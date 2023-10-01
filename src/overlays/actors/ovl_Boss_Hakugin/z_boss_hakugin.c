@@ -35,6 +35,7 @@ void func_80B091D8(BossHakugin* this, PlayState* play);
 void func_80B094E0(BossHakugin* this, PlayState* play);
 void func_80B098BC(BossHakugin* this, PlayState* play);
 void func_80B09C78(BossHakugin* this, PlayState* play);
+void func_80B09DFC(BossHakugin* this);
 void func_80B09E20(BossHakugin* this, PlayState* play);
 void func_80B09EDC(BossHakugin* this, PlayState* play);
 void func_80B0A2A4(BossHakugin* this, PlayState* play);
@@ -56,7 +57,7 @@ void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
 void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
 void func_80B0D9CC(BossHakugin* this);
 void func_80B0DFA8(BossHakugin* this);
-void func_80B0E548(Actor* this, PlayState* play);
+void func_80B0E548(Actor* thisx, PlayState* play2);
 
 #if 0
 ActorInit Boss_Hakugin_InitVars = {
@@ -459,6 +460,7 @@ void func_80B05EE0(BossHakugin* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B06558.s")
 
+void func_80B06600(BossHakugin* this, Vec3f* arg1, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B06600.s")
 
 void func_80B0696C(BossHakugin* this, Vec3f* arg1);
@@ -536,7 +538,37 @@ void func_80B06F48(BossHakugin* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0728C.s")
+s32 func_80B0728C(BossHakugin* this) {
+    s16 rand;
+
+    rand = ((Rand_Next() >> 0x12) + 0x4000);
+    this->unk_0198 += rand;
+    if (this->unk_01A8 == 5) {
+        if (Math_SmoothStepToS(&this->unk_01A6, -0x900, 4, 0x200, 0x80) == 0) {
+            this->unk_01A8--;
+        }
+
+        this->unk_01C8 = (this->unk_01A6 + 0x480) * -0.026041666f;
+        this->unk_01C8 = CLAMP_MIN(this->unk_01C8, 0.001f);
+
+        this->unk_01D0 = (this->unk_01A6 - 0x700) * -0.00021059783f;
+        this->unk_01D0 = CLAMP_MAX(this->unk_01D0, 0.62f);
+
+        if (this->unk_01D0 > 0.0f) {
+            this->unk_01CC = -100.0f - (((0.62f / this->unk_01D0) - 1.0f) * 200.0f);
+        } else {
+            this->unk_01CC = -200.0f;
+        }
+
+    } else if (this->unk_01A8 > 0) {
+        this->unk_01A8--;
+    } else if (Math_ScaledStepToS(&this->unk_01A6, 0x700, 0x380) != 0) {
+        this->unk_01D0 = (0x700 - this->unk_01A6) * 0.00024414062f * 0.62f;
+        return 1;
+    }
+
+    return 0;
+}
 
 void func_80B07450(BossHakugin* this, PlayState* play) {
     Vec3f velocity;
@@ -963,9 +995,47 @@ void func_80B08C1C(BossHakugin* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B08CB8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B09178.s")
+void func_80B09178(BossHakugin* this) {
+    Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.5f, 0.0f, 0.0f, 0, -3.0f);
+    this->actionFunc = func_80B091D8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B091D8.s")
+// TODO: Probably a better way to clean some of this up
+void func_80B091D8(BossHakugin* this, PlayState* play) {
+    s16 temp_v0;
+    s16 var_v0;
+
+    Math_ScaledStepToS(&this->unk_01A6, 0x800, 0x100);
+    Math_StepToF(&this->actor.speed, 25.0f, 2.0f);
+    SkelAnime_Update(&this->skelAnime);
+    func_80B07450(this, play);
+    if ((this->unk_0454 < 0.0f) || (this->unk_0484.base.atFlags & 2)) {
+        func_80B08C1C(this);
+    } else {
+        if ((this->unk_01C0 < 89.100006f) || (this->unk_01BC < 89.100006f)) {
+            this->unk_019E = this->unk_01A0;
+        } else {
+            if (((this->unk_044C > 0.0f) && (this->unk_044C < this->unk_01C0)) ||
+                ((this->unk_044C <= 0.0f) && (-this->unk_044C < this->unk_01BC))) {
+                temp_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+                var_v0 = CLAMP(temp_v0, -0x3000, 0x3000);
+                this->unk_019E = this->actor.shape.rot.y + var_v0;
+            } else {
+                this->unk_019E =
+                    ((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y) >> 1) + this->actor.shape.rot.y;
+            }
+        }
+
+        var_v0 = (this->unk_019E - this->unk_01A0);
+        if (var_v0 > 0x1800) {
+            this->unk_019E = this->unk_01A0 + 0x1800;
+        } else if (var_v0 < -0x1800) {
+            this->unk_019E = this->unk_01A0 - 0x1800;
+        }
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_019E, 5, 0x800, 0x100);
+        this->actor.world.rot.y = this->actor.shape.rot.y;
+    }
+}
 
 void func_80B093C0(BossHakugin* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGohtFallDownAnim, -3.0f);
@@ -1041,13 +1111,99 @@ void func_80B098BC(BossHakugin* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B09A94.s")
+void func_80B09A94(BossHakugin* this, PlayState* play) {
+    f32 var_fv1;
+    s16 atan;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B09C78.s")
+    if (this->actionFunc != func_80B09E20) {
+        Animation_MorphToPlayOnce(&this->skelAnime, &gGohtStationaryAnim, -5.0f);
+        this->actor.speed = 0.0f;
+        atan = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x);
+        if (atan < -0x4000) {
+            this->actor.world.pos.x = -1200.0f;
+            this->actor.shape.rot.y = 0x4000;
+            this->actor.world.pos.z = -1200.0f;
+        } else if (atan < 0) {
+            this->actor.world.pos.x = -1200.0f;
+            this->actor.shape.rot.y = -0x8000;
+            this->actor.world.pos.z = 1200.0f;
+        } else if (atan < 0x4000) {
+            this->actor.world.pos.x = 1200.0f;
+            this->actor.shape.rot.y = -0x4000;
+            this->actor.world.pos.z = 1200.0f;
+        } else {
+            this->actor.world.pos.x = 1200.0f;
+            this->actor.shape.rot.y = 0;
+            this->actor.world.pos.z = -1200.0f;
+        }
+        if (this->unk_01B4 == 1) {
+            var_fv1 = -1.0f;
+            this->actor.shape.rot.y -= 0x4000;
+        } else {
+            var_fv1 = 1.0f;
+        }
+        this->unk_01A0 = this->actor.shape.rot.y + (this->unk_01B4 * 0x6000);
+        this->actor.world.rot.y = this->actor.shape.rot.y;
+        this->actor.world.pos.x += var_fv1 * 300.0f * Math_CosS(this->actor.shape.rot.y);
+        this->actor.world.pos.z -= var_fv1 * 300.0f * Math_SinS(this->actor.shape.rot.y);
+        this->actor.world.pos.y += 500.0f;
+        this->actor.world.pos.y =
+            BgCheck_EntityRaycastFloor1(&play->colCtx, &this->actor.floorPoly, &this->actor.world.pos);
+        this->unk_018C = 0;
+    }
+    this->unk_01A6 = 0x700;
+    this->unk_019C = 0x96;
+    this->unk_01CC = -100.0f;
+    this->actionFunc = func_80B09C78;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B09DFC.s")
+void func_80B09C78(BossHakugin* this, PlayState* play) {
+    f32 temp_fv1;
+    f32 sp1C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B09E20.s")
+    SkelAnime_Update(&this->skelAnime);
+    temp_fv1 = fabsf(this->unk_044C);
+    sp1C = temp_fv1;
+    Math_StepToF(&this->unk_01C8, 0.0f, 6.0f);
+    if ((this->unk_0454 < 0.0f) || (this->actor.xzDistToPlayer < 750.0f) || (this->unk_018C == 1)) {
+        func_80B08C1C(this);
+        return;
+    }
+
+    if ((this->unk_2618[0].unk_0C == 0) && (this->unk_01C8 < 0.1f) && (temp_fv1 < 400.0f) && (this->unk_0454 > 0.0f)) {
+        func_80B09DFC(this);
+        return;
+    }
+
+    if ((temp_fv1 > 400.0f) && ((play->gameplayFrames & 0xF) == 0xF)) {
+        func_80B06C08(this);
+        return;
+    }
+
+    if (this->unk_019C > 0) {
+        this->unk_019C--;
+    } else {
+        this->unk_01B4 = -this->unk_01B4;
+        this->unk_01A0 = this->actor.shape.rot.y;
+        this->actor.world.rot.y = this->actor.shape.rot.y;
+        func_80B08C1C(this);
+    }
+}
+
+void func_80B09DFC(BossHakugin* this) {
+    this->unk_01A8 = 5;
+    this->unk_01C8 = 0.0f;
+    this->actionFunc = func_80B09E20;
+}
+
+void func_80B09E20(BossHakugin* this, PlayState* play) {
+    SkelAnime_Update(&this->skelAnime);
+    Audio_PlaySfx_AtPos(&this->unk_0458, NA_SE_EN_COMMON_THUNDER - SFX_FLAG);
+    if (func_80B0728C(this) != 0) {
+        func_80B06600(this, &this->unk_0380, play);
+        func_80B09A94(this, play);
+    }
+}
 
 void func_80B09E84(BossHakugin* this) {
     CutsceneManager_Queue(this->actor.csId);
@@ -1253,11 +1409,49 @@ void func_80B0A87C(BossHakugin* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0B238.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0B34C.s")
+void func_80B0B34C(BossHakugin* this) {
+    BossHakuginEffect* effect;
+    s32 i;
+
+    for (i = 0; i < 36; i++) {
+        effect = &this->unk_09F8[i];
+        Math_StepToF(&effect->unk_0.y, effect->unk_C.x, effect->unk_C.y);
+        if (effect->unk_C.y > 0.0f) {
+            effect->unk_C.y = effect->unk_C.y + 6.0f;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0B3F4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0B548.s")
+void func_80B0B548(BossHakugin* this, PlayState* play) {
+    BossHakuginUnkStruct_2618* unk_str;
+    s16 rand;
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
+        unk_str = &this->unk_2618[i];
+
+        if (unk_str->unk_14.base.atFlags & 2) {
+            Player* player = GET_PLAYER(play);
+            this->unk_018C = 1;
+            Player_PlaySfx(player, NA_SE_EN_COMMON_E_BALL_HIT);
+            unk_str->unk_14.base.atFlags &= ~2;
+        }
+        if (unk_str->unk_0C > 0) {
+            unk_str->unk_0C -= 0x14;
+            if (unk_str->unk_0C <= 0) {
+                unk_str->unk_0C = 0;
+            } else if (unk_str->unk_0C < 0x100) {
+                rand = (s32)Rand_Next() >> 0x10;
+                unk_str->unk_0E.z = rand;
+                if (unk_str->unk_0C >= 0x3D) {
+                    CollisionCheck_SetAT(play, &play->colChkCtx, &unk_str->unk_14.base);
+                }
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0B660.s")
 
@@ -1762,7 +1956,14 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0DFA8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0E548.s")
+void func_80B0E548(Actor* thisx, PlayState* play2) {
+    BossHakugin* this = THIS;
+    PlayState* play = play2;
+
+    func_80B0DFA8(this);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_0484.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk_0484.base);
+}
 
 void func_80B0E5A4(Actor* thisx, PlayState* play) {
     BossHakugin* this = THIS;
