@@ -10,8 +10,9 @@ typedef void (*EnEncount3ActionFunc)(struct EnEncount3*, PlayState*);
 typedef struct EnEncount3 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnEncount3ActionFunc actionFunc;
-    /* 0x148 */ s16 unk148;
-    /* 0x14A */ s16 unk14A;                         /* inferred */
+    /* 0x148 */ u8 unk148;
+    /* 0x149 */ char pad149[1];
+    /* 0x14A */ s16 unk14A;
     /* 0x14C */ char pad14C[2];
     /* 0x14E */ s16 unk14E;
     /* 0x150 */ s16 unk150;
@@ -29,8 +30,8 @@ typedef struct EnEncount3 {
     /* 0x170 */ f32 unk170;
     /* 0x174 */ f32 unk174;
     /* 0x178 */ f32 unk178;
-    /* 0x17C */ Actor *unk17C;
-    /* 0x180 */ char pad180[0x4C];                  /* maybe part of unk17C[0x14]? */
-} EnEncount3;                                       /* size = 0x1CC */
+    /* 0x17C */ Actor* unk17C;
+    /* 0x180 */ char pad180[0x4C];
+} EnEncount3; // size = 0x1CC
 
 #endif // Z_EN_ENCOUNT3_H

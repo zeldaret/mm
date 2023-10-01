@@ -12,7 +12,7 @@
 
 void EnEncount3_Init(Actor* thisx, PlayState* play);
 void EnEncount3_Destroy(Actor* thisx, PlayState* play);
-void EnEncount3_Update(Actor* thisx, PlayState* play);
+void EnEncount3_Update(Actor* thisx, PlayState* play2);
 void EnEncount3_Draw(Actor* thisx, PlayState* play);
 
 void func_809AD058(EnEncount3* this);
@@ -37,7 +37,6 @@ u32 D_809AD810 = false;
 
 extern UNK_TYPE D_060009A0;
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/EnEncount3_Init.s")
 void EnEncount3_Init(Actor* thisx, PlayState* play) {
     EnEncount3* this = THIS;
 
@@ -62,11 +61,9 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
     func_809AD058(this);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/EnEncount3_Destroy.s")
 void EnEncount3_Destroy(Actor* thisx, PlayState* play) {
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/func_809AD058.s")
 void func_809AD058(EnEncount3* this) {
     this->unk154 = 0x113;
     this->unk150 = 1;
@@ -74,28 +71,25 @@ void func_809AD058(EnEncount3* this) {
     this->actionFunc = func_809AD084;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/func_809AD084.s")
 void func_809AD084(EnEncount3* this, PlayState* play) {
     if ((this->unk15C >= 0) && (Flags_GetSwitch(play, this->unk15C) != 0)) {
         Actor_Kill(&this->actor);
-        return;
-    }
-    if (!(this->unk16C < this->actor.xzDistToPlayer) && (Player_GetMask(play) == 6) && (!D_809AD810)) {
+    } else if (!(this->unk16C < this->actor.xzDistToPlayer) && (Player_GetMask(play) == 6) && (!D_809AD810)) {
         if (this->unk15E > 0) {
             this->unk15E--;
-            return;
-        }
-        this->unk17C = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, this->unk154, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, this->unk158);
-        if (this->unk17C != NULL) {
-            this->unk14E++;
-            D_809AD810 = true;
-            this->actionFunc = func_809AD194;
+        } else {
+            this->unk17C =
+                Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, this->unk154, this->actor.world.pos.x,
+                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, this->unk158);
+            if (this->unk17C != NULL) {
+                this->unk14E++;
+                D_809AD810 = true;
+                this->actionFunc = func_809AD194;
+            }
         }
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/func_809AD194.s")
 void func_809AD194(EnEncount3* this, PlayState* play) {
     if (this->unk14E == 0) {
         this->unk178 = 0.0f;
@@ -106,7 +100,6 @@ void func_809AD194(EnEncount3* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/func_809AD1EC.s")
 void func_809AD1EC(EnEncount3* this, PlayState* play) {
     if (this->unk174 < 0.002f) {
         D_809AD810 = false;
@@ -114,9 +107,74 @@ void func_809AD1EC(EnEncount3* this, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/EnEncount3_Update.s")
+void EnEncount3_Update(Actor* thisx, PlayState* play2) {
+    EnEncount3* this = THIS;
+    f32 new_var;
+    PlayState* play = play2;
+    Player* player = GET_PLAYER(play);
+    f32 sp3C;
+    f32 sp38;
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/EnEncount3_Draw.s")
+    this->actionFunc(this, play);
+    if (this->actionFunc == func_809AD194) {
+        new_var = this->unk16C * 0.52f;
+        if (new_var < this->actor.xzDistToPlayer) {
+            this->unk178 = ((this->unk16C * 0.03125f) * 0.001f) + 0.1f;
+        } else {
+            this->unk178 = 0.06f;
+        }
+
+        if (((this->unk16C + 50.0f) + BREG(0)) < this->actor.xzDistToPlayer) {
+            if (this->actionFunc == func_809AD194) {
+                this->unk148 = 0;
+                this->unk178 = 0.0f;
+                D_809AD810 = false;
+                if (((this->unk17C != NULL) && (this->unk17C->update != NULL)) &&
+                    (this->unk17C->colChkInfo.health > 0)) {
+                    Actor_Kill(this->unk17C);
+                    this->unk17C = NULL;
+                }
+                func_809AD058(this);
+            }
+        } else if (this->unk16C < this->actor.xzDistToPlayer) {
+            s16 i = 0;
+            while (i < PLAYER_BODYPART_MAX) {
+                player->flameTimers[i++] = Rand_S16Offset(0, 0xC8);
+            }
+            player->isBurning = 1;
+
+            sp3C = this->actor.world.pos.x - player->actor.world.pos.x;
+            sp38 = this->actor.world.pos.z - player->actor.world.pos.z;
+            if (Play_InCsMode(play) == 0) {
+                func_800B8D50(play, &this->actor, 10.0f, Math_Atan2S_XY(sp38, sp3C), 0.0f, 1U);
+            }
+        }
+        this->unk17C->colChkInfo = this->unk17C->colChkInfo;
+    }
+
+    this->unk168 = this->unk16C;
+    this->unk168 /= 7666.0f;
+    if (this->actionFunc != func_809AD194) {
+        Math_ApproachZeroF(&this->unk170, 0.3f, 10.0f);
+        Math_ApproachZeroF(&this->unk160, 0.3f, 5.0f);
+        if (this->unk160 < 1.0f) {
+            play->unk_18880 = 0;
+        }
+    } else if (this->unk148 != 0) {
+        Math_ApproachF(&this->unk170, 255.0f, 0.4f, 10.0f);
+        Math_ApproachF(&this->unk160, 60.0f, 0.3f, 5.0f);
+    }
+    Math_ApproachF(&this->unk174, this->unk178, 0.3f, 0.03f);
+
+    this->unk164 = this->unk160 / 60.0f;
+    if (this->unk164 != 0.0f) {
+        play->envCtx.lightSettings.fogNear = (0x3C0 - play->envCtx.unk_C4.fogNear) * this->unk164;
+        play->envCtx.lightSettings.fogColor[0] = (40.0f - play->envCtx.unk_C4.fogColor[0]) * this->unk164;
+        play->envCtx.lightSettings.fogColor[1] = (10.0f - play->envCtx.unk_C4.fogColor[1]) * this->unk164;
+        play->envCtx.lightSettings.fogColor[2] = (0.0f - play->envCtx.unk_C4.fogColor[2]) * this->unk164;
+    }
+}
+
 void EnEncount3_Draw(Actor* thisx, PlayState* play) {
     EnEncount3* this = THIS;
     s32 pad;
