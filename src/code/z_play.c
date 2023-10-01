@@ -3,7 +3,7 @@
 #include "regs.h"
 #include "functions.h"
 #include "z64vismono.h"
-#include "z64visfbcopyfx.h"
+#include "z64visfbuf.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 s16 sTransitionFillTimer;
@@ -12,8 +12,8 @@ TransitionTile sTransitionTile;
 s32 gTransitionTileState;
 VisMono sPlayVisMono;
 Color_RGBA8_u32 gVisMonoColor;
-VisFbCopyFx D_801F6D38;
-VisFbCopyFx* D_801F6D4C;
+VisFbuf D_801F6D38;
+VisFbuf* D_801F6D4C;
 BombersNotebook sBombersNotebook;
 u8 sBombersNotebookOpen;
 u8 sMotionBlurStatus;
@@ -418,7 +418,7 @@ void Play_Destroy(GameState* thisx) {
     ShrinkWindow_Destroy();
     TransitionFade_Destroy(&this->unk_18E48);
     VisMono_Destroy(&sPlayVisMono);
-    VisFbCopyFx_Destroy(D_801F6D4C);
+    VisFbuf_Destroy(D_801F6D4C);
     D_801F6D4C = NULL;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_92_80)) {
@@ -1119,7 +1119,7 @@ void Play_PostWorldDraw(PlayState* this) {
         nextOpa = Graph_GfxPlusOne(opa);
         gSPDisplayList(OVERLAY_DISP++, nextOpa);
 
-        VisFbCopyFx_Draw(D_801F6D4C, &nextOpa, this->unk_18E60);
+        VisFbuf_Draw(D_801F6D4C, &nextOpa, this->unk_18E60);
 
         gSPEndDisplayList(nextOpa++);
         Graph_BranchDlist(opa, nextOpa);
@@ -2314,7 +2314,7 @@ void Play_Init(GameState* thisx) {
 
     gVisMonoColor.a = 0;
     D_801F6D4C = &D_801F6D38;
-    VisFbCopyFx_Init(D_801F6D4C);
+    VisFbuf_Init(D_801F6D4C);
     D_801F6D4C->lodProportion = 0.0f;
     D_801F6D4C->mode = 1;
     D_801F6D4C->primColor.r = 0;

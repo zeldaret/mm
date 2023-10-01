@@ -521,7 +521,7 @@ beginseg
     include "build/src/code/z_view.o"
     include "build/src/code/z_vimode.o"
     include "build/src/code/z_viscvg.o"
-    include "build/src/code/z_visfbcopyfx.o"
+    include "build/src/code/z_visfbuf.o"
     include "build/src/code/z_vismono.o"
     include "build/src/code/z_viszbuf.o"
     include "build/src/code/z_vr_box.o"

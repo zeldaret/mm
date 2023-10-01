@@ -1,30 +1,30 @@
 /**
- * @file z_visfbcopyfx.c
+ * @file z_visfbuf.c
  * @brief Copies images between color images (generally framebuffers), possibly with filling, scaling, and colour
  * interpolation.
  *
  * Used for several transition effects, and in z_play to shrink the screen at the end of the First and Second Days.
  *
- * @note to use the functions in this file, with the exception of VisFbCopyFx_Draw(), it is necessary to load the S2DEX2
+ * @note to use the functions in this file, with the exception of VisFbuf_Draw(), it is necessary to load the S2DEX2
  * microcode first, and then re-load the 3D microcode afterwards for the rest of the drawing in the frame; see
- * VisFbCopyFx_Draw() for how to do this.
+ * VisFbuf_Draw() for how to do this.
  */
 
 #include "global.h"
-#include "z64visfbcopyfx.h"
+#include "z64visfbuf.h"
 #include "sys_cfb.h"
 
 #define SCALE_MIN 0.032f
 #define SCALE_MAX 1.0f //!< also unchanged scale
 
-void VisFbCopyFx_Init(VisFbCopyFx* this) {
-    bzero(this, sizeof(VisFbCopyFx));
+void VisFbuf_Init(VisFbuf* this) {
+    bzero(this, sizeof(VisFbuf));
 }
 
-void VisFbCopyFx_Destroy(VisFbCopyFx* this) {
+void VisFbuf_Destroy(VisFbuf* this) {
 }
 
-// internal, only used in VisFbCopyFx_SetBg
+// internal, only used in VisFbuf_SetBg
 /**
  * Draw a bg to the specified color image.
  *
@@ -35,8 +35,7 @@ void VisFbCopyFx_Destroy(VisFbCopyFx* this) {
  * @param[in]     height    Output height in pixels
  * @param[in]     cycleMode Which BG mode to use
  */
-void VisFbCopyFx_DrawBgToColorImage(Gfx** gfxP, uObjBg* bg, void* img, s32 width, s32 height,
-                                    VisFbCopyBgMode cycleMode) {
+void VisFbuf_DrawBgToColorImage(Gfx** gfxP, uObjBg* bg, void* img, s32 width, s32 height, VisFbufBgMode cycleMode) {
     Gfx* gfx = *gfxP;
 
     gDPPipeSync(gfx++);
@@ -46,7 +45,7 @@ void VisFbCopyFx_DrawBgToColorImage(Gfx** gfxP, uObjBg* bg, void* img, s32 width
 
     // Draw bg in appropriate type
     gSPObjRenderMode(gfx++, G_OBJRM_ANTIALIAS | G_OBJRM_BILERP);
-    if (!!(cycleMode & VIS_FB_COPY_BG_CYC_COPY) != 0) { //! FAKE: may possibly be a better way
+    if (!!(cycleMode & VIS_FBUF_BG_CYC_COPY) != 0) { //! FAKE: may possibly be a better way
         gSPBgRectCopy(gfx++, bg);
     } else {
         gSPBgRect1Cyc(gfx++, bg);
@@ -63,8 +62,8 @@ void VisFbCopyFx_DrawBgToColorImage(Gfx** gfxP, uObjBg* bg, void* img, s32 width
 // internal
 /**
  * Set up a BG from a specified source image and draw it to the specified color image with
- * VisFbCopyFx_DrawBgToColorImage(), using the BG's settings. Use VisFbCopyFx_SetBgSimple() or
- * VisFbCopyFx_SetBgGeneral()
+ * VisFbuf_DrawBgToColorImage(), using the BG's settings. Use VisFbuf_SetBgSimple() or
+ * VisFbuf_SetBgGeneral()
  *
  * @param[out] gfxP     Pointer to current displaylist
  * @param[in] source    Pointer to beginning of source color image
@@ -73,12 +72,12 @@ void VisFbCopyFx_DrawBgToColorImage(Gfx** gfxP, uObjBg* bg, void* img, s32 width
  * @param[in] height    Output height in pixels
  * @param[in] x         Left of drawn output
  * @param[in] y         Top of drawn output
- * @param[in] scaleX    Amount to rescale the image, (dsdx). No effect if `cycleMode` is `VIS_FB_COPY_BG_CYC_COPY`.
- * @param[in] scaleY    Amount to rescale the image, (dtdy). No effect if `cycleMode` is `VIS_FB_COPY_BG_CYC_COPY`.
+ * @param[in] scaleX    Amount to rescale the image, (dsdx). No effect if `cycleMode` is `VIS_FBUF_BG_CYC_COPY`.
+ * @param[in] scaleY    Amount to rescale the image, (dtdy). No effect if `cycleMode` is `VIS_FBUF_BG_CYC_COPY`.
  * @param[in] cycleMode Which BG mode to use
  */
-void VisFbCopyFx_SetBg(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX, f32 scaleY,
-                       VisFbCopyBgMode cycleMode) {
+void VisFbuf_SetBg(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX, f32 scaleY,
+                   VisFbufBgMode cycleMode) {
     Gfx* gfx = *gfxP;
     Gfx* gfxTemp;
     uObjBg* bg;
@@ -104,7 +103,7 @@ void VisFbCopyFx_SetBg(Gfx** gfxP, void* source, void* img, s32 width, s32 heigh
     bg->b.imageFlip = 0;
     bg->b.imagePtr = source;
 
-    if (!!(cycleMode & VIS_FB_COPY_BG_CYC_COPY) != 0) { //! FAKE: may possibly be a better way
+    if (!!(cycleMode & VIS_FBUF_BG_CYC_COPY) != 0) { //! FAKE: may possibly be a better way
         guS2DInitBg(bg);
     } else {
         bg->s.scaleW = (s32)((1 << 10) / scaleX);
@@ -113,37 +112,37 @@ void VisFbCopyFx_SetBg(Gfx** gfxP, void* source, void* img, s32 width, s32 heigh
     }
 
     // draw BG to `img`
-    VisFbCopyFx_DrawBgToColorImage(&gfx, bg, img, width, height, cycleMode);
+    VisFbuf_DrawBgToColorImage(&gfx, bg, img, width, height, cycleMode);
 
     *gfxP = gfx;
 }
 
 // used in FbdemoWipe5 and internally
-// "default settings" wrapper for VisFbCopyFx_SetBg
+// "default settings" wrapper for VisFbuf_SetBg
 /**
  * Set up a BG from a specified source image and draw it to the specified color image with
- * VisFbCopyFx_DrawBgToColorImage(), using the BG's settings. Position uses the default (0,0), and no rescaling is done
+ * VisFbuf_DrawBgToColorImage(), using the BG's settings. Position uses the default (0,0), and no rescaling is done
  * even if 1-cycle mode is enabled.
  *
- * @see VisFbCopyFx_SetBg() for arguments.
+ * @see VisFbuf_SetBg() for arguments.
  */
-void VisFbCopyFx_SetBgSimple(Gfx** gfxP, void* source, void* img, s32 width, s32 height, VisFbCopyBgMode cycleMode) {
-    VisFbCopyFx_SetBg(gfxP, source, img, width, height, 0.0f, 0.0f, SCALE_MAX, SCALE_MAX, cycleMode);
+void VisFbuf_SetBgSimple(Gfx** gfxP, void* source, void* img, s32 width, s32 height, VisFbufBgMode cycleMode) {
+    VisFbuf_SetBg(gfxP, source, img, width, height, 0.0f, 0.0f, SCALE_MAX, SCALE_MAX, cycleMode);
 }
 
-// wrapper for VisFbCopyFx_SetBg with general arguments, used in VisFbCopyFx_ApplyEffects
+// wrapper for VisFbuf_SetBg with general arguments, used in VisFbuf_ApplyEffects
 /**
  * Set up a BG from a specified source image and draw it to the specified color image with
- * VisFbCopyFx_DrawBgToColorImage(). Fully general settings are available.
+ * VisFbuf_DrawBgToColorImage(). Fully general settings are available.
  *
- * @see VisFbCopyFx_SetBg() for arguments.
+ * @see VisFbuf_SetBg() for arguments.
  */
-void VisFbCopyFx_SetBgGeneral(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX,
-                              f32 scaleY, VisFbCopyBgMode cycleMode) {
-    VisFbCopyFx_SetBg(gfxP, source, img, width, height, x, y, scaleX, scaleY, cycleMode);
+void VisFbuf_SetBgGeneral(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX,
+                          f32 scaleY, VisFbufBgMode cycleMode) {
+    VisFbuf_SetBg(gfxP, source, img, width, height, x, y, scaleX, scaleY, cycleMode);
 }
 
-// internal, used in VisFbCopyFx_DrawGeneral
+// internal, used in VisFbuf_DrawGeneral
 /**
  * Most general redrawing function.
  *
@@ -159,7 +158,7 @@ void VisFbCopyFx_SetBgGeneral(Gfx** gfxP, void* source, void* img, s32 width, s3
  * @param[in]     width  Output width in pixels
  * @param[in]     height Output height in pixels
  */
-void VisFbCopyFx_ApplyEffects(VisFbCopyFx* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height) {
+void VisFbuf_ApplyEffects(VisFbuf* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height) {
     Gfx* gfx = *gfxP;
     s32 pad[3];
 
@@ -169,7 +168,7 @@ void VisFbCopyFx_ApplyEffects(VisFbCopyFx* this, Gfx** gfxP, void* source, void*
                     G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                         G_TD_CLAMP | G_TP_NONE | G_CYC_COPY | G_PM_NPRIMITIVE,
                     G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
-    VisFbCopyFx_SetBgSimple(&gfx, source, img, width, height, VIS_FB_COPY_BG_CYC_COPY);
+    VisFbuf_SetBgSimple(&gfx, source, img, width, height, VIS_FBUF_BG_CYC_COPY);
 
     gDPPipeSync(gfx++);
     // fill framebuffer with primColor
@@ -182,7 +181,7 @@ void VisFbCopyFx_ApplyEffects(VisFbCopyFx* this, Gfx** gfxP, void* source, void*
 
         gDPSetFillColor(gfx++, (color << 0x10) | color);
     }
-    //! @bug VisFbCopyFx_SetBgSimple() sets the current color image back to the frame's default framebuffer at the end,
+    //! @bug VisFbuf_SetBgSimple() sets the current color image back to the frame's default framebuffer at the end,
     //! so this will always fill in the default framebuffer, whatever are used as `source` and `img`. This does not
     //! arise in-game since this function is always used with `source = D_0F000000`.
     gDPFillRectangle(gfx++, 0, 0, width - 1, height - 1);
@@ -216,12 +215,13 @@ void VisFbCopyFx_ApplyEffects(VisFbCopyFx* this, Gfx** gfxP, void* source, void*
                           ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0,
                           ENVIRONMENT);
     }
+
     // Draw scaled image in centre of `width * height` rectangle in `source`
     {
         f32 scale = CLAMP_ALT(this->scale, SCALE_MIN, SCALE_MAX);
 
-        VisFbCopyFx_SetBgGeneral(&gfx, img, source, width, height, width * 0.5f * (1.0f - scale),
-                                 height * 0.5f * (1.0f - scale), scale, scale, VIS_FB_COPY_BG_CYC_1CYC);
+        VisFbuf_SetBgGeneral(&gfx, img, source, width, height, width * 0.5f * (1.0f - scale),
+                             height * 0.5f * (1.0f - scale), scale, scale, VIS_FBUF_BG_CYC_1CYC);
     }
 
     gDPPipeSync(gfx++);
@@ -229,9 +229,9 @@ void VisFbCopyFx_ApplyEffects(VisFbCopyFx* this, Gfx** gfxP, void* source, void*
     *gfxP = gfx;
 }
 
-// internal, used in VisFbCopyFx_Draw, VIS_FB_COPY_MODE_GENERAL
+// internal, used in VisFbuf_Draw, VIS_FBUF_MODE_GENERAL
 /**
- * If scale is within `(SCALE_MIN, SCALE_MAX)`, apply VisFbCopyFx_ApplyEffects().
+ * If scale is within `(SCALE_MIN, SCALE_MAX)`, apply VisFbuf_ApplyEffects().
  * If it is smaller than `SCALE_MIN`, fill the framebuffer with `this->primColor`
  *
  * @param[in]     this
@@ -241,13 +241,13 @@ void VisFbCopyFx_ApplyEffects(VisFbCopyFx* this, Gfx** gfxP, void* source, void*
  * @param[in]     width  Output width in pixels
  * @param[in]     height Output height in pixels
  */
-void VisFbCopyFx_DrawGeneral(VisFbCopyFx* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height) {
+void VisFbuf_DrawGeneral(VisFbuf* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height) {
     if (this->scale < SCALE_MAX) {
         Gfx* gfx = *gfxP;
         u32 color;
 
         if (this->scale > SCALE_MIN) {
-            VisFbCopyFx_ApplyEffects(this, &gfx, source, img, width, height);
+            VisFbuf_ApplyEffects(this, &gfx, source, img, width, height);
         } else {
             gDPPipeSync(gfx++);
             // fill the framebuffer with this->primColor
@@ -257,7 +257,7 @@ void VisFbCopyFx_DrawGeneral(VisFbCopyFx* this, Gfx** gfxP, void* source, void* 
                             G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
             color = GPACK_RGBA5551(this->primColor.r, this->primColor.g, (u32)this->primColor.b, 1);
             gDPSetFillColor(gfx++, (color << 0x10) | color);
-            //! @bug See corresponding note in VisFbCopyFx_ApplyEffects()
+            //! @bug See corresponding note in VisFbuf_ApplyEffects()
             gDPFillRectangle(gfx++, 0, 0, width - 1, height - 1);
 
             gDPPipeSync(gfx++);
@@ -277,7 +277,7 @@ void VisFbCopyFx_DrawGeneral(VisFbCopyFx* this, Gfx** gfxP, void* source, void* 
  * @param[in]     width  width of img
  * @param[in]     height height of img
  */
-void VisFbCopyFx_DrawInterpolate(VisFbCopyFx* this, Gfx** gfxP, void* img, s32 width, s32 height) {
+void VisFbuf_DrawInterpolate(VisFbuf* this, Gfx** gfxP, void* img, s32 width, s32 height) {
     Gfx* gfx = *gfxP;
 
     gDPPipeSync(gfx++);
@@ -290,7 +290,7 @@ void VisFbCopyFx_DrawInterpolate(VisFbCopyFx* this, Gfx** gfxP, void* img, s32 w
     gDPSetColor(gfx++, G_SETENVCOLOR, this->envColor.rgba);
     gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT,
                       PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT);
-    VisFbCopyFx_SetBgSimple(&gfx, img, img, width, height, VIS_FB_COPY_BG_CYC_1CYC);
+    VisFbuf_SetBgSimple(&gfx, img, img, width, height, VIS_FBUF_BG_CYC_1CYC);
 
     gDPPipeSync(gfx++);
 
@@ -305,18 +305,18 @@ void VisFbCopyFx_DrawInterpolate(VisFbCopyFx* this, Gfx** gfxP, void* img, s32 w
  * @param[in,out] gfxP Pointer to current displaylist
  * @param[in,out] img  Pointer to beginning of destination color image
  */
-void VisFbCopyFx_Draw(VisFbCopyFx* this, Gfx** gfxP, void* img) {
+void VisFbuf_Draw(VisFbuf* this, Gfx** gfxP, void* img) {
     Gfx* gfx = *gfxP;
 
     gSPLoadUcodeL(gfx++, gspS2DEX2_fifo);
 
     switch (this->mode) {
-        case VIS_FB_COPY_MODE_GENERAL:
-            VisFbCopyFx_DrawGeneral(this, &gfx, D_0F000000, img, gScreenWidth, gScreenHeight);
+        case VIS_FBUF_MODE_GENERAL:
+            VisFbuf_DrawGeneral(this, &gfx, D_0F000000, img, gScreenWidth, gScreenHeight);
             break;
 
-        case VIS_FB_COPY_MODE_INTERPOLATE:
-            VisFbCopyFx_DrawInterpolate(this, &gfx, D_0F000000, gScreenWidth, gScreenHeight);
+        case VIS_FBUF_MODE_INTERPOLATE:
+            VisFbuf_DrawInterpolate(this, &gfx, D_0F000000, gScreenWidth, gScreenHeight);
             break;
 
         default:

@@ -3,7 +3,7 @@
 
 #include "ultra64.h"
 #include "color.h"
-#include "z64visfbcopyfx.h"
+#include "z64visfbuf.h"
 
 typedef struct TransitionWipe4 {
     /* 0x00 */ Color_RGBA8_u32 primColor;
@@ -14,7 +14,7 @@ typedef struct TransitionWipe4 {
     /* 0x11 */ u8 colorType;
     /* 0x12 */ u8 speedType;
     /* 0x13 */ u8 isDone;
-    /* 0x14 */ VisFbCopyFx copyFx;
+    /* 0x14 */ VisFbuf copyFx;
 } TransitionWipe4; // size = 0x28
 
 #endif
