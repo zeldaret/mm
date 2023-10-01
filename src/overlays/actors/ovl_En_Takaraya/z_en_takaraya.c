@@ -19,7 +19,7 @@ void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 void func_80ADED8C(EnTakaraya* this);
 void func_80ADEDF8(EnTakaraya* this);
 void func_80ADEE4C(EnTakaraya* this, PlayState* play);
-void func_80ADEF74(Actor* thisx, PlayState* play);
+void func_80ADEF74(EnTakaraya* this, PlayState* play);
 void func_80ADF03C(EnTakaraya* this);
 void func_80ADF050(EnTakaraya* this, PlayState* play);
 void func_80ADF2D4(EnTakaraya* this);
@@ -170,8 +170,7 @@ void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADEF74.s")
-void func_80ADEF74(Actor* thisx, PlayState* play) {
-    EnTakaraya* this = THIS;
+void func_80ADEF74(EnTakaraya* this, PlayState* play) {
     u8 var_v1;
 
     if (Flags_GetSwitch(play, this->unk2B0) != 0) {
@@ -181,7 +180,7 @@ void func_80ADEF74(Actor* thisx, PlayState* play) {
     }
     if (gSaveContext.save.playerForm) {}
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, 0x1BB, 0.0f, 0.0f, 0.0f, 0, 0, 5,
-                                  ((var_v1 << 5) + thisx->params) + 0xB000, thisx->csId, 0x3FFU, NULL);
+                                  ((var_v1 << 5) + this->actor.params) + 0xB000, this->actor.csId, 0x3FFU, NULL);
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF03C.s")
@@ -226,7 +225,7 @@ void func_80ADF050(EnTakaraya* this, PlayState* play) {
             } else {
                 Audio_PlaySfx_MessageDecide();
                 Rupees_ChangeBy(play->msgCtx.unk1206C * -1);
-                func_80ADEF74(&this->actor, play);
+                func_80ADEF74(this, play);
                 this->actor.textId = 0x778;
                 if (this->skelAnime.animation != &object_bg_Anim_009890) {
                     Animation_MorphToLoop(&this->skelAnime, &object_bg_Anim_009890, 5.0f);
