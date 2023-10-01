@@ -116,4 +116,33 @@ void func_809AD1EC(EnEncount3* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/EnEncount3_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/EnEncount3_Draw.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/EnEncount3_Draw.s")
+void EnEncount3_Draw(Actor* thisx, PlayState* play) {
+    EnEncount3* this = THIS;
+    s32 pad;
+
+    if (this->unk170 > 0.0f) {
+        OPEN_DISPS(play->state.gfxCtx);
+
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+        Matrix_Push();
+
+        gDPPipeSync(POLY_XLU_DISP++);
+        gSPSegment(POLY_XLU_DISP++, 0x08,
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, (s32)play->gameplayFrames, 0U, 0x20, 0x40, 1,
+                                    (s32)play->gameplayFrames * -2, (s32)play->gameplayFrames * -8, 0x20, 0x20));
+
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 200, 0, (s8)this->unk170);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);
+
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y - 40.0f, this->actor.world.pos.z,
+                         MTXMODE_NEW);
+        Matrix_Scale(this->unk168, this->unk174, this->unk168, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, &D_060009A0);
+
+        Matrix_Pop();
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+}
