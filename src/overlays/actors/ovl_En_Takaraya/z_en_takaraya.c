@@ -15,6 +15,10 @@ void EnTakaraya_Destroy(Actor* thisx, PlayState* play);
 void EnTakaraya_Update(Actor* thisx, PlayState* play);
 void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 
+void func_80ADED8C(EnTakaraya* this);
+void func_80ADEDF8(EnTakaraya* this);
+void func_80ADEE4C(EnTakaraya* this, PlayState* play);
+void func_80ADF03C(EnTakaraya* this);
 void func_80ADF050(EnTakaraya* this, PlayState* play);
 void func_80ADF338(EnTakaraya* this, PlayState* play);
 void func_80ADF4E0(EnTakaraya* this);
@@ -25,7 +29,9 @@ void func_80ADF6DC(EnTakaraya* this);
 void func_80ADF730(EnTakaraya* this, PlayState* play);
 void func_80ADF7B8(EnTakaraya* this);
 void func_80ADF7CC(EnTakaraya* this, PlayState* play);
-void func_80ADEDF8(EnTakaraya* this);
+
+s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+void EnTakaraya_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx);
 
 #if 0
 ActorInit En_Takaraya_InitVars = {
@@ -51,11 +57,53 @@ static InitChainEntry D_80ADFB20[] = {
 extern InitChainEntry D_80ADFB20[];
 
 extern UNK_TYPE D_06001384;
-extern UNK_TYPE D_06009890;
-extern UNK_TYPE D_0600A280;
-extern UNK_TYPE D_0600AD98;
+extern AnimationHeader D_06009890;
+extern AnimationHeader D_0600A280;
+extern AnimationHeader D_0600AD98;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Init.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Init.s")
+extern FlexSkeletonHeader D_06008FC8;
+extern void* D_80ADFB00[4];
+extern void* D_80ADFB10[4];
+extern u32 D_80ADFB28;
+extern u16 D_80ADFB2C[6];
+
+void EnTakaraya_Init(Actor* thisx, PlayState* play) {
+    EnTakaraya* this = THIS;
+    s32 i;
+    Actor_ProcessInitChain(&this->actor, D_80ADFB20);
+    ActorShape_Init(&this->actor.shape, -60.0f, ((void*)0), 0.0f);
+    SkelAnime_InitFlex(play, &this->skelAnime, &D_06008FC8, &D_06009890, this->jointTable, this->morphTable, 24);
+    this->unk2B2 = (this->actor.params >> 8) & 0xFF;
+    thisx->params &= 0xFF;
+    if (!D_80ADFB28) {
+        for (i = 0; i < (s32)(sizeof(D_80ADFB10) / sizeof(D_80ADFB10[0])); i++) {
+            D_80ADFB00[i] = Lib_SegmentedToVirtual(D_80ADFB00[i]);
+            D_80ADFB10[i] = Lib_SegmentedToVirtual(D_80ADFB10[i]);
+        }
+        D_80ADFB28 = 1;
+    }
+    this->unk2AC = 2;
+    if (gSaveContext.save.entrance == 0x2810) {
+        Audio_StopSubBgm();
+        if (gSaveContext.timerStates[4] == TIMER_STATE_6) {
+            this->actor.textId = 0x77A;
+            gSaveContext.timerStates[4] = TIMER_STATE_STOP;
+            func_80ADF6DC(this);
+            return;
+        }
+        this->actor.textId = 0x77C;
+        if (gSaveContext.save.saveInfo.weekEventReg[63] & 2) {
+            gSaveContext.save.saveInfo.weekEventReg[63] &= 0xFE;
+            gSaveContext.save.saveInfo.weekEventReg[63] &= 0xFD;
+            func_80ADEDF8(this);
+            return;
+        }
+        func_80ADF6DC(this);
+        return;
+    }
+    func_80ADEDF8(this);
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Destroy.s") 0xBF 0x40
 void EnTakaraya_Destroy(Actor* thisx, PlayState* play) {
@@ -67,11 +115,54 @@ void EnTakaraya_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADED8C.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADED8C.s")
+void func_80ADED8C(EnTakaraya* this) {
+    if (this->unk2AC != 0) {
+        this->unk2AC++;
+        if (this->unk2AC == 4) {
+            this->unk2AC = 0;
+        }
+    } else if (Rand_ZeroOne() < 0.02f) {
+        this->unk2AC++;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADEDF8.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADEDF8.s")
+void func_80ADEDF8(EnTakaraya* this) {
+    if (this->skelAnime.animation == &D_06001384) {
+        Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
+    }
+    this->actionFunc = func_80ADEE4C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADEE4C.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADEE4C.s")
+void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
+    u16 temp_v0;
+    s16 new_var;
+
+    if (SkelAnime_Update(&this->skelAnime) != 0) {
+        if ((&D_0600A280) == (*this).skelAnime.animation) {
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
+        } else {
+            Animation_MorphToLoop(&this->skelAnime, &D_06009890, -4.0f);
+        }
+    }
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+        if (Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL) == 0) {
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
+        }
+        func_80ADF03C(this);
+    } else if (Actor_IsFacingPlayer(&this->actor, 0x2000) != 0) {
+        temp_v0 = Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL);
+        this->actor.textId = temp_v0;
+        if (!(temp_v0 & 0xFFFF)) {
+            new_var = gSaveContext.save.playerForm;
+            this->actor.textId = D_80ADFB2C[new_var];
+        }
+        this->unk2B0 = gSaveContext.save.playerForm + this->unk2B2;
+        Actor_OfferTalk(&this->actor, play, 120.0f);
+    }
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADEF74.s")
 extern UNK_TYPE1 D_80ADFB39;
@@ -108,7 +199,37 @@ void func_80ADF2D4(EnTakaraya* this) {
     this->actionFunc = &func_80ADF338;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF338.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF338.s")
+void func_80ADF338(EnTakaraya* this, PlayState* play) {
+    Actor* chest = play->actorCtx.actorLists[ACTORCAT_CHEST].first;
+    Actor* player = play->actorCtx.actorLists[ACTORCAT_PLAYER].first;
+    Vec3f sp3C;
+    Vec3f sp30;
+    f32 sp2C;
+    s16 sp2A;
+
+    SkelAnime_Update(&this->skelAnime);
+    if ((CutsceneManager_GetCurrentCsId() == this->actor.csId) && (chest != NULL)) {
+        this->unk2AE--;
+        sp2A = CutsceneManager_GetCurrentSubCamId((s16)this->actor.csId);
+        if (this->unk2AE >= 0x1A) {
+            sp2C = 250.0f;
+        } else {
+            sp2C = ((chest->xzDistToPlayer - 250.0f) * (f32)(0x19 - this->unk2AE) * 0.04f) + 250.0f;
+        }
+        sp3C.x = (Math_SinS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.x;
+        sp3C.y = player->world.pos.y + 120.0f;
+        sp3C.z = (Math_CosS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.z;
+        sp30.x = sp3C.x - (Math_SinS(chest->yawTowardsPlayer) * 250.0f);
+        sp30.y = sp3C.y - 90.0f;
+        sp30.z = sp3C.z - (Math_CosS(chest->yawTowardsPlayer) * 250.0f);
+        Play_SetCameraAtEye(play, sp2A, &sp30, &sp3C);
+        return;
+    }
+    if (this->unk2AE < 0x91) {
+        func_80ADF4E0(this);
+    }
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF4E0.s")
 void func_80ADF4E0(EnTakaraya* this) {
@@ -146,7 +267,7 @@ void func_80ADF654(EnTakaraya* this, PlayState* play) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF6DC.s")
 void func_80ADF6DC(EnTakaraya* this) {
-    Animation_PlayLoop(&this->unk144, (AnimationHeader*)&D_06001384);
+    Animation_PlayLoop(&this->skelAnime, (AnimationHeader*)&D_06001384);
     this->unk2AC = 0;
     this->actor.flags |= ACTOR_FLAG_10000;
     this->actionFunc = &func_80ADF730;
@@ -154,7 +275,7 @@ void func_80ADF6DC(EnTakaraya* this) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF730.s")
 void func_80ADF730(EnTakaraya* this, PlayState* play) {
-    SkelAnime_Update(&this->unk144);
+    SkelAnime_Update(&this->skelAnime);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         this->actor.flags &= 0xFFFEFFFF;
         func_80ADF7B8(this);
@@ -171,10 +292,52 @@ void func_80ADF7B8(EnTakaraya* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF7CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Update.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Update.s")
+void EnTakaraya_Update(Actor* thisx, PlayState* play) {
+    EnTakaraya* this = THIS;
+    s32 pad;
+    Vec3s torsoRot;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF94C.s")
+    this->actionFunc(this, play);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &torsoRot, this->actor.focus.pos);
+    func_80ADED8C(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF984.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF94C.s")
+s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnTakaraya* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Draw.s")
+    if (limbIndex == 5) {
+        rot->x += this->headRot.y;
+    }
+    return 0;
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF984.s")
+void EnTakaraya_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
+    EnTakaraya* this = THIS;
+
+    if (limbIndex == 5) {
+        Matrix_RotateYS((s16)(0x400 - this->headRot.x), MTXMODE_APPLY);
+        Matrix_MultVecX(500.0f, &thisx->focus.pos);
+    }
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Draw.s")
+void EnTakaraya_Draw(Actor* thisx, PlayState* play) {
+    EnTakaraya* this = THIS;
+
+    OPEN_DISPS(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
+    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) || (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        gSPSegment(POLY_OPA_DISP++, 0x08, D_80ADFB10[this->unk2AC]);
+    } else {
+        gSPSegment(POLY_OPA_DISP++, 0x08, D_80ADFB00[this->unk2AC]);
+    }
+    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnTakaraya_OverrideLimbDraw, NULL,
+                                   EnTakaraya_TransformLimbDraw, &this->actor);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
