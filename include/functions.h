@@ -980,17 +980,6 @@ void SkinMatrix_SetYRotation(MtxF* mf, s16 a);
 void SkinMatrix_MulYRotation(MtxF* mf, s16 a);
 void SkinMatrix_SetZRotation(MtxF* mf, s16 a);
 
-void VisFbCopyFx_Init(VisFbCopyFx* this);
-void VisFbCopyFx_Destroy(VisFbCopyFx* this);
-void VisFbCopyFx_DrawBgToColorImage(Gfx** gfxP, uObjBg* bg, void* img, s32 width, s32 height, VisFbCopyBgMode cycleMode);
-void VisFbCopyFx_SetBg(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX, f32 scaleY, VisFbCopyBgMode cycleMode);
-void VisFbCopyFx_SetBgSimple(Gfx** gfxP, void* source, void* img, s32 width, s32 height, VisFbCopyBgMode cycleMode);
-void VisFbCopyFx_SetBgGeneral(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX, f32 scaleY, VisFbCopyBgMode cycleMode);
-void VisFbCopyFx_ApplyEffects(VisFbCopyFx* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height);
-void VisFbCopyFx_DrawGeneral(VisFbCopyFx* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height);
-void VisFbCopyFx_DrawInterpolate(VisFbCopyFx* this, Gfx** gfxP, void* img, s32 width, s32 height);
-void VisFbCopyFx_Draw(VisFbCopyFx* this, Gfx** gfxP, void* img);
-
 // void func_80147520(void);
 void func_80147564(PlayState* play);
 s32 Message_ShouldAdvance(PlayState* play);

@@ -9,7 +9,10 @@
  * microcode first, and then re-load the 3D microcode afterwards for the rest of the drawing in the frame; see
  * VisFbCopyFx_Draw() for how to do this.
  */
+
 #include "global.h"
+#include "z64visfbcopyfx.h"
+#include "sys_cfb.h"
 
 #define SCALE_MIN 0.032f
 #define SCALE_MAX 1.0f //!< also unchanged scale
@@ -51,7 +54,7 @@ void VisFbCopyFx_DrawBgToColorImage(Gfx** gfxP, uObjBg* bg, void* img, s32 width
 
     gDPPipeSync(gfx++);
     // Reset the color image and scissor to frame's defaults
-    gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
+    gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, gCfbWidth, D_0F000000);
     gSPDisplayList(gfx++, D_0E000000.setScissor);
 
     *gfxP = gfx;

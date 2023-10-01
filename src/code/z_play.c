@@ -1,7 +1,9 @@
+#include "prevent_bss_reordering.h"
 #include "z64.h"
 #include "regs.h"
 #include "functions.h"
 #include "z64vismono.h"
+#include "z64visfbcopyfx.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 s16 sTransitionFillTimer;
@@ -416,7 +418,7 @@ void Play_Destroy(GameState* thisx) {
     ShrinkWindow_Destroy();
     TransitionFade_Destroy(&this->unk_18E48);
     VisMono_Destroy(&sPlayVisMono);
-    func_80140EA0(D_801F6D4C);
+    VisFbCopyFx_Destroy(D_801F6D4C);
     D_801F6D4C = NULL;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_92_80)) {
@@ -1117,7 +1119,7 @@ void Play_PostWorldDraw(PlayState* this) {
         nextOpa = Graph_GfxPlusOne(opa);
         gSPDisplayList(OVERLAY_DISP++, nextOpa);
 
-        func_80141778(D_801F6D4C, &nextOpa, this->unk_18E60, gfxCtx);
+        VisFbCopyFx_Draw(D_801F6D4C, &nextOpa, this->unk_18E60);
 
         gSPEndDisplayList(nextOpa++);
         Graph_BranchDlist(opa, nextOpa);
@@ -2312,7 +2314,7 @@ void Play_Init(GameState* thisx) {
 
     gVisMonoColor.a = 0;
     D_801F6D4C = &D_801F6D38;
-    func_80140E80(D_801F6D4C);
+    VisFbCopyFx_Init(D_801F6D4C);
     D_801F6D4C->lodProportion = 0.0f;
     D_801F6D4C->mode = 1;
     D_801F6D4C->primColor.r = 0;

@@ -3,8 +3,9 @@
 
 #include "ultra64.h"
 #include "color.h"
+#include "z64visfbcopyfx.h"
 
-typedef struct {
+typedef struct TransitionWipe4 {
     /* 0x00 */ Color_RGBA8_u32 primColor;
     /* 0x04 */ Color_RGBA8_u32 envColor;
     /* 0x08 */ f32 baseSpeed;

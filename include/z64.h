@@ -330,23 +330,4 @@ typedef enum {
     /* 3 */ PICTO_PHOTO_STATE_READY
 } PictoPhotoState;
 
-typedef enum {
-    /* 0 */ VIS_FB_COPY_BG_CYC_1CYC, //!< Enable rescaling
-    /* 1 */ VIS_FB_COPY_BG_CYC_COPY  //!< Direct copy, no scaling
-} VisFbCopyBgMode;
-
-typedef enum {
-    /* 0 */ VIS_FB_COPY_MODE_NONE,    //!< Do nothing but waste time loading microcode
-    /* 1 */ VIS_FB_COPY_MODE_GENERAL, //!< Interpolation, filling and scaling
-    /* 2 */ VIS_FB_COPY_MODE_INTERPOLATE
-} VisFbCopyMode;
-
-typedef struct VisFbCopyFx {
-    /* 0x00 */ u8 mode;
-    /* 0x04 */ f32 scale;
-    /* 0x08 */ f32 lodProportion; // expected to be between 0.0f and 1.0f
-    /* 0x0C */ Color_RGBA8_u32 primColor;
-    /* 0x10 */ Color_RGBA8_u32 envColor;
-} VisFbCopyFx; // size = 0x14
-
 #endif
