@@ -40,8 +40,8 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
     EnEncount3* this = THIS;
 
     this->unk14A = ENCOUNT3_GET_SPAWN_INDEX(thisx);
-    this->unk158 = ENCOUNT3_GET_PARAM_F80(thisx);
-    this->unk15C = ENCOUNT3_GET_PARAM_7F(thisx);
+    this->childParams = ENCOUNT3_GET_PARAM_F80(thisx);
+    this->switchFlags = ENCOUNT3_GET_SWITCHFLAGS(thisx);
     this->unk15A = this->actor.csId;
     this->unk16C = this->actor.world.rot.z * 10.0f;
     if (this->unk16C < 10.0f) {
@@ -49,10 +49,10 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
     } else if (this->unk16C > 1000.0f) {
         this->unk16C = 1000.0f;
     }
-    if (this->unk15C == 0x7F) {
-        this->unk15C = -1;
+    if (this->switchFlags == 0x7F) {
+        this->switchFlags = -1;
     }
-    if ((this->unk15C >= 0) && (Flags_GetSwitch(play, this->unk15C) != 0)) {
+    if ((this->switchFlags >= 0) && (Flags_GetSwitch(play, this->switchFlags) != 0)) {
         Actor_Kill(&this->actor);
     }
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
@@ -64,23 +64,24 @@ void EnEncount3_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_809AD058(EnEncount3* this) {
-    this->unk154 = 0x113;
+    this->childActorId = 0x113;
     this->unk150 = 1;
     this->unk15E = 0x1E;
     this->actionFunc = func_809AD084;
 }
 
 void func_809AD084(EnEncount3* this, PlayState* play) {
-    if ((this->unk15C >= 0) && (Flags_GetSwitch(play, this->unk15C) != 0)) {
+    if ((this->switchFlags >= 0) && (Flags_GetSwitch(play, this->switchFlags) != 0)) {
         Actor_Kill(&this->actor);
-    } else if (!(this->unk16C < this->actor.xzDistToPlayer) && (Player_GetMask(play) == 6) && !D_809AD810) {
+    } else if (!(this->unk16C < this->actor.xzDistToPlayer) && (Player_GetMask(play) == PLAYER_MASK_GARO) &&
+               !D_809AD810) {
         if (this->unk15E > 0) {
             this->unk15E--;
         } else {
-            this->unk17C =
-                Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, this->unk154, this->actor.world.pos.x,
-                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, this->unk158);
-            if (this->unk17C != NULL) {
+            this->child =
+                Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, this->childActorId, this->actor.world.pos.x,
+                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, this->childParams);
+            if (this->child != NULL) {
                 this->unk14E++;
                 D_809AD810 = true;
                 this->actionFunc = func_809AD194;
@@ -92,8 +93,8 @@ void func_809AD084(EnEncount3* this, PlayState* play) {
 void func_809AD194(EnEncount3* this, PlayState* play) {
     if (this->unk14E == 0) {
         this->unk178 = 0.0f;
-        if (this->unk15C >= 0) {
-            Flags_SetSwitch(play, this->unk15C);
+        if (this->switchFlags >= 0) {
+            Flags_SetSwitch(play, this->switchFlags);
         }
         this->actionFunc = func_809AD1EC;
     }
@@ -128,10 +129,9 @@ void EnEncount3_Update(Actor* thisx, PlayState* play2) {
                 this->unk148 = 0;
                 this->unk178 = 0.0f;
                 D_809AD810 = false;
-                if (((this->unk17C != NULL) && (this->unk17C->update != NULL)) &&
-                    (this->unk17C->colChkInfo.health > 0)) {
-                    Actor_Kill(this->unk17C);
-                    this->unk17C = NULL;
+                if (((this->child != NULL) && (this->child->update != NULL)) && (this->child->colChkInfo.health > 0)) {
+                    Actor_Kill(this->child);
+                    this->child = NULL;
                 }
                 func_809AD058(this);
             }
@@ -149,7 +149,7 @@ void EnEncount3_Update(Actor* thisx, PlayState* play2) {
                 func_800B8D50(play, &this->actor, 10.0f, Math_Atan2S_XY(sp38, sp3C), 0.0f, 1);
             }
         }
-        this->unk17C->colChkInfo = this->unk17C->colChkInfo;
+        this->child->colChkInfo = this->child->colChkInfo;
     }
 
     this->unk168 = this->unk16C;
