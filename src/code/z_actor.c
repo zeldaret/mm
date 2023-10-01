@@ -3507,7 +3507,7 @@ s32 Target_InTargetableScreenRegion(PlayState* play, Actor* actor) {
  * - Must not be blocked by a surface (?)
  *
  * This function also checks for the nearest enemy actor, which allows determining if enemy background music should be
- * played. This actor is stored in `targetContext.bgmEnemy` and its distance is stored in `sBgmEnemyDistSq`
+ * played. This actor is stored in `targetCtx.bgmEnemy` and its distance is stored in `sBgmEnemyDistSq`
  *
  * This function is expected to be called with almost every actor category in each cycle. On a new cycle its global
  * variables must be reset by the caller, otherwise the information of the previous cycle will be retained on this one.
