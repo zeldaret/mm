@@ -11,6 +11,8 @@ typedef void (*EnEncount3ActionFunc)(struct EnEncount3*, PlayState*);
 #define ENCOUNT3_GET_PARAM_F80(thisx) (((thisx)->params >> 7) & 0x1F)
 #define ENCOUNT3_GET_SWITCHFLAGS(thisx) ((thisx)->params & 0x7F)
 
+#define ENCOUNT3_GET_ROTZ(thisx) ((thisx)->world.rot.z)
+
 typedef struct EnEncount3 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnEncount3ActionFunc actionFunc;
