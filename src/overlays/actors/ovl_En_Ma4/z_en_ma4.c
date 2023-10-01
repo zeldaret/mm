@@ -136,7 +136,7 @@ typedef enum EnMa4Animation {
     /* 20 */ ENMA4_ANIM_MAX
 } EnMa4Animation;
 
-static AnimationSpeedInfo sAnimationInfo[ENMA4_ANIM_MAX] = {
+static AnimationSpeedInfo sAnimationSpeedInfo[ENMA4_ANIM_MAX] = {
     { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },              // ENMA4_ANIM_0
     { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, -6.0f },             // ENMA4_ANIM_1
     { &gRomaniLookAroundAnim, 1.0f, ANIMMODE_LOOP, 0.0f },        // ENMA4_ANIM_2
@@ -160,9 +160,9 @@ static AnimationSpeedInfo sAnimationInfo[ENMA4_ANIM_MAX] = {
 };
 
 void EnMa4_ChangeAnim(EnMa4* this, s32 animIndex) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
-                     sAnimationInfo[animIndex].morphFrames);
+    Animation_Change(&this->skelAnime, sAnimationSpeedInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationSpeedInfo[animIndex].animation),
+                     sAnimationSpeedInfo[animIndex].mode, sAnimationSpeedInfo[animIndex].morphFrames);
 }
 
 void func_80ABDD9C(EnMa4* this, PlayState* play) {
