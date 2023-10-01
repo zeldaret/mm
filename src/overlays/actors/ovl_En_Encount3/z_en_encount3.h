@@ -7,13 +7,16 @@ struct EnEncount3;
 
 typedef void (*EnEncount3ActionFunc)(struct EnEncount3*, PlayState*);
 
+#define ENCOUNT3_GET_SPAWN_INDEX(thisx) (((thisx)->params >> 0xC) & 0xF)
+#define ENCOUNT3_GET_PARAM_F80(thisx) (((thisx)->params >> 7) & 0x1F)
+#define ENCOUNT3_GET_PARAM_7F(thisx) ((thisx)->params & 0x7F)
+
 typedef struct EnEncount3 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnEncount3ActionFunc actionFunc;
     /* 0x148 */ u8 unk148;
-    /* 0x149 */ char pad149[1];
     /* 0x14A */ s16 unk14A;
-    /* 0x14C */ char pad14C[2];
+    /* 0x14C */ UNK_TYPE1 unk14C[0x2];
     /* 0x14E */ s16 unk14E;
     /* 0x150 */ s16 unk150;
     /* 0x152 */ s16 unk152;
@@ -31,7 +34,7 @@ typedef struct EnEncount3 {
     /* 0x174 */ f32 unk174;
     /* 0x178 */ f32 unk178;
     /* 0x17C */ Actor* unk17C;
-    /* 0x180 */ char pad180[0x4C];
+    /* 0x180 */ UNK_TYPE1 unk180[0x4C];
 } EnEncount3; // size = 0x1CC
 
 #endif // Z_EN_ENCOUNT3_H

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_encount3.h"
+#include "objects/object_big_fwall/object_big_fwall.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CANT_LOCK_ON)
 
@@ -33,16 +34,16 @@ ActorInit En_Encount3_InitVars = {
     (ActorFunc)EnEncount3_Draw,
 };
 
-u32 D_809AD810 = false;
+s32 D_809AD810 = false;
 
 extern UNK_TYPE D_060009A0;
 
 void EnEncount3_Init(Actor* thisx, PlayState* play) {
     EnEncount3* this = THIS;
 
-    this->unk14A = (this->actor.params >> 0xC) & 0xF;
-    this->unk158 = (this->actor.params >> 7) & 0x1F;
-    this->unk15C = this->actor.params & 0x7F;
+    this->unk14A = ENCOUNT3_GET_SPAWN_INDEX(thisx);
+    this->unk158 = ENCOUNT3_GET_PARAM_F80(thisx);
+    this->unk15C = ENCOUNT3_GET_PARAM_7F(thisx);
     this->unk15A = this->actor.csId;
     this->unk16C = this->actor.world.rot.z * 10.0f;
     if (this->unk16C < 10.0f) {
@@ -56,7 +57,7 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
     if ((this->unk15C >= 0) && (Flags_GetSwitch(play, this->unk15C) != 0)) {
         Actor_Kill(&this->actor);
     }
-    this->actor.flags |= 0x08000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     func_809AD058(this);
 }
@@ -74,7 +75,7 @@ void func_809AD058(EnEncount3* this) {
 void func_809AD084(EnEncount3* this, PlayState* play) {
     if ((this->unk15C >= 0) && (Flags_GetSwitch(play, this->unk15C) != 0)) {
         Actor_Kill(&this->actor);
-    } else if (!(this->unk16C < this->actor.xzDistToPlayer) && (Player_GetMask(play) == 6) && (!D_809AD810)) {
+    } else if (!(this->unk16C < this->actor.xzDistToPlayer) && (Player_GetMask(play) == 6) && !D_809AD810) {
         if (this->unk15E > 0) {
             this->unk15E--;
         } else {
@@ -137,16 +138,17 @@ void EnEncount3_Update(Actor* thisx, PlayState* play2) {
                 func_809AD058(this);
             }
         } else if (this->unk16C < this->actor.xzDistToPlayer) {
-            s16 i = 0;
-            while (i < PLAYER_BODYPART_MAX) {
-                player->flameTimers[i++] = Rand_S16Offset(0, 0xC8);
+            s16 i;
+
+            for (i = 0; i < PLAYER_BODYPART_MAX; i++) {
+                player->flameTimers[i] = Rand_S16Offset(0, 0xC8);
             }
-            player->isBurning = 1;
+            player->isBurning = true;
 
             sp3C = this->actor.world.pos.x - player->actor.world.pos.x;
             sp38 = this->actor.world.pos.z - player->actor.world.pos.z;
             if (Play_InCsMode(play) == 0) {
-                func_800B8D50(play, &this->actor, 10.0f, Math_Atan2S_XY(sp38, sp3C), 0.0f, 1U);
+                func_800B8D50(play, &this->actor, 10.0f, Math_Atan2S_XY(sp38, sp3C), 0.0f, 1);
             }
         }
         this->unk17C->colChkInfo = this->unk17C->colChkInfo;
@@ -198,7 +200,7 @@ void EnEncount3_Draw(Actor* thisx, PlayState* play) {
         Matrix_Scale(this->unk168, this->unk174, this->unk168, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, &D_060009A0);
+        gSPDisplayList(POLY_XLU_DISP++, object_big_fwall_DL_0009A0);
 
         Matrix_Pop();
         CLOSE_DISPS(play->state.gfxCtx);
