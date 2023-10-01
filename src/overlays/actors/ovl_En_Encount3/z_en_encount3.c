@@ -36,8 +36,6 @@ ActorInit En_Encount3_InitVars = {
 
 s32 D_809AD810 = false;
 
-extern UNK_TYPE D_060009A0;
-
 void EnEncount3_Init(Actor* thisx, PlayState* play) {
     EnEncount3* this = THIS;
 
