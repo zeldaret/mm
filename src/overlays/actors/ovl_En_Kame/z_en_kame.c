@@ -647,10 +647,10 @@ void EnKame_Stunned(EnKame* this, PlayState* play) {
 }
 
 void EnKame_SetupDamaged(EnKame* this) {
-    s16 lastFrame = Animation_GetLastFrame(&gSnapperDamageAnim);
+    s16 endFrame = Animation_GetLastFrame(&gSnapperDamageAnim);
 
-    Animation_Change(&this->snapperSkelAnime, &gSnapperDamageAnim, 1.0f, 0.0f, lastFrame, ANIMMODE_ONCE, -3.0f);
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, lastFrame);
+    Animation_Change(&this->snapperSkelAnime, &gSnapperDamageAnim, 1.0f, 0.0f, endFrame, ANIMMODE_ONCE, -3.0f);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, endFrame);
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_DAMAGE);
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = EnKame_Damaged;

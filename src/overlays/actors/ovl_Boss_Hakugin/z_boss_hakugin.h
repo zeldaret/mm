@@ -83,9 +83,7 @@ typedef struct BossHakugin {
     /* 0x0380 */ Vec3f unk_0380;
     /* 0x038C */ Vec3f unk_038C;
     /* 0x0398 */ Vec3f bodyPartsPos[15];
-    /* 0x044C */ f32 unk_044C;
-    /* 0x0450 */ char unk_0450[4];
-    /* 0x0454 */ f32 unk_0454;
+    /* 0x044C */ Vec3f unk_044C;
     /* 0x0458 */ Vec3f unk_0458;
     /* 0x0464 */ Vec3f unk_0464;
     /* 0x0470 */ LightNode* lightNode;

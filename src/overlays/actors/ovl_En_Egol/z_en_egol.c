@@ -933,7 +933,7 @@ void EnEgol_Slam(EnEgol* this, PlayState* play) {
         }
         EnEgol_DestroyBlocks(this, play, this->rightHandPos, this->leftHandPos);
     }
-    if (this->animEndFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         EnEgol_SetupSlamWait(this);
     } else if ((this->skelAnime.curFrame <= 17.0f) && (this->skelAnime.curFrame >= 10.0f)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->bodyCollider.base);
