@@ -204,10 +204,10 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     EnTk* this = THIS;
 
     this->unk_2B0 = ENTK_GET_F(&this->actor);
-    this->unk_2B1 = ENTK_GET_7F0(&this->actor);
+    this->switchFlag = ENTK_GET_SWITCH_FLAG(&this->actor);
     Collider_InitCylinder(play, &this->collider);
 
-    if (Flags_GetSwitch(play, this->unk_2B1)) {
+    if (Flags_GetSwitch(play, this->switchFlag)) {
         if (this->unk_2B0 == 0) {
             Actor_Kill(&this->actor);
             return;
@@ -562,7 +562,7 @@ void func_80AED610(EnTk* this, PlayState* play) {
                     Message_StartTextbox(play, 0x13FD, &this->actor);
                 } else if (CURRENT_DAY != 2) {
                     func_80AED544(this, play);
-                } else if (!Flags_GetSwitch(play, ENTK_GET_7F0(&this->actor))) {
+                } else if (!Flags_GetSwitch(play, ENTK_GET_SWITCH_FLAG(&this->actor))) {
                     Message_StartTextbox(play, 0x1403, &this->actor);
                 } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_02)) {
                     func_80AED544(this, play);

@@ -188,7 +188,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    this->switchFlags = BIG_POE_GET_SWITCH_FLAGS(thisx);
+    this->switchFlags = BIG_POE_GET_SWITCH_FLAG(thisx);
     thisx->params &= 0xFF;
     if (thisx->params == BIG_POE_TYPE_POSSIBLE_FIRE) {
         if (Flags_GetSwitch(play, this->switchFlags)) {

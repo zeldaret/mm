@@ -7,7 +7,7 @@ struct EnOkarinaTag;
 
 typedef void (*EnOkarinaTagActionFunc)(struct EnOkarinaTag*, PlayState*);
 
-#define ENOKARINATAG_GET_SWITCH_FLAGS(thisx) (((thisx)->params & 0x7F))
+#define ENOKARINATAG_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x7F))
 #define ENOKARINATAG_GET_780(thisx) (((thisx)->params >> 0x7) & 0xF)
 #define ENOKARINATAG_GET_F800(thisx) (((thisx)->params >> 0xB) & 0x1F)
 

@@ -75,6 +75,6 @@ typedef enum EnBigpoType {
   /* 5 */ BIG_POE_TYPE_UNK5
 } EnBigpoType;
 
-#define BIG_POE_GET_SWITCH_FLAGS(thisx) (u8)((thisx)->params >> 0x8) 
+#define BIG_POE_GET_SWITCH_FLAG(thisx) (u8)((thisx)->params >> 0x8) 
 
 #endif // Z_EN_BIGPO_H

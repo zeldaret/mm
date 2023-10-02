@@ -141,7 +141,8 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
             this->unk_146 = ENELFGRP_1;
             if (sp24 >= 25) {
                 this->actionFunc = func_80A3A520;
-                if ((this->actor.home.rot.z != 0) && Flags_GetSwitch(play, this->actor.home.rot.z)) {
+                if ((ENELFGRP_GET_SWITCH_FLAG_2(&this->actor) != 0) &&
+                    Flags_GetSwitch(play, ENELFGRP_GET_SWITCH_FLAG_2(&this->actor))) {
                     this->actionFunc = func_80A3A600;
                 } else if (INV_CONTENT(ITEM_MASK_GREAT_FAIRY) == ITEM_MASK_GREAT_FAIRY) {
                     func_80A396B0(this, 4);
@@ -471,8 +472,8 @@ void func_80A3A520(EnElfgrp* this, PlayState* play) {
             Item_Give(play, ITEM_MASK_GREAT_FAIRY);
         }
 
-        if (this->actor.home.rot.z != 0) {
-            Flags_SetSwitch(play, this->actor.home.rot.z);
+        if (ENELFGRP_GET_SWITCH_FLAG_2(&this->actor) != 0) {
+            Flags_SetSwitch(play, ENELFGRP_GET_SWITCH_FLAG_2(&this->actor));
         }
     } else if (this->actor.xzDistToPlayer < 350.0f) {
         CutsceneManager_Queue(this->actor.csId);

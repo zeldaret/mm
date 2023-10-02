@@ -141,7 +141,7 @@ void func_80A4CD28(ObjFireshield* this) {
 void func_80A4CD34(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjFireshield* this = THIS;
-    s32 sp24 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_FLAGS(&this->actor));
+    s32 isSwitchFlagSet = Flags_GetSwitch(play, OBJFIRESHIELD_GET_FLAGS(&this->actor));
     s32 phi_v1;
     s32 phi_a0;
 
@@ -160,7 +160,7 @@ void func_80A4CD34(Actor* thisx, PlayState* play) {
 
     if (phi_v1 || phi_a0) {
         this->unk_19C = 0;
-    } else if (sp24) {
+    } else if (isSwitchFlagSet) {
         this->unk_19C = 0;
     } else {
         this->unk_19C = 1;
