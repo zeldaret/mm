@@ -16,7 +16,7 @@ typedef struct EnOkarinaTag {
     /* 0x144 */ EnOkarinaTagActionFunc actionFunc;
     /* 0x148 */ s16 unk148;
     /* 0x14A */ s16 unk14A;
-    /* 0x14C */ s32 switchFlags;
+    /* 0x14C */ s32 switchFlag;
     /* 0x150 */ s8 unk150;
     /* 0x154 */ f32 unk154;
     /* 0x158 */ f32 unk158;
