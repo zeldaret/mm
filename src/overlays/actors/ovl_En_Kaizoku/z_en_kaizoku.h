@@ -80,7 +80,7 @@ typedef struct EnKaizoku {
     /* 0x2D6 */ s16 csId;
     /* 0x2D8 */ u8 unk_2D8;
     /* 0x2D9 */ u8 unk_2D9;
-    /* 0x2DC */ f32 frameCount;
+    /* 0x2DC */ f32 animEndFrame;
     /* 0x2E0 */ f32 unk_2E0;
     /* 0x2E4 */ EnKaizokuAnimation animIndex;
     /* 0x2E8 */ s32 bodyPartIndex;

@@ -93,7 +93,8 @@ typedef enum EnHorseAnimation {
     /* 5 */ ENHORSE_ANIM_TROT,
     /* 6 */ ENHORSE_ANIM_GALLOP,
     /* 7 */ ENHORSE_ANIM_LOW_JUMP,
-    /* 8 */ ENHORSE_ANIM_HIGH_JUMP
+    /* 8 */ ENHORSE_ANIM_HIGH_JUMP,
+    /* 9 */ ENHORSE_ANIM_MAX
 } EnHorseAnimation;
 
 typedef enum HorseType {
@@ -101,7 +102,8 @@ typedef enum HorseType {
     /* 1 */ HORSE_TYPE_HNI,
     /* 2 */ HORSE_TYPE_2,
     /* 3 */ HORSE_TYPE_BANDIT,
-    /* 4 */ HORSE_TYPE_DONKEY // Cremia's donkey
+    /* 4 */ HORSE_TYPE_DONKEY, // Cremia's donkey
+    /* 5 */ HORSE_TYPE_MAX
 } HorseType;
 
 #define ENHORSE_PARAM_BANDIT 0x2000

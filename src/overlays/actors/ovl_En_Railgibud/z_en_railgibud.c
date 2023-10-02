@@ -463,7 +463,7 @@ void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
             if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
                 if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->stateFlags2 &= ~PLAYER_STATE2_80;
-                    player->unk_AE8 = 100;
+                    player->actionVar2 = 100;
                 }
 
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_GRAB_END);
@@ -1182,37 +1182,40 @@ s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, PlayState* play) {
             this->cueId = play->csCtx.actorCues[cueChannel]->id;
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
-                    this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_IDLE;
+                    this->csAnimIndex = EN_RAILGIBUD_ANIM_IDLE;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_IDLE);
                     break;
 
                 case 2:
-                    this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_SLUMP_START;
+                    this->csAnimIndex = EN_RAILGIBUD_ANIM_SLUMP_START;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_WEAKENED2);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_SLUMP_START);
                     break;
 
                 case 3:
-                    this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_CONVULSION;
+                    this->csAnimIndex = EN_RAILGIBUD_ANIM_CONVULSION;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_CONVULSION);
                     break;
 
                 case 4:
-                    this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_ARMS_UP_START;
+                    this->csAnimIndex = EN_RAILGIBUD_ANIM_ARMS_UP_START;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_ARMS_UP_START);
                     break;
 
                 case 5:
-                    this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_WALK;
+                    this->csAnimIndex = EN_RAILGIBUD_ANIM_WALK;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_WALK);
+                    break;
+
+                default:
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            if (this->cutsceneAnimIndex == EN_RAILGIBUD_ANIM_SLUMP_START) {
-                this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_SLUMP_LOOP;
+            if (this->csAnimIndex == EN_RAILGIBUD_ANIM_SLUMP_START) {
+                this->csAnimIndex = EN_RAILGIBUD_ANIM_SLUMP_LOOP;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_SLUMP_LOOP);
-            } else if (this->cutsceneAnimIndex == EN_RAILGIBUD_ANIM_ARMS_UP_START) {
-                this->cutsceneAnimIndex = EN_RAILGIBUD_ANIM_ARMS_UP_LOOP;
+            } else if (this->csAnimIndex == EN_RAILGIBUD_ANIM_ARMS_UP_START) {
+                this->csAnimIndex = EN_RAILGIBUD_ANIM_ARMS_UP_LOOP;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_ARMS_UP_LOOP);
                 EnRailgibud_SetupSinkIntoGround(this);
             }

@@ -685,7 +685,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
          (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
-            player->unk_AE8 = 101;
+            player->actionVar2 = 101;
             player->actor.parent = NULL;
             player->csMode = PLAYER_CSMODE_NONE;
         }
@@ -781,7 +781,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
          (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
-            player->unk_AE8 = 101;
+            player->actionVar2 = 101;
             player->actor.parent = NULL;
             player->csMode = PLAYER_CSMODE_NONE;
             Play_DisableMotionBlur();
@@ -909,7 +909,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
     // Stop chewing when the timer runs out
     if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0) {
         if (&this->actor == player->actor.parent) {
-            player->unk_AE8 = 101;
+            player->actionVar2 = 101;
             player->actor.parent = NULL;
             player->csMode = PLAYER_CSMODE_NONE;
             Play_DisableMotionBlur();
@@ -1751,7 +1751,7 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
     }
 
     if (&this->actor == player->actor.parent) {
-        player->unk_AE8 = 101;
+        player->actionVar2 = 101;
         player->actor.parent = NULL;
         player->csMode = PLAYER_CSMODE_NONE;
         Play_DisableMotionBlur();
@@ -1903,7 +1903,7 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
                     Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_DAMAGE_OLD);
 
                     if (&this->actor == player->actor.parent) {
-                        player->unk_AE8 = 101;
+                        player->actionVar2 = 101;
                         player->actor.parent = NULL;
                         player->csMode = PLAYER_CSMODE_NONE;
                         Play_DisableMotionBlur();

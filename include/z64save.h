@@ -154,12 +154,22 @@ typedef enum {
     /* 52 */ HUD_VISIBILITY_NONE_INSTANT = 52
 } HudVisibility;
 
+// Based on sRupeesTextLocalization
+typedef enum Language {
+    /* 0 */ LANGUAGE_JPN,
+    /* 1 */ LANGUAGE_ENG,
+    /* 2 */ LANGUAGE_GER,
+    /* 3 */ LANGUAGE_FRE,
+    /* 4 */ LANGUAGE_SPA,
+    /* 5 */ LANGUAGE_MAX
+} Language;
+
 typedef enum HighScore {
     /* 0 */ HS_BANK_RUPEES,
     /* 1 */ HS_UNK_1,
     /* 2 */ HS_FISHING, // Fishing flags
     /* 3 */ HS_BOAT_ARCHERY,
-    /* 4 */ HS_HOSRE_BACK_BALLOON,
+    /* 4 */ HS_HORSE_BACK_BALLOON,
     /* 5 */ HS_LOTTERY_GUESS, // Lottery code chosen by player (only uses lower three hex digits)
     /* 6 */ HS_SHOOTING_GALLERY, // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
     /* 7 */ HS_MAX
@@ -520,6 +530,7 @@ typedef enum {
     (gSaveContext.save.saveInfo.stolenItems = (gSaveContext.save.saveInfo.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
 
 #define HIGH_SCORE(type) (gSaveContext.save.saveInfo.highScores[(type)])
+#define GET_HIGH_SCORE(type) ((void)0, gSaveContext.save.saveInfo.highScores[(type)])
 
 #define HS_GET_BANK_RUPEES() (HIGH_SCORE(HS_BANK_RUPEES) & 0xFFFF)
 #define HS_SET_BANK_RUPEES(rupees) (HIGH_SCORE(HS_BANK_RUPEES) = ((HIGH_SCORE(HS_BANK_RUPEES) & 0xFFFF0000) | (rupees)))
@@ -529,8 +540,8 @@ typedef enum {
 #define HS_GET_BOAT_ARCHERY_HIGH_SCORE() ((HIGH_SCORE(HS_BOAT_ARCHERY) & 0xFFFF0000) >> 0x10)
 #define HS_SET_BOAT_ARCHERY_HIGH_SCORE(score) (HIGH_SCORE(HS_BOAT_ARCHERY) = ((HIGH_SCORE(HS_BOAT_ARCHERY) & 0xFFFF) | ((u16)(score) << 0x10)))
 
-#define HS_GET_HORSE_BACK_BALLOON_TIME() ((s32)HIGH_SCORE(HS_HOSRE_BACK_BALLOON))
-#define HS_SET_HORSE_BACK_BALLOON_TIME(time) (HIGH_SCORE(HS_HOSRE_BACK_BALLOON) = (time))
+#define HS_GET_HORSE_BACK_BALLOON_TIME() ((s32)HIGH_SCORE(HS_HORSE_BACK_BALLOON))
+#define HS_SET_HORSE_BACK_BALLOON_TIME(time) (HIGH_SCORE(HS_HORSE_BACK_BALLOON) = (time))
 
 #define HS_GET_LOTTERY_CODE_GUESS() (HIGH_SCORE(HS_LOTTERY_GUESS) & 0xFFFF)
 #define HS_SET_LOTTERY_CODE_GUESS(guess) (HIGH_SCORE(HS_LOTTERY_GUESS) = ((HIGH_SCORE(HS_LOTTERY_GUESS) & 0xFFFF0000) | ((guess) & 0xFFFF)))
