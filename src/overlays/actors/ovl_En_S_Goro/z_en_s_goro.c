@@ -36,7 +36,7 @@ Week Event Flags:
 #include "overlays/actors/ovl_En_Jg/z_en_jg.h" // Goron Elder
 #include "objects/object_taisou/object_taisou.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 #define THIS ((EnSGoro*)thisx)
 
 #define EN_S_GORO_ROLLEDUP_YOFFSET 14.0f
@@ -1048,7 +1048,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
         this->actor.gravity = -1.0f;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        this->actor.targetMode = 1;
+        this->actor.targetMode = TARGET_MODE_1;
 
         switch (EN_S_GORO_GET_MAIN_TYPE(&this->actor)) {
             case EN_S_GORO_TYPE_SHRINE_WINTER_A:
@@ -1113,8 +1113,8 @@ void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_WinterShrineGoron_Talk;
-        } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, play);
+        } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isLockedOn) {
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1144,8 +1144,8 @@ void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_SpringShrineGoron_Talk;
-        } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isTargeted)) {
-            func_800B863C(&this->actor, play);
+        } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isLockedOn)) {
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1185,8 +1185,8 @@ void EnSGoro_ShopGoron_Idle(EnSGoro* this, PlayState* play) {
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_ShopGoron_Talk;
         }
-    } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+    } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isLockedOn) {
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1271,7 +1271,7 @@ void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play) {
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnSGoro_ShopGoron_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1279,8 +1279,8 @@ void EnSGoro_Sleep(EnSGoro* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x23A, &this->actor);
         this->actionFunc = EnSGoro_SleepTalk;
-    } else if (this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+    } else if (this->actor.isLockedOn) {
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
     EnSGoro_UpdateSleeping(this, play);
 }
@@ -1381,53 +1381,62 @@ void EnSGoro_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     s32 overrideRot;
     EnSGoro* this = THIS;
 
-    if (limbIndex != GORON_LIMB_BODY) {
-        if ((limbIndex == GORON_LIMB_HEAD) && (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY)) {
-            if (this->actionFlags & EN_S_GORO_ACTIONFLAG_FACEPLAYER) {
-                overrideRot = true;
-            } else {
-                overrideRot = false;
+    switch (limbIndex) {
+        case GORON_LIMB_HEAD:
+            if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
+                if (this->actionFlags & EN_S_GORO_ACTIONFLAG_FACEPLAYER) {
+                    overrideRot = true;
+                } else {
+                    overrideRot = false;
+                }
+                if (this->loseAttentionTimer != 0) {
+                    stepRot = true;
+                } else {
+                    stepRot = false;
+                }
+
+                EnSGoro_UpdateLimb(this->headRotZ + this->bodyRotZ + 0x4000,
+                                   this->headRotY + this->bodyRotY + this->actor.shape.rot.y + 0x4000,
+                                   &this->headTranslate, &this->headRotate, stepRot, overrideRot);
+
+                Matrix_Pop();
+                Matrix_Translate(this->headTranslate.x, this->headTranslate.y, this->headTranslate.z, MTXMODE_NEW);
+                Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+                Matrix_RotateYS(this->headRotate.y, MTXMODE_APPLY);
+                Matrix_RotateXS(this->headRotate.x, MTXMODE_APPLY);
+                Matrix_RotateZS(this->headRotate.z, MTXMODE_APPLY);
+                Matrix_Push();
             }
-            if (this->loseAttentionTimer != 0) {
-                stepRot = true;
-            } else {
-                stepRot = false;
+            break;
+
+        case GORON_LIMB_BODY:
+            if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
+                if (this->actionFlags & EN_S_GORO_ACTIONFLAG_FACEPLAYER) {
+                    overrideRot = true;
+                } else {
+                    overrideRot = false;
+                }
+                if (this->loseAttentionTimer != 0) {
+                    stepRot = true;
+                } else {
+                    stepRot = false;
+                }
+
+                EnSGoro_UpdateLimb(this->bodyRotZ + 0x4000, this->bodyRotY + this->actor.shape.rot.y + 0x4000,
+                                   &this->bodyTranslate, &this->bodyRotate, stepRot, overrideRot);
+
+                Matrix_Pop();
+                Matrix_Translate(this->bodyTranslate.x, this->bodyTranslate.y, this->bodyTranslate.z, MTXMODE_NEW);
+                Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+                Matrix_RotateYS(this->bodyRotate.y, MTXMODE_APPLY);
+                Matrix_RotateXS(this->bodyRotate.x, MTXMODE_APPLY);
+                Matrix_RotateZS(this->bodyRotate.z, MTXMODE_APPLY);
+                Matrix_Push();
             }
+            break;
 
-            EnSGoro_UpdateLimb(this->headRotZ + this->bodyRotZ + 0x4000,
-                               this->headRotY + this->bodyRotY + this->actor.shape.rot.y + 0x4000, &this->headTranslate,
-                               &this->headRotate, stepRot, overrideRot);
-
-            Matrix_Pop();
-            Matrix_Translate(this->headTranslate.x, this->headTranslate.y, this->headTranslate.z, MTXMODE_NEW);
-            Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateYS(this->headRotate.y, MTXMODE_APPLY);
-            Matrix_RotateXS(this->headRotate.x, MTXMODE_APPLY);
-            Matrix_RotateZS(this->headRotate.z, MTXMODE_APPLY);
-            Matrix_Push();
-        }
-    } else if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
-        if (this->actionFlags & EN_S_GORO_ACTIONFLAG_FACEPLAYER) {
-            overrideRot = true;
-        } else {
-            overrideRot = false;
-        }
-        if (this->loseAttentionTimer != 0) {
-            stepRot = true;
-        } else {
-            stepRot = false;
-        }
-
-        EnSGoro_UpdateLimb(this->bodyRotZ + 0x4000, this->bodyRotY + this->actor.shape.rot.y + 0x4000,
-                           &this->bodyTranslate, &this->bodyRotate, stepRot, overrideRot);
-
-        Matrix_Pop();
-        Matrix_Translate(this->bodyTranslate.x, this->bodyTranslate.y, this->bodyTranslate.z, MTXMODE_NEW);
-        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->bodyRotate.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->bodyRotate.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->bodyRotate.z, MTXMODE_APPLY);
-        Matrix_Push();
+        default:
+            break;
     }
 }
 

@@ -7,7 +7,7 @@
 #include "z_en_zog.h"
 #include "objects/object_zog/object_zog.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZog*)thisx)
 
@@ -628,14 +628,13 @@ void func_80B9451C(EnZog* this, PlayState* play) {
         this->unk_300 = 2;
         this->actionFunc = func_80B94470;
     } else if ((play->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
-        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
-            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
             this->actor.shape.shadowDraw = NULL;
         }
     } else if (this->actor.xzDistToPlayer < 120.0f) {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
     }
     func_80B943EC(this, play);
 }
@@ -717,8 +716,7 @@ void func_80B948A8(EnZog* this, PlayState* play) {
         this->unk_300 = 2;
         this->actionFunc = func_80B946FC;
     } else if ((play->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
-        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
-            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
             this->actor.shape.shadowDraw = NULL;
@@ -734,7 +732,7 @@ void func_80B948A8(EnZog* this, PlayState* play) {
         }
 
         if ((this->unk_302 == 0) && (this->actor.xzDistToPlayer < 120.0f)) {
-            func_800B8614(&this->actor, play, 150.0f);
+            Actor_OfferTalk(&this->actor, play, 150.0f);
         }
     }
     func_80B93A48(this, play);
@@ -908,7 +906,7 @@ void func_80B94E34(EnZog* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_88_10);
     } else if ((this->actor.yawTowardsPlayer > 16000) && (this->actor.yawTowardsPlayer < 32000) &&
                (this->unk_302 == 0)) {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -941,7 +939,7 @@ void func_80B95128(EnZog* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         SET_WEEKEVENTREG(WEEKEVENTREG_91_01);
     } else {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
     func_80B93A48(this, play);

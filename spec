@@ -13,40 +13,38 @@ endseg
 beginseg
     name "boot"
     address 0x80080060
-    include "build/src/boot_O2_g3/boot_main.o"
+    include "build/src/boot/boot_main.o"
     include "build/data/boot/rspboot.data.o"
-    include "build/src/boot_O2_g3/idle.o"
-    include "build/src/boot_O2_g3/idle_extra_bss.o"
-    include "build/src/boot_O2_g3/viconfig.o"
+    include "build/src/boot/idle.o"
+    include "build/src/boot/viconfig.o"
     include "build/data/boot/viconfig.data.o"
-    include "build/src/boot_O2_g3/z_std_dma.o"
-    include "build/src/boot_O2_g3/yaz0.o"
-    include "build/src/boot_O2_g3/irqmgr.o"
-    include "build/src/boot_O2_g3/CIC6105.o"
-    include "build/src/boot_O2_g3/syncprintf.o"
-    include "build/src/boot_O2_g3/fault.o"
-    include "build/data/boot/fault.bss.o"
-    include "build/src/boot_O2_g3/fault_drawer.o"
-    include "build/src/boot_O2/boot_80084940.o"
-    include "build/src/boot_O2/loadfragment.o"
-    include "build/src/boot_O2/loadfragment2.o"
-    include "build/src/boot_O2/padutils.o"
-    include "build/src/boot_O2/stackcheck.o"
-    include "build/src/boot_O2/gfxprint.o"
+    include "build/src/boot/z_std_dma.o"
+    include "build/src/boot/yaz0.o"
+    include "build/src/boot/irqmgr.o"
+    include "build/src/boot/CIC6105.o"
+    include "build/src/boot/syncprintf.o"
+    include "build/src/boot/fault.o"
+    include "build/src/boot/fault_drawer.o"
+    include "build/src/boot/O2/rcp_utils.o"
+    include "build/src/boot/O2/loadfragment.o"
+    include "build/src/boot/O2/loadfragment2.o"
+    include "build/src/boot/O2/padutils.o"
+    include "build/src/boot/O2/stackcheck.o"
+    include "build/src/boot/O2/gfxprint.o"
     include "build/data/boot/gfxprint.data.o"
-    include "build/src/boot_O2/mtxuty-cvt.o"
-    include "build/src/boot_O2/assert.o"
-    include "build/src/boot_O2/system_heap.o"
-    include "build/src/boot_O2/padsetup.o"
-    include "build/src/boot_O2/boot_80086760.o"
+    include "build/src/boot/O2/mtxuty-cvt.o"
+    include "build/src/boot/O2/debug.o"
+    include "build/src/boot/O2/system_heap.o"
+    include "build/src/boot/O2/padsetup.o"
+    include "build/src/boot/O2/math64.o"
     include "build/asm/boot/fp.text.o"
     include "build/data/boot/fp.data.o"
-    include "build/src/boot_O2/system_malloc.o"
-    include "build/src/boot_O2/rand.o"
-    include "build/src/boot_O2/__osMalloc.o"
+    include "build/src/boot/O2/system_malloc.o"
+    include "build/src/boot/O2/rand.o"
+    include "build/src/boot/O2/__osMalloc.o"
     include "build/src/libultra/rmon/sprintf.o"
-    include "build/src/boot_O2/printutils.o"
-    include "build/src/boot_O2/sleep.o"
+    include "build/src/boot/O2/printutils.o"
+    include "build/src/boot/O2/sleep.o"
     include "build/asm/boot/setcause.text.o"
     include "build/src/libultra/os/sendmesg.o"
     include "build/src/libultra/io/pfsfreeblocks.o"
@@ -234,12 +232,12 @@ beginseg
     include "build/src/libultra/os/sethwinterrupt.o"
     include "build/asm/boot/getwatchlo.text.o"
     include "build/asm/boot/setwatchlo.text.o"
-    include "build/src/boot_O2/fmodf.o"
-    include "build/src/boot_O2/__osMemset.o"
-    include "build/src/boot_O2/__osStrcmp.o"
-    include "build/src/boot_O2/__osStrcpy.o"
-    include "build/src/boot_O2/__osMemcpy.o"
-    include "build/src/boot_O2_g3/build.o"
+    include "build/src/boot/O2/fmodf.o"
+    include "build/src/boot/O2/__osMemset.o"
+    include "build/src/boot/O2/__osStrcmp.o"
+    include "build/src/boot/O2/__osStrcpy.o"
+    include "build/src/boot/O2/__osMemcpy.o"
+    include "build/src/boot/build.o"
 endseg
 
 beginseg
@@ -434,7 +432,6 @@ beginseg
     include "build/data/code/gspS2DEX2.fifo.data.o"
     include "build/data/code/njpgdspMain.data.o"
     include "build/src/code/z_en_a_keep.o"
-    include "build/data/code/code_801E3FA0.bss.o"
     include "build/src/code/z_en_item00.o"
     include "build/src/code/z_eff_blure.o"
     include "build/src/code/z_eff_shield_particle.o"
@@ -446,11 +443,8 @@ beginseg
     include "build/src/code/z_effect_soft_sprite_old_init.o"
     include "build/src/code/z_effect_soft_sprite_dlftbls.o"
     include "build/src/code/flg_set.o"
-    include "build/data/code/flg_set.bss.o"
-    include "build/src/code/pad_801DC9C0.o"
     include "build/src/code/z_DLF.o"
     include "build/src/code/z_actor.o"
-    include "build/data/code/z_actor.bss.o"
     include "build/src/code/z_actor_dlftbls.o"
     include "build/src/code/z_bgcheck.o"
     include "build/src/code/z_bg_collect.o"
@@ -473,7 +467,6 @@ beginseg
     include "build/src/code/z_face_reaction.o"
     include "build/src/code/z_env_flags.o"
     include "build/src/code/z_eventmgr.o"
-    include "build/data/code/z_eventmgr.bss.o"
     include "build/src/code/z_fcurve_data.o"
     include "build/src/code/z_fcurve_data_skelanime.o"
     include "build/src/code/z_fireobj.o"
@@ -538,7 +531,6 @@ beginseg
     include "build/data/code/z_message.data.o"
     include "build/data/code/z_message.bss.o"
     include "build/src/code/z_message_nes.o"
-    include "build/data/code/z_message_nes.data.o"
     include "build/src/code/z_message_staff.o"
     include "build/src/code/z_player_call.o"
     include "build/src/code/z_shrink_window.o"
@@ -554,21 +546,17 @@ beginseg
     include "build/src/code/z_play.o"
     include "build/src/code/z_play_hireso.o"
     include "build/src/code/PreRender.o"
-    include "build/data/code/PreRender.bss.o"
     include "build/src/code/TwoHeadGfxArena.o"
     include "build/src/code/TwoHeadArena.o"
     include "build/src/code/audio_stop_all_sfx.o"
     include "build/src/code/audio_thread_manager.o"
     include "build/src/code/title_setup.o"
     include "build/src/code/game.o"
-    include "build/data/code/game.bss.o"
     include "build/src/code/gamealloc.o"
     include "build/src/code/graph.o"
     include "build/src/code/graphalloc.o"
     include "build/src/code/listalloc.o"
     include "build/src/code/main.o"
-    include "build/data/code/main.data.o"
-    include "build/data/code/main.bss.o"
     include "build/src/code/padmgr.o"
     include "build/src/code/sched.o"
     include "build/src/code/speed_meter.o"
@@ -2068,8 +2056,7 @@ beginseg
     name "ovl_En_Ge3"
     compress
     include "build/src/overlays/actors/ovl_En_Ge3/z_en_ge3.o"
-    include "build/data/ovl_En_Ge3/ovl_En_Ge3.data.o"
-    include "build/data/ovl_En_Ge3/ovl_En_Ge3.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ge3/ovl_En_Ge3_reloc.o"
 endseg
 
 beginseg
@@ -2452,8 +2439,7 @@ beginseg
     name "ovl_Dm_Hina"
     compress
     include "build/src/overlays/actors/ovl_Dm_Hina/z_dm_hina.o"
-    include "build/data/ovl_Dm_Hina/ovl_Dm_Hina.data.o"
-    include "build/data/ovl_Dm_Hina/ovl_Dm_Hina.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Hina/ovl_Dm_Hina_reloc.o"
 endseg
 
 beginseg
@@ -2818,8 +2804,7 @@ beginseg
     name "ovl_En_Bal"
     compress
     include "build/src/overlays/actors/ovl_En_Bal/z_en_bal.o"
-    include "build/data/ovl_En_Bal/ovl_En_Bal.data.o"
-    include "build/data/ovl_En_Bal/ovl_En_Bal.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bal/ovl_En_Bal_reloc.o"
 endseg
 
 beginseg
@@ -3081,8 +3066,7 @@ beginseg
     name "ovl_En_Mnk"
     compress
     include "build/src/overlays/actors/ovl_En_Mnk/z_en_mnk.o"
-    include "build/data/ovl_En_Mnk/ovl_En_Mnk.data.o"
-    include "build/data/ovl_En_Mnk/ovl_En_Mnk.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mnk/ovl_En_Mnk_reloc.o"
 endseg
 
 beginseg
@@ -3110,8 +3094,7 @@ beginseg
     name "ovl_Obj_Tokei_Tobira"
     compress
     include "build/src/overlays/actors/ovl_Obj_Tokei_Tobira/z_obj_tokei_tobira.o"
-    include "build/data/ovl_Obj_Tokei_Tobira/ovl_Obj_Tokei_Tobira.data.o"
-    include "build/data/ovl_Obj_Tokei_Tobira/ovl_Obj_Tokei_Tobira.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Tokei_Tobira/ovl_Obj_Tokei_Tobira_reloc.o"
 endseg
 
 beginseg
@@ -3308,8 +3291,7 @@ beginseg
     name "ovl_Bg_Lotus"
     compress
     include "build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o"
-    include "build/data/ovl_Bg_Lotus/ovl_Bg_Lotus.data.o"
-    include "build/data/ovl_Bg_Lotus/ovl_Bg_Lotus.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Lotus/ovl_Bg_Lotus_reloc.o"
 endseg
 
 beginseg
@@ -3651,8 +3633,7 @@ beginseg
     name "ovl_Obj_Wind"
     compress
     include "build/src/overlays/actors/ovl_Obj_Wind/z_obj_wind.o"
-    include "build/data/ovl_Obj_Wind/ovl_Obj_Wind.data.o"
-    include "build/data/ovl_Obj_Wind/ovl_Obj_Wind.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Wind/ovl_Obj_Wind_reloc.o"
 endseg
 
 beginseg
@@ -4864,9 +4845,7 @@ beginseg
     name "ovl_En_Invadepoh_Demo"
     compress
     include "build/src/overlays/actors/ovl_En_Invadepoh_Demo/z_en_invadepoh_demo.o"
-    include "build/data/ovl_En_Invadepoh_Demo/ovl_En_Invadepoh_Demo.data.o"
-    include "build/data/ovl_En_Invadepoh_Demo/ovl_En_Invadepoh_Demo.bss.o"
-    include "build/data/ovl_En_Invadepoh_Demo/ovl_En_Invadepoh_Demo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Invadepoh_Demo/ovl_En_Invadepoh_Demo_reloc.o"
 endseg
 
 beginseg

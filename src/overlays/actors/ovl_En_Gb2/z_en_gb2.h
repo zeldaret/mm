@@ -2,6 +2,7 @@
 #define Z_EN_GB2_H
 
 #include "global.h"
+#include "objects/object_ps/object_ps.h"
 
 struct EnGb2;
 
@@ -19,8 +20,8 @@ typedef enum {
 typedef struct EnGb2 {
     /* 0x0000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[12];
-    /* 0x1D0 */ Vec3s morphTable[12];
+    /* 0x188 */ Vec3s jointTable[OBJECT_PS_LIMB_MAX];
+    /* 0x1D0 */ Vec3s morphTable[OBJECT_PS_LIMB_MAX];
     /* 0x218 */ EnGb2ActionFunc actionFunc;
     /* 0x21C */ ColliderCylinder collider;
     /* 0x268 */ Actor* unk_268;

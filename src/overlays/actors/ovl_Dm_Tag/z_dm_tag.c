@@ -15,7 +15,7 @@ void DmTag_Destroy(Actor* thisx, PlayState* play);
 void DmTag_Update(Actor* thisx, PlayState* play);
 
 void func_80C229AC(DmTag* this, PlayState* play);
-void func_80C229EC(DmTag* this, PlayState* play);
+void DmTag_DoNothing(DmTag* this, PlayState* play);
 void func_80C229FC(DmTag* this, PlayState* play);
 
 ActorInit Dm_Tag_InitVars = {
@@ -154,7 +154,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 6:
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
             play->nextEntrance = ENTRANCE(STOCK_POT_INN, 5);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
@@ -162,13 +162,16 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
             this->unk_1A4++;
             break;
+
+        default:
+            break;
     }
     return ret;
 }
 
 s32 func_80C227E8(DmTag* this, PlayState* play) {
     if (this->unk_1A4 == 0) {
-        func_800B7298(play, &this->actor, 7);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
         play->nextEntrance = ENTRANCE(STOCK_POT_INN, 4);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -190,9 +193,13 @@ s32* func_80C22880(DmTag* this, PlayState* play) {
                 return D_80C22BF0;
             }
             return D_80C22C30;
+
         case 2:
             this->msgEventCallback = func_80C224D8;
             return D_80C22BFC;
+
+        default:
+            break;
     }
     return NULL;
 }
@@ -200,24 +207,23 @@ s32* func_80C22880(DmTag* this, PlayState* play) {
 s32 func_80C2291C(DmTag* this, PlayState* play) {
     s32 ret = false;
 
-    if (this->unk_18C & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            this->unk_18C |= 8;
-            SubS_UpdateFlags(&this->unk_18C, 0, 7);
-            this->msgEventScript = func_80C22880(this, play);
-            this->actionFunc = func_80C229FC;
-            ret = true;
-        }
+    if (((this->unk_18C & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        this->unk_18C |= 8;
+        SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        this->msgEventScript = func_80C22880(this, play);
+        this->actionFunc = func_80C229FC;
+        ret = true;
     }
     return ret;
 }
 
 void func_80C229AC(DmTag* this, PlayState* play) {
-    SubS_UpdateFlags(&this->unk_18C, 3, 7);
-    this->actor.flags |= ACTOR_FLAG_1;
+    SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 }
 
-void func_80C229EC(DmTag* this, PlayState* play) {
+void DmTag_DoNothing(DmTag* this, PlayState* play) {
 }
 
 void func_80C229FC(DmTag* this, PlayState* play) {
@@ -239,13 +245,13 @@ void DmTag_Init(Actor* thisx, PlayState* play) {
         player->stateFlags1 |= PLAYER_STATE1_20;
         this->unk_18E = 2;
         this->unk_18C = 0;
-        SubS_UpdateFlags(&this->unk_18C, 4, 7);
-        this->actor.flags &= ~ACTOR_FLAG_1;
-        this->actionFunc = func_80C229EC;
+        SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actionFunc = DmTag_DoNothing;
     } else if (this->actor.room == 2) {
         Actor_Kill(&this->actor);
     } else {
-        this->actor.targetMode = 1;
+        this->actor.targetMode = TARGET_MODE_1;
         this->unk_18E = 1;
         this->unk_18C = 0;
         this->actionFunc = func_80C229AC;
@@ -260,6 +266,7 @@ void DmTag_Update(Actor* thisx, PlayState* play) {
 
     func_80C2291C(this, play);
     this->actionFunc(this, play);
-    func_8013C964(&this->actor, play, 40.0f, fabsf(this->actor.playerHeightRel) + 1.0f, 0, this->unk_18C & 7);
+    SubS_Offer(&this->actor, play, 40.0f, fabsf(this->actor.playerHeightRel) + 1.0f, PLAYER_IA_NONE,
+               this->unk_18C & SUBS_OFFER_MODE_MASK);
     Actor_SetFocus(&this->actor, 0.0f);
 }

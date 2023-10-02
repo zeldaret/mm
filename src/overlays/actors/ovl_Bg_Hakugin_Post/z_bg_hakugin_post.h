@@ -10,6 +10,7 @@ typedef void (*BgHakuginPostFunc)(struct BgHakuginPost*);
 
 #define BGHAKUGINPOST_GET_7(thisx) ((thisx)->params & 7)
 #define BGHAKUGINPOST_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
+#define BGHAKUGINPOST_GET_SWITCH_FLAG_2(thisx) (((thisx)->home.rot.x) & 0x7F)
 
 typedef struct {
     /* 0x00 */ s32 unk_00;

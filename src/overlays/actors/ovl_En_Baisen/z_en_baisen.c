@@ -7,7 +7,7 @@
 #include "z_en_baisen.h"
 #include "objects/object_bai/object_bai.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnBaisen*)thisx)
 
@@ -57,16 +57,31 @@ static ColliderCylinderInit sCylinderInit = {
 
 static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x2AD5, 0x2AD6, 0x2AD7, 0x2AD8, 0x2AC6 };
 
-static AnimationHeader* sAnimations[] = { &object_bai_Anim_0011C0, &object_bai_Anim_0008B4, &object_bai_Anim_008198 };
+typedef enum {
+    /* 0 */ ENBAISEN_ANIM_0,
+    /* 1 */ ENBAISEN_ANIM_1,
+    /* 2 */ ENBAISEN_ANIM_2,
+    /* 3 */ ENBAISEN_ANIM_MAX
+} EnBaisenAnimation;
 
-static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
+static AnimationHeader* sAnimations[ENBAISEN_ANIM_MAX] = {
+    &object_bai_Anim_0011C0, // ENBAISEN_ANIM_0
+    &object_bai_Anim_0008B4, // ENBAISEN_ANIM_1
+    &object_bai_Anim_008198, // ENBAISEN_ANIM_2
+};
+
+static u8 sAnimationModes[ENBAISEN_ANIM_MAX] = {
+    ANIMMODE_LOOP, // ENBAISEN_ANIM_0
+    ANIMMODE_LOOP, // ENBAISEN_ANIM_1
+    ANIMMODE_LOOP, // ENBAISEN_ANIM_2
+};
 
 void EnBaisen_Init(Actor* thisx, PlayState* play) {
     EnBaisen* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_bai_Skel_007908, &object_bai_Anim_0011C0, this->jointTable,
-                       this->morphTable, 20);
+                       this->morphTable, OBJECT_BAI_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->paramCopy = this->actor.params;
     if (this->actor.params == 0) {
@@ -82,7 +97,7 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
             Actor_Kill(&this->actor);
         }
     }
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     if (this->paramCopy == 0) {
@@ -100,8 +115,8 @@ void EnBaisen_Destroy(Actor* thisx, PlayState* play) {
 
 void EnBaisen_ChangeAnim(EnBaisen* this, s32 animIndex) {
     this->animIndex = animIndex;
-    this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animEndFrame,
                      sAnimationModes[this->animIndex], -10.0f);
 }
 
@@ -136,10 +151,10 @@ void func_80BE87B0(EnBaisen* this, PlayState* play) {
 void func_80BE87FC(EnBaisen* this) {
     if (this->paramCopy == 0) {
         this->textIdIndex = 2;
-        EnBaisen_ChangeAnim(this, 2);
+        EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_2);
         this->unk29E = this->actor.world.rot.y;
     } else {
-        EnBaisen_ChangeAnim(this, 0);
+        EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_0);
     }
 
     this->actor.textId = sTextIds[this->textIdIndex];
@@ -165,7 +180,7 @@ void func_80BE887C(EnBaisen* this, PlayState* play) {
             }
         }
         this->actor.textId = sTextIds[this->textIdIndex];
-        func_800B8614(&this->actor, play, 70.0f);
+        Actor_OfferTalk(&this->actor, play, 70.0f);
     }
 }
 
@@ -187,13 +202,13 @@ void func_80BE895C(EnBaisen* this, PlayState* play) {
 void func_80BE89D8(EnBaisen* this, PlayState* play) {
     if (&this->actor == this->unk2A4) {
         this->unk29E = this->actor.world.rot.y;
-        if (this->animIndex == 0) {
-            EnBaisen_ChangeAnim(this, 1);
+        if (this->animIndex == ENBAISEN_ANIM_0) {
+            EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_1);
         }
     } else {
         this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk2A4->world.pos);
-        if (this->animIndex != 0) {
-            EnBaisen_ChangeAnim(this, 0);
+        if (this->animIndex != ENBAISEN_ANIM_0) {
+            EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_0);
         }
     }
     if ((play->msgCtx.currentTextId == 0x2AC6) || (play->msgCtx.currentTextId == 0x2AC7) ||
@@ -209,15 +224,15 @@ void func_80BE89D8(EnBaisen* this, PlayState* play) {
 void func_80BE8AAC(EnBaisen* this, PlayState* play) {
     if ((this->textIdIndex % 2) != 0) {
         this->unk29E = this->actor.world.rot.y;
-        if (this->animIndex == 0) {
-            EnBaisen_ChangeAnim(this, 1);
+        if (this->animIndex == ENBAISEN_ANIM_0) {
+            EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_1);
         }
     } else {
         if (this->unk2A4 != NULL) {
             this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk2A4->world.pos);
         }
-        if (this->animIndex != 0) {
-            EnBaisen_ChangeAnim(this, 0);
+        if (this->animIndex != ENBAISEN_ANIM_0) {
+            EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_0);
         }
     }
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
@@ -269,7 +284,7 @@ void EnBaisen_Update(Actor* thisx, PlayState* play) {
 s32 EnBaisen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBaisen* this = THIS;
 
-    if (limbIndex == 9) {
+    if (limbIndex == OBJECT_BAI_LIMB_09) {
         rot->x += this->headRotX;
         rot->y += this->headRotY;
         rot->z += this->headRotZ;

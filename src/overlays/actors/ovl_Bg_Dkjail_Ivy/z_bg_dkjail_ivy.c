@@ -125,7 +125,7 @@ void BgDkjailIvy_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_dkjail_obj_Colheader_0011A8);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gDkjailCol);
     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     this->alpha = 255;

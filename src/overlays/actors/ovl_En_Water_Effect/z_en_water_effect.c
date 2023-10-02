@@ -17,7 +17,7 @@
 #include "objects/object_water_effect/object_water_effect.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnWaterEffect*)thisx)
 
@@ -91,7 +91,7 @@ void EnWaterEffect_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnWaterEffect* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_DC4 = Rand_ZeroFloat(100.0f);
 
     if (this->actor.params == ENWATEREFFECT_TYPE_FALLING_ROCK_SPAWNER) {

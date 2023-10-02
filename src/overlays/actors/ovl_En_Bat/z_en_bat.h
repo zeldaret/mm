@@ -23,6 +23,13 @@ struct EnBat;
 
 typedef void (*EnBatActionFunc)(struct EnBat*, PlayState*);
 
+typedef enum BadBatBodyPart {
+    /* 0 */ BAD_BAT_BODYPART_0,
+    /* 1 */ BAD_BAT_BODYPART_1,
+    /* 2 */ BAD_BAT_BODYPART_2,
+    /* 3 */ BAD_BAT_BODYPART_MAX
+} BadBatBodyPart;
+
 typedef struct EnBat {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnBatActionFunc actionFunc;
@@ -36,7 +43,7 @@ typedef struct EnBat {
     /* 0x154 */ f32 drawDmgEffScale;
     /* 0x158 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x15C */ f32 drawDmgEffAlpha;
-    /* 0x160 */ Vec3f bodyPartPoss[3];
+    /* 0x160 */ Vec3f bodyPartsPos[BAD_BAT_BODYPART_MAX];
     /* 0x184 */ ColliderSphere collider;
 } EnBat; // size = 0x1DC
 

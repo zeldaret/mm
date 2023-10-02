@@ -2,6 +2,8 @@
 #define Z64ACTOR_H
 
 #include "PR/ultratypes.h"
+#include "color.h"
+#include "padutils.h"
 #include "z64math.h"
 #include "z64animation.h"
 #include "z64collision_check.h"
@@ -150,7 +152,7 @@ typedef struct Actor {
     /* 0x100 */ f32 uncullZoneScale; // Amount to increase the uncull zone scale by (in projected space)
     /* 0x104 */ f32 uncullZoneDownward; // Amount to increase uncull zone downward by (in projected space)
     /* 0x108 */ Vec3f prevPos; // World position from the previous update cycle
-    /* 0x114 */ u8 isTargeted; // Set to true if the actor is currently being targeted by the player
+    /* 0x114 */ u8 isLockedOn; // Set to true if the actor is currently being targeted by the player
     /* 0x115 */ u8 targetPriority; // Lower values have higher priority. Resets to 0 when player stops targeting
     /* 0x116 */ u16 textId; // Text ID to pass to link/display when interacting with the actor
     /* 0x118 */ u16 freezeTimer; // Actor does not update when set. Timer decrements automatically
@@ -208,10 +210,10 @@ typedef enum Item00Type {
     /* 0x09 */ ITEM00_ARROWS_40,
     /* 0x0A */ ITEM00_ARROWS_50,
     /* 0x0B */ ITEM00_BOMBS_B,
-    /* 0x0C */ ITEM00_NUTS_1,
-    /* 0x0D */ ITEM00_STICK,
-    /* 0x0E */ ITEM00_MAGIC_LARGE,
-    /* 0x0F */ ITEM00_MAGIC_SMALL,
+    /* 0x0C */ ITEM00_DEKU_NUTS_1,
+    /* 0x0D */ ITEM00_DEKU_STICK,
+    /* 0x0E */ ITEM00_MAGIC_JAR_BIG,
+    /* 0x0F */ ITEM00_MAGIC_JAR_SMALL,
     /* 0x10 */ ITEM00_MASK,
     /* 0x11 */ ITEM00_SMALL_KEY,
     /* 0x12 */ ITEM00_FLEXIBLE,
@@ -219,7 +221,7 @@ typedef enum Item00Type {
     /* 0x14 */ ITEM00_RUPEE_PURPLE,
     /* 0x15 */ ITEM00_3_HEARTS,
     /* 0x16 */ ITEM00_SHIELD_HERO,
-    /* 0x17 */ ITEM00_NUTS_10,
+    /* 0x17 */ ITEM00_DEKU_NUTS_10,
     /* 0x18 */ ITEM00_NOTHING,
     /* 0x19 */ ITEM00_BOMBS_0,
     /* 0x1A */ ITEM00_BIG_FAIRY,
@@ -296,32 +298,46 @@ typedef enum {
 #define ACTORCTX_FLAG_6 (1 << 6)
 #define ACTORCTX_FLAG_7 (1 << 7)
 
-
-typedef struct {
+// A set of 4 triangles which appear around an actor when the player Z-Targets it
+typedef struct LockOnTriangleSet {
     /* 0x00 */ Vec3f pos;
-    /* 0x0C */ f32 unkC;
+    /* 0x0C */ f32 radius; // distance towards the center of the locked on
     /* 0x10 */ Color_RGBA8 color;
-} TargetContextEntry; // size = 0x14
+} LockOnTriangleSet; // size = 0x14
 
 typedef struct TargetContext {
-    /* 0x00 */ Vec3f unk0;
-    /* 0x0C */ Vec3f targetCenterPos;
-    /* 0x18 */ Color_RGBAf fairyInner;
-    /* 0x28 */ Color_RGBAf fairyOuter;
-    /* 0x38 */ Actor* arrowPointedActor;
-    /* 0x3C */ Actor* targetedActor;
-    /* 0x40 */ f32 unk40;
-    /* 0x44 */ f32 unk44;
-    /* 0x48 */ s16 unk48; // alpha
-    /* 0x4A */ u8 unk4A;
-    /* 0x4B */ u8 unk4B;
-    /* 0x4C */ s8 unk4C;
-    /* 0x4D */ UNK_TYPE1 pad4D[0x3];
-    /* 0x50 */ TargetContextEntry unk50[3];
-    /* 0x8C */ Actor* unk8C;
+    /* 0x00 */ Vec3f fairyPos; // Used by Tatl to indicate a targetable actor or general hint
+    /* 0x0C */ Vec3f lockOnPos;
+    /* 0x18 */ Color_RGBAf fairyInnerColor;
+    /* 0x28 */ Color_RGBAf fairyOuterColor;
+    /* 0x38 */ Actor* fairyActor;
+    /* 0x3C */ Actor* lockOnActor;
+    /* 0x40 */ f32 fairyMoveProgressFactor; // Controls Tatl so she can smootly transition to the target actor
+    /* 0x44 */ f32 lockOnRadius; // Control the circle lock-on triangles coming in from offscreen when you first target
+    /* 0x48 */ s16 lockOnAlpha;
+    /* 0x4A */ u8 fairyActorCategory;
+    /* 0x4B */ u8 rotZTick;
+    /* 0x4C */ s8 lockOnIndex;
+    /* 0x50 */ LockOnTriangleSet lockOnTriangleSets[3];
+    /* 0x8C */ Actor* forcedTargetActor; // Never set to non-NULL
     /* 0x90 */ Actor* bgmEnemy;
-    /* 0x94 */ Actor* unk_94;
+    /* 0x94 */ Actor* arrowPointedActor;
 } TargetContext; // size = 0x98
+
+typedef enum TargetMode {
+    /*  0 */ TARGET_MODE_0,
+    /*  1 */ TARGET_MODE_1,
+    /*  2 */ TARGET_MODE_2,
+    /*  3 */ TARGET_MODE_3,
+    /*  4 */ TARGET_MODE_4,
+    /*  5 */ TARGET_MODE_5,
+    /*  6 */ TARGET_MODE_6,
+    /*  7 */ TARGET_MODE_7,
+    /*  8 */ TARGET_MODE_8,
+    /*  9 */ TARGET_MODE_9,
+    /* 10 */ TARGET_MODE_10,
+    /* 11 */ TARGET_MODE_MAX
+} TargetMode;
 
 typedef struct {
     /* 0x0 */ TexturePtr texture;
@@ -348,11 +364,11 @@ typedef struct PlayerImpact {
     /* 0x08 */ Vec3f pos;
 } PlayerImpact; // size = 0x14
 
-typedef struct ActorContext_unk_20C {
+typedef struct ActorSharedMemoryEntry {
     /* 0x0 */ s16 id;
     /* 0x2 */ s8 isDynamicallyInitialised;
     /* 0x4 */ void* ptr;
-} ActorContext_unk_20C; // size = 0x8
+} ActorSharedMemoryEntry; // size = 0x8
 
 typedef struct ActorContextSceneFlags {
     /* 0x00 */ u32 switches[4]; // First 0x40 are permanent, second 0x40 are temporary
@@ -407,12 +423,12 @@ typedef struct ActorContext {
     /* 0x00F */ u8 numLensActors;
     /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
     /* 0x0A0 */ Actor* lensActors[LENS_ACTOR_MAX]; // Draws up to LENS_ACTOR_MAX number of invisible actors
-    /* 0x120 */ TargetContext targetContext;
+    /* 0x120 */ TargetContext targetCtx;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
     /* 0x1F4 */ PlayerImpact playerImpact;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
-    /* 0x20C */ ActorContext_unk_20C unk_20C[8];
+    /* 0x20C */ ActorSharedMemoryEntry actorSharedMemory[8];
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
     /* 0x250 */ void* absoluteSpace; // Space used to allocate actor overlays of alloc type ALLOCTYPE_ABSOLUTE
     /* 0x254 */ struct EnTorch2* elegyShells[5]; // PLAYER_FORM_MAX
@@ -454,14 +470,14 @@ typedef enum {
     /* 3 */ DOORLOCK_MAX
 } DoorLockType;
 
-// Targetability / ACTOR_FLAG_TARGETABLE?
-#define ACTOR_FLAG_1             (1 << 0)
-// 
+// Allows Tatl to fly over the actor and lock-on it (using the Z-target)
+#define ACTOR_FLAG_TARGETABLE    (1 << 0)
+// Unused
 #define ACTOR_FLAG_2             (1 << 1)
-// 
-#define ACTOR_FLAG_4             (1 << 2)
-// 
-#define ACTOR_FLAG_8             (1 << 3)
+// Changes the targeting behaviour for unfriendly actors (sound effects, Player's stance, etc)
+#define ACTOR_FLAG_UNFRIENDLY    (1 << 2)
+// Opposite of the UNFRIENDLY flag. It is not checked explictly in the original game.
+#define ACTOR_FLAG_FRIENDLY      (1 << 3)
 // 
 #define ACTOR_FLAG_10            (1 << 4)
 // 
@@ -537,16 +553,6 @@ typedef enum {
 
 #define COLORFILTER_BUFFLAG_XLU    0x2000
 #define COLORFILTER_BUFFLAG_OPA    0x0000
-
-typedef enum {
-    /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
-    /* 0x01 */ CLEAR_TAG_LARGE_EXPLOSION,
-    /* 0x02 */ CLEAR_TAG_POP,
-    /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
-    /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
-    /* 0x23 */ CLEAR_TAG_SPLASH = 35,
-    /* 0xC8 */ CLEAR_TAG_SMOKE = 200
-} ClearTagType;
 
 typedef enum {
     /* 0x00 */ TATL_HINT_ID_DEFAULT,
@@ -690,9 +696,11 @@ typedef struct BlinkInfo {
     /* 0x2 */ s16 blinkTimer;
 } BlinkInfo; // size = 0x4
 
-extern TargetRangeParams gTargetRanges[];
+extern TargetRangeParams gTargetRanges[TARGET_MODE_MAX];
 extern s16 D_801AED48[8];
 extern Gfx D_801AEF88[];
 extern Gfx D_801AEFA0[];
+
+extern Actor* D_801ED920;
 
 #endif

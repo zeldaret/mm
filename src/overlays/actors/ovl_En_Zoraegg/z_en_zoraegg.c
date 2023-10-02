@@ -98,15 +98,15 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
     this->actor.terminalVelocity = -10.0f;
     this->actor.gravity = -5.0f;
 
-    switch (ENZORAEGG_GET_1F(&this->actor)) {
-        case ENZORAEGG_1F_00:
-            if (Flags_GetSwitch(play, ENZORAEGG_GET_SWITCH_FLAG(&this->actor))) {
+    switch (ZORA_EGG_GET_TYPE(&this->actor)) {
+        case ZORA_EGG_TYPE_00:
+            if (Flags_GetSwitch(play, ZORA_EGG_GET_SWITCH_FLAG(&this->actor))) {
                 Actor_Kill(&this->actor);
                 return;
             }
             break;
 
-        case ENZORAEGG_1F_11:
+        case ZORA_EGG_TYPE_11:
             if (func_80B319A8(play) >= 7) {
                 Actor_Kill(&this->actor);
                 this->actor.home.rot.z = 1;
@@ -114,26 +114,26 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
             }
             break;
 
-        case ENZORAEGG_1F_03:
-        case ENZORAEGG_1F_04:
-        case ENZORAEGG_1F_05:
-        case ENZORAEGG_1F_06:
-        case ENZORAEGG_1F_07:
-        case ENZORAEGG_1F_08:
-        case ENZORAEGG_1F_09:
+        case ZORA_EGG_TYPE_03:
+        case ZORA_EGG_TYPE_04:
+        case ZORA_EGG_TYPE_05:
+        case ZORA_EGG_TYPE_06:
+        case ZORA_EGG_TYPE_07:
+        case ZORA_EGG_TYPE_08:
+        case ZORA_EGG_TYPE_09:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
                 Actor_Kill(&this->actor);
                 return;
             }
             break;
 
-        case ENZORAEGG_1F_0A:
-        case ENZORAEGG_1F_0B:
-        case ENZORAEGG_1F_0C:
-        case ENZORAEGG_1F_0D:
-        case ENZORAEGG_1F_0E:
-        case ENZORAEGG_1F_0F:
-        case ENZORAEGG_1F_10:
+        case ZORA_EGG_TYPE_0A:
+        case ZORA_EGG_TYPE_0B:
+        case ZORA_EGG_TYPE_0C:
+        case ZORA_EGG_TYPE_0D:
+        case ZORA_EGG_TYPE_0E:
+        case ZORA_EGG_TYPE_0F:
+        case ZORA_EGG_TYPE_10:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
                 Actor_Kill(&this->actor);
                 return;
@@ -141,50 +141,50 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    switch (ENZORAEGG_GET_1F(&this->actor)) {
-        case ENZORAEGG_1F_00:
+    switch (ZORA_EGG_GET_TYPE(&this->actor)) {
+        case ZORA_EGG_TYPE_00:
             this->actionFunc = func_80B320E0;
-            this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
-            this->actor.targetMode = 3;
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+            this->actor.targetMode = TARGET_MODE_3;
             break;
 
-        case ENZORAEGG_1F_01:
+        case ZORA_EGG_TYPE_01:
             this->actionFunc = func_80B322BC;
             func_80B31590(this);
             break;
 
-        case ENZORAEGG_1F_02:
+        case ZORA_EGG_TYPE_02:
             this->actionFunc = func_80B32390;
             func_80B31590(this);
             break;
 
-        case ENZORAEGG_1F_03:
-        case ENZORAEGG_1F_04:
-        case ENZORAEGG_1F_05:
-        case ENZORAEGG_1F_06:
-        case ENZORAEGG_1F_07:
-        case ENZORAEGG_1F_08:
-        case ENZORAEGG_1F_09:
-            this->cueType = cueTypes[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_03];
+        case ZORA_EGG_TYPE_03:
+        case ZORA_EGG_TYPE_04:
+        case ZORA_EGG_TYPE_05:
+        case ZORA_EGG_TYPE_06:
+        case ZORA_EGG_TYPE_07:
+        case ZORA_EGG_TYPE_08:
+        case ZORA_EGG_TYPE_09:
+            this->cueType = cueTypes[ZORA_EGG_GET_TYPE(&this->actor) - ZORA_EGG_TYPE_03];
             Animation_PlayOnce(&this->skelAnime, &object_zoraegg_Anim_001E08);
             this->unk_1EC = 1;
             this->unk_1EE = 0;
             this->unk_1EF = 0;
             this->actionFunc = func_80B32B10;
-            if (((ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_03) >= func_80B319A8(play)) {
+            if ((ZORA_EGG_GET_TYPE(&this->actor) - ZORA_EGG_TYPE_03) >= func_80B319A8(play)) {
                 this->actionFunc = func_80B32B3C;
                 this->actor.draw = NULL;
             }
             break;
 
-        case ENZORAEGG_1F_0A:
-        case ENZORAEGG_1F_0B:
-        case ENZORAEGG_1F_0C:
-        case ENZORAEGG_1F_0D:
-        case ENZORAEGG_1F_0E:
-        case ENZORAEGG_1F_0F:
-        case ENZORAEGG_1F_10:
-            this->cueType = cueTypes[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_0A];
+        case ZORA_EGG_TYPE_0A:
+        case ZORA_EGG_TYPE_0B:
+        case ZORA_EGG_TYPE_0C:
+        case ZORA_EGG_TYPE_0D:
+        case ZORA_EGG_TYPE_0E:
+        case ZORA_EGG_TYPE_0F:
+        case ZORA_EGG_TYPE_10:
+            this->cueType = cueTypes[ZORA_EGG_GET_TYPE(&this->actor) - ZORA_EGG_TYPE_0A];
             this->unk_1EC = 2;
             this->actionFunc = func_80B324B0;
             Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
@@ -193,7 +193,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
             this->unk_1EA |= 3;
             break;
 
-        case ENZORAEGG_1F_11:
+        case ZORA_EGG_TYPE_11:
             Actor_SetScale(&this->actor, 0.0006f);
             this->actionFunc = func_80B32D08;
             this->actor.world.pos.y -= this->actor.shape.yOffset * this->actor.scale.y;
@@ -254,7 +254,7 @@ Actor* func_80B31CB4(PlayState* play) {
     Actor* actor = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (actor != NULL) {
-        if ((actor->id == ACTOR_EN_ZORAEGG) && (ENZORAEGG_GET_1F(actor) == ENZORAEGG_1F_11) &&
+        if ((actor->id == ACTOR_EN_ZORAEGG) && (ZORA_EGG_GET_TYPE(actor) == ZORA_EGG_TYPE_11) &&
             (actor->home.rot.z == 0)) {
             actor->home.rot.z = 1;
             return actor;
@@ -268,7 +268,7 @@ Actor* func_80B31D14(PlayState* play) {
     Actor* actor = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (actor != NULL) {
-        if ((actor->id == ACTOR_EN_ZORAEGG) && (ENZORAEGG_GET_1F(actor) == ENZORAEGG_1F_03)) {
+        if ((actor->id == ACTOR_EN_ZORAEGG) && (ZORA_EGG_GET_TYPE(actor) == ZORA_EGG_TYPE_03)) {
             return actor;
         }
         actor = actor->next;
@@ -337,20 +337,20 @@ void func_80B32094(EnZoraegg* this, PlayState* play) {
 
 void func_80B320E0(EnZoraegg* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        Flags_SetSwitch(play, ENZORAEGG_GET_SWITCH_FLAG(&this->actor));
+        Flags_SetSwitch(play, ZORA_EGG_GET_SWITCH_FLAG(&this->actor));
         Actor_Kill(&this->actor);
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B32094;
         Message_StartTextbox(play, 0x24B, &this->actor);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 60.0f);
-        if (this->actor.isTargeted) {
-            func_800B8614(&this->actor, play, 110.0f);
+        if (this->actor.isLockedOn) {
+            Actor_OfferTalk(&this->actor, play, 110.0f);
         }
     }
 
-    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
-    this->actor.targetMode = 3;
+    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.targetMode = TARGET_MODE_3;
     func_80B31C40(this, play);
 }
 
@@ -701,7 +701,7 @@ void func_80B32F04(Actor* thisx, PlayState* play) {
     gfx = POLY_XLU_DISP;
     gfx = Gfx_SetupDL20_NoCD(gfx);
 
-    gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
+    gDPSetDither(gfx++, G_CD_NOISE);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
     gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
 

@@ -193,13 +193,13 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
           ((this->colliders2[0].base.ac->id != ACTOR_OBJ_AQUA) &&
            (this->colliders2[0].info.acHitInfo->toucher.dmgFlags == 0x800)) ||
           ((this->colliders2[0].base.ac->id == ACTOR_OBJ_AQUA) &&
-           (this->colliders2[0].base.ac->params == OBJAQUA_1)))) ||
+           (this->colliders2[0].base.ac->params == AQUA_TYPE_HOT)))) ||
         ((this->colliders2[1].base.acFlags & AC_HIT) &&
          ((this->colliders2[1].base.ac == NULL) ||
           ((this->colliders2[1].base.ac->id != ACTOR_OBJ_AQUA) &&
            (this->colliders2[1].info.acHitInfo->toucher.dmgFlags == 0x800)) ||
           ((this->colliders2[1].base.ac->id == ACTOR_OBJ_AQUA) &&
-           (this->colliders2[1].base.ac->params == OBJAQUA_1))))) {
+           (this->colliders2[1].base.ac->params == AQUA_TYPE_HOT))))) {
         CutsceneManager_Queue(this->actor.csId);
         this->unk_14A = 0;
         this->actionFunc = func_80931E58;

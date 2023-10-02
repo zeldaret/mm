@@ -75,6 +75,9 @@ void func_80C2590C(EnInvisibleRuppe* this, PlayState* play) {
                 Audio_PlaySfx(NA_SE_SY_GET_RUPY);
                 Item_DropCollectible(play, &this->actor.world.pos, 0x8000 | ITEM00_RUPEE_RED);
                 break;
+
+            default:
+                break;
         }
 
         if (this->switchFlag >= 0) {

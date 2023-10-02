@@ -6,7 +6,7 @@
 
 #include "z_en_tanron1.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron1*)thisx)
 
@@ -30,14 +30,14 @@ ActorInit En_Tanron1_InitVars = {
     (ActorFunc)EnTanron1_Draw,
 };
 
-static u64 sPad = { 0 };
+static s32 sPad = 0;
 
 #include "overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
 
 void EnTanron1_Init(Actor* thisx, PlayState* play) {
     EnTanron1* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (!ENTANRON1_GET_100(&this->actor)) {
         this->unk_144 = 0;
     } else {
@@ -149,7 +149,7 @@ void EnTanron1_Update(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
+    if ((player->heldItemAction == PLAYER_IA_DEKU_STICK) && (player->unk_B28 != 0)) {
         this->unk_14C.x = player->meleeWeaponInfo[0].tip.x;
         this->unk_14C.y = player->meleeWeaponInfo[0].tip.y;
         this->unk_14C.z = player->meleeWeaponInfo[0].tip.z;

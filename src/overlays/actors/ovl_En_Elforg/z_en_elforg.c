@@ -164,7 +164,7 @@ void EnElforg_Destroy(Actor* thisx, PlayState* play) {
 
 void EnElforg_SpawnSparkles(EnElforg* this, PlayState* play, s32 life) {
     static Vec3f sVelocity = { 0.0f, -0.05f, 0.0f };
-    static Vec3f sAcceleration = { 0.0f, -0.025f, 0.0f };
+    static Vec3f sAccel = { 0.0f, -0.025f, 0.0f };
     static Color_RGBA8 sPrimColors[] = {
         { 255, 235, 220, 255 }, { 255, 220, 220, 255 }, { 220, 255, 220, 255 },
         { 220, 220, 255, 255 }, { 255, 255, 200, 255 },
@@ -182,8 +182,8 @@ void EnElforg_SpawnSparkles(EnElforg* this, PlayState* play, s32 life) {
     index = (this->area < STRAY_FAIRY_AREA_CLOCK_TOWN || this->area >= STRAY_FAIRY_AREA_MAX)
                 ? STRAY_FAIRY_AREA_CLOCK_TOWN
                 : this->area;
-    EffectSsKirakira_SpawnDispersed(play, &pos, &sVelocity, &sAcceleration, &sPrimColors[index], &sEnvColors[index],
-                                    1000, life);
+    EffectSsKirakira_SpawnDispersed(play, &pos, &sVelocity, &sAccel, &sPrimColors[index], &sEnvColors[index], 1000,
+                                    life);
 }
 
 void EnElforg_ApproachTargetYPosition(EnElforg* this, Vec3f* targetPos) {
@@ -385,7 +385,7 @@ void EnElforg_CirclePlayer(EnElforg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 distanceFromPlayer;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_GORON) {
         distanceFromPlayer = 40.0f;
     } else {
         distanceFromPlayer = 20.0f;

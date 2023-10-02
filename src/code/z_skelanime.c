@@ -1680,7 +1680,8 @@ void SkelAnime_AnimateFrame(SkelAnime* skelAnime) {
         s32 frame = skelAnime->curFrame;
         f32 partialFrame = skelAnime->curFrame - frame;
 
-        if (++frame >= (s32)skelAnime->animLength) {
+        frame++;
+        if (frame >= (s32)skelAnime->animLength) {
             frame = 0;
         }
         SkelAnime_GetFrameData(skelAnime->animation, frame, skelAnime->limbCount, nextjointTable);

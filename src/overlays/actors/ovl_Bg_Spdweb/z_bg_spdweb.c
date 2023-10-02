@@ -450,7 +450,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
                 this->dyna.actor.world.pos.z;
         }
         func_809CEE74(this);
-    } else if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
+    } else if ((player->heldItemAction == PLAYER_IA_DEKU_STICK) && (player->unk_B28 != 0)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &this->dyna.actor.world.pos, &sp3C);
         sp38 = Math_SinS(-this->dyna.actor.shape.rot.x);
         sp34 = Math_CosS(-this->dyna.actor.shape.rot.x);

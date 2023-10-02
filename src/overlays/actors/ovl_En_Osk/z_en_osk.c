@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_ikn_demo/object_ikn_demo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnOsk*)thisx)
 
@@ -67,7 +67,7 @@ void EnOsk_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80BF5F60;
     this->unk_254 = -1;
     this->cueId = -1;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     switch (ENOSK_GET_F(&this->actor)) {
         case ENOSK_1:
@@ -542,12 +542,10 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
                      MTXMODE_APPLY);
     }
 
-    gfx = Gfx_SetupDL20_NoCD(POLY_XLU_DISP);
+    gfx = POLY_XLU_DISP;
+    gfx = Gfx_SetupDL20_NoCD(gfx);
 
-    gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
-    if (1) {}
-    if (1) {}
-    if (1) {}
+    gDPSetDither(gfx++, G_CD_NOISE);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
     gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
     gDPSetPrimColor(gfx++, 0, 0, 130, 0, 255, 100);

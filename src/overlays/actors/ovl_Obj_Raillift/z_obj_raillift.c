@@ -215,8 +215,6 @@ void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play) {
 
 void ObjRaillift_Update(Actor* thisx, PlayState* play) {
     ObjRaillift* this = THIS;
-    f32 target;
-    f32 step;
 
     this->actionFunc(this, play);
     Actor_SetFocus(thisx, 10.0f);
@@ -227,7 +225,8 @@ void ObjRaillift_Update(Actor* thisx, PlayState* play) {
         }
     }
     if (OBJRAILLIFT_REACT_TO_PLAYER_ON_TOP(thisx)) {
-        s32 requiredScopeTemp;
+        f32 target;
+        f32 step;
 
         this->isPlayerOnTopPrev = this->isPlayerOnTop;
         this->isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna) ? true : false;

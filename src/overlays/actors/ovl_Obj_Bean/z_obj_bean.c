@@ -548,7 +548,7 @@ void func_80937FC8(ObjBean* this, PlayState* play) {
     this->unk_1E8(this);
 
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
-        if (Player_GetExchangeItemId(play) == PLAYER_IA_MAGIC_BEANS) {
+        if (Player_GetExchangeItemAction(play) == PLAYER_IA_MAGIC_BEANS) {
             func_809383B4(this);
             Flags_SetSwitch(play, OBJBEAN_GET_SWITCH_FLAG_2(&this->dyna.actor, 0));
         }
@@ -578,7 +578,7 @@ void func_80937FC8(ObjBean* this, PlayState* play) {
                 CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
             }
         } else {
-            func_800B85E0(&this->dyna.actor, play, 28.0f, PLAYER_IA_MAGIC_BEANS);
+            Actor_OfferTalkExchangeEquiCylinder(&this->dyna.actor, play, 28.0f, PLAYER_IA_MAGIC_BEANS);
         }
     }
 }

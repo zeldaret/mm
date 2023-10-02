@@ -67,7 +67,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
     this->unk_148 = 0;
     this->unk_14A = 0;
     this->actor.focus.pos.y += 40.0f;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     switch (this->unk_147) {
         case ENELFGRP_1:
@@ -119,6 +119,9 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                             this->unk_14A |= 0x10;
                         }
                         break;
+
+                    default:
+                        break;
                 }
             } else if (func_80A39BD0(play, this->unk_147)) {
                 this->actionFunc = func_80A3A7FC;
@@ -169,7 +172,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                 } else {
                     this->actor.textId = 0x578;
                 }
-                this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+                this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
             }
             break;
     }
@@ -409,6 +412,9 @@ void func_80A3A274(EnElfgrp* this, PlayState* play) {
                 this->actionFunc = func_80A3A210;
                 this->unk_144 = 90;
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -536,7 +542,7 @@ void func_80A3A7FC(EnElfgrp* this, PlayState* play) {
         func_80A39CD4(play, this->unk_147, temp_s0);
     } else if (this->actor.xzDistToPlayer < 280.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 300.0f);
+        Actor_OfferTalk(&this->actor, play, 300.0f);
     }
 }
 
@@ -558,7 +564,7 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play) {
     }
 
     if (this->actor.xzDistToPlayer < 30.0f) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             player->actor.freezeTimer = 100;
             player->stateFlags1 |= PLAYER_STATE1_20000000;
@@ -567,7 +573,7 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play) {
             gSaveContext.save.saveInfo.weekEventReg[9] |= this->unk_146;
         } else {
             this->actor.flags |= ACTOR_FLAG_10000;
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferTalk(&this->actor, play, 100.0f);
         }
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;

@@ -357,7 +357,7 @@ void ObjChan_CreateSmashEffects(ObjChan* this, PlayState* play) {
         }
         new_var2 = spA4 * Rand_ZeroOne();
         EffectSsKakera_Spawn(play, &spDC, &spD0, &this->actor.world.pos, -260, phi_s0, 20, 0, 0, spA8 + new_var2, 0, 0,
-                             50, -1, OBJECT_TSUBO, object_tsubo_DL_001960);
+                             50, -1, OBJECT_TSUBO, gPotShardDL);
     }
     func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 20, 50, true);
     func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 10, 80, true);
@@ -382,12 +382,12 @@ void ObjChan_Draw(Actor* thisx, PlayState* play) {
 
     opa = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
     gSPMatrix(&opa[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
-    gSPDisplayList(&opa[1], object_obj_chan_DL_000AF0);
+    gSPDisplayList(&opa[1], gChandelierCenterDL);
     POLY_OPA_DISP = &opa[2];
 
     xlu = Gfx_SetupDL71(POLY_XLU_DISP);
     gSPMatrix(&xlu[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
-    gSPDisplayList(&xlu[1], object_obj_chan_DL_000A10);
+    gSPDisplayList(&xlu[1], gChandelierPotHolderDL);
     POLY_XLU_DISP = &xlu[2];
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -408,7 +408,7 @@ void ObjChan_DrawPot(Actor* thisx, PlayState* play) {
 
     dl = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
     gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
-    gSPDisplayList(&dl[1], object_obj_chan_DL_002358);
+    gSPDisplayList(&dl[1], gChandelierPotDL);
     POLY_OPA_DISP = &dl[2];
 
     CLOSE_DISPS(play->state.gfxCtx);

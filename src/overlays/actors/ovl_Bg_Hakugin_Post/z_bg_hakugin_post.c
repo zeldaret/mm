@@ -681,9 +681,9 @@ void func_80A9C854(BgHakuginPost* this, PlayState* play) {
     }
 
     if (sp38) {
-        Flags_SetSwitch(play, this->dyna.actor.home.rot.x & 0x7F);
+        Flags_SetSwitch(play, BGHAKUGINPOST_GET_SWITCH_FLAG_2(&this->dyna.actor));
     } else {
-        Flags_UnsetSwitch(play, this->dyna.actor.home.rot.x & 0x7F);
+        Flags_UnsetSwitch(play, BGHAKUGINPOST_GET_SWITCH_FLAG_2(&this->dyna.actor));
     }
 }
 

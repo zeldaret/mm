@@ -4,7 +4,6 @@
  * Description: Great Bay Temple - Seesaw and Waterwheel w/ Platforms
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_balance.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 
