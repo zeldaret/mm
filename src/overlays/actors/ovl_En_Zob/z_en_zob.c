@@ -7,7 +7,7 @@
 #include "z_en_zob.h"
 #include "objects/object_zob/object_zob.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZob*)thisx)
 
@@ -210,7 +210,7 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
 
     this->unk_2F4 |= 1;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_30_02)) {
             textId = 0x11F9;
         } else {
@@ -543,7 +543,7 @@ void func_80BA0610(EnZob* this, PlayState* play) {
         func_80B9FC70(this, 0);
         this->actionFunc = func_80BA00BC;
     } else {
-        func_800B8614(&this->actor, play, 500.0f);
+        Actor_OfferTalk(&this->actor, play, 500.0f);
     }
 }
 
@@ -563,7 +563,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
 
     if (func_800B8718(&this->actor, &play->state)) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             Message_StartTextbox(play, 0x1208, NULL);
             SET_WEEKEVENTREG(WEEKEVENTREG_30_08);
         } else {
@@ -581,7 +581,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
         this->actionFunc = func_80BA06BC;
     } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.xzDistToPlayer > 60.0f) &&
                Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x3000)) {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
         func_800B874C(&this->actor, play, 200.0f, 150.0f);
     }
 
@@ -594,7 +594,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
 void func_80BA08E8(EnZob* this, PlayState* play) {
     s32 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1257;
             this->unk_304 = 3;
@@ -658,7 +658,7 @@ void func_80BA0AD8(EnZob* this, PlayState* play) {
         func_80BA08E8(this, play);
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
                Actor_IsFacingPlayer(&this->actor, 0x3000)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 

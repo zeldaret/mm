@@ -525,7 +525,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
         }
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_B)) {
-            playerForm = gSaveContext.save.playerForm - 1;
+            playerForm = GET_PLAYER_FORM - 1;
             if (playerForm < PLAYER_FORM_FIERCE_DEITY) {
                 playerForm = PLAYER_FORM_HUMAN;
             }
@@ -1084,7 +1084,7 @@ void MapSelect_Init(GameState* thisx) {
         this->pageDownIndex = dREG(82);
     }
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
     gSaveContext.save.cutsceneIndex = 0;
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
     gSaveContext.save.linkAge = 0;

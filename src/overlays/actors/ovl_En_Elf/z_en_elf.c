@@ -5,7 +5,6 @@
  */
 
 #include "z_en_elf.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
@@ -298,7 +297,7 @@ void func_8088CC48(EnElf* this, PlayState* play) {
     func_8088CBAC(this, play);
     this->unk_25C = 0;
     this->disappearTimer = 240;
-    if ((this->fairyFlags & 0x400) && Flags_GetCollectible(play, this->unk_260)) {
+    if ((this->fairyFlags & 0x400) && Flags_GetCollectible(play, this->collectibleFlag)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -320,11 +319,11 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
     EnElf* this = THIS;
     Player* player = GET_PLAYER(play);
     s32 colorConfig;
-    s32 params;
+    s32 fairyType;
 
     Actor_ProcessInitChain(thisx, sInitChain);
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
-                   this->morphTable, 7);
+                   this->morphTable, FAIRY_LIMB_MAX);
     ActorShape_Init(&thisx->shape, 0.0f, NULL, 15.0f);
     thisx->shape.shadowAlpha = 255;
 
@@ -340,15 +339,15 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
     this->unk_240 = 0.0f;
     colorConfig = 0;
 
-    this->unk_260 = ENELF_GET_FE00(&this->actor);
-    params = ENELF_GET_F(&this->actor);
-    if (thisx->params & 0x100) {
+    this->collectibleFlag = FAIRY_GET_COLLECTIBLE_FLAG(&this->actor);
+    fairyType = FAIRY_GET_TYPE(&this->actor);
+    if (FAIRY_GET_BOOL_PARAM(thisx)) {
         this->fairyFlags |= 0x400;
     }
 
-    this->actor.params = params;
-    switch (params) {
-        case 0:
+    this->actor.params = fairyType;
+    switch (fairyType) {
+        case FAIRY_TYPE_0:
             thisx->room = -1;
             EnElf_SetupAction(this, func_8088E850);
             func_8088C51C(this, 0);
@@ -364,7 +363,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->unk_266 = QuestHint_GetTatlTextId(play);
             break;
 
-        case 1:
+        case FAIRY_TYPE_1:
             colorConfig = -1;
             gSaveContext.jinxTimer = 0;
             EnElf_SetupAction(this, func_8088E0F0);
@@ -376,7 +375,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->unk_250 = 0.0f;
             break;
 
-        case 5:
+        case FAIRY_TYPE_5:
             colorConfig = -1;
             EnElf_SetupAction(this, func_8088E484);
             this->unk_254 = 0.0f;
@@ -387,7 +386,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->unk_250 = 7.0f;
             break;
 
-        case 7:
+        case FAIRY_TYPE_7:
             this->fairyFlags |= 0x200;
             thisx->shape.shadowDraw = ActorShadow_DrawWhiteCircle;
             this->fairyFlags |= 0x100;
@@ -397,7 +396,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             func_8088CC48(this, play);
             break;
 
-        case 2:
+        case FAIRY_TYPE_2:
             this->fairyFlags |= 0x100;
             colorConfig = -1;
             this->fairyFlags |= 0x800;
@@ -406,7 +405,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             func_8088CC48(this, play);
             break;
 
-        case 6:
+        case FAIRY_TYPE_6:
             colorConfig = -1;
             this->fairyFlags |= 0x800;
             this->fairyFlags |= 0x2000;
@@ -414,25 +413,25 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             func_8088CC48(this, play);
             break;
 
-        case 9:
+        case FAIRY_TYPE_9:
             this->fairyFlags |= 0x1000;
 
-        case 10:
+        case FAIRY_TYPE_10:
             colorConfig = -2;
             func_8088CC48(this, play);
             break;
 
-        case 8:
+        case FAIRY_TYPE_8:
             Actor_Kill(thisx);
             return;
 
-        case 3:
+        case FAIRY_TYPE_3:
             colorConfig = Rand_ZeroFloat(11.99f) + 1.0f;
             EnElf_SetupAction(this, func_8088E018);
             func_8088C51C(this, 0);
             break;
 
-        case 4:
+        case FAIRY_TYPE_4:
             EnElf_SetupAction(this, func_8088E0E0);
             func_8088C51C(this, 6);
             this->fairyFlags |= 8;
@@ -441,9 +440,12 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
 
                 for (i = 0; i < 8; i++) {
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, thisx->world.pos.x, thisx->world.pos.y - 30.0f,
-                                thisx->world.pos.z, 0, 0, 0, 6);
+                                thisx->world.pos.z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_6, false, 0));
                 }
             }
+            break;
+
+        default:
             break;
     }
 
@@ -652,14 +654,14 @@ void func_8088DD34(EnElf* this, PlayState* play) {
 
     func_8088CBAC(this, play);
     if (this->fairyFlags & 0x800) {
-        this->unk_224.y = player->bodyPartsPos[0].y;
+        this->unk_224.y = player->bodyPartsPos[PLAYER_BODYPART_WAIST].y;
     }
 
     func_8088D8D0(this, &this->unk_224);
     func_8088D9BC(this, play);
     if (Actor_HasParent(&this->actor, play)) {
         if (this->fairyFlags & 0x400) {
-            Flags_SetCollectible(play, this->unk_260);
+            Flags_SetCollectible(play, this->collectibleFlag);
         }
         Actor_Kill(&this->actor);
         return;
@@ -689,7 +691,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         this->unk_246 = 0;
         EnElf_SetupAction(this, func_8088E0F0);
         if (this->fairyFlags & 0x400) {
-            Flags_SetCollectible(play, this->unk_260);
+            Flags_SetCollectible(play, this->collectibleFlag);
         }
         return;
     }
@@ -882,7 +884,7 @@ void func_8088E60C(EnElf* this, PlayState* play) {
 void func_8088E850(EnElf* this, PlayState* play) {
     Vec3f nextPos;
     Player* player = GET_PLAYER(play);
-    Actor* arrowPointedActor;
+    Actor* targetFairyActor;
     f32 xScale;
     f32 distFromLinksHead;
     u32 cueChannel;
@@ -968,15 +970,15 @@ void func_8088E850(EnElf* this, PlayState* play) {
                 break;
 
             default:
-                arrowPointedActor = play->actorCtx.targetContext.arrowPointedActor;
+                targetFairyActor = play->actorCtx.targetCtx.fairyActor;
                 if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor != NULL)) {
                     Math_Vec3f_Copy(&nextPos, &player->talkActor->focus.pos);
                 } else {
-                    Math_Vec3f_Copy(&nextPos, &play->actorCtx.targetContext.unk0);
+                    Math_Vec3f_Copy(&nextPos, &play->actorCtx.targetCtx.fairyPos);
                 }
                 nextPos.y += 1500.0f * this->actor.scale.y;
 
-                if (arrowPointedActor != NULL) {
+                if (targetFairyActor != NULL) {
                     func_8088DB4C(this, &nextPos, 0.0f, 30.0f, 0.2f);
                     if (this->actor.speed >= 5.0f) {
                         func_8088F5F4(this, play, 0x10);
@@ -1037,7 +1039,7 @@ void func_8088EF18(Color_RGBAf* dest, Color_RGBAf* newColor, Color_RGBAf* curCol
 }
 
 void func_8088EFA4(EnElf* this, PlayState* play) {
-    Actor* arrayPointerActor = play->actorCtx.targetContext.arrowPointedActor;
+    Actor* targetFairyActor = play->actorCtx.targetCtx.fairyActor;
     Player* player = GET_PLAYER(play);
     f32 transitionRate;
 
@@ -1062,35 +1064,35 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
             this->outerColor.b = 80.0f;
             this->outerColor.a = 0.0f;
         }
-    } else if (play->actorCtx.targetContext.unk40 != 0.0f) {
+    } else if (play->actorCtx.targetCtx.fairyMoveProgressFactor != 0.0f) {
         this->unk_268 = 0;
         this->unk_238 = 1.0f;
         if (!this->unk_269) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
         }
     } else if (this->unk_268 == 0) {
-        if ((arrayPointerActor == NULL) ||
-            (Math_Vec3f_DistXYZ(&this->actor.world.pos, &play->actorCtx.targetContext.unk0) < 50.0f)) {
+        if ((targetFairyActor == NULL) ||
+            (Math_Vec3f_DistXYZ(&this->actor.world.pos, &play->actorCtx.targetCtx.fairyPos) < 50.0f)) {
             this->unk_268 = 1;
         }
     } else if (this->unk_238 != 0.0f) {
         if (Math_StepToF(&this->unk_238, 0.0f, 0.25f)) {
-            this->innerColor = play->actorCtx.targetContext.fairyInner;
-            this->outerColor = play->actorCtx.targetContext.fairyOuter;
+            this->innerColor = play->actorCtx.targetCtx.fairyInnerColor;
+            this->outerColor = play->actorCtx.targetCtx.fairyOuterColor;
         } else {
             transitionRate = 0.25f / this->unk_238;
-            func_8088EF18(&this->innerColor, &play->actorCtx.targetContext.fairyInner, &this->innerColor,
+            func_8088EF18(&this->innerColor, &play->actorCtx.targetCtx.fairyInnerColor, &this->innerColor,
                           transitionRate);
-            func_8088EF18(&this->outerColor, &play->actorCtx.targetContext.fairyOuter, &this->outerColor,
+            func_8088EF18(&this->outerColor, &play->actorCtx.targetCtx.fairyOuterColor, &this->outerColor,
                           transitionRate);
         }
     }
 
     if (this->fairyFlags & 1) {
-        if ((arrayPointerActor == NULL) || (player->targetedActor == NULL)) {
+        if ((targetFairyActor == NULL) || (player->lockOnActor == NULL)) {
             this->fairyFlags ^= 1;
         }
-    } else if ((arrayPointerActor != NULL) && (player->targetedActor != NULL)) {
+    } else if ((targetFairyActor != NULL) && (player->lockOnActor != NULL)) {
         u8 temp = this->unk_269;
         u16 targetSfxId = (this->unk_269 == 0) ? NA_SE_NONE : NA_SE_NONE;
 
@@ -1103,7 +1105,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
 
 void func_8088F214(EnElf* this, PlayState* play) {
     s32 sp34;
-    Actor* arrowPointedActor;
+    Actor* targetFairyActor;
     Player* player = GET_PLAYER(play);
     s32 pad;
 
@@ -1134,12 +1136,12 @@ void func_8088F214(EnElf* this, PlayState* play) {
         sp34 = 1;
         Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BELL_ANGER - SFX_FLAG);
     } else {
-        arrowPointedActor = play->actorCtx.targetContext.arrowPointedActor;
+        targetFairyActor = play->actorCtx.targetCtx.fairyActor;
         if (player->stateFlags1 & PLAYER_STATE1_400) {
             sp34 = 10;
             this->unk_25C = 100;
-        } else if ((arrowPointedActor == NULL) || (arrowPointedActor->category == 4)) {
-            if (arrowPointedActor != NULL) {
+        } else if ((targetFairyActor == NULL) || (targetFairyActor->category == ACTORCAT_NPC)) {
+            if (targetFairyActor != NULL) {
                 this->unk_25C = 100;
                 player->stateFlags2 |= PLAYER_STATE2_100000;
                 sp34 = 0;
@@ -1278,13 +1280,13 @@ void func_8088FA38(EnElf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->fairyFlags & 0x10) {
-        refPos = play->actorCtx.targetContext.unk0;
+        refPos = play->actorCtx.targetCtx.fairyPos;
 
         if (this->unk_234 != NULL) {
             refPos = this->unk_234->world.pos;
         } else {
-            if ((player->targetedActor == NULL) || (&player->actor == player->targetedActor) ||
-                (&this->actor == player->targetedActor) || (this->unk_264 & 4)) {
+            if ((player->lockOnActor == NULL) || (&player->actor == player->lockOnActor) ||
+                (&this->actor == player->lockOnActor) || (this->unk_264 & 4)) {
                 refPos.x =
                     player->bodyPartsPos[PLAYER_BODYPART_HEAD].x + (Math_SinS(player->actor.shape.rot.y) * 20.0f);
                 refPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 5.0f;
@@ -1460,7 +1462,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
     }
 
-    if ((player->tatlTextId == 0) && (player->targetedActor == NULL)) {
+    if ((player->tatlTextId == 0) && (player->lockOnActor == NULL)) {
         if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 600) &&
             (gSaveContext.save.saveInfo.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = QuestHint_GetTatlTextId(play);
@@ -1554,7 +1556,7 @@ s32 EnElf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     Vec3f sp34;
     f32 scale;
 
-    if (limbIndex == 6) {
+    if (limbIndex == FAIRY_LIMB_6) {
         scale = ((Math_SinS(this->timer * 4096) * 0.1f) + 1.0f) * 0.012f;
         if (this->fairyFlags & 0x200) {
             scale *= 2.0f;
@@ -1566,8 +1568,11 @@ s32 EnElf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     }
 
+    //! @note: `limbIndex` extends past `FAIRY_LIMB_MAX`.
+    //! This code was copied from OoT despite the number of limbs decreasing.
+    //! In OoT, this was intented to not draw wings for big fairies
     if ((this->fairyFlags & 0x200) &&
-        ((limbIndex == 4) || (limbIndex == 7) || (limbIndex == 11) || (limbIndex == 14))) {
+        ((limbIndex == FAIRY_LIMB_4) || (limbIndex == 7) || (limbIndex == 11) || (limbIndex == 14))) {
         *dList = NULL;
     }
     return false;

@@ -3,8 +3,10 @@
  *
  * Manages all cutscenes except for manual
  */
+
 #include "global.h"
 #include "z64shrink_window.h"
+#include "libc/string.h"
 
 ActorCutscene sGlobalCutsceneList[] = {
     // CS_ID_GLOBAL_78

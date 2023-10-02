@@ -8,7 +8,7 @@
 #include "objects/object_kanban/object_kanban.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnKanban*)thisx)
 
@@ -145,8 +145,8 @@ void EnKanban_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
     if (this->actor.params != ENKANBAN_PIECE) {
-        this->actor.targetMode = 0;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.targetMode = TARGET_MODE_0;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->unk_19A = Rand_ZeroFloat(1.9f);
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -186,7 +186,7 @@ void func_80954BE8(EnKanban* this, PlayState* play) {
                 if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
                     this->msgFlag = true;
                 } else {
-                    func_800B8614(&this->actor, play, 68.0f);
+                    Actor_OfferTalk(&this->actor, play, 68.0f);
                 }
             }
         } else {
@@ -226,7 +226,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             }
 
             if (this->zTargetTimer == 1) {
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             }
 
             if (this->partFlags == 0xFFFF) {
@@ -377,7 +377,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             piece->direction = -1;
                         }
                         piece->airTimer = 100;
-                        piece->actor.flags &= ~ACTOR_FLAG_1;
+                        piece->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                         piece->actor.flags |= ACTOR_FLAG_2000000;
                         this->cutMarkTimer = 5;
                         Actor_PlaySfx(&this->actor, NA_SE_IT_SWORD_STRIKE);
@@ -393,7 +393,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
             if (this->actor.xzDistToPlayer > 500.0f) {
-                this->actor.flags |= ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 this->partFlags = 0xFFFF;
             }
 
@@ -877,7 +877,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 ((pDiff + yDiff + rDiff + this->spinRot.x + this->spinRot.z) == 0) && (this->floorRot.x == 0.0f) &&
                 (this->floorRot.z == 0.0f)) {
                 signpost->partFlags |= this->partFlags;
-                signpost->actor.flags |= ACTOR_FLAG_1;
+                signpost->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 Actor_Kill(&this->actor);
                 return;
             }

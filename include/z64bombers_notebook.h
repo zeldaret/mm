@@ -2,8 +2,9 @@
 #define Z64BOMBERS_NOTEBOOK_H
 
 #include "ultra64.h"
-#include "io/controller.h"
 #include "z64dma.h"
+
+struct PlayState;
 
 #define DEFINE_PERSON(enum, _photo, _description, _metEnum, _metMessage, _metFlag) enum,
 typedef enum BombersNotebookPerson {

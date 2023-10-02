@@ -6,7 +6,7 @@
 
 #include "z_en_ma_yts.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnMaYts*)thisx)
 
@@ -137,12 +137,12 @@ void func_80B8D12C(EnMaYts* this, PlayState* play) {
 void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
     switch (this->type) {
         case MA_YTS_TYPE_BARN:
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
         case MA_YTS_TYPE_SITTING:
-            this->actor.targetMode = 6;
+            this->actor.targetMode = TARGET_MODE_6;
             // Day 1 or "Winning" the alien invasion
             if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 EnMaYts_ChangeAnim(this, 14);
@@ -152,13 +152,13 @@ void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
             break;
 
         case MA_YTS_TYPE_SLEEPING:
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
             this->actor.draw = EnMaYts_DrawSleeping;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
         case MA_YTS_TYPE_ENDCREDITS:
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
@@ -302,7 +302,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (!(gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_80)) {
                 // Saying to non-human Link: "Cremia went to town."
                 SET_WEEKEVENTREG(WEEKEVENTREG_65_80);
@@ -349,7 +349,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
         }
         EnMaYts_SetupDialogueHandler(this);
     } else if (ABS_ALT(sp26) < 0x4000) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 

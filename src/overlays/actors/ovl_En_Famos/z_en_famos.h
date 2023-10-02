@@ -11,8 +11,8 @@ typedef void (*EnFamosActionFunc)(struct EnFamos*, PlayState*);
 typedef struct EnFamosRock {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;
-    /* 0x18 */ Vec3s rotation;
-    /* 0x20 */ f32   scale;
+    /* 0x18 */ Vec3s rot;
+    /* 0x20 */ f32 scale;
 } EnFamosRock; // size = 0x24
 
 #define FAMOS_GET_PATH_INDEX(thisx) ((thisx)->params)

@@ -6,7 +6,7 @@
 
 #include "z_en_zod.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZod*)thisx)
 
@@ -124,7 +124,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
             }
 
             this->actionFunc = func_80BAFB84;
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
                 break;
             }
@@ -154,7 +154,7 @@ void EnZod_Destroy(Actor* thisx, PlayState* play) {
 void EnZod_HandleRoomConversation(EnZod* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_ZORA) {
         textId = 0x1227;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_08)) {
             textId = 0x1229;
@@ -380,7 +380,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
         EnZod_HandleRoomConversation(this, play);
         this->actionFunc = func_80BAF7CC;
     } else if (EnZod_PlayerIsFacingTijo(this, play)) {
-        func_800B8614(&this->actor, play, 210.0f);
+        Actor_OfferTalk(&this->actor, play, 210.0f);
     }
 
     seqPos.x = this->actor.projectedPos.x;
@@ -393,7 +393,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
 void func_80BAFA44(EnZod* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1253;
         } else {
@@ -436,7 +436,7 @@ void func_80BAFB84(EnZod* this, PlayState* play) {
         func_80BAFA44(this, play);
         this->actionFunc = func_80BAFADC;
     } else if (EnZod_PlayerIsFacingTijo(this, play)) {
-        func_800B8614(&this->actor, play, 210.0f);
+        Actor_OfferTalk(&this->actor, play, 210.0f);
     }
 }
 

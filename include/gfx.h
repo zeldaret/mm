@@ -5,6 +5,7 @@
 #include "PR/sched.h"
 #include "thga.h"
 #include "alignment.h"
+#include "unk.h"
 
 struct GameState;
 

@@ -2,19 +2,30 @@
 #define Z_EN_BIGPO_H
 
 #include "global.h"
+#include "objects/object_bigpo/object_bigpo.h"
 
 struct EnBigpo;
 
 typedef void (*EnBigPoActionFunc)(struct EnBigpo*, PlayState*);
+
+typedef enum BigPoeBodyPart {
+    /* 0 */ BIG_POE_BODYPART_0,
+    /* 1 */ BIG_POE_BODYPART_1,
+    /* 2 */ BIG_POE_BODYPART_2,
+    /* 3 */ BIG_POE_BODYPART_3,
+    /* 4 */ BIG_POE_BODYPART_4,
+    /* 5 */ BIG_POE_BODYPART_5,
+    /* 6 */ BIG_POE_BODYPART_6,
+    /* 7 */ BIG_POE_BODYPART_7,
+    /* 8 */ BIG_POE_BODYPART_8,
+    /* 9 */ BIG_POE_BODYPART_MAX
+} BigPoeBodyPart;
 
 typedef struct EnBigpoFireEffect {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ LightNode* light;
     /* 0x10 */ LightInfo info; // size 0xE
 } EnBigpoFireEffect; // size = 0x20
-
-#define ENBIGPO_LIMBCOUNT 10
-
 
 // idleTimer gets reused:
 // * after dampe reveals a fire, 8 minutes of frames before it goes away again
@@ -27,8 +38,8 @@ typedef struct EnBigpoFireEffect {
 typedef struct EnBigpo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[ENBIGPO_LIMBCOUNT];
-    /* 0x1C4 */ Vec3s morphTable[ENBIGPO_LIMBCOUNT];
+    /* 0x188 */ Vec3s jointTable[BIG_POE_LIMB_MAX];
+    /* 0x1C4 */ Vec3s morphTable[BIG_POE_LIMB_MAX];
     /* 0x200 */ EnBigPoActionFunc actionFunc;
     /* 0x204 */ u8 storePrevBgm;
     /* 0x206 */ s16 idleTimer; // frame counter
@@ -42,7 +53,7 @@ typedef struct EnBigpo {
     /* 0x218 */ f32 savedHeight; // actual height while flying moves as part of bobbing
     /* 0x21C */ f32 drawDmgEffAlpha;
     /* 0x220 */ f32 drawDmgEffScale;
-    /* 0x224 */ Vec3f limbPos[9];
+    /* 0x224 */ Vec3f bodyPartsPos[BIG_POE_BODYPART_MAX];
     /* 0x290 */ Color_RGBA8 mainColor;
     /* 0x294 */ Color_RGBA8 lanternColor;
     /* 0x298 */ UNK_TYPE1 pad298[0x14];
@@ -56,14 +67,14 @@ typedef struct EnBigpo {
 // well version is "regular" (spawns automatically), dampe basement version is "summoned"
 // on room enter, 3 "possiblefire" are turned into "chosenfire" at random
 typedef enum EnBigpoType {
-  /* 0 */ ENBIGPO_REGULAR,
-  /* 1 */ ENBIGPO_SUMMONED,
-  /* 2 */ ENBIGPO_POSSIBLEFIRE,
-  /* 3 */ ENBIGPO_CHOSENFIRE,
-  /* 4 */ ENBIGPO_REVEALEDFIRE,
-  /* 5 */ ENBIGPO_UNK5
+  /* 0 */ BIG_POE_TYPE_REGULAR,
+  /* 1 */ BIG_POE_TYPE_SUMMONED,
+  /* 2 */ BIG_POE_TYPE_POSSIBLE_FIRE,
+  /* 3 */ BIG_POE_TYPE_CHOSEN_FIRE,
+  /* 4 */ BIG_POE_TYPE_REVEALED_FIRE,
+  /* 5 */ BIG_POE_TYPE_UNK5
 } EnBigpoType;
 
-#define BIGPO_GET_SWITCHFLAGS(thisx) (u8)((thisx)->params >> 0x8) 
+#define BIG_POE_GET_SWITCHFLAGS(thisx) (u8)((thisx)->params >> 0x8) 
 
 #endif // Z_EN_BIGPO_H

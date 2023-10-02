@@ -1,4 +1,6 @@
 #include "global.h"
+#include "PR/gs2dex.h"
+#include "debug.h"
 
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3) {
 }
@@ -380,7 +382,7 @@ RoomShapeImageMultiBgEntry* Room_GetImageMultiBgEntry(RoomShapeImageMulti* roomS
         bgEntry++;
     }
 
-    __assert("../z_room.c", 849);
+    _dbg_hungup("../z_room.c", 849);
 
     return NULL;
 }
@@ -461,7 +463,7 @@ void Room_DrawImage(PlayState* play, Room* room, u32 flags) {
     } else if (roomShape->amountType == ROOM_SHAPE_IMAGE_AMOUNT_MULTI) {
         Room_DrawImageMulti(play, room, flags);
     } else {
-        __assert("../z_room.c", 965);
+        _dbg_hungup("../z_room.c", 965);
     }
 }
 
@@ -516,7 +518,7 @@ size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
 
     roomCtx->roomMemPages[0] = THA_AllocTailAlign16(&play->state.heap, maxRoomSize);
     if (roomCtx->roomMemPages[0] == NULL) {
-        __assert("../z_room.c", 1078);
+        _dbg_hungup("../z_room.c", 1078);
     }
     roomCtx->roomMemPages[1] = (void*)((uintptr_t)roomCtx->roomMemPages[0] + maxRoomSize);
     roomCtx->activeMemPage = 0;

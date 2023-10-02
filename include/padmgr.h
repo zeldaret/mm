@@ -2,15 +2,9 @@
 #define PADMGR_H
 
 #include "libc/stdbool.h"
-#include "io/controller.h"
+#include "ultra64.h"
 #include "irqmgr.h"
-
-typedef struct {
-    /* 0x00 */ OSContPad cur;
-    /* 0x06 */ OSContPad prev;
-    /* 0x0C */ OSContPad press; // X/Y store delta from last frame
-    /* 0x12 */ OSContPad rel; // X/Y store adjusted
-} Input; // size = 0x18
+#include "padutils.h"
 
 typedef enum {
     /*  0 */ PADMGR_CONT_NONE,

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "sys_cfb.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 Gfx gSetupDLs[SETUPDL_MAX][6] = {
@@ -1538,10 +1539,10 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
     gSPDisplayList(DEBUG_DISP++, gGfxMasterDL->setupBuffers);
 
     if (clearZb) {
-        gSPDisplayList(gfxCtx->polyOpa.p++, D_0E000000.clearZBuffer);
+        gSPDisplayList(POLY_OPA_DISP++, D_0E000000.clearZBuffer);
     }
     if (clearFb) {
-        gSPDisplayList(gfxCtx->polyOpa.p++, D_0E000000.clearFrameBuffer);
+        gSPDisplayList(POLY_OPA_DISP++, D_0E000000.clearFrameBuffer);
     }
 
     CLOSE_DISPS(gfxCtx);

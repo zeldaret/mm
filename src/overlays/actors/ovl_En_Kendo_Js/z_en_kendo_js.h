@@ -2,6 +2,7 @@
 #define Z_EN_KENDO_JS_H
 
 #include "global.h"
+#include "objects/object_js/object_js.h"
 
 struct EnKendoJs;
 
@@ -17,8 +18,8 @@ typedef struct EnKendoJs {
     /* 0x144 */ ColliderCylinder collider;
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnKendoJsActionFunc actionFunc;
-    /* 0x1D8 */ Vec3s jointTable[13];
-    /* 0x226 */ Vec3s morphTable[13];
+    /* 0x1D8 */ Vec3s jointTable[OBJECT_JS_LIMB_MAX];
+    /* 0x226 */ Vec3s morphTable[OBJECT_JS_LIMB_MAX];
     /* 0x274 */ Vec3s* unk_274;
     /* 0x278 */ Vec3s unk_278;
     /* 0x27E */ Vec3s unk_27E;

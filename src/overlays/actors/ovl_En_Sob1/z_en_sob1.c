@@ -9,7 +9,7 @@
 #include "objects/object_masterzoora/object_masterzoora.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnSob1*)thisx)
 
@@ -176,7 +176,7 @@ void EnSob1_SetupAction(EnSob1* this, EnSob1ActionFunc action) {
 s32 EnSob1_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
@@ -190,7 +190,7 @@ u16 EnSob1_GetTalkOption(EnSob1* this, PlayState* play) {
     if (this->shopType == BOMB_SHOP) {
         if ((gSaveContext.save.day == 1) && (gSaveContext.save.time >= CLOCK_TIME(6, 00))) {
             return 0x648;
-        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
             return 0x649;
         } else {
             return 0x64A;
@@ -270,34 +270,34 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
     } else if (this->shopType == ZORA_SHOP) {
         switch (player->transformation) {
             case PLAYER_FORM_HUMAN:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_10)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_HUMAN)) {
                     return 0x12CF;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_10);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_HUMAN);
                     return 0x12CE;
                 }
 
             case PLAYER_FORM_DEKU:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_20)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_DEKU)) {
                     return 0x12D1;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_20);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_DEKU);
                     return 0x12D0;
                 }
 
             case PLAYER_FORM_GORON:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_40)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_GORON)) {
                     return 0x12D3;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_40);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_GORON);
                     return 0x12D2;
                 }
 
             case PLAYER_FORM_ZORA:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_80)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_ZORA)) {
                     return 0x12D5;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_80);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_ZORA);
                     return 0x12D4;
                 }
 
@@ -306,33 +306,33 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
         }
     } else if (this->shopType == GORON_SHOP) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_04)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_NON_GORON)) {
                 return 0xBB9;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_04);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_NON_GORON);
                 return 0xBB8;
             }
         } else {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_GORON)) {
                 return 0xBBB;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_08);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_GORON);
                 return 0xBBA;
             }
         }
     } else if (this->shopType == GORON_SHOP_SPRING) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_10)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_NON_GORON)) {
                 return 0xBBD;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_10);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_NON_GORON);
                 return 0xBBC;
             }
         } else {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_GORON)) {
                 return 0xBBF;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_20);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_GORON);
                 return 0xBBE;
             }
         }
@@ -571,7 +571,7 @@ void EnSob1_Idle(EnSob1* this, PlayState* play) {
              player->actor.world.pos.x <= this->posXZRange.xMax) &&
             (player->actor.world.pos.z >= this->posXZRange.zMin &&
              player->actor.world.pos.z <= this->posXZRange.zMax)) {
-            func_800B8614(&this->actor, play, 400.0f);
+            Actor_OfferTalk(&this->actor, play, 400.0f);
         }
         if (this->wasTalkedToWhileWalking == true) {
             this->wasTalkedToWhileWalking = false;
@@ -826,7 +826,7 @@ void EnSob1_Walking(EnSob1* this, PlayState* play) {
              player->actor.world.pos.x <= this->posXZRange.xMax) &&
             (player->actor.world.pos.z >= this->posXZRange.zMin &&
              player->actor.world.pos.z <= this->posXZRange.zMax)) {
-            func_800B8614(&this->actor, play, 400.0f);
+            Actor_OfferTalk(&this->actor, play, 400.0f);
         }
     }
 }
@@ -851,7 +851,7 @@ void EnSob1_ItemPurchased(EnSob1* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_ContinueTextbox(play, 0x647);
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1120,7 +1120,7 @@ void EnSob1_SetupItemPurchased(EnSob1* this, PlayState* play) {
             this->csId = this->lookToShopkeeperCsId;
             CutsceneManager_Queue(this->csId);
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1136,7 +1136,7 @@ void EnSob1_ContinueShopping(EnSob1* this, PlayState* play) {
         player->stateFlags2 |= PLAYER_STATE2_20000000;
         Message_StartTextbox(play, this->welcomeTextId, &this->actor);
         EnSob1_SetupStartShopping(play, this, true);
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1401,7 +1401,7 @@ void EnSob1_InitShop(EnSob1* this, PlayState* play) {
         this->actor.world.pos.y += posOffset->y;
         this->actor.world.pos.z += posOffset->z;
         shopItems = sShops[this->shopType];
-        if ((this->shopType == BOMB_SHOP) && CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+        if ((this->shopType == BOMB_SHOP) && CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
             sShops[this->shopType][0].shopItemId = SI_BOMB_BAG_30_2;
         }
 
@@ -1482,7 +1482,7 @@ void EnSob1_InitShop(EnSob1* this, PlayState* play) {
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
         this->blinkFunc = EnSob1_WaitForBlink;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     }
 }
 

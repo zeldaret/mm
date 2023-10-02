@@ -2,7 +2,7 @@
 #define Z64PLAYER_H
 
 #include "alignment.h"
-#include "os.h"
+#include "PR/os.h"
 #include "z64actor.h"
 
 struct Player;
@@ -51,8 +51,15 @@ typedef enum {
     /* 4 */ PLAYER_ENV_HAZARD_UNDERWATER_FREE
 } PlayerEnvHazard;
 
+/*
+ * Current known usages for PLAYER_IA_MINUS1:
+ *  1. With TalkExchange requests, used to continue a current conversation after a textbox is closed
+ *  2. In `func_80123810` as a return value representing the offer is declined or invalid
+ *  3. Used as an item action to return the previously held item after player is done shielding
+ */
+
 typedef enum PlayerItemAction {
-    /*   -1 */ PLAYER_IA_MINUS1 = -1,
+    /*   -1 */ PLAYER_IA_MINUS1 = -1, // TODO: determine usages with more player docs, possibly split into seperate values (see known usages above)
     /* 0x00 */ PLAYER_IA_NONE,
     /* 0x01 */ PLAYER_IA_LAST_USED,
     /* 0x02 */ PLAYER_IA_FISHING_ROD,
@@ -61,7 +68,7 @@ typedef enum PlayerItemAction {
     /* 0x04 */ PLAYER_IA_SWORD_RAZOR,
     /* 0x05 */ PLAYER_IA_SWORD_GILDED,
     /* 0x06 */ PLAYER_IA_SWORD_TWO_HANDED,
-    /* 0x07 */ PLAYER_IA_STICK,
+    /* 0x07 */ PLAYER_IA_DEKU_STICK,
     /* 0x08 */ PLAYER_IA_ZORA_FINS,
     /* 0x09 */ PLAYER_IA_BOW,
     /* 0x0A */ PLAYER_IA_BOW_FIRE,
@@ -73,8 +80,8 @@ typedef enum PlayerItemAction {
     /* 0x0F */ PLAYER_IA_POWDER_KEG,
     /* 0x10 */ PLAYER_IA_BOMBCHU,
     /* 0x11 */ PLAYER_IA_11,
-    /* 0x12 */ PLAYER_IA_NUT,
-    /* 0x13 */ PLAYER_IA_PICTO_BOX,
+    /* 0x12 */ PLAYER_IA_DEKU_NUT,
+    /* 0x13 */ PLAYER_IA_PICTOGRAPH_BOX,
     /* 0x14 */ PLAYER_IA_OCARINA,
     /* 0x15 */ PLAYER_IA_BOTTLE_MIN,
     /* 0x15 */ PLAYER_IA_BOTTLE_EMPTY = PLAYER_IA_BOTTLE_MIN,
@@ -141,7 +148,7 @@ typedef enum PlayerItemAction {
     /* 0x50 */ PLAYER_IA_MASK_ZORA,
     /* 0x51 */ PLAYER_IA_MASK_DEKU,
     /* 0x51 */ PLAYER_IA_MASK_MAX = PLAYER_IA_MASK_DEKU,
-    /* 0x52 */ PLAYER_IA_LENS,
+    /* 0x52 */ PLAYER_IA_LENS_OF_TRUTH,
     /* 0x53 */ PLAYER_IA_MAX
 } PlayerItemAction;
 
@@ -165,7 +172,7 @@ typedef enum PlayerMeleeWeapon {
     /* 2 */ PLAYER_MELEEWEAPON_SWORD_RAZOR = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_RAZOR),
     /* 3 */ PLAYER_MELEEWEAPON_SWORD_GILDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_GILDED),
     /* 4 */ PLAYER_MELEEWEAPON_SWORD_TWO_HANDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_TWO_HANDED),
-    /* 5 */ PLAYER_MELEEWEAPON_STICK = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_STICK),
+    /* 5 */ PLAYER_MELEEWEAPON_DEKU_STICK = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_DEKU_STICK),
     /* 6 */ PLAYER_MELEEWEAPON_ZORA_FINS = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_ZORA_FINS),
     /* 7 */ PLAYER_MELEEWEAPON_MAX
 } PlayerMeleeWeapon;
@@ -421,7 +428,7 @@ typedef enum PlayerModelGroup {
     /*  7 */ PLAYER_MODELGROUP_EXPLOSIVES,
     /*  8 */ PLAYER_MODELGROUP_8,
     /*  9 */ PLAYER_MODELGROUP_HOOKSHOT,
-    /* 10 */ PLAYER_MODELGROUP_STICK,
+    /* 10 */ PLAYER_MODELGROUP_DEKU_STICK,
     /* 11 */ PLAYER_MODELGROUP_INSTRUMENT,
     /* 12 */ PLAYER_MODELGROUP_BOTTLE,
     /* 13 */ PLAYER_MODELGROUP_13,
@@ -1040,7 +1047,7 @@ typedef enum PlayerCueId {
 // breman mask march?
 #define PLAYER_STATE3_20000000   (1 << 29)
 // 
-#define PLAYER_STATE3_40000000   (1 << 30)
+#define PLAYER_STATE3_START_CHANGING_HELD_ITEM   (1 << 30)
 // TARGETING_HOSTILE?
 #define PLAYER_STATE3_80000000   (1 << 31)
 
@@ -1079,7 +1086,7 @@ typedef enum PlayerUnkAA5 {
 } PlayerUnkAA5;
 
 typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
-typedef s32 (*PlayerFuncAC4)(struct Player* this, struct PlayState* play);
+typedef s32 (*PlayerUpperActionFunc)(struct Player* this, struct PlayState* play);
 typedef void (*PlayerFuncD58)(struct PlayState* play, struct Player* this);
 
 
@@ -1095,7 +1102,7 @@ typedef struct Player {
     /* 0x14B */ u8 transformation; // PlayerTransformation enum
     /* 0x14C */ u8 modelGroup; // PlayerModelGroup enum
     /* 0x14D */ u8 nextModelGroup;
-    /* 0x14E */ s8 unk_14E;
+    /* 0x14E */ s8 itemChangeType; // ItemChangeType enum
     /* 0x14F */ u8 modelAnimType; // PlayerAnimType enum
     /* 0x150 */ u8 leftHandType;
     /* 0x151 */ u8 rightHandType;
@@ -1122,7 +1129,7 @@ typedef struct Player {
     /* 0x238 */ OSMesg maskObjectLoadMsg;
     /* 0x23C */ void* maskObjectSegment;
     /* 0x240 */ SkelAnime skelAnime;
-    /* 0x284 */ SkelAnime unk_284;
+    /* 0x284 */ SkelAnime skelAnimeUpper;
     /* 0x2C8 */ SkelAnime unk_2C8;
     /* 0x30C */ Vec3s jointTable[5];
     /* 0x32A */ Vec3s morphTable[5];
@@ -1168,7 +1175,7 @@ typedef struct Player {
     /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
-    /* 0x730 */ Actor* targetedActor; // Z/L-Targeted actor
+    /* 0x730 */ Actor* lockOnActor; // Z/L-Targeted actor
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
@@ -1176,8 +1183,8 @@ typedef struct Player {
     /* 0x74C */ u8 jointTableBuffer[PLAYER_LIMB_BUF_SIZE];
     /* 0x7EB */ u8 morphTableBuffer[PLAYER_LIMB_BUF_SIZE];
     /* 0x88A */ u8 blendTableBuffer[PLAYER_LIMB_BUF_SIZE];
-    /* 0x929 */ u8 unk_929[PLAYER_LIMB_BUF_SIZE];
-    /* 0x9C8 */ u8 unk_9C8[PLAYER_LIMB_BUF_SIZE];
+    /* 0x929 */ u8 jointTableUpperBuffer[PLAYER_LIMB_BUF_SIZE];
+    /* 0x9C8 */ u8 morphTableUpperBuffer[PLAYER_LIMB_BUF_SIZE];
     /* 0xA68 */ PlayerAgeProperties* ageProperties; // repurposed as "transformation properties"?
     /* 0xA6C */ u32 stateFlags1;
     /* 0xA70 */ u32 stateFlags2;
@@ -1187,7 +1194,7 @@ typedef struct Player {
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 csId;
-    /* 0xA87 */ s8 exchangeItemId; // PlayerItemAction enum
+    /* 0xA87 */ s8 exchangeItemAction; // PlayerItemAction enum
     /* 0xA88 */ Actor* talkActor;
     /* 0xA8C */ f32 talkActorDistance;
     /* 0xA90 */ Actor* unk_A90;
@@ -1205,8 +1212,8 @@ typedef struct Player {
     /* 0xAB8 */ f32 unk_AB8;
     /* 0xABC */ f32 unk_ABC;
     /* 0xAC0 */ f32 unk_AC0;
-    /* 0xAC4 */ PlayerFuncAC4 unk_AC4;
-    /* 0xAC8 */ f32 unk_AC8;
+    /* 0xAC4 */ PlayerUpperActionFunc upperActionFunc; // Upper body/item action functions
+    /* 0xAC8 */ f32 skelAnimeUpperBlendWeight;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;
     /* 0xACF */ u8 putAwayCountdown; // Frames to wait before showing "Put Away" on A
@@ -1221,8 +1228,8 @@ typedef struct Player {
     /* 0xADE */ u8 unk_ADE;
     /* 0xADF */ s8 unk_ADF[4]; // Circular buffer used for testing for triggering a quickspin
     /* 0xAE3 */ s8 unk_AE3[4]; // Circular buffer used for ?
-    /* 0xAE7 */ s8 unk_AE7; // a timer, used as an index for multiple kinds of animations too, room index?, etc
-    /* 0xAE8 */ s16 unk_AE8; // multipurpose timer
+    /* 0xAE7 */ s8 actionVar1; // context dependent variable that has different meanings depending on what action is currently running
+    /* 0xAE8 */ s16 actionVar2; // context dependent variable that has different meanings depending on what action is currently running
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ union {
                     Vec3f unk_AF0[2];
@@ -1291,8 +1298,8 @@ typedef struct Player {
     /* 0xD5D */ u8 floorTypeTimer; // Unused remnant of OoT
     /* 0xD5E */ u8 floorProperty; // FloorProperty enum
     /* 0xD5F */ u8 prevFloorType; // Unused remnant of OoT
-    /* 0xD60 */ f32 unk_D60;
-    /* 0xD64 */ s16 unk_D64;
+    /* 0xD60 */ f32 prevControlStickMagnitude;
+    /* 0xD64 */ s16 prevControlStickAngle;
     /* 0xD66 */ u16 prevFloorSfxOffset;
     /* 0xD68 */ s16 unk_D68;
     /* 0xD6A */ s8 unk_D6A;

@@ -29,15 +29,15 @@ typedef struct BgNumaHana {
     /* 0x234 */ BgNumaHanaActionFunc actionFunc;
     /* 0x238 */ WoodenFlowerPetalPosRot innerPetalPosRot[6];
     /* 0x2B0 */ WoodenFlowerPetalPosRot outerPetalPosRot[6];
-    /* 0x328 */ s16 petalZRotation;
-    /* 0x32A */ s16 innerPetalZRotation;
-    /* 0x32C */ s16 innerPetalZRotationalVelocity;
-    /* 0x32E */ s16 settleZRotation;
+    /* 0x328 */ s16 petalRotZ;
+    /* 0x32A */ s16 innerPetalRotZ;
+    /* 0x32C */ s16 innerPetalAngularVelocityZ;
+    /* 0x32E */ s16 settleRotZ;
     /* 0x330 */ s16 settleAngle;
     /* 0x334 */ f32 settleScale;
-    /* 0x338 */ s16 outerPetalZRotation;
-    /* 0x33A */ s16 outerPetalZRotationalVelocity;
-    /* 0x33C */ s16 flowerRotationalVelocity;
+    /* 0x338 */ s16 outerPetalRotZ;
+    /* 0x33A */ s16 outerPetalAngularVelocityZ;
+    /* 0x33C */ s16 flowerAngularVelocity;
     /* 0x33E */ s16 transitionTimer;
 } BgNumaHana; // size = 0x340
 
