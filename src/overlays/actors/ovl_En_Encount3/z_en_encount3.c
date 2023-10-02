@@ -41,7 +41,7 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
 
     this->unk14A = ENCOUNT3_GET_SPAWN_INDEX(thisx);
     this->childParams = ENCOUNT3_GET_PARAM_F80(thisx);
-    this->switchFlags = ENCOUNT3_GET_SWITCHFLAGS(thisx);
+    this->switchFlag = ENCOUNT3_GET_SWITCHFLAG(thisx);
     this->unk15A = this->actor.csId;
     this->unk16C = ENCOUNT3_GET_ROTZ(thisx) * 10.0f;
     if (this->unk16C < 10.0f) {
@@ -49,10 +49,10 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
     } else if (this->unk16C > 1000.0f) {
         this->unk16C = 1000.0f;
     }
-    if (this->switchFlags == 0x7F) {
-        this->switchFlags = -1;
+    if (this->switchFlag == 0x7F) {
+        this->switchFlag = -1;
     }
-    if (this->switchFlags >= 0 && Flags_GetSwitch(play, this->switchFlags)) {
+    if (this->switchFlag >= 0 && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
@@ -71,7 +71,7 @@ void func_809AD058(EnEncount3* this) {
 }
 
 void func_809AD084(EnEncount3* this, PlayState* play) {
-    if (this->switchFlags >= 0 && Flags_GetSwitch(play, this->switchFlags)) {
+    if (this->switchFlag >= 0 && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     } else if (!(this->unk16C < this->actor.xzDistToPlayer) && (Player_GetMask(play) == PLAYER_MASK_GARO) &&
                !D_809AD810) {
@@ -93,8 +93,8 @@ void func_809AD084(EnEncount3* this, PlayState* play) {
 void func_809AD194(EnEncount3* this, PlayState* play) {
     if (this->unk14E == 0) {
         this->unk178 = 0.0f;
-        if (this->switchFlags >= 0) {
-            Flags_SetSwitch(play, this->switchFlags);
+        if (this->switchFlag >= 0) {
+            Flags_SetSwitch(play, this->switchFlag);
         }
         this->actionFunc = func_809AD1EC;
     }
