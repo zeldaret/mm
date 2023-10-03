@@ -857,21 +857,21 @@ s16 D_801CFE34[] = {
     255  // ITEM_SONG_SUN
 };
 
-TexturePtr D_801CFE4C[] = {
+static TexturePtr sStrayFairyIconTextures[] = {
     gStrayFairyWoodfallIconTex,
     gStrayFairySnowheadIconTex,
     gStrayFairyGreatBayIconTex,
     gStrayFairyStoneTowerIconTex,
 };
 
-Color_RGB8 D_801CFE5C[] = {
+static Color_RGB8 sStrayFairyIconPrimColors[] = {
     { 255, 110, 160 },
     { 90, 255, 100 },
     { 120, 255, 255 },
     { 245, 245, 90 },
 };
 
-Color_RGB8 D_801CFE68[] = {
+static Color_RGB8 sStrayFairyIconEnvColors[] = {
     { 255, 255, 255 },
     { 255, 255, 255 },
     { 255, 255, 255 },
@@ -910,19 +910,19 @@ void Message_DrawItemIcon(PlayState* play, Gfx** gfxP) {
     } else if (msgCtx->itemId == ITEM_STRAY_FAIRIES) {
         msgCtx->unk12016 = 0x18;
         gDPPipeSync(gfx++);
-        gDPSetPrimColor(gfx++, 0, 0, D_801CFE5C[((void)0, gSaveContext.dungeonIndex)].r,
-                        D_801CFE5C[((void)0, gSaveContext.dungeonIndex)].g,
-                        D_801CFE5C[((void)0, gSaveContext.dungeonIndex)].b, msgCtx->textColorAlpha);
-        gDPSetEnvColor(gfx++, D_801CFE68[((void)0, gSaveContext.dungeonIndex)].r,
-                       D_801CFE68[((void)0, gSaveContext.dungeonIndex)].g,
-                       D_801CFE68[((void)0, gSaveContext.dungeonIndex)].b, 0);
+        gDPSetPrimColor(gfx++, 0, 0, sStrayFairyIconPrimColors[((void)0, gSaveContext.dungeonIndex)].r,
+                        sStrayFairyIconPrimColors[((void)0, gSaveContext.dungeonIndex)].g,
+                        sStrayFairyIconPrimColors[((void)0, gSaveContext.dungeonIndex)].b, msgCtx->textColorAlpha);
+        gDPSetEnvColor(gfx++, sStrayFairyIconEnvColors[((void)0, gSaveContext.dungeonIndex)].r,
+                       sStrayFairyIconEnvColors[((void)0, gSaveContext.dungeonIndex)].g,
+                       sStrayFairyIconEnvColors[((void)0, gSaveContext.dungeonIndex)].b, 0);
         gDPLoadTextureBlock_4b(gfx++, gStrayFairyGlowingCircleIconTex, G_IM_FMT_I, 32, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSPTextureRectangle(gfx++, msgCtx->unk12010 << 2, msgCtx->unk12012 << 2,
                             (msgCtx->unk12010 + msgCtx->unk12014) << 2, (msgCtx->unk12012 + msgCtx->unk12016) << 2,
                             G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, msgCtx->textColorAlpha);
-        gDPLoadTextureBlock(gfx++, D_801CFE4C[((void)0, gSaveContext.dungeonIndex)], G_IM_FMT_RGBA, G_IM_SIZ_32b, 32,
+        gDPLoadTextureBlock(gfx++, sStrayFairyIconTextures[((void)0, gSaveContext.dungeonIndex)], G_IM_FMT_RGBA, G_IM_SIZ_32b, 32,
                             24, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                             G_TX_NOLOD, G_TX_NOLOD);
     } else if ((msgCtx->itemId >= ITEM_SONG_SONATA) && (msgCtx->itemId <= ITEM_SONG_SUN)) {
@@ -1918,7 +1918,7 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
 
 /*
  * offsetting to actual codepoints is done outside this function
- * every digits will be added 0x824F to get an actual S-JIS
+ * every digit will be added 0x824F to get an actual S-JIS
  * printable character.
  */
 void Message_GetTimerDigits(OSTime time, s16* digits) {
@@ -2187,7 +2187,7 @@ void Message_Decode(PlayState* play) {
     spC0 = 0.0f;
     font->unk_11D88 = (font->unk_11D88 ^ 1) & 1;
 
-    if ((gSaveContext.options.language == 0) && !msgCtx->textIsCredits) {
+    if ((gSaveContext.options.language == LANGUAGE_JPN) && !msgCtx->textIsCredits) {
         spD2 = 0;
         spE0 = 0;
         decodedBufPos = 0;
