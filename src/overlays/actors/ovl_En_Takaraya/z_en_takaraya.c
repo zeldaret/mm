@@ -98,13 +98,13 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_bg_Skel_008FC8, &object_bg_Anim_009890, this->jointTable,
                        this->morphTable, OBJECT_BG_1_LIMB_MAX);
     this->switchFlag = EN_TAKARAYA_GET_SWITCH_FLAG(thisx);
-    thisx->params = EN_TAKARAYA_GET_FF(thisx);
+    thisx->params &= 0xFF;
     if (!D_80ADFB28) {
         for (i = 0; i < (sizeof(D_80ADFB10) / sizeof(D_80ADFB10[0])); i++) {
             D_80ADFB00[i] = Lib_SegmentedToVirtual(D_80ADFB00[i]);
             D_80ADFB10[i] = Lib_SegmentedToVirtual(D_80ADFB10[i]);
         }
-        D_80ADFB28 = 1;
+        D_80ADFB28 = true;
     }
     this->eyeTexIndex = 2;
     if (gSaveContext.save.entrance == ENTRANCE(TREASURE_CHEST_SHOP, 1)) {
@@ -174,9 +174,12 @@ void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         textId = Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL);
         this->actor.textId = textId;
+
+        //! FAKE
         if (!(textId & 0xFFFF)) {
             this->actor.textId = D_80ADFB2C[GET_PLAYER_FORM];
         }
+
         this->formSwitchFlag = gSaveContext.save.playerForm + this->switchFlag;
         Actor_OfferTalk(&this->actor, play, 120.0f);
     }

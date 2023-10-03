@@ -9,7 +9,6 @@ struct EnTakaraya;
 typedef void (*EnTakarayaActionFunc)(struct EnTakaraya*, PlayState*);
 
 #define EN_TAKARAYA_GET_SWITCH_FLAG(thisx) (u8)((thisx)->params >> 0x8)
-#define EN_TAKARAYA_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define TAKARAYA_GET_TREASURE_FLAG(this) (1 << (this)->actor.params)
 
 typedef struct EnTakaraya {
