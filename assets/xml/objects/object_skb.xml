@@ -15,9 +15,9 @@
         <Texture Name="gStalchildRibcageTex" OutName="stalchild_ribcage" Format="rgba16" Width="8" Height="16" Offset="0x37A0" />
         <Texture Name="gStalchildSkullTex" OutName="stalchild_skull" Format="rgba16" Width="8" Height="8" Offset="0x38A0" />
         <Texture Name="gStalchildNoseTex" OutName="stalchild_nose" Format="rgba16" Width="8" Height="8" Offset="0x3920" />
-        <Texture Name="gStalchildSingleBoneTex" OutName="stalchild_single_bone" Format="rgba16" Width="8" Height="8" Offset="0x39A0" />
-        <Texture Name="gStalchildHandFootTex" OutName="stalchild_hand_foot" Format="rgba16" Width="8" Height="16" Offset="0x3A20" />
-        <Texture Name="gStalchildJawTex" OutName="stalchild_jaw" Format="rgba16" Width="16" Height="8" Offset="0x3B20" />
+        <Texture Name="gStalchildBoneTex" OutName="stalchild_bone" Format="rgba16" Width="8" Height="8" Offset="0x39A0" />
+        <Texture Name="gStalchildHandAndFeetTex" OutName="stalchild_hand_and_feet" Format="rgba16" Width="8" Height="16" Offset="0x3A20" />
+        <Texture Name="gStalchildTeethTex" OutName="stalchild_teeth" Format="rgba16" Width="16" Height="8" Offset="0x3B20" />
         <Texture Name="gStalchildEyeSocketTex" OutName="stalchild_eye_socket" Format="rgba16" Width="16" Height="16" Offset="0x3C20" />
         <Texture Name="gStalchildEyeTex" OutName="stalchild_eye" Format="rgba16" Width="8" Height="8" Offset="0x3E20" />
         <DList Name="gStalchildHeadDL" Offset="0x4F30" />
@@ -39,7 +39,7 @@
         <DList Name="gStalchildRightFootDL" Offset="0x5D28" />
         <Limb Name="gStalchildRootLimb" Type="Standard" EnumName="STALCHILD_LIMB_ROOT" Offset="0x5DC8" />
         <Limb Name="gStalchildPelvisLimb" Type="Standard" EnumName="STALCHILD_LIMB_PELVIS" Offset="0x5DD4" />
-        <Limb Name="gStalchildLegsRootLimb" Type="Standard" EnumName="STALCHILD_LIMB_LEGS_ROOT" Offset="0x5DE0" />
+        <Limb Name="gStalchildRoot2Limb" Type="Standard" EnumName="STALCHILD_LIMB_ROOT_2" Offset="0x5DE0" />
         <Limb Name="gStalchildRightFemurLimb" Type="Standard" EnumName="STALCHILD_LIMB_RIGHT_FEMUR" Offset="0x5DEC" />
         <Limb Name="gStalchildRightShinLimb" Type="Standard" EnumName="STALCHILD_LIMB_RIGHT_SHIN" Offset="0x5DF8" />
         <Limb Name="gStalchildRightFootLimb" Type="Standard" EnumName="STALCHILD_LIMB_RIGHT_FOOT" Offset="0x5E04" />

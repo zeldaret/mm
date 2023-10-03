@@ -271,7 +271,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
     func_80B708C0(this, play);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildWalkAnim, this->jointTable, this->morphTable,
-                   20);
+                   STALCHILD_LIMB_MAX);
     Collider_InitJntSph(play, &this->collider);
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);

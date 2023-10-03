@@ -177,28 +177,28 @@ void func_809947B0(PlayState* play, EnSkb* this, Vec3f* inPos) {
 
 void func_8099495C(EnSkb* this, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildStandUpAnim, this->jointTable, this->morphTable,
-                   20);
+                   STALCHILD_LIMB_MAX);
     this->unk_3DC = 0;
     func_80994E2C(this);
 }
 
 void func_809949C4(EnSkb* this, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildSitLaughAnim, this->jointTable, this->morphTable,
-                   20);
+                   STALCHILD_LIMB_MAX);
     this->unk_3DC = 1;
     func_809952D8(this);
 }
 
 void func_80994A30(EnSkb* this, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildSitTapToesAnim, this->jointTable,
-                   this->morphTable, 20);
+                   this->morphTable, STALCHILD_LIMB_MAX);
     this->unk_3DC = 1;
     func_809953E8(this);
 }
 
 void func_80994A9C(EnSkb* this, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildSwingOnBranch, this->jointTable,
-                   this->morphTable, 20);
+                   this->morphTable, STALCHILD_LIMB_MAX);
     this->unk_3DC = 1;
     func_809954F8(this);
 }
