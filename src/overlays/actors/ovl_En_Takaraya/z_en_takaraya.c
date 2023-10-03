@@ -199,7 +199,7 @@ void func_80ADEF74(EnTakaraya* this, PlayState* play) {
 }
 
 void func_80ADF03C(EnTakaraya* this) {
-    this->actionFunc = &func_80ADF050;
+    this->actionFunc = func_80ADF050;
 }
 
 void func_80ADF050(EnTakaraya* this, PlayState* play) {
@@ -261,7 +261,7 @@ void func_80ADF2D4(EnTakaraya* this) {
     this->timer = 145;
     SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
-    this->actionFunc = &func_80ADF338;
+    this->actionFunc = func_80ADF338;
 }
 
 void func_80ADF338(EnTakaraya* this, PlayState* play) {
@@ -296,7 +296,7 @@ void func_80ADF338(EnTakaraya* this, PlayState* play) {
 void func_80ADF4E0(EnTakaraya* this) {
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 45);
     this->timer = 1;
-    this->actionFunc = &func_80ADF520;
+    this->actionFunc = func_80ADF520;
 }
 
 void func_80ADF520(EnTakaraya* this, PlayState* play) {
@@ -320,7 +320,7 @@ void func_80ADF520(EnTakaraya* this, PlayState* play) {
 void func_80ADF608(EnTakaraya* this, PlayState* play) {
     func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
     this->unk2AD = true;
-    this->actionFunc = &func_80ADF654;
+    this->actionFunc = func_80ADF654;
 }
 
 void func_80ADF654(EnTakaraya* this, PlayState* play) {
@@ -344,7 +344,7 @@ void func_80ADF6DC(EnTakaraya* this) {
     Animation_PlayLoop(&this->skelAnime, &object_bg_Anim_001384);
     this->eyeTexIndex = 0;
     this->actor.flags |= ACTOR_FLAG_10000;
-    this->actionFunc = &func_80ADF730;
+    this->actionFunc = func_80ADF730;
 }
 
 void func_80ADF730(EnTakaraya* this, PlayState* play) {
@@ -359,7 +359,7 @@ void func_80ADF730(EnTakaraya* this, PlayState* play) {
 }
 
 void func_80ADF7B8(EnTakaraya* this) {
-    this->actionFunc = &func_80ADF7CC;
+    this->actionFunc = func_80ADF7CC;
 }
 
 void func_80ADF7CC(EnTakaraya* this, PlayState* play) {
