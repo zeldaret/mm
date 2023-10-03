@@ -39,9 +39,9 @@ typedef struct BossHakugin {
     /* 0x0144 */ SkelAnime skelAnime;
     /* 0x0188 */ BossHakuginActionFunc actionFunc;
     /* 0x018C */ u8 unk_018C;
-    /* 0x018D */ s8 unk_018D;
-    /* 0x018E */ s8 unk_018E;
-    /* 0x018F */ s8 unk_018F;
+    /* 0x018D */ u8 unk_018D;
+    /* 0x018E */ u8 unk_018E;
+    /* 0x018F */ u8 unk_018F;
     /* 0x0190 */ u8 unk_0190; // boolean?
     /* 0x0191 */ u8 unk_0191;
     /* 0x0192 */ u8 unk_0192;
