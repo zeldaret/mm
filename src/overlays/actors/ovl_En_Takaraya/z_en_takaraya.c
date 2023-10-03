@@ -47,19 +47,9 @@ ActorInit En_Takaraya_InitVars = {
     (ActorFunc)EnTakaraya_Draw,
 };
 
-void* D_80ADFB00[4] = {
-    0x06006F58,
-    0x06007358,
-    0x06007758,
-    0x06007358,
-};
+void* D_80ADFB00[4] = { 0x06006F58, 0x06007358, 0x06007758, 0x06007358 };
 
-void* D_80ADFB10[4] = {
-    0x06007B58,
-    0x06007F58,
-    0x06007758,
-    0x06007F58,
-};
+void* D_80ADFB10[4] = { 0x06007B58, 0x06007F58, 0x06007758, 0x06007F58 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
@@ -68,23 +58,14 @@ static InitChainEntry sInitChain[] = {
 
 u32 D_80ADFB28 = 0;
 
-u16 D_80ADFB2C[6] = {
-    1901, 1902, 1903, 1900, 1901, 0,
-};
+u16 D_80ADFB2C[6] = { 1901, 1902, 1903, 1900, 1901, 0 };
 
-u8 D_80ADFB38[][2] = {
-    5, 5, 12, 5, 4, 4, 42, 41, 5, 5, 0, 0,
-};
+u8 D_80ADFB38[][2] = { { 5, 5 }, { 12, 5 }, { 4, 4 }, { 42, 41 }, { 5, 5 }, { 0, 0 } };
 
-u16 D_80ADFB44[] = {
-    1909, 1910, 1911, 1908, 1909, 0,
-};
+u16 D_80ADFB44[] = { 1909, 1910, 1911, 1908, 1909, 0 };
 
-u16 D_80ADFB50[] = {
-    1905, 1906, 1907, 1904, 1905, 0, 0, 0,
-};
+u16 D_80ADFB50[] = { 1905, 1906, 1907, 1904, 1905, 0, 0, 0 };
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Init.s")
 void EnTakaraya_Init(Actor* thisx, PlayState* play) {
     EnTakaraya* this = THIS;
     s32 i;
@@ -93,21 +74,21 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, -60.0f, ((void*)0), 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_bg_Skel_008FC8, &object_bg_Anim_009890, this->jointTable,
                        this->morphTable, 24);
-    this->unk2B2 = (this->actor.params >> 8) & 0xFF;
-    thisx->params &= 0xFF;
+    this->switchFlag = EN_TAKARAYA_GET_SWITCH_FLAG(thisx);
+    thisx->params = EN_TAKARAYA_GET_FF(thisx);
     if (!D_80ADFB28) {
-        for (i = 0; i < (s32)(sizeof(D_80ADFB10) / sizeof(D_80ADFB10[0])); i++) {
+        for (i = 0; i < (sizeof(D_80ADFB10) / sizeof(D_80ADFB10[0])); i++) {
             D_80ADFB00[i] = Lib_SegmentedToVirtual(D_80ADFB00[i]);
             D_80ADFB10[i] = Lib_SegmentedToVirtual(D_80ADFB10[i]);
         }
         D_80ADFB28 = 1;
     }
-    this->unk2AC = 2;
-    if (gSaveContext.save.entrance == 0x2810) {
+    this->eyeTexIndex = 2;
+    if (gSaveContext.save.entrance == ENTRANCE(TREASURE_CHEST_SHOP, 1)) {
         Audio_StopSubBgm();
-        if (gSaveContext.timerStates[4] == TIMER_STATE_6) {
+        if (gSaveContext.timerStates[TIMER_ID_MINIGAME_2] == TIMER_STATE_6) {
             this->actor.textId = 0x77A;
-            gSaveContext.timerStates[4] = TIMER_STATE_STOP;
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
             func_80ADF6DC(this);
         } else {
             this->actor.textId = 0x77C;
@@ -124,30 +105,27 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Destroy.s") 0xBF 0x40
 void EnTakaraya_Destroy(Actor* thisx, PlayState* play) {
     EnTakaraya* this = THIS;
 
     Flags_UnsetSwitch(play, 5);
     if (!this->unk2AD) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
-        gSaveContext.timerStates[4] = 5;
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADED8C.s")
 void func_80ADED8C(EnTakaraya* this) {
-    if (this->unk2AC != 0) {
-        this->unk2AC++;
-        if (this->unk2AC == 4) {
-            this->unk2AC = 0;
+    if (this->eyeTexIndex != 0) {
+        this->eyeTexIndex++;
+        if (this->eyeTexIndex == 4) {
+            this->eyeTexIndex = 0;
         }
     } else if (Rand_ZeroOne() < 0.02f) {
-        this->unk2AC++;
+        this->eyeTexIndex++;
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADEDF8.s")
 void func_80ADEDF8(EnTakaraya* this) {
     if (this->skelAnime.animation == &object_bg_Anim_001384) {
         Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
@@ -155,10 +133,8 @@ void func_80ADEDF8(EnTakaraya* this) {
     this->actionFunc = func_80ADEE4C;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADEE4C.s")
 void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
     u16 textId;
-    s16 new_var;
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if ((&object_bg_Anim_00A280) == (*this).skelAnime.animation) {
@@ -176,34 +152,30 @@ void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
         textId = Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL);
         this->actor.textId = textId;
         if (!(textId & 0xFFFF)) {
-            new_var = gSaveContext.save.playerForm;
-            this->actor.textId = D_80ADFB2C[new_var];
+            this->actor.textId = D_80ADFB2C[(void)0, gSaveContext.save.playerForm];
         }
-        this->unk2B0 = gSaveContext.save.playerForm + this->unk2B2;
+        this->unk2B0 = gSaveContext.save.playerForm + this->switchFlag;
         Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADEF74.s")
 void func_80ADEF74(EnTakaraya* this, PlayState* play) {
     u8 var_v1;
 
-    if (Flags_GetSwitch(play, this->unk2B0) != 0) {
+    if (Flags_GetSwitch(play, this->unk2B0)) {
         var_v1 = D_80ADFB38[gSaveContext.save.playerForm][1];
     } else {
         var_v1 = D_80ADFB38[gSaveContext.save.playerForm][0];
     }
     if (gSaveContext.save.playerForm) {}
-    Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, 0x1BB, 0.0f, 0.0f, 0.0f, 0, 0, 5,
-                                  ((var_v1 << 5) + this->actor.params) + 0xB000, this->actor.csId, 0x3FFU, NULL);
+    Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_TAKARAYA_WALL, 0.0f, 0.0f, 0.0f, 0, 0, 5,
+                                  ((var_v1 << 5) + this->actor.params) + 0xB000, this->actor.csId, 0x3FF, NULL);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF03C.s")
 void func_80ADF03C(EnTakaraya* this) {
     this->actionFunc = &func_80ADF050;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF050.s")
 void func_80ADF050(EnTakaraya* this, PlayState* play) {
     u8 talkState;
 
@@ -226,7 +198,7 @@ void func_80ADF050(EnTakaraya* this, PlayState* play) {
             func_80ADEDF8(this);
         }
     } else if ((talkState == TEXT_STATE_1) && (this->actor.textId != 0x778)) {
-        if (Message_ShouldAdvance(play) != 0) {
+        if (Message_ShouldAdvance(play)) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
         }
     } else if ((talkState == TEXT_STATE_CHOICE) && (Message_ShouldAdvance(play))) {
@@ -257,127 +229,117 @@ void func_80ADF050(EnTakaraya* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF2D4.s")
 void func_80ADF2D4(EnTakaraya* this) {
-    Actor_PlaySfx_FlaggedCentered2(&this->actor, 0x482CU);
-    Audio_PlaySubBgm(0x25U);
-    this->unk2AE = 0x91;
+    Actor_PlaySfx_FlaggedCentered2(&this->actor, NA_SE_SY_FOUND);
+    Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
+    this->timer = 145;
     SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
     this->actionFunc = &func_80ADF338;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF338.s")
 void func_80ADF338(EnTakaraya* this, PlayState* play) {
     Actor* chest = play->actorCtx.actorLists[ACTORCAT_CHEST].first;
     Actor* player = play->actorCtx.actorLists[ACTORCAT_PLAYER].first;
-    Vec3f sp3C;
-    Vec3f sp30;
+    Vec3f eye;
+    Vec3f at;
     f32 sp2C;
-    s16 sp2A;
+    s16 CamId;
 
     SkelAnime_Update(&this->skelAnime);
     if ((CutsceneManager_GetCurrentCsId() == this->actor.csId) && (chest != NULL)) {
-        this->unk2AE--;
-        sp2A = CutsceneManager_GetCurrentSubCamId((s16)this->actor.csId);
-        if (this->unk2AE >= 0x1A) {
+        this->timer--;
+        CamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
+        if (this->timer >= 26) {
             sp2C = 250.0f;
         } else {
-            sp2C = ((chest->xzDistToPlayer - 250.0f) * (f32)(0x19 - this->unk2AE) * 0.04f) + 250.0f;
+            sp2C = ((chest->xzDistToPlayer - 250.0f) * (25 - this->timer) * 0.04f) + 250.0f;
         }
-        sp3C.x = (Math_SinS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.x;
-        sp3C.y = player->world.pos.y + 120.0f;
-        sp3C.z = (Math_CosS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.z;
-        sp30.x = sp3C.x - (Math_SinS(chest->yawTowardsPlayer) * 250.0f);
-        sp30.y = sp3C.y - 90.0f;
-        sp30.z = sp3C.z - (Math_CosS(chest->yawTowardsPlayer) * 250.0f);
-        Play_SetCameraAtEye(play, sp2A, &sp30, &sp3C);
-    } else if (this->unk2AE < 0x91) {
+        eye.x = (Math_SinS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.x;
+        eye.y = player->world.pos.y + 120.0f;
+        eye.z = (Math_CosS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.z;
+        at.x = eye.x - (Math_SinS(chest->yawTowardsPlayer) * 250.0f);
+        at.y = eye.y - 90.0f;
+        at.z = eye.z - (Math_CosS(chest->yawTowardsPlayer) * 250.0f);
+        Play_SetCameraAtEye(play, CamId, &at, &eye);
+    } else if (this->timer < 145) {
         func_80ADF4E0(this);
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF4E0.s")
 void func_80ADF4E0(EnTakaraya* this) {
-    Interface_StartTimer(4, 0x2D);
-    this->unk2AE = 1;
+    Interface_StartTimer(TIMER_ID_MINIGAME_2, 45);
+    this->timer = 1;
     this->actionFunc = &func_80ADF520;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF520.s")
 void func_80ADF520(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Play_InCsMode(play) == 0) {
-        if (Flags_GetTreasure(play, this->actor.params) != 0) {
+        if (Flags_GetTreasure(play, this->actor.params)) {
             Flags_SetSwitch(play, this->unk2B0);
             play->actorCtx.sceneFlags.chest &= ~(1 << this->actor.params);
-            this->unk2AE = 0;
-            gSaveContext.timerStates[4] = 6;
+            this->timer = 0;
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
             func_80ADF608(this, play);
-        } else if (gSaveContext.timerCurTimes[4] == 0) {
-            this->unk2AE = 0x32;
+        } else if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] == TIMER_STATE_OFF) {
+            this->timer = 50;
             Message_StartTextbox(play, 0x77D, &this->actor);
-            gSaveContext.timerStates[4] = 5;
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
             func_80ADF608(this, play);
         }
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF608.s")
 void func_80ADF608(EnTakaraya* this, PlayState* play) {
-    func_800B7298(play, &this->actor, 7);
-    this->unk2AD = 1;
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+    this->unk2AD = true;
     this->actionFunc = &func_80ADF654;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF654.s")
 void func_80ADF654(EnTakaraya* this, PlayState* play) {
-    if (this->unk2AE > 0) {
-        this->unk2AE--;
+    if (this->timer > 0) {
+        this->timer--;
     } else {
-        if (gSaveContext.timerStates[4] == 6) {
-            play->transitionType = 0x50;
-            gSaveContext.nextTransitionType = 3;
+        if (gSaveContext.timerStates[TIMER_ID_MINIGAME_2] == TIMER_STATE_6) {
+            play->transitionType = TRANS_TYPE_80;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         } else {
-            play->transitionType = 0x40;
-            gSaveContext.nextTransitionType = 2;
+            play->transitionType = TRANS_TYPE_64;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
         }
         gSaveContext.nextCutsceneIndex = 0;
-        play->nextEntrance = 0x2810;
-        play->transitionTrigger = 0x14;
+        play->nextEntrance = ENTRANCE(TREASURE_CHEST_SHOP, 1);
+        play->transitionTrigger = TRANS_TRIGGER_START;
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF6DC.s")
 void func_80ADF6DC(EnTakaraya* this) {
-    Animation_PlayLoop(&this->skelAnime, (AnimationHeader*)&object_bg_Anim_001384);
-    this->unk2AC = 0;
+    Animation_PlayLoop(&this->skelAnime, &object_bg_Anim_001384);
+    this->eyeTexIndex = 0;
     this->actor.flags |= ACTOR_FLAG_10000;
     this->actionFunc = &func_80ADF730;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF730.s")
 void func_80ADF730(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= 0xFFFEFFFF;
         func_80ADF7B8(this);
     } else {
-        this->unk2B0 = gSaveContext.save.playerForm + this->unk2B2;
+        this->unk2B0 = gSaveContext.save.playerForm + this->switchFlag;
         Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF7B8.s")
 void func_80ADF7B8(EnTakaraya* this) {
     this->actionFunc = &func_80ADF7CC;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF7CC.s")
 void func_80ADF7CC(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == 5) && (Message_ShouldAdvance(play) != 0)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && (Message_ShouldAdvance(play))) {
         if (this->actor.textId == 0x77A) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                 Message_CloseTextbox(play);
@@ -397,7 +359,6 @@ void func_80ADF7CC(EnTakaraya* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Update.s")
 void EnTakaraya_Update(Actor* thisx, PlayState* play) {
     EnTakaraya* this = THIS;
     s32 pad;
@@ -408,7 +369,6 @@ void EnTakaraya_Update(Actor* thisx, PlayState* play) {
     func_80ADED8C(this);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF94C.s")
 s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTakaraya* this = THIS;
 
@@ -418,17 +378,15 @@ s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     return false;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADF984.s")
 void EnTakaraya_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnTakaraya* this = THIS;
 
     if (limbIndex == 5) {
-        Matrix_RotateYS((s16)(0x400 - this->headRot.x), MTXMODE_APPLY);
+        Matrix_RotateYS(0x400 - this->headRot.x, MTXMODE_APPLY);
         Matrix_MultVecX(500.0f, &thisx->focus.pos);
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Draw.s")
 void EnTakaraya_Draw(Actor* thisx, PlayState* play) {
     EnTakaraya* this = THIS;
 
@@ -436,9 +394,9 @@ void EnTakaraya_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) || (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
-        gSPSegment(POLY_OPA_DISP++, 0x08, D_80ADFB10[this->unk2AC]);
+        gSPSegment(POLY_OPA_DISP++, 0x08, D_80ADFB10[this->eyeTexIndex]);
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x08, D_80ADFB00[this->unk2AC]);
+        gSPSegment(POLY_OPA_DISP++, 0x08, D_80ADFB00[this->eyeTexIndex]);
     }
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnTakaraya_OverrideLimbDraw, NULL,
