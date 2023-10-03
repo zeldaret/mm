@@ -1,11 +1,11 @@
 ﻿<Root>
     <!-- Assets for the Marine Researcher -->
     <File Name="object_mk" Segment="6">
-        <Animation Name="gMarineResearcherHeadWaggleAnim" Offset="0x438" />
-        <Animation Name="gMarineResearcherYellAnim" Offset="0x7D8" />
-        <Animation Name="gMarineResearcherShakeInFearAnim" Offset="0x10F4" />
-        <Animation Name="gMarineResearcherStrokeChinAnim" Offset="0x1964" />
-        <Animation Name="gMarineResearcherIdleAnim" Offset="0x1C38" />
+        <Animation Name="gMarineResearcherHeadWaggleAnim" Offset="0x438" /> <!-- Original name is "lake_dameja" -->
+        <Animation Name="gMarineResearcherYellAnim" Offset="0x7D8" /> <!-- Original name is "lake_isogunoja" -->
+        <Animation Name="gMarineResearcherShakeInFearAnim" Offset="0x10F4" /> <!-- Original name is "lake_sorewa" -->
+        <Animation Name="gMarineResearcherStrokeChinAnim" Offset="0x1964" /> <!-- Original name is "lake_u_m" -->
+        <Animation Name="gMarineResearcherIdleAnim" Offset="0x1C38" /> <!-- Original name is "mk_matsu" -->
         <DList Name="gMarineResearcherMidTorsoDL" Offset="0x4320" />
         <DList Name="gMarineResearcherUpperTorsoDL" Offset="0x4610" />
         <DList Name="gMarineResearcherNeckDL" Offset="0x4960" />
