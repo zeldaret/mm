@@ -9,7 +9,7 @@ typedef void (*EnEncount3ActionFunc)(struct EnEncount3*, PlayState*);
 
 #define ENCOUNT3_GET_SPAWN_INDEX(thisx) (((thisx)->params >> 0xC) & 0xF)
 #define ENCOUNT3_GET_PARAM_F80(thisx) (((thisx)->params >> 7) & 0x1F)
-#define ENCOUNT3_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define ENCOUNT3_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 #define ENCOUNT3_GET_ROTZ(thisx) ((thisx)->world.rot.z)
 
@@ -25,9 +25,9 @@ typedef struct EnEncount3 {
     /* 0x154 */ s16 childActorId;
     /* 0x156 */ s16 unk156;
     /* 0x158 */ s16 childParams;
-    /* 0x15A */ s16 unk15A;
+    /* 0x15A */ s16 csId;
     /* 0x15C */ s16 switchFlag;
-    /* 0x15E */ s16 unk15E;
+    /* 0x15E */ s16 timer;
     /* 0x160 */ f32 unk160;
     /* 0x164 */ f32 unk164;
     /* 0x168 */ f32 unk168;

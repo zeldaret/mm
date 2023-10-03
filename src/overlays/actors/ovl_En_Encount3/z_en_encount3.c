@@ -41,8 +41,8 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
 
     this->unk14A = ENCOUNT3_GET_SPAWN_INDEX(thisx);
     this->childParams = ENCOUNT3_GET_PARAM_F80(thisx);
-    this->switchFlag = ENCOUNT3_GET_SWITCHFLAG(thisx);
-    this->unk15A = this->actor.csId;
+    this->switchFlag = ENCOUNT3_GET_SWITCH_FLAG(thisx);
+    this->csId = this->actor.csId;
     this->unk16C = ENCOUNT3_GET_ROTZ(thisx) * 10.0f;
     if (this->unk16C < 10.0f) {
         this->unk16C = 10.0f;
@@ -52,7 +52,7 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
     if (this->switchFlag == 0x7F) {
         this->switchFlag = -1;
     }
-    if (this->switchFlag >= 0 && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
@@ -66,17 +66,18 @@ void EnEncount3_Destroy(Actor* thisx, PlayState* play) {
 void func_809AD058(EnEncount3* this) {
     this->childActorId = ACTOR_EN_JSO;
     this->unk150 = 1;
-    this->unk15E = 0x1E;
+    this->timer = 30;
     this->actionFunc = func_809AD084;
 }
 
 void func_809AD084(EnEncount3* this, PlayState* play) {
-    if (this->switchFlag >= 0 && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
-    } else if (!(this->unk16C < this->actor.xzDistToPlayer) && (Player_GetMask(play) == PLAYER_MASK_GARO) &&
-               !D_809AD810) {
-        if (this->unk15E > 0) {
-            this->unk15E--;
+        return;
+    }
+    if (!(this->unk16C < this->actor.xzDistToPlayer) && (Player_GetMask(play) == PLAYER_MASK_GARO) && !D_809AD810) {
+        if (this->timer > 0) {
+            this->timer--;
         } else {
             this->child =
                 Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, this->childActorId, this->actor.world.pos.x,
@@ -139,13 +140,13 @@ void EnEncount3_Update(Actor* thisx, PlayState* play2) {
             s16 i;
 
             for (i = 0; i < PLAYER_BODYPART_MAX; i++) {
-                player->flameTimers[i] = Rand_S16Offset(0, 0xC8);
+                player->flameTimers[i] = Rand_S16Offset(0, 200);
             }
             player->isBurning = true;
 
             sp3C = this->actor.world.pos.x - player->actor.world.pos.x;
             sp38 = this->actor.world.pos.z - player->actor.world.pos.z;
-            if (Play_InCsMode(play) == 0) {
+            if (!Play_InCsMode(play)) {
                 func_800B8D50(play, &this->actor, 10.0f, Math_Atan2S_XY(sp38, sp3C), 0.0f, 1);
             }
         }
@@ -168,7 +169,7 @@ void EnEncount3_Update(Actor* thisx, PlayState* play2) {
 
     this->unk164 = this->unk160 / 60.0f;
     if (this->unk164 != 0.0f) {
-        play->envCtx.lightSettings.fogNear = (0x3C0 - play->envCtx.unk_C4.fogNear) * this->unk164;
+        play->envCtx.lightSettings.fogNear = (960 - play->envCtx.unk_C4.fogNear) * this->unk164;
         play->envCtx.lightSettings.fogColor[0] = (40.0f - play->envCtx.unk_C4.fogColor[0]) * this->unk164;
         play->envCtx.lightSettings.fogColor[1] = (10.0f - play->envCtx.unk_C4.fogColor[1]) * this->unk164;
         play->envCtx.lightSettings.fogColor[2] = (0.0f - play->envCtx.unk_C4.fogColor[2]) * this->unk164;
@@ -187,7 +188,7 @@ void EnEncount3_Draw(Actor* thisx, PlayState* play) {
 
         gDPPipeSync(POLY_XLU_DISP++);
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, (s32)play->gameplayFrames, 0U, 0x20, 0x40, 1,
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, (s32)play->gameplayFrames, 0, 0x20, 0x40, 1,
                                     (s32)play->gameplayFrames * -2, (s32)play->gameplayFrames * -8, 0x20, 0x20));
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 200, 0, (s8)this->unk170);
