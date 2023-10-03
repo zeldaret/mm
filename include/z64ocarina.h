@@ -35,7 +35,7 @@ typedef enum {
 typedef enum {
     /* 0x00 */ OCARINA_ACTION_0, // acts like free play but never set
     /* 0x01 */ OCARINA_ACTION_FREE_PLAY,
-    /* 0x02 */ OCARINA_ACTION_DEMONSTRATE_SONATA, // Song demonstrations by teachers
+    /* 0x02 */ OCARINA_ACTION_DEMONSTRATE_SONATA, // Song demonstrated/previewed by another actor/teacher
     /* 0x03 */ OCARINA_ACTION_DEMONSTRATE_GORON_LULLABY,
     /* 0x04 */ OCARINA_ACTION_DEMONSTRATE_NEW_WAVE,
     /* 0x05 */ OCARINA_ACTION_DEMONSTRATE_ELEGY,
@@ -51,7 +51,7 @@ typedef enum {
     /* 0x0F */ OCARINA_ACTION_DEMONSTRATE_DOUBLE_TIME,
     /* 0x10 */ OCARINA_ACTION_DEMONSTRATE_GORON_LULLABY_INTRO,
     /* 0x11 */ OCARINA_ACTION_11,
-    /* 0x12 */ OCARINA_ACTION_PROMPT_SONATA, // Playing back a particular song
+    /* 0x12 */ OCARINA_ACTION_PROMPT_SONATA, // User plays back song through inputing 1 note at a time, as a tutorial. Each note is verified.
     /* 0x13 */ OCARINA_ACTION_PROMPT_GORON_LULLABY,
     /* 0x14 */ OCARINA_ACTION_PROMPT_NEW_WAVE,
     /* 0x15 */ OCARINA_ACTION_PROMPT_ELEGY,
@@ -67,7 +67,7 @@ typedef enum {
     /* 0x1F */ OCARINA_ACTION_PROMPT_DOUBLE_TIME,
     /* 0x20 */ OCARINA_ACTION_PROMPT_GORON_LULLABY_INTRO,
     /* 0x21 */ OCARINA_ACTION_21,
-    /* 0x22 */ OCARINA_ACTION_CHECK_SONATA, // Playing songs for check spots. Broken as playing any dungeon song will softlock.
+    /* 0x22 */ OCARINA_ACTION_CHECK_SONATA, // Once the entire song is played, checks for a specific song. Broken as playing any dungeon song will softlock.
     /* 0x23 */ OCARINA_ACTION_CHECK_GORON_LULLABY,
     /* 0x24 */ OCARINA_ACTION_CHECK_NEW_WAVE,
     /* 0x25 */ OCARINA_ACTION_CHECK_ELEGY,

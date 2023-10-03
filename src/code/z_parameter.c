@@ -7018,8 +7018,9 @@ void Interface_Update(PlayState* play) {
     // Update Sun Song
     if (gSaveContext.sunsSongState != SUNSSONG_INACTIVE) {
         // exit out of ocarina mode after suns song finishes playing
-        if ((msgCtx->ocarinaAction != 0x39) && (gSaveContext.sunsSongState == SUNSSONG_START)) {
-            play->msgCtx.ocarinaMode = 4;
+        if ((msgCtx->ocarinaAction != OCARINA_ACTION_CHECK_NOTIME_DONE) &&
+            (gSaveContext.sunsSongState == SUNSSONG_START)) {
+            play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         }
 
         // handle suns song in areas where time moves
@@ -7039,7 +7040,7 @@ void Interface_Update(PlayState* play) {
                     // Daytime has been reached. End suns song effect
                     gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
                     R_TIME_SPEED = sPrevTimeSpeed;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
             } else {
                 // Daytime
@@ -7047,7 +7048,7 @@ void Interface_Update(PlayState* play) {
                     // Nighttime has been reached. End suns song effect
                     gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
                     R_TIME_SPEED = sPrevTimeSpeed;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
             }
         } else {
