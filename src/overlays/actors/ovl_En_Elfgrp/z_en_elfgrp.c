@@ -82,9 +82,9 @@ ActorInit En_Elfgrp_InitVars = {
  * Set the actor's cutscene id to a later one, or -1 if run out.
  *
  * @note This is only expected to be called in Init when this actor has the first cutscene set, but can also work for
- * later cutscenes if \p numberToSkip is set correcly.
+ * later cutscenes if \p numCutscenes is set correcly.
  *
- * @param numberToSkip Number of cutscenes in the list to skip forward to set this one.
+ * @param numCutscenes Number of cutscenes in the list to skip forward to set this one.
  */
 void EnElfgrp_SetCutscene(EnElfgrp* this, s32 numCutscenes) {
     while (numCutscenes > 0) {
@@ -263,7 +263,7 @@ s32 EnElfgrp_GetFountainFairiesCount(PlayState* play, s32 type) {
     return numberInFountain;
 }
 
-// Update number of Stray Fairies in Fountain?
+// Update number of Stray Fairies in Fountain
 void EnElfgrp_SetFountainFairiesCount(PlayState* play, s32 type, s32 newCount) {
     if ((type < ENELFGRP_TYPE_MAGIC) || (type > ENELFGRP_TYPE_KINDNESS) ||
         (newCount < (STRAY_FAIRY_TOTAL - STRAY_FAIRY_SCATTERED_TOTAL)) || (newCount > STRAY_FAIRY_TOTAL)) {
@@ -287,7 +287,7 @@ void EnElfgrp_SpawnStrayFairies(EnElfgrp* this, PlayState* play, s32 count, s32 
     s32 i;
     Actor* strayFairy;
     s32 strayFairyParams;
-    Vec3f spawnCentrePos;
+    Vec3f spawnCenterPos;
     Player* player = GET_PLAYER(play);
 
     if (fairyType == 0) {
@@ -295,19 +295,19 @@ void EnElfgrp_SpawnStrayFairies(EnElfgrp* this, PlayState* play, s32 count, s32 
     }
 
     if (fairyType == 0) {
-        spawnCentrePos = this->actor.world.pos;
-        spawnCentrePos.y += 20.0f;
+        spawnCenterPos = this->actor.world.pos;
+        spawnCenterPos.y += 20.0f;
         strayFairyParams = STRAY_FAIRY_PARAMS(0, this->type, STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN);
     } else {
-        spawnCentrePos = player->actor.world.pos;
-        spawnCentrePos.y += 20.0f;
+        spawnCenterPos = player->actor.world.pos;
+        spawnCenterPos.y += 20.0f;
         strayFairyParams = STRAY_FAIRY_PARAMS(0, this->type, STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN);
     }
 
     for (i = 0; i < count; i++) {
         strayFairy =
-            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, Rand_CenteredFloat(20.0f) + spawnCentrePos.x,
-                        spawnCentrePos.y, Rand_CenteredFloat(20.0f) + spawnCentrePos.z, 0, 0, 0, strayFairyParams);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, Rand_CenteredFloat(20.0f) + spawnCenterPos.x,
+                        spawnCenterPos.y, Rand_CenteredFloat(20.0f) + spawnCenterPos.z, 0, 0, 0, strayFairyParams);
 
         if (strayFairy == NULL) {
             continue;
@@ -319,7 +319,7 @@ void EnElfgrp_SpawnStrayFairies(EnElfgrp* this, PlayState* play, s32 count, s32 
 }
 
 /**
- * Tell any spawned Stray Fairies to come to the Fountain centre.
+ * Tell any spawned Stray Fairies to come to the Fountain center.
  *
  * @return s32 always 0
  */

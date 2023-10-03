@@ -30,7 +30,7 @@ typedef enum StrayFairyType {
     /* 8 */ STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN // The ones you "turn in" by walking into a Fairy Fountain
 } StrayFairyType;
 
-// Correspond to the Great Fairy types
+// Corresponds to the Great Fairy types
 typedef enum StrayFairyArea {
     /* 0 */ STRAY_FAIRY_AREA_CLOCK_TOWN = GREAT_FAIRY_TYPE_MAGIC,
     /* 1 */ STRAY_FAIRY_AREA_WOODFALL = GREAT_FAIRY_TYPE_POWER,

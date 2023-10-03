@@ -84,7 +84,7 @@ void BgDyYoseizo_Init(Actor* thisx, PlayState* play) {
 void BgDyYoseizo_Destroy(Actor* thisx, PlayState* play) {
 }
 
-// Has no visible effect since no segment set for manually-controllable eye textures
+// Has no visible effect since no segment is set for manually-controllable eye textures
 void BgDyYoseizo_UpdateEyes(BgDyYoseizo* this) {
     if (this->blinkTimer != 0) {
         this->blinkTimer--;
