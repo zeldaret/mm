@@ -5,7 +5,6 @@
  */
 
 #include "z_en_takaraya.h"
-#include "objects/object_bg/object_bg.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -16,7 +15,7 @@ void EnTakaraya_Destroy(Actor* thisx, PlayState* play);
 void EnTakaraya_Update(Actor* thisx, PlayState* play);
 void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 
-void func_80ADED8C(EnTakaraya* this);
+void EnTakaraya_Blink(EnTakaraya* this);
 void func_80ADEDF8(EnTakaraya* this);
 void func_80ADEE4C(EnTakaraya* this, PlayState* play);
 void func_80ADEF74(EnTakaraya* this, PlayState* play);
@@ -58,22 +57,46 @@ static InitChainEntry sInitChain[] = {
 
 u32 D_80ADFB28 = 0;
 
-u16 D_80ADFB2C[6] = { 1901, 1902, 1903, 1900, 1901, 0 };
+u16 D_80ADFB2C[PLAYER_FORM_MAX] = {
+    1901, // PLAYER_FORM_FIERCE_DEITY
+    1902, // PLAYER_FORM_GORON
+    1903, // PLAYER_FORM_ZORA
+    1900, // PLAYER_FORM_DEKU
+    1901, // PLAYER_FORM_HUMAN
+};
 
-u8 D_80ADFB38[][2] = { { 5, 5 }, { 12, 5 }, { 4, 4 }, { 42, 41 }, { 5, 5 }, { 0, 0 } };
+u8 D_80ADFB38[PLAYER_FORM_MAX][2] = {
+    { 5, 5 },   // PLAYER_FORM_FIERCE_DEITY
+    { 12, 5 },  // PLAYER_FORM_GORON
+    { 4, 4 },   // PLAYER_FORM_ZORA
+    { 42, 41 }, // PLAYER_FORM_DEKU
+    { 5, 5 },   // PLAYER_FORM_HUMAN
+};
 
-u16 D_80ADFB44[] = { 1909, 1910, 1911, 1908, 1909, 0 };
+u16 D_80ADFB44[PLAYER_FORM_MAX] = {
+    1909, // PLAYER_FORM_FIERCE_DEITY
+    1910, // PLAYER_FORM_GORON
+    1911, // PLAYER_FORM_ZORA
+    1908, // PLAYER_FORM_DEKU
+    1909, // PLAYER_FORM_HUMAN
+};
 
-u16 D_80ADFB50[] = { 1905, 1906, 1907, 1904, 1905, 0, 0, 0 };
+u16 D_80ADFB50[PLAYER_FORM_MAX] = {
+    1905, // PLAYER_FORM_FIERCE_DEITY
+    1906, // PLAYER_FORM_GORON
+    1907, // PLAYER_FORM_ZORA
+    1904, // PLAYER_FORM_DEKU
+    1905, // PLAYER_FORM_HUMAN
+};
 
 void EnTakaraya_Init(Actor* thisx, PlayState* play) {
     EnTakaraya* this = THIS;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, -60.0f, ((void*)0), 0.0f);
+    ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_bg_Skel_008FC8, &object_bg_Anim_009890, this->jointTable,
-                       this->morphTable, 24);
+                       this->morphTable, OBJECT_BG_1_LIMB_MAX);
     this->switchFlag = EN_TAKARAYA_GET_SWITCH_FLAG(thisx);
     thisx->params = EN_TAKARAYA_GET_FF(thisx);
     if (!D_80ADFB28) {
@@ -115,7 +138,7 @@ void EnTakaraya_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_80ADED8C(EnTakaraya* this) {
+void EnTakaraya_Blink(EnTakaraya* this) {
     if (this->eyeTexIndex != 0) {
         this->eyeTexIndex++;
         if (this->eyeTexIndex == 4) {
@@ -137,7 +160,7 @@ void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
     u16 textId;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if ((&object_bg_Anim_00A280) == (*this).skelAnime.animation) {
+        if (this->skelAnime.animation == &object_bg_Anim_00A280) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
         } else {
             Animation_MorphToLoop(&this->skelAnime, &object_bg_Anim_009890, -4.0f);
@@ -152,9 +175,9 @@ void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
         textId = Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL);
         this->actor.textId = textId;
         if (!(textId & 0xFFFF)) {
-            this->actor.textId = D_80ADFB2C[(void)0, gSaveContext.save.playerForm];
+            this->actor.textId = D_80ADFB2C[GET_PLAYER_FORM];
         }
-        this->unk2B0 = gSaveContext.save.playerForm + this->switchFlag;
+        this->formSwitchFlag = gSaveContext.save.playerForm + this->switchFlag;
         Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
@@ -162,12 +185,15 @@ void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
 void func_80ADEF74(EnTakaraya* this, PlayState* play) {
     u8 var_v1;
 
-    if (Flags_GetSwitch(play, this->unk2B0)) {
+    if (Flags_GetSwitch(play, this->formSwitchFlag)) {
         var_v1 = D_80ADFB38[gSaveContext.save.playerForm][1];
     } else {
         var_v1 = D_80ADFB38[gSaveContext.save.playerForm][0];
     }
-    if (gSaveContext.save.playerForm) {}
+
+    //! FAKE:
+    if (GET_PLAYER_FORM) {}
+
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_TAKARAYA_WALL, 0.0f, 0.0f, 0.0f, 0, 0, 5,
                                   ((var_v1 << 5) + this->actor.params) + 0xB000, this->actor.csId, 0x3FF, NULL);
 }
@@ -220,7 +246,7 @@ void func_80ADF050(EnTakaraya* this, PlayState* play) {
             }
         } else {
             Audio_PlaySfx_MessageCancel();
-            this->actor.textId = D_80ADFB44[(void)0, gSaveContext.save.playerForm];
+            this->actor.textId = D_80ADFB44[GET_PLAYER_FORM];
             if (this->skelAnime.animation == &object_bg_Anim_009890) {
                 Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_000968, 5.0f);
             }
@@ -240,28 +266,28 @@ void func_80ADF2D4(EnTakaraya* this) {
 
 void func_80ADF338(EnTakaraya* this, PlayState* play) {
     Actor* chest = play->actorCtx.actorLists[ACTORCAT_CHEST].first;
-    Actor* player = play->actorCtx.actorLists[ACTORCAT_PLAYER].first;
-    Vec3f eye;
-    Vec3f at;
+    Player* player = GET_PLAYER(play);
+    Vec3f subCamEye;
+    Vec3f subCamAt;
     f32 sp2C;
-    s16 CamId;
+    s16 subCamId;
 
     SkelAnime_Update(&this->skelAnime);
     if ((CutsceneManager_GetCurrentCsId() == this->actor.csId) && (chest != NULL)) {
         this->timer--;
-        CamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
+        subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         if (this->timer >= 26) {
             sp2C = 250.0f;
         } else {
             sp2C = ((chest->xzDistToPlayer - 250.0f) * (25 - this->timer) * 0.04f) + 250.0f;
         }
-        eye.x = (Math_SinS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.x;
-        eye.y = player->world.pos.y + 120.0f;
-        eye.z = (Math_CosS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.z;
-        at.x = eye.x - (Math_SinS(chest->yawTowardsPlayer) * 250.0f);
-        at.y = eye.y - 90.0f;
-        at.z = eye.z - (Math_CosS(chest->yawTowardsPlayer) * 250.0f);
-        Play_SetCameraAtEye(play, CamId, &at, &eye);
+        subCamEye.x = (Math_SinS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.x;
+        subCamEye.y = player->actor.world.pos.y + 120.0f;
+        subCamEye.z = (Math_CosS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.z;
+        subCamAt.x = subCamEye.x - (Math_SinS(chest->yawTowardsPlayer) * 250.0f);
+        subCamAt.y = subCamEye.y - 90.0f;
+        subCamAt.z = subCamEye.z - (Math_CosS(chest->yawTowardsPlayer) * 250.0f);
+        Play_SetCameraAtEye(play, subCamId, &subCamAt, &subCamEye);
     } else if (this->timer < 145) {
         func_80ADF4E0(this);
     }
@@ -277,8 +303,8 @@ void func_80ADF520(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Play_InCsMode(play) == 0) {
         if (Flags_GetTreasure(play, this->actor.params)) {
-            Flags_SetSwitch(play, this->unk2B0);
-            play->actorCtx.sceneFlags.chest &= ~(1 << this->actor.params);
+            Flags_SetSwitch(play, this->formSwitchFlag);
+            play->actorCtx.sceneFlags.chest &= ~TAKARAYA_GET_TREASURE_FLAG(this);
             this->timer = 0;
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
             func_80ADF608(this, play);
@@ -324,10 +350,10 @@ void func_80ADF6DC(EnTakaraya* this) {
 void func_80ADF730(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        this->actor.flags &= 0xFFFEFFFF;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80ADF7B8(this);
     } else {
-        this->unk2B0 = gSaveContext.save.playerForm + this->switchFlag;
+        this->formSwitchFlag = gSaveContext.save.playerForm + this->switchFlag;
         Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
@@ -339,7 +365,7 @@ void func_80ADF7B8(EnTakaraya* this) {
 void func_80ADF7CC(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && (Message_ShouldAdvance(play))) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->actor.textId == 0x77A) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                 Message_CloseTextbox(play);
@@ -351,7 +377,7 @@ void func_80ADF7CC(EnTakaraya* this, PlayState* play) {
                 Message_ContinueTextbox(play, this->actor.textId);
             }
         } else {
-            this->actor.textId = D_80ADFB50[(void)0, gSaveContext.save.playerForm];
+            this->actor.textId = D_80ADFB50[GET_PLAYER_FORM];
             Message_ContinueTextbox(play, this->actor.textId);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
             func_80ADF03C(this);
@@ -366,13 +392,13 @@ void EnTakaraya_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_TrackPlayer(play, &this->actor, &this->headRot, &torsoRot, this->actor.focus.pos);
-    func_80ADED8C(this);
+    EnTakaraya_Blink(this);
 }
 
 s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTakaraya* this = THIS;
 
-    if (limbIndex == 5) {
+    if (limbIndex == OBJECT_BG_1_LIMB_05) {
         rot->x += this->headRot.y;
     }
     return false;
@@ -381,7 +407,7 @@ s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 void EnTakaraya_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnTakaraya* this = THIS;
 
-    if (limbIndex == 5) {
+    if (limbIndex == OBJECT_BG_1_LIMB_05) {
         Matrix_RotateYS(0x400 - this->headRot.x, MTXMODE_APPLY);
         Matrix_MultVecX(500.0f, &thisx->focus.pos);
     }
