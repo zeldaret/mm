@@ -35,7 +35,6 @@ void func_80ADF7CC(EnTakaraya* this, PlayState* play);
 s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnTakaraya_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx);
 
-#if 0
 ActorInit En_Takaraya_InitVars = {
     ACTOR_EN_TAKARAYA,
     ACTORCAT_NPC,
@@ -48,33 +47,49 @@ ActorInit En_Takaraya_InitVars = {
     (ActorFunc)EnTakaraya_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80ADFB20[] = {
+void* D_80ADFB00[4] = {
+    0x06006F58,
+    0x06007358,
+    0x06007758,
+    0x06007358,
+};
+
+void* D_80ADFB10[4] = {
+    0x06007B58,
+    0x06007F58,
+    0x06007758,
+    0x06007F58,
+};
+
+static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 
-#endif
+u32 D_80ADFB28 = 0;
 
-extern InitChainEntry D_80ADFB20[];
+u16 D_80ADFB2C[6] = {
+    1901, 1902, 1903, 1900, 1901, 0,
+};
 
-extern void* D_80ADFB00[4];
-extern void* D_80ADFB10[4];
-extern u32 D_80ADFB28;
-extern u16 D_80ADFB2C[6];
+u8 D_80ADFB38[][2] = {
+    5, 5, 12, 5, 4, 4, 42, 41, 5, 5, 0, 0,
+};
 
-extern u8 D_80ADFB39; // fake
-extern u8 D_80ADFB38;
+u16 D_80ADFB44[] = {
+    1909, 1910, 1911, 1908, 1909, 0,
+};
 
-extern u16 D_80ADFB44[];
-extern u16 D_80ADFB50[];
+u16 D_80ADFB50[] = {
+    1905, 1906, 1907, 1904, 1905, 0, 0, 0,
+};
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Init.s")
 void EnTakaraya_Init(Actor* thisx, PlayState* play) {
     EnTakaraya* this = THIS;
     s32 i;
 
-    Actor_ProcessInitChain(&this->actor, D_80ADFB20);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, -60.0f, ((void*)0), 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_bg_Skel_008FC8, &object_bg_Anim_009890, this->jointTable,
                        this->morphTable, 24);
@@ -142,25 +157,25 @@ void func_80ADEDF8(EnTakaraya* this) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADEE4C.s")
 void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
-    u16 temp_v0;
+    u16 textId;
     s16 new_var;
 
-    if (SkelAnime_Update(&this->skelAnime) != 0) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         if ((&object_bg_Anim_00A280) == (*this).skelAnime.animation) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
         } else {
             Animation_MorphToLoop(&this->skelAnime, &object_bg_Anim_009890, -4.0f);
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL) == 0) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00A280, -4.0f);
         }
         func_80ADF03C(this);
-    } else if (Actor_IsFacingPlayer(&this->actor, 0x2000) != 0) {
-        temp_v0 = Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL);
-        this->actor.textId = temp_v0;
-        if (!(temp_v0 & 0xFFFF)) {
+    } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
+        textId = Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL);
+        this->actor.textId = textId;
+        if (!(textId & 0xFFFF)) {
             new_var = gSaveContext.save.playerForm;
             this->actor.textId = D_80ADFB2C[new_var];
         }
@@ -174,9 +189,9 @@ void func_80ADEF74(EnTakaraya* this, PlayState* play) {
     u8 var_v1;
 
     if (Flags_GetSwitch(play, this->unk2B0) != 0) {
-        var_v1 = *((&D_80ADFB39) + (gSaveContext.save.playerForm * 2));
+        var_v1 = D_80ADFB38[gSaveContext.save.playerForm][1];
     } else {
-        var_v1 = *((&D_80ADFB38) + (gSaveContext.save.playerForm * 2));
+        var_v1 = D_80ADFB38[gSaveContext.save.playerForm][0];
     }
     if (gSaveContext.save.playerForm) {}
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, 0x1BB, 0.0f, 0.0f, 0.0f, 0, 0, 5,
@@ -192,11 +207,11 @@ void func_80ADF03C(EnTakaraya* this) {
 void func_80ADF050(EnTakaraya* this, PlayState* play) {
     u8 talkState;
 
-    if (SkelAnime_Update(&this->skelAnime) != 0) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &object_bg_Anim_00AD98) {
             Animation_PlayOnce(&this->skelAnime, &object_bg_Anim_000968);
         } else if (this->skelAnime.animation == &object_bg_Anim_00A280) {
-            Animation_PlayLoop(&this->skelAnime, (AnimationHeader*)&object_bg_Anim_001384);
+            Animation_PlayLoop(&this->skelAnime, &object_bg_Anim_001384);
         } else {
             Animation_PlayLoop(&this->skelAnime, &object_bg_Anim_009890);
         }
@@ -214,7 +229,7 @@ void func_80ADF050(EnTakaraya* this, PlayState* play) {
         if (Message_ShouldAdvance(play) != 0) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
         }
-    } else if ((talkState == TEXT_STATE_CHOICE) && (Message_ShouldAdvance(play) != 0)) {
+    } else if ((talkState == TEXT_STATE_CHOICE) && (Message_ShouldAdvance(play))) {
         if (play->msgCtx.choiceIndex == 0) {
             if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
                 this->actor.textId = 0x77B;
