@@ -186,14 +186,10 @@ void func_80ADEF74(EnTakaraya* this, PlayState* play) {
     u8 var_v1;
 
     if (Flags_GetSwitch(play, this->formSwitchFlag)) {
-        var_v1 = D_80ADFB38[gSaveContext.save.playerForm][1];
+        var_v1 = D_80ADFB38[GET_PLAYER_FORM][1];
     } else {
-        var_v1 = D_80ADFB38[gSaveContext.save.playerForm][0];
+        var_v1 = D_80ADFB38[GET_PLAYER_FORM][0];
     }
-
-    //! FAKE:
-    if (GET_PLAYER_FORM) {}
-
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_TAKARAYA_WALL, 0.0f, 0.0f, 0.0f, 0, 0, 5,
                                   ((var_v1 << 5) + this->actor.params) + 0xB000, this->actor.csId, 0x3FF, NULL);
 }
