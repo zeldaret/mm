@@ -197,7 +197,7 @@ void EnPoComposer_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->lightColor = sLightColorInit;
     this->envColor = sEnvColorInit;
-    this->lastCsAction = COMPOSER_CUEID_NONE;
+    this->cueId = COMPOSER_CUEID_NONE;
 
     if (PO_COMPOSER_IS_FLAT(&this->actor)) {
         this->sharpCsNum = 0;
@@ -365,65 +365,65 @@ void EnPoComposer_Idle(EnPoComposer* this, PlayState* play) {
 }
 
 void EnPoComposer_SetupRaiseArms(EnPoComposer* this) {
-    this->csActionTimer = 0;
+    this->csCueTimer = 0;
     Actor_PlaySfx(&this->actor, NA_SE_EN_SHARP_REACTION);
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PO_COMPOSER_ANIM_RAISE_ARMS);
     this->actionFunc = EnPoComposer_RaiseArms;
 }
 
 void EnPoComposer_RaiseArms(EnPoComposer* this, PlayState* play) {
-    if ((this->csActionTimer == 0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        this->csActionTimer++;
+    if ((this->csCueTimer == 0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        this->csCueTimer++;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PO_COMPOSER_ANIM_ARMS_RAISED);
     }
 }
 
 void EnPoComposer_SetupLowerArms(EnPoComposer* this) {
-    this->csActionTimer = 0;
+    this->csCueTimer = 0;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PO_COMPOSER_ANIM_LOWER_ARMS);
     this->actionFunc = EnPoComposer_LowerArms;
 }
 
 void EnPoComposer_LowerArms(EnPoComposer* this, PlayState* play) {
-    if ((this->csActionTimer == 0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        this->csActionTimer++;
+    if ((this->csCueTimer == 0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        this->csCueTimer++;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PO_COMPOSER_ANIM_IDLE_FACING_DOWN);
     }
 }
 
 void EnPoComposer_SetupCutscenePlayCurse(EnPoComposer* this) {
-    this->csActionTimer = 0;
+    this->csCueTimer = 0;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PO_COMPOSER_ANIM_BEGIN_PLAYING_CURSE);
     this->actionFunc = EnPoComposer_CutscenePlayCurse;
 }
 
 void EnPoComposer_CutscenePlayCurse(EnPoComposer* this, PlayState* play) {
-    if ((this->csActionTimer == 0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        this->csActionTimer++;
+    if ((this->csCueTimer == 0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        this->csCueTimer++;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PO_COMPOSER_ANIM_PLAYING_CURSE);
     }
 }
 
 void EnPoComposer_SetupRoll(EnPoComposer* this) {
-    this->csActionTimer = 0;
+    this->csCueTimer = 0;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PO_COMPOSER_ANIM_BEGIN_ROLLING);
     this->actionFunc = EnPoComposer_Roll;
 }
 
 void EnPoComposer_Roll(EnPoComposer* this, PlayState* play) {
-    if (this->csActionTimer == 0) {
+    if (this->csCueTimer == 0) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            this->csActionTimer++;
+            this->csCueTimer++;
             Actor_PlaySfx(&this->actor, NA_SE_EN_SHARP_REACTION);
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PO_COMPOSER_ANIM_ROLLING);
         }
-    } else if (Animation_OnFrame(&this->skelAnime, 1.0f) && (this->lightColor.a >= 33)) {
-        if (this->csActionTimer == 1) {
+    } else if (Animation_OnFrame(&this->skelAnime, 1.0f) && (this->lightColor.a > 32)) {
+        if (this->csCueTimer == 1) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_DEAD_WIND2_OLD);
-            this->csActionTimer = 2;
+            this->csCueTimer = 2;
         } else {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST3_DEAD_WIND3_OLD);
-            this->csActionTimer = 1;
+            this->csCueTimer = 1;
         }
     }
 }
@@ -444,8 +444,8 @@ s32 EnPoComposer_UpdateAction(EnPoComposer* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, cueType)) {
         cueChannel = Cutscene_GetCueChannel(play, cueType);
 
-        if (this->lastCsAction != play->csCtx.actorCues[cueChannel]->id) {
-            this->lastCsAction = play->csCtx.actorCues[cueChannel]->id;
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
 
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case COMPOSER_CUEID_IDLE: // loop idle
@@ -516,8 +516,8 @@ s32 EnPoComposer_UpdateAction(EnPoComposer* this, PlayState* play) {
         return true;
     }
 
-    if (this->actionFunc != EnPoComposer_StartedCutscene && this->actionFunc != EnPoComposer_StartCutscene &&
-        this->actionFunc != EnPoComposer_PlayCurse && play->csCtx.state == CS_STATE_IDLE) {
+    if ((this->actionFunc != EnPoComposer_StartedCutscene) && (this->actionFunc != EnPoComposer_StartCutscene) &&
+        (this->actionFunc != EnPoComposer_PlayCurse) && (play->csCtx.state == CS_STATE_IDLE)) {
 
         if (PO_COMPOSER_IS_FLAT(&this->actor)) {
             EnPoComposer_SetupStartedCutscene(this);
@@ -527,7 +527,7 @@ s32 EnPoComposer_UpdateAction(EnPoComposer* this, PlayState* play) {
             this->inCutscene = false;
 
             if (this->sharpCsNum < SHARP_CS_SONG_STORMS) {
-                if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_14_02))) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_02)) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_14_02);
                 }
                 EnPoComposer_SetupPlayCurse(this);
@@ -537,7 +537,7 @@ s32 EnPoComposer_UpdateAction(EnPoComposer* this, PlayState* play) {
         }
     }
 
-    this->lastCsAction = COMPOSER_CUEID_NONE;
+    this->cueId = COMPOSER_CUEID_NONE;
     return false;
 }
 
@@ -628,7 +628,7 @@ s32 EnPoComposer_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
         gDPSetEnvColor((*gfx)++, this->lightColor.r, this->lightColor.g, this->lightColor.b, this->lightColor.a);
     }
 
-    return 0;
+    return false;
 }
 
 void EnPoComposer_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
@@ -739,7 +739,7 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
     lightPos.z += (s16)lightOffset.z;
 
     Lights_PointGlowSetInfo(&this->lightInfo, lightPos.x, lightPos.y, lightPos.z, this->envColor.r, this->envColor.g,
-                            this->envColor.b, this->envColor.a * 0.78431374f);
+                            this->envColor.b, this->envColor.a * (200.0f / 255.0f));
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

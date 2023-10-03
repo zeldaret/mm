@@ -19,14 +19,15 @@ typedef enum {
     /*  9 */ COMPOSER_CUEID_DISAPPEAR,
     /* 10 */ COMPOSER_CUEID_DONE,
     /* 99 */ COMPOSER_CUEID_NONE = 99
-} EnPoComposerCutsceneAction;
+} EnPoComposerCueId;
 
 typedef enum {
     /* 0 */ SHARP_CS_ENCOUNTER_FIRST,
     /* 1 */ SHARP_CS_ENCOUNTER_OTHER,
     /* 2 */ SHARP_CS_SONG_HEALING,
-    /* 3 */ SHARP_CS_SONG_STORMS
-} SharpCsId;
+    /* 3 */ SHARP_CS_SONG_STORMS,
+    /* 4 */ SHARP_CS_MAX
+} SharpCsIdIndex;
 
 struct EnPoComposer;
 
@@ -46,12 +47,12 @@ typedef struct EnPoComposer {
     /* 0x290 */ s32 sharpCsNum;
     /* 0x294 */ Vec3s jointTable[PO_COMPOSER_LIMB_MAX];
     /* 0x2DC */ Vec3s morphTable[PO_COMPOSER_LIMB_MAX];
-    /* 0x324 */ s16 csIds[4];
+    /* 0x324 */ s16 csIds[SHARP_CS_MAX];
     /* 0x32C */ s16 actionTimer;
-    /* 0x32E */ s16 csActionTimer;
+    /* 0x32E */ s16 csCueTimer;
     /* 0x330 */ s16 inCutscene;
     /* 0x332 */ s16 visible;
-    /* 0x334 */ u16 lastCsAction;
+    /* 0x334 */ u16 cueId;
     /* 0x336 */ Color_RGBA8 lightColor;
     /* 0x33A */ Color_RGBA8 envColor;
 } EnPoComposer; // size = 0x340

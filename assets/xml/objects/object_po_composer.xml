@@ -58,6 +58,6 @@
         <Limb Name="gPoeComposerLowerBodyLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_LOWER_BODY" Offset="0x98F8" />
 
         <!-- Skeleton -->
-        <Skeleton Name="gPoeComposerSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PO_COMPOSER_LIMB_NONE" LimbMax="PO_COMPOSER_LIMB_MAX" EnumName="PoComposerLimb" Offset="0x9930" />
+        <Skeleton Name="gPoeComposerSkel" Type="Flex" LimbType="Standard" LimbNone="PO_COMPOSER_LIMB_NONE" LimbMax="PO_COMPOSER_LIMB_MAX" EnumName="PoComposerLimb" Offset="0x9930" />
     </File>
 </Root>
