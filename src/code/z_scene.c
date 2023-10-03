@@ -48,7 +48,7 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     for (i = 0; i < OBJECT_EXCHANGE_BANK_MAX; i++) { objectCtx->status[i].id = 0; }
     // clang-format on
 
-    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocTailAlign16(&gameState->heap, spaceSize);
+    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocTailAlign16(&gameState->tha, spaceSize);
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
 
@@ -357,7 +357,7 @@ void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
     size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
-        play->roomCtx.unk74 = THA_AllocTailAlign16(&play->state.heap, size);
+        play->roomCtx.unk74 = THA_AllocTailAlign16(&play->state.tha, size);
         DmaMgr_SendRequest0(play->roomCtx.unk74, vromStart, size);
     }
 }
