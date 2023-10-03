@@ -1072,7 +1072,7 @@ void Play_Update(PlayState* this) {
         this->pauseCtx.bombersNotebookOpen = false;
         sBombersNotebook.loadState = BOMBERS_NOTEBOOK_LOAD_STATE_NONE;
         this->msgCtx.msgLength = 0;
-        this->msgCtx.msgMode = 0;
+        this->msgCtx.msgMode = MSGMODE_NONE;
         this->msgCtx.currentTextId = 0;
         this->msgCtx.stateTimer = 0;
         Audio_PlaySfx(NA_SE_SY_CANCEL);

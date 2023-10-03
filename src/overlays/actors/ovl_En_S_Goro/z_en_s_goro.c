@@ -811,7 +811,7 @@ s32 EnSGoro_CheckLullaby(EnSGoro* this, PlayState* play) {
     s32 actorType;
     Player* player = GET_PLAYER(play);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3)) {
+    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT)) {
         if (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) {
             this->animInfoIndex = EN_S_GORO_ANIM_ROLLUP;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
@@ -1157,7 +1157,7 @@ void EnSGoro_SpringShrineGoron_Talk(EnSGoro* this, PlayState* play) {
         if (this->actionFlags & EN_S_GORO_ACTIONFLAG_LASTMESSAGE) {
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_ENGAGED;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = EnSGoro_SpringShrineGoron_Idle;
             return;
@@ -1243,7 +1243,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
 
         this->textId = EnSGoro_BombshopGoron_NextTextId(this, play);
         if ((this->textId == 0x675) || (this->textId == 0x676)) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             Actor_OfferGetItem(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
             this->actionFunc = EnSGoro_ShopGoron_TakePayment;
@@ -1288,7 +1288,7 @@ void EnSGoro_Sleep(EnSGoro* this, PlayState* play) {
 void EnSGoro_SleepTalk(EnSGoro* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = EnSGoro_Sleep;
         }

@@ -638,7 +638,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     }
 
     gSaveContext.save.saveInfo.playerData.rupees = 0;
-    gSaveContext.save.saveInfo.unk_F41 = 0;
+    gSaveContext.save.saveInfo.scarecrowSpawnSongSet = false;
     gSaveContext.powderKegTimer = 0;
     gSaveContext.unk_1014 = 0;
     gSaveContext.jinxTimer = 0;
@@ -1304,7 +1304,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             gSaveContext.cycleSceneFlags[i].collectible = gSaveContext.save.saveInfo.permanentSceneFlags[i].collectible;
         }
 
-        if (gSaveContext.save.saveInfo.unk_F41) {
+        if (gSaveContext.save.saveInfo.scarecrowSpawnSongSet) {
             Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.saveInfo.scarecrowSpawnSong,
                        sizeof(gSaveContext.save.saveInfo.scarecrowSpawnSong));
 
@@ -1649,7 +1649,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
             } else {
                 if (phi_s2) {
                     gSaveContext.options.optionId = 0xA51D;
-                    gSaveContext.options.language = 1;
+                    gSaveContext.options.language = LANGUAGE_ENG;
                     gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
                     gSaveContext.options.languageSetting = 0;
                     gSaveContext.options.zTargetSetting = 0;
@@ -1657,7 +1657,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     Lib_MemCpy(&gSaveContext.options, sramCtx->saveBuf, sizeof(SaveOptions));
                     if (gSaveContext.options.optionId != 0xA51D) {
                         gSaveContext.options.optionId = 0xA51D;
-                        gSaveContext.options.language = 1;
+                        gSaveContext.options.language = LANGUAGE_ENG;
                         gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
                         gSaveContext.options.languageSetting = 0;
                         gSaveContext.options.zTargetSetting = 0;
@@ -1671,7 +1671,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
         gSaveContext.flashSaveAvailable = D_801F6AF2;
     }
 
-    gSaveContext.options.language = 1;
+    gSaveContext.options.language = LANGUAGE_ENG;
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
@@ -1853,8 +1853,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
  */
 void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx) {
     if (gSaveContext.flashSaveAvailable) {
-        // TODO: macros for languages
-        gSaveContext.options.language = 1;
+        gSaveContext.options.language = LANGUAGE_ENG;
         Lib_MemCpy(sramCtx->saveBuf, &gSaveContext.options, sizeof(SaveOptions));
     }
 }
