@@ -1713,7 +1713,7 @@ asm/non_matchings/code/z_player_lib/Player_IsGoronOrDeku.s,Player_IsGoronOrDeku,
 asm/non_matchings/code/z_player_lib/func_801234D4.s,func_801234D4,0x801234D4,0x2F
 asm/non_matchings/code/z_player_lib/func_80123590.s,func_80123590,0x80123590,0x13
 asm/non_matchings/code/z_player_lib/func_801235DC.s,func_801235DC,0x801235DC,0x1C
-asm/non_matchings/code/z_player_lib/func_8012364C.s,func_8012364C,0x8012364C,0x71
+asm/non_matchings/code/z_player_lib/Player_GetItemOnButton.s,Player_GetItemOnButton,0x8012364C,0x71
 asm/non_matchings/code/z_player_lib/func_80123810.s,func_80123810,0x80123810,0x54
 asm/non_matchings/code/z_player_lib/Player_ActionToModelGroup.s,Player_ActionToModelGroup,0x80123960,0x13
 asm/non_matchings/code/z_player_lib/Player_SetModelsForHoldingShield.s,Player_SetModelsForHoldingShield,0x801239AC,0x3E
@@ -2729,12 +2729,12 @@ asm/non_matchings/code/sched/Sched_SendGfxCancelMsg.s,Sched_SendGfxCancelMsg,0x8
 asm/non_matchings/code/sched/Sched_FaultClient.s,Sched_FaultClient,0x80177084,0x36
 asm/non_matchings/code/sched/Sched_ThreadEntry.s,Sched_ThreadEntry,0x8017715C,0x51
 asm/non_matchings/code/sched/Sched_Init.s,Sched_Init,0x801772A0,0x3C
-asm/non_matchings/code/speed_meter/func_80177390.s,func_80177390,0x80177390,0x4
+asm/non_matchings/code/speed_meter/SpeedMeter_InitImpl.s,SpeedMeter_InitImpl,0x80177390,0x4
 asm/non_matchings/code/speed_meter/SpeedMeter_Init.s,SpeedMeter_Init,0x801773A0,0x9
 asm/non_matchings/code/speed_meter/SpeedMeter_Destroy.s,SpeedMeter_Destroy,0x801773C4,0x3
 asm/non_matchings/code/speed_meter/SpeedMeter_DrawTimeEntries.s,SpeedMeter_DrawTimeEntries,0x801773D0,0x1AD
-asm/non_matchings/code/speed_meter/func_80177A84.s,func_80177A84,0x80177A84,0x11
-asm/non_matchings/code/speed_meter/func_80177AC8.s,func_80177AC8,0x80177AC8,0xE4
+asm/non_matchings/code/speed_meter/SpeedMeter_InitAllocEntry.s,SpeedMeter_InitAllocEntry,0x80177A84,0x11
+asm/non_matchings/code/speed_meter/SpeedMeter_DrawAllocEntry.s,SpeedMeter_DrawAllocEntry,0x80177AC8,0xE4
 asm/non_matchings/code/speed_meter/SpeedMeter_DrawAllocEntries.s,SpeedMeter_DrawAllocEntries,0x80177E58,0xA6
 asm/non_matchings/code/speed_meter/func_801780F0.s,func_801780F0,0x801780F0,0x3F
 asm/non_matchings/code/speed_meter/func_801781EC.s,func_801781EC,0x801781EC,0x90

@@ -14,7 +14,7 @@ extern OSPiHandle* gCartHandle;
 extern size_t gDmaMgrDmaBuffSize;
 extern vs32 gIrqMgrResetStatus;
 extern volatile OSTime sIrqMgrResetTime;
-extern volatile OSTime sIrqMgrRetraceTime;
+extern volatile OSTime gIrqMgrRetraceTime;
 extern s32 sIrqMgrRetraceCount;
 
 // extern UNK_TYPE1 sGfxPrintFontTLUT;
@@ -235,7 +235,6 @@ extern Input* D_801D0D60;
 extern u32 retryCount;
 extern u32 cfbIdx[3];
 
-extern UNK_PTR D_801D1540;
 extern Vec3f gZeroVec3f;
 extern Vec3s gZeroVec3s;
 
@@ -1771,19 +1770,6 @@ extern GfxMasterList* gGfxMasterDL;
 
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
-
-extern volatile OSTime D_801FBAE0;
-extern volatile OSTime D_801FBAE8;
-extern volatile OSTime gRDPTimeTotal;
-extern volatile OSTime lastRenderFrameDuration;
-extern volatile OSTime gRSPAudioTotalTime;
-extern volatile OSTime sRSPGFXTotalTime;
-extern volatile OSTime sRSPOtherTotalTime;
-// extern UNK_TYPE1 D_801FBB18;
-
-// Accumulator for `gRDPTimeTotal`
-extern volatile OSTime gRDPTimeAcc;
-// extern UNK_TYPE1 D_801FBB28;
 
 extern Vec3f D_801FBBF0;
 extern LineSegment Math3D_ColSphereTri_line;

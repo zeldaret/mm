@@ -57,8 +57,8 @@ static ColliderCylinderInit sCylinderInit = {
 
 s32 func_809592E0(EnMk* this, s16 index) {
     AnimationHeader* sAnimations[] = {
-        &object_mk_Anim_001C38, &object_mk_Anim_000438, &object_mk_Anim_0007D8,
-        &object_mk_Anim_0010F4, &object_mk_Anim_001964,
+        &gMarineResearcherIdleAnim,        &gMarineResearcherHeadWaggleAnim, &gMarineResearcherYellAnim,
+        &gMarineResearcherShakeInFearAnim, &gMarineResearcherStrokeChinAnim,
     };
 
     if (index == this->unk_27C) {
@@ -82,8 +82,8 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
     this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -1.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_mk_Skel_006CA0, &object_mk_Anim_001C38, this->jointTable,
-                       this->morphTable, OBJECT_MK_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMarineResearcherSkel, &gMarineResearcherIdleAnim, this->jointTable,
+                       this->morphTable, MARINE_RESEARCHER_LIMB_MAX);
 
     this->unk_27C = -1;
     func_809592E0(this, 0);
@@ -463,7 +463,7 @@ void EnMk_Update(Actor* thisx, PlayState* play) {
 s32 EnMk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMk* this = THIS;
 
-    if (limbIndex == OBJECT_MK_LIMB_0B) {
+    if (limbIndex == MARINE_RESEARCHER_LIMB_HEAD) {
         rot->y -= this->unk_270.y;
         rot->z += this->unk_270.x;
     }
@@ -475,7 +475,7 @@ Vec3f D_8095A2A0 = { 1000.0f, -100.0f, 0.0f };
 void EnMk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMk* this = THIS;
 
-    if (limbIndex == OBJECT_MK_LIMB_0B) {
+    if (limbIndex == MARINE_RESEARCHER_LIMB_HEAD) {
         Matrix_MultVec3f(&D_8095A2A0, &this->actor.focus.pos);
     }
 }
