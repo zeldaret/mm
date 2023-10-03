@@ -1,7 +1,7 @@
 /*
  * File: z_obj_sound.c
  * Overlay: ovl_Obj_Sound
- * Description: Plays certain sounds (e.g., swamp waterfall noise)
+ * Description: An invisible point-source to play sounds, including sfx and sequences.
  */
 
 #include "z_obj_sound.h"
@@ -14,30 +14,6 @@ void ObjSound_Init(Actor* thisx, PlayState* play);
 void ObjSound_Destroy(Actor* thisx, PlayState* play);
 void ObjSound_Update(Actor* thisx, PlayState* play);
 void ObjSound_Draw(Actor* thisx, PlayState* play);
-
-/**
- * Sound Modes:
- *
- * Mode 0:
- *   - NA_SE_EV_FOUNTAIN
- *   - NA_SE_EV_COW_CRY_LV
- *   - NA_SE_EV_WATER_WALL_BIG
- *   - NA_SE_EV_WATER_WALL
- *   - NA_SE_EV_MAKE_TURRET
- *   - NA_SE_EV_WATER_BUBBLE
- *   - NA_SE_EV_DRAIN
- *   - NA_SE_EV_BOILED_WATER_S
- * Mode 1: ()
- *   - NA_BGM_SHOP
- *   - NA_BGM_MINI_GAME
- *   - NA_BGM_MILK_BAR
- *   - NA_BGM_MILK_BAR_DUPLICATE
- *   - NA_BGM_ASTRAL_OBSERVATORY
- * Mode 2:
- *   - Unused in scenes
- * Mode 3: (Fanfares)
- *   - NA_BGM_SWAMP_CRUISE
- */
 
 ActorInit Obj_Sound_InitVars = {
     ACTOR_OBJ_SOUND,

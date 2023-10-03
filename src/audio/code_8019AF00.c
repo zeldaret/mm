@@ -4881,37 +4881,37 @@ void Audio_SetSequenceProperties(u8 seqPlayerIndex, Vec3f* pos, s16 flags, f32 m
                                  f32 minVolume) {
     f32 dist;
     f32 volume;
-    s8 sp27;
-    s8 sp26;
+    s8 surroundEffectIndex;
+    s8 pan;
     s32 pad;
 
-    // calculating pan? from z-position
+    // calculating surround sound effect from z-position
     if (pos->z > 0.0f) {
         if (pos->z > 100.0f) {
-            sp27 = 0;
+            surroundEffectIndex = 0;
         } else {
-            sp27 = ((100.0f - pos->z) / 100.0f) * 64.0f;
+            surroundEffectIndex = ((100.0f - pos->z) / 100.0f) * 64.0f;
         }
     } else {
         if (pos->z < -100.0f) {
-            sp27 = 0x7F;
+            surroundEffectIndex = 0x7F;
         } else {
-            sp27 = (s8)((-pos->z / 100.0f) * 64.0f) + 0x3F;
+            surroundEffectIndex = (s8)((-pos->z / 100.0f) * 64.0f) + 0x3F;
         }
     }
 
     // calculating pan from x-position
     if (pos->x > 0.0f) {
         if (pos->x > 200.0f) {
-            sp26 = 0x6C;
+            pan = 0x6C;
         } else {
-            sp26 = (s8)((pos->x / 200.0f) * 45.0f) + 0x3F;
+            pan = (s8)((pos->x / 200.0f) * 45.0f) + 0x3F;
         }
     } else {
         if (pos->x < -200.0f) {
-            sp26 = 0x14;
+            pan = 0x14;
         } else {
-            sp26 = (s8)(((pos->x + 200.0f) / 200.0f) * 44.0f) + 0x14;
+            pan = (s8)(((pos->x + 200.0f) / 200.0f) * 44.0f) + 0x14;
         }
     }
 
@@ -4929,11 +4929,11 @@ void Audio_SetSequenceProperties(u8 seqPlayerIndex, Vec3f* pos, s16 flags, f32 m
     AUDIOCMD_GLOBAL_SET_CHANNEL_MASK(seqPlayerIndex, 0xFFFF);
 
     if (flags & 1) {
-        AUDIOCMD_CHANNEL_SET_SURROUND_EFFECT_INDEX(seqPlayerIndex, AUDIOCMD_ALL_CHANNELS, sp27);
+        AUDIOCMD_CHANNEL_SET_SURROUND_EFFECT_INDEX(seqPlayerIndex, AUDIOCMD_ALL_CHANNELS, surroundEffectIndex);
     }
 
     if (flags & 2) {
-        AUDIOCMD_CHANNEL_SET_PAN(seqPlayerIndex, AUDIOCMD_ALL_CHANNELS, sp26);
+        AUDIOCMD_CHANNEL_SET_PAN(seqPlayerIndex, AUDIOCMD_ALL_CHANNELS, pan);
     }
 
     if (flags & 4) {
@@ -4942,15 +4942,11 @@ void Audio_SetSequenceProperties(u8 seqPlayerIndex, Vec3f* pos, s16 flags, f32 m
 
     // applies filter, stores result in sSequenceFilter
     if (flags & 8) {
-        // Uses new filter gBandPassFilterData, loads it into
-        // Then channel->filter points to gBandPassFilterData
-        // AudioHeap_LoadFilter(((u32)&sSpatialSeqIsActive[SEQ_PLAYER_AMBIENCE] & ~0xF) + 0x10, 5, 4);
-        // ALIGN16(sSequenceFilter)
+        // Uses new filter gBandPassFilterData
         AUDIOCMD_CHANNEL_SET_FILTER(seqPlayerIndex, AUDIOCMD_ALL_CHANNELS, 0x54,
                                     ((u32)&sSequenceFilter[0] & ~0xF) + 0x10);
     } else {
         // Identity Filter
-        // AudioHeap_LoadFilter(((u32)&sSpatialSeqIsActive[SEQ_PLAYER_AMBIENCE] & ~0xF) + 0x10, 0, 0);
         AUDIOCMD_CHANNEL_SET_FILTER(seqPlayerIndex, AUDIOCMD_ALL_CHANNELS, 0, ((u32)&sSequenceFilter[0] & ~0xF) + 0x10);
     }
 
@@ -4979,7 +4975,6 @@ void Audio_SetSequenceProperties(u8 seqPlayerIndex, Vec3f* pos, s16 flags, f32 m
 
 // ======== BEGIN Z_OBJ_SOUND FUNCTIONS ========
 
-// Part of audio update (runs every frame), related to z_obj_sound
 /**
  * Used for Main Bgm and Fanfares
  */
@@ -4997,7 +4992,6 @@ void Audio_UpdateObjSoundProperties(void) {
     }
 }
 
-// related to z_obj_sound
 /**
  * Used for Main Bgm and Fanfares
  */
@@ -5014,10 +5008,6 @@ void Audio_SetObjSoundProperties(u8 seqPlayerIndex, Vec3f* pos, s16 flags, f32 m
     sObjSoundMinVol = minVolume;
 }
 
-// related to z_obj_sound
-/**
- *
- */
 void Audio_StartObjSoundFanfare(u8 seqPlayerIndex, Vec3f* pos, s8 seqId, u16 seqIdOffset) {
     s32 pad[3];
     u32 mask;
@@ -5043,15 +5033,6 @@ void Audio_StartObjSoundFanfare(u8 seqPlayerIndex, Vec3f* pos, s8 seqId, u16 seq
         SEQCMD_STOP_SEQUENCE(seqPlayerIndex, 5);
     }
 }
-
-/**
- * z_obj_sound
- *    - NA_BGM_SHOP
- *    - NA_BGM_MINI_GAME
- *    - NA_BGM_MILK_BAR
- *    - NA_BGM_MILK_BAR_DUPLICATE
- *    - NA_BGM_ASTRAL_OBSERVATORY
- */
 
 void Audio_PlayObjSoundBgm(Vec3f* pos, s8 seqId) {
     s32 pad[2];
@@ -5245,7 +5226,6 @@ void Audio_PlaySubBgmAtPosWithFilter(Vec3f* pos, u8 seqId, f32 maxDist) {
     sSpatialSubBgmFadeTimer = 4;
 }
 
-// Part of audio update (runs every frame)
 // Another bgm by pos, less customization
 void Audio_UpdateSubBgmAtPos(void) {
     if (sSpatialSubBgmFadeTimer != 0) {
@@ -5310,7 +5290,6 @@ void Audio_PlaySequenceAtPos(u8 seqPlayerIndex, Vec3f* pos, u16 seqId, f32 maxDi
     }
 }
 
-// Part of audio update (runs every frame)
 void Audio_UpdateSequenceAtPos(void) {
     u16 mainBgmSeqId = AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN);
     u8 volumeFadeTimer;

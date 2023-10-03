@@ -542,7 +542,7 @@ void func_80BBBD5C(EnZos* this, PlayState* play) {
 
 void func_80BBBDE0(EnZos* this, PlayState* play) {
     Actor* thisx = &this->actor;
-    Vec3f sp28;
+    Vec3f seqPos;
 
     if (this->unk_2B6 & 1) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x1000, 0x200);
@@ -578,10 +578,10 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_10);
     }
 
-    sp28.x = this->actor.projectedPos.x;
-    sp28.y = this->actor.projectedPos.y;
-    sp28.z = this->actor.projectedPos.z;
-    Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_PIANO_PLAY, 1000.0f);
+    seqPos.x = this->actor.projectedPos.x;
+    seqPos.y = this->actor.projectedPos.y;
+    seqPos.z = this->actor.projectedPos.z;
+    Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_PIANO_PLAY, 1000.0f);
 }
 
 void func_80BBBFBC(EnZos* this, PlayState* play) {
