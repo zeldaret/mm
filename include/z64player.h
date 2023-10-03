@@ -1040,7 +1040,7 @@ typedef enum PlayerCueId {
 // breman mask march?
 #define PLAYER_STATE3_20000000   (1 << 29)
 // 
-#define PLAYER_STATE3_40000000   (1 << 30)
+#define PLAYER_STATE3_START_CHANGING_HELD_ITEM   (1 << 30)
 // TARGETING_HOSTILE?
 #define PLAYER_STATE3_80000000   (1 << 31)
 
@@ -1095,7 +1095,7 @@ typedef struct Player {
     /* 0x14B */ u8 transformation; // PlayerTransformation enum
     /* 0x14C */ u8 modelGroup; // PlayerModelGroup enum
     /* 0x14D */ u8 nextModelGroup;
-    /* 0x14E */ s8 unk_14E;
+    /* 0x14E */ s8 itemChangeType; // ItemChangeType enum
     /* 0x14F */ u8 modelAnimType; // PlayerAnimType enum
     /* 0x150 */ u8 leftHandType;
     /* 0x151 */ u8 rightHandType;
@@ -1122,7 +1122,7 @@ typedef struct Player {
     /* 0x238 */ OSMesg maskObjectLoadMsg;
     /* 0x23C */ void* maskObjectSegment;
     /* 0x240 */ SkelAnime skelAnime;
-    /* 0x284 */ SkelAnime unk_284;
+    /* 0x284 */ SkelAnime skelAnimeUpper;
     /* 0x2C8 */ SkelAnime unk_2C8;
     /* 0x30C */ Vec3s jointTable[5];
     /* 0x32A */ Vec3s morphTable[5];
@@ -1176,8 +1176,8 @@ typedef struct Player {
     /* 0x74C */ u8 jointTableBuffer[PLAYER_LIMB_BUF_SIZE];
     /* 0x7EB */ u8 morphTableBuffer[PLAYER_LIMB_BUF_SIZE];
     /* 0x88A */ u8 blendTableBuffer[PLAYER_LIMB_BUF_SIZE];
-    /* 0x929 */ u8 unk_929[PLAYER_LIMB_BUF_SIZE];
-    /* 0x9C8 */ u8 unk_9C8[PLAYER_LIMB_BUF_SIZE];
+    /* 0x929 */ u8 jointTableUpperBuffer[PLAYER_LIMB_BUF_SIZE];
+    /* 0x9C8 */ u8 morphTableUpperBuffer[PLAYER_LIMB_BUF_SIZE];
     /* 0xA68 */ PlayerAgeProperties* ageProperties; // repurposed as "transformation properties"?
     /* 0xA6C */ u32 stateFlags1;
     /* 0xA70 */ u32 stateFlags2;
@@ -1206,7 +1206,7 @@ typedef struct Player {
     /* 0xABC */ f32 unk_ABC;
     /* 0xAC0 */ f32 unk_AC0;
     /* 0xAC4 */ PlayerUpperActionFunc upperActionFunc; // Upper body/item action functions
-    /* 0xAC8 */ f32 unk_AC8;
+    /* 0xAC8 */ f32 skelAnimeUpperBlendWeight;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;
     /* 0xACF */ u8 putAwayCountdown; // Frames to wait before showing "Put Away" on A

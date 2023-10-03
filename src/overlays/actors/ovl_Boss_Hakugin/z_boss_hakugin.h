@@ -39,9 +39,9 @@ typedef struct BossHakugin {
     /* 0x0144 */ SkelAnime skelAnime;
     /* 0x0188 */ BossHakuginActionFunc actionFunc;
     /* 0x018C */ u8 unk_018C;
-    /* 0x018D */ s8 unk_018D;
-    /* 0x018E */ s8 unk_018E;
-    /* 0x018F */ s8 unk_018F;
+    /* 0x018D */ u8 unk_018D;
+    /* 0x018E */ u8 unk_018E;
+    /* 0x018F */ u8 unk_018F;
     /* 0x0190 */ u8 unk_0190; // boolean?
     /* 0x0191 */ u8 unk_0191;
     /* 0x0192 */ u8 unk_0192;
@@ -83,9 +83,7 @@ typedef struct BossHakugin {
     /* 0x0380 */ Vec3f unk_0380;
     /* 0x038C */ Vec3f unk_038C;
     /* 0x0398 */ Vec3f bodyPartsPos[15];
-    /* 0x044C */ f32 unk_044C;
-    /* 0x0450 */ char unk_0450[4];
-    /* 0x0454 */ f32 unk_0454;
+    /* 0x044C */ Vec3f unk_044C;
     /* 0x0458 */ Vec3f unk_0458;
     /* 0x0464 */ Vec3f unk_0464;
     /* 0x0470 */ LightNode* lightNode;

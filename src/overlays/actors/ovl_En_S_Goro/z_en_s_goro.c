@@ -1381,53 +1381,62 @@ void EnSGoro_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     s32 overrideRot;
     EnSGoro* this = THIS;
 
-    if (limbIndex != GORON_LIMB_BODY) {
-        if ((limbIndex == GORON_LIMB_HEAD) && (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY)) {
-            if (this->actionFlags & EN_S_GORO_ACTIONFLAG_FACEPLAYER) {
-                overrideRot = true;
-            } else {
-                overrideRot = false;
+    switch (limbIndex) {
+        case GORON_LIMB_HEAD:
+            if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
+                if (this->actionFlags & EN_S_GORO_ACTIONFLAG_FACEPLAYER) {
+                    overrideRot = true;
+                } else {
+                    overrideRot = false;
+                }
+                if (this->loseAttentionTimer != 0) {
+                    stepRot = true;
+                } else {
+                    stepRot = false;
+                }
+
+                EnSGoro_UpdateLimb(this->headRotZ + this->bodyRotZ + 0x4000,
+                                   this->headRotY + this->bodyRotY + this->actor.shape.rot.y + 0x4000,
+                                   &this->headTranslate, &this->headRotate, stepRot, overrideRot);
+
+                Matrix_Pop();
+                Matrix_Translate(this->headTranslate.x, this->headTranslate.y, this->headTranslate.z, MTXMODE_NEW);
+                Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+                Matrix_RotateYS(this->headRotate.y, MTXMODE_APPLY);
+                Matrix_RotateXS(this->headRotate.x, MTXMODE_APPLY);
+                Matrix_RotateZS(this->headRotate.z, MTXMODE_APPLY);
+                Matrix_Push();
             }
-            if (this->loseAttentionTimer != 0) {
-                stepRot = true;
-            } else {
-                stepRot = false;
+            break;
+
+        case GORON_LIMB_BODY:
+            if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
+                if (this->actionFlags & EN_S_GORO_ACTIONFLAG_FACEPLAYER) {
+                    overrideRot = true;
+                } else {
+                    overrideRot = false;
+                }
+                if (this->loseAttentionTimer != 0) {
+                    stepRot = true;
+                } else {
+                    stepRot = false;
+                }
+
+                EnSGoro_UpdateLimb(this->bodyRotZ + 0x4000, this->bodyRotY + this->actor.shape.rot.y + 0x4000,
+                                   &this->bodyTranslate, &this->bodyRotate, stepRot, overrideRot);
+
+                Matrix_Pop();
+                Matrix_Translate(this->bodyTranslate.x, this->bodyTranslate.y, this->bodyTranslate.z, MTXMODE_NEW);
+                Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+                Matrix_RotateYS(this->bodyRotate.y, MTXMODE_APPLY);
+                Matrix_RotateXS(this->bodyRotate.x, MTXMODE_APPLY);
+                Matrix_RotateZS(this->bodyRotate.z, MTXMODE_APPLY);
+                Matrix_Push();
             }
+            break;
 
-            EnSGoro_UpdateLimb(this->headRotZ + this->bodyRotZ + 0x4000,
-                               this->headRotY + this->bodyRotY + this->actor.shape.rot.y + 0x4000, &this->headTranslate,
-                               &this->headRotate, stepRot, overrideRot);
-
-            Matrix_Pop();
-            Matrix_Translate(this->headTranslate.x, this->headTranslate.y, this->headTranslate.z, MTXMODE_NEW);
-            Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateYS(this->headRotate.y, MTXMODE_APPLY);
-            Matrix_RotateXS(this->headRotate.x, MTXMODE_APPLY);
-            Matrix_RotateZS(this->headRotate.z, MTXMODE_APPLY);
-            Matrix_Push();
-        }
-    } else if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
-        if (this->actionFlags & EN_S_GORO_ACTIONFLAG_FACEPLAYER) {
-            overrideRot = true;
-        } else {
-            overrideRot = false;
-        }
-        if (this->loseAttentionTimer != 0) {
-            stepRot = true;
-        } else {
-            stepRot = false;
-        }
-
-        EnSGoro_UpdateLimb(this->bodyRotZ + 0x4000, this->bodyRotY + this->actor.shape.rot.y + 0x4000,
-                           &this->bodyTranslate, &this->bodyRotate, stepRot, overrideRot);
-
-        Matrix_Pop();
-        Matrix_Translate(this->bodyTranslate.x, this->bodyTranslate.y, this->bodyTranslate.z, MTXMODE_NEW);
-        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->bodyRotate.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->bodyRotate.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->bodyRotate.z, MTXMODE_APPLY);
-        Matrix_Push();
+        default:
+            break;
     }
 }
 
