@@ -5027,7 +5027,7 @@ void Audio_StartObjSoundFanfare(u8 seqPlayerIndex, Vec3f* pos, s8 seqId, u16 seq
 
             mask = 0xFFFF;
 
-            SEQCMD_PLAY_SEQUENCE(seqPlayerIndex, ((((AudioThread_NextRandom() % 0x1E) & 0xFF) + 1)),
+            SEQCMD_PLAY_SEQUENCE(seqPlayerIndex, ((((AudioThread_NextRandom() % 30) & 0xFF) + 1)),
                                  ((seqId & mask) + seqIdOffset));
             sObjSoundMainBgmSeqId = seqId;
         }
@@ -5070,7 +5070,7 @@ void Audio_PlayObjSoundBgm(Vec3f* pos, s8 seqId) {
             Audio_SetObjSoundProperties(SEQ_PLAYER_BGM_MAIN, pos, 0x20, 100.0f, 1500.0f, 0.9f, 0.0f);
         } else {
             if (sObjSoundMainBgmSeqId == NA_BGM_GENERAL_SFX) {
-                temp_a0 = ((((AudioThread_NextRandom() % 0x1E) & 0xFF) + 1) << 0x10) | ((u16)seqId + 0x7F00);
+                temp_a0 = ((((AudioThread_NextRandom() % 30) & 0xFF) + 1) << 0x10) | ((u16)seqId + 0x7F00);
                 SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, temp_a0);
                 sObjSoundMainBgmSeqId = seqId;
             }
