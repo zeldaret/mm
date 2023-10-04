@@ -26,7 +26,7 @@ u32 EffectSsLightning_Init(PlayState* play, u32 index, EffectSs* this, void* ini
 void EffectSsLightning_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsLightning_Draw(PlayState* play, u32 index, EffectSs* this);
 
-TexturePtr sLightningTextures[] = {
+static TexturePtr sLightningTextures[] = {
     gEffLightning1Tex, gEffLightning2Tex, gEffLightning3Tex, gEffLightning4Tex,
     gEffLightning5Tex, gEffLightning6Tex, gEffLightning7Tex, gEffLightning8Tex,
 };

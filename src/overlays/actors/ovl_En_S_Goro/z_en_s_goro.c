@@ -264,7 +264,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                 }
             } else {
                 // Scene flag - Checks whether the chandelier has been lit
-                if (!Flags_GetSwitch(play, EN_S_GORO_SCENEFLAG_INDEX(&this->actor))) {
+                if (!Flags_GetSwitch(play, EN_S_GORO_GET_SWITCH_FLAG(&this->actor))) {
                     if (player->transformation == PLAYER_FORM_GORON) {
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_08)) {
                             if (this->textId == 0xD02) {

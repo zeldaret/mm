@@ -144,7 +144,7 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
 
     temp = (2.0f - this->unk16C) * this->unk16C;
 
-    func_800FD2B4(play, temp * 0.5f, 880.0f, 0.2f, 0.9f);
+    Environment_AdjustLights(play, temp * 0.5f, 880.0f, 0.2f, 0.9f);
 
     Lights_PointNoGlowSetInfo(&this->lightInfo1, this->actor.world.pos.x, this->actor.world.pos.y + 55.0f,
                               this->actor.world.pos.z, (s32)(255.0f * temp), (s32)(255.0f * temp), (s32)(200.0f * temp),

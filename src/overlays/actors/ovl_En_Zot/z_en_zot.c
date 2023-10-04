@@ -864,7 +864,7 @@ void func_80B98178(EnZot* this, PlayState* play) {
                     textId = 0x12A6;
                     SET_WEEKEVENTREG(WEEKEVENTREG_39_04);
                 }
-            } else if (Flags_GetSwitch(play, this->actor.home.rot.z & 0x7F)) {
+            } else if (Flags_GetSwitch(play, ENZOT_GET_SWITCH_FLAG(&this->actor))) {
                 textId = 0x12A0;
             } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_02)) {
                 textId = 0x12A5;
@@ -1173,7 +1173,7 @@ void func_80B98E10(EnZot* this, PlayState* play) {
     u16 textId;
 
     if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
-        if (Flags_GetSwitch(play, this->actor.home.rot.z & 0x7F)) {
+        if (Flags_GetSwitch(play, ENZOT_GET_SWITCH_FLAG(&this->actor))) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_40_04)) {
                 textId = 0x12C5;
             } else {
@@ -1187,7 +1187,7 @@ void func_80B98E10(EnZot* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_40_02);
         }
     } else {
-        if (Flags_GetSwitch(play, this->actor.home.rot.z & 0x7F)) {
+        if (Flags_GetSwitch(play, ENZOT_GET_SWITCH_FLAG(&this->actor))) {
             if (this->unk_2F2 & 0x10) {
                 textId = 0x12BF;
             } else {

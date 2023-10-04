@@ -181,7 +181,7 @@ s32 DoorShutter_SetupDoor(DoorShutter* this, PlayState* play) {
             return true;
         }
     } else if ((doorType == 2) || (doorType == 7)) {
-        if (!Flags_GetSwitch(play, DOORSHUTTER_GET_7F(&this->slidingDoor.dyna.actor))) {
+        if (!Flags_GetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor))) {
             DoorShutter_SetupAction(this, func_808A1548);
             this->unk_168 = 1.0f;
             return true;
@@ -243,7 +243,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
     this->unk_163 = sp24;
 
     if ((this->doorType == 4) || (this->doorType == 5)) {
-        if (!Flags_GetSwitch(play, DOORSHUTTER_GET_7F(&this->slidingDoor.dyna.actor))) {
+        if (!Flags_GetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor))) {
             this->unk_166 = 10;
         }
     }
@@ -346,7 +346,7 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
         DoorShutter_SetupAction(this, func_808A1684);
         this->slidingDoor.dyna.actor.velocity.y = 0.0f;
         if (this->unk_166 != 0) {
-            Flags_SetSwitch(play, DOORSHUTTER_GET_7F(&this->slidingDoor.dyna.actor));
+            Flags_SetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor));
             if (this->doorType != 5) {
                 DUNGEON_KEY_COUNT(gSaveContext.mapIndex) = DUNGEON_KEY_COUNT(gSaveContext.mapIndex) - 1;
                 Actor_PlaySfx(&this->slidingDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
@@ -474,7 +474,7 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
 
 void func_808A1548(DoorShutter* this, PlayState* play) {
     if (func_808A1478(this, play, 1.0f)) {
-        if (Flags_GetSwitch(play, DOORSHUTTER_GET_7F(&this->slidingDoor.dyna.actor))) {
+        if (Flags_GetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor))) {
             this->csId = this->slidingDoor.dyna.actor.csId;
             if (CutsceneManager_IsNext(this->csId)) {
                 CutsceneManager_StartWithPlayerCs(this->csId, &this->slidingDoor.dyna.actor);
@@ -495,7 +495,8 @@ void func_808A1548(DoorShutter* this, PlayState* play) {
 }
 
 void func_808A1618(DoorShutter* this, PlayState* play) {
-    if ((this->slidingDoor.unk_15C == 0) && !Flags_GetSwitch(play, DOORSHUTTER_GET_7F(&this->slidingDoor.dyna.actor))) {
+    if ((this->slidingDoor.unk_15C == 0) &&
+        !Flags_GetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor))) {
         DoorShutter_SetupAction(this, func_808A1548);
     } else {
         func_808A1090(this, play);

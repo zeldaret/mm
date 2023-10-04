@@ -617,8 +617,8 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
                     break;
             }
         } else {
-            if (ENST_GET_3F(&this->actor) != ENST_3F_63) {
-                Flags_SetSwitch(play, ENST_GET_3F(&this->actor));
+            if (ENST_GET_SWITCH_FLAG(&this->actor) != 0x3F) {
+                Flags_SetSwitch(play, ENST_GET_SWITCH_FLAG(&this->actor));
             }
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
@@ -843,7 +843,7 @@ void EnSt_Init(Actor* thisx, PlayState* play) {
     EnSt* this = THIS;
 
     this->unk_2C0 = Object_GetSlot(&play->objectCtx, GAMEPLAY_KEEP);
-    if (((ENST_GET_3F(&this->actor) != ENST_3F_63) && Flags_GetSwitch(play, ENST_GET_3F(&this->actor))) ||
+    if (((ENST_GET_SWITCH_FLAG(&this->actor) != 0x3F) && Flags_GetSwitch(play, ENST_GET_SWITCH_FLAG(&this->actor))) ||
         (this->unk_2C0 < 0)) {
         Actor_Kill(&this->actor);
         return;

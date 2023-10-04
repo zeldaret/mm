@@ -705,12 +705,12 @@ void EnOsn_InitCutscene(EnOsn* this) {
 }
 
 void EnOsn_ChooseAction(EnOsn* this, PlayState* play) {
-    u32 isFlagSet = Flags_GetSwitch(play, 0);
+    u32 isSwitchFlagSet = Flags_GetSwitch(play, 0);
 
     this->csId = this->actor.csId;
 
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, OSN_ANIM_IDLE);
-    if (!isFlagSet) {
+    if (!isSwitchFlagSet) {
         this->actionFunc = EnOsn_HandleCsAction;
     } else {
         this->actionFunc = EnOsn_Idle;
@@ -968,14 +968,14 @@ void EnOsn_Destroy(Actor* thisx, PlayState* play) {
 void EnOsn_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnOsn* this = THIS;
-    u32 isFlagSet = Flags_GetSwitch(play, 0);
+    u32 isSwitchFlagSet = Flags_GetSwitch(play, 0);
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
 
     if (ENOSN_GET_TYPE(&this->actor) == OSN_TYPE_CHOOSE) {
-        if (isFlagSet) {
+        if (isSwitchFlagSet) {
             this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             EnOsn_UpdateCollider(this, play);
             this->actor.draw = EnOsn_Draw;

@@ -335,10 +335,10 @@ void DemoEffect_DrawLight(Actor* thisx, PlayState* play2) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    D_801F4E32 = 1;
-    D_801F4E38.x = thisx->world.pos.x;
-    D_801F4E38.y = thisx->world.pos.y;
-    D_801F4E38.z = thisx->world.pos.z;
+    gCustomLensFlare1On = true;
+    gCustomLensFlare1Pos.x = thisx->world.pos.x;
+    gCustomLensFlare1Pos.y = thisx->world.pos.y;
+    gCustomLensFlare1Pos.z = thisx->world.pos.z;
 
     D_801F4E44 = thisx->scale.x * 60.0f;
     D_801F4E48 = thisx->scale.x * 50.0f;

@@ -8,17 +8,11 @@ struct EnDaiku2;
 
 typedef void (*EnDaiku2ActionFunc)(struct EnDaiku2*, PlayState*);
 
-#define ENDAIKU2_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define ENDAIKU2_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define ENDAIKU2_GET_PATH_INDEX(thisx) (((thisx)->params >> 7) & 0x3F)
 #define ENDAIKU2_GET_8000(thisx) (((thisx)->params >> 15) & 0x1)
 
 #define ENDAIKU2_PATH_INDEX_NONE 0x3F
-
-typedef enum {
-    /*  -1 */ ENDAIKU2_GET_7F_MINUS1 = -1,
-    /*   0 */ ENDAIKU2_GET_7F_0,
-    /* 127 */ ENDAIKU2_GET_7F_127 = 127
-} EnDaiku2Param;
 
 typedef struct EnDaiku2Effect {
     /* 0x00 */ u8 isEnabled;
@@ -45,7 +39,7 @@ typedef struct EnDaiku2 {
     /* 0x268 */ Vec3f unk_268;
     /* 0x274 */ s16 unk_274;
     /* 0x276 */ s16 animIndex;
-    /* 0x278 */ s16 unk_278;
+    /* 0x278 */ s16 switchFlag;
     /* 0x27A */ s16 pathIndex;
     /* 0x27C */ UNK_TYPE1 unk_27C[0x4];
     /* 0x280 */ s32 unk_280;
