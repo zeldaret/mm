@@ -2088,7 +2088,7 @@ beginseg
     name "ovl_Door_Spiral"
     compress
     include "build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o"
-    include "build/data/ovl_Door_Spiral/ovl_Door_Spiral.data.o"
+    //include "build/data/ovl_Door_Spiral/ovl_Door_Spiral.data.o"
     include "build/data/ovl_Door_Spiral/ovl_Door_Spiral.reloc.o"
 endseg
 
