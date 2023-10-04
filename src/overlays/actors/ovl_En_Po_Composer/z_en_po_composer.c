@@ -577,8 +577,9 @@ void EnPoComposer_StepLightColor(EnPoComposer* this) {
 
 void EnPoComposer_UpdateEnvColor(EnPoComposer* this) {
     if ((this->actionFunc == EnPoComposer_Appear) && (this->skelAnime.curFrame < 12.0f)) {
+        // Step rgb from 55 to 255 and alpha from 0 to 200 over the first 12 frames of the appear anim
         this->envColor.r = this->envColor.g = this->envColor.b = 55.0f + this->skelAnime.curFrame * 16.66f;
-        this->envColor.a = this->skelAnime.curFrame * 16.666666f;
+        this->envColor.a = this->skelAnime.curFrame * (200.0f / 12.0f);
     } else {
         f32 rand = Rand_ZeroOne();
 
