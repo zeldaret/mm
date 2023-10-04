@@ -737,18 +737,21 @@ typedef struct {
     /* 0xA */ s16 relativeTo; // see `CutsceneCamRelativeTo`
 } CsCmdCamPoint; // size = 0xC
 
-typedef enum {
-    /* 0 */ CS_CAM_INTERP_0,
-    /* 1 */ CS_CAM_INTERP_1,
-    /* 2 */ CS_CAM_INTERP_2,
-    /* 3 */ CS_CAM_INTERP_3,
-    /* 4 */ CS_CAM_INTERP_4,
-    /* 5 */ CS_CAM_INTERP_5,
-    /* 6 */ CS_CAM_INTERP_6,
-    /* 7 */ CS_CAM_INTERP_NONE
+typedef enum CutsceneCamInterpType {
+    /* 0 */ CS_CAM_INTERP_0, // values do not change.
+    // values 1-3 only uses a single point from the cmd
+    /* 1 */ CS_CAM_INTERP_1, // values immediately set to cmd values.
+    /* 2 */ CS_CAM_INTERP_2, // values lerp from init to cmd values (increasing t)
+    /* 3 */ CS_CAM_INTERP_3, // values lerp from cur to cmd values (fixed t at weight = 100)
+    // values 4-5 uses multiple points from the cmd
+    /* 4 */ CS_CAM_INTERP_4, // cubic multi-point (identical to SM64/OoT)
+    /* 5 */ CS_CAM_INTERP_5, // quadratic multi-point
+    // value 5 only uses a single point from the cmd
+    /* 6 */ CS_CAM_INTERP_6, // does VecGeo calculations using fov
+    /* 7 */ CS_CAM_INTERP_OFF // interpolation is not processed.
 } CutsceneCamInterpType;
 
-typedef enum {
+typedef enum CutsceneCamRelativeTo {
     /* 0 */ CS_CAM_REL_0,
     /* 1 */ CS_CAM_REL_1,
     /* 2 */ CS_CAM_REL_2,
@@ -759,26 +762,25 @@ typedef enum {
 
 
 // Roll and Fov Data
-typedef struct {
-    /* 0x0 */ s16 unused0; // unused
+typedef struct CsCmdCamMisc {
+    /* 0x0 */ s16 unused0; // used only in the unused interp function
     /* 0x2 */ s16 roll;
     /* 0x4 */ s16 fov;
     /* 0x6 */ s16 unused1; // unused
 } CsCmdCamMisc; // size = 0x8
 
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x2A */ f32 unk_20;
+typedef struct CutsceneCameraInterp {
+    /* 0x00 */ Vec3f curPos;
+    /* 0x0C */ Vec3f initPos;
+    /* 0x18 */ f32 initFov;
+    /* 0x1C */ f32 initRoll;
+    /* 0x2A */ f32 unk_20; // position adjustment based on fov?
     /* 0x24 */ s16 curFrame;
-    /* 0x26 */ s16 unk_26;
+    /* 0x26 */ s16 curIndex;
     /* 0x28 */ s16 duration;
     /* 0x2A */ s16 numEntries;
     /* 0x1E */ u8 curPoint;
     /* 0x2D */ u8 type; // See `CutsceneCamInterpType`
-    /* 0x2E */ UNK_TYPE1 unk_2E[2];
 } CutsceneCameraInterp; // size = 0x30
 
 typedef struct CutsceneCamera {
@@ -798,11 +800,11 @@ typedef struct CutsceneCamera {
 } CutsceneCamera; // size = 0x80
 
 typedef enum {
-    /* 0 */ CS_CAM_STATE_UPDATE_ALL, // Update spline and next spline timer
-    /* 0 */ CS_CAM_STATE_UPDATE_SPLINE, // Update spline, do not advance next spline timer
-    /* 0 */ CS_CAM_STATE_PAUSE, // No updates
-    /* 0 */ CS_CAM_STATE_DONE_SPLINE, // Finished the current spline, ready for the next one
-    /* 0 */ CS_CAM_STATE_DONE = 999 // Finished all the splines.
+    /*   0 */ CS_CAM_STATE_UPDATE_ALL, // Update spline and next spline timer
+    /*   1 */ CS_CAM_STATE_UPDATE_SPLINE, // Update spline, do not advance next spline timer
+    /*   2 */ CS_CAM_STATE_PAUSE, // No updates
+    /*   3 */ CS_CAM_STATE_DONE_SPLINE, // Finished the current spline, ready for the next one
+    /* 999 */ CS_CAM_STATE_DONE = 999 // Finished all the splines.
 } CutsceneCameraState;
 
 // OoT Remnant
