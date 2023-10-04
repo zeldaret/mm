@@ -2349,22 +2349,6 @@ asm/non_matchings/code/z_message/func_80149048.s,func_80149048,0x80149048,0x65
 asm/non_matchings/code/z_message/func_801491DC.s,func_801491DC,0x801491DC,0x9E
 asm/non_matchings/code/z_message/func_80149454.s,func_80149454,0x80149454,0x9D
 asm/non_matchings/code/z_message/func_801496C8.s,func_801496C8,0x801496C8,0xA5
-<<<<<<< HEAD
-asm/non_matchings/code/z_message/func_8014995C.s,func_8014995C,0x8014995C,0xAF
-asm/non_matchings/code/z_message/Message_DrawItemIcon.s,Message_DrawItemIcon,0x80149C18,0xA9
-asm/non_matchings/code/z_message/Message_FindMessage.s,Message_FindMessage,0x80149EBC,0x2E
-asm/non_matchings/code/z_message/Message_DrawItemIcon.s,Message_DrawItemIcon,0x80149F74,0x2D7
-asm/non_matchings/code/z_message/func_8014AAD0.s,func_8014AAD0,0x8014AAD0,0xBB
-asm/non_matchings/code/z_message/func_8014ADBC.s,func_8014ADBC,0x8014ADBC,0x654
-asm/non_matchings/code/z_message/func_8014C70C.s,func_8014C70C,0x8014C70C,0x142
-asm/non_matchings/code/z_message/Message_LoadChar.s,Message_LoadChar,0x8014CC14,0x28
-asm/non_matchings/code/z_message/func_8014CCB4.s,func_8014CCB4,0x8014CCB4,0x4F
-asm/non_matchings/code/z_message/func_8014CDF0.s,func_8014CDF0,0x8014CDF0,0x7B
-asm/non_matchings/code/z_message/Message_SetupLoadItemIcon.s,Message_SetupLoadItemIcon,0x8014CFDC,0xCA
-asm/non_matchings/code/z_message/func_8014D304.s,func_8014D304,0x8014D304,0xCA
-asm/non_matchings/code/z_message/func_8014D62C.s,func_8014D62C,0x8014D62C,0x62
-asm/non_matchings/code/z_message/func_8014D7B4.s,func_8014D7B4,0x8014D7B4,0xCB4
-=======
 asm/non_matchings/code/z_message/Message_DrawTextChar.s,Message_DrawTextChar,0x8014995C,0xAF
 asm/non_matchings/code/z_message/Message_GrowTextbox.s,Message_GrowTextbox,0x80149C18,0xA9
 asm/non_matchings/code/z_message/Message_FindMessage.s,Message_FindMessage,0x80149EBC,0x2E
@@ -2379,7 +2363,6 @@ asm/non_matchings/code/z_message/Message_SetupLoadItemIcon.s,Message_SetupLoadIt
 asm/non_matchings/code/z_message/Message_LoadTime.s,Message_LoadTime,0x8014D304,0xCA
 asm/non_matchings/code/z_message/Message_LoadOwlWarpText.s,Message_LoadOwlWarpText,0x8014D62C,0x62
 asm/non_matchings/code/z_message/Message_Decode.s,Message_Decode,0x8014D7B4,0xCB4
->>>>>>> main
 asm/non_matchings/code/z_message/func_80150A84.s,func_80150A84,0x80150A84,0xA1
 asm/non_matchings/code/z_message/Message_OpenText.s,Message_OpenText,0x80150D08,0x1EA
 asm/non_matchings/code/z_message/func_801514B0.s,func_801514B0,0x801514B0,0x100
