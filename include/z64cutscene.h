@@ -745,7 +745,7 @@ typedef enum {
     /* 4 */ CS_CAM_INTERP_4,
     /* 5 */ CS_CAM_INTERP_5,
     /* 6 */ CS_CAM_INTERP_6,
-    /* 7 */ CS_CAM_INTERP_7
+    /* 7 */ CS_CAM_INTERP_NONE
 } CutsceneCamInterpType;
 
 typedef enum {
@@ -777,7 +777,7 @@ typedef struct {
     /* 0x28 */ s16 duration;
     /* 0x2A */ s16 numEntries;
     /* 0x1E */ u8 curPoint;
-    /* 0x2D */ u8 unk_2D;
+    /* 0x2D */ u8 type; // See `CutsceneCamInterpType`
     /* 0x2E */ UNK_TYPE1 unk_2E[2];
 } CutsceneCameraInterp; // size = 0x30
 

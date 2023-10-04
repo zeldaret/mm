@@ -5,28 +5,29 @@ static CutsceneCamera* sCurCsCamera;
 
 typedef s16 (*CsCamInterpolateCallback)(Vec3f*, f32*, s16*, CsCmdCamPoint*, CsCmdCamMisc*, CutsceneCameraInterp*);
 
-s16 func_80161180(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp);
-s16 func_8016237C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp);
-s16 func_8016253C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp);
-s16 func_80162A50(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp);
-s16 func_801623E4(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp);
-s16 func_80161C20(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp);
-s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp);
-s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp);
-s16 func_80163334(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp);
+s16 CutsceneCamera_Interp_None(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                               CutsceneCameraInterp* interp);
+s16 CutsceneCamera_Interp_0(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp);
+s16 CutsceneCamera_Interp_5(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp);
+s16 CutsceneCamera_Interp_4(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp);
+s16 CutsceneCamera_Interp_1(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp);
+s16 CutsceneCamera_Interp_2(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp);
+s16 CutsceneCamera_Interp_3(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp);
+s16 CutsceneCamera_Interp_6(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp);
+s16 CutsceneCamera_Interp_Unused(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                                 CutsceneCameraInterp* interp);
+
 f32 func_80163660(Actor* actor);
 
-s16 func_80161180(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp) {
+s16 CutsceneCamera_Interp_None(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                               CutsceneCameraInterp* interp) {
     return 0;
 }
 
@@ -47,37 +48,37 @@ s32 CutsceneCamera_Init(Camera* camera, CutsceneCamera* csCamera) {
     __osMemset(&csCamera->eyeInterp, 0, sizeof(CutsceneCameraInterp));
     __osMemset(&csCamera->atInterp, 0, sizeof(CutsceneCameraInterp));
 
-    csCamera->eyeInterp.unk_2D = csCamera->atInterp.unk_2D = 7;
+    csCamera->eyeInterp.type = csCamera->atInterp.type = CS_CAM_INTERP_NONE;
 
     return 1;
 }
 
 CsCamInterpolateCallback CutsceneCamera_Interpolate(u8 interpType) {
     switch (interpType) {
-        case CS_CAM_INTERP_7:
+        case CS_CAM_INTERP_NONE:
         default:
-            return func_80161180;
+            return CutsceneCamera_Interp_None;
 
         case CS_CAM_INTERP_0:
-            return func_8016237C;
+            return CutsceneCamera_Interp_0;
 
         case CS_CAM_INTERP_5:
-            return func_8016253C;
+            return CutsceneCamera_Interp_5;
 
         case CS_CAM_INTERP_4:
-            return func_80162A50;
+            return CutsceneCamera_Interp_4;
 
         case CS_CAM_INTERP_1:
-            return func_801623E4;
+            return CutsceneCamera_Interp_1;
 
         case CS_CAM_INTERP_2:
-            return func_80161C20;
+            return CutsceneCamera_Interp_2;
 
         case CS_CAM_INTERP_3:
-            return func_80161E4C;
+            return CutsceneCamera_Interp_3;
 
         case CS_CAM_INTERP_6:
-            return func_801620CC;
+            return CutsceneCamera_Interp_6;
     }
 }
 
@@ -311,7 +312,7 @@ s32 CutsceneCamera_UpdateSplines(u8* script, CutsceneCamera* csCamera) {
                 csCamera->splineIndex = (csCamera->splineIndex & 0xFFFF) + 1;
                 csCamera->state = CS_CAM_STATE_UPDATE_ALL;
                 csCamera->nextSplineTimer = csCamera->updateSplineTimer = 0;
-                csCamera->eyeInterp.unk_2D = csCamera->atInterp.unk_2D = 7;
+                csCamera->eyeInterp.type = csCamera->atInterp.type = CS_CAM_INTERP_NONE;
             }
 
             csCamera->nextSplineTimer++;
@@ -356,12 +357,13 @@ void CutsceneCamera_Reset(void) {
     sCurCsCamera->state = CS_CAM_STATE_UPDATE_ALL;
 }
 
-s16 func_80161C20(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp) {
+s16 CutsceneCamera_Interp_2(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp) {
     f32 temp_f0;
 
-    if (interp->unk_2D != 2) {
-        interp->unk_2D = 2;
+    if (interp->type != CS_CAM_INTERP_2) {
+        // Initialize
+        interp->type = CS_CAM_INTERP_2;
         interp->unk_26 = 0;
         interp->curFrame = 0;
         interp->duration = 1;
@@ -406,21 +408,23 @@ s16 func_80161C20(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
     }
 
     if (interp->curFrame >= point->duration) {
-        interp->unk_2D = 7;
+        // Finished
+        interp->type = CS_CAM_INTERP_NONE;
         return 1;
     }
 
     return 0;
 }
 
-s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp) {
+s16 CutsceneCamera_Interp_3(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp) {
     f32 phi_f2;
     f32 tmp1;
     f32 tmp2;
 
-    if (interp->unk_2D != 3) {
-        interp->unk_2D = 3;
+    if (interp->type != CS_CAM_INTERP_3) {
+        // Initialize
+        interp->type = CS_CAM_INTERP_3;
         interp->unk_26 = 0;
         interp->curFrame = 0;
         interp->duration = 1;
@@ -469,21 +473,24 @@ s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
     }
 
     if (interp->curFrame >= point->duration) {
-        interp->unk_2D = 7;
+        // Finished
+        interp->type = CS_CAM_INTERP_NONE;
         return 1;
     }
+
     return 0;
 }
 
-s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp) {
+s16 CutsceneCamera_Interp_6(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp) {
     VecGeo sp40;
     f32 sp3C;
     f32 tmp1;
     f32 tmp2;
 
-    if (interp->unk_2D != 6) {
-        interp->unk_2D = 6;
+    if (interp->type != CS_CAM_INTERP_6) {
+        // Initialize
+        interp->type = CS_CAM_INTERP_6;
         interp->unk_26 = 0;
         interp->curFrame = 0;
         interp->duration = 1;
@@ -530,36 +537,42 @@ s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
     }
 
     if (interp->curFrame >= point->duration) {
-        interp->unk_2D = 7;
+        // Finished
+        interp->type = CS_CAM_INTERP_NONE;
         return 1;
     }
 
     return 0;
 }
 
-s16 func_8016237C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp) {
-    if (interp->unk_2D != 0) {
-        interp->unk_2D = 0;
+s16 CutsceneCamera_Interp_0(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp) {
+    if (interp->type != CS_CAM_INTERP_0) {
+        // Initialize
+        interp->type = CS_CAM_INTERP_0;
         interp->unk_26 = 0;
         interp->curFrame = 0;
         interp->duration = 1;
     }
 
     interp->curFrame++;
+
     if (interp->curFrame >= point->duration) {
-        interp->unk_2D = 7;
+        // Finishes
+        interp->type = CS_CAM_INTERP_NONE;
         return true;
     }
+
     return false;
 }
 
-s16 func_801623E4(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp) {
+s16 CutsceneCamera_Interp_1(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp) {
     s16 pad;
 
-    if (interp->unk_2D != 1) {
-        interp->unk_2D = 1;
+    if (interp->type != CS_CAM_INTERP_1) {
+        // Initialize
+        interp->type = CS_CAM_INTERP_1;
         interp->unk_26 = 0;
         interp->curFrame = 0;
         interp->duration = 1;
@@ -580,11 +593,12 @@ s16 func_801623E4(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
     interp->curFrame++;
 
     if (interp->curFrame >= point->duration) {
-        interp->unk_2D = 7;
-        return true;
+        // Finished
+        interp->type = CS_CAM_INTERP_NONE;
+        return 1;
     }
 
-    return false;
+    return 0;
 }
 
 void func_801624EC(f32 u, f32* coeff) {
@@ -595,14 +609,15 @@ void func_801624EC(f32 u, f32* coeff) {
     coeff[2] = u * u * 0.5f;
 }
 
-s16 func_8016253C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp) {
+s16 CutsceneCamera_Interp_5(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp) {
     f32 new_var;
     f32 coeff[3];
     s32 sp3C[3];
 
-    if (interp->unk_2D != 5) {
-        interp->unk_2D = 5;
+    if (interp->type != CS_CAM_INTERP_5) {
+        // Initialize
+        interp->type = CS_CAM_INTERP_5;
         interp->unk_26 = 0;
         interp->duration = point->duration;
         interp->curFrame = 0;
@@ -665,7 +680,7 @@ s16 func_8016253C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
         interp->unk_26++;
         interp->curFrame = 0;
         if (interp->unk_26 >= (interp->duration - 2)) {
-            interp->unk_2D = 7;
+            interp->type = CS_CAM_INTERP_NONE;
             return interp->duration;
         }
     }
@@ -683,14 +698,15 @@ void func_801629BC(f32 u, f32* coeff) {
     coeff[3] = u * u * u * (1.0f / 6.0f);
 }
 
-s16 func_80162A50(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp) {
+s16 CutsceneCamera_Interp_4(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                            CutsceneCameraInterp* interp) {
     f32 new_var;
     f32 coeff[4];
     s32 sp44[4];
 
-    if (interp->unk_2D != 4) {
-        interp->unk_2D = 4;
+    if (interp->type != CS_CAM_INTERP_4) {
+        // Initialize
+        interp->type = CS_CAM_INTERP_4;
         interp->unk_26 = 0;
         interp->duration = point->duration;
         interp->curFrame = 0;
@@ -762,7 +778,7 @@ s16 func_80162A50(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
         interp->curFrame = 0;
         interp->unk_26++;
         if (interp->unk_26 >= (interp->duration - 3)) {
-            interp->unk_2D = 7;
+            interp->type = CS_CAM_INTERP_NONE;
             return interp->duration;
         }
     }
@@ -771,7 +787,7 @@ s16 func_80162A50(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
 
 static f32 sKnots[38];
 
-// Only used by unused func_80163334
+// Only used by unused CutsceneCamera_Interp_Unused
 void func_80162FF8(s16 arg0) {
     f32 var_fv0 = 0.0f;
     s32 i;
@@ -798,7 +814,7 @@ void func_80162FF8(s16 arg0) {
     sKnots[i++] = var_fv0;
 }
 
-// Only used by unused func_80163334
+// Only used by unused CutsceneCamera_Interp_Unused
 void func_801631DC(f32 progress, s32 arg2, f32* coeff) {
     f32 coeffTemp[4][4];
     s32 i;
@@ -832,13 +848,14 @@ void func_801631DC(f32 progress, s32 arg2, f32* coeff) {
     }
 }
 
-s16 func_80163334(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
-                  CutsceneCameraInterp* interp) {
+s16 CutsceneCamera_Interp_Unused(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                                 CutsceneCameraInterp* interp) {
     s32 index;
     f32 coeff[3];
 
-    if (interp->unk_2D != 4) {
-        interp->unk_2D = 4;
+    if (interp->type != CS_CAM_INTERP_4) {
+        // Initialize
+        interp->type = CS_CAM_INTERP_4;
         interp->unk_26 = 0;
         interp->duration = point->duration;
         func_80162FF8(interp->duration);
@@ -874,7 +891,7 @@ s16 func_80163334(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
         interp->unk_26++;
         interp->curFrame = 0;
         if (interp->unk_26 >= (interp->duration - 2)) {
-            interp->unk_2D = 7;
+            interp->type = CS_CAM_INTERP_NONE;
             return interp->duration;
         }
     }
