@@ -440,7 +440,8 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
                 break;
             }
         }
-        if ((i >= ARRAY_COUNT(sObjectInfo) - 34) && (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
+        if ((i >= ARRAY_COUNT(sObjectInfo) - 34) &&
+            (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) > OBJECT_SLOT_NONE)) {
             objectInfo++;
         }
     }

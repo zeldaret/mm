@@ -101,7 +101,7 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
             break;
         }
     }
-    if ((i >= 15) && (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
+    if ((i >= 15) && (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) > OBJECT_SLOT_NONE)) {
         objectInfo++;
     }
     objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);

@@ -27,7 +27,7 @@ EffectSsInit Effect_Ss_Hahen_InitVars = {
 };
 
 void EffectSsHahen_CheckForObject(EffectSs* this, PlayState* play) {
-    if (((this->rObjectSlot = Object_GetSlot(&play->objectCtx, this->rObjectId)) < 0) ||
+    if (((this->rObjectSlot = Object_GetSlot(&play->objectCtx, this->rObjectId)) <= OBJECT_SLOT_NONE) ||
         !Object_IsLoaded(&play->objectCtx, this->rObjectSlot)) {
         this->life = -1;
         this->draw = NULL;

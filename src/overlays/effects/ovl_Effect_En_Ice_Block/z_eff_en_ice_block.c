@@ -25,7 +25,7 @@ EffectSsInit Effect_En_Ice_Block_InitVars = {
 #define rRotVel regs[3]
 
 u32 EffectEnIceBlock_CheckIceBlockObject(EffectSs* this, PlayState* play) {
-    if (((this->rObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_ICE_BLOCK)) < 0) ||
+    if (((this->rObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_ICE_BLOCK)) <= OBJECT_SLOT_NONE) ||
         (!Object_IsLoaded(&play->objectCtx, this->rObjectSlot))) {
         this->life = -1;
         this->draw = NULL;

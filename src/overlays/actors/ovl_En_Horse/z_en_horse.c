@@ -738,7 +738,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->type = HORSE_TYPE_DONKEY;
         this->unk_528 = 80.0f;
         this->boostSpeed = 12;
-        if ((this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_HA)) < 0) {
+        if ((this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_HA)) <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
             return;
         }
@@ -748,7 +748,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->type = HORSE_TYPE_2;
         this->unk_528 = 64.8f;
         this->boostSpeed = 15;
-        if ((this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_HORSE_LINK_CHILD)) < 0) {
+        if ((this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_HORSE_LINK_CHILD)) <= OBJECT_SLOT_NONE) {
             thisx->objectSlot = Object_SpawnPersistent(&play->objectCtx, OBJECT_HORSE_LINK_CHILD);
             Actor_SetObjectDependency(play, &this->actor);
             Skin_Init(&play->state, &this->skin, sSkeletonHeaders[this->type], sAnimationHeaders[this->type][0]);
@@ -760,7 +760,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     } else if (ENHORSE_IS_BANDIT_TYPE(&this->actor)) {
         this->type = HORSE_TYPE_BANDIT;
         this->boostSpeed = 12;
-        if ((this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_HA)) < 0) {
+        if ((this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_HA)) <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
             return;
         }

@@ -29,7 +29,7 @@ EffectSsInit Effect_Ss_D_Fire_InitVars = {
 static TexturePtr sFireTextures[] = { gDodongoFire0Tex, gDodongoFire1Tex, gDodongoFire2Tex, gDodongoFire3Tex };
 
 s32 EffectSsDFire_CheckForObject(EffectSs* this, PlayState* play) {
-    if (((this->rObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_DODONGO)) < 0) ||
+    if (((this->rObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_DODONGO)) <= OBJECT_SLOT_NONE) ||
         !Object_IsLoaded(&play->objectCtx, this->rObjectSlot)) {
         this->life = -1;
         this->draw = NULL;

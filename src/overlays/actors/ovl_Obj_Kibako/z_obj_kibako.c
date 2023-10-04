@@ -135,12 +135,12 @@ void func_80926394(ObjKibako* this, PlayState* play) {
 void ObjKibako_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjKibako* this = THIS;
-    s32 whichBankIndex;
+    s32 objectIndex;
 
-    whichBankIndex = KIBAKO_BANK_INDEX(thisx);
+    objectIndex = KIBAKO_BANK_INDEX(thisx);
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetScale(&this->actor, 0.15f);
-    if (whichBankIndex == 0) {
+    if (objectIndex == 0) {
         this->actor.uncullZoneForward = 4000.0f;
     } else {
         this->actor.uncullZoneForward = 800.0f;
@@ -149,7 +149,7 @@ void ObjKibako_Init(Actor* thisx, PlayState* play2) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[whichBankIndex]);
+    this->objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[objectIndex]);
     if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
