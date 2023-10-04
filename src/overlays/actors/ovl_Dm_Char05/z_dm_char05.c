@@ -178,7 +178,7 @@ void DmChar05_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AAC990(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_GOLONMASK);
+    s32 objectIdx = Object_GetSlot(&play->objectCtx, OBJECT_GI_GOLONMASK);
 
     if (objectIdx >= 0) {
         this->unk_18F = objectIdx;
@@ -200,7 +200,7 @@ void func_80AAC9DC(DmChar05* this, PlayState* play) {
 }
 
 void func_80AACA98(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_MASK13);
+    s32 objectIdx = Object_GetSlot(&play->objectCtx, OBJECT_GI_MASK13);
 
     if (objectIdx >= 0) {
         this->unk_18F = objectIdx;
@@ -232,7 +232,7 @@ void func_80AACBE4(DmChar05* this, PlayState* play) {
         OBJECT_GI_MASK11, OBJECT_GI_MASK20, OBJECT_GI_RABIT_MASK, OBJECT_GI_MASK12,
     };
     s32 params = DMCHAR05_GET(&this->actor) - DMCHAR05_5;
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, D_80AAE2F0[params]);
+    s32 objectIdx = Object_GetSlot(&play->objectCtx, D_80AAE2F0[params]);
 
     if (objectIdx >= 0) {
         this->unk_18F = objectIdx;
@@ -278,7 +278,7 @@ void func_80AACD0C(DmChar05* this, PlayState* play) {
 }
 
 void func_80AACD1C(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_ZORAMASK);
+    s32 objectIdx = Object_GetSlot(&play->objectCtx, OBJECT_GI_ZORAMASK);
 
     if (objectIdx >= 0) {
         this->unk_18F = objectIdx;
@@ -298,7 +298,7 @@ void func_80AACD68(DmChar05* this, PlayState* play) {
 }
 
 void func_80AACE10(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_MASK15);
+    s32 objectIdx = Object_GetSlot(&play->objectCtx, OBJECT_GI_MASK15);
 
     if (objectIdx >= 0) {
         this->unk_18F = objectIdx;

@@ -60,7 +60,7 @@ void EnWarptag_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnWarpTag_WaitForPlayer;
 
         } else {
-            if ((this->dangeonKeepObject = Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP)) < 0) {
+            if ((this->dangeonKeepObject = Object_GetSlot(&play->objectCtx, GAMEPLAY_DANGEON_KEEP)) < 0) {
                 Actor_Kill(&this->dyna.actor);
             }
 

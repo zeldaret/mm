@@ -381,7 +381,7 @@ void EnSob1_SpawnShopItems(EnSob1* this, PlayState* play, ShopItem* shopItem) {
 
 s32 EnSob1_GetObjIndices(EnSob1* this, PlayState* play, s16* objIds) {
     if (objIds[1] != OBJECT_ID_MAX) {
-        this->unusedObjIndex = Object_GetIndex(&play->objectCtx, objIds[1]);
+        this->unusedObjIndex = Object_GetSlot(&play->objectCtx, objIds[1]);
         if (this->unusedObjIndex < 0) {
             return false;
         }
@@ -389,7 +389,7 @@ s32 EnSob1_GetObjIndices(EnSob1* this, PlayState* play, s16* objIds) {
         this->unusedObjIndex = -1;
     }
     if (objIds[2] != OBJECT_ID_MAX) {
-        this->shopkeeperAnimObjIndex = Object_GetIndex(&play->objectCtx, objIds[2]);
+        this->shopkeeperAnimObjIndex = Object_GetSlot(&play->objectCtx, objIds[2]);
         if (this->shopkeeperAnimObjIndex < 0) {
             return false;
         }
@@ -427,7 +427,7 @@ void EnSob1_Init(Actor* thisx, PlayState* play) {
     }
 
     objIds = sObjectIds[this->shopType];
-    this->mainObjIndex = Object_GetIndex(&play->objectCtx, objIds[0]);
+    this->mainObjIndex = Object_GetSlot(&play->objectCtx, objIds[0]);
     if (this->mainObjIndex < 0) {
         Actor_Kill(&this->actor);
         return;
@@ -1345,7 +1345,7 @@ void EnSob1_Blink(EnSob1* this) {
 }
 
 void EnSob1_ChangeObject(EnSob1* this, PlayState* play) {
-    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->shopkeeperAnimObjIndex].segment);
+    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjIndex].segment);
 }
 
 s32 EnSob1_AreObjectsLoaded(EnSob1* this, PlayState* play) {
@@ -1363,7 +1363,7 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, PlayState* play) {
 
 void EnSob1_ZoraShopkeeper_Init(EnSob1* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, ZORA_LIMB_MAX);
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->shopkeeperAnimObjIndex].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjIndex].segment);
     Animation_Change(&this->skelAnime, &gZoraShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gZoraShopkeeperAnim),
                      ANIMMODE_LOOP, 0.0f);
     this->actor.draw = EnSob1_ZoraShopkeeper_Draw;
@@ -1372,7 +1372,7 @@ void EnSob1_ZoraShopkeeper_Init(EnSob1* this, PlayState* play) {
 
 void EnSob1_GoronShopkeeper_Init(EnSob1* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable, GORON_LIMB_MAX);
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->shopkeeperAnimObjIndex].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjIndex].segment);
     Animation_Change(&this->skelAnime, &gGoronShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gGoronShopkeeperAnim),
                      ANIMMODE_LOOP, 0.0f);
     this->actor.draw = EnSob1_GoronShopkeeper_Draw;

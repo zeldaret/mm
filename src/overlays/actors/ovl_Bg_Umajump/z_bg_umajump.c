@@ -103,7 +103,7 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
             thisx->update = Actor_Noop;
         }
     } else {
-        this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_UMAJUMP);
+        this->objectIndex = Object_GetSlot(&play->objectCtx, OBJECT_UMAJUMP);
 
         if (this->objectIndex < 0) {
             Actor_Kill(thisx);

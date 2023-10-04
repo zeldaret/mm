@@ -461,7 +461,7 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
 
         case DEMO_KANKYO_TYPE_GIANTS:
             this->isSafeToDrawGiants = false;
-            objId = Object_GetIndex(&play->objectCtx, sObjectBubbleIndex);
+            objId = Object_GetSlot(&play->objectCtx, sObjectBubbleIndex);
             DemoKankyo_SetupAction(this, DemoKakyo_GiantObjectCheck);
             break;
 

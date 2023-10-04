@@ -57,7 +57,7 @@ void DemoEffect_Init(Actor* thisx, PlayState* play) {
     if (sEffectTypeObjects[type] == GAMEPLAY_KEEP) {
         objectIndex = 0;
     } else {
-        objectIndex = Object_GetIndex(&play->objectCtx, sEffectTypeObjects[type]);
+        objectIndex = Object_GetSlot(&play->objectCtx, sEffectTypeObjects[type]);
     }
 
     if (objectIndex < 0) {

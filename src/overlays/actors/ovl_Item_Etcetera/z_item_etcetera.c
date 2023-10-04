@@ -55,7 +55,7 @@ void ItemEtcetera_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ItemEtcetera* this = THIS;
     s32 type = ITEMETCETERA_GET_FF(&this->actor);
-    s32 objBankIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
+    s32 objBankIndex = Object_GetSlot(&play->objectCtx, sObjectIds[type]);
 
     if (objBankIndex < 0) {
         // assert on debug

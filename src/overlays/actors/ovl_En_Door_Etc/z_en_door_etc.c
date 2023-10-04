@@ -101,10 +101,10 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
             break;
         }
     }
-    if ((i >= 15) && (Object_GetIndex(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
+    if ((i >= 15) && (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
         objectInfo++;
     }
-    objectIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
+    objectIndex = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
     if (objectIndex < 0) {
         Actor_Kill(&this->knobDoor.dyna.actor);
     } else {

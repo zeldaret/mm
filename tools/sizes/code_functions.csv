@@ -1929,10 +1929,10 @@ asm/non_matchings/code/code_8012EC80/Inventory_SaveDekuPlaygroundHighScore.s,Inv
 asm/non_matchings/code/code_8012EC80/Inventory_IncrementSkullTokenCount.s,Inventory_IncrementSkullTokenCount,0x8012F1BC,0x1C
 asm/non_matchings/code/code_8012EC80/Inventory_GetSkullTokenCount.s,Inventory_GetSkullTokenCount,0x8012F22C,0x13
 asm/non_matchings/code/code_8012EC80/Inventory_SaveLotteryCodeGuess.s,Inventory_SaveLotteryCodeGuess,0x8012F278,0x16
-asm/non_matchings/code/z_scene/Object_Spawn.s,Object_Spawn,0x8012F2E0,0x3C
-asm/non_matchings/code/z_scene/Object_InitBank.s,Object_InitBank,0x8012F3D0,0x4B
-asm/non_matchings/code/z_scene/Object_UpdateBank.s,Object_UpdateBank,0x8012F4FC,0x43
-asm/non_matchings/code/z_scene/Object_GetIndex.s,Object_GetIndex,0x8012F608,0x18
+asm/non_matchings/code/z_scene/Object_SpawnPersistent.s,Object_SpawnPersistent,0x8012F2E0,0x3C
+asm/non_matchings/code/z_scene/Object_InitContext.s,Object_InitContext,0x8012F3D0,0x4B
+asm/non_matchings/code/z_scene/Object_UpdateEntries.s,Object_UpdateEntries,0x8012F4FC,0x43
+asm/non_matchings/code/z_scene/Object_GetSlot.s,Object_GetSlot,0x8012F608,0x18
 asm/non_matchings/code/z_scene/Object_IsLoaded.s,Object_IsLoaded,0x8012F668,0xC
 asm/non_matchings/code/z_scene/Object_LoadAll.s,Object_LoadAll,0x8012F698,0x29
 asm/non_matchings/code/z_scene/func_8012F73C.s,func_8012F73C,0x8012F73C,0x18

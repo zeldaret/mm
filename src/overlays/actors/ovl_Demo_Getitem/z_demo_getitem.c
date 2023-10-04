@@ -57,7 +57,7 @@ void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     this->getItemDrawId = sGetItemDraws[itemIndex];
     this->cueType = sCueTypes[itemIndex];
 
-    objectIndex = Object_GetIndex(&play->objectCtx, sObjectBankIndices[itemIndex]);
+    objectIndex = Object_GetSlot(&play->objectCtx, sObjectBankIndices[itemIndex]);
     if (objectIndex < 0) {
         Actor_Kill(&this->actor);
         return;

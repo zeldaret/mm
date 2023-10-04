@@ -72,7 +72,7 @@ void DmChar03_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AAB5F8(DmChar03* this, PlayState* play) {
-    s32 index = Object_GetIndex(&play->objectCtx, OBJECT_GI_NUTSMASK);
+    s32 index = Object_GetSlot(&play->objectCtx, OBJECT_GI_NUTSMASK);
 
     if (index >= 0) {
         this->objectIndex = index;

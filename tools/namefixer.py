@@ -774,6 +774,9 @@ wordReplace = {
 
     "func_80133038": "Schedule_RunScript",
 
+    "Object_GetIndex": "Object_GetSlot",
+    "Object_Spawn": "Object_SpawnPersistent",
+
     "EffectSsKiraKira_SpawnSmallYellow": "EffectSsKirakira_SpawnSmallYellow",
     "EffectSsKiraKira_SpawnSmall": "EffectSsKirakira_SpawnSmall",
     "EffectSsKiraKira_SpawnDispersed": "EffectSsKirakira_SpawnDispersed",
@@ -1156,6 +1159,7 @@ wordReplace = {
     "play->roomCtx.curRoom.unk3": "play->roomCtx.curRoom.behaviorType1",
     "play->roomCtx.curRoom.unk2": "play->roomCtx.curRoom.behaviorType2",
     "play->roomCtx.unk31": "play->roomCtx.status",
+    "play->objectCtx.status": "play->objectCtx.slots",
 
     "actorCtx.unkC": "actorCtx.halfDaysBit",
     "actorCtx.unk1F4": "actorCtx.playerImpact.type",

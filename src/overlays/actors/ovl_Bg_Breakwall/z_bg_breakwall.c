@@ -212,7 +212,7 @@ void BgBreakwall_Init(Actor* thisx, PlayState* play) {
     BgBreakwallStruct* sp24 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    this->unk_15C = Object_GetIndex(&play->objectCtx, sp24->unk_00);
+    this->unk_15C = Object_GetSlot(&play->objectCtx, sp24->unk_00);
 
     if ((this->unk_15C < 0) || !sp24->unk_14(this, play)) {
         Actor_Kill(&this->dyna.actor);
