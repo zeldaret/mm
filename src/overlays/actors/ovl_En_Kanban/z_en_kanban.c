@@ -50,8 +50,9 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static u16 sPartFlags[] = {
-    PART_UPPER_LEFT,  PART_LEFT_UPPER,  PART_LEFT_LOWER, PART_RIGHT_UPPER, PART_RIGHT_LOWER, PART_LOWER_LEFT,
-    PART_UPPER_RIGHT, PART_LOWER_RIGHT, PART_POST_UPPER, PART_POST_LOWER,  PART_POST_STAND,
+    PART_UPPER_SIDE_LEFT,  PART_LEFT_SIDE_UPPER, PART_LEFT_SIDE_LOWER,  PART_RIGHT_SIDE_UPPER,
+    PART_RIGHT_SIDE_LOWER, PART_LOWER_SIDE_LEFT, PART_UPPER_SIDE_RIGHT, PART_LOWER_SIDE_RIGHT,
+    PART_POST_UPPER,       PART_POST_LOWER,      PART_POST_STAND,
 };
 
 static Vec3f sPieceOffsets[] = {
@@ -289,40 +290,48 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             this->zTargetTimer = 10;
                         }
 
-                        if ((piece->partFlags & PART_UPPER_LEFT) && (piece->partFlags & PART_LOWER_RIGHT)) {
+                        if ((piece->partFlags & PART_UPPER_SIDE_LEFT) && (piece->partFlags & PART_LOWER_SIDE_RIGHT)) {
                             piece->pieceType = PIECE_WHOLE_SIGN;
-                        } else if ((piece->partFlags & PART_LEFT_UPPER) && (piece->partFlags & PART_RIGHT_UPPER)) {
+                        } else if ((piece->partFlags & PART_LEFT_SIDE_UPPER) &&
+                                   (piece->partFlags & PART_RIGHT_SIDE_UPPER)) {
                             piece->pieceType = PIECE_UPPER_HALF;
-                        } else if ((piece->partFlags & PART_LEFT_LOWER) && (piece->partFlags & PART_RIGHT_LOWER)) {
+                        } else if ((piece->partFlags & PART_LEFT_SIDE_LOWER) &&
+                                   (piece->partFlags & PART_RIGHT_SIDE_LOWER)) {
                             piece->pieceType = PIECE_LOWER_HALF;
-                        } else if ((piece->partFlags & PART_UPPER_RIGHT) && (piece->partFlags & PART_LOWER_RIGHT)) {
+                        } else if ((piece->partFlags & PART_UPPER_SIDE_RIGHT) &&
+                                   (piece->partFlags & PART_LOWER_SIDE_RIGHT)) {
                             piece->pieceType = PIECE_RIGHT_HALF;
-                        } else if ((piece->partFlags & PART_UPPER_LEFT) && (piece->partFlags & PART_LOWER_LEFT)) {
+                        } else if ((piece->partFlags & PART_UPPER_SIDE_LEFT) &&
+                                   (piece->partFlags & PART_LOWER_SIDE_LEFT)) {
                             piece->pieceType = PIECE_LEFT_HALF;
-                        } else if ((piece->partFlags & PART_UPPER_LEFT) && (piece->partFlags & PART_LEFT_UPPER)) {
+                        } else if ((piece->partFlags & PART_UPPER_SIDE_LEFT) &&
+                                   (piece->partFlags & PART_LEFT_SIDE_UPPER)) {
                             piece->pieceType = PIECE_2ND_QUAD;
-                        } else if ((piece->partFlags & PART_UPPER_RIGHT) && (piece->partFlags & PART_RIGHT_UPPER)) {
+                        } else if ((piece->partFlags & PART_UPPER_SIDE_RIGHT) &&
+                                   (piece->partFlags & PART_RIGHT_SIDE_UPPER)) {
                             piece->pieceType = PIECE_1ST_QUAD;
-                        } else if ((piece->partFlags & PART_LEFT_LOWER) && (piece->partFlags & PART_LOWER_LEFT)) {
+                        } else if ((piece->partFlags & PART_LEFT_SIDE_LOWER) &&
+                                   (piece->partFlags & PART_LOWER_SIDE_LEFT)) {
                             piece->pieceType = PIECE_3RD_QUAD;
-                        } else if ((piece->partFlags & PART_RIGHT_LOWER) && (piece->partFlags & PART_LOWER_RIGHT)) {
+                        } else if ((piece->partFlags & PART_RIGHT_SIDE_LOWER) &&
+                                   (piece->partFlags & PART_LOWER_SIDE_RIGHT)) {
                             piece->pieceType = PIECE_4TH_QUAD;
-                        } else if (piece->partFlags & PART_UPPER_LEFT) {
-                            piece->pieceType = PIECE_UPPER_LEFT;
-                        } else if (piece->partFlags & PART_LEFT_UPPER) {
-                            piece->pieceType = PIECE_LEFT_UPPER;
-                        } else if (piece->partFlags & PART_LEFT_LOWER) {
-                            piece->pieceType = PIECE_LEFT_LOWER;
-                        } else if (piece->partFlags & PART_LOWER_LEFT) {
-                            piece->pieceType = PIECE_LOWER_LEFT;
-                        } else if (piece->partFlags & PART_UPPER_RIGHT) {
-                            piece->pieceType = PIECE_UPPER_RIGHT;
-                        } else if (piece->partFlags & PART_RIGHT_UPPER) {
-                            piece->pieceType = PIECE_RIGHT_UPPER;
-                        } else if (piece->partFlags & PART_RIGHT_LOWER) {
-                            piece->pieceType = PIECE_RIGHT_LOWER;
-                        } else if (piece->partFlags & PART_LOWER_RIGHT) {
-                            piece->pieceType = PIECE_LOWER_RIGHT;
+                        } else if (piece->partFlags & PART_UPPER_SIDE_LEFT) {
+                            piece->pieceType = PIECE_UPPER_SIDE_LEFT;
+                        } else if (piece->partFlags & PART_LEFT_SIDE_UPPER) {
+                            piece->pieceType = PIECE_LEFT_SIDE_UPPER;
+                        } else if (piece->partFlags & PART_LEFT_SIDE_LOWER) {
+                            piece->pieceType = PIECE_LEFT_SIDE_LOWER;
+                        } else if (piece->partFlags & PART_LOWER_SIDE_LEFT) {
+                            piece->pieceType = PIECE_LOWER_SIDE_LEFT;
+                        } else if (piece->partFlags & PART_UPPER_SIDE_RIGHT) {
+                            piece->pieceType = PIECE_UPPER_SIDE_RIGHT;
+                        } else if (piece->partFlags & PART_RIGHT_SIDE_UPPER) {
+                            piece->pieceType = PIECE_RIGHT_SIDE_UPPER;
+                        } else if (piece->partFlags & PART_RIGHT_SIDE_LOWER) {
+                            piece->pieceType = PIECE_RIGHT_SIDE_LOWER;
+                        } else if (piece->partFlags & PART_LOWER_SIDE_RIGHT) {
+                            piece->pieceType = PIECE_LOWER_SIDE_RIGHT;
                         } else if (piece->partFlags & PART_POST_UPPER) {
                             piece->pieceType = PIECE_POST_UPPER;
                         } else if (piece->partFlags & PART_POST_LOWER) {
@@ -891,9 +900,9 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 }
 
 static Gfx* sDisplayLists[] = {
-    object_kanban_DL_000CB0, object_kanban_DL_000DB8, object_kanban_DL_000E78, object_kanban_DL_000F38,
-    object_kanban_DL_000FF8, object_kanban_DL_0010B8, object_kanban_DL_0011C0, object_kanban_DL_0012C8,
-    object_kanban_DL_0013D0, object_kanban_DL_001488, object_kanban_DL_001540,
+    gSignUpperSideLeftModelDL,  gSignLeftSideUpperModelDL, gSignLeftSideLowerModelDL,  gSignRightSideUpperModelDL,
+    gSignRightSideLowerModelDL, gSignLowerSideLeftModelDL, gSignUpperSideRightModelDL, gSignLowerSideRightModelDL,
+    gSignPostUpperModelDL,      gSignPostLowerModelDL,     gSignPostStandModelDL,
 };
 
 #include "z_en_kanban_gfx.c"
@@ -924,7 +933,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPDisplayList(POLY_OPA_DISP++, object_kanban_DL_000C30);
+    gSPDisplayList(POLY_OPA_DISP++, gSignMaterialDL);
 
     if (this->actionState != ENKANBAN_SIGN) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
@@ -983,7 +992,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 255, 255, 255, this->cutMarkAlpha);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 150, 0);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_kanban_DL_001630);
+            gSPDisplayList(POLY_XLU_DISP++, gSignParticleDL);
         }
     }
 
