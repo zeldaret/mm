@@ -728,6 +728,7 @@ wordReplace = {
     "SubS_UpdateFlags": "SubS_SetOfferMode",
     "func_8013D8DC": "SubS_IsObjectLoaded",
     "func_8013D924": "SubS_GetObjectSlot",
+    "SubS_GetObjectIndex": "SubS_GetObjectSlot",
     "func_8013D5E8": "SubS_AngleDiffLessEqual",
     "func_8013DCE0": "SubS_ActorPathing_Init",
     "func_8013DE04": "SubS_ActorPathing_Update",
