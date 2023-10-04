@@ -143,7 +143,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
         player->stateFlags2 &= ~PLAYER_STATE2_20000;
         this->isCharging = false;
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK)) {
             player->unk_B08 = 1.0f;
             this->collider.info.toucher.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;

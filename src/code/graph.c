@@ -9,7 +9,7 @@ FaultAddrConvClient sGraphFaultAddrConvClient;
 FaultClient sGraphFaultClient;
 GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
-OSTime sGraphTaskStartTime;
+OSTime sGraphPrevUpdateEndTime;
 
 #include "variables.h"
 #include "macros.h"
@@ -17,6 +17,7 @@ OSTime sGraphTaskStartTime;
 #include "idle.h"
 #include "sys_cfb.h"
 #include "system_malloc.h"
+#include "z64speed_meter.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
@@ -311,17 +312,17 @@ void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {
     {
         OSTime time = osGetTime();
 
-        D_801FBAE8 = sRSPGFXTotalTime;
-        D_801FBAE0 = gRSPAudioTotalTime;
+        gRSPGfxTimeTotal = gRSPGfxTimeAcc;
+        gRSPAudioTimeTotal = gRSPAudioTimeAcc;
         gRDPTimeTotal = gRDPTimeAcc;
-        sRSPGFXTotalTime = 0;
-        gRSPAudioTotalTime = 0;
+        gRSPGfxTimeAcc = 0;
+        gRSPAudioTimeAcc = 0;
         gRDPTimeAcc = 0;
 
-        if (sGraphTaskStartTime != 0) {
-            lastRenderFrameDuration = time - sGraphTaskStartTime;
+        if (sGraphPrevUpdateEndTime != 0) {
+            gGraphUpdatePeriod = time - sGraphPrevUpdateEndTime;
         }
-        sGraphTaskStartTime = time;
+        sGraphPrevUpdateEndTime = time;
     }
 }
 

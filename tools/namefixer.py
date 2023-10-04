@@ -1160,7 +1160,7 @@ wordReplace = {
     "play->msgCtx.unk12023": "play->msgCtx.stateTimer",
     "play->msgCtx.unk1202A": "play->msgCtx.ocarinaMode",
     "play->msgCtx.unk1202C": "play->msgCtx.ocarinaAction",
-    "play->msgCtx.unk12048": "play->msgCtx.lastOcarinaButtonIndex",
+    "play->msgCtx.unk12048": "play->msgCtx.ocarinaButtonIndex",
     "play->msgCtx.unk120B0": "play->msgCtx.ocarinaSongEffectActive",
     "play->msgCtx.unk12046": "play->msgCtx.blockSunsSong",
     "play->msgCtx.unk12090": "play->msgCtx.textIsCredits",

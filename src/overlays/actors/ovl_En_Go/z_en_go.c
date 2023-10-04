@@ -748,7 +748,7 @@ s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 isFallingAsleep = false;
 
-    if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+    if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->sleepState == ENGO_AWAKE) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
         (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON) && (play->sceneId == SCENE_16GORON_HOUSE) &&
