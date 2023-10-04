@@ -2162,8 +2162,7 @@ beginseg
     name "ovl_En_Encount3"
     compress
     include "build/src/overlays/actors/ovl_En_Encount3/z_en_encount3.o"
-    include "build/data/ovl_En_Encount3/ovl_En_Encount3.data.o"
-    include "build/data/ovl_En_Encount3/ovl_En_Encount3.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Encount3/ovl_En_Encount3_reloc.o"
 endseg
 
 beginseg
@@ -2365,8 +2364,7 @@ beginseg
     name "ovl_Bg_Dy_Yoseizo"
     compress
     include "build/src/overlays/actors/ovl_Bg_Dy_Yoseizo/z_bg_dy_yoseizo.o"
-    include "build/data/ovl_Bg_Dy_Yoseizo/ovl_Bg_Dy_Yoseizo.data.o"
-    include "build/data/ovl_Bg_Dy_Yoseizo/ovl_Bg_Dy_Yoseizo.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Dy_Yoseizo/ovl_Bg_Dy_Yoseizo_reloc.o"
 endseg
 
 beginseg
