@@ -582,16 +582,16 @@ void func_80BE7718(EnDaiku2* this, PlayState* play) {
     s32 i;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     EnDaiku2Effect* effect = this->effects;
-    s32 objectIdx;
+    s32 objectSlot;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    objectIdx = Object_GetSlot(&play->objectCtx, OBJECT_BOMBIWA);
-    if ((objectIdx >= 0) && Object_IsLoaded(&play->objectCtx, objectIdx)) {
+    objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_BOMBIWA);
+    if ((objectSlot >= 0) && Object_IsLoaded(&play->objectCtx, objectSlot)) {
         gDPPipeSync(POLY_OPA_DISP++);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectIdx].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
 
         for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
             if (effect->isEnabled) {

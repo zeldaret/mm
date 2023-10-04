@@ -23,7 +23,7 @@ EffectSsInit Effect_Ss_Extra_InitVars = {
 
 static TexturePtr sPointTextures[] = { gYabusamePoint30Tex, gYabusamePoint60Tex, gYabusamePoint100Tex };
 
-#define rObjId regs[0]
+#define rObjectSlot regs[0]
 #define rTimer regs[1]
 #define rScoreIndex regs[2]
 #define rScale regs[3]
@@ -31,13 +31,13 @@ static TexturePtr sPointTextures[] = { gYabusamePoint30Tex, gYabusamePoint60Tex,
 u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     s32 pad;
     EffectSsExtraInitParams* params = PARAMS;
-    s32 objIndex;
+    s32 objectSlot;
 
-    objIndex = Object_GetSlot(&play->objectCtx, OBJECT_YABUSAME_POINT);
-    if ((objIndex >= 0) && (Object_IsLoaded(&play->objectCtx, objIndex))) {
+    objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_YABUSAME_POINT);
+    if ((objectSlot >= 0) && (Object_IsLoaded(&play->objectCtx, objectSlot))) {
         void* segBackup = gSegments[6];
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
 
         this->pos = params->pos;
         this->velocity = params->velocity;
@@ -48,7 +48,7 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
         this->rScoreIndex = params->scoreIndex;
         this->rScale = params->scale;
         this->rTimer = 5;
-        this->rObjId = objIndex;
+        this->rObjectSlot = objectSlot;
 
         gSegments[6] = segBackup;
         return 1;
@@ -62,7 +62,7 @@ void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this) {
     void* storedSegment;
 
     scale = this->rScale / 100.0f;
-    storedSegment = play->objectCtx.slots[this->rObjId].segment;
+    storedSegment = play->objectCtx.slots[this->rObjectSlot].segment;
 
     OPEN_DISPS(play->state.gfxCtx);
 

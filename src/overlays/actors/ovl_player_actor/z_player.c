@@ -3342,7 +3342,7 @@ void Player_InitItemAction_SpawnHookshot(PlayState* play, Player* this) {
         return;
     }
     armsHook = (ArmsHook*)this->heldActor;
-    armsHook->actor.objBankIndex = this->actor.objBankIndex;
+    armsHook->actor.objectSlot = this->actor.objectSlot;
     armsHook->unk_208 = this->transformation;
 }
 
@@ -10634,7 +10634,7 @@ Vec3f D_8085D340 = { 0.0f, 50.0f, 0.0f };
 void Player_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     Player* this = THIS;
-    s8 objBankIndex;
+    s8 objectSlot;
     s32 respawnFlag;
     s32 var_a1;
     PlayerInitMode initMode;
@@ -10661,9 +10661,9 @@ void Player_Init(Actor* thisx, PlayState* play) {
     if (this->actor.shape.rot.x != 0) {
         this->transformation = this->actor.shape.rot.x - 1;
 
-        objBankIndex = Object_GetSlot(&play->objectCtx, gPlayerFormObjectIndices[this->transformation]);
-        this->actor.objBankIndex = objBankIndex;
-        if (objBankIndex < 0) {
+        objectSlot = Object_GetSlot(&play->objectCtx, gPlayerFormObjectIds[this->transformation]);
+        this->actor.objectSlot = objectSlot;
+        if (objectSlot < 0) {
             Actor_Kill(&this->actor);
             return;
         }

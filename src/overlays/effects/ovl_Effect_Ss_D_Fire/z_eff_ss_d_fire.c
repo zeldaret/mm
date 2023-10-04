@@ -13,7 +13,7 @@
 #define rAlphaStep regs[6]
 #define rFadeDelay regs[7]
 #define rScaleStep regs[8]
-#define rObjectIndex regs[9]
+#define rObjectSlot regs[9]
 
 #define PARAMS ((EffectSsDFireInitParams*)initParamsx)
 
@@ -29,8 +29,8 @@ EffectSsInit Effect_Ss_D_Fire_InitVars = {
 static TexturePtr sFireTextures[] = { gDodongoFire0Tex, gDodongoFire1Tex, gDodongoFire2Tex, gDodongoFire3Tex };
 
 s32 EffectSsDFire_CheckForObject(EffectSs* this, PlayState* play) {
-    if (((this->rObjectIndex = Object_GetSlot(&play->objectCtx, OBJECT_DODONGO)) < 0) ||
-        !Object_IsLoaded(&play->objectCtx, this->rObjectIndex)) {
+    if (((this->rObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_DODONGO)) < 0) ||
+        !Object_IsLoaded(&play->objectCtx, this->rObjectSlot)) {
         this->life = -1;
         this->draw = NULL;
         return false;
@@ -69,7 +69,7 @@ void EffectSsDFire_Draw(PlayState* play, u32 index, EffectSs* this) {
     f32 scale;
 
     if (EffectSsDFire_CheckForObject(this, play)) {
-        object = play->objectCtx.slots[this->rObjectIndex].segment;
+        object = play->objectCtx.slots[this->rObjectSlot].segment;
 
         OPEN_DISPS(gfxCtx);
 

@@ -22,7 +22,7 @@ typedef struct ObjPzlblock {
     /* 0x16E */ s16 unk_16E[4];
     /* 0x176 */ s16 unk_176;
     /* 0x178 */ s16 unk_178;
-    /* 0x17A */ s8 unk_17A;
+    /* 0x17A */ s8 objectSlot;
 } ObjPzlblock; // size = 0x17C
 
 #endif // Z_OBJ_PZLBLOCK_H

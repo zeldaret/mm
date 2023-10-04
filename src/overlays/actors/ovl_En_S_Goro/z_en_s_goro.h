@@ -23,7 +23,7 @@ typedef struct EnSGoro {
     /* 0x1EC */ s16 eyeTexIndex;
     /* 0x1EE */ s16 eyeTimer;
     /* 0x1F0 */ s16 loseAttentionTimer;
-    /* 0x1F4 */ s32 loadedObjIndex;
+    /* 0x1F4 */ s32 objectSlot;
     /* 0x1F8 */ Vec3s jointTable[GORON_LIMB_MAX];
     /* 0x264 */ Vec3s morphTable[GORON_LIMB_MAX];
     /* 0x2D0 */ f32 scaleFactor;

@@ -20,7 +20,7 @@ typedef enum {
 
 typedef struct BgBreakwall {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ s8 unk_15C;
+    /* 0x15C */ s8 objectSlot;
     /* 0x15D */ u8 switchFlag;
     /* 0x15E */ u8 unk_15E;
     /* 0x160 */ BgBreakwallActionFunc actionFunc;

@@ -71,7 +71,7 @@ static EnIshiUnkFunc2 D_8095F6D8[] = { func_8095D804, func_8095DABC };
 
 static EnIshiUnkFunc D_8095F6E0[] = { func_8095DDA8, func_8095DE9C };
 
-static s16 D_8095F6E8[] = { GAMEPLAY_FIELD_KEEP, OBJECT_ISHI };
+static s16 sObjectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_ISHI };
 
 static ColliderCylinderInit sCylinderInit[] = {
     {
@@ -173,7 +173,7 @@ s32 func_8095D758(EnIshi* this, PlayState* play, f32 arg2) {
 void func_8095D804(Actor* thisx, PlayState* play) {
     EnIshi* this = THIS;
     s32 i;
-    s16 temp;
+    s16 objectId;
     Gfx* phi_s4;
     Vec3f spC4;
     Vec3f spB8;
@@ -184,7 +184,7 @@ void func_8095D804(Actor* thisx, PlayState* play) {
         phi_s4 = gSmallRockDL;
     }
 
-    temp = D_8095F6E8[ENISHI_GET_8(&this->actor)];
+    objectId = sObjectIds[ENISHI_GET_8(&this->actor)];
 
     for (i = 0; i < ARRAY_COUNT(D_8095F74C); i++) {
         spB8.x = ((Rand_ZeroOne() - 0.5f) * 8.0f) + this->actor.world.pos.x;
@@ -207,7 +207,7 @@ void func_8095D804(Actor* thisx, PlayState* play) {
         spC4.z += (Rand_ZeroOne() - 0.5f) * 11.0f;
 
         EffectSsKakera_Spawn(play, &spB8, &spC4, &spB8, -420, ((s32)Rand_Next() > 0) ? 65 : 33, 30, 5, 0, D_8095F74C[i],
-                             3, 10, 40, -1, temp, phi_s4);
+                             3, 10, 40, -1, objectId, phi_s4);
     }
 }
 
@@ -425,8 +425,8 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
         this->unk_197 |= 1;
     }
 
-    this->unk_196 = Object_GetSlot(&play->objectCtx, D_8095F6E8[ENISHI_GET_8(&this->actor)]);
-    if (this->unk_196 < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[ENISHI_GET_8(&this->actor)]);
+    if (this->objectSlot < 0) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -446,8 +446,8 @@ void func_8095E5AC(EnIshi* this) {
 }
 
 void func_8095E5C0(EnIshi* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->unk_196)) {
-        this->actor.objBankIndex = this->unk_196;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         this->actor.flags &= ~ACTOR_FLAG_10;
         if (!ENISHI_GET_8(&this->actor)) {
             this->actor.draw = func_8095F61C;

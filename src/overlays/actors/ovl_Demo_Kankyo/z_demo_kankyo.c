@@ -34,7 +34,7 @@ ActorInit Demo_Kankyo_InitVars = {
     (ActorFunc)DemoKankyo_Draw,
 };
 
-static s32 sObjectBubbleIndex = OBJECT_BUBBLE | 0x10000;
+static s32 sObjectBubbleId = OBJECT_BUBBLE | 0x10000;
 
 void DemoKankyo_SetupAction(DemoKankyo* this, DemoKankyoActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -279,9 +279,9 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, PlayState* play) {
 }
 
 void DemoKakyo_GiantObjectCheck(DemoKankyo* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->objectId)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->isSafeToDrawGiants = true;
-        this->actor.objBankIndex = this->objectId;
+        this->actor.objectSlot = this->objectSlot;
         DemoKankyo_SetupAction(this, DemoKakyo_MoonSparklesActionFunc);
     }
 }
@@ -437,7 +437,7 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
     DemoKankyo* this = THIS;
     s32 pad;
     s32 i;
-    s32 objId;
+    s32 objectSlot;
 
     // This must be a single line to match, possibly a macro?
     // clang-format off
@@ -449,7 +449,7 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
 
     switch (this->actor.params) {
         case DEMO_KANKYO_TYPE_LOSTWOODS:
-            objId = OBJECT_UNSET_0;
+            objectSlot = OBJECT_UNSET_0;
             this->actor.room = -1;
             if (sLostWoodsSparklesMutex == false) {
                 DemoKankyo_SetupAction(this, DemoKakyo_LostWoodsSparkleActionFunc);
@@ -461,24 +461,24 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
 
         case DEMO_KANKYO_TYPE_GIANTS:
             this->isSafeToDrawGiants = false;
-            objId = Object_GetSlot(&play->objectCtx, sObjectBubbleIndex);
+            objectSlot = Object_GetSlot(&play->objectCtx, sObjectBubbleId);
             DemoKankyo_SetupAction(this, DemoKakyo_GiantObjectCheck);
             break;
 
         case DEMO_KANKYO_TYPE_MOON:
-            objId = OBJECT_UNSET_0;
+            objectSlot = OBJECT_UNSET_0;
             this->isSafeToDrawGiants = true;
             DemoKankyo_SetupAction(this, DemoKakyo_MoonSparklesActionFunc);
             break;
 
         default:
             //! @bug: this causes a crash because the actionfunc is never set
-            objId = -1;
+            objectSlot = -1;
             break;
     }
 
-    if (objId > -1) {
-        this->objectId = objId;
+    if (objectSlot > -1) {
+        this->objectSlot = objectSlot;
     }
 }
 

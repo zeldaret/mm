@@ -52,7 +52,7 @@ ActorInit Bg_Breakwall_InitVars = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
+    /* 0x00 */ s16 objectId;
     /* 0x04 */ Gfx* unk_04;
     /* 0x08 */ Gfx* unk_08;
     /* 0x0C */ AnimatedMaterial* unk_0C;
@@ -212,9 +212,9 @@ void BgBreakwall_Init(Actor* thisx, PlayState* play) {
     BgBreakwallStruct* sp24 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    this->unk_15C = Object_GetSlot(&play->objectCtx, sp24->unk_00);
+    this->objectSlot = Object_GetSlot(&play->objectCtx, sp24->objectId);
 
-    if ((this->unk_15C < 0) || !sp24->unk_14(this, play)) {
+    if ((this->objectSlot < 0) || !sp24->unk_14(this, play)) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -233,10 +233,10 @@ void BgBreakwall_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_808B76CC(BgBreakwall* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->unk_15C)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         BgBreakwallStruct* temp_s1 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
-        this->dyna.actor.objBankIndex = this->unk_15C;
+        this->dyna.actor.objectSlot = this->objectSlot;
         this->dyna.actor.draw = BgBreakwall_Draw;
 
         if (((BGBREAKWALL_GET_F(&this->dyna.actor)) != BGBREAKWALL_F_7) &&
