@@ -10663,7 +10663,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
         objectSlot = Object_GetSlot(&play->objectCtx, gPlayerFormObjectIds[this->transformation]);
         this->actor.objectSlot = objectSlot;
-        if (objectSlot < 0) {
+        if (objectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
             return;
         }

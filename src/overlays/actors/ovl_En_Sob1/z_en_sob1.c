@@ -382,19 +382,19 @@ void EnSob1_SpawnShopItems(EnSob1* this, PlayState* play, ShopItem* shopItem) {
 s32 EnSob1_GetObjectIndices(EnSob1* this, PlayState* play, s16* objectIds) {
     if (objectIds[1] != OBJECT_ID_MAX) {
         this->unusedObjectSlot = Object_GetSlot(&play->objectCtx, objectIds[1]);
-        if (this->unusedObjectSlot < 0) {
+        if (this->unusedObjectSlot <= OBJECT_SLOT_NONE) {
             return false;
         }
     } else {
-        this->unusedObjectSlot = -1;
+        this->unusedObjectSlot = OBJECT_SLOT_NONE;
     }
     if (objectIds[2] != OBJECT_ID_MAX) {
         this->shopkeeperAnimObjectSlot = Object_GetSlot(&play->objectCtx, objectIds[2]);
-        if (this->shopkeeperAnimObjectSlot < 0) {
+        if (this->shopkeeperAnimObjectSlot <= OBJECT_SLOT_NONE) {
             return false;
         }
     } else {
-        this->shopkeeperAnimObjectSlot = -1;
+        this->shopkeeperAnimObjectSlot = OBJECT_SLOT_NONE;
     }
     return true;
 }
@@ -428,7 +428,7 @@ void EnSob1_Init(Actor* thisx, PlayState* play) {
 
     objectIds = sObjectIds[this->shopType];
     this->mainObjectSlot = Object_GetSlot(&play->objectCtx, objectIds[0]);
-    if (this->mainObjectSlot < 0) {
+    if (this->mainObjectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -1350,10 +1350,10 @@ void EnSob1_ChangeObject(EnSob1* this, PlayState* play) {
 
 s32 EnSob1_AreObjectsLoaded(EnSob1* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->mainObjectSlot)) {
-        if ((this->unusedObjectSlot >= 0) && !Object_IsLoaded(&play->objectCtx, this->unusedObjectSlot)) {
+        if ((this->unusedObjectSlot > OBJECT_SLOT_NONE) && !Object_IsLoaded(&play->objectCtx, this->unusedObjectSlot)) {
             return false;
         }
-        if ((this->shopkeeperAnimObjectSlot >= 0) &&
+        if ((this->shopkeeperAnimObjectSlot > OBJECT_SLOT_NONE) &&
             !Object_IsLoaded(&play->objectCtx, this->shopkeeperAnimObjectSlot)) {
             return false;
         }

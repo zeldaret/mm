@@ -447,7 +447,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
 
     this->knobDoor.dlIndex = objectInfo->dListIndex;
     objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
-    if (objectSlot < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         objectInfo = &sObjectInfo[15];
         objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
         if (objectSlot != 0) {

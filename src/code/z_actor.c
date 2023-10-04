@@ -3300,8 +3300,9 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     }
 
     objectSlot = Object_GetSlot(&play->objectCtx, actorInit->objectId);
-    if ((objectSlot < 0) || ((actorInit->type == ACTORCAT_ENEMY) && Flags_GetClear(play, play->roomCtx.curRoom.num) &&
-                             (actorInit->id != ACTOR_BOSS_05))) {
+    if ((objectSlot <= OBJECT_SLOT_NONE) ||
+        ((actorInit->type == ACTORCAT_ENEMY) && Flags_GetClear(play, play->roomCtx.curRoom.num) &&
+         (actorInit->id != ACTOR_BOSS_05))) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);
         return NULL;
     }

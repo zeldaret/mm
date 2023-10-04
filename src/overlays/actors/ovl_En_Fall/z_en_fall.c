@@ -181,7 +181,7 @@ void EnFall_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if (objectSlot < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }

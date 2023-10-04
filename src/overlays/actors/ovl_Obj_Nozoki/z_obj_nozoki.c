@@ -95,7 +95,7 @@ void ObjNozoki_Destroy(Actor* thisx, PlayState* play) {
 void func_80BA2514(ObjNozoki* this, PlayState* play) {
     s32 objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[this->unk_15C]);
 
-    if (objectSlot < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->dyna.actor);
         return;
     }

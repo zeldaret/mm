@@ -180,7 +180,7 @@ void DmChar05_Destroy(Actor* thisx, PlayState* play) {
 void func_80AAC990(DmChar05* this, PlayState* play) {
     s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_GOLONMASK);
 
-    if (objectSlot >= 0) {
+    if (objectSlot > OBJECT_SLOT_NONE) {
         this->objectSlot = objectSlot;
         this->actionFunc = func_80AAC9DC;
     }
@@ -202,7 +202,7 @@ void func_80AAC9DC(DmChar05* this, PlayState* play) {
 void func_80AACA98(DmChar05* this, PlayState* play) {
     s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_MASK13);
 
-    if (objectSlot >= 0) {
+    if (objectSlot > OBJECT_SLOT_NONE) {
         this->objectSlot = objectSlot;
         this->actionFunc = func_80AACAE4;
     }
@@ -234,7 +234,7 @@ void func_80AACBE4(DmChar05* this, PlayState* play) {
     s32 params = DMCHAR05_GET(&this->actor) - DMCHAR05_5;
     s32 objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[params]);
 
-    if (objectSlot >= 0) {
+    if (objectSlot > OBJECT_SLOT_NONE) {
         this->objectSlot = objectSlot;
         this->actionFunc = func_80AACD0C;
     }
@@ -280,7 +280,7 @@ void func_80AACD0C(DmChar05* this, PlayState* play) {
 void func_80AACD1C(DmChar05* this, PlayState* play) {
     s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_ZORAMASK);
 
-    if (objectSlot >= 0) {
+    if (objectSlot > OBJECT_SLOT_NONE) {
         this->objectSlot = objectSlot;
         this->actionFunc = func_80AACD68;
     }
@@ -300,7 +300,7 @@ void func_80AACD68(DmChar05* this, PlayState* play) {
 void func_80AACE10(DmChar05* this, PlayState* play) {
     s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_MASK15);
 
-    if (objectSlot >= 0) {
+    if (objectSlot > OBJECT_SLOT_NONE) {
         this->objectSlot = objectSlot;
         this->actionFunc = func_80AACE5C;
     }

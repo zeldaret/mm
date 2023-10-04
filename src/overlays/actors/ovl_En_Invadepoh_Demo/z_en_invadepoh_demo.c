@@ -210,7 +210,7 @@ void EnInvadepohDemo_Alien_Init(EnInvadepohDemo* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sAlienInitChain);
     this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000;
     this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_UCH);
-    if (this->objectSlot < 0) {
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -221,7 +221,7 @@ void EnInvadepohDemo_Alien_Init(EnInvadepohDemo* this, PlayState* play) {
 void EnInvadepohDemo_Romani_Init(EnInvadepohDemo* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sRomaniInitChain);
     this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_MA1);
-    if (this->objectSlot < 0) {
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -234,7 +234,7 @@ void EnInvadepohDemo_Cow_Init(EnInvadepohDemo* this, PlayState* play) {
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH_DEMO, 0.0f, 0.0f, 0.0f, 0, 0, 0,
                        EN_INVADEPOH_DEMO_TYPE_COW_TAIL);
     this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_COW);
-    if (this->objectSlot < 0) {
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -251,7 +251,7 @@ void EnInvadepohDemo_Ufo_Init(EnInvadepohDemo* this, PlayState* play) {
 void EnInvadepohDemo_CowTail_Init(EnInvadepohDemo* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sCowTailInitChain);
     this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_COW);
-    if (this->objectSlot < 0) {
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -786,7 +786,7 @@ void EnInvadepohDemo_Init(Actor* thisx, PlayState* play) {
     this->ufoRotZ = 0;
     this->pathIndex = EN_INVADEPOH_DEMO_GET_PATH_INDEX(&this->actor);
     this->pointIndex = 0;
-    this->objectSlot = -1;
+    this->objectSlot = OBJECT_SLOT_NONE;
     sInitFuncs[this->type](this, play);
 }
 

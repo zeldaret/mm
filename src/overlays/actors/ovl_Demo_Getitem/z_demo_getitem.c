@@ -58,7 +58,7 @@ void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     this->cueType = sCueTypes[itemIndex];
 
     objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[itemIndex]);
-    if (objectSlot < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }

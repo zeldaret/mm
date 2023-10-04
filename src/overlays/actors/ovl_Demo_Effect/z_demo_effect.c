@@ -60,7 +60,7 @@ void DemoEffect_Init(Actor* thisx, PlayState* play) {
         objectSlot = Object_GetSlot(&play->objectCtx, sEffectTypeObjectIds[type]);
     }
 
-    if (objectSlot < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         // assert on debug
     } else {
         this->initObjectSlot = objectSlot;

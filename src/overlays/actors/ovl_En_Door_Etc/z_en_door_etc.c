@@ -105,7 +105,7 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
         objectInfo++;
     }
     objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
-    if (objectSlot < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->knobDoor.dyna.actor);
     } else {
         this->knobDoor.objectSlot = objectSlot;

@@ -131,7 +131,7 @@ void ObjPurify_Init(Actor* thisx, PlayState* play) {
         DynaPolyActor_Init(&this->dyna, 0);
     }
     this->objectSlot = Object_GetSlot(&play->objectCtx, info->objectId);
-    if (this->objectSlot < 0) {
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->dyna.actor);
     } else if (sp20 == 0) {
         func_80A84EAC(this);

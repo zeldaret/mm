@@ -57,7 +57,7 @@ void ItemEtcetera_Init(Actor* thisx, PlayState* play) {
     s32 type = ITEMETCETERA_GET_FF(&this->actor);
     s32 objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[type]);
 
-    if (objectSlot < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         // assert on debug
     } else {
         this->objectSlot = objectSlot;

@@ -982,9 +982,9 @@ s32 EnGo_UpdateSkelAnime(EnGo* this, PlayState* play) {
     s8 extraObjIndex = -1;
     s32 isAnimFinished = false;
 
-    if ((this->animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot >= 0)) {
+    if ((this->animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot > OBJECT_SLOT_NONE)) {
         extraObjIndex = this->hakuginDemoObjectSlot;
-    } else if ((this->animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot >= 0)) {
+    } else if ((this->animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot > OBJECT_SLOT_NONE)) {
         extraObjIndex = this->taisouObjectSlot;
     } else if (this->animIndex < ENGO_ANIM_ATHLETICS_MIN) {
         extraObjIndex = this->actor.objectSlot;
@@ -1042,9 +1042,9 @@ s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimation animIndex) {
     s8 extraObjIndex = -1;
     s32 didAnimChange = false;
 
-    if ((animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot >= 0)) {
+    if ((animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot > OBJECT_SLOT_NONE)) {
         extraObjIndex = this->hakuginDemoObjectSlot;
-    } else if ((animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot >= 0)) {
+    } else if ((animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot > OBJECT_SLOT_NONE)) {
         extraObjIndex = this->taisouObjectSlot;
     } else if (animIndex < ENGO_ANIM_ATHLETICS_MIN) {
         extraObjIndex = this->actor.objectSlot;
@@ -1893,8 +1893,8 @@ void EnGo_SetupMedigoron(EnGo* this, PlayState* play) {
 void EnGo_SetupInitialAction(EnGo* this, PlayState* play) {
     EffectTireMarkInit tireMarkInit = { 0, 62, { 0, 0, 15, 100 } };
 
-    if (((this->taisouObjectSlot < 0) || SubS_IsObjectLoaded(this->taisouObjectSlot, play)) ||
-        ((this->hakuginDemoObjectSlot < 0) || SubS_IsObjectLoaded(this->hakuginDemoObjectSlot, play))) {
+    if (((this->taisouObjectSlot <= OBJECT_SLOT_NONE) || SubS_IsObjectLoaded(this->taisouObjectSlot, play)) ||
+        ((this->hakuginDemoObjectSlot <= OBJECT_SLOT_NONE) || SubS_IsObjectLoaded(this->hakuginDemoObjectSlot, play))) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);

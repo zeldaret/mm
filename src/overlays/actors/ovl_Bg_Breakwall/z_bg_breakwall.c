@@ -214,7 +214,7 @@ void BgBreakwall_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->objectSlot = Object_GetSlot(&play->objectCtx, sp24->objectId);
 
-    if ((this->objectSlot < 0) || !sp24->unk_14(this, play)) {
+    if ((this->objectSlot <= OBJECT_SLOT_NONE) || !sp24->unk_14(this, play)) {
         Actor_Kill(&this->dyna.actor);
         return;
     }

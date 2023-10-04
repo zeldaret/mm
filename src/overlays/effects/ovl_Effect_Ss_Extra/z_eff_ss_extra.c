@@ -34,7 +34,7 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
     s32 objectSlot;
 
     objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_YABUSAME_POINT);
-    if ((objectSlot >= 0) && (Object_IsLoaded(&play->objectCtx, objectSlot))) {
+    if ((objectSlot > OBJECT_SLOT_NONE) && (Object_IsLoaded(&play->objectCtx, objectSlot))) {
         void* segBackup = gSegments[6];
 
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);

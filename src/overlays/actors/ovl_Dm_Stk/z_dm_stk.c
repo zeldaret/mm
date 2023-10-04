@@ -319,7 +319,7 @@ void DmStk_LoadObjectForAnimation(DmStk* this, PlayState* play) {
         objectSlot = this->objectStk2ObjectSlot;
     }
 
-    if (objectSlot >= 0) {
+    if (objectSlot > OBJECT_SLOT_NONE) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 }
@@ -1065,7 +1065,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->objectStkObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_STK);
         this->objectStk2ObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_STK2);
         this->objectStk3ObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_STK3);
-        if (this->objectStkObjectSlot < 0) {
+        if (this->objectStkObjectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
         }
 
@@ -1965,7 +1965,7 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 
                 if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_513) &&
                     (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_513)]->id == 2) &&
-                    (this->objectStk2ObjectSlot >= 0)) {
+                    (this->objectStk2ObjectSlot > OBJECT_SLOT_NONE)) {
                     Matrix_Push();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
                     gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectStk2ObjectSlot].segment);

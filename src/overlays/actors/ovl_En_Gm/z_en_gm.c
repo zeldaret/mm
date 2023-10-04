@@ -306,11 +306,11 @@ EnDoor* func_8094DF90(PlayState* play, s32 arg1) {
 s32 EnGm_UpdateSkelAnime(EnGm* this, PlayState* play) {
     s32 isAnimFinished = false;
 
-    if (this->objectSlot < 0) {
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         return false;
     }
 
-    if (this->objectSlot >= 0) {
+    if (this->objectSlot > OBJECT_SLOT_NONE) {
         this->skelAnime.playSpeed = this->animPlaySpeed;
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
     }
@@ -356,7 +356,7 @@ s32 func_8094E0F8(EnGm* this, PlayState* play) {
         return false;
     }
 
-    if ((this->objectSlot < 0) || !SubS_IsObjectLoaded(this->objectSlot, play)) {
+    if ((this->objectSlot <= OBJECT_SLOT_NONE) || !SubS_IsObjectLoaded(this->objectSlot, play)) {
         ret = true;
     } else {
         this->actor.draw = EnGm_Draw;
@@ -1863,7 +1863,7 @@ void EnGm_Draw(Actor* thisx, PlayState* play) {
     };
     EnGm* this = THIS;
 
-    if ((this->unk_258 != 0) && (this->objectSlot >= 0)) {
+    if ((this->unk_258 != 0) && (this->objectSlot > OBJECT_SLOT_NONE)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

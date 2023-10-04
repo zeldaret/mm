@@ -220,8 +220,8 @@ void EnBba01_Init(Actor* thisx, PlayState* play) {
     this->enHy.skelUpperObjectSlot = SubS_GetObjectSlot(OBJECT_BBA, play);
     this->enHy.skelLowerObjectSlot = SubS_GetObjectSlot(OBJECT_BBA, play);
 
-    if ((this->enHy.animObjectSlot < 0) || (this->enHy.headObjectSlot < 0) || (this->enHy.skelUpperObjectSlot < 0) ||
-        (this->enHy.skelLowerObjectSlot < 0)) {
+    if ((this->enHy.animObjectSlot <= OBJECT_SLOT_NONE) || (this->enHy.headObjectSlot <= OBJECT_SLOT_NONE) ||
+        (this->enHy.skelUpperObjectSlot <= OBJECT_SLOT_NONE) || (this->enHy.skelLowerObjectSlot <= OBJECT_SLOT_NONE)) {
         Actor_Kill(&this->enHy.actor);
     }
     this->enHy.actor.draw = NULL;

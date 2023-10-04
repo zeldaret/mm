@@ -105,7 +105,7 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
     } else {
         this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_UMAJUMP);
 
-        if (this->objectSlot < 0) {
+        if (this->objectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(thisx);
         }
 

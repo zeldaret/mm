@@ -263,7 +263,8 @@ void EnDnk_DoNothing(EnDnk* this, PlayState* play) {
 void EnDnk_Init(Actor* thisx, PlayState* play) {
     EnDnk* this = THIS;
 
-    this->objectSlot = -1;
+    this->objectSlot = OBJECT_SLOT_NONE;
+
     switch (ENDNK_GET_3(&this->actor)) {
         case ENDNK_GET_3_1:
             this->objectSlot = SubS_GetObjectSlot(OBJECT_HINTNUTS, play);
@@ -278,7 +279,7 @@ void EnDnk_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if (this->objectSlot >= 0) {
+    if (this->objectSlot > OBJECT_SLOT_NONE) {
         this->actionFunc = func_80A51648;
     } else {
         Actor_Kill(&this->actor);

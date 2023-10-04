@@ -150,7 +150,7 @@ void ObjKibako_Init(Actor* thisx, PlayState* play2) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[whichBankIndex]);
-    if (this->objectSlot < 0) {
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }

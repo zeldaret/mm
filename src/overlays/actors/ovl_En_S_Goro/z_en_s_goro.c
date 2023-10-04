@@ -787,7 +787,7 @@ s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
     if (this->animInfoIndex == EN_S_GORO_ANIM_IDLE_STAND) {
         if (((EnJg*)this->otherGoron)->flags & 1) {
             this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_TAISOU);
-            if (this->objectSlot >= 0) {
+            if (this->objectSlot > OBJECT_SLOT_NONE) {
                 gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
                 this->animInfoIndex = EN_S_GORO_ANIM_TAISOU_CHEER;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
@@ -796,7 +796,7 @@ s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
         }
     } else if ((this->animInfoIndex == EN_S_GORO_ANIM_TAISOU_CHEER) && !(((EnJg*)this->otherGoron)->flags & 1)) {
         this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
-        if (this->objectSlot >= 0) {
+        if (this->objectSlot > OBJECT_SLOT_NONE) {
             gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
             this->animInfoIndex = EN_S_GORO_ANIM_IDLE_STAND;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
@@ -1310,7 +1310,7 @@ void EnSGoro_Init(Actor* thisx, PlayState* play) {
         s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
 
         this->objectSlot = objectSlot;
-        if (objectSlot < 0) {
+        if (objectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
         }
     }

@@ -62,7 +62,7 @@ void EnNwc_Init(Actor* thisx, PlayState* play) {
     EnNwc* this = THIS;
 
     niwObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_NIW);
-    if (niwObjectSlot < 0) {
+    if (niwObjectSlot <= OBJECT_SLOT_NONE) {
         // niw object does not exist, we need it for tranformation, despawn
         Actor_Kill(&this->actor);
         return;

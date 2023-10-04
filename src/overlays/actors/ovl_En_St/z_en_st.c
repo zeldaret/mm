@@ -844,7 +844,7 @@ void EnSt_Init(Actor* thisx, PlayState* play) {
 
     this->objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_KEEP);
     if (((ENST_GET_3F(&this->actor) != ENST_3F_63) && Flags_GetSwitch(play, ENST_GET_3F(&this->actor))) ||
-        (this->objectSlot < 0)) {
+        (this->objectSlot <= OBJECT_SLOT_NONE)) {
         Actor_Kill(&this->actor);
         return;
     }

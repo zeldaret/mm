@@ -74,7 +74,7 @@ void DmChar03_Destroy(Actor* thisx, PlayState* play) {
 void func_80AAB5F8(DmChar03* this, PlayState* play) {
     s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_NUTSMASK);
 
-    if (objectSlot >= 0) {
+    if (objectSlot > OBJECT_SLOT_NONE) {
         this->objectSlot = objectSlot;
         this->actionFunc = func_80AAB644;
     }

@@ -81,7 +81,7 @@ void ObjEtcetera_Init(Actor* thisx, PlayState* play) {
     }
 
     objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[type]);
-    if (objectSlot >= 0) {
+    if (objectSlot > OBJECT_SLOT_NONE) {
         this->objectSlot = objectSlot;
     }
 

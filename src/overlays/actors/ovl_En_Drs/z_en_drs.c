@@ -68,7 +68,7 @@ void EnDrs_CollisionUpdate(EnDrs* this, PlayState* play) {
 void EnDrs_Setup(EnDrs* this, PlayState* play) {
     s32 pad[2];
 
-    if ((this->moonMaskObjectSlot >= 0) && SubS_IsObjectLoaded(this->moonMaskObjectSlot, play)) {
+    if ((this->moonMaskObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->moonMaskObjectSlot, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gWeddingDressMannequinSkel, NULL, this->jointTable,
                            this->morphTable, WEDDING_DRESS_MANNEQUIN_LIMB_MAX);

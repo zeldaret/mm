@@ -551,7 +551,7 @@ void func_80BB2520(EnGeg* this, PlayState* play) {
 
             case 0xD66:
                 this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
-                if (this->objectSlot >= 0) {
+                if (this->objectSlot > OBJECT_SLOT_NONE) {
                     this->animIndex = ENGEG_ANIM_19;
                     EnGeg_ChangeAnim(this, play);
                 }
@@ -569,7 +569,7 @@ void func_80BB2520(EnGeg* this, PlayState* play) {
             case 0xD75:
             case 0xD8B:
                 this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
-                if (this->objectSlot >= 0) {
+                if (this->objectSlot > OBJECT_SLOT_NONE) {
                     this->animIndex = ENGEG_ANIM_4;
                     EnGeg_ChangeAnim(this, play);
                 }
@@ -714,7 +714,7 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
             this->unk_496 = 0xD68;
             Message_ContinueTextbox(play, this->unk_496);
             this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_TAISOU);
-            if (this->objectSlot >= 0) {
+            if (this->objectSlot > OBJECT_SLOT_NONE) {
                 this->animIndex = ENGEG_ANIM_13;
                 EnGeg_ChangeAnim(this, play);
             }
@@ -927,7 +927,7 @@ void EnGeg_Init(Actor* thisx, PlayState* play) {
 
     if (this->actor.update != NULL) {
         this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
-        if (this->objectSlot < 0) {
+        if (this->objectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
         }
     }

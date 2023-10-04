@@ -449,7 +449,7 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
 
     switch (this->actor.params) {
         case DEMO_KANKYO_TYPE_LOSTWOODS:
-            objectSlot = OBJECT_UNSET_0;
+            objectSlot = 0;
             this->actor.room = -1;
             if (sLostWoodsSparklesMutex == false) {
                 DemoKankyo_SetupAction(this, DemoKakyo_LostWoodsSparkleActionFunc);
@@ -466,18 +466,18 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
             break;
 
         case DEMO_KANKYO_TYPE_MOON:
-            objectSlot = OBJECT_UNSET_0;
+            objectSlot = 0;
             this->isSafeToDrawGiants = true;
             DemoKankyo_SetupAction(this, DemoKakyo_MoonSparklesActionFunc);
             break;
 
         default:
             //! @bug: this causes a crash because the actionfunc is never set
-            objectSlot = -1;
+            objectSlot = OBJECT_SLOT_NONE;
             break;
     }
 
-    if (objectSlot > -1) {
+    if (objectSlot > OBJECT_SLOT_NONE) {
         this->objectSlot = objectSlot;
     }
 }

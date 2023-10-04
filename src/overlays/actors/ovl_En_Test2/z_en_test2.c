@@ -84,7 +84,7 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
     EnTest2* this = THIS;
 
     objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[this->actor.params]);
-    if (objectSlot < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }

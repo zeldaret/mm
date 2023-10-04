@@ -128,7 +128,7 @@ void EffectSsKakera_Draw(PlayState* play, u32 index, EffectSs* this) {
 
 void EffectSsKakera_CheckForObject(EffectSs* this, PlayState* play) {
     this->rObjectSlot = Object_GetSlot(&play->objectCtx, this->rObjectId);
-    if ((this->rObjectSlot < 0) || (!Object_IsLoaded(&play->objectCtx, this->rObjectSlot))) {
+    if ((this->rObjectSlot <= OBJECT_SLOT_NONE) || (!Object_IsLoaded(&play->objectCtx, this->rObjectSlot))) {
         this->life = 0;
         this->draw = NULL;
     }

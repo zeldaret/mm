@@ -191,8 +191,8 @@ Actor* func_80C24838(PlayState* play) {
 }
 
 void func_80C248A8(DmGm* this, PlayState* play) {
-    if ((this->an4ObjectSlot >= 0) && SubS_IsObjectLoaded(this->an4ObjectSlot, play) && (this->msmoObjectSlot >= 0) &&
-        SubS_IsObjectLoaded(this->msmoObjectSlot, play)) {
+    if ((this->an4ObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->an4ObjectSlot, play) &&
+        (this->msmoObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->msmoObjectSlot, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &object_an1_Skel_012618, NULL, this->jointTable, this->morphTable,
                            OBJECT_AN1_LIMB_MAX);

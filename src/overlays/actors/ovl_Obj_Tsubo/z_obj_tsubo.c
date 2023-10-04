@@ -187,7 +187,7 @@ void ObjTsubo_Init(Actor* thisx, PlayState* play) {
     this->cylinderCollider.dim.height = sPotTypeData[type].height;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->objectSlot = Object_GetSlot(&play->objectCtx, sPotTypeData[type].objectId);
-    if (this->objectSlot < 0) {
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }

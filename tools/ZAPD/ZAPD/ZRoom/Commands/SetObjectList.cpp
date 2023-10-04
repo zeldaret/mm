@@ -20,8 +20,8 @@ void SetObjectList::ParseRawData()
 	objects.reserve(objectCnt);
 	for (uint8_t i = 0; i < objectCnt; i++)
 	{
-		uint16_t objectSlot = BitConverter::ToInt16BE(parent->GetRawData(), currentPtr);
-		objects.push_back(objectSlot);
+		uint16_t objectIndex = BitConverter::ToInt16BE(parent->GetRawData(), currentPtr);
+		objects.push_back(objectIndex);
 		currentPtr += 2;
 	}
 }
@@ -34,9 +34,9 @@ void SetObjectList::DeclareReferences(const std::string& prefix)
 
 		for (size_t i = 0; i < objects.size(); i++)
 		{
-			uint16_t objectSlot = objects[i];
+			uint16_t objectIndex = objects[i];
 			declaration +=
-				StringHelper::Sprintf("    %s,", ZNames::GetObjectName(objectSlot).c_str());
+				StringHelper::Sprintf("    %s,", ZNames::GetObjectName(objectIndex).c_str());
 
 			if (i < objects.size() - 1)
 				declaration += "\n";
