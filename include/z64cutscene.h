@@ -776,7 +776,7 @@ typedef struct CutsceneCameraInterp {
     /* 0x1C */ f32 initRoll;
     /* 0x2A */ f32 unk_20; // position adjustment based on fov?
     /* 0x24 */ s16 curFrame;
-    /* 0x26 */ s16 curIndex;
+    /* 0x26 */ s16 waypoint;
     /* 0x28 */ s16 duration;
     /* 0x2A */ s16 numEntries;
     /* 0x1E */ u8 curPoint;

@@ -365,7 +365,7 @@ s16 CutsceneCamera_Interp_2(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPo
     if (interpState->type != CS_CAM_INTERP_2) {
         // Initialize
         interpState->type = CS_CAM_INTERP_2;
-        interpState->curIndex = 0;
+        interpState->waypoint = 0;
         interpState->curFrame = 0;
         interpState->duration = 1;
         if (camPos != NULL) {
@@ -426,7 +426,7 @@ s16 CutsceneCamera_Interp_3(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPo
     if (interpState->type != CS_CAM_INTERP_3) {
         // Initialize
         interpState->type = CS_CAM_INTERP_3;
-        interpState->curIndex = 0;
+        interpState->waypoint = 0;
         interpState->curFrame = 0;
         interpState->duration = 1;
         if (camPos != NULL) {
@@ -498,7 +498,7 @@ s16 CutsceneCamera_Interp_6(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPo
     if (interpState->type != CS_CAM_INTERP_6) {
         // Initialize
         interpState->type = CS_CAM_INTERP_6;
-        interpState->curIndex = 0;
+        interpState->waypoint = 0;
         interpState->curFrame = 0;
         interpState->duration = 1;
         if (camPos != NULL) {
@@ -559,7 +559,7 @@ s16 CutsceneCamera_Interp_0(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPo
     if (interpState->type != CS_CAM_INTERP_0) {
         // Initialize
         interpState->type = CS_CAM_INTERP_0;
-        interpState->curIndex = 0;
+        interpState->waypoint = 0;
         interpState->curFrame = 0;
         interpState->duration = 1;
     }
@@ -583,7 +583,7 @@ s16 CutsceneCamera_Interp_1(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPo
     if (interpState->type != CS_CAM_INTERP_1) {
         // Initialize
         interpState->type = CS_CAM_INTERP_1;
-        interpState->curIndex = 0;
+        interpState->waypoint = 0;
         interpState->curFrame = 0;
         interpState->duration = 1;
         if (camFov != NULL) {
@@ -628,27 +628,27 @@ s16 CutsceneCamera_Interp_5(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPo
     if (interpState->type != CS_CAM_INTERP_5) {
         // Initialize
         interpState->type = CS_CAM_INTERP_5;
-        interpState->curIndex = 0;
+        interpState->waypoint = 0;
         interpState->duration = pointCmd->duration;
         interpState->curFrame = 0;
     }
 
-    new_var = (f32)interpState->curFrame / pointCmd[interpState->curIndex + 1].duration;
+    new_var = (f32)interpState->curFrame / pointCmd[interpState->waypoint + 1].duration;
 
-    if (interpState->curIndex < (interpState->duration - 1)) {
-        sp3C[0] = interpState->curIndex;
+    if (interpState->waypoint < (interpState->duration - 1)) {
+        sp3C[0] = interpState->waypoint;
     } else {
         sp3C[0] = interpState->duration - 1;
     }
 
-    if ((interpState->curIndex + 1) < (interpState->duration - 1)) {
-        sp3C[1] = interpState->curIndex + 1;
+    if ((interpState->waypoint + 1) < (interpState->duration - 1)) {
+        sp3C[1] = interpState->waypoint + 1;
     } else {
         sp3C[1] = interpState->duration - 1;
     }
 
-    if ((interpState->curIndex + 2) < (interpState->duration - 1)) {
-        sp3C[2] = interpState->curIndex + 2;
+    if ((interpState->waypoint + 2) < (interpState->duration - 1)) {
+        sp3C[2] = interpState->waypoint + 2;
     } else {
         sp3C[2] = interpState->duration - 1;
     }
@@ -687,10 +687,10 @@ s16 CutsceneCamera_Interp_5(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPo
 
     interpState->curFrame++;
 
-    if (interpState->curFrame == pointCmd[interpState->curIndex + 1].duration) {
-        interpState->curIndex++;
+    if (interpState->curFrame == pointCmd[interpState->waypoint + 1].duration) {
+        interpState->waypoint++;
         interpState->curFrame = 0;
-        if (interpState->curIndex >= (interpState->duration - 2)) {
+        if (interpState->waypoint >= (interpState->duration - 2)) {
             interpState->type = CS_CAM_INTERP_OFF;
             return interpState->duration;
         }
@@ -718,33 +718,33 @@ s16 CutsceneCamera_Interp_4(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPo
     if (interpState->type != CS_CAM_INTERP_4) {
         // Initialize
         interpState->type = CS_CAM_INTERP_4;
-        interpState->curIndex = 0;
+        interpState->waypoint = 0;
         interpState->duration = pointCmd->duration;
         interpState->curFrame = 0;
     }
 
-    new_var = (f32)interpState->curFrame / pointCmd[interpState->curIndex + 1].duration;
+    new_var = (f32)interpState->curFrame / pointCmd[interpState->waypoint + 1].duration;
 
-    if (interpState->curIndex < (interpState->duration - 1)) {
-        sp44[0] = interpState->curIndex;
+    if (interpState->waypoint < (interpState->duration - 1)) {
+        sp44[0] = interpState->waypoint;
     } else {
         sp44[0] = interpState->duration - 1;
     }
 
-    if ((interpState->curIndex + 1) < (interpState->duration - 1)) {
-        sp44[1] = interpState->curIndex + 1;
+    if ((interpState->waypoint + 1) < (interpState->duration - 1)) {
+        sp44[1] = interpState->waypoint + 1;
     } else {
         sp44[1] = interpState->duration - 1;
     }
 
-    if ((interpState->curIndex + 2) < (interpState->duration - 1)) {
-        sp44[2] = interpState->curIndex + 2;
+    if ((interpState->waypoint + 2) < (interpState->duration - 1)) {
+        sp44[2] = interpState->waypoint + 2;
     } else {
         sp44[2] = interpState->duration - 1;
     }
 
-    if ((interpState->curIndex + 3) < (interpState->duration - 1)) {
-        sp44[3] = interpState->curIndex + 3;
+    if ((interpState->waypoint + 3) < (interpState->duration - 1)) {
+        sp44[3] = interpState->waypoint + 3;
     } else {
         sp44[3] = interpState->duration - 1;
     }
@@ -785,10 +785,10 @@ s16 CutsceneCamera_Interp_4(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPo
 
     interpState->curFrame++;
 
-    if (interpState->curFrame == pointCmd[interpState->curIndex + 1].duration) {
+    if (interpState->curFrame == pointCmd[interpState->waypoint + 1].duration) {
         interpState->curFrame = 0;
-        interpState->curIndex++;
-        if (interpState->curIndex >= (interpState->duration - 3)) {
+        interpState->waypoint++;
+        if (interpState->waypoint >= (interpState->duration - 3)) {
             interpState->type = CS_CAM_INTERP_OFF;
             return interpState->duration;
         }
@@ -867,47 +867,47 @@ s16 CutsceneCamera_Interp_Unused(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmd
     if (interpState->type != CS_CAM_INTERP_4) {
         // Initialize
         interpState->type = CS_CAM_INTERP_4;
-        interpState->curIndex = 0;
+        interpState->waypoint = 0;
         interpState->duration = pointCmd->duration;
         func_80162FF8(interpState->duration);
         interpState->curFrame = 0;
     }
 
-    index = interpState->curIndex + 2;
+    index = interpState->waypoint + 2;
     func_801631DC(F32_LERPIMP(sKnots[index], sKnots[index + 1],
-                              (f32)interpState->curFrame / miscCmd[interpState->curIndex].unused0),
+                              (f32)interpState->curFrame / miscCmd[interpState->waypoint].unused0),
                   index, coeff);
 
     if (camPos != NULL) {
-        camPos->x = (coeff[0] * pointCmd[interpState->curIndex].pos.x) +
-                    (coeff[1] * pointCmd[interpState->curIndex + 1].pos.x) +
-                    (coeff[2] * pointCmd[interpState->curIndex + 2].pos.x);
-        camPos->y = (coeff[0] * pointCmd[interpState->curIndex].pos.y) +
-                    (coeff[1] * pointCmd[interpState->curIndex + 1].pos.y) +
-                    (coeff[2] * pointCmd[interpState->curIndex + 2].pos.y);
-        camPos->z = (coeff[0] * pointCmd[interpState->curIndex].pos.z) +
-                    (coeff[1] * pointCmd[interpState->curIndex + 1].pos.z) +
-                    (coeff[2] * pointCmd[interpState->curIndex + 2].pos.z);
+        camPos->x = (coeff[0] * pointCmd[interpState->waypoint].pos.x) +
+                    (coeff[1] * pointCmd[interpState->waypoint + 1].pos.x) +
+                    (coeff[2] * pointCmd[interpState->waypoint + 2].pos.x);
+        camPos->y = (coeff[0] * pointCmd[interpState->waypoint].pos.y) +
+                    (coeff[1] * pointCmd[interpState->waypoint + 1].pos.y) +
+                    (coeff[2] * pointCmd[interpState->waypoint + 2].pos.y);
+        camPos->z = (coeff[0] * pointCmd[interpState->waypoint].pos.z) +
+                    (coeff[1] * pointCmd[interpState->waypoint + 1].pos.z) +
+                    (coeff[2] * pointCmd[interpState->waypoint + 2].pos.z);
     }
 
     if (camFov != NULL) {
-        *camFov = (coeff[0] * miscCmd[interpState->curIndex].fov) +
-                  (coeff[1] * miscCmd[interpState->curIndex + 1].fov) +
-                  (coeff[2] * miscCmd[interpState->curIndex + 2].fov);
+        *camFov = (coeff[0] * miscCmd[interpState->waypoint].fov) +
+                  (coeff[1] * miscCmd[interpState->waypoint + 1].fov) +
+                  (coeff[2] * miscCmd[interpState->waypoint + 2].fov);
     }
 
     if (camRoll != NULL) {
-        *camRoll = CAM_DEG_TO_BINANG((coeff[0] * miscCmd[interpState->curIndex].roll) +
-                                     (coeff[1] * miscCmd[interpState->curIndex + 1].roll) +
-                                     (coeff[2] * miscCmd[interpState->curIndex + 2].roll));
+        *camRoll = CAM_DEG_TO_BINANG((coeff[0] * miscCmd[interpState->waypoint].roll) +
+                                     (coeff[1] * miscCmd[interpState->waypoint + 1].roll) +
+                                     (coeff[2] * miscCmd[interpState->waypoint + 2].roll));
     }
 
     interpState->curFrame++;
 
-    if (interpState->curFrame >= miscCmd[interpState->curIndex].unused0) {
-        interpState->curIndex++;
+    if (interpState->curFrame >= miscCmd[interpState->waypoint].unused0) {
+        interpState->waypoint++;
         interpState->curFrame = 0;
-        if (interpState->curIndex >= (interpState->duration - 2)) {
+        if (interpState->waypoint >= (interpState->duration - 2)) {
             interpState->type = CS_CAM_INTERP_OFF;
             return interpState->duration;
         }
