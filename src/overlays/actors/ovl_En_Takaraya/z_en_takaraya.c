@@ -65,7 +65,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 
-u32 D_80ADFB28 = 0;
+u32 sTexturesDesegmented = 0;
 
 u16 D_80ADFB2C[PLAYER_FORM_MAX] = {
     1901, // PLAYER_FORM_FIERCE_DEITY
@@ -109,12 +109,12 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, TREASURE_CHEST_SHOP_GAL_LIMB_MAX);
     this->switchFlag = EN_TAKARAYA_GET_SWITCH_FLAG(thisx);
     thisx->params &= 0xFF;
-    if (!D_80ADFB28) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sEyesDownTextures); i++) {
             sEyesUpTextures[i] = Lib_SegmentedToVirtual(sEyesUpTextures[i]);
             sEyesDownTextures[i] = Lib_SegmentedToVirtual(sEyesDownTextures[i]);
         }
-        D_80ADFB28 = true;
+        sTexturesDesegmented = true;
     }
     this->eyeTexIndex = 2;
     if (gSaveContext.save.entrance == ENTRANCE(TREASURE_CHEST_SHOP, 1)) {
