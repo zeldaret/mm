@@ -738,16 +738,16 @@ typedef struct {
 } CsCmdCamPoint; // size = 0xC
 
 typedef enum CutsceneCamInterpType {
-    /* 0 */ CS_CAM_INTERP_0, // values do not change.
+    /* 0 */ CS_CAM_INTERP_NONE, // values do not change.
     // values 1-3 only uses a single point from the cmd
-    /* 1 */ CS_CAM_INTERP_1, // values immediately set to cmd values.
-    /* 2 */ CS_CAM_INTERP_2, // values lerp from init to cmd values (increasing t)
-    /* 3 */ CS_CAM_INTERP_3, // values lerp from cur to cmd values (fixed t at weight = 100)
+    /* 1 */ CS_CAM_INTERP_SET, // values immediately set to cmd values.
+    /* 2 */ CS_CAM_INTERP_LERP, // values lerp from init to cmd values (increasing t)
+    /* 3 */ CS_CAM_INTERP_SMOOTH, // values lerp from cur to cmd values (fixed t at weight = 100)
     // values 4-5 uses multiple points from the cmd
-    /* 4 */ CS_CAM_INTERP_4, // cubic multi-point (identical to SM64/OoT)
-    /* 5 */ CS_CAM_INTERP_5, // quadratic multi-point
+    /* 4 */ CS_CAM_INTERP_MP_CUBIC, // cubic multi-point (identical to SM64/OoT)
+    /* 5 */ CS_CAM_INTERP_MP_QUAD, // quadratic multi-point
     // value 5 only uses a single point from the cmd
-    /* 6 */ CS_CAM_INTERP_6, // does VecGeo calculations using fov
+    /* 6 */ CS_CAM_INTERP_GEO, // does VecGeo calculations using fov
     /* 7 */ CS_CAM_INTERP_OFF // interpolation is not processed.
 } CutsceneCamInterpType;
 
