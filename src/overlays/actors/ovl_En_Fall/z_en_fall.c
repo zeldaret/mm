@@ -165,19 +165,19 @@ void EnFall_Init(Actor* thisx, PlayState* play) {
         case EN_FALL_TYPE_LODMOON_NO_LERP:
         case EN_FALL_TYPE_LODMOON:
         case EN_FALL_TYPE_LODMOON_INVERTED_STONE_TOWER:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_LODMOON);
+            objectIndex = Object_GetSlot(&play->objectCtx, OBJECT_LODMOON);
             break;
 
         case EN_FALL_TYPE_MOONS_TEAR:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_MOONSTON);
+            objectIndex = Object_GetSlot(&play->objectCtx, OBJECT_MOONSTON);
             break;
 
         case EN_FALL_TYPE_STOPPED_MOON_OPEN_MOUTH:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_FALL2);
+            objectIndex = Object_GetSlot(&play->objectCtx, OBJECT_FALL2);
             break;
 
         default:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_FALL);
+            objectIndex = Object_GetSlot(&play->objectCtx, OBJECT_FALL);
             break;
     }
 

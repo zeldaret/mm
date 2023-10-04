@@ -425,7 +425,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
         this->unk_197 |= 1;
     }
 
-    this->unk_196 = Object_GetIndex(&play->objectCtx, D_8095F6E8[ENISHI_GET_8(&this->actor)]);
+    this->unk_196 = Object_GetSlot(&play->objectCtx, D_8095F6E8[ENISHI_GET_8(&this->actor)]);
     if (this->unk_196 < 0) {
         Actor_Kill(&this->actor);
         return;

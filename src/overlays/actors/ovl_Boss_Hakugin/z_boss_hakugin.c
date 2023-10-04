@@ -761,12 +761,12 @@ void func_80B06D38(BossHakugin* this, PlayState* play) {
         }
         return;
     }
-    sp44 =
-        (EnBom*) Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM,
-                    this->unk_0484.elements[1].dim.worldSphere.center.x - (100.0f * Math_SinS(this->actor.shape.rot.y)),
-                    this->unk_0484.elements[1].dim.worldSphere.center.y + 100.0f,
-                    this->unk_0484.elements[1].dim.worldSphere.center.z - (Math_CosS(this->actor.shape.rot.y) * 100.0f),
-                    0, 0, 0, 0);
+    sp44 = (EnBom*)Actor_Spawn(
+        &play->actorCtx, play, ACTOR_EN_BOM,
+        this->unk_0484.elements[1].dim.worldSphere.center.x - (100.0f * Math_SinS(this->actor.shape.rot.y)),
+        this->unk_0484.elements[1].dim.worldSphere.center.y + 100.0f,
+        this->unk_0484.elements[1].dim.worldSphere.center.z - (Math_CosS(this->actor.shape.rot.y) * 100.0f), 0, 0, 0,
+        0);
     if (sp44 != NULL) {
         temp_a1 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - 0x8000;
         if (temp_a1 > 0x2000) {

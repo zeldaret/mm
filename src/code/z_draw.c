@@ -827,9 +827,9 @@ void GetItem_DrawRemains(PlayState* play, s16 drawId) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_BSMASK);
+    objectIndex = Object_GetSlot(&play->objectCtx, OBJECT_BSMASK);
 
-    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[objectIndex].segment);
+    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectIndex].segment);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);

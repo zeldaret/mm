@@ -234,7 +234,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         this->slidingDoor.dyna.actor.room = -1;
     }
 
-    if ((this->requiredObjBankIndex = Object_GetIndex(&play->objectCtx, D_808A2180[sp24].objectId)) < 0) {
+    if ((this->requiredObjBankIndex = Object_GetSlot(&play->objectCtx, D_808A2180[sp24].objectId)) < 0) {
         Actor_Kill(&this->slidingDoor.dyna.actor);
         return;
     }

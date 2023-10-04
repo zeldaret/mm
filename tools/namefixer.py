@@ -774,6 +774,9 @@ wordReplace = {
 
     "func_80133038": "Schedule_RunScript",
 
+    "Object_GetIndex": "Object_GetSlot",
+    "Object_Spawn": "Object_SpawnPersistent",
+
     "EffectSsKiraKira_SpawnSmallYellow": "EffectSsKirakira_SpawnSmallYellow",
     "EffectSsKiraKira_SpawnSmall": "EffectSsKirakira_SpawnSmall",
     "EffectSsKiraKira_SpawnDispersed": "EffectSsKirakira_SpawnDispersed",
@@ -1104,7 +1107,7 @@ wordReplace = {
     "play->msgCtx.unk12023": "play->msgCtx.stateTimer",
     "play->msgCtx.unk1202A": "play->msgCtx.ocarinaMode",
     "play->msgCtx.unk1202C": "play->msgCtx.ocarinaAction",
-    "play->msgCtx.unk12048": "play->msgCtx.lastOcarinaButtonIndex",
+    "play->msgCtx.unk12048": "play->msgCtx.ocarinaButtonIndex",
     "play->msgCtx.unk120B0": "play->msgCtx.ocarinaSongEffectActive",
     "play->msgCtx.unk12046": "play->msgCtx.blockSunsSong",
     "play->msgCtx.unk12090": "play->msgCtx.textIsCredits",
@@ -1156,6 +1159,7 @@ wordReplace = {
     "play->roomCtx.curRoom.unk3": "play->roomCtx.curRoom.behaviorType1",
     "play->roomCtx.curRoom.unk2": "play->roomCtx.curRoom.behaviorType2",
     "play->roomCtx.unk31": "play->roomCtx.status",
+    "play->objectCtx.status": "play->objectCtx.slots",
 
     "actorCtx.unkC": "actorCtx.halfDaysBit",
     "actorCtx.unk1F4": "actorCtx.playerImpact.type",
