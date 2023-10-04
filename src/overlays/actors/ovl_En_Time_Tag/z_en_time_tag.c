@@ -161,7 +161,7 @@ void EnTimeTag_SoaringEngraving_Wait(EnTimeTag* this, PlayState* play) {
             this->actionFunc = EnTimeTag_SoaringEngraving_SubsequentInteraction;
         }
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
-               (Flags_GetSwitch(play, TIMETAG_SOARING_GET_SWITCHFLAG(&this->actor)) ||
+               (Flags_GetSwitch(play, TIMETAG_SOARING_GET_SWITCH_FLAG(&this->actor)) ||
                 CHECK_QUEST_ITEM(QUEST_SONG_SOARING))) {
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         Actor_OfferTalk(&this->actor, play, 110.0f);

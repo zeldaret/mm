@@ -9,7 +9,7 @@ struct EnElfgrp;
 typedef void (*EnElfgrpActionFunc)(struct EnElfgrp*, PlayState*);
 
 #define ENELFGRP_GET_TYPE(thisx) ((thisx)->params & 0xF) //!< Same type as Great Fairies
-#define ENELFGRP_GET_SWITCHFLAG_PARAMS(thisx) (((thisx)->params & 0xFE00) >> 9)
+#define ENELFGRP_GET_SWITCH_FLAG_PARAMS(thisx) (((thisx)->params & 0xFE00) >> 9)
 #define ENELFGRP_GET_SWITCHFLAG_ROT(thisx) ((thisx)->home.rot.z)
 
 typedef enum ElfgrpType {

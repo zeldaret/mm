@@ -93,7 +93,7 @@ void ObjLightblock_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->dyna.actor, typeVars->scale);
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(play, &this->collider);
-    if (Flags_GetSwitch(play, LIGHTBLOCK_DESTROYED(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, LIGHTBLOCK_GET_DESTROYED_SWITCH_FLAG(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -152,7 +152,7 @@ void ObjLightblock_SetupPlayCutscene(ObjLightblock* this) {
 void ObjLightblock_PlayCutscene(ObjLightblock* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        Flags_SetSwitch(play, LIGHTBLOCK_DESTROYED(&this->dyna.actor));
+        Flags_SetSwitch(play, LIGHTBLOCK_GET_DESTROYED_SWITCH_FLAG(&this->dyna.actor));
         ObjLightblock_SpawnEffect(this, play);
         ObjLightblock_SetupFadeAway(this);
     } else {

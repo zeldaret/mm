@@ -248,9 +248,9 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BA36C0(this, play, 1);
         if (play->sceneId != SCENE_SONCHONOIE) {
-            Flags_SetSwitch(play, this->actor.params & 0x7F);
+            Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor));
         } else if (player->transformation == PLAYER_FORM_DEKU) {
-            Flags_SetSwitch(play, this->actor.home.rot.x);
+            Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_3(&this->actor));
         }
         this->unk2B6 = 0;
         return;
@@ -268,7 +268,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
             Actor_OfferTalk(&this->actor, play, 50.0f);
             if (play->sceneId == SCENE_SONCHONOIE) {
                 if (player->transformation == PLAYER_FORM_DEKU) {
-                    if (!Flags_GetSwitch(play, this->actor.home.rot.x)) {
+                    if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_3(&this->actor))) {
                         this->text = D_80BA5068;
                     } else {
                         this->text = D_80BA5074;
@@ -278,7 +278,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
                 }
             } else if (ENTOTO_WEEK_EVENT_FLAGS) {
                 this->text = D_80BA502C;
-            } else if (!Flags_GetSwitch(play, this->actor.params & 0x7F)) {
+            } else if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor))) {
                 this->text = D_80BA5034;
             } else {
                 this->text = D_80BA5038;
@@ -646,15 +646,15 @@ s32 func_80BA4B24(EnToto* this, PlayState* play) {
         player = GET_PLAYER(play);
         Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_0028B8, -4.0f);
         if (player->transformation == PLAYER_FORM_ZORA) {
-            if (!Flags_GetSwitch(play, this->actor.params & 0x7F)) {
-                Flags_SetSwitch(play, this->actor.params & 0x7F);
+            if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor))) {
+                Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor));
                 return 1;
             } else {
                 return 3;
             }
         } else {
-            if (!Flags_GetSwitch(play, (this->actor.params >> 7) & 0x7F)) {
-                Flags_SetSwitch(play, (this->actor.params >> 7) & 0x7F);
+            if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_2(&this->actor))) {
+                Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_2(&this->actor));
                 return 4;
             } else {
                 return 7;

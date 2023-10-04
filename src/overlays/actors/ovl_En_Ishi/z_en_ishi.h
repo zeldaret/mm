@@ -16,7 +16,7 @@ typedef void (*EnIshiUnkFunc2)(Actor*, PlayState*);
 #define ENISHI_GET_70(thisx) (((thisx)->params >> 4) & 7)
 #define ENISHI_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
 #define ENISHI_GET_100(thisx) (((thisx)->params >> 8) & 1)
-#define ENISHI_GET_FE00(thisx) (((thisx)->params >> 9) & 0x7F)
+#define ENISHI_GET_FLAG(thisx) (((thisx)->params >> 9) & 0x7F)
 
 typedef struct EnIshi {
     /* 0x000 */ Actor actor;

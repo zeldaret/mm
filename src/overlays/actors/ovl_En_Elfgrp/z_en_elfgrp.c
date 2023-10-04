@@ -480,7 +480,7 @@ void func_80A3A398(EnElfgrp* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->actionFunc = func_80A3A274;
-        Flags_UnsetSwitch(play, ENELFGRP_GET_SWITCHFLAG_PARAMS(&this->actor));
+        Flags_UnsetSwitch(play, ENELFGRP_GET_SWITCH_FLAG_PARAMS(&this->actor));
 
         if (this->stateFlags & ELFGRP_STATE_1) {
             Item_Give(play, ITEM_MASK_GREAT_FAIRY);
@@ -524,7 +524,7 @@ void func_80A3A520(EnElfgrp* this, PlayState* play) {
     } else if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->actionFunc = func_80A3A4AC;
-        Flags_SetSwitch(play, ENELFGRP_GET_SWITCHFLAG_PARAMS(&this->actor));
+        Flags_SetSwitch(play, ENELFGRP_GET_SWITCH_FLAG_PARAMS(&this->actor));
 
         if (this->stateFlags & ELFGRP_STATE_1) {
             Item_Give(play, ITEM_MASK_GREAT_FAIRY);

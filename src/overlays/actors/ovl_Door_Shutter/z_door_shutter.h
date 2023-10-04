@@ -9,7 +9,7 @@ struct DoorShutter;
 typedef void (*DoorShutterActionFunc)(struct DoorShutter*, PlayState*);
 
 #define DOORSHUTTER_GET_1F(thisx) ((thisx)->params & 0x1F)
-#define DOORSHUTTER_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define DOORSHUTTER_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define DOORSHUTTER_GET_380(thisx) (((thisx)->params >> 7) & 7)
 
 typedef struct DoorShutter {

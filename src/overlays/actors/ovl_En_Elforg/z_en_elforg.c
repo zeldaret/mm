@@ -87,7 +87,7 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
             break;
 
         case STRAY_FAIRY_TYPE_COLLECTIBLE:
-            if (Flags_GetCollectible(play, STRAY_FAIRY_FLAG(thisx))) {
+            if (Flags_GetCollectible(play, STRAY_FAIRY_GET_FLAG(thisx))) {
                 Actor_Kill(thisx);
                 return;
             }
@@ -100,7 +100,7 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            if (Flags_GetSwitch(play, STRAY_FAIRY_FLAG(thisx))) {
+            if (Flags_GetSwitch(play, STRAY_FAIRY_GET_FLAG(thisx))) {
                 Actor_Kill(thisx);
                 return;
             }
@@ -475,15 +475,15 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
 
             switch (STRAY_FAIRY_TYPE(&this->actor)) {
                 case STRAY_FAIRY_TYPE_COLLECTIBLE:
-                    Flags_SetCollectible(play, STRAY_FAIRY_FLAG(&this->actor));
+                    Flags_SetCollectible(play, STRAY_FAIRY_GET_FLAG(&this->actor));
                     break;
 
                 case STRAY_FAIRY_TYPE_CHEST:
-                    Flags_SetTreasure(play, STRAY_FAIRY_FLAG(&this->actor));
+                    Flags_SetTreasure(play, STRAY_FAIRY_GET_FLAG(&this->actor));
                     break;
 
                 default:
-                    Flags_SetSwitch(play, STRAY_FAIRY_FLAG(&this->actor));
+                    Flags_SetSwitch(play, STRAY_FAIRY_GET_FLAG(&this->actor));
                     break;
             }
 
