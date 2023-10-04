@@ -112,12 +112,12 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
 
     // this actor can draw two separate bodies that use different objects
     if (STH_GET_SWAMP_BODY(&this->actor)) {
-        objectId = Object_GetIndex(&play->objectCtx, OBJECT_AHG);
+        objectId = Object_GetSlot(&play->objectCtx, OBJECT_AHG);
     } else {
-        objectId = Object_GetIndex(&play->objectCtx, OBJECT_STH);
+        objectId = Object_GetSlot(&play->objectCtx, OBJECT_STH);
     }
     this->mainObjectId = objectId;
-    this->maskOfTruthObjectId = Object_GetIndex(&play->objectCtx, OBJECT_MASK_TRUTH);
+    this->maskOfTruthObjectId = Object_GetSlot(&play->objectCtx, OBJECT_MASK_TRUTH);
 
     Actor_SetScale(&this->actor, 0.01f);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -740,7 +740,7 @@ void EnSth_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.status[this->maskOfTruthObjectId].segment);
+                    gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.slots[this->maskOfTruthObjectId].segment);
                     gSPDisplayList(POLY_OPA_DISP++, object_mask_truth_DL_0001A0);
 
                     Matrix_Pop();

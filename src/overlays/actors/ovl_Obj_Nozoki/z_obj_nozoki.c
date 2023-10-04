@@ -93,7 +93,7 @@ void ObjNozoki_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BA2514(ObjNozoki* this, PlayState* play) {
-    s32 sp24 = Object_GetIndex(&play->objectCtx, D_80BA34B8[this->unk_15C]);
+    s32 sp24 = Object_GetSlot(&play->objectCtx, D_80BA34B8[this->unk_15C]);
 
     if (sp24 < 0) {
         Actor_Kill(&this->dyna.actor);

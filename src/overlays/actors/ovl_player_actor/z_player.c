@@ -10661,7 +10661,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     if (this->actor.shape.rot.x != 0) {
         this->transformation = this->actor.shape.rot.x - 1;
 
-        objBankIndex = Object_GetIndex(&play->objectCtx, gPlayerFormObjectIndices[this->transformation]);
+        objBankIndex = Object_GetSlot(&play->objectCtx, gPlayerFormObjectIndices[this->transformation]);
         this->actor.objBankIndex = objBankIndex;
         if (objBankIndex < 0) {
             Actor_Kill(&this->actor);
@@ -12380,7 +12380,7 @@ void Player_Update(Actor* thisx, PlayState* play) {
 
     // This block is a leftover dog-following mechanic from OoT
     if (gSaveContext.dogParams < 0) {
-        if (Object_GetIndex(&play->objectCtx, OBJECT_DOG) < 0) {
+        if (Object_GetSlot(&play->objectCtx, OBJECT_DOG) < 0) {
             gSaveContext.dogParams = 0;
         } else {
             Actor* dog;
@@ -16630,10 +16630,12 @@ void Player_Action_62(Player* this, PlayState* play) {
 s32 func_80851C40(PlayState* play, Player* this) {
     return ((play->sceneId == SCENE_MILK_BAR) && Audio_IsSequencePlaying(NA_BGM_BALLAD_OF_THE_WIND_FISH)) ||
            (((play->sceneId != SCENE_MILK_BAR) && (this->csMode == PLAYER_CSMODE_68)) ||
-            ((play->msgCtx.msgMode == 0x12) || (play->msgCtx.msgMode == 0x13) || (play->msgCtx.msgMode == 0x14) ||
-             ((play->msgCtx.ocarinaMode != 1) &&
-              ((this->csMode == PLAYER_CSMODE_5) || (play->msgCtx.ocarinaMode == 3) ||
-               play->msgCtx.ocarinaAction == 0x32))));
+            ((play->msgCtx.msgMode == MSGMODE_SONG_PLAYED) ||
+             (play->msgCtx.msgMode == MSGMODE_SETUP_DISPLAY_SONG_PLAYED) ||
+             (play->msgCtx.msgMode == MSGMODE_DISPLAY_SONG_PLAYED) ||
+             ((play->msgCtx.ocarinaMode != OCARINA_MODE_ACTIVE) &&
+              ((this->csMode == PLAYER_CSMODE_5) || (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) ||
+               play->msgCtx.ocarinaAction == OCARINA_ACTION_FREE_PLAY_DONE))));
 }
 
 // Deku playing the pipes? The loops both overwrite unk_AF0[0].y,z and unk_AF0[1].x,y,z
@@ -16653,7 +16655,7 @@ void func_80851D30(PlayState* play, Player* this) {
             *var_s0 = sp50.x;
             var_s0++;
         }
-    } else if (play->msgCtx.ocarinaMode == 1) {
+    } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) {
         if (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID) {
             var_s0[play->msgCtx.ocarinaButtonIndex] = 1.2f;
             func_8082DB90(play, this, D_8085D190[this->transformation]);
@@ -16738,7 +16740,7 @@ void func_808521E0(PlayState* play, Player* this) {
         }
 
         func_80124618(D_801C0490, this->skelAnime.curFrame, &this->unk_AF0[1]);
-    } else if (play->msgCtx.ocarinaMode == 1) {
+    } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) {
         if (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID) {
             func_80851EC8(play, this);
         }
@@ -16760,7 +16762,8 @@ void func_80852290(PlayState* play, Player* this) {
         s16 var_a1_3;
         s16 sp38;
 
-        if ((play->msgCtx.ocarinaMode == 1) && (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID)) {
+        if ((play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) &&
+            (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID)) {
             if ((this->unk_A90 != NULL) && (this->unk_A94 < 0.0f)) {
                 this->unk_A90->flags |= ACTOR_FLAG_20000000;
                 this->unk_A94 = 0.0f;
@@ -16841,10 +16844,10 @@ void Player_Action_63(Player* this, PlayState* play) {
                                                ((this->skelAnime.mode == 0) && (this->actionVar2 == 0)))) {
         func_808525C4(play, this);
         if (!(this->actor.flags & ACTOR_FLAG_20000000) || (this->unk_A90->id == ACTOR_EN_ZOT)) {
-            func_80152434(play, 1);
+            Message_DisplayOcarinaStaff(play, OCARINA_ACTION_FREE_PLAY);
         }
     } else if (this->actionVar2 != 0) {
-        if (play->msgCtx.ocarinaMode == 4) {
+        if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
             play->interfaceCtx.unk_222 = 0;
             CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA]);
             this->actor.flags &= ~ACTOR_FLAG_20000000;
@@ -16860,12 +16863,15 @@ void Player_Action_63(Player* this, PlayState* play) {
                 Player_AnimationPlayOnceReverse(play, this, D_8085D17C[this->transformation]);
             }
         } else {
-            s32 var_v1 = (play->msgCtx.ocarinaMode >= 0x1C) && (play->msgCtx.ocarinaMode < 0x27);
+            s32 var_v1 = (play->msgCtx.ocarinaMode >= OCARINA_MODE_WARP_TO_GREAT_BAY_COAST) &&
+                         (play->msgCtx.ocarinaMode <= OCARINA_MODE_WARP_TO_ENTRANCE);
             s32 pad[2];
 
-            if (var_v1 || (play->msgCtx.ocarinaMode == 0x16) || (play->msgCtx.ocarinaMode == 0x1A) ||
-                (play->msgCtx.ocarinaMode == 0x18) || (play->msgCtx.ocarinaMode == 0x19)) {
-                if (play->msgCtx.ocarinaMode == 0x16) {
+            if (var_v1 || (play->msgCtx.ocarinaMode == OCARINA_MODE_APPLY_SOT) ||
+                (play->msgCtx.ocarinaMode == OCARINA_MODE_APPLY_DOUBLE_SOT) ||
+                (play->msgCtx.ocarinaMode == OCARINA_MODE_APPLY_INV_SOT_FAST) ||
+                (play->msgCtx.ocarinaMode == OCARINA_MODE_APPLY_INV_SOT_SLOW)) {
+                if (play->msgCtx.ocarinaMode == OCARINA_MODE_APPLY_SOT) {
                     if (!func_8082DA90(play)) {
                         if (gSaveContext.save.saveInfo.playerData.threeDayResetCount == 1) {
                             play->nextEntrance = ENTRANCE(CUTSCENE, 1);
@@ -16896,7 +16902,8 @@ void Player_Action_63(Player* this, PlayState* play) {
                         Player_AnimationPlayOnceReverse(play, this, D_8085D17C[this->transformation]);
                     }
                 }
-            } else if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_ELEGY)) {
+            } else if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
+                       (play->msgCtx.lastPlayedSong == OCARINA_SONG_ELEGY)) {
                 play->interfaceCtx.unk_222 = 0;
                 CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA]);
 
@@ -18114,7 +18121,7 @@ void Player_Action_87(Player* this, PlayState* play) {
 
 void Player_Action_88(Player* this, PlayState* play) {
     if (this->actionVar2++ > 90) {
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         func_8085B384(this, play);
     } else if (this->actionVar2 == 10) {
         func_80848640(play, this);
@@ -19814,7 +19821,7 @@ void Player_CsAction_4(PlayState* play, Player* this, CsCmdActorCue* cue) {
     PlayerAnimation_Update(play, &this->skelAnime);
     if ((this->actor.id == ACTOR_EN_TEST3) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
         this->getItemDrawIdPlusOne = GID_MASK_SUN + 1;
-        Message_BombersNotebookQueueEvent(play, 0x1B);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_ESCAPED_SAKONS_HIDEOUT);
         Audio_PlayFanfare(NA_BGM_GET_NEW_MASK);
     }
 }

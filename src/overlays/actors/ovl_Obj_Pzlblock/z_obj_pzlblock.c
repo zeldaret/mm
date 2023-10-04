@@ -207,7 +207,7 @@ void ObjPzlblock_Init(Actor* thisx, PlayState* play) {
 
     DynaPolyActor_Init(&this->dyna, 0);
 
-    this->unk_17A = Object_GetIndex(&play->objectCtx, sp24->unk_00);
+    this->unk_17A = Object_GetSlot(&play->objectCtx, sp24->unk_00);
 
     if (sp28 == 0) {
         func_809A3D1C(this);

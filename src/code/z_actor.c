@@ -1096,7 +1096,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 }
 
 void Actor_SetObjectDependency(PlayState* play, Actor* actor) {
-    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[actor->objBankIndex].segment);
+    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[actor->objBankIndex].segment);
 }
 
 void Actor_Init(Actor* actor, PlayState* play) {
@@ -2700,8 +2700,8 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     Matrix_Scale(actor->scale.x, actor->scale.y, actor->scale.z, MTXMODE_APPLY);
     Actor_SetObjectDependency(play, actor);
 
-    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[actor->objBankIndex].segment);
-    gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[actor->objBankIndex].segment);
+    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[actor->objBankIndex].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[actor->objBankIndex].segment);
 
     if (actor->colorFilterTimer != 0) {
         s32 colorFlag = COLORFILTER_GET_COLORFLAG(actor->colorFilterParams);
@@ -3299,7 +3299,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
         return NULL;
     }
 
-    objBankIndex = Object_GetIndex(&play->objectCtx, actorInit->objectId);
+    objBankIndex = Object_GetSlot(&play->objectCtx, actorInit->objectId);
     if ((objBankIndex < 0) || ((actorInit->type == ACTORCAT_ENEMY) && Flags_GetClear(play, play->roomCtx.curRoom.num) &&
                                (actorInit->id != ACTOR_BOSS_05))) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);

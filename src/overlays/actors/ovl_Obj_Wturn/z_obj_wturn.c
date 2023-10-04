@@ -39,7 +39,8 @@ void func_808A7954(ObjWturn* this) {
 }
 
 void func_808A7968(ObjWturn* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode >= 28 && play->msgCtx.ocarinaMode < 39) {
+    if ((play->msgCtx.ocarinaMode >= OCARINA_MODE_WARP_TO_GREAT_BAY_COAST) &&
+        (play->msgCtx.ocarinaMode <= OCARINA_MODE_WARP_TO_ENTRANCE)) {
         Flags_UnsetSwitch(play, OBJWTURN_GET_SWITCH_FLAG(&this->actor));
         Actor_Kill(&this->actor);
         return;

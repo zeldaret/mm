@@ -588,10 +588,10 @@ void func_80BE7718(EnDaiku2* this, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_BOMBIWA);
+    objectIdx = Object_GetSlot(&play->objectCtx, OBJECT_BOMBIWA);
     if ((objectIdx >= 0) && Object_IsLoaded(&play->objectCtx, objectIdx)) {
         gDPPipeSync(POLY_OPA_DISP++);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[objectIdx].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectIdx].segment);
 
         for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
             if (effect->isEnabled) {
