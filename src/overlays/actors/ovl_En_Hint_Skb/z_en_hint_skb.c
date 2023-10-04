@@ -126,19 +126,19 @@ static DamageTable sDamageTable = {
 };
 
 typedef enum EnHinkSkbAnimation {
-    /*  0 */ ENHINTSKB_ANIM_0,
-    /*  1 */ ENHINTSKB_ANIM_1,
-    /*  2 */ ENHINTSKB_ANIM_2,
-    /*  3 */ ENHINTSKB_ANIM_3,
-    /*  4 */ ENHINTSKB_ANIM_4,
-    /*  5 */ ENHINTSKB_ANIM_5,
-    /*  6 */ ENHINTSKB_ANIM_6,
-    /*  7 */ ENHINTSKB_ANIM_7,
-    /*  8 */ ENHINTSKB_ANIM_8,
-    /*  9 */ ENHINTSKB_ANIM_9,
-    /* 10 */ ENHINTSKB_ANIM_10,
-    /* 11 */ ENHINTSKB_ANIM_11,
-    /* 12 */ ENHINTSKB_ANIM_12,
+    /*  0 */ STALCHILD_ANIM_WALK,
+    /*  1 */ STALCHILD_ANIM_STAND_UP_MORPH_1,
+    /*  2 */ STALCHILD_ANIM_ATTACK,
+    /*  3 */ STALCHILD_ANIM_STAGGER_MORPH_4,
+    /*  4 */ STALCHILD_ANIM_COLLAPSE,
+    /*  5 */ STALCHILD_ANIM_SIT_LAUGH,
+    /*  6 */ STALCHILD_ANIM_SIT_TAP_TOES,
+    /*  7 */ STALCHILD_ANIM_SWING_ON_BRANCH,
+    /*  8 */ STALCHILD_ANIM_STAND_UP_MORPH_8,
+    /*  9 */ STALCHILD_ANIM_STAND_UP_MORPH_16,
+    /* 10 */ STALCHILD_ANIM_STAGGER_MORPH_8,
+    /* 11 */ STALCHILD_ANIM_SALUTE,
+    /* 12 */ STALCHILD_ANIM_IDLE,
     /* 13 */ ENHINTSKB_ANIM_MAX
 } EnHinkSkbAnimation;
 
@@ -153,7 +153,7 @@ static AnimationInfo sAnimationInfo[ENHINTSKB_ANIM_MAX] = {
     { &gStalchildSwingOnBranch, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },    // STALCHILD_ANIM_SWING_ON_BRANCH
     { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // STALCHILD_ANIM_STAND_UP_MORPH_8
     { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },     // STALCHILD_ANIM_STAND_UP_MORPH_16
-    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // STALCHILD_ANIM_STAGGER_MORPH_16
+    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // STALCHILD_ANIM_STAGGER_MORPH_8
     { &gStalchildSaluteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },       // STALCHILD_ANIM_SALUTE
     { &gStalchildIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },         // STALCHILD_ANIM_IDLE
 };
@@ -197,7 +197,7 @@ void func_80C1FE20(EnHintSkb* this, PlayState* play) {
 }
 
 void func_80C1FE30(EnHintSkb* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_WALK);
     this->actor.speed = 1.6f;
     this->actionFunc = func_80C1FE80;
 }
@@ -216,7 +216,7 @@ void func_80C1FE80(EnHintSkb* this, PlayState* play) {
 void func_80C1FF30(EnHintSkb* this) {
     this->collider.base.atFlags &= ~AT_BOUNCED;
     this->actor.speed = 0.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_ATTACK);
     this->actionFunc = func_80C1FF88;
 }
 
@@ -290,12 +290,12 @@ void func_80C2016C(EnHintSkb* this, PlayState* play) {
 void func_80C20274(EnHintSkb* this) {
     if (this->skelAnime.animation == &gStalchildSitLaughAnim) {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_8);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_STAND_UP_MORPH_8);
         this->actor.gravity = -1.0f;
         this->actor.speed = 1.0f;
     } else {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_3);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_STAGGER_MORPH_4);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->actor.speed = -4.0f;
         }
@@ -333,7 +333,7 @@ void func_80C20334(EnHintSkb* this, PlayState* play) {
 }
 
 void func_80C20484(EnHintSkb* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_4);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_COLLAPSE);
     this->unk_3E8 |= 4;
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = -6.0f;
@@ -365,7 +365,7 @@ void func_80C20590(EnHintSkb* this, PlayState* play) {
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_3);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_STAGGER_MORPH_4);
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_3E8 |= 1;
             func_80C20274(this);
@@ -392,7 +392,7 @@ void func_80C2069C(EnHintSkb* this, PlayState* play) {
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_3);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_STAGGER_MORPH_4);
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_3E8 |= 1;
             func_80C20274(this);
@@ -421,10 +421,10 @@ void func_80C2077C(EnHintSkb* this, PlayState* play) {
                 this->actor.speed = 2.4f;
                 this->actor.gravity = -1.0f;
                 this->actor.velocity.y = 3.0f;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_8);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_STAND_UP_MORPH_8);
             }
         } else {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_11);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_SALUTE);
             Message_StartTextbox(play, 0x1148, &this->actor);
             this->unk_3E6 = 0x1148;
         }
@@ -484,7 +484,7 @@ void func_80C208D0(EnHintSkb* this, PlayState* play) {
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             Message_StartTextbox(play, 0x1147, &this->actor);
             this->unk_3E6 = 0x1147;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_0);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_WALK);
         }
     }
 
@@ -559,7 +559,7 @@ void func_80C20C24(EnHintSkb* this, PlayState* play) {
         case 0x1147:
             Message_StartTextbox(play, 0x1148, &this->actor);
             this->unk_3E6 = 0x1148;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_11);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_SALUTE);
             break;
 
         case 0x1148:
@@ -611,7 +611,7 @@ void func_80C20D64(EnHintSkb* this, PlayState* play) {
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 if (this->actionFunc == func_80C1FE80) {
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_12);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_IDLE);
                 }
                 func_80C2075C(this);
             }
@@ -724,7 +724,7 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
                 this->drawDmgEffScale = 0.5f;
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_STAGGER_MORPH_4);
                 func_80C2066C(this);
                 break;
 
@@ -743,7 +743,7 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
             case 13:
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENHINTSKB_ANIM_3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, STALCHILD_ANIM_STAGGER_MORPH_4);
                 func_80C20274(this);
                 break;
 
@@ -912,9 +912,9 @@ void EnHintSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         }
 
         if (this->drawDmgEffTimer != 0) {
-            if ((limbIndex == STALCHILD_LIMB_PELVIS) || (limbIndex == STALCHILD_LIMB_RIGHT_FEMUR) ||
+            if ((limbIndex == STALCHILD_LIMB_PELVIS) || (limbIndex == STALCHILD_LIMB_RIGHT_THIGH) ||
                 (limbIndex == STALCHILD_LIMB_RIGHT_SHIN) || (limbIndex == STALCHILD_LIMB_RIGHT_FOOT) ||
-                (limbIndex == STALCHILD_LIMB_LEFT_FEMUR) || (limbIndex == STALCHILD_LIMB_LEFT_SHIN) ||
+                (limbIndex == STALCHILD_LIMB_LEFT_THIGH) || (limbIndex == STALCHILD_LIMB_LEFT_SHIN) ||
                 (limbIndex == STALCHILD_LIMB_LEFT_FOOT) || (limbIndex == STALCHILD_LIMB_RIGHT_UPPER_ARM) ||
                 (limbIndex == STALCHILD_LIMB_RIGHT_LOWER_ARM) || (limbIndex == STALCHILD_LIMB_RIGHT_HAND) ||
                 (limbIndex == STALCHILD_LIMB_LEFT_UPPER_ARM) || (limbIndex == STALCHILD_LIMB_LEFT_LOWER_ARM) ||

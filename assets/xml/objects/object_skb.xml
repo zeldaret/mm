@@ -31,19 +31,19 @@
         <DList Name="gStalchildRightUpperArmDL" Offset="0x57D8" />
         <DList Name="gStalchildRightLowerArmDL" Offset="0x5898" />
         <DList Name="gStalchildRightHandDL" Offset="0x5940" />
-        <DList Name="gStalchildLeftFemurDL" Offset="0x5A08" />
+        <DList Name="gStalchildLeftThighDL" Offset="0x5A08" />
         <DList Name="gStalchildLeftShinDL" Offset="0x5AA0" />
         <DList Name="gStalchildLeftFootDL" Offset="0x5B48" />
-        <DList Name="gStalchildRightFemurDL" Offset="0x5BE8" />
+        <DList Name="gStalchildRightThighDL" Offset="0x5BE8" />
         <DList Name="gStalchildRightShinDL" Offset="0x5C80" />
         <DList Name="gStalchildRightFootDL" Offset="0x5D28" />
         <Limb Name="gStalchildRootLimb" Type="Standard" EnumName="STALCHILD_LIMB_ROOT" Offset="0x5DC8" />
         <Limb Name="gStalchildPelvisLimb" Type="Standard" EnumName="STALCHILD_LIMB_PELVIS" Offset="0x5DD4" />
-        <Limb Name="gStalchildRoot2Limb" Type="Standard" EnumName="STALCHILD_LIMB_ROOT_2" Offset="0x5DE0" />
-        <Limb Name="gStalchildRightFemurLimb" Type="Standard" EnumName="STALCHILD_LIMB_RIGHT_FEMUR" Offset="0x5DEC" />
+        <Limb Name="gStalchildRootLegsLimb" Type="Standard" EnumName="STALCHILD_LIMB_ROOT_LEGS" Offset="0x5DE0" />
+        <Limb Name="gStalchildRightThighLimb" Type="Standard" EnumName="STALCHILD_LIMB_RIGHT_THIGH" Offset="0x5DEC" />
         <Limb Name="gStalchildRightShinLimb" Type="Standard" EnumName="STALCHILD_LIMB_RIGHT_SHIN" Offset="0x5DF8" />
         <Limb Name="gStalchildRightFootLimb" Type="Standard" EnumName="STALCHILD_LIMB_RIGHT_FOOT" Offset="0x5E04" />
-        <Limb Name="gStalchildLeftFemurLimb" Type="Standard" EnumName="STALCHILD_LIMB_LEFT_FEMUR" Offset="0x5E10" />
+        <Limb Name="gStalchildLeftThighLimb" Type="Standard" EnumName="STALCHILD_LIMB_LEFT_THIGH" Offset="0x5E10" />
         <Limb Name="gStalchildLeftShinLimb" Type="Standard" EnumName="STALCHILD_LIMB_LEFT_SHIN" Offset="0x5E1C" />
         <Limb Name="gStalchildLeftFootLimb" Type="Standard" EnumName="STALCHILD_LIMB_LEFT_FOOT" Offset="0x5E28" />
         <Limb Name="gStalchildRibcageLimb" Type="Standard" EnumName="STALCHILD_LIMB_RIBCAGE" Offset="0x5E34" />
