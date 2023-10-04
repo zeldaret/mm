@@ -11,15 +11,16 @@ typedef void (*DemoEffectActionFunc)(struct DemoEffect*, PlayState*);
 #define DEMO_EFFECT_GET_TYPE(thisx) ((thisx)->params & 0xFF)
 
 typedef enum {
-    /* 0 */ DEMO_EFFECT_TYPE_0,
-    /* 1 */ DEMO_EFFECT_TYPE_1,
-    /* 2 */ DEMO_EFFECT_TYPE_2,
-    /* 3 */ DEMO_EFFECT_TYPE_3,
-    /* 4 */ DEMO_EFFECT_TYPE_4,
-    /* 5 */ DEMO_EFFECT_TYPE_5,
-    /* 6 */ DEMO_EFFECT_TYPE_6,
-    /* 7 */ DEMO_EFFECT_TYPE_7,
-    /* 8 */ DEMO_EFFECT_TYPE_8
+    /* 0 */ DEMO_EFFECT_TIMEWARP_TIMEBLOCK_LARGE,
+    /* 1 */ DEMO_EFFECT_TIMEWARP_TIMEBLOCK_SMALL,
+    /* 2 */ DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_LARGE,
+    /* 3 */ DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_VERY_LARGE,
+    /* 4 */ DEMO_EFFECT_TYPE_LIGHT_BASE,
+    /* 4 */ DEMO_EFFECT_TYPE_LIGHT_DARK_YELLOW = DEMO_EFFECT_TYPE_LIGHT_BASE,
+    /* 5 */ DEMO_EFFECT_TYPE_LIGHT_PINK,
+    /* 6 */ DEMO_EFFECT_TYPE_LIGHT_GREEN,
+    /* 7 */ DEMO_EFFECT_TYPE_LIGHT_BLUE,
+    /* 8 */ DEMO_EFFECT_TYPE_LIGHT_YELLOW // Unused
 } DemoEffectType;
 
 typedef struct DemoEffect {

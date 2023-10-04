@@ -597,7 +597,7 @@ void Message_Init(PlayState* play) {
     msgCtx->ocarinaAction = msgCtx->textUnskippable = 0;
     msgCtx->textColorAlpha = 0xFF;
     View_Init(&msgCtx->view, play->state.gfxCtx);
-    msgCtx->textboxSegment = THA_AllocTailAlign16(&play->state.heap, 0x13C00);
+    msgCtx->textboxSegment = THA_AllocTailAlign16(&play->state.tha, 0x13C00);
     font = &play->msgCtx.font;
     Font_LoadOrderedFont(&play->msgCtx.font);
     font->unk_11D88 = 0;

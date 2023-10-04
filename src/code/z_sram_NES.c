@@ -97,7 +97,8 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     /* 20 */ 0,
     /* 21 */ 0,
     /* 22 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_22_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_22_80),
-    /* 23 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_80),
+    /* 23 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_80),
     /* 24 */ PERSISTENT_WEEKEVENTREG_ALT(WEEKEVENTREG_24_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_24_80),
     /* 25 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_25_01),
     /* 26 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_26_40),
@@ -1866,7 +1867,7 @@ void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
 
 void Sram_Alloc(GameState* gameState, SramContext* sramCtx) {
     if (gSaveContext.flashSaveAvailable) {
-        sramCtx->saveBuf = THA_AllocTailAlign16(&gameState->heap, SAVE_BUFFER_SIZE);
+        sramCtx->saveBuf = THA_AllocTailAlign16(&gameState->tha, SAVE_BUFFER_SIZE);
         sramCtx->status = 0;
     }
 }
