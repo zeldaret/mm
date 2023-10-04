@@ -9,7 +9,7 @@
 #include "objects/object_daiku/object_daiku.h"
 #include "objects/object_bombiwa/object_bombiwa.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDaiku2*)thisx)
 
@@ -84,7 +84,7 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_002FA0, this->jointTable,
                        this->morphTable, OBJECT_DAIKU_LIMB_MAX);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_278 = ENDAIKU2_GET_7F(&this->actor);
     this->pathIndex = ENDAIKU2_GET_PATH_INDEX(&this->actor);

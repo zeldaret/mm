@@ -144,8 +144,8 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
     switch (ZORA_EGG_GET_TYPE(&this->actor)) {
         case ZORA_EGG_TYPE_00:
             this->actionFunc = func_80B320E0;
-            this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
-            this->actor.targetMode = 3;
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+            this->actor.targetMode = TARGET_MODE_3;
             break;
 
         case ZORA_EGG_TYPE_01:
@@ -344,13 +344,13 @@ void func_80B320E0(EnZoraegg* this, PlayState* play) {
         Message_StartTextbox(play, 0x24B, &this->actor);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 60.0f);
-        if (this->actor.isTargeted) {
+        if (this->actor.isLockedOn) {
             Actor_OfferTalk(&this->actor, play, 110.0f);
         }
     }
 
-    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
-    this->actor.targetMode = 3;
+    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.targetMode = TARGET_MODE_3;
     func_80B31C40(this, play);
 }
 
@@ -701,7 +701,7 @@ void func_80B32F04(Actor* thisx, PlayState* play) {
     gfx = POLY_XLU_DISP;
     gfx = Gfx_SetupDL20_NoCD(gfx);
 
-    gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
+    gDPSetDither(gfx++, G_CD_NOISE);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
     gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
 

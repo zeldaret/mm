@@ -73,7 +73,7 @@ typedef struct EnPp {
                     s16 hasLandedFromJump;
                     s16 maskDetachState;
                 } actionVar;
-    /* 0x2D4 */ s16 maskBounceRotationalVelocity; // Controls the speed that the Hiploop rotates to face the player when an attack bounces off the mask.
+    /* 0x2D4 */ s16 maskBounceAngularVelocity; // Controls the speed that the Hiploop rotates to face the player when an attack bounces off the mask.
     /* 0x2D6 */ s16 deadBodyPartsSpawnedCount;
     /* 0x2D8 */ f32 endFrame;
     /* 0x2DC */ f32 chargeAndBounceSpeed;
@@ -88,7 +88,7 @@ typedef struct EnPp {
     /* 0x364 */ Vec3f deadBodyPartPos;
     /* 0x370 */ s32 deadBodyPartCount;
     /* 0x374 */ Vec3f deadBodyPartsPos[EN_PP_DEAD_BODYPART_MAX];
-    /* 0x3EC */ Vec3s deadBodyPartRotationalVelocity;
+    /* 0x3EC */ Vec3s deadBodyPartAngularVelocity;
     /* 0x3F2 */ s16 drawDmgEffTimer;
     /* 0x3F4 */ s16 drawDmgEffType;
     /* 0x3F8 */ f32 drawDmgEffScale;

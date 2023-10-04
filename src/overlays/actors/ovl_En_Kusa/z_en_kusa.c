@@ -4,7 +4,6 @@
  * Description: Grass / Bush
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_kusa.h"
 #include "objects/object_kusa/object_kusa.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -572,6 +571,9 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
                 EnKusa_SetupUprootedWaitRegrow(this);
                 this->actor.shape.shadowDraw = NULL;
                 break;
+
+            default:
+                break;
         }
 
     } else {
@@ -622,8 +624,12 @@ void EnKusa_SetupCut(EnKusa* this) {
         case ENKUSA_TYPE_GRASS_2:
             this->actionFunc = EnKusa_DoNothing;
             break;
+
         case ENKUSA_TYPE_REGROWING_GRASS:
             this->actionFunc = EnKusa_CutWaitRegrow;
+            break;
+
+        default:
             break;
     }
     this->timer = 0;

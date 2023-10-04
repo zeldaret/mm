@@ -1,4 +1,4 @@
-#include "PR/pfs.h"
+#include "PR/os_pfs.h"
 #include "global.h"
 
 s32 __osPfsSelectBank(OSPfs* pfs, u8 bank) {

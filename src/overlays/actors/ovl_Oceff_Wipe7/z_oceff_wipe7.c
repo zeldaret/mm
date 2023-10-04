@@ -43,7 +43,7 @@ void OceffWipe7_Destroy(Actor* thisx, PlayState* play) {
     OceffWipe7* this = THIS;
 
     Magic_Reset(play);
-    play->msgCtx.unk120B0 = 0;
+    play->msgCtx.ocarinaSongEffectActive = false;
 }
 
 void OceffWipe7_Update(Actor* thisx, PlayState* play) {

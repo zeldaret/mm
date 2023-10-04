@@ -7,7 +7,7 @@
 #include "z_en_trt2.h"
 #include "objects/object_trt/object_trt.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnTrt2*)thisx)
 
@@ -240,7 +240,7 @@ void func_80AD381C(EnTrt2* this, PlayState* play) {
             this->actor.world.pos.y -= 50.0f;
             this->unk_3D9 = 0;
             this->unk_3B2 = 0;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actor.flags |= ACTOR_FLAG_10;
         }
     } else {
@@ -347,7 +347,7 @@ void func_80AD3CEC(EnTrt2* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_3A8, &this->actor);
         this->unk_3D8 = false;
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
         this->unk_3B2 = 4;
@@ -375,7 +375,7 @@ void func_80AD3DA4(EnTrt2* this, PlayState* play) {
 void func_80AD3E34(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (Inventory_HasEmptyBottle()) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->unk_3B2 = 12;
         } else {
@@ -403,7 +403,7 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
             }
         }
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_3B2 = 12;
     }
@@ -447,7 +447,7 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
             func_80AD349C(this);
             func_80AD3DA4(this, play);
         } else {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             if (this->unk_3A8 == 0x84C) {
                 EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
@@ -529,7 +529,7 @@ void func_80AD4550(EnTrt2* this, PlayState* play) {
     }
 
     if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
     }
 }
@@ -701,7 +701,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
     s16 sp1E = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Player* player = GET_PLAYER(play);
 
-    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted &&
+    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isLockedOn &&
         !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
         ((player->transformation == PLAYER_FORM_HUMAN) || (player->transformation == PLAYER_FORM_FIERCE_DEITY))) {
         this->actor.speed = 0.0f;
@@ -710,7 +710,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
         return true;
     }
 
-    if (func_80AD4C4C(this) && this->actor.isTargeted && (sp1E < 0x4000) && (sp1E > -0x4000)) {
+    if (func_80AD4C4C(this) && this->actor.isLockedOn && (sp1E < 0x4000) && (sp1E > -0x4000)) {
         Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
 
@@ -801,7 +801,7 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 3, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_3, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 

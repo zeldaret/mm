@@ -116,13 +116,13 @@ void EnTimeTag_RooftopOath_Cutscene(EnTimeTag* this, PlayState* play) {
 void EnTimeTag_RooftopOath_Wait(EnTimeTag* this, PlayState* play) {
     Actor* thisx = &this->actor;
 
-    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_OATH)) {
-        if (thisx->csId != CS_ID_NONE) {
+    if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_OATH)) {
+        if (this->actor.csId != CS_ID_NONE) {
             this->actionFunc = EnTimeTag_RooftopOath_Cutscene;
             CutsceneManager_Queue(thisx->csId);
             gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
         }
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
     }
 }
 
@@ -163,7 +163,7 @@ void EnTimeTag_SoaringEngraving_Wait(EnTimeTag* this, PlayState* play) {
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
                (Flags_GetSwitch(play, TIMETAG_SOARING_GET_SWITCHFLAG(&this->actor)) ||
                 CHECK_QUEST_ITEM(QUEST_SONG_SOARING))) {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         Actor_OfferTalk(&this->actor, play, 110.0f);
     }
 }
@@ -186,11 +186,11 @@ void EnTimeTag_Diary_AfterOcarina(EnTimeTag* this, PlayState* play) {
 }
 
 void EnTimeTag_Diary_TeachEvanSongSnippets(EnTimeTag* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaStaff->state == 0) && (play->msgCtx.msgMode == 0x1B)) {
+    if ((play->msgCtx.ocarinaStaff->state == 0) && (play->msgCtx.msgMode == MSGMODE_SONG_DEMONSTRATION_DONE)) {
         TIMETAG_DIARY_TIMER(&this->actor) = 5;
         this->actionFunc = EnTimeTag_Diary_AfterOcarina;
         play->msgCtx.msgLength = 0;
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
     }
 }
 
@@ -217,13 +217,13 @@ void EnTimeTag_Diary_Cutscene(EnTimeTag* this, PlayState* play) {
                         break;
 
                     case 0x122B: // Mikau diary part 1
-                        func_80152434(play, 0x3F);
+                        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_DEMONSTRATE_EVAN_PART1_SECOND_HALF);
                         this->actionFunc = EnTimeTag_Diary_TeachEvanSongSnippets;
                         TIMETAG_DIARY_SONG(&this->actor) = TIMETAG_DIARY_SONG_EVAN_PART1;
                         break;
 
                     case 0x122E: // Mikau diary part 3
-                        func_80152434(play, 0x40);
+                        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_DEMONSTRATE_EVAN_PART2_SECOND_HALF);
                         this->actionFunc = EnTimeTag_Diary_TeachEvanSongSnippets;
                         TIMETAG_DIARY_SONG(&this->actor) = TIMETAG_DIARY_SONG_EVAN_PART2;
                         break;

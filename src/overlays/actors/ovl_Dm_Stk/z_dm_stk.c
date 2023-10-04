@@ -1768,7 +1768,7 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
 
     if (play->csCtx.state == CS_STATE_IDLE) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, play);
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->tatlMessageTimer++;
         if (this->tatlMessageTimer > 800) {
             this->tatlMessageTimer = 0;
@@ -1793,7 +1793,7 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
 void DmStk_ClockTower_Idle(DmStk* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_IDLE) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, play);
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 
         if (this->animIndex == SK_ANIM_CALL_DOWN_MOON_LOOP) {
             this->actor.targetArrowOffset = 3100.0f;
@@ -1867,7 +1867,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
 
         // This code is responsible for making in-game time pass while using the telescope in the Astral Observatory.
         // Skull Kid is always loaded in the scene, even if he isn't visible, hence why time always passes.
-        if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
+        if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
             (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
             (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
             (play->csCtx.state == CS_STATE_IDLE)) {

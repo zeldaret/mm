@@ -7,7 +7,7 @@
 #include "z_en_toto.h"
 #include "objects/object_zm/object_zm.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnToto*)thisx)
 
@@ -89,7 +89,7 @@ static EnTotoActionFunc D_80BA501C[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_1, ICHAIN_STOP),
 };
 
 static EnTotoText D_80BA502C[] = {
@@ -151,7 +151,12 @@ static Vec3s D_80BA510C[] = {
     { 0xFF64, 0x0016, 0xFE7E },
 };
 
-static u16 D_80BA5120[] = { 67, 68, 69, 70 };
+static u16 sOcarinaActionWindFishPrompts[] = {
+    OCARINA_ACTION_PROMPT_WIND_FISH_HUMAN,
+    OCARINA_ACTION_PROMPT_WIND_FISH_GORON,
+    OCARINA_ACTION_PROMPT_WIND_FISH_ZORA,
+    OCARINA_ACTION_PROMPT_WIND_FISH_DEKU,
+};
 
 static u8 D_80BA5128[] = { 8, 4, 2, 1 };
 
@@ -332,7 +337,7 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
         }
     } else {
         player = GET_PLAYER(play);
-        if ((player->stateFlags1 & PLAYER_STATE1_400) && player->unk_AE7 != 0) {
+        if ((player->stateFlags1 & PLAYER_STATE1_400) && (player->actionVar1 != 0)) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_CIRCUS_LEADERS_MASK);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN);
@@ -542,12 +547,12 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
 
 s32 func_80BA46D8(EnToto* this, PlayState* play) {
     func_800B7298(play, NULL, PLAYER_CSMODE_68);
-    func_80152434(play, D_80BA5120[CUR_FORM]);
+    Message_DisplayOcarinaStaff(play, sOcarinaActionWindFishPrompts[CUR_FORM]);
     return 0;
 }
 
 s32 func_80BA4740(EnToto* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode == 4) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
         if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
             SET_WEEKEVENTREG(WEEKEVENTREG_56_10);
         }

@@ -8,7 +8,7 @@
 #include "z64snap.h"
 #include "objects/object_zo/object_zo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnZot*)thisx)
 
@@ -96,7 +96,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     this->unk_2F4 = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.world.rot.z = this->actor.shape.rot.z = 0;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -4.0f;
 
@@ -1146,7 +1146,7 @@ void func_80B98BF4(EnZot* this, PlayState* play) {
 
 void func_80B98CA8(EnZot* this, PlayState* play) {
     if (func_800B8718(&this->actor, &play->state)) {
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         AudioOcarina_StartDefault(0xFFFF);
         this->actionFunc = func_80B98BF4;
         this->actor.flags |= ACTOR_FLAG_10000;

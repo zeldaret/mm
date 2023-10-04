@@ -8,7 +8,7 @@
 #include "objects/object_an4/object_an4.h"
 #include "objects/object_msmo/object_msmo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmGm*)thisx)
 
@@ -199,7 +199,7 @@ void func_80C248A8(DmGm* this, PlayState* play) {
 
         this->animIndex = DMGM_ANIM_NONE;
         DmGm_ChangeAnim(this, play, DMGM_ANIM_0);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         Actor_SetScale(&this->actor, 0.01f);
         this->unk_2AE |= 1;
         this->actor.draw = func_80C25000;

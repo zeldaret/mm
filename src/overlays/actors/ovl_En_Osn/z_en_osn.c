@@ -7,7 +7,7 @@
 #include "z_en_osn.h"
 #include "objects/object_osn/object_osn.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnOsn*)thisx)
 
@@ -176,7 +176,7 @@ static DamageTable sDamageTable = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_STOP),
 };
 
 void EnOsn_UpdateCollider(EnOsn* this, PlayState* play) {
@@ -724,7 +724,7 @@ void EnOsn_Idle(EnOsn* this, PlayState* play) {
         !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->actionFunc = EnOsn_StartCutscene;
-        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) &&
+        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) && (yaw < 0x4000) &&
                    (yaw > -0x4000)) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             this->actor.textId = 0xFFFF;
@@ -733,7 +733,7 @@ void EnOsn_Idle(EnOsn* this, PlayState* play) {
         this->textId = EnOsn_GetInitialText(this, play);
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnOsn_Talk;
-    } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) && (yaw > -0x4000)) {
+    } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) && (yaw < 0x4000) && (yaw > -0x4000)) {
         Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
 }
@@ -888,7 +888,7 @@ void EnOsn_Talk(EnOsn* this, PlayState* play) {
     if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
         if (this->stateFlags & OSN_STATE_END_CONVERSATION) {
             this->stateFlags &= ~OSN_STATE_END_CONVERSATION;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = EnOsn_Idle;
         } else {
@@ -948,7 +948,7 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
             break;
 
         case OSN_TYPE_CUTSCENE:
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnOsn_HandleCsAction;
             break;
 
@@ -976,12 +976,12 @@ void EnOsn_Update(Actor* thisx, PlayState* play) {
 
     if (ENOSN_GET_TYPE(&this->actor) == OSN_TYPE_CHOOSE) {
         if (isFlagSet) {
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             EnOsn_UpdateCollider(this, play);
             this->actor.draw = EnOsn_Draw;
         } else {
             this->actor.draw = NULL;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         }
     }
 

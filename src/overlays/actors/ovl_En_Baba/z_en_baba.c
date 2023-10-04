@@ -6,7 +6,7 @@
 
 #include "z_en_baba.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnBaba*)thisx)
 
@@ -513,7 +513,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
 
     this->actor.draw = EnBaba_Draw;
     this->stateFlags |= BOMB_SHOP_LADY_STATE_DRAW_SHADOW;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 
     if (play->sceneId == SCENE_BOMYA) {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
@@ -558,7 +558,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
     } else {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
         if (BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_SWAY) {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->animIndex = BOMB_SHOP_LADY_ANIM_SWAY;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_DoNothing;
@@ -596,7 +596,7 @@ void EnBaba_FollowSchedule_Talk(EnBaba* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = EnBaba_FollowSchedule;
     }
@@ -610,7 +610,7 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             if (this->stateFlags & BOMB_SHOP_LADY_STATE_END_CONVERSATION) {
                 this->stateFlags &= ~BOMB_SHOP_LADY_STATE_END_CONVERSATION;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
@@ -629,7 +629,7 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
                 }
             } else if (this->stateFlags & BOMB_SHOP_LADY_STATE_GIVE_BLAST_MASK) {
                 this->stateFlags &= ~BOMB_SHOP_LADY_STATE_GIVE_BLAST_MASK;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnBaba_GiveBlastMask;
             } else {
@@ -672,11 +672,11 @@ void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
         ((this->scheduleResult != scheduleOutput.result) &&
          !EnBaba_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->stateFlags &= ~BOMB_SHOP_LADY_STATE_DRAW_SHADOW;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = BOMB_SHOP_LADY_SCH_NONE;
     } else {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_DRAW_SHADOW;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->scheduleResult = scheduleOutput.result;
 
@@ -686,7 +686,7 @@ void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             Message_StartTextbox(play, 0x2A39, &this->actor); // "I'm sorry"
             this->actionFunc = EnBaba_FollowSchedule_Talk;
-        } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
+        } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
     }
@@ -744,7 +744,7 @@ void EnBaba_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.gravity = -4.0f;
     this->actionFunc = EnBaba_FinishInit;
 }

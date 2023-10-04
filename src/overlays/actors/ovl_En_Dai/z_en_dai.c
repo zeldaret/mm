@@ -6,7 +6,7 @@
 
 #include "z_en_dai.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnDai*)thisx)
 
@@ -429,7 +429,7 @@ void func_80B3EE8C(EnDai* this, PlayState* play) {
 void func_80B3EEDC(EnDai* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         EnDai_ChangeAnim(this, ENDAI_ANIM_1);
         this->actionFunc = func_80B3EE8C;
@@ -541,7 +541,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     this->animIndex = ENDAI_ANIM_NONE;
     EnDai_ChangeAnim(this, ENDAI_ANIM_0);
     Actor_SetScale(&this->actor, 0.2f);
-    this->actor.targetMode = 10;
+    this->actor.targetMode = TARGET_MODE_10;
     this->unk_1F0 = D_80B3FBF0;
     this->unk_1FC = D_80B3FBF0;
     this->unk_1CE = 0;
@@ -561,7 +561,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk_1CD = 0;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_1CE |= (0x100 | 0x20);
     this->unk_1CE |= 0x80;
     this->actionFunc = func_80B3EEDC;

@@ -7,7 +7,7 @@
 #include "z_en_yb.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnYb*)thisx)
 
@@ -120,7 +120,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     } else { // else (night 6pm to midnight): wait to appear
         this->alpha = 0;
         this->actionFunc = EnYb_WaitForMidnight;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     }
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_04)) {
@@ -358,7 +358,7 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
 
     EnYb_UpdateAnimation(this, play);
     if ((this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.playerHeightRel) < 50.0f) &&
-        (play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
+        (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
         (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
@@ -396,7 +396,7 @@ void EnYb_WaitForMidnight(EnYb* this, PlayState* play) {
         this->alpha += 5;
         if (this->alpha > 250) {
             this->alpha = 255;
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnYb_Idle;
         }
         EnYb_EnableProximityMusic(this);
@@ -407,11 +407,11 @@ void EnYb_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnYb* this = THIS;
 
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_1)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TARGETABLE)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_1)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TARGETABLE)) {
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }

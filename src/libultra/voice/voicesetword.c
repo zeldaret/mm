@@ -4,9 +4,9 @@
  * Registers words to the Voice Recognition System dictionary
  */
 
-#include "ultra64/controller_voice.h"
-#include "ultra64/os_voice.h"
-#include "io/controller.h"
+#include "PR/controller_voice.h"
+#include "PR/os_voice.h"
+#include "PR/controller.h"
 #include "functions.h"
 #include "macros.h"
 

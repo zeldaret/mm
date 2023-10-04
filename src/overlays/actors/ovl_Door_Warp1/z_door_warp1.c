@@ -919,10 +919,10 @@ void DoorWarp1_Update(Actor* thisx, PlayState* play) {
         this->unk_204 = 1.0f;
     }
 
-    if ((this->unk_1A0 != NULL) && (this->unk_1A0->unk_15C != this->unk_204)) {
+    if ((this->unk_1A0 != NULL) && (this->unk_1A0->unk15C != this->unk_204)) {
         this->unk_1A0->actor.world.pos.y = this->dyna.actor.world.pos.y;
-        this->unk_1A0->unk_158 = this->dyna.actor.world.pos.y;
-        this->unk_1A0->unk_15C = this->unk_204;
+        this->unk_1A0->unk158 = this->dyna.actor.world.pos.y;
+        this->unk_1A0->unk15C = this->unk_204;
     }
 
     this->actionFunc(this, play);

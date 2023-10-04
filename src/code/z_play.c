@@ -32,6 +32,7 @@ u8 sMotionBlurStatus;
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+#include "debug.h"
 
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;
@@ -82,7 +83,7 @@ void Play_DrawMotionBlur(PlayState* this) {
             sMotionBlurStatus = MOTION_BLUR_PROCESS;
         }
 
-        func_801705B4(&this->pauseBgPreRender, &gfx);
+        PreRender_SaveFramebuffer(&this->pauseBgPreRender, &gfx);
 
         gSPEndDisplayList(gfx++);
 
@@ -335,11 +336,11 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
 
             default:
                 fbdemoType = -1;
-                __assert("../z_play.c", 1420);
+                _dbg_hungup("../z_play.c", 1420);
         }
     } else {
         fbdemoType = -1;
-        __assert("../z_play.c", 1423);
+        _dbg_hungup("../z_play.c", 1423);
     }
 
     transitionCtx->transitionType = transitionType;
@@ -960,9 +961,9 @@ void Play_UpdateMain(PlayState* this) {
         Play_UpdateTransition(this);
         if (gTransitionTileState != TRANS_TILE_READY) {
             if ((gSaveContext.gameMode == GAMEMODE_NORMAL) &&
-                (((this->msgCtx.msgMode == 0)) ||
-                 ((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == 0x42) &&
-                  (this->msgCtx.unk12020 == 0x41)) ||
+                (((this->msgCtx.msgMode == MSGMODE_NONE)) ||
+                 ((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == MSGMODE_TEXT_DONE) &&
+                  (this->msgCtx.textboxEndType == TEXTBOX_ENDTYPE_41)) ||
                  ((this->msgCtx.currentTextId >= 0x100) && (this->msgCtx.currentTextId <= 0x200))) &&
                 (this->gameOverCtx.state == GAMEOVER_INACTIVE)) {
                 KaleidoSetup_Update(this);
@@ -1071,7 +1072,7 @@ void Play_Update(PlayState* this) {
         this->pauseCtx.bombersNotebookOpen = false;
         sBombersNotebook.loadState = BOMBERS_NOTEBOOK_LOAD_STATE_NONE;
         this->msgCtx.msgLength = 0;
-        this->msgCtx.msgMode = 0;
+        this->msgCtx.msgMode = MSGMODE_NONE;
         this->msgCtx.currentTextId = 0;
         this->msgCtx.stateTimer = 0;
         Audio_PlaySfx(NA_SE_SY_CANCEL);
@@ -1266,8 +1267,8 @@ void Play_DrawMain(PlayState* this) {
             if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_READY) {
                 Gfx* sp8C = POLY_OPA_DISP;
 
-                if (this->pauseBgPreRender.unk_4D == 2) {
-                    func_80170B28(&this->pauseBgPreRender, &sp8C);
+                if (this->pauseBgPreRender.filterState == PRERENDER_FILTER_STATE_DONE) {
+                    PreRender_RestoreFramebuffer(&this->pauseBgPreRender, &sp8C);
                 } else {
                     func_80170798(&this->pauseBgPreRender, &sp8C);
                 }
@@ -1404,10 +1405,10 @@ void Play_DrawMain(PlayState* this) {
                     this->pauseBgPreRender.cvgSave = NULL;
                 }
 
-                func_801705B4(&this->pauseBgPreRender, &sp74);
+                PreRender_SaveFramebuffer(&this->pauseBgPreRender, &sp74);
 
                 if (this->pauseBgPreRender.cvgSave != NULL) {
-                    func_80170730(&this->pauseBgPreRender, &sp74);
+                    PreRender_DrawCoverage(&this->pauseBgPreRender, &sp74);
                 }
 
                 gSPEndDisplayList(sp74++);
@@ -1561,7 +1562,7 @@ void Play_GetFloorSurface(PlayState* this, MtxF* mtx, Vec3f* pos) {
 
 void* Play_LoadFile(PlayState* this, RomFile* entry) {
     size_t size = entry->vromEnd - entry->vromStart;
-    void* allocp = THA_AllocTailAlign16(&this->state.heap, size);
+    void* allocp = THA_AllocTailAlign16(&this->state.tha, size);
 
     DmaMgr_SendRequest0(allocp, entry->vromStart, size);
 
@@ -2323,9 +2324,9 @@ void Play_Init(GameState* thisx) {
     D_801F6D4C->envColor.b = 0;
     D_801F6D4C->envColor.a = 0;
     CutsceneFlags_UnsetAll(this);
-    THA_GetRemaining(&this->state.heap);
-    zAllocSize = THA_GetRemaining(&this->state.heap);
-    zAlloc = (uintptr_t)THA_AllocTailAlign16(&this->state.heap, zAllocSize);
+    THA_GetRemaining(&this->state.tha);
+    zAllocSize = THA_GetRemaining(&this->state.tha);
+    zAlloc = (uintptr_t)THA_AllocTailAlign16(&this->state.tha, zAllocSize);
     ZeldaArena_Init(((zAlloc + 8) & ~0xF), (zAllocSize - ((zAlloc + 8) & ~0xF)) + zAlloc); //! @bug: Incorrect ALIGN16s
     Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
 

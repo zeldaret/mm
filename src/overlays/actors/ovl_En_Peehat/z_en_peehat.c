@@ -10,7 +10,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_ph/object_ph.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPeehat*)thisx)
 
@@ -231,7 +231,7 @@ void EnPeehat_Destroy(Actor* thisx, PlayState* play) {
 void func_80897170(EnPeehat* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 1.1f;
-    this->drawDmgEffFrozenSteamScale = 1.6500001f;
+    this->drawDmgEffFrozenSteamScale = 1650.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->colliderSphere.base.colType = COLTYPE_HIT3;
     this->unk_2B0 = 80;
@@ -298,7 +298,7 @@ void func_80897498(EnPeehat* this) {
 
 void func_80897520(EnPeehat* this, PlayState* play) {
     if (!gSaveContext.save.isNight) {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->colliderSphere.base.acFlags |= AC_ON;
         if (this->actor.xzDistToPlayer < 740.0f) {
             func_80897648(this);
@@ -306,7 +306,7 @@ void func_80897520(EnPeehat* this, PlayState* play) {
             Math_StepToF(&this->actor.shape.yOffset, -1000.0f, 10.0f);
         }
     } else {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->colliderSphere.base.acFlags &= ~AC_ON;
         Math_StepToF(&this->actor.shape.yOffset, -1000.0f, 50.0f);
         if (this->unk_2B0 != 0) {

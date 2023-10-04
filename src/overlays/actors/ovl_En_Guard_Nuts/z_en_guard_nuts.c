@@ -7,7 +7,7 @@
 #include "z_en_guard_nuts.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGuardNuts*)thisx)
 
@@ -61,31 +61,38 @@ s32 sGuardCount = 0;
 
 s32 D_80ABBE20 = 0;
 
-static u16 sTextIDs[] = { 0x0824, 0x0825, 0x0826, 0x082D, 0x0827, 0x0828, 0x0829, 0x082A, 0x082B, 0x082C };
+static u16 sTextIds[] = { 0x0824, 0x0825, 0x0826, 0x082D, 0x0827, 0x0828, 0x0829, 0x082A, 0x082B, 0x082C };
 
 s16 D_80ABBE38[] = { 0x0000, 0x0000, 0x0002, 0x0001, 0x0000, 0x0000, 0x0002, 0x0000, 0x0000, 0x0002 };
 
-static AnimationHeader* sAnimations[] = {
-    &gDekuPalaceGuardWaitAnim,
-    &gDekuPalaceGuardWalkAnim,
-    &gDekuPalaceGuardDigAnim,
-    &gDekuPalaceGuardWalkAnim,
+typedef enum {
+    /* -1 */ GUARD_NUTS_ANIM_NONE = -1,
+    /*  0 */ GUARD_NUTS_ANIM_WAIT_HEAD_TILT,
+    /*  1 */ GUARD_NUTS_ANIM_WALK,
+    /*  2 */ GUARD_NUTS_ANIM_DIG,
+    /*  3 */ GUARD_NUTS_ANIM_WALK_2,
+    /*  4 */ GUARD_NUTS_ANIM_MAX
+} EnGuardNutsAnimation;
+
+static AnimationHeader* sAnimations[GUARD_NUTS_ANIM_MAX] = {
+    &gDekuPalaceGuardWaitAnim, // GUARD_NUTS_ANIM_WAIT_HEAD_TILT
+    &gDekuPalaceGuardWalkAnim, // GUARD_NUTS_ANIM_WALK
+    &gDekuPalaceGuardDigAnim,  // GUARD_NUTS_ANIM_DIG
+    &gDekuPalaceGuardWalkAnim, // GUARD_NUTS_ANIM_WALK_2
 };
 
-static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
+static u8 sAnimationModes[GUARD_NUTS_ANIM_MAX] = {
+    ANIMMODE_LOOP, // GUARD_NUTS_ANIM_WAIT_HEAD_TILT
+    ANIMMODE_LOOP, // GUARD_NUTS_ANIM_WALK
+    ANIMMODE_ONCE, // GUARD_NUTS_ANIM_DIG
+    ANIMMODE_ONCE, // GUARD_NUTS_ANIM_WALK_2
+};
 
 static TexturePtr sEyeTextures[] = {
     gDekuPalaceGuardEyeOpenTex,
     gDekuPalaceGuardEyeHalfTex,
     gDekuPalaceGuardEyeClosedTex,
 };
-
-typedef enum {
-    /* 0 */ WAIT_HEAD_TILT_ANIM,
-    /* 1 */ WALK_ANIM,
-    /* 2 */ DIG_ANIM,
-    /* 3 */ WALK_ANIM_2
-} EnGuardNutsAnim;
 
 typedef enum {
     /* 0 */ GUARD_NUTS_WAIT_STATE,
@@ -101,7 +108,7 @@ void EnGuardNuts_Init(Actor* thisx, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardWaitAnim, this->jointTable,
                    this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.015f);
     Math_Vec3f_Copy(&this->guardPos, &this->actor.world.pos);
@@ -123,20 +130,20 @@ void EnGuardNuts_Destroy(Actor* thisx, PlayState* play) {
 }
 
 /**
- * @brief Changes the animation to the provided index. Updates animIndex and animFrameCount for the animation.
+ * @brief Changes the animation to the provided index. Updates animIndex and animEndFrame for the animation.
  *
  * @param this
  * @param animIndex the index of sAnimations to change to
  */
 void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 animIndex) {
     this->animIndex = animIndex;
-    this->animFrameCount = Animation_GetLastFrame(sAnimations[this->animIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animFrameCount,
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[this->animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animEndFrame,
                      sAnimationModes[this->animIndex], -2.0f);
 }
 
 void EnGuardNuts_SetupWait(EnGuardNuts* this) {
-    EnGuardNuts_ChangeAnim(this, WAIT_HEAD_TILT_ANIM);
+    EnGuardNuts_ChangeAnim(this, GUARD_NUTS_ANIM_WAIT_HEAD_TILT);
     this->state = GUARD_NUTS_WAIT_STATE;
     this->actionFunc = EnGuardNuts_Wait;
 }
@@ -169,22 +176,22 @@ void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play) {
         // No place for an outsider
         this->guardTextIndex = 3;
     }
-    this->actor.textId = sTextIDs[this->guardTextIndex];
+    this->actor.textId = sTextIds[this->guardTextIndex];
     phi_a1 = this->actor.world.rot.y;
     if (D_80ABBE20 == 2) {
         EnGuardNuts_Burrow(this, play);
         return;
     }
     if (D_80ABBE20 == 1) {
-        if (this->animIndex != WALK_ANIM) {
-            EnGuardNuts_ChangeAnim(this, WALK_ANIM);
+        if (this->animIndex != GUARD_NUTS_ANIM_WALK) {
+            EnGuardNuts_ChangeAnim(this, GUARD_NUTS_ANIM_WALK);
         }
         phi_a1 = (this->actor.home.rot.y + 0x8000);
     }
     if (fabsf((f32)(this->actor.shape.rot.y - phi_a1)) < 100.0f) {
         this->actor.shape.rot.y = phi_a1;
-        if ((D_80ABBE20 == 1) && (this->animIndex != WALK_ANIM_2)) {
-            EnGuardNuts_ChangeAnim(this, WALK_ANIM_2);
+        if ((D_80ABBE20 == 1) && (this->animIndex != GUARD_NUTS_ANIM_WALK_2)) {
+            EnGuardNuts_ChangeAnim(this, GUARD_NUTS_ANIM_WALK_2);
         }
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, phi_a1, 1, 0xBB8, 0);
@@ -199,7 +206,7 @@ void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play) {
 }
 
 void func_80ABB540(EnGuardNuts* this) {
-    EnGuardNuts_ChangeAnim(this, WALK_ANIM);
+    EnGuardNuts_ChangeAnim(this, GUARD_NUTS_ANIM_WALK);
     this->targetHeadPos.x = this->targetHeadPos.y = 0;
     this->timer = 16;
     this->state = GUARD_NUTS_TALKING_STATE;
@@ -216,7 +223,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
     if (fabsf((this->actor.shape.rot.y - yaw)) < 100.0f) {
         this->actor.shape.rot.y = yaw;
         curFrame = this->skelAnime.curFrame;
-        if ((curFrame < this->animFrameCount) || (this->guardTextIndex >= 7)) {
+        if ((curFrame < this->animEndFrame) || (this->guardTextIndex >= 7)) {
             SkelAnime_Update(&this->skelAnime);
         }
     } else {
@@ -226,8 +233,8 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         this->targetHeadPos.y = 0;
         this->targetHeadPos.x = 0;
-        if ((this->guardTextIndex == 3) && (this->animIndex == WAIT_HEAD_TILT_ANIM)) {
-            EnGuardNuts_ChangeAnim(this, WAIT_HEAD_TILT_ANIM);
+        if ((this->guardTextIndex == 3) && (this->animIndex == GUARD_NUTS_ANIM_WAIT_HEAD_TILT)) {
+            EnGuardNuts_ChangeAnim(this, GUARD_NUTS_ANIM_WAIT_HEAD_TILT);
         }
         if (Message_ShouldAdvance(play)) {
             if (D_80ABBE38[this->guardTextIndex] != 1) {
@@ -238,7 +245,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
                     EnGuardNuts_Burrow(this, play);
                 } else {
                     this->guardTextIndex++;
-                    Message_StartTextbox(play, sTextIDs[this->guardTextIndex], &this->actor);
+                    Message_StartTextbox(play, sTextIds[this->guardTextIndex], &this->actor);
                     if (D_80ABBE38[this->guardTextIndex] == 2) {
                         D_80ABBE20 = 1;
                     }
@@ -271,7 +278,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
 void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play) {
     Vec3f digPos;
 
-    EnGuardNuts_ChangeAnim(this, DIG_ANIM);
+    EnGuardNuts_ChangeAnim(this, GUARD_NUTS_ANIM_DIG);
     Math_Vec3f_Copy(&digPos, &this->actor.world.pos);
     digPos.y = this->actor.floorHeight;
     EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
@@ -287,7 +294,7 @@ void EnGuardNuts_SetupUnburrow(EnGuardNuts* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     SkelAnime_Update(&this->skelAnime);
-    if (this->animFrameCount <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         this->state = GUARD_NUTS_BURROWED_STATE;
         this->actionFunc = EnGuardNuts_Unburrow;
         this->actor.world.rot.y = this->actor.home.rot.y;
@@ -322,12 +329,13 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
     s32 pad;
 
     if (this->blinkTimer == 0) {
-        if (++(this->eyeState) >= 3) {
+        this->eyeState++;
+        if (this->eyeState >= 3) {
             this->eyeState = 0;
             this->blinkTimer = (s16)Rand_ZeroFloat(60.0f) + 20;
         }
     }
-    if ((this->animIndex == WALK_ANIM) &&
+    if ((this->animIndex == GUARD_NUTS_ANIM_WALK) &&
         (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }

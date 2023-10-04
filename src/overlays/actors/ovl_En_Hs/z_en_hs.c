@@ -6,7 +6,7 @@
 
 #include "z_en_hs.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnHs*)thisx)
 
@@ -87,7 +87,7 @@ void EnHs_Init(Actor* thisx, PlayState* play) {
     }
 
     this->stateFlags = 0;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     func_80952C50(this, play);
 }
 
@@ -110,7 +110,7 @@ void EnHs_UpdateChickPos(Vec3f* dst, Vec3f src, f32 offset) {
 
     Math_Vec3f_Diff(&src, dst, &diff);
 
-    distance = SQ(diff.x) + SQ(diff.z); // gets un-squared after we check if we are too close
+    distance = SQXZ(diff); // gets un-squared after we check if we are too close
 
     if (SQ(offset) > distance) {
         return;
@@ -176,20 +176,20 @@ void func_80953098(EnHs* this, PlayState* play) {
 void func_80953180(EnHs* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
-            case 0x33F4: // text: laughing that they are all roosters (!)
-            case 0x33F6: // text: Grog regrets not being able to see his chicks reach adult hood
+            case 0x33F4: // laughing that they are all roosters (!)
+            case 0x33F6: // Grog regrets not being able to see his chicks reach adult hood
                 Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
 
-            case 0x33F7: // text: notice his chicks are grown up, happy, wants to give you bunny hood
+            case 0x33F7: // notice his chicks are grown up, happy, wants to give you bunny hood
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80953098;
                 func_80953098(this, play);
                 break;
 
-            case 0x33F9: // text: laughing that they are all roosters (.)
+            case 0x33F9: // laughing that they are all roosters (.)
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
@@ -340,6 +340,9 @@ s32 EnHs_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
                 *dList = NULL;
                 return false;
             }
+            break;
+
+        default:
             break;
     }
     return false;

@@ -8,7 +8,7 @@
 #include "objects/object_trt/object_trt.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnTrt*)thisx)
 
@@ -126,7 +126,7 @@ void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 a
 s32 EnTrt_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
@@ -217,7 +217,7 @@ void EnTrt_EndInteraction(PlayState* play, EnTrt* this) {
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &play->state);
-    play->msgCtx.msgMode = 0x43;
+    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     this->drawCursor = 0;
@@ -362,7 +362,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
                     CutsceneManager_Stop(this->csId);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnTrt_PayForMushroom;
                 break;
@@ -412,7 +412,7 @@ void EnTrt_StartRedPotionConversation(EnTrt* this, PlayState* play) {
                     CutsceneManager_Stop(this->csId);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
@@ -660,7 +660,7 @@ void EnTrt_SetupBuyItemWithFanfare(PlayState* play, EnTrt* this) {
     Player* player = GET_PLAYER(play);
 
     Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
-    play->msgCtx.msgMode = 0x43;
+    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
@@ -999,7 +999,7 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, PlayState* play) {
                     CutsceneManager_Stop(this->csId);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
@@ -1577,7 +1577,7 @@ void EnTrt_InitShop(EnTrt* this, PlayState* play) {
         this->flags |= ENTRT_GIVEN_MUSHROOM;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void EnTrt_GetCutscenes(EnTrt* this, PlayState* play) {

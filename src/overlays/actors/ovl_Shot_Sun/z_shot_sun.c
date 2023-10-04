@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_Item_Etcetera/z_item_etcetera.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((ShotSun*)thisx)
 
@@ -66,7 +66,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->actionFunc = ShotSun_UpdateHyliaSun;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     }
 }
 
@@ -129,18 +129,18 @@ void ShotSun_TriggerFairy(ShotSun* this, PlayState* play) {
 void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play) {
     s32 type = SHOTSUN_GET_TYPE(&this->actor);
 
-    if (play->msgCtx.ocarinaMode == 3) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         switch (play->msgCtx.lastPlayedSong) {
             case OCARINA_SONG_STORMS:
                 if (type == SHOTSUN_FAIRY_SPAWNER_STORMS) {
                     this->actionFunc = ShotSun_TriggerFairy;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
                 break;
             case OCARINA_SONG_SUNS:
                 if (type == SHOTSUN_FAIRY_SPAWNER_SUNS) {
                     this->actionFunc = ShotSun_TriggerFairy;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
                 break;
         }

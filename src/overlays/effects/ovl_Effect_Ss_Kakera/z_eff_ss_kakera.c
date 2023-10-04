@@ -5,6 +5,7 @@
  */
 
 #include "z_eff_ss_kakera.h"
+#include "debug.h"
 
 #define rReg0 regs[0]
 #define rGravity regs[1]
@@ -62,7 +63,7 @@ u32 EffectSsKakera_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
                 break;
         }
     } else {
-        __assert("../z_eff_kakera.c", 193);
+        _dbg_hungup("../z_eff_kakera.c", 193);
     }
     this->draw = EffectSsKakera_Draw;
     this->update = EffectSsKakera_Update;

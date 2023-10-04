@@ -7,7 +7,7 @@
 #include "z_en_akindonuts.h"
 #include "objects/object_dnt/object_dnt.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnAkindonuts*)thisx)
 
@@ -152,7 +152,7 @@ static u16 D_80BF04AC[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -457,7 +457,7 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C &= ~0x1;
                         this->unk_32C |= 0x40;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -546,7 +546,7 @@ void func_80BED680(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -650,7 +650,7 @@ void func_80BED8A4(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -739,7 +739,7 @@ void func_80BEDB88(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -838,7 +838,7 @@ void func_80BEDDAC(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -922,7 +922,7 @@ void func_80BEE070(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x161A;
                         this->actionFunc = func_80BEF360;
@@ -1011,7 +1011,7 @@ void func_80BEE274(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x1629;
                         this->actionFunc = func_80BEF360;
@@ -1095,7 +1095,7 @@ void func_80BEE530(EnAkindonuts* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -1318,7 +1318,7 @@ void func_80BEEE10(EnAkindonuts* this, PlayState* play) {
         this->actionFunc = func_80BEEFA8;
     } else if (((this->actor.xzDistToPlayer < 100.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
-               this->actor.isTargeted) {
+               this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 100.0f);
     } else if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
                !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
@@ -1335,15 +1335,15 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_32C & 1) {
                 this->unk_32C &= ~0x1;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_33C = 0;
                 this->actionFunc = func_80BEEE10;
             } else if (this->unk_32C & 0x20) {
                 this->unk_32C &= ~0x20;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->unk_32C &= ~0x4;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->animIndex = ENAKINDONUTS_ANIM_8;
                 this->unk_33C = 0;
@@ -1378,7 +1378,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
 
 void func_80BEF18C(EnAkindonuts* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_33C = 0;
         this->actionFunc = func_80BEEE10;
@@ -1405,7 +1405,7 @@ void func_80BEF20C(EnAkindonuts* this, PlayState* play) {
     if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_32C & 1) {
             this->unk_32C &= ~0x1;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = func_80BEF360;
         } else {

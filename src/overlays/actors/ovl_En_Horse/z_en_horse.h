@@ -93,7 +93,8 @@ typedef enum EnHorseAnimation {
     /* 5 */ ENHORSE_ANIM_TROT,
     /* 6 */ ENHORSE_ANIM_GALLOP,
     /* 7 */ ENHORSE_ANIM_LOW_JUMP,
-    /* 8 */ ENHORSE_ANIM_HIGH_JUMP
+    /* 8 */ ENHORSE_ANIM_HIGH_JUMP,
+    /* 9 */ ENHORSE_ANIM_MAX
 } EnHorseAnimation;
 
 typedef enum HorseType {
@@ -101,7 +102,8 @@ typedef enum HorseType {
     /* 1 */ HORSE_TYPE_HNI,
     /* 2 */ HORSE_TYPE_2,
     /* 3 */ HORSE_TYPE_BANDIT,
-    /* 4 */ HORSE_TYPE_DONKEY // Cremia's donkey
+    /* 4 */ HORSE_TYPE_DONKEY, // Cremia's donkey
+    /* 5 */ HORSE_TYPE_MAX
 } HorseType;
 
 #define ENHORSE_PARAM_BANDIT 0x2000
@@ -206,8 +208,8 @@ typedef struct EnHorse {
     /* 0x3E4 */ UNK_TYPE1 unk_3E4[0x4];
     /* 0x3E8 */ f32 unk_3E8;
     /* 0x3EC */ s16 unk_3EC;
-    /* 0x3EE */ Vec3s jointTable[OBJECT_HA_1_LIMB_MAX];
-    /* 0x48A */ Vec3s morphTable[OBJECT_HA_1_LIMB_MAX];
+    /* 0x3EE */ Vec3s jointTable[HORSE_BANDIT_LIMB_MAX];
+    /* 0x48A */ Vec3s morphTable[HORSE_BANDIT_LIMB_MAX];
     /* 0x528 */ f32 unk_528;
     /* 0x52C */ s32 unk_52C;
     /* 0x530 */ s32 cueChannel;

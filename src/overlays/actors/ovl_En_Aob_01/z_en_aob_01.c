@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Racedog/z_en_racedog.h"
 #include "overlays/actors/ovl_En_Dg/z_en_dg.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnAob01*)thisx)
 
@@ -449,7 +449,7 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
                 this->stateFlags &= ~ENAOB01_FLAG_PLAYER_CONFIRMED_CHOICE;
                 Rupees_ChangeBy(-this->rupeesBet);
                 func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnAob01_BeforeRace_StartRace;
                 return;
@@ -518,7 +518,7 @@ void EnAob01_BeforeRace_RespondToPlayAgainQuestion(EnAob01* this, PlayState* pla
             }
         }
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->textId = 0;
         this->actionFunc = EnAob01_BeforeRace_Idle;
@@ -672,7 +672,7 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
             this->stateFlags &= ~ENAOB01_FLAG_LAUGH;
             if (this->stateFlags & ENAOB01_FLAG_CONVERSATION_OVER) {
                 this->stateFlags &= ~ENAOB01_FLAG_CONVERSATION_OVER;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnAob01_BeforeRace_Idle;
             } else {
@@ -898,7 +898,7 @@ void EnAob01_AfterRace_GiveReward(EnAob01* this, PlayState* play) {
     if (EnAob01_ProcessIdleAnim(this)) {
         if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             this->rupeesBet = 0;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
         }
 
@@ -1114,7 +1114,7 @@ void EnAob01_Init(Actor* thisx, PlayState* play) {
         case EVENTINF_DOG_RACE_STATE_NOT_STARTED:
             EnAob01_InitializeDogTextOffsets();
             EnAob01_SpawnDogs(this, play);
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnAob01_BeforeRace_Idle;
             break;
 
@@ -1125,7 +1125,7 @@ void EnAob01_Init(Actor* thisx, PlayState* play) {
             this->csId = this->actor.csId;
             EnAob01_Race_FollowSelectedDog(this, play);
             CutsceneManager_Queue(this->csId);
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             EnAob01_Race_HidePlayer(this, play);
             this->actionFunc = EnAob01_Race_StartCutscene;
             break;
@@ -1133,7 +1133,7 @@ void EnAob01_Init(Actor* thisx, PlayState* play) {
         case EVENTINF_DOG_RACE_STATE_ENDED:
             EnAob01_InitializeDogTextOffsets();
             EnAob01_SpawnDogs(this, play);
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actor.flags |= ACTOR_FLAG_10000;
             this->actionFunc = EnAob01_AfterRace_GiveRaceResult;
             break;

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/object_mm/object_mm.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnPm*)thisx)
 
@@ -1265,7 +1265,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
             this->unk_36C = scheduleOutput->time1 - scheduleOutput->time0;
             this->unk_36E = sp56 - scheduleOutput->time0;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
                 this->unk_356 |= 0x800;
             }
@@ -1501,7 +1501,7 @@ s32 func_80AF992C(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80AFB8F8);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -1.0f;
     this->unk_368 = 80.0f;
     if (scheduleOutput->result == 14) {
@@ -1571,8 +1571,8 @@ s32 func_80AF9B54(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
-    this->actor.flags |= ACTOR_FLAG_1;
-    this->actor.targetMode = 0;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk_394 = PLAYER_IA_NONE;
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
@@ -2004,11 +2004,11 @@ void func_80AFA4D0(EnPm* this, PlayState* play) {
     if (!Schedule_RunScript(play, D_80AFB900[this->unk_38C], &sp2C) ||
         ((this->unk_258 != sp2C.result) && !func_80AF9BF8(this, play, &sp2C))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         sp2C.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 
     this->unk_258 = sp2C.result;

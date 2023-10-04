@@ -61,7 +61,7 @@ void Object_InitContext(GameState* gameState, ObjectContext* objectCtx) {
     for (i = 0; i < ARRAY_COUNT(objectCtx->slots); i++) { objectCtx->slots[i].id = 0; }
     // clang-format on
 
-    objectCtx->spaceStart = objectCtx->slots[0].segment = THA_AllocTailAlign16(&gameState->heap, spaceSize);
+    objectCtx->spaceStart = objectCtx->slots[0].segment = THA_AllocTailAlign16(&gameState->tha, spaceSize);
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepSlot = Object_SpawnPersistent(objectCtx, GAMEPLAY_KEEP);
 
@@ -370,7 +370,7 @@ void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
     size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
-        play->roomCtx.unk74 = THA_AllocTailAlign16(&play->state.heap, size);
+        play->roomCtx.unk74 = THA_AllocTailAlign16(&play->state.tha, size);
         DmaMgr_SendRequest0(play->roomCtx.unk74, vromStart, size);
     }
 }
