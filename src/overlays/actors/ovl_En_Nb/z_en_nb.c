@@ -7,7 +7,7 @@
 #include "z_en_nb.h"
 #include "objects/object_nb/object_nb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnNb*)thisx)
 
@@ -26,9 +26,6 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play);
 s32 func_80BC01DC(Actor* thisx, PlayState* play);
 
 #define EN_NB_FLAG_NONE (0)
-#define EN_NB_FLAG_1 (1 << 0)
-#define EN_NB_FLAG_2 (1 << 1)
-#define EN_NB_FLAG_4 (1 << 2)
 #define EN_NB_FLAG_8 (1 << 3)
 #define EN_NB_FLAG_10 (1 << 4)
 #define EN_NB_FLAG_20 (1 << 5)
@@ -403,18 +400,17 @@ u8* func_80BC045C(EnNb* this, PlayState* play) {
 s32 func_80BC04FC(EnNb* this, PlayState* play) {
     s32 ret = false;
 
-    if (this->stateFlags & (EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            this->stateFlags |= EN_NB_FLAG_20;
-            SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_NONE, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
-            this->behaviour = ENNB_BEHAVIOUR_0;
-            this->msgEventCallback = NULL;
-            this->actor.child = this->unk_1E8;
-            this->msgEventScript = func_80BC045C(this, play);
-            this->stateFlags |= EN_NB_FLAG_20;
-            this->actionFunc = func_80BC0EAC;
-            ret = true;
-        }
+    if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        this->stateFlags |= EN_NB_FLAG_20;
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        this->behaviour = ENNB_BEHAVIOUR_0;
+        this->msgEventCallback = NULL;
+        this->actor.child = this->unk_1E8;
+        this->msgEventScript = func_80BC045C(this, play);
+        this->stateFlags |= EN_NB_FLAG_20;
+        this->actionFunc = func_80BC0EAC;
+        ret = true;
     }
     return ret;
 }
@@ -459,7 +455,7 @@ void func_80BC06C4(EnNb* this) {
     if (this->unk_1E8->id == ACTOR_PLAYER) {
         player = (Player*)this->unk_1E8;
 
-        sp40.y = player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_1E8->focus.pos);
     }
@@ -576,7 +572,7 @@ s32 func_80BC0B98(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 success = false;
 
     if (EnNb_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN) != NULL) {
-        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->stateFlags |= EN_NB_FLAG_20;
         EnNb_ChangeAnim(this, EN_NB_ANIM_0);
         success = true;
@@ -587,9 +583,9 @@ s32 func_80BC0B98(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80BC0C0C(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if (!CHECK_EVENTINF(EVENTINF_43)) {
-        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else {
-        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_4, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
     }
     EnNb_ChangeAnim(this, EN_NB_ANIM_0);
 
@@ -599,8 +595,8 @@ s32 func_80BC0C0C(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 EnNb_ProcessScheduleOutput(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 success;
 
-    this->actor.flags |= ACTOR_FLAG_1;
-    this->actor.targetMode = 0;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.targetMode = TARGET_MODE_0;
     this->stateFlags = EN_NB_FLAG_NONE;
     this->unk_274 = 40.0f;
 
@@ -644,16 +640,16 @@ void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
         scheduleOutput.result = EN_NB_SCH_1;
         EnNb_ProcessScheduleOutput(this, play, &scheduleOutput);
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     } else if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput) ||
                ((this->scheduleResult != scheduleOutput.result) &&
                 !EnNb_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = EN_NB_SCH_NONE;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 
     this->scheduleResult = scheduleOutput.result;
@@ -668,7 +664,7 @@ void func_80BC0EAC(EnNb* this, PlayState* play) {
             CLEAR_EVENTINF(EVENTINF_43);
         }
 
-        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         if (this->scheduleResult != EN_NB_SCH_2) {
             this->stateFlags &= ~EN_NB_FLAG_20;
         }
@@ -696,7 +692,7 @@ void EnNb_Init(Actor* thisx, PlayState* play) {
     this->stateFlags = EN_NB_FLAG_NONE;
 
     if (CHECK_EVENTINF(EVENTINF_43)) {
-        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_4, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
     } else {
         CLEAR_EVENTINF(EVENTINF_42);
         CLEAR_EVENTINF(EVENTINF_43);
@@ -724,8 +720,8 @@ void EnNb_Update(Actor* thisx, PlayState* play) {
         EnNb_UpdateSkelAnime(this);
         func_80BC0800(this);
         if (Actor_IsFacingPlayer(&this->actor, 0x38E0)) {
-            func_8013C964(&this->actor, play, this->unk_274, 30.0f, ITEM_OCARINA_OF_TIME,
-                          this->stateFlags & (EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4));
+            SubS_Offer(&this->actor, play, this->unk_274, 30.0f, PLAYER_IA_NONE,
+                       this->stateFlags & SUBS_OFFER_MODE_MASK);
         }
         func_80BBFF24(this, play);
     }

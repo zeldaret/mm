@@ -149,7 +149,7 @@ void ObjKibako_Init(Actor* thisx, PlayState* play2) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->bankIndex = Object_GetIndex(&play->objectCtx, sObjectIdList[whichBankIndex]);
+    this->bankIndex = Object_GetSlot(&play->objectCtx, sObjectIdList[whichBankIndex]);
     if (this->bankIndex < 0) {
         Actor_Kill(&this->actor);
         return;

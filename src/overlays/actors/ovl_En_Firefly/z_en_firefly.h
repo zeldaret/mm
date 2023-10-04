@@ -18,6 +18,13 @@ typedef enum {
 #define KEESE_INVISIBLE (1 << 0xF)
 #define KEESE_GET_MAIN_TYPE(thisx) ((thisx)->params & 0x7FFF)
 
+typedef enum KeeseBodyPart {
+    /* 0 */ KEESE_BODYPART_LEFT_WING_END,
+    /* 1 */ KEESE_BODYPART_RIGHT_WING_END_ROOT,
+    /* 2 */ KEESE_BODYPART_BODY,
+    /* 3 */ KEESE_BODYPART_MAX
+} KeeseBodyPart;
+
 typedef struct EnFirefly {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -35,7 +42,7 @@ typedef struct EnFirefly {
     /* 0x2E8 */ f32 drawDmgEffScale;
     /* 0x2E8 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2F4 */ u32 lastDrawnFrame;
-    /* 0x2F8 */ Vec3f limbPos[3];
+    /* 0x2F8 */ Vec3f bodyPartsPos[KEESE_BODYPART_MAX];
     /* 0x31C */ ColliderSphere collider;
 } EnFirefly; // size = 0x374
 

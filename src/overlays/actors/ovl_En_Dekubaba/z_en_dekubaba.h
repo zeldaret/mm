@@ -13,6 +13,14 @@ typedef enum {
     /* 1 */ DEKUBABA_BIG
 } DekuBabaType;
 
+typedef enum DekuBabaBodyPart {
+    /* 0 */ DEKUBABA_BODYPART_0,
+    /* 1 */ DEKUBABA_BODYPART_1,
+    /* 2 */ DEKUBABA_BODYPART_2,
+    /* 3 */ DEKUBABA_BODYPART_3,
+    /* 4 */ DEKUBABA_BODYPART_MAX
+} DekuBabaBodyPart;
+
 typedef struct EnDekubaba {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -27,7 +35,7 @@ typedef struct EnDekubaba {
     /* 0x1FC */ f32 drawDmgEffAlpha;
     /* 0x200 */ f32 drawDmgEffScale;
     /* 0x204 */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x208 */ Vec3f bodyPartsPos[4];
+    /* 0x208 */ Vec3f bodyPartsPos[DEKUBABA_BODYPART_MAX];
     /* 0x238 */ CollisionPoly* boundFloor;
     /* 0x23C */ ColliderJntSph collider;
     /* 0x25C */ ColliderJntSphElement colliderElements[7];

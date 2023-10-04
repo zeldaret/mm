@@ -781,7 +781,7 @@ typedef struct {
     /* 0x2E */ UNK_TYPE1 unk_2E[2];
 } CutsceneCameraInterp; // size = 0x30
 
-typedef struct {
+typedef struct CutsceneCamera {
     /* 0x00 */ s16 splineIndex;
     /* 0x02 */ s16 cmdIndex;
     /* 0x04 */ s16 splineNeedsInit;
@@ -855,5 +855,11 @@ void CutsceneFlags_UnsetAll(struct PlayState* play);
 void CutsceneFlags_Set(struct PlayState* play, s16 flag);
 void CutsceneFlags_Unset(struct PlayState* play, s16 flag);
 s32 CutsceneFlags_Get(struct PlayState* play, s16 flag);
+
+extern u8 gOpeningEntranceIndex;
+
+extern u8 D_801F4DDC;
+extern u8 gDisablePlayerCsModeStartPos;
+extern s16 gDungeonBossWarpSceneId;
 
 #endif

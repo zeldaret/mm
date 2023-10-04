@@ -77,7 +77,7 @@ static InitChainEntry sInitChain[] = {
 
 /**
  * Spawns another wooden flower instance that handles the opened flower's collision.
- * Returns true if this wooden flower instance was succesfully spawned.
+ * Returns true if this wooden flower instance was successfully spawned.
  */
 s32 BgNumaHana_SpawnOpenFlowerCollisionChild(BgNumaHana* this, PlayState* play) {
     Actor* child;
@@ -100,9 +100,9 @@ void BgNumaHana_UpdatePetalPosRots(BgNumaHana* this) {
     s32 i;
 
     innerPetalYPos = this->dyna.actor.world.pos.y + -10.0f;
-    angle = this->petalZRotation - 0x2000;
+    angle = this->petalRotZ - 0x2000;
     outerPetalPosScale = (Math_CosS(angle) * 77.42784f) + 74.95192f;
-    outerPetalYPos = (Math_SinS(this->petalZRotation) * 77.42784f) + this->dyna.actor.world.pos.y + -64.74976f;
+    outerPetalYPos = (Math_SinS(this->petalRotZ) * 77.42784f) + this->dyna.actor.world.pos.y + -64.74976f;
 
     for (i = 0; i < ARRAY_COUNT(this->innerPetalPosRot); i++) {
         innerPetalPosRot = &this->innerPetalPosRot[i];
@@ -114,14 +114,14 @@ void BgNumaHana_UpdatePetalPosRots(BgNumaHana* this) {
         innerPetalPosRot->pos.z = (Math_CosS(angle) * 74.95192f) + this->dyna.actor.world.pos.z;
         innerPetalPosRot->rot.x = this->dyna.actor.shape.rot.x;
         innerPetalPosRot->rot.y = angle - 0x4000;
-        innerPetalPosRot->rot.z = this->dyna.actor.shape.rot.z + this->petalZRotation;
+        innerPetalPosRot->rot.z = this->dyna.actor.shape.rot.z + this->petalRotZ;
 
         outerPetalPosRot->pos.x = (Math_SinS(angle) * outerPetalPosScale) + this->dyna.actor.world.pos.x;
         outerPetalPosRot->pos.y = outerPetalYPos;
         outerPetalPosRot->pos.z = (Math_CosS(angle) * outerPetalPosScale) + this->dyna.actor.world.pos.z;
         outerPetalPosRot->rot.x = innerPetalPosRot->rot.x;
         outerPetalPosRot->rot.y = innerPetalPosRot->rot.y;
-        outerPetalPosRot->rot.z = innerPetalPosRot->rot.z + this->outerPetalZRotation;
+        outerPetalPosRot->rot.z = innerPetalPosRot->rot.z + this->outerPetalRotZ;
     }
 }
 
@@ -130,10 +130,10 @@ void BgNumaHana_UpdatePetalPosRots(BgNumaHana* this) {
  * as if they are "settling" into place. This function is responsible
  * for computing the extra rotation for this "settling".
  */
-void BgNumaHana_UpdateSettleRotation(s16* settleZRotation, s16* settleAngle, f32* settleScale, f32 scaleStep) {
+void BgNumaHana_UpdateSettleRotation(s16* settleRotZ, s16* settleAngle, f32* settleScale, f32 scaleStep) {
     *settleAngle += 0x32C8;
     Math_StepToF(settleScale, 0.0f, scaleStep);
-    *settleZRotation += (s16)(Math_SinS(*settleAngle) * *settleScale);
+    *settleRotZ += (s16)(Math_SinS(*settleAngle) * *settleScale);
 }
 
 void BgNumaHana_Init(Actor* thisx, PlayState* play) {
@@ -164,15 +164,15 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 
-            this->petalZRotation = 0x2000;
-            this->innerPetalZRotation = 0x2000;
-            this->innerPetalZRotationalVelocity = 0;
-            this->settleZRotation = 0;
+            this->petalRotZ = 0x2000;
+            this->innerPetalRotZ = 0x2000;
+            this->innerPetalAngularVelocityZ = 0;
+            this->settleRotZ = 0;
             this->settleAngle = 0;
             this->settleScale = 0.0f;
-            this->outerPetalZRotation = -0x4000;
-            this->outerPetalZRotationalVelocity = 0;
-            this->flowerRotationalVelocity = 0x147;
+            this->outerPetalRotZ = -0x4000;
+            this->outerPetalAngularVelocityZ = 0;
+            this->flowerAngularVelocity = 0x147;
 
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 210.0f;
             FireObj_SetState2(&this->fire, 0.05f, FIRE_STATE_FULLY_LIT);
@@ -238,13 +238,13 @@ void BgNumaHana_SetupUnfoldInnerPetals(BgNumaHana* this) {
  * parts of the petals that are closest to the stalk.
  */
 void BgNumaHana_UnfoldInnerPetals(BgNumaHana* this, PlayState* play) {
-    Math_StepToS(&this->innerPetalZRotationalVelocity, 240, 14);
-    if (Math_ScaledStepToS(&this->innerPetalZRotation, 0x2000, this->innerPetalZRotationalVelocity)) {
+    Math_StepToS(&this->innerPetalAngularVelocityZ, 240, 14);
+    if (Math_ScaledStepToS(&this->innerPetalRotZ, 0x2000, this->innerPetalAngularVelocityZ)) {
         if (this->transitionTimer >= 11) {
             BgNumaHana_SetupUnfoldOuterPetals(this);
         } else {
             if (this->transitionTimer <= 0) {
-                this->settleZRotation = 0;
+                this->settleRotZ = 0;
                 this->settleAngle = 0;
                 this->settleScale = 420.0f;
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
@@ -255,8 +255,8 @@ void BgNumaHana_UnfoldInnerPetals(BgNumaHana* this, PlayState* play) {
         Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
     }
 
-    BgNumaHana_UpdateSettleRotation(&this->settleZRotation, &this->settleAngle, &this->settleScale, 20.0f);
-    this->petalZRotation = this->innerPetalZRotation + this->settleZRotation;
+    BgNumaHana_UpdateSettleRotation(&this->settleRotZ, &this->settleAngle, &this->settleScale, 20.0f);
+    this->petalRotZ = this->innerPetalRotZ + this->settleRotZ;
     BgNumaHana_UpdatePetalPosRots(this);
 }
 
@@ -270,13 +270,13 @@ void BgNumaHana_SetupUnfoldOuterPetals(BgNumaHana* this) {
  * parts of the petals that are furthest to the stalk.
  */
 void BgNumaHana_UnfoldOuterPetals(BgNumaHana* this, PlayState* play) {
-    Math_StepToS(&this->outerPetalZRotationalVelocity, 240, 14);
-    if (Math_ScaledStepToS(&this->outerPetalZRotation, -0x4000, this->outerPetalZRotationalVelocity)) {
+    Math_StepToS(&this->outerPetalAngularVelocityZ, 240, 14);
+    if (Math_ScaledStepToS(&this->outerPetalRotZ, -0x4000, this->outerPetalAngularVelocityZ)) {
         if (this->transitionTimer >= 11) {
             BgNumaHana_SetupRaiseFlower(this);
         } else {
             if (this->transitionTimer <= 0) {
-                this->settleZRotation = 0;
+                this->settleRotZ = 0;
                 this->settleAngle = 0x5120;
                 this->settleScale = 130.0f;
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
@@ -287,8 +287,8 @@ void BgNumaHana_UnfoldOuterPetals(BgNumaHana* this, PlayState* play) {
         Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
     }
 
-    BgNumaHana_UpdateSettleRotation(&this->settleZRotation, &this->settleAngle, &this->settleScale, 7.0f);
-    this->petalZRotation = this->innerPetalZRotation + this->settleZRotation;
+    BgNumaHana_UpdateSettleRotation(&this->settleRotZ, &this->settleAngle, &this->settleScale, 7.0f);
+    this->petalRotZ = this->innerPetalRotZ + this->settleRotZ;
     BgNumaHana_UpdatePetalPosRots(this);
 }
 
@@ -303,10 +303,10 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play) {
     s32 pad;
     DynaPolyActor* child;
 
-    BgNumaHana_UpdateSettleRotation(&this->settleZRotation, &this->settleAngle, &this->settleScale, 10.0f);
-    this->petalZRotation = this->innerPetalZRotation + this->settleZRotation;
-    Math_StepToS(&this->flowerRotationalVelocity, 0x111, 0xA);
-    this->dyna.actor.shape.rot.y += this->flowerRotationalVelocity;
+    BgNumaHana_UpdateSettleRotation(&this->settleRotZ, &this->settleAngle, &this->settleScale, 10.0f);
+    this->petalRotZ = this->innerPetalRotZ + this->settleRotZ;
+    Math_StepToS(&this->flowerAngularVelocity, 0x111, 0xA);
+    this->dyna.actor.shape.rot.y += this->flowerAngularVelocity;
     Math_StepToF(&this->dyna.actor.velocity.y, 3.0f, 0.3f);
 
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 210.0f,
@@ -317,14 +317,14 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play) {
         DynaPoly_EnableCollision(play, &play->colCtx.dyna, child->bgId);
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 
-        this->petalZRotation = 0x2000;
-        this->innerPetalZRotation = 0x2000;
-        this->innerPetalZRotationalVelocity = 0;
-        this->settleZRotation = 0;
+        this->petalRotZ = 0x2000;
+        this->innerPetalRotZ = 0x2000;
+        this->innerPetalAngularVelocityZ = 0;
+        this->settleRotZ = 0;
         this->settleAngle = 0;
-        this->outerPetalZRotation = -0x4000;
-        this->outerPetalZRotationalVelocity = 0;
-        this->flowerRotationalVelocity = 0x147;
+        this->outerPetalRotZ = -0x4000;
+        this->outerPetalAngularVelocityZ = 0;
+        this->flowerAngularVelocity = 0x147;
         this->settleScale = 0.0f;
 
         CutsceneManager_Stop(this->dyna.actor.csId);
@@ -343,8 +343,8 @@ void BgNumaHana_SetupOpenedIdle(BgNumaHana* this) {
  * Spins the "opened" flower around the y-axis.
  */
 void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play) {
-    this->dyna.actor.shape.rot.y += this->flowerRotationalVelocity;
-    this->petalZRotation = this->innerPetalZRotation + this->settleZRotation;
+    this->dyna.actor.shape.rot.y += this->flowerAngularVelocity;
+    this->petalRotZ = this->innerPetalRotZ + this->settleRotZ;
     BgNumaHana_UpdatePetalPosRots(this);
     Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
 }
@@ -404,13 +404,13 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
         gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerOuterPetalDL);
     }
 
-    objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_SYOKUDAI);
+    objectIndex = Object_GetSlot(&play->objectCtx, OBJECT_SYOKUDAI);
     if ((objectIndex >= 0) && (Object_IsLoaded(&play->objectCtx, objectIndex))) {
         Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 64.5f,
                                      this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(1.5f, 1.5f, 1.5f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[objectIndex].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectIndex].segment);
         gSPDisplayList(POLY_OPA_DISP++, gObjectSyokudaiTypeNoSwitchDL);
     }
 

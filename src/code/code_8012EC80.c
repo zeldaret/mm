@@ -43,14 +43,14 @@ u32 gUpgradeMasks[] = {
 // 3 = two-bit masks
 // 7 = three-bit masks
 u32 gUpgradeNegMasks[] = {
-    ~(7 << 0),  // Quivers
-    ~(7 << 3),  // Bomb Bags
-    ~(7 << 6),  // Unused (Strength)
-    ~(7 << 9),  // Unused (Scale)
-    ~(3 << 12), // Wallets
-    ~(7 << 14), // Unused (Deku Seed Bullet Bags)
-    ~(7 << 17), // Unused (Deku Stick)
-    ~(7 << 20), // Unused (Deku Nut)
+    ~(7 << 0),  // UPG_QUIVER
+    ~(7 << 3),  // UPG_BOMB_BAG
+    ~(7 << 6),  // UPG_STRENGTH
+    ~(7 << 9),  // UPG_SCALE
+    ~(3 << 12), // UPG_WALLET
+    ~(7 << 14), // UPG_BULLET_BAG
+    ~(7 << 17), // UPG_DEKU_STICKS
+    ~(7 << 20), // UPG_DEKU_NUTS
 };
 
 u8 gEquipShifts[] = {
@@ -61,25 +61,25 @@ u8 gEquipShifts[] = {
 };
 
 u8 gUpgradeShifts[] = {
-    0,  // Quivers
-    3,  // Bomb Bags
-    6,  // Unused (Strength)
-    9,  // Unused (Scale)
-    12, // Wallets
-    14, // Unused (Deku Seed Bullet Bags)
-    17, // Unused (Deku Stick)
-    20, // Unused (Deku Nut)
+    0,  // UPG_QUIVER
+    3,  // UPG_BOMB_BAG
+    6,  // UPG_STRENGTH
+    9,  // UPG_SCALE
+    12, // UPG_WALLET
+    14, // UPG_BULLET_BAG
+    17, // UPG_DEKU_STICKS
+    20, // UPG_DEKU_NUTS
 };
 
 u16 gUpgradeCapacities[][4] = {
-    { 0, 30, 40, 50 },     // Quivers
-    { 0, 20, 30, 40 },     // Bomb Bags
-    { 0, 0, 0, 0 },        // Unused (Strength)
-    { 0, 0, 0, 0 },        // Unused (Scale)
-    { 99, 200, 500, 500 }, // Wallets
-    { 0, 30, 40, 50 },     // Unused (Deku Seed Bullet Bags)
-    { 0, 10, 20, 30 },     // Unused (Deku Stick)
-    { 0, 20, 30, 40 },     // Unused (Deku Nut)
+    { 0, 30, 40, 50 },     // UPG_QUIVER
+    { 0, 20, 30, 40 },     // UPG_BOMB_BAG
+    { 0, 0, 0, 0 },        // UPG_STRENGTH
+    { 0, 0, 0, 0 },        // UPG_SCALE
+    { 99, 200, 500, 500 }, // UPG_WALLET
+    { 0, 30, 40, 50 },     // UPG_BULLET_BAG
+    { 0, 10, 20, 30 },     // UPG_DEKU_STICKS
+    { 0, 20, 30, 40 },     // UPG_DEKU_NUTS
 };
 
 // eight-bit masks
@@ -512,7 +512,7 @@ u8 Inventory_DeleteEquipment(PlayState* play, s16 equipment) {
 }
 
 void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
-    u32 upgrades = gSaveContext.save.saveInfo.inventory.upgrades;
+    u32 upgrades = GET_SAVE_INVENTORY_UPGRADES;
 
     upgrades &= gUpgradeNegMasks[upgrade];
     upgrades |= value << gUpgradeShifts[upgrade];
@@ -723,6 +723,5 @@ void Inventory_SaveLotteryCodeGuess(PlayState* play) {
     lotteryCodeGuess = ((play->msgCtx.unk12054[0] & 0xF) << 8);  // First Digit
     lotteryCodeGuess |= ((play->msgCtx.unk12054[1] & 0xF) << 4); // Second Digit
     lotteryCodeGuess |= (play->msgCtx.unk12054[2] & 0xF);        // Third Digit
-    gSaveContext.save.saveInfo.lotteryCodeGuess =
-        (gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
+    HS_SET_LOTTERY_CODE_GUESS(lotteryCodeGuess);
 }

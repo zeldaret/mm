@@ -81,8 +81,8 @@ void OceffStorm_Init(Actor* thisx, PlayState* play) {
         this->actor.draw = OceffStorm_Draw2;
     } else {
         this->actor.world.pos.y = player->actor.world.pos.y;
-        this->actor.world.pos.x = player->bodyPartsPos[0].x;
-        this->actor.world.pos.z = player->bodyPartsPos[0].z;
+        this->actor.world.pos.x = player->bodyPartsPos[PLAYER_BODYPART_WAIST].x;
+        this->actor.world.pos.z = player->bodyPartsPos[PLAYER_BODYPART_WAIST].z;
         gSaveContext.jinxTimer = 0;
         if ((play->interfaceCtx.restrictions.songOfStorms == 0) && !func_8098176C(play)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OKARINA_EFFECT, this->actor.world.pos.x,
@@ -100,11 +100,7 @@ void OceffStorm_Destroy(Actor* thisx, PlayState* play) {
 void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play) {
     f32 cylinderScale;
 
-    switch (gSaveContext.save.playerForm) {
-        default:
-            cylinderScale = 1.0f;
-            break;
-
+    switch (GET_PLAYER_FORM) {
         case PLAYER_FORM_DEKU:
             cylinderScale = 1.3f;
             break;
@@ -115,6 +111,10 @@ void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play) {
 
         case PLAYER_FORM_GORON:
             cylinderScale = 2.0f;
+            break;
+
+        default:
+            cylinderScale = 1.0f;
             break;
     }
 

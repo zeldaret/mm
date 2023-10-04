@@ -16,7 +16,7 @@ s16 sEquipMagicArrowSlotHoldTimer = 0;
 s16 sEquipAnimTimer = 10;
 
 u8 gPlayerFormSlotRestrictions[PLAYER_FORM_MAX][ITEM_NUM_SLOTS] = {
-    // Fierce Deity
+    // PLAYER_FORM_FIERCE_DEITY
     {
         false, // SLOT_OCARINA
         false, // SLOT_BOW
@@ -43,7 +43,7 @@ u8 gPlayerFormSlotRestrictions[PLAYER_FORM_MAX][ITEM_NUM_SLOTS] = {
         true,  // SLOT_BOTTLE_5
         true,  // SLOT_BOTTLE_6
     },
-    // Goron
+    // PLAYER_FORM_GORON
     {
         true,  // SLOT_OCARINA
         false, // SLOT_BOW
@@ -70,7 +70,7 @@ u8 gPlayerFormSlotRestrictions[PLAYER_FORM_MAX][ITEM_NUM_SLOTS] = {
         true,  // SLOT_BOTTLE_5
         true,  // SLOT_BOTTLE_6
     },
-    // Zora
+    // PLAYER_FORM_ZORA
     {
         true,  // SLOT_OCARINA
         false, // SLOT_BOW
@@ -97,7 +97,7 @@ u8 gPlayerFormSlotRestrictions[PLAYER_FORM_MAX][ITEM_NUM_SLOTS] = {
         true,  // SLOT_BOTTLE_5
         true,  // SLOT_BOTTLE_6
     },
-    // Deku
+    // PLAYER_FORM_DEKU
     {
         true,  // SLOT_OCARINA
         false, // SLOT_BOW
@@ -124,7 +124,7 @@ u8 gPlayerFormSlotRestrictions[PLAYER_FORM_MAX][ITEM_NUM_SLOTS] = {
         true,  // SLOT_BOTTLE_5
         true,  // SLOT_BOTTLE_6
     },
-    // Human
+    // PLAYER_FORM_HUMAN
     {
         true,  // SLOT_OCARINA
         true,  // SLOT_BOW
@@ -193,7 +193,7 @@ void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx,
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    if (!gPlayerFormSlotRestrictions[((void)0, gSaveContext.save.playerForm)][SLOT(item)]) {
+    if (!gPlayerFormSlotRestrictions[GET_PLAYER_FORM][SLOT(item)]) {
         // Ammo item is restricted
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 100, 100, 100, pauseCtx->alpha);
     } else {
@@ -277,8 +277,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
 
         if (((void)0, gSaveContext.save.saveInfo.inventory.items[i]) != ITEM_NONE) {
             if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) && (pauseCtx->pageIndex == PAUSE_ITEM) &&
-                (pauseCtx->cursorSpecialPos == 0) &&
-                gPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
+                (pauseCtx->cursorSpecialPos == 0) && gPlayerFormSlotRestrictions[GET_PLAYER_FORM][i]) {
                 if ((sEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) && (i == SLOT_ARROW_ICE)) {
                     // Possible bug:
                     // Supposed to be `SLOT_BOW`, unchanged from OoT, instead increase size of ice arrow icon
@@ -339,8 +338,12 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-u8 sPlayerFormItems[] = {
-    ITEM_MASK_FIERCE_DEITY, ITEM_MASK_GORON, ITEM_MASK_ZORA, ITEM_MASK_DEKU, ITEM_NONE,
+u8 sPlayerFormItems[PLAYER_FORM_MAX] = {
+    ITEM_MASK_FIERCE_DEITY, // PLAYER_FORM_FIERCE_DEITY
+    ITEM_MASK_GORON,        // PLAYER_FORM_GORON
+    ITEM_MASK_ZORA,         // PLAYER_FORM_ZORA
+    ITEM_MASK_DEKU,         // PLAYER_FORM_DEKU
+    ITEM_NONE,              // PLAYER_FORM_HUMAN
 };
 
 void KaleidoScope_UpdateItemCursor(PlayState* play) {
@@ -599,23 +602,20 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                     CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_CLEFT | BTN_CDOWN | BTN_CRIGHT)) {
 
                     // Ensure that a transformation mask can not be unequipped while being used
-                    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+                    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
                         if (1) {}
                         if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CLEFT)) {
-                            if (sPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
-                                BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
+                            if (sPlayerFormItems[GET_PLAYER_FORM] == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
                                 Audio_PlaySfx(NA_SE_SY_ERROR);
                                 return;
                             }
                         } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CDOWN)) {
-                            if (sPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
-                                BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
+                            if (sPlayerFormItems[GET_PLAYER_FORM] == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
                                 Audio_PlaySfx(NA_SE_SY_ERROR);
                                 return;
                             }
                         } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CRIGHT)) {
-                            if (sPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
-                                BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)) {
+                            if (sPlayerFormItems[GET_PLAYER_FORM] == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)) {
                                 Audio_PlaySfx(NA_SE_SY_ERROR);
                                 return;
                             }

@@ -16,6 +16,7 @@
  */
 
 #include "z_en_fall.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_fall/object_fall.h"
 #include "objects/object_fall2/object_fall2.h"
 #include "objects/object_lodmoon/object_lodmoon.h"
@@ -114,6 +115,9 @@ void EnFall_Moon_AdjustScaleAndPosition(EnFall* this, PlayState* play) {
                     this->actor.home.pos.y - (finalDayRelativeHeight * 6700.0f * (this->scale * 6.25f));
             }
             break;
+
+        default:
+            break;
     }
 }
 
@@ -161,19 +165,19 @@ void EnFall_Init(Actor* thisx, PlayState* play) {
         case EN_FALL_TYPE_LODMOON_NO_LERP:
         case EN_FALL_TYPE_LODMOON:
         case EN_FALL_TYPE_LODMOON_INVERTED_STONE_TOWER:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_LODMOON);
+            objectIndex = Object_GetSlot(&play->objectCtx, OBJECT_LODMOON);
             break;
 
         case EN_FALL_TYPE_MOONS_TEAR:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_MOONSTON);
+            objectIndex = Object_GetSlot(&play->objectCtx, OBJECT_MOONSTON);
             break;
 
         case EN_FALL_TYPE_STOPPED_MOON_OPEN_MOUTH:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_FALL2);
+            objectIndex = Object_GetSlot(&play->objectCtx, OBJECT_FALL2);
             break;
 
         default:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_FALL);
+            objectIndex = Object_GetSlot(&play->objectCtx, OBJECT_FALL);
             break;
     }
 
@@ -353,6 +357,9 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
             case 9:
                 play->csCtx.curFrame--;
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -391,6 +398,9 @@ void EnFall_StoppedOpenMouthMoon_PerformCutsceneActions(EnFall* this, PlayState*
             case 4:
                 this->actor.draw = EnFall_OpenMouthMoon_Draw;
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -404,6 +414,9 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
 
             case 4:
                 this->actor.draw = NULL;
+                break;
+
+            default:
                 break;
         }
     }
@@ -422,6 +435,9 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
 
                     case 1303:
                         Actor_PlaySfx(&this->actor, NA_SE_EV_SLIP_MOON);
+                        break;
+
+                    default:
                         break;
                 }
                 if (play->csCtx.curFrame >= 1145) {
@@ -442,10 +458,16 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
                     case 737:
                         Actor_PlaySfx(&this->actor, NA_SE_EV_SLIP_MOON);
                         break;
+
+                    default:
+                        break;
                 }
                 if (play->csCtx.curFrame >= 650) {
                     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -524,7 +546,7 @@ void EnFall_MoonsTear_Fall(EnFall* this, PlayState* play) {
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TEST, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, -2);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_EXPLOSION));
             this->actor.draw = NULL;
             this->actionFunc = EnFall_MoonsTear_DoNothing;
         } else {
@@ -539,20 +561,20 @@ void EnFall_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 }
 
+static u8 sAlphaTableIndices[] = {
+    4, 4, 0, 1, 1, 1, 1, 1, 1, 3, 3, 0, 0, 3, 0, 1, 1, 1, 4, 0, 4, 0, 1, 1, 1, 3, 0, 3, 0, 1, 1, 1, 4, 4, 1,
+    1, 0, 4, 4, 0, 1, 1, 1, 1, 1, 1, 3, 3, 0, 0, 3, 3, 0, 0, 1, 1, 1, 1, 1, 4, 0, 4, 4, 0, 4, 4, 1, 1, 1, 1,
+    1, 1, 3, 3, 0, 0, 3, 3, 0, 0, 1, 1, 1, 1, 1, 1, 4, 4, 0, 4, 0, 1, 1, 1, 3, 0, 3, 3, 0, 0, 1, 1, 1, 1, 1,
+    1, 4, 4, 0, 4, 4, 0, 1, 1, 1, 1, 1, 1, 3, 3, 0, 0, 0, 0, 0, 2, 2, 1, 1, 0, 0, 2, 2, 0, 1, 1, 0, 0, 1, 0,
+    2, 0, 0, 1, 0, 2, 0, 0, 2, 1, 2, 0, 1, 0, 1, 0, 0, 1, 2, 2, 0, 0, 2, 1, 1, 0, 0, 1, 1, 0, 0, 2, 2, 0, 0,
+    0, 0, 2, 0, 2, 2, 0, 1, 1, 0, 0, 1, 0, 0, 1, 2, 2, 0, 0, 0, 2, 2, 1, 1, 0, 0, 1, 1, 0, 0, 2, 2, 0, 0,
+};
+
 /**
  * Updates the alpha for every vertex in the fire ball so that some parts of
  * the sphere are more transparent or opaque than others.
  */
 void EnFall_Fireball_SetPerVertexAlpha(f32 fireballAlpha) {
-    static u8 sAlphaTableIndex[] = {
-        4, 4, 0, 1, 1, 1, 1, 1, 1, 3, 3, 0, 0, 3, 0, 1, 1, 1, 4, 0, 4, 0, 1, 1, 1, 3, 0, 3, 0, 1, 1, 1, 4, 4, 1,
-        1, 0, 4, 4, 0, 1, 1, 1, 1, 1, 1, 3, 3, 0, 0, 3, 3, 0, 0, 1, 1, 1, 1, 1, 4, 0, 4, 4, 0, 4, 4, 1, 1, 1, 1,
-        1, 1, 3, 3, 0, 0, 3, 3, 0, 0, 1, 1, 1, 1, 1, 1, 4, 4, 0, 4, 0, 1, 1, 1, 3, 0, 3, 3, 0, 0, 1, 1, 1, 1, 1,
-        1, 4, 4, 0, 4, 4, 0, 1, 1, 1, 1, 1, 1, 3, 3, 0, 0, 0, 0, 0, 2, 2, 1, 1, 0, 0, 2, 2, 0, 1, 1, 0, 0, 1, 0,
-        2, 0, 0, 1, 0, 2, 0, 0, 2, 1, 2, 0, 1, 0, 1, 0, 0, 1, 2, 2, 0, 0, 2, 1, 1, 0, 0, 1, 1, 0, 0, 2, 2, 0, 0,
-        0, 0, 2, 0, 2, 2, 0, 1, 1, 0, 0, 1, 0, 0, 1, 2, 2, 0, 0, 0, 2, 2, 1, 1, 0, 0, 1, 1, 0, 0, 2, 2, 0, 0,
-    };
-
     s32 pad;
     u8 perVertexAlphaTable[5];
     Vtx* vertices = Lib_SegmentedToVirtual(gMoonFireballVtx);
@@ -567,8 +589,8 @@ void EnFall_Fireball_SetPerVertexAlpha(f32 fireballAlpha) {
     perVertexAlphaTable[3] = (s8)(104.0f * fireballAlpha);
     perVertexAlphaTable[4] = (s8)(54.0f * fireballAlpha);
 
-    for (i = 0; i < ARRAY_COUNT(sAlphaTableIndex); i++, vertices++) {
-        vertices->v.cn[3] = perVertexAlphaTable[sAlphaTableIndex[i]];
+    for (i = 0; i < ARRAY_COUNT(sAlphaTableIndices); i++, vertices++) {
+        vertices->v.cn[3] = perVertexAlphaTable[sAlphaTableIndices[i]];
     }
 }
 

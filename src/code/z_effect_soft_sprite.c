@@ -8,7 +8,7 @@ void EffectSS_Init(PlayState* play, s32 numEntries) {
     EffectSs* effectsSs;
     EffectSsOverlay* overlay;
 
-    sEffectSsInfo.data_table = (EffectSs*)THA_AllocTailAlign16(&play->state.heap, numEntries * sizeof(EffectSs));
+    sEffectSsInfo.data_table = (EffectSs*)THA_AllocTailAlign16(&play->state.tha, numEntries * sizeof(EffectSs));
     sEffectSsInfo.searchIndex = 0;
     sEffectSsInfo.size = numEntries;
 
@@ -189,11 +189,11 @@ void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
                          overlayEntry->loadedRamAddr);
         }
 
-        initInfo = (uintptr_t)(
-            (overlayEntry->initInfo != NULL)
-                ? (void*)((uintptr_t)overlayEntry->initInfo -
-                          (intptr_t)((uintptr_t)overlayEntry->vramStart - (uintptr_t)overlayEntry->loadedRamAddr))
-                : NULL);
+        initInfo = (void*)(uintptr_t)((overlayEntry->initInfo != NULL)
+                                          ? (void*)((uintptr_t)overlayEntry->initInfo -
+                                                    (intptr_t)((uintptr_t)overlayEntry->vramStart -
+                                                               (uintptr_t)overlayEntry->loadedRamAddr))
+                                          : NULL);
     }
 
     if (initInfo->init != NULL) {

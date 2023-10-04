@@ -8,7 +8,7 @@
 #include "z_en_kakasi.h"
 #include "objects/object_ka/object_ka.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnKakasi*)thisx)
 
@@ -121,18 +121,32 @@ typedef enum {
     /* 5 */ ENKAKASI_ANIM_ARMS_CROSSED_STILL, // arms crossed but still, also some noise sfx
     /* 6 */ ENKAKASI_ANIM_WAVE,               // "wave" short sideways shake, stops early, partial? unused?
     /* 7 */ ENKAKASI_ANIM_SLOWROLL,           // partial bounch, ends looking left, OFFER anim takes over
-    /* 8 */ ENKAKASI_ANIM_IDLE                // slow stretching wiggle, ends in regular position
+    /* 8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
+    /* 9 */ ENKAKASI_ANIM_MAX
 } EnKakasiAnimation;
 
-static AnimationHeader* sAnimations[] = {
-    &object_ka_Anim_007444, &object_ka_Anim_00686C, &object_ka_Anim_0081A4,
-    &object_ka_Anim_007B90, &object_ka_Anim_0071EC, &object_ka_Anim_007444,
-    &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_000214,
+static AnimationHeader* sAnimations[ENKAKASI_ANIM_MAX] = {
+    &object_ka_Anim_007444, // ENKAKASI_ANIM_ARMS_CROSSED_ROCKING
+    &object_ka_Anim_00686C, // ENKAKASI_ANIM_SIDEWAYS_SHAKING
+    &object_ka_Anim_0081A4, // ENKAKASI_ANIM_HOPPING_REGULAR
+    &object_ka_Anim_007B90, // ENKAKASI_ANIM_SPIN_REACH_OFFER
+    &object_ka_Anim_0071EC, // ENKAKASI_ANIM_TWIRL
+    &object_ka_Anim_007444, // ENKAKASI_ANIM_ARMS_CROSSED_STILL
+    &object_ka_Anim_00686C, // ENKAKASI_ANIM_WAVE
+    &object_ka_Anim_0081A4, // ENKAKASI_ANIM_SLOWROLL
+    &object_ka_Anim_000214, // ENKAKASI_ANIM_IDLE
 };
 
-static u8 sAnimationModes[] = {
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
-    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
+static u8 sAnimationModes[ENKAKASI_ANIM_MAX] = {
+    ANIMMODE_LOOP, // ENKAKASI_ANIM_ARMS_CROSSED_ROCKING
+    ANIMMODE_LOOP, // ENKAKASI_ANIM_SIDEWAYS_SHAKING
+    ANIMMODE_LOOP, // ENKAKASI_ANIM_HOPPING_REGULAR
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_SPIN_REACH_OFFER
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_TWIRL
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_ARMS_CROSSED_STILL
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_WAVE
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_SLOWROLL
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_IDLE
 };
 
 void EnKakasi_Destroy(Actor* thisx, PlayState* play) {
@@ -147,7 +161,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &D_80971D80);
-    SkelAnime_InitFlex(play, &this->skelanime, &object_ka_Skel_0065B0, &object_ka_Anim_000214, 0, 0, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_ka_Skel_0065B0, &object_ka_Anim_000214, NULL, NULL, 0);
 
     this->songSummonDist = KAKASI_GET_SUMMON_DISTANCE(&this->picto.actor) * 20.0f;
     if (this->songSummonDist < 40.0f) {
@@ -156,7 +170,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
 
     this->unkHeight = (this->picto.actor.world.rot.z * 20.0f) + 60.0f;
     this->picto.actor.world.rot.z = 0;
-    this->picto.actor.targetMode = 0;
+    this->picto.actor.targetMode = TARGET_MODE_0;
     if ((this->picto.actor.world.rot.x > 0) && (this->picto.actor.world.rot.x < 8)) {
         this->picto.actor.targetMode = KAKASI_GET_TARGETMODE(thisx);
     }
@@ -197,9 +211,9 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
 
 void EnKakasi_ChangeAnim(EnKakasi* this, s32 animIndex) {
     this->animIndex = animIndex;
-    this->animeFrameCount = Animation_GetLastFrame(&sAnimations[this->animIndex]->common);
+    this->animEndFrame = Animation_GetLastFrame(&sAnimations[this->animIndex]->common);
     // 1: regular playback speed, 0: starting frame
-    Animation_Change(&this->skelanime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animEndFrame,
                      sAnimationModes[this->animIndex], -4.0f);
 }
 
@@ -209,24 +223,24 @@ s32 EnKakasi_ValidatePictograph(PlayState* play, Actor* thisx) {
 
 void EnKakasi_CheckAnimationSfx(EnKakasi* this) {
     if ((this->animIndex == ENKAKASI_ANIM_SIDEWAYS_SHAKING) || (this->animIndex == ENKAKASI_ANIM_ARMS_CROSSED_STILL)) {
-        if (Animation_OnFrame(&this->skelanime, 1.0f) || Animation_OnFrame(&this->skelanime, 8.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
             Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASHI_SWING);
         }
     }
     if ((this->animIndex == ENKAKASI_ANIM_HOPPING_REGULAR) || (this->animIndex == ENKAKASI_ANIM_SLOWROLL)) {
-        if (Animation_OnFrame(&this->skelanime, 4.0f) || Animation_OnFrame(&this->skelanime, 8.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 4.0f) || Animation_OnFrame(&this->skelAnime, 8.0f)) {
             Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASHI_SWING);
         }
-        if (Animation_OnFrame(&this->skelanime, 1.0f) || Animation_OnFrame(&this->skelanime, 9.0f) ||
-            Animation_OnFrame(&this->skelanime, 16.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 9.0f) ||
+            Animation_OnFrame(&this->skelAnime, 16.0f)) {
             Actor_PlaySfx(&this->picto.actor, NA_SE_IT_KAKASHI_JUMP);
         }
-        if (Animation_OnFrame(&this->skelanime, 18.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASHI_ROLL);
         }
     }
     if ((this->animIndex == ENKAKASI_ANIM_SPIN_REACH_OFFER) || (this->animIndex == ENKAKASI_ANIM_TWIRL)) {
-        if (Animation_OnFrame(&this->skelanime, 1.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
             Actor_PlaySfx(&this->picto.actor, NA_SE_EV_KAKASH_LONGI_ROLL);
         }
     }
@@ -274,9 +288,10 @@ void func_8096FAAC(EnKakasi* this, PlayState* play) {
  * goes off every frame of song teach, but... doing what?
  */
 void func_8096FBB8(EnKakasi* this, PlayState* play) {
-    if ((play->msgCtx.unk12048 == 0) || (play->msgCtx.unk12048 == 1) || (play->msgCtx.unk12048 == 2) ||
-        (play->msgCtx.unk12048 == 3) || (play->msgCtx.unk12048 == 4)) {
-        // why not 0 < x < 4? fewer branches
+    if ((play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_A) || (play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_C_DOWN) ||
+        (play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_C_RIGHT) ||
+        (play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_C_LEFT) ||
+        (play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_C_UP)) {
         this->unk190++;
     }
     if ((this->unk190 != 0) && (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING)) {
@@ -286,7 +301,7 @@ void func_8096FBB8(EnKakasi* this, PlayState* play) {
         this->unk190 = 8;
     }
     if (this->unk190 != 0) {
-        Math_ApproachF(&this->skelanime.playSpeed, 1.0f, 0.1f, 0.2f);
+        Math_ApproachF(&this->skelAnime.playSpeed, 1.0f, 0.1f, 0.2f);
         this->picto.actor.shape.rot.y += 0x800;
     }
 }
@@ -318,7 +333,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.flags &= ~ACTOR_FLAG_10000;
                 this->actionFunc = EnKakasi_RegularDialogue;
             } else {
-                func_800B8500(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
+                Actor_OfferTalkExchange(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
             }
         }
     }
@@ -330,19 +345,19 @@ void EnKakasi_SetupIdleStanding(EnKakasi* this) {
 }
 
 void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
-    u32 saveContextDay = gSaveContext.save.day;
+    u32 day = gSaveContext.save.day;
     s16 x;
     s16 y;
 
     // first talk to scarecrow dialogue
     this->picto.actor.textId = 0x1644;
     if (func_800B8718(&this->picto.actor, &play->state)) {
-        this->skelanime.playSpeed = 1.0f;
+        this->skelAnime.playSpeed = 1.0f;
         EnKakasi_SetupSongTeach(this, play);
         return;
     }
     if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
-        this->skelanime.playSpeed = 1.0f;
+        this->skelAnime.playSpeed = 1.0f;
         EnKakasi_SetupDialogue(this);
         return;
     }
@@ -352,23 +367,23 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
             (y < SCREEN_HEIGHT) && (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING)) {
             // faster shaking
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
-            this->skelanime.playSpeed = 2.0f;
+            this->skelAnime.playSpeed = 2.0f;
         }
     } else if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
         if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
-            this->skelanime.playSpeed = 2.0f;
+            this->skelAnime.playSpeed = 2.0f;
         }
-    } else if ((saveContextDay == 3) && gSaveContext.save.isNight) {
-        this->skelanime.playSpeed = 1.0f;
+    } else if ((day == 3) && gSaveContext.save.isNight) {
+        this->skelAnime.playSpeed = 1.0f;
         if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-            EnKakasi_ChangeAnim(this, 1);
+            EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
         }
     } else if (this->animIndex != ENKAKASI_ANIM_IDLE) {
         EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_IDLE);
     }
     if (this->picto.actor.xzDistToPlayer < 120.0f) {
-        func_800B8614(&this->picto.actor, play, 100.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 100.0f);
         func_800B874C(&this->picto.actor, play, 100.0f, 80.0f);
     }
 }
@@ -386,12 +401,12 @@ void EnKakasi_SetupDialogue(EnKakasi* this) {
 }
 
 void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
-    u32 saveContextDay = gSaveContext.save.day;
-    f32 currentAnimeFrame = this->skelanime.curFrame;
+    u32 day = gSaveContext.save.day;
+    f32 curFrame = this->skelAnime.curFrame;
 
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 2000, 0);
     // if first dialogue
-    if ((this->picto.actor.textId != 0x1644) && (this->animeFrameCount <= currentAnimeFrame) &&
+    if ((this->picto.actor.textId != 0x1644) && (curFrame >= this->animEndFrame) &&
         (this->animIndex == ENKAKASI_ANIM_SLOWROLL)) {
 
         EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
@@ -400,8 +415,9 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
 
     // if dialogue: oh sorry come back again
     if ((this->picto.actor.textId == 0x1651) || (this->picto.actor.textId == 0x1659)) {
-        if ((this->animeFrameCount <= currentAnimeFrame) && (this->animIndex != ENKAKASI_ANIM_SPIN_REACH_OFFER)) {
-            if (++this->unkCounter1A4 >= 2) {
+        if ((curFrame >= this->animEndFrame) && (this->animIndex != ENKAKASI_ANIM_SPIN_REACH_OFFER)) {
+            this->unkCounter1A4++;
+            if (this->unkCounter1A4 >= 2) {
                 this->unkCounter1A4 = 0;
                 EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
             }
@@ -517,7 +533,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                     this->picto.actor.textId = 0x1658;
                 } else if (this->picto.actor.textId == 0x165C) {
                     this->picto.actor.textId = 0x165E;
-                } else if ((saveContextDay == 3) && gSaveContext.save.isNight) {
+                } else if ((day == 3) && gSaveContext.save.isNight) {
                     this->picto.actor.textId = 0x164F;
                 } else {
                     this->picto.actor.textId = 0x1652;
@@ -559,7 +575,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, PlayState* play) {
  */
 void EnKakasi_OcarinaRemark(EnKakasi* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_80152434(play, 0x35);
+        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_SCARECROW_SPAWN_RECORDING);
         this->unkState1A8 = 0;
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -616,7 +632,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
         func_8096FAAC(this, play);
         func_8096FBB8(this, play);
 
-        if (play->msgCtx.ocarinaMode == 4) { // song failed
+        if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) { // song failed
             this->unk190 = 0;
             this->unkCounter1A4 = 0;
             CutsceneManager_Stop(this->csIdList[0]);
@@ -629,9 +645,9 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
             this->actionFunc = EnKakasi_RegularDialogue;
 
-        } else if (play->msgCtx.ocarinaMode == 3) { // song success
+        } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) { // song success
             this->postTeachTimer = 30;
-            this->skelanime.playSpeed = 2.0f;
+            this->skelAnime.playSpeed = 2.0f;
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
             this->actionFunc = EnKakasi_PostSongLearnTwirl;
         }
@@ -639,21 +655,20 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
 }
 
 void EnKakasi_PostSongLearnTwirl(EnKakasi* this, PlayState* play) {
-    f32 animeFrame = this->skelanime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
 
     if ((this->postTeachTimer == 0) && (this->animIndex != ENKAKASI_ANIM_TWIRL)) {
         EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_TWIRL);
-        this->skelanime.playSpeed = 2.0f;
+        this->skelAnime.playSpeed = 2.0f;
     }
-    if ((this->postTeachTimer == 0) && (this->animIndex == ENKAKASI_ANIM_TWIRL) &&
-        (this->animeFrameCount <= animeFrame)) {
+    if ((this->postTeachTimer == 0) && (this->animIndex == ENKAKASI_ANIM_TWIRL) && (curFrame >= this->animEndFrame)) {
         EnKakasi_SetupPostSongLearnDialogue(this, play);
     }
 }
 
 void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     CutsceneManager_Stop(this->csIdList[0]);
-    play->msgCtx.ocarinaMode = 4;
+    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
@@ -667,7 +682,7 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
 
 void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    f32 tempAnimFrame = this->skelanime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
     Vec3f vec3fCopy;
 
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 3000, 0);
@@ -683,7 +698,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     }
 
     if ((this->picto.actor.textId == 0x1648) && (this->animIndex == ENKAKASI_ANIM_HOPPING_REGULAR) &&
-        (this->animeFrameCount <= tempAnimFrame)) {
+        (curFrame >= this->animEndFrame)) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
@@ -691,7 +706,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     }
 
     if ((this->picto.actor.textId == 0x164B) && (this->animIndex == ENKAKASI_ANIM_ARMS_CROSSED_ROCKING) &&
-        (this->animeFrameCount <= tempAnimFrame)) {
+        (curFrame >= this->animEndFrame)) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
@@ -818,11 +833,10 @@ void EnKakasi_SetupDanceNightAway(EnKakasi* this) {
 }
 
 void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
-    f32 currentFrame;
+    f32 curFrame = this->skelAnime.curFrame;
     Vec3f localVec3f;
     Player* player;
 
-    currentFrame = this->skelanime.curFrame;
     EnKakasi_CheckPlayerPosition(this, play);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 3000, 0);
     this->unk22C.y = this->picto.actor.home.pos.y + 50.0f;
@@ -856,7 +870,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
 
         case 1:
             // end of twirl, start shaking back and forth
-            if ((this->unk204 == 0) && (this->animeFrameCount <= currentFrame)) {
+            if ((this->unk204 == 0) && (curFrame >= this->animEndFrame)) {
                 this->unk204 = 0x14;
                 this->unk190++;
                 EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
@@ -1040,9 +1054,9 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08) && (this->picto.actor.xzDistToPlayer < this->songSummonDist) &&
-        ((BREG(1) != 0) || (play->msgCtx.ocarinaMode == 0xD))) {
+        ((BREG(1) != 0) || (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_SCARECROW_SPAWN))) {
         this->picto.actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = EnKakasi_SetupRiseOutOfGround;
     }
 }
@@ -1100,7 +1114,7 @@ void EnKakasi_IdleRisen(EnKakasi* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
         this->actionFunc = EnKakasi_RisenDialogue;
     } else {
-        func_800B8614(&this->picto.actor, play, 70.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 70.0f);
     }
 }
 
@@ -1117,7 +1131,7 @@ void EnKakasi_Update(Actor* thisx, PlayState* play) {
     EnKakasi* this = THIS;
     s32 pad;
 
-    SkelAnime_Update(&this->skelanime);
+    SkelAnime_Update(&this->skelAnime);
     if (this->picto.actor.draw != NULL) {
         EnKakasi_CheckAnimationSfx(this);
     }
@@ -1154,7 +1168,7 @@ void EnKakasi_Update(Actor* thisx, PlayState* play) {
 void EnKakasi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnKakasi* this = THIS;
 
-    if (limbIndex == 4) {
+    if (limbIndex == OBJECT_KA_LIMB_04) {
         Matrix_MultVec3f(&gZeroVec3f, &this->unk1BC);
     }
 }
@@ -1162,6 +1176,6 @@ void EnKakasi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 void EnKakasi_Draw(Actor* thisx, PlayState* play) {
     EnKakasi* this = THIS;
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount, NULL,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnKakasi_PostLimbDraw, &this->picto.actor);
 }

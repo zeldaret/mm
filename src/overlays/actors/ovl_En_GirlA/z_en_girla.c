@@ -6,7 +6,7 @@
 
 #include "z_en_girla.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnGirlA*)thisx)
 
@@ -165,7 +165,7 @@ void EnGirlA_InitObjIndex(EnGirlA* this, PlayState* play) {
         return;
     }
 
-    this->objIndex = Object_GetIndex(&play->objectCtx, sShopItemEntries[params].objectId);
+    this->objIndex = Object_GetSlot(&play->objectCtx, sShopItemEntries[params].objectId);
     if (this->objIndex < 0) {
         Actor_Kill(&this->actor);
         return;
@@ -205,13 +205,13 @@ s32 EnGirlA_CanBuyPotionGreen(PlayState* play, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyPotionBlue(PlayState* play, EnGirlA* this) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_08)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_GAVE_KOTAKE_MUSHROOM)) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
     if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_10)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FREE_BLUE_POTION)) {
         return CANBUY_RESULT_SUCCESS_2;
     }
     if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
@@ -585,7 +585,7 @@ void EnGirlA_InitalUpdate(EnGirlA* this, PlayState* play) {
         this->itemParams = shopItem->params;
         this->drawFunc = shopItem->drawFunc;
         this->getItemDrawId = shopItem->getItemDrawId;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         Actor_SetScale(&this->actor, 0.25f);
         this->actor.shape.yOffset = 24.0f;
         this->actor.shape.shadowScale = 4.0f;

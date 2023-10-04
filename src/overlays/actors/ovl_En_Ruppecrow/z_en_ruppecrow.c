@@ -222,7 +222,7 @@ void EnRuppecrow_ShatterIce(EnRuppecrow* this, PlayState* play) {
     if (this->currentEffect == ENRUPPECROW_EFFECT_ICE) {
         this->currentEffect = ENRUPPECROW_EFFECT_NONE;
         this->unk_2C8 = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 0x2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENRUPPECROW_BODYPART_MAX, 0x2, 0.2f, 0.2f);
     }
 }
 
@@ -368,7 +368,7 @@ void EnRuppecrow_UpdatePosition(EnRuppecrow* this, PlayState* play) {
 s32 EnRuppecrow_CheckPlayedMatchingSong(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->msgCtx.ocarinaMode == 0x3) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         switch (player->transformation) {
             case PLAYER_FORM_DEKU:
                 if (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA) {
@@ -494,7 +494,7 @@ void EnRuppecrow_UpdateDamage(EnRuppecrow* this, PlayState* play) {
 
         if (this->actor.colChkInfo.damageEffect != 0x1) {
             this->actor.colChkInfo.health = 0;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             Enemy_StartFinishingBlow(play, &this->actor);
             EnRuppecrow_HandleDeath(this);
         }
@@ -640,12 +640,12 @@ void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
     EnRuppecrow* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->joinTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
                        OBJECT_CROW_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
     Collider_InitJntSph(play, &this->collider);
-    Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, &this->colliderElement);
+    Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 

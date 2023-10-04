@@ -11,7 +11,7 @@
 #include "objects/object_sekihiz/object_sekihiz.h"
 #include "objects/object_zog/object_zog.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnSekihi*)thisx)
 
@@ -69,7 +69,7 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN);
     }
 
-    objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
+    objectIndex = Object_GetSlot(&play->objectCtx, sObjectIds[type]);
     if (objectIndex >= 0) {
         this->objectIndex = objectIndex;
     }
@@ -162,7 +162,7 @@ void func_80A450B0(EnSekihi* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
         this->actionFunc = func_80A44F40;
     } else if ((this->dyna.actor.xzDistToPlayer < 100.0f) && (Player_IsFacingActor(&this->dyna.actor, 0x2600, play))) {
-        func_800B8614(&this->dyna.actor, play, 120.0f);
+        Actor_OfferTalk(&this->dyna.actor, play, 120.0f);
     }
 }
 

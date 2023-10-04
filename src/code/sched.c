@@ -1,15 +1,8 @@
-#include "prevent_bss_reordering.h"
-#include "global.h"
+#include "fault.h"
 #include "idle.h"
-#include "stackcheck.h"
-#include "z64thread.h"
+#include "z64.h"
 
-#define RSP_DONE_MSG 667
-#define RDP_DONE_MSG 668
-#define ENTRY_MSG 670
-#define RDP_AUDIO_CANCEL_MSG 671
-#define RSP_GFX_CANCEL_MSG 672
-
+// Variables are put before most headers as a hacky way to bypass bss reordering
 FaultClient sSchedFaultClient;
 
 OSTime sRSPGFXStartTime;
@@ -19,6 +12,18 @@ OSTime sRDPStartTime;
 
 u64* gAudioSPDataPtr;
 u32 gAudioSPDataSize;
+
+#include "functions.h"
+#include "variables.h"
+#include "stackcheck.h"
+#include "z64speed_meter.h"
+#include "z64thread.h"
+
+#define RSP_DONE_MSG 667
+#define RDP_DONE_MSG 668
+#define ENTRY_MSG 670
+#define RDP_AUDIO_CANCEL_MSG 671
+#define RSP_GFX_CANCEL_MSG 672
 
 void Sched_SwapFramebuffer(CfbInfo* cfbInfo) {
     if (cfbInfo->swapBuffer != NULL) {
@@ -422,16 +427,16 @@ void Sched_HandleRSPDone(SchedContext* sched) {
     time = osGetTime();
     switch (sched->curRSPTask->list.t.type) {
         case M_AUDTASK:
-            gRSPAudioTotalTime += time - sRSPAudioStartTime;
+            gRSPAudioTimeAcc += time - sRSPAudioStartTime;
             break;
 
         case M_GFXTASK:
-            sRSPGFXTotalTime += time - sRSPGFXStartTime;
+            gRSPGfxTimeAcc += time - sRSPGFXStartTime;
             break;
 
         default:
             if (1) {}
-            sRSPOtherTotalTime += time - sRSPOtherStartTime;
+            gRSPOtherTimeAcc += time - sRSPOtherStartTime;
             break;
     }
 
@@ -477,7 +482,7 @@ void Sched_HandleRDPDone(SchedContext* sched) {
     }
 
     // Log run time
-    gRDPTotalTime = osGetTime() - sRDPStartTime;
+    gRDPTimeAcc = osGetTime() - sRDPStartTime;
 
     // Mark task done
     curRDP = sched->curRDPTask;

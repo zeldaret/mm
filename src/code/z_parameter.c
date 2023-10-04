@@ -1,4 +1,6 @@
 #include "global.h"
+#include "PR/gs2dex.h"
+#include "sys_cfb.h"
 #include "z64snap.h"
 #include "z64view.h"
 #include "archives/icon_item_static/icon_item_static_yar.h"
@@ -1707,7 +1709,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
     if (CHECK_EVENTINF(EVENTINF_41)) {
         // Related to swamp boat (non-minigame)?
         for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
-            if ((GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTOGRAPH_BOX) || (msgCtx->msgMode != 0)) {
+            if ((GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTOGRAPH_BOX) || (msgCtx->msgMode != MSGMODE_NONE)) {
                 if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
                     restoreHudVisibility = true;
                 }
@@ -2020,10 +2022,10 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
         }
 
         // C buttons
-        if (gSaveContext.save.playerForm == player->transformation) {
+        if (GET_PLAYER_FORM == player->transformation) {
             for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 // Individual C button
-                if (!gPlayerFormItemRestrictions[(void)0, gSaveContext.save.playerForm][GET_CUR_FORM_BTN_ITEM(i)]) {
+                if (!gPlayerFormItemRestrictions[GET_PLAYER_FORM][GET_CUR_FORM_BTN_ITEM(i)]) {
                     // Item not usable in current playerForm
                     if (gSaveContext.buttonStatus[i] != BTN_DISABLED) {
                         gSaveContext.buttonStatus[i] = BTN_DISABLED;
@@ -2182,7 +2184,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
     if (gSaveContext.save.cutsceneIndex < 0xFFF0) {
         gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
         if ((player->stateFlags1 & PLAYER_STATE1_800000) || CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01) ||
-            (!(CHECK_EVENTINF(EVENTINF_41)) && (play->unk_1887C >= 2))) {
+            (!CHECK_EVENTINF(EVENTINF_41) && (play->unk_1887C >= 2))) {
             // Riding Epona OR Honey & Darling minigame OR Horseback balloon minigame OR related to swamp boat
             // (non-minigame?)
             if ((player->stateFlags1 & PLAYER_STATE1_800000) && (player->currentMask == PLAYER_MASK_BLAST) &&
@@ -2255,8 +2257,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                                (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) &&
                                (Cutscene_GetSceneLayer(play) != 0) && (play->transitionTrigger == TRANS_TRIGGER_OFF)) {
                         Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
-                    } else if ((gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) &&
-                               (CHECK_EVENTINF(EVENTINF_35))) {
+                    } else if ((gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) && CHECK_EVENTINF(EVENTINF_35)) {
                         Interface_SetHudVisibility(HUD_VISIBILITY_B_MINIMAP);
                     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_82_08) &&
                                (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE)) {
@@ -2345,8 +2346,8 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     restoreHudVisibility = true;
                     sPictoState = PICTO_BOX_STATE_OFF;
                 } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) || (func_801A5100() == 1)) {
-                    if (!(CHECK_EVENTINF(EVENTINF_41)) ||
-                        ((CHECK_EVENTINF(EVENTINF_41)) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
+                    if (!CHECK_EVENTINF(EVENTINF_41) ||
+                        (CHECK_EVENTINF(EVENTINF_41) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
                         Audio_PlaySfx(NA_SE_SY_CAMERA_SHUTTER);
                         SREG(89) = 1;
                         play->haltAllActors = true;
@@ -3145,10 +3146,8 @@ void Inventory_UpdateDeitySwordEquip(PlayState* play) {
         interfaceCtx->unk_21C = 0;
         interfaceCtx->bButtonDoAction = 0;
 
-        // Is simply checking if (gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY)
-        if ((((gSaveContext.save.playerForm > 0) && (gSaveContext.save.playerForm < 4))
-                 ? 1
-                 : gSaveContext.save.playerForm >> 1) == 0) {
+        // Is simply checking if (GET_PLAYER_FORM == PLAYER_FORM_FIERCE_DEITY)
+        if ((((GET_PLAYER_FORM > 0) && (GET_PLAYER_FORM < 4)) ? 1 : GET_PLAYER_FORM >> 1) == 0) {
             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_DEITY;
         } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_SWORD_DEITY) {
             if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
@@ -3658,7 +3657,7 @@ void Magic_Update(PlayState* play) {
         case MAGIC_STATE_CONSUME_LENS:
             // Slowly consume magic while Lens of Truth is active
             if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-                (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+                (msgCtx->msgMode == MSGMODE_NONE) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
                 (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
                 !Play_InCsMode(play)) {
 
@@ -3701,7 +3700,7 @@ void Magic_Update(PlayState* play) {
             // fallthrough
         case MAGIC_STATE_CONSUME_GORON_ZORA:
             if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == 0) &&
-                (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+                (msgCtx->msgMode == MSGMODE_NONE) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
                 (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
@@ -3723,7 +3722,7 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_CONSUME_GIANTS_MASK:
             if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-                (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+                (msgCtx->msgMode == MSGMODE_NONE) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
                 (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
@@ -3933,7 +3932,7 @@ void Interface_DrawItemButtons(PlayState* play) {
             if ((gSaveContext.hudVisibility == HUD_VISIBILITY_NONE) ||
                 (gSaveContext.hudVisibility == HUD_VISIBILITY_NONE_ALT) ||
                 (gSaveContext.hudVisibility == HUD_VISIBILITY_A_HEARTS_MAGIC_WITH_OVERWRITE) ||
-                (msgCtx->msgMode != 0)) {
+                (msgCtx->msgMode != MSGMODE_NONE)) {
                 temp = 0;
             } else if (player->stateFlags1 & PLAYER_STATE1_200000) {
                 temp = 70;
@@ -4104,7 +4103,7 @@ void Interface_DrawBButtonIcons(PlayState* play) {
                         (play->sceneId != SCENE_BOWLING) &&
                         ((gSaveContext.minigameStatus != MINIGAME_STATUS_ACTIVE) ||
                          (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0))) &&
-                        ((gSaveContext.minigameStatus != MINIGAME_STATUS_ACTIVE) || !(CHECK_EVENTINF(EVENTINF_35))) &&
+                        ((gSaveContext.minigameStatus != MINIGAME_STATUS_ACTIVE) || !CHECK_EVENTINF(EVENTINF_35)) &&
                         (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80) || (play->unk_1887C != 100))) {
                         Interface_DrawAmmoCount(play, EQUIP_SLOT_B, interfaceCtx->bAlpha);
                     }
@@ -4401,8 +4400,8 @@ void Interface_DrawClock(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if ((R_TIME_SPEED != 0) &&
-        ((msgCtx->msgMode == 0) || ((play->actorCtx.flags & ACTORCTX_FLAG_1) && !Play_InCsMode(play)) ||
-         (msgCtx->msgMode == 0) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
+        ((msgCtx->msgMode == MSGMODE_NONE) || ((play->actorCtx.flags & ACTORCTX_FLAG_1) && !Play_InCsMode(play)) ||
+         (msgCtx->msgMode == MSGMODE_NONE) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
          (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) &&
         !FrameAdvance_IsEnabled(&play->state) && !Environment_IsTimeStopped() && (gSaveContext.save.day <= 3)) {
         /**
@@ -5441,31 +5440,31 @@ void Interface_StartMoonCrash(PlayState* play) {
     play->transitionType = TRANS_TYPE_FADE_WHITE;
 }
 
-void Interface_GetTimerDigits(u64 timer, s16* timerArr) {
-    u64 time = timer;
+void Interface_GetTimerDigits(OSTime time, s16* timerArr) {
+    OSTime t = time;
 
     // 6 minutes
-    timerArr[0] = time / SECONDS_TO_TIMER(360);
-    time -= timerArr[0] * SECONDS_TO_TIMER(360);
+    timerArr[0] = t / SECONDS_TO_TIMER(360);
+    t -= timerArr[0] * SECONDS_TO_TIMER(360);
 
     // minutes
-    timerArr[1] = time / SECONDS_TO_TIMER(60);
-    time -= timerArr[1] * SECONDS_TO_TIMER(60);
+    timerArr[1] = t / SECONDS_TO_TIMER(60);
+    t -= timerArr[1] * SECONDS_TO_TIMER(60);
 
     // 10 seconds
-    timerArr[3] = time / SECONDS_TO_TIMER(10);
-    time -= timerArr[3] * SECONDS_TO_TIMER(10);
+    timerArr[3] = t / SECONDS_TO_TIMER(10);
+    t -= timerArr[3] * SECONDS_TO_TIMER(10);
 
     // seconds
-    timerArr[4] = time / SECONDS_TO_TIMER(1);
-    time -= timerArr[4] * SECONDS_TO_TIMER(1);
+    timerArr[4] = t / SECONDS_TO_TIMER(1);
+    t -= timerArr[4] * SECONDS_TO_TIMER(1);
 
     // 100 milliseconds
-    timerArr[6] = time / SECONDS_TO_TIMER_PRECISE(0, 10);
-    time -= timerArr[6] * SECONDS_TO_TIMER_PRECISE(0, 10);
+    timerArr[6] = t / SECONDS_TO_TIMER_PRECISE(0, 10);
+    t -= timerArr[6] * SECONDS_TO_TIMER_PRECISE(0, 10);
 
     // 10 milliseconds
-    timerArr[7] = time;
+    timerArr[7] = t;
 }
 
 #define IS_POSTMAN_TIMER_DRAWN                                                        \
@@ -5501,8 +5500,8 @@ void Interface_DrawTimers(PlayState* play) {
     // Not satisfying any of these conditions will pause the timer
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
         (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-        ((msgCtx->msgMode == 0) ||
-         ((msgCtx->msgMode != 0) && (msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6))) &&
+        ((msgCtx->msgMode == MSGMODE_NONE) || ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId >= 0x1BB2) &&
+                                               (msgCtx->currentTextId <= 0x1BB6))) &&
         !(player->stateFlags1 & PLAYER_STATE1_200) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
         (play->transitionMode == TRANS_MODE_OFF) && !Play_InCsMode(play)) {
 
@@ -5951,7 +5950,7 @@ void Interface_UpdateBottleTimers(PlayState* play) {
     // Not satisfying any of these conditions will pause the bottle timer
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
         (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-        ((msgCtx->msgMode == 0) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
+        ((msgCtx->msgMode == MSGMODE_NONE) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
          ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6))) &&
         (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
         !Play_InCsMode(play)) {
@@ -6402,14 +6401,14 @@ void Interface_Draw(PlayState* play) {
         Minimap_Draw(play);
 
         if ((R_PAUSE_BG_PRERENDER_STATE != 2) && (R_PAUSE_BG_PRERENDER_STATE != 3)) {
-            Actor_DrawZTarget(&play->actorCtx.targetContext, play);
+            Target_Draw(&play->actorCtx.targetCtx, play);
         }
 
         Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         Interface_DrawItemButtons(play);
 
-        if (player->transformation == ((void)0, gSaveContext.save.playerForm)) {
+        if (player->transformation == GET_PLAYER_FORM) {
             Interface_DrawBButtonIcons(play);
         }
         Interface_DrawCButtonIcons(play);
@@ -6871,7 +6870,7 @@ void Interface_Update(PlayState* play) {
                 interfaceCtx->aButtonRoll = -15700.0f;
                 interfaceCtx->aButtonState = A_BTN_STATE_2;
 
-                if ((msgCtx->msgMode != 0) && (msgCtx->unk12006 == 0x26)) {
+                if ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->textboxYTarget == 38)) {
                     R_A_BTN_Y_OFFSET = -14;
                 } else {
                     R_A_BTN_Y_OFFSET = 0;
@@ -7019,8 +7018,9 @@ void Interface_Update(PlayState* play) {
     // Update Sun Song
     if (gSaveContext.sunsSongState != SUNSSONG_INACTIVE) {
         // exit out of ocarina mode after suns song finishes playing
-        if ((msgCtx->ocarinaAction != 0x39) && (gSaveContext.sunsSongState == SUNSSONG_START)) {
-            play->msgCtx.ocarinaMode = 4;
+        if ((msgCtx->ocarinaAction != OCARINA_ACTION_CHECK_NOTIME_DONE) &&
+            (gSaveContext.sunsSongState == SUNSSONG_START)) {
+            play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         }
 
         // handle suns song in areas where time moves
@@ -7040,7 +7040,7 @@ void Interface_Update(PlayState* play) {
                     // Daytime has been reached. End suns song effect
                     gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
                     R_TIME_SPEED = sPrevTimeSpeed;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
             } else {
                 // Daytime
@@ -7048,7 +7048,7 @@ void Interface_Update(PlayState* play) {
                     // Nighttime has been reached. End suns song effect
                     gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
                     R_TIME_SPEED = sPrevTimeSpeed;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
             }
         } else {
@@ -7116,16 +7116,16 @@ void Interface_Init(PlayState* play) {
     interfaceCtx->healthTimer = 200;
 
     parameterStaticSize = SEGMENT_ROM_SIZE(parameter_static);
-    interfaceCtx->parameterSegment = THA_AllocTailAlign16(&play->state.heap, parameterStaticSize);
+    interfaceCtx->parameterSegment = THA_AllocTailAlign16(&play->state.tha, parameterStaticSize);
     DmaMgr_SendRequest0(interfaceCtx->parameterSegment, SEGMENT_ROM_START(parameter_static), parameterStaticSize);
 
-    interfaceCtx->doActionSegment = THA_AllocTailAlign16(&play->state.heap, 0xC90);
+    interfaceCtx->doActionSegment = THA_AllocTailAlign16(&play->state.tha, 0xC90);
     DmaMgr_SendRequest0(interfaceCtx->doActionSegment, SEGMENT_ROM_START(do_action_static), 0x300);
     DmaMgr_SendRequest0(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START(do_action_static) + 0x480, 0x180);
 
     Interface_NewDay(play, CURRENT_DAY);
 
-    interfaceCtx->iconItemSegment = THA_AllocTailAlign16(&play->state.heap, 0x4000);
+    interfaceCtx->iconItemSegment = THA_AllocTailAlign16(&play->state.tha, 0x4000);
 
     if (CUR_FORM_EQUIP(EQUIP_SLOT_B) < ITEM_F0) {
         Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);

@@ -79,7 +79,7 @@ EnDoorEtcInfo sObjInfo[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.x, 0, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
@@ -101,10 +101,10 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
             break;
         }
     }
-    if ((i >= 15) && (Object_GetIndex(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
+    if ((i >= 15) && (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
         objectInfo++;
     }
-    objectIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
+    objectIndex = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
     if (objectIndex < 0) {
         Actor_Kill(&this->knobDoor.dyna.actor);
     } else {

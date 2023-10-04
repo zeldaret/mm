@@ -7,7 +7,7 @@
 #include "z_en_bom_bowl_man.h"
 #include "objects/object_cs/object_cs.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnBomBowlMan*)thisx)
 
@@ -49,16 +49,75 @@ ActorInit En_Bom_Bowl_Man_InitVars = {
     (ActorFunc)EnBomBowlMan_Draw,
 };
 
-static AnimationHeader* sAnimations[] = {
-    &gBomberIdleAnim,       &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
-    &object_cs_Anim_002044, &object_cs_Anim_01007C, &object_cs_Anim_00349C, &object_cs_Anim_004960,
-    &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_001A1C, &object_cs_Anim_003EE4,
-    &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8, &object_cs_Anim_001708,
-    &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0, &object_cs_Anim_0031C4,
+typedef enum {
+    /*   -1 */ ENBOMBOWLMAN_ANIM_NONE = -1,
+    /* 0x00 */ ENBOMBOWLMAN_ANIM_0,
+    /* 0x01 */ ENBOMBOWLMAN_ANIM_1,
+    /* 0x02 */ ENBOMBOWLMAN_ANIM_2,
+    /* 0x03 */ ENBOMBOWLMAN_ANIM_3,
+    /* 0x04 */ ENBOMBOWLMAN_ANIM_4,
+    /* 0x05 */ ENBOMBOWLMAN_ANIM_5,
+    /* 0x06 */ ENBOMBOWLMAN_ANIM_6,
+    /* 0x07 */ ENBOMBOWLMAN_ANIM_7,
+    /* 0x08 */ ENBOMBOWLMAN_ANIM_8,
+    /* 0x09 */ ENBOMBOWLMAN_ANIM_9,
+    /* 0x0A */ ENBOMBOWLMAN_ANIM_10,
+    /* 0x0B */ ENBOMBOWLMAN_ANIM_11,
+    /* 0x0C */ ENBOMBOWLMAN_ANIM_12,
+    /* 0x0D */ ENBOMBOWLMAN_ANIM_13,
+    /* 0x0E */ ENBOMBOWLMAN_ANIM_14,
+    /* 0x0F */ ENBOMBOWLMAN_ANIM_15,
+    /* 0x10 */ ENBOMBOWLMAN_ANIM_16,
+    /* 0x11 */ ENBOMBOWLMAN_ANIM_17,
+    /* 0x12 */ ENBOMBOWLMAN_ANIM_18,
+    /* 0x13 */ ENBOMBOWLMAN_ANIM_19,
+    /* 0x14 */ ENBOMBOWLMAN_ANIM_MAX
+} EnBomBowlManAnimation;
+
+static AnimationHeader* sAnimations[ENBOMBOWLMAN_ANIM_MAX] = {
+    &gBomberIdleAnim,       // ENBOMBOWLMAN_ANIM_0
+    &object_cs_Anim_00FAF4, // ENBOMBOWLMAN_ANIM_1
+    &object_cs_Anim_0057C8, // ENBOMBOWLMAN_ANIM_2
+    &object_cs_Anim_0053F4, // ENBOMBOWLMAN_ANIM_3
+    &object_cs_Anim_002044, // ENBOMBOWLMAN_ANIM_4
+    &object_cs_Anim_01007C, // ENBOMBOWLMAN_ANIM_5
+    &object_cs_Anim_00349C, // ENBOMBOWLMAN_ANIM_6
+    &object_cs_Anim_004960, // ENBOMBOWLMAN_ANIM_7
+    &object_cs_Anim_005128, // ENBOMBOWLMAN_ANIM_8
+    &object_cs_Anim_004C1C, // ENBOMBOWLMAN_ANIM_9
+    &object_cs_Anim_001A1C, // ENBOMBOWLMAN_ANIM_10
+    &object_cs_Anim_003EE4, // ENBOMBOWLMAN_ANIM_11
+    &object_cs_Anim_00478C, // ENBOMBOWLMAN_ANIM_12
+    &object_cs_Anim_00433C, // ENBOMBOWLMAN_ANIM_13
+    &object_cs_Anim_0060E8, // ENBOMBOWLMAN_ANIM_14
+    &object_cs_Anim_001708, // ENBOMBOWLMAN_ANIM_15
+    &object_cs_Anim_005DC4, // ENBOMBOWLMAN_ANIM_16
+    &object_cs_Anim_0026B0, // ENBOMBOWLMAN_ANIM_17
+    &object_cs_Anim_0036B0, // ENBOMBOWLMAN_ANIM_18
+    &object_cs_Anim_0031C4, // ENBOMBOWLMAN_ANIM_19
 };
 
-u8 D_809C6178[] = {
-    0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0,
+static u8 sAnimationModes[ENBOMBOWLMAN_ANIM_MAX] = {
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_0
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_1
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_2
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_3
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_4
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_5
+    ANIMMODE_ONCE, // ENBOMBOWLMAN_ANIM_6
+    ANIMMODE_ONCE, // ENBOMBOWLMAN_ANIM_7
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_8
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_9
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_10
+    ANIMMODE_ONCE, // ENBOMBOWLMAN_ANIM_11
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_12
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_13
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_14
+    ANIMMODE_ONCE, // ENBOMBOWLMAN_ANIM_15
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_16
+    ANIMMODE_ONCE, // ENBOMBOWLMAN_ANIM_17
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_18
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_19
 };
 
 u16 D_809C618C[] = { 0x710, 0x711, 0x715, 0x716, 0x717, 0x718 };
@@ -77,10 +136,10 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     this->actor.gravity = -3.0f;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
-                       this->morphTable, 21);
+                       this->morphTable, OBJECT_CS_LIMB_MAX);
     this->unk_2F6 = ENBOMBOWLMAN_GET_F0(&this->actor);
     this->unk_2F4 = ENBOMBOWLMAN_GET_F(&this->actor);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->actor, 0.01f);
 
     if (this->unk_2F6 == ENBOMBOWLMAN_F0_0) {
@@ -112,37 +171,37 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
 void EnBomBowlMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_809C493C(EnBomBowlMan* this, s32 arg1, f32 arg2) {
-    this->unk_2F8 = arg1;
-    this->unk_2C4 = Animation_GetLastFrame(sAnimations[arg1]);
-    Animation_Change(&this->skelAnime, sAnimations[this->unk_2F8], arg2, 0.0f, this->unk_2C4, D_809C6178[this->unk_2F8],
-                     -4.0f);
+void EnBomBowlMan_ChangeAnim(EnBomBowlMan* this, s32 animIndex, f32 playSpeed) {
+    this->animIndex = animIndex;
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, this->animEndFrame,
+                     sAnimationModes[this->animIndex], -4.0f);
 }
 
 void func_809C49CC(EnBomBowlMan* this) {
-    if ((this->unk_2F8 == 5) &&
+    if ((this->animIndex == ENBOMBOWLMAN_ANIM_5) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
-    if ((this->unk_2F8 == 0xB) &&
+    if ((this->animIndex == ENBOMBOWLMAN_ANIM_11) &&
         (Animation_OnFrame(&this->skelAnime, 4.0f) || Animation_OnFrame(&this->skelAnime, 8.0f) ||
          Animation_OnFrame(&this->skelAnime, 12.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
-    if ((this->unk_2F8 == 0x12) &&
+    if ((this->animIndex == ENBOMBOWLMAN_ANIM_18) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 2.0f) ||
          Animation_OnFrame(&this->skelAnime, 4.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
-    if ((this->unk_2F8 == 0xF) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
+    if ((this->animIndex == ENBOMBOWLMAN_ANIM_15) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 
-    if ((this->unk_2F8 == 6) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
+    if ((this->animIndex == ENBOMBOWLMAN_ANIM_6) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 }
@@ -171,7 +230,7 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
     s8 code;
 
     func_809C4B50(this);
-    func_809C493C(this, 0, 1.0f);
+    EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_0, 1.0f);
 
     for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.bomberCode); i++) {
         Math_Vec3f_Copy(&sp7C, &this->actor.home.pos);
@@ -199,7 +258,7 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
         CutsceneManager_Queue(this->csId1);
     }
 
-    func_809C493C(this, 3, 1.0f);
+    EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_3, 1.0f);
     this->unk_2D4 = this->actor.yawTowardsPlayer;
     this->unk_290 = this->actor.yawTowardsPlayer;
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_73_10);
@@ -252,12 +311,12 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                                       &this->unk_2D8[0]->actor);
                 this->unk_2D4 = 0;
                 this->unk_2BC = 10;
-                func_809C493C(this, 17, 1.0f);
+                EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_17, 1.0f);
                 break;
 
             case 1:
                 D_809C6104 = 0;
-                func_809C493C(this, 3, 1.0f);
+                EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_3, 1.0f);
                 this->unk_2D4 = this->actor.yawTowardsPlayer;
                 this->unk_2C0 = 2;
                 if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
@@ -274,7 +333,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                 } else {
                     this->unk_2C0 = 3;
                     play->msgCtx.msgLength = 0;
-                    func_809C493C(this, 1, 1.0f);
+                    EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_1, 1.0f);
                     D_809C6100 = 1;
                     if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                         CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -302,7 +361,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                     CutsceneManager_Stop(this->csId1);
                 }
                 play->msgCtx.msgLength = 0;
-                func_809C493C(this, 1, 1.0f);
+                EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_1, 1.0f);
                 D_809C6100 = 1;
                 this->actionFunc = func_809C5B1C;
                 sp28 = true;
@@ -314,6 +373,9 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_BOMBERS);
                 this->actionFunc = func_809C51B4;
                 sp28 = true;
+                break;
+
+            default:
                 break;
         }
 
@@ -331,7 +393,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((play->msgCtx.bombersNotebookEventQueueCount == 0) &&
-        ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
+        ((play->msgCtx.msgMode == MSGMODE_NONE) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
         play->nextEntrance = Entrance_CreateFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -352,7 +414,7 @@ void func_809C52B4(EnBomBowlMan* this) {
     this->actor.draw = NULL;
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.world.pos.x = 1340.0f;
     this->actor.world.pos.z = -1795.0f;
     this->unk_29C = 3;
@@ -378,7 +440,7 @@ void func_809C53A4(EnBomBowlMan* this) {
     this->actor.draw = EnBomBowlMan_Draw;
     this->actor.world.pos.x = 1360.0f;
     this->actor.world.pos.z = -1870.0f;
-    func_809C493C(this, 18, 1.0f);
+    EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_18, 1.0f);
     this->unk_29C = 3;
     this->actionFunc = func_809C5408;
 }
@@ -404,7 +466,7 @@ void func_809C5524(EnBomBowlMan* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
         this->actor.textId = 0x72F;
     }
-    func_809C493C(this, 3, 1.0f);
+    EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_3, 1.0f);
     Message_StartTextbox(play, this->actor.textId, &this->actor);
     this->actionFunc = func_809C5598;
 }
@@ -424,14 +486,14 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
             this->actor.textId = 0x715;
         } else if (this->actor.textId == 0x715) {
             func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
-            func_809C493C(this, 17, 1.0f);
+            EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_17, 1.0f);
             func_809C59A4(this, play);
             return;
         } else if (this->actor.textId == 0x716) {
             this->actor.textId = 0x735;
         } else if (this->actor.textId == 0x735) {
             this->unk_2C2 = 0;
-            func_809C493C(this, 17, 1.0f);
+            EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_17, 1.0f);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BOMBERS_NOTEBOOK);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_BOMBERS);
@@ -449,7 +511,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
 
     if (this->unk_2C2 == 0) {
         if ((play->msgCtx.bombersNotebookEventQueueCount == 0) &&
-            ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
+            ((play->msgCtx.msgMode == MSGMODE_NONE) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
@@ -460,7 +522,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             } else {
                 CutsceneManager_StartWithPlayerCs(this->csId3, &this->actor);
                 this->unk_2C2 = 2;
-                func_809C493C(this, 18, 1.0f);
+                EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_18, 1.0f);
             }
         }
     } else if (this->unk_2C2 == 1) {
@@ -472,7 +534,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
         } else {
             CutsceneManager_StartWithPlayerCs(this->csId3, &this->actor);
             this->unk_2C2 = 2;
-            func_809C493C(this, 18, 1.0f);
+            EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_18, 1.0f);
         }
     } else {
         Math_SmoothStepToS(&this->actor.world.rot.y, yaw, 1, 2000, 10);
@@ -510,7 +572,7 @@ void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
         } else {
             this->actor.textId = 0x716;
         }
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_809C5AA4;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
@@ -525,7 +587,7 @@ void func_809C5AA4(EnBomBowlMan* this, PlayState* play) {
             this->actionFunc = func_809C5598;
         }
     } else {
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -543,33 +605,33 @@ void func_809C5B1C(EnBomBowlMan* this, PlayState* play) {
 
 void func_809C5BA0(EnBomBowlMan* this) {
     if (this->unk_2F4 != 0) {
-        func_809C493C(this, 0, 1.0f);
+        EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_0, 1.0f);
     } else {
-        this->unk_2F8 = 0;
+        this->animIndex = ENBOMBOWLMAN_ANIM_0;
     }
     this->unk_29C = 2;
     this->actionFunc = func_809C5BF4;
 }
 
 void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
-    f32 sp2C = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
     Camera* subCam;
 
-    if ((D_809C6104 != 0) && (this->unk_2F8 != 15)) {
-        func_809C493C(this, 15, 1.0f);
+    if ((D_809C6104 != 0) && (this->animIndex != ENBOMBOWLMAN_ANIM_15)) {
+        EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_15, 1.0f);
     }
 
-    if ((this->unk_2F8 == 15) && (this->unk_2C4 <= sp2C)) {
-        func_809C493C(this, 0, 1.0f);
+    if ((this->animIndex == ENBOMBOWLMAN_ANIM_15) && (curFrame >= this->animEndFrame)) {
+        EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_0, 1.0f);
     }
 
     if (D_809C6100 != 0) {
-        if ((this->unk_2F8 == 0) && (D_809C6100 == (this->unk_2F4 + 1))) {
-            func_809C493C(this, 11, 1.0f);
+        if ((this->animIndex == ENBOMBOWLMAN_ANIM_0) && (D_809C6100 == (this->unk_2F4 + 1))) {
+            EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_11, 1.0f);
         }
 
-        if ((this->unk_2F8 == 11) && (this->unk_2C4 <= sp2C)) {
-            func_809C493C(this, 12, 1.0f);
+        if ((this->animIndex == ENBOMBOWLMAN_ANIM_11) && (curFrame >= this->animEndFrame)) {
+            EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_12, 1.0f);
             D_809C6100++;
         }
 
@@ -581,7 +643,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
 
                 Message_CloseTextbox(play);
                 Camera_SetTargetActor(subCam, &this->unk_2D8[0]->actor);
-                func_809C493C(this, 13, 1.0f);
+                EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_13, 1.0f);
                 D_809C6100 = 0;
                 if (player->transformation == PLAYER_FORM_HUMAN) {
                     this->unk_2C0 = 5;
@@ -638,19 +700,19 @@ void EnBomBowlMan_Update(Actor* thisx, PlayState* play) {
 s32 EnBomBowlMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBomBowlMan* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_CS_LIMB_0F) {
         *dList = NULL;
     }
 
-    if (limbIndex == 17) {
+    if (limbIndex == OBJECT_CS_LIMB_11) {
         rot->x += this->unk_28A;
     }
 
-    if ((limbIndex == 19) && (this->unk_2F6 == ENBOMBOWLMAN_F0_2)) {
+    if ((limbIndex == OBJECT_CS_LIMB_13) && (this->unk_2F6 == ENBOMBOWLMAN_F0_2)) {
         *dList = NULL;
     }
 
-    if ((limbIndex == 20) && (this->unk_2F6 == ENBOMBOWLMAN_F0_0)) {
+    if ((limbIndex == OBJECT_CS_LIMB_14) && (this->unk_2F6 == ENBOMBOWLMAN_F0_0)) {
         *dList = NULL;
     }
     return false;

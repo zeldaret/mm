@@ -2,6 +2,7 @@
 #define Z_EN_GINKO_MAN_H
 
 #include "global.h"
+#include "objects/object_boj/object_boj.h"
 
 struct EnGinkoMan;
 
@@ -11,8 +12,8 @@ typedef struct EnGinkoMan {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnGinkoManActionFunc actionFunc;
-    /* 0x18C */ Vec3s jointTable[0x10];
-    /* 0x1EC */ Vec3s morphTable[0x10];
+    /* 0x18C */ Vec3s jointTable[OBJECT_BOJ_LIMB_MAX];
+    /* 0x1EC */ Vec3s morphTable[OBJECT_BOJ_LIMB_MAX];
     /* 0x24C */ Vec3s limb15Rot;
     /* 0x252 */ Vec3s limb8Rot;
     /* 0x258 */ s16 curTextId;

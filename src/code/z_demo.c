@@ -1,8 +1,24 @@
+#include "PR/ultratypes.h"
+#include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h"
+
+// Variables are put before most headers as a hacky way to bypass bss reordering
+struct CutsceneCamera;
+
+s16 sCutsceneQuakeIndex;
+struct CutsceneCamera sCutsceneCameraInfo;
+u16 sCueTypeList[10];
+u8 D_801F4DDC;
+static s16 sBssPad;
+u8 gDisablePlayerCsModeStartPos;
+s16 gDungeonBossWarpSceneId;
+
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 
 void CutsceneHandler_DoNothing(PlayState* play, CutsceneContext* csCtx);
 void CutsceneHandler_StartManual(PlayState* play, CutsceneContext* csCtx);
@@ -12,23 +28,11 @@ void CutsceneHandler_RunScript(PlayState* play, CutsceneContext* csCtx);
 void CutsceneHandler_StopScript(PlayState* play, CutsceneContext* csCtx);
 void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx);
 
-// Unused
-UNK_TYPE4 D_801BB120 = 0;
+static s32 sPad = 0;
 u16 sCurTextId = 0;
 u16 sCurOcarinaAction = 0;
 u8 gOpeningEntranceIndex = 0;
 u8 sCutsceneStoredPlayerForm = 0;
-
-// bss
-#ifndef NON_MATCHING
-static u16 sSeqId;
-#endif
-s16 sCutsceneQuakeIndex;
-CutsceneCamera sCutsceneCameraInfo;
-u16 sCueTypeList[10];
-UNK_TYPE D_801F4DDC;
-u8 gDisablePlayerCsModeStartPos;
-s16 gDungeonBossWarpSceneId;
 
 void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
     s32 i;
@@ -193,7 +197,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             if (isFirstFrame) {
                 loadedScene = play->loadedScene;
                 if (loadedScene->titleTextId != 0) {
-                    func_80151A68(play, loadedScene->titleTextId);
+                    Message_DisplaySceneTitleCard(play, loadedScene->titleTextId);
                 }
             }
             break;
@@ -301,7 +305,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             break;
 
         case CS_MISC_PLAYER_FORM_HUMAN:
-            sCutsceneStoredPlayerForm = gSaveContext.save.playerForm;
+            sCutsceneStoredPlayerForm = GET_PLAYER_FORM;
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
             gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
             break;
@@ -452,8 +456,6 @@ void Cutscene_SetSfxReverbIndexTo1(PlayState* play, CutsceneContext* csCtx, CsCm
     }
 }
 
-#ifdef NON_MATCHING
-// needs in-function static bss
 void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdModifySeq* cmd) {
     static u16 sSeqId;
     u8 dayMinusOne;
@@ -504,10 +506,6 @@ void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdMo
         }
     }
 }
-#else
-void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdModifySeq* cmd);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/CutsceneCmd_ModifySequence.s")
-#endif
 
 void CutsceneCmd_FadeOutAmbience(PlayState* play, CutsceneContext* csCtx, CsCmdFadeOutAmbience* cmd) {
     if ((csCtx->curFrame == cmd->startFrame) && (csCtx->curFrame < cmd->endFrame)) {
@@ -815,8 +813,9 @@ void CutsceneCmd_GiveTatlToPlayer(PlayState* play, CutsceneContext* csCtx, CsCmd
             if (player->tatlActor != NULL) {
                 return;
             }
-            player->tatlActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, player->actor.world.pos.x,
-                                            player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
+            player->tatlActor =
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, player->actor.world.pos.x, player->actor.world.pos.y,
+                            player->actor.world.pos.z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_0, false, 0));
         }
     }
 }
@@ -1044,7 +1043,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
         if (sCurOcarinaAction != cmd->textId) {
             sCutsceneTextboxType = CS_TEXT_OCARINA_ACTION;
             sCurOcarinaAction = cmd->textId;
-            func_80152434(play, cmd->textId);
+            Message_DisplayOcarinaStaff(play, cmd->textId);
             return;
         }
     }
@@ -1099,7 +1098,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
             }
 
             if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_80152434(play, cmd->textId);
+                Message_DisplayOcarinaStaff(play, cmd->textId);
             }
         }
 
@@ -1566,7 +1565,7 @@ void Cutscene_HandleEntranceTriggers(PlayState* play) {
             if ((Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) +
                                              ((void)0, gSaveContext.sceneLayer)) &
                  0x4000) != 0) {
-                func_80151A68(play, scene->titleTextId);
+                Message_DisplaySceneTitleCard(play, scene->titleTextId);
             }
         }
 
