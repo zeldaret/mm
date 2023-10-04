@@ -5132,7 +5132,6 @@ void Audio_UpdateObjSoundFanfare(void) {
             }
 
             sAudioCutsceneFlag = true;
-
         } else {
             Audio_StartObjSoundFanfare(SEQ_PLAYER_FANFARE, NULL, sObjSoundFanfareSeqId, 0);
             if (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_DISABLED) {
