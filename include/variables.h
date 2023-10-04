@@ -1746,20 +1746,7 @@ extern s16 D_801F4E7A;
 // extern UNK_TYPE4 D_801F6B00;
 // extern UNK_TYPE4 D_801F6B04;
 // extern UNK_TYPE4 D_801F6B08;
-// extern UNK_TYPE1 D_801F6B0C;
-// extern UNK_TYPE1 D_801F6B0E;
-// extern UNK_TYPE1 D_801F6B10;
-// extern UNK_TYPE1 D_801F6B12;
-// extern UNK_TYPE1 D_801F6B14;
-// extern UNK_TYPE1 D_801F6B16;
-// extern UNK_TYPE1 D_801F6B18;
-// extern UNK_TYPE1 D_801F6B1A;
-// extern UNK_TYPE1 D_801F6B1C;
-// extern UNK_TYPE1 D_801F6B1E;
-// extern UNK_TYPE1 D_801F6B20;
-// extern UNK_TYPE1 D_801F6B22;
-// extern UNK_TYPE4 sCurCsCamera;
-// extern UNK_TYPE1 sKnots;
+
 extern void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
 
