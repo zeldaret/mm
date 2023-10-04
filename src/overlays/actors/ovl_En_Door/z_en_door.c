@@ -455,9 +455,9 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
             return;
         }
     }
-    this->knobDoor.requiredObjectSlot = objectSlot;
+    this->knobDoor.objectSlot = objectSlot;
     this->knobDoor.dlIndex = objectInfo->dListIndex; // Set twice?
-    if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.requiredObjectSlot) {
+    if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
         func_80866A5C(this, play);
     } else {
         this->actionFunc = func_80866A5C;
@@ -480,8 +480,8 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80866A5C(EnDoor* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->knobDoor.requiredObjectSlot)) {
-        this->knobDoor.dyna.actor.objectSlot = this->knobDoor.requiredObjectSlot;
+    if (Object_IsLoaded(&play->objectCtx, this->knobDoor.objectSlot)) {
+        this->knobDoor.dyna.actor.objectSlot = this->knobDoor.objectSlot;
         this->actionFunc = func_80866B20;
         this->knobDoor.dyna.actor.world.rot.y = 0;
         if (this->doorType == ENDOOR_TYPE_1) {
@@ -688,7 +688,7 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 void EnDoor_Draw(Actor* thisx, PlayState* play) {
     EnDoor* this = THIS;
 
-    if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.requiredObjectSlot) {
+    if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {

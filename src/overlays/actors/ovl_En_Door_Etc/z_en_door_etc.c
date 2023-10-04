@@ -108,9 +108,9 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
     if (objectSlot < 0) {
         Actor_Kill(&this->knobDoor.dyna.actor);
     } else {
-        this->knobDoor.requiredObjectSlot = objectSlot;
+        this->knobDoor.objectSlot = objectSlot;
         this->knobDoor.dlIndex = objectInfo->dListIndex;
-        if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.requiredObjectSlot) {
+        if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
             EnDoorEtc_WaitForObject(this, play);
         } else {
             this->actionFunc = EnDoorEtc_WaitForObject;
@@ -139,9 +139,9 @@ s32 EnDoorEtc_IsDistanceGreater(Vec3f* a, Vec3f* b, f32 c) {
 }
 
 void EnDoorEtc_WaitForObject(EnDoorEtc* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->knobDoor.requiredObjectSlot)) {
+    if (Object_IsLoaded(&play->objectCtx, this->knobDoor.objectSlot)) {
         this->knobDoor.dyna.actor.flags &= ~ACTOR_FLAG_10;
-        this->knobDoor.dyna.actor.objectSlot = this->knobDoor.requiredObjectSlot;
+        this->knobDoor.dyna.actor.objectSlot = this->knobDoor.objectSlot;
         this->actionFunc = func_80AC2354;
         this->knobDoor.dyna.actor.draw = EnDoorEtc_Draw;
     }
