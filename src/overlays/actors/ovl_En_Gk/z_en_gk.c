@@ -294,7 +294,7 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
         this->unk_1E4 &= ~0x40;
     }
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
         this->animIndex = ENGK_ANIM_3;
@@ -545,7 +545,7 @@ void func_80B51410(EnGk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->actor.xzDistToPlayer < 100.0f) {
-        if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+        if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
             (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY_INTRO)) {
             this->unk_1E4 |= 0x20;
         }
@@ -906,7 +906,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
         }
 
         if (this->unk_1E4 & 2) {
-            if ((play->msgCtx.ocarinaMode != 1) && (play->msgCtx.ocarinaMode != 3) &&
+            if ((play->msgCtx.ocarinaMode != OCARINA_MODE_ACTIVE) && (play->msgCtx.ocarinaMode != OCARINA_MODE_EVENT) &&
                 (play->csCtx.state == CS_STATE_IDLE)) {
                 Audio_PlaySfx_AtFixedPos(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
             }
@@ -918,7 +918,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
 
 void func_80B5216C(EnGk* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80B51698;
     }

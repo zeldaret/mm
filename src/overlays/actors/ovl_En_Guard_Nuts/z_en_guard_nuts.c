@@ -329,7 +329,8 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
     s32 pad;
 
     if (this->blinkTimer == 0) {
-        if (++(this->eyeState) >= 3) {
+        this->eyeState++;
+        if (this->eyeState >= 3) {
             this->eyeState = 0;
             this->blinkTimer = (s16)Rand_ZeroFloat(60.0f) + 20;
         }

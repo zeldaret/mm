@@ -121,18 +121,32 @@ typedef enum {
     /* 5 */ ENKAKASI_ANIM_ARMS_CROSSED_STILL, // arms crossed but still, also some noise sfx
     /* 6 */ ENKAKASI_ANIM_WAVE,               // "wave" short sideways shake, stops early, partial? unused?
     /* 7 */ ENKAKASI_ANIM_SLOWROLL,           // partial bounch, ends looking left, OFFER anim takes over
-    /* 8 */ ENKAKASI_ANIM_IDLE                // slow stretching wiggle, ends in regular position
+    /* 8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
+    /* 9 */ ENKAKASI_ANIM_MAX
 } EnKakasiAnimation;
 
-static AnimationHeader* sAnimations[] = {
-    &object_ka_Anim_007444, &object_ka_Anim_00686C, &object_ka_Anim_0081A4,
-    &object_ka_Anim_007B90, &object_ka_Anim_0071EC, &object_ka_Anim_007444,
-    &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_000214,
+static AnimationHeader* sAnimations[ENKAKASI_ANIM_MAX] = {
+    &object_ka_Anim_007444, // ENKAKASI_ANIM_ARMS_CROSSED_ROCKING
+    &object_ka_Anim_00686C, // ENKAKASI_ANIM_SIDEWAYS_SHAKING
+    &object_ka_Anim_0081A4, // ENKAKASI_ANIM_HOPPING_REGULAR
+    &object_ka_Anim_007B90, // ENKAKASI_ANIM_SPIN_REACH_OFFER
+    &object_ka_Anim_0071EC, // ENKAKASI_ANIM_TWIRL
+    &object_ka_Anim_007444, // ENKAKASI_ANIM_ARMS_CROSSED_STILL
+    &object_ka_Anim_00686C, // ENKAKASI_ANIM_WAVE
+    &object_ka_Anim_0081A4, // ENKAKASI_ANIM_SLOWROLL
+    &object_ka_Anim_000214, // ENKAKASI_ANIM_IDLE
 };
 
-static u8 sAnimationModes[] = {
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
-    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
+static u8 sAnimationModes[ENKAKASI_ANIM_MAX] = {
+    ANIMMODE_LOOP, // ENKAKASI_ANIM_ARMS_CROSSED_ROCKING
+    ANIMMODE_LOOP, // ENKAKASI_ANIM_SIDEWAYS_SHAKING
+    ANIMMODE_LOOP, // ENKAKASI_ANIM_HOPPING_REGULAR
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_SPIN_REACH_OFFER
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_TWIRL
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_ARMS_CROSSED_STILL
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_WAVE
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_SLOWROLL
+    ANIMMODE_ONCE, // ENKAKASI_ANIM_IDLE
 };
 
 void EnKakasi_Destroy(Actor* thisx, PlayState* play) {
@@ -147,7 +161,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &D_80971D80);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ka_Skel_0065B0, &object_ka_Anim_000214, 0, 0, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_ka_Skel_0065B0, &object_ka_Anim_000214, NULL, NULL, 0);
 
     this->songSummonDist = KAKASI_GET_SUMMON_DISTANCE(&this->picto.actor) * 20.0f;
     if (this->songSummonDist < 40.0f) {
@@ -278,7 +292,6 @@ void func_8096FBB8(EnKakasi* this, PlayState* play) {
         (play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_C_RIGHT) ||
         (play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_C_LEFT) ||
         (play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_C_UP)) {
-        // why not 0 < x < 4? fewer branches
         this->unk190++;
     }
     if ((this->unk190 != 0) && (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING)) {
@@ -364,7 +377,7 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
     } else if ((day == 3) && gSaveContext.save.isNight) {
         this->skelAnime.playSpeed = 1.0f;
         if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
-            EnKakasi_ChangeAnim(this, 1);
+            EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
         }
     } else if (this->animIndex != ENKAKASI_ANIM_IDLE) {
         EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_IDLE);
@@ -403,7 +416,8 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
     // if dialogue: oh sorry come back again
     if ((this->picto.actor.textId == 0x1651) || (this->picto.actor.textId == 0x1659)) {
         if ((curFrame >= this->animEndFrame) && (this->animIndex != ENKAKASI_ANIM_SPIN_REACH_OFFER)) {
-            if (++this->unkCounter1A4 >= 2) {
+            this->unkCounter1A4++;
+            if (this->unkCounter1A4 >= 2) {
                 this->unkCounter1A4 = 0;
                 EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
             }
@@ -561,7 +575,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, PlayState* play) {
  */
 void EnKakasi_OcarinaRemark(EnKakasi* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_80152434(play, 0x35);
+        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_SCARECROW_SPAWN_RECORDING);
         this->unkState1A8 = 0;
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -618,7 +632,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
         func_8096FAAC(this, play);
         func_8096FBB8(this, play);
 
-        if (play->msgCtx.ocarinaMode == 4) { // song failed
+        if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) { // song failed
             this->unk190 = 0;
             this->unkCounter1A4 = 0;
             CutsceneManager_Stop(this->csIdList[0]);
@@ -631,7 +645,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
             this->actionFunc = EnKakasi_RegularDialogue;
 
-        } else if (play->msgCtx.ocarinaMode == 3) { // song success
+        } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) { // song success
             this->postTeachTimer = 30;
             this->skelAnime.playSpeed = 2.0f;
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
@@ -654,7 +668,7 @@ void EnKakasi_PostSongLearnTwirl(EnKakasi* this, PlayState* play) {
 
 void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     CutsceneManager_Stop(this->csIdList[0]);
-    play->msgCtx.ocarinaMode = 4;
+    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
@@ -1040,9 +1054,9 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08) && (this->picto.actor.xzDistToPlayer < this->songSummonDist) &&
-        ((BREG(1) != 0) || (play->msgCtx.ocarinaMode == 0xD))) {
+        ((BREG(1) != 0) || (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_SCARECROW_SPAWN))) {
         this->picto.actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = EnKakasi_SetupRiseOutOfGround;
     }
 }
@@ -1154,7 +1168,7 @@ void EnKakasi_Update(Actor* thisx, PlayState* play) {
 void EnKakasi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnKakasi* this = THIS;
 
-    if (limbIndex == 4) {
+    if (limbIndex == OBJECT_KA_LIMB_04) {
         Matrix_MultVec3f(&gZeroVec3f, &this->unk1BC);
     }
 }

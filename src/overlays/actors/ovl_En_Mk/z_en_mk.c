@@ -412,7 +412,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
     }
 
     if (func_800B8718(&this->actor, &play->state)) {
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = func_80959D28;
         if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             this->actor.csId = this->csIdList[0];

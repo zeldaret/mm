@@ -277,13 +277,13 @@ void func_80997FF0(EnGs* this, PlayState* play) {
 }
 
 void func_80998040(EnGs* this, PlayState* play) {
-    func_80152434(play, 1);
+    Message_DisplayOcarinaStaff(play, OCARINA_ACTION_FREE_PLAY);
     this->actionFunc = func_8099807C;
 }
 
 void func_8099807C(EnGs* this, PlayState* play) {
     switch (play->msgCtx.ocarinaMode) {
-        case 3:
+        case OCARINA_MODE_EVENT:
             switch (play->msgCtx.lastPlayedSong) {
                 case OCARINA_SONG_HEALING:
                 case OCARINA_SONG_EPONAS:
@@ -341,11 +341,11 @@ void func_8099807C(EnGs* this, PlayState* play) {
             }
             break;
 
-        case 0:
-        case 4:
+        case OCARINA_MODE_NONE:
+        case OCARINA_MODE_END:
             func_80998300(this, play);
 
-        case 26:
+        case OCARINA_MODE_APPLY_DOUBLE_SOT:
             func_80997D14(this, play);
             break;
 
@@ -1030,7 +1030,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
     EnGs* this = THIS;
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         this->collider.base.acFlags &= ~AC_HIT;
         func_80997DEC(this, play);
