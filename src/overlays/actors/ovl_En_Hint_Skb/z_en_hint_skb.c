@@ -139,10 +139,10 @@ typedef enum EnHinkSkbAnimation {
     /* 10 */ STALCHILD_ANIM_STAGGER_MORPH_8,
     /* 11 */ STALCHILD_ANIM_SALUTE,
     /* 12 */ STALCHILD_ANIM_IDLE,
-    /* 13 */ ENHINTSKB_ANIM_MAX
+    /* 13 */ STALCHILD_ANIM_MAX
 } EnHinkSkbAnimation;
 
-static AnimationInfo sAnimationInfo[ENHINTSKB_ANIM_MAX] = {
+static AnimationInfo sAnimationInfo[STALCHILD_ANIM_MAX] = {
     { &gStalchildWalkAnim, 0.96f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },        // STALCHILD_ANIM_WALK
     { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },      // STALCHILD_ANIM_STAND_UP_MORPH_1
     { &gStalchildAttackAnim, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f }, // STALCHILD_ANIM_ATTACK
