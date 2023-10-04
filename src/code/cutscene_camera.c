@@ -404,8 +404,6 @@ s16 CutsceneCamera_Interp_Lerp(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCa
         temp = (s16)(new_var - (s16)interpState->initRoll);
 
         *camRoll = (s16)interpState->initRoll + (s16)(temp * lerp);
-
-        // *camRoll = LERPIMP((s16)interpState->initRoll, (s16)CAM_DEG_TO_BINANG(miscCmd->roll), lerp);
     }
 
     if (interpState->curFrame >= pointCmd->duration) {
@@ -442,7 +440,6 @@ s16 CutsceneCamera_Interp_Smooth(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmd
         }
     }
 
-    // could rewrite `(pointCmd->duration & 1)` as `(s32)((u32)pointCmd->duration % 2)`
     tmp2 = (((pointCmd->weight + 100) * (pointCmd->duration / 2)) +
             (((pointCmd->weight + 100) / 2) * (pointCmd->duration & 1)));
     if (pointCmd->duration < 2) {
@@ -696,7 +693,7 @@ s16 CutsceneCamera_Interp_MultiPointQuadratic(Vec3f* camPos, f32* camFov, s16* c
 
 /**
  * This code is very similar to the unused spline system in OoT's func_800BB0A0
- * in which that is based on the Super Mario 64 cutscene camera movement
+ * in that it is based on the Super Mario 64 cutscene camera movement
  */
 void func_801629BC(f32 u, f32* coeff) {
     coeff[0] = (1.0f - u) * (1.0f - u) * (1.0f - u) * (1.0f / 6.0f);
