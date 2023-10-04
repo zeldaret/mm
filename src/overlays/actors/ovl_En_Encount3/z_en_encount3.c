@@ -50,9 +50,9 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
         this->unk16C = 1000.0f;
     }
     if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
@@ -71,7 +71,7 @@ void func_809AD058(EnEncount3* this) {
 }
 
 void func_809AD084(EnEncount3* this, PlayState* play) {
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -94,7 +94,7 @@ void func_809AD084(EnEncount3* this, PlayState* play) {
 void func_809AD194(EnEncount3* this, PlayState* play) {
     if (this->unk14E == 0) {
         this->unk178 = 0.0f;
-        if (this->switchFlag >= 0) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         this->actionFunc = func_809AD1EC;

@@ -265,10 +265,10 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->switchFlag == 0xFF) {
-        this->switchFlag = -1;
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag != -1) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag != SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
 
@@ -880,7 +880,7 @@ void EnTalkGibud_Disappear(EnTalkGibud* this, PlayState* play) {
         player->stateFlags1 |= PLAYER_STATE1_20000000;
         this->disappearanceTimer--;
     } else {
-        if (this->switchFlag != -1) {
+        if (this->switchFlag != SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         player->stateFlags1 &= ~PLAYER_STATE1_20;

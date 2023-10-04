@@ -118,10 +118,10 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
     this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);
 
     if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -180,7 +180,7 @@ void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
 
 void EnEncount2_Die(EnEncount2* this, PlayState* play) {
     if (this->deathTimer == 0) {
-        if (this->switchFlag >= 0) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         Actor_Kill(&this->dyna.actor);

@@ -80,7 +80,7 @@ void func_80C2590C(EnInvisibleRuppe* this, PlayState* play) {
                 break;
         }
 
-        if (this->switchFlag >= 0) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
 
@@ -99,10 +99,10 @@ void EnInvisibleRuppe_Init(Actor* thisx, PlayState* play) {
     this->switchFlag = INVISIBLERUPPE_GET_SWITCH_FLAG(&this->actor);
 
     if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }

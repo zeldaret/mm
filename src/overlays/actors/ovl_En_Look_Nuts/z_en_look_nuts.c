@@ -117,9 +117,9 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
 
     if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && (Flags_GetSwitch(play, this->switchFlag))) {
         Actor_Kill(&this->actor);
         return;
     }

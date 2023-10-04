@@ -116,10 +116,10 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     this->switchFlag = ENHIDDENNUTS_GET_SWITCH_FLAG(&this->actor);
 
     if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -411,7 +411,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
 }
 
 void func_80BDBE70(EnHiddenNuts* this, PlayState* play) {
-    if (this->switchFlag >= 0) {
+    if (this->switchFlag > SWITCH_FLAG_NONE) {
         Flags_SetSwitch(play, this->switchFlag);
     }
     EnHiddenNuts_ChangeAnim(this, ENHIDDENNUTS_ANIM_8);

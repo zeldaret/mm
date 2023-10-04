@@ -340,7 +340,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     this->type = EN_WIZ_GET_TYPE(&this->actor);
 
     if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
     if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_BGM)) {
@@ -352,7 +352,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
         this->actor.colChkInfo.health = 6;
     }
 
-    if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && (Flags_GetSwitch(play, this->switchFlag))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -1201,7 +1201,7 @@ void EnWiz_Dead(EnWiz* this, PlayState* play) {
         EnWiz_SelectPlatform(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_EXTINCT);
         Actor_Kill(&this->actor);
-        if (this->switchFlag >= 0) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
     }

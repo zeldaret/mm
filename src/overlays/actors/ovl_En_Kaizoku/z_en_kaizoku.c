@@ -288,10 +288,10 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (this->switchFlag == 127) {
-        this->switchFlag = -1;
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->picto.actor);
         return;
     }
@@ -867,7 +867,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
                     this->subCamId = SUB_CAM_ID_DONE;
                     func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_END);
                     CutsceneManager_Stop(this->csId);
-                    if (this->switchFlag >= 0) {
+                    if (this->switchFlag > SWITCH_FLAG_NONE) {
                         Flags_SetSwitch(play, this->switchFlag);
                     }
                     Actor_Kill(&this->picto.actor);
