@@ -65,16 +65,16 @@ u32 EffectSsDFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsDFire_Draw(PlayState* play, u32 index, EffectSs* this) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 pad;
-    void* object;
+    void* objectPtr;
     f32 scale;
 
     if (EffectSsDFire_CheckForObject(this, play)) {
-        object = play->objectCtx.slots[this->rObjectSlot].segment;
+        objectPtr = play->objectCtx.slots[this->rObjectSlot].segment;
 
         OPEN_DISPS(gfxCtx);
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(object);
-        gSPSegment(POLY_XLU_DISP++, 0x06, object);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(objectPtr);
+        gSPSegment(POLY_XLU_DISP++, 0x06, objectPtr);
 
         scale = this->rScale / 100.0f;
 

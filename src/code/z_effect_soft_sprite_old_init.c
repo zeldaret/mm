@@ -41,7 +41,7 @@ void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, TexturePtr texture) {
     MtxF mfTrans11DA0;
     s32 pad1;
     Mtx* mtx;
-    void* object = play->objectCtx.slots[this->rgObjBankIndex].segment;
+    void* objectPtr = play->objectCtx.slots[this->rgObjBankIndex].segment;
 
     OPEN_DISPS(gfxCtx);
 
@@ -50,8 +50,8 @@ void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, TexturePtr texture) {
     SkinMatrix_SetScale(&mfScale, scale, scale, scale);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &play->billboardMtxF, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
-    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(object);
-    gSPSegment(POLY_XLU_DISP++, 0x06, object);
+    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(objectPtr);
+    gSPSegment(POLY_XLU_DISP++, 0x06, objectPtr);
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &mfResult);
 

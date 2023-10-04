@@ -59,16 +59,16 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this) {
     s32 pad;
     f32 scale;
-    void* storedSegment;
+    void* objectPtr;
 
     scale = this->rScale / 100.0f;
-    storedSegment = play->objectCtx.slots[this->rObjectSlot].segment;
+    objectPtr = play->objectCtx.slots[this->rObjectSlot].segment;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(storedSegment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(objectPtr);
 
-    gSPSegment(POLY_XLU_DISP++, 0x06, storedSegment);
+    gSPSegment(POLY_XLU_DISP++, 0x06, objectPtr);
 
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
