@@ -1,5 +1,5 @@
 ﻿<Root>
-    <!-- Assets for cuttable signs-->
+    <!-- Assets for cuttable signs -->
     <File Name="object_kanban" Segment="6">
         <DList Name="gSignMaterialDL" Offset="0xC30" />
         <DList Name="gSignUpperSideLeftModelDL" Offset="0xCB0" /> <!-- Original name is "kanban_L_top_R_model" -->
