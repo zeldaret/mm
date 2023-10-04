@@ -46,9 +46,19 @@ ActorInit En_Takaraya_InitVars = {
     (ActorFunc)EnTakaraya_Draw,
 };
 
-void* D_80ADFB00[4] = { 0x06006F58, 0x06007358, 0x06007758, 0x06007358 };
+TexturePtr sEyesUpTextures[] = {
+    gTreasureChestShopGalEyeOpenUpTex,
+    gTreasureChestShopGalEyeHalfUpTex,
+    gTreasureChestShopGalEyeClosedTex,
+    gTreasureChestShopGalEyeHalfUpTex,
+};
 
-void* D_80ADFB10[4] = { 0x06007B58, 0x06007F58, 0x06007758, 0x06007F58 };
+TexturePtr sEyesDownTextures[] = {
+    gTreasureChestShopGalEyeOpenDownTex,
+    gTreasureChestShopGalEyeHalfDownTex,
+    gTreasureChestShopGalEyeClosedTex,
+    gTreasureChestShopGalEyeHalfDownTex,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
@@ -95,14 +105,14 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_bg_Skel_008FC8, &object_bg_Anim_009890, this->jointTable,
-                       this->morphTable, OBJECT_BG_1_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTreasureChestShopGalSkeleton, &object_bg_Anim_009890, this->jointTable,
+                       this->morphTable, TREASURE_CHEST_SHOP_GAL_LIMB_MAX);
     this->switchFlag = EN_TAKARAYA_GET_SWITCH_FLAG(thisx);
     thisx->params &= 0xFF;
     if (!D_80ADFB28) {
-        for (i = 0; i < (sizeof(D_80ADFB10) / sizeof(D_80ADFB10[0])); i++) {
-            D_80ADFB00[i] = Lib_SegmentedToVirtual(D_80ADFB00[i]);
-            D_80ADFB10[i] = Lib_SegmentedToVirtual(D_80ADFB10[i]);
+        for (i = 0; i < ARRAY_COUNT(sEyesDownTextures); i++) {
+            sEyesUpTextures[i] = Lib_SegmentedToVirtual(sEyesUpTextures[i]);
+            sEyesDownTextures[i] = Lib_SegmentedToVirtual(sEyesDownTextures[i]);
         }
         D_80ADFB28 = true;
     }
@@ -157,8 +167,6 @@ void func_80ADEDF8(EnTakaraya* this) {
 }
 
 void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
-    u16 textId;
-
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &object_bg_Anim_00A280) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
@@ -172,14 +180,10 @@ void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
         }
         func_80ADF03C(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        textId = Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL);
-        this->actor.textId = textId;
-
-        //! FAKE
-        if (!(textId & 0xFFFF)) {
+        this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL);
+        if (this->actor.textId == 0) {
             this->actor.textId = D_80ADFB2C[GET_PLAYER_FORM];
         }
-
         this->formSwitchFlag = gSaveContext.save.playerForm + this->switchFlag;
         Actor_OfferTalk(&this->actor, play, 120.0f);
     }
@@ -226,7 +230,7 @@ void func_80ADF050(EnTakaraya* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
         }
-    } else if ((talkState == TEXT_STATE_CHOICE) && (Message_ShouldAdvance(play))) {
+    } else if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) {
             if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
                 this->actor.textId = 0x77B;
@@ -303,7 +307,7 @@ void func_80ADF520(EnTakaraya* this, PlayState* play) {
     if (Play_InCsMode(play) == 0) {
         if (Flags_GetTreasure(play, this->actor.params)) {
             Flags_SetSwitch(play, this->formSwitchFlag);
-            play->actorCtx.sceneFlags.chest &= ~TAKARAYA_GET_TREASURE_FLAG(this);
+            play->actorCtx.sceneFlags.chest &= ~TAKARAYA_GET_TREASURE_FLAG(&this->actor);
             this->timer = 0;
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
             func_80ADF608(this, play);
@@ -397,7 +401,7 @@ void EnTakaraya_Update(Actor* thisx, PlayState* play) {
 s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTakaraya* this = THIS;
 
-    if (limbIndex == OBJECT_BG_1_LIMB_05) {
+    if (limbIndex == TREASURE_CHEST_SHOP_GAL_LIMB_HEAD) {
         rot->x += this->headRot.y;
     }
     return false;
@@ -406,7 +410,7 @@ s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 void EnTakaraya_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnTakaraya* this = THIS;
 
-    if (limbIndex == OBJECT_BG_1_LIMB_05) {
+    if (limbIndex == TREASURE_CHEST_SHOP_GAL_LIMB_HEAD) {
         Matrix_RotateYS(0x400 - this->headRot.x, MTXMODE_APPLY);
         Matrix_MultVecX(500.0f, &thisx->focus.pos);
     }
@@ -419,9 +423,9 @@ void EnTakaraya_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) || (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
-        gSPSegment(POLY_OPA_DISP++, 0x08, D_80ADFB10[this->eyeTexIndex]);
+        gSPSegment(POLY_OPA_DISP++, 0x08, sEyesDownTextures[this->eyeTexIndex]);
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x08, D_80ADFB00[this->eyeTexIndex]);
+        gSPSegment(POLY_OPA_DISP++, 0x08, sEyesUpTextures[this->eyeTexIndex]);
     }
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnTakaraya_OverrideLimbDraw, NULL,

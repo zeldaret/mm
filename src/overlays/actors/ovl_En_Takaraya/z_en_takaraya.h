@@ -9,13 +9,13 @@ struct EnTakaraya;
 typedef void (*EnTakarayaActionFunc)(struct EnTakaraya*, PlayState*);
 
 #define EN_TAKARAYA_GET_SWITCH_FLAG(thisx) (u8)((thisx)->params >> 0x8)
-#define TAKARAYA_GET_TREASURE_FLAG(this) (1 << (this)->actor.params)
+#define TAKARAYA_GET_TREASURE_FLAG(thisx) (1 << (thisx)->params)
 
 typedef struct EnTakaraya {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[OBJECT_BG_1_LIMB_MAX];
-    /* 0x218 */ Vec3s morphTable[OBJECT_BG_1_LIMB_MAX];
+    /* 0x188 */ Vec3s jointTable[TREASURE_CHEST_SHOP_GAL_LIMB_MAX];
+    /* 0x218 */ Vec3s morphTable[TREASURE_CHEST_SHOP_GAL_LIMB_MAX];
     /* 0x2A8 */ EnTakarayaActionFunc actionFunc;
     /* 0x2AC */ u8 eyeTexIndex;
     /* 0x2AD */ u8 unk2AD;
