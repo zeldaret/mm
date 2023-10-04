@@ -565,10 +565,10 @@ s16 CutsceneCamera_Interp_None(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCa
     if (interpState->curFrame >= pointCmd->duration) {
         // Finishes
         interpState->type = CS_CAM_INTERP_OFF;
-        return true;
+        return 1;
     }
 
-    return false;
+    return 0;
 }
 
 // Immediately sets the values
