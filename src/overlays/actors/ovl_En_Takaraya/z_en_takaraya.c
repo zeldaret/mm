@@ -16,11 +16,11 @@ void EnTakaraya_Update(Actor* thisx, PlayState* play);
 void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 
 void EnTakaraya_Blink(EnTakaraya* this);
-void func_80ADEDF8(EnTakaraya* this);
-void func_80ADEE4C(EnTakaraya* this, PlayState* play);
-void func_80ADEF74(EnTakaraya* this, PlayState* play);
-void func_80ADF03C(EnTakaraya* this);
-void func_80ADF050(EnTakaraya* this, PlayState* play);
+void EnTakaraya_SetupWait(EnTakaraya* this);
+void EnTakaraya_Wait(EnTakaraya* this, PlayState* play);
+void EnTakaraya_GetForm(EnTakaraya* this, PlayState* play);
+void EnTakaraya_SetupTalk(EnTakaraya* this);
+void EnTakaraya_Talk(EnTakaraya* this, PlayState* play);
 void func_80ADF2D4(EnTakaraya* this);
 void func_80ADF338(EnTakaraya* this, PlayState* play);
 void func_80ADF4E0(EnTakaraya* this);
@@ -128,13 +128,13 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
-                func_80ADEDF8(this);
+                EnTakaraya_SetupWait(this);
             } else {
                 func_80ADF6DC(this);
             }
         }
     } else {
-        func_80ADEDF8(this);
+        EnTakaraya_SetupWait(this);
     }
 }
 
@@ -159,14 +159,14 @@ void EnTakaraya_Blink(EnTakaraya* this) {
     }
 }
 
-void func_80ADEDF8(EnTakaraya* this) {
+void EnTakaraya_SetupWait(EnTakaraya* this) {
     if (this->skelAnime.animation == &object_bg_Anim_001384) {
         Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
     }
-    this->actionFunc = func_80ADEE4C;
+    this->actionFunc = EnTakaraya_Wait;
 }
 
-void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
+void EnTakaraya_Wait(EnTakaraya* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &object_bg_Anim_00A280) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
@@ -178,7 +178,7 @@ void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
         if (Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL) == 0) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00A280, -4.0f);
         }
-        func_80ADF03C(this);
+        EnTakaraya_SetupTalk(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL);
         if (this->actor.textId == 0) {
@@ -189,7 +189,7 @@ void func_80ADEE4C(EnTakaraya* this, PlayState* play) {
     }
 }
 
-void func_80ADEF74(EnTakaraya* this, PlayState* play) {
+void EnTakaraya_GetForm(EnTakaraya* this, PlayState* play) {
     u8 var_v1;
 
     if (Flags_GetSwitch(play, this->formSwitchFlag)) {
@@ -201,11 +201,11 @@ void func_80ADEF74(EnTakaraya* this, PlayState* play) {
                                   ((var_v1 << 5) + this->actor.params) + 0xB000, this->actor.csId, 0x3FF, NULL);
 }
 
-void func_80ADF03C(EnTakaraya* this) {
-    this->actionFunc = func_80ADF050;
+void EnTakaraya_SetupTalk(EnTakaraya* this) {
+    this->actionFunc = EnTakaraya_Talk;
 }
 
-void func_80ADF050(EnTakaraya* this, PlayState* play) {
+void EnTakaraya_Talk(EnTakaraya* this, PlayState* play) {
     u8 talkState;
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -224,7 +224,7 @@ void func_80ADF050(EnTakaraya* this, PlayState* play) {
         } else {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
-            func_80ADEDF8(this);
+            EnTakaraya_SetupWait(this);
         }
     } else if ((talkState == TEXT_STATE_1) && (this->actor.textId != 0x778)) {
         if (Message_ShouldAdvance(play)) {
@@ -241,7 +241,7 @@ void func_80ADF050(EnTakaraya* this, PlayState* play) {
             } else {
                 Audio_PlaySfx_MessageDecide();
                 Rupees_ChangeBy(play->msgCtx.unk1206C * -1);
-                func_80ADEF74(this, play);
+                EnTakaraya_GetForm(this, play);
                 this->actor.textId = 0x778;
                 if (this->skelAnime.animation != &object_bg_Anim_009890) {
                     Animation_MorphToLoop(&this->skelAnime, &object_bg_Anim_009890, 5.0f);
@@ -374,7 +374,7 @@ void func_80ADF7CC(EnTakaraya* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
-                func_80ADEDF8(this);
+                EnTakaraya_SetupWait(this);
             } else {
                 this->actor.textId = 0x77C;
                 Message_ContinueTextbox(play, this->actor.textId);
@@ -383,7 +383,7 @@ void func_80ADF7CC(EnTakaraya* this, PlayState* play) {
             this->actor.textId = D_80ADFB50[GET_PLAYER_FORM];
             Message_ContinueTextbox(play, this->actor.textId);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
-            func_80ADF03C(this);
+            EnTakaraya_SetupTalk(this);
         }
     }
 }
