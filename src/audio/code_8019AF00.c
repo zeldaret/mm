@@ -244,6 +244,10 @@ Vec3f* sRiverSoundBgmPos = NULL;
 f32 sRiverSoundXZDistToPlayer = 2000.0f;
 u8 sObjSoundMainBgmSeqId = NA_BGM_GENERAL_SFX;
 
+// Weights distance strongest by depth (z), weaker by left/right screen (x), and weakest by top/bottom screen (y)
+#define SEQ_SCREEN_WEIGHTED_DIST(projectedPos) \
+    (sqrtf(SQ((projectedPos)->z) + ((SQ((projectedPos)->x) / 4.0f) + (SQ((projectedPos)->y) / 6.0f))))
+
 // Allows enemy bgm
 #define SEQ_FLAG_ENEMY (1 << 0)
 
@@ -4877,46 +4881,46 @@ void Audio_SplitBgmChannels(s8 volumeSplit) {
     }
 }
 
-void Audio_SetSequenceProperties(u8 seqPlayerIndex, Vec3f* pos, s16 flags, f32 minDist, f32 maxDist, f32 maxVolume,
-                                 f32 minVolume) {
+void Audio_SetSequenceProperties(u8 seqPlayerIndex, Vec3f* projectedPos, s16 flags, f32 minDist, f32 maxDist,
+                                 f32 maxVolume, f32 minVolume) {
     f32 dist;
     f32 volume;
     s8 surroundEffectIndex;
     s8 pan;
     s32 pad;
 
-    // calculating surround sound effect from z-position
-    if (pos->z > 0.0f) {
-        if (pos->z > 100.0f) {
+    // calculating surround sound effect from screen depth
+    if (projectedPos->z > 0.0f) {
+        if (projectedPos->z > 100.0f) {
             surroundEffectIndex = 0;
         } else {
-            surroundEffectIndex = ((100.0f - pos->z) / 100.0f) * 64.0f;
+            surroundEffectIndex = ((100.0f - projectedPos->z) / 100.0f) * 64.0f;
         }
     } else {
-        if (pos->z < -100.0f) {
+        if (projectedPos->z < -100.0f) {
             surroundEffectIndex = 0x7F;
         } else {
-            surroundEffectIndex = (s8)((-pos->z / 100.0f) * 64.0f) + 0x3F;
+            surroundEffectIndex = (s8)((-projectedPos->z / 100.0f) * 64.0f) + 0x3F;
         }
     }
 
-    // calculating pan from x-position
-    if (pos->x > 0.0f) {
-        if (pos->x > 200.0f) {
+    // calculating pan from left-right screen position
+    if (projectedPos->x > 0.0f) {
+        if (projectedPos->x > 200.0f) {
             pan = 0x6C;
         } else {
-            pan = (s8)((pos->x / 200.0f) * 45.0f) + 0x3F;
+            pan = (s8)((projectedPos->x / 200.0f) * 45.0f) + 0x3F;
         }
     } else {
-        if (pos->x < -200.0f) {
+        if (projectedPos->x < -200.0f) {
             pan = 0x14;
         } else {
-            pan = (s8)(((pos->x + 200.0f) / 200.0f) * 44.0f) + 0x14;
+            pan = (s8)(((projectedPos->x + 200.0f) / 200.0f) * 44.0f) + 0x14;
         }
     }
 
-    // Calculate volume
-    dist = sqrtf(SQ(pos->z) + ((SQ(pos->x) * 0.25f) + (SQ(pos->y) / 6.0f)));
+    // Calculate weighted volume
+    dist = SEQ_SCREEN_WEIGHTED_DIST(projectedPos);
 
     if (dist > maxDist) {
         volume = minVolume;
@@ -5099,9 +5103,7 @@ void Audio_PlayObjSoundFanfare(Vec3f* pos, s8 seqId) {
     if (sObjSoundFanfareSeqId == NA_BGM_GENERAL_SFX) {
         // No spatial fanfare is currently playing
         requestFanfare = true;
-    } else if (sqrtf(SQ(pos->z) + ((SQ(pos->x) * 0.25f) + (SQ(pos->y) / 6.0f))) <
-               sqrtf(SQ(sObjSoundFanfarePos.z) +
-                     ((SQ(sObjSoundFanfarePos.x) * 0.25f) + (SQ(sObjSoundFanfarePos.y) / 6.0f)))) {
+    } else if (SEQ_SCREEN_WEIGHTED_DIST(pos) < SEQ_SCREEN_WEIGHTED_DIST(&sObjSoundFanfarePos)) {
         // The spatial fanfare requested is closer than the spatial fanfare currently playing
         requestFanfare = true;
     }
@@ -5154,8 +5156,9 @@ void Audio_StopSequenceAtPos(u8 seqPlayerIndex, u8 volumeFadeTimer) {
     }
 }
 
-void Audio_StartSubBgmAtPos(u8 seqPlayerIndex, Vec3f* pos, u8 seqId, u8 flags, f32 minDist, f32 maxDist, f32 arg6) {
-    f32 dist = sqrtf(SQ(pos->z) + ((SQ(pos->x) * 0.25f) + (SQ(pos->y) / 6.0f)));
+void Audio_StartSubBgmAtPos(u8 seqPlayerIndex, Vec3f* projectedPos, u8 seqId, u8 flags, f32 minDist, f32 maxDist,
+                            f32 arg6) {
+    f32 dist = SEQ_SCREEN_WEIGHTED_DIST(projectedPos);
     u8 targetVolume;
     u16 seqId0 = AudioSeq_GetActiveSeqId(seqPlayerIndex);
     f32 relVolume;
@@ -5180,7 +5183,7 @@ void Audio_StartSubBgmAtPos(u8 seqPlayerIndex, Vec3f* pos, u8 seqId, u8 flags, f
         sSpatialSeqIsActive[seqPlayerIndex] = true;
     }
 
-    Audio_SetSequenceProperties(seqPlayerIndex, pos, flags, minDist, maxDist, 1.0, 0.05f);
+    Audio_SetSequenceProperties(seqPlayerIndex, projectedPos, flags, minDist, maxDist, 1.0, 0.05f);
 
     if ((seqPlayerIndex == SEQ_PLAYER_BGM_SUB) && (gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].enabled == true)) {
 
