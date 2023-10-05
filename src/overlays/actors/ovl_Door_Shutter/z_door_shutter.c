@@ -234,7 +234,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         this->slidingDoor.dyna.actor.room = -1;
     }
 
-    if ((this->requiredObjBankIndex = Object_GetSlot(&play->objectCtx, D_808A2180[sp24].objectId)) < 0) {
+    if ((this->objectSlot = Object_GetSlot(&play->objectCtx, D_808A2180[sp24].objectId)) <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->slidingDoor.dyna.actor);
         return;
     }
@@ -263,9 +263,9 @@ void DoorShutter_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DoorShutter_SetupType(DoorShutter* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->requiredObjBankIndex) &&
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot) &&
         (!R_PLAY_FILL_SCREEN_ON || (R_PLAY_FILL_SCREEN_ALPHA == 0))) {
-        this->slidingDoor.dyna.actor.objBankIndex = this->requiredObjBankIndex;
+        this->slidingDoor.dyna.actor.objectSlot = this->objectSlot;
         this->slidingDoor.dyna.actor.draw = DoorShutter_Draw;
         DoorShutter_SetupDoor(this, play);
     }

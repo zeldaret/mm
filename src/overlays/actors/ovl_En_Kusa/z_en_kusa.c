@@ -70,7 +70,7 @@ ActorInit En_Kusa_InitVars = {
     (ActorFunc)NULL,
 };
 
-static s16 objectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_KUSA, OBJECT_KUSA, OBJECT_KUSA };
+static s16 sObjectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_KUSA, OBJECT_KUSA, OBJECT_KUSA };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -393,8 +393,8 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
         this->isInWater |= 1;
     }
 
-    this->objIndex = Object_GetSlot(&play->objectCtx, objectIds[(KUSA_GET_TYPE(&this->actor))]);
-    if (this->objIndex < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[(KUSA_GET_TYPE(&this->actor))]);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -428,7 +428,7 @@ void EnKusa_SetupWaitObject(EnKusa* this) {
 void EnKusa_WaitObject(EnKusa* this, PlayState* play) {
     s32 pad;
 
-    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         s32 kusaType = KUSA_GET_TYPE(&this->actor);
 
         if (this->isCut) {
@@ -441,7 +441,7 @@ void EnKusa_WaitObject(EnKusa* this, PlayState* play) {
         } else {
             this->actor.draw = EnKusa_DrawGrass;
         }
-        this->actor.objBankIndex = this->objIndex;
+        this->actor.objectSlot = this->objectSlot;
         this->actor.flags &= ~ACTOR_FLAG_10;
     }
 }

@@ -184,17 +184,17 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ITEM00_SHIELD_HERO:
-            thisx->objBankIndex = Object_GetSlot(&play->objectCtx, OBJECT_GI_SHIELD_2);
+            thisx->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_SHIELD_2);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
         case ITEM00_MAP:
-            thisx->objBankIndex = Object_GetSlot(&play->objectCtx, OBJECT_GI_MAP);
+            thisx->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_MAP);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
         case ITEM00_COMPASS:
-            thisx->objBankIndex = Object_GetSlot(&play->objectCtx, OBJECT_GI_COMPASS);
+            thisx->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_COMPASS);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
@@ -317,10 +317,10 @@ void EnItem00_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnItem00_WaitForHeartObject(EnItem00* this, PlayState* play) {
-    s32 objBankIndex = Object_GetSlot(&play->objectCtx, OBJECT_GI_HEARTS);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_HEARTS);
 
-    if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
-        this->actor.objBankIndex = objBankIndex;
+    if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
+        this->actor.objectSlot = objectSlot;
         this->actionFunc = func_800A640C;
     }
 }
@@ -725,10 +725,10 @@ void EnItem00_Draw(Actor* thisx, PlayState* play) {
             case ITEM00_RECOVERY_HEART:
                 if (this->unk152 < 0) {
                     if (this->unk152 == -1) {
-                        s8 bankIndex = Object_GetSlot(&play->objectCtx, OBJECT_GI_HEART);
+                        s8 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_HEART);
 
-                        if (Object_IsLoaded(&play->objectCtx, bankIndex)) {
-                            this->actor.objBankIndex = bankIndex;
+                        if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
+                            this->actor.objectSlot = objectSlot;
                             Actor_SetObjectDependency(play, &this->actor);
                             this->unk152 = -2;
                         }
@@ -852,7 +852,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play) {
 void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play) {
     s32 pad[2];
 
-    if (Object_GetSlot(&play->objectCtx, OBJECT_GI_HEARTS) == this->actor.objBankIndex) {
+    if (Object_GetSlot(&play->objectCtx, OBJECT_GI_HEARTS) == this->actor.objectSlot) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);

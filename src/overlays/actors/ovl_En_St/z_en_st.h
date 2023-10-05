@@ -38,7 +38,7 @@ typedef struct EnSt {
     /* 0x1DC */ ColliderCylinder collider2;
     /* 0x228 */ ColliderCylinder collider3;
     /* 0x274 */ ColliderCylinder collider4;
-    /* 0x2C0 */ s8 unk_2C0;
+    /* 0x2C0 */ s8 objectSlot;
     /* 0x2C4 */ f32 unk_2C4;
     /* 0x2C8 */ f32 unk_2C8;
     /* 0x2CC */ f32 unk_2CC;
