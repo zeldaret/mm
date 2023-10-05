@@ -406,9 +406,8 @@ TexturePtr D_80B0EA88 = gGohtMetalPlateWithCirclePatternTex;
 
 s8 D_80B0EA8C[0x20] = {
     -1, -1, 0,  -1, -1, -1, 3,   -1, 4,  5,   -1, 6,  -1,  7,   8,  1,
-    2,  -1, -1, -1, -1, 9,  0xA, -1, -1, 0xB, -1, -1, 0xC, 0xD, -1, -1,
+    2,  -1, -1, -1, -1, 9,  0xA, -1, -1, 0xB, -1, -1, 0xC, 0xD, -1, -1, 0xE
 };
-s8 D_80B0EAAC = 0xE;
 s32 D_80B0EAB0[5] = { 0x1C, 0x18, 0x11, 0xD, 6 };
 Color_RGBA8 D_80B0EAC4 = { 0xFA, 0xFA, 0xFA, 0xFF };
 Color_RGBA8 D_80B0EAC8 = { 0xB4, 0xB4, 0xB4, 0xFF };
