@@ -393,7 +393,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
         this->isInWater |= 1;
     }
 
-    this->objIndex = Object_GetIndex(&play->objectCtx, objectIds[(KUSA_GET_TYPE(&this->actor))]);
+    this->objIndex = Object_GetSlot(&play->objectCtx, objectIds[(KUSA_GET_TYPE(&this->actor))]);
     if (this->objIndex < 0) {
         Actor_Kill(&this->actor);
         return;

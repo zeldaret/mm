@@ -5,7 +5,7 @@
 
 #define BAD_BAT_GET_TYPE(thisx) (((thisx)->params >> 0) & 0x1F)
 #define BAD_BAT_GET_PARAMFLAGS(thisx) (((thisx)->params >> 5) & 7)
-#define BAD_BAT_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0xFF)
+#define BAD_BAT_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0xFF)
 #define BAD_BAT_PARAMS(switchFlag, paramflags, type) ((type) | ((paramflags) << 5) | ((switchFlag) << 8))
 
 //! PARAMFLAGS

@@ -78,7 +78,7 @@ void ObjHsblock_Init(Actor* thisx, PlayState* play) {
             func_8093E03C(this);
             break;
         case 1:
-            if (Flags_GetSwitch(play, OBJHSBLOCK_GET_SWITCH(thisx))) {
+            if (Flags_GetSwitch(play, OBJHSBLOCK_GET_SWITCH_FLAG(thisx))) {
                 func_8093E03C(this);
             } else {
                 func_8093E05C(this);
@@ -106,7 +106,7 @@ void func_8093E05C(ObjHsblock* this) {
 }
 
 void func_8093E0A0(ObjHsblock* this, PlayState* play) {
-    if (Flags_GetSwitch(play, OBJHSBLOCK_GET_SWITCH(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJHSBLOCK_GET_SWITCH_FLAG(&this->dyna.actor))) {
         func_8093E0E8(this);
     }
 }

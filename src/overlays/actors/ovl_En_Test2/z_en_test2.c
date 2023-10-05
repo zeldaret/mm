@@ -83,7 +83,7 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
     EnTest2ModelInfo* modelInfo;
     EnTest2* this = THIS;
 
-    objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[this->actor.params]);
+    objectIndex = Object_GetSlot(&play->objectCtx, sObjectIds[this->actor.params]);
     if (objectIndex < 0) {
         Actor_Kill(&this->actor);
         return;

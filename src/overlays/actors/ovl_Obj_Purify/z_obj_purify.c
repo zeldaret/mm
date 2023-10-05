@@ -130,7 +130,7 @@ void ObjPurify_Init(Actor* thisx, PlayState* play) {
     if (sp20 == 1) {
         DynaPolyActor_Init(&this->dyna, 0);
     }
-    this->objIndex = Object_GetIndex(&play->objectCtx, info->objectId);
+    this->objIndex = Object_GetSlot(&play->objectCtx, info->objectId);
     if (this->objIndex < 0) {
         Actor_Kill(&this->dyna.actor);
     } else if (sp20 == 0) {

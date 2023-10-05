@@ -71,10 +71,10 @@ void EnKgy_Init(Actor* thisx, PlayState* play) {
     this->animIndex2 = ENKGY_ANIM_NONE;
     this->zubora = EnKgy_FindZubora(play);
     this->iceBlock = EnKgy_FindIceBlock(play);
-    Flags_UnsetSwitch(play, ENKGY_GET_FE00(&this->actor) + 1);
-    if (Flags_GetSwitch(play, ENKGY_GET_FE00(&this->actor)) ||
+    Flags_UnsetSwitch(play, ENKGY_GET_SWITCH_FLAG(&this->actor) + 1);
+    if (Flags_GetSwitch(play, ENKGY_GET_SWITCH_FLAG(&this->actor)) ||
         CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
-        Flags_SetSwitch(play, ENKGY_GET_FE00(&this->actor) + 1);
+        Flags_SetSwitch(play, ENKGY_GET_SWITCH_FLAG(&this->actor) + 1);
         play->envCtx.lightSettingOverride = 1;
         SET_WEEKEVENTREG(WEEKEVENTREG_21_01);
         if (!func_80B40D64(play)) {
@@ -1111,7 +1111,7 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
         func_80B411DC(this, play, 0);
         func_80B40E18(this, this->actor.textId);
     } else {
-        if (Flags_GetSwitch(play, ENKGY_GET_FE00(&this->actor))) {
+        if (Flags_GetSwitch(play, ENKGY_GET_SWITCH_FLAG(&this->actor))) {
             this->actor.textId = 0xC30;
             this->actionFunc = func_80B4296C;
             SET_WEEKEVENTREG(WEEKEVENTREG_21_01);

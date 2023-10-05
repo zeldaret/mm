@@ -476,8 +476,6 @@ beginseg
     include "build/src/code/z_kaleido_setup.o"
     include "build/src/code/z_kanfont.o"
     include "build/src/code/z_kankyo.o"
-    include "build/data/code/z_kankyo.data.o"
-    include "build/data/code/z_kankyo.bss.o"
     include "build/src/code/z_lib.o"
     include "build/src/code/z_lifemeter.o"
     include "build/src/code/z_lights.o"
@@ -528,8 +526,6 @@ beginseg
     include "build/src/code/z_vr_box_draw.o"
     include "build/src/code/z_sram_NES.o"
     include "build/src/code/z_message.o"
-    include "build/data/code/z_message.data.o"
-    include "build/data/code/z_message.bss.o"
     include "build/src/code/z_message_nes.o"
     include "build/src/code/z_message_staff.o"
     include "build/src/code/z_player_call.o"
@@ -560,8 +556,6 @@ beginseg
     include "build/src/code/padmgr.o"
     include "build/src/code/sched.o"
     include "build/src/code/speed_meter.o"
-    include "build/data/code/speed_meter.data.o"
-    include "build/data/code/speed_meter.bss.o"
     include "build/src/code/su_mtx.o"
     include "build/src/code/sys_cfb.o"
     include "build/src/code/sys_cmpdma.o"
@@ -2165,8 +2159,7 @@ beginseg
     name "ovl_En_Encount3"
     compress
     include "build/src/overlays/actors/ovl_En_Encount3/z_en_encount3.o"
-    include "build/data/ovl_En_Encount3/ovl_En_Encount3.data.o"
-    include "build/data/ovl_En_Encount3/ovl_En_Encount3.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Encount3/ovl_En_Encount3_reloc.o"
 endseg
 
 beginseg
@@ -2368,8 +2361,7 @@ beginseg
     name "ovl_Bg_Dy_Yoseizo"
     compress
     include "build/src/overlays/actors/ovl_Bg_Dy_Yoseizo/z_bg_dy_yoseizo.o"
-    include "build/data/ovl_Bg_Dy_Yoseizo/ovl_Bg_Dy_Yoseizo.data.o"
-    include "build/data/ovl_Bg_Dy_Yoseizo/ovl_Bg_Dy_Yoseizo.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Dy_Yoseizo/ovl_Bg_Dy_Yoseizo_reloc.o"
 endseg
 
 beginseg

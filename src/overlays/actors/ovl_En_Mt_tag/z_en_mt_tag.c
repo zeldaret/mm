@@ -318,7 +318,7 @@ void EnMttag_RaceStart(EnMttag* this, PlayState* play) {
                 Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
                 play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
                 SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GORON_RACE | SEQ_FLAG_ASYNC);
-                play->envCtx.unk_E4 = 0xFE;
+                play->envCtx.timeSeqState = TIMESEQ_REQUEST;
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
             } else if ((this->timer < 60) && (play->interfaceCtx.minigameState == MINIGAME_STATE_COUNTDOWN_GO)) {
                 this->timer = 0;

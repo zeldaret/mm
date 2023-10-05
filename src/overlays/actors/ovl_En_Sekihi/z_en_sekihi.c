@@ -69,7 +69,7 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN);
     }
 
-    objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
+    objectIndex = Object_GetSlot(&play->objectCtx, sObjectIds[type]);
     if (objectIndex >= 0) {
         this->objectIndex = objectIndex;
     }

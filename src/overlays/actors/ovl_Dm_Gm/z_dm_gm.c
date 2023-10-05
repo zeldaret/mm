@@ -81,9 +81,9 @@ s32 DmGm_UpdateSkelAnime(DmGm* this, PlayState* play) {
     }
 
     if (objectIndex2 >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectIndex2].segment);
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectIndex].segment);
     }
 
     return isAnimFinished;
@@ -101,10 +101,10 @@ s32 DmGm_ChangeAnim(DmGm* this, PlayState* play, s32 animIndex) {
     }
 
     if ((objectIndex2 >= 0) && (this->animIndex != animIndex)) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectIndex2].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectIndex].segment);
     }
 
     return didAnimChange;
@@ -312,9 +312,9 @@ void DmGm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         Matrix_TranslateRotateZYX(&D_80C25218, &D_80C25224);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp2A].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[sp2A].segment);
         gSPDisplayList(POLY_OPA_DISP++, gMoonMaskDL);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp2B].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[sp2B].segment);
 
         Matrix_Pop();
 
