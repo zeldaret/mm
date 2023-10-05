@@ -184,7 +184,7 @@ void EnTakaraya_Wait(EnTakaraya* this, PlayState* play) {
         if (this->actor.textId == 0) {
             this->actor.textId = D_80ADFB2C[GET_PLAYER_FORM];
         }
-        this->formSwitchFlag = gSaveContext.save.playerForm + this->switchFlag;
+        this->formSwitchFlag = GET_PLAYER_FORM + this->switchFlag;
         Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
@@ -423,7 +423,7 @@ void EnTakaraya_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) || (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+    if ((GET_PLAYER_FORM == PLAYER_FORM_DEKU) || (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
         gSPSegment(POLY_OPA_DISP++, 0x08, sEyesDownTextures[this->eyeTexIndex]);
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x08, sEyesUpTextures[this->eyeTexIndex]);
