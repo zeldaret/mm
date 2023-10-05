@@ -2315,7 +2315,7 @@ void Play_Init(GameState* thisx) {
     sPlayVisFBufInstance = &sPlayVisFBuf;
     VisFbuf_Init(sPlayVisFBufInstance);
     sPlayVisFBufInstance->lodProportion = 0.0f;
-    sPlayVisFBufInstance->mode = 1;
+    sPlayVisFBufInstance->mode = VIS_FBUF_MODE_GENERAL;
     sPlayVisFBufInstance->primColor.r = 0;
     sPlayVisFBufInstance->primColor.g = 0;
     sPlayVisFBufInstance->primColor.b = 0;
