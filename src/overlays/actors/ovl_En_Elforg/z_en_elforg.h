@@ -7,7 +7,7 @@
 
 #define STRAY_FAIRY_TYPE(thisx) ((thisx)->params & 0xF)
 #define STRAY_FAIRY_GET_NON_DUNGEON_AREA(thisx) (((thisx)->params & 0x1C0) >> 6)
-#define STRAY_FAIRY_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
+#define STRAY_FAIRY_GET_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 #define STRAY_FAIRY_SPARKLE_COUNT(thisx) ((thisx)->home.rot.x)
 
 //! @note `nonDungeonArea` does not always use the enum

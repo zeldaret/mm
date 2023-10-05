@@ -40,7 +40,7 @@ void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk148 = ENOKARINATAG_GET_F800(thisx);
     this->unk14A = ENOKARINATAG_GET_780(thisx);
-    this->switchFlags = ENOKARINATAG_GET_SWITCHFLAGS(thisx);
+    this->switchFlag = ENOKARINATAG_GET_SWITCH_FLAG(thisx);
     if (this->actor.world.rot.z > 0) {
         zRot = this->actor.world.rot.z;
         while (zRot > 10.0f) {
@@ -50,8 +50,8 @@ void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
     }
     this->unk154 = zRot * 50.0f;
     this->unk158 = i * 50.0f;
-    if (this->switchFlags == 0x7F) {
-        this->switchFlags = -1;
+    if (this->switchFlag == 0x7F) {
+        this->switchFlag = -1;
     }
     if (this->unk14A == 0xF) {
         this->unk14A = -1;
@@ -66,14 +66,14 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
     s16 yDiff;
     u16 var_v1;
 
-    if (this->switchFlags >= 0) {
+    if (this->switchFlag >= 0) {
         if (this->unk148 == 0) {
-            if (Flags_GetSwitch(play, this->switchFlags)) {
+            if (Flags_GetSwitch(play, this->switchFlag)) {
                 return;
             }
         }
         if (this->unk148 == 1) {
-            if (!Flags_GetSwitch(play, this->switchFlags)) {
+            if (!Flags_GetSwitch(play, this->switchFlag)) {
                 return;
             }
         }
@@ -122,19 +122,19 @@ void func_8093E68C(EnOkarinaTag* this, PlayState* play) {
                                       (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_SUNS) ||
                                       (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_STORMS) ||
                                       (play->msgCtx.ocarinaMode == OCARINA_MODE_F)))) {
-            if (this->switchFlags >= 0) {
+            if (this->switchFlag >= 0) {
                 switch (this->unk148) {
                     case 0:
-                        Flags_SetSwitch(play, this->switchFlags);
+                        Flags_SetSwitch(play, this->switchFlag);
                         break;
                     case 1:
-                        Flags_UnsetSwitch(play, this->switchFlags);
+                        Flags_UnsetSwitch(play, this->switchFlag);
                         break;
                     case 2:
-                        if (Flags_GetSwitch(play, this->switchFlags)) {
-                            Flags_UnsetSwitch(play, this->switchFlags);
+                        if (Flags_GetSwitch(play, this->switchFlag)) {
+                            Flags_UnsetSwitch(play, this->switchFlag);
                         } else {
-                            Flags_SetSwitch(play, this->switchFlags);
+                            Flags_SetSwitch(play, this->switchFlag);
                         }
                         break;
                 }

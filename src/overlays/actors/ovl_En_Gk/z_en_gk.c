@@ -296,7 +296,7 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
 
     if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
-        Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
+        Flags_SetSwitch(play, ENGK_GET_SWITCH_FLAG(&this->actor));
         this->animIndex = ENGK_ANIM_3;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGK_ANIM_3);
         this->actionFunc = func_80B521E8;
@@ -612,7 +612,7 @@ void func_80B51510(EnGk* this, PlayState* play) {
                     break;
 
                 case 7:
-                    Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
+                    Flags_SetSwitch(play, ENGK_GET_SWITCH_FLAG(&this->actor));
                     break;
 
                 default:
@@ -673,7 +673,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
     } else {
-        if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
+        if (Flags_GetSwitch(play, ENGK_GET_SWITCH_FLAG(&this->actor))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_40_40);
             this->actionFunc = func_80B51D9C;
             return;
@@ -1070,7 +1070,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
         this->animIndex = ENGK_ANIM_5;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGK_ANIM_5);
         if (play->sceneId == SCENE_17SETUGEN2) {
-            if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
+            if (Flags_GetSwitch(play, ENGK_GET_SWITCH_FLAG(&this->actor))) {
                 Actor_Kill(&this->actor);
                 return;
             }

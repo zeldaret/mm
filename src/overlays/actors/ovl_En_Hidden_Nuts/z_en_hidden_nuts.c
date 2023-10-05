@@ -113,7 +113,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->pathIndex = ENHIDDENNUTS_GET_PATH_INDEX(&this->actor);
-    this->switchFlag = ENHIDDENNUTS_GET_SWITCHFLAG(&this->actor);
+    this->switchFlag = ENHIDDENNUTS_GET_SWITCH_FLAG(&this->actor);
 
     if (this->switchFlag == 0x7F) {
         this->switchFlag = -1;

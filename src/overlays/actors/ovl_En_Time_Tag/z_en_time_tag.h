@@ -14,7 +14,7 @@ typedef void (*EnTimeTagActionFunc)(struct EnTimeTag*, PlayState*);
 #define TIMETAG_KICKOUT_HOUR(thisx) ((thisx)->home.rot.x)
 #define TIMETAG_KICKOUT_MINUTE(thisx) ((thisx)->home.rot.y)
 
-#define TIMETAG_SOARING_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define TIMETAG_SOARING_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 #define TIMETAG_DIARY_GET_TYPE(thisx) ((thisx)->params & 0x7F)
 #define TIMETAG_DIARY_TIMER(thisx) ((thisx)->home.rot.x)
