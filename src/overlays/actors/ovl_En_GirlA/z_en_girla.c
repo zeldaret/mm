@@ -165,7 +165,7 @@ void EnGirlA_InitObjIndex(EnGirlA* this, PlayState* play) {
         return;
     }
 
-    this->objIndex = Object_GetIndex(&play->objectCtx, sShopItemEntries[params].objectId);
+    this->objIndex = Object_GetSlot(&play->objectCtx, sShopItemEntries[params].objectId);
     if (this->objIndex < 0) {
         Actor_Kill(&this->actor);
         return;

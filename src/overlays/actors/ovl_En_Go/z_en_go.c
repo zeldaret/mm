@@ -748,7 +748,7 @@ s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 isFallingAsleep = false;
 
-    if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+    if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->sleepState == ENGO_AWAKE) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
         (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON) && (play->sceneId == SCENE_16GORON_HOUSE) &&
@@ -991,10 +991,10 @@ s32 EnGo_UpdateSkelAnime(EnGo* this, PlayState* play) {
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
         this->skelAnime.playSpeed = this->animPlaySpeed;
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objIndex].segment);
     }
 
     return isAnimFinished;
@@ -1051,11 +1051,11 @@ s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimation animIndex) {
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objIndex].segment);
     }
 
     return didAnimChange;

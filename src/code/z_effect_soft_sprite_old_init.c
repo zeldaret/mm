@@ -41,7 +41,7 @@ void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, TexturePtr texture) {
     MtxF mfTrans11DA0;
     s32 pad1;
     Mtx* mtx;
-    void* object = play->objectCtx.status[this->rgObjBankIndex].segment;
+    void* object = play->objectCtx.slots[this->rgObjBankIndex].segment;
 
     OPEN_DISPS(gfxCtx);
 

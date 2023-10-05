@@ -101,10 +101,10 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
             break;
         }
     }
-    if ((i >= 15) && (Object_GetIndex(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
+    if ((i >= 15) && (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
         objectInfo++;
     }
-    objectIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
+    objectIndex = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
     if (objectIndex < 0) {
         Actor_Kill(&this->knobDoor.dyna.actor);
     } else {
@@ -193,8 +193,8 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
         }
     }
     if ((this->knobDoor.dyna.actor.textId == 0x239B) &&
-        Flags_GetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->knobDoor.dyna.actor))) {
-        Flags_UnsetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->knobDoor.dyna.actor));
+        Flags_GetSwitch(play, ENDOORETC_GET_SWITCH_FLAG(&this->knobDoor.dyna.actor))) {
+        Flags_UnsetSwitch(play, ENDOORETC_GET_SWITCH_FLAG(&this->knobDoor.dyna.actor));
         this->actionFunc = func_80AC2154;
         this->knobDoor.dyna.actor.textId = 0x1800; // "It won't budge!"
         this->unk_1F4 |= 1;

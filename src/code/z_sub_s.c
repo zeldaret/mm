@@ -1174,7 +1174,7 @@ s8 SubS_IsObjectLoaded(s8 index, PlayState* play) {
 }
 
 s8 SubS_GetObjectIndex(s16 id, PlayState* play) {
-    return Object_GetIndex(&play->objectCtx, id);
+    return Object_GetSlot(&play->objectCtx, id);
 }
 
 /**

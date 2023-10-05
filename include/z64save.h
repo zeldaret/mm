@@ -115,7 +115,7 @@ typedef enum {
     /* 16 */ TIMER_STATE_POSTMAN_END
 } TimerState;
 
-typedef enum {
+typedef enum BottleTimerState {
     /* 0 */ BOTTLE_TIMER_STATE_OFF,
     /* 1 */ BOTTLE_TIMER_STATE_COUNTING
 } BottleTimerState;
@@ -126,7 +126,7 @@ typedef enum {
     /* 3 */ MINIGAME_STATUS_END = 3
 } MinigameStatus;
 
-typedef enum {
+typedef enum HudVisibility {
     /*  0 */ HUD_VISIBILITY_IDLE,
     /*  1 */ HUD_VISIBILITY_NONE,
     /*  2 */ HUD_VISIBILITY_NONE_ALT, // Identical to HUD_VISIBILITY_NONE
@@ -304,7 +304,7 @@ typedef struct SaveInfo {
     /* 0xF38 */ u32 regionsVisited;                    // "area_arrival"
     /* 0xF3C */ u32 worldMapCloudVisibility;           // "cloud_clear"
     /* 0xF40 */ u8 unk_F40;                            // "oca_rec_flag"                   has scarecrows song
-    /* 0xF41 */ u8 unk_F41;                            // "oca_rec_flag8"                  scarecrows song set?
+    /* 0xF41 */ u8 scarecrowSpawnSongSet;              // "oca_rec_flag8"
     /* 0xF42 */ u8 scarecrowSpawnSong[128];
     /* 0xFC2 */ s8 bombersCaughtNum;                   // "aikotoba_index"
     /* 0xFC3 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"
@@ -327,7 +327,7 @@ typedef struct Save {
     /* 0x10 */ s32 isNight;                             // "asahiru_fg"
     /* 0x14 */ s32 timeSpeedOffset;                     // "change_zelda_time"
     /* 0x18 */ s32 day;                                 // "totalday"
-    /* 0x1C */ s32 daysElapsed;                         // "eventday"
+    /* 0x1C */ s32 eventDayCount;                       // "eventday"
     /* 0x20 */ u8 playerForm;                           // "player_character"
     /* 0x21 */ u8 snowheadCleared;                      // "spring_flag"
     /* 0x22 */ u8 hasTatl;                              // "bell_flag"
@@ -453,8 +453,8 @@ typedef enum {
 
 // The day begins at CLOCK_TIME(6, 0) so it must be offset.
 #define TIME_UNTIL_MOON_CRASH \
-    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)));
-#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)));
+    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)))
+#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)))
 
 #define GET_PLAYER_FORM ((void)0, gSaveContext.save.playerForm)
 
@@ -650,11 +650,14 @@ typedef enum {
 #define WEEKEVENTREG_CLOCK_TOWER_OPENED PACK_WEEKEVENTREG_FLAG(8, 0x40)
 
 #define WEEKEVENTREG_08_80 PACK_WEEKEVENTREG_FLAG(8, 0x80)
+
+// This 5 flags are managed in a special way by EnElfgrp
 #define WEEKEVENTREG_09_01 PACK_WEEKEVENTREG_FLAG(9, 0x01)
 #define WEEKEVENTREG_09_02 PACK_WEEKEVENTREG_FLAG(9, 0x02)
 #define WEEKEVENTREG_09_04 PACK_WEEKEVENTREG_FLAG(9, 0x04)
 #define WEEKEVENTREG_09_08 PACK_WEEKEVENTREG_FLAG(9, 0x08)
 #define WEEKEVENTREG_09_10 PACK_WEEKEVENTREG_FLAG(9, 0x10)
+
 #define WEEKEVENTREG_09_20 PACK_WEEKEVENTREG_FLAG(9, 0x20)
 #define WEEKEVENTREG_09_40 PACK_WEEKEVENTREG_FLAG(9, 0x40)
 #define WEEKEVENTREG_09_80 PACK_WEEKEVENTREG_FLAG(9, 0x80)
@@ -795,7 +798,7 @@ typedef enum {
 #define WEEKEVENTREG_22_40 PACK_WEEKEVENTREG_FLAG(22, 0x40)
 #define WEEKEVENTREG_22_80 PACK_WEEKEVENTREG_FLAG(22, 0x80)
 #define WEEKEVENTREG_23_01 PACK_WEEKEVENTREG_FLAG(23, 0x01)
-#define WEEKEVENTREG_23_02 PACK_WEEKEVENTREG_FLAG(23, 0x02)
+#define WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK PACK_WEEKEVENTREG_FLAG(23, 0x02)
 #define WEEKEVENTREG_23_04 PACK_WEEKEVENTREG_FLAG(23, 0x04)
 #define WEEKEVENTREG_23_08 PACK_WEEKEVENTREG_FLAG(23, 0x08)
 #define WEEKEVENTREG_23_10 PACK_WEEKEVENTREG_FLAG(23, 0x10)
@@ -1630,6 +1633,9 @@ typedef enum {
     /* 2 */ DUNGEON_INDEX_GREAT_BAY_TEMPLE,
     /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE // Also applies to Inverted Stone Tower Temple
 } DungeonIndex;
+
+#define STRAY_FAIRY_TOTAL 25 // total number of stray fairies, including those already in the Great Fairy Fountain
+#define STRAY_FAIRY_SCATTERED_TOTAL 15 // original number of stray fairies in one dungeon area
 
 void Sram_ActivateOwl(u8 owlId);
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void);

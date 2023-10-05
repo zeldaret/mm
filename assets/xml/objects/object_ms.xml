@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_ms" Segment="6">
         <!-- Bean Salesman Animations -->
-        <Animation Name="gBeanSalesmanEatingAnim" Offset="0x5EC"/>
+        <Animation Name="gBeanSalesmanEatingAnim" Offset="0x5EC"/> <!-- Original name is "ms_matsu" -->
 
         <!-- Bean Salesman Limb DisplayLists -->
         <DList Name="gBeanSalesmanLeftUpperArmDL" Offset="0x2E58"/>

@@ -247,7 +247,7 @@ void func_80B70D24(EnRailSkb* this, PlayState* play) {
 
     while (actor != NULL) {
         if ((actor->id == ACTOR_OBJ_HAKAISI) && func_80B70B04(this, actor->world.pos)) {
-            if (Flags_GetSwitch(play, (actor->params & 0xFF00) >> 8)) {
+            if (Flags_GetSwitch(play, OBJHAKAISI_GET_SWITCH_FLAG(actor))) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -276,7 +276,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    if (Flags_GetSwitch(play, ENRAILSKB_GET_FF(&this->actor))) {
+    if (Flags_GetSwitch(play, ENRAILSKB_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
     }
 

@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define OBJHSBLOCK_GET_SWITCH(thisx) (((thisx)->params >> 8) & 0x7F)
+#define OBJHSBLOCK_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 #define OBJHSBLOCK_GET_3(thisx) ((thisx)->params & 3)
 #define OBJHSBLOCK_GET_5(thisx) (((thisx)->params >> 5) & 1)
 #define OBJHSBLOCK_GET_6(thisx) (((thisx)->params >> 6) & 3)

@@ -259,7 +259,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->unk_2CA = this->picto.actor.world.rot.z;
     this->picto.actor.colChkInfo.health = 8;
     this->exitIndex = KAIZOKU_GET_EXIT_INDEX(&this->picto.actor);
-    this->switchFlag = KAIZOKU_GET_SWITCHFLAG(&this->picto.actor);
+    this->switchFlag = KAIZOKU_GET_SWITCH_FLAG(&this->picto.actor);
 
     if (this->unk_2CA >= 2) {
         this->unk_2CA = 0;

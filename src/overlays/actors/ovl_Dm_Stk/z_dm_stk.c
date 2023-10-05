@@ -320,7 +320,7 @@ void DmStk_LoadObjectForAnimation(DmStk* this, PlayState* play) {
     }
 
     if (objectIndex >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectIndex].segment);
     }
 }
 
@@ -1062,9 +1062,9 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
     this->shouldDraw = true;
     if (DM_STK_GET_TYPE(&this->actor) != DM_STK_TYPE_MAJORAS_MASK) {
         this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_NOT_READY;
-        this->objectStkObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_STK);
-        this->objectStk2ObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_STK2);
-        this->objectStk3ObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_STK3);
+        this->objectStkObjectIndex = Object_GetSlot(&play->objectCtx, OBJECT_STK);
+        this->objectStk2ObjectIndex = Object_GetSlot(&play->objectCtx, OBJECT_STK2);
+        this->objectStk3ObjectIndex = Object_GetSlot(&play->objectCtx, OBJECT_STK3);
         if (this->objectStkObjectIndex < 0) {
             Actor_Kill(&this->actor);
         }
@@ -1073,9 +1073,9 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->deflectCount = 0;
         this->maskType = SK_MASK_TYPE_NORMAL;
         this->animIndex = SK_ANIM_IDLE;
-        this->fogR = play->lightCtx.fogColor.r;
-        this->fogG = play->lightCtx.fogColor.g;
-        this->fogB = play->lightCtx.fogColor.b;
+        this->fogR = play->lightCtx.fogColor[0];
+        this->fogG = play->lightCtx.fogColor[1];
+        this->fogB = play->lightCtx.fogColor[2];
 
         if ((play->sceneId == SCENE_LOST_WOODS) && (gSaveContext.sceneLayer == 1)) {
             this->alpha = 0;
@@ -1643,9 +1643,9 @@ void DmStk_HandleCutscene(DmStk* this, PlayState* play) {
             this->fadeInState++;
         }
 
-        this->fogR = play->lightCtx.fogColor.r * this->fogScale;
-        this->fogG = play->lightCtx.fogColor.g * this->fogScale;
-        this->fogB = play->lightCtx.fogColor.b * this->fogScale;
+        this->fogR = play->lightCtx.fogColor[0] * this->fogScale;
+        this->fogG = play->lightCtx.fogColor[1] * this->fogScale;
+        this->fogB = play->lightCtx.fogColor[2] * this->fogScale;
     } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_FOG) {
         if (this->fogN < 996) {
             this->fogN += 10;
@@ -1867,7 +1867,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
 
         // This code is responsible for making in-game time pass while using the telescope in the Astral Observatory.
         // Skull Kid is always loaded in the scene, even if he isn't visible, hence why time always passes.
-        if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
+        if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
             (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
             (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
             (play->csCtx.state == CS_STATE_IDLE)) {
@@ -1968,15 +1968,15 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                     (this->objectStk2ObjectIndex >= 0)) {
                     Matrix_Push();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
-                    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->objectStk2ObjectIndex].segment);
+                    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectStk2ObjectIndex].segment);
 
-                    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectStk2ObjectIndex].segment);
+                    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->objectStk2ObjectIndex].segment);
 
                     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gSkullKidMajorasMaskCurseOverlayTexAnim));
                     Gfx_DrawDListOpa(play, gSkullKidMajorasMaskCurseOverlayDL);
-                    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->objectStkObjectIndex].segment);
+                    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectStkObjectIndex].segment);
 
-                    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectStkObjectIndex].segment);
+                    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->objectStkObjectIndex].segment);
 
                     Matrix_Pop();
                 }
@@ -2095,7 +2095,7 @@ void DmStk_Draw(Actor* thisx, PlayState* play) {
             return;
         }
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->objectStkObjectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectStkObjectIndex].segment);
 
         OPEN_DISPS(play->state.gfxCtx);
 

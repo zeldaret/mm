@@ -9,7 +9,7 @@ struct EnGb2;
 typedef void (*EnGb2ActionFunc)(struct EnGb2*, PlayState*);
 
 #define ENGB2_GET_7(thisx) ((thisx)->params & 7)
-#define ENGB2_GET_7F8(thisx) (((thisx)->params & 0x7F8) >> 3)
+#define ENGB2_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x7F8) >> 3)
 
 typedef enum {
     /* 0 */ ENGB2_7_0,

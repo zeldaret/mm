@@ -1318,7 +1318,7 @@ void EnMnk_MonkeyTiedUp_ReactToWrongInstrument(EnMnk* this, PlayState* play) {
             case 0x8DB:
                 Message_CloseTextbox(play);
                 this->actionFunc = EnMnk_MonkeyTiedUp_WaitForInstrument;
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 EnMnk_MonkeyTiedUp_SetAnim(this, MONKEY_TIEDUP_ANIM_WAIT);
                 if (this->csId != CS_ID_NONE) {
                     CutsceneManager_Stop(this->csId);
@@ -1489,7 +1489,7 @@ void EnMnk_MonkeyTiedUp_WaitForInstrument(EnMnk* this, PlayState* play) {
                 this->csId = 2;
                 SET_EVENTINF(EVENTINF_24);
                 this->picto.actor.csId = this->csIdList[2];
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 CutsceneManager_Queue(this->csIdList[2]);
                 return;
 
@@ -1577,7 +1577,7 @@ void EnMnk_MonkeyTiedUp_Wait(EnMnk* this, PlayState* play) {
         this->csId = 2;
         SET_EVENTINF(EVENTINF_24);
         this->picto.actor.csId = this->csIdList[2];
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         CutsceneManager_Queue(this->csIdList[2]);
     } else if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {

@@ -425,7 +425,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
 
     this->doorType = ENDOOR_GET_TYPE(thisx);
 
-    this->switchFlag = ENDOOR_GET_PARAM_7F(thisx);
+    this->switchFlag = ENDOOR_GET_SWITCH_FLAG(thisx);
     if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {
         DynaPolyActor_Init(&this->knobDoor.dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->knobDoor.dyna, &gDoorCol);
@@ -440,16 +440,16 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
                 break;
             }
         }
-        if ((i >= ARRAY_COUNT(sObjInfo) - 34) && (Object_GetIndex(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
+        if ((i >= ARRAY_COUNT(sObjInfo) - 34) && (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
             objectInfo++;
         }
     }
 
     this->knobDoor.dlIndex = objectInfo->dListIndex;
-    objectBankIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
+    objectBankIndex = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
     if (objectBankIndex < 0) {
         objectInfo = &sObjInfo[15];
-        objectBankIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
+        objectBankIndex = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
         if (objectBankIndex != 0) {
             Actor_Kill(&this->knobDoor.dyna.actor);
             return;

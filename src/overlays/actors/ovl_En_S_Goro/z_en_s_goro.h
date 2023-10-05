@@ -5,7 +5,7 @@
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 
 #define EN_S_GORO_GET_MAIN_TYPE(thisx) ((thisx)->params & 0xF)
-#define EN_S_GORO_SCENEFLAG_INDEX(thisx) (((thisx)->params & 0x7F0) >> 4)
+#define EN_S_GORO_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x7F0) >> 4)
 
 struct EnSGoro;
 
