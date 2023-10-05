@@ -1395,8 +1395,8 @@ void EnOssan_CuriosityShopMan_Init(EnOssan* this, PlayState* play) {
 }
 
 void EnOssan_PartTimer_Init(EnOssan* this, PlayState* play) {
-    SkelAnime_InitFlex(play, &this->skelAnime, &gAniSkeleton, &gAniStandingNormalAnim, this->jointTable,
-                       this->morphTable, 16);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gAniSkel, &gAniStandingNormalAnim, this->jointTable, this->morphTable,
+                       16);
     this->actor.draw = EnOssan_PartTimer_Draw;
 }
 
