@@ -1,10 +1,10 @@
 ﻿<Root>
     <!-- Object for Lightblock -->
     <File Name="object_lightblock" Segment="6">
-        <DList Name="gLightblockEmptyDL" Offset="0x170" />
-        <DList Name="gLightblockDL" Offset="0x178" />
+        <DList Name="gLightblockEmptyDL" Offset="0x170" /> <!-- Original name is "z2_brick_light_modelT" -->
+        <DList Name="gLightblockDL" Offset="0x178" /> <!-- Original name is "z2_brick_light_model" -->
         <Texture Name="gLightblockTLUT" OutName="lightblock_tlut" Format="rgba16" Width="4" Height="4" Offset="0x258" />
         <Texture Name="gLightblockTex" OutName="lightblock_tex" Format="ci4" Width="64" Height="64" Offset="0x278" />
-        <Collision Name="gLightblockCol" Offset="0xB80" />
+        <Collision Name="gLightblockCol" Offset="0xB80" /> <!-- Original name is "z2_brick_light_bgdatainfo" -->
     </File>
 </Root>
