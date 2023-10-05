@@ -98,9 +98,7 @@ typedef struct BossHakugin {
     /* 0x2618 */ BossHakuginUnkStruct_2618 unk_2618[20];
     /* 0x3158 */ BossHakuginFhgFlashUnkStruct unk_3158[5][15];
     /* 0x3734 */ Vec3f unk_3734[10];
-    /* 0x37AC */ f32 unk_37AC;
-    /* 0x37B0 */ f32 unk_37B0;
-    /* 0x37B4 */ f32 unk_37B4;
+    /* 0x37AC */ Vec3f unk_37AC;
     /* 0x37B8 */ ColliderSphere unk_37B8;
 } BossHakugin; // size = 0x3810
 
