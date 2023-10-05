@@ -66,7 +66,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, PlayState* play) {
     }
 
     // note: DemoKankyo can crash if placed in an area that snows (ObjectKankyo)
-    // because they both use unk_F2 as an effect counter,
+    // because they both use PRECIP_SNOW_MAX precipitation as an effect counter,
     // causing DemoKankyo to write beyond its efffect array boundry
     // this crash can occur if the two actors are in different scenes connected by an exit
     // e.g. if you add DemoKankyo to GoronShrine, you will crash entering/leaving through door

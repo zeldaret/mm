@@ -162,8 +162,8 @@ typedef struct {
     /* 0x09 */ s8 light2Dir[3];
     /* 0x0C */ u8 light2Color[3];
     /* 0x0F */ u8 fogColor[3];
-    /* 0x12 */ s16 fogNear;
-    /* 0x14 */ s16 zFar;
+    /* 0x12 */ s16 fogNear; // ranges from 0-1000 (0: starts immediately, 1000: no fog), but is clamped to ENV_FOGNEAR_MAX
+    /* 0x14 */ s16 zFar; // Max depth (render distance) of the view as a whole. fogFar will always match zFar
 } CurrentEnvLightSettings; // size = 0x16
 
 // `EnvLightSettings` is very similar to `CurrentEnvLightSettings` with one key difference.
