@@ -1,8 +1,8 @@
 ﻿<Root>
     <!-- Object for Kinsta1 Obj -->
     <File Name="object_kinsta1_obj" Segment="6">
-        <DList Name="gKinsta1ObjEmptyDL" Offset="0x190" />
-        <DList Name="gKinsta1ObjDoorDL" Offset="0x198" />
+        <DList Name="gKinsta1ObjEmptyDL" Offset="0x190" /> <!-- Original name is "m2_KIN1_shutter_modelT" -->
+        <DList Name="gKinsta1ObjDoorDL" Offset="0x198" /> <!-- Original name is "m2_KIN1_shutter_model" -->
         <Texture Name="gKinsta1ObjTex" OutName="kinsta1_obj" Format="rgba16" Width="32" Height="64" Offset="0x2F0" />
     </File>
 </Root>
