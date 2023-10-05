@@ -4,21 +4,21 @@
 #include "global.h"
 #include "objects/object_po_composer/object_po_composer.h"
 
-#define PO_COMPOSER_IS_FLAT(actor) ((actor)->params & 0x8000)
-#define PO_COMPOSER_4000(actor)    ((actor)->params & 0x4000)
+#define POE_COMPOSER_IS_FLAT(actor) ((actor)->params & 0x8000)
+#define POE_COMPOSER_4000(actor)    ((actor)->params & 0x4000)
 
 typedef enum {
-    /*  1 */ COMPOSER_CUEID_IDLE = 1,
-    /*  2 */ COMPOSER_CUEID_APPEAR_SPIN,
-    /*  3 */ COMPOSER_CUEID_IDLE2,
-    /*  4 */ COMPOSER_CUEID_RAISE_ARMS,
-    /*  5 */ COMPOSER_CUEID_LOWER_ARMS,
-    /*  6 */ COMPOSER_CUEID_PLAY_CURSE,
-    /*  7 */ COMPOSER_CUEID_ROLL,
-    /*  8 */ COMPOSER_CUEID_APPEAR,
-    /*  9 */ COMPOSER_CUEID_DISAPPEAR,
-    /* 10 */ COMPOSER_CUEID_DONE,
-    /* 99 */ COMPOSER_CUEID_NONE = 99
+    /*  1 */ POE_COMPOSER_CUEID_IDLE = 1,
+    /*  2 */ POE_COMPOSER_CUEID_APPEAR_SPIN,
+    /*  3 */ POE_COMPOSER_CUEID_IDLE2,
+    /*  4 */ POE_COMPOSER_CUEID_RAISE_ARMS,
+    /*  5 */ POE_COMPOSER_CUEID_LOWER_ARMS,
+    /*  6 */ POE_COMPOSER_CUEID_PLAY_CURSE,
+    /*  7 */ POE_COMPOSER_CUEID_ROLL,
+    /*  8 */ POE_COMPOSER_CUEID_APPEAR,
+    /*  9 */ POE_COMPOSER_CUEID_DISAPPEAR,
+    /* 10 */ POE_COMPOSER_CUEID_DONE,
+    /* 99 */ POE_COMPOSER_CUEID_NONE = 99
 } EnPoComposerCueId;
 
 typedef enum {
@@ -45,8 +45,8 @@ typedef struct EnPoComposer {
     /* 0x27C */ LightInfo lightInfo;
     /* 0x28A */ UNK_TYPE1 unk_28A[0x6];
     /* 0x290 */ s32 sharpCsNum;
-    /* 0x294 */ Vec3s jointTable[PO_COMPOSER_LIMB_MAX];
-    /* 0x2DC */ Vec3s morphTable[PO_COMPOSER_LIMB_MAX];
+    /* 0x294 */ Vec3s jointTable[POE_COMPOSER_LIMB_MAX];
+    /* 0x2DC */ Vec3s morphTable[POE_COMPOSER_LIMB_MAX];
     /* 0x324 */ s16 csIds[SHARP_CS_MAX];
     /* 0x32C */ s16 actionTimer;
     /* 0x32E */ s16 csCueTimer;

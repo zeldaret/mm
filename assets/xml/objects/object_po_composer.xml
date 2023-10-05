@@ -1,21 +1,22 @@
 ﻿<Root>
     <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
 
+    <!-- Assets for the composer brothers Flat and Sharp -->
     <File Name="object_po_composer" Segment="6">
         <!-- Animations -->
         <Animation Name="gPoeComposerAttackAnim" Offset="0x20C" />
         <Animation Name="gPoeComposerRaiseArmsAnim" Offset="0x570" />
-        <Animation Name="gPoeComposerBeginPlayingAnim" Offset="0xA58" />
-        <Animation Name="gPoeComposerPlayingAnim" Offset="0x1420" />
+        <Animation Name="gPoeComposerBeginPlayAnim" Offset="0xA58" />
+        <Animation Name="gPoeComposerPlayAnim" Offset="0x1420" />
         <Animation Name="gPoeComposerFleeAnim" Offset="0x15B8" />
         <Animation Name="gPoeComposerIdleAnim" Offset="0x188C" />
         <Animation Name="gPoeComposerArmsRaisedAnim" Offset="0x1F44" />
         <Animation Name="gPoeComposerLowerArmsAnim" Offset="0x23E8" />
-        <Animation Name="gPoeComposerIdleLookingDownAnim" Offset="0x2AE0" />
-        <Animation Name="gPoeComposerBeginRollingAnim" Offset="0x3024" />
-        <Animation Name="gPoeComposerRollingAnim" Offset="0x334C" />
+        <Animation Name="gPoeComposerLookingDownAnim" Offset="0x2AE0" />
+        <Animation Name="gPoeComposerBeginRollAnim" Offset="0x3024" />
+        <Animation Name="gPoeComposerRollAnim" Offset="0x334C" />
         <Animation Name="gPoeComposerAppearDisappearAnim" Offset="0x3954" />
-        <Animation Name="gPoeComposerIdleStillAnim" Offset="0x3DB0" />
+        <Animation Name="gPoeComposerStillAnim" Offset="0x3DB0" />
 
         <!-- Texture -->
         <Texture Name="gPoeComposerSoulTex" OutName="composer_soul" Format="i8" Width="32" Height="64" Offset="0x3DC0" />
@@ -45,19 +46,19 @@
         <Texture Name="object_po_composer_Tex_009680" OutName="tex_009680" Format="rgba16" Width="16" Height="16" Offset="0x9680" />
 
         <!-- Limbs -->
-        <Limb Name="gPoeComposerUpperBodyLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_UPPER_BODY" Offset="0x9880" />
-        <Limb Name="gPoeComposerLeftShoulderLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_LEFT_SHOULDER" Offset="0x988C" />
-        <Limb Name="gPoeComposerLeftArmLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_LEFT_ARM" Offset="0x9898" />
-        <Limb Name="gPoeComposerLeftHandLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_LEFT_HAND" Offset="0x98A4" />
-        <Limb Name="gPoeComposerConductorBatonLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_CONDUCTOR_BATON" Offset="0x98B0" />
-        <Limb Name="gPoeComposerRightShoulderLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_RIGHT_SHOULDER" Offset="0x98BC" />
-        <Limb Name="gPoeComposerRightArmLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_RIGHT_ARM" Offset="0x98C8" />
-        <Limb Name="gPoeComposerRightHandLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_RIGHT_HAND" Offset="0x98D4" />
-        <Limb Name="gPoeComposerLanternLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_LANTERN" Offset="0x98E0" />
-        <Limb Name="gPoeComposerHeadLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_HEAD" Offset="0x98EC" />
-        <Limb Name="gPoeComposerLowerBodyLimb" Type="Standard" EnumName="PO_COMPOSER_LIMB_LOWER_BODY" Offset="0x98F8" />
+        <Limb Name="gPoeComposerUpperBodyLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_UPPER_BODY" Offset="0x9880" />
+        <Limb Name="gPoeComposerLeftShoulderLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_LEFT_SHOULDER" Offset="0x988C" />
+        <Limb Name="gPoeComposerLeftArmLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_LEFT_ARM" Offset="0x9898" />
+        <Limb Name="gPoeComposerLeftHandLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_LEFT_HAND" Offset="0x98A4" />
+        <Limb Name="gPoeComposerConductorBatonLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_CONDUCTOR_BATON" Offset="0x98B0" />
+        <Limb Name="gPoeComposerRightShoulderLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_RIGHT_SHOULDER" Offset="0x98BC" />
+        <Limb Name="gPoeComposerRightArmLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_RIGHT_ARM" Offset="0x98C8" />
+        <Limb Name="gPoeComposerRightHandLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_RIGHT_HAND" Offset="0x98D4" />
+        <Limb Name="gPoeComposerLanternLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_LANTERN" Offset="0x98E0" />
+        <Limb Name="gPoeComposerHeadLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_HEAD" Offset="0x98EC" />
+        <Limb Name="gPoeComposerLowerBodyLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_LOWER_BODY" Offset="0x98F8" />
 
         <!-- Skeleton -->
-        <Skeleton Name="gPoeComposerSkel" Type="Flex" LimbType="Standard" LimbNone="PO_COMPOSER_LIMB_NONE" LimbMax="PO_COMPOSER_LIMB_MAX" EnumName="PoComposerLimb" Offset="0x9930" />
+        <Skeleton Name="gPoeComposerSkel" Type="Flex" LimbType="Standard" LimbNone="POE_COMPOSER_LIMB_NONE" LimbMax="POE_COMPOSER_LIMB_MAX" EnumName="PoComposerLimb" Offset="0x9930" />
     </File>
 </Root>
