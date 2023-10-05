@@ -1,3 +1,6 @@
+#include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h"
+
 #include "PR/ultratypes.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -10,15 +13,6 @@ u8 D_801F4DDC;
 static s16 sBssPad;
 u8 gDisablePlayerCsModeStartPos;
 s16 gDungeonBossWarpSceneId;
-
-#include "prevent_bss_reordering.h"
-#include "prevent_bss_reordering2.h"
-// clang-format off
-// Partial structs taken from "prevent_bss_reordering.h"
-struct Dummy200 { int x; };
-struct Dummy201 { int x; };
-struct Dummy202 { int x; };
-// clang-format on
 
 #include "global.h"
 #include "z64quake.h"

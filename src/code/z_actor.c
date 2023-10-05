@@ -4,12 +4,14 @@
  */
 
 #include "z64actor.h"
+#include "prevent_bss_reordering.h"
 #include "fault.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
 #include "z64horse.h"
 #include "z64quake.h"
 #include "z64rumble.h"
+
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
