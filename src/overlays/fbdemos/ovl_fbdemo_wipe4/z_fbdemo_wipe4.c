@@ -13,10 +13,13 @@
 
 #define THIS ((TransitionWipe4*)thisx)
 
-// TODO: determine how generic these macros are. Requires rest of the fbdemos decompiled.
-#define TW4_SET_PARAMS (1 << 7)
-#define TW4_GET_COLORTYPE(type) (((type) >> 1) & 3)
-#define TW4_GET_SPEEDTYPE(type) ((type)&1)
+#define TRANS4_GET_COLORTYPE(type) (((type) >> 1) & 3)
+#define TRANS4_GET_SPEEDTYPE(type) ((type)&1)
+
+typedef enum TransitionWipe4Direction {
+    /* 0 */ TRANS_WIPE4_DIR_IN,
+    /* 1 */ TRANS_WIPE4_DIR_OUT
+} TransitionWipe4Direction;
 
 void* TransitionWipe4_Init(void* thisx);
 void TransitionWipe4_Destroy(void* thisx);
@@ -119,13 +122,13 @@ s32 TransitionWipe4_IsDone(void* thisx) {
 void TransitionWipe4_SetType(void* thisx, s32 type) {
     TransitionWipe4* this = (TransitionWipe4*)thisx;
 
-    if (type & TW4_SET_PARAMS) {
-        this->colorType = TW4_GET_COLORTYPE(type);
-        this->speedType = TW4_GET_SPEEDTYPE(type);
-    } else if (type == 1) {
-        this->direction = 1;
+    if (type & TRANS_TYPE_SET_PARAMS) {
+        this->colorType = TRANS4_GET_COLORTYPE(type);
+        this->speedType = TRANS4_GET_SPEEDTYPE(type);
+    } else if (type == TRANS_INSTANCE_TYPE_FILL_OUT) {
+        this->direction = TRANS_WIPE4_DIR_OUT;
     } else {
-        this->direction = 0;
+        this->direction = TRANS_WIPE4_DIR_IN;
     }
 }
 
