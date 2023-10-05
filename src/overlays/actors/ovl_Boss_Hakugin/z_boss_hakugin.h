@@ -49,7 +49,6 @@ typedef struct BossHakugin {
     /* 0x0194 */ u8 unk_0194;
     /* 0x0194 */ u8 unk_0195;
     /* 0x0196 */ u8 unk_0196;
-    /* 0x0197 */ char unk_0197[0x1];
     /* 0x0198 */ s16 unk_0198;
     /* 0x019A */ s16 unk_019A;
     /* 0x019C */ s16 unk_019C;
@@ -72,7 +71,7 @@ typedef struct BossHakugin {
     /* 0x01CC */ f32 unk_01CC;
     /* 0x01D0 */ f32 unk_01D0;
     /* 0x01D4 */ f32 unk_01D4;
-    /* 0x01D8 */ char unk_01D8[0x4];
+    /* 0x01D8 */ char unk_01D8[0x4]; // probably unused float
     /* 0x01DC */ f32 unk_01DC;
     /* 0x01E0 */ f32 unk_01E0;
     /* 0x01E4 */ f32 unk_01E4;
@@ -88,7 +87,6 @@ typedef struct BossHakugin {
     /* 0x0464 */ Vec3f unk_0464;
     /* 0x0470 */ LightNode* lightNode;
     /* 0x0474 */ LightInfo lightInfo;
-    /* 0x0482 */ char unk_0482[0x2];
     /* 0x0484 */ ColliderJntSph unk_0484;
     /* 0x04A4 */ ColliderJntSphElement unk_04A4[19];
     /* 0x0964 */ ColliderCylinder unk_0964;
