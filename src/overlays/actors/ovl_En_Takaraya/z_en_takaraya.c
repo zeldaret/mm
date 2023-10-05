@@ -68,11 +68,11 @@ static InitChainEntry sInitChain[] = {
 u32 sTexturesDesegmented = false;
 
 u16 D_80ADFB2C[PLAYER_FORM_MAX] = {
-    1901, // PLAYER_FORM_FIERCE_DEITY
-    1902, // PLAYER_FORM_GORON
-    1903, // PLAYER_FORM_ZORA
-    1900, // PLAYER_FORM_DEKU
-    1901, // PLAYER_FORM_HUMAN
+    0x76D, // PLAYER_FORM_FIERCE_DEITY
+    0x76E, // PLAYER_FORM_GORON
+    0x76F, // PLAYER_FORM_ZORA
+    0x76C, // PLAYER_FORM_DEKU
+    0x76D, // PLAYER_FORM_HUMAN
 };
 
 u8 D_80ADFB38[PLAYER_FORM_MAX][2] = {
@@ -84,19 +84,19 @@ u8 D_80ADFB38[PLAYER_FORM_MAX][2] = {
 };
 
 u16 D_80ADFB44[PLAYER_FORM_MAX] = {
-    1909, // PLAYER_FORM_FIERCE_DEITY
-    1910, // PLAYER_FORM_GORON
-    1911, // PLAYER_FORM_ZORA
-    1908, // PLAYER_FORM_DEKU
-    1909, // PLAYER_FORM_HUMAN
+    0x775, // PLAYER_FORM_FIERCE_DEITY
+    0x776, // PLAYER_FORM_GORON
+    0x777, // PLAYER_FORM_ZORA
+    0x774, // PLAYER_FORM_DEKU
+    0x775, // PLAYER_FORM_HUMAN
 };
 
 u16 D_80ADFB50[PLAYER_FORM_MAX] = {
-    1905, // PLAYER_FORM_FIERCE_DEITY
-    1906, // PLAYER_FORM_GORON
-    1907, // PLAYER_FORM_ZORA
-    1904, // PLAYER_FORM_DEKU
-    1905, // PLAYER_FORM_HUMAN
+    0x771, // PLAYER_FORM_FIERCE_DEITY
+    0x772, // PLAYER_FORM_GORON
+    0x773, // PLAYER_FORM_ZORA
+    0x770, // PLAYER_FORM_DEKU
+    0x771, // PLAYER_FORM_HUMAN
 };
 
 void EnTakaraya_Init(Actor* thisx, PlayState* play) {
@@ -198,7 +198,8 @@ void EnTakaraya_SpawnWalls(EnTakaraya* this, PlayState* play) {
         var_v1 = D_80ADFB38[GET_PLAYER_FORM][0];
     }
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_TAKARAYA_WALL, 0.0f, 0.0f, 0.0f, 0, 0, 5,
-                                  ((var_v1 << 5) + this->actor.params) + 0xB000, this->actor.csId, 0x3FF, NULL);
+                                  ((var_v1 << 5) + this->actor.params) + 0xB000, this->actor.csId, HALFDAYBIT_ALL,
+                                  NULL);
 }
 
 void EnTakaraya_SetupTalk(EnTakaraya* this) {
@@ -240,7 +241,7 @@ void EnTakaraya_Talk(EnTakaraya* this, PlayState* play) {
                 Audio_PlaySfx(NA_SE_SY_ERROR);
             } else {
                 Audio_PlaySfx_MessageDecide();
-                Rupees_ChangeBy(play->msgCtx.unk1206C * -1);
+                Rupees_ChangeBy(-play->msgCtx.unk1206C);
                 EnTakaraya_SpawnWalls(this, play);
                 this->actor.textId = 0x778;
                 if (this->skelAnime.animation != &object_bg_Anim_009890) {
@@ -304,7 +305,7 @@ void func_80ADF4E0(EnTakaraya* this) {
 
 void func_80ADF520(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Play_InCsMode(play) == 0) {
+    if (!Play_InCsMode(play)) {
         if (Flags_GetTreasure(play, this->actor.params)) {
             Flags_SetSwitch(play, this->formSwitchFlag);
             play->actorCtx.sceneFlags.chest &= ~TAKARAYA_GET_TREASURE_FLAG(&this->actor);
