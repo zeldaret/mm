@@ -62,10 +62,10 @@ void EnHata_Update(Actor* thisx, PlayState* play2) {
     this->skelAnime.playSpeed = 2.75f * phi_fv0;
     this->skelAnime.playSpeed += 1.0f + Rand_ZeroFloat(1.25f);
 
-    sp34.x = play->envCtx.windDir.x;
-    sp34.y = play->envCtx.windDir.y + ((1.0f - phi_fv0) * 240.0f);
+    sp34.x = play->envCtx.windDirection.x;
+    sp34.y = play->envCtx.windDirection.y + ((1.0f - phi_fv0) * 240.0f);
     sp34.y = CLAMP(sp34.y, -118.0f, 118.0f);
-    sp34.z = play->envCtx.windDir.z;
+    sp34.z = play->envCtx.windDirection.z;
 
     phi_fv0 = CLAMP(phi_fv0, 0.1f, 0.4f);
     Math_ApproachF(&this->unk_2A4.x, sp34.x, phi_fv0, 1000.0f);

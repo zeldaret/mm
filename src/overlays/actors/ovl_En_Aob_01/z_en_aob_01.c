@@ -475,7 +475,7 @@ void EnAob01_BeforeRace_StartRace(EnAob01* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
         this->stateFlags |= ENAOB01_FLAG_STARTED_RACE;
-        func_800FD750(NA_BGM_HORSE);
+        Environment_ForcePlaySequence(NA_BGM_HORSE);
         play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_64;

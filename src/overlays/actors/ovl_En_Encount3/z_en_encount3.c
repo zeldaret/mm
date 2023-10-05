@@ -169,10 +169,10 @@ void EnEncount3_Update(Actor* thisx, PlayState* play2) {
 
     this->unk164 = this->unk160 / 60.0f;
     if (this->unk164 != 0.0f) {
-        play->envCtx.lightSettings.fogNear = (960 - play->envCtx.unk_C4.fogNear) * this->unk164;
-        play->envCtx.lightSettings.fogColor[0] = (40.0f - play->envCtx.unk_C4.fogColor[0]) * this->unk164;
-        play->envCtx.lightSettings.fogColor[1] = (10.0f - play->envCtx.unk_C4.fogColor[1]) * this->unk164;
-        play->envCtx.lightSettings.fogColor[2] = (0.0f - play->envCtx.unk_C4.fogColor[2]) * this->unk164;
+        play->envCtx.adjLightSettings.fogNear = (960 - play->envCtx.lightSettings.fogNear) * this->unk164;
+        play->envCtx.adjLightSettings.fogColor[0] = (40.0f - play->envCtx.lightSettings.fogColor[0]) * this->unk164;
+        play->envCtx.adjLightSettings.fogColor[1] = (10.0f - play->envCtx.lightSettings.fogColor[1]) * this->unk164;
+        play->envCtx.adjLightSettings.fogColor[2] = (0.0f - play->envCtx.lightSettings.fogColor[2]) * this->unk164;
     }
 }
 

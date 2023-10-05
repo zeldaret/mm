@@ -1073,9 +1073,9 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->deflectCount = 0;
         this->maskType = SK_MASK_TYPE_NORMAL;
         this->animIndex = SK_ANIM_IDLE;
-        this->fogR = play->lightCtx.fogColor.r;
-        this->fogG = play->lightCtx.fogColor.g;
-        this->fogB = play->lightCtx.fogColor.b;
+        this->fogR = play->lightCtx.fogColor[0];
+        this->fogG = play->lightCtx.fogColor[1];
+        this->fogB = play->lightCtx.fogColor[2];
 
         if ((play->sceneId == SCENE_LOST_WOODS) && (gSaveContext.sceneLayer == 1)) {
             this->alpha = 0;
@@ -1643,9 +1643,9 @@ void DmStk_HandleCutscene(DmStk* this, PlayState* play) {
             this->fadeInState++;
         }
 
-        this->fogR = play->lightCtx.fogColor.r * this->fogScale;
-        this->fogG = play->lightCtx.fogColor.g * this->fogScale;
-        this->fogB = play->lightCtx.fogColor.b * this->fogScale;
+        this->fogR = play->lightCtx.fogColor[0] * this->fogScale;
+        this->fogG = play->lightCtx.fogColor[1] * this->fogScale;
+        this->fogB = play->lightCtx.fogColor[2] * this->fogScale;
     } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_FOG) {
         if (this->fogN < 996) {
             this->fogN += 10;
