@@ -42,8 +42,8 @@ void BgHakuginElvpole_Init(Actor* thisx, PlayState* play) {
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     this->unk_15C = 0;
     this->unk_160 = false;
-    if ((BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor) != 0x7F) &&
-        Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor))) {
+    if ((BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor) != 0x7F) &&
+        Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->unk_15E = 0x64;
     } else {
         this->unk_15E = -1;
@@ -81,12 +81,12 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
             sp28 = true;
         } else {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 320.0f;
-            Flags_UnsetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor));
+            Flags_UnsetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor));
             this->unk_15E = -1;
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
         }
-    } else if ((BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor) != 0x7F) &&
-               Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor))) {
+    } else if ((BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor) != 0x7F) &&
+               Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->unk_15E = 0x64;
         this->unk_160 = true;
     }

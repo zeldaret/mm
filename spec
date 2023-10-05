@@ -476,8 +476,6 @@ beginseg
     include "build/src/code/z_kaleido_setup.o"
     include "build/src/code/z_kanfont.o"
     include "build/src/code/z_kankyo.o"
-    include "build/data/code/z_kankyo.data.o"
-    include "build/data/code/z_kankyo.bss.o"
     include "build/src/code/z_lib.o"
     include "build/src/code/z_lifemeter.o"
     include "build/src/code/z_lights.o"

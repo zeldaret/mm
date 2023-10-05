@@ -5432,7 +5432,7 @@ void Interface_StartMoonCrash(PlayState* play) {
     }
 
     gSaveContext.save.day = 4;
-    gSaveContext.save.daysElapsed = 4;
+    gSaveContext.save.eventDayCount = 4;
     gSaveContext.save.time = CLOCK_TIME(6, 0) + 10;
     play->nextEntrance = ENTRANCE(TERMINA_FIELD, 12);
     gSaveContext.nextCutsceneIndex = 0;

@@ -112,7 +112,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp7C);
     this->unk_19A = 0;
     this->unk_198 = 0;
-    this->switchFlag = OBJHAKAISI_GET_SWITCHFLAG(thisx);
+    this->switchFlag = OBJHAKAISI_GET_SWITCH_FLAG(thisx);
     this->csId = this->dyna.actor.csId;
 
     if (this->switchFlag == 0xFF) {

@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define ENELFBUB_GET_SWITCHFLAG(thisx) ((((thisx)->params) & 0xFE00) >> 9)
+#define ENELFBUB_GET_SWITCH_FLAG(thisx) ((((thisx)->params) & 0xFE00) >> 9)
 
 struct EnElfbub;
 

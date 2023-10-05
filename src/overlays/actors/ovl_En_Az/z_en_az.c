@@ -1526,7 +1526,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
                             play->msgCtx.msgMode = MSGMODE_PAUSED;
-                            func_800FD750(NA_BGM_TIMED_MINI_GAME);
+                            Environment_ForcePlaySequence(NA_BGM_TIMED_MINI_GAME);
                             func_80A94AB8(this, play, 1);
                             func_80A979DC(this, play);
                         } else {
@@ -1571,7 +1571,7 @@ void func_80A97C4C(EnAz* this, PlayState* play) {
     func_80A97410(this, play);
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3) || (this->unk_2FA == 6) || (this->unk_2FA == 8)) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_01);
-        func_800FD750(NA_BGM_TIMED_MINI_GAME);
+        Environment_ForcePlaySequence(NA_BGM_TIMED_MINI_GAME);
         play->nextEntrance = Entrance_CreateFromSpawn(1);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;

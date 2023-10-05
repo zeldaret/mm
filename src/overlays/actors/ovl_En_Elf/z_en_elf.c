@@ -1323,7 +1323,7 @@ void func_8088FC34(EnElf* this, PlayState* play) {
         } else {
             Math_StepToF(&this->unk_240, 1.0f, 0.05f);
         }
-        func_800FD2B4(play, SQ(this->unk_240), player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f);
+        Environment_AdjustLights(play, SQ(this->unk_240), player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f);
     }
 }
 
@@ -1521,8 +1521,8 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     this->elfMsg = NULL;
     this->timer++;
 
-    if ((this->unk_240 >= 0.0f) &&
-        func_800FD2B4(play, SQ(this->unk_240) * this->unk_240, player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f)) {
+    if ((this->unk_240 >= 0.0f) && Environment_AdjustLights(play, SQ(this->unk_240) * this->unk_240,
+                                                            player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f)) {
         Math_StepToF(&this->unk_240, -0.05f, 0.05f);
     }
 

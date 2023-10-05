@@ -364,7 +364,7 @@ void func_80B0FD8C(EnGb2* this, PlayState* play) {
 }
 
 void func_80B0FE18(PlayState* play) {
-    func_800FD750(NA_BGM_MINI_BOSS);
+    Environment_ForcePlaySequence(NA_BGM_MINI_BOSS);
     play->nextEntrance = ENTRANCE(GHOST_HUT, 1);
     play->transitionType = TRANS_TYPE_64;
     gSaveContext.nextTransitionType = TRANS_TYPE_64;
@@ -681,7 +681,7 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
             case ENGB2_7_2:
                 CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 if (this->unk_26E == 0x14FB) {
-                    Flags_SetSwitch(play, ENGB2_GET_7F8(&this->actor));
+                    Flags_SetSwitch(play, ENGB2_GET_SWITCH_FLAG(&this->actor));
                     Actor_Kill(&this->actor);
                     return;
                 }
@@ -752,7 +752,7 @@ void func_80B10DAC(EnGb2* this, PlayState* play) {
             if (this->csIdIndex != 2) {
                 this->actionFunc = func_80B10E98;
             } else {
-                Flags_SetSwitch(play, ENGB2_GET_7F8(&this->actor));
+                Flags_SetSwitch(play, ENGB2_GET_SWITCH_FLAG(&this->actor));
                 this->actionFunc = func_80B10868;
             }
         } else {
@@ -776,7 +776,7 @@ void func_80B10E98(EnGb2* this, PlayState* play) {
             if ((this->unk_26E != 0x14E8) && (this->unk_26E != 0x14EA)) {
                 CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->actionFunc = func_80B10B5C;
-            } else if (Flags_GetSwitch(play, ENGB2_GET_7F8(&this->actor))) {
+            } else if (Flags_GetSwitch(play, ENGB2_GET_SWITCH_FLAG(&this->actor))) {
                 this->actionFunc = func_80B10A48;
             } else {
                 CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
@@ -936,7 +936,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            if (Flags_GetSwitch(play, ENGB2_GET_7F8(thisx))) {
+            if (Flags_GetSwitch(play, ENGB2_GET_SWITCH_FLAG(thisx))) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -950,7 +950,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
         case ENGB2_7_2:
             this->csIdIndex = 0;
             this->csIdList[0] = this->actor.csId;
-            if (Flags_GetSwitch(play, ENGB2_GET_7F8(thisx))) {
+            if (Flags_GetSwitch(play, ENGB2_GET_SWITCH_FLAG(thisx))) {
                 Actor_Kill(&this->actor);
                 return;
             }

@@ -879,7 +879,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x3475:
                     SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_START);
-                    func_800FD750(NA_BGM_HORSE);
+                    Environment_ForcePlaySequence(NA_BGM_HORSE);
                     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
                     play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
                     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1176,7 +1176,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x3475:
                     SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_START);
-                    func_800FD750(NA_BGM_HORSE);
+                    Environment_ForcePlaySequence(NA_BGM_HORSE);
                     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
                     play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
                     play->transitionTrigger = TRANS_TRIGGER_START;

@@ -481,7 +481,7 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
     EYEGORE_SET_SPH_DIM(this->bodyCollider.elements[4], 300, 200, 0, 25, 1.0f);
     EYEGORE_SET_SPH_DIM(this->bodyCollider.elements[5], 2100, -300, 0, 37, 1.0f);
 
-    this->switchFlag = EYEGORE_GET_SWITCH(&this->actor);
+    this->switchFlag = EYEGORE_GET_SWITCH_FLAG(&this->actor);
     if (this->switchFlag == 0x7F) {
         this->switchFlag = -1;
     }

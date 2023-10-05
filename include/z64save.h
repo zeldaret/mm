@@ -327,7 +327,7 @@ typedef struct Save {
     /* 0x10 */ s32 isNight;                             // "asahiru_fg"
     /* 0x14 */ s32 timeSpeedOffset;                     // "change_zelda_time"
     /* 0x18 */ s32 day;                                 // "totalday"
-    /* 0x1C */ s32 daysElapsed;                         // "eventday"
+    /* 0x1C */ s32 eventDayCount;                       // "eventday"
     /* 0x20 */ u8 playerForm;                           // "player_character"
     /* 0x21 */ u8 snowheadCleared;                      // "spring_flag"
     /* 0x22 */ u8 hasTatl;                              // "bell_flag"
