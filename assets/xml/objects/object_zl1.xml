@@ -38,14 +38,11 @@
 
 
         <!-- Textures -->
-        <!-- <Texture Name="object_zl1_Tex_006CD8" OutName="tex_006CD8" Format="rgba16" Width="16" Height="16" Offset="0x6CD8" /> -->
         <Texture Name="gChildZelda1TLUT_6CD8" OutName="child_zelda_1_tlut_6CD8" Format="rgba16" Width="252" Height="1" Offset="0x6CD8" />
-        <!-- <Blob Name="object_zl1_Blob_006ED8" Size="0x1F0" Offset="0x6ED8" /> -->
         <Texture Name="gChildZelda1TLUT_6ED0" OutName="child_zelda_1_tlut_6ED0" Format="rgba16" Width="252" Height="1" Offset="0x6ED0" />
-        <!-- <Texture Name="object_zl1_TLUT_0070C8" OutName="tlut_0070C8" Format="rgba16" Width="16" Height="16" Offset="0x70C8" /> -->
         <Texture Name="gChildZelda1TLUT_70C8" OutName="child_zelda_1_tlut_70C8" Format="rgba16" Width="160" Height="1" Offset="0x70C8" />
-        <!-- <Blob Name="object_zl1_Blob_0072C8" Size="0x740" Offset="0x72C8" /> -->
         <Texture Name="gChildZelda1EyeOpenLookingUpRightTex" OutName="child_zelda_1_eye_open_looking_up_right" Format="ci8" Width="32" Height="32" Offset="0x7208" TlutOffset="0x6CD8" />
+        <!-- <Blob Name="object_zl1_Blob_0072C8" Size="0x740" Offset="0x72C8" /> -->
         <Texture Name="gChildZelda1MouthNeutralTex" OutName="child_zelda_1_mouth_neutral" Format="ci8" Width="32" Height="32" Offset="0x7608" TlutOffset="0x6ED0" />
         <Texture Name="gChildZelda1HeaddressGradientTex" OutName="child_zelda_1_headdress_gradient" Format="ci8" Width="8" Height="8" Offset="0x7A08" TlutOffset="0x70C8" />
         <Texture Name="gChildZelda1SkinGradientTex" OutName="child_zelda_1_skin_gradient" Format="rgba16" Width="8" Height="8" Offset="0x7A48" />
@@ -60,7 +57,6 @@
         <Texture Name="gChildZelda1AlternateDressLiningTex" OutName="child_zelda_1_alternate_dress_lining" Format="rgba16" Width="8" Height="16" Offset="0x8648" />
         <Texture Name="gChildZelda1BootTex" OutName="child_zelda_1_boot" Format="rgba16" Width="8" Height="8" Offset="0x8748" />
         <Texture Name="gChildZelda1BootShaftTex" OutName="child_zelda_1_boot_shaft" Format="rgba16" Width="8" Height="8" Offset="0x87C8" />
-        <!-- <Blob Name="object_zl1_Blob_008848" Size="0x2000" Offset="0x8848" /> -->
         <Texture Name="gChildZelda1EyeOpenLookingLeftTex" OutName="child_zelda_1_eye_open_looking_left" Format="ci8" Width="32" Height="32" Offset="0x8848" TlutOffset="0x6CD8" />
         <Texture Name="gChildZelda1EyeOpenLookingRightTex" OutName="child_zelda_1_eye_open_looking_right" Format="ci8" Width="32" Height="32" Offset="0x8C48" TlutOffset="0x6CD8" />
         <Texture Name="gChildZelda1MouthFrowningTex" OutName="child_zelda_1_mouth_frowning" Format="ci8" Width="32" Height="32" Offset="0x9048" TlutOffset="0x6ED0" />
@@ -72,7 +68,6 @@
         <Texture Name="gChildZelda1Tex_A848" OutName="child_zelda_1_tex_A848" Format="rgba16" Width="8" Height="8" Offset="0xA848" />
         <Texture Name="gChildZelda1HeaddressTex_A8C8" OutName="child_zelda_1_headdress_A8C8" Format="ci8" Width="8" Height="16" Offset="0xA8C8" TlutOffset="0x70C8" />
         <Texture Name="gChildZelda1HeaddressStripeTex" OutName="child_zelda_1_headdress_stripe" Format="ci8" Width="16" Height="32" Offset="0xA948" TlutOffset="0x70C8" />
-        <!-- <Blob Name="object_zl1_Blob_00AB48" Size="0x400" Offset="0xAB48" /> -->
         <Texture Name="gChildZelda1MouthOpenSmilingTex" OutName="child_zelda_1_mouth_open_smiling" Format="ci8" Width="32" Height="32" Offset="0xAB48" TlutOffset="0x6ED0" />
 
         <!-- Child Zelda 1 Limb DisplayLists -->
