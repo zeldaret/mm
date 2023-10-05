@@ -61,7 +61,6 @@ void func_80B0D9CC(BossHakugin* this);
 void func_80B0DFA8(BossHakugin* this);
 void func_80B0E548(Actor* thisx, PlayState* play2);
 
-#if 0
 ActorInit Boss_Hakugin_InitVars = {
     ACTOR_BOSS_HAKUGIN,
     ACTORCAT_BOSS,
@@ -74,121 +73,298 @@ ActorInit Boss_Hakugin_InitVars = {
     (ActorFunc)BossHakugin_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[19] = {
-static ColliderJntSphElementInit D_80B0E700[19] = {
+static ColliderJntSphElementInit sJntSphElementsInit[19] = {
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NONE,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 16, { { 1300, 200, 0 }, 30 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 15, { { 1400, 300, 0 }, 35 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 2, { { 1600, -400, 0 }, 26 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 6, { { 1700, 200, 400 }, 18 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 8, { { 1000, 0, 0 }, 10 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 9, { { 500, 0, 0 }, 9 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 11, { { 1700, 200, -400 }, 18 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 13, { { 1000, 0, 0 }, 10 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 14, { { 500, 0, 0 }, 9 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 21, { { 800, 0, 400 }, 15 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 22, { { 500, 200, 0 }, 9 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 24, { { 300, 0, 0 }, 8 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 25, { { 500, 100, 0 }, 9 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 28, { { 800, 0, -400 }, 15 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 29, { { 500, 200, 0 }, 9 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 31, { { 300, 0, 0 }, 8 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 32, { { 500, 100, 0 }, 9 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 16, { { 2400, -400, -2900 }, 12 }, 270 },
     },
     {
-        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_HITMARK, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK2,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON | BUMP_NO_HITMARK,
+            OCELEM_ON,
+        },
         { 16, { { 2400, -400, 2900 }, 12 }, 270 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80B0E9AC = {
-    { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    ARRAY_COUNT(sJntSphElementsInit), D_80B0E700, // sJntSphElementsInit,
+static ColliderJntSphInit sJntSphInit = {
+    {
+        COLTYPE_METAL,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    ARRAY_COUNT(sJntSphElementsInit),
+    sJntSphElementsInit,
 };
 
-// static ColliderTrisElementInit sTrisElementsInit[1] = {
-static ColliderTrisElementInit D_80B0E9BC[1] = {
+static ColliderTrisElementInit sTrisElementsInit[1] = {
     {
-        { ELEMTYPE_UNK5, { 0x20000000, 0x03, 0x08 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK5,
+            { 0x20000000, 0x03, 0x08 },
+            { 0x00000000, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NONE,
+            BUMP_NONE,
+            OCELEM_NONE,
+        },
         { { { 22.0f, 0.0f, 100.0f }, { 0.0f, 0.0f, -100.0f }, { -22.0f, 0.0f, 100.0f } } },
     },
 };
 
-// static ColliderTrisInit sTrisInit = {
-static ColliderTrisInit D_80B0E9F8 = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_NONE, OC2_TYPE_1, COLSHAPE_TRIS, },
-    ARRAY_COUNT(sTrisElementsInit), D_80B0E9BC, // sTrisElementsInit,
+static ColliderTrisInit sTrisInit = {
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_NONE,
+        OC1_NONE,
+        OC2_TYPE_1,
+        COLSHAPE_TRIS,
+    },
+    ARRAY_COUNT(sTrisElementsInit),
+    sTrisElementsInit,
 };
 
-// static ColliderSphereInit sSphereInit = {
-static ColliderSphereInit D_80B0EA08 = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_NONE, OC2_TYPE_2, COLSHAPE_SPHERE, },
-    { ELEMTYPE_UNK5, { 0x20000000, 0x00, 0x08 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_NONE, OCELEM_NONE, },
+static ColliderSphereInit sSphereInit = {
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_NONE,
+        OC1_NONE,
+        OC2_TYPE_2,
+        COLSHAPE_SPHERE,
+    },
+    {
+        ELEMTYPE_UNK5,
+        { 0x20000000, 0x00, 0x08 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_HARD,
+        BUMP_NONE,
+        OCELEM_NONE,
+    },
     { 1, { { 0, 0, 0 }, 23 }, 100 },
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B0EA34 = {
-    { COLTYPE_HARD, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x02, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_HARD,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x02, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NONE,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 170, 40, 0, { 0, 0, 0 } },
 };
 
-// static DamageTable sDamageTable = {
 static DamageTable D_80B0EA60 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
@@ -224,48 +400,29 @@ static DamageTable D_80B0EA60 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xC),
 };
 
-// sColChkInfoInit
 static CollisionCheckInfoInit D_80B0EA80 = { 30, 80, 100, MASS_IMMOVABLE };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B0EAD8[] = {
-    ICHAIN_S8(hintId, 27, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 27, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
+TexturePtr D_80B0EA88 = gGohtMetalPlateWithCirclePatternTex;
+
+s8 D_80B0EA8C[0x20] = {
+    -1, -1, 0,  -1, -1, -1, 3,   -1, 4,  5,   -1, 6,  -1,  7,   8,  1,
+    2,  -1, -1, -1, -1, 9,  0xA, -1, -1, 0xB, -1, -1, 0xC, 0xD, -1, -1,
 };
+s8 D_80B0EAAC = 0xE;
+s32 D_80B0EAB0[5] = { 0x1C, 0x18, 0x11, 0xD, 6 };
+Color_RGBA8 D_80B0EAC4 = { 0xFA, 0xFA, 0xFA, 0xFF };
+Color_RGBA8 D_80B0EAC8 = { 0xB4, 0xB4, 0xB4, 0xFF };
+Color_RGB8 D_80B0EACC = { 0, 0x96, 0xFF };
+Color_RGB8 D_80B0EAD0 = { 0, 0xFF, 0xFF };
 
-#endif
-
-extern ColliderJntSphElementInit D_80B0E700[19];
-extern ColliderJntSphInit D_80B0E9AC;
-extern ColliderTrisElementInit D_80B0E9BC[1];
-extern Vec3f D_80B0E9D4[3];
-extern ColliderTrisInit D_80B0E9F8;
-extern ColliderSphereInit D_80B0EA08;
-extern ColliderCylinderInit D_80B0EA34;
-extern DamageTable D_80B0EA60;
-extern CollisionCheckInfoInit D_80B0EA80;
-extern TexturePtr D_80B0EA88;
-extern s8 D_80B0EA8C[]; // sLimbToBodyParts
-extern s8 D_80B0EAAC;
-extern s32 D_80B0EAB0[5];
-extern Color_RGBA8 D_80B0EAC4;
-extern Color_RGBA8 D_80B0EAC8;
-extern Color_RGB8 D_80B0EACC;
-extern Color_RGB8 D_80B0EAD0;
-extern s32 D_80B0EAD4;
-extern InitChainEntry D_80B0EAD8[];
-extern Vec3f D_80B0EAE8;
-extern Vec3f D_80B0EAF4;
-extern Vec3f D_80B0EB00;
-extern Vec3f D_80B0EB0C;
-extern Vec3f D_80B0EB18;
-
-#ifdef NON_MATCHING
-// requires in-function static, too lazy to import all the data right now
 void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     static s32 D_80B0EAD4 = 0;
+    static InitChainEntry D_80B0EAD8[] = {
+        ICHAIN_S8(hintId, 27, ICHAIN_CONTINUE),
+        ICHAIN_VEC3F_DIV1000(scale, 27, ICHAIN_CONTINUE),
+        ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
+        ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
+    };
     PlayState* play = play2;
     BossHakugin* this = THIS;
     Actor** actorPtr;
@@ -280,14 +437,14 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
         D_80B0EA88 = Lib_SegmentedToVirtual(D_80B0EA88);
     }
 
-    Collider_InitAndSetJntSph(play, &this->unk_0484, &this->actor, &D_80B0E9AC, this->unk_04A4);
+    Collider_InitAndSetJntSph(play, &this->unk_0484, &this->actor, &sJntSphInit, this->unk_04A4);
     for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
-        Collider_InitAndSetTris(play, &this->unk_2618[i].unk_14, &this->actor, &D_80B0E9F8, &this->unk_2618[i].unk_34);
+        Collider_InitAndSetTris(play, &this->unk_2618[i].unk_14, &this->actor, &sTrisInit, &this->unk_2618[i].unk_34);
     }
 
-    Collider_InitAndSetSphere(play, &this->unk_37B8, &this->actor, &D_80B0EA08);
+    Collider_InitAndSetSphere(play, &this->unk_37B8, &this->actor, &sSphereInit);
     this->unk_37B8.dim.worldSphere.radius = 40;
-    Collider_InitAndSetCylinder(play, &this->unk_0964, &this->actor, &D_80B0EA34);
+    Collider_InitAndSetCylinder(play, &this->unk_0964, &this->actor, &sCylinderInit);
     this->unk_0964.dim.pos.x = (this->actor.world.pos.x - 50.0f);
     this->unk_0964.dim.pos.y = this->actor.world.pos.y;
     this->unk_0964.dim.pos.z = this->actor.world.pos.z;
@@ -340,9 +497,22 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
         func_80B09E84(this);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/BossHakugin_Init.s")
-#endif
+
+Vec3f D_80B0EAE8 = { 492.0f, 28.0f, -1478.0f };
+Vec3f D_80B0EAF4 = { 894.0f, 176.0f, -1600.0f };
+Vec3f D_80B0EB00 = { 972.0f, 176.0f, -1600.0f };
+Vec3f D_80B0EB0C = { 377.0f, 140.0f, -1600.0f };
+Vec3f D_80B0EB18 = { 282.0f, 108.0f, -1600.0f };
+s32 D_80B0EB24[5] = { 0, 0xF, 0x1A, 0x21, 0x24 };
+
+typedef struct {
+    s32 unk_00;
+    u32 unk_04;
+} BossHakuginUnkStruct_80B0A8C4;
+
+BossHakuginUnkStruct_80B0A8C4 D_80B0EB38[6] = {
+    { 0, 0x28000 }, { 4, 0x1A0 }, { 7, 0x3400 }, { 0xE, 0xD0000000 }, { 0xA, 0x01A00000 }, { 1, 0x08104002 },
+};
 
 void BossHakugin_Destroy(Actor* thisx, PlayState* play) {
     BossHakugin* this = THIS;
@@ -618,7 +788,7 @@ void func_80B06558(BossHakuginUnkStruct_2618* arg0) {
     Matrix_SetTranslateRotateYXZ(arg0->unk_00.x, arg0->unk_00.y, arg0->unk_00.z, &arg0->unk_0E);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     for (i = 0; i < 3; i++) {
-        Matrix_MultVec3f(&D_80B0E9D4[i], &sp38[i]);
+        Matrix_MultVec3f(&sTrisElementsInit[0].dim.vtx[i], &sp38[i]);
     }
     Collider_SetTrisVertices(&arg0->unk_14, 0, &sp38[0], &sp38[1], &sp38[2]);
 }
@@ -1420,9 +1590,7 @@ void func_80B09178(BossHakugin* this) {
     this->actionFunc = func_80B091D8;
 }
 
-// TODO: Probably a better way to clean some of this up
 void func_80B091D8(BossHakugin* this, PlayState* play) {
-    s16 temp_v0;
     s16 var_v0;
 
     Math_ScaledStepToS(&this->unk_01A6, 0x800, 0x100);
@@ -1437,8 +1605,8 @@ void func_80B091D8(BossHakugin* this, PlayState* play) {
         } else {
             if (((this->unk_044C.x > 0.0f) && (this->unk_044C.x < this->unk_01C0)) ||
                 ((this->unk_044C.x <= 0.0f) && (-this->unk_044C.x < this->unk_01BC))) {
-                temp_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-                var_v0 = CLAMP(temp_v0, -0x3000, 0x3000);
+                var_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+                var_v0 = CLAMP(var_v0, -0x3000, 0x3000);
                 this->unk_019E = this->actor.shape.rot.y + var_v0;
             } else {
                 this->unk_019E =
@@ -1878,14 +2046,6 @@ void func_80B0A87C(BossHakugin* this) {
 
 #ifdef NON_MATCHING
 // non-matchings seem to be caused by accesses to D_80B0EB38
-typedef struct {
-    s32 unk_00;
-    s32 unk_04;
-} BossHakuginUnkStruct_80B0A8C4;
-
-extern BossHakuginUnkStruct_80B0A8C4 D_80B0EB38[5];
-extern s32 D_80B0EB24[5];
-
 void func_80B0A8C4(BossHakugin* this, PlayState* play) {
     EnBom* bomb;
     Vec3s* test;
@@ -2361,8 +2521,6 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-#ifdef NON_MATCHING
-// requires in-function static, too lazy to import all the data right now
 s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  Actor* thisx) {
     static s32 D_80B0EB68 = 4;
@@ -2390,8 +2548,8 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
     if (limbIndex == GOHT_LIMB_HEAD) {
         rot->z += this->unk_01A6;
         if (this->actionFunc == func_80B0A2A4) {
-            rot->z += this->unk_0374.y;
-            rot->y += this->unk_0374.z;
+            rot->z += this->unk_0374.z;
+            rot->y += this->unk_0374.y;
         }
     } else if (limbIndex == GOHT_LIMB_THORAX_WRAPPER) {
         rot->z += (s16)(this->unk_01A6 * 2);
@@ -2401,10 +2559,6 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
 
     return false;
 }
-#else
-s32 BossHakugin_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/BossHakugin_OverrideLimbDraw.s")
-#endif
 
 void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     BossHakugin* this = THIS;
@@ -2711,23 +2865,12 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     }
 }
 
-#if 0
 s32 D_80B0EB70[6] = { 1, 2, 3, 3, 2, 1 };
 s32 D_80B0EB88[7] = { 2, 3, 4, 4, 4, 3, 2 };
 s32 D_80B0EBA4[8] = { 2, 3, 4, 4, 4, 4, 3, 2 };
-s32 D_80B0EBC4[14] = { 2, 4, 5, 6, 7, 8, 8, 8, 8, 7, 6, 5, 4, 2 };
-s32 D_80B0EBFC[15] = { 1, -1, 1, 1, 3, 4, 1, 6, 7, 0, 9, 10, 0, 12, 13 };
-u8 D_80B0EC38[15] = { 1, 2, 1, 0, 3, 3, 0, 3, 3, 0, 3, 3, 0, 3, 3 };
-#else
-// These are the different sizes wdiths
-extern s32 D_80B0EB70[];
-extern s32 D_80B0EB88[];
-extern s32 D_80B0EBA4[];
-extern s32 D_80B0EBC4[];
-
-extern s32 D_80B0EBFC[]; // sParentBodyParts
-extern u8 D_80B0EC38[];  // sShadowSizes
-#endif
+s32 D_80B0EBC4[0xE] = { 2, 4, 5, 6, 7, 8, 8, 8, 8, 7, 6, 5, 4, 2 };
+s32 D_80B0EBFC[0xF] = { 1, -1, 1, 1, 3, 4, 1, 6, 7, 0, 9, 0xA, 0, 0xC, 0xD };
+u8 D_80B0EC38[0x18] = { 1, 2, 1, 0, 3, 3, 0, 3, 3, 0, 3, 3, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
     s32 index;
@@ -2857,6 +3000,7 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
 }
 
 #ifdef NON_MATCHING
+// Saved float register alloc. Seems related to spB4.
 void func_80B0D9CC(BossHakugin* this) {
     s32 var_s3;
     Vec3f spC8;
