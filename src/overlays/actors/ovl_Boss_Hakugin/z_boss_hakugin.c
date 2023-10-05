@@ -404,7 +404,7 @@ static CollisionCheckInfoInit D_80B0EA80 = { 30, 80, 100, MASS_IMMOVABLE };
 
 TexturePtr D_80B0EA88 = gGohtMetalPlateWithCirclePatternTex;
 
-s8 D_80B0EA8C[0x20] = {
+s8 D_80B0EA8C[] = {
     -1, -1, 0,  -1, -1, -1, 3,   -1, 4,  5,   -1, 6,  -1,  7,   8,  1,
     2,  -1, -1, -1, -1, 9,  0xA, -1, -1, 0xB, -1, -1, 0xC, 0xD, -1, -1, 0xE
 };
