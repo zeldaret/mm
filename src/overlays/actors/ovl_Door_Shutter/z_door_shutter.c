@@ -697,7 +697,8 @@ void DoorShutter_Draw(Actor* thisx, PlayState* play) {
         }
 
         if (sp44->unk_04 != 0) {
-            TransitionActorEntry* transitionEntry = &play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor)];
+            TransitionActorEntry* transitionEntry =
+                &play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor)];
 
             if ((play->roomCtx.prevRoom.num >= 0) ||
                 (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {

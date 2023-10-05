@@ -1,8 +1,9 @@
 #include "global.h"
 #include "gfx.h"
+#include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-void MapDisp_DestroyIMap(PlayState* play);
-void MapDisp_InitIMap(PlayState* play);
+void MapDisp_DestroyMapI(PlayState* play);
+void MapDisp_InitMapI(PlayState* play);
 
 extern s32 D_801BEAD0[4]; // G_IM_SIZ
 extern s32 D_801BEAE0[4]; // siz_LOAD_BLOCK
@@ -37,9 +38,9 @@ extern TexturePtr D_02003F20;
 extern Gfx D_0401ED00[];
 extern TexturePtr D_0C000000;
 
-void MapDisp_GetIMapTexture(void* dst, s32 iMapId) {
-    if (func_80109A98(iMapId) != 0) {
-        CmpDma_LoadFile(SEGMENT_ROM_START(map_i_static), iMapId, dst, func_80109A98(iMapId));
+void MapDisp_GetMapITexture(void* dst, s32 mapId) {
+    if (MapDisp_GetSizeOfMapITex(mapId) != 0) {
+        CmpDma_LoadFile(SEGMENT_ROM_START(map_i_static), mapId, dst, MapDisp_GetSizeOfMapITex(mapId));
     }
 }
 
@@ -69,11 +70,11 @@ s32 func_80102EF0(PlayState* play) {
     if (curRoom == -1) {
         return false;
     }
-    entry = &D_801BEBB8.unk0->entry[curRoom];
+    entry = &D_801BEBB8.minimapList->entry[curRoom];
     if (entry->mapId == 0xFFFF) {
         return false;
     }
-    if (func_80109AD8(entry->mapId) == 0x3A) {
+    if (MapData_GetMapIId(entry->mapId) == MAPDATA_MAP_I_MAX) {
         return false;
     }
     return true;
@@ -96,37 +97,37 @@ f32 func_80102F9C(f32 arg0) {
     return 0.0f;
 }
 
-void MapDisp_GetMapTexDim(MinimapEntry* arg0, s32* out1, s32* out2) {
-    MapData_GetMapTexDim(arg0->mapId, out1, out2);
+void MapDisp_GetMapTexDim(MinimapEntry* minimapEntry, s32* width, s32* height) {
+    MapData_GetMapTexDim(minimapEntry->mapId, width, height);
 }
 
-void MapDisp_GetMapScale(MinimapEntry* arg0, s32* scale) {
-    MapData_GetMapScale(arg0->mapId, scale);
+void MapDisp_GetMapScale(MinimapEntry* minimapEntry, s32* scale) {
+    MapData_GetMapScale(minimapEntry->mapId, scale);
     if (*scale == 0) {
         *scale = 20;
     }
 }
 
-void MapDisp_GetMapPos(MinimapEntry* arg0, s32* arg1, s32* arg2) {
+void MapDisp_GetMapPos(MinimapEntry* minimapEntry, s32* offsetX, s32* offsetY) {
     s32 width;
     s32 height;
     s32 temp;
     s32 temp2;
 
-    if (arg0->mapId == 0xFFFF) {
-        *arg1 = 0;
-        *arg2 = 0;
+    if (minimapEntry->mapId == 0xFFFF) {
+        *offsetX = 0;
+        *offsetY = 0;
         return;
     }
-    MapDisp_GetMapTexDim(arg0, &width, &height);
-    func_801097C8(arg0->mapId, arg1, arg2);
-    if (arg0->unk8 & 1) {
+    MapDisp_GetMapTexDim(minimapEntry, &width, &height);
+    MapData_GetMapTexOffset(minimapEntry->mapId, offsetX, offsetY);
+    if (minimapEntry->unk8 & 1) {
         temp = width / 2;
-        *arg1 = (temp - *arg1) + temp;
+        *offsetX = (temp - *offsetX) + temp;
     }
-    if (arg0->unk8 & 2) {
+    if (minimapEntry->unk8 & 2) {
         temp2 = height / 2;
-        *arg2 = (temp2 - *arg2) + temp2;
+        *offsetY = (temp2 - *offsetY) + temp2;
     }
 }
 
@@ -142,32 +143,32 @@ void func_801031D0(PlayState* play, TexturePtr arg1, s32 arg2, s32 arg3, s32 arg
     s32 var_t1;
     s32 var_v1_4;
     s32 var_v1_5;
-    Color_RGBA8 spAC;
-    s32 spA8;
+    Color_RGBA8 spAC_color;
+    s32 spA8_drawType;
 
-    spCC = &D_801BEBB8.unk0->entry[arg4];
+    spCC = &D_801BEBB8.minimapList->entry[arg4];
     if ((spCC->mapId != 0xFFFF) && (arg1 != 0)) {
         MapDisp_GetMapTexDim(spCC, &spC8, &spC4);
         OPEN_DISPS(play->state.gfxCtx);
         Gfx_SetupDL39_Overlay(play->state.gfxCtx);
-        func_801094A0(func_80109908(spCC->mapId), &spAC);
-        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, spAC.r, spAC.g, spAC.b,
-                        (s32)(play->interfaceCtx.minimapAlpha * arg5 * spAC.a / 255.0f));
-        func_801098A0(spCC->mapId, &spA8);
-        switch (spA8) {
-            case 1:
+        MapData_GetMapColor(MapData_GetMapColorIndex(spCC->mapId), &spAC_color);
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, spAC_color.r, spAC_color.g, spAC_color.b,
+                        (s32)(play->interfaceCtx.minimapAlpha * arg5 * spAC_color.a / 255.0f));
+        MapData_GetDrawType(spCC->mapId, &spA8_drawType);
+        switch (spA8_drawType) {
+            case MAPDATA_DRAW_1:
                 gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                 gDPLoadTextureBlock_4b(OVERLAY_DISP++, arg1, G_IM_FMT_IA, spC8, spC4, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
                 break;
-            case 3:
+            case MAPDATA_DRAW_3:
                 gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0,
                                   TEXEL0);
                 gDPLoadTextureBlock_4b(OVERLAY_DISP++, arg1, G_IM_FMT_I, spC8, spC4, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
                 break;
             default:
-            case 0:
+            case MAPDATA_DRAW_0:
                 gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                 gDPLoadTextureBlock_4b(OVERLAY_DISP++, arg1, G_IM_FMT_I, spC8, spC4, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -242,25 +243,25 @@ void func_80103A58(PlayState* play, Actor* actor) {
     s32 spC4;
     f32 spC0;
     u32 pad;
-    s32 var_v0;
+    s32 scale;
     Player* spB4;
     u32 pad2;
-    s32 spAC;
+    s32 spAC_scaleTemp;
     // GraphicsContext *spA8;
 
-    spDC = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
+    spDC = &D_801BEBB8.minimapList->entry[D_801BEBB8.curRoom];
     spB4 = GET_PLAYER(play);
     if (spDC->mapId != 0xFFFF) {
         MapDisp_GetMapPos(spDC, &spD0, &spCC);
         MapDisp_GetMapTexDim(spDC, &spC8, &spC4);
-        var_v0 = D_801BEBB8.unk0->scale;
-        if (D_801BEBB8.unk0->scale == 0) {
-            var_v0 = 20;
-        } else if (D_801BEBB8.unk0->scale == -1) {
-            MapDisp_GetMapScale(spDC, &spAC);
-            var_v0 = spAC;
+        scale = D_801BEBB8.minimapList->scale;
+        if (D_801BEBB8.minimapList->scale == 0) {
+            scale = 20;
+        } else if (D_801BEBB8.minimapList->scale == -1) {
+            MapDisp_GetMapScale(spDC, &spAC_scaleTemp);
+            scale = spAC_scaleTemp;
         }
-        spC0 = 1.0f / (f32)var_v0;
+        spC0 = 1.0f / (f32)scale;
         if (!MapDisp_IsDataRotated(play)) {
             spD8 = (s32)((actor->world.pos.x - (f32)spDC->unk2) * spC0) + D_801BEBB8.unk8 + D_801BEBB8.unkC -
                    D_801BEBB8.unk8 + spD0;
@@ -408,15 +409,15 @@ void func_801045AC(PlayState* play, Actor* actor) {
     if (sp50 < 0) {
         sp50 = 0.0f;
     }
-    sp7C = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
+    sp7C = &D_801BEBB8.minimapList->entry[D_801BEBB8.curRoom];
     if (sp7C->mapId != 0xFFFF) {
         MapDisp_GetMapPos(sp7C, &sp70, &sp6C);
         MapDisp_GetMapTexDim(sp7C, &sp68, &sp64);
 
-        var_v1 = D_801BEBB8.unk0->scale;
-        if (D_801BEBB8.unk0->scale == 0) {
+        var_v1 = D_801BEBB8.minimapList->scale;
+        if (D_801BEBB8.minimapList->scale == 0) {
             var_v1 = 20;
-        } else if (D_801BEBB8.unk0->scale == -1) {
+        } else if (D_801BEBB8.minimapList->scale == -1) {
             s32 sp4C;
             MapDisp_GetMapScale(sp7C, &sp4C);
             var_v1 = sp4C;
@@ -446,14 +447,14 @@ void func_801045AC(PlayState* play, Actor* actor) {
                 s32 pad;
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, D_801BEC2C[actor->category].r, D_801BEC2C[actor->category].g,
                                 D_801BEC2C[actor->category].b,
-                                (s32)((D_801BEC2C[actor->category].a * (1.0f - D_801BEBB8.unk24 * 0.05f) * sp50 *
-                                       play->interfaceCtx.minimapAlpha) /
+                                (s32)((D_801BEC2C[actor->category].a * (1.0f - D_801BEBB8.swapAnimTimer * 0.05f) *
+                                       sp50 * play->interfaceCtx.minimapAlpha) /
                                       255.0f));
 
-                var_v1 = D_801BEBB8.unk0->scale;
-                if (D_801BEBB8.unk0->scale == 0) {
+                var_v1 = D_801BEBB8.minimapList->scale;
+                if (D_801BEBB8.minimapList->scale == 0) {
                     var_v1 = 20;
-                } else if (D_801BEBB8.unk0->scale == -1) {
+                } else if (D_801BEBB8.minimapList->scale == -1) {
                     s32 sp34;
                     MapDisp_GetMapScale(sp7C, &sp34);
                     var_v1 = sp34;
@@ -511,33 +512,33 @@ void func_80104C80(PlayState* play) {
 void MapDisp_Init(PlayState* play) {
     s32 i;
 
-    D_801BEBB8.unk0 = NULL;
+    D_801BEBB8.minimapList = NULL;
     D_801BEBB8.curRoom = -1;
     D_801BEBB8.unk8 = 0xD2;
     D_801BEBB8.unkA = 0x8C;
     D_801BEBB8.unkC = 0xD2;
     D_801BEBB8.unkE = 0x8C;
-    D_801BEBB8.unk10 = NULL;
+    D_801BEBB8.lMapCurTex = NULL;
     D_801BEBB8.prevRoom = -1;
-    D_801BEBB8.unk18 = NULL;
+    D_801BEBB8.lMapPrevTex = NULL;
     D_801BEBB8.unk1C = 0;
     D_801BEBB8.unk1E = 0;
     D_801BEBB8.unk20 = 0;
-    D_801BEBB8.unk24 = 0;
+    D_801BEBB8.swapAnimTimer = 0;
 
     if (!Map_IsInBossArea(play)) {
         D_801BEC1C = play->numRooms;
     }
-    D_801BEBB8.unk28 = THA_AllocTailAlign16(&play->state.heap, 0x4000);
-    D_801BEBB8.unk2C = THA_AllocTailAlign16(&play->state.heap, 0x4000);
+    D_801BEBB8.texBuff0 = THA_AllocTailAlign16(&play->state.heap, 0x4000);
+    D_801BEBB8.texBuff1 = THA_AllocTailAlign16(&play->state.heap, 0x4000);
     func_80104C80(play);
     if (!Map_IsInBossArea(play)) {
-        D_801BEBB8.unk30 = 0;
-        D_801BEBB8.unk32 = 0;
-        D_801BEBB8.unk34 = 0x64;
-        D_801BEBB8.unk36 = 0x64;
-        D_801BEBB8.unk38 = (s16)(s32)((f32)D_801BEBB8.unk30 + ((f32)D_801BEBB8.unk34 * 0.5f));
-        D_801BEBB8.unk3A = (s16)(s32)((f32)D_801BEBB8.unk32 + ((f32)D_801BEBB8.unk36 * 0.5f));
+        D_801BEBB8.sceneMinX = 0;
+        D_801BEBB8.sceneMinZ = 0;
+        D_801BEBB8.sceneWidth = 100;
+        D_801BEBB8.sceneHeight = 100;
+        D_801BEBB8.sceneMidX = (s16)(s32)((f32)D_801BEBB8.sceneMinX + ((f32)D_801BEBB8.sceneWidth * 0.5f));
+        D_801BEBB8.sceneMidZ = (s16)(s32)((f32)D_801BEBB8.sceneMinZ + ((f32)D_801BEBB8.sceneHeight * 0.5f));
     }
     D_801BEBB8.unk3C = THA_AllocTailAlign16(&play->state.heap, D_801BEC1C * sizeof(s16));
 
@@ -549,7 +550,7 @@ void MapDisp_Init(PlayState* play) {
     for (i = 0; i < 32; i++) {
         D_801BEBB8.unk48[i] = -0x7FFF;
     }
-    MapDisp_InitIMap(play);
+    MapDisp_InitMapI(play);
     D_801BEBB8.unk58 = 0;
     D_801BEBB8.unk5A = 0;
     if (Map_IsInBossArea(play) != 0) {
@@ -568,7 +569,7 @@ void func_80104F34(PlayState* play) {
         D_801BEBB8.unk48[i1] = -0x7FFF;
     }
     for (i2 = 0; i2 < D_801BEC1C; i2++) {
-        MinimapEntry* mapEntry1 = &D_801BEBB8.unk0->entry[i2];
+        MinimapEntry* mapEntry1 = &D_801BEBB8.minimapList->entry[i2];
 
         if (mapEntry1->mapId == 0xFFFF) {
             continue;
@@ -599,7 +600,7 @@ void func_80104F34(PlayState* play) {
         }
     }
     for (i2 = 0; i2 < D_801BEC1C; i2++) {
-        MinimapEntry* mapEntry2 = &D_801BEBB8.unk0->entry[i2];
+        MinimapEntry* mapEntry2 = &D_801BEBB8.minimapList->entry[i2];
 
         D_801BEBB8.unk3C[i2] = -1;
 
@@ -629,7 +630,7 @@ void func_80104F34(PlayState* play) {
 s32 func_80105294(void) {
     T_801BEC70 sp4 = D_801BEC70;
 
-    if ((D_801BEBB8.unk0 == NULL) || (D_801BEBB8.unk58 < 0) || (D_801BEBB8.unk58 >= 5) || (D_801BEC1C == 0)) {
+    if ((D_801BEBB8.minimapList == NULL) || (D_801BEBB8.unk58 < 0) || (D_801BEBB8.unk58 >= 5) || (D_801BEC1C == 0)) {
         return 0x7B;
     }
     return sp4.unk0[D_801BEBB8.unk58];
@@ -641,30 +642,27 @@ s16 func_80105318(void) {
 
 // TransitionActor params test
 s32 func_80105328(s32 params) {
-    if (((((u16)params) >> 7) & 7) == 5) {
-        return 1;
+    if (ENDOOR_PARAMS_GET_TYPE((u16)params) == ENDOOR_TYPE_5) {
+        return true;
     }
-    return 0;
+    return false;
 }
 
 void func_8010534C(PlayState* play) {
-    TransitionActorList* transitionActors;
-    TransitionActorEntry* var_s0;
+    TransitionActorList* transitionActors = &D_801BEC24;
     s32 var_v0;
-    s32 var_s2;
+    s32 i;
 
-    transitionActors = &D_801BEC24;
-
-    for (var_s2 = 0; var_s2 < transitionActors->count; var_s2++) {
-        if (func_80105328(D_801F53B0[var_s2].params) != 0) {
-            if (ABS_ALT(D_801F53B0[var_s2].id) != 0x18) {
+    for (i = 0; i < transitionActors->count; i++) {
+        if (func_80105328(D_801F53B0[i].params) != 0) {
+            if (ABS_ALT(D_801F53B0[i].id) != 0x18) {
                 for (var_v0 = 0; var_v0 < D_801BEBB8.unk40; var_v0++) {
                     s32 temp = (D_801BEBB8.unk48[var_v0] - 5); // needed for matching
-                    if (((var_v0 == D_801BEBB8.unk40 - 1) &&
-                         (D_801F53B0[var_s2].pos.y >= (D_801BEBB8.unk48[var_v0] - 5))) ||
-                        ((var_v0 != D_801BEBB8.unk40 - 1) &&
-                         (D_801F53B0[var_s2].pos.y >= (D_801BEBB8.unk48[var_v0] - 5)) &&
-                         (D_801F53B0[var_s2].pos.y < (D_801BEBB8.unk48[var_v0 + 1] - 5)))) {
+                    if (((var_v0 == D_801BEBB8.unk40 - 1) && (D_801F53B0[i].pos.y >= (D_801BEBB8.unk48[var_v0] - 5)))
+
+                        ||
+                        ((var_v0 != D_801BEBB8.unk40 - 1) && (D_801F53B0[i].pos.y >= (D_801BEBB8.unk48[var_v0] - 5)) &&
+                         (D_801F53B0[i].pos.y < (D_801BEBB8.unk48[var_v0 + 1] - 5)))) {
                         D_801BEBB8.unk58 = var_v0;
                         return;
                     }
@@ -692,15 +690,15 @@ void func_8010549C(PlayState* play, void* segmentAddress) {
 
         D_801BEC14.entry = D_801F5130;
         if (play->colCtx.colHeader != NULL) {
-            D_801BEBB8.unk30 = play->colCtx.colHeader->minBounds.x;
-            D_801BEBB8.unk32 = play->colCtx.colHeader->minBounds.z;
-            D_801BEBB8.unk34 = play->colCtx.colHeader->maxBounds.x - play->colCtx.colHeader->minBounds.x;
-            D_801BEBB8.unk36 = play->colCtx.colHeader->maxBounds.z - play->colCtx.colHeader->minBounds.z;
-            D_801BEBB8.unk38 = D_801BEBB8.unk30 + (D_801BEBB8.unk34 * 0.5f);
-            D_801BEBB8.unk3A = D_801BEBB8.unk32 + (D_801BEBB8.unk36 * 0.5f);
+            D_801BEBB8.sceneMinX = play->colCtx.colHeader->minBounds.x;
+            D_801BEBB8.sceneMinZ = play->colCtx.colHeader->minBounds.z;
+            D_801BEBB8.sceneWidth = play->colCtx.colHeader->maxBounds.x - play->colCtx.colHeader->minBounds.x;
+            D_801BEBB8.sceneHeight = play->colCtx.colHeader->maxBounds.z - play->colCtx.colHeader->minBounds.z;
+            D_801BEBB8.sceneMidX = D_801BEBB8.sceneMinX + (D_801BEBB8.sceneWidth * 0.5f);
+            D_801BEBB8.sceneMidZ = D_801BEBB8.sceneMinZ + (D_801BEBB8.sceneHeight * 0.5f);
         }
     }
-    D_801BEBB8.unk0 = &D_801BEC14;
+    D_801BEBB8.minimapList = &D_801BEC14;
     func_80104F34(play);
     func_8010534C(play);
 }
@@ -717,7 +715,7 @@ void func_8010565C(PlayState* play, s32 num, void* segmentAddress) {
         D_801BEC20 = num;
     }
     D_801BEBB8.unk54 = D_801F5270;
-    D_801BEBB8.unk50 = D_801BEC20;
+    D_801BEBB8.numChests = D_801BEC20;
 }
 
 void func_80105818(PlayState* play, s32 num, TransitionActorEntry* transitionActorList) {
@@ -735,19 +733,19 @@ void func_80105818(PlayState* play, s32 num, TransitionActorEntry* transitionAct
 void MapDisp_Destroy(PlayState* play) {
     s32 i;
 
-    D_801BEBB8.unk0 = NULL;
+    D_801BEBB8.minimapList = NULL;
     D_801BEBB8.curRoom = -1;
     D_801BEBB8.unkC = 0xD2;
     D_801BEBB8.unkE = 0x8C;
-    D_801BEBB8.unk10 = NULL;
+    D_801BEBB8.lMapCurTex = NULL;
     D_801BEBB8.prevRoom = -1;
-    D_801BEBB8.unk18 = NULL;
+    D_801BEBB8.lMapPrevTex = NULL;
     D_801BEBB8.unk1C = 0;
     D_801BEBB8.unk1E = 0;
     D_801BEBB8.unk20 = 0;
-    D_801BEBB8.unk24 = 0;
-    D_801BEBB8.unk28 = NULL;
-    D_801BEBB8.unk2C = NULL;
+    D_801BEBB8.swapAnimTimer = 0;
+    D_801BEBB8.texBuff0 = NULL;
+    D_801BEBB8.texBuff1 = NULL;
 
     for (i = 0; i < D_801BEC1C; i++) {
         func_80102EA4(play, &D_801BEBB8.unk3C[i]);
@@ -759,9 +757,9 @@ void MapDisp_Destroy(PlayState* play) {
     D_801BEBB8.unk44 = 0;
     D_801BEBB8.unk4C = 0;
     D_801BEBB8.unk48 = NULL;
-    D_801BEBB8.unk50 = 0;
+    D_801BEBB8.numChests = 0;
     D_801BEBB8.unk54 = NULL;
-    MapDisp_DestroyIMap(play);
+    MapDisp_DestroyMapI(play);
     D_801BEBB8.unk5A = 0;
 }
 
@@ -770,39 +768,39 @@ void func_80105B34(PlayState* play) {
     s16 temp_a0_2;
     s16 temp_v1;
     s16 temp_v1_2;
-    s32 temp_v0;
 
-    if ((D_801BEBB8.unk0 != NULL) && (D_801BEC1C != 0)) {
+    if ((D_801BEBB8.minimapList != NULL) && (D_801BEC1C != 0)) {
         D_801BEBFA = 8 - play->pauseCtx.unk_256;
         if (D_801BEBB8.prevRoom != -1) {
-            temp_v0 = D_801BEBB8.unk24;
-            if (temp_v0 > 0) {
+            if (D_801BEBB8.swapAnimTimer > 0) {
                 temp_v1 = D_801BEBB8.unk8;
                 temp_a0 = D_801BEBB8.unkC;
                 if (temp_v1 != temp_a0) {
-                    D_801BEBB8.unkC = (s16)(s32)(((f32)(temp_v1 - temp_a0) / (f32)temp_v0) + (f32)temp_a0);
+                    D_801BEBB8.unkC =
+                        (s16)(s32)(((f32)(temp_v1 - temp_a0) / (f32)D_801BEBB8.swapAnimTimer) + (f32)temp_a0);
                 }
                 temp_v1_2 = D_801BEBB8.unkA;
                 temp_a0_2 = D_801BEBB8.unkE;
                 if (temp_v1_2 != temp_a0_2) {
-                    D_801BEBB8.unkE = (s16)(s32)(((f32)(temp_v1_2 - temp_a0_2) / (f32)temp_v0) + (f32)temp_a0_2);
+                    D_801BEBB8.unkE =
+                        (s16)(s32)(((f32)(temp_v1_2 - temp_a0_2) / (f32)D_801BEBB8.swapAnimTimer) + (f32)temp_a0_2);
                 }
-                D_801BEBB8.unk24 = temp_v0 - 1;
-                return;
+                D_801BEBB8.swapAnimTimer--;
+            } else {
+                D_801BEBB8.prevRoom = -1;
+                D_801BEBB8.swapAnimTimer = 0;
+                D_801BEBB8.unkC = D_801BEBB8.unk8;
+                D_801BEBB8.unkE = D_801BEBB8.unkA;
             }
-            D_801BEBB8.prevRoom = -1;
-            D_801BEBB8.unk24 = 0;
-            D_801BEBB8.unkC = D_801BEBB8.unk8;
-            D_801BEBB8.unkE = D_801BEBB8.unkA;
-            return;
+        } else {
+            D_801BEBB8.swapAnimTimer = 0;
         }
-        D_801BEBB8.unk24 = 0;
     }
 }
 
-void func_80105C40(s16 room) {
-    MinimapEntry* temp_s0;
-    MinimapEntry* sp58;
+void MapDisp_SwapRooms(s16 nextRoom) {
+    MinimapEntry* nextMinimapEntry;
+    MinimapEntry* prevMinimapEntry;
     s32 sp54;
     s32 sp50;
     s32 sp4C;
@@ -810,40 +808,41 @@ void func_80105C40(s16 room) {
     s32 sp44;
     s32 sp40;
 
-    if ((D_801BEBB8.unk0 != NULL) && (D_801BEC1C != 0) && (room != -1)) {
-        temp_s0 = &D_801BEBB8.unk0->entry[room];
-        if ((temp_s0->mapId < 5) || ((temp_s0->mapId >= 0x100) && (temp_s0->mapId < 0x162)) ||
-            temp_s0->mapId == 0xFFFF) {
+    if ((D_801BEBB8.minimapList != NULL) && (D_801BEC1C != 0) && (nextRoom != -1)) {
+        nextMinimapEntry = &D_801BEBB8.minimapList->entry[nextRoom];
+        if ((nextMinimapEntry->mapId < 5) ||
+            ((nextMinimapEntry->mapId >= 0x100) && (nextMinimapEntry->mapId < 0x162)) ||
+            nextMinimapEntry->mapId == 0xFFFF) {
 
             D_801BEBB8.prevRoom = D_801BEBB8.curRoom;
-            D_801BEBB8.curRoom = room;
-            D_801BEBB8.unk24 = 0x14;
+            D_801BEBB8.curRoom = nextRoom;
+            D_801BEBB8.swapAnimTimer = 20;
 
-            D_801BEBB8.unk18 = D_801BEBB8.unk10;
+            D_801BEBB8.lMapPrevTex = D_801BEBB8.lMapCurTex;
             sp54 = D_801BEBB8.unk8;
             sp50 = D_801BEBB8.unkA;
 
-            temp_s0 = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
+            nextMinimapEntry = &D_801BEBB8.minimapList->entry[D_801BEBB8.curRoom];
 
-            if (temp_s0->mapId == 0xFFFF) {
+            if (nextMinimapEntry->mapId == 0xFFFF) {
                 D_801BEBB8.unk1E = 0;
                 D_801BEBB8.unk8 = 0xD2;
                 D_801BEBB8.unkA = 0x8C;
                 D_801BEBB8.unkC = 0xD2;
                 D_801BEBB8.unkE = 0x8C;
-                D_801BEBB8.unk10 = NULL;
+                D_801BEBB8.lMapCurTex = NULL;
                 D_801BEBB8.unk1C = D_801BEBB8.unk1E;
                 return;
             }
-            MapDisp_GetMapPos(temp_s0, &sp44, &sp40);
-            MapDisp_GetMapTexDim(temp_s0, &sp4C, &sp48);
+            MapDisp_GetMapPos(nextMinimapEntry, &sp44, &sp40);
+            MapDisp_GetMapTexDim(nextMinimapEntry, &sp4C, &sp48);
             D_801BEBB8.unk8 = 0x127 - sp4C;
             D_801BEBB8.unkA = 0xDC - sp48;
             if (D_801BEBB8.prevRoom != -1) {
-                sp58 = &D_801BEBB8.unk0->entry[D_801BEBB8.prevRoom];
-                if (sp58->mapId == 0xFFFF) {
+                prevMinimapEntry = &D_801BEBB8.minimapList->entry[D_801BEBB8.prevRoom];
+                if (prevMinimapEntry->mapId == 0xFFFF) {
                     D_801BEBB8.unk1E = 0;
-                    D_801BEBB8.unk10 = NULL;
+                    D_801BEBB8.lMapCurTex = NULL;
                     D_801BEBB8.unk1C = D_801BEBB8.unk1E;
                     D_801BEBB8.unkC = D_801BEBB8.unk8;
                     D_801BEBB8.unkE = D_801BEBB8.unkA;
@@ -851,21 +850,23 @@ void func_80105C40(s16 room) {
                 } else {
                     s32 sp3C;
                     s32 sp38;
-                    s32 var_v0;
+                    s32 scale;
                     s32 pad;
-                    MapDisp_GetMapPos(sp58, &sp3C, &sp38);
-                    var_v0 = D_801BEBB8.unk0->scale;
-                    if (D_801BEBB8.unk0->scale == 0) {
-                        var_v0 = 20;
-                    } else if (D_801BEBB8.unk0->scale == -1) {
-                        s32 sp2C;
-                        MapDisp_GetMapScale(temp_s0, &sp2C);
-                        var_v0 = sp2C;
+                    MapDisp_GetMapPos(prevMinimapEntry, &sp3C, &sp38);
+                    scale = D_801BEBB8.minimapList->scale;
+                    if (D_801BEBB8.minimapList->scale == 0) {
+                        scale = 20;
+                    } else if (D_801BEBB8.minimapList->scale == -1) {
+                        s32 scaleTemp;
+                        MapDisp_GetMapScale(nextMinimapEntry, &scaleTemp);
+                        scale = scaleTemp;
                     }
                     D_801BEBB8.unk1C = (s16)(s32)(
-                        ((f32)sp44 + (((f32)sp58->unk2 - (f32)temp_s0->unk2) * (1.0f / var_v0))) - (f32)sp3C);
+                        ((f32)sp44 + (((f32)prevMinimapEntry->unk2 - (f32)nextMinimapEntry->unk2) * (1.0f / scale))) -
+                        (f32)sp3C);
                     D_801BEBB8.unk1E = (s16)(s32)(
-                        ((f32)sp40 + (((f32)sp58->unk6 - (f32)temp_s0->unk6) * (1.0f / var_v0))) - (f32)sp38);
+                        ((f32)sp40 + (((f32)prevMinimapEntry->unk6 - (f32)nextMinimapEntry->unk6) * (1.0f / scale))) -
+                        (f32)sp38);
                     D_801BEBB8.unkC = sp54 - D_801BEBB8.unk1C;
                     D_801BEBB8.unkE = sp50 - D_801BEBB8.unk1E;
                 }
@@ -874,21 +875,21 @@ void func_80105C40(s16 room) {
                 D_801BEBB8.unkC = D_801BEBB8.unk8;
                 D_801BEBB8.unkE = D_801BEBB8.unkA;
             }
-            D_801BEBB8.unk10 = NULL;
+            D_801BEBB8.lMapCurTex = NULL;
 
-            switch (func_80109714(temp_s0->mapId)) {
-                case 0:
-                    D_801BEBB8.unk10 = func_8010958C(temp_s0->mapId);
+            switch (MapData_MID_GetType(nextMinimapEntry->mapId)) {
+                case MAPDATA_MID_GAMEPLAY_DANGEON_KEEP:
+                    D_801BEBB8.lMapCurTex = MapData_GetMapTexGameplayDangeonKeep(nextMinimapEntry->mapId);
                     return;
-                case 1:
-                    if (D_801BEBB8.unk18 == D_801BEBB8.unk28) {
-                        D_801BEBB8.unk10 = D_801BEBB8.unk2C;
+                case MAPDATA_MID_MAP_GRAND_STATIC:
+                    if (D_801BEBB8.lMapPrevTex == D_801BEBB8.texBuff0) {
+                        D_801BEBB8.lMapCurTex = D_801BEBB8.texBuff1;
                     } else {
-                        D_801BEBB8.unk10 = D_801BEBB8.unk28;
+                        D_801BEBB8.lMapCurTex = D_801BEBB8.texBuff0;
                     }
-                    if (func_801096D4(temp_s0->mapId) != 0) {
-                        CmpDma_LoadFile(SEGMENT_ROM_START(map_grand_static), temp_s0->mapId - 0x100,
-                                      (s32)D_801BEBB8.unk10, func_801096D4(temp_s0->mapId));
+                    if (MapData_GetSizeOfMapGrandTex(nextMinimapEntry->mapId) != 0) {
+                        CmpDma_LoadFile(SEGMENT_ROM_START(map_grand_static), nextMinimapEntry->mapId - 0x100,
+                                        D_801BEBB8.lMapCurTex, MapData_GetSizeOfMapGrandTex(nextMinimapEntry->mapId));
                     }
                     break;
             }
@@ -908,15 +909,15 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
     s32 sp54;
     s32 var_v0;
 
-    sp6C = &D_801BEBB8.unk0->entry[D_801BEBB8.curRoom];
+    sp6C = &D_801BEBB8.minimapList->entry[D_801BEBB8.curRoom];
     if (sp6C->mapId != 0xFFFF) {
         f32 sp4C;
         MapDisp_GetMapPos(sp6C, &sp60, &sp5C);
         MapDisp_GetMapTexDim(sp6C, &sp58, &sp54);
-        var_v0 = D_801BEBB8.unk0->scale;
-        if (D_801BEBB8.unk0->scale == 0) {
+        var_v0 = D_801BEBB8.minimapList->scale;
+        if (D_801BEBB8.minimapList->scale == 0) {
             var_v0 = 20;
-        } else if (D_801BEBB8.unk0->scale == -1) {
+        } else if (D_801BEBB8.minimapList->scale == -1) {
             s32 sp48;
             MapDisp_GetMapScale(sp6C, &sp48);
             var_v0 = sp48;
@@ -987,20 +988,20 @@ s32 func_80106530(PlayState* play) {
     return false;
 }
 
-s32 func_8010657C(s32 arg0, s32 arg1) {
+s32 func_8010657C(s32 curRoom, s32 prevRoom) {
     MinimapEntry* entry;
     s16* temp1; // Can be removed, but adds readability
 
-    if ((arg0 == -1) || (arg1 == -1)) {
+    if ((curRoom == -1) || (prevRoom == -1)) {
         return 0;
     }
-    entry = &D_801BEBB8.unk0->entry[arg0];
+    entry = &D_801BEBB8.minimapList->entry[curRoom];
     temp1 = D_801BEBB8.unk3C;
-    if ((temp1[arg0] <= temp1[arg1]) && (temp1[arg1] <= (temp1[arg0] + ((entry->unk8 >> 2) & 7)))) {
+    if ((temp1[curRoom] <= temp1[prevRoom]) && (temp1[prevRoom] <= (temp1[curRoom] + ((entry->unk8 >> 2) & 7)))) {
         return 1;
     }
-    entry = &D_801BEBB8.unk0->entry[arg1];
-    if ((temp1[arg1] <= temp1[arg0]) && (temp1[arg0] <= (temp1[arg1] + ((entry->unk8 >> 2) & 7)))) {
+    entry = &D_801BEBB8.minimapList->entry[prevRoom];
+    if ((temp1[prevRoom] <= temp1[curRoom]) && (temp1[curRoom] <= (temp1[prevRoom] + ((entry->unk8 >> 2) & 7)))) {
         return 1;
     }
     return 0;
@@ -1009,16 +1010,17 @@ s32 func_8010657C(s32 arg0, s32 arg1) {
 void func_80106644(PlayState* play, s32 x, s32 z, s32 rot) {
     PauseContext* pauseCtx = &play->pauseCtx;
 
-    if ((D_801BEBB8.unk0 != 0) && ((s32)pauseCtx->state < 4) && (XREG(95) == 0) &&
+    if ((D_801BEBB8.minimapList != 0) && ((s32)pauseCtx->state < 4) && (XREG(95) == 0) &&
         (play->interfaceCtx.minimapAlpha != 0)) {
         if ((func_801064CC(play) == 0) && (D_801BEC1C != 0)) {
             if (func_80106450(play) != 0) {
-                func_801031D0(play, D_801BEBB8.unk10, D_801BEBB8.unkC, D_801BEBB8.unkE, D_801BEBB8.curRoom,
-                              1.0f - (D_801BEBB8.unk24 * 0.05f));
+                func_801031D0(play, D_801BEBB8.lMapCurTex, D_801BEBB8.unkC, D_801BEBB8.unkE, D_801BEBB8.curRoom,
+                              1.0f - (D_801BEBB8.swapAnimTimer * 0.05f));
                 if ((D_801BEBB8.curRoom != D_801BEBB8.prevRoom) &&
                     (func_8010657C(D_801BEBB8.curRoom, D_801BEBB8.prevRoom) != 0)) {
-                    func_801031D0(play, D_801BEBB8.unk18, D_801BEBB8.unkC + D_801BEBB8.unk1C,
-                                  D_801BEBB8.unkE + D_801BEBB8.unk1E, D_801BEBB8.prevRoom, D_801BEBB8.unk24 * 0.05f);
+                    func_801031D0(play, D_801BEBB8.lMapPrevTex, D_801BEBB8.unkC + D_801BEBB8.unk1C,
+                                  D_801BEBB8.unkE + D_801BEBB8.unk1E, D_801BEBB8.prevRoom,
+                                  D_801BEBB8.swapAnimTimer * 0.05f);
                 }
                 func_80104AE8(play);
             }
@@ -1047,85 +1049,84 @@ void MapDisp_ResetIMap(void) {
     D_801BEBB8.unk20 &= ~1;
 }
 
-void MapDisp_InitIMap(PlayState* play) {
+void MapDisp_InitMapI(PlayState* play) {
     MapDisp_ResetIMap();
 }
 
-void MapDisp_DestroyIMap(PlayState* play) {
+void MapDisp_DestroyMapI(PlayState* play) {
     MapDisp_ResetIMap();
 }
 
 // alloc pause screen dungeon map
 void* func_801068FC(PlayState* play, void* heap) {
     void* heapNext;
-    s32 temp_s2;
-    s32 temp_v0;
-    s32 var_s1;
+    s32 mapId;
+    s32 mapCompactId;
+    s32 dungeonMapRoomIter;
     s32 var_s2;
-    s32 var_s4;
+    s32 roomIter;
     MinimapEntry* entry;
     s32 var_s3;
 
     heapNext = heap;
-    if ((D_801BEBB8.unk0 == NULL) || (D_801BEC1C == 0)) {
+    if ((D_801BEBB8.minimapList == NULL) || (D_801BEC1C == 0)) {
         return heapNext;
     }
     D_801F56B0.rooms = 0;
 
     // loop for number of rooms
-    for (var_s4 = 0; var_s4 < D_801BEC1C; var_s4++) {
-        var_s2 = 0;
-        entry = &D_801BEBB8.unk0->entry[var_s4];
+    for (roomIter = 0; roomIter < D_801BEC1C; roomIter++) {
+        var_s2 = false;
+        entry = &D_801BEBB8.minimapList->entry[roomIter];
         if (entry->mapId == 0xFFFF) {
             continue;
-        } else {
-            temp_v0 = func_80109BA0(entry->mapId);
-            if (temp_v0 == -1) {
-                continue;
-            } else {
-                for (var_s1 = 0; var_s1 < D_801F56B0.rooms; var_s1++) {
-                    if (temp_v0 == D_801F56B0.unk4[var_s1]) {
-                        var_s2 = 1;
-                        break;
-                    }
-                }
-                if (var_s2 == 0) {
-                    D_801F56B0.unk4[D_801F56B0.rooms] = temp_v0;
-                    D_801F56B0.rooms += 1;
-                }
+        }
+        mapCompactId = MapData_GetMapCompactId(entry->mapId);
+        if (mapCompactId == -1) {
+            continue;
+        }
+        for (dungeonMapRoomIter = 0; dungeonMapRoomIter < D_801F56B0.rooms; dungeonMapRoomIter++) {
+            if (mapCompactId == D_801F56B0.unk4[dungeonMapRoomIter]) {
+                var_s2 = true;
+                break;
             }
+        }
+        if (var_s2 == false) {
+            D_801F56B0.unk4[D_801F56B0.rooms] = mapCompactId;
+            D_801F56B0.rooms += 1;
         }
     }
 
     D_801F56B0.unk84[0] = heap;
-    for (var_s1 = 0; var_s1 < D_801F56B0.rooms; var_s1++) {
-        temp_s2 = D_801F56B0.unk4[var_s1];
-        MapDisp_GetIMapTexture(D_801F56B0.unk84[var_s1], temp_s2);
-        if (var_s1 + 1 < D_801F56B0.rooms) {
-            D_801F56B0.unk84[var_s1 + 1] = ALIGN16((intptr_t)D_801F56B0.unk84[var_s1] + MapData_GetMapSize(temp_s2));
+    for (dungeonMapRoomIter = 0; dungeonMapRoomIter < D_801F56B0.rooms; dungeonMapRoomIter++) {
+        mapId = D_801F56B0.unk4[dungeonMapRoomIter];
+        MapDisp_GetMapITexture(D_801F56B0.unk84[dungeonMapRoomIter], mapId);
+        if (dungeonMapRoomIter + 1 < D_801F56B0.rooms) {
+            D_801F56B0.unk84[dungeonMapRoomIter + 1] =
+                ALIGN16((intptr_t)D_801F56B0.unk84[dungeonMapRoomIter] + MapData_CPID_GetSizeOfMapTex(mapId));
         } else {
-            heapNext = (intptr_t)D_801F56B0.unk84[var_s1] + MapData_GetMapSize(temp_s2);
+            heapNext = (intptr_t)D_801F56B0.unk84[dungeonMapRoomIter] + MapData_CPID_GetSizeOfMapTex(mapId);
         }
     }
-    for (var_s4 = 0; var_s4 < D_801BEC1C; var_s4++) {
-        entry = &D_801BEBB8.unk0->entry[var_s4];
+    for (roomIter = 0; roomIter < D_801BEC1C; roomIter++) {
+        entry = &D_801BEBB8.minimapList->entry[roomIter];
         if (entry->mapId == 0xFFFF) {
-            D_801F56B0.unk104[var_s4] = NULL;
+            D_801F56B0.unk104[roomIter] = NULL;
         } else {
             var_s3 = false;
-            temp_v0 = func_80109BA0(entry->mapId);
-            for (var_s1 = 0; var_s1 < D_801F56B0.rooms; var_s1++) {
-                if (temp_v0 == D_801F56B0.unk4[var_s1]) {
+            mapCompactId = MapData_GetMapCompactId(entry->mapId);
+            for (dungeonMapRoomIter = 0; dungeonMapRoomIter < D_801F56B0.rooms; dungeonMapRoomIter++) {
+                if (mapCompactId == D_801F56B0.unk4[dungeonMapRoomIter]) {
                     var_s3 = true;
                     break;
                 }
             }
             if (!var_s3) {
-                D_801F56B0.unk104[var_s4] = NULL;
+                D_801F56B0.unk104[roomIter] = NULL;
             } else {
-                void* dummy = D_801F56B0.unk84[var_s1]; //! FAKE:
+                void* dummy = D_801F56B0.unk84[dungeonMapRoomIter]; //! FAKE:
 
-                D_801F56B0.unk104[var_s4] = D_801F56B0.unk84[var_s1];
+                D_801F56B0.unk104[roomIter] = D_801F56B0.unk84[dungeonMapRoomIter];
             }
         }
     }
@@ -1205,10 +1206,10 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_RGBA16);
 
     for (var_s2 = 0; var_s2 < D_801BEC1C; var_s2++) {
-        s32 sp118;
-        s32 sp114;
-        s32 sp110;
-        s32 sp10C;
+        s32 sp118_texWidth;
+        s32 sp114_texHeight;
+        s32 sp110_offsetX;
+        s32 sp10C_offsetY;
         MinimapEntry* sp108;
         s32 pad104;
         s32 sp100;
@@ -1221,66 +1222,70 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
         s32 padE4;
         s32 padE0;
 
-        sp108 = &D_801BEBB8.unk0->entry[var_s2];
+        sp108 = &D_801BEBB8.minimapList->entry[var_s2];
         if ((sp108->mapId != 0xFFFF) && (sp108->mapId < 0x162)) {
             if ((D_801BEBB8.unk42 >= D_801BEBB8.unk3C[var_s2]) &&
                 ((D_801BEBB8.unk3C[var_s2] + ((sp108->unk8 >> 2) & 7)) >= D_801BEBB8.unk42)) {
                 temp_s1 = D_801F56B0.unk104[var_s2];
                 if (temp_s1 != NULL) {
-                    spE8 = func_80109BA0(sp108->mapId);
+                    spE8 = MapData_GetMapCompactId(sp108->mapId);
                     if (spE8 == -1) {
                         continue;
                     } else {
                         // sp3C = play + 0x18000;
-                        func_80109D40(spE8, &sp118, &sp114);
-                        func_80109DD8(spE8, &sp110, &sp10C);
+                        MapData_CPID_GetTexDim(spE8, &sp118_texWidth, &sp114_texHeight);
+                        MapData_CPID_GetTexOffset(spE8, &sp110_offsetX, &sp10C_offsetY);
                         if (sp108->unk8 & 1) {
-                            sp110 = (sp118 / 2 - sp110) + sp118 / 2;
-                            sp100 = (sp118 - 1) << 5;
+                            sp110_offsetX = (sp118_texWidth / 2 - sp110_offsetX) + sp118_texWidth / 2;
+                            sp100 = (sp118_texWidth - 1) << 5;
                             spF8 = 0xFC00;
                         } else {
                             sp100 = 0;
                             spF8 = 0x400;
                         }
                         if (sp108->unk8 & 2) {
-                            sp10C = (sp114 / 2 - sp10C) + sp114 / 2;
-                            spFC = (sp114 - 1) << 5;
+                            sp10C_offsetY = (sp114_texHeight / 2 - sp10C_offsetY) + sp114_texHeight / 2;
+                            spFC = (sp114_texHeight - 1) << 5;
                             spF4 = 0xFC00;
                         } else {
                             spFC = 0;
                             spF4 = 0x400;
                         }
-                        spF0 = ((sp108->unk2 - (f32)D_801BEBB8.unk38) * arg5 - sp110) + ((arg3 / 2) + arg1);
-                        spEC = ((sp108->unk6 - (f32)D_801BEBB8.unk3A) * arg5 - sp10C) + ((arg4 / 2) + arg2);
+                        spF0 = ((sp108->unk2 - (f32)D_801BEBB8.sceneMidX) * arg5 - sp110_offsetX) + ((arg3 / 2) + arg1);
+                        spEC = ((sp108->unk6 - (f32)D_801BEBB8.sceneMidZ) * arg5 - sp10C_offsetY) + ((arg4 / 2) + arg2);
 
                         if (var_s2 == play->roomCtx.curRoom.num) {
                             if (Map_IsInBossArea(play) != 0) {
-                                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118, sp114, 1,
-                                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
-                                                       G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118_texWidth,
+                                                       sp114_texHeight, 1, G_TX_NOMIRROR | G_TX_WRAP,
+                                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                                                       G_TX_NOLOD);
                             } else {
-                                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118, sp114, 2,
-                                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
-                                                       G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118_texWidth,
+                                                       sp114_texHeight, 2, G_TX_NOMIRROR | G_TX_WRAP,
+                                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                                                       G_TX_NOLOD);
                             }
                         } else if (gSaveContext.save.saveInfo
                                        .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                                        .rooms &
                                    (1 << var_s2)) {
-                            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118, sp114, 1,
-                                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                                                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118_texWidth,
+                                                   sp114_texHeight, 1, G_TX_NOMIRROR | G_TX_WRAP,
+                                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                                                   G_TX_NOLOD);
                         } else if (CHECK_DUNGEON_ITEM(
                                        2,
                                        arg6)) { //*(gBitFlags + 8) & gSaveContext.save.inventory.dungeonItems[arg6]) {
-                            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118, sp114, 0,
-                                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                                                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118_texWidth,
+                                                   sp114_texHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                                                   G_TX_NOLOD);
                         } else {
                             continue;
                         }
-                        gSPTextureRectangle(POLY_OPA_DISP++, (spF0 << 2), (spEC << 2), (spF0 + sp118) << 2,
-                                            (spEC + sp114) << 2, 0, sp100, spFC, spF8, spF4);
+                        gSPTextureRectangle(POLY_OPA_DISP++, (spF0 << 2), (spEC << 2), (spF0 + sp118_texWidth) << 2,
+                                            (spEC + sp114_texHeight) << 2, 0, sp100, spFC, spF8, spF4);
                         gDPPipeSync(POLY_OPA_DISP++);
                     }
                 }
@@ -1410,10 +1415,10 @@ void func_80107B78(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
 
         var_s3 = 0;
         var_s0 = D_801BEBB8.unk54;
-        // if (D_801BEBB8.unk50 > 0) {
-        for (var_s3 = 0; var_s3 < D_801BEBB8.unk50; var_s3++) {
+        // if (D_801BEBB8.numChests > 0) {
+        for (var_s3 = 0; var_s3 < D_801BEBB8.numChests; var_s3++) {
             sp3C = var_s0[var_s3].unk0;
-            sp38 = &D_801BEBB8.unk0->entry[sp3C];
+            sp38 = &D_801BEBB8.minimapList->entry[sp3C];
             switch (arg0->sceneId) {
                 case SCENE_MITURIN_BS:
                     var_v1_2 = gSaveContext.cycleSceneFlags[SCENE_MITURIN].chest & (1 << var_s0[var_s3].unk2);
@@ -1437,9 +1442,9 @@ void func_80107B78(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
             } else if (func_80106BEC((s32)D_801BEBB8.unk42, (f32)var_s0[var_s3].unk6) == 0) {
                 continue;
             } else {
-                temp_ft0 = (s32)(((((f32)var_s0[var_s3].unk4 - (f32)D_801BEBB8.unk38) * arg5) - (f32)4) +
+                temp_ft0 = (s32)(((((f32)var_s0[var_s3].unk4 - (f32)D_801BEBB8.sceneMidX) * arg5) - (f32)4) +
                                  (f32)((arg3 / 2) + arg1));
-                temp_ft0_2 = (s32)(((((f32)var_s0[var_s3].unk8 - (f32)D_801BEBB8.unk3A) * arg5) - (f32)4) +
+                temp_ft0_2 = (s32)(((((f32)var_s0[var_s3].unk8 - (f32)D_801BEBB8.sceneMidZ) * arg5) - (f32)4) +
                                    (f32)((arg4 / 2) + arg2));
                 // temp_v1_13 = temp_s1->polyOpa.p;
                 // temp_s1->polyOpa.p = temp_v1_13 + 8;
@@ -1482,17 +1487,19 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                     roomA = D_801F53B0[i].sides[0].room;
                     roomB = D_801F53B0[i].sides[1].room;
                     if (CHECK_DUNGEON_ITEM(2, gSaveContext.mapIndex) || (roomA < 0) ||
-                        (gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
+                        (gSaveContext.save.saveInfo
+                             .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                              .rooms &
                          (1 << roomA)) ||
                         (roomB < 0) ||
-                        (gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
+                        (gSaveContext.save.saveInfo
+                             .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                              .rooms &
                          (1 << roomB))) {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-                        tempX = ((f32)D_801F53B0[i].pos.x - D_801BEBB8.unk38) * arg5 + ((arg3 / 2) + arg1);
-                        tempY = ((f32)D_801F53B0[i].pos.z - D_801BEBB8.unk3A) * arg5 + ((arg4 / 2) + arg2);
+                        tempX = ((f32)D_801F53B0[i].pos.x - D_801BEBB8.sceneMidX) * arg5 + ((arg3 / 2) + arg1);
+                        tempY = ((f32)D_801F53B0[i].pos.z - D_801BEBB8.sceneMidZ) * arg5 + ((arg4 / 2) + arg2);
                         gSPTextureRectangle(POLY_OPA_DISP++, ((tempX - 1) << 2), ((tempY - 1) << 2), ((tempX + 1) << 2),
                                             ((tempY + 1) << 2), G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
                     }
@@ -1528,9 +1535,10 @@ void func_80108558(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
             if ((func_80105328((s32)D_801F53B0[var_s2].params) != 0) &&
                 (func_80106BEC((s32)D_801BEBB8.unk42, (f32)D_801F53B0[var_s2].pos.y) != 0)) {
                 if (ABS_ALT(D_801F53B0[var_s2].id) != ACTOR_EN_HOLL) {
-                    temp_ft0 = ((((f32)D_801F53B0[var_s2].pos.x - D_801BEBB8.unk38) * arg5) - 4) + ((arg3 / 2) + arg1);
+                    temp_ft0 =
+                        ((((f32)D_801F53B0[var_s2].pos.x - D_801BEBB8.sceneMidX) * arg5) - 4) + ((arg3 / 2) + arg1);
                     temp_ft0_2 =
-                        ((((f32)D_801F53B0[var_s2].pos.z - D_801BEBB8.unk3A) * arg5) - 4) + ((arg4 / 2) + arg2);
+                        ((((f32)D_801F53B0[var_s2].pos.z - D_801BEBB8.sceneMidZ) * arg5) - 4) + ((arg4 / 2) + arg2);
                     gSPTextureRectangle(POLY_OPA_DISP++, temp_ft0 << 2, temp_ft0_2 << 2, (temp_ft0 + 8) << 2,
                                         (temp_ft0_2 + 8) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
                 }
@@ -1583,7 +1591,7 @@ void func_80108AF8(PlayState* play) {
     s32 var_s1;
     s32 spB4 = 0;
 
-    if ((D_801BEBB8.unk0 != NULL) && (D_801BEC1C != 0) && (func_80108A64(play) == 0)) {
+    if ((D_801BEBB8.minimapList != NULL) && (D_801BEC1C != 0) && (func_80108A64(play) == 0)) {
         if (Map_IsInBossArea(play) != 0) {
             switch (play->sceneId) {
                 case SCENE_MITURIN_BS:
@@ -1608,7 +1616,8 @@ void func_80108AF8(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 200, pauseCtx->alpha);
 
         for (var_s1 = 0; var_s1 < D_801BEBB8.unk40; var_s1++) {
-            if ((gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))].unk_14 &
+            if ((gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
+                     .unk_14 &
                  gBitFlags[4 - var_s1]) ||
                 CHECK_DUNGEON_ITEM2(2, spB4)) {
                 gDPLoadTextureBlock(POLY_OPA_DISP++, func_80108A10(D_801BEBB8.unk44 + var_s1), G_IM_FMT_IA, G_IM_SIZ_8b,
@@ -1645,7 +1654,7 @@ void func_80108AF8(PlayState* play) {
 }
 
 s32 func_801090B0(s32 arg0) {
-    if ((D_801BEBB8.unk0 == NULL) || (D_801BEC1C == 0)) {
+    if ((D_801BEBB8.minimapList == NULL) || (D_801BEC1C == 0)) {
         return false;
     }
     if ((arg0 < 0) || (arg0 >= 6)) {
@@ -1660,7 +1669,7 @@ s32 func_801090B0(s32 arg0) {
 s32 func_80109124(s16 arg0) {
     s32 i;
 
-    if ((D_801BEBB8.unk0 == NULL) || (D_801BEC1C == 0)) {
+    if ((D_801BEBB8.minimapList == NULL) || (D_801BEC1C == 0)) {
         return -1;
     }
     if (D_801BEBB8.unk40 < 2) {
@@ -1709,11 +1718,11 @@ void func_801091F0(PlayState* play) {
         } else {
             sp44 = gSaveContext.mapIndex;
         }
-        temp_a0 = D_801BEBB8.unk0->entry->mapId;
+        temp_a0 = D_801BEBB8.minimapList->entry->mapId;
         if ((temp_a0 != 0xFFFF) && (temp_a0 < 0x162)) {
-            temp_v0_2 = func_80109BA0(temp_a0);
+            temp_v0_2 = MapData_GetMapCompactId(temp_a0);
             if (temp_v0_2 != -1) {
-                var_t2 = func_80109F78(temp_v0_2);
+                var_t2 = MapData_CPID_GetMapScale(temp_v0_2);
                 if (var_t2 == 0) {
                     var_t2 = 0x50;
                 }

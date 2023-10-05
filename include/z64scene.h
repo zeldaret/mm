@@ -497,7 +497,7 @@ typedef struct {
     /* 0x02 */ s16 unk2;
     /* 0x04 */ s16 unk4;
     /* 0x06 */ s16 unk6;
-    /* 0x08 */ u16 unk8;
+    /* 0x08 */ u16 unk8; // flags; 1 = mirror x? 2 = mirror y?
 } MinimapEntry; // size = 0xA
 
 typedef struct {
