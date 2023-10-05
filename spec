@@ -3519,7 +3519,7 @@ beginseg
     name "ovl_Boss_Hakugin"
     compress
     include "build/src/overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.o"
-    include "build/data/ovl_Boss_Hakugin/ovl_Boss_Hakugin.data.o"
+    // include "build/data/ovl_Boss_Hakugin/ovl_Boss_Hakugin.data.o"
     include "build/data/ovl_Boss_Hakugin/ovl_Boss_Hakugin.reloc.o"
 endseg
 
