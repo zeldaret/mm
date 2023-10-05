@@ -723,6 +723,5 @@ void Inventory_SaveLotteryCodeGuess(PlayState* play) {
     lotteryCodeGuess = ((play->msgCtx.unk12054[0] & 0xF) << 8);  // First Digit
     lotteryCodeGuess |= ((play->msgCtx.unk12054[1] & 0xF) << 4); // Second Digit
     lotteryCodeGuess |= (play->msgCtx.unk12054[2] & 0xF);        // Third Digit
-    gSaveContext.save.saveInfo.lotteryCodeGuess =
-        (gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
+    HS_SET_LOTTERY_CODE_GUESS(lotteryCodeGuess);
 }

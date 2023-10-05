@@ -94,7 +94,7 @@ void func_80952734(EnMs* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer < 90.0f) {
         if (ABS_ALT(temp_v1) < 0x2000) {
-            func_800B8614(&this->actor, play, 90.0f);
+            Actor_OfferTalk(&this->actor, play, 90.0f);
         }
     }
 }
@@ -104,7 +104,7 @@ void func_80952734(EnMs* this, PlayState* play) {
 void func_809529AC(EnMs* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.textId = 0;
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = func_80952A1C;
     } else {
         Actor_OfferGetItem(&this->actor, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
@@ -116,7 +116,7 @@ void func_80952A1C(EnMs* this, PlayState* play) {
         Message_ContinueTextbox(play, 0x936U);
         this->actionFunc = func_809527F8;
     } else {
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, -1);
+        Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, -1);
     }
 }
 

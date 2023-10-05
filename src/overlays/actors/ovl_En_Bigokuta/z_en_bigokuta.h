@@ -9,6 +9,8 @@ struct EnBigokuta;
 
 typedef void (*EnBigokutaActionFunc)(struct EnBigokuta*, PlayState*);
 
+#define EN_BIGOKUTA_GET_SWITCH_FLAG(thisx) ((thisx)->params)
+
 typedef enum BigokutaBodyPart {
     /*  0 */ BIGOKUTA_BODYPART_0,
     /*  1 */ BIGOKUTA_BODYPART_1,

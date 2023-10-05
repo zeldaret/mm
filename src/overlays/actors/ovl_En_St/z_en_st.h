@@ -7,10 +7,9 @@ struct EnSt;
 
 typedef void (*EnStActionFunc)(struct EnSt*, PlayState*);
 
-#define ENST_GET_3F(thisx) (((thisx)->params & 0x3F) & 0xFF)
+#define ENST_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x3F) & 0xFF)
 #define ENST_GET_1C0(thisx) ((((thisx)->params & 0x1C0) >> 6) & 0xFF)
 
-#define ENST_3F_63 63
 #define ENST_1C0_1 1
 
 typedef enum EnStBodyPart {
@@ -39,7 +38,7 @@ typedef struct EnSt {
     /* 0x1DC */ ColliderCylinder collider2;
     /* 0x228 */ ColliderCylinder collider3;
     /* 0x274 */ ColliderCylinder collider4;
-    /* 0x2C0 */ s8 unk_2C0;
+    /* 0x2C0 */ s8 objectSlot;
     /* 0x2C4 */ f32 unk_2C4;
     /* 0x2C8 */ f32 unk_2C8;
     /* 0x2CC */ f32 unk_2CC;

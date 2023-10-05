@@ -204,7 +204,7 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play) {
 void ArrowFire_Update(Actor* thisx, PlayState* play) {
     ArrowFire* this = (ArrowFire*)thisx;
 
-    if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
+    if ((play->msgCtx.msgMode == MSGMODE_E) || (play->msgCtx.msgMode == MSGMODE_SONG_PLAYED)) {
         Actor_Kill(&this->actor);
         return;
     }

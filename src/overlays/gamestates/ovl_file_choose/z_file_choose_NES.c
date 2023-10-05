@@ -2197,7 +2197,7 @@ void FileSelect_LoadGame(GameState* thisx) {
     gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
     gSaveContext.cutsceneTrigger = 0;
     gSaveContext.chamberCutsceneNum = 0;
-    gSaveContext.nextDayTime = 0xFFFF;
+    gSaveContext.nextDayTime = NEXT_TIME_NONE;
     gSaveContext.retainWeatherMode = false;
 
     gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
@@ -2489,7 +2489,7 @@ void FileSelect_InitContext(GameState* thisx) {
     Skybox_Init(&this->state, &this->skyboxCtx, 1);
     R_TIME_SPEED = 10;
 
-    envCtx->changeSkyboxState = 0;
+    envCtx->changeSkyboxState = CHANGE_SKYBOX_INACTIVE;
     envCtx->changeSkyboxTimer = 0;
     envCtx->changeLightEnabled = false;
     envCtx->changeLightTimer = 0;
@@ -2531,15 +2531,15 @@ void FileSelect_Init(GameState* thisx) {
     Font_LoadOrderedFont(&this->font);
 
     size = SEGMENT_ROM_SIZE(title_static);
-    this->staticSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->staticSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->staticSegment, SEGMENT_ROM_START(title_static), size);
 
     size = SEGMENT_ROM_SIZE(parameter_static);
-    this->parameterSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->parameterSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->parameterSegment, SEGMENT_ROM_START(parameter_static), size);
 
     size = gObjectTable[OBJECT_MAG].vromEnd - gObjectTable[OBJECT_MAG].vromStart;
-    this->titleSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->titleSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->titleSegment, gObjectTable[OBJECT_MAG].vromStart, size);
 
     Audio_SetSpec(0xA);

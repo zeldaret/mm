@@ -171,8 +171,8 @@ void EnEndingHero6_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        if ((this->objectIndex >= 0) && Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-            gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectIndex].segment);
+        if ((this->objectSlot > OBJECT_SLOT_NONE) && Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+            gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->objectSlot].segment);
 
             switch (this->type) {
                 case ENDING_HERO6_TYPE_DAIKU_RED:

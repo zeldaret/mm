@@ -34,7 +34,7 @@ ActorInit Demo_Kankyo_InitVars = {
     (ActorFunc)DemoKankyo_Draw,
 };
 
-static s32 sObjectBubbleIndex = OBJECT_BUBBLE | 0x10000;
+static s32 sObjectBubbleId = OBJECT_BUBBLE | 0x10000;
 
 void DemoKankyo_SetupAction(DemoKankyo* this, DemoKankyoActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -56,21 +56,21 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (play->roomCtx.unk7A[1] != 0) {
-        if (play->envCtx.unk_F2[3] != 0) {
-            play->envCtx.unk_F2[3]--;
+        if (play->envCtx.precipitation[PRECIP_SNOW_MAX] != 0) {
+            play->envCtx.precipitation[PRECIP_SNOW_MAX]--;
         } else {
             Actor_Kill(&this->actor);
         }
-    } else if (play->envCtx.unk_F2[3] < DEMOKANKYO_EFFECT_COUNT) {
-        play->envCtx.unk_F2[3] += 16;
+    } else if (play->envCtx.precipitation[PRECIP_SNOW_MAX] < DEMOKANKYO_EFFECT_COUNT) {
+        play->envCtx.precipitation[PRECIP_SNOW_MAX] += 16;
     }
 
     // note: DemoKankyo can crash if placed in an area that snows (ObjectKankyo)
-    // because they both use unk_F2 as an effect counter,
+    // because they both use PRECIP_SNOW_MAX precipitation as an effect counter,
     // causing DemoKankyo to write beyond its efffect array boundry
     // this crash can occur if the two actors are in different scenes connected by an exit
     // e.g. if you add DemoKankyo to GoronShrine, you will crash entering/leaving through door
-    for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
+    for (i = 0; i < play->envCtx.precipitation[PRECIP_SNOW_MAX]; i++) {
         repositionLimit = 130.0f;
 
         eyeToAt.x = play->view.at.x - play->view.eye.x;
@@ -279,9 +279,9 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, PlayState* play) {
 }
 
 void DemoKakyo_GiantObjectCheck(DemoKankyo* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->objectId)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->isSafeToDrawGiants = true;
-        this->actor.objBankIndex = this->objectId;
+        this->actor.objectSlot = this->objectSlot;
         DemoKankyo_SetupAction(this, DemoKakyo_MoonSparklesActionFunc);
     }
 }
@@ -304,8 +304,8 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, PlayState* play) {
     s32 pad1;
     Vec3f worldPos;
 
-    if (play->envCtx.unk_F2[3] < DEMOKANKYO_EFFECT_COUNT) {
-        play->envCtx.unk_F2[3] += 16;
+    if (play->envCtx.precipitation[PRECIP_SNOW_MAX] < DEMOKANKYO_EFFECT_COUNT) {
+        play->envCtx.precipitation[PRECIP_SNOW_MAX] += 16;
     }
 
     eyeToAt.x = play->view.at.x - play->view.eye.x;
@@ -318,7 +318,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, PlayState* play) {
 
     halfScreenHeight = SCREEN_HEIGHT / 2;
 
-    for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
+    for (i = 0; i < play->envCtx.precipitation[PRECIP_SNOW_MAX]; i++) {
         switch (this->effects[i].state) {
             case DEMO_KANKYO_STATE_INIT:
                 this->effects[i].posBase.x = play->view.eye.x + (eyeToAtNormX * halfScreenHeight);
@@ -437,7 +437,7 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
     DemoKankyo* this = THIS;
     s32 pad;
     s32 i;
-    s32 objId;
+    s32 objectSlot;
 
     // This must be a single line to match, possibly a macro?
     // clang-format off
@@ -449,7 +449,7 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
 
     switch (this->actor.params) {
         case DEMO_KANKYO_TYPE_LOSTWOODS:
-            objId = OBJECT_UNSET_0;
+            objectSlot = 0;
             this->actor.room = -1;
             if (sLostWoodsSparklesMutex == false) {
                 DemoKankyo_SetupAction(this, DemoKakyo_LostWoodsSparkleActionFunc);
@@ -461,24 +461,24 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
 
         case DEMO_KANKYO_TYPE_GIANTS:
             this->isSafeToDrawGiants = false;
-            objId = Object_GetIndex(&play->objectCtx, sObjectBubbleIndex);
+            objectSlot = Object_GetSlot(&play->objectCtx, sObjectBubbleId);
             DemoKankyo_SetupAction(this, DemoKakyo_GiantObjectCheck);
             break;
 
         case DEMO_KANKYO_TYPE_MOON:
-            objId = OBJECT_UNSET_0;
+            objectSlot = 0;
             this->isSafeToDrawGiants = true;
             DemoKankyo_SetupAction(this, DemoKakyo_MoonSparklesActionFunc);
             break;
 
         default:
             //! @bug: this causes a crash because the actionfunc is never set
-            objId = -1;
+            objectSlot = OBJECT_SLOT_NONE;
             break;
     }
 
-    if (objId > -1) {
-        this->objectId = objId;
+    if (objectSlot > OBJECT_SLOT_NONE) {
+        this->objectSlot = objectSlot;
     }
 }
 
@@ -511,7 +511,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
         gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
 
-        for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
+        for (i = 0; i < play->envCtx.precipitation[PRECIP_SNOW_MAX]; i++) {
             worldPos.x = this->effects[i].posBase.x + this->effects[i].posOffset.x;
             worldPos.y = this->effects[i].posBase.y + this->effects[i].posOffset.y;
             worldPos.z = this->effects[i].posBase.z + this->effects[i].posOffset.z;
@@ -601,7 +601,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
 
         Gfx_SetupDL25_Xlu(gfxCtx);
 
-        for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
+        for (i = 0; i < play->envCtx.precipitation[PRECIP_SNOW_MAX]; i++) {
             worldPos.x = this->effects[i].posBase.x + this->effects[i].posOffset.x;
             worldPos.y = this->effects[i].posBase.y + this->effects[i].posOffset.y;
             worldPos.z = this->effects[i].posBase.z + this->effects[i].posOffset.z;

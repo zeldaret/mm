@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define BGLADDER_GET_SIZE(thisx) ((thisx)->params & 0xFF)
-#define BGLADDER_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0xFF)
+#define BGLADDER_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0xFF)
 
 struct BgLadder;
 
