@@ -6,22 +6,22 @@
         <Animation Name="object_bg_Anim_001384" Offset="0x1384" /> <!-- Original name is "bg_kunekune" ("wiggling; waving; swaying; twisting and turning​") -->
         
         <!-- Treasure Chest Shop Gal Limb DisplayLists -->
-        <DList Name="object_bg_DL_003F50" Offset="0x3F50" />
-        <DList Name="object_bg_DL_004558" Offset="0x4558" />
-        <DList Name="object_bg_DL_004768" Offset="0x4768" />
-        <DList Name="object_bg_DL_004A38" Offset="0x4A38" />
-        <DList Name="object_bg_DL_004BC0" Offset="0x4BC0" />
-        <DList Name="object_bg_DL_004EE0" Offset="0x4EE0" />
-        <DList Name="object_bg_DL_0051B0" Offset="0x51B0" />
-        <DList Name="object_bg_DL_005338" Offset="0x5338" />
-        <DList Name="object_bg_DL_005658" Offset="0x5658" />
-        <DList Name="object_bg_DL_005978" Offset="0x5978" />
-        <DList Name="object_bg_DL_005B80" Offset="0x5B80" />
-        <DList Name="object_bg_DL_005F20" Offset="0x5F20" />
-        <DList Name="object_bg_DL_006090" Offset="0x6090" />
-        <DList Name="object_bg_DL_006298" Offset="0x6298" />
-        <DList Name="object_bg_DL_006638" Offset="0x6638" />
-        <DList Name="object_bg_DL_0067A8" Offset="0x67A8" />
+        <DList Name="gTreasureChestShopGalHeadDL" Offset="0x3F50" />
+        <DList Name="gTreasureChestShopGalNeckDL" Offset="0x4558" />
+        <DList Name="gTreasureChestShopGalLeftHandDL" Offset="0x4768" />
+        <DList Name="gTreasureChestShopGalLeftForearmDL" Offset="0x4A38" />
+        <DList Name="gTreasureChestShopGalLeftUpperArmDL" Offset="0x4BC0" />
+        <DList Name="gTreasureChestShopGalRightHandDL" Offset="0x4EE0" />
+        <DList Name="gTreasureChestShopGalRightForearmDL" Offset="0x51B0" />
+        <DList Name="gTreasureChestShopGalRightUpperArmDL" Offset="0x5338" />
+        <DList Name="gTreasureChestShopGalTorsoDL" Offset="0x5658" />
+        <DList Name="gTreasureChestShopGalLeftFootDL" Offset="0x5978" />
+        <DList Name="gTreasureChestShopGalLeftShinDL" Offset="0x5B80" />
+        <DList Name="gTreasureChestShopGalLeftThighDL" Offset="0x5F20" />
+        <DList Name="gTreasureChestShopGalRightFootDL" Offset="0x6090" />
+        <DList Name="gTreasureChestShopGalRightShinDL" Offset="0x6298" />
+        <DList Name="gTreasureChestShopGalRightThighDL" Offset="0x6638" />
+        <DList Name="gTreasureChestShopGalHipsDL" Offset="0x67A8" />
 
         <!-- Treasure Chest Shop Gal Textures -->
         <Texture Name="gTreasureChestShopGalTLUT" OutName="treasure_cheat_shop_gal_tlut" Format="rgba16" Width="16" Height="16" Offset="0x68D8" />
@@ -39,32 +39,32 @@
         <Texture Name="gTreasureChestShopGalFingersTex" OutName="treasure_cheat_shop_gal_fingers" Format="ci8" Width="16" Height="16" Offset="0x8D58" /> 
         
         <!-- Treasure Chest Shop Gal Limbs -->
-        <Limb Name="gTreasureChestShopGal_008E58" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_01" Offset="0x8E58" />
+        <Limb Name="gTreasureChestShopGalRootLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_ROOT" Offset="0x8E58" />
         <Limb Name="gTreasureChestShopGalHipsLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_HIPS" Offset="0x8E64" />
         <Limb Name="gTreasureChestShopGalTorsoLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_TORSO" Offset="0x8E70" />
         <Limb Name="gTreasureChestShopGalNeckLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_NECK" Offset="0x8E7C" />
         <Limb Name="gTreasureChestShopGalHeadLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_HEAD" Offset="0x8E88" />
-        <Limb Name="gTreasureChestShopGal_008E94" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_06" Offset="0x8E94" />
+        <Limb Name="gTreasureChestShopGalLeftArmRootLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_LEFT_ARM_ROOT" Offset="0x8E94" />
         <Limb Name="gTreasureChestShopGalLeftUpperArmLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_LEFT_UPPER_ARM" Offset="0x8EA0" />
         <Limb Name="gTreasureChestShopGalLeftForearmLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_LEFT_FOREARM" Offset="0x8EAC" />
         <Limb Name="gTreasureChestShopGalLeftHandLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_LEFT_HAND" Offset="0x8EB8" />
-        <Limb Name="gTreasureChestShopGal_008EC4" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_0A" Offset="0x8EC4" />
+        <Limb Name="gTreasureChestShopGalRightArmRootLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_RIGHT_ARM_ROOT" Offset="0x8EC4" />
         <Limb Name="gTreasureChestShopGalRightUpperArmLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_RIGHT_UPPER_ARM" Offset="0x8ED0" />
         <Limb Name="gTreasureChestShopGalRightForearmLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_RIGHT_FOREARM" Offset="0x8EDC" />
         <Limb Name="gTreasureChestShopGalRightHandLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_RIGHT_HAND" Offset="0x8EE8" />
-        <Limb Name="gTreasureChestShopGal_008EF4" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_0E" Offset="0x8EF4" />
+        <Limb Name="gTreasureChestShopGalRightLegRootLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_RIGHT_LEG_ROOT" Offset="0x8EF4" />
         <Limb Name="gTreasureChestShopGalRightThighLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_RIGHT_THIGH" Offset="0x8F00" />
-        <Limb Name="gTreasureChestShopGalRightCalfLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_RIGHT_CALF" Offset="0x8F0C" />
-        <Limb Name="gTreasureChestShopGal_008F18" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_11" Offset="0x8F18" />
-        <Limb Name="gTreasureChestShopGalRightFootCalfLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_RIGHT_FOOT_CALF" Offset="0x8F24" />
-        <Limb Name="gTreasureChestShopGal_008F30" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_13" Offset="0x8F30" />
+        <Limb Name="gTreasureChestShopGalRightShinLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_RIGHT_SHIN" Offset="0x8F0C" />
+        <Limb Name="gTreasureChestShopGalRightFootRootLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_RIGHT_FOOT_ROOT" Offset="0x8F18" />
+        <Limb Name="gTreasureChestShopGalRightFootLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_RIGHT_FOOT" Offset="0x8F24" />
+        <Limb Name="gTreasureChestShopGalLeftLegRootLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_LEFT_LEG_ROOT" Offset="0x8F30" />
         <Limb Name="gTreasureChestShopGalLeftThighLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_LEFT_THIGH" Offset="0x8F3C" />
-        <Limb Name="gTreasureChestShopGalLeftCalfLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_LEFT_CALF" Offset="0x8F48" />
-        <Limb Name="gTreasureChestShopGal_008F54" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_16" Offset="0x8F54" />
+        <Limb Name="gTreasureChestShopGalLeftShinLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_LEFT_SHIN" Offset="0x8F48" />
+        <Limb Name="gTreasureChestShopGalLeftFootRootLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_LEFT_FOOT_ROOT" Offset="0x8F54" />
         <Limb Name="gTreasureChestShopGalLeftFootLimb" Type="Standard" EnumName="TREASURE_CHEST_SHOP_GAL_LIMB_LEFT_FOOT" Offset="0x8F60" />
         
         <!-- Treasure Chest Shop Gal Skeleton -->
-        <Skeleton Name="gTreasureChestShopGalSkeleton" Type="Flex" LimbType="Standard" LimbNone="TREASURE_CHEST_SHOP_GAL_LIMB_NONE" LimbMax="TREASURE_CHEST_SHOP_GAL_LIMB_MAX" EnumName="ObjectBg1Limb" Offset="0x8FC8" />
+        <Skeleton Name="gTreasureChestShopGalSkel" Type="Flex" LimbType="Standard" LimbNone="TREASURE_CHEST_SHOP_GAL_LIMB_NONE" LimbMax="TREASURE_CHEST_SHOP_GAL_LIMB_MAX" EnumName="TreasureChestShopGalLimb" Offset="0x8FC8" />
         
         <!-- Animations -->
         <Animation Name="object_bg_Anim_009890" Offset="0x9890" /> <!-- Original name is "bg_newwait" -->

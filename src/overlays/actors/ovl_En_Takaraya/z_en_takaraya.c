@@ -18,7 +18,7 @@ void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 void EnTakaraya_Blink(EnTakaraya* this);
 void EnTakaraya_SetupWait(EnTakaraya* this);
 void EnTakaraya_Wait(EnTakaraya* this, PlayState* play);
-void EnTakaraya_GetForm(EnTakaraya* this, PlayState* play);
+void EnTakaraya_SpawnWalls(EnTakaraya* this, PlayState* play);
 void EnTakaraya_SetupTalk(EnTakaraya* this);
 void EnTakaraya_Talk(EnTakaraya* this, PlayState* play);
 void func_80ADF2D4(EnTakaraya* this);
@@ -65,7 +65,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 
-u32 sTexturesDesegmented = 0;
+u32 sTexturesDesegmented = false;
 
 u16 D_80ADFB2C[PLAYER_FORM_MAX] = {
     1901, // PLAYER_FORM_FIERCE_DEITY
@@ -105,7 +105,7 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gTreasureChestShopGalSkeleton, &object_bg_Anim_009890, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTreasureChestShopGalSkel, &object_bg_Anim_009890, this->jointTable,
                        this->morphTable, TREASURE_CHEST_SHOP_GAL_LIMB_MAX);
     this->switchFlag = EN_TAKARAYA_GET_SWITCH_FLAG(thisx);
     thisx->params &= 0xFF;
@@ -189,7 +189,7 @@ void EnTakaraya_Wait(EnTakaraya* this, PlayState* play) {
     }
 }
 
-void EnTakaraya_GetForm(EnTakaraya* this, PlayState* play) {
+void EnTakaraya_SpawnWalls(EnTakaraya* this, PlayState* play) {
     u8 var_v1;
 
     if (Flags_GetSwitch(play, this->formSwitchFlag)) {
@@ -241,7 +241,7 @@ void EnTakaraya_Talk(EnTakaraya* this, PlayState* play) {
             } else {
                 Audio_PlaySfx_MessageDecide();
                 Rupees_ChangeBy(play->msgCtx.unk1206C * -1);
-                EnTakaraya_GetForm(this, play);
+                EnTakaraya_SpawnWalls(this, play);
                 this->actor.textId = 0x778;
                 if (this->skelAnime.animation != &object_bg_Anim_009890) {
                     Animation_MorphToLoop(&this->skelAnime, &object_bg_Anim_009890, 5.0f);
