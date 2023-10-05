@@ -14,10 +14,10 @@
         <DList Name="gDs2nLeftHandDL" Offset="0x33B0" />
         <DList Name="gDs2nHipsDL" Offset="0x3528" />
         <DList Name="gDs2nRightThighDL" Offset="0x35F0" /> 
-        <DList Name="gDs2nRightCalfDL" Offset="0x36D0" />
+        <DList Name="gDs2nRightShinDL" Offset="0x36D0" />
         <DList Name="gDs2nRightFootDL" Offset="0x37A8" />
         <DList Name="gDs2nLeftThighDL" Offset="0x3988" />
-        <DList Name="gDs2nLeftCalfDL" Offset="0x3A68" />
+        <DList Name="gDs2nLeftShinDL" Offset="0x3A68" />
         <DList Name="gDs2nLeftFootDL" Offset="0x3B40" />
         
         <Texture Name="gDs2nMainTlut" OutName="tlut_main" Format="rgba16" Width="16" Height="16" Offset="0x3CD8" />
@@ -70,10 +70,10 @@
         <!-- z64Utils cannot render this skeleton, no idea what the three limbs with no DL are for, our actor doesnt use them -->
         <Limb Name="gDs2nHipsLimb" Type="Standard" EnumName="DS2N_LIMB_HIPS" Offset="0x8050" />
         <Limb Name="gDs2nLeftThighLimb" Type="Standard" EnumName="DS2N_LIMB_LEFT_THIGH" Offset="0x805C" />
-        <Limb Name="gDs2nLeftCalfLimb" Type="Standard" EnumName="DS2N_LIMB_LEFT_CALF" Offset="0x8068" />
+        <Limb Name="gDs2nLeftShinLimb" Type="Standard" EnumName="DS2N_LIMB_LEFT_SHIN" Offset="0x8068" />
         <Limb Name="gDs2nLeftFootLimb" Type="Standard" EnumName="DS2N_LIMB_LEFT_FOOT" Offset="0x8074" />
         <Limb Name="gDs2nRightThighLimb" Type="Standard" EnumName="DS2N_LIMB_RIGHT_THIGH" Offset="0x8080" />
-        <Limb Name="gDs2nRightCalfLimb" Type="Standard" EnumName="DS2N_LIMB_RIGHT_CALF" Offset="0x808C" />
+        <Limb Name="gDs2nRightShinLimb" Type="Standard" EnumName="DS2N_LIMB_RIGHT_SHIN" Offset="0x808C" />
         <Limb Name="gDs2nRightFootLimb" Type="Standard" EnumName="DS2N_LIMB_RIGHT_FOOT" Offset="0x8098" />
         <Limb Name="gDs2nLimb_008098" Type="Standard" EnumName="DS2N_LIMB_08" Offset="0x80A4" /> <!-- these three have no DL -->
         <Limb Name="gDs2nLimb_0080B0" Type="Standard" EnumName="DS2N_LIMB_09" Offset="0x80B0" />
@@ -86,7 +86,7 @@
         <Limb Name="gDs2nRightForearmLimb" Type="Standard" EnumName="DS2N_LIMB_RIGHT_FOREARM" Offset="0x8104" />
         <Limb Name="gDs2nRightHandLimb" Type="Standard" EnumName="DS2N_LIMB_RIGHT_HAND" Offset="0x8110" />
         <Limb Name="gDs2nHeadLimb" Type="Standard" EnumName="DS2N_LIMB_HEAD" Offset="0x811C" />
-        <Skeleton Name="gDs2nSkeleton" Type="Flex" LimbType="Standard" LimbNone="DS2N_LIMB_NONE" LimbMax="DS2N_LIMB_MAX" EnumName="Ds2nLimb" Offset="0x8170" />
+        <Skeleton Name="gDs2nSkel" Type="Flex" LimbType="Standard" LimbNone="DS2N_LIMB_NONE" LimbMax="DS2N_LIMB_MAX" EnumName="Ds2nLimb" Offset="0x8170" />
 
         <!-- 8 bytes: 0x11 followed by zeros  <Blob Name="gDs2n_Blob_008178" Size="0x8" Offset="0x8178" /> -->
     </File>

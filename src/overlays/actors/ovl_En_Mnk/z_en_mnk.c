@@ -249,7 +249,7 @@ void EnMnk_MonkeyTiedUp_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = EnMnk_MonkeyTiedUp_Wait;
     this->picto.actor.flags |= ACTOR_FLAG_2000000;
-    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyTiedUpPoleSkeleton, &object_mnk_Anim_003584,
+    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyTiedUpPoleSkel, &object_mnk_Anim_003584,
                        this->propJointTable, this->propMorphTable, OBJECT_MNK_1_LIMB_MAX);
     this->cueId = 4;
     this->animIndex = MONKEY_TIEDUP_ANIM_NONE;
@@ -277,7 +277,7 @@ void EnMnk_MonkeyHanging_Init(Actor* thisx, PlayState* play) {
     func_800BC154(play, &play->actorCtx, &this->picto.actor, ACTORCAT_PROP);
     this->actionFunc = EnMnk_MonkeyHanging_StruggleBeforeDunk;
     this->picto.actor.textId = 0x8E8;
-    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyHangingRopeSkeleton, &gMonkeyHangingStruggleAnim,
+    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyHangingRopeSkel, &gMonkeyHangingStruggleAnim,
                        this->propJointTable, this->propMorphTable, OBJECT_MNK_3_LIMB_MAX);
     EnMnk_MonkeyHanging_ChangeAnim(this, MONKEY_HANGING_ANIM_STRUGGLE, ANIMMODE_LOOP, 0.0f);
     this->unk_3E0 = 5;
@@ -297,7 +297,7 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->picto.actor, 0.012f);
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 12.0f);
     this->actionFunc = EnMnk_DoNothing;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gMonkeySkeleton, &object_mnk_Anim_0105DC, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMonkeySkel, &object_mnk_Anim_0105DC, this->jointTable,
                        this->morphTable, OBJECT_MNK_2_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_mnk_Anim_0105DC);
     this->flags = 0;
