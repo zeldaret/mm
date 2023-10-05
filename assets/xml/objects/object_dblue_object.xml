@@ -14,7 +14,7 @@
         <!-- DisplayLists and Collision for the ice stalactites that can be thawed with Fire Arrows.  -->
         <DList Name="gGreatBayTempleObjectIceStalactiteRimDL" Offset="0x3250" />
         <DList Name="gGreatBayTempleObjectIceStalactiteDL" Offset="0x3358" /> <!-- Original name is "m2_KON_ICE_model" -->
-        <Collision Name="gGreatBayTempleObjectIceStalactiteCol" Offset="0x3540" /> <!-- Original name is "m2_KON_ICE_bgdatainfo". Unused -->
+        <Collision Name="gGreatBayTempleObjectIceStalactiteCol" Offset="0x3540" /> <!-- Unused. Original name is "m2_KON_ICE_bgdatainfo" -->
 
         <!-- DisplayLists for the frozen version of the waterfall that briefly appears when you hit it with an Ice Arrow. -->
         <DList Name="gGreatBayTempleObjectFrozenWaterfallDL" Offset="0x3770" />

@@ -45,7 +45,7 @@ typedef struct EnKusa {
     /* 0x144 */ EnKusaActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collider;
     /* 0x194 */ u8 timer;
-    /* 0x195 */ s8 objIndex;
+    /* 0x195 */ s8 objectSlot;
     /* 0x196 */ s8 kusaMtxIdx;
     /* 0x197 */ u8 isCut;
     /* 0x198 */ u8 isInWater;

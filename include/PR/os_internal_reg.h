@@ -1,5 +1,5 @@
-#ifndef PR_OS_INTERNAL_REG
-#define PR_OS_INTERNAL_REG
+#ifndef PR_OS_INTERNAL_REG_H
+#define PR_OS_INTERNAL_REG_H
 
 #include "ultratypes.h"
 #include "os_exception.h"

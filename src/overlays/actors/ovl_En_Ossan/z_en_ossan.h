@@ -21,7 +21,7 @@ typedef struct EnOssan {
     /* 0x18C */ EnOssanActionFunc prevActionFunc; // Used to restore back to correct browsing function
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ s16 delayTimer;
-    /* 0x1DE */ s8 objIndex;
+    /* 0x1DE */ s8 objectSlot;
     /* 0x1E0 */ s16 eyeTexIndex;
     /* 0x1E2 */ s16 blinkTimer;
     /* 0x1E4 */ EnOssanBlinkFunc blinkFunc;

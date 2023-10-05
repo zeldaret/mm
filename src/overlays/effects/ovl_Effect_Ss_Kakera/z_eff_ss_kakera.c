@@ -17,8 +17,8 @@
 #define rScale regs[7]
 #define rReg8 regs[8]
 #define rReg9 regs[9]
-#define rObjId regs[10]
-#define rObjBankIndex regs[11]
+#define rObjectId regs[10]
+#define rObjectSlot regs[11]
 #define rColorIndex regs[12]
 
 #define PARAMS ((EffectSsKakeraInitParams*)initParamsx)
@@ -51,14 +51,14 @@ u32 EffectSsKakera_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
     this->priority = 101;
     if (initParams->dList != NULL) {
         this->gfx = initParams->dList;
-        switch (initParams->objId) {
+        switch (initParams->objectId) {
             case GAMEPLAY_KEEP:
             case GAMEPLAY_FIELD_KEEP:
             case GAMEPLAY_DANGEON_KEEP:
-                this->rObjId = KAKERA_OBJECT_DEFAULT;
+                this->rObjectId = KAKERA_OBJECT_DEFAULT;
                 break;
             default:
-                this->rObjId = initParams->objId;
+                this->rObjectId = initParams->objectId;
                 EffectSsKakera_CheckForObject(this, play);
                 break;
         }
@@ -93,11 +93,11 @@ void EffectSsKakera_Draw(PlayState* play, u32 index, EffectSs* this) {
     s32 colorIndex = this->rColorIndex;
 
     OPEN_DISPS(gfxCtx);
-    if (this->rObjId != KAKERA_OBJECT_DEFAULT) {
+    if (this->rObjectId != KAKERA_OBJECT_DEFAULT) {
         if ((((this->rReg4 >> 7) & 1) << 7) == 0x80) {
-            gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[this->rObjBankIndex].segment);
+            gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[this->rObjectSlot].segment);
         } else {
-            gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->rObjBankIndex].segment);
+            gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->rObjectSlot].segment);
         }
     }
 
@@ -127,8 +127,8 @@ void EffectSsKakera_Draw(PlayState* play, u32 index, EffectSs* this) {
 }
 
 void EffectSsKakera_CheckForObject(EffectSs* this, PlayState* play) {
-    this->rObjBankIndex = Object_GetIndex(&play->objectCtx, this->rObjId);
-    if ((this->rObjBankIndex < 0) || (!Object_IsLoaded(&play->objectCtx, this->rObjBankIndex))) {
+    this->rObjectSlot = Object_GetSlot(&play->objectCtx, this->rObjectId);
+    if ((this->rObjectSlot <= OBJECT_SLOT_NONE) || (!Object_IsLoaded(&play->objectCtx, this->rObjectSlot))) {
         this->life = 0;
         this->draw = NULL;
     }
@@ -369,7 +369,7 @@ void EffectSsKakera_Update(PlayState* play, u32 index, EffectSs* this) {
         this->life = 0;
     }
     func_8097E7E0(this, play);
-    if (this->rObjId != KAKERA_OBJECT_DEFAULT) {
+    if (this->rObjectId != KAKERA_OBJECT_DEFAULT) {
         EffectSsKakera_CheckForObject(this, play);
     }
 }

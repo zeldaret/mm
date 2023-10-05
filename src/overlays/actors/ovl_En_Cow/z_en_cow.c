@@ -268,7 +268,7 @@ void EnCow_Talk(EnCow* this, PlayState* play) {
 }
 
 void EnCow_Idle(EnCow* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaMode == 0) || (play->msgCtx.ocarinaMode == 4)) {
+    if ((play->msgCtx.ocarinaMode == OCARINA_MODE_NONE) || (play->msgCtx.ocarinaMode == OCARINA_MODE_END)) {
         if (gHorsePlayedEponasSong) {
             if (this->flags & EN_COW_FLAG_WONT_GIVE_MILK) {
                 this->flags &= ~EN_COW_FLAG_WONT_GIVE_MILK;

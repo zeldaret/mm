@@ -68,9 +68,9 @@ Run the formatting script `format.py`, to format the C files in the standard way
 
 **N.B.** this is now essential: the CI will fail immediately if it detects files that change when formatted.
 
-### Merge master
+### Merge main
 
-To make sure the PR builds correctly with the current master, you need to merge `upstream/master` before you make the PR. This tends to break things, that you have to fix to get it to compile correctly again.
+To make sure the PR builds correctly with the current main, you need to merge `upstream/main` before you make the PR. This tends to break things, that you have to fix to get it to compile correctly again.
 
 ## Pull Requests
 
@@ -89,6 +89,6 @@ Please also update the status of the file on Trello/the spreadsheet.
 
 Pull requests may be reviewed by anyone (who knows enough about the conventions of the project), and all must be reviewed and approved by two leads and one extra contributor.
 
-To implement suggestions made in reviews, it is generally easier to be consistent if you push more commits from your local branch. It is also quite possible that in the meantime some other PR has gone in, and git will ask you to merge master before you add more commits. This is normally fairly painless, although often you have to resolve merge conflicts. If in doubt, backup your work before doing anything, and ask in Discord before doing anything drastic, or if you don't understand what git is telling you.
+To implement suggestions made in reviews, it is generally easier to be consistent if you push more commits from your local branch. It is also quite possible that in the meantime some other PR has gone in, and git will ask you to merge main before you add more commits. This is normally fairly painless, although often you have to resolve merge conflicts. If in doubt, backup your work before doing anything, and ask in Discord before doing anything drastic, or if you don't understand what git is telling you.
 
 There is no need to wait for your PR to be approved and committed before working on your next file.

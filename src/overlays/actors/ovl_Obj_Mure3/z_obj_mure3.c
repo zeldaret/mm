@@ -134,7 +134,7 @@ void func_8098F438(ObjMure3* this, PlayState* play) {
 
         if ((*collectible != NULL) && !((this->unk164 >> i) & 1)) {
             if ((*collectible)->unk1A4 != 0) {
-                Flags_SetSwitch(play, OBJMURE3_PARAM_7F(&this->actor));
+                Flags_SetSwitch(play, OBJMURE3_GET_SWITCH_FLAG(&this->actor));
             }
             if ((*collectible)->actor.update == NULL) {
                 this->unk164 |= (1 << i);
@@ -147,7 +147,7 @@ void func_8098F438(ObjMure3* this, PlayState* play) {
 void ObjMure3_Init(Actor* thisx, PlayState* play) {
     ObjMure3* this = THIS;
 
-    if (Flags_GetSwitch(play, OBJMURE3_PARAM_7F(&this->actor))) {
+    if (Flags_GetSwitch(play, OBJMURE3_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }

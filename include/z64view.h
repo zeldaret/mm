@@ -65,6 +65,17 @@ typedef struct View {
     }                                      \
     (void)0
 
+#define SET_FULLSCREEN_VIEWPORT_DYNAMIC(view)   \
+{                                               \
+    Viewport viewport;                          \
+    viewport.bottomY = gScreenHeight;           \
+    viewport.rightX = gScreenWidth;             \
+    viewport.topY = 0;                          \
+    viewport.leftX = 0;                         \
+    View_SetViewport(view, &viewport);          \
+}                                               \
+(void)0
+
 void View_Init(View* view, struct GraphicsContext* gfxCtx);
 void View_LookAt(View* view, Vec3f* eye, Vec3f* at, Vec3f* up);
 void View_SetScale(View* view, f32 scale);

@@ -76,7 +76,7 @@ typedef struct EnRd {
     /* 0x3E2 */ UNK_TYPE1 unk3E2[0x2];
     /* 0x3E4 */ union {
                     s16 danceEndTimer;
-                    s16 pirouetteRotationalVelocity;
+                    s16 pirouetteAngularVelocity;
                 };
     /* 0x3E6 */ s16 drawDmgEffTimer;
     /* 0x3E8 */ u8 drawDmgEffType;

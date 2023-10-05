@@ -43,7 +43,7 @@ void EnAttackNiw_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gNiwSkel, &gNiwIdleAnim, this->jointTable, this->morphTable,
                        NIW_LIMB_MAX);
 
     // probably copy pasted from EnNiw, which has this same code, but AttackNiw has no params

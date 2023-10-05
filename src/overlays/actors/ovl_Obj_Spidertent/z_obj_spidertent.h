@@ -8,7 +8,7 @@ struct ObjSpidertent;
 typedef void (*ObjSpidertentActionFunc)(struct ObjSpidertent*, PlayState*);
 
 #define OBJSPIDERTENT_GET_1(thisx) ((thisx)->params & 1)
-#define OBJSPIDERTENT_GET_7F00(thisx) (((thisx)->params >> 8) & 0x7F)
+#define OBJSPIDERTENT_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 
 typedef struct ObjSpidertent {
     /* 0x000 */ DynaPolyActor dyna;

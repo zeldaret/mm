@@ -9,7 +9,7 @@ typedef void (*ObjOshihikiActionFunc)(struct ObjOshihiki*, PlayState*);
 
 #define OBJOSHIHIKI_GET_F(thisx) ((thisx)->params & 0xF)
 #define OBJOSHIHIKI_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
-#define OBJOSHIHIKI_GET_7F00(thisx) (((thisx)->params >> 8) & 0x7F)
+#define OBJOSHIHIKI_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 #define OBJOSHIHIKI_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 
 typedef enum {
