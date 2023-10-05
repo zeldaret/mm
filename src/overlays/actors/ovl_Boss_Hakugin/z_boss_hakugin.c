@@ -1415,8 +1415,6 @@ void func_80B08CB8(BossHakugin* this, PlayState* play) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B08CB8.s")
-
 void func_80B09178(BossHakugin* this) {
     Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.5f, 0.0f, 0.0f, 0, -3.0f);
     this->actionFunc = func_80B091D8;
