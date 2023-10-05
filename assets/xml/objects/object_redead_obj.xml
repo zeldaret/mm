@@ -2,7 +2,7 @@
     <!-- Object for The Gibdo's Well Doors -->
     <File Name="object_redead_obj" Segment="6">
         <DList Name="gRedeadObjDL" Offset="0x1A0" />
-        <Texture Name="gRedeadObjTLUT" OutName="redead_tlut" Format="rgba16" Width="4" Height="4" Offset="0x390" />
-        <Texture Name="gRedeadObjTex" OutName="redead" Format="ci4" Width="64" Height="64" Offset="0x3B0" />
+        <Texture Name="gRedeadObjTLUT" OutName="redead_obj_tlut" Format="rgba16" Width="4" Height="4" Offset="0x390" />
+        <Texture Name="gRedeadObjTex" OutName="redead_obj" Format="ci4" Width="64" Height="64" Offset="0x3B0" />
     </File>
 </Root>
