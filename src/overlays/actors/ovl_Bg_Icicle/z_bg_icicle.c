@@ -69,7 +69,7 @@ void BgIcicle_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(thisx, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_icicle_Colheader_000294);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gIciclesCol);
 
     Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit);
     Collider_UpdateCylinder(thisx, &this->collider);
@@ -242,5 +242,5 @@ void BgIcicle_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgIcicle_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_icicle_DL_0000D0);
+    Gfx_DrawDListOpa(play, gIciclesDL);
 }
