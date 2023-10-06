@@ -3,8 +3,10 @@
  *
  * Manages all cutscenes except for manual
  */
+
 #include "global.h"
 #include "z64shrink_window.h"
+#include "libc/string.h"
 
 ActorCutscene sGlobalCutsceneList[] = {
     // CS_ID_GLOBAL_78
@@ -54,6 +56,13 @@ typedef struct {
 CutsceneManager sCutsceneMgr = {
     CS_ID_NONE, 0, CS_ID_NONE, SUB_CAM_ID_DONE, NULL, CS_START_0, NULL, CAM_ID_MAIN, false,
 };
+
+ActorCutscene* sSceneCutsceneList;
+s16 sSceneCutsceneCount;
+u8 sWaitingCutsceneList[16];
+static s32 sBssPad;
+u8 sNextCutsceneList[16];
+static s32 sBssPad2;
 
 s16 CutsceneManager_SetHudVisibility(s16 csHudVisibility) {
     u16 hudVisibility;
@@ -204,7 +213,7 @@ void CutsceneManager_End(void) {
             sCutsceneMgr.targetActor->flags &= ~ACTOR_FLAG_100000;
             // fallthrough
         case CS_START_1:
-            func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_END);
+            func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_END);
             sCutsceneMgr.startMethod = CS_START_0;
             break;
 
@@ -216,11 +225,11 @@ void CutsceneManager_End(void) {
 
     switch (csEntry->endSfx) {
         case CS_END_SFX_TRE_BOX_APPEAR:
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             break;
 
         case CS_END_SFX_CORRECT_CHIME:
-            play_sound(NA_SE_SY_CORRECT_CHIME);
+            Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
             break;
 
         default: // CS_END_SFX_NONE
@@ -335,7 +344,7 @@ s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
     if (startCsId >= 0) {
-        func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_WAIT);
+        func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);
         }
@@ -351,7 +360,7 @@ s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
     if (startCsId >= 0) {
-        func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_WAIT);
+        func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);
         }

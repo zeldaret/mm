@@ -8,7 +8,7 @@
 #include "objects/object_kanban/object_kanban.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnKanban*)thisx)
 
@@ -50,8 +50,9 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static u16 sPartFlags[] = {
-    PART_UPPER_LEFT,  PART_LEFT_UPPER,  PART_LEFT_LOWER, PART_RIGHT_UPPER, PART_RIGHT_LOWER, PART_LOWER_LEFT,
-    PART_UPPER_RIGHT, PART_LOWER_RIGHT, PART_POST_UPPER, PART_POST_LOWER,  PART_POST_STAND,
+    PART_UPPER_SIDE_LEFT,  PART_LEFT_SIDE_UPPER, PART_LEFT_SIDE_LOWER,  PART_RIGHT_SIDE_UPPER,
+    PART_RIGHT_SIDE_LOWER, PART_LOWER_SIDE_LEFT, PART_UPPER_SIDE_RIGHT, PART_LOWER_SIDE_RIGHT,
+    PART_POST_UPPER,       PART_POST_LOWER,      PART_POST_STAND,
 };
 
 static Vec3f sPieceOffsets[] = {
@@ -145,8 +146,8 @@ void EnKanban_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
     if (this->actor.params != ENKANBAN_PIECE) {
-        this->actor.targetMode = 0;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.targetMode = TARGET_MODE_0;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->unk_19A = Rand_ZeroFloat(1.9f);
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -186,7 +187,7 @@ void func_80954BE8(EnKanban* this, PlayState* play) {
                 if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
                     this->msgFlag = true;
                 } else {
-                    func_800B8614(&this->actor, play, 68.0f);
+                    Actor_OfferTalk(&this->actor, play, 68.0f);
                 }
             }
         } else {
@@ -226,7 +227,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             }
 
             if (this->zTargetTimer == 1) {
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             }
 
             if (this->partFlags == 0xFFFF) {
@@ -289,40 +290,48 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             this->zTargetTimer = 10;
                         }
 
-                        if ((piece->partFlags & PART_UPPER_LEFT) && (piece->partFlags & PART_LOWER_RIGHT)) {
+                        if ((piece->partFlags & PART_UPPER_SIDE_LEFT) && (piece->partFlags & PART_LOWER_SIDE_RIGHT)) {
                             piece->pieceType = PIECE_WHOLE_SIGN;
-                        } else if ((piece->partFlags & PART_LEFT_UPPER) && (piece->partFlags & PART_RIGHT_UPPER)) {
+                        } else if ((piece->partFlags & PART_LEFT_SIDE_UPPER) &&
+                                   (piece->partFlags & PART_RIGHT_SIDE_UPPER)) {
                             piece->pieceType = PIECE_UPPER_HALF;
-                        } else if ((piece->partFlags & PART_LEFT_LOWER) && (piece->partFlags & PART_RIGHT_LOWER)) {
+                        } else if ((piece->partFlags & PART_LEFT_SIDE_LOWER) &&
+                                   (piece->partFlags & PART_RIGHT_SIDE_LOWER)) {
                             piece->pieceType = PIECE_LOWER_HALF;
-                        } else if ((piece->partFlags & PART_UPPER_RIGHT) && (piece->partFlags & PART_LOWER_RIGHT)) {
+                        } else if ((piece->partFlags & PART_UPPER_SIDE_RIGHT) &&
+                                   (piece->partFlags & PART_LOWER_SIDE_RIGHT)) {
                             piece->pieceType = PIECE_RIGHT_HALF;
-                        } else if ((piece->partFlags & PART_UPPER_LEFT) && (piece->partFlags & PART_LOWER_LEFT)) {
+                        } else if ((piece->partFlags & PART_UPPER_SIDE_LEFT) &&
+                                   (piece->partFlags & PART_LOWER_SIDE_LEFT)) {
                             piece->pieceType = PIECE_LEFT_HALF;
-                        } else if ((piece->partFlags & PART_UPPER_LEFT) && (piece->partFlags & PART_LEFT_UPPER)) {
+                        } else if ((piece->partFlags & PART_UPPER_SIDE_LEFT) &&
+                                   (piece->partFlags & PART_LEFT_SIDE_UPPER)) {
                             piece->pieceType = PIECE_2ND_QUAD;
-                        } else if ((piece->partFlags & PART_UPPER_RIGHT) && (piece->partFlags & PART_RIGHT_UPPER)) {
+                        } else if ((piece->partFlags & PART_UPPER_SIDE_RIGHT) &&
+                                   (piece->partFlags & PART_RIGHT_SIDE_UPPER)) {
                             piece->pieceType = PIECE_1ST_QUAD;
-                        } else if ((piece->partFlags & PART_LEFT_LOWER) && (piece->partFlags & PART_LOWER_LEFT)) {
+                        } else if ((piece->partFlags & PART_LEFT_SIDE_LOWER) &&
+                                   (piece->partFlags & PART_LOWER_SIDE_LEFT)) {
                             piece->pieceType = PIECE_3RD_QUAD;
-                        } else if ((piece->partFlags & PART_RIGHT_LOWER) && (piece->partFlags & PART_LOWER_RIGHT)) {
+                        } else if ((piece->partFlags & PART_RIGHT_SIDE_LOWER) &&
+                                   (piece->partFlags & PART_LOWER_SIDE_RIGHT)) {
                             piece->pieceType = PIECE_4TH_QUAD;
-                        } else if (piece->partFlags & PART_UPPER_LEFT) {
-                            piece->pieceType = PIECE_UPPER_LEFT;
-                        } else if (piece->partFlags & PART_LEFT_UPPER) {
-                            piece->pieceType = PIECE_LEFT_UPPER;
-                        } else if (piece->partFlags & PART_LEFT_LOWER) {
-                            piece->pieceType = PIECE_LEFT_LOWER;
-                        } else if (piece->partFlags & PART_LOWER_LEFT) {
-                            piece->pieceType = PIECE_LOWER_LEFT;
-                        } else if (piece->partFlags & PART_UPPER_RIGHT) {
-                            piece->pieceType = PIECE_UPPER_RIGHT;
-                        } else if (piece->partFlags & PART_RIGHT_UPPER) {
-                            piece->pieceType = PIECE_RIGHT_UPPER;
-                        } else if (piece->partFlags & PART_RIGHT_LOWER) {
-                            piece->pieceType = PIECE_RIGHT_LOWER;
-                        } else if (piece->partFlags & PART_LOWER_RIGHT) {
-                            piece->pieceType = PIECE_LOWER_RIGHT;
+                        } else if (piece->partFlags & PART_UPPER_SIDE_LEFT) {
+                            piece->pieceType = PIECE_UPPER_SIDE_LEFT;
+                        } else if (piece->partFlags & PART_LEFT_SIDE_UPPER) {
+                            piece->pieceType = PIECE_LEFT_SIDE_UPPER;
+                        } else if (piece->partFlags & PART_LEFT_SIDE_LOWER) {
+                            piece->pieceType = PIECE_LEFT_SIDE_LOWER;
+                        } else if (piece->partFlags & PART_LOWER_SIDE_LEFT) {
+                            piece->pieceType = PIECE_LOWER_SIDE_LEFT;
+                        } else if (piece->partFlags & PART_UPPER_SIDE_RIGHT) {
+                            piece->pieceType = PIECE_UPPER_SIDE_RIGHT;
+                        } else if (piece->partFlags & PART_RIGHT_SIDE_UPPER) {
+                            piece->pieceType = PIECE_RIGHT_SIDE_UPPER;
+                        } else if (piece->partFlags & PART_RIGHT_SIDE_LOWER) {
+                            piece->pieceType = PIECE_RIGHT_SIDE_LOWER;
+                        } else if (piece->partFlags & PART_LOWER_SIDE_RIGHT) {
+                            piece->pieceType = PIECE_LOWER_SIDE_RIGHT;
                         } else if (piece->partFlags & PART_POST_UPPER) {
                             piece->pieceType = PIECE_POST_UPPER;
                         } else if (piece->partFlags & PART_POST_LOWER) {
@@ -377,7 +386,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             piece->direction = -1;
                         }
                         piece->airTimer = 100;
-                        piece->actor.flags &= ~ACTOR_FLAG_1;
+                        piece->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                         piece->actor.flags |= ACTOR_FLAG_2000000;
                         this->cutMarkTimer = 5;
                         Actor_PlaySfx(&this->actor, NA_SE_IT_SWORD_STRIKE);
@@ -393,7 +402,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
             if (this->actor.xzDistToPlayer > 500.0f) {
-                this->actor.flags |= ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 this->partFlags = 0xFFFF;
             }
 
@@ -824,16 +833,17 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 
             switch (this->ocarinaFlag) {
                 case 0:
-                    if (play->msgCtx.ocarinaMode == 1) {
+                    if (play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) {
                         this->ocarinaFlag = 1;
                     }
                     break;
 
                 case 1:
-                    if ((play->msgCtx.ocarinaMode == 4) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
+                    if ((play->msgCtx.ocarinaMode == OCARINA_MODE_END) &&
+                        (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
                         this->actionState = ENKANBAN_REPAIR;
                         this->bounceX = 1;
-                        play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+                        Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
                     }
                     break;
 
@@ -877,7 +887,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 ((pDiff + yDiff + rDiff + this->spinRot.x + this->spinRot.z) == 0) && (this->floorRot.x == 0.0f) &&
                 (this->floorRot.z == 0.0f)) {
                 signpost->partFlags |= this->partFlags;
-                signpost->actor.flags |= ACTOR_FLAG_1;
+                signpost->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -890,9 +900,9 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 }
 
 static Gfx* sDisplayLists[] = {
-    object_kanban_DL_000CB0, object_kanban_DL_000DB8, object_kanban_DL_000E78, object_kanban_DL_000F38,
-    object_kanban_DL_000FF8, object_kanban_DL_0010B8, object_kanban_DL_0011C0, object_kanban_DL_0012C8,
-    object_kanban_DL_0013D0, object_kanban_DL_001488, object_kanban_DL_001540,
+    gSignUpperSideLeftModelDL,  gSignLeftSideUpperModelDL, gSignLeftSideLowerModelDL,  gSignRightSideUpperModelDL,
+    gSignRightSideLowerModelDL, gSignLowerSideLeftModelDL, gSignUpperSideRightModelDL, gSignLowerSideRightModelDL,
+    gSignPostUpperModelDL,      gSignPostLowerModelDL,     gSignPostStandModelDL,
 };
 
 #include "z_en_kanban_gfx.c"
@@ -923,7 +933,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPDisplayList(POLY_OPA_DISP++, object_kanban_DL_000C30);
+    gSPDisplayList(POLY_OPA_DISP++, gSignMaterialDL);
 
     if (this->actionState != ENKANBAN_SIGN) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
@@ -982,7 +992,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 255, 255, 255, this->cutMarkAlpha);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 150, 0);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_kanban_DL_001630);
+            gSPDisplayList(POLY_XLU_DISP++, gSignParticleDL);
         }
     }
 

@@ -7,7 +7,7 @@
 #include "z_en_owl.h"
 #include "objects/object_owl/object_owl.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnOwl*)thisx)
 
@@ -120,7 +120,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.1f);
         this->actor.update = func_8095CCF4;
         this->actor.draw = func_8095D074;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->unk_3D8 = 0;
         this->unk_3DA = 0x320;
         this->unk_3DC = 0x12C;
@@ -146,7 +146,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
     this->unk_40C = 4;
     this->csIdIndex = -1;
     owlType = ENOWL_GET_TYPE(&this->actor);
-    switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
+    switchFlag = ENOWL_GET_SWITCH_FLAG(&this->actor);
 
     switch (owlType) {
         case ENOWL_GET_TYPE_1:
@@ -157,7 +157,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENOWL_GET_TYPE_2:
-            if (gSaveContext.save.saveInfo.inventory.items[ITEM_LENS] == ITEM_LENS) {
+            if (gSaveContext.save.saveInfo.inventory.items[ITEM_LENS_OF_TRUTH] == ITEM_LENS_OF_TRUTH) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -232,7 +232,7 @@ s32 func_8095A978(EnOwl* this, PlayState* play, u16 textId, f32 targetDist, f32 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < targetDist) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, targetDist, arg4, PLAYER_IA_NONE);
+        Actor_OfferTalkExchange(&this->actor, play, targetDist, arg4, PLAYER_IA_NONE);
     }
 
     return false;
@@ -245,7 +245,7 @@ s32 func_8095A9FC(EnOwl* this, PlayState* play, u16 textId) {
 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < 120.0f) {
-        func_800B8500(&this->actor, play, 350.0f, 1000.0f, PLAYER_IA_NONE);
+        Actor_OfferTalkExchange(&this->actor, play, 350.0f, 1000.0f, PLAYER_IA_NONE);
     }
 
     return false;
@@ -258,7 +258,7 @@ void func_8095AA70(EnOwl* this) {
 }
 
 void func_8095AAD0(EnOwl* this, PlayState* play) {
-    s32 switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
+    s32 switchFlag = ENOWL_GET_SWITCH_FLAG(&this->actor);
 
     if (switchFlag < 0x7F) {
         Flags_SetSwitch(play, switchFlag);
@@ -514,7 +514,7 @@ void func_8095B574(EnOwl* this, PlayState* play) {
         this->csIdIndex = 2;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 200.0f, 400.0f, PLAYER_IA_NONE);
+        Actor_OfferTalkExchange(&this->actor, play, 200.0f, 400.0f, PLAYER_IA_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     }
@@ -621,7 +621,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                     case 0xBEC:
                         switch (play->msgCtx.choiceIndex) {
                             case 0:
-                                func_8019F208();
+                                Audio_PlaySfx_MessageDecide();
                                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_40)) {
                                     Message_ContinueTextbox(play, 0xBF4);
                                 } else {
@@ -631,7 +631,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                                 break;
 
                             case 1:
-                                func_8019F230();
+                                Audio_PlaySfx_MessageCancel();
                                 Message_ContinueTextbox(play, 0xBEF);
                                 break;
 
@@ -643,12 +643,12 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                     case 0xBF2:
                         switch (play->msgCtx.choiceIndex) {
                             case 0:
-                                func_8019F208();
+                                Audio_PlaySfx_MessageDecide();
                                 Message_ContinueTextbox(play, 0xBF4);
                                 break;
 
                             case 1:
-                                func_8019F230();
+                                Audio_PlaySfx_MessageCancel();
                                 Message_ContinueTextbox(play, 0xBF3);
                                 break;
 
@@ -741,12 +741,12 @@ void func_8095BE0C(EnOwl* this, PlayState* play) {
         this->csIdIndex = 1;
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {
-        if (this->actor.isTargeted) {
-            func_800B8500(&this->actor, play, 200.0f, 200.0f, PLAYER_IA_NONE);
+        if (this->actor.isLockedOn) {
+            Actor_OfferTalkExchange(&this->actor, play, 200.0f, 200.0f, PLAYER_IA_NONE);
         }
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 200.0f, 200.0f, PLAYER_IA_NONE);
+        Actor_OfferTalkExchange(&this->actor, play, 200.0f, 200.0f, PLAYER_IA_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     }

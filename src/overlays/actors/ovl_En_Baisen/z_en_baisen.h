@@ -2,6 +2,7 @@
 #define Z_EN_BAISEN_H
 
 #include "global.h"
+#include "objects/object_bai/object_bai.h"
 
 struct EnBaisen;
 
@@ -10,8 +11,8 @@ typedef void (*EnBaisenActionFunc)(struct EnBaisen*, PlayState*);
 typedef struct EnBaisen {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[20];
-    /* 0x200 */ Vec3s morphTable[20];
+    /* 0x188 */ Vec3s jointTable[OBJECT_BAI_LIMB_MAX];
+    /* 0x200 */ Vec3s morphTable[OBJECT_BAI_LIMB_MAX];
     /* 0x278 */ EnBaisenActionFunc actionFunc;
     /* 0x27C */ s16 headRotY;
     /* 0x27E */ s16 headRotX;
@@ -22,7 +23,7 @@ typedef struct EnBaisen {
     /* 0x28C */ s32 paramCopy;
     /* 0x290 */ s32 unk290;
     /* 0x294 */ s16 unusedCounter;
-    /* 0x298 */ f32 frameCount;
+    /* 0x298 */ f32 animEndFrame;
     /* 0x29C */ s16 unk29C;
     /* 0x29E */ s16 unk29E;
     /* 0x2A0 */ s16 textIdIndex;

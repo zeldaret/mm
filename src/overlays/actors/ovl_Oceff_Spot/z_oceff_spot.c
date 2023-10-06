@@ -62,8 +62,8 @@ void OceffSpot_Init(Actor* thisx, PlayState* play2) {
     this->actor.scale.y = 0.3f;
     this->unk16C = 0.0f;
     this->actor.world.pos.y = player->actor.world.pos.y;
-    this->actor.world.pos.x = player->bodyPartsPos[0].x;
-    this->actor.world.pos.z = player->bodyPartsPos[0].z;
+    this->actor.world.pos.x = player->bodyPartsPos[PLAYER_BODYPART_WAIST].x;
+    this->actor.world.pos.z = player->bodyPartsPos[PLAYER_BODYPART_WAIST].z;
 }
 
 void OceffSpot_Destroy(Actor* thisx, PlayState* play2) {
@@ -80,12 +80,13 @@ void OceffSpot_End(OceffSpot* this, PlayState* play) {
         this->unk16C -= 0.05f;
     } else {
         Actor_Kill(&this->actor);
-        if ((R_TIME_SPEED != 400) && (play->msgCtx.unk12046 == 0)) {
-            if ((play->msgCtx.ocarinaAction != 0x39) || (play->msgCtx.ocarinaMode != 0xA)) {
+        if ((R_TIME_SPEED != 400) && !play->msgCtx.blockSunsSong) {
+            if ((play->msgCtx.ocarinaAction != OCARINA_ACTION_CHECK_NOTIME_DONE) ||
+                (play->msgCtx.ocarinaMode != OCARINA_MODE_PLAYED_SUNS)) {
                 gSaveContext.sunsSongState = SUNSSONG_START;
             }
         } else {
-            play->msgCtx.ocarinaMode = 4;
+            play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         }
     }
 }
@@ -117,11 +118,7 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
     temp = (1.0f - cosf(this->unk16C * M_PI)) * 0.5f;
     this->actionFunc(this, play);
 
-    switch (gSaveContext.save.playerForm) {
-        default:
-            scale = 1.0f;
-            break;
-
+    switch (GET_PLAYER_FORM) {
         case PLAYER_FORM_DEKU:
             scale = 1.3f;
             break;
@@ -133,6 +130,10 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
         case PLAYER_FORM_GORON:
             scale = 2.0f;
             break;
+
+        default:
+            scale = 1.0f;
+            break;
     }
 
     this->actor.scale.z = (scale * 0.42f) * temp;
@@ -143,7 +144,7 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
 
     temp = (2.0f - this->unk16C) * this->unk16C;
 
-    func_800FD2B4(play, temp * 0.5f, 880.0f, 0.2f, 0.9f);
+    Environment_AdjustLights(play, temp * 0.5f, 880.0f, 0.2f, 0.9f);
 
     Lights_PointNoGlowSetInfo(&this->lightInfo1, this->actor.world.pos.x, this->actor.world.pos.y + 55.0f,
                               this->actor.world.pos.z, (s32)(255.0f * temp), (s32)(255.0f * temp), (s32)(200.0f * temp),

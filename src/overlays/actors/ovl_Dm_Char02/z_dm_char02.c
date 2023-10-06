@@ -16,7 +16,7 @@ void DmChar02_Destroy(Actor* thisx, PlayState* play);
 void DmChar02_Update(Actor* thisx, PlayState* play);
 void DmChar02_Draw(Actor* thisx, PlayState* play);
 
-void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play);
+void DmChar02_HandleCutscene(DmChar02* this, PlayState* play);
 
 ActorInit Dm_Char02_InitVars = {
     ACTOR_DM_CHAR02,
@@ -35,29 +35,30 @@ typedef enum {
     /* 0 */ DMCHAR02_ANIM_HIT_GROUND,
     /* 1 */ DMCHAR02_ANIM_TURN_AROUND,
     /* 2 */ DMCHAR02_ANIM_JUGGLE,
-    /* 3 */ DMCHAR02_ANIM_FALL
+    /* 3 */ DMCHAR02_ANIM_FALL,
+    /* 4 */ DMCHAR02_ANIM_MAX
 } DmChar02Animation;
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gClockTowerOcarinaOfTimeHitGroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gClockTowerOcarinaOfTimeTurnAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gClockTowerOcarinaOfTimeJuggleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gClockTowerOcarinaOfTimeFallAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+static AnimationInfo sAnimationInfo[DMCHAR02_ANIM_MAX] = {
+    { &gClockTowerOcarinaOfTimeHitGroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },  // DMCHAR02_ANIM_HIT_GROUND
+    { &gClockTowerOcarinaOfTimeTurnAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // DMCHAR02_ANIM_TURN_AROUND
+    { &gClockTowerOcarinaOfTimeJuggleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },     // DMCHAR02_ANIM_JUGGLE
+    { &gClockTowerOcarinaOfTimeFallAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },       // DMCHAR02_ANIM_FALL
 };
 
-void DmChar02_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
-    f32 frameCount;
+void DmChar02_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
+    f32 endFrame;
 
-    animationInfo += animIndex;
+    animInfo += animIndex;
 
-    if (animationInfo->frameCount < 0.0f) {
-        frameCount = Animation_GetLastFrame(animationInfo->animation);
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
     } else {
-        frameCount = animationInfo->frameCount;
+        endFrame = animInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
-                     frameCount, animationInfo->mode, animationInfo->morphFrames);
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
 void DmChar02_PlaySfxForDroppingOcarinaCutscene(DmChar02* this, PlayState* play) {
@@ -88,9 +89,9 @@ void DmChar02_Init(Actor* thisx, PlayState* play) {
         this->actor.targetArrowOffset = 3000.0f;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gClockTowerOcarinaOfTimeSkel, NULL, NULL, NULL, 0);
-        DmChar02_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+        DmChar02_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR02_ANIM_HIT_GROUND], 0);
         Actor_SetScale(&this->actor, 0.01f);
-        this->actionFunc = DmChar02_PerformCutsceneActions;
+        this->actionFunc = DmChar02_HandleCutscene;
     } else {
         Actor_Kill(&this->actor);
     }
@@ -99,7 +100,7 @@ void DmChar02_Init(Actor* thisx, PlayState* play) {
 void DmChar02_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play) {
+void DmChar02_HandleCutscene(DmChar02* this, PlayState* play) {
     u8 shouldChangeAnimation = true;
     s32 cueChannel;
 
@@ -148,7 +149,7 @@ void DmChar02_Update(Actor* thisx, PlayState* play) {
     this->unk_2F0 = this->unk_2F0;
     this->actionFunc(this, play);
     if (!Actor_HasParent(&this->actor, play)) {
-        Actor_OfferGetItem(&this->actor, play, GI_OCARINA, 30.0f, 80.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_OCARINA_OF_TIME, 30.0f, 80.0f);
     } else {
         gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         Actor_Kill(&this->actor);

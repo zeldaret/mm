@@ -169,7 +169,7 @@ void func_80B80440(BgIkanaRotaryroom* this, PlayState* play) {
     Matrix_Push();
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_SWITCH_FLAG_2(&this->dyna.actor))) {
         Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
     } else {
         Matrix_Translate(D_80B8216C.x, D_80B8216C.y, D_80B8216C.z, MTXMODE_APPLY);
@@ -195,7 +195,7 @@ void func_80B80550(BgIkanaRotaryroom* this, PlayState* play) {
     MtxF sp68;
     Vec3s sp60;
 
-    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_SWITCH_FLAG_1(&this->dyna.actor))) {
         spC4 = 1;
     } else {
         spC4 = 0;
@@ -494,10 +494,10 @@ s32 func_80B80F08(BgIkanaRotaryroom* this, PlayState* play) {
         Matrix_Pop();
 
         if (Math3D_Vec3fDistSq(&sp34, &sp28) < 3.0f) {
-            if (!Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
+            if (!Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_SWITCH_FLAG_2(&this->dyna.actor))) {
                 sp24 = true;
             }
-            Flags_SetSwitch(play, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor));
+            Flags_SetSwitch(play, BGIKANAROTARYROOM_GET_SWITCH_FLAG_2(&this->dyna.actor));
         }
     }
     return sp24;
@@ -652,7 +652,7 @@ void func_80B814B8(BgIkanaRotaryroom* this, PlayState* play) {
             func_80169EFC(&play->state);
             Player_PlaySfx(player, NA_SE_VO_LI_TAKEN_AWAY + player->ageProperties->voiceSfxIdOffset);
             play->haltAllActors = true;
-            play_sound(NA_SE_OC_ABYSS);
+            Audio_PlaySfx(NA_SE_OC_ABYSS);
             this->actionFunc = NULL;
         }
     } else {
@@ -708,7 +708,7 @@ void BgIkanaRotaryroom_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
-    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_SWITCH_FLAG_1(&this->dyna.actor))) {
         this->dyna.actor.shape.rot.x = -0x8000;
     } else {
         this->dyna.actor.shape.rot.x = 0;
@@ -753,15 +753,15 @@ void func_80B818B4(BgIkanaRotaryroom* this) {
 
 void func_80B818C8(Actor* thisx, PlayState* play) {
     BgIkanaRotaryroom* this = THIS;
-    s32 sp20;
+    s32 switchFlag;
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        sp20 = BGIKANAROTARYROOM_GET_FE(&this->dyna.actor);
-        if (Flags_GetSwitch(play, sp20)) {
-            Flags_UnsetSwitch(play, sp20);
+        switchFlag = BGIKANAROTARYROOM_GET_SWITCH_FLAG_1(&this->dyna.actor);
+        if (Flags_GetSwitch(play, switchFlag)) {
+            Flags_UnsetSwitch(play, switchFlag);
         } else {
-            Flags_SetSwitch(play, sp20);
+            Flags_SetSwitch(play, switchFlag);
         }
         func_80B81978(this);
     } else {
@@ -813,7 +813,7 @@ void func_80B81A80(Actor* thisx, PlayState* play) {
     s32 i;
     BgIkanaRotaryroomStruct1* ptr;
 
-    func_800B9010(thisx, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(thisx, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
     this->unk_584--;
 
     if (this->unk_584 <= 0) {
@@ -850,7 +850,7 @@ void func_80B81BA0(Actor* thisx, PlayState* play) {
     s32 sp30 = 0;
     s32 i;
 
-    func_800B9010(&this->dyna.actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
 
     if (this->unk_584 > 0) {
         this->unk_584--;
@@ -866,7 +866,7 @@ void func_80B81BA0(Actor* thisx, PlayState* play) {
         Quake_SetDuration(quakeIndex, 15);
     }
 
-    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_SWITCH_FLAG_1(&this->dyna.actor))) {
         if (this->dyna.actor.shape.rot.x < 0) {
             this->dyna.actor.shape.rot.x = -0x8000;
             sp30 = 1;
@@ -921,7 +921,7 @@ void func_80B81DC8(Actor* thisx, PlayState* play) {
     BgIkanaRotaryroom* this = THIS;
 
     if (this->unk_584 > 10) {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
     }
     this->unk_584--;
 

@@ -207,11 +207,11 @@ void ObjPzlblock_Init(Actor* thisx, PlayState* play) {
 
     DynaPolyActor_Init(&this->dyna, 0);
 
-    this->unk_17A = Object_GetIndex(&play->objectCtx, sp24->unk_00);
+    this->unk_17A = Object_GetSlot(&play->objectCtx, sp24->unk_00);
 
     if (sp28 == 0) {
         func_809A3D1C(this);
-    } else if (Flags_GetSwitch(play, OBJPZLBLOCK_GET_7F(&this->dyna.actor))) {
+    } else if (Flags_GetSwitch(play, OBJPZLBLOCK_GET_SWITCH_FLAG(&this->dyna.actor))) {
         if (sp2C == 0) {
             this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (sp28 * 60);
             func_809A3D1C(this);
@@ -295,7 +295,7 @@ void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
             }
         } else {
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-            Flags_SetSwitch(play, OBJPZLBLOCK_GET_7F(&this->dyna.actor));
+            Flags_SetSwitch(play, OBJPZLBLOCK_GET_SWITCH_FLAG(&this->dyna.actor));
             sp20 = 1;
         }
 
@@ -307,7 +307,7 @@ void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
             func_809A3D1C(this);
         }
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 }
 

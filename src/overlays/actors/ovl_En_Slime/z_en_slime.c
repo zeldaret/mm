@@ -5,8 +5,9 @@
  */
 
 #include "z_en_slime.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_200)
 
 #define THIS ((EnSlime*)thisx)
 
@@ -153,22 +154,25 @@ static Color_RGBA8 sBubbleEnvColor = { 150, 150, 150, 0 };
 static Vec3f sBubbleAccel = { 0.0f, -0.8f, 0.0f };
 
 static Color_RGBA8 sPrimColors[] = {
-    { 255, 255, 255, 255 },
-    { 255, 255, 0, 255 },
-    { 255, 255, 200, 255 },
-    { 225, 200, 255, 255 },
+    { 255, 255, 255, 255 }, // EN_SLIME_TYPE_BLUE
+    { 255, 255, 0, 255 },   // EN_SLIME_TYPE_GREEN
+    { 255, 255, 200, 255 }, // EN_SLIME_TYPE_YELLOW
+    { 225, 200, 255, 255 }, // EN_SLIME_TYPE_RED
 };
 
 static Color_RGBA8 sEnvColors[] = {
-    { 140, 255, 195, 255 },
-    { 50, 255, 0, 255 },
-    { 255, 180, 0, 255 },
-    { 255, 50, 155, 255 },
+    { 140, 255, 195, 255 }, // EN_SLIME_TYPE_BLUE
+    { 50, 255, 0, 255 },    // EN_SLIME_TYPE_GREEN
+    { 255, 180, 0, 255 },   // EN_SLIME_TYPE_YELLOW
+    { 255, 50, 155, 255 },  // EN_SLIME_TYPE_RED
 };
 
-static Vec3f sLimbPosOffsets[EN_SLIME_LIMBPOS_COUNT] = {
-    { 2000.0f, 2000.0f, 0.0f }, { -1500.0f, 2500.0f, -500.0f }, { -500.0f, 1000.0f, 2500.0f },
-    { 0.0f, 4000.0f, 0.0f },    { 0.0f, 2000.0f, -2000.0f },
+static Vec3f sBodyPartPosOffsets[EN_SLIME_BODYPART_MAX] = {
+    { 2000.0f, 2000.0f, 0.0f },     // EN_SLIME_BODYPART_0
+    { -1500.0f, 2500.0f, -500.0f }, // EN_SLIME_BODYPART_1
+    { -500.0f, 1000.0f, 2500.0f },  // EN_SLIME_BODYPART_2
+    { 0.0f, 4000.0f, 0.0f },        // EN_SLIME_BODYPART_3
+    { 0.0f, 2000.0f, -2000.0f },    // EN_SLIME_BODYPART_4
 };
 
 AnimatedMaterial* sSlimeTexAnim;
@@ -262,7 +266,7 @@ void EnSlime_Thaw(EnSlime* this, PlayState* play) {
         this->drawDmgEffType = 0; // So it's not triggered again until Freeze has been called again.
         this->collider.base.colType = COLTYPE_NONE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_SLIME_BODYPART_MAX, 2, 0.2f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -776,7 +780,7 @@ void EnSlime_Dead(EnSlime* this, PlayState* play) {
         if (this->actor.params == EN_SLIME_TYPE_YELLOW) {
             Item_DropCollectible(play, &this->actor.world.pos, ITEM00_ARROWS_10);
         } else if (this->actor.params == EN_SLIME_TYPE_GREEN) {
-            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_MAGIC_SMALL);
+            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_MAGIC_JAR_SMALL);
         } else if (this->actor.params == EN_SLIME_TYPE_RED) {
             Item_DropCollectible(play, &this->actor.world.pos, ITEM00_RECOVERY_HEART);
         }
@@ -812,7 +816,7 @@ f32 EnSlime_SnapIceBlockPosition(f32 currentPosition, f32 homePosition) {
  */
 void EnSlime_SetupSpawnIceBlock(EnSlime* this) {
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->drawDmgEffAlpha = 0.0f;
     this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
@@ -849,7 +853,7 @@ void EnSlime_SpawnIceBlock(EnSlime* this, PlayState* play) {
             this->actor.colorFilterTimer = 0;
             this->collider.base.acFlags |= AC_ON;
             this->iceBlockTimer = ICE_BLOCK_UNUSED;
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actor.gravity = -2.0f;
             EnSlime_SetupIdle(this);
         }
@@ -937,7 +941,7 @@ void EnSlime_IceBlockThaw(EnSlime* this, PlayState* play) {
 
     if (this->iceBlockTimer == ICE_BLOCK_UNUSED) {
         this->collider.base.acFlags |= AC_ON;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.flags &= ~ACTOR_FLAG_10;
         EnSlime_SetupIdle(this);
     }
@@ -999,7 +1003,7 @@ void EnSlime_Revive(EnSlime* this, PlayState* play) {
     this->timer++;
     if (this->timer == 28) {
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->collider.base.acFlags |= AC_ON;
         this->actor.shape.rot.y = this->actor.home.rot.y;
         EnSlime_SetupMoveInDirection(this);
@@ -1061,7 +1065,7 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Actor_SetDropFlag(&this->actor, &this->collider.info);
                 Enemy_StartFinishingBlow(play, &this->actor);
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             }
 
             if (this->actor.colChkInfo.damageEffect == EN_SLIME_DMGEFF_BLUNT) {
@@ -1090,7 +1094,7 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                     this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                                    CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     } else if (this->actor.colChkInfo.damageEffect == EN_SLIME_DMGEFF_ELECTRIC) {
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                         this->drawDmgEffAlpha = 4.0f;
@@ -1154,7 +1158,7 @@ void EnSlime_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.2f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.4f);
             } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.4f, 0.01f)) {
-                func_800B9010(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfx_Flagged(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
     }
@@ -1216,8 +1220,8 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_XLU_DISP++, gChuchuEyesDL);
     }
 
-    for (i = 0; i < EN_SLIME_LIMBPOS_COUNT; i++) {
-        Matrix_MultVec3f(&sLimbPosOffsets[i], &this->limbPos[i]);
+    for (i = 0; i < EN_SLIME_BODYPART_MAX; i++) {
+        Matrix_MultVec3f(&sBodyPartPosOffsets[i], &this->bodyPartsPos[i]);
     }
 
     if (this->actionFunc == EnSlime_Revive) {
@@ -1242,7 +1246,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EN_SLIME_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     CLOSE_DISPS(play->state.gfxCtx);

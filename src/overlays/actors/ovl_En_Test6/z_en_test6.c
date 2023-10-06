@@ -375,24 +375,24 @@ void EnTest6_Destroy(Actor* thisx, PlayState* play2) {
     EnTest6* this = THIS;
     s32 i;
 
-    play->envCtx.lightSettings.ambientColor[0] = 0;
-    play->envCtx.lightSettings.ambientColor[1] = 0;
-    play->envCtx.lightSettings.ambientColor[2] = 0;
+    play->envCtx.adjLightSettings.ambientColor[0] = 0;
+    play->envCtx.adjLightSettings.ambientColor[1] = 0;
+    play->envCtx.adjLightSettings.ambientColor[2] = 0;
 
-    play->envCtx.lightSettings.diffuseColor1[0] = 0;
-    play->envCtx.lightSettings.diffuseColor1[1] = 0;
-    play->envCtx.lightSettings.diffuseColor1[2] = 0;
+    play->envCtx.adjLightSettings.light1Color[0] = 0;
+    play->envCtx.adjLightSettings.light1Color[1] = 0;
+    play->envCtx.adjLightSettings.light1Color[2] = 0;
 
-    play->envCtx.lightSettings.diffuseColor2[0] = 0;
-    play->envCtx.lightSettings.diffuseColor2[1] = 0;
-    play->envCtx.lightSettings.diffuseColor2[2] = 0;
+    play->envCtx.adjLightSettings.light2Color[0] = 0;
+    play->envCtx.adjLightSettings.light2Color[1] = 0;
+    play->envCtx.adjLightSettings.light2Color[2] = 0;
 
-    play->envCtx.lightSettings.fogColor[0] = 0;
-    play->envCtx.lightSettings.fogColor[1] = 0;
-    play->envCtx.lightSettings.fogColor[2] = 0;
+    play->envCtx.adjLightSettings.fogColor[0] = 0;
+    play->envCtx.adjLightSettings.fogColor[1] = 0;
+    play->envCtx.adjLightSettings.fogColor[2] = 0;
 
-    play->envCtx.lightSettings.fogNear = 0;
-    play->envCtx.lightSettings.zFar = 0;
+    play->envCtx.adjLightSettings.fogNear = 0;
+    play->envCtx.adjLightSettings.zFar = 0;
 
     play->envCtx.fillScreen = false;
 
@@ -425,7 +425,7 @@ void EnTest6_StartCutscene(EnTest6* this, PlayState* play) {
             break;
 
         default:
-            gSaveContext.save.daysElapsed = 0;
+            gSaveContext.save.eventDayCount = 0;
             gSaveContext.save.day = 0;
             gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
             EnTest6_SetupAction(this, EnTest6_SharedSoTCutscene);
@@ -439,9 +439,9 @@ void EnTest6_SetupInvertedSoTCutscene(EnTest6* this, PlayState* play) {
     this->screenFillAlpha = 0;
 
     if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_SLOW) {
-        play_sound(NA_SE_SY_TIME_CONTROL_SLOW);
+        Audio_PlaySfx(NA_SE_SY_TIME_CONTROL_SLOW);
     } else if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
-        play_sound(NA_SE_SY_TIME_CONTROL_NORMAL);
+        Audio_PlaySfx(NA_SE_SY_TIME_CONTROL_NORMAL);
     }
 }
 
@@ -685,7 +685,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
 
     if (DECR(this->timer) == 0) {
         EnTest6_StopInvertedSoTCutscene(this, play);
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
     }
 }
 
@@ -773,7 +773,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
         play->unk_18844 = false;
     }
 
-    func_800B8F98(&player->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
 
     switch (this->timer) {
         case 119:
@@ -1091,7 +1091,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 } else {
                     gSaveContext.respawnFlag = 2;
                 }
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 return;
         }
     } else {
@@ -1168,7 +1168,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                     play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
                     play->transitionType = TRANS_TYPE_FADE_BLACK;
                     gSaveContext.respawnFlag = 2;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
                 return;
         }

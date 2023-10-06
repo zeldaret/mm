@@ -61,7 +61,7 @@ void EnNwc_Init(Actor* thisx, PlayState* play) {
     s32 niwObjectIndex;
     EnNwc* this = THIS;
 
-    niwObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_NIW);
+    niwObjectIndex = Object_GetSlot(&play->objectCtx, OBJECT_NIW);
     if (niwObjectIndex < 0) {
         // niw object does not exist, we need it for tranformation, despawn
         Actor_Kill(&this->actor);
@@ -242,20 +242,20 @@ void EnNwc_CheckFound(EnNwc* this, PlayState* play) {
         }
 
         EnNwc_ChangeState(this, NWC_STATE_FOLLOWING);
-        func_801A0868(&gSfxDefaultPos, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
+        Audio_PlaySfx_AtPosWithAllChannelsIO(&gSfxDefaultPos, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
     }
 }
 
 void EnNwc_LoadNiwSkeleton(EnNwc* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->niwObjectIndex)) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->niwObjectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->niwObjectIndex].segment);
 
-        SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
+        SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkel, &gNiwIdleAnim, this->jointTable, this->morphTable,
                            NIW_LIMB_MAX);
         Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim),
                          ANIMMODE_LOOP, 0.0f);
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->nwcObjectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->nwcObjectIndex].segment);
         this->state = NWC_STATE_NIW_LOADED;
         EnNwc_ToggleState(this);
     }

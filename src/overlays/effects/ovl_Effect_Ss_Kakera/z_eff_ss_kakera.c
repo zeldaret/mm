@@ -5,6 +5,7 @@
  */
 
 #include "z_eff_ss_kakera.h"
+#include "debug.h"
 
 #define rReg0 regs[0]
 #define rGravity regs[1]
@@ -62,7 +63,7 @@ u32 EffectSsKakera_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
                 break;
         }
     } else {
-        __assert("../z_eff_kakera.c", 193);
+        _dbg_hungup("../z_eff_kakera.c", 193);
     }
     this->draw = EffectSsKakera_Draw;
     this->update = EffectSsKakera_Update;
@@ -94,9 +95,9 @@ void EffectSsKakera_Draw(PlayState* play, u32 index, EffectSs* this) {
     OPEN_DISPS(gfxCtx);
     if (this->rObjId != KAKERA_OBJECT_DEFAULT) {
         if ((((this->rReg4 >> 7) & 1) << 7) == 0x80) {
-            gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[this->rObjBankIndex].segment);
+            gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[this->rObjBankIndex].segment);
         } else {
-            gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->rObjBankIndex].segment);
+            gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->rObjBankIndex].segment);
         }
     }
 
@@ -126,7 +127,7 @@ void EffectSsKakera_Draw(PlayState* play, u32 index, EffectSs* this) {
 }
 
 void EffectSsKakera_CheckForObject(EffectSs* this, PlayState* play) {
-    this->rObjBankIndex = Object_GetIndex(&play->objectCtx, this->rObjId);
+    this->rObjBankIndex = Object_GetSlot(&play->objectCtx, this->rObjId);
     if ((this->rObjBankIndex < 0) || (!Object_IsLoaded(&play->objectCtx, this->rObjBankIndex))) {
         this->life = 0;
         this->draw = NULL;

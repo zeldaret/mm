@@ -10,6 +10,7 @@
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_ishi/object_ishi.h"
+#include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
@@ -180,7 +181,7 @@ void func_8095D804(Actor* thisx, PlayState* play) {
     if (!ENISHI_GET_8(&this->actor)) {
         phi_s4 = gameplay_field_keep_DL_0066B0;
     } else {
-        phi_s4 = object_ishi_DL_0009B0;
+        phi_s4 = gSmallRockDL;
     }
 
     temp = D_8095F6E8[ENISHI_GET_8(&this->actor)];
@@ -309,7 +310,7 @@ void func_8095DFF0(EnIshi* this, PlayState* play) {
     s16 temp_v1_2;
 
     if (temp >= 0) {
-        sp3C = Item_DropCollectible(play, &this->actor.world.pos, temp | (ENISHI_GET_FE00(&this->actor) << 8));
+        sp3C = Item_DropCollectible(play, &this->actor.world.pos, temp | (ENISHI_GET_FLAG(&this->actor) << 8));
         if (sp3C != NULL) {
             Matrix_Push();
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
@@ -353,8 +354,9 @@ void func_8095E204(EnIshi* this, PlayState* play) {
 
     for (i = 0; i < 3; i++) {
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
-                                          this->actor.csId, this->actor.halfDaysBits, NULL) == NULL) {
+                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
+                                          ENINSECT_PARAMS(true), this->actor.csId, this->actor.halfDaysBits,
+                                          NULL) == NULL) {
             break;
         }
     }
@@ -397,7 +399,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, D_8095F6B8[sp34]);
     func_8095D6E0(&this->actor, play);
 
-    if ((sp34 == 1) && Flags_GetSwitch(play, ENISHI_GET_FE00(&this->actor))) {
+    if ((sp34 == 1) && Flags_GetSwitch(play, ENISHI_GET_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -423,7 +425,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
         this->unk_197 |= 1;
     }
 
-    this->unk_196 = Object_GetIndex(&play->objectCtx, D_8095F6E8[ENISHI_GET_8(&this->actor)]);
+    this->unk_196 = Object_GetSlot(&play->objectCtx, D_8095F6E8[ENISHI_GET_8(&this->actor)]);
     if (this->unk_196 < 0) {
         Actor_Kill(&this->actor);
         return;
@@ -535,7 +537,7 @@ void func_8095E95C(EnIshi* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
         if (ENISHI_GET_1(&this->actor) == 1) {
-            Flags_SetSwitch(play, ENISHI_GET_FE00(&this->actor));
+            Flags_SetSwitch(play, ENISHI_GET_FLAG(&this->actor));
         }
         func_8095EA70(this);
         func_8095E14C(this);
@@ -761,5 +763,5 @@ void func_8095F61C(Actor* thisx, PlayState* play) {
 }
 
 void func_8095F654(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_ishi_DL_0009B0);
+    Gfx_DrawDListOpa(play, gSmallRockDL);
 }

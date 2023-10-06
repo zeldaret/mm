@@ -48,6 +48,7 @@
  * - Effect Update/Draw
  * - Seaweed
  */
+
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
@@ -55,7 +56,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_water_effect/object_water_effect.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss03*)thisx)
 
@@ -121,7 +122,7 @@ GyorgEffect sGyorgEffects[GYORG_EFFECT_COUNT];
 Boss03* sGyorgBossInstance;
 
 void Boss03_PlayUnderwaterSfx(Vec3f* projectedPos, u16 sfxId) {
-    func_8019F420(projectedPos, sfxId);
+    Audio_PlaySfx_Underwater(projectedPos, sfxId);
 }
 
 /* Start of SpawnEffect section */
@@ -475,7 +476,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
             this->jointTable[i].z = Math_SinS(this->unk_240 * 0x10 + i * 19000) * 4000.0f;
         }
 
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         return;
     }
 
@@ -506,7 +507,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
         sGyorgEffects[i].type = GYORG_EFFECT_NONE;
     }
 
-    this->actor.targetMode = 5;
+    this->actor.targetMode = TARGET_MODE_5;
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.health = 10;
 
@@ -544,7 +545,7 @@ void func_809E344C(Boss03* this, PlayState* play) {
         this->actionFunc = func_809E34B8;
         Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -15.0f);
         this->unk_274 = 0;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 }
 
@@ -684,9 +685,9 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
          (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
-            player->unk_AE8 = 101;
+            player->actionVar2 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_0;
+            player->csMode = PLAYER_CSMODE_NONE;
         }
 
         func_809E344C(this, play);
@@ -754,7 +755,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
     this->unk_276 = 0x1000;
     this->unk_2BD = true;
     this->unk_278 = 15.0f;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     SkelAnime_Update(&this->skelAnime);
 
@@ -780,9 +781,9 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
          (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
-            player->unk_AE8 = 101;
+            player->actionVar2 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_0;
+            player->csMode = PLAYER_CSMODE_NONE;
             Play_DisableMotionBlur();
         }
 
@@ -908,9 +909,9 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
     // Stop chewing when the timer runs out
     if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0) {
         if (&this->actor == player->actor.parent) {
-            player->unk_AE8 = 101;
+            player->actionVar2 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_0;
+            player->csMode = PLAYER_CSMODE_NONE;
             Play_DisableMotionBlur();
             func_800B8D50(play, NULL, 10.0f, this->actor.shape.rot.y, 0.0f, 0x20);
         }
@@ -1051,7 +1052,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
 
         // Attack platform
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-            play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
+            Audio_PlaySfx(NA_SE_IT_BIG_BOMB_EXPLOSION);
             Actor_RequestQuakeAndRumble(&this->actor, play, 20, 15);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
                         ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE);
@@ -1167,7 +1168,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 this->subCamAt.y = player->actor.world.pos.y + 30.0f;
                 this->csState = 1;
                 this->csTimer = 0;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->unk_2D5 = true;
 
                 this->subCamFov = KREG(14) + 60.0f;
@@ -1421,7 +1422,7 @@ void Boss03_SetupDeathCutscene(Boss03* this, PlayState* play) {
     this->workTimer[WORK_TIMER_UNK0_C] = 0;
     this->unk_242 = 0;
     this->csState = 0;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
@@ -1750,9 +1751,9 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
     }
 
     if (&this->actor == player->actor.parent) {
-        player->unk_AE8 = 101;
+        player->actionVar2 = 101;
         player->actor.parent = NULL;
-        player->csMode = PLAYER_CSMODE_0;
+        player->csMode = PLAYER_CSMODE_NONE;
         Play_DisableMotionBlur();
     }
 
@@ -1772,7 +1773,7 @@ void Boss03_Stunned(Boss03* this, PlayState* play) {
         this->actor.gravity = -2.0f;
         Actor_MoveWithGravity(&this->actor);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
-            play_sound(NA_SE_IT_WALL_HIT_HARD);
+            Audio_PlaySfx(NA_SE_IT_WALL_HIT_HARD);
             Actor_RequestQuakeAndRumble(&this->actor, play, 10, 10);
         }
     } else {
@@ -1902,9 +1903,9 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
                     Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_DAMAGE_OLD);
 
                     if (&this->actor == player->actor.parent) {
-                        player->unk_AE8 = 101;
+                        player->actionVar2 = 101;
                         player->actor.parent = NULL;
-                        player->csMode = PLAYER_CSMODE_0;
+                        player->csMode = PLAYER_CSMODE_NONE;
                         Play_DisableMotionBlur();
                     }
 
@@ -2114,9 +2115,9 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
     this->prevPlayerPos = player->actor.world.pos;
 
     if (this->waterHeight < this->actor.world.pos.y) {
-        func_8019F540(0);
+        Audio_SetSfxUnderwaterReverb(false);
     } else {
-        func_8019F540(1);
+        Audio_SetSfxUnderwaterReverb(true);
     }
 
     if (this->unk_280 != 0) {
@@ -2151,14 +2152,14 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
 /* Start of Gyorg's Draw section */
 
 void Boss03_SetObject(PlayState* play, s16 objectId) {
-    s32 objectIndex = Object_GetIndex(&play->objectCtx, objectId);
+    s32 objectIndex = Object_GetSlot(&play->objectCtx, objectId);
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectIndex].segment);
 
-    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[objectIndex].segment);
-    gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[objectIndex].segment);
+    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectIndex].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[objectIndex].segment);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -2194,24 +2195,42 @@ s32 Boss03_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
  * Since there are two sets of ColliderJntSph, indices < 2 (ARRAY_COUNT(sHeadJntSphElementsInit)) refers to the first
  * collider and indices >= 2 refers to the second one
  */
-s8 sGyorgSphElementIndices[] = {
-    -1, // GYORG_LIMB_NONE,
-    -1, // GYORG_LIMB_ROOT,
-    0,  // GYORG_LIMB_HEAD,
-    -1, // GYORG_LIMB_BODY_ROOT,
-    4,  // GYORG_LIMB_UPPER_TRUNK,
-    5,  // GYORG_LIMB_LOWER_TRUNK,
-    6,  // GYORG_LIMB_TAIL,
-    -1, // GYORG_LIMB_RIGHT_FIN_ROOT,
-    2,  // GYORG_LIMB_UPPER_RIGHT_FIN,
-    -1, // GYORG_LIMB_LOWER_RIGHT_FIN,
-    -1, // GYORG_LIMB_LEFT_FIN_ROOT,
-    3,  // GYORG_LIMB_UPPER_LEFT_FIN,
-    -1, // GYORG_LIMB_LOWER_LEFT_FIN,
-    -1, // GYORG_LIMB_JAW_ROOT,
-    1,  // GYORG_LIMB_JAW,
-    -1, // GYORG_LIMB_MAX
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+static s8 sLimbToSphere[2][GYORG_LIMB_MAX] = {
+    {
+        -1, // GYORG_LIMB_NONE
+        -1, // GYORG_LIMB_ROOT
+        0,  // GYORG_LIMB_HEAD
+        -1, // GYORG_LIMB_BODY_ROOT
+        4,  // GYORG_LIMB_UPPER_TRUNK
+        5,  // GYORG_LIMB_LOWER_TRUNK
+        6,  // GYORG_LIMB_TAIL
+        -1, // GYORG_LIMB_RIGHT_FIN_ROOT
+        2,  // GYORG_LIMB_UPPER_RIGHT_FIN
+        -1, // GYORG_LIMB_LOWER_RIGHT_FIN
+        -1, // GYORG_LIMB_LEFT_FIN_ROOT
+        3,  // GYORG_LIMB_UPPER_LEFT_FIN
+        -1, // GYORG_LIMB_LOWER_LEFT_FIN
+        -1, // GYORG_LIMB_JAW_ROOT
+        1,  // GYORG_LIMB_JAW
+    },
+    // unused
+    {
+        -1, // GYORG_LIMB_NONE
+        -1, // GYORG_LIMB_ROOT
+        -1, // GYORG_LIMB_HEAD
+        -1, // GYORG_LIMB_BODY_ROOT
+        -1, // GYORG_LIMB_UPPER_TRUNK
+        -1, // GYORG_LIMB_LOWER_TRUNK
+        -1, // GYORG_LIMB_TAIL
+        -1, // GYORG_LIMB_RIGHT_FIN_ROOT
+        -1, // GYORG_LIMB_UPPER_RIGHT_FIN
+        -1, // GYORG_LIMB_LOWER_RIGHT_FIN
+        -1, // GYORG_LIMB_LEFT_FIN_ROOT
+        -1, // GYORG_LIMB_UPPER_LEFT_FIN
+        -1, // GYORG_LIMB_LOWER_LEFT_FIN
+        -1, // GYORG_LIMB_JAW_ROOT
+        -1, // GYORG_LIMB_JAW
+    },
 };
 
 Vec3f D_809E9148 = { 600.0f, -100.0f, 0.0f };
@@ -2233,8 +2252,8 @@ void Boss03_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
         Matrix_MultVec3f(&D_809E9148, &this->actor.focus.pos);
     }
 
-    sphereElementIndex = sGyorgSphElementIndices[limbIndex];
-    if (sphereElementIndex >= 0) {
+    sphereElementIndex = sLimbToSphere[0][limbIndex];
+    if (sphereElementIndex > -1) {
         Matrix_MultVec3f(&D_809E9154[sphereElementIndex], &spherePos);
 
         if (sphereElementIndex < 2) {

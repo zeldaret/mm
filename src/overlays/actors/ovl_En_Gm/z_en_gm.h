@@ -2,6 +2,7 @@
 #define Z_EN_GM_H
 
 #include "global.h"
+#include "objects/object_in2/object_in2.h"
 
 struct EnGm;
 
@@ -10,6 +11,8 @@ typedef s32 (*EnGmUnkFunc)(struct EnGm*, PlayState*);
 typedef void (*EnGmUnkFunc2)(struct EnGm*, PlayState*);
 
 #define ENGM_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
+
+#define ENGM_FIDGET_TABLE_LEN 3
 
 typedef struct EnGm {
     /* 0x000 */ Actor actor;
@@ -40,11 +43,11 @@ typedef struct EnGm {
     /* 0x29C */ Vec3f unk_29C;
     /* 0x2A8 */ Vec3s unk_2A8;
     /* 0x2AE */ Vec3s unk_2AE;
-    /* 0x2B4 */ Vec3s jointTable[20];
-    /* 0x32C */ Vec3s morphTable[20];
+    /* 0x2B4 */ Vec3s jointTable[OBJECT_IN2_LIMB_MAX];
+    /* 0x32C */ Vec3s morphTable[OBJECT_IN2_LIMB_MAX];
     /* 0x3A4 */ u16 unk_3A4;
     /* 0x3A6 */ u16 unk_3A6;
-    /* 0x3A8 */ f32 unk_3A8;
+    /* 0x3A8 */ f32 animPlaySpeed;
     /* 0x3AC */ f32 unk_3AC;
     /* 0x3B0 */ f32 unk_3B0;
     /* 0x3B4 */ f32 unk_3B4;
@@ -61,13 +64,13 @@ typedef struct EnGm {
     /* 0x3CC */ s16 unk_3CC;
     /* 0x3CE */ s16 unk_3CE;
     /* 0x3D0 */ s16 unk_3D0;
-    /* 0x3D2 */ s16 unk_3D2[3];
-    /* 0x3D8 */ s16 unk_3D8[3];
+    /* 0x3D2 */ s16 fidgetTableZ[ENGM_FIDGET_TABLE_LEN];
+    /* 0x3D8 */ s16 fidgetTableY[ENGM_FIDGET_TABLE_LEN];
     /* 0x3DE */ s16 unk_3DE;
     /* 0x3E0 */ s16 unk_3E0;
     /* 0x3E2 */ s16 unk_3E2;
     /* 0x3E4 */ EnGmUnkFunc unk_3E4;
-    /* 0x3E8 */ s32 unk_3E8;
+    /* 0x3E8 */ s32 animIndex;
     /* 0x3EC */ UNK_TYPE1 unk3EC[0x4];
     /* 0x3F0 */ s32 prevTalkState;
     /* 0x3F4 */ s32 unk_3F4;

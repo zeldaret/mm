@@ -12,6 +12,20 @@ typedef void (*EnPrActionFunc)(struct EnPr*, PlayState*);
 #define ENPR_FF00_MAX 20
 #define ENPR_FF00_MIN 0
 
+typedef enum EnPrBodyPart {
+    /*  0 */ ENPR_BODYPART_0,
+    /*  1 */ ENPR_BODYPART_1,
+    /*  2 */ ENPR_BODYPART_2,
+    /*  3 */ ENPR_BODYPART_3,
+    /*  4 */ ENPR_BODYPART_4,
+    /*  5 */ ENPR_BODYPART_5,
+    /*  6 */ ENPR_BODYPART_6,
+    /*  7 */ ENPR_BODYPART_7,
+    /*  8 */ ENPR_BODYPART_8,
+    /*  9 */ ENPR_BODYPART_9,
+    /* 10 */ ENPR_BODYPART_MAX
+} EnPrBodyPart;
+
 typedef struct EnPr {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -31,13 +45,13 @@ typedef struct EnPr {
     /* 0x218 */ UNK_TYPE1 unk218[4];
     /* 0x21C */ s32 unk_21C;
     /* 0x220 */ UNK_TYPE1 unk220[0x8];
-    /* 0x228 */ s32 unk_228;
+    /* 0x228 */ s32 bodyPartsCount;
     /* 0x22C */ s16 unk_22C;
     /* 0x22E */ s16 drawDmgEffAlpha;
     /* 0x230 */ s16 drawDmgEffType;
     /* 0x234 */ f32 unk_234;
     /* 0x238 */ f32 unk_238;
-    /* 0x23C */ Vec3f limbPos[10];
+    /* 0x23C */ Vec3f bodyPartsPos[ENPR_BODYPART_MAX];
     /* 0x2B4 */ f32 unk_2B4;
     /* 0x2B8 */ f32 unk_2B8;
     /* 0x2BC */ f32 unk_2BC;

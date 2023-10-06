@@ -9,7 +9,7 @@
 #include "objects/object_fz/object_fz.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnFz*)thisx)
 
@@ -157,7 +157,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_FREEZARD, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1400, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
@@ -180,7 +180,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_BC8 = 0;
     this->unk_BCF = 0;
     this->unk_BCC = 1;
@@ -472,7 +472,7 @@ void func_80933014(EnFz* this) {
 void func_809330D4(EnFz* this) {
     this->unk_BD6 = 2;
     this->unk_BCE = 0;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80933104;
 }
 
@@ -543,7 +543,7 @@ void func_80933324(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_80933368;
 }
@@ -607,7 +607,7 @@ void func_809334B8(EnFz* this, PlayState* play) {
     if (this->unk_BCA > 10) {
         sp3F = 0;
         sp3C = 150;
-        func_800B9010(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
         if ((this->unk_BCA - 10) < 16) {
             sp3C = (this->unk_BCA * 10) - 100;
         }
@@ -653,7 +653,7 @@ void func_809336C0(EnFz* this, PlayState* play) {
     this->unk_BCC = 1;
     this->unk_BCE = 0;
     this->unk_BD8 = 1;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_BD7 = 0;
     this->unk_BCA = 60;
     func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
@@ -671,7 +671,7 @@ void func_80933790(EnFz* this) {
     this->unk_BD6 = 3;
     this->unk_BCE = 0;
     this->unk_BD8 = 1;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.speed = 0.0f;
     this->unk_BBC = 0.0f;
     this->actionFunc = func_809337D4;
@@ -702,7 +702,7 @@ void func_8093389C(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_809338E0;
 }
@@ -723,7 +723,7 @@ void func_809338E0(EnFz* this, PlayState* play) {
 
     sp3F = 0;
     sp3C = 150;
-    func_800B9010(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
 
     if ((this->unk_BC6 & 0x3F) >= 0x30) {
         sp3C = 630 - ((this->unk_BC6 & 0x3F) * 10);
@@ -763,7 +763,7 @@ void func_80933AF4(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_80933B38;
 }
@@ -863,14 +863,14 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
 
     if (this->drawDmgEffTimer > 0) {
         s32 pad2[6];
-        Vec3f limbPos[2];
+        Vec3f bodyPartsPos[2];
         s32 pad3;
 
-        limbPos[0] = this->actor.world.pos;
-        limbPos[1] = this->actor.world.pos;
-        limbPos[0].y += 20.0f;
-        limbPos[1].y += 40.0f;
-        Actor_DrawDamageEffects(play, NULL, limbPos, ARRAY_COUNT(limbPos), this->drawDmgEffScale * 4.0f, 0.5f,
+        bodyPartsPos[0] = this->actor.world.pos;
+        bodyPartsPos[1] = this->actor.world.pos;
+        bodyPartsPos[0].y += 20.0f;
+        bodyPartsPos[1].y += 40.0f;
+        Actor_DrawDamageEffects(play, NULL, bodyPartsPos, ARRAY_COUNT(bodyPartsPos), this->drawDmgEffScale * 4.0f, 0.5f,
                                 this->drawDmgEffAlpha, ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
     }
 

@@ -178,10 +178,9 @@ void DoorWarp1_Destroy(Actor* thisx, PlayState* play) {
     LightContext_RemoveLight(play, &play->lightCtx, this->unk_1DC);
     LightContext_RemoveLight(play, &play->lightCtx, this->unk_1F0);
 
-    for (i = 0; i < ARRAY_COUNT(play->envCtx.lightSettings.diffuseColor1); i++) {
-        play->envCtx.lightSettings.diffuseColor1[i] = 0;
-        play->envCtx.lightSettings.fogColor[i] = play->envCtx.lightSettings.diffuseColor1[i];
-        play->envCtx.lightSettings.ambientColor[i] = play->envCtx.lightSettings.diffuseColor1[i];
+    for (i = 0; i < ARRAY_COUNT(play->envCtx.adjLightSettings.light1Color); i++) {
+        play->envCtx.adjLightSettings.ambientColor[i] = play->envCtx.adjLightSettings.fogColor[i] =
+            play->envCtx.adjLightSettings.light1Color[i] = 0;
     }
 
     if (this->unk_1D3 != 0) {
@@ -360,14 +359,14 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         if (play->msgCtx.choiceIndex == 0) {
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
             player->unk_3A0.x = this->dyna.actor.world.pos.x;
             player->unk_3A0.z = this->dyna.actor.world.pos.z;
             this->unk_1CA = 1;
             DoorWarp1_SetupAction(this, func_808B9524);
         } else {
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
             DoorWarp1_SetupAction(this, func_808B94A4);
         }
@@ -781,7 +780,6 @@ void func_808BA550(DoorWarp1* this, PlayState* play) {
     Player* player2 = GET_PLAYER(play);
     Player* player = GET_PLAYER(play);
     s16 i;
-    s32 temp_f16;
     f32 temp_f0;
     f32 temp_f2;
     s32 temp;
@@ -869,16 +867,13 @@ void func_808BA550(DoorWarp1* this, PlayState* play) {
     if (1) {}
     temp_f0 = 1.0f - ((f32)(D_808BC000 - this->unk_1D0) / ((D_808BC000 - tempS) + 100));
     if (temp_f0 > 0.0f) {
-        temp_f16 = -255.0f * temp_f0;
-
-        for (i = 0; i < 3; i++) {
-            play->envCtx.lightSettings.diffuseColor1[i] = temp_f16;
-            play->envCtx.lightSettings.fogColor[i] = temp_f16;
-            play->envCtx.lightSettings.ambientColor[i] = temp_f16;
+        for (i = 0; i < ARRAY_COUNT(play->envCtx.adjLightSettings.light1Color); i++) {
+            play->envCtx.adjLightSettings.ambientColor[i] = play->envCtx.adjLightSettings.fogColor[i] =
+                play->envCtx.adjLightSettings.light1Color[i] = -255.0f * temp_f0;
         }
 
-        play->envCtx.lightSettings.fogNear = -500.0f * temp_f0;
-        if (play->envCtx.lightSettings.fogNear < -300) {
+        play->envCtx.adjLightSettings.fogNear = -500.0f * temp_f0;
+        if (play->envCtx.adjLightSettings.fogNear < -300) {
             play->roomCtx.curRoom.segment = NULL;
         }
     }
@@ -919,10 +914,10 @@ void DoorWarp1_Update(Actor* thisx, PlayState* play) {
         this->unk_204 = 1.0f;
     }
 
-    if ((this->unk_1A0 != NULL) && (this->unk_1A0->unk_15C != this->unk_204)) {
+    if ((this->unk_1A0 != NULL) && (this->unk_1A0->unk15C != this->unk_204)) {
         this->unk_1A0->actor.world.pos.y = this->dyna.actor.world.pos.y;
-        this->unk_1A0->unk_158 = this->dyna.actor.world.pos.y;
-        this->unk_1A0->unk_15C = this->unk_204;
+        this->unk_1A0->unk158 = this->dyna.actor.world.pos.y;
+        this->unk_1A0->unk15C = this->unk_204;
     }
 
     this->actionFunc(this, play);

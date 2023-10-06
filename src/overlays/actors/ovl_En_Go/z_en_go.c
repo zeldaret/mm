@@ -20,7 +20,8 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+
 #define THIS ((EnGo*)thisx)
 
 #define ENGO_STANDING_Y_OFFSET 0.0f  // Actor shape offset in use when a Goron is in any standing state.
@@ -81,8 +82,8 @@ typedef enum EnGoEffectType {
     /* 7 */ ENGO_EFFECT_STEAM = ENGO_EFFECT_STEAM_MIN
 } EnGoEffectType;
 
-typedef enum EnGoAnimationIndex {
-    /* -1 */ ENGO_ANIM_INVALID = -1,
+typedef enum EnGoAnimation {
+    /* -1 */ ENGO_ANIM_NONE = -1,
     /*  0 */ ENGO_ANIM_GORON_MIN,
     /*  0 */ ENGO_ANIM_LYINGDOWNIDLE = ENGO_ANIM_GORON_MIN,
     /*  1 */ ENGO_ANIM_LYINGDOWNIDLE_IMM,
@@ -94,21 +95,21 @@ typedef enum EnGoAnimationIndex {
     /*  7 */ ENGO_ANIM_DROPKEG,
     /*  8 */ ENGO_ANIM_COVEREARS,
     /*  9 */ ENGO_ANIM_SHIVERINGSURPRISED,
-    /*  10 */ ENGO_ANIM_ATHLETICS_MIN,
-    /*  10 */ ENGO_ANIM_DOUBLE_ARM_SIDEBEND = ENGO_ANIM_ATHLETICS_MIN,
-    /*  11 */ ENGO_ANIM_SQUAT_SIDE_TO_SIDE,
-    /*  12 */ ENGO_ANIM_SHAKE_LIMBS,
-    /*  13 */ ENGO_ANIM_SINGLE_ARM_SIDEBEND,
-    /*  14 */ ENGO_ANIM_SITTING_STRETCH,
-    /*  15 */ ENGO_ANIM_CHEER,
-    /*  16 */ ENGO_ANIM_SHOUT,
-    /*  17 */ ENGO_ANIM_HELP_SITTING_STRETCH,
-    /*  18 */ ENGO_ANIM_SPRING_MIN,
-    /*  18 */ ENGO_ANIM_SHOW = ENGO_ANIM_SPRING_MIN,
-    /*  19 */ ENGO_ANIM_SHOW_LOOPED,
-    /*  20 */ ENGO_ANIM_LOOK_AROUND,
-    /*  21 */ ENGO_ANIM_LOOK_AROUND_LOOPED
-} EnGoAnimationIndex;
+    /* 10 */ ENGO_ANIM_ATHLETICS_MIN,
+    /* 10 */ ENGO_ANIM_DOUBLE_ARM_SIDEBEND = ENGO_ANIM_ATHLETICS_MIN,
+    /* 11 */ ENGO_ANIM_SQUAT_SIDE_TO_SIDE,
+    /* 12 */ ENGO_ANIM_SHAKE_LIMBS,
+    /* 13 */ ENGO_ANIM_SINGLE_ARM_SIDEBEND,
+    /* 14 */ ENGO_ANIM_SITTING_STRETCH,
+    /* 15 */ ENGO_ANIM_CHEER,
+    /* 16 */ ENGO_ANIM_SHOUT,
+    /* 17 */ ENGO_ANIM_HELP_SITTING_STRETCH,
+    /* 18 */ ENGO_ANIM_SPRING_MIN,
+    /* 18 */ ENGO_ANIM_SHOW = ENGO_ANIM_SPRING_MIN,
+    /* 19 */ ENGO_ANIM_SHOW_LOOPED,
+    /* 20 */ ENGO_ANIM_LOOK_AROUND,
+    /* 21 */ ENGO_ANIM_LOOK_AROUND_LOOPED
+} EnGoAnimation;
 
 void EnGo_Idle(EnGo* this, PlayState* play);
 void EnGo_Sleep(EnGo* this, PlayState* play);
@@ -308,7 +309,7 @@ static DamageTable sDamageTable = {
 /**
  * Animations used in the actor.
  *
- * @see EnGoAnimationIndex
+ * @see EnGoAnimation
  */
 static AnimationInfoS sAnimationInfo[] = {
 
@@ -529,7 +530,7 @@ void EnGo_DrawDust(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
  * @param pos Position around which the effects appear
  */
 void EnGo_InitSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], Vec3f pos) {
-    static u8 effectIndexToSnowEffectTable[ENGO_SNOW_EFFECT_COUNT] = {
+    static u8 sEffectIndexToSnowEffectTable[ENGO_SNOW_EFFECT_COUNT] = {
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
@@ -569,7 +570,7 @@ void EnGo_InitSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], Vec3f pos) {
         effect->alphaDenom = effect->alphaNumer = 1;
 
         // Assign a snow effect value of 'ENGO_EFFECT_SNOW1'/'2'/'3'
-        effect->type = effectIndexToSnowEffectTable[i];
+        effect->type = sEffectIndexToSnowEffectTable[i];
 
         // Initialize the parameters for the paired element
         randRelativeToWorldPos.x = ((Rand_ZeroOne() - 0.5f) * 80.0f) + effect->pos.x;
@@ -747,7 +748,7 @@ s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 isFallingAsleep = false;
 
-    if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+    if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->sleepState == ENGO_AWAKE) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
         (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON) && (play->sceneId == SCENE_16GORON_HOUSE) &&
@@ -889,7 +890,8 @@ void EnGo_UpdateCollider(EnGo* this, PlayState* play) {
  * @return True if talking
  */
 s32 EnGo_UpdateTalking(EnGo* this, PlayState* play) {
-    if (!(this->actionFlags & 7) || !Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (((this->actionFlags & SUBS_OFFER_MODE_MASK) == SUBS_OFFER_MODE_NONE) ||
+        !Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         return false;
     }
 
@@ -906,7 +908,7 @@ s32 EnGo_UpdateTalking(EnGo* this, PlayState* play) {
         this->actionFlags |= ENGO_FLAG_EYES_OPEN;
     }
 
-    SubS_UpdateFlags(&this->actionFlags, 0, 7);
+    SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     this->cutsceneState = 0;
     this->gatekeeperAnimState = 0;
     this->interruptedActionFunc = this->actionFunc;
@@ -952,18 +954,18 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
         (this->actor.draw != NULL) && (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
         (play->csCtx.scriptIndex == 0)) {
         if (!this->springArrivalCutsceneActive) {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->springArrivalCueId = 255;
             this->springArrivalCutsceneActive = true;
             this->interruptedActionFunc = this->actionFunc;
         }
-        SubS_UpdateFlags(&this->actionFlags, 0, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = EnGo_HandleSpringArrivalCutscene;
     } else if (this->springArrivalCutsceneActive) {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->springArrivalCueId = 255;
         this->springArrivalCutsceneActive = false;
-        SubS_UpdateFlags(&this->actionFlags, 3, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->actionFunc = this->interruptedActionFunc;
     }
 
@@ -975,27 +977,27 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
  *
  * @return True if non-repeating animation has finished
  */
-s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play) {
+s32 EnGo_UpdateSkelAnime(EnGo* this, PlayState* play) {
     s8 objIndex = this->actor.objBankIndex;
     s8 extraObjIndex = -1;
-    s32 ret = false;
+    s32 isAnimFinished = false;
 
-    if ((this->curAnimIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
+    if ((this->animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
         extraObjIndex = this->hakuginDemoObjIndex;
-    } else if ((this->curAnimIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjIndex >= 0)) {
+    } else if ((this->animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjIndex >= 0)) {
         extraObjIndex = this->taisouObjIndex;
-    } else if (this->curAnimIndex < ENGO_ANIM_ATHLETICS_MIN) {
+    } else if (this->animIndex < ENGO_ANIM_ATHLETICS_MIN) {
         extraObjIndex = this->actor.objBankIndex;
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
-        this->skelAnime.playSpeed = this->curAnimPlaySpeed;
-        ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
+        this->skelAnime.playSpeed = this->animPlaySpeed;
+        isAnimFinished = SkelAnime_Update(&this->skelAnime);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objIndex].segment);
     }
 
-    return ret;
+    return isAnimFinished;
 }
 
 /**
@@ -1003,7 +1005,7 @@ s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play) {
  */
 s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_IDLE) {
-        if (this->curAnimIndex == ENGO_ANIM_ROLL) {
+        if (this->animIndex == ENGO_ANIM_ROLL) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
             }
@@ -1011,7 +1013,7 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
             if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
             }
-        } else if ((this->curAnimIndex == ENGO_ANIM_UNROLL) || (this->curAnimIndex == ENGO_ANIM_UNROLL_IMM)) {
+        } else if ((this->animIndex == ENGO_ANIM_UNROLL) || (this->animIndex == ENGO_ANIM_UNROLL_IMM)) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE_OFF);
             }
@@ -1035,10 +1037,10 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
  *
  * @return True if animation was changed
  */
-s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex) {
+s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimation animIndex) {
     s8 objIndex = this->actor.objBankIndex;
     s8 extraObjIndex = -1;
-    s32 ret = false;
+    s32 didAnimChange = false;
 
     if ((animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
         extraObjIndex = this->hakuginDemoObjIndex;
@@ -1049,14 +1051,14 @@ s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex) {
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
-        this->curAnimIndex = animIndex;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        this->curAnimPlaySpeed = this->skelAnime.playSpeed;
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objIndex].segment);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 /**
@@ -1173,7 +1175,7 @@ s32 EnGo_UpdateRotationToTarget(EnGo* this, PlayState* play) {
 
     Math_Vec3f_Copy(&thisPos, &this->actor.focus.pos);
     if (this->attentionTarget->id == ACTOR_PLAYER) {
-        targetPos.y = ((Player*)this->attentionTarget)->bodyPartsPos[7].y + 3.0f;
+        targetPos.y = ((Player*)this->attentionTarget)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&targetPos, &this->attentionTarget->focus.pos);
     }
@@ -1224,13 +1226,13 @@ void EnGo_GravemakerIdle(EnGo* this, PlayState* play) {
     s16 deltaYaw = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
 
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
-        SubS_UpdateFlags(&this->actionFlags, 3, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else if ((player->transformation != PLAYER_FORM_GORON) || (ABS_ALT(deltaYaw) >= 0x1C70) ||
                CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_GRAVEMAKER_AS_GORON) ||
                CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON)) {
-        SubS_UpdateFlags(&this->actionFlags, 3, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else {
-        SubS_UpdateFlags(&this->actionFlags, 4, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
     }
 }
 
@@ -1239,9 +1241,9 @@ void EnGo_GravemakerIdle(EnGo* this, PlayState* play) {
  */
 void EnGo_FrozenIdle(EnGo* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON)) {
-        SubS_UpdateFlags(&this->actionFlags, 3, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else {
-        SubS_UpdateFlags(&this->actionFlags, 4, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
     }
 }
 
@@ -1649,14 +1651,14 @@ void EnGo_ChangeToStretchingAnimation(EnGo* this, PlayState* play) {
     EnGo_ChangeAnim(this, play, sSubtypeToAnimIndex[subtypeLookup]);
 
     // Move the sitting Goron forward, since their spawn location is the same as their standing counterpart.
-    if (this->curAnimIndex == ENGO_ANIM_SITTING_STRETCH) {
+    if (this->animIndex == ENGO_ANIM_SITTING_STRETCH) {
 
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &sStretchingGoronOffset,
                                       &newSittingStretcherPos);
         Math_Vec3f_Copy(&this->actor.world.pos, &newSittingStretcherPos);
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->sleepState = ENGO_AWAKE;
     this->actionFlags = 0;
@@ -1680,7 +1682,7 @@ void EnGo_ChangeToSpectatingAnimation(EnGo* this, PlayState* play) {
     animFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->skelAnime.curFrame = animFrame;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->sleepState = ENGO_AWAKE;
     this->actionFlags = 0;
@@ -1699,7 +1701,7 @@ void EnGo_ChangeToSpectatingAnimation(EnGo* this, PlayState* play) {
 void EnGo_ChangeToFrozenAnimation(EnGo* this, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInitFrozen);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->curAnimIndex = -1;
+    this->animIndex = ENGO_ANIM_NONE;
     EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVER);
     this->sleepState = ENGO_AWAKE;
     this->iceBlockScale = (this->scaleFactor / 0.01f) * 0.9f;
@@ -1744,7 +1746,7 @@ void EnGo_ChangeToCoveringEarsAnimation(EnGo* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->actionFlags = 0;
     this->actor.gravity = -1.0f;
-    SubS_UpdateFlags(&this->actionFlags, 3, 7);
+    SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->sleepState = ENGO_AWAKE;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->blinkTimer = 0;
@@ -1763,7 +1765,7 @@ void EnGo_ChangeToShiveringAnimation(EnGo* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->actionFlags = 0;
     this->actor.gravity = -1.0f;
-    SubS_UpdateFlags(&this->actionFlags, 3, 7);
+    SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->sleepState = ENGO_AWAKE;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFlags |= ENGO_FLAG_EYES_OPEN;
@@ -1781,7 +1783,7 @@ void EnGo_ChangeToShiveringAnimation(EnGo* this, PlayState* play) {
 void EnGo_SetupAthletic(EnGo* this, PlayState* play) {
     if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
          (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
-        (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE))) {
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
         EnGo_ChangeToStretchingAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
@@ -1874,11 +1876,11 @@ void EnGo_SetupMedigoron(EnGo* this, PlayState* play) {
     EnGo_ChangeAnim(this, play, ENGO_ANIM_LYINGDOWNIDLE);
     this->scaleFactor *= ENGO_MEDIGORON_SCALE_MULTIPLIER;
     Actor_SetScale(&this->actor, this->scaleFactor);
-    this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actor.targetMode = 3;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.targetMode = TARGET_MODE_3;
     this->actionFlags = 0;
     this->actor.gravity = -1.0f;
-    SubS_UpdateFlags(&this->actionFlags, 3, 7);
+    SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFlags |= ENGO_FLAG_EYES_OPEN;
     this->msgEventFunc = EnGo_HandleGivePowderKegCutscene;
@@ -1897,7 +1899,7 @@ void EnGo_SetupInitialAction(EnGo* this, PlayState* play) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
 
-        this->curAnimIndex = ENGO_ANIM_INVALID;
+        this->animIndex = ENGO_ANIM_NONE;
         EnGo_ChangeAnim(this, play, ENGO_ANIM_UNROLL);
         this->actor.draw = EnGo_Draw;
 
@@ -1906,7 +1908,7 @@ void EnGo_SetupInitialAction(EnGo* this, PlayState* play) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         Effect_Add(play, &this->indexEffect, EFFECT_TIRE_MARK, 0, 0, &tireMarkInit);
 
-        this->actor.targetMode = 1;
+        this->actor.targetMode = TARGET_MODE_1;
         this->scaleFactor = ENGO_NORMAL_SCALE;
         this->msgEventFunc = NULL;
 
@@ -1964,7 +1966,7 @@ void EnGo_Idle(EnGo* this, PlayState* play) {
     } else if (ENGO_GET_TYPE(&this->actor) != ENGO_MEDIGORON) {
         // All others besides the Medigoron in the Powder Keg Shop can fall asleep
         if (EnGo_IsFallingAsleep(this, play)) {
-            SubS_UpdateFlags(&this->actionFlags, 0, 7);
+            SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
             this->sleepState = ENGO_ASLEEP_POS;
             this->actionFunc = EnGo_Sleep;
         } else if (ENGO_GET_TYPE(&this->actor) == ENGO_GRAVEYARD) {
@@ -1982,9 +1984,9 @@ void EnGo_Idle(EnGo* this, PlayState* play) {
             }
         } else if (ENGO_GET_TYPE(&this->actor) == ENGO_ATHLETIC) {
             if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3FFC) {
-                SubS_UpdateFlags(&this->actionFlags, 3, 7);
+                SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             } else {
-                SubS_UpdateFlags(&this->actionFlags, 0, 7);
+                SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
             }
         }
     }
@@ -2037,7 +2039,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
             }
             this->snorePhase += 0x400;
             this->actor.shape.yOffset = (this->actor.scale.y / this->scaleFactor) * ENGO_ROLLEDUP_Y_OFFSET;
-            SubS_UpdateFlags(&this->actionFlags, 3, 7);
+            SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         }
     } else if ((this->actor.xzDistToPlayer >= 240.0f) || (this->actor.playerHeightRel >= 20.0f) ||
                (this->sleepState != ENGO_AWAKE)) {
@@ -2048,7 +2050,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
         this->actor.shape.yOffset = ENGO_STANDING_Y_OFFSET;
     }
 
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
     Math_ApproachS(&this->actor.shape.rot.y, targetRot, 4, 0x2AA8);
 }
 
@@ -2061,7 +2063,8 @@ void EnGo_Frozen(EnGo* this, PlayState* play) {
     Actor* actorCollidedWith = this->colliderCylinder.base.ac;
 
     if ((this->actionFlags & ENGO_FLAG_HIT_BY_OTHER) &&
-        (((actorCollidedWith != NULL) && (actorCollidedWith->id == ACTOR_OBJ_AQUA) && AQUA_HOT(actorCollidedWith)) ||
+        (((actorCollidedWith != NULL) && (actorCollidedWith->id == ACTOR_OBJ_AQUA) &&
+          (AQUA_GET_TYPE(actorCollidedWith) != AQUA_TYPE_COLD)) ||
          (this->actor.colChkInfo.damageEffect == ENGO_DMGEFF_FIRE))) {
         this->actionFunc = EnGo_AwaitThaw;
     }
@@ -2092,7 +2095,7 @@ void EnGo_Thaw(EnGo* this, PlayState* play) {
         EnGo_ChangeToShiveringAnimation(this, play);
         if ((ENGO_GET_TYPE(&this->actor) == ENGO_GRAVEYARD) &&
             (ENGO_GET_SUBTYPE(&this->actor) == ENGO_GRAVEYARD_FROZEN)) {
-            SubS_UpdateFlags(&this->actionFlags, 4, 7);
+            SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
             EnGo_ChangeToShiveringAnimation(otherGoron, play);
             otherGoron->actionFunc = EnGo_Idle;
         }
@@ -2165,14 +2168,14 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
             switch (this->springArrivalCueId) {
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
-                        (this->curAnimIndex == ENGO_ANIM_LOOK_AROUND)) {
+                        (this->animIndex == ENGO_ANIM_LOOK_AROUND)) {
                         EnGo_ChangeAnim(this, play, ENGO_ANIM_LOOK_AROUND_LOOPED);
                     }
                     break;
 
                 case 4:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
-                        (this->curAnimIndex == ENGO_ANIM_SHOW)) {
+                        (this->animIndex == ENGO_ANIM_SHOW)) {
                         EnGo_ChangeAnim(this, play, ENGO_ANIM_SHOW_LOOPED);
                     }
                     break;
@@ -2243,7 +2246,7 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
                 }
             }
 
-            SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+            SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
             Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     }
@@ -2388,7 +2391,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
             Math_Vec3f_Copy(&thisPos, &this->actor.world.pos);
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&thisPos, &targetPos), 4, 0x2AA8);
         }
-        SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+        SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
         return;
     }
 
@@ -2400,7 +2403,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
     }
 
     this->actionFlags &= ~ENGO_FLAG_ENGAGED;
-    SubS_UpdateFlags(&this->actionFlags, 3, 7);
+    SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->msgScriptResumePos = 0;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFunc = this->interruptedActionFunc;
@@ -2436,7 +2439,7 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
 
     if (!(this->actionFlags & ENGO_FLAG_FROZEN)) {
         EnGo_UpdateEyes(this);
-        EnGo_UpdateAnimationToCurrent(this, play);
+        EnGo_UpdateSkelAnime(this, play);
         EnGo_UpdateAttentionTargetAndReactions(this, play);
         EnGo_UpdateSfx(this, play);
     }
@@ -2448,10 +2451,10 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
         } else {
             xzRange = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & 7);
+        SubS_Offer(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & SUBS_OFFER_MODE_MASK);
     } else if ((this->actionFlags & ENGO_FLAG_ROLLED_UP) && (this->sleepState != ENGO_AWAKE)) {
         xzRange = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & 7);
+        SubS_Offer(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & SUBS_OFFER_MODE_MASK);
     }
 
     if ((ENGO_GET_TYPE(&this->actor) != ENGO_MEDIGORON) && (ENGO_GET_TYPE(&this->actor) != ENGO_SPECTATOR) &&
@@ -2498,7 +2501,7 @@ void EnGo_Draw_NoSkeleton(EnGo* this, PlayState* play) {
 s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnGo* this = THIS;
     Vec3f worldPos;
-    s32 rotTableIndex;
+    s32 fidgetIndex;
 
     if ((ENGO_GET_TYPE(&this->actor) == ENGO_MEDIGORON) && (limbIndex == GORON_LIMB_BODY)) {
         Matrix_MultZero(&worldPos);
@@ -2508,25 +2511,25 @@ s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     switch (limbIndex) {
         case GORON_LIMB_BODY:
-            rotTableIndex = 0;
+            fidgetIndex = 0;
             break;
 
         case GORON_LIMB_LEFT_UPPER_ARM:
-            rotTableIndex = 1;
+            fidgetIndex = 1;
             break;
 
         case GORON_LIMB_RIGHT_UPPER_ARM:
-            rotTableIndex = 2;
+            fidgetIndex = 2;
             break;
 
         default:
-            rotTableIndex = 9;
+            fidgetIndex = 9;
             break;
     }
 
-    if ((this->actionFlags & ENGO_FLAG_STANDING) && (rotTableIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->limbRotTableY[rotTableIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->limbRotTableZ[rotTableIndex]) * 200.0f);
+    if ((this->actionFlags & ENGO_FLAG_STANDING) && (fidgetIndex < 9)) {
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
     return false;
 }
@@ -2596,7 +2599,7 @@ void EnGo_Draw(Actor* thisx, PlayState* play) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
 
-        if (this->curAnimIndex == ENGO_ANIM_SITTING_STRETCH) {
+        if (this->animIndex == ENGO_ANIM_SITTING_STRETCH) {
             Matrix_Translate(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
         }
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

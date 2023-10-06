@@ -6,8 +6,9 @@
 
 #include "z_en_ssh.h"
 #include "objects/object_ssh/object_ssh.h"
+#include "objects/object_st/object_st.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnSsh*)thisx)
 
@@ -325,9 +326,9 @@ void EnSsh_Stunned(EnSsh* this, PlayState* play) {
 
     if (this->stunTimer < 30) {
         if (this->stunTimer & 1) {
-            this->actor.shape.rot.y += 2000;
+            this->actor.shape.rot.y += 0x7D0;
         } else {
-            this->actor.shape.rot.y -= 2000;
+            this->actor.shape.rot.y -= 0x7D0;
         }
     }
 }
@@ -627,13 +628,15 @@ void EnSsh_SetColliders(EnSsh* this, PlayState* play) {
 }
 
 void EnSsh_Init(Actor* thisx, PlayState* play) {
-    // @bug - this symbol no longer exists, reads from a random place in object_ssh_Tex_000190 instead
-    f32 frameCount = Animation_GetLastFrame(&D_06000304);
+    //! @bug: object_st_Anim_000304 is similar if not idential to object_ssh_Anim_001494.
+    //! They also shared the same offset into their respective object files in OoT.
+    //! However since object_ssh is the one loaded, this ends up reading garbage data from within object_ssh_Tex_000190.
+    f32 frameCount = Animation_GetLastFrame(&object_st_Anim_000304);
     s32 pad;
     EnSsh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_ssh_Skel_006470, NULL, this->jointTable, this->morphtable, 30);
+    SkelAnime_Init(play, &this->skelAnime, &object_ssh_Skel_006470, NULL, this->jointTable, this->morphTable, 30);
     Animation_Change(&this->skelAnime, &object_ssh_Anim_001494, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP_INTERP, 0.0f);
     this->blureIdx = EnSsh_CreateBlureEffect(play);
     EnSsh_InitColliders(this, play);
@@ -747,7 +750,7 @@ void EnSsh_Idle(EnSsh* this, PlayState* play) {
 
     if ((this->unkTimer == 0) && (this->animTimer == 0) && (this->actor.xzDistToPlayer < 100.0f) &&
         Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 

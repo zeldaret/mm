@@ -2,7 +2,8 @@
 #define MACROS_H
 
 #include "libc/stdint.h"
-#include "ultra64/convert.h"
+#include "PR/os_convert.h"
+#include "main.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -37,6 +38,7 @@
 #define DAY_LENGTH (CLOCK_TIME(24, 0))
 
 #define TIME_TO_HOURS_F(time) ((time) * (24.0f / 0x10000))
+#define TIME_TO_HOURS_F_ALT(time) (TIME_TO_MINUTES_F(time) / 60.0f)
 #define TIME_TO_MINUTES_F(time) ((time) * ((24.0f * 60.0f) / 0x10000)) // 0.021972656f
 #define TIME_TO_MINUTES_ALT_F(time) ((time) / (0x10000 / (24.0f * 60.0f)))
 #define TIME_TO_SECONDS_F(time) ((time) * ((24.0f * 60.0f * 60.0f) / 0x10000))
@@ -52,20 +54,10 @@
 // To be used with `Magic_Add`, but ensures enough magic is added to fill the magic bar to capacity
 #define MAGIC_FILL_TO_CAPACITY (((void)0, gSaveContext.magicFillTarget) + (gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired + 1) * MAGIC_NORMAL_METER)
 
-#define CONTROLLER1(gameState) (&(gameState)->input[0])
-#define CONTROLLER2(gameState) (&(gameState)->input[1])
-#define CONTROLLER3(gameState) (&(gameState)->input[2])
-#define CONTROLLER4(gameState) (&(gameState)->input[3])
-
 #define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
 #define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
 
 #define CHECK_FLAG_ALL(flags, mask) (((flags) & (mask)) == (mask))
-
-#define ALIGN8(val) (((val) + 7) & ~7)
-#define ALIGN16(val) (((val) + 0xF) & ~0xF)
-#define ALIGN64(val) (((val) + 0x3F) & ~0x3F)
-#define ALIGN256(val) (((val) + 0xFF) & ~0xFF)
 
 #define BIT_FLAG_TO_SHIFT(flag) \
     ((flag & 0x80) ? 7 : \
@@ -104,12 +96,6 @@
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
 
-#define RGBA16_GET_R(pixel) (((pixel) >> 11) & 0x1F)
-#define RGBA16_GET_G(pixel) (((pixel) >> 6) & 0x1F)
-#define RGBA16_GET_B(pixel) (((pixel) >> 1) & 0x1F)
-
-#define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x) - 0.5))
-
 #define SWAP(type, a, b)    \
     {                       \
         type _temp = (a);   \
@@ -117,8 +103,5 @@
         (b) = _temp;        \
     }                       \
     (void)0
-
-#define OVERLAY_RELOCATION_OFFSET(overlayEntry) ((uintptr_t)((overlayEntry)->vramStart) - (uintptr_t)((overlayEntry)->loadedRamAddr))
-#define VRAM_PTR_SIZE(entry) ((uintptr_t)((entry)->vramEnd) - (uintptr_t)((entry)->vramStart))
 
 #endif // MACROS_H

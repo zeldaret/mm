@@ -3,6 +3,7 @@
  * Overlay: ovl_Dm_Char01
  * Description: Woodfall scene objects (temple, water, walls, etc)
  */
+
 #include "prevent_bss_reordering.h"
 #include "z_dm_char01.h"
 #include "objects/object_mtoride/object_mtoride.h"
@@ -168,14 +169,14 @@ void func_80AA8698(DmChar01* this, PlayState* play) {
         (player2->actor.world.pos.x < 40.0f) && (player2->actor.world.pos.z > 1000.0f) &&
         (player2->actor.world.pos.z < 1078.0f)) {
         if (!D_80AAAAB4) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             D_80AAAAB4 = true;
         }
     } else {
         D_80AAAAB4 = false;
     }
 
-    if ((player->transformation == PLAYER_FORM_DEKU) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_DEKU) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA)) {
 
         if ((player2->actor.world.pos.x > -40.0f) && (player2->actor.world.pos.x < 40.0f) &&

@@ -3,7 +3,7 @@
  *
  * Checks whether or not a word can be registered in the dictionary
  */
-#include "io/controller.h"
+#include "PR/controller.h"
 
 // TODO: SJIS support
 s32 osVoiceCheckWord(u8* word) {

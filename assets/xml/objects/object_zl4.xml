@@ -93,7 +93,7 @@
         <Limb Name="gDmZl4RightForearmLimb" Type="Standard" EnumName="ZL4_LIMB_RIGHT_FOREARM" Offset="0xDFD0" />
         <Limb Name="gDmZl4RightHandLimb" Type="Standard" EnumName="ZL4_LIMB_RIGHT_HAND" Offset="0xDFDC" />
         <Limb Name="gDmZl4HeadLimb" Type="Standard" EnumName="ZL4_LIMB_HEAD" Offset="0xDFE8" />
-        <Skeleton Name="gZl4Skeleton" Type="Flex" LimbType="Standard" LimbNone="ZL4_LIMB_NONE" LimbMax="ZL4_LIMB_MAX" EnumName="Zl4Limb" Offset="0xE038" />
+        <Skeleton Name="gZl4Skel" Type="Flex" LimbType="Standard" LimbNone="ZL4_LIMB_NONE" LimbMax="ZL4_LIMB_MAX" EnumName="Zl4Limb" Offset="0xE038" />
 
         
         <!-- Unused Flute Animations -->

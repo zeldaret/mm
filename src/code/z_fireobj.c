@@ -112,7 +112,7 @@ void FireObj_UpdateStateTransitions(PlayState* play, FireObj* fire) {
         (waterY - fire->position.y > 6500.0f * fire->yScale)) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_NOT_LIT);
     }
-    if ((fire->flags & FIRE_FLAG_INTERACT_STICK) && (player->heldItemAction == PLAYER_IA_STICK)) {
+    if ((fire->flags & FIRE_FLAG_INTERACT_STICK) && (player->heldItemAction == PLAYER_IA_DEKU_STICK)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &fire->position, &dist);
         if (Math3D_LengthSquared(&dist) < SQ(20.0f)) {
             sp40 = true;

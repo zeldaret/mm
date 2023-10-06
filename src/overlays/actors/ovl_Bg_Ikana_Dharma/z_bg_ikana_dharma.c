@@ -153,7 +153,7 @@ void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, PlayState* play) {
 
     if (wasHit && (sFirstHitBgIkanaDharma == NULL)) {
         sFirstHitBgIkanaDharma = this2;
-        Flags_SetSwitch(play, BGIKANADHARMA_GET_SWITCHFLAG(&this->dyna.actor));
+        Flags_SetSwitch(play, BGIKANADHARMA_GET_SWITCH_FLAG(&this->dyna.actor));
         tempAngle1 = BINANG_ADD(this->dyna.actor.yawTowardsPlayer, 0x8000);
         tempAngle2 = (BINANG_SUB(player->actor.shape.rot.y, tempAngle1) >> 1);
         this->dyna.actor.world.rot.y = tempAngle1 + tempAngle2 + 0xF000;

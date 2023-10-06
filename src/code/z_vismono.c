@@ -4,6 +4,7 @@
  */
 
 #include "global.h"
+#include "z64vismono.h"
 #include "system_malloc.h"
 
 // Height of the fragments the color frame buffer (CFB) is split into.

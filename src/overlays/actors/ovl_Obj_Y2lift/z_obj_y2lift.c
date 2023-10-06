@@ -83,7 +83,7 @@ void ObjY2lift_Update(Actor* thisx, PlayState* play) {
         }
     } else {
         this->unk15E = false;
-        func_800B9010(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     }
     if (DECR(this->unk15F) != 0) {
         this->dyna.actor.shape.yOffset = (2.0f * (this->unk15F & 1)) * this->unk15F;

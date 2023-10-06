@@ -7,7 +7,7 @@
 #include "z_en_rz.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnRz*)thisx)
 
@@ -112,7 +112,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80BFC058;
     EnRz_SetupPath(this, play);
     this->animIndex = EN_RZ_ANIM_MAX;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
@@ -362,7 +362,7 @@ s32 func_80BFBE70(EnRz* this, PlayState* play) {
     u16 cueId;
 
     if ((EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) && (this->animIndex == EN_RZ_ANIM_APPLAUDING)) {
-        func_800B9010(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
     }
 
     if (Cutscene_IsCueInChannel(play, this->cueType)) {
@@ -536,10 +536,10 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
         } else if (EnRz_CanTalk(this, play)) {
             if (func_80BFBCEC(this, play) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04) && this->sister != NULL) {
                 this->actor.flags |= ACTOR_FLAG_10000;
-                func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+                Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
             } else {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_800B8614(&this->actor, play, 120.0f);
+                Actor_OfferTalk(&this->actor, play, 120.0f);
             }
         }
 
@@ -572,7 +572,7 @@ void func_80BFC674(EnRz* this, PlayState* play) {
             Message_StartTextbox(play, 0x2924, &this->actor);
         }
     } else if (EnRz_CanTalk(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -609,7 +609,7 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
         this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -644,7 +644,7 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
         this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 

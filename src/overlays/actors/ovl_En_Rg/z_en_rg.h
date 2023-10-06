@@ -11,6 +11,8 @@ typedef void (*EnRgActionFunc)(struct EnRg*, PlayState*);
 
 #define ENRG_PATH_INDEX_NONE 0xFF
 
+#define ENRG_FIDGET_TABLE_LEN 3
+
 typedef struct {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
@@ -43,8 +45,8 @@ typedef struct EnRg {
     /* 0x322 */ s16 unk_322;
     /* 0x324 */ s16 unk_324;
     /* 0x326 */ s16 unk_326;
-    /* 0x328 */ s16 unk_328[3];
-    /* 0x32E */ s16 unk_32E[3];
+    /* 0x328 */ s16 fidgetTableZ[ENRG_FIDGET_TABLE_LEN];
+    /* 0x32E */ s16 fidgetTableY[ENRG_FIDGET_TABLE_LEN];
     /* 0x334 */ s32 unk_334;
     /* 0x338 */ UNK_TYPE1 unk338[4];
     /* 0x33C */ s32 unk_33C;

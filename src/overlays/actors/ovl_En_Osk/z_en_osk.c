@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_ikn_demo/object_ikn_demo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnOsk*)thisx)
 
@@ -67,7 +67,7 @@ void EnOsk_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80BF5F60;
     this->unk_254 = -1;
     this->cueId = -1;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     switch (ENOSK_GET_F(&this->actor)) {
         case ENOSK_1:
@@ -221,7 +221,7 @@ void func_80BF61EC(EnOsk* this, PlayState* play) {
             this->actor.scale.x -= 0.85f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }
@@ -298,7 +298,7 @@ void func_80BF6478(EnOsk* this) {
 
             case 10:
             case 11:
-                func_800B9010(&this->actor, NA_SE_EN_YASE_LAUGH_K - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_YASE_LAUGH_K - SFX_FLAG);
                 break;
         }
     }
@@ -350,7 +350,7 @@ void func_80BF656C(EnOsk* this, PlayState* play) {
             this->actor.scale.x -= 0.65f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }
@@ -482,7 +482,7 @@ void func_80BF6A20(EnOsk* this, PlayState* play) {
             this->actor.scale.x -= 0.65f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }
@@ -542,12 +542,10 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
                      MTXMODE_APPLY);
     }
 
-    gfx = Gfx_SetupDL20_NoCD(POLY_XLU_DISP);
+    gfx = POLY_XLU_DISP;
+    gfx = Gfx_SetupDL20_NoCD(gfx);
 
-    gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
-    if (1) {}
-    if (1) {}
-    if (1) {}
+    gDPSetDither(gfx++, G_CD_NOISE);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
     gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
     gDPSetPrimColor(gfx++, 0, 0, 130, 0, 255, 100);

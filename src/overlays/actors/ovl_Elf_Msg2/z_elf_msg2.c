@@ -43,8 +43,8 @@ s32 func_8096EC4C(ElfMsg2* this, PlayState* play) {
     if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
         (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
         (void)"共倒れ"; // "Collapse together"
-        if (ELFMSG2_GET_SWITCHFLAG(&this->actor) != 0x7F) {
-            Flags_SetSwitch(play, ELFMSG2_GET_SWITCHFLAG(&this->actor));
+        if (ELFMSG2_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
+            Flags_SetSwitch(play, ELFMSG2_GET_SWITCH_FLAG(&this->actor));
         }
         Actor_Kill(&this->actor);
         return true;
@@ -53,17 +53,17 @@ s32 func_8096EC4C(ElfMsg2* this, PlayState* play) {
 
         if (Flags_GetClear(play, this->actor.room)) {
             (void)"共倒れ２"; // "Collapse 2"
-            if (ELFMSG2_GET_SWITCHFLAG(&this->actor) != 0x7F) {
-                Flags_SetSwitch(play, ELFMSG2_GET_SWITCHFLAG(&this->actor));
+            if (ELFMSG2_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG2_GET_SWITCH_FLAG(&this->actor));
             }
             Actor_Kill(&this->actor);
             return true;
         }
     }
-    if (ELFMSG2_GET_SWITCHFLAG(&this->actor) == 0x7F) {
+    if (ELFMSG2_GET_SWITCH_FLAG(&this->actor) == 0x7F) {
         return false;
     }
-    if (Flags_GetSwitch(play, ELFMSG2_GET_SWITCHFLAG(&this->actor))) {
+    if (Flags_GetSwitch(play, ELFMSG2_GET_SWITCH_FLAG(&this->actor))) {
         (void)"共倒れ"; // "Collapse together"
         Actor_Kill(&this->actor);
         return true;
@@ -83,7 +83,7 @@ void ElfMsg2_Init(Actor* thisx, PlayState* play) {
             ElfMsg2_SetupAction(this, func_8096EFD0);
         } else {
             ElfMsg2_SetupAction(this, func_8096EF98);
-            this->actor.flags |= (ACTOR_FLAG_40000 | ACTOR_FLAG_1);
+            this->actor.flags |= (ACTOR_FLAG_40000 | ACTOR_FLAG_TARGETABLE);
             this->actor.textId = func_8096EE50(this);
         }
         this->actor.shape.rot.z = 0;
@@ -108,8 +108,8 @@ void func_8096EE64(ElfMsg2* this, PlayState* play) {
 
         if (this->actor.home.rot.z != 1) {
             Actor_Kill(&this->actor);
-            if (ELFMSG2_GET_SWITCHFLAG(&this->actor) != 0x7F) {
-                Flags_SetSwitch(play, ELFMSG2_GET_SWITCHFLAG(&this->actor));
+            if (ELFMSG2_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG2_GET_SWITCH_FLAG(&this->actor));
             }
             return;
         }
@@ -137,7 +137,7 @@ void func_8096EFD0(ElfMsg2* this, PlayState* play) {
     if ((this->actor.home.rot.y < 0) && (this->actor.home.rot.y >= -0x80) &&
         (Flags_GetSwitch(play, -this->actor.home.rot.y - 1))) {
         ElfMsg2_SetupAction(this, func_8096EF98);
-        this->actor.flags |= (ACTOR_FLAG_40000 | ACTOR_FLAG_1);
+        this->actor.flags |= (ACTOR_FLAG_40000 | ACTOR_FLAG_TARGETABLE);
         this->actor.textId = func_8096EE50(this);
     }
 }

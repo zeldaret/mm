@@ -240,7 +240,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                 CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
 
                 if (!CutsceneFlags_Get(play, 4)) {
-                    play_sound(NA_SE_SY_PIECE_OF_HEART);
+                    Audio_PlaySfx(NA_SE_SY_PIECE_OF_HEART);
                     this->state = MAG_STATE_CALLED;
                     this->unk11F00 = 0;
                     this->unk11F02 = 30;
@@ -387,7 +387,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                                 if (gOpeningEntranceIndex >= 2) {
                                     gOpeningEntranceIndex = 0;
                                 }
-                                play_sound(NA_SE_SY_PIECE_OF_HEART);
+                                Audio_PlaySfx(NA_SE_SY_PIECE_OF_HEART);
                                 gSaveContext.gameMode = GAMEMODE_FILE_SELECT;
                                 play->transitionTrigger = TRANS_TRIGGER_START;
                                 play->transitionType = TRANS_TYPE_FADE_BLACK;
@@ -430,7 +430,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                 if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) ||
                     CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
                     CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
-                    play_sound(NA_SE_SY_PIECE_OF_HEART);
+                    Audio_PlaySfx(NA_SE_SY_PIECE_OF_HEART);
                     this->state = MAG_STATE_CALLED;
                 }
             }
@@ -707,7 +707,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
     s16 step;
 
     // Set segment 6 to the object, since this will be read by OVERLAY_DISP where it is not set by default.
-    gSPSegment(gfx++, 0x06, play->objectCtx.status[this->actor.objBankIndex].segment);
+    gSPSegment(gfx++, 0x06, play->objectCtx.slots[this->actor.objBankIndex].segment);
 
     Gfx_SetupDL39_Ptr(&gfx);
 

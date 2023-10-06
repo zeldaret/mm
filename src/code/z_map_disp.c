@@ -501,7 +501,7 @@ void func_80104AE8(PlayState* play) {
 void func_80104C80(PlayState* play) {
     s32 objBankIndex;
 
-    objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP);
+    objBankIndex = Object_GetSlot(&play->objectCtx, GAMEPLAY_DANGEON_KEEP);
     if (objBankIndex < 0) {
         D_801BEBB8.unk20 |= 1;
     } else {
@@ -529,8 +529,8 @@ void MapDisp_Init(PlayState* play) {
     if (!Map_IsInBossArea(play)) {
         D_801BEC1C = play->numRooms;
     }
-    D_801BEBB8.texBuff0 = THA_AllocTailAlign16(&play->state.heap, 0x4000);
-    D_801BEBB8.texBuff1 = THA_AllocTailAlign16(&play->state.heap, 0x4000);
+    D_801BEBB8.texBuff0 = THA_AllocTailAlign16(&play->state.tha, 0x4000);
+    D_801BEBB8.texBuff1 = THA_AllocTailAlign16(&play->state.tha, 0x4000);
     func_80104C80(play);
     if (!Map_IsInBossArea(play)) {
         D_801BEBB8.sceneMinX = 0;
@@ -540,12 +540,12 @@ void MapDisp_Init(PlayState* play) {
         D_801BEBB8.sceneMidX = (s16)(s32)((f32)D_801BEBB8.sceneMinX + ((f32)D_801BEBB8.sceneWidth * 0.5f));
         D_801BEBB8.sceneMidZ = (s16)(s32)((f32)D_801BEBB8.sceneMinZ + ((f32)D_801BEBB8.sceneHeight * 0.5f));
     }
-    D_801BEBB8.unk3C = THA_AllocTailAlign16(&play->state.heap, D_801BEC1C * sizeof(s16));
+    D_801BEBB8.unk3C = THA_AllocTailAlign16(&play->state.tha, D_801BEC1C * sizeof(s16));
 
     for (i = 0; i < D_801BEC1C; i++) {
         func_80102E90(play, &D_801BEBB8.unk3C[i]);
     }
-    D_801BEBB8.unk48 = THA_AllocTailAlign16(&play->state.heap, 32 * sizeof(s16));
+    D_801BEBB8.unk48 = THA_AllocTailAlign16(&play->state.tha, 32 * sizeof(s16));
 
     for (i = 0; i < 32; i++) {
         D_801BEBB8.unk48[i] = -0x7FFF;

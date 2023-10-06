@@ -7,7 +7,7 @@
 #include "z_en_minislime.h"
 #include "overlays/actors/ovl_En_Bigslime/z_en_bigslime.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
 
 #define THIS ((EnMinislime*)thisx)
 
@@ -121,7 +121,7 @@ static DamageTable sDamageTable = {
 void EnMinislime_Init(Actor* thisx, PlayState* play) {
     EnMinislime* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->id = this->actor.params;
@@ -306,14 +306,9 @@ void EnMinislime_SetupIceArrowDamage(EnMinislime* this) {
 }
 
 void EnMinislime_IceArrowDamage(EnMinislime* this, PlayState* play) {
-    f32 invFrozenTimer;
-    s32 pad;
-    f32 randFloat;
-    s32 randSign;
-
     if (this->frozenTimer == 80) {
         this->frozenAlpha += 10;
-        func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         if (this->frozenAlpha >= 200) {
             this->frozenAlpha = 200;
             this->frozenTimer--;
@@ -324,11 +319,11 @@ void EnMinislime_IceArrowDamage(EnMinislime* this, PlayState* play) {
             Math_Vec3f_Copy(&this->shakeRefPos, &this->actor.world.pos);
         } else if (this->frozenTimer > 0) {
             if ((this->frozenTimer < 20) || ((this->frozenTimer < 40) && ((this->frozenTimer % 2) != 0))) {
-                s32 requiredScopeTemp;
+                f32 invFrozenTimer = 1.0f / this->frozenTimer;
+                s32 pad;
+                f32 randFloat = Rand_ZeroFloat(invFrozenTimer);
+                s32 randSign = Rand_ZeroOne() < 0.5f ? -1 : 1;
 
-                invFrozenTimer = 1.0f / this->frozenTimer;
-                randFloat = Rand_ZeroFloat(invFrozenTimer);
-                randSign = Rand_ZeroOne() < 0.5f ? -1 : 1;
                 this->actor.world.pos.x = randSign * (invFrozenTimer + randFloat) + this->shakeRefPos.x;
                 randFloat = Rand_ZeroFloat(invFrozenTimer);
                 randSign = Rand_ZeroOne() < 0.5f ? -1 : 1;
@@ -371,7 +366,7 @@ void EnMinislime_FireArrowDamage(EnMinislime* this, PlayState* play) {
         this->frozenAlpha = 10 * this->meltTimer;
     }
 
-    func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     if (this->meltTimer == 0) {
         EnMinislime_SetupIdle(this);
     }
@@ -605,7 +600,7 @@ void EnMinislime_DefeatMelt(EnMinislime* this, PlayState* play) {
         EnMinislime_AddIceSmokeEffect(this, play);
     }
 
-    func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     if (Math_StepToF(&this->actor.scale.y, 0.001f, 0.00075f)) {
         if ((this->actor.shape.shadowAlpha - 4) <= 0) {
             this->actor.shape.shadowAlpha = 0;

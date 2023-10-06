@@ -181,7 +181,7 @@ void Map_Init(PlayState* play) {
     MapDisp_SwapRooms(play->roomCtx.curRoom.num);
     interfaceCtx->unk_278 = -1;
     interfaceCtx->dungeonOrBossAreaMapIndex = -1;
-    interfaceCtx->mapSegment = THA_AllocTailAlign16(&play->state.heap, 0x1000);
+    interfaceCtx->mapSegment = THA_AllocTailAlign16(&play->state.tha, 0x1000);
     if (func_8010A2AC(play)) {
         gSaveContext.mapIndex = func_8010A238(play);
         return;
@@ -230,9 +230,9 @@ void Map_Update(PlayState* play) {
     if ((play->pauseCtx.state <= PAUSE_STATE_OPENING_2) && (CHECK_BTN_ALL(controller->press.button, BTN_L)) &&
         !Play_InCsMode(play) && !func_80106530(play)) {
         if (!R_MINIMAP_DISABLED) {
-            play_sound(NA_SE_SY_CAMERA_ZOOM_UP);
+            Audio_PlaySfx(NA_SE_SY_CAMERA_ZOOM_UP);
         } else {
-            play_sound(NA_SE_SY_CAMERA_ZOOM_DOWN);
+            Audio_PlaySfx(NA_SE_SY_CAMERA_ZOOM_DOWN);
         }
 
         R_MINIMAP_DISABLED ^= 1;

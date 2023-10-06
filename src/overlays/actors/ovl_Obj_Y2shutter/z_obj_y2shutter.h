@@ -18,6 +18,6 @@ typedef enum {
 } ShutterType;
 
 #define OBJY2SHUTTER_GET_TYPE(thisx) (((thisx)->params >> 7) & 1)
-#define OBJY2SHUTTER_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define OBJY2SHUTTER_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 #endif // Z_OBJ_Y2SHUTTER_H

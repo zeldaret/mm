@@ -2,6 +2,7 @@
 #define Z_EN_HINT_SKB_H
 
 #include "global.h"
+#include "objects/object_skb/object_skb.h"
 
 struct EnHintSkb;
 
@@ -9,18 +10,36 @@ typedef void (*EnHintSkbActionFunc)(struct EnHintSkb*, PlayState*);
 
 #define ENHINTSKB_GET_FF(thisx) ((thisx)->params & 0xFF)
 
+typedef enum EnHintSkbBodyPart {
+    /*  0 */ ENHINTSKB_BODYPART_0,
+    /*  1 */ ENHINTSKB_BODYPART_1,
+    /*  2 */ ENHINTSKB_BODYPART_2,
+    /*  3 */ ENHINTSKB_BODYPART_3,
+    /*  4 */ ENHINTSKB_BODYPART_4,
+    /*  5 */ ENHINTSKB_BODYPART_5,
+    /*  6 */ ENHINTSKB_BODYPART_6,
+    /*  7 */ ENHINTSKB_BODYPART_7,
+    /*  8 */ ENHINTSKB_BODYPART_8,
+    /*  9 */ ENHINTSKB_BODYPART_9,
+    /* 10 */ ENHINTSKB_BODYPART_10,
+    /* 11 */ ENHINTSKB_BODYPART_11,
+    /* 12 */ ENHINTSKB_BODYPART_12,
+    /* 13 */ ENHINTSKB_BODYPART_13,
+    /* 14 */ ENHINTSKB_BODYPART_MAX
+} EnHintSkbBodyPart;
+
 typedef struct EnHintSkb {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderJntSph collider;
     /* 0x164 */ ColliderJntSphElement colliderElement[2];
     /* 0x1E4 */ SkelAnime skelAnime;
     /* 0x228 */ EnHintSkbActionFunc actionFunc;
-    /* 0x22C */ Vec3f limbPos[14];
+    /* 0x22C */ Vec3f bodyPartsPos[ENHINTSKB_BODYPART_MAX];
     /* 0x2D4 */ f32 drawDmgEffAlpha;
     /* 0x2D8 */ f32 drawDmgEffScale;
-    /* 0x2DC */ s32 limbCount;
-    /* 0x2E0 */ Vec3s jointTable[20];
-    /* 0x358 */ Vec3s morphtable[20];
+    /* 0x2DC */ s32 bodyPartsCount;
+    /* 0x2E0 */ Vec3s jointTable[OBJECT_SKB_LIMB_MAX];
+    /* 0x358 */ Vec3s morphTable[OBJECT_SKB_LIMB_MAX];
     /* 0x3D0 */ UNK_TYPE1 unk3D0[0xC];
     /* 0x3DC */ s16 unk_3DC;
     /* 0x3DE */ s16 unk_3DE;

@@ -46,7 +46,7 @@ void ObjKzsaku_Init(Actor* thisx, PlayState* play) {
 
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, thisx, col);
 
-    this->switchFlag = KZSAKU_GET_SWITCHFLAG(thisx);
+    this->switchFlag = KZSAKU_GET_SWITCH_FLAG(thisx);
     this->raisedAmount = 0.0f;
 
     if (Flags_GetSwitch(play, this->switchFlag)) {
@@ -86,7 +86,7 @@ void ObjKzsaku_Rise(ObjKzsaku* this, PlayState* play) {
         }
     }
     if (this->raisedAmount < 450.0f) {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_METALDOOR_SLIDE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_METALDOOR_SLIDE - SFX_FLAG);
         this->raisedAmount += 15.0f;
     } else {
         func_80C08C84(this);

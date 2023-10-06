@@ -7,7 +7,7 @@
 #include "z_en_osn.h"
 #include "objects/object_osn/object_osn.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnOsn*)thisx)
 
@@ -176,7 +176,7 @@ static DamageTable sDamageTable = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_STOP),
 };
 
 void EnOsn_UpdateCollider(EnOsn* this, PlayState* play) {
@@ -705,12 +705,12 @@ void EnOsn_InitCutscene(EnOsn* this) {
 }
 
 void EnOsn_ChooseAction(EnOsn* this, PlayState* play) {
-    u32 isFlagSet = Flags_GetSwitch(play, 0);
+    u32 isSwitchFlagSet = Flags_GetSwitch(play, 0);
 
     this->csId = this->actor.csId;
 
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, OSN_ANIM_IDLE);
-    if (!isFlagSet) {
+    if (!isSwitchFlagSet) {
         this->actionFunc = EnOsn_HandleCsAction;
     } else {
         this->actionFunc = EnOsn_Idle;
@@ -724,17 +724,17 @@ void EnOsn_Idle(EnOsn* this, PlayState* play) {
         !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->actionFunc = EnOsn_StartCutscene;
-        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) &&
+        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) && (yaw < 0x4000) &&
                    (yaw > -0x4000)) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             this->actor.textId = 0xFFFF;
         }
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->textId = EnOsn_GetInitialText(this, play);
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnOsn_Talk;
-    } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) && (yaw > -0x4000)) {
-        func_800B863C(&this->actor, play);
+    } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) && (yaw < 0x4000) && (yaw > -0x4000)) {
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
 }
 
@@ -888,7 +888,7 @@ void EnOsn_Talk(EnOsn* this, PlayState* play) {
     if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
         if (this->stateFlags & OSN_STATE_END_CONVERSATION) {
             this->stateFlags &= ~OSN_STATE_END_CONVERSATION;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = EnOsn_Idle;
         } else {
@@ -948,7 +948,7 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
             break;
 
         case OSN_TYPE_CUTSCENE:
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnOsn_HandleCsAction;
             break;
 
@@ -968,20 +968,20 @@ void EnOsn_Destroy(Actor* thisx, PlayState* play) {
 void EnOsn_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnOsn* this = THIS;
-    u32 isFlagSet = Flags_GetSwitch(play, 0);
+    u32 isSwitchFlagSet = Flags_GetSwitch(play, 0);
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
 
     if (ENOSN_GET_TYPE(&this->actor) == OSN_TYPE_CHOOSE) {
-        if (isFlagSet) {
-            this->actor.flags |= ACTOR_FLAG_1;
+        if (isSwitchFlagSet) {
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             EnOsn_UpdateCollider(this, play);
             this->actor.draw = EnOsn_Draw;
         } else {
             this->actor.draw = NULL;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         }
     }
 

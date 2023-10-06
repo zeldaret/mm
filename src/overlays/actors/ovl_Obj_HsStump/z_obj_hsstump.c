@@ -44,7 +44,7 @@ void ObjHsStump_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->isHidden = OBJHSSTUMP_GET_ISHIDDEN(thisx);
-    this->switchFlag = OBJHSSTUMP_GET_SWITCHFLAG(thisx);
+    this->switchFlag = OBJHSSTUMP_GET_SWITCH_FLAG(thisx);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_hsstump_Colheader_0011B0);
     switch (this->isHidden) {
@@ -71,7 +71,7 @@ void ObjHsStump_SetupIdle(ObjHsStump* this, PlayState* play) {
 }
 
 void ObjHsStump_Idle(ObjHsStump* this, PlayState* play) {
-    if (this->isHidden == true && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->isHidden == true) && Flags_GetSwitch(play, this->switchFlag)) {
         ObjHsStump_SetupAppear(this, play);
     }
 }
@@ -81,7 +81,7 @@ void ObjHsStump_SetupAppear(ObjHsStump* this, PlayState* play) {
     this->framesAppeared = 0;
     this->rotAngle = 0;
     this->rotFactor = 3640.0f;
-    func_8019F128(NA_SE_EN_NPC_APPEAR);
+    Audio_PlaySfx_2(NA_SE_EN_NPC_APPEAR);
     this->actionFunc = ObjHsStump_Appear;
 }
 

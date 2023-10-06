@@ -80,7 +80,7 @@ void ObjEtcetera_Init(Actor* thisx, PlayState* play) {
         type = DEKU_FLOWER_TYPE_PINK;
     }
 
-    objectIndex = Object_GetIndex(&play->objectCtx, objectIds[type]);
+    objectIndex = Object_GetSlot(&play->objectCtx, objectIds[type]);
     if (objectIndex >= 0) {
         this->objIndex = objectIndex;
     }
@@ -298,7 +298,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                 Actor_SetScale(&this->dyna.actor, 0.01f);
                 this->dyna.actor.scale.y = 0.02f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
-                this->dyna.actor.targetMode = 3;
+                this->dyna.actor.targetMode = TARGET_MODE_3;
                 break;
 
             case DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE:
@@ -311,7 +311,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                 this->oscillationTimer = 30;
                 this->bounceOscillationScale = 0.0f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
-                this->dyna.actor.targetMode = 3;
+                this->dyna.actor.targetMode = TARGET_MODE_3;
                 break;
 
             default:
@@ -328,7 +328,7 @@ void ObjEtcetera_Update(Actor* thisx, PlayState* play) {
     if (floorBgId == BGCHECK_SCENE) {
         floorPoly = this->dyna.actor.floorPoly;
         if ((floorPoly != NULL) && (this->burrowFlag & 1)) {
-            func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, floorBgId));
+            Environment_ChangeLightSetting(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, floorBgId));
         }
     }
 
