@@ -140,7 +140,7 @@ typedef enum EnHinkSkbAnimation {
     /* 11 */ STALCHILD_ANIM_SALUTE,
     /* 12 */ STALCHILD_ANIM_IDLE,
     /* 13 */ STALCHILD_ANIM_MAX
-} EnHinkSkbAnimation;
+} StalchildHintAnimation;
 
 static AnimationInfo sAnimationInfo[STALCHILD_ANIM_MAX] = {
     { &gStalchildWalkAnim, 0.96f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },        // STALCHILD_ANIM_WALK
