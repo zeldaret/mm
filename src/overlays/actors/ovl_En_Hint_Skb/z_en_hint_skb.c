@@ -125,7 +125,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-typedef enum EnHinkSkbAnimation {
+typedef enum StalchildHintAnimation {
     /*  0 */ STALCHILD_HINT_ANIM_WALK,
     /*  1 */ STALCHILD_HINT_ANIM_STAND_UP_MORPH_1,
     /*  2 */ STALCHILD_HINT_ANIM_ATTACK,
