@@ -39,7 +39,7 @@ void ObjVisiblock_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_visiblock_Colheader_000AD0);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gLensOfTruthPlatformCol);
 }
 
 void ObjVisiblock_Destroy(Actor* thisx, PlayState* play) {
@@ -49,5 +49,5 @@ void ObjVisiblock_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void ObjVisiblock_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListXlu(play, object_visiblock_DL_000140);
+    Gfx_DrawDListXlu(play, gLensOfTruthPlatformOnDL);
 }
