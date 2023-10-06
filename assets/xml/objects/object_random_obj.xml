@@ -2,6 +2,6 @@
     <!-- Object for Secret Shrine Sliding Door -->
     <File Name="object_random_obj" Segment="6">
         <DList Name="gSecretShrineSlidingDoorDL" Offset="0x190" />
-        <Texture Name="gSecretShrineSlidingDoorTex" OutName="secret_shrine_doors" Format="rgba16" Width="32" Height="64" Offset="0x2F0" />
+        <Texture Name="gSecretShrineSlidingDoorTex" OutName="secret_shrine_sliding_door" Format="rgba16" Width="32" Height="64" Offset="0x2F0" />
     </File>
 </Root>
