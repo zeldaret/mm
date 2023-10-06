@@ -19,7 +19,7 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     // Get digits for max number of stray fairies
-    counterDigits[1] = 15;
+    counterDigits[1] = STRAY_FAIRY_SCATTERED_TOTAL;
     counterDigits[0] = counterDigits[1] / 10;
     counterDigits[1] -= (s16)(counterDigits[0] * 10);
 

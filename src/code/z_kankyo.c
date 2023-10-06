@@ -1,18 +1,6 @@
-#include "prevent_bss_reordering.h"
-#include "global.h"
-#include "z64environment.h"
-#include "z64rumble.h"
-#include "z64save.h"
-#include "z64skybox.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
-
-void Environment_UpdatePostmanEvents(PlayState* play);
-void Environment_UpdateRain(PlayState* play);
-void Environment_UpdateTimeBasedSequence(PlayState* play);
-u8 func_800FE5D0(struct PlayState* play);
-void Environment_JumpForwardInTime(void);
+#include "ultra64.h"
+#include "z64light.h"
+#include "z64math.h"
 
 typedef enum {
     /* 0x00 */ LIGHTNING_BOLT_START,
@@ -21,9 +9,19 @@ typedef enum {
     /* 0xFF */ LIGHTNING_BOLT_INACTIVE = 0xFF
 } LightningBoltState;
 
-#define LERP(x, y, t) (((y) - (x)) * (t) + (x))
+typedef struct {
+    /* 0x00 */ u8 state;
+    /* 0x04 */ Vec3f offset;
+    /* 0x10 */ Vec3f pos;
+    /* 0x1C */ s8 pitch;
+    /* 0x1D */ s8 roll;
+    /* 0x1E */ u8 textureIndex;
+    /* 0x1F */ u8 delayTimer;
+} LightningBolt; // size = 0x20
 
-// Bss
+// Variables are put before most headers as a hacky way to bypass bss reordering
+struct LightningStrike;
+
 u8 D_801F4E30;
 u8 D_801F4E31;
 u8 gCustomLensFlare1On;
@@ -36,7 +34,7 @@ Vec3f gCustomLensFlare2Pos;
 f32 D_801F4E5C;
 f32 D_801F4E60;
 s16 D_801F4E64;
-LightningStrike gLightningStrike;
+struct LightningStrike gLightningStrike;
 f32 D_801F4E74;
 u16 D_801F4E78;
 u16 gSkyboxNumStars;
@@ -60,6 +58,15 @@ u8 sEnvIsTimeStopped;
 u8 D_801F4F33;
 u8 sGameOverLightsIntensity;
 Gfx* sSkyboxStarsDList;
+
+#include "z64environment.h"
+#include "global.h"
+#include "sys_cfb.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+
+#define LERP(x, y, t) (((y) - (x)) * (t) + (x))
 
 // Data
 f32 sSandstormLerpScale = 0.0f;
@@ -478,6 +485,12 @@ SkyboxFile sNormalSkyFiles[] = {
     },
 };
 
+void Environment_UpdatePostmanEvents(PlayState* play);
+void Environment_UpdateRain(PlayState* play);
+void Environment_UpdateTimeBasedSequence(PlayState* play);
+u8 func_800FE5D0(struct PlayState* play);
+void Environment_JumpForwardInTime(void);
+
 void Environment_GraphCallback(GraphicsContext* gfxCtx, void* arg) {
     PlayState* play = (PlayState*)arg;
 
@@ -887,10 +900,6 @@ f32 Environment_LerpWeightAccelDecel(u16 endFrame, u16 startFrame, u16 curFrame,
     decelDurationF = (s32)decelDuration;
 
     if ((startFrameF >= endFrameF) || (accelDurationF + decelDurationF > totalFrames)) {
-        // "The frame relation between end_frame and start_frame is wrong!!!"
-        // osSyncPrintf(VT_COL(RED, WHITE) "\nend_frameとstart_frameのフレーム関係がおかしい!!!" VT_RST);
-        // osSyncPrintf(VT_COL(RED, WHITE) "\nby get_parcent_forAccelBrake!!!!!!!!!" VT_RST);
-
         return 0.0f;
     }
 
@@ -2993,13 +3002,13 @@ void Environment_LerpFog(PlayState* play, s16 fogNearTarget, s16 fogFarTarget, f
 }
 
 // Repurposed from OoT to be more general
-u32 Environment_GetBgsDayCount(void) {
-    return gSaveContext.save.daysElapsed;
+u32 Environment_GetEventDayCount(void) {
+    return gSaveContext.save.eventDayCount;
 }
 
 // Repurposed from OoT to be more general
-void Environment_ClearBgsDayCount(void) {
-    gSaveContext.save.daysElapsed = 0;
+void Environment_ClearEventDayCount(void) {
+    gSaveContext.save.eventDayCount = 0;
 }
 
 // Repurposed from OoT to be more general

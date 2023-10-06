@@ -378,7 +378,7 @@ void func_8089AC70(EnDinofos* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
     this->colliderJntSph.base.colType = COLTYPE_HIT3;
-    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->unk_290 = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
@@ -450,7 +450,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         return true;
     }
 
-    if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->unk_AE7 == 1) &&
+    if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->actionVar1 == 1) &&
         (this->unk_28B == 0)) {
         this->unk_28B = 1;
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElement) - 3; i++) {

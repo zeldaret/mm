@@ -294,7 +294,7 @@ typedef struct {
     /* 0x4 */ s16 objectId;
 } EnDoorInfo; // size = 0x6
 
-static EnDoorInfo sObjInfo[] = {
+static EnDoorInfo sObjectInfo[] = {
     { SCENE_MITURIN, 0x01, OBJECT_NUMA_OBJ },
     { SCENE_TENMON_DAI, 0x02, OBJECT_DOR01 },
     { SCENE_00KEIKOKU, 0x02, OBJECT_DOR01 },
@@ -416,8 +416,8 @@ static Gfx* D_808679A4[14][2] = {
 
 void EnDoor_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    s32 objectBankIndex;
-    EnDoorInfo* objectInfo = &sObjInfo[0];
+    s32 objectSlot;
+    EnDoorInfo* objectInfo = &sObjectInfo[0];
     EnDoor* this = THIS;
     s32 i;
 
@@ -425,7 +425,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
 
     this->doorType = ENDOOR_GET_TYPE(thisx);
 
-    this->switchFlag = ENDOOR_GET_PARAM_7F(thisx);
+    this->switchFlag = ENDOOR_GET_SWITCH_FLAG(thisx);
     if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {
         DynaPolyActor_Init(&this->knobDoor.dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->knobDoor.dyna, &gDoorCol);
@@ -433,31 +433,32 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
     SkelAnime_Init(play, &this->knobDoor.skelAnime, &gDoorSkel, &gameplay_keep_Anim_020658, this->limbTable,
                    this->limbTable, DOOR_LIMB_MAX);
     if (this->doorType == ENDOOR_TYPE_5) {
-        objectInfo = &sObjInfo[17 + this->switchFlag];
+        objectInfo = &sObjectInfo[17 + this->switchFlag];
     } else {
-        for (i = 0; i < ARRAY_COUNT(sObjInfo) - 34; i++, objectInfo++) {
+        for (i = 0; i < ARRAY_COUNT(sObjectInfo) - 34; i++, objectInfo++) {
             if (play->sceneId == objectInfo->sceneId) {
                 break;
             }
         }
-        if ((i >= ARRAY_COUNT(sObjInfo) - 34) && (Object_GetIndex(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
+        if ((i >= ARRAY_COUNT(sObjectInfo) - 34) &&
+            (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) > OBJECT_SLOT_NONE)) {
             objectInfo++;
         }
     }
 
     this->knobDoor.dlIndex = objectInfo->dListIndex;
-    objectBankIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
-    if (objectBankIndex < 0) {
-        objectInfo = &sObjInfo[15];
-        objectBankIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
-        if (objectBankIndex != 0) {
+    objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
+    if (objectSlot <= OBJECT_SLOT_NONE) {
+        objectInfo = &sObjectInfo[15];
+        objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
+        if (objectSlot != 0) {
             Actor_Kill(&this->knobDoor.dyna.actor);
             return;
         }
     }
-    this->knobDoor.requiredObjBankIndex = objectBankIndex;
+    this->knobDoor.objectSlot = objectSlot;
     this->knobDoor.dlIndex = objectInfo->dListIndex; // Set twice?
-    if (this->knobDoor.dyna.actor.objBankIndex == this->knobDoor.requiredObjBankIndex) {
+    if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
         func_80866A5C(this, play);
     } else {
         this->actionFunc = func_80866A5C;
@@ -480,8 +481,8 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80866A5C(EnDoor* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->knobDoor.requiredObjBankIndex)) {
-        this->knobDoor.dyna.actor.objBankIndex = this->knobDoor.requiredObjBankIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->knobDoor.objectSlot)) {
+        this->knobDoor.dyna.actor.objectSlot = this->knobDoor.objectSlot;
         this->actionFunc = func_80866B20;
         this->knobDoor.dyna.actor.world.rot.y = 0;
         if (this->doorType == ENDOOR_TYPE_1) {
@@ -688,7 +689,7 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 void EnDoor_Draw(Actor* thisx, PlayState* play) {
     EnDoor* this = THIS;
 
-    if (this->knobDoor.dyna.actor.objBankIndex == this->knobDoor.requiredObjBankIndex) {
+    if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {

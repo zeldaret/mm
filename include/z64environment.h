@@ -5,8 +5,10 @@
 #include "PR/os_message.h"
 #include "z64math.h"
 #include "z64dma.h"
+#include "unk.h"
 
 struct GameOverContext;
+struct GraphicsContext;
 struct LightContext;
 struct MessageContext;
 struct PauseContext;
@@ -132,7 +134,7 @@ typedef enum {
     /* 0xD */ SANDSTORM_D
 } SandstormState;
 
-typedef struct {
+typedef struct LightningStrike {
     /* 0x00 */ u8 state;
     /* 0x01 */ u8 flashRed;
     /* 0x02 */ u8 flashGreen;
@@ -160,8 +162,8 @@ typedef struct {
     /* 0x09 */ s8 light2Dir[3];
     /* 0x0C */ u8 light2Color[3];
     /* 0x0F */ u8 fogColor[3];
-    /* 0x12 */ s16 fogNear;
-    /* 0x14 */ s16 zFar;
+    /* 0x12 */ s16 fogNear; // ranges from 0-1000 (0: starts immediately, 1000: no fog), but is clamped to ENV_FOGNEAR_MAX
+    /* 0x14 */ s16 zFar; // Max depth (render distance) of the view as a whole. fogFar will always match zFar
 } CurrentEnvLightSettings; // size = 0x16
 
 // `EnvLightSettings` is very similar to `CurrentEnvLightSettings` with one key difference.
@@ -258,10 +260,10 @@ void Environment_EnableUnderwaterLights(struct PlayState* play, s32 waterLightsI
 void Environment_DisableUnderwaterLights(struct PlayState* play);
 void Environment_Update(struct PlayState* play, EnvironmentContext* envCtx, struct LightContext* lightCtx,
                         struct PauseContext* pauseCtx, struct MessageContext* msgCtx, struct GameOverContext* gameOverCtx,
-                        GraphicsContext* gfxCtx);
-void Environment_DrawSunLensFlare(struct PlayState* play, EnvironmentContext* envCtx, struct View* view, GraphicsContext* gfxCtx, Vec3f vec);
-void Environment_DrawLensFlare(struct PlayState* play, EnvironmentContext* envCtx, struct View* view, GraphicsContext* gfxCtx, Vec3f pos, f32 scale, f32 colorIntensity, s16 glareStrength, u8 isSun);
-void Environment_DrawRain(struct PlayState* play, struct View* view, GraphicsContext* gfxCtx);
+                        struct GraphicsContext* gfxCtx);
+void Environment_DrawSunLensFlare(struct PlayState* play, EnvironmentContext* envCtx, struct View* view, struct GraphicsContext* gfxCtx, Vec3f vec);
+void Environment_DrawLensFlare(struct PlayState* play, EnvironmentContext* envCtx, struct View* view, struct GraphicsContext* gfxCtx, Vec3f pos, f32 scale, f32 colorIntensity, s16 glareStrength, u8 isSun);
+void Environment_DrawRain(struct PlayState* play, struct View* view, struct GraphicsContext* gfxCtx);
 void Environment_ChangeLightSetting(struct PlayState* play, u8 lightSetting);
 void Environment_AddLightningBolts(struct PlayState* play, u8 num);
 void Environment_PlaySceneSequence(struct PlayState* play);
@@ -269,7 +271,7 @@ void Environment_DrawCustomLensFlare(struct PlayState* play);
 void Environment_InitGameOverLights(struct PlayState* play);
 void Environment_FadeInGameOverLights(struct PlayState* play);
 void Environment_FadeOutGameOverLights(struct PlayState* play);
-void Environment_FillScreen(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue, u8 alpha, u8 drawFlags);
+void Environment_FillScreen(struct GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue, u8 alpha, u8 drawFlags);
 void Environment_DrawSandstorm(struct PlayState* play, u8 sandstormState);
 s32 Environment_AdjustLights(struct PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 arg4);
 void Environment_LerpAmbientColor(struct PlayState* play, Color_RGB8* to, f32 lerp);
@@ -302,8 +304,7 @@ extern u8 gLightConfigAfterUnderwater;
 extern u8 gInterruptSongOfStorms;
 extern u8 gSceneSeqState;
 
-//! @TODO: actual extern'd bss
-/*
+// Bss
 extern u8 D_801F4E30;
 
 extern u8 gCustomLensFlare1On;
@@ -318,61 +319,9 @@ extern f32 D_801F4E5C;
 extern f32 D_801F4E60;
 extern s16 D_801F4E64;
 
-extern LightningStrike gLightningStrike;
+extern struct LightningStrike gLightningStrike;
 extern f32 D_801F4E74;
 extern u16 D_801F4E78;
 extern u16 gSkyboxNumStars;
-*/
-
-//! @TODO: Remove all code below
-
-//! @TODO: Struct goes in z_kankyo.c
-typedef struct {
-    /* 0x00 */ u8 state;
-    /* 0x04 */ Vec3f offset;
-    /* 0x10 */ Vec3f pos;
-    /* 0x1C */ s8 pitch;
-    /* 0x1D */ s8 roll;
-    /* 0x1E */ u8 textureIndex;
-    /* 0x1F */ u8 delayTimer;
-} LightningBolt; // size = 0x20
-
-//! @TODO: all bss externed for matching
-extern u8 D_801F4E30;
-extern u8 D_801F4E31;
-extern u8 gCustomLensFlare1On;
-extern Vec3f gCustomLensFlare1Pos;
-extern f32 D_801F4E44;
-extern f32 D_801F4E48;
-extern s16 D_801F4E4C;
-extern u8 gCustomLensFlare2On;
-extern Vec3f gCustomLensFlare2Pos;
-extern f32 D_801F4E5C;
-extern f32 D_801F4E60;
-extern s16 D_801F4E64;
-extern LightningStrike gLightningStrike;
-extern f32 D_801F4E74;
-extern u16 D_801F4E78;
-extern u16 gSkyboxNumStars;
-extern LightningBolt sLightningBolts[3];
-extern LightNode* sNGameOverLightNode;
-extern LightInfo sNGameOverLightInfo;
-extern LightNode* sSGameOverLightNode;
-extern LightInfo sSGameOverLightInfo;
-extern f32 sSunEnvAlpha;
-extern f32 sSunColor;
-extern f32 sSunScale;
-extern f32 sSunPrimAlpha;
-extern s32 sSunDepthTestX;
-extern s32 sSunDepthTestY;
-extern f32 D_801F4F28;
-extern s16 sLightningFlashAlpha;
-extern u16 sSandstormScroll;
-extern u8 D_801F4F30;
-extern u8 D_801F4F31;
-extern u8 sEnvIsTimeStopped;
-extern u8 D_801F4F33;
-extern u8 sGameOverLightsIntensity;
-extern Gfx* sSkyboxStarsDList;
 
 #endif

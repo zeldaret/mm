@@ -115,7 +115,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &object_pr_Skel_004188, &object_pr_Anim_004340, this->jointTable,
-                       this->morphtable, 5);
+                       this->morphTable, 5);
     this->unk_1E0 = ENPR2_GET_F(&this->actor);
     this->actor.colChkInfo.mass = 10;
     Math_Vec3f_Copy(&this->unk_228, &this->actor.home.pos);

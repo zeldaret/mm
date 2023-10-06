@@ -3,6 +3,7 @@
  */
 
 #include "PR/controller_voice.h"
+#include "PR/voice_internal.h"
 #include "PR/controller.h"
 #include "functions.h"
 #include "variables.h"

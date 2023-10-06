@@ -1,4 +1,5 @@
 #include "global.h"
+#include "PR/gs2dex.h"
 #include "debug.h"
 
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3) {
@@ -515,7 +516,7 @@ size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
         }
     }
 
-    roomCtx->roomMemPages[0] = THA_AllocTailAlign16(&play->state.heap, maxRoomSize);
+    roomCtx->roomMemPages[0] = THA_AllocTailAlign16(&play->state.tha, maxRoomSize);
     if (roomCtx->roomMemPages[0] == NULL) {
         _dbg_hungup("../z_room.c", 1078);
     }

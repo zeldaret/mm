@@ -43,7 +43,7 @@ typedef struct EnInvadepohDemo {
     /* 0x154 */ s32 cueId; // "demo_mode"
     /* 0x158 */ s32 pathIndex;
     /* 0x15C */ s32 pointIndex;
-    /* 0x160 */ s32 objectIndex;
+    /* 0x160 */ s32 objectSlot;
     /* 0x164 */ s32 drawFlags; // Only has one flag to control whether or not to draw
     /* 0x168 */ s32 cueIdOffset;
     /* 0x16C */ s16 ufoRotZ;

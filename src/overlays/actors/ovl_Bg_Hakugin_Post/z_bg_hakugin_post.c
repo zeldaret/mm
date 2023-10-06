@@ -155,9 +155,9 @@ void func_80A9AFB4(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
         unkStruct->unk_0000[i].unk_00 = BGHAKUGINPOST_GET_7(&this->dyna.actor);
         Math_Vec3f_Copy(&unkStruct->unk_0000[i].unk_08, &this->dyna.actor.world.pos);
         Math_Vec3f_Copy(&unkStruct->unk_0000[i].unk_14, &this->dyna.actor.world.pos);
-        unkStruct->unk_0000[i].unk_2E = BGHAKUGINPOST_GET_7F00(&this->dyna.actor);
+        unkStruct->unk_0000[i].switchFlag = BGHAKUGINPOST_GET_SWITCH_FLAG(&this->dyna.actor);
         if (D_80A9D880[unkStruct->unk_0000[i].unk_00].unk_04) {
-            if (Flags_GetSwitch(play, unkStruct->unk_0000[i].unk_2E)) {
+            if (Flags_GetSwitch(play, unkStruct->unk_0000[i].switchFlag)) {
                 unkStruct->unk_0000[i].unk_34 = 5;
             } else {
                 unkStruct->unk_0000[i].unk_34 = 1;
@@ -184,7 +184,7 @@ void func_80A9B160(BgHakuginPostUnkStruct* unkStruct, PlayState* play) {
         unkStruct->unk_0000[i].unk_24 = 0.0f;
         unkStruct->unk_0000[i].unk_34 = 1;
         if (D_80A9D880[unkStruct->unk_0000[i].unk_00].unk_04 != 0) {
-            Flags_UnsetSwitch(play, unkStruct->unk_0000[i].unk_2E);
+            Flags_UnsetSwitch(play, unkStruct->unk_0000[i].switchFlag);
         }
     }
 }
@@ -240,25 +240,25 @@ void func_80A9B384(Vec3f* arg0) {
 
 void func_80A9B3BC(BgHakuginPost* this, PlayState* play) {
     s32 pad;
-    s32 sp28 = BGHAKUGINPOST_GET_7F00(&this->dyna.actor);
-    s32 sp24 = BGHAKUGINPOST_GET_7F00(&this->dyna.actor) + 1;
+    s32 switchFlag1 = BGHAKUGINPOST_GET_SWITCH_FLAG(&this->dyna.actor);
+    s32 switchFlag2 = BGHAKUGINPOST_GET_SWITCH_FLAG(&this->dyna.actor) + 1;
     s32 sp20;
     s32 sp1C;
 
-    if (Flags_GetSwitch(play, sp28)) {
+    if (Flags_GetSwitch(play, switchFlag1)) {
         sp20 = true;
     } else {
         sp20 = false;
     }
 
-    if (Flags_GetSwitch(play, sp24)) {
+    if (Flags_GetSwitch(play, switchFlag2)) {
         sp1C = true;
     } else {
         sp1C = false;
     }
 
     if (!(sp20 | sp1C)) {
-        Flags_SetSwitch(play, sp28);
+        Flags_SetSwitch(play, switchFlag1);
         this->unk_170 = true;
     } else {
         this->unk_170 = sp20;
@@ -269,27 +269,27 @@ void func_80A9B3BC(BgHakuginPost* this, PlayState* play) {
 
 void func_80A9B46C(BgHakuginPost* this, PlayState* play) {
     s32 pad;
-    s32 sp30 = BGHAKUGINPOST_GET_7F00(&this->dyna.actor);
-    s32 sp2C = BGHAKUGINPOST_GET_7F00(&this->dyna.actor) + 1;
+    s32 switchFlag1 = BGHAKUGINPOST_GET_SWITCH_FLAG(&this->dyna.actor);
+    s32 switchFlag2 = BGHAKUGINPOST_GET_SWITCH_FLAG(&this->dyna.actor) + 1;
     s32 sp28;
     s32 sp24;
 
-    if (Flags_GetSwitch(play, sp30)) {
+    if (Flags_GetSwitch(play, switchFlag1)) {
         sp28 = true;
     } else {
         sp28 = false;
     }
 
-    if (Flags_GetSwitch(play, sp2C)) {
+    if (Flags_GetSwitch(play, switchFlag2)) {
         sp24 = true;
     } else {
         sp24 = false;
     }
 
     if (!this->unk_170 && (sp28 == 1)) {
-        Flags_UnsetSwitch(play, sp2C);
+        Flags_UnsetSwitch(play, switchFlag2);
     } else if (!this->unk_174 && (sp24 == 1)) {
-        Flags_UnsetSwitch(play, sp30);
+        Flags_UnsetSwitch(play, switchFlag1);
     }
 
     this->unk_170 = sp28;
@@ -668,7 +668,7 @@ void func_80A9C854(BgHakuginPost* this, PlayState* play) {
             for (i = 0; i < D_80A9E028.count; i++) {
                 ColliderCylinder* collider = D_80A9E028.unk_0000[i].collider;
 
-                if ((collider != NULL) && Flags_GetSwitch(play, D_80A9E028.unk_0000[i].unk_2E)) {
+                if ((collider != NULL) && Flags_GetSwitch(play, D_80A9E028.unk_0000[i].switchFlag)) {
                     sp28 = false;
                     break;
                 }
@@ -681,9 +681,9 @@ void func_80A9C854(BgHakuginPost* this, PlayState* play) {
     }
 
     if (sp38) {
-        Flags_SetSwitch(play, this->dyna.actor.home.rot.x & 0x7F);
+        Flags_SetSwitch(play, BGHAKUGINPOST_GET_SWITCH_FLAG_2(&this->dyna.actor));
     } else {
-        Flags_UnsetSwitch(play, this->dyna.actor.home.rot.x & 0x7F);
+        Flags_UnsetSwitch(play, BGHAKUGINPOST_GET_SWITCH_FLAG_2(&this->dyna.actor));
     }
 }
 
@@ -841,7 +841,7 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
                 D_80A9E028.unk_0000[i].unk_34 = 2;
                 Player_PlaySfx(player, NA_SE_IT_HAMMER_HIT);
                 Audio_PlaySfx_2(NA_SE_EV_SLIDE_DOOR_OPEN);
-                Flags_SetSwitch(play, D_80A9E028.unk_0000[i].unk_2E);
+                Flags_SetSwitch(play, D_80A9E028.unk_0000[i].switchFlag);
                 this->unk_178 = 20;
                 func_80A9D2C4(this, func_80A9CE00, D_80A9E028.unk_0000[i].unk_14.y + 50.0f, D_80A9E028.unk_0000[i].csId,
                               D_80A9E028.unk_0000[i].additionalCsId);

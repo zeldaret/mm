@@ -54,7 +54,7 @@ ActorInit Obj_Tsubo_InitVars = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 objId;
+    /* 0x00 */ s16 objectId;
     /* 0x04 */ f32 scale;
     /* 0x08 */ Gfx* modelDL;
     /* 0x0C */ Gfx* shardDL;
@@ -186,8 +186,8 @@ void ObjTsubo_Init(Actor* thisx, PlayState* play) {
     this->cylinderCollider.dim.radius = sPotTypeData[type].radius;
     this->cylinderCollider.dim.height = sPotTypeData[type].height;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->objBankIndex = Object_GetIndex(&play->objectCtx, sPotTypeData[type].objId);
-    if (this->objBankIndex < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, sPotTypeData[type].objectId);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -246,7 +246,7 @@ void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play) {
         }
         scale = Rand_ZeroOne() * 110.0f + 15.0f;
         EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -260, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
-                             typeData->objId, typeData->shardDL);
+                             typeData->objectId, typeData->shardDL);
     }
     func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 20, 50, true);
     func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 10, 80, true);
@@ -285,7 +285,7 @@ void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play) {
         }
         scale = Rand_ZeroOne() * 160.0f + 15.0f;
         EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -340, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
-                             typeData->objId, typeData->shardDL);
+                             typeData->objectId, typeData->shardDL);
     }
     func_800BBFB0(play, &this->actor.world.pos, 50.0f, 2, 40, 50, true);
     func_800BBFB0(play, &this->actor.world.pos, 50.0f, 2, 20, 80, true);
@@ -330,8 +330,8 @@ void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
             phi_s0 = 0x20;
         }
         scale = Rand_ZeroOne() * 105.0f + 10.0f;
-        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1, typeData->objId,
-                             typeData->shardDL);
+        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1,
+                             typeData->objectId, typeData->shardDL);
     }
 }
 
@@ -375,8 +375,8 @@ void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2) {
             phi_s0 = 0xA0;
         }
         scale = (Rand_ZeroOne() * 150.0f) + 10.0f;
-        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1, typeData->objId,
-                             typeData->shardDL);
+        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1,
+                             typeData->objectId, typeData->shardDL);
     }
 }
 
@@ -412,7 +412,7 @@ void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2) {
             phi_s0 = 0x20;
         }
         EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -170, phi_s0, 50, 3, 0,
-                             (Rand_ZeroOne() * 105.0f) + 10.0f, 0, 0, 70, -1, typeData->objId, typeData->shardDL);
+                             (Rand_ZeroOne() * 105.0f) + 10.0f, 0, 0, 70, -1, typeData->objectId, typeData->shardDL);
     }
     for (i = 0; i < 7; i++) {
         EffectSsBubble_Spawn(play, &this->actor.world.pos, 20.0f, 30.0f, 40.0f, (Rand_ZeroOne() * 0.06f) + 0.09f);
@@ -430,8 +430,8 @@ void func_80928914(ObjTsubo* this) {
 void func_80928928(ObjTsubo* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
-    if (Object_IsLoaded(&play->objectCtx, this->objBankIndex)) {
-        this->actor.objBankIndex = this->objBankIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         func_809289B4(this);
     }
 }

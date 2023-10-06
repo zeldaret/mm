@@ -6,7 +6,7 @@
 
 struct EnDoorEtc;
 
-#define ENDOORETC_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define ENDOORETC_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 typedef void (*EnDoorEtcActionFunc)(struct EnDoorEtc*, PlayState*);
 

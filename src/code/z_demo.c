@@ -1,6 +1,4 @@
 #include "PR/ultratypes.h"
-#include "prevent_bss_reordering.h"
-#include "prevent_bss_reordering2.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 struct CutsceneCamera;
@@ -12,6 +10,15 @@ u8 D_801F4DDC;
 static s16 sBssPad;
 u8 gDisablePlayerCsModeStartPos;
 s16 gDungeonBossWarpSceneId;
+
+#include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h"
+// clang-format off
+// Partial structs taken from "prevent_bss_reordering.h"
+struct Dummy200 { int x; };
+struct Dummy201 { int x; };
+struct Dummy202 { int x; };
+// clang-format on
 
 #include "global.h"
 #include "z64quake.h"
@@ -197,7 +204,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             if (isFirstFrame) {
                 loadedScene = play->loadedScene;
                 if (loadedScene->titleTextId != 0) {
-                    func_80151A68(play, loadedScene->titleTextId);
+                    Message_DisplaySceneTitleCard(play, loadedScene->titleTextId);
                 }
             }
             break;
@@ -1043,7 +1050,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
         if (sCurOcarinaAction != cmd->textId) {
             sCutsceneTextboxType = CS_TEXT_OCARINA_ACTION;
             sCurOcarinaAction = cmd->textId;
-            func_80152434(play, cmd->textId);
+            Message_DisplayOcarinaStaff(play, cmd->textId);
             return;
         }
     }
@@ -1098,7 +1105,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
             }
 
             if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_80152434(play, cmd->textId);
+                Message_DisplayOcarinaStaff(play, cmd->textId);
             }
         }
 
@@ -1565,7 +1572,7 @@ void Cutscene_HandleEntranceTriggers(PlayState* play) {
             if ((Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) +
                                              ((void)0, gSaveContext.sceneLayer)) &
                  0x4000) != 0) {
-                func_80151A68(play, scene->titleTextId);
+                Message_DisplaySceneTitleCard(play, scene->titleTextId);
             }
         }
 

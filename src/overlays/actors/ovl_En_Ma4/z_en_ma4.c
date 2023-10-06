@@ -916,9 +916,9 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x336D;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
+                    if ((s32)time < HS_GET_HORSE_BACK_BALLOON_TIME()) {
                         // [Score] New record!
-                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
+                        HS_SET_HORSE_BACK_BALLOON_TIME(time);
                         EnMa4_SetFaceExpression(this, 0, 3);
                         Message_StartTextbox(play, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -960,8 +960,8 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x3356;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
-                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
+                    if ((s32)time < HS_GET_HORSE_BACK_BALLOON_TIME()) {
+                        HS_SET_HORSE_BACK_BALLOON_TIME(time);
                         EnMa4_SetFaceExpression(this, 0, 3);
                         Message_StartTextbox(play, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -987,9 +987,9 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x3356;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
+                    if ((s32)time < HS_GET_HORSE_BACK_BALLOON_TIME()) {
                         // New record
-                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
+                        HS_SET_HORSE_BACK_BALLOON_TIME(time);
                         Message_StartTextbox(play, 0x335D, &this->actor);
                         this->textId = 0x335D;
                     } else {

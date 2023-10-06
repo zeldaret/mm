@@ -107,7 +107,7 @@ void ObjectKankyo_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 2:
-            play->envCtx.precipitation[PRECIP_SNOW_CUR] = 0x80;
+            play->envCtx.precipitation[PRECIP_SNOW_CUR] = 128;
             func_808DBFB0(this, play);
             break;
 
@@ -189,7 +189,7 @@ void func_808DC18C(ObjectKankyo* this, PlayState* play) {
 
 void func_808DC454(ObjectKankyo* this, PlayState* play) {
     s16 i;
-    u32 tempI;
+    s32 pad1;
     f32 phi_f20;
     f32 spD0;
     f32 spCC;
@@ -231,8 +231,7 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
                     this->unk_14C[i].unk_10 = temp_f22;
                 } else {
                     this->unk_14C[i].unk_10 += temp_f22;
-                    tempI = i;
-                    if (play->envCtx.precipitation[PRECIP_SNOW_CUR] == (tempI + 1)) {
+                    if (play->envCtx.precipitation[PRECIP_SNOW_CUR] == ((u32)i + 1)) {
                         this->unk_114E = 0;
                     }
                 }

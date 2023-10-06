@@ -119,7 +119,7 @@ void DmZl_Init(Actor* thisx, PlayState* play) {
     this->actor.targetArrowOffset = 1000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     // these three set to NULL should mean they are dynamically allocated
-    SkelAnime_InitFlex(play, &this->skelAnime, &gZl4Skeleton, NULL, NULL, NULL, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gZl4Skel, NULL, NULL, NULL, 0);
     DmZl_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmZl_DoNothing;

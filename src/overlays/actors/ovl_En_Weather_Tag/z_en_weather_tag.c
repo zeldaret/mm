@@ -126,7 +126,7 @@ u8 func_80966608(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
     if (WEATHER_TAG_RANGE100(&this->actor) > Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
         if (play->envCtx.lightConfig == play->envCtx.changeLightNextConfig) {
             gInterruptSongOfStorms = true;
-            if ((play->envCtx.lightMode != LIGHT_MODE_TIME) ||
+            if (!(play->envCtx.lightMode == LIGHT_MODE_TIME) ||
                 ((play->envCtx.lightConfig != 1) && !play->envCtx.changeLightEnabled)) {
 
                 gInterruptSongOfStorms = false;
@@ -156,7 +156,7 @@ u8 func_80966758(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
     if (WEATHER_TAG_RANGE100(&this->actor) < Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
         if (play->envCtx.lightConfig == play->envCtx.changeLightNextConfig) {
             gInterruptSongOfStorms = true;
-            if ((play->envCtx.lightMode != LIGHT_MODE_TIME) ||
+            if (!(play->envCtx.lightMode == LIGHT_MODE_TIME) ||
                 ((play->envCtx.lightConfig != 1) && !play->envCtx.changeLightEnabled)) {
 
                 gInterruptSongOfStorms = false;
@@ -319,7 +319,7 @@ void func_80966D20(EnWeatherTag* this, PlayState* play) {
 //   path to goron village winter, winter mountain village
 void func_80966E0C(EnWeatherTag* this, PlayState* play) {
     if (func_80966608(this, play, 0, 1, 0, 2, 60, 3)) {
-        play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0x80;
+        play->envCtx.precipitation[PRECIP_SNOW_MAX] = 128;
         EnWeatherTag_SetupAction(this, func_80966E84);
     }
 }
@@ -449,7 +449,7 @@ void func_809672DC(EnWeatherTag* this, PlayState* play) {
         }
     }
 
-    Math_SmoothStepToS(&play->envCtx.adjLightSettings.fogNear, (s16)(-40.0f * strength), 1, 1, 1);
+    Math_SmoothStepToS(&play->envCtx.adjLightSettings.fogNear, -40.0f * strength, 1, 1, 1);
 }
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN: rain proximity as approaching rainy scene
@@ -491,7 +491,7 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
     EnWeatherTag* this = THIS;
 
     this->actionFunc(this, play);
-    if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
+    if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
         (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
         (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
         (play->csCtx.state == CS_STATE_IDLE)) {

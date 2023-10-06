@@ -1,6 +1,6 @@
 #include "global.h"
 
-s16 gPlayerFormObjectIndices[PLAYER_FORM_MAX] = {
+s16 gPlayerFormObjectIds[PLAYER_FORM_MAX] = {
     OBJECT_LINK_BOY,   // PLAYER_FORM_FIERCE_DEITY
     OBJECT_LINK_GORON, // PLAYER_FORM_GORON
     OBJECT_LINK_ZORA,  // PLAYER_FORM_ZORA

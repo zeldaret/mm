@@ -41,7 +41,7 @@ void EnOkarinaEffect_Destroy(Actor* thisx, PlayState* play) {
 void EnOkarinaEffect_Init(Actor* thisx, PlayState* play) {
     EnOkarinaEffect* this = THIS;
 
-    if (play->envCtx.precipitation[PRECIP_RAIN_CUR]) {
+    if (play->envCtx.precipitation[PRECIP_RAIN_CUR] != 0) {
         Actor_Kill(&this->actor);
     }
     EnOkarinaEffect_SetupAction(this, func_8096B104);

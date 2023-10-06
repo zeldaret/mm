@@ -37,12 +37,12 @@ asm/non_matchings/boot/irqmgr/IrqMgr_HandlePRENMI500.s,IrqMgr_HandlePRENMI500,0x
 asm/non_matchings/boot/irqmgr/IrqMgr_HandleRetrace.s,IrqMgr_HandleRetrace,0x800815CC,0x2E
 asm/non_matchings/boot/irqmgr/IrqMgr_ThreadEntry.s,IrqMgr_ThreadEntry,0x80081684,0x34
 asm/non_matchings/boot/irqmgr/IrqMgr_Init.s,IrqMgr_Init,0x80081754,0x33
-asm/non_matchings/boot/CIC6105/CIC6105_Nop80081820.s,CIC6105_Nop80081820,0x80081820,0x2
-asm/non_matchings/boot/CIC6105/CIC6105_Nop80081828.s,CIC6105_Nop80081828,0x80081828,0x2
+asm/non_matchings/boot/CIC6105/CIC6105_Noop1.s,CIC6105_Noop1,0x80081820,0x2
+asm/non_matchings/boot/CIC6105/CIC6105_Noop2.s,CIC6105_Noop2,0x80081828,0x2
 asm/non_matchings/boot/CIC6105/CIC6105_PrintRomInfo.s,CIC6105_PrintRomInfo,0x80081830,0x1B
 asm/non_matchings/boot/CIC6105/CIC6105_AddRomInfoFaultPage.s,CIC6105_AddRomInfoFaultPage,0x8008189C,0xD
-asm/non_matchings/boot/CIC6105/CIC6105_RemoveRomInfoFaultPage.s,CIC6105_RemoveRomInfoFaultPage,0x800818D0,0x9
-asm/non_matchings/boot/CIC6105/func_800818F4.s,func_800818F4,0x800818F4,0xB
+asm/non_matchings/boot/CIC6105/CIC6105_Destroy.s,CIC6105_Destroy,0x800818D0,0x9
+asm/non_matchings/boot/CIC6105/CIC6105_Init.s,CIC6105_Init,0x800818F4,0xB
 asm/non_matchings/boot/syncprintf/osSyncPrintfUnused.s,osSyncPrintfUnused,0x80081920,0x7
 asm/non_matchings/boot/syncprintf/osSyncPrintf.s,osSyncPrintf,0x8008193C,0x7
 asm/non_matchings/boot/syncprintf/rmonPrintf.s,rmonPrintf,0x80081958,0xA
