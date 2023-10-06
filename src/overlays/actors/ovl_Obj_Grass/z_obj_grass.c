@@ -99,7 +99,7 @@ void ObjGrass_OverrideMatrixCurrent(MtxF* matrix) {
 }
 
 void ObjGrass_DropCollectible(ObjGrassElement* grassElem, PlayState* play) {
-    if ((grassElem->dropTable & 0x10) == 0) {
+    if (!(grassElem->dropTable & 0x10)) {
         Item_DropCollectibleRandom(play, NULL, &grassElem->pos, grassElem->dropTable * 0x10);
     }
 }
@@ -230,6 +230,9 @@ void ObjGrass_UpdateGrass(ObjGrass* this, PlayState* play) {
         }
 
         if (j < ARRAY_COUNT(sNearestGrassGroupsDist)) {
+            // Insert the grassGroup into the list
+
+            // Shift each element under j that remains in the list down 1
             for (x = ARRAY_COUNT(sNearestGrassGroupsDist) - 2; x >= j; x--) {
                 sNearestGrassGroupsDist[x + 1] = sNearestGrassGroupsDist[x];
                 sNearestGrassGroups[x + 1] = sNearestGrassGroups[x];
@@ -257,6 +260,9 @@ void ObjGrass_UpdateGrass(ObjGrass* this, PlayState* play) {
                     }
 
                     if (x < ARRAY_COUNT(sNearestGrassElementsDistSq)) {
+                        // Insert the GrassElement into the list
+
+                        // Shift each element under j that remains in the list down 1
                         for (y = ARRAY_COUNT(sNearestGrassElementsDistSq) - 2; y >= x; y--) {
                             sNearestGrassElementsDistSq[y + 1] = sNearestGrassElementsDistSq[y];
                             sNearestGrassElements[y + 1] = sNearestGrassElements[y];

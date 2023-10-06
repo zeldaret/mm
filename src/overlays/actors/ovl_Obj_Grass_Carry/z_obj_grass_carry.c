@@ -88,12 +88,12 @@ void ObjGrassCarry_UpdateVelY(ObjGrassCarry* this) {
     }
 }
 
-void ObjGrassCarry_RandScaleVecToZero(Vec3f* vel, f32 scale) {
+void ObjGrassCarry_RandScaleVecToZero(Vec3f* velocity, f32 scale) {
     scale += ((Rand_ZeroOne() * 0.2f) - 0.1f) * scale;
 
-    vel->x -= (vel->x * scale);
-    vel->y -= (vel->y * scale);
-    vel->z -= (vel->z * scale);
+    velocity->x -= velocity->x * scale;
+    velocity->y -= velocity->y * scale;
+    velocity->z -= velocity->z * scale;
 }
 
 void ObjGrassCarry_UpdatePos(ObjGrassCarry* this) {

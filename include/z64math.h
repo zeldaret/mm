@@ -41,7 +41,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ f32 distance;
-    /* 0x4 */ s16 rotY;
+    /* 0x4 */ s16 angle;
 } VecPolar; // size = 0x8
 
 typedef struct {
