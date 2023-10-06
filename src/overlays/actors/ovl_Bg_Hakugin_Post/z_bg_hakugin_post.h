@@ -9,7 +9,8 @@ typedef void (*BgHakuginPostActionFunc)(struct BgHakuginPost*, PlayState*);
 typedef void (*BgHakuginPostFunc)(struct BgHakuginPost*);
 
 #define BGHAKUGINPOST_GET_7(thisx) ((thisx)->params & 7)
-#define BGHAKUGINPOST_GET_7F00(thisx) (((thisx)->params >> 8) & 0x7F)
+#define BGHAKUGINPOST_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
+#define BGHAKUGINPOST_GET_SWITCH_FLAG_2(thisx) (((thisx)->home.rot.x) & 0x7F)
 
 typedef struct {
     /* 0x00 */ s32 unk_00;
@@ -21,7 +22,7 @@ typedef struct {
     /* 0x28 */ s16 unk_28;
     /* 0x2A */ s16 csId;
     /* 0x2C */ s16 additionalCsId;
-    /* 0x2E */ u8 unk_2E;
+    /* 0x2E */ u8 switchFlag;
     /* 0x2F */ u8 unk_2F;
     /* 0x30 */ s8 unk_30;
     /* 0x34 */ s32 unk_34;

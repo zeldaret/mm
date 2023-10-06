@@ -58,6 +58,6 @@
         <Limb Name="gBigPoeLanternLimb" Type="Standard" EnumName="BIG_POE_LIMB_LANTERN" Offset="0x5BD0" />
         <Limb Name="gBigPoeHatAndCloakLimb" Type="Standard" EnumName="BIG_POE_LIMB_HAT_AND_CLOAK" Offset="0x5BDC" />
         <Limb Name="gBigPoeLowerRobe" Type="Standard" EnumName="BIG_POE_LIMB_LOWER_ROBE" Offset="0x5BE8" />
-        <Skeleton Name="gBigPoeSkeleton" Type="Normal" LimbType="Standard" LimbNone="BIG_POE_LIMB_NONE" LimbMax="BIG_POE_LIMB_MAX" EnumName="BigPoeLimb" Offset="0x5C18" />
+        <Skeleton Name="gBigPoeSkel" Type="Normal" LimbType="Standard" LimbNone="BIG_POE_LIMB_NONE" LimbMax="BIG_POE_LIMB_MAX" EnumName="BigPoeLimb" Offset="0x5C18" />
     </File>
 </Root>

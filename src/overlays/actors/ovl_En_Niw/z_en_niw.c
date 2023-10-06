@@ -108,7 +108,7 @@ void EnNiw_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gNiwSkel, &gNiwIdleAnim, this->jointTable, this->morphTable,
                        NIW_LIMB_MAX);
     Math_Vec3f_Copy(&this->unk2A4, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk2B0, &this->actor.world.pos);

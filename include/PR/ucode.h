@@ -23,9 +23,4 @@ extern u64 gspF3DZEX2_NoN_PosLight_fifoTextEnd[];
 extern u64 gspF3DZEX2_NoN_PosLight_fifoDataStart[];
 extern u64 gspF3DZEX2_NoN_PosLight_fifoDataEnd[];
 
-extern u64 gspS2DEX2_fifoTextStart[];
-extern u64 gspS2DEX2_fifoTextEnd[];
-extern u64 gspS2DEX2_fifoDataStart[];
-extern u64 gspS2DEX2_fifoDataEnd[];
-
 #endif

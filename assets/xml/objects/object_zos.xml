@@ -6,7 +6,7 @@
         <Animation Name="gEvanInspiredAnim" Offset="0x48D4" /> <!-- Original name is "zK_furimuki" ("to turn around") -->
         <Animation Name="gEvanPlayRightAnim" Offset="0x5E04" /> <!-- Original name is "zK_play01" -->
         <Animation Name="gEvanPlayLeftAnim" Offset="0x7334" /> <!-- Original name is "zK_play02" -->
-        <Animation Name="gEeanTalkFootTapAnim" Offset="0x7C40" /> <!-- Original name is "zK_talk01" -->
+        <Animation Name="gEvanTalkFootTapAnim" Offset="0x7C40" /> <!-- Original name is "zK_talk01" -->
         <Animation Name="gEvanTalkLookDownAnim" Offset="0x8630" /> <!-- Original name is "zK_talk02" -->
         <Animation Name="gEvanTalkArmsOutAnim" Offset="0x90CC" /> <!-- Original name is "zK_talk03" -->
         <Animation Name="gEvanTalkHandsOnHipsAnim" Offset="0x9830" /> <!-- Original name is "zK_talk04" -->

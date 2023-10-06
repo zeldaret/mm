@@ -46,7 +46,7 @@ void ObjKzsaku_Init(Actor* thisx, PlayState* play) {
 
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, thisx, col);
 
-    this->switchFlag = KZSAKU_GET_SWITCHFLAG(thisx);
+    this->switchFlag = KZSAKU_GET_SWITCH_FLAG(thisx);
     this->raisedAmount = 0.0f;
 
     if (Flags_GetSwitch(play, this->switchFlag)) {

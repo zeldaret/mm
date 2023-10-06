@@ -46,6 +46,6 @@
         <!-- shoulders down to toes plus box hes sitting on -->
         <Limb Name="gHsChestAndLowerBodyPlusBox" Type="Standard" EnumName="HS_LIMB_LOWER_BODY_PLUS_BOX" Offset="0x620C" />
         <Limb Name="gHsCuccoFeedBagsLimb" Type="Standard" EnumName="HS_LIMB_CUCCO_FEED_BAGS" Offset="0x6218" />
-        <Skeleton Name="gHsSkeleton" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HS_LIMB_NONE" LimbMax="OBJECT_HS_LIMB_MAX" EnumName="ObjectHsLimb" Offset="0x6260" />
+        <Skeleton Name="gHsSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HS_LIMB_NONE" LimbMax="OBJECT_HS_LIMB_MAX" EnumName="ObjectHsLimb" Offset="0x6260" />
     </File>
 </Root>

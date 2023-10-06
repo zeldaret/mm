@@ -350,11 +350,8 @@ void func_80B76980(EnTruMt* this, PlayState* play) {
         this->actor.speed = 0.0f;
         this->actionFunc = func_80B76BB8;
     } else if (CHECK_EVENTINF(EVENTINF_40)) {
-        u32 score = gSaveContext.minigameScore;
-
-        if (((gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF0000) >> 0x10) < score) {
-            gSaveContext.save.saveInfo.unk_EC4 =
-                ((gSaveContext.minigameScore & 0xFFFF) << 0x10) | (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF);
+        if (((void)0, gSaveContext.minigameScore) > HS_GET_BOAT_ARCHERY_HIGH_SCORE()) {
+            HS_SET_BOAT_ARCHERY_HIGH_SCORE((u32)((void)0, gSaveContext.minigameScore));
             SET_EVENTINF(EVENTINF_37);
         }
     }

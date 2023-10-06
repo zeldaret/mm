@@ -77,7 +77,7 @@ void func_8089F014(EnViewer* this, PlayState* play, f32 arg2) {
         arg2 = 0.0f;
     }
     play->envCtx.lightSettingOverride = 0;
-    play->envCtx.unk_E0 = 2;
+    play->envCtx.lightBlendOverride = LIGHT_BLEND_OVERRIDE_FULL_CONTROL;
     play->envCtx.lightSetting = this->actor.world.rot.x;
     play->envCtx.prevLightSetting = this->actor.world.rot.z;
     play->envCtx.lightBlend = arg2;
@@ -87,11 +87,11 @@ void func_8089F0A0(EnViewer* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     D_8089F3E4++;
-    if ((D_8089F3E4 == D_8089F3E0) && (play->envCtx.lightSettingOverride != 255)) {
-        play->envCtx.lightSettingOverride = 255;
-        play->envCtx.unk_E0 = 0;
+    if ((D_8089F3E4 == D_8089F3E0) && (play->envCtx.lightSettingOverride != LIGHT_SETTING_OVERRIDE_NONE)) {
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
+        play->envCtx.lightBlendOverride = LIGHT_BLEND_OVERRIDE_NONE;
         play->envCtx.lightBlend = 1.0f;
-        func_800FAAB4(
+        Environment_ChangeLightSetting(
             play, SurfaceType_GetLightSettingIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId));
         play->envCtx.lightBlend = 1.0f;
         play->envCtx.prevLightSetting = play->envCtx.lightSetting;

@@ -81,7 +81,7 @@ void ObjIcePoly_Init(Actor* thisx, PlayState* play) {
     ObjIcePoly* this = THIS;
     s32 i;
 
-    this->unk_149 = OBJICEPOLY_GET_FF00(thisx);
+    this->switchFlag = OBJICEPOLY_GET_SWITCH_FLAG(thisx);
     thisx->params &= 0xFF;
     thisx->uncullZoneForward = 5600.0f;
 
@@ -115,7 +115,7 @@ void ObjIcePoly_Init(Actor* thisx, PlayState* play) {
     thisx->shape.rot.x = 0x500;
     thisx->shape.rot.z = -0x500;
 
-    if (((this->unk_149 != OBJICEPOLY_FF_FF) && Flags_GetSwitch(play, this->unk_149)) ||
+    if (((this->switchFlag != 0xFF) && Flags_GetSwitch(play, this->switchFlag)) ||
         ((play->sceneId == SCENE_KAJIYA) && CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE))) {
         Actor_Kill(thisx);
         return;
@@ -219,7 +219,7 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
                 }
             } while (actor != NULL);
         }
-    } else if ((this->unk_149 != OBJICEPOLY_FF_FF) && Flags_GetSwitch(play, this->unk_149)) {
+    } else if ((this->switchFlag != 0xFF) && Flags_GetSwitch(play, this->switchFlag)) {
         CutsceneManager_Queue(this->actor.csId);
         this->unk_14A = 1;
         this->actionFunc = func_80931E58;
@@ -328,8 +328,8 @@ void func_80931EEC(ObjIcePoly* this, PlayState* play) {
 
     if (this->unk_14A == 0) {
         CutsceneManager_Stop(this->actor.csId);
-        if (this->unk_149 != OBJICEPOLY_FF_FF) {
-            Flags_SetSwitch(play, this->unk_149);
+        if (this->switchFlag != 0xFF) {
+            Flags_SetSwitch(play, this->switchFlag);
         }
         Actor_Kill(&this->actor);
     }
