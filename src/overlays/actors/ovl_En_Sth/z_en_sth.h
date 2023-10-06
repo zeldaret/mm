@@ -42,8 +42,8 @@ typedef struct EnSth {
     /* 0x294 */ Vec3s headRot;
     /* 0x29A */ s16 animIndex;
     /* 0x29C */ u16 sthFlags;
-    /* 0x29E */ u8 mainObjectId;
-    /* 0x29F */ u8 maskOfTruthObjectId;
+    /* 0x29E */ u8 mainObjectSlot;
+    /* 0x29F */ u8 maskOfTruthObjectSlot;
     /* 0x2A0 */ EnSthActionFunc actionFunc;
 } EnSth; // size = 0x2A4
 

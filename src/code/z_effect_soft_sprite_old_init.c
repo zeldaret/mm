@@ -41,7 +41,7 @@ void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, TexturePtr texture) {
     MtxF mfTrans11DA0;
     s32 pad1;
     Mtx* mtx;
-    void* object = play->objectCtx.status[this->rgObjBankIndex].segment;
+    void* objectPtr = play->objectCtx.slots[this->rgObjectSlot].segment;
 
     OPEN_DISPS(gfxCtx);
 
@@ -50,8 +50,8 @@ void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, TexturePtr texture) {
     SkinMatrix_SetScale(&mfScale, scale, scale, scale);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &play->billboardMtxF, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
-    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(object);
-    gSPSegment(POLY_XLU_DISP++, 0x06, object);
+    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(objectPtr);
+    gSPSegment(POLY_XLU_DISP++, 0x06, objectPtr);
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &mfResult);
 
@@ -542,7 +542,7 @@ void EffectSsDtBubble_SpawnCustomColor(PlayState* play, Vec3f* pos, Vec3f* veloc
  *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
  *       only live for 200 frames
  */
-void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 flags, s16 scale, s16 objId,
+void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 flags, s16 scale, s16 objectId,
                          s16 life, Gfx* dList) {
     EffectSsHahenInitParams initParams;
 
@@ -552,7 +552,7 @@ void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* ac
     initParams.dList = dList;
     initParams.flags = flags;
     initParams.scale = scale;
-    initParams.objId = objId;
+    initParams.objectId = objectId;
     initParams.life = life;
 
     EffectSs_Spawn(play, EFFECT_SS_HAHEN, 128, &initParams);
@@ -568,7 +568,7 @@ void EffectSsHahen_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* ac
  *       only live for 200 frames
  */
 void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 flags, s16 scale, s16 randScaleRange,
-                              s16 count, s16 objId, s16 life, Gfx* dList) {
+                              s16 count, s16 objectId, s16 life, Gfx* dList) {
     s32 i;
     Vec3f velocity;
     Vec3f accel;
@@ -581,7 +581,7 @@ void EffectSsHahen_SpawnBurst(PlayState* play, Vec3f* pos, f32 burstScale, s16 f
         velocity.z = (Rand_ZeroOne() - 0.5f) * burstScale;
         velocity.y = ((Rand_ZeroOne() * 0.5f) + 0.5f) * burstScale;
 
-        EffectSsHahen_Spawn(play, pos, &velocity, &accel, flags, Rand_S16Offset(scale, randScaleRange), objId, life,
+        EffectSsHahen_Spawn(play, pos, &velocity, &accel, flags, Rand_S16Offset(scale, randScaleRange), objectId, life,
                             dList);
     }
 }
@@ -719,7 +719,7 @@ void EffectSsSolderSrchBall_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, 
 // EffectSsKakera Spawn Functions
 
 void EffectSsKakera_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* arg3, s16 gravity, s16 arg5, s16 arg6,
-                          s16 arg7, s16 arg8, s16 scale, s16 arg10, s16 arg11, s32 life, s16 colorIdx, s16 objId,
+                          s16 arg7, s16 arg8, s16 scale, s16 arg10, s16 arg11, s32 life, s16 colorIdx, s16 objectId,
                           Gfx* dList) {
     EffectSsKakeraInitParams initParams;
 
@@ -736,7 +736,7 @@ void EffectSsKakera_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* a
     initParams.unk_32 = arg11;
     initParams.life = life;
     initParams.colorIdx = colorIdx;
-    initParams.objId = objId;
+    initParams.objectId = objectId;
     initParams.dList = dList;
 
     EffectSs_Spawn(play, EFFECT_SS_KAKERA, 101, &initParams);

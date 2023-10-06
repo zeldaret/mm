@@ -51,7 +51,7 @@ void BgF40Swlift_Init(Actor* thisx, PlayState* play) {
     }
 
     sHeights[index] = this->dyna.actor.world.pos.y;
-    sSwitchFlags[index] = BG_F40_SWLIFT_GET_SWITCHFLAG(thisx);
+    sSwitchFlags[index] = BG_F40_SWLIFT_GET_SWITCH_FLAG(thisx);
     if (index != 0) {
         Actor_Kill(&this->dyna.actor);
         return;

@@ -176,7 +176,7 @@ void EnSob1_SetupAction(EnSob1* this, EnSob1ActionFunc action) {
 s32 EnSob1_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
@@ -379,22 +379,22 @@ void EnSob1_SpawnShopItems(EnSob1* this, PlayState* play, ShopItem* shopItem) {
     }
 }
 
-s32 EnSob1_GetObjIndices(EnSob1* this, PlayState* play, s16* objIds) {
-    if (objIds[1] != OBJECT_ID_MAX) {
-        this->unusedObjIndex = Object_GetIndex(&play->objectCtx, objIds[1]);
-        if (this->unusedObjIndex < 0) {
+s32 EnSob1_GetObjectIndices(EnSob1* this, PlayState* play, s16* objectIds) {
+    if (objectIds[1] != OBJECT_ID_MAX) {
+        this->unusedObjectSlot = Object_GetSlot(&play->objectCtx, objectIds[1]);
+        if (this->unusedObjectSlot <= OBJECT_SLOT_NONE) {
             return false;
         }
     } else {
-        this->unusedObjIndex = -1;
+        this->unusedObjectSlot = OBJECT_SLOT_NONE;
     }
-    if (objIds[2] != OBJECT_ID_MAX) {
-        this->shopkeeperAnimObjIndex = Object_GetIndex(&play->objectCtx, objIds[2]);
-        if (this->shopkeeperAnimObjIndex < 0) {
+    if (objectIds[2] != OBJECT_ID_MAX) {
+        this->shopkeeperAnimObjectSlot = Object_GetSlot(&play->objectCtx, objectIds[2]);
+        if (this->shopkeeperAnimObjectSlot <= OBJECT_SLOT_NONE) {
             return false;
         }
     } else {
-        this->shopkeeperAnimObjIndex = -1;
+        this->shopkeeperAnimObjectSlot = OBJECT_SLOT_NONE;
     }
     return true;
 }
@@ -402,7 +402,7 @@ s32 EnSob1_GetObjIndices(EnSob1* this, PlayState* play, s16* objIds) {
 void EnSob1_Init(Actor* thisx, PlayState* play) {
     EnSob1* this = THIS;
     s32 pad;
-    s16* objIds;
+    s16* objectIds;
 
     switch (ENSOB1_GET_SHOPTYPE(thisx)) {
         case ZORA_SHOP:
@@ -426,13 +426,13 @@ void EnSob1_Init(Actor* thisx, PlayState* play) {
             return;
     }
 
-    objIds = sObjectIds[this->shopType];
-    this->mainObjIndex = Object_GetIndex(&play->objectCtx, objIds[0]);
-    if (this->mainObjIndex < 0) {
+    objectIds = sObjectIds[this->shopType];
+    this->mainObjectSlot = Object_GetSlot(&play->objectCtx, objectIds[0]);
+    if (this->mainObjectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
-    if (!EnSob1_GetObjIndices(this, play, objIds)) {
+    if (!EnSob1_GetObjectIndices(this, play, objectIds)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -466,7 +466,7 @@ void EnSob1_EndInteraction(PlayState* play, EnSob1* this) {
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &play->state);
-    play->msgCtx.msgMode = 0x43;
+    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     this->drawCursor = 0;
@@ -957,7 +957,7 @@ void EnSob1_SetupBuyItemWithFanfare(PlayState* play, EnSob1* this) {
     Player* player = GET_PLAYER(play);
 
     Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
-    play->msgCtx.msgMode = 0x43;
+    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
@@ -1110,7 +1110,7 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, PlayState* play) {
 
 void EnSob1_SetupItemPurchased(EnSob1* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
@@ -1345,15 +1345,16 @@ void EnSob1_Blink(EnSob1* this) {
 }
 
 void EnSob1_ChangeObject(EnSob1* this, PlayState* play) {
-    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->shopkeeperAnimObjIndex].segment);
+    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
 }
 
 s32 EnSob1_AreObjectsLoaded(EnSob1* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->mainObjIndex)) {
-        if ((this->unusedObjIndex >= 0) && !Object_IsLoaded(&play->objectCtx, this->unusedObjIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->mainObjectSlot)) {
+        if ((this->unusedObjectSlot > OBJECT_SLOT_NONE) && !Object_IsLoaded(&play->objectCtx, this->unusedObjectSlot)) {
             return false;
         }
-        if ((this->shopkeeperAnimObjIndex >= 0) && !Object_IsLoaded(&play->objectCtx, this->shopkeeperAnimObjIndex)) {
+        if ((this->shopkeeperAnimObjectSlot > OBJECT_SLOT_NONE) &&
+            !Object_IsLoaded(&play->objectCtx, this->shopkeeperAnimObjectSlot)) {
             return false;
         }
         return true;
@@ -1363,7 +1364,7 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, PlayState* play) {
 
 void EnSob1_ZoraShopkeeper_Init(EnSob1* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, ZORA_LIMB_MAX);
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->shopkeeperAnimObjIndex].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
     Animation_Change(&this->skelAnime, &gZoraShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gZoraShopkeeperAnim),
                      ANIMMODE_LOOP, 0.0f);
     this->actor.draw = EnSob1_ZoraShopkeeper_Draw;
@@ -1372,7 +1373,7 @@ void EnSob1_ZoraShopkeeper_Init(EnSob1* this, PlayState* play) {
 
 void EnSob1_GoronShopkeeper_Init(EnSob1* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable, GORON_LIMB_MAX);
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->shopkeeperAnimObjIndex].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
     Animation_Change(&this->skelAnime, &gGoronShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gGoronShopkeeperAnim),
                      ANIMMODE_LOOP, 0.0f);
     this->actor.draw = EnSob1_GoronShopkeeper_Draw;
@@ -1394,7 +1395,7 @@ void EnSob1_InitShop(EnSob1* this, PlayState* play) {
 
     if (EnSob1_AreObjectsLoaded(this, play)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.objBankIndex = this->mainObjIndex;
+        this->actor.objectSlot = this->mainObjectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         posOffset = &sPosOffset[this->shopType];
         this->actor.world.pos.x += posOffset->x;

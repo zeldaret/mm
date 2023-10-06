@@ -133,7 +133,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
 }
 
 void EnHy_ChangeObjectAndAnim(EnHy* enHy, PlayState* play, s16 animIndex) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[enHy->animObjIndex].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
     EnHy_ChangeAnim(&enHy->skelAnime, animIndex);
 }
 
@@ -141,7 +141,7 @@ s32 EnHy_UpdateSkelAnime(EnHy* enHy, PlayState* play) {
     s32 isUpdated = false;
 
     if (enHy->actor.draw != NULL) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[enHy->animObjIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
         SkelAnime_Update(&enHy->skelAnime);
         isUpdated = true;
     }
@@ -161,14 +161,14 @@ void EnHy_Blink(EnHy* enHy, s32 eyeTexMaxIndex) {
 s32 EnHy_Init(EnHy* enHy, PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex) {
     s32 isInitialized = false;
 
-    if ((SubS_IsObjectLoaded(enHy->animObjIndex, play) == true) &&
-        (SubS_IsObjectLoaded(enHy->headObjIndex, play) == true) &&
-        (SubS_IsObjectLoaded(enHy->skelUpperObjIndex, play) == true) &&
-        (SubS_IsObjectLoaded(enHy->skelLowerObjIndex, play) == true)) {
-        enHy->actor.objBankIndex = enHy->skelLowerObjIndex;
+    if ((SubS_IsObjectLoaded(enHy->animObjectSlot, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->headObjectSlot, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelUpperObjectSlot, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelLowerObjectSlot, play) == true)) {
+        enHy->actor.objectSlot = enHy->skelLowerObjectSlot;
         isInitialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[enHy->actor.objBankIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[enHy->actor.objectSlot].segment);
         SkelAnime_InitFlex(play, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
                            ENHY_LIMB_MAX);
         EnHy_ChangeObjectAndAnim(enHy, play, animIndex);

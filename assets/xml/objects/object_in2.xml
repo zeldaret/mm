@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_in2" Segment="6">
-        <Animation Name="object_in2_Anim_000084" Offset="0x84" />
+        <Animation Name="object_in2_Anim_000084" Offset="0x84" /> <!-- Original name is "in2_kihon" -->
         <DList Name="object_in2_DL_002D60" Offset="0x2D60" />
         <DList Name="object_in2_DL_003060" Offset="0x3060" />
         <DList Name="object_in2_DL_0035B0" Offset="0x35B0" />
@@ -67,16 +67,16 @@
         <Limb Name="object_in2_Standardlimb_00784C" Type="Standard" EnumName="OBJECT_IN2_LIMB_12" Offset="0x784C" />
         <Limb Name="object_in2_Standardlimb_007858" Type="Standard" EnumName="OBJECT_IN2_LIMB_13" Offset="0x7858" />
         <Skeleton Name="object_in2_Skel_0078B0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IN2_LIMB_NONE" LimbMax="OBJECT_IN2_LIMB_MAX" EnumName="ObjectIn2Limb" Offset="0x78B0" />
-        <Animation Name="object_in2_Anim_008090" Offset="0x8090" />
-        <Animation Name="object_in2_Anim_00898C" Offset="0x898C" />
-        <Animation Name="object_in2_Anim_009450" Offset="0x9450" />
-        <Animation Name="object_in2_Anim_009CDC" Offset="0x9CDC" />
-        <Animation Name="object_in2_Anim_00A5E0" Offset="0xA5E0" />
-        <Animation Name="object_in2_Anim_00A70C" Offset="0xA70C" />
-        <Animation Name="object_in2_Anim_00AD18" Offset="0xAD18" />
-        <Animation Name="object_in2_Anim_00B8B0" Offset="0xB8B0" />
-        <Animation Name="object_in2_Anim_00B990" Offset="0xB990" />
-        <Animation Name="object_in2_Anim_00BA80" Offset="0xBA80" />
-        <Animation Name="object_in2_Anim_00C03C" Offset="0xC03C" />
+        <Animation Name="object_in2_Anim_008090" Offset="0x8090" /> <!-- Original name is "in2_suwarukard" -->
+        <Animation Name="object_in2_Anim_00898C" Offset="0x898C" /> <!-- Original name is "in2_suwarunomu" -->
+        <Animation Name="object_in2_Anim_009450" Offset="0x9450" /> <!-- Original name is "in2_suwaruokoru" -->
+        <Animation Name="object_in2_Anim_009CDC" Offset="0x9CDC" /> <!-- Original name is "in2_suwaruwait" -->
+        <Animation Name="object_in2_Anim_00A5E0" Offset="0xA5E0" /> <!-- Original name is "in2_suwaruwait2" -->
+        <Animation Name="object_in2_Anim_00A70C" Offset="0xA70C" /> <!-- Original name is "in2_suwaruwait3" -->
+        <Animation Name="object_in2_Anim_00AD18" Offset="0xAD18" /> <!-- Original name is "in2_walk" -->
+        <Animation Name="object_in2_Anim_00B8B0" Offset="0xB8B0" /> <!-- Original name is "in2_walk2suwaru" -->
+        <Animation Name="object_in2_Anim_00B990" Offset="0xB990" /> <!-- Original name is "in2_matsu1" -->
+        <Animation Name="object_in2_Anim_00BA80" Offset="0xBA80" /> <!-- Original name is "in_neru1" -->
+        <Animation Name="object_in2_Anim_00C03C" Offset="0xC03C" /> <!-- Original name is "in_pekopeko" -->
     </File>
 </Root>

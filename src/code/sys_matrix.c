@@ -75,7 +75,7 @@ MtxF* sCurrentMatrix; //!< original name: "Matrix_now"
  * @remark original name: "new_Matrix"
  */
 void Matrix_Init(GameState* gameState) {
-    sMatrixStack = THA_AllocTailAlign16(&gameState->heap, MATRIX_STACK_SIZE * sizeof(MtxF));
+    sMatrixStack = THA_AllocTailAlign16(&gameState->tha, MATRIX_STACK_SIZE * sizeof(MtxF));
     sCurrentMatrix = sMatrixStack;
 }
 
