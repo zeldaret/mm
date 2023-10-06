@@ -167,8 +167,7 @@ void EnPoh_Init(Actor* thisx, PlayState* play) {
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     Lights_PointGlowSetInfo(&this->lightInfo, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
                             255, 255, 255, 0);
-    SkelAnime_Init(play, &this->skelAnime, &object_po_Skel_0050D0, &object_po_Anim_000A60, this->jointTable,
-                   this->morphTable, 21);
+    SkelAnime_Init(play, &this->skelAnime, &gPoeSkel, &gPoeFloatAnim, this->jointTable, this->morphTable, 21);
     this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     func_80B2D0E8(this);
 }
@@ -215,7 +214,7 @@ void func_80B2C9B8(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2CA4C(EnPoh* this) {
-    Animation_PlayLoop(&this->skelAnime, &object_po_Anim_0015B0);
+    Animation_PlayLoop(&this->skelAnime, &gPoeDisappearAnim);
     this->unk_18E = Rand_S16Offset(2, 3);
     this->actionFunc = func_80B2CAA4;
     this->actor.speed = 0.0f;
@@ -241,7 +240,7 @@ void func_80B2CAA4(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2CB60(EnPoh* this) {
-    Animation_PlayLoop(&this->skelAnime, &object_po_Anim_000A60);
+    Animation_PlayLoop(&this->skelAnime, &gPoeFloatAnim);
     this->unk_18E = Rand_S16Offset(15, 3);
     this->colliderCylinder.base.acFlags |= AC_ON;
     this->actionFunc = func_80B2CBBC;
@@ -276,7 +275,7 @@ void func_80B2CBBC(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2CD14(EnPoh* this) {
-    Animation_PlayLoop(&this->skelAnime, &object_po_Anim_000A60);
+    Animation_PlayLoop(&this->skelAnime, &gPoeFloatAnim);
     this->actionFunc = func_80B2CD64;
     this->unk_18E = 0;
     this->actor.speed = 2.0f;
@@ -315,7 +314,7 @@ void func_80B2CD64(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2CEC8(EnPoh* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_po_Anim_0001A8, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gPoeAttackAnim, -6.0f);
     this->unk_18E = 12;
     this->actor.speed = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_LAUGH);
@@ -344,7 +343,7 @@ void func_80B2CF28(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2CFF8(EnPoh* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_po_Anim_0004EC, -6.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gPoeDamagedAnim, -6.0f);
     func_800BE504(&this->actor, &this->colliderCylinder);
     this->colliderCylinder.base.acFlags &= ~AC_ON;
     this->actor.speed = 5.0f;
@@ -366,7 +365,7 @@ void func_80B2D07C(EnPoh* this, PlayState* play) {
 void func_80B2D0E8(EnPoh* this) {
     this->unk_197 = 0;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &object_po_Anim_0011C4, 0.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &gPoeAppearAnim, 0.0f);
     this->actionFunc = func_80B2D140;
 }
 
@@ -445,7 +444,7 @@ void func_80B2D300(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2D5DC(EnPoh* this) {
-    Animation_PlayOnce(&this->skelAnime, &object_po_Anim_000A60);
+    Animation_PlayOnce(&this->skelAnime, &gPoeFloatAnim);
     this->actionFunc = func_80B2D628;
     this->actor.speed = -5.0f;
 }
@@ -462,7 +461,7 @@ void func_80B2D628(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2D694(EnPoh* this) {
-    Animation_PlayLoop(&this->skelAnime, &object_po_Anim_0015B0);
+    Animation_PlayLoop(&this->skelAnime, &gPoeDisappearAnim);
     this->unk_192 = BINANG_ROT180(this->actor.world.rot.y);
     this->actionFunc = func_80B2D6EC;
     this->actor.speed = 0.0f;
@@ -540,7 +539,7 @@ void func_80B2D980(EnPoh* this, PlayState* play) {
 }
 
 void func_80B2DAD0(EnPoh* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_po_Anim_0006E0, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gPoeFleeAnim, -5.0f);
     this->actor.speed = 5.0f;
     this->actor.world.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
     this->colliderCylinder.base.acFlags |= AC_ON;
@@ -585,7 +584,7 @@ void func_80B2DC50(EnPoh* this, PlayState* play) {
 
 void func_80B2DD2C(EnPoh* this, PlayState* play) {
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight <= BGCHECK_Y_MIN)) {
-        EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_PO, 10, object_po_DL_002D28);
+        EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_PO, 10, gPoeLanternDL);
         func_80B2E0B0(this);
     }
 
@@ -864,28 +863,28 @@ s32 EnPoh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-static s8 sLimbToBodyParts[OBJECT_PO_LIMB_MAX] = {
-    BODYPART_NONE,    // OBJECT_PO_LIMB_NONE
-    BODYPART_NONE,    // OBJECT_PO_LIMB_01
-    BODYPART_NONE,    // OBJECT_PO_LIMB_02
-    BODYPART_NONE,    // OBJECT_PO_LIMB_03
-    ENPOH_BODYPART_4, // OBJECT_PO_LIMB_04
-    ENPOH_BODYPART_5, // OBJECT_PO_LIMB_05
-    BODYPART_NONE,    // OBJECT_PO_LIMB_06
-    BODYPART_NONE,    // OBJECT_PO_LIMB_07
-    BODYPART_NONE,    // OBJECT_PO_LIMB_08
-    ENPOH_BODYPART_0, // OBJECT_PO_LIMB_09
-    ENPOH_BODYPART_1, // OBJECT_PO_LIMB_0A
-    BODYPART_NONE,    // OBJECT_PO_LIMB_0B
-    BODYPART_NONE,    // OBJECT_PO_LIMB_0C
-    BODYPART_NONE,    // OBJECT_PO_LIMB_0D
-    BODYPART_NONE,    // OBJECT_PO_LIMB_0E
-    BODYPART_NONE,    // OBJECT_PO_LIMB_0F
-    ENPOH_BODYPART_2, // OBJECT_PO_LIMB_10
-    BODYPART_NONE,    // OBJECT_PO_LIMB_11
-    BODYPART_NONE,    // OBJECT_PO_LIMB_12
-    ENPOH_BODYPART_3, // OBJECT_PO_LIMB_13
-    BODYPART_NONE,    // OBJECT_PO_LIMB_14
+static s8 sLimbToBodyParts[POE_LIMB_MAX] = {
+    BODYPART_NONE,    // POE_LIMB_NONE
+    BODYPART_NONE,    // POE_LIMB_ROOT
+    BODYPART_NONE,    // POE_LIMB_ROOT_WRAPPER
+    BODYPART_NONE,    // POE_LIMB_BOTTEM_CLOAK_ROOT
+    ENPOH_BODYPART_4, // POE_LIMB_BOTTEM_CLOAK
+    ENPOH_BODYPART_5, // POE_LIMB_TOP_CLOAK
+    BODYPART_NONE,    // POE_LIMB_LEFT_ARM_ROOT
+    BODYPART_NONE,    // POE_LIMB_LEFT_ARM_WRAPPER
+    BODYPART_NONE,    // POE_LIMB_LEFT_FOREARM_ROOT
+    ENPOH_BODYPART_0, // POE_LIMB_LEFT_FOREARM
+    ENPOH_BODYPART_1, // POE_LIMB_LEFT_UPPER_ARM
+    BODYPART_NONE,    // POE_LIMB_FACE
+    BODYPART_NONE,    // POE_LIMB_RIGHT_ARM_ROOT
+    BODYPART_NONE,    // POE_LIMB_RIGHT_ARM_WRAPPER
+    BODYPART_NONE,    // POE_LIMB_RIGHT_FOREARM_ROOT
+    BODYPART_NONE,    // POE_LIMB_RIGHT_ARM_HAND_ROOT
+    ENPOH_BODYPART_2, // POE_LIMB_RIGHT_ARM_HAND
+    BODYPART_NONE,    // POE_LIMB_LATERN_ROOT
+    BODYPART_NONE,    // POE_LIMB_LATERN
+    ENPOH_BODYPART_3, // POE_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,    // POE_LIMB_RIGHT_UPPER_ARM
 };
 
 static Vec3f D_80B2F734[] = {
@@ -903,7 +902,7 @@ void EnPoh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     Collider_UpdateSpheres(limbIndex, &this->colliderSph);
     if ((this->actionFunc == func_80B2D300) && (this->unk_18E >= 2) && (limbIndex == 5)) {
         gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList((*gfx)++, object_po_DL_002608);
+        gSPDisplayList((*gfx)++, gPoeBurnDL);
     }
 
     if (limbIndex == 18) {
@@ -978,7 +977,7 @@ void EnPoh_Draw(Actor* thisx, PlayState* play) {
     Matrix_Put(&this->unk_3D8);
 
     gSPMatrix(&gfx[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&gfx[3], object_po_DL_002D28);
+    gSPDisplayList(&gfx[3], gPoeLanternDL);
 
     POLY_OPA_DISP = &gfx[4];
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ENPOH_BODYPART_MAX,
@@ -1018,7 +1017,7 @@ void func_80B2F37C(Actor* thisx, PlayState* play) {
                                 this->actor.world.pos.z + sp7C.z, this->unk_198, this->unk_199, this->unk_19A, 200);
 
         gSPMatrix(&gfx[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&gfx[3], object_po_DL_002D28);
+        gSPDisplayList(&gfx[3], gPoeLanternDL);
 
         POLY_OPA_DISP = &gfx[4];
     } else {
@@ -1033,7 +1032,7 @@ void func_80B2F37C(Actor* thisx, PlayState* play) {
         Matrix_RotateYF(BINANG_TO_RAD(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000), MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, object_po_DL_003850);
+        gSPDisplayList(POLY_XLU_DISP++, gPoeSoulDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
