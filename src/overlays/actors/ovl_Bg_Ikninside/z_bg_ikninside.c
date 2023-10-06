@@ -64,7 +64,7 @@ void BgIkninside_Init(Actor* thisx, PlayState* play) {
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-    if (Flags_GetSwitch(play, DMIKNINSIDE_GET_SWITCH(thisx))) {
+    if (Flags_GetSwitch(play, DMIKNINSIDE_GET_SWITCH_FLAG(thisx))) {
         Actor_Kill(&this->dyna.actor);
     }
 }
@@ -118,7 +118,7 @@ void func_80C072D0(BgIkninside* this, PlayState* play) {
                 EffectSsHahen_Spawn(play, &pos, &velocity, &D_80C076D4, 0, 30, OBJECT_IKNINSIDE_OBJ, 25,
                                     D_80C076A0[i & 1]);
             }
-            Flags_SetSwitch(play, DMIKNINSIDE_GET_SWITCH(&this->dyna.actor));
+            Flags_SetSwitch(play, DMIKNINSIDE_GET_SWITCH_FLAG(&this->dyna.actor));
             this->actionFunc = func_80C07230;
             this->dyna.actor.draw = NULL;
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -150,7 +150,7 @@ void BgIkninside_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_ikninside_obj_DL_00CC78);
 
     CLOSE_DISPS(play->state.gfxCtx);

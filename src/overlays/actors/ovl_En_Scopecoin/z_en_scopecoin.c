@@ -90,7 +90,7 @@ void EnScopecoin_Draw(Actor* thisx, PlayState* play) {
     EnScopecoin* this = THIS;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
 
     OPEN_DISPS(gfxCtx);

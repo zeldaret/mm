@@ -24,7 +24,7 @@ typedef struct {
 
 typedef struct EnNiw {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ SkelAnime skelanime;
+    /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[NIW_LIMB_MAX];
     /* 0x1E8 */ Vec3s morphTable[NIW_LIMB_MAX];
     /* 0x248 */ EnNiwActionFunc actionFunc;
@@ -106,7 +106,7 @@ typedef enum {
     /* 2 */ NIW_ANIM_PECKING_AND_WAVING, // wings move along their axis, like human hand waving
     /* 3 */ NIW_ANIM_PECKING_AND_FORFLAPPING, // (unused) low (yaw based) flapping, forward and back
     /* 4 */ NIW_ANIM_FREEZE, // used during Cucco Storm
-    /* 5 */ NIW_ANIM_PECKING_SLOW_FORFLAPPING, // wing speed half that of 3
+    /* 5 */ NIW_ANIM_PECKING_SLOW_FORFLAPPING // wing speed half that of 3
 } EnNiwHeadAndWingAnimationState;
 
 

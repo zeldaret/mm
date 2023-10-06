@@ -2,6 +2,7 @@
 #define Z64TRANSITION_H
 
 #include "ultra64.h"
+#include "libc/stdint.h"
 #include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.h"
@@ -67,7 +68,7 @@ typedef struct {
 
 typedef enum {
     /* 1 */ TRANS_INSTANCE_TYPE_FILL_OUT = 1,
-    /* 2 */ TRANS_INSTANCE_TYPE_FILL_IN,
+    /* 2 */ TRANS_INSTANCE_TYPE_FILL_IN
 } TransitionInstanceType;
 
 #define TRANS_INSTANCE_TYPE_FADE_FLASH 3
@@ -164,31 +165,34 @@ typedef enum {
     /* 86 */ TRANS_TYPE_86 = 86
 } TransitionType;
 
-typedef enum {
-    /* 0 */ FBDEMO_FADE,
-    /* 1 */ FBDEMO_TRIFORCE,
-    /* 2 */ FBDEMO_WIPE1,
-    /* 3 */ FBDEMO_WIPE3,
-    /* 4 */ FBDEMO_WIPE4,
-    /* 5 */ FBDEMO_CIRCLE,
-    /* 6 */ FBDEMO_WIPE5
+#define DEFINE_TRANSITION(enumValue, _structName, _instanceName, _name) enumValue,
+#define DEFINE_TRANSITION_INTERNAL(enumValue, _structName, _instanceName) enumValue,
+
+typedef enum FbDemoType {
+    #include "tables/transition_table.h"
+    /* 7 */ FBDEMO_MAX
 } FbDemoType;
 
+#undef DEFINE_TRANSITION
+#undef DEFINE_TRANSITION_INTERNAL
+
 #define TRANS_NEXT_TYPE_DEFAULT 0xFF
+
+#define DEFINE_TRANSITION(_enumValue, structName, instanceName, _name) structName instanceName;
+#define DEFINE_TRANSITION_INTERNAL(_enumValue, structName, instanceName) structName instanceName;
+
+typedef union TransitionInstance {
+    #include "tables/transition_table.h"
+} TransitionInstance; // size = 0x218
+
+#undef DEFINE_TRANSITION
+#undef DEFINE_TRANSITION_INTERNAL
 
 typedef struct {
     /* 0x000 */ s16 transitionType;
     /* 0x002 */ s8 fbdemoType;
     /* 0x003 */ char unk_003[0x5];
-    /* 0x008 */ union {
-        TransitionFade fade;
-        TransitionCircle circle;
-        TransitionTriforce triforce;
-        TransitionWipe1 wipe1;
-        TransitionWipe3 wipe3;
-        TransitionWipe4 wipe4;
-        TransitionWipe5 wipe5;
-    } instanceData;
+    /* 0x008 */ TransitionInstance instanceData;
     /* 0x220 */ char unk_220[0x10];
     /* 0x230 */ void* (*init)(void* transition);
     /* 0x234 */ void  (*destroy)(void* transition);

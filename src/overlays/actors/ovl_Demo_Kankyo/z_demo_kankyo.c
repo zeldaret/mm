@@ -56,21 +56,21 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (play->roomCtx.unk7A[1] != 0) {
-        if (play->envCtx.unk_F2[3] != 0) {
-            play->envCtx.unk_F2[3]--;
+        if (play->envCtx.precipitation[PRECIP_SNOW_MAX] != 0) {
+            play->envCtx.precipitation[PRECIP_SNOW_MAX]--;
         } else {
             Actor_Kill(&this->actor);
         }
-    } else if (play->envCtx.unk_F2[3] < DEMOKANKYO_EFFECT_COUNT) {
-        play->envCtx.unk_F2[3] += 16;
+    } else if (play->envCtx.precipitation[PRECIP_SNOW_MAX] < DEMOKANKYO_EFFECT_COUNT) {
+        play->envCtx.precipitation[PRECIP_SNOW_MAX] += 16;
     }
 
     // note: DemoKankyo can crash if placed in an area that snows (ObjectKankyo)
-    // because they both use unk_F2 as an effect counter,
+    // because they both use PRECIP_SNOW_MAX precipitation as an effect counter,
     // causing DemoKankyo to write beyond its efffect array boundry
     // this crash can occur if the two actors are in different scenes connected by an exit
     // e.g. if you add DemoKankyo to GoronShrine, you will crash entering/leaving through door
-    for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
+    for (i = 0; i < play->envCtx.precipitation[PRECIP_SNOW_MAX]; i++) {
         repositionLimit = 130.0f;
 
         eyeToAt.x = play->view.at.x - play->view.eye.x;
@@ -304,8 +304,8 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, PlayState* play) {
     s32 pad1;
     Vec3f worldPos;
 
-    if (play->envCtx.unk_F2[3] < DEMOKANKYO_EFFECT_COUNT) {
-        play->envCtx.unk_F2[3] += 16;
+    if (play->envCtx.precipitation[PRECIP_SNOW_MAX] < DEMOKANKYO_EFFECT_COUNT) {
+        play->envCtx.precipitation[PRECIP_SNOW_MAX] += 16;
     }
 
     eyeToAt.x = play->view.at.x - play->view.eye.x;
@@ -318,7 +318,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, PlayState* play) {
 
     halfScreenHeight = SCREEN_HEIGHT / 2;
 
-    for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
+    for (i = 0; i < play->envCtx.precipitation[PRECIP_SNOW_MAX]; i++) {
         switch (this->effects[i].state) {
             case DEMO_KANKYO_STATE_INIT:
                 this->effects[i].posBase.x = play->view.eye.x + (eyeToAtNormX * halfScreenHeight);
@@ -461,7 +461,7 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
 
         case DEMO_KANKYO_TYPE_GIANTS:
             this->isSafeToDrawGiants = false;
-            objId = Object_GetIndex(&play->objectCtx, sObjectBubbleIndex);
+            objId = Object_GetSlot(&play->objectCtx, sObjectBubbleIndex);
             DemoKankyo_SetupAction(this, DemoKakyo_GiantObjectCheck);
             break;
 
@@ -506,12 +506,12 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
     if (!(play->cameraPtrs[CAM_ID_MAIN]->stateFlags & CAM_STATE_UNDERWATER)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
+        POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
         gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
 
-        for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
+        for (i = 0; i < play->envCtx.precipitation[PRECIP_SNOW_MAX]; i++) {
             worldPos.x = this->effects[i].posBase.x + this->effects[i].posOffset.x;
             worldPos.y = this->effects[i].posBase.y + this->effects[i].posOffset.y;
             worldPos.z = this->effects[i].posBase.z + this->effects[i].posOffset.z;
@@ -598,9 +598,10 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
         GraphicsContext* gfxCtx = play->state.gfxCtx;
 
         OPEN_DISPS(gfxCtx);
-        func_8012C2DC(gfxCtx);
 
-        for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
+        Gfx_SetupDL25_Xlu(gfxCtx);
+
+        for (i = 0; i < play->envCtx.precipitation[PRECIP_SNOW_MAX]; i++) {
             worldPos.x = this->effects[i].posBase.x + this->effects[i].posOffset.x;
             worldPos.y = this->effects[i].posBase.y + this->effects[i].posOffset.y;
             worldPos.z = this->effects[i].posBase.z + this->effects[i].posOffset.z;

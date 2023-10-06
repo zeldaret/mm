@@ -239,12 +239,12 @@ void func_80A237A4(ObjIceblock* this) {
         ((this->unk_244 - ((600.0f * this->dyna.actor.scale.y) - 90.0f)) + (sp20 * ptr->unk_08)) + ptr->unk_00;
 }
 
-void func_80A23938(ObjIceblock* this2) {
-    ObjIceblock* this = this2;
+void func_80A23938(ObjIceblock* this) {
+    Actor* thisx = &this->dyna.actor;
 
     if (this->unk_1B0 & 0x80) {
-        Math_ScaledStepToS(&this->dyna.actor.shape.rot.x, 0, 400);
-        Math_ScaledStepToS(&this->dyna.actor.shape.rot.z, 0, 400);
+        Math_ScaledStepToS(&thisx->shape.rot.x, 0, 400);
+        Math_ScaledStepToS(&thisx->shape.rot.z, 0, 400);
     } else {
         ObjIceBlockUnkStruct4* ptr = &this->unk_27C;
         f32 phi_f0;
@@ -252,7 +252,7 @@ void func_80A23938(ObjIceblock* this2) {
 
         if (this->unk_1B0 & 0x20) {
             phi_f0 = 0.3f;
-            ptr->unk_14 = this->dyna.actor.yawTowardsPlayer;
+            ptr->unk_14 = thisx->yawTowardsPlayer;
         } else {
             phi_f0 = 0.08f;
         }
@@ -264,16 +264,15 @@ void func_80A23938(ObjIceblock* this2) {
 
         temp = ptr->unk_16 - ptr->unk_14;
 
-        ptr->unk_18 +=
-            (s16)(temp * -0.04f * this->dyna.actor.xzDistToPlayer * this->dyna.actor.scale.x * (1.0f / 600.0f));
+        ptr->unk_18 += (s16)(temp * -0.04f * thisx->xzDistToPlayer * thisx->scale.x * (1.0f / 600.0f));
         ptr->unk_18 = func_80A23090(ptr->unk_18, 50, 800);
         ptr->unk_16 += ptr->unk_18;
 
-        this->dyna.actor.shape.rot.x = Math_CosS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
-        this->dyna.actor.shape.rot.x = CLAMP(this->dyna.actor.shape.rot.x, -2000, 2000);
+        thisx->shape.rot.x = Math_CosS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
+        thisx->shape.rot.x = CLAMP(thisx->shape.rot.x, -2000, 2000);
 
-        this->dyna.actor.shape.rot.z = -Math_SinS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
-        this->dyna.actor.shape.rot.z = CLAMP(this->dyna.actor.shape.rot.z, -2000, 2000);
+        thisx->shape.rot.z = -Math_SinS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
+        thisx->shape.rot.z = CLAMP(thisx->shape.rot.z, -2000, 2000);
     }
 }
 
@@ -671,13 +670,14 @@ void func_80A24B74(ObjIceblock* this, PlayState* play) {
     s32 pad;
     Vec3f sp20;
 
-    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
-        if (1) {}
-        sp20.x = this->dyna.actor.world.pos.x;
-        sp20.y = this->unk_244;
-        sp20.z = this->dyna.actor.world.pos.z;
-        EffectSsGRipple_Spawn(play, &sp20, 480, 880, 0);
+    if (!(this->dyna.actor.flags & ACTOR_FLAG_40)) {
+        return;
     }
+
+    sp20.x = this->dyna.actor.world.pos.x;
+    sp20.y = this->unk_244;
+    sp20.z = this->dyna.actor.world.pos.z;
+    EffectSsGRipple_Spawn(play, &sp20, 480, 880, 0);
 }
 
 void func_80A24BDC(ObjIceblock* this, PlayState* play, f32 arg2, f32 arg3, s32 arg4) {
@@ -1181,7 +1181,7 @@ void func_80A25E50(ObjIceblock* this, PlayState* play) {
         func_80A2541C(this, play);
         func_80A25CF4(this);
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
     }
 }
 
@@ -1267,7 +1267,7 @@ void func_80A26144(ObjIceblock* this, PlayState* play) {
         func_80A23B88(this);
         func_80A25FA0(this);
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
     }
 
     func_80A24DD0(this, play);
@@ -1527,7 +1527,7 @@ void func_80A26BF8(ObjIceblock* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     sp70.z = 0;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1B4); i++) {

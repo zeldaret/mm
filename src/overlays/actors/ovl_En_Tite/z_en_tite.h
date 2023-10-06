@@ -7,13 +7,26 @@ struct EnTite;
 
 typedef void (*EnTiteActionFunc)(struct EnTite*, PlayState*);
 
-enum {
+typedef enum {
     /* -4 */ ENTITE_MINUS_4 = -4,
     /* -3 */ ENTITE_MINUS_3,
     /* -2 */ ENTITE_MINUS_2,
     /* -1 */ ENTITE_MINUS_1,
-    /*  0 */ ENTITE_MINUS_0,
-};
+    /*  0 */ ENTITE_MINUS_0
+} EnTiteParam;
+
+typedef enum EnTiteBodyPart {
+    /* 0 */ ENTITE_BODYPART_0,
+    /* 1 */ ENTITE_BODYPART_1,
+    /* 2 */ ENTITE_BODYPART_2,
+    /* 3 */ ENTITE_BODYPART_3,
+    /* 4 */ ENTITE_BODYPART_4,
+    /* 5 */ ENTITE_BODYPART_5,
+    /* 6 */ ENTITE_BODYPART_6,
+    /* 7 */ ENTITE_BODYPART_7,
+    /* 8 */ ENTITE_BODYPART_8,
+    /* 9 */ ENTITE_BODYPART_MAX
+} EnTiteBodyPart;
 
 typedef struct EnTite {
     /* 0x000 */ Actor actor;
@@ -31,8 +44,8 @@ typedef struct EnTite {
     /* 0x2C4 */ f32 drawDmgEffAlpha;
     /* 0x2C8 */ f32 drawDmgEffScale;
     /* 0x2CC */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x2D0 */ Vec3f limbPos[9];
-    /* 0x33C */ Vec3f unk_33C[9];
+    /* 0x2D0 */ Vec3f bodyPartsPos[ENTITE_BODYPART_MAX];
+    /* 0x33C */ Vec3f unk_33C[ENTITE_BODYPART_MAX];
     /* 0x3A8 */ Gfx* unk_3A8;
     /* 0x3AC */ ColliderSphere collider;
 } EnTite; // size = 0x404

@@ -4,7 +4,6 @@
  * Description: Trees, shrubs
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_wood02.h"
 #include "objects/object_wood02/object_wood02.h"
 
@@ -264,8 +263,8 @@ void EnWood02_Init(Actor* thisx, PlayState* play) {
         case WOOD_LEAF_YELLOW:
             this->unk_14A[0] = 75;
             actorScale = 0.02f;
-            this->actor.velocity.x = randPlusMinusPoint5Scaled(6.0f);
-            this->actor.velocity.z = randPlusMinusPoint5Scaled(6.0f);
+            this->actor.velocity.x = Rand_CenteredFloat(6.0f);
+            this->actor.velocity.z = Rand_CenteredFloat(6.0f);
             this->actor.velocity.y = (Rand_ZeroOne() * 1.25f) + -3.1f;
             break;
     }
@@ -409,7 +408,7 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
 
                 for (i = 3; i >= 0; i--) {
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WOOD02, dropsSpawnPt.x, dropsSpawnPt.y, dropsSpawnPt.z,
-                                0, randPlusMinusPoint5Scaled(0xFFFF), 0, leavesParams);
+                                0, Rand_CenteredFloat(0xFFFF), 0, leavesParams);
                 }
             }
 
@@ -486,10 +485,10 @@ void EnWood02_Draw(Actor* thisx, PlayState* play) {
         red = green = blue = 255;
     }
 
-    func_8012C2DC(gfxCtx);
+    Gfx_SetupDL25_Xlu(gfxCtx);
 
     if ((thisx->params == WOOD_LEAF_GREEN) || (thisx->params == WOOD_LEAF_YELLOW)) {
-        func_8012C28C(gfxCtx);
+        Gfx_SetupDL25_Opa(gfxCtx);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, red, green, blue, 127);
 
@@ -501,7 +500,7 @@ void EnWood02_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_808C4D70[this->drawType & 0xF]);
     } else {
-        func_8012C2DC(gfxCtx);
+        Gfx_SetupDL25_Xlu(gfxCtx);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_808C4D54[this->drawType & 0xF]);

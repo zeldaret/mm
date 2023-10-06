@@ -7,7 +7,7 @@
 #include "z_en_zog.h"
 #include "objects/object_zog/object_zog.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZog*)thisx)
 
@@ -394,9 +394,9 @@ void func_80B93D2C(EnZog* this, PlayState* play) {
 void func_80B93DE8(Vec3f* arg0, PlayState* play, s32 arg2) {
     Vec3f sp2C;
 
-    sp2C.x = randPlusMinusPoint5Scaled(30.0f) + arg0->x;
+    sp2C.x = Rand_CenteredFloat(30.0f) + arg0->x;
     sp2C.y = arg0->y + 3.0f;
-    sp2C.z = randPlusMinusPoint5Scaled(30.0f) + arg0->z;
+    sp2C.z = Rand_CenteredFloat(30.0f) + arg0->z;
     EffectSsKirakira_SpawnDispersed(play, &sp2C, &D_80B9598C, &D_80B95998, &D_80B959A4, &D_80B959A8, 1000, arg2);
 }
 
@@ -627,15 +627,14 @@ void func_80B9451C(EnZog* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B94470;
-    } else if ((play->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
-        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
-            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+    } else if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (this->actor.xzDistToPlayer < 120.0f)) {
+        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
             this->actor.shape.shadowDraw = NULL;
         }
     } else if (this->actor.xzDistToPlayer < 120.0f) {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
     }
     func_80B943EC(this, play);
 }
@@ -667,14 +666,14 @@ void func_80B946FC(EnZog* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         play->msgCtx.msgLength = 0;
                         this->actionFunc = func_80B946B4;
                         func_80B93BA8(this, 1);
                         break;
 
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0x1014);
                         break;
                 }
@@ -716,9 +715,8 @@ void func_80B948A8(EnZog* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B946FC;
-    } else if ((play->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
-        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
-            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+    } else if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (this->actor.xzDistToPlayer < 120.0f)) {
+        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
             this->actor.shape.shadowDraw = NULL;
@@ -734,7 +732,7 @@ void func_80B948A8(EnZog* this, PlayState* play) {
         }
 
         if ((this->unk_302 == 0) && (this->actor.xzDistToPlayer < 120.0f)) {
-            func_800B8614(&this->actor, play, 150.0f);
+            Actor_OfferTalk(&this->actor, play, 150.0f);
         }
     }
     func_80B93A48(this, play);
@@ -865,9 +863,9 @@ void func_80B94E34(EnZog* this, PlayState* play) {
             Vec3f sp38;
 
             Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80B959AC, &sp38);
-            sp38.x += randPlusMinusPoint5Scaled(30.0f);
+            sp38.x += Rand_CenteredFloat(30.0f);
             sp38.y += 20.0f;
-            sp38.z += randPlusMinusPoint5Scaled(30.0f);
+            sp38.z += Rand_CenteredFloat(30.0f);
             if (WaterBox_GetSurface1(play, &play->colCtx, sp38.x, sp38.z, &sp38.y, &sp44) &&
                 (this->actor.world.pos.y < sp38.y)) {
                 EffectSsGSplash_Spawn(play, &sp38, NULL, NULL, 1,
@@ -908,7 +906,7 @@ void func_80B94E34(EnZog* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_88_10);
     } else if ((this->actor.yawTowardsPlayer > 16000) && (this->actor.yawTowardsPlayer < 32000) &&
                (this->unk_302 == 0)) {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -941,7 +939,7 @@ void func_80B95128(EnZog* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         SET_WEEKEVENTREG(WEEKEVENTREG_91_01);
     } else {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
     func_80B93A48(this, play);
@@ -1049,11 +1047,11 @@ void EnZog_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_30A & 8) {
         if (this->unk_322 > 128) {
             gfx = POLY_XLU_DISP++;
-            func_8012C2B4(gfx);
+            Gfx_SetupDL71(gfx);
             Scene_SetRenderModeXlu(play, 2, 2);
         } else {
             gfx = POLY_XLU_DISP++;
-            func_8012C304(gfx);
+            Gfx_SetupDL72(gfx);
             Scene_SetRenderModeXlu(play, 1, 2);
         }
 
@@ -1068,7 +1066,7 @@ void EnZog_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                NULL, func_80B95598, &this->actor, POLY_XLU_DISP);
     } else {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Scene_SetRenderModeXlu(play, 0, 1);
 
         gfx = POLY_OPA_DISP;

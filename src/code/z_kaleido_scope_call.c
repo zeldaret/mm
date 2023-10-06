@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64shrink_window.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
@@ -40,13 +39,13 @@ void KaleidoScopeCall_Update(PlayState* play) {
             if (ShrinkWindow_Letterbox_GetSize() == 0) {
                 R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_SETUP;
                 pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
-                pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_0;
+                pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_APPEARING;
                 pauseCtx->state = (pauseCtx->state & 0xFFFF) + 1;
             }
         } else if (pauseCtx->state == PAUSE_STATE_GAMEOVER_0) {
             R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_SETUP;
             pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
-            pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_0;
+            pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_APPEARING;
             pauseCtx->state = (pauseCtx->state & 0xFFFF) + 1;
         } else if ((pauseCtx->state == PAUSE_STATE_OPENING_1) || (pauseCtx->state == PAUSE_STATE_GAMEOVER_1) ||
                    (pauseCtx->state == PAUSE_STATE_OWLWARP_1)) {

@@ -16,7 +16,7 @@ void DmOpstage_Destroy(Actor* thisx, PlayState* play);
 void DmOpstage_Update(Actor* thisx, PlayState* play);
 void DmOpstage_Draw(Actor* thisx, PlayState* play);
 
-void DmOpstage_FollowCutsceneScript(DmOpstage* this, PlayState* play);
+void DmOpstage_HandleCutscene(DmOpstage* this, PlayState* play);
 
 ActorInit Dm_Opstage_InitVars = {
     ACTOR_DM_OPSTAGE,
@@ -42,12 +42,12 @@ void DmOpstage_Init(Actor* thisx, PlayState* play) {
     DmOpstage* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DmOpstage_SetupAction(this, DmOpstage_FollowCutsceneScript);
+    DmOpstage_SetupAction(this, DmOpstage_HandleCutscene);
     Actor_SetScale(&this->dyna.actor, 0.1f);
 
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_GROUND) {
         DynaPolyActor_Init(&this->dyna, 0);
-        DynaPolyActor_LoadMesh(play, &this->dyna, &gKeikokuDemoFloorColliderHeader);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gKeikokuDemoFloorCol);
     }
 
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > DMOPSTAGE_TYPE_GROUND) {
@@ -69,7 +69,7 @@ void DmOpstage_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void DmOpstage_FollowCutsceneScript(DmOpstage* this, PlayState* play) {
+void DmOpstage_HandleCutscene(DmOpstage* this, PlayState* play) {
     s32 cueChannel;
 
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_GROUND) {
@@ -98,7 +98,7 @@ void DmOpstage_Update(Actor* thisx, PlayState* play) {
     if ((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 0) && (play->csCtx.curFrame == 480)) {
         // This actor is responsible for playing the fairy sound during the exposition in the intro,
         // during the transition to Lost Woods, before Ocarina gets stolen.
-        func_8019F128(NA_SE_EV_NAVY_FLY_REBIRTH);
+        Audio_PlaySfx_2(NA_SE_EV_NAVY_FLY_REBIRTH);
     }
 }
 
@@ -133,6 +133,9 @@ void DmOpstage_Draw(Actor* thisx, PlayState* play) {
         case DMOPSTAGE_TYPE_STRAIGHT_TREE:
             Gfx_DrawDListOpa(play, gKeikokuDemoTallTreeStraightDL);
             Gfx_DrawDListXlu(play, gKeikokuDemoTallTreeStraightEmptyDL);
+            break;
+
+        default:
             break;
     }
 }

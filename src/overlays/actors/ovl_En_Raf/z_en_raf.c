@@ -5,6 +5,7 @@
  */
 
 #include "z_en_raf.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_CANT_LOCK_ON)
 
@@ -40,7 +41,7 @@ typedef enum {
     /* 2 */ EN_RAF_ANIM_CHEW,
     /* 3 */ EN_RAF_ANIM_SPIT,
     /* 4 */ EN_RAF_ANIM_CONVULSE,
-    /* 5 */ EN_RAF_ANIM_DEATH,
+    /* 5 */ EN_RAF_ANIM_DEATH
 } EnRafAnimation;
 
 typedef enum {
@@ -51,7 +52,7 @@ typedef enum {
     /* 4 */ EN_RAF_ACTION_EXPLODE,
     /* 5 */ EN_RAF_ACTION_CONVULSE,
     /* 6 */ EN_RAF_ACTION_DISSOLVE,
-    /* 7 */ EN_RAF_ACTION_DORMANT,
+    /* 7 */ EN_RAF_ACTION_DORMANT
 } EnRafAction;
 
 typedef enum {
@@ -209,7 +210,7 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     CollisionHeader_GetVirtual(&gCarnivorousLilyPadCol, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
-    this->dyna.actor.targetMode = 3;
+    this->dyna.actor.targetMode = TARGET_MODE_3;
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     SkelAnime_InitFlex(play, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim, this->jointTable,
                        this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
@@ -318,7 +319,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->grabTarget = EN_RAF_GRAB_TARGET_GORON_PLAYER;
             } else {
-                player->unk_AE8 = 50;
+                player->actionVar2 = 50;
             }
 
             this->playerRotYWhenGrabbed = player->actor.world.rot.y;
@@ -454,7 +455,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
             case EN_RAF_GRAB_TARGET_GORON_PLAYER:
                 if (this->chewCount > (BREG(54) + 4)) {
                     player->actor.parent = NULL;
-                    player->unk_AE8 = 1000;
+                    player->actionVar2 = 1000;
                     EnRaf_Explode(this, play);
                 }
                 break;
@@ -511,7 +512,7 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     Math_Vec3f_Copy(&explosionPos, &this->dyna.actor.world.pos);
     explosionPos.y += 10.0f;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, explosionPos.x, explosionPos.y, explosionPos.z, 0, 0, 0,
-                CLEAR_TAG_SMALL_EXPLOSION);
+                CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
     Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
     if (this->switchFlag >= 0) {
@@ -537,7 +538,7 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     this->timer = 5;
     if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, 5);
-        this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
     }
 
     this->actionFunc = EnRaf_PostDetonation;
@@ -551,7 +552,7 @@ void EnRaf_PostDetonation(EnRaf* this, PlayState* play) {
         this->collider.dim.radius = 50;
         this->collider.dim.height = 10;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, 6);
-        this->dyna.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->dyna.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
         EnRaf_SetupDormant(this);
     } else if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
         this->collider.dim.radius = 80;
@@ -873,8 +874,8 @@ void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
 void EnRaf_Draw(Actor* thisx, PlayState* play) {
     EnRaf* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, NULL, EnRaf_TransformLimbDraw, &this->dyna.actor);
 
@@ -895,9 +896,9 @@ void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* acc
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rotation.x = randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.y = randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.z = randPlusMinusPoint5Scaled(30000.0f);
+            effect->rot.x = Rand_CenteredFloat(30000.0f);
+            effect->rot.y = Rand_CenteredFloat(30000.0f);
+            effect->rot.z = Rand_CenteredFloat(30000.0f);
             return;
         }
     }
@@ -912,9 +913,9 @@ void EnRaf_UpdateEffects(EnRaf* this, PlayState* play) {
             effect->pos.x += effect->velocity.x;
             effect->pos.y += effect->velocity.y;
             effect->pos.z += effect->velocity.z;
-            effect->rotation.x += 0xBB8;
-            effect->rotation.y += 0xBB8;
-            effect->rotation.z += 0xBB8;
+            effect->rot.x += 0xBB8;
+            effect->rot.y += 0xBB8;
+            effect->rot.z += 0xBB8;
             effect->velocity.x += effect->accel.x;
             effect->velocity.y += effect->accel.y;
             effect->velocity.z += effect->accel.z;
@@ -948,14 +949,14 @@ void EnRaf_DrawEffects(EnRaf* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isEnabled) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
-            Matrix_RotateXS(effect->rotation.x, MTXMODE_APPLY);
-            Matrix_RotateYS(effect->rotation.y, MTXMODE_APPLY);
-            Matrix_RotateZS(effect->rotation.z, MTXMODE_APPLY);
+            Matrix_RotateXS(effect->rot.x, MTXMODE_APPLY);
+            Matrix_RotateYS(effect->rot.y, MTXMODE_APPLY);
+            Matrix_RotateZS(effect->rot.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gCarnivorousLilyPadParticleDL);

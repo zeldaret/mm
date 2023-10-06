@@ -80,7 +80,7 @@ s32 func_80B83D04(BgDblueWaterfall* this, PlayState* play) {
     s32 phi_v1;
     s32 sp18 = BGDBLUEWATERFALL_GET_100(&this->actor);
 
-    if (Flags_GetSwitch(play, BGDBLUEWATERFALL_GET_7F(&this->actor))) {
+    if (Flags_GetSwitch(play, BGDBLUEWATERFALL_GET_SWITCH_FLAG(&this->actor))) {
         phi_v1 = true;
     } else {
         phi_v1 = false;
@@ -91,7 +91,7 @@ s32 func_80B83D04(BgDblueWaterfall* this, PlayState* play) {
 s32 func_80B83D58(Actor* thisx, PlayState* play) {
     BgDblueWaterfall* this = THIS;
 
-    if (Flags_GetSwitch(play, BGDBLUEWATERFALL_GET_7F(&this->actor))) {
+    if (Flags_GetSwitch(play, BGDBLUEWATERFALL_GET_SWITCH_FLAG(&this->actor))) {
         return false;
     }
     return true;
@@ -99,11 +99,11 @@ s32 func_80B83D58(Actor* thisx, PlayState* play) {
 
 void func_80B83D94(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
-    s32 sp20 = BGDBLUEWATERFALL_GET_7F(&this->actor);
+    s32 switchFlag = BGDBLUEWATERFALL_GET_SWITCH_FLAG(&this->actor);
     s32 sp1C = BGDBLUEWATERFALL_GET_100(&this->actor);
     s32 phi_v0;
 
-    if (Flags_GetSwitch(play, sp20)) {
+    if (Flags_GetSwitch(play, switchFlag)) {
         phi_v0 = true;
     } else {
         phi_v0 = false;
@@ -111,20 +111,20 @@ void func_80B83D94(BgDblueWaterfall* this, PlayState* play) {
 
     if (phi_v0 != sp1C) {
         if (phi_v0) {
-            Flags_UnsetSwitch(play, sp20);
+            Flags_UnsetSwitch(play, switchFlag);
         } else {
-            Flags_SetSwitch(play, sp20);
+            Flags_SetSwitch(play, switchFlag);
         }
     }
 }
 
 void func_80B83E1C(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
-    s32 sp20 = BGDBLUEWATERFALL_GET_7F(&this->actor);
+    s32 switchFlag = BGDBLUEWATERFALL_GET_SWITCH_FLAG(&this->actor);
     s32 sp1C = BGDBLUEWATERFALL_GET_100(&this->actor);
     s32 phi_v0;
 
-    if (Flags_GetSwitch(play, sp20)) {
+    if (Flags_GetSwitch(play, switchFlag)) {
         phi_v0 = true;
     } else {
         phi_v0 = false;
@@ -132,9 +132,9 @@ void func_80B83E1C(BgDblueWaterfall* this, PlayState* play) {
 
     if (phi_v0 == sp1C) {
         if (phi_v0) {
-            Flags_UnsetSwitch(play, sp20);
+            Flags_UnsetSwitch(play, switchFlag);
         } else {
-            Flags_SetSwitch(play, sp20);
+            Flags_SetSwitch(play, switchFlag);
         }
     }
 }
@@ -320,9 +320,10 @@ void func_80B84610(BgDblueWaterfall* this, PlayState* play) {
 
     player->actor.world.pos.x += sp34.x;
     player->actor.world.pos.z += sp34.z;
+    //! FAKE:
     if (this && this && this) {}
-    player->unk_B80 = 8.0f;
-    player->unk_B84 = this->actor.yawTowardsPlayer;
+    player->pushedSpeed = 8.0f;
+    player->pushedYaw = this->actor.yawTowardsPlayer;
 }
 
 static InitChainEntry sInitChain[] = {
@@ -530,7 +531,7 @@ void func_80B84BCC(BgDblueWaterfall* this, PlayState* play) {
             }
         }
 
-        func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
     } else {
         if (this->unk_1A3) {
             CutsceneManager_Stop(this->csId);
@@ -569,7 +570,7 @@ void func_80B84F20(BgDblueWaterfall* this, PlayState* play) {
             this->unk_19F = 0;
         }
 
-        func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     } else {
         if (this->unk_1A3) {
             CutsceneManager_Stop(this->csId);
@@ -590,7 +591,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -609,7 +610,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x9B, 255, 255, 255, this->unk_19F);
             gSPDisplayList(POLY_XLU_DISP++, gGreatBayTempleObjectIceStalactiteDL);
         } else {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
             gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x9B, 255, 255, 255, 255);

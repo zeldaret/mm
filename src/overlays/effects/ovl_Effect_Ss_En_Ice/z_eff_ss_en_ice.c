@@ -60,7 +60,7 @@ u32 EffectSsEnIce_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
         this->rEnvColorG = initParams->envColor.g;
         this->rEnvColorB = initParams->envColor.b;
         this->rAlphaMode = 1;
-        this->rPitch = randPlusMinusPoint5Scaled(0x10000);
+        this->rPitch = Rand_CenteredFloat(0x10000);
     } else if (initParams->type == ENICE_TYPE_NORMAL) {
         Math_Vec3f_Copy(&this->pos, &initParams->pos);
         Math_Vec3f_Copy(&this->vec, &initParams->pos);
@@ -112,7 +112,7 @@ void EffectSsEnIce_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_RotateXS(this->rPitch, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800BCC68(&this->pos, play);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, gameplayFrames & 0xFF, 0x20, 0x10, 1, 0,
@@ -142,7 +142,7 @@ void EffectSsEnIce_UpdateFlying(PlayState* play, u32 index, EffectSs* this) {
     } else {
         this->actor = NULL;
         if (this->life >= 9) {
-            rand = randPlusMinusPoint5Scaled(0xFFFF);
+            rand = Rand_CenteredFloat(0xFFFF);
             this->accel.x = Math_SinS(rand) * (Rand_ZeroOne() + 1.0f);
             this->accel.z = Math_CosS(rand) * (Rand_ZeroOne() + 1.0f);
             this->life = 8;

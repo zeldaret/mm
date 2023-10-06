@@ -42,8 +42,8 @@ void BgHakuginElvpole_Init(Actor* thisx, PlayState* play) {
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     this->unk_15C = 0;
     this->unk_160 = false;
-    if ((BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor) != 0x7F) &&
-        Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor))) {
+    if ((BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor) != 0x7F) &&
+        Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->unk_15E = 0x64;
     } else {
         this->unk_15E = -1;
@@ -81,12 +81,12 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
             sp28 = true;
         } else {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 320.0f;
-            Flags_UnsetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor));
+            Flags_UnsetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor));
             this->unk_15E = -1;
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
         }
-    } else if ((BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor) != 0x7F) &&
-               Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor))) {
+    } else if ((BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor) != 0x7F) &&
+               Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->unk_15E = 0x64;
         this->unk_160 = true;
     }
@@ -99,7 +99,7 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
         this->unk_15C++;
         this->dyna.actor.world.pos.x = (Math_SinS(this->unk_15C * 0x2000) * var_fv1) + this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = (Math_CosS(this->unk_15C * 0x2000) * var_fv1) + this->dyna.actor.home.pos.z;
-        func_800B9010(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     } else {
         this->unk_15C = 0;
     }
@@ -126,7 +126,7 @@ void BgHakuginElvpole_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_hakugin_obj_DL_00ACB8);
 
     CLOSE_DISPS(play->state.gfxCtx);

@@ -2,22 +2,19 @@
 #define Z_DOOR_SHUTTER_H
 
 #include "global.h"
+#include "z64door.h"
 
 struct DoorShutter;
 
 typedef void (*DoorShutterActionFunc)(struct DoorShutter*, PlayState*);
 
 #define DOORSHUTTER_GET_1F(thisx) ((thisx)->params & 0x1F)
-#define DOORSHUTTER_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define DOORSHUTTER_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define DOORSHUTTER_GET_380(thisx) (((thisx)->params >> 7) & 7)
-#define DOORSHUTTER_GET_FC00(thisx) ((u16)(thisx)->params >> 0xA)
 
 typedef struct DoorShutter {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ UNK_TYPE1 unk144[0x18];
-    /* 0x015C */ s16 unk_15C;
-    /* 0x015E */ s16 unk_15E;
-    /* 0x0160 */ s16 csId;
+    /* 0x000 */ SlidingDoorActor slidingDoor;
+    /* 0x160 */ s16 csId;
     /* 0x0162 */ u8 doorType;
     /* 0x0163 */ u8 unk_163;
     /* 0x0164 */ u8 unk_164;

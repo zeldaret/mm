@@ -103,7 +103,7 @@ void BgAstrBombwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_astr_obj_Colheader_002498);
     Collider_InitTris(play, &this->collider);
-    if (Flags_GetSwitch(play, BGASTRBOMBWALL_GET_SWITCHFLAG(thisx))) {
+    if (Flags_GetSwitch(play, BGASTRBOMBWALL_GET_SWITCH_FLAG(thisx))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -163,7 +163,7 @@ void func_80C0A378(BgAstrBombwall* this) {
 void func_80C0A38C(BgAstrBombwall* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Flags_SetSwitch(play, BGASTRBOMBWALL_GET_SWITCHFLAG(&this->dyna.actor));
+        Flags_SetSwitch(play, BGASTRBOMBWALL_GET_SWITCH_FLAG(&this->dyna.actor));
         func_80C0A400(this, play);
     } else {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
@@ -202,24 +202,28 @@ void BgAstrBombwall_Draw(Actor* thixs, PlayState* play) {
         Gfx* opa;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         opa = POLY_OPA_DISP;
-        gSPDisplayList(&opa[0], &sSetupDL[25 * 6]);
+        gSPDisplayList(&opa[0], gSetupDLs[SETUPDL_25]);
         gSPMatrix(&opa[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSetGeometryMode(&opa[2], G_LIGHTING_POSITIONAL);
         gSPDisplayList(&opa[3], object_astr_obj_DL_002380);
         POLY_OPA_DISP = &opa[4];
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
     {
         Gfx* xlu;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         xlu = POLY_XLU_DISP;
-        gSPDisplayList(&xlu[0], &sSetupDL[25 * 6]);
+        gSPDisplayList(&xlu[0], gSetupDLs[SETUPDL_25]);
         gSPMatrix(&xlu[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSetGeometryMode(&xlu[2], G_LIGHTING_POSITIONAL);
         gSPDisplayList(&xlu[3], object_astr_obj_DL_0022E0);
         POLY_XLU_DISP = &xlu[4];
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }

@@ -6,9 +6,10 @@
 
 #include "z_en_wf.h"
 #include "overlays/actors/ovl_En_Bom_Chu/z_en_bom_chu.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnWf*)thisx)
 
@@ -376,7 +377,7 @@ void func_80990854(EnWf* this, PlayState* play) {
         this->collider2.base.colType = COLTYPE_HIT5;
         this->collider3.base.colType = COLTYPE_HIT5;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 10, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, WOLFOS_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -489,9 +490,9 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
             }
 
             for (i = 0; i < arg2; i++) {
-                sp88.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
+                sp88.x = Rand_CenteredFloat(50.0f) + this->actor.world.pos.x;
                 sp88.y = Rand_ZeroFloat(5.0f) + this->actor.world.pos.y;
-                sp88.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
+                sp88.z = Rand_CenteredFloat(50.0f) + this->actor.world.pos.z;
                 func_800B0F18(play, &sp88, &gZeroVec3f, &D_809942DC, phi_s1, phi_s1, phi_s6, 5,
                               Rand_ZeroFloat(5.0f) + 14.0f);
             }
@@ -526,7 +527,7 @@ void func_80990F0C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     this->actor.shape.shadowScale = 0.0f;
     this->actor.scale.y = 0.0f;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_2A0 = 60;
     this->actionFunc = func_80990F50;
 }
@@ -552,7 +553,7 @@ void func_80990F50(EnWf* this, PlayState* play) {
 void func_80990FC8(EnWf* this) {
     Animation_Change(&this->skelAnime, &gWolfosRearUpFallOverAnim, 0.5f, 0.0f, 7.0f, ANIMMODE_ONCE_INTERP, 0.0f);
     this->unk_2A0 = 5;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80991040;
 }
 
@@ -616,7 +617,8 @@ void func_80991280(EnWf* this, PlayState* play) {
 
     if (!func_8099408C(play, this) && !func_80990948(play, this, 0)) {
         phi_v1 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
-        if ((this->actor.xzDistToPlayer < 80.0f) && (player->meleeWeaponState != 0) && (phi_v1 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < 80.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
+            (phi_v1 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             func_80991948(this);
@@ -666,7 +668,8 @@ void func_8099149C(EnWf* this, PlayState* play) {
 
         sp28 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
 
-        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) && (player->meleeWeaponState != 0) && (sp28 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) &&
+            (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) && (sp28 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             if (Rand_ZeroOne() > 0.7f) {
@@ -1161,7 +1164,7 @@ void func_80992D6C(EnWf* this) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = -6.0f;
     }
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_2A0 = 25;
     Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_DEAD);
     this->actionFunc = func_80992E0C;
@@ -1197,13 +1200,13 @@ void func_80992E0C(EnWf* this, PlayState* play) {
         this->unk_2A0--;
 
         for (i = (25 - this->unk_2A0) >> 1; i >= 0; i--) {
-            sp60.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-            sp60.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-            sp60.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+            sp60.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+            sp60.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+            sp60.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
             func_800B3030(play, &sp60, &D_809942F0, &D_809942F0, 100, 0, 2);
         }
 
-        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
     }
 }
 
@@ -1454,7 +1457,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
                     this->drawDmgEffAlpha = 4.0f;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->info.bumper.hitPos.x,
                                 collider->info.bumper.hitPos.y, collider->info.bumper.hitPos.z, 0, 0, 0,
-                                CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
 
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
@@ -1532,7 +1535,7 @@ void EnWf_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = this->drawDmgEffScale;
             }
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
@@ -1546,17 +1549,39 @@ s32 EnWf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     return false;
 }
 
+static s8 sLimbToBodyParts[WOLFOS_NORMAL_LIMB_MAX] = {
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_NONE
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_ROOT
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_LEFT_THIGH
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_LEFT_SHIN
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_LEFT_PASTERN
+    WOLFOS_BODYPART_BACK_LEFT_PAW,         // WOLFOS_NORMAL_LIMB_BACK_LEFT_PAW
+    WOLFOS_BODYPART_TAIL,                  // WOLFOS_NORMAL_LIMB_TAIL
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_ABDOMEN
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_RIGHT_THIGH
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_RIGHT_SHIN
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_RIGHT_PASTERN
+    WOLFOS_BODYPART_BACK_RIGHT_PAW,        // WOLFOS_NORMAL_LIMB_BACK_RIGHT_PAW
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_THORAX
+    WOLFOS_BODYPART_FRONT_RIGHT_UPPER_LEG, // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_UPPER_LEG
+    WOLFOS_BODYPART_FRONT_RIGHT_LOWER_LEG, // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_LOWER_LEG
+    WOLFOS_BODYPART_FRONT_RIGHT_CLAW,      // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_CLAW
+    WOLFOS_BODYPART_HEAD_ROOT,             // WOLFOS_NORMAL_LIMB_HEAD_ROOT
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_HEAD
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_EYES
+    WOLFOS_BODYPART_FRONT_LEFT_UPPER_LEG,  // WOLFOS_NORMAL_LIMB_FRONT_LEFT_UPPER_LEG
+    WOLFOS_BODYPART_FRONT_LEFT_LOWER_LEG,  // WOLFOS_NORMAL_LIMB_FRONT_LEFT_LOWER_LEG
+    WOLFOS_BODYPART_FRONT_LEFT_CLAW,       // WOLFOS_NORMAL_LIMB_FRONT_LEFT_CLAW
+};
+
 void EnWf_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static s8 D_809942FC[] = {
-        -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, -1, 2, -1, 3, 4, 5, 6, -1, -1, 7, 8, 9,
-    };
     EnWf* this = THIS;
     Vec3f sp20;
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
 
-    if (D_809942FC[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[D_809942FC[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if (limbIndex == WOLFOS_NORMAL_LIMB_TAIL) {
@@ -1573,7 +1598,7 @@ void EnWf_Draw(Actor* thisx, PlayState* play) {
     if (this->actionFunc != func_80990F50) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         if (this->actor.params == 0) {
             gSPSegment(POLY_OPA_DISP++, 0x08, sNormalEyeTextures[this->eyeIndex]);
@@ -1585,7 +1610,7 @@ void EnWf_Draw(Actor* thisx, PlayState* play) {
 
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               EnWf_OverrideLimbDraw, EnWf_PostLimbDraw, &this->actor);
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, WOLFOS_BODYPART_MAX, this->drawDmgEffScale,
                                 this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 }

@@ -13,9 +13,9 @@
 #define THIS ((ObjJgameLight*)thisx)
 
 typedef enum {
-    /* 0x0 */ OBJJGAMELIGHT_NONE,
-    /* 0x1 */ OBJJGAMELIGHT_CORRECT,
-    /* 0x2 */ OBJJGAMELIGHT_INCORRECT,
+    /* 0 */ OBJJGAMELIGHT_NONE,
+    /* 1 */ OBJJGAMELIGHT_CORRECT,
+    /* 2 */ OBJJGAMELIGHT_INCORRECT
 } ObjJgameLightSignal;
 
 void ObjJgameLight_Init(Actor* thisx, PlayState* play);
@@ -93,7 +93,7 @@ void ObjJgameLight_Destroy(Actor* thisx, PlayState* play) {
 void func_80C15474(ObjJgameLight* this, PlayState* play) {
     u8 temp_a1;
 
-    if ((this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITE_FIRE) && (this->isOn == false)) {
+    if ((this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITE_FIRE) && !this->isOn) {
         if (this->lightRadius < 160) {
             this->lightRadius += 40;
         } else {
@@ -123,7 +123,7 @@ void func_80C15474(ObjJgameLight* this, PlayState* play) {
         }
     }
     if (this->flameScaleProportion > 0.1f) {
-        func_800B9010(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_TORCH - SFX_FLAG);
     }
     temp_a1 = (s32)(Rand_ZeroOne() * 127.0f) + 128;
     Lights_PointSetColorAndRadius(&this->lightInfo, temp_a1, temp_a1 * 0.7f, 0, this->lightRadius);
@@ -138,7 +138,7 @@ void ObjJgameLight_UpdateCollision(ObjJgameLight* this, PlayState* play) {
 void func_80C15718(ObjJgameLight* this, PlayState* play) {
     if ((this->actor.colChkInfo.health & OBJLUPYGAMELIFT_IGNITE_FIRE) &&
         !(this->prevHealth & OBJLUPYGAMELIFT_IGNITE_FIRE)) {
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_FLAME_IGNITION);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_FLAME_IGNITION);
         this->prevHealth = this->actor.colChkInfo.health;
     }
     if (this->actor.colChkInfo.health & OBJLUPYGAMELIFT_DISPLAY_CORRECT) {
@@ -172,11 +172,11 @@ void ObjJgameLight_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, &gObjectSyokudaiTypeSwitchCausesFlameDL);
     if (this->alpha > 0) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         if (this->alpha > 255) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, 255);
         } else {
@@ -192,7 +192,7 @@ void ObjJgameLight_Draw(Actor* thisx, PlayState* play) {
     if (this->flameScaleProportion != 0.0f) {
         f32 scale;
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         scale = (this->flameScaleProportion * 27.0f) / 10000.0f;
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (this->flameScroll * -20) & 0x1FF,

@@ -83,7 +83,7 @@ void EffectSsFireTail_Draw(PlayState* play, u32 index, EffectSs* this) {
     if (this->actor != NULL) {
         this->vec = this->actor->velocity;
 
-        if (this->rBodyPart < 0) {
+        if (this->rBodyPart <= BODYPART_NONE) {
             Matrix_Translate(this->pos.x + this->actor->world.pos.x, this->pos.y + this->actor->world.pos.y,
                              this->pos.z + this->actor->world.pos.z, MTXMODE_NEW);
         } else {
@@ -121,7 +121,7 @@ void EffectSsFireTail_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_Scale(1.0f, temp1, 1.0f / temp1, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, 0);
     gSPSegment(

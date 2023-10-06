@@ -68,7 +68,7 @@ Vec3f D_80947B10[] = {
     { -1.0f, -2.0f, -0.2f }, { 0.0f, -2.0f, -0.2f },  { 1.0f, -2.0f, -0.2f },  { 0.0f, -3.0f, -0.5f },
 };
 
-static s32 sPad[2] = { 0, 0 };
+static s32 sPad = 0;
 
 #include "overlays/ovl_En_Sda/ovl_En_Sda.c"
 
@@ -228,7 +228,8 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, PlayState* pl
 
     if (BREG(57) != 0) {
         for (shadowTextureTemp = shadowTexture, i = 0; i < 0x1000; i++, shadowTextureTemp++) {
-            if ((i >= 0 && i < 0x40) || (i >= 0xFC0 && i < 0x1000) || ((i & 0x3F) == 0) || ((i & 0x3F) == 0x3F)) {
+            if (((i >= 0) && (i < 0x40)) || ((i >= 0xFC0) && (i < 0x1000)) || ((i & 0x3F) == 0) ||
+                ((i & 0x3F) == 0x3F)) {
                 *shadowTextureTemp = 255;
             } else {
                 *shadowTextureTemp = 0;
@@ -323,7 +324,7 @@ void func_80947668(u8* shadowTexture, Player* player, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C448(play->state.gfxCtx);
+    Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 0, 0, 0, (BREG(52) + 50));
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
@@ -352,6 +353,4 @@ void func_80947668(u8* shadowTexture, Player* player, PlayState* play) {
     }
 
     CLOSE_DISPS(gfxCtx);
-
-    if (1) {}
 }

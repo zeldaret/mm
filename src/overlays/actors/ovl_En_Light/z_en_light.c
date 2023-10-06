@@ -31,9 +31,9 @@ ActorInit En_Light_InitVars = {
 };
 
 typedef struct {
-    /* 0x00 */ Color_RGBA8 unk_00;
-    /* 0x04 */ Color_RGB8 unk_04;
-    /* 0x07 */ u8 unk_07;
+    /* 0x0 */ Color_RGBA8 unk_00;
+    /* 0x4 */ Color_RGB8 unk_04;
+    /* 0x7 */ u8 unk_07;
 } EnLightStruct; // size = 0x8
 
 EnLightStruct D_808666D0[] = {
@@ -70,7 +70,7 @@ void EnLight_Init(Actor* thisx, PlayState* play) {
 
     if (ENLIGHT_GET_800(&this->actor)) {
         this->actor.update = func_80865F38;
-        if (ENLIGHT_GET_1000(&this->actor) && Flags_GetSwitch(play, ENLIGHT_SWITCHFLAG(&this->actor))) {
+        if (ENLIGHT_GET_1000(&this->actor) && Flags_GetSwitch(play, ENLIGHT_SWITCH_FLAG(&this->actor))) {
             Actor_SetScale(&this->actor, 0.0f);
         }
     } else if (ENLIGHT_GET_2000(&this->actor)) {
@@ -124,7 +124,7 @@ void func_80865F38(Actor* thisx, PlayState* play) {
     s32 sp2C = false;
 
     if (ENLIGHT_GET_1000(&this->actor)) {
-        if (Flags_GetSwitch(play, ENLIGHT_SWITCHFLAG(&this->actor))) {
+        if (Flags_GetSwitch(play, ENLIGHT_SWITCH_FLAG(&this->actor))) {
             Math_StepToF(&sp30, 1.0f, 0.05f);
             sp2C = true;
         } else {
@@ -134,7 +134,7 @@ void func_80865F38(Actor* thisx, PlayState* play) {
             }
             Math_StepToF(&sp30, 0.0f, 0.05f);
         }
-    } else if (Flags_GetSwitch(play, ENLIGHT_SWITCHFLAG(&this->actor))) {
+    } else if (Flags_GetSwitch(play, ENLIGHT_SWITCH_FLAG(&this->actor))) {
         if (sp30 < 0.1f) {
             Actor_SetScale(&this->actor, 0.0f);
             sp30 = 0.0f;
@@ -168,7 +168,7 @@ void EnLight_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     if (this->actor.params >= 0) {
         gSPSegment(

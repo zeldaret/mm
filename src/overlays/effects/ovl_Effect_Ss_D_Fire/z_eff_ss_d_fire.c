@@ -29,7 +29,7 @@ EffectSsInit Effect_Ss_D_Fire_InitVars = {
 static TexturePtr sFireTextures[] = { gDodongoFire0Tex, gDodongoFire1Tex, gDodongoFire2Tex, gDodongoFire3Tex };
 
 s32 EffectSsDFire_CheckForObject(EffectSs* this, PlayState* play) {
-    if (((this->rObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_DODONGO)) < 0) ||
+    if (((this->rObjectIndex = Object_GetSlot(&play->objectCtx, OBJECT_DODONGO)) < 0) ||
         !Object_IsLoaded(&play->objectCtx, this->rObjectIndex)) {
         this->life = -1;
         this->draw = NULL;
@@ -69,7 +69,7 @@ void EffectSsDFire_Draw(PlayState* play, u32 index, EffectSs* this) {
     f32 scale;
 
     if (EffectSsDFire_CheckForObject(this, play)) {
-        object = play->objectCtx.status[this->rObjectIndex].segment;
+        object = play->objectCtx.slots[this->rObjectIndex].segment;
 
         OPEN_DISPS(gfxCtx);
 
@@ -83,7 +83,7 @@ void EffectSsDFire_Draw(PlayState* play, u32 index, EffectSs* this) {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        func_8012C974(gfxCtx);
+        Gfx_SetupDL60_XluNoCD(gfxCtx);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 50, this->rAlpha);
 

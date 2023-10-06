@@ -8,19 +8,19 @@ struct ObjArmos;
 
 typedef void (*ObjArmosActionFunc)(struct ObjArmos*, PlayState*);
 
-#define OBJARMOS_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJARMOS_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define OBJARMOS_GET_ROTZ_7(thisx) ((thisx)->home.rot.z & 7)
 #define OBJARMOS_GET_ROTX_F(thisx) ((thisx)->home.rot.x & 0xF)
 
-enum {
+typedef enum {
     /* 0 */ OBJARMOS_ROT_7_0,
     /* 1 */ OBJARMOS_ROT_7_1,
     /* 2 */ OBJARMOS_ROT_7_2,
     /* 3 */ OBJARMOS_ROT_7_3,
     /* 4 */ OBJARMOS_ROT_7_4,
     /* 5 */ OBJARMOS_ROT_7_5,
-    /* 6 */ OBJARMOS_ROT_7_6,
-};
+    /* 6 */ OBJARMOS_ROT_7_6
+} ObjArmosParam;
 
 typedef struct ObjArmos {
     /* 0x000 */ DynaPolyActor dyna;

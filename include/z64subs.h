@@ -10,16 +10,31 @@ extern Vec3f gOneVec3f;
 
 #define SUBS_TIME_PATHING_ORDER 3
 
+// NOTE: all on screen checks are bugged, and always evaluate to true, even if the target is off screen
+typedef enum {
+    /* 0 */ SUBS_OFFER_MODE_NONE,
+    /* 1 */ SUBS_OFFER_MODE_GET_ITEM,
+    // Further modes all deal with offering talk exchange requests
+    /* 2 */ SUBS_OFFER_MODE_NEARBY,
+    /* 3 */ SUBS_OFFER_MODE_ONSCREEN,
+    /* 4 */ SUBS_OFFER_MODE_AUTO,
+    /* 5 */ SUBS_OFFER_MODE_AUTO_TARGETED, // Also checks nearby and on screen
+    /* 6 */ SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN
+} SubSOfferMode;
+
+#define SUBS_OFFER_MODE_MASK                                                                               \
+    (SUBS_OFFER_MODE_GET_ITEM | SUBS_OFFER_MODE_NEARBY | SUBS_OFFER_MODE_ONSCREEN | SUBS_OFFER_MODE_AUTO | \
+     SUBS_OFFER_MODE_AUTO_TARGETED | SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN)
+
 typedef enum {
     /* 0 */ SUBS_CUTSCENE_WITH_PLAYER,
     /* 1 */ SUBS_CUTSCENE_NORMAL,
     /* 2 */ SUBS_CUTSCENE_WITH_PLAYER_SET_FLAG
 } SubSCutsceneType;
 
-//! TODO: rename based on func_8013E748 and func_800B8500
-typedef s32 (*func_8013E748_VerifyFunc)(struct PlayState*, Actor*, void*);
+typedef s32 (*VerifyTalkExchangeActorFunc)(struct PlayState*, Actor*, void*);
 
-typedef s32 (*VerifyActor)(struct PlayState*, Actor*, Actor*, void*);
+typedef s32 (*VerifyFindActorFunc)(struct PlayState*, Actor*, Actor*, void*);
 
 #define SUBS_SHADOW_TEX_WIDTH 64
 #define SUBS_SHADOW_TEX_HEIGHT 64
@@ -91,7 +106,7 @@ s32 SubS_InCsMode(struct PlayState* play);
 
 s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRot, s32 overrideRot);
 
-void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits);
+void SubS_SetOfferMode(u16* flags, u16 offerMode, u16 mask);
 
 void SubS_TimePathing_FillKnots(f32 knots[], s32 order, s32 numPoints);
 s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypointTime, s32 totalTime, s32 pathCount, s32 order, f32 knots[]);
@@ -108,14 +123,14 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationI
 
 s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex);
 
-Path* SubS_GetDayDependentPath(struct PlayState* play, u8 pathIndex, u8 max, s32* startPointIndex);
+Path* SubS_GetDayDependentPath(struct PlayState* play, u8 pathIndex, u8 pathIndexNone, s32* startPointIndex);
 
 s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 progress, s32 direction);
 s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* progress, s32 direction, s32 returnStart);
 
 s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst);
 
-s32 func_8013C964(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 type);
+s32 SubS_Offer(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 itemId, SubSOfferMode mode);
 
 void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size);
 void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[], s8 parentBodyParts[]);
@@ -126,7 +141,7 @@ s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trac
 
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB);
 
-Path* SubS_GetPathByIndex(struct PlayState* play, s16 pathIndex, s16 max);
+Path* SubS_GetPathByIndex(struct PlayState* play, s16 pathIndex, s16 pathIndexNone);
 s32 SubS_CopyPointFromPath(Path* path, s32 pointIndex, Vec3f* dst);
 s16 SubS_GetDistSqAndOrientPoints(Vec3f* vecA, Vec3f* vecB, f32* distSq);
 s32 SubS_MoveActorToPoint(Actor* actor, Vec3f* point, s16 rotStep);
@@ -137,7 +152,7 @@ s8 SubS_GetObjectIndex(s16 id, struct PlayState* play);
 
 Actor* SubS_FindActor(struct PlayState* play, Actor* actorListStart, u8 actorCategory, s16 actorId);
 
-s32 SubS_FillLimbRotTables(struct PlayState* play, s16* limbRotTableY, s16* limbRotTableZ, s32 numLimbs);
+s32 SubS_UpdateFidgetTables(struct PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen);
 
 s32 SubS_IsFloorAbove(struct PlayState* play, Vec3f* pos, f32 distAbove);
 
@@ -159,11 +174,11 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 csIdList[], s16 numCutscenes);
 void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane);
 s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePointA, Vec3f* linePointB, Vec3f* intersect);
 
-Actor* SubS_FindActorCustom(struct PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId, void* verifyData, VerifyActor verifyActor);
+Actor* SubS_FindActorCustom(struct PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId, void* verifyData, VerifyFindActorFunc verifyActorFunc);
 
-s32 func_8013E748(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data, func_8013E748_VerifyFunc verifyFunc);
+s32 SubS_OfferTalkExchangeCustom(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction, void* data, VerifyTalkExchangeActorFunc verifyActorFunc);
 s32 SubS_ActorAndPlayerFaceEachOther(struct PlayState* play, Actor* actor, void* data);
-s32 func_8013E8F8(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol, s16 actorYawTol);
+s32 SubS_OfferTalkExchangeFacing(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction, s16 playerYawRange, s16 actorYawRange);
 
 s32 SubS_TrackPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget, s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep, u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax);
 

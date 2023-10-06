@@ -32,33 +32,38 @@ ActorInit Dm_Char03_InitVars = {
     (ActorFunc)DmChar03_Draw,
 };
 
-AnimationInfo sAnimationInfo[] = {
-    { &gDekuMaskFallOverAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+typedef enum {
+    /* 0 */ DMCHAR03_ANIM_FALL_OVER,
+    /* 1 */ DMCHAR03_ANIM_MAX
+} DmChar03Animation;
+
+AnimationInfo sAnimationInfo[DMCHAR03_ANIM_MAX] = {
+    { &gDekuMaskFallOverAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // DMCHAR03_ANIM_FALL_OVER
 };
 
-void DmChar03_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
-    f32 frame;
+void DmChar03_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
+    f32 endFrame;
 
-    animationInfo += animIndex;
+    animInfo += animIndex;
 
-    if (animationInfo->frameCount < 0.0f) {
-        frame = Animation_GetLastFrame(animationInfo->animation);
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
     } else {
-        frame = animationInfo->frameCount;
+        endFrame = animInfo->frameCount;
     }
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, frame,
-                     animationInfo->mode, animationInfo->morphFrames);
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
 void DmChar03_Init(Actor* thisx, PlayState* play) {
     DmChar03* this = THIS;
 
-    this->animIndex = 0;
+    this->animIndex = DMCHAR03_ANIM_FALL_OVER;
     this->actor.targetArrowOffset = 3000.0f;
     this->unk_18E = false;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gDekuMaskSkel, NULL, NULL, NULL, 0);
-    DmChar03_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+    DmChar03_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR03_ANIM_FALL_OVER], 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmChar03_DoNothing;
 }
@@ -67,7 +72,7 @@ void DmChar03_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AAB5F8(DmChar03* this, PlayState* play) {
-    s32 index = Object_GetIndex(&play->objectCtx, OBJECT_GI_NUTSMASK);
+    s32 index = Object_GetSlot(&play->objectCtx, OBJECT_GI_NUTSMASK);
 
     if (index >= 0) {
         this->objectIndex = index;
@@ -92,7 +97,7 @@ void DmChar03_DoNothing(DmChar03* this, PlayState* play) {
 }
 
 void func_80AAB710(DmChar03* this, PlayState* play) {
-    u8 shouldChangeAnim = true;
+    u8 changeAnim = true;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_136)) {
         s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_136);
@@ -100,27 +105,31 @@ void func_80AAB710(DmChar03* this, PlayState* play) {
         if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
-                    shouldChangeAnim = false;
+                    changeAnim = false;
                     break;
+
                 case 2:
-                    this->animIndex = 0;
+                    this->animIndex = DMCHAR03_ANIM_FALL_OVER;
                     break;
+
                 case 3:
                     this->unk_18E = false;
-                    shouldChangeAnim = false;
+                    changeAnim = false;
                     Actor_Kill(&this->actor);
                     break;
+
                 case 4:
                     Item_Give(play, ITEM_MASK_DEKU);
-                    shouldChangeAnim = false;
+                    changeAnim = false;
                     this->actionFunc = func_80AAB5F8;
                     break;
+
                 default:
-                    shouldChangeAnim = false;
+                    changeAnim = false;
                     break;
             }
 
-            if (shouldChangeAnim) {
+            if (changeAnim) {
                 DmChar03_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
@@ -131,8 +140,8 @@ void func_80AAB710(DmChar03* this, PlayState* play) {
 void func_80AAB838(DmChar03* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_IT_MASK_BOUND_0);
-    } else if ((Animation_OnFrame(&this->skelAnime, 10.0f)) || (Animation_OnFrame(&this->skelAnime, 18.0f)) ||
-               (Animation_OnFrame(&this->skelAnime, 30.0f)) || (Animation_OnFrame(&this->skelAnime, 38.0f))) {
+    } else if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 18.0f) ||
+               Animation_OnFrame(&this->skelAnime, 30.0f) || Animation_OnFrame(&this->skelAnime, 38.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_IT_MASK_BOUND_1);
     }
 }
@@ -163,9 +172,9 @@ void DmChar03_Draw(Actor* thisx, PlayState* play) {
     DmChar03* this = THIS;
 
     if (!this->unk_18E) {
-        if ((Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_136)) &&
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_136) &&
             (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_136)]->id != 1)) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                            this->skelAnime.dListCount, DmChar03_OverrideLimbDraw, DmChar03_PostLimbDraw,
                                            DmChar03_TransformLimbDraw, &this->actor);

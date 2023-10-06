@@ -223,6 +223,8 @@ typedef enum ConveyorSpeed {
     /* 4 */ CONVEYOR_SPEED_MAX
 } ConveyorSpeed;
 
+#define CONVEYOR_DIRECTION_TO_BINANG(conveyorDirection) ((conveyorDirection) * (0x10000 / 64))
+
 typedef struct {
     /* 0x0 */ u32 data[2];
 
@@ -255,7 +257,7 @@ typedef struct {
     /* 0x14 */ u16 numPolygons;
     /* 0x18 */ CollisionPoly* polyList;
     /* 0x1C */ SurfaceType* surfaceTypeList;
-    /* 0x20 */ CamData* bgCamList;
+    /* 0x20 */ BgCamInfo* bgCamList;
     /* 0x24 */ u16 numWaterBoxes;
     /* 0x28 */ WaterBox* waterBoxes;
 } CollisionHeader; // size = 0x2C

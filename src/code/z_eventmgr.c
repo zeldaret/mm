@@ -3,8 +3,10 @@
  *
  * Manages all cutscenes except for manual
  */
+
 #include "global.h"
 #include "z64shrink_window.h"
+#include "libc/string.h"
 
 ActorCutscene sGlobalCutsceneList[] = {
     // CS_ID_GLOBAL_78
@@ -36,7 +38,7 @@ ActorCutscene sGlobalCutsceneList[] = {
 typedef enum {
     /* 0 */ CS_START_0,
     /* 1 */ CS_START_1,
-    /* 2 */ CS_START_2,
+    /* 2 */ CS_START_2
 } ActorCutsceneStartMethod;
 
 typedef struct {
@@ -54,6 +56,13 @@ typedef struct {
 CutsceneManager sCutsceneMgr = {
     CS_ID_NONE, 0, CS_ID_NONE, SUB_CAM_ID_DONE, NULL, CS_START_0, NULL, CAM_ID_MAIN, false,
 };
+
+ActorCutscene* sSceneCutsceneList;
+s16 sSceneCutsceneCount;
+u8 sWaitingCutsceneList[16];
+static s32 sBssPad;
+u8 sNextCutsceneList[16];
+static s32 sBssPad2;
 
 s16 CutsceneManager_SetHudVisibility(s16 csHudVisibility) {
     u16 hudVisibility;
@@ -204,7 +213,7 @@ void CutsceneManager_End(void) {
             sCutsceneMgr.targetActor->flags &= ~ACTOR_FLAG_100000;
             // fallthrough
         case CS_START_1:
-            func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_END);
+            func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_END);
             sCutsceneMgr.startMethod = CS_START_0;
             break;
 
@@ -216,11 +225,11 @@ void CutsceneManager_End(void) {
 
     switch (csEntry->endSfx) {
         case CS_END_SFX_TRE_BOX_APPEAR:
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             break;
 
         case CS_END_SFX_CORRECT_CHIME:
-            play_sound(NA_SE_SY_CORRECT_CHIME);
+            Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
             break;
 
         default: // CS_END_SFX_NONE
@@ -335,7 +344,7 @@ s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
     if (startCsId >= 0) {
-        func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_WAIT);
+        func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);
         }
@@ -351,7 +360,7 @@ s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
     if (startCsId >= 0) {
-        func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_WAIT);
+        func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);
         }
@@ -371,7 +380,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
     Camera* retCam;
     s32 csType = 0;
 
-    if ((csId < 0) || (sCutsceneMgr.csId != CS_ID_NONE)) {
+    if ((csId <= CS_ID_NONE) || (sCutsceneMgr.csId != CS_ID_NONE)) {
         return csId;
     }
 
@@ -402,13 +411,13 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
             if (CutsceneManager_FindEntranceCsId() != csId) {
                 func_800E0348(retCam);
             } else {
-                Camera_ClearFlags(retCam, CAM_STATE_2);
+                Camera_UnsetStateFlag(retCam, CAM_STATE_2);
             }
         }
 
         memcpy(subCam, retCam, sizeof(Camera));
         subCam->camId = sCutsceneMgr.subCamId;
-        Camera_ClearFlags(subCam, CAM_STATE_6 | CAM_STATE_0);
+        Camera_UnsetStateFlag(subCam, CAM_STATE_6 | CAM_STATE_0);
 
         Play_ChangeCameraStatus(sCutsceneMgr.play, sCutsceneMgr.retCamId, CAM_STATUS_WAIT);
         Play_ChangeCameraStatus(sCutsceneMgr.play, sCutsceneMgr.subCamId, CAM_STATUS_ACTIVE);
@@ -422,7 +431,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
             sCutsceneMgr.length = csEntry->length;
         } else {
             if (csEntry->csCamId != CS_CAM_ID_NONE) {
-                Camera_ChangeDataIdx(subCam, csEntry->csCamId);
+                Camera_ChangeActorCsCamIndex(subCam, csEntry->csCamId);
             } else {
                 Camera_ChangeSetting(subCam, CAM_SET_FREE0);
             }
@@ -437,7 +446,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
 s16 CutsceneManager_Stop(s16 csId) {
     ActorCutscene* csEntry;
 
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return csId;
     }
 
@@ -468,28 +477,28 @@ ActorCutscene* CutsceneManager_GetCutsceneEntry(s16 csId) {
 }
 
 s16 CutsceneManager_GetAdditionalCsId(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return CS_ID_NONE;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->additionalCsId;
 }
 
 s16 CutsceneManager_GetLength(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return -1;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->length;
 }
 
 s16 CutsceneManager_GetCutsceneScriptIndex(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return -1;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->scriptIndex;
 }
 
 s16 CutsceneManager_GetCutsceneCustomValue(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return -1;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->customValue;

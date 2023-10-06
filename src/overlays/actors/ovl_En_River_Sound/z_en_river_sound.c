@@ -35,7 +35,7 @@ void EnRiverSound_Init(Actor* thisx, PlayState* play) {
     this->playSound = false;
     pathIndex = RS_GET_PATH_INDEX(&this->actor);
     this->actor.params = RS_GET_TYPE(&this->actor);
-    if (pathIndex == 0xFF) {
+    if (pathIndex == RS_PATH_INDEX_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -88,6 +88,6 @@ void EnRiverSound_Draw(Actor* thisx, PlayState* play) {
     if (params < RS_RIVER_DEFAULT_LOW_FREQ) {
         Actor_PlaySfx(&this->actor, gAudioEnvironmentalSfx[params]);
     } else {
-        Audio_PlaySfxForRiver(&this->actor.projectedPos, freqScale[this->soundFreqIndex]);
+        Audio_PlaySfx_River(&this->actor.projectedPos, freqScale[this->soundFreqIndex]);
     }
 }

@@ -60,7 +60,7 @@ typedef struct {
     /* 0x14 */ BgBreakwallUnkFunc unk_14;
     /* 0x18 */ BgBreakwallUnkFunc2 unk_18;
     /* 0x1C */ ActorFunc unk_1C;
-} BgBreakwallStruct;
+} BgBreakwallStruct; // size = 0x20
 
 BgBreakwallStruct D_808B8140[] = {
     { OBJECT_OMOYA_OBJ, object_omoya_obj_DL_0001A0, NULL, NULL, NULL, func_808B7380, func_808B77D0, NULL },
@@ -84,8 +84,7 @@ BgBreakwallStruct D_808B8140[] = {
       func_808B77D0, NULL },
     { OBJECT_IKNINSIDE_OBJ, NULL, object_ikninside_obj_DL_00AEC0, object_ikninside_obj_Matanimheader_00BCB8, NULL,
       func_808B751C, func_808B7A10, func_808B7D34 },
-    { OBJECT_SPOT11_OBJ, object_spot11_obj_DL_0013F0, NULL, NULL, &object_spot11_obj_Colheader_001EB8, func_808B736C,
-      func_808B77D0, NULL },
+    { OBJECT_SPOT11_OBJ, gWoodStepDL, NULL, NULL, &gWoodStepCol, func_808B736C, func_808B77D0, NULL },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -146,7 +145,7 @@ s32 func_808B736C(BgBreakwall* this, PlayState* play) {
 }
 
 s32 func_808B7380(BgBreakwall* this, PlayState* play) {
-    if ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    if ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         return false;
     }
     return true;
@@ -192,8 +191,8 @@ s32 func_808B74D8(BgBreakwall* this, PlayState* play) {
 s32 func_808B751C(BgBreakwall* this, PlayState* play) {
     Actor_SetScale(&this->dyna.actor, 0.1f);
 
-    if ((BGBREAKWALL_SWITCHFLAG(&this->dyna.actor) != 0x7F) &&
-        !Flags_GetSwitch(play, BGBREAKWALL_SWITCHFLAG(&this->dyna.actor))) {
+    if ((BGBREAKWALL_SWITCH_FLAG(&this->dyna.actor) != 0x7F) &&
+        !Flags_GetSwitch(play, BGBREAKWALL_SWITCH_FLAG(&this->dyna.actor))) {
         return false;
     }
 
@@ -213,7 +212,7 @@ void BgBreakwall_Init(Actor* thisx, PlayState* play) {
     BgBreakwallStruct* sp24 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    this->unk_15C = Object_GetIndex(&play->objectCtx, sp24->unk_00);
+    this->unk_15C = Object_GetSlot(&play->objectCtx, sp24->unk_00);
 
     if ((this->unk_15C < 0) || !sp24->unk_14(this, play)) {
         Actor_Kill(&this->dyna.actor);
@@ -221,7 +220,7 @@ void BgBreakwall_Init(Actor* thisx, PlayState* play) {
     }
 
     BgBreakwall_SetupAction(this, func_808B76CC);
-    this->switchFlag = BGBREAKWALL_SWITCHFLAG(&this->dyna.actor);
+    this->switchFlag = BGBREAKWALL_SWITCH_FLAG(&this->dyna.actor);
 }
 
 void BgBreakwall_Destroy(Actor* thisx, PlayState* play) {
@@ -292,7 +291,7 @@ void func_808B78A4(BgBreakwall* this, PlayState* play) {
 
 void func_808B78DC(BgBreakwall* this, PlayState* play) {
     Actor_SetScale(&this->dyna.actor, 3.5f);
-    func_800B9010(&this->dyna.actor, NA_SE_EV_TORNADE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_TORNADE - SFX_FLAG);
 }
 
 void func_808B7914(BgBreakwall* this, PlayState* play) {
@@ -339,8 +338,8 @@ void func_808B7A90(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_800FE7A8(D_808B82F0, &sp2C);
-    func_800FE7A8(D_808B8300, &sp28);
+    Environment_LerpSandstormColors(D_808B82F0, &sp2C);
+    Environment_LerpSandstormColors(D_808B8300, &sp28);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp2C.r, sp2C.g, sp2C.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sp28.r, sp28.g, sp28.b, 255);
@@ -355,19 +354,19 @@ void func_808B7B54(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_800FE7A8(D_808B8310, &sp50);
-    func_800FE7A8(D_808B8330, &sp4C);
+    Environment_LerpSandstormColors(D_808B8310, &sp50);
+    Environment_LerpSandstormColors(D_808B8330, &sp4C);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp50.r, sp50.g, sp50.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sp4C.r, sp4C.g, sp4C.b, 255);
     gSPDisplayList(POLY_XLU_DISP++, object_posthouse_obj_DL_000A50);
 
-    func_800FE7A8(D_808B8320, &sp50);
-    func_800FE7A8(D_808B8340, &sp4C);
+    Environment_LerpSandstormColors(D_808B8320, &sp50);
+    Environment_LerpSandstormColors(D_808B8340, &sp4C);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp50.r, sp50.g, sp50.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sp4C.r, sp4C.g, sp4C.b, 255);
@@ -423,14 +422,14 @@ void BgBreakwall_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (temp_s2->unk_04 != NULL) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, temp_s2->unk_04);
     }
 
     if (temp_s2->unk_08 != NULL) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, temp_s2->unk_08);

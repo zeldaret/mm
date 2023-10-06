@@ -40,7 +40,7 @@ void BgKeikokuSaku_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&object_keikoku_obj_Colheader_002300, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-    this->switchFlag = BGKEIKOKUSAKU_GET_SWITCHFLAG(thisx);
+    this->switchFlag = BGKEIKOKUSAKU_GET_SWITCH_FLAG(thisx);
     if (Flags_GetSwitch(play, this->switchFlag)) {
         this->dyna.actor.world.pos.z = 2659.0f;
     } else {
@@ -94,7 +94,7 @@ void BgKeikokuSaku_Update(Actor* thisx, PlayState* play) {
 void BgKeikokuSaku_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_001640);
 

@@ -74,7 +74,7 @@ void func_80B40160(BgGoronOyu* this, PlayState* play) {
         func_80B40080(this);
     }
 
-    Audio_PlaySfxAtPos(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
+    Audio_PlaySfx_AtPos(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
 void func_80B401F8(BgGoronOyu* this, PlayState* play) {
@@ -183,10 +183,12 @@ void BgGoronOyu_Update(Actor* thisx, PlayState* play) {
 
 void BgGoronOyu_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_oyu_Matanimheader_000968));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000158);
     gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000080);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

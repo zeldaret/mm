@@ -56,10 +56,10 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, PlayState* play) {
-    return Flags_GetSwitch(play, this->dyna.actor.params & 0x7F) &&
-           Flags_GetSwitch(play, (this->dyna.actor.params & 0x7F) + 1) &&
-           Flags_GetSwitch(play, (this->dyna.actor.params & 0x7F) + 2) &&
-           Flags_GetSwitch(play, (this->dyna.actor.params & 0x7F) + 3);
+    return Flags_GetSwitch(play, BGIKANASHUTTER_GET_SWITCH_FLAG(&this->dyna.actor)) &&
+           Flags_GetSwitch(play, BGIKANASHUTTER_GET_SWITCH_FLAG(&this->dyna.actor) + 1) &&
+           Flags_GetSwitch(play, BGIKANASHUTTER_GET_SWITCH_FLAG(&this->dyna.actor) + 2) &&
+           Flags_GetSwitch(play, BGIKANASHUTTER_GET_SWITCH_FLAG(&this->dyna.actor) + 3);
 }
 
 void BgIkanaShutter_Init(Actor* thisx, PlayState* play) {
@@ -68,7 +68,7 @@ void BgIkanaShutter_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_ikana_obj_Colheader_000F28);
-    if (!((this->dyna.actor.params >> 8) & 1)) {
+    if (!BGIKANASHUTTER_GET_100(&this->dyna.actor)) {
         if (BgIkanaShutter_AllSwitchesPressed(this, play)) {
             func_80BD599C(this);
             return;
@@ -151,10 +151,10 @@ void func_80BD5A18(BgIkanaShutter* this, PlayState* play) {
     this->dyna.actor.velocity.y *= 0.978f;
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
-        quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 21536);
-        Quake_SetQuakeValues(quakeIndex, 4, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 12);
+        Quake_SetPerturbations(quakeIndex, 4, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 12);
 
         func_80BD5828(this);
     }

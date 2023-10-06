@@ -9,15 +9,15 @@ struct EnBee;
 typedef void (*EnBeeActionFunc)(struct EnBee*, PlayState*);
 
 typedef enum {
-    /* 0 */ BEE_BEHAVIOR_IDLE = 0,
-    /* 1 */ BEE_BEHAVIOR_ATTACK,
+    /* 0 */ BEE_BEHAVIOR_IDLE,
+    /* 1 */ BEE_BEHAVIOR_ATTACK
 } BeeBehaviorType;
 
 typedef struct EnBee {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s morphTable[OBJECT_BEE_LIMB_MAX];
-    /* 0x1C4 */ Vec3s jointTable[OBJECT_BEE_LIMB_MAX];
+    /* 0x188 */ Vec3s jointTable[OBJECT_BEE_LIMB_MAX];
+    /* 0x1C4 */ Vec3s morphTable[OBJECT_BEE_LIMB_MAX];
     /* 0x200 */ EnBeeActionFunc actionFunc;
     /* 0x204 */ s16 attackDelayTimer;
     /* 0x206 */ s16 sfxHitTimer;

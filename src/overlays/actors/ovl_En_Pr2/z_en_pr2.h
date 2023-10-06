@@ -10,13 +10,16 @@ typedef void (*EnPr2ActionFunc)(struct EnPr2*, PlayState*);
 #define ENPR2_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENPR2_GET_FF0(thisx) (((thisx)->params >> 4) & 0xFF)
 
+#define ENPR2_PATH_INDEX_NONE 0x3F
+#define ENPR2_PARAMS(paramF, paramFF0) (((paramF) & 0xF) | (((paramFF0) << 4) & 0xFF0))
+
 typedef struct EnPr2 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[5];
-    /* 0x1A6 */ Vec3s morphtable[5];
+    /* 0x1A6 */ Vec3s morphTable[5];
     /* 0x1C4 */ EnPr2ActionFunc actionFunc;
-    /* 0x1C8 */ s16 unk_1C8;
+    /* 0x1C8 */ s16 pathIndex;
     /* 0x1CC */ Path* path;
     /* 0x1D0 */ s32 unk_1D0;
     /* 0x1D4 */ s16 unk_1D4;

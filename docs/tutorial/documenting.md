@@ -137,7 +137,7 @@ void func_80C1019C(EnRecepgirl* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         func_80C10290(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        func_800B8614(&this->actor, play, 60.0f);
+        Actor_OfferTalk(&this->actor, play, 60.0f);
         if (Player_GetMask(play) == 2) {
             this->actor.textId = 0x2367;
         } else if (Flags_GetSwitch(play, this->actor.params)) {
@@ -244,7 +244,7 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80C106B0[this->unk_2AC]);
 
@@ -473,7 +473,7 @@ void func_80C1019C(EnRecepgirl* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         func_80C10290(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        func_800B8614(&this->actor, play, 60.0f);
+        Actor_OfferTalk(&this->actor, play, 60.0f);
         if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
             this->actor.textId = 0x2367; // "... doesn't Kafei want to break off his engagement ... ?"
         } else if (Flags_GetSwitch(play, this->actor.params)) {

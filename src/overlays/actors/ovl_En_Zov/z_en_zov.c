@@ -5,10 +5,9 @@
  */
 
 #include "z_en_zov.h"
-#include "objects/object_zov/object_zov.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZov*)thisx)
 
@@ -60,20 +59,20 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BD270C[] = {
-    &object_zov_Anim_00D3EC, &object_zov_Anim_008120, &object_zov_Anim_00B4CC, &object_zov_Anim_00A888,
-    &object_zov_Anim_00C510, &object_zov_Anim_00CAA8, &object_zov_Anim_008120, &object_zov_Anim_00A888,
-    &object_zov_Anim_002B5C, &object_zov_Anim_00418C, &object_zov_Anim_005A6C, &object_zov_Anim_0066A4,
-    &object_zov_Anim_0017D4, &object_zov_Anim_0023F4,
+static AnimationHeader* sAnimations[] = {
+    &gLuluLookDownAnim,    &gLuluPutHandsDownAnim, &gLuluLookForwardAndDownAnim, &gLuluLookAroundAnim,
+    &gLuluAngleHeadAnim,   &gLuluNodAnim,          &gLuluPutHandsDownAnim,       &gLuluLookAroundAnim,
+    &gLuluSingStartAnim,   &gLuluSingLoopAnim,     &gLuluLookForwardAndLeftAnim, &gLuluLookLeftLoopAnim,
+    &gLuluTurnAndWalkAnim, &gLuluWalkLoopAnim,
 };
 
 static Vec3f D_80BD2744 = { 400.0f, 600.0f, 0.0f };
 
 static Vec3f D_80BD2750 = { 400.0f, 600.0f, 0.0f };
 
-static TexturePtr D_80BD275C[] = { object_zov_Tex_013C38, object_zov_Tex_015138, object_zov_Tex_014138 };
+static TexturePtr sEyeTextures[] = { gLuluEyeOpenTex, gLuluEyeHalfTex, gLuluEyeClosedTex };
 
-static TexturePtr D_80BD2768[] = { object_zov_Tex_0135F8, object_zov_Tex_014538 };
+static TexturePtr sMouthTextures[] = { gLuluMouthClosedTex, gLuluMouthOpenTex };
 
 static s8 D_80BD2770[] = {
     1, 2, 1, 0, 0, 1, 2, 1,
@@ -86,9 +85,9 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->picto.actor, 0.01f);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_zov_Skel_016258, &object_zov_Anim_00D3EC, this->jontTable,
-                       this->morphTable, 23);
-    Animation_PlayLoop(&this->skelAnime, &object_zov_Anim_00D3EC);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gLuluSkel, &gLuluLookDownAnim, this->jointTable, this->morphTable,
+                       LULU_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &gLuluLookDownAnim);
 
     this->unk_320 = 0;
     this->csIdIndex = -1;
@@ -147,10 +146,10 @@ void func_80BD1440(EnZov* this, s16 arg1) {
     this->csIdIndex = arg1;
 }
 
-void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
+void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 morphFrames) {
     f32 frame;
 
-    if (((index != this->unk_322) || (mode != ANIMMODE_LOOP)) && (index >= 0) && (index < ARRAY_COUNT(D_80BD270C))) {
+    if (((index != this->unk_322) || (mode != ANIMMODE_LOOP)) && (index >= 0) && (index < ARRAY_COUNT(sAnimations))) {
         switch (index) {
             case 6:
                 frame = 30.0f;
@@ -164,8 +163,8 @@ void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
                 frame = 0.0f;
                 break;
         }
-        Animation_Change(&this->skelAnime, D_80BD270C[index], 1.0f, frame, Animation_GetLastFrame(D_80BD270C[index]),
-                         mode, transitionRate);
+        Animation_Change(&this->skelAnime, sAnimations[index], 1.0f, frame, Animation_GetLastFrame(sAnimations[index]),
+                         mode, morphFrames);
         this->unk_322 = index;
     }
 }
@@ -187,7 +186,7 @@ void func_80BD160C(EnZov* this, PlayState* play) {
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
         this->unk_320 &= ~2;
-        if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM != PLAYER_FORM_ZORA) {
             textId = 0x1024;
             if ((this->unk_322 == 0) || (this->unk_322 == 4)) {
                 func_80BD1570(this, 4, ANIMMODE_ONCE);
@@ -201,7 +200,7 @@ void func_80BD160C(EnZov* this, PlayState* play) {
             this->unk_320 |= 4;
             func_80BD1570(this, 3, ANIMMODE_ONCE);
         }
-    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         func_80BD1570(this, 2, ANIMMODE_ONCE);
         this->actionFunc = func_80BD19FC;
         this->unk_324 = 10;
@@ -378,7 +377,7 @@ void func_80BD1C84(EnZov* this, PlayState* play) {
         this->actionFunc = func_80BD187C;
         func_80BD160C(this, play);
     } else if (func_80BD15A4(this, play)) {
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     }
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_504)) {
@@ -390,7 +389,7 @@ void func_80BD1C84(EnZov* this, PlayState* play) {
 void func_80BD1D30(EnZov* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1032;
         } else {
@@ -452,7 +451,7 @@ void func_80BD1F1C(EnZov* this, PlayState* play) {
         this->actionFunc = func_80BD1DB8;
         func_80BD1D30(this, play);
     } else if (func_80BD15A4(this, play)) {
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     }
 }
 
@@ -521,14 +520,14 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
 s32 EnZov_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnZov* this = THIS;
 
-    if (limbIndex == 12) {
+    if (limbIndex == LULU_LIMB_HEAD) {
         rot->x += this->unk_2F0.y;
         if ((this->unk_320 & 0x10) && (this->unk_322 == 0)) {
             rot->z += this->unk_2F0.x;
         }
     }
 
-    if (limbIndex == 11) {
+    if (limbIndex == LULU_LIMB_TORSO) {
         rot->x += this->unk_2F6.y;
     }
     return false;
@@ -537,17 +536,17 @@ s32 EnZov_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnZov_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnZov* this = THIS;
 
-    if (limbIndex == 12) {
+    if (limbIndex == LULU_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BD2744, &this->picto.actor.focus.pos);
         Math_Vec3f_Copy(&this->unk_2FC, &this->picto.actor.focus.pos);
         this->unk_2FC.y += 10.0f;
     }
 
-    if (limbIndex == 18) {
+    if (limbIndex == LULU_LIMB_RIGHT_UPPER_ARM) {
         Matrix_MultVec3f(&D_80BD2750, &this->unk_308);
     }
 
-    if (limbIndex == 13) {
+    if (limbIndex == LULU_LIMB_LEFT_UPPER_ARM) {
         Matrix_MultVec3f(&D_80BD2750, &this->unk_314);
     }
 }
@@ -563,7 +562,7 @@ void EnZov_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     phi_a1 = 0;
     curFrame = this->skelAnime.curFrame;
     phi_v1 = this->unk_2EC;
@@ -625,8 +624,8 @@ void EnZov_Draw(Actor* thisx, PlayState* play) {
     }
 
     gfx = POLY_OPA_DISP;
-    gSPSegment(&gfx[0], 0x09, Lib_SegmentedToVirtual(D_80BD275C[phi_v1]));
-    gSPSegment(&gfx[1], 0x08, Lib_SegmentedToVirtual(D_80BD2768[phi_a1]));
+    gSPSegment(&gfx[0], 0x09, Lib_SegmentedToVirtual(sEyeTextures[phi_v1]));
+    gSPSegment(&gfx[1], 0x08, Lib_SegmentedToVirtual(sMouthTextures[phi_a1]));
     POLY_OPA_DISP = &gfx[2];
 
     CLOSE_DISPS(play->state.gfxCtx);

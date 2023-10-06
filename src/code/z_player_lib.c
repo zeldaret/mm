@@ -257,7 +257,7 @@ void func_80122C20(PlayState* play, struct_80122D44_arg1* arg1) {
     for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++, temp_v1++) {
         // Can't be `temp_v1->alpha != 0`
         if (temp_v1->alpha) {
-            phi_a1 = temp_v1->unk_00 == 3 ? (255 / 3) : (255 / 5);
+            phi_a1 = (temp_v1->unk_00 == 3) ? (255 / 3) : (255 / 5);
             if (phi_a1 >= temp_v1->alpha) {
                 temp_v1->alpha = 0;
             } else {
@@ -270,7 +270,7 @@ void func_80122C20(PlayState* play, struct_80122D44_arg1* arg1) {
 typedef struct {
     /* 0x0 */ Color_RGB8 color;
     /* 0x4 */ Gfx* dList;
-} struct_801BFDD0; // size = 0x08
+} struct_801BFDD0; // size = 0x8
 
 struct_801BFDD0 D_801BFDD0[] = {
     { { 180, 200, 255 }, gLinkGoronCurledDL },
@@ -369,13 +369,13 @@ void func_80122F28(Player* player) {
 s32 func_80122F9C(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && player->unk_AE7 == 2;
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->actionVar1 == 2);
 }
 
 s32 func_80122FCC(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->unk_AE7 == 1 || player->unk_AE7 == 3);
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && ((player->actionVar1 == 1) || (player->actionVar1 == 3));
 }
 
 void func_8012300C(PlayState* play, s32 arg1) {
@@ -389,16 +389,16 @@ void func_8012301C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Player* this = (Player*)thisx;
 
-    this->unk_AE7++;
+    this->actionVar1++;
 
-    if (this->unk_AE7 == 2) {
+    if (this->actionVar1 == 2) {
         s16 objectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
         func_8012F73C(&play->objectCtx, this->actor.objBankIndex, objectId);
-        this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
-    } else if (this->unk_AE7 >= 3) {
-        s32 objBankIndex = Object_GetIndex(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
+        this->actor.objBankIndex = Object_GetSlot(&play->objectCtx, GAMEPLAY_KEEP);
+    } else if (this->actionVar1 >= 3) {
+        s32 objBankIndex = Object_GetSlot(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
 
         if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
             this->actor.objBankIndex = objBankIndex;
@@ -472,7 +472,7 @@ void func_80123140(PlayState* play, Player* player) {
     REG(39) = bootRegs[8];
     REG(43) = bootRegs[9];
     R_RUN_SPEED_LIMIT = bootRegs[10];
-    REG(68) = bootRegs[11];
+    REG(68) = bootRegs[11]; // gravity
     REG(69) = bootRegs[12];
     IREG(66) = bootRegs[13];
     IREG(67) = bootRegs[14];
@@ -495,7 +495,7 @@ void func_80123140(PlayState* play, Player* player) {
 
 s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
-           (player->csMode != PLAYER_CSMODE_0) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
+           (player->csMode != PLAYER_CSMODE_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
            (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
 }
@@ -503,7 +503,7 @@ s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
 s32 Player_InCsMode(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return Player_InBlockingCsMode(play, player) || player->unk_AA5 == 5;
+    return Player_InBlockingCsMode(play, player) || (player->unk_AA5 == PLAYER_UNKAA5_5);
 }
 
 s32 func_80123420(Player* player) {
@@ -519,7 +519,7 @@ s32 func_80123448(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
-           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->targetedActor == NULL));
+           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->lockOnActor == NULL));
 }
 
 // TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
@@ -556,8 +556,8 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags3 & PLAYER_STATE3_1000) {
-        player->unk_B08[0] = arg1;
-        player->unk_B08[1] += arg1 * 0.05f;
+        player->unk_B08 = arg1;
+        player->unk_B0C += arg1 * 0.05f;
         player->currentYaw = arg2;
         player->actor.home.rot.y = arg2;
         player->actor.shape.rot.y = arg2;
@@ -570,12 +570,12 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     return false;
 }
 
-ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
-    if (arg2 >= 4) {
+ItemId Player_GetItemOnButton(PlayState* play, Player* player, EquipSlot slot) {
+    if (slot >= EQUIP_SLOT_A) {
         return ITEM_NONE;
     }
 
-    if (arg2 == 0) {
+    if (slot == EQUIP_SLOT_B) {
         ItemId item = Inventory_GetBtnBItem(play);
 
         if (item >= ITEM_FD) {
@@ -597,18 +597,24 @@ ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
         return item;
     }
 
-    if (arg2 == 1) {
+    if (slot == EQUIP_SLOT_C_LEFT) {
         return C_BTN_ITEM(EQUIP_SLOT_C_LEFT);
     }
 
-    if (arg2 == 2) {
+    if (slot == EQUIP_SLOT_C_DOWN) {
         return C_BTN_ITEM(EQUIP_SLOT_C_DOWN);
     }
+
+    // EQUIP_SLOT_C_RIGHT
 
     return C_BTN_ITEM(EQUIP_SLOT_C_RIGHT);
 }
 
-u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
+u16 sCItemButtons[] = {
+    BTN_CLEFT,
+    BTN_CDOWN,
+    BTN_CRIGHT,
+};
 
 PlayerItemAction func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -620,7 +626,7 @@ PlayerItemAction func_80123810(PlayState* play) {
         if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_A | BTN_B)) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
-            Interface_SetHudVisibility(play->msgCtx.unk_120BC);
+            Interface_SetHudVisibility(play->msgCtx.hudVisibility);
             return PLAYER_IA_MINUS1;
         }
     } else {
@@ -630,14 +636,14 @@ PlayerItemAction func_80123810(PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(sCItemButtons); i++) {
         if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, sCItemButtons[i])) {
             i++;
-            itemId = func_8012364C(play, player, i);
+            itemId = Player_GetItemOnButton(play, player, i);
 
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
-            Interface_SetHudVisibility(play->msgCtx.unk_120BC);
+            Interface_SetHudVisibility(play->msgCtx.hudVisibility);
 
             if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_MINUS1)) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 return PLAYER_IA_MINUS1;
             } else {
                 s32 pad;
@@ -655,12 +661,12 @@ PlayerItemAction func_80123810(PlayState* play) {
 u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_NONE
     PLAYER_MODELGROUP_13,             // PLAYER_IA_LAST_USED
-    PLAYER_MODELGROUP_STICK,          // PLAYER_IA_FISHING_ROD
+    PLAYER_MODELGROUP_DEKU_STICK,     // PLAYER_IA_FISHING_ROD
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_KOKIRI
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_RAZOR
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_GILDED
-    PLAYER_MODELGROUP_TWO_HAND_SWORD, // PLAYER_IA_SWORD_GREAT_FAIRY
-    PLAYER_MODELGROUP_STICK,          // PLAYER_IA_STICK
+    PLAYER_MODELGROUP_TWO_HAND_SWORD, // PLAYER_IA_SWORD_TWO_HANDED
+    PLAYER_MODELGROUP_DEKU_STICK,     // PLAYER_IA_DEKU_STICK
     PLAYER_MODELGROUP_ZORA_FINS,      // PLAYER_IA_ZORA_FINS
     PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW
     PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW_FIRE
@@ -671,8 +677,8 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_IA_POWDER_KEG
     PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_IA_BOMBCHU
     PLAYER_MODELGROUP_8,              // PLAYER_IA_11
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_NUT
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_PICTO_BOX
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEKU_NUT
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_PICTOGRAPH_BOX
     PLAYER_MODELGROUP_INSTRUMENT,     // PLAYER_IA_OCARINA
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_EMPTY
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_FISH
@@ -695,7 +701,7 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_MILK_HALF
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_CHATEAU
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_FAIRY
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MOON_TEAR
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MOONS_TEAR
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEED_LAND
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_ROOM_KEY
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_LETTER_TO_KAFEI
@@ -735,7 +741,7 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_GORON
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_ZORA
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_DEKU
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_LENS
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_LENS_OF_TRUTH
 };
 
 PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerItemAction itemAction) {
@@ -808,7 +814,7 @@ PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
     /* PLAYER_MODELGROUP_HOOKSHOT */
     { PLAYER_ANIMTYPE_4, PLAYER_MODELTYPE_LH_OPEN, PLAYER_MODELTYPE_RH_HOOKSHOT, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
-    /* PLAYER_MODELGROUP_STICK */
+    /* PLAYER_MODELGROUP_DEKU_STICK */
     { PLAYER_ANIMTYPE_3, PLAYER_MODELTYPE_LH_CLOSED, PLAYER_MODELTYPE_RH_CLOSED, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_INSTRUMENT */
@@ -1287,7 +1293,7 @@ void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {
 void func_80123C58(Player* player) {
     player->itemAction = player->heldItemAction;
     Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->heldItemAction));
-    player->unk_AA5 = 0;
+    player->unk_AA5 = PLAYER_UNKAA5_0;
 }
 
 void Player_SetEquipmentData(PlayState* play, Player* player) {
@@ -1316,8 +1322,8 @@ void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, Pla
     player->itemAction = itemAction;
 }
 
-void func_80123DA4(Player* player) {
-    player->targetedActor = NULL;
+void Player_Untarget(Player* player) {
+    player->lockOnActor = NULL;
     player->stateFlags2 &= ~PLAYER_STATE2_2000;
 }
 
@@ -1335,14 +1341,14 @@ void func_80123DC0(Player* player) {
             ~(PLAYER_STATE1_8000 | PLAYER_STATE1_10000 | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
     }
 
-    func_80123DA4(player);
+    Player_Untarget(player);
 }
 
 void func_80123E90(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
     func_80123DC0(player);
-    player->targetedActor = actor;
+    player->lockOnActor = actor;
     player->unk_A78 = actor;
     player->stateFlags1 |= PLAYER_STATE1_10000;
     Camera_SetViewParam(Play_GetCamera(play, CAM_ID_MAIN), CAM_VIEW_TARGET, actor);
@@ -1362,12 +1368,12 @@ s32 func_80123F2C(PlayState* play, s32 ammo) {
 }
 
 s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange) {
-    Player* this = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     Vec3f diff;
     s32 pad;
 
-    if ((this->heldItemAction == PLAYER_IA_STICK) && (this->unk_B28 != 0)) {
-        Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, pos, &diff);
+    if ((player->heldItemAction == PLAYER_IA_DEKU_STICK) && (player->unk_B28 != 0)) {
+        Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, pos, &diff);
         return (SQXZ(diff) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
     }
 
@@ -1445,7 +1451,7 @@ PlayerMeleeWeapon Player_GetMeleeWeaponHeld(Player* player) {
 
 s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     // Relies on the itemActions for two-handed weapons being contiguous.
-    if ((player->heldItemAction >= PLAYER_IA_SWORD_GREAT_FAIRY) && (player->heldItemAction <= PLAYER_IA_STICK)) {
+    if ((player->heldItemAction >= PLAYER_IA_SWORD_TWO_HANDED) && (player->heldItemAction <= PLAYER_IA_DEKU_STICK)) {
         return true;
     }
 
@@ -1539,10 +1545,8 @@ void Player_UpdateBunnyEars(Player* player) {
     sBunnyEarKinematics.angVel.y += -sBunnyEarKinematics.rot.y >> 2;
 
     angle = player->actor.world.rot.y - player->actor.shape.rot.y;
-    force.x =
-        (s32)(player->actor.speed * -200.0f * Math_CosS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
-    force.y =
-        (s32)(player->actor.speed * 100.0f * Math_SinS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
+    force.x = (s32)(player->actor.speed * -200.0f * Math_CosS(angle) * (Rand_CenteredFloat(2.0f) + 10.0f)) & 0xFFFF;
+    force.y = (s32)(player->actor.speed * 100.0f * Math_SinS(angle) * (Rand_CenteredFloat(2.0f) + 10.0f)) & 0xFFFF;
 
     sBunnyEarKinematics.angVel.x += force.x >> 2;
     sBunnyEarKinematics.angVel.y += force.y >> 2;
@@ -1642,9 +1646,9 @@ TexturePtr sPlayerMouthTextures[PLAYER_MOUTH_MAX] = {
 };
 
 typedef struct PlayerFaceIndices {
-    /* 0x00 */ u8 eyeIndex;
-    /* 0x01 */ u8 mouthIndex;
-} PlayerFaceIndices; // size = 0x02
+    /* 0x0 */ u8 eyeIndex;
+    /* 0x1 */ u8 mouthIndex;
+} PlayerFaceIndices; // size = 0x2
 
 PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_0
@@ -1800,7 +1804,7 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         temp_f20 = sp74 - SQ(sp58);
         temp_f20 = (temp_f20 < 0.0f) ? 0.0f : sqrtf(temp_f20);
 
-        sp4C = func_80086B30(temp_f20, sp58);
+        sp4C = Math_FAtan2F(temp_f20, sp58);
         distance = sqrtf(SQ(diffX) + SQ(yIntersect - sp90.y) + SQ(diffZ));
         sp58 = (SQ(distance) + sp70) / (2.0f * distance);
         sp54 = distance - sp58;
@@ -1808,8 +1812,8 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         temp_f20 = sp74 - SQ(sp58);
         temp_f20 = (temp_f20 < 0.0f) ? 0.0f : sqrtf(temp_f20);
 
-        sp48 = func_80086B30(temp_f20, sp58);
-        phi_t1 = (M_PI - (func_80086B30(sp54, temp_f20) + ((M_PI / 2.0f) - sp48))) * (0x8000 / M_PI);
+        sp48 = Math_FAtan2F(temp_f20, sp58);
+        phi_t1 = (M_PI - (Math_FAtan2F(sp54, temp_f20) + ((M_PI / 2.0f) - sp48))) * (0x8000 / M_PI);
         phi_t1 = -skelAnime->jointTable[shinLimbIndex].z + phi_t1;
         temp_f8 = (sp48 - sp4C) * (0x8000 / M_PI);
 
@@ -1854,7 +1858,7 @@ void Player_DrawHookshotReticle(PlayState* play, Player* player, f32 hookshotDis
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 7);
+            OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_7);
 
             SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &pos, &sp58, &sp54);
 
@@ -1865,7 +1869,7 @@ void Player_DrawHookshotReticle(PlayState* play, Player* player, f32 hookshotDis
 
             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPSegment(OVERLAY_DISP++, 0x06, play->objectCtx.status[player->actor.objBankIndex].segment);
+            gSPSegment(OVERLAY_DISP++, 0x06, play->objectCtx.slots[player->actor.objBankIndex].segment);
             gSPDisplayList(OVERLAY_DISP++, gHookshotReticleDL);
 
             CLOSE_DISPS(play->state.gfxCtx);
@@ -2038,7 +2042,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                 pos->x *= player->ageProperties->unk_08;
                 pos->z *= player->ageProperties->unk_08;
             }
-            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_UPDATEY)) {
+            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_UPDATE_Y)) {
                 pos->y *= player->ageProperties->unk_08;
             }
         }
@@ -2094,7 +2098,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                 EnArrow* bubble = NULL;
 
                 if (((player->skelAnime.animation == &gPlayerAnim_pn_drinkend)) ||
-                    (player->unk_284.animation == &gPlayerAnim_pn_tamahaki) ||
+                    (player->skelAnimeUpper.animation == &gPlayerAnim_pn_tamahaki) ||
                     ((player->stateFlags3 & PLAYER_STATE3_40) && ((bubble = (EnArrow*)player->heldActor) != NULL))) {
                     Matrix_TranslateRotateZYX(pos, rot);
                     func_80125340();
@@ -2110,7 +2114,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                     } else if (player->skelAnime.animation == &gPlayerAnim_pn_drinkend) {
                         func_80124618(D_801C03E0, player->skelAnime.curFrame, player->unk_AF0);
                     } else {
-                        func_80124618(D_801C03C0, player->unk_284.curFrame, player->unk_AF0);
+                        func_80124618(D_801C03C0, player->skelAnimeUpper.curFrame, player->unk_AF0);
                     }
 
                     Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
@@ -2315,7 +2319,7 @@ s32 Player_OverrideLimbDrawGameplayFirstPerson(PlayState* play, s32 limbIndex, G
     Player* player = (Player*)actor;
 
     if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, actor)) {
-        if (player->unk_AA5 != 3) {
+        if (player->unk_AA5 != PLAYER_UNKAA5_3) {
             *dList = NULL;
         } else if (limbIndex == PLAYER_LIMB_LEFT_FOREARM) {
             *dList = sPlayerFirstPersonLeftForearmDLs[player->transformation];
@@ -2530,9 +2534,9 @@ Gfx* D_801C0B20[] = {
     object_mask_bakuretu_DL_0005C0, // PLAYER_MASK_BLAST
     object_mask_bu_san_DL_000710,   // PLAYER_MASK_SCENTS
     object_mask_kyojin_DL_000380,   // PLAYER_MASK_GIANT
-    gameplay_keep_DL_00B260,        // PLAYER_MASK_FIERCE_DEITY
-    gameplay_keep_DL_005A10,        // PLAYER_MASK_GORON
-    gameplay_keep_DL_005360,        // PLAYER_MASK_ZORA
+    gFierceDeityMaskDL,             // PLAYER_MASK_FIERCE_DEITY
+    gGoronMaskDL,                   // PLAYER_MASK_GORON
+    gZoraMaskDL,                    // PLAYER_MASK_ZORA
     gDekuMaskDL,                    // PLAYER_MASK_DEKU
     object_mask_boy_DL_000900,
     object_mask_goron_DL_0014A0,
@@ -2552,14 +2556,16 @@ void func_8012669C(PlayState* play, Player* player, Vec3f* arg2, Vec3f* arg3) {
     Matrix_MultVec3f(arg2, &sp3C);
     Matrix_MultVec3f(arg3, &sp30);
 
-    if (player->meleeWeaponState != 0) {
+    if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
         if (func_80126440(play, NULL, &player->meleeWeaponInfo[0], &sp3C, &sp30) &&
             (player->transformation != PLAYER_FORM_GORON) && (!(player->stateFlags1 & PLAYER_STATE1_400000))) {
             EffectBlure_AddVertex(Effect_GetByIndex(player->meleeWeaponEffectIndex[0]), &player->meleeWeaponInfo[0].tip,
                                   &player->meleeWeaponInfo[0].base);
         }
-        if ((player->meleeWeaponState > 0) && ((player->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) ||
-                                               (player->stateFlags2 & PLAYER_STATE2_20000))) {
+
+        if ((player->meleeWeaponState >= PLAYER_MELEE_WEAPON_STATE_1) &&
+            ((player->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) ||
+             (player->stateFlags2 & PLAYER_STATE2_20000))) {
             Matrix_MultVec3f(&arg2[1], &sp3C);
             Matrix_MultVec3f(&arg3[1], &sp30);
             func_80126440(play, &player->meleeWeaponQuads[0], &player->meleeWeaponInfo[1], &sp3C, &sp30);
@@ -2714,7 +2720,7 @@ void func_80126BD0(PlayState* play, Player* player, s32 arg2) {
 
             gSPDisplayList(POLY_OPA_DISP++, D_801C0AB4[arg2]);
 
-            if (player->meleeWeaponState != 0) {
+            if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
                 if ((((player->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_LEFT)) && (arg2 == 0)) ||
                     ((player->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_COMBO) && (arg2 != 0))) {
                     func_8012669C(play, player, D_801C0A00, D_801C09DC);
@@ -3290,13 +3296,13 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
             CLOSE_DISPS(play->state.gfxCtx);
         }
 
-    } else if (player->itemAction == PLAYER_IA_STICK) {
+    } else if (player->itemAction == PLAYER_IA_DEKU_STICK) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
         Matrix_Translate(-428.26f, 267.2f, -33.82f, MTXMODE_APPLY);
         Matrix_RotateZYX(-0x8000, 0, 0x4000, MTXMODE_APPLY);
-        Matrix_Scale(1.0f, player->unk_B08[1], 1.0f, MTXMODE_APPLY);
+        Matrix_Scale(1.0f, player->unk_B0C, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gDekuStickDL);
@@ -3321,10 +3327,10 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
             Color_RGB8* bottleColor = &sPlayerBottleColors[bottle];
 
             gDPSetEnvColor(POLY_XLU_DISP++, bottleColor->r, bottleColor->g, bottleColor->b, 0);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_000320);
+            gSPDisplayList(POLY_XLU_DISP++, gBottleContentsDL);
         }
 
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0003E0);
+        gSPDisplayList(POLY_XLU_DISP++, gBottleGlassDL);
 
         Matrix_Pop();
 
@@ -3413,27 +3419,27 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
                     3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
                     4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
-                    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
-                    -1.0f,   // PLAYER_MELEEWEAPON_STICK
+                    5500.0f, // PLAYER_MELEEWEAPON_SWORD_TWO_HANDED
+                    -1.0f,   // PLAYER_MELEEWEAPON_DEKU_STICK
                     2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
                 };
 
                 if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) ||
                     ((player->transformation != PLAYER_FORM_ZORA) &&
-                     ((player->itemAction == PLAYER_IA_STICK) ||
-                      ((player->meleeWeaponState != 0) &&
+                     ((player->itemAction == PLAYER_IA_DEKU_STICK) ||
+                      ((player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_RIGHT) &&
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_BUTT))))) {
-                    if (player->itemAction == PLAYER_IA_STICK) {
-                        D_801C0994->x = player->unk_B08[1] * 5000.0f;
+                    if (player->itemAction == PLAYER_IA_DEKU_STICK) {
+                        D_801C0994->x = player->unk_B0C * 5000.0f;
                     } else {
                         D_801C0994->x = sMeleeWeaponLengths[Player_GetMeleeWeaponHeld(player)];
                     }
                     func_80126B8C(play, player);
                 }
 
-                Matrix_Get(&player->mf_CC4);
-                Matrix_MtxFToYXZRot(&player->mf_CC4, &player->leftHandWorld.rot, false);
+                Matrix_Get(&player->leftHandMf);
+                Matrix_MtxFToYXZRot(&player->leftHandMf, &player->leftHandWorld.rot, false);
             }
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
@@ -3458,18 +3464,18 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
                     Matrix_MultZero(&sp20C);
                     temp_fv0 = Math_Vec3f_DistXYZ(sPlayerCurBodyPartPos, &sp20C);
-                    player->unk_B08[0] = temp_fv0 - 3.0f;
+                    player->unk_B08 = temp_fv0 - 3.0f;
                     if (temp_fv0 < 3.0f) {
-                        player->unk_B08[0] = 0.0f;
+                        player->unk_B08 = 0.0f;
                     } else {
-                        player->unk_B08[0] *= 1.6f;
-                        if (player->unk_B08[0] > 1.0f) {
-                            player->unk_B08[0] = 1.0f;
+                        player->unk_B08 *= 1.6f;
+                        if (player->unk_B08 > 1.0f) {
+                            player->unk_B08 = 1.0f;
                         }
                     }
-                    player->unk_B08[1] = -0.5f;
+                    player->unk_B0C = -0.5f;
                 }
-                Matrix_Scale(1.0f, player->unk_B08[0], 1.0f, MTXMODE_APPLY);
+                Matrix_Scale(1.0f, player->unk_B08, 1.0f, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -3518,7 +3524,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         Player_DrawHookshotReticle(play, player, 77600.0f);
                     }
                 }
-            } else if (player->meleeWeaponState != 0) {
+            } else if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
                 if (player->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_RIGHT) {
                     func_80126B8C(play, player);
                 }
@@ -3526,7 +3532,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             if ((player->getItemDrawIdPlusOne != (GID_NONE + 1)) ||
                 ((func_800B7118(player) == 0) && (heldActor != NULL))) {
                 if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawIdPlusOne != (GID_NONE + 1)) &&
-                    (player->exchangeItemId != PLAYER_IA_NONE)) {
+                    (player->exchangeItemAction != PLAYER_IA_NONE)) {
                     Math_Vec3f_Copy(&sPlayerGetItemRefPos, &player->leftHandWorld.pos);
                 } else {
                     sPlayerGetItemRefPos.x =
@@ -3590,6 +3596,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 for (i = 0; i < ARRAY_COUNT(sp178); i++) {
                     Matrix_Push();
                     Matrix_Scale(sp178[i].x, sp178[i].y, sp178[i].z, MTXMODE_APPLY);
+
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -3743,7 +3750,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
 
-        if ((player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_100)) && (player->unk_AE8 != 0)) {
+        if ((player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_100)) && (player->actionVar2 != 0)) {
             static Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
                 { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_FIERCE_DEITY
                 { -578.3f, -1100.9f, 0.0f }, // PLAYER_FORM_GORON
@@ -3763,7 +3770,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, (u8)player->unk_AE8);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, (u8)player->actionVar2);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054C90);
 
             Matrix_Pop();
@@ -3783,7 +3790,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 Matrix_MultVec3f(&sPlayerFocusHeadLimbModelPos, &player->actor.focus.pos);
                 Matrix_MultVec3f(&D_801C0E94, sPlayerCurBodyPartPos);
                 if ((player->skelAnime.animation == &gPlayerAnim_pn_drinkend) ||
-                    (player->unk_284.animation == &gPlayerAnim_pn_tamahaki) ||
+                    (player->skelAnimeUpper.animation == &gPlayerAnim_pn_tamahaki) ||
                     ((player->stateFlags3 & PLAYER_STATE3_40) && ((spA8 = player->heldActor) != NULL))) {
                     if (spA8 != NULL) {
                         static Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
@@ -3811,7 +3818,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                                   &player->meleeWeaponInfo[0].base);
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_SHIN) {
-        if (player->meleeWeaponState != 0) {
+        if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
             if ((player->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_KICK) ||
                 (player->meleeWeaponAnimation == PLAYER_MWA_ZORA_JUMPKICK_START) ||
                 (player->meleeWeaponAnimation == PLAYER_MWA_ZORA_JUMPKICK_FINISH)) {
@@ -3819,7 +3826,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_WAIST) {
-        if (player->meleeWeaponState != 0) {
+        if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
             if (player->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_BUTT) {
                 Math_Vec3f_Copy(&player->unk_AF0[1], &player->meleeWeaponInfo[0].base);
                 func_8012669C(play, player, D_801C0A90, D_801C0A6C);

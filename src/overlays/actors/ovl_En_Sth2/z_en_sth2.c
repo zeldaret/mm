@@ -6,7 +6,7 @@
 
 #include "z_en_sth2.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnSth2*)thisx)
 
@@ -35,7 +35,7 @@ ActorInit En_Sth2_InitVars = {
 void EnSth2_Init(Actor* thisx, PlayState* play) {
     EnSth2* this = THIS;
 
-    this->objIndex = Object_GetIndex(&play->objectCtx, OBJECT_STH);
+    this->objIndex = Object_GetSlot(&play->objectCtx, OBJECT_STH);
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     this->unused = 0;
@@ -114,7 +114,7 @@ void EnSth2_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,
                Gfx_EnvColor(play->state.gfxCtx, sEnvColors[1].r, sEnvColors[1].g, sEnvColors[1].b, 255));
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 90, 110, 130, 255));

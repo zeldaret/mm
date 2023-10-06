@@ -69,7 +69,7 @@ void ObjYasi_Update(Actor* thisx, PlayState* play) {
                 dropPos.x = this->dyna.actor.world.pos.x;
                 dropPos.y = this->dyna.actor.world.pos.y + 280.0f;
                 dropPos.z = this->dyna.actor.world.pos.z;
-                Item_DropCollectible(play, &dropPos, ITEM00_NUTS_1);
+                Item_DropCollectible(play, &dropPos, ITEM00_DEKU_NUTS_1);
             }
         }
         this->dyna.actor.home.rot.y = GET_PLAYER(play)->actor.shape.rot.y;

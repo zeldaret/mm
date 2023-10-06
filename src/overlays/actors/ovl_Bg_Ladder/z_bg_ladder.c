@@ -49,7 +49,7 @@ void BgLadder_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
-    this->switchFlag = BGLADDER_GET_SWITCHFLAG(thisx);
+    this->switchFlag = BGLADDER_GET_SWITCH_FLAG(thisx);
     thisx->params = BGLADDER_GET_SIZE(thisx);
     DynaPolyActor_Init(&this->dyna, 0);
     size = thisx->params;
@@ -143,7 +143,7 @@ void BgLadder_Draw(Actor* thisx, PlayState* play) {
         gfx = POLY_XLU_DISP;
     }
 
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 0x19]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     gDPSetEnvColor(&gfx[1], 255, 255, 255, this->alpha);
     gSPMatrix(&gfx[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(&gfx[3], sLadderDLists[this->dyna.actor.params]);

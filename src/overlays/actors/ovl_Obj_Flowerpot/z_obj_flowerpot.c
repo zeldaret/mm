@@ -22,7 +22,7 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play);
 void func_80A1CBF8(ObjFlowerpot* this);
 void func_80A1CC0C(ObjFlowerpot* this, PlayState* play);
 void func_80A1CD10(ObjFlowerpot* this);
-void func_80A1CEF4(ObjFlowerpot* this2, PlayState* play);
+void func_80A1CEF4(ObjFlowerpot* this, PlayState* play);
 
 u32 D_80A1D830;
 MtxF D_80A1D838[8];
@@ -255,7 +255,7 @@ void func_80A1BA44(ObjFlowerpot* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spC4, &spB8, &spC4, -600, phi_s0, 30, 0, 0, (Rand_ZeroOne() * 12.0f) + 16.6f,
-                             phi_s1, 0, 35, -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0015B0);
+                             phi_s1, 0, 35, -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0015B0);
     }
 
     spD0.y += 20.0f;
@@ -298,7 +298,7 @@ void func_80A1BD80(ObjFlowerpot* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spBC, &spB0, &spBC, -240, phi_s0, 40, 0, 0, (Rand_ZeroOne() * 20.0f) + 10.6f, 0, 0,
-                             42, -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0015B0);
+                             42, -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0015B0);
     }
 
     spBC.y = this->actor.world.pos.y + this->actor.depthInWater;
@@ -338,7 +338,7 @@ void func_80A1C0FC(ObjFlowerpot* this, PlayState* play) {
 
         Math_Vec3f_Sum(&spB8, &spC4, &spB8);
         EffectSsKakera_Spawn(play, &spB8, &spAC, &spB8, -100, 64, 40, 0, 0, (Rand_ZeroOne() * 16.0f) + 14.0f, 0, 0, 80,
-                             -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0014F0);
+                             -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0014F0);
     }
 }
 
@@ -365,7 +365,7 @@ void func_80A1C328(ObjFlowerpot* this, PlayState* play) {
 
         Math_Vec3f_Sum(&spB8, &spC4, &spB8);
         EffectSsKakera_Spawn(play, &spB8, &spAC, &spB8, -80, 64, 44, 0, 0, (Rand_ZeroOne() * 16.0f) + 14.0f, 0, 0, 80,
-                             -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0014F0);
+                             -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0014F0);
     }
 }
 
@@ -589,8 +589,8 @@ void func_80A1CD10(ObjFlowerpot* this) {
     }
 }
 
-void func_80A1CEF4(ObjFlowerpot* this2, PlayState* play) {
-    ObjFlowerpot* this = this2;
+void func_80A1CEF4(ObjFlowerpot* this, PlayState* play) {
+    Actor* thisx = &this->actor;
     s32 sp28 = this->collider.elements[0].info.toucherFlags & TOUCH_HIT;
 
     if (sp28) {
@@ -603,7 +603,7 @@ void func_80A1CEF4(ObjFlowerpot* this2, PlayState* play) {
 
     func_80A1C62C(this, play);
 
-    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || sp28 ||
+    if ((thisx->bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || sp28 ||
         (this->unk_1E8 <= 0)) {
         if (!(this->unk_1EA & 2)) {
             func_80A1B914(this, play);
@@ -613,11 +613,11 @@ void func_80A1CEF4(ObjFlowerpot* this2, PlayState* play) {
         }
         func_80A1BA44(this, play);
         func_80A1B994(this, play);
-        Actor_Kill(&this->actor);
+        Actor_Kill(thisx);
         return;
     }
 
-    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
+    if (thisx->bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         if (!(this->unk_1EA & 2)) {
             func_80A1B914(this, play);
             func_80A1C328(this, play);
@@ -626,22 +626,22 @@ void func_80A1CEF4(ObjFlowerpot* this2, PlayState* play) {
         }
         func_80A1BD80(this, play);
         func_80A1B994(this, play);
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
-        Actor_Kill(&this->actor);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
+        Actor_Kill(thisx);
         return;
     }
 
-    Actor_MoveWithGravity(&this->actor);
+    Actor_MoveWithGravity(thisx);
 
     if (!(this->unk_1EA & 2)) {
-        D_80A1D3F8 += (s16)(this->actor.shape.rot.x * -0.06f);
+        D_80A1D3F8 += (s16)(thisx->shape.rot.x * -0.06f);
     } else {
         Math_StepToS(&D_80A1D3F8, 0, 80);
         Math_StepToS(&D_80A1D3FC, 0, 20);
     }
 
-    this->actor.shape.rot.x += D_80A1D3F8;
-    this->actor.shape.rot.y += D_80A1D3FC;
+    thisx->shape.rot.x += D_80A1D3F8;
+    thisx->shape.rot.y += D_80A1D3FC;
 
     func_80A1C5E8(this, play);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -668,7 +668,7 @@ void ObjFlowerpot_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_flowerpot_DL_0012E0);

@@ -121,11 +121,11 @@ static u8 sScheduleScript[] = {
     /* 0x094 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 10, 12),
     /* 0x09A */ SCHEDULE_CMD_RET_NONE(),
     /* 0x09B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(3, 0x138 - 0x0A0),
-    /* 0x0A0 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_33_08, 0x12C - 0x0A5),
-    /* 0x0A5 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_79_40, 0x12C - 0x0AA),
+    /* 0x0A0 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG, 0x12C - 0x0A5),
+    /* 0x0A5 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_SAKON_DEAD, 0x12C - 0x0AA),
     /* 0x0AA */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_SECOM, 0x0B0 - 0x0AE),
     /* 0x0AE */ SCHEDULE_CMD_RET_VAL_S(7),
-    /* 0x0B0 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_51_20, 0x0DD - 0x0B4),
+    /* 0x0B0 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT, 0x0DD - 0x0B4),
     /* 0x0B4 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_IKANA, 0x0DC - 0x0B8),
     /* 0x0B8 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_51_08, 0x0BE - 0x0BC),
     /* 0x0BC */ SCHEDULE_CMD_RET_VAL_S(5),
@@ -149,7 +149,7 @@ static u8 sScheduleScript[] = {
     /* 0x0F3 */ SCHEDULE_CMD_RET_TIME(4, 0, 4, 10, 11),
     /* 0x0F9 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x12B - 0x0FD),
     /* 0x0FD */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(4, 10, 4, 30, 0x125 - 0x103),
-    /* 0x103 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_51_01, 0x11C - 0x107),
+    /* 0x103 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES, 0x11C - 0x107),
     /* 0x107 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(4, 30, 4, 45, 0x116 - 0x10D),
     /* 0x10D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(4, 45, 6, 0, 0x114 - 0x113),
     /* 0x113 */ SCHEDULE_CMD_RET_NONE(),
@@ -312,7 +312,7 @@ s32 func_80A3E898(EnTest3* this, PlayState* play) {
     u16 textId = this->unk_D78->textId;
 
     if ((this->unk_D78->unk_0 == 4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
-        func_80151BB4(play, 2);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
     }
     if (textId == 0xFFFF) {
         Message_CloseTextbox(play);
@@ -353,13 +353,13 @@ s32 func_80A3EA30(EnTest3* this, PlayState* play) {
         Actor* hideoutDoor = SubS_FindActor(play, NULL, ACTORCAT_BG, ACTOR_BG_IKNV_OBJ);
 
         if (hideoutDoor != NULL) {
-            this->player.targetedActor = hideoutDoor;
+            this->player.lockOnActor = hideoutDoor;
         }
     }
     if (this->unk_D78->unk_1 != 0) {
         CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         CutsceneManager_Queue(this->csId);
-        play->msgCtx.msgMode = 0x44;
+        play->msgCtx.msgMode = MSGMODE_PAUSED;
     }
     return false;
 }
@@ -377,7 +377,7 @@ s32 func_80A3EAF8(EnTest3* this, PlayState* play) {
             CutsceneManager_Stop(this->csId);
             this->csId = CS_ID_GLOBAL_TALK;
             CutsceneManager_Queue(this->csId);
-            this->player.targetedActor = &GET_PLAYER(play)->actor;
+            this->player.lockOnActor = &GET_PLAYER(play)->actor;
         }
         return 1;
     }
@@ -389,9 +389,9 @@ s32 func_80A3EB8C(EnTest3* this, PlayState* play) {
         Actor* hideoutObject = SubS_FindActor(play, NULL, ACTORCAT_ITEMACTION, ACTOR_OBJ_NOZOKI);
 
         if (hideoutObject != NULL) {
-            this->player.targetedActor = hideoutObject;
+            this->player.lockOnActor = hideoutObject;
         }
-        play->msgCtx.msgMode = 0x44;
+        play->msgCtx.msgMode = MSGMODE_PAUSED;
         return 1;
     }
     return 0;
@@ -411,9 +411,9 @@ s32 func_80A3EC30(EnTest3* this, PlayState* play) {
 s32 func_80A3EC44(EnTest3* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex != 0) {
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
         } else {
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
         }
         if (play->msgCtx.choiceIndex != 0) {
             return 1;
@@ -456,7 +456,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     this->player.transformation = PLAYER_FORM_HUMAN;
     this->player.ageProperties = &sAgeProperties;
     this->player.heldItemAction = PLAYER_IA_NONE;
-    this->player.heldItemId = ITEM_OCARINA;
+    this->player.heldItemId = ITEM_OCARINA_OF_TIME;
 
     Player_SetModelGroup(&this->player, 3);
     play->playerInit(&this->player, play, &object_test3_Skel_00F7EC);
@@ -470,7 +470,8 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     this->unk_D90 = GET_PLAYER(play);
     this->player.giObjectSegment = this->unk_D90->giObjectSegment;
     this->player.tatlActor = this->unk_D90->tatlActor;
-    if ((CURRENT_DAY != 3) || CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) || !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
+    if ((CURRENT_DAY != 3) || CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) ||
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
         this->player.currentMask = PLAYER_MASK_KEATON;
     }
     this->player.prevMask = this->player.currentMask;
@@ -478,8 +479,8 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     if (play->sceneId == SCENE_SECOM) {
         this->subCamId = Play_CreateSubCamera(play);
         subCam = Play_GetCamera(play, this->subCamId);
-        Camera_InitPlayerSettings(subCam, &this->player);
-        Camera_SetFlags(subCam, CAM_STATE_0 | CAM_STATE_6);
+        Camera_InitFocalActorSettings(subCam, &this->player.actor);
+        Camera_SetStateFlag(subCam, CAM_STATE_0 | CAM_STATE_6);
         Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_WAIT);
     }
 
@@ -526,23 +527,23 @@ void func_80A3F0B0(EnTest3* this, PlayState* play) {
 }
 
 void func_80A3F114(EnTest3* this, PlayState* play) {
-    if (this->player.csMode != PLAYER_CSMODE_0) {
+    if (this->player.csMode != PLAYER_CSMODE_NONE) {
         play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_END);
     }
 }
 
 s32 func_80A3F15C(EnTest3* this, PlayState* play, struct_80A41828* arg2) {
-    s32 pathIndex;
+    s32 limit;
     Path* path;
     Vec3s* curPathPoint;
     Vec3s* nextPathPoint;
     Vec3f curPathPos;
     Vec3f nextPathPos;
 
-    pathIndex = ABS_ALT(arg2->unk_1_0) - 1;
+    limit = ABS_ALT(arg2->unk_1_0) - 1;
 
-    if (pathIndex >= 0) {
-        path = SubS_GetAdditionalPath(play, KAFEI_GET_PARAM_1F(&this->player.actor), pathIndex);
+    if (limit >= 0) {
+        path = SubS_GetAdditionalPath(play, KAFEI_GET_PATH_INDEX(&this->player.actor), limit);
 
         curPathPoint = Lib_SegmentedToVirtual(path->points);
         if (arg2->unk_1_0 > 0) {
@@ -589,13 +590,13 @@ s32 func_80A3F384(EnTest3* this, PlayState* play) {
     EnDoor* door = (EnDoor*)func_80A3F2BC(play, this, ACTOR_EN_DOOR, ACTORCAT_DOOR, 55.0f, 20.0f);
     Vec3f offset;
 
-    if ((door != NULL) && (door->unk_1A1 == 0) &&
-        ((player->doorType == 0) || (&door->dyna.actor != player->doorActor)) &&
-        Actor_ActorAIsFacingActorB(&this->player.actor, &door->dyna.actor, 0x3000)) {
-        Actor_OffsetOfPointInActorCoords(&door->dyna.actor, &offset, &this->player.actor.world.pos);
-        this->player.doorType = 1;
+    if ((door != NULL) && !door->knobDoor.playOpenAnim &&
+        ((player->doorType == PLAYER_DOORTYPE_NONE) || (&door->knobDoor.dyna.actor != player->doorActor)) &&
+        Actor_ActorAIsFacingActorB(&this->player.actor, &door->knobDoor.dyna.actor, 0x3000)) {
+        Actor_OffsetOfPointInActorCoords(&door->knobDoor.dyna.actor, &offset, &this->player.actor.world.pos);
+        this->player.doorType = PLAYER_DOORTYPE_HANDLE;
         this->player.doorDirection = (offset.z >= 0.0f) ? 1.0f : -1.0f;
-        this->player.doorActor = &door->dyna.actor;
+        this->player.doorActor = &door->knobDoor.dyna.actor;
         this->player.csId = CS_ID_NONE;
         return true;
     }
@@ -653,11 +654,11 @@ s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
 s32 func_80A3F73C(EnTest3* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->player.actor, &play->state)) {
         func_80A3E7E0(this, func_80A4084C);
-        this->player.targetedActor = &GET_PLAYER(play)->actor;
+        this->player.lockOnActor = &GET_PLAYER(play)->actor;
         this->player.stateFlags2 &= ~PLAYER_STATE2_40000;
         D_80A41D5C = true;
         if ((this->unk_D78->unk_0 == 4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
-            func_80151BB4(play, 2);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
         }
     } else {
         if (play->actorCtx.flags & ACTORCTX_FLAG_4) {
@@ -669,14 +670,14 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             CutsceneManager_SetReturnCamera(this->subCamId);
             play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_WAIT);
         }
-        func_800B863C(&this->player.actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->player.actor, play);
         if (this->unk_D88 == 3) {
             func_80A3F534(this, play);
         } else if (this->unk_D88 == 5) {
             func_80A3F5A4(this, play);
         }
         this->player.actor.textId = this->unk_D78->textId;
-        this->player.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->player.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
     return false;
 }
@@ -781,10 +782,10 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
         CutsceneManager_SetReturnCamera(CAM_ID_MAIN);
         Environment_StartTime();
         if (((void)0, gSaveContext.save.time) > CLOCK_TIME(6, 0)) {
-            func_800FE658(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
+            Environment_SetTimeJump(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
         }
         if (play->actorCtx.flags & ACTORCTX_FLAG_6) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_51_20);
+            SET_WEEKEVENTREG(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT);
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_02);
         }
         D_80A41D20 = 3;
@@ -867,7 +868,7 @@ s32 func_80A40098(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
     u16 numWaypoints;
 
     func_80A3F15C(this, play, arg2);
-    this->unk_D7C = SubS_GetAdditionalPath(play, KAFEI_GET_PARAM_1F(&this->player.actor), ABS_ALT(arg2->unk_1_0) - 1);
+    this->unk_D7C = SubS_GetAdditionalPath(play, KAFEI_GET_PATH_INDEX(&this->player.actor), ABS_ALT(arg2->unk_1_0) - 1);
     if ((this->unk_D88 < 7) && (this->unk_D88 != 0) && (this->unk_D80 >= 0)) {
         startTime = now;
     } else {
@@ -949,7 +950,7 @@ s32 func_80A40230(EnTest3* this, PlayState* play) {
     dx = this->player.actor.world.pos.x - this->player.actor.prevPos.x;
     dy = this->player.actor.world.pos.z - this->player.actor.prevPos.z;
     this->player.linearVelocity = sqrtf(SQ(dx) + SQ(dy));
-    this->player.linearVelocity *= 1.0f + (1.05f * fabsf(Math_SinS(this->player.unk_B6C)));
+    this->player.linearVelocity *= 1.0f + (1.05f * fabsf(Math_SinS(this->player.floorPitch)));
     D_80A41D40 = (this->player.linearVelocity * 10.0f) + 20.0f;
     D_80A41D40 = CLAMP_MAX(D_80A41D40, 60.0f);
     D_80A41D44 = this->player.actor.world.rot.y;
@@ -1006,7 +1007,7 @@ void func_80A4084C(EnTest3* this, PlayState* play) {
             } else {
                 func_80A3E7E0(this, func_80A40678);
             }
-            this->player.targetedActor = NULL;
+            this->player.lockOnActor = NULL;
         }
     } else if (func_80A3ED24(this, play)) {
         func_80A3E7E0(this, func_80A40908);
@@ -1016,15 +1017,15 @@ void func_80A4084C(EnTest3* this, PlayState* play) {
 void func_80A40908(EnTest3* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->player.actor, &play->state)) {
         func_80A3E7E0(this, func_80A4084C);
-        this->player.targetedActor = &GET_PLAYER(play)->actor;
+        this->player.lockOnActor = &GET_PLAYER(play)->actor;
         SET_WEEKEVENTREG(WEEKEVENTREG_51_08);
-        func_80151BB4(play, 0x19);
-        func_80151BB4(play, 2);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_PENDANT_OF_MEMORIES);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
     } else {
-        func_800B8500(&this->player.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->player.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
         this->unk_D78 = &D_80A41854[6];
         this->player.actor.textId = this->unk_D78->textId;
-        this->player.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->player.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
 }
 
@@ -1054,7 +1055,7 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
     play->actorCtx.flags &= ~ACTORCTX_FLAG_7;
     this->player.actor.draw = EnTest3_Draw;
     D_80A41D48 = false;
-    this->player.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+    this->player.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_506) &&
         !((this->player.actor.category == ACTORCAT_PLAYER) &&
           ((play->actorCtx.flags & ACTORCTX_FLAG_5) || (play->actorCtx.flags & ACTORCTX_FLAG_4)))) {
@@ -1064,7 +1065,7 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
         play->actorCtx.flags &= ~ACTORCTX_FLAG_4;
     } else if (this->player.actor.category == ACTORCAT_PLAYER) {
         func_80A409D4(this, play);
-    } else if (play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_0)) {
+    } else if (play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_NONE)) {
         if (this->unk_D88 >= 7) {
             Vec3f worldPos;
 
@@ -1103,7 +1104,7 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
             pos->z *= this->player.ageProperties->unk_08;
         }
         if (!(this->player.skelAnime.moveFlags & ANIM_FLAG_4) ||
-            (this->player.skelAnime.moveFlags & ANIM_FLAG_UPDATEY)) {
+            (this->player.skelAnime.moveFlags & ANIM_FLAG_UPDATE_Y)) {
             pos->y *= this->player.ageProperties->unk_08;
         }
         pos->y -= this->player.unk_AB8;
@@ -1163,7 +1164,9 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             func_80128640(play, &this->player, *dList1);
             if (this->player.stateFlags3 & PLAYER_STATE3_20000000) {
                 OPEN_DISPS(play->state.gfxCtx);
+
                 gSPDisplayList(POLY_OPA_DISP++, object_test3_DL_00EDD0);
+
                 CLOSE_DISPS(play->state.gfxCtx);
             }
         }
@@ -1176,8 +1179,8 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             leftHandActor->world.rot.y = this->player.actor.shape.rot.y + this->player.leftHandWorld.rot.y;
             leftHandActor->shape.rot.y = leftHandActor->world.rot.y;
         } else {
-            Matrix_Get(&this->player.mf_CC4);
-            Matrix_MtxFToYXZRot(&this->player.mf_CC4, &this->player.leftHandWorld.rot, false);
+            Matrix_Get(&this->player.leftHandMf);
+            Matrix_MtxFToYXZRot(&this->player.leftHandMf, &this->player.leftHandWorld.rot, false);
             func_80126B8C(play, &this->player);
         }
 
@@ -1185,12 +1188,15 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
         Actor* leftHandActor = this->player.heldActor;
 
         if (leftHandActor != NULL) {
-            leftHandActor->world.pos.x = (this->player.bodyPartsPos[15].x + this->player.leftHandWorld.pos.x) / 2.0f;
-            leftHandActor->world.pos.y = (this->player.bodyPartsPos[15].y + this->player.leftHandWorld.pos.y) / 2.0f;
-            leftHandActor->world.pos.z = (this->player.bodyPartsPos[15].z + this->player.leftHandWorld.pos.z) / 2.0f;
+            leftHandActor->world.pos.x =
+                (this->player.bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].x + this->player.leftHandWorld.pos.x) / 2.0f;
+            leftHandActor->world.pos.y =
+                (this->player.bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].y + this->player.leftHandWorld.pos.y) / 2.0f;
+            leftHandActor->world.pos.z =
+                (this->player.bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z + this->player.leftHandWorld.pos.z) / 2.0f;
         }
     } else if (limbIndex == OBJECT_TEST3_LIMB_0B) {
-        Actor* actor730 = this->player.targetedActor;
+        Actor* actor730 = this->player.lockOnActor;
 
         if ((*dList1 != NULL) && this->player.currentMask && !(this->player.stateFlags2 & PLAYER_STATE2_1000000)) {
             // this->player.currentMask != PLAYER_MASK_NONE
@@ -1199,7 +1205,9 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
                  (this->player.skelAnime.curFrame >= 12.0f))) {
                 if (func_80127438(play, &this->player, this->player.currentMask)) {
                     OPEN_DISPS(play->state.gfxCtx);
+
                     gSPDisplayList(POLY_OPA_DISP++, object_mask_ki_tan_DL_0004A0);
+
                     CLOSE_DISPS(play->state.gfxCtx);
                 }
             }
@@ -1212,13 +1220,15 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             Matrix_MultVec3f(&D_80A418CC, &this->player.actor.focus.pos);
         }
     } else if (limbIndex == OBJECT_TEST3_LIMB_15) {
-        if (D_80A41D60 || CHECK_WEEKEVENTREG(WEEKEVENTREG_50_80) ||
+        if (D_80A41D60 || CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_PENDANT_OF_MEMORIES) ||
             (INV_CONTENT(ITEM_PENDANT_OF_MEMORIES) == ITEM_PENDANT_OF_MEMORIES) ||
             (this->player.getItemDrawIdPlusOne - 1 == GID_PENDANT_OF_MEMORIES)) {
             D_80A41D60 = true;
         } else {
             OPEN_DISPS(play->state.gfxCtx);
+
             gSPDisplayList(POLY_OPA_DISP++, object_test3_DL_00CB60);
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     } else {
@@ -1257,7 +1267,7 @@ void EnTest3_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C268(play);
+    func_8012C268(&play->state);
     if (this->player.invincibilityTimer > 0) {
         s32 temp2; // Must exist for stack order. Could hold the result of CLAMP instead.
 

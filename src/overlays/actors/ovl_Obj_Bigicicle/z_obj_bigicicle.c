@@ -111,7 +111,7 @@ void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
     }
     Actor_SetScale(&this->actor, sp28 * 0.001f);
 
-    this->actor.params &= 0xFF;
+    this->actor.params = OBJBIGICLE_GET_SWITCH_FLAG_MASK(&this->actor);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     sp30 = sp28 * (1.0f / 60.0f);
 
@@ -125,7 +125,7 @@ void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
     this->collider2.dim.height = this->collider2.dim.height * sp30;
     this->collider2.dim.yShift = this->collider2.dim.yShift * sp30;
 
-    if (Flags_GetSwitch(play, this->actor.params)) {
+    if (Flags_GetSwitch(play, OBJBIGICLE_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -159,13 +159,13 @@ void func_80AE8DE4(ObjBigicicle* this, PlayState* play) {
     f32 temp_f20 = this->actor.scale.x * (50.0f / 3.0f);
 
     for (i = 0; i < 10; i++) {
-        sp98.x = (randPlusMinusPoint5Scaled(4.0f) * temp_f20) + this->actor.world.pos.x;
+        sp98.x = (Rand_CenteredFloat(4.0f) * temp_f20) + this->actor.world.pos.x;
         sp98.y = ((Rand_ZeroFloat(20.0f) - 35.0f) * temp_f20) + this->actor.world.pos.y;
-        sp98.z = (randPlusMinusPoint5Scaled(4.0f) * temp_f20) + this->actor.world.pos.z;
+        sp98.z = (Rand_CenteredFloat(4.0f) * temp_f20) + this->actor.world.pos.z;
 
-        sp8C.x = randPlusMinusPoint5Scaled(13.0f);
+        sp8C.x = Rand_CenteredFloat(13.0f);
         sp8C.y = Rand_ZeroFloat(2.0f);
-        sp8C.z = randPlusMinusPoint5Scaled(13.0f);
+        sp8C.z = Rand_CenteredFloat(13.0f);
 
         EffectSsHahen_Spawn(play, &sp98, &sp8C, &D_80AE987C, HAHEN_XLU, (Rand_ZeroFloat(20.0f) + 30.0f) * temp_f20,
                             OBJECT_BIGICICLE, 40, object_bigicicle_DL_0009B0);
@@ -222,8 +222,8 @@ void func_80AE9180(ObjBigicicle* this, PlayState* play) {
 
     if (this->unk_14A > 0) {
         this->unk_14A--;
-        this->actor.shape.rot.x = BINANG_ADD((s32)(randPlusMinusPoint5Scaled(1408.0f) * 0.02f * this->unk_14A), 0x4000);
-        this->actor.shape.rot.z = randPlusMinusPoint5Scaled(1408.0f) * 0.02f * this->unk_14A;
+        this->actor.shape.rot.x = BINANG_ADD((s32)(Rand_CenteredFloat(0x580) * 0.02f * this->unk_14A), 0x4000);
+        this->actor.shape.rot.z = Rand_CenteredFloat(0x580) * 0.02f * this->unk_14A;
     } else {
         this->actor.shape.rot.x = 0x4000;
         this->actor.shape.rot.z = 0;
@@ -248,7 +248,7 @@ void func_80AE9258(ObjBigicicle* this, PlayState* play) {
             temp_f0 = this->actor.world.pos.y - icePoly->actor.world.pos.y;
             if ((temp_f0 < icePoly->colliders1[0].dim.height) && (temp_f0 > 0.0f) &&
                 (Actor_WorldDistXZToActor(&this->actor, &icePoly->actor) < icePoly->colliders1[0].dim.radius)) {
-                Flags_SetSwitch(play, this->actor.params);
+                Flags_SetSwitch(play, OBJBIGICLE_GET_SWITCH_FLAG(&this->actor));
                 this->actionFunc = func_80AE939C;
                 return;
             }
@@ -271,9 +271,9 @@ void func_80AE939C(ObjBigicicle* this, PlayState* play) {
     f32 temp_f20 = this->actor.scale.x * (50.0f / 3.0f);
 
     for (i = 0; i < 20; i++) {
-        sp8C.x = randPlusMinusPoint5Scaled(15.0f);
+        sp8C.x = Rand_CenteredFloat(15.0f);
         sp8C.y = Rand_ZeroFloat(7.0f) + 3.0f;
-        sp8C.z = randPlusMinusPoint5Scaled(15.0f);
+        sp8C.z = Rand_CenteredFloat(15.0f);
 
         sp98.x = this->actor.world.pos.x + (sp8C.x * 5.0f * temp_f20);
         sp98.y = this->actor.world.pos.y + (sp8C.y * 7.0f * temp_f20);

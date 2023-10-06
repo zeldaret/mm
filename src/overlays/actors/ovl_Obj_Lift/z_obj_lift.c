@@ -101,7 +101,7 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
     this->unk_178 = this->dyna.actor.home.rot.z;
     this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
-    if ((this->unk_178 <= 0) && (Flags_GetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor)))) {
+    if ((this->unk_178 <= 0) && (Flags_GetSwitch(play, OBJLIFT_GET_SWITCH_FLAG(&this->dyna.actor)))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -134,10 +134,10 @@ void func_8093D7A0(ObjLift* this, PlayState* play) {
             if (OBJLIFT_GET_7(&this->dyna.actor) == 7) {
                 func_8093D9C0(this);
             } else {
-                quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_1);
+                quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_1);
                 Quake_SetSpeed(quakeIndex, 10000);
-                Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
-                Quake_SetCountdown(quakeIndex, 20);
+                Quake_SetPerturbations(quakeIndex, 2, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 20);
 
                 func_8093D88C(this);
             }
@@ -196,7 +196,7 @@ void func_8093DA48(ObjLift* this, PlayState* play) {
             func_8093DB70(this);
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
-            Flags_SetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor));
+            Flags_SetSwitch(play, OBJLIFT_GET_SWITCH_FLAG(&this->dyna.actor));
             Actor_Kill(&this->dyna.actor);
         }
     }

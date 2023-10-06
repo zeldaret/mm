@@ -55,8 +55,8 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ f32 unk_04;
 } ObjFireshieldStruct; // size = 0x8
 
 ObjFireshieldStruct D_80A4D84C[] = {
@@ -88,7 +88,7 @@ void func_80A4CABC(ObjFireshield* this) {
     s32 pad;
 
     if (CutsceneManager_IsNext(this->actor.csId)) {
-        s32 sp18 = OBJFIRESHIELD_GET_7F(&this->actor);
+        s32 sp18 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
         s32 temp_a0 = (sp18 & ~0x1F) >> 5;
 
         CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
@@ -103,7 +103,7 @@ void func_80A4CABC(ObjFireshield* this) {
 
 void func_80A4CB7C(ObjFireshield* this) {
     s32 pad;
-    s32 sp18 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 sp18 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
 
     if (this->unk_194 > 0) {
         if (this->unk_194 == 20) {
@@ -119,7 +119,7 @@ void func_80A4CB7C(ObjFireshield* this) {
 }
 
 void func_80A4CC54(ObjFireshield* this) {
-    s32 temp_v0 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 temp_v0 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
     s32 temp_v1 = 1 << (temp_v0 & 0x1F);
 
     this->actionFunc = func_80A4CCBC;
@@ -128,7 +128,7 @@ void func_80A4CC54(ObjFireshield* this) {
 }
 
 void func_80A4CCBC(ObjFireshield* this) {
-    s32 temp_v0 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 temp_v0 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
 
     this->actionFunc = func_80A4CD28;
     D_80A4D884[(temp_v0 & ~0x1F) >> 5] &= ~(1 << (temp_v0 & 0x1F));
@@ -141,7 +141,7 @@ void func_80A4CD28(ObjFireshield* this) {
 void func_80A4CD34(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjFireshield* this = THIS;
-    s32 sp24 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_7F(&this->actor));
+    s32 isSwitchFlagSet = Flags_GetSwitch(play, OBJFIRESHIELD_GET_FLAGS(&this->actor));
     s32 phi_v1;
     s32 phi_a0;
 
@@ -154,13 +154,13 @@ void func_80A4CD34(Actor* thisx, PlayState* play) {
             phi_a0 = false;
         }
     } else {
-        phi_a0 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_3F80(&this->actor));
+        phi_a0 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_SWITCH_FLAG(&this->actor));
         phi_v1 = false;
     }
 
     if (phi_v1 || phi_a0) {
         this->unk_19C = 0;
-    } else if (sp24) {
+    } else if (isSwitchFlagSet) {
         this->unk_19C = 0;
     } else {
         this->unk_19C = 1;
@@ -175,7 +175,7 @@ void func_80A4CD34(Actor* thisx, PlayState* play) {
 
 void func_80A4CE28(ObjFireshield* this, PlayState* play) {
     s32 pad;
-    s32 sp30 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 sp30 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
     s32 pad2[2];
     s32 sp24;
     s32 sp20;
@@ -189,7 +189,7 @@ void func_80A4CE28(ObjFireshield* this, PlayState* play) {
             sp20 = false;
         }
     } else {
-        sp20 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_3F80(&this->actor));
+        sp20 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_SWITCH_FLAG(&this->actor));
         sp24 = false;
     }
 
@@ -251,7 +251,7 @@ void func_80A4CE28(ObjFireshield* this, PlayState* play) {
 }
 
 void func_80A4D174(ObjFireshield* this) {
-    s32 temp_v0 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 temp_v0 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
     s32 temp_v1 = 1 << (temp_v0 & 0x1F);
 
     if (!(D_80A4D864[(temp_v0 & ~0x1F) >> 5] & temp_v1)) {
@@ -315,10 +315,10 @@ void ObjFireshield_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void ObjFireshield_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
     ObjFireshield* this = THIS;
-    ObjFireshield* this2 = THIS;
     s32 sp44 = OBJFIRESHIELD_GET_ROTX(&this->actor);
-    s32 sp40 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 sp40 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
     s32 temp_a0;
     s32 temp_v1;
 
@@ -342,12 +342,12 @@ void ObjFireshield_Update(Actor* thisx, PlayState* play) {
         this->collider.base.atFlags &= ~AT_HIT;
     } else if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
-        func_800B8D98(play, &this->actor, 5.0f, this->actor.yawTowardsPlayer, 1.0f);
+        func_800B8D98(play, thisx, 5.0f, thisx->yawTowardsPlayer, 1.0f);
     }
 
     func_80A4CE28(this, play);
 
-    this->actor.world.pos.y = ((sp44 ? 144.0f : -144.0f) * (1.0f - this2->unk_198)) + this->actor.home.pos.y;
+    thisx->world.pos.y = ((sp44 ? 144.0f : -144.0f) * (1.0f - this->unk_198)) + thisx->home.pos.y;
 
     this->unk_1A6 = this->unk_198 * 255.0f;
 
@@ -357,13 +357,12 @@ void ObjFireshield_Update(Actor* thisx, PlayState* play) {
         this->collider.dim.height = this->unk_198 * 80.0f;
 
         if (sp44) {
-            this->collider.dim.yShift =
-                (s32)(this->actor.home.pos.y - this->actor.world.pos.y) - this->collider.dim.height;
+            this->collider.dim.yShift = (s32)(thisx->home.pos.y - thisx->world.pos.y) - this->collider.dim.height;
         } else {
-            this->collider.dim.yShift = this->actor.home.pos.y - this->actor.world.pos.y;
+            this->collider.dim.yShift = thisx->home.pos.y - thisx->world.pos.y;
         }
 
-        func_800B9010(&this->actor, NA_SE_EV_BURNING - SFX_FLAG);
+        Actor_PlaySfx_Flagged(thisx, NA_SE_EV_BURNING - SFX_FLAG);
 
         if (player->transformation == PLAYER_FORM_GORON) {
             this->collider.info.toucher.damage = 0;
@@ -373,7 +372,7 @@ void ObjFireshield_Update(Actor* thisx, PlayState* play) {
             this->collider.info.toucher.effect = 1;
         }
 
-        Collider_UpdateCylinder(&this->actor, &this->collider);
+        Collider_UpdateCylinder(thisx, &this->collider);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
@@ -384,7 +383,7 @@ void ObjFireshield_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 220, 0, this->unk_1A6);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);

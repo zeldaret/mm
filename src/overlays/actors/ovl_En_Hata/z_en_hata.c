@@ -33,13 +33,12 @@ void EnHata_Init(Actor* thisx, PlayState* play) {
     s32 rand;
     f32 endFrame;
 
-    SkelAnime_Init(play, &this->skelAnime, &object_hata_Skel_002FD0, NULL, this->jointTable, this->morphTable,
-                   OBJECT_HATA_LIMB_MAX);
-    endFrame = Animation_GetLastFrame(&object_hata_Anim_000444);
-    Animation_Change(&this->skelAnime, &object_hata_Anim_000444, 1.0f, 0.0f, endFrame, ANIMMODE_LOOP, 0.0f);
+    SkelAnime_Init(play, &this->skelAnime, &gFlagpoleSkel, NULL, this->jointTable, this->morphTable, FLAGPOLE_LIMB_MAX);
+    endFrame = Animation_GetLastFrame(&gFlagpoleFlapAnim);
+    Animation_Change(&this->skelAnime, &gFlagpoleFlapAnim, 1.0f, 0.0f, endFrame, ANIMMODE_LOOP, 0.0f);
     rand = Rand_ZeroFloat(endFrame);
     this->skelAnime.curFrame = rand;
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_hata_Colheader_0000C0);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gFlagpoleCol);
     Actor_SetScale(&this->dyna.actor, 0.013f);
     this->dyna.actor.uncullZoneScale = 500.0f;
     this->dyna.actor.uncullZoneDownward = 500.0f;
@@ -63,10 +62,10 @@ void EnHata_Update(Actor* thisx, PlayState* play2) {
     this->skelAnime.playSpeed = 2.75f * phi_fv0;
     this->skelAnime.playSpeed += 1.0f + Rand_ZeroFloat(1.25f);
 
-    sp34.x = play->envCtx.windDir.x;
-    sp34.y = play->envCtx.windDir.y + ((1.0f - phi_fv0) * 240.0f);
+    sp34.x = play->envCtx.windDirection.x;
+    sp34.y = play->envCtx.windDirection.y + ((1.0f - phi_fv0) * 240.0f);
     sp34.y = CLAMP(sp34.y, -118.0f, 118.0f);
-    sp34.z = play->envCtx.windDir.z;
+    sp34.z = play->envCtx.windDirection.z;
 
     phi_fv0 = CLAMP(phi_fv0, 0.1f, 0.4f);
     Math_ApproachF(&this->unk_2A4.x, sp34.x, phi_fv0, 1000.0f);
@@ -84,7 +83,7 @@ void EnHata_Update(Actor* thisx, PlayState* play2) {
 s32 EnHata_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnHata* this = THIS;
 
-    if ((limbIndex == OBJECT_HATA_LIMB_04) || (limbIndex == OBJECT_HATA_LIMB_0D)) {
+    if ((limbIndex == FLAGPOLE_LIMB_FLAG1_HOIST_END_BASE) || (limbIndex == FLAGPOLE_LIMB_FLAG2_HOIST_END_BASE)) {
         rot->y += this->unk_29C;
         rot->z += this->unk_2A0;
     }
@@ -94,7 +93,7 @@ s32 EnHata_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 void EnHata_Draw(Actor* thisx, PlayState* play) {
     EnHata* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnHata_OverrideLimbDraw, NULL,
                       &this->dyna.actor);
 }

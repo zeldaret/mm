@@ -47,27 +47,37 @@ ActorInit Dm_Char05_InitVars = {
     (ActorFunc)DmChar05_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &object_dmask_Anim_001090, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dmask_Anim_004288, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dmask_Anim_0001A8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dmask_Anim_00017C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dmask_Anim_0011A0, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_dmask_Anim_0013A4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum {
+    /* 0 */ DMCHAR05_ANIM_0,
+    /* 1 */ DMCHAR05_ANIM_1,
+    /* 2 */ DMCHAR05_ANIM_2,
+    /* 3 */ DMCHAR05_ANIM_3,
+    /* 4 */ DMCHAR05_ANIM_4,
+    /* 5 */ DMCHAR05_ANIM_5,
+    /* 6 */ DMCHAR05_ANIM_MAX
+} DmChar05Animation;
+
+static AnimationInfo sAnimationInfo[DMCHAR05_ANIM_MAX] = {
+    { &object_dmask_Anim_001090, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // DMCHAR05_ANIM_0
+    { &object_dmask_Anim_004288, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // DMCHAR05_ANIM_1
+    { &object_dmask_Anim_0001A8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // DMCHAR05_ANIM_2
+    { &object_dmask_Anim_00017C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // DMCHAR05_ANIM_3
+    { &object_dmask_Anim_0011A0, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // DMCHAR05_ANIM_4
+    { &object_dmask_Anim_0013A4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f }, // DMCHAR05_ANIM_5
 };
 
-void func_80AAC5A0(SkelAnime* skelAnime, AnimationInfo* animation, u16 arg2) {
-    f32 phi_f2;
+void DmChar05_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
+    f32 endFrame;
 
-    animation += arg2;
+    animInfo += animIndex;
 
-    if (animation->frameCount < 0.0f) {
-        phi_f2 = Animation_GetLastFrame(animation->animation);
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
     } else {
-        phi_f2 = animation->frameCount;
+        endFrame = animInfo->frameCount;
     }
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, phi_f2,
-                     animation->mode, animation->morphFrames);
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
 void func_80AAC63C(Actor* thisx, PlayState* play) {
@@ -76,9 +86,9 @@ void func_80AAC63C(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_010B0, NULL, NULL, NULL, 0);
     if (DMCHAR05_GET(&this->actor) == DMCHAR05_0) {
-        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[0], 0);
+        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR05_ANIM_0], 0);
     } else {
-        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[1], 0);
+        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR05_ANIM_1], 0);
     }
     this->actionFunc = func_80AACC48;
 }
@@ -88,7 +98,7 @@ void func_80AAC6E4(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_042B0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[1], 0);
+    DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR05_ANIM_1], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -97,7 +107,7 @@ void func_80AAC770(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_dmask_Skel_001D0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[3], 0);
+    DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR05_ANIM_3], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -106,7 +116,7 @@ void func_80AAC7FC(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_013D0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[4], 0);
+    DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR05_ANIM_4], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -119,7 +129,7 @@ void func_80AAC888(Actor* thisx, PlayState* play) {
 void DmChar05_Init(Actor* thisx, PlayState* play) {
     DmChar05* this = THIS;
 
-    this->unk_18C = 0;
+    this->animIndex = DMCHAR05_ANIM_0;
     this->unk_18E = 0;
     this->unk_19C = 0;
     this->unk_1A0 = 0;
@@ -168,7 +178,7 @@ void DmChar05_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AAC990(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_GOLONMASK);
+    s32 objectIdx = Object_GetSlot(&play->objectCtx, OBJECT_GI_GOLONMASK);
 
     if (objectIdx >= 0) {
         this->unk_18F = objectIdx;
@@ -190,7 +200,7 @@ void func_80AAC9DC(DmChar05* this, PlayState* play) {
 }
 
 void func_80AACA98(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_MASK13);
+    s32 objectIdx = Object_GetSlot(&play->objectCtx, OBJECT_GI_MASK13);
 
     if (objectIdx >= 0) {
         this->unk_18F = objectIdx;
@@ -222,7 +232,7 @@ void func_80AACBE4(DmChar05* this, PlayState* play) {
         OBJECT_GI_MASK11, OBJECT_GI_MASK20, OBJECT_GI_RABIT_MASK, OBJECT_GI_MASK12,
     };
     s32 params = DMCHAR05_GET(&this->actor) - DMCHAR05_5;
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, D_80AAE2F0[params]);
+    s32 objectIdx = Object_GetSlot(&play->objectCtx, D_80AAE2F0[params]);
 
     if (objectIdx >= 0) {
         this->unk_18F = objectIdx;
@@ -268,7 +278,7 @@ void func_80AACD0C(DmChar05* this, PlayState* play) {
 }
 
 void func_80AACD1C(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_ZORAMASK);
+    s32 objectIdx = Object_GetSlot(&play->objectCtx, OBJECT_GI_ZORAMASK);
 
     if (objectIdx >= 0) {
         this->unk_18F = objectIdx;
@@ -288,7 +298,7 @@ void func_80AACD68(DmChar05* this, PlayState* play) {
 }
 
 void func_80AACE10(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_MASK15);
+    s32 objectIdx = Object_GetSlot(&play->objectCtx, OBJECT_GI_MASK15);
 
     if (objectIdx >= 0) {
         this->unk_18F = objectIdx;
@@ -308,7 +318,7 @@ void func_80AACE5C(DmChar05* this, PlayState* play) {
 }
 
 void func_80AACF04(DmChar05* this, PlayState* play) {
-    u8 sp2F = true;
+    u8 changeAnim = true;
     s32 cueChannel;
 
     switch (DMCHAR05_GET(&this->actor)) {
@@ -319,7 +329,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                 if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
                     switch (play->csCtx.actorCues[cueChannel]->id) {
                         case 1:
-                            sp2F = false;
+                            changeAnim = false;
                             break;
 
                         case 2:
@@ -327,27 +337,27 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                             break;
 
                         case 3:
-                            this->unk_18C = 0;
+                            this->animIndex = DMCHAR05_ANIM_0;
                             break;
 
                         case 4:
                             Item_Give(play, ITEM_MASK_GORON);
-                            sp2F = false;
+                            changeAnim = false;
                             this->actionFunc = func_80AAC990;
                             break;
 
                         case 5:
-                            sp2F = false;
+                            changeAnim = false;
                             Actor_Kill(&this->actor);
                             break;
 
                         default:
-                            sp2F = false;
+                            changeAnim = false;
                             break;
                     }
 
-                    if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                    if (changeAnim) {
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                     }
                 }
 
@@ -362,36 +372,36 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                 if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
                     switch (play->csCtx.actorCues[cueChannel]->id) {
                         case 1:
-                            sp2F = false;
+                            changeAnim = false;
                             break;
 
                         case 2:
-                            this->unk_18C = 1;
+                            this->animIndex = DMCHAR05_ANIM_1;
                             this->unk_1B4 = 1;
                             break;
 
                         case 3:
-                            this->unk_18C = 1;
+                            this->animIndex = DMCHAR05_ANIM_1;
                             break;
 
                         case 4:
                             Item_Give(play, ITEM_MASK_ZORA);
-                            sp2F = false;
+                            changeAnim = false;
                             this->actionFunc = func_80AACD1C;
                             break;
 
                         case 5:
-                            sp2F = false;
+                            changeAnim = false;
                             Actor_Kill(&this->actor);
                             break;
 
                         default:
-                            sp2F = false;
+                            changeAnim = false;
                             break;
                     }
 
-                    if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                    if (changeAnim) {
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                     }
                 }
 
@@ -406,35 +416,35 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                 if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
                     switch (play->csCtx.actorCues[cueChannel]->id) {
                         case 1:
-                            sp2F = false;
+                            changeAnim = false;
                             break;
 
                         case 2:
-                            this->unk_18C = 3;
+                            this->animIndex = DMCHAR05_ANIM_3;
                             break;
 
                         case 3:
-                            this->unk_18C = 2;
+                            this->animIndex = DMCHAR05_ANIM_2;
                             break;
 
                         case 4:
                             Item_Give(play, ITEM_MASK_GIBDO);
-                            sp2F = false;
+                            changeAnim = false;
                             this->actionFunc = func_80AACE10;
                             break;
 
                         case 5:
-                            sp2F = false;
+                            changeAnim = false;
                             Actor_Kill(&this->actor);
                             break;
 
                         default:
-                            sp2F = false;
+                            changeAnim = false;
                             break;
                     }
 
-                    if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                    if (changeAnim) {
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                     }
                 }
 
@@ -449,28 +459,28 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                 if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
                     switch (play->csCtx.actorCues[cueChannel]->id) {
                         default:
-                            sp2F = false;
+                            changeAnim = false;
                             break;
 
                         case 1:
-                            sp2F = false;
+                            changeAnim = false;
                             break;
 
                         case 2:
-                            this->unk_18C = 4;
+                            this->animIndex = DMCHAR05_ANIM_4;
                             break;
 
                         case 3:
-                            this->unk_18C = 5;
+                            this->animIndex = DMCHAR05_ANIM_5;
                             break;
 
                         case 4:
-                            this->unk_18C = 5;
+                            this->animIndex = DMCHAR05_ANIM_5;
                             break;
                     }
 
-                    if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                    if (changeAnim) {
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                     }
                 }
 
@@ -482,9 +492,9 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
             }
 
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                if (this->unk_18C == 4) {
-                    this->unk_18C++;
-                    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                if (this->animIndex == DMCHAR05_ANIM_4) {
+                    this->animIndex++;
+                    DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                 }
             }
             break;
@@ -611,7 +621,7 @@ void func_80AAD998(Actor* thisx, PlayState* play) {
             (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_109)]->id != 1)) {
             OPEN_DISPS(play->state.gfxCtx);
 
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->unk_19C, this->unk_1A0, this->unk_1A4, this->unk_1A8,
                                        this->unk_1AC, this->unk_1B0);
             SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar05_OverrideLimbDraw,
@@ -630,7 +640,7 @@ void func_80AADA90(Actor* thisx, PlayState* play) {
     if (this->unk_18E == 0) {
         if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_473) &&
             (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_473)]->id != 1)) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar05_OverrideLimbDraw,
                               DmChar05_PostLimbDraw, &this->actor);
         }
@@ -645,7 +655,7 @@ void func_80AADB4C(Actor* thisx, PlayState* play) {
     if (this->unk_18E == 0) {
         if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_518) &&
             (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_518)]->id != 1)) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                   this->skelAnime.dListCount, NULL, NULL, &this->actor);
         }
@@ -663,7 +673,7 @@ void func_80AADC00(Actor* thisx, PlayState* play) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_559);
 
         if ((play->csCtx.actorCues[cueChannel]->id != 1) && (play->csCtx.actorCues[cueChannel]->id != 4)) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar05_OverrideLimbDraw,
                               DmChar05_PostLimbDraw, &this->actor);
         }

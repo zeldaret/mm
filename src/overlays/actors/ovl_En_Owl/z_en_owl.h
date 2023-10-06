@@ -10,14 +10,14 @@ typedef void (*EnOwlFunc)(struct EnOwl*);
 
 #define ENOWL_GET_F000(thisx) (((thisx)->params & 0xF000) >> 0xC)
 #define ENOWL_GET_TYPE(thisx) (((thisx)->params & 0xF80) >> 7)
-#define ENOWL_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define ENOWL_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 typedef enum {
     /* 0x001 */ ENOWL_GET_TYPE_1 = 1,
     /* 0x002 */ ENOWL_GET_TYPE_2,
     /* 0x003 */ ENOWL_GET_TYPE_3,
     /* 0x01E */ ENOWL_GET_TYPE_30 = 30,
-    /* 0x3E8 */ ENOWL_GET_TYPE_1000 = 1000,
+    /* 0x3E8 */ ENOWL_GET_TYPE_1000 = 1000
 } EnOwlType;
 
 typedef struct EnOwl {

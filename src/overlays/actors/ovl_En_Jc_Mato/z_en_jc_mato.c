@@ -122,7 +122,7 @@ void EnJcMato_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     Collider_InitSphere(play, &this->collider);
     Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
-    this->collider.dim.worldSphere.radius = 0xF;
+    this->collider.dim.worldSphere.radius = 15;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     Actor_SetScale(&this->actor, 0.008f);
     this->hitFlag = false;
@@ -150,9 +150,11 @@ void EnJcMato_Draw(Actor* thisx, PlayState* play) {
     EnJcMato* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gKoumeTargetDL);
     Matrix_MultVec3f(&sOffset, &this->pos);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -8,9 +8,10 @@
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnPametfrog*)thisx)
 
@@ -80,12 +81,12 @@ ActorInit En_Pametfrog_InitVars = {
 };
 
 typedef enum {
-    /* 0x0 */ GEKKO_DMGEFF_NONE,
-    /* 0x1 */ GEKKO_DMGEFF_STUN,
-    /* 0x2 */ GEKKO_DMGEFF_FIRE,
-    /* 0x3 */ GEKKO_DMGEFF_ICE,
-    /* 0x4 */ GEKKO_DMGEFF_LIGHT,
-    /* 0x5 */ GEKKO_DMGEFF_ZORA_BARRIER,
+    /* 0 */ GEKKO_DMGEFF_NONE,
+    /* 1 */ GEKKO_DMGEFF_STUN,
+    /* 2 */ GEKKO_DMGEFF_FIRE,
+    /* 3 */ GEKKO_DMGEFF_ICE,
+    /* 4 */ GEKKO_DMGEFF_LIGHT,
+    /* 5 */ GEKKO_DMGEFF_ZORA_BARRIER
 } EnPametfrogDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -168,10 +169,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(targetArrowOffset, -13221, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 10, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_10, ICHAIN_STOP),
 };
 
-static s32 isFrogReturnedFlags[] = {
+static s32 sIsFrogReturnedFlags[] = {
     WEEKEVENTREG_32_40,
     WEEKEVENTREG_32_80,
     WEEKEVENTREG_33_01,
@@ -191,7 +192,7 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_Kill(&this->actor);
-        if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
+        if (!CHECK_WEEKEVENTREG(sIsFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
         }
@@ -244,7 +245,7 @@ void EnPametfrog_Thaw(EnPametfrog* this, PlayState* play) {
         this->collider.base.colType = COLTYPE_HIT6;
         this->collider.elements->info.elemType = ELEMTYPE_UNK1;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, GEKKO_BODYPART_MAX, 2, 0.3f, 0.2f);
     }
 }
 
@@ -306,7 +307,7 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
         return false;
     }
 
-    rotation = func_80086C48(arg0);
+    rotation = Math_FAcosF(arg0);
     if (rotation < 0.0001f) {
         return false;
     }
@@ -394,7 +395,7 @@ void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, PlayState* play) {
         this->drawDmgEffAlpha = 3.0f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].info.bumper.hitPos.x,
                     this->collider.elements[0].info.bumper.hitPos.y, this->collider.elements[0].info.bumper.hitPos.z, 0,
-                    0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
         EnPametfrog_Freeze(this);
     }
@@ -424,7 +425,7 @@ void EnPametfrog_SetupRearOnSnapper(EnPametfrog* this) {
         Animation_PlayOnce(&this->skelAnime, &gGekkoStandingIdleAnim);
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.params = GEKKO_ON_SNAPPER;
     this->actionFunc = EnPametfrog_RearOnSnapper;
 }
@@ -501,7 +502,7 @@ void EnPametfrog_SetupFallOffSnapper(EnPametfrog* this, PlayState* play) {
     this->actor.velocity.y = 15.0f;
     this->actor.world.rot.y = BINANG_ROT180(this->actor.child->world.rot.y);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->timer = 30;
     this->collider.base.ocFlags1 |= OC1_ON;
     yaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
@@ -523,7 +524,7 @@ void EnPametfrog_FallOffSnapper(EnPametfrog* this, PlayState* play) {
         this->timer--;
     }
 
-    sin = sin_rad(this->timer * (M_PI / 3)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
+    sin = Math_SinF(this->timer * (M_PI / 3)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
     EnPametfrog_ShakeCamera(this, play, 300.0f * sin, 100.0f * sin);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnPametfrog_StopCutscene(this, play);
@@ -966,9 +967,9 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, PlayState* play) {
     Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
 
     for (i = 0; i < 25; i++) {
-        vel.x = randPlusMinusPoint5Scaled(5.0f);
+        vel.x = Rand_CenteredFloat(5.0f);
         vel.y = Rand_ZeroFloat(3.0f) + 4.0f;
-        vel.z = randPlusMinusPoint5Scaled(5.0f);
+        vel.z = Rand_CenteredFloat(5.0f);
         EffectSsHahen_Spawn(play, &this->actor.world.pos, &vel, &sAccel, 0, Rand_S16Offset(12, 3), HAHEN_OBJECT_DEFAULT,
                             10, 0);
     }
@@ -981,7 +982,7 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, PlayState* play) {
     f32 magShake;
 
     this->timer--;
-    magShake = (sin_rad(this->timer * (M_PI / 5)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
+    magShake = (Math_SinF(this->timer * (M_PI / 5)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
     EnPametfrog_ShakeCamera(this, play, 75.0f * magShake, 10.0f * magShake);
     if (this->timer == 0) {
         EnPametfrog_StopCutscene(this, play);
@@ -1171,7 +1172,7 @@ void EnPametfrog_SetupCallSnapper(EnPametfrog* this, PlayState* play) {
 
     Animation_MorphToPlayOnce(&this->skelAnime, &gGekkoCallAnim, 3.0f);
     Actor_PlaySfx(&this->actor, NA_SE_EN_FROG_GREET);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.colChkInfo.health = 6;
     this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
@@ -1224,10 +1225,10 @@ void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, PlayState* play) {
     // Zooms in on Snapper spawn point
     Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
 
-    this->quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
+    this->quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
     Quake_SetSpeed(this->quakeIndex, 18000);
-    Quake_SetQuakeValues(this->quakeIndex, 2, 0, 0, 0);
-    Quake_SetCountdown(this->quakeIndex, 15);
+    Quake_SetPerturbations(this->quakeIndex, 2, 0, 0, 0);
+    Quake_SetDuration(this->quakeIndex, 15);
 
     Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 20, 10);
 
@@ -1249,12 +1250,12 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, PlayState* play) {
 void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play) {
     this->actor.params = GEKKO_GET_SNAPPER;
 
-    Quake_Remove(this->quakeIndex);
+    Quake_RemoveRequest(this->quakeIndex);
 
-    this->quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    this->quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
     Quake_SetSpeed(this->quakeIndex, 20000);
-    Quake_SetQuakeValues(this->quakeIndex, 17, 0, 0, 0);
-    Quake_SetCountdown(this->quakeIndex, 12);
+    Quake_SetPerturbations(this->quakeIndex, 17, 0, 0, 0);
+    Quake_SetDuration(this->quakeIndex, 12);
 
     Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
 
@@ -1299,10 +1300,11 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                         this->drawDmgEffScale = 0.75f;
                         this->drawDmgEffAlpha = 4.0f;
-                        Actor_Spawn(
-                            &play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].info.bumper.hitPos.x,
-                            this->collider.elements[0].info.bumper.hitPos.y,
-                            this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
+                                    this->collider.elements[0].info.bumper.hitPos.x,
+                                    this->collider.elements[0].info.bumper.hitPos.y,
+                                    this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0,
+                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     }
                     EnPametfrog_SetupDamage(this);
                 }
@@ -1310,7 +1312,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
                 this->collider.base.acFlags &= ~AC_ON;
                 EnPametfrog_ApplyMagicArrowEffects(this, play);
                 Enemy_StartFinishingBlow(play, &this->actor);
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 Audio_RestorePrevBgm();
                 EnPametfrog_SetupCutscene(this);
             } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ZORA_BARRIER) {
@@ -1372,34 +1374,43 @@ void EnPametfrog_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = unk2C4;
             this->drawDmgEffScale = unk2C4 > 0.75f ? 0.75f : this->drawDmgEffScale;
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, (3.0f / 160.0f))) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
 
-/* value -1: Limb Not used
- * value 0:  GEKKO_LIMB_WAIST
- * value 1:  GEKKO_LIMB_LEFT_SHIN
- * value 2:  GEKKO_LIMB_LEFT_FOOT
- * value 3:  GEKKO_LIMB_RIGHT_SHIN
- * value 4:  GEKKO_LIMB_RIGHT_FOOT
- * value 5:  GEKKO_LIMB_LEFT_UPPER_ARM
- * value 6:  GEKKO_LIMB_LEFT_FOREARM
- * value 7:  GEKKO_LIMB_LEFT_HAND
- * value 8:  GEKKO_LIMB_RIGHT_UPPER_ARM
- * value 9:  GEKKO_LIMB_RIGHT_FOREARM
- * value 10: GEKKO_LIMB_RIGHT_HAND
- * value 11: GEKKO_LIMB_JAW
- */
-static s8 limbPosIndex[] = {
-    -1, -1, 0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5, 6, -1, 7, 8, 9, -1, 10, -1, 11, -1, -1,
+static s8 sLimbToBodyParts[GEKKO_LIMB_MAX] = {
+    BODYPART_NONE,                  // GEKKO_LIMB_NONE
+    BODYPART_NONE,                  // GEKKO_LIMB_ROOT
+    GEKKO_BODYPART_WAIST,           // GEKKO_LIMB_WAIST
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_THIGH
+    GEKKO_BODYPART_LEFT_SHIN,       // GEKKO_LIMB_LEFT_SHIN
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_ANKLE
+    GEKKO_BODYPART_LEFT_FOOT,       // GEKKO_LIMB_LEFT_FOOT
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_THIGH
+    GEKKO_BODYPART_RIGHT_SHIN,      // GEKKO_LIMB_RIGHT_SHIN
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_ANKLE
+    GEKKO_BODYPART_RIGHT_FOOT,      // GEKKO_LIMB_RIGHT_FOOT
+    BODYPART_NONE,                  // GEKKO_LIMB_TORSO
+    GEKKO_BODYPART_LEFT_UPPER_ARM,  // GEKKO_LIMB_LEFT_UPPER_ARM
+    GEKKO_BODYPART_LEFT_FOREARM,    // GEKKO_LIMB_LEFT_FOREARM
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_WRIST
+    GEKKO_BODYPART_LEFT_HAND,       // GEKKO_LIMB_LEFT_HAND
+    GEKKO_BODYPART_RIGHT_UPPER_ARM, // GEKKO_LIMB_RIGHT_UPPER_ARM
+    GEKKO_BODYPART_RIGHT_FOREARM,   // GEKKO_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_WRIST
+    GEKKO_BODYPART_RIGHT_HAND,      // GEKKO_LIMB_RIGHT_HAND
+    BODYPART_NONE,                  // GEKKO_LIMB_HEAD
+    GEKKO_BODYPART_JAW,             // GEKKO_LIMB_JAW
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_EYE
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_EYE
 };
 
 void EnPametfrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnPametfrog* this = THIS;
     Vec3f vec;
     Vec3s* center;
-    s8 index;
+    s8 bodyPartIndex;
 
     if (limbIndex == GEKKO_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
@@ -1415,19 +1426,19 @@ void EnPametfrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
         center->z = (Math_CosS(this->actor.shape.rot.y) * 35.0f) + this->actor.focus.pos.z;
     }
 
-    index = limbPosIndex[limbIndex];
-    if (index != -1) {
-        Matrix_MultZero(&this->limbPos[index]);
+    bodyPartIndex = sLimbToBodyParts[limbIndex];
+    if (bodyPartIndex != BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
     }
 }
 
 void EnPametfrog_Draw(Actor* thisx, PlayState* play) {
     EnPametfrog* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_RotateYS(this->spinYaw, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnPametfrog_PostLimbDraw, &this->actor);
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, GEKKO_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

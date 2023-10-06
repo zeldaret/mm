@@ -26,11 +26,6 @@ void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play);
 void func_80AAF884(DmChar08* this, PlayState* play);
 void func_80AAFB04(DmChar08* this, PlayState* play);
 void func_80AAFB94(DmChar08* this, PlayState* play);
-void func_80AAFE88(DmChar08* this, PlayState* play);
-void func_80AB023C(DmChar08* this, PlayState* play);
-void func_80AB01E8(DmChar08* this, PlayState* play);
-void DmChar08_SpawnBubbles(DmChar08* this, PlayState* play);
-void func_80AAFCCC(DmChar08* this, PlayState* play);
 
 typedef enum {
     /* 0 */ TURTLE_EYEMODE_BLINK_LEFT,
@@ -38,18 +33,8 @@ typedef enum {
     /* 2 */ TURTLE_EYEMODE_CLOSED,
     /* 3 */ TURTLE_EYEMODE_LOOK_STRAIGHT,
     /* 4 */ TURTLE_EYEMODE_UNUSED,
-    /* 5 */ TURTLE_EYEMODE_LOOK_RIGHT,
-} EyeMode;
-
-typedef enum {
-    /* 0 */ TURTLE_ANIM_IDLE,
-    /* 1 */ TURTLE_ANIM_SWIM,
-    /* 2 */ TURTLE_ANIM_FLOAT,
-    /* 3 */ TURTLE_ANIM_SPEAK1,
-    /* 4 */ TURTLE_ANIM_COUGH,
-    /* 5 */ TURTLE_ANIM_SPEAK2,
-    /* 6 */ TURTLE_ANIM_YAWN,
-} TurtleAnimation;
+    /* 5 */ TURTLE_EYEMODE_LOOK_RIGHT
+} TurtleEyeMode;
 
 ActorInit Dm_Char08_InitVars = {
     ACTOR_DM_CHAR08,
@@ -65,14 +50,26 @@ ActorInit Dm_Char08_InitVars = {
 
 #include "overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gTurtleIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
-    { &gTurtleSwimAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
-    { &gTurtleFloatAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
-    { &gTurtleSpeak1Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
-    { &gTurtleCoughAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
-    { &gTurtleSpeak2Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
-    { &gTurtleYawnAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },
+typedef enum {
+    /*  0 */ TURTLE_ANIM_IDLE,
+    /*  1 */ TURTLE_ANIM_SWIM,
+    /*  2 */ TURTLE_ANIM_FLOAT,
+    /*  3 */ TURTLE_ANIM_SPEAK1,
+    /*  4 */ TURTLE_ANIM_COUGH,
+    /*  5 */ TURTLE_ANIM_SPEAK2,
+    /*  6 */ TURTLE_ANIM_YAWN,
+    /*  7 */ TURTLE_ANIM_MAX,
+    /* 99 */ TURTLE_ANIM_NONE = 99
+} TurtleAnimation;
+
+static AnimationInfo sAnimationInfo[TURTLE_ANIM_MAX] = {
+    { &gTurtleIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },   // TURTLE_ANIM_IDLE
+    { &gTurtleSwimAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },   // TURTLE_ANIM_SWIM
+    { &gTurtleFloatAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },  // TURTLE_ANIM_FLOAT
+    { &gTurtleSpeak1Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f }, // TURTLE_ANIM_SPEAK1
+    { &gTurtleCoughAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },  // TURTLE_ANIM_COUGH
+    { &gTurtleSpeak2Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f }, // TURTLE_ANIM_SPEAK2
+    { &gTurtleYawnAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -24.0f },   // TURTLE_ANIM_YAWN
 };
 
 static InitChainEntry sInitChain[] = {
@@ -130,24 +127,26 @@ void DmChar08_UpdateEyes(DmChar08* this) {
     }
 }
 
-void DmChar08_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
+void DmChar08_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
     f32 endFrame;
 
-    animationInfo += animIndex;
-    if (animationInfo->frameCount < 0.0f) {
-        endFrame = Animation_GetLastFrame(animationInfo->animation);
+    animInfo += animIndex;
+
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
     } else {
-        endFrame = animationInfo->frameCount;
+        endFrame = animInfo->frameCount;
     }
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
-                     animationInfo->mode, animationInfo->morphFrames);
+
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
 void DmChar08_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     DmChar08* this = THIS;
 
-    thisx->targetMode = 5;
+    thisx->targetMode = TARGET_MODE_5;
     this->eyeMode = TURTLE_EYEMODE_CLOSED;
     thisx->targetArrowOffset = 120.0f;
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
@@ -198,11 +197,11 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
                 this->unk_1F0 = 1.0f;
                 this->unk_1FF = 2;
                 this->animIndex = TURTLE_ANIM_FLOAT;
-                this->unk_203 = 0x63;
+                this->prevAnimIndex = TURTLE_ANIM_NONE;
                 this->eyeMode = TURTLE_EYEMODE_BLINK_STRAIGHT;
                 this->unk_207 = 0;
                 this->unk_208 = 0;
-                thisx->flags |= ACTOR_FLAG_1;
+                thisx->flags |= ACTOR_FLAG_TARGETABLE;
                 if (gSaveContext.save.entrance == ENTRANCE(ZORA_CAPE, 8)) {
                     this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                     this->actionFunc = func_80AAFAC4;
@@ -217,11 +216,11 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
         case SCENE_SEA:
             this->unk_1FF = 2;
             this->animIndex = TURTLE_ANIM_FLOAT;
-            this->unk_203 = 0x63;
+            this->prevAnimIndex = TURTLE_ANIM_NONE;
             this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
             this->unk_207 = 0;
             this->unk_208 = 0;
-            thisx->flags |= ACTOR_FLAG_1;
+            thisx->flags |= ACTOR_FLAG_TARGETABLE;
             this->actionFunc = func_80AAFAE4;
             this->unk_1F0 = 1.0f;
             break;
@@ -229,12 +228,15 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
         case SCENE_KONPEKI_ENT:
             this->unk_1FF = 2;
             this->animIndex = TURTLE_ANIM_FLOAT;
-            this->unk_203 = 0x63;
+            this->prevAnimIndex = TURTLE_ANIM_NONE;
             this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
             this->unk_207 = 0;
             this->unk_208 = 0;
             this->actionFunc = DmChar08_DoNothing;
             this->unk_1F0 = 1.0f;
+            break;
+
+        default:
             break;
     }
     DmChar08_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
@@ -258,13 +260,13 @@ void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
         ((player2->actor.world.pos.x > -5780.0f) && (player2->actor.world.pos.x < -5385.0f) &&
          (player2->actor.world.pos.z > 1120.0f) && (player2->actor.world.pos.z < 2100.0f))) {
         if (!sSuccessSoundAlreadyPlayed) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             sSuccessSoundAlreadyPlayed = true;
         }
     } else {
         sSuccessSoundAlreadyPlayed = false;
     }
-    if ((player->transformation == PLAYER_FORM_ZORA) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_ZORA) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_NEW_WAVE)) {
         if ((player2->actor.world.pos.x > -5780.0f) && (player2->actor.world.pos.x < -5385.0f)) {
             if ((player2->actor.world.pos.z > 1120.0f) && (player2->actor.world.pos.z < 2100.0f)) {
@@ -298,7 +300,7 @@ void func_80AAF884(DmChar08* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_IDLE) {
         DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
-        this->dyna.actor.flags |= ACTOR_FLAG_1;
+        this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actionFunc = func_80AAF8F4;
     }
 }
@@ -341,13 +343,13 @@ void func_80AAFA18(DmChar08* this, PlayState* play) {
 }
 
 void func_80AAFAC4(DmChar08* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         this->actionFunc = func_80AAF8F4;
     }
 }
 
 void func_80AAFAE4(DmChar08* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         this->actionFunc = func_80AAFB04;
     }
 }
@@ -408,6 +410,9 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                             this->unk_206 = 0;
                         }
                         break;
+
+                    default:
+                        break;
                 }
             } else {
                 switch (this->unk_206) {
@@ -425,6 +430,9 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                             Message_CloseTextbox(play);
                             this->unk_206 = 0;
                         }
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -446,7 +454,13 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                         this->unk_206 = 0;
                     }
                     break;
+
+                default:
+                    break;
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -454,7 +468,7 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
 void DmChar08_DoNothing(DmChar08* this, PlayState* play) {
 }
 
-void func_80AAFE88(DmChar08* this, PlayState* play) {
+void DmChar08_HandleCutscene(DmChar08* this, PlayState* play) {
     s32 cueChannel;
     s32 pad;
     f32 phi_f12;
@@ -512,6 +526,9 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
                     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIG_TORTOISE_ROLL);
                     this->animIndex = TURTLE_ANIM_FLOAT;
                     break;
+
+                default:
+                    break;
             }
         }
         switch (play->csCtx.actorCues[cueChannel]->id) {
@@ -556,9 +573,9 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
     }
 }
 
-void func_80AB01E8(DmChar08* this, PlayState* play) {
-    if (this->animIndex != this->unk_203) {
-        this->unk_203 = this->animIndex;
+void DmChar08_UpdateAnim(DmChar08* this, PlayState* play) {
+    if (this->animIndex != this->prevAnimIndex) {
+        this->prevAnimIndex = this->animIndex;
         DmChar08_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
     }
 }
@@ -619,6 +636,9 @@ void func_80AB023C(DmChar08* this, PlayState* play) {
             case 0x1030: // Return to sleep
                 this->unk_207 = 4;
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -640,6 +660,9 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
+                    break;
+
+                default:
                     break;
             }
             break;
@@ -667,6 +690,9 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
+                    break;
+
+                default:
                     break;
             }
             break;
@@ -723,6 +749,9 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                         this->unk_208 = 0;
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
 
@@ -757,6 +786,9 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                         this->unk_208 = 0;
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
 
@@ -781,6 +813,9 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
+                    break;
+
+                default:
                     break;
             }
             break;
@@ -808,6 +843,9 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
+                    break;
+
+                default:
                     break;
             }
             break;
@@ -856,8 +894,12 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                         this->unk_208 = 0;
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
+
         case 10:
             switch (this->unk_208) {
                 case 0:
@@ -865,6 +907,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                     this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                     this->unk_208++;
                     break;
+
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_SPEAK2;
@@ -872,6 +915,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                         this->unk_208++;
                     }
                     break;
+
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_SPEAK1;
@@ -879,6 +923,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                         this->unk_208++;
                     }
                     break;
+
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = TURTLE_ANIM_FLOAT;
@@ -887,13 +932,19 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
                         this->unk_208 = 0;
                     }
                     break;
+
+                default:
+                    break;
             }
+            break;
+
+        default:
             break;
     }
 }
 
 void func_80AB096C(DmChar08* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_31MISAKI) && (gSaveContext.sceneLayer == 0) &&
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_31MISAKI) && (gSaveContext.sceneLayer == 0) &&
         (play->csCtx.scriptIndex == 0)) {
         if ((play->csCtx.curFrame >= 890) && (play->csCtx.curFrame < 922)) {
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
@@ -979,10 +1030,10 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
 
     DmChar08_UpdateEyes(this);
     this->actionFunc(this, play);
-    func_80AAFE88(this, play);
+    DmChar08_HandleCutscene(this, play);
     func_80AB023C(this, play);
     func_80AB032C(this, play);
-    func_80AB01E8(this, play);
+    DmChar08_UpdateAnim(this, play);
     SkelAnime_Update(&this->skelAnime);
     DmChar08_SpawnBubbles(this, play);
     this->dyna.actor.world.pos.y = this->targetYPos;
@@ -995,14 +1046,14 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
     }
     if (this->unk_1FF != 0) {
         func_80AAFCCC(this, play);
-        func_800B8614(&this->dyna.actor, play, 400.0f);
+        Actor_OfferTalk(&this->dyna.actor, play, 400.0f);
     }
     func_80AB096C(this, play);
     DmChar08_UpdateCollision(this, play);
 }
 
 s32 DmChar08_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if ((play->csCtx.state == 0) && (play->sceneId == SCENE_31MISAKI) &&
+    if ((play->csCtx.state == CS_STATE_IDLE) && (play->sceneId == SCENE_31MISAKI) &&
         (limbIndex == TURTLE_LIMB_FRONT_RIGHT_UPPER_FLIPPER)) {
         rot->z = -0x5E24;
     }
@@ -1079,6 +1130,9 @@ void DmChar08_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
             Matrix_Scale((this->unk_1F0 * 0.55f) + 0.45f, (this->unk_1F0 * 0.2f) + 0.8f,
                          (this->unk_1F0 * 0.55f) + 0.45f, MTXMODE_APPLY);
             break;
+
+        default:
+            break;
     }
 }
 
@@ -1093,7 +1147,8 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
     DmChar08* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
@@ -1113,11 +1168,12 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gTurtleAsleepDL);
     } else if (this->unk_1FF == 1) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Scene_SetRenderModeXlu(play, 2, 2);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gTurtleAsleepDL);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

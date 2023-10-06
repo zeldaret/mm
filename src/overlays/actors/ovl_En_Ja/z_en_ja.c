@@ -5,9 +5,8 @@
  */
 
 #include "z_en_ja.h"
-#include "objects/object_boj/object_boj.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnJa*)thisx)
 
@@ -89,27 +88,41 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &object_boj_Anim_002734, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, 0 },
-    { &object_boj_Anim_002734, 1.0f, 0, -1, 0, -4 }, { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, -4 },
-    { &object_boj_Anim_004078, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_005CE4, 1.0f, 0, -1, 0, 0 },
+typedef enum EnJaAnimation {
+    /* -1 */ ENJA_ANIM_NONE = -1,
+    /*  0 */ ENJA_ANIM_0,
+    /*  1 */ ENJA_ANIM_1,
+    /*  2 */ ENJA_ANIM_2,
+    /*  3 */ ENJA_ANIM_3,
+    /*  4 */ ENJA_ANIM_4,
+    /*  5 */ ENJA_ANIM_5,
+    /*  6 */ ENJA_ANIM_MAX
+} EnJaAnimation;
+
+static AnimationInfoS sAnimationInfo[ENJA_ANIM_MAX] = {
+    { &object_boj_Anim_002734, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENJA_ANIM_0
+    { &object_boj_Anim_0033B0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENJA_ANIM_1
+    { &object_boj_Anim_002734, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENJA_ANIM_2
+    { &object_boj_Anim_0033B0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENJA_ANIM_3
+    { &object_boj_Anim_004078, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENJA_ANIM_4
+    { &object_boj_Anim_005CE4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENJA_ANIM_5
 };
 
-void func_80BC1900(EnJa* this) {
-    this->skelAnime.playSpeed = this->unk_344;
+void EnJa_UpdateSkelAnime(EnJa* this) {
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80BC192C(EnJa* this, s32 arg1) {
-    s32 ret = false;
+s32 EnJa_ChangeAnim(EnJa* this, s32 animIndex) {
+    s32 didAnimChange = false;
 
-    if (arg1 != this->unk_36C) {
-        this->unk_36C = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
-        this->unk_344 = this->skelAnime.playSpeed;
+    if (this->animIndex != animIndex) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 void func_80BC1984(EnJa* this, PlayState* play) {
@@ -123,8 +136,9 @@ void func_80BC1984(EnJa* this, PlayState* play) {
 s32 func_80BC19FC(EnJa* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_340 & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        SubS_UpdateFlags(&this->unk_340, 0, 7);
+    if (((this->unk_340 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80BC22F4;
         ret = true;
     }
@@ -243,9 +257,9 @@ s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80BC1AE0(this, play)) {
-        SubS_UpdateFlags(&this->unk_340, 3, 7);
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_340 |= 0x10;
-        func_80BC192C(this, 5);
+        EnJa_ChangeAnim(this, ENJA_ANIM_5);
         func_80BC2EA4(this);
         ret = true;
     }
@@ -257,11 +271,11 @@ s32 func_80BC203C(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if (func_80BC1AE0(this, play)) {
         if (ENJA_GET_3(&this->actor) == 0) {
-            func_80BC192C(this, 1);
+            EnJa_ChangeAnim(this, ENJA_ANIM_1);
         } else {
-            func_80BC192C(this, 4);
+            EnJa_ChangeAnim(this, ENJA_ANIM_4);
         }
-        SubS_UpdateFlags(&this->unk_340, 3, 7);
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->actor.shape.shadowDraw = NULL;
         this->unk_340 |= 0x50;
         ret = true;
@@ -282,6 +296,9 @@ s32 func_80BC20D0(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
         case 2:
             ret = func_80BC203C(this, play, scheduleOutput);
+            break;
+
+        default:
             break;
     }
     return ret;
@@ -305,11 +322,11 @@ void func_80BC21A8(EnJa* this, PlayState* play) {
     if (!Schedule_RunScript(play, D_80BC35F0, &sp18) ||
         ((this->unk_1D8.unk_00 != sp18.result) && !func_80BC20D0(this, play, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         sp18.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->unk_1D8.unk_00 = sp18.result;
     func_80BC2150(this, play);
@@ -328,14 +345,16 @@ s32* func_80BC2274(EnJa* this, PlayState* play) {
                 return D_80BC362C;
             }
             return D_80BC366C;
+
+        default:
+            return D_80BC360C;
     }
-    return D_80BC360C;
 }
 
 void func_80BC22F4(EnJa* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, func_80BC2274(this, play), this->unk_368, &this->unk_1D8.unk_04)) {
         this->unk_340 &= ~8;
-        SubS_UpdateFlags(&this->unk_340, 3, 7);
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_1D8.unk_04 = 0;
         this->unk_340 |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -347,16 +366,17 @@ void EnJa_Init(Actor* thisx, PlayState* play) {
     EnJa* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_boj_Skel_00C240, NULL, this->jointTable, this->morphTable, 16);
-    this->unk_36C = -1;
-    func_80BC192C(this, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_boj_Skel_00C240, NULL, this->jointTable, this->morphTable,
+                       OBJECT_BOJ_LIMB_MAX);
+    this->animIndex = ENJA_ANIM_NONE;
+    EnJa_ChangeAnim(this, ENJA_ANIM_0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.uncullZoneForward = 800.0f;
     this->actor.gravity = 0.0f;
-    SubS_UpdateFlags(&this->unk_340, 0, 7);
+    SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     this->unk_340 |= 0x10;
     this->unk_1D8.unk_00 = 0;
     this->unk_368 = NULL;
@@ -379,13 +399,13 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_1D8.unk_00 != 0) {
-        func_80BC1900(this);
+        EnJa_UpdateSkelAnime(this);
         func_80BC1A68(this);
         func_80BC1D70(this, play);
 
         radius = this->collider.dim.radius + 30;
         height = this->collider.dim.height + 10;
-        func_8013C964(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_340 & 7);
+        SubS_Offer(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_340 & SUBS_OFFER_MODE_MASK);
 
         if (this->unk_1D8.unk_00 != 2) {
             Actor_MoveWithGravity(&this->actor);
@@ -402,7 +422,7 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
 s32 EnJa_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnJa* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_BOJ_LIMB_0F) {
         func_80BC1E40(this, play);
     }
     return false;
@@ -418,10 +438,10 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     EnJa* this = THIS;
     s32 pad2;
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_BOJ_LIMB_0F) {
         Matrix_MultVec3f(&D_80BC3780, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
-    } else if ((this->unk_340 & 0x40) && (limbIndex == 11)) {
+    } else if ((this->unk_340 & 0x40) && (limbIndex == OBJECT_BOJ_LIMB_0B)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
@@ -436,8 +456,9 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     }
 
     if (this->unk_1D8.unk_00 == 1) {
-        if ((limbIndex == 11) && (((this->skelAnime.curFrame >= 0.0f) && (this->skelAnime.curFrame <= 6.0f)) ||
-                                  ((this->skelAnime.curFrame >= 35.0f) && (this->skelAnime.curFrame <= 47.0f)))) {
+        if ((limbIndex == OBJECT_BOJ_LIMB_0B) &&
+            (((this->skelAnime.curFrame >= 0.0f) && (this->skelAnime.curFrame <= 6.0f)) ||
+             ((this->skelAnime.curFrame >= 35.0f) && (this->skelAnime.curFrame <= 47.0f)))) {
             OPEN_DISPS(play->state.gfxCtx);
 
             Matrix_Push();
@@ -474,7 +495,7 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             Matrix_Pop();
 
             CLOSE_DISPS(play->state.gfxCtx);
-        } else if (limbIndex == 14) {
+        } else if (limbIndex == OBJECT_BOJ_LIMB_0E) {
             if ((this->skelAnime.curFrame >= 0.0f) && (this->skelAnime.curFrame <= 18.0f)) {
                 OPEN_DISPS(play->state.gfxCtx);
 
@@ -540,8 +561,8 @@ void EnJa_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         overrideRot = false;
     }
 
-    if (limbIndex != 8) {
-        if (limbIndex == 15) {
+    switch (limbIndex) {
+        case OBJECT_BOJ_LIMB_0F:
             SubS_UpdateLimb(this->unk_354 + this->unk_358 + 0x4000,
                             this->unk_356 + this->unk_35A + this->actor.shape.rot.y + 0x4000, &this->unk_1EC,
                             &this->unk_274, stepRot, overrideRot);
@@ -552,17 +573,22 @@ void EnJa_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
             Matrix_RotateXS(this->unk_274.x, MTXMODE_APPLY);
             Matrix_RotateZS(this->unk_274.z, MTXMODE_APPLY);
             Matrix_Push();
-        }
-    } else {
-        SubS_UpdateLimb(this->unk_358 + 0x4000, this->unk_35A + this->actor.shape.rot.y + 0x4000, &this->unk_1F8,
-                        &this->unk_27A, stepRot, overrideRot);
-        Matrix_Pop();
-        Matrix_Translate(this->unk_1F8.x, this->unk_1F8.y, this->unk_1F8.z, MTXMODE_NEW);
-        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->unk_27A.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk_27A.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->unk_27A.z, MTXMODE_APPLY);
-        Matrix_Push();
+            break;
+
+        case OBJECT_BOJ_LIMB_08:
+            SubS_UpdateLimb(this->unk_358 + 0x4000, this->unk_35A + this->actor.shape.rot.y + 0x4000, &this->unk_1F8,
+                            &this->unk_27A, stepRot, overrideRot);
+            Matrix_Pop();
+            Matrix_Translate(this->unk_1F8.x, this->unk_1F8.y, this->unk_1F8.z, MTXMODE_NEW);
+            Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->unk_27A.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_27A.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_27A.z, MTXMODE_APPLY);
+            Matrix_Push();
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -594,7 +620,7 @@ void EnJa_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_1D8.unk_00 != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08,
                    Gfx_EnvColor(play->state.gfxCtx, D_80BC37AC[phi_t2].r, D_80BC37AC[phi_t2].g, D_80BC37AC[phi_t2].b,

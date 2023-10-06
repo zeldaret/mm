@@ -8,26 +8,26 @@ struct ObjHunsui;
 
 typedef void (*ObjHunsuiActionFunc)(struct ObjHunsui*, PlayState*);
 
-#define OBJHUNSUI_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJHUNSUI_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define OBJHUNSUI_GET_F80(thisx) (((thisx)->params >> 7) & 0x1F)
 #define OBJHUNSUI_GET_F000(thisx) (((thisx)->params >> 0xC) & 0xF)
 
-enum {
+typedef enum {
     /* 0 */ OBJHUNSUI_F000_0,
     /* 1 */ OBJHUNSUI_F000_1,
     /* 2 */ OBJHUNSUI_F000_2,
     /* 3 */ OBJHUNSUI_F000_3,
     /* 4 */ OBJHUNSUI_F000_4,
     /* 5 */ OBJHUNSUI_F000_5,
-    /* 6 */ OBJHUNSUI_F000_6,
-};
+    /* 6 */ OBJHUNSUI_F000_6
+} ObjHunsuiParam;
 
 typedef struct ObjHunsui {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjHunsuiActionFunc actionFunc;
     /* 0x160 */ s16 unk_160;
     /* 0x164 */ s32 unk_164;
-    /* 0x168 */ s32 unk_168;
+    /* 0x168 */ s32 switchFlag;
     /* 0x16C */ s8 unk_16C;
     /* 0x16D */ s8 unk_16D;
     /* 0x16E */ s8 unk_16E;

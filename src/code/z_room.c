@@ -1,4 +1,6 @@
 #include "global.h"
+#include "PR/gs2dex.h"
+#include "debug.h"
 
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3) {
 }
@@ -18,14 +20,14 @@ void Room_DrawNormal(PlayState* play, Room* room, u32 flags) {
     if (flags & ROOM_DRAW_OPA) {
         func_800BCBF4(&sZeroVec, play);
         gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
-        func_8012C268(play);
+        func_8012C268(&play->state);
         gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
     if (flags & ROOM_DRAW_XLU) {
         func_800BCC68(&sZeroVec, play);
         gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
@@ -53,51 +55,39 @@ typedef enum {
 } RoomCullableDebugMode;
 
 typedef struct RoomShapeCullableEntryLinked {
-    /* 0x00 */ RoomShapeCullableEntry* entry;
-    /* 0x04 */ f32 boundsNearZ;
-    /* 0x08 */ struct RoomShapeCullableEntryLinked* prev;
-    /* 0x0C */ struct RoomShapeCullableEntryLinked* next;
+    /* 0x0 */ RoomShapeCullableEntry* entry;
+    /* 0x4 */ f32 boundsNearZ;
+    /* 0x8 */ struct RoomShapeCullableEntryLinked* prev;
+    /* 0xC */ struct RoomShapeCullableEntryLinked* next;
 } RoomShapeCullableEntryLinked; // size = 0x10
 
-// TODO: 127 is an arbitrarily chosen number to make the stack sorta work
-#define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 127
+#define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 128
 
-#ifdef NON_MATCHING
-// Small regalloc, likely related to temp usage and scoping
 void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
     RoomShapeCullable* roomShape;
     RoomShapeCullableEntry* roomShapeCullableEntry;
-    RoomShapeCullableEntry* roomShapeCullableEntries;
-    RoomShapeCullableEntry* roomShapeCullableEntryIter;
-    Gfx* displayList;
-    f32 entryBoundsNearZ;
     RoomShapeCullableEntryLinked linkedEntriesBuffer[ROOM_SHAPE_CULLABLE_MAX_ENTRIES];
     RoomShapeCullableEntryLinked* head = NULL;
     RoomShapeCullableEntryLinked* tail = NULL;
-    s32 var_a1;
     RoomShapeCullableEntryLinked* iter;
+    Gfx* displayList;
     RoomShapeCullableEntryLinked* insert;
-    f32 var_fv1;
+    f32 entryBoundsNearZ;
     s32 i;
     Vec3f pos;
     Vec3f projectedPos;
-    s32 pad2;
+    RoomShapeCullableEntry* roomShapeCullableEntries;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     if (flags & ROOM_DRAW_OPA) {
         func_800BCBF4(&sZeroVec, play);
 
-        //! TODO: Fake
-        if (1) {}
-        if (1) {}
-        if (1) {}
-
         gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
         if (play->roomCtx.unk74 != NULL) {
             gSPSegment(POLY_OPA_DISP++, 0x06, play->roomCtx.unk74);
         }
-        func_8012C268(play);
+        func_8012C268(&play->state);
         gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
@@ -107,11 +97,11 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
         if (play->roomCtx.unk74 != NULL) {
             gSPSegment(POLY_XLU_DISP++, 0x06, play->roomCtx.unk74);
         }
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
-    if ((room->enablePosLights != 0) || (MREG(93) != 0)) {
+    if (room->enablePosLights || (MREG(93) != 0)) {
         gSPSetGeometryMode(POLY_OPA_DISP++, G_LIGHTING_POSITIONAL);
         gSPSetGeometryMode(POLY_XLU_DISP++, G_LIGHTING_POSITIONAL);
     }
@@ -159,8 +149,9 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
             }
         }
     } else {
-        f32 var_fa1 = 1.0f / play->projectionMtxFDiagonal.z; // sp54
-        s32 pad5;
+        f32 var_fa1 = 1.0f / play->projectionMtxFDiagonal.z;
+        f32 var_fv1;
+        s32 var_a1;
 
         // Pick and sort entries by depth
         for (i = 0; i < roomShape->numEntries; i++, roomShapeCullableEntry++) {
@@ -237,8 +228,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
 
         if (flags & ROOM_DRAW_OPA) {
             for (; head != NULL; head = head->next, i++) {
-                s32 pad3;
-                RoomShapeCullableEntry* roomShapeCullableEntry;
+                s32 pad;
 
                 roomShapeCullableEntry = head->entry;
 
@@ -265,17 +255,17 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
         }
 
         if (flags & ROOM_DRAW_XLU) {
-            for (; head != NULL; head = head->prev) {
+            for (; tail != NULL; tail = tail->prev) {
                 f32 temp_fv0;
                 f32 temp_fv1;
 
-                roomShapeCullableEntry = head->entry;
+                roomShapeCullableEntry = tail->entry;
                 displayList = roomShapeCullableEntry->xlu;
 
                 if (displayList != NULL) {
                     if (roomShapeCullableEntry->boundsSphereRadius & 1) {
 
-                        temp_fv0 = head->boundsNearZ - (f32)(iREG(93) + 0xBB8);
+                        temp_fv0 = tail->boundsNearZ - (f32)(iREG(93) + 0xBB8);
                         temp_fv1 = iREG(94) + 0x7D0;
 
                         if (temp_fv0 < temp_fv1) {
@@ -299,10 +289,6 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-void Room_DrawCullable(PlayState* play, Room* room, u32 flags);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_DrawCullable.s")
-#endif
 
 #define ROOM_IMAGE_NODRAW_BACKGROUND (1 << 0)
 #define ROOM_IMAGE_NODRAW_OPA (1 << 1)
@@ -333,7 +319,7 @@ void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
         gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
 
         if (drawOpa) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
             gSPDisplayList(POLY_OPA_DISP++, entry->opa);
         }
@@ -363,7 +349,7 @@ void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
 
     if (drawXlu) {
         gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
         gSPDisplayList(POLY_XLU_DISP++, entry->xlu);
     }
@@ -373,7 +359,7 @@ void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
 
 RoomShapeImageMultiBgEntry* Room_GetImageMultiBgEntry(RoomShapeImageMulti* roomShapeImageMulti, PlayState* play) {
     Camera* activeCam = GET_ACTIVE_CAM(play);
-    s32 bgCamIndex = activeCam->bgCamDataId;
+    s32 bgCamIndex = activeCam->bgCamIndex;
     s16 overrideBgCamIndex;
     Player* player;
     RoomShapeImageMultiBgEntry* bgEntry;
@@ -396,7 +382,7 @@ RoomShapeImageMultiBgEntry* Room_GetImageMultiBgEntry(RoomShapeImageMulti* roomS
         bgEntry++;
     }
 
-    __assert("../z_room.c", 849);
+    _dbg_hungup("../z_room.c", 849);
 
     return NULL;
 }
@@ -432,7 +418,7 @@ void Room_DrawImageMulti(PlayState* play, Room* room, u32 flags) {
         gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
 
         if (drawOpa) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
             gSPDisplayList(POLY_OPA_DISP++, dListsEntry->opa);
         }
@@ -461,7 +447,7 @@ void Room_DrawImageMulti(PlayState* play, Room* room, u32 flags) {
 
     if (drawXlu) {
         gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
         gSPDisplayList(POLY_XLU_DISP++, dListsEntry->xlu);
     }
@@ -477,7 +463,7 @@ void Room_DrawImage(PlayState* play, Room* room, u32 flags) {
     } else if (roomShape->amountType == ROOM_SHAPE_IMAGE_AMOUNT_MULTI) {
         Room_DrawImageMulti(play, room, flags);
     } else {
-        __assert("../z_room.c", 965);
+        _dbg_hungup("../z_room.c", 965);
     }
 }
 
@@ -530,9 +516,9 @@ size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
         }
     }
 
-    roomCtx->roomMemPages[0] = THA_AllocTailAlign16(&play->state.heap, maxRoomSize);
+    roomCtx->roomMemPages[0] = THA_AllocTailAlign16(&play->state.tha, maxRoomSize);
     if (roomCtx->roomMemPages[0] == NULL) {
-        __assert("../z_room.c", 1078);
+        _dbg_hungup("../z_room.c", 1078);
     }
     roomCtx->roomMemPages[1] = (void*)((uintptr_t)roomCtx->roomMemPages[0] + maxRoomSize);
     roomCtx->activeMemPage = 0;
@@ -595,12 +581,12 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
             Actor_SpawnTransitionActors(play, &play->actorCtx);
 
             if (((play->sceneId != SCENE_IKANA) || (roomCtx->curRoom.num != 1)) && (play->sceneId != SCENE_IKNINSIDE)) {
-                play->envCtx.lightSettingOverride = 0xFF;
-                play->envCtx.unk_E0 = 0;
+                play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
+                play->envCtx.lightBlendOverride = LIGHT_BLEND_OVERRIDE_NONE;
             }
             func_800FEAB0();
-            if (!func_800FE4B8(play)) {
-                func_800FD858(play);
+            if (Environment_GetStormState(play) == STORM_STATE_OFF) {
+                Environment_StopStormNatureAmbience(play);
             }
         } else {
             return 0;

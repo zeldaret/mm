@@ -29,7 +29,7 @@ ActorInit En_Fr_InitVars = {
 void EnFr_Init(Actor* thisx, PlayState* play) {
     EnFr* this = THIS;
 
-    if (Flags_GetSwitch(play, ENFR_GET_SWITCHFLAG(&this->actor))) {
+    if (Flags_GetSwitch(play, ENFR_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -43,7 +43,7 @@ void EnFr_Destroy(Actor* thisx, PlayState* play) {
 void EnFr_Update(Actor* thisx, PlayState* play) {
     EnFr* this = THIS;
 
-    if (Flags_GetSwitch(play, ENFR_GET_SWITCHFLAG(&this->actor))) {
+    if (Flags_GetSwitch(play, ENFR_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }

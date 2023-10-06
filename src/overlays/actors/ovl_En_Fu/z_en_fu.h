@@ -2,6 +2,7 @@
 #define Z_EN_FU_H
 
 #include "global.h"
+#include "objects/object_mu/object_mu.h"
 #include "overlays/actors/ovl_Bg_Fu_Mizu/z_bg_fu_mizu.h"
 
 struct EnFu;
@@ -27,8 +28,8 @@ typedef struct EnFu {
     /* 0x144 */ ColliderCylinder collider;
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnFuActionFunc actionFunc;
-    /* 0x1D8 */ Vec3s jointTable[21];
-    /* 0x256 */ Vec3s morphTable[21];
+    /* 0x1D8 */ Vec3s jointTable[HONEY_AND_DARLING_LIMB_MAX];
+    /* 0x256 */ Vec3s morphTable[HONEY_AND_DARLING_LIMB_MAX];
     /* 0x2D4 */ BgFuMizu* unk_2D4;
     /* 0x2D8 */ EnFuUnkStruct unk_2D8[10];
     /* 0x508 */ Vec3f unk_508;

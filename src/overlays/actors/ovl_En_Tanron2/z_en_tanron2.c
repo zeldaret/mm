@@ -9,7 +9,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_boss04/object_boss04.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron2*)thisx)
 
@@ -124,7 +124,7 @@ void EnTanron2_Init(Actor* thisx, PlayState* play) {
     EnTanron2* this = THIS;
 
     D_80BB8450 = (Boss04*)this->actor.parent;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     if (this->actor.params == 100) {
         this->actor.update = func_80BB7B90;
@@ -138,7 +138,7 @@ void EnTanron2_Init(Actor* thisx, PlayState* play) {
     this->actor.draw = NULL;
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = 5;
+    this->actor.targetMode = TARGET_MODE_5;
 
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
@@ -207,7 +207,7 @@ void func_80BB6B80(EnTanron2* this) {
     this->actor.velocity.x = 0.0f;
     this->unk_158 = 0;
     this->unk_159 = 1;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->collider1.dim.radius = 30;
     this->collider1.dim.height = 50;
     this->collider1.dim.yShift = -25;
@@ -236,7 +236,7 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
             switch (this->unk_158) {
                 case 0:
                     if (Rand_ZeroOne() > 0.2f) {
-                        sp32 = Rand_ZeroFloat(65536.0f);
+                        sp32 = Rand_ZeroFloat(0x10000);
                     } else {
                         sp32 = Math_Atan2S(sp2C, sp28);
                     }
@@ -428,10 +428,10 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
                 func_80BB6B80(this);
                 this->unk_158 = 1;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_DAMAGE);
-                if ((player->targetedActor != NULL) && (&this->actor != player->targetedActor)) {
-                    player->targetedActor = &this->actor;
-                    play->actorCtx.targetContext.arrowPointedActor = &this->actor;
-                    play->actorCtx.targetContext.targetedActor = &this->actor;
+                if ((player->lockOnActor != NULL) && (&this->actor != player->lockOnActor)) {
+                    player->lockOnActor = &this->actor;
+                    play->actorCtx.targetCtx.fairyActor = &this->actor;
+                    play->actorCtx.targetCtx.lockOnActor = &this->actor;
                 }
             } else {
                 this->unk_154 = 15;
@@ -550,10 +550,10 @@ void EnTanron2_Update(Actor* thisx, PlayState* play) {
 
             if (ABS_ALT(BINANG_SUB(D_80BB8450->actor.yawTowardsPlayer, atan)) > 0x3000) {
                 this->unk_159 = 0;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             } else {
                 this->unk_159 = 1;
-                this->actor.flags |= ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             }
         }
     }
@@ -592,7 +592,7 @@ void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, gWartBubbleMaterialDL);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 150);
@@ -637,7 +637,7 @@ void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
         }
     }
 
-    func_8012C448(play->state.gfxCtx);
+    Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 150);
     gSPDisplayList(POLY_XLU_DISP++, gWartShadowMaterialDL);
@@ -654,7 +654,7 @@ void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
         tanron2 = tanron2->next;
     }
 
-    func_8012C974(play->state.gfxCtx);
+    Gfx_SetupDL60_XluNoCD(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 255);
