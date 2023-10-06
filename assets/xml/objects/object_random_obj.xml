@@ -1,7 +1,7 @@
 ﻿<Root>
-    <!-- Object for Random Obj -->
+    <!-- Object for Secret Shrine doors -->
     <File Name="object_random_obj" Segment="6">
-        <DList Name="gRandomObjDL" Offset="0x190" />
-        <Texture Name="gRandomObjTex" OutName="random_obj" Format="rgba16" Width="32" Height="64" Offset="0x2F0" />
+        <DList Name="gSecretShrineDoorsDL" Offset="0x190" />
+        <Texture Name="gSecretShrineDoorsTex" OutName="secret_shrine_doors" Format="rgba16" Width="32" Height="64" Offset="0x2F0" />
     </File>
 </Root>
