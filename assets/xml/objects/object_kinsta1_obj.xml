@@ -1,8 +1,8 @@
 ﻿<Root>
-    <!-- Object for Swamp Spider House Door -->
+    <!-- Object for Swamp Spider Sliding House Door -->
     <File Name="object_kinsta1_obj" Segment="6">
-        <DList Name="gSwampSpiderHouseDoorEmptyDL" Offset="0x190" /> <!-- Original name is "m2_KIN1_shutter_modelT" -->
-        <DList Name="gSwampSpiderHouseDoorDL" Offset="0x198" /> <!-- Original name is "m2_KIN1_shutter_model" -->
-        <Texture Name="gSwampSpiderHouseTex" OutName="swamp_spider_house_door" Format="rgba16" Width="32" Height="64" Offset="0x2F0" />
+        <DList Name="gSwampSpiderHouseSlidingDoorEmptyDL" Offset="0x190" /> <!-- Original name is "m2_KIN1_shutter_modelT" -->
+        <DList Name="gSwampSpiderHouseSlidingDoorDL" Offset="0x198" /> <!-- Original name is "m2_KIN1_shutter_model" -->
+        <Texture Name="gSwampSpiderHouseSlidingDoorTex" OutName="swamp_spider_house_door" Format="rgba16" Width="32" Height="64" Offset="0x2F0" />
     </File>
 </Root>
