@@ -357,7 +357,7 @@ void func_80ADF730(EnTakaraya* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80ADF7B8(this);
     } else {
-        this->formSwitchFlag = gSaveContext.save.playerForm + this->switchFlag;
+        this->formSwitchFlag = GET_PLAYER_FORM + this->switchFlag;
         Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
