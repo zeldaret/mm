@@ -1,13 +1,23 @@
 ﻿<Root>
+    <!-- Object for Wooden Ladder -->
     <File Name="object_ladder" Segment="6">
-        <DList Name="object_ladder_DL_0000A0" Offset="0xA0" />
-        <Collision Name="object_ladder_Colheader_0001D8" Offset="0x1D8" />
-        <DList Name="object_ladder_DL_0002D0" Offset="0x2D0" />
-        <Collision Name="object_ladder_Colheader_000408" Offset="0x408" />
-        <DList Name="object_ladder_DL_000500" Offset="0x500" />
-        <Collision Name="object_ladder_Colheader_000638" Offset="0x638" />
-        <DList Name="object_ladder_DL_000730" Offset="0x730" />
-        <Collision Name="object_ladder_Colheader_000868" Offset="0x868" />
-        <Texture Name="object_ladder_Tex_0008A0" OutName="tex_0008A0" Format="rgba16" Width="32" Height="32" Offset="0x8A0" />
+        <!-- Wooden Ladder with 12 Rung -->
+        <DList Name="gWoodenLadder12RungDL" Offset="0xA0" />
+        <Collision Name="gWoodenLadder12RungCol" Offset="0x1D8" />
+
+        <!-- Wooden Ladder with 16 Rung -->
+        <DList Name="gWoodenLadder16RungDL" Offset="0x2D0" />
+        <Collision Name="gWoodenLadder16RungCol" Offset="0x408" />
+
+        <!-- Wooden Ladder with 20 Rung -->
+        <DList Name="gWoodenLadder20RungDL" Offset="0x500" />
+        <Collision Name="gWoodenLadder20RungCol" Offset="0x638" />
+
+        <!-- Wooden Ladder with 24 Rung -->
+        <DList Name="gWoodenLadder24RungDL" Offset="0x730" />
+        <Collision Name="gWoodenLadder24RungCol" Offset="0x868" />
+
+        <!-- Wooden Ladder Texture -->
+        <Texture Name="gWoodenLadderTex" OutName="wooden_ladder" Format="rgba16" Width="32" Height="32" Offset="0x8A0" />
     </File>
 </Root>
