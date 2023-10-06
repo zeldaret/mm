@@ -126,6 +126,7 @@ typedef union {
 } MtxF; // size = 0x40
 
 #define LERPIMP(v0, v1, t) ((v0) + (((v1) - (v0)) * (t)))
+#define LERPIMP_ALT(v0, v1, t) (((v1) - (v0)) * (t) + (v0))
 #define F32_LERP(v0, v1, t) ((1.0f - (t)) * (f32)(v0) + (t) * (f32)(v1))
 #define F32_LERPIMP(v0, v1, t) ((f32)(v0) + (((f32)(v1) - (f32)(v0)) * (t)))
 #define F32_LERPIMPINV(v0, v1, t) ((f32)(v0) + (((f32)(v1) - (f32)(v0)) / (t)))

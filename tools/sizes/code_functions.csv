@@ -1229,7 +1229,7 @@ asm/non_matchings/code/z_kankyo/Environment_LerpWeightAccelDecel.s,Environment_L
 asm/non_matchings/code/z_kankyo/Environment_UpdateSkybox.s,Environment_UpdateSkybox,0x800F5CD0,0x2D9
 asm/non_matchings/code/z_kankyo/Environment_EnableUnderwaterLights.s,Environment_EnableUnderwaterLights,0x800F6834,0x46
 asm/non_matchings/code/z_kankyo/Environment_DisableUnderwaterLights.s,Environment_DisableUnderwaterLights,0x800F694C,0x2E
-asm/non_matchings/code/z_kankyo/func_800F6A04.s,func_800F6A04,0x800F6A04,0xF
+asm/non_matchings/code/z_kankyo/Environment_WipeRumbleRequests.s,Environment_WipeRumbleRequests,0x800F6A04,0xF
 asm/non_matchings/code/z_kankyo/Environment_UpdateSkyboxRotY.s,Environment_UpdateSkyboxRotY,0x800F6A40,0x1E
 asm/non_matchings/code/z_kankyo/Environment_UpdateNextDayTime.s,Environment_UpdateNextDayTime,0x800F6AB8,0x23
 asm/non_matchings/code/z_kankyo/Environment_UpdateTime.s,Environment_UpdateTime,0x800F6B44,0x6A

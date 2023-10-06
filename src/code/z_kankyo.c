@@ -66,8 +66,6 @@ Gfx* sSkyboxStarsDList;
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-#define LERP(x, y, t) (((y) - (x)) * (t) + (x))
-
 // Data
 f32 sSandstormLerpScale = 0.0f;
 s32 sSunScreenDepth = GPACK_ZDZ(G_MAXFBZ, 0);
@@ -499,13 +497,13 @@ void Environment_GraphCallback(GraphicsContext* gfxCtx, void* arg) {
 }
 
 typedef struct {
-    /* 0x0 */ s32 mantissa;
-    /* 0x4 */ s32 exponent;
-} ZBufValConversionEntry; // size = 0x8
+    /* 0x0 */ s32 mantissaShift; // shift applied to the mantissa of the z buffer value
+    /* 0x4 */ s32 base;          // 15.3 fixed-point base value for the exponent
+} ZBufValConversionEntry;        // size = 0x8
 
 ZBufValConversionEntry sZBufValConversionTable[1 << 3] = {
-    { 6, 0x00000 }, { 5, 0x20000 }, { 4, 0x30000 }, { 3, 0x38000 },
-    { 2, 0x3C000 }, { 1, 0x3E000 }, { 0, 0x3F000 }, { 0, 0x3F800 },
+    { 6, 0x0000 << 3 }, { 5, 0x4000 << 3 }, { 4, 0x6000 << 3 }, { 3, 0x7000 << 3 },
+    { 2, 0x7800 << 3 }, { 1, 0x7C00 << 3 }, { 0, 0x7E00 << 3 }, { 0, 0x7F00 << 3 },
 };
 
 #define ZBUFVAL_EXPONENT(v) (((v) >> 15) & 7)
@@ -521,8 +519,8 @@ ZBufValConversionEntry sZBufValConversionTable[1 << 3] = {
  */
 s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
     // base[exp] + mantissa << shift[exp]
-    s32 ret = (ZBUFVAL_MANTISSA(zBufferVal) << sZBufValConversionTable[ZBUFVAL_EXPONENT(zBufferVal)].mantissa) +
-              sZBufValConversionTable[ZBUFVAL_EXPONENT(zBufferVal)].exponent;
+    s32 ret = (ZBUFVAL_MANTISSA(zBufferVal) << sZBufValConversionTable[ZBUFVAL_EXPONENT(zBufferVal)].mantissaShift) +
+              sZBufValConversionTable[ZBUFVAL_EXPONENT(zBufferVal)].base;
 
     return ret;
 }
@@ -1089,12 +1087,12 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
 
         envCtx->skyboxBlend = skyboxBlend;
         Skybox_SetColors(skyboxCtx,
-                         LERP(sSkyboxPrimColors[color1Index].r, sSkyboxPrimColors[color2Index].r, colorWeight),
-                         LERP(sSkyboxPrimColors[color1Index].g, sSkyboxPrimColors[color2Index].g, colorWeight),
-                         LERP(sSkyboxPrimColors[color1Index].b, sSkyboxPrimColors[color2Index].b, colorWeight),
-                         LERP(sSkyboxEnvColors[color1Index].r, sSkyboxEnvColors[color2Index].r, colorWeight),
-                         LERP(sSkyboxEnvColors[color1Index].g, sSkyboxEnvColors[color2Index].g, colorWeight),
-                         LERP(sSkyboxEnvColors[color1Index].b, sSkyboxEnvColors[color2Index].b, colorWeight));
+                         LERPIMP_ALT(sSkyboxPrimColors[color1Index].r, sSkyboxPrimColors[color2Index].r, colorWeight),
+                         LERPIMP_ALT(sSkyboxPrimColors[color1Index].g, sSkyboxPrimColors[color2Index].g, colorWeight),
+                         LERPIMP_ALT(sSkyboxPrimColors[color1Index].b, sSkyboxPrimColors[color2Index].b, colorWeight),
+                         LERPIMP_ALT(sSkyboxEnvColors[color1Index].r, sSkyboxEnvColors[color2Index].r, colorWeight),
+                         LERPIMP_ALT(sSkyboxEnvColors[color1Index].g, sSkyboxEnvColors[color2Index].g, colorWeight),
+                         LERPIMP_ALT(sSkyboxEnvColors[color1Index].b, sSkyboxEnvColors[color2Index].b, colorWeight));
     }
 }
 
@@ -1143,7 +1141,7 @@ void Environment_DisableUnderwaterLights(PlayState* play) {
     }
 }
 
-void func_800F6A04(void) {
+void Environment_WipeRumbleRequests(void) {
     if ((gSaveContext.gameMode != GAMEMODE_NORMAL) && (gSaveContext.gameMode != GAMEMODE_END_CREDITS)) {
         Rumble_StateWipeRequests();
     }
@@ -1364,7 +1362,7 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                         sp90[1] =
                             func_800F6EA4(lightSettingsList[sp94].ambientColor[j] + spA4[3].ambientColor[j],
                                           lightSettingsList[sp96].ambientColor[j] + spA4[2].ambientColor[j], temp_fv0);
-                        envCtx->lightSettings.ambientColor[j] = LERP(sp90[0], sp90[1], var_fs3);
+                        envCtx->lightSettings.ambientColor[j] = LERPIMP_ALT(sp90[0], sp90[1], var_fs3);
                     }
 
                     if (Environment_IsSceneUpsideDown(play)) {
@@ -1389,7 +1387,7 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                         sp90[1] =
                             func_800F6EA4(lightSettingsList[sp94].light1Color[j] + spA4[3].light1Color[j],
                                           lightSettingsList[sp96].light1Color[j] + spA4[2].light1Color[j], temp_fv0);
-                        envCtx->lightSettings.light1Color[j] = LERP(sp90[0], sp90[1], var_fs3);
+                        envCtx->lightSettings.light1Color[j] = LERPIMP_ALT(sp90[0], sp90[1], var_fs3);
 
                         sp90[0] =
                             func_800F6EA4(lightSettingsList[sp95].light2Color[j] + spA4[1].light2Color[j],
@@ -1397,7 +1395,7 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                         sp90[1] =
                             func_800F6EA4(lightSettingsList[sp94].light2Color[j] + spA4[3].light2Color[j],
                                           lightSettingsList[sp96].light2Color[j] + spA4[2].light2Color[j], temp_fv0);
-                        envCtx->lightSettings.light2Color[j] = LERP(sp90[0], sp90[1], var_fs3);
+                        envCtx->lightSettings.light2Color[j] = LERPIMP_ALT(sp90[0], sp90[1], var_fs3);
                     }
 
                     for (j = 0; j < 3; j++) {
@@ -1405,7 +1403,7 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                                                 lightSettingsList[sp97].fogColor[j] + spA4[0].fogColor[j], temp_fv0);
                         sp90[1] = func_800F6EA4(lightSettingsList[sp94].fogColor[j] + spA4[3].fogColor[j],
                                                 lightSettingsList[sp96].fogColor[j] + spA4[2].fogColor[j], temp_fv0);
-                        envCtx->lightSettings.fogColor[j] = LERP(sp90[0], sp90[1], var_fs3);
+                        envCtx->lightSettings.fogColor[j] = LERPIMP_ALT(sp90[0], sp90[1], var_fs3);
                     }
 
                     sp8C[0] =
@@ -1463,23 +1461,23 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
 
                 for (i = 0; i < 3; i++) {
                     envCtx->lightSettings.ambientColor[i] =
-                        LERP(lightSettingsList[envCtx->prevLightSetting].ambientColor[i],
-                             lightSettingsList[envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].ambientColor[i],
+                                    lightSettingsList[envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
                     envCtx->lightSettings.light1Dir[i] =
-                        LERP(lightSettingsList[envCtx->prevLightSetting].light1Dir[i],
-                             lightSettingsList[envCtx->lightSetting].light1Dir[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light1Dir[i],
+                                    lightSettingsList[envCtx->lightSetting].light1Dir[i], envCtx->lightBlend);
                     envCtx->lightSettings.light1Color[i] =
-                        LERP(lightSettingsList[envCtx->prevLightSetting].light1Color[i],
-                             lightSettingsList[envCtx->lightSetting].light1Color[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light1Color[i],
+                                    lightSettingsList[envCtx->lightSetting].light1Color[i], envCtx->lightBlend);
                     envCtx->lightSettings.light2Dir[i] =
-                        LERP(lightSettingsList[envCtx->prevLightSetting].light2Dir[i],
-                             lightSettingsList[envCtx->lightSetting].light2Dir[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light2Dir[i],
+                                    lightSettingsList[envCtx->lightSetting].light2Dir[i], envCtx->lightBlend);
                     envCtx->lightSettings.light2Color[i] =
-                        LERP(lightSettingsList[envCtx->prevLightSetting].light2Color[i],
-                             lightSettingsList[envCtx->lightSetting].light2Color[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light2Color[i],
+                                    lightSettingsList[envCtx->lightSetting].light2Color[i], envCtx->lightBlend);
                     envCtx->lightSettings.fogColor[i] =
-                        LERP(lightSettingsList[envCtx->prevLightSetting].fogColor[i],
-                             lightSettingsList[envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].fogColor[i],
+                                    lightSettingsList[envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
                 }
                 envCtx->lightSettings.fogNear =
                     LERP16(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[envCtx->prevLightSetting].blendRateAndFogNear),
@@ -1736,7 +1734,7 @@ void Environment_Update(PlayState* play, EnvironmentContext* envCtx, LightContex
     D_801BDBC0 = 0;
     D_801BDBC4 = 0;
 
-    func_800F6A04();
+    Environment_WipeRumbleRequests();
 
     if (pauseCtx->state == PAUSE_STATE_OFF) {
         Environment_UpdateSkyboxRotY(play);
@@ -2968,37 +2966,32 @@ s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 
     return 1;
 }
 
-// Get ((to - from) * lerp)
-void Environment_LerpRGB8(Color_RGB8* from, Color_RGB8* to, f32 lerp, Vec3s* dst) {
+void Environment_LerpRGB8(u8* from, Color_RGB8* to, f32 lerp, s16* dst) {
     Color_RGB8 result;
 
-    Color_RGB8_Lerp(from, to, lerp, &result);
+    Color_RGB8_Lerp((Color_RGB8*)from, to, lerp, &result);
 
-    dst->x = result.r - from->r;
-    dst->y = result.g - from->g;
-    dst->z = result.b - from->b;
+    dst[0] = result.r - from[0];
+    dst[1] = result.g - from[1];
+    dst[2] = result.b - from[2];
 }
 
 void Environment_LerpAmbientColor(PlayState* play, Color_RGB8* to, f32 lerp) {
-    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.ambientColor, to, lerp,
-                         (Vec3s*)&play->envCtx.adjLightSettings.ambientColor);
+    Environment_LerpRGB8(play->envCtx.lightSettings.ambientColor, to, lerp, play->envCtx.adjLightSettings.ambientColor);
 }
 
 void Environment_LerpDiffuseColor(PlayState* play, Color_RGB8* to, f32 lerp) {
-    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.light1Color, to, lerp,
-                         (Vec3s*)play->envCtx.adjLightSettings.light1Color);
-    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.light2Color, to, lerp,
-                         (Vec3s*)play->envCtx.adjLightSettings.light2Color);
+    Environment_LerpRGB8(play->envCtx.lightSettings.light1Color, to, lerp, play->envCtx.adjLightSettings.light1Color);
+    Environment_LerpRGB8(play->envCtx.lightSettings.light2Color, to, lerp, play->envCtx.adjLightSettings.light2Color);
 }
 
 void Environment_LerpFogColor(PlayState* play, Color_RGB8* to, f32 lerp) {
-    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.fogColor, to, lerp,
-                         (Vec3s*)play->envCtx.adjLightSettings.fogColor);
+    Environment_LerpRGB8(play->envCtx.lightSettings.fogColor, to, lerp, play->envCtx.adjLightSettings.fogColor);
 }
 
 void Environment_LerpFog(PlayState* play, s16 fogNearTarget, s16 fogFarTarget, f32 lerp) {
-    play->envCtx.adjLightSettings.fogNear = (fogNearTarget - (s16)play->envCtx.lightSettings.fogNear) * lerp;
-    play->envCtx.adjLightSettings.zFar = (fogFarTarget - (s16)play->envCtx.lightSettings.zFar) * lerp;
+    play->envCtx.adjLightSettings.fogNear = (fogNearTarget - play->envCtx.lightSettings.fogNear) * lerp;
+    play->envCtx.adjLightSettings.zFar = (fogFarTarget - play->envCtx.lightSettings.zFar) * lerp;
 }
 
 // Repurposed from OoT to be more general
