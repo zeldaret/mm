@@ -37,10 +37,10 @@ static InitChainEntry sInitChain[] = {
 };
 
 static Gfx* sLadderDLists[] = {
-    gWoodenLadder12RungDL, // 12 Rung
-    gWoodenLadder16RungDL, // 16 Rung
-    gWoodenLadder20RungDL, // 20 Rung
-    gWoodenLadder24RungDL, // 24 Rung
+    gWoodenLadder12RungDL,
+    gWoodenLadder16RungDL,
+    gWoodenLadder20RungDL,
+    gWoodenLadder24RungDL,
 };
 
 void BgLadder_Init(Actor* thisx, PlayState* play) {
