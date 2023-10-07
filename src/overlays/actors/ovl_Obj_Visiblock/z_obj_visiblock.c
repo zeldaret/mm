@@ -49,5 +49,5 @@ void ObjVisiblock_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void ObjVisiblock_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListXlu(play, gLensOfTruthPlatformOnDL);
+    Gfx_DrawDListXlu(play, gLensOfTruthPlatformDL);
 }
