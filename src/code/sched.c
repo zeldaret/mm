@@ -16,6 +16,7 @@ u32 gAudioSPDataSize;
 #include "functions.h"
 #include "variables.h"
 #include "stackcheck.h"
+#include "z64speed_meter.h"
 #include "z64thread.h"
 
 #define RSP_DONE_MSG 667
@@ -426,16 +427,16 @@ void Sched_HandleRSPDone(SchedContext* sched) {
     time = osGetTime();
     switch (sched->curRSPTask->list.t.type) {
         case M_AUDTASK:
-            gRSPAudioTotalTime += time - sRSPAudioStartTime;
+            gRSPAudioTimeAcc += time - sRSPAudioStartTime;
             break;
 
         case M_GFXTASK:
-            sRSPGFXTotalTime += time - sRSPGFXStartTime;
+            gRSPGfxTimeAcc += time - sRSPGFXStartTime;
             break;
 
         default:
             if (1) {}
-            sRSPOtherTotalTime += time - sRSPOtherStartTime;
+            gRSPOtherTimeAcc += time - sRSPOtherStartTime;
             break;
     }
 

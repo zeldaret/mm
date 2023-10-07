@@ -136,7 +136,7 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
     EnDnh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gKoumeKioskSkeleton, NULL, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &gKoumeKioskSkel, NULL, this->jointTable, this->morphTable,
                    KOUME_KIOSK_LIMB_MAX);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENDNH_ANIM_HEAD_MOVING);
     this->actor.shape.yOffset = 1100.0f;

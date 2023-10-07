@@ -90,8 +90,8 @@ typedef struct EnGrasshopper {
     /* 0x035C */ s16 bankState;
     /* 0x035E */ s16 type;
     /* 0x0360 */ f32 dragonflyScale;
-    /* 0x0364 */ f32 rotationalVelocity;
-    /* 0x0368 */ f32 endFrame;
+    /* 0x0364 */ f32 angularVelocity;
+    /* 0x0368 */ f32 animEndFrame;
     /* 0x036C */ f32 approachSpeed;
     /* 0x0370 */ f32 baseFlyHeight;
     /* 0x0374 */ f32 targetPosY;

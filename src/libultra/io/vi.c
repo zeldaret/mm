@@ -1,13 +1,13 @@
 #include "global.h"
 
-__OSViContext D_80098060[2] = { 0 };
-__OSViContext* __osViCurr = &D_80098060[0];
-__OSViContext* __osViNext = &D_80098060[1];
+static __OSViContext vi[2] = { 0 };
+__OSViContext* __osViCurr = &vi[0];
+__OSViContext* __osViNext = &vi[1];
 
 void __osViInit(void) {
-    bzero(D_80098060, sizeof(D_80098060));
-    __osViCurr = &D_80098060[0];
-    __osViNext = &D_80098060[1];
+    bzero(vi, sizeof(vi));
+    __osViCurr = &vi[0];
+    __osViNext = &vi[1];
     __osViNext->retraceCount = 1;
     __osViCurr->retraceCount = 1;
     __osViNext->buffer = (void*)0x80000000;

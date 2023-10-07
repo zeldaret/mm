@@ -13,7 +13,7 @@ typedef struct {
 NmiBuff* gNMIBuffer;
 
 void Nmi_Init(void) {
-    gNMIBuffer = (NmiBuff*)osAppNmiBuffer;
+    gNMIBuffer = (NmiBuff*)osAppNMIBuffer;
     gNMIBuffer->resetting = false;
 
     if (osResetType == COLD_RESET) {

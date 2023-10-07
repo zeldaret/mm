@@ -8,6 +8,10 @@ struct EnToto;
 typedef void (*EnTotoActionFunc)(struct EnToto*, PlayState*);
 typedef s32 (*EnTotoUnkFunc)(struct EnToto*, PlayState*);
 
+#define ENTOTO_GET_SWITCH_FLAG_1(thisx) ((thisx)->params & 0x7F)
+#define ENTOTO_GET_SWITCH_FLAG_2(thisx) (((thisx)->params >> 7) & 0x7F)
+#define ENTOTO_GET_SWITCH_FLAG_3(thisx) ((thisx)->home.rot.x)
+
 typedef struct EnTotoText {
     /* 0x0 */ u8 unk0;
     /* 0x1 */ u8 unk1;

@@ -10,7 +10,7 @@ typedef s32 (*BgBreakwallUnkFunc)(struct BgBreakwall*, PlayState*);
 typedef void (*BgBreakwallUnkFunc2)(struct BgBreakwall*, PlayState*);
 
 #define BGBREAKWALL_GET_F(thisx) ((thisx)-> params & 0xF)
-#define BGBREAKWALL_SWITCHFLAG(thisx) (((thisx)-> params & 0xFE00) >> 9)
+#define BGBREAKWALL_SWITCH_FLAG(thisx) (((thisx)-> params & 0xFE00) >> 9)
 
 typedef enum {
     /*  7 */ BGBREAKWALL_F_7 = 7,
@@ -20,7 +20,7 @@ typedef enum {
 
 typedef struct BgBreakwall {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ s8 unk_15C;
+    /* 0x15C */ s8 objectSlot;
     /* 0x15D */ u8 switchFlag;
     /* 0x15E */ u8 unk_15E;
     /* 0x160 */ BgBreakwallActionFunc actionFunc;
