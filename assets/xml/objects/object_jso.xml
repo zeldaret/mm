@@ -2,8 +2,8 @@
     <!-- Assets for Garos and the Garo Master -->
     <File Name="object_jso" Segment="6">
         <!-- Unused Empty Texture Animations -->
-        <TextureAnimation Name="gGaroEmptyTexAnim1" Offset="0x0" />
-        <TextureAnimation Name="gGaroEmptyTexAnim2" Offset="0x10" />
+        <TextureAnimation Name="gGaroEmpty1TexAnim" Offset="0x0" />
+        <TextureAnimation Name="gGaroEmpty2TexAnim" Offset="0x10" />
 
         <!-- Garo Master Limb DisplayLists -->
         <DList Name="gGaroMasterLeftThighDL" Offset="0x1210" />
