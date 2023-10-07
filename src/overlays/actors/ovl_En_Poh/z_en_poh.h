@@ -8,12 +8,12 @@ struct EnPoh;
 typedef void (*EnPohActionFunc)(struct EnPoh*, PlayState*);
 
 typedef enum EnPohBodyPart {
-    /*  0 */ ENPOH_BODYPART_0,
-    /*  1 */ ENPOH_BODYPART_1,
-    /*  2 */ ENPOH_BODYPART_2,
-    /*  3 */ ENPOH_BODYPART_3,
-    /*  4 */ ENPOH_BODYPART_4,
-    /*  5 */ ENPOH_BODYPART_5,
+    /*  0 */ POE_BODYPART_LEFT_FOREARM,
+    /*  1 */ POE_BODYPART_LEFT_UPPER_ARM,
+    /*  2 */ POE_BODYPART_RIGHT_ARM_HAND,
+    /*  3 */ POE_BODYPART_RIGHT_FOREARM,
+    /*  4 */ POE_BODYPART_BOTTEM_CLOAK,
+    /*  5 */ POE_BODYPART_TOP_CLOAK,
     /*  6 */ ENPOH_BODYPART_6,
     /*  7 */ ENPOH_BODYPART_7,
     /*  8 */ ENPOH_BODYPART_8,

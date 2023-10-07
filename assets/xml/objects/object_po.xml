@@ -31,17 +31,17 @@
         <Texture Name="gPoeCloak2Tex" OutName="poe_cloak2" Format="rgba16" Width="16" Height="16" Offset="0x4510" />
         <Texture Name="gPoeCloak3Tex" OutName="poe_cloak3" Format="rgba16" Width="8" Height="8" Offset="0x4710" />
         <Texture Name="gPoeEyeTex" OutName="poe_eye" Format="rgba16" Width="16" Height="16" Offset="0x4790" />
-        <Texture Name="gPoeLanternTopTex" OutName="poe_latern_top" Format="rgba16" Width="8" Height="8" Offset="0x4990" />
-        <Texture Name="gPoeLanternBottemTex" OutName="poe_latern_bottem" Format="rgba16" Width="8" Height="16" Offset="0x4A10" />
-        <Texture Name="gPoeLanternMiddleTex" OutName="poe_latern_middle" Format="rgba16" Width="16" Height="16" Offset="0x4B10" />
+        <Texture Name="gPoeLanternTopTex" OutName="poe_lantern_top" Format="rgba16" Width="8" Height="8" Offset="0x4990" />
+        <Texture Name="gPoeLanternBottomTex" OutName="poe_lantern_bottom" Format="rgba16" Width="8" Height="16" Offset="0x4A10" />
+        <Texture Name="gPoeLanternMiddleTex" OutName="poe_lantern_middle" Format="rgba16" Width="16" Height="16" Offset="0x4B10" />
         <Texture Name="gPoeBurnTex" OutName="poe_burn" Format="rgba16" Width="16" Height="16" Offset="0x4D10" />
         <Texture Name="gPoeBurnEyeTex" OutName="poe_burn_eye" Format="rgba16" Width="8" Height="8" Offset="0x4F10" />
 
         <!-- Limbs -->
         <Limb Name="gPoeRootLimb" Type="Standard" EnumName="POE_LIMB_ROOT" Offset="0x4F90" />
         <Limb Name="gPoeRootWrapperLimb" Type="Standard" EnumName="POE_LIMB_ROOT_WRAPPER" Offset="0x4F9C" />
-        <Limb Name="gPoeBottemCloakRootLimb" Type="Standard" EnumName="POE_LIMB_BOTTEM_CLOAK_ROOT" Offset="0x4FA8" />
-        <Limb Name="gPoeBottemCloakLimb" Type="Standard" EnumName="POE_LIMB_BOTTEM_CLOAK" Offset="0x4FB4" />
+        <Limb Name="gPoeBottomCloakRootLimb" Type="Standard" EnumName="POE_LIMB_BOTTOM_CLOAK_ROOT" Offset="0x4FA8" />
+        <Limb Name="gPoeBottomCloakLimb" Type="Standard" EnumName="POE_LIMB_BOTTOM_CLOAK" Offset="0x4FB4" />
         <Limb Name="gPoeTopCloakLimb" Type="Standard" EnumName="POE_LIMB_TOP_CLOAK" Offset="0x4FC0" />
         <Limb Name="gPoeLeftArmRootLimb" Type="Standard" EnumName="POE_LIMB_LEFT_ARM_ROOT" Offset="0x4FCC" />
         <Limb Name="gPoeLeftArmWrapperLimb" Type="Standard" EnumName="POE_LIMB_LEFT_ARM_WRAPPER" Offset="0x4FD8" />
@@ -54,8 +54,8 @@
         <Limb Name="gPoeRightForearmRootLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_FOREARM_ROOT" Offset="0x502C" />
         <Limb Name="gPoeRightArmHandRootLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_ARM_HAND_ROOT_" Offset="0x5038" />
         <Limb Name="gPoeRightArmHandLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_ARM_HAND" Offset="0x5044" />
-        <Limb Name="gPoeLanternRootLimb" Type="Standard" EnumName="POE_LIMB_LATERN_ROOT" Offset="0x5050" />
-        <Limb Name="gPoeLanternLimb" Type="Standard" EnumName="POE_LIMB_LATERN" Offset="0x505C" />
+        <Limb Name="gPoeLanternRootLimb" Type="Standard" EnumName="POE_LIMB_LANTERN_ROOT" Offset="0x5050" />
+        <Limb Name="gPoeLanternLimb" Type="Standard" EnumName="POE_LIMB_LANTERN" Offset="0x505C" />
         <Limb Name="gPoeRightForearmLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_FOREARM" Offset="0x5068" />
         <Limb Name="gPoeRightUpperArmLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_UPPER_ARM" Offset="0x5074" />
 

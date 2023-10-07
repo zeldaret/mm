@@ -864,27 +864,27 @@ s32 EnPoh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 static s8 sLimbToBodyParts[POE_LIMB_MAX] = {
-    BODYPART_NONE,    // POE_LIMB_NONE
-    BODYPART_NONE,    // POE_LIMB_ROOT
-    BODYPART_NONE,    // POE_LIMB_ROOT_WRAPPER
-    BODYPART_NONE,    // POE_LIMB_BOTTEM_CLOAK_ROOT
-    ENPOH_BODYPART_4, // POE_LIMB_BOTTEM_CLOAK
-    ENPOH_BODYPART_5, // POE_LIMB_TOP_CLOAK
-    BODYPART_NONE,    // POE_LIMB_LEFT_ARM_ROOT
-    BODYPART_NONE,    // POE_LIMB_LEFT_ARM_WRAPPER
-    BODYPART_NONE,    // POE_LIMB_LEFT_FOREARM_ROOT
-    ENPOH_BODYPART_0, // POE_LIMB_LEFT_FOREARM
-    ENPOH_BODYPART_1, // POE_LIMB_LEFT_UPPER_ARM
-    BODYPART_NONE,    // POE_LIMB_FACE
-    BODYPART_NONE,    // POE_LIMB_RIGHT_ARM_ROOT
-    BODYPART_NONE,    // POE_LIMB_RIGHT_ARM_WRAPPER
-    BODYPART_NONE,    // POE_LIMB_RIGHT_FOREARM_ROOT
-    BODYPART_NONE,    // POE_LIMB_RIGHT_ARM_HAND_ROOT
-    ENPOH_BODYPART_2, // POE_LIMB_RIGHT_ARM_HAND
-    BODYPART_NONE,    // POE_LIMB_LATERN_ROOT
-    BODYPART_NONE,    // POE_LIMB_LATERN
-    ENPOH_BODYPART_3, // POE_LIMB_RIGHT_FOREARM
-    BODYPART_NONE,    // POE_LIMB_RIGHT_UPPER_ARM
+    BODYPART_NONE,               // POE_LIMB_NONE
+    BODYPART_NONE,               // POE_LIMB_ROOT
+    BODYPART_NONE,               // POE_LIMB_ROOT_WRAPPER
+    BODYPART_NONE,               // POE_LIMB_BOTTEM_CLOAK_ROOT
+    POE_BODYPART_BOTTEM_CLOAK,   // POE_LIMB_BOTTEM_CLOAK
+    POE_BODYPART_TOP_CLOAK,      // POE_LIMB_TOP_CLOAK
+    BODYPART_NONE,               // POE_LIMB_LEFT_ARM_ROOT
+    BODYPART_NONE,               // POE_LIMB_LEFT_ARM_WRAPPER
+    BODYPART_NONE,               // POE_LIMB_LEFT_FOREARM_ROOT
+    POE_BODYPART_LEFT_FOREARM,   // POE_LIMB_LEFT_FOREARM
+    POE_BODYPART_LEFT_UPPER_ARM, // POE_LIMB_LEFT_UPPER_ARM
+    BODYPART_NONE,               // POE_LIMB_FACE
+    BODYPART_NONE,               // POE_LIMB_RIGHT_ARM_ROOT
+    BODYPART_NONE,               // POE_LIMB_RIGHT_ARM_WRAPPER
+    BODYPART_NONE,               // POE_LIMB_RIGHT_FOREARM_ROOT
+    BODYPART_NONE,               // POE_LIMB_RIGHT_ARM_HAND_ROOT
+    POE_BODYPART_RIGHT_ARM_HAND, // POE_LIMB_RIGHT_ARM_HAND
+    BODYPART_NONE,               // POE_LIMB_LATERN_ROOT
+    BODYPART_NONE,               // POE_LIMB_LATERN
+    POE_BODYPART_RIGHT_FOREARM,  // POE_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,               // POE_LIMB_RIGHT_UPPER_ARM
 };
 
 static Vec3f D_80B2F734[] = {
@@ -920,16 +920,16 @@ void EnPoh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
     bodyPartIndex = sLimbToBodyParts[limbIndex];
     if (bodyPartIndex != BODYPART_NONE) {
-        if (bodyPartIndex <= ENPOH_BODYPART_3) {
+        if (bodyPartIndex <= POE_BODYPART_RIGHT_FOREARM) {
             Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
-        } else if (bodyPartIndex == ENPOH_BODYPART_4) {
+        } else if (bodyPartIndex == POE_BODYPART_BOTTEM_CLOAK) {
             Matrix_MultVecX(2000.0f, &this->bodyPartsPos[bodyPartIndex]);
         } else {
             s32 i;
             Vec3f* vec = &this->bodyPartsPos[bodyPartIndex + 2];
             Vec3f* vec2 = &D_80B2F734[0];
 
-            Matrix_MultVecX(-2000.0f, &this->bodyPartsPos[bodyPartIndex]);     // ENPOH_BODYPART_5
+            Matrix_MultVecX(-2000.0f, &this->bodyPartsPos[bodyPartIndex]);     // POE_BODYPART_TOP_CLOAK
             Matrix_MultVecY(-2000.0f, &this->bodyPartsPos[bodyPartIndex + 1]); // ENPOH_BODYPART_6
 
             for (i = bodyPartIndex + 2; i < ENPOH_BODYPART_MAX; i++, vec++, vec2++) {
