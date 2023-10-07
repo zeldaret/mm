@@ -3,7 +3,7 @@
     <File Name="object_skb" Segment="6">
         <Animation Name="gStalchildIdleAnim" Offset="0x9E4" />
         <Animation Name="gStalchildSaluteAnim" Offset="0x15EC" />
-        <Animation Name="gStalchildSwingOnBranch" Offset="0x1D1C" />
+        <Animation Name="gStalchildSwingOnBranchAnim" Offset="0x1D1C" />
         <Animation Name="gStalchildAttackAnim" Offset="0x2190" />
         <!-- <Blob Name="object_skb_zeroes_unk_000021A0" Size="0x20" Offset="0x21A0" /> -->
         <Animation Name="gStalchildCollapseAnim" Offset="0x270C" />
