@@ -57,7 +57,7 @@ static AnimationInfo sAnimationInfo[] = {
     { &gStalchildCollapseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
     { &gStalchildSitLaughAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
     { &gStalchildSitTapToesAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
-    { &gStalchildSwingOnBranch, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &gStalchildSwingOnBranchAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
     { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
     { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },
     { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
@@ -197,7 +197,7 @@ void func_80994A30(EnSkb* this, PlayState* play) {
 }
 
 void func_80994A9C(EnSkb* this, PlayState* play) {
-    SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildSwingOnBranch, this->jointTable,
+    SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildSwingOnBranchAnim, this->jointTable,
                    this->morphTable, STALCHILD_LIMB_MAX);
     this->unk_3DC = 1;
     func_809954F8(this);

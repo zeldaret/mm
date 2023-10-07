@@ -143,19 +143,19 @@ typedef enum StalchildHintAnimation {
 } StalchildHintAnimation;
 
 static AnimationInfo sAnimationInfo[STALCHILD_HINT_ANIM_MAX] = {
-    { &gStalchildWalkAnim, 0.96f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },        // STALCHILD_HINT_ANIM_WALK
-    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },      // STALCHILD_HINT_ANIM_STAND_UP_MORPH_1
-    { &gStalchildAttackAnim, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f }, // STALCHILD_HINT_ANIM_ATTACK
-    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },      // STALCHILD_HINT_ANIM_STAGGER_MORPH_4
-    { &gStalchildCollapseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },     // STALCHILD_HINT_ANIM_COLLAPSE
-    { &gStalchildSitLaughAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },     // STALCHILD_HINT_ANIM_SIT_LAUGH
-    { &gStalchildSitTapToesAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },   // STALCHILD_HINT_ANIM_SIT_TAP_TOES
-    { &gStalchildSwingOnBranch, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },    // STALCHILD_HINT_ANIM_SWING_ON_BRANCH
-    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // STALCHILD_HINT_ANIM_STAND_UP_MORPH_8
-    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },     // STALCHILD_HINT_ANIM_STAND_UP_MORPH_16
-    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // STALCHILD_HINT_ANIM_STAGGER_MORPH_8
-    { &gStalchildSaluteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },       // STALCHILD_HINT_ANIM_SALUTE
-    { &gStalchildIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },         // STALCHILD_HINT_ANIM_IDLE
+    { &gStalchildWalkAnim, 0.96f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },         // STALCHILD_HINT_ANIM_WALK
+    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },       // STALCHILD_HINT_ANIM_STAND_UP_MORPH_1
+    { &gStalchildAttackAnim, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f },  // STALCHILD_HINT_ANIM_ATTACK
+    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },       // STALCHILD_HINT_ANIM_STAGGER_MORPH_4
+    { &gStalchildCollapseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },      // STALCHILD_HINT_ANIM_COLLAPSE
+    { &gStalchildSitLaughAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },      // STALCHILD_HINT_ANIM_SIT_LAUGH
+    { &gStalchildSitTapToesAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },    // STALCHILD_HINT_ANIM_SIT_TAP_TOES
+    { &gStalchildSwingOnBranchAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, // STALCHILD_HINT_ANIM_SWING_ON_BRANCH
+    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },       // STALCHILD_HINT_ANIM_STAND_UP_MORPH_8
+    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },      // STALCHILD_HINT_ANIM_STAND_UP_MORPH_16
+    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },       // STALCHILD_HINT_ANIM_STAGGER_MORPH_8
+    { &gStalchildSaluteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },        // STALCHILD_HINT_ANIM_SALUTE
+    { &gStalchildIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },          // STALCHILD_HINT_ANIM_IDLE
 };
 
 static InitChainEntry sInitChain[] = {
