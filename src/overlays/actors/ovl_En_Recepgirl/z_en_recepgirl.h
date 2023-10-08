@@ -7,6 +7,8 @@ struct EnRecepgirl;
 
 typedef void (*EnRecepgirlActionFunc)(struct EnRecepgirl*, PlayState*);
 
+#define ENRECEPGIRL_GET_SWITCH_FLAG(thisx) ((thisx)->params)
+
 typedef struct EnRecepgirl {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;

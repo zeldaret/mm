@@ -4,13 +4,30 @@
 #ifndef REGS_H
 #define REGS_H
 
+#include "ultra64.h"
+#include "unk.h"
+
+
 #define REG_GROUPS 29 // number of REG groups, i.e. REG, SREG, OREG, etc.
 #define REG_PAGES 6
 #define REG_PER_PAGE 16
 #define REG_PER_GROUP REG_PAGES * REG_PER_PAGE
 
-/* We probably want a better name for gGameInfo based on OoT discussions */
-#define BASE_REG(n, r) gGameInfo->data[n * REG_PER_GROUP + r]
+typedef struct RegEditor {
+    /* 0x00 */ u8  regPage; // 0: no page selected (reg editor is not active); 1: first page; `REG_PAGES`: last page
+    /* 0x01 */ u8  regGroup; // Indexed from 0 to `REG_GROUPS`-1. Each group has its own character to identify it.
+    /* 0x02 */ u8  regCur; // Selected reg, indexed from 0 as the page start
+    /* 0x03 */ u8  dPadInputPrev;
+    /* 0x04 */ u32 inputRepeatTimer;
+    /* 0x08 */ UNK_TYPE1 pad_08[0xC];
+    /* 0x14 */ s16 data[REG_GROUPS * REG_PER_GROUP]; // Accessed through *REG macros
+} RegEditor; // size = 0x15D4
+
+void Regs_Init(void);
+
+extern RegEditor* gRegEditor;
+
+#define BASE_REG(n, r) (gRegEditor->data[n * REG_PER_GROUP + r])
 
 #define  REG(r) BASE_REG(0, r)
 #define SREG(r) BASE_REG(1, r)
@@ -42,12 +59,21 @@
 #define kREG(r) BASE_REG(27, r)
 #define bREG(r) BASE_REG(28, r)
 
-/* TODO: Actually confirm these, in case of miss-match it's at least a simple list to `sed` */
+/* TODO: There are still a few OoT defines here that need confirmation */
+
 #define R_TIME_SPEED                      REG(15)
 #define R_RUN_SPEED_LIMIT                 REG(45)
 
 #define R_ENABLE_ARENA_DBG                SREG(0) // Same as OoT
+#define R_ROOM_IMAGE_NODRAW_FLAGS         SREG(25)
 #define R_UPDATE_RATE                     SREG(30)
+#define R_VI_MODE_EDIT_STATE              SREG(48)
+#define R_VI_MODE_EDIT_WIDTH              SREG(49)
+#define R_VI_MODE_EDIT_HEIGHT             SREG(50)
+#define R_VI_MODE_EDIT_ULY_ADJ            SREG(51)
+#define R_VI_MODE_EDIT_LRY_ADJ            SREG(52)
+#define R_VI_MODE_EDIT_ULX_ADJ            SREG(53)
+#define R_VI_MODE_EDIT_LRX_ADJ            SREG(54)
 #define R_FB_FILTER_TYPE                  SREG(80)
 #define R_FB_FILTER_PRIM_COLOR(c)         SREG(81 + c)
 #define R_FB_FILTER_A                     SREG(84)
@@ -122,6 +148,12 @@
 #define R_REVERSE_FLOOR_INDEX               XREG(94)
 #define R_MINIMAP_DISABLED                  XREG(95)
 
+#define R_TRANS_FADE_FLASH_ALPHA_STEP     iREG(50) // Set to a negative number to start the flash
+#define R_ROOM_CULL_DEBUG_MODE            iREG(86)
+#define R_ROOM_CULL_NUM_ENTRIES           iREG(87)
+#define R_ROOM_CULL_USED_ENTRIES          iREG(88)
+#define R_ROOM_CULL_DEBUG_TARGET          iREG(89)
+
 #define R_B_LABEL_DD                      WREG(0)
 #define R_OW_MINIMAP_X                    WREG(29)
 #define R_OW_MINIMAP_Y                    WREG(30)
@@ -142,5 +174,8 @@
 #define R_ITEM_AMMO_Y(i)                  VREG(68 + i)
 #define R_ITEM_ICON_WIDTH(i)              VREG(76 + i)
 #define R_ITEM_BTN_WIDTH(i)               VREG(80 + i)
+
+// Name inferred from OoT. Set to true to manually set play->csCtx.script
+#define R_USE_DEBUG_CUTSCENE              dREG(95)
 
 #endif

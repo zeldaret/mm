@@ -8,7 +8,7 @@
 #include "z_en_warp_tag.h"
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnWarptag*)thisx)
 
@@ -37,8 +37,10 @@ ActorInit En_Warp_tag_InitVars = {
 };
 
 // this appears to be unused, as the code never accesses it in known vanilla cases
-// these unknown values get passed to a unknown z_message function
-u8 D_809C1000[] = { 0x28, 0x29, 0x2A, 0x2B, 0x2D, 0x2C, 0, 0 };
+u8 D_809C1000[] = {
+    OCARINA_ACTION_CHECK_TIME,    OCARINA_ACTION_CHECK_HEALING, OCARINA_ACTION_CHECK_EPONAS,
+    OCARINA_ACTION_CHECK_SOARING, OCARINA_ACTION_CHECK_SUNS,    OCARINA_ACTION_CHECK_STORMS,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
@@ -52,13 +54,13 @@ void EnWarptag_Init(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->dyna.actor, 0.0f);
 
     if (WARPTAG_GET_3C0_MAX(thisx) == WARPTAG_3C0_MAX) {
-        this->dyna.actor.flags &= ~ACTOR_FLAG_1;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
         if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
             this->actionFunc = EnWarpTag_WaitForPlayer;
 
         } else {
-            if ((this->dangeonKeepObject = Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP)) < 0) {
+            if ((this->dangeonKeepObject = Object_GetSlot(&play->objectCtx, GAMEPLAY_DANGEON_KEEP)) < 0) {
                 Actor_Kill(&this->dyna.actor);
             }
 
@@ -113,7 +115,7 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
         //   and I doubt its set externally by another actor, so I believe this is unused
         // might be a bug, they might have meant to set actor flag (0x2000 0000) up above but mistyped (0x200 0000)
         // also WARPTAG_GET_3C0 should always return 2C0 -> 0xF for all known in-game uses, which is OOB
-        func_80152434(play, D_809C1000[WARPTAG_GET_3C0(&this->dyna.actor)]); // unk message function
+        Message_DisplayOcarinaStaff(play, D_809C1000[WARPTAG_GET_3C0(&this->dyna.actor)]);
         this->actionFunc = EnWarpTag_Unused809C0A20;
 
     } else {
@@ -125,13 +127,13 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
  * Unused ActionFunc: assigned by EnWarpTag_Unused809C09A0, no known variants use.
  */
 void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode == 9) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_7);
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_STORMS) {
+        func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
         this->actionFunc = EnWarpTag_RespawnPlayer;
-        ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
+        CutsceneManager_Stop(CutsceneManager_GetCurrentCsId());
 
-    } else if (play->msgCtx.ocarinaMode >= 2) {
-        play->msgCtx.ocarinaMode = 4;
+    } else if (play->msgCtx.ocarinaMode >= OCARINA_MODE_WARP) {
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = EnWarpTag_Unused809C09A0;
     }
 }
@@ -141,7 +143,7 @@ void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
  */
 void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
     ActorEntry* playerActorEntry;
-    Player* player;
+    Player* player = GET_PLAYER(play);
     s32 playerSpawnIndex;
     s32 new15E;
     s32 entrance;
@@ -149,14 +151,14 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
     u8 playerForm;
     s16 playerParams;
 
-    player = GET_PLAYER(play);
-    if (play->playerActorCsIds[4] >= 0 && ActorCutscene_GetCurrentIndex() != play->playerActorCsIds[4]) {
-        if (ActorCutscene_GetCanPlayNext(play->playerActorCsIds[4]) == 0) {
-            ActorCutscene_SetIntentToPlay(play->playerActorCsIds[4]);
+    if ((play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON] >= 0) &&
+        (CutsceneManager_GetCurrentCsId() != play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON])) {
+        if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON])) {
+            CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON]);
 
         } else {
-            ActorCutscene_StartAndSetUnkLinkFields(play->playerActorCsIds[4], &this->dyna.actor);
-            func_800B8E58(player, NA_SE_PL_WARP_PLATE);
+            CutsceneManager_StartWithPlayerCs(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON], &this->dyna.actor);
+            Player_PlaySfx(player, NA_SE_PL_WARP_PLATE);
             Play_EnableMotionBlur(0);
         }
 
@@ -208,10 +210,9 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
 
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?
                 // especially because we are converting from deg to binang, but isnt home.rot.y already in binang??
-                Play_SetRespawnData(
-                    &play->state, 0, entrance, play->setupEntranceList[playerSpawnIndex].room, playerParams,
-                    &newRespawnPos,
-                    ((((playerActorEntry->rot.y >> 7) & 0x1FF) / 180.0f) * 32768.0f)); // DEG_TO_BINANG ?
+                Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, entrance,
+                                    play->setupEntranceList[playerSpawnIndex].room, playerParams, &newRespawnPos,
+                                    DEG_TO_BINANG_ALT((playerActorEntry->rot.y >> 7) & 0x1FF));
 
                 func_80169EFC(&play->state);
                 gSaveContext.respawnFlag = -5;
@@ -232,11 +233,11 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
  * ActionFunc: Deku Playground, return to North Clock Town.
  */
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() != this->dyna.actor.cutscene) {
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_GetCurrentCsId() != this->dyna.actor.csId) {
+        if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+            CutsceneManager_Queue(this->dyna.actor.csId);
         }
     }
 
@@ -244,9 +245,8 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
         play->nextEntrance = play->setupExitList[WARPTAG_GET_EXIT_INDEX(&this->dyna.actor)];
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
-        func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
+        Audio_PlaySfx_2(NA_SE_OC_SECRET_HOLE_OUT);
         func_801A4058(5);
-        if (1) {}
         gSaveContext.seqId = (u8)NA_BGM_DISABLED;
         gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     }
@@ -263,7 +263,7 @@ void EnWarptag_Update(Actor* thisx, PlayState* play) {
 void EnWarpTag_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWarpTagRainbowTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

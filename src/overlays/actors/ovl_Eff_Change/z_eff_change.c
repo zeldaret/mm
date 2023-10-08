@@ -56,7 +56,7 @@ void EffChange_Init(Actor* thisx, PlayState* play) {
     this->step = 0;
     this->actor.shape.rot.y = 0;
     this->skeletonInfo.frameCtrl.unk_C = (2.0f / 3.0f);
-    ActorCutscene_SetIntentToPlay(0x7B);
+    CutsceneManager_Queue(CS_ID_GLOBAL_ELEGY);
 }
 
 void EffChange_Destroy(Actor* thisx, PlayState* play) {
@@ -80,8 +80,8 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
 
     if (func_80183DE0(&this->skeletonInfo)) {
         Actor_Kill(&this->actor);
-        ActorCutscene_Stop(0x7B);
-        func_800FD2B4(play, 0.0f, 850.0f, 0.2f, 0.0f);
+        CutsceneManager_Stop(CS_ID_GLOBAL_ELEGY);
+        Environment_AdjustLights(play, 0.0f, 850.0f, 0.2f, 0.0f);
         return;
     }
 
@@ -108,12 +108,12 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
     } else if (phi_fv0 < 0.0f) {
         phi_fv0 = 0.0f;
     }
-    func_800FD2B4(play, phi_fv0, 850.0f, 0.2f, 0.0f);
-    if (ActorCutscene_GetCurrentIndex() != 0x7B) {
-        if (ActorCutscene_GetCanPlayNext(0x7B)) {
-            ActorCutscene_Start(0x7B, &this->actor);
+    Environment_AdjustLights(play, phi_fv0, 850.0f, 0.2f, 0.0f);
+    if (CutsceneManager_GetCurrentCsId() != CS_ID_GLOBAL_ELEGY) {
+        if (CutsceneManager_IsNext(CS_ID_GLOBAL_ELEGY)) {
+            CutsceneManager_Start(CS_ID_GLOBAL_ELEGY, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(0x7B);
+            CutsceneManager_Queue(CS_ID_GLOBAL_ELEGY);
         }
     }
 }
@@ -133,7 +133,7 @@ void EffChange_Draw(Actor* thisx, PlayState* play) {
     mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
     if (mtx != NULL) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_RotateYS((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000), MTXMODE_APPLY);
 
         OPEN_DISPS(play->state.gfxCtx);

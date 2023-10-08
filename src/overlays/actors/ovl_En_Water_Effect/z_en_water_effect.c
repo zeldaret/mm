@@ -13,10 +13,11 @@
  */
 
 #include "z_en_water_effect.h"
+#include "overlays/actors/ovl_Bg_Ikana_Rotaryroom/z_bg_ikana_rotaryroom.h"
 #include "objects/object_water_effect/object_water_effect.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnWaterEffect*)thisx)
 
@@ -90,7 +91,7 @@ void EnWaterEffect_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnWaterEffect* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_DC4 = Rand_ZeroFloat(100.0f);
 
     if (this->actor.params == ENWATEREFFECT_TYPE_FALLING_ROCK_SPAWNER) {
@@ -158,10 +159,10 @@ void EnWaterEffect_Update(Actor* thisx, PlayState* play2) {
         this->unk_DC4++;
         if ((this->unk_DC4 % 32) == 0) {
             if (Rand_ZeroOne() < 0.5f) {
-                Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, 4);
-                sp88.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
+                Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, UPDBGCHECKINFO_FLAG_4);
+                sp88.x = Rand_CenteredFloat(50.0f) + this->actor.world.pos.x;
                 sp88.y = this->actor.world.pos.y;
-                sp88.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
+                sp88.z = Rand_CenteredFloat(50.0f) + this->actor.world.pos.z;
                 if ((this->actor.world.pos.y + this->actor.depthInWater) <= this->actor.floorHeight) {
                     phi_v1 = 0;
                 } else {
@@ -289,12 +290,12 @@ void EnWaterEffect_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_144) / 2; i++, ptr++) {
         if ((ptr->unk_00 == 1) || (ptr->unk_00 == 2)) {
             if (!phi_s4) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+                POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
@@ -326,7 +327,7 @@ void EnWaterEffect_Draw(Actor* thisx, PlayState* play2) {
     for (i = 0; i < ARRAY_COUNT(this->unk_144) / 2; i++, ptr++) {
         if (ptr->unk_00 == 3) {
             if (!phi_s4) {
-                func_8012C448(gfxCtx);
+                Gfx_SetupDL44_Xlu(gfxCtx);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
@@ -367,9 +368,9 @@ void func_80A599E8(EnWaterEffect* this, Vec3f* arg1, u8 arg2) {
 
             if (arg2 >= 2) {
                 if (arg2 == 2) {
-                    ptr->unk_10.x = randPlusMinusPoint5Scaled(10.0f);
+                    ptr->unk_10.x = Rand_CenteredFloat(10.0f);
                     ptr->unk_10.y = Rand_ZeroFloat(3.0f) + 5.0f;
-                    ptr->unk_10.z = randPlusMinusPoint5Scaled(10.0f);
+                    ptr->unk_10.z = Rand_CenteredFloat(10.0f);
                 }
                 ptr->unk_2C.z = 0.0017f;
                 ptr->unk_2C.x = 0.003f;
@@ -414,16 +415,16 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
         this->unk_DC6--;
     }
 
-    if ((rotaryRoom != NULL) && Flags_GetSwitch(play, (rotaryRoom->params >> 1) & 0x7F)) {
+    if ((rotaryRoom != NULL) && Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_SWITCH_FLAG_1(rotaryRoom))) {
         this->unk_DC6 = Rand_ZeroFloat(150.0f) + 100.0f;
     } else if (!Play_InCsMode(play)) {
         this->unk_DC4++;
         if (this->unk_DC6 == 0) {
             this->unk_DC6 = Rand_ZeroFloat(150.0f) + 100.0f;
-            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, 4);
-            sp74.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
+            Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, UPDBGCHECKINFO_FLAG_4);
+            sp74.x = Rand_CenteredFloat(50.0f) + this->actor.world.pos.x;
             sp74.y = this->actor.world.pos.y;
-            sp74.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
+            sp74.z = Rand_CenteredFloat(50.0f) + this->actor.world.pos.z;
             func_80A599E8(this, &sp74, 0);
         }
     }
@@ -482,7 +483,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
                                 player->flameTimers[j] = Rand_S16Offset(0, 200);
                             }
                             player->isBurning = true;
-                            func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DEMO_DAMAGE);
+                            Player_PlaySfx(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DEMO_DAMAGE);
                         }
                     }
 
@@ -524,8 +525,8 @@ void func_80A5A184(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_144); i++, ptr++) {
         if (ptr->unk_00 == 4) {
@@ -623,7 +624,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_XLU_DISP++, 165, 235, 255, 128);
 
@@ -634,7 +635,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
     if ((this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) ||
         (this->actor.params == ENWATEREFFECT_TYPE_GYORG_PRIMARY_SPRAY)) {
         if (this->unk_E2C > 1.0f) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000DE0));
             Matrix_Scale(this->unk_DC8[1].y, this->unk_DC8[1].z, this->unk_DC8[1].y, MTXMODE_APPLY);
 
@@ -646,7 +647,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
         Matrix_Pop();
 
         if (this->unk_E30 > 1.0f) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E0C));
             Matrix_Scale(this->unk_DC8[2].y, this->unk_DC8[2].z, this->unk_DC8[2].y, MTXMODE_APPLY);
 
@@ -661,7 +662,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
     }
 
     if ((this->unk_E34 > 1.0f) && (this->actor.params != ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE)) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E40));
         Matrix_Scale(this->unk_DC8[3].y, this->unk_DC8[3].z, this->unk_DC8[3].y, MTXMODE_APPLY);
 
@@ -674,7 +675,7 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
 
     if ((this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) ||
         (this->actor.params == ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE)) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_water_effect_Matanimheader_000E58));
         Matrix_Scale(this->unk_DC8[4].y, this->unk_DC8[4].z, this->unk_DC8[4].y, MTXMODE_APPLY);
 
@@ -684,12 +685,12 @@ void func_80A5A6B8(Actor* thisx, PlayState* play2) {
     }
 
     if (this->actor.params == ENWATEREFFECT_TYPE_GYORG_RIPPLES) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_144) / 2; i++, ptr++) {
             if (ptr->unk_00 == 3) {
                 if (!phi_s4) {
-                    func_8012C448(play->state.gfxCtx);
+                    Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
                     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                     gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);

@@ -145,7 +145,7 @@ void BgKin2Bombwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     bombwallCollider = &this->collider;
     Collider_InitCylinder(play, bombwallCollider);
-    if (Flags_GetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BG_KIN2_BOMBWALL_GET_SWITCH_FLAG(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -171,7 +171,7 @@ void BgKin2Bombwall_SetupWait(BgKin2Bombwall* this) {
 void BgKin2Bombwall_Wait(BgKin2Bombwall* this, PlayState* play) {
     if (BgKin2Bombwall_IsHitFromNearby(this, play)) {
         this->collider.base.acFlags &= ~AC_HIT;
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
         BgKin2Bombwall_SetupPlayCutscene(this);
     } else {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
@@ -183,17 +183,17 @@ void BgKin2Bombwall_SetupPlayCutscene(BgKin2Bombwall* this) {
 }
 
 void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Flags_SetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(&this->dyna.actor));
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        Flags_SetSwitch(play, BG_KIN2_BOMBWALL_GET_SWITCH_FLAG(&this->dyna.actor));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
         BgKin2Bombwall_SpawnEffects(this, play);
         BgKin2Bombwall_SetupEndCutscene(this);
 
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -205,7 +205,7 @@ void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall* this) {
 void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, PlayState* play) {
     this->timer--;
     if (this->timer <= 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         Actor_Kill(&this->dyna.actor);
     }
 }

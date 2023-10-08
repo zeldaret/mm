@@ -6,7 +6,7 @@
 
 #include "z_obj_mu_pict.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((ObjMuPict*)thisx)
 
@@ -40,13 +40,13 @@ ActorInit Obj_Mu_Pict_InitVars = {
 void ObjMuPict_Init(Actor* thisx, PlayState* play) {
     ObjMuPict* this = THIS;
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         Actor_Kill(&this->actor);
     }
 
     func_80C06D90(this, play);
     this->unk14A = OBJMUPICT_GET_F000(&this->actor);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
     this->unk148 = 0;
@@ -64,19 +64,19 @@ void func_80C06B70(ObjMuPict* this, PlayState* play) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (this->actor.cutscene < 0) {
+        if (this->actor.csId <= CS_ID_NONE) {
             func_80C06DC8(this, play);
             func_80C06CC4(this);
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
             func_80C06DC8(this, play);
             func_80C06C54(this);
         }
     } else if (ABS_ALT(yawDiff) < 0x2AAA) {
-        func_800B8614(&this->actor, play, 80.0f);
+        Actor_OfferTalk(&this->actor, play, 80.0f);
     }
 }
 
@@ -85,11 +85,11 @@ void func_80C06C54(ObjMuPict* this) {
 }
 
 void func_80C06C68(ObjMuPict* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
         func_80C06CC4(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -113,8 +113,8 @@ void func_80C06CD8(ObjMuPict* this, PlayState* play) {
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 func_80C06B5C(this);
-                if (this->actor.cutscene >= 0) {
-                    ActorCutscene_Stop(this->actor.cutscene);
+                if (this->actor.csId >= 0) {
+                    CutsceneManager_Stop(this->actor.csId);
                 }
             }
             break;

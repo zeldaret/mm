@@ -12,12 +12,25 @@ typedef enum {
     /* 1 */ EN_SNOWMAN_TYPE_LARGE,
     /* 2 */ EN_SNOWMAN_TYPE_SPLIT,
     /* 3 */ EN_SNOWMAN_TYPE_SMALL_SNOWBALL,
-    /* 4 */ EN_SNOWMAN_TYPE_LARGE_SNOWBALL,
+    /* 4 */ EN_SNOWMAN_TYPE_LARGE_SNOWBALL
 } EnSnowmanType;
 
 struct EnSnowman;
 
 typedef void (*EnSnowmanActionFunc)(struct EnSnowman*, PlayState*);
+
+typedef enum EnSnowmanBodyPart {
+    /* 0 */ EN_SNOWMAN_BODYPART_0,
+    /* 1 */ EN_SNOWMAN_BODYPART_1,
+    /* 2 */ EN_SNOWMAN_BODYPART_2,
+    /* 3 */ EN_SNOWMAN_BODYPART_3,
+    /* 4 */ EN_SNOWMAN_BODYPART_4,
+    /* 5 */ EN_SNOWMAN_BODYPART_5,
+    /* 6 */ EN_SNOWMAN_BODYPART_6,
+    /* 7 */ EN_SNOWMAN_BODYPART_7,
+    /* 8 */ EN_SNOWMAN_BODYPART_8,
+    /* 9 */ EN_SNOWMAN_BODYPART_MAX
+} EnSnowmanBodyPart;
 
 typedef struct EnSnowman {
     /* 0x000 */ Actor actor;
@@ -50,7 +63,7 @@ typedef struct EnSnowman {
     /* 0x2A4 */ f32 drawDmgEffScale;
     /* 0x2A8 */ Vec3f combinePos;
     /* 0x2B4 */ Vec3f snowballPos;
-    /* 0x2C0 */ Vec3f bodyPartsPos[9];
+    /* 0x2C0 */ Vec3f bodyPartsPos[EN_SNOWMAN_BODYPART_MAX];
     /* 0x32C */ ColliderCylinder collider;
 } EnSnowman; // size = 0x378
 

@@ -32,7 +32,7 @@ ActorInit Obj_Blockstop_InitVars = {
 void ObjBlockstop_Init(Actor* thisx, PlayState* play) {
     ObjBlockstop* this = THIS;
 
-    if (Flags_GetSwitch(play, this->actor.params)) {
+    if (Flags_GetSwitch(play, OBJBLOCKSTOP_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
     }
     this->actionFunc = ObjBlockstop_CheckForBlock;
@@ -48,7 +48,7 @@ void ObjBlockstop_CheckForBlock(ObjBlockstop* this, PlayState* play) {
 
             s32 params = OBJOSHIHIKI_GET_F(prop);
             if (params < 3) {
-                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                CutsceneManager_Queue(this->actor.csId);
                 this->actionFunc = ObjBlockstop_TryPlayCutscene;
             }
         }
@@ -57,15 +57,15 @@ void ObjBlockstop_CheckForBlock(ObjBlockstop* this, PlayState* play) {
 }
 
 void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        Flags_SetSwitch(play, this->actor.params);
-        if (ActorCutscene_GetLength(this->actor.cutscene) != -1) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        Flags_SetSwitch(play, OBJBLOCKSTOP_GET_SWITCH_FLAG(&this->actor));
+        if (CutsceneManager_GetLength(this->actor.csId) != -1) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         }
         Actor_Kill(&this->actor);
         return;
     }
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
 }
 
 void ObjBlockstop_Update(Actor* thisx, PlayState* play) {

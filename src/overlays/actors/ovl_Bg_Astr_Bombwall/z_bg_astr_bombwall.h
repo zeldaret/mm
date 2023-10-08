@@ -5,7 +5,7 @@
 
 struct BgAstrBombwall;
 
-#define BGASTRBOMBWALL_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define BGASTRBOMBWALL_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 typedef void (*BgAstrBombwallActionFunc)(struct BgAstrBombwall*, PlayState*);
 typedef struct BgAstrBombwall {
@@ -13,6 +13,6 @@ typedef struct BgAstrBombwall {
     /* 0x15C */ BgAstrBombwallActionFunc actionFunc;
     /* 0x160 */ ColliderTris collider;
     /* 0x180 */ ColliderTrisElement colliderElements[2];
-    /* 0x238 */ s16 cutscenes[1];
+    /* 0x238 */ s16 csIdList[1];
 } BgAstrBombwall;
 #endif // Z_BG_ASTR_BOMBWALL_H

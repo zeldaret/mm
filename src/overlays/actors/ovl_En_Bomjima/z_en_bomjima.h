@@ -2,6 +2,7 @@
 #define Z_EN_BOMJIMA_H
 
 #include "global.h"
+#include "objects/object_cs/object_cs.h"
 
 struct EnBomjima;
 
@@ -13,8 +14,8 @@ typedef void (*EnBomjimaActionFunc)(struct EnBomjima*, PlayState*);
 typedef struct EnBomjima {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[21];
-    /* 0x206 */ Vec3s morphTable[21];
+    /* 0x188 */ Vec3s jointTable[OBJECT_CS_LIMB_MAX];
+    /* 0x206 */ Vec3s morphTable[OBJECT_CS_LIMB_MAX];
     /* 0x284 */ EnBomjimaActionFunc actionFunc;
     /* 0x288 */ s16 unk_288;
     /* 0x28A */ s16 unk_28A;
@@ -38,9 +39,9 @@ typedef struct EnBomjima {
     /* 0x2C6 */ s16 unk_2C6;
     /* 0x2C8 */ s16 unk_2C8;
     /* 0x2CA */ s16 unk_2CA;
-    /* 0x2CC */ f32 animLastFrame;
+    /* 0x2CC */ f32 animEndFrame;
     /* 0x2D0 */ f32 unk_2D0;
-    /* 0x2D4 */ s16 cutscenes[2];
+    /* 0x2D4 */ s16 csIdList[2];
     /* 0x2D8 */ UNK_TYPE1 unk2D8[4]; // maybe a part of the above?
     /* 0x2DC */ s16 unk_2DC;
     /* 0x2DE */ s16 cutsceneEnded;
@@ -52,7 +53,7 @@ typedef struct EnBomjima {
     /* 0x2EA */ s16 unk_2EA;
     /* 0x2EC */ s32 animIndex;
     /* 0x2F0 */ EnBombal* bombal;
-    /* 0x2F4 */ s16 bombalCutscene;
+    /* 0x2F4 */ s16 bombalCsId;
     /* 0x2F8 */ ColliderCylinder collider;
 } EnBomjima; // size = 0x344
 

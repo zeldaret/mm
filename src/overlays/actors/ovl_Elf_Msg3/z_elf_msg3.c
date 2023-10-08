@@ -42,25 +42,25 @@ s32 func_80A2CD1C(ElfMsg3* this, PlayState* play) {
     if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
         (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
         (void)"共倒れ"; // "Collapse together"
-        if (ELFMSG3_GET_SWITCH(&this->actor) != 0x7F) {
-            Flags_SetSwitch(play, ELFMSG3_GET_SWITCH(&this->actor));
+        if (ELFMSG3_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
+            Flags_SetSwitch(play, ELFMSG3_GET_SWITCH_FLAG(&this->actor));
         }
         Actor_Kill(&this->actor);
         return true;
     }
     if (this->actor.home.rot.y == 0x81) {
         if (Flags_GetClear(play, this->actor.room)) {
-            if (ELFMSG3_GET_SWITCH(&this->actor) != 0x7F) {
-                Flags_SetSwitch(play, ELFMSG3_GET_SWITCH(&this->actor));
+            if (ELFMSG3_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG3_GET_SWITCH_FLAG(&this->actor));
             }
             Actor_Kill(&this->actor);
             return true;
         }
     }
-    if (ELFMSG3_GET_SWITCH(&this->actor) == 0x7F) {
+    if (ELFMSG3_GET_SWITCH_FLAG(&this->actor) == 0x7F) {
         return false;
     }
-    if (Flags_GetSwitch(play, ELFMSG3_GET_SWITCH(&this->actor))) {
+    if (Flags_GetSwitch(play, ELFMSG3_GET_SWITCH_FLAG(&this->actor))) {
         (void)"共倒れ"; // "Collapse together"
         Actor_Kill(&this->actor);
         return true;
@@ -110,20 +110,20 @@ void func_80A2CF7C(ElfMsg3* this, PlayState* play) {
          ((player->actor.world.pos.y - this->actor.world.pos.y) < (100.0f * this->actor.scale.y))) &&
         (fabsf(player->actor.world.pos.z - this->actor.world.pos.z) < (100.0f * this->actor.scale.z))) {
         player->tatlTextId = func_80A2CF50(this);
-        ActorCutscene_SetIntentToPlay(0x7C);
+        CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         tatl->elfMsg = &this->actor;
-        if (this->actor.cutscene == -1) {
-            this->actor.cutscene = 0x7C;
+        if (this->actor.csId == CS_ID_NONE) {
+            this->actor.csId = CS_ID_GLOBAL_TALK;
         }
         if ((player->tatlTextId < 0) && (this->actor.home.rot.x < 0)) {
-            if (ActorCutscene_GetCurrentIndex() == 0x7D) {
-                ActorCutscene_Stop(0x7D);
-                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-            } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-                ActorCutscene_Start(this->actor.cutscene, &this->actor);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_DOOR);
+                CutsceneManager_Queue(this->actor.csId);
+            } else if (CutsceneManager_IsNext(this->actor.csId)) {
+                CutsceneManager_Start(this->actor.csId, &this->actor);
                 func_800E0348(play->cameraPtrs[CAM_ID_MAIN]);
             } else {
-                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                CutsceneManager_Queue(this->actor.csId);
             }
         }
     }
@@ -134,8 +134,8 @@ void ElfMsg3_Update(Actor* thisx, PlayState* play) {
 
     if (!func_80A2CD1C(this, play)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            if (ELFMSG3_GET_SWITCH(thisx) != 0x7F) {
-                Flags_SetSwitch(play, ELFMSG3_GET_SWITCH(thisx));
+            if (ELFMSG3_GET_SWITCH_FLAG(thisx) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG3_GET_SWITCH_FLAG(thisx));
             }
             Actor_Kill(&this->actor);
             return;

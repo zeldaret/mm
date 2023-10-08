@@ -13,15 +13,15 @@ typedef void (*DoorWarp1ActionFunc)(struct DoorWarp1*, PlayState*);
 #define DOORWARP1_GET_FF00_2(thisx) ((thisx)->params & 0xFF00)
 #define DOORWARP1_GET_FF00_3(thisx) ((thisx)->params >> 8)
 
-enum {
+typedef enum {
     /* 0 */ ENDOORWARP1_FF_0,
     /* 1 */ ENDOORWARP1_FF_1,
     /* 2 */ ENDOORWARP1_FF_2,
     /* 3 */ ENDOORWARP1_FF_3,
     /* 4 */ ENDOORWARP1_FF_4,
     /* 5 */ ENDOORWARP1_FF_5,
-    /* 6 */ ENDOORWARP1_FF_6,
-};
+    /* 6 */ ENDOORWARP1_FF_6
+} DoorWarp1Param;
 
 typedef struct DoorWarp1 {
     /* 0x000 */ DynaPolyActor dyna;
@@ -53,7 +53,7 @@ typedef struct DoorWarp1 {
     /* 0x202 */ u8 unk_202;
     /* 0x203 */ u8 unk_203;
     /* 0x204 */ f32 unk_204;
-    /* 0x208 */ u8 unk_208;
+    /* 0x208 */ u8 cueId;
 } DoorWarp1; // size = 0x20C
 
 #endif // Z_DOOR_WARP1_H

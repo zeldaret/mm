@@ -27,7 +27,7 @@ void EffectSsSbn_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsSbn_DrawSliding(PlayState* play, u32 index, EffectSs* this);
 void EffectSsSbn_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Sbn_InitVars = {
+EffectSsInit Effect_Ss_Sbn_InitVars = {
     EFFECT_SS_SBN,
     EffectSsSbn_Init,
 };
@@ -68,7 +68,7 @@ u32 EffectSsSbn_Init(PlayState* play, u32 index, EffectSs* this, void* initParam
     this->rReg4 = 250;
     this->rReg4Step = 30;
 
-    this->rScale = randPlusMinusPoint5Scaled(100.0f) + (initParams->scale * 120.0f);
+    this->rScale = Rand_CenteredFloat(100.0f) + (initParams->scale * 120.0f);
     if (this->rScale < 600) {
         this->rScale = 600;
     } else if (this->rScale > 1500) {
@@ -135,7 +135,7 @@ void EffectSsSbn_DrawSliding(PlayState* play, u32 index, EffectSs* this) {
     OPEN_DISPS(gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C2DC(gfxCtx);
+    Gfx_SetupDL25_Xlu(gfxCtx);
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_XLU_DECAL2);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->rAlpha);
 
@@ -175,7 +175,7 @@ void EffectSsSbn_Draw(PlayState* play, u32 index, EffectSs* this) {
     OPEN_DISPS(gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C2DC(gfxCtx);
+    Gfx_SetupDL25_Xlu(gfxCtx);
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_XLU_DECAL2);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->rAlpha);
 

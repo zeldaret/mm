@@ -5,6 +5,15 @@
 #include "z64view.h"
 
 typedef enum {
+    /* -1 */ EQUIP_SLOT_NONE = -1,
+    /*  0 */ EQUIP_SLOT_B,
+    /*  1 */ EQUIP_SLOT_C_LEFT,
+    /*  2 */ EQUIP_SLOT_C_DOWN,
+    /*  3 */ EQUIP_SLOT_C_RIGHT,
+    /*  4 */ EQUIP_SLOT_A
+} EquipSlot;
+
+typedef enum {
     /* 0 */ A_BTN_STATE_0,
     /* 1 */ A_BTN_STATE_1,
     /* 2 */ A_BTN_STATE_2,
@@ -134,7 +143,7 @@ typedef struct {
     /* 0x218 */ f32 aButtonRoll;
     /* 0x21C */ s16 unk_21C;
     /* 0x21E */ s16 bButtonDoAction;
-    /* 0x220 */ s16 unk_220;
+    /* 0x220 */ s16 tatlCalling;
     /* 0x222 */ s16 unk_222;
     /* 0x224 */ s16 unk_224;
     /* 0x226 */ s16 lifeColorChange;
@@ -212,5 +221,50 @@ typedef struct {
     /* 0x340 */ uintptr_t storyAddr;
     /* 0x344 */ size_t storySize;
 } InterfaceContext; // size = 0x348
+
+Gfx* Gfx_DrawTexRectRGBA16(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
+Gfx* Gfx_DrawTexRectIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
+Gfx* Gfx_DrawTexRectI8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy);
+Gfx* Gfx_DrawTexQuadIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, u16 point);
+Gfx* Gfx_DrawTexQuad4b(Gfx* gfx, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight, u16 point);
+
+void Interface_StartTimer(s16 timerId, s16 seconds);
+void Interface_StartPostmanTimer(s16 seconds, s16 bunnyHoodState);
+void Interface_NewDay(struct PlayState* play, s32 day);
+void Interface_SetHudVisibility(u16 hudVisibility);
+void Interface_UpdateButtonsPart2(struct PlayState* play);
+void Interface_SetSceneRestrictions(struct PlayState* play);
+void Interface_InitMinigame(struct PlayState* play);
+void Interface_LoadItemIconImpl(struct PlayState* play, u8 btn);
+void Interface_LoadItemIcon(struct PlayState* play, u8 btn);
+void Interface_UpdateButtonsAlt(struct PlayState* play, u16 flag);
+u8 Item_Give(struct PlayState* play, u8 item);
+u8 Item_CheckObtainability(u8 item);
+void Inventory_DeleteItem(s16 item, s16 slot);
+void Inventory_UnequipItem(s16 item);
+s32 Inventory_ReplaceItem(struct PlayState* play, u8 oldItem, u8 newItem);
+void Inventory_UpdateDeitySwordEquip(struct PlayState* play);
+s32 Inventory_HasEmptyBottle(void);
+s32 Inventory_HasItemInBottle(u8 item);
+void Inventory_UpdateBottleItem(struct PlayState* play, u8 item, u8 btn);
+s32 Inventory_ConsumeFairy(struct PlayState* play);
+void Inventory_UpdateItem(struct PlayState* play, s16 slot, s16 item);
+void func_8011552C(struct PlayState* play, u16 arg1);
+void func_801155B4(struct PlayState* play, s16 arg1);
+void func_80115764(struct PlayState* play, UNK_TYPE arg1);
+void func_80115844(struct PlayState* play, s16 doAction);
+s32 Health_ChangeBy(struct PlayState* play, s16 healthChange);
+void Health_GiveHearts(s16 hearts);
+void Rupees_ChangeBy(s16 rupeeChange);
+void Inventory_ChangeAmmo(s16 item, s16 ammoChange);
+void Magic_Add(struct PlayState* play, s16 magicToAdd);
+void Magic_Reset(struct PlayState* play);
+s32 Magic_Consume(struct PlayState* play, s16 magicToConsume, s16 type);
+void Interface_SetPerfectLetters(struct PlayState* play, s16 perfectLettersType);
+void Interface_StartMoonCrash(struct PlayState* play);
+void Interface_Draw(struct PlayState* play);
+void Interface_Update(struct PlayState* play);
+void Interface_Destroy(struct PlayState* play);
+void Interface_Init(struct PlayState* play);
 
 #endif

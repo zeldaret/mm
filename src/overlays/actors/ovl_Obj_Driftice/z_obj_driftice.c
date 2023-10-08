@@ -163,19 +163,19 @@ void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* 
             temp_f20 = 0.01f;
         }
 
-        Math_StepToS(&arg0->unk_00[1], 1200.0f * temp_f20, 0x64);
+        Math_StepToS(&arg0->unk_02, 1200.0f * temp_f20, 0x64);
         phi_s0 = 2500.0f * temp_f20;
-        Math_StepToS(&arg0->unk_00[3], Math_CosS(arg0->unk_00[2] * 6.5536f) * (120.0f * temp_f20), 0x28);
+        Math_StepToS(&arg0->unk_06, Math_CosS(arg0->unk_04 * 6.5536f) * (120.0f * temp_f20), 0x28);
         Math_StepToF(&arg0->unk_08, 1.0f, 0.02f);
     } else {
-        Math_StepToS(&arg0->unk_00[1], 0, 0x96);
+        Math_StepToS(&arg0->unk_02, 0, 0x96);
         phi_s0 = 0;
-        Math_StepToS(&arg0->unk_00[3], 20, 7);
+        Math_StepToS(&arg0->unk_06, 20, 7);
         Math_StepToF(&arg0->unk_08, 0.0f, 0.02f);
     }
-    Math_ScaledStepToS(arg0->unk_00, this->dyna.actor.yawTowardsPlayer, arg0->unk_00[1]);
-    *arg3 = arg0->unk_00[0];
-    Math_ScaledStepToS(&arg0->unk_00[2], phi_s0, arg0->unk_00[3]);
+    Math_ScaledStepToS(&arg0->unk_00, this->dyna.actor.yawTowardsPlayer, arg0->unk_02);
+    *arg3 = arg0->unk_00;
+    Math_ScaledStepToS(&arg0->unk_04, phi_s0, arg0->unk_06);
 
     for (i = 0; i < 2; i++) {
         temp_s0 = &arg0->unk_0C[i];
@@ -195,8 +195,7 @@ void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* 
 
     temp_f22 *= arg0->unk_08;
 
-    //! FAKE:
-    *arg2 = arg0->unk_00[2] + (s32)((void)0, temp_f22);
+    *arg2 = (s32)temp_f22 + arg0->unk_04;
 }
 
 void func_80A66C4C(ObjDrifticeStruct4* arg0, ObjDriftice* this, s16* arg2, s16* arg3) {
@@ -358,10 +357,10 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
         phi_f12 = this->unk_23C * 0.13f;
     }
 
-    Math_StepToF(&this->dyna.actor.speedXZ, phi_f0, phi_f12);
+    Math_StepToF(&this->dyna.actor.speed, phi_f0, phi_f12);
 
-    if ((this->dyna.actor.speedXZ + 0.05f) < sp3C) {
-        Math_Vec3f_Scale(&this->dyna.actor.velocity, this->dyna.actor.speedXZ / sp3C);
+    if ((this->dyna.actor.speed + 0.05f) < sp3C) {
+        Math_Vec3f_Scale(&this->dyna.actor.velocity, this->dyna.actor.speed / sp3C);
         this->dyna.actor.world.pos.x += this->dyna.actor.velocity.x;
         this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
         this->dyna.actor.world.pos.z += this->dyna.actor.velocity.z;
@@ -371,7 +370,7 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
 
         if (1) {}
 
-        this->dyna.actor.speedXZ *= 0.5f;
+        this->dyna.actor.speed *= 0.5f;
         if (((this->unk_164 >= this->unk_160) && (this->unk_168 > 0)) ||
             ((this->unk_164 <= 0) && (this->unk_168 < 0))) {
             if (!OBJDRIFTICE_GET_1000(&this->dyna.actor)) {
@@ -389,7 +388,7 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
                 if ((this->unk_16C[0].x != points->x) || (this->unk_16C[0].y != points->y) ||
                     (this->unk_16C[0].z != points->z)) {
                     func_80A6743C(this);
-                    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp30 = false;
                 }
             }
@@ -408,7 +407,7 @@ void func_80A6743C(ObjDriftice* this) {
 void func_80A67450(ObjDriftice* this, PlayState* play) {
     if (this->unk_248 < 0) {
         func_80A66570(this, this->unk_164);
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         func_80A671CC(this);
     }
 }
@@ -421,7 +420,7 @@ void func_80A674A8(ObjDriftice* this) {
 void func_80A674C4(ObjDriftice* this, PlayState* play) {
     this->unk_24C--;
     if (this->unk_24C <= 0) {
-        this->dyna.actor.speedXZ = 0.0f;
+        this->dyna.actor.speed = 0.0f;
         func_80A671CC(this);
     }
 }
@@ -429,7 +428,7 @@ void func_80A674C4(ObjDriftice* this, PlayState* play) {
 void ObjDriftice_Update(Actor* thisx, PlayState* play) {
     ObjDriftice* this = THIS;
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if (this->unk_248 < 0) {
             this->unk_248 = 1;
         } else {

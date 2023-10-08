@@ -41,7 +41,7 @@ ActorInit Bg_Iknin_Susceil_InitVars = {
     (ActorFunc)BgIkninSusceil_Draw,
 };
 
-static s32 unused = 0;
+static s32 sPad = 0;
 static f32 D_80C0B0E4 = 960.0f;
 static Vec2f D_80C0B0E8 = { -320.0f, 0.0f };
 static s8 D_80C0B0F0[] = { 0x00, 0x00, 0x07, 0x0A, 0x0A, 0x0B, 0x0B, 0x00 };
@@ -62,26 +62,27 @@ s32 func_80C0A740(BgIkninSusceil* this, PlayState* play) {
 }
 
 void func_80C0A804(BgIkninSusceil* this, PlayState* play) {
-    func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80C0A838(BgIkninSusceil* this, PlayState* play) {
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80C0A86C(BgIkninSusceil* this, PlayState* play, s16 verticalMag, s16 countdown, s32 arg4) {
+void BgIkninSusceil_RequestQuakeAndRumble(BgIkninSusceil* this, PlayState* play, s16 quakeY, s16 quakeDuration,
+                                          s32 rumbleType) {
     s32 pad;
-    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 31536);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetPerturbations(quakeIndex, quakeY, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, quakeDuration);
 
-    if (arg4 == 1) {
+    if (rumbleType == 1) {
         Rumble_Request(SQ(100.0f), 255, 20, 150);
-    } else if (arg4 == 2) {
+    } else if (rumbleType == 2) {
         Rumble_Request(SQ(100.0f), 180, 20, 100);
-    } else if (arg4 == 3) {
+    } else if (rumbleType == 3) {
         Rumble_Request(SQ(100.0f), 120, 20, 10);
     }
 }
@@ -92,7 +93,10 @@ s32 func_80C0A95C(BgIkninSusceil* this, PlayState* play) {
     f32 new_var;
     Player* player = GET_PLAYER(play);
     Vec3f offset;
-    f32 temp1, temp2, temp3, temp4;
+    f32 temp1;
+    f32 temp2;
+    f32 temp3;
+    f32 temp4;
 
     Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     for (i = 0; i < 7; i++) {
@@ -115,7 +119,7 @@ void BgIkninSusceil_Init(Actor* thisx, PlayState* play) {
     BgIkninSusceil* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_ikninside_obj_Colheader_00CBAC);
     this->animatedTexture = Lib_SegmentedToVirtual(object_ikninside_obj_Matanimheader_00C670);
     func_80C0AC74(this);
@@ -154,12 +158,12 @@ void func_80C0ABA8(BgIkninSusceil* this, PlayState* play) {
     this->dyna.actor.velocity.y *= 0.93f;
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
-        func_80C0A86C(this, play, 4, 14, 1);
-        Flags_UnsetSwitch(play, SUSCEIL_GET_SWITCHFLAG(&this->dyna.actor));
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
+        BgIkninSusceil_RequestQuakeAndRumble(this, play, 4, 14, 1);
+        Flags_UnsetSwitch(play, SUSCEIL_GET_SWITCH_FLAG(&this->dyna.actor));
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
     }
 }
 
@@ -169,7 +173,7 @@ void func_80C0AC74(BgIkninSusceil* this) {
 }
 
 void func_80C0AC90(BgIkninSusceil* this, PlayState* play) {
-    if (Flags_GetSwitch(play, SUSCEIL_GET_SWITCHFLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, SUSCEIL_GET_SWITCH_FLAG(&this->dyna.actor))) {
         func_80C0ACD4(this);
     }
 }
@@ -179,11 +183,11 @@ void func_80C0ACD4(BgIkninSusceil* this) {
 }
 
 void func_80C0ACE8(BgIkninSusceil* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         func_80C0AD44(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -197,11 +201,11 @@ void func_80C0AD64(BgIkninSusceil* this, PlayState* play) {
     this->dyna.actor.velocity.y *= 0.98f;
     if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 365.0f, 0.5f,
                            this->dyna.actor.velocity.y, 1.0f) < 0.1f) {
-        func_80C0A86C(this, play, 1, 14, 3);
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        BgIkninSusceil_RequestQuakeAndRumble(this, play, 1, 14, 3);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         func_80C0AB14(this);
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
     }
 }
 
@@ -216,7 +220,7 @@ void func_80C0AE5C(BgIkninSusceil* this, PlayState* play) {
     this->dyna.actor.velocity.y = CLAMP_MIN(this->dyna.actor.velocity.y, 1.0f);
     this->dyna.actor.world.pos.y = this->dyna.actor.world.pos.y + this->dyna.actor.velocity.y;
     if ((this->dyna.actor.home.pos.y + 365.0f) < this->dyna.actor.world.pos.y) {
-        func_80C0A86C(this, play, 3, 14, 2);
+        BgIkninSusceil_RequestQuakeAndRumble(this, play, 3, 14, 2);
         func_80C0AB14(this);
     }
 }
@@ -230,7 +234,7 @@ void BgIkninSusceil_Update(Actor* thisx, PlayState* play) {
         (player->unk_B48 > 1000.0f)) {
         this->unk168 = 2;
         if ((func_80C0A95C(this, play) != 0) && (this->actionFunc != func_80C0AE5C)) {
-            func_800B8E58(player, NA_SE_PL_BODY_HIT);
+            Player_PlaySfx(player, NA_SE_PL_BODY_HIT);
             func_80C0AE3C(this);
         }
     }

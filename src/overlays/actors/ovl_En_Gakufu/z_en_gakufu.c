@@ -208,9 +208,9 @@ void EnGakufu_GiveReward(EnGakufu* this, PlayState* play) {
     s32 hour;
     s32 i;
 
-    play_sound(NA_SE_SY_CORRECT_CHIME);
+    Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
 
-    hour = gSaveContext.save.time * (24.0f / 0x10000); // TIME_TO_HOURS_F
+    hour = TIME_TO_HOURS_F(gSaveContext.save.time);
     for (i = 0; i < 3; i++) {
         Item_DropCollectible(play, &sRewardDropsSpawnTerminaFieldPos, sRewardDrops[i + sRewardDropsIndex[hour]]);
     }
@@ -219,13 +219,13 @@ void EnGakufu_GiveReward(EnGakufu* this, PlayState* play) {
 }
 
 void EnGakufu_PlayRewardCutscene(EnGakufu* this, PlayState* play) {
-    if (this->actor.cutscene == -1) {
+    if (this->actor.csId == CS_ID_NONE) {
         EnGakufu_GiveReward(this, play);
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         EnGakufu_GiveReward(this, play);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

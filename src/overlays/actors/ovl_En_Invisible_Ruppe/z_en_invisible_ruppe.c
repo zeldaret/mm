@@ -55,30 +55,33 @@ static ColliderCylinderInit sCylinderInit = {
 void func_80C258A0(EnInvisibleRuppe* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void func_80C2590C(EnInvisibleRuppe* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
-        switch (INVISIBLERUPPE_GET_3(this)) {
+        switch (INVISIBLERUPPE_GET_3(&this->actor)) {
             case 0:
-                play_sound(NA_SE_SY_GET_RUPY);
+                Audio_PlaySfx(NA_SE_SY_GET_RUPY);
                 Item_DropCollectible(play, &this->actor.world.pos, 0x8000 | ITEM00_RUPEE_GREEN);
                 break;
 
             case 1:
-                play_sound(NA_SE_SY_GET_RUPY);
+                Audio_PlaySfx(NA_SE_SY_GET_RUPY);
                 Item_DropCollectible(play, &this->actor.world.pos, 0x8000 | ITEM00_RUPEE_BLUE);
                 break;
 
             case 2:
-                play_sound(NA_SE_SY_GET_RUPY);
+                Audio_PlaySfx(NA_SE_SY_GET_RUPY);
                 Item_DropCollectible(play, &this->actor.world.pos, 0x8000 | ITEM00_RUPEE_RED);
+                break;
+
+            default:
                 break;
         }
 
-        if (this->unk_190 >= 0) {
-            Flags_SetSwitch(play, this->unk_190);
+        if (this->switchFlag >= 0) {
+            Flags_SetSwitch(play, this->switchFlag);
         }
 
         this->actionFunc = func_80C259E8;
@@ -93,13 +96,13 @@ void EnInvisibleRuppe_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnInvisibleRuppe* this = THIS;
 
-    this->unk_190 = INVISIBLERUPPE_GET_1FC(this);
+    this->switchFlag = INVISIBLERUPPE_GET_SWITCH_FLAG(&this->actor);
 
-    if (this->unk_190 == 0x7F) {
-        this->unk_190 = -1;
+    if (this->switchFlag == 0x7F) {
+        this->switchFlag = -1;
     }
 
-    if ((this->unk_190 >= 0) && Flags_GetSwitch(play, this->unk_190)) {
+    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }

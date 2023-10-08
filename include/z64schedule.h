@@ -50,13 +50,13 @@ typedef enum {
     /* 0x0F */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S,  // Branches if the current time is less than the command time, short range branch
     /* 0x10 */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L,  // Branches if the current time is less than the command time, long range branch
     /* 0x11 */ SCHEDULE_CMD_ID_BRANCH_S,             // Always branch, short range branch
-    /* 0x12 */ SCHEDULE_CMD_ID_BRANCH_L,             // Always branch, long range branch
+    /* 0x12 */ SCHEDULE_CMD_ID_BRANCH_L              // Always branch, long range branch
 } ScheduleCommandId;
 
 typedef enum {
     /* 0 */ SCHEDULE_CHECK_MISC_ROOM_KEY,
     /* 1 */ SCHEDULE_CHECK_MISC_LETTER_TO_KAFEI,
-    /* 2 */ SCHEDULE_CHECK_MISC_MASK_ROMANI,
+    /* 2 */ SCHEDULE_CHECK_MISC_MASK_ROMANI
 } ScheduleCheckMisc;
 
 typedef struct {

@@ -7,7 +7,7 @@
 #include "z_en_tru_mt.h"
 #include "overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTruMt*)thisx)
 
@@ -180,13 +180,13 @@ s32 func_80B761FC(EnTruMt* this, PlayState* play) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (this->unk_3A4 == 0) {
                 this->unk_3A4 = 1;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DAMAGE);
             } else {
                 this->unk_3A4 = 0;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
             }
             play->interfaceCtx.minigameHiddenPoints = 1;
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
             return true;
         }
     }
@@ -247,13 +247,13 @@ void func_80B76440(EnTruMt* this, PlayState* play) {
         s16 temp_v1 = this->unk_394 - Math_Vec3f_Yaw(&this->unk_398, &this->actor.world.pos);
 
         if ((temp_v1 <= -0x2000) || (temp_v1 >= 0x2000)) {
-            Math_ApproachF(&this->actor.speedXZ, 7.0f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 7.0f, 0.2f, 1.0f);
         } else if (this->actor.xzDistToPlayer < 300.0f) {
-            Math_ApproachF(&this->actor.speedXZ, 7.0f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 7.0f, 0.2f, 1.0f);
         } else if (this->actor.xzDistToPlayer > 500.0f) {
-            Math_ApproachF(&this->actor.speedXZ, 2.5f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 2.5f, 0.2f, 1.0f);
         } else {
-            Math_ApproachF(&this->actor.speedXZ, 4.0f, 0.2f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 4.0f, 0.2f, 1.0f);
         }
     }
 }
@@ -301,7 +301,7 @@ s32 func_80B76600(EnTruMt* this, Path* path, s32 arg2) {
         phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
     }
@@ -335,7 +335,7 @@ s32 func_80B768F0(EnTruMt* this, PlayState* play) {
 }
 
 void func_80B76924(EnTruMt* this) {
-    this->unk_38E.z = Math_SinS(this->unk_388) * 30.0f * (0x10000 / 360.0f);
+    this->unk_38E.z = DEG_TO_BINANG(Math_SinS(this->unk_388) * 30.0f);
     this->unk_388 += 0x400;
 }
 
@@ -347,14 +347,11 @@ void func_80B76980(EnTruMt* this, PlayState* play) {
         SET_EVENTINF(EVENTINF_36);
         SET_EVENTINF(EVENTINF_40);
         player->stateFlags3 &= ~PLAYER_STATE3_400;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actionFunc = func_80B76BB8;
     } else if (CHECK_EVENTINF(EVENTINF_40)) {
-        u32 score = gSaveContext.minigameScore;
-
-        if (((gSaveContext.save.unk_EE8 & 0xFFFF0000) >> 0x10) < score) {
-            gSaveContext.save.unk_EE8 =
-                ((gSaveContext.minigameScore & 0xFFFF) << 0x10) | (gSaveContext.save.unk_EE8 & 0xFFFF);
+        if (((void)0, gSaveContext.minigameScore) > HS_GET_BOAT_ARCHERY_HIGH_SCORE()) {
+            HS_SET_BOAT_ARCHERY_HIGH_SCORE((u32)((void)0, gSaveContext.minigameScore));
             SET_EVENTINF(EVENTINF_37);
         }
     }
@@ -381,7 +378,7 @@ void func_80B76A64(EnTruMt* this, PlayState* play) {
         if (func_80B76600(this, this->path, this->unk_36C)) {
             if (this->unk_36C >= (this->path->count - 1)) {
                 this->actionFunc = func_80B76C38;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 return;
             }
             this->unk_36C++;
@@ -431,15 +428,15 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
 
     this->collider.dim.worldSphere.radius = 22;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FF(&this->actor), 0x3F);
-    this->actor.targetMode = 0;
+    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FF(&this->actor), ENTRUMT_PATH_INDEX_NONE);
+    this->actor.targetMode = TARGET_MODE_0;
 
     Actor_SetScale(&this->actor, 0.008f);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->unk_328 = 0;
     this->actor.room = -1;
-    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FC00(&this->actor), ENTRUMT_PATH_INDEX_NONE);
     EnTruMt_ChangeAnim(&this->skelAnime, KOUME_MT_ANIM_FLY);
     this->actionFunc = func_80B76A64;
 }
@@ -527,7 +524,7 @@ void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     }
 
     if (limbIndex == KOUME_LIMB_BROOM) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -583,7 +580,7 @@ void EnTruMt_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[this->eyeTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(eyeTextures[this->eyeTexIndex]));

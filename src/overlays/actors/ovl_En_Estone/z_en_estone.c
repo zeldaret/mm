@@ -64,19 +64,19 @@ void EnEstone_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
-    this->rotVel.x = this->rotVel.y = this->rotVel.z = randPlusMinusPoint5Scaled(1.0f) * 20.0f;
+    this->rotVel.x = this->rotVel.y = this->rotVel.z = Rand_CenteredFloat(1.0f) * 20.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.world.rot.y += (s16)randPlusMinusPoint5Scaled(0x2710);
+    this->actor.world.rot.y += (s16)(s32)Rand_CenteredFloat(0x2710);
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
     if (this->actor.params == ENESTONE_TYPE_LARGE) {
-        this->actor.speedXZ = Rand_ZeroFloat(5.0f) + 2.0f;
+        this->actor.speed = Rand_ZeroFloat(5.0f) + 2.0f;
         this->scale = (Rand_ZeroFloat(1.0f) * 0.005f) + 0.005f;
         this->actor.velocity.y = Rand_ZeroFloat(10.0f) + 15.0f;
         this->actor.gravity = -2.0f;
-    } else {
-        this->actor.speedXZ = Rand_ZeroFloat(3.0f) + 1.0f;
+    } else { // ENESTONE_TYPE_SMALL
+        this->actor.speed = Rand_ZeroFloat(3.0f) + 1.0f;
         this->scale = (Rand_ZeroFloat(1.0f) * 0.003f) + 0.003f;
         this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 7.0f;
         this->actor.gravity = -1.0f;
@@ -121,8 +121,9 @@ void EnEstone_Active(EnEstone* this, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    if (((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) || (this->collider.base.atFlags & 4)) {
-        this->collider.base.atFlags &= ~4;
+    if (((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f)) ||
+        (this->collider.base.atFlags & AT_BOUNCED)) {
+        this->collider.base.atFlags &= ~AT_BOUNCED;
         if (this->actor.params == ENESTONE_TYPE_LARGE) {
             for (i = 0; i < 2; i++) {
                 accel.x = 2.0f * (Rand_ZeroOne() - 0.5f);
@@ -139,11 +140,11 @@ void EnEstone_Active(EnEstone* this, PlayState* play) {
         velocity.y = this->actor.floorHeight;
         Actor_SpawnFloorDustRing(play, &this->actor, &velocity, 0.0f, 10, 6.0f, 50, 30, true);
         this->actor.velocity.y = this->actor.gravity = 0.0f;
-        this->actor.speedXZ *= 0.3f;
+        this->actor.speed *= 0.3f;
         this->actor.shape.shadowScale = 0.0f;
         this->inactive = true;
         this->timer = 50;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WALL_BROKEN);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_WALL_BROKEN);
         this->actionFunc = EnEstone_Inactive;
     } else {
         //! FAKE: https://decomp.me/scratch/YiPVN
@@ -173,7 +174,8 @@ void EnEstone_Update(Actor* thisx, PlayState* play2) {
 
     Actor_MoveWithGravity(&this->actor);
     if ((this->timer == 0) && !this->inactive) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 50.0f, 100.0f, 0x1C);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 50.0f, 100.0f,
+                                UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     }
     if (!this->inactive) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -193,9 +195,9 @@ void EnEstone_Draw(Actor* thisx, PlayState* play2) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-        Matrix_RotateXFApply(this->rot.x * (M_PI / 180.0f));
-        Matrix_RotateYF(this->rot.y * (M_PI / 180.0f), MTXMODE_APPLY);
-        Matrix_RotateZF(this->rot.z * (M_PI / 180.0f), MTXMODE_APPLY);
+        Matrix_RotateXFApply(DEG_TO_RAD(this->rot.x));
+        Matrix_RotateYF(DEG_TO_RAD(this->rot.y), MTXMODE_APPLY);
+        Matrix_RotateZF(DEG_TO_RAD(this->rot.z), MTXMODE_APPLY);
         Matrix_Scale(this->scale, this->scale, this->scale, MTXMODE_APPLY);
         Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
@@ -222,9 +224,9 @@ void EnEstone_SpawnEffect(EnEstone* this, Vec3f* pos, Vec3f* velocity, Vec3f* ac
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = lifetime;
-            effect->rot.x = randPlusMinusPoint5Scaled(0x7530);
-            effect->rot.y = randPlusMinusPoint5Scaled(0x7530);
-            effect->rot.z = randPlusMinusPoint5Scaled(0x7530);
+            effect->rot.x = Rand_CenteredFloat(0x7530);
+            effect->rot.y = Rand_CenteredFloat(0x7530);
+            effect->rot.z = Rand_CenteredFloat(0x7530);
             break;
         }
     }
@@ -264,7 +266,7 @@ void EnEstone_DrawEffects(EnEstone* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isActive) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);

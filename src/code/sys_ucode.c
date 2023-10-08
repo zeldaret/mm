@@ -4,12 +4,6 @@
  */
 #include "global.h"
 
-extern u64 rspbootTextStart[];
-extern u64 rspbootTextEnd[];
-
-extern u64 gspF3DZEX2_NoN_PosLight_fifoTextStart[];
-extern u64 gspF3DZEX2_NoN_PosLight_fifoDataStart[];
-
 u64* initialgspUcodeText = gspF3DZEX2_NoN_PosLight_fifoTextStart;
 u64* initialgspUcodeData = gspF3DZEX2_NoN_PosLight_fifoDataStart;
 

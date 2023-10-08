@@ -13,7 +13,7 @@ void __osDevMgrMain(void* arg) {
     ret = 0;
 
     while (true) {
-        osRecvMesg(devMgr->cmdQueue, (OSMesg)&ioMesg, OS_MESG_BLOCK);
+        osRecvMesg(devMgr->cmdQueue, (OSMesg*)&ioMesg, OS_MESG_BLOCK);
         if ((ioMesg->piHandle != NULL) && (ioMesg->piHandle->type == 2) &&
             ((ioMesg->piHandle->transferInfo.cmdType == OS_READ) ||
              (ioMesg->piHandle->transferInfo.cmdType == OS_WRITE))) {
@@ -51,7 +51,7 @@ void __osDevMgrMain(void* arg) {
                     __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x1000000);
                 }
                 block->errStatus = 4;
-                HW_REG(PI_STATUS_REG, u32) = PI_STATUS_CLEAR_INTR;
+                HW_REG(PI_STATUS_REG, u32) = PI_CLR_INTR;
                 __osSetGlobalIntMask(0x00100C01);
             }
             osSendMesg(ioMesg->hdr.retQueue, (OSMesg)ioMesg, OS_MESG_NOBLOCK);

@@ -201,7 +201,7 @@ void func_8092E840(EnHonotrap* this, PlayState* play) {
     this->unk228 = GET_PLAYER(play)->actor.world.pos;
     this->unk228.y += 10.0f;
     this->unk23A = Rand_ZeroOne() * 511.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FLAME_IGNITION);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_FLAME_IGNITION);
     if (params == 2) {
         this->actor.room = -1;
         this->collider.cyl.dim.radius = 12;
@@ -229,7 +229,7 @@ void func_8092E988(EnHonotrap* this, PlayState* play) {
         var_s0 &= 0x1FF;
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FLAME_IGNITION);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_FLAME_IGNITION);
     func_8092F854(this);
 }
 
@@ -294,7 +294,7 @@ void func_8092EC9C(EnHonotrap* this) {
     this->actionFunc = func_8092ECF0;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     this->unk220 = 30;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RED_EYE);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_RED_EYE);
 }
 
 void func_8092ECF0(EnHonotrap* this, PlayState* play) {
@@ -355,7 +355,7 @@ void func_8092EE90(EnHonotrap* this, PlayState* play) {
 }
 
 void func_8092EF3C(EnHonotrap* this) {
-    Actor_PlaySfxAtPos(&this->actor, 0x2881U);
+    Actor_PlaySfx(&this->actor, 0x2881U);
     Actor_SetColorFilter(&this->actor, 0x4000U, 255, 0, 40);
     this->unk220 = 0x28;
     this->actionFunc = func_8092EF98;
@@ -460,7 +460,7 @@ void func_8092F34C(EnHonotrap* this) {
     f32 temp_fv1;
 
     this->actionFunc = func_8092F3D8;
-    temp_fv1 = 1.0f / (Actor_DistanceToPoint(&this->actor, &this->unk228) + 1.0f);
+    temp_fv1 = 1.0f / (Actor_WorldDistXYZToPoint(&this->actor, &this->unk228) + 1.0f);
     this->actor.velocity.x = (this->unk228.x - this->actor.world.pos.x) * temp_fv1;
     this->actor.velocity.y = (this->unk228.y - this->actor.world.pos.y) * temp_fv1;
     this->actor.velocity.z = (this->unk228.z - this->actor.world.pos.z) * temp_fv1;
@@ -498,13 +498,13 @@ void func_8092F3D8(EnHonotrap* this, PlayState* play) {
         func_8092E5A4(&sp4C, &sp34);
         sp40 = this->actor.velocity;
         func_80179F64(&sp40, &sp4C, &this->actor.velocity);
-        this->actor.speedXZ = this->unk234 * 0.5f;
+        this->actor.speed = this->unk234 * 0.5f;
         this->actor.world.rot.y = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
         func_8092F7A8(this);
         return;
     }
     if (this->collider.tris.base.atFlags & 2) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actor.velocity.y = 0.0f;
         func_8092F7A8(this);
         return;
@@ -524,7 +524,7 @@ void func_8092F3D8(EnHonotrap* this, PlayState* play) {
 
 void func_8092F5AC(EnHonotrap* this) {
     this->actionFunc = func_8092F5EC;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.x = this->actor.velocity.y = this->actor.velocity.z = 0.0f;
     this->unk220 = 100;
     this->actor.world.rot.x = this->actor.world.rot.y = this->actor.world.rot.z = 0;
@@ -534,7 +534,7 @@ void func_8092F5EC(EnHonotrap* this, PlayState* play) {
     s32 pad;
 
     Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x300);
-    Math_StepToF(&this->actor.speedXZ, 3.0f, 0.1f);
+    Math_StepToF(&this->actor.speed, 3.0f, 0.1f);
     if (-this->actor.playerHeightRel < 10.0f) {
         this->actor.gravity = 0.08f;
     } else {
@@ -556,7 +556,7 @@ void func_8092F5EC(EnHonotrap* this, PlayState* play) {
         this->actor.world.rot.y = ((sp30.y * 2) - this->actor.world.rot.y) + 0x8000;
         func_8092F7A8(this);
     } else if (this->collider.tris.base.atFlags & 2) {
-        this->actor.speedXZ *= 0.1f;
+        this->actor.speed *= 0.1f;
         this->actor.velocity.y *= 0.1f;
         func_8092F7A8(this);
     } else if ((this->actor.bgCheckFlags & 8) || (this->unk220 <= 0)) {
@@ -718,7 +718,7 @@ void func_8092FE44(Actor* thisx, PlayState* play) {
         this->actor.shape.yOffset = Math_SinS(this->unk238) * 1000.0f + 600.0f;
     }
     Actor_SetFocus(&this->actor, 5.0f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
     this->actionFunc(this, play);
     this->unk23A -= 0x14;
     this->unk23A &= 0x1FF;
@@ -736,7 +736,7 @@ void func_8092FEFC(Actor* thisx, PlayState* play) {
         this->unk220--;
     }
     this->unk238 += 0x640;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
     this->actionFunc(this, play);
 }
 
@@ -744,7 +744,7 @@ void EnHonotrap_Draw(Actor* thisx, PlayState* play) {
     EnHonotrap* this = (EnHonotrap*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, D_809303F0[this->unk222]);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, &D_050085F0);
@@ -756,7 +756,7 @@ void func_80930030(Actor* thisx, PlayState* play) {
     EnHonotrap* this = (EnHonotrap*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, this->unk23A, 32, 128));
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 200, 0, 255);
@@ -776,7 +776,7 @@ void func_80930190(Actor* thisx, PlayState* play) {
     s32 i; // s4
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 200, 0, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     Camera_GetCamDir(&spB8, play->cameraPtrs[play->activeCamId]);

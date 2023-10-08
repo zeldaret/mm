@@ -2,6 +2,7 @@
 #define Z_EN_IG_H
 
 #include "global.h"
+#include "objects/object_dai/object_dai.h"
 
 struct EnIg;
 
@@ -9,7 +10,7 @@ typedef void (*EnIgActionFunc)(struct EnIg*, PlayState*);
 typedef s32 (*EnIgUnkFunc)(struct EnIg*, PlayState*);
 typedef void (*EnIgUnkFunc2)(struct EnIg*, PlayState*);
 
-#define ENIG_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENIG_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
 typedef struct EnIg {
     /* 0x000 */ Actor actor;
@@ -38,11 +39,11 @@ typedef struct EnIg {
     /* 0x2D4 */ Vec3f unk_2D4;
     /* 0x2E0 */ UNK_TYPE1 unk2E0[0x6];
     /* 0x2E6 */ Vec3s unk_2E6;
-    /* 0x2EC */ Vec3s jointTable[19];
-    /* 0x35E */ Vec3s morphTable[19];
+    /* 0x2EC */ Vec3s jointTable[OBJECT_DAI_LIMB_MAX];
+    /* 0x35E */ Vec3s morphTable[OBJECT_DAI_LIMB_MAX];
     /* 0x3D0 */ u16 unk_3D0;
     /* 0x3D2 */ u16 unk_3D2;
-    /* 0x3D4 */ f32 unk_3D4;
+    /* 0x3D4 */ f32 animPlaySpeed;
     /* 0x3D8 */ UNK_TYPE1 unk3D8[0x8];
     /* 0x3E0 */ s16 unk_3E0;
     /* 0x3E2 */ s16 unk_3E2;
@@ -57,7 +58,7 @@ typedef struct EnIg {
     /* 0x3F4 */ s16 unk_3F4;
     /* 0x3F6 */ s16 unk_3F6;
     /* 0x3F8 */ EnIgUnkFunc unk_3F8;
-    /* 0x3FC */ s32 unk_3FC;
+    /* 0x3FC */ s32 animIndex;
     /* 0x400 */ UNK_TYPE1 unk400[0x8];
     /* 0x408 */ s32 unk_408;
 } EnIg; // size = 0x40C

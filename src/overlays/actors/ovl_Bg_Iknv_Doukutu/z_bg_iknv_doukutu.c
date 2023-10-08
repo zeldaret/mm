@@ -51,9 +51,9 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
     switch (BGIKNVDOUKUTU_GET_F(&this->dyna.actor)) {
         case BGIKNVDOUKUTU_F_0:
             this->actionFunc = func_80BD71BC;
-            this->csAction = 0x204;
+            this->cueType = CS_CMD_ACTOR_CUE_516;
             this->unk_160 = 1.0f;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                 this->dyna.actor.draw = func_80BD7768;
                 this->actionFunc = func_80BD73D0;
                 play->envCtx.lightSettingOverride = 25;
@@ -65,7 +65,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
         case BGIKNVDOUKUTU_F_1:
             Actor_SetScale(&this->dyna.actor, 1.0f);
             this->dyna.actor.draw = func_80BD7820;
-            this->csAction = 0x204;
+            this->cueType = CS_CMD_ACTOR_CUE_516;
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_012788, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
@@ -75,7 +75,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             break;
 
         case BGIKNVDOUKUTU_F_2:
-            this->csAction = 0x204;
+            this->cueType = CS_CMD_ACTOR_CUE_516;
             this->dyna.actor.draw = func_80BD78C4;
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_0117C8, &colHeader);
@@ -116,8 +116,8 @@ void func_80BD716C(BgIknvDoukutu* this, PlayState* play) {
 
 void func_80BD71BC(BgIknvDoukutu* this, PlayState* play) {
     play->envCtx.lightSettingOverride = 24;
-    if (Cutscene_CheckActorAction(play, this->csAction) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action == 2)) {
+    if (Cutscene_IsCueInChannel(play, this->cueType) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 2)) {
         this->actionFunc = func_80BD716C;
         this->dyna.actor.draw = func_80BD7538;
     }
@@ -131,12 +131,12 @@ void func_80BD7250(BgIknvDoukutu* this, PlayState* play) {
         this->dyna.actor.world.pos.y = temp_fv0;
         this->actionFunc = func_80BD73D0;
     }
-    func_8019F128(NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
+    Audio_PlaySfx_2(NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
 void func_80BD72BC(BgIknvDoukutu* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, this->csAction) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action == 3)) {
+    if (Cutscene_IsCueInChannel(play, this->cueType) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 3)) {
         this->actionFunc = func_80BD7250;
     }
 
@@ -146,8 +146,8 @@ void func_80BD72BC(BgIknvDoukutu* this, PlayState* play) {
 }
 
 void func_80BD7360(BgIknvDoukutu* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, this->csAction) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action == 2)) {
+    if (Cutscene_IsCueInChannel(play, this->cueType) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 2)) {
         this->actionFunc = func_80BD72BC;
     }
 }
@@ -172,8 +172,8 @@ void BgIknvDoukutu_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSPDisplayList(POLY_OPA_DISP++, object_iknv_obj_DL_00DDD8);
@@ -205,9 +205,9 @@ void func_80BD7538(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C304(POLY_XLU_DISP++);
+    Gfx_SetupDL72(POLY_XLU_DISP++);
     Scene_SetRenderModeXlu(play, 1, 2);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, (s32)(255.0f * sp54));
     gSPDisplayList(POLY_XLU_DISP++, object_iknv_obj_DL_00DDD8);
@@ -226,7 +226,7 @@ void func_80BD7768(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSPDisplayList(POLY_OPA_DISP++, object_iknv_obj_DL_010D98);
@@ -243,7 +243,7 @@ void func_80BD7820(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, object_iknv_obj_DL_012700);
 
@@ -261,7 +261,7 @@ void func_80BD78C4(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(140.0f * sp30));
 

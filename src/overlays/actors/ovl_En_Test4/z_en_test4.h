@@ -9,7 +9,7 @@ typedef void (*EnTest4ActionFunc)(struct EnTest4*, PlayState*);
 
 typedef struct EnTest4 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ s8 unk_144; // 0 on night, 1 on day
+    /* 0x144 */ s8 csIdIndex; // 0 on night, 1 on day
     /* 0x145 */ u8 transitionCsTimer;
     /* 0x146 */ u16 unk_146;
     /* 0x148 */ u16 nextBellTime; // Next time the bell will sound

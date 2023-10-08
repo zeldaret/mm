@@ -5,11 +5,8 @@
  */
 
 #include "z_en_dnk.h"
-#include "objects/object_dnk/object_dnk.h"
-#include "objects/object_hintnuts/object_hintnuts.h"
-#include "objects/object_dekunuts/object_dekunuts.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDnk*)thisx)
 
@@ -17,7 +14,7 @@ void EnDnk_Init(Actor* thisx, PlayState* play);
 void EnDnk_Destroy(Actor* thisx, PlayState* play);
 void EnDnk_Update(Actor* thisx, PlayState* play);
 
-void func_80A51890(EnDnk* this, PlayState* play);
+void EnDnk_HandleCutscene(EnDnk* this, PlayState* play);
 void EnDnk_DoNothing(EnDnk* this, PlayState* play);
 void func_80A52018(Actor* thisx, PlayState* play);
 void func_80A52134(EnDnk* this, PlayState* play);
@@ -93,66 +90,108 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPalaceGuardAttackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPalaceGuardDigAnim, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
-    { &gDekuPalaceGuardDigAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPalaceGuardJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPalaceGuardHappyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_hintnuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
-    { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_hintnuts_Anim_0026C4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_hintnuts_Anim_002894, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_hintnuts_Anim_002B90, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_hintnuts_Anim_0029BC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_hintnuts_Anim_002E84, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuScrubSpitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuScrubDamageAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDekuScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuScrubDieAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuScrubUnburrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuScrubLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuScrubUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuScrubIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gDekuScrubIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuScrubPantingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuScrubStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+typedef enum {
+    /* -1 */ ENDNK_ANIM_NONE = -1,
+    /*  0 */ ENDNK_ANIM_0,
+    /*  1 */ ENDNK_ANIM_1,
+    /*  2 */ ENDNK_ANIM_2,
+    /*  3 */ ENDNK_ANIM_3,
+    /*  4 */ ENDNK_ANIM_4,
+    /*  5 */ ENDNK_ANIM_5,
+    /*  6 */ ENDNK_ANIM_6,
+    /*  7 */ ENDNK_ANIM_7,
+    /*  8 */ ENDNK_ANIM_8,
+    /*  9 */ ENDNK_ANIM_9,
+    /* 10 */ ENDNK_ANIM_10,
+    /* 11 */ ENDNK_ANIM_11,
+    /* 12 */ ENDNK_ANIM_12,
+    /* 13 */ ENDNK_ANIM_13,
+    /* 14 */ ENDNK_ANIM_14,
+    /* 15 */ ENDNK_ANIM_15,
+    /* 16 */ ENDNK_ANIM_16,
+    /* 17 */ ENDNK_ANIM_17,
+    /* 18 */ ENDNK_ANIM_18,
+    /* 19 */ ENDNK_ANIM_19,
+    /* 20 */ ENDNK_ANIM_20,
+    /* 21 */ ENDNK_ANIM_21,
+    /* 22 */ ENDNK_ANIM_22,
+    /* 23 */ ENDNK_ANIM_23,
+    /* 24 */ ENDNK_ANIM_24,
+    /* 25 */ ENDNK_ANIM_25,
+    /* 26 */ ENDNK_ANIM_26,
+    /* 27 */ ENDNK_ANIM_27,
+    /* 28 */ ENDNK_ANIM_28,
+    /* 29 */ ENDNK_ANIM_29,
+    /* 30 */ ENDNK_ANIM_30,
+    /* 31 */ ENDNK_ANIM_31,
+    /* 32 */ ENDNK_ANIM_32,
+    /* 33 */ ENDNK_ANIM_33,
+    /* 34 */ ENDNK_ANIM_34,
+    /* 35 */ ENDNK_ANIM_35,
+    /* 36 */ ENDNK_ANIM_MAX
+} EnDnkAnimation;
+
+static AnimationInfoS sAnimationInfo[ENDNK_ANIM_MAX] = {
+    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENDNK_ANIM_0
+    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },   // ENDNK_ANIM_1
+    { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // ENDNK_ANIM_2
+    { &gDekuPalaceGuardAttackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // ENDNK_ANIM_3
+    { &gDekuPalaceGuardDigAnim, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },     // ENDNK_ANIM_4
+    { &gDekuPalaceGuardDigAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },     // ENDNK_ANIM_5
+    { &gDekuPalaceGuardJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },    // ENDNK_ANIM_6
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENDNK_ANIM_7
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // ENDNK_ANIM_8
+    { &gDekuPalaceGuardHappyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },   // ENDNK_ANIM_9
+    { &object_hintnuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENDNK_ANIM_10
+    { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, ANIMMODE_ONCE, 0 }, // ENDNK_ANIM_11
+    { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENDNK_ANIM_12
+    { &object_hintnuts_Anim_0026C4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENDNK_ANIM_13
+    { &object_hintnuts_Anim_002894, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENDNK_ANIM_14
+    { &object_hintnuts_Anim_002B90, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENDNK_ANIM_15
+    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENDNK_ANIM_16
+    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENDNK_ANIM_17
+    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENDNK_ANIM_18
+    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENDNK_ANIM_19
+    { &object_hintnuts_Anim_0029BC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENDNK_ANIM_20
+    { &object_hintnuts_Anim_002E84, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENDNK_ANIM_21
+    { &gDekuScrubSpitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },          // ENDNK_ANIM_22
+    { &gDekuScrubDamageAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // ENDNK_ANIM_23
+    { &gDekuScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // ENDNK_ANIM_24
+    { &gDekuScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // ENDNK_ANIM_25
+    { &gDekuScrubDieAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },           // ENDNK_ANIM_26
+    { &gDekuScrubUnburrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },      // ENDNK_ANIM_27
+    { &gDekuScrubLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // ENDNK_ANIM_28
+    { &gDekuScrubUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },            // ENDNK_ANIM_29
+    { &gDekuScrubIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },           // ENDNK_ANIM_30
+    { &gDekuScrubIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },          // ENDNK_ANIM_31
+    { &gDekuScrubPantingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },       // ENDNK_ANIM_32
+    { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // ENDNK_ANIM_33
+    { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },           // ENDNK_ANIM_34
+    { &gDekuScrubStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENDNK_ANIM_35
 };
 
-s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
-    s16 frame;
-    s16 frameCount;
-    s32 sp30 = false;
+s32 EnDnk_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
+    s16 startFrame;
+    s16 endFrame;
+    s32 didAnimChange = false;
 
     if (animIndex >= 0) {
         if (animIndex < ARRAY_COUNT(sAnimationInfo)) {
-            sp30 = true;
-            frameCount = sAnimationInfo[animIndex].frameCount;
-            if (frameCount < 0) {
-                frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
+            didAnimChange = true;
+            endFrame = sAnimationInfo[animIndex].frameCount;
+            if (endFrame < 0) {
+                endFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
             }
-            frame = sAnimationInfo[animIndex].startFrame;
-            if (frame < 0) {
-                frame = frameCount;
+            startFrame = sAnimationInfo[animIndex].startFrame;
+            if (startFrame < 0) {
+                startFrame = endFrame;
             }
-            Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed, frame,
-                             frameCount, sAnimationInfo[animIndex].mode, sAnimationInfo[animIndex].morphFrames);
+            Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
+                             startFrame, endFrame, sAnimationInfo[animIndex].mode,
+                             sAnimationInfo[animIndex].morphFrames);
         }
     }
-    return sp30;
+    return didAnimChange;
 }
 
 s32 func_80A515C4(EnDnk* this) {
@@ -171,7 +210,7 @@ s32 func_80A515C4(EnDnk* this) {
 
 void func_80A51648(EnDnk* this, PlayState* play) {
     if (SubS_IsObjectLoaded(this->unk_28E, play) == true) {
-        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_28E].segment);
+        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->unk_28E].segment);
         this->actor.draw = func_80A52018;
         this->actor.objBankIndex = this->unk_28E;
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
@@ -180,19 +219,19 @@ void func_80A51648(EnDnk* this, PlayState* play) {
             case ENDNK_GET_3_0:
                 SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable, this->morphTable,
                                DEKU_PALACE_GUARD_LIMB_MAX);
-                func_80A514F0(&this->skelAnime, 7);
+                EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_7);
                 break;
 
             case ENDNK_GET_3_1:
                 SkelAnime_Init(play, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, NULL, this->jointTable,
-                               this->morphTable, 10);
-                func_80A514F0(&this->skelAnime, 18);
+                               this->morphTable, OBJECT_HINTNUTS_LIMB_MAX);
+                EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_18);
                 break;
 
             case ENDNK_GET_3_2:
                 SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable, this->morphTable,
                                DEKU_SCRUB_LIMB_MAX);
-                func_80A514F0(&this->skelAnime, 35);
+                EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_35);
                 break;
         }
 
@@ -200,21 +239,21 @@ void func_80A51648(EnDnk* this, PlayState* play) {
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         if (ENDNK_GET_3C(&this->actor) == 4) {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
-            this->actionFunc = func_80A51890;
+            this->actionFunc = EnDnk_HandleCutscene;
             Actor_SetScale(&this->actor, 0.1f);
         } else {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnDnk_DoNothing;
             Actor_SetScale(&this->actor, 0.01f);
         }
     }
 }
 
-void func_80A51890(EnDnk* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 126)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 126));
+void EnDnk_HandleCutscene(EnDnk* this, PlayState* play) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_126)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_126));
     }
 }
 
@@ -284,7 +323,7 @@ void func_80A51AA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     Vec3f sp44;
     Vec3s sp3C;
 
-    if (limbIndex == 2) {
+    if (limbIndex == DEKU_PALACE_GUARD_LIMB_HEAD) {
         Matrix_MultVec3f(&sp50, &sp44);
         Matrix_Get(&sp5C);
         Matrix_MtxFToYXZRot(&sp5C, &sp3C, false);
@@ -334,7 +373,7 @@ void func_80A51CB8(EnDnk* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A5245C[this->unk_2A0]));
     gDPPipeSync(POLY_OPA_DISP++);
@@ -360,7 +399,9 @@ void func_80A51DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     Vec3f sp44;
     Vec3s sp3C;
 
-    if (limbIndex == 2) {
+    // Note: Also for `limbIndex == OBJECT_HINTNUTS_LIMB_02`
+    // Assumes `OBJECT_HINTNUTS_LIMB_02` is the same value as `DEKU_SCRUB_LIMB_HEAD`
+    if (limbIndex == DEKU_SCRUB_LIMB_HEAD) {
         Matrix_MultVec3f(&sp50, &sp44);
         Matrix_Get(&sp5C);
         Matrix_MtxFToYXZRot(&sp5C, &sp3C, false);
@@ -402,7 +443,7 @@ void func_80A51DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
 }
 
 void func_80A51FC0(EnDnk* this, PlayState* play) {
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51D78, func_80A51DA4,
                       &this->actor);
 }
@@ -419,35 +460,41 @@ void func_80A52018(Actor* thisx, PlayState* play) {
         case ENDNK_GET_3_2:
             func_80A51FC0(this, play);
             break;
+
+        default:
+            break;
     }
 }
 
 void func_80A52074(EnDnk* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 80:
-            func_8019F128(NA_SE_EN_DEKNUTS_DANCE1);
+            Audio_PlaySfx_2(NA_SE_EN_DEKNUTS_DANCE1);
             break;
 
         case 123:
-            func_8019F128(NA_SE_EN_DEKNUTS_DANCE2);
+            Audio_PlaySfx_2(NA_SE_EN_DEKNUTS_DANCE2);
             break;
 
         case 438:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
             break;
 
         case 493:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+            break;
+
+        default:
             break;
     }
 
-    if ((play->csCtx.frames >= 198) && (play->csCtx.frames < 438)) {
-        func_8019F128(NA_SE_EN_DEKNUTS_DANCE - SFX_FLAG);
+    if ((play->csCtx.curFrame >= 198) && (play->csCtx.curFrame < 438)) {
+        Audio_PlaySfx_2(NA_SE_EN_DEKNUTS_DANCE - SFX_FLAG);
     }
 }
 
 void func_80A52134(EnDnk* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneId == SCENE_SPOT00) &&
+    if ((play->csCtx.state != CS_STATE_IDLE) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneId == SCENE_SPOT00) &&
         (gSaveContext.sceneLayer == 2)) {
         func_80A52074(this, play);
     }

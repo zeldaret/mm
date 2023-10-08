@@ -55,7 +55,7 @@ void ItemEtcetera_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ItemEtcetera* this = THIS;
     s32 type = ITEMETCETERA_GET_FF(&this->actor);
-    s32 objBankIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
+    s32 objBankIndex = Object_GetSlot(&play->objectCtx, sObjectIds[type]);
 
     if (objBankIndex < 0) {
         // assert on debug
@@ -106,7 +106,7 @@ void func_8092009C(ItemEtcetera* this, PlayState* play) {
         return;
     }
 
-    Actor_PickUp(&this->actor, play, this->getItemId, 30.0f, 50.0f);
+    Actor_OfferGetItem(&this->actor, play, this->getItemId, 30.0f, 50.0f);
 }
 
 void func_809200F8(ItemEtcetera* this, PlayState* play) {

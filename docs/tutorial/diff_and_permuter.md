@@ -2,7 +2,7 @@
 
 This document is intended as a step-by-step demonstration of matching a reasonably complex function using the diff script `diff.py` and the decomp permuter, both included in the repo. For general information on both see [the tools documentation](../tools.md).
 
-Until such time as someone finds a suitable function, you can look at the OoT tutorial: [here for diff.py](https://github.com/zeldaret/oot/blob/master/docs/tutorial/beginning_decomp.md#diff) and [here for the permuter](https://github.com/zeldaret/oot/blob/master/docs/tutorial/other_functions.md#the-permuter).
+Until such time as someone finds a suitable function, you can look at the OoT tutorial: [here for diff.py](https://github.com/zeldaret/oot/blob/main/docs/tutorial/beginning_decomp.md#diff) and [here for the permuter](https://github.com/zeldaret/oot/blob/main/docs/tutorial/other_functions.md#the-permuter).
 
 
 <!-- 

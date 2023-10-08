@@ -11,7 +11,7 @@ struct EnIn;
 
 typedef void (*EnHorseActionFunc)(struct EnHorse*, PlayState*);
 typedef void (*EnHorsePostdrawFunc)(struct EnHorse*, PlayState*);
-typedef void (*EnHorseCsFunc)(struct EnHorse*, PlayState*, CsCmdActorAction*);
+typedef void (*EnHorseCsFunc)(struct EnHorse*, PlayState*, CsCmdActorCue*);
 
 #define ENHORSE_BOOST (1 << 0)                 /*         0x1 */
 #define ENHORSE_BOOST_DECEL (1 << 1)           /*         0x2 */
@@ -75,7 +75,7 @@ typedef enum EnHorseAction {
     /* 25 */ ENHORSE_ACTION_25
 } EnHorseAction;
 
-typedef enum {
+typedef enum EnHorsePlayerDir {
     /* 0 */ PLAYER_DIR_FRONT_R,
     /* 1 */ PLAYER_DIR_FRONT_L,
     /* 2 */ PLAYER_DIR_BACK_R,
@@ -84,12 +84,26 @@ typedef enum {
     /* 5 */ PLAYER_DIR_SIDE_L
 } EnHorsePlayerDir;
 
-typedef enum {
+typedef enum EnHorseAnimation {
+    /* 0 */ ENHORSE_ANIM_IDLE,
+    /* 1 */ ENHORSE_ANIM_WHINNY,
+    /* 2 */ ENHORSE_ANIM_STOPPING,
+    /* 3 */ ENHORSE_ANIM_REARING,
+    /* 4 */ ENHORSE_ANIM_WALK,
+    /* 5 */ ENHORSE_ANIM_TROT,
+    /* 6 */ ENHORSE_ANIM_GALLOP,
+    /* 7 */ ENHORSE_ANIM_LOW_JUMP,
+    /* 8 */ ENHORSE_ANIM_HIGH_JUMP,
+    /* 9 */ ENHORSE_ANIM_MAX
+} EnHorseAnimation;
+
+typedef enum HorseType {
     /* 0 */ HORSE_TYPE_EPONA,
     /* 1 */ HORSE_TYPE_HNI,
     /* 2 */ HORSE_TYPE_2,
     /* 3 */ HORSE_TYPE_BANDIT,
-    /* 4 */ HORSE_TYPE_DONKEY // Cremia's donkey
+    /* 4 */ HORSE_TYPE_DONKEY, // Cremia's donkey
+    /* 5 */ HORSE_TYPE_MAX
 } HorseType;
 
 #define ENHORSE_PARAM_BANDIT 0x2000
@@ -100,7 +114,7 @@ typedef enum {
 #define ENHORSE_IS_4000_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_4000)
 #define ENHORSE_IS_DONKEY_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_DONKEY)
 
-typedef enum {
+typedef enum EnHorseParam {
     /*  0 */ ENHORSE_0,
     /*  1 */ ENHORSE_1,
     /*  2 */ ENHORSE_2,
@@ -121,7 +135,7 @@ typedef enum {
     /* 17 */ ENHORSE_17,
     /* 18 */ ENHORSE_18,
     /* 19 */ ENHORSE_19,
-    /* 20 */ ENHORSE_20,
+    /* 20 */ ENHORSE_20
 } EnHorseParam;
 
 /**
@@ -190,15 +204,15 @@ typedef struct EnHorse {
     /* 0x3BC */ Vec3f frontLeftHoof;
     /* 0x3C8 */ Vec3f backRightHoof;
     /* 0x3D4 */ Vec3f backLeftHoof;
-    /* 0x3E0 */ s32 unk_3E0;
+    /* 0x3E0 */ s32 cueId;
     /* 0x3E4 */ UNK_TYPE1 unk_3E4[0x4];
     /* 0x3E8 */ f32 unk_3E8;
     /* 0x3EC */ s16 unk_3EC;
-    /* 0x3EE */ Vec3s jointTable[OBJECT_HA_1_LIMB_MAX];
-    /* 0x48A */ Vec3s morphTable[OBJECT_HA_1_LIMB_MAX];
+    /* 0x3EE */ Vec3s jointTable[HORSE_BANDIT_LIMB_MAX];
+    /* 0x48A */ Vec3s morphTable[HORSE_BANDIT_LIMB_MAX];
     /* 0x528 */ f32 unk_528;
     /* 0x52C */ s32 unk_52C;
-    /* 0x530 */ s32 unk_530;
+    /* 0x530 */ s32 cueChannel;
     /* 0x534 */ s32 unk_534;
     /* 0x538 */ s32 unk_538;
     /* 0x53C */ s32 unk_53C;

@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define BGLADDER_GET_SIZE(thisx) ((thisx)->params & 0xFF)
-#define BGLADDER_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0xFF)
+#define BGLADDER_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0xFF)
 
 struct BgLadder;
 
@@ -21,7 +21,7 @@ typedef enum {
     /* 0 */ LADDER_SIZE_12RUNG,
     /* 1 */ LADDER_SIZE_16RUNG,
     /* 2 */ LADDER_SIZE_20RUNG,
-    /* 3 */ LADDER_SIZE_24RUNG,
+    /* 3 */ LADDER_SIZE_24RUNG
 } BgLadderSize;
 
 #endif // Z_BG_LADDER_H

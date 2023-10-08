@@ -9,8 +9,8 @@ typedef void (*EnTkActionFunc)(struct EnTk*, PlayState*);
 typedef void (*EnTkUnkFunc)(struct EnTk*, PlayState*);
 
 #define ENTK_GET_F(thisx) ((thisx)->params & 0xF)
-#define ENTK_GET_7F0(thisx) (((thisx)->params >> 4) & 0x7F)
-#define ENTK_GET_F800(thisx) ((((thisx)->params >> 0xB) & 0x1F) & 0xFF)
+#define ENTK_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 4) & 0x7F)
+#define ENTK_GET_PATH_INDEX(thisx) (((thisx)->params >> 0xB) & 0x1F)
 
 typedef struct EnTk {
     /* 0x000 */ Actor actor;
@@ -20,7 +20,7 @@ typedef struct EnTk {
     /* 0x1D8 */ Vec3s jointTable[18];
     /* 0x244 */ Vec3s morphTable[18];
     /* 0x2B0 */ s8 unk_2B0;
-    /* 0x2B1 */ s8 unk_2B1;
+    /* 0x2B1 */ s8 switchFlag;
     /* 0x2B4 */ Vec3f unk_2B4;
     /* 0x2C0 */ s16 unk_2C0;
     /* 0x2C2 */ s16 unk_2C2;
@@ -36,13 +36,13 @@ typedef struct EnTk {
     /* 0x2E0 */ s32 unk_2E0;
     /* 0x2E4 */ s16 unk_2E4;
     /* 0x2E6 */ u16 unk_2E6;
-    /* 0x2E8 */ s16 unk_2E8;
+    /* 0x2E8 */ s16 csLength;
     /* 0x2EC */ Vec3f unk_2EC;
     /* 0x2F8 */ Vec3s unk_2F8;
     /* 0x300 */ Vec3f unk_300;
     /* 0x30C */ EnTkUnkFunc unk_30C;
     /* 0x310 */ s16 unk_310;
-    /* 0x312 */ s16 cutscenes[2];
+    /* 0x312 */ s16 csIdList[2];
     /* 0x316 */ s16 unk_316;
     /* 0x318 */ s16 unk_318;
     /* 0x31A */ s16 unk_31A;

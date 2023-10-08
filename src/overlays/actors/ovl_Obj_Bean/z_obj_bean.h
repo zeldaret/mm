@@ -8,19 +8,19 @@ struct ObjBean;
 typedef void (*ObjBeanActionFunc)(struct ObjBean*, PlayState*);
 typedef void (*ObjBeanUnkFunc)(struct ObjBean*);
 
-#define OBJBEAN_GET_7F(thisx, x) (((thisx)->params + (x)) & 0x7F)
+#define OBJBEAN_GET_SWITCH_FLAG_1(thisx, offset) (((thisx)->params + (offset)) & 0x7F)
 #define OBJBEAN_GET_80(thisx) (((thisx)->params >> 7) & 1)
 #define OBJBEAN_GET_3F00(thisx) (((thisx)->params >> 8) & 0x3F)
-#define OBJBEAN_GET_3F80(thisx, x) ((((thisx)->params >> 7) + (x)) & 0x7F)
+#define OBJBEAN_GET_SWITCH_FLAG_2(thisx, offset) ((((thisx)->params >> 7) + (offset)) & 0x7F)
 #define OBJBEAN_GET_C000(thisx) (((thisx)->params >> 0xE) & 3)
 
 #define OBJBEAN_GET_3(thisx) ((thisx)->home.rot.z & 3)
 
-enum {
-    /* 0x0 */ ENOBJBEAN_GET_C000_0,
-    /* 0x1 */ ENOBJBEAN_GET_C000_1,
-    /* 0x2 */ ENOBJBEAN_GET_C000_2,
-};
+typedef enum {
+    /* 0 */ ENOBJBEAN_GET_C000_0,
+    /* 1 */ ENOBJBEAN_GET_C000_1,
+    /* 2 */ ENOBJBEAN_GET_C000_2
+} ObjBeanParam;
 
 typedef struct ObjBean {
     /* 0x000 */ DynaPolyActor dyna;

@@ -87,7 +87,7 @@ void EnMm_Init(Actor* thisx, PlayState* play) {
         func_80965BBC(this);
         return;
     }
-    if (this->actor.cutscene >= 0) {
+    if (this->actor.csId >= 0) {
         action = func_80965D3C;
     } else {
         action = func_80965DB4;
@@ -102,13 +102,13 @@ void EnMm_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80965D3C(EnMm* this, PlayState* play) {
-    s16 cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    s16 csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
 
-    if (ActorCutscene_GetCanPlayNext(cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(cutscene, &this->actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         EnMm_SetupAction(this, func_80965DB4);
     } else {
-        ActorCutscene_SetIntentToPlay(cutscene);
+        CutsceneManager_Queue(csId);
     }
 }
 
@@ -124,54 +124,55 @@ void func_80965DB4(EnMm* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         func_80965BBC(this);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PULL_UP_ROCK);
+        Actor_PlaySfx(&this->actor, NA_SE_PL_PULL_UP_ROCK);
     } else {
-        if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & 0x10)) {
+        if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING)) {
             this->actor.velocity.y = 0.0f;
         }
 
-        if ((this->actor.speedXZ != 0.0f) && (this->actor.bgCheckFlags & 8)) {
+        if ((this->actor.speed != 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
             angle = BINANG_SUB(this->actor.world.rot.y, BINANG_ROT180(this->actor.wallYaw));
             this->actor.world.rot.y += BINANG_SUB(0x8000, (s16)(angle * 2));
-            this->actor.speedXZ *= 0.5f;
+            this->actor.speed *= 0.5f;
             CollisionCheck_SpawnShieldParticles(play, &this->actor.world.pos);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
         }
 
-        if (!(this->actor.bgCheckFlags & 1)) {
-            Math_StepToF(&this->actor.speedXZ, 0.0f, 0.08f);
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+            Math_StepToF(&this->actor.speed, 0.0f, 0.08f);
         } else {
-            temp_f14 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-            temp_f12 = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+            temp_f14 = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
+            temp_f12 = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
             Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
             temp_f14 += 3.0f * slopeNormal.x;
             temp_f12 += 3.0f * slopeNormal.z;
             temp_f2 = sqrtf(SQ(temp_f14) + SQ(temp_f12));
 
-            if ((temp_f2 < this->actor.speedXZ) ||
-                (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
-                this->actor.speedXZ = CLAMP_MAX(temp_f2, 16.0f);
+            if ((temp_f2 < this->actor.speed) ||
+                (SurfaceType_GetFloorEffect(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) ==
+                 FLOOR_EFFECT_1)) {
+                this->actor.speed = CLAMP_MAX(temp_f2, 16.0f);
                 this->actor.world.rot.y = Math_Atan2S_XY(temp_f12, temp_f14);
             }
 
-            if (!Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f)) {
+            if (!Math_StepToF(&this->actor.speed, 0.0f, 1.0f)) {
                 direction = this->actor.world.rot.y;
                 if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->actor.shape.rot.y)) > 0x4000) {
                     direction = BINANG_ROT180(direction);
                 }
-                Math_ScaledStepToS(&this->actor.shape.rot.y, direction, this->actor.speedXZ * 100.0f);
-                this->unk_190 += (s16)(this->actor.speedXZ * 800.0f);
+                Math_ScaledStepToS(&this->actor.shape.rot.y, direction, this->actor.speed * 100.0f);
+                this->unk_190 += (s16)(this->actor.speed * 800.0f);
             }
 
-            if (this->actor.bgCheckFlags & 2) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
                 if (this->actor.velocity.y < -6.0f) {
                     this->actor.velocity.y *= -0.3f;
-                    this->actor.bgCheckFlags &= ~1;
+                    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
                 }
 
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
             } else {
-                Actor_PickUp(&this->actor, play, GI_NONE, 50.0f, 30.0f);
+                Actor_OfferGetItem(&this->actor, play, GI_NONE, 50.0f, 30.0f);
             }
         }
 
@@ -186,7 +187,7 @@ void func_8096611C(EnMm* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         EnMm_SetupAction(this, func_80965DB4);
         this->actor.room = play->roomCtx.curRoom.num;
-        this->actor.bgCheckFlags &= ~1;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
         gSaveContext.unk_1014 = 0;
     } else {
@@ -200,7 +201,9 @@ void EnMm_Update(Actor* thisx, PlayState* play) {
 
     Collider_ResetCylinderAC(play, &this->collider.base);
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 20.0f, 31);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Actor_SetFocus(&this->actor, 20.0f);
 }
 
@@ -208,7 +211,8 @@ void EnMm_Draw(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->unk_190 != 0) {
         s16 rotY = this->actor.world.rot.y - this->actor.shape.rot.y;
 
@@ -218,5 +222,6 @@ void EnMm_Draw(Actor* thisx, PlayState* play) {
     }
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_055628);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

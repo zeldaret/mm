@@ -9,7 +9,8 @@ typedef void (*BgHakuginPostActionFunc)(struct BgHakuginPost*, PlayState*);
 typedef void (*BgHakuginPostFunc)(struct BgHakuginPost*);
 
 #define BGHAKUGINPOST_GET_7(thisx) ((thisx)->params & 7)
-#define BGHAKUGINPOST_GET_7F00(thisx) (((thisx)->params >> 8) & 0x7F)
+#define BGHAKUGINPOST_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
+#define BGHAKUGINPOST_GET_SWITCH_FLAG_2(thisx) (((thisx)->home.rot.x) & 0x7F)
 
 typedef struct {
     /* 0x00 */ s32 unk_00;
@@ -19,9 +20,9 @@ typedef struct {
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ s16 unk_28;
-    /* 0x2A */ s16 unk_2A;
-    /* 0x2C */ s16 unk_2C;
-    /* 0x2E */ u8 unk_2E;
+    /* 0x2A */ s16 csId;
+    /* 0x2C */ s16 additionalCsId;
+    /* 0x2E */ u8 switchFlag;
     /* 0x2F */ u8 unk_2F;
     /* 0x30 */ s8 unk_30;
     /* 0x34 */ s32 unk_34;
@@ -64,10 +65,10 @@ typedef struct BgHakuginPost {
     /* 0x178 */ s8 unk_178;
     /* 0x179 */ s8 unk_179;
     /* 0x17C */ BgHakuginPostFunc unkFunc;
-    /* 0x180 */ s16 unk_180;
-    /* 0x182 */ s16 unk_182;
-    /* 0x184 */ s16 unk_184;
-    /* 0x186 */ s16 unk_186;
+    /* 0x180 */ s16 csLength;
+    /* 0x182 */ s16 additionalCsLength;
+    /* 0x184 */ s16 csId;
+    /* 0x186 */ s16 additionalCsId;
 } BgHakuginPost; // size = 0x188
 
 #endif // Z_BG_HAKUGIN_POST_H

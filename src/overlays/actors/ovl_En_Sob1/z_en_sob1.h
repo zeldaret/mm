@@ -15,7 +15,9 @@ typedef void (*EnSob1ActionFunc)(struct EnSob1*, PlayState*);
 typedef void (*EnSob1BlinkFunc)(struct EnSob1*);
 
 #define ENSOB1_GET_SHOPTYPE(thisx) ((thisx)->params & 0x1F)
-#define ENSOB1_GET_PATH(thisx) (((thisx)->params & 0x3E0) >> 5)
+#define ENSOB1_GET_PATH_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
+
+#define ENSOB1_PATH_INDEX_NONE 0x1F
 
 typedef struct EnSob1XZRange {
     /* 0x0 */ f32 xMin;
@@ -60,10 +62,10 @@ typedef struct EnSob1 {
     /* 0x39C */ u8 arrowAnimState;
     /* 0x39D */ u8 stickAnimState;
     /* 0x39E */ s16 cutsceneState;
-    /* 0x3A0 */ s16 cutscene;
-    /* 0x3A2 */ s16 lookFowardCutscene;
-    /* 0x3A4 */ s16 lookToShelfCutscene;
-    /* 0x3A6 */ s16 lookToShopkeeperCutscene;
+    /* 0x3A0 */ s16 csId;
+    /* 0x3A2 */ s16 lookFowardCsId;
+    /* 0x3A4 */ s16 lookToShelfCsId;
+    /* 0x3A6 */ s16 lookToShopkeeperCsId;
     /* 0x3A8 */ UNK_TYPE1 pad3A8[0x4];
     /* 0x3AC */ f32 shopItemSelectedTween;
     /* 0x3B0 */ UNK_TYPE1 pad3B0[0x4];

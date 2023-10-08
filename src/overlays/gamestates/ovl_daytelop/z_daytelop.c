@@ -4,9 +4,10 @@
  * Description: "Dawn of ... day" screen
  */
 
+#include "global.h"
 #include "z_daytelop.h"
+#include "z64save.h"
 #include "z64shrink_window.h"
-#include "z64view.h"
 #include "misc/daytelop_static/daytelop_static.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 
@@ -73,7 +74,7 @@ void DayTelop_Update(DayTelopState* this, GameState* thisx) {
     this->transitionCountdown--;
     if (this->transitionCountdown == 0) {
         if (gSaveContext.save.day < 9) {
-            gSaveContext.gameMode = 0;
+            gSaveContext.gameMode = GAMEMODE_NORMAL;
         } else {
             gSaveContext.nextCutsceneIndex = 0xFFF6;
             gSaveContext.save.day = 1;
@@ -83,7 +84,7 @@ void DayTelop_Update(DayTelopState* this, GameState* thisx) {
         SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
 
         gSaveContext.save.time = CLOCK_TIME(6, 0);
-        D_801BDBC8 = 0xFE;
+        gSceneSeqState = SCENESEQ_MORNING;
     } else if (this->transitionCountdown == 90) {
         this->fadeInState = DAYTELOP_HOURSTEXT_FADEIN;
         this->alpha = 0;
@@ -129,7 +130,8 @@ void DayTelop_Draw(DayTelopState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
-    func_8012C628(this->state.gfxCtx);
+
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     if (gSaveContext.save.day >= 9) {
         // Draw a white screen
@@ -139,7 +141,7 @@ void DayTelop_Draw(DayTelopState* this) {
         gDPFillRectangle(POLY_OPA_DISP++, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-    func_8012C628(this->state.gfxCtx);
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -213,18 +215,18 @@ void DayTelop_Noop(DayTelopState* this) {
 void DayTelop_LoadGraphics(DayTelopState* this) {
     size_t segmentSize = SEGMENT_ROM_SIZE(daytelop_static);
 
-    this->daytelopStaticFile = THA_AllocEndAlign16(&this->state.heap, segmentSize);
+    this->daytelopStaticFile = THA_AllocTailAlign16(&this->state.tha, segmentSize);
     DmaMgr_SendRequest0(this->daytelopStaticFile, SEGMENT_ROM_START(daytelop_static), segmentSize);
 
     segmentSize = SEGMENT_ROM_SIZE(icon_item_gameover_static);
-    this->gameoverStaticFile = THA_AllocEndAlign16(&this->state.heap, segmentSize);
+    this->gameoverStaticFile = THA_AllocTailAlign16(&this->state.tha, segmentSize);
     DmaMgr_SendRequest0(this->gameoverStaticFile, SEGMENT_ROM_START(icon_item_gameover_static), segmentSize);
 }
 
 void DayTelop_Init(GameState* thisx) {
     DayTelopState* this = (DayTelopState*)thisx;
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
     Matrix_Init(&this->state);
     ShrinkWindow_Destroy();
     View_Init(&this->view, this->state.gfxCtx);
@@ -242,5 +244,5 @@ void DayTelop_Init(GameState* thisx) {
 
     DayTelop_Noop(this);
     DayTelop_LoadGraphics(this);
-    play_sound(NA_SE_OC_TELOP_IMPACT);
+    Audio_PlaySfx(NA_SE_OC_TELOP_IMPACT);
 }

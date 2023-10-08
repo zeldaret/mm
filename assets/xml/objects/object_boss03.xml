@@ -5,7 +5,7 @@
         whip assets, along with an unused duplicate of the small fishes.
     -->
     <File Name="object_boss03" Segment="6">
-        <Animation Name="gGyorgIdleAnim" Offset="0x88" /> <!-- Original name is "bus_base". Maybe unused? -->
+        <Animation Name="gGyorgIdleAnim" Offset="0x88" /> <!-- Unused. Original name is "bus_base" -->
 
         <!-- Unused Majora's Wrath Whip Texture -->
         <Texture Name="gGyorgUnusedMajorasWrathWhipTex" OutName="unused_majoras_wrath_whip" Format="rgba16" Width="8" Height="16" Offset="0xA0" />
@@ -46,7 +46,7 @@
         <DList Name="gGyorgBubbleModelDL" Offset="0x7EB0" />
 
         <!-- Gyorg Title Card -->
-        <Texture Name="gGyorgTitleCardTex" OutName="gyorg_title_card" Format="i8" Width="128" Height="40" Offset="0x7EC8" />
+        <Texture Name="gGyorgTitleCardTex" OutName="gyorg_title_card" Format="ia8" Width="128" Height="40" Offset="0x7EC8" />
 
         <!-- Gyorg Limbs -->
         <Limb Name="gGyorgRootLimb" Type="Standard" EnumName="GYORG_LIMB_ROOT" Offset="0x92C8" />
@@ -69,12 +69,12 @@
 
         <!-- Gyorg Animations -->
         <Animation Name="gGyorgFloppingAnim" Offset="0x9554" /> <!-- Original name is "bus_dead" -->
-        <Animation Name="gGyorgJumpingAnim" Offset="0x98F0" /> <!-- Original name is "bus_jump". Maybe unused? -->
+        <Animation Name="gGyorgJumpingAnim" Offset="0x98F0" /> <!-- Unused. Original name is "bus_jump" -->
         <Animation Name="gGyorgStunnedAnim" Offset="0x99D0" /> <!-- Original name is "bus_sibire" ("paralyzed") -->
         <Animation Name="gGyorgBackingUpAnim" Offset="0x9C14" /> <!-- Original name is "bus_stop" -->
         <Animation Name="gGyorgFastSwimmingAnim" Offset="0x9CF8" /> <!-- Original name is "bus_swim" -->
-        <Animation Name="gGyorgGentleSwimmingAnim" Offset="0xA020" /> <!-- Maybe unused? -->
-        <Animation Name="gGyorgTailSweepAnim" Offset="0xA134" /> <!-- Maybe unused? -->
+        <Animation Name="gGyorgGentleSwimmingAnim" Offset="0xA020" /> <!-- Unused -->
+        <Animation Name="gGyorgTailSweepAnim" Offset="0xA134" /> <!-- Unused -->
         <Animation Name="gGyorgCrawlingAnim" Offset="0xA6C8" />
 
         <!-- Seaweed DisplayLists -->

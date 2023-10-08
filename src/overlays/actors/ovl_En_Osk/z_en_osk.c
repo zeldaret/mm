@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_ikn_demo/object_ikn_demo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnOsk*)thisx)
 
@@ -66,8 +66,8 @@ void EnOsk_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = func_80BF5F60;
     this->unk_254 = -1;
-    this->unk_256 = -1;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->cueId = -1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     switch (ENOSK_GET_F(&this->actor)) {
         case ENOSK_1:
@@ -75,7 +75,7 @@ void EnOsk_Init(Actor* thisx, PlayState* play) {
                                this->jointTable, this->morphTable, 7);
             Animation_PlayLoop(&this->skelAnime, &object_ikn_demo_Anim_006808);
             this->actionFunc = func_80BF656C;
-            this->unk_258 = 0x210;
+            this->cueType = CS_CMD_ACTOR_CUE_528;
             break;
 
         case ENOSK_2:
@@ -83,7 +83,7 @@ void EnOsk_Init(Actor* thisx, PlayState* play) {
                                this->jointTable, this->morphTable, 7);
             Animation_PlayLoop(&this->skelAnime, &object_ikn_demo_Anim_006808);
             this->actionFunc = func_80BF6A20;
-            this->unk_258 = 0x211;
+            this->cueType = CS_CMD_ACTOR_CUE_529;
             break;
 
         default:
@@ -92,7 +92,7 @@ void EnOsk_Init(Actor* thisx, PlayState* play) {
                                this->jointTable, this->morphTable, 17);
             Animation_PlayLoop(&this->skelAnime, &object_ikn_demo_Anim_0000B8);
             this->actionFunc = func_80BF61EC;
-            this->unk_258 = 0x212;
+            this->cueType = CS_CMD_ACTOR_CUE_530;
             this->actor.home.rot.z = 0;
             this->unk_25C = 0.0f;
             break;
@@ -118,9 +118,9 @@ void func_80BF5E68(EnOsk* this, AnimationHeader** animations, s16 index, f32 pla
 void func_80BF5EBC(EnOsk* this, PlayState* play) {
     Vec3f sp2C;
 
-    sp2C.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
-    sp2C.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.z;
-    sp2C.y = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.y;
+    sp2C.x = Rand_CenteredFloat(30.0f) + this->actor.world.pos.x;
+    sp2C.z = Rand_CenteredFloat(30.0f) + this->actor.world.pos.z;
+    sp2C.y = Rand_CenteredFloat(30.0f) + this->actor.world.pos.y;
 
     func_800B3030(play, &sp2C, &D_80BF7018, &D_80BF7018, 100, 0, 2);
 }
@@ -129,12 +129,12 @@ void func_80BF5F60(EnOsk* this, PlayState* play) {
 }
 
 void func_80BF5F70(EnOsk* this) {
-    if ((this->unk_256 != 1) && (this->unk_256 != 6)) {
+    if ((this->cueId != 1) && (this->cueId != 6)) {
         this->actor.draw = EnOsk_Draw;
         Actor_SetScale(&this->actor, 0.017f);
     }
 
-    switch (this->unk_256) {
+    switch (this->cueId) {
         case 1:
             this->actor.draw = NULL;
             break;
@@ -181,20 +181,20 @@ void func_80BF609C(EnOsk* this, PlayState* play) {
                 case 0:
                     if (Animation_OnFrame(&this->skelAnime, this->unk_25C) ||
                         Animation_OnFrame(&this->skelAnime, this->unk_25C + 8.0f)) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOSU_TALK);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_TALK);
                     }
                     break;
 
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->unk_25C)) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOSU_TALK);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_TALK);
                     }
                     break;
 
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->unk_25C) ||
                         Animation_OnFrame(&this->skelAnime, this->unk_25C + 6.0f)) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BOSU_TALK);
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_TALK);
                     }
                     break;
             }
@@ -205,10 +205,10 @@ void func_80BF609C(EnOsk* this, PlayState* play) {
 void func_80BF61EC(EnOsk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, this->unk_258)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->unk_258));
-        if (this->unk_256 != play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action) {
-            this->unk_256 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action;
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        if (this->cueId != play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id) {
+            this->cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
             func_80BF5F70(this);
         }
         func_80BF609C(this, play);
@@ -216,12 +216,12 @@ void func_80BF61EC(EnOsk* this, PlayState* play) {
         this->actor.draw = NULL;
     }
 
-    if (this->unk_256 == 6) {
+    if (this->cueId == 6) {
         if (this->actor.scale.x > 0.85f * 0.001f) {
             this->actor.scale.x -= 0.85f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }
@@ -229,12 +229,12 @@ void func_80BF61EC(EnOsk* this, PlayState* play) {
 }
 
 void func_80BF6314(EnOsk* this) {
-    if ((this->unk_256 != 1) && (this->unk_256 != 9)) {
+    if ((this->cueId != 1) && (this->cueId != 9)) {
         this->actor.draw = EnOsk_Draw;
         Actor_SetScale(&this->actor, 0.013f);
     }
 
-    switch (this->unk_256) {
+    switch (this->cueId) {
         case 1:
             this->actor.draw = NULL;
             break;
@@ -280,25 +280,25 @@ void func_80BF6478(EnOsk* this) {
             case 1:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
                     Animation_OnFrame(&this->skelAnime, 11.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 3:
                 if (Animation_OnFrame(&this->skelAnime, 11.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 4:
                 if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 10:
             case 11:
-                func_800B9010(&this->actor, NA_SE_EN_YASE_LAUGH_K - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_YASE_LAUGH_K - SFX_FLAG);
                 break;
         }
     }
@@ -329,10 +329,10 @@ void func_80BF656C(EnOsk* this, PlayState* play) {
         }
     }
 
-    if (Cutscene_CheckActorAction(play, this->unk_258)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->unk_258));
-        if (this->unk_256 != play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action) {
-            this->unk_256 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action;
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        if (this->cueId != play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id) {
+            this->cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
             func_80BF6314(this);
         }
         func_80BF6478(this);
@@ -340,17 +340,17 @@ void func_80BF656C(EnOsk* this, PlayState* play) {
         this->actor.draw = NULL;
     }
 
-    if ((this->unk_256 == 2) && (this->actor.scale.x < 13.0f * 0.001f)) {
+    if ((this->cueId == 2) && (this->actor.scale.x < 13.0f * 0.001f)) {
         this->actor.scale.x += 0.65f * 0.001f;
         Actor_SetScale(&this->actor, this->actor.scale.x);
     }
 
-    if (this->unk_256 == 9) {
+    if (this->cueId == 9) {
         if (this->actor.scale.x > 0.65f * 0.001f) {
             this->actor.scale.x -= 0.65f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }
@@ -358,12 +358,12 @@ void func_80BF656C(EnOsk* this, PlayState* play) {
 }
 
 void func_80BF67A8(EnOsk* this) {
-    if ((this->unk_256 != 1) && (this->unk_256 != 8)) {
+    if ((this->cueId != 1) && (this->cueId != 8)) {
         this->actor.draw = EnOsk_Draw;
         Actor_SetScale(&this->actor, 0.013f);
     }
 
-    switch (this->unk_256) {
+    switch (this->cueId) {
         case 1:
             this->actor.draw = NULL;
             break;
@@ -406,31 +406,31 @@ void func_80BF68E0(EnOsk* this) {
             case 7:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
                     Animation_OnFrame(&this->skelAnime, 11.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 2:
                 if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 4:
                 if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 5:
-                if ((Animation_OnFrame(&this->skelAnime, 6.0f)) || Animation_OnFrame(&this->skelAnime, 11.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                if (Animation_OnFrame(&this->skelAnime, 6.0f) || Animation_OnFrame(&this->skelAnime, 11.0f)) {
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
             case 8:
                 if (Animation_OnFrame(&this->skelAnime, 13.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
         }
@@ -466,10 +466,10 @@ void func_80BF6A20(EnOsk* this, PlayState* play) {
         }
     }
 
-    if (Cutscene_CheckActorAction(play, this->unk_258)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->unk_258));
-        if (this->unk_256 != play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action) {
-            this->unk_256 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_258)]->action;
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        if (this->cueId != play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id) {
+            this->cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
             func_80BF67A8(this);
         }
         func_80BF68E0(this);
@@ -477,12 +477,12 @@ void func_80BF6A20(EnOsk* this, PlayState* play) {
         this->actor.draw = NULL;
     }
 
-    if (this->unk_256 == 8) {
+    if (this->cueId == 8) {
         if (this->actor.scale.x > 0.65f * 0.001f) {
             this->actor.scale.x -= 0.65f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }
@@ -512,7 +512,7 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_PrimColor(play->state.gfxCtx, 0x80, 255, 255, 255, 255));
 
@@ -536,18 +536,16 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(this->actor.focus.pos.x + sp80.x, this->actor.focus.pos.y + sp80.y,
                          sp80.z = this->actor.focus.pos.z + sp80.z, MTXMODE_NEW);
 
-        sp80.z = Math_SinS(play->gameplayFrames << 0xE);
+        sp80.z = Math_SinS(play->gameplayFrames * 0x4000);
         sp80.z = ((sp80.z + 1.0f) * 0.1f) + 2.0f;
         Matrix_Scale(this->actor.scale.x * sp80.z, this->actor.scale.y * sp80.z, this->actor.scale.z * sp80.z,
                      MTXMODE_APPLY);
     }
 
-    gfx = func_8012C868(POLY_XLU_DISP);
+    gfx = POLY_XLU_DISP;
+    gfx = Gfx_SetupDL20_NoCD(gfx);
 
-    gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
-    if (1) {}
-    if (1) {}
-    if (1) {}
+    gDPSetDither(gfx++, G_CD_NOISE);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
     gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
     gDPSetPrimColor(gfx++, 0, 0, 130, 0, 255, 100);

@@ -2,20 +2,20 @@
     <!-- Assets for the Eyegore enemy and associated props -->
     <File Name="object_eg" Segment="6">
         <!-- Display lists and textures for Eyegore's effects -->
-        <DList Name="gEyegoreEffectImpactDL" Offset="0x40" />
+        <DList Name="gEyegoreEffectImpactDL" Offset="0x40" /> <!-- Original name is "grid1_model" -->
         <Texture Name="gEyegoreEffectImpactTex" OutName="eyegore_effect_impact" Format="ia8" Width="64" Height="64" Offset="0xC0" />
         <TextureAnimation Name="gEyegoreEmpty1TexAnim" Offset="0x10C0" />
-        <DList Name="gEyegoreEffectLargeBodyPieceDL" Offset="0x1170" />
+        <DList Name="gEyegoreEffectLargeBodyPieceDL" Offset="0x1170" /> <!-- Original name is "baku_shape1_model" -->
         <Texture Name="gEyegoreEffectLargeBodyPieceTex" OutName="eyegore_effect_large_piece" Format="rgba16" Width="8" Height="16" Offset="0x1210" />
-        <DList Name="gEyegoreEffectSmallBodyPieceDL" Offset="0x13B0" />
+        <DList Name="gEyegoreEffectSmallBodyPieceDL" Offset="0x13B0" /> <!-- Original name is "baku_shape2_model" -->
         <Texture Name="gEyegoreEffectSmallBodyPieceTex" OutName="eyegore_effect_small_piece" Format="rgba16" Width="8" Height="16" Offset="0x1450" />
         <DList Name="gEyegoreEmpty1DL" Offset="0x1690" />
 
         <!-- Assets for Eyegore's destructible pillars (unused) -->
         <DList Name="gEyegoreBlockDL" Offset="0x1698" />
-        <Collision Name="gEyegoreBlockCol" Offset="0x1820" />
+        <Collision Name="gEyegoreBlockCol" Offset="0x1820" /> <!-- Original name is "eg_block1_bgdatainfo" -->
         <DList Name="gEyegoreEmpty2DL" Offset="0x1910" />
-        <DList Name="gEyegoreEffectSolidDebrisDL" Offset="0x1918" />
+        <DList Name="gEyegoreEffectSolidDebrisDL" Offset="0x1918" /> <!-- Original name is "eg_block2_model" -->
         <Texture Name="gEyegoreEffectSolidDebrisTex" OutName="eyegore_effect_solid_debris" Format="rgba16" Width="16" Height="16" Offset="0x19B0" />
         <TextureAnimation Name="gEyegoreEmpty2TexAnim" Offset="0x1BB0" />
         <DList Name="gEyegoreEmpty3DL" Offset="0x1BF0" />
@@ -24,7 +24,7 @@
         <TextureAnimation Name="gEyegoreEmpty3TexAnim" Offset="0x1E80" />
 
         <!-- Slam attack animation -->
-        <Animation Name="gEyegoreSlamAnim" Offset="0x2460" />
+        <Animation Name="gEyegoreSlamAnim" Offset="0x2460" /> <!-- Original name is "eg_atack01" -->
 
         <!-- Unused vertex mesh. Purpose unknown. -->
         <Array Name="gEyegoreUnusedVtx" Count="464" Offset="0x2470"> <!-- type is uncertain -->
@@ -32,22 +32,22 @@
         </Array>
 
         <!-- Display list for Eyegore's laser attack -->
-        <DList Name="gEyegoreLaserDL" Offset="0x41F0" />
+        <DList Name="gEyegoreLaserDL" Offset="0x41F0" /> <!-- Original name is "eg_sen_SCR1_F_model" -->
         
-        <!-- Several unused textures. Purpose unknown. -->
-        <Texture Name="gEyegoreUnusedUnknown1Tex" OutName="eyegore_unused_unknown_1" Format="rgba16" Width="8" Height="8" Offset="0x4280" /> <!-- unused -->
-        <Texture Name="gEyegoreUnusedUnknown2Tex" OutName="eyegore_unused_unknown_2" Format="i4" Width="16" Height="32" Offset="0x4300" /> <!-- type is uncertain -->
-        <Texture Name="gEyegoreUnusedUnknown3Tex" OutName="eyegore_unused_unknown_3" Format="rgba16" Width="16" Height="32" Offset="0x4400" /> <!-- unused -->
-        <Texture Name="gEyegoreUnusedUnknown4Tex" OutName="eyegore_unused_unknown_4" Format="rgba16" Width="16" Height="8" Offset="0x4800" /> <!-- unused -->
-        <Texture Name="gEyegoreUnusedUnknown5Tex" OutName="eyegore_unused_unknown_5" Format="rgba16" Width="16" Height="16" Offset="0x4900" /> <!-- unused -->
-        <Texture Name="gEyegoreUnusedEyeTex" OutName="eyegore_unused_eye" Format="rgba16" Width="32" Height="16" Offset="0x4B00" /> <!-- unused -->
-        <Texture Name="gEyegoreUnusedUnknown6Tex" OutName="eyegore_unused_unknown_6" Format="rgba16" Width="16" Height="16" Offset="0x4F00" /> <!-- unused -->
+        <!-- Several unused textures that look to come from object_vm. Purpose unknown. -->
+        <Texture Name="gEyegoreBeamosBodyGradientTex" OutName="eyegore_beamos_body_gradient" Format="rgba16" Width="8" Height="8" Offset="0x4280" />
+        <Texture Name="gEyegoreBeamosGrayMetalTex" OutName="eyegore_beamos_gray_metal" Format="i4" Width="16" Height="32" Offset="0x4300" />
+        <Texture Name="gEyegoreBeamosBoltAndMetalTex" OutName="eyegore_beamos_bolt_and_metal" Format="rgba16" Width="16" Height="32" Offset="0x4400" />
+        <Texture Name="gEyegoreBeamosInnerEyeLidTex" OutName="eyegore_beamos_inner_eye_lid" Format="rgba16" Width="16" Height="8" Offset="0x4800" />
+        <Texture Name="gEyegoreBeamosEyeOutlineTex" OutName="eyegore_beamos_eye_outline" Format="rgba16" Width="16" Height="16" Offset="0x4900" />
+        <Texture Name="gEyegoreBeamosEyeTex" OutName="eyegore_beamos_eye" Format="rgba16" Width="32" Height="16" Offset="0x4B00" />
+        <Texture Name="gEyegoreBeamosBodyTex" OutName="eyegore_beamos_body_tex" Format="rgba16" Width="16" Height="16" Offset="0x4F00" />
 
         <!-- Animated texture for Eyegore's laser attack. Uses gEyegoreEyeLaserTexAnim. -->
         <Texture Name="gEyegoreLaserTex" OutName="eyegore_laser" Format="rgba16" Width="8" Height="8" Offset="0x5100" />
 
-        <!-- Unused teeth texture. Purpose unknown. -->
-        <Texture Name="gEyegoreUnusedTeethTex" OutName="eyegore_unused_teeth" Format="rgba16" Width="32" Height="32" Offset="0x5180" /> <!-- unused -->
+        <!-- Unused teeth texture that looks to come from object_vm. Purpose unknown. -->
+        <Texture Name="gEyegoreBeamosTeethTex" OutName="eyegore_beamos_teeth" Format="rgba16" Width="32" Height="32" Offset="0x5180" />
 
         <!-- Eyegore limb display lists -->
         <DList Name="gEyegoreHipsDL" Offset="0x7C80" />
@@ -105,32 +105,32 @@
         <Skeleton Name="gEyegoreSkel" Type="Flex" LimbType="Standard" LimbNone="EYEGORE_LIMB_NONE" LimbMax="EYEGORE_LIMB_MAX" EnumName="EyegoreLimb" Offset="0x9664" />
 
         <!-- Various fight animations -->
-        <Animation Name="gEyegoreSlamWaitAnim" Offset="0x9D2C" />
-        <Animation Name="gEyegoreSlamEndAnim" Offset="0xA204" />
-        <Animation Name="gEyegoreLaserAnim" Offset="0xA484" />
-        <Animation Name="gEyegoreUnusedLaserEndAnim" Offset="0xA73C" />
-        <Animation Name="gEyegoreDamagedAnim" Offset="0xADF8" />
-        <Animation Name="gEyegoreDeathAnim" Offset="0xBC60" />
-        <Animation Name="gEyegoreRetreatAnim" Offset="0xBEB8" />
-        <Animation Name="gEyegoreLeftPunchAnim" Offset="0xC434" />
-        <Animation Name="gEyegoreRightPunchAnim" Offset="0xC9B4" />
-        <Animation Name="gEyegoreStunnedAnim" Offset="0xCC4C" />
-        <Animation Name="gEyegoreStunEndAnim" Offset="0xCE54" />
-        <Animation Name="gEyegoreSitAnim" Offset="0xD3D8" />
+        <Animation Name="gEyegoreSlamWaitAnim" Offset="0x9D2C" /> <!-- Original name is "eg_atack02" -->
+        <Animation Name="gEyegoreSlamEndAnim" Offset="0xA204" /> <!-- Original name is "eg_atack03" -->
+        <Animation Name="gEyegoreLaserAnim" Offset="0xA484" /> <!-- Original name is "eg_beam" -->
+        <Animation Name="gEyegoreUnusedLaserEndAnim" Offset="0xA73C" /> <!-- Original name is "eg_beamTOwalk" -->
+        <Animation Name="gEyegoreDamagedAnim" Offset="0xADF8" /> <!-- Original name is "eg_damage" -->
+        <Animation Name="gEyegoreDeathAnim" Offset="0xBC60" /> <!-- Original name is "eg_dead" -->
+        <Animation Name="gEyegoreRetreatAnim" Offset="0xBEB8" /> <!-- Original name is "eg_escape" -->
+        <Animation Name="gEyegoreLeftPunchAnim" Offset="0xC434" /> <!-- Original name is "eg_hatakiL" -->
+        <Animation Name="gEyegoreRightPunchAnim" Offset="0xC9B4" /> <!-- Original name is "eg_hatakiR" -->
+        <Animation Name="gEyegoreStunnedAnim" Offset="0xCC4C" /> <!-- Original name is "eg_mahi" -->
+        <Animation Name="gEyegoreStunEndAnim" Offset="0xCE54" /> <!-- Original name is "eg_mahiTOwalk" -->
+        <Animation Name="gEyegoreSitAnim" Offset="0xD3D8" /> <!-- Original name is "eg_nemuru" -->
 
-        <!-- Unused stone display list and texture. Could be prototype of final stone assets. -->
+        <!-- Unused stone display list and texture. It's a copy of the stone in object_efc_star_field. -->
         <DList Name="gEyegoreUnusedStoneDL" Offset="0xDCC0" />
         <Texture Name="gEyegoreUnusedStoneTex" OutName="eyegore_unused_stone" Format="i4" Width="64" Height="64" Offset="0xDEA8" />
 
         <!-- Various walking and idle animations. Contains several unused ones. -->
-        <Animation Name="gEyegoreUnusedChaseAnim" Offset="0xEA10" />
-        <Animation Name="gEyegoreStandAnim" Offset="0xEE4C" />
-        <Animation Name="gEyegoreUnusedWalkAnim" Offset="0xF524" />
-        <Animation Name="gEyegoreUnusedIdleAnim" Offset="0xFB0C" />
-        <Animation Name="gEyegoreWalkAnim" Offset="0x100C0" />
+        <Animation Name="gEyegoreUnusedChaseAnim" Offset="0xEA10" /> <!-- Original name is "eg_run" -->
+        <Animation Name="gEyegoreStandAnim" Offset="0xEE4C" /> <!-- Original name is "eg_start" -->
+        <Animation Name="gEyegoreUnusedWalkAnim" Offset="0xF524" /> <!-- Original name is "eg_turn" -->
+        <Animation Name="gEyegoreUnusedIdleAnim" Offset="0xFB0C" /> <!-- Original name is "eg_wait" -->
+        <Animation Name="gEyegoreWalkAnim" Offset="0x100C0" /> <!-- Original name is "eg_walk" -->
 
         <!-- Display list and texture for the stones created by Eyegore's attacks -->
-        <DList Name="gEyegoreStoneDL" Offset="0x10240" />
+        <DList Name="gEyegoreStoneDL" Offset="0x10240" /> <!-- Original name is "iwaA_cube1_model" -->
         <Texture Name="gEyegoreStoneTex" OutName="eyegore_stone" Format="rgba16" Width="36" Height="36" Offset="0x10310" />
 
         <!-- Duplicate of gEyegoreEffectImpactTex -->

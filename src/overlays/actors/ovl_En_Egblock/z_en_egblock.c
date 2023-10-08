@@ -7,13 +7,13 @@
 #include "z_en_egblock.h"
 #include "objects/object_eg/object_eg.h"
 
-#define FLAGS (ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnEgblock*)thisx)
 
 typedef enum {
     /* 0 */ EGBLOCK_EFFECT_DEBRIS_SOLID,
-    /* 1 */ EGBLOCK_EFFECT_DEBRIS_FLAT,
+    /* 1 */ EGBLOCK_EFFECT_DEBRIS_FLAT
 } EnEgblockEffectType;
 
 void EnEgblock_Init(Actor* thisx, PlayState* play);
@@ -110,7 +110,7 @@ void EnEgblock_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnEgblock* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->inactive != true) {
         OPEN_DISPS(play->state.gfxCtx);
@@ -134,8 +134,8 @@ void EnEgblock_SpawnEffect(EnEgblock* this, Vec3f* pos, s16 lifetime, s16 arg3) 
         if (!effect->isActive) {
             effect->isActive = true;
             effect->pos = *pos;
-            effect->pos.x += randPlusMinusPoint5Scaled(50.0f);
-            effect->pos.z += randPlusMinusPoint5Scaled(50.0f);
+            effect->pos.x += Rand_CenteredFloat(50.0f);
+            effect->pos.z += Rand_CenteredFloat(50.0f);
             effect->timer = lifetime;
             effect->alpha = 255;
             effect->type = arg3;
@@ -146,9 +146,9 @@ void EnEgblock_SpawnEffect(EnEgblock* this, Vec3f* pos, s16 lifetime, s16 arg3) 
             effect->velocity.y = 5.0f + (10.0f * Rand_ZeroOne());
             effect->velocity.z = 2.0f * (Rand_ZeroOne() - 0.5f);
             effect->scale = 0.5f + (0.2f * Rand_ZeroFloat(1.0f));
-            effect->rot.x = randPlusMinusPoint5Scaled(0x7530);
-            effect->rot.y = randPlusMinusPoint5Scaled(0x7530);
-            effect->rot.z = randPlusMinusPoint5Scaled(0x7530);
+            effect->rot.x = Rand_CenteredFloat(0x7530);
+            effect->rot.y = Rand_CenteredFloat(0x7530);
+            effect->rot.z = Rand_CenteredFloat(0x7530);
             break;
         }
     }
@@ -193,7 +193,7 @@ void EnEgblock_DrawEffects(EnEgblock* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isActive) {

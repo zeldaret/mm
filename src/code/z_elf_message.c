@@ -13,7 +13,7 @@
  * Gets the relevant text ID for Tatl hints in first cycle.
  */
 u16 QuestHint_GetTatlTextId(PlayState* play) {
-    if (INV_CONTENT(ITEM_OCARINA) == ITEM_OCARINA) {
+    if (INV_CONTENT(ITEM_OCARINA_OF_TIME) == ITEM_OCARINA_OF_TIME) {
         return 0;
     }
 
@@ -26,7 +26,7 @@ u16 QuestHint_GetTatlTextId(PlayState* play) {
     }
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_10)) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED)) {
             return 0;
         }
 
@@ -45,7 +45,7 @@ u16 QuestHint_GetTatlTextId(PlayState* play) {
         return 0x21D;
     }
 
-    if (gSaveContext.save.playerData.isMagicAcquired != true) {
+    if (gSaveContext.save.saveInfo.playerData.isMagicAcquired != true) {
         return 0x21F;
     }
 
@@ -57,7 +57,7 @@ u16 QuestHint_GetTatlTextId(PlayState* play) {
         return 0;
     }
 
-    if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_MOON_TEAR) {
+    if (INV_CONTENT(ITEM_MOONS_TEAR) == ITEM_MOONS_TEAR) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_04)) {
             return 0x242;
         }

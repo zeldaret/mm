@@ -165,7 +165,7 @@ void ObjHamishi_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         this->actor.uncullZoneForward += 1000.0f;
     }
 
@@ -180,7 +180,7 @@ void ObjHamishi_Init(Actor* thisx, PlayState* play) {
     func_809A13A0(this, play);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 2.3f);
 
-    if (Flags_GetSwitch(play, OBJHAMISHI_GET_SWITCHFLAG(&this->actor))) {
+    if (Flags_GetSwitch(play, OBJHAMISHI_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -232,7 +232,7 @@ void ObjHamishi_Update(Actor* thisx, PlayState* play) {
             } else {
                 func_809A10F4(this, play);
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_WALL_BROKEN);
-                Flags_SetSwitch(play, OBJHAMISHI_GET_SWITCHFLAG(&this->actor));
+                Flags_SetSwitch(play, OBJHAMISHI_GET_SWITCH_FLAG(&this->actor));
                 Actor_Kill(&this->actor);
             }
         }
@@ -267,7 +267,7 @@ void ObjHamishi_Draw(Actor* thisx, PlayState* play) {
 
     if ((thisx->projectedPos.z <= 2150.0f) || ((this->unk_1A2 & 1) && (thisx->projectedPos.z < 2250.0f))) {
         thisx->shape.shadowAlpha = 160;
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -277,7 +277,7 @@ void ObjHamishi_Draw(Actor* thisx, PlayState* play) {
         f32 sp20 = (2250.0f - thisx->projectedPos.z) * 2.55f;
 
         thisx->shape.shadowAlpha = sp20 * 0.627451f;
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

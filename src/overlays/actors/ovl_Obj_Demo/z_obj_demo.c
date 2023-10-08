@@ -1,7 +1,7 @@
 /*
  * File: z_obj_demo.c
  * Overlay: ovl_Obj_Demo
- * Description:
+ * Description: Cutscene triggers when player is in range
  */
 
 #include "z_obj_demo.h"
@@ -32,8 +32,8 @@ ActorInit Obj_Demo_InitVars = {
 void ObjDemo_Init(Actor* thisx, PlayState* play) {
     ObjDemo* this = THIS;
 
-    thisx->params = OBJDEMO_GET_FF(thisx);
-    if ((thisx->params != OBJDEMO_FF_FF) && (Flags_GetSwitch(play, thisx->params))) {
+    thisx->params = OBJDEMO_GET_SWITCH_FLAG_MASK(thisx);
+    if ((OBJDEMO_GET_SWITCH_FLAG(thisx) != 0xFF) && (Flags_GetSwitch(play, OBJDEMO_GET_SWITCH_FLAG(thisx)))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -60,8 +60,8 @@ void ObjDemo_Init(Actor* thisx, PlayState* play) {
 }
 
 void func_80983634(PlayState* play) {
-    if ((play->sceneId == SCENE_CASTLE) && (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) == NA_BGM_IKANA_CASTLE)) {
-        Audio_QueueSeqCmd(0x100100FF);
+    if ((play->sceneId == SCENE_CASTLE) && (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_IKANA_CASTLE)) {
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
     }
 }
 
@@ -69,37 +69,37 @@ void func_80983678(ObjDemo* this, PlayState* play) {
     func_80983634(play);
     if ((this->actor.xzDistToPlayer < this->xzRange) && (fabsf(this->actor.playerHeightRel) < this->yRange)) {
         if (this->unk_148 == 1) {
-            ActorCutscene_Stop(0x7D);
+            CutsceneManager_Stop(CS_ID_GLOBAL_DOOR);
         }
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
         this->actionFunc = func_80983704;
     }
 }
 
 void func_80983704(ObjDemo* this, PlayState* play) {
-    if ((this->unk_148 == 1) && (ActorCutscene_GetCurrentIndex() == 0x7D)) {
-        ActorCutscene_Stop(0x7D);
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    if ((this->unk_148 == 1) && (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR)) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_DOOR);
+        CutsceneManager_Queue(this->actor.csId);
     } else {
-        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+        if (CutsceneManager_IsNext(this->actor.csId)) {
             if (this->unk_148 == 1) {
-                ActorCutscene_Start(this->actor.cutscene, &this->actor);
+                CutsceneManager_Start(this->actor.csId, &this->actor);
                 func_800E0348(play->cameraPtrs[CAM_ID_MAIN]);
             } else {
-                ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+                CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             }
             if (play->sceneId == SCENE_CASTLE) {
-                Audio_QueueSeqCmd(NA_BGM_IKANA_CASTLE | 0x8000);
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_IKANA_CASTLE | SEQ_FLAG_ASYNC);
             }
-            this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            if (this->actor.cutscene == -1) {
-                if (this->actor.params != 0xFF) {
-                    Flags_SetSwitch(play, this->actor.params);
+            this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
+            if (this->actor.csId == CS_ID_NONE) {
+                if (OBJDEMO_GET_SWITCH_FLAG(&this->actor) != 0xFF) {
+                    Flags_SetSwitch(play, OBJDEMO_GET_SWITCH_FLAG(&this->actor));
                 }
                 Actor_Kill(&this->actor);
             }
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
             func_80983634(play);
         }
     }
@@ -108,7 +108,8 @@ void func_80983704(ObjDemo* this, PlayState* play) {
 void ObjDemo_Update(Actor* thisx, PlayState* play) {
     ObjDemo* this = THIS;
 
-    if ((this->actor.params != 0xFF) && Flags_GetSwitch(play, this->actor.params)) {
+    if ((OBJDEMO_GET_SWITCH_FLAG(&this->actor) != 0xFF) &&
+        Flags_GetSwitch(play, OBJDEMO_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }

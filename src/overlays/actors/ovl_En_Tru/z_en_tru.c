@@ -7,7 +7,7 @@
 #include "z_en_tru.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTru*)thisx)
 
@@ -93,8 +93,14 @@ ActorInit En_Tru_InitVars = {
 static Vec3f D_80A8B250 = { 0.0f, 0.02f, 0.0f };
 
 static Color_RGBA8 D_80A8B25C[] = {
-    { 255, 20, 60, 0 },   { 255, 235, 160, 0 }, { 20, 60, 255, 0 },
-    { 100, 100, 100, 0 }, { 255, 255, 200, 0 }, { 100, 100, 100, 0 },
+    { 255, 20, 60, 0 },
+    { 255, 235, 160, 0 },
+    { 20, 60, 255, 0 },
+};
+static Color_RGBA8 D_80A8B268[] = {
+    { 100, 100, 100, 0 },
+    { 255, 255, 200, 0 },
+    { 100, 100, 100, 0 },
 };
 
 static f32 D_80A8B274[] = { 60.0f, 255.0f, 60.0f };
@@ -173,36 +179,36 @@ void func_80A85788(EnTruUnkStruct* arg0, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 30; i++, arg0++) {
-        if (arg0->unk_00 == 1) {
-            f32 alpha;
+        f32 alpha;
 
-            if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, D_80A89000);
-                flag = true;
-            }
-
-            do {
-                alpha = (f32)arg0->unk_02 / arg0->unk_01;
-                alpha *= 255.0f;
-            } while (0);
-
-            gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 128);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)alpha);
-            gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, -arg0->unk_02 * 5, 32, 64, 1, 0, 0, 32, 32));
-
-            Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
-            Matrix_Translate(0.0f, 14.0f, 0.0f, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_80A890A8);
+        if (arg0->unk_00 != 1) {
+            continue;
         }
+
+        if (!flag) {
+            gSPDisplayList(POLY_XLU_DISP++, D_80A89000);
+            flag = true;
+        }
+
+        alpha = (f32)arg0->unk_02 / arg0->unk_01;
+        alpha *= 255.0f;
+
+        gDPPipeSync(POLY_XLU_DISP++);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 128);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)alpha);
+        gSPSegment(POLY_XLU_DISP++, 0x08,
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, -arg0->unk_02 * 5, 32, 64, 1, 0, 0, 32, 32));
+
+        Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 14.0f, 0.0f, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, D_80A890A8);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -227,38 +233,38 @@ void func_80A85AA4(EnTruUnkStruct* arg0, Vec3f* arg1, f32 arg2, f32 arg3, f32 ar
 }
 
 void func_80A85BCC(EnTruUnkStruct* arg0, PlayState* play) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 i;
     s32 flag = false;
 
     OPEN_DISPS(play->state.gfxCtx);
-    if (play) {}
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 30; i++, arg0++) {
-        if (arg0->unk_00 == 2) {
-            f32 alpha;
+        f32 alpha;
 
-            if (!flag) {
-                gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 200, 0);
-                flag = true;
-            }
-
-            do {
-                alpha = (f32)arg0->unk_02 / arg0->unk_01;
-                alpha *= 255.0f;
-            } while (0);
-
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)alpha);
-
-            Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_80A8A108);
+        if (arg0->unk_00 != 2) {
+            continue;
         }
+
+        if (!flag) {
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 200, 0);
+            flag = true;
+        }
+
+        alpha = (f32)arg0->unk_02 / arg0->unk_01;
+        alpha *= 255.0f;
+
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)alpha);
+
+        Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, D_80A8A108);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -282,63 +288,56 @@ void func_80A85E2C(EnTruUnkStruct* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, 
     }
 }
 
-#ifdef NON_MATCHING
-// s8/s6 flipped, same deal as above functions but the same fixes don't work
 void func_80A85F84(EnTruUnkStruct* arg0, PlayState* play) {
-    u8 flag = false;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 i;
+    s32 flag = false;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 30; i++, arg0++) {
         f32 alpha;
         s32 index;
-
-        if ((arg0->unk_00 == 3) || (arg0->unk_00 == 4) || (arg0->unk_00 == 5)) {
-            if (!flag) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
-                gSPDisplayList(POLY_XLU_DISP++, gKoumeDustMaterialDL);
-                flag = true;
-            }
-
-            Matrix_Push();
-
-            do {
-                alpha = (f32)arg0->unk_02 / arg0->unk_01;
-                alpha *= D_80A8B274[arg0->unk_00 - 3];
-            } while (0);
-
-            gDPSetCombineLERP(POLY_XLU_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0,
-                              COMBINED, 0, SHADE, 0, 0, 0, 0, COMBINED);
-            gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
-            gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
-            gDPPipeSync(POLY_XLU_DISP++);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80A8B25C[arg0->unk_00 - 3].r, D_80A8B25C[arg0->unk_00 - 3].g,
-                            D_80A8B25C[arg0->unk_00 - 3].b, (u8)alpha);
-            gDPSetEnvColor(POLY_XLU_DISP++, D_80A8B25C[arg0->unk_00 - 3].r, D_80A8B25C[arg0->unk_00 - 3].g,
-                           D_80A8B25C[arg0->unk_00 - 3].b, 0);
-
-            Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
-            Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            index = ((f32)arg0->unk_02 / arg0->unk_01) * 8.0f;
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[index]));
-            gSPDisplayList(POLY_XLU_DISP++, gKoumeDustModelDL);
-
-            Matrix_Pop();
+        if ((arg0->unk_00 != 3) && (arg0->unk_00 != 4) && (arg0->unk_00 != 5)) {
+            continue;
         }
+
+        if (!flag) {
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
+            gSPDisplayList(POLY_XLU_DISP++, gKoumeDustMaterialDL);
+            flag = true;
+        }
+
+        Matrix_Push();
+
+        alpha = (f32)arg0->unk_02 / arg0->unk_01;
+        alpha *= D_80A8B274[arg0->unk_00 - 3];
+
+        gDPSetCombineLERP(POLY_XLU_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, 0, TEXEL0, 0,
+                          COMBINED, 0, SHADE, 0, 0, 0, 0, COMBINED);
+        gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
+        gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
+        gDPPipeSync(POLY_XLU_DISP++);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80A8B25C[arg0->unk_00 - 3].r, D_80A8B25C[arg0->unk_00 - 3].g,
+                        D_80A8B25C[arg0->unk_00 - 3].b, (u8)alpha);
+        gDPSetEnvColor(POLY_XLU_DISP++, D_80A8B268[arg0->unk_00 - 3].r, D_80A8B268[arg0->unk_00 - 3].g,
+                       D_80A8B268[arg0->unk_00 - 3].b, 0);
+
+        Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
+        Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        index = ((f32)arg0->unk_02 / arg0->unk_01) * 8.0f;
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[index]));
+        gSPDisplayList(POLY_XLU_DISP++, gKoumeDustModelDL);
+        Matrix_Pop();
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-void func_80A85F84(EnTruUnkStruct* arg0, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tru/func_80A85F84.s")
-#endif
 
 s32 func_80A86384(EnTruUnkStruct* arg0, Vec3f* arg1) {
     s32 i;
@@ -495,7 +494,7 @@ s32 func_80A86B0C(EnTru* this, PlayState* play) {
 s32 func_80A86BAC(EnTru* this, PlayState* play) {
     if (this->unk_34E & 0x400) {
         Matrix_Push();
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -525,7 +524,7 @@ s32 func_80A86BAC(EnTru* this, PlayState* play) {
 
     if (this->unk_34E & 0x800) {
         Matrix_Push();
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -671,11 +670,11 @@ UNK_TYPE* func_80A871E0(EnTru* this, PlayState* play) {
         return D_80A88924;
     }
 
-    if (!(this->unk_34E & 0x40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+    if (!(this->unk_34E & 0x40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
         return D_80A88918;
     }
 
-    if ((this->unk_34E & 0x1000) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+    if ((this->unk_34E & 0x1000) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
         return D_80A88910;
     }
 
@@ -686,28 +685,28 @@ s32 func_80A872AC(EnTru* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 ret = false;
 
-    if (this->unk_34E & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            if (player->transformation == PLAYER_FORM_HUMAN) {
-                this->unk_34E &= ~0x80;
-            }
-            this->unk_34E &= ~(0x4000 | 0x2000);
-
-            if ((player->exchangeItemId == 35) || (player->exchangeItemId == 36)) {
-                this->unk_34E |= 0x2000;
-                this->unk_38C = player->exchangeItemId;
-            } else if (player->exchangeItemId != 0) {
-                this->unk_34E |= 0x4000;
-            }
-
-            this->unk_378 = func_80A875AC;
-            this->unk_390 = 0;
-            this->unk_364 = 0;
-            this->unk_354 = func_80A871E0(this, play);
-            SubS_UpdateFlags(&this->unk_34E, 0, 7);
-            this->actionFunc = func_80A881E0;
-            ret = true;
+    if (((this->unk_34E & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (player->transformation == PLAYER_FORM_HUMAN) {
+            this->unk_34E &= ~0x80;
         }
+        this->unk_34E &= ~(0x4000 | 0x2000);
+
+        if ((player->exchangeItemAction == PLAYER_IA_BOTTLE_POTION_RED) ||
+            (player->exchangeItemAction == PLAYER_IA_BOTTLE_POTION_BLUE)) {
+            this->unk_34E |= 0x2000;
+            this->unk_38C = player->exchangeItemAction;
+        } else if (player->exchangeItemAction != PLAYER_IA_NONE) {
+            this->unk_34E |= 0x4000;
+        }
+
+        this->unk_378 = func_80A875AC;
+        this->unk_390 = 0;
+        this->unk_364 = 0;
+        this->unk_354 = func_80A871E0(this, play);
+        SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        this->actionFunc = func_80A881E0;
+        ret = true;
     }
 
     return ret;
@@ -736,7 +735,7 @@ s32 func_80A87400(EnTru* this, PlayState* play) {
     this->unk_360 = CLAMP(this->unk_360 + 2000, 0, 0x4000);
 
     Math_ApproachF(&this->unk_35C, 30.0f, 0.08f, 1000.0f);
-    Math_ApproachF(&this->actor.speedXZ, 30.0f, 0.2f, 1000.0f);
+    Math_ApproachF(&this->actor.speed, 30.0f, 0.2f, 1000.0f);
 
     if (this->path != NULL) {
         sp4C = Lib_SegmentedToVirtual(this->path->points);
@@ -770,8 +769,8 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
 
     switch (this->unk_364) {
         case 0:
-            if ((this->unk_34E & 0x40) || CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
-                this->unk_374 = this->actor.cutscene;
+            if ((this->unk_34E & 0x40) || CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
+                this->csId = this->actor.csId;
                 this->unk_364++;
             } else {
                 this->unk_364++;
@@ -780,14 +779,14 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
             }
 
         case 1:
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
-                ActorCutscene_SetIntentToPlay(this->unk_374);
-            } else if (ActorCutscene_GetCanPlayNext(this->unk_374)) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->unk_374, &this->actor);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+                CutsceneManager_Queue(this->csId);
+            } else if (CutsceneManager_IsNext(this->csId)) {
+                CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
                 this->unk_364++;
             } else {
-                ActorCutscene_SetIntentToPlay(this->unk_374);
+                CutsceneManager_Queue(this->csId);
             }
             break;
 
@@ -867,19 +866,19 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
 
     switch (this->unk_364) {
         case 0:
-            ActorCutscene_Stop(this->unk_374);
-            this->unk_374 = ActorCutscene_GetAdditionalCutscene(this->unk_374);
+            CutsceneManager_Stop(this->csId);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->unk_364++;
 
         case 1:
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
-                ActorCutscene_SetIntentToPlay(this->unk_374);
-            } else if (ActorCutscene_GetCanPlayNext(this->unk_374)) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->unk_374, &this->actor);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+                CutsceneManager_Queue(this->csId);
+            } else if (CutsceneManager_IsNext(this->csId)) {
+                CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
                 this->unk_364++;
             } else {
-                ActorCutscene_SetIntentToPlay(this->unk_374);
+                CutsceneManager_Queue(this->csId);
             }
             break;
 
@@ -913,11 +912,11 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
                        Animation_OnFrame(&this->skelAnime, 52.0f)) {
                 if (Animation_OnFrame(&this->skelAnime, 52.0f)) {
                     this->unk_34E &= ~0x400;
-                    Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+                    Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
                 }
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DRINK);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_DRINK);
             } else if (Animation_OnFrame(&this->skelAnime, 90.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_REGAIN);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_REGAIN);
             }
 
             if ((this->skelAnime.curFrame > 90.0f) && (this->skelAnime.curFrame < 95.0f)) {
@@ -961,7 +960,7 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
                 this->unk_372 = 10;
                 this->unk_364++;
             } else if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_MAGIC);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_MAGIC);
                 func_80A85AA4(this->unk_394, &this->unk_1F8, 1.0f, 0.1f, 40.0f);
             }
             break;
@@ -973,8 +972,8 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
                     this->actor.shape.shadowDraw = NULL;
                     this->unk_34E |= (0x200 | 0x8);
                     this->unk_34E &= ~0x800;
-                    if (player->exchangeItemId != 0) {
-                        player->exchangeItemId = 0;
+                    if (player->exchangeItemAction != PLAYER_IA_NONE) {
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                     }
                     EnTru_ChangeAnim(this, KOUME_ANIM_HOVER1);
                 }
@@ -999,26 +998,26 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
 
     switch (this->unk_364) {
         case 0:
-            ActorCutscene_Stop(this->unk_374);
-            this->unk_374 = ActorCutscene_GetAdditionalCutscene(this->unk_374);
+            CutsceneManager_Stop(this->csId);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->unk_364++;
 
         case 1:
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
-                ActorCutscene_SetIntentToPlay(this->unk_374);
-            } else if (ActorCutscene_GetCanPlayNext(this->unk_374)) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->unk_374, &this->actor);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+                CutsceneManager_Queue(this->csId);
+            } else if (CutsceneManager_IsNext(this->csId)) {
+                CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
                 this->unk_364++;
             } else {
-                ActorCutscene_SetIntentToPlay(this->unk_374);
+                CutsceneManager_Queue(this->csId);
             }
             break;
 
         case 2:
             AudioSfx_StopById(NA_SE_EN_KOUME_MAGIC);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_AWAY);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_LAUGH);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_AWAY);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_LAUGH);
             EnTru_ChangeAnim(this, KOUME_ANIM_TAKE_OFF);
             this->skelAnime.baseTransl.y = 0;
             this->skelAnime.moveFlags = 2;
@@ -1041,13 +1040,13 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
         case 4:
             if (func_80A87400(this, play) || (DECR(this->unk_362) == 0)) {
                 ret = true;
-                SET_WEEKEVENTREG(WEEKEVENTREG_12_08);
+                SET_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME);
             }
             break;
     }
 
     if (ret == true) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.draw = NULL;
         this->unk_378 = NULL;
         this->unk_34E = 0;
@@ -1058,17 +1057,17 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
 
 void func_80A87FD0(EnTru* this, PlayState* play) {
     if (this->actor.draw != NULL) {
-        if ((this->unk_34E & 0x80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+        if ((this->unk_34E & 0x80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
             if (func_80A873B8(this)) {
-                SubS_UpdateFlags(&this->unk_34E, 3, 7);
+                SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             } else {
-                SubS_UpdateFlags(&this->unk_34E, 0, 7);
+                SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
             }
         } else if (this->unk_34E & 0x40) {
             if (func_80A873B8(this)) {
-                SubS_UpdateFlags(&this->unk_34E, 3, 7);
+                SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             } else {
-                SubS_UpdateFlags(&this->unk_34E, 0, 7);
+                SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
             }
 
             if ((this->animIndex == KOUME_ANIM_TRY_GET_UP) &&
@@ -1081,15 +1080,15 @@ void func_80A87FD0(EnTru* this, PlayState* play) {
                     EnTru_ChangeAnim(this, KOUME_ANIM_TRY_GET_UP);
                 }
             }
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
-                   (this->actor.xzDistToPlayer < 140.0f)) {
-            SubS_UpdateFlags(&this->unk_34E, 4, 7);
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED) &&
+                   (fabsf(this->actor.playerHeightRel) < 10.0f) && (this->actor.xzDistToPlayer < 140.0f)) {
+            SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
             this->unk_34E |= 0x1040;
             this->unk_362 = Rand_S16Offset(40, 20);
         } else if (func_80A873B8(this)) {
-            SubS_UpdateFlags(&this->unk_34E, 3, 7);
+            SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         } else {
-            SubS_UpdateFlags(&this->unk_34E, 0, 7);
+            SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         }
     }
 }
@@ -1102,24 +1101,24 @@ void func_80A881E0(EnTru* this, PlayState* play) {
             this->unk_34E |= 0x80;
         }
 
-        if (ActorCutscene_GetCurrentIndex() != -1) {
-            ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
+        if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
+            CutsceneManager_Stop(CutsceneManager_GetCurrentCsId());
         }
 
-        if (!(this->unk_34E & 0x40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+        if (!(this->unk_34E & 0x40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
             EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN);
         } else if (this->unk_34E & 0x80) {
             EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN);
             func_80A86460(this);
-        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
             EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_HEAD_UP_MORPH);
         }
 
-        SubS_UpdateFlags(&this->unk_34E, 0, 7);
+        SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_34E &= ~(0x1000 | 0x8);
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        this->actor.flags &= ~ACTOR_FLAG_100;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         this->unk_1E8 = 0;
         this->actionFunc = func_80A87FD0;
     }
@@ -1128,7 +1127,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
 void EnTru_Init(Actor* thisx, PlayState* play) {
     EnTru* this = THIS;
 
-    if ((gSaveContext.save.entrance != ENTRANCE(WOODS_OF_MYSTERY, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
+    if ((gSaveContext.save.entrance != ENTRANCE(WOODS_OF_MYSTERY, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -1139,23 +1138,24 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->animIndex = -1;
     EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN);
-    this->path = SubS_GetDayDependentPath(play, ENTRU_GET_PATH(&this->actor), 255, &this->unk_384);
+    this->path =
+        SubS_GetDayDependentPath(play, ENTRU_GET_PATH_INDEX(&this->actor), ENTRU_PATH_INDEX_NONE, &this->unk_384);
     if (this->path != NULL) {
         this->unk_384 = 1;
     }
 
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     Actor_SetScale(&this->actor, 0.008f);
     this->unk_34E = 0;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
         EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_HEAD_UP);
     } else {
         this->unk_388 = PLAYER_IA_NONE;
     }
 
     this->actionFunc = func_80A87FD0;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnTru_Destroy(Actor* thisx, PlayState* play) {
@@ -1179,7 +1179,7 @@ void EnTru_Update(Actor* thisx, PlayState* play) {
     radius = this->collider.dim.worldSphere.radius + 30;
     this->unk_388 = !(this->unk_34E & 0x80) ? PLAYER_IA_NONE : PLAYER_IA_NONE;
 
-    func_8013C964(&this->actor, play, radius, 20.0f, this->unk_388, this->unk_34E & 7);
+    SubS_Offer(&this->actor, play, radius, 20.0f, this->unk_388, this->unk_34E & SUBS_OFFER_MODE_MASK);
     func_80A8697C(this, play);
     func_80A86384(this->unk_394, &this->unk_1F8);
 }
@@ -1266,7 +1266,7 @@ void EnTru_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));

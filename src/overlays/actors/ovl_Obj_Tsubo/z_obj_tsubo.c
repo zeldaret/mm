@@ -10,7 +10,7 @@
 #include "objects/object_tsubo/object_tsubo.h"
 #include "objects/object_racetsubo/object_racetsubo.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
 #define THIS ((ObjTsubo*)thisx)
 
@@ -20,11 +20,11 @@ void ObjTsubo_Update(Actor* thisx, PlayState* play);
 void ObjTsubo_Draw(Actor* thisx, PlayState* play2);
 
 void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play);
-void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play);
+void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play);
 void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2);
-void ObjTsubo_RacePotBreak2(ObjTsubo* this, PlayState* play2);
+void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2);
 void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2);
-void ObjTsubo_RacePotBreak3(ObjTsubo* this, PlayState* play2);
+void ObjTsubo_MagicPotBreak3(ObjTsubo* this, PlayState* play2);
 void func_80928914(ObjTsubo* this);
 void func_80928928(ObjTsubo* this, PlayState* play);
 void func_809289B4(ObjTsubo* this);
@@ -63,16 +63,14 @@ typedef struct {
     /* 0x14 */ ObjTsuboUnkFunc breakPot1;
     /* 0x18 */ ObjTsuboUnkFunc breakPot2;
     /* 0x1C */ ObjTsuboUnkFunc breakPot3;
-
-} ObjTsuboData;
+} ObjTsuboData; // size = 0x20
 
 ObjTsuboData sPotTypeData[4] = {
     { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
       ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
-    { OBJECT_RACETSUBO, 0.29549998f, object_racetsubo_DL_000278, object_racetsubo_DL_001610, 18, 45,
-      ObjTsubo_RacePotBreak1, ObjTsubo_RacePotBreak2, ObjTsubo_RacePotBreak3 },
-    { OBJECT_TSUBO, 0.197f, object_tsubo_DL_0017C0, object_tsubo_DL_001960, 12, 32, ObjTsubo_PotBreak1,
-      ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
+    { OBJECT_RACETSUBO, 0.29549998f, gMagicPotDL, gMagicPotShardDL, 18, 45, ObjTsubo_MagicPotBreak1,
+      ObjTsubo_MagicPotBreak2, ObjTsubo_MagicPotBreak3 },
+    { OBJECT_TSUBO, 0.197f, gPotDL, gPotShardDL, 12, 32, ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
     { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
       ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
 };
@@ -148,7 +146,7 @@ void ObjTsubo_SpawnGoldSkulltula(ObjTsubo* this, PlayState* play, s32 arg2) {
         if (child != NULL) {
             child->parent = &this->actor;
             child->velocity.y = 0.0f;
-            child->speedXZ = 0.0f;
+            child->speed = 0.0f;
         }
     }
 }
@@ -188,7 +186,7 @@ void ObjTsubo_Init(Actor* thisx, PlayState* play) {
     this->cylinderCollider.dim.radius = sPotTypeData[type].radius;
     this->cylinderCollider.dim.height = sPotTypeData[type].height;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->objBankIndex = Object_GetIndex(&play->objectCtx, sPotTypeData[type].objId);
+    this->objBankIndex = Object_GetSlot(&play->objectCtx, sPotTypeData[type].objId);
     if (this->objBankIndex < 0) {
         Actor_Kill(&this->actor);
         return;
@@ -254,7 +252,7 @@ void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play) {
     func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 10, 80, true);
 }
 
-void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play) {
+void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play) {
     s16 rot;
     s32 phi_s0;
     s32 i;
@@ -337,7 +335,7 @@ void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
     }
 }
 
-void ObjTsubo_RacePotBreak2(ObjTsubo* this, PlayState* play2) {
+void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2) {
     PlayState* play = (PlayState*)play2;
     s32 pad;
     s16 rot;
@@ -422,7 +420,7 @@ void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2) {
     }
 }
 
-void ObjTsubo_RacePotBreak3(ObjTsubo* this, PlayState* play2) {
+void ObjTsubo_MagicPotBreak3(ObjTsubo* this, PlayState* play2) {
 }
 
 void func_80928914(ObjTsubo* this) {
@@ -431,7 +429,7 @@ void func_80928914(ObjTsubo* this) {
 
 void func_80928928(ObjTsubo* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
     if (Object_IsLoaded(&play->objectCtx, this->objBankIndex)) {
         this->actor.objBankIndex = this->objBankIndex;
         func_809289B4(this);
@@ -467,13 +465,13 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         func_80927818(this, play, 0);
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
         //! player->currentMask, but in this case is garbage in the collider
-        func_800B8E58((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
+        Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
     } else if ((this->unk_19B != 0) ||
                (acHit && (this->cylinderCollider.info.acHitInfo->toucher.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
         this->unk_19B = 0;
-        if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 15.0f)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f)) {
             typeData->breakPot3(this, play);
         } else {
             typeData->breakPot1(this, play);
@@ -493,8 +491,10 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
     } else {
         if (!this->unk_195) {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
-            if ((this->actor.bgCheckFlags & 1) && (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
+            Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
+            if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+                (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
                 this->unk_195 = true;
                 this->actor.flags &= ~ACTOR_FLAG_10;
             }
@@ -509,7 +509,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
                     s32 absYawDiff = ABS_ALT(yawDiff);
 
                     if (absYawDiff > (0x10000 / 3)) {
-                        Actor_PickUp(&this->actor, play, GI_NONE, 36.0f, 30.0f);
+                        Actor_OfferGetItem(&this->actor, play, GI_NONE, 36.0f, 30.0f);
                     }
                 }
             }
@@ -530,8 +530,10 @@ void func_80928D80(ObjTsubo* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
         Actor_MoveWithGravity(&this->actor);
-        this->actor.flags &= ~ACTOR_FLAG_4000000;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
+        this->actor.flags &= ~ACTOR_FLAG_CAN_PRESS_SWITCH;
+        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                    UPDBGCHECKINFO_FLAG_80);
         func_80928E74(this);
     } else {
         pos.x = this->actor.world.pos.x;
@@ -568,7 +570,8 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         this->unk_194--;
     }
     typeData = &sPotTypeData[type];
-    if ((this->actor.bgCheckFlags & 0xB) || atHit || (this->unk_194 <= 0)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || atHit ||
+        (this->unk_194 <= 0)) {
         typeData->breakPot1(this, play);
         if (type == OBJ_TSUBO_TYPE_3) {
             func_8092762C(this, play);
@@ -582,7 +585,7 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         }
 
         func_809291DC(this);
-    } else if (this->actor.bgCheckFlags & 0x40) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         typeData->breakPot2(this, play);
         if (type == OBJ_TSUBO_TYPE_3) {
             func_8092762C(this, play);
@@ -603,7 +606,9 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         Math_StepToS(&D_8092950C, D_80929508, 150);
         this->actor.shape.rot.x += D_80929504;
         this->actor.shape.rot.y += D_8092950C;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                    UPDBGCHECKINFO_FLAG_80);
         Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->cylinderCollider.base);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->cylinderCollider.base);
@@ -621,7 +626,7 @@ void func_809291DC(ObjTsubo* this) {
     this->actor.shape.rot.x = this->actor.home.rot.x;
     this->actor.world.rot.x = this->actor.home.rot.x;
     this->actor.velocity.y = 0.0f;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.shape.rot.y = this->actor.home.rot.y;
     this->actor.world.rot.y = this->actor.home.rot.y;
     Actor_SetScale(&this->actor, 0.0f);
@@ -640,7 +645,7 @@ void func_8092926C(ObjTsubo* this, PlayState* play) {
     } else {
         scale = sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)].scale;
         if (Math_StepToF(&this->actor.scale.x, scale, scale * 0.1f)) {
-            this->actor.flags |= ACTOR_FLAG_4000000;
+            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCH;
             func_809289B4(this);
         }
         this->actor.scale.z = this->actor.scale.y = this->actor.scale.x;
@@ -673,7 +678,7 @@ void ObjTsubo_Update(Actor* thisx, PlayState* play) {
         }
         if (this->unk_19A >= 0) {
             if (this->unk_19A == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
                     this->unk_19A = Rand_S16Offset(40, 80);
                 } else {

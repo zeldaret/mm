@@ -86,7 +86,7 @@ void EnFuKago_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* sp34 = NULL;
     Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_fu_mato_Colheader_0015C0, &sp34);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp34);
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -136,11 +136,11 @@ s32 func_80ACF8B8(EnFuKago* this, PlayState* play) {
             return false;
         }
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
         return true;
-    } else {
-        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
+
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     return false;
 }
 
@@ -227,8 +227,8 @@ void func_80ACFA78(EnFuKago* this, PlayState* play) {
     this->unk_338 = 60;
     this->unk_33A = 1;
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODBOX_BREAK);
-    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WOODBOX_BREAK);
+    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     this->actionFunc = func_80AD0028;
 }
 
@@ -364,7 +364,7 @@ void func_80AD0340(EnFuKago* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(D_80AD061C); i++, ptr++) {
         Matrix_Push();
@@ -390,7 +390,7 @@ void EnFuKago_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_33A == 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_fu_mato_DL_0006A0);

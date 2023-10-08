@@ -4,6 +4,7 @@
  * Description: Great Bay Temple - Waterwheels, push switches, gear shafts, and whirlpools
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_movebg.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 #include "overlays/actors/ovl_Obj_Hunsui/z_obj_hunsui.h"
@@ -33,9 +34,9 @@ void func_80A2B308(Actor* thisx, PlayState* play);
 BgDblueMovebg* D_80A2BBF0;
 
 typedef struct {
-    u8 unk_00;
-    u8 unk_01;
-} BgDblueMovebgUnkStruct;
+    /* 0x0 */ u8 unk_00;
+    /* 0x1 */ u8 unk_01;
+} BgDblueMovebgUnkStruct; // size = 0x2
 
 BgDblueMovebgUnkStruct D_80A2BBF4;
 
@@ -96,7 +97,7 @@ static AnimatedMaterial* sTexAnims[] = {
 
 s16 D_80A2B96C[] = { 0, 0x16C, -0x16C, 0 };
 
-s16 D_80A2B974[] = { -1, -1 };
+static s16 sCsIdList[] = { CS_ID_NONE, CS_ID_NONE };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
@@ -107,22 +108,22 @@ static InitChainEntry sInitChain[] = {
 
 Vec3f D_80A2B988 = { 1785.0f, 0.0f, 220.0f };
 
-s32 func_80A29A80(PlayState* play, s32 arg1, s32 arg2) {
+s32 func_80A29A80(PlayState* play, s32 switchFlagBase, s32 arg2) {
     s32 sp2C = 1;
-    s32 val;
+    s32 switchFlagOffset;
     s32 val2;
 
     if (arg2 < 14) {
-        val = D_80A2B870[arg2][0];
+        switchFlagOffset = D_80A2B870[arg2][0];
         val2 = D_80A2B870[arg2][1];
 
-        while (val--) {
-            if ((1 << val) & val2) {
-                if (!Flags_GetSwitch(play, arg1 + val)) {
+        while (switchFlagOffset--) {
+            if ((1 << switchFlagOffset) & val2) {
+                if (!Flags_GetSwitch(play, switchFlagBase + switchFlagOffset)) {
                     sp2C = 0;
                     break;
                 }
-            } else if (Flags_GetSwitch(play, arg1 + val)) {
+            } else if (Flags_GetSwitch(play, switchFlagBase + switchFlagOffset)) {
                 sp2C = 0;
                 break;
             }
@@ -131,20 +132,20 @@ s32 func_80A29A80(PlayState* play, s32 arg1, s32 arg2) {
         sp2C = 0;
         switch (arg2) {
             case 14:
-                if (!Flags_GetSwitch(play, arg1)) {
+                if (!Flags_GetSwitch(play, switchFlagBase)) {
                     sp2C = 1;
                 }
 
-                if (Flags_GetSwitch(play, arg1 + 1) && Flags_GetSwitch(play, arg1 + 2) &&
-                    Flags_GetSwitch(play, arg1 + 3)) {
+                if (Flags_GetSwitch(play, switchFlagBase + 1) && Flags_GetSwitch(play, switchFlagBase + 2) &&
+                    Flags_GetSwitch(play, switchFlagBase + 3)) {
                     sp2C += 2;
                 }
                 break;
 
             case 15:
-                if (!Flags_GetSwitch(play, arg1) ||
-                    (Flags_GetSwitch(play, arg1 + 1) && Flags_GetSwitch(play, arg1 + 2) &&
-                     Flags_GetSwitch(play, arg1 + 3))) {
+                if (!Flags_GetSwitch(play, switchFlagBase) ||
+                    (Flags_GetSwitch(play, switchFlagBase + 1) && Flags_GetSwitch(play, switchFlagBase + 2) &&
+                     Flags_GetSwitch(play, switchFlagBase + 3))) {
                     sp2C = 1;
                 }
                 break;
@@ -161,8 +162,8 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_160 = BGDBLUEMOVEBG_GET_F(thisx);
     this->unk_1BC = BGDBLUEMOVEBG_GET_F000(thisx);
-    this->unk_1C0 = BGDBLUEMOVEBG_GET_FF0(thisx);
-    DynaPolyActor_Init(&this->dyna, 1);
+    this->switchFlag = BGDBLUEMOVEBG_GET_SWITCH_FLAG(thisx);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
     if ((this->unk_160 == 9) || (this->unk_160 == 8)) {
         if (D_80A2BBF4.unk_00 != 0) {
@@ -196,7 +197,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
     this->xluDList = sXluDLists[this->unk_160];
     this->texAnim = sTexAnims[this->unk_160];
 
-    SubS_FillCutscenesList(&this->dyna.actor, this->unk_1B6, ARRAY_COUNT(this->unk_1B6));
+    SubS_FillCutscenesList(&this->dyna.actor, this->csIdList, ARRAY_COUNT(this->csIdList));
 
     switch (this->unk_160) {
         case 1:
@@ -213,17 +214,17 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             }
             this->unk_17E = 0;
             this->unk_184 = 0.0f;
-            if (Flags_GetSwitch(play, this->unk_1C0)) {
+            if (Flags_GetSwitch(play, this->switchFlag)) {
                 this->unk_18C = 0x384;
             } else {
                 this->unk_18C = 0;
             }
-            this->dyna.actor.shape.rot.y += (s16)((this->unk_18C / 10.0f) * (0x10000 / 360.0f));
+            this->dyna.actor.shape.rot.y += DEG_TO_BINANG(this->unk_18C / 10.0f);
             this->actionFunc = func_80A2A714;
             break;
 
         case 6:
-            this->unk_178 = func_80A29A80(play, this->unk_1C0, this->unk_1BC);
+            this->unk_178 = func_80A29A80(play, this->switchFlag, this->unk_1BC);
             this->unk_1CC = D_80A2B96C[this->unk_178];
             this->unk_1CE = this->unk_1CC;
             this->actionFunc = func_80A2A1E0;
@@ -236,7 +237,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             this->dyna.actor.shape.rot.x = 0;
             this->dyna.actor.world.rot.z = 0;
             this->dyna.actor.shape.rot.z = 0;
-            if (Flags_GetSwitch(play, this->unk_1C0)) {
+            if (Flags_GetSwitch(play, this->switchFlag)) {
                 Actor_Kill(&this->dyna.actor);
                 break;
             }
@@ -244,7 +245,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             this->dyna.actor.draw = func_80A2B308;
             this->unk_17E = 0;
             this->unk_184 = 0.0f;
-            this->dyna.actor.shape.rot.y += (s16)((this->unk_18C / 10.0f) * (0x10000 / 360.0f));
+            this->dyna.actor.shape.rot.y += DEG_TO_BINANG(this->unk_18C / 10.0f);
             this->actionFunc = func_80A2A32C;
             break;
 
@@ -253,10 +254,10 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             this->unk_2F8[1] = NULL;
             this->unk_2F8[0] = NULL;
         label:
-            for (i = 0; i < ARRAY_COUNT(D_80A2B974); i++) {
-                D_80A2B974[i] = this->unk_1B6[i];
+            for (i = 0; i < ARRAY_COUNT(sCsIdList); i++) {
+                sCsIdList[i] = this->csIdList[i];
             }
-            this->unk_178 = func_80A29A80(play, this->unk_1C0, this->unk_1BC);
+            this->unk_178 = func_80A29A80(play, this->switchFlag, this->unk_1BC);
             this->unk_1CC = D_80A2B96C[this->unk_178];
             this->unk_1CE = this->unk_1CC;
             Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
@@ -274,7 +275,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 11:
-            this->unk_1CC = D_80A2B96C[func_80A29A80(play, this->unk_1C0, this->unk_1BC)];
+            this->unk_1CC = D_80A2B96C[func_80A29A80(play, this->switchFlag, this->unk_1BC)];
             D_80A2BBF0 = this;
             this->dyna.actor.flags |= ACTOR_FLAG_20;
             this->dyna.actor.update = Actor_Noop;
@@ -313,7 +314,7 @@ void func_80A2A128(BgDblueMovebg* this, PlayState* play) {
 }
 
 void func_80A2A1E0(BgDblueMovebg* this, PlayState* play) {
-    s32 temp_v0 = func_80A29A80(play, this->unk_1C0, this->unk_1BC);
+    s32 temp_v0 = func_80A29A80(play, this->switchFlag, this->unk_1BC);
 
     if (temp_v0 != this->unk_178) {
         switch (temp_v0) {
@@ -384,8 +385,8 @@ void func_80A2A32C(BgDblueMovebg* this, PlayState* play) {
         }
 
         if (phi_v1) {
-            this->unk_180 = func_800F2178(this->unk_1B6[0]);
-            this->unk_1D2 = this->unk_1B6[0];
+            this->unk_180 = CutsceneManager_GetCutsceneCustomValue(this->csIdList[0]);
+            this->csId = this->csIdList[0];
             this->unk_172 |= 8;
             this->actionFunc = func_80A2A444;
         } else {
@@ -407,7 +408,7 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
     sp20 = Math_StepToS(&this->unk_18A, 900, this->unk_188);
     temp_v0 = this->unk_18A * this->unk_17E;
     this->dyna.actor.shape.rot.y =
-        (s32)((this->unk_18C + temp_v0) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
+        (s32)DEG_TO_BINANG_ALT3((this->unk_18C + temp_v0) * 0.1f) + this->dyna.actor.home.rot.y;
 
     if ((player->stateFlags2 & PLAYER_STATE2_10) && (this->unk_184 > 0.0f)) {
         player->actor.world.pos.x =
@@ -421,8 +422,8 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
     if (sp20) {
         player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
-        Flags_SetSwitch(play, this->unk_1C0);
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+        Flags_SetSwitch(play, this->switchFlag);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
 
         if (func_80A29A80(play, this->unk_1C8, this->unk_1C4)) {
             this->unk_172 |= 1;
@@ -431,11 +432,11 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
         }
 
         if (!(this->unk_174 & 1) && (this->unk_172 & 1)) {
-            func_801000CC(NA_SE_EV_PIPE_STREAM_START);
+            Lib_PlaySfx_2(NA_SE_EV_PIPE_STREAM_START);
         }
         func_80A2A670(this, play);
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_COCK_SWITCH_ROLL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_COCK_SWITCH_ROLL - SFX_FLAG);
     }
 }
 
@@ -446,7 +447,7 @@ void func_80A2A670(BgDblueMovebg* this, PlayState* play) {
 void func_80A2A688(BgDblueMovebg* this, PlayState* play) {
     this->unk_180--;
     if (this->unk_180 <= 0) {
-        ActorCutscene_Stop(this->unk_1B6[0]);
+        CutsceneManager_Stop(this->csIdList[0]);
     }
 
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y - 60.0f, 2.0f) &&
@@ -476,8 +477,8 @@ void func_80A2A714(BgDblueMovebg* this, PlayState* play) {
         }
         this->unk_17E = phi_v0 * phi_f0;
 
-        this->unk_180 = func_800F2178(this->unk_1B6[0]);
-        this->unk_1D2 = this->unk_1B6[0];
+        this->unk_180 = CutsceneManager_GetCutsceneCustomValue(this->csIdList[0]);
+        this->csId = this->csIdList[0];
         this->unk_172 |= 8;
         this->actionFunc = func_80A2A7F8;
     }
@@ -494,8 +495,7 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
 
     sp28 = Math_StepToS(&this->unk_18A, 900, this->unk_188);
     sp26 = this->unk_18A * this->unk_17E;
-    this->dyna.actor.shape.rot.y =
-        (s32)((this->unk_18C + sp26) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
+    this->dyna.actor.shape.rot.y = (s32)DEG_TO_BINANG_ALT3((this->unk_18C + sp26) * 0.1f) + this->dyna.actor.home.rot.y;
 
     if ((player->stateFlags2 & PLAYER_STATE2_10) && (this->unk_184 > 0.0f)) {
         player->actor.world.pos.x =
@@ -510,9 +510,9 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
         temp = (this->unk_18C + sp26 + 3600) % 3600;
 
         if ((temp == 900) || (temp == 2700)) {
-            Flags_SetSwitch(play, this->unk_1C0);
+            Flags_SetSwitch(play, this->switchFlag);
         } else {
-            Flags_UnsetSwitch(play, this->unk_1C0);
+            Flags_UnsetSwitch(play, this->switchFlag);
         }
 
         player->stateFlags1 |= PLAYER_STATE1_20;
@@ -524,7 +524,7 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
         this->unk_18A = 0;
         this->unk_17E = 0;
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
 
         if (func_80A29A80(play, this->unk_1C8, this->unk_1C4)) {
             this->unk_172 |= 1;
@@ -533,14 +533,14 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
         }
 
         if (!(this->unk_174 & 1) && (this->unk_172 & 1)) {
-            func_801000CC(NA_SE_EV_PIPE_STREAM_START);
+            Lib_PlaySfx_2(NA_SE_EV_PIPE_STREAM_START);
         }
 
         this->unk_174 = this->unk_172;
         this->unk_1D0 = 17;
         this->actionFunc = func_80A2AAB8;
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_COCK_SWITCH_ROLL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_COCK_SWITCH_ROLL - SFX_FLAG);
     }
 }
 
@@ -549,12 +549,12 @@ void func_80A2AAB8(BgDblueMovebg* this, PlayState* play) {
     s32 sp18;
 
     if (this->unk_180-- <= 0) {
-        ActorCutscene_Stop(this->unk_1B6[0]);
+        CutsceneManager_Stop(this->csIdList[0]);
     }
 
     sp18 = false;
-    if ((this->unk_1D0 > 0) && ((D_80A2B974[0] >= 0) || (D_80A2B974[1] >= 0))) {
-        if (ActorCutscene_GetCurrentIndex() != -1) {
+    if ((this->unk_1D0 > 0) && ((sCsIdList[0] >= 0) || (sCsIdList[1] >= 0))) {
+        if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
             sp18 = true;
         }
     }
@@ -637,18 +637,18 @@ void func_80A2AED0(BgDblueMovebg* this, PlayState* play) {
         }
     }
 
-    temp_v0_3 = func_80A29A80(play, this->unk_1C0, this->unk_1BC);
+    temp_v0_3 = func_80A29A80(play, this->switchFlag, this->unk_1BC);
     if (temp_v0_3 != this->unk_178) {
         switch (temp_v0_3) {
             case 1:
             case 2:
-                this->unk_1D2 = this->unk_1B6[0];
+                this->csId = this->csIdList[0];
                 this->unk_17E = 40;
                 break;
 
             case 0:
             case 3:
-                this->unk_1D2 = this->unk_1B6[1];
+                this->csId = this->csIdList[1];
                 this->unk_17E = 15;
                 break;
         }
@@ -704,7 +704,7 @@ void func_80A2AED0(BgDblueMovebg* this, PlayState* play) {
 }
 
 void func_80A2B1A0(BgDblueMovebg* this, PlayState* play) {
-    switch (func_80A29A80(play, this->unk_1C0, this->unk_1BC)) {
+    switch (func_80A29A80(play, this->switchFlag, this->unk_1BC)) {
         case 1:
             this->dyna.actor.shape.rot.z = this->dyna.actor.home.rot.z;
             break;
@@ -721,7 +721,7 @@ void BgDblueMovebg_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_172 & 8) {
-        if (SubS_StartActorCutscene(&this->dyna.actor, this->unk_1D2, -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+        if (SubS_StartCutscene(&this->dyna.actor, this->csId, CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
             this->unk_172 &= ~8;
         }
     }
@@ -736,12 +736,12 @@ void func_80A2B274(Actor* thisx, PlayState* play) {
         return;
     }
 
-    temp_v1 = D_80A2B96C[func_80A29A80(play, this->unk_1C0, this->unk_1BC)];
+    temp_v1 = D_80A2B96C[func_80A29A80(play, this->switchFlag, this->unk_1BC)];
     if (temp_v1 != 0) {
         if (temp_v1 > 0) {
-            func_8019FC20(&this->dyna.actor.projectedPos, NA_SE_EV_DUMMY_WATER_WHEEL_RR - SFX_FLAG);
+            Audio_PlaySfx_WaterWheel(&this->dyna.actor.projectedPos, NA_SE_EV_DUMMY_WATER_WHEEL_RR - SFX_FLAG);
         } else {
-            func_8019FC20(&this->dyna.actor.projectedPos, NA_SE_EV_DUMMY_WATER_WHEEL_LR - SFX_FLAG);
+            Audio_PlaySfx_WaterWheel(&this->dyna.actor.projectedPos, NA_SE_EV_DUMMY_WATER_WHEEL_LR - SFX_FLAG);
         }
     }
 }
@@ -752,7 +752,7 @@ void func_80A2B308(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, this->opaDList);
@@ -778,7 +778,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
         }
 
         if ((this->opaDList != NULL) || (this->unk_160 == 6)) {
-            gfx2 = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
+            gfx2 = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
 
             gSPMatrix(&gfx2[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -797,7 +797,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
         }
 
         if (this->xluDList != NULL) {
-            gfx = func_8012C2B4(POLY_XLU_DISP);
+            gfx = Gfx_SetupDL71(POLY_XLU_DISP);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(&gfx[1], this->xluDList);
@@ -820,7 +820,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
         Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
-        gfx = func_8012C2B4(POLY_XLU_DISP);
+        gfx = Gfx_SetupDL71(POLY_XLU_DISP);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_1D8[0]); i++) {
             for (j = 0; j < ARRAY_COUNT(this->unk_1D8); j++) {
@@ -856,9 +856,11 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
 
     if ((this->unk_160 == 9) || (this->unk_160 == 8)) {
         if (this->unk_1CC >= 0) {
-            func_8019FB0C(&this->unk_1A8, NA_SE_EV_BIG_WATER_WHEEL_RR - SFX_FLAG, this->unk_1D4, 32);
+            Audio_PlaySfx_AtPosWithFreqAndChannelIO(&this->unk_1A8, NA_SE_EV_BIG_WATER_WHEEL_RR - SFX_FLAG,
+                                                    this->unk_1D4, 32);
         } else {
-            func_8019FB0C(&this->unk_1A8, NA_SE_EV_BIG_WATER_WHEEL_LR - SFX_FLAG, this->unk_1D4, 32);
+            Audio_PlaySfx_AtPosWithFreqAndChannelIO(&this->unk_1A8, NA_SE_EV_BIG_WATER_WHEEL_LR - SFX_FLAG,
+                                                    this->unk_1D4, 32);
         }
     }
 }

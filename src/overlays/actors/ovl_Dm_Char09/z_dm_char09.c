@@ -16,7 +16,7 @@ void DmChar09_Update(Actor* thisx, PlayState* play);
 void DmChar09_Draw(Actor* thisx, PlayState* play);
 
 void DmChar09_DoNothing(DmChar09* this, PlayState* play);
-void func_80AB2268(DmChar09* this, PlayState* play);
+void DmChar09_HandleCutscene(DmChar09* this, PlayState* play);
 
 ActorInit Dm_Char09_InitVars = {
     ACTOR_DM_CHAR09,
@@ -30,23 +30,28 @@ ActorInit Dm_Char09_InitVars = {
     (ActorFunc)DmChar09_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gBeeFlyingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum {
+    /* 0 */ DMCHAR09_ANIM_FLYING,
+    /* 1 */ DMCHAR09_ANIM_MAX
+} DmChar09Animation;
+
+static AnimationInfo sAnimationInfo[DMCHAR09_ANIM_MAX] = {
+    { &gBeeFlyingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f }, // DMCHAR09_ANIM_FLYING
 };
 
-void DmChar09_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
-    f32 frameCount;
+void DmChar09_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
+    f32 endFrame;
 
-    animationInfo += animIndex;
+    animInfo += animIndex;
 
-    if (animationInfo->frameCount < 0.0f) {
-        frameCount = Animation_GetLastFrame(animationInfo->animation);
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
     } else {
-        frameCount = animationInfo->frameCount;
+        endFrame = animInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
-                     frameCount, animationInfo->mode, animationInfo->morphFrames);
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
 void DmChar09_Init(Actor* thisx, PlayState* play) {
@@ -55,7 +60,7 @@ void DmChar09_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_Init(play, &this->skelAnime, &gBeeSkel, &gBeeFlyingAnim, this->jointTable, this->morphTable,
                    OBJECT_BEE_LIMB_MAX);
-    DmChar09_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+    DmChar09_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR09_ANIM_FLYING], 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_228 = Rand_ZeroOne() * 65535.0f;
     this->unk_22A = Rand_ZeroOne() * 65535.0f;
@@ -90,15 +95,15 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
         phi_fv0 = this->speed;
         phi_fa0 = this->speed * 0.16f;
     }
-    Math_StepToF(&thisx->speedXZ, phi_fv0, phi_fa0);
-    if ((thisx->speedXZ + 0.05f) < sp54) {
-        Math_Vec3f_Scale(&thisx->velocity, thisx->speedXZ / sp54);
+    Math_StepToF(&thisx->speed, phi_fv0, phi_fa0);
+    if ((thisx->speed + 0.05f) < sp54) {
+        Math_Vec3f_Scale(&thisx->velocity, thisx->speed / sp54);
         thisx->world.pos.x += thisx->velocity.x;
         thisx->world.pos.y += thisx->velocity.y;
         thisx->world.pos.z += thisx->velocity.z;
     } else {
         this->unk_21C += this->unk_220;
-        thisx->speedXZ *= 0.4f;
+        thisx->speed *= 0.4f;
         phi_a1 = true;
         if (((this->unk_21C >= this->unk_218) && (this->unk_220 > 0)) ||
             ((this->unk_21C <= 0) && (this->unk_220 < 0))) {
@@ -109,7 +114,7 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
                 this->unk_220 = 1;
             } else {
                 phi_a1 = false;
-                this->actionFunc = func_80AB2268;
+                this->actionFunc = DmChar09_HandleCutscene;
             }
         }
         if (phi_a1) {
@@ -123,49 +128,55 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
 void DmChar09_DoNothing(DmChar09* this, PlayState* play) {
 }
 
-void func_80AB2268(DmChar09* this, PlayState* play) {
+void DmChar09_HandleCutscene(DmChar09* this, PlayState* play) {
     Path* path;
     s32 pad;
     s32 i;
-    s32 actionIndex;
+    s32 cueChannel;
     s32 max = 0;
-    s32 pathnum;
+    s32 pathIndex;
     u8 temp = false;
 
     if (!DMCHAR09_GET_F(&this->actor)) {
-        if (play->csCtx.currentCsIndex == 1) {
+        if (play->csCtx.scriptIndex == 1) {
             temp = true;
         }
-    } else if (play->csCtx.currentCsIndex == 0) {
+    } else if (play->csCtx.scriptIndex == 0) {
         temp = true;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x1F7) && temp) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 0x1F7);
-        if (this->unk_22F != play->csCtx.actorActions[actionIndex]->action) {
-            this->unk_22F = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_503) && temp) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_503);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 2:
                     max = 0;
                     break;
+
                 case 3:
                     max = 1;
                     break;
+
                 case 4:
                     max = 2;
                     break;
+
                 case 5:
                     max = 3;
                     break;
+
+                default:
+                    break;
             }
 
-            if (play->csCtx.actorActions[actionIndex]->action >= 2) {
-                pathnum = DMCHAR09_GET_PATH(&this->actor);
-                path = &play->setupPathList[pathnum];
+            if (play->csCtx.actorCues[cueChannel]->id >= 2) {
+                pathIndex = DMCHAR09_GET_PATH_INDEX(&this->actor);
+                path = &play->setupPathList[pathIndex];
 
                 for (i = 0; i < max; i++) {
-                    pathnum = path->unk1;
-                    path = &play->setupPathList[pathnum];
+                    pathIndex = path->additionalPathIndex;
+                    path = &play->setupPathList[pathIndex];
                 }
 
                 this->unk_224 = Lib_SegmentedToVirtual(path->points);
@@ -175,7 +186,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                 this->unk_220 = 1;
                 this->unk_22E = true;
 
-                this->speed = (u16)play->csCtx.actorActions[actionIndex]->rot.z * 0.00390625f;
+                this->speed = (u16)play->csCtx.actorCues[cueChannel]->rot.z * (1.0f / 256.0f);
                 this->actionFunc = func_80AB1FDC;
             } else {
                 this->unk_22E = false;
@@ -183,7 +194,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
             }
         }
     } else {
-        this->unk_22F = 0x63;
+        this->cueId = 99;
     }
 }
 
@@ -200,10 +211,10 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actionFunc(this, play);
-    func_80AB2268(this, play);
+    DmChar09_HandleCutscene(this, play);
     func_80AB24BC(this, play);
-    if ((play->csCtx.state != 0) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
+    if ((play->csCtx.state != CS_STATE_IDLE) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
     }
 }
 
@@ -217,9 +228,9 @@ s32 DmChar09_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 void DmChar09_Draw(Actor* thisx, PlayState* play) {
     DmChar09* this = THIS;
 
-    if ((play->csCtx.state != 0) && this->unk_22E) {
-        func_8012C28C(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+    if ((play->csCtx.state != CS_STATE_IDLE) && this->unk_22E) {
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar09_OverrideLimbDraw, NULL,
                           &this->actor);
     }

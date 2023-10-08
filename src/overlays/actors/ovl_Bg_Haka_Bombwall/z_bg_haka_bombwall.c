@@ -160,14 +160,15 @@ void BgHakaBombwall_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(play, &this->collider);
-    if (Flags_GetSwitch(play, BGHAKABOMBWALL_GET_7F(thisx))) {
+    if (Flags_GetSwitch(play, BGHAKABOMBWALL_GET_SWITCH_FLAG(thisx))) {
         Actor_Kill(&this->dyna.actor);
-    } else {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &object_haka_obj_Colheader_000148);
-        Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
-        Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        func_80BD6260(this);
+        return;
     }
+
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_haka_obj_Colheader_000148);
+    Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
+    func_80BD6260(this);
 }
 
 void BgHakaBombwall_Destroy(Actor* thisx, PlayState* play) {
@@ -191,21 +192,21 @@ void func_80BD6274(BgHakaBombwall* this, PlayState* play) {
 
 void BgHakaBombwall_SetupPlayCutscene(BgHakaBombwall* this) {
     this->dyna.actor.flags |= ACTOR_FLAG_10;
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
     this->actionFunc = BgHakaBombwall_PlayCutscene;
 }
 
 void BgHakaBombwall_PlayCutscene(BgHakaBombwall* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         func_80BD5E6C(this, play);
         this->dyna.actor.draw = NULL;
-        Flags_SetSwitch(play, BGHAKABOMBWALL_GET_7F(&this->dyna.actor));
+        Flags_SetSwitch(play, BGHAKABOMBWALL_GET_SWITCH_FLAG(&this->dyna.actor));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 0x3C, NA_SE_EV_WALL_BROKEN);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         BgHakaBombwall_SetupEndCutscene(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -217,7 +218,7 @@ void BgHakaBombwall_SetupEndCutscene(BgHakaBombwall* this) {
 void BgHakaBombwall_EndCutscene(BgHakaBombwall* this, PlayState* play) {
     this->csTimer--;
     if (this->csTimer <= 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         Actor_Kill(&this->dyna.actor);
     }
 }

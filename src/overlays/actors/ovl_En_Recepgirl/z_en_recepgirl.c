@@ -7,7 +7,7 @@
 #include "z_en_recepgirl.h"
 #include "objects/object_bg/object_bg.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnRecepgirl*)thisx)
 
@@ -37,7 +37,7 @@ static TexturePtr sEyeTextures[] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0,
                                      object_bg_Tex_00FCF0 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 
@@ -61,7 +61,7 @@ void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
 
     this->eyeTexIndex = 2;
 
-    if (Flags_GetSwitch(play, this->actor.params)) {
+    if (Flags_GetSwitch(play, ENRECEPGIRL_GET_SWITCH_FLAG(&this->actor))) {
         this->actor.textId = 0x2ADC; // hear directions again?
     } else {
         this->actor.textId = 0x2AD9; // "Welcome..."
@@ -103,13 +103,13 @@ void EnRecepgirl_Wait(EnRecepgirl* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         EnRecepgirl_SetupTalk(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        func_800B8614(&this->actor, play, 60.0f);
+        Actor_OfferTalk(&this->actor, play, 60.0f);
         if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
-            this->actor.textId = 0x2367; // "... doesn't Kafei want to break off his engagement ... ?"
-        } else if (Flags_GetSwitch(play, this->actor.params)) {
+            this->actor.textId = 0x2367;
+        } else if (Flags_GetSwitch(play, ENRECEPGIRL_GET_SWITCH_FLAG(&this->actor))) {
             this->actor.textId = 0x2ADC; // hear directions again?
         } else {
-            this->actor.textId = 0x2AD9; // "Welcome..."
+            this->actor.textId = 0x2AD9;
         }
     }
 }
@@ -145,8 +145,8 @@ void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
         this->actor.textId = 0x2ADC; // hear directions again?
         EnRecepgirl_SetupWait(this);
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        if (this->actor.textId == 0x2AD9) { // "Welcome..."
-            Flags_SetSwitch(play, this->actor.params);
+        if (this->actor.textId == 0x2AD9) {
+            Flags_SetSwitch(play, ENRECEPGIRL_GET_SWITCH_FLAG(&this->actor));
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
 
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
@@ -156,11 +156,11 @@ void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
             }
         } else if (this->actor.textId == 0x2ADC) { // hear directions again?
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
-            this->actor.textId = 0x2ADD; // "So..."
+            this->actor.textId = 0x2ADD;
         } else {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_000968, 10.0f);
 
-            if (this->actor.textId == 0x2ADD) {        // "So..."
+            if (this->actor.textId == 0x2ADD) {
                 this->actor.textId = 0x2ADE;           // Mayor's office is on the left, drawing room on the right
             } else if (this->actor.textId == 0x2ADA) { // Mayor's office is on the left (meeting ongoing)
                 this->actor.textId = 0x2ADB;           // drawing room on the right
@@ -168,7 +168,7 @@ void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
                 this->actor.textId = 0x2AE0; // drawing room on the right, don't go in without an appointment
             }
         }
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
     }
 }
 
@@ -205,7 +205,7 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, sEyeTextures[this->eyeTexIndex]);
 
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

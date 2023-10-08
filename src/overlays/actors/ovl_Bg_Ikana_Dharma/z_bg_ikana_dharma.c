@@ -115,11 +115,11 @@ void BgIkanaDharma_Init(Actor* thisx, PlayState* play2) {
             Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_IKANA_DHARMA, this->dyna.actor.world.pos.x,
                                           segmentY, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                                           this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
-                                          BGIKANADHARMA_PARAMS(0, true, 0), this->dyna.actor.cutscene,
-                                          this->dyna.actor.unk20, NULL);
+                                          BGIKANADHARMA_PARAMS(0, true, 0), this->dyna.actor.csId,
+                                          this->dyna.actor.halfDaysBits, NULL);
         }
 
-        this->dyna.actor.bgCheckFlags |= 1;
+        this->dyna.actor.bgCheckFlags |= BGCHECKFLAG_GROUND;
     }
 
     BgIkanaDharma_SetupWaitForHit(this);
@@ -137,7 +137,7 @@ void BgIkanaDharma_Destroy(Actor* thisx, PlayState* play) {
 
 void BgIkanaDharma_SetupWaitForHit(BgIkanaDharma* this) {
     this->actionFunc = BgIkanaDharma_WaitForHit;
-    this->dyna.actor.speedXZ = 0.0f;
+    this->dyna.actor.speed = 0.0f;
 }
 
 void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, PlayState* play) {
@@ -151,17 +151,17 @@ void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
     }
 
-    if (wasHit && sFirstHitBgIkanaDharma == NULL) {
+    if (wasHit && (sFirstHitBgIkanaDharma == NULL)) {
         sFirstHitBgIkanaDharma = this2;
-        Flags_SetSwitch(play, BGIKANADHARMA_GET_SWITCHFLAG(&this->dyna.actor));
+        Flags_SetSwitch(play, BGIKANADHARMA_GET_SWITCH_FLAG(&this->dyna.actor));
         tempAngle1 = BINANG_ADD(this->dyna.actor.yawTowardsPlayer, 0x8000);
         tempAngle2 = (BINANG_SUB(player->actor.shape.rot.y, tempAngle1) >> 1);
         this->dyna.actor.world.rot.y = tempAngle1 + tempAngle2 + 0xF000;
-        this->dyna.actor.speedXZ = 20.0f;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DARUMA_VANISH);
+        this->dyna.actor.speed = 20.0f;
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DARUMA_VANISH);
         BgIkanaDharma_SetupStartCutscene(this);
-    } else if ((this->dyna.actor.flags & ACTOR_FLAG_40) == ACTOR_FLAG_40 && sFirstHitBgIkanaDharma == NULL &&
-               this->dyna.actor.xzDistToPlayer < 420.0f) {
+    } else if (CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_40) && (sFirstHitBgIkanaDharma == NULL) &&
+               (this->dyna.actor.xzDistToPlayer < 420.0f)) {
         tempAngle1 = BINANG_SUB(this->dyna.actor.yawTowardsPlayer, player->actor.shape.rot.y);
         tempAngle1 = ABS_ALT(tempAngle1);
 
@@ -173,16 +173,16 @@ void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, PlayState* play) {
 }
 
 void BgIkanaDharma_SetupStartCutscene(BgIkanaDharma* this) {
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
     this->actionFunc = BgIkanaDharma_StartCutscene;
 }
 
 void BgIkanaDharma_StartCutscene(BgIkanaDharma* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         BgIkanaDharma_SetupWaitForCutsceneToEnd(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -200,7 +200,7 @@ void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play) {
                 sFirstHitBgIkanaDharma = NULL;
             }
 
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
     }
 
@@ -226,15 +226,15 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
         actorBelow = DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId);
         if (actorBelow == NULL) {
             Actor_MoveWithGravity(&this->dyna.actor);
-            Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
-            if (this->dyna.actor.bgCheckFlags & 2) {
-                s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+            Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
+            if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
+                s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
                 Quake_SetSpeed(quakeIndex, 21536);
-                Quake_SetQuakeValues(quakeIndex, 4, 0, 0, 0);
-                Quake_SetCountdown(quakeIndex, 12);
+                Quake_SetPerturbations(quakeIndex, 4, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 12);
 
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {
             if (actorBelow->actor.id == ACTOR_BG_IKANA_DHARMA) {
@@ -250,7 +250,8 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
         wallCheckRadius = CLAMP_MIN(wallCheckRadius, 2.0f);
 
         Actor_MoveWithGravity(&this->dyna.actor);
-        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, wallCheckRadius, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, wallCheckRadius, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     Actor_SetFocus(&this->dyna.actor, 40.0f);

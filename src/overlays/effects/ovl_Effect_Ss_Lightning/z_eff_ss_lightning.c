@@ -26,12 +26,12 @@ u32 EffectSsLightning_Init(PlayState* play, u32 index, EffectSs* this, void* ini
 void EffectSsLightning_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsLightning_Draw(PlayState* play, u32 index, EffectSs* this);
 
-TexturePtr sLightningTextures[] = {
+static TexturePtr sLightningTextures[] = {
     gEffLightning1Tex, gEffLightning2Tex, gEffLightning3Tex, gEffLightning4Tex,
     gEffLightning5Tex, gEffLightning6Tex, gEffLightning7Tex, gEffLightning8Tex,
 };
 
-const EffectSsInit Effect_Ss_Lightning_InitVars = {
+EffectSsInit Effect_Ss_Lightning_InitVars = {
     EFFECT_SS_LIGHTNING,
     EffectSsLightning_Init,
 };
@@ -119,7 +119,7 @@ void EffectSsLightning_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        func_8012C9BC(gfxCtx);
+        Gfx_SetupDL61_Xlu(gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, sLightningTextures[texIndex]);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
                         this->rPrimColorA);
