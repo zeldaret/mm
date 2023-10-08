@@ -10,7 +10,10 @@ typedef void (*ObjMure2ActionFunc)(struct ObjMure2*, PlayState*);
 typedef struct ObjMure2 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ObjMure2ActionFunc actionFunc;
-    /* 0x148 */ char unk_148[0x38];
+    /* 0x148 */ Actor* unk_148[12];
+    u16 unk_178;
+    /* 0x17C */ f32 unk_17C;
+
 } ObjMure2; // size = 0x180
 
 #endif // Z_OBJ_MURE2_H
