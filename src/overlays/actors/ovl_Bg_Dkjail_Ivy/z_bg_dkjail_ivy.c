@@ -57,7 +57,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
-    static Gfx* sLeafDlists[] = { gKakeraLeafMiddle, gKakeraLeafTip };
+    static Gfx* sLeafDlists[] = { gKakeraLeafMiddleDL, gKakeraLeafTipDL };
     static s16 sLeafScales[] = { 110, 80, 60, 40 };
     f32 phi_fs0;
     s32 i;

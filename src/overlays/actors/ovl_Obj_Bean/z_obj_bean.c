@@ -303,8 +303,8 @@ void func_809375C8(ObjBean* this, PlayState* play) {
 
 void func_809375F4(ObjBean* this, PlayState* play) {
     static Gfx* D_80939024[] = {
-        gKakeraLeafMiddle,
-        gKakeraLeafTip,
+        gKakeraLeafMiddleDL,
+        gKakeraLeafTipDL,
     };
     Vec3f spC4;
     Vec3f spB8;

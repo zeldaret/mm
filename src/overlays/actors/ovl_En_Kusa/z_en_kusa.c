@@ -307,7 +307,7 @@ void EnKusa_SpawnFragments(EnKusa* this, PlayState* play) {
         scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) & 7;
 
         EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0, 0x50,
-                             -1, 1, gKakeraLeafMiddle);
+                             -1, 1, gKakeraLeafMiddleDL);
 
         pos.x = this->actor.world.pos.x + (directon->x * this->actor.scale.x * 40.0f);
         pos.y = this->actor.world.pos.y + (directon->y * this->actor.scale.y * 40.0f) + 10.0f;
@@ -319,7 +319,7 @@ void EnKusa_SpawnFragments(EnKusa* this, PlayState* play) {
         scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) % 7;
 
         EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0, 0x50,
-                             -1, 1, gKakeraLeafTip);
+                             -1, 1, gKakeraLeafTipDL);
     }
 }
 
@@ -736,7 +736,7 @@ void EnKusa_DrawGrass(Actor* thisx, PlayState* play) {
     EnKusa* this = THIS;
 
     if (this->isCut) {
-        Gfx_DrawDListOpa(play, gKusaStump);
+        Gfx_DrawDListOpa(play, gKusaStumpDL);
     } else {
         if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) &&
             (this->actionFunc == EnKusa_WaitForInteract)) {
@@ -744,6 +744,6 @@ void EnKusa_DrawGrass(Actor* thisx, PlayState* play) {
                 EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
             }
         }
-        Gfx_DrawDListOpa(play, gKusaSprout);
+        Gfx_DrawDListOpa(play, gKusaSproutDL);
     }
 }
