@@ -495,7 +495,7 @@ void func_80123140(PlayState* play, Player* player) {
 
 s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
-           (player->csMode != PLAYER_CSMODE_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
+           (player->csAction != PLAYER_CSACTION_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
            (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
 }
@@ -1297,7 +1297,7 @@ void func_80123C58(Player* player) {
 }
 
 void Player_SetEquipmentData(PlayState* play, Player* player) {
-    if (player->csMode != PLAYER_CSMODE_134) {
+    if (player->csAction != PLAYER_CSACTION_134) {
         player->currentShield = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
         if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) &&
                                                              (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {

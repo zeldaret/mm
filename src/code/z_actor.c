@@ -1393,31 +1393,31 @@ void Actor_MountHorse(PlayState* play, Player* player, Actor* horse) {
 
 s32 func_800B7200(Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) ||
-           (player->csMode != PLAYER_CSMODE_NONE);
+           (player->csAction != PLAYER_CSACTION_NONE);
 }
 
 void Actor_SpawnHorse(PlayState* play, Player* player) {
     Horse_Spawn(play, player);
 }
 
-s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
+s32 func_800B724C(PlayState* play, Actor* actor, u8 csAction) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->csMode == PLAYER_CSMODE_5) ||
-        ((csMode == PLAYER_CSMODE_END) && (player->csMode == PLAYER_CSMODE_NONE))) {
+    if ((player->csAction == PLAYER_CSACTION_5) ||
+        ((csAction == PLAYER_CSACTION_END) && (player->csAction == PLAYER_CSACTION_NONE))) {
         return false;
     }
 
-    player->csMode = csMode;
+    player->csAction = csAction;
     player->csActor = actor;
     player->unk_3BA = false;
     return true;
 }
 
-s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
+s32 func_800B7298(PlayState* play, Actor* actor, u8 csAction) {
     Player* player = GET_PLAYER(play);
 
-    if (func_800B724C(play, actor, csMode)) {
+    if (func_800B724C(play, actor, csAction)) {
         player->unk_3BA = true;
         return true;
     }

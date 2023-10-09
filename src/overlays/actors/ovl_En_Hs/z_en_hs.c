@@ -225,7 +225,7 @@ void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play) {
 
 void func_80953354(EnHs* this, PlayState* play) {
     if (!Play_InCsMode(play)) {
-        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+        func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
         this->actionFunc = EnHs_SceneTransitToBunnyHoodDialogue;
     }
 }
