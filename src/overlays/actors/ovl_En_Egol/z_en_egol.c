@@ -482,7 +482,7 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
     EYEGORE_SET_SPH_DIM(this->bodyCollider.elements[5], 2100, -300, 0, 37, 1.0f);
 
     this->switchFlag = EYEGORE_GET_SWITCH_FLAG(&this->actor);
-    if (this->switchFlag == 0x7F) {
+    if (this->switchFlag == EYEGORE_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
     if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {

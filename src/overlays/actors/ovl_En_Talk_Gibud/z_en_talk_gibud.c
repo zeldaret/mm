@@ -264,7 +264,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
         this->requestedItemIndex = EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK;
     }
 
-    if (this->switchFlag == 0xFF) {
+    if (this->switchFlag == EN_TALK_GIBUD_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
 

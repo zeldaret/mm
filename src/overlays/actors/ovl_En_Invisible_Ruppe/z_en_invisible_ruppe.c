@@ -98,7 +98,7 @@ void EnInvisibleRuppe_Init(Actor* thisx, PlayState* play) {
 
     this->switchFlag = INVISIBLERUPPE_GET_SWITCH_FLAG(&this->actor);
 
-    if (this->switchFlag == 0x7F) {
+    if (this->switchFlag == INVISIBLERUPPE_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
 

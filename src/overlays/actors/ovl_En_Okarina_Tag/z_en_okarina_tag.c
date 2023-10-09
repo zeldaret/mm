@@ -50,7 +50,7 @@ void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
     }
     this->unk154 = zRot * 50.0f;
     this->unk158 = i * 50.0f;
-    if (this->switchFlag == 0x7F) {
+    if (this->switchFlag == ENOKARINATAG_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
     if (this->unk14A == 0xF) {

@@ -97,7 +97,7 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        if (this->switchFlag == 0x7F) {
+        if (this->switchFlag == ENDAIKU2_SWITCH_FLAG_NONE) {
             this->switchFlag = SWITCH_FLAG_NONE;
         } else if (Flags_GetSwitch(play, this->switchFlag)) {
             this->unk_25C = this->path->count - 1;

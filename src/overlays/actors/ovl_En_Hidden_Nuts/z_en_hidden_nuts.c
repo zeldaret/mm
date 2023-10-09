@@ -115,7 +115,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     this->pathIndex = ENHIDDENNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = ENHIDDENNUTS_GET_SWITCH_FLAG(&this->actor);
 
-    if (this->switchFlag == 0x7F) {
+    if (this->switchFlag == ENHIDDENNUTS_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
 

@@ -117,7 +117,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
     this->scale = 0.1f;
     this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);
 
-    if (this->switchFlag == 0x7F) {
+    if (this->switchFlag == ENCOUNT2_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
 

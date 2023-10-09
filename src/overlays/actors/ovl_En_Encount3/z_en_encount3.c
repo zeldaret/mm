@@ -49,7 +49,7 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
     } else if (this->unk16C > 1000.0f) {
         this->unk16C = 1000.0f;
     }
-    if (this->switchFlag == 0x7F) {
+    if (this->switchFlag == ENCOUNT3_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
     if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {

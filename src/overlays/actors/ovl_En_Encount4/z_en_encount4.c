@@ -43,9 +43,9 @@ void EnEncount4_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnEncount4* this = THIS;
 
-    this->unk_148 = ENENCOUNT4_GET_F000(thisx);
-    this->switchFlag = ENENCOUNT4_GET_FLAG(thisx);
-    if (this->switchFlag == 0x7F) {
+    this->unk_148 = ENCOUNT4_GET_F000(thisx);
+    this->switchFlag = ENCOUNT4_GET_SWITCH_FLAG(thisx);
+    if (this->switchFlag == ENCOUNT4_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
     if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {

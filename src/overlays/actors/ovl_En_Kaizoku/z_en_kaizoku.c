@@ -287,7 +287,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->picto.actor, 0.0125f);
     this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    if (this->switchFlag == 127) {
+    if (this->switchFlag == KAIZOKU_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
 

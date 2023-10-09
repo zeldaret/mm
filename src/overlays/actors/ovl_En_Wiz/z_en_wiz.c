@@ -339,7 +339,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     this->switchFlag = EN_WIZ_GET_SWITCH_FLAG(&this->actor);
     this->type = EN_WIZ_GET_TYPE(&this->actor);
 
-    if (this->switchFlag == 0x7F) {
+    if (this->switchFlag == EN_WIZ_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
 

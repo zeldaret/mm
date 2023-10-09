@@ -225,7 +225,7 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     this->mainType = EN_RAF_GET_TYPE(&this->dyna.actor);
     this->reviveTimer = EN_RAF_GET_REVIVE_TIMER(&this->dyna.actor);
     this->switchFlag = EN_RAF_GET_SWITCH_FLAG(&this->dyna.actor);
-    if (this->switchFlag == 0x7F) {
+    if (this->switchFlag == EN_RAF_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
 
