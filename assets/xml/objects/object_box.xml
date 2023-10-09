@@ -11,12 +11,12 @@
         <DList Name="gBoxChestLidDL" Offset="0x12E8" />
         <DList Name="gBoxChestLidGildedDL" Offset="0x1850" />
         <DList Name="gBoxChestLidOrnateDL" Offset="0x1D58" />
-        <Texture Name="gBoxChestLockTex" OutName="chest_lock_tex" Format="rgba16" Width="32" Height="64" Offset="0x1E60" />
-        <Texture Name="gBoxChestCornerTex" OutName="chest_corner_tex" Format="rgba16" Width="32" Height="32" Offset="0x2E60" />
-        <Texture Name="gBoxChestLockGildedTex" OutName="chest_lock_gilded_tex" Format="rgba16" Width="32" Height="64" Offset="0x3660" />
-        <Texture Name="gBoxChestCornerGildedTex" OutName="chest_corner_gilded_tex" Format="rgba16" Width="32" Height="32" Offset="0x4660" />
-        <Texture Name="gBoxChestLockOrnateTex" OutName="chest_lock_ornate_tex" Format="rgba16" Width="32" Height="64" Offset="0x4E60" />
-        <Texture Name="gBoxChestCornerOrnateTex" OutName="chest_corner_ornate_tex" Format="rgba16" Width="32" Height="32" Offset="0x5E60" />
+        <Texture Name="gBoxChestLockTex" OutName="chest_lock" Format="rgba16" Width="32" Height="64" Offset="0x1E60" />
+        <Texture Name="gBoxChestCornerTex" OutName="chest_corner" Format="rgba16" Width="32" Height="32" Offset="0x2E60" />
+        <Texture Name="gBoxChestLockGildedTex" OutName="chest_lock_gilded" Format="rgba16" Width="32" Height="64" Offset="0x3660" />
+        <Texture Name="gBoxChestCornerGildedTex" OutName="chest_corner_gilded" Format="rgba16" Width="32" Height="32" Offset="0x4660" />
+        <Texture Name="gBoxChestLockOrnateTex" OutName="chest_lock_ornate" Format="rgba16" Width="32" Height="64" Offset="0x4E60" />
+        <Texture Name="gBoxChestCornerOrnateTex" OutName="chest_corner_ornate" Format="rgba16" Width="32" Height="32" Offset="0x5E60" />
         <Limb Name="object_box_Standardlimb_006660" Type="Standard" EnumName="OBJECT_BOX_CHEST_LIMB_01" Offset="0x6660" />
         <Limb Name="object_box_Standardlimb_00666C" Type="Standard" EnumName="OBJECT_BOX_CHEST_LIMB_02" Offset="0x666C" />
         <Limb Name="object_box_Standardlimb_006678" Type="Standard" EnumName="OBJECT_BOX_CHEST_LIMB_03" Offset="0x6678" />
@@ -24,7 +24,7 @@
         <Skeleton Name="gBoxChestSkel" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BOX_CHEST_LIMB_NONE" LimbMax="OBJECT_BOX_CHEST_LIMB_MAX" EnumName="ObjectBoxChestLimb" Offset="0x66A0" />
         <CurveAnimation Name="gBoxLightAdultCurveAnim" SkelOffset="0x7D78" Offset="0x6A20"/> <!-- Original name is "demo_tre_lgt_c_fcurve_data" -->
         <CurveAnimation Name="gBoxLightChildCurveAnim" SkelOffset="0x7D78" Offset="0x6E30"/> <!-- Original name is "demo_tre_lgt_fcurve_data" -->
-        <Texture Name="gBoxLightTex" OutName="box_light_tex" Format="i8" Width="64" Height="32" Offset="0x6E40" />
+        <Texture Name="gBoxLightTex" OutName="box_light" Format="i8" Width="64" Height="32" Offset="0x6E40" />
         <DList Name="object_box_DL_007890" Offset="0x7890" />
         <DList Name="object_box_DL_007978" Offset="0x7978" />
         <DList Name="object_box_DL_007A40" Offset="0x7A40" />

@@ -50,19 +50,19 @@ s32 func_80996594(EnSkb* this, PlayState* play);
 void func_80996BEC(EnSkb* this, PlayState* play);
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_skb_Anim_0064E0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
-    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_skb_Anim_002190, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f },
-    { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
-    { &object_skb_Anim_00270C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
-    { &object_skb_Anim_00697C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
-    { &object_skb_Anim_006D90, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
-    { &object_skb_Anim_001D1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
-    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },
-    { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &object_skb_Anim_0015EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
-    { &object_skb_Anim_0009E4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &gStalchildWalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gStalchildAttackAnim, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f },
+    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
+    { &gStalchildCollapseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
+    { &gStalchildSitLaughAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &gStalchildSitTapToesAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &gStalchildSwingOnBranchAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },
+    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &gStalchildSaluteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
+    { &gStalchildIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
 };
 
 static Vec3f D_80997468[] = {
@@ -176,29 +176,29 @@ void func_809947B0(PlayState* play, EnSkb* this, Vec3f* inPos) {
 }
 
 void func_8099495C(EnSkb* this, PlayState* play) {
-    SkelAnime_Init(play, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_003584, this->jointTable,
-                   this->morphTable, 20);
+    SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildStandUpAnim, this->jointTable, this->morphTable,
+                   STALCHILD_LIMB_MAX);
     this->unk_3DC = 0;
     func_80994E2C(this);
 }
 
 void func_809949C4(EnSkb* this, PlayState* play) {
-    SkelAnime_Init(play, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_00697C, this->jointTable,
-                   this->morphTable, 20);
+    SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildSitLaughAnim, this->jointTable, this->morphTable,
+                   STALCHILD_LIMB_MAX);
     this->unk_3DC = 1;
     func_809952D8(this);
 }
 
 void func_80994A30(EnSkb* this, PlayState* play) {
-    SkelAnime_Init(play, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_006D90, this->jointTable,
-                   this->morphTable, 20);
+    SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildSitTapToesAnim, this->jointTable,
+                   this->morphTable, STALCHILD_LIMB_MAX);
     this->unk_3DC = 1;
     func_809953E8(this);
 }
 
 void func_80994A9C(EnSkb* this, PlayState* play) {
-    SkelAnime_Init(play, &this->skelAnime, &object_skb_Skel_005EF8, &object_skb_Anim_001D1C, this->jointTable,
-                   this->morphTable, 20);
+    SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildSwingOnBranchAnim, this->jointTable,
+                   this->morphTable, STALCHILD_LIMB_MAX);
     this->unk_3DC = 1;
     func_809954F8(this);
 }
@@ -535,7 +535,7 @@ void func_80995818(EnSkb* this, PlayState* play) {
 }
 
 void func_809958F4(EnSkb* this) {
-    Animation_Change(&this->skelAnime, &object_skb_Anim_003584, -1.0f, Animation_GetLastFrame(&object_skb_Anim_003584),
+    Animation_Change(&this->skelAnime, &gStalchildStandUpAnim, -1.0f, Animation_GetLastFrame(&gStalchildStandUpAnim),
                      0.0f, ANIMMODE_ONCE, -4.0f);
     this->unk_3E4 = 0;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -620,7 +620,7 @@ void func_80995C84(EnSkb* this, PlayState* play) {
 }
 
 void func_80995D3C(EnSkb* this) {
-    Animation_Change(&this->skelAnime, &object_skb_Anim_002190, -0.4f, this->skelAnime.curFrame - 1.0f, 0.0f,
+    Animation_Change(&this->skelAnime, &gStalchildAttackAnim, -0.4f, this->skelAnime.curFrame - 1.0f, 0.0f,
                      ANIMMODE_ONCE_INTERP, 0.0f);
     this->collider.base.atFlags &= ~AT_BOUNCED;
     this->unk_3DE = 4;
