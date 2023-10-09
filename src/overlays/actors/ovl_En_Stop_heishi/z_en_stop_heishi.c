@@ -85,21 +85,21 @@ static u16 sThirdDayLeaveMessages[] = {
 };
 
 static AnimationHeader* sAnimations[SOLDIER_ANIM_MAX] = {
-    &gSoldierLookDown,             // SOLDIER_ANIM_LOOK_DOWN
-    &gSoldierComeUpHere,           // SOLDIER_ANIM_COME_UP_HERE
-    &gSoldierStandHandOnHip,       // SOLDIER_ANIM_STAND_HAND_ON_HIP
-    &gSoldierStandAndLookDown,     // SOLDIER_ANIM_STAND_LOOK_DOWN
-    &object_sdn_Anim_0057BC,       // SOLDIER_ANIM_4
-    &object_sdn_Anim_005D28,       // SOLDIER_ANIM_5
-    &object_sdn_Anim_0064C0,       // SOLDIER_ANIM_6
-    &gSoldierStandWithHandOnChest, // SOLDIER_ANIM_STAND_HAND_ON_CHEST
+    &gSoldierLookDownAnim,             // SOLDIER_ANIM_LOOK_DOWN
+    &gSoldierComeUpHereAnim,           // SOLDIER_ANIM_COME_UP_HERE
+    &gSoldierStandHandOnHipAnim,       // SOLDIER_ANIM_STAND_HAND_ON_HIP
+    &gSoldierStandAndLookDownAnim,     // SOLDIER_ANIM_STAND_LOOK_DOWN
+    &object_sdn_Anim_0057BC,           // SOLDIER_ANIM_4
+    &object_sdn_Anim_005D28,           // SOLDIER_ANIM_5
+    &object_sdn_Anim_0064C0,           // SOLDIER_ANIM_6
+    &gSoldierStandWithHandOnChestAnim, // SOLDIER_ANIM_STAND_HAND_ON_CHEST
 };
 
 void EnStopheishi_Init(Actor* thisx, PlayState* play) {
     EnStopheishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierStandHandOnHip, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierStandHandOnHipAnim, this->jointTable,
                        this->morphTable, SOLDIER_LIMB_MAX);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;

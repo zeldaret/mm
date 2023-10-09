@@ -157,7 +157,7 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 slot, s16 id) {
 void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd) {
     s32 loadedCount;
     s16 playerObjectId;
-    void* nextObject;
+    void* objectPtr;
 
     play->linkActorEntry =
         (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + play->setupEntranceList[play->curSpawn].spawn;
@@ -170,14 +170,14 @@ void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd) {
     }
 
     loadedCount = Object_SpawnPersistent(&play->objectCtx, OBJECT_LINK_CHILD);
-    nextObject = play->objectCtx.slots[play->objectCtx.numEntries].segment;
+    objectPtr = play->objectCtx.slots[play->objectCtx.numEntries].segment;
     play->objectCtx.numEntries = loadedCount;
     play->objectCtx.numPersistentEntries = loadedCount;
-    playerObjectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
+    playerObjectId = gPlayerFormObjectIds[GET_PLAYER_FORM];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_SpawnPersistent(&play->objectCtx, playerObjectId);
 
-    play->objectCtx.slots[play->objectCtx.numEntries].segment = nextObject;
+    play->objectCtx.slots[play->objectCtx.numEntries].segment = objectPtr;
 }
 
 // SceneTableEntry Header Command 0x01: Actor List
@@ -255,7 +255,7 @@ void Scene_CommandRoomBehavior(PlayState* play, SceneCmd* cmd) {
     play->roomCtx.curRoom.lensMode = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
     play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xA) & 1;
     play->roomCtx.curRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
-    play->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xC) & 1;
+    play->envCtx.stormState = (cmd->roomBehavior.gpFlag2 >> 0xC) & 1;
 }
 
 // SceneTableEntry Header Command 0x0A: Mesh Header
@@ -386,7 +386,7 @@ void Scene_CommandSkyboxSettings(PlayState* play, SceneCmd* cmd) {
 // SceneTableEntry Header Command 0x12: Skybox Disables
 void Scene_CommandSkyboxDisables(PlayState* play, SceneCmd* cmd) {
     play->envCtx.skyboxDisabled = cmd->skyboxDisables.unk4;
-    play->envCtx.sunMoonDisabled = cmd->skyboxDisables.unk5;
+    play->envCtx.sunDisabled = cmd->skyboxDisables.unk5;
 }
 
 // SceneTableEntry Header Command 0x10: Time Settings
@@ -436,9 +436,9 @@ void Scene_CommandWindSettings(PlayState* play, SceneCmd* cmd) {
     s8 temp2 = cmd->windSettings.vertical;
     s8 temp3 = cmd->windSettings.south;
 
-    play->envCtx.windDir.x = temp1;
-    play->envCtx.windDir.y = temp2;
-    play->envCtx.windDir.z = temp3;
+    play->envCtx.windDirection.x = temp1;
+    play->envCtx.windDirection.y = temp2;
+    play->envCtx.windDirection.z = temp3;
     play->envCtx.windSpeed = cmd->windSettings.clothIntensity;
 }
 

@@ -366,7 +366,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
                 gSaveContext.save.time = CLOCK_TIME(8, 0);
                 Sram_IncrementDay();
             } else {
-                func_800FE658(120.0f);
+                Environment_SetTimeJump(120.0f);
             }
 
             this->behaviour++;

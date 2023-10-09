@@ -1066,7 +1066,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
                 Math_StepToF(&this->unk_200, 1.0f, 0.02f);
             }
             func_80997AFC(this->unk_194, &this->unk_1F7);
-            Lib_LerpRGB(&this->unk_1F4, &this->unk_1F7, this->unk_200, &this->unk_1FA);
+            Color_RGB8_Lerp(&this->unk_1F4, &this->unk_1F7, this->unk_200, &this->unk_1FA);
             if (this->unk_200 >= 1.0f) {
                 this->unk_1F4 = this->unk_1FA;
             }

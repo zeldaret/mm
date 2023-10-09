@@ -36,7 +36,7 @@
         <DList Name="gClockTowerUnusedEmpty1DL" Offset="0x9A00" />
         <DList Name="gClockTowerTerminaFieldWallsDL" Offset="0x9A08" />
         <Texture Name="gClockTowerTerminaFieldWallsBrickTex" OutName="clock_tower_termina_field_walls_brick" Format="rgba16" Width="32" Height="32" Offset="0x9B48" />
-        <Texture Name="gClockTowerTerminaFieldWallsMask" OutName="clock_tower_termina_field_walls_mask" Format="i4" Width="64" Height="64" Offset="0xA348" />
+        <Texture Name="gClockTowerTerminaFieldWallsMaskTex" OutName="clock_tower_termina_field_walls_mask" Format="i4" Width="64" Height="64" Offset="0xA348" />
         <DList Name="gClockTowerSpotlightDL" Offset="0xB0C0" />
         <DList Name="gClockTowerCounterweightDL" Offset="0xB208" />
         <TextureAnimation Name="gClockTowerUnusedTexAnim" Offset="0xB4E4" />
@@ -68,11 +68,11 @@
 
         <!-- Probably intended to be used as the xluDList for Clock Tower Clock Face -->
         <DList Name="gClockTowerUnusedEmpty7DL" Offset="0xE810" />
-        <DList Name="gClockTowerClockFace" Offset="0xE818" />
+        <DList Name="gClockTowerClockFaceDL" Offset="0xE818" />
 
         <!-- Probably intended to be used as the xluDList for Wall Clock Clock Face -->
         <DList Name="gClockTowerUnusedEmpty8DL" Offset="0xF510" />
-        <DList Name="gWallClockClockFace" Offset="0xF518" />
+        <DList Name="gWallClockClockFaceDL" Offset="0xF518" />
         <Texture Name="gWallClockClockFaceBackTex" OutName="wall_clock_clock_face_back" Format="rgba16" Width="16" Height="32" Offset="0xF7F8" />
         <Texture Name="gWallClockClockFaceBottomTex" OutName="wall_clock_clock_face_bottom" Format="rgba16" Width="64" Height="32" Offset="0xFBF8" />
         <Texture Name="gWallClockClockFaceTopTex" OutName="wall_clock_clock_face_top" Format="rgba16" Width="64" Height="32" Offset="0x10BF8" />

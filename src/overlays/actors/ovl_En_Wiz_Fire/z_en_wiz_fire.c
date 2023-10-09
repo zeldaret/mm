@@ -119,19 +119,19 @@ void EnWizFire_Destroy(Actor* thisx, PlayState* play) {
     EnWizFire* this = THIS;
 
     if (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
-        play->envCtx.lightSettings.fogColor[2] = 0;
-        play->envCtx.lightSettings.fogColor[1] = play->envCtx.lightSettings.fogColor[2];
-        play->envCtx.lightSettings.fogColor[0] = play->envCtx.lightSettings.fogColor[2];
-        play->envCtx.lightSettings.diffuseColor2[2] = play->envCtx.lightSettings.fogColor[2];
-        play->envCtx.lightSettings.diffuseColor2[1] = play->envCtx.lightSettings.fogColor[2];
-        play->envCtx.lightSettings.diffuseColor2[0] = play->envCtx.lightSettings.fogColor[2];
-        play->envCtx.lightSettings.diffuseColor1[2] = play->envCtx.lightSettings.fogColor[2];
-        play->envCtx.lightSettings.diffuseColor1[1] = play->envCtx.lightSettings.fogColor[2];
-        play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.fogColor[2];
-        play->envCtx.lightSettings.ambientColor[2] = play->envCtx.lightSettings.fogColor[2];
-        play->envCtx.lightSettings.ambientColor[1] = play->envCtx.lightSettings.fogColor[2];
-        play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.fogColor[2];
-        play->envCtx.lightSettings.fogNear = play->envCtx.lightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.fogColor[2] = 0;
+        play->envCtx.adjLightSettings.fogColor[1] = play->envCtx.adjLightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.fogColor[0] = play->envCtx.adjLightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.light2Color[2] = play->envCtx.adjLightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.light2Color[1] = play->envCtx.adjLightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.light2Color[0] = play->envCtx.adjLightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.light1Color[2] = play->envCtx.adjLightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.light1Color[1] = play->envCtx.adjLightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.light1Color[0] = play->envCtx.adjLightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.ambientColor[2] = play->envCtx.adjLightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.ambientColor[1] = play->envCtx.adjLightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.ambientColor[0] = play->envCtx.adjLightSettings.fogColor[2];
+        play->envCtx.adjLightSettings.fogNear = play->envCtx.adjLightSettings.fogColor[2];
     }
 
     Collider_DestroyCylinder(play, &this->collider);
@@ -518,38 +518,39 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
                 fogNear = 968.0f;
             }
 
-            play->envCtx.lightSettings.fogNear = (fogNear - (s16)play->envCtx.unk_C4.fogNear) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.fogNear =
+                (fogNear - (s16)play->envCtx.lightSettings.fogNear) * this->blendScaleFrac;
 
-            play->envCtx.lightSettings.ambientColor[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.ambientColor[0]) * this->blendScaleFrac;
-            play->envCtx.lightSettings.ambientColor[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.ambientColor[1]) * this->blendScaleFrac;
-            play->envCtx.lightSettings.ambientColor[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.ambientColor[2]) * this->blendScaleFrac;
-
-            index++;
-            play->envCtx.lightSettings.diffuseColor1[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.diffuseColor1[0]) * this->blendScaleFrac;
-            play->envCtx.lightSettings.diffuseColor1[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.diffuseColor1[1]) * this->blendScaleFrac;
-            play->envCtx.lightSettings.diffuseColor1[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.diffuseColor1[2]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.ambientColor[0] =
+                ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.ambientColor[0]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.ambientColor[1] =
+                ((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.ambientColor[1]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.ambientColor[2] =
+                ((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.ambientColor[2]) * this->blendScaleFrac;
 
             index++;
-            play->envCtx.lightSettings.diffuseColor2[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.diffuseColor[0]) * this->blendScaleFrac;
-            play->envCtx.lightSettings.diffuseColor2[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.diffuseColor[1]) * this->blendScaleFrac;
-            play->envCtx.lightSettings.diffuseColor2[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.diffuseColor[2]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.light1Color[0] =
+                ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.light1Color[0]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.light1Color[1] =
+                ((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.light1Color[1]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.light1Color[2] =
+                ((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.light1Color[2]) * this->blendScaleFrac;
 
             index++;
-            play->envCtx.lightSettings.fogColor[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.fogColor[0]) * this->blendScaleFrac;
-            play->envCtx.lightSettings.fogColor[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.fogColor[1]) * this->blendScaleFrac;
-            play->envCtx.lightSettings.fogColor[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.fogColor[2]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.light2Color[0] =
+                ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.light2Color[0]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.light2Color[1] =
+                ((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.light2Color[1]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.light2Color[2] =
+                ((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.light2Color[2]) * this->blendScaleFrac;
+
+            index++;
+            play->envCtx.adjLightSettings.fogColor[0] =
+                ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.fogColor[0]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.fogColor[1] =
+                ((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.fogColor[1]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.fogColor[2] =
+                ((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.fogColor[2]) * this->blendScaleFrac;
         }
     }
 

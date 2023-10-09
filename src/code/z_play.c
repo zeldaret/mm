@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "z64.h"
 #include "regs.h"
 #include "functions.h"
@@ -360,8 +361,8 @@ void Play_ClearTransition(PlayState* this) {
 Gfx* Play_SetFog(PlayState* this, Gfx* gfx) {
     s32 fogFar = this->lightCtx.zFar * (5.0f / 64.0f);
 
-    return Gfx_SetFogWithSync(gfx, this->lightCtx.fogColor.r, this->lightCtx.fogColor.g, this->lightCtx.fogColor.b, 0,
-                              this->lightCtx.fogNear, ((fogFar <= 1000) ? 1000 : fogFar));
+    return Gfx_SetFogWithSync(gfx, this->lightCtx.fogColor[0], this->lightCtx.fogColor[1], this->lightCtx.fogColor[2],
+                              0, this->lightCtx.fogNear, ((fogFar <= 1000) ? 1000 : fogFar));
 }
 
 void Play_Destroy(GameState* thisx) {
@@ -524,7 +525,7 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
         }
 
         func_801A3EC0(0x20);
-        func_800F6834(this, lightIndex);
+        Environment_EnableUnderwaterLights(this, lightIndex);
 
         if ((sQuakeIndex == -1) || (Quake_GetTimeLeft(sQuakeIndex) == 10)) {
             s16 quakeIndex = Quake_Request(camera, QUAKE_TYPE_5);
@@ -553,7 +554,7 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
         if (sQuakeIndex != 0) {
             Quake_RemoveRequest(sQuakeIndex);
         }
-        func_800F694C(this);
+        Environment_DisableUnderwaterLights(this);
         func_801A3EC0(0);
     }
 }
@@ -585,20 +586,20 @@ void Play_UpdateTransition(PlayState* this) {
                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) ||
                      ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) &&
                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE))) &&
-                    (!func_800FE590(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
+                    (!Environment_IsFinalHours(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
                      (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS))) {
                     func_801A4058(20);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 }
 
-                if (func_800FD768()) {
+                if (Environment_IsForcedSequenceDisabled()) {
                     func_801A4058(20);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 }
 
-                if (func_800FE590(this) && (Entrance_GetSceneId(this->nextEntrance + sceneLayer) >= 0) &&
+                if (Environment_IsFinalHours(this) && (Entrance_GetSceneId(this->nextEntrance + sceneLayer) >= 0) &&
                     (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
                     func_801A41C8(20);
                 }
@@ -824,10 +825,10 @@ void Play_UpdateTransition(PlayState* this) {
 
         case TRANS_MODE_SANDSTORM_INIT:
             if (this->transitionTrigger != TRANS_TRIGGER_END) {
-                this->envCtx.sandstormState = 1;
+                this->envCtx.sandstormState = SANDSTORM_FILL;
                 this->transitionMode = TRANS_MODE_SANDSTORM;
             } else {
-                this->envCtx.sandstormState = 2;
+                this->envCtx.sandstormState = SANDSTORM_UNFILL;
                 this->envCtx.sandstormPrimA = 255;
                 this->envCtx.sandstormEnvA = 255;
                 this->transitionMode = TRANS_MODE_SANDSTORM;
@@ -856,7 +857,7 @@ void Play_UpdateTransition(PlayState* this) {
 
         case TRANS_MODE_SANDSTORM_END_INIT:
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
-                this->envCtx.sandstormState = 4;
+                this->envCtx.sandstormState = SANDSTORM_DISSIPATE;
                 this->envCtx.sandstormPrimA = 255;
                 this->envCtx.sandstormEnvA = 255;
 
@@ -1144,8 +1145,8 @@ void Play_DrawMain(PlayState* this) {
         if (this->skyboxCtx.skyboxShouldDraw || (this->roomCtx.curRoom.roomShape->base.type == ROOM_SHAPE_TYPE_IMAGE)) {
             func_8012CF0C(gfxCtx, false, true, 0, 0, 0);
         } else {
-            func_8012CF0C(gfxCtx, true, true, this->lightCtx.fogColor.r, this->lightCtx.fogColor.g,
-                          this->lightCtx.fogColor.b);
+            func_8012CF0C(gfxCtx, true, true, this->lightCtx.fogColor[0], this->lightCtx.fogColor[1],
+                          this->lightCtx.fogColor[2]);
         }
     } else {
         func_8012CF0C(gfxCtx, false, false, 0, 0, 0);
@@ -1292,7 +1293,7 @@ void Play_DrawMain(PlayState* this) {
                         }
                     }
 
-                    func_800FE390(this);
+                    Environment_Draw(this);
                 }
 
                 sp268 = LightContext_NewLights(&this->lightCtx, gfxCtx);
@@ -1324,8 +1325,7 @@ void Play_DrawMain(PlayState* this) {
                     }
                 }
 
-                // envCtx.precipitation[PRECIP_RAIN_CUR]
-                if (this->envCtx.unk_F2[1] != 0) {
+                if (this->envCtx.precipitation[PRECIP_RAIN_CUR] != 0) {
                     Environment_DrawRain(this, &this->view, gfxCtx);
                 }
             }
@@ -1339,7 +1339,7 @@ void Play_DrawMain(PlayState* this) {
             }
 
             if (1) {
-                if (!this->envCtx.sunMoonDisabled) {
+                if (!this->envCtx.sunDisabled) {
                     sp25C.x = this->view.eye.x + this->envCtx.sunPos.x;
                     sp25C.y = this->view.eye.y + this->envCtx.sunPos.y;
                     sp25C.z = this->view.eye.z + this->envCtx.sunPos.z;
@@ -1367,7 +1367,7 @@ void Play_DrawMain(PlayState* this) {
             }
 
             if (1) {
-                if (this->envCtx.sandstormState != 0) {
+                if (this->envCtx.sandstormState != SANDSTORM_OFF) {
                     Environment_DrawSandstorm(this, this->envCtx.sandstormState);
                 }
             }
@@ -1440,7 +1440,7 @@ SkipPostWorldDraw:
     }
 
     if (!sp25B) {
-        func_800FE3E0(this);
+        Environment_DrawSkyboxStars(this);
     }
 
     CLOSE_DISPS(gfxCtx);
@@ -2217,7 +2217,7 @@ void Play_Init(GameState* thisx) {
         gSaveContext.save.cutsceneIndex = 0;
     }
 
-    if (gSaveContext.nextDayTime != 0xFFFF) {
+    if (gSaveContext.nextDayTime != NEXT_TIME_NONE) {
         gSaveContext.save.time = gSaveContext.nextDayTime;
         gSaveContext.skyboxTime = gSaveContext.nextDayTime;
     }
@@ -2250,14 +2250,14 @@ void Play_Init(GameState* thisx) {
     KaleidoScopeCall_Init(this);
     Interface_Init(this);
 
-    if (gSaveContext.nextDayTime != 0xFFFF) {
-        if (gSaveContext.nextDayTime == 0x8000) {
+    if (gSaveContext.nextDayTime != NEXT_TIME_NONE) {
+        if (gSaveContext.nextDayTime == NEXT_TIME_DAY) {
             gSaveContext.save.day++;
-            gSaveContext.save.daysElapsed++;
+            gSaveContext.save.eventDayCount++;
             gSaveContext.dogIsLost = true;
-            gSaveContext.nextDayTime = -2;
+            gSaveContext.nextDayTime = NEXT_TIME_DAY_SET;
         } else {
-            gSaveContext.nextDayTime = -3;
+            gSaveContext.nextDayTime = NEXT_TIME_NIGHT_SET;
         }
     }
 
@@ -2348,7 +2348,7 @@ void Play_Init(GameState* thisx) {
 
     CutsceneManager_StoreCamera(&this->mainCamera);
     Interface_SetSceneRestrictions(this);
-    func_800FB758(this);
+    Environment_PlaySceneSequence(this);
     gSaveContext.seqId = this->sequenceCtx.seqId;
     gSaveContext.ambienceId = this->sequenceCtx.ambienceId;
     AnimationContext_Update(this, &this->animationCtx);
