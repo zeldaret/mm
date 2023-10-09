@@ -378,7 +378,7 @@ typedef enum {
     /* 0x13 */ PLAYER_CSTYPE_ANIM_19
 } PlayerCsType;
 
-typedef struct PlayerCsModeEntry {
+typedef struct PlayerCsActionEntry {
     /* 0x0 */ s8 type; // PlayerCsType enum
     /* 0x4 */ union {
         void* ptr; // Do not use, required in the absence of designated initialisors
@@ -388,7 +388,7 @@ typedef struct PlayerCsModeEntry {
         AnimSfxEntry* entry;
         CsCmdActorCue* cue;
     };
-} PlayerCsModeEntry; // size = 0x8
+} PlayerCsActionEntry; // size = 0x8
 
 typedef struct struct_8085E368 {
     /* 0x0 */ Vec3s base;
@@ -11655,101 +11655,99 @@ void Player_DetectSecrets(PlayState* play, Player* this) {
 
 // Making a player csAction negative will behave as its positive counterpart
 // except will disable setting the start position
-#define DISABLE_PLAYER_CSACTION_START_POS(csAction) -(csAction)
-
-s8 sPlayerCsModes[PLAYER_CUEID_MAX] = {
-    /* PLAYER_CUEID_NONE */ PLAYER_CSACTION_NONE,
-    /* PLAYER_CUEID_1 */ PLAYER_CSACTION_2,
-    /* PLAYER_CUEID_2 */ PLAYER_CSACTION_2,
-    /* PLAYER_CUEID_3 */ PLAYER_CSACTION_4,
-    /* PLAYER_CUEID_4 */ PLAYER_CSACTION_3,
-    /* PLAYER_CUEID_5 */ PLAYER_CSACTION_56,
-    /* PLAYER_CUEID_6 */ PLAYER_CSACTION_8,
-    /* PLAYER_CUEID_7 */ PLAYER_CSACTION_NONE,
-    /* PLAYER_CUEID_8 */ PLAYER_CSACTION_NONE,
-    /* PLAYER_CUEID_9 */ PLAYER_CSACTION_135,
-    /* PLAYER_CUEID_10 */ PLAYER_CSACTION_21,
-    /* PLAYER_CUEID_11 */ PLAYER_CSACTION_61,
-    /* PLAYER_CUEID_12 */ PLAYER_CSACTION_62,
-    /* PLAYER_CUEID_13 */ PLAYER_CSACTION_60,
-    /* PLAYER_CUEID_14 */ PLAYER_CSACTION_63,
-    /* PLAYER_CUEID_15 */ PLAYER_CSACTION_64,
-    /* PLAYER_CUEID_16 */ PLAYER_CSACTION_65,
-    /* PLAYER_CUEID_17 */ PLAYER_CSACTION_66,
-    /* PLAYER_CUEID_18 */ PLAYER_CSACTION_70,
-    /* PLAYER_CUEID_19 */ PLAYER_CSACTION_19,
-    /* PLAYER_CUEID_20 */ PLAYER_CSACTION_71,
-    /* PLAYER_CUEID_21 */ PLAYER_CSACTION_72,
-    /* PLAYER_CUEID_22 */ PLAYER_CSACTION_67,
-    /* PLAYER_CUEID_23 */ PLAYER_CSACTION_73,
-    /* PLAYER_CUEID_24 */ PLAYER_CSACTION_74,
-    /* PLAYER_CUEID_25 */ PLAYER_CSACTION_75,
-    /* PLAYER_CUEID_26 */ PLAYER_CSACTION_68,
-    /* PLAYER_CUEID_27 */ PLAYER_CSACTION_69,
-    /* PLAYER_CUEID_28 */ PLAYER_CSACTION_76,
-    /* PLAYER_CUEID_29 */ PLAYER_CSACTION_116,
-    /* PLAYER_CUEID_30 */ PLAYER_CSACTION_NONE,
-    /* PLAYER_CUEID_31 */ PLAYER_CSACTION_40,
-    /* PLAYER_CUEID_32 */ PLAYER_CSACTION_NONE,
-    /* PLAYER_CUEID_33 */ DISABLE_PLAYER_CSACTION_START_POS(PLAYER_CSACTION_52),
-    /* PLAYER_CUEID_34 */ PLAYER_CSACTION_42,
-    /* PLAYER_CUEID_35 */ PLAYER_CSACTION_43,
-    /* PLAYER_CUEID_36 */ PLAYER_CSACTION_57,
-    /* PLAYER_CUEID_37 */ PLAYER_CSACTION_81,
-    /* PLAYER_CUEID_38 */ PLAYER_CSACTION_41,
-    /* PLAYER_CUEID_39 */ PLAYER_CSACTION_53,
-    /* PLAYER_CUEID_40 */ PLAYER_CSACTION_54,
-    /* PLAYER_CUEID_41 */ PLAYER_CSACTION_44,
-    /* PLAYER_CUEID_42 */ PLAYER_CSACTION_55,
-    /* PLAYER_CUEID_43 */ PLAYER_CSACTION_45,
-    /* PLAYER_CUEID_44 */ PLAYER_CSACTION_46,
-    /* PLAYER_CUEID_45 */ PLAYER_CSACTION_47,
-    /* PLAYER_CUEID_46 */ PLAYER_CSACTION_48,
-    /* PLAYER_CUEID_47 */ PLAYER_CSACTION_49,
-    /* PLAYER_CUEID_48 */ PLAYER_CSACTION_50,
-    /* PLAYER_CUEID_49 */ PLAYER_CSACTION_51,
-    /* PLAYER_CUEID_50 */ PLAYER_CSACTION_77,
-    /* PLAYER_CUEID_51 */ PLAYER_CSACTION_78,
-    /* PLAYER_CUEID_52 */ PLAYER_CSACTION_79,
-    /* PLAYER_CUEID_53 */ PLAYER_CSACTION_80,
-    /* PLAYER_CUEID_54 */ PLAYER_CSACTION_81,
-    /* PLAYER_CUEID_55 */ PLAYER_CSACTION_82,
-    /* PLAYER_CUEID_56 */ PLAYER_CSACTION_83,
-    /* PLAYER_CUEID_57 */ PLAYER_CSACTION_84,
-    /* PLAYER_CUEID_58 */ PLAYER_CSACTION_85,
-    /* PLAYER_CUEID_59 */ PLAYER_CSACTION_86,
-    /* PLAYER_CUEID_60 */ PLAYER_CSACTION_87,
-    /* PLAYER_CUEID_61 */ PLAYER_CSACTION_88,
-    /* PLAYER_CUEID_62 */ PLAYER_CSACTION_89,
-    /* PLAYER_CUEID_63 */ PLAYER_CSACTION_90,
-    /* PLAYER_CUEID_64 */ PLAYER_CSACTION_91,
-    /* PLAYER_CUEID_65 */ PLAYER_CSACTION_92,
-    /* PLAYER_CUEID_66 */ PLAYER_CSACTION_94,
-    /* PLAYER_CUEID_67 */ PLAYER_CSACTION_95,
-    /* PLAYER_CUEID_68 */ PLAYER_CSACTION_100,
-    /* PLAYER_CUEID_69 */ PLAYER_CSACTION_101,
-    /* PLAYER_CUEID_70 */ PLAYER_CSACTION_98,
-    /* PLAYER_CUEID_71 */ PLAYER_CSACTION_99,
-    /* PLAYER_CUEID_72 */ PLAYER_CSACTION_102,
-    /* PLAYER_CUEID_73 */ PLAYER_CSACTION_103,
-    /* PLAYER_CUEID_74 */ PLAYER_CSACTION_104,
-    /* PLAYER_CUEID_75 */ PLAYER_CSACTION_112,
-    /* PLAYER_CUEID_76 */ PLAYER_CSACTION_113,
-    /* PLAYER_CUEID_77 */ PLAYER_CSACTION_117,
-    /* PLAYER_CUEID_78 */ PLAYER_CSACTION_104,
-    /* PLAYER_CUEID_79 */ PLAYER_CSACTION_104,
-    /* PLAYER_CUEID_80 */ PLAYER_CSACTION_105,
-    /* PLAYER_CUEID_81 */ PLAYER_CSACTION_106,
-    /* PLAYER_CUEID_82 */ PLAYER_CSACTION_107,
-    /* PLAYER_CUEID_83 */ PLAYER_CSACTION_108,
-    /* PLAYER_CUEID_84 */ PLAYER_CSACTION_109,
-    /* PLAYER_CUEID_85 */ PLAYER_CSACTION_110,
-    /* PLAYER_CUEID_86 */ PLAYER_CSACTION_118,
-    /* PLAYER_CUEID_87 */ PLAYER_CSACTION_119,
-    /* PLAYER_CUEID_88 */ PLAYER_CSACTION_120,
-    /* PLAYER_CUEID_89 */ PLAYER_CSACTION_114,
-    /* PLAYER_CUEID_90 */ PLAYER_CSACTION_111,
-    /* PLAYER_CUEID_91 */ PLAYER_CSACTION_122,
+s8 sPlayerCueToCsActionMap[PLAYER_CUEID_MAX] = {
+    PLAYER_CSACTION_NONE, // PLAYER_CUEID_NONE
+    PLAYER_CSACTION_2,    // PLAYER_CUEID_1
+    PLAYER_CSACTION_2,    // PLAYER_CUEID_2
+    PLAYER_CSACTION_4,    // PLAYER_CUEID_3
+    PLAYER_CSACTION_3,    // PLAYER_CUEID_4
+    PLAYER_CSACTION_56,   // PLAYER_CUEID_5
+    PLAYER_CSACTION_8,    // PLAYER_CUEID_6
+    PLAYER_CSACTION_NONE, // PLAYER_CUEID_7
+    PLAYER_CSACTION_NONE, // PLAYER_CUEID_8
+    PLAYER_CSACTION_135,  // PLAYER_CUEID_9
+    PLAYER_CSACTION_21,   // PLAYER_CUEID_10
+    PLAYER_CSACTION_61,   // PLAYER_CUEID_11
+    PLAYER_CSACTION_62,   // PLAYER_CUEID_12
+    PLAYER_CSACTION_60,   // PLAYER_CUEID_13
+    PLAYER_CSACTION_63,   // PLAYER_CUEID_14
+    PLAYER_CSACTION_64,   // PLAYER_CUEID_15
+    PLAYER_CSACTION_65,   // PLAYER_CUEID_16
+    PLAYER_CSACTION_66,   // PLAYER_CUEID_17
+    PLAYER_CSACTION_70,   // PLAYER_CUEID_18
+    PLAYER_CSACTION_19,   // PLAYER_CUEID_19
+    PLAYER_CSACTION_71,   // PLAYER_CUEID_20
+    PLAYER_CSACTION_72,   // PLAYER_CUEID_21
+    PLAYER_CSACTION_67,   // PLAYER_CUEID_22
+    PLAYER_CSACTION_73,   // PLAYER_CUEID_23
+    PLAYER_CSACTION_74,   // PLAYER_CUEID_24
+    PLAYER_CSACTION_75,   // PLAYER_CUEID_25
+    PLAYER_CSACTION_68,   // PLAYER_CUEID_26
+    PLAYER_CSACTION_69,   // PLAYER_CUEID_27
+    PLAYER_CSACTION_76,   // PLAYER_CUEID_28
+    PLAYER_CSACTION_116,  // PLAYER_CUEID_29
+    PLAYER_CSACTION_NONE, // PLAYER_CUEID_30
+    PLAYER_CSACTION_40,   // PLAYER_CUEID_31
+    PLAYER_CSACTION_NONE, // PLAYER_CUEID_32
+    -PLAYER_CSACTION_52,  // PLAYER_CUEID_33
+    PLAYER_CSACTION_42,   // PLAYER_CUEID_34
+    PLAYER_CSACTION_43,   // PLAYER_CUEID_35
+    PLAYER_CSACTION_57,   // PLAYER_CUEID_36
+    PLAYER_CSACTION_81,   // PLAYER_CUEID_37
+    PLAYER_CSACTION_41,   // PLAYER_CUEID_38
+    PLAYER_CSACTION_53,   // PLAYER_CUEID_39
+    PLAYER_CSACTION_54,   // PLAYER_CUEID_40
+    PLAYER_CSACTION_44,   // PLAYER_CUEID_41
+    PLAYER_CSACTION_55,   // PLAYER_CUEID_42
+    PLAYER_CSACTION_45,   // PLAYER_CUEID_43
+    PLAYER_CSACTION_46,   // PLAYER_CUEID_44
+    PLAYER_CSACTION_47,   // PLAYER_CUEID_45
+    PLAYER_CSACTION_48,   // PLAYER_CUEID_46
+    PLAYER_CSACTION_49,   // PLAYER_CUEID_47
+    PLAYER_CSACTION_50,   // PLAYER_CUEID_48
+    PLAYER_CSACTION_51,   // PLAYER_CUEID_49
+    PLAYER_CSACTION_77,   // PLAYER_CUEID_50
+    PLAYER_CSACTION_78,   // PLAYER_CUEID_51
+    PLAYER_CSACTION_79,   // PLAYER_CUEID_52
+    PLAYER_CSACTION_80,   // PLAYER_CUEID_53
+    PLAYER_CSACTION_81,   // PLAYER_CUEID_54
+    PLAYER_CSACTION_82,   // PLAYER_CUEID_55
+    PLAYER_CSACTION_83,   // PLAYER_CUEID_56
+    PLAYER_CSACTION_84,   // PLAYER_CUEID_57
+    PLAYER_CSACTION_85,   // PLAYER_CUEID_58
+    PLAYER_CSACTION_86,   // PLAYER_CUEID_59
+    PLAYER_CSACTION_87,   // PLAYER_CUEID_60
+    PLAYER_CSACTION_88,   // PLAYER_CUEID_61
+    PLAYER_CSACTION_89,   // PLAYER_CUEID_62
+    PLAYER_CSACTION_90,   // PLAYER_CUEID_63
+    PLAYER_CSACTION_91,   // PLAYER_CUEID_64
+    PLAYER_CSACTION_92,   // PLAYER_CUEID_65
+    PLAYER_CSACTION_94,   // PLAYER_CUEID_66
+    PLAYER_CSACTION_95,   // PLAYER_CUEID_67
+    PLAYER_CSACTION_100,  // PLAYER_CUEID_68
+    PLAYER_CSACTION_101,  // PLAYER_CUEID_69
+    PLAYER_CSACTION_98,   // PLAYER_CUEID_70
+    PLAYER_CSACTION_99,   // PLAYER_CUEID_71
+    PLAYER_CSACTION_102,  // PLAYER_CUEID_72
+    PLAYER_CSACTION_103,  // PLAYER_CUEID_73
+    PLAYER_CSACTION_104,  // PLAYER_CUEID_74
+    PLAYER_CSACTION_112,  // PLAYER_CUEID_75
+    PLAYER_CSACTION_113,  // PLAYER_CUEID_76
+    PLAYER_CSACTION_117,  // PLAYER_CUEID_77
+    PLAYER_CSACTION_104,  // PLAYER_CUEID_78
+    PLAYER_CSACTION_104,  // PLAYER_CUEID_79
+    PLAYER_CSACTION_105,  // PLAYER_CUEID_80
+    PLAYER_CSACTION_106,  // PLAYER_CUEID_81
+    PLAYER_CSACTION_107,  // PLAYER_CUEID_82
+    PLAYER_CSACTION_108,  // PLAYER_CUEID_83
+    PLAYER_CSACTION_109,  // PLAYER_CUEID_84
+    PLAYER_CSACTION_110,  // PLAYER_CUEID_85
+    PLAYER_CSACTION_118,  // PLAYER_CUEID_86
+    PLAYER_CSACTION_119,  // PLAYER_CUEID_87
+    PLAYER_CSACTION_120,  // PLAYER_CUEID_88
+    PLAYER_CSACTION_114,  // PLAYER_CUEID_89
+    PLAYER_CSACTION_111,  // PLAYER_CUEID_90
+    PLAYER_CSACTION_122,  // PLAYER_CUEID_91
 };
 
 f32 D_8085D3E0[PLAYER_FORM_MAX] = {
@@ -12143,7 +12141,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             if ((this->csAction != PLAYER_CSACTION_5) && !(this->stateFlags1 & PLAYER_STATE1_800000)) {
                 if (!(this->stateFlags2 & PLAYER_STATE2_80) && (this->actor.id == ACTOR_PLAYER)) {
                     if ((play->csCtx.playerCue != NULL) &&
-                        (sPlayerCsModes[play->csCtx.playerCue->id] != PLAYER_CSACTION_NONE)) {
+                        (sPlayerCueToCsActionMap[play->csCtx.playerCue->id] != PLAYER_CSACTION_NONE)) {
                         func_800B7298(play, NULL, PLAYER_CSACTION_5);
                         Player_StopHorizontalMovement(this);
                     } else if (((u32)this->csAction == PLAYER_CSACTION_NONE) &&
@@ -19204,7 +19202,7 @@ void func_80858D48(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
     Player_StopHorizontalMovement(this);
 }
 
-PlayerCsAnim sPlayerCsModeAnimFuncs[] = {
+PlayerCsAnim sPlayerCsActionAnimFuncs[] = {
     NULL,             // PLAYER_CSTYPE_NONE
     Player_CsAnim_1,  // PLAYER_CSTYPE_ANIM_1
     Player_CsAnim_2,  // PLAYER_CSTYPE_ANIM_2
@@ -19472,7 +19470,7 @@ void func_80859300(PlayState* play, Player* this, UNK_TYPE arg2) {
     }
 }
 
-PlayerCsModeEntry sPlayerCsModeInitFuncs[PLAYER_CSACTION_MAX] = {
+PlayerCsActionEntry sPlayerCsActionInitFuncs[PLAYER_CSACTION_MAX] = {
     /* PLAYER_CSACTION_NONE   */ { PLAYER_CSTYPE_NONE, { NULL } },
     /* PLAYER_CSACTION_1   */ { PLAYER_CSTYPE_ACTION, { Player_CsAction_1 } },
     /* PLAYER_CSACTION_2   */ { PLAYER_CSTYPE_NONE, { NULL } },
@@ -19615,7 +19613,7 @@ PlayerCsModeEntry sPlayerCsModeInitFuncs[PLAYER_CSACTION_MAX] = {
     /* PLAYER_CSACTION_139 */ { PLAYER_CSTYPE_ANIM_3, { &gPlayerAnim_link_last_hit_motion2 } },
 };
 
-PlayerCsModeEntry sPlayerCsModeUpdateFuncs[PLAYER_CSACTION_MAX] = {
+PlayerCsActionEntry sPlayerCsActionUpdateFuncs[PLAYER_CSACTION_MAX] = {
     /* PLAYER_CSACTION_NONE   */ { PLAYER_CSTYPE_NONE, { NULL } },
     /* PLAYER_CSACTION_1   */ { PLAYER_CSTYPE_ACTION, { Player_CsAction_0 } },
     /* PLAYER_CSACTION_2   */ { PLAYER_CSTYPE_ACTION, { Player_CsAction_11 } },
@@ -20312,9 +20310,9 @@ void Player_Cutscene_8085ABA8(Player* this, CsCmdActorCue* cue) {
     func_8082E784(this);
 }
 
-void func_8085AC9C(PlayState* play, Player* this, CsCmdActorCue* cue, PlayerCsModeEntry* csEntry) {
+void func_8085AC9C(PlayState* play, Player* this, CsCmdActorCue* cue, PlayerCsActionEntry* csEntry) {
     if (csEntry->type > PLAYER_CSTYPE_NONE) {
-        sPlayerCsModeAnimFuncs[csEntry->type](play, this, csEntry->csAnimArg2);
+        sPlayerCsActionAnimFuncs[csEntry->type](play, this, csEntry->csAnimArg2);
     } else if (csEntry->type <= PLAYER_CSTYPE_ACTION) {
         csEntry->csActionFunc(play, this, cue);
     }
@@ -20342,7 +20340,7 @@ void Player_CsAction_48(PlayState* play, Player* this, CsCmdActorCue* cue) {
 
     if ((play->csCtx.state == CS_STATE_IDLE) || (play->csCtx.state == CS_STATE_STOP) ||
         (play->csCtx.state == CS_STATE_RUN_UNSTOPPABLE)) {
-        if ((sPlayerCsModes[this->cueId] == PLAYER_CSACTION_68) && (play->sceneId == SCENE_OKUJOU)) {
+        if ((sPlayerCueToCsActionMap[this->cueId] == PLAYER_CSACTION_68) && (play->sceneId == SCENE_OKUJOU)) {
             this->unk_AA5 = PLAYER_UNKAA5_5;
 
             if (Player_ActionChange_13(this, play)) {
@@ -20353,7 +20351,7 @@ void Player_CsAction_48(PlayState* play, Player* this, CsCmdActorCue* cue) {
 
         var_a0 = true;
 
-        if (sPlayerCsModes[this->cueId] != PLAYER_CSACTION_16) {
+        if (sPlayerCueToCsActionMap[this->cueId] != PLAYER_CSACTION_16) {
             this->csAction = PLAYER_CSACTION_END;
             func_800B7298(play, NULL, PLAYER_CSACTION_END);
             this->cueId = PLAYER_CUEID_NONE;
@@ -20368,7 +20366,7 @@ void Player_CsAction_48(PlayState* play, Player* this, CsCmdActorCue* cue) {
     }
 
     if (!var_a0 && (this->cueId != playerCue->id)) {
-        csAction = sPlayerCsModes[playerCue->id];
+        csAction = sPlayerCueToCsActionMap[playerCue->id];
 
         // Negative csActions will skip this block
         if ((csAction >= PLAYER_CSACTION_NONE) && !gDisablePlayerCsActionStartPos) {
@@ -20389,15 +20387,15 @@ void Player_CsAction_48(PlayState* play, Player* this, CsCmdActorCue* cue) {
 
         func_8082E794(this);
         func_8085AD5C(play, this, ABS_ALT(csAction));
-        func_8085AC9C(play, this, playerCue, &sPlayerCsModeInitFuncs[ABS_ALT(csAction)]);
+        func_8085AC9C(play, this, playerCue, &sPlayerCsActionInitFuncs[ABS_ALT(csAction)]);
 
         this->actionVar2 = 0;
         this->actionVar1 = 0;
         this->cueId = playerCue->id;
     }
 
-    csAction = sPlayerCsModes[this->cueId];
-    func_8085AC9C(play, this, playerCue, &sPlayerCsModeUpdateFuncs[ABS_ALT(csAction)]);
+    csAction = sPlayerCueToCsActionMap[this->cueId];
+    func_8085AC9C(play, this, playerCue, &sPlayerCsActionUpdateFuncs[ABS_ALT(csAction)]);
 
     if ((u16)playerCue->rot.x != 0) {
         Math_SmoothStepToS(&this->actor.focus.rot.x, (u16)playerCue->rot.x, 4, 0x2710, 0);
@@ -20412,10 +20410,10 @@ void Player_Action_97(Player* this, PlayState* play) {
 
         this->prevCsAction = this->csAction;
         func_8085AD5C(play, this, this->csAction);
-        func_8085AC9C(play, this, NULL, &sPlayerCsModeInitFuncs[this->csAction]);
+        func_8085AC9C(play, this, NULL, &sPlayerCsActionInitFuncs[this->csAction]);
     }
 
-    func_8085AC9C(play, this, NULL, &sPlayerCsModeUpdateFuncs[this->csAction]);
+    func_8085AC9C(play, this, NULL, &sPlayerCsActionUpdateFuncs[this->csAction]);
 }
 
 s32 Player_StartFishing(PlayState* play) {
