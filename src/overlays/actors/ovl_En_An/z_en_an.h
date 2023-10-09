@@ -14,6 +14,20 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 #define ENAN_8000 0x8000
 //#define ENAN_GET_8000(thisx) (((thisx)->params & 0x8000) >> 0xF)
 
+#define ENAN_STATE_8    (1 << 3)
+#define ENAN_STATE_10   (1 << 4)
+#define ENAN_STATE_20   (1 << 5)
+#define ENAN_STATE_40   (1 << 6)
+#define ENAN_STATE_80   (1 << 7)
+#define ENAN_STATE_100  (1 << 8)
+#define ENAN_STATE_200  (1 << 9)
+#define ENAN_STATE_400  (1 << 10)
+#define ENAN_STATE_800  (1 << 11)
+#define ENAN_STATE_1000 (1 << 12)
+#define ENAN_STATE_2000 (1 << 13)
+#define ENAN_STATE_4000 (1 << 14)
+#define ENAN_STATE_8000 (1 << 15)
+
 typedef struct EnAn {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -47,7 +61,7 @@ typedef struct EnAn {
     /* 0x25E */ UNK_TYPE1 unk_25E[0x6];
     /* 0x264 */ Vec3s jointTable[OBJECT_AN1_LIMB_MAX];
     /* 0x2E2 */ Vec3s morphTable[OBJECT_AN1_LIMB_MAX];
-    /* 0x360 */ u16 unk_360; // stateFlags?
+    /* 0x360 */ u16 stateFlags;
     /* 0x362 */ u16 prevTextId;
     /* 0x364 */ u8 cueId;
     /* 0x368 */ f32 unk_368;

@@ -834,7 +834,7 @@ s16 D_80B58E40[ENAN_FACE_MAX] = {
 void EnAn_UpdateFace(EnAn* this) {
     s32 var_a1 = false;
 
-    if (this->unk_360 & 0x100) {
+    if (this->stateFlags & ENAN_STATE_100) {
         if (DECR(this->unk_38E) == 0) {
             // default case doesn't match
             switch (this->faceIndex) {
@@ -906,7 +906,7 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
 
     switch (arg2) {
         case 0x0:
-            if ((this->unk_360 & 0x800) && !this->unk_3B0) {
+            if ((this->stateFlags & ENAN_STATE_800) && !this->unk_3B0) {
                 this->unk_3A8++;
                 this->unk_3AC -= 2;
                 Gfx_SetupDL25_Xlu(play->state.gfxCtx);
@@ -924,7 +924,7 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
 
         case 0x1:
             otherObjectSlot = this->maskKerfayObjectSlot;
-            if ((this->unk_360 & 0x4000) && !this->unk_3B0 && (otherObjectSlot >= 0)) {
+            if ((this->stateFlags & ENAN_STATE_4000) && !this->unk_3B0 && (otherObjectSlot >= 0)) {
                 gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.slots[otherObjectSlot].segment);
 
                 Matrix_TranslateRotateZYX(&D_80B58E54, &D_80B58E60);
@@ -938,7 +938,7 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
 
         case 0x2:
             otherObjectSlot = this->an2ObjectSlot;
-            if ((this->unk_360 & 0x1000) && !this->unk_3B0 && (otherObjectSlot >= 0)) {
+            if ((this->stateFlags & ENAN_STATE_1000) && !this->unk_3B0 && (otherObjectSlot >= 0)) {
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[otherObjectSlot].segment);
                 gSPDisplayList(POLY_OPA_DISP++, object_an2_DL_000378);
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
@@ -947,7 +947,7 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
 
         case 0x3:
             otherObjectSlot = this->an3ObjectSlot;
-            if ((this->unk_360 & 0x2000) && !this->unk_3B0 && (otherObjectSlot >= 0)) {
+            if ((this->stateFlags & ENAN_STATE_2000) && !this->unk_3B0 && (otherObjectSlot >= 0)) {
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[otherObjectSlot].segment);
                 gSPDisplayList(POLY_OPA_DISP++, object_an3_DL_000308);
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
@@ -955,7 +955,7 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
             break;
 
         case 0x4:
-            if ((this->unk_360 & 0x8000) && !this->unk_3B0) {
+            if ((this->stateFlags & ENAN_STATE_8000) && !this->unk_3B0) {
                 gSPDisplayList(POLY_OPA_DISP++, object_an1_DL_012478);
             }
             break;
@@ -1207,15 +1207,15 @@ s32 func_80B54D18(Actor* thisx, PlayState* play) {
                 goto label;
             } else {
                 ret = true;
-                this->unk_360 |= 0x4000;
+                this->stateFlags |= ENAN_STATE_4000;
                 this->unk_394++;
             }
             break;
 
         case 0x1:
         label:
-            this->unk_360 &= ~(0x20 | 0x4000);
-            this->unk_360 |= 0x200;
+            this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_4000);
+            this->stateFlags |= ENAN_STATE_200;
             EnAn_ChangeAnim(this, play, ENAN_ANIM_20);
             ret = true;
             this->unk_394++;
@@ -1380,8 +1380,8 @@ s32* func_80B54DF4(EnAn* this, PlayState* play) {
 s32 func_80B55180(EnAn* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_360 & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+    if ((this->stateFlags & SUBS_OFFER_MODE_MASK) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_3C4 = 0;
         this->unk_394 = 0;
         this->msgEventFunc = NULL;
@@ -1396,11 +1396,11 @@ s32 func_80B55180(EnAn* this, PlayState* play) {
             (this->scheduleResult == ANJU_SCH_2D) || (this->scheduleResult == ANJU_SCH_2F) ||
             (this->scheduleResult == ANJU_SCH_30) || (this->scheduleResult == ANJU_SCH_31) ||
             (this->scheduleResult == ANJU_SCH_34) || (this->scheduleResult == ANJU_SCH_35)) {
-            this->unk_360 |= 0x20;
+            this->stateFlags |= ENAN_STATE_20;
         }
 
         if ((this->scheduleResult == ANJU_SCH_3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
-            this->unk_360 &= ~0x20;
+            this->stateFlags &= ~ENAN_STATE_20;
         }
 
         this->actionFunc = func_80B57A44;
@@ -1419,7 +1419,7 @@ s32 func_80B552E4(EnAn* this, PlayState* play) {
         if (!this->unk_3B0) {
             this->unk_38A = ENAN_FACE_0;
             this->faceIndex = ENAN_FACE_0;
-            this->unk_360 |= 0x300;
+            this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
             this->unk_38E = 8;
             this->cueId = -1;
             this->unk_3B0 = true;
@@ -1465,19 +1465,19 @@ void func_80B553AC(EnAn* this) {
 }
 
 void func_80B554E8(EnAn* this) {
-    if (this->unk_360 & 0x20) {
+    if (this->stateFlags & ENAN_STATE_20) {
         if ((this->unk_218 != NULL) && (this->unk_218->update != NULL)) {
             if (DECR(this->unk_388) == 0) {
                 func_80B553AC(this);
-                this->unk_360 &= ~0x200;
-                this->unk_360 |= 0x80;
+                this->stateFlags &= ~ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_80;
                 return;
             }
         }
     }
 
-    if (this->unk_360 & 0x80) {
-        this->unk_360 &= ~0x80;
+    if (this->stateFlags & ENAN_STATE_80) {
+        this->stateFlags &= ~ENAN_STATE_80;
         this->unk_37C = 0;
         this->unk_37E = 0;
         this->unk_388 = 20;
@@ -1485,7 +1485,7 @@ void func_80B554E8(EnAn* this) {
     }
 
     if (DECR(this->unk_388) == 0) {
-        this->unk_360 |= 0x200;
+        this->stateFlags |= ENAN_STATE_200;
     }
 }
 
@@ -1501,7 +1501,7 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
 
         case ANJU_SCH_16:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_23);
-            this->unk_360 |= 0x2000;
+            this->stateFlags |= ENAN_STATE_2000;
             break;
 
         case ANJU_SCH_E:
@@ -1520,7 +1520,7 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
         case ANJU_SCH_34:
         case ANJU_SCH_35:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_22);
-            this->unk_360 |= 0x2000;
+            this->stateFlags |= ENAN_STATE_2000;
             break;
 
         default:
@@ -1542,13 +1542,13 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
 void func_80B556F8(EnAn* this, PlayState* play) {
     if (this->unk_396 == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_6);
-        this->unk_360 &= ~0x20;
-        this->unk_360 |= 0x200;
+        this->stateFlags &= ~ENAN_STATE_20;
+        this->stateFlags |= ENAN_STATE_200;
         this->unk_396++;
     } else if ((this->unk_396 == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
-        this->unk_360 &= ~0x200;
-        this->unk_360 |= 0x20;
+        this->stateFlags &= ~ENAN_STATE_200;
+        this->stateFlags |= ENAN_STATE_20;
         this->unk_396++;
     }
 }
@@ -1556,13 +1556,13 @@ void func_80B556F8(EnAn* this, PlayState* play) {
 void func_80B557AC(EnAn* this, PlayState* play) {
     if (this->unk_396 == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_3);
-        this->unk_360 &= 0xFFDF;
-        this->unk_360 |= 0x200;
+        this->stateFlags &= ~ENAN_STATE_20;
+        this->stateFlags |= ENAN_STATE_200;
         this->unk_396++;
     } else if ((this->unk_396 == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
-        this->unk_360 &= 0xFDFF;
-        this->unk_360 |= 0x20;
+        this->stateFlags &= ~ENAN_STATE_200;
+        this->stateFlags |= ENAN_STATE_20;
         this->unk_396++;
     }
 }
@@ -1570,13 +1570,13 @@ void func_80B557AC(EnAn* this, PlayState* play) {
 void func_80B55860(EnAn* this, PlayState* play) {
     if (this->unk_396 == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_4);
-        this->unk_360 |= 0x200;
-        this->unk_360 &= 0xFFDF;
+        this->stateFlags |= ENAN_STATE_200;
+        this->stateFlags &= ~ENAN_STATE_20;
         this->unk_396++;
     } else if ((this->unk_396 == 1) && (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0)) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
-        this->unk_360 &= 0xFDFF;
-        this->unk_360 |= 0x20;
+        this->stateFlags &= ~ENAN_STATE_200;
+        this->stateFlags |= ENAN_STATE_20;
         this->unk_396++;
     }
 }
@@ -1586,13 +1586,13 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
     u16 textId = play->msgCtx.currentTextId;
 
     if (player->stateFlags1 & PLAYER_STATE1_40) {
-        this->unk_360 |= 0x400;
-        if (this->prevTextId != textId) {
+        this->stateFlags |= ENAN_STATE_400;
 
+        if (this->prevTextId != textId) {
             switch (textId) {
                 case 0x28E5:
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_5);
-                    this->unk_360 &= 0xDFFF;
+                    this->stateFlags &= ~ENAN_STATE_2000;
                     break;
 
                 case 0x28BA:
@@ -1624,8 +1624,8 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
 
                 case 0x28EB:
                     if (this->animIndex != ENAN_ANIM_20) {
-                        this->unk_360 &= 0xBFDF;
-                        this->unk_360 |= 0x200;
+                        this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_4000);
+                        this->stateFlags |= ENAN_STATE_200;
                         EnAn_ChangeAnim(this, play, ENAN_ANIM_20);
                     }
                     break;
@@ -1640,7 +1640,7 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
                     break;
 
                 case 0x28E6:
-                    this->unk_360 &= 0xDFFF;
+                    this->stateFlags &= ~ENAN_STATE_2000;
                     this->unk_18C = func_80B55860;
                     this->unk_396 = 0;
                     break;
@@ -1831,10 +1831,10 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
         }
 
         this->prevTextId = textId;
-    } else if (this->unk_360 & 0x400) {
+    } else if (this->stateFlags & ENAN_STATE_400) {
         this->unk_18C = NULL;
         this->prevTextId = 0;
-        this->unk_360 &= ~0x400;
+        this->stateFlags &= ~ENAN_STATE_400;
         this->faceIndex = this->unk_38A;
         this->unk_38E = 4;
         func_80B555C8(this, play);
@@ -1937,11 +1937,11 @@ s32 func_80B5600C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if (func_80B55D98(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_PM) != 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
-        SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
-        this->unk_360 |= 0x120;
-        this->unk_360 |= 0x200;
+        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_100;
+        this->stateFlags |= ENAN_STATE_200;
     }
 
     return ret;
@@ -1952,11 +1952,11 @@ s32 func_80B56094(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if (func_80B55D98(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_IG) != 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
-        SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
-        this->unk_360 |= 0x120;
-        this->unk_360 |= 0x200;
+        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_100;
+        this->stateFlags |= ENAN_STATE_200;
     }
 
     return ret;
@@ -1967,11 +1967,11 @@ s32 func_80B5611C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if (func_80B55D98(this, play, scheduleOutput, 4, 0x243) != 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_15);
-        SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
-        this->unk_360 |= 0x120;
-        this->unk_360 |= 0xA00;
+        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_100;
+        this->stateFlags |= ENAN_STATE_200 | ENAN_STATE_800;
     }
 
     return ret;
@@ -2033,24 +2033,24 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 case ANJU_SCH_1A:
                 case ANJU_SCH_1B:
                 case ANJU_SCH_1C:
-                    this->unk_360 |= 0x900;
+                    this->stateFlags |= ENAN_STATE_800 | ENAN_STATE_100;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_16);
                     break;
 
                 case ANJU_SCH_24:
                 case ANJU_SCH_27:
-                    this->unk_360 |= 0x2100;
+                    this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_2000;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_22);
                     break;
 
                 default:
-                    this->unk_360 |= 0x100;
+                    this->stateFlags |= ENAN_STATE_100;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_7);
                     break;
             }
 
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-            this->unk_360 |= 0x200;
+            this->stateFlags |= ENAN_STATE_200;
             this->actor.gravity = 0.0f;
             ret = true;
         }
@@ -2096,8 +2096,8 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->timePathWaypointTime = this->timePathTotalTime / var_v1_2;
 
         this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + 2;
-        this->unk_360 &= ~8;
-        this->unk_360 &= ~0x10;
+        this->stateFlags &= ~ENAN_STATE_8;
+        this->stateFlags &= ~ENAN_STATE_10;
 
         switch (scheduleOutput->result) {
             case ANJU_SCH_2C:
@@ -2123,28 +2123,28 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         switch (scheduleOutput->result) {
             case ANJU_SCH_2A:
             case ANJU_SCH_2B:
-                SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+                SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 /* fallthrough */
             case ANJU_SCH_2C:
             case ANJU_SCH_2D:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_16);
-                this->unk_360 |= 0x300;
-                this->unk_360 |= 0x800;
+                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_800;
                 break;
 
             case ANJU_SCH_34:
             case ANJU_SCH_35:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_22);
-                SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+                SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
-                this->unk_360 |= 0x300;
-                this->unk_360 |= 0x2000;
+                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_2000;
                 break;
 
             case ANJU_SCH_32:
             case ANJU_SCH_33:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_7);
-                this->unk_360 |= 0x300;
+                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 break;
 
             case ANJU_SCH_36:
@@ -2158,16 +2158,16 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_3E:
             case ANJU_SCH_3F:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_18);
-                this->unk_360 |= 0x300;
-                this->unk_360 |= 0x1000;
+                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_1000;
                 break;
 
             case ANJU_SCH_28:
             case ANJU_SCH_2F:
             case ANJU_SCH_30:
             case ANJU_SCH_31:
-                SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-                this->unk_360 |= 0x300;
+                SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 /* fallthrough */
             default:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_7);
@@ -2207,10 +2207,10 @@ s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
         if (scheduleOutput->result == ANJU_SCH_16) {
             EnAn_ChangeAnim(this, play, ENAN_ANIM_23);
-            SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+            SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
-            this->unk_360 |= 0x300;
-            this->unk_360 |= 0x2000;
+            this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+            this->stateFlags |= ENAN_STATE_2000;
         }
         ret = true;
     }
@@ -2251,21 +2251,21 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_12:
             case ANJU_SCH_17:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
-                SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+                SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->unk_37A = 0;
-                this->unk_360 |= 0x300;
+                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 if (scheduleOutput->result == ANJU_SCH_12) {
                     this->unk_374 = 70.0f;
                 }
                 break;
 
             case ANJU_SCH_3:
-                this->unk_360 |= 0x300;
-                this->unk_360 |= 0x1000;
+                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_1000;
 
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_20);
-                    this->unk_360 |= 0x40;
+                    this->stateFlags |= ENAN_STATE_40;
                     this->actor.world.rot.y += 0x7FF8;
                     this->actor.shape.rot.y = this->actor.world.rot.y;
                     this->unk_37A = 4;
@@ -2281,10 +2281,10 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
             case ANJU_SCH_E:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_12);
-                SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+                SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
-                this->unk_360 |= 0x300;
-                this->unk_360 |= 0x8000;
+                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_8000;
                 break;
         }
         ret = true;
@@ -2305,10 +2305,10 @@ s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if (scheduleOutput->result == ANJU_SCH_C) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_11);
-        SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
-        this->unk_360 |= 0x300;
-        this->unk_360 |= 0x40;
+        this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+        this->stateFlags |= ENAN_STATE_40;
 
         this->unk_38A = ENAN_FACE_5;
         this->faceIndex = ENAN_FACE_5;
@@ -2330,7 +2330,7 @@ s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     switch (scheduleOutput->result) {
         case ANJU_SCH_1:
-            SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+            SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             EnAn_ChangeAnim(this, play, ENAN_ANIM_9);
             break;
 
@@ -2342,8 +2342,8 @@ s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             break;
     }
 
-    this->unk_360 |= 0x300;
-    this->unk_360 |= 0x40;
+    this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+    this->stateFlags |= ENAN_STATE_40;
 
     this->actor.gravity = 0.0f;
     return true;
@@ -2357,8 +2357,8 @@ s32 func_80B56CAC(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.shape.rot, &D_80B58EA4);
     Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
     EnAn_ChangeAnim(this, play, ENAN_ANIM_0);
-    SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-    this->unk_360 |= 0x300;
+    SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
 
     return 1;
 }
@@ -2368,7 +2368,7 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
 
     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actor.targetMode = TARGET_MODE_6;
-    this->unk_360 = 0;
+    this->stateFlags = 0;
     this->unk_38A = ENAN_FACE_0;
     this->faceIndex = ENAN_FACE_0;
     this->unk_38E = 8;
@@ -2521,13 +2521,13 @@ s32 func_80B5702C(EnAn* this, PlayState* play) {
     sp54 = 0;
     SubS_TimePathing_FillKnots(knots, 3, this->timePath->count + 3);
 
-    if (!(this->unk_360 & 8)) {
+    if (!(this->stateFlags & ENAN_STATE_8)) {
         timePathTargetPos = gZeroVec3f;
         SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime, this->timePathWaypointTime, this->timePathTotalTime,
                                 &this->timePathWaypoint, knots, &timePathTargetPos, this->timePathTimeSpeed);
         SubS_TimePathing_ComputeInitialY(play, this->timePath, this->timePathWaypoint, &timePathTargetPos);
         this->actor.world.pos.y = timePathTargetPos.y;
-        this->unk_360 |= 8;
+        this->stateFlags |= ENAN_STATE_8;
     } else {
         timePathTargetPos = this->timePathTargetPos;
     }
@@ -2544,7 +2544,7 @@ s32 func_80B5702C(EnAn* this, PlayState* play) {
 
     if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime, this->timePathWaypointTime, this->timePathTotalTime,
                                 &this->timePathWaypoint, knots, &this->timePathTargetPos, this->timePathTimeSpeed)) {
-        this->unk_360 |= 0x10;
+        this->stateFlags |= ENAN_STATE_10;
     } else {
         sp70 = this->actor.world.pos;
         sp64 = this->timePathTargetPos;
@@ -2566,26 +2566,26 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
     switch (this->scheduleResult) {
         case ANJU_SCH_17:
             if ((func_80B55F8C(play) != 0) && (func_80B55ECC(this) != 0)) {
-                this->unk_360 |= 0x20;
+                this->stateFlags |= ENAN_STATE_20;
             } else {
-                this->unk_360 &= ~0x20;
+                this->stateFlags &= ~ENAN_STATE_20;
             }
             break;
 
         case ANJU_SCH_1:
             if (func_80B55ECC(this) != 0) {
-                this->unk_360 |= 0x20;
+                this->stateFlags |= ENAN_STATE_20;
             } else {
-                this->unk_360 &= ~0x20;
+                this->stateFlags &= ~ENAN_STATE_20;
             }
             break;
 
         case ANJU_SCH_12:
         case ANJU_SCH_13:
             if (func_80B55ECC(this) != 0) {
-                this->unk_360 |= 0x20;
+                this->stateFlags |= ENAN_STATE_20;
             } else {
-                this->unk_360 &= ~0x20;
+                this->stateFlags &= ~ENAN_STATE_20;
             }
             break;
 
@@ -2615,7 +2615,7 @@ s32 func_80B573F4(EnAn* this, PlayState* play) {
             if (temp1 == temp2) {
                 Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_19);
-                this->unk_360 |= 0x40;
+                this->stateFlags |= ENAN_STATE_40;
                 this->unk_37A++;
             }
             break;
@@ -2628,14 +2628,14 @@ s32 func_80B573F4(EnAn* this, PlayState* play) {
 
         case 0x3:
             if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3000) {
-                SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+                SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             } else {
-                SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+                SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
             }
             break;
 
         case 0x4:
-            SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+            SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             this->unk_37A++;
             break;
     }
@@ -2648,15 +2648,15 @@ s32 func_80B575BC(EnAn* this, PlayState* play) {
     s16 temp_v1 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, temp));
 
     if (temp_v1 < 0x4000) {
-        SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else {
-        SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     }
 
     if (func_80B55ECC(this) != 0) {
-        this->unk_360 |= 0x20;
+        this->stateFlags |= ENAN_STATE_20;
     } else {
-        this->unk_360 &= ~0x20;
+        this->stateFlags &= ~ENAN_STATE_20;
     }
 
     return 1;
@@ -2667,12 +2667,12 @@ s32 func_80B57674(EnAn* this, PlayState* play) {
     s16 temp_v1 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, temp));
 
     if (temp_v1 < 0x3000) {
-        SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else {
-        SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     }
 
-    this->unk_360 &= ~0x20;
+    this->stateFlags &= ~ENAN_STATE_20;
     return 1;
 }
 
@@ -2772,7 +2772,7 @@ void func_80B577F0(EnAn* this, PlayState* play) {
 
     this->actor.draw = EnAn_Draw;
     Actor_SetScale(&this->actor, 0.01f);
-    this->unk_360 = 0;
+    this->stateFlags = 0;
     this->scheduleResult = ANJU_SCH_NONE;
 
     this->actionFunc = func_80B578F8;
@@ -2812,10 +2812,10 @@ void func_80B578F8(EnAn* this, PlayState* play) {
 
 void func_80B57A44(EnAn* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventFunc, &this->msgScriptResumePos) != 0) {
-        SubS_SetOfferMode(&this->unk_360, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
-        this->unk_360 &= ~0x20;
-        this->unk_360 |= 0x200;
+        this->stateFlags &= ~ENAN_STATE_20;
+        this->stateFlags |= ENAN_STATE_200;
         this->unk_388 = 20;
         this->msgScriptResumePos = 0;
         this->actionFunc = func_80B578F8;
@@ -2931,9 +2931,9 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
         func_80B53BA8(this, play);
         EnAn_UpdateFace(this);
         func_80B554E8(this);
-        SubS_Offer(&this->actor, play, this->unk_374, 30.0f, 0, this->unk_360 & SUBS_OFFER_MODE_MASK);
+        SubS_Offer(&this->actor, play, this->unk_374, 30.0f, 0, this->stateFlags & SUBS_OFFER_MODE_MASK);
 
-        if (!(this->unk_360 & 0x40)) {
+        if (!(this->stateFlags & ENAN_STATE_40)) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4U);
         }
@@ -2966,8 +2966,8 @@ void EnAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     s32 stepRot;
     s32 overrideRot;
 
-    if (!(this->unk_360 & 0x200)) {
-        if (this->unk_360 & 0x80) {
+    if (!(this->stateFlags & ENAN_STATE_200)) {
+        if (this->stateFlags & ENAN_STATE_80) {
             overrideRot = true;
         } else {
             overrideRot = false;
