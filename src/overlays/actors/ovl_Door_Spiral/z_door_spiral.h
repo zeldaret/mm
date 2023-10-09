@@ -8,14 +8,12 @@ struct DoorSpiral;
 typedef void (*DoorSpiralActionFunc)(struct DoorSpiral*, PlayState*);
 
 #define DOORSPIRAL_GET_FC00(thisx) ((u16)(thisx)->params >> 0xA)
-
-// TODO: Below figure out the bit mask and update to match abover
-#define DOORSPIRAL_GET_SOME_FLAG(thisx) (((thisx)->params >> 8) & 3)
-#define DOORSPIRAL_GET_SOME_FLAG_2(thisx) (((thisx)->params >> 7) & 1)
+#define DOORSPIRAL_GET_TYPE(thisx) (((thisx)->params >> 8) & 0x3)
+#define DOORSPIRAL_GET_80(thisx) (((thisx)->params >> 7) & 0x1)
 
 typedef struct DoorSpiral {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ u8 unk144;
+    /* 0x144 */ u8 shouldClimb;
     /* 0x145 */ s8 unk145;
     /* 0x146 */ u8 unk146;
     /* 0x147 */ u8 unk147;

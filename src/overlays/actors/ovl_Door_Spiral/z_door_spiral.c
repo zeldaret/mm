@@ -43,11 +43,25 @@ ActorInit Door_Spiral_InitVars = {
     (ActorFunc)DoorSpiral_Draw,
 };
 
-UNK_TYPE D_809A3250[] = {
-    0x00000000, 0x00000000, 0x00000000, 0x820C320F, 0x050219E0, 0x0501D980, 0x00000000, 0x820C320F,
-    0x06004448, 0x060007A8, 0x00000000, 0x820C320F, 0x060051B8, 0x060014C8, 0x00000000, 0x820C320F,
-    0x06009278, 0x06006128, 0x00000000, 0x820C320F, 0x06013EA8, 0x06012B70, 0x00000000, 0x820C320F,
-    0x06000EA0, 0x06000590, 0x00000000, 0x820C320F, 0x06002110, 0x060012C0, 0x00000000, 0x820C320F,
+typedef struct {
+    /* 0x0 */ Gfx* unk_00;
+    /* 0x4 */ Gfx* unk_04;
+    /* 0x8 */ u32 unk_08;
+    /* 0x9 */ u8 unk_09;
+    /* 0xA */ u8 translateZ;
+    /* 0xB */ u8 unk_0B;
+    /* 0xC */ u8 unk_0C;
+} SpiralInfo; // size = 0xD
+
+SpiralInfo sSpiralInfoTable[] = {
+    { NULL, NULL, 0, 130, 12, 50, 15 },
+    { gameplay_dangeon_keep_DL_0219E0, gameplay_dangeon_keep_DL_01D980, 0, 130, 12, 50, 15 },
+    { object_numa_obj_DL_004448, object_numa_obj_DL_0007A8, 0, 130, 12, 50, 15 },
+    { object_numa_obj_DL_0051B8, object_numa_obj_DL_0014C8, 0, 130, 12, 50, 15 },
+    { object_hakugin_obj_DL_009278, object_hakugin_obj_DL_006128, 0, 130, 12, 50, 15 },
+    { object_ikana_obj_DL_013EA8, object_ikana_obj_DL_012B70, 0, 130, 12, 50, 15 },
+    { object_ikninside_obj_DL_000EA0, object_ikninside_obj_DL_000590, 0, 130, 12, 50, 15 },
+    { object_danpei_object_DL_002110, object_danpei_object_DL_0012C0, 0, 130, 12, 50, 15 },
 };
 
 typedef struct {
@@ -55,13 +69,19 @@ typedef struct {
     /* 0x2 */ u8 index;
 } SpiralObjectInfo; // size = 0x4
 
-SpiralObjectInfo D_809A32D0[] = {
+SpiralObjectInfo sSpiralObjectInfoTable[] = {
     { GAMEPLAY_KEEP, 0 },    { GAMEPLAY_DANGEON_KEEP, 1 }, { OBJECT_NUMA_OBJ, 2 },      { OBJECT_HAKUGIN_OBJ, 4 },
     { OBJECT_IKANA_OBJ, 5 }, { OBJECT_DANPEI_OBJECT, 7 },  { OBJECT_IKNINSIDE_OBJ, 6 },
 };
 
-UNK_TYPE D_809A32EC[] = {
-    0x001B0200, 0x00210300, 0x00160400, 0x00180400, 0x00300500, 0x00560600, 0x001D0600,
+typedef struct {
+    /* 0x0 */ s16 sceneId;
+    /* 0x2 */ u8 index;
+} SpiralSceneInfo; // size = 0x4
+
+SpiralSceneInfo sSpiralSceneInfoTable[] = {
+    { SCENE_MITURIN, 2 },     { SCENE_HAKUGIN, 3 },   { SCENE_INISIE_N, 4 }, { SCENE_INISIE_R, 4 },
+    { SCENE_DANPEI2TEST, 5 }, { SCENE_IKNINSIDE, 6 }, { SCENE_CASTLE, 6 },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -71,29 +91,44 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
 };
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2B60.s")
 void func_809A2B60(DoorSpiral* this, DoorSpiralActionFunc actionFunc) {
     this->actionFunc = actionFunc;
     this->unk14A = 0;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2B70.s")
 s32 func_809A2B70(DoorSpiral* this, PlayState* play) {
-    SpiralObjectInfo* z = &D_809A32D0[this->unk147];
-    this->unk148 = z->index;
+    SpiralObjectInfo* spiralObjectInfo = &sSpiralObjectInfoTable[this->unk147];
+    this->unk148 = spiralObjectInfo->index;
     if ((this->unk148 == 7) || ((this->unk148 == 2) && (play->roomCtx.curRoom.enablePosLights != 0))) {
         if (this->unk148 == 2) {
             this->unk148 = 3;
         }
-        this->actor.flags |= 0x10000000;
+        this->actor.flags |= ACTOR_FLAG_10000000;
     }
     func_809A2B60(this, func_809A2FF8);
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2BF8.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2BF8.s")
+u8 func_809A2BF8(PlayState* play) {
+    SpiralSceneInfo* spiralSceneInfo = sSpiralSceneInfoTable;
+    s32 i;
+    u8 var_v1;
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/DoorSpiral_Init.s")
+    for (i = 0; i < ARRAY_COUNT(sSpiralSceneInfoTable); i++) {
+        if (play->sceneId == spiralSceneInfo->sceneId) {
+            break;
+        }
+        spiralSceneInfo += 0x1;
+    }
+    if (i < ARRAY_COUNT(sSpiralSceneInfoTable)) {
+        var_v1 = spiralSceneInfo->index;
+    } else {
+        var_v1 = (Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP) >= 0) ? 1 : 0;
+    }
+    return var_v1;
+}
+
 void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     DoorSpiral* this = THIS;
     s32 transitionActorId = DOORSPIRAL_GET_FC00(thisx);
@@ -103,10 +138,10 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
     } else {
         Actor_ProcessInitChain(&this->actor, sInitChain);
-        this->unk145 = DOORSPIRAL_GET_SOME_FLAG(thisx);
-        this->unk146 = DOORSPIRAL_GET_SOME_FLAG_2(thisx);
+        this->unk145 = DOORSPIRAL_GET_TYPE(thisx);
+        this->unk146 = DOORSPIRAL_GET_80(thisx);
         this->unk147 = func_809A2BF8(play);
-        temp_v0_2 = Object_GetIndex(&play->objectCtx, D_809A32D0[this->unk147].objectId);
+        temp_v0_2 = Object_GetIndex(&play->objectCtx, sSpiralObjectInfoTable[this->unk147].objectId);
         this->objIndex = temp_v0_2;
         if (temp_v0_2 < 0) {
             Actor_Kill(&this->actor);
@@ -117,13 +152,11 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/DoorSpiral_Destroy.s")
 void DoorSpiral_Destroy(Actor* thisx, PlayState* play) {
     s32 transitionActorId = DOORSPIRAL_GET_FC00(thisx);
     play->doorCtx.transitionActorList[transitionActorId].id = -play->doorCtx.transitionActorList[transitionActorId].id;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2DB0.s")
 void func_809A2DB0(DoorSpiral* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objIndex) != 0) {
         this->actor.objBankIndex = this->objIndex;
@@ -131,7 +164,6 @@ void func_809A2DB0(DoorSpiral* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2E08.s")
 f32 func_809A2E08(PlayState* play, DoorSpiral* this, f32 arg2, f32 arg3, f32 arg4) {
     Player* player = GET_PLAYER(play);
     Vec3f point;
@@ -150,14 +182,30 @@ f32 func_809A2E08(PlayState* play, DoorSpiral* this, f32 arg2, f32 arg3, f32 arg
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2EA0.s")
+s32 func_809A2EA0(DoorSpiral* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A2FF8.s")
+    if (Player_InCsMode(play) == 0) {
+        SpiralInfo* temp_v0 = &sSpiralInfoTable[this->unk148];
+        f32 temp_fv0 = func_809A2E08(play, this, 0.0f, temp_v0->unk_0B, temp_v0->unk_0C);
+        if (fabsf(temp_fv0) < 64.0f) {
+            s16 var_v0 = player->actor.shape.rot.y - this->actor.shape.rot.y;
+            if (temp_fv0 > 0.0f) {
+                var_v0 = 0x8000 - var_v0;
+            }
+            if (ABS_ALT(var_v0) < 0x3000) {
+                return (temp_fv0 >= 0.0f) ? 1.0f : -1.0f;
+            }
+        }
+    }
+    return 0;
+}
+
 void func_809A2FF8(DoorSpiral* this, PlayState* play) {
     Player* player;
     u32 index;
 
-    if (this->unk144) {
+    if (this->shouldClimb) {
         func_809A2B60(this, func_809A3098);
     } else if (func_809A2EA0(this, play) != 0) {
         player = GET_PLAYER(play);
@@ -170,17 +218,15 @@ void func_809A2FF8(DoorSpiral* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/func_809A3098.s")
 void func_809A3098(DoorSpiral* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 0x20000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_20000000)) {
         func_809A2B60(this, func_809A2DB0);
-        this->unk144 = 0;
+        this->shouldClimb = 0;
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/DoorSpiral_Update.s")
 void DoorSpiral_Update(Actor* thisx, PlayState* play) {
     DoorSpiral* this = THIS;
     Player* player = GET_PLAYER(play);
@@ -190,4 +236,25 @@ void DoorSpiral_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Spiral/DoorSpiral_Draw.s")
+void DoorSpiral_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
+    SpiralInfo* temp;
+    SpiralInfo** temp_a3;
+    DoorSpiral* this = THIS;
+
+    if (this->actor.objBankIndex == this->objIndex) {
+        temp_a3 = (SpiralInfo**)&sSpiralInfoTable[this->unk148];
+        temp = temp_a3[this->unk146];
+        if (temp != NULL) {
+            OPEN_DISPS(play->state.gfxCtx);
+
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            gSPDisplayList(POLY_OPA_DISP++, temp_a3[this->unk146]);
+
+            CLOSE_DISPS(play->state.gfxCtx);
+        }
+    }
+}
