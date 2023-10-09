@@ -105,8 +105,8 @@ void ObjSyokudai_Init(Actor* thisx, PlayState* play) {
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
 
     if (OBJ_SYOKUDAI_GET_START_LIT(thisx) ||
-        ((type != OBJ_SYOKUDAI_TYPE_NO_SWITCH || switchFlag != 0x7F) && Flags_GetSwitch(play, switchFlag))) {
-
+        (((type != OBJ_SYOKUDAI_TYPE_NO_SWITCH) || (switchFlag != OBJ_SYOKUDAI_SWITCH_FLAG_NONE)) &&
+         Flags_GetSwitch(play, switchFlag))) {
         s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
 
         this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
@@ -267,9 +267,11 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->standCollider.base);
     Collider_UpdateCylinder(thisx, &this->flameCollider);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->flameCollider.base);
-    if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_OUT) && (--this->snuffTimer == OBJ_SYOKUDAI_SNUFF_OUT) &&
-        (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
-        sNumLitTorchesInGroup--;
+    if (this->snuffTimer > OBJ_SYOKUDAI_SNUFF_OUT) {
+        this->snuffTimer--;
+        if ((this->snuffTimer == OBJ_SYOKUDAI_SNUFF_OUT) && (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
+            sNumLitTorchesInGroup--;
+        }
     }
     if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
         s32 pad2;

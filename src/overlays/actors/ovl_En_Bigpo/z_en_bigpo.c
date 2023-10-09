@@ -222,7 +222,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     this->mainColor.b = 210;
     this->mainColor.a = 0; // fully invisible
 
-    if ((this->switchFlag != 0xFF) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag != BIG_POE_SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
 
@@ -756,7 +756,7 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
 
 void EnBigpo_LanternFalling(EnBigpo* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND || this->actor.floorHeight == BGCHECK_Y_MIN) {
-        if (this->switchFlag != 0xFF) {
+        if (this->switchFlag != BIG_POE_SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
 
