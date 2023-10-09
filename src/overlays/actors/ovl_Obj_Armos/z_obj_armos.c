@@ -198,7 +198,7 @@ void ObjArmos_Init(Actor* thisx, PlayState* play) {
 
     if (sp40 == 0) {
         func_809A57D8(this);
-    } else if (Flags_GetSwitch(play, OBJARMOS_GET_7F(&this->dyna.actor))) {
+    } else if (Flags_GetSwitch(play, OBJARMOS_GET_SWITCH_FLAG(&this->dyna.actor))) {
         if (sp44 == OBJARMOS_ROT_7_0) {
             this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (sp40 * 60);
             func_809A57D8(this);
@@ -285,7 +285,7 @@ void func_809A562C(ObjArmos* this, PlayState* play) {
             }
         } else {
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-            Flags_SetSwitch(play, OBJARMOS_GET_7F(&this->dyna.actor));
+            Flags_SetSwitch(play, OBJARMOS_GET_SWITCH_FLAG(&this->dyna.actor));
             sp20 = true;
         }
 

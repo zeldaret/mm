@@ -35,6 +35,6 @@
         <Limb Name="gNiwUpperBodyRootLimb" LimbType="Standard" EnumName="NIW_LIMB_UPPER_BODY" Offset="0x24D0"/>
         <Limb Name="gNiwNeckLimb" LimbType="Standard" EnumName="NIW_LIMB_NECK" Offset="0x24DC"/>
         <Limb Name="gNiwHeadLimb" LimbType="Standard" EnumName="NIW_LIMB_HEAD" Offset="0x24E8"/>
-        <Skeleton Name="gNiwSkeleton" Type="Flex" LimbType="Standard" LimbNone="NIW_LIMB_NONE" LimbMax="NIW_LIMB_MAX" EnumName="ObjectNiwLimb" Offset="0x2530" />
+        <Skeleton Name="gNiwSkel" Type="Flex" LimbType="Standard" LimbNone="NIW_LIMB_NONE" LimbMax="NIW_LIMB_MAX" EnumName="ObjectNiwLimb" Offset="0x2530" />
     </File>
 </Root>

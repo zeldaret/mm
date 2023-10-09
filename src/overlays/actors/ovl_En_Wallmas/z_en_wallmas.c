@@ -198,7 +198,7 @@ void EnWallmas_Destroy(Actor* thisx, PlayState* play) {
 void EnWallmas_Freeze(EnWallmas* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = 3;
     this->timer = 80;

@@ -189,7 +189,7 @@ weekEventReg = {
     (22 << 8) | 0x40: "WEEKEVENTREG_22_40",
     (22 << 8) | 0x80: "WEEKEVENTREG_22_80",
     (23 << 8) | 0x01: "WEEKEVENTREG_23_01",
-    (23 << 8) | 0x02: "WEEKEVENTREG_23_02",
+    (23 << 8) | 0x02: "WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK",
     (23 << 8) | 0x04: "WEEKEVENTREG_23_04",
     (23 << 8) | 0x08: "WEEKEVENTREG_23_08",
     (23 << 8) | 0x10: "WEEKEVENTREG_23_10",

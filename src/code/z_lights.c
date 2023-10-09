@@ -257,15 +257,15 @@ void LightContext_Init(PlayState* play, LightContext* lightCtx) {
 }
 
 void LightContext_SetAmbientColor(LightContext* lightCtx, u8 r, u8 g, u8 b) {
-    lightCtx->ambient.r = r;
-    lightCtx->ambient.g = g;
-    lightCtx->ambient.b = b;
+    lightCtx->ambientColor[0] = r;
+    lightCtx->ambientColor[1] = g;
+    lightCtx->ambientColor[2] = b;
 }
 
 void LightContext_SetFog(LightContext* lightCtx, u8 r, u8 g, u8 b, s16 near, s16 far) {
-    lightCtx->fogColor.r = r;
-    lightCtx->fogColor.g = g;
-    lightCtx->fogColor.b = b;
+    lightCtx->fogColor[0] = r;
+    lightCtx->fogColor[1] = g;
+    lightCtx->fogColor[2] = b;
     lightCtx->fogNear = near;
     lightCtx->zFar = far;
 }
@@ -274,7 +274,7 @@ void LightContext_SetFog(LightContext* lightCtx, u8 r, u8 g, u8 b, s16 near, s16
  * Allocate a new Lights group and initilize the ambient color with that provided by LightContext
  */
 Lights* LightContext_NewLights(LightContext* lightCtx, GraphicsContext* gfxCtx) {
-    return Lights_New(gfxCtx, lightCtx->ambient.r, lightCtx->ambient.g, lightCtx->ambient.b);
+    return Lights_New(gfxCtx, lightCtx->ambientColor[0], lightCtx->ambientColor[1], lightCtx->ambientColor[2]);
 }
 
 void LightContext_InitList(PlayState* play, LightContext* lightCtx) {
