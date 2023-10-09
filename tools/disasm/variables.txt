@@ -14444,7 +14444,7 @@
     0x80B534A8:("D_80B534A8","f32","",0x4),
     0x80B534AC:("D_80B534AC","f32","",0x4),
     0x80B581D0:("sScheduleScript","UNK_TYPE1","",0x1),
-    0x80B58618:("D_80B58618","UNK_TYPE1","",0x1),
+    0x80B58618:("sSearchTimePathLimit","UNK_TYPE1","",0x1),
     0x80B58718:("D_80B58718","UNK_TYPE1","",0x1),
     0x80B58784:("D_80B58784","UNK_TYPE1","",0x1),
     0x80B58808:("D_80B58808","UNK_TYPE1","",0x1),

@@ -14010,7 +14010,7 @@
     0x80B53840:("func_80B53840",),
     0x80B539CC:("func_80B539CC",),
     0x80B53A7C:("func_80B53A7C",),
-    0x80B53B3C:("func_80B53B3C",),
+    0x80B53B3C:("EnAn_FindDoor",),
     0x80B53BA8:("func_80B53BA8",),
     0x80B53CE8:("EnAn_ChangeAnim",),
     0x80B53ED4:("func_80B53ED4",),

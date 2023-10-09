@@ -19,14 +19,14 @@ typedef struct EnAn {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnAnActionFunc actionFunc;
     /* 0x18C */ EnAnUnkFunc unk_18C;
-    /* 0x190 */ ColliderCylinder unk_190;
-    /* 0x1DC */ Path* unk_1DC; // timePath
-    /* 0x1E0 */ Vec3f unk_1E0;
-    /* 0x1EC */ f32 unk_1EC;
-    /* 0x1F0 */ s32 unk_1F0;
-    /* 0x1F4 */ s32 unk_1F4;
-    /* 0x1F8 */ s32 unk_1F8;
-    /* 0x1FC */ s32 unk_1FC;
+    /* 0x190 */ ColliderCylinder collider;
+    /* 0x1DC */ Path* timePath;
+    /* 0x1E0 */ Vec3f timePathTargetPos;
+    /* 0x1EC */ f32 timePathProgress;
+    /* 0x1F0 */ s32 timePathTotalTime;
+    /* 0x1F4 */ s32 timePathWaypointTime;
+    /* 0x1F8 */ s32 timePathWaypoint;
+    /* 0x1FC */ s32 timePathElapsedTime;
     /* 0x200 */ u8 scheduleResult;
     /* 0x204 */ s32* msgEventScript;
     /* 0x208 */ s8 an2ObjectSlot;
@@ -43,27 +43,27 @@ typedef struct EnAn {
     /* 0x234 */ Vec3f unk_234;
     /* 0x240 */ Vec3f unk_240;
     /* 0x24C */ UNK_TYPE1 unk_24C[0xC];
-    /* 0x258 */ Vec3s unk_258;
+    /* 0x258 */ Vec3s unk_258; // some limb rot
     /* 0x25E */ UNK_TYPE1 unk_25E[0x6];
     /* 0x264 */ Vec3s jointTable[OBJECT_AN1_LIMB_MAX];
     /* 0x2E2 */ Vec3s morphTable[OBJECT_AN1_LIMB_MAX];
-    /* 0x360 */ u16 unk_360; // flags?
-    /* 0x362 */ u16 unk_362;
-    /* 0x364 */ u8 unk_364;
+    /* 0x360 */ u16 unk_360; // stateFlags?
+    /* 0x362 */ u16 prevTextId;
+    /* 0x364 */ u8 cueId;
     /* 0x368 */ f32 unk_368;
     /* 0x36C */ UNK_TYPE1 unk_36C[0x8];
     /* 0x374 */ f32 unk_374;
     /* 0x378 */ s16 unk_378; // schedule time diff
-    /* 0x37A */ s16 unk_37A;
-    /* 0x37C */ s16 unk_37C;
-    /* 0x37E */ s16 unk_37E;
+    /* 0x37A */ s16 unk_37A; // schedule time diff
+    /* 0x37C */ s16 unk_37C; // some limb z rot
+    /* 0x37E */ s16 unk_37E; // some limb y rot
     /* 0x380 */ UNK_TYPE1 unk_380[0x4];
-    /* 0x384 */ s16 unk_384;
-    /* 0x386 */ s16 unk_386;
-    /* 0x388 */ s16 unk_388;
+    /* 0x384 */ s16 timePathTimeSpeed;
+    /* 0x386 */ s16 unk_386; // timer
+    /* 0x388 */ s16 unk_388; // timer
     /* 0x38A */ s16 unk_38A; // face enum
     /* 0x38C */ s16 faceIndex; // face enum
-    /* 0x38E */ s16 unk_38E;
+    /* 0x38E */ s16 unk_38E; // timer
     /* 0x390 */ s16 eyeTexIndex;
     /* 0x392 */ s16 mouthTexIndex;
     /* 0x394 */ s16 unk_394;
@@ -78,7 +78,7 @@ typedef struct EnAn {
     /* 0x3B8 */ s32 unk_3B8;
     /* 0x3BC */ s32 unk_3BC;
     /* 0x3C0 */ s32 unk_3C0;
-    /* 0x3C4 */ s32 unk_3C4;
+    /* 0x3C4 */ s32 unk_3C4; // set but not read
 } EnAn; // size = 0x3C8
 
 #endif // Z_EN_AN_H
