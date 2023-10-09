@@ -1,5 +1,3 @@
-//#include "prevent_bss_reordering.h"
-//#include "prevent_bss_reordering2.h"
 #include "PR/ultratypes.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -20,6 +18,7 @@ s16 gDungeonBossWarpSceneId;
 struct Dummy200 { int x; };
 struct Dummy201 { int x; };
 struct Dummy202 { int x; };
+struct Dummy203 { int x; };
 // clang-format on
 
 #include "global.h"
