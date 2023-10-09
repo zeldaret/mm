@@ -135,7 +135,7 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
     CollisionPoly* colPoly;
     s32 bgId;
 
-    if ((this->switchFlag > SWITCH_FLAG_NONE) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         this->timer = 100;
         this->actionFunc = func_809C464C;
 

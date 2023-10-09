@@ -222,7 +222,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     this->mainColor.b = 210;
     this->mainColor.a = 0; // fully invisible
 
-    if ((this->switchFlag != 0xFF) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag != 0xFF) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
 

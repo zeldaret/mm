@@ -352,7 +352,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
         this->actor.colChkInfo.health = 6;
     }
 
-    if ((this->switchFlag > SWITCH_FLAG_NONE) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }

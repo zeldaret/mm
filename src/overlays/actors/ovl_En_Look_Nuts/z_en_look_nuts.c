@@ -119,7 +119,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     if (this->switchFlag == 0x7F) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag > SWITCH_FLAG_NONE) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
