@@ -2275,8 +2275,8 @@ void Message_Decode(PlayState* play) {
                 spC0 += playerNameLen * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x201) {
                 DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1000, SEGMENT_ROM_START(message_texture_static), 0x900);
-                DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1900,
-                                    SEGMENT_ROM_START(message_texture_static) + 0x900, 0x900);
+                DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1900, SEGMENT_ROM_START(message_texture_static) + 0x900,
+                                    0x900);
                 spE0 = 2;
                 spD2 = 2;
                 msgCtx->unk12012 = msgCtx->textboxY + 8;
