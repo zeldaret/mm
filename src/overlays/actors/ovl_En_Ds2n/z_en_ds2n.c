@@ -71,7 +71,7 @@ void EnDs2n_Init(Actor* thisx, PlayState* play) {
     EnDs2n* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gDs2nSkeleton, &gDs2nIdleAnim, NULL, NULL, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDs2nSkel, &gDs2nIdleAnim, NULL, NULL, 0);
     EnDs2n_SetupIdle(this);
 }
 

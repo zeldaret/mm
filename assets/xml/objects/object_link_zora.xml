@@ -80,7 +80,7 @@
             <Scalar Type="x8"/>
         </Array>
 
-        <DList Name="object_link_zora_DL_011760" Offset="0x11760" />
+        <DList Name="object_link_zora_DL_011760" Offset="0x11760" /> <!-- Original name is "zora_thunder_modelT" -->
         <DList Name="object_link_zora_DL_011A58" Offset="0x11A58" />
         <Texture Name="object_link_zora_Tex_011A60" OutName="tex_011A60" Format="i8" Width="64" Height="32" Offset="0x11A60" />
         <Texture Name="object_link_zora_Tex_012260" OutName="tex_012260" Format="i8" Width="32" Height="64" Offset="0x12260" />

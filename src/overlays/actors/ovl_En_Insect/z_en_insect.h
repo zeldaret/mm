@@ -2,6 +2,7 @@
 #define Z_EN_INSECT_H
 
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 struct EnInsect;
 
@@ -16,8 +17,8 @@ typedef struct EnInsect {
     /* 0x144 */ ColliderJntSph collider;
     /* 0x164 */ ColliderJntSphElement colliderElements[1];
     /* 0x1A4 */ SkelAnime skelAnime;
-    /* 0x1E8 */ Vec3s jointTable[24];
-    /* 0x278 */ Vec3s morphTable[24];
+    /* 0x1E8 */ Vec3s jointTable[BUG_LIMB_MAX];
+    /* 0x278 */ Vec3s morphTable[BUG_LIMB_MAX];
     /* 0x308 */ EnInsectActionFunc actionFunc;
     /* 0x30C */ u16 unk_30C;
     /* 0x30E */ s16 unk_30E;

@@ -9,7 +9,7 @@ typedef void (*EnWarptagActionFunc)(struct EnWarptag*, PlayState*);
 
 typedef struct EnWarptag {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ s8 dangeonKeepObject;
+    /* 0x15C */ s8 dangeonKeepObjectSlot;
     /* 0x15E */ union {
                     s16 reusedValue;      // default name
                     s16 unkValue15E;      // passed to unk play func, mods player rotation, stepped to 0x2710

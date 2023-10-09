@@ -147,11 +147,11 @@ TexturePtr sMonkeyFaceTextures[] = {
     object_mnk_Tex_017120, object_mnk_Tex_017920, object_mnk_Tex_018120,
 };
 
-void EnMnk_MonkeyTiedUp_ChangeAnim(EnMnk* this, s32 animIndex, u8 mode, f32 morphFrames) {
+void EnMnk_MonkeyTiedUp_ChangeAnim(EnMnk* this, s32 animIndex, u8 animMode, f32 morphFrames) {
     Animation_Change(&this->skelAnime, sMonkeyTiedUpAnimations[animIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(&sMonkeyTiedUpAnimations[animIndex]->common), mode, morphFrames);
+                     Animation_GetLastFrame(&sMonkeyTiedUpAnimations[animIndex]->common), animMode, morphFrames);
     Animation_Change(&this->propSkelAnime, sMonkeyTiedUpPoleAnimations[animIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(&sMonkeyTiedUpPoleAnimations[animIndex]->common), mode, morphFrames);
+                     Animation_GetLastFrame(&sMonkeyTiedUpPoleAnimations[animIndex]->common), animMode, morphFrames);
 
     switch (animIndex) {
         case MONKEY_TIEDUP_ANIM_KICKAROUND:
@@ -184,11 +184,11 @@ void EnMnk_MonkeyTiedUp_SetNewAnim(EnMnk* this, s32 animIndex) {
     }
 }
 
-void EnMnk_MonkeyHanging_ChangeAnim(EnMnk* this, s32 animIndex, u8 mode, f32 morphFrames) {
+void EnMnk_MonkeyHanging_ChangeAnim(EnMnk* this, s32 animIndex, u8 animMode, f32 morphFrames) {
     Animation_Change(&this->skelAnime, sMonkeyHangingAnimations[animIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(&sMonkeyHangingAnimations[animIndex]->common), mode, morphFrames);
+                     Animation_GetLastFrame(&sMonkeyHangingAnimations[animIndex]->common), animMode, morphFrames);
     Animation_Change(&this->propSkelAnime, sMonkeyHangingRopeAnimations[animIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(&sMonkeyHangingRopeAnimations[animIndex]->common), mode, morphFrames);
+                     Animation_GetLastFrame(&sMonkeyHangingRopeAnimations[animIndex]->common), animMode, morphFrames);
     this->animIndex = animIndex;
 }
 
@@ -196,7 +196,7 @@ void EnMnk_MonkeyHanging_SetAnim(EnMnk* this, s32 animIndex) {
     EnMnk_MonkeyHanging_ChangeAnim(this, animIndex, ANIMMODE_LOOP, -5.0f);
 }
 
-void EnMnk_Monkey_ChangeAnim(EnMnk* this, s32 animIndex, u8 mode, f32 morphFrames) {
+void EnMnk_Monkey_ChangeAnim(EnMnk* this, s32 animIndex, u8 animMode, f32 morphFrames) {
     s32 pad;
 
     if (animIndex == 100) {
@@ -204,10 +204,10 @@ void EnMnk_Monkey_ChangeAnim(EnMnk* this, s32 animIndex, u8 mode, f32 morphFrame
     }
     if ((animIndex == 4) || (animIndex == 6)) {
         Animation_Change(&this->skelAnime, sMonkeyAnimations[animIndex], -1.0f,
-                         Animation_GetLastFrame(&sMonkeyAnimations[animIndex]->common), 0.0f, mode, morphFrames);
+                         Animation_GetLastFrame(&sMonkeyAnimations[animIndex]->common), 0.0f, animMode, morphFrames);
     } else {
         Animation_Change(&this->skelAnime, sMonkeyAnimations[animIndex], 1.0f, 0.0f,
-                         Animation_GetLastFrame(&sMonkeyAnimations[animIndex]->common), mode, morphFrames);
+                         Animation_GetLastFrame(&sMonkeyAnimations[animIndex]->common), animMode, morphFrames);
     }
     this->unk_3E0 = 0;
     this->animIndex = animIndex;
@@ -249,7 +249,7 @@ void EnMnk_MonkeyTiedUp_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = EnMnk_MonkeyTiedUp_Wait;
     this->picto.actor.flags |= ACTOR_FLAG_2000000;
-    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyTiedUpPoleSkeleton, &object_mnk_Anim_003584,
+    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyTiedUpPoleSkel, &object_mnk_Anim_003584,
                        this->propJointTable, this->propMorphTable, OBJECT_MNK_1_LIMB_MAX);
     this->cueId = 4;
     this->animIndex = MONKEY_TIEDUP_ANIM_NONE;
@@ -277,7 +277,7 @@ void EnMnk_MonkeyHanging_Init(Actor* thisx, PlayState* play) {
     func_800BC154(play, &play->actorCtx, &this->picto.actor, ACTORCAT_PROP);
     this->actionFunc = EnMnk_MonkeyHanging_StruggleBeforeDunk;
     this->picto.actor.textId = 0x8E8;
-    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyHangingRopeSkeleton, &gMonkeyHangingStruggleAnim,
+    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyHangingRopeSkel, &gMonkeyHangingStruggleAnim,
                        this->propJointTable, this->propMorphTable, OBJECT_MNK_3_LIMB_MAX);
     EnMnk_MonkeyHanging_ChangeAnim(this, MONKEY_HANGING_ANIM_STRUGGLE, ANIMMODE_LOOP, 0.0f);
     this->unk_3E0 = 5;
@@ -297,7 +297,7 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->picto.actor, 0.012f);
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 12.0f);
     this->actionFunc = EnMnk_DoNothing;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gMonkeySkeleton, &object_mnk_Anim_0105DC, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMonkeySkel, &object_mnk_Anim_0105DC, this->jointTable,
                        this->morphTable, OBJECT_MNK_2_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_mnk_Anim_0105DC);
     this->flags = 0;
@@ -1318,7 +1318,7 @@ void EnMnk_MonkeyTiedUp_ReactToWrongInstrument(EnMnk* this, PlayState* play) {
             case 0x8DB:
                 Message_CloseTextbox(play);
                 this->actionFunc = EnMnk_MonkeyTiedUp_WaitForInstrument;
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 EnMnk_MonkeyTiedUp_SetAnim(this, MONKEY_TIEDUP_ANIM_WAIT);
                 if (this->csId != CS_ID_NONE) {
                     CutsceneManager_Stop(this->csId);
@@ -1489,7 +1489,7 @@ void EnMnk_MonkeyTiedUp_WaitForInstrument(EnMnk* this, PlayState* play) {
                 this->csId = 2;
                 SET_EVENTINF(EVENTINF_24);
                 this->picto.actor.csId = this->csIdList[2];
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 CutsceneManager_Queue(this->csIdList[2]);
                 return;
 
@@ -1577,7 +1577,7 @@ void EnMnk_MonkeyTiedUp_Wait(EnMnk* this, PlayState* play) {
         this->csId = 2;
         SET_EVENTINF(EVENTINF_24);
         this->picto.actor.csId = this->csIdList[2];
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         CutsceneManager_Queue(this->csIdList[2]);
     } else if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {

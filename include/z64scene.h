@@ -74,7 +74,7 @@ typedef struct {
 typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  naviQuestHintFileId;
-    /* 0x4 */ u32 subKeepIndex;
+    /* 0x4 */ u32 subKeepId;
 } SCmdSpecialFiles; // size = 0x8
 
 typedef struct {
@@ -415,7 +415,7 @@ typedef struct {
     /* 0x08 */ DmaRequest dmaReq;
     /* 0x28 */ OSMesgQueue loadQueue;
     /* 0x40 */ OSMesg loadMsg;
-} ObjectStatus; // size = 0x44
+} ObjectEntry; // size = 0x44
 
 typedef struct {
     /* 0x0 */ RomFile segment;
@@ -472,14 +472,16 @@ typedef struct {
 typedef RoomShapeCullableEntry PolygonDlist2;
 typedef RoomShapeCullable PolygonType2;
 
+#define OBJECT_SLOT_NONE -1
+
 typedef struct {
     /* 0x000 */ void* spaceStart;
     /* 0x004 */ void* spaceEnd;
-    /* 0x008 */ u8 num;
-    /* 0x009 */ u8 spawnedObjectCount;
-    /* 0x00A */ u8 mainKeepIndex;
-    /* 0x00B */ u8 subKeepIndex;
-    /* 0x00C */ ObjectStatus status[OBJECT_EXCHANGE_BANK_MAX];
+    /* 0x008 */ u8 numEntries; // total amount of used entries
+    /* 0x009 */ u8 numPersistentEntries; // amount of entries that won't be reused when loading a new object list (when loading a new room)
+    /* 0x00A */ u8 mainKeepSlot; // "gameplay_keep" slot
+    /* 0x00B */ u8 subKeepSlot; // "gameplay_field_keep" or "gameplay_dangeon_keep" slot
+    /* 0x00C */ ObjectEntry slots[35];
 } ObjectContext; // size = 0x958
 
 #define PATH_INDEX_NONE -1
@@ -899,13 +901,13 @@ typedef enum {
 #define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED
 #define SCENE_CMD_CUTSCENE_LIST SCENE_CMD_CUTSCENE_SCRIPT_LIST
 
-s32 Object_Spawn(ObjectContext* objectCtx, s16 id);
-void Object_InitBank(struct GameState* gameState, ObjectContext* objectCtx);
-void Object_UpdateBank(ObjectContext* objectCtx);
-s32 Object_GetIndex(ObjectContext* objectCtx, s16 objectId);
-s32 Object_IsLoaded(ObjectContext* objectCtx, s32 index);
+s32 Object_SpawnPersistent(ObjectContext* objectCtx, s16 id);
+void Object_InitContext(struct GameState* gameState, ObjectContext* objectCtx);
+void Object_UpdateEntries(ObjectContext* objectCtx);
+s32 Object_GetSlot(ObjectContext* objectCtx, s16 objectId);
+s32 Object_IsLoaded(ObjectContext* objectCtx, s32 slot);
 void Object_LoadAll(ObjectContext* objectCtx);
-void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id);
+void* func_8012F73C(ObjectContext* objectCtx, s32 slot, s16 id);
 void Scene_CommandSpawnList(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandActorList(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandActorCutsceneCamList(struct PlayState* play, SceneCmd* cmd);

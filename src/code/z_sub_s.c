@@ -1169,12 +1169,12 @@ s16 SubS_GetDistSqAndOrientPath(Path* path, s32 pointIndex, Vec3f* pos, f32* dis
     return Math_Atan2S(diffX, diffZ);
 }
 
-s8 SubS_IsObjectLoaded(s8 index, PlayState* play) {
-    return !Object_IsLoaded(&play->objectCtx, index) ? false : true;
+s8 SubS_IsObjectLoaded(s8 objectSlot, PlayState* play) {
+    return !Object_IsLoaded(&play->objectCtx, objectSlot) ? false : true;
 }
 
-s8 SubS_GetObjectIndex(s16 id, PlayState* play) {
-    return Object_GetIndex(&play->objectCtx, id);
+s8 SubS_GetObjectSlot(s16 objectId, PlayState* play) {
+    return Object_GetSlot(&play->objectCtx, objectId);
 }
 
 /**

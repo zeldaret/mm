@@ -2,6 +2,7 @@
 #define Z_EN_HINT_SKB_H
 
 #include "global.h"
+#include "objects/object_skb/object_skb.h"
 
 struct EnHintSkb;
 
@@ -37,8 +38,8 @@ typedef struct EnHintSkb {
     /* 0x2D4 */ f32 drawDmgEffAlpha;
     /* 0x2D8 */ f32 drawDmgEffScale;
     /* 0x2DC */ s32 bodyPartsCount;
-    /* 0x2E0 */ Vec3s jointTable[20];
-    /* 0x358 */ Vec3s morphtable[20];
+    /* 0x2E0 */ Vec3s jointTable[STALCHILD_LIMB_MAX];
+    /* 0x358 */ Vec3s morphTable[STALCHILD_LIMB_MAX];
     /* 0x3D0 */ UNK_TYPE1 unk3D0[0xC];
     /* 0x3DC */ s16 unk_3DC;
     /* 0x3DE */ s16 unk_3DE;

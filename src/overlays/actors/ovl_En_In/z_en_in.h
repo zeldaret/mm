@@ -16,7 +16,13 @@ typedef enum {
     /* 4 */ ENIN_BLUE_SHIRT
 } EnInType;
 
-typedef enum {
+#define ENIN_GET_TYPE(thisx) ((thisx)->params & 0x1FF)
+#define ENIN_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
+
+#define ENIN_PATH_INDEX_NONE 0x3F
+
+typedef enum EnInAnimation {
+    /* -1 */ ENIN_ANIM_NONE = -1,
     /*  0 */ ENIN_ANIM_0,
     /*  1 */ ENIN_ANIM_1,
     /*  2 */ ENIN_ANIM_2,
@@ -34,13 +40,22 @@ typedef enum {
     /* 14 */ ENIN_ANIM_14,
     /* 15 */ ENIN_ANIM_15,
     /* 16 */ ENIN_ANIM_16,
-    /* 17 */ ENIN_ANIM_17
+    /* 17 */ ENIN_ANIM_17,
+    /* 18 */ ENIN_ANIM_MAX
 } EnInAnimation;
 
-#define ENIN_GET_TYPE(thisx) ((thisx)->params & 0x1FF)
-#define ENIN_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
-
-#define ENIN_PATH_INDEX_NONE 0x3F
+typedef enum EnInAnimation2 {
+    /* -1 */ ENIN_ANIM2_NONE = -1,
+    /*  0 */ ENIN_ANIM2_0,
+    /*  1 */ ENIN_ANIM2_1,
+    /*  2 */ ENIN_ANIM2_2,
+    /*  3 */ ENIN_ANIM2_3,
+    /*  4 */ ENIN_ANIM2_4,
+    /*  5 */ ENIN_ANIM2_5,
+    /*  6 */ ENIN_ANIM2_6,
+    /*  7 */ ENIN_ANIM2_7,
+    /*  8 */ ENIN_ANIM2_MAX
+} EnInAnimation2;
 
 typedef struct EnIn {
     /* 0x000 */ Actor actor;
@@ -70,7 +85,7 @@ typedef struct EnIn {
     /* 0x482 */ s16 unk482;
     /* 0x484 */ s16 unk484;
     /* 0x486 */ s16 unk486;
-    /* 0x488 */ s16 unk488;
+    /* 0x488 */ s16 animIndex2;
     /* 0x48A */ u16 unk48A;
     /* 0x48C */ s32 unk48C;
     /* 0x490 */ UNK_TYPE1 unk490[0x4];

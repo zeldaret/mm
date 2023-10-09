@@ -198,7 +198,7 @@ void func_80B8264C(BgDblueBalance* this) {
     f32 temp_f0;
     s16 phi_s2;
 
-    if (this->unk_170 != 0) {
+    if (this->isSwitchFlagSet) {
         if (this->unk_183 < 8) {
             this->unk_183 = 0;
         } else {
@@ -247,7 +247,7 @@ void func_80B8264C(BgDblueBalance* this) {
 }
 
 void func_80B828E4(BgDblueBalance* this, PlayState* play) {
-    if (Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor)) && (this->unk_17D <= 0)) {
+    if (Flags_GetSwitch(play, BGDBLUEBALANCE_GET_SWITCH_FLAG(&this->dyna.actor)) && (this->unk_17D <= 0)) {
         if (this->unk_183 >= 252) {
             this->unk_183 = 255;
         } else {
@@ -306,7 +306,7 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
     BgDblueBalance* this = THIS;
     s32 sp2C = BGDBLUEBALANCE_GET_300(&this->dyna.actor);
     s32 pad2;
-    s32 sp24 = Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor));
+    s32 isSwitchFlagSet = Flags_GetSwitch(play, BGDBLUEBALANCE_GET_SWITCH_FLAG(&this->dyna.actor));
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
@@ -326,7 +326,7 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
     }
 
     if (sp2C == 0) {
-        if (sp24 != 0) {
+        if (isSwitchFlagSet) {
             this->dyna.actor.shape.rot.z = -0x1C72;
             this->unk_174 = -0x1C72;
         } else {
@@ -337,9 +337,9 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
         func_80B8259C(this, play);
         func_80B82DC4(this);
     } else if (sp2C == 3) {
-        this->unk_16C = sp24;
-        this->unk_170 = sp24;
-        if (sp24 != 0) {
+        this->isSwitchFlagSet2 = isSwitchFlagSet;
+        this->isSwitchFlagSet = isSwitchFlagSet;
+        if (isSwitchFlagSet) {
             func_80B83344(this);
         } else {
             this->unk_178 = 0x1F4;
@@ -396,7 +396,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
     BgDblueBalance* sp3C;
     Vec3f sp30;
 
-    if (Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGDBLUEBALANCE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         if (this->unk_17D > 0) {
             this->unk_17D--;
         } else {
@@ -555,7 +555,7 @@ void func_80B83344(BgDblueBalance* this) {
 }
 
 void func_80B8335C(BgDblueBalance* this, PlayState* play) {
-    if (!Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor))) {
+    if (!Flags_GetSwitch(play, BGDBLUEBALANCE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->unk_178 = -0x14;
         func_80B833A8(this);
     }
@@ -573,8 +573,8 @@ void func_80B833C4(BgDblueBalance* this, PlayState* play) {
     s16 sp26;
     s16 sp24;
 
-    if (this->unk_170 != 0) {
-        if ((this->unk_16C == 0) && (this->unk_17F == 0)) {
+    if (this->isSwitchFlagSet) {
+        if (!this->isSwitchFlagSet2 && (this->unk_17F == 0)) {
             this->unk_17F = 1;
         }
 
@@ -590,9 +590,11 @@ void func_80B833C4(BgDblueBalance* this, PlayState* play) {
     sp26 = this->dyna.actor.shape.rot.x;
     this->dyna.actor.shape.rot.x += this->unk_178;
     sp24 = this->dyna.actor.shape.rot.x;
+
+    //! FAKE:
     if (sp24) {}
 
-    if (this->unk_170 != 0) {
+    if (this->isSwitchFlagSet) {
         if (this->unk_186 != 0) {
             if (func_80B82B00(sp26, sp24, this->unk_184)) {
                 sp28 = true;
@@ -619,7 +621,7 @@ void func_80B833C4(BgDblueBalance* this, PlayState* play) {
 void func_80B83518(Actor* thisx, PlayState* play) {
     BgDblueBalance* this = THIS;
 
-    this->unk_170 = Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor));
+    this->isSwitchFlagSet = Flags_GetSwitch(play, BGDBLUEBALANCE_GET_SWITCH_FLAG(&this->dyna.actor));
 
     this->actionFunc(this, play);
 
@@ -638,7 +640,7 @@ void func_80B83518(Actor* thisx, PlayState* play) {
             CutsceneManager_Queue(this->dyna.actor.csId);
         }
     }
-    this->unk_16C = this->unk_170;
+    this->isSwitchFlagSet2 = this->isSwitchFlagSet;
 }
 
 void BgDblueBalance_Draw(Actor* thisx, PlayState* play) {
