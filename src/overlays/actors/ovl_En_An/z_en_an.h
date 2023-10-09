@@ -10,9 +10,9 @@ typedef void (*EnAnActionFunc)(struct EnAn*, PlayState*);
 typedef void (*EnAnUnkFunc)(struct EnAn*, PlayState*);
 typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
-// path index : 0xFF
-
-#define ENAN_GET_8000(thisx) (((thisx)->params & 0x8000) >> 0xF)
+#define ENAN_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
+#define ENAN_8000 0x8000
+//#define ENAN_GET_8000(thisx) (((thisx)->params & 0x8000) >> 0xF)
 
 typedef struct EnAn {
     /* 0x000 */ Actor actor;
@@ -29,11 +29,11 @@ typedef struct EnAn {
     /* 0x1FC */ s32 unk_1FC;
     /* 0x200 */ u8 unk_200; // enum? // schedule result
     /* 0x204 */ s32* msgEventScript;
-    /* 0x208 */ s8 an2ObjIndex;
-    /* 0x209 */ s8 an3ObjIndex;
-    /* 0x20A */ s8 maskKerfayObjIndex;
-    /* 0x20B */ s8 an4ObjIndex;
-    /* 0x20C */ s8 msmoObjIndex;
+    /* 0x208 */ s8 an2ObjectSlot;
+    /* 0x209 */ s8 an3ObjectSlot;
+    /* 0x20A */ s8 maskKerfayObjectSlot;
+    /* 0x20B */ s8 an4ObjectSlot;
+    /* 0x20C */ s8 msmoObjectSlot;
     /* 0x210 */ s32 msgScriptResumePos;
     /* 0x214 */ s8 unk_214; // curRoom.num
     /* 0x215 */ s8 unk_215;

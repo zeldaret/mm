@@ -605,11 +605,11 @@ s32 func_80B53840(EnAn* this, PlayState* play) {
     s32 ret = false;
 
     if ((this->unk_214 != play->roomCtx.curRoom.num) && (play->roomCtx.status == 0) && (this->unk_3B8 == 0)) {
-        this->msmoObjIndex = SubS_GetObjectSlot(OBJECT_MSMO, play);
-        this->an4ObjIndex = SubS_GetObjectSlot(OBJECT_AN4, play);
-        this->maskKerfayObjIndex = SubS_GetObjectSlot(OBJECT_MASK_KERFAY, play);
-        this->an3ObjIndex = SubS_GetObjectSlot(OBJECT_AN3, play);
-        this->an2ObjIndex = SubS_GetObjectSlot(OBJECT_AN2, play);
+        this->msmoObjectSlot = SubS_GetObjectSlot(OBJECT_MSMO, play);
+        this->an4ObjectSlot = SubS_GetObjectSlot(OBJECT_AN4, play);
+        this->maskKerfayObjectSlot = SubS_GetObjectSlot(OBJECT_MASK_KERFAY, play);
+        this->an3ObjectSlot = SubS_GetObjectSlot(OBJECT_AN3, play);
+        this->an2ObjectSlot = SubS_GetObjectSlot(OBJECT_AN2, play);
         this->actor.draw = NULL;
         this->unk_214 = play->roomCtx.curRoom.num;
         this->unk_3B8 = 1;
@@ -619,7 +619,7 @@ s32 func_80B53840(EnAn* this, PlayState* play) {
         return false;
     }
 
-    if (((this->an2ObjIndex >= 0) && (SubS_IsObjectLoaded(this->an2ObjIndex, play) == 0)) || ((this->an3ObjIndex >= 0) && (SubS_IsObjectLoaded(this->an3ObjIndex, play) == 0)) || ((this->maskKerfayObjIndex >= 0) && (SubS_IsObjectLoaded(this->maskKerfayObjIndex, play) == 0)) || ((this->an4ObjIndex >= 0) && (SubS_IsObjectLoaded(this->an4ObjIndex, play) == 0)) || ((this->msmoObjIndex >= 0) && (SubS_IsObjectLoaded(this->msmoObjIndex, play) == 0))) {
+    if (((this->an2ObjectSlot >= 0) && (SubS_IsObjectLoaded(this->an2ObjectSlot, play) == 0)) || ((this->an3ObjectSlot >= 0) && (SubS_IsObjectLoaded(this->an3ObjectSlot, play) == 0)) || ((this->maskKerfayObjectSlot >= 0) && (SubS_IsObjectLoaded(this->maskKerfayObjectSlot, play) == 0)) || ((this->an4ObjectSlot >= 0) && (SubS_IsObjectLoaded(this->an4ObjectSlot, play) == 0)) || ((this->msmoObjectSlot >= 0) && (SubS_IsObjectLoaded(this->msmoObjectSlot, play) == 0))) {
         ret = true;
     } else {
         this->actor.draw = EnAn_Draw;
@@ -666,7 +666,7 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
         }
 
         if ((this != (EnAn*)foundActor) && (foundActor->update != NULL)) {
-            if (!(foundActor->params & 0x8000)) {
+            if (!(foundActor->params & ENAN_8000)) {
                 break;
             }
         }
@@ -720,29 +720,29 @@ EnDoor* func_80B53B3C(PlayState* play, s32 scheduleOutputResult) {
 }
 
 s32 func_80B53BA8(EnAn* this, PlayState* play) {
-    s8 temp_a3 = this->actor.objectSlot;
-    s8 var_v1 = -1;
+    s8 originalObjectSlot = this->actor.objectSlot;
+    s8 otherObjectSlot = -1;
     s32 ret = 0;
 
-    if ((this->animIndex >= 0x19) && (this->an4ObjIndex >= 0)) {
-        var_v1 = this->an4ObjIndex;
-    } else if ((this->animIndex >= 0x15) && (this->an3ObjIndex >= 0)) {
-        var_v1 = this->an3ObjIndex;
-    } else if ((this->animIndex >= 0x11) && (this->an2ObjIndex >= 0)) {
-        var_v1 = this->an2ObjIndex;
+    if ((this->animIndex >= 0x19) && (this->an4ObjectSlot >= 0)) {
+        otherObjectSlot = this->an4ObjectSlot;
+    } else if ((this->animIndex >= 0x15) && (this->an3ObjectSlot >= 0)) {
+        otherObjectSlot = this->an3ObjectSlot;
+    } else if ((this->animIndex >= 0x11) && (this->an2ObjectSlot >= 0)) {
+        otherObjectSlot = this->an2ObjectSlot;
     } else if (this->animIndex < 0x11) {
-        var_v1 = temp_a3;
+        otherObjectSlot = originalObjectSlot;
     }
 
-    if (var_v1 < 0) {
+    if (otherObjectSlot < 0) {
         return 0;
     }
 
-    if (var_v1 >= 0) {
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[var_v1].segment);
+    if (otherObjectSlot >= 0) {
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
         this->skelAnime.playSpeed = this->unk_368;
         ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[temp_a3].segment);
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
     }
 
     return ret;
@@ -837,22 +837,22 @@ AnimationInfoS D_80B58BF4[ENAN_ANIM_MAX] = {
 };
 
 s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
-    s8 temp_t1 = this->actor.objectSlot;
-    s8 var_v1 = -1;
+    s8 originalObjectSlot = this->actor.objectSlot;
+    s8 otherObjectSlot = -1;
     s32 var_t0 = 0;
     s32 var_t2 = 0;
 
-    if ((animIndex >= 25) && (this->an4ObjIndex >= 0)) {
-        var_v1 = this->an4ObjIndex;
-    } else if ((animIndex >= 21) && (this->an3ObjIndex >= 0)) {
-        var_v1 = this->an3ObjIndex;
-    } else if ((animIndex >= 17) && (this->an2ObjIndex >= 0)) {
-        var_v1 = this->an2ObjIndex;
+    if ((animIndex >= 25) && (this->an4ObjectSlot >= 0)) {
+        otherObjectSlot = this->an4ObjectSlot;
+    } else if ((animIndex >= 21) && (this->an3ObjectSlot >= 0)) {
+        otherObjectSlot = this->an3ObjectSlot;
+    } else if ((animIndex >= 17) && (this->an2ObjectSlot >= 0)) {
+        otherObjectSlot = this->an2ObjectSlot;
     } else if (animIndex < 17) {
-        var_v1 = temp_t1;
+        otherObjectSlot = originalObjectSlot;
     }
 
-    if (var_v1 < 0) {
+    if (otherObjectSlot < 0) {
         return 0;
     }
 
@@ -885,12 +885,12 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
             break;
     }
 
-    if ((var_t0 != 0) && (var_v1 >= 0)) {
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[var_v1].segment);
+    if ((var_t0 != 0) && (otherObjectSlot >= 0)) {
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
         this->animIndex = animIndex;
         var_t2 = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80B58BF4, animIndex);
         this->unk_368 = this->skelAnime.playSpeed;
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[temp_t1].segment);
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
     }
 
     return var_t2;
@@ -1026,8 +1026,8 @@ Vec3s D_80B58E74 = { 0x238C, 0, -0x3FFC };
 
 void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
     s32 pad;
-    s8 sp53 = this->actor.objectSlot;
-    s8 temp_a2;
+    s8 originalObjectSlot = this->actor.objectSlot;
+    s8 otherObjectSlot;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1049,33 +1049,33 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
             break;
 
         case 0x1:
-            temp_a2 = this->maskKerfayObjIndex;
-            if ((this->unk_360 & 0x4000) && (this->unk_3B0 == 0) && (temp_a2 >= 0)) {
-                gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.slots[temp_a2].segment);
+            otherObjectSlot = this->maskKerfayObjectSlot;
+            if ((this->unk_360 & 0x4000) && (this->unk_3B0 == 0) && (otherObjectSlot >= 0)) {
+                gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.slots[otherObjectSlot].segment);
 
                 Matrix_TranslateRotateZYX(&D_80B58E54, &D_80B58E60);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, object_mask_kerfay_DL_000D40);
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[sp53].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
             }
             break;
 
         case 0x2:
-            temp_a2 = this->an2ObjIndex;
-            if ((this->unk_360 & 0x1000) && (this->unk_3B0 == 0) && (temp_a2 >= 0)) {
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[temp_a2].segment);
+            otherObjectSlot = this->an2ObjectSlot;
+            if ((this->unk_360 & 0x1000) && (this->unk_3B0 == 0) && (otherObjectSlot >= 0)) {
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[otherObjectSlot].segment);
                 gSPDisplayList(POLY_OPA_DISP++, object_an2_DL_000378);
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[sp53].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
             }
             break;
 
         case 0x3:
-            temp_a2 = this->an3ObjIndex;
-            if ((this->unk_360 & 0x2000) && (this->unk_3B0 == 0) && (temp_a2 >= 0)) {
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[temp_a2].segment);
+            otherObjectSlot = this->an3ObjectSlot;
+            if ((this->unk_360 & 0x2000) && (this->unk_3B0 == 0) && (otherObjectSlot >= 0)) {
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[otherObjectSlot].segment);
                 gSPDisplayList(POLY_OPA_DISP++, object_an3_DL_000308);
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[sp53].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
             }
             break;
 
@@ -1086,14 +1086,14 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
             break;
 
         case 0x5:
-            temp_a2 = this->msmoObjIndex;
-            if ((this->unk_3B4 != 0) && (temp_a2 >= 0)) {
+            otherObjectSlot = this->msmoObjectSlot;
+            if ((this->unk_3B4 != 0) && (otherObjectSlot >= 0)) {
                 Matrix_TranslateRotateZYX(&D_80B58E68, &D_80B58E74);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[temp_a2].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[otherObjectSlot].segment);
                 gSPDisplayList(POLY_OPA_DISP++, gMoonMaskDL);
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[sp53].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
             }
             break;
     }
@@ -1965,7 +1965,7 @@ Actor* func_80B55D20(EnAn* this, PlayState* play) {
 }
 
 s32 func_80B55D98(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 actorCategory, s16 actorId) {
-    u8 sp4F = this->actor.params & 0xFF;
+    u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     Vec3s* temp_v0_3;
     Vec3f sp3C;
     Vec3f sp30;
@@ -1977,7 +1977,7 @@ s32 func_80B55D98(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput, u
     this->unk_1DC = NULL;
 
     if (D_80B58618[scheduleOutput->result] >= 0) {
-        this->unk_1DC = SubS_GetAdditionalPath(play, sp4F, D_80B58618[scheduleOutput->result]);
+        this->unk_1DC = SubS_GetAdditionalPath(play, pathIndex, D_80B58618[scheduleOutput->result]);
     }
 
     if ((var_v1 != NULL) && (var_v1->update != NULL)) {
@@ -2070,7 +2070,7 @@ s32 func_80B5611C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp56 = SCHEDULE_TIME_NOW;
-    u8 pathIndex = this->actor.params & 0xFF;
+    u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     EnDoor* sp50;
     Vec3s* temp_v0_2;
     Vec3f sp40;
@@ -2151,7 +2151,7 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 temp_t0 = (gSaveContext.save.time - 0x3FFC);
     u16 var_v1_2;
-    u8 sp2B = this->actor.params & 0xFF;
+    u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     s32 pad;
     s32 var_v1 = 0;
     s32 temp_a3;
@@ -2160,7 +2160,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     temp_a3 = D_80B58618[scheduleOutput->result];
 
     if (temp_a3 >= 0) {
-        this->unk_1DC = SubS_GetAdditionalPath(play, sp2B, temp_a3);
+        this->unk_1DC = SubS_GetAdditionalPath(play, pathIndex, temp_a3);
     }
 
     if ((this->unk_1DC != NULL) && (this->unk_1DC->count < 3)) {
@@ -2271,7 +2271,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u8 pathIndex = this->actor.params & 0xFF;
+    u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     Vec3f sp40;
     Vec3f sp34;
     Vec3s* temp_v0_2;
@@ -2308,7 +2308,7 @@ s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u8 pathIndex = this->actor.params & 0xFF;
+    u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     Vec3f sp40;
     Vec3f sp34;
     Vec3s* temp_v0_2; // sp30
@@ -2851,7 +2851,7 @@ void func_80B577F0(EnAn* this, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->unk_190, &this->actor, &D_80B58BBC);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B58BE8);
 
-    if (this->actor.params & 0x8000) {
+    if (this->actor.params & ENAN_8000) {
         this->unk_3C0 = 1;
     }
 
@@ -2869,7 +2869,7 @@ void func_80B578F8(EnAn* this, PlayState* play) {
 
     this->unk_384 = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
-    if (!(this->actor.params & 0x8000) && (this->unk_3C0 == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_51_40)) {
+    if (!(this->actor.params & ENAN_8000) && (this->unk_3C0 == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_51_40)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -2963,10 +2963,10 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
     s32 temp_v0;
 
     if (play->sceneId != SCENE_YADOYA) {
-        this->actor.params &= (s16)~0x8000;
+        this->actor.params &= (s16)~ENAN_8000;
     }
 
-    temp_v1 = ENAN_GET_8000(&this->actor);
+    temp_v1 = (this->actor.params & ENAN_8000) >> 0xF;
     temp_v0 = CHECK_WEEKEVENTREG(WEEKEVENTREG_51_40);
 
     if (((temp_v0 == 0) && (temp_v1 == 1)) || ((temp_v0 != 0) && (temp_v1 == 0))) {
