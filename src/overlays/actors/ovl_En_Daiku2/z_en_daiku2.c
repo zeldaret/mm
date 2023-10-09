@@ -86,7 +86,7 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, OBJECT_DAIKU_LIMB_MAX);
     this->actor.targetMode = TARGET_MODE_0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->unk_278 = ENDAIKU2_GET_7F(&this->actor);
+    this->switchFlag = ENDAIKU2_GET_SWITCH_FLAG(&this->actor);
     this->pathIndex = ENDAIKU2_GET_PATH_INDEX(&this->actor);
     this->path = SubS_GetPathByIndex(play, this->pathIndex, ENDAIKU2_PATH_INDEX_NONE);
     this->unk_280 = ENDAIKU2_GET_8000(&this->actor);
@@ -97,9 +97,9 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        if (this->unk_278 == ENDAIKU2_GET_7F_127) {
-            this->unk_278 = ENDAIKU2_GET_7F_MINUS1;
-        } else if (Flags_GetSwitch(play, this->unk_278)) {
+        if (this->switchFlag == 0x7F) {
+            this->switchFlag = -1;
+        } else if (Flags_GetSwitch(play, this->switchFlag)) {
             this->unk_25C = this->path->count - 1;
             func_80BE61D0(this);
             Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_268);
@@ -185,7 +185,7 @@ s32 func_80BE64C0(EnDaiku2* this, PlayState* play) {
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     bomb = (EnBom*)Actor_FindNearby(play, &this->actor, -1, ACTORCAT_EXPLOSIVES, BREG(7) + 240.0f);
     Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
-    if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && !Flags_GetSwitch(play, this->unk_278) && (bomb != NULL) &&
+    if ((this->switchFlag >= 0) && !Flags_GetSwitch(play, this->switchFlag) && (bomb != NULL) &&
         (bomb->actor.id == ACTOR_EN_BOM)) {
         if (!bomb->isPowderKeg) {
             this->actor.textId = 0x32D3;
@@ -228,7 +228,7 @@ void func_80BE65B4(EnDaiku2* this, PlayState* play) {
     }
 
     this->unk_264 = 1.0f;
-    if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && Flags_GetSwitch(play, this->unk_278)) {
+    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
         this->unk_28A = 5;
         if (this->animIndex != ENDAIKU2_ANIM_10) {
             EnDaiku2_ChangeAnim(this, ENDAIKU2_ANIM_10);
@@ -251,7 +251,7 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0x0);
     if (sp98 != 2) {
-        if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && Flags_GetSwitch(play, this->unk_278)) {
+        if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
             this->unk_28A = 5;
             if (this->animIndex != ENDAIKU2_ANIM_10) {
                 EnDaiku2_ChangeAnim(this, ENDAIKU2_ANIM_10);
@@ -323,7 +323,7 @@ void func_80BE6B40(EnDaiku2* this, PlayState* play) {
     s32 day = gSaveContext.save.day;
 
     this->unk_288 = 1;
-    if ((day != 3) && Flags_GetSwitch(play, this->unk_278)) {
+    if ((day != 3) && Flags_GetSwitch(play, this->switchFlag)) {
         this->actionFunc = func_80BE6BC0;
     } else {
         EnDaiku2_ChangeAnim(this, ENDAIKU2_ANIM_5);
@@ -433,7 +433,7 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
                     EnDaiku2_ChangeAnim(this, ENDAIKU2_ANIM_3);
                 }
 
-                if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && Flags_GetSwitch(play, this->unk_278)) {
+                if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
                     this->unk_28A = 5;
                     if (this->animIndex != ENDAIKU2_ANIM_10) {
                         EnDaiku2_ChangeAnim(this, ENDAIKU2_ANIM_10);
@@ -582,16 +582,16 @@ void func_80BE7718(EnDaiku2* this, PlayState* play) {
     s32 i;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     EnDaiku2Effect* effect = this->effects;
-    s32 objectIdx;
+    s32 objectSlot;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_BOMBIWA);
-    if ((objectIdx >= 0) && Object_IsLoaded(&play->objectCtx, objectIdx)) {
+    objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_BOMBIWA);
+    if ((objectSlot > OBJECT_SLOT_NONE) && Object_IsLoaded(&play->objectCtx, objectSlot)) {
         gDPPipeSync(POLY_OPA_DISP++);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[objectIdx].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
 
         for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
             if (effect->isEnabled) {

@@ -62,8 +62,8 @@ static ColliderCylinderInit sCylinderInit = {
 static u16 sEnStoneHeishiTextIds[] = { 0x1473, 0x1474, 0x1475, 0x1476, 0x1477, 0x1478, 0x1479, 0x147A, 0x1472 };
 
 static AnimationHeader* sAnimations[] = {
-    &gSoldierStandHandOnHip, &gSoldierDrink, &gSoldierCheerWithSpear, &gSoldierWave,
-    &gSoldierSitAndReach,    &gSoldierDrink, &gSoldierStandUp,
+    &gSoldierStandHandOnHipAnim, &gSoldierDrinkAnim, &gSoldierCheerWithSpearAnim, &gSoldierWaveAnim,
+    &gSoldierSitAndReachAnim,    &gSoldierDrinkAnim, &gSoldierStandUpAnim,
 };
 
 static u8 sAnimationModes[] = {
@@ -107,7 +107,7 @@ void EnStoneheishi_Init(Actor* thisx, PlayState* play) {
     EnStoneheishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWave, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWaveAnim, this->jointTable, this->morphTable,
                        SOLDIER_LIMB_MAX);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;

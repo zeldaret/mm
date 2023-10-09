@@ -223,7 +223,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
             break;
 
         case 0x464:
-            play->msgCtx.msgMode = 0x44;
+            play->msgCtx.msgMode = MSGMODE_PAUSED;
             EnGinkoMan_SetupStamp(this); // stamp player
             break;
 

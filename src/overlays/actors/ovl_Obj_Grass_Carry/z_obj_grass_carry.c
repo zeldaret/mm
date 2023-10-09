@@ -132,7 +132,7 @@ void func_809AAFE8(Vec3f* arg0, PlayState* play) {
         spBC.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
 
         EffectSsKakera_Spawn(play, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809ABC3C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gKakeraLeafMiddle);
+                             D_809ABC3C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gKakeraLeafMiddleDL);
 
         spB0.x = arg0->x + (ptr->x * 16.0f);
         spB0.y = arg0->y + (ptr->y * 16.0f) + 10.0f;
@@ -143,7 +143,7 @@ void func_809AAFE8(Vec3f* arg0, PlayState* play) {
         spBC.z = (Rand_ZeroOne() - 0.5f) * 6.0f;
 
         EffectSsKakera_Spawn(play, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809ABC3C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gKakeraLeafTip);
+                             D_809ABC3C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gKakeraLeafTipDL);
     }
 }
 

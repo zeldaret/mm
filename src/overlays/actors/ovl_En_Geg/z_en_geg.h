@@ -23,7 +23,7 @@ typedef struct EnGeg {
     /* 0x240 */ s16 unk_240;
     /* 0x242 */ s16 unk_242;
     /* 0x244 */ s16 unk_244;
-    /* 0x248 */ s32 unk_248;
+    /* 0x248 */ s32 objectSlot;
     /* 0x24C */ Vec3s jointTable[GORON_LIMB_MAX];
     /* 0x2B8 */ Vec3s morphTable[GORON_LIMB_MAX];
     /* 0x324 */ UNK_TYPE1 unk324[0x144];

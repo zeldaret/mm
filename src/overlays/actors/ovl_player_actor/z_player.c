@@ -524,7 +524,7 @@ FloorEffect sPlayerFloorEffect;
 Input* sPlayerControlInput;
 s32 sPlayerUseHeldItem;              // When true, the current held item is used. Is reset to false every frame.
 s32 sPlayerHeldItemButtonIsHeldDown; // Indicates if the button for the current held item is held down.
-EnvLightSettings D_80862B50;         // backup of play->envCtx.lightSettings
+AdjLightSettings D_80862B50;         // backup of lay->envCtx.adjLightSettings
 s32 D_80862B6C;                      // this->skelAnime.moveFlags // sPlayerSkelMoveFlags?
 
 s32 func_8082DA90(PlayState* play) {
@@ -3348,7 +3348,7 @@ void Player_InitItemAction_SpawnHookshot(PlayState* play, Player* this) {
         return;
     }
     armsHook = (ArmsHook*)this->heldActor;
-    armsHook->actor.objBankIndex = this->actor.objBankIndex;
+    armsHook->actor.objectSlot = this->actor.objectSlot;
     armsHook->unk_208 = this->transformation;
 }
 
@@ -6292,7 +6292,7 @@ s32 func_80835DF8(PlayState* play, Player* this, CollisionPoly** outPoly, s32* o
     f32 yIntersect = func_80835CD8(play, this, &D_8085D100, &pos, outPoly, outBgId);
 
     if ((*outBgId == BGCHECK_SCENE) && (fabsf(this->actor.world.pos.y - yIntersect) < 10.0f)) {
-        func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, *outPoly, *outBgId));
+        Environment_ChangeLightSetting(play, SurfaceType_GetLightSettingIndex(&play->colCtx, *outPoly, *outBgId));
         return true;
     }
     return false;
@@ -7331,7 +7331,7 @@ void func_808388B8(PlayState* play, Player* this, PlayerTransformation playerFor
     gSaveContext.save.playerForm = playerForm;
     this->stateFlags1 |= PLAYER_STATE1_2;
 
-    D_80862B50 = play->envCtx.lightSettings;
+    D_80862B50 = play->envCtx.adjLightSettings;
     this->actor.velocity.y = 0.0f;
     Actor_DeactivateLens(play);
 }
@@ -9926,7 +9926,7 @@ s32 func_8083F8A8(PlayState* play, Player* this, f32 radius, s32 countMax, f32 r
             velocity.y = Rand_ZeroFloat(2.0f);
             velocity.z = Rand_CenteredFloat(3.0f);
             D_8085D288.y = -0.1f;
-            EffectSsHahen_Spawn(play, &pos, &velocity, &D_8085D288, 0, 0x96, 1, 0x10, gKakeraLeafTip);
+            EffectSsHahen_Spawn(play, &pos, &velocity, &D_8085D288, 0, 0x96, 1, 0x10, gKakeraLeafTipDL);
         }
     }
 
@@ -10383,7 +10383,7 @@ void func_80840EC0(Player* this, PlayState* play) {
 
 // Spin attack size
 void func_80840F34(Player* this) {
-    Math_StepToF(&this->unk_B08, (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_02)) ? 1.0f : 0.5f, 0.02f);
+    Math_StepToF(&this->unk_B08, CHECK_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK) ? 1.0f : 0.5f, 0.02f);
 }
 
 s32 func_80840F90(PlayState* play, Player* this, CsCmdActorCue* cue, f32 arg3, s16 arg4, s32 arg5) {
@@ -10644,7 +10644,7 @@ Vec3f D_8085D340 = { 0.0f, 50.0f, 0.0f };
 void Player_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     Player* this = THIS;
-    s8 objBankIndex;
+    s8 objectSlot;
     s32 respawnFlag;
     s32 var_a1;
     PlayerInitMode initMode;
@@ -10671,9 +10671,9 @@ void Player_Init(Actor* thisx, PlayState* play) {
     if (this->actor.shape.rot.x != 0) {
         this->transformation = this->actor.shape.rot.x - 1;
 
-        objBankIndex = Object_GetIndex(&play->objectCtx, gPlayerFormObjectIndices[this->transformation]);
-        this->actor.objBankIndex = objBankIndex;
-        if (objBankIndex < 0) {
+        objectSlot = Object_GetSlot(&play->objectCtx, gPlayerFormObjectIds[this->transformation]);
+        this->actor.objectSlot = objectSlot;
+        if (objectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
             return;
         }
@@ -11253,7 +11253,8 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
             func_801A3CF4(SurfaceType_GetEcho(&play->colCtx, floorPoly, this->actor.floorBgId));
 
             if (this->actor.floorBgId == BGCHECK_SCENE) {
-                func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, this->actor.floorBgId));
+                Environment_ChangeLightSetting(
+                    play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, this->actor.floorBgId));
             } else {
                 DynaPoly_SetPlayerAbove(&play->colCtx, this->actor.floorBgId);
             }
@@ -11848,9 +11849,9 @@ void func_80844784(PlayState* play, Player* this) {
             }
 
             if (play->envCtx.windSpeed >= 50.0f) {
-                temp_fa0 = play->envCtx.windDir.x;
-                temp_fa1 = play->envCtx.windDir.y;
-                temp_ft4 = play->envCtx.windDir.z;
+                temp_fa0 = play->envCtx.windDirection.x;
+                temp_fa1 = play->envCtx.windDirection.y;
+                temp_ft4 = play->envCtx.windDirection.z;
 
                 temp_fv0_2 = sqrtf(SQ(temp_fa0) + SQ(temp_fa1) + SQ(temp_ft4));
                 if (temp_fv0_2 != 0.0f) {
@@ -12391,7 +12392,7 @@ void Player_Update(Actor* thisx, PlayState* play) {
 
     // This block is a leftover dog-following mechanic from OoT
     if (gSaveContext.dogParams < 0) {
-        if (Object_GetIndex(&play->objectCtx, OBJECT_DOG) < 0) {
+        if (Object_GetSlot(&play->objectCtx, OBJECT_DOG) < 0) {
             gSaveContext.dogParams = 0;
         } else {
             Actor* dog;
@@ -12628,7 +12629,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                          CLAMP_MIN(spB8, spB4) * this->actor.scale.z * 1.15f, MTXMODE_APPLY);
             Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
             Scene_SetRenderModeXlu(play, 0, 1);
-            Lib_LerpRGB(&D_8085D580, &D_8085D584, this->unk_B10[0], &spBC);
+            Color_RGB8_Lerp(&D_8085D580, &D_8085D584, this->unk_B10[0], &spBC);
 
             gDPSetEnvColor(POLY_OPA_DISP++, spBC.r, spBC.g, spBC.b, 255);
 
@@ -16643,10 +16644,12 @@ void Player_Action_62(Player* this, PlayState* play) {
 s32 func_80851C40(PlayState* play, Player* this) {
     return ((play->sceneId == SCENE_MILK_BAR) && Audio_IsSequencePlaying(NA_BGM_BALLAD_OF_THE_WIND_FISH)) ||
            (((play->sceneId != SCENE_MILK_BAR) && (this->csMode == PLAYER_CSMODE_68)) ||
-            ((play->msgCtx.msgMode == 0x12) || (play->msgCtx.msgMode == 0x13) || (play->msgCtx.msgMode == 0x14) ||
-             ((play->msgCtx.ocarinaMode != 1) &&
-              ((this->csMode == PLAYER_CSMODE_5) || (play->msgCtx.ocarinaMode == 3) ||
-               play->msgCtx.ocarinaAction == 0x32))));
+            ((play->msgCtx.msgMode == MSGMODE_SONG_PLAYED) ||
+             (play->msgCtx.msgMode == MSGMODE_SETUP_DISPLAY_SONG_PLAYED) ||
+             (play->msgCtx.msgMode == MSGMODE_DISPLAY_SONG_PLAYED) ||
+             ((play->msgCtx.ocarinaMode != OCARINA_MODE_ACTIVE) &&
+              ((this->csMode == PLAYER_CSMODE_5) || (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) ||
+               play->msgCtx.ocarinaAction == OCARINA_ACTION_FREE_PLAY_DONE))));
 }
 
 // Deku playing the pipes? The loops both overwrite unk_AF0[0].y,z and unk_AF0[1].x,y,z
@@ -16666,7 +16669,7 @@ void func_80851D30(PlayState* play, Player* this) {
             *var_s0 = sp50.x;
             var_s0++;
         }
-    } else if (play->msgCtx.ocarinaMode == 1) {
+    } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) {
         if (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID) {
             var_s0[play->msgCtx.ocarinaButtonIndex] = 1.2f;
             Player_Anim_PlayOnceAdjusted(play, this, D_8085D190[this->transformation]);
@@ -16751,7 +16754,7 @@ void func_808521E0(PlayState* play, Player* this) {
         }
 
         func_80124618(D_801C0490, this->skelAnime.curFrame, &this->unk_AF0[1]);
-    } else if (play->msgCtx.ocarinaMode == 1) {
+    } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) {
         if (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID) {
             func_80851EC8(play, this);
         }
@@ -16773,7 +16776,8 @@ void func_80852290(PlayState* play, Player* this) {
         s16 var_a1_3;
         s16 sp38;
 
-        if ((play->msgCtx.ocarinaMode == 1) && (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID)) {
+        if ((play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) &&
+            (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID)) {
             if ((this->unk_A90 != NULL) && (this->unk_A94 < 0.0f)) {
                 this->unk_A90->flags |= ACTOR_FLAG_20000000;
                 this->unk_A94 = 0.0f;
@@ -16854,10 +16858,10 @@ void Player_Action_63(Player* this, PlayState* play) {
                                                ((this->skelAnime.mode == 0) && (this->actionVar2 == 0)))) {
         func_808525C4(play, this);
         if (!(this->actor.flags & ACTOR_FLAG_20000000) || (this->unk_A90->id == ACTOR_EN_ZOT)) {
-            func_80152434(play, 1);
+            Message_DisplayOcarinaStaff(play, OCARINA_ACTION_FREE_PLAY);
         }
     } else if (this->actionVar2 != 0) {
-        if (play->msgCtx.ocarinaMode == 4) {
+        if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
             play->interfaceCtx.unk_222 = 0;
             CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA]);
             this->actor.flags &= ~ACTOR_FLAG_20000000;
@@ -16873,12 +16877,15 @@ void Player_Action_63(Player* this, PlayState* play) {
                 Player_Anim_PlayOnceAdjustedReverse(play, this, D_8085D17C[this->transformation]);
             }
         } else {
-            s32 var_v1 = (play->msgCtx.ocarinaMode >= 0x1C) && (play->msgCtx.ocarinaMode < 0x27);
+            s32 var_v1 = (play->msgCtx.ocarinaMode >= OCARINA_MODE_WARP_TO_GREAT_BAY_COAST) &&
+                         (play->msgCtx.ocarinaMode <= OCARINA_MODE_WARP_TO_ENTRANCE);
             s32 pad[2];
 
-            if (var_v1 || (play->msgCtx.ocarinaMode == 0x16) || (play->msgCtx.ocarinaMode == 0x1A) ||
-                (play->msgCtx.ocarinaMode == 0x18) || (play->msgCtx.ocarinaMode == 0x19)) {
-                if (play->msgCtx.ocarinaMode == 0x16) {
+            if (var_v1 || (play->msgCtx.ocarinaMode == OCARINA_MODE_APPLY_SOT) ||
+                (play->msgCtx.ocarinaMode == OCARINA_MODE_APPLY_DOUBLE_SOT) ||
+                (play->msgCtx.ocarinaMode == OCARINA_MODE_APPLY_INV_SOT_FAST) ||
+                (play->msgCtx.ocarinaMode == OCARINA_MODE_APPLY_INV_SOT_SLOW)) {
+                if (play->msgCtx.ocarinaMode == OCARINA_MODE_APPLY_SOT) {
                     if (!func_8082DA90(play)) {
                         if (gSaveContext.save.saveInfo.playerData.threeDayResetCount == 1) {
                             play->nextEntrance = ENTRANCE(CUTSCENE, 1);
@@ -16909,7 +16916,8 @@ void Player_Action_63(Player* this, PlayState* play) {
                         Player_Anim_PlayOnceAdjustedReverse(play, this, D_8085D17C[this->transformation]);
                     }
                 }
-            } else if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_ELEGY)) {
+            } else if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
+                       (play->msgCtx.lastPlayedSong == OCARINA_SONG_ELEGY)) {
                 play->interfaceCtx.unk_222 = 0;
                 CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA]);
 
@@ -17847,14 +17855,14 @@ void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
     u8* new_var;
     s32 pad[4];
 
-    new_var = play->envCtx.unk_C4.diffuseColor1;
-    sp70.fogNear = play->envCtx.unk_C4.fogNear;
-    sp70.fogColor[0] = play->envCtx.unk_C4.fogColor[0];
-    sp70.fogColor[1] = play->envCtx.unk_C4.fogColor[1];
-    sp70.fogColor[2] = play->envCtx.unk_C4.fogColor[2];
-    sp70.ambientColor[0] = play->envCtx.unk_C4.ambientColor[0];
-    sp70.ambientColor[1] = play->envCtx.unk_C4.ambientColor[1];
-    sp70.ambientColor[2] = play->envCtx.unk_C4.ambientColor[2];
+    new_var = play->envCtx.lightSettings.light1Color;
+    sp70.fogNear = play->envCtx.lightSettings.fogNear;
+    sp70.fogColor[0] = play->envCtx.lightSettings.fogColor[0];
+    sp70.fogColor[1] = play->envCtx.lightSettings.fogColor[1];
+    sp70.fogColor[2] = play->envCtx.lightSettings.fogColor[2];
+    sp70.ambientColor[0] = play->envCtx.lightSettings.ambientColor[0];
+    sp70.ambientColor[1] = play->envCtx.lightSettings.ambientColor[1];
+    sp70.ambientColor[2] = play->envCtx.lightSettings.ambientColor[2];
 
     if (arg1 <= 1.0f) {
         arg1 -= 0.0f;
@@ -17885,13 +17893,13 @@ void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
         var_t4 = D_8085D844;
     }
 
-    play->envCtx.lightSettings.fogNear =
-        ((s16)((var_v1->fogNear - var_t0->fogNear) * arg1) + var_t0->fogNear) - play->envCtx.unk_C4.fogNear;
+    play->envCtx.adjLightSettings.fogNear =
+        ((s16)((var_v1->fogNear - var_t0->fogNear) * arg1) + var_t0->fogNear) - play->envCtx.lightSettings.fogNear;
 
-    func_80854CD0(arg1, play->envCtx.lightSettings.fogColor, var_v1->fogColor, var_t0->fogColor,
-                  play->envCtx.unk_C4.fogColor, play->envCtx.lightSettings.ambientColor, var_v1->ambientColor,
-                  var_t0->ambientColor, play->envCtx.unk_C4.ambientColor, play->envCtx.lightSettings.diffuseColor1,
-                  var_t3, var_t4, new_var);
+    func_80854CD0(arg1, play->envCtx.adjLightSettings.fogColor, var_v1->fogColor, var_t0->fogColor,
+                  play->envCtx.lightSettings.fogColor, play->envCtx.adjLightSettings.ambientColor, var_v1->ambientColor,
+                  var_t0->ambientColor, play->envCtx.lightSettings.ambientColor,
+                  play->envCtx.adjLightSettings.light1Color, var_t3, var_t4, new_var);
 }
 
 struct_8085D848 D_8085D848[] = {
@@ -18116,7 +18124,7 @@ void Player_Action_87(Player* this, PlayState* play) {
                 this->prevMask = this->currentMask;
                 this->csId = play->playerCsIds[PLAYER_CS_ID_MASK_TRANSFORMATION];
                 Player_StopCutscene(this);
-                play->envCtx.lightSettings = D_80862B50;
+                play->envCtx.adjLightSettings = D_80862B50;
                 func_8085B384(this, play);
                 return;
             }
@@ -18130,7 +18138,7 @@ void Player_Action_87(Player* this, PlayState* play) {
 
 void Player_Action_88(Player* this, PlayState* play) {
     if (this->actionVar2++ > 90) {
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         func_8085B384(this, play);
     } else if (this->actionVar2 == 10) {
         func_80848640(play, this);
@@ -19833,7 +19841,7 @@ void Player_CsAction_4(PlayState* play, Player* this, CsCmdActorCue* cue) {
     PlayerAnimation_Update(play, &this->skelAnime);
     if ((this->actor.id == ACTOR_EN_TEST3) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
         this->getItemDrawIdPlusOne = GID_MASK_SUN + 1;
-        Message_BombersNotebookQueueEvent(play, 0x1B);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_ESCAPED_SAKONS_HIDEOUT);
         Audio_PlayFanfare(NA_BGM_GET_NEW_MASK);
     }
 }

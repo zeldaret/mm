@@ -32,8 +32,8 @@ ActorInit Obj_Demo_InitVars = {
 void ObjDemo_Init(Actor* thisx, PlayState* play) {
     ObjDemo* this = THIS;
 
-    thisx->params = OBJDEMO_GET_FF(thisx);
-    if ((thisx->params != OBJDEMO_FF_FF) && (Flags_GetSwitch(play, thisx->params))) {
+    thisx->params = OBJDEMO_GET_SWITCH_FLAG_MASK(thisx);
+    if ((OBJDEMO_GET_SWITCH_FLAG(thisx) != 0xFF) && (Flags_GetSwitch(play, OBJDEMO_GET_SWITCH_FLAG(thisx)))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -93,8 +93,8 @@ void func_80983704(ObjDemo* this, PlayState* play) {
             }
             this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
             if (this->actor.csId == CS_ID_NONE) {
-                if (this->actor.params != 0xFF) {
-                    Flags_SetSwitch(play, this->actor.params);
+                if (OBJDEMO_GET_SWITCH_FLAG(&this->actor) != 0xFF) {
+                    Flags_SetSwitch(play, OBJDEMO_GET_SWITCH_FLAG(&this->actor));
                 }
                 Actor_Kill(&this->actor);
             }
@@ -108,7 +108,8 @@ void func_80983704(ObjDemo* this, PlayState* play) {
 void ObjDemo_Update(Actor* thisx, PlayState* play) {
     ObjDemo* this = THIS;
 
-    if ((this->actor.params != 0xFF) && Flags_GetSwitch(play, this->actor.params)) {
+    if ((OBJDEMO_GET_SWITCH_FLAG(&this->actor) != 0xFF) &&
+        Flags_GetSwitch(play, OBJDEMO_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }

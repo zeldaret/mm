@@ -29,7 +29,7 @@
         <Texture Name="object_kaizoku_obj_Tex_009508" OutName="tex_009508" Format="ci4" Width="4" Height="4" Offset="0x9508" />
         <Collision Name="object_kaizoku_obj_Colheader_009A88" Offset="0x9A88" /> <!-- Original name is "Y2_boat_bgdatainfo" -->
         <DList Name="gPiratesFortressDoorDL" Offset="0x9F20" /> <!-- Original name is "Y2_KaizokuDoor_model" -->
-        <Texture Name="gPiratesFortressDoorTexDL" OutName="door_tex" Format="rgba16" Width="16" Height="64" Offset="0xA210" />
+        <Texture Name="gPiratesFortressDoorTex" OutName="door" Format="rgba16" Width="16" Height="64" Offset="0xA210" />
         <Texture Name="object_kaizoku_obj_Tex_00AA10" OutName="tex_00AA10" Format="i4" Width="32" Height="32" Offset="0xAA10" />
         <DList Name="object_kaizoku_obj_DL_00AD50" Offset="0xAD50" /> <!-- Original name is "Y2_kibako_model" -->
         <Texture Name="object_kaizoku_obj_TLUT_00AF38" OutName="tlut_00AF38" Format="rgba16" Width="4" Height="4" Offset="0xAF38" />

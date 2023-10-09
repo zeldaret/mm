@@ -8,7 +8,7 @@ struct EnLight;
 #define ENLIGHT_GET_1(thisx) ((thisx)->params & 1)
 #define ENLIGHT_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENLIGHT_GET_800(thisx) ((thisx)->params & 0x800)
-#define ENLIGHT_SWITCHFLAG(thisx) (((thisx)->params & 0x7F0) >> 4)
+#define ENLIGHT_SWITCH_FLAG(thisx) (((thisx)->params & 0x7F0) >> 4)
 #define ENLIGHT_GET_1000(thisx) ((thisx)->params & 0x1000)
 #define ENLIGHT_GET_2000(thisx) ((thisx)->params & 0x2000)
 #define ENLIGHT_GET_4000(thisx) ((thisx)->params & 0x4000)

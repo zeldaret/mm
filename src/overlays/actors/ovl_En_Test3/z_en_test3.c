@@ -360,7 +360,7 @@ s32 func_80A3EA30(EnTest3* this, PlayState* play) {
     if (this->unk_D78->unk_1 != 0) {
         CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         CutsceneManager_Queue(this->csId);
-        play->msgCtx.msgMode = 0x44;
+        play->msgCtx.msgMode = MSGMODE_PAUSED;
     }
     return false;
 }
@@ -392,7 +392,7 @@ s32 func_80A3EB8C(EnTest3* this, PlayState* play) {
         if (hideoutObject != NULL) {
             this->player.lockOnActor = hideoutObject;
         }
-        play->msgCtx.msgMode = 0x44;
+        play->msgCtx.msgMode = MSGMODE_PAUSED;
         return 1;
     }
     return 0;
@@ -783,7 +783,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
         CutsceneManager_SetReturnCamera(CAM_ID_MAIN);
         Environment_StartTime();
         if (((void)0, gSaveContext.save.time) > CLOCK_TIME(6, 0)) {
-            func_800FE658(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
+            Environment_SetTimeJump(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
         }
         if (play->actorCtx.flags & ACTORCTX_FLAG_6) {
             SET_WEEKEVENTREG(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT);

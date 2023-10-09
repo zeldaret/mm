@@ -392,16 +392,16 @@ void func_8012301C(Actor* thisx, PlayState* play2) {
     this->actionVar1++;
 
     if (this->actionVar1 == 2) {
-        s16 objectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
+        s16 objectId = gPlayerFormObjectIds[GET_PLAYER_FORM];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
-        func_8012F73C(&play->objectCtx, this->actor.objBankIndex, objectId);
-        this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
+        func_8012F73C(&play->objectCtx, this->actor.objectSlot, objectId);
+        this->actor.objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_KEEP);
     } else if (this->actionVar1 >= 3) {
-        s32 objBankIndex = Object_GetIndex(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
+        s32 objectSlot = Object_GetSlot(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
 
-        if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
-            this->actor.objBankIndex = objBankIndex;
+        if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
+            this->actor.objectSlot = objectSlot;
             this->actor.shape.rot.z = GET_PLAYER_FORM + 1;
             this->actor.init = PlayerCall_Init;
             this->actor.update = PlayerCall_Update;
@@ -1869,7 +1869,7 @@ void Player_DrawHookshotReticle(PlayState* play, Player* player, f32 hookshotDis
 
             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPSegment(OVERLAY_DISP++, 0x06, play->objectCtx.status[player->actor.objBankIndex].segment);
+            gSPSegment(OVERLAY_DISP++, 0x06, play->objectCtx.slots[player->actor.objectSlot].segment);
             gSPDisplayList(OVERLAY_DISP++, gHookshotReticleDL);
 
             CLOSE_DISPS(play->state.gfxCtx);
