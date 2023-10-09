@@ -59,8 +59,8 @@ typedef struct EnAn {
     /* 0x24C */ UNK_TYPE1 unk_24C[0xC];
     /* 0x258 */ Vec3s unk_258; // some limb rot
     /* 0x25E */ UNK_TYPE1 unk_25E[0x6];
-    /* 0x264 */ Vec3s jointTable[OBJECT_AN1_LIMB_MAX];
-    /* 0x2E2 */ Vec3s morphTable[OBJECT_AN1_LIMB_MAX];
+    /* 0x264 */ Vec3s jointTable[ANJU1_LIMB_MAX];
+    /* 0x2E2 */ Vec3s morphTable[ANJU1_LIMB_MAX];
     /* 0x360 */ u16 stateFlags;
     /* 0x362 */ u16 prevTextId;
     /* 0x364 */ u8 cueId;
@@ -77,7 +77,7 @@ typedef struct EnAn {
     /* 0x388 */ s16 unk_388; // timer
     /* 0x38A */ s16 unk_38A; // face enum
     /* 0x38C */ s16 faceIndex; // face enum
-    /* 0x38E */ s16 unk_38E; // timer
+    /* 0x38E */ s16 eyeTimer;
     /* 0x390 */ s16 eyeTexIndex;
     /* 0x392 */ s16 mouthTexIndex;
     /* 0x394 */ s16 unk_394;

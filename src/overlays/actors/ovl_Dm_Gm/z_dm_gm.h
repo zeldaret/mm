@@ -16,8 +16,8 @@ typedef struct DmGm {
     /* 0x18C */ Vec3f unk_194;
     /* 0x1A4 */ Vec3s unk_1A4;
     /* 0x1A4 */ Vec3s unk_1AA;
-    /* 0x1B0 */ Vec3s jointTable[OBJECT_AN1_LIMB_MAX];
-    /* 0x22E */ Vec3s morphTable[OBJECT_AN1_LIMB_MAX];
+    /* 0x1B0 */ Vec3s jointTable[ANJU1_LIMB_MAX];
+    /* 0x22E */ Vec3s morphTable[ANJU1_LIMB_MAX];
     /* 0x2AC */ s8 an4ObjectSlot;
     /* 0x2AD */ s8 msmoObjectSlot;
     /* 0x2AE */ u16 unk_2AE;
