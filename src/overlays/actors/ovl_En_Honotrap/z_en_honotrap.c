@@ -292,7 +292,7 @@ void func_8092EBDC(EnHonotrap* this, PlayState* play) {
 
 void func_8092EC9C(EnHonotrap* this) {
     this->actionFunc = func_8092ECF0;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, 0, 40);
     this->unk220 = 30;
     Actor_PlaySfx(&this->actor, NA_SE_EV_RED_EYE);
 }
@@ -355,8 +355,8 @@ void func_8092EE90(EnHonotrap* this, PlayState* play) {
 }
 
 void func_8092EF3C(EnHonotrap* this) {
-    Actor_PlaySfx(&this->actor, 0x2881U);
-    Actor_SetColorFilter(&this->actor, 0x4000U, 255, 0, 40);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_RED_EYE);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, 0, 40);
     this->unk220 = 0x28;
     this->actionFunc = func_8092EF98;
 }
@@ -433,8 +433,8 @@ void func_8092F1A0(EnHonotrap* this) {
 }
 
 void func_8092F208(EnHonotrap* this, PlayState* play) {
-    if ((this->collider.tris.base.atFlags & 2) || (this->unk220 <= 0)) {
-        if ((this->collider.tris.base.atFlags & 2) && !(this->collider.tris.base.atFlags & 4)) {
+    if ((this->collider.tris.base.atFlags & AT_HIT) || (this->unk220 <= 0)) {
+        if ((this->collider.tris.base.atFlags & AT_HIT) && !(this->collider.tris.base.atFlags & AT_BOUNCED)) {
             func_800B8D98(play, &this->actor, 5.0f, this->actor.yawTowardsPlayer, 0.0f);
         }
         this->actor.velocity.z = 0.0f;
@@ -446,7 +446,7 @@ void func_8092F208(EnHonotrap* this, PlayState* play) {
     if (this->actor.velocity.y > 0.0f) {
         this->actor.world.pos.x += this->actor.velocity.x;
         this->actor.world.pos.z += this->actor.velocity.z;
-        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 12.0f, 0.0f, 5U);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
     if (Math_StepToF(&this->actor.world.pos.y, this->actor.floorHeight + 1.0f, this->actor.velocity.y) == 0) {
         this->actor.velocity.y += 1.0f;
@@ -488,9 +488,11 @@ void func_8092F3D8(EnHonotrap* this, PlayState* play) {
     temp_s1 &= Math_StepToF(&this->actor.world.pos.x, this->unk228.x, sp60.x);
     temp_s1 &= Math_StepToF(&this->actor.world.pos.y, this->unk228.y, sp60.y);
     temp_s1 &= Math_StepToF(&this->actor.world.pos.z, this->unk228.z, sp60.z);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 0.0f, 0x1DU);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
-    if (this->collider.tris.base.atFlags & 4) {
+    if (this->collider.tris.base.atFlags & AT_BOUNCED) {
         player = GET_PLAYER(play);
         sp34.x = -player->shieldMf.xz;
         sp34.y = -player->shieldMf.yz;
@@ -503,7 +505,7 @@ void func_8092F3D8(EnHonotrap* this, PlayState* play) {
         func_8092F7A8(this);
         return;
     }
-    if (this->collider.tris.base.atFlags & 2) {
+    if (this->collider.tris.base.atFlags & AT_HIT) {
         this->actor.speed = 0.0f;
         this->actor.velocity.y = 0.0f;
         func_8092F7A8(this);
@@ -546,20 +548,22 @@ void func_8092F5EC(EnHonotrap* this, PlayState* play) {
     }
     this->actor.velocity.y *= 0.95f;
     Actor_UpdatePos(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 0.0f, 0x1DU);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
-    if (this->collider.tris.base.atFlags & 4) {
+    if (this->collider.tris.base.atFlags & AT_BOUNCED) {
         Player* player = GET_PLAYER(play);
         Vec3s sp30;
 
         Matrix_MtxFToYXZRot(&player->shieldMf, &sp30, 0);
         this->actor.world.rot.y = ((sp30.y * 2) - this->actor.world.rot.y) + 0x8000;
         func_8092F7A8(this);
-    } else if (this->collider.tris.base.atFlags & 2) {
+    } else if (this->collider.tris.base.atFlags & AT_HIT) {
         this->actor.speed *= 0.1f;
         this->actor.velocity.y *= 0.1f;
         func_8092F7A8(this);
-    } else if ((this->actor.bgCheckFlags & 8) || (this->unk220 <= 0)) {
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->unk220 <= 0)) {
         func_8092F7A8(this);
     } else {
         func_8092E510(this, play);
@@ -577,7 +581,9 @@ void func_8092F7BC(EnHonotrap* this, PlayState* play) {
     this->actor.scale.y = temp_fv0;
     this->actor.scale.z = temp_fv0;
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 0.0f, 0x1DU);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     if (sp28 != 0) {
         Actor_Kill(&this->actor);
     }
@@ -695,7 +701,7 @@ void EnHonotrap_Update(Actor* thisx, PlayState* play) {
         this->actor.child = NULL;
     }
     this->actionFunc(this, play);
-    if (this->collider.tris.base.acFlags & 2) {
+    if (this->collider.tris.base.acFlags & AC_HIT) {
         EffectSsBomb2_SpawnLayered(play, &this->actor.world.pos, &D_809304EC, &D_809304F8, 15, 8);
         Actor_Kill(&this->actor);
         return;
@@ -767,13 +773,14 @@ void func_80930030(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#ifdef NON_MATCHING
 void func_80930190(Actor* thisx, PlayState* play) {
-    EnHonotrap* this = (EnHonotrap*)thisx;
-    Vec3s spB8;
+    s32 pad;
+    EnHonotrap* this;
     EnHonotrapArr* temp_s0;
     EnHonotrap23C* var_s3;
     s32 i; // s4
+    s32 pad2;
+    Vec3s spB8;
 
     OPEN_DISPS(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
@@ -781,6 +788,7 @@ void func_80930190(Actor* thisx, PlayState* play) {
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     Camera_GetCamDir(&spB8, play->cameraPtrs[play->activeCamId]);
     spB8.y += 0x8000;
+    this = ((EnHonotrap*)thisx);
     var_s3 = &this->unk23C;
     for (i = 0; i < 6; i++) {
         temp_s0 = &var_s3->unkC[i];
@@ -789,9 +797,7 @@ void func_80930190(Actor* thisx, PlayState* play) {
                        Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, temp_s0->unk_10, 0x20, 0x80));
             Matrix_SetTranslateRotateYXZ(temp_s0->unk0.x, temp_s0->unk0.y - (4000.0f * temp_s0->unkC), temp_s0->unk0.z,
                                          &spB8);
-            // temp_fa1 = temp_s0->unkC;
-            Matrix_Scale(((fabsf(Math_SinS((s16)(spB8.y - this->actor.shape.rot.y) >> 1)) * 0.2f) + 1.7f) *
-                             temp_s0->unkC,
+            Matrix_Scale(((fabsf(Math_SinS((s16)(spB8.y - thisx->shape.rot.y) >> 1)) * 0.2f) + 1.7f) * temp_s0->unkC,
                          temp_s0->unkC, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
@@ -799,6 +805,3 @@ void func_80930190(Actor* thisx, PlayState* play) {
     }
     CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Honotrap/func_80930190.s")
-#endif
