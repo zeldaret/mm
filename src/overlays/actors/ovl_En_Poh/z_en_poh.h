@@ -13,7 +13,7 @@ typedef enum EnPohBodyPart {
     /*  1 */ POE_BODYPART_LEFT_UPPER_ARM,
     /*  2 */ POE_BODYPART_RIGHT_ARM_HAND,
     /*  3 */ POE_BODYPART_RIGHT_FOREARM,
-    /*  4 */ POE_BODYPART_BOTTEM_CLOAK,
+    /*  4 */ POE_BODYPART_BOTTOM_CLOAK,
     /*  5 */ POE_BODYPART_TOP_CLOAK,
     /*  6 */ ENPOH_BODYPART_6,
     /*  7 */ ENPOH_BODYPART_7,
