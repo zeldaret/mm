@@ -84,7 +84,7 @@ ShutterInfo D_808A21B0[] = {
     { gBeneathTheWellSlidingDoorDL, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_ikninside_obj_DL_004440, object_ikninside_obj_DL_005260, 130, 0, 20, 15 },
     { gSecretShrineSlidingDoorDL, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
-    { object_kinsta1_obj_DL_000198, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
+    { gSwampSpiderHouseSlidingDoorDL, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_kaizoku_obj_DL_0001A0, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_last_obj_DL_0039C0, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
 };
