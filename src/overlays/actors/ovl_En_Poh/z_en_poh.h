@@ -2,6 +2,7 @@
 #define Z_EN_POH_H
 
 #include "global.h"
+#include "objects/object_po/object_po.h"
 
 struct EnPoh;
 
@@ -38,8 +39,8 @@ typedef struct EnPoh {
     /* 0x199 */ u8 unk_199;
     /* 0x19A */ u8 unk_19A;
     /* 0x19B */ u8 unk_19B;
-    /* 0x19C */ Vec3s jointTable[21];
-    /* 0x21A */ Vec3s morphTable[21];
+    /* 0x19C */ Vec3s jointTable[POE_LIMB_MAX];
+    /* 0x21A */ Vec3s morphTable[POE_LIMB_MAX];
     /* 0x298 */ f32 drawDmgEffAlpha;
     /* 0x29C */ f32 drawDmgEffScale;
     /* 0x2A0 */ Vec3f bodyPartsPos[ENPOH_BODYPART_MAX];

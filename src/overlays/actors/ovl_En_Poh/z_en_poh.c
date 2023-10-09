@@ -7,7 +7,6 @@
 #include "prevent_bss_reordering.h"
 #include "z_en_poh.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_po/object_po.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
 
@@ -167,7 +166,7 @@ void EnPoh_Init(Actor* thisx, PlayState* play) {
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     Lights_PointGlowSetInfo(&this->lightInfo, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
                             255, 255, 255, 0);
-    SkelAnime_Init(play, &this->skelAnime, &gPoeSkel, &gPoeFloatAnim, this->jointTable, this->morphTable, 21);
+    SkelAnime_Init(play, &this->skelAnime, &gPoeSkel, &gPoeFloatAnim, this->jointTable, this->morphTable, POE_LIMB_MAX);
     this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     func_80B2D0E8(this);
 }
