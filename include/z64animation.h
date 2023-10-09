@@ -13,8 +13,8 @@ struct SkelAnime;
 struct PlayerAnimationFrame;
 
 // for indexing `jointTable[]` and `morphTable[]`
-#define LIMB_INDEX_MODEL_TRANSLATION 0
-#define LIMB_INDEX_MODEL_ROT 1
+#define LIMB_INDEX_MODEL_POS 0 // Translation/Offset of the entire model
+#define LIMB_INDEX_MODEL_ROT 1 // Rotation of the entire model
 
 #define LIMB_DONE 0xFF
 #define BODYPART_NONE -1
