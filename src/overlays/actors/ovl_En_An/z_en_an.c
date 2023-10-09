@@ -2989,31 +2989,33 @@ void func_80B57A44(EnAn* this, PlayState* play) {
     }
 }
 
-#ifdef NON_EQUIVALENT
 void func_80B57B48(EnAn* this, PlayState* play) {
     s32 sp30[] = { ENAN_ANIM_0, ENAN_ANIM_11, ENAN_ANIM_34, ENAN_ANIM_25, ENAN_ANIM_26, ENAN_ANIM_28, ENAN_ANIM_30, ENAN_ANIM_32, ENAN_ANIM_33, ENAN_ANIM_0 };
-    s32 temp_v0; // sp28
     u16 temp_v1;
-    u8 var_v0;
+    s32 temp_v0; // sp28
 
-    if (Cutscene_IsCueInChannel(play, 0x22DU) != 0) {
+    if(0) {}
+
+    if (Cutscene_IsCueInChannel(play, 0x22DU)) {
         temp_v0 = Cutscene_GetCueChannel(play, 0x22DU);
         temp_v1 = play->csCtx.actorCues[temp_v0]->id;
-        var_v0 = temp_v1 & 0xFF;
-        if ((temp_v1 & 0xFF) != this->unk_364) {
-            this->unk_364 = (u8) temp_v1;
-            if (var_v0 == 3) {
+
+        if (this->unk_364 != (temp_v1 & 0xFF)) {
+            this->unk_364 = temp_v1;
+            if (this->unk_364 == 3) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_87_02);
-                var_v0 = this->unk_364;
                 this->unk_3B4 = 1;
             }
-            if (var_v0 == 9) {
+            if (this->unk_364 == 9) {
                 this->unk_3B4 = 0;
             }
             EnAn_ChangeAnim(this, play, sp30[temp_v1]);
         }
 
-        if ((this->animIndex == ENAN_ANIM_26) || (this->animIndex == ENAN_ANIM_28) || (this->animIndex == ENAN_ANIM_30) || (this->animIndex == ENAN_ANIM_34)) {
+        if ((this->animIndex == ENAN_ANIM_26) ||
+            (this->animIndex == ENAN_ANIM_28) ||
+            (this->animIndex == ENAN_ANIM_30) ||
+            (this->animIndex == ENAN_ANIM_34)) {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 EnAn_ChangeAnim(this, play, this->animIndex + 1);
             }
@@ -3021,11 +3023,6 @@ void func_80B57B48(EnAn* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
     }
 }
-#else
-s32 D_80B58EAC[] = { ENAN_ANIM_0, ENAN_ANIM_11, ENAN_ANIM_34, ENAN_ANIM_25, ENAN_ANIM_26, ENAN_ANIM_28, ENAN_ANIM_30, ENAN_ANIM_32, ENAN_ANIM_33, ENAN_ANIM_0 };
-void func_80B57B48(EnAn* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57B48.s")
-#endif
 
 void EnAn_Init(Actor* thisx, PlayState* play) {
     s32 pad;
