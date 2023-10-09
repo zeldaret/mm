@@ -1,8 +1,8 @@
 ﻿<Root>
     <File Name="object_kitan" Segment="6">
-        <Animation Name="object_kitan_Anim_000CE8" Offset="0xCE8" />
-        <Animation Name="object_kitan_Anim_00190C" Offset="0x190C" />
-        <Animation Name="object_kitan_Anim_002770" Offset="0x2770" />
+        <Animation Name="object_kitan_Anim_000CE8" Offset="0xCE8" /> <!-- Original name is "kt_hohoho" -->
+        <Animation Name="object_kitan_Anim_00190C" Offset="0x190C" /> <!-- Original name is "kt_laugh" -->
+        <Animation Name="object_kitan_Anim_002770" Offset="0x2770" /> <!-- Original name is "kt_wait" -->
         <DList Name="object_kitan_DL_004C40" Offset="0x4C40" />
         <DList Name="object_kitan_DL_004DF0" Offset="0x4DF0" />
         <DList Name="object_kitan_DL_005160" Offset="0x5160" />

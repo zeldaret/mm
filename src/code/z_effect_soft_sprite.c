@@ -8,7 +8,7 @@ void EffectSS_Init(PlayState* play, s32 numEntries) {
     EffectSs* effectsSs;
     EffectSsOverlay* overlay;
 
-    sEffectSsInfo.data_table = (EffectSs*)THA_AllocTailAlign16(&play->state.heap, numEntries * sizeof(EffectSs));
+    sEffectSsInfo.data_table = (EffectSs*)THA_AllocTailAlign16(&play->state.tha, numEntries * sizeof(EffectSs));
     sEffectSsInfo.searchIndex = 0;
     sEffectSsInfo.size = numEntries;
 

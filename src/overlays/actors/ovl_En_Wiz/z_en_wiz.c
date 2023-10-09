@@ -336,7 +336,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->ghostColliders, &this->actor, &sJntSphInit, this->ghostColliderElements);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->staffFlameScroll = Rand_S16Offset(0, 7);
-    this->switchFlag = EN_WIZ_GET_SWITCHFLAG(&this->actor);
+    this->switchFlag = EN_WIZ_GET_SWITCH_FLAG(&this->actor);
     this->type = EN_WIZ_GET_TYPE(&this->actor);
 
     if (this->switchFlag == 0x7F) {

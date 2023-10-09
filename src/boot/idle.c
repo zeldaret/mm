@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "irqmgr.h"
 #include "main.h"
 #include "stack.h"

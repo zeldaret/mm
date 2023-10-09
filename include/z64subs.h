@@ -147,8 +147,8 @@ s16 SubS_GetDistSqAndOrientPoints(Vec3f* vecA, Vec3f* vecB, f32* distSq);
 s32 SubS_MoveActorToPoint(Actor* actor, Vec3f* point, s16 rotStep);
 s16 SubS_GetDistSqAndOrientPath(Path* path, s32 pointIndex, Vec3f* pos, f32* distSq);
 
-s8 SubS_IsObjectLoaded(s8 index, struct PlayState* play);
-s8 SubS_GetObjectIndex(s16 id, struct PlayState* play);
+s8 SubS_IsObjectLoaded(s8 objectSlot, struct PlayState* play);
+s8 SubS_GetObjectSlot(s16 objectId, struct PlayState* play);
 
 Actor* SubS_FindActor(struct PlayState* play, Actor* actorListStart, u8 actorCategory, s16 actorId);
 

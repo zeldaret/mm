@@ -209,8 +209,8 @@ void EnInvadepohDemo_DoNothing(EnInvadepohDemo* this, PlayState* play) {
 void EnInvadepohDemo_Alien_Init(EnInvadepohDemo* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sAlienInitChain);
     this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000;
-    this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_UCH);
-    if (this->objectIndex < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_UCH);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -220,8 +220,8 @@ void EnInvadepohDemo_Alien_Init(EnInvadepohDemo* this, PlayState* play) {
 
 void EnInvadepohDemo_Romani_Init(EnInvadepohDemo* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sRomaniInitChain);
-    this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_MA1);
-    if (this->objectIndex < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_MA1);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -233,8 +233,8 @@ void EnInvadepohDemo_Cow_Init(EnInvadepohDemo* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sCowInitChain);
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH_DEMO, 0.0f, 0.0f, 0.0f, 0, 0, 0,
                        EN_INVADEPOH_DEMO_TYPE_COW_TAIL);
-    this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_COW);
-    if (this->objectIndex < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_COW);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -250,8 +250,8 @@ void EnInvadepohDemo_Ufo_Init(EnInvadepohDemo* this, PlayState* play) {
 
 void EnInvadepohDemo_CowTail_Init(EnInvadepohDemo* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sCowTailInitChain);
-    this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_COW);
-    if (this->objectIndex < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_COW);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -503,8 +503,8 @@ void EnInvadepohDemo_CowTail_Idle(EnInvadepohDemo* this, PlayState* play) {
 void EnInvadepohDemo_Alien_WaitForObject(EnInvadepohDemo* this, PlayState* play) {
     s32 pad[2];
 
-    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-        this->actor.objBankIndex = this->objectIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         this->drawFlags |= DRAW_FLAG_SHOULD_DRAW;
         this->actionFunc = EnInvadepohDemo_SelectCueAction;
@@ -517,8 +517,8 @@ void EnInvadepohDemo_Alien_WaitForObject(EnInvadepohDemo* this, PlayState* play)
 void EnInvadepohDemo_Romani_WaitForObject(EnInvadepohDemo* this, PlayState* play) {
     s32 pad[2];
 
-    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-        this->actor.objBankIndex = this->objectIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         this->drawFlags |= DRAW_FLAG_SHOULD_DRAW;
         this->actionFunc = EnInvadepohDemo_SelectCueAction;
@@ -531,8 +531,8 @@ void EnInvadepohDemo_Romani_WaitForObject(EnInvadepohDemo* this, PlayState* play
 void EnInvadepohDemo_Cow_WaitForObject(EnInvadepohDemo* this, PlayState* play) {
     s32 pad[2];
 
-    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-        this->actor.objBankIndex = this->objectIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         this->drawFlags |= DRAW_FLAG_SHOULD_DRAW;
         this->actionFunc = EnInvadepohDemo_SelectCueAction;
@@ -545,8 +545,8 @@ void EnInvadepohDemo_Cow_WaitForObject(EnInvadepohDemo* this, PlayState* play) {
 void EnInvadepohDemo_CowTail_WaitForObject(EnInvadepohDemo* this, PlayState* play) {
     s32 pad[2];
 
-    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-        this->actor.objBankIndex = this->objectIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         this->drawFlags |= DRAW_FLAG_SHOULD_DRAW;
         this->actionFunc = EnInvadepohDemo_CowTail_Idle;
@@ -750,7 +750,7 @@ void EnInvadepohDemo_Ufo_Draw(EnInvadepohDemo* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (EnInvadepohDemo_Ufo_ShouldDrawLensFlare(play, &flashPos)) {
-        func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, flashPos, 20.0f, 9.0f, 0, 0);
+        Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, flashPos, 20.0f, 9.0f, 0, 0);
     }
 }
 
@@ -786,7 +786,7 @@ void EnInvadepohDemo_Init(Actor* thisx, PlayState* play) {
     this->ufoRotZ = 0;
     this->pathIndex = EN_INVADEPOH_DEMO_GET_PATH_INDEX(&this->actor);
     this->pointIndex = 0;
-    this->objectIndex = -1;
+    this->objectSlot = OBJECT_SLOT_NONE;
     sInitFuncs[this->type](this, play);
 }
 

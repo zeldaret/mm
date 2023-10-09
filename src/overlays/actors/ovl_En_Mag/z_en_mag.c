@@ -707,7 +707,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
     s16 step;
 
     // Set segment 6 to the object, since this will be read by OVERLAY_DISP where it is not set by default.
-    gSPSegment(gfx++, 0x06, play->objectCtx.status[this->actor.objBankIndex].segment);
+    gSPSegment(gfx++, 0x06, play->objectCtx.slots[this->actor.objectSlot].segment);
 
     Gfx_SetupDL39_Ptr(&gfx);
 

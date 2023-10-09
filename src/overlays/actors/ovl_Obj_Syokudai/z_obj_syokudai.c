@@ -248,7 +248,8 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                         }
                     } else {
-                        if (++sNumLitTorchesInGroup >= groupSize) {
+                        sNumLitTorchesInGroup++;
+                        if (sNumLitTorchesInGroup >= groupSize) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
                             this->snuffTimer =
