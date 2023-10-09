@@ -468,61 +468,55 @@ void func_8092F34C(EnHonotrap* this) {
     this->unk234 = 0.0f;
 }
 
-#ifdef NON_MATCHING
 void func_8092F3D8(EnHonotrap* this, PlayState* play) {
-    s32 pad;
+    Actor* thisx = &this->actor;
     Vec3f sp60;
 
     s32 temp_s1;
-    Player* player;
-
-    Vec3f sp4C;
-    Vec3f sp40;
-    Vec3f sp34;
 
     Math_StepToF(&this->unk234, 13.0f, 0.5f);
-    sp60.x = fabsf(this->unk234 * this->actor.velocity.x);
-    sp60.y = fabsf(this->unk234 * this->actor.velocity.y);
-    sp60.z = fabsf(this->unk234 * this->actor.velocity.z);
+    sp60.x = fabsf(this->unk234 * thisx->velocity.x);
+    sp60.y = fabsf(this->unk234 * thisx->velocity.y);
+    sp60.z = fabsf(this->unk234 * thisx->velocity.z);
     temp_s1 = 1;
-    temp_s1 &= Math_StepToF(&this->actor.world.pos.x, this->unk228.x, sp60.x);
-    temp_s1 &= Math_StepToF(&this->actor.world.pos.y, this->unk228.y, sp60.y);
-    temp_s1 &= Math_StepToF(&this->actor.world.pos.z, this->unk228.z, sp60.z);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 0.0f,
+    temp_s1 &= Math_StepToF(&thisx->world.pos.x, this->unk228.x, sp60.x);
+    temp_s1 &= Math_StepToF(&thisx->world.pos.y, this->unk228.y, sp60.y);
+    temp_s1 &= Math_StepToF(&thisx->world.pos.z, this->unk228.z, sp60.z);
+    Actor_UpdateBgCheckInfo(play, thisx, 10.0f, 10.0f, 0.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
                                 UPDBGCHECKINFO_FLAG_10);
 
     if (this->collider.tris.base.atFlags & AT_BOUNCED) {
-        player = GET_PLAYER(play);
+        Player* player = GET_PLAYER(play);
+        Vec3f sp4C;
+        Vec3f sp40;
+        Vec3f sp34;
+
         sp34.x = -player->shieldMf.xz;
         sp34.y = -player->shieldMf.yz;
         sp34.z = -player->shieldMf.zz;
         func_8092E5A4(&sp4C, &sp34);
-        sp40 = this->actor.velocity;
-        func_80179F64(&sp40, &sp4C, &this->actor.velocity);
-        this->actor.speed = this->unk234 * 0.5f;
-        this->actor.world.rot.y = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
+        sp40 = thisx->velocity;
+        func_80179F64(&sp40, &sp4C, &thisx->velocity);
+        thisx->speed = this->unk234 * 0.5f;
+        thisx->world.rot.y = Math_Atan2S_XY(thisx->velocity.z, thisx->velocity.x);
         func_8092F7A8(this);
-        return;
     }
-    if (this->collider.tris.base.atFlags & AT_HIT) {
-        this->actor.speed = 0.0f;
-        this->actor.velocity.y = 0.0f;
+    else if (this->collider.tris.base.atFlags & AT_HIT) {
+        thisx->speed = 0.0f;
+        thisx->velocity.y = 0.0f;
         func_8092F7A8(this);
-        return;
     }
-    if (this->unk220 <= 0) {
+    else if (this->unk220 <= 0) {
         func_8092F7A8(this);
-        return;
     }
-    func_8092E510(this, play);
-    if (temp_s1 != 0) {
-        func_8092F5AC(this);
+    else {
+        func_8092E510(this, play);
+        if (temp_s1 != 0) {
+            func_8092F5AC(this);
+        }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Honotrap/func_8092F3D8.s")
-#endif
 
 void func_8092F5AC(EnHonotrap* this) {
     this->actionFunc = func_8092F5EC;
