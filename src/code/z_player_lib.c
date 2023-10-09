@@ -1299,7 +1299,7 @@ void func_80123C58(Player* player) {
 void Player_SetEquipmentData(PlayState* play, Player* player) {
     if (player->csAction != PLAYER_CSACTION_134) {
         player->currentShield = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
-        if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) &&
+        if ((player->transformation != PLAYER_FORM_ZORA) || ((player->currentBoots != PLAYER_BOOTS_ZORA_LAND) &&
                                                              (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
             player->currentBoots = D_801BFF90[player->transformation];
         }
