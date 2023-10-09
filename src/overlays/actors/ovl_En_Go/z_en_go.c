@@ -82,8 +82,8 @@ typedef enum EnGoEffectType {
     /* 7 */ ENGO_EFFECT_STEAM = ENGO_EFFECT_STEAM_MIN
 } EnGoEffectType;
 
-typedef enum EnGoAnimationIndex {
-    /* -1 */ ENGO_ANIM_INVALID = -1,
+typedef enum EnGoAnimation {
+    /* -1 */ ENGO_ANIM_NONE = -1,
     /*  0 */ ENGO_ANIM_GORON_MIN,
     /*  0 */ ENGO_ANIM_LYINGDOWNIDLE = ENGO_ANIM_GORON_MIN,
     /*  1 */ ENGO_ANIM_LYINGDOWNIDLE_IMM,
@@ -95,21 +95,21 @@ typedef enum EnGoAnimationIndex {
     /*  7 */ ENGO_ANIM_DROPKEG,
     /*  8 */ ENGO_ANIM_COVEREARS,
     /*  9 */ ENGO_ANIM_SHIVERINGSURPRISED,
-    /*  10 */ ENGO_ANIM_ATHLETICS_MIN,
-    /*  10 */ ENGO_ANIM_DOUBLE_ARM_SIDEBEND = ENGO_ANIM_ATHLETICS_MIN,
-    /*  11 */ ENGO_ANIM_SQUAT_SIDE_TO_SIDE,
-    /*  12 */ ENGO_ANIM_SHAKE_LIMBS,
-    /*  13 */ ENGO_ANIM_SINGLE_ARM_SIDEBEND,
-    /*  14 */ ENGO_ANIM_SITTING_STRETCH,
-    /*  15 */ ENGO_ANIM_CHEER,
-    /*  16 */ ENGO_ANIM_SHOUT,
-    /*  17 */ ENGO_ANIM_HELP_SITTING_STRETCH,
-    /*  18 */ ENGO_ANIM_SPRING_MIN,
-    /*  18 */ ENGO_ANIM_SHOW = ENGO_ANIM_SPRING_MIN,
-    /*  19 */ ENGO_ANIM_SHOW_LOOPED,
-    /*  20 */ ENGO_ANIM_LOOK_AROUND,
-    /*  21 */ ENGO_ANIM_LOOK_AROUND_LOOPED
-} EnGoAnimationIndex;
+    /* 10 */ ENGO_ANIM_ATHLETICS_MIN,
+    /* 10 */ ENGO_ANIM_DOUBLE_ARM_SIDEBEND = ENGO_ANIM_ATHLETICS_MIN,
+    /* 11 */ ENGO_ANIM_SQUAT_SIDE_TO_SIDE,
+    /* 12 */ ENGO_ANIM_SHAKE_LIMBS,
+    /* 13 */ ENGO_ANIM_SINGLE_ARM_SIDEBEND,
+    /* 14 */ ENGO_ANIM_SITTING_STRETCH,
+    /* 15 */ ENGO_ANIM_CHEER,
+    /* 16 */ ENGO_ANIM_SHOUT,
+    /* 17 */ ENGO_ANIM_HELP_SITTING_STRETCH,
+    /* 18 */ ENGO_ANIM_SPRING_MIN,
+    /* 18 */ ENGO_ANIM_SHOW = ENGO_ANIM_SPRING_MIN,
+    /* 19 */ ENGO_ANIM_SHOW_LOOPED,
+    /* 20 */ ENGO_ANIM_LOOK_AROUND,
+    /* 21 */ ENGO_ANIM_LOOK_AROUND_LOOPED
+} EnGoAnimation;
 
 void EnGo_Idle(EnGo* this, PlayState* play);
 void EnGo_Sleep(EnGo* this, PlayState* play);
@@ -309,7 +309,7 @@ static DamageTable sDamageTable = {
 /**
  * Animations used in the actor.
  *
- * @see EnGoAnimationIndex
+ * @see EnGoAnimation
  */
 static AnimationInfoS sAnimationInfo[] = {
 
@@ -530,7 +530,7 @@ void EnGo_DrawDust(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
  * @param pos Position around which the effects appear
  */
 void EnGo_InitSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], Vec3f pos) {
-    static u8 effectIndexToSnowEffectTable[ENGO_SNOW_EFFECT_COUNT] = {
+    static u8 sEffectIndexToSnowEffectTable[ENGO_SNOW_EFFECT_COUNT] = {
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
@@ -570,7 +570,7 @@ void EnGo_InitSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], Vec3f pos) {
         effect->alphaDenom = effect->alphaNumer = 1;
 
         // Assign a snow effect value of 'ENGO_EFFECT_SNOW1'/'2'/'3'
-        effect->type = effectIndexToSnowEffectTable[i];
+        effect->type = sEffectIndexToSnowEffectTable[i];
 
         // Initialize the parameters for the paired element
         randRelativeToWorldPos.x = ((Rand_ZeroOne() - 0.5f) * 80.0f) + effect->pos.x;
@@ -748,7 +748,7 @@ s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 isFallingAsleep = false;
 
-    if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+    if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->sleepState == ENGO_AWAKE) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
         (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON) && (play->sceneId == SCENE_16GORON_HOUSE) &&
@@ -977,27 +977,27 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
  *
  * @return True if non-repeating animation has finished
  */
-s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play) {
-    s8 objIndex = this->actor.objBankIndex;
+s32 EnGo_UpdateSkelAnime(EnGo* this, PlayState* play) {
+    s8 objectSlot = this->actor.objectSlot;
     s8 extraObjIndex = -1;
-    s32 ret = false;
+    s32 isAnimFinished = false;
 
-    if ((this->curAnimIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
-        extraObjIndex = this->hakuginDemoObjIndex;
-    } else if ((this->curAnimIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjIndex >= 0)) {
-        extraObjIndex = this->taisouObjIndex;
-    } else if (this->curAnimIndex < ENGO_ANIM_ATHLETICS_MIN) {
-        extraObjIndex = this->actor.objBankIndex;
+    if ((this->animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot > OBJECT_SLOT_NONE)) {
+        extraObjIndex = this->hakuginDemoObjectSlot;
+    } else if ((this->animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot > OBJECT_SLOT_NONE)) {
+        extraObjIndex = this->taisouObjectSlot;
+    } else if (this->animIndex < ENGO_ANIM_ATHLETICS_MIN) {
+        extraObjIndex = this->actor.objectSlot;
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
-        this->skelAnime.playSpeed = this->curAnimPlaySpeed;
-        ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
+        this->skelAnime.playSpeed = this->animPlaySpeed;
+        isAnimFinished = SkelAnime_Update(&this->skelAnime);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
-    return ret;
+    return isAnimFinished;
 }
 
 /**
@@ -1005,7 +1005,7 @@ s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play) {
  */
 s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_IDLE) {
-        if (this->curAnimIndex == ENGO_ANIM_ROLL) {
+        if (this->animIndex == ENGO_ANIM_ROLL) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
             }
@@ -1013,7 +1013,7 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
             if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
             }
-        } else if ((this->curAnimIndex == ENGO_ANIM_UNROLL) || (this->curAnimIndex == ENGO_ANIM_UNROLL_IMM)) {
+        } else if ((this->animIndex == ENGO_ANIM_UNROLL) || (this->animIndex == ENGO_ANIM_UNROLL_IMM)) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE_OFF);
             }
@@ -1037,28 +1037,28 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
  *
  * @return True if animation was changed
  */
-s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex) {
-    s8 objIndex = this->actor.objBankIndex;
+s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimation animIndex) {
+    s8 objectSlot = this->actor.objectSlot;
     s8 extraObjIndex = -1;
-    s32 ret = false;
+    s32 didAnimChange = false;
 
-    if ((animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
-        extraObjIndex = this->hakuginDemoObjIndex;
-    } else if ((animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjIndex >= 0)) {
-        extraObjIndex = this->taisouObjIndex;
+    if ((animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot > OBJECT_SLOT_NONE)) {
+        extraObjIndex = this->hakuginDemoObjectSlot;
+    } else if ((animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot > OBJECT_SLOT_NONE)) {
+        extraObjIndex = this->taisouObjectSlot;
     } else if (animIndex < ENGO_ANIM_ATHLETICS_MIN) {
-        extraObjIndex = this->actor.objBankIndex;
+        extraObjIndex = this->actor.objectSlot;
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
-        this->curAnimIndex = animIndex;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        this->curAnimPlaySpeed = this->skelAnime.playSpeed;
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 /**
@@ -1651,7 +1651,7 @@ void EnGo_ChangeToStretchingAnimation(EnGo* this, PlayState* play) {
     EnGo_ChangeAnim(this, play, sSubtypeToAnimIndex[subtypeLookup]);
 
     // Move the sitting Goron forward, since their spawn location is the same as their standing counterpart.
-    if (this->curAnimIndex == ENGO_ANIM_SITTING_STRETCH) {
+    if (this->animIndex == ENGO_ANIM_SITTING_STRETCH) {
 
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &sStretchingGoronOffset,
                                       &newSittingStretcherPos);
@@ -1701,7 +1701,7 @@ void EnGo_ChangeToSpectatingAnimation(EnGo* this, PlayState* play) {
 void EnGo_ChangeToFrozenAnimation(EnGo* this, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInitFrozen);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->curAnimIndex = -1;
+    this->animIndex = ENGO_ANIM_NONE;
     EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVER);
     this->sleepState = ENGO_AWAKE;
     this->iceBlockScale = (this->scaleFactor / 0.01f) * 0.9f;
@@ -1893,13 +1893,13 @@ void EnGo_SetupMedigoron(EnGo* this, PlayState* play) {
 void EnGo_SetupInitialAction(EnGo* this, PlayState* play) {
     EffectTireMarkInit tireMarkInit = { 0, 62, { 0, 0, 15, 100 } };
 
-    if (((this->taisouObjIndex < 0) || SubS_IsObjectLoaded(this->taisouObjIndex, play)) ||
-        ((this->hakuginDemoObjIndex < 0) || SubS_IsObjectLoaded(this->hakuginDemoObjIndex, play))) {
+    if (((this->taisouObjectSlot <= OBJECT_SLOT_NONE) || SubS_IsObjectLoaded(this->taisouObjectSlot, play)) ||
+        ((this->hakuginDemoObjectSlot <= OBJECT_SLOT_NONE) || SubS_IsObjectLoaded(this->hakuginDemoObjectSlot, play))) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
 
-        this->curAnimIndex = ENGO_ANIM_INVALID;
+        this->animIndex = ENGO_ANIM_NONE;
         EnGo_ChangeAnim(this, play, ENGO_ANIM_UNROLL);
         this->actor.draw = EnGo_Draw;
 
@@ -2168,14 +2168,14 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
             switch (this->springArrivalCueId) {
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
-                        (this->curAnimIndex == ENGO_ANIM_LOOK_AROUND)) {
+                        (this->animIndex == ENGO_ANIM_LOOK_AROUND)) {
                         EnGo_ChangeAnim(this, play, ENGO_ANIM_LOOK_AROUND_LOOPED);
                     }
                     break;
 
                 case 4:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
-                        (this->curAnimIndex == ENGO_ANIM_SHOW)) {
+                        (this->animIndex == ENGO_ANIM_SHOW)) {
                         EnGo_ChangeAnim(this, play, ENGO_ANIM_SHOW_LOOPED);
                     }
                     break;
@@ -2412,8 +2412,8 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
 void EnGo_Init(Actor* thisx, PlayState* play) {
     EnGo* this = THIS;
 
-    this->taisouObjIndex = SubS_GetObjectIndex(OBJECT_TAISOU, play);
-    this->hakuginDemoObjIndex = SubS_GetObjectIndex(OBJECT_HAKUGIN_DEMO, play);
+    this->taisouObjectSlot = SubS_GetObjectSlot(OBJECT_TAISOU, play);
+    this->hakuginDemoObjectSlot = SubS_GetObjectSlot(OBJECT_HAKUGIN_DEMO, play);
     this->actionFunc = EnGo_SetupInitialAction;
 }
 
@@ -2439,7 +2439,7 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
 
     if (!(this->actionFlags & ENGO_FLAG_FROZEN)) {
         EnGo_UpdateEyes(this);
-        EnGo_UpdateAnimationToCurrent(this, play);
+        EnGo_UpdateSkelAnime(this, play);
         EnGo_UpdateAttentionTargetAndReactions(this, play);
         EnGo_UpdateSfx(this, play);
     }
@@ -2599,7 +2599,7 @@ void EnGo_Draw(Actor* thisx, PlayState* play) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
 
-        if (this->curAnimIndex == ENGO_ANIM_SITTING_STRETCH) {
+        if (this->animIndex == ENGO_ANIM_SITTING_STRETCH) {
             Matrix_Translate(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
         }
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

@@ -307,20 +307,20 @@ static AnimationInfo sAnimationInfo[SK_ANIM_LAUGH_AFTER_MAX] = {
  * Ensures the correct object for the current animation is in segment 6.
  */
 void DmStk_LoadObjectForAnimation(DmStk* this, PlayState* play) {
-    s32 objectIndex;
+    s32 objectSlot;
 
     if (((this->animIndex >= SK_ANIM_SHAKE_HEAD) && (this->animIndex <= SK_ANIM_BENT_OVER_HEAD_TWITCH)) ||
         (this->animIndex == SK_ANIM_CALL_DOWN_MOON_START) || (this->animIndex == SK_ANIM_CALL_DOWN_MOON_LOOP) ||
         (this->animIndex == SK_ANIM_TELESCOPE_LOOK_UP_START) || (this->animIndex == SK_ANIM_TELESCOPE_LOOK_UP_LOOP)) {
-        objectIndex = this->objectStkObjectIndex;
+        objectSlot = this->objectStkObjectSlot;
     } else if (this->animIndex >= SK_ANIM_LOOK_UP_AT_GIANTS) {
-        objectIndex = this->objectStk3ObjectIndex;
+        objectSlot = this->objectStk3ObjectSlot;
     } else {
-        objectIndex = this->objectStk2ObjectIndex;
+        objectSlot = this->objectStk2ObjectSlot;
     }
 
-    if (objectIndex >= 0) {
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+    if (objectSlot > OBJECT_SLOT_NONE) {
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 }
 
@@ -1062,10 +1062,10 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
     this->shouldDraw = true;
     if (DM_STK_GET_TYPE(&this->actor) != DM_STK_TYPE_MAJORAS_MASK) {
         this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_NOT_READY;
-        this->objectStkObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_STK);
-        this->objectStk2ObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_STK2);
-        this->objectStk3ObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_STK3);
-        if (this->objectStkObjectIndex < 0) {
+        this->objectStkObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_STK);
+        this->objectStk2ObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_STK2);
+        this->objectStk3ObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_STK3);
+        if (this->objectStkObjectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
         }
 
@@ -1073,9 +1073,9 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->deflectCount = 0;
         this->maskType = SK_MASK_TYPE_NORMAL;
         this->animIndex = SK_ANIM_IDLE;
-        this->fogR = play->lightCtx.fogColor.r;
-        this->fogG = play->lightCtx.fogColor.g;
-        this->fogB = play->lightCtx.fogColor.b;
+        this->fogR = play->lightCtx.fogColor[0];
+        this->fogG = play->lightCtx.fogColor[1];
+        this->fogB = play->lightCtx.fogColor[2];
 
         if ((play->sceneId == SCENE_LOST_WOODS) && (gSaveContext.sceneLayer == 1)) {
             this->alpha = 0;
@@ -1643,9 +1643,9 @@ void DmStk_HandleCutscene(DmStk* this, PlayState* play) {
             this->fadeInState++;
         }
 
-        this->fogR = play->lightCtx.fogColor.r * this->fogScale;
-        this->fogG = play->lightCtx.fogColor.g * this->fogScale;
-        this->fogB = play->lightCtx.fogColor.b * this->fogScale;
+        this->fogR = play->lightCtx.fogColor[0] * this->fogScale;
+        this->fogG = play->lightCtx.fogColor[1] * this->fogScale;
+        this->fogB = play->lightCtx.fogColor[2] * this->fogScale;
     } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_FOG) {
         if (this->fogN < 996) {
             this->fogN += 10;
@@ -1867,7 +1867,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
 
         // This code is responsible for making in-game time pass while using the telescope in the Astral Observatory.
         // Skull Kid is always loaded in the scene, even if he isn't visible, hence why time always passes.
-        if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
+        if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
             (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
             (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
             (play->csCtx.state == CS_STATE_IDLE)) {
@@ -1965,18 +1965,18 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 
                 if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_513) &&
                     (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_513)]->id == 2) &&
-                    (this->objectStk2ObjectIndex >= 0)) {
+                    (this->objectStk2ObjectSlot > OBJECT_SLOT_NONE)) {
                     Matrix_Push();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
-                    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[this->objectStk2ObjectIndex].segment);
+                    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectStk2ObjectSlot].segment);
 
-                    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectStk2ObjectIndex].segment);
+                    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->objectStk2ObjectSlot].segment);
 
                     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gSkullKidMajorasMaskCurseOverlayTexAnim));
                     Gfx_DrawDListOpa(play, gSkullKidMajorasMaskCurseOverlayDL);
-                    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[this->objectStkObjectIndex].segment);
+                    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectStkObjectSlot].segment);
 
-                    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectStkObjectIndex].segment);
+                    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->objectStkObjectSlot].segment);
 
                     Matrix_Pop();
                 }
@@ -1998,17 +1998,17 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 
         switch (this->handType) {
             case SK_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE:
-                gSPDisplayList(POLY_OPA_DISP++, gSkullKidUntexturedRightHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidUntexturedRightHandDL);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask2DL);
                 break;
 
             case SK_HAND_TYPE_HOLDING_LINK_MASK:
-                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMaskHoldingRightHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidMaskHoldingRightHandDL);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidLinkMask3DL);
                 break;
 
             case SK_HAND_TYPE_HOLDING_OCARINA:
-                gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaHoldingRightHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaHoldingRightHandDL);
 
                 if ((play->sceneId == SCENE_LOST_WOODS) && (gSaveContext.sceneLayer == 1)) {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
@@ -2042,11 +2042,11 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                 break;
 
             case SK_HAND_TYPE_HOLDING_LINK_MASK:
-                gSPDisplayList(POLY_OPA_DISP++, gSkullKidUntexturedLeftHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidUntexturedLeftHandDL);
                 break;
 
             case SK_HAND_TYPE_HOLDING_MAJORAS_MASK:
-                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHandDL);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask2DL);
                 break;
 
@@ -2054,21 +2054,21 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                 if ((play->sceneId != SCENE_LOST_WOODS) || (gSaveContext.sceneLayer != 1)) {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidOcarinaOfTimeDL);
                 }
-                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHandDL);
                 break;
 
             case SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA:
-                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidTwoFingersExtendedLeftHandDL);
                 break;
 
             case SK_HAND_TYPE_HOLDING_FLUTE:
-                gSPDisplayList(POLY_OPA_DISP++, gSkullKidFluteHoldingLeftHand);
+                gSPDisplayList(POLY_OPA_DISP++, gSkullKidFluteHoldingLeftHandDL);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidFluteDL);
                 break;
 
             case SK_HAND_TYPE_DEFAULT:
                 if (this->alpha == 255) {
-                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidOpenLeftHand);
+                    gSPDisplayList(POLY_OPA_DISP++, gSkullKidOpenLeftHandDL);
                 }
                 break;
 
@@ -2095,7 +2095,7 @@ void DmStk_Draw(Actor* thisx, PlayState* play) {
             return;
         }
 
-        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[this->objectStkObjectIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectStkObjectSlot].segment);
 
         OPEN_DISPS(play->state.gfxCtx);
 

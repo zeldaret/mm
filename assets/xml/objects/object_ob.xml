@@ -65,10 +65,10 @@
         <Texture Name="gMoonChildTLUT" OutName="moonchild_tlut" Format="rgba16" Width="16" Height="16" Offset="0x15B28" />
         <Texture Name="gMoonChildFingersTex" OutName="moonchild_fingers" Format="ci8" Width="16" Height="16" Offset="0x15D28" />
         <Texture Name="gMoonChildThighSkinTex" OutName="moonchild_thigh_skin" Format="ci8" Width="8" Height="8" Offset="0x15E28" />
-        <Texture Name="gMoonChildTshirtDetailTex" OutName="moonchild_tshirt_detail_tex" Format="ci8" Width="16" Height="32" Offset="0x15E68" />
+        <Texture Name="gMoonChildTshirtDetailTex" OutName="moonchild_tshirt_detail" Format="ci8" Width="16" Height="32" Offset="0x15E68" />
         <Texture Name="gMoonChildHairTex" OutName="moonchild_hair" Format="ci8" Width="8" Height="16" Offset="0x16068" />
         <Texture Name="gMoonChildEarTex" OutName="moonchild_ear" Format="ci8" Width="8" Height="8" Offset="0x160E8" />
-        <Texture Name="gMoonChildBackHair" OutName="moonchild_back_hair" Format="ci8" Width="8" Height="16" Offset="0x16128" />
+        <Texture Name="gMoonChildBackHairTex" OutName="moonchild_back_hair" Format="ci8" Width="8" Height="16" Offset="0x16128" />
         <Texture Name="gMoonChildTshirtNecklineTex" OutName="moonchild_tshirt_neckline" Format="ci8" Width="16" Height="32" Offset="0x161A8" />
 
         <!-- Moonchild Limbs -->

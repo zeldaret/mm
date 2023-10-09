@@ -41,7 +41,7 @@
         <Texture Name="gEyegoreBeamosInnerEyeLidTex" OutName="eyegore_beamos_inner_eye_lid" Format="rgba16" Width="16" Height="8" Offset="0x4800" />
         <Texture Name="gEyegoreBeamosEyeOutlineTex" OutName="eyegore_beamos_eye_outline" Format="rgba16" Width="16" Height="16" Offset="0x4900" />
         <Texture Name="gEyegoreBeamosEyeTex" OutName="eyegore_beamos_eye" Format="rgba16" Width="32" Height="16" Offset="0x4B00" />
-        <Texture Name="gEyegoreBeamosBodyTex" OutName="eyegore_beamos_body_tex" Format="rgba16" Width="16" Height="16" Offset="0x4F00" />
+        <Texture Name="gEyegoreBeamosBodyTex" OutName="eyegore_beamos_body" Format="rgba16" Width="16" Height="16" Offset="0x4F00" />
 
         <!-- Animated texture for Eyegore's laser attack. Uses gEyegoreEyeLaserTexAnim. -->
         <Texture Name="gEyegoreLaserTex" OutName="eyegore_laser" Format="rgba16" Width="8" Height="8" Offset="0x5100" />

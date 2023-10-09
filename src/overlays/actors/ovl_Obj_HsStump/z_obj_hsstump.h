@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define OBJHSSTUMP_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define OBJHSSTUMP_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define OBJHSSTUMP_GET_ISHIDDEN(thisx) (((thisx)->params >> 12) & 0xF)
 
 struct ObjHsStump;

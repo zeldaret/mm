@@ -725,7 +725,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor,
 /* Start of Flags section */
 
 /**
- * Tests if current scene switch flag is set.
+ * Tests if a current scene switch flag is set.
  */
 s32 Flags_GetSwitch(PlayState* play, s32 flag) {
     if ((flag >= 0) && (flag < 0x80)) {
@@ -735,7 +735,7 @@ s32 Flags_GetSwitch(PlayState* play, s32 flag) {
 }
 
 /**
- * Sets current scene switch flag.
+ * Sets a current scene switch flag.
  */
 void Flags_SetSwitch(PlayState* play, s32 flag) {
     if ((flag >= 0) && (flag < 0x80)) {
@@ -744,7 +744,7 @@ void Flags_SetSwitch(PlayState* play, s32 flag) {
 }
 
 /**
- * Unsets current scene switch flag.
+ * Unsets a current scene switch flag.
  */
 void Flags_UnsetSwitch(PlayState* play, s32 flag) {
     if ((flag >= 0) && (flag < 0x80)) {
@@ -753,77 +753,77 @@ void Flags_UnsetSwitch(PlayState* play, s32 flag) {
 }
 
 /**
- * Tests if current scene chest flag is set.
+ * Tests if a current scene chest flag is set.
  */
 s32 Flags_GetTreasure(PlayState* play, s32 flag) {
     return play->actorCtx.sceneFlags.chest & (1 << flag);
 }
 
 /**
- * Sets current scene chest flag.
+ * Sets a current scene chest flag.
  */
 void Flags_SetTreasure(PlayState* play, s32 flag) {
     play->actorCtx.sceneFlags.chest |= (1 << flag);
 }
 
 /**
- * Overrides the all the chest flags.
+ * Overrides all the current scene chest flags.
  */
 void Flags_SetAllTreasure(PlayState* play, s32 flag) {
     play->actorCtx.sceneFlags.chest = flag;
 }
 
 /**
- * Returns all the chest flags.
+ * Returns all the current scene chest flags.
  */
 s32 Flags_GetAllTreasure(PlayState* play) {
     return play->actorCtx.sceneFlags.chest;
 }
 
 /**
- * Tests if current scene clear flag is set.
+ * Tests if a current scene clear flag is set.
  */
 s32 Flags_GetClear(PlayState* play, s32 roomNumber) {
     return play->actorCtx.sceneFlags.clearedRoom & (1 << roomNumber);
 }
 
 /**
- * Sets current scene clear flag.
+ * Sets a current scene clear flag.
  */
 void Flags_SetClear(PlayState* play, s32 roomNumber) {
     play->actorCtx.sceneFlags.clearedRoom |= (1 << roomNumber);
 }
 
 /**
- * Unsets current scene clear flag.
+ * Unsets a current scene clear flag.
  */
 void Flags_UnsetClear(PlayState* play, s32 roomNumber) {
     play->actorCtx.sceneFlags.clearedRoom &= ~(1 << roomNumber);
 }
 
 /**
- * Tests if current scene temp clear flag is set.
+ * Tests if a current scene temp clear flag is set.
  */
 s32 Flags_GetClearTemp(PlayState* play, s32 roomNumber) {
     return play->actorCtx.sceneFlags.clearedRoomTemp & (1 << roomNumber);
 }
 
 /**
- * Sets current scene temp clear flag.
+ * Sets a current scene temp clear flag.
  */
 void Flags_SetClearTemp(PlayState* play, s32 roomNumber) {
     play->actorCtx.sceneFlags.clearedRoomTemp |= (1 << roomNumber);
 }
 
 /**
- * Unsets current scene temp clear flag.
+ * Unsets a current scene temp clear flag.
  */
 void Flags_UnsetClearTemp(PlayState* play, s32 roomNumber) {
     play->actorCtx.sceneFlags.clearedRoomTemp &= ~(1 << roomNumber);
 }
 
 /**
- * Tests if current scene collectible flag is set.
+ * Tests if a current scene collectible flag is set.
  */
 s32 Flags_GetCollectible(PlayState* play, s32 flag) {
     if ((flag > 0) && (flag < 0x80)) {
@@ -833,7 +833,7 @@ s32 Flags_GetCollectible(PlayState* play, s32 flag) {
 }
 
 /**
- * Sets current scene collectible flag.
+ * Sets a current scene collectible flag.
  */
 void Flags_SetCollectible(PlayState* play, s32 flag) {
     if ((flag > 0) && (flag < 0x80)) {
@@ -1096,7 +1096,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 }
 
 void Actor_SetObjectDependency(PlayState* play, Actor* actor) {
-    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.status[actor->objBankIndex].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[actor->objectSlot].segment);
 }
 
 void Actor_Init(Actor* actor, PlayState* play) {
@@ -1119,7 +1119,7 @@ void Actor_Init(Actor* actor, PlayState* play) {
     actor->floorBgId = BGCHECK_SCENE;
 
     ActorShape_Init(&actor->shape, 0.0f, NULL, 0.0f);
-    if (Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, actor->objectSlot)) {
         Actor_SetObjectDependency(play, actor);
         actor->init(actor, play);
         actor->init = NULL;
@@ -2486,7 +2486,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     actor->audioFlags &= ~ACTOR_AUDIO_FLAG_ALL;
 
     if (actor->init != NULL) {
-        if (Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
+        if (Object_IsLoaded(&play->objectCtx, actor->objectSlot)) {
             Actor_SetObjectDependency(play, actor);
             actor->init(actor, play);
             actor->init = NULL;
@@ -2500,7 +2500,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
             nextActor = actor->next;
         }
     } else {
-        if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
+        if (!Object_IsLoaded(&play->objectCtx, actor->objectSlot)) {
             Actor_Kill(actor);
         } else if ((params->requiredActorFlag && !(actor->flags & params->requiredActorFlag)) ||
                    (((!params->requiredActorFlag) != 0) &&
@@ -2700,8 +2700,8 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     Matrix_Scale(actor->scale.x, actor->scale.y, actor->scale.z, MTXMODE_APPLY);
     Actor_SetObjectDependency(play, actor);
 
-    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[actor->objBankIndex].segment);
-    gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[actor->objBankIndex].segment);
+    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[actor->objectSlot].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[actor->objectSlot].segment);
 
     if (actor->colorFilterTimer != 0) {
         s32 colorFlag = COLORFILTER_GET_COLORFLAG(actor->colorFilterParams);
@@ -3055,7 +3055,7 @@ void Actor_KillAllWithMissingObject(PlayState* play, ActorContext* actorCtx) {
         actor = actorCtx->actorLists[i].first;
 
         while (actor != NULL) {
-            if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
+            if (!Object_IsLoaded(&play->objectCtx, actor->objectSlot)) {
                 Actor_Kill(actor);
             }
 
@@ -3287,7 +3287,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     s32 pad;
     Actor* actor;
     ActorInit* actorInit;
-    s32 objBankIndex;
+    s32 objectSlot;
     ActorOverlay* overlayEntry;
 
     if (actorCtx->totalLoadedActors >= 0xFF) {
@@ -3299,9 +3299,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
         return NULL;
     }
 
-    objBankIndex = Object_GetIndex(&play->objectCtx, actorInit->objectId);
-    if ((objBankIndex < 0) || ((actorInit->type == ACTORCAT_ENEMY) && Flags_GetClear(play, play->roomCtx.curRoom.num) &&
-                               (actorInit->id != ACTOR_BOSS_05))) {
+    objectSlot = Object_GetSlot(&play->objectCtx, actorInit->objectId);
+    if ((objectSlot <= OBJECT_SLOT_NONE) ||
+        ((actorInit->type == ACTORCAT_ENEMY) && Flags_GetClear(play, play->roomCtx.curRoom.num) &&
+         (actorInit->id != ACTOR_BOSS_05))) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);
         return NULL;
     }
@@ -3323,10 +3324,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     actor->flags = actorInit->flags;
 
     if (actorInit->id == ACTOR_EN_PART) {
-        actor->objBankIndex = rotZ;
+        actor->objectSlot = rotZ;
         rotZ = 0;
     } else {
-        actor->objBankIndex = objBankIndex;
+        actor->objectSlot = objectSlot;
     }
 
     actor->init = actorInit->init;
@@ -3705,7 +3706,7 @@ void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 partParams, Gfx** d
 
         spawnedPart =
             Actor_SpawnAsChild(&play->actorCtx, actor, play, ACTOR_EN_PART, currentMatrix->mf[3][0],
-                               currentMatrix->mf[3][1], currentMatrix->mf[3][2], 0, 0, actor->objBankIndex, partParams);
+                               currentMatrix->mf[3][1], currentMatrix->mf[3][2], 0, 0, actor->objectSlot, partParams);
 
         if (spawnedPart != NULL) {
             part = (EnPart*)spawnedPart;

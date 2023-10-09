@@ -5,7 +5,7 @@
 
 struct BgIkninside;
 
-#define DMIKNINSIDE_GET_SWITCH(thisx) (((thisx)->params & 0xFE00) >> 9)
+#define DMIKNINSIDE_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
 typedef void (*BgIkninsideActionFunc)(struct BgIkninside*, PlayState*);
 

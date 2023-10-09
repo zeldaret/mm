@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define ROOMTIMER_GET_SWITCHFLAG(thisx) (((thisx)->params >> 9) & 0x7F)
+#define ROOMTIMER_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 9) & 0x7F)
 
 struct ObjRoomtimer;
 

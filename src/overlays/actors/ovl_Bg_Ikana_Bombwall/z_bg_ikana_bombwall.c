@@ -242,7 +242,7 @@ void BgIkanaBombwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(play, &this->collider);
 
-    if (Flags_GetSwitch(play, BGIKANABOMBWALL_GET_SWITCHFLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGIKANABOMBWALL_GET_SWITCH_FLAG(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -333,7 +333,7 @@ void func_80BD503C(BgIkanaBombwall* this, PlayState* play) {
         }
         this->dyna.actor.draw = NULL;
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
-        Flags_SetSwitch(play, BGIKANABOMBWALL_GET_SWITCHFLAG(&this->dyna.actor));
+        Flags_SetSwitch(play, BGIKANABOMBWALL_GET_SWITCH_FLAG(&this->dyna.actor));
         if (!BGIKANABOMBWALL_GET_100(&this->dyna.actor)) {
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         }

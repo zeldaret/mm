@@ -7,7 +7,7 @@ struct ObjHugebombiwa;
 
 typedef void (*ObjHugebombiwaActionFunc)(struct ObjHugebombiwa*, PlayState*);
 
-#define ENHUGEBOMBIWA_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define ENHUGEBOMBIWA_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define ENHUGEBOMBIWA_GET_100(thisx) (((thisx)->params >> 8) & 1)
 
 typedef struct {
