@@ -44,7 +44,7 @@ ActorInit Door_Spiral_InitVars = {
 };
 
 typedef struct {
-    /* 0x0 */ Gfx* unk_00[2];
+    /* 0x0 */ Gfx* dLists[2]; // represents a staircase up or down
     /* 0x8 */ u32 unk_08;
     /* 0x9 */ u8 unk_09;
     /* 0xA */ u8 translateZ;
@@ -53,14 +53,14 @@ typedef struct {
 } SpiralInfo; // size = 0x10
 
 SpiralInfo sSpiralInfoTable[] = {
-    { NULL, NULL, 0, 130, 12, 50, 15 },
-    { gameplay_dangeon_keep_DL_0219E0, gameplay_dangeon_keep_DL_01D980, 0, 130, 12, 50, 15 },
-    { object_numa_obj_DL_004448, object_numa_obj_DL_0007A8, 0, 130, 12, 50, 15 },
-    { object_numa_obj_DL_0051B8, object_numa_obj_DL_0014C8, 0, 130, 12, 50, 15 },
-    { object_hakugin_obj_DL_009278, object_hakugin_obj_DL_006128, 0, 130, 12, 50, 15 },
-    { object_ikana_obj_DL_013EA8, object_ikana_obj_DL_012B70, 0, 130, 12, 50, 15 },
-    { object_ikninside_obj_DL_000EA0, object_ikninside_obj_DL_000590, 0, 130, 12, 50, 15 },
-    { object_danpei_object_DL_002110, object_danpei_object_DL_0012C0, 0, 130, 12, 50, 15 },
+    { { NULL, NULL }, 0, 130, 12, 50, 15 },
+    { { gameplay_dangeon_keep_DL_0219E0, gameplay_dangeon_keep_DL_01D980 }, 0, 130, 12, 50, 15 },
+    { { object_numa_obj_DL_004448, object_numa_obj_DL_0007A8 }, 0, 130, 12, 50, 15 },
+    { { object_numa_obj_DL_0051B8, object_numa_obj_DL_0014C8 }, 0, 130, 12, 50, 15 },
+    { { object_hakugin_obj_DL_009278, object_hakugin_obj_DL_006128 }, 0, 130, 12, 50, 15 },
+    { { object_ikana_obj_DL_013EA8, object_ikana_obj_DL_012B70 }, 0, 130, 12, 50, 15 },
+    { { object_ikninside_obj_DL_000EA0, object_ikninside_obj_DL_000590 }, 0, 130, 12, 50, 15 },
+    { { object_danpei_object_DL_002110, object_danpei_object_DL_0012C0 }, 0, 130, 12, 50, 15 },
 };
 
 typedef struct {
@@ -123,7 +123,7 @@ u8 func_809A2BF8(PlayState* play) {
     if (i < ARRAY_COUNT(sSpiralSceneInfoTable)) {
         var_v1 = spiralSceneInfo->index;
     } else {
-        var_v1 = (Object_GetSlot(&play->objectCtx, GAMEPLAY_DANGEON_KEEP) >= 0) ? 1 : 0;
+        var_v1 = (Object_GetSlot(&play->objectCtx, GAMEPLAY_DANGEON_KEEP) > OBJECT_SLOT_NONE) ? 1 : 0;
     }
     return var_v1;
 }
@@ -131,19 +131,19 @@ u8 func_809A2BF8(PlayState* play) {
 void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     DoorSpiral* this = THIS;
     s32 transitionActorId = DOORSPIRAL_GET_FC00(thisx);
-    s8 temp_v0_2;
+    s8 objectSlot;
 
     if (this->actor.room != play->doorCtx.transitionActorList[transitionActorId].sides[0].room) {
         Actor_Kill(&this->actor);
         return;
     }
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk145 = DOORSPIRAL_GET_TYPE(thisx);
-    this->unk146 = DOORSPIRAL_GET_80(thisx);
+    this->type = DOORSPIRAL_GET_TYPE(thisx);
+    this->direction = DOORSPIRAL_GET_80(thisx);
     this->unk147 = func_809A2BF8(play);
-    temp_v0_2 = Object_GetSlot(&play->objectCtx, sSpiralObjectInfoTable[this->unk147].objectId);
-    this->objSlot = temp_v0_2;
-    if (temp_v0_2 < 0) {
+    objectSlot = Object_GetSlot(&play->objectCtx, sSpiralObjectInfoTable[this->unk147].objectId);
+    this->objSlot = objectSlot;
+    if (objectSlot < 0) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -185,7 +185,7 @@ f32 func_809A2E08(PlayState* play, DoorSpiral* this, f32 arg2, f32 arg3, f32 arg
 s32 func_809A2EA0(DoorSpiral* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Player_InCsMode(play) == 0) {
+    if (!Player_InCsMode(play)) {
         SpiralInfo* temp_v0 = &sSpiralInfoTable[this->unk148];
         f32 temp_fv0 = func_809A2E08(play, this, 0.0f, temp_v0->unk_0B, temp_v0->unk_0C);
 
@@ -212,7 +212,7 @@ void func_809A2FF8(DoorSpiral* this, PlayState* play) {
     } else if (func_809A2EA0(this, play) != 0) {
         player = GET_PLAYER(play);
         player->doorType = PLAYER_DOORTYPE_STAIRCASE;
-        player->doorDirection = this->unk146;
+        player->doorDirection = this->direction;
         player->doorActor = &this->actor;
         index = DOORSPIRAL_GET_FC00(&this->actor);
         player->doorNext = (play->doorCtx.transitionActorList[index].params >> 0xA);
@@ -245,7 +245,7 @@ void DoorSpiral_Draw(Actor* thisx, PlayState* play) {
 
     if (this->actor.objectSlot == this->objSlot) {
         SpiralInfo* spiralInfo = &sSpiralInfoTable[this->unk148];
-        Gfx* temp = spiralInfo->unk_00[this->unk146];
+        Gfx* temp = spiralInfo->dLists[this->direction];
 
         if (temp != NULL) {
             OPEN_DISPS(play->state.gfxCtx);
@@ -254,7 +254,7 @@ void DoorSpiral_Draw(Actor* thisx, PlayState* play) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_OPA_DISP++, spiralInfo->unk_00[this->unk146]);
+            gSPDisplayList(POLY_OPA_DISP++, spiralInfo->dLists[this->direction]);
 
             CLOSE_DISPS(play->state.gfxCtx);
         }

@@ -14,8 +14,8 @@ typedef void (*DoorSpiralActionFunc)(struct DoorSpiral*, PlayState*);
 typedef struct DoorSpiral {
     /* 0x000 */ Actor actor;
     /* 0x144 */ u8 shouldClimb;
-    /* 0x145 */ s8 unk145;
-    /* 0x146 */ u8 unk146;
+    /* 0x145 */ s8 type;
+    /* 0x146 */ u8 direction;
     /* 0x147 */ u8 unk147;
     /* 0x148 */ u8 unk148;
     /* 0x149 */ s8 objSlot;
