@@ -33,7 +33,7 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
     EffectSsExtraInitParams* params = PARAMS;
     s32 objectSlot;
 
-    objectSlot = Object_GetIndex(&play->objectCtx, OBJECT_YABUSAME_POINT);
+    objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_YABUSAME_POINT);
     if ((objectSlot >= 0) && (Object_IsLoaded(&play->objectCtx, objectSlot))) {
         uintptr_t segBackup = gSegments[6];
 
