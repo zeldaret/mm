@@ -14049,7 +14049,7 @@
     0x80B56B00:("func_80B56B00",),
     0x80B56BC0:("func_80B56BC0",),
     0x80B56CAC:("func_80B56CAC",),
-    0x80B56D28:("func_80B56D28",),
+    0x80B56D28:("EnAn_ProcessScheduleOutput",),
     0x80B56E44:("func_80B56E44",),
     0x80B56EB4:("func_80B56EB4",),
     0x80B5702C:("func_80B5702C",),

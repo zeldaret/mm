@@ -20,14 +20,14 @@ typedef struct EnAn {
     /* 0x188 */ EnAnActionFunc actionFunc;
     /* 0x18C */ EnAnUnkFunc unk_18C;
     /* 0x190 */ ColliderCylinder unk_190;
-    /* 0x1DC */ Path* unk_1DC;
+    /* 0x1DC */ Path* unk_1DC; // timePath
     /* 0x1E0 */ Vec3f unk_1E0;
     /* 0x1EC */ f32 unk_1EC;
     /* 0x1F0 */ s32 unk_1F0;
     /* 0x1F4 */ s32 unk_1F4;
     /* 0x1F8 */ s32 unk_1F8;
     /* 0x1FC */ s32 unk_1FC;
-    /* 0x200 */ u8 unk_200; // enum? // schedule result
+    /* 0x200 */ u8 scheduleResult;
     /* 0x204 */ s32* msgEventScript;
     /* 0x208 */ s8 an2ObjectSlot;
     /* 0x209 */ s8 an3ObjectSlot;

@@ -27,6 +27,74 @@ void func_80B577F0(EnAn* this, PlayState* play);
 void func_80B578F8(EnAn* this, PlayState* play);
 void func_80B57A44(EnAn* this, PlayState* play);
 
+typedef enum AnjuScheduleResult {
+    /*  0 */ ANJU_SCH_NONE,
+    /*  1 */ ANJU_SCH_1,
+    /*  2 */ ANJU_SCH_2,
+    /*  3 */ ANJU_SCH_3,
+    /*  4 */ ANJU_SCH_4,
+    /*  5 */ ANJU_SCH_5,
+    /*  6 */ ANJU_SCH_6,
+    /*  7 */ ANJU_SCH_7,
+    /*  8 */ ANJU_SCH_8,
+    /*  9 */ ANJU_SCH_9,
+    /* 10 */ ANJU_SCH_A,
+    /* 11 */ ANJU_SCH_B,
+    /* 12 */ ANJU_SCH_C,
+    /* 13 */ ANJU_SCH_D,
+    /* 14 */ ANJU_SCH_E,
+    /* 15 */ ANJU_SCH_F,
+    /* 16 */ ANJU_SCH_10,
+    /* 17 */ ANJU_SCH_11,
+    /* 18 */ ANJU_SCH_12,
+    /* 19 */ ANJU_SCH_13,
+    /* 20 */ ANJU_SCH_14,
+    /* 21 */ ANJU_SCH_15,
+    /* 22 */ ANJU_SCH_16,
+    /* 23 */ ANJU_SCH_17,
+    /* 24 */ ANJU_SCH_18,
+    /* 25 */ ANJU_SCH_19,
+    /* 26 */ ANJU_SCH_1A,
+    /* 27 */ ANJU_SCH_1B,
+    /* 28 */ ANJU_SCH_1C,
+    /* 29 */ ANJU_SCH_1D,
+    /* 30 */ ANJU_SCH_1E,
+    /* 31 */ ANJU_SCH_1F,
+    /* 32 */ ANJU_SCH_20,
+    /* 33 */ ANJU_SCH_21,
+    /* 34 */ ANJU_SCH_22,
+    /* 35 */ ANJU_SCH_23,
+    /* 36 */ ANJU_SCH_24,
+    /* 37 */ ANJU_SCH_25,
+    /* 38 */ ANJU_SCH_26,
+    /* 39 */ ANJU_SCH_27,
+    /* 40 */ ANJU_SCH_28,
+    /* 41 */ ANJU_SCH_29,
+    /* 42 */ ANJU_SCH_2A,
+    /* 43 */ ANJU_SCH_2B,
+    /* 44 */ ANJU_SCH_2C,
+    /* 45 */ ANJU_SCH_2D,
+    /* 46 */ ANJU_SCH_2E,
+    /* 47 */ ANJU_SCH_2F,
+    /* 48 */ ANJU_SCH_30,
+    /* 49 */ ANJU_SCH_31,
+    /* 50 */ ANJU_SCH_32,
+    /* 51 */ ANJU_SCH_33,
+    /* 52 */ ANJU_SCH_34,
+    /* 53 */ ANJU_SCH_35,
+    /* 54 */ ANJU_SCH_36,
+    /* 55 */ ANJU_SCH_37,
+    /* 56 */ ANJU_SCH_38,
+    /* 57 */ ANJU_SCH_39,
+    /* 58 */ ANJU_SCH_3A,
+    /* 59 */ ANJU_SCH_3B,
+    /* 60 */ ANJU_SCH_3C,
+    /* 61 */ ANJU_SCH_3D,
+    /* 62 */ ANJU_SCH_3E,
+    /* 63 */ ANJU_SCH_3F,
+    /* 64 */ ANJU_SCH_MAX // ?
+} AnjuScheduleResult;
+
 static u8 sScheduleScript[] = {
     /* 0x000 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(1, 0x151 - 0x005),
     /* 0x005 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L(SCENE_YADOYA, 0x150 - 0x00A),
@@ -61,30 +129,30 @@ static u8 sScheduleScript[] = {
     /* 0x0B5 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x0BF - 0x0B9),
     /* 0x0B9 */ SCHEDULE_CMD_RET_TIME( 0,  0,  6,  0, 23),
     /* 0x0BF */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0C0 */ SCHEDULE_CMD_RET_TIME(23, 15,  0,  0, 49),
-    /* 0x0C6 */ SCHEDULE_CMD_RET_TIME(23, 10, 23, 15, 31),
-    /* 0x0CC */ SCHEDULE_CMD_RET_TIME(21,  5, 21, 10, 30),
-    /* 0x0D2 */ SCHEDULE_CMD_RET_TIME(20, 30, 21,  5, 48),
-    /* 0x0D8 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, 19),
-    /* 0x0DE */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, 47),
-    /* 0x0E4 */ SCHEDULE_CMD_RET_TIME(16, 30, 19, 50, 18),
-    /* 0x0EA */ SCHEDULE_CMD_RET_TIME(16, 10, 16, 30, 17),
-    /* 0x0F0 */ SCHEDULE_CMD_RET_TIME(14, 18, 16, 10, 18),
-    /* 0x0F6 */ SCHEDULE_CMD_RET_TIME(14,  8, 14, 18, 16),
-    /* 0x0FC */ SCHEDULE_CMD_RET_TIME(13, 50, 14,  8, 18),
-    /* 0x102 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, 46),
-    /* 0x108 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, 29),
-    /* 0x10E */ SCHEDULE_CMD_RET_TIME(12, 55, 13,  0, 28),
-    /* 0x114 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, 45),
-    /* 0x11A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, 27),
-    /* 0x120 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, 44),
-    /* 0x126 */ SCHEDULE_CMD_RET_TIME(12,  0, 12, 15, 21),
-    /* 0x12C */ SCHEDULE_CMD_RET_TIME(11, 55, 12,  0, 43),
-    /* 0x132 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, 26),
-    /* 0x138 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, 42),
-    /* 0x13E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, 14),
-    /* 0x144 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, 40),
-    /* 0x14A */ SCHEDULE_CMD_RET_TIME( 6,  0, 10, 55, 18),
+    /* 0x0C0 */ SCHEDULE_CMD_RET_TIME(23, 15,  0,  0, ANJU_SCH_31),
+    /* 0x0C6 */ SCHEDULE_CMD_RET_TIME(23, 10, 23, 15, ANJU_SCH_1F),
+    /* 0x0CC */ SCHEDULE_CMD_RET_TIME(21,  5, 21, 10, ANJU_SCH_1E),
+    /* 0x0D2 */ SCHEDULE_CMD_RET_TIME(20, 30, 21,  5, ANJU_SCH_30),
+    /* 0x0D8 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_13),
+    /* 0x0DE */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_2F),
+    /* 0x0E4 */ SCHEDULE_CMD_RET_TIME(16, 30, 19, 50, ANJU_SCH_12),
+    /* 0x0EA */ SCHEDULE_CMD_RET_TIME(16, 10, 16, 30, ANJU_SCH_11),
+    /* 0x0F0 */ SCHEDULE_CMD_RET_TIME(14, 18, 16, 10, ANJU_SCH_12),
+    /* 0x0F6 */ SCHEDULE_CMD_RET_TIME(14,  8, 14, 18, ANJU_SCH_10),
+    /* 0x0FC */ SCHEDULE_CMD_RET_TIME(13, 50, 14,  8, ANJU_SCH_12),
+    /* 0x102 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_2E),
+    /* 0x108 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, ANJU_SCH_1D),
+    /* 0x10E */ SCHEDULE_CMD_RET_TIME(12, 55, 13,  0, ANJU_SCH_1C),
+    /* 0x114 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, ANJU_SCH_2D),
+    /* 0x11A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, ANJU_SCH_1B),
+    /* 0x120 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, ANJU_SCH_2C),
+    /* 0x126 */ SCHEDULE_CMD_RET_TIME(12,  0, 12, 15, ANJU_SCH_15),
+    /* 0x12C */ SCHEDULE_CMD_RET_TIME(11, 55, 12,  0, ANJU_SCH_2B),
+    /* 0x132 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, ANJU_SCH_1A),
+    /* 0x138 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_2A),
+    /* 0x13E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_E),
+    /* 0x144 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_28),
+    /* 0x14A */ SCHEDULE_CMD_RET_TIME( 6,  0, 10, 55, ANJU_SCH_12),
     /* 0x150 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x151 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(2, 0x391 - 0x156),
     /* 0x156 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x29E - 0x15B),
@@ -102,18 +170,18 @@ static u8 sScheduleScript[] = {
     /* 0x19D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21,  0, 21,  5, 0x1B0 - 0x1A3),
     /* 0x1A3 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 30, 23,  0, 0x1AA - 0x1A9),
     /* 0x1A9 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1AA */ SCHEDULE_CMD_RET_TIME(21, 30, 23,  0, 24),
-    /* 0x1B0 */ SCHEDULE_CMD_RET_TIME(21,  0, 21,  5, 30),
-    /* 0x1B6 */ SCHEDULE_CMD_RET_TIME(20, 30, 21,  0, 48),
-    /* 0x1BC */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, 19),
-    /* 0x1C2 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, 47),
-    /* 0x1C8 */ SCHEDULE_CMD_RET_TIME(18,  0, 19, 50, 18),
-    /* 0x1CE */ SCHEDULE_CMD_RET_TIME(17, 55, 18,  0, 35),
-    /* 0x1D4 */ SCHEDULE_CMD_RET_TIME(17, 30, 17, 55, 51),
-    /* 0x1DA */ SCHEDULE_CMD_RET_TIME(17, 24, 17, 30, 34),
-    /* 0x1E0 */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 39, 33),
-    /* 0x1E6 */ SCHEDULE_CMD_RET_TIME(11,  9, 11, 29, 50),
-    /* 0x1EC */ SCHEDULE_CMD_RET_TIME(11,  3, 11,  9, 32),
+    /* 0x1AA */ SCHEDULE_CMD_RET_TIME(21, 30, 23,  0, ANJU_SCH_18),
+    /* 0x1B0 */ SCHEDULE_CMD_RET_TIME(21,  0, 21,  5, ANJU_SCH_1E),
+    /* 0x1B6 */ SCHEDULE_CMD_RET_TIME(20, 30, 21,  0, ANJU_SCH_30),
+    /* 0x1BC */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_13),
+    /* 0x1C2 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_2F),
+    /* 0x1C8 */ SCHEDULE_CMD_RET_TIME(18,  0, 19, 50, ANJU_SCH_12),
+    /* 0x1CE */ SCHEDULE_CMD_RET_TIME(17, 55, 18,  0, ANJU_SCH_23),
+    /* 0x1D4 */ SCHEDULE_CMD_RET_TIME(17, 30, 17, 55, ANJU_SCH_33),
+    /* 0x1DA */ SCHEDULE_CMD_RET_TIME(17, 24, 17, 30, ANJU_SCH_22),
+    /* 0x1E0 */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 39, ANJU_SCH_21),
+    /* 0x1E6 */ SCHEDULE_CMD_RET_TIME(11,  9, 11, 29, ANJU_SCH_32),
+    /* 0x1EC */ SCHEDULE_CMD_RET_TIME(11,  3, 11,  9, ANJU_SCH_20),
     /* 0x1F2 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x23F - 0x1F6),
     /* 0x1F6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 29, 11, 39, 0x239 - 0x1FC),
     /* 0x1FC */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 39, 12, 25, 0x233 - 0x202),
@@ -122,30 +190,30 @@ static u8 sScheduleScript[] = {
     /* 0x20E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 45, 17, 24, 0x221 - 0x214),
     /* 0x214 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(17, 24, 17, 30, 0x21B - 0x21A),
     /* 0x21A */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x21B */ SCHEDULE_CMD_RET_TIME(17, 24, 17, 30, 38),
-    /* 0x221 */ SCHEDULE_CMD_RET_TIME(16, 45, 17, 24, 59),
-    /* 0x227 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 45, 58),
-    /* 0x22D */ SCHEDULE_CMD_RET_TIME(12, 25, 13, 15, 55),
-    /* 0x233 */ SCHEDULE_CMD_RET_TIME(11, 39, 12, 25, 54),
-    /* 0x239 */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 39, 37),
+    /* 0x21B */ SCHEDULE_CMD_RET_TIME(17, 24, 17, 30, ANJU_SCH_26),
+    /* 0x221 */ SCHEDULE_CMD_RET_TIME(16, 45, 17, 24, ANJU_SCH_3B),
+    /* 0x227 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 45, ANJU_SCH_3A),
+    /* 0x22D */ SCHEDULE_CMD_RET_TIME(12, 25, 13, 15, ANJU_SCH_37),
+    /* 0x233 */ SCHEDULE_CMD_RET_TIME(11, 39, 12, 25, ANJU_SCH_36),
+    /* 0x239 */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 39, ANJU_SCH_25),
     /* 0x23F */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_CLOCKTOWER, 0x274 - 0x243),
     /* 0x243 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 39, 12, 25, 0x26E - 0x249),
     /* 0x249 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 25, 13, 15, 0x268 - 0x24F),
     /* 0x24F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 55, 16, 45, 0x262 - 0x255),
     /* 0x255 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 45, 17, 24, 0x25C - 0x25B),
     /* 0x25B */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x25C */ SCHEDULE_CMD_RET_TIME(16, 45, 17, 24, 63),
-    /* 0x262 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 45, 62),
-    /* 0x268 */ SCHEDULE_CMD_RET_TIME(12, 25, 13, 15, 61),
-    /* 0x26E */ SCHEDULE_CMD_RET_TIME(11, 39, 12, 25, 60),
+    /* 0x25C */ SCHEDULE_CMD_RET_TIME(16, 45, 17, 24, ANJU_SCH_3F),
+    /* 0x262 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 45, ANJU_SCH_3E),
+    /* 0x268 */ SCHEDULE_CMD_RET_TIME(12, 25, 13, 15, ANJU_SCH_3D),
+    /* 0x26E */ SCHEDULE_CMD_RET_TIME(11, 39, 12, 25, ANJU_SCH_3C),
     /* 0x274 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ALLEY, 0x29D - 0x278),
     /* 0x278 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 15, 13, 45, 0x297 - 0x27E),
     /* 0x27E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 45, 15, 25, 0x291 - 0x284),
     /* 0x284 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 25, 15, 55, 0x28B - 0x28A),
     /* 0x28A */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x28B */ SCHEDULE_CMD_RET_TIME(15, 25, 15, 55, 57),
-    /* 0x291 */ SCHEDULE_CMD_RET_TIME(13, 45, 15, 25,  3),
-    /* 0x297 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 45, 56),
+    /* 0x28B */ SCHEDULE_CMD_RET_TIME(15, 25, 15, 55, ANJU_SCH_39),
+    /* 0x291 */ SCHEDULE_CMD_RET_TIME(13, 45, 15, 25, ANJU_SCH_3),
+    /* 0x297 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 45, ANJU_SCH_38),
     /* 0x29D */ SCHEDULE_CMD_RET_NONE(),
     /* 0x29E */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L(SCENE_YADOYA, 0x390 - 0x2A3),
     /* 0x2A3 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L( 6,  0, 10, 55, 0x38A - 0x2AA),
@@ -168,25 +236,25 @@ static u8 sScheduleScript[] = {
     /* 0x311 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21,  5, 21, 10, 0x324 - 0x317),
     /* 0x317 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 30, 23,  0, 0x31E - 0x31D),
     /* 0x31D */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x31E */ SCHEDULE_CMD_RET_TIME(21, 30, 23,  0, 24),
-    /* 0x324 */ SCHEDULE_CMD_RET_TIME(21,  5, 21, 10, 30),
-    /* 0x32A */ SCHEDULE_CMD_RET_TIME(20, 30, 21,  5, 48),
-    /* 0x330 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, 19),
-    /* 0x336 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, 47),
-    /* 0x33C */ SCHEDULE_CMD_RET_TIME(13, 50, 19, 50, 18),
-    /* 0x342 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, 46),
-    /* 0x348 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, 29),
-    /* 0x34E */ SCHEDULE_CMD_RET_TIME(12, 55, 13,  0, 28),
-    /* 0x354 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, 45),
-    /* 0x35A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, 27),
-    /* 0x360 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, 44),
-    /* 0x366 */ SCHEDULE_CMD_RET_TIME(12,  0, 12, 15, 21),
-    /* 0x36C */ SCHEDULE_CMD_RET_TIME(11, 55, 12,  0, 43),
-    /* 0x372 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, 26),
-    /* 0x378 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, 42),
-    /* 0x37E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, 14),
-    /* 0x384 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, 40),
-    /* 0x38A */ SCHEDULE_CMD_RET_TIME( 6,  0, 10, 55, 18),
+    /* 0x31E */ SCHEDULE_CMD_RET_TIME(21, 30, 23,  0, ANJU_SCH_18),
+    /* 0x324 */ SCHEDULE_CMD_RET_TIME(21,  5, 21, 10, ANJU_SCH_1E),
+    /* 0x32A */ SCHEDULE_CMD_RET_TIME(20, 30, 21,  5, ANJU_SCH_30),
+    /* 0x330 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_13),
+    /* 0x336 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_2F),
+    /* 0x33C */ SCHEDULE_CMD_RET_TIME(13, 50, 19, 50, ANJU_SCH_12),
+    /* 0x342 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_2E),
+    /* 0x348 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, ANJU_SCH_1D),
+    /* 0x34E */ SCHEDULE_CMD_RET_TIME(12, 55, 13,  0, ANJU_SCH_1C),
+    /* 0x354 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, ANJU_SCH_2D),
+    /* 0x35A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, ANJU_SCH_1B),
+    /* 0x360 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, ANJU_SCH_2C),
+    /* 0x366 */ SCHEDULE_CMD_RET_TIME(12,  0, 12, 15, ANJU_SCH_15),
+    /* 0x36C */ SCHEDULE_CMD_RET_TIME(11, 55, 12,  0, ANJU_SCH_2B),
+    /* 0x372 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, ANJU_SCH_1A),
+    /* 0x378 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_2A),
+    /* 0x37E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_E),
+    /* 0x384 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_28),
+    /* 0x38A */ SCHEDULE_CMD_RET_TIME( 6,  0, 10, 55, ANJU_SCH_12),
     /* 0x390 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x391 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(3, 0x447 - 0x396),
     /* 0x396 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES, 0x3ED - 0x39A),
@@ -197,15 +265,15 @@ static u8 sScheduleScript[] = {
     /* 0x3B0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 30, 11, 50, 0x3C3 - 0x3B6),
     /* 0x3B6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 50, 12,  0, 0x3BD - 0x3BC),
     /* 0x3BC */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x3BD */ SCHEDULE_CMD_RET_TIME(11, 50, 12,  0, 39),
-    /* 0x3C3 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, 53),
-    /* 0x3C9 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, 36),
-    /* 0x3CF */ SCHEDULE_CMD_RET_TIME(11,  0, 11, 25, 52),
-    /* 0x3D5 */ SCHEDULE_CMD_RET_TIME( 6,  0, 11,  0, 22),
+    /* 0x3BD */ SCHEDULE_CMD_RET_TIME(11, 50, 12,  0, ANJU_SCH_27),
+    /* 0x3C3 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_35),
+    /* 0x3C9 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, ANJU_SCH_24),
+    /* 0x3CF */ SCHEDULE_CMD_RET_TIME(11,  0, 11, 25, ANJU_SCH_34),
+    /* 0x3D5 */ SCHEDULE_CMD_RET_TIME( 6,  0, 11,  0, ANJU_SCH_16),
     /* 0x3DB */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x3EC - 0x3DF),
     /* 0x3DF */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18,  0,  6,  0, 0x3E6 - 0x3E5),
     /* 0x3E5 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x3E6 */ SCHEDULE_CMD_RET_TIME(18,  0,  6,  0, 12),
+    /* 0x3E6 */ SCHEDULE_CMD_RET_TIME(18,  0,  6,  0, ANJU_SCH_C),
     /* 0x3EC */ SCHEDULE_CMD_RET_NONE(),
     /* 0x3ED */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x446 - 0x3F1),
     /* 0x3F1 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S( 6,  0, 11,  0, 0x440 - 0x3F7),
@@ -216,83 +284,84 @@ static u8 sScheduleScript[] = {
     /* 0x40F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18,  0,  5,  0, 0x422 - 0x415),
     /* 0x415 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S( 5,  0,  6,  0, 0x41C - 0x41B),
     /* 0x41B */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x41C */ SCHEDULE_CMD_RET_TIME( 5,  0,  6,  0,  1),
-    /* 0x422 */ SCHEDULE_CMD_RET_TIME(18,  0,  5,  0,  1),
-    /* 0x428 */ SCHEDULE_CMD_RET_TIME(11, 50, 12,  0, 39),
-    /* 0x42E */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, 53),
-    /* 0x434 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, 36),
-    /* 0x43A */ SCHEDULE_CMD_RET_TIME(11,  0, 11, 25, 52),
-    /* 0x440 */ SCHEDULE_CMD_RET_TIME( 6,  0, 11,  0, 22),
+    /* 0x41C */ SCHEDULE_CMD_RET_TIME( 5,  0,  6,  0, ANJU_SCH_1),
+    /* 0x422 */ SCHEDULE_CMD_RET_TIME(18,  0,  5,  0, ANJU_SCH_1),
+    /* 0x428 */ SCHEDULE_CMD_RET_TIME(11, 50, 12,  0, ANJU_SCH_27),
+    /* 0x42E */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_35),
+    /* 0x434 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, ANJU_SCH_24),
+    /* 0x43A */ SCHEDULE_CMD_RET_TIME(11,  0, 11, 25, ANJU_SCH_34),
+    /* 0x440 */ SCHEDULE_CMD_RET_TIME( 6,  0, 11,  0, ANJU_SCH_16),
     /* 0x446 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x447 */ SCHEDULE_CMD_RET_NONE(),
 };
 
-s32 D_80B58618[0x40] = {
-    -1,
-    0xA,
-    -1,
-    0,
-    -1,
-    -1,
-    -1,
-    -1,
-    -1,
-    -1,
-    -1,
-    -1,
-    -1,
-    -1,
-    0,
-    -1,
-    0xA,
-    0xA,
-    0xA,
-    0xB,
-    -1,
-    4,
-    0x16,
-    0xF,
-    -1,
-    -1,
-    3,
-    6,
-    8,
-    9,
-    0xD,
-    0xE,
-    0x10,
-    0x12,
-    0x13,
-    0x15,
-    0x17,
-    0,
-    5,
-    0x19,
-    0,
-    1,
-    2,
-    4,
-    5,
-    7,
-    0xA,
-    0xB,
-    0xC,
-    0xF,
-    0x11,
-    0x14,
-    0x16,
-    0x18,
-    1,
-    2,
-    0,
-    1,
-    3,
-    4,
-    0,
-    1,
-    2,
-    3,
+s32 D_80B58618[ANJU_SCH_MAX] = {
+    -1, // ANJU_SCH_NONE
+    10, // ANJU_SCH_1
+    -1, // ANJU_SCH_2
+    0, // ANJU_SCH_3
+    -1, // ANJU_SCH_4
+    -1, // ANJU_SCH_5
+    -1, // ANJU_SCH_6
+    -1, // ANJU_SCH_7
+    -1, // ANJU_SCH_8
+    -1, // ANJU_SCH_9
+    -1, // ANJU_SCH_A
+    -1, // ANJU_SCH_B
+    -1, // ANJU_SCH_C
+    -1, // ANJU_SCH_D
+    0, // ANJU_SCH_E
+    -1, // ANJU_SCH_F
+    10, // ANJU_SCH_10
+    10, // ANJU_SCH_11
+    10, // ANJU_SCH_12
+    11, // ANJU_SCH_13
+    -1, // ANJU_SCH_14
+    4, // ANJU_SCH_15
+    22, // ANJU_SCH_16
+    15, // ANJU_SCH_17
+    -1, // ANJU_SCH_18
+    -1, // ANJU_SCH_19
+    3, // ANJU_SCH_1A
+    6, // ANJU_SCH_1B
+    8, // ANJU_SCH_1C
+    9, // ANJU_SCH_1D
+    13, // ANJU_SCH_1E
+    14, // ANJU_SCH_1F
+    16, // ANJU_SCH_20
+    18, // ANJU_SCH_21
+    19, // ANJU_SCH_22
+    21, // ANJU_SCH_23
+    23, // ANJU_SCH_24
+    0, // ANJU_SCH_25
+    5, // ANJU_SCH_26
+    25, // ANJU_SCH_27
+    0, // ANJU_SCH_28
+    1, // ANJU_SCH_29
+    2, // ANJU_SCH_2A
+    4, // ANJU_SCH_2B
+    5, // ANJU_SCH_2C
+    7, // ANJU_SCH_2D
+    10, // ANJU_SCH_2E
+    11, // ANJU_SCH_2F
+    12, // ANJU_SCH_30
+    15, // ANJU_SCH_31
+    17, // ANJU_SCH_32
+    20, // ANJU_SCH_33
+    22, // ANJU_SCH_34
+    24, // ANJU_SCH_35
+    1, // ANJU_SCH_36
+    2, // ANJU_SCH_37
+    0, // ANJU_SCH_38
+    1, // ANJU_SCH_39
+    3, // ANJU_SCH_3A
+    4, // ANJU_SCH_3B
+    0, // ANJU_SCH_3C
+    1, // ANJU_SCH_3D
+    2, // ANJU_SCH_3E
+    3, // ANJU_SCH_3F
 };
+
 s32 D_80B58718[0x1B] = {
     0x560800,
     0x44090000,
@@ -903,7 +972,7 @@ void func_80B53ED4(EnAn* this, PlayState* play) {
     s32 pad;
     Vec3f sp24;
 
-    if (this->unk_200 == 0x19) {
+    if (this->scheduleResult == ANJU_SCH_19) {
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80B58E34, &sp24);
         this->unk_190.dim.radius = 20;
         Math_Vec3f_ToVec3s(&this->unk_190.dim.pos, &sp24);
@@ -1353,47 +1422,47 @@ s32 func_80B54D18(Actor* thisx, PlayState* play) {
 s32* func_80B54DF4(EnAn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    switch (this->unk_200) {
-        case 0x15:
+    switch (this->scheduleResult) {
+        case ANJU_SCH_15:
             this->msgEventFunc = func_80B54A94;
             return D_80B58808;
 
-        case 0x10:
+        case ANJU_SCH_10:
             this->msgEventFunc = func_80B547C8;
             return D_80B58718;
 
-        case 0x11:
+        case ANJU_SCH_11:
             this->msgEventFunc = func_80B5492C;
             return D_80B58784;
 
-        case 0xE:
+        case ANJU_SCH_E:
             this->msgEventFunc = func_80B54C5C;
             return D_80B58954;
 
-        case 0xC:
+        case ANJU_SCH_C:
             return D_80B5899C;
 
-        case 0x19:
+        case ANJU_SCH_19:
             return D_80B58B90;
 
         default:
             if (player->transformation == PLAYER_FORM_DEKU) {
-                switch (this->unk_200) {
-                    case 0x1:
+                switch (this->scheduleResult) {
+                    case ANJU_SCH_1:
                         return D_80B58AE8;
 
-                    case 0x28:
-                    case 0x2A:
-                    case 0x2B:
-                    case 0x2C:
-                    case 0x2D:
-                    case 0x2F:
+                    case ANJU_SCH_28:
+                    case ANJU_SCH_2A:
+                    case ANJU_SCH_2B:
+                    case ANJU_SCH_2C:
+                    case ANJU_SCH_2D:
+                    case ANJU_SCH_2F:
                         return D_80B58B7C;
 
-                    case 0x3:
+                    case ANJU_SCH_3:
                         return D_80B58A24;
 
-                    case 0x31:
+                    case ANJU_SCH_31:
                         return D_80B589FC;
 
                     default:
@@ -1401,16 +1470,16 @@ s32* func_80B54DF4(EnAn* this, PlayState* play) {
                 }
             } else {
                 if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
-                    if (this->unk_200 == 0x31) {
+                    if (this->scheduleResult == ANJU_SCH_31) {
                         return D_80B58B88;
                     }
 
-                    if (this->unk_200 == 0x17) {
+                    if (this->scheduleResult == ANJU_SCH_17) {
                         this->msgEventFunc = func_80B54BC4;
                         return D_80B589AC;
                     }
 
-                    if (this->unk_200 == 3) {
+                    if (this->scheduleResult == ANJU_SCH_3) {
                         this->msgEventFunc = func_80B54D18;
                         return D_80B58B3C;
                     }
@@ -1428,11 +1497,11 @@ s32* func_80B54DF4(EnAn* this, PlayState* play) {
                 }
 
                 if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
-                    if (this->unk_200 == 0x17) {
+                    if (this->scheduleResult == ANJU_SCH_17) {
                         this->msgEventFunc = func_80B54BC4;
                         return D_80B589AC;
                     }
-                    if (this->unk_200 == 3) {
+                    if (this->scheduleResult == ANJU_SCH_3) {
                         this->msgEventFunc = func_80B54D18;
                         return D_80B58AF4;
                     }
@@ -1441,50 +1510,50 @@ s32* func_80B54DF4(EnAn* this, PlayState* play) {
                     }
                 }
 
-                switch (this->unk_200) {
-                    case 0x1:
+                switch (this->scheduleResult) {
+                    case ANJU_SCH_1:
                         return D_80B58AE8;
 
-                    case 0x28:
+                    case ANJU_SCH_28:
                         return D_80B5894C;
 
-                    case 0x2A:
-                    case 0x2B:
-                    case 0x2C:
-                    case 0x2D:
+                    case ANJU_SCH_2A:
+                    case ANJU_SCH_2B:
+                    case ANJU_SCH_2C:
+                    case ANJU_SCH_2D:
                         return D_80B58980;
 
-                    case 0x3:
+                    case ANJU_SCH_3:
                         this->msgEventFunc = func_80B54D18;
                         return D_80B58AF4;
 
-                    case 0x12:
+                    case ANJU_SCH_12:
                         if (gSaveContext.save.day >= 2) {
                             return D_80B58A3C;
                         }
                         return D_80B5885C;
 
-                    case 0x13:
-                    case 0x2F:
+                    case ANJU_SCH_13:
+                    case ANJU_SCH_2F:
                         return D_80B58938;
 
-                    case 0x16:
+                    case ANJU_SCH_16:
                         return D_80B58988;
 
-                    case 0x17:
+                    case ANJU_SCH_17:
                         return D_80B589FC;
 
-                    case 0x30:
+                    case ANJU_SCH_30:
                         return D_80B58944;
 
-                    case 0x31:
+                    case ANJU_SCH_31:
                         if (player->transformation == PLAYER_FORM_HUMAN) {
                             return D_80B58B88;
                         }
                         return D_80B589FC;
 
-                    case 0x34:
-                    case 0x35:
+                    case ANJU_SCH_34:
+                    case ANJU_SCH_35:
                         return D_80B58994;
 
                     default:
@@ -1508,11 +1577,11 @@ s32 func_80B55180(EnAn* this, PlayState* play) {
         this->actor.child = this->unk_218;
         this->msgEventScript = func_80B54DF4(this, play);
 
-        if ((this->unk_200 == 1) || (this->unk_200 == 3) || (this->unk_200 == 0x12) || (this->unk_200 == 0x13) || (this->unk_200 == 0x17) || (this->unk_200 == 0x16) || (this->unk_200 == 0x28) || (this->unk_200 == 0x2A) || (this->unk_200 == 0x2B) || (this->unk_200 == 0x2C) || (this->unk_200 == 0x2D) || (this->unk_200 == 0x2F) || (this->unk_200 == 0x30) || (this->unk_200 == 0x31) || (this->unk_200 == 0x34) || (this->unk_200 == 0x35)) {
+        if ((this->scheduleResult == ANJU_SCH_1) || (this->scheduleResult == ANJU_SCH_3) || (this->scheduleResult == ANJU_SCH_12) || (this->scheduleResult == ANJU_SCH_13) || (this->scheduleResult == ANJU_SCH_17) || (this->scheduleResult == ANJU_SCH_16) || (this->scheduleResult == ANJU_SCH_28) || (this->scheduleResult == ANJU_SCH_2A) || (this->scheduleResult == ANJU_SCH_2B) || (this->scheduleResult == ANJU_SCH_2C) || (this->scheduleResult == ANJU_SCH_2D) || (this->scheduleResult == ANJU_SCH_2F) || (this->scheduleResult == ANJU_SCH_30) || (this->scheduleResult == ANJU_SCH_31) || (this->scheduleResult == ANJU_SCH_34) || (this->scheduleResult == ANJU_SCH_35)) {
             this->unk_360 |= 0x20;
         }
 
-        if ((this->unk_200 == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
+        if ((this->scheduleResult == ANJU_SCH_3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
             this->unk_360 &= ~0x20;
         }
 
@@ -1602,35 +1671,35 @@ void func_80B554E8(EnAn* this) {
 }
 
 s32 func_80B555C8(EnAn* this, PlayState* play) {
-    switch (this->unk_200) {
-        case 0x10:
-        case 0x11:
-        case 0x12:
-        case 0x13:
-        case 0x17:
+    switch (this->scheduleResult) {
+        case ANJU_SCH_10:
+        case ANJU_SCH_11:
+        case ANJU_SCH_12:
+        case ANJU_SCH_13:
+        case ANJU_SCH_17:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
             break;
 
-        case 0x16:
+        case ANJU_SCH_16:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_23);
             this->unk_360 |= 0x2000;
             break;
 
-        case 0xE:
+        case ANJU_SCH_E:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_12);
             break;
 
-        case 0x15:
+        case ANJU_SCH_15:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_15);
             break;
 
-        case 0x2F:
-        case 0x31:
+        case ANJU_SCH_2F:
+        case ANJU_SCH_31:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_7);
             break;
 
-        case 0x34:
-        case 0x35:
+        case ANJU_SCH_34:
+        case ANJU_SCH_35:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_22);
             this->unk_360 |= 0x2000;
             break;
@@ -1943,20 +2012,20 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
 Actor* func_80B55D20(EnAn* this, PlayState* play) {
     Actor* actor;
 
-    switch (this->unk_200) {
+    switch (this->scheduleResult) {
         default:
             actor = &GET_PLAYER(play)->actor;
             break;
 
-        case 0x15:
+        case ANJU_SCH_15:
             actor = func_80B539CC(this, play, ACTORCAT_NPC, ACTOR_EN_NB);
             break;
 
-        case 0x10:
+        case ANJU_SCH_10:
             actor = func_80B539CC(this, play, ACTORCAT_NPC, ACTOR_EN_PM);
             break;
 
-        case 0x11:
+        case ANJU_SCH_11:
             actor = func_80B539CC(this, play, ACTORCAT_NPC, ACTOR_EN_IG);
             break;
     }
@@ -2105,34 +2174,36 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             this->unk_378 = scheduleOutput->time1 - scheduleOutput->time0;
             this->unk_37A = sp56 - scheduleOutput->time0;
 
-            switch (scheduleOutput->result) {                    /* switch 1 */
-                case 0x1B:                          /* switch 1 */
-                case 0x1C:                          /* switch 1 */
-                case 0x20:                          /* switch 1 */
-                case 0x21:                          /* switch 1 */
-                case 0x22:                          /* switch 1 */
-                case 0x23:                          /* switch 1 */
-                case 0x25:                          /* switch 1 */
-                case 0x26:                          /* switch 1 */
+            switch (scheduleOutput->result) {
+                case ANJU_SCH_1B:
+                case ANJU_SCH_1C:
+                case ANJU_SCH_20:
+                case ANJU_SCH_21:
+                case ANJU_SCH_22:
+                case ANJU_SCH_23:
+                case ANJU_SCH_25:
+                case ANJU_SCH_26:
                     this->unk_38A = ENAN_FACE_2;
                     this->faceIndex = ENAN_FACE_2;
                     this->unk_38E = 8;
                     break;
             }
 
-            switch (scheduleOutput->result) {       /* switch 2 */
-                case 0x1A:                          /* switch 2 */
-                case 0x1B:                          /* switch 2 */
-                case 0x1C:                          /* switch 2 */
+            switch (scheduleOutput->result) {
+                case ANJU_SCH_1A:
+                case ANJU_SCH_1B:
+                case ANJU_SCH_1C:
                     this->unk_360 |= 0x900;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_16);
                     break;
-                case 0x24:                          /* switch 2 */
-                case 0x27:                          /* switch 2 */
+
+                case ANJU_SCH_24:
+                case ANJU_SCH_27:
                     this->unk_360 |= 0x2100;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_22);
                     break;
-                default:                            /* switch 2 */
+
+                default:
                     this->unk_360 |= 0x100;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_7);
                     break;
@@ -2168,7 +2239,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     }
 
     if (this->unk_1DC != NULL) {
-        if ((this->unk_200 < 0x28) && (this->unk_200 != 0) && (this->unk_384 >= 0)) {
+        if ((this->scheduleResult < ANJU_SCH_28) && (this->scheduleResult != ANJU_SCH_NONE) && (this->unk_384 >= 0)) {
             var_v1_2 = temp_t0;
         } else {
             var_v1_2 = scheduleOutput->time0;
@@ -2188,41 +2259,41 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->unk_360 &= ~8;
         this->unk_360 &= ~0x10;
 
-        switch (scheduleOutput->result) {                           /* switch 1 */
-            case 0x2C:                              /* switch 1 */
-            case 0x2D:                              /* switch 1 */
-            case 0x32:                              /* switch 1 */
-            case 0x33:                              /* switch 1 */
-            case 0x36:                              /* switch 1 */
-            case 0x37:                              /* switch 1 */
-            case 0x38:                              /* switch 1 */
-            case 0x39:                              /* switch 1 */
-            case 0x3A:                              /* switch 1 */
-            case 0x3B:                              /* switch 1 */
-            case 0x3C:                              /* switch 1 */
-            case 0x3D:                              /* switch 1 */
-            case 0x3E:                              /* switch 1 */
-            case 0x3F:                              /* switch 1 */
+        switch (scheduleOutput->result) {
+            case ANJU_SCH_2C:
+            case ANJU_SCH_2D:
+            case ANJU_SCH_32:
+            case ANJU_SCH_33:
+            case ANJU_SCH_36:
+            case ANJU_SCH_37:
+            case ANJU_SCH_38:
+            case ANJU_SCH_39:
+            case ANJU_SCH_3A:
+            case ANJU_SCH_3B:
+            case ANJU_SCH_3C:
+            case ANJU_SCH_3D:
+            case ANJU_SCH_3E:
+            case ANJU_SCH_3F:
                 this->unk_38A = ENAN_FACE_2;
                 this->faceIndex = ENAN_FACE_2;
                 this->unk_38E = 8;
                 break;
         }
 
-        switch (scheduleOutput->result) {                           /* switch 2 */
-            case 0x2A:                              /* switch 2 */
-            case 0x2B:                              /* switch 2 */
+        switch (scheduleOutput->result) {
+            case ANJU_SCH_2A:
+            case ANJU_SCH_2B:
                 SubS_SetOfferMode(&this->unk_360, 3U, 7U);
                 /* fallthrough */
-            case 0x2C:                              /* switch 2 */
-            case 0x2D:                              /* switch 2 */
+            case ANJU_SCH_2C:
+            case ANJU_SCH_2D:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_16);
                 this->unk_360 |= 0x300;
                 this->unk_360 |= 0x800;
                 break;
 
-            case 0x34:                              /* switch 2 */
-            case 0x35:                              /* switch 2 */
+            case ANJU_SCH_34:
+            case ANJU_SCH_35:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_22);
                 SubS_SetOfferMode(&this->unk_360, 3U, 7U);
 
@@ -2230,35 +2301,35 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 this->unk_360 |= 0x2000;
                 break;
 
-            case 0x32:                              /* switch 2 */
-            case 0x33:                              /* switch 2 */
+            case ANJU_SCH_32:
+            case ANJU_SCH_33:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_7);
                 this->unk_360 |= 0x300;
                 break;
 
-            case 0x36:                              /* switch 2 */
-            case 0x37:                              /* switch 2 */
-            case 0x38:                              /* switch 2 */
-            case 0x39:                              /* switch 2 */
-            case 0x3A:                              /* switch 2 */
-            case 0x3B:                              /* switch 2 */
-            case 0x3C:                              /* switch 2 */
-            case 0x3D:                              /* switch 2 */
-            case 0x3E:                              /* switch 2 */
-            case 0x3F:                              /* switch 2 */
+            case ANJU_SCH_36:
+            case ANJU_SCH_37:
+            case ANJU_SCH_38:
+            case ANJU_SCH_39:
+            case ANJU_SCH_3A:
+            case ANJU_SCH_3B:
+            case ANJU_SCH_3C:
+            case ANJU_SCH_3D:
+            case ANJU_SCH_3E:
+            case ANJU_SCH_3F:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_18);
                 this->unk_360 |= 0x300;
                 this->unk_360 |= 0x1000;
                 break;
 
-            case 0x28:                              /* switch 2 */
-            case 0x2F:                              /* switch 2 */
-            case 0x30:                              /* switch 2 */
-            case 0x31:                              /* switch 2 */
+            case ANJU_SCH_28:
+            case ANJU_SCH_2F:
+            case ANJU_SCH_30:
+            case ANJU_SCH_31:
                 SubS_SetOfferMode(&this->unk_360, 3U, 7U);
                 this->unk_360 |= 0x300;
                 /* fallthrough */
-            default:                                /* switch 2 */
+            default:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_7);
                 break;
         }
@@ -2294,7 +2365,7 @@ s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
-        if (scheduleOutput->result == 0x16) {
+        if (scheduleOutput->result == ANJU_SCH_16) {
             EnAn_ChangeAnim(this, play, ENAN_ANIM_23);
             SubS_SetOfferMode(&this->unk_360, 3U, 7U);
 
@@ -2334,21 +2405,21 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
 
         switch (scheduleOutput->result) {
-            case 0x13:
+            case ANJU_SCH_13:
                 this->actor.world.rot.y += 0x7FF8;
                 /* fallthrough */
-            case 0x12:
-            case 0x17:
+            case ANJU_SCH_12:
+            case ANJU_SCH_17:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
                 SubS_SetOfferMode(&this->unk_360, 3U, 7U);
                 this->unk_37A = 0;
                 this->unk_360 |= 0x300;
-                if (scheduleOutput->result == 0x12) {
+                if (scheduleOutput->result == ANJU_SCH_12) {
                     this->unk_374 = 70.0f;
                 }
                 break;
 
-            case 0x3:
+            case ANJU_SCH_3:
                 this->unk_360 |= 0x300;
                 this->unk_360 |= 0x1000;
 
@@ -2367,7 +2438,8 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 this->faceIndex = ENAN_FACE_2;
                 this->unk_38E = 8;
                 break;
-            case 0xE:
+
+            case ANJU_SCH_E:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_12);
                 SubS_SetOfferMode(&this->unk_360, 3U, 7U);
 
@@ -2384,7 +2456,6 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 Vec3f D_80B58E7C = { 905.0f, 260.0f, -64.0f };
 Vec3s D_80B58E88 = { 0, 0, 0 };
 
-
 s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
 
@@ -2392,7 +2463,7 @@ s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.shape.rot, &D_80B58E88);
     Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
 
-    if (scheduleOutput->result == 0xC) {
+    if (scheduleOutput->result == ANJU_SCH_C) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_11);
         SubS_SetOfferMode(&this->unk_360, 3U, 7U);
 
@@ -2418,12 +2489,12 @@ s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
 
     switch (scheduleOutput->result) {
-        case 0x1:
+        case ANJU_SCH_1:
             SubS_SetOfferMode(&this->unk_360, 3U, 7U);
             EnAn_ChangeAnim(this, play, ENAN_ANIM_9);
             break;
 
-        case 0x18:
+        case ANJU_SCH_18:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_11);
             this->unk_38A = ENAN_FACE_5;
             this->faceIndex = ENAN_FACE_5;
@@ -2452,7 +2523,7 @@ s32 func_80B56CAC(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return 1;
 }
 
-s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
@@ -2464,83 +2535,83 @@ s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     this->unk_374 = 40.0f;
 
     switch (scheduleOutput->result) {
-        case 0x10:
+        case ANJU_SCH_10:
             ret = func_80B5600C(this, play, scheduleOutput);
             break;
 
-        case 0x11:
+        case ANJU_SCH_11:
             ret = func_80B56094(this, play, scheduleOutput);
             break;
 
-        case 0x15:
+        case ANJU_SCH_15:
             ret = func_80B5611C(this, play, scheduleOutput);
             break;
 
-        case 0xC:
+        case ANJU_SCH_C:
             ret = func_80B56B00(this, play, scheduleOutput);
             break;
 
-        case 0x1:
-        case 0x18:
+        case ANJU_SCH_1:
+        case ANJU_SCH_18:
             ret = func_80B56BC0(this, play, scheduleOutput);
             break;
 
-        case 0x3:
-        case 0xE:
-        case 0x12:
-        case 0x13:
-        case 0x17:
+        case ANJU_SCH_3:
+        case ANJU_SCH_E:
+        case ANJU_SCH_12:
+        case ANJU_SCH_13:
+        case ANJU_SCH_17:
             ret = func_80B56880(this, play, scheduleOutput);
             break;
 
-        case 0x16:
+        case ANJU_SCH_16:
             ret = func_80B56744(this, play, scheduleOutput);
             break;
 
-        case 0x19:
+        case ANJU_SCH_19:
             ret = func_80B56CAC(this, play, scheduleOutput);
             break;
 
-        case 0x1A:
-        case 0x1B:
-        case 0x1C:
-        case 0x1D:
-        case 0x1E:
-        case 0x1F:
-        case 0x20:
-        case 0x21:
-        case 0x22:
-        case 0x23:
-        case 0x24:
-        case 0x25:
-        case 0x26:
-        case 0x27:
+        case ANJU_SCH_1A:
+        case ANJU_SCH_1B:
+        case ANJU_SCH_1C:
+        case ANJU_SCH_1D:
+        case ANJU_SCH_1E:
+        case ANJU_SCH_1F:
+        case ANJU_SCH_20:
+        case ANJU_SCH_21:
+        case ANJU_SCH_22:
+        case ANJU_SCH_23:
+        case ANJU_SCH_24:
+        case ANJU_SCH_25:
+        case ANJU_SCH_26:
+        case ANJU_SCH_27:
             ret = func_80B561A4(this, play, scheduleOutput);
             break;
 
-        case 0x28:
-        case 0x2A:
-        case 0x2B:
-        case 0x2C:
-        case 0x2D:
-        case 0x2E:
-        case 0x2F:
-        case 0x30:
-        case 0x31:
-        case 0x32:
-        case 0x33:
-        case 0x34:
-        case 0x35:
-        case 0x36:
-        case 0x37:
-        case 0x38:
-        case 0x39:
-        case 0x3A:
-        case 0x3B:
-        case 0x3C:
-        case 0x3D:
-        case 0x3E:
-        case 0x3F:
+        case ANJU_SCH_28:
+        case ANJU_SCH_2A:
+        case ANJU_SCH_2B:
+        case ANJU_SCH_2C:
+        case ANJU_SCH_2D:
+        case ANJU_SCH_2E:
+        case ANJU_SCH_2F:
+        case ANJU_SCH_30:
+        case ANJU_SCH_31:
+        case ANJU_SCH_32:
+        case ANJU_SCH_33:
+        case ANJU_SCH_34:
+        case ANJU_SCH_35:
+        case ANJU_SCH_36:
+        case ANJU_SCH_37:
+        case ANJU_SCH_38:
+        case ANJU_SCH_39:
+        case ANJU_SCH_3A:
+        case ANJU_SCH_3B:
+        case ANJU_SCH_3C:
+        case ANJU_SCH_3D:
+        case ANJU_SCH_3E:
+        case ANJU_SCH_3F:
             ret = func_80B56418(this, play, scheduleOutput);
             break;
 
@@ -2566,7 +2637,7 @@ s32 func_80B56E44(EnAn* this, PlayState* play) {
 }
 
 s32 func_80B56EB4(EnAn* this, PlayState* play) {
-    EnDoor* sp44 = func_80B53B3C(play, this->unk_200);
+    EnDoor* sp44 = func_80B53B3C(play, this->scheduleResult);
     Vec3f sp38;
     f32 temp_fv0;
     s32 pad;
@@ -2649,8 +2720,8 @@ s32 func_80B5702C(EnAn* this, PlayState* play) {
 }
 
 s32 func_80B572D4(EnAn* this, PlayState* play) {
-    switch (this->unk_200) {
-        case 0x17:
+    switch (this->scheduleResult) {
+        case ANJU_SCH_17:
             if ((func_80B55F8C(play) != 0) && (func_80B55ECC(this) != 0)) {
                 this->unk_360 |= 0x20;
             } else {
@@ -2658,7 +2729,7 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
             }
             break;
 
-        case 0x1:
+        case ANJU_SCH_1:
             if (func_80B55ECC(this) != 0) {
                 this->unk_360 |= 0x20;
             } else {
@@ -2666,8 +2737,8 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
             }
             break;
 
-        case 0x12:
-        case 0x13:
+        case ANJU_SCH_12:
+        case ANJU_SCH_13:
             if (func_80B55ECC(this) != 0) {
                 this->unk_360 |= 0x20;
             } else {
@@ -2675,7 +2746,7 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
             }
             break;
 
-        case 0x16:
+        case ANJU_SCH_16:
             if (Animation_OnFrame(&this->skelAnime, 6.0f) && (this->animIndex == ENAN_ANIM_23)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_SWEEP);
             }
@@ -2763,78 +2834,78 @@ s32 func_80B57674(EnAn* this, PlayState* play) {
 }
 
 void func_80B57718(EnAn* this, PlayState* play) {
-    switch (this->unk_200) {
-        case 0x10:
-        case 0x11:
-        case 0x15:
+    switch (this->scheduleResult) {
+        case ANJU_SCH_10:
+        case ANJU_SCH_11:
+        case ANJU_SCH_15:
             func_80B56E44(this, play);
             break;
 
-        case 0x3:
+        case ANJU_SCH_3:
             func_80B573F4(this, play);
             break;
 
-        case 0x1:
+        case ANJU_SCH_1:
             func_80B575BC(this, play);
             break;
 
-        case 0x19:
+        case ANJU_SCH_19:
             func_80B57674(this, play);
             break;
 
-        case 0xC:
-        case 0xE:
-        case 0x12:
-        case 0x13:
-        case 0x16:
-        case 0x18:
+        case ANJU_SCH_C:
+        case ANJU_SCH_E:
+        case ANJU_SCH_12:
+        case ANJU_SCH_13:
+        case ANJU_SCH_16:
+        case ANJU_SCH_18:
             func_80B572D4(this, play);
             break;
 
-        case 0x17:
+        case ANJU_SCH_17:
             func_80B572D4(this, play);
             break;
 
-        case 0x1A:
-        case 0x1B:
-        case 0x1C:
-        case 0x1D:
-        case 0x1E:
-        case 0x1F:
-        case 0x20:
-        case 0x21:
-        case 0x22:
-        case 0x23:
-        case 0x24:
-        case 0x25:
-        case 0x26:
-        case 0x27:
+        case ANJU_SCH_1A:
+        case ANJU_SCH_1B:
+        case ANJU_SCH_1C:
+        case ANJU_SCH_1D:
+        case ANJU_SCH_1E:
+        case ANJU_SCH_1F:
+        case ANJU_SCH_20:
+        case ANJU_SCH_21:
+        case ANJU_SCH_22:
+        case ANJU_SCH_23:
+        case ANJU_SCH_24:
+        case ANJU_SCH_25:
+        case ANJU_SCH_26:
+        case ANJU_SCH_27:
             func_80B56EB4(this, play);
             break;
 
-        case 0x28:
-        case 0x2A:
-        case 0x2B:
-        case 0x2C:
-        case 0x2D:
-        case 0x2E:
-        case 0x2F:
-        case 0x30:
-        case 0x31:
-        case 0x32:
-        case 0x33:
-        case 0x34:
-        case 0x35:
-        case 0x36:
-        case 0x37:
-        case 0x38:
-        case 0x39:
-        case 0x3A:
-        case 0x3B:
-        case 0x3C:
-        case 0x3D:
-        case 0x3E:
-        case 0x3F:
+        case ANJU_SCH_28:
+        case ANJU_SCH_2A:
+        case ANJU_SCH_2B:
+        case ANJU_SCH_2C:
+        case ANJU_SCH_2D:
+        case ANJU_SCH_2E:
+        case ANJU_SCH_2F:
+        case ANJU_SCH_30:
+        case ANJU_SCH_31:
+        case ANJU_SCH_32:
+        case ANJU_SCH_33:
+        case ANJU_SCH_34:
+        case ANJU_SCH_35:
+        case ANJU_SCH_36:
+        case ANJU_SCH_37:
+        case ANJU_SCH_38:
+        case ANJU_SCH_39:
+        case ANJU_SCH_3A:
+        case ANJU_SCH_3B:
+        case ANJU_SCH_3C:
+        case ANJU_SCH_3D:
+        case ANJU_SCH_3E:
+        case ANJU_SCH_3F:
             func_80B5702C(this, play);
             break;
     }
@@ -2858,14 +2929,14 @@ void func_80B577F0(EnAn* this, PlayState* play) {
     this->actor.draw = EnAn_Draw;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_360 = 0;
-    this->unk_200 = 0;
+    this->scheduleResult = ANJU_SCH_NONE;
 
     this->actionFunc = func_80B578F8;
     this->actionFunc(this, play);
 }
 
 void func_80B578F8(EnAn* this, PlayState* play) {
-    ScheduleOutput sp20;
+    ScheduleOutput scheduleOutput;
 
     this->unk_384 = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
@@ -2875,20 +2946,20 @@ void func_80B578F8(EnAn* this, PlayState* play) {
     }
 
     if (this->unk_3C0 != 0) {
-        sp20.result = 0x19;
-        if (this->unk_200 != 0x19) {
-            func_80B56D28(this, play, &sp20);
+        scheduleOutput.result = ANJU_SCH_19;
+        if (this->scheduleResult != ANJU_SCH_19) {
+            EnAn_ProcessScheduleOutput(this, play, &scheduleOutput);
         }
-    } else if ((Schedule_RunScript(play, sScheduleScript, &sp20) == 0) || ((this->unk_200 != sp20.result) && (func_80B56D28(this, play, &sp20) == 0))) {
+    } else if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput) || ((this->scheduleResult != scheduleOutput.result) && (EnAn_ProcessScheduleOutput(this, play, &scheduleOutput) == 0))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        sp20.result = 0;
+        scheduleOutput.result = ANJU_SCH_NONE;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 
-    this->unk_200 = sp20.result;
+    this->scheduleResult = scheduleOutput.result;
     this->unk_218 = func_80B55D20(this, play);
     func_80B57718(this, play);
 }
@@ -2903,7 +2974,7 @@ void func_80B57A44(EnAn* this, PlayState* play) {
         this->unk_388 = 0x14;
         this->msgScriptResumePos = 0;
         this->actionFunc = func_80B578F8;
-    } else if ((this->unk_200 != 1) && (this->unk_200 != 3) && (this->unk_200 != 0xC) && (this->unk_200 != 0xE) && (this->unk_200 != 0x19)) {
+    } else if ((this->scheduleResult != ANJU_SCH_1) && (this->scheduleResult != 3) && (this->scheduleResult != ANJU_SCH_C) && (this->scheduleResult != ANJU_SCH_E) && (this->scheduleResult != ANJU_SCH_19)) {
         if ((this->unk_218 != NULL) && (this->unk_218->update != NULL)) {
             s32 temp;
             Vec3f sp38;
@@ -3011,7 +3082,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
     }
 
     this->actionFunc(this, play);
-    if (this->unk_200 != 0) {
+    if (this->scheduleResult != ANJU_SCH_NONE) {
         func_80B55914(this, play);
         func_80B53BA8(this, play);
         EnAn_UpdateFace(this);
@@ -3096,7 +3167,7 @@ TexturePtr D_80B58EEC[ENAN_EYES_MAX] = {
 void EnAn_Draw(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
 
-    if ((this->unk_200 != 0) || (this->unk_3B0 != 0)) {
+    if ((this->scheduleResult != ANJU_SCH_NONE) || (this->unk_3B0 != 0)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
