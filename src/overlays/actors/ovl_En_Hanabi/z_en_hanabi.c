@@ -194,6 +194,7 @@ void EnHanabi_Init(Actor* thisx, PlayState* play2) {
     EnHanabi* this = THIS;
     s32 i;
 
+    //! FAKE:
     if (1) {}
 
     Actor_SetScale(thisx, 1.0f);

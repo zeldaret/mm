@@ -122,7 +122,7 @@ void EnJcMato_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     Collider_InitSphere(play, &this->collider);
     Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
-    this->collider.dim.worldSphere.radius = 0xF;
+    this->collider.dim.worldSphere.radius = 15;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     Actor_SetScale(&this->actor, 0.008f);
     this->hitFlag = false;

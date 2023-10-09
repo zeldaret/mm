@@ -2,8 +2,8 @@
  * File: voicegetstatus.c
  */
 
-#include "ultra64/controller_voice.h"
-#include "io/controller.h"
+#include "PR/controller_voice.h"
+#include "PR/controller.h"
 #include "functions.h"
 
 s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 channel, u8* status) {

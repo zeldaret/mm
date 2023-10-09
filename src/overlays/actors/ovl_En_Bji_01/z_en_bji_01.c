@@ -101,7 +101,7 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
         }
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_809CD028(this, play);
     } else {

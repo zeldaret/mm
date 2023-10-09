@@ -132,7 +132,7 @@ void EnFall_RisingDebris_ResetEffects(EnFall* this) {
 
 void EnFall_Init(Actor* thisx, PlayState* play) {
     EnFall* this = THIS;
-    s32 objectIndex;
+    s32 objectSlot;
 
     this->eyeGlowIntensity = 0.0f;
     this->flags = 0;
@@ -165,27 +165,27 @@ void EnFall_Init(Actor* thisx, PlayState* play) {
         case EN_FALL_TYPE_LODMOON_NO_LERP:
         case EN_FALL_TYPE_LODMOON:
         case EN_FALL_TYPE_LODMOON_INVERTED_STONE_TOWER:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_LODMOON);
+            objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_LODMOON);
             break;
 
         case EN_FALL_TYPE_MOONS_TEAR:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_MOONSTON);
+            objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_MOONSTON);
             break;
 
         case EN_FALL_TYPE_STOPPED_MOON_OPEN_MOUTH:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_FALL2);
+            objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_FALL2);
             break;
 
         default:
-            objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_FALL);
+            objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_FALL);
             break;
     }
 
-    if (objectIndex < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
-    this->objIndex = objectIndex;
+    this->objectSlot = objectSlot;
     this->actionFunc = EnFall_Setup;
 }
 
@@ -210,8 +210,8 @@ Actor* EnFall_MoonsTear_GetTerminaFieldMoon(PlayState* play) {
 void EnFall_Setup(EnFall* this, PlayState* play) {
     Actor* moon;
 
-    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
-        this->actor.objBankIndex = this->objIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         this->actionFunc = EnFall_Moon_PerformDefaultActions;
         switch (EN_FALL_TYPE(&this->actor)) {
             case EN_FALL_TYPE_TITLE_SCREEN_MOON:

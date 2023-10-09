@@ -470,7 +470,7 @@ void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
     }
 
     if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80ADBBEC;
         func_800B7298(play, NULL, PLAYER_CSMODE_19);
@@ -516,7 +516,7 @@ void func_80ADBD64(EnSellnuts* this, PlayState* play) {
     }
 
     if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_338 &= ~2;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -558,7 +558,7 @@ void func_80ADBE80(EnSellnuts* this, PlayState* play) {
 
 void func_80ADBFA0(EnSellnuts* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         if (this->unk_34C == 0) {
             this->actionFunc = func_80ADB544;
@@ -721,7 +721,7 @@ void func_80ADC6D0(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.save.day == 3) {
@@ -751,7 +751,7 @@ void func_80ADC7B4(EnSellnuts* this, PlayState* play) {
             CutsceneManager_Queue(this->csId);
         }
     } else if ((this->unk_366 == 1) && (talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_366 = 0;
         CutsceneManager_Stop(this->csId);

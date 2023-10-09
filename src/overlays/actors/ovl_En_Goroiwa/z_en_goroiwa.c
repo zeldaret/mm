@@ -674,6 +674,7 @@ void func_80940090(EnGoroiwa* this, PlayState* play) {
         sp10C.x = this->actor.world.pos.x;
         sp10C.y = this->actor.world.pos.y + this->unk_1DC;
         sp10C.z = this->actor.world.pos.z;
+        //! FAKE:
         if (1) {}
         spD8 = spEC * 150.0f;
         spA8 = 0x10000 / spD8;
@@ -1117,8 +1118,8 @@ void func_809419D0(EnGoroiwa* this) {
 
 void func_80941A10(EnGoroiwa* this, PlayState* play) {
     static EnGoroiwaUnkFunc D_80942E94[] = {
-        &func_8093F498,
-        &func_8093F34C,
+        func_8093F498,
+        func_8093F34C,
     };
     static u16 D_80942E9C[][2] = {
         { NA_SE_EV_BIGBALL_ROLL - SFX_FLAG, NA_SE_EV_BIGBALL_ROLL_SR - SFX_FLAG },
@@ -1506,6 +1507,9 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
                         this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
                         this->actor.floorBgId = 50;
                     }
+                    break;
+
+                default:
                     break;
             }
 

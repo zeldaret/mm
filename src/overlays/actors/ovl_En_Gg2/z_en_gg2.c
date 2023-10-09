@@ -5,7 +5,6 @@
  */
 
 #include "z_en_gg2.h"
-#include "objects/object_gg/object_gg.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_REACT_TO_LENS)
 
@@ -39,15 +38,44 @@ ActorInit En_Gg2_InitVars = {
     /**/ EnGg2_Draw,
 };
 
-AnimationInfo D_80B3BF00[] = {
-    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, 0, -10.0f }, { &object_gg_Anim_00D528, 1.0f, 0.0f, 0.0f, 2, -10.0f },
-    { &object_gg_Anim_00D174, 1.0f, 0.0f, 0.0f, 2, -10.0f }, { &object_gg_Anim_00ECC0, 1.0f, 0.0f, 0.0f, 2, -10.0f },
-    { &object_gg_Anim_00BAF0, 1.0f, 0.0f, 0.0f, 0, -10.0f }, { &object_gg_Anim_00AF40, 1.0f, 0.0f, 0.0f, 0, -10.0f },
-    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, 0, -10.0f }, { &object_gg_Anim_00AF40, 1.0f, 0.0f, 0.0f, 0, -10.0f },
-    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, 0, -10.0f }, { &object_gg_Anim_0100C8, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_gg_Anim_00CDA0, 1.0f, 0.0f, 0.0f, 0, 0.0f },   { &object_gg_Anim_00B560, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_gg_Anim_00A4B4, 1.0f, 0.0f, 0.0f, 2, 0.0f },   { &object_gg_Anim_00E86C, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_gg_Anim_00D99C, 1.0f, 0.0f, 0.0f, 2, 0.0f },   { &object_gg_Anim_00E2A4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+typedef enum {
+    /*   -1 */ ENGG2_ANIM_NONE = -1,
+    /* 0x00 */ ENGG2_ANIM_0,
+    /* 0x01 */ ENGG2_ANIM_1,
+    /* 0x02 */ ENGG2_ANIM_2,
+    /* 0x03 */ ENGG2_ANIM_3,
+    /* 0x04 */ ENGG2_ANIM_4,
+    /* 0x05 */ ENGG2_ANIM_5,
+    /* 0x06 */ ENGG2_ANIM_6,
+    /* 0x07 */ ENGG2_ANIM_7,
+    /* 0x08 */ ENGG2_ANIM_8,
+    /* 0x09 */ ENGG2_ANIM_9,
+    /* 0x0A */ ENGG2_ANIM_10,
+    /* 0x0B */ ENGG2_ANIM_11,
+    /* 0x0C */ ENGG2_ANIM_12,
+    /* 0x0D */ ENGG2_ANIM_13,
+    /* 0x0E */ ENGG2_ANIM_14,
+    /* 0x0F */ ENGG2_ANIM_15,
+    /* 0x10 */ ENGG2_ANIM_MAX
+} EnGg2Animation;
+
+static AnimationInfo sAnimationInfo[ENGG2_ANIM_MAX] = {
+    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_0
+    { &object_gg_Anim_00D528, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -10.0f }, // ENGG2_ANIM_1
+    { &object_gg_Anim_00D174, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -10.0f }, // ENGG2_ANIM_2
+    { &object_gg_Anim_00ECC0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -10.0f }, // ENGG2_ANIM_3
+    { &object_gg_Anim_00BAF0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_4
+    { &object_gg_Anim_00AF40, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_5
+    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_6
+    { &object_gg_Anim_00AF40, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_7
+    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_8
+    { &object_gg_Anim_0100C8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },   // ENGG2_ANIM_9
+    { &object_gg_Anim_00CDA0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },   // ENGG2_ANIM_10
+    { &object_gg_Anim_00B560, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },   // ENGG2_ANIM_11
+    { &object_gg_Anim_00A4B4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },   // ENGG2_ANIM_12
+    { &object_gg_Anim_00E86C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },   // ENGG2_ANIM_13
+    { &object_gg_Anim_00D99C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },   // ENGG2_ANIM_14
+    { &object_gg_Anim_00E2A4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },   // ENGG2_ANIM_15
 };
 
 Color_RGBA8 D_80B3C080 = { 255, 255, 255, 255 };
@@ -116,38 +144,38 @@ void func_80B3ADD8(EnGg2* this) {
 
 void func_80B3AE60(EnGg2* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(D_80B3BF00[this->unk_2EE].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if (curFrame == lastFrame) {
-        switch (this->unk_2EE) {
-            case 0:
-                this->unk_2EE = 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 1);
+    if (curFrame == endFrame) {
+        switch (this->animIndex) {
+            case ENGG2_ANIM_0:
+                this->animIndex = ENGG2_ANIM_1;
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGG2_ANIM_1);
                 this->actionFunc = func_80B3B0A0;
                 break;
 
-            case 1:
-            case 8:
-                this->unk_2EE = 5;
+            case ENGG2_ANIM_1:
+            case ENGG2_ANIM_8:
+                this->animIndex = ENGG2_ANIM_5;
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 5);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGG2_ANIM_5);
                 this->actionFunc = func_80B3B120;
                 break;
 
-            case 5:
-                this->unk_2EE = 6;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
+            case ENGG2_ANIM_5:
+                this->animIndex = ENGG2_ANIM_6;
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGG2_ANIM_0);
                 this->actionFunc = func_80B3B21C;
                 break;
 
-            case 6:
-                this->unk_2EE = 7;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 5);
+            case ENGG2_ANIM_6:
+                this->animIndex = ENGG2_ANIM_7;
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGG2_ANIM_5);
                 this->actionFunc = func_80B3B294;
                 break;
 
             default:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGG2_ANIM_0);
                 this->actionFunc = func_80B3AFB0;
                 break;
         }
@@ -173,7 +201,7 @@ void func_80B3B05C(EnGg2* this, PlayState* play) {
 
 void func_80B3B0A0(EnGg2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_2F0 = 0;
         this->actionFunc = func_80B3B5D4;
@@ -338,7 +366,7 @@ f32 func_80B3B7E4(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
 void func_80B3B8A4(EnGg2* this) {
     f32 sp1C;
 
-    if ((this->unk_2EE != 5) && (this->unk_2EE != 7)) {
+    if ((this->animIndex != ENGG2_ANIM_5) && (this->animIndex != ENGG2_ANIM_7)) {
         this->unk_2F2 += 0x62C;
         sp1C = 1100.0f;
     } else {
@@ -368,7 +396,7 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_gg_Skel_00F6C0, &object_gg_Anim_00F578, this->jointTable,
-                       this->morphTable, 20);
+                       this->morphTable, OBJECT_GG_LIMB_MAX);
     this->path = SubS_GetPathByIndex(play, ENGG2_GET_PATH_INDEX(&this->actor), ENGG2_PATH_INDEX_NONE);
     this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
     this->unk_2F0 = 0;
@@ -384,15 +412,15 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
-        this->unk_2EE = 0;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
+        this->animIndex = ENGG2_ANIM_0;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGG2_ANIM_0);
         this->actionFunc = func_80B3AFB0;
     } else if (play->sceneId == SCENE_17SETUGEN) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_04) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_08) &&
             !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_10)) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
-            this->unk_2EE = 8;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
+            this->animIndex = ENGG2_ANIM_8;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGG2_ANIM_0);
             this->actionFunc = func_80B3B05C;
         } else {
             Actor_Kill(&this->actor);
@@ -401,8 +429,8 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_04) && CHECK_WEEKEVENTREG(WEEKEVENTREG_20_08) &&
             !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_10)) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
-            this->unk_2EE = 8;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
+            this->animIndex = ENGG2_ANIM_8;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGG2_ANIM_0);
             this->actionFunc = func_80B3B05C;
         } else {
             Actor_Kill(&this->actor);
@@ -424,7 +452,7 @@ void EnGg2_Update(Actor* thisx, PlayState* play) {
     if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-        if ((this->unk_2EE == 5) && (this->unk_2EE == 7)) {
+        if ((this->animIndex == ENGG2_ANIM_5) && (this->animIndex == ENGG2_ANIM_7)) {
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         }
     } else {
@@ -441,7 +469,7 @@ void EnGg2_Update(Actor* thisx, PlayState* play) {
     func_80B3B8A4(this);
     Actor_TrackPlayer(play, &this->actor, &this->unk_1E0, &this->unk_1E6, this->actor.focus.pos);
 
-    if ((this->unk_2EE == 5) || (this->unk_2EE == 7)) {
+    if ((this->animIndex == ENGG2_ANIM_5) || (this->animIndex == ENGG2_ANIM_7)) {
         Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_SHARP_FLOAT - SFX_FLAG);
         if ((play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) && ((play->state.frames % 4) == 0)) {
             func_80B3B4B0(this, play);
@@ -454,12 +482,12 @@ void EnGg2_Update(Actor* thisx, PlayState* play) {
 s32 func_80B3BD44(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnGg2* this = THIS;
 
-    if ((this->unk_2EE != 5) && (this->unk_2EE != 7)) {
-        if (limbIndex == 1) {
+    if ((this->animIndex != ENGG2_ANIM_5) && (this->animIndex != ENGG2_ANIM_7)) {
+        if (limbIndex == OBJECT_GG_LIMB_01) {
             Matrix_RotateYS(this->unk_2F6, MTXMODE_APPLY);
         }
 
-        if (limbIndex == 2) {
+        if (limbIndex == OBJECT_GG_LIMB_02) {
             Matrix_RotateZS(this->unk_2F4, MTXMODE_APPLY);
         }
     }
@@ -469,7 +497,7 @@ s32 func_80B3BD44(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 void func_80B3BDC0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnGg2* this = THIS;
 
-    if (limbIndex == 4) {
+    if (limbIndex == OBJECT_GG_LIMB_04) {
         Matrix_MultVec3f(&D_80B3C0A0, &this->unk_304);
     }
 }

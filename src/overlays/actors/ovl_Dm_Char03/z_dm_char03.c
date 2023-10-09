@@ -72,10 +72,10 @@ void DmChar03_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AAB5F8(DmChar03* this, PlayState* play) {
-    s32 index = Object_GetIndex(&play->objectCtx, OBJECT_GI_NUTSMASK);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_NUTSMASK);
 
-    if (index >= 0) {
-        this->objectIndex = index;
+    if (objectSlot > OBJECT_SLOT_NONE) {
+        this->objectSlot = objectSlot;
         this->actionFunc = func_80AAB644;
     }
 }
@@ -187,13 +187,13 @@ void DmChar03_Draw(Actor* thisx, PlayState* play) {
 void func_80AABA84(PlayState* play, DmChar03* this) {
     s32 pad;
 
-    if (this->actor.objBankIndex == this->objectIndex) {
+    if (this->actor.objectSlot == this->objectSlot) {
         Matrix_Translate(this->offset.x, this->offset.y, this->offset.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, (play->gameplayFrames * 0x3E8), 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
         GetItem_Draw(play, GID_MASK_DEKU);
     }
-    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-        this->actor.objBankIndex = this->objectIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
     }
 }

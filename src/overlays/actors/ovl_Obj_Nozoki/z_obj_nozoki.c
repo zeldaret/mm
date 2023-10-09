@@ -49,7 +49,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_STOP),
 };
 
-s16 D_80BA34B8[] = { OBJECT_SECOM_OBJ, OBJECT_GI_MSSA, OBJECT_SECOM_OBJ, OBJECT_SECOM_OBJ };
+static s16 sObjectIds[] = { OBJECT_SECOM_OBJ, OBJECT_GI_MSSA, OBJECT_SECOM_OBJ, OBJECT_SECOM_OBJ };
 
 Vec3f D_80BA34C0 = { 0.0f, 0.0f, -1110.0f };
 
@@ -93,15 +93,15 @@ void ObjNozoki_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BA2514(ObjNozoki* this, PlayState* play) {
-    s32 sp24 = Object_GetIndex(&play->objectCtx, D_80BA34B8[this->unk_15C]);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[this->unk_15C]);
 
-    if (sp24 < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
 
-    if (Object_IsLoaded(&play->objectCtx, sp24)) {
-        this->dyna.actor.objBankIndex = sp24;
+    if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
+        this->dyna.actor.objectSlot = objectSlot;
         this->dyna.actor.draw = ObjNozoki_Draw;
 
         if (this->unk_15C == 0) {
@@ -174,7 +174,7 @@ void func_80BA27C4(ObjNozoki* this, PlayState* play) {
                 play->actorCtx.flags |= ACTORCTX_FLAG_7;
             }
 
-            if (!Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCHFLAG1(&this->dyna.actor))) {
+            if (!Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCH_FLAG1(&this->dyna.actor))) {
                 return;
             }
         }
@@ -209,10 +209,10 @@ void func_80BA28DC(ObjNozoki* this, PlayState* play) {
         Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 200.0f, this->dyna.actor.velocity.y);
 
         if (OBJNOZOKI_GET_200(&this->dyna.actor)) {
-            if (!Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCHFLAG1(&this->dyna.actor))) {
+            if (!Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCH_FLAG1(&this->dyna.actor))) {
                 return;
             }
-        } else if (Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCHFLAG1(&this->dyna.actor))) {
+        } else if (Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCH_FLAG1(&this->dyna.actor))) {
             s32 csId = this->dyna.actor.csId;
 
             if (csId == this->csId) {
@@ -252,20 +252,20 @@ void func_80BA2AB4(ObjNozoki* this, PlayState* play) {
 
     if (!(play->actorCtx.flags & ACTORCTX_FLAG_5)) {
         if (!(OBJNOZOKI_GET_200(&this->dyna.actor)) &&
-            Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCHFLAG1(&this->dyna.actor))) {
+            Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCH_FLAG1(&this->dyna.actor))) {
             func_80BA2790(this);
         }
     }
 }
 
-void func_80BA2B64(ObjNozoki* this, PlayState* play, s32 arg2, s32 arg3) {
+void func_80BA2B64(ObjNozoki* this, PlayState* play, s32 arg2, s32 switchFlag) {
     this->unk_15D = arg2;
     this->unk_15E = 80;
-    Flags_UnsetSwitch(play, arg3);
+    Flags_UnsetSwitch(play, switchFlag);
 }
 
 void func_80BA2BA4(ObjNozoki* this, PlayState* play) {
-    if (!Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCHFLAG1(&this->dyna.actor))) {
+    if (!Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCH_FLAG1(&this->dyna.actor))) {
         this->dyna.actor.shape.rot.x = -0x1F40;
         this->unk_15E = 80;
     } else if (DECR(this->unk_15E) == 0) {
@@ -331,7 +331,7 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
                 Actor_Kill(&this->dyna.actor);
             }
         } else if (!(play->actorCtx.flags & ACTORCTX_FLAG_5) && (GET_PLAYER(play)->actor.id == ACTOR_PLAYER) &&
-                   Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCHFLAG2(&this->dyna.actor)) && (sp38 < 20.0f)) {
+                   Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCH_FLAG2(&this->dyna.actor)) && (sp38 < 20.0f)) {
             static Vec3f D_80BA34F0 = { 0.0f, 0.0f, 50.0f };
 
             play->actorCtx.flags |= ACTORCTX_FLAG_6;
@@ -374,7 +374,7 @@ void func_80BA3044(ObjNozoki* this, PlayState* play) {
             this->unk_15E = 20;
             Math_Vec3f_Copy(&this->dyna.actor.world.pos, sp1C);
         } else if (!(play->actorCtx.flags & ACTORCTX_FLAG_5) &&
-                   Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCHFLAG1(&this->dyna.actor))) {
+                   Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCH_FLAG1(&this->dyna.actor))) {
             sp1C = &this->dyna.actor.home.pos;
         }
     } else if (DECR(this->unk_15E) == 0) {
@@ -386,7 +386,7 @@ void func_80BA3044(ObjNozoki* this, PlayState* play) {
 
 void func_80BA311C(ObjNozoki* this, PlayState* play) {
     if (this->unk_15D == 0) {
-        if (Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCHFLAG1(&this->dyna.actor))) {
+        if (Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCH_FLAG1(&this->dyna.actor))) {
             this->unk_15D = 1;
             this->unk_15E = 70;
         }

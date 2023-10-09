@@ -92,7 +92,7 @@ void MirRay2_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = this->actor.shape.rot.x;
     if (MIRRAY2_GET_F(thisx) != 1) {
-        if ((MIRRAY2_GET_SWITCH_FLAGS(thisx) != 0x7F) && !Flags_GetSwitch(play, MIRRAY2_GET_SWITCH_FLAGS(thisx))) {
+        if ((MIRRAY2_GET_SWITCH_FLAG(thisx) != 0x7F) && !Flags_GetSwitch(play, MIRRAY2_GET_SWITCH_FLAG(thisx))) {
             this->unk1A4 |= 1;
         }
     }
@@ -109,7 +109,7 @@ void MirRay2_Update(Actor* thisx, PlayState* play) {
     MirRay2* this = THIS;
 
     if (this->unk1A4 & 1) {
-        if (Flags_GetSwitch(play, MIRRAY2_GET_SWITCH_FLAGS(thisx))) {
+        if (Flags_GetSwitch(play, MIRRAY2_GET_SWITCH_FLAG(thisx))) {
             this->unk1A4 &= ~1;
         }
     } else {

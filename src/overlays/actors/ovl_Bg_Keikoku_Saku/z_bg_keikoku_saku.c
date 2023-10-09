@@ -40,7 +40,7 @@ void BgKeikokuSaku_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&object_keikoku_obj_Colheader_002300, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-    this->switchFlag = BGKEIKOKUSAKU_GET_SWITCHFLAG(thisx);
+    this->switchFlag = BGKEIKOKUSAKU_GET_SWITCH_FLAG(thisx);
     if (Flags_GetSwitch(play, this->switchFlag)) {
         this->dyna.actor.world.pos.z = 2659.0f;
     } else {

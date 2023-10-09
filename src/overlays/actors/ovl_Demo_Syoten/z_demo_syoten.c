@@ -499,8 +499,8 @@ void func_80C17468(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_800FE7A8(D_80C17824, &sp2C);
-    func_800FE7A8(D_80C17834, &sp28);
+    Environment_LerpSandstormColors(D_80C17824, &sp2C);
+    Environment_LerpSandstormColors(D_80C17834, &sp28);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp2C.r, sp2C.g, sp2C.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sp28.r, sp28.g, sp28.b, 255);

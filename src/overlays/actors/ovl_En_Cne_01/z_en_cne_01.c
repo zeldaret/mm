@@ -205,13 +205,13 @@ void EnCne01_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnCne01* this = THIS;
 
-    this->enHy.animObjIndex = SubS_GetObjectIndex(OBJECT_OS_ANIME, play);
-    this->enHy.headObjIndex = SubS_GetObjectIndex(OBJECT_CNE, play);
-    this->enHy.skelUpperObjIndex = SubS_GetObjectIndex(OBJECT_CNE, play);
-    this->enHy.skelLowerObjIndex = SubS_GetObjectIndex(OBJECT_CNE, play);
+    this->enHy.animObjectSlot = SubS_GetObjectSlot(OBJECT_OS_ANIME, play);
+    this->enHy.headObjectSlot = SubS_GetObjectSlot(OBJECT_CNE, play);
+    this->enHy.skelUpperObjectSlot = SubS_GetObjectSlot(OBJECT_CNE, play);
+    this->enHy.skelLowerObjectSlot = SubS_GetObjectSlot(OBJECT_CNE, play);
 
-    if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skelUpperObjIndex < 0) ||
-        (this->enHy.skelLowerObjIndex < 0)) {
+    if ((this->enHy.animObjectSlot <= OBJECT_SLOT_NONE) || (this->enHy.headObjectSlot <= OBJECT_SLOT_NONE) ||
+        (this->enHy.skelUpperObjectSlot <= OBJECT_SLOT_NONE) || (this->enHy.skelLowerObjectSlot <= OBJECT_SLOT_NONE)) {
         Actor_Kill(&this->enHy.actor);
     }
     this->enHy.actor.draw = NULL;
@@ -254,10 +254,10 @@ s32 EnCne01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     if (limbIndex == CNE_LIMB_HEAD) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.headObjIndex].segment);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.headObjIndex].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.headObjectSlot].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjectSlot].segment);
         *dList = gCneHeadBrownHairDL;
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -294,8 +294,8 @@ void EnCne01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     if (limbIndex == CNE_LIMB_RIGHT_FOOT) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
-        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
+        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

@@ -70,7 +70,7 @@ void EnLight_Init(Actor* thisx, PlayState* play) {
 
     if (ENLIGHT_GET_800(&this->actor)) {
         this->actor.update = func_80865F38;
-        if (ENLIGHT_GET_1000(&this->actor) && Flags_GetSwitch(play, ENLIGHT_SWITCHFLAG(&this->actor))) {
+        if (ENLIGHT_GET_1000(&this->actor) && Flags_GetSwitch(play, ENLIGHT_SWITCH_FLAG(&this->actor))) {
             Actor_SetScale(&this->actor, 0.0f);
         }
     } else if (ENLIGHT_GET_2000(&this->actor)) {
@@ -124,7 +124,7 @@ void func_80865F38(Actor* thisx, PlayState* play) {
     s32 sp2C = false;
 
     if (ENLIGHT_GET_1000(&this->actor)) {
-        if (Flags_GetSwitch(play, ENLIGHT_SWITCHFLAG(&this->actor))) {
+        if (Flags_GetSwitch(play, ENLIGHT_SWITCH_FLAG(&this->actor))) {
             Math_StepToF(&sp30, 1.0f, 0.05f);
             sp2C = true;
         } else {
@@ -134,7 +134,7 @@ void func_80865F38(Actor* thisx, PlayState* play) {
             }
             Math_StepToF(&sp30, 0.0f, 0.05f);
         }
-    } else if (Flags_GetSwitch(play, ENLIGHT_SWITCHFLAG(&this->actor))) {
+    } else if (Flags_GetSwitch(play, ENLIGHT_SWITCH_FLAG(&this->actor))) {
         if (sp30 < 0.1f) {
             Actor_SetScale(&this->actor, 0.0f);
             sp30 = 0.0f;

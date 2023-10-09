@@ -386,7 +386,7 @@ void func_8092D108(EnDns* this, PlayState* play) {
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlower);
+    gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlowerDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

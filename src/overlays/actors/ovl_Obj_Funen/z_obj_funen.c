@@ -42,6 +42,6 @@ void ObjFunen_Draw(Actor* thisx, PlayState* play) {
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, temp, 0x20, 0x20, 1, 0, temp, 0x20, 0x20));
-    gSPDisplayList(POLY_XLU_DISP++, object_funen_DL_0000D0);
+    gSPDisplayList(POLY_XLU_DISP++, gStoneTowerSmokeDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }

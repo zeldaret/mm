@@ -365,15 +365,15 @@ void EnIk_CheckActions(EnIk* this, PlayState* play) {
 }
 
 void EnIk_SetupIdle(EnIk* this) {
-    f32 frameCount = Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim);
+    f32 endFrame = Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim);
 
     if (this->drawArmorFlags != 0) {
         this->timer = 10;
     } else {
         this->timer = 0;
     }
-    Animation_Change(&this->skelAnime, &gIronKnuckleEndHorizontalAttackAnim, 1.0f, frameCount, frameCount,
-                     ANIMMODE_ONCE, this->timer);
+    Animation_Change(&this->skelAnime, &gIronKnuckleEndHorizontalAttackAnim, 1.0f, endFrame, endFrame, ANIMMODE_ONCE,
+                     this->timer);
     this->actionFunc = EnIk_Idle;
     this->actor.speed = 0.0f;
 }
@@ -461,7 +461,7 @@ void EnIk_SetupVerticalAttack(EnIk* this) {
         playbackSpeed = 1.2f;
     }
     Animation_Change(&this->skelAnime, &gIronKnuckleVerticalAttackAnim, playbackSpeed, 0.0f,
-                     Animation_GetLastFrame(&gIronKnuckleVerticalAttackAnim.common), 3, -4.0f);
+                     Animation_GetLastFrame(&gIronKnuckleVerticalAttackAnim.common), ANIMMODE_ONCE_INTERP, -4.0f);
     this->timer = 0;
     this->blurEffectSpawnLock = -1;
     this->actionFunc = EnIk_VerticalAttack;

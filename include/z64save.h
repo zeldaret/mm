@@ -2,9 +2,9 @@
 #define Z64SAVE_H
 
 #include "ultra64.h"
+#include "PR/os.h"
 #include "z64item.h"
 #include "z64math.h"
-#include "os.h"
 
 struct GameState;
 struct PlayState;
@@ -115,7 +115,7 @@ typedef enum {
     /* 16 */ TIMER_STATE_POSTMAN_END
 } TimerState;
 
-typedef enum {
+typedef enum BottleTimerState {
     /* 0 */ BOTTLE_TIMER_STATE_OFF,
     /* 1 */ BOTTLE_TIMER_STATE_COUNTING
 } BottleTimerState;
@@ -126,7 +126,7 @@ typedef enum {
     /* 3 */ MINIGAME_STATUS_END = 3
 } MinigameStatus;
 
-typedef enum {
+typedef enum HudVisibility {
     /*  0 */ HUD_VISIBILITY_IDLE,
     /*  1 */ HUD_VISIBILITY_NONE,
     /*  2 */ HUD_VISIBILITY_NONE_ALT, // Identical to HUD_VISIBILITY_NONE
@@ -153,6 +153,27 @@ typedef enum {
     /* 50 */ HUD_VISIBILITY_ALL = 50,
     /* 52 */ HUD_VISIBILITY_NONE_INSTANT = 52
 } HudVisibility;
+
+// Based on sRupeesTextLocalization
+typedef enum Language {
+    /* 0 */ LANGUAGE_JPN,
+    /* 1 */ LANGUAGE_ENG,
+    /* 2 */ LANGUAGE_GER,
+    /* 3 */ LANGUAGE_FRE,
+    /* 4 */ LANGUAGE_SPA,
+    /* 5 */ LANGUAGE_MAX
+} Language;
+
+typedef enum HighScore {
+    /* 0 */ HS_BANK_RUPEES,
+    /* 1 */ HS_UNK_1,
+    /* 2 */ HS_FISHING, // Fishing flags
+    /* 3 */ HS_BOAT_ARCHERY,
+    /* 4 */ HS_HORSE_BACK_BALLOON,
+    /* 5 */ HS_LOTTERY_GUESS, // Lottery code chosen by player (only uses lower three hex digits)
+    /* 6 */ HS_SHOOTING_GALLERY, // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
+    /* 7 */ HS_MAX
+} HighScore;
 
 #define PICTO_PHOTO_WIDTH 160
 #define PICTO_PHOTO_HEIGHT 112
@@ -278,18 +299,12 @@ typedef struct SaveInfo {
     /* 0xEA8 */ u32 unk_EA8[2];                        // Related to blue warps
     /* 0xEB0 */ u32 stolenItems;                       // Items stolen by Takkuri and given to Curiosity Shop Man
     /* 0xEB4 */ u32 unk_EB4;
-    /* 0xEB8 */ u32 bankRupees;
-    /* 0xEBC */ u32 unk_EBC;
-    /* 0xEC0 */ u32 unk_EC0;                           // Fishing flags
-    /* 0xEC4 */ u32 unk_EC4;
-    /* 0xEC8 */ u32 horseBackBalloonHighScore;
-    /* 0xECC */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
-    /* 0xED0 */ u32 shootingGalleryHighScores;         // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
+    /* 0xEB8 */ u32 highScores[HS_MAX];
     /* 0xED4 */ u8 weekEventReg[100];                  // "week_event_reg"
     /* 0xF38 */ u32 regionsVisited;                    // "area_arrival"
     /* 0xF3C */ u32 worldMapCloudVisibility;           // "cloud_clear"
     /* 0xF40 */ u8 unk_F40;                            // "oca_rec_flag"                   has scarecrows song
-    /* 0xF41 */ u8 unk_F41;                            // "oca_rec_flag8"                  scarecrows song set?
+    /* 0xF41 */ u8 scarecrowSpawnSongSet;              // "oca_rec_flag8"
     /* 0xF42 */ u8 scarecrowSpawnSong[128];
     /* 0xFC2 */ s8 bombersCaughtNum;                   // "aikotoba_index"
     /* 0xFC3 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"
@@ -312,7 +327,7 @@ typedef struct Save {
     /* 0x10 */ s32 isNight;                             // "asahiru_fg"
     /* 0x14 */ s32 timeSpeedOffset;                     // "change_zelda_time"
     /* 0x18 */ s32 day;                                 // "totalday"
-    /* 0x1C */ s32 daysElapsed;                         // "eventday"
+    /* 0x1C */ s32 eventDayCount;                       // "eventday"
     /* 0x20 */ u8 playerForm;                           // "player_character"
     /* 0x21 */ u8 snowheadCleared;                      // "spring_flag"
     /* 0x22 */ u8 hasTatl;                              // "bell_flag"
@@ -430,12 +445,16 @@ typedef enum {
 #define LINK_IS_CHILD (gSaveContext.save.linkAge == 1)
 #define LINK_IS_ADULT (gSaveContext.save.linkAge == 0)
 
+#define YEARS_CHILD 5
+#define YEARS_ADULT 17
+#define LINK_AGE_IN_YEARS (!LINK_IS_ADULT ? YEARS_CHILD : YEARS_ADULT)
+
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
 
 // The day begins at CLOCK_TIME(6, 0) so it must be offset.
 #define TIME_UNTIL_MOON_CRASH \
-    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)));
-#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)));
+    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)))
+#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)))
 
 #define GET_PLAYER_FORM ((void)0, gSaveContext.save.playerForm)
 
@@ -510,10 +529,27 @@ typedef enum {
 #define SET_STOLEN_ITEM_2(itemId) \
     (gSaveContext.save.saveInfo.stolenItems = (gSaveContext.save.saveInfo.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
 
-#define GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() ((s32)(gSaveContext.save.saveInfo.shootingGalleryHighScores & 0xFFFF))
-#define GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((gSaveContext.save.saveInfo.shootingGalleryHighScores & 0xFFFF0000) >> 0x10))
-#define SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.saveInfo.shootingGalleryHighScores = (gSaveContext.save.saveInfo.shootingGalleryHighScores & 0xFFFF0000) | ((u16)(score)))
-#define SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.saveInfo.shootingGalleryHighScores = ((gSaveContext.save.saveInfo.shootingGalleryHighScores) & 0xFFFF) | ((u16)(score) << 0x10))
+#define HIGH_SCORE(type) (gSaveContext.save.saveInfo.highScores[(type)])
+#define GET_HIGH_SCORE(type) ((void)0, gSaveContext.save.saveInfo.highScores[(type)])
+
+#define HS_GET_BANK_RUPEES() (HIGH_SCORE(HS_BANK_RUPEES) & 0xFFFF)
+#define HS_SET_BANK_RUPEES(rupees) (HIGH_SCORE(HS_BANK_RUPEES) = ((HIGH_SCORE(HS_BANK_RUPEES) & 0xFFFF0000) | (rupees)))
+
+#define HS_GET_HIGH_SCORE_3_LOWER() (HIGH_SCORE(HS_BOAT_ARCHERY) & 0xFFFF)
+#define HS_SET_HIGH_SCORE_3_LOWER(score) (HIGH_SCORE(HS_BOAT_ARCHERY) = ((HIGH_SCORE(HS_BOAT_ARCHERY) & 0xFFFF0000) | (score)))
+#define HS_GET_BOAT_ARCHERY_HIGH_SCORE() ((HIGH_SCORE(HS_BOAT_ARCHERY) & 0xFFFF0000) >> 0x10)
+#define HS_SET_BOAT_ARCHERY_HIGH_SCORE(score) (HIGH_SCORE(HS_BOAT_ARCHERY) = ((HIGH_SCORE(HS_BOAT_ARCHERY) & 0xFFFF) | ((u16)(score) << 0x10)))
+
+#define HS_GET_HORSE_BACK_BALLOON_TIME() ((s32)HIGH_SCORE(HS_HORSE_BACK_BALLOON))
+#define HS_SET_HORSE_BACK_BALLOON_TIME(time) (HIGH_SCORE(HS_HORSE_BACK_BALLOON) = (time))
+
+#define HS_GET_LOTTERY_CODE_GUESS() (HIGH_SCORE(HS_LOTTERY_GUESS) & 0xFFFF)
+#define HS_SET_LOTTERY_CODE_GUESS(guess) (HIGH_SCORE(HS_LOTTERY_GUESS) = ((HIGH_SCORE(HS_LOTTERY_GUESS) & 0xFFFF0000) | ((guess) & 0xFFFF)))
+
+#define HS_GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() ((s32)(HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF))
+#define HS_SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(score) (HIGH_SCORE(HS_SHOOTING_GALLERY) = (HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF0000) | ((u16)(score)))
+#define HS_GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF0000) >> 0x10))
+#define HS_SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (HIGH_SCORE(HS_SHOOTING_GALLERY) = (HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF) | ((u16)(score) << 0x10))
 
 /**
  * gSaveContext.save.saveInfo.weekEventReg
@@ -614,11 +650,14 @@ typedef enum {
 #define WEEKEVENTREG_CLOCK_TOWER_OPENED PACK_WEEKEVENTREG_FLAG(8, 0x40)
 
 #define WEEKEVENTREG_08_80 PACK_WEEKEVENTREG_FLAG(8, 0x80)
+
+// This 5 flags are managed in a special way by EnElfgrp
 #define WEEKEVENTREG_09_01 PACK_WEEKEVENTREG_FLAG(9, 0x01)
 #define WEEKEVENTREG_09_02 PACK_WEEKEVENTREG_FLAG(9, 0x02)
 #define WEEKEVENTREG_09_04 PACK_WEEKEVENTREG_FLAG(9, 0x04)
 #define WEEKEVENTREG_09_08 PACK_WEEKEVENTREG_FLAG(9, 0x08)
 #define WEEKEVENTREG_09_10 PACK_WEEKEVENTREG_FLAG(9, 0x10)
+
 #define WEEKEVENTREG_09_20 PACK_WEEKEVENTREG_FLAG(9, 0x20)
 #define WEEKEVENTREG_09_40 PACK_WEEKEVENTREG_FLAG(9, 0x40)
 #define WEEKEVENTREG_09_80 PACK_WEEKEVENTREG_FLAG(9, 0x80)
@@ -759,7 +798,7 @@ typedef enum {
 #define WEEKEVENTREG_22_40 PACK_WEEKEVENTREG_FLAG(22, 0x40)
 #define WEEKEVENTREG_22_80 PACK_WEEKEVENTREG_FLAG(22, 0x80)
 #define WEEKEVENTREG_23_01 PACK_WEEKEVENTREG_FLAG(23, 0x01)
-#define WEEKEVENTREG_23_02 PACK_WEEKEVENTREG_FLAG(23, 0x02)
+#define WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK PACK_WEEKEVENTREG_FLAG(23, 0x02)
 #define WEEKEVENTREG_23_04 PACK_WEEKEVENTREG_FLAG(23, 0x04)
 #define WEEKEVENTREG_23_08 PACK_WEEKEVENTREG_FLAG(23, 0x08)
 #define WEEKEVENTREG_23_10 PACK_WEEKEVENTREG_FLAG(23, 0x10)
@@ -1594,6 +1633,9 @@ typedef enum {
     /* 2 */ DUNGEON_INDEX_GREAT_BAY_TEMPLE,
     /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE // Also applies to Inverted Stone Tower Temple
 } DungeonIndex;
+
+#define STRAY_FAIRY_TOTAL 25 // total number of stray fairies, including those already in the Great Fairy Fountain
+#define STRAY_FAIRY_SCATTERED_TOTAL 15 // original number of stray fairies in one dungeon area
 
 void Sram_ActivateOwl(u8 owlId);
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void);

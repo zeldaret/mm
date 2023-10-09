@@ -153,8 +153,8 @@ void EffKamejimaWave_Draw(Actor* thisx, PlayState* play) {
     Color_RGBA8 primColor;
     Color_RGBA8 envColor;
 
-    func_800FE7A8(sPrimColors, &primColor);
-    func_800FE7A8(sEnvColors, &envColor);
+    Environment_LerpSandstormColors(sPrimColors, &primColor);
+    Environment_LerpSandstormColors(sEnvColors, &envColor);
     EffKamejimaWave_SetVtxAlpha(sVtxAlpha);
 
     OPEN_DISPS(play->state.gfxCtx);

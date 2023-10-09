@@ -393,7 +393,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((play->msgCtx.bombersNotebookEventQueueCount == 0) &&
-        ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
+        ((play->msgCtx.msgMode == MSGMODE_NONE) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
         play->nextEntrance = Entrance_CreateFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -511,7 +511,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
 
     if (this->unk_2C2 == 0) {
         if ((play->msgCtx.bombersNotebookEventQueueCount == 0) &&
-            ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
+            ((play->msgCtx.msgMode == MSGMODE_NONE) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {

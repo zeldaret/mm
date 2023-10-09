@@ -224,7 +224,7 @@ void func_808D0930(EnFloormas* this, PlayState* play) {
 void func_808D09CC(EnFloormas* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_18E = 80;

@@ -4,7 +4,6 @@
  * Description: Grass / Bush
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_kusa.h"
 #include "objects/object_kusa/object_kusa.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -71,7 +70,7 @@ ActorInit En_Kusa_InitVars = {
     /**/ NULL,
 };
 
-static s16 objectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_KUSA, OBJECT_KUSA, OBJECT_KUSA };
+static s16 sObjectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_KUSA, OBJECT_KUSA, OBJECT_KUSA };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -308,7 +307,7 @@ void EnKusa_SpawnFragments(EnKusa* this, PlayState* play) {
         scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) & 7;
 
         EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0, 0x50,
-                             -1, 1, gKakeraLeafMiddle);
+                             -1, 1, gKakeraLeafMiddleDL);
 
         pos.x = this->actor.world.pos.x + (directon->x * this->actor.scale.x * 40.0f);
         pos.y = this->actor.world.pos.y + (directon->y * this->actor.scale.y * 40.0f) + 10.0f;
@@ -320,7 +319,7 @@ void EnKusa_SpawnFragments(EnKusa* this, PlayState* play) {
         scaleIndex = (s32)(Rand_ZeroOne() * 111.1f) % 7;
 
         EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0, sFragmentScales[scaleIndex], 0, 0, 0x50,
-                             -1, 1, gKakeraLeafTip);
+                             -1, 1, gKakeraLeafTipDL);
     }
 }
 
@@ -394,8 +393,8 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
         this->isInWater |= 1;
     }
 
-    this->objIndex = Object_GetIndex(&play->objectCtx, objectIds[(KUSA_GET_TYPE(&this->actor))]);
-    if (this->objIndex < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[(KUSA_GET_TYPE(&this->actor))]);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -429,7 +428,7 @@ void EnKusa_SetupWaitObject(EnKusa* this) {
 void EnKusa_WaitObject(EnKusa* this, PlayState* play) {
     s32 pad;
 
-    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         s32 kusaType = KUSA_GET_TYPE(&this->actor);
 
         if (this->isCut) {
@@ -442,7 +441,7 @@ void EnKusa_WaitObject(EnKusa* this, PlayState* play) {
         } else {
             this->actor.draw = EnKusa_DrawGrass;
         }
-        this->actor.objBankIndex = this->objIndex;
+        this->actor.objectSlot = this->objectSlot;
         this->actor.flags &= ~ACTOR_FLAG_10;
     }
 }
@@ -572,6 +571,9 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
                 EnKusa_SetupUprootedWaitRegrow(this);
                 this->actor.shape.shadowDraw = NULL;
                 break;
+
+            default:
+                break;
         }
 
     } else {
@@ -622,8 +624,12 @@ void EnKusa_SetupCut(EnKusa* this) {
         case ENKUSA_TYPE_GRASS_2:
             this->actionFunc = EnKusa_DoNothing;
             break;
+
         case ENKUSA_TYPE_REGROWING_GRASS:
             this->actionFunc = EnKusa_CutWaitRegrow;
+            break;
+
+        default:
             break;
     }
     this->timer = 0;
@@ -730,7 +736,7 @@ void EnKusa_DrawGrass(Actor* thisx, PlayState* play) {
     EnKusa* this = THIS;
 
     if (this->isCut) {
-        Gfx_DrawDListOpa(play, gKusaStump);
+        Gfx_DrawDListOpa(play, gKusaStumpDL);
     } else {
         if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) &&
             (this->actionFunc == EnKusa_WaitForInteract)) {
@@ -738,6 +744,6 @@ void EnKusa_DrawGrass(Actor* thisx, PlayState* play) {
                 EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
             }
         }
-        Gfx_DrawDListOpa(play, gKusaSprout);
+        Gfx_DrawDListOpa(play, gKusaSproutDL);
     }
 }

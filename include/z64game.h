@@ -4,9 +4,10 @@
 #include "ultra64.h"
 #include "libc/stdbool.h"
 #include "libc/stdint.h"
-#include "io/controller.h"
+#include "padutils.h"
 #include "tha.h"
 #include "padmgr.h"
+#include "unk.h"
 
 struct GraphicsContext;
 struct GameState;
@@ -60,7 +61,7 @@ typedef struct GameState {
     /* 0x0C */ GameStateFunc init; // Usually the current game state's init, though after stopping, the graph thread will look here to determine the next game state to load.
     /* 0x10 */ size_t size;
     /* 0x14 */ Input input[MAXCONTROLLERS];
-    /* 0x74 */ TwoHeadArena heap;
+    /* 0x74 */ TwoHeadArena tha;
     /* 0x84 */ GameAlloc alloc;
     /* 0x98 */ UNK_TYPE1 pad98[0x3];
     /* 0x9B */ u8 running; // If 0, switch to next game state

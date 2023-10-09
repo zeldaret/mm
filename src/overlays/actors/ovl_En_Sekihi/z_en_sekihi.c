@@ -55,7 +55,7 @@ static u16 sTextIds[] = { 0, 0, 0, 0, 0x1018 };
 void EnSekihi_Init(Actor* thisx, PlayState* play) {
     EnSekihi* this = THIS;
     s32 type = ENSIKIHI_GET_TYPE(thisx);
-    s32 objectIndex;
+    s32 objectSlot;
     s32 pad;
 
     if (((type < SEKIHI_TYPE_0) || (type >= SEKIHI_TYPE_MAX)) || (sOpaDLists[type] == NULL)) {
@@ -69,9 +69,9 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN);
     }
 
-    objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
-    if (objectIndex >= 0) {
-        this->objectIndex = objectIndex;
+    objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[type]);
+    if (objectSlot > OBJECT_SLOT_NONE) {
+        this->objectSlot = objectSlot;
     }
     this->actionFunc = func_80A44DE8;
     this->opaDList = sOpaDLists[type];
@@ -96,8 +96,8 @@ void func_80A44DE8(EnSekihi* this, PlayState* play) {
     };
 
     type = ENSIKIHI_GET_TYPE(&this->dyna.actor);
-    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-        this->dyna.actor.objBankIndex = this->objectIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->dyna.actor.objectSlot = this->objectSlot;
         this->dyna.actor.draw = EnSekihi_Draw;
         if (type == SEKIHI_TYPE_4) {
             this->actionFunc = func_80A450B0;

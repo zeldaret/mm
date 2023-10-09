@@ -81,10 +81,10 @@ typedef struct EnHy {
     /* 0x144 */ EnHyActionFunc actionFunc;
     /* 0x148 */ EnHyActionFunc prevActionFunc;
     /* 0x14C */ SkelAnime skelAnime;
-    /* 0x190 */ s8 headObjIndex; // Limb 15
-    /* 0x191 */ s8 skelUpperObjIndex; // Limbs 8-14
-    /* 0x192 */ s8 skelLowerObjIndex; // Limbs 1-7
-    /* 0x193 */ s8 animObjIndex;
+    /* 0x190 */ s8 headObjectSlot; // Limb 15
+    /* 0x191 */ s8 skelUpperObjectSlot; // Limbs 8-14
+    /* 0x192 */ s8 skelLowerObjectSlot; // Limbs 1-7
+    /* 0x193 */ s8 animObjectSlot;
     /* 0x194 */ ColliderCylinder collider;
     /* 0x1E0 */ u16 textId;
     /* 0x1E2 */ u8 waitingOnInit;

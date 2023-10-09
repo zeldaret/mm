@@ -136,7 +136,7 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
     this->animationFrame = Rand_ZeroOne() * 9.0f;
 
     this->paramFlags = BAD_BAT_GET_PARAMFLAGS(thisx);
-    this->switchFlag = BAD_BAT_GET_SWITCHFLAG(thisx);
+    this->switchFlag = BAD_BAT_GET_SWITCH_FLAG(thisx);
     thisx->params = BAD_BAT_GET_TYPE(thisx);
 
     thisx->depthInWater = BGCHECK_Y_MIN;

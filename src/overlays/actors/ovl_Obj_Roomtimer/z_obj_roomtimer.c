@@ -33,7 +33,7 @@ ActorInit Obj_Roomtimer_InitVars = {
 void ObjRoomtimer_Init(Actor* thisx, PlayState* play) {
     ObjRoomtimer* this = THIS;
 
-    this->switchFlag = ROOMTIMER_GET_SWITCHFLAG(thisx);
+    this->switchFlag = ROOMTIMER_GET_SWITCH_FLAG(thisx);
     this->actor.params &= 0x1FF;
 
     if (this->actor.params != 0x1FF) {

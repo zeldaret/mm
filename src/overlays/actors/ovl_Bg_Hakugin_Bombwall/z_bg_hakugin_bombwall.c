@@ -316,7 +316,7 @@ void BgHakuginBombwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(play, &this->collider);
 
-    if (Flags_GetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCHFLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCH_FLAG(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -400,7 +400,7 @@ void func_80ABCD98(BgHakuginBombwall* this, PlayState* play) {
         ptr->unk_24(this, play);
         this->dyna.actor.draw = NULL;
         this->unk_1AC = 20;
-        Flags_SetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCHFLAG(&this->dyna.actor));
+        Flags_SetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCH_FLAG(&this->dyna.actor));
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = func_80ABCE60;
     } else {

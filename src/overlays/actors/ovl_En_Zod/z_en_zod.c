@@ -622,7 +622,7 @@ void EnZod_DrawDrums(EnZod* this, PlayState* play) {
 }
 
 void EnZod_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr sTijoEyesTextures[] = { &gTijoEyesOpen, &gTijoEyesHalfOpen, &gTijoEyesClosed };
+    static TexturePtr sTijoEyesTextures[] = { &gTijoEyesOpenTex, &gTijoEyesHalfOpenTex, &gTijoEyesClosedTex };
     EnZod* this = THIS;
     Gfx* gfx;
 

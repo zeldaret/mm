@@ -27,7 +27,7 @@ Both approaches have their advantages and disadvantages.
 
 ## Data first
 
-This way is good for smaller actors with little data. The OoT tutorial [covers this in plenty of detail](https://github.com/zeldaret/oot/blob/master/docs/tutorial/data.md), and the process in MM is essentially identical, so we won't go over it here.
+This way is good for smaller actors with little data. The OoT tutorial [covers this in plenty of detail](https://github.com/zeldaret/oot/blob/main/docs/tutorial/data.md), and the process in MM is essentially identical, so we won't go over it here.
 
 ## Extern and data last
 

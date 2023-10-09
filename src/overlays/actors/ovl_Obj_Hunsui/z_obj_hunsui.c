@@ -65,20 +65,20 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
 };
 
-s32 func_80B9C450(PlayState* play, s32 arg1, s32 arg2) {
+s32 func_80B9C450(PlayState* play, s32 switchFlagBase, s32 arg2) {
     s32 sp2C = 1;
 
     if (arg2 < ARRAY_COUNT(D_80B9DC70)) {
-        s32 val = D_80B9DC70[arg2].unk_00;
+        s32 switchFlagOffset = D_80B9DC70[arg2].unk_00;
         s32 val3 = D_80B9DC70[arg2].unk_01;
 
-        while (val--) {
-            if ((1 << val) & val3) {
-                if (!Flags_GetSwitch(play, arg1 + val)) {
+        while (switchFlagOffset--) {
+            if ((1 << switchFlagOffset) & val3) {
+                if (!Flags_GetSwitch(play, switchFlagBase + switchFlagOffset)) {
                     sp2C = 0;
                     break;
                 }
-            } else if (Flags_GetSwitch(play, arg1 + val)) {
+            } else if (Flags_GetSwitch(play, switchFlagBase + switchFlagOffset)) {
                 sp2C = 0;
                 break;
             }
@@ -87,22 +87,25 @@ s32 func_80B9C450(PlayState* play, s32 arg1, s32 arg2) {
         sp2C = 0;
         switch (arg2) {
             case 14:
-                if (!Flags_GetSwitch(play, arg1)) {
+                if (!Flags_GetSwitch(play, switchFlagBase)) {
                     sp2C = 1;
                 }
 
-                if (Flags_GetSwitch(play, arg1 + 1) && Flags_GetSwitch(play, arg1 + 2) &&
-                    Flags_GetSwitch(play, arg1 + 3)) {
+                if (Flags_GetSwitch(play, switchFlagBase + 1) && Flags_GetSwitch(play, switchFlagBase + 2) &&
+                    Flags_GetSwitch(play, switchFlagBase + 3)) {
                     sp2C += 2;
                 }
                 break;
 
             case 15:
-                if (!Flags_GetSwitch(play, arg1) ||
-                    (Flags_GetSwitch(play, arg1 + 1) && Flags_GetSwitch(play, arg1 + 2) &&
-                     Flags_GetSwitch(play, arg1 + 3))) {
+                if (!Flags_GetSwitch(play, switchFlagBase) ||
+                    (Flags_GetSwitch(play, switchFlagBase + 1) && Flags_GetSwitch(play, switchFlagBase + 2) &&
+                     Flags_GetSwitch(play, switchFlagBase + 3))) {
                     sp2C = 1;
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -204,7 +207,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_160 = OBJHUNSUI_GET_F000(thisx);
     this->unk_164 = OBJHUNSUI_GET_F80(thisx);
-    this->unk_168 = OBJHUNSUI_GET_7F(thisx);
+    this->switchFlag = OBJHUNSUI_GET_SWITCH_FLAG(thisx);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
     if ((this->unk_160 != OBJHUNSUI_F000_5) && (this->unk_160 != OBJHUNSUI_F000_6)) {
@@ -279,7 +282,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
 
         case OBJHUNSUI_F000_1:
             this->dyna.actor.draw = func_80B9DA60;
-            if ((this->unk_172 & 1) && func_80B9C450(play, this->unk_168, this->unk_164)) {
+            if ((this->unk_172 & 1) && func_80B9C450(play, this->switchFlag, this->unk_164)) {
                 this->unk_174 = 240.0f;
                 this->unk_172 |= 4;
                 this->unk_184 = 0xFF0;
@@ -289,7 +292,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
                 this->unk_184 = 0;
             }
             this->unk_178 = this->unk_174;
-            this->unk_180 = func_80B9C450(play, this->unk_168, this->unk_164);
+            this->unk_180 = func_80B9C450(play, this->switchFlag, this->unk_164);
             this->actionFunc = func_80B9CE64;
             break;
 
@@ -304,7 +307,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
                 func_80B9D2BC(this, play);
                 this->unk_178 = this->unk_174;
             } else {
-                if ((this->unk_172 & 1) || func_80B9C450(play, this->unk_168, this->unk_164)) {
+                if ((this->unk_172 & 1) || func_80B9C450(play, this->switchFlag, this->unk_164)) {
                     func_80B9D4D0(this, play);
                 } else {
                     func_80B9D0FC(this, play);
@@ -351,7 +354,7 @@ void func_80B9CE64(ObjHunsui* this, PlayState* play) {
     this->unk_18A += 0x71C;
     Math_SmoothStepToF(&this->unk_190, this->unk_194, 1.0f, 0.2f, 0.01f);
 
-    sp2C = func_80B9C450(play, this->unk_168, this->unk_164);
+    sp2C = func_80B9C450(play, this->switchFlag, this->unk_164);
 
     if (!(this->unk_172 & 1)) {
         if (sp2C != this->unk_180) {
@@ -446,7 +449,7 @@ void func_80B9D120(ObjHunsui* this, PlayState* play) {
         this->unk_172 |= 2;
     }
 
-    if (func_80B9C450(play, this->unk_168, this->unk_164)) {
+    if (func_80B9C450(play, this->switchFlag, this->unk_164)) {
         this->csId = this->csIdList[0];
         this->unk_172 |= 0x40;
         func_80B9D4D0(this, play);
@@ -463,7 +466,7 @@ s32 func_80B9D288(PlayState* play, Actor* thisx, Actor* iter, void* verifyData) 
 }
 
 void func_80B9D2BC(ObjHunsui* this, PlayState* play) {
-    if ((this->unk_172 & 1) || func_80B9C450(play, this->unk_168, this->unk_164)) {
+    if ((this->unk_172 & 1) || func_80B9C450(play, this->switchFlag, this->unk_164)) {
         func_80B9D4D0(this, play);
     } else {
         this->unk_172 |= 2;
@@ -559,7 +562,7 @@ void func_80B9D508(ObjHunsui* this, PlayState* play) {
         this->unk_1B0 += -8.0f + (0.9f * (this->dyna.actor.world.pos.y - this->dyna.actor.prevPos.y));
     }
 
-    if (!(this->unk_172 & 1) && !func_80B9C450(play, this->unk_168, this->unk_164)) {
+    if (!(this->unk_172 & 1) && !func_80B9C450(play, this->switchFlag, this->unk_164)) {
         this->csId = this->csIdList[0];
         this->unk_172 |= 0x40;
         func_80B9D0FC(this, play);
@@ -576,7 +579,7 @@ void func_80B9D714(ObjHunsui* this, PlayState* play) {
         (this->unk_16D != play->roomCtx.curRoom.num) && (this->unk_16D != play->roomCtx.prevRoom.num)) {
         Actor_Kill(&this->dyna.actor);
     } else {
-        if (Flags_GetSwitch(play, this->unk_168)) {
+        if (Flags_GetSwitch(play, this->switchFlag)) {
             this->unk_172 &= ~2;
             this->unk_172 |= 0x10;
             csId = this->dyna.actor.csId;
@@ -600,7 +603,7 @@ void func_80B9D714(ObjHunsui* this, PlayState* play) {
                 if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 800.0f, 0.1f, 8.0f,
                                        1.0f) < 0.5f) {
                     if (DECR(this->unk_16E) == 0) {
-                        Flags_UnsetSwitch(play, this->unk_168);
+                        Flags_UnsetSwitch(play, this->switchFlag);
                     }
                 }
                 this->dyna.actor.velocity.y = this->dyna.actor.world.pos.y - this->dyna.actor.prevPos.y;

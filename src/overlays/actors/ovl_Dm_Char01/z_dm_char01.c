@@ -4,6 +4,7 @@
  * Description: Woodfall scene objects (temple, water, walls, etc)
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_dm_char01.h"
 #include "objects/object_mtoride/object_mtoride.h"
 #include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
@@ -175,7 +176,7 @@ void func_80AA8698(DmChar01* this, PlayState* play) {
         D_80AAAAB4 = false;
     }
 
-    if ((player->transformation == PLAYER_FORM_DEKU) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_DEKU) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA)) {
 
         if ((player2->actor.world.pos.x > -40.0f) && (player2->actor.world.pos.x < 40.0f) &&

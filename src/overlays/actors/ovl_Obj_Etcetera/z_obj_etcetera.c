@@ -52,7 +52,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 14, 0, { 0, 0, 0 } },
 };
 
-static s16 objectIds[] = {
+static s16 sObjectIds[] = {
     GAMEPLAY_KEEP,
     GAMEPLAY_KEEP,
     GAMEPLAY_KEEP,
@@ -71,7 +71,7 @@ static f32 oscillationTable[] = {
 void ObjEtcetera_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjEtcetera* this = THIS;
-    s32 objectIndex;
+    s32 objectSlot;
     s32 type = DEKU_FLOWER_TYPE(&this->dyna.actor);
     s32 floorBgId;
     Vec3f pos;
@@ -80,9 +80,9 @@ void ObjEtcetera_Init(Actor* thisx, PlayState* play) {
         type = DEKU_FLOWER_TYPE_PINK;
     }
 
-    objectIndex = Object_GetIndex(&play->objectCtx, objectIds[type]);
-    if (objectIndex >= 0) {
-        this->objIndex = objectIndex;
+    objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[type]);
+    if (objectSlot > OBJECT_SLOT_NONE) {
+        this->objectSlot = objectSlot;
     }
 
     pos.x = this->dyna.actor.world.pos.x;
@@ -257,8 +257,8 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
         type = DEKU_FLOWER_TYPE_PINK;
     }
 
-    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
-        this->dyna.actor.objBankIndex = this->objIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->dyna.actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->dyna.actor);
         DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         thisCollisionHeader = collisionHeaders[type];
@@ -328,7 +328,7 @@ void ObjEtcetera_Update(Actor* thisx, PlayState* play) {
     if (floorBgId == BGCHECK_SCENE) {
         floorPoly = this->dyna.actor.floorPoly;
         if ((floorPoly != NULL) && (this->burrowFlag & 1)) {
-            func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, floorBgId));
+            Environment_ChangeLightSetting(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, floorBgId));
         }
     }
 

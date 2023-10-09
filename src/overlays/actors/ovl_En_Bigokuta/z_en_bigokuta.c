@@ -104,7 +104,8 @@ void EnBigokuta_Init(Actor* thisx, PlayState* play) {
     this->csId = CutsceneManager_GetAdditionalCsId(this->picto.actor.csId);
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE) ||
-        ((this->picto.actor.params != 0xFF) && Flags_GetSwitch(play, this->picto.actor.params))) {
+        ((EN_BIGOKUTA_GET_SWITCH_FLAG(&this->picto.actor) != 0xFF) &&
+         Flags_GetSwitch(play, EN_BIGOKUTA_GET_SWITCH_FLAG(&this->picto.actor)))) {
         Actor_Kill(&this->picto.actor);
     } else {
         this->picto.actor.world.pos.y -= 99.0f;
@@ -168,7 +169,7 @@ void EnBigokuta_ShootPlayer(EnBigokuta* this, PlayState* play) {
 
     if (&this->picto.actor == player->actor.parent) {
         player->actor.parent = NULL;
-        player->unk_AE8 = 100;
+        player->actionVar2 = 100;
         player->actor.velocity.y = 0.0f;
         player->actor.world.pos.x += 20.0f * Math_SinS(this->picto.actor.home.rot.y);
         player->actor.world.pos.z += 20.0f * Math_CosS(this->picto.actor.home.rot.y);
@@ -309,7 +310,7 @@ void EnBigokuta_SuckInPlayer(EnBigokuta* this, PlayState* play) {
         this->timer++;
     }
 
-    player->unk_AE8 = 0;
+    player->actionVar2 = 0;
     Math_Vec3f_Copy(&player->actor.world.pos, &this->playerPos);
     if (Math_Vec3f_StepTo(&player->actor.world.pos, &this->playerHoldPos, sqrtf(this->timer) * 5.0f) < 0.1f) {
         s16 rotY = this->picto.actor.shape.rot.y;
@@ -445,8 +446,8 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                                                       &D_80AC45B8, Rand_S16Offset(150, 50), 25, false);
                 }
 
-                if (this->picto.actor.params != 0xFF) {
-                    Flags_SetSwitch(play, this->picto.actor.params);
+                if (EN_BIGOKUTA_GET_SWITCH_FLAG(&this->picto.actor) != 0xFF) {
+                    Flags_SetSwitch(play, EN_BIGOKUTA_GET_SWITCH_FLAG(&this->picto.actor));
                 }
 
                 CutsceneManager_Stop(this->csId);
@@ -492,7 +493,7 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
             if (this->bodyCollider.info.acHitInfo->toucher.dmgFlags & 0x1000) { // Ice Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
                 this->drawDmgEffScale = 1.2f;
-                this->drawDmgEffFrozenSteamScale = 1.8000001f;
+                this->drawDmgEffFrozenSteamScale = 1800.0f * 0.001f;
                 this->drawDmgEffAlpha = 1.0f;
             } else if (this->bodyCollider.info.acHitInfo->toucher.dmgFlags & 0x2000) { // Light Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;

@@ -68,7 +68,7 @@ void EnDrs_CollisionUpdate(EnDrs* this, PlayState* play) {
 void EnDrs_Setup(EnDrs* this, PlayState* play) {
     s32 pad[2];
 
-    if ((this->moonMaskObjBankIndex >= 0) && SubS_IsObjectLoaded(this->moonMaskObjBankIndex, play)) {
+    if ((this->moonMaskObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->moonMaskObjectSlot, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gWeddingDressMannequinSkel, NULL, this->jointTable,
                            this->morphTable, WEDDING_DRESS_MANNEQUIN_LIMB_MAX);
@@ -87,7 +87,7 @@ void EnDrs_Idle(EnDrs* this, PlayState* play) {
 void EnDrs_Init(Actor* thisx, PlayState* play) {
     EnDrs* this = THIS;
 
-    this->moonMaskObjBankIndex = SubS_GetObjectIndex(OBJECT_MSMO, play);
+    this->moonMaskObjectSlot = SubS_GetObjectSlot(OBJECT_MSMO, play);
     this->actionFunc = EnDrs_Setup;
 }
 
@@ -110,17 +110,17 @@ void EnDrs_Update(Actor* thisx, PlayState* play) {
 void EnDrs_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDrs* this = THIS;
     PlayState* play = play2;
-    s8 temp = this->moonMaskObjBankIndex;
-    s8 temp2 = this->actor.objBankIndex;
+    s8 temp = this->moonMaskObjectSlot;
+    s8 temp2 = this->actor.objectSlot;
 
     // Anju removes the Moon Mask at the start of the Couple's Mask cutscene
     // after that it will no longer be rendered.
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_87_02) && (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[temp].segment);
         gSPDisplayList(POLY_OPA_DISP++, &gMoonMaskDL);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp2].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[temp2].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

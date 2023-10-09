@@ -37,7 +37,7 @@ void EnEndingHero4_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierCheerWithSpear, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierCheerWithSpearAnim, this->jointTable,
                        this->morphTable, SOLDIER_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     EnEndingHero4_SetupIdle(this);

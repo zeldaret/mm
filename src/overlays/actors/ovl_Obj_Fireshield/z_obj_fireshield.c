@@ -88,7 +88,7 @@ void func_80A4CABC(ObjFireshield* this) {
     s32 pad;
 
     if (CutsceneManager_IsNext(this->actor.csId)) {
-        s32 sp18 = OBJFIRESHIELD_GET_7F(&this->actor);
+        s32 sp18 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
         s32 temp_a0 = (sp18 & ~0x1F) >> 5;
 
         CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
@@ -103,7 +103,7 @@ void func_80A4CABC(ObjFireshield* this) {
 
 void func_80A4CB7C(ObjFireshield* this) {
     s32 pad;
-    s32 sp18 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 sp18 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
 
     if (this->unk_194 > 0) {
         if (this->unk_194 == 20) {
@@ -119,7 +119,7 @@ void func_80A4CB7C(ObjFireshield* this) {
 }
 
 void func_80A4CC54(ObjFireshield* this) {
-    s32 temp_v0 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 temp_v0 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
     s32 temp_v1 = 1 << (temp_v0 & 0x1F);
 
     this->actionFunc = func_80A4CCBC;
@@ -128,7 +128,7 @@ void func_80A4CC54(ObjFireshield* this) {
 }
 
 void func_80A4CCBC(ObjFireshield* this) {
-    s32 temp_v0 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 temp_v0 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
 
     this->actionFunc = func_80A4CD28;
     D_80A4D884[(temp_v0 & ~0x1F) >> 5] &= ~(1 << (temp_v0 & 0x1F));
@@ -141,7 +141,7 @@ void func_80A4CD28(ObjFireshield* this) {
 void func_80A4CD34(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjFireshield* this = THIS;
-    s32 sp24 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_7F(&this->actor));
+    s32 isSwitchFlagSet = Flags_GetSwitch(play, OBJFIRESHIELD_GET_FLAGS(&this->actor));
     s32 phi_v1;
     s32 phi_a0;
 
@@ -154,13 +154,13 @@ void func_80A4CD34(Actor* thisx, PlayState* play) {
             phi_a0 = false;
         }
     } else {
-        phi_a0 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_3F80(&this->actor));
+        phi_a0 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_SWITCH_FLAG(&this->actor));
         phi_v1 = false;
     }
 
     if (phi_v1 || phi_a0) {
         this->unk_19C = 0;
-    } else if (sp24) {
+    } else if (isSwitchFlagSet) {
         this->unk_19C = 0;
     } else {
         this->unk_19C = 1;
@@ -175,7 +175,7 @@ void func_80A4CD34(Actor* thisx, PlayState* play) {
 
 void func_80A4CE28(ObjFireshield* this, PlayState* play) {
     s32 pad;
-    s32 sp30 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 sp30 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
     s32 pad2[2];
     s32 sp24;
     s32 sp20;
@@ -189,7 +189,7 @@ void func_80A4CE28(ObjFireshield* this, PlayState* play) {
             sp20 = false;
         }
     } else {
-        sp20 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_3F80(&this->actor));
+        sp20 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_SWITCH_FLAG(&this->actor));
         sp24 = false;
     }
 
@@ -251,7 +251,7 @@ void func_80A4CE28(ObjFireshield* this, PlayState* play) {
 }
 
 void func_80A4D174(ObjFireshield* this) {
-    s32 temp_v0 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 temp_v0 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
     s32 temp_v1 = 1 << (temp_v0 & 0x1F);
 
     if (!(D_80A4D864[(temp_v0 & ~0x1F) >> 5] & temp_v1)) {
@@ -318,7 +318,7 @@ void ObjFireshield_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjFireshield* this = THIS;
     s32 sp44 = OBJFIRESHIELD_GET_ROTX(&this->actor);
-    s32 sp40 = OBJFIRESHIELD_GET_7F(&this->actor);
+    s32 sp40 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
     s32 temp_a0;
     s32 temp_v1;
 

@@ -319,7 +319,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->grabTarget = EN_RAF_GRAB_TARGET_GORON_PLAYER;
             } else {
-                player->unk_AE8 = 50;
+                player->actionVar2 = 50;
             }
 
             this->playerRotYWhenGrabbed = player->actor.world.rot.y;
@@ -455,7 +455,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
             case EN_RAF_GRAB_TARGET_GORON_PLAYER:
                 if (this->chewCount > (BREG(54) + 4)) {
                     player->actor.parent = NULL;
-                    player->unk_AE8 = 1000;
+                    player->actionVar2 = 1000;
                     EnRaf_Explode(this, play);
                 }
                 break;

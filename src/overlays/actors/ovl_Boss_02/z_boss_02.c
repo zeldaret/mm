@@ -4,7 +4,6 @@
  * Description: Twinmold
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_boss_02.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -1321,7 +1320,7 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play) {
     Boss02* this = THIS;
 
     this->giantModeScaleFactor = sGiantModeScaleFactor;
-    play->envCtx.sandstormState = 0xD;
+    play->envCtx.sandstormState = SANDSTORM_D;
 
     if (sBlueWarp != NULL) {
         this->fogNear = KREG(23) + -15.0f;
@@ -1829,7 +1828,7 @@ void Boss02_HandleGiantsMaskCutscene(Boss02* this, PlayState* play) {
         Actor_SetScale(&player->actor, this->playerScale);
     }
 
-    play->envCtx.lightSettings.fogNear = this->fogNear;
+    play->envCtx.adjLightSettings.fogNear = this->fogNear;
 
     // Switches from the "normal" variation of the arena to the "giant" variation (or vice versa)
     // at the appropriate point in the Giant's Mask cutscene.

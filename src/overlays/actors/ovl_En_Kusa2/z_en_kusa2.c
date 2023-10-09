@@ -1315,8 +1315,8 @@ void EnKusa2_Update(Actor* thisx, PlayState* play) {
 
 void func_80A5E6F0(Actor* thisx, PlayState* play) {
     static Gfx* D_80A5EB68[] = {
-        gKakeraLeafTip,
-        gKakeraLeafMiddle,
+        gKakeraLeafTipDL,
+        gKakeraLeafMiddleDL,
     };
     EnKusa2* this = THIS;
     s32 i;

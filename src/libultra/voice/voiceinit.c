@@ -4,9 +4,9 @@
  * Initializes Voice Recognition System control structure and hardware
  */
 
-#include "ultra64/controller_voice.h"
-#include "ultra64/os_voice.h"
-#include "io/controller.h"
+#include "PR/controller_voice.h"
+#include "PR/os_voice.h"
+#include "PR/controller.h"
 #include "functions.h"
 #include "macros.h"
 
@@ -14,7 +14,7 @@ static u8 sCmds[] = {
     0x1E, 0x6E, 0x08, 0x56, 0x03,
 };
 
-s32 osVoiceInit(OSMesgQueue* mq, OSVoiceHandle* hd, s32 channel) {
+s32 osVoiceInit(OSMesgQueue* mq, OSVoiceHandle* hd, int channel) {
     s32 errorCode;
     s32 i;
     u8 status = 0;

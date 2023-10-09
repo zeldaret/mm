@@ -245,9 +245,9 @@ void func_808A54B0(EnSt* this, PlayState* play) {
     if ((this->unk_18C & 1) && (this->actor.colChkInfo.health != 0)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_2C0].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
 
-        gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[this->unk_2C0].segment);
+        gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[this->objectSlot].segment);
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
@@ -617,8 +617,8 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
                     break;
             }
         } else {
-            if (ENST_GET_3F(&this->actor) != ENST_3F_63) {
-                Flags_SetSwitch(play, ENST_GET_3F(&this->actor));
+            if (ENST_GET_SWITCH_FLAG(&this->actor) != 0x3F) {
+                Flags_SetSwitch(play, ENST_GET_SWITCH_FLAG(&this->actor));
             }
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
@@ -693,7 +693,7 @@ s32 func_808A6A3C(EnSt* this) {
 void func_808A6A78(EnSt* this, PlayState* play) {
     s32 pad[2];
 
-    if (Object_IsLoaded(&play->objectCtx, this->unk_2C0)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 8.0f);
         SkelAnime_Init(play, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable, 30);
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
@@ -842,9 +842,9 @@ void func_808A701C(EnSt* this, PlayState* play) {
 void EnSt_Init(Actor* thisx, PlayState* play) {
     EnSt* this = THIS;
 
-    this->unk_2C0 = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
-    if (((ENST_GET_3F(&this->actor) != ENST_3F_63) && Flags_GetSwitch(play, ENST_GET_3F(&this->actor))) ||
-        (this->unk_2C0 < 0)) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_KEEP);
+    if (((ENST_GET_SWITCH_FLAG(&this->actor) != 0x3F) && Flags_GetSwitch(play, ENST_GET_SWITCH_FLAG(&this->actor))) ||
+        (this->objectSlot <= OBJECT_SLOT_NONE)) {
         Actor_Kill(&this->actor);
         return;
     }

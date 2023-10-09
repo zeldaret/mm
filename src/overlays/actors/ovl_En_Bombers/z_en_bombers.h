@@ -25,7 +25,7 @@ typedef struct EnBombers {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[OBJECT_CS_LIMB_MAX];
-    /* 0x206 */ Vec3s morphtable[OBJECT_CS_LIMB_MAX];
+    /* 0x206 */ Vec3s morphTable[OBJECT_CS_LIMB_MAX];
     /* 0x284 */ EnBombersActionFunc actionFunc;
     /* 0x288 */ s16 unk_288;
     /* 0x28A */ s16 unk_28A;

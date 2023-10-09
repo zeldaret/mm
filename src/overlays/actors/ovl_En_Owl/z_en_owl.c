@@ -146,7 +146,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
     this->unk_40C = 4;
     this->csIdIndex = -1;
     owlType = ENOWL_GET_TYPE(&this->actor);
-    switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
+    switchFlag = ENOWL_GET_SWITCH_FLAG(&this->actor);
 
     switch (owlType) {
         case ENOWL_GET_TYPE_1:
@@ -258,7 +258,7 @@ void func_8095AA70(EnOwl* this) {
 }
 
 void func_8095AAD0(EnOwl* this, PlayState* play) {
-    s32 switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
+    s32 switchFlag = ENOWL_GET_SWITCH_FLAG(&this->actor);
 
     if (switchFlag < 0x7F) {
         Flags_SetSwitch(play, switchFlag);

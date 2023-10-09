@@ -198,7 +198,7 @@ void EnOssan_SetupAction(EnOssan* this, EnOssanActionFunc action) {
 s32 EnOssan_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
@@ -267,16 +267,16 @@ void EnOssan_SpawnShopItems(EnOssan* this, PlayState* play, ShopItem* shop) {
 
 void EnOssan_Init(Actor* thisx, PlayState* play) {
     EnOssan* this = THIS;
-    s16 id;
+    s16 objectId;
 
     if ((this->actor.params > ENOSSAN_PART_TIME_WORKER) && (this->actor.params < ENOSSAN_CURIOSITY_SHOP_MAN)) {
         //! @bug: Impossible to reach, && should be an ||
         Actor_Kill(&this->actor);
         return;
     }
-    id = sObjectIds[this->actor.params];
-    this->objIndex = Object_GetIndex(&play->objectCtx, id);
-    if (this->objIndex < 0) {
+    objectId = sObjectIds[this->actor.params];
+    this->objectSlot = Object_GetSlot(&play->objectCtx, objectId);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -304,7 +304,7 @@ void EnOssan_EndInteraction(PlayState* play, EnOssan* this) {
     Player* player = GET_PLAYER(play);
 
     Actor_ProcessTalkRequest(&this->actor, &play->state);
-    play->msgCtx.msgMode = 0x43;
+    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     this->drawCursor = 0;
@@ -994,7 +994,7 @@ void EnOssan_SetupBuyItemWithFanfare(PlayState* play, EnOssan* this) {
     Player* player = GET_PLAYER(play);
 
     Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
-    play->msgCtx.msgMode = 0x43;
+    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
@@ -1124,7 +1124,7 @@ void EnOssan_BuyItemWithFanfare(EnOssan* this, PlayState* play) {
 
 void EnOssan_SetupItemPurchased(EnOssan* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         EnOssan_SetupAction(this, EnOssan_ItemPurchased);
         if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_STOPPED) {
@@ -1395,8 +1395,8 @@ void EnOssan_CuriosityShopMan_Init(EnOssan* this, PlayState* play) {
 }
 
 void EnOssan_PartTimer_Init(EnOssan* this, PlayState* play) {
-    SkelAnime_InitFlex(play, &this->skelAnime, &gAniSkeleton, &gAniStandingNormalAnim, this->jointTable,
-                       this->morphTable, 16);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gAniSkel, &gAniStandingNormalAnim, this->jointTable, this->morphTable,
+                       ANI_LIMB_MAX);
     this->actor.draw = EnOssan_PartTimer_Draw;
 }
 
@@ -1506,9 +1506,9 @@ void EnOssan_InitShop(EnOssan* this, PlayState* play) {
     static EnOssanActionFunc sInitFuncs[] = { EnOssan_CuriosityShopMan_Init, EnOssan_PartTimer_Init };
     ShopItem* shopItems;
 
-    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.objBankIndex = this->objIndex;
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         shopItems = sShops[this->actor.params];
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);

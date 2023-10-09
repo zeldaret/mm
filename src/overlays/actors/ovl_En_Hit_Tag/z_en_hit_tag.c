@@ -56,7 +56,7 @@ void EnHitTag_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = EnHitTag_WaitForHit;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    if (Flags_GetSwitch(play, ENHITTAG_GET_SWITCHFLAG(thisx))) {
+    if (Flags_GetSwitch(play, ENHITTAG_GET_SWITCH_FLAG(thisx))) {
         Actor_Kill(&this->actor);
     }
 }

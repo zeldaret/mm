@@ -386,7 +386,7 @@ void BgIngate_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, gSichitaiBoat);
+    gSPDisplayList(POLY_OPA_DISP++, gSichitaiBoatDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

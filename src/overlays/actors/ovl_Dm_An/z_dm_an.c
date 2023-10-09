@@ -70,41 +70,41 @@ static AnimationInfoS sAnimationInfo[DMAN_ANIM_MAX] = {
 };
 
 s32 DmAn_UpdateSkelAnime(DmAn* this, PlayState* play) {
-    s8 objectIndex = this->actor.objBankIndex;
-    s8 objectIndex2;
+    s8 objectSlot = this->actor.objectSlot;
+    s8 objectSlot2;
     s32 isAnimFinished = false;
 
     if (this->animIndex <= DMAN_ANIM_1) {
-        objectIndex2 = this->actor.objBankIndex;
+        objectSlot2 = this->actor.objectSlot;
     } else {
-        objectIndex2 = this->unk_2AC;
+        objectSlot2 = this->an4ObjectSlot;
     }
 
-    if (objectIndex2 >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
+    if (objectSlot2 >= 0) {
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return isAnimFinished;
 }
 
 s32 DmAn_ChangeAnim(DmAn* this, PlayState* play, s32 animIndex) {
-    s8 objectIndex = this->actor.objBankIndex;
-    s8 objectIndex2;
+    s8 objectSlot = this->actor.objectSlot;
+    s8 objectSlot2;
     s32 didAnimChange = false;
 
     if (animIndex <= DMAN_ANIM_1) {
-        objectIndex2 = this->actor.objBankIndex;
+        objectSlot2 = this->actor.objectSlot;
     } else {
-        objectIndex2 = this->unk_2AC;
+        objectSlot2 = this->an4ObjectSlot;
     }
 
-    if ((objectIndex2 >= 0) && (this->animIndex != animIndex)) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
+    if ((objectSlot2 >= 0) && (this->animIndex != animIndex)) {
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return didAnimChange;
@@ -191,8 +191,8 @@ Actor* func_80C1C8E8(PlayState* play) {
 }
 
 void func_80C1C958(DmAn* this, PlayState* play) {
-    if ((this->unk_2AC >= 0) && SubS_IsObjectLoaded(this->unk_2AC, play) && (this->unk_2AD >= 0) &&
-        SubS_IsObjectLoaded(this->unk_2AD, play)) {
+    if ((this->an4ObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->an4ObjectSlot, play) &&
+        (this->msmoObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->msmoObjectSlot, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &object_an1_Skel_012618, NULL, this->jointTable, this->morphTable,
                            OBJECT_AN1_LIMB_MAX);
@@ -273,8 +273,8 @@ void DmAn_DoNothing(DmAn* this, PlayState* play) {
 void DmAn_Init(Actor* thisx, PlayState* play) {
     DmAn* this = THIS;
 
-    this->unk_2AC = SubS_GetObjectIndex(OBJECT_AN4, play);
-    this->unk_2AD = SubS_GetObjectIndex(OBJECT_MSMO, play);
+    this->an4ObjectSlot = SubS_GetObjectSlot(OBJECT_AN4, play);
+    this->msmoObjectSlot = SubS_GetObjectSlot(OBJECT_MSMO, play);
     this->actionFunc = func_80C1C958;
 }
 
@@ -302,8 +302,8 @@ Vec3f D_80C1D2DC = { 1000.0f, 0.0f, 0.0f };
 void func_80C1CD80(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad[2];
     DmAn* this = THIS;
-    s8 sp2B = this->actor.objBankIndex;
-    s8 sp2A = this->unk_2AD;
+    s8 objectSlot = this->actor.objectSlot;
+    s8 msmoObjectSlot = this->msmoObjectSlot;
 
     if ((limbIndex == OBJECT_AN1_LIMB_05) && this->didAnimChangeInCs) {
         OPEN_DISPS(play->state.gfxCtx);
@@ -312,9 +312,9 @@ void func_80C1CD80(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
         Matrix_TranslateRotateZYX(&D_80C1D2C8, &D_80C1D2D4);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp2A].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[msmoObjectSlot].segment);
         gSPDisplayList(POLY_OPA_DISP++, gMoonMaskDL);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp2B].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
 
         Matrix_Pop();
 

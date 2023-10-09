@@ -111,7 +111,7 @@ void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
     }
     Actor_SetScale(&this->actor, sp28 * 0.001f);
 
-    this->actor.params &= 0xFF;
+    this->actor.params = OBJBIGICLE_GET_SWITCH_FLAG_MASK(&this->actor);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     sp30 = sp28 * (1.0f / 60.0f);
 
@@ -125,7 +125,7 @@ void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
     this->collider2.dim.height = this->collider2.dim.height * sp30;
     this->collider2.dim.yShift = this->collider2.dim.yShift * sp30;
 
-    if (Flags_GetSwitch(play, this->actor.params)) {
+    if (Flags_GetSwitch(play, OBJBIGICLE_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -248,7 +248,7 @@ void func_80AE9258(ObjBigicicle* this, PlayState* play) {
             temp_f0 = this->actor.world.pos.y - icePoly->actor.world.pos.y;
             if ((temp_f0 < icePoly->colliders1[0].dim.height) && (temp_f0 > 0.0f) &&
                 (Actor_WorldDistXZToActor(&this->actor, &icePoly->actor) < icePoly->colliders1[0].dim.radius)) {
-                Flags_SetSwitch(play, this->actor.params);
+                Flags_SetSwitch(play, OBJBIGICLE_GET_SWITCH_FLAG(&this->actor));
                 this->actionFunc = func_80AE939C;
                 return;
             }

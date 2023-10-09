@@ -47,7 +47,7 @@ ActorInit Demo_Tre_Lgt_InitVars = {
     /**/ DemoTreLgt_Draw,
 };
 
-static TransformUpdateIndex* sBoxLightAnimations[] = {
+static CurveAnimationHeader* sBoxLightAnimations[] = {
     &gBoxLightAdultCurveAnim,
     &gBoxLightChildCurveAnim,
 };

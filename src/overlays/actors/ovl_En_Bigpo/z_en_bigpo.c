@@ -188,10 +188,10 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    this->switchFlags = BIG_POE_GET_SWITCHFLAGS(thisx);
+    this->switchFlag = BIG_POE_GET_SWITCH_FLAG(thisx);
     thisx->params &= 0xFF;
     if (thisx->params == BIG_POE_TYPE_POSSIBLE_FIRE) {
-        if (Flags_GetSwitch(play, this->switchFlags)) {
+        if (Flags_GetSwitch(play, this->switchFlag)) {
             Actor_Kill(&this->actor);
             return;
         }
@@ -201,7 +201,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    SkelAnime_Init(play, &this->skelAnime, &gBigPoeSkeleton, &gBigPoeFloatAnim, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &gBigPoeSkel, &gBigPoeFloatAnim, this->jointTable, this->morphTable,
                    BIG_POE_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -222,7 +222,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     this->mainColor.b = 210;
     this->mainColor.a = 0; // fully invisible
 
-    if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(play, this->switchFlags))) {
+    if ((this->switchFlag != 0xFF) && (Flags_GetSwitch(play, this->switchFlag))) {
         Actor_Kill(&this->actor);
     }
 
@@ -756,8 +756,8 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
 
 void EnBigpo_LanternFalling(EnBigpo* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND || this->actor.floorHeight == BGCHECK_Y_MIN) {
-        if (this->switchFlags != 0xFF) {
-            Flags_SetSwitch(play, this->switchFlags);
+        if (this->switchFlag != 0xFF) {
+            Flags_SetSwitch(play, this->switchFlag);
         }
 
         EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_BIGPO, 10,
@@ -1051,7 +1051,8 @@ void EnBigpo_FlameCircleCutscene(EnBigpo* this, PlayState* play) {
     this->idleTimer--;
     if (this->idleTimer == 0) {
         EnBigpo* parentPoh = (EnBigpo*)this->actor.parent;
-        Flags_SetSwitch(play, this->switchFlags);
+
+        Flags_SetSwitch(play, this->switchFlag);
         Math_Vec3f_Copy(&parentPoh->fires[this->unk20C].pos, &this->actor.world.pos);
         Actor_Kill(&this->actor);
         if (this->unk20C == 0) {

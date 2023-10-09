@@ -4,7 +4,7 @@
 #include "global.h"
 #include "objects/object_wiz/object_wiz.h"
 
-#define EN_WIZ_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define EN_WIZ_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define EN_WIZ_GET_TYPE(thisx) (((thisx)->params >> 8) & 0xFF)
 
 typedef enum {
@@ -50,7 +50,7 @@ typedef struct EnWiz {
     /* 0x3BA */ s16 hasActiveProjectile;
     /* 0x3BC */ s16 hasRunToEveryPlatform; // used for the second phase cutscene to make sure the Wizrobe visits every platform
     /* 0x3BE */ s16 unk_3BE; // unused, inferred from surrounding members
-    /* 0x3C0 */ s16 rotationalVelocity;
+    /* 0x3C0 */ s16 angularVelocity;
     /* 0x3C2 */ s16 alpha;
     /* 0x3C4 */ s16 platformLightAlpha;
     /* 0x3C6 */ s16 targetPlatformLightAlpha;

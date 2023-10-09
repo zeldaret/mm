@@ -250,13 +250,13 @@ Actor* ObjSwitch_SpawnIce(ObjSwitch* this, PlayState* play) {
 
 void ObjSwitch_SetSwitchFlagState(ObjSwitch* this, PlayState* play, s32 setFlag) {
     if (setFlag) {
-        s32 flag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
+        s32 switchFlag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
 
-        Flags_SetSwitch(play, flag);
+        Flags_SetSwitch(play, switchFlag);
     } else {
-        s32 flag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
+        s32 switchFlag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
 
-        Flags_UnsetSwitch(play, flag);
+        Flags_UnsetSwitch(play, switchFlag);
     }
 }
 

@@ -556,14 +556,14 @@ void EnPp_Idle(EnPp* this, PlayState* play) {
                 EnPp_ChangeAnim(this, EN_PP_ANIM_WALK);
             }
 
-            if ((this->maskBounceRotationalVelocity < 0x64) &&
+            if ((this->maskBounceAngularVelocity < 0x64) &&
                 (fabsf(this->actor.world.rot.y - this->targetRotY) < 100.0f)) {
                 Math_ApproachF(&this->actor.speed, 1.0f, 0.3f, 1.0f);
             }
 
-            Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1,
-                               (this->maskBounceRotationalVelocity + 0x258), 0);
-            Math_SmoothStepToS(&this->maskBounceRotationalVelocity, 0, 1, 0x1F4, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, this->maskBounceAngularVelocity + 0x258,
+                               0);
+            Math_SmoothStepToS(&this->maskBounceAngularVelocity, 0, 1, 0x1F4, 0);
         }
     }
 }
@@ -602,11 +602,10 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
             this->targetPos.z += distanceFromWorldPos.z;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, (this->maskBounceRotationalVelocity + 0x7D0),
-                           0);
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, this->maskBounceAngularVelocity + 0x7D0, 0);
     }
 
-    Math_SmoothStepToS(&this->maskBounceRotationalVelocity, 0, 1, 0x1F4, 0);
+    Math_SmoothStepToS(&this->maskBounceAngularVelocity, 0, 1, 0x1F4, 0);
     if (!this->actionVar.isCharging) {
         Math_ApproachZeroF(&this->actor.speed, 0.5f, 1.0f);
         if (fabsf(this->actor.world.rot.y - this->targetRotY) < 100.0f) {
@@ -985,7 +984,7 @@ void EnPp_SetupDead(EnPp* this, PlayState* play) {
         this->targetPos.z += deadVelocity.z;
     }
 
-    this->maskBounceRotationalVelocity = this->actionVar.isCharging = 0;
+    this->maskBounceAngularVelocity = this->actionVar.isCharging = 0;
     EnPp_ChangeAnim(this, EN_PP_ANIM_DAMAGE);
     this->timer = 15;
     if (((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
@@ -1165,8 +1164,8 @@ void EnPp_BodyPart_SetupMove(EnPp* this) {
     this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 13.0f;
     this->actor.gravity = -2.0f;
     this->timer = Rand_S16Offset(30, 30);
-    this->deadBodyPartRotationalVelocity.x = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
-    this->deadBodyPartRotationalVelocity.z = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
+    this->deadBodyPartAngularVelocity.x = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
+    this->deadBodyPartAngularVelocity.z = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
     if (EN_PP_GET_TYPE(&this->actor) != EN_PP_TYPE_BODY_PART_BODY) {
         this->actor.speed = Rand_ZeroFloat(4.0f) + 4.0f;
         this->actor.world.rot.y = ((s32)Rand_CenteredFloat(223.0f) + 0x1999) * this->deadBodyPartIndex;
@@ -1198,8 +1197,8 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
     } else {
         Math_Vec3f_Copy(&this->deadBodyPartsPos[0], &this->deadBodyPartPos);
         this->deadBodyPartCount = 1;
-        this->actor.shape.rot.x += this->deadBodyPartRotationalVelocity.x;
-        this->actor.shape.rot.z += this->deadBodyPartRotationalVelocity.z;
+        this->actor.shape.rot.x += this->deadBodyPartAngularVelocity.x;
+        this->actor.shape.rot.z += this->deadBodyPartAngularVelocity.z;
     }
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
@@ -1348,12 +1347,12 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                                  (this->action == EN_PP_ACTION_ROAR))) {
         this->secondaryTimer = 0;
         this->timer = 10;
-        this->maskBounceRotationalVelocity = 0x20D0;
+        this->maskBounceAngularVelocity = 0x20D0;
         this->actor.speed = 0.0f;
         if (this->action == EN_PP_ACTION_CHARGE) {
             this->actionVar.isCharging = false;
             EnPp_ChangeAnim(this, EN_PP_ANIM_TURN_TO_FACE_PLAYER);
-            this->maskBounceRotationalVelocity = 0x1B58;
+            this->maskBounceAngularVelocity = 0x1B58;
         }
 
         this->targetRotY = this->actor.yawTowardsPlayer;

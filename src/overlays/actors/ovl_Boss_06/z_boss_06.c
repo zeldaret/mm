@@ -431,26 +431,26 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_1E4 > 0.0f) {
         if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-            D_801F4E32 = 1;
-            D_801F4E38.x = this->actor.world.pos.x + this->unk_1B0;
-            D_801F4E38.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
-            D_801F4E38.z = this->actor.world.pos.z;
+            gCustomLensFlare1On = true;
+            gCustomLensFlare1Pos.x = this->actor.world.pos.x + this->unk_1B0;
+            gCustomLensFlare1Pos.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
+            gCustomLensFlare1Pos.z = this->actor.world.pos.z;
             D_801F4E44 = this->unk_1E4;
             D_801F4E48 = 10.0f;
             D_801F4E4C = 0;
         } else {
-            D_801F4E4E = 1;
-            D_801F4E50.x = this->actor.world.pos.x + this->unk_1B0;
-            D_801F4E50.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
-            D_801F4E50.z = this->actor.world.pos.z;
+            gCustomLensFlare2On = true;
+            gCustomLensFlare2Pos.x = this->actor.world.pos.x + this->unk_1B0;
+            gCustomLensFlare2Pos.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
+            gCustomLensFlare2Pos.z = this->actor.world.pos.z;
             D_801F4E5C = this->unk_1E4;
             D_801F4E60 = 10.0f;
             D_801F4E64 = 0;
         }
     } else if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-        D_801F4E32 = 0;
+        gCustomLensFlare1On = false;
     } else {
-        D_801F4E4E = 0;
+        gCustomLensFlare2On = false;
     }
 
     if ((this->unk_1C8 != 0) && (this->unk_1C8 != 0)) {

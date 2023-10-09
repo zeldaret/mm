@@ -81,7 +81,7 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
     if (func_80183DE0(&this->skeletonInfo)) {
         Actor_Kill(&this->actor);
         CutsceneManager_Stop(CS_ID_GLOBAL_ELEGY);
-        func_800FD2B4(play, 0.0f, 850.0f, 0.2f, 0.0f);
+        Environment_AdjustLights(play, 0.0f, 850.0f, 0.2f, 0.0f);
         return;
     }
 
@@ -108,7 +108,7 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
     } else if (phi_fv0 < 0.0f) {
         phi_fv0 = 0.0f;
     }
-    func_800FD2B4(play, phi_fv0, 850.0f, 0.2f, 0.0f);
+    Environment_AdjustLights(play, phi_fv0, 850.0f, 0.2f, 0.0f);
     if (CutsceneManager_GetCurrentCsId() != CS_ID_GLOBAL_ELEGY) {
         if (CutsceneManager_IsNext(CS_ID_GLOBAL_ELEGY)) {
             CutsceneManager_Start(CS_ID_GLOBAL_ELEGY, &this->actor);

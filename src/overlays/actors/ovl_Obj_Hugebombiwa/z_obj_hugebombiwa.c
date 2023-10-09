@@ -340,7 +340,7 @@ void ObjHugebombiwa_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitCylinder(play, &this->collider);
 
-    if (Flags_GetSwitch(play, ENHUGEBOMBIWA_GET_7F(&this->actor))) {
+    if (Flags_GetSwitch(play, ENHUGEBOMBIWA_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -409,19 +409,19 @@ void func_80A54CEC(ObjHugebombiwa* this, PlayState* play) {
 
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
-        Flags_SetSwitch(play, ENHUGEBOMBIWA_GET_7F(&this->actor));
-        if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) &&
+        Flags_SetSwitch(play, ENHUGEBOMBIWA_GET_SWITCH_FLAG(&this->actor));
+        if (!ENHUGEBOMBIWA_GET_100(&this->actor) &&
             ((play->sceneId == SCENE_17SETUGEN) || (play->sceneId == SCENE_17SETUGEN2))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_19_02);
         }
 
-        if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
+        if (!ENHUGEBOMBIWA_GET_100(&this->actor)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
         } else {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 80, NA_SE_EV_SNOWBALL_BROKEN);
         }
 
-        if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
+        if (!ENHUGEBOMBIWA_GET_100(&this->actor)) {
             func_80A53BE0(play, &this->actor.world.pos);
             func_80A54E10(this);
         } else {

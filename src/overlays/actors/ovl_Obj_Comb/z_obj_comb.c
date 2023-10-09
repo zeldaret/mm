@@ -127,7 +127,7 @@ void func_8098CEAC(ObjComb* this, PlayState* play) {
             phi_v0 = 0x20;
         }
         EffectSsKakera_Spawn(play, &spD0, &spC4, &spD0, phi_s0, phi_v0, phi_s1, 4, 0, temp_f10, 0, 0, 60, -1,
-                             OBJECT_COMB, object_comb_DL_001040);
+                             OBJECT_COMB, gBeehiveFragmentDL);
     }
 
     spD0.x = this->actor.world.pos.x;
@@ -185,7 +185,7 @@ void func_8098D19C(ObjComb* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spD0, &spC4, &spD0, phi_s0, phi_v0, phi_s1, 4, 0, temp_f8, 0, 0, 60, -1,
-                             OBJECT_COMB, object_comb_DL_001040);
+                             OBJECT_COMB, gBeehiveFragmentDL);
     }
 
     spD0.x = this->actor.world.pos.x;
@@ -236,7 +236,7 @@ void func_8098D47C(ObjComb* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spC8, &spBC, &spC8, phi_s0, phi_v0, 40, 0, 0, temp_f10, 0, 0, 80, -1, OBJECT_COMB,
-                             object_comb_DL_001040);
+                             gBeehiveFragmentDL);
     }
 }
 
@@ -566,7 +566,7 @@ void ObjComb_Draw(Actor* thisx, PlayState* play) {
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_comb_DL_000CB0);
+    gSPDisplayList(POLY_OPA_DISP++, gBeehiveDL);
 
     Collider_UpdateSpheres(0, &this->collider);
 

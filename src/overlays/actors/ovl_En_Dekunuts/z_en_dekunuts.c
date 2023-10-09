@@ -150,7 +150,7 @@ void EnDekunuts_Destroy(Actor* thisx, PlayState* play) {
 void func_808BD348(EnDekunuts* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_190 = 80;

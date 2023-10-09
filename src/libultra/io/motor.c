@@ -1,6 +1,6 @@
-#include "ultra64/motor.h"
+#include "PR/os_motor.h"
 
-#include "io/controller.h"
+#include "PR/controller.h"
 #include "functions.h"
 
 #define BANK_ADDR 0x400

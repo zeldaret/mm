@@ -38,8 +38,8 @@ s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
     if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
         (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
         (void)"共倒れ"; // Collapse together
-        if (ELFMSG5_GET_SWITCHFLAG(&this->actor) != 0x7F) {
-            Flags_SetSwitch(play, ELFMSG5_GET_SWITCHFLAG(&this->actor));
+        if (ELFMSG5_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
+            Flags_SetSwitch(play, ELFMSG5_GET_SWITCH_FLAG(&this->actor));
         }
         Actor_Kill(&this->actor);
         return true;
@@ -47,17 +47,17 @@ s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
     if (this->actor.home.rot.y == 0x81) {
         if (Flags_GetClear(play, this->actor.room)) {
             (void)"共倒れ２"; // Collapse 2
-            if (ELFMSG5_GET_SWITCHFLAG(&this->actor) != 0x7F) {
-                Flags_SetSwitch(play, ELFMSG5_GET_SWITCHFLAG(&this->actor));
+            if (ELFMSG5_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG5_GET_SWITCH_FLAG(&this->actor));
             }
             Actor_Kill(&this->actor);
             return true;
         }
     }
-    if (ELFMSG5_GET_SWITCHFLAG(&this->actor) == 0x7F) {
+    if (ELFMSG5_GET_SWITCH_FLAG(&this->actor) == 0x7F) {
         return false;
     }
-    if (Flags_GetSwitch(play, ELFMSG5_GET_SWITCHFLAG(&this->actor))) {
+    if (Flags_GetSwitch(play, ELFMSG5_GET_SWITCH_FLAG(&this->actor))) {
         (void)"共倒れ"; // Collapse together
         Actor_Kill(&this->actor);
         return true;

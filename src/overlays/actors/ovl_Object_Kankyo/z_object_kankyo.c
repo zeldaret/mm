@@ -55,11 +55,11 @@ void func_808DBEB0(ObjectKankyo* this, PlayState* play) {
     D_808DE5B0 = 0.0f;
     this->unk_144 = Rand_ZeroOne() * 360.0f;
     this->unk_148 = Rand_ZeroOne() * 360.0f;
-    if (play->envCtx.unk_F2[2] == 128) {
+    if (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 128) {
         D_808DE5B0 = 1.0f;
         this->unk_114E = 1;
 
-        for (i = 0; i < play->envCtx.unk_F2[2]; i++) {
+        for (i = 0; i < play->envCtx.precipitation[PRECIP_SNOW_CUR]; i++) {
             this->unk_14C[i].unk_10 = Rand_ZeroOne() * -200.0f;
         }
     } else {
@@ -107,7 +107,7 @@ void ObjectKankyo_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 2:
-            play->envCtx.unk_F2[2] = 0x80;
+            play->envCtx.precipitation[PRECIP_SNOW_CUR] = 128;
             func_808DBFB0(this, play);
             break;
 
@@ -180,16 +180,16 @@ void func_808DC18C(ObjectKankyo* this, PlayState* play) {
     magnitude = play->envCtx.windSpeed / 60.0f;
     magnitude = CLAMP(magnitude, 0.0f, 1.0f);
 
-    sp30.x = play->envCtx.windDir.x * magnitude;
-    sp30.y = play->envCtx.windDir.y + 100.0f;
-    sp30.z = play->envCtx.windDir.z * magnitude;
+    sp30.x = play->envCtx.windDirection.x * magnitude;
+    sp30.y = play->envCtx.windDirection.y + 100.0f;
+    sp30.z = play->envCtx.windDirection.z * magnitude;
     this->unk_14C[2].unk_00 = 0x4000 - Math_Vec3f_Pitch(&gZeroVec3f, &sp30);
     this->unk_14C[2].unk_04 = Math_Vec3f_Yaw(&gZeroVec3f, &sp30) + 0x8000;
 }
 
 void func_808DC454(ObjectKankyo* this, PlayState* play) {
     s16 i;
-    u32 tempI;
+    s32 pad1;
     f32 phi_f20;
     f32 spD0;
     f32 spCC;
@@ -214,7 +214,7 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
     spCC = y / magnitude;
     spC8 = z / magnitude;
 
-    for (i = 0; i < play->envCtx.unk_F2[2]; i++) {
+    for (i = 0; i < play->envCtx.precipitation[PRECIP_SNOW_CUR]; i++) {
         switch (this->unk_14C[i].unk_1C) {
             case 0:
                 this->unk_14C[i].unk_00 = play->view.eye.x + (spD0 * 120.0f);
@@ -231,14 +231,13 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
                     this->unk_14C[i].unk_10 = temp_f22;
                 } else {
                     this->unk_14C[i].unk_10 += temp_f22;
-                    tempI = i;
-                    if (play->envCtx.unk_F2[2] == (tempI + 1)) {
+                    if (play->envCtx.precipitation[PRECIP_SNOW_CUR] == ((u32)i + 1)) {
                         this->unk_114E = 0;
                     }
                 }
 
                 this->unk_14C[i].unk_14 = (Rand_ZeroOne() - 0.5f) * (2.0f * temp_120);
-                if (play->envCtx.unk_F2[4] == 0) {
+                if (play->envCtx.precipitation[PRECIP_SOS_MAX] == 0) {
                     this->unk_14C[i].unk_18 = (Rand_ZeroOne() * 3.0f) + 1.0f;
                 } else {
                     this->unk_14C[i].unk_18 = (Rand_ZeroOne() * 3.0f) + 8.0f;
@@ -251,14 +250,14 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
                 temp_f28 = play->view.eye.y + (spCC * 120.0f);
                 temp_f30 = play->view.eye.z + (spC8 * 120.0f);
 
-                magnitude =
-                    sqrtf((f32)SQ(play->envCtx.windDir.x) + SQ(play->envCtx.windDir.y) + SQ(play->envCtx.windDir.z));
+                magnitude = sqrtf((f32)SQ(play->envCtx.windDirection.x) + SQ(play->envCtx.windDirection.y) +
+                                  SQ(play->envCtx.windDirection.z));
                 if (magnitude == 0.0f) {
                     magnitude = 0.001f;
                 }
-                spC4 = -play->envCtx.windDir.x / magnitude;
-                spC0 = -play->envCtx.windDir.y / magnitude;
-                spBC = -play->envCtx.windDir.z / magnitude;
+                spC4 = -play->envCtx.windDirection.x / magnitude;
+                spC0 = -play->envCtx.windDirection.y / magnitude;
+                spBC = -play->envCtx.windDirection.z / magnitude;
 
                 if (i == 0) {
                     this->unk_144 += 0.049999997f * Rand_ZeroOne();
@@ -318,13 +317,13 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
 }
 
 void func_808DCB7C(ObjectKankyo* this, PlayState* play) {
-    if (play->envCtx.unk_F2[2] < play->envCtx.unk_F2[3]) {
+    if (play->envCtx.precipitation[PRECIP_SNOW_CUR] < play->envCtx.precipitation[PRECIP_SNOW_MAX]) {
         if ((play->state.frames % 16) == 0) {
-            play->envCtx.unk_F2[2] += 2;
+            play->envCtx.precipitation[PRECIP_SNOW_CUR] += 2;
         }
-    } else if (play->envCtx.unk_F2[3] < play->envCtx.unk_F2[2]) {
+    } else if (play->envCtx.precipitation[PRECIP_SNOW_MAX] < play->envCtx.precipitation[PRECIP_SNOW_CUR]) {
         if ((play->state.frames % 16) == 0) {
-            play->envCtx.unk_F2[2] -= 2;
+            play->envCtx.precipitation[PRECIP_SNOW_CUR] -= 2;
         }
     }
     func_808DC454(this, play);
@@ -333,24 +332,24 @@ void func_808DCB7C(ObjectKankyo* this, PlayState* play) {
 void func_808DCBF8(ObjectKankyo* this, PlayState* play) {
     f32 temp_f0;
 
-    if ((play->envCtx.unk_F2[2] > 0) && (this->unk_114C == 0)) {
+    if ((play->envCtx.precipitation[PRECIP_SNOW_CUR] > 0) && (this->unk_114C == 0)) {
         if ((play->state.frames % 16) == 0) {
-            play->envCtx.unk_F2[2] -= 9;
-            if ((s8)play->envCtx.unk_F2[2] < 0) {
-                play->envCtx.unk_F2[2] = 0;
+            play->envCtx.precipitation[PRECIP_SNOW_CUR] -= 9;
+            if ((s8)play->envCtx.precipitation[PRECIP_SNOW_CUR] < 0) {
+                play->envCtx.precipitation[PRECIP_SNOW_CUR] = 0;
             }
         }
     }
 
-    temp_f0 = (f32)play->envCtx.unk_F2[2] / 128;
+    temp_f0 = (f32)play->envCtx.precipitation[PRECIP_SNOW_CUR] / 128;
     temp_f0 = CLAMP(temp_f0, 0.0f, 1.0f);
 
     if (temp_f0 > 0.01f) {
         D_801F4E30 = 155.0f * temp_f0;
-        play->envCtx.sandstormState = 10;
+        play->envCtx.sandstormState = SANDSTORM_A;
     } else {
         D_801F4E30 = 0;
-        play->envCtx.sandstormState = 10;
+        play->envCtx.sandstormState = SANDSTORM_A;
     }
     func_808DC454(this, play);
 }
@@ -413,14 +412,14 @@ void func_808DCDB4(ObjectKankyo* this, PlayState* play) {
                 temp_f28 = play->view.eye.y + (spA8 * 120.0f);
                 temp_f18 = play->view.eye.z + (spA4 * 120.0f);
 
-                magnitude =
-                    sqrtf((f32)SQ(play->envCtx.windDir.x) + SQ(play->envCtx.windDir.y) + SQ(play->envCtx.windDir.z));
+                magnitude = sqrtf((f32)SQ(play->envCtx.windDirection.x) + SQ(play->envCtx.windDirection.y) +
+                                  SQ(play->envCtx.windDirection.z));
                 if (magnitude == 0.0f) {
                     magnitude = 0.001f;
                 }
 
-                spA0 = -play->envCtx.windDir.x / magnitude;
-                sp9C = -play->envCtx.windDir.z / magnitude;
+                spA0 = -play->envCtx.windDirection.x / magnitude;
+                sp9C = -play->envCtx.windDirection.z / magnitude;
 
                 if (i == 0) {
                     this->unk_144 += 0.049999997f * Rand_ZeroOne();
@@ -512,7 +511,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
     f32 temp_f2;
     f32 tempf;
 
-    if ((play->cameraPtrs[CAM_ID_MAIN]->stateFlags & CAM_STATE_UNDERWATER) || ((u8)play->envCtx.unk_E2 == 0)) {
+    if ((play->cameraPtrs[CAM_ID_MAIN]->stateFlags & CAM_STATE_UNDERWATER) || ((u8)play->envCtx.stormState == 0)) {
         return;
     }
 
@@ -525,14 +524,14 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
         temp_f0 = CLAMP(temp_f0, 0.0f, 1.0f);
         Math_SmoothStepToF(&D_808DE5B0, temp_f0, 0.2f, 0.1f, 0.001f);
 
-        sp68 = play->envCtx.unk_F2[2];
+        sp68 = play->envCtx.precipitation[PRECIP_SNOW_CUR];
         sp68 *= D_808DE5B0;
 
-        if ((play->envCtx.unk_F2[2] >= 32) && (sp68 < 32)) {
+        if ((play->envCtx.precipitation[PRECIP_SNOW_CUR] >= 32) && (sp68 < 32)) {
             sp68 = 32;
         }
     } else {
-        sp68 = play->envCtx.unk_F2[2];
+        sp68 = play->envCtx.precipitation[PRECIP_SNOW_CUR];
     }
 
     for (i = 0; i < sp68; i++) {
@@ -654,7 +653,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
     Player* player = GET_PLAYER(play);
     s32 i;
     u8 phi_s5;
-    u16 end = play->envCtx.unk_F2[1];
+    u16 end = play->envCtx.precipitation[PRECIP_RAIN_CUR];
     f32 temp_f12;
     f32 temp_f20;
     f32 temp_f22;

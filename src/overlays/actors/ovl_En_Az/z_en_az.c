@@ -4,6 +4,7 @@
  * Description: Beaver Bros
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_az.h"
 #include "overlays/actors/ovl_En_Twig/z_en_twig.h"
 #include "overlays/actors/ovl_En_Fish/z_en_fish.h"
@@ -77,20 +78,20 @@ typedef enum {
 } BeaverAnimation;
 
 static AnimationSpeedInfo sAnimationSpeedInfo[BEAVER_ANIM_IDLE_FACE_MAX] = {
-    { &gBeaverIdleAnim, 1.0f, ANIMMODE_LOOP, -10.0f },            // BEAVER_ANIM_IDLE
-    { &gBeaverWalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },             // BEAVER_ANIM_WALK
-    { &gBeaverSwimWithSpinningTail, 1.0f, ANIMMODE_LOOP, -5.0f }, // BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL
-    { &gBeaverSwimWithRaisedTail, 1.0f, ANIMMODE_LOOP, -5.0f },   // BEAVER_ANIM_SWIM_WITH_RAISED_TAIL
-    { &gBeaverTalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },             // BEAVER_ANIM_TALK
-    { &gBeaverTalkWaveArmsAnim, 1.0f, ANIMMODE_LOOP, -5.0f },     // BEAVER_ANIM_TALK_WAVE_ARMS
-    { &gBeaverLaughRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },       // BEAVER_ANIM_LAUGH_RIGHT
-    { &gBeaverLaughLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },        // BEAVER_ANIM_LAUGH_LEFT
-    { &gBeaverSwimAnim, 2.0f, ANIMMODE_LOOP, -5.0f },             // BEAVER_ANIM_SWIM
-    { &gBeaverTalkToLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },       // BEAVER_ANIM_TALK_TO_LEFT
-    { &gBeaverTalkToRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },      // BEAVER_ANIM_TALK_TO_RIGHT
-    { &gBeaverBowAnim, 1.0f, ANIMMODE_ONCE, -5.0f },              // BEAVER_ANIM_BOW
-    { &gBeaverIdleFaceLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },     // BEAVER_ANIM_IDLE_FACE_LEFT
-    { &gBeaverIdleFaceRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },    // BEAVER_ANIM_IDLE_FACE_RIGHT
+    { &gBeaverIdleAnim, 1.0f, ANIMMODE_LOOP, -10.0f },                // BEAVER_ANIM_IDLE
+    { &gBeaverWalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },                 // BEAVER_ANIM_WALK
+    { &gBeaverSwimWithSpinningTailAnim, 1.0f, ANIMMODE_LOOP, -5.0f }, // BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL
+    { &gBeaverSwimWithRaisedTailAnim, 1.0f, ANIMMODE_LOOP, -5.0f },   // BEAVER_ANIM_SWIM_WITH_RAISED_TAIL
+    { &gBeaverTalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },                 // BEAVER_ANIM_TALK
+    { &gBeaverTalkWaveArmsAnim, 1.0f, ANIMMODE_LOOP, -5.0f },         // BEAVER_ANIM_TALK_WAVE_ARMS
+    { &gBeaverLaughRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },           // BEAVER_ANIM_LAUGH_RIGHT
+    { &gBeaverLaughLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },            // BEAVER_ANIM_LAUGH_LEFT
+    { &gBeaverSwimAnim, 2.0f, ANIMMODE_LOOP, -5.0f },                 // BEAVER_ANIM_SWIM
+    { &gBeaverTalkToLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },           // BEAVER_ANIM_TALK_TO_LEFT
+    { &gBeaverTalkToRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },          // BEAVER_ANIM_TALK_TO_RIGHT
+    { &gBeaverBowAnim, 1.0f, ANIMMODE_ONCE, -5.0f },                  // BEAVER_ANIM_BOW
+    { &gBeaverIdleFaceLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },         // BEAVER_ANIM_IDLE_FACE_LEFT
+    { &gBeaverIdleFaceRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },        // BEAVER_ANIM_IDLE_FACE_RIGHT
 };
 
 ActorInit En_Az_InitVars = {
@@ -706,7 +707,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                 if (SubS_StartCutscene(&brother->actor, brother->csIdList[0], CS_ID_GLOBAL_TALK,
                                        SUBS_CUTSCENE_NORMAL)) {
                     brother->unk_374 |= 0x8000;
-                    play->msgCtx.msgMode = 0x44;
+                    play->msgCtx.msgMode = MSGMODE_PAUSED;
                     ret = 0;
                 }
             } else if (Message_ShouldAdvance(play)) {
@@ -831,7 +832,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10DB:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            play->msgCtx.msgMode = 0x44;
+                            play->msgCtx.msgMode = MSGMODE_PAUSED;
                             this->unk_2FA = 1;
                             ret = 0;
                         } else {
@@ -944,7 +945,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
 
                     case 0x10EB:
                         if (play->msgCtx.choiceIndex == 0) {
-                            play->msgCtx.msgMode = 0x44;
+                            play->msgCtx.msgMode = MSGMODE_PAUSED;
                             Audio_PlaySfx_MessageDecide();
                             switch (this->unk_2FA) {
                                 case 4:
@@ -1496,7 +1497,7 @@ void func_80A97A28(EnAz* this, PlayState* play) {
 
 void func_80A97A40(EnAz* this, PlayState* play) {
     if (SubS_StartCutscene(&this->actor, 0, CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_80A97A9C(this, play);
     }
@@ -1524,8 +1525,8 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                     case 0x10D8:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            play->msgCtx.msgMode = 0x44;
-                            func_800FD750(NA_BGM_TIMED_MINI_GAME);
+                            play->msgCtx.msgMode = MSGMODE_PAUSED;
+                            Environment_ForcePlaySequence(NA_BGM_TIMED_MINI_GAME);
                             func_80A94AB8(this, play, 1);
                             func_80A979DC(this, play);
                         } else {
@@ -1570,7 +1571,7 @@ void func_80A97C4C(EnAz* this, PlayState* play) {
     func_80A97410(this, play);
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3) || (this->unk_2FA == 6) || (this->unk_2FA == 8)) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_01);
-        func_800FD750(NA_BGM_TIMED_MINI_GAME);
+        Environment_ForcePlaySequence(NA_BGM_TIMED_MINI_GAME);
         play->nextEntrance = Entrance_CreateFromSpawn(1);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
