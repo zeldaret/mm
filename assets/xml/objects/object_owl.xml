@@ -34,9 +34,9 @@
         <DList Name="gOwlFlyingLeftClawDL" Offset="0x7120" />
         
         <!-- The two following TLUTs are identical and both are used as TLUTs for the eye textures -->
-        <!-- TLUT used in gOwlPerchingSkel -->
+        <!-- TLUT used in gOwlPerchingHeadDL -->
         <Texture Name="gOwlPerchingEyeTLUT" OutName="owl_perching_eye_tlut" Format="rgba16" Width="16" Height="16" Offset="0x72B8" />
-        <!-- TLUT used in gOwlFlyingSkel -->
+        <!-- TLUT used in gOwlFlyingHeadDL -->
         <Texture Name="gOwlFlyingEyeTLUT" OutName="owl_flying_eye_tlut" Format="rgba16" Width="16" Height="16" Offset="0x74B8" />
 
         <!-- Textures -->
