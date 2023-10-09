@@ -33,7 +33,7 @@ typedef struct EnDnk {
     /* 0x21E */ Vec3s morphTable[DNK_LIMB_MAX];
     /* 0x260 */ Gfx* unk_260[DEKU_PALACE_GUARD_LIMB_MAX];
     /* 0x28C */ u16 unk_28C;
-    /* 0x28E */ s8 unk_28E;
+    /* 0x28E */ s8 objectSlot;
     /* 0x290 */ s16 unk_290;
     /* 0x292 */ s16 unk_292;
     /* 0x294 */ s16 unk_294;

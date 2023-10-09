@@ -113,11 +113,15 @@ typedef struct {
 #define OS_VI_FPAL_HPN2     54
 #define OS_VI_FPAL_HPF2     55
 
-#define OS_TV_PAL           0
-#define OS_TV_NTSC          1
-#define OS_TV_MPAL          2
 #define OS_VI_UNK28         28
 
+
+extern OSViMode osViModeNtscHpf1;
+extern OSViMode osViModePalLan1;
+extern OSViMode osViModeNtscHpn1;
+extern OSViMode osViModeNtscLan1;
+extern OSViMode osViModeMpalLan1;
+extern OSViMode osViModeFpalLan1;
 
 void* osViGetCurrentFramebuffer(void);
 void* osViGetNextFramebuffer(void);
@@ -130,6 +134,5 @@ void osViSetEvent(OSMesgQueue* mq, OSMesg m, u32 retraceCount);
 void osViSwapBuffer(void* frameBufPtr);
 void osViBlack(u8 active);
 void osCreateViManager(OSPri pri);
-
 
 #endif

@@ -10,7 +10,7 @@ typedef void (*EnRailSkbActionFunc)(struct EnRailSkb*, PlayState*);
 typedef void (*EnRailSkbUnkFunc)(struct EnRailSkb*);
 
 #define ENRAILSKB_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
-#define ENRAILSKB_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENRAILSKB_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0xFF)
 
 typedef enum EnRailSkbBodyPart {
     /*  0 */ ENRAILSKB_BODYPART_0,

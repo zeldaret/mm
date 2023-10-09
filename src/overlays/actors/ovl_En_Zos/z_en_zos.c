@@ -138,7 +138,7 @@ static AnimationHeader* sAnimations[] = {
     &gEvanLeanOnKeyboardAnim,        // EN_ZOS_ANIM_LEAN_ON_KEYBOARD
     &gEvanLeanOnKeyboardAndSighAnim, // EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH
     &gEvanHandsOnHipsAnim,           // EN_ZOS_ANIM_HANDS_ON_HIPS
-    &gEeanTalkFootTapAnim,           // EN_ZOS_ANIM_TALK_FOOT_TAP
+    &gEvanTalkFootTapAnim,           // EN_ZOS_ANIM_TALK_FOOT_TAP
     &gEvanTalkLookDownAnim,          // EN_ZOS_ANIM_TALK_LOOK_DOWN
     &gEvanTalkArmsOutAnim,           // EN_ZOS_ANIM_TALK_ARMS_OUT
     &gEvanTalkHandsOnHipsAnim,       // EN_ZOS_ANIM_TALK_HANDS_ON_HIPS
@@ -555,8 +555,8 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
 
     func_80BBB0D4(this, play);
 
-    if (play->msgCtx.ocarinaMode == 0x2A) {
-        play->msgCtx.ocarinaMode = 4;
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_FULL_EVAN_SONG) {
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = func_80BBBB84;
         this->actor.flags |= ACTOR_FLAG_10000;
         Actor_OfferTalk(&this->actor, play, 120.0f);

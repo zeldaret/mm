@@ -143,7 +143,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
         player->stateFlags2 &= ~PLAYER_STATE2_20000;
         this->isCharging = false;
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK)) {
             player->unk_B08 = 1.0f;
             this->collider.info.toucher.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
@@ -203,7 +203,7 @@ void EnMThunder_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnMThunder_AdjustLights(PlayState* play, f32 arg1) {
-    func_800FD2B4(play, arg1, 850.0f, 0.2f, 0.0f);
+    Environment_AdjustLights(play, arg1, 850.0f, 0.2f, 0.0f);
 }
 
 void EnMThunder_Spin_AttackNoMagic(EnMThunder* this, PlayState* play) {

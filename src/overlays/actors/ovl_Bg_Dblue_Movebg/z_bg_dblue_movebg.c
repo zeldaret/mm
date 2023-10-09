@@ -108,22 +108,22 @@ static InitChainEntry sInitChain[] = {
 
 Vec3f D_80A2B988 = { 1785.0f, 0.0f, 220.0f };
 
-s32 func_80A29A80(PlayState* play, s32 arg1, s32 arg2) {
+s32 func_80A29A80(PlayState* play, s32 switchFlagBase, s32 arg2) {
     s32 sp2C = 1;
-    s32 val;
+    s32 switchFlagOffset;
     s32 val2;
 
     if (arg2 < 14) {
-        val = D_80A2B870[arg2][0];
+        switchFlagOffset = D_80A2B870[arg2][0];
         val2 = D_80A2B870[arg2][1];
 
-        while (val--) {
-            if ((1 << val) & val2) {
-                if (!Flags_GetSwitch(play, arg1 + val)) {
+        while (switchFlagOffset--) {
+            if ((1 << switchFlagOffset) & val2) {
+                if (!Flags_GetSwitch(play, switchFlagBase + switchFlagOffset)) {
                     sp2C = 0;
                     break;
                 }
-            } else if (Flags_GetSwitch(play, arg1 + val)) {
+            } else if (Flags_GetSwitch(play, switchFlagBase + switchFlagOffset)) {
                 sp2C = 0;
                 break;
             }
@@ -132,20 +132,20 @@ s32 func_80A29A80(PlayState* play, s32 arg1, s32 arg2) {
         sp2C = 0;
         switch (arg2) {
             case 14:
-                if (!Flags_GetSwitch(play, arg1)) {
+                if (!Flags_GetSwitch(play, switchFlagBase)) {
                     sp2C = 1;
                 }
 
-                if (Flags_GetSwitch(play, arg1 + 1) && Flags_GetSwitch(play, arg1 + 2) &&
-                    Flags_GetSwitch(play, arg1 + 3)) {
+                if (Flags_GetSwitch(play, switchFlagBase + 1) && Flags_GetSwitch(play, switchFlagBase + 2) &&
+                    Flags_GetSwitch(play, switchFlagBase + 3)) {
                     sp2C += 2;
                 }
                 break;
 
             case 15:
-                if (!Flags_GetSwitch(play, arg1) ||
-                    (Flags_GetSwitch(play, arg1 + 1) && Flags_GetSwitch(play, arg1 + 2) &&
-                     Flags_GetSwitch(play, arg1 + 3))) {
+                if (!Flags_GetSwitch(play, switchFlagBase) ||
+                    (Flags_GetSwitch(play, switchFlagBase + 1) && Flags_GetSwitch(play, switchFlagBase + 2) &&
+                     Flags_GetSwitch(play, switchFlagBase + 3))) {
                     sp2C = 1;
                 }
                 break;
@@ -162,7 +162,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_160 = BGDBLUEMOVEBG_GET_F(thisx);
     this->unk_1BC = BGDBLUEMOVEBG_GET_F000(thisx);
-    this->unk_1C0 = BGDBLUEMOVEBG_GET_FF0(thisx);
+    this->switchFlag = BGDBLUEMOVEBG_GET_SWITCH_FLAG(thisx);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
     if ((this->unk_160 == 9) || (this->unk_160 == 8)) {
@@ -214,7 +214,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             }
             this->unk_17E = 0;
             this->unk_184 = 0.0f;
-            if (Flags_GetSwitch(play, this->unk_1C0)) {
+            if (Flags_GetSwitch(play, this->switchFlag)) {
                 this->unk_18C = 0x384;
             } else {
                 this->unk_18C = 0;
@@ -224,7 +224,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 6:
-            this->unk_178 = func_80A29A80(play, this->unk_1C0, this->unk_1BC);
+            this->unk_178 = func_80A29A80(play, this->switchFlag, this->unk_1BC);
             this->unk_1CC = D_80A2B96C[this->unk_178];
             this->unk_1CE = this->unk_1CC;
             this->actionFunc = func_80A2A1E0;
@@ -237,7 +237,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             this->dyna.actor.shape.rot.x = 0;
             this->dyna.actor.world.rot.z = 0;
             this->dyna.actor.shape.rot.z = 0;
-            if (Flags_GetSwitch(play, this->unk_1C0)) {
+            if (Flags_GetSwitch(play, this->switchFlag)) {
                 Actor_Kill(&this->dyna.actor);
                 break;
             }
@@ -257,7 +257,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             for (i = 0; i < ARRAY_COUNT(sCsIdList); i++) {
                 sCsIdList[i] = this->csIdList[i];
             }
-            this->unk_178 = func_80A29A80(play, this->unk_1C0, this->unk_1BC);
+            this->unk_178 = func_80A29A80(play, this->switchFlag, this->unk_1BC);
             this->unk_1CC = D_80A2B96C[this->unk_178];
             this->unk_1CE = this->unk_1CC;
             Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
@@ -275,7 +275,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 11:
-            this->unk_1CC = D_80A2B96C[func_80A29A80(play, this->unk_1C0, this->unk_1BC)];
+            this->unk_1CC = D_80A2B96C[func_80A29A80(play, this->switchFlag, this->unk_1BC)];
             D_80A2BBF0 = this;
             this->dyna.actor.flags |= ACTOR_FLAG_20;
             this->dyna.actor.update = Actor_Noop;
@@ -314,7 +314,7 @@ void func_80A2A128(BgDblueMovebg* this, PlayState* play) {
 }
 
 void func_80A2A1E0(BgDblueMovebg* this, PlayState* play) {
-    s32 temp_v0 = func_80A29A80(play, this->unk_1C0, this->unk_1BC);
+    s32 temp_v0 = func_80A29A80(play, this->switchFlag, this->unk_1BC);
 
     if (temp_v0 != this->unk_178) {
         switch (temp_v0) {
@@ -422,7 +422,7 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
     if (sp20) {
         player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
-        Flags_SetSwitch(play, this->unk_1C0);
+        Flags_SetSwitch(play, this->switchFlag);
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
 
         if (func_80A29A80(play, this->unk_1C8, this->unk_1C4)) {
@@ -510,9 +510,9 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
         temp = (this->unk_18C + sp26 + 3600) % 3600;
 
         if ((temp == 900) || (temp == 2700)) {
-            Flags_SetSwitch(play, this->unk_1C0);
+            Flags_SetSwitch(play, this->switchFlag);
         } else {
-            Flags_UnsetSwitch(play, this->unk_1C0);
+            Flags_UnsetSwitch(play, this->switchFlag);
         }
 
         player->stateFlags1 |= PLAYER_STATE1_20;
@@ -637,7 +637,7 @@ void func_80A2AED0(BgDblueMovebg* this, PlayState* play) {
         }
     }
 
-    temp_v0_3 = func_80A29A80(play, this->unk_1C0, this->unk_1BC);
+    temp_v0_3 = func_80A29A80(play, this->switchFlag, this->unk_1BC);
     if (temp_v0_3 != this->unk_178) {
         switch (temp_v0_3) {
             case 1:
@@ -704,7 +704,7 @@ void func_80A2AED0(BgDblueMovebg* this, PlayState* play) {
 }
 
 void func_80A2B1A0(BgDblueMovebg* this, PlayState* play) {
-    switch (func_80A29A80(play, this->unk_1C0, this->unk_1BC)) {
+    switch (func_80A29A80(play, this->switchFlag, this->unk_1BC)) {
         case 1:
             this->dyna.actor.shape.rot.z = this->dyna.actor.home.rot.z;
             break;
@@ -736,7 +736,7 @@ void func_80A2B274(Actor* thisx, PlayState* play) {
         return;
     }
 
-    temp_v1 = D_80A2B96C[func_80A29A80(play, this->unk_1C0, this->unk_1BC)];
+    temp_v1 = D_80A2B96C[func_80A29A80(play, this->switchFlag, this->unk_1BC)];
     if (temp_v1 != 0) {
         if (temp_v1 > 0) {
             Audio_PlaySfx_WaterWheel(&this->dyna.actor.projectedPos, NA_SE_EV_DUMMY_WATER_WHEEL_RR - SFX_FLAG);

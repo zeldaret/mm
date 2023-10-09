@@ -5,7 +5,7 @@
 #include "objects/object_rd/object_rd.h"
 
 #define EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx) ((thisx)->params & 0xF)
-#define EN_TALK_GIBUD_SWITCH_FLAG(thisx) (((thisx)->params & 0xFF0) >> 4)
+#define EN_TALK_GIBUD_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0xFF0) >> 4)
 
 struct EnTalkGibud;
 

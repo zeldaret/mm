@@ -523,7 +523,7 @@ void EnRd_SetupPirouette(EnRd* this) {
     Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadPirouetteAnim, -6.0f);
     this->action = EN_RD_ACTION_PIROUETTE;
     this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 5.0f;
-    this->pirouetteRotationalVelocity = 0x1112;
+    this->pirouetteAngularVelocity = 0x1112;
     this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnRd_Pirouette;
@@ -562,12 +562,12 @@ void EnRd_Pirouette(EnRd* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        this->pirouetteRotationalVelocity = 0x1112;
+        this->pirouetteAngularVelocity = 0x1112;
     } else if (Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        this->pirouetteRotationalVelocity = 0x199A;
+        this->pirouetteAngularVelocity = 0x199A;
     }
 
-    this->actor.world.rot.y -= this->pirouetteRotationalVelocity;
+    this->actor.world.rot.y -= this->pirouetteAngularVelocity;
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
 
@@ -577,13 +577,13 @@ void EnRd_EndPirouetteWhenPlayerIsClose(EnRd* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
-    this->actor.world.rot.y -= this->pirouetteRotationalVelocity;
+    this->actor.world.rot.y -= this->pirouetteAngularVelocity;
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
-    this->pirouetteRotationalVelocity -= 0x64;
-    if ((this->pirouetteRotationalVelocity < 0x834) && (this->pirouetteRotationalVelocity >= 0x7D0)) {
+    this->pirouetteAngularVelocity -= 0x64;
+    if ((this->pirouetteAngularVelocity < 0x834) && (this->pirouetteAngularVelocity >= 0x7D0)) {
         Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, ANIMMODE_ONCE, -10.0f);
-    } else if (this->pirouetteRotationalVelocity < 0x3E8) {
+    } else if (this->pirouetteAngularVelocity < 0x3E8) {
         if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (!this->isMourning)) {
             EnRd_SetupAttemptPlayerFreeze(this);
         } else {
@@ -842,7 +842,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
                 if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->stateFlags2 &= ~PLAYER_STATE2_80;
-                    player->unk_AE8 = 100;
+                    player->actionVar2 = 100;
                 }
                 Animation_Change(&this->skelAnime, &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f,
                                  Animation_GetLastFrame(&gGibdoRedeadGrabEndAnim), ANIMMODE_ONCE_INTERP, 0.0f);

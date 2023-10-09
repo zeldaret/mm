@@ -17,7 +17,7 @@ typedef struct ObjKibako {
     /* 0x144 */ ObjKibakoActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collider;
     /* 0x194 */ s16 timer;
-    /* 0x196 */ s16 bankIndex;
+    /* 0x196 */ s16 objectSlot;
     /* 0x198 */ s8 isDropCollected;
     /* 0x199 */ s8 unk199; /* room? */
 } ObjKibako; // size = 0x19C

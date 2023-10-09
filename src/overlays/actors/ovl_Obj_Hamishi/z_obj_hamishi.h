@@ -5,7 +5,7 @@
 
 struct ObjHamishi;
 
-#define OBJHAMISHI_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define OBJHAMISHI_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 typedef struct ObjHamishi {
     /* 0x000 */ Actor actor;
