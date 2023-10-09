@@ -1,5 +1,5 @@
 ﻿<Root>
-    <!-- Objects for Icicles: The breakable ice stalagmites sticking out of the ground in Snowhead Temple -->
+    <!-- Object for Icicles -->
     <File Name="object_icicle" Segment="6">
         <DList Name="gIcicleDL" Offset="0xD0" /> <!-- Original name is "ice_turara_model" -->
         <Collision Name="gIcicleCol" Offset="0x294" /> <!-- Original name is "ice_turara_bgdatainfo" -->
