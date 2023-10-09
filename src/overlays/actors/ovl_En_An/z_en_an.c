@@ -605,11 +605,11 @@ s32 func_80B53840(EnAn* this, PlayState* play) {
     s32 ret = false;
 
     if ((this->unk_214 != play->roomCtx.curRoom.num) && (play->roomCtx.status == 0) && (this->unk_3B8 == 0)) {
-        this->msmoObjIndex = SubS_GetObjectIndex(OBJECT_MSMO, play);
-        this->an4ObjIndex = SubS_GetObjectIndex(OBJECT_AN4, play);
-        this->maskKerfayObjIndex = SubS_GetObjectIndex(OBJECT_MASK_KERFAY, play);
-        this->an3ObjIndex = SubS_GetObjectIndex(OBJECT_AN3, play);
-        this->an2ObjIndex = SubS_GetObjectIndex(OBJECT_AN2, play);
+        this->msmoObjIndex = SubS_GetObjectSlot(OBJECT_MSMO, play);
+        this->an4ObjIndex = SubS_GetObjectSlot(OBJECT_AN4, play);
+        this->maskKerfayObjIndex = SubS_GetObjectSlot(OBJECT_MASK_KERFAY, play);
+        this->an3ObjIndex = SubS_GetObjectSlot(OBJECT_AN3, play);
+        this->an2ObjIndex = SubS_GetObjectSlot(OBJECT_AN2, play);
         this->actor.draw = NULL;
         this->unk_214 = play->roomCtx.curRoom.num;
         this->unk_3B8 = 1;
@@ -720,7 +720,7 @@ EnDoor* func_80B53B3C(PlayState* play, s32 scheduleOutputResult) {
 }
 
 s32 func_80B53BA8(EnAn* this, PlayState* play) {
-    s8 temp_a3 = this->actor.objBankIndex;
+    s8 temp_a3 = this->actor.objectSlot;
     s8 var_v1 = -1;
     s32 ret = 0;
 
@@ -739,10 +739,10 @@ s32 func_80B53BA8(EnAn* this, PlayState* play) {
     }
 
     if (var_v1 >= 0) {
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[var_v1].segment);
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[var_v1].segment);
         this->skelAnime.playSpeed = this->unk_368;
         ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[temp_a3].segment);
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[temp_a3].segment);
     }
 
     return ret;
@@ -837,7 +837,7 @@ AnimationInfoS D_80B58BF4[ENAN_ANIM_MAX] = {
 };
 
 s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
-    s8 temp_t1 = this->actor.objBankIndex;
+    s8 temp_t1 = this->actor.objectSlot;
     s8 var_v1 = -1;
     s32 var_t0 = 0;
     s32 var_t2 = 0;
@@ -886,11 +886,11 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
     }
 
     if ((var_t0 != 0) && (var_v1 >= 0)) {
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[var_v1].segment);
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[var_v1].segment);
         this->animIndex = animIndex;
         var_t2 = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80B58BF4, animIndex);
         this->unk_368 = this->skelAnime.playSpeed;
-        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[temp_t1].segment);
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[temp_t1].segment);
     }
 
     return var_t2;
@@ -1026,7 +1026,7 @@ Vec3s D_80B58E74 = { 0x238C, 0, -0x3FFC };
 
 void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
     s32 pad;
-    s8 sp53 = this->actor.objBankIndex;
+    s8 sp53 = this->actor.objectSlot;
     s8 temp_a2;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -1051,31 +1051,31 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
         case 0x1:
             temp_a2 = this->maskKerfayObjIndex;
             if ((this->unk_360 & 0x4000) && (this->unk_3B0 == 0) && (temp_a2 >= 0)) {
-                gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.status[temp_a2].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.slots[temp_a2].segment);
 
                 Matrix_TranslateRotateZYX(&D_80B58E54, &D_80B58E60);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, object_mask_kerfay_DL_000D40);
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp53].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[sp53].segment);
             }
             break;
 
         case 0x2:
             temp_a2 = this->an2ObjIndex;
             if ((this->unk_360 & 0x1000) && (this->unk_3B0 == 0) && (temp_a2 >= 0)) {
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp_a2].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[temp_a2].segment);
                 gSPDisplayList(POLY_OPA_DISP++, object_an2_DL_000378);
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp53].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[sp53].segment);
             }
             break;
 
         case 0x3:
             temp_a2 = this->an3ObjIndex;
             if ((this->unk_360 & 0x2000) && (this->unk_3B0 == 0) && (temp_a2 >= 0)) {
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp_a2].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[temp_a2].segment);
                 gSPDisplayList(POLY_OPA_DISP++, object_an3_DL_000308);
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp53].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[sp53].segment);
             }
             break;
 
@@ -1091,9 +1091,9 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
                 Matrix_TranslateRotateZYX(&D_80B58E68, &D_80B58E74);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp_a2].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[temp_a2].segment);
                 gSPDisplayList(POLY_OPA_DISP++, gMoonMaskDL);
-                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp53].segment);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[sp53].segment);
             }
             break;
     }
