@@ -18,9 +18,8 @@ typedef struct DoorSpiral {
     /* 0x146 */ u8 unk146;
     /* 0x147 */ u8 unk147;
     /* 0x148 */ u8 unk148;
-    /* 0x149 */ s8 objIndex;
+    /* 0x149 */ s8 objSlot;
     /* 0x14A */ s8 unk14A;
-    /* 0x14B */ s8 unk14B;
     /* 0x14C */ DoorSpiralActionFunc actionFunc;
 } DoorSpiral; // size = 0x150
 
