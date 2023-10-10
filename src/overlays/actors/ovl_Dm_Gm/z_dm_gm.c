@@ -54,7 +54,7 @@ typedef enum {
 
 static AnimationInfoS sAnimationInfo[DMGM_ANIM_MAX] = {
     { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_0
-    { &gAn1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_1
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },           // DMGM_ANIM_1
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_2
     { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_3
     { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_4
@@ -375,8 +375,8 @@ TexturePtr D_80C25238[] = {
 };
 
 TexturePtr D_80C25244[] = {
-    gAnju1EyeOpenTex, gAnju1EyeHalfTex, gAnju1EyeClosedTex, gAnju1EyeHalfTex,
-    gAnju1Eye00FDA0Tex, gAnju1EyeSadTex, gAnju1EyeAngryTex,
+    gAnju1EyeOpenTex,   gAnju1EyeHalfTex, gAnju1EyeClosedTex, gAnju1EyeHalfTex,
+    gAnju1Eye00FDA0Tex, gAnju1EyeSadTex,  gAnju1EyeAngryTex,
 };
 
 void func_80C25000(Actor* thisx, PlayState* play) {

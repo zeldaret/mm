@@ -596,14 +596,14 @@ EnDoor* EnAn_FindDoor(PlayState* play, s32 scheduleOutputResult) {
 typedef enum EnAnAnimation {
     /* -1 */ ENAN_ANIM_NONE = -1,
     /*  0 */ ENAN_ANIM_0,
-    /*  1 */ ENAN_ANIM_1,
-    /*  2 */ ENAN_ANIM_2,
-    /*  3 */ ENAN_ANIM_3,
-    /*  4 */ ENAN_ANIM_4,
+    /*  1 */ ENAN_ANIM_IDLE,
+    /*  2 */ ENAN_ANIM_IDLE_MORPH,
+    /*  3 */ ENAN_ANIM_BOWING,
+    /*  4 */ ENAN_ANIM_BOWING_MORPH,
     /*  5 */ ENAN_ANIM_SURPRISED,
     /*  6 */ ENAN_ANIM_6,
-    /*  7 */ ENAN_ANIM_7,
-    /*  8 */ ENAN_ANIM_8,
+    /*  7 */ ENAN_ANIM_WALK,
+    /*  8 */ ENAN_ANIM_WALK2, // Duplicate of ENAN_ANIM_WALK
     /*  9 */ ENAN_ANIM_SIT,
     /* 10 */ ENAN_ANIM_SIT_MORPH,
     /* 11 */ ENAN_ANIM_11,
@@ -615,15 +615,15 @@ typedef enum EnAnAnimation {
 
     /* 17 */ ENAN_ANIMOBJ_AN2,
     /* 17 */ ENAN_ANIM_17 = ENAN_ANIMOBJ_AN2,
-    /* 18 */ ENAN_ANIM_18,
-    /* 19 */ ENAN_ANIM_19,
-    /* 20 */ ENAN_ANIM_SITTING_AND_CRYING,
+    /* 18 */ ENAN_ANIM_UMBRELLA_WALK,
+    /* 19 */ ENAN_ANIM_UMBRELLA_SIT,
+    /* 20 */ ENAN_ANIM_UMBRELLA_CRYING,
 
     /* 21 */ ENAN_ANIMOBJ_AN3,
-    /* 21 */ ENAN_ANIM_21 = ENAN_ANIMOBJ_AN3,
-    /* 22 */ ENAN_ANIM_22,
-    /* 23 */ ENAN_ANIM_SWEEP,
-    /* 24 */ ENAN_ANIM_24,
+    /* 21 */ ENAN_ANIM_BROOM_IDLE = ENAN_ANIMOBJ_AN3,
+    /* 22 */ ENAN_ANIM_BROOM_WALK,
+    /* 23 */ ENAN_ANIM_BROOM_SWEEP,
+    /* 24 */ ENAN_ANIM_24, //! @bug See note at `sAnimationInfo`
 
     /* 25 */ ENAN_ANIMOBJ_AN4,
     /* 25 */ ENAN_ANIM_25 = ENAN_ANIMOBJ_AN4,
@@ -641,35 +641,38 @@ typedef enum EnAnAnimation {
 } EnAnAnimation;
 
 static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
-    { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_0
-    { &object_an1_Anim_008B6C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_1
-    { &object_an1_Anim_008B6C, 1.0f, 0, -1, ANIMMODE_LOOP, -6 }, // ENAN_ANIM_2
-    { &object_an1_Anim_00544C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_3
-    { &object_an1_Anim_00544C, 1.0f, 0, -1, ANIMMODE_ONCE, -6 }, // ENAN_ANIM_4
-    { &gAn1SurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },       // ENAN_ANIM_SURPRISED
-    { &object_an1_Anim_001E74, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_6
-    { &object_an1_Anim_013048, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_7
-    { &object_an1_Anim_013048, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_8
-    { &gAn1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // ENAN_ANIM_SIT
-    { &gAn1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },            // ENAN_ANIM_SIT_MORPH
-    { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_11
-    { &object_an1_Anim_0065C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_12
-    { &object_an1_Anim_001090, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_13
-    { &object_an1_Anim_00144C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_14
-    { &gAn1WaitingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_WAITING_WITH_TRAY
-    { &gAn1WalkingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_WALKING_WITH_TRAY
+    { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },    // ENAN_ANIM_0
+    { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // ENAN_ANIM_IDLE
+    { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },           // ENAN_ANIM_IDLE_MORPH
+    { &gAnju1BowingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // ENAN_ANIM_BOWING
+    { &gAnju1BowingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },         // ENAN_ANIM_BOWING_MORPH
+    { &gAnju1SurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },       // ENAN_ANIM_SURPRISED
+    { &object_an1_Anim_001E74, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENAN_ANIM_6
+    { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // ENAN_ANIM_WALK
+    { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // ENAN_ANIM_WALK2
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // ENAN_ANIM_SIT
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },            // ENAN_ANIM_SIT_MORPH
+    { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },    // ENAN_ANIM_11
+    { &object_an1_Anim_0065C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },    // ENAN_ANIM_12
+    { &object_an1_Anim_001090, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENAN_ANIM_13
+    { &object_an1_Anim_00144C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENAN_ANIM_14
+    { &gAnju1WaitingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_WAITING_WITH_TRAY
+    { &gAnju1WalkingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_WALKING_WITH_TRAY
 
-    { &object_an2_Anim_0028DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_17
-    { &object_an2_Anim_0042CC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_18
-    { &object_an2_Anim_0038A0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_19
-    { &gAnju2SittingAndCryingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_SITTING_AND_CRYING
+    // ENAN_ANIMOBJ_AN2
+    { &object_an2_Anim_0028DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENAN_ANIM_17
+    { &gAnju2UmbrellaWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENAN_ANIM_UMBRELLA_WALK
+    { &gAnju2UmbrellaSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENAN_ANIM_UMBRELLA_SIT
+    { &gAnju2UmbrellaCryingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_UMBRELLA_CRYING
 
-    { &object_an3_Anim_00201C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_21
-    { &object_an3_Anim_002A4C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_22
-    { &gAnju3SweepAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // ENAN_ANIM_SWEEP
+    // ENAN_ANIMOBJ_AN3
+    { &gAnju3BroomIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_BROOM_IDLE
+    { &gAnju3BroomWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_BROOM_WALK
+    { &gAnju3BroomSweepAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_BROOM_SWEEP
     //! @bug Uses symbol from OBJECT_AN2 instead of OBJECT_AN3
-    { &object_an2_Anim_0038A0, -1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_24
+    { &gAnju2UmbrellaSitAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_24
 
+    // ENAN_ANIMOBJ_AN4
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_25
     { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_26
     { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_27
@@ -683,7 +686,7 @@ static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
     { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_35
 };
 
-s32 func_80B53BA8(EnAn* this, PlayState* play) {
+s32 EnAn_UpdateSkel(EnAn* this, PlayState* play) {
     s8 originalObjectSlot = this->actor.objectSlot;
     s8 otherObjectSlot = OBJECT_SLOT_NONE;
     s32 ret = 0;
@@ -733,16 +736,16 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
     }
 
     switch (animIndex) {
-        case ENAN_ANIM_1:
-        case ENAN_ANIM_2:
-            if ((this->animIndex != ENAN_ANIM_1) && (this->animIndex != ENAN_ANIM_2)) {
+        case ENAN_ANIM_IDLE:
+        case ENAN_ANIM_IDLE_MORPH:
+            if ((this->animIndex != ENAN_ANIM_IDLE) && (this->animIndex != ENAN_ANIM_IDLE_MORPH)) {
                 changeAnim = true;
             }
             break;
 
-        case ENAN_ANIM_7:
-        case ENAN_ANIM_8:
-            if ((this->animIndex != ENAN_ANIM_7) && (this->animIndex != ENAN_ANIM_8)) {
+        case ENAN_ANIM_WALK:
+        case ENAN_ANIM_WALK2:
+            if ((this->animIndex != ENAN_ANIM_WALK) && (this->animIndex != ENAN_ANIM_WALK2)) {
                 changeAnim = true;
             }
             break;
@@ -774,7 +777,7 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
 
 Vec3f D_80B58E34 = { 0.0f, 0.0f, 8.0f };
 
-void func_80B53ED4(EnAn* this, PlayState* play) {
+void EnAn_UpdateCollider(EnAn* this, PlayState* play) {
     f32 temp;
     s32 pad;
     Vec3f sp24;
@@ -1236,7 +1239,7 @@ s32 func_80B54D18(Actor* thisx, PlayState* play) {
         label:
             this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_DRAW_KAFEI_MASK);
             this->stateFlags |= ENAN_STATE_200;
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_AND_CRYING);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRYING);
             ret = true;
             this->unk_394++;
             break;
@@ -1518,11 +1521,11 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
         case ANJU_SCH_12:
         case ANJU_SCH_13:
         case ANJU_SCH_17:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
             break;
 
         case ANJU_SCH_16:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_SWEEP);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_SWEEP);
             this->stateFlags |= ENAN_STATE_DRAW_BROOM;
             break;
 
@@ -1536,12 +1539,12 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
 
         case ANJU_SCH_2F:
         case ANJU_SCH_31:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_7);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
             break;
 
         case ANJU_SCH_34:
         case ANJU_SCH_35:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_22);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_WALK);
             this->stateFlags |= ENAN_STATE_DRAW_BROOM;
             break;
 
@@ -1550,10 +1553,10 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
             }
             if (this->animIndex == ENAN_ANIM_17) {
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_18);
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_WALK);
             }
-            if ((this->animIndex == ENAN_ANIM_1) || (this->animIndex == ENAN_ANIM_2)) {
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_8);
+            if ((this->animIndex == ENAN_ANIM_IDLE) || (this->animIndex == ENAN_ANIM_IDLE_MORPH)) {
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK2);
             }
             break;
     }
@@ -1568,7 +1571,7 @@ void func_80B556F8(EnAn* this, PlayState* play) {
         this->stateFlags |= ENAN_STATE_200;
         this->dialogueFuncState++;
     } else if ((this->dialogueFuncState == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE_MORPH);
         this->stateFlags &= ~ENAN_STATE_200;
         this->stateFlags |= ENAN_STATE_20;
         this->dialogueFuncState++;
@@ -1577,12 +1580,12 @@ void func_80B556F8(EnAn* this, PlayState* play) {
 
 void func_80B557AC(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_3);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_BOWING);
         this->stateFlags &= ~ENAN_STATE_20;
         this->stateFlags |= ENAN_STATE_200;
         this->dialogueFuncState++;
     } else if ((this->dialogueFuncState == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE_MORPH);
         this->stateFlags &= ~ENAN_STATE_200;
         this->stateFlags |= ENAN_STATE_20;
         this->dialogueFuncState++;
@@ -1591,19 +1594,19 @@ void func_80B557AC(EnAn* this, PlayState* play) {
 
 void func_80B55860(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_4);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_BOWING_MORPH);
         this->stateFlags |= ENAN_STATE_200;
         this->stateFlags &= ~ENAN_STATE_20;
         this->dialogueFuncState++;
     } else if ((this->dialogueFuncState == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE_MORPH);
         this->stateFlags &= ~ENAN_STATE_200;
         this->stateFlags |= ENAN_STATE_20;
         this->dialogueFuncState++;
     }
 }
 
-s32 EnAn_HandleDialog(EnAn* this, PlayState* play) {
+s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 textId = play->msgCtx.currentTextId;
 
@@ -1624,11 +1627,11 @@ s32 EnAn_HandleDialog(EnAn* this, PlayState* play) {
 
                 case 0x28AF: // "Good night"
                 case 0x28C1: // "I need to hurry and cook for grandmother"
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
                     break;
 
                 case 0x28BC: // "Where did you got that letter?"
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE_MORPH);
                     break;
 
                 case 0x28C6: // "Don't talk to me or I'll drop this plate"
@@ -1641,14 +1644,14 @@ s32 EnAn_HandleDialog(EnAn* this, PlayState* play) {
 
                 case 0x28F7: // "Everyone will be taking refuge by tomorrow"
                 case 0x28F8: // "We'll go to Romani Ranch to take refuge"
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_21);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_IDLE);
                     break;
 
                 case 0x28EB: // "I'm afraid to meet him..."
-                    if (this->animIndex != ENAN_ANIM_SITTING_AND_CRYING) {
+                    if (this->animIndex != ENAN_ANIM_UMBRELLA_CRYING) {
                         this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_DRAW_KAFEI_MASK);
                         this->stateFlags |= ENAN_STATE_200;
-                        EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_AND_CRYING);
+                        EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRYING);
                     }
                     break;
 
@@ -1749,14 +1752,14 @@ s32 EnAn_HandleDialog(EnAn* this, PlayState* play) {
                     if (this->animIndex == ENAN_ANIM_WALKING_WITH_TRAY) {
                         EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
                     }
-                    if (this->animIndex == ENAN_ANIM_18) {
+                    if (this->animIndex == ENAN_ANIM_UMBRELLA_WALK) {
                         EnAn_ChangeAnim(this, play, ENAN_ANIM_17);
                     }
-                    if ((this->animIndex == ENAN_ANIM_22) || (this->animIndex == ENAN_ANIM_SWEEP)) {
-                        EnAn_ChangeAnim(this, play, ENAN_ANIM_21);
+                    if ((this->animIndex == ENAN_ANIM_BROOM_WALK) || (this->animIndex == ENAN_ANIM_BROOM_SWEEP)) {
+                        EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_IDLE);
                     }
-                    if ((this->animIndex == ENAN_ANIM_7) || (this->animIndex == ENAN_ANIM_8)) {
-                        EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
+                    if ((this->animIndex == ENAN_ANIM_WALK) || (this->animIndex == ENAN_ANIM_WALK2)) {
+                        EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE_MORPH);
                     }
                     break;
             }
@@ -1960,7 +1963,7 @@ s32 func_80B5600C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80B55D98(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_PM)) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
@@ -1975,7 +1978,7 @@ s32 func_80B56094(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80B55D98(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_IG)) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
@@ -2064,12 +2067,12 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 case ANJU_SCH_24:
                 case ANJU_SCH_27:
                     this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_DRAW_BROOM;
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_22);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_WALK);
                     break;
 
                 default:
                     this->stateFlags |= ENAN_STATE_100;
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_7);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
                     break;
             }
 
@@ -2159,7 +2162,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
             case ANJU_SCH_34:
             case ANJU_SCH_35:
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_22);
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_WALK);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
@@ -2168,7 +2171,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
             case ANJU_SCH_32:
             case ANJU_SCH_33:
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_7);
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 break;
 
@@ -2182,7 +2185,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_3D:
             case ANJU_SCH_3E:
             case ANJU_SCH_3F:
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_18);
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_WALK);
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
                 break;
@@ -2195,7 +2198,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 /* fallthrough */
             default:
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_7);
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
                 break;
         }
 
@@ -2231,7 +2234,7 @@ s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
         if (scheduleOutput->result == ANJU_SCH_16) {
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_SWEEP);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_SWEEP);
             SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
             this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
@@ -2275,7 +2278,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 /* fallthrough */
             case ANJU_SCH_12:
             case ANJU_SCH_17:
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->unk_37A = 0;
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
@@ -2289,13 +2292,13 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
 
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_AND_CRYING);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRYING);
                     this->stateFlags |= ENAN_STATE_40;
                     this->actor.world.rot.y += 0x7FF8;
                     this->actor.shape.rot.y = this->actor.world.rot.y;
                     this->unk_37A = 4;
                 } else {
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_18);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_WALK);
                     this->unk_37A = 0;
                 }
 
@@ -2617,7 +2620,7 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
             break;
 
         case ANJU_SCH_16:
-            if (Animation_OnFrame(&this->skelAnime, 6.0f) && (this->animIndex == ENAN_ANIM_SWEEP)) {
+            if (Animation_OnFrame(&this->skelAnime, 6.0f) && (this->animIndex == ENAN_ANIM_BROOM_SWEEP)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_SWEEP);
             }
             break;
@@ -2641,7 +2644,7 @@ s32 func_80B573F4(EnAn* this, PlayState* play) {
             temp2 = (this->actor.shape.rot.y / 0xB6) * 0xB6;
             if (temp1 == temp2) {
                 Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_19);
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_SIT);
                 this->stateFlags |= ENAN_STATE_40;
                 this->unk_37A++;
             }
@@ -2789,7 +2792,7 @@ void EnAn_Initialize(EnAn* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gAnju1Skel, NULL, this->jointTable, this->morphTable, ANJU1_LIMB_MAX);
 
     this->animIndex = ENAN_ANIM_NONE;
-    EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
+    EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
 
@@ -2873,9 +2876,17 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
 }
 
 void func_80B57B48(EnAn* this, PlayState* play) {
-    s32 sp30[] = {
-        ENAN_ANIM_0,  ENAN_ANIM_11, ENAN_ANIM_34, ENAN_ANIM_25, ENAN_ANIM_26,
-        ENAN_ANIM_28, ENAN_ANIM_30, ENAN_ANIM_32, ENAN_ANIM_33, ENAN_ANIM_0,
+    s32 animIds[] = {
+        /* 0 */ ENAN_ANIM_0,
+        /* 1 */ ENAN_ANIM_11,
+        /* 2 */ ENAN_ANIM_34,
+        /* 3 */ ENAN_ANIM_25,
+        /* 4 */ ENAN_ANIM_26,
+        /* 5 */ ENAN_ANIM_28,
+        /* 6 */ ENAN_ANIM_30,
+        /* 7 */ ENAN_ANIM_32,
+        /* 8 */ ENAN_ANIM_33,
+        /* 9 */ ENAN_ANIM_0,
     };
     s32 pad;
 
@@ -2895,7 +2906,7 @@ void func_80B57B48(EnAn* this, PlayState* play) {
             if (this->cueId == 9) {
                 this->drawMoonMask = false;
             }
-            EnAn_ChangeAnim(this, play, sp30[cueId]);
+            EnAn_ChangeAnim(this, play, animIds[cueId]);
         }
 
         if ((this->animIndex == ENAN_ANIM_26) || (this->animIndex == ENAN_ANIM_28) ||
@@ -2957,25 +2968,25 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
 
     if ((this->actionFunc != EnAn_Initialize) && !EnAn_CheckTalk(this, play) && func_80B552E4(this, play)) {
         func_80B57B48(this, play);
-        func_80B53BA8(this, play);
+        EnAn_UpdateSkel(this, play);
         EnAn_UpdateFace(this);
         return;
     }
 
     this->actionFunc(this, play);
     if (this->scheduleResult != ANJU_SCH_NONE) {
-        EnAn_HandleDialog(this, play);
-        func_80B53BA8(this, play);
+        EnAn_HandleDialogue(this, play);
+        EnAn_UpdateSkel(this, play);
         EnAn_UpdateFace(this);
         func_80B554E8(this);
         SubS_Offer(&this->actor, play, this->unk_374, 30.0f, 0, this->stateFlags & SUBS_OFFER_MODE_MASK);
 
         if (!(this->stateFlags & ENAN_STATE_40)) {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4U);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         }
 
-        func_80B53ED4(this, play);
+        EnAn_UpdateCollider(this, play);
     }
 }
 

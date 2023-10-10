@@ -3,14 +3,14 @@
         <Animation Name="object_an1_Anim_001090" Offset="0x1090" /> <!-- Original name is "an_ajimi" ("tasting; sampling​") -->
         <Animation Name="object_an1_Anim_00144C" Offset="0x144C" /> <!-- Original name is "an_ajimiend" -->
         <Animation Name="object_an1_Anim_001E74" Offset="0x1E74" /> <!-- Original name is "an_aogu" ("to look up") -->
-        <Animation Name="gAn1SurprisedAnim" Offset="0x26B4" /> <!-- Original name is "an_bikkuri" ("to be surprised") -->
-        <Animation Name="gAn1WaitingWithTrayAnim" Offset="0x341C" /> <!-- Original name is "an_obonwait" ("obon" = "tray") -->
-        <Animation Name="gAn1WalkingWithTrayAnim" Offset="0x3EA8" /> <!-- Original name is "an_obonwalk" -->
-        <Animation Name="object_an1_Anim_00544C" Offset="0x544C" /> <!-- Original name is "an_ojigit" ("bow; bowing") -->
+        <Animation Name="gAnju1SurprisedAnim" Offset="0x26B4" /> <!-- Original name is "an_bikkuri" ("to be surprised") -->
+        <Animation Name="gAnju1WaitingWithTrayAnim" Offset="0x341C" /> <!-- Original name is "an_obonwait" ("obon" = "tray") -->
+        <Animation Name="gAnju1WalkingWithTrayAnim" Offset="0x3EA8" /> <!-- Original name is "an_obonwalk" -->
+        <Animation Name="gAnju1BowingAnim" Offset="0x544C" /> <!-- Original name is "an_ojigit" ("bow; bowing") -->
         <Animation Name="object_an1_Anim_0065C8" Offset="0x65C8" /> <!-- Original name is "an_ryouri" ("cooking") -->
-        <Animation Name="gAn1SitAnim" Offset="0x71E8" /> <!-- Original name is "an_suwaru" ("to sit") -->
+        <Animation Name="gAnju1SitAnim" Offset="0x71E8" /> <!-- Original name is "an_suwaru" ("to sit") -->
         <Animation Name="object_an1_Anim_007E08" Offset="0x7E08" /> <!-- Original name is "an_suzetsubou" ("su" = short for "suwaru", "zetsubou" = "despair; hopelessness​") -->
-        <Animation Name="object_an1_Anim_008B6C" Offset="0x8B6C" /> <!-- Original name is "an_wait" -->
+        <Animation Name="gAnju1IdleAnim" Offset="0x8B6C" /> <!-- Original name is "an_wait" -->
 
         <DList Name="gAnju1Skirt4DL" Offset="0xBC20" />
         <DList Name="gAnju1Skirt3DL" Offset="0xBD20" />
@@ -90,7 +90,7 @@
 
         <Skeleton Name="gAnju1Skel" Type="Flex" LimbType="Standard" LimbNone="ANJU1_LIMB_NONE" LimbMax="ANJU1_LIMB_MAX" EnumName="Anju1Limb" Offset="0x12618" />
 
-        <Animation Name="object_an1_Anim_013048" Offset="0x13048" /> <!-- Original name is "an_walk" -->
+        <Animation Name="gAnju1WalkAnim" Offset="0x13048" /> <!-- Original name is "an_walk" -->
         <Animation Name="object_an1_Anim_013E1C" Offset="0x13E1C" /> <!-- Original name is "anj_tetunagu_loop" ("joined hands") -->
     </File>
 </Root>
