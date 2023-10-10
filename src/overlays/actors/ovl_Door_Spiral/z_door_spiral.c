@@ -130,20 +130,20 @@ u8 func_809A2BF8(PlayState* play) {
 
 void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     DoorSpiral* this = THIS;
-    s32 transitionActorId = DOORSPIRAL_GET_FC00(thisx);
+    s32 transitionId = DOOR_GET_TRANSITION_ID(thisx);
     s8 objectSlot;
 
-    if (this->actor.room != play->doorCtx.transitionActorList[transitionActorId].sides[0].room) {
+    if (this->actor.room != play->doorCtx.transitionActorList[transitionId].sides[0].room) {
         Actor_Kill(&this->actor);
         return;
     }
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->type = DOORSPIRAL_GET_TYPE(thisx);
-    this->direction = DOORSPIRAL_GET_80(thisx);
+    this->direction = DOORSPIRAL_GET_DIRECTION(thisx);
     this->unk147 = func_809A2BF8(play);
     objectSlot = Object_GetSlot(&play->objectCtx, sSpiralObjectInfoTable[this->unk147].objectId);
-    this->objSlot = objectSlot;
-    if (objectSlot < 0) {
+    this->objectSlot = objectSlot;
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -152,14 +152,14 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
 }
 
 void DoorSpiral_Destroy(Actor* thisx, PlayState* play) {
-    s32 transitionActorId = DOORSPIRAL_GET_FC00(thisx);
+    s32 transitionId = DOOR_GET_TRANSITION_ID(thisx);
 
-    play->doorCtx.transitionActorList[transitionActorId].id = -play->doorCtx.transitionActorList[transitionActorId].id;
+    play->doorCtx.transitionActorList[transitionId].id = -play->doorCtx.transitionActorList[transitionId].id;
 }
 
 void func_809A2DB0(DoorSpiral* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->objSlot)) {
-        this->actor.objectSlot = this->objSlot;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         func_809A2B70(this, play);
     }
 }
@@ -205,7 +205,7 @@ s32 func_809A2EA0(DoorSpiral* this, PlayState* play) {
 
 void func_809A2FF8(DoorSpiral* this, PlayState* play) {
     Player* player;
-    u32 index;
+    u32 transitionId;
 
     if (this->shouldClimb) {
         DoorSpiral_SetupAction(this, func_809A3098);
@@ -214,8 +214,8 @@ void func_809A2FF8(DoorSpiral* this, PlayState* play) {
         player->doorType = PLAYER_DOORTYPE_STAIRCASE;
         player->doorDirection = this->direction;
         player->doorActor = &this->actor;
-        index = DOORSPIRAL_GET_FC00(&this->actor);
-        player->doorNext = (play->doorCtx.transitionActorList[index].params >> 0xA);
+        transitionId = DOOR_GET_TRANSITION_ID(&this->actor);
+        player->doorNext = (play->doorCtx.transitionActorList[transitionId].params >> 0xA);
         func_80122F28(player);
     }
 }
@@ -243,11 +243,11 @@ void DoorSpiral_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     DoorSpiral* this = THIS;
 
-    if (this->actor.objectSlot == this->objSlot) {
+    if (this->actor.objectSlot == this->objectSlot) {
         SpiralInfo* spiralInfo = &sSpiralInfoTable[this->unk148];
-        Gfx* temp = spiralInfo->dLists[this->direction];
+        Gfx* dList = spiralInfo->dLists[this->direction];
 
-        if (temp != NULL) {
+        if (dList != NULL) {
             OPEN_DISPS(play->state.gfxCtx);
 
             Gfx_SetupDL25_Opa(play->state.gfxCtx);
