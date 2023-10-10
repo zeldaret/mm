@@ -14061,7 +14061,7 @@
     0x80B577F0:("EnAn_Initialize",),
     0x80B578F8:("EnAn_FollowSchedule",),
     0x80B57A44:("EnAn_Talk",),
-    0x80B57B48:("func_80B57B48",),
+    0x80B57B48:("EnAn_HandleCutscene",),
     0x80B57C9C:("EnAn_Init",),
     0x80B57D70:("EnAn_Destroy",),
     0x80B57D9C:("EnAn_Update",),

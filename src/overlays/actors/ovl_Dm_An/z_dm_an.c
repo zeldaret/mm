@@ -53,20 +53,20 @@ typedef enum {
 } DmAnAnimation;
 
 static AnimationInfoS sAnimationInfo[DMAN_ANIM_MAX] = {
-    { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_0
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // DMAN_ANIM_1
-    { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_2
-    { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_3
-    { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_4
-    { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_5
-    { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_6
-    { &object_an4_Anim_002550, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_7
-    { &object_an4_Anim_00353C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_8
-    { &object_an4_Anim_004498, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_9
-    { &object_an4_Anim_0060B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_10
-    { &object_an4_Anim_00041C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_11
-    { &object_an4_Anim_004A78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_12
-    { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_13
+    { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_0
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                 // DMAN_ANIM_1
+    { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // DMAN_ANIM_2
+    { &gAnju1HoldingHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // DMAN_ANIM_3
+    { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        // DMAN_ANIM_4
+    { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // DMAN_ANIM_5
+    { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        // DMAN_ANIM_6
+    { &object_an4_Anim_002550, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // DMAN_ANIM_7
+    { &object_an4_Anim_00353C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        // DMAN_ANIM_8
+    { &object_an4_Anim_004498, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // DMAN_ANIM_9
+    { &object_an4_Anim_0060B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        // DMAN_ANIM_10
+    { &object_an4_Anim_00041C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        // DMAN_ANIM_11
+    { &gAnju4SittingRaiseFaceAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // DMAN_ANIM_12
+    { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // DMAN_ANIM_13
 };
 
 s32 DmAn_UpdateSkelAnime(DmAn* this, PlayState* play) {

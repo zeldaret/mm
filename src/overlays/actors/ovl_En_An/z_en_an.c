@@ -92,7 +92,7 @@ typedef enum AnjuScheduleResult {
     /* 61 */ ANJU_SCH_3D,
     /* 62 */ ANJU_SCH_3E,
     /* 63 */ ANJU_SCH_3F,
-    /* 64 */ ANJU_SCH_MAX // ?
+    /* 64 */ ANJU_SCH_MAX
 } AnjuScheduleResult;
 
 static u8 sScheduleScript[] = {
@@ -595,7 +595,7 @@ EnDoor* EnAn_FindDoor(PlayState* play, s32 scheduleOutputResult) {
  */
 typedef enum EnAnAnimation {
     /* -1 */ ENAN_ANIM_NONE = -1,
-    /*  0 */ ENAN_ANIM_0,
+    /*  0 */ ENAN_ANIM_HOLDING_HANDS,
     /*  1 */ ENAN_ANIM_IDLE,
     /*  2 */ ENAN_ANIM_IDLE_MORPH,
     /*  3 */ ENAN_ANIM_BOWING,
@@ -606,10 +606,10 @@ typedef enum EnAnAnimation {
     /*  8 */ ENAN_ANIM_WALK2, // Duplicate of ENAN_ANIM_WALK
     /*  9 */ ENAN_ANIM_SIT,
     /* 10 */ ENAN_ANIM_SIT_MORPH,
-    /* 11 */ ENAN_ANIM_11,
-    /* 12 */ ENAN_ANIM_12,
-    /* 13 */ ENAN_ANIM_13,
-    /* 14 */ ENAN_ANIM_14,
+    /* 11 */ ENAN_ANIM_SITTING_IN_DISBELIEVE,
+    /* 12 */ ENAN_ANIM_COOKING,
+    /* 13 */ ENAN_ANIM_TASTING,
+    /* 14 */ ENAN_ANIM_TASTING_END,
     /* 15 */ ENAN_ANIM_WAITING_WITH_TRAY,
     /* 16 */ ENAN_ANIM_WALKING_WITH_TRAY,
 
@@ -635,29 +635,29 @@ typedef enum EnAnAnimation {
     /* 31 */ ENAN_ANIM_31,
     /* 32 */ ENAN_ANIM_32,
     /* 33 */ ENAN_ANIM_33,
-    /* 34 */ ENAN_ANIM_34,
+    /* 34 */ ENAN_ANIM_SITTING_RAISE_FACE,
     /* 35 */ ENAN_ANIM_35,
     /* 36 */ ENAN_ANIM_MAX
 } EnAnAnimation;
 
 static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
-    { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },    // ENAN_ANIM_0
-    { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // ENAN_ANIM_IDLE
-    { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },           // ENAN_ANIM_IDLE_MORPH
-    { &gAnju1BowingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // ENAN_ANIM_BOWING
-    { &gAnju1BowingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },         // ENAN_ANIM_BOWING_MORPH
-    { &gAnju1SurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },       // ENAN_ANIM_SURPRISED
-    { &object_an1_Anim_001E74, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENAN_ANIM_6
-    { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // ENAN_ANIM_WALK
-    { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // ENAN_ANIM_WALK2
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // ENAN_ANIM_SIT
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },            // ENAN_ANIM_SIT_MORPH
-    { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },    // ENAN_ANIM_11
-    { &object_an1_Anim_0065C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },    // ENAN_ANIM_12
-    { &object_an1_Anim_001090, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENAN_ANIM_13
-    { &object_an1_Anim_00144C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENAN_ANIM_14
-    { &gAnju1WaitingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_WAITING_WITH_TRAY
-    { &gAnju1WalkingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_WALKING_WITH_TRAY
+    { &gAnju1HoldingHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // ENAN_ANIM_HOLDING_HANDS
+    { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_IDLE
+    { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },               // ENAN_ANIM_IDLE_MORPH
+    { &gAnju1BowingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },              // ENAN_ANIM_BOWING
+    { &gAnju1BowingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },             // ENAN_ANIM_BOWING_MORPH
+    { &gAnju1SurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENAN_ANIM_SURPRISED
+    { &object_an1_Anim_001E74, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        // ENAN_ANIM_6
+    { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_WALK
+    { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_WALK2
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                 // ENAN_ANIM_SIT
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },                // ENAN_ANIM_SIT_MORPH
+    { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_SITTING_IN_DISBELIEVE
+    { &gAnju1CookingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // ENAN_ANIM_COOKING
+    { &gAnju1TastingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // ENAN_ANIM_TASTING
+    { &gAnju1TastingEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // ENAN_ANIM_TASTING_END
+    { &gAnju1WaitingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_WAITING_WITH_TRAY
+    { &gAnju1WalkingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_WALKING_WITH_TRAY
 
     // ENAN_ANIMOBJ_AN2
     { &object_an2_Anim_0028DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENAN_ANIM_17
@@ -673,17 +673,17 @@ static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
     { &gAnju2UmbrellaSitAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_24
 
     // ENAN_ANIMOBJ_AN4
-    { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_25
-    { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_26
-    { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_27
-    { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_28
-    { &object_an4_Anim_002550, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_29
-    { &object_an4_Anim_00353C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_30
-    { &object_an4_Anim_004498, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_31
-    { &object_an4_Anim_0060B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_32
-    { &object_an4_Anim_00041C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_33
-    { &object_an4_Anim_004A78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_34
-    { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_35
+    { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_25
+    { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_26
+    { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_27
+    { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_28
+    { &object_an4_Anim_002550, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_29
+    { &object_an4_Anim_00353C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_30
+    { &object_an4_Anim_004498, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_31
+    { &object_an4_Anim_0060B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_32
+    { &object_an4_Anim_00041C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_33
+    { &gAnju4SittingRaiseFaceAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_SITTING_RAISE_FACE
+    { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_35
 };
 
 s32 EnAn_UpdateSkel(EnAn* this, PlayState* play) {
@@ -1198,7 +1198,7 @@ s32 func_80B54C5C(Actor* thisx, PlayState* play) {
 
     switch (this->unk_394) {
         case 0x0:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_13);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_TASTING);
             this->unk_394++;
             break;
 
@@ -1211,7 +1211,7 @@ s32 func_80B54C5C(Actor* thisx, PlayState* play) {
             break;
 
         case 0x2:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_14);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_TASTING_END);
             this->unk_394++;
             break;
     }
@@ -1437,7 +1437,7 @@ s32 func_80B552E4(EnAn* this, PlayState* play) {
     u16 scriptIndex = play->csCtx.scriptIndex;
     s32 ret = false;
 
-    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_YADOYA) && (gSaveContext.sceneLayer == 0) &&
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_YADOYA) && (gSaveContext.sceneLayer == 0) &&
         ((scriptIndex == 0) || (scriptIndex == 1))) {
         if (!this->forceDraw) {
             this->unk_38A = ENAN_FACE_0;
@@ -1530,7 +1530,7 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
             break;
 
         case ANJU_SCH_E:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_12);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_COOKING);
             break;
 
         case ANJU_SCH_15:
@@ -2308,7 +2308,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 break;
 
             case ANJU_SCH_E:
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_12);
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_COOKING);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
@@ -2332,7 +2332,7 @@ s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
 
     if (scheduleOutput->result == ANJU_SCH_C) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_11);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_IN_DISBELIEVE);
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
         this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
@@ -2363,7 +2363,7 @@ s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             break;
 
         case ANJU_SCH_18:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_11);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_IN_DISBELIEVE);
             this->unk_38A = ENAN_FACE_5;
             this->faceIndex = ENAN_FACE_5;
             this->eyeTimer = 8;
@@ -2384,7 +2384,7 @@ s32 func_80B56CAC(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     Math_Vec3s_Copy(&this->actor.shape.rot, &D_80B58EA4);
     Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
-    EnAn_ChangeAnim(this, play, ENAN_ANIM_0);
+    EnAn_ChangeAnim(this, play, ENAN_ANIM_HOLDING_HANDS);
     SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
 
@@ -2875,18 +2875,18 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
     }
 }
 
-void func_80B57B48(EnAn* this, PlayState* play) {
+void EnAn_HandleCutscene(EnAn* this, PlayState* play) {
     s32 animIds[] = {
-        /* 0 */ ENAN_ANIM_0,
-        /* 1 */ ENAN_ANIM_11,
-        /* 2 */ ENAN_ANIM_34,
+        /* 0 */ ENAN_ANIM_HOLDING_HANDS,
+        /* 1 */ ENAN_ANIM_SITTING_IN_DISBELIEVE,
+        /* 2 */ ENAN_ANIM_SITTING_RAISE_FACE,
         /* 3 */ ENAN_ANIM_25,
         /* 4 */ ENAN_ANIM_26,
         /* 5 */ ENAN_ANIM_28,
         /* 6 */ ENAN_ANIM_30,
         /* 7 */ ENAN_ANIM_32,
         /* 8 */ ENAN_ANIM_33,
-        /* 9 */ ENAN_ANIM_0,
+        /* 9 */ ENAN_ANIM_HOLDING_HANDS,
     };
     s32 pad;
 
@@ -2899,6 +2899,7 @@ void func_80B57B48(EnAn* this, PlayState* play) {
 
         if (this->cueId != (cueId & 0xFF)) {
             this->cueId = cueId;
+
             if (this->cueId == 3) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_87_02);
                 this->drawMoonMask = true;
@@ -2906,15 +2907,17 @@ void func_80B57B48(EnAn* this, PlayState* play) {
             if (this->cueId == 9) {
                 this->drawMoonMask = false;
             }
+
             EnAn_ChangeAnim(this, play, animIds[cueId]);
         }
 
         if ((this->animIndex == ENAN_ANIM_26) || (this->animIndex == ENAN_ANIM_28) ||
-            (this->animIndex == ENAN_ANIM_30) || (this->animIndex == ENAN_ANIM_34)) {
+            (this->animIndex == ENAN_ANIM_30) || (this->animIndex == ENAN_ANIM_SITTING_RAISE_FACE)) {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 EnAn_ChangeAnim(this, play, this->animIndex + 1);
             }
         }
+
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 }
@@ -2967,7 +2970,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((this->actionFunc != EnAn_Initialize) && !EnAn_CheckTalk(this, play) && func_80B552E4(this, play)) {
-        func_80B57B48(this, play);
+        EnAn_HandleCutscene(this, play);
         EnAn_UpdateSkel(this, play);
         EnAn_UpdateFace(this);
         return;

@@ -75,23 +75,23 @@ typedef struct EnAn {
     /* 0x384 */ s16 timePathTimeSpeed;
     /* 0x386 */ s16 unk_386; // timer
     /* 0x388 */ s16 unk_388; // timer
-    /* 0x38A */ s16 unk_38A; // face enum
-    /* 0x38C */ s16 faceIndex; // face enum
+    /* 0x38A */ s16 unk_38A; // EnAnFace enum
+    /* 0x38C */ s16 faceIndex; // EnAnFace enum
     /* 0x38E */ s16 eyeTimer;
     /* 0x390 */ s16 eyeTexIndex;
     /* 0x392 */ s16 mouthTexIndex;
     /* 0x394 */ s16 unk_394;
     /* 0x396 */ s16 dialogueFuncState;
     /* 0x398 */ MsgEventFunc msgEventFunc;
-    /* 0x39C */ s32 animIndex;
+    /* 0x39C */ s32 animIndex; // EnAnAnimation enum
     /* 0x3A0 */ UNK_TYPE1 unk_3A0[0x8];
-    /* 0x3A8 */ u32 unk_3A8;
-    /* 0x3AC */ u32 unk_3AC;
+    /* 0x3A8 */ u32 unk_3A8; // TwoTexScroll
+    /* 0x3AC */ u32 unk_3AC; // TwoTexScroll
     /* 0x3B0 */ s32 forceDraw;
     /* 0x3B4 */ s32 drawMoonMask;
     /* 0x3B8 */ s32 slotsInitialized;
     /* 0x3BC */ s32 unk_3BC;
-    /* 0x3C0 */ s32 unk_3C0;
+    /* 0x3C0 */ s32 unk_3C0; // true if ENAN_8000
     /* 0x3C4 */ s32 unk_3C4; // set but not read
 } EnAn; // size = 0x3C8
 

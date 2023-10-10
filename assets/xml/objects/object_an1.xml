@@ -1,15 +1,16 @@
 ﻿<Root>
     <File Name="object_an1" Segment="6">
-        <Animation Name="object_an1_Anim_001090" Offset="0x1090" /> <!-- Original name is "an_ajimi" ("tasting; sampling​") -->
-        <Animation Name="object_an1_Anim_00144C" Offset="0x144C" /> <!-- Original name is "an_ajimiend" -->
+        <Animation Name="gAnju1TastingAnim" Offset="0x1090" /> <!-- Original name is "an_ajimi" ("tasting; sampling​") -->
+        <Animation Name="gAnju1TastingEndAnim" Offset="0x144C" /> <!-- Original name is "an_ajimiend" -->
+
         <Animation Name="object_an1_Anim_001E74" Offset="0x1E74" /> <!-- Original name is "an_aogu" ("to look up") -->
         <Animation Name="gAnju1SurprisedAnim" Offset="0x26B4" /> <!-- Original name is "an_bikkuri" ("to be surprised") -->
         <Animation Name="gAnju1WaitingWithTrayAnim" Offset="0x341C" /> <!-- Original name is "an_obonwait" ("obon" = "tray") -->
         <Animation Name="gAnju1WalkingWithTrayAnim" Offset="0x3EA8" /> <!-- Original name is "an_obonwalk" -->
         <Animation Name="gAnju1BowingAnim" Offset="0x544C" /> <!-- Original name is "an_ojigit" ("bow; bowing") -->
-        <Animation Name="object_an1_Anim_0065C8" Offset="0x65C8" /> <!-- Original name is "an_ryouri" ("cooking") -->
+        <Animation Name="gAnju1CookingAnim" Offset="0x65C8" /> <!-- Original name is "an_ryouri" ("cooking") -->
         <Animation Name="gAnju1SitAnim" Offset="0x71E8" /> <!-- Original name is "an_suwaru" ("to sit") -->
-        <Animation Name="object_an1_Anim_007E08" Offset="0x7E08" /> <!-- Original name is "an_suzetsubou" ("su" = short for "suwaru", "zetsubou" = "despair; hopelessness​") -->
+        <Animation Name="gAnju1SittingInDisbelieveAnim" Offset="0x7E08" /> <!-- Original name is "an_suzetsubou" ("su" = short for "suwaru", "zetsubou" = "despair; hopelessness​") -->
         <Animation Name="gAnju1IdleAnim" Offset="0x8B6C" /> <!-- Original name is "an_wait" -->
 
         <DList Name="gAnju1Skirt4DL" Offset="0xBC20" />
@@ -41,7 +42,7 @@
         <Texture Name="object_an1_Tex_00E5E0" OutName="tex_00E5E0" Format="ci8" Width="16" Height="16" Offset="0xE5E0" />
         <Texture Name="gAnju1Mouth00E6E0Tex" OutName="anju_mouth_00E6E0" Format="ci8" Width="32" Height="16" Offset="0xE6E0" TlutOffset="0xDF20" />
         <Texture Name="object_an1_Tex_00E8E0" OutName="tex_00E8E0" Format="ci8" Width="8" Height="8" Offset="0xE8E0" />
-        <Texture Name="gAnju1HandsTex" OutName="anju_hand" Format="ci8" Width="16" Height="16" Offset="0xE920" />
+        <Texture Name="gAnju1HandTex" OutName="anju_hand" Format="ci8" Width="16" Height="16" Offset="0xE920" />
         <Texture Name="object_an1_Tex_00EA20" OutName="tex_00EA20" Format="ci8" Width="32" Height="32" Offset="0xEA20" />
         <Texture Name="object_an1_Tex_00EE20" OutName="tex_00EE20" Format="ci8" Width="16" Height="16" Offset="0xEE20" />
         <Texture Name="object_an1_Tex_00EF20" OutName="tex_00EF20" Format="ci8" Width="8" Height="16" Offset="0xEF20" />
@@ -91,6 +92,6 @@
         <Skeleton Name="gAnju1Skel" Type="Flex" LimbType="Standard" LimbNone="ANJU1_LIMB_NONE" LimbMax="ANJU1_LIMB_MAX" EnumName="Anju1Limb" Offset="0x12618" />
 
         <Animation Name="gAnju1WalkAnim" Offset="0x13048" /> <!-- Original name is "an_walk" -->
-        <Animation Name="object_an1_Anim_013E1C" Offset="0x13E1C" /> <!-- Original name is "anj_tetunagu_loop" ("joined hands") -->
+        <Animation Name="gAnju1HoldingHandsAnim" Offset="0x13E1C" /> <!-- Holding hands with Kafei while kneeled --> <!-- Original name is "anj_tetunagu_loop" ("joined hands") -->
     </File>
 </Root>
