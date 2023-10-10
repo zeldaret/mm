@@ -52,7 +52,7 @@
         <Limb Name="gPoeRightArmRootLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_ARM_ROOT" Offset="0x5014" />
         <Limb Name="gPoeRightArmWrapperLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_ARM_WRAPPER" Offset="0x5020" />
         <Limb Name="gPoeRightForearmRootLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_FOREARM_ROOT" Offset="0x502C" />
-        <Limb Name="gPoeRightArmHandRootLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_ARM_HAND_ROOT_" Offset="0x5038" />
+        <Limb Name="gPoeRightArmHandRootLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_ARM_HAND_ROOT" Offset="0x5038" />
         <Limb Name="gPoeRightArmHandLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_ARM_HAND" Offset="0x5044" />
         <Limb Name="gPoeLanternRootLimb" Type="Standard" EnumName="POE_LIMB_LANTERN_ROOT" Offset="0x5050" />
         <Limb Name="gPoeLanternLimb" Type="Standard" EnumName="POE_LIMB_LANTERN" Offset="0x505C" />
@@ -60,6 +60,6 @@
         <Limb Name="gPoeRightUpperArmLimb" Type="Standard" EnumName="POE_LIMB_RIGHT_UPPER_ARM" Offset="0x5074" />
 
         <!-- Skeleton -->
-        <Skeleton Name="gPoeSkel" Type="Normal" LimbType="Standard" LimbNone="POE_LIMB_NONE" LimbMax="POE_LIMB_MAX" EnumName="ObjectPoLimb" Offset="0x50D0" />
+        <Skeleton Name="gPoeSkel" Type="Normal" LimbType="Standard" LimbNone="POE_LIMB_NONE" LimbMax="POE_LIMB_MAX" EnumName="PoeLimb" Offset="0x50D0" />
     </File>
 </Root>
