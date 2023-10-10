@@ -5419,7 +5419,7 @@ s32 func_808339D4(PlayState* play, Player* this, s32 damage) {
 
 void func_80833A64(Player* this) {
     this->skelAnime.prevTransl = this->skelAnime.jointTable[LIMB_INDEX_POS];
-    Player_AnimReplace_SetupLedgeClimb(this, 1 | ANIM_FLAG_UPDATE_Y);
+    Player_AnimReplace_SetupLedgeClimb(this, ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y);
 }
 
 void func_80833AA0(Player* this, PlayState* play) {
@@ -15755,7 +15755,7 @@ void Player_Action_49(Player* this, PlayState* play) {
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         this->currentYaw = this->skelAnime.jointTable[LIMB_INDEX_ROT].y + this->actor.shape.rot.y;
-        Player_AnimReplace_SetupLedgeClimb(this, 1);
+        Player_AnimReplace_SetupLedgeClimb(this, ANIM_FLAG_1);
         this->actor.shape.rot.y = this->currentYaw;
         func_80839E74(this, play);
         this->stateFlags1 &= ~(PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000);
