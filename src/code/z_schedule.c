@@ -240,11 +240,25 @@ s32 Schedule_BranchL(PlayState* play, u8** script, ScheduleOutput* output) {
 }
 
 static s32 (*sScheduleCmdFuncs[])(PlayState*, u8**, ScheduleOutput*) = {
-    Schedule_CheckFlagS,       Schedule_CheckFlagL,     Schedule_CheckTimeRangeS,  Schedule_CheckTimeRangeL,
-    Schedule_ReturnValueL,     Schedule_ReturnNone,     Schedule_ReturnEmpty,      Schedule_Nop,
-    Schedule_CheckMiscS,       Schedule_ReturnValueS,   Schedule_CheckNotInSceneS, Schedule_CheckNotInSceneL,
-    Schedule_CheckNotInDayS,   Schedule_CheckNotInDayL, Schedule_ReturnTime,       Schedule_CheckBeforeTimeS,
-    Schedule_CheckBeforeTimeL, Schedule_BranchS,        Schedule_BranchL,
+    Schedule_CheckFlagS,        // SCHEDULE_CMD_ID_CHECK_FLAG_S
+    Schedule_CheckFlagL,      // SCHEDULE_CMD_ID_CHECK_FLAG_L
+    Schedule_CheckTimeRangeS,   // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S
+    Schedule_CheckTimeRangeL, // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L
+    Schedule_ReturnValueL,      // SCHEDULE_CMD_ID_RET_VAL_L
+    Schedule_ReturnNone,      // SCHEDULE_CMD_ID_RET_NONE
+    Schedule_ReturnEmpty,       // SCHEDULE_CMD_ID_RET_EMPTY
+    Schedule_Nop,             // SCHEDULE_CMD_ID_NOP
+    Schedule_CheckMiscS,        // SCHEDULE_CMD_ID_CHECK_MISC_S
+    Schedule_ReturnValueS,    // SCHEDULE_CMD_ID_RET_VAL_S
+    Schedule_CheckNotInSceneS,  // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S
+    Schedule_CheckNotInSceneL, // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L
+    Schedule_CheckNotInDayS,    // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S
+    Schedule_CheckNotInDayL,  // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L
+    Schedule_ReturnTime,        // SCHEDULE_CMD_ID_RET_TIME
+    Schedule_CheckBeforeTimeS, // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S
+    Schedule_CheckBeforeTimeL, // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L
+    Schedule_BranchS,         // SCHEDULE_CMD_ID_BRANCH_S
+    Schedule_BranchL, // SCHEDULE_CMD_ID_BRANCH_L
 };
 
 static u8 sScheduleCmdSizes[] = {
