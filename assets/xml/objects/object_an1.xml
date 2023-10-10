@@ -54,8 +54,7 @@
         <Texture Name="gAnju1EyeAngryTex" OutName="anju_eye_angry" Format="ci8" Width="32" Height="32" Offset="0x103A0" TlutOffset="0xDD20" />
 
         <DList Name="object_an1_DL_0111E0" Offset="0x111E0" />
-        <!-- tray? -->
-        <DList Name="object_an1_DL_0111E8" Offset="0x111E8" /> <!-- Original name is "an_obon_model" -->
+        <DList Name="gAnju1FoodTrayDL" Offset="0x111E8" /> <!-- Original name is "an_obon_model" -->
 
         <Texture Name="object_an1_Tex_011928" OutName="tex_011928" Format="i8" Width="32" Height="32" Offset="0x11928" />
         <Texture Name="object_an1_Tex_011D28" OutName="tex_011D28" Format="rgba16" Width="16" Height="16" Offset="0x11D28" />

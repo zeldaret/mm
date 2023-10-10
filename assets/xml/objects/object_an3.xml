@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_an3" Segment="6">
         <DList Name="object_an3_DL_000300" Offset="0x300" />
-        <DList Name="object_an3_DL_000308" Offset="0x308" /> <!-- Original name is "an_hoki_model" ("broom") -->
+        <DList Name="gAnju3BroomDL" Offset="0x308" /> <!-- Original name is "an_hoki_model" ("broom") -->
 
         <Texture Name="object_an3_Tex_0004C8" OutName="tex_0004C8" Format="i8" Width="16" Height="16" Offset="0x4C8" />
         <Texture Name="object_an3_Tex_0005C8" OutName="tex_0005C8" Format="rgba16" Width="8" Height="32" Offset="0x5C8" />

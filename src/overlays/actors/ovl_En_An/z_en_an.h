@@ -14,19 +14,19 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 #define ENAN_8000 0x8000
 //#define ENAN_GET_8000(thisx) (((thisx)->params & 0x8000) >> 0xF)
 
-#define ENAN_STATE_8    (1 << 3)
-#define ENAN_STATE_10   (1 << 4)
-#define ENAN_STATE_20   (1 << 5)
-#define ENAN_STATE_40   (1 << 6)
-#define ENAN_STATE_80   (1 << 7)
-#define ENAN_STATE_100  (1 << 8)
-#define ENAN_STATE_200  (1 << 9)
-#define ENAN_STATE_400  (1 << 10)
-#define ENAN_STATE_800  (1 << 11)
-#define ENAN_STATE_1000 (1 << 12)
-#define ENAN_STATE_2000 (1 << 13)
-#define ENAN_STATE_4000 (1 << 14)
-#define ENAN_STATE_8000 (1 << 15)
+#define ENAN_STATE_8                (1 << 3)
+#define ENAN_STATE_10               (1 << 4)
+#define ENAN_STATE_20               (1 << 5)
+#define ENAN_STATE_40               (1 << 6)
+#define ENAN_STATE_80               (1 << 7)
+#define ENAN_STATE_100              (1 << 8)
+#define ENAN_STATE_200              (1 << 9)
+#define ENAN_STATE_400              (1 << 10)
+#define ENAN_STATE_DRAW_FOOD_TRAY   (1 << 11)
+#define ENAN_STATE_DRAW_UMBRELLA    (1 << 12)
+#define ENAN_STATE_DRAW_BROOM       (1 << 13)
+#define ENAN_STATE_DRAW_KAFEI_MASK  (1 << 14)
+#define ENAN_STATE_DRAW_CHOPSTICKS  (1 << 15)
 
 typedef struct EnAn {
     /* 0x000 */ Actor actor;
@@ -51,13 +51,13 @@ typedef struct EnAn {
     /* 0x210 */ s32 msgScriptResumePos;
     /* 0x214 */ s8 unk_214; // curRoom.num
     /* 0x215 */ s8 unk_215;
-    /* 0x218 */ Actor* unk_218;
+    /* 0x218 */ Actor* lookAtActor;
     /* 0x21C */ UNK_TYPE1 unk_21C[0xC];
     /* 0x228 */ Vec3f unk_228;
     /* 0x234 */ Vec3f unk_234;
-    /* 0x240 */ Vec3f unk_240;
+    /* 0x240 */ Vec3f headComputedPos;
     /* 0x24C */ UNK_TYPE1 unk_24C[0xC];
-    /* 0x258 */ Vec3s unk_258; // some limb rot
+    /* 0x258 */ Vec3s headComputedRot;
     /* 0x25E */ UNK_TYPE1 unk_25E[0x6];
     /* 0x264 */ Vec3s jointTable[ANJU1_LIMB_MAX];
     /* 0x2E2 */ Vec3s morphTable[ANJU1_LIMB_MAX];
@@ -69,8 +69,8 @@ typedef struct EnAn {
     /* 0x374 */ f32 unk_374;
     /* 0x378 */ s16 unk_378; // schedule time diff
     /* 0x37A */ s16 unk_37A; // schedule time diff
-    /* 0x37C */ s16 unk_37C; // some limb z rot
-    /* 0x37E */ s16 unk_37E; // some limb y rot
+    /* 0x37C */ s16 headRotZ;
+    /* 0x37E */ s16 headRotY;
     /* 0x380 */ UNK_TYPE1 unk_380[0x4];
     /* 0x384 */ s16 timePathTimeSpeed;
     /* 0x386 */ s16 unk_386; // timer
@@ -87,8 +87,8 @@ typedef struct EnAn {
     /* 0x3A0 */ UNK_TYPE1 unk_3A0[0x8];
     /* 0x3A8 */ u32 unk_3A8;
     /* 0x3AC */ u32 unk_3AC;
-    /* 0x3B0 */ s32 unk_3B0;
-    /* 0x3B4 */ s32 unk_3B4;
+    /* 0x3B0 */ s32 forceDraw;
+    /* 0x3B4 */ s32 drawMoonMask;
     /* 0x3B8 */ s32 unk_3B8;
     /* 0x3BC */ s32 unk_3BC;
     /* 0x3C0 */ s32 unk_3C0;

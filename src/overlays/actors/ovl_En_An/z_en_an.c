@@ -899,12 +899,16 @@ void EnAn_UpdateFace(EnAn* this) {
     this->mouthTexIndex = sMouthIndices[this->faceIndex];
 }
 
-Vec3f D_80B58E54 = { 190.0f, -130.0f, 0.0f };
-Vec3s D_80B58E60 = { 0, 0, 0x4168 };
-Vec3f D_80B58E68 = { 450.0f, 700.0f, -760.0f };
-Vec3s D_80B58E74 = { 0x238C, 0, -0x3FFC };
+typedef enum EnAnAccessory {
+    /* 0 */ ENAN_ACCESSORY_FOOD_TRAY,
+    /* 1 */ ENAN_ACCESSORY_KAFEI_MASK,
+    /* 2 */ ENAN_ACCESSORY_UMBRELLA,
+    /* 3 */ ENAN_ACCESSORY_BROOM,
+    /* 4 */ ENAN_ACCESSORY_CHOPSTICKS,
+    /* 5 */ ENAN_ACCESSORY_MOON_MASK
+} EnAnAccessory;
 
-void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
+void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) {
     s32 pad;
     s8 originalObjectSlot = this->actor.objectSlot;
     s8 otherObjectSlot;
@@ -913,9 +917,9 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
 
     Matrix_Push();
 
-    switch (arg2) {
-        case 0x0:
-            if ((this->stateFlags & ENAN_STATE_800) && !this->unk_3B0) {
+    switch (accessoryId) {
+        case ENAN_ACCESSORY_FOOD_TRAY:
+            if ((this->stateFlags & ENAN_STATE_DRAW_FOOD_TRAY) && !this->forceDraw) {
                 this->unk_3A8++;
                 this->unk_3AC -= 2;
                 Gfx_SetupDL25_Xlu(play->state.gfxCtx);
@@ -923,17 +927,20 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPSegment(POLY_XLU_DISP++, 0x08,
-                           Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->unk_3A8, 0U, 0x10, 0x10, 1, 0U, this->unk_3AC,
-                                            0x10, 0x10));
-                gSPDisplayList(POLY_XLU_DISP++, object_an1_DL_0111E8);
+                           Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->unk_3A8, 0, 16, 16, 1, 0, this->unk_3AC,
+                                            16, 16));
+                gSPDisplayList(POLY_XLU_DISP++, gAnju1FoodTrayDL);
 
                 Gfx_SetupDL25_Opa(play->state.gfxCtx);
             }
             break;
 
-        case 0x1:
+        case ENAN_ACCESSORY_KAFEI_MASK:
             otherObjectSlot = this->maskKerfayObjectSlot;
-            if ((this->stateFlags & ENAN_STATE_4000) && !this->unk_3B0 && (otherObjectSlot > OBJECT_SLOT_NONE)) {
+            if ((this->stateFlags & ENAN_STATE_DRAW_KAFEI_MASK) && !this->forceDraw && (otherObjectSlot > OBJECT_SLOT_NONE)) {
+                static Vec3f D_80B58E54 = { 190.0f, -130.0f, 0.0f };
+                static Vec3s D_80B58E60 = { 0, 0, 0x4168 };
+
                 gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.slots[otherObjectSlot].segment);
 
                 Matrix_TranslateRotateZYX(&D_80B58E54, &D_80B58E60);
@@ -945,37 +952,41 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
             }
             break;
 
-        case 0x2:
+        case ENAN_ACCESSORY_UMBRELLA:
             otherObjectSlot = this->an2ObjectSlot;
-            if ((this->stateFlags & ENAN_STATE_1000) && !this->unk_3B0 && (otherObjectSlot > OBJECT_SLOT_NONE)) {
+            if ((this->stateFlags & ENAN_STATE_DRAW_UMBRELLA) && !this->forceDraw && (otherObjectSlot > OBJECT_SLOT_NONE)) {
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[otherObjectSlot].segment);
-                gSPDisplayList(POLY_OPA_DISP++, object_an2_DL_000378);
+                gSPDisplayList(POLY_OPA_DISP++, gAnju2UmbrellaDL);
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
             }
             break;
 
-        case 0x3:
+        case ENAN_ACCESSORY_BROOM:
             otherObjectSlot = this->an3ObjectSlot;
-            if ((this->stateFlags & ENAN_STATE_2000) && !this->unk_3B0 && (otherObjectSlot > OBJECT_SLOT_NONE)) {
+            if ((this->stateFlags & ENAN_STATE_DRAW_BROOM) && !this->forceDraw && (otherObjectSlot > OBJECT_SLOT_NONE)) {
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[otherObjectSlot].segment);
-                gSPDisplayList(POLY_OPA_DISP++, object_an3_DL_000308);
+                gSPDisplayList(POLY_OPA_DISP++, gAnju3BroomDL);
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
             }
             break;
 
-        case 0x4:
-            if ((this->stateFlags & ENAN_STATE_8000) && !this->unk_3B0) {
+        case ENAN_ACCESSORY_CHOPSTICKS:
+            if ((this->stateFlags & ENAN_STATE_DRAW_CHOPSTICKS) && !this->forceDraw) {
                 gSPDisplayList(POLY_OPA_DISP++, gAnju1ChopsticksDL);
             }
             break;
 
-        case 0x5:
+        case ENAN_ACCESSORY_MOON_MASK:
             otherObjectSlot = this->msmoObjectSlot;
-            if (this->unk_3B4 && (otherObjectSlot > OBJECT_SLOT_NONE)) {
+            if (this->drawMoonMask && (otherObjectSlot > OBJECT_SLOT_NONE)) {
+                static Vec3f D_80B58E68 = { 450.0f, 700.0f, -760.0f };
+                static Vec3s D_80B58E74 = { 0x238C, 0, -0x3FFC };
+
                 Matrix_TranslateRotateZYX(&D_80B58E68, &D_80B58E74);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[otherObjectSlot].segment);
                 gSPDisplayList(POLY_OPA_DISP++, gMoonMaskDL);
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
@@ -1216,14 +1227,14 @@ s32 func_80B54D18(Actor* thisx, PlayState* play) {
                 goto label;
             } else {
                 ret = true;
-                this->stateFlags |= ENAN_STATE_4000;
+                this->stateFlags |= ENAN_STATE_DRAW_KAFEI_MASK;
                 this->unk_394++;
             }
             break;
 
         case 0x1:
         label:
-            this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_4000);
+            this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_DRAW_KAFEI_MASK);
             this->stateFlags |= ENAN_STATE_200;
             EnAn_ChangeAnim(this, play, ENAN_ANIM_20);
             ret = true;
@@ -1394,7 +1405,7 @@ s32 func_80B55180(EnAn* this, PlayState* play) {
         this->unk_3C4 = 0;
         this->unk_394 = 0;
         this->msgEventFunc = NULL;
-        this->actor.child = this->unk_218;
+        this->actor.child = this->lookAtActor;
         this->msgEventScript = func_80B54DF4(this, play);
 
         if ((this->scheduleResult == ANJU_SCH_1) || (this->scheduleResult == ANJU_SCH_3) ||
@@ -1425,20 +1436,20 @@ s32 func_80B552E4(EnAn* this, PlayState* play) {
 
     if ((play->csCtx.state != 0) && (play->sceneId == SCENE_YADOYA) && (gSaveContext.sceneLayer == 0) &&
         ((scriptIndex == 0) || (scriptIndex == 1))) {
-        if (!this->unk_3B0) {
+        if (!this->forceDraw) {
             this->unk_38A = ENAN_FACE_0;
             this->faceIndex = ENAN_FACE_0;
             this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
             this->eyeTimer = 8;
             this->cueId = -1;
-            this->unk_3B0 = true;
-            this->unk_3B4 = false;
+            this->forceDraw = true;
+            this->drawMoonMask = false;
         }
 
         ret = true;
-    } else if (this->unk_3B0) {
-        this->unk_3B0 = false;
-        this->unk_3B4 = false;
+    } else if (this->forceDraw) {
+        this->forceDraw = false;
+        this->drawMoonMask = false;
         this->unk_3C0 = true;
         this->actor.room = play->roomCtx.curRoom.num;
         this->actionFunc = func_80B578F8;
@@ -1447,37 +1458,39 @@ s32 func_80B552E4(EnAn* this, PlayState* play) {
     return ret;
 }
 
-void func_80B553AC(EnAn* this) {
+void EnAn_UpdateHeadRot(EnAn* this) {
     Actor* temp_v0_2;
     Vec3f sp40;
     Vec3f sp34;
-    s32 pad;
+    Player* player;
 
-    Math_Vec3f_Copy(&sp40, &this->unk_218->world.pos);
+    Math_Vec3f_Copy(&sp40, &this->lookAtActor->world.pos);
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-    Math_ApproachS(&this->unk_37E, Math_Vec3f_Yaw(&sp34, &sp40) - this->actor.shape.rot.y, 4, 0x2AA8);
+    Math_ApproachS(&this->headRotY, Math_Vec3f_Yaw(&sp34, &sp40) - this->actor.shape.rot.y, 4, 0x2AA8);
 
-    this->unk_37E = CLAMP(this->unk_37E, -0x1FFE, 0x1FFE);
+    this->headRotY = CLAMP(this->headRotY, -0x1FFE, 0x1FFE);
 
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
 
-    temp_v0_2 = this->unk_218;
+    temp_v0_2 = this->lookAtActor;
     if (temp_v0_2->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)temp_v0_2)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
+        player = (Player*)temp_v0_2;
+
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &temp_v0_2->focus.pos);
     }
 
-    Math_ApproachS(&this->unk_37C, Math_Vec3f_Pitch(&sp34, &sp40), 4, 0x2AA8);
+    Math_ApproachS(&this->headRotZ, Math_Vec3f_Pitch(&sp34, &sp40), 4, 0x2AA8);
 
-    this->unk_37C = CLAMP(this->unk_37C, -0x1554, 0x1554);
+    this->headRotZ = CLAMP(this->headRotZ, -0x1554, 0x1554);
 }
 
 void func_80B554E8(EnAn* this) {
     if (this->stateFlags & ENAN_STATE_20) {
-        if ((this->unk_218 != NULL) && (this->unk_218->update != NULL)) {
+        if ((this->lookAtActor != NULL) && (this->lookAtActor->update != NULL)) {
             if (DECR(this->unk_388) == 0) {
-                func_80B553AC(this);
+                EnAn_UpdateHeadRot(this);
                 this->stateFlags &= ~ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_80;
                 return;
@@ -1487,8 +1500,8 @@ void func_80B554E8(EnAn* this) {
 
     if (this->stateFlags & ENAN_STATE_80) {
         this->stateFlags &= ~ENAN_STATE_80;
-        this->unk_37C = 0;
-        this->unk_37E = 0;
+        this->headRotZ = 0;
+        this->headRotY = 0;
         this->unk_388 = 20;
         return;
     }
@@ -1510,7 +1523,7 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
 
         case ANJU_SCH_16:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_SWEEP);
-            this->stateFlags |= ENAN_STATE_2000;
+            this->stateFlags |= ENAN_STATE_DRAW_BROOM;
             break;
 
         case ANJU_SCH_E:
@@ -1529,7 +1542,7 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
         case ANJU_SCH_34:
         case ANJU_SCH_35:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_22);
-            this->stateFlags |= ENAN_STATE_2000;
+            this->stateFlags |= ENAN_STATE_DRAW_BROOM;
             break;
 
         default:
@@ -1601,7 +1614,7 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
             switch (textId) {
                 case 0x28E5:
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_5);
-                    this->stateFlags &= ~ENAN_STATE_2000;
+                    this->stateFlags &= ~ENAN_STATE_DRAW_BROOM;
                     break;
 
                 case 0x28BA:
@@ -1633,7 +1646,7 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
 
                 case 0x28EB:
                     if (this->animIndex != ENAN_ANIM_20) {
-                        this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_4000);
+                        this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_DRAW_KAFEI_MASK);
                         this->stateFlags |= ENAN_STATE_200;
                         EnAn_ChangeAnim(this, play, ENAN_ANIM_20);
                     }
@@ -1649,7 +1662,7 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
                     break;
 
                 case 0x28E6:
-                    this->stateFlags &= ~ENAN_STATE_2000;
+                    this->stateFlags &= ~ENAN_STATE_DRAW_BROOM;
                     this->unk_18C = func_80B55860;
                     this->unk_396 = 0;
                     break;
@@ -1980,7 +1993,7 @@ s32 func_80B5611C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         ret = true;
 
         this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_100;
-        this->stateFlags |= ENAN_STATE_200 | ENAN_STATE_800;
+        this->stateFlags |= ENAN_STATE_200 | ENAN_STATE_DRAW_FOOD_TRAY;
     }
 
     return ret;
@@ -2042,13 +2055,13 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 case ANJU_SCH_1A:
                 case ANJU_SCH_1B:
                 case ANJU_SCH_1C:
-                    this->stateFlags |= ENAN_STATE_800 | ENAN_STATE_100;
+                    this->stateFlags |= ENAN_STATE_DRAW_FOOD_TRAY | ENAN_STATE_100;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_16);
                     break;
 
                 case ANJU_SCH_24:
                 case ANJU_SCH_27:
-                    this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_2000;
+                    this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_DRAW_BROOM;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_22);
                     break;
 
@@ -2139,7 +2152,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_2D:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_16);
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
-                this->stateFlags |= ENAN_STATE_800;
+                this->stateFlags |= ENAN_STATE_DRAW_FOOD_TRAY;
                 break;
 
             case ANJU_SCH_34:
@@ -2148,7 +2161,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
-                this->stateFlags |= ENAN_STATE_2000;
+                this->stateFlags |= ENAN_STATE_DRAW_BROOM;
                 break;
 
             case ANJU_SCH_32:
@@ -2169,7 +2182,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_3F:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_18);
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
-                this->stateFlags |= ENAN_STATE_1000;
+                this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
                 break;
 
             case ANJU_SCH_28:
@@ -2220,7 +2233,7 @@ s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
             this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
-            this->stateFlags |= ENAN_STATE_2000;
+            this->stateFlags |= ENAN_STATE_DRAW_BROOM;
         }
         ret = true;
     }
@@ -2271,7 +2284,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
             case ANJU_SCH_3:
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
-                this->stateFlags |= ENAN_STATE_1000;
+                this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
 
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_20);
@@ -2294,7 +2307,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
-                this->stateFlags |= ENAN_STATE_8000;
+                this->stateFlags |= ENAN_STATE_DRAW_CHOPSTICKS;
                 break;
         }
         ret = true;
@@ -2477,8 +2490,8 @@ s32 func_80B56E44(EnAn* this, PlayState* play) {
     Vec3f sp2C;
     Vec3f sp20;
 
-    if ((this->unk_218 != NULL) && (this->unk_218->update != NULL)) {
-        Math_Vec3f_Copy(&sp2C, &this->unk_218->world.pos);
+    if ((this->lookAtActor != NULL) && (this->lookAtActor->update != NULL)) {
+        Math_Vec3f_Copy(&sp2C, &this->lookAtActor->world.pos);
         Math_Vec3f_Copy(&sp20, &this->actor.world.pos);
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp20, &sp2C);
     }
@@ -2577,7 +2590,7 @@ s32 func_80B5702C(EnAn* this, PlayState* play) {
 s32 func_80B572D4(EnAn* this, PlayState* play) {
     switch (this->scheduleResult) {
         case ANJU_SCH_17:
-            if ((func_80B55F8C(play) != 0) && (func_80B55ECC(this) != 0)) {
+            if ((func_80B55F8C(play) != 0) && func_80B55ECC(this)) {
                 this->stateFlags |= ENAN_STATE_20;
             } else {
                 this->stateFlags &= ~ENAN_STATE_20;
@@ -2817,7 +2830,7 @@ void func_80B578F8(EnAn* this, PlayState* play) {
     }
 
     this->scheduleResult = scheduleOutput.result;
-    this->unk_218 = func_80B55D20(this, play);
+    this->lookAtActor = func_80B55D20(this, play);
     func_80B57718(this, play);
 }
 
@@ -2833,12 +2846,12 @@ void func_80B57A44(EnAn* this, PlayState* play) {
     } else if ((this->scheduleResult != ANJU_SCH_1) && (this->scheduleResult != ANJU_SCH_3) &&
                (this->scheduleResult != ANJU_SCH_C) && (this->scheduleResult != ANJU_SCH_E) &&
                (this->scheduleResult != ANJU_SCH_19)) {
-        if ((this->unk_218 != NULL) && (this->unk_218->update != NULL)) {
+        if ((this->lookAtActor != NULL) && (this->lookAtActor->update != NULL)) {
             s32 temp;
             Vec3f sp38;
             Vec3f sp2C;
 
-            Math_Vec3f_Copy(&sp38, &this->unk_218->world.pos);
+            Math_Vec3f_Copy(&sp38, &this->lookAtActor->world.pos);
             Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
             temp = Math_Vec3f_Yaw(&sp2C, &sp38);
 
@@ -2864,10 +2877,10 @@ void func_80B57B48(EnAn* this, PlayState* play) {
             this->cueId = cueId;
             if (this->cueId == 3) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_87_02);
-                this->unk_3B4 = true;
+                this->drawMoonMask = true;
             }
             if (this->cueId == 9) {
-                this->unk_3B4 = false;
+                this->drawMoonMask = false;
             }
             EnAn_ChangeAnim(this, play, sp30[cueId]);
         }
@@ -2961,14 +2974,14 @@ void EnAn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     if (limbIndex == ANJU1_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80B58ED4, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
-        func_80B54124(this, play, 1U);
+        EnAn_DrawAccessory(this, play, ENAN_ACCESSORY_KAFEI_MASK);
     } else if (limbIndex == ANJU1_LIMB_RIGHT_HAND) {
-        func_80B54124(this, play, 0U);
-        func_80B54124(this, play, 4U);
-        func_80B54124(this, play, 2U);
-        func_80B54124(this, play, 3U);
+        EnAn_DrawAccessory(this, play, ENAN_ACCESSORY_FOOD_TRAY);
+        EnAn_DrawAccessory(this, play, ENAN_ACCESSORY_CHOPSTICKS);
+        EnAn_DrawAccessory(this, play, ENAN_ACCESSORY_UMBRELLA);
+        EnAn_DrawAccessory(this, play, ENAN_ACCESSORY_BROOM);
     } else if (limbIndex == ANJU1_LIMB_LEFT_HAND) {
-        func_80B54124(this, play, 5U);
+        EnAn_DrawAccessory(this, play, ENAN_ACCESSORY_MOON_MASK);
     }
 }
 
@@ -2990,14 +3003,14 @@ void EnAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 
     if (limbIndex == ANJU1_LIMB_HEAD) {
-        SubS_UpdateLimb(this->unk_37C + 0x4000, this->unk_37E + this->actor.shape.rot.y + 0x4000, &this->unk_240,
-                        &this->unk_258, stepRot, overrideRot);
+        SubS_UpdateLimb(this->headRotZ + 0x4000, this->headRotY + this->actor.shape.rot.y + 0x4000, &this->headComputedPos,
+                        &this->headComputedRot, stepRot, overrideRot);
         Matrix_Pop();
-        Matrix_Translate(this->unk_240.x, this->unk_240.y, this->unk_240.z, MTXMODE_NEW);
+        Matrix_Translate(this->headComputedPos.x, this->headComputedPos.y, this->headComputedPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->unk_258.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk_258.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->unk_258.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->headComputedRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headComputedRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headComputedRot.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }
@@ -3021,7 +3034,7 @@ static TexturePtr sEyeTextures[ENAN_EYES_MAX] = {
 void EnAn_Draw(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
 
-    if ((this->scheduleResult != ANJU_SCH_NONE) || this->unk_3B0) {
+    if ((this->scheduleResult != ANJU_SCH_NONE) || this->forceDraw) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
