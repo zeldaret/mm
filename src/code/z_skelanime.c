@@ -100,11 +100,11 @@ void SkelAnime_DrawLod(PlayState* play, void** skeleton, Vec3s* jointTable, Over
     Matrix_Push();
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
-    pos.x = jointTable[LIMB_INDEX_POS].x;
-    pos.y = jointTable[LIMB_INDEX_POS].y;
-    pos.z = jointTable[LIMB_INDEX_POS].z;
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
 
-    rot = jointTable[LIMB_INDEX_ROT];
+    rot = jointTable[LIMB_ROOT_ROT];
     dList = rootLimb->dLists[lod];
 
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &dList, &pos, &rot, actor)) {
@@ -219,11 +219,11 @@ void SkelAnime_DrawFlexLod(PlayState* play, void** skeleton, Vec3s* jointTable, 
     Matrix_Push();
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
-    pos.x = jointTable[LIMB_INDEX_POS].x;
-    pos.y = jointTable[LIMB_INDEX_POS].y;
-    pos.z = jointTable[LIMB_INDEX_POS].z;
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
 
-    rot = jointTable[LIMB_INDEX_ROT];
+    rot = jointTable[LIMB_ROOT_ROT];
 
     newDList = limbDList = rootLimb->dLists[lod];
 
@@ -326,11 +326,11 @@ void SkelAnime_DrawOpa(PlayState* play, void** skeleton, Vec3s* jointTable, Over
     Matrix_Push();
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
 
-    pos.x = jointTable[LIMB_INDEX_POS].x;
-    pos.y = jointTable[LIMB_INDEX_POS].y;
-    pos.z = jointTable[LIMB_INDEX_POS].z;
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
 
-    rot = jointTable[LIMB_INDEX_ROT];
+    rot = jointTable[LIMB_ROOT_ROT];
     dList = rootLimb->dList;
 
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &dList, &pos, &rot, actor)) {
@@ -439,10 +439,10 @@ void SkelAnime_DrawFlexOpa(PlayState* play, void** skeleton, Vec3s* jointTable, 
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
 
-    pos.x = jointTable[LIMB_INDEX_POS].x;
-    pos.y = jointTable[LIMB_INDEX_POS].y;
-    pos.z = jointTable[LIMB_INDEX_POS].z;
-    rot = jointTable[LIMB_INDEX_ROT];
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
+    rot = jointTable[LIMB_ROOT_ROT];
 
     newDList = limbDList = rootLimb->dList;
 
@@ -575,10 +575,10 @@ void SkelAnime_DrawTransformFlexOpa(PlayState* play, void** skeleton, Vec3s* joi
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
 
-    pos.x = jointTable[LIMB_INDEX_POS].x;
-    pos.y = jointTable[LIMB_INDEX_POS].y;
-    pos.z = jointTable[LIMB_INDEX_POS].z;
-    rot = jointTable[LIMB_INDEX_ROT];
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
+    rot = jointTable[LIMB_ROOT_ROT];
 
     newDList = limbDList = rootLimb->dList;
 
@@ -722,11 +722,11 @@ Gfx* SkelAnime_Draw(PlayState* play, void** skeleton, Vec3s* jointTable, Overrid
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
 
-    pos.x = jointTable[LIMB_INDEX_POS].x;
-    pos.y = jointTable[LIMB_INDEX_POS].y;
-    pos.z = jointTable[LIMB_INDEX_POS].z;
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
 
-    rot = jointTable[LIMB_INDEX_ROT];
+    rot = jointTable[LIMB_ROOT_ROT];
 
     dList = rootLimb->dList;
 
@@ -838,11 +838,11 @@ Gfx* SkelAnime_DrawFlex(PlayState* play, void** skeleton, Vec3s* jointTable, s32
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
 
-    pos.x = jointTable[LIMB_INDEX_POS].x;
-    pos.y = jointTable[LIMB_INDEX_POS].y;
-    pos.z = jointTable[LIMB_INDEX_POS].z;
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
 
-    rot = jointTable[LIMB_INDEX_ROT];
+    rot = jointTable[LIMB_ROOT_ROT];
 
     newDList = limbDList = rootLimb->dList;
 
@@ -1931,30 +1931,30 @@ void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle) {
         diff->x = 0.0f;
     } else {
         // `angle` rotation around y axis.
-        x = skelAnime->jointTable[LIMB_INDEX_POS].x - skelAnime->prevTransl.x;
-        z = skelAnime->jointTable[LIMB_INDEX_POS].z - skelAnime->prevTransl.z;
+        x = skelAnime->jointTable[LIMB_ROOT_POS].x - skelAnime->prevTransl.x;
+        z = skelAnime->jointTable[LIMB_ROOT_POS].z - skelAnime->prevTransl.z;
         sin = Math_SinS(angle);
         cos = Math_CosS(angle);
         diff->x = x * cos + z * sin;
         diff->z = z * cos - x * sin;
     }
 
-    skelAnime->prevTransl.x = skelAnime->jointTable[LIMB_INDEX_POS].x;
-    skelAnime->jointTable[LIMB_INDEX_POS].x = skelAnime->baseTransl.x;
-    skelAnime->prevTransl.z = skelAnime->jointTable[LIMB_INDEX_POS].z;
-    skelAnime->jointTable[LIMB_INDEX_POS].z = skelAnime->baseTransl.z;
+    skelAnime->prevTransl.x = skelAnime->jointTable[LIMB_ROOT_POS].x;
+    skelAnime->jointTable[LIMB_ROOT_POS].x = skelAnime->baseTransl.x;
+    skelAnime->prevTransl.z = skelAnime->jointTable[LIMB_ROOT_POS].z;
+    skelAnime->jointTable[LIMB_ROOT_POS].z = skelAnime->baseTransl.z;
 
     if (skelAnime->moveFlags & ANIM_FLAG_UPDATE_Y) {
         if (skelAnime->moveFlags & ANIM_FLAG_NOMOVE) {
             diff->y = 0.0f;
         } else {
-            diff->y = skelAnime->jointTable[LIMB_INDEX_POS].y - skelAnime->prevTransl.y;
+            diff->y = skelAnime->jointTable[LIMB_ROOT_POS].y - skelAnime->prevTransl.y;
         }
-        skelAnime->prevTransl.y = skelAnime->jointTable[LIMB_INDEX_POS].y;
-        skelAnime->jointTable[LIMB_INDEX_POS].y = skelAnime->baseTransl.y;
+        skelAnime->prevTransl.y = skelAnime->jointTable[LIMB_ROOT_POS].y;
+        skelAnime->jointTable[LIMB_ROOT_POS].y = skelAnime->baseTransl.y;
     } else {
         diff->y = 0.0f;
-        skelAnime->prevTransl.y = skelAnime->jointTable[LIMB_INDEX_POS].y;
+        skelAnime->prevTransl.y = skelAnime->jointTable[LIMB_ROOT_POS].y;
     }
     skelAnime->moveFlags &= ~ANIM_FLAG_NOMOVE;
 }

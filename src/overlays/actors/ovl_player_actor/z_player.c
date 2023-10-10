@@ -569,7 +569,7 @@ void Player_Anim_PlayOnceAdjustedReverse(PlayState* play, Player* this, PlayerAn
 }
 
 void Player_Anim_ResetModelRotY(Player* this) {
-    this->skelAnime.jointTable[LIMB_INDEX_ROT].y = 0;
+    this->skelAnime.jointTable[LIMB_ROOT_ROT].y = 0;
 }
 
 void func_8082DC38(Player* this) {
@@ -1927,21 +1927,21 @@ void Player_Anim_ResetPrevTranslRotFormScale(Player* this) {
 }
 
 void Player_Anim_ZeroModelYaw(Player* this) {
-    this->skelAnime.jointTable[LIMB_INDEX_ROT].y = 0;
+    this->skelAnime.jointTable[LIMB_ROOT_ROT].y = 0;
 }
 
 void Player_Anim_ResetMove(Player* this) {
     if (this->skelAnime.moveFlags) {
         Player_Anim_ResetModelRotY(this);
-        this->skelAnime.jointTable[LIMB_INDEX_POS].x = this->skelAnime.baseTransl.x;
-        this->skelAnime.jointTable[LIMB_INDEX_POS].z = this->skelAnime.baseTransl.z;
+        this->skelAnime.jointTable[LIMB_ROOT_POS].x = this->skelAnime.baseTransl.x;
+        this->skelAnime.jointTable[LIMB_ROOT_POS].z = this->skelAnime.baseTransl.z;
 
         if (this->skelAnime.moveFlags & ANIM_FLAG_8) {
             if (this->skelAnime.moveFlags & ANIM_FLAG_UPDATE_Y) {
-                this->skelAnime.jointTable[LIMB_INDEX_POS].y = this->skelAnime.prevTransl.y;
+                this->skelAnime.jointTable[LIMB_ROOT_POS].y = this->skelAnime.prevTransl.y;
             }
         } else {
-            this->skelAnime.jointTable[LIMB_INDEX_POS].y = this->skelAnime.baseTransl.y;
+            this->skelAnime.jointTable[LIMB_ROOT_POS].y = this->skelAnime.baseTransl.y;
         }
         Player_Anim_ResetPrevTranslRot(this);
         this->skelAnime.moveFlags = 0;
@@ -1981,7 +1981,7 @@ void Player_AnimReplace_Setup(PlayState* play, Player* this, s32 moveFlags) {
     } else if ((moveFlags & ANIM_FLAG_100) || this->skelAnime.moveFlags) {
         Player_Anim_ResetPrevTranslRot(this);
     } else {
-        this->skelAnime.prevTransl = this->skelAnime.jointTable[LIMB_INDEX_POS];
+        this->skelAnime.prevTransl = this->skelAnime.jointTable[LIMB_ROOT_POS];
         this->skelAnime.prevYaw = this->actor.shape.rot.y;
     }
 
@@ -5418,7 +5418,7 @@ s32 func_808339D4(PlayState* play, Player* this, s32 damage) {
 }
 
 void func_80833A64(Player* this) {
-    this->skelAnime.prevTransl = this->skelAnime.jointTable[LIMB_INDEX_POS];
+    this->skelAnime.prevTransl = this->skelAnime.jointTable[LIMB_ROOT_POS];
     Player_AnimReplace_SetupLedgeClimb(this, ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y);
 }
 
@@ -13880,8 +13880,8 @@ void Player_Action_4(Player* this, PlayState* play) {
                 this->skelAnime.endFrame = this->skelAnime.animLength - 1.0f;
             }
 
-            this->skelAnime.jointTable[LIMB_INDEX_POS].y =
-                (this->skelAnime.jointTable[LIMB_INDEX_POS].y + ((this->actionVar2 & 1) * 0x50)) - 0x28;
+            this->skelAnime.jointTable[LIMB_ROOT_POS].y =
+                (this->skelAnime.jointTable[LIMB_ROOT_POS].y + ((this->actionVar2 & 1) * 0x50)) - 0x28;
         } else {
             Player_Anim_ResetMove(this);
             Player_ChooseIdleAnim(play, this);
@@ -15754,7 +15754,7 @@ void Player_Action_49(Player* this, PlayState* play) {
     this->stateFlags2 |= PLAYER_STATE2_40;
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
-        this->currentYaw = this->skelAnime.jointTable[LIMB_INDEX_ROT].y + this->actor.shape.rot.y;
+        this->currentYaw = this->skelAnime.jointTable[LIMB_ROOT_ROT].y + this->actor.shape.rot.y;
         Player_AnimReplace_SetupLedgeClimb(this, ANIM_FLAG_1);
         this->actor.shape.rot.y = this->currentYaw;
         func_80839E74(this, play);
@@ -16925,8 +16925,8 @@ void Player_Action_63(Player* this, PlayState* play) {
                 Player_SetAction_PreserveItemAction(play, this, Player_Action_88, 0);
                 this->stateFlags1 |= PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000;
             } else if (this->unk_AA5 == PLAYER_UNKAA5_4) {
-                f32 temp_fa0 = this->skelAnime.jointTable[LIMB_INDEX_POS].x;
-                f32 temp_fa1 = this->skelAnime.jointTable[LIMB_INDEX_POS].z;
+                f32 temp_fa0 = this->skelAnime.jointTable[LIMB_ROOT_POS].x;
+                f32 temp_fa1 = this->skelAnime.jointTable[LIMB_ROOT_POS].z;
                 f32 var_fv1;
 
                 var_fv1 = sqrtf(SQ(temp_fa0) + SQ(temp_fa1));
@@ -16935,8 +16935,8 @@ void Player_Action_63(Player* this, PlayState* play) {
                     var_fv1 = CLAMP_MIN(var_fv1, 0.0f);
                 }
 
-                this->skelAnime.jointTable[LIMB_INDEX_POS].x = temp_fa0 * var_fv1;
-                this->skelAnime.jointTable[LIMB_INDEX_POS].z = temp_fa1 * var_fv1;
+                this->skelAnime.jointTable[LIMB_ROOT_POS].x = temp_fa0 * var_fv1;
+                this->skelAnime.jointTable[LIMB_ROOT_POS].z = temp_fa1 * var_fv1;
             } else {
                 func_8085255C(play, this);
             }
@@ -18196,8 +18196,8 @@ void Player_Action_91(Player* this, PlayState* play) {
     }
 
     this->actor.shape.rot.y += this->actionVar2;
-    this->skelAnime.jointTable[LIMB_INDEX_POS].x = 0;
-    this->skelAnime.jointTable[LIMB_INDEX_POS].z = 0;
+    this->skelAnime.jointTable[LIMB_ROOT_POS].x = 0;
+    this->skelAnime.jointTable[LIMB_ROOT_POS].z = 0;
     this->unk_ABC += this->unk_B10[5];
 
     if (this->unk_ABC >= 0.0f) {
@@ -20337,7 +20337,7 @@ void func_8085AC9C(PlayState* play, Player* this, CsCmdActorCue* cue, PlayerCsMo
     }
 
     if ((D_80862B6C & 4) && !(this->skelAnime.moveFlags & ANIM_FLAG_4)) {
-        this->skelAnime.morphTable[LIMB_INDEX_POS].y /= this->ageProperties->unk_08;
+        this->skelAnime.morphTable[LIMB_ROOT_POS].y /= this->ageProperties->unk_08;
         D_80862B6C = 0;
     }
 }

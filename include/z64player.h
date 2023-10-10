@@ -318,7 +318,7 @@ typedef enum PlayerDoorType {
 } PlayerDoorType;
 
 // Some player animations are played at this reduced speed, for reasons yet unclear.
-// Perhaps to compress animation data? Or to adjust from 30fps to 20fps?
+// Perhaps to compress animation data?
 // This is called "adjusted" for now.
 // z_en_horse also has many instances of this adjusted speed
 #define PLAYER_ANIM_ADJUSTED_SPEED (2.0f / 3.0f)
