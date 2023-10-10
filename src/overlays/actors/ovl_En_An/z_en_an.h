@@ -7,7 +7,7 @@
 struct EnAn;
 
 typedef void (*EnAnActionFunc)(struct EnAn*, PlayState*);
-typedef void (*EnAnUnkFunc)(struct EnAn*, PlayState*);
+typedef void (*EnAnDialogueFunc)(struct EnAn*, PlayState*);
 typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENAN_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
@@ -21,8 +21,8 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 #define ENAN_STATE_80               (1 << 7)
 #define ENAN_STATE_100              (1 << 8)
 #define ENAN_STATE_200              (1 << 9)
-#define ENAN_STATE_400              (1 << 10)
-#define ENAN_STATE_DRAW_FOOD_TRAY   (1 << 11)
+#define ENAN_STATE_TALKING          (1 << 10)
+#define ENAN_STATE_DRAW_TRAY        (1 << 11)
 #define ENAN_STATE_DRAW_UMBRELLA    (1 << 12)
 #define ENAN_STATE_DRAW_BROOM       (1 << 13)
 #define ENAN_STATE_DRAW_KAFEI_MASK  (1 << 14)
@@ -32,7 +32,7 @@ typedef struct EnAn {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnAnActionFunc actionFunc;
-    /* 0x18C */ EnAnUnkFunc unk_18C;
+    /* 0x18C */ EnAnDialogueFunc dialogueFunc;
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ Path* timePath;
     /* 0x1E0 */ Vec3f timePathTargetPos;
@@ -49,7 +49,7 @@ typedef struct EnAn {
     /* 0x20B */ s8 an4ObjectSlot;
     /* 0x20C */ s8 msmoObjectSlot;
     /* 0x210 */ s32 msgScriptResumePos;
-    /* 0x214 */ s8 unk_214; // curRoom.num
+    /* 0x214 */ s8 roomNum;
     /* 0x215 */ s8 unk_215;
     /* 0x218 */ Actor* lookAtActor;
     /* 0x21C */ UNK_TYPE1 unk_21C[0xC];
@@ -81,7 +81,7 @@ typedef struct EnAn {
     /* 0x390 */ s16 eyeTexIndex;
     /* 0x392 */ s16 mouthTexIndex;
     /* 0x394 */ s16 unk_394;
-    /* 0x396 */ s16 unk_396;
+    /* 0x396 */ s16 dialogueFuncState;
     /* 0x398 */ MsgEventFunc msgEventFunc;
     /* 0x39C */ s32 animIndex;
     /* 0x3A0 */ UNK_TYPE1 unk_3A0[0x8];
@@ -89,7 +89,7 @@ typedef struct EnAn {
     /* 0x3AC */ u32 unk_3AC;
     /* 0x3B0 */ s32 forceDraw;
     /* 0x3B4 */ s32 drawMoonMask;
-    /* 0x3B8 */ s32 unk_3B8;
+    /* 0x3B8 */ s32 slotsInitialized;
     /* 0x3BC */ s32 unk_3BC;
     /* 0x3C0 */ s32 unk_3C0;
     /* 0x3C4 */ s32 unk_3C4; // set but not read

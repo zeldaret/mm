@@ -23,9 +23,9 @@ void EnAn_Update(Actor* thisx, PlayState* play);
 void EnAn_Draw(Actor* thisx, PlayState* play);
 
 // Action funcs
-void func_80B577F0(EnAn* this, PlayState* play);
-void func_80B578F8(EnAn* this, PlayState* play);
-void func_80B57A44(EnAn* this, PlayState* play);
+void EnAn_Initialize(EnAn* this, PlayState* play);
+void EnAn_FollowSchedule(EnAn* this, PlayState* play);
+void EnAn_Talk(EnAn* this, PlayState* play);
 
 typedef enum AnjuScheduleResult {
     /*  0 */ ANJU_SCH_NONE,
@@ -444,8 +444,7 @@ ActorInit En_An_InitVars = {
     (ActorFunc)NULL,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B58BBC = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT1,
         AT_NONE,
@@ -465,43 +464,41 @@ static ColliderCylinderInit D_80B58BBC = {
     { 14, 62, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80B58BE8 = { 0, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-s32 func_80B53840(EnAn* this, PlayState* play) {
+s32 EnAn_InitializeObjectSlots(EnAn* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_214 != play->roomCtx.curRoom.num) && (play->roomCtx.status == 0) && !this->unk_3B8) {
+    if ((this->roomNum != play->roomCtx.curRoom.num) && (play->roomCtx.status == 0) && !this->slotsInitialized) {
         this->msmoObjectSlot = SubS_GetObjectSlot(OBJECT_MSMO, play);
         this->an4ObjectSlot = SubS_GetObjectSlot(OBJECT_AN4, play);
         this->maskKerfayObjectSlot = SubS_GetObjectSlot(OBJECT_MASK_KERFAY, play);
         this->an3ObjectSlot = SubS_GetObjectSlot(OBJECT_AN3, play);
         this->an2ObjectSlot = SubS_GetObjectSlot(OBJECT_AN2, play);
         this->actor.draw = NULL;
-        this->unk_214 = play->roomCtx.curRoom.num;
-        this->unk_3B8 = true;
+        this->roomNum = play->roomCtx.curRoom.num;
+        this->slotsInitialized = true;
     }
 
-    if (!this->unk_3B8) {
+    if (!this->slotsInitialized) {
         return false;
     }
 
-    if (((this->an2ObjectSlot > OBJECT_SLOT_NONE) && (SubS_IsObjectLoaded(this->an2ObjectSlot, play) == 0)) ||
-        ((this->an3ObjectSlot > OBJECT_SLOT_NONE) && (SubS_IsObjectLoaded(this->an3ObjectSlot, play) == 0)) ||
-        ((this->maskKerfayObjectSlot > OBJECT_SLOT_NONE) &&
-         (SubS_IsObjectLoaded(this->maskKerfayObjectSlot, play) == 0)) ||
-        ((this->an4ObjectSlot > OBJECT_SLOT_NONE) && (SubS_IsObjectLoaded(this->an4ObjectSlot, play) == 0)) ||
-        ((this->msmoObjectSlot > OBJECT_SLOT_NONE) && (SubS_IsObjectLoaded(this->msmoObjectSlot, play) == 0))) {
+    if (((this->an2ObjectSlot > OBJECT_SLOT_NONE) && !SubS_IsObjectLoaded(this->an2ObjectSlot, play)) ||
+        ((this->an3ObjectSlot > OBJECT_SLOT_NONE) && !SubS_IsObjectLoaded(this->an3ObjectSlot, play)) ||
+        ((this->maskKerfayObjectSlot > OBJECT_SLOT_NONE) && !SubS_IsObjectLoaded(this->maskKerfayObjectSlot, play)) ||
+        ((this->an4ObjectSlot > OBJECT_SLOT_NONE) && !SubS_IsObjectLoaded(this->an4ObjectSlot, play)) ||
+        ((this->msmoObjectSlot > OBJECT_SLOT_NONE) && !SubS_IsObjectLoaded(this->msmoObjectSlot, play))) {
         ret = true;
     } else {
         this->actor.draw = EnAn_Draw;
-        this->unk_3B8 = false;
+        this->slotsInitialized = false;
     }
 
     return ret;
 }
 
-Actor* func_80B539CC(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
+Actor* EnAn_FindActor(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* foundActor = NULL;
 
     while (true) {
@@ -649,22 +646,22 @@ static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
     { &object_an1_Anim_008B6C, 1.0f, 0, -1, ANIMMODE_LOOP, -6 }, // ENAN_ANIM_2
     { &object_an1_Anim_00544C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_3
     { &object_an1_Anim_00544C, 1.0f, 0, -1, ANIMMODE_ONCE, -6 }, // ENAN_ANIM_4
-    { &gAn1SurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_SURPRISED
+    { &gAn1SurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },       // ENAN_ANIM_SURPRISED
     { &object_an1_Anim_001E74, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_6
     { &object_an1_Anim_013048, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_7
     { &object_an1_Anim_013048, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_8
-    { &gAn1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_SIT
-    { &gAn1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 }, // ENAN_ANIM_SIT_MORPH
+    { &gAn1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // ENAN_ANIM_SIT
+    { &gAn1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },            // ENAN_ANIM_SIT_MORPH
     { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_11
     { &object_an1_Anim_0065C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_12
     { &object_an1_Anim_001090, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_13
     { &object_an1_Anim_00144C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_14
-    { &gAn1WaitingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_WAITING_WITH_TRAY
-    { &gAn1WalkingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_WALKING_WITH_TRAY
+    { &gAn1WaitingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_WAITING_WITH_TRAY
+    { &gAn1WalkingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_WALKING_WITH_TRAY
 
-    { &object_an2_Anim_0028DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_17
-    { &object_an2_Anim_0042CC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_18
-    { &object_an2_Anim_0038A0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_19
+    { &object_an2_Anim_0028DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_17
+    { &object_an2_Anim_0042CC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_18
+    { &object_an2_Anim_0038A0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_19
     { &gAnju2SittingAndCryingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_SITTING_AND_CRYING
 
     { &object_an3_Anim_00201C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_21
@@ -919,16 +916,16 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
 
     switch (accessoryId) {
         case ENAN_ACCESSORY_FOOD_TRAY:
-            if ((this->stateFlags & ENAN_STATE_DRAW_FOOD_TRAY) && !this->forceDraw) {
+            if ((this->stateFlags & ENAN_STATE_DRAW_TRAY) && !this->forceDraw) {
                 this->unk_3A8++;
                 this->unk_3AC -= 2;
                 Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPSegment(POLY_XLU_DISP++, 0x08,
-                           Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->unk_3A8, 0, 16, 16, 1, 0, this->unk_3AC,
-                                            16, 16));
+                gSPSegment(
+                    POLY_XLU_DISP++, 0x08,
+                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->unk_3A8, 0, 16, 16, 1, 0, this->unk_3AC, 16, 16));
                 gSPDisplayList(POLY_XLU_DISP++, gAnju1FoodTrayDL);
 
                 Gfx_SetupDL25_Opa(play->state.gfxCtx);
@@ -937,7 +934,8 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
 
         case ENAN_ACCESSORY_KAFEI_MASK:
             otherObjectSlot = this->maskKerfayObjectSlot;
-            if ((this->stateFlags & ENAN_STATE_DRAW_KAFEI_MASK) && !this->forceDraw && (otherObjectSlot > OBJECT_SLOT_NONE)) {
+            if ((this->stateFlags & ENAN_STATE_DRAW_KAFEI_MASK) && !this->forceDraw &&
+                (otherObjectSlot > OBJECT_SLOT_NONE)) {
                 static Vec3f D_80B58E54 = { 190.0f, -130.0f, 0.0f };
                 static Vec3s D_80B58E60 = { 0, 0, 0x4168 };
 
@@ -954,7 +952,8 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
 
         case ENAN_ACCESSORY_UMBRELLA:
             otherObjectSlot = this->an2ObjectSlot;
-            if ((this->stateFlags & ENAN_STATE_DRAW_UMBRELLA) && !this->forceDraw && (otherObjectSlot > OBJECT_SLOT_NONE)) {
+            if ((this->stateFlags & ENAN_STATE_DRAW_UMBRELLA) && !this->forceDraw &&
+                (otherObjectSlot > OBJECT_SLOT_NONE)) {
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[otherObjectSlot].segment);
                 gSPDisplayList(POLY_OPA_DISP++, gAnju2UmbrellaDL);
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
@@ -963,7 +962,8 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
 
         case ENAN_ACCESSORY_BROOM:
             otherObjectSlot = this->an3ObjectSlot;
-            if ((this->stateFlags & ENAN_STATE_DRAW_BROOM) && !this->forceDraw && (otherObjectSlot > OBJECT_SLOT_NONE)) {
+            if ((this->stateFlags & ENAN_STATE_DRAW_BROOM) && !this->forceDraw &&
+                (otherObjectSlot > OBJECT_SLOT_NONE)) {
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[otherObjectSlot].segment);
                 gSPDisplayList(POLY_OPA_DISP++, gAnju3BroomDL);
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
@@ -1248,7 +1248,7 @@ s32 func_80B54D18(Actor* thisx, PlayState* play) {
 // TODO: figure out what to do with this
 #define SCHEDULE_CALC_TIME_ALT(hour, minute) SCHEDULE_CONVERT_TIME((((hour)*60.0f) + (minute)) * (0x10000 / 60 / 24.0f))
 
-s32* func_80B54DF4(EnAn* this, PlayState* play) {
+s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     switch (this->scheduleResult) {
@@ -1397,7 +1397,7 @@ s32* func_80B54DF4(EnAn* this, PlayState* play) {
     return NULL;
 }
 
-s32 func_80B55180(EnAn* this, PlayState* play) {
+s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
     s32 ret = false;
 
     if ((this->stateFlags & SUBS_OFFER_MODE_MASK) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -1406,7 +1406,7 @@ s32 func_80B55180(EnAn* this, PlayState* play) {
         this->unk_394 = 0;
         this->msgEventFunc = NULL;
         this->actor.child = this->lookAtActor;
-        this->msgEventScript = func_80B54DF4(this, play);
+        this->msgEventScript = EnAn_GetMsgEventScript(this, play);
 
         if ((this->scheduleResult == ANJU_SCH_1) || (this->scheduleResult == ANJU_SCH_3) ||
             (this->scheduleResult == ANJU_SCH_12) || (this->scheduleResult == ANJU_SCH_13) ||
@@ -1423,7 +1423,7 @@ s32 func_80B55180(EnAn* this, PlayState* play) {
             this->stateFlags &= ~ENAN_STATE_20;
         }
 
-        this->actionFunc = func_80B57A44;
+        this->actionFunc = EnAn_Talk;
         ret = true;
     }
 
@@ -1452,7 +1452,7 @@ s32 func_80B552E4(EnAn* this, PlayState* play) {
         this->drawMoonMask = false;
         this->unk_3C0 = true;
         this->actor.room = play->roomCtx.curRoom.num;
-        this->actionFunc = func_80B578F8;
+        this->actionFunc = EnAn_FollowSchedule;
     }
 
     return ret;
@@ -1562,54 +1562,53 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
 }
 
 void func_80B556F8(EnAn* this, PlayState* play) {
-    if (this->unk_396 == 0) {
+    if (this->dialogueFuncState == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_6);
         this->stateFlags &= ~ENAN_STATE_20;
         this->stateFlags |= ENAN_STATE_200;
-        this->unk_396++;
-    } else if ((this->unk_396 == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        this->dialogueFuncState++;
+    } else if ((this->dialogueFuncState == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
         this->stateFlags &= ~ENAN_STATE_200;
         this->stateFlags |= ENAN_STATE_20;
-        this->unk_396++;
+        this->dialogueFuncState++;
     }
 }
 
 void func_80B557AC(EnAn* this, PlayState* play) {
-    if (this->unk_396 == 0) {
+    if (this->dialogueFuncState == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_3);
         this->stateFlags &= ~ENAN_STATE_20;
         this->stateFlags |= ENAN_STATE_200;
-        this->unk_396++;
-    } else if ((this->unk_396 == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        this->dialogueFuncState++;
+    } else if ((this->dialogueFuncState == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
         this->stateFlags &= ~ENAN_STATE_200;
         this->stateFlags |= ENAN_STATE_20;
-        this->unk_396++;
+        this->dialogueFuncState++;
     }
 }
 
 void func_80B55860(EnAn* this, PlayState* play) {
-    if (this->unk_396 == 0) {
+    if (this->dialogueFuncState == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_4);
         this->stateFlags |= ENAN_STATE_200;
         this->stateFlags &= ~ENAN_STATE_20;
-        this->unk_396++;
-    } else if ((this->unk_396 == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        this->dialogueFuncState++;
+    } else if ((this->dialogueFuncState == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
         this->stateFlags &= ~ENAN_STATE_200;
         this->stateFlags |= ENAN_STATE_20;
-        this->unk_396++;
+        this->dialogueFuncState++;
     }
 }
 
-// EnAn_ReactDialogue?
-s32 func_80B55914(EnAn* this, PlayState* play) {
+s32 EnAn_HandleDialog(EnAn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 textId = play->msgCtx.currentTextId;
 
     if (player->stateFlags1 & PLAYER_STATE1_40) {
-        this->stateFlags |= ENAN_STATE_400;
+        this->stateFlags |= ENAN_STATE_TALKING;
 
         if (this->prevTextId != textId) {
             switch (textId) {
@@ -1658,14 +1657,14 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
                 case 0x28BE: // "From what postbox did you got that letter?!"
                 case 0x28C0: // "Not what I mean!"
                 case 0x295E: // "I need to know!"
-                    this->unk_18C = func_80B556F8;
-                    this->unk_396 = 0;
+                    this->dialogueFunc = func_80B556F8;
+                    this->dialogueFuncState = 0;
                     break;
 
                 case 0x28E6: // "It's from Kafei"
                     this->stateFlags &= ~ENAN_STATE_DRAW_BROOM;
-                    this->unk_18C = func_80B55860;
-                    this->unk_396 = 0;
+                    this->dialogueFunc = func_80B55860;
+                    this->dialogueFuncState = 0;
                     break;
 
                 case 0x1885: // "It's 8:30 pm and the Inn is locking the door"
@@ -1677,8 +1676,8 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
                 case 0x28D9: // "Please"
                 case 0x28DC: // "Thank you"
                 case 0x28DE: // "Mail it in the morning"
-                    this->unk_18C = func_80B557AC;
-                    this->unk_396 = 0;
+                    this->dialogueFunc = func_80B557AC;
+                    this->dialogueFuncState = 0;
                     break;
 
                 case 0x28A1: // "Are you staying the night?"
@@ -1854,23 +1853,25 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
         }
 
         this->prevTextId = textId;
-    } else if (this->stateFlags & ENAN_STATE_400) {
-        this->unk_18C = NULL;
+    } else if (this->stateFlags & ENAN_STATE_TALKING) {
+        // Player stopped talking with Anju
+
+        this->dialogueFunc = NULL;
         this->prevTextId = 0;
-        this->stateFlags &= ~ENAN_STATE_400;
+        this->stateFlags &= ~ENAN_STATE_TALKING;
         this->faceIndex = this->unk_38A;
         this->eyeTimer = 4;
         func_80B555C8(this, play);
     }
 
-    if (this->unk_18C != NULL) {
-        this->unk_18C(this, play);
+    if (this->dialogueFunc != NULL) {
+        this->dialogueFunc(this, play);
     }
 
     return 0;
 }
 
-Actor* func_80B55D20(EnAn* this, PlayState* play) {
+Actor* EnAn_FindLookAtActor(EnAn* this, PlayState* play) {
     Actor* actor;
 
     switch (this->scheduleResult) {
@@ -1879,15 +1880,15 @@ Actor* func_80B55D20(EnAn* this, PlayState* play) {
             break;
 
         case ANJU_SCH_15:
-            actor = func_80B539CC(this, play, ACTORCAT_NPC, ACTOR_EN_NB);
+            actor = EnAn_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_NB);
             break;
 
         case ANJU_SCH_10:
-            actor = func_80B539CC(this, play, ACTORCAT_NPC, ACTOR_EN_PM);
+            actor = EnAn_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_PM);
             break;
 
         case ANJU_SCH_11:
-            actor = func_80B539CC(this, play, ACTORCAT_NPC, ACTOR_EN_IG);
+            actor = EnAn_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_IG);
             break;
     }
 
@@ -1903,7 +1904,7 @@ s32 func_80B55D98(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput, u
     s32 pad;
     s32 ret = false;
 
-    actor = func_80B539CC(this, play, actorCategory, actorId);
+    actor = EnAn_FindActor(this, play, actorCategory, actorId);
     this->timePath = NULL;
 
     if (sSearchTimePathLimit[scheduleOutput->result] >= 0) {
@@ -1994,7 +1995,7 @@ s32 func_80B5611C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         ret = true;
 
         this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_100;
-        this->stateFlags |= ENAN_STATE_200 | ENAN_STATE_DRAW_FOOD_TRAY;
+        this->stateFlags |= ENAN_STATE_200 | ENAN_STATE_DRAW_TRAY;
     }
 
     return ret;
@@ -2056,7 +2057,7 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 case ANJU_SCH_1A:
                 case ANJU_SCH_1B:
                 case ANJU_SCH_1C:
-                    this->stateFlags |= ENAN_STATE_DRAW_FOOD_TRAY | ENAN_STATE_100;
+                    this->stateFlags |= ENAN_STATE_DRAW_TRAY | ENAN_STATE_100;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
                     break;
 
@@ -2153,7 +2154,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_2D:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
-                this->stateFlags |= ENAN_STATE_DRAW_FOOD_TRAY;
+                this->stateFlags |= ENAN_STATE_DRAW_TRAY;
                 break;
 
             case ANJU_SCH_34:
@@ -2782,14 +2783,15 @@ void func_80B57718(EnAn* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
 }
 
-void func_80B577F0(EnAn* this, PlayState* play) {
+// Tentative name
+void EnAn_Initialize(EnAn* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gAnju1Skel, NULL, this->jointTable, this->morphTable, ANJU1_LIMB_MAX);
 
     this->animIndex = ENAN_ANIM_NONE;
     EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
-    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &D_80B58BBC);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B58BE8);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
 
     if (this->actor.params & ENAN_8000) {
         this->unk_3C0 = true;
@@ -2800,11 +2802,11 @@ void func_80B577F0(EnAn* this, PlayState* play) {
     this->stateFlags = 0;
     this->scheduleResult = ANJU_SCH_NONE;
 
-    this->actionFunc = func_80B578F8;
+    this->actionFunc = EnAn_FollowSchedule;
     this->actionFunc(this, play);
 }
 
-void func_80B578F8(EnAn* this, PlayState* play) {
+void EnAn_FollowSchedule(EnAn* this, PlayState* play) {
     ScheduleOutput scheduleOutput;
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
@@ -2821,7 +2823,7 @@ void func_80B578F8(EnAn* this, PlayState* play) {
         }
     } else if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput) ||
                ((this->scheduleResult != scheduleOutput.result) &&
-                (EnAn_ProcessScheduleOutput(this, play, &scheduleOutput) == 0))) {
+                !EnAn_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = ANJU_SCH_NONE;
@@ -2831,33 +2833,42 @@ void func_80B578F8(EnAn* this, PlayState* play) {
     }
 
     this->scheduleResult = scheduleOutput.result;
-    this->lookAtActor = func_80B55D20(this, play);
+    this->lookAtActor = EnAn_FindLookAtActor(this, play);
     func_80B57718(this, play);
 }
 
-void func_80B57A44(EnAn* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventFunc, &this->msgScriptResumePos) != 0) {
+void EnAn_Talk(EnAn* this, PlayState* play) {
+    if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventFunc, &this->msgScriptResumePos)) {
+        // Message event script is done
+
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
         this->stateFlags &= ~ENAN_STATE_20;
         this->stateFlags |= ENAN_STATE_200;
         this->unk_388 = 20;
         this->msgScriptResumePos = 0;
-        this->actionFunc = func_80B578F8;
-    } else if ((this->scheduleResult != ANJU_SCH_1) && (this->scheduleResult != ANJU_SCH_3) &&
-               (this->scheduleResult != ANJU_SCH_C) && (this->scheduleResult != ANJU_SCH_E) &&
-               (this->scheduleResult != ANJU_SCH_19)) {
-        if ((this->lookAtActor != NULL) && (this->lookAtActor->update != NULL)) {
-            s32 temp;
-            Vec3f sp38;
-            Vec3f sp2C;
+        this->actionFunc = EnAn_FollowSchedule;
 
-            Math_Vec3f_Copy(&sp38, &this->lookAtActor->world.pos);
-            Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
-            temp = Math_Vec3f_Yaw(&sp2C, &sp38);
+        return;
+    }
 
-            Math_ApproachS(&this->actor.shape.rot.y, temp, 4, 0x2AA8);
-        }
+    if ((this->scheduleResult == ANJU_SCH_1) || (this->scheduleResult == ANJU_SCH_3) ||
+        (this->scheduleResult == ANJU_SCH_C) || (this->scheduleResult == ANJU_SCH_E) ||
+        (this->scheduleResult == ANJU_SCH_19)) {
+        return;
+    }
+
+    if ((this->lookAtActor != NULL) && (this->lookAtActor->update != NULL)) {
+        // Rotate towards actor
+        s32 temp;
+        Vec3f sp38;
+        Vec3f sp2C;
+
+        Math_Vec3f_Copy(&sp38, &this->lookAtActor->world.pos);
+        Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
+        temp = Math_Vec3f_Yaw(&sp2C, &sp38);
+
+        Math_ApproachS(&this->actor.shape.rot.y, temp, 4, 0x2AA8);
     }
 }
 
@@ -2868,6 +2879,7 @@ void func_80B57B48(EnAn* this, PlayState* play) {
     };
     s32 pad;
 
+    //! FAKE
     if (0) {}
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_557)) {
@@ -2921,13 +2933,13 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    this->unk_214 = -0x80;
-    this->unk_3B8 = false;
+    this->roomNum = -0x80;
+    this->slotsInitialized = false;
     if (temp_v1 == 0) {
         this->actor.room = -1;
     }
 
-    this->actionFunc = func_80B577F0;
+    this->actionFunc = EnAn_Initialize;
 }
 
 void EnAn_Destroy(Actor* thisx, PlayState* play) {
@@ -2939,11 +2951,11 @@ void EnAn_Destroy(Actor* thisx, PlayState* play) {
 void EnAn_Update(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
 
-    if (func_80B53840(this, play)) {
+    if (EnAn_InitializeObjectSlots(this, play)) {
         return;
     }
 
-    if ((this->actionFunc != func_80B577F0) && !func_80B55180(this, play) && (func_80B552E4(this, play) != 0)) {
+    if ((this->actionFunc != EnAn_Initialize) && !EnAn_CheckTalk(this, play) && func_80B552E4(this, play)) {
         func_80B57B48(this, play);
         func_80B53BA8(this, play);
         EnAn_UpdateFace(this);
@@ -2952,7 +2964,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     if (this->scheduleResult != ANJU_SCH_NONE) {
-        func_80B55914(this, play);
+        EnAn_HandleDialog(this, play);
         func_80B53BA8(this, play);
         EnAn_UpdateFace(this);
         func_80B554E8(this);
@@ -3004,8 +3016,8 @@ void EnAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 
     if (limbIndex == ANJU1_LIMB_HEAD) {
-        SubS_UpdateLimb(this->headRotZ + 0x4000, this->headRotY + this->actor.shape.rot.y + 0x4000, &this->headComputedPos,
-                        &this->headComputedRot, stepRot, overrideRot);
+        SubS_UpdateLimb(this->headRotZ + 0x4000, this->headRotY + this->actor.shape.rot.y + 0x4000,
+                        &this->headComputedPos, &this->headComputedRot, stepRot, overrideRot);
         Matrix_Pop();
         Matrix_Translate(this->headComputedPos.x, this->headComputedPos.y, this->headComputedPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
