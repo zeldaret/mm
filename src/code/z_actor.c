@@ -1939,8 +1939,8 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  * - Positive values (`PLAYER_IA_NONE < exchangeItemAction < PLAYER_IA_MAX`):
  *    Offers the ability to initiate the conversation with an item from the player.
  *    Not all positive values are implemented properly for this to work.
- *    Working ones are PLAYER_IA_PICTO_BOX and PLAYER_IA_BOTTLE_MIN <= exchangeItemAction < PLAYER_IA_MASK_MIN
- *    Note: While PLAYER_IA_BEANS works, it is special cased to just plant the bean with no talking.
+ *    Working ones are PLAYER_IA_PICTOGRAPH_BOX and PLAYER_IA_BOTTLE_MIN <= exchangeItemAction < PLAYER_IA_MASK_MIN
+ *    Note: While PLAYER_IA_MAGIC_BEANS works, it is special cased to just plant the bean with no talking.
  * - `PLAYER_IA_NONE`:
  *    Allows the player to speak to or check the actor (by pressing A).
  * - `PLAYER_IA_MINUS1`:
