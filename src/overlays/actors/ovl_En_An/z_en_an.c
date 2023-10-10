@@ -603,24 +603,24 @@ typedef enum EnAnAnimation {
     /*  2 */ ENAN_ANIM_2,
     /*  3 */ ENAN_ANIM_3,
     /*  4 */ ENAN_ANIM_4,
-    /*  5 */ ENAN_ANIM_5,
+    /*  5 */ ENAN_ANIM_SURPRISED,
     /*  6 */ ENAN_ANIM_6,
     /*  7 */ ENAN_ANIM_7,
     /*  8 */ ENAN_ANIM_8,
-    /*  9 */ ENAN_ANIM_9,
-    /* 10 */ ENAN_ANIM_10,
+    /*  9 */ ENAN_ANIM_SIT,
+    /* 10 */ ENAN_ANIM_SIT_MORPH,
     /* 11 */ ENAN_ANIM_11,
     /* 12 */ ENAN_ANIM_12,
     /* 13 */ ENAN_ANIM_13,
     /* 14 */ ENAN_ANIM_14,
-    /* 15 */ ENAN_ANIM_15,
-    /* 16 */ ENAN_ANIM_16,
+    /* 15 */ ENAN_ANIM_WAITING_WITH_TRAY,
+    /* 16 */ ENAN_ANIM_WALKING_WITH_TRAY,
 
     /* 17 */ ENAN_ANIMOBJ_AN2,
     /* 17 */ ENAN_ANIM_17 = ENAN_ANIMOBJ_AN2,
     /* 18 */ ENAN_ANIM_18,
     /* 19 */ ENAN_ANIM_19,
-    /* 20 */ ENAN_ANIM_20,
+    /* 20 */ ENAN_ANIM_SITTING_AND_CRYING,
 
     /* 21 */ ENAN_ANIMOBJ_AN3,
     /* 21 */ ENAN_ANIM_21 = ENAN_ANIMOBJ_AN3,
@@ -649,23 +649,23 @@ static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
     { &object_an1_Anim_008B6C, 1.0f, 0, -1, ANIMMODE_LOOP, -6 }, // ENAN_ANIM_2
     { &object_an1_Anim_00544C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_3
     { &object_an1_Anim_00544C, 1.0f, 0, -1, ANIMMODE_ONCE, -6 }, // ENAN_ANIM_4
-    { &object_an1_Anim_0026B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_5
+    { &gAn1SurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_SURPRISED
     { &object_an1_Anim_001E74, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_6
     { &object_an1_Anim_013048, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_7
     { &object_an1_Anim_013048, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_8
-    { &object_an1_Anim_0071E8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_9
-    { &object_an1_Anim_0071E8, 1.0f, 0, -1, ANIMMODE_LOOP, -6 }, // ENAN_ANIM_10
+    { &gAn1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_SIT
+    { &gAn1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 }, // ENAN_ANIM_SIT_MORPH
     { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_11
     { &object_an1_Anim_0065C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_12
     { &object_an1_Anim_001090, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_13
     { &object_an1_Anim_00144C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_14
-    { &object_an1_Anim_00341C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_15
-    { &object_an1_Anim_003EA8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_16
+    { &gAn1WaitingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_WAITING_WITH_TRAY
+    { &gAn1WalkingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_WALKING_WITH_TRAY
 
     { &object_an2_Anim_0028DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_17
     { &object_an2_Anim_0042CC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_18
     { &object_an2_Anim_0038A0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_19
-    { &object_an2_Anim_001B80, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_20
+    { &gAnju2SittingAndCryingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_SITTING_AND_CRYING
 
     { &object_an3_Anim_00201C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_21
     { &object_an3_Anim_002A4C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_22
@@ -750,9 +750,9 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
             }
             break;
 
-        case ENAN_ANIM_9:
-        case ENAN_ANIM_10:
-            if ((this->animIndex != ENAN_ANIM_9) && (this->animIndex != ENAN_ANIM_10)) {
+        case ENAN_ANIM_SIT:
+        case ENAN_ANIM_SIT_MORPH:
+            if ((this->animIndex != ENAN_ANIM_SIT) && (this->animIndex != ENAN_ANIM_SIT_MORPH)) {
                 changeAnim = true;
             }
             break;
@@ -1236,7 +1236,7 @@ s32 func_80B54D18(Actor* thisx, PlayState* play) {
         label:
             this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_DRAW_KAFEI_MASK);
             this->stateFlags |= ENAN_STATE_200;
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_20);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_AND_CRYING);
             ret = true;
             this->unk_394++;
             break;
@@ -1531,7 +1531,7 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
             break;
 
         case ANJU_SCH_15:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_15);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
             break;
 
         case ANJU_SCH_2F:
@@ -1546,8 +1546,8 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
             break;
 
         default:
-            if (this->animIndex == ENAN_ANIM_15) {
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_16);
+            if (this->animIndex == ENAN_ANIM_WAITING_WITH_TRAY) {
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
             }
             if (this->animIndex == ENAN_ANIM_17) {
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_18);
@@ -1603,6 +1603,7 @@ void func_80B55860(EnAn* this, PlayState* play) {
     }
 }
 
+// EnAn_ReactDialogue?
 s32 func_80B55914(EnAn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 textId = play->msgCtx.currentTextId;
@@ -1612,142 +1613,142 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
 
         if (this->prevTextId != textId) {
             switch (textId) {
-                case 0x28E5:
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_5);
+                case 0x28E5: // "Ah!"
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_SURPRISED);
                     this->stateFlags &= ~ENAN_STATE_DRAW_BROOM;
                     break;
 
-                case 0x28BA:
-                case 0x28D1:
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_5);
+                case 0x28BA: // "What's this?"
+                case 0x28D1: // "You are looking for Kafei?"
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_SURPRISED);
                     break;
 
-                case 0x28AF:
-                case 0x28C1:
+                case 0x28AF: // "Good night"
+                case 0x28C1: // "I need to hurry and cook for grandmother"
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
                     break;
 
-                case 0x28BC:
+                case 0x28BC: // "Where did you got that letter?"
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_2);
                     break;
 
-                case 0x28C6:
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_15);
+                case 0x28C6: // "Don't talk to me or I'll drop this plate"
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
                     break;
 
-                case 0x28F5:
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_10);
+                case 0x28F5: // "The town will be crushed by the moon. Forget about the letter"
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_SIT_MORPH);
                     break;
 
-                case 0x28F7:
-                case 0x28F8:
+                case 0x28F7: // "Everyone will be taking refuge by tomorrow"
+                case 0x28F8: // "We'll go to Romani Ranch to take refuge"
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_21);
                     break;
 
-                case 0x28EB:
-                    if (this->animIndex != ENAN_ANIM_20) {
+                case 0x28EB: // "I'm afraid to meet him..."
+                    if (this->animIndex != ENAN_ANIM_SITTING_AND_CRYING) {
                         this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_DRAW_KAFEI_MASK);
                         this->stateFlags |= ENAN_STATE_200;
-                        EnAn_ChangeAnim(this, play, ENAN_ANIM_20);
+                        EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_AND_CRYING);
                     }
                     break;
 
-                case 0x28A4:
-                case 0x28A9:
-                case 0x28BE:
-                case 0x28C0:
-                case 0x295E:
+                case 0x28A4: // "That's good. We're totally booked right before the carnival"
+                case 0x28A9: // "You do have a reservation?"
+                case 0x28BE: // "From what postbox did you got that letter?!"
+                case 0x28C0: // "Not what I mean!"
+                case 0x295E: // "I need to know!"
                     this->unk_18C = func_80B556F8;
                     this->unk_396 = 0;
                     break;
 
-                case 0x28E6:
+                case 0x28E6: // "It's from Kafei"
                     this->stateFlags &= ~ENAN_STATE_DRAW_BROOM;
                     this->unk_18C = func_80B55860;
                     this->unk_396 = 0;
                     break;
 
-                case 0x1885:
-                case 0x28A0:
-                case 0x28A3:
-                case 0x28A5:
-                case 0x28B1:
-                case 0x28D2:
-                case 0x28D9:
-                case 0x28DC:
-                case 0x28DE:
+                case 0x1885: // "It's 8:30 pm and the Inn is locking the door"
+                case 0x28A0: // "Welcome to the Inn."
+                case 0x28A3: // "I'm sorry, there are no vacancies. We are always booked at the carnival"
+                case 0x28A5: // "Visit us again in the future"
+                case 0x28B1: // "I'm sorry, there are no vacancies"
+                case 0x28D2: // "I have a clue that will help find Kafei"
+                case 0x28D9: // "Please"
+                case 0x28DC: // "Thank you"
+                case 0x28DE: // "Mail it in the morning"
                     this->unk_18C = func_80B557AC;
                     this->unk_396 = 0;
                     break;
 
-                case 0x28A1:
-                case 0x28A2:
-                case 0x28A6:
-                case 0x28A7:
-                case 0x28A8:
-                case 0x28AA:
-                case 0x28AB:
-                case 0x28AC:
-                case 0x28AD:
-                case 0x28AE:
-                case 0x28B0:
-                case 0x28B2:
-                case 0x28B3:
-                case 0x28B4:
-                case 0x28B5:
-                case 0x28B6:
-                case 0x28B7:
-                case 0x28B8:
-                case 0x28B9:
-                case 0x28BB:
-                case 0x28BD:
-                case 0x28BF:
-                case 0x28C2:
-                case 0x28C3:
+                case 0x28A1: // "Are you staying the night?"
+                case 0x28A2: // "You are staying the night!?"
+                case 0x28A6: // "Are you staying the night? Did I ask you the same earlier?"
+                case 0x28A7: // "Enjoy the carnival"
+                case 0x28A8: // "Did you have a reservation?"
+                case 0x28AA: // "One moment please"
+                case 0x28AB: // "I expected your arrival for afternon. Your room is on the second floor"
+                case 0x28AC: // "Have you been to the plaza yet? They are putting the carnival stuff"
+                case 0x28AD: // "Relax..."
+                case 0x28AE: // doesn't exist
+                case 0x28B0: // "It's hard to find one's way on the city goro"
+                case 0x28B2: // "I should have a reservation-goro"
+                case 0x28B3: // "I do have your reservation. Your room is on the second floor"
+                case 0x28B4: // "The place is falling apart-goro"
+                case 0x28B5: // "I made a reservation. I'm [Player]-goro"
+                case 0x28B6: // "[Player]-goro? There's a reservation under a similar name, but it's taken"
+                case 0x28B7: // "Really-goro? I'll just sleep outside then-goro"
+                case 0x28B8: // "I'm sorry"
+                case 0x28B9: // "It's a hard world-goro"
+                case 0x28BB: // "I delivered this to you!"
+                case 0x28BD: // "From the postbox"
+                case 0x28BF: // "From somewhere"
+                case 0x28C2: // "I need to hurry! The afternoon guest will arrive soon"
+                case 0x28C3: // "Used to be a cafeteria"
                 case 0x28C4:
-                case 0x28C5:
-                case 0x28C7:
-                case 0x28C8:
-                case 0x28C9:
-                case 0x28CA:
-                case 0x28CB:
-                case 0x28CC:
-                case 0x28CD:
-                case 0x28CE:
-                case 0x28CF:
-                case 0x28D0:
-                case 0x28D3:
-                case 0x28D4:
-                case 0x28D5:
-                case 0x28D6:
-                case 0x28D7:
-                case 0x28D8:
-                case 0x28DA:
-                case 0x28DB:
-                case 0x28DD:
-                case 0x28DF:
-                case 0x28E0:
-                case 0x28E1:
-                case 0x28E2:
-                case 0x28E3:
-                case 0x28E4:
-                case 0x28E7:
-                case 0x28E8:
-                case 0x28E9:
-                case 0x28EA:
-                case 0x28EC:
-                case 0x28ED:
-                case 0x28EE:
-                case 0x28EF:
-                case 0x28F0:
-                case 0x28F1:
-                case 0x28F2:
+                case 0x28C5: // "Mmm?"
+                case 0x28C7: // "Tortus, I've already had lunch"
+                case 0x28C8: // "I'm Anju! Tortus was my dad..."
+                case 0x28C9: // "I've already had lunch"
+                case 0x28CA: // "Please eat..."
+                case 0x28CB: // "I already ate lunch"
+                case 0x28CC: // "Don't eat my food then"
+                case 0x28CD: // "Phew"
+                case 0x28CE: // "Phew?"
+                case 0x28CF: // "Want me to read a story?"
+                case 0x28D0: // "That mask... You are looking for Kafei"
+                case 0x28D3: // "Come to our kitchen at 11:30"
+                case 0x28D4: // "I'll find him myself"
+                case 0x28D5: // "I wonder where Kafei could have gone"
+                case 0x28D6: // "Nevermind!"
+                case 0x28D7: // "I'm sorry to bother you late at night"
+                case 0x28D8: // "I received a letter from Kafei"
+                case 0x28DA: // "Put my letter in a postbox"
+                case 0x28DB: // "Can I ask this to you?"
+                case 0x28DD: // doesn't exist
+                case 0x28DF: // "You won't take refuge?"
+                case 0x28E0: // "Today's weather"
+                case 0x28E1: // "I'll wait for him"
+                case 0x28E2: // "Did you see him? It's too late"
+                case 0x28E3: // "Did you see him? It's too early"
+                case 0x28E4: // "Did you meet him?"
+                case 0x28E7: // "What's that?"
+                case 0x28E8: // "Have you seen a man around here?"
+                case 0x28E9: // "He looks like this"
+                case 0x28EA: // "He disappeared a month ago"
+                case 0x28EC: // "Should I wait?"
+                case 0x28ED: // "You are looking for him too"
+                case 0x28EE: // "I came here to look for him myself"
+                case 0x28EF: // "What a ramshackle inn"
+                case 0x28F0: // "Everything is falling apart"
+                case 0x28F1: // "We are leaving in the evening for the ranch"
+                case 0x28F2: // "I wonder if Kafei is really at Cremia's"
                 case 0x28F3:
-                case 0x28F4:
-                case 0x28F6:
+                case 0x28F4: // "But he said in the letter he'll come back"
+                case 0x28F6: // "Mother thank you"
                 default:
-                    if (this->animIndex == ENAN_ANIM_16) {
-                        EnAn_ChangeAnim(this, play, ENAN_ANIM_15);
+                    if (this->animIndex == ENAN_ANIM_WALKING_WITH_TRAY) {
+                        EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
                     }
                     if (this->animIndex == ENAN_ANIM_18) {
                         EnAn_ChangeAnim(this, play, ENAN_ANIM_17);
@@ -1762,90 +1763,90 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
             }
 
             switch (textId) {
-                case 0x28F5:
+                case 0x28F5: // "The town will be crushed by the moon. Forget about the letter"
                     this->unk_38A = ENAN_FACE_0;
                     /* fallthrough */
-                case 0x28A5:
-                case 0x28AA:
-                case 0x28F8:
+                case 0x28A5: // "Visit us again in the future"
+                case 0x28AA: // "One moment please"
+                case 0x28F8: // "We'll go to Romani Ranch to take refuge"
                     this->faceIndex = ENAN_FACE_0;
                     this->eyeTimer = 8;
                     break;
 
-                case 0x1885:
-                case 0x28A0:
-                case 0x28A6:
-                case 0x28AF:
-                case 0x28C1:
+                case 0x1885: // "It's 8:30 pm and the Inn is locking the door"
+                case 0x28A0: // "Welcome to the Inn."
+                case 0x28A6: // "Are you staying the night? Did I ask you the same earlier?"
+                case 0x28AF: // "Good night"
+                case 0x28C1: // "I need to hurry and cook for grandmother"
                     this->faceIndex = ENAN_FACE_3;
                     this->eyeTimer = 8;
                     break;
 
-                case 0x28A2:
-                case 0x28B3:
-                case 0x28B6:
-                case 0x28BA:
-                case 0x28BE:
-                case 0x28CE:
-                case 0x28D0:
-                case 0x28D6:
-                case 0x28E5:
-                case 0x28E7:
-                case 0x28ED:
+                case 0x28A2: // "You are staying the night!?"
+                case 0x28B3: // "I do have your reservation. Your room is on the second floor"
+                case 0x28B6: // "[Player]-goro? There's a reservation under a similar name, but it's taken"
+                case 0x28BA: // "What's this?"
+                case 0x28BE: // "From what postbox did you got that letter?!"
+                case 0x28CE: // "Phew?"
+                case 0x28D0: // "That mask... You are looking for Kafei"
+                case 0x28D6: // "Nevermind!"
+                case 0x28E5: // "Ah!"
+                case 0x28E7: // "What's that?"
+                case 0x28ED: // "You are looking for him too"
                     this->faceIndex = ENAN_FACE_1;
                     this->eyeTimer = 8;
                     break;
 
-                case 0x28AD:
+                case 0x28AD: // "Relax..."
                     this->faceIndex = ENAN_FACE_8;
                     this->eyeTimer = 8;
                     break;
 
-                case 0x28C0:
-                case 0x28D7:
-                case 0x28DE:
+                case 0x28C0: // "Not what I mean!"
+                case 0x28D7: // "I'm sorry to bother you late at night"
+                case 0x28DE: // "Mail it in the morning"
                     this->faceIndex = ENAN_FACE_2;
                     this->eyeTimer = 8;
                     break;
 
-                case 0x28E6:
-                case 0x28F7:
+                case 0x28E6: // "It's from Kafei"
+                case 0x28F7: // "Everyone will be taking refuge by tomorrow"
                     this->faceIndex = ENAN_FACE_6;
                     this->eyeTimer = 8;
                     break;
 
-                case 0x28A3:
-                case 0x28B1:
-                case 0x28B8:
-                case 0x28C6:
-                case 0x28CA:
-                case 0x28CC:
-                case 0x28D5:
-                case 0x28E2:
-                case 0x28E3:
-                case 0x28E4:
+                case 0x28A3: // "I'm sorry, there are no vacancies. We are always booked at the carnival"
+                case 0x28B1: // "I'm sorry, there are no vacancies"
+                case 0x28B8: // "I'm sorry"
+                case 0x28C6: // "Don't talk to me or I'll drop this plate"
+                case 0x28CA: // "Please eat..."
+                case 0x28CC: // "Don't eat my food then"
+                case 0x28D5: // "I wonder where Kafei could have gone"
+                case 0x28E2: // "Did you see him? It's too late"
+                case 0x28E3: // "Did you see him? It's too early"
+                case 0x28E4: // "Did you meet him?"
                     this->faceIndex = ENAN_FACE_4;
                     this->eyeTimer = 8;
                     break;
 
-                case 0x28EC:
+                case 0x28EC: // "Should I wait?"
                     this->unk_38A = ENAN_FACE_5;
                     /* fallthrough */
-                case 0x28DC:
-                case 0x28EB:
-                case 0x28F2:
-                case 0x28F9:
+                case 0x28DC: // "Thank you"
+                case 0x28EB: // "I'm afraid to meet him..."
+                case 0x28F2: // "I wonder if Kafei is really at Cremia's"
+                case 0x28F9: // "Perhaps I was wrong..."
                     this->faceIndex = ENAN_FACE_5;
                     this->eyeTimer = 8;
                     break;
 
-                case 0x28F6:
+                case 0x28F6: // "Mother thank you"
                     this->faceIndex = ENAN_FACE_9;
                     this->eyeTimer = 8;
                     break;
 
-                case 0x28A4:
-                case 0x28A9:
+                case 0x28A4: // "That's good. We're totally booked right before the carnival"
+                case 0x28A9: // "You do have a reservation?"
                     this->faceIndex = ENAN_FACE_7;
                     this->eyeTimer = 8;
                     break;
@@ -1988,7 +1989,7 @@ s32 func_80B5611C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80B55D98(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_NB)) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_15);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
@@ -2056,7 +2057,7 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 case ANJU_SCH_1B:
                 case ANJU_SCH_1C:
                     this->stateFlags |= ENAN_STATE_DRAW_FOOD_TRAY | ENAN_STATE_100;
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_16);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
                     break;
 
                 case ANJU_SCH_24:
@@ -2150,7 +2151,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 /* fallthrough */
             case ANJU_SCH_2C:
             case ANJU_SCH_2D:
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_16);
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_DRAW_FOOD_TRAY;
                 break;
@@ -2287,7 +2288,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
 
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_20);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_AND_CRYING);
                     this->stateFlags |= ENAN_STATE_40;
                     this->actor.world.rot.y += 0x7FF8;
                     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -2354,7 +2355,7 @@ s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     switch (scheduleOutput->result) {
         case ANJU_SCH_1:
             SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_9);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_SIT);
             break;
 
         case ANJU_SCH_18:
