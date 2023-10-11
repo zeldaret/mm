@@ -887,9 +887,9 @@ static s8 sLimbToBodyParts[POE_LIMB_MAX] = {
 };
 
 static Vec3f D_80B2F734[] = {
-    { -600.0f, 500.0f, 1700.0f },  // ENPOH_BODYPART_7
-    { -600.0f, 500.0f, -1700.0f }, // ENPOH_BODYPART_8
-    { 1000.0f, 1700.0f, 0.0f },    // ENPOH_BODYPART_9
+    { -600.0f, 500.0f, 1700.0f },  // POE_BODYPART_7
+    { -600.0f, 500.0f, -1700.0f }, // POE_BODYPART_8
+    { 1000.0f, 1700.0f, 0.0f },    // POE_BODYPART_9
 };
 
 void EnPoh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
@@ -929,9 +929,9 @@ void EnPoh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             Vec3f* vec2 = &D_80B2F734[0];
 
             Matrix_MultVecX(-2000.0f, &this->bodyPartsPos[bodyPartIndex]);     // POE_BODYPART_TOP_CLOAK
-            Matrix_MultVecY(-2000.0f, &this->bodyPartsPos[bodyPartIndex + 1]); // ENPOH_BODYPART_6
+            Matrix_MultVecY(-2000.0f, &this->bodyPartsPos[bodyPartIndex + 1]); // POE_BODYPART_6
 
-            for (i = bodyPartIndex + 2; i < ENPOH_BODYPART_MAX; i++, vec++, vec2++) {
+            for (i = bodyPartIndex + 2; i < POE_BODYPART_MAX; i++, vec++, vec2++) {
                 Matrix_MultVec3f(vec2, vec);
             }
         }
@@ -979,7 +979,7 @@ void EnPoh_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(&gfx[3], gPoeLanternDL);
 
     POLY_OPA_DISP = &gfx[4];
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ENPOH_BODYPART_MAX,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, POE_BODYPART_MAX,
                             this->actor.scale.x * 100.0f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
                             ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
