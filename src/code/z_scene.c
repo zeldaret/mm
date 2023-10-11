@@ -157,7 +157,7 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 slot, s16 id) {
 void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd) {
     s32 loadedCount;
     s16 playerObjectId;
-    void* nextObject;
+    void* objectPtr;
 
     play->linkActorEntry =
         (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + play->setupEntranceList[play->curSpawn].spawn;
@@ -170,14 +170,14 @@ void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd) {
     }
 
     loadedCount = Object_SpawnPersistent(&play->objectCtx, OBJECT_LINK_CHILD);
-    nextObject = play->objectCtx.slots[play->objectCtx.numEntries].segment;
+    objectPtr = play->objectCtx.slots[play->objectCtx.numEntries].segment;
     play->objectCtx.numEntries = loadedCount;
     play->objectCtx.numPersistentEntries = loadedCount;
-    playerObjectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
+    playerObjectId = gPlayerFormObjectIds[GET_PLAYER_FORM];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_SpawnPersistent(&play->objectCtx, playerObjectId);
 
-    play->objectCtx.slots[play->objectCtx.numEntries].segment = nextObject;
+    play->objectCtx.slots[play->objectCtx.numEntries].segment = objectPtr;
 }
 
 // SceneTableEntry Header Command 0x01: Actor List

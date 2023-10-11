@@ -786,18 +786,18 @@ void EnSGoro_UpdateSleeping(EnSGoro* this, PlayState* play) {
 s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
     if (this->animInfoIndex == EN_S_GORO_ANIM_IDLE_STAND) {
         if (((EnJg*)this->otherGoron)->flags & 1) {
-            this->loadedObjIndex = Object_GetSlot(&play->objectCtx, OBJECT_TAISOU);
-            if (this->loadedObjIndex >= 0) {
-                gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->loadedObjIndex].segment);
+            this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_TAISOU);
+            if (this->objectSlot > OBJECT_SLOT_NONE) {
+                gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
                 this->animInfoIndex = EN_S_GORO_ANIM_TAISOU_CHEER;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
                 return true;
             }
         }
     } else if ((this->animInfoIndex == EN_S_GORO_ANIM_TAISOU_CHEER) && !(((EnJg*)this->otherGoron)->flags & 1)) {
-        this->loadedObjIndex = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
-        if (this->loadedObjIndex >= 0) {
-            gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->loadedObjIndex].segment);
+        this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
+        if (this->objectSlot > OBJECT_SLOT_NONE) {
+            gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
             this->animInfoIndex = EN_S_GORO_ANIM_IDLE_STAND;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
             this->skelAnime.curFrame = this->skelAnime.endFrame;
@@ -1023,7 +1023,7 @@ s32 EnSGoro_UpdateAttentionTarget(EnSGoro* this, PlayState* play) {
 }
 
 void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->loadedObjIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actionFlags = 0;
         if (EN_S_GORO_OFTYPE_WSHRINE) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
@@ -1307,10 +1307,10 @@ void EnSGoro_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     if (this->actor.update != NULL) {
-        s32 objIndex = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
+        s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
 
-        this->loadedObjIndex = objIndex;
-        if (objIndex < 0) {
+        this->objectSlot = objectSlot;
+        if (objectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
         }
     }
@@ -1329,7 +1329,7 @@ void EnSGoro_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->loadedObjIndex].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
     SkelAnime_Update(&this->skelAnime);
     if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
         EnSGoro_UpdateAttentionTarget(this, play);

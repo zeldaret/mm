@@ -27,7 +27,7 @@ typedef struct EnEndingHero6 {
     /* 0x278 */ EnEndingHero6ActionFunc actionFunc;
     /* 0x27C */ s32 animIndex;
     /* 0x280 */ s32 type;
-    /* 0x284 */ s8 objectIndex;
+    /* 0x284 */ s8 objectSlot;
     /* 0x286 */ s16 timer;
     /* 0x288 */ s16 blinkTimer;
     /* 0x28A */ s16 eyeState;

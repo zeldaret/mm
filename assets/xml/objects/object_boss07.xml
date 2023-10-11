@@ -150,7 +150,7 @@
         <Animation Name="gMajorasMaskFloatingAnim" Offset="0x19E48" /> <!-- Original name is "last3_stop" -->
 
         <!-- Majora's Wrath Animations. For unused animations, we don't know what the whips are supposed to do, since their physics are controlled by the Boss07 actor.  -->
-        <Animation Name="gMajorasWrathFlipLeftAndSpin" Offset="0x1AE1C" /> <!-- Unused. Original name is "last_ac01" -->
+        <Animation Name="gMajorasWrathFlipLeftAndSpinAnim" Offset="0x1AE1C" /> <!-- Unused. Original name is "last_ac01" -->
         <Animation Name="gMajorasWrathDoubleKickAndJumpBackAnim" Offset="0x1C430" /> <!-- Unused. Original name is "last_ac02" -->
         <Animation Name="gMajorasWrathBackflipUppercutAttackAnim" Offset="0x1CFF0" /> <!-- Unused. Original name is "last_ac03" -->
         <Animation Name="gMajorasWrathHighKickAnim" Offset="0x1D974" /> <!-- Unused and almost identical to gMajorasWrathKickAnim. Original name is "last_ac04" -->

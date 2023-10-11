@@ -180,7 +180,7 @@ extern s16 gItemPrices[];
 extern u16 gSceneIdsPerRegion[11][27];
 extern u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114];
 
-extern s16 gPlayerFormObjectIndices[PLAYER_FORM_MAX];
+extern s16 gPlayerFormObjectIds[PLAYER_FORM_MAX];
 extern ObjectId gObjectTableSize;
 extern RomFile gObjectTable[OBJECT_ID_MAX];
 
