@@ -26,7 +26,7 @@
         <Texture Name="gKafeiEyesRollLeftTex" OutName="kafei_eyes_roll_left" Format="ci8" Width="64" Height="32" Offset="0x4E80" />
         <Texture Name="gKafeiEyesRollUpTex" OutName="kafei_eyes_roll_up" Format="ci8" Width="64" Height="32" Offset="0x5680" />
         <Texture Name="gKafeiEyesRollDownTex" OutName="kafei_eyes_roll_down" Format="ci8" Width="64" Height="32" Offset="0x5E80" />
-        <Texture Name="object_test3_Tex_006680" OutName="tex_006680" Format="ci8" Width="64" Height="32" Offset="0x6680" /> <!-- name it after object_link_child_Tex_003800  -->
+        <Texture Name="object_test3_Tex_006680" OutName="tex_006680" Format="ci8" Width="64" Height="32" Offset="0x6680" /> <!-- TODO: name it after object_link_child_Tex_003800  -->
         <Texture Name="gKafeiMouthTeethTex" OutName="kafei_mouth_teeth" Format="ci8" Width="32" Height="32" Offset="0x6E80" />
         <Texture Name="gKafeiMouthAngryTex" OutName="kafei_mouth_angry" Format="ci8" Width="32" Height="32" Offset="0x7280" />
         <Texture Name="gKafeiMouthHappyTex" OutName="kafei_mouth_happy" Format="ci8" Width="32" Height="32" Offset="0x7680" />

@@ -1261,8 +1261,8 @@ static KafeiFace sFaceExpressions[] = {
 void EnTest3_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnTest3* this = THIS;
-    s32 eyeTexIndex = (this->player.skelAnime.jointTable[KAFEI_LIMB_MAX].x & 0xF) - 1;
-    s32 mouthTexIndex = ((this->player.skelAnime.jointTable[KAFEI_LIMB_MAX].x >> 4) & 0xF) - 1;
+    s32 eyeTexIndex = GET_EYE_INDEX_FROM_JOINT_TABLE(this->player.skelAnime.jointTable);
+    s32 mouthTexIndex = GET_MOUTH_INDEX_FROM_JOINT_TABLE(this->player.skelAnime.jointTable);
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
