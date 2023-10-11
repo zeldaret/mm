@@ -40,7 +40,7 @@ void ElfMsg2_SetupAction(ElfMsg2* this, ElfMsg2ActionFunc actionFunc) {
 }
 
 s32 func_8096EC4C(ElfMsg2* this, PlayState* play) {
-    if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
+    if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y <= 0x80) &&
         Flags_GetSwitch(play, this->actor.home.rot.y - 1)) {
         (void)"共倒れ"; // "Collapse together"
         if (ELFMSG2_GET_SWITCH_FLAG(&this->actor) != 0x7F) {

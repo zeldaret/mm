@@ -35,7 +35,7 @@ static InitChainEntry sInitChainsInitChain[] = {
 };
 
 s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
-    if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
+    if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y <= 0x80) &&
         Flags_GetSwitch(play, this->actor.home.rot.y - 1)) {
         (void)"共倒れ"; // Collapse together
         if (ELFMSG5_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
