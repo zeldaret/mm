@@ -31,7 +31,7 @@ typedef enum AnjuScheduleResult {
     /*  0 */ ANJU_SCH_NONE,
     /*  1 */ ANJU_SCH_1,
     /*  2 */ ANJU_SCH_2,
-    /*  3 */ ANJU_SCH_3,
+    /*  3 */ ANJU_SCH_LAUNDRY_POOL_SIT,
     /*  4 */ ANJU_SCH_4,
     /*  5 */ ANJU_SCH_5,
     /*  6 */ ANJU_SCH_6,
@@ -40,7 +40,7 @@ typedef enum AnjuScheduleResult {
     /*  9 */ ANJU_SCH_9,
     /* 10 */ ANJU_SCH_A,
     /* 11 */ ANJU_SCH_B,
-    /* 12 */ ANJU_SCH_C,
+    /* 12 */ ANJU_SCH_RANCH,
     /* 13 */ ANJU_SCH_D,
     /* 14 */ ANJU_SCH_E,
     /* 15 */ ANJU_SCH_F,
@@ -84,8 +84,8 @@ typedef enum AnjuScheduleResult {
     /* 53 */ ANJU_SCH_35,
     /* 54 */ ANJU_SCH_36,
     /* 55 */ ANJU_SCH_37,
-    /* 56 */ ANJU_SCH_38,
-    /* 57 */ ANJU_SCH_39,
+    /* 56 */ ANJU_SCH_LAUNDRY_POOL_WALKING_IN,
+    /* 57 */ ANJU_SCH_LAUNDRY_POOL_LEAVING,
     /* 58 */ ANJU_SCH_3A,
     /* 59 */ ANJU_SCH_3B,
     /* 60 */ ANJU_SCH_3C,
@@ -211,9 +211,9 @@ static u8 sScheduleScript[] = {
     /* 0x27E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 45, 15, 25, 0x291 - 0x284),
     /* 0x284 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 25, 15, 55, 0x28B - 0x28A),
     /* 0x28A */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x28B */ SCHEDULE_CMD_RET_TIME(15, 25, 15, 55, ANJU_SCH_39),
-    /* 0x291 */ SCHEDULE_CMD_RET_TIME(13, 45, 15, 25, ANJU_SCH_3),
-    /* 0x297 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 45, ANJU_SCH_38),
+    /* 0x28B */ SCHEDULE_CMD_RET_TIME(15, 25, 15, 55, ANJU_SCH_LAUNDRY_POOL_LEAVING),
+    /* 0x291 */ SCHEDULE_CMD_RET_TIME(13, 45, 15, 25, ANJU_SCH_LAUNDRY_POOL_SIT),
+    /* 0x297 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 45, ANJU_SCH_LAUNDRY_POOL_WALKING_IN),
     /* 0x29D */ SCHEDULE_CMD_RET_NONE(),
     /* 0x29E */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L(SCENE_YADOYA, 0x390 - 0x2A3),
     /* 0x2A3 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(6, 0, 10, 55, 0x38A - 0x2AA),
@@ -273,7 +273,7 @@ static u8 sScheduleScript[] = {
     /* 0x3DB */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x3EC - 0x3DF),
     /* 0x3DF */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x3E6 - 0x3E5),
     /* 0x3E5 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x3E6 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, ANJU_SCH_C),
+    /* 0x3E6 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, ANJU_SCH_RANCH),
     /* 0x3EC */ SCHEDULE_CMD_RET_NONE(),
     /* 0x3ED */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x446 - 0x3F1),
     /* 0x3F1 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 11, 0, 0x440 - 0x3F7),
@@ -295,11 +295,248 @@ static u8 sScheduleScript[] = {
     /* 0x447 */ SCHEDULE_CMD_RET_NONE(),
 };
 
+/**
+ * The schedule script is roughly equivalent to the following pseudo-code:
+
+s32 scheduleScript(PlayState* play) {
+    if (gSaveContext.save.day == 1) {
+        if (play->sceneId == SCENE_YADOYA) {
+            if ((6, 0) <= NOW <= (10, 55)) {
+                return ANJU_SCH_12;
+            } else if ((10, 55) <= NOW <= (11, 10)) {
+                return ANJU_SCH_28;
+            } else if ((11, 10) <= NOW <= (11, 30)) {
+                return ANJU_SCH_E;
+            } else if ((11, 30) <= NOW <= (11, 50)) {
+                return ANJU_SCH_2A;
+            } else if ((11, 50) <= NOW <= (11, 55)) {
+                return ANJU_SCH_1A;
+            } else if ((11, 55) <= NOW <= (12, 0)) {
+                return ANJU_SCH_2B;
+            } else if ((12, 0) <= NOW <= (12, 15)) {
+                return ANJU_SCH_15;
+            } else if ((12, 15) <= NOW <= (12, 20)) {
+                return ANJU_SCH_2C;
+            } else if ((12, 20) <= NOW <= (12, 25)) {
+                return ANJU_SCH_1B;
+            } else if ((12, 25) <= NOW <= (12, 55)) {
+                return ANJU_SCH_2D;
+            } else if ((12, 55) <= NOW <= (13, 0)) {
+                return ANJU_SCH_1C;
+            } else if ((13, 15) <= NOW <= (13, 20)) {
+                return ANJU_SCH_1D;
+            } else if ((13, 20) <= NOW <= (13, 50)) {
+                return ANJU_SCH_2E;
+            } else if ((13, 50) <= NOW <= (14, 8)) {
+                return ANJU_SCH_12;
+            } else if ((14, 8) <= NOW <= (14, 18)) {
+                return ANJU_SCH_10;
+            } else if ((14, 18) <= NOW <= (16, 10)) {
+                return ANJU_SCH_12;
+            } else if ((16, 10) <= NOW <= (16, 30)) {
+                return ANJU_SCH_11;
+            } else if ((16, 30) <= NOW <= (19, 50)) {
+                return ANJU_SCH_12;
+            } else if ((19, 50) <= NOW <= (20, 20)) {
+                return ANJU_SCH_2F;
+            } else if ((20, 20) <= NOW <= (20, 30)) {
+                return ANJU_SCH_13;
+            } else if ((20, 30) <= NOW <= (21, 5)) {
+                return ANJU_SCH_30;
+            } else if ((21, 5) <= NOW <= (21, 10)) {
+                return ANJU_SCH_1E;
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
+                if ((23, 10) <= NOW <= (23, 15)) {
+                    return ANJU_SCH_1F;
+                } else if ((23, 15) <= NOW <= (0, 0)) {
+                    return ANJU_SCH_31;
+                } else if ((0, 0) <= NOW <= (6, 0)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HAD_MIDNIGHT_MEETING)) {
+                        return None;
+                    }
+                    return ANJU_SCH_17;
+                } else {
+                    return None;
+                }
+            } else {
+                return None;
+            }
+        } else {
+            return None;
+        }
+    } else if (gSaveContext.save.day == 2) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HAD_MIDNIGHT_MEETING)) {
+            if (play->sceneId == SCENE_YADOYA) {
+                if ((6, 0) <= NOW <= (10, 55)) {
+                    return ANJU_SCH_12;
+                } else if ((10, 55) <= NOW <= (11, 10)) {
+                    return ANJU_SCH_28;
+                } else if ((11, 10) <= NOW <= (11, 30)) {
+                    return ANJU_SCH_E;
+                } else if ((11, 30) <= NOW <= (11, 50)) {
+                    return ANJU_SCH_2A;
+                } else if ((11, 50) <= NOW <= (11, 55)) {
+                    return ANJU_SCH_1A;
+                } else if ((11, 55) <= NOW <= (12, 0)) {
+                    return ANJU_SCH_2B;
+                } else if ((12, 0) <= NOW <= (12, 15)) {
+                    return ANJU_SCH_15;
+                } else if ((12, 15) <= NOW <= (12, 20)) {
+                    return ANJU_SCH_2C;
+                } else if ((12, 20) <= NOW <= (12, 25)) {
+                    return ANJU_SCH_1B;
+                } else if ((12, 25) <= NOW <= (12, 55)) {
+                    return ANJU_SCH_2D;
+                } else if ((12, 55) <= NOW <= (13, 0)) {
+                    return ANJU_SCH_1C;
+                } else if ((13, 15) <= NOW <= (13, 20)) {
+                    return ANJU_SCH_1D;
+                } else if ((13, 20) <= NOW <= (13, 50)) {
+                    return ANJU_SCH_2E;
+                } else if ((13, 50) <= NOW <= (19, 50)) {
+                    return ANJU_SCH_12;
+                } else if ((19, 50) <= NOW <= (20, 20)) {
+                    return ANJU_SCH_2F;
+                } else if ((20, 20) <= NOW <= (20, 30)) {
+                    return ANJU_SCH_13;
+                } else if ((20, 30) <= NOW <= (21, 5)) {
+                    return ANJU_SCH_30;
+                } else if ((21, 5) <= NOW <= (21, 10)) {
+                    return ANJU_SCH_1E;
+                } else if ((21, 30) <= NOW <= (23, 0)) {
+                    return ANJU_SCH_18;
+                } else {
+                    return None;
+                }
+            } else {
+                return None;
+            }
+        } else if (play->sceneId == SCENE_YADOYA) {
+            if ((11, 3) <= NOW <= (11, 9)) {
+                return ANJU_SCH_20;
+            } else if ((11, 9) <= NOW <= (11, 29)) {
+                return ANJU_SCH_32;
+            } else if ((11, 29) <= NOW <= (11, 39)) {
+                return ANJU_SCH_21;
+            } else if ((17, 24) <= NOW <= (17, 30)) {
+                return ANJU_SCH_22;
+            } else if ((17, 30) <= NOW <= (17, 55)) {
+                return ANJU_SCH_33;
+            } else if ((17, 55) <= NOW <= (18, 0)) {
+                return ANJU_SCH_23;
+            } else if ((18, 0) <= NOW <= (19, 50)) {
+                return ANJU_SCH_12;
+            } else if ((19, 50) <= NOW <= (20, 20)) {
+                return ANJU_SCH_2F;
+            } else if ((20, 20) <= NOW <= (20, 30)) {
+                return ANJU_SCH_13;
+            } else if ((20, 30) <= NOW <= (21, 0)) {
+                return ANJU_SCH_30;
+            } else if ((21, 0) <= NOW <= (21, 5)) {
+                return ANJU_SCH_1E;
+            } else if ((21, 30) <= NOW <= (23, 0)) {
+                return ANJU_SCH_18;
+            } else {
+                return None;
+            }
+        } else if (play->sceneId == SCENE_TOWN) {
+            if ((11, 29) <= NOW <= (11, 39)) {
+                return ANJU_SCH_25;
+            } else if ((11, 39) <= NOW <= (12, 25)) {
+                return ANJU_SCH_36;
+            } else if ((12, 25) <= NOW <= (13, 15)) {
+                return ANJU_SCH_37;
+            } else if ((15, 55) <= NOW <= (16, 45)) {
+                return ANJU_SCH_3A;
+            } else if ((16, 45) <= NOW <= (17, 24)) {
+                return ANJU_SCH_3B;
+            } else if ((17, 24) <= NOW <= (17, 30)) {
+                return ANJU_SCH_26;
+            } else {
+                return None;
+            }
+        } else if (play->sceneId == SCENE_CLOCKTOWER) {
+            if ((11, 39) <= NOW <= (12, 25)) {
+                return ANJU_SCH_3C;
+            } else if ((12, 25) <= NOW <= (13, 15)) {
+                return ANJU_SCH_3D;
+            } else if ((15, 55) <= NOW <= (16, 45)) {
+                return ANJU_SCH_3E;
+            } else if ((16, 45) <= NOW <= (17, 24)) {
+                return ANJU_SCH_3F;
+            } else {
+                return None;
+            }
+        } else if (play->sceneId == SCENE_ALLEY) {
+            if ((13, 15) <= NOW <= (13, 45)) {
+                return ANJU_SCH_LAUNDRY_POOL_WALKING_IN;
+            } else if ((13, 45) <= NOW <= (15, 25)) {
+                return ANJU_SCH_LAUNDRY_POOL_SIT;
+            } else if ((15, 25) <= NOW <= (15, 55)) {
+                return ANJU_SCH_LAUNDRY_POOL_LEAVING;
+            } else {
+                return None;
+            }
+        } else {
+            return None;
+        }
+    } else if (gSaveContext.save.day == 3) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES)) {
+            if (play->sceneId == SCENE_YADOYA) {
+                if ((6, 0) <= NOW <= (11, 0)) {
+                    return ANJU_SCH_16;
+                } else if ((11, 0) <= NOW <= (11, 25)) {
+                    return ANJU_SCH_34;
+                } else if ((11, 25) <= NOW <= (11, 30)) {
+                    return ANJU_SCH_24;
+                } else if ((11, 30) <= NOW <= (11, 50)) {
+                    return ANJU_SCH_35;
+                } else if ((11, 50) <= NOW <= (12, 0)) {
+                    return ANJU_SCH_27;
+                } else if ((18, 0) <= NOW <= (5, 0)) {
+                    return ANJU_SCH_1;
+                } else if ((5, 0) <= NOW <= (6, 0)) {
+                    return ANJU_SCH_1;
+                } else {
+                    return None;
+                }
+            } else {
+                return None;
+            }
+        } else if (play->sceneId == SCENE_YADOYA) {
+            if ((6, 0) <= NOW <= (11, 0)) {
+                return ANJU_SCH_16;
+            } else if ((11, 0) <= NOW <= (11, 25)) {
+                return ANJU_SCH_34;
+            } else if ((11, 25) <= NOW <= (11, 30)) {
+                return ANJU_SCH_24;
+            } else if ((11, 30) <= NOW <= (11, 50)) {
+                return ANJU_SCH_35;
+            } else if ((11, 50) <= NOW <= (12, 0)) {
+                return ANJU_SCH_27;
+            } else {
+                return None;
+            }
+        } else if (play->sceneId == SCENE_OMOYA) {
+            if ((18, 0) <= NOW <= (6, 0)) {
+                return ANJU_SCH_RANCH;
+            } else {
+                return None;
+            }
+        } else {
+            return None;
+        }
+    } else {
+        return None;
+    }
+}
+ */
+
 static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     -1, // ANJU_SCH_NONE
     10, // ANJU_SCH_1
     -1, // ANJU_SCH_2
-    0,  // ANJU_SCH_3
+    0,  // ANJU_SCH_LAUNDRY_POOL_SIT
     -1, // ANJU_SCH_4
     -1, // ANJU_SCH_5
     -1, // ANJU_SCH_6
@@ -308,7 +545,7 @@ static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     -1, // ANJU_SCH_9
     -1, // ANJU_SCH_A
     -1, // ANJU_SCH_B
-    -1, // ANJU_SCH_C
+    -1, // ANJU_SCH_RANCH
     -1, // ANJU_SCH_D
     0,  // ANJU_SCH_E
     -1, // ANJU_SCH_F
@@ -352,8 +589,8 @@ static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     24, // ANJU_SCH_35
     1,  // ANJU_SCH_36
     2,  // ANJU_SCH_37
-    0,  // ANJU_SCH_38
-    1,  // ANJU_SCH_39
+    0,  // ANJU_SCH_LAUNDRY_POOL_WALKING_IN
+    1,  // ANJU_SCH_LAUNDRY_POOL_LEAVING
     3,  // ANJU_SCH_3A
     4,  // ANJU_SCH_3B
     0,  // ANJU_SCH_3C
@@ -1271,7 +1508,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             this->msgEventFunc = func_80B54C5C;
             return D_80B58954;
 
-        case ANJU_SCH_C:
+        case ANJU_SCH_RANCH:
             return D_80B5899C;
 
         case ANJU_SCH_19:
@@ -1291,7 +1528,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
                     case ANJU_SCH_2F:
                         return D_80B58B7C;
 
-                    case ANJU_SCH_3:
+                    case ANJU_SCH_LAUNDRY_POOL_SIT:
                         return D_80B58A24;
 
                     case ANJU_SCH_31:
@@ -1311,7 +1548,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
                         return D_80B589AC;
                     }
 
-                    if (this->scheduleResult == ANJU_SCH_3) {
+                    if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
                         this->msgEventFunc = func_80B54D18;
                         return D_80B58B3C;
                     }
@@ -1335,7 +1572,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
                         this->msgEventFunc = func_80B54BC4;
                         return D_80B589AC;
                     }
-                    if (this->scheduleResult == ANJU_SCH_3) {
+                    if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
                         this->msgEventFunc = func_80B54D18;
                         return D_80B58AF4;
                     }
@@ -1357,7 +1594,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
                     case ANJU_SCH_2D:
                         return D_80B58980;
 
-                    case ANJU_SCH_3:
+                    case ANJU_SCH_LAUNDRY_POOL_SIT:
                         this->msgEventFunc = func_80B54D18;
                         return D_80B58AF4;
 
@@ -1411,7 +1648,7 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
         this->actor.child = this->lookAtActor;
         this->msgEventScript = EnAn_GetMsgEventScript(this, play);
 
-        if ((this->scheduleResult == ANJU_SCH_1) || (this->scheduleResult == ANJU_SCH_3) ||
+        if ((this->scheduleResult == ANJU_SCH_1) || (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
             (this->scheduleResult == ANJU_SCH_12) || (this->scheduleResult == ANJU_SCH_13) ||
             (this->scheduleResult == ANJU_SCH_17) || (this->scheduleResult == ANJU_SCH_16) ||
             (this->scheduleResult == ANJU_SCH_28) || (this->scheduleResult == ANJU_SCH_2A) ||
@@ -1422,7 +1659,7 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
             this->stateFlags |= ENAN_STATE_20;
         }
 
-        if ((this->scheduleResult == ANJU_SCH_3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
+        if ((this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) && CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
             this->stateFlags &= ~ENAN_STATE_20;
         }
 
@@ -2134,8 +2371,8 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_33:
             case ANJU_SCH_36:
             case ANJU_SCH_37:
-            case ANJU_SCH_38:
-            case ANJU_SCH_39:
+            case ANJU_SCH_LAUNDRY_POOL_WALKING_IN:
+            case ANJU_SCH_LAUNDRY_POOL_LEAVING:
             case ANJU_SCH_3A:
             case ANJU_SCH_3B:
             case ANJU_SCH_3C:
@@ -2177,8 +2414,8 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
             case ANJU_SCH_36:
             case ANJU_SCH_37:
-            case ANJU_SCH_38:
-            case ANJU_SCH_39:
+            case ANJU_SCH_LAUNDRY_POOL_WALKING_IN:
+            case ANJU_SCH_LAUNDRY_POOL_LEAVING:
             case ANJU_SCH_3A:
             case ANJU_SCH_3B:
             case ANJU_SCH_3C:
@@ -2287,7 +2524,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 }
                 break;
 
-            case ANJU_SCH_3:
+            case ANJU_SCH_LAUNDRY_POOL_SIT:
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
 
@@ -2331,7 +2568,7 @@ s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.shape.rot, &D_80B58E88);
     Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
 
-    if (scheduleOutput->result == ANJU_SCH_C) {
+    if (scheduleOutput->result == ANJU_SCH_RANCH) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_IN_DISBELIEVE);
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
@@ -2415,7 +2652,7 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
             ret = func_80B5611C(this, play, scheduleOutput);
             break;
 
-        case ANJU_SCH_C:
+        case ANJU_SCH_RANCH:
             ret = func_80B56B00(this, play, scheduleOutput);
             break;
 
@@ -2424,7 +2661,7 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
             ret = func_80B56BC0(this, play, scheduleOutput);
             break;
 
-        case ANJU_SCH_3:
+        case ANJU_SCH_LAUNDRY_POOL_SIT:
         case ANJU_SCH_E:
         case ANJU_SCH_12:
         case ANJU_SCH_13:
@@ -2472,8 +2709,8 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
         case ANJU_SCH_35:
         case ANJU_SCH_36:
         case ANJU_SCH_37:
-        case ANJU_SCH_38:
-        case ANJU_SCH_39:
+        case ANJU_SCH_LAUNDRY_POOL_WALKING_IN:
+        case ANJU_SCH_LAUNDRY_POOL_LEAVING:
         case ANJU_SCH_3A:
         case ANJU_SCH_3B:
         case ANJU_SCH_3C:
@@ -2714,7 +2951,7 @@ void func_80B57718(EnAn* this, PlayState* play) {
             func_80B56E44(this, play);
             break;
 
-        case ANJU_SCH_3:
+        case ANJU_SCH_LAUNDRY_POOL_SIT:
             func_80B573F4(this, play);
             break;
 
@@ -2726,7 +2963,7 @@ void func_80B57718(EnAn* this, PlayState* play) {
             func_80B57674(this, play);
             break;
 
-        case ANJU_SCH_C:
+        case ANJU_SCH_RANCH:
         case ANJU_SCH_E:
         case ANJU_SCH_12:
         case ANJU_SCH_13:
@@ -2771,8 +3008,8 @@ void func_80B57718(EnAn* this, PlayState* play) {
         case ANJU_SCH_35:
         case ANJU_SCH_36:
         case ANJU_SCH_37:
-        case ANJU_SCH_38:
-        case ANJU_SCH_39:
+        case ANJU_SCH_LAUNDRY_POOL_WALKING_IN:
+        case ANJU_SCH_LAUNDRY_POOL_LEAVING:
         case ANJU_SCH_3A:
         case ANJU_SCH_3B:
         case ANJU_SCH_3C:
@@ -2855,8 +3092,8 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
         return;
     }
 
-    if ((this->scheduleResult == ANJU_SCH_1) || (this->scheduleResult == ANJU_SCH_3) ||
-        (this->scheduleResult == ANJU_SCH_C) || (this->scheduleResult == ANJU_SCH_E) ||
+    if ((this->scheduleResult == ANJU_SCH_1) || (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
+        (this->scheduleResult == ANJU_SCH_RANCH) || (this->scheduleResult == ANJU_SCH_E) ||
         (this->scheduleResult == ANJU_SCH_19)) {
         return;
     }
