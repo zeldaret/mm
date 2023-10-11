@@ -599,23 +599,23 @@ static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     3,  // ANJU_SCH_3F
 };
 
-s32 D_80B58718[0x1B] = {
+s32 sAnjuMsgScript_Sch10[0x1B] = {
     0x00560800, 0x44090000, 0x0E28BA0C, 0x09000017, 0x0E28BB0C, 0x09000018, 0x0E28BC0C, 0x09000017, 0x0E28BD0C,
     0x09000018, 0x0E28BE0C, 0x09000017, 0x0E28BF0C, 0x09000018, 0x0E28C02D, 0x00012D00, 0x0B0C0900, 0x00115608,
     0x10090000, 0x0E295C0C, 0x09000017, 0x0E295D0C, 0x09000018, 0x0E295E2D, 0x00012D00, 0x0B0C0900, 0x00100000,
 };
-s32 D_80B58784[0x21] = {
+s32 sAnjuMsgScript_Sch11[0x21] = {
     0x09000000, 0x4B10001E, 0x0E28B10C, 0x09000017, 0x0E28B20C, 0x09000018, 0x0E28B32D, 0x00011137, 0x020C0900,
     0x00100056, 0x10002E0E, 0x28B10C09, 0x0000170E, 0x28B50C09, 0x0000180E, 0x28B60C09, 0x0000170E, 0x28B70C09,
     0x0000180E, 0x28B82D00, 0x010C0900, 0x00115610, 0x10090000, 0x170E2956, 0x0C090000, 0x180E2957, 0x0C090000,
     0x170E2958, 0x0C090000, 0x180E2959, 0x2D00010C, 0x09000012, 0x10000000,
 };
-s32 D_80B58808[0x15] = {
+s32 sAnjuMsgScript_Sch15[0x15] = {
     0x09000017, 0x0E28C70C, 0x09000018, 0x0E28C80C, 0x09000017, 0x0E28C90C, 0x09000018,
     0x0E28CA0C, 0x09000017, 0x0E28CB0C, 0x09000018, 0x0E28CC0C, 0x09000017, 0x0E28CD0C,
     0x09000018, 0x0E28CE0C, 0x09000017, 0x0E28CF2D, 0x12D00,    0x0E0C0900, 0x100000,
 };
-s32 D_80B5885C[0x37] = {
+s32 sAnjuMsgScript_Sch12_B[0x37] = {
     0x220B0000, 0x69002020, 0x64004B,   0x1000B700, 0x370100AA, 0x370200,   0x550E28A0, 0x0C090000,
     0x0F28A80C, 0x05000000, 0x30000030, 0x0E28A90C, 0x0F28AA0C, 0x0F28AB0C, 0x120600A0, 0x1300,
     0xA02F0000, 0x2E2D0014, 0x0C114B10, 0x0700000E, 0x28AD2D00, 0x010C2400, 0x41161031, 0x0E28A30C,
@@ -624,28 +624,28 @@ s32 D_80B5885C[0x37] = {
     0x10C11,    0x20201023, 0x400012,   0x0E28A00C, 0x0900000F, 0x28A62D00, 0x010C2400, 0x40100E28,
     0xA72D0001, 0x0C102300, 0x41000B0E, 0x28AC2D00, 0x010C2400, 0x41100E28, 0xAD0C1000,
 };
-s32 D_80B58938[3] = { 0x0E18852D, 0x10C12, 0x10000000 };
-s32 D_80B58944[2] = { 0x0E28AF2D, 0x10C10 };
-s32 D_80B5894C[2] = { 0x0E28C12D, 0x10C10 };
-s32 D_80B58954[0xB] = {
+s32 sAnjuMsgScript_Sch13_Sch2F[3] = { 0x0E18852D, 0x10C12, 0x10000000 };
+s32 sAnjuMsgScript_Sch30[2] = { 0x0E28AF2D, 0x10C10 };
+s32 sAnjuMsgScript_Sch28[2] = { 0x0E28C12D, 0x10C10 };
+s32 sAnjuMsgScript_SchE[0xB] = {
     0x350100,   0x1C0E28C3, 0x0C0F28C4, 0x0C150900, 0xE28C5,    0x2D00010C,
     0x15090000, 0x11350112, 0x100E28C2, 0x2D00010C, 0x10000000,
 };
 s32 D_80B58980[2] = { 0x0E28C62D, 0x10C10 };
-s32 D_80B58988[3] = { 0x0E28F70C, 0x0F28F82D, 0x10C10 };
-s32 D_80B58994[2] = { 0x0E28F82D, 0x10C10 };
-s32 D_80B5899C[4] = { 0x0E28F90C, 0x0F28FA0C, 0x0F28FB2D, 0x10C10 };
-s32 D_80B589AC[0x14] = {
+s32 sAnjuMsgScript_Sch16[3] = { 0x0E28F70C, 0x0F28F82D, 0x10C10 };
+s32 sAnjuMsgScript_Sch34_Sch35[2] = { 0x0E28F82D, 0x10C10 };
+s32 sAnjuMsgScript_SchRanch[4] = { 0x0E28F90C, 0x0F28FA0C, 0x0F28FB2D, 0x10C10 };
+s32 sAnjuMsgScript_Sch17_A[0x14] = {
     0x0E28D70C, 0x0F28D80C, 0x0F28D90C, 0x0F28DA0C, 0x0F28DB0C, 0x05000700, 0x731,
     0x0E28D919, -0x16CFF2,  0x28DC0C11, 0x32201132, 0x10120600, 0xAA000013, 0xAA2F00,
     0x2E2D00,   0x012D0017, 0x2D00160C, 0x0700000E, 0x28DE0C15, 0x09000010,
 };
-s32 D_80B589FC[2] = { 0x0E28D62D, 0x10C10 };
-s32 D_80B58A04[8] = {
+s32 sAnjuMsgScript_Sch17_B[2] = { 0x0E28D62D, 0x10C10 };
+s32 sAnjuMsgScript_DekuDefault[8] = {
     0x522000, 0x100E294F, 0x0C0F2950, 0x2D00010C, 0x12115220, 0x100E2951, 0x2D00010C, 0x12100000,
 };
-s32 D_80B58A24[6] = { 0x524000, 0x0B0E2952, 0x2D00010C, 0x11524010, 0x0E29532D, 0x10C10 };
-s32 D_80B58A3C[2] = { 0x0E28E02D, 0x10C10 };
+s32 sAnjuMsgScript_SchLaundryPoolDeku[6] = { 0x524000, 0x0B0E2952, 0x2D00010C, 0x11524010, 0x0E29532D, 0x10C10 };
+s32 sAnjuMsgScript_Sch12_A[2] = { 0x0E28E02D, 0x10C10 };
 s32 D_80B58A44[0x1E] = {
     0x320800,   0x080E28D5, 0x2D00010C, 0x10003220,  0x80E28,    -0x2BD2FFFF, 0x0C100033, 0x01001A25,
     0x30001D,   0x27000300, 0x080E28E3, 0x2D00010C,  0x100E28E2, 0x2D00010C,  0x100E28E1, 0x2D00010C,
@@ -656,18 +656,18 @@ s32 D_80B58ABC[2] = { 0x0E28D02D, 0x10C10 };
 s32 D_80B58AC4[9] = {
     0x320800, 0x160E28D1, 0x0C0F28D2, 0x0C0F28D3, 0x2D00152D, 0x10C11, 0x3208100E, 0x28D32D00, 0x010C1000,
 };
-s32 D_80B58AE8[3] = { 0x0E28DF2D, 0x10C12, 0x10000000 };
-s32 D_80B58AF4[0x12] = {
+s32 sAnjuMsgScript_Sch1[3] = { 0x0E28DF2D, 0x10C12, 0x10000000 };
+s32 sAnjuMsgScript_SchLaundryPoolDefault[0x12] = {
     0x372000,    0x29003208, 0x2A0E28,   -0x17F3EAF7, 0xE28,      -0x16F3F0D8, -0x15F3EAF7, 0xE28,   -0x14F3F0D8,
     -0x13D2FFFF, 0x0C121137, 0x20100E28, -0x13F3EDF0, 0x0E28EE0C, 0x0F28EB0C,  0x0F28EC2D,  0x10C12, 0x11372010,
 };
-s32 D_80B58B3C[0x10] = {
+s32 sAnjuMsgScript_SchLaundryPoolKafeiMask[0x10] = {
     0x372000,   0x21003208, 0x220E28,    -0x17F3F0D8, -0x12F3EAF7, 0xE28,      -0x14F3F0D8, -0x13D2FFFF,
     0x0C121137, 0x20100E28, -0x13F3EDF0, 0x0E28EE0C,  0x0F28EB0C,  0x0F28EC2D, 0x10C12,     0x11372010,
 };
 s32 D_80B58B7C[3] = { 0x0E29512D, 0x10C12, 0x10000000 };
-s32 D_80B58B88[2] = { 0x0E29612D, 0x10C10 };
-s32 D_80B58B90[3] = { 0x0E291B2D, 0x10C12, 0x10000000 };
+s32 sAnjuMsgScript_Sch31[2] = { 0x0E29612D, 0x10C10 };
+s32 sAnjuMsgScript_Sch19[3] = { 0x0E291B2D, 0x10C12, 0x10000000 };
 
 ActorInit En_An_InitVars = {
     ACTOR_EN_AN,
@@ -1239,7 +1239,7 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 func_80B54678(EnAn* this, s16 csId) {
+s32 EnAn_ChangeCutscene(EnAn* this, s16 csId) {
     s32 ret = false;
 
     if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
@@ -1255,26 +1255,26 @@ s32 func_80B54678(EnAn* this, s16 csId) {
     return ret;
 }
 
-s16 func_80B546F4(EnAn* this, s32 arg1) {
+s16 EnAn_GetCsId(EnAn* this, s32 numCutscenes) {
     s16 csId = this->actor.csId;
     s32 i;
 
-    for (i = 0; i < arg1; i++) {
+    for (i = 0; i < numCutscenes; i++) {
         csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 
     return csId;
 }
 
-s16 func_80B54750(EnAn* this, s32 arg1) {
-    Actor* temp_v0 = this->actor.child;
+s16 EnAn_GetChildCsId(EnAn* this, s32 numCutscenes) {
+    Actor* child = this->actor.child;
     s16 csId = -1;
     s32 i;
 
-    if ((temp_v0 != NULL) && (temp_v0->update != NULL)) {
-        csId = temp_v0->csId;
+    if ((child != NULL) && (child->update != NULL)) {
+        csId = child->csId;
 
-        for (i = 0; i < arg1; i++) {
+        for (i = 0; i < numCutscenes; i++) {
             csId = CutsceneManager_GetAdditionalCsId(csId);
         }
     }
@@ -1282,15 +1282,15 @@ s16 func_80B54750(EnAn* this, s32 arg1) {
     return csId;
 }
 
-s32 func_80B547C8(Actor* thisx, PlayState* play) {
+s32 EnAn_MsgEvent_10(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
-    s16 csId = func_80B546F4(this, 0);
+    s16 csId = EnAn_GetCsId(this, 0);
     s32 ret = 0;
 
-    switch (this->unk_394) {
+    switch (this->msgEventState) {
         case 0x0:
             ret = 0;
-            if (func_80B54678(this, csId)) {
+            if (EnAn_ChangeCutscene(this, csId)) {
                 goto label;
             }
             break;
@@ -1301,40 +1301,41 @@ s32 func_80B547C8(Actor* thisx, PlayState* play) {
         label:
             Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             ret = 1;
-            this->unk_394++;
+            this->msgEventState++;
             break;
 
         case 0x1:
         case 0x3:
         case 0x5:
-            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08)) && (this->unk_394 == 3)) {
+            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08)) && (this->msgEventState == 3)) {
                 CutsceneManager_Stop(csId);
             } else if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
                 Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
                                       this->actor.child);
             }
-            this->unk_394++;
+            this->msgEventState++;
             ret = 1;
             break;
 
         case 0x7:
             CutsceneManager_Stop(csId);
             ret = 1;
-            this->unk_394++;
+            this->msgEventState++;
             break;
     }
 
     return ret;
 }
-s32 func_80B5492C(Actor* thisx, PlayState* play) {
+
+s32 EnAn_MsgEvent_11(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
-    s16 csId = func_80B546F4(this, 0);
+    s16 csId = EnAn_GetCsId(this, 0);
     s32 var_a2 = 0;
 
-    switch (this->unk_394) {
+    switch (this->msgEventState) {
         case 0x0:
             var_a2 = 0;
-            if (func_80B54678(this, csId)) {
+            if (EnAn_ChangeCutscene(this, csId)) {
                 goto label;
             }
             break;
@@ -1344,40 +1345,40 @@ s32 func_80B5492C(Actor* thisx, PlayState* play) {
         label:
             Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             var_a2 = 1;
-            this->unk_394++;
+            this->msgEventState++;
             break;
 
         case 0x1:
         case 0x3:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY)) && (this->unk_394 == 3)) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY)) && (this->msgEventState == 3)) {
                 CutsceneManager_Stop(csId);
-                this->unk_394 = 5;
+                this->msgEventState = 5;
             } else if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
                 Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
                                       this->actor.child);
             }
-            this->unk_394++;
+            this->msgEventState++;
             var_a2 = 1;
             break;
 
         case 0x5:
             CutsceneManager_Stop(csId);
             var_a2 = 1;
-            this->unk_394++;
+            this->msgEventState++;
             break;
     }
     return var_a2;
 }
 
-s32 func_80B54A94(Actor* thisx, PlayState* play) {
+s32 EnAn_MsgEvent_15(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
-    s16 csId = func_80B54750(this, 0);
+    s16 csId = EnAn_GetChildCsId(this, 0);
     s32 ret = 0;
 
-    switch (this->unk_394) {
+    switch (this->msgEventState) {
         case 0x0:
             ret = 0;
-            if (func_80B54678(this, csId)) {
+            if (EnAn_ChangeCutscene(this, csId)) {
                 goto label;
             }
             break;
@@ -1392,7 +1393,7 @@ s32 func_80B54A94(Actor* thisx, PlayState* play) {
                                       this->actor.child);
             }
             ret = 1;
-            this->unk_394++;
+            this->msgEventState++;
             break;
 
         case 0x1:
@@ -1401,74 +1402,75 @@ s32 func_80B54A94(Actor* thisx, PlayState* play) {
         case 0x7:
             Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             ret = 1;
-            this->unk_394++;
+            this->msgEventState++;
             break;
 
         case 0x9:
             CutsceneManager_Stop(csId);
             ret = 1;
-            this->unk_394++;
+            this->msgEventState++;
             break;
     }
 
     return ret;
 }
 
-s32 func_80B54BC4(Actor* thisx, PlayState* play) {
+// Only used if Player is using Kafei's Mask or if Human and Promised midnight meeting
+s32 EnAn_MsgEvent_17(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
 
-    if (this->unk_394 == 0) {
+    if (this->msgEventState == 0) {
         func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
         play->nextEntrance = ENTRANCE(STOCK_POT_INN, 3);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_FADE_BLACK;
         gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
-        this->unk_394++;
+        this->msgEventState++;
     }
     return 0;
 }
 
-s32 func_80B54C5C(Actor* thisx, PlayState* play) {
+s32 EnAn_MsgEvent_E(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
     s32 sp20 = false;
 
-    switch (this->unk_394) {
+    switch (this->msgEventState) {
         case 0x0:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_TASTING);
-            this->unk_394++;
+            this->msgEventState++;
             break;
 
         case 0x1:
         case 0x3:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                this->unk_394++;
+                this->msgEventState++;
                 sp20 = true;
             }
             break;
 
         case 0x2:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_TASTING_END);
-            this->unk_394++;
+            this->msgEventState++;
             break;
     }
 
     return sp20;
 }
 
-s32 func_80B54D18(Actor* thisx, PlayState* play) {
+s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
     s32 ret = false;
 
-    switch (this->unk_394) {
+    switch (this->msgEventState) {
         case 0x0:
             if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) || CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
-                this->unk_394++;
+                this->msgEventState++;
                 goto label;
             } else {
                 ret = true;
                 this->stateFlags |= ENAN_STATE_DRAW_KAFEI_MASK;
-                this->unk_394++;
+                this->msgEventState++;
             }
             break;
 
@@ -1478,7 +1480,7 @@ s32 func_80B54D18(Actor* thisx, PlayState* play) {
             this->stateFlags |= ENAN_STATE_200;
             EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRYING);
             ret = true;
-            this->unk_394++;
+            this->msgEventState++;
             break;
     }
 
@@ -1493,144 +1495,149 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
 
     switch (this->scheduleResult) {
         case ANJU_SCH_15:
-            this->msgEventFunc = func_80B54A94;
-            return D_80B58808;
+            this->msgEventFunc = EnAn_MsgEvent_15;
+            return sAnjuMsgScript_Sch15;
 
         case ANJU_SCH_10:
-            this->msgEventFunc = func_80B547C8;
-            return D_80B58718;
+            this->msgEventFunc = EnAn_MsgEvent_10;
+            return sAnjuMsgScript_Sch10;
 
         case ANJU_SCH_11:
-            this->msgEventFunc = func_80B5492C;
-            return D_80B58784;
+            this->msgEventFunc = EnAn_MsgEvent_11;
+            return sAnjuMsgScript_Sch11;
 
         case ANJU_SCH_E:
-            this->msgEventFunc = func_80B54C5C;
-            return D_80B58954;
+            this->msgEventFunc = EnAn_MsgEvent_E;
+            return sAnjuMsgScript_SchE;
 
         case ANJU_SCH_RANCH:
-            return D_80B5899C;
+            return sAnjuMsgScript_SchRanch;
 
         case ANJU_SCH_19:
-            return D_80B58B90;
+            return sAnjuMsgScript_Sch19;
 
         default:
-            if (player->transformation == PLAYER_FORM_DEKU) {
-                switch (this->scheduleResult) {
-                    case ANJU_SCH_1:
-                        return D_80B58AE8;
+            break;
+    }
 
-                    case ANJU_SCH_28:
-                    case ANJU_SCH_2A:
-                    case ANJU_SCH_2B:
-                    case ANJU_SCH_2C:
-                    case ANJU_SCH_2D:
-                    case ANJU_SCH_2F:
-                        return D_80B58B7C;
+    if (player->transformation == PLAYER_FORM_DEKU) {
+        switch (this->scheduleResult) {
+            case ANJU_SCH_1:
+                return sAnjuMsgScript_Sch1;
 
-                    case ANJU_SCH_LAUNDRY_POOL_SIT:
-                        return D_80B58A24;
+            case ANJU_SCH_28:
+            case ANJU_SCH_2A:
+            case ANJU_SCH_2B:
+            case ANJU_SCH_2C:
+            case ANJU_SCH_2D:
+            case ANJU_SCH_2F:
+                return D_80B58B7C;
 
-                    case ANJU_SCH_31:
-                        return D_80B589FC;
+            case ANJU_SCH_LAUNDRY_POOL_SIT:
+                return sAnjuMsgScript_SchLaundryPoolDeku;
 
-                    default:
-                        return D_80B58A04;
-                }
-            } else {
-                if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
-                    if (this->scheduleResult == ANJU_SCH_31) {
-                        return D_80B58B88;
-                    }
+            case ANJU_SCH_31:
+                return sAnjuMsgScript_Sch17_B;
 
-                    if (this->scheduleResult == ANJU_SCH_17) {
-                        this->msgEventFunc = func_80B54BC4;
-                        return D_80B589AC;
-                    }
+            default:
+                break;
+        }
 
-                    if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
-                        this->msgEventFunc = func_80B54D18;
-                        return D_80B58B3C;
-                    }
+        return sAnjuMsgScript_DekuDefault;
+    }
 
-                    if (gSaveContext.save.day >= 2) {
-                        return D_80B58A44;
-                    }
+    if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
+        if (this->scheduleResult == ANJU_SCH_31) {
+            return sAnjuMsgScript_Sch31;
+        }
 
-                    // if ((gSaveContext.save.time - 0x3FFC) < 0x5883) {
-                    // if (SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time) < SCHEDULE_CONVERT_TIME_ALT(CLOCK_TIME(14,
-                    // 18))) {
-                    if (SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time) < SCHEDULE_CALC_TIME_ALT(14, 18)) {
-                        return D_80B58ABC;
-                    }
-                    return D_80B58AC4;
-                }
+        if (this->scheduleResult == ANJU_SCH_17) {
+            this->msgEventFunc = EnAn_MsgEvent_17;
+            return sAnjuMsgScript_Sch17_A;
+        }
 
-                if ((player->transformation == PLAYER_FORM_HUMAN) &&
-                    CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
-                    if (this->scheduleResult == ANJU_SCH_17) {
-                        this->msgEventFunc = func_80B54BC4;
-                        return D_80B589AC;
-                    }
-                    if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
-                        this->msgEventFunc = func_80B54D18;
-                        return D_80B58AF4;
-                    }
-                    if (gSaveContext.save.day >= 2) {
-                        return D_80B58A44;
-                    }
-                }
+        if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
+            this->msgEventFunc = EnAn_MsgEvent_LaundryPool;
+            return sAnjuMsgScript_SchLaundryPoolKafeiMask;
+        }
 
-                switch (this->scheduleResult) {
-                    case ANJU_SCH_1:
-                        return D_80B58AE8;
+        if (gSaveContext.save.day >= 2) {
+            return D_80B58A44;
+        }
 
-                    case ANJU_SCH_28:
-                        return D_80B5894C;
+        // if ((gSaveContext.save.time - 0x3FFC) < 0x5883) {
+        // if (SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time) < SCHEDULE_CONVERT_TIME_ALT(CLOCK_TIME(14,
+        // 18))) {
+        if (SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time) < SCHEDULE_CALC_TIME_ALT(14, 18)) {
+            return D_80B58ABC;
+        }
 
-                    case ANJU_SCH_2A:
-                    case ANJU_SCH_2B:
-                    case ANJU_SCH_2C:
-                    case ANJU_SCH_2D:
-                        return D_80B58980;
+        return D_80B58AC4;
+    }
 
-                    case ANJU_SCH_LAUNDRY_POOL_SIT:
-                        this->msgEventFunc = func_80B54D18;
-                        return D_80B58AF4;
+    if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
+        if (this->scheduleResult == ANJU_SCH_17) {
+            this->msgEventFunc = EnAn_MsgEvent_17;
+            return sAnjuMsgScript_Sch17_A;
+        }
 
-                    case ANJU_SCH_12:
-                        if (gSaveContext.save.day >= 2) {
-                            return D_80B58A3C;
-                        }
-                        return D_80B5885C;
+        if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
+            this->msgEventFunc = EnAn_MsgEvent_LaundryPool;
+            return sAnjuMsgScript_SchLaundryPoolDefault;
+        }
 
-                    case ANJU_SCH_13:
-                    case ANJU_SCH_2F:
-                        return D_80B58938;
+        if (gSaveContext.save.day >= 2) {
+            return D_80B58A44;
+        }
+    }
 
-                    case ANJU_SCH_16:
-                        return D_80B58988;
+    switch (this->scheduleResult) {
+        case ANJU_SCH_1:
+            return sAnjuMsgScript_Sch1;
 
-                    case ANJU_SCH_17:
-                        return D_80B589FC;
+        case ANJU_SCH_28:
+            return sAnjuMsgScript_Sch28;
 
-                    case ANJU_SCH_30:
-                        return D_80B58944;
+        case ANJU_SCH_2A:
+        case ANJU_SCH_2B:
+        case ANJU_SCH_2C:
+        case ANJU_SCH_2D:
+            return D_80B58980;
 
-                    case ANJU_SCH_31:
-                        if (player->transformation == PLAYER_FORM_HUMAN) {
-                            return D_80B58B88;
-                        }
-                        return D_80B589FC;
+        case ANJU_SCH_LAUNDRY_POOL_SIT:
+            this->msgEventFunc = EnAn_MsgEvent_LaundryPool;
+            return sAnjuMsgScript_SchLaundryPoolDefault;
 
-                    case ANJU_SCH_34:
-                    case ANJU_SCH_35:
-                        return D_80B58994;
-
-                    default:
-                        break;
-                }
+        case ANJU_SCH_12:
+            if (gSaveContext.save.day >= 2) {
+                return sAnjuMsgScript_Sch12_A;
             }
+            return sAnjuMsgScript_Sch12_B;
+
+        case ANJU_SCH_13:
+        case ANJU_SCH_2F:
+            return sAnjuMsgScript_Sch13_Sch2F;
+
+        case ANJU_SCH_16:
+            return sAnjuMsgScript_Sch16;
+
+        case ANJU_SCH_17:
+            return sAnjuMsgScript_Sch17_B;
+
+        case ANJU_SCH_30:
+            return sAnjuMsgScript_Sch30;
+
+        case ANJU_SCH_31:
+            if (player->transformation == PLAYER_FORM_HUMAN) {
+                return sAnjuMsgScript_Sch31;
+            }
+            return sAnjuMsgScript_Sch17_B;
+
+        case ANJU_SCH_34:
+        case ANJU_SCH_35:
+            return sAnjuMsgScript_Sch34_Sch35;
+
+        default:
             break;
     }
 
@@ -1643,7 +1650,7 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
     if ((this->stateFlags & SUBS_OFFER_MODE_MASK) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_3C4 = 0;
-        this->unk_394 = 0;
+        this->msgEventState = 0;
         this->msgEventFunc = NULL;
         this->actor.child = this->lookAtActor;
         this->msgEventScript = EnAn_GetMsgEventScript(this, play);
@@ -2840,7 +2847,7 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
             break;
 
         case ANJU_SCH_1:
-            if (func_80B55ECC(this) != 0) {
+            if (func_80B55ECC(this)) {
                 this->stateFlags |= ENAN_STATE_20;
             } else {
                 this->stateFlags &= ~ENAN_STATE_20;
@@ -2849,7 +2856,7 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
 
         case ANJU_SCH_12:
         case ANJU_SCH_13:
-            if (func_80B55ECC(this) != 0) {
+            if (func_80B55ECC(this)) {
                 this->stateFlags |= ENAN_STATE_20;
             } else {
                 this->stateFlags &= ~ENAN_STATE_20;
@@ -2920,7 +2927,7 @@ s32 func_80B575BC(EnAn* this, PlayState* play) {
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     }
 
-    if (func_80B55ECC(this) != 0) {
+    if (func_80B55ECC(this)) {
         this->stateFlags |= ENAN_STATE_20;
     } else {
         this->stateFlags &= ~ENAN_STATE_20;

@@ -80,7 +80,7 @@ typedef struct EnAn {
     /* 0x38E */ s16 eyeTimer;
     /* 0x390 */ s16 eyeTexIndex;
     /* 0x392 */ s16 mouthTexIndex;
-    /* 0x394 */ s16 unk_394;
+    /* 0x394 */ s16 msgEventState;
     /* 0x396 */ s16 dialogueFuncState;
     /* 0x398 */ MsgEventFunc msgEventFunc;
     /* 0x39C */ s32 animIndex; // EnAnAnimation enum
