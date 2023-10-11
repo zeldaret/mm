@@ -123,7 +123,7 @@ void ObjGrass_SpawnFragments(Vec3f* basePos, PlayState* play) {
 
         EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0,
                              sFragmentScales[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, GAMEPLAY_KEEP,
-                             gKakeraLeafMiddle);
+                             gKakeraLeafMiddleDL);
 
         pos.x = basePos->x + (dir->x * 16.0f);
         pos.y = basePos->y + (dir->y * 16.0f) + 10.0f;
@@ -135,7 +135,7 @@ void ObjGrass_SpawnFragments(Vec3f* basePos, PlayState* play) {
 
         EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0,
                              sFragmentScales[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, GAMEPLAY_KEEP,
-                             gKakeraLeafTip);
+                             gKakeraLeafTipDL);
     }
 }
 

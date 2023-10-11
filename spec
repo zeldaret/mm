@@ -3333,8 +3333,7 @@ beginseg
     name "ovl_En_Takaraya"
     compress
     include "build/src/overlays/actors/ovl_En_Takaraya/z_en_takaraya.o"
-    include "build/data/ovl_En_Takaraya/ovl_En_Takaraya.data.o"
-    include "build/data/ovl_En_Takaraya/ovl_En_Takaraya.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Takaraya/ovl_En_Takaraya_reloc.o"
 endseg
 
 beginseg

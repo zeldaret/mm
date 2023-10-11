@@ -26,7 +26,7 @@ typedef enum {
 typedef struct DemoEffect {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelCurve skelCurve;
-    /* 0x164 */ u8 initObjectIndex;
+    /* 0x164 */ u8 initObjectSlot;
     /* 0x165 */ u8 primXluColor[3];
     /* 0x168 */ u8 envXluColor[3];
     /* 0x16C */ s16 timer;
