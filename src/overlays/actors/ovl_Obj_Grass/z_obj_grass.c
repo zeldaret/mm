@@ -20,10 +20,10 @@ void ObjGrass_Destroy(Actor* thisx, PlayState* play);
 void ObjGrass_Update(Actor* thisx, PlayState* play);
 void ObjGrass_Draw(Actor* thisx, PlayState* play);
 
-ObjGrassGroup* sNearestGrassGroups[4];
-f32 sNearestGrassGroupsDist[4];
-ObjGrassElement* sNearestGrassElements[OBJ_GRASS_NUM_COLLIDERS];
-f32 sNearestGrassElementsDistSq[OBJ_GRASS_NUM_COLLIDERS];
+ObjGrassGroup* sNearestGrassGroups[OBJ_GRASS_NEAREST_GROUP_MAX];
+f32 sNearestGrassGroupsDist[OBJ_GRASS_NEAREST_GROUP_MAX];
+ObjGrassElement* sNearestGrassElements[OBJ_GRASS_NEAREST_ELEM_MAX];
+f32 sNearestGrassElementsDistSq[OBJ_GRASS_NEAREST_ELEM_MAX];
 
 #include "overlays/ovl_Obj_Grass/ovl_Obj_Grass.c"
 
@@ -201,12 +201,12 @@ void ObjGrass_UpdateGrass(ObjGrass* this, PlayState* play) {
     ObjGrassGroup* grassGroup;
     s16 yaw;
 
-    for (i = 0; i < ARRAY_COUNT(sNearestGrassElements); i++) {
+    for (i = 0; i < OBJ_GRASS_NEAREST_ELEM_MAX; i++) {
         sNearestGrassElements[i] = NULL;
         sNearestGrassElementsDistSq[i] = SQ(650.0f);
     }
 
-    for (i = 0; i < ARRAY_COUNT(sNearestGrassGroups); i++) {
+    for (i = 0; i < OBJ_GRASS_NEAREST_GROUP_MAX; i++) {
         sNearestGrassGroups[i] = NULL;
         sNearestGrassGroupsDist[i] = SQ(650.0f);
     }
@@ -223,17 +223,17 @@ void ObjGrass_UpdateGrass(ObjGrass* this, PlayState* play) {
         grassGroup = &this->grassGroups[i];
         distSq = Math3D_Vec3fDistSq(&grassGroup->homePos, &player->actor.world.pos);
 
-        for (j = 0; j < ARRAY_COUNT(sNearestGrassGroupsDist); j++) {
+        for (j = 0; j < OBJ_GRASS_NEAREST_GROUP_MAX; j++) {
             if (distSq < sNearestGrassGroupsDist[j]) {
                 break;
             }
         }
 
-        if (j < ARRAY_COUNT(sNearestGrassGroupsDist)) {
+        if (j < OBJ_GRASS_NEAREST_GROUP_MAX) {
             // Insert the grassGroup into the list
 
             // Shift each element under j that remains in the list down 1
-            for (x = ARRAY_COUNT(sNearestGrassGroupsDist) - 2; x >= j; x--) {
+            for (x = OBJ_GRASS_NEAREST_GROUP_MAX - 2; x >= j; x--) {
                 sNearestGrassGroupsDist[x + 1] = sNearestGrassGroupsDist[x];
                 sNearestGrassGroups[x + 1] = sNearestGrassGroups[x];
             }
@@ -245,7 +245,7 @@ void ObjGrass_UpdateGrass(ObjGrass* this, PlayState* play) {
 
     this->carryGrassElem = NULL;
 
-    for (i = 0; i < ARRAY_COUNT(sNearestGrassGroups); i++) {
+    for (i = 0; i < OBJ_GRASS_NEAREST_GROUP_MAX; i++) {
         grassGroup = sNearestGrassGroups[i];
 
         if (grassGroup != NULL) {
@@ -253,17 +253,17 @@ void ObjGrass_UpdateGrass(ObjGrass* this, PlayState* play) {
                 if (!(grassGroup->elements[j].flags & OBJ_GRASS_ELEM_REMOVED)) {
                     distSq = Math3D_Vec3fDistSq(&grassGroup->elements[j].pos, &player->actor.world.pos);
 
-                    for (x = 0; x < ARRAY_COUNT(sNearestGrassElementsDistSq); x++) {
+                    for (x = 0; x < OBJ_GRASS_NEAREST_ELEM_MAX; x++) {
                         if (distSq < sNearestGrassElementsDistSq[x]) {
                             break;
                         }
                     }
 
-                    if (x < ARRAY_COUNT(sNearestGrassElementsDistSq)) {
+                    if (x < OBJ_GRASS_NEAREST_ELEM_MAX) {
                         // Insert the GrassElement into the list
 
                         // Shift each element under j that remains in the list down 1
-                        for (y = ARRAY_COUNT(sNearestGrassElementsDistSq) - 2; y >= x; y--) {
+                        for (y = OBJ_GRASS_NEAREST_ELEM_MAX - 2; y >= x; y--) {
                             sNearestGrassElementsDistSq[y + 1] = sNearestGrassElementsDistSq[y];
                             sNearestGrassElements[y + 1] = sNearestGrassElements[y];
                         }

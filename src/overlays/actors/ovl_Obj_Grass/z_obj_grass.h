@@ -7,7 +7,9 @@
 struct ObjGrass;
 struct ObjGrassCarry;
 
-#define OBJ_GRASS_NUM_COLLIDERS 20
+#define OBJ_GRASS_NEAREST_GROUP_MAX 4
+#define OBJ_GRASS_NEAREST_ELEM_MAX 20
+
 #define OBJ_GRASS_GROUP_ELEM_COUNT_MAX 12
 
 #define OBJ_GRASS_GROUP_DRAW 1
@@ -27,7 +29,7 @@ typedef struct ObjGrassElement {
 
 typedef struct {
     /* 0x00 */ Vec3f homePos;
-    /* 0x0C */ ObjGrassElement elements[12];
+    /* 0x0C */ ObjGrassElement elements[OBJ_GRASS_GROUP_ELEM_COUNT_MAX];
     /* 0xFC */ s16 count;
     /* 0xFE */ u8 flags;
 } ObjGrassGroup; // size = 0x100
@@ -41,7 +43,7 @@ typedef struct ObjGrass {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ ObjGrassGroup grassGroups[40];
     /* 0x2944 */ s16 activeGrassGroups;
-    /* 0x2948 */ ObjGrassCollider grassElemColliders[OBJ_GRASS_NUM_COLLIDERS];
+    /* 0x2948 */ ObjGrassCollider grassElemColliders[OBJ_GRASS_NEAREST_ELEM_MAX];
     /* 0x2F88 */ MtxF distortionMtx[OBJ_GRASS_GROUP_ELEM_COUNT_MAX];
     /* 0x3288 */ s16 unk_3288;
     /* 0x328A */ s16 unk_328A;
