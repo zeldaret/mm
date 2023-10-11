@@ -186,8 +186,8 @@ s32 func_809A2EA0(DoorSpiral* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!Player_InCsMode(play)) {
-        SpiralInfo* temp_v0 = &sSpiralInfoTable[this->unk148];
-        f32 temp_fv0 = func_809A2E08(play, this, 0.0f, temp_v0->unk_0B, temp_v0->unk_0C);
+        SpiralInfo* spiralInfo = &sSpiralInfoTable[this->unk148];
+        f32 temp_fv0 = func_809A2E08(play, this, 0.0f, spiralInfo->unk_0B, spiralInfo->unk_0C);
 
         if (fabsf(temp_fv0) < 64.0f) {
             s16 var_v0 = player->actor.shape.rot.y - this->actor.shape.rot.y;
