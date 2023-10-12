@@ -9,10 +9,10 @@ typedef void (*EnHonotrapActionFunc)(struct EnHonotrap*, PlayState*);
 
 typedef union {
     struct {
-        ColliderTris tris;
-        ColliderTrisElement elements[2];
+        /* 0x00 */ ColliderTris tris;
+        /* 0x20 */ ColliderTrisElement elements[2];
     };
-    ColliderCylinder cyl;
+    /* 0x00 */ ColliderCylinder cyl;
 } EnHonotrapCollider; // size = 0xD8
 
 typedef struct {
@@ -20,14 +20,14 @@ typedef struct {
     /* 0x0C */ f32  unkC;
     /* 0x10 */ s16 flameScroll;
     /* 0x12 */ u8 isDrawn;
-} EnHonotrapFlameElement; //size 0x14
+} EnHonotrapFlameElement; // size = 0x14
 
 typedef struct {
-    f32 unk0;
-    f32 unk4;
-    f32 unk8;
-    EnHonotrapFlameElement flameList[6];
-} EnHonotrapFlameGroup;
+    /* 0x00 */ f32 unk0;
+    /* 0x04 */ f32 unk4;
+    /* 0x08 */ f32 unk8;
+    /* 0x0C */ EnHonotrapFlameElement flameList[6];
+} EnHonotrapFlameGroup; // size = 0x84;
 
 typedef struct EnHonotrap {
     /* 0x000 */ Actor actor;
@@ -45,11 +45,11 @@ typedef struct EnHonotrap {
 } EnHonotrap; // size = 0x2C4
 
 typedef enum {
-    HONOTRAP_EYE,
-    HONOTRAP_FLAME_MOVE,
-    HONOTRAP_FLAME_DROP,
-    HONOTRAP_EYE_MUTI_FLAME,
-    HONOTRAP_FLAME_GROUP
+    HONOTRAP_TYPE_EYE,
+    HONOTRAP_TYPE_FLAME_MOVE,
+    HONOTRAP_TYPE_FLAME_DROP,
+    HONOTRAP_TYPE_EYE_MUTI_FLAME,
+    HONOTRAP_TYPE_FLAME_GROUP
 } EnHonotrapType;
 
 #endif // Z_EN_HONOTRAP_H
