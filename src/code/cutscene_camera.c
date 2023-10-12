@@ -616,7 +616,7 @@ s16 CutsceneCamera_Interp_MultiPointQuadratic(Vec3f* camPos, f32* camFov, s16* c
                                               CsCmdCamMisc* miscCmd, CutsceneCameraInterp* interpState) {
     f32 new_var;
     f32 coeff[3];
-    s32 wayPoints[3];
+    s32 waypoints[3];
 
     if (interpState->type != CS_CAM_INTERP_MP_QUAD) {
         // Initialize
@@ -629,37 +629,37 @@ s16 CutsceneCamera_Interp_MultiPointQuadratic(Vec3f* camPos, f32* camFov, s16* c
     new_var = (f32)interpState->curFrame / pointCmd[interpState->waypoint + 1].duration;
 
     if (interpState->waypoint < (interpState->duration - 1)) {
-        wayPoints[0] = interpState->waypoint;
+        waypoints[0] = interpState->waypoint;
     } else {
-        wayPoints[0] = interpState->duration - 1;
+        waypoints[0] = interpState->duration - 1;
     }
 
     if ((interpState->waypoint + 1) < (interpState->duration - 1)) {
-        wayPoints[1] = interpState->waypoint + 1;
+        waypoints[1] = interpState->waypoint + 1;
     } else {
-        wayPoints[1] = interpState->duration - 1;
+        waypoints[1] = interpState->duration - 1;
     }
 
     if ((interpState->waypoint + 2) < (interpState->duration - 1)) {
-        wayPoints[2] = interpState->waypoint + 2;
+        waypoints[2] = interpState->waypoint + 2;
     } else {
-        wayPoints[2] = interpState->duration - 1;
+        waypoints[2] = interpState->duration - 1;
     }
 
     func_801624EC(new_var, coeff);
 
     if (camPos != NULL) {
-        camPos->x = (coeff[0] * pointCmd[wayPoints[0]].pos.x) + (coeff[1] * pointCmd[wayPoints[1]].pos.x) +
-                    (coeff[2] * pointCmd[wayPoints[2]].pos.x);
-        camPos->y = (coeff[0] * pointCmd[wayPoints[0]].pos.y) + (coeff[1] * pointCmd[wayPoints[1]].pos.y) +
-                    (coeff[2] * pointCmd[wayPoints[2]].pos.y);
-        camPos->z = (coeff[0] * pointCmd[wayPoints[0]].pos.z) + (coeff[1] * pointCmd[wayPoints[1]].pos.z) +
-                    (coeff[2] * pointCmd[wayPoints[2]].pos.z);
+        camPos->x = (coeff[0] * pointCmd[waypoints[0]].pos.x) + (coeff[1] * pointCmd[waypoints[1]].pos.x) +
+                    (coeff[2] * pointCmd[waypoints[2]].pos.x);
+        camPos->y = (coeff[0] * pointCmd[waypoints[0]].pos.y) + (coeff[1] * pointCmd[waypoints[1]].pos.y) +
+                    (coeff[2] * pointCmd[waypoints[2]].pos.y);
+        camPos->z = (coeff[0] * pointCmd[waypoints[0]].pos.z) + (coeff[1] * pointCmd[waypoints[1]].pos.z) +
+                    (coeff[2] * pointCmd[waypoints[2]].pos.z);
     }
 
     if (camFov != NULL) {
-        *camFov = (coeff[0] * miscCmd[wayPoints[0]].fov) + (coeff[1] * miscCmd[wayPoints[1]].fov) +
-                  (coeff[2] * miscCmd[wayPoints[2]].fov);
+        *camFov = (coeff[0] * miscCmd[waypoints[0]].fov) + (coeff[1] * miscCmd[waypoints[1]].fov) +
+                  (coeff[2] * miscCmd[waypoints[2]].fov);
     }
 
     if (camRoll != NULL) {
@@ -667,9 +667,9 @@ s16 CutsceneCamera_Interp_MultiPointQuadratic(Vec3f* camPos, f32* camFov, s16* c
         s32 sp28[2];
         s32 temp;
 
-        rolls[0] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[0]].roll);
-        rolls[1] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[1]].roll);
-        rolls[2] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[2]].roll);
+        rolls[0] = CAM_DEG_TO_BINANG(miscCmd[waypoints[0]].roll);
+        rolls[1] = CAM_DEG_TO_BINANG(miscCmd[waypoints[1]].roll);
+        rolls[2] = CAM_DEG_TO_BINANG(miscCmd[waypoints[2]].roll);
 
         sp28[0] = (s16)(rolls[1] - rolls[0]);
         sp28[1] = sp28[0] + (s16)(rolls[2] - rolls[1]);
@@ -706,7 +706,7 @@ s16 CutsceneCamera_Interp_MultiPointCubic(Vec3f* camPos, f32* camFov, s16* camRo
                                           CsCmdCamMisc* miscCmd, CutsceneCameraInterp* interpState) {
     f32 new_var;
     f32 coeff[4];
-    s32 wayPoints[4];
+    s32 waypoints[4];
 
     if (interpState->type != CS_CAM_INTERP_MP_CUBIC) {
         // Initialize
@@ -719,43 +719,43 @@ s16 CutsceneCamera_Interp_MultiPointCubic(Vec3f* camPos, f32* camFov, s16* camRo
     new_var = (f32)interpState->curFrame / pointCmd[interpState->waypoint + 1].duration;
 
     if (interpState->waypoint < (interpState->duration - 1)) {
-        wayPoints[0] = interpState->waypoint;
+        waypoints[0] = interpState->waypoint;
     } else {
-        wayPoints[0] = interpState->duration - 1;
+        waypoints[0] = interpState->duration - 1;
     }
 
     if ((interpState->waypoint + 1) < (interpState->duration - 1)) {
-        wayPoints[1] = interpState->waypoint + 1;
+        waypoints[1] = interpState->waypoint + 1;
     } else {
-        wayPoints[1] = interpState->duration - 1;
+        waypoints[1] = interpState->duration - 1;
     }
 
     if ((interpState->waypoint + 2) < (interpState->duration - 1)) {
-        wayPoints[2] = interpState->waypoint + 2;
+        waypoints[2] = interpState->waypoint + 2;
     } else {
-        wayPoints[2] = interpState->duration - 1;
+        waypoints[2] = interpState->duration - 1;
     }
 
     if ((interpState->waypoint + 3) < (interpState->duration - 1)) {
-        wayPoints[3] = interpState->waypoint + 3;
+        waypoints[3] = interpState->waypoint + 3;
     } else {
-        wayPoints[3] = interpState->duration - 1;
+        waypoints[3] = interpState->duration - 1;
     }
 
     func_801629BC(new_var, coeff);
 
     if (camPos != NULL) {
-        camPos->x = (coeff[0] * pointCmd[wayPoints[0]].pos.x) + (coeff[1] * pointCmd[wayPoints[1]].pos.x) +
-                    (coeff[2] * pointCmd[wayPoints[2]].pos.x) + (coeff[3] * pointCmd[wayPoints[3]].pos.x);
-        camPos->y = (coeff[0] * pointCmd[wayPoints[0]].pos.y) + (coeff[1] * pointCmd[wayPoints[1]].pos.y) +
-                    (coeff[2] * pointCmd[wayPoints[2]].pos.y) + (coeff[3] * pointCmd[wayPoints[3]].pos.y);
-        camPos->z = (coeff[0] * pointCmd[wayPoints[0]].pos.z) + (coeff[1] * pointCmd[wayPoints[1]].pos.z) +
-                    (coeff[2] * pointCmd[wayPoints[2]].pos.z) + (coeff[3] * pointCmd[wayPoints[3]].pos.z);
+        camPos->x = (coeff[0] * pointCmd[waypoints[0]].pos.x) + (coeff[1] * pointCmd[waypoints[1]].pos.x) +
+                    (coeff[2] * pointCmd[waypoints[2]].pos.x) + (coeff[3] * pointCmd[waypoints[3]].pos.x);
+        camPos->y = (coeff[0] * pointCmd[waypoints[0]].pos.y) + (coeff[1] * pointCmd[waypoints[1]].pos.y) +
+                    (coeff[2] * pointCmd[waypoints[2]].pos.y) + (coeff[3] * pointCmd[waypoints[3]].pos.y);
+        camPos->z = (coeff[0] * pointCmd[waypoints[0]].pos.z) + (coeff[1] * pointCmd[waypoints[1]].pos.z) +
+                    (coeff[2] * pointCmd[waypoints[2]].pos.z) + (coeff[3] * pointCmd[waypoints[3]].pos.z);
     }
 
     if (camFov != NULL) {
-        *camFov = (coeff[0] * miscCmd[wayPoints[0]].fov) + (coeff[1] * miscCmd[wayPoints[1]].fov) +
-                  (coeff[2] * miscCmd[wayPoints[2]].fov) + (coeff[3] * miscCmd[wayPoints[3]].fov);
+        *camFov = (coeff[0] * miscCmd[waypoints[0]].fov) + (coeff[1] * miscCmd[waypoints[1]].fov) +
+                  (coeff[2] * miscCmd[waypoints[2]].fov) + (coeff[3] * miscCmd[waypoints[3]].fov);
     }
 
     if (camRoll != NULL) {
@@ -763,10 +763,10 @@ s16 CutsceneCamera_Interp_MultiPointCubic(Vec3f* camPos, f32* camFov, s16* camRo
         s32 sp2C[3];
         s32 temp;
 
-        rolls[0] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[0]].roll);
-        rolls[1] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[1]].roll);
-        rolls[2] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[2]].roll);
-        rolls[3] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[3]].roll);
+        rolls[0] = CAM_DEG_TO_BINANG(miscCmd[waypoints[0]].roll);
+        rolls[1] = CAM_DEG_TO_BINANG(miscCmd[waypoints[1]].roll);
+        rolls[2] = CAM_DEG_TO_BINANG(miscCmd[waypoints[2]].roll);
+        rolls[3] = CAM_DEG_TO_BINANG(miscCmd[waypoints[3]].roll);
 
         sp2C[0] = (s16)(rolls[1] - rolls[0]);
         sp2C[1] = sp2C[0] + (s16)(rolls[2] - rolls[1]);
