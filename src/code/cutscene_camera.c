@@ -15,10 +15,10 @@ s16 CutsceneCamera_Interp_MultiPointCubic(Vec3f* camPos, f32* camFov, s16* camRo
                                           CsCmdCamMisc* miscCmd, CutsceneCameraInterp* interpState);
 s16 CutsceneCamera_Interp_Set(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd, CsCmdCamMisc* miscCmd,
                               CutsceneCameraInterp* interpState);
-s16 CutsceneCamera_Interp_Lerp(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd, CsCmdCamMisc* miscCmd,
-                               CutsceneCameraInterp* interpState);
-s16 CutsceneCamera_Interp_Smooth(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd,
+s16 CutsceneCamera_Interp_Linear(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd,
                                  CsCmdCamMisc* miscCmd, CutsceneCameraInterp* interpState);
+s16 CutsceneCamera_Interp_Scale(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd,
+                                CsCmdCamMisc* miscCmd, CutsceneCameraInterp* interpState);
 s16 CutsceneCamera_Interp_Geo(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd, CsCmdCamMisc* miscCmd,
                               CutsceneCameraInterp* interpState);
 s16 CutsceneCamera_Interp_Unused(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd,
@@ -71,11 +71,11 @@ CsCamInterpolateCallback CutsceneCamera_Interpolate(u8 interpType) {
         case CS_CAM_INTERP_SET:
             return CutsceneCamera_Interp_Set;
 
-        case CS_CAM_INTERP_LERP:
-            return CutsceneCamera_Interp_Lerp;
+        case CS_CAM_INTERP_LINEAR:
+            return CutsceneCamera_Interp_Linear;
 
-        case CS_CAM_INTERP_SMOOTH:
-            return CutsceneCamera_Interp_Smooth;
+        case CS_CAM_INTERP_SCALE:
+            return CutsceneCamera_Interp_Scale;
 
         case CS_CAM_INTERP_GEO:
             return CutsceneCamera_Interp_Geo;
@@ -358,13 +358,13 @@ void CutsceneCamera_Reset(void) {
 }
 
 // Linear interpolation from initial values to cmd values. Set weight to 100 to go all the way to the cmd value.
-s16 CutsceneCamera_Interp_Lerp(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd, CsCmdCamMisc* miscCmd,
-                               CutsceneCameraInterp* interpState) {
+s16 CutsceneCamera_Interp_Linear(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd,
+                                 CsCmdCamMisc* miscCmd, CutsceneCameraInterp* interpState) {
     f32 lerp;
 
-    if (interpState->type != CS_CAM_INTERP_LERP) {
+    if (interpState->type != CS_CAM_INTERP_LINEAR) {
         // Initialize
-        interpState->type = CS_CAM_INTERP_LERP;
+        interpState->type = CS_CAM_INTERP_LINEAR;
         interpState->waypoint = 0;
         interpState->curFrame = 0;
         interpState->duration = 1;
@@ -396,14 +396,14 @@ s16 CutsceneCamera_Interp_Lerp(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCa
     }
 
     if (camRoll != NULL) {
-        s16 new_var;
-        s16 temp;
+        s16 targetRoll;
+        s16 rollDiffToTarget;
 
-        new_var = CAM_DEG_TO_BINANG(miscCmd->roll);
+        targetRoll = CAM_DEG_TO_BINANG(miscCmd->roll);
 
-        temp = (s16)(new_var - (s16)interpState->initRoll);
+        rollDiffToTarget = (s16)(targetRoll - (s16)interpState->initRoll);
 
-        *camRoll = (s16)interpState->initRoll + (s16)(temp * lerp);
+        *camRoll = (s16)interpState->initRoll + (s16)(rollDiffToTarget * lerp);
     }
 
     if (interpState->curFrame >= pointCmd->duration) {
@@ -415,15 +415,15 @@ s16 CutsceneCamera_Interp_Lerp(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCa
     return 0;
 }
 
-s16 CutsceneCamera_Interp_Smooth(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd,
-                                 CsCmdCamMisc* miscCmd, CutsceneCameraInterp* interpState) {
+s16 CutsceneCamera_Interp_Scale(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd,
+                                CsCmdCamMisc* miscCmd, CutsceneCameraInterp* interpState) {
     f32 lerp;
     f32 tmp1;
     f32 tmp2;
 
-    if (interpState->type != CS_CAM_INTERP_SMOOTH) {
+    if (interpState->type != CS_CAM_INTERP_SCALE) {
         // Initialize
-        interpState->type = CS_CAM_INTERP_SMOOTH;
+        interpState->type = CS_CAM_INTERP_SCALE;
         interpState->waypoint = 0;
         interpState->curFrame = 0;
         interpState->duration = 1;
@@ -462,14 +462,14 @@ s16 CutsceneCamera_Interp_Smooth(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmd
     }
 
     if (camRoll != NULL) {
-        s16 new_var;
-        s16 temp;
+        s16 targetRoll;
+        s16 rollDiffToTarget;
 
-        new_var = CAM_DEG_TO_BINANG(miscCmd->roll);
+        targetRoll = CAM_DEG_TO_BINANG(miscCmd->roll);
 
-        temp = (s16)(new_var - (s16)interpState->initRoll);
+        rollDiffToTarget = (s16)(targetRoll - (s16)interpState->initRoll);
 
-        *camRoll += (s16)(temp * lerp);
+        *camRoll += (s16)(rollDiffToTarget * lerp);
     }
 
     if (interpState->curFrame >= pointCmd->duration) {
@@ -484,7 +484,7 @@ s16 CutsceneCamera_Interp_Smooth(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmd
 s16 CutsceneCamera_Interp_Geo(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCamPoint* pointCmd, CsCmdCamMisc* miscCmd,
                               CutsceneCameraInterp* interpState) {
     VecGeo sp40;
-    f32 sp3C;
+    f32 lerp;
     f32 tmp1;
     f32 tmp2;
 
@@ -508,10 +508,10 @@ s16 CutsceneCamera_Interp_Geo(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCam
     tmp2 = (((pointCmd->weight + 100) * (pointCmd->duration / 2)) +
             (((pointCmd->weight + 100) / 2) * (pointCmd->duration & 1)));
     if (pointCmd->duration < 2) {
-        sp3C = 1.0f;
+        lerp = 1.0f;
     } else {
         tmp1 = (f32)(pointCmd->weight - 100) / (pointCmd->duration - 1);
-        sp3C = ((interpState->curFrame * tmp1) + 100.0f) / tmp2;
+        lerp = ((interpState->curFrame * tmp1) + 100.0f) / tmp2;
     }
 
     interpState->curFrame++;
@@ -523,18 +523,18 @@ s16 CutsceneCamera_Interp_Geo(Vec3f* camPos, f32* camFov, s16* camRoll, CsCmdCam
     }
 
     if (camFov != NULL) {
-        *camFov += (miscCmd->fov - interpState->initFov) * sp3C;
+        *camFov += (miscCmd->fov - interpState->initFov) * lerp;
     }
 
     if (camRoll != NULL) {
-        s16 new_var;
-        s16 temp;
+        s16 targetRoll;
+        s16 rollDiffToTarget;
 
-        new_var = CAM_DEG_TO_BINANG(miscCmd->roll);
+        targetRoll = CAM_DEG_TO_BINANG(miscCmd->roll);
 
-        temp = (s16)(new_var - (s16)interpState->initRoll);
+        rollDiffToTarget = (s16)(targetRoll - (s16)interpState->initRoll);
 
-        *camRoll += (s16)(temp * sp3C);
+        *camRoll += (s16)(rollDiffToTarget * lerp);
     }
 
     if (interpState->curFrame >= pointCmd->duration) {
@@ -616,7 +616,7 @@ s16 CutsceneCamera_Interp_MultiPointQuadratic(Vec3f* camPos, f32* camFov, s16* c
                                               CsCmdCamMisc* miscCmd, CutsceneCameraInterp* interpState) {
     f32 new_var;
     f32 coeff[3];
-    s32 sp3C[3];
+    s32 wayPoints[3];
 
     if (interpState->type != CS_CAM_INTERP_MP_QUAD) {
         // Initialize
@@ -629,53 +629,53 @@ s16 CutsceneCamera_Interp_MultiPointQuadratic(Vec3f* camPos, f32* camFov, s16* c
     new_var = (f32)interpState->curFrame / pointCmd[interpState->waypoint + 1].duration;
 
     if (interpState->waypoint < (interpState->duration - 1)) {
-        sp3C[0] = interpState->waypoint;
+        wayPoints[0] = interpState->waypoint;
     } else {
-        sp3C[0] = interpState->duration - 1;
+        wayPoints[0] = interpState->duration - 1;
     }
 
     if ((interpState->waypoint + 1) < (interpState->duration - 1)) {
-        sp3C[1] = interpState->waypoint + 1;
+        wayPoints[1] = interpState->waypoint + 1;
     } else {
-        sp3C[1] = interpState->duration - 1;
+        wayPoints[1] = interpState->duration - 1;
     }
 
     if ((interpState->waypoint + 2) < (interpState->duration - 1)) {
-        sp3C[2] = interpState->waypoint + 2;
+        wayPoints[2] = interpState->waypoint + 2;
     } else {
-        sp3C[2] = interpState->duration - 1;
+        wayPoints[2] = interpState->duration - 1;
     }
 
     func_801624EC(new_var, coeff);
 
     if (camPos != NULL) {
-        camPos->x = (coeff[0] * pointCmd[sp3C[0]].pos.x) + (coeff[1] * pointCmd[sp3C[1]].pos.x) +
-                    (coeff[2] * pointCmd[sp3C[2]].pos.x);
-        camPos->y = (coeff[0] * pointCmd[sp3C[0]].pos.y) + (coeff[1] * pointCmd[sp3C[1]].pos.y) +
-                    (coeff[2] * pointCmd[sp3C[2]].pos.y);
-        camPos->z = (coeff[0] * pointCmd[sp3C[0]].pos.z) + (coeff[1] * pointCmd[sp3C[1]].pos.z) +
-                    (coeff[2] * pointCmd[sp3C[2]].pos.z);
+        camPos->x = (coeff[0] * pointCmd[wayPoints[0]].pos.x) + (coeff[1] * pointCmd[wayPoints[1]].pos.x) +
+                    (coeff[2] * pointCmd[wayPoints[2]].pos.x);
+        camPos->y = (coeff[0] * pointCmd[wayPoints[0]].pos.y) + (coeff[1] * pointCmd[wayPoints[1]].pos.y) +
+                    (coeff[2] * pointCmd[wayPoints[2]].pos.y);
+        camPos->z = (coeff[0] * pointCmd[wayPoints[0]].pos.z) + (coeff[1] * pointCmd[wayPoints[1]].pos.z) +
+                    (coeff[2] * pointCmd[wayPoints[2]].pos.z);
     }
 
     if (camFov != NULL) {
-        *camFov =
-            (coeff[0] * miscCmd[sp3C[0]].fov) + (coeff[1] * miscCmd[sp3C[1]].fov) + (coeff[2] * miscCmd[sp3C[2]].fov);
+        *camFov = (coeff[0] * miscCmd[wayPoints[0]].fov) + (coeff[1] * miscCmd[wayPoints[1]].fov) +
+                  (coeff[2] * miscCmd[wayPoints[2]].fov);
     }
 
     if (camRoll != NULL) {
-        s16 sp34[3];
+        s16 rolls[3];
         s32 sp28[2];
         s32 temp;
 
-        sp34[0] = CAM_DEG_TO_BINANG(miscCmd[sp3C[0]].roll);
-        sp34[1] = CAM_DEG_TO_BINANG(miscCmd[sp3C[1]].roll);
-        sp34[2] = CAM_DEG_TO_BINANG(miscCmd[sp3C[2]].roll);
+        rolls[0] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[0]].roll);
+        rolls[1] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[1]].roll);
+        rolls[2] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[2]].roll);
 
-        sp28[0] = (s16)(sp34[1] - sp34[0]);
-        sp28[1] = sp28[0] + (s16)(sp34[2] - sp34[1]);
+        sp28[0] = (s16)(rolls[1] - rolls[0]);
+        sp28[1] = sp28[0] + (s16)(rolls[2] - rolls[1]);
 
         temp = ((coeff[1] * sp28[0]) + (coeff[2] * sp28[1]));
-        *camRoll = sp34[0] + temp;
+        *camRoll = rolls[0] + temp;
     }
 
     interpState->curFrame++;
@@ -692,7 +692,7 @@ s16 CutsceneCamera_Interp_MultiPointQuadratic(Vec3f* camPos, f32* camFov, s16* c
 }
 
 /**
- * This code is very similar to the unused spline system in OoT's func_800BB0A0
+ * This code is very similar to the spline system in OoT's func_800BB0A0
  * in that it is based on the Super Mario 64 cutscene camera movement
  */
 void func_801629BC(f32 u, f32* coeff) {
@@ -706,7 +706,7 @@ s16 CutsceneCamera_Interp_MultiPointCubic(Vec3f* camPos, f32* camFov, s16* camRo
                                           CsCmdCamMisc* miscCmd, CutsceneCameraInterp* interpState) {
     f32 new_var;
     f32 coeff[4];
-    s32 sp44[4];
+    s32 wayPoints[4];
 
     if (interpState->type != CS_CAM_INTERP_MP_CUBIC) {
         // Initialize
@@ -719,61 +719,61 @@ s16 CutsceneCamera_Interp_MultiPointCubic(Vec3f* camPos, f32* camFov, s16* camRo
     new_var = (f32)interpState->curFrame / pointCmd[interpState->waypoint + 1].duration;
 
     if (interpState->waypoint < (interpState->duration - 1)) {
-        sp44[0] = interpState->waypoint;
+        wayPoints[0] = interpState->waypoint;
     } else {
-        sp44[0] = interpState->duration - 1;
+        wayPoints[0] = interpState->duration - 1;
     }
 
     if ((interpState->waypoint + 1) < (interpState->duration - 1)) {
-        sp44[1] = interpState->waypoint + 1;
+        wayPoints[1] = interpState->waypoint + 1;
     } else {
-        sp44[1] = interpState->duration - 1;
+        wayPoints[1] = interpState->duration - 1;
     }
 
     if ((interpState->waypoint + 2) < (interpState->duration - 1)) {
-        sp44[2] = interpState->waypoint + 2;
+        wayPoints[2] = interpState->waypoint + 2;
     } else {
-        sp44[2] = interpState->duration - 1;
+        wayPoints[2] = interpState->duration - 1;
     }
 
     if ((interpState->waypoint + 3) < (interpState->duration - 1)) {
-        sp44[3] = interpState->waypoint + 3;
+        wayPoints[3] = interpState->waypoint + 3;
     } else {
-        sp44[3] = interpState->duration - 1;
+        wayPoints[3] = interpState->duration - 1;
     }
 
     func_801629BC(new_var, coeff);
 
     if (camPos != NULL) {
-        camPos->x = (coeff[0] * pointCmd[sp44[0]].pos.x) + (coeff[1] * pointCmd[sp44[1]].pos.x) +
-                    (coeff[2] * pointCmd[sp44[2]].pos.x) + (coeff[3] * pointCmd[sp44[3]].pos.x);
-        camPos->y = (coeff[0] * pointCmd[sp44[0]].pos.y) + (coeff[1] * pointCmd[sp44[1]].pos.y) +
-                    (coeff[2] * pointCmd[sp44[2]].pos.y) + (coeff[3] * pointCmd[sp44[3]].pos.y);
-        camPos->z = (coeff[0] * pointCmd[sp44[0]].pos.z) + (coeff[1] * pointCmd[sp44[1]].pos.z) +
-                    (coeff[2] * pointCmd[sp44[2]].pos.z) + (coeff[3] * pointCmd[sp44[3]].pos.z);
+        camPos->x = (coeff[0] * pointCmd[wayPoints[0]].pos.x) + (coeff[1] * pointCmd[wayPoints[1]].pos.x) +
+                    (coeff[2] * pointCmd[wayPoints[2]].pos.x) + (coeff[3] * pointCmd[wayPoints[3]].pos.x);
+        camPos->y = (coeff[0] * pointCmd[wayPoints[0]].pos.y) + (coeff[1] * pointCmd[wayPoints[1]].pos.y) +
+                    (coeff[2] * pointCmd[wayPoints[2]].pos.y) + (coeff[3] * pointCmd[wayPoints[3]].pos.y);
+        camPos->z = (coeff[0] * pointCmd[wayPoints[0]].pos.z) + (coeff[1] * pointCmd[wayPoints[1]].pos.z) +
+                    (coeff[2] * pointCmd[wayPoints[2]].pos.z) + (coeff[3] * pointCmd[wayPoints[3]].pos.z);
     }
 
     if (camFov != NULL) {
-        *camFov = (coeff[0] * miscCmd[sp44[0]].fov) + (coeff[1] * miscCmd[sp44[1]].fov) +
-                  (coeff[2] * miscCmd[sp44[2]].fov) + (coeff[3] * miscCmd[sp44[3]].fov);
+        *camFov = (coeff[0] * miscCmd[wayPoints[0]].fov) + (coeff[1] * miscCmd[wayPoints[1]].fov) +
+                  (coeff[2] * miscCmd[wayPoints[2]].fov) + (coeff[3] * miscCmd[wayPoints[3]].fov);
     }
 
     if (camRoll != NULL) {
-        s16 sp3C[4];
+        s16 rolls[4];
         s32 sp2C[3];
         s32 temp;
 
-        sp3C[0] = CAM_DEG_TO_BINANG(miscCmd[sp44[0]].roll);
-        sp3C[1] = CAM_DEG_TO_BINANG(miscCmd[sp44[1]].roll);
-        sp3C[2] = CAM_DEG_TO_BINANG(miscCmd[sp44[2]].roll);
-        sp3C[3] = CAM_DEG_TO_BINANG(miscCmd[sp44[3]].roll);
+        rolls[0] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[0]].roll);
+        rolls[1] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[1]].roll);
+        rolls[2] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[2]].roll);
+        rolls[3] = CAM_DEG_TO_BINANG(miscCmd[wayPoints[3]].roll);
 
-        sp2C[0] = (s16)(sp3C[1] - sp3C[0]);
-        sp2C[1] = sp2C[0] + (s16)(sp3C[2] - sp3C[1]);
-        sp2C[2] = sp2C[1] + (s16)(sp3C[3] - sp3C[2]);
+        sp2C[0] = (s16)(rolls[1] - rolls[0]);
+        sp2C[1] = sp2C[0] + (s16)(rolls[2] - rolls[1]);
+        sp2C[2] = sp2C[1] + (s16)(rolls[3] - rolls[2]);
 
         temp = ((coeff[1] * sp2C[0]) + (coeff[2] * sp2C[1]) + (coeff[3] * sp2C[2]));
-        *camRoll = sp3C[0] + temp;
+        *camRoll = rolls[0] + temp;
     }
 
     interpState->curFrame++;
@@ -793,7 +793,7 @@ static f32 sKnots[38];
 
 // Only used by unused CutsceneCamera_Interp_Unused
 void func_80162FF8(s16 arg0) {
-    f32 var_fv0 = 0.0f;
+    f32 val = 0.0f;
     s32 i;
 
     sKnots[0] = 0.0f;
@@ -802,20 +802,20 @@ void func_80162FF8(s16 arg0) {
 
     for (i = 3; i < arg0; i++) {
         if (i == 3) {
-            var_fv0 += 0.9f;
+            val += 0.9f;
         } else if ((i == 4) || (i == (arg0 - 1))) {
-            var_fv0 += 0.6f;
+            val += 0.6f;
         } else {
-            var_fv0 += 0.3f;
+            val += 0.3f;
         }
 
-        sKnots[i] = var_fv0;
+        sKnots[i] = val;
     }
 
-    var_fv0 += 0.9f;
-    sKnots[i++] = var_fv0;
-    sKnots[i++] = var_fv0;
-    sKnots[i++] = var_fv0;
+    val += 0.9f;
+    sKnots[i++] = val;
+    sKnots[i++] = val;
+    sKnots[i++] = val;
 }
 
 // Only used by unused CutsceneCamera_Interp_Unused

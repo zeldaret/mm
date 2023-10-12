@@ -2426,8 +2426,8 @@ asm/non_matchings/code/cutscene_camera/CutsceneCamera_UpdateSplines.s,CutsceneCa
 asm/non_matchings/code/cutscene_camera/func_80161BAC.s,func_80161BAC,0x80161BAC,0xD
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_SetState.s,CutsceneCamera_SetState,0x80161BE0,0xB
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_Reset.s,CutsceneCamera_Reset,0x80161C0C,0x5
-asm/non_matchings/code/cutscene_camera/CutsceneCamera_Interp_Lerp.s,CutsceneCamera_Interp_Lerp,0x80161C20,0x8B
-asm/non_matchings/code/cutscene_camera/CutsceneCamera_Interp_Smooth.s,CutsceneCamera_Interp_Smooth,0x80161E4C,0xA0
+asm/non_matchings/code/cutscene_camera/CutsceneCamera_Interp_Linear.s,CutsceneCamera_Interp_Linear,0x80161C20,0x8B
+asm/non_matchings/code/cutscene_camera/CutsceneCamera_Interp_Scale.s,CutsceneCamera_Interp_Scale,0x80161E4C,0xA0
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_Interp_Geo.s,CutsceneCamera_Interp_Geo,0x801620CC,0xAC
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_Interp_None.s,CutsceneCamera_Interp_None,0x8016237C,0x1A
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_Interp_Set.s,CutsceneCamera_Interp_Set,0x801623E4,0x42

@@ -741,12 +741,12 @@ typedef enum CutsceneCamInterpType {
     /* 0 */ CS_CAM_INTERP_NONE, // values do not change.
     // values 1-3 only uses a single point from the cmd
     /* 1 */ CS_CAM_INTERP_SET, // values immediately set to cmd values.
-    /* 2 */ CS_CAM_INTERP_LERP, // values lerp from init to cmd values (increasing t)
-    /* 3 */ CS_CAM_INTERP_SMOOTH, // values lerp from cur to cmd values (fixed t at weight = 100)
+    /* 2 */ CS_CAM_INTERP_LINEAR, // Lerp to the target position
+    /* 3 */ CS_CAM_INTERP_SCALE, // Step to the target position in increments scaled by the remaining distance
     // values 4-5 uses multiple points from the cmd
     /* 4 */ CS_CAM_INTERP_MP_CUBIC, // cubic multi-point (identical to SM64/OoT)
     /* 5 */ CS_CAM_INTERP_MP_QUAD, // quadratic multi-point
-    // value 5 only uses a single point from the cmd
+    // value 6 only uses a single point from the cmd
     /* 6 */ CS_CAM_INTERP_GEO, // does VecGeo calculations using fov
     /* 7 */ CS_CAM_INTERP_OFF // interpolation is not processed.
 } CutsceneCamInterpType;
