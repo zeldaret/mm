@@ -201,7 +201,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    SkelAnime_Init(play, &this->skelAnime, &gBigPoeSkeleton, &gBigPoeFloatAnim, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &gBigPoeSkel, &gBigPoeFloatAnim, this->jointTable, this->morphTable,
                    BIG_POE_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);

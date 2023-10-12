@@ -37,14 +37,14 @@ ActorInit Demo_Effect_InitVars = {
 };
 
 void DemoEffect_Init(Actor* thisx, PlayState* play) {
-    static s16 sEffectTypeObjects[] = {
+    static s16 sEffectTypeObjectIds[] = {
         OBJECT_EFC_TW, OBJECT_EFC_TW, OBJECT_EFC_TW, OBJECT_EFC_TW, GAMEPLAY_KEEP,
         GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP,
     };
     s32 pad;
     DemoEffect* this = THIS;
     s32 type = DEMO_EFFECT_GET_TYPE(&this->actor);
-    s32 objectIndex;
+    s32 objectSlot;
     s32 pad2;
     Color_RGB8 lightColors[] = {
         { 200, 200, 0 },  // Yellow
@@ -54,16 +54,16 @@ void DemoEffect_Init(Actor* thisx, PlayState* play) {
         { 255, 255, 80 }, // Light Yellow
     };
 
-    if (sEffectTypeObjects[type] == GAMEPLAY_KEEP) {
-        objectIndex = 0;
+    if (sEffectTypeObjectIds[type] == GAMEPLAY_KEEP) {
+        objectSlot = 0;
     } else {
-        objectIndex = Object_GetSlot(&play->objectCtx, sEffectTypeObjects[type]);
+        objectSlot = Object_GetSlot(&play->objectCtx, sEffectTypeObjectIds[type]);
     }
 
-    if (objectIndex < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         // assert on debug
     } else {
-        this->initObjectIndex = objectIndex;
+        this->initObjectSlot = objectSlot;
     }
 
     Actor_SetScale(&this->actor, 0.2f);
@@ -123,8 +123,8 @@ void DemoEffect_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DemoEffect_WaitForObject(DemoEffect* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->initObjectIndex)) {
-        this->actor.objBankIndex = this->initObjectIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->initObjectSlot)) {
+        this->actor.objectSlot = this->initObjectSlot;
         this->actor.draw = this->initDrawFunc;
         this->actionFunc = this->initActionFunc;
     }

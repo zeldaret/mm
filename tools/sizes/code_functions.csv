@@ -2202,7 +2202,7 @@ asm/non_matchings/code/z_sub_s/SubS_GetDistSqAndOrientPoints.s,SubS_GetDistSqAnd
 asm/non_matchings/code/z_sub_s/SubS_MoveActorToPoint.s,SubS_MoveActorToPoint,0x8013D768,0x35
 asm/non_matchings/code/z_sub_s/SubS_GetDistSqAndOrientPath.s,SubS_GetDistSqAndOrientPath,0x8013D83C,0x28
 asm/non_matchings/code/z_sub_s/SubS_IsObjectLoaded.s,SubS_IsObjectLoaded,0x8013D8DC,0x12
-asm/non_matchings/code/z_sub_s/SubS_GetObjectIndex.s,SubS_GetObjectIndex,0x8013D924,0xF
+asm/non_matchings/code/z_sub_s/SubS_GetObjectSlot.s,SubS_GetObjectSlot,0x8013D924,0xF
 asm/non_matchings/code/z_sub_s/SubS_FindActor.s,SubS_FindActor,0x8013D960,0x1A
 asm/non_matchings/code/z_sub_s/SubS_UpdateFidgetTables.s,SubS_UpdateFidgetTables,0x8013D9C8,0x72
 asm/non_matchings/code/z_sub_s/SubS_IsFloorAbove.s,SubS_IsFloorAbove,0x8013DB90,0x2C
