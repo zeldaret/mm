@@ -1,10 +1,10 @@
 ﻿<Root>
-    <!-- Hot Spring Water found in the Woodfall region and the Empty Ikana Well -->
+    <!-- Hot Spring Water found in the Snowhead Village region and Beneath the Well -->
     <File Name="object_oyu" Segment="6">
-        <DList Name="gSpringWaterDL" Offset="0x80" />
-        <DList Name="gSpringWaterEmptyDL" Offset="0x158" />
-        <Texture Name="gSpringWaterTex" OutName="spring_water" Format="rgba16" Width="32" Height="32" Offset="0x160" />
-        <TextureAnimation Name="gSpringWaterTexAnim" Offset="0x968" />
-        <Collision Name="gSpringWaterCol" Offset="0x988" />
+        <DList Name="gHotSpringWaterDL" Offset="0x80" />
+        <DList Name="gHotSpringWaterEmptyDL" Offset="0x158" />
+        <Texture Name="gHotSpringWaterTex" OutName="hot_spring_water" Format="rgba16" Width="32" Height="32" Offset="0x160" />
+        <TextureAnimation Name="gHotSpringWaterTexAnim" Offset="0x968" />
+        <Collision Name="gHotSpringWaterCol" Offset="0x988" />
     </File>
 </Root>
