@@ -29,8 +29,8 @@ void EnAn_Talk(EnAn* this, PlayState* play);
 
 typedef enum AnjuScheduleResult {
     /*  0 */ ANJU_SCH_NONE,
-    /*  1 */ ANJU_SCH_1,
-    /*  2 */ ANJU_SCH_2,
+    /*  1 */ ANJU_SCH_WAITING_FOR_KAFEI,
+    /*  2 */ ANJU_SCH_2, // unused
     /*  3 */ ANJU_SCH_LAUNDRY_POOL_SIT,
     /*  4 */ ANJU_SCH_4,
     /*  5 */ ANJU_SCH_5,
@@ -42,18 +42,18 @@ typedef enum AnjuScheduleResult {
     /* 11 */ ANJU_SCH_B,
     /* 12 */ ANJU_SCH_RANCH,
     /* 13 */ ANJU_SCH_D,
-    /* 14 */ ANJU_SCH_E,
+    /* 14 */ ANJU_SCH_COOKING,
     /* 15 */ ANJU_SCH_F,
-    /* 16 */ ANJU_SCH_10,
-    /* 17 */ ANJU_SCH_11,
+    /* 16 */ ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN,
+    /* 17 */ ANJU_SCH_ATTEND_GORON, // ANJU_SCH_ATTEND_LINK_THE_GORON? ANJU_SCH_ATTEND_PLAYER_THE_GORON?
     /* 18 */ ANJU_SCH_12,
     /* 19 */ ANJU_SCH_13,
     /* 20 */ ANJU_SCH_14,
-    /* 21 */ ANJU_SCH_15,
+    /* 21 */ ANJU_SCH_GIVE_LUNCH_TO_GRANDMA,
     /* 22 */ ANJU_SCH_16,
     /* 23 */ ANJU_SCH_17,
     /* 24 */ ANJU_SCH_18,
-    /* 25 */ ANJU_SCH_19,
+    /* 25 */ ANJU_SCH_19, // Set manually in code instead of via script
     /* 26 */ ANJU_SCH_1A,
     /* 27 */ ANJU_SCH_1B,
     /* 28 */ ANJU_SCH_1C,
@@ -136,9 +136,9 @@ static u8 sScheduleScript[] = {
     /* 0x0D8 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_13),
     /* 0x0DE */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_2F),
     /* 0x0E4 */ SCHEDULE_CMD_RET_TIME(16, 30, 19, 50, ANJU_SCH_12),
-    /* 0x0EA */ SCHEDULE_CMD_RET_TIME(16, 10, 16, 30, ANJU_SCH_11),
+    /* 0x0EA */ SCHEDULE_CMD_RET_TIME(16, 10, 16, 30, ANJU_SCH_ATTEND_GORON),
     /* 0x0F0 */ SCHEDULE_CMD_RET_TIME(14, 18, 16, 10, ANJU_SCH_12),
-    /* 0x0F6 */ SCHEDULE_CMD_RET_TIME(14, 8, 14, 18, ANJU_SCH_10),
+    /* 0x0F6 */ SCHEDULE_CMD_RET_TIME(14, 8, 14, 18, ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN),
     /* 0x0FC */ SCHEDULE_CMD_RET_TIME(13, 50, 14, 8, ANJU_SCH_12),
     /* 0x102 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_2E),
     /* 0x108 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, ANJU_SCH_1D),
@@ -146,11 +146,11 @@ static u8 sScheduleScript[] = {
     /* 0x114 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, ANJU_SCH_2D),
     /* 0x11A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, ANJU_SCH_1B),
     /* 0x120 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, ANJU_SCH_2C),
-    /* 0x126 */ SCHEDULE_CMD_RET_TIME(12, 0, 12, 15, ANJU_SCH_15),
+    /* 0x126 */ SCHEDULE_CMD_RET_TIME(12, 0, 12, 15, ANJU_SCH_GIVE_LUNCH_TO_GRANDMA),
     /* 0x12C */ SCHEDULE_CMD_RET_TIME(11, 55, 12, 0, ANJU_SCH_2B),
     /* 0x132 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, ANJU_SCH_1A),
     /* 0x138 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_2A),
-    /* 0x13E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_E),
+    /* 0x13E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_COOKING),
     /* 0x144 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_28),
     /* 0x14A */ SCHEDULE_CMD_RET_TIME(6, 0, 10, 55, ANJU_SCH_12),
     /* 0x150 */ SCHEDULE_CMD_RET_NONE(),
@@ -248,11 +248,11 @@ static u8 sScheduleScript[] = {
     /* 0x354 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, ANJU_SCH_2D),
     /* 0x35A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, ANJU_SCH_1B),
     /* 0x360 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, ANJU_SCH_2C),
-    /* 0x366 */ SCHEDULE_CMD_RET_TIME(12, 0, 12, 15, ANJU_SCH_15),
+    /* 0x366 */ SCHEDULE_CMD_RET_TIME(12, 0, 12, 15, ANJU_SCH_GIVE_LUNCH_TO_GRANDMA),
     /* 0x36C */ SCHEDULE_CMD_RET_TIME(11, 55, 12, 0, ANJU_SCH_2B),
     /* 0x372 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, ANJU_SCH_1A),
     /* 0x378 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_2A),
-    /* 0x37E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_E),
+    /* 0x37E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_COOKING),
     /* 0x384 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_28),
     /* 0x38A */ SCHEDULE_CMD_RET_TIME(6, 0, 10, 55, ANJU_SCH_12),
     /* 0x390 */ SCHEDULE_CMD_RET_NONE(),
@@ -284,8 +284,8 @@ static u8 sScheduleScript[] = {
     /* 0x40F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 5, 0, 0x422 - 0x415),
     /* 0x415 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(5, 0, 6, 0, 0x41C - 0x41B),
     /* 0x41B */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x41C */ SCHEDULE_CMD_RET_TIME(5, 0, 6, 0, ANJU_SCH_1),
-    /* 0x422 */ SCHEDULE_CMD_RET_TIME(18, 0, 5, 0, ANJU_SCH_1),
+    /* 0x41C */ SCHEDULE_CMD_RET_TIME(5, 0, 6, 0, ANJU_SCH_WAITING_FOR_KAFEI),
+    /* 0x422 */ SCHEDULE_CMD_RET_TIME(18, 0, 5, 0, ANJU_SCH_WAITING_FOR_KAFEI),
     /* 0x428 */ SCHEDULE_CMD_RET_TIME(11, 50, 12, 0, ANJU_SCH_27),
     /* 0x42E */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_35),
     /* 0x434 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, ANJU_SCH_24),
@@ -306,7 +306,7 @@ s32 scheduleScript(PlayState* play) {
             } else if ((10, 55) <= NOW <= (11, 10)) {
                 return ANJU_SCH_28;
             } else if ((11, 10) <= NOW <= (11, 30)) {
-                return ANJU_SCH_E;
+                return ANJU_SCH_COOKING;
             } else if ((11, 30) <= NOW <= (11, 50)) {
                 return ANJU_SCH_2A;
             } else if ((11, 50) <= NOW <= (11, 55)) {
@@ -314,7 +314,7 @@ s32 scheduleScript(PlayState* play) {
             } else if ((11, 55) <= NOW <= (12, 0)) {
                 return ANJU_SCH_2B;
             } else if ((12, 0) <= NOW <= (12, 15)) {
-                return ANJU_SCH_15;
+                return ANJU_SCH_GIVE_LUNCH_TO_GRANDMA;
             } else if ((12, 15) <= NOW <= (12, 20)) {
                 return ANJU_SCH_2C;
             } else if ((12, 20) <= NOW <= (12, 25)) {
@@ -330,11 +330,11 @@ s32 scheduleScript(PlayState* play) {
             } else if ((13, 50) <= NOW <= (14, 8)) {
                 return ANJU_SCH_12;
             } else if ((14, 8) <= NOW <= (14, 18)) {
-                return ANJU_SCH_10;
+                return ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN;
             } else if ((14, 18) <= NOW <= (16, 10)) {
                 return ANJU_SCH_12;
             } else if ((16, 10) <= NOW <= (16, 30)) {
-                return ANJU_SCH_11;
+                return ANJU_SCH_ATTEND_GORON;
             } else if ((16, 30) <= NOW <= (19, 50)) {
                 return ANJU_SCH_12;
             } else if ((19, 50) <= NOW <= (20, 20)) {
@@ -372,7 +372,7 @@ s32 scheduleScript(PlayState* play) {
                 } else if ((10, 55) <= NOW <= (11, 10)) {
                     return ANJU_SCH_28;
                 } else if ((11, 10) <= NOW <= (11, 30)) {
-                    return ANJU_SCH_E;
+                    return ANJU_SCH_COOKING;
                 } else if ((11, 30) <= NOW <= (11, 50)) {
                     return ANJU_SCH_2A;
                 } else if ((11, 50) <= NOW <= (11, 55)) {
@@ -380,7 +380,7 @@ s32 scheduleScript(PlayState* play) {
                 } else if ((11, 55) <= NOW <= (12, 0)) {
                     return ANJU_SCH_2B;
                 } else if ((12, 0) <= NOW <= (12, 15)) {
-                    return ANJU_SCH_15;
+                    return ANJU_SCH_GIVE_LUNCH_TO_GRANDMA;
                 } else if ((12, 15) <= NOW <= (12, 20)) {
                     return ANJU_SCH_2C;
                 } else if ((12, 20) <= NOW <= (12, 25)) {
@@ -494,9 +494,9 @@ s32 scheduleScript(PlayState* play) {
                 } else if ((11, 50) <= NOW <= (12, 0)) {
                     return ANJU_SCH_27;
                 } else if ((18, 0) <= NOW <= (5, 0)) {
-                    return ANJU_SCH_1;
+                    return ANJU_SCH_WAITING_FOR_KAFEI;
                 } else if ((5, 0) <= NOW <= (6, 0)) {
-                    return ANJU_SCH_1;
+                    return ANJU_SCH_WAITING_FOR_KAFEI;
                 } else {
                     return None;
                 }
@@ -534,7 +534,7 @@ s32 scheduleScript(PlayState* play) {
 
 static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     -1, // ANJU_SCH_NONE
-    10, // ANJU_SCH_1
+    10, // ANJU_SCH_WAITING_FOR_KAFEI
     -1, // ANJU_SCH_2
     0,  // ANJU_SCH_LAUNDRY_POOL_SIT
     -1, // ANJU_SCH_4
@@ -547,14 +547,14 @@ static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     -1, // ANJU_SCH_B
     -1, // ANJU_SCH_RANCH
     -1, // ANJU_SCH_D
-    0,  // ANJU_SCH_E
+    0,  // ANJU_SCH_COOKING
     -1, // ANJU_SCH_F
-    10, // ANJU_SCH_10
-    10, // ANJU_SCH_11
+    10, // ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN
+    10, // ANJU_SCH_ATTEND_GORON
     10, // ANJU_SCH_12
     11, // ANJU_SCH_13
     -1, // ANJU_SCH_14
-    4,  // ANJU_SCH_15
+    4,  // ANJU_SCH_GIVE_LUNCH_TO_GRANDMA
     22, // ANJU_SCH_16
     15, // ANJU_SCH_17
     -1, // ANJU_SCH_18
@@ -599,18 +599,18 @@ static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     3,  // ANJU_SCH_3F
 };
 
-s32 sAnjuMsgScript_Sch10[0x1B] = {
+s32 sAnjuMsgScript_SchReceiveLetterFromPostman[0x1B] = {
     0x00560800, 0x44090000, 0x0E28BA0C, 0x09000017, 0x0E28BB0C, 0x09000018, 0x0E28BC0C, 0x09000017, 0x0E28BD0C,
     0x09000018, 0x0E28BE0C, 0x09000017, 0x0E28BF0C, 0x09000018, 0x0E28C02D, 0x00012D00, 0x0B0C0900, 0x00115608,
     0x10090000, 0x0E295C0C, 0x09000017, 0x0E295D0C, 0x09000018, 0x0E295E2D, 0x00012D00, 0x0B0C0900, 0x00100000,
 };
-s32 sAnjuMsgScript_Sch11[0x21] = {
+s32 sAnjuMsgScript_SchAttendGoron[0x21] = {
     0x09000000, 0x4B10001E, 0x0E28B10C, 0x09000017, 0x0E28B20C, 0x09000018, 0x0E28B32D, 0x00011137, 0x020C0900,
     0x00100056, 0x10002E0E, 0x28B10C09, 0x0000170E, 0x28B50C09, 0x0000180E, 0x28B60C09, 0x0000170E, 0x28B70C09,
     0x0000180E, 0x28B82D00, 0x010C0900, 0x00115610, 0x10090000, 0x170E2956, 0x0C090000, 0x180E2957, 0x0C090000,
     0x170E2958, 0x0C090000, 0x180E2959, 0x2D00010C, 0x09000012, 0x10000000,
 };
-s32 sAnjuMsgScript_Sch15[0x15] = {
+s32 sAnjuMsgScript_SchGiveLunchToGrandma[0x15] = {
     0x09000017, 0x0E28C70C, 0x09000018, 0x0E28C80C, 0x09000017, 0x0E28C90C, 0x09000018,
     0x0E28CA0C, 0x09000017, 0x0E28CB0C, 0x09000018, 0x0E28CC0C, 0x09000017, 0x0E28CD0C,
     0x09000018, 0x0E28CE0C, 0x09000017, 0x0E28CF2D, 0x12D00,    0x0E0C0900, 0x100000,
@@ -627,7 +627,7 @@ s32 sAnjuMsgScript_Sch12_B[0x37] = {
 s32 sAnjuMsgScript_Sch13_Sch2F[3] = { 0x0E18852D, 0x10C12, 0x10000000 };
 s32 sAnjuMsgScript_Sch30[2] = { 0x0E28AF2D, 0x10C10 };
 s32 sAnjuMsgScript_Sch28[2] = { 0x0E28C12D, 0x10C10 };
-s32 sAnjuMsgScript_SchE[0xB] = {
+s32 sAnjuMsgScript_SchCooking[0xB] = {
     0x350100,   0x1C0E28C3, 0x0C0F28C4, 0x0C150900, 0xE28C5,    0x2D00010C,
     0x15090000, 0x11350112, 0x100E28C2, 0x2D00010C, 0x10000000,
 };
@@ -656,7 +656,7 @@ s32 D_80B58ABC[2] = { 0x0E28D02D, 0x10C10 };
 s32 D_80B58AC4[9] = {
     0x320800, 0x160E28D1, 0x0C0F28D2, 0x0C0F28D3, 0x2D00152D, 0x10C11, 0x3208100E, 0x28D32D00, 0x010C1000,
 };
-s32 sAnjuMsgScript_Sch1[3] = { 0x0E28DF2D, 0x10C12, 0x10000000 };
+s32 sAnjuMsgScript_SchWaitingForKafei[3] = { 0x0E28DF2D, 0x10C12, 0x10000000 };
 s32 sAnjuMsgScript_SchLaundryPoolDefault[0x12] = {
     0x372000,    0x29003208, 0x2A0E28,   -0x17F3EAF7, 0xE28,      -0x16F3F0D8, -0x15F3EAF7, 0xE28,   -0x14F3F0D8,
     -0x13D2FFFF, 0x0C121137, 0x20100E28, -0x13F3EDF0, 0x0E28EE0C, 0x0F28EB0C,  0x0F28EC2D,  0x10C12, 0x11372010,
@@ -787,7 +787,7 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
     return foundActor;
 }
 
-EnDoor* EnAn_FindDoor(PlayState* play, s32 scheduleOutputResult) {
+EnDoor* EnAn_FindDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) {
     s32 switchFlag;
 
     switch (scheduleOutputResult) {
@@ -1282,7 +1282,7 @@ s16 EnAn_GetChildCsId(EnAn* this, s32 numCutscenes) {
     return csId;
 }
 
-s32 EnAn_MsgEvent_10(Actor* thisx, PlayState* play) {
+s32 EnAn_MsgEvent_ReceiveLetterFromPostman(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
     s16 csId = EnAn_GetCsId(this, 0);
     s32 ret = 0;
@@ -1327,7 +1327,7 @@ s32 EnAn_MsgEvent_10(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-s32 EnAn_MsgEvent_11(Actor* thisx, PlayState* play) {
+s32 EnAn_MsgEvent_AttendGoron(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
     s16 csId = EnAn_GetCsId(this, 0);
     s32 var_a2 = 0;
@@ -1370,7 +1370,7 @@ s32 EnAn_MsgEvent_11(Actor* thisx, PlayState* play) {
     return var_a2;
 }
 
-s32 EnAn_MsgEvent_15(Actor* thisx, PlayState* play) {
+s32 EnAn_MsgEvent_GiveLunchToGrandma(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
     s16 csId = EnAn_GetChildCsId(this, 0);
     s32 ret = 0;
@@ -1431,7 +1431,7 @@ s32 EnAn_MsgEvent_17(Actor* thisx, PlayState* play) {
     return 0;
 }
 
-s32 EnAn_MsgEvent_E(Actor* thisx, PlayState* play) {
+s32 EnAn_MsgEvent_Cooking(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
     s32 sp20 = false;
 
@@ -1494,21 +1494,21 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     switch (this->scheduleResult) {
-        case ANJU_SCH_15:
-            this->msgEventFunc = EnAn_MsgEvent_15;
-            return sAnjuMsgScript_Sch15;
+        case ANJU_SCH_GIVE_LUNCH_TO_GRANDMA:
+            this->msgEventFunc = EnAn_MsgEvent_GiveLunchToGrandma;
+            return sAnjuMsgScript_SchGiveLunchToGrandma;
 
-        case ANJU_SCH_10:
-            this->msgEventFunc = EnAn_MsgEvent_10;
-            return sAnjuMsgScript_Sch10;
+        case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
+            this->msgEventFunc = EnAn_MsgEvent_ReceiveLetterFromPostman;
+            return sAnjuMsgScript_SchReceiveLetterFromPostman;
 
-        case ANJU_SCH_11:
-            this->msgEventFunc = EnAn_MsgEvent_11;
-            return sAnjuMsgScript_Sch11;
+        case ANJU_SCH_ATTEND_GORON:
+            this->msgEventFunc = EnAn_MsgEvent_AttendGoron;
+            return sAnjuMsgScript_SchAttendGoron;
 
-        case ANJU_SCH_E:
-            this->msgEventFunc = EnAn_MsgEvent_E;
-            return sAnjuMsgScript_SchE;
+        case ANJU_SCH_COOKING:
+            this->msgEventFunc = EnAn_MsgEvent_Cooking;
+            return sAnjuMsgScript_SchCooking;
 
         case ANJU_SCH_RANCH:
             return sAnjuMsgScript_SchRanch;
@@ -1522,8 +1522,8 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
 
     if (player->transformation == PLAYER_FORM_DEKU) {
         switch (this->scheduleResult) {
-            case ANJU_SCH_1:
-                return sAnjuMsgScript_Sch1;
+            case ANJU_SCH_WAITING_FOR_KAFEI:
+                return sAnjuMsgScript_SchWaitingForKafei;
 
             case ANJU_SCH_28:
             case ANJU_SCH_2A:
@@ -1592,8 +1592,8 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
     }
 
     switch (this->scheduleResult) {
-        case ANJU_SCH_1:
-            return sAnjuMsgScript_Sch1;
+        case ANJU_SCH_WAITING_FOR_KAFEI:
+            return sAnjuMsgScript_SchWaitingForKafei;
 
         case ANJU_SCH_28:
             return sAnjuMsgScript_Sch28;
@@ -1655,7 +1655,7 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
         this->actor.child = this->lookAtActor;
         this->msgEventScript = EnAn_GetMsgEventScript(this, play);
 
-        if ((this->scheduleResult == ANJU_SCH_1) || (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
+        if ((this->scheduleResult == ANJU_SCH_WAITING_FOR_KAFEI) || (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
             (this->scheduleResult == ANJU_SCH_12) || (this->scheduleResult == ANJU_SCH_13) ||
             (this->scheduleResult == ANJU_SCH_17) || (this->scheduleResult == ANJU_SCH_16) ||
             (this->scheduleResult == ANJU_SCH_28) || (this->scheduleResult == ANJU_SCH_2A) ||
@@ -1758,10 +1758,11 @@ void func_80B554E8(EnAn* this) {
     }
 }
 
+// EnAn_ChooseAnimForSchedule?
 s32 func_80B555C8(EnAn* this, PlayState* play) {
     switch (this->scheduleResult) {
-        case ANJU_SCH_10:
-        case ANJU_SCH_11:
+        case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
+        case ANJU_SCH_ATTEND_GORON:
         case ANJU_SCH_12:
         case ANJU_SCH_13:
         case ANJU_SCH_17:
@@ -1773,11 +1774,11 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
             this->stateFlags |= ENAN_STATE_DRAW_BROOM;
             break;
 
-        case ANJU_SCH_E:
+        case ANJU_SCH_COOKING:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_COOKING);
             break;
 
-        case ANJU_SCH_15:
+        case ANJU_SCH_GIVE_LUNCH_TO_GRANDMA:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
             break;
 
@@ -2126,15 +2127,15 @@ Actor* EnAn_FindLookAtActor(EnAn* this, PlayState* play) {
             actor = &GET_PLAYER(play)->actor;
             break;
 
-        case ANJU_SCH_15:
+        case ANJU_SCH_GIVE_LUNCH_TO_GRANDMA:
             actor = EnAn_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_NB);
             break;
 
-        case ANJU_SCH_10:
+        case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
             actor = EnAn_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_PM);
             break;
 
-        case ANJU_SCH_11:
+        case ANJU_SCH_ATTEND_GORON:
             actor = EnAn_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_IG);
             break;
     }
@@ -2148,14 +2149,15 @@ s32 func_80B55D98(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput, u
     Vec3f sp3C;
     Vec3f sp30;
     Actor* actor;
-    s32 pad;
+    s32 limit;
     s32 ret = false;
 
     actor = EnAn_FindActor(this, play, actorCategory, actorId);
     this->timePath = NULL;
 
-    if (sSearchTimePathLimit[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, pathIndex, sSearchTimePathLimit[scheduleOutput->result]);
+    limit = sSearchTimePathLimit[scheduleOutput->result];
+    if (limit >= 0) {
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, limit);
     }
 
     if ((actor != NULL) && (actor->update != NULL)) {
@@ -2173,16 +2175,17 @@ s32 func_80B55D98(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput, u
     return ret;
 }
 
-s32 func_80B55ECC(EnAn* this) {
+s32 EnAn_IsFacingAndNearPlayer(EnAn* this) {
     s32 ret = false;
 
-    if (Actor_IsFacingAndNearPlayer(&this->actor, (this->unk_3BC != 0) ? 150.0f : 100.0f, 0x2800)) {
+    // TODO: why is the range variable?
+    if (Actor_IsFacingAndNearPlayer(&this->actor, this->unk_3BC ? 150.0f : 100.0f, 0x2800)) {
         ret = true;
     }
 
     if (DECR(this->unk_386) == 0) {
         this->unk_3BC ^= 1;
-        this->unk_386 = Rand_S16Offset(0x3C, 0x3C);
+        this->unk_386 = Rand_S16Offset(60, 60); // 3~6 seconds
     }
 
     return ret;
@@ -2190,17 +2193,17 @@ s32 func_80B55ECC(EnAn* this) {
 
 s32 func_80B55F8C(PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 var_v1 = false;
+    s32 ret = false;
 
     if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) &&
         CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
-        var_v1 = true;
+        ret = true;
     } else if ((player->transformation == PLAYER_FORM_HUMAN) &&
                CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
-        var_v1 = true;
+        ret = true;
     }
 
-    return var_v1;
+    return ret;
 }
 
 s32 func_80B5600C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
@@ -2332,17 +2335,17 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 now = SCHEDULE_TIME_NOW;
-    u16 var_v1_2;
+    u16 startTime;
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     s32 pad;
-    s32 var_v1 = 0;
-    s32 temp_a3;
+    s32 ret = false;
+    s32 limit;
 
     this->timePath = NULL;
-    temp_a3 = sSearchTimePathLimit[scheduleOutput->result];
 
-    if (temp_a3 >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, pathIndex, temp_a3);
+    limit = sSearchTimePathLimit[scheduleOutput->result];
+    if (limit >= 0) {
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, limit);
     }
 
     if ((this->timePath != NULL) && (this->timePath->count < 3)) {
@@ -2352,20 +2355,20 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if (this->timePath != NULL) {
         if ((this->scheduleResult < ANJU_SCH_28) && (this->scheduleResult != ANJU_SCH_NONE) &&
             (this->timePathTimeSpeed >= 0)) {
-            var_v1_2 = now;
+            startTime = now;
         } else {
-            var_v1_2 = scheduleOutput->time0;
+            startTime = scheduleOutput->time0;
         }
 
-        if (scheduleOutput->time1 < var_v1_2) {
-            this->timePathTotalTime = (var_v1_2 - scheduleOutput->time1) + 0xFFFF;
+        if (scheduleOutput->time1 < startTime) {
+            this->timePathTotalTime = (startTime - scheduleOutput->time1) + 0xFFFF;
         } else {
-            this->timePathTotalTime = scheduleOutput->time1 - var_v1_2;
+            this->timePathTotalTime = scheduleOutput->time1 - startTime;
         }
 
-        this->timePathElapsedTime = now - var_v1_2;
-        var_v1_2 = (this->timePath->count - 2);
-        this->timePathWaypointTime = this->timePathTotalTime / var_v1_2;
+        this->timePathElapsedTime = now - startTime;
+        startTime = (this->timePath->count - 2);
+        this->timePathWaypointTime = this->timePathTotalTime / startTime;
 
         this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + 2;
         this->stateFlags &= ~ENAN_STATE_8;
@@ -2446,18 +2449,18 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 break;
         }
 
-        var_v1 = 1;
+        ret = true;
         this->actor.gravity = -1.0f;
     }
 
-    return var_v1;
+    return ret;
 }
 
 s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     Vec3f sp40;
     Vec3f sp34;
-    Vec3s* temp_v0_2;
+    Vec3s* points;
     s32 limit;
     s32 ret = false;
 
@@ -2469,9 +2472,9 @@ s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     }
 
     if ((this->timePath != NULL) && (this->timePath->count >= 2)) {
-        temp_v0_2 = Lib_SegmentedToVirtual(this->timePath->points);
-        Math_Vec3s_ToVec3f(&sp40, &temp_v0_2[0]);
-        Math_Vec3s_ToVec3f(&sp34, &temp_v0_2[1]);
+        points = Lib_SegmentedToVirtual(this->timePath->points);
+        Math_Vec3s_ToVec3f(&sp40, &points[0]);
+        Math_Vec3s_ToVec3f(&sp34, &points[1]);
 
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
@@ -2494,7 +2497,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     Vec3f sp40;
     Vec3f sp34;
-    Vec3s* temp_v0_2; // sp30
+    Vec3s* points;
     s32 limit;
     s32 ret = false;
 
@@ -2505,9 +2508,9 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     }
 
     if ((this->timePath != NULL) && (this->timePath->count >= 2)) {
-        temp_v0_2 = Lib_SegmentedToVirtual(this->timePath->points);
-        Math_Vec3s_ToVec3f(&sp40, &temp_v0_2[this->timePath->count - 1]);
-        Math_Vec3s_ToVec3f(&sp34, &temp_v0_2[this->timePath->count - 2]);
+        points = Lib_SegmentedToVirtual(this->timePath->points);
+        Math_Vec3s_ToVec3f(&sp40, &points[this->timePath->count - 1]);
+        Math_Vec3s_ToVec3f(&sp34, &points[this->timePath->count - 2]);
 
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp34, &sp40);
 
@@ -2551,7 +2554,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 this->eyeTimer = 8;
                 break;
 
-            case ANJU_SCH_E:
+            case ANJU_SCH_COOKING:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_COOKING);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
@@ -2601,7 +2604,7 @@ s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
 
     switch (scheduleOutput->result) {
-        case ANJU_SCH_1:
+        case ANJU_SCH_WAITING_FOR_KAFEI:
             SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             EnAn_ChangeAnim(this, play, ENAN_ANIM_SIT);
             break;
@@ -2647,15 +2650,15 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
     this->unk_374 = 40.0f;
 
     switch (scheduleOutput->result) {
-        case ANJU_SCH_10:
+        case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
             ret = func_80B5600C(this, play, scheduleOutput);
             break;
 
-        case ANJU_SCH_11:
+        case ANJU_SCH_ATTEND_GORON:
             ret = func_80B56094(this, play, scheduleOutput);
             break;
 
-        case ANJU_SCH_15:
+        case ANJU_SCH_GIVE_LUNCH_TO_GRANDMA:
             ret = func_80B5611C(this, play, scheduleOutput);
             break;
 
@@ -2663,13 +2666,13 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
             ret = func_80B56B00(this, play, scheduleOutput);
             break;
 
-        case ANJU_SCH_1:
+        case ANJU_SCH_WAITING_FOR_KAFEI:
         case ANJU_SCH_18:
             ret = func_80B56BC0(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_LAUNDRY_POOL_SIT:
-        case ANJU_SCH_E:
+        case ANJU_SCH_COOKING:
         case ANJU_SCH_12:
         case ANJU_SCH_13:
         case ANJU_SCH_17:
@@ -2839,15 +2842,15 @@ s32 func_80B5702C(EnAn* this, PlayState* play) {
 s32 func_80B572D4(EnAn* this, PlayState* play) {
     switch (this->scheduleResult) {
         case ANJU_SCH_17:
-            if ((func_80B55F8C(play) != 0) && func_80B55ECC(this)) {
+            if (func_80B55F8C(play) && EnAn_IsFacingAndNearPlayer(this)) {
                 this->stateFlags |= ENAN_STATE_20;
             } else {
                 this->stateFlags &= ~ENAN_STATE_20;
             }
             break;
 
-        case ANJU_SCH_1:
-            if (func_80B55ECC(this)) {
+        case ANJU_SCH_WAITING_FOR_KAFEI:
+            if (EnAn_IsFacingAndNearPlayer(this)) {
                 this->stateFlags |= ENAN_STATE_20;
             } else {
                 this->stateFlags &= ~ENAN_STATE_20;
@@ -2856,7 +2859,7 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
 
         case ANJU_SCH_12:
         case ANJU_SCH_13:
-            if (func_80B55ECC(this)) {
+            if (EnAn_IsFacingAndNearPlayer(this)) {
                 this->stateFlags |= ENAN_STATE_20;
             } else {
                 this->stateFlags &= ~ENAN_STATE_20;
@@ -2927,7 +2930,7 @@ s32 func_80B575BC(EnAn* this, PlayState* play) {
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     }
 
-    if (func_80B55ECC(this)) {
+    if (EnAn_IsFacingAndNearPlayer(this)) {
         this->stateFlags |= ENAN_STATE_20;
     } else {
         this->stateFlags &= ~ENAN_STATE_20;
@@ -2952,9 +2955,9 @@ s32 func_80B57674(EnAn* this, PlayState* play) {
 
 void func_80B57718(EnAn* this, PlayState* play) {
     switch (this->scheduleResult) {
-        case ANJU_SCH_10:
-        case ANJU_SCH_11:
-        case ANJU_SCH_15:
+        case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
+        case ANJU_SCH_ATTEND_GORON:
+        case ANJU_SCH_GIVE_LUNCH_TO_GRANDMA:
             func_80B56E44(this, play);
             break;
 
@@ -2962,7 +2965,7 @@ void func_80B57718(EnAn* this, PlayState* play) {
             func_80B573F4(this, play);
             break;
 
-        case ANJU_SCH_1:
+        case ANJU_SCH_WAITING_FOR_KAFEI:
             func_80B575BC(this, play);
             break;
 
@@ -2971,7 +2974,7 @@ void func_80B57718(EnAn* this, PlayState* play) {
             break;
 
         case ANJU_SCH_RANCH:
-        case ANJU_SCH_E:
+        case ANJU_SCH_COOKING:
         case ANJU_SCH_12:
         case ANJU_SCH_13:
         case ANJU_SCH_16:
@@ -3099,8 +3102,8 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
         return;
     }
 
-    if ((this->scheduleResult == ANJU_SCH_1) || (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
-        (this->scheduleResult == ANJU_SCH_RANCH) || (this->scheduleResult == ANJU_SCH_E) ||
+    if ((this->scheduleResult == ANJU_SCH_WAITING_FOR_KAFEI) || (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
+        (this->scheduleResult == ANJU_SCH_RANCH) || (this->scheduleResult == ANJU_SCH_COOKING) ||
         (this->scheduleResult == ANJU_SCH_19)) {
         return;
     }
