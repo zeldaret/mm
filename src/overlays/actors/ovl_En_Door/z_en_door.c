@@ -514,7 +514,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
             Flags_SetSwitch(play, this->switchFlag);
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
         }
-    } else if (this->unk_1A7 != 0) {
+    } else if (this->openTimer != 0) {
         this->actionFunc = func_80866F94;
         Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_DOOR_OPEN);
     } else if (!Player_InCsMode(play)) {
@@ -585,14 +585,14 @@ void func_80866B20(EnDoor* this, PlayState* play) {
 void func_80866F94(EnDoor* this, PlayState* play) {
     s32 direction;
 
-    if (this->unk_1A7 != 0) {
-        if (this->unk_1A7 >= 0) {
+    if (this->openTimer != 0) {
+        if (this->openTimer >= 0) {
             direction = 1;
         } else {
             direction = -1;
         }
         if (Math_ScaledStepToS(&this->knobDoor.dyna.actor.world.rot.y, direction * 0x3E80, 0x7D0)) {
-            Math_StepToC(&this->unk_1A7, 0, 1);
+            Math_StepToC(&this->openTimer, 0, 1);
         }
     } else {
         if (Math_ScaledStepToS(&this->knobDoor.dyna.actor.world.rot.y, 0, 0x7D0)) {

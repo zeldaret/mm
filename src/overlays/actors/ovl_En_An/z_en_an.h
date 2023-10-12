@@ -75,7 +75,7 @@ typedef struct EnAn {
     /* 0x384 */ s16 timePathTimeSpeed;
     /* 0x386 */ s16 unk_386; // timer
     /* 0x388 */ s16 unk_388; // timer
-    /* 0x38A */ s16 unk_38A; // EnAnFace enum
+    /* 0x38A */ s16 savedFaceIndex; // EnAnFace enum
     /* 0x38C */ s16 faceIndex; // EnAnFace enum
     /* 0x38E */ s16 eyeTimer;
     /* 0x390 */ s16 eyeTexIndex;

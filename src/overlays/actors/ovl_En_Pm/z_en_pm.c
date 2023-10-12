@@ -1711,9 +1711,9 @@ s32 func_80AF9D04(EnPm* this, PlayState* play) {
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if (((f32)this->unk_36E / this->unk_36C) <= 0.9f) {
-                door->unk_1A7 = this->unk_260;
+                door->openTimer = this->unk_260;
             } else {
-                door->unk_1A7 = 0;
+                door->openTimer = 0;
             }
         }
         this->unk_36E = CLAMP(this->unk_36E, 0, this->unk_36C);

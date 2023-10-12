@@ -57,7 +57,7 @@
         <DList Name="object_an1_DL_0111E0" Offset="0x111E0" />
         <DList Name="gAnju1FoodTrayDL" Offset="0x111E8" /> <!-- Original name is "an_obon_model" -->
 
-        <Texture Name="object_an1_Tex_011928" OutName="tex_011928" Format="i8" Width="32" Height="32" Offset="0x11928" />
+        <Texture Name="gAnju1PlateTex" OutName="plate" Format="i8" Width="32" Height="32" Offset="0x11928" />
         <Texture Name="object_an1_Tex_011D28" OutName="tex_011D28" Format="rgba16" Width="16" Height="16" Offset="0x11D28" />
         <Texture Name="object_an1_Tex_011F28" OutName="tex_011F28" Format="rgba16" Width="16" Height="16" Offset="0x11F28" />
         <Texture Name="object_an1_Tex_012128" OutName="tex_012128" Format="i8" Width="16" Height="16" Offset="0x12128" />

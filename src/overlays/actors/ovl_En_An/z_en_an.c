@@ -32,66 +32,66 @@ typedef enum AnjuScheduleResult {
     /*  1 */ ANJU_SCH_WAITING_FOR_KAFEI,
     /*  2 */ ANJU_SCH_2, // unused
     /*  3 */ ANJU_SCH_LAUNDRY_POOL_SIT,
-    /*  4 */ ANJU_SCH_4,
-    /*  5 */ ANJU_SCH_5,
-    /*  6 */ ANJU_SCH_6,
-    /*  7 */ ANJU_SCH_7,
-    /*  8 */ ANJU_SCH_8,
-    /*  9 */ ANJU_SCH_9,
-    /* 10 */ ANJU_SCH_A,
-    /* 11 */ ANJU_SCH_B,
+    /*  4 */ ANJU_SCH_4, // unused
+    /*  5 */ ANJU_SCH_5, // unused
+    /*  6 */ ANJU_SCH_6, // unused
+    /*  7 */ ANJU_SCH_7, // unused
+    /*  8 */ ANJU_SCH_8, // unused
+    /*  9 */ ANJU_SCH_9, // unused
+    /* 10 */ ANJU_SCH_A, // unused
+    /* 11 */ ANJU_SCH_B, // unused
     /* 12 */ ANJU_SCH_RANCH,
-    /* 13 */ ANJU_SCH_D,
+    /* 13 */ ANJU_SCH_D, // unused
     /* 14 */ ANJU_SCH_COOKING,
-    /* 15 */ ANJU_SCH_F,
+    /* 15 */ ANJU_SCH_F, // unused
     /* 16 */ ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN,
     /* 17 */ ANJU_SCH_ATTEND_GORON, // ANJU_SCH_ATTEND_LINK_THE_GORON? ANJU_SCH_ATTEND_PLAYER_THE_GORON?
-    /* 18 */ ANJU_SCH_12,
-    /* 19 */ ANJU_SCH_13,
-    /* 20 */ ANJU_SCH_14,
+    /* 18 */ ANJU_SCH_RECEPTIONIST_IDLE,
+    /* 19 */ ANJU_SCH_13, // Standing next to the Inn's front door at closing time
+    /* 20 */ ANJU_SCH_14, // unused
     /* 21 */ ANJU_SCH_GIVE_LUNCH_TO_GRANDMA,
-    /* 22 */ ANJU_SCH_16,
-    /* 23 */ ANJU_SCH_17,
-    /* 24 */ ANJU_SCH_18,
+    /* 22 */ ANJU_SCH_SWEEPING,
+    /* 23 */ ANJU_SCH_MIDNIGHT_MEETING,
+    /* 24 */ ANJU_SCH_18, // Day 2, 21:30 ~ 23:00, on the employees-only room, talking with her mom
     /* 25 */ ANJU_SCH_19, // Set manually in code instead of via script
-    /* 26 */ ANJU_SCH_1A,
-    /* 27 */ ANJU_SCH_1B,
-    /* 28 */ ANJU_SCH_1C,
-    /* 29 */ ANJU_SCH_1D,
-    /* 30 */ ANJU_SCH_1E,
-    /* 31 */ ANJU_SCH_1F,
-    /* 32 */ ANJU_SCH_20,
-    /* 33 */ ANJU_SCH_21,
-    /* 34 */ ANJU_SCH_22,
-    /* 35 */ ANJU_SCH_23,
-    /* 36 */ ANJU_SCH_24,
-    /* 37 */ ANJU_SCH_25,
-    /* 38 */ ANJU_SCH_26,
-    /* 39 */ ANJU_SCH_27,
-    /* 40 */ ANJU_SCH_28,
-    /* 41 */ ANJU_SCH_29,
-    /* 42 */ ANJU_SCH_2A,
-    /* 43 */ ANJU_SCH_2B,
-    /* 44 */ ANJU_SCH_2C,
-    /* 45 */ ANJU_SCH_2D,
-    /* 46 */ ANJU_SCH_2E,
-    /* 47 */ ANJU_SCH_2F,
-    /* 48 */ ANJU_SCH_30,
-    /* 49 */ ANJU_SCH_31,
-    /* 50 */ ANJU_SCH_32,
-    /* 51 */ ANJU_SCH_33,
-    /* 52 */ ANJU_SCH_34,
-    /* 53 */ ANJU_SCH_35,
-    /* 54 */ ANJU_SCH_36,
-    /* 55 */ ANJU_SCH_37,
+    /* 26 */ ANJU_SCH_1A, // Passing through to Grandma's door (entering)
+    /* 27 */ ANJU_SCH_1B, // Passing through to Grandma's door (leaving)
+    /* 28 */ ANJU_SCH_1C, // Passing through the door of the employees-only room (entering), after giving Grandma's lunch
+    /* 29 */ ANJU_SCH_1D, // Passing through the door of the employees-only room (leaving), after giving Grandma's lunch
+    /* 30 */ ANJU_SCH_1E, // Passing through the door of the employees-only room (entering), after closing the Inn
+    /* 31 */ ANJU_SCH_1F, // Passing through the door of the employees-only room (leaving), to have the midnight meeting
+    /* 32 */ ANJU_SCH_20, // Passing through the door of the employees-only room (leaving), going to the Laundry Pool
+    /* 33 */ ANJU_SCH_21, // Passing through the Inn's front door (leaving) (inside the Inn), going to the Laundry Pool
+    /* 34 */ ANJU_SCH_22, // Passing through the Inn's front door (entering) (inside the Inn), going from the Laundry Pool
+    /* 35 */ ANJU_SCH_23, // Passing through the door of the employees-only room (entering), after going to the Laundry Pool
+    /* 36 */ ANJU_SCH_24, // Day 3, 11:25 ~ 11:30, passing through the door after sweeping
+    /* 37 */ ANJU_SCH_25, // Passing through the Inn's front door (leaving) (East Clock Town), going to the Laundry Pool
+    /* 38 */ ANJU_SCH_26, // Passing through the Inn's front door (entering) (East Clock Town), going from the Laundry Pool
+    /* 39 */ ANJU_SCH_27, // Day 3, 11:50 ~ 12:00, passing through the door of the employees-only room
+    /* 40 */ ANJU_SCH_28, // Going from the front desk to the kitchen
+    /* 41 */ ANJU_SCH_29, // unused
+    /* 42 */ ANJU_SCH_2A, // Walking from the kitchen to Grandma's room
+    /* 43 */ ANJU_SCH_2B, // Inside Grandma's room, walking to give her her food
+    /* 44 */ ANJU_SCH_2C, // Inside Grandma's room, walking out
+    /* 45 */ ANJU_SCH_2D, // Left Grandma's room, walking towards employees-only room
+    /* 46 */ ANJU_SCH_2E, // Left employees-only room, walking to front desk
+    /* 47 */ ANJU_SCH_2F, // Walking from the front desk to right next to the Inn's front door
+    /* 48 */ ANJU_SCH_30, // Walking from the Inn's front door after closing, to the employees-only room
+    /* 49 */ ANJU_SCH_31, // Walking from the employees-only room to the kitchen, to have the midnight meeting
+    /* 50 */ ANJU_SCH_32, // Walking from the employees-only room to Inn's front door, to go to the Laundry Pool
+    /* 51 */ ANJU_SCH_33, // Walking from the Inn's front door to the employees-only room, after going to the Laundry Pool
+    /* 52 */ ANJU_SCH_34, // Day 3, 11:00 ~ 11:25, Stopped sweeping, walking out of the room
+    /* 53 */ ANJU_SCH_35, // Day 3, 11:00 ~ 11:25, Walking through the hallway after sweeping
+    /* 54 */ ANJU_SCH_36, // Walking through East Clock Town, going to the Laundry Pool
+    /* 55 */ ANJU_SCH_37, // Walking through South Clock Town, East Clock Town perspective, going to the Laundry Pool
     /* 56 */ ANJU_SCH_LAUNDRY_POOL_WALKING_IN,
     /* 57 */ ANJU_SCH_LAUNDRY_POOL_LEAVING,
-    /* 58 */ ANJU_SCH_3A,
-    /* 59 */ ANJU_SCH_3B,
-    /* 60 */ ANJU_SCH_3C,
-    /* 61 */ ANJU_SCH_3D,
-    /* 62 */ ANJU_SCH_3E,
-    /* 63 */ ANJU_SCH_3F,
+    /* 58 */ ANJU_SCH_3A, // Walking through South Clock Town, East Clock Town perspective, going to the Inn from the Laundry Pool
+    /* 59 */ ANJU_SCH_3B, // Walking through East Clock Town, going to the Inn from the Laundry Pool
+    /* 60 */ ANJU_SCH_3C, // Walking through East Clock Town, South Clock Town perspective, going to the Laundry Pool
+    /* 61 */ ANJU_SCH_3D, // Walking through South Clock Town, going to the Laundry Pool
+    /* 62 */ ANJU_SCH_3E, // Walking through South Clock Town, going to the Inn from the Laundry Pool
+    /* 63 */ ANJU_SCH_3F, // Walking through East Clock Town, South Clock Town perspective, going to the Inn from the Laundry Pool
     /* 64 */ ANJU_SCH_MAX
 } AnjuScheduleResult;
 
@@ -127,7 +127,7 @@ static u8 sScheduleScript[] = {
     /* 0x0AE */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 6, 0, 0x0B5 - 0x0B4),
     /* 0x0B4 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x0B5 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x0BF - 0x0B9),
-    /* 0x0B9 */ SCHEDULE_CMD_RET_TIME(0, 0, 6, 0, ANJU_SCH_17),
+    /* 0x0B9 */ SCHEDULE_CMD_RET_TIME(0, 0, 6, 0, ANJU_SCH_MIDNIGHT_MEETING),
     /* 0x0BF */ SCHEDULE_CMD_RET_NONE(),
     /* 0x0C0 */ SCHEDULE_CMD_RET_TIME(23, 15, 0, 0, ANJU_SCH_31),
     /* 0x0C6 */ SCHEDULE_CMD_RET_TIME(23, 10, 23, 15, ANJU_SCH_1F),
@@ -135,11 +135,11 @@ static u8 sScheduleScript[] = {
     /* 0x0D2 */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 5, ANJU_SCH_30),
     /* 0x0D8 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_13),
     /* 0x0DE */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_2F),
-    /* 0x0E4 */ SCHEDULE_CMD_RET_TIME(16, 30, 19, 50, ANJU_SCH_12),
+    /* 0x0E4 */ SCHEDULE_CMD_RET_TIME(16, 30, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x0EA */ SCHEDULE_CMD_RET_TIME(16, 10, 16, 30, ANJU_SCH_ATTEND_GORON),
-    /* 0x0F0 */ SCHEDULE_CMD_RET_TIME(14, 18, 16, 10, ANJU_SCH_12),
+    /* 0x0F0 */ SCHEDULE_CMD_RET_TIME(14, 18, 16, 10, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x0F6 */ SCHEDULE_CMD_RET_TIME(14, 8, 14, 18, ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN),
-    /* 0x0FC */ SCHEDULE_CMD_RET_TIME(13, 50, 14, 8, ANJU_SCH_12),
+    /* 0x0FC */ SCHEDULE_CMD_RET_TIME(13, 50, 14, 8, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x102 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_2E),
     /* 0x108 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, ANJU_SCH_1D),
     /* 0x10E */ SCHEDULE_CMD_RET_TIME(12, 55, 13, 0, ANJU_SCH_1C),
@@ -152,7 +152,7 @@ static u8 sScheduleScript[] = {
     /* 0x138 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_2A),
     /* 0x13E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_COOKING),
     /* 0x144 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_28),
-    /* 0x14A */ SCHEDULE_CMD_RET_TIME(6, 0, 10, 55, ANJU_SCH_12),
+    /* 0x14A */ SCHEDULE_CMD_RET_TIME(6, 0, 10, 55, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x150 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x151 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(2, 0x391 - 0x156),
     /* 0x156 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x29E - 0x15B),
@@ -175,7 +175,7 @@ static u8 sScheduleScript[] = {
     /* 0x1B6 */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 0, ANJU_SCH_30),
     /* 0x1BC */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_13),
     /* 0x1C2 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_2F),
-    /* 0x1C8 */ SCHEDULE_CMD_RET_TIME(18, 0, 19, 50, ANJU_SCH_12),
+    /* 0x1C8 */ SCHEDULE_CMD_RET_TIME(18, 0, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x1CE */ SCHEDULE_CMD_RET_TIME(17, 55, 18, 0, ANJU_SCH_23),
     /* 0x1D4 */ SCHEDULE_CMD_RET_TIME(17, 30, 17, 55, ANJU_SCH_33),
     /* 0x1DA */ SCHEDULE_CMD_RET_TIME(17, 24, 17, 30, ANJU_SCH_22),
@@ -241,7 +241,7 @@ static u8 sScheduleScript[] = {
     /* 0x32A */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 5, ANJU_SCH_30),
     /* 0x330 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_13),
     /* 0x336 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_2F),
-    /* 0x33C */ SCHEDULE_CMD_RET_TIME(13, 50, 19, 50, ANJU_SCH_12),
+    /* 0x33C */ SCHEDULE_CMD_RET_TIME(13, 50, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x342 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_2E),
     /* 0x348 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, ANJU_SCH_1D),
     /* 0x34E */ SCHEDULE_CMD_RET_TIME(12, 55, 13, 0, ANJU_SCH_1C),
@@ -254,7 +254,7 @@ static u8 sScheduleScript[] = {
     /* 0x378 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_2A),
     /* 0x37E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_COOKING),
     /* 0x384 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_28),
-    /* 0x38A */ SCHEDULE_CMD_RET_TIME(6, 0, 10, 55, ANJU_SCH_12),
+    /* 0x38A */ SCHEDULE_CMD_RET_TIME(6, 0, 10, 55, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x390 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x391 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(3, 0x447 - 0x396),
     /* 0x396 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES, 0x3ED - 0x39A),
@@ -269,7 +269,7 @@ static u8 sScheduleScript[] = {
     /* 0x3C3 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_35),
     /* 0x3C9 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, ANJU_SCH_24),
     /* 0x3CF */ SCHEDULE_CMD_RET_TIME(11, 0, 11, 25, ANJU_SCH_34),
-    /* 0x3D5 */ SCHEDULE_CMD_RET_TIME(6, 0, 11, 0, ANJU_SCH_16),
+    /* 0x3D5 */ SCHEDULE_CMD_RET_TIME(6, 0, 11, 0, ANJU_SCH_SWEEPING),
     /* 0x3DB */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x3EC - 0x3DF),
     /* 0x3DF */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x3E6 - 0x3E5),
     /* 0x3E5 */ SCHEDULE_CMD_RET_NONE(),
@@ -290,7 +290,7 @@ static u8 sScheduleScript[] = {
     /* 0x42E */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_35),
     /* 0x434 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, ANJU_SCH_24),
     /* 0x43A */ SCHEDULE_CMD_RET_TIME(11, 0, 11, 25, ANJU_SCH_34),
-    /* 0x440 */ SCHEDULE_CMD_RET_TIME(6, 0, 11, 0, ANJU_SCH_16),
+    /* 0x440 */ SCHEDULE_CMD_RET_TIME(6, 0, 11, 0, ANJU_SCH_SWEEPING),
     /* 0x446 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x447 */ SCHEDULE_CMD_RET_NONE(),
 };
@@ -302,7 +302,7 @@ s32 scheduleScript(PlayState* play) {
     if (gSaveContext.save.day == 1) {
         if (play->sceneId == SCENE_YADOYA) {
             if ((6, 0) <= NOW <= (10, 55)) {
-                return ANJU_SCH_12;
+                return ANJU_SCH_RECEPTIONIST_IDLE;
             } else if ((10, 55) <= NOW <= (11, 10)) {
                 return ANJU_SCH_28;
             } else if ((11, 10) <= NOW <= (11, 30)) {
@@ -328,15 +328,15 @@ s32 scheduleScript(PlayState* play) {
             } else if ((13, 20) <= NOW <= (13, 50)) {
                 return ANJU_SCH_2E;
             } else if ((13, 50) <= NOW <= (14, 8)) {
-                return ANJU_SCH_12;
+                return ANJU_SCH_RECEPTIONIST_IDLE;
             } else if ((14, 8) <= NOW <= (14, 18)) {
                 return ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN;
             } else if ((14, 18) <= NOW <= (16, 10)) {
-                return ANJU_SCH_12;
+                return ANJU_SCH_RECEPTIONIST_IDLE;
             } else if ((16, 10) <= NOW <= (16, 30)) {
                 return ANJU_SCH_ATTEND_GORON;
             } else if ((16, 30) <= NOW <= (19, 50)) {
-                return ANJU_SCH_12;
+                return ANJU_SCH_RECEPTIONIST_IDLE;
             } else if ((19, 50) <= NOW <= (20, 20)) {
                 return ANJU_SCH_2F;
             } else if ((20, 20) <= NOW <= (20, 30)) {
@@ -354,7 +354,7 @@ s32 scheduleScript(PlayState* play) {
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HAD_MIDNIGHT_MEETING)) {
                         return None;
                     }
-                    return ANJU_SCH_17;
+                    return ANJU_SCH_MIDNIGHT_MEETING;
                 } else {
                     return None;
                 }
@@ -368,7 +368,7 @@ s32 scheduleScript(PlayState* play) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HAD_MIDNIGHT_MEETING)) {
             if (play->sceneId == SCENE_YADOYA) {
                 if ((6, 0) <= NOW <= (10, 55)) {
-                    return ANJU_SCH_12;
+                    return ANJU_SCH_RECEPTIONIST_IDLE;
                 } else if ((10, 55) <= NOW <= (11, 10)) {
                     return ANJU_SCH_28;
                 } else if ((11, 10) <= NOW <= (11, 30)) {
@@ -394,7 +394,7 @@ s32 scheduleScript(PlayState* play) {
                 } else if ((13, 20) <= NOW <= (13, 50)) {
                     return ANJU_SCH_2E;
                 } else if ((13, 50) <= NOW <= (19, 50)) {
-                    return ANJU_SCH_12;
+                    return ANJU_SCH_RECEPTIONIST_IDLE;
                 } else if ((19, 50) <= NOW <= (20, 20)) {
                     return ANJU_SCH_2F;
                 } else if ((20, 20) <= NOW <= (20, 30)) {
@@ -425,7 +425,7 @@ s32 scheduleScript(PlayState* play) {
             } else if ((17, 55) <= NOW <= (18, 0)) {
                 return ANJU_SCH_23;
             } else if ((18, 0) <= NOW <= (19, 50)) {
-                return ANJU_SCH_12;
+                return ANJU_SCH_RECEPTIONIST_IDLE;
             } else if ((19, 50) <= NOW <= (20, 20)) {
                 return ANJU_SCH_2F;
             } else if ((20, 20) <= NOW <= (20, 30)) {
@@ -484,7 +484,7 @@ s32 scheduleScript(PlayState* play) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES)) {
             if (play->sceneId == SCENE_YADOYA) {
                 if ((6, 0) <= NOW <= (11, 0)) {
-                    return ANJU_SCH_16;
+                    return ANJU_SCH_SWEEPING;
                 } else if ((11, 0) <= NOW <= (11, 25)) {
                     return ANJU_SCH_34;
                 } else if ((11, 25) <= NOW <= (11, 30)) {
@@ -505,7 +505,7 @@ s32 scheduleScript(PlayState* play) {
             }
         } else if (play->sceneId == SCENE_YADOYA) {
             if ((6, 0) <= NOW <= (11, 0)) {
-                return ANJU_SCH_16;
+                return ANJU_SCH_SWEEPING;
             } else if ((11, 0) <= NOW <= (11, 25)) {
                 return ANJU_SCH_34;
             } else if ((11, 25) <= NOW <= (11, 30)) {
@@ -551,12 +551,12 @@ static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     -1, // ANJU_SCH_F
     10, // ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN
     10, // ANJU_SCH_ATTEND_GORON
-    10, // ANJU_SCH_12
+    10, // ANJU_SCH_RECEPTIONIST_IDLE
     11, // ANJU_SCH_13
     -1, // ANJU_SCH_14
     4,  // ANJU_SCH_GIVE_LUNCH_TO_GRANDMA
-    22, // ANJU_SCH_16
-    15, // ANJU_SCH_17
+    22, // ANJU_SCH_SWEEPING
+    15, // ANJU_SCH_MIDNIGHT_MEETING
     -1, // ANJU_SCH_18
     -1, // ANJU_SCH_19
     3,  // ANJU_SCH_1A
@@ -624,7 +624,7 @@ s32 sAnjuMsgScript_Sch12_B[0x37] = {
     0x10C11,    0x20201023, 0x400012,   0x0E28A00C, 0x0900000F, 0x28A62D00, 0x010C2400, 0x40100E28,
     0xA72D0001, 0x0C102300, 0x41000B0E, 0x28AC2D00, 0x010C2400, 0x41100E28, 0xAD0C1000,
 };
-s32 sAnjuMsgScript_Sch13_Sch2F[3] = { 0x0E18852D, 0x10C12, 0x10000000 };
+s32 sAnjuMsgScript_InnCloseTime[3] = { 0x0E18852D, 0x10C12, 0x10000000 };
 s32 sAnjuMsgScript_Sch30[2] = { 0x0E28AF2D, 0x10C10 };
 s32 sAnjuMsgScript_Sch28[2] = { 0x0E28C12D, 0x10C10 };
 s32 sAnjuMsgScript_SchCooking[0xB] = {
@@ -632,7 +632,7 @@ s32 sAnjuMsgScript_SchCooking[0xB] = {
     0x15090000, 0x11350112, 0x100E28C2, 0x2D00010C, 0x10000000,
 };
 s32 D_80B58980[2] = { 0x0E28C62D, 0x10C10 };
-s32 sAnjuMsgScript_Sch16[3] = { 0x0E28F70C, 0x0F28F82D, 0x10C10 };
+s32 sAnjuMsgScript_SchSweeping[3] = { 0x0E28F70C, 0x0F28F82D, 0x10C10 };
 s32 sAnjuMsgScript_Sch34_Sch35[2] = { 0x0E28F82D, 0x10C10 };
 s32 sAnjuMsgScript_SchRanch[4] = { 0x0E28F90C, 0x0F28FA0C, 0x0F28FB2D, 0x10C10 };
 s32 sAnjuMsgScript_Sch17_A[0x14] = {
@@ -640,7 +640,10 @@ s32 sAnjuMsgScript_Sch17_A[0x14] = {
     0x0E28D919, -0x16CFF2,  0x28DC0C11, 0x32201132, 0x10120600, 0xAA000013, 0xAA2F00,
     0x2E2D00,   0x012D0017, 0x2D00160C, 0x0700000E, 0x28DE0C15, 0x09000010,
 };
-s32 sAnjuMsgScript_Sch17_B[2] = { 0x0E28D62D, 0x10C10 };
+
+// Surprised: "nevermind"
+s32 sAnjuMsgScript_80B589FC[2] = { 0x0E28D62D, 0x10C10 };
+
 s32 sAnjuMsgScript_DekuDefault[8] = {
     0x522000, 0x100E294F, 0x0C0F2950, 0x2D00010C, 0x12115220, 0x100E2951, 0x2D00010C, 0x12100000,
 };
@@ -665,8 +668,13 @@ s32 sAnjuMsgScript_SchLaundryPoolKafeiMask[0x10] = {
     0x372000,   0x21003208, 0x220E28,    -0x17F3F0D8, -0x12F3EAF7, 0xE28,      -0x14F3F0D8, -0x13D2FFFF,
     0x0C121137, 0x20100E28, -0x13F3EDF0, 0x0E28EE0C,  0x0F28EB0C,  0x0F28EC2D, 0x10C12,     0x11372010,
 };
-s32 D_80B58B7C[3] = { 0x0E29512D, 0x10C12, 0x10000000 };
-s32 sAnjuMsgScript_Sch31[2] = { 0x0E29612D, 0x10C10 };
+
+// Anju says the Inn is full and tell the player to tell that to his mother
+s32 sAnjuMsgScript_80B58B7C[3] = { 0x0E29512D, 0x10C12, 0x10000000 };
+
+// Tells player that they should talk in the kitchen instead
+s32 sAnjuMsgScript_80B58B88[2] = { 0x0E29612D, 0x10C10 };
+
 s32 sAnjuMsgScript_Sch19[3] = { 0x0E291B2D, 0x10C12, 0x10000000 };
 
 ActorInit En_An_InitVars = {
@@ -1531,13 +1539,13 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             case ANJU_SCH_2C:
             case ANJU_SCH_2D:
             case ANJU_SCH_2F:
-                return D_80B58B7C;
+                return sAnjuMsgScript_80B58B7C;
 
             case ANJU_SCH_LAUNDRY_POOL_SIT:
                 return sAnjuMsgScript_SchLaundryPoolDeku;
 
             case ANJU_SCH_31:
-                return sAnjuMsgScript_Sch17_B;
+                return sAnjuMsgScript_80B589FC;
 
             default:
                 break;
@@ -1548,10 +1556,10 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
 
     if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
         if (this->scheduleResult == ANJU_SCH_31) {
-            return sAnjuMsgScript_Sch31;
+            return sAnjuMsgScript_80B58B88;
         }
 
-        if (this->scheduleResult == ANJU_SCH_17) {
+        if (this->scheduleResult == ANJU_SCH_MIDNIGHT_MEETING) {
             this->msgEventFunc = EnAn_MsgEvent_17;
             return sAnjuMsgScript_Sch17_A;
         }
@@ -1576,7 +1584,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
     }
 
     if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
-        if (this->scheduleResult == ANJU_SCH_17) {
+        if (this->scheduleResult == ANJU_SCH_MIDNIGHT_MEETING) {
             this->msgEventFunc = EnAn_MsgEvent_17;
             return sAnjuMsgScript_Sch17_A;
         }
@@ -1608,7 +1616,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             this->msgEventFunc = EnAn_MsgEvent_LaundryPool;
             return sAnjuMsgScript_SchLaundryPoolDefault;
 
-        case ANJU_SCH_12:
+        case ANJU_SCH_RECEPTIONIST_IDLE:
             if (gSaveContext.save.day >= 2) {
                 return sAnjuMsgScript_Sch12_A;
             }
@@ -1616,22 +1624,22 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
 
         case ANJU_SCH_13:
         case ANJU_SCH_2F:
-            return sAnjuMsgScript_Sch13_Sch2F;
+            return sAnjuMsgScript_InnCloseTime;
 
-        case ANJU_SCH_16:
-            return sAnjuMsgScript_Sch16;
+        case ANJU_SCH_SWEEPING:
+            return sAnjuMsgScript_SchSweeping;
 
-        case ANJU_SCH_17:
-            return sAnjuMsgScript_Sch17_B;
+        case ANJU_SCH_MIDNIGHT_MEETING:
+            return sAnjuMsgScript_80B589FC;
 
         case ANJU_SCH_30:
             return sAnjuMsgScript_Sch30;
 
         case ANJU_SCH_31:
             if (player->transformation == PLAYER_FORM_HUMAN) {
-                return sAnjuMsgScript_Sch31;
+                return sAnjuMsgScript_80B58B88;
             }
-            return sAnjuMsgScript_Sch17_B;
+            return sAnjuMsgScript_80B589FC;
 
         case ANJU_SCH_34:
         case ANJU_SCH_35:
@@ -1656,8 +1664,8 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
         this->msgEventScript = EnAn_GetMsgEventScript(this, play);
 
         if ((this->scheduleResult == ANJU_SCH_WAITING_FOR_KAFEI) || (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
-            (this->scheduleResult == ANJU_SCH_12) || (this->scheduleResult == ANJU_SCH_13) ||
-            (this->scheduleResult == ANJU_SCH_17) || (this->scheduleResult == ANJU_SCH_16) ||
+            (this->scheduleResult == ANJU_SCH_RECEPTIONIST_IDLE) || (this->scheduleResult == ANJU_SCH_13) ||
+            (this->scheduleResult == ANJU_SCH_MIDNIGHT_MEETING) || (this->scheduleResult == ANJU_SCH_SWEEPING) ||
             (this->scheduleResult == ANJU_SCH_28) || (this->scheduleResult == ANJU_SCH_2A) ||
             (this->scheduleResult == ANJU_SCH_2B) || (this->scheduleResult == ANJU_SCH_2C) ||
             (this->scheduleResult == ANJU_SCH_2D) || (this->scheduleResult == ANJU_SCH_2F) ||
@@ -1684,7 +1692,7 @@ s32 func_80B552E4(EnAn* this, PlayState* play) {
     if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_YADOYA) && (gSaveContext.sceneLayer == 0) &&
         ((scriptIndex == 0) || (scriptIndex == 1))) {
         if (!this->forceDraw) {
-            this->unk_38A = ENAN_FACE_0;
+            this->savedFaceIndex = ENAN_FACE_0;
             this->faceIndex = ENAN_FACE_0;
             this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
             this->eyeTimer = 8;
@@ -1758,18 +1766,17 @@ void func_80B554E8(EnAn* this) {
     }
 }
 
-// EnAn_ChooseAnimForSchedule?
-s32 func_80B555C8(EnAn* this, PlayState* play) {
+s32 EnAn_ChooseAnimAfterTalking(EnAn* this, PlayState* play) {
     switch (this->scheduleResult) {
         case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
         case ANJU_SCH_ATTEND_GORON:
-        case ANJU_SCH_12:
+        case ANJU_SCH_RECEPTIONIST_IDLE:
         case ANJU_SCH_13:
-        case ANJU_SCH_17:
+        case ANJU_SCH_MIDNIGHT_MEETING:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
             break;
 
-        case ANJU_SCH_16:
+        case ANJU_SCH_SWEEPING:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_SWEEP);
             this->stateFlags |= ENAN_STATE_DRAW_BROOM;
             break;
@@ -1809,7 +1816,7 @@ s32 func_80B555C8(EnAn* this, PlayState* play) {
     return 0;
 }
 
-void func_80B556F8(EnAn* this, PlayState* play) {
+void EnAn_DialogueFunc_80B556F8(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_6);
         this->stateFlags &= ~ENAN_STATE_20;
@@ -1823,7 +1830,7 @@ void func_80B556F8(EnAn* this, PlayState* play) {
     }
 }
 
-void func_80B557AC(EnAn* this, PlayState* play) {
+void EnAn_DialogueFunc_80B557AC(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_BOWING);
         this->stateFlags &= ~ENAN_STATE_20;
@@ -1837,7 +1844,7 @@ void func_80B557AC(EnAn* this, PlayState* play) {
     }
 }
 
-void func_80B55860(EnAn* this, PlayState* play) {
+void EnAn_DialogueFunc_80B55860(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_BOWING_MORPH);
         this->stateFlags |= ENAN_STATE_200;
@@ -1905,13 +1912,13 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
                 case 0x28BE: // "From what postbox did you got that letter?!"
                 case 0x28C0: // "Not what I mean!"
                 case 0x295E: // "I need to know!"
-                    this->dialogueFunc = func_80B556F8;
+                    this->dialogueFunc = EnAn_DialogueFunc_80B556F8;
                     this->dialogueFuncState = 0;
                     break;
 
                 case 0x28E6: // "It's from Kafei"
                     this->stateFlags &= ~ENAN_STATE_DRAW_BROOM;
-                    this->dialogueFunc = func_80B55860;
+                    this->dialogueFunc = EnAn_DialogueFunc_80B55860;
                     this->dialogueFuncState = 0;
                     break;
 
@@ -1924,7 +1931,7 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
                 case 0x28D9: // "Please"
                 case 0x28DC: // "Thank you"
                 case 0x28DE: // "Mail it in the morning"
-                    this->dialogueFunc = func_80B557AC;
+                    this->dialogueFunc = EnAn_DialogueFunc_80B557AC;
                     this->dialogueFuncState = 0;
                     break;
 
@@ -2011,7 +2018,7 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
 
             switch (textId) {
                 case 0x28F5: // "The town will be crushed by the moon. Forget about the letter"
-                    this->unk_38A = ENAN_FACE_0;
+                    this->savedFaceIndex = ENAN_FACE_0;
                     /* fallthrough */
                 case 0x28A5: // "Visit us again in the future"
                 case 0x28AA: // "One moment please"
@@ -2077,7 +2084,7 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
                     break;
 
                 case 0x28EC: // "Should I wait?"
-                    this->unk_38A = ENAN_FACE_5;
+                    this->savedFaceIndex = ENAN_FACE_5;
                     /* fallthrough */
                 case 0x28DC: // "Thank you"
                 case 0x28EB: // "I'm afraid to meet him..."
@@ -2107,9 +2114,9 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
         this->dialogueFunc = NULL;
         this->prevTextId = 0;
         this->stateFlags &= ~ENAN_STATE_TALKING;
-        this->faceIndex = this->unk_38A;
+        this->faceIndex = this->savedFaceIndex;
         this->eyeTimer = 4;
-        func_80B555C8(this, play);
+        EnAn_ChooseAnimAfterTalking(this, play);
     }
 
     if (this->dialogueFunc != NULL) {
@@ -2252,12 +2259,12 @@ s32 func_80B5611C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 sp56 = SCHEDULE_TIME_NOW;
+    u16 now = SCHEDULE_TIME_NOW;
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     EnDoor* door;
     Vec3s* points;
-    Vec3f sp40;
-    Vec3f sp34;
+    Vec3f firstPos;
+    Vec3f secondPos;
     s32 limit;
     s32 ret = false;
 
@@ -2272,12 +2279,13 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
         if (this->timePath != NULL) {
             points = Lib_SegmentedToVirtual(this->timePath->points);
-            Math_Vec3s_ToVec3f(&sp40, &points[0]);
-            Math_Vec3s_ToVec3f(&sp34, &points[1]);
-            Math_Vec3f_Copy(&this->unk_228, &sp40);
-            Math_Vec3f_Copy(&this->unk_234, &sp34);
-            this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
-            Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
+            Math_Vec3s_ToVec3f(&firstPos, &points[0]);
+            Math_Vec3s_ToVec3f(&secondPos, &points[1]);
+
+            Math_Vec3f_Copy(&this->unk_228, &firstPos);
+            Math_Vec3f_Copy(&this->unk_234, &secondPos);
+            this->actor.world.rot.y = Math_Vec3f_Yaw(&firstPos, &secondPos);
+            Math_Vec3f_Copy(&this->actor.world.pos, &firstPos);
 
             if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, door->knobDoor.dyna.actor.shape.rot.y)) <= 0x4000) {
                 this->unk_215 = -0x4B;
@@ -2286,7 +2294,7 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             }
 
             this->unk_378 = scheduleOutput->time1 - scheduleOutput->time0;
-            this->unk_37A = sp56 - scheduleOutput->time0;
+            this->unk_37A = now - scheduleOutput->time0;
 
             switch (scheduleOutput->result) {
                 case ANJU_SCH_1B:
@@ -2297,7 +2305,7 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 case ANJU_SCH_23:
                 case ANJU_SCH_25:
                 case ANJU_SCH_26:
-                    this->unk_38A = ENAN_FACE_2;
+                    this->savedFaceIndex = ENAN_FACE_2;
                     this->faceIndex = ENAN_FACE_2;
                     this->eyeTimer = 8;
                     break;
@@ -2389,7 +2397,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_3D:
             case ANJU_SCH_3E:
             case ANJU_SCH_3F:
-                this->unk_38A = ENAN_FACE_2;
+                this->savedFaceIndex = ENAN_FACE_2;
                 this->faceIndex = ENAN_FACE_2;
                 this->eyeTimer = 8;
                 break;
@@ -2458,8 +2466,8 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
-    Vec3f sp40;
-    Vec3f sp34;
+    Vec3f firstPos;
+    Vec3f secondPos;
     Vec3s* points;
     s32 limit;
     s32 ret = false;
@@ -2473,20 +2481,22 @@ s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if ((this->timePath != NULL) && (this->timePath->count >= 2)) {
         points = Lib_SegmentedToVirtual(this->timePath->points);
-        Math_Vec3s_ToVec3f(&sp40, &points[0]);
-        Math_Vec3s_ToVec3f(&sp34, &points[1]);
+        Math_Vec3s_ToVec3f(&firstPos, &points[0]);
+        Math_Vec3s_ToVec3f(&secondPos, &points[1]);
 
-        this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
+        this->actor.world.rot.y = Math_Vec3f_Yaw(&firstPos, &secondPos);
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-        Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
-        Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
-        if (scheduleOutput->result == ANJU_SCH_16) {
+        Math_Vec3f_Copy(&this->actor.world.pos, &firstPos);
+        Math_Vec3f_Copy(&this->actor.prevPos, &firstPos);
+
+        if (scheduleOutput->result == ANJU_SCH_SWEEPING) {
             EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_SWEEP);
             SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
             this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
             this->stateFlags |= ENAN_STATE_DRAW_BROOM;
         }
+
         ret = true;
     }
 
@@ -2523,13 +2533,13 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_13:
                 this->actor.world.rot.y += 0x7FF8;
                 /* fallthrough */
-            case ANJU_SCH_12:
-            case ANJU_SCH_17:
+            case ANJU_SCH_RECEPTIONIST_IDLE:
+            case ANJU_SCH_MIDNIGHT_MEETING:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->unk_37A = 0;
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
-                if (scheduleOutput->result == ANJU_SCH_12) {
+                if (scheduleOutput->result == ANJU_SCH_RECEPTIONIST_IDLE) {
                     this->unk_374 = 70.0f;
                 }
                 break;
@@ -2549,7 +2559,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                     this->unk_37A = 0;
                 }
 
-                this->unk_38A = ENAN_FACE_2;
+                this->savedFaceIndex = ENAN_FACE_2;
                 this->faceIndex = ENAN_FACE_2;
                 this->eyeTimer = 8;
                 break;
@@ -2585,7 +2595,7 @@ s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
         this->stateFlags |= ENAN_STATE_40;
 
-        this->unk_38A = ENAN_FACE_5;
+        this->savedFaceIndex = ENAN_FACE_5;
         this->faceIndex = ENAN_FACE_5;
         this->eyeTimer = 8;
     }
@@ -2611,7 +2621,7 @@ s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
         case ANJU_SCH_18:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_IN_DISBELIEVE);
-            this->unk_38A = ENAN_FACE_5;
+            this->savedFaceIndex = ENAN_FACE_5;
             this->faceIndex = ENAN_FACE_5;
             this->eyeTimer = 8;
             break;
@@ -2644,7 +2654,7 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actor.targetMode = TARGET_MODE_6;
     this->stateFlags = 0;
-    this->unk_38A = ENAN_FACE_0;
+    this->savedFaceIndex = ENAN_FACE_0;
     this->faceIndex = ENAN_FACE_0;
     this->eyeTimer = 8;
     this->unk_374 = 40.0f;
@@ -2673,13 +2683,13 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
 
         case ANJU_SCH_LAUNDRY_POOL_SIT:
         case ANJU_SCH_COOKING:
-        case ANJU_SCH_12:
+        case ANJU_SCH_RECEPTIONIST_IDLE:
         case ANJU_SCH_13:
-        case ANJU_SCH_17:
+        case ANJU_SCH_MIDNIGHT_MEETING:
             ret = func_80B56880(this, play, scheduleOutput);
             break;
 
-        case ANJU_SCH_16:
+        case ANJU_SCH_SWEEPING:
             ret = func_80B56744(this, play, scheduleOutput);
             break;
 
@@ -2738,6 +2748,7 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
     return ret;
 }
 
+// RotateTowardsLookAtActor?
 s32 func_80B56E44(EnAn* this, PlayState* play) {
     Vec3f sp2C;
     Vec3f sp20;
@@ -2759,10 +2770,11 @@ s32 func_80B56EB4(EnAn* this, PlayState* play) {
 
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
+            // Tell the door to be open while passing through it and which orientation
             if ((this->unk_37A / (f32)this->unk_378) <= 0.9f) {
-                door->unk_1A7 = this->unk_215;
+                door->openTimer = this->unk_215;
             } else {
-                door->unk_1A7 = 0;
+                door->openTimer = 0;
             }
         }
 
@@ -2811,7 +2823,7 @@ s32 func_80B5702C(EnAn* this, PlayState* play) {
     this->actor.world.pos.x = timePathTargetPos.x;
     this->actor.world.pos.z = timePathTargetPos.z;
 
-    if (SubS_InCsMode(play) != 0) {
+    if (SubS_InCsMode(play)) {
         sp54 = this->timePathElapsedTime;
         sp50 = this->timePathWaypoint;
         timePathTargetPos = this->actor.world.pos;
@@ -2828,7 +2840,7 @@ s32 func_80B5702C(EnAn* this, PlayState* play) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
 
-    if (SubS_InCsMode(play) != 0) {
+    if (SubS_InCsMode(play)) {
         this->timePathElapsedTime = sp54;
         this->timePathWaypoint = sp50;
         this->timePathTargetPos = timePathTargetPos;
@@ -2841,7 +2853,7 @@ s32 func_80B5702C(EnAn* this, PlayState* play) {
 
 s32 func_80B572D4(EnAn* this, PlayState* play) {
     switch (this->scheduleResult) {
-        case ANJU_SCH_17:
+        case ANJU_SCH_MIDNIGHT_MEETING:
             if (func_80B55F8C(play) && EnAn_IsFacingAndNearPlayer(this)) {
                 this->stateFlags |= ENAN_STATE_20;
             } else {
@@ -2857,7 +2869,7 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
             }
             break;
 
-        case ANJU_SCH_12:
+        case ANJU_SCH_RECEPTIONIST_IDLE:
         case ANJU_SCH_13:
             if (EnAn_IsFacingAndNearPlayer(this)) {
                 this->stateFlags |= ENAN_STATE_20;
@@ -2866,7 +2878,7 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
             }
             break;
 
-        case ANJU_SCH_16:
+        case ANJU_SCH_SWEEPING:
             if (Animation_OnFrame(&this->skelAnime, 6.0f) && (this->animIndex == ENAN_ANIM_BROOM_SWEEP)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_SWEEP);
             }
@@ -2975,14 +2987,14 @@ void func_80B57718(EnAn* this, PlayState* play) {
 
         case ANJU_SCH_RANCH:
         case ANJU_SCH_COOKING:
-        case ANJU_SCH_12:
+        case ANJU_SCH_RECEPTIONIST_IDLE:
         case ANJU_SCH_13:
-        case ANJU_SCH_16:
+        case ANJU_SCH_SWEEPING:
         case ANJU_SCH_18:
             func_80B572D4(this, play);
             break;
 
-        case ANJU_SCH_17:
+        case ANJU_SCH_MIDNIGHT_MEETING:
             func_80B572D4(this, play);
             break;
 
