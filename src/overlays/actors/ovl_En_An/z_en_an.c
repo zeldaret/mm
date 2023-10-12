@@ -38,60 +38,60 @@ typedef enum AnjuScheduleResult {
     /*  7 */ ANJU_SCH_7, // unused
     /*  8 */ ANJU_SCH_8, // unused
     /*  9 */ ANJU_SCH_9, // unused
-    /* 10 */ ANJU_SCH_A, // unused
-    /* 11 */ ANJU_SCH_B, // unused
+    /* 10 */ ANJU_SCH_10, // unused
+    /* 11 */ ANJU_SCH_11, // unused
     /* 12 */ ANJU_SCH_RANCH,
-    /* 13 */ ANJU_SCH_D, // unused
+    /* 13 */ ANJU_SCH_13, // unused
     /* 14 */ ANJU_SCH_COOKING,
-    /* 15 */ ANJU_SCH_F, // unused
+    /* 15 */ ANJU_SCH_15, // unused
     /* 16 */ ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN,
     /* 17 */ ANJU_SCH_ATTEND_GORON, // ANJU_SCH_ATTEND_LINK_THE_GORON? ANJU_SCH_ATTEND_PLAYER_THE_GORON?
     /* 18 */ ANJU_SCH_RECEPTIONIST_IDLE,
-    /* 19 */ ANJU_SCH_13, // Standing next to the Inn's front door at closing time
-    /* 20 */ ANJU_SCH_14, // unused
+    /* 19 */ ANJU_SCH_19, // Standing next to the Inn's front door at closing time
+    /* 20 */ ANJU_SCH_20, // unused
     /* 21 */ ANJU_SCH_GIVE_LUNCH_TO_GRANDMA,
     /* 22 */ ANJU_SCH_SWEEPING,
     /* 23 */ ANJU_SCH_MIDNIGHT_MEETING,
-    /* 24 */ ANJU_SCH_18, // Day 2, 21:30 ~ 23:00, on the employees-only room, talking with her mom
-    /* 25 */ ANJU_SCH_19, // Set manually in code instead of via script
-    /* 26 */ ANJU_SCH_1A, // Passing through to Grandma's door (entering)
-    /* 27 */ ANJU_SCH_1B, // Passing through to Grandma's door (leaving)
-    /* 28 */ ANJU_SCH_1C, // Passing through the door of the employees-only room (entering), after giving Grandma's lunch
-    /* 29 */ ANJU_SCH_1D, // Passing through the door of the employees-only room (leaving), after giving Grandma's lunch
-    /* 30 */ ANJU_SCH_1E, // Passing through the door of the employees-only room (entering), after closing the Inn
-    /* 31 */ ANJU_SCH_1F, // Passing through the door of the employees-only room (leaving), to have the midnight meeting
-    /* 32 */ ANJU_SCH_20, // Passing through the door of the employees-only room (leaving), going to the Laundry Pool
-    /* 33 */ ANJU_SCH_21, // Passing through the Inn's front door (leaving) (inside the Inn), going to the Laundry Pool
-    /* 34 */ ANJU_SCH_22, // Passing through the Inn's front door (entering) (inside the Inn), going from the Laundry Pool
-    /* 35 */ ANJU_SCH_23, // Passing through the door of the employees-only room (entering), after going to the Laundry Pool
-    /* 36 */ ANJU_SCH_24, // Day 3, 11:25 ~ 11:30, passing through the door after sweeping
-    /* 37 */ ANJU_SCH_25, // Passing through the Inn's front door (leaving) (East Clock Town), going to the Laundry Pool
-    /* 38 */ ANJU_SCH_26, // Passing through the Inn's front door (entering) (East Clock Town), going from the Laundry Pool
-    /* 39 */ ANJU_SCH_27, // Day 3, 11:50 ~ 12:00, passing through the door of the employees-only room
-    /* 40 */ ANJU_SCH_28, // Going from the front desk to the kitchen
-    /* 41 */ ANJU_SCH_29, // unused
-    /* 42 */ ANJU_SCH_2A, // Walking from the kitchen to Grandma's room
-    /* 43 */ ANJU_SCH_2B, // Inside Grandma's room, walking to give her her food
-    /* 44 */ ANJU_SCH_2C, // Inside Grandma's room, walking out
-    /* 45 */ ANJU_SCH_2D, // Left Grandma's room, walking towards employees-only room
-    /* 46 */ ANJU_SCH_2E, // Left employees-only room, walking to front desk
-    /* 47 */ ANJU_SCH_2F, // Walking from the front desk to right next to the Inn's front door
-    /* 48 */ ANJU_SCH_30, // Walking from the Inn's front door after closing, to the employees-only room
-    /* 49 */ ANJU_SCH_31, // Walking from the employees-only room to the kitchen, to have the midnight meeting
-    /* 50 */ ANJU_SCH_32, // Walking from the employees-only room to Inn's front door, to go to the Laundry Pool
-    /* 51 */ ANJU_SCH_33, // Walking from the Inn's front door to the employees-only room, after going to the Laundry Pool
-    /* 52 */ ANJU_SCH_34, // Day 3, 11:00 ~ 11:25, Stopped sweeping, walking out of the room
-    /* 53 */ ANJU_SCH_35, // Day 3, 11:00 ~ 11:25, Walking through the hallway after sweeping
-    /* 54 */ ANJU_SCH_36, // Walking through East Clock Town, going to the Laundry Pool
-    /* 55 */ ANJU_SCH_37, // Walking through South Clock Town, East Clock Town perspective, going to the Laundry Pool
+    /* 24 */ ANJU_SCH_24, // Day 2, 21:30 ~ 23:00, on the employees-only room, talking with her mom
+    /* 25 */ ANJU_SCH_25, // Set manually in code instead of via script
+    /* 26 */ ANJU_SCH_DOOR_26, // Passing through to Grandma's door (entering)
+    /* 27 */ ANJU_SCH_DOOR_27, // Passing through to Grandma's door (leaving)
+    /* 28 */ ANJU_SCH_DOOR_28, // Passing through the door of the employees-only room (entering), after giving Grandma's lunch
+    /* 29 */ ANJU_SCH_DOOR_29, // Passing through the door of the employees-only room (leaving), after giving Grandma's lunch
+    /* 30 */ ANJU_SCH_DOOR_30, // Passing through the door of the employees-only room (entering), after closing the Inn
+    /* 31 */ ANJU_SCH_DOOR_31, // Passing through the door of the employees-only room (leaving), to have the midnight meeting
+    /* 32 */ ANJU_SCH_DOOR_32, // Passing through the door of the employees-only room (leaving), going to the Laundry Pool
+    /* 33 */ ANJU_SCH_DOOR_33, // Passing through the Inn's front door (leaving) (inside the Inn), going to the Laundry Pool
+    /* 34 */ ANJU_SCH_DOOR_34, // Passing through the Inn's front door (entering) (inside the Inn), going from the Laundry Pool
+    /* 35 */ ANJU_SCH_DOOR_35, // Passing through the door of the employees-only room (entering), after going to the Laundry Pool
+    /* 36 */ ANJU_SCH_DOOR_36, // Passing through the door of the second guest room (leaving), after sweeping the floor
+    /* 37 */ ANJU_SCH_DOOR_37, // Passing through the Inn's front door (leaving) (East Clock Town), going to the Laundry Pool
+    /* 38 */ ANJU_SCH_DOOR_38, // Passing through the Inn's front door (entering) (East Clock Town), going from the Laundry Pool
+    /* 39 */ ANJU_SCH_DOOR_39, // Passing through the door of the employees-only room (entering, after sweeping the floor
+    /* 40 */ ANJU_SCH_40, // Going from the front desk to the kitchen
+    /* 41 */ ANJU_SCH_41, // unused
+    /* 42 */ ANJU_SCH_42, // Walking from the kitchen to Grandma's room
+    /* 43 */ ANJU_SCH_43, // Inside Grandma's room, walking to give her her food
+    /* 44 */ ANJU_SCH_44, // Inside Grandma's room, walking out
+    /* 45 */ ANJU_SCH_45, // Left Grandma's room, walking towards employees-only room
+    /* 46 */ ANJU_SCH_46, // Left employees-only room, walking to front desk
+    /* 47 */ ANJU_SCH_47, // Walking from the front desk to right next to the Inn's front door
+    /* 48 */ ANJU_SCH_48, // Walking from the Inn's front door after closing, to the employees-only room
+    /* 49 */ ANJU_SCH_49, // Walking from the employees-only room to the kitchen, to have the midnight meeting
+    /* 50 */ ANJU_SCH_50, // Walking from the employees-only room to Inn's front door, to go to the Laundry Pool
+    /* 51 */ ANJU_SCH_51, // Walking from the Inn's front door to the employees-only room, after going to the Laundry Pool
+    /* 52 */ ANJU_SCH_52, // Day 3, 11:00 ~ 11:25, Stopped sweeping, walking out of the room
+    /* 53 */ ANJU_SCH_53, // Day 3, 11:00 ~ 11:25, Walking through the hallway after sweeping
+    /* 54 */ ANJU_SCH_54, // Walking through East Clock Town, going to the Laundry Pool
+    /* 55 */ ANJU_SCH_55, // Walking through South Clock Town, East Clock Town perspective, going to the Laundry Pool
     /* 56 */ ANJU_SCH_LAUNDRY_POOL_WALKING_IN,
     /* 57 */ ANJU_SCH_LAUNDRY_POOL_LEAVING,
-    /* 58 */ ANJU_SCH_3A, // Walking through South Clock Town, East Clock Town perspective, going to the Inn from the Laundry Pool
-    /* 59 */ ANJU_SCH_3B, // Walking through East Clock Town, going to the Inn from the Laundry Pool
-    /* 60 */ ANJU_SCH_3C, // Walking through East Clock Town, South Clock Town perspective, going to the Laundry Pool
-    /* 61 */ ANJU_SCH_3D, // Walking through South Clock Town, going to the Laundry Pool
-    /* 62 */ ANJU_SCH_3E, // Walking through South Clock Town, going to the Inn from the Laundry Pool
-    /* 63 */ ANJU_SCH_3F, // Walking through East Clock Town, South Clock Town perspective, going to the Inn from the Laundry Pool
+    /* 58 */ ANJU_SCH_58, // Walking through South Clock Town, East Clock Town perspective, going to the Inn from the Laundry Pool
+    /* 59 */ ANJU_SCH_59, // Walking through East Clock Town, going to the Inn from the Laundry Pool
+    /* 60 */ ANJU_SCH_60, // Walking through East Clock Town, South Clock Town perspective, going to the Laundry Pool
+    /* 61 */ ANJU_SCH_61, // Walking through South Clock Town, going to the Laundry Pool
+    /* 62 */ ANJU_SCH_62, // Walking through South Clock Town, going to the Inn from the Laundry Pool
+    /* 63 */ ANJU_SCH_63, // Walking through East Clock Town, South Clock Town perspective, going to the Inn from the Laundry Pool
     /* 64 */ ANJU_SCH_MAX
 } AnjuScheduleResult;
 
@@ -129,29 +129,29 @@ static u8 sScheduleScript[] = {
     /* 0x0B5 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x0BF - 0x0B9),
     /* 0x0B9 */ SCHEDULE_CMD_RET_TIME(0, 0, 6, 0, ANJU_SCH_MIDNIGHT_MEETING),
     /* 0x0BF */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0C0 */ SCHEDULE_CMD_RET_TIME(23, 15, 0, 0, ANJU_SCH_31),
-    /* 0x0C6 */ SCHEDULE_CMD_RET_TIME(23, 10, 23, 15, ANJU_SCH_1F),
-    /* 0x0CC */ SCHEDULE_CMD_RET_TIME(21, 5, 21, 10, ANJU_SCH_1E),
-    /* 0x0D2 */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 5, ANJU_SCH_30),
-    /* 0x0D8 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_13),
-    /* 0x0DE */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_2F),
+    /* 0x0C0 */ SCHEDULE_CMD_RET_TIME(23, 15, 0, 0, ANJU_SCH_49),
+    /* 0x0C6 */ SCHEDULE_CMD_RET_TIME(23, 10, 23, 15, ANJU_SCH_DOOR_31),
+    /* 0x0CC */ SCHEDULE_CMD_RET_TIME(21, 5, 21, 10, ANJU_SCH_DOOR_30),
+    /* 0x0D2 */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 5, ANJU_SCH_48),
+    /* 0x0D8 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_19),
+    /* 0x0DE */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_47),
     /* 0x0E4 */ SCHEDULE_CMD_RET_TIME(16, 30, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x0EA */ SCHEDULE_CMD_RET_TIME(16, 10, 16, 30, ANJU_SCH_ATTEND_GORON),
     /* 0x0F0 */ SCHEDULE_CMD_RET_TIME(14, 18, 16, 10, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x0F6 */ SCHEDULE_CMD_RET_TIME(14, 8, 14, 18, ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN),
     /* 0x0FC */ SCHEDULE_CMD_RET_TIME(13, 50, 14, 8, ANJU_SCH_RECEPTIONIST_IDLE),
-    /* 0x102 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_2E),
-    /* 0x108 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, ANJU_SCH_1D),
-    /* 0x10E */ SCHEDULE_CMD_RET_TIME(12, 55, 13, 0, ANJU_SCH_1C),
-    /* 0x114 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, ANJU_SCH_2D),
-    /* 0x11A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, ANJU_SCH_1B),
-    /* 0x120 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, ANJU_SCH_2C),
+    /* 0x102 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_46),
+    /* 0x108 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, ANJU_SCH_DOOR_29),
+    /* 0x10E */ SCHEDULE_CMD_RET_TIME(12, 55, 13, 0, ANJU_SCH_DOOR_28),
+    /* 0x114 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, ANJU_SCH_45),
+    /* 0x11A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, ANJU_SCH_DOOR_27),
+    /* 0x120 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, ANJU_SCH_44),
     /* 0x126 */ SCHEDULE_CMD_RET_TIME(12, 0, 12, 15, ANJU_SCH_GIVE_LUNCH_TO_GRANDMA),
-    /* 0x12C */ SCHEDULE_CMD_RET_TIME(11, 55, 12, 0, ANJU_SCH_2B),
-    /* 0x132 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, ANJU_SCH_1A),
-    /* 0x138 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_2A),
+    /* 0x12C */ SCHEDULE_CMD_RET_TIME(11, 55, 12, 0, ANJU_SCH_43),
+    /* 0x132 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, ANJU_SCH_DOOR_26),
+    /* 0x138 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_42),
     /* 0x13E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_COOKING),
-    /* 0x144 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_28),
+    /* 0x144 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_40),
     /* 0x14A */ SCHEDULE_CMD_RET_TIME(6, 0, 10, 55, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x150 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x151 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(2, 0x391 - 0x156),
@@ -170,18 +170,18 @@ static u8 sScheduleScript[] = {
     /* 0x19D */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 0, 21, 5, 0x1B0 - 0x1A3),
     /* 0x1A3 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 30, 23, 0, 0x1AA - 0x1A9),
     /* 0x1A9 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x1AA */ SCHEDULE_CMD_RET_TIME(21, 30, 23, 0, ANJU_SCH_18),
-    /* 0x1B0 */ SCHEDULE_CMD_RET_TIME(21, 0, 21, 5, ANJU_SCH_1E),
-    /* 0x1B6 */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 0, ANJU_SCH_30),
-    /* 0x1BC */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_13),
-    /* 0x1C2 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_2F),
+    /* 0x1AA */ SCHEDULE_CMD_RET_TIME(21, 30, 23, 0, ANJU_SCH_24),
+    /* 0x1B0 */ SCHEDULE_CMD_RET_TIME(21, 0, 21, 5, ANJU_SCH_DOOR_30),
+    /* 0x1B6 */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 0, ANJU_SCH_48),
+    /* 0x1BC */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_19),
+    /* 0x1C2 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_47),
     /* 0x1C8 */ SCHEDULE_CMD_RET_TIME(18, 0, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
-    /* 0x1CE */ SCHEDULE_CMD_RET_TIME(17, 55, 18, 0, ANJU_SCH_23),
-    /* 0x1D4 */ SCHEDULE_CMD_RET_TIME(17, 30, 17, 55, ANJU_SCH_33),
-    /* 0x1DA */ SCHEDULE_CMD_RET_TIME(17, 24, 17, 30, ANJU_SCH_22),
-    /* 0x1E0 */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 39, ANJU_SCH_21),
-    /* 0x1E6 */ SCHEDULE_CMD_RET_TIME(11, 9, 11, 29, ANJU_SCH_32),
-    /* 0x1EC */ SCHEDULE_CMD_RET_TIME(11, 3, 11, 9, ANJU_SCH_20),
+    /* 0x1CE */ SCHEDULE_CMD_RET_TIME(17, 55, 18, 0, ANJU_SCH_DOOR_35),
+    /* 0x1D4 */ SCHEDULE_CMD_RET_TIME(17, 30, 17, 55, ANJU_SCH_51),
+    /* 0x1DA */ SCHEDULE_CMD_RET_TIME(17, 24, 17, 30, ANJU_SCH_DOOR_34),
+    /* 0x1E0 */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 39, ANJU_SCH_DOOR_33),
+    /* 0x1E6 */ SCHEDULE_CMD_RET_TIME(11, 9, 11, 29, ANJU_SCH_50),
+    /* 0x1EC */ SCHEDULE_CMD_RET_TIME(11, 3, 11, 9, ANJU_SCH_DOOR_32),
     /* 0x1F2 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x23F - 0x1F6),
     /* 0x1F6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 29, 11, 39, 0x239 - 0x1FC),
     /* 0x1FC */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 39, 12, 25, 0x233 - 0x202),
@@ -190,22 +190,22 @@ static u8 sScheduleScript[] = {
     /* 0x20E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 45, 17, 24, 0x221 - 0x214),
     /* 0x214 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(17, 24, 17, 30, 0x21B - 0x21A),
     /* 0x21A */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x21B */ SCHEDULE_CMD_RET_TIME(17, 24, 17, 30, ANJU_SCH_26),
-    /* 0x221 */ SCHEDULE_CMD_RET_TIME(16, 45, 17, 24, ANJU_SCH_3B),
-    /* 0x227 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 45, ANJU_SCH_3A),
-    /* 0x22D */ SCHEDULE_CMD_RET_TIME(12, 25, 13, 15, ANJU_SCH_37),
-    /* 0x233 */ SCHEDULE_CMD_RET_TIME(11, 39, 12, 25, ANJU_SCH_36),
-    /* 0x239 */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 39, ANJU_SCH_25),
+    /* 0x21B */ SCHEDULE_CMD_RET_TIME(17, 24, 17, 30, ANJU_SCH_DOOR_38),
+    /* 0x221 */ SCHEDULE_CMD_RET_TIME(16, 45, 17, 24, ANJU_SCH_59),
+    /* 0x227 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 45, ANJU_SCH_58),
+    /* 0x22D */ SCHEDULE_CMD_RET_TIME(12, 25, 13, 15, ANJU_SCH_55),
+    /* 0x233 */ SCHEDULE_CMD_RET_TIME(11, 39, 12, 25, ANJU_SCH_54),
+    /* 0x239 */ SCHEDULE_CMD_RET_TIME(11, 29, 11, 39, ANJU_SCH_DOOR_37),
     /* 0x23F */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_CLOCKTOWER, 0x274 - 0x243),
     /* 0x243 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 39, 12, 25, 0x26E - 0x249),
     /* 0x249 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(12, 25, 13, 15, 0x268 - 0x24F),
     /* 0x24F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 55, 16, 45, 0x262 - 0x255),
     /* 0x255 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 45, 17, 24, 0x25C - 0x25B),
     /* 0x25B */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x25C */ SCHEDULE_CMD_RET_TIME(16, 45, 17, 24, ANJU_SCH_3F),
-    /* 0x262 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 45, ANJU_SCH_3E),
-    /* 0x268 */ SCHEDULE_CMD_RET_TIME(12, 25, 13, 15, ANJU_SCH_3D),
-    /* 0x26E */ SCHEDULE_CMD_RET_TIME(11, 39, 12, 25, ANJU_SCH_3C),
+    /* 0x25C */ SCHEDULE_CMD_RET_TIME(16, 45, 17, 24, ANJU_SCH_63),
+    /* 0x262 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 45, ANJU_SCH_62),
+    /* 0x268 */ SCHEDULE_CMD_RET_TIME(12, 25, 13, 15, ANJU_SCH_61),
+    /* 0x26E */ SCHEDULE_CMD_RET_TIME(11, 39, 12, 25, ANJU_SCH_60),
     /* 0x274 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ALLEY, 0x29D - 0x278),
     /* 0x278 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 15, 13, 45, 0x297 - 0x27E),
     /* 0x27E */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 45, 15, 25, 0x291 - 0x284),
@@ -236,24 +236,24 @@ static u8 sScheduleScript[] = {
     /* 0x311 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 5, 21, 10, 0x324 - 0x317),
     /* 0x317 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(21, 30, 23, 0, 0x31E - 0x31D),
     /* 0x31D */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x31E */ SCHEDULE_CMD_RET_TIME(21, 30, 23, 0, ANJU_SCH_18),
-    /* 0x324 */ SCHEDULE_CMD_RET_TIME(21, 5, 21, 10, ANJU_SCH_1E),
-    /* 0x32A */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 5, ANJU_SCH_30),
-    /* 0x330 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_13),
-    /* 0x336 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_2F),
+    /* 0x31E */ SCHEDULE_CMD_RET_TIME(21, 30, 23, 0, ANJU_SCH_24),
+    /* 0x324 */ SCHEDULE_CMD_RET_TIME(21, 5, 21, 10, ANJU_SCH_DOOR_30),
+    /* 0x32A */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 5, ANJU_SCH_48),
+    /* 0x330 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_19),
+    /* 0x336 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_47),
     /* 0x33C */ SCHEDULE_CMD_RET_TIME(13, 50, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
-    /* 0x342 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_2E),
-    /* 0x348 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, ANJU_SCH_1D),
-    /* 0x34E */ SCHEDULE_CMD_RET_TIME(12, 55, 13, 0, ANJU_SCH_1C),
-    /* 0x354 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, ANJU_SCH_2D),
-    /* 0x35A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, ANJU_SCH_1B),
-    /* 0x360 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, ANJU_SCH_2C),
+    /* 0x342 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_46),
+    /* 0x348 */ SCHEDULE_CMD_RET_TIME(13, 15, 13, 20, ANJU_SCH_DOOR_29),
+    /* 0x34E */ SCHEDULE_CMD_RET_TIME(12, 55, 13, 0, ANJU_SCH_DOOR_28),
+    /* 0x354 */ SCHEDULE_CMD_RET_TIME(12, 25, 12, 55, ANJU_SCH_45),
+    /* 0x35A */ SCHEDULE_CMD_RET_TIME(12, 20, 12, 25, ANJU_SCH_DOOR_27),
+    /* 0x360 */ SCHEDULE_CMD_RET_TIME(12, 15, 12, 20, ANJU_SCH_44),
     /* 0x366 */ SCHEDULE_CMD_RET_TIME(12, 0, 12, 15, ANJU_SCH_GIVE_LUNCH_TO_GRANDMA),
-    /* 0x36C */ SCHEDULE_CMD_RET_TIME(11, 55, 12, 0, ANJU_SCH_2B),
-    /* 0x372 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, ANJU_SCH_1A),
-    /* 0x378 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_2A),
+    /* 0x36C */ SCHEDULE_CMD_RET_TIME(11, 55, 12, 0, ANJU_SCH_43),
+    /* 0x372 */ SCHEDULE_CMD_RET_TIME(11, 50, 11, 55, ANJU_SCH_DOOR_26),
+    /* 0x378 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_42),
     /* 0x37E */ SCHEDULE_CMD_RET_TIME(11, 10, 11, 30, ANJU_SCH_COOKING),
-    /* 0x384 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_28),
+    /* 0x384 */ SCHEDULE_CMD_RET_TIME(10, 55, 11, 10, ANJU_SCH_40),
     /* 0x38A */ SCHEDULE_CMD_RET_TIME(6, 0, 10, 55, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x390 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x391 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(3, 0x447 - 0x396),
@@ -265,10 +265,10 @@ static u8 sScheduleScript[] = {
     /* 0x3B0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 30, 11, 50, 0x3C3 - 0x3B6),
     /* 0x3B6 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(11, 50, 12, 0, 0x3BD - 0x3BC),
     /* 0x3BC */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x3BD */ SCHEDULE_CMD_RET_TIME(11, 50, 12, 0, ANJU_SCH_27),
-    /* 0x3C3 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_35),
-    /* 0x3C9 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, ANJU_SCH_24),
-    /* 0x3CF */ SCHEDULE_CMD_RET_TIME(11, 0, 11, 25, ANJU_SCH_34),
+    /* 0x3BD */ SCHEDULE_CMD_RET_TIME(11, 50, 12, 0, ANJU_SCH_DOOR_39),
+    /* 0x3C3 */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_53),
+    /* 0x3C9 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, ANJU_SCH_DOOR_36),
+    /* 0x3CF */ SCHEDULE_CMD_RET_TIME(11, 0, 11, 25, ANJU_SCH_52),
     /* 0x3D5 */ SCHEDULE_CMD_RET_TIME(6, 0, 11, 0, ANJU_SCH_SWEEPING),
     /* 0x3DB */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_OMOYA, 0x3EC - 0x3DF),
     /* 0x3DF */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 6, 0, 0x3E6 - 0x3E5),
@@ -286,10 +286,10 @@ static u8 sScheduleScript[] = {
     /* 0x41B */ SCHEDULE_CMD_RET_NONE(),
     /* 0x41C */ SCHEDULE_CMD_RET_TIME(5, 0, 6, 0, ANJU_SCH_WAITING_FOR_KAFEI),
     /* 0x422 */ SCHEDULE_CMD_RET_TIME(18, 0, 5, 0, ANJU_SCH_WAITING_FOR_KAFEI),
-    /* 0x428 */ SCHEDULE_CMD_RET_TIME(11, 50, 12, 0, ANJU_SCH_27),
-    /* 0x42E */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_35),
-    /* 0x434 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, ANJU_SCH_24),
-    /* 0x43A */ SCHEDULE_CMD_RET_TIME(11, 0, 11, 25, ANJU_SCH_34),
+    /* 0x428 */ SCHEDULE_CMD_RET_TIME(11, 50, 12, 0, ANJU_SCH_DOOR_39),
+    /* 0x42E */ SCHEDULE_CMD_RET_TIME(11, 30, 11, 50, ANJU_SCH_53),
+    /* 0x434 */ SCHEDULE_CMD_RET_TIME(11, 25, 11, 30, ANJU_SCH_DOOR_36),
+    /* 0x43A */ SCHEDULE_CMD_RET_TIME(11, 0, 11, 25, ANJU_SCH_52),
     /* 0x440 */ SCHEDULE_CMD_RET_TIME(6, 0, 11, 0, ANJU_SCH_SWEEPING),
     /* 0x446 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x447 */ SCHEDULE_CMD_RET_NONE(),
@@ -304,29 +304,29 @@ s32 scheduleScript(PlayState* play) {
             if ((6, 0) <= NOW <= (10, 55)) {
                 return ANJU_SCH_RECEPTIONIST_IDLE;
             } else if ((10, 55) <= NOW <= (11, 10)) {
-                return ANJU_SCH_28;
+                return ANJU_SCH_40;
             } else if ((11, 10) <= NOW <= (11, 30)) {
                 return ANJU_SCH_COOKING;
             } else if ((11, 30) <= NOW <= (11, 50)) {
-                return ANJU_SCH_2A;
+                return ANJU_SCH_42;
             } else if ((11, 50) <= NOW <= (11, 55)) {
-                return ANJU_SCH_1A;
+                return ANJU_SCH_DOOR_26;
             } else if ((11, 55) <= NOW <= (12, 0)) {
-                return ANJU_SCH_2B;
+                return ANJU_SCH_43;
             } else if ((12, 0) <= NOW <= (12, 15)) {
                 return ANJU_SCH_GIVE_LUNCH_TO_GRANDMA;
             } else if ((12, 15) <= NOW <= (12, 20)) {
-                return ANJU_SCH_2C;
+                return ANJU_SCH_44;
             } else if ((12, 20) <= NOW <= (12, 25)) {
-                return ANJU_SCH_1B;
+                return ANJU_SCH_DOOR_27;
             } else if ((12, 25) <= NOW <= (12, 55)) {
-                return ANJU_SCH_2D;
+                return ANJU_SCH_45;
             } else if ((12, 55) <= NOW <= (13, 0)) {
-                return ANJU_SCH_1C;
+                return ANJU_SCH_DOOR_28;
             } else if ((13, 15) <= NOW <= (13, 20)) {
-                return ANJU_SCH_1D;
+                return ANJU_SCH_DOOR_29;
             } else if ((13, 20) <= NOW <= (13, 50)) {
-                return ANJU_SCH_2E;
+                return ANJU_SCH_46;
             } else if ((13, 50) <= NOW <= (14, 8)) {
                 return ANJU_SCH_RECEPTIONIST_IDLE;
             } else if ((14, 8) <= NOW <= (14, 18)) {
@@ -338,18 +338,18 @@ s32 scheduleScript(PlayState* play) {
             } else if ((16, 30) <= NOW <= (19, 50)) {
                 return ANJU_SCH_RECEPTIONIST_IDLE;
             } else if ((19, 50) <= NOW <= (20, 20)) {
-                return ANJU_SCH_2F;
+                return ANJU_SCH_47;
             } else if ((20, 20) <= NOW <= (20, 30)) {
-                return ANJU_SCH_13;
+                return ANJU_SCH_19;
             } else if ((20, 30) <= NOW <= (21, 5)) {
-                return ANJU_SCH_30;
+                return ANJU_SCH_48;
             } else if ((21, 5) <= NOW <= (21, 10)) {
-                return ANJU_SCH_1E;
+                return ANJU_SCH_DOOR_30;
             } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
                 if ((23, 10) <= NOW <= (23, 15)) {
-                    return ANJU_SCH_1F;
+                    return ANJU_SCH_DOOR_31;
                 } else if ((23, 15) <= NOW <= (0, 0)) {
-                    return ANJU_SCH_31;
+                    return ANJU_SCH_49;
                 } else if ((0, 0) <= NOW <= (6, 0)) {
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HAD_MIDNIGHT_MEETING)) {
                         return None;
@@ -370,41 +370,41 @@ s32 scheduleScript(PlayState* play) {
                 if ((6, 0) <= NOW <= (10, 55)) {
                     return ANJU_SCH_RECEPTIONIST_IDLE;
                 } else if ((10, 55) <= NOW <= (11, 10)) {
-                    return ANJU_SCH_28;
+                    return ANJU_SCH_40;
                 } else if ((11, 10) <= NOW <= (11, 30)) {
                     return ANJU_SCH_COOKING;
                 } else if ((11, 30) <= NOW <= (11, 50)) {
-                    return ANJU_SCH_2A;
+                    return ANJU_SCH_42;
                 } else if ((11, 50) <= NOW <= (11, 55)) {
-                    return ANJU_SCH_1A;
+                    return ANJU_SCH_DOOR_26;
                 } else if ((11, 55) <= NOW <= (12, 0)) {
-                    return ANJU_SCH_2B;
+                    return ANJU_SCH_43;
                 } else if ((12, 0) <= NOW <= (12, 15)) {
                     return ANJU_SCH_GIVE_LUNCH_TO_GRANDMA;
                 } else if ((12, 15) <= NOW <= (12, 20)) {
-                    return ANJU_SCH_2C;
+                    return ANJU_SCH_44;
                 } else if ((12, 20) <= NOW <= (12, 25)) {
-                    return ANJU_SCH_1B;
+                    return ANJU_SCH_DOOR_27;
                 } else if ((12, 25) <= NOW <= (12, 55)) {
-                    return ANJU_SCH_2D;
+                    return ANJU_SCH_45;
                 } else if ((12, 55) <= NOW <= (13, 0)) {
-                    return ANJU_SCH_1C;
+                    return ANJU_SCH_DOOR_28;
                 } else if ((13, 15) <= NOW <= (13, 20)) {
-                    return ANJU_SCH_1D;
+                    return ANJU_SCH_DOOR_29;
                 } else if ((13, 20) <= NOW <= (13, 50)) {
-                    return ANJU_SCH_2E;
+                    return ANJU_SCH_46;
                 } else if ((13, 50) <= NOW <= (19, 50)) {
                     return ANJU_SCH_RECEPTIONIST_IDLE;
                 } else if ((19, 50) <= NOW <= (20, 20)) {
-                    return ANJU_SCH_2F;
+                    return ANJU_SCH_47;
                 } else if ((20, 20) <= NOW <= (20, 30)) {
-                    return ANJU_SCH_13;
+                    return ANJU_SCH_19;
                 } else if ((20, 30) <= NOW <= (21, 5)) {
-                    return ANJU_SCH_30;
+                    return ANJU_SCH_48;
                 } else if ((21, 5) <= NOW <= (21, 10)) {
-                    return ANJU_SCH_1E;
+                    return ANJU_SCH_DOOR_30;
                 } else if ((21, 30) <= NOW <= (23, 0)) {
-                    return ANJU_SCH_18;
+                    return ANJU_SCH_24;
                 } else {
                     return None;
                 }
@@ -413,57 +413,57 @@ s32 scheduleScript(PlayState* play) {
             }
         } else if (play->sceneId == SCENE_YADOYA) {
             if ((11, 3) <= NOW <= (11, 9)) {
-                return ANJU_SCH_20;
+                return ANJU_SCH_DOOR_32;
             } else if ((11, 9) <= NOW <= (11, 29)) {
-                return ANJU_SCH_32;
+                return ANJU_SCH_50;
             } else if ((11, 29) <= NOW <= (11, 39)) {
-                return ANJU_SCH_21;
+                return ANJU_SCH_DOOR_33;
             } else if ((17, 24) <= NOW <= (17, 30)) {
-                return ANJU_SCH_22;
+                return ANJU_SCH_DOOR_34;
             } else if ((17, 30) <= NOW <= (17, 55)) {
-                return ANJU_SCH_33;
+                return ANJU_SCH_51;
             } else if ((17, 55) <= NOW <= (18, 0)) {
-                return ANJU_SCH_23;
+                return ANJU_SCH_DOOR_35;
             } else if ((18, 0) <= NOW <= (19, 50)) {
                 return ANJU_SCH_RECEPTIONIST_IDLE;
             } else if ((19, 50) <= NOW <= (20, 20)) {
-                return ANJU_SCH_2F;
+                return ANJU_SCH_47;
             } else if ((20, 20) <= NOW <= (20, 30)) {
-                return ANJU_SCH_13;
+                return ANJU_SCH_19;
             } else if ((20, 30) <= NOW <= (21, 0)) {
-                return ANJU_SCH_30;
+                return ANJU_SCH_48;
             } else if ((21, 0) <= NOW <= (21, 5)) {
-                return ANJU_SCH_1E;
+                return ANJU_SCH_DOOR_30;
             } else if ((21, 30) <= NOW <= (23, 0)) {
-                return ANJU_SCH_18;
+                return ANJU_SCH_24;
             } else {
                 return None;
             }
         } else if (play->sceneId == SCENE_TOWN) {
             if ((11, 29) <= NOW <= (11, 39)) {
-                return ANJU_SCH_25;
+                return ANJU_SCH_DOOR_37;
             } else if ((11, 39) <= NOW <= (12, 25)) {
-                return ANJU_SCH_36;
+                return ANJU_SCH_54;
             } else if ((12, 25) <= NOW <= (13, 15)) {
-                return ANJU_SCH_37;
+                return ANJU_SCH_55;
             } else if ((15, 55) <= NOW <= (16, 45)) {
-                return ANJU_SCH_3A;
+                return ANJU_SCH_58;
             } else if ((16, 45) <= NOW <= (17, 24)) {
-                return ANJU_SCH_3B;
+                return ANJU_SCH_59;
             } else if ((17, 24) <= NOW <= (17, 30)) {
-                return ANJU_SCH_26;
+                return ANJU_SCH_DOOR_38;
             } else {
                 return None;
             }
         } else if (play->sceneId == SCENE_CLOCKTOWER) {
             if ((11, 39) <= NOW <= (12, 25)) {
-                return ANJU_SCH_3C;
+                return ANJU_SCH_60;
             } else if ((12, 25) <= NOW <= (13, 15)) {
-                return ANJU_SCH_3D;
+                return ANJU_SCH_61;
             } else if ((15, 55) <= NOW <= (16, 45)) {
-                return ANJU_SCH_3E;
+                return ANJU_SCH_62;
             } else if ((16, 45) <= NOW <= (17, 24)) {
-                return ANJU_SCH_3F;
+                return ANJU_SCH_63;
             } else {
                 return None;
             }
@@ -486,13 +486,13 @@ s32 scheduleScript(PlayState* play) {
                 if ((6, 0) <= NOW <= (11, 0)) {
                     return ANJU_SCH_SWEEPING;
                 } else if ((11, 0) <= NOW <= (11, 25)) {
-                    return ANJU_SCH_34;
+                    return ANJU_SCH_52;
                 } else if ((11, 25) <= NOW <= (11, 30)) {
-                    return ANJU_SCH_24;
+                    return ANJU_SCH_DOOR_36;
                 } else if ((11, 30) <= NOW <= (11, 50)) {
-                    return ANJU_SCH_35;
+                    return ANJU_SCH_53;
                 } else if ((11, 50) <= NOW <= (12, 0)) {
-                    return ANJU_SCH_27;
+                    return ANJU_SCH_DOOR_39;
                 } else if ((18, 0) <= NOW <= (5, 0)) {
                     return ANJU_SCH_WAITING_FOR_KAFEI;
                 } else if ((5, 0) <= NOW <= (6, 0)) {
@@ -507,13 +507,13 @@ s32 scheduleScript(PlayState* play) {
             if ((6, 0) <= NOW <= (11, 0)) {
                 return ANJU_SCH_SWEEPING;
             } else if ((11, 0) <= NOW <= (11, 25)) {
-                return ANJU_SCH_34;
+                return ANJU_SCH_52;
             } else if ((11, 25) <= NOW <= (11, 30)) {
-                return ANJU_SCH_24;
+                return ANJU_SCH_DOOR_36;
             } else if ((11, 30) <= NOW <= (11, 50)) {
-                return ANJU_SCH_35;
+                return ANJU_SCH_53;
             } else if ((11, 50) <= NOW <= (12, 0)) {
-                return ANJU_SCH_27;
+                return ANJU_SCH_DOOR_39;
             } else {
                 return None;
             }
@@ -543,60 +543,60 @@ static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     -1, // ANJU_SCH_7
     -1, // ANJU_SCH_8
     -1, // ANJU_SCH_9
-    -1, // ANJU_SCH_A
-    -1, // ANJU_SCH_B
+    -1, // ANJU_SCH_10
+    -1, // ANJU_SCH_11
     -1, // ANJU_SCH_RANCH
-    -1, // ANJU_SCH_D
+    -1, // ANJU_SCH_13
     0,  // ANJU_SCH_COOKING
-    -1, // ANJU_SCH_F
+    -1, // ANJU_SCH_15
     10, // ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN
     10, // ANJU_SCH_ATTEND_GORON
     10, // ANJU_SCH_RECEPTIONIST_IDLE
-    11, // ANJU_SCH_13
-    -1, // ANJU_SCH_14
+    11, // ANJU_SCH_19
+    -1, // ANJU_SCH_20
     4,  // ANJU_SCH_GIVE_LUNCH_TO_GRANDMA
     22, // ANJU_SCH_SWEEPING
     15, // ANJU_SCH_MIDNIGHT_MEETING
-    -1, // ANJU_SCH_18
-    -1, // ANJU_SCH_19
-    3,  // ANJU_SCH_1A
-    6,  // ANJU_SCH_1B
-    8,  // ANJU_SCH_1C
-    9,  // ANJU_SCH_1D
-    13, // ANJU_SCH_1E
-    14, // ANJU_SCH_1F
-    16, // ANJU_SCH_20
-    18, // ANJU_SCH_21
-    19, // ANJU_SCH_22
-    21, // ANJU_SCH_23
-    23, // ANJU_SCH_24
-    0,  // ANJU_SCH_25
-    5,  // ANJU_SCH_26
-    25, // ANJU_SCH_27
-    0,  // ANJU_SCH_28
-    1,  // ANJU_SCH_29
-    2,  // ANJU_SCH_2A
-    4,  // ANJU_SCH_2B
-    5,  // ANJU_SCH_2C
-    7,  // ANJU_SCH_2D
-    10, // ANJU_SCH_2E
-    11, // ANJU_SCH_2F
-    12, // ANJU_SCH_30
-    15, // ANJU_SCH_31
-    17, // ANJU_SCH_32
-    20, // ANJU_SCH_33
-    22, // ANJU_SCH_34
-    24, // ANJU_SCH_35
-    1,  // ANJU_SCH_36
-    2,  // ANJU_SCH_37
+    -1, // ANJU_SCH_24
+    -1, // ANJU_SCH_25
+    3,  // ANJU_SCH_DOOR_26
+    6,  // ANJU_SCH_DOOR_27
+    8,  // ANJU_SCH_DOOR_28
+    9,  // ANJU_SCH_DOOR_29
+    13, // ANJU_SCH_DOOR_30
+    14, // ANJU_SCH_DOOR_31
+    16, // ANJU_SCH_DOOR_32
+    18, // ANJU_SCH_DOOR_33
+    19, // ANJU_SCH_DOOR_34
+    21, // ANJU_SCH_DOOR_35
+    23, // ANJU_SCH_DOOR_36
+    0,  // ANJU_SCH_DOOR_37
+    5,  // ANJU_SCH_DOOR_38
+    25, // ANJU_SCH_DOOR_39
+    0,  // ANJU_SCH_40
+    1,  // ANJU_SCH_41
+    2,  // ANJU_SCH_42
+    4,  // ANJU_SCH_43
+    5,  // ANJU_SCH_44
+    7,  // ANJU_SCH_45
+    10, // ANJU_SCH_46
+    11, // ANJU_SCH_47
+    12, // ANJU_SCH_48
+    15, // ANJU_SCH_49
+    17, // ANJU_SCH_50
+    20, // ANJU_SCH_51
+    22, // ANJU_SCH_52
+    24, // ANJU_SCH_53
+    1,  // ANJU_SCH_54
+    2,  // ANJU_SCH_55
     0,  // ANJU_SCH_LAUNDRY_POOL_WALKING_IN
     1,  // ANJU_SCH_LAUNDRY_POOL_LEAVING
-    3,  // ANJU_SCH_3A
-    4,  // ANJU_SCH_3B
-    0,  // ANJU_SCH_3C
-    1,  // ANJU_SCH_3D
-    2,  // ANJU_SCH_3E
-    3,  // ANJU_SCH_3F
+    3,  // ANJU_SCH_58
+    4,  // ANJU_SCH_59
+    0,  // ANJU_SCH_60
+    1,  // ANJU_SCH_61
+    2,  // ANJU_SCH_62
+    3,  // ANJU_SCH_63
 };
 
 s32 sAnjuMsgScript_SchReceiveLetterFromPostman[0x1B] = {
@@ -799,29 +799,29 @@ EnDoor* EnAn_FindDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) 
     s32 switchFlag;
 
     switch (scheduleOutputResult) {
-        case ANJU_SCH_1A:
-        case ANJU_SCH_1B:
+        case ANJU_SCH_DOOR_26:
+        case ANJU_SCH_DOOR_27:
             switchFlag = 0xD;
             break;
 
-        case ANJU_SCH_21:
-        case ANJU_SCH_22:
-        case ANJU_SCH_25:
-        case ANJU_SCH_26:
+        case ANJU_SCH_DOOR_33:
+        case ANJU_SCH_DOOR_34:
+        case ANJU_SCH_DOOR_37:
+        case ANJU_SCH_DOOR_38:
             switchFlag = 0xB;
             break;
 
-        case ANJU_SCH_24:
+        case ANJU_SCH_DOOR_36:
             switchFlag = 0x10;
             break;
 
-        case ANJU_SCH_1C:
-        case ANJU_SCH_1D:
-        case ANJU_SCH_1E:
-        case ANJU_SCH_1F:
-        case ANJU_SCH_20:
-        case ANJU_SCH_23:
-        case ANJU_SCH_27:
+        case ANJU_SCH_DOOR_28:
+        case ANJU_SCH_DOOR_29:
+        case ANJU_SCH_DOOR_30:
+        case ANJU_SCH_DOOR_31:
+        case ANJU_SCH_DOOR_32:
+        case ANJU_SCH_DOOR_35:
+        case ANJU_SCH_DOOR_39:
             switchFlag = 0xE;
             break;
 
@@ -1027,7 +1027,7 @@ void EnAn_UpdateCollider(EnAn* this, PlayState* play) {
     s32 pad;
     Vec3f sp24;
 
-    if (this->scheduleResult == ANJU_SCH_19) {
+    if (this->scheduleResult == ANJU_SCH_25) {
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80B58E34, &sp24);
         this->collider.dim.radius = 20;
         Math_Vec3f_ToVec3s(&this->collider.dim.pos, &sp24);
@@ -1521,7 +1521,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
         case ANJU_SCH_RANCH:
             return sAnjuMsgScript_SchRanch;
 
-        case ANJU_SCH_19:
+        case ANJU_SCH_25:
             return sAnjuMsgScript_Sch19;
 
         default:
@@ -1533,18 +1533,18 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             case ANJU_SCH_WAITING_FOR_KAFEI:
                 return sAnjuMsgScript_SchWaitingForKafei;
 
-            case ANJU_SCH_28:
-            case ANJU_SCH_2A:
-            case ANJU_SCH_2B:
-            case ANJU_SCH_2C:
-            case ANJU_SCH_2D:
-            case ANJU_SCH_2F:
+            case ANJU_SCH_40:
+            case ANJU_SCH_42:
+            case ANJU_SCH_43:
+            case ANJU_SCH_44:
+            case ANJU_SCH_45:
+            case ANJU_SCH_47:
                 return sAnjuMsgScript_80B58B7C;
 
             case ANJU_SCH_LAUNDRY_POOL_SIT:
                 return sAnjuMsgScript_SchLaundryPoolDeku;
 
-            case ANJU_SCH_31:
+            case ANJU_SCH_49:
                 return sAnjuMsgScript_80B589FC;
 
             default:
@@ -1555,7 +1555,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
     }
 
     if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
-        if (this->scheduleResult == ANJU_SCH_31) {
+        if (this->scheduleResult == ANJU_SCH_49) {
             return sAnjuMsgScript_80B58B88;
         }
 
@@ -1603,13 +1603,13 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
         case ANJU_SCH_WAITING_FOR_KAFEI:
             return sAnjuMsgScript_SchWaitingForKafei;
 
-        case ANJU_SCH_28:
+        case ANJU_SCH_40:
             return sAnjuMsgScript_Sch28;
 
-        case ANJU_SCH_2A:
-        case ANJU_SCH_2B:
-        case ANJU_SCH_2C:
-        case ANJU_SCH_2D:
+        case ANJU_SCH_42:
+        case ANJU_SCH_43:
+        case ANJU_SCH_44:
+        case ANJU_SCH_45:
             return D_80B58980;
 
         case ANJU_SCH_LAUNDRY_POOL_SIT:
@@ -1622,8 +1622,8 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             }
             return sAnjuMsgScript_Sch12_B;
 
-        case ANJU_SCH_13:
-        case ANJU_SCH_2F:
+        case ANJU_SCH_19:
+        case ANJU_SCH_47:
             return sAnjuMsgScript_InnCloseTime;
 
         case ANJU_SCH_SWEEPING:
@@ -1632,17 +1632,17 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
         case ANJU_SCH_MIDNIGHT_MEETING:
             return sAnjuMsgScript_80B589FC;
 
-        case ANJU_SCH_30:
+        case ANJU_SCH_48:
             return sAnjuMsgScript_Sch30;
 
-        case ANJU_SCH_31:
+        case ANJU_SCH_49:
             if (player->transformation == PLAYER_FORM_HUMAN) {
                 return sAnjuMsgScript_80B58B88;
             }
             return sAnjuMsgScript_80B589FC;
 
-        case ANJU_SCH_34:
-        case ANJU_SCH_35:
+        case ANJU_SCH_52:
+        case ANJU_SCH_53:
             return sAnjuMsgScript_Sch34_Sch35;
 
         default:
@@ -1664,13 +1664,13 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
         this->msgEventScript = EnAn_GetMsgEventScript(this, play);
 
         if ((this->scheduleResult == ANJU_SCH_WAITING_FOR_KAFEI) || (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
-            (this->scheduleResult == ANJU_SCH_RECEPTIONIST_IDLE) || (this->scheduleResult == ANJU_SCH_13) ||
+            (this->scheduleResult == ANJU_SCH_RECEPTIONIST_IDLE) || (this->scheduleResult == ANJU_SCH_19) ||
             (this->scheduleResult == ANJU_SCH_MIDNIGHT_MEETING) || (this->scheduleResult == ANJU_SCH_SWEEPING) ||
-            (this->scheduleResult == ANJU_SCH_28) || (this->scheduleResult == ANJU_SCH_2A) ||
-            (this->scheduleResult == ANJU_SCH_2B) || (this->scheduleResult == ANJU_SCH_2C) ||
-            (this->scheduleResult == ANJU_SCH_2D) || (this->scheduleResult == ANJU_SCH_2F) ||
-            (this->scheduleResult == ANJU_SCH_30) || (this->scheduleResult == ANJU_SCH_31) ||
-            (this->scheduleResult == ANJU_SCH_34) || (this->scheduleResult == ANJU_SCH_35)) {
+            (this->scheduleResult == ANJU_SCH_40) || (this->scheduleResult == ANJU_SCH_42) ||
+            (this->scheduleResult == ANJU_SCH_43) || (this->scheduleResult == ANJU_SCH_44) ||
+            (this->scheduleResult == ANJU_SCH_45) || (this->scheduleResult == ANJU_SCH_47) ||
+            (this->scheduleResult == ANJU_SCH_48) || (this->scheduleResult == ANJU_SCH_49) ||
+            (this->scheduleResult == ANJU_SCH_52) || (this->scheduleResult == ANJU_SCH_53)) {
             this->stateFlags |= ENAN_STATE_20;
         }
 
@@ -1771,7 +1771,7 @@ s32 EnAn_ChooseAnimAfterTalking(EnAn* this, PlayState* play) {
         case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
         case ANJU_SCH_ATTEND_GORON:
         case ANJU_SCH_RECEPTIONIST_IDLE:
-        case ANJU_SCH_13:
+        case ANJU_SCH_19:
         case ANJU_SCH_MIDNIGHT_MEETING:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
             break;
@@ -1789,13 +1789,13 @@ s32 EnAn_ChooseAnimAfterTalking(EnAn* this, PlayState* play) {
             EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
             break;
 
-        case ANJU_SCH_2F:
-        case ANJU_SCH_31:
+        case ANJU_SCH_47:
+        case ANJU_SCH_49:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
             break;
 
-        case ANJU_SCH_34:
-        case ANJU_SCH_35:
+        case ANJU_SCH_52:
+        case ANJU_SCH_53:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_WALK);
             this->stateFlags |= ENAN_STATE_DRAW_BROOM;
             break;
@@ -2297,14 +2297,14 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             this->unk_37A = now - scheduleOutput->time0;
 
             switch (scheduleOutput->result) {
-                case ANJU_SCH_1B:
-                case ANJU_SCH_1C:
-                case ANJU_SCH_20:
-                case ANJU_SCH_21:
-                case ANJU_SCH_22:
-                case ANJU_SCH_23:
-                case ANJU_SCH_25:
-                case ANJU_SCH_26:
+                case ANJU_SCH_DOOR_27:
+                case ANJU_SCH_DOOR_28:
+                case ANJU_SCH_DOOR_32:
+                case ANJU_SCH_DOOR_33:
+                case ANJU_SCH_DOOR_34:
+                case ANJU_SCH_DOOR_35:
+                case ANJU_SCH_DOOR_37:
+                case ANJU_SCH_DOOR_38:
                     this->savedFaceIndex = ENAN_FACE_2;
                     this->faceIndex = ENAN_FACE_2;
                     this->eyeTimer = 8;
@@ -2312,15 +2312,15 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             }
 
             switch (scheduleOutput->result) {
-                case ANJU_SCH_1A:
-                case ANJU_SCH_1B:
-                case ANJU_SCH_1C:
+                case ANJU_SCH_DOOR_26:
+                case ANJU_SCH_DOOR_27:
+                case ANJU_SCH_DOOR_28:
                     this->stateFlags |= ENAN_STATE_DRAW_TRAY | ENAN_STATE_100;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
                     break;
 
-                case ANJU_SCH_24:
-                case ANJU_SCH_27:
+                case ANJU_SCH_DOOR_36:
+                case ANJU_SCH_DOOR_39:
                     this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_DRAW_BROOM;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_WALK);
                     break;
@@ -2361,7 +2361,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     }
 
     if (this->timePath != NULL) {
-        if ((this->scheduleResult < ANJU_SCH_28) && (this->scheduleResult != ANJU_SCH_NONE) &&
+        if ((this->scheduleResult < ANJU_SCH_40) && (this->scheduleResult != ANJU_SCH_NONE) &&
             (this->timePathTimeSpeed >= 0)) {
             startTime = now;
         } else {
@@ -2383,20 +2383,20 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->stateFlags &= ~ENAN_STATE_10;
 
         switch (scheduleOutput->result) {
-            case ANJU_SCH_2C:
-            case ANJU_SCH_2D:
-            case ANJU_SCH_32:
-            case ANJU_SCH_33:
-            case ANJU_SCH_36:
-            case ANJU_SCH_37:
+            case ANJU_SCH_44:
+            case ANJU_SCH_45:
+            case ANJU_SCH_50:
+            case ANJU_SCH_51:
+            case ANJU_SCH_54:
+            case ANJU_SCH_55:
             case ANJU_SCH_LAUNDRY_POOL_WALKING_IN:
             case ANJU_SCH_LAUNDRY_POOL_LEAVING:
-            case ANJU_SCH_3A:
-            case ANJU_SCH_3B:
-            case ANJU_SCH_3C:
-            case ANJU_SCH_3D:
-            case ANJU_SCH_3E:
-            case ANJU_SCH_3F:
+            case ANJU_SCH_58:
+            case ANJU_SCH_59:
+            case ANJU_SCH_60:
+            case ANJU_SCH_61:
+            case ANJU_SCH_62:
+            case ANJU_SCH_63:
                 this->savedFaceIndex = ENAN_FACE_2;
                 this->faceIndex = ENAN_FACE_2;
                 this->eyeTimer = 8;
@@ -2404,19 +2404,19 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         }
 
         switch (scheduleOutput->result) {
-            case ANJU_SCH_2A:
-            case ANJU_SCH_2B:
+            case ANJU_SCH_42:
+            case ANJU_SCH_43:
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 /* fallthrough */
-            case ANJU_SCH_2C:
-            case ANJU_SCH_2D:
+            case ANJU_SCH_44:
+            case ANJU_SCH_45:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_DRAW_TRAY;
                 break;
 
-            case ANJU_SCH_34:
-            case ANJU_SCH_35:
+            case ANJU_SCH_52:
+            case ANJU_SCH_53:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_WALK);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
@@ -2424,31 +2424,31 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 this->stateFlags |= ENAN_STATE_DRAW_BROOM;
                 break;
 
-            case ANJU_SCH_32:
-            case ANJU_SCH_33:
+            case ANJU_SCH_50:
+            case ANJU_SCH_51:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 break;
 
-            case ANJU_SCH_36:
-            case ANJU_SCH_37:
+            case ANJU_SCH_54:
+            case ANJU_SCH_55:
             case ANJU_SCH_LAUNDRY_POOL_WALKING_IN:
             case ANJU_SCH_LAUNDRY_POOL_LEAVING:
-            case ANJU_SCH_3A:
-            case ANJU_SCH_3B:
-            case ANJU_SCH_3C:
-            case ANJU_SCH_3D:
-            case ANJU_SCH_3E:
-            case ANJU_SCH_3F:
+            case ANJU_SCH_58:
+            case ANJU_SCH_59:
+            case ANJU_SCH_60:
+            case ANJU_SCH_61:
+            case ANJU_SCH_62:
+            case ANJU_SCH_63:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_WALK);
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
                 break;
 
-            case ANJU_SCH_28:
-            case ANJU_SCH_2F:
-            case ANJU_SCH_30:
-            case ANJU_SCH_31:
+            case ANJU_SCH_40:
+            case ANJU_SCH_47:
+            case ANJU_SCH_48:
+            case ANJU_SCH_49:
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
                 /* fallthrough */
@@ -2530,7 +2530,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
 
         switch (scheduleOutput->result) {
-            case ANJU_SCH_13:
+            case ANJU_SCH_19:
                 this->actor.world.rot.y += 0x7FF8;
                 /* fallthrough */
             case ANJU_SCH_RECEPTIONIST_IDLE:
@@ -2619,7 +2619,7 @@ s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             EnAn_ChangeAnim(this, play, ENAN_ANIM_SIT);
             break;
 
-        case ANJU_SCH_18:
+        case ANJU_SCH_24:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_IN_DISBELIEVE);
             this->savedFaceIndex = ENAN_FACE_5;
             this->faceIndex = ENAN_FACE_5;
@@ -2677,14 +2677,14 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
             break;
 
         case ANJU_SCH_WAITING_FOR_KAFEI:
-        case ANJU_SCH_18:
+        case ANJU_SCH_24:
             ret = func_80B56BC0(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_LAUNDRY_POOL_SIT:
         case ANJU_SCH_COOKING:
         case ANJU_SCH_RECEPTIONIST_IDLE:
-        case ANJU_SCH_13:
+        case ANJU_SCH_19:
         case ANJU_SCH_MIDNIGHT_MEETING:
             ret = func_80B56880(this, play, scheduleOutput);
             break;
@@ -2693,50 +2693,50 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
             ret = func_80B56744(this, play, scheduleOutput);
             break;
 
-        case ANJU_SCH_19:
+        case ANJU_SCH_25:
             ret = func_80B56CAC(this, play, scheduleOutput);
             break;
 
-        case ANJU_SCH_1A:
-        case ANJU_SCH_1B:
-        case ANJU_SCH_1C:
-        case ANJU_SCH_1D:
-        case ANJU_SCH_1E:
-        case ANJU_SCH_1F:
-        case ANJU_SCH_20:
-        case ANJU_SCH_21:
-        case ANJU_SCH_22:
-        case ANJU_SCH_23:
-        case ANJU_SCH_24:
-        case ANJU_SCH_25:
-        case ANJU_SCH_26:
-        case ANJU_SCH_27:
+        case ANJU_SCH_DOOR_26:
+        case ANJU_SCH_DOOR_27:
+        case ANJU_SCH_DOOR_28:
+        case ANJU_SCH_DOOR_29:
+        case ANJU_SCH_DOOR_30:
+        case ANJU_SCH_DOOR_31:
+        case ANJU_SCH_DOOR_32:
+        case ANJU_SCH_DOOR_33:
+        case ANJU_SCH_DOOR_34:
+        case ANJU_SCH_DOOR_35:
+        case ANJU_SCH_DOOR_36:
+        case ANJU_SCH_DOOR_37:
+        case ANJU_SCH_DOOR_38:
+        case ANJU_SCH_DOOR_39:
             ret = func_80B561A4(this, play, scheduleOutput);
             break;
 
-        case ANJU_SCH_28:
-        case ANJU_SCH_2A:
-        case ANJU_SCH_2B:
-        case ANJU_SCH_2C:
-        case ANJU_SCH_2D:
-        case ANJU_SCH_2E:
-        case ANJU_SCH_2F:
-        case ANJU_SCH_30:
-        case ANJU_SCH_31:
-        case ANJU_SCH_32:
-        case ANJU_SCH_33:
-        case ANJU_SCH_34:
-        case ANJU_SCH_35:
-        case ANJU_SCH_36:
-        case ANJU_SCH_37:
+        case ANJU_SCH_40:
+        case ANJU_SCH_42:
+        case ANJU_SCH_43:
+        case ANJU_SCH_44:
+        case ANJU_SCH_45:
+        case ANJU_SCH_46:
+        case ANJU_SCH_47:
+        case ANJU_SCH_48:
+        case ANJU_SCH_49:
+        case ANJU_SCH_50:
+        case ANJU_SCH_51:
+        case ANJU_SCH_52:
+        case ANJU_SCH_53:
+        case ANJU_SCH_54:
+        case ANJU_SCH_55:
         case ANJU_SCH_LAUNDRY_POOL_WALKING_IN:
         case ANJU_SCH_LAUNDRY_POOL_LEAVING:
-        case ANJU_SCH_3A:
-        case ANJU_SCH_3B:
-        case ANJU_SCH_3C:
-        case ANJU_SCH_3D:
-        case ANJU_SCH_3E:
-        case ANJU_SCH_3F:
+        case ANJU_SCH_58:
+        case ANJU_SCH_59:
+        case ANJU_SCH_60:
+        case ANJU_SCH_61:
+        case ANJU_SCH_62:
+        case ANJU_SCH_63:
             ret = func_80B56418(this, play, scheduleOutput);
             break;
 
@@ -2870,7 +2870,7 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
             break;
 
         case ANJU_SCH_RECEPTIONIST_IDLE:
-        case ANJU_SCH_13:
+        case ANJU_SCH_19:
             if (EnAn_IsFacingAndNearPlayer(this)) {
                 this->stateFlags |= ENAN_STATE_20;
             } else {
@@ -2981,16 +2981,16 @@ void func_80B57718(EnAn* this, PlayState* play) {
             func_80B575BC(this, play);
             break;
 
-        case ANJU_SCH_19:
+        case ANJU_SCH_25:
             func_80B57674(this, play);
             break;
 
         case ANJU_SCH_RANCH:
         case ANJU_SCH_COOKING:
         case ANJU_SCH_RECEPTIONIST_IDLE:
-        case ANJU_SCH_13:
+        case ANJU_SCH_19:
         case ANJU_SCH_SWEEPING:
-        case ANJU_SCH_18:
+        case ANJU_SCH_24:
             func_80B572D4(this, play);
             break;
 
@@ -2998,46 +2998,46 @@ void func_80B57718(EnAn* this, PlayState* play) {
             func_80B572D4(this, play);
             break;
 
-        case ANJU_SCH_1A:
-        case ANJU_SCH_1B:
-        case ANJU_SCH_1C:
-        case ANJU_SCH_1D:
-        case ANJU_SCH_1E:
-        case ANJU_SCH_1F:
-        case ANJU_SCH_20:
-        case ANJU_SCH_21:
-        case ANJU_SCH_22:
-        case ANJU_SCH_23:
-        case ANJU_SCH_24:
-        case ANJU_SCH_25:
-        case ANJU_SCH_26:
-        case ANJU_SCH_27:
+        case ANJU_SCH_DOOR_26:
+        case ANJU_SCH_DOOR_27:
+        case ANJU_SCH_DOOR_28:
+        case ANJU_SCH_DOOR_29:
+        case ANJU_SCH_DOOR_30:
+        case ANJU_SCH_DOOR_31:
+        case ANJU_SCH_DOOR_32:
+        case ANJU_SCH_DOOR_33:
+        case ANJU_SCH_DOOR_34:
+        case ANJU_SCH_DOOR_35:
+        case ANJU_SCH_DOOR_36:
+        case ANJU_SCH_DOOR_37:
+        case ANJU_SCH_DOOR_38:
+        case ANJU_SCH_DOOR_39:
             func_80B56EB4(this, play);
             break;
 
-        case ANJU_SCH_28:
-        case ANJU_SCH_2A:
-        case ANJU_SCH_2B:
-        case ANJU_SCH_2C:
-        case ANJU_SCH_2D:
-        case ANJU_SCH_2E:
-        case ANJU_SCH_2F:
-        case ANJU_SCH_30:
-        case ANJU_SCH_31:
-        case ANJU_SCH_32:
-        case ANJU_SCH_33:
-        case ANJU_SCH_34:
-        case ANJU_SCH_35:
-        case ANJU_SCH_36:
-        case ANJU_SCH_37:
+        case ANJU_SCH_40:
+        case ANJU_SCH_42:
+        case ANJU_SCH_43:
+        case ANJU_SCH_44:
+        case ANJU_SCH_45:
+        case ANJU_SCH_46:
+        case ANJU_SCH_47:
+        case ANJU_SCH_48:
+        case ANJU_SCH_49:
+        case ANJU_SCH_50:
+        case ANJU_SCH_51:
+        case ANJU_SCH_52:
+        case ANJU_SCH_53:
+        case ANJU_SCH_54:
+        case ANJU_SCH_55:
         case ANJU_SCH_LAUNDRY_POOL_WALKING_IN:
         case ANJU_SCH_LAUNDRY_POOL_LEAVING:
-        case ANJU_SCH_3A:
-        case ANJU_SCH_3B:
-        case ANJU_SCH_3C:
-        case ANJU_SCH_3D:
-        case ANJU_SCH_3E:
-        case ANJU_SCH_3F:
+        case ANJU_SCH_58:
+        case ANJU_SCH_59:
+        case ANJU_SCH_60:
+        case ANJU_SCH_61:
+        case ANJU_SCH_62:
+        case ANJU_SCH_63:
             func_80B5702C(this, play);
             break;
     }
@@ -3079,8 +3079,8 @@ void EnAn_FollowSchedule(EnAn* this, PlayState* play) {
     }
 
     if (this->unk_3C0) {
-        scheduleOutput.result = ANJU_SCH_19;
-        if (this->scheduleResult != ANJU_SCH_19) {
+        scheduleOutput.result = ANJU_SCH_25;
+        if (this->scheduleResult != ANJU_SCH_25) {
             EnAn_ProcessScheduleOutput(this, play, &scheduleOutput);
         }
     } else if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput) ||
@@ -3116,7 +3116,7 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
 
     if ((this->scheduleResult == ANJU_SCH_WAITING_FOR_KAFEI) || (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
         (this->scheduleResult == ANJU_SCH_RANCH) || (this->scheduleResult == ANJU_SCH_COOKING) ||
-        (this->scheduleResult == ANJU_SCH_19)) {
+        (this->scheduleResult == ANJU_SCH_25)) {
         return;
     }
 
