@@ -2288,9 +2288,9 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             Math_Vec3f_Copy(&this->actor.world.pos, &firstPos);
 
             if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, door->knobDoor.dyna.actor.shape.rot.y)) <= 0x4000) {
-                this->unk_215 = -0x4B;
+                this->doorOpenTimer = -75;
             } else {
-                this->unk_215 = 0x4B;
+                this->doorOpenTimer = 75;
             }
 
             this->unk_378 = scheduleOutput->time1 - scheduleOutput->time0;
@@ -2772,7 +2772,7 @@ s32 func_80B56EB4(EnAn* this, PlayState* play) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             // Tell the door to be open while passing through it and which orientation
             if ((this->unk_37A / (f32)this->unk_378) <= 0.9f) {
-                door->openTimer = this->unk_215;
+                door->openTimer = this->doorOpenTimer;
             } else {
                 door->openTimer = 0;
             }
@@ -2965,7 +2965,7 @@ s32 func_80B57674(EnAn* this, PlayState* play) {
     return 1;
 }
 
-void func_80B57718(EnAn* this, PlayState* play) {
+void EnAn_HandleSchedule(EnAn* this, PlayState* play) {
     switch (this->scheduleResult) {
         case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
         case ANJU_SCH_ATTEND_GORON:
@@ -3045,7 +3045,6 @@ void func_80B57718(EnAn* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
 }
 
-// Tentative name
 void EnAn_Initialize(EnAn* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gAnju1Skel, NULL, this->jointTable, this->morphTable, ANJU1_LIMB_MAX);
@@ -3096,7 +3095,7 @@ void EnAn_FollowSchedule(EnAn* this, PlayState* play) {
 
     this->scheduleResult = scheduleOutput.result;
     this->lookAtActor = EnAn_FindLookAtActor(this, play);
-    func_80B57718(this, play);
+    EnAn_HandleSchedule(this, play);
 }
 
 void EnAn_Talk(EnAn* this, PlayState* play) {

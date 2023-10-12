@@ -50,7 +50,7 @@ typedef struct EnAn {
     /* 0x20C */ s8 msmoObjectSlot;
     /* 0x210 */ s32 msgScriptResumePos;
     /* 0x214 */ s8 roomNum;
-    /* 0x215 */ s8 unk_215;
+    /* 0x215 */ s8 doorOpenTimer;
     /* 0x218 */ Actor* lookAtActor;
     /* 0x21C */ UNK_TYPE1 unk_21C[0xC];
     /* 0x228 */ Vec3f unk_228;

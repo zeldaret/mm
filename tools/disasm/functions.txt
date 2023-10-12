@@ -14057,7 +14057,7 @@
     0x80B573F4:("func_80B573F4",),
     0x80B575BC:("func_80B575BC",),
     0x80B57674:("func_80B57674",),
-    0x80B57718:("func_80B57718",),
+    0x80B57718:("EnAn_HandleSchedule",),
     0x80B577F0:("EnAn_Initialize",),
     0x80B578F8:("EnAn_FollowSchedule",),
     0x80B57A44:("EnAn_Talk",),
