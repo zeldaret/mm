@@ -199,7 +199,7 @@ void EnEncount3_Draw(Actor* thisx, PlayState* play) {
         Matrix_Scale(this->unk168, this->unk174, this->unk168, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, object_big_fwall_DL_0009A0);
+        gSPDisplayList(POLY_XLU_DISP++, gRingOfFireDL);
 
         Matrix_Pop();
         CLOSE_DISPS(play->state.gfxCtx);

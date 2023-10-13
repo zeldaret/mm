@@ -2767,11 +2767,11 @@ void Actor_UpdateFlaggedAudio(Actor* actor) {
     if (sfxId != NA_SE_NONE) {}
 
     if (actor->audioFlags & ACTOR_AUDIO_FLAG_SEQ_MUSIC_BOX_HOUSE) {
-        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
+        Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
     }
 
     if (actor->audioFlags & ACTOR_AUDIO_FLAG_SEQ_KAMARO_DANCE) {
-        func_801A1FB4(SEQ_PLAYER_BGM_MAIN, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
+        Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_MAIN, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
     }
 }
 
