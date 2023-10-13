@@ -604,6 +604,7 @@ s32 sAnjuMsgScript_SchReceiveLetterFromPostman[0x1B] = {
     0x09000018, 0x0E28BE0C, 0x09000017, 0x0E28BF0C, 0x09000018, 0x0E28C02D, 0x00012D00, 0x0B0C0900, 0x00115608,
     0x10090000, 0x0E295C0C, 0x09000017, 0x0E295D0C, 0x09000018, 0x0E295E2D, 0x00012D00, 0x0B0C0900, 0x00100000,
 };
+
 s32 sAnjuMsgScript_SchAttendGoron[0x21] = {
     0x09000000, 0x4B10001E, 0x0E28B10C, 0x09000017, 0x0E28B20C, 0x09000018, 0x0E28B32D, 0x00011137, 0x020C0900,
     0x00100056, 0x10002E0E, 0x28B10C09, 0x0000170E, 0x28B50C09, 0x0000180E, 0x28B60C09, 0x0000170E, 0x28B70C09,
@@ -615,7 +616,7 @@ s32 sAnjuMsgScript_SchGiveLunchToGranny[0x15] = {
     0x0E28CA0C, 0x09000017, 0x0E28CB0C, 0x09000018, 0x0E28CC0C, 0x09000017, 0x0E28CD0C,
     0x09000018, 0x0E28CE0C, 0x09000017, 0x0E28CF2D, 0x12D00,    0x0E0C0900, 0x100000,
 };
-s32 sAnjuMsgScript_Sch12_B[0x37] = {
+s32 sAnjuMsgScript_80B5885C[0x37] = {
     0x220B0000, 0x69002020, 0x64004B,   0x1000B700, 0x370100AA, 0x370200,   0x550E28A0, 0x0C090000,
     0x0F28A80C, 0x05000000, 0x30000030, 0x0E28A90C, 0x0F28AA0C, 0x0F28AB0C, 0x120600A0, 0x1300,
     0xA02F0000, 0x2E2D0014, 0x0C114B10, 0x0700000E, 0x28AD2D00, 0x010C2400, 0x41161031, 0x0E28A30C,
@@ -625,17 +626,18 @@ s32 sAnjuMsgScript_Sch12_B[0x37] = {
     0xA72D0001, 0x0C102300, 0x41000B0E, 0x28AC2D00, 0x010C2400, 0x41100E28, 0xAD0C1000,
 };
 s32 sAnjuMsgScript_InnCloseTime[3] = { 0x0E18852D, 0x10C12, 0x10000000 };
-s32 sAnjuMsgScript_Sch30[2] = { 0x0E28AF2D, 0x10C10 };
-s32 sAnjuMsgScript_Sch28[2] = { 0x0E28C12D, 0x10C10 };
+s32 sAnjuMsgScript_80B58944[2] = { 0x0E28AF2D, 0x10C10 };
+s32 sAnjuMsgScript_80B5894C[2] = { 0x0E28C12D, 0x10C10 };
 s32 sAnjuMsgScript_SchCooking[0xB] = {
     0x350100,   0x1C0E28C3, 0x0C0F28C4, 0x0C150900, 0xE28C5,    0x2D00010C,
     0x15090000, 0x11350112, 0x100E28C2, 0x2D00010C, 0x10000000,
 };
-s32 D_80B58980[2] = { 0x0E28C62D, 0x10C10 };
+s32 sAnjuMsgScript_80B58980[2] = { 0x0E28C62D, 0x10C10 };
 s32 sAnjuMsgScript_SchSweeping[3] = { 0x0E28F70C, 0x0F28F82D, 0x10C10 };
-s32 sAnjuMsgScript_Sch34_Sch35[2] = { 0x0E28F82D, 0x10C10 };
+s32 sAnjuMsgScript_80B58994[2] = { 0x0E28F82D, 0x10C10 };
 s32 sAnjuMsgScript_SchRanch[4] = { 0x0E28F90C, 0x0F28FA0C, 0x0F28FB2D, 0x10C10 };
-s32 sAnjuMsgScript_Sch17_A[0x14] = {
+
+s32 sAnjuMsgScript_SchMidnightMeeting[0x14] = {
     0x0E28D70C, 0x0F28D80C, 0x0F28D90C, 0x0F28DA0C, 0x0F28DB0C, 0x05000700, 0x731,
     0x0E28D919, -0x16CFF2,  0x28DC0C11, 0x32201132, 0x10120600, 0xAA000013, 0xAA2F00,
     0x2E2D00,   0x012D0017, 0x2D00160C, 0x0700000E, 0x28DE0C15, 0x09000010,
@@ -648,15 +650,15 @@ s32 sAnjuMsgScript_DekuDefault[8] = {
     0x522000, 0x100E294F, 0x0C0F2950, 0x2D00010C, 0x12115220, 0x100E2951, 0x2D00010C, 0x12100000,
 };
 s32 sAnjuMsgScript_SchLaundryPoolDeku[6] = { 0x524000, 0x0B0E2952, 0x2D00010C, 0x11524010, 0x0E29532D, 0x10C10 };
-s32 sAnjuMsgScript_Sch12_A[2] = { 0x0E28E02D, 0x10C10 };
-s32 D_80B58A44[0x1E] = {
+s32 sAnjuMsgScript_80B58A3C[2] = { 0x0E28E02D, 0x10C10 };
+s32 sAnjuMsgScript_80B58A44[0x1E] = {
     0x320800,   0x080E28D5, 0x2D00010C, 0x10003220,  0x80E28,    -0x2BD2FFFF, 0x0C100033, 0x01001A25,
     0x30001D,   0x27000300, 0x080E28E3, 0x2D00010C,  0x100E28E2, 0x2D00010C,  0x100E28E1, 0x2D00010C,
     0x100E28E4, 0x0C0E00FF, 0x1E003600, 0x0E000000,  0x0C2C28E7, 0x0C2F0000,  0x2D00010C, 0x1012102C,
     0x28E50C2F, 0xC2A,      0x300F28,   -0x19D2FFFF, 0x2D001A0C, 0x11330110,
 };
-s32 D_80B58ABC[2] = { 0x0E28D02D, 0x10C10 };
-s32 D_80B58AC4[9] = {
+s32 sAnjuMsgScript_80B58ABC[2] = { 0x0E28D02D, 0x10C10 };
+s32 sAnjuMsgScript_80B58AC4[9] = {
     0x320800, 0x160E28D1, 0x0C0F28D2, 0x0C0F28D3, 0x2D00152D, 0x10C11, 0x3208100E, 0x28D32D00, 0x010C1000,
 };
 s32 sAnjuMsgScript_SchWaitingForKafei[3] = { 0x0E28DF2D, 0x10C12, 0x10000000 };
@@ -675,7 +677,7 @@ s32 sAnjuMsgScript_80B58B7C[3] = { 0x0E29512D, 0x10C12, 0x10000000 };
 // Tells player that they should talk in the kitchen instead
 s32 sAnjuMsgScript_80B58B88[2] = { 0x0E29612D, 0x10C10 };
 
-s32 sAnjuMsgScript_Sch19[3] = { 0x0E291B2D, 0x10C12, 0x10000000 };
+s32 sAnjuMsgScript_80B58B90[3] = { 0x0E291B2D, 0x10C12, 0x10000000 };
 
 ActorInit En_An_InitVars = {
     ACTOR_EN_AN,
@@ -1088,7 +1090,7 @@ static s16 sMouthIndices[ENAN_FACE_MAX] = {
 void EnAn_UpdateFace(EnAn* this) {
     s32 skipBlink = false;
 
-    if (this->stateFlags & ENAN_STATE_100) {
+    if (this->stateFlags & ENAN_STATE_UPDATE_EYES) {
         if (DECR(this->eyeTimer) == 0) {
             // default case doesn't match
             switch (this->faceIndex) {
@@ -1293,11 +1295,11 @@ s16 EnAn_GetChildCsId(EnAn* this, s32 numCutscenes) {
 s32 EnAn_MsgEvent_ReceiveLetterFromPostman(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
     s16 csId = EnAn_GetCsId(this, 0);
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (this->msgEventState) {
         case 0x0:
-            ret = 0;
+            ret = false;
             if (EnAn_ChangeCutscene(this, csId)) {
                 goto label;
             }
@@ -1308,7 +1310,7 @@ s32 EnAn_MsgEvent_ReceiveLetterFromPostman(Actor* thisx, PlayState* play) {
         case 0x6:
         label:
             Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
-            ret = 1;
+            ret = true;
             this->msgEventState++;
             break;
 
@@ -1322,12 +1324,12 @@ s32 EnAn_MsgEvent_ReceiveLetterFromPostman(Actor* thisx, PlayState* play) {
                                       this->actor.child);
             }
             this->msgEventState++;
-            ret = 1;
+            ret = true;
             break;
 
         case 0x7:
             CutsceneManager_Stop(csId);
-            ret = 1;
+            ret = true;
             this->msgEventState++;
             break;
     }
@@ -1338,11 +1340,11 @@ s32 EnAn_MsgEvent_ReceiveLetterFromPostman(Actor* thisx, PlayState* play) {
 s32 EnAn_MsgEvent_AttendGoron(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
     s16 csId = EnAn_GetCsId(this, 0);
-    s32 var_a2 = 0;
+    s32 ret = false;
 
     switch (this->msgEventState) {
         case 0x0:
-            var_a2 = 0;
+            ret = false;
             if (EnAn_ChangeCutscene(this, csId)) {
                 goto label;
             }
@@ -1352,7 +1354,7 @@ s32 EnAn_MsgEvent_AttendGoron(Actor* thisx, PlayState* play) {
         case 0x4:
         label:
             Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
-            var_a2 = 1;
+            ret = true;
             this->msgEventState++;
             break;
 
@@ -1366,16 +1368,17 @@ s32 EnAn_MsgEvent_AttendGoron(Actor* thisx, PlayState* play) {
                                       this->actor.child);
             }
             this->msgEventState++;
-            var_a2 = 1;
+            ret = true;
             break;
 
         case 0x5:
             CutsceneManager_Stop(csId);
-            var_a2 = 1;
+            ret = true;
             this->msgEventState++;
             break;
     }
-    return var_a2;
+
+    return ret;
 }
 
 s32 EnAn_MsgEvent_GiveLunchToGranny(Actor* thisx, PlayState* play) {
@@ -1424,7 +1427,7 @@ s32 EnAn_MsgEvent_GiveLunchToGranny(Actor* thisx, PlayState* play) {
 }
 
 // Only used if Player is using Kafei's Mask or if Human and Promised midnight meeting
-s32 EnAn_MsgEvent_17(Actor* thisx, PlayState* play) {
+s32 EnAn_MsgEvent_MidnightMeeting(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
 
     if (this->msgEventState == 0) {
@@ -1522,7 +1525,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             return sAnjuMsgScript_SchRanch;
 
         case ANJU_SCH_25:
-            return sAnjuMsgScript_Sch19;
+            return sAnjuMsgScript_80B58B90;
 
         default:
             break;
@@ -1560,8 +1563,8 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
         }
 
         if (this->scheduleResult == ANJU_SCH_MIDNIGHT_MEETING) {
-            this->msgEventFunc = EnAn_MsgEvent_17;
-            return sAnjuMsgScript_Sch17_A;
+            this->msgEventFunc = EnAn_MsgEvent_MidnightMeeting;
+            return sAnjuMsgScript_SchMidnightMeeting;
         }
 
         if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
@@ -1570,23 +1573,23 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
         }
 
         if (gSaveContext.save.day >= 2) {
-            return D_80B58A44;
+            return sAnjuMsgScript_80B58A44;
         }
 
         // if ((gSaveContext.save.time - 0x3FFC) < 0x5883) {
         // if (SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time) < SCHEDULE_CONVERT_TIME_ALT(CLOCK_TIME(14,
         // 18))) {
         if (SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time) < SCHEDULE_CALC_TIME_ALT(14, 18)) {
-            return D_80B58ABC;
+            return sAnjuMsgScript_80B58ABC;
         }
 
-        return D_80B58AC4;
+        return sAnjuMsgScript_80B58AC4;
     }
 
     if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
         if (this->scheduleResult == ANJU_SCH_MIDNIGHT_MEETING) {
-            this->msgEventFunc = EnAn_MsgEvent_17;
-            return sAnjuMsgScript_Sch17_A;
+            this->msgEventFunc = EnAn_MsgEvent_MidnightMeeting;
+            return sAnjuMsgScript_SchMidnightMeeting;
         }
 
         if (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) {
@@ -1595,7 +1598,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
         }
 
         if (gSaveContext.save.day >= 2) {
-            return D_80B58A44;
+            return sAnjuMsgScript_80B58A44;
         }
     }
 
@@ -1604,13 +1607,13 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             return sAnjuMsgScript_SchWaitingForKafei;
 
         case ANJU_SCH_WALKING_40:
-            return sAnjuMsgScript_Sch28;
+            return sAnjuMsgScript_80B5894C;
 
         case ANJU_SCH_WALKING_42:
         case ANJU_SCH_WALKING_43:
         case ANJU_SCH_WALKING_44:
         case ANJU_SCH_WALKING_45:
-            return D_80B58980;
+            return sAnjuMsgScript_80B58980;
 
         case ANJU_SCH_LAUNDRY_POOL_SIT:
             this->msgEventFunc = EnAn_MsgEvent_LaundryPool;
@@ -1618,9 +1621,9 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
 
         case ANJU_SCH_RECEPTIONIST_IDLE:
             if (gSaveContext.save.day >= 2) {
-                return sAnjuMsgScript_Sch12_A;
+                return sAnjuMsgScript_80B58A3C;
             }
-            return sAnjuMsgScript_Sch12_B;
+            return sAnjuMsgScript_80B5885C;
 
         case ANJU_SCH_19:
         case ANJU_SCH_WALKING_47:
@@ -1633,7 +1636,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             return sAnjuMsgScript_80B589FC;
 
         case ANJU_SCH_WALKING_48:
-            return sAnjuMsgScript_Sch30;
+            return sAnjuMsgScript_80B58944;
 
         case ANJU_SCH_WALKING_49:
             if (player->transformation == PLAYER_FORM_HUMAN) {
@@ -1643,7 +1646,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
 
         case ANJU_SCH_WALKING_52:
         case ANJU_SCH_WALKING_53:
-            return sAnjuMsgScript_Sch34_Sch35;
+            return sAnjuMsgScript_80B58994;
 
         default:
             break;
@@ -1694,7 +1697,7 @@ s32 func_80B552E4(EnAn* this, PlayState* play) {
         if (!this->forceDraw) {
             this->savedFaceIndex = ENAN_FACE_0;
             this->faceIndex = ENAN_FACE_0;
-            this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+            this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
             this->eyeTimer = 8;
             this->cueId = -1;
             this->forceDraw = true;
@@ -2221,7 +2224,7 @@ s32 func_80B5600C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
-        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_100;
+        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_UPDATE_EYES;
         this->stateFlags |= ENAN_STATE_200;
     }
 
@@ -2236,7 +2239,7 @@ s32 func_80B56094(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
-        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_100;
+        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_UPDATE_EYES;
         this->stateFlags |= ENAN_STATE_200;
     }
 
@@ -2251,7 +2254,7 @@ s32 func_80B5611C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
-        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_100;
+        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_UPDATE_EYES;
         this->stateFlags |= ENAN_STATE_200 | ENAN_STATE_DRAW_TRAY;
     }
 
@@ -2315,18 +2318,18 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 case ANJU_SCH_DOOR_26:
                 case ANJU_SCH_DOOR_27:
                 case ANJU_SCH_DOOR_28:
-                    this->stateFlags |= ENAN_STATE_DRAW_TRAY | ENAN_STATE_100;
+                    this->stateFlags |= ENAN_STATE_DRAW_TRAY | ENAN_STATE_UPDATE_EYES;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
                     break;
 
                 case ANJU_SCH_DOOR_36:
                 case ANJU_SCH_DOOR_39:
-                    this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_DRAW_BROOM;
+                    this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_DRAW_BROOM;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_WALK);
                     break;
 
                 default:
-                    this->stateFlags |= ENAN_STATE_100;
+                    this->stateFlags |= ENAN_STATE_UPDATE_EYES;
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
                     break;
             }
@@ -2380,7 +2383,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
         this->timePathWaypoint = (this->timePathElapsedTime / this->timePathWaypointTime) + 2;
         this->stateFlags &= ~ENAN_STATE_8;
-        this->stateFlags &= ~ENAN_STATE_10;
+        this->stateFlags &= ~ENAN_STATE_REACHED_PATH_END;
 
         switch (scheduleOutput->result) {
             case ANJU_SCH_WALKING_44:
@@ -2411,7 +2414,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_WALKING_44:
             case ANJU_SCH_WALKING_45:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
-                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_DRAW_TRAY;
                 break;
 
@@ -2419,15 +2422,14 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_WALKING_53:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_WALK);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-
-                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_DRAW_BROOM;
                 break;
 
             case ANJU_SCH_WALKING_50:
             case ANJU_SCH_WALKING_51:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
-                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
                 break;
 
             case ANJU_SCH_WALKING_54:
@@ -2441,7 +2443,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_WALKING_62:
             case ANJU_SCH_WALKING_63:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_WALK);
-                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
                 break;
 
@@ -2450,7 +2452,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_WALKING_48:
             case ANJU_SCH_WALKING_49:
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
                 /* fallthrough */
             default:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
@@ -2493,7 +2495,7 @@ s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_SWEEP);
             SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
-            this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+            this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
             this->stateFlags |= ENAN_STATE_DRAW_BROOM;
         }
 
@@ -2538,19 +2540,19 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->var1.followScheduleState = 0;
-                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
                 if (scheduleOutput->result == ANJU_SCH_RECEPTIONIST_IDLE) {
                     this->unk_374 = 70.0f;
                 }
                 break;
 
             case ANJU_SCH_LAUNDRY_POOL_SIT:
-                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
 
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRYING);
-                    this->stateFlags |= ENAN_STATE_40;
+                    this->stateFlags |= ENAN_STATE_IGNORE_GRAVITY;
                     this->actor.world.rot.y += 0x7FF8;
                     this->actor.shape.rot.y = this->actor.world.rot.y;
                     this->var1.laundryPoolState = 4;
@@ -2567,8 +2569,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case ANJU_SCH_COOKING:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_COOKING);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-
-                this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_DRAW_CHOPSTICKS;
                 break;
         }
@@ -2592,8 +2593,8 @@ s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_IN_DISBELIEVE);
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
-        this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
-        this->stateFlags |= ENAN_STATE_40;
+        this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+        this->stateFlags |= ENAN_STATE_IGNORE_GRAVITY;
 
         this->savedFaceIndex = ENAN_FACE_5;
         this->faceIndex = ENAN_FACE_5;
@@ -2627,8 +2628,8 @@ s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             break;
     }
 
-    this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
-    this->stateFlags |= ENAN_STATE_40;
+    this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+    this->stateFlags |= ENAN_STATE_IGNORE_GRAVITY;
 
     this->actor.gravity = 0.0f;
     return true;
@@ -2643,7 +2644,7 @@ s32 func_80B56CAC(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
     EnAn_ChangeAnim(this, play, ENAN_ANIM_HOLDING_HANDS);
     SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-    this->stateFlags |= ENAN_STATE_100 | ENAN_STATE_200;
+    this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
 
     return 1;
 }
@@ -2836,7 +2837,7 @@ s32 EnAn_HandleSch_FollowTimePath(EnAn* this, PlayState* play) {
     if (SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
                                 &this->timePathTargetPos, this->timePathTimeSpeed)) {
-        this->stateFlags |= ENAN_STATE_10;
+        this->stateFlags |= ENAN_STATE_REACHED_PATH_END;
     } else {
         worldPos = this->actor.world.pos;
         timePathTargetPos = this->timePathTargetPos;
@@ -2907,7 +2908,7 @@ s32 EnAn_HandleSch_LaundryPool(EnAn* this, PlayState* play) {
             if (worldRot == shapeRot) {
                 Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_SIT);
-                this->stateFlags |= ENAN_STATE_40;
+                this->stateFlags |= ENAN_STATE_IGNORE_GRAVITY;
                 this->var1.laundryPoolState++;
             }
             break;
@@ -3247,7 +3248,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
         func_80B554E8(this);
         SubS_Offer(&this->actor, play, this->unk_374, 30.0f, 0, this->stateFlags & SUBS_OFFER_MODE_MASK);
 
-        if (!(this->stateFlags & ENAN_STATE_40)) {
+        if (!(this->stateFlags & ENAN_STATE_IGNORE_GRAVITY)) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         }
