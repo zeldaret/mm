@@ -781,7 +781,12 @@ void EnJso_SetupSpinBeforeAttack(EnJso* this) {
 void EnJso_SpinBeforeAttack(EnJso* this, PlayState* play) {
     this->actor.world.rot.x += 0x1770;
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0xFA0, 0x14);
-    if (!(this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+
+    if (this->actor.velocity.y > 0.0f) {
+        return;
+    }
+
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.world.rot.x = 0;
         this->actor.velocity.y = 0.0f;
         this->actor.speed = 0.0f;
@@ -836,15 +841,17 @@ void EnJso_DashAttack(EnJso* this, PlayState* play) {
         this->actor.velocity.y = 13.0f;
     }
 
-    if (!(curFrame < this->animEndFrame)) {
-        yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-        absYawDiff = ABS_ALT(yawDiff);
+    if (curFrame < this->animEndFrame) {
+        return;
+    }
 
-        if ((this->dashAttackTimer == 0) || (this->actor.xzDistToPlayer < 100.0f) || (absYawDiff > 0x4300)) {
-            AudioSfx_SetChannelIO(&this->actor.projectedPos, NA_SE_EN_ANSATSUSYA_DASH_2, 0);
-            Math_ApproachZeroF(&this->actor.speed, 0.3f, 3.0f);
-            EnJso_SetupSlash(this, play);
-        }
+    yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    absYawDiff = ABS_ALT(yawDiff);
+
+    if ((this->dashAttackTimer == 0) || (this->actor.xzDistToPlayer < 100.0f) || (absYawDiff > 0x4300)) {
+        AudioSfx_SetChannelIO(&this->actor.projectedPos, NA_SE_EN_ANSATSUSYA_DASH_2, 0);
+        Math_ApproachZeroF(&this->actor.speed, 0.3f, 3.0f);
+        EnJso_SetupSlash(this, play);
     }
 }
 
@@ -1051,8 +1058,11 @@ void EnJso_SetupDamaged(EnJso* this, PlayState* play) {
  * point it will jump back.
  */
 void EnJso_Damaged(EnJso* this, PlayState* play) {
-    if (!(this->actor.velocity.y > 0.0f) && (this->actor.colorFilterTimer == 0) &&
-        (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+    if (this->actor.velocity.y > 0.0f) {
+        return;
+    }
+
+    if ((this->actor.colorFilterTimer == 0) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         EnJso_SetupJumpBack(this);
     }
 }
@@ -1161,7 +1171,11 @@ void EnJso_FallDownAndTalk(EnJso* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
     Player* player = GET_PLAYER(play);
 
-    if (!(curFrame < this->animEndFrame) && !Play_InCsMode(play) && (play->msgCtx.msgLength == 0)) {
+    if (curFrame < this->animEndFrame) {
+        return;
+    }
+
+    if (!Play_InCsMode(play) && (play->msgCtx.msgLength == 0)) {
         if (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 60.0f) {
             Player* player2 = GET_PLAYER(play);
 
