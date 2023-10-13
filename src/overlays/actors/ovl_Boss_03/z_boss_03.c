@@ -2152,14 +2152,14 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
 /* Start of Gyorg's Draw section */
 
 void Boss03_SetObject(PlayState* play, s16 objectId) {
-    s32 objectIndex = Object_GetSlot(&play->objectCtx, objectId);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, objectId);
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectIndex].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
 
-    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectIndex].segment);
-    gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[objectIndex].segment);
+    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

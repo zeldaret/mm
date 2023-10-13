@@ -1,7 +1,7 @@
 /*
  * File: z_bg_f40_switch.c
  * Overlay: ovl_Bg_F40_Switch
- * Description: Stone Tower Switch
+ * Description: Stone Tower FloorSwitch
  */
 
 #include "z_bg_f40_switch.h"
@@ -113,7 +113,7 @@ void BgF40Switch_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = BgF40Switch_IdleUnpressed;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 1.0f;
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_f40_switch_Colheader_000118);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerFloorSwitchCol);
     if (!sBgF40SwitchGlobalsInitialized) {
         sBgF40SwitchLastUpdateFrame = play->gameplayFrames;
         sBgF40SwitchGlobalsInitialized = true;
@@ -189,6 +189,6 @@ void BgF40Switch_Update(Actor* thisx, PlayState* play) {
 void BgF40Switch_Draw(Actor* thisx, PlayState* play) {
     BgF40Switch* this = THIS;
 
-    Gfx_DrawDListOpa(play, object_f40_switch_DL_000438);
-    Gfx_DrawDListOpa(play, object_f40_switch_DL_000390);
+    Gfx_DrawDListOpa(play, gStoneTowerFloorSwitchDL);
+    Gfx_DrawDListOpa(play, gStoneTowerFloorSwitchOutlineDL);
 }

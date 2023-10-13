@@ -389,7 +389,7 @@ void EnGuardNuts_Draw(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_OPA_DISP++, gDekuPalaceGuardFlower);
+    gSPDisplayList(POLY_OPA_DISP++, gDekuPalaceGuardFlowerDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

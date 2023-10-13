@@ -267,16 +267,16 @@ void EnOssan_SpawnShopItems(EnOssan* this, PlayState* play, ShopItem* shop) {
 
 void EnOssan_Init(Actor* thisx, PlayState* play) {
     EnOssan* this = THIS;
-    s16 id;
+    s16 objectId;
 
     if ((this->actor.params > ENOSSAN_PART_TIME_WORKER) && (this->actor.params < ENOSSAN_CURIOSITY_SHOP_MAN)) {
         //! @bug: Impossible to reach, && should be an ||
         Actor_Kill(&this->actor);
         return;
     }
-    id = sObjectIds[this->actor.params];
-    this->objIndex = Object_GetSlot(&play->objectCtx, id);
-    if (this->objIndex < 0) {
+    objectId = sObjectIds[this->actor.params];
+    this->objectSlot = Object_GetSlot(&play->objectCtx, objectId);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -1506,9 +1506,9 @@ void EnOssan_InitShop(EnOssan* this, PlayState* play) {
     static EnOssanActionFunc sInitFuncs[] = { EnOssan_CuriosityShopMan_Init, EnOssan_PartTimer_Init };
     ShopItem* shopItems;
 
-    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.objBankIndex = this->objIndex;
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         shopItems = sShops[this->actor.params];
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);

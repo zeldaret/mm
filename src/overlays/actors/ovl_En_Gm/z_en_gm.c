@@ -306,11 +306,11 @@ EnDoor* func_8094DF90(PlayState* play, s32 arg1) {
 s32 EnGm_UpdateSkelAnime(EnGm* this, PlayState* play) {
     s32 isAnimFinished = false;
 
-    if (this->unk_262 < 0) {
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         return false;
     }
 
-    if (this->unk_262 >= 0) {
+    if (this->objectSlot > OBJECT_SLOT_NONE) {
         this->skelAnime.playSpeed = this->animPlaySpeed;
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
     }
@@ -319,7 +319,7 @@ s32 EnGm_UpdateSkelAnime(EnGm* this, PlayState* play) {
 }
 
 s32 EnGm_ChangeAnim(EnGm* this, PlayState* play, s32 animIndex) {
-    s8 tmp = this->unk_262;
+    s8 tmp = this->objectSlot;
     s32 changeAnim = false;
     s32 didAnimChange = false;
 
@@ -347,7 +347,7 @@ s32 func_8094E0F8(EnGm* this, PlayState* play) {
 
     if ((this->unk_260 != play->roomCtx.curRoom.num) && (play->roomCtx.status == 0)) {
         this->unk_260 = play->roomCtx.curRoom.num;
-        this->unk_262 = SubS_GetObjectIndex(OBJECT_IN2, play);
+        this->objectSlot = SubS_GetObjectSlot(OBJECT_IN2, play);
         this->actor.draw = NULL;
         this->unk_3FC = 1;
     }
@@ -356,7 +356,7 @@ s32 func_8094E0F8(EnGm* this, PlayState* play) {
         return false;
     }
 
-    if ((this->unk_262 < 0) || !SubS_IsObjectLoaded(this->unk_262, play)) {
+    if ((this->objectSlot <= OBJECT_SLOT_NONE) || !SubS_IsObjectLoaded(this->objectSlot, play)) {
         ret = true;
     } else {
         this->actor.draw = EnGm_Draw;
@@ -1863,7 +1863,7 @@ void EnGm_Draw(Actor* thisx, PlayState* play) {
     };
     EnGm* this = THIS;
 
-    if ((this->unk_258 != 0) && (this->unk_262 >= 0)) {
+    if ((this->unk_258 != 0) && (this->objectSlot > OBJECT_SLOT_NONE)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

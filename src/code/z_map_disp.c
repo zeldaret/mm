@@ -375,7 +375,7 @@ void func_8010439C(PlayState* play) {
             if (actor != NULL) {
                 do {
                     if ((actor->update != NULL) && (actor->init == NULL) &&
-                        (Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) &&
+                        (Object_IsLoaded(&play->objectCtx, actor->objectSlot)) &&
                         ((actor->id == ACTOR_EN_BOX) || (i == ACTORCAT_PLAYER) ||
                          (actor->flags & ACTOR_FLAG_80000000)) &&
                         ((D_801BEBB8.curRoom == actor->room) || (actor->room == -1))) {
@@ -485,7 +485,7 @@ void func_80104AE8(PlayState* play) {
         if (actor != NULL) {
             do {
                 if ((actor->update != NULL) && (actor->init == NULL) &&
-                    Object_IsLoaded(&play->objectCtx, actor->objBankIndex) &&
+                    Object_IsLoaded(&play->objectCtx, actor->objectSlot) &&
                     ((D_801BEBB8.curRoom == actor->room) || (actor->room == -1))) {
                     func_801045AC(play, actor);
                 }
@@ -499,13 +499,13 @@ void func_80104AE8(PlayState* play) {
 // Possible fakematch
 // https://decomp.me/scratch/kvGBZ
 void func_80104C80(PlayState* play) {
-    s32 objBankIndex;
+    s32 objectSlot;
 
-    objBankIndex = Object_GetSlot(&play->objectCtx, GAMEPLAY_DANGEON_KEEP);
-    if (objBankIndex < 0) {
+    objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_DANGEON_KEEP);
+    if (objectSlot < 0) {
         D_801BEBB8.unk20 |= 1;
     } else {
-        do { } while (!Object_IsLoaded(&play->objectCtx, objBankIndex)); }
+        do { } while (!Object_IsLoaded(&play->objectCtx, objectSlot)); }
     if (&play->objectCtx) {}
 }
 
@@ -861,12 +861,14 @@ void MapDisp_SwapRooms(s16 nextRoom) {
                         MapDisp_GetMapScale(nextMinimapEntry, &scaleTemp);
                         scale = scaleTemp;
                     }
-                    D_801BEBB8.unk1C = (s16)(s32)(
-                        ((f32)sp44 + (((f32)prevMinimapEntry->unk2 - (f32)nextMinimapEntry->unk2) * (1.0f / scale))) -
-                        (f32)sp3C);
-                    D_801BEBB8.unk1E = (s16)(s32)(
-                        ((f32)sp40 + (((f32)prevMinimapEntry->unk6 - (f32)nextMinimapEntry->unk6) * (1.0f / scale))) -
-                        (f32)sp38);
+                    D_801BEBB8.unk1C =
+                        (s16)(s32)(((f32)sp44 +
+                                    (((f32)prevMinimapEntry->unk2 - (f32)nextMinimapEntry->unk2) * (1.0f / scale))) -
+                                   (f32)sp3C);
+                    D_801BEBB8.unk1E =
+                        (s16)(s32)(((f32)sp40 +
+                                    (((f32)prevMinimapEntry->unk6 - (f32)nextMinimapEntry->unk6) * (1.0f / scale))) -
+                                   (f32)sp38);
                     D_801BEBB8.unkC = sp54 - D_801BEBB8.unk1C;
                     D_801BEBB8.unkE = sp50 - D_801BEBB8.unk1E;
                 }

@@ -472,6 +472,8 @@ typedef struct {
 typedef RoomShapeCullableEntry PolygonDlist2;
 typedef RoomShapeCullable PolygonType2;
 
+#define OBJECT_SLOT_NONE -1
+
 typedef struct {
     /* 0x000 */ void* spaceStart;
     /* 0x004 */ void* spaceEnd;

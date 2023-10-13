@@ -213,7 +213,7 @@
 
         <!-- Loach DLs -->
         <DList Name="gFishingLoachHeadDL" Offset="0xDED0" />
-        <DList Name="gFishingLoachLowerFrontFin" Offset="0xDFA8" />
+        <DList Name="gFishingLoachLowerFrontFinDL" Offset="0xDFA8" />
         <DList Name="gFishingLoachFrontSegmentDL" Offset="0xE048" />
         <DList Name="gFishingLoachMiddleSegmentDL" Offset="0xE168" />
         <DList Name="gFishingLoachLowerBackFinDL" Offset="0xE460" />
