@@ -2,6 +2,7 @@
 #define Z_EN_ZORAEGG_H
 
 #include "global.h"
+#include "objects/object_zoraegg/object_zoraegg.h"
 
 struct EnZoraegg;
 
@@ -44,8 +45,8 @@ typedef enum {
 typedef struct EnZoraegg {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[7];
-    /* 0x1B2 */ Vec3s morphTable[7];
+    /* 0x188 */ Vec3s jointTable[ZORA_BABY_LIMB_MAX];
+    /* 0x1B2 */ Vec3s morphTable[ZORA_BABY_LIMB_MAX];
     /* 0x1DC */ Actor* unk_1DC;
     /* 0x1E0 */ f32 unk_1E0;
     /* 0x1E4 */ f32 unk_1E4;

@@ -2,8 +2,8 @@
     <!-- Object for Zora Baby and Zora Egg -->
     <File Name="object_zoraegg" Segment="6">
         <!-- The animations when all the eggs hatch and the Zora babies swim up -->
-        <Animation Name="gZoraBabySwimmingUpAnim" Offset="0x5D4" />
-        <Animation Name="gZoraBabyHatchingAnim" Offset="0x1E08" />
+        <Animation Name="gZoraBabySwimUpAnim" Offset="0x5D4" />
+        <Animation Name="gZoraBabyHatchAnim" Offset="0x1E08" />
         
         <!-- Zora Baby Dlists -->
         <DList Name="gZoraBabyHeadDL" Offset="0x2550" />
@@ -35,10 +35,10 @@
         <Skeleton Name="gZoraBabySkel" Type="Flex" LimbType="Standard" LimbNone="ZORA_BABY_LIMB_NONE" LimbMax="ZORA_BABY_LIMB_MAX" EnumName="ZoraBabyLimb" Offset="0x4C90" />
         
         <!-- Animations -->
-        <Animation Name="gZoraBabyFormingNoteAnim" Offset="0x4D20" />
+        <Animation Name="gZoraBabyFormNoteAnim" Offset="0x4D20" />
         <Animation Name="gZoraBabySongLearnedAnim" Offset="0x4E04" />
         <Animation Name="gZoraBabyNoteAnim" Offset="0x4FE4" />
-        <Animation Name="gZoraBabySwimmingAnim" Offset="0x5098" />
+        <Animation Name="gZoraBabySwimAnim" Offset="0x5098" />
         
         <!-- Zora Egg -->
         <DList Name="gZoraEggDL" Offset="0x5250" />

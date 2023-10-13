@@ -6,7 +6,6 @@
 
 #include "z_en_zoraegg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_zoraegg/object_zoraegg.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -81,9 +80,9 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
     };
 
     Actor_SetScale(&this->actor, 0.006f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gZoraBabySkel, &gZoraBabySwimmingAnim, this->jointTable,
-                       this->morphTable, 7);
-    Animation_PlayLoop(&this->skelAnime, &gZoraBabySwimmingAnim);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gZoraBabySkel, &gZoraBabySwimAnim, this->jointTable, this->morphTable,
+                       ZORA_BABY_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &gZoraBabySwimAnim);
     ActorShape_Init(&this->actor.shape, 1100.0f, NULL, 0.0f);
 
     this->actionFunc = func_80B32084;
@@ -166,7 +165,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
         case ZORA_EGG_TYPE_08:
         case ZORA_EGG_TYPE_09:
             this->cueType = cueTypes[ZORA_EGG_GET_TYPE(&this->actor) - ZORA_EGG_TYPE_03];
-            Animation_PlayOnce(&this->skelAnime, &gZoraBabyHatchingAnim);
+            Animation_PlayOnce(&this->skelAnime, &gZoraBabyHatchAnim);
             this->unk_1EC = 1;
             this->unk_1EE = 0;
             this->unk_1EF = 0;
@@ -474,8 +473,8 @@ void func_80B326F4(EnZoraegg* this, PlayState* play) {
 
     if (Cutscene_IsCueInChannel(play, this->cueType) &&
         (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 3)) {
-        Animation_Change(&this->skelAnime, &gZoraBabyFormingNoteAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gZoraBabyFormingNoteAnim), ANIMMODE_ONCE, 5.0f);
+        Animation_Change(&this->skelAnime, &gZoraBabyFormNoteAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gZoraBabyFormNoteAnim), ANIMMODE_ONCE, 5.0f);
         this->unk_1E8 = 0;
         this->actionFunc = func_80B32644;
         SET_WEEKEVENTREG(WEEKEVENTREG_19_40);
@@ -495,14 +494,14 @@ void func_80B32820(EnZoraegg* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_1E8 >= 2) {
             this->actionFunc = func_80B326F4;
-            Animation_Change(&this->skelAnime, &gZoraBabySwimmingAnim, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&gZoraBabySwimmingAnim), ANIMMODE_LOOP, 10.0f);
+            Animation_Change(&this->skelAnime, &gZoraBabySwimAnim, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&gZoraBabySwimAnim), ANIMMODE_LOOP, 10.0f);
             this->unk_1E8 = 0;
             SkelAnime_Update(&this->skelAnime);
             return;
         }
 
-        Animation_PlayOnce(&this->skelAnime, &gZoraBabySwimmingUpAnim);
+        Animation_PlayOnce(&this->skelAnime, &gZoraBabySwimUpAnim);
         this->unk_1E8 += 1;
         SkelAnime_Update(&this->skelAnime);
     }
@@ -520,7 +519,7 @@ void func_80B32928(EnZoraegg* this, PlayState* play) {
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        Animation_PlayOnce(&this->skelAnime, &gZoraBabySwimmingUpAnim);
+        Animation_PlayOnce(&this->skelAnime, &gZoraBabySwimUpAnim);
         this->unk_1EA |= 1;
         this->actionFunc = func_80B32820;
         this->unk_1E8 = 0;
