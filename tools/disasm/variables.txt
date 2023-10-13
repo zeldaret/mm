@@ -4181,7 +4181,7 @@
     0x801FD3AB:("sFanfareState","UNK_TYPE1","",0x1),
     0x801FD3AC:("sFanfareSeqId","UNK_TYPE1","",0x1),
     0x801FD3AE:("sMuteOnlySfxAndAmbienceSeq","UNK_TYPE1","",0x1),
-    0x801FD3AF:("sAllPlayersMutedExceptOcaAndSys","UNK_TYPE1","",0x1),
+    0x801FD3AF:("sAllPlayersMutedExceptSystemAndOcarina","UNK_TYPE1","",0x1),
     0x801FD3B0:("sAudioPauseState","UNK_TYPE1","",0x1),
     0x801FD3B4:("sSpatialSeqIsActive","u8","[4]",0x4),
     0x801FD3B8:("sSequenceFilter","UNK_TYPE1","",0x1),

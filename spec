@@ -2000,8 +2000,7 @@ beginseg
     name "ovl_Obj_Sound"
     compress
     include "build/src/overlays/actors/ovl_Obj_Sound/z_obj_sound.o"
-    include "build/data/ovl_Obj_Sound/ovl_Obj_Sound.data.o"
-    include "build/data/ovl_Obj_Sound/ovl_Obj_Sound.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Sound/ovl_Obj_Sound_reloc.o"
 endseg
 
 beginseg
