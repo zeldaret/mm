@@ -30,6 +30,6 @@ minutes = round(minutes - 60 * hours)
 macro_val = SCHEDULE_CONVERT_TIME((hours * 60.0 + minutes) * ((0x10000 // 60) / 24.0))
 
 print(f"{hours},{minutes:02} -> 0x{macro_val:04X}")
-print(f"SCHEDULE_CALC_TIME_ALT({hours}, {minutes})")
+print(f"SCHEDULE_TIME({hours}, {minutes})")
 if time != macro_val:
     print("Warning: Result does not match as-is")

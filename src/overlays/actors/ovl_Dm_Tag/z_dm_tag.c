@@ -188,7 +188,7 @@ s32* func_80C22880(DmTag* this, PlayState* play) {
     switch (this->unk_18E) {
         case 1:
             time = SCHEDULE_TIME_NOW_ALT;
-            if ((time >= SCHEDULE_CALC_TIME_ALT(21, 30)) && (time < SCHEDULE_CALC_TIME_ALT(23, 0))) {
+            if ((time >= SCHEDULE_TIME(21, 30)) && (time < SCHEDULE_TIME(23, 0))) {
                 if (gSaveContext.save.day == 2) {
                     this->msgEventCallback = func_80C227E8;
                     return D_80C22BF0;
