@@ -18,7 +18,6 @@ mapId
 mapCompactId
 0x000-0x039 fetches dungeon minimap data from map_i_static
 0x03A-0x09B fetches L-minimap data from map_grand_static
-
 */
 
 #define FLOOR_INDEX_MAX 4
@@ -33,7 +32,6 @@ mapCompactId
 #define MAPDATA_MID_MAP_GRAND_STATIC 1
 #define MAPDATA_MID_MAP_I_STATIC 2
 
-
 #define MAPDATA_CPID_MAP_GRAND_STATIC 0
 #define MAPDATA_CPID_MAP_I_STATIC 1
 #define MAPDATA_CPID_2 2
@@ -42,6 +40,16 @@ mapCompactId
 #define MAPDATA_DRAW_1 1
 #define MAPDATA_DRAW_2 2
 #define MAPDATA_DRAW_3 3
+
+typedef struct {
+    u8 texWidth;
+    u8 texHeight;
+    s16 offsetX;
+    s16 offsetY;
+    u8 drawType;
+    u8 colorIndex;
+    s16 scale;
+} MapSpriteInfo; // size 0x0A
 
 typedef struct {
     /* 0x00 */ TexturePtr lmapTex; //minimap texture
@@ -53,16 +61,6 @@ typedef struct {
     /* 0x09 */ u8 colorIndex;
     /* 0x0A */ s16 scale;
 } MapSpriteInfo2; // size 0x0C
-
-typedef struct {
-    u8 texWidth;
-    u8 texHeight;
-    s16 offsetX;
-    s16 offsetY;
-    u8 drawType;
-    u8 colorIndex;
-    s16 scale;
-} MapSpriteInfo; // size 0x0A
 
 /* z_map_disp */
 
