@@ -701,7 +701,7 @@ s32 func_80A3F9A4(EnTest3* this, PlayState* play) {
 }
 
 s32 func_80A3F9E4(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
-    scheduleOutput->time0 = SCHEDULE_TIME_NOW;
+    scheduleOutput->time0 = (u16)SCHEDULE_TIME_NOW;
     scheduleOutput->time1 = (u16)(scheduleOutput->time0 + 70);
     func_80A40098(this, play, arg2, scheduleOutput);
     if (this->player.actor.xzDistToPlayer < 300.0f) {
@@ -729,7 +729,7 @@ s32 func_80A3FA58(EnTest3* this, PlayState* play) {
         if (cond || this->unk_D8A <= 0) {
             func_80A3F114(this, play);
             sp40.unk_1_0 = 5;
-            scheduleOutput.time0 = SCHEDULE_TIME_NOW;
+            scheduleOutput.time0 = (u16)SCHEDULE_TIME_NOW;
             scheduleOutput.time1 = (u16)(scheduleOutput.time0 + (cond ? 80 : 140));
 
             func_80A40098(this, play, &sp40, &scheduleOutput);
@@ -805,7 +805,7 @@ s32 func_80A3FE20(EnTest3* this, PlayState* play) {
     if (D_80A41D64 == 0) {
         if (func_80A3E9DC(this, play)) {
             sp2C.unk_1_0 = 2;
-            scheduleOutput.time0 = SCHEDULE_TIME_NOW;
+            scheduleOutput.time0 = (u16)SCHEDULE_TIME_NOW;
             scheduleOutput.time1 = (u16)(scheduleOutput.time0 + 1000);
             func_80A40098(this, play, &sp2C, &scheduleOutput);
             D_80A41D64 = 1;

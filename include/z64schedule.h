@@ -28,12 +28,10 @@
  */
 
 // Macro to convert the time format used in the save struct into the format used in Schedule
-#define SCHEDULE_CONVERT_TIME_ALT(time) ((time) - 0x10000 / 360 * 90)
-#define SCHEDULE_CONVERT_TIME(time) ((u16)(s32)SCHEDULE_CONVERT_TIME_ALT(time))
+#define SCHEDULE_CONVERT_TIME(time) ((s32)((time) - 0x10000 / 360 * 90))
 
 #define SCHEDULE_TIME(hour, minute) SCHEDULE_CONVERT_TIME((((hour)*60.0f) + (minute)) * (0x10000 / 60 / 24.0f))
 
-#define SCHEDULE_TIME_NOW_ALT SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time)
 #define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(gSaveContext.save.time)
 
 typedef enum ScheduleCommandId {
