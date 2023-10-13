@@ -663,19 +663,19 @@ s16 CutsceneCamera_Interp_MultiPointQuadratic(Vec3f* camPos, f32* camFov, s16* c
     }
 
     if (camRoll != NULL) {
-        s16 rolls[3];
+        s16 targetRolls[3];
         s32 sp28[2];
-        s32 temp;
+        s32 rollDiffToTarget;
 
-        rolls[0] = CAM_DEG_TO_BINANG(miscCmd[waypoints[0]].roll);
-        rolls[1] = CAM_DEG_TO_BINANG(miscCmd[waypoints[1]].roll);
-        rolls[2] = CAM_DEG_TO_BINANG(miscCmd[waypoints[2]].roll);
+        targetRolls[0] = CAM_DEG_TO_BINANG(miscCmd[waypoints[0]].roll);
+        targetRolls[1] = CAM_DEG_TO_BINANG(miscCmd[waypoints[1]].roll);
+        targetRolls[2] = CAM_DEG_TO_BINANG(miscCmd[waypoints[2]].roll);
 
-        sp28[0] = (s16)(rolls[1] - rolls[0]);
-        sp28[1] = sp28[0] + (s16)(rolls[2] - rolls[1]);
+        sp28[0] = (s16)(targetRolls[1] - targetRolls[0]);
+        sp28[1] = sp28[0] + (s16)(targetRolls[2] - targetRolls[1]);
 
-        temp = ((coeff[1] * sp28[0]) + (coeff[2] * sp28[1]));
-        *camRoll = rolls[0] + temp;
+        rollDiffToTarget = ((coeff[1] * sp28[0]) + (coeff[2] * sp28[1]));
+        *camRoll = targetRolls[0] + rollDiffToTarget;
     }
 
     interpState->curFrame++;
@@ -759,21 +759,21 @@ s16 CutsceneCamera_Interp_MultiPointCubic(Vec3f* camPos, f32* camFov, s16* camRo
     }
 
     if (camRoll != NULL) {
-        s16 rolls[4];
+        s16 targetRolls[4];
         s32 sp2C[3];
-        s32 temp;
+        s32 rollDiffToTarget;
 
-        rolls[0] = CAM_DEG_TO_BINANG(miscCmd[waypoints[0]].roll);
-        rolls[1] = CAM_DEG_TO_BINANG(miscCmd[waypoints[1]].roll);
-        rolls[2] = CAM_DEG_TO_BINANG(miscCmd[waypoints[2]].roll);
-        rolls[3] = CAM_DEG_TO_BINANG(miscCmd[waypoints[3]].roll);
+        targetRolls[0] = CAM_DEG_TO_BINANG(miscCmd[waypoints[0]].roll);
+        targetRolls[1] = CAM_DEG_TO_BINANG(miscCmd[waypoints[1]].roll);
+        targetRolls[2] = CAM_DEG_TO_BINANG(miscCmd[waypoints[2]].roll);
+        targetRolls[3] = CAM_DEG_TO_BINANG(miscCmd[waypoints[3]].roll);
 
-        sp2C[0] = (s16)(rolls[1] - rolls[0]);
-        sp2C[1] = sp2C[0] + (s16)(rolls[2] - rolls[1]);
-        sp2C[2] = sp2C[1] + (s16)(rolls[3] - rolls[2]);
+        sp2C[0] = (s16)(targetRolls[1] - targetRolls[0]);
+        sp2C[1] = sp2C[0] + (s16)(targetRolls[2] - targetRolls[1]);
+        sp2C[2] = sp2C[1] + (s16)(targetRolls[3] - targetRolls[2]);
 
-        temp = ((coeff[1] * sp2C[0]) + (coeff[2] * sp2C[1]) + (coeff[3] * sp2C[2]));
-        *camRoll = rolls[0] + temp;
+        rollDiffToTarget = ((coeff[1] * sp2C[0]) + (coeff[2] * sp2C[1]) + (coeff[3] * sp2C[2]));
+        *camRoll = targetRolls[0] + rollDiffToTarget;
     }
 
     interpState->curFrame++;
