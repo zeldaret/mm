@@ -52,34 +52,34 @@ typedef enum AnjuScheduleResult {
     /* 21 */ ANJU_SCH_GIVE_LUNCH_TO_GRANNY,
     /* 22 */ ANJU_SCH_SWEEPING,
     /* 23 */ ANJU_SCH_MIDNIGHT_MEETING,
-    /* 24 */ ANJU_SCH_TALKING_WITH_MOM, // Day 2, 21:30 ~ 23:00, on the employees-only room, talking with her mom
+    /* 24 */ ANJU_SCH_TALKING_WITH_MOM, // Day 2, 21:30 ~ 23:00, on the staff room, talking with her mom
     /* 25 */ ANJU_SCH_25, // Set manually in code instead of via script
     /* 26 */ ANJU_SCH_DOOR_26, // Passing through to Granny's door (entering)
     /* 27 */ ANJU_SCH_DOOR_27, // Passing through to Granny's door (leaving)
-    /* 28 */ ANJU_SCH_DOOR_28, // Passing through the door of the employees-only room (entering), after giving Granny's lunch
-    /* 29 */ ANJU_SCH_DOOR_29, // Passing through the door of the employees-only room (leaving), after giving Granny's lunch
-    /* 30 */ ANJU_SCH_DOOR_30, // Passing through the door of the employees-only room (entering), after closing the Inn
-    /* 31 */ ANJU_SCH_DOOR_31, // Passing through the door of the employees-only room (leaving), to have the midnight meeting
-    /* 32 */ ANJU_SCH_DOOR_32, // Passing through the door of the employees-only room (leaving), going to the Laundry Pool
+    /* 28 */ ANJU_SCH_DOOR_28, // Passing through the door of the staff room (entering), after giving Granny's lunch
+    /* 29 */ ANJU_SCH_DOOR_29, // Passing through the door of the staff room (leaving), after giving Granny's lunch
+    /* 30 */ ANJU_SCH_DOOR_30, // Passing through the door of the staff room (entering), after closing the Inn
+    /* 31 */ ANJU_SCH_DOOR_31, // Passing through the door of the staff room (leaving), to have the midnight meeting
+    /* 32 */ ANJU_SCH_DOOR_32, // Passing through the door of the staff room (leaving), going to the Laundry Pool
     /* 33 */ ANJU_SCH_DOOR_33, // Passing through the Inn's front door (leaving) (inside the Inn), going to the Laundry Pool
     /* 34 */ ANJU_SCH_DOOR_34, // Passing through the Inn's front door (entering) (inside the Inn), going from the Laundry Pool
-    /* 35 */ ANJU_SCH_DOOR_35, // Passing through the door of the employees-only room (entering), after going to the Laundry Pool
+    /* 35 */ ANJU_SCH_DOOR_35, // Passing through the door of the staff room (entering), after going to the Laundry Pool
     /* 36 */ ANJU_SCH_DOOR_36, // Passing through the door of the Large Suite (leaving), after sweeping the floor
     /* 37 */ ANJU_SCH_DOOR_37, // Passing through the Inn's front door (leaving) (East Clock Town), going to the Laundry Pool
     /* 38 */ ANJU_SCH_DOOR_38, // Passing through the Inn's front door (entering) (East Clock Town), going from the Laundry Pool
-    /* 39 */ ANJU_SCH_DOOR_39, // Passing through the door of the employees-only room (entering, after sweeping the floor
+    /* 39 */ ANJU_SCH_DOOR_39, // Passing through the door of the staff room (entering, after sweeping the floor
     /* 40 */ ANJU_SCH_WALKING_40, // Going from the front desk to the kitchen
     /* 41 */ ANJU_SCH_41, // unused
     /* 42 */ ANJU_SCH_WALKING_42, // Walking from the kitchen to Granny's room
     /* 43 */ ANJU_SCH_WALKING_43, // Inside Granny's room, walking to give her her food
     /* 44 */ ANJU_SCH_WALKING_44, // Inside Granny's room, walking out
-    /* 45 */ ANJU_SCH_WALKING_45, // Left Granny's room, walking towards employees-only room
-    /* 46 */ ANJU_SCH_WALKING_46, // Left employees-only room, walking to front desk
+    /* 45 */ ANJU_SCH_WALKING_45, // Left Granny's room, walking towards staff room
+    /* 46 */ ANJU_SCH_WALKING_46, // Left staff room, walking to front desk
     /* 47 */ ANJU_SCH_WALKING_47, // Walking from the front desk to right next to the Inn's front door
-    /* 48 */ ANJU_SCH_WALKING_48, // Walking from the Inn's front door after closing, to the employees-only room
-    /* 49 */ ANJU_SCH_WALKING_49, // Walking from the employees-only room to the kitchen, to have the midnight meeting
-    /* 50 */ ANJU_SCH_WALKING_50, // Walking from the employees-only room to Inn's front door, to go to the Laundry Pool
-    /* 51 */ ANJU_SCH_WALKING_51, // Walking from the Inn's front door to the employees-only room, after going to the Laundry Pool
+    /* 48 */ ANJU_SCH_WALKING_48, // Walking from the Inn's front door after closing, to the staff room
+    /* 49 */ ANJU_SCH_WALKING_49, // Walking from the staff room to the kitchen, to have the midnight meeting
+    /* 50 */ ANJU_SCH_WALKING_50, // Walking from the staff room to Inn's front door, to go to the Laundry Pool
+    /* 51 */ ANJU_SCH_WALKING_51, // Walking from the Inn's front door to the staff room, after going to the Laundry Pool
     /* 52 */ ANJU_SCH_WALKING_52, // Day 3, 11:00 ~ 11:25, Stopped sweeping, walking out of the room
     /* 53 */ ANJU_SCH_WALKING_53, // Day 3, 11:00 ~ 11:25, Walking through the hallway after sweeping
     /* 54 */ ANJU_SCH_WALKING_54, // Walking through East Clock Town, going to the Laundry Pool
@@ -1022,14 +1022,14 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
     return ret;
 }
 
-Vec3f D_80B58E34 = { 0.0f, 0.0f, 8.0f };
-
 void EnAn_UpdateCollider(EnAn* this, PlayState* play) {
     f32 temp;
     s32 pad;
     Vec3f sp24;
 
     if (this->scheduleResult == ANJU_SCH_25) {
+        static Vec3f D_80B58E34 = { 0.0f, 0.0f, 8.0f };
+
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80B58E34, &sp24);
         this->collider.dim.radius = 20;
         Math_Vec3f_ToVec3s(&this->collider.dim.pos, &sp24);
@@ -2216,7 +2216,7 @@ s32 func_80B55F8C(PlayState* play) {
     return ret;
 }
 
-s32 func_80B5600C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessSchedule_ReceiveLetterFromPostman(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80B55D98(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_PM)) {
@@ -2231,7 +2231,7 @@ s32 func_80B5600C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return ret;
 }
 
-s32 func_80B56094(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessSchedule_AttendGoron(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80B55D98(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_IG)) {
@@ -2246,7 +2246,7 @@ s32 func_80B56094(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return ret;
 }
 
-s32 func_80B5611C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessSchedule_GiveLunchToGranny(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80B55D98(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_NB)) {
@@ -2261,7 +2261,7 @@ s32 func_80B5611C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return ret;
 }
 
-s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 now = SCHEDULE_TIME_NOW;
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     EnDoor* door;
@@ -2296,8 +2296,8 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 this->doorOpenTimer = 75;
             }
 
-            this->unk_378 = scheduleOutput->time1 - scheduleOutput->time0;
-            this->var1.unk_37A = now - scheduleOutput->time0;
+            this->doorTimeTotalDiff = scheduleOutput->time1 - scheduleOutput->time0;
+            this->var1.doorTimeProgress = now - scheduleOutput->time0;
 
             switch (scheduleOutput->result) {
                 case ANJU_SCH_DOOR_27:
@@ -2344,7 +2344,7 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return ret;
 }
 
-s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 now = SCHEDULE_TIME_NOW;
     u16 startTime;
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
@@ -2466,7 +2466,7 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return ret;
 }
 
-s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessSchedule_Sweeping(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     Vec3f firstPos;
     Vec3f secondPos;
@@ -2505,10 +2505,10 @@ s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return ret;
 }
 
-s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
-    Vec3f sp40;
-    Vec3f sp34;
+    Vec3f lastPos;
+    Vec3f penultimatePos;
     Vec3s* points;
     s32 limit;
     s32 ret = false;
@@ -2521,15 +2521,15 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if ((this->timePath != NULL) && (this->timePath->count >= 2)) {
         points = Lib_SegmentedToVirtual(this->timePath->points);
-        Math_Vec3s_ToVec3f(&sp40, &points[this->timePath->count - 1]);
-        Math_Vec3s_ToVec3f(&sp34, &points[this->timePath->count - 2]);
+        Math_Vec3s_ToVec3f(&lastPos, &points[this->timePath->count - 1]);
+        Math_Vec3s_ToVec3f(&penultimatePos, &points[this->timePath->count - 2]);
 
-        this->actor.world.rot.y = Math_Vec3f_Yaw(&sp34, &sp40);
+        this->actor.world.rot.y = Math_Vec3f_Yaw(&penultimatePos, &lastPos);
 
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
         Math_Vec3s_Copy(&this->actor.home.rot, &this->actor.world.rot);
-        Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
-        Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
+        Math_Vec3f_Copy(&this->actor.world.pos, &lastPos);
+        Math_Vec3f_Copy(&this->actor.prevPos, &lastPos);
 
         switch (scheduleOutput->result) {
             case ANJU_SCH_19:
@@ -2579,10 +2579,9 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return ret;
 }
 
-Vec3f D_80B58E7C = { 905.0f, 260.0f, -64.0f };
-Vec3s D_80B58E88 = { 0, 0, 0 };
-
-s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessSchedule_Ranch(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    static Vec3f D_80B58E7C = { 905.0f, 260.0f, -64.0f };
+    static Vec3s D_80B58E88 = { 0, 0, 0 };
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80B58E7C);
@@ -2604,10 +2603,9 @@ s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return true;
 }
 
-Vec3f D_80B58E90 = { -508.0f, 210.0f, -162.0f };
-Vec3s D_80B58E9C = { 0, 0x3FFC, 0 };
-
-s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessSchedule_StaffRoom(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    static Vec3f D_80B58E90 = { -508.0f, 210.0f, -162.0f };
+    static Vec3s D_80B58E9C = { 0, 0x3FFC, 0 };
     s32 pad;
 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80B58E90);
@@ -2635,9 +2633,8 @@ s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return true;
 }
 
-Vec3s D_80B58EA4 = { 0, -0x2AAD, 0 };
-
-s32 func_80B56CAC(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessSchedule_80B56CAC(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    static Vec3s D_80B58EA4 = { 0, -0x2AAD, 0 };
     s32 pad;
 
     Math_Vec3s_Copy(&this->actor.shape.rot, &D_80B58EA4);
@@ -2646,7 +2643,7 @@ s32 func_80B56CAC(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
 
-    return 1;
+    return true;
 }
 
 s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
@@ -2662,24 +2659,24 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
 
     switch (scheduleOutput->result) {
         case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
-            ret = func_80B5600C(this, play, scheduleOutput);
+            ret = EnAn_ProcessSchedule_ReceiveLetterFromPostman(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_ATTEND_GORON:
-            ret = func_80B56094(this, play, scheduleOutput);
+            ret = EnAn_ProcessSchedule_AttendGoron(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_GIVE_LUNCH_TO_GRANNY:
-            ret = func_80B5611C(this, play, scheduleOutput);
+            ret = EnAn_ProcessSchedule_GiveLunchToGranny(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_RANCH:
-            ret = func_80B56B00(this, play, scheduleOutput);
+            ret = EnAn_ProcessSchedule_Ranch(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_WAITING_FOR_KAFEI:
         case ANJU_SCH_TALKING_WITH_MOM:
-            ret = func_80B56BC0(this, play, scheduleOutput);
+            ret = EnAn_ProcessSchedule_StaffRoom(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_LAUNDRY_POOL_SIT:
@@ -2687,15 +2684,15 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
         case ANJU_SCH_RECEPTIONIST_IDLE:
         case ANJU_SCH_19:
         case ANJU_SCH_MIDNIGHT_MEETING:
-            ret = func_80B56880(this, play, scheduleOutput);
+            ret = EnAn_ProcessSchedule_80B56880(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_SWEEPING:
-            ret = func_80B56744(this, play, scheduleOutput);
+            ret = EnAn_ProcessSchedule_Sweeping(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_25:
-            ret = func_80B56CAC(this, play, scheduleOutput);
+            ret = EnAn_ProcessSchedule_80B56CAC(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_DOOR_26:
@@ -2712,7 +2709,7 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
         case ANJU_SCH_DOOR_37:
         case ANJU_SCH_DOOR_38:
         case ANJU_SCH_DOOR_39:
-            ret = func_80B561A4(this, play, scheduleOutput);
+            ret = EnAn_ProcessSchedule_Door(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_WALKING_40:
@@ -2738,11 +2735,11 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
         case ANJU_SCH_WALKING_61:
         case ANJU_SCH_WALKING_62:
         case ANJU_SCH_WALKING_63:
-            ret = func_80B56418(this, play, scheduleOutput);
+            ret = EnAn_ProcessSchedule_Walking(this, play, scheduleOutput);
             break;
 
         default:
-            ret = 0;
+            ret = false;
             break;
     }
 
@@ -2774,23 +2771,23 @@ s32 EnAn_HandleSch_Door(EnAn* this, PlayState* play) {
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             // Tell the door actor to be open while passing through it and which orientation
-            if ((this->var1.unk_37A / (f32)this->unk_378) <= 0.9f) {
+            if ((this->var1.doorTimeProgress / (f32)this->doorTimeTotalDiff) <= 0.9f) {
                 door->openTimer = this->doorOpenTimer;
             } else {
                 door->openTimer = 0;
             }
         }
 
-        this->var1.unk_37A = CLAMP(this->var1.unk_37A, 0, this->unk_378);
-        distance = Math_Vec3f_DistXZ(&this->doorEntrancePos, &this->doorExitPos) / this->unk_378;
+        this->var1.doorTimeProgress = CLAMP(this->var1.doorTimeProgress, 0, this->doorTimeTotalDiff);
+        distance = Math_Vec3f_DistXZ(&this->doorEntrancePos, &this->doorExitPos) / this->doorTimeTotalDiff;
 
         sp38.x = 0.0f;
         sp38.y = 0.0f;
-        sp38.z = this->var1.unk_37A * distance;
+        sp38.z = this->var1.doorTimeProgress * distance;
 
         Lib_Vec3f_TranslateAndRotateY(&this->doorEntrancePos, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
 
-        this->var1.unk_37A += this->timePathTimeSpeed;
+        this->var1.doorTimeProgress += this->timePathTimeSpeed;
         if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_PIRATE_WALK);
         }
@@ -2802,35 +2799,35 @@ s32 EnAn_HandleSch_Door(EnAn* this, PlayState* play) {
 s32 EnAn_HandleSch_FollowTimePath(EnAn* this, PlayState* play) {
     f32 knots[265];
     Vec3f worldPos;
-    Vec3f timePathTargetPos;
-    Vec3f timePathTargetPos;
+    Vec3f sp64;
+    Vec3f sp58;
     s32 timePathElapsedTime;
     s32 timePathWaypoint;
     s32 pad;
 
-    timePathElapsedTime = 0;
     timePathWaypoint = 0;
+    timePathElapsedTime = 0;
     SubS_TimePathing_FillKnots(knots, SUBS_TIME_PATHING_ORDER, this->timePath->count + SUBS_TIME_PATHING_ORDER);
 
     if (!(this->stateFlags & ENAN_STATE_8)) {
-        timePathTargetPos = gZeroVec3f;
+        sp58 = gZeroVec3f;
         SubS_TimePathing_Update(this->timePath, &this->timePathProgress, &this->timePathElapsedTime,
                                 this->timePathWaypointTime, this->timePathTotalTime, &this->timePathWaypoint, knots,
-                                &timePathTargetPos, this->timePathTimeSpeed);
-        SubS_TimePathing_ComputeInitialY(play, this->timePath, this->timePathWaypoint, &timePathTargetPos);
-        this->actor.world.pos.y = timePathTargetPos.y;
+                                &sp58, this->timePathTimeSpeed);
+        SubS_TimePathing_ComputeInitialY(play, this->timePath, this->timePathWaypoint, &sp58);
+        this->actor.world.pos.y = sp58.y;
         this->stateFlags |= ENAN_STATE_8;
     } else {
-        timePathTargetPos = this->timePathTargetPos;
+        sp58 = this->timePathTargetPos;
     }
 
-    this->actor.world.pos.x = timePathTargetPos.x;
-    this->actor.world.pos.z = timePathTargetPos.z;
+    this->actor.world.pos.x = sp58.x;
+    this->actor.world.pos.z = sp58.z;
 
     if (SubS_InCsMode(play)) {
         timePathElapsedTime = this->timePathElapsedTime;
         timePathWaypoint = this->timePathWaypoint;
-        timePathTargetPos = this->actor.world.pos;
+        sp58 = this->actor.world.pos;
     }
     this->timePathTargetPos = gZeroVec3f;
 
@@ -2840,14 +2837,14 @@ s32 EnAn_HandleSch_FollowTimePath(EnAn* this, PlayState* play) {
         this->stateFlags |= ENAN_STATE_REACHED_PATH_END;
     } else {
         worldPos = this->actor.world.pos;
-        timePathTargetPos = this->timePathTargetPos;
-        this->actor.world.rot.y = Math_Vec3f_Yaw(&worldPos, &timePathTargetPos);
+        sp64 = this->timePathTargetPos;
+        this->actor.world.rot.y = Math_Vec3f_Yaw(&worldPos, &sp64);
     }
 
     if (SubS_InCsMode(play)) {
         this->timePathElapsedTime = timePathElapsedTime;
         this->timePathWaypoint = timePathWaypoint;
-        this->timePathTargetPos = timePathTargetPos;
+        this->timePathTargetPos = sp58;
     } else if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_PIRATE_WALK);
     }

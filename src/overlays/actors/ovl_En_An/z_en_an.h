@@ -67,9 +67,9 @@ typedef struct EnAn {
     /* 0x368 */ f32 unk_368;
     /* 0x36C */ UNK_TYPE1 unk_36C[0x8];
     /* 0x374 */ f32 unk_374;
-    /* 0x378 */ s16 unk_378; // schedule time diff
+    /* 0x378 */ s16 doorTimeTotalDiff; // Time difference between the point before going through a door and after going through it
     /* 0x37A */ union {
-        s16 unk_37A; // schedule time diff
+        s16 doorTimeProgress; // schedule time diff
         s16 laundryPoolState;
         s16 followScheduleState; // unused
     } var1;
