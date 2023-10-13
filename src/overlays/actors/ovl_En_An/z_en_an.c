@@ -29,69 +29,132 @@ void EnAn_Talk(EnAn* this, PlayState* play);
 
 typedef enum AnjuScheduleResult {
     /*  0 */ ANJU_SCH_NONE,
+    // Waiting for Kafei on the night of Day 3
     /*  1 */ ANJU_SCH_WAITING_FOR_KAFEI,
-    /*  2 */ ANJU_SCH_2, // unused
+    // unused
+    /*  2 */ ANJU_SCH_2,
+    // Day 2, 13:45 ~ 15:25, No midnight meeting. Sit on the Laundry Pool under the rain
     /*  3 */ ANJU_SCH_LAUNDRY_POOL_SIT,
-    /*  4 */ ANJU_SCH_4, // unused
-    /*  5 */ ANJU_SCH_5, // unused
-    /*  6 */ ANJU_SCH_6, // unused
-    /*  7 */ ANJU_SCH_7, // unused
-    /*  8 */ ANJU_SCH_8, // unused
-    /*  9 */ ANJU_SCH_9, // unused
-    /* 10 */ ANJU_SCH_10, // unused
-    /* 11 */ ANJU_SCH_11, // unused
+    // unused
+    /*  4 */ ANJU_SCH_4,
+    // unused
+    /*  5 */ ANJU_SCH_5,
+    // unused
+    /*  6 */ ANJU_SCH_6,
+    // unused
+    /*  7 */ ANJU_SCH_7,
+    // unused
+    /*  8 */ ANJU_SCH_8,
+    // unused
+    /*  9 */ ANJU_SCH_9,
+    // unused
+    /* 10 */ ANJU_SCH_10,
+    // unused
+    /* 11 */ ANJU_SCH_11,
+    // Day 3, Night, if not delivered the Pendant of Memories
     /* 12 */ ANJU_SCH_RANCH,
-    /* 13 */ ANJU_SCH_13, // unused
+    // unused
+    /* 13 */ ANJU_SCH_13,
+    // Cooking lunch for Granny at 11:10 ~ 11:30 on Day 1 and Day 2 (if did had the Midnight meeting)
     /* 14 */ ANJU_SCH_COOKING,
-    /* 15 */ ANJU_SCH_15, // unused
+    // unused
+    /* 15 */ ANJU_SCH_15,
+    // Day 1, 14:08 ~ 14:18. Receive Kafei's letter from Postman
     /* 16 */ ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN,
+    // Day 1, 16:10 ~ 16:30. Attends the goron named after the player
     /* 17 */ ANJU_SCH_ATTEND_GORON, // ANJU_SCH_ATTEND_LINK_THE_GORON? ANJU_SCH_ATTEND_PLAYER_THE_GORON?
+                                    // Just standing on the front desk of the Inn
     /* 18 */ ANJU_SCH_RECEPTIONIST_IDLE,
-    /* 19 */ ANJU_SCH_19, // Standing next to the Inn's front door at closing time
-    /* 20 */ ANJU_SCH_20, // unused
+    // Standing next to the Inn's front door at closing time
+    /* 19 */ ANJU_SCH_WAITING_CLOSING_TIME,
+    // unused
+    /* 20 */ ANJU_SCH_20,
+    // 12:00 ~ 12:15, Day 1 and Day 2 (if did had the Midnight meeting). Give lunch to Granny
     /* 21 */ ANJU_SCH_GIVE_LUNCH_TO_GRANNY,
+    // Day 3, 06:00 ~ 11:00. Sweeping the Suite room. TODO: maybe rename to "cleaning Suite room"?
     /* 22 */ ANJU_SCH_SWEEPING,
+    // Day 1, 00:00 ~ 06:00. Waiting for player at the kitchen to have the Midnight meeting.
     /* 23 */ ANJU_SCH_MIDNIGHT_MEETING,
-    /* 24 */ ANJU_SCH_TALKING_WITH_MOM, // Day 2, 21:30 ~ 23:00, on the staff room, talking with her mom
-    /* 25 */ ANJU_SCH_25, // Set manually in code instead of via script
-    /* 26 */ ANJU_SCH_DOOR_26, // Passing through to Granny's door (entering)
-    /* 27 */ ANJU_SCH_DOOR_27, // Passing through to Granny's door (leaving)
-    /* 28 */ ANJU_SCH_DOOR_28, // Passing through the door of the staff room (entering), after giving Granny's lunch
-    /* 29 */ ANJU_SCH_DOOR_29, // Passing through the door of the staff room (leaving), after giving Granny's lunch
-    /* 30 */ ANJU_SCH_DOOR_30, // Passing through the door of the staff room (entering), after closing the Inn
-    /* 31 */ ANJU_SCH_DOOR_31, // Passing through the door of the staff room (leaving), to have the midnight meeting
-    /* 32 */ ANJU_SCH_DOOR_32, // Passing through the door of the staff room (leaving), going to the Laundry Pool
-    /* 33 */ ANJU_SCH_DOOR_33, // Passing through the Inn's front door (leaving) (inside the Inn), going to the Laundry Pool
-    /* 34 */ ANJU_SCH_DOOR_34, // Passing through the Inn's front door (entering) (inside the Inn), going from the Laundry Pool
-    /* 35 */ ANJU_SCH_DOOR_35, // Passing through the door of the staff room (entering), after going to the Laundry Pool
-    /* 36 */ ANJU_SCH_DOOR_36, // Passing through the door of the Large Suite (leaving), after sweeping the floor
-    /* 37 */ ANJU_SCH_DOOR_37, // Passing through the Inn's front door (leaving) (East Clock Town), going to the Laundry Pool
-    /* 38 */ ANJU_SCH_DOOR_38, // Passing through the Inn's front door (entering) (East Clock Town), going from the Laundry Pool
-    /* 39 */ ANJU_SCH_DOOR_39, // Passing through the door of the staff room (entering, after sweeping the floor
-    /* 40 */ ANJU_SCH_WALKING_40, // Going from the front desk to the kitchen
-    /* 41 */ ANJU_SCH_41, // unused
-    /* 42 */ ANJU_SCH_WALKING_42, // Walking from the kitchen to Granny's room
-    /* 43 */ ANJU_SCH_WALKING_43, // Inside Granny's room, walking to give her her food
-    /* 44 */ ANJU_SCH_WALKING_44, // Inside Granny's room, walking out
-    /* 45 */ ANJU_SCH_WALKING_45, // Left Granny's room, walking towards staff room
-    /* 46 */ ANJU_SCH_WALKING_46, // Left staff room, walking to front desk
-    /* 47 */ ANJU_SCH_WALKING_47, // Walking from the front desk to right next to the Inn's front door
-    /* 48 */ ANJU_SCH_WALKING_48, // Walking from the Inn's front door after closing, to the staff room
-    /* 49 */ ANJU_SCH_WALKING_49, // Walking from the staff room to the kitchen, to have the midnight meeting
-    /* 50 */ ANJU_SCH_WALKING_50, // Walking from the staff room to Inn's front door, to go to the Laundry Pool
-    /* 51 */ ANJU_SCH_WALKING_51, // Walking from the Inn's front door to the staff room, after going to the Laundry Pool
-    /* 52 */ ANJU_SCH_WALKING_52, // Day 3, 11:00 ~ 11:25, Stopped sweeping, walking out of the room
-    /* 53 */ ANJU_SCH_WALKING_53, // Day 3, 11:00 ~ 11:25, Walking through the hallway after sweeping
-    /* 54 */ ANJU_SCH_WALKING_54, // Walking through East Clock Town, going to the Laundry Pool
-    /* 55 */ ANJU_SCH_WALKING_55, // Walking through South Clock Town, East Clock Town perspective, going to the Laundry Pool
+    // Day 2, 21:30 ~ 23:00, on the staff room, talking with her mom
+    /* 24 */ ANJU_SCH_TALKING_WITH_MOM,
+    // Reunited with Kafei on the Staff room. Set manually in code instead of via script
+    /* 25 */ ANJU_SCH_WITH_KAFEI,
+    // Passing through to Granny's door (entering)
+    /* 26 */ ANJU_SCH_DOOR_26,
+    // Passing through to Granny's door (leaving)
+    /* 27 */ ANJU_SCH_DOOR_27,
+    // Passing through the door of the staff room (entering), after giving Granny's lunch
+    /* 28 */ ANJU_SCH_DOOR_28,
+    // Passing through the door of the staff room (leaving), after giving Granny's lunch
+    /* 29 */ ANJU_SCH_DOOR_29,
+    // Passing through the door of the staff room (entering), after closing the Inn
+    /* 30 */ ANJU_SCH_DOOR_30,
+    // Passing through the door of the staff room (leaving), to have the midnight meeting
+    /* 31 */ ANJU_SCH_DOOR_31,
+    // Passing through the door of the staff room (leaving), going to the Laundry Pool
+    /* 32 */ ANJU_SCH_DOOR_32,
+    // Passing through the Inn's front door (leaving) (inside the Inn), going to the Laundry Pool
+    /* 33 */ ANJU_SCH_DOOR_33,
+    // Passing through the Inn's front door (entering) (inside the Inn), going from the Laundry Pool
+    /* 34 */ ANJU_SCH_DOOR_34,
+    // Passing through the door of the staff room (entering), after going to the Laundry Pool
+    /* 35 */ ANJU_SCH_DOOR_35,
+    // Passing through the door of the Large Suite (leaving), after sweeping the floor
+    /* 36 */ ANJU_SCH_DOOR_36,
+    // Passing through the Inn's front door (leaving) (East Clock Town), going to the Laundry Pool
+    /* 37 */ ANJU_SCH_DOOR_37,
+    // Passing through the Inn's front door (entering) (East Clock Town), going from the Laundry Pool
+    /* 38 */ ANJU_SCH_DOOR_38,
+    // Passing through the door of the staff room (entering, after sweeping the floor
+    /* 39 */ ANJU_SCH_DOOR_39,
+    // Going from the front desk to the kitchen
+    /* 40 */ ANJU_SCH_WALKING_40,
+    // unused
+    /* 41 */ ANJU_SCH_41,
+    // Walking from the kitchen to Granny's room
+    /* 42 */ ANJU_SCH_WALKING_42,
+    // Inside Granny's room, walking to give her her food
+    /* 43 */ ANJU_SCH_WALKING_43,
+    // Inside Granny's room, walking out
+    /* 44 */ ANJU_SCH_WALKING_44,
+    // Left Granny's room, walking towards staff room
+    /* 45 */ ANJU_SCH_WALKING_45,
+    // Left staff room, walking to front desk
+    /* 46 */ ANJU_SCH_WALKING_46,
+    // Walking from the front desk to right next to the Inn's front door
+    /* 47 */ ANJU_SCH_WALKING_47,
+    // Walking from the Inn's front door after closing, to the staff room
+    /* 48 */ ANJU_SCH_WALKING_48,
+    // Walking from the staff room to the kitchen, to have the midnight meeting
+    /* 49 */ ANJU_SCH_WALKING_49,
+    // Walking from the staff room to Inn's front door, to go to the Laundry Pool
+    /* 50 */ ANJU_SCH_WALKING_50,
+    // Walking from the Inn's front door to the staff room, after going to the Laundry Pool
+    /* 51 */ ANJU_SCH_WALKING_51,
+    // Day 3, 11:00 ~ 11:25, Stopped sweeping, walking out of the room
+    /* 52 */ ANJU_SCH_WALKING_52,
+    // Day 3, 11:00 ~ 11:25, Walking through the hallway after sweeping
+    /* 53 */ ANJU_SCH_WALKING_53,
+    // Walking through East Clock Town, going to the Laundry Pool
+    /* 54 */ ANJU_SCH_WALKING_54,
+    // Walking through South Clock Town, East Clock Town perspective, going to the Laundry Pool
+    /* 55 */ ANJU_SCH_WALKING_55,
+    // Walking through Laundry Pool, entering
     /* 56 */ ANJU_SCH_WALKING_56,
+    // Walking through Laundry Pool, leaving
     /* 57 */ ANJU_SCH_WALKING_57,
-    /* 58 */ ANJU_SCH_WALKING_58, // Walking through South Clock Town, East Clock Town perspective, going to the Inn from the Laundry Pool
-    /* 59 */ ANJU_SCH_WALKING_59, // Walking through East Clock Town, going to the Inn from the Laundry Pool
-    /* 60 */ ANJU_SCH_WALKING_60, // Walking through East Clock Town, South Clock Town perspective, going to the Laundry Pool
-    /* 61 */ ANJU_SCH_WALKING_61, // Walking through South Clock Town, going to the Laundry Pool
-    /* 62 */ ANJU_SCH_WALKING_62, // Walking through South Clock Town, going to the Inn from the Laundry Pool
-    /* 63 */ ANJU_SCH_WALKING_63, // Walking through East Clock Town, South Clock Town perspective, going to the Inn from the Laundry Pool
+    // Walking through South Clock Town, East Clock Town perspective, going to the Inn from the Laundry Pool
+    /* 58 */ ANJU_SCH_WALKING_58,
+    // Walking through East Clock Town, going to the Inn from the Laundry Pool
+    /* 59 */ ANJU_SCH_WALKING_59,
+    // Walking through East Clock Town, South Clock Town perspective, going to the Laundry Pool
+    /* 60 */ ANJU_SCH_WALKING_60,
+    // Walking through South Clock Town, going to the Laundry Pool
+    /* 61 */ ANJU_SCH_WALKING_61,
+    // Walking through South Clock Town, going to the Inn from the Laundry Pool
+    /* 62 */ ANJU_SCH_WALKING_62,
+    // Walking through East Clock Town, South Clock Town perspective, going to the Inn from the Laundry Pool
+    /* 63 */ ANJU_SCH_WALKING_63,
     /* 64 */ ANJU_SCH_MAX
 } AnjuScheduleResult;
 
@@ -133,7 +196,7 @@ static u8 sScheduleScript[] = {
     /* 0x0C6 */ SCHEDULE_CMD_RET_TIME(23, 10, 23, 15, ANJU_SCH_DOOR_31),
     /* 0x0CC */ SCHEDULE_CMD_RET_TIME(21, 5, 21, 10, ANJU_SCH_DOOR_30),
     /* 0x0D2 */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 5, ANJU_SCH_WALKING_48),
-    /* 0x0D8 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_19),
+    /* 0x0D8 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_WAITING_CLOSING_TIME),
     /* 0x0DE */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_WALKING_47),
     /* 0x0E4 */ SCHEDULE_CMD_RET_TIME(16, 30, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x0EA */ SCHEDULE_CMD_RET_TIME(16, 10, 16, 30, ANJU_SCH_ATTEND_GORON),
@@ -173,7 +236,7 @@ static u8 sScheduleScript[] = {
     /* 0x1AA */ SCHEDULE_CMD_RET_TIME(21, 30, 23, 0, ANJU_SCH_TALKING_WITH_MOM),
     /* 0x1B0 */ SCHEDULE_CMD_RET_TIME(21, 0, 21, 5, ANJU_SCH_DOOR_30),
     /* 0x1B6 */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 0, ANJU_SCH_WALKING_48),
-    /* 0x1BC */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_19),
+    /* 0x1BC */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_WAITING_CLOSING_TIME),
     /* 0x1C2 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_WALKING_47),
     /* 0x1C8 */ SCHEDULE_CMD_RET_TIME(18, 0, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x1CE */ SCHEDULE_CMD_RET_TIME(17, 55, 18, 0, ANJU_SCH_DOOR_35),
@@ -239,7 +302,7 @@ static u8 sScheduleScript[] = {
     /* 0x31E */ SCHEDULE_CMD_RET_TIME(21, 30, 23, 0, ANJU_SCH_TALKING_WITH_MOM),
     /* 0x324 */ SCHEDULE_CMD_RET_TIME(21, 5, 21, 10, ANJU_SCH_DOOR_30),
     /* 0x32A */ SCHEDULE_CMD_RET_TIME(20, 30, 21, 5, ANJU_SCH_WALKING_48),
-    /* 0x330 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_19),
+    /* 0x330 */ SCHEDULE_CMD_RET_TIME(20, 20, 20, 30, ANJU_SCH_WAITING_CLOSING_TIME),
     /* 0x336 */ SCHEDULE_CMD_RET_TIME(19, 50, 20, 20, ANJU_SCH_WALKING_47),
     /* 0x33C */ SCHEDULE_CMD_RET_TIME(13, 50, 19, 50, ANJU_SCH_RECEPTIONIST_IDLE),
     /* 0x342 */ SCHEDULE_CMD_RET_TIME(13, 20, 13, 50, ANJU_SCH_WALKING_46),
@@ -340,7 +403,7 @@ s32 scheduleScript(PlayState* play) {
             } else if ((19, 50) <= NOW <= (20, 20)) {
                 return ANJU_SCH_WALKING_47;
             } else if ((20, 20) <= NOW <= (20, 30)) {
-                return ANJU_SCH_19;
+                return ANJU_SCH_WAITING_CLOSING_TIME;
             } else if ((20, 30) <= NOW <= (21, 5)) {
                 return ANJU_SCH_WALKING_48;
             } else if ((21, 5) <= NOW <= (21, 10)) {
@@ -398,7 +461,7 @@ s32 scheduleScript(PlayState* play) {
                 } else if ((19, 50) <= NOW <= (20, 20)) {
                     return ANJU_SCH_WALKING_47;
                 } else if ((20, 20) <= NOW <= (20, 30)) {
-                    return ANJU_SCH_19;
+                    return ANJU_SCH_WAITING_CLOSING_TIME;
                 } else if ((20, 30) <= NOW <= (21, 5)) {
                     return ANJU_SCH_WALKING_48;
                 } else if ((21, 5) <= NOW <= (21, 10)) {
@@ -429,7 +492,7 @@ s32 scheduleScript(PlayState* play) {
             } else if ((19, 50) <= NOW <= (20, 20)) {
                 return ANJU_SCH_WALKING_47;
             } else if ((20, 20) <= NOW <= (20, 30)) {
-                return ANJU_SCH_19;
+                return ANJU_SCH_WAITING_CLOSING_TIME;
             } else if ((20, 30) <= NOW <= (21, 0)) {
                 return ANJU_SCH_WALKING_48;
             } else if ((21, 0) <= NOW <= (21, 5)) {
@@ -552,13 +615,13 @@ static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     10, // ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN
     10, // ANJU_SCH_ATTEND_GORON
     10, // ANJU_SCH_RECEPTIONIST_IDLE
-    11, // ANJU_SCH_19
+    11, // ANJU_SCH_WAITING_CLOSING_TIME
     -1, // ANJU_SCH_20
     4,  // ANJU_SCH_GIVE_LUNCH_TO_GRANNY
     22, // ANJU_SCH_SWEEPING
     15, // ANJU_SCH_MIDNIGHT_MEETING
     -1, // ANJU_SCH_TALKING_WITH_MOM
-    -1, // ANJU_SCH_25
+    -1, // ANJU_SCH_WITH_KAFEI
     3,  // ANJU_SCH_DOOR_26
     6,  // ANJU_SCH_DOOR_27
     8,  // ANJU_SCH_DOOR_28
@@ -611,11 +674,13 @@ s32 sAnjuMsgScript_SchAttendGoron[0x21] = {
     0x0000180E, 0x28B82D00, 0x010C0900, 0x00115610, 0x10090000, 0x170E2956, 0x0C090000, 0x180E2957, 0x0C090000,
     0x170E2958, 0x0C090000, 0x180E2959, 0x2D00010C, 0x09000012, 0x10000000,
 };
+
 s32 sAnjuMsgScript_SchGiveLunchToGranny[0x15] = {
     0x09000017, 0x0E28C70C, 0x09000018, 0x0E28C80C, 0x09000017, 0x0E28C90C, 0x09000018,
     0x0E28CA0C, 0x09000017, 0x0E28CB0C, 0x09000018, 0x0E28CC0C, 0x09000017, 0x0E28CD0C,
     0x09000018, 0x0E28CE0C, 0x09000017, 0x0E28CF2D, 0x12D00,    0x0E0C0900, 0x100000,
 };
+
 s32 sAnjuMsgScript_80B5885C[0x37] = {
     0x220B0000, 0x69002020, 0x64004B,   0x1000B700, 0x370100AA, 0x370200,   0x550E28A0, 0x0C090000,
     0x0F28A80C, 0x05000000, 0x30000030, 0x0E28A90C, 0x0F28AA0C, 0x0F28AB0C, 0x120600A0, 0x1300,
@@ -625,16 +690,24 @@ s32 sAnjuMsgScript_80B5885C[0x37] = {
     0x10C11,    0x20201023, 0x400012,   0x0E28A00C, 0x0900000F, 0x28A62D00, 0x010C2400, 0x40100E28,
     0xA72D0001, 0x0C102300, 0x41000B0E, 0x28AC2D00, 0x010C2400, 0x41100E28, 0xAD0C1000,
 };
+
 s32 sAnjuMsgScript_InnCloseTime[3] = { 0x0E18852D, 0x10C12, 0x10000000 };
+
 s32 sAnjuMsgScript_80B58944[2] = { 0x0E28AF2D, 0x10C10 };
+
 s32 sAnjuMsgScript_80B5894C[2] = { 0x0E28C12D, 0x10C10 };
+
 s32 sAnjuMsgScript_SchCooking[0xB] = {
     0x350100,   0x1C0E28C3, 0x0C0F28C4, 0x0C150900, 0xE28C5,    0x2D00010C,
     0x15090000, 0x11350112, 0x100E28C2, 0x2D00010C, 0x10000000,
 };
+
 s32 sAnjuMsgScript_80B58980[2] = { 0x0E28C62D, 0x10C10 };
+
 s32 sAnjuMsgScript_SchSweeping[3] = { 0x0E28F70C, 0x0F28F82D, 0x10C10 };
+
 s32 sAnjuMsgScript_80B58994[2] = { 0x0E28F82D, 0x10C10 };
+
 s32 sAnjuMsgScript_SchRanch[4] = { 0x0E28F90C, 0x0F28FA0C, 0x0F28FB2D, 0x10C10 };
 
 s32 sAnjuMsgScript_SchMidnightMeeting[0x14] = {
@@ -649,23 +722,31 @@ s32 sAnjuMsgScript_80B589FC[2] = { 0x0E28D62D, 0x10C10 };
 s32 sAnjuMsgScript_DekuDefault[8] = {
     0x522000, 0x100E294F, 0x0C0F2950, 0x2D00010C, 0x12115220, 0x100E2951, 0x2D00010C, 0x12100000,
 };
+
 s32 sAnjuMsgScript_SchLaundryPoolDeku[6] = { 0x524000, 0x0B0E2952, 0x2D00010C, 0x11524010, 0x0E29532D, 0x10C10 };
+
 s32 sAnjuMsgScript_80B58A3C[2] = { 0x0E28E02D, 0x10C10 };
+
 s32 sAnjuMsgScript_80B58A44[0x1E] = {
     0x320800,   0x080E28D5, 0x2D00010C, 0x10003220,  0x80E28,    -0x2BD2FFFF, 0x0C100033, 0x01001A25,
     0x30001D,   0x27000300, 0x080E28E3, 0x2D00010C,  0x100E28E2, 0x2D00010C,  0x100E28E1, 0x2D00010C,
     0x100E28E4, 0x0C0E00FF, 0x1E003600, 0x0E000000,  0x0C2C28E7, 0x0C2F0000,  0x2D00010C, 0x1012102C,
     0x28E50C2F, 0xC2A,      0x300F28,   -0x19D2FFFF, 0x2D001A0C, 0x11330110,
 };
+
 s32 sAnjuMsgScript_80B58ABC[2] = { 0x0E28D02D, 0x10C10 };
+
 s32 sAnjuMsgScript_80B58AC4[9] = {
     0x320800, 0x160E28D1, 0x0C0F28D2, 0x0C0F28D3, 0x2D00152D, 0x10C11, 0x3208100E, 0x28D32D00, 0x010C1000,
 };
+
 s32 sAnjuMsgScript_SchWaitingForKafei[3] = { 0x0E28DF2D, 0x10C12, 0x10000000 };
+
 s32 sAnjuMsgScript_SchLaundryPoolDefault[0x12] = {
     0x372000,    0x29003208, 0x2A0E28,   -0x17F3EAF7, 0xE28,      -0x16F3F0D8, -0x15F3EAF7, 0xE28,   -0x14F3F0D8,
     -0x13D2FFFF, 0x0C121137, 0x20100E28, -0x13F3EDF0, 0x0E28EE0C, 0x0F28EB0C,  0x0F28EC2D,  0x10C12, 0x11372010,
 };
+
 s32 sAnjuMsgScript_SchLaundryPoolKafeiMask[0x10] = {
     0x372000,   0x21003208, 0x220E28,    -0x17F3F0D8, -0x12F3EAF7, 0xE28,      -0x14F3F0D8, -0x13D2FFFF,
     0x0C121137, 0x20100E28, -0x13F3EDF0, 0x0E28EE0C,  0x0F28EB0C,  0x0F28EC2D, 0x10C12,     0x11372010,
@@ -677,7 +758,7 @@ s32 sAnjuMsgScript_80B58B7C[3] = { 0x0E29512D, 0x10C12, 0x10000000 };
 // Tells player that they should talk in the kitchen instead
 s32 sAnjuMsgScript_80B58B88[2] = { 0x0E29612D, 0x10C10 };
 
-s32 sAnjuMsgScript_80B58B90[3] = { 0x0E291B2D, 0x10C12, 0x10000000 };
+s32 sAnjuMsgScript_SchWithKafei[3] = { 0x0E291B2D, 0x10C12, 0x10000000 };
 
 ActorInit En_An_InitVars = {
     ACTOR_EN_AN,
@@ -1027,7 +1108,7 @@ void EnAn_UpdateCollider(EnAn* this, PlayState* play) {
     s32 pad;
     Vec3f sp24;
 
-    if (this->scheduleResult == ANJU_SCH_25) {
+    if (this->scheduleResult == ANJU_SCH_WITH_KAFEI) {
         static Vec3f D_80B58E34 = { 0.0f, 0.0f, 8.0f };
 
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80B58E34, &sp24);
@@ -1524,8 +1605,8 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
         case ANJU_SCH_RANCH:
             return sAnjuMsgScript_SchRanch;
 
-        case ANJU_SCH_25:
-            return sAnjuMsgScript_80B58B90;
+        case ANJU_SCH_WITH_KAFEI:
+            return sAnjuMsgScript_SchWithKafei;
 
         default:
             break;
@@ -1625,7 +1706,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             }
             return sAnjuMsgScript_80B5885C;
 
-        case ANJU_SCH_19:
+        case ANJU_SCH_WAITING_CLOSING_TIME:
         case ANJU_SCH_WALKING_47:
             return sAnjuMsgScript_InnCloseTime;
 
@@ -1666,8 +1747,10 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
         this->actor.child = this->lookAtActor;
         this->msgEventScript = EnAn_GetMsgEventScript(this, play);
 
-        if ((this->scheduleResult == ANJU_SCH_WAITING_FOR_KAFEI) || (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
-            (this->scheduleResult == ANJU_SCH_RECEPTIONIST_IDLE) || (this->scheduleResult == ANJU_SCH_19) ||
+        if ((this->scheduleResult == ANJU_SCH_WAITING_FOR_KAFEI) ||
+            (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
+            (this->scheduleResult == ANJU_SCH_RECEPTIONIST_IDLE) ||
+            (this->scheduleResult == ANJU_SCH_WAITING_CLOSING_TIME) ||
             (this->scheduleResult == ANJU_SCH_MIDNIGHT_MEETING) || (this->scheduleResult == ANJU_SCH_SWEEPING) ||
             (this->scheduleResult == ANJU_SCH_WALKING_40) || (this->scheduleResult == ANJU_SCH_WALKING_42) ||
             (this->scheduleResult == ANJU_SCH_WALKING_43) || (this->scheduleResult == ANJU_SCH_WALKING_44) ||
@@ -1774,7 +1857,7 @@ s32 EnAn_ChooseAnimAfterTalking(EnAn* this, PlayState* play) {
         case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
         case ANJU_SCH_ATTEND_GORON:
         case ANJU_SCH_RECEPTIONIST_IDLE:
-        case ANJU_SCH_19:
+        case ANJU_SCH_WAITING_CLOSING_TIME:
         case ANJU_SCH_MIDNIGHT_MEETING:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
             break;
@@ -2532,7 +2615,7 @@ s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* s
         Math_Vec3f_Copy(&this->actor.prevPos, &lastPos);
 
         switch (scheduleOutput->result) {
-            case ANJU_SCH_19:
+            case ANJU_SCH_WAITING_CLOSING_TIME:
                 this->actor.world.rot.y += 0x7FF8;
                 /* fallthrough */
             case ANJU_SCH_RECEPTIONIST_IDLE:
@@ -2633,7 +2716,7 @@ s32 EnAn_ProcessSchedule_StaffRoom(EnAn* this, PlayState* play, ScheduleOutput* 
     return true;
 }
 
-s32 EnAn_ProcessSchedule_80B56CAC(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+s32 EnAn_ProcessSchedule_WithKafei(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     static Vec3s D_80B58EA4 = { 0, -0x2AAD, 0 };
     s32 pad;
 
@@ -2682,7 +2765,7 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
         case ANJU_SCH_LAUNDRY_POOL_SIT:
         case ANJU_SCH_COOKING:
         case ANJU_SCH_RECEPTIONIST_IDLE:
-        case ANJU_SCH_19:
+        case ANJU_SCH_WAITING_CLOSING_TIME:
         case ANJU_SCH_MIDNIGHT_MEETING:
             ret = EnAn_ProcessSchedule_80B56880(this, play, scheduleOutput);
             break;
@@ -2691,8 +2774,8 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
             ret = EnAn_ProcessSchedule_Sweeping(this, play, scheduleOutput);
             break;
 
-        case ANJU_SCH_25:
-            ret = EnAn_ProcessSchedule_80B56CAC(this, play, scheduleOutput);
+        case ANJU_SCH_WITH_KAFEI:
+            ret = EnAn_ProcessSchedule_WithKafei(this, play, scheduleOutput);
             break;
 
         case ANJU_SCH_DOOR_26:
@@ -2871,7 +2954,7 @@ s32 EnAn_HandleSch_80B572D4(EnAn* this, PlayState* play) {
             break;
 
         case ANJU_SCH_RECEPTIONIST_IDLE:
-        case ANJU_SCH_19:
+        case ANJU_SCH_WAITING_CLOSING_TIME:
             if (EnAn_IsFacingAndNearPlayer(this)) {
                 this->stateFlags |= ENAN_STATE_20;
             } else {
@@ -2933,7 +3016,7 @@ s32 EnAn_HandleSch_LaundryPool(EnAn* this, PlayState* play) {
     return 0;
 }
 
-s32 EnAn_HandleSch_80B575BC(EnAn* this, PlayState* play) {
+s32 EnAn_HandleSch_WaitingForKafei(EnAn* this, PlayState* play) {
     s32 yRot = this->actor.shape.rot.y;
     s16 yaw = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, yRot));
 
@@ -2952,7 +3035,7 @@ s32 EnAn_HandleSch_80B575BC(EnAn* this, PlayState* play) {
     return 1;
 }
 
-s32 EnAn_HandleSch_80B57674(EnAn* this, PlayState* play) {
+s32 EnAn_HandleSch_WithKafei(EnAn* this, PlayState* play) {
     s16 yRot = BINANG_ADD(this->actor.shape.rot.y, 0x3000);
     s16 yaw = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, yRot));
 
@@ -2981,17 +3064,17 @@ void EnAn_HandleSchedule(EnAn* this, PlayState* play) {
             break;
 
         case ANJU_SCH_WAITING_FOR_KAFEI:
-            EnAn_HandleSch_80B575BC(this, play);
+            EnAn_HandleSch_WaitingForKafei(this, play);
             break;
 
-        case ANJU_SCH_25:
-            EnAn_HandleSch_80B57674(this, play);
+        case ANJU_SCH_WITH_KAFEI:
+            EnAn_HandleSch_WithKafei(this, play);
             break;
 
         case ANJU_SCH_RANCH:
         case ANJU_SCH_COOKING:
         case ANJU_SCH_RECEPTIONIST_IDLE:
-        case ANJU_SCH_19:
+        case ANJU_SCH_WAITING_CLOSING_TIME:
         case ANJU_SCH_SWEEPING:
         case ANJU_SCH_TALKING_WITH_MOM:
             EnAn_HandleSch_80B572D4(this, play);
@@ -3081,8 +3164,8 @@ void EnAn_FollowSchedule(EnAn* this, PlayState* play) {
     }
 
     if (this->unk_3C0) {
-        scheduleOutput.result = ANJU_SCH_25;
-        if (this->scheduleResult != ANJU_SCH_25) {
+        scheduleOutput.result = ANJU_SCH_WITH_KAFEI;
+        if (this->scheduleResult != ANJU_SCH_WITH_KAFEI) {
             EnAn_ProcessScheduleOutput(this, play, &scheduleOutput);
         }
     } else if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput) ||
@@ -3118,7 +3201,7 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
 
     if ((this->scheduleResult == ANJU_SCH_WAITING_FOR_KAFEI) || (this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) ||
         (this->scheduleResult == ANJU_SCH_RANCH) || (this->scheduleResult == ANJU_SCH_COOKING) ||
-        (this->scheduleResult == ANJU_SCH_25)) {
+        (this->scheduleResult == ANJU_SCH_WITH_KAFEI)) {
         return;
     }
 

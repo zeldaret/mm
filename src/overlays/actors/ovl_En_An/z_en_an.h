@@ -16,7 +16,7 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENAN_STATE_8                (1 << 3)
 #define ENAN_STATE_REACHED_PATH_END (1 << 4)
-#define ENAN_STATE_20               (1 << 5)
+#define ENAN_STATE_20               (1 << 5) // rotate head?
 #define ENAN_STATE_IGNORE_GRAVITY   (1 << 6)
 #define ENAN_STATE_80               (1 << 7)
 #define ENAN_STATE_UPDATE_EYES      (1 << 8)
