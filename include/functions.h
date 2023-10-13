@@ -1267,6 +1267,14 @@ void AudioScript_InitSequencePlayers(void);
 void func_8019AE40(s32 param_1, s32 param_2, u32 param_3, s32 param_4);
 void func_8019AEC0(UNK_PTR param_1, UNK_PTR param_2);
 
+void Audio_Init(void);
+void Audio_InitSound(void);
+void Audio_Update(void);
+void Audio_ResetForAudioHeapStep3(void);
+void Audio_ResetForAudioHeapStep2(void);
+void Audio_ResetForAudioHeapStep1(s32 specId);
+void Audio_PreNMI(void);
+
 void AudioOcarina_SetSongStartingPos(void);
 void AudioOcarina_StartAtSongStartingPos(u32 ocarinaFlags);
 void AudioOcarina_StartForSongCheck(u32 ocarinaFlags, u8 ocarinaStaffPlayingPosStart);
