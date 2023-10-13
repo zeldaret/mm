@@ -743,10 +743,12 @@ void EnHonotrap_Draw(Actor* thisx, PlayState* play) {
     EnHonotrap* this = (EnHonotrap*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, sSilverEyeTextures[this->eyeState]);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, &gEyeSwitchSilverDL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -755,6 +757,7 @@ void EnHonotrap_DrawFlame(Actor* thisx, PlayState* play) {
     EnHonotrap* this = (EnHonotrap*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, this->flameScroll, 32, 128));
@@ -763,6 +766,7 @@ void EnHonotrap_DrawFlame(Actor* thisx, PlayState* play) {
     Matrix_RotateYS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -776,6 +780,7 @@ void EnHonotrap_DrawFlameGroup(Actor* thisx, PlayState* play) {
     Vec3s camDir;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 200, 0, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
@@ -798,5 +803,6 @@ void EnHonotrap_DrawFlameGroup(Actor* thisx, PlayState* play) {
             gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
