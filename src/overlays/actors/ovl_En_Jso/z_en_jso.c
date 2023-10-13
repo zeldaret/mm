@@ -1155,7 +1155,7 @@ void EnJso_Dead(EnJso* this, PlayState* play) {
 void EnJso_SetupFallDownAndTalk(EnJso* this, PlayState* play) {
     EnJso_ChangeAnim(this, EN_JSO_ANIM_FALL_DOWN);
     this->textIndex = 2;
-    this->actor.colChkInfo.mass = 255;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
     this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
