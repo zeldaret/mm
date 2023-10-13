@@ -3600,7 +3600,7 @@ void KaleidoScope_Update(PlayState* play) {
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             MsgEvent_SendNullTask();
-            func_80143324(play, &play->skyboxCtx, play->skyboxId);
+            Skybox_ManageResources(play, &play->skyboxCtx, play->skyboxId);
 
             if ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId == 0xFF)) {
                 func_80115844(play, DO_ACTION_STOP);

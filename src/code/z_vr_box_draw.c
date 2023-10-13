@@ -64,4 +64,5 @@ void Skybox_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyboxId
 }
 
 void Skybox_Update(SkyboxContext* skyboxCtx) {
+
 }
