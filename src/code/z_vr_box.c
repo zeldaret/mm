@@ -1,24 +1,24 @@
 #include "global.h"
 
-u32 D_801C5E30[] = { 0, 0x2000, 0x4000, 0x6000, 0x8000, 0xC000 };
+u32 Skybox_TextureOffsets[] = { 0, 0x2000, 0x4000, 0x6000, 0x8000, 0xC000 };
 
-u16 D_801C5E48[] = {
+u16 Skybox_VertexOrder[] = {
     0, 2, 10, 12, 2, 4, 12, 14, 10, 12, 20, 22, 12, 14, 22, 24, 1, 3, 5, 6, 7, 8, 9, 11, 13, 15, 16, 17, 18, 19, 21, 23,
 };
-s32 D_801C5E88[] = { 0, 62 << 5, 124 << 5, 186 << 5, 248 << 5 };
 
-s32 D_801C5E9C[] = { 0, 62 << 5, 124 << 5, 186 << 5, 248 << 5 };
+s32 Skybox_texUOffsets[] = { 0, 62 << 5, 124 << 5, 186 << 5, 248 << 5 };
 
-s32 D_801C5EB0[] = { 0, 62 << 5, 124 << 5, 62 << 5, 0 };
+s32 Skybox_texVOffsets[] = { 0, 62 << 5, 124 << 5, 186 << 5, 248 << 5 };
 
-s16 D_801C5EC4[] = {
+s32 Skybox_texVOffsetsAlt[] = { 0, 62 << 5, 124 << 5, 62 << 5, 0 };
+
+s16 Skybox_VertexMapping[] = {
     0,  16, 19, 18, 16, 1,  20, 19, 1,  17, 21, 20, 17, 5,  22, 21, 18, 19, 23, 2,  19, 20,
     3,  23, 20, 21, 24, 3,  21, 22, 7,  24, 2,  23, 26, 25, 23, 3,  27, 26, 3,  24, 28, 27,
     24, 7,  29, 28, 25, 26, 30, 10, 26, 27, 11, 30, 27, 28, 31, 11, 28, 29, 15, 31,
 };
 
-s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7,
-                  s32 arg8) {
+s32 Skybox_LoadTexturesAndPalette(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) {
     s32 i;
     s32 j;
     s32 k;
@@ -48,8 +48,8 @@ s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s3
                     roomVtxPosZ[k] = arg5;
                     roomVtxPosX[k] = temp2;
                     roomVtxPosY[k] = temp1;
-                    roomVtxTexU[k] = D_801C5E88[j];
-                    roomVtxTexV[k] = D_801C5EB0[i];
+                    roomVtxTexU[k] = Skybox_texUOffsets[j];
+                    roomVtxTexV[k] = Skybox_texVOffsetsAlt[i];
                     temp2 += arg6;
                 }
                 temp1 += arg7;
@@ -66,8 +66,8 @@ s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s3
                     roomVtxPosX[k] = arg3;
                     roomVtxPosY[k] = temp1;
                     roomVtxPosZ[k] = temp2;
-                    roomVtxTexU[k] = D_801C5E88[j];
-                    roomVtxTexV[k] = D_801C5EB0[i];
+                    roomVtxTexU[k] = Skybox_texUOffsets[j];
+                    roomVtxTexV[k] = Skybox_texVOffsetsAlt[i];
                     temp2 += arg6;
                 }
                 temp1 += arg7;
@@ -84,8 +84,8 @@ s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s3
                     roomVtxPosY[k] = arg4;
                     roomVtxPosX[k] = temp2;
                     roomVtxPosZ[k] = temp1;
-                    roomVtxTexU[k] = D_801C5E88[j];
-                    roomVtxTexV[k] = D_801C5E9C[i];
+                    roomVtxTexU[k] = Skybox_texUOffsets[j];
+                    roomVtxTexV[k] = Skybox_texVOffsets[i];
                     temp2 += arg6;
                 }
                 temp1 += arg7;
@@ -99,7 +99,7 @@ s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s3
     skyboxCtx->roomDL = &skyboxCtx->dListBuf[2 * arg8][0];
 
     for (i = 0; i < 0x20; i++) {
-        index = D_801C5E48[i];
+        index = Skybox_VertexOrder[i];
 
         roomVtx[arg2 + i].v.ob[0] = roomVtxPosX[index];
         roomVtx[arg2 + i].v.ob[1] = roomVtxPosY[index];
@@ -119,47 +119,47 @@ s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s3
         phi_a2_4 = 0;
         for (phi_t2_4 = 0, phi_ra = 0; phi_ra < 4; phi_ra++, phi_a2_4 += 0x1F) {
             for (phi_a0_4 = 0, phi_t1 = 0; phi_t1 < 4; phi_t1++, phi_a0_4 += 0x1F, phi_t2_4 += 4) {
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[0] + D_801C5E30[arg8], 0,
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[0] + Skybox_TextureOffsets[arg8], 0,
                                  G_TX_RENDERTILE, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
                                  phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[1] + D_801C5E30[arg8], 0x80,
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[1] + Skybox_TextureOffsets[arg8], 0x80,
                                  1, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
                                  phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-                gSP1Quadrangle(skyboxCtx->roomDL++, D_801C5EC4[phi_t2_4 + 1], D_801C5EC4[phi_t2_4 + 2],
-                               D_801C5EC4[phi_t2_4 + 3], D_801C5EC4[phi_t2_4 + 0], 3);
+                gSP1Quadrangle(skyboxCtx->roomDL++, Skybox_VertexMapping[phi_t2_4 + 1], Skybox_VertexMapping[phi_t2_4 + 2],
+                               Skybox_VertexMapping[phi_t2_4 + 3], Skybox_VertexMapping[phi_t2_4 + 0], 3);
             }
         }
     } else {
         phi_a2_4 = 0;
         for (phi_t2_4 = 0, phi_ra = 0; phi_ra < 2; phi_ra++, phi_a2_4 += 0x1F) {
             for (phi_a0_4 = 0, phi_t1 = 0; phi_t1 < 4; phi_t1++, phi_a0_4 += 0x1F, phi_t2_4 += 4) {
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[0] + D_801C5E30[arg8], 0,
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[0] + Skybox_TextureOffsets[arg8], 0,
                                  G_TX_RENDERTILE, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
                                  phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[1] + D_801C5E30[arg8], 0x80,
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[1] + Skybox_TextureOffsets[arg8], 0x80,
                                  1, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
                                  phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-                gSP1Quadrangle(skyboxCtx->roomDL++, D_801C5EC4[phi_t2_4 + 1], D_801C5EC4[phi_t2_4 + 2],
-                               D_801C5EC4[phi_t2_4 + 3], D_801C5EC4[phi_t2_4 + 0], 3);
+                gSP1Quadrangle(skyboxCtx->roomDL++, Skybox_VertexMapping[phi_t2_4 + 1], Skybox_VertexMapping[phi_t2_4 + 2],
+                               Skybox_VertexMapping[phi_t2_4 + 3], Skybox_VertexMapping[phi_t2_4 + 0], 3);
             }
         }
         phi_a2_4 -= 0x1F;
         for (phi_ra = 0; phi_ra < 2; phi_ra++, phi_a2_4 -= 0x1F) {
             for (phi_a0_4 = 0, phi_t1 = 0; phi_t1 < 4; phi_t1++, phi_a0_4 += 0x1F, phi_t2_4 += 4) {
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[0] + D_801C5E30[arg8], 0,
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[0] + Skybox_TextureOffsets[arg8], 0,
                                  G_TX_RENDERTILE, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
                                  phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[1] + D_801C5E30[arg8], 0x80,
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[1] + Skybox_TextureOffsets[arg8], 0x80,
                                  1, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
                                  phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-                gSP1Quadrangle(skyboxCtx->roomDL++, D_801C5EC4[phi_t2_4 + 1], D_801C5EC4[phi_t2_4 + 2],
-                               D_801C5EC4[phi_t2_4 + 3], D_801C5EC4[phi_t2_4 + 0], 3);
+                gSP1Quadrangle(skyboxCtx->roomDL++, Skybox_VertexMapping[phi_t2_4 + 1], Skybox_VertexMapping[phi_t2_4 + 2],
+                               Skybox_VertexMapping[phi_t2_4 + 3], Skybox_VertexMapping[phi_t2_4 + 0], 3);
             }
         }
     }
@@ -167,18 +167,20 @@ s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s3
     return arg2;
 }
 
-void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
-    static struct_801C5F44 D_801C5F44[] = {
+void Skybox_GenerateVertices(SkyboxContext* skyboxCtx, s32 arg1) {
+
+    static SkyboxVertexData Skybox_VertexDataArray[] = {
         { -64, 64, -64, 32, -32 }, { 64, 64, 64, -32, -32 }, { -64, 64, 64, -32, -32 },
         { 64, 64, -64, 32, -32 },  { -64, 64, 64, 32, -32 }, { -64, -64, -64, 32, 32 },
     };
+
     s32 ret = 0;
-    struct_801C5F44* unkStruct;
+    SkyboxVertexData* unkStruct;
     s32 face;
 
     for (face = 0; face < arg1; face++) {
-        unkStruct = &D_801C5F44[face];
-        ret = func_80142440(skyboxCtx, skyboxCtx->roomVtx, ret, unkStruct->unk0, unkStruct->unk4, unkStruct->unk8,
+        unkStruct = &Skybox_VertexDataArray[face];
+        ret = Skybox_LoadTexturesAndPalette(skyboxCtx, skyboxCtx->roomVtx, ret, unkStruct->unk0, unkStruct->unk4, unkStruct->unk8,
                             unkStruct->unkC, unkStruct->unk10, face);
     }
 }
@@ -232,7 +234,7 @@ void Skybox_Setup(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) 
     }
 }
 
-void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
+void Skybox_ManageResources(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
     size_t size;
 
     switch (skyboxId) {
@@ -299,11 +301,11 @@ void Skybox_Init(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) {
         if (skyboxId == SKYBOX_CUTSCENE_MAP) {
             // Allocate enough space for the vertices for a 6 sided skybox (cube)
             skyboxCtx->roomVtx = THA_AllocTailAlign16(&gameState->tha, sizeof(Vtx) * 32 * 6);
-            func_80143148(skyboxCtx, 6);
+            Skybox_GenerateVertices(skyboxCtx, 6);
         } else {
             // Allocate enough space for the vertices for a 5 sided skybox (bottom is missing)
             skyboxCtx->roomVtx = THA_AllocTailAlign16(&gameState->tha, sizeof(Vtx) * 32 * 5);
-            func_80143148(skyboxCtx, 5);
+            Skybox_GenerateVertices(skyboxCtx, 5);
         }
     }
 }
