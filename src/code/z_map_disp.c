@@ -1,6 +1,7 @@
 #include "global.h"
 #include "gfx.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 void MapDisp_DestroyMapI(PlayState* play);
 void MapDisp_InitMapI(PlayState* play);
@@ -150,6 +151,7 @@ void func_801031D0(PlayState* play, TexturePtr arg1, s32 arg2, s32 arg3, s32 arg
     if ((spCC->mapId != 0xFFFF) && (arg1 != 0)) {
         MapDisp_GetMapTexDim(spCC, &spC8, &spC4);
         OPEN_DISPS(play->state.gfxCtx);
+
         Gfx_SetupDL39_Overlay(play->state.gfxCtx);
         MapData_GetMapColor(MapData_GetMapColorIndex(spCC->mapId), &spAC_color);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, spAC_color.r, spAC_color.g, spAC_color.b,
@@ -192,6 +194,7 @@ void func_801031D0(PlayState* play, TexturePtr arg1, s32 arg2, s32 arg3, s32 arg
         }
         gSPTextureRectangle(OVERLAY_DISP++, arg2 << 2, arg3 << 2, (spC8 + arg2) << 2, (arg3 + spC4) << 2,
                             G_TX_RENDERTILE, var_t1, var_t0, var_a3, var_a0_4);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -275,6 +278,7 @@ void func_80103A58(PlayState* play, Actor* actor) {
         }
         if ((spD8 > 0) && (spD8 < 0x3FF) && (spD4 > 0) && (spD4 < 0x3FF)) {
             OPEN_DISPS(play->state.gfxCtx);
+
             if ((actor->category == ACTORCAT_PLAYER) && (actor->flags & 0x80000000)) {
                 s16 spA2;
                 Gfx_SetupDL42_Overlay(play->state.gfxCtx);
@@ -351,6 +355,7 @@ void func_80103A58(PlayState* play, Actor* actor) {
                 gSPTextureRectangle(OVERLAY_DISP++, (spD8 - 1) << 2, (spD4 - 1) << 2, (spD8 + 1) << 2, (spD4 + 1) << 2,
                                     G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
             }
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }
@@ -366,6 +371,7 @@ void func_8010439C(PlayState* play) {
 
     if (play->roomCtx.curRoom.num != -1) {
         OPEN_DISPS(play->state.gfxCtx);
+
         gDPLoadTextureBlock_4b(OVERLAY_DISP++, &D_801BEB38, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
@@ -385,6 +391,7 @@ void func_8010439C(PlayState* play) {
                 } while (actor != NULL);
             }
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -397,15 +404,12 @@ void func_801045AC(PlayState* play, Actor* actor) {
     s32 sp6C;
     s32 sp68;
     s32 sp64;
-    Player* player;
+    Player* player = GET_PLAYER(play);
     f32 sp5C;
-    f32 temp_fv1;
+    f32 temp_fv1 = fabsf(player->actor.world.pos.y - actor->world.pos.y);
     s32 var_v1;
-    f32 sp50;
+    f32 sp50 = 1.0f - (1 / 350.0f) * temp_fv1;
 
-    player = GET_PLAYER(play);
-    temp_fv1 = fabsf(player->actor.world.pos.y - actor->world.pos.y);
-    sp50 = 1.0f - (1 / 350.0f) * temp_fv1;
     if (sp50 < 0) {
         sp50 = 0.0f;
     }
@@ -419,6 +423,7 @@ void func_801045AC(PlayState* play, Actor* actor) {
             var_v1 = 20;
         } else if (D_801BEBB8.minimapList->scale == -1) {
             s32 sp4C;
+
             MapDisp_GetMapScale(sp7C, &sp4C);
             var_v1 = sp4C;
         }
@@ -440,11 +445,13 @@ void func_801045AC(PlayState* play, Actor* actor) {
         }
         if ((sp78 > 0) && (sp78 < 0x3FF) && (sp74 > 0) && (sp74 < 0x3FF)) {
             OPEN_DISPS(play->state.gfxCtx);
+
             Gfx_SetupDL39_Overlay(play->state.gfxCtx);
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
             if ((actor->category == 0xA) && (func_80103A10(play) != 0)) {
                 s32 pad;
+
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, D_801BEC2C[actor->category].r, D_801BEC2C[actor->category].g,
                                 D_801BEC2C[actor->category].b,
                                 (s32)((D_801BEC2C[actor->category].a * (1.0f - D_801BEBB8.swapAnimTimer * 0.05f) *
@@ -456,6 +463,7 @@ void func_801045AC(PlayState* play, Actor* actor) {
                     var_v1 = 20;
                 } else if (D_801BEBB8.minimapList->scale == -1) {
                     s32 sp34;
+
                     MapDisp_GetMapScale(sp7C, &sp34);
                     var_v1 = sp34;
                 }
@@ -467,6 +475,7 @@ void func_801045AC(PlayState* play, Actor* actor) {
                                         (sp74 + 1) << 2, G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
                 }
             }
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }
@@ -478,6 +487,7 @@ void func_80104AE8(PlayState* play) {
 
     if (play->roomCtx.curRoom.num != -1) {
         OPEN_DISPS(play->state.gfxCtx);
+
         gDPLoadTextureBlock_4b(OVERLAY_DISP++, &D_801BEB38, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
@@ -492,17 +502,16 @@ void func_80104AE8(PlayState* play) {
                 actor = actor->next;
             } while (actor != NULL);
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
-// Possible fakematch
-// https://decomp.me/scratch/kvGBZ
+//! FAKE: https://decomp.me/scratch/kvGBZ
 void func_80104C80(PlayState* play) {
-    s32 objectSlot;
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_DANGEON_KEEP);
 
-    objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_DANGEON_KEEP);
-    if (objectSlot < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         D_801BEBB8.unk20 |= 1;
     } else {
         do { } while (!Object_IsLoaded(&play->objectCtx, objectSlot)); }
@@ -553,7 +562,7 @@ void MapDisp_Init(PlayState* play) {
     MapDisp_InitMapI(play);
     D_801BEBB8.unk58 = 0;
     D_801BEBB8.unk5A = 0;
-    if (Map_IsInBossArea(play) != 0) {
+    if (Map_IsInBossArea(play)) {
         func_8010549C(play, NULL);
         func_8010565C(play, 0, NULL);
     }
@@ -658,6 +667,7 @@ void func_8010534C(PlayState* play) {
             if (ABS_ALT(D_801F53B0[i].id) != 0x18) {
                 for (var_v0 = 0; var_v0 < D_801BEBB8.unk40; var_v0++) {
                     s32 temp = (D_801BEBB8.unk48[var_v0] - 5); // needed for matching
+
                     if (((var_v0 == D_801BEBB8.unk40 - 1) && (D_801F53B0[i].pos.y >= (D_801BEBB8.unk48[var_v0] - 5)))
 
                         ||
@@ -678,7 +688,7 @@ void func_8010549C(PlayState* play, void* segmentAddress) {
     MinimapList* temp_v0;
     s32 i;
 
-    if (Map_IsInBossArea(play) == 0) {
+    if (!Map_IsInBossArea(play)) {
         D_801BEC1C = play->numRooms;
         temp_v0 = Lib_SegmentedToVirtual(segmentAddress);
         D_801BEC14 = *temp_v0;
@@ -707,7 +717,7 @@ void func_8010565C(PlayState* play, s32 num, void* segmentAddress) {
     MinimapChest* var_v1;
     s32 var_a3;
 
-    if (Map_IsInBossArea(play) == 0) {
+    if (!Map_IsInBossArea(play)) {
         var_v1 = Lib_SegmentedToVirtual(segmentAddress);
         for (var_a3 = 0; var_a3 < num; var_v1++, var_a3++) {
             D_801F5270[var_a3] = *var_v1;
@@ -721,7 +731,7 @@ void func_8010565C(PlayState* play, s32 num, void* segmentAddress) {
 void func_80105818(PlayState* play, s32 num, TransitionActorEntry* transitionActorList) {
     s32 i;
 
-    if (Map_IsInBossArea(play) == 0) {
+    if (!Map_IsInBossArea(play)) {
         D_801BEC24.count = num;
         for (i = 0; i < num; i++) {
             D_801F53B0[i] = transitionActorList[i];
@@ -852,12 +862,14 @@ void MapDisp_SwapRooms(s16 nextRoom) {
                     s32 sp38;
                     s32 scale;
                     s32 pad;
+
                     MapDisp_GetMapPos(prevMinimapEntry, &sp3C, &sp38);
                     scale = D_801BEBB8.minimapList->scale;
                     if (D_801BEBB8.minimapList->scale == 0) {
                         scale = 20;
                     } else if (D_801BEBB8.minimapList->scale == -1) {
                         s32 scaleTemp;
+
                         MapDisp_GetMapScale(nextMinimapEntry, &scaleTemp);
                         scale = scaleTemp;
                     }
@@ -883,6 +895,7 @@ void MapDisp_SwapRooms(s16 nextRoom) {
                 case MAPDATA_MID_GAMEPLAY_DANGEON_KEEP:
                     D_801BEBB8.lMapCurTex = MapData_GetMapTexGameplayDangeonKeep(nextMinimapEntry->mapId);
                     return;
+
                 case MAPDATA_MID_MAP_GRAND_STATIC:
                     if (D_801BEBB8.lMapPrevTex == D_801BEBB8.texBuff0) {
                         D_801BEBB8.lMapCurTex = D_801BEBB8.texBuff1;
@@ -893,6 +906,9 @@ void MapDisp_SwapRooms(s16 nextRoom) {
                         CmpDma_LoadFile(SEGMENT_ROM_START(map_grand_static), nextMinimapEntry->mapId - 0x100,
                                         D_801BEBB8.lMapCurTex, MapData_GetSizeOfMapGrandTex(nextMinimapEntry->mapId));
                     }
+                    break;
+
+                default:
                     break;
             }
         }
@@ -921,6 +937,7 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
             var_v0 = 20;
         } else if (D_801BEBB8.minimapList->scale == -1) {
             s32 sp48;
+
             MapDisp_GetMapScale(sp6C, &sp48);
             var_v0 = sp48;
         }
@@ -934,6 +951,7 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
         }
         if ((sp68 > 0) && (sp68 < 0x3FF) && (sp64 > 0) && (sp64 < 0x3FF)) {
             OPEN_DISPS(play->state.gfxCtx);
+
             Gfx_SetupDL42_Overlay(play->state.gfxCtx);
             gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
@@ -951,6 +969,7 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0xFF, 200, 0, 0, play->interfaceCtx.minimapAlpha);
             gSPDisplayList(OVERLAY_DISP++, D_0401ED00);
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }
@@ -969,15 +988,15 @@ s32 func_80106408(PlayState* play) {
 
 s32 func_80106450(PlayState* play) {
     if (((func_8010A0A4(play) == 0) && (Inventory_IsMapVisible(play->sceneId) != 0)) ||
-        ((func_8010A0A4(play) != 0) && CHECK_DUNGEON_ITEM(2, gSaveContext.mapIndex))) {
+        ((func_8010A0A4(play) != 0) && CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.mapIndex))) {
         return true;
     }
     return false;
 }
 
 s32 func_801064CC(PlayState* play) {
-    if (((play->csCtx.state != 0) && (func_80106408(play) == 0)) || (D_801BEBB8.unk20 & 2) ||
-        (Map_IsInBossArea(play) != 0)) {
+    if (((play->csCtx.state != CS_STATE_IDLE) && !func_80106408(play)) || (D_801BEBB8.unk20 & 2) ||
+        Map_IsInBossArea(play)) {
         return true;
     }
     return false;
@@ -1026,9 +1045,9 @@ void func_80106644(PlayState* play, s32 x, s32 z, s32 rot) {
                 }
                 func_80104AE8(play);
             }
-            if (((func_8010A0A4(play) == 0) || CHECK_DUNGEON_ITEM(1, gSaveContext.mapIndex)) &&
+            if (((func_8010A0A4(play) == 0) || CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.mapIndex)) &&
                 ((func_8010A0A4(play) != 0) || Inventory_IsMapVisible(play->sceneId))) {
-                if (play->interfaceCtx.minigameState == 0) {
+                if (play->interfaceCtx.minigameState == MINIGAME_STATE_NONE) {
                     func_80105FE0(play, x, z, rot);
                 }
                 func_8010439C(play);
@@ -1154,12 +1173,16 @@ s32 func_80106D08(s32 sceneId) {
     switch (sceneId) {
         case SCENE_MITURIN_BS:
             return SCENE_MITURIN;
+
         case SCENE_HAKUGIN_BS:
             return SCENE_HAKUGIN;
+
         case SCENE_SEA_BS:
             return SCENE_SEA;
+
         case SCENE_INISIE_BS:
             return SCENE_INISIE_N;
+
         default:
             return sceneId;
     }
@@ -1187,7 +1210,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     temp2 = ((D_801F56B0.unk184 * 115.0f / 40.0f) + 140.0f) * 31.0f / 255.0f;
 
     D_801BECC4[1] = (temp1 << 6) | (temp2 << 1) | 1;
-    if (CHECK_DUNGEON_ITEM(2, arg6)) {
+    if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, arg6)) {
         D_801BEC84[0xF] = 0xAD5F;
         D_801BECA4[0xF] = 0xAD5F;
         D_801BECC4[0xF] = 0xAD5F;
@@ -1198,6 +1221,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     }
 
     OPEN_DISPS(play->state.gfxCtx);
+
     // temp_a0 = play->state.gfxCtx;
     // sp48 = arg6 + &gSaveContext;
     Gfx_SetupDL39_Opa(play->state.gfxCtx);
@@ -1257,7 +1281,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                         spEC = ((sp108->unk6 - (f32)D_801BEBB8.sceneMidZ) * arg5 - sp10C_offsetY) + ((arg4 / 2) + arg2);
 
                         if (var_s2 == play->roomCtx.curRoom.num) {
-                            if (Map_IsInBossArea(play) != 0) {
+                            if (Map_IsInBossArea(play)) {
                                 gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118_texWidth,
                                                        sp114_texHeight, 1, G_TX_NOMIRROR | G_TX_WRAP,
                                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -1277,7 +1301,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                                                    G_TX_NOLOD);
                         } else if (CHECK_DUNGEON_ITEM(
-                                       2,
+                                       DUNGEON_MAP,
                                        arg6)) { //*(gBitFlags + 8) & gSaveContext.save.inventory.dungeonItems[arg6]) {
                             gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118_texWidth,
                                                    sp114_texHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -1295,6 +1319,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
         }
     }
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_NONE);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 #else
@@ -1319,6 +1344,7 @@ void func_80107B78(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     if (D_801BEBB8.unk54 != NULL) {
         // temp_s1 = arg0->state.gfxCtx;
         OPEN_DISPS(arg0->state.gfxCtx);
+
         // temp_v1 = temp_s1->polyOpa.p;
         // temp_s1->polyOpa.p = temp_v1 + 8;
         // temp_v1->words.w1 = 0x00000000;
@@ -1425,15 +1451,19 @@ void func_80107B78(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                 case SCENE_MITURIN_BS:
                     var_v1_2 = gSaveContext.cycleSceneFlags[SCENE_MITURIN].chest & (1 << var_s0[var_s3].unk2);
                     break;
+
                 case SCENE_HAKUGIN_BS:
                     var_v1_2 = gSaveContext.cycleSceneFlags[SCENE_HAKUGIN].chest & (1 << var_s0[var_s3].unk2);
                     break;
+
                 case SCENE_SEA_BS:
                     var_v1_2 = gSaveContext.cycleSceneFlags[SCENE_SEA].chest & (1 << var_s0[var_s3].unk2);
                     break;
+
                 case SCENE_INISIE_BS:
                     var_v1_2 = gSaveContext.cycleSceneFlags[SCENE_INISIE_N].chest & (1 << var_s0[var_s3].unk2);
                     break;
+
                 default:
                     var_v1_2 = Flags_GetTreasure(arg0, (s32)var_s0[var_s3].unk2);
                     break;
@@ -1460,6 +1490,7 @@ void func_80107B78(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                                     (temp_ft0_2 + 8) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
             }
         }
+
         CLOSE_DISPS(arg0->state.gfxCtx);
     }
 }
@@ -1480,6 +1511,7 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
 
     if (transitionActors->count != 0) {
         OPEN_DISPS(play->state.gfxCtx);
+
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPLoadTextureBlock_4b(POLY_OPA_DISP++, &D_801BEB38, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -1488,7 +1520,7 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                 if ((ABS_ALT(D_801F53B0[i].id) != ACTOR_EN_HOLL) && (func_80105328(D_801F53B0[i].params) == 0)) {
                     roomA = D_801F53B0[i].sides[0].room;
                     roomB = D_801F53B0[i].sides[1].room;
-                    if (CHECK_DUNGEON_ITEM(2, gSaveContext.mapIndex) || (roomA < 0) ||
+                    if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.mapIndex) || (roomA < 0) ||
                         (gSaveContext.save.saveInfo
                              .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                              .rooms &
@@ -1508,6 +1540,7 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                 }
             }
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -1523,13 +1556,14 @@ void func_80108558(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
 
     sp30 = &D_801BEC24;
     OPEN_DISPS(arg0->state.gfxCtx);
+
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_NONE);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_AA_DEC_LINE, G_RM_NOOP2);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, arg0->pauseCtx.alpha);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gDPPipeSync(POLY_OPA_DISP++);
-    if (CHECK_DUNGEON_ITEM(1, arg6)) {
+    if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, arg6)) {
         gDPLoadTextureBlock_TEST(POLY_OPA_DISP++, &D_02002460, G_IM_FMT_IA, D_801BEAE0[1], D_801BEAF0[1], D_801BEB00[1],
                                  D_801BEB10[1], D_801BEB20[1], D_801BEAD0[1], 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -1547,6 +1581,7 @@ void func_80108558(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
             }
         }
     }
+
     CLOSE_DISPS(arg0->state.gfxCtx);
 }
 #else
@@ -1567,13 +1602,13 @@ TexturePtr func_80108A10(s32 arg0) {
 s32 func_80108A64(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
 
-    if (pauseCtx->pageIndex != 1) {
+    if (pauseCtx->pageIndex != PAUSE_MAP) {
         return 1;
     }
-    if ((pauseCtx->state == 7) || ((pauseCtx->state >= 8) && (pauseCtx->state < 0x13))) {
+    if ((pauseCtx->state == PAUSE_STATE_SAVEPROMPT) || IS_PAUSE_STATE_GAMEOVER) {
         return 1;
     }
-    if ((pauseCtx->state != 6) || (pauseCtx->mainState != 0)) {
+    if ((pauseCtx->state != PAUSE_STATE_MAIN) || (pauseCtx->mainState != PAUSE_MAIN_STATE_IDLE)) {
         return 1;
     }
     if (pauseCtx->alpha == 0) {
@@ -1582,7 +1617,6 @@ s32 func_80108A64(PlayState* play) {
     return 0;
 }
 
-// https://decomp.me/scratch/4gO7Z
 void func_80108AF8(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s32 temp_a0_2;
@@ -1594,25 +1628,32 @@ void func_80108AF8(PlayState* play) {
     s32 spB4 = 0;
 
     if ((D_801BEBB8.minimapList != NULL) && (D_801BEC1C != 0) && (func_80108A64(play) == 0)) {
-        if (Map_IsInBossArea(play) != 0) {
+        if (Map_IsInBossArea(play)) {
             switch (play->sceneId) {
                 case SCENE_MITURIN_BS:
                     spB4 = 0;
                     break;
+
                 case SCENE_HAKUGIN_BS:
                     spB4 = 1;
                     break;
+
                 case SCENE_SEA_BS:
                     spB4 = 2;
                     break;
+
                 case SCENE_INISIE_BS:
                     spB4 = 3;
+                    break;
+
+                default:
                     break;
             }
         } else {
             spB4 = gSaveContext.mapIndex;
         }
         OPEN_DISPS(play->state.gfxCtx);
+
         Gfx_SetupDL39_Opa(play->state.gfxCtx);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 200, pauseCtx->alpha);
@@ -1621,7 +1662,7 @@ void func_80108AF8(PlayState* play) {
             if ((gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                      .unk_14 &
                  gBitFlags[4 - var_s1]) ||
-                CHECK_DUNGEON_ITEM2(2, spB4)) {
+                CHECK_DUNGEON_ITEM2(DUNGEON_MAP, spB4)) {
                 gDPLoadTextureBlock(POLY_OPA_DISP++, func_80108A10(D_801BEBB8.unk44 + var_s1), G_IM_FMT_IA, G_IM_SIZ_8b,
                                     24, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                                     G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -1651,6 +1692,7 @@ void func_80108AF8(PlayState* play) {
                                 G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
         }
         Gfx_SetupDL42_Opa(play->state.gfxCtx);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -1702,19 +1744,25 @@ void func_801091F0(PlayState* play) {
     sp40 = 0;
     sp3C = 0;
     if (func_80108A64(play) == 0) {
-        if (Map_IsInBossArea(play) != 0) {
+        if (Map_IsInBossArea(play)) {
             switch (play->sceneId) {
                 case SCENE_MITURIN_BS:
                     sp44 = 0;
                     break;
+
                 case SCENE_HAKUGIN_BS:
                     sp44 = 1;
                     break;
+
                 case SCENE_SEA_BS:
                     sp44 = 2;
                     break;
+
                 case SCENE_INISIE_BS:
                     sp44 = 3;
+                    break;
+
+                default:
                     break;
             }
         } else {
@@ -1738,7 +1786,7 @@ void func_801091F0(PlayState* play) {
                 func_80106D5C(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, 1.0f / var_t2, sp44);
                 func_80108124(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, 1.0f / var_t2, sp44);
                 func_80108558(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, 1.0f / var_t2, sp44);
-                if (CHECK_DUNGEON_ITEM(1, sp44)) {
+                if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, sp44)) {
                     func_80107B78(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, 1.0f / var_t2);
                 }
             }

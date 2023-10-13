@@ -2,13 +2,13 @@
 #include "z64map.h"
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
-static Color_RGBA8 mapColorTable[3] = {
+static Color_RGBA8 sMapColorTable[] = {
     { 255, 255, 255, 255 },
     { 0, 255, 255, 160 }, // Blue
     { 100, 255, 255, 255 },
 };
 
-static MapSpriteInfo2 gameplay_dangeon_keep_Info[5] = {
+static MapSpriteInfo2 sGameplayDangeonKeepInfo[5] = {
     { &gameplay_dangeon_keep_Tex_0022C8, 96, 85, 48, 42, MAPDATA_DRAW_0, 0, 20 },
     { &gameplay_dangeon_keep_Tex_0042C8, 96, 85, 48, 62, MAPDATA_DRAW_0, 0, 20 },
     { &gameplay_dangeon_keep_Tex_0052C8, 96, 85, 68, 42, MAPDATA_DRAW_0, 0, 20 },
@@ -16,7 +16,7 @@ static MapSpriteInfo2 gameplay_dangeon_keep_Info[5] = {
     { &gameplay_dangeon_keep_Tex_0062C8, 96, 85, 68, 62, MAPDATA_DRAW_0, 0, 20 },
 };
 
-static MapSpriteInfo map_grand_static_Info[98] = {
+static MapSpriteInfo sMapGrandStaticInfo[98] = {
     { 96, 85, 48, 42, MAPDATA_DRAW_0, 0, 20 },   { 96, 85, 48, 62, MAPDATA_DRAW_0, 0, 20 },
     { 96, 85, 68, 42, MAPDATA_DRAW_0, 0, 20 },   { 96, 85, 48, 62, MAPDATA_DRAW_0, 0, 20 },
     { 96, 85, 68, 62, MAPDATA_DRAW_0, 0, 20 },   { 80, 72, 40, 35, MAPDATA_DRAW_1, 1, 52 },
@@ -72,7 +72,7 @@ static s32 D_801BF15C[5] = {
     0x50, 0x50, 0x8D, 0x50, 0x50,
 };
 
-static MapSpriteInfo map_i_static_Info[MAPDATA_MAP_I_MAX] = {
+static MapSpriteInfo sMapIStaticInfo[MAPDATA_MAP_I_MAX] = {
     { 96, 85, 73, 67, MAPDATA_DRAW_0, 0, 60 }, { 96, 85, 73, 74, MAPDATA_DRAW_0, 0, 60 },
     { 96, 85, 80, 67, MAPDATA_DRAW_0, 0, 60 }, { 96, 85, 73, 67, MAPDATA_DRAW_0, 0, 60 },
     { 96, 85, 80, 74, MAPDATA_DRAW_0, 0, 60 }, { 32, 29, 17, 14, MAPDATA_DRAW_2, 0, 50 },
@@ -104,11 +104,11 @@ static MapSpriteInfo map_i_static_Info[MAPDATA_MAP_I_MAX] = {
     { 16, 30, 9, 8, MAPDATA_DRAW_2, 0, 90 },   { 16, 9, 9, 4, MAPDATA_DRAW_2, 0, 90 },
 };
 
-static s32 map_i_for_gameplay_dangeon_keep[5] = {
+static s32 sMapIForGameplayDangeonKeep[5] = {
     0x00, 0x01, 0x02, 0x03, 0x04,
 };
 
-static s32 map_i_for_map_grand[98] = {
+static s32 sMapIForMapGrand[98] = {
     MAPDATA_MAP_I_MAX,
     0x01,
     0x02,
@@ -212,55 +212,55 @@ static s32 map_i_for_map_grand[98] = {
 s32 MapDisp_GetSizeOfMapITex(s32 mapId);
 
 void MapData_GetMapColor(s32 colorIndex, Color_RGBA8* color) {
-    *color = mapColorTable[colorIndex];
+    *color = sMapColorTable[colorIndex];
 }
 
 void MapData_GetMapTexDimGameplayDangeonKeep(s32 mapId, s32* width, s32* height) {
-    *width = gameplay_dangeon_keep_Info[mapId].width;
-    *height = gameplay_dangeon_keep_Info[mapId].height;
+    *width = sGameplayDangeonKeepInfo[mapId].width;
+    *height = sGameplayDangeonKeepInfo[mapId].height;
 }
 
 void MapData_GetMapTexOffsetGameplayDangeonKeep(s32 mapId, s32* offsetX, s32* offsetY) {
-    *offsetX = gameplay_dangeon_keep_Info[mapId].offsetX;
-    *offsetY = gameplay_dangeon_keep_Info[mapId].offsetY;
+    *offsetX = sGameplayDangeonKeepInfo[mapId].offsetX;
+    *offsetY = sGameplayDangeonKeepInfo[mapId].offsetY;
 }
 
 void MapData_GetMapDrawTypeGameplayDangeonKeep(s32 mapId, s32* drawType) {
-    *drawType = gameplay_dangeon_keep_Info[mapId].drawType;
+    *drawType = sGameplayDangeonKeepInfo[mapId].drawType;
 }
 
 u8 MapData_GetMapColorIndexGameplayDangeonKeep(s32 mapId) {
-    return gameplay_dangeon_keep_Info[mapId].colorIndex;
+    return sGameplayDangeonKeepInfo[mapId].colorIndex;
 }
 
 s16 MapData_GetMapGameplayDangeonKeepScale(s32 mapId) {
-    return gameplay_dangeon_keep_Info[mapId].scale;
+    return sGameplayDangeonKeepInfo[mapId].scale;
 }
 
 TexturePtr MapData_GetMapTexGameplayDangeonKeep(s32 mapId) {
-    return gameplay_dangeon_keep_Info[mapId].lmapTex;
+    return sGameplayDangeonKeepInfo[mapId].lmapTex;
 }
 
 void MapData_GetMapTexGameplayDangeonKeepDim(s32 mapId, s32* width, s32* height) {
-    *width = map_grand_static_Info[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].texWidth;
-    *height = map_grand_static_Info[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].texHeight;
+    *width = sMapGrandStaticInfo[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].texWidth;
+    *height = sMapGrandStaticInfo[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].texHeight;
 }
 
 void MapData_GetMapTexGameplayDangeonKeepOffset(s32 mapId, s32* offsetX, s32* offsetY) {
-    *offsetX = map_grand_static_Info[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].offsetX;
-    *offsetY = map_grand_static_Info[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].offsetY;
+    *offsetX = sMapGrandStaticInfo[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].offsetX;
+    *offsetY = sMapGrandStaticInfo[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].offsetY;
 }
 
 void MapData_GetMapGrandDrawType(s32 mapId, s32* drawType) {
-    *drawType = map_grand_static_Info[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].drawType;
+    *drawType = sMapGrandStaticInfo[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].drawType;
 }
 
 u8 MapData_GetMapGrandColorIndex(s32 mapId) {
-    return map_grand_static_Info[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].colorIndex;
+    return sMapGrandStaticInfo[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].colorIndex;
 }
 
 s16 MapData_GetMapGrandScale(s32 mapId) {
-    return map_grand_static_Info[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].scale;
+    return sMapGrandStaticInfo[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].scale;
 }
 
 s32 MapData_MapGrandTexSizeTest(s32 mapId) {
@@ -275,8 +275,8 @@ s32 MapData_MapGrandTexSizeTest(s32 mapId) {
 }
 
 s32 MapData_GetSizeOfMapGrandTex(s32 mapId) {
-    return (map_grand_static_Info[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].texWidth *
-            map_grand_static_Info[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].texHeight) /
+    return (sMapGrandStaticInfo[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].texWidth *
+            sMapGrandStaticInfo[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)].texHeight) /
            2;
 }
 
@@ -295,9 +295,11 @@ void MapData_GetMapTexDim(s32 mapId, s32* width, s32* height) {
         case MAPDATA_MID_GAMEPLAY_DANGEON_KEEP:
             MapData_GetMapTexDimGameplayDangeonKeep(mapId, width, height);
             return;
+
         case MAPDATA_MID_MAP_GRAND_STATIC:
             MapData_GetMapTexGameplayDangeonKeepDim(mapId, width, height);
             return;
+
         default:
             *width = *height = 0;
             return;
@@ -309,9 +311,11 @@ void MapData_GetMapTexOffset(s32 mapId, s32* offsetX, s32* offsetY) {
         case MAPDATA_MID_GAMEPLAY_DANGEON_KEEP:
             MapData_GetMapTexOffsetGameplayDangeonKeep(mapId, offsetX, offsetY);
             return;
+
         case MAPDATA_MID_MAP_GRAND_STATIC:
             MapData_GetMapTexGameplayDangeonKeepOffset(mapId, offsetX, offsetY);
             return;
+
         default:
             *offsetX = *offsetY = 0;
             return;
@@ -323,9 +327,11 @@ void MapData_GetMapScale(s32 mapId, s32* scale) {
         default:
             *scale = 0;
             return;
+
         case MAPDATA_MID_GAMEPLAY_DANGEON_KEEP:
             *scale = MapData_GetMapGameplayDangeonKeepScale(mapId);
             return;
+
         case MAPDATA_MID_MAP_GRAND_STATIC:
             *scale = MapData_GetMapGrandScale(mapId);
             return;
@@ -337,9 +343,11 @@ void MapData_GetDrawType(s32 mapId, s32* drawType) {
         case MAPDATA_MID_GAMEPLAY_DANGEON_KEEP:
             MapData_GetMapDrawTypeGameplayDangeonKeep(mapId, drawType);
             return;
+
         case MAPDATA_MID_MAP_GRAND_STATIC:
             MapData_GetMapGrandDrawType(mapId, drawType);
             return;
+
         default:
             *drawType = 0;
             return;
@@ -350,8 +358,10 @@ s32 MapData_GetMapColorIndex(s32 mapId) {
     switch (MapData_MID_GetType(mapId)) {
         case MAPDATA_MID_GAMEPLAY_DANGEON_KEEP:
             return MapData_GetMapColorIndexGameplayDangeonKeep(mapId);
+
         case MAPDATA_MID_MAP_GRAND_STATIC:
             return MapData_GetMapGrandColorIndex(mapId);
+
         default:
             return 0;
     }
@@ -362,32 +372,31 @@ s32 func_80109964(s32 arg0) {
 }
 
 void MapData_GetMapITexDim(s32 mapId, s32* width, s32* height) {
-    *width = map_i_static_Info[mapId].texWidth;
-    *height = map_i_static_Info[mapId].texHeight;
+    *width = sMapIStaticInfo[mapId].texWidth;
+    *height = sMapIStaticInfo[mapId].texHeight;
 }
 
 void MapData_GetMapITexOffset(s32 mapId, s32* offsetX, s32* offsetY) {
-    *offsetX = map_i_static_Info[mapId].offsetX;
-    *offsetY = map_i_static_Info[mapId].offsetY;
+    *offsetX = sMapIStaticInfo[mapId].offsetX;
+    *offsetY = sMapIStaticInfo[mapId].offsetY;
 }
 
 void MapData_GetMapIDrawType(s32 mapId, s32* drawType) {
-    *drawType = map_i_static_Info[mapId].drawType;
+    *drawType = sMapIStaticInfo[mapId].drawType;
 }
 
 u8 MapData_GetMapIColorIndex(s32 mapId) {
-    return map_i_static_Info[mapId].colorIndex;
+    return sMapIStaticInfo[mapId].colorIndex;
 }
 
 s16 MapData_GetMapIScale(s32 mapId) {
-    return map_i_static_Info[mapId].scale;
+    return sMapIStaticInfo[mapId].scale;
 }
 
 s32 MapData_MapITexSizeTest(s32 mapId) {
     s32 i;
-    s32 size;
+    s32 size = 0;
 
-    size = 0;
     for (i = 1; i < mapId + 1; i++) {
         size += MapDisp_GetSizeOfMapITex(i - 1);
     }
@@ -396,15 +405,17 @@ s32 MapData_MapITexSizeTest(s32 mapId) {
 }
 
 s32 MapDisp_GetSizeOfMapITex(s32 mapId) {
-    return (map_i_static_Info[mapId].texWidth * map_i_static_Info[mapId].texHeight) / 2;
+    return (sMapIStaticInfo[mapId].texWidth * sMapIStaticInfo[mapId].texHeight) / 2;
 }
 
 s32 MapData_GetMapIId(s32 mapId) {
     switch (MapData_MID_GetType(mapId)) {
         case MAPDATA_MID_GAMEPLAY_DANGEON_KEEP:
-            return map_i_for_gameplay_dangeon_keep[mapId];
+            return sMapIForGameplayDangeonKeep[mapId];
+
         case MAPDATA_MID_MAP_GRAND_STATIC:
-            return map_i_for_map_grand[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)];
+            return sMapIForMapGrand[MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId)];
+
         default:
             return 0;
     }
@@ -417,8 +428,10 @@ s32 func_80109B38(s32 mapId) {
     switch (MapData_MID_GetType(mapId)) {
         case MAPDATA_MID_GAMEPLAY_DANGEON_KEEP:
             return 2;
+
         case MAPDATA_MID_MAP_GRAND_STATIC:
             return 0;
+
         default:
             return 0;
     }
@@ -457,10 +470,13 @@ s32 func_80109C38(s32 mapCompactId) {
     switch (MapData_CPID_GetType(mapCompactId)) {
         case MAPDATA_CPID_MAP_GRAND_STATIC:
             return MapData_MapGrandTexSizeTest(MAPDATA_GET_MAP_GRAND_ID_FROM_COMPACT_ID(mapCompactId));
+
         case MAPDATA_CPID_MAP_I_STATIC:
             return MapData_MapITexSizeTest(mapCompactId);
+
         case MAPDATA_CPID_2:
             return 0;
+
         default:
             return 0;
     }
@@ -473,16 +489,18 @@ s32 MapData_CPID_GetSizeOfMapTex(s32 mapCompactId) {
     switch (MapData_CPID_GetType(mapCompactId)) {
         case MAPDATA_CPID_MAP_GRAND_STATIC:
             return MapData_GetSizeOfMapGrandTex(MAPDATA_GET_MAP_GRAND_ID_FROM_COMPACT_ID(mapCompactId));
+
         case MAPDATA_CPID_MAP_I_STATIC:
             return MapDisp_GetSizeOfMapITex(mapCompactId);
+
         case MAPDATA_CPID_2:
             return 0;
+
         default:
             return 0;
     }
 }
 
-// GOOD
 void MapData_CPID_GetTexDim(s32 mapCompactId, s32* width, s32* height) {
     if (mapCompactId == -1) {
         *width = *height = 0;
@@ -493,9 +511,11 @@ void MapData_CPID_GetTexDim(s32 mapCompactId, s32* width, s32* height) {
             MapData_GetMapTexGameplayDangeonKeepDim(MAPDATA_GET_MAP_GRAND_ID_FROM_COMPACT_ID(mapCompactId), width,
                                                     height);
             return;
+
         case MAPDATA_CPID_MAP_I_STATIC:
             MapData_GetMapITexDim(mapCompactId, width, height);
             return;
+
         case MAPDATA_CPID_2:
         default:
             *width = *height = 0;
@@ -503,7 +523,6 @@ void MapData_CPID_GetTexDim(s32 mapCompactId, s32* width, s32* height) {
     }
 }
 
-// GOOD
 void MapData_CPID_GetTexOffset(s32 mapCompactId, s32* offsetX, s32* offsetY) {
     if (mapCompactId == -1) {
         *offsetX = *offsetY = 0;
@@ -514,9 +533,11 @@ void MapData_CPID_GetTexOffset(s32 mapCompactId, s32* offsetX, s32* offsetY) {
             MapData_GetMapTexGameplayDangeonKeepOffset(MAPDATA_GET_MAP_GRAND_ID_FROM_COMPACT_ID(mapCompactId), offsetX,
                                                        offsetY);
             return;
+
         case MAPDATA_CPID_MAP_I_STATIC:
             MapData_GetMapITexOffset(mapCompactId, offsetX, offsetY);
             return;
+
         case MAPDATA_CPID_2:
         default:
             *offsetX = *offsetY = 0;
@@ -534,9 +555,11 @@ void MapData_CPID_GetDrawType(s32 mapCompactId, s32* drawType) {
         case MAPDATA_CPID_MAP_GRAND_STATIC:
             MapData_GetMapGrandDrawType(MAPDATA_GET_MAP_GRAND_ID_FROM_COMPACT_ID(mapCompactId), drawType);
             return;
+
         case MAPDATA_CPID_MAP_I_STATIC:
             MapData_GetMapIDrawType(mapCompactId, drawType);
             return;
+
         case MAPDATA_CPID_2:
         default:
             *drawType = MAPDATA_DRAW_0;
@@ -552,15 +575,16 @@ u8 MapData_CPID_GetMapColorIndex(s32 mapCompactId) {
     switch (MapData_CPID_GetType(mapCompactId)) {
         case MAPDATA_CPID_MAP_GRAND_STATIC:
             return MapData_GetMapGrandColorIndex(MAPDATA_GET_MAP_GRAND_ID_FROM_COMPACT_ID(mapCompactId));
+
         case MAPDATA_CPID_MAP_I_STATIC:
             return MapData_GetMapIColorIndex(mapCompactId);
+
         case MAPDATA_CPID_2:
         default:
             return 0;
     }
 }
 
-// GOOD
 s16 MapData_CPID_GetMapScale(s32 mapCompactId) {
     if (mapCompactId == -1) {
         return 0;
@@ -568,8 +592,10 @@ s16 MapData_CPID_GetMapScale(s32 mapCompactId) {
     switch (MapData_CPID_GetType(mapCompactId)) {
         case MAPDATA_CPID_MAP_GRAND_STATIC:
             return MapData_GetMapGrandScale(MAPDATA_GET_MAP_GRAND_ID_FROM_COMPACT_ID(mapCompactId));
+
         case MAPDATA_CPID_MAP_I_STATIC:
             return MapData_GetMapIScale(mapCompactId);
+
         case MAPDATA_CPID_2:
         default:
             return 0;
