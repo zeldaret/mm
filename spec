@@ -2108,8 +2108,7 @@ beginseg
     name "ovl_Obj_Boyo"
     compress
     include "build/src/overlays/actors/ovl_Obj_Boyo/z_obj_boyo.o"
-    include "build/data/ovl_Obj_Boyo/ovl_Obj_Boyo.data.o"
-    include "build/data/ovl_Obj_Boyo/ovl_Obj_Boyo.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Boyo/ovl_Obj_Boyo_reloc.o"
 endseg
 
 beginseg
@@ -2137,8 +2136,7 @@ beginseg
     name "ovl_Obj_Grass_Unit"
     compress
     include "build/src/overlays/actors/ovl_Obj_Grass_Unit/z_obj_grass_unit.o"
-    include "build/data/ovl_Obj_Grass_Unit/ovl_Obj_Grass_Unit.data.o"
-    include "build/data/ovl_Obj_Grass_Unit/ovl_Obj_Grass_Unit.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Grass_Unit/ovl_Obj_Grass_Unit_reloc.o"
 endseg
 
 beginseg
@@ -3334,8 +3332,7 @@ beginseg
     name "ovl_En_Takaraya"
     compress
     include "build/src/overlays/actors/ovl_En_Takaraya/z_en_takaraya.o"
-    include "build/data/ovl_En_Takaraya/ovl_En_Takaraya.data.o"
-    include "build/data/ovl_En_Takaraya/ovl_En_Takaraya.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Takaraya/ovl_En_Takaraya_reloc.o"
 endseg
 
 beginseg

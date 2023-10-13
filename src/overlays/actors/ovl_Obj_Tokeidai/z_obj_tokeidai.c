@@ -835,9 +835,9 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     if (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_WALL_CLOCK ||
         OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_SMALL_WALL_CLOCK) {
-        gSPDisplayList(POLY_OPA_DISP++, gWallClockClockFace);
+        gSPDisplayList(POLY_OPA_DISP++, gWallClockClockFaceDL);
     } else {
-        gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockFace);
+        gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockFaceDL);
     }
 
     Matrix_Translate(0.0f, -1112.0f, -19.6f, MTXMODE_APPLY);
