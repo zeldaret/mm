@@ -247,7 +247,7 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
         Audio_PlaySfx_2(NA_SE_OC_SECRET_HOLE_OUT);
-        func_801A4058(5);
+        Audio_MuteAllSeqExceptSystemAndOcarina(5);
         gSaveContext.seqId = (u8)NA_BGM_DISABLED;
         gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     }

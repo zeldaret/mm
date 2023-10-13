@@ -4503,7 +4503,7 @@ void func_80831F34(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
             this->actionVar1 = 1;
         } else {
             play->gameOverCtx.state = GAMEOVER_DEATH_START;
-            func_801A41F8(0);
+            Audio_StopFanfare(0);
             Audio_PlayFanfare(NA_BGM_GAME_OVER);
             gSaveContext.seqId = (u8)NA_BGM_DISABLED;
             gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
@@ -6127,7 +6127,7 @@ s32 Player_HandleExitsAndVoids(PlayState* play, Player* this, CollisionPoly* pol
 
                 if ((this->stateFlags1 & PLAYER_STATE1_8000000) && (this->floorProperty == FLOOR_PROPERTY_5)) {
                     Audio_PlaySfx_2(NA_SE_OC_TUNAMI);
-                    func_801A4058(5);
+                    Audio_MuteAllSeqExceptSystemAndOcarina(5);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
@@ -6149,7 +6149,7 @@ s32 Player_HandleExitsAndVoids(PlayState* play, Player* this, CollisionPoly* pol
                 ((sp34 < 100) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND))) {
                 if (floorType == FLOOR_TYPE_11) {
                     Audio_PlaySfx_2(NA_SE_OC_SECRET_HOLE_OUT);
-                    func_801A4058(5);
+                    Audio_MuteAllSeqExceptSystemAndOcarina(5);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 } else {
@@ -8564,9 +8564,9 @@ void func_8083BB4C(PlayState* play, Player* this) {
         if ((this->transformation == PLAYER_FORM_ZORA) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             this->currentBoots = PLAYER_BOOTS_ZORA_LAND;
         }
-        func_801A3E38(0);
+        Audio_SetBaseFilter(0);
     } else {
-        func_801A3E38(0x20);
+        Audio_SetBaseFilter(0x20);
         if ((this->transformation == PLAYER_FORM_ZORA) || (sp1C < 10.0f)) {
             this->underwaterTimer = 0;
         } else if (this->underwaterTimer < 300) {
@@ -11240,7 +11240,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
         this->floorProperty = SurfaceType_GetFloorProperty(&play->colCtx, floorPoly, this->actor.floorBgId);
 
         if (this == GET_PLAYER(play)) {
-            func_801A3CF4(SurfaceType_GetEcho(&play->colCtx, floorPoly, this->actor.floorBgId));
+            Audio_SetCodeReverb(SurfaceType_GetEcho(&play->colCtx, floorPoly, this->actor.floorBgId));
 
             if (this->actor.floorBgId == BGCHECK_SCENE) {
                 Environment_ChangeLightSetting(

@@ -620,5 +620,5 @@ void func_8012EBF8(PlayState* play, RoomContext* roomCtx) {
         Map_InitRoomData(play, roomCtx->curRoom.num);
         Minimap_SavePlayerRoomInitInfo(play);
     }
-    func_801A3CD8(play->roomCtx.curRoom.echo);
+    Audio_SetEnvReverb(play->roomCtx.curRoom.echo);
 }
