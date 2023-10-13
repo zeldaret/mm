@@ -51,10 +51,10 @@ typedef struct EnAn {
     /* 0x210 */ s32 msgScriptResumePos;
     /* 0x214 */ s8 roomNum;
     /* 0x215 */ s8 doorOpenTimer;
-    /* 0x218 */ Actor* lookAtActor;
+    /* 0x218 */ Actor* lookAtActor; // interactActor
     /* 0x21C */ UNK_TYPE1 unk_21C[0xC];
-    /* 0x228 */ Vec3f unk_228;
-    /* 0x234 */ Vec3f unk_234;
+    /* 0x228 */ Vec3f doorEntrancePos; // Position of the point just before entering the door
+    /* 0x234 */ Vec3f doorExitPos; // Position of the point just after passing through the door
     /* 0x240 */ Vec3f headComputedPos;
     /* 0x24C */ UNK_TYPE1 unk_24C[0xC];
     /* 0x258 */ Vec3s headComputedRot;
@@ -68,7 +68,11 @@ typedef struct EnAn {
     /* 0x36C */ UNK_TYPE1 unk_36C[0x8];
     /* 0x374 */ f32 unk_374;
     /* 0x378 */ s16 unk_378; // schedule time diff
-    /* 0x37A */ s16 unk_37A; // schedule time diff
+    /* 0x37A */ union {
+        s16 unk_37A; // schedule time diff
+        s16 laundryPoolState;
+        s16 followScheduleState; // unused
+    } var1;
     /* 0x37C */ s16 headRotZ;
     /* 0x37E */ s16 headRotY;
     /* 0x380 */ UNK_TYPE1 unk_380[0x4];
