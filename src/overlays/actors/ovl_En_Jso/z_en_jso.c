@@ -7,6 +7,7 @@
 #include "z_en_jso.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Encount3/z_en_encount3.h"
+#include "overlays/actors/ovl_En_Part/z_en_part.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
@@ -978,9 +979,8 @@ void EnJso_SetupStunned(EnJso* this) {
     AudioSfx_SetChannelIO(&this->actor.projectedPos, NA_SE_EN_ANSATSUSYA_DASH_2, 0);
     EnJso_ChangeAnim(this, EN_JSO_ANIM_DAMAGED);
 
-    //! @bug: This assignment is immediately overriden below.
+    // This assignment is immediately overriden below.
     this->timer = 30;
-
     this->actor.speed = 0.0f;
     if (((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
          (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) &&
@@ -1086,7 +1086,7 @@ void EnJso_JumpBack(EnJso* this, PlayState* play) {
         this->actor.speed = 0.0f;
     }
 
-    if ((this->timer == 0) || ((this->animEndFrame <= curFrame) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND))) {
+    if ((this->timer == 0) || ((curFrame >= this->animEndFrame) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND))) {
         this->actor.world.rot.x = 0;
         this->actor.velocity.y = 0.0f;
         this->actor.speed = 0.0f;
@@ -1554,7 +1554,7 @@ void EnJso_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
     if (limbIndex == GARO_LIMB_LEFT_SWORD) {
         if (this->swordState == EN_JSO_SWORD_STATE_KNOCKED_OUT_OF_HANDS) {
-            Actor_SpawnBodyParts(&this->actor, play, 15, dList);
+            Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_15), dList);
         }
 
         Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
@@ -1569,7 +1569,7 @@ void EnJso_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         Matrix_MultVec3f(&sSwordBaseOffset, &swordBasePos);
 
         if (((this->action == EN_JSO_ACTION_SLASH) || (this->action == EN_JSO_ACTION_DASH_ATTACK)) &&
-            (!this->disableBlure)) {
+            !this->disableBlure) {
             EffectBlure_AddVertex(Effect_GetByIndex(this->leftSwordBlureIndex), &swordTipPos, &swordBasePos);
         } else if (this->disableBlure == true) {
             EffectBlure_AddSpace(Effect_GetByIndex(this->leftSwordBlureIndex));
@@ -1578,7 +1578,7 @@ void EnJso_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
     if (limbIndex == GARO_LIMB_RIGHT_SWORD) {
         if (this->swordState == EN_JSO_SWORD_STATE_KNOCKED_OUT_OF_HANDS) {
-            Actor_SpawnBodyParts(&this->actor, play, 15, dList);
+            Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_15), dList);
             this->swordState = EN_JSO_SWORD_STATE_NONE_DRAWN;
         }
 
@@ -1594,7 +1594,7 @@ void EnJso_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         Matrix_MultVec3f(&sSwordBaseOffset, &swordBasePos);
 
         if (((this->action == EN_JSO_ACTION_SLASH) || (this->action == EN_JSO_ACTION_DASH_ATTACK)) &&
-            (!this->disableBlure)) {
+            !this->disableBlure) {
             EffectBlure_AddVertex(Effect_GetByIndex(this->rightSwordBlureIndex), &swordTipPos, &swordBasePos);
         } else if (this->disableBlure == true) {
             EffectBlure_AddSpace(Effect_GetByIndex(this->rightSwordBlureIndex));
@@ -1652,30 +1652,30 @@ void EnJso_Draw(Actor* thisx, PlayState* play) {
         for (i = 0; i < this->afterimageCount; i++) {
             if (sAfterimageAlpha[i] == 0) {
                 continue;
-            } else {
-                Matrix_Translate(this->afterimagePos[index].x, this->afterimagePos[index].y,
-                                 this->afterimagePos[index].z, MTXMODE_NEW);
-                Matrix_Scale(this->scale, this->scale, this->scale, MTXMODE_APPLY);
-                //! @bug: These matrix rotation functions are supposed to be passed binangs, so using BINANG_TO_RAD here
-                //! is incorrect. Specifically, it results in rotation values far smaller than expected, since
-                //! BINANG_TO_RAD divides the angle by 0x8000. In-game, this bug manifests as the Garo's afterimages
-                //! looking the "wrong way", as they have a rotation close to (0, 0, 0) instead of matching the Garo's
-                //! rotation as intended. This bug can be fixed by using the correct matrix rotation functions (e.g.,
-                //! Matrix_RotateYF instead of Matrix_RotateYS) or by removing BINANG_TO_RAD entirely.
-                Matrix_RotateYS(BINANG_TO_RAD(this->afterimageRot[index].y), MTXMODE_APPLY);
-                Matrix_RotateXS(BINANG_TO_RAD(this->afterimageRot[index].x), MTXMODE_APPLY);
-                Matrix_RotateZS(BINANG_TO_RAD(this->afterimageRot[index].z), MTXMODE_APPLY);
+            }
 
-                gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, sAfterimageAlpha[i]);
-                gSPSegment(POLY_XLU_DISP++, 0x0C, EnJso_SetAfterimageRenderMode(play->state.gfxCtx));
-                POLY_XLU_DISP = SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->afterimageJointTable[index],
-                                                   this->skelAnime.dListCount, NULL, NULL, &this->actor, POLY_XLU_DISP);
+            Matrix_Translate(this->afterimagePos[index].x, this->afterimagePos[index].y, this->afterimagePos[index].z,
+                             MTXMODE_NEW);
+            Matrix_Scale(this->scale, this->scale, this->scale, MTXMODE_APPLY);
+            //! @bug: These matrix rotation functions are supposed to be passed binangs, so using BINANG_TO_RAD here
+            //! is incorrect. Specifically, it results in rotation values far smaller than expected, since
+            //! BINANG_TO_RAD divides the angle by 0x8000. In-game, this bug manifests as the Garo's afterimages
+            //! looking the "wrong way", as they have a rotation close to (0, 0, 0) instead of matching the Garo's
+            //! rotation as intended. This bug can be fixed by using the correct matrix rotation functions (e.g.,
+            //! Matrix_RotateYF instead of Matrix_RotateYS) or by removing BINANG_TO_RAD entirely.
+            Matrix_RotateYS(BINANG_TO_RAD(this->afterimageRot[index].y), MTXMODE_APPLY);
+            Matrix_RotateXS(BINANG_TO_RAD(this->afterimageRot[index].x), MTXMODE_APPLY);
+            Matrix_RotateZS(BINANG_TO_RAD(this->afterimageRot[index].z), MTXMODE_APPLY);
 
-                index--;
-                if (index < 0) {
-                    index = EN_JSO_AFTERIMAGE_COUNT - 1;
-                }
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, sAfterimageAlpha[i]);
+            gSPSegment(POLY_XLU_DISP++, 0x0C, EnJso_SetAfterimageRenderMode(play->state.gfxCtx));
+            POLY_XLU_DISP = SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->afterimageJointTable[index],
+                                               this->skelAnime.dListCount, NULL, NULL, &this->actor, POLY_XLU_DISP);
+
+            index--;
+            if (index < 0) {
+                index = EN_JSO_AFTERIMAGE_COUNT - 1;
             }
         }
     }
