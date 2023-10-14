@@ -12,8 +12,8 @@ TransitionTile sTransitionTile;
 s32 gTransitionTileState;
 VisMono sPlayVisMono;
 Color_RGBA8_u32 gVisMonoColor;
-VisFbuf sPlayVisFBuf;
-VisFbuf* sPlayVisFBufInstance;
+VisFbuf sPlayVisFbuf;
+VisFbuf* sPlayVisFbufInstance;
 BombersNotebook sBombersNotebook;
 u8 sBombersNotebookOpen;
 u8 sMotionBlurStatus;
@@ -418,8 +418,8 @@ void Play_Destroy(GameState* thisx) {
     ShrinkWindow_Destroy();
     TransitionFade_Destroy(&this->unk_18E48);
     VisMono_Destroy(&sPlayVisMono);
-    VisFbuf_Destroy(sPlayVisFBufInstance);
-    sPlayVisFBufInstance = NULL;
+    VisFbuf_Destroy(sPlayVisFbufInstance);
+    sPlayVisFbufInstance = NULL;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_92_80)) {
         Actor_CleanupContext(&this->actorCtx, this);
@@ -1111,7 +1111,7 @@ void Play_PostWorldDraw(PlayState* this) {
         Gfx* opa;
         GraphicsContext* gfxCtx = this->state.gfxCtx;
 
-        sPlayVisFBufInstance->scale = gSaveContext.screenScale / 1000.0f;
+        sPlayVisFbufInstance->scale = gSaveContext.screenScale / 1000.0f;
 
         OPEN_DISPS(gfxCtx);
 
@@ -1119,7 +1119,7 @@ void Play_PostWorldDraw(PlayState* this) {
         nextOpa = Graph_GfxPlusOne(opa);
         gSPDisplayList(OVERLAY_DISP++, nextOpa);
 
-        VisFbuf_Draw(sPlayVisFBufInstance, &nextOpa, this->unk_18E60);
+        VisFbuf_Draw(sPlayVisFbufInstance, &nextOpa, this->unk_18E60);
 
         gSPEndDisplayList(nextOpa++);
         Graph_BranchDlist(opa, nextOpa);
@@ -2312,18 +2312,18 @@ void Play_Init(GameState* thisx) {
     VisMono_Init(&sPlayVisMono);
 
     gVisMonoColor.a = 0;
-    sPlayVisFBufInstance = &sPlayVisFBuf;
-    VisFbuf_Init(sPlayVisFBufInstance);
-    sPlayVisFBufInstance->lodProportion = 0.0f;
-    sPlayVisFBufInstance->mode = VIS_FBUF_MODE_GENERAL;
-    sPlayVisFBufInstance->primColor.r = 0;
-    sPlayVisFBufInstance->primColor.g = 0;
-    sPlayVisFBufInstance->primColor.b = 0;
-    sPlayVisFBufInstance->primColor.a = 0;
-    sPlayVisFBufInstance->envColor.r = 0;
-    sPlayVisFBufInstance->envColor.g = 0;
-    sPlayVisFBufInstance->envColor.b = 0;
-    sPlayVisFBufInstance->envColor.a = 0;
+    sPlayVisFbufInstance = &sPlayVisFbuf;
+    VisFbuf_Init(sPlayVisFbufInstance);
+    sPlayVisFbufInstance->lodProportion = 0.0f;
+    sPlayVisFbufInstance->mode = VIS_FBUF_MODE_GENERAL;
+    sPlayVisFbufInstance->primColor.r = 0;
+    sPlayVisFbufInstance->primColor.g = 0;
+    sPlayVisFbufInstance->primColor.b = 0;
+    sPlayVisFbufInstance->primColor.a = 0;
+    sPlayVisFbufInstance->envColor.r = 0;
+    sPlayVisFbufInstance->envColor.g = 0;
+    sPlayVisFbufInstance->envColor.b = 0;
+    sPlayVisFbufInstance->envColor.a = 0;
     CutsceneFlags_UnsetAll(this);
     THA_GetRemaining(&this->state.tha);
     zAllocSize = THA_GetRemaining(&this->state.tha);
