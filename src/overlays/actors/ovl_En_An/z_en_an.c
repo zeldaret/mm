@@ -62,8 +62,8 @@ typedef enum AnjuScheduleResult {
     // Day 1, 14:08 ~ 14:18. Receive Kafei's letter from Postman
     /* 16 */ ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN,
     // Day 1, 16:10 ~ 16:30. Attends the goron named after the player
-    /* 17 */ ANJU_SCH_ATTEND_GORON, // ANJU_SCH_ATTEND_LINK_THE_GORON? ANJU_SCH_ATTEND_PLAYER_THE_GORON?
-                                    // Just standing on the front desk of the Inn
+    /* 17 */ ANJU_SCH_ATTEND_GORON,
+    // Just standing on the front desk of the Inn
     /* 18 */ ANJU_SCH_RECEPTIONIST_IDLE,
     // Standing next to the Inn's front door at closing time
     /* 19 */ ANJU_SCH_WAITING_CLOSING_TIME,
@@ -75,7 +75,7 @@ typedef enum AnjuScheduleResult {
     /* 22 */ ANJU_SCH_SWEEPING,
     // Day 1, 00:00 ~ 06:00. Waiting for player at the kitchen to have the Midnight meeting.
     /* 23 */ ANJU_SCH_MIDNIGHT_MEETING,
-    // Day 2, 21:30 ~ 23:00, on the staff room, talking with her mom
+    // Day 2, 21:30 ~ 23:00. On the staff room talking with her mom. This can be seen from the Knife Chamber
     /* 24 */ ANJU_SCH_TALKING_WITH_MOM,
     // Reunited with Kafei on the Staff room. Set manually in code instead of via script
     /* 25 */ ANJU_SCH_WITH_KAFEI,
@@ -105,7 +105,7 @@ typedef enum AnjuScheduleResult {
     /* 37 */ ANJU_SCH_DOOR_37,
     // Passing through the Inn's front door (entering) (East Clock Town), going from the Laundry Pool
     /* 38 */ ANJU_SCH_DOOR_38,
-    // Passing through the door of the staff room (entering, after sweeping the floor
+    // Passing through the door of the staff room (entering), after sweeping the floor
     /* 39 */ ANJU_SCH_DOOR_39,
     // Going from the front desk to the kitchen
     /* 40 */ ANJU_SCH_WALKING_40,
