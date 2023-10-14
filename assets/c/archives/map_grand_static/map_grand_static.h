@@ -1,6 +1,8 @@
 #ifndef MAP_GRAND_STATIC_H
 #define MAP_GRAND_STATIC_H 1
 
+#include "ultra64.h"
+
 extern u64 gMapGrandStatic100Tex[];
 extern u64 gMapGrandStatic101Tex[];
 extern u64 gMapGrandStatic102Tex[];
@@ -99,4 +101,5 @@ extern u64 gMapGrandStatic15ETex[];
 extern u64 gMapGrandStatic15FTex[];
 extern u64 gMapGrandStatic160Tex[];
 extern u64 gMapGrandStatic161Tex[];
+
 #endif

@@ -1,9 +1,4 @@
-#include "ultra64.h"
-#include "z64.h"
-#include "macros.h"
 #include "map_grand_static.h"
-#include "assets/misc/link_animetion/link_animetion.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 u64 gMapGrandStatic100Tex[] = {
 #include "assets/archives/map_grand_static/map_100.i4.inc.c"

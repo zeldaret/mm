@@ -1,6 +1,8 @@
 #ifndef MAP_I_STATIC_H
 #define MAP_I_STATIC_H 1
 
+#include "ultra64.h"
+
 extern u64 gMapIStatic00Tex[];
 extern u64 gMapIStatic01Tex[];
 extern u64 gMapIStatic02Tex[];
@@ -59,4 +61,5 @@ extern u64 gMapIStatic36Tex[];
 extern u64 gMapIStatic37Tex[];
 extern u64 gMapIStatic38Tex[];
 extern u64 gMapIStatic39Tex[];
+
 #endif

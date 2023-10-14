@@ -1,9 +1,4 @@
-#include "ultra64.h"
-#include "z64.h"
-#include "macros.h"
 #include "map_i_static.h"
-#include "assets/misc/link_animetion/link_animetion.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 u64 gMapIStatic00Tex[] = {
 #include "assets/archives/map_i_static/map_00.i4.inc.c"
@@ -236,4 +231,3 @@ u64 gMapIStatic38Tex[] = {
 u64 gMapIStatic39Tex[] = {
 #include "assets/archives/map_i_static/map_39.i4.inc.c"
 };
-
