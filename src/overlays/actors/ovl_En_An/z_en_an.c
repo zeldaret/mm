@@ -942,7 +942,7 @@ typedef enum EnAnAnimation {
     /* 16 */ ENAN_ANIM_WALKING_WITH_TRAY,
 
     /* 17 */ ENAN_ANIMOBJ_AN2,
-    /* 17 */ ENAN_ANIM_17 = ENAN_ANIMOBJ_AN2,
+    /* 17 */ ENAN_ANIM_UMBRELLA_IDLE = ENAN_ANIMOBJ_AN2,
     /* 18 */ ENAN_ANIM_UMBRELLA_WALK,
     /* 19 */ ENAN_ANIM_UMBRELLA_SIT,
     /* 20 */ ENAN_ANIM_UMBRELLA_CRYING,
@@ -988,7 +988,7 @@ static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
     { &gAnju1WalkingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_WALKING_WITH_TRAY
 
     // ENAN_ANIMOBJ_AN2
-    { &object_an2_Anim_0028DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENAN_ANIM_17
+    { &gAnju2UmbrellaIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENAN_ANIM_UMBRELLA_IDLE
     { &gAnju2UmbrellaWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENAN_ANIM_UMBRELLA_WALK
     { &gAnju2UmbrellaSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENAN_ANIM_UMBRELLA_SIT
     { &gAnju2UmbrellaCryingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_UMBRELLA_CRYING
@@ -1890,7 +1890,7 @@ s32 EnAn_ChooseAnimAfterTalking(EnAn* this, PlayState* play) {
             if (this->animIndex == ENAN_ANIM_WAITING_WITH_TRAY) {
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
             }
-            if (this->animIndex == ENAN_ANIM_17) {
+            if (this->animIndex == ENAN_ANIM_UMBRELLA_IDLE) {
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_WALK);
             }
             if ((this->animIndex == ENAN_ANIM_IDLE) || (this->animIndex == ENAN_ANIM_IDLE_MORPH)) {
@@ -2091,7 +2091,7 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
                         EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
                     }
                     if (this->animIndex == ENAN_ANIM_UMBRELLA_WALK) {
-                        EnAn_ChangeAnim(this, play, ENAN_ANIM_17);
+                        EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_IDLE);
                     }
                     if ((this->animIndex == ENAN_ANIM_BROOM_WALK) || (this->animIndex == ENAN_ANIM_BROOM_SWEEP)) {
                         EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_IDLE);
