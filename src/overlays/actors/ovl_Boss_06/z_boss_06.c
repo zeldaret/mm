@@ -4,13 +4,14 @@
  * Description: Igos du Ikana window - curtains and ray effects
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_knight/object_knight.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss06*)thisx)
 
@@ -151,7 +152,7 @@ void Boss06_Init(Actor* thisx, PlayState* play) {
         this->unk_200[i] = temp_v0[i];
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void Boss06_Destroy(Actor* thisx, PlayState* play) {
@@ -163,7 +164,7 @@ void func_809F23CC(Boss06* this) {
         if ((this->unk_1C9 == 0) && (D_809F4970->unk_68A == 0)) {
             if (this->actor.colChkInfo.damageEffect == 2) {
                 func_809F24A8(this);
-                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+                Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
 
                 this->unk_1B0 = -(this->actor.world.pos.x - this->collider.info.bumper.hitPos.x);
                 this->unk_1BC = this->unk_1B0 * 0.35f;
@@ -229,7 +230,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             }
 
             if (this->unk_1CA >= 30) {
-                play_sound(NA_SE_EV_S_STONE_FLASH);
+                Audio_PlaySfx(NA_SE_EV_S_STONE_FLASH);
             }
 
             if (this->unk_1CA >= 60) {
@@ -376,7 +377,7 @@ void func_809F2C44(Boss06* this, PlayState* play) {
         }
 
         if ((this->unk_1E4 > 0.1f) && ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-            play_sound(NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
+            Audio_PlaySfx(NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
         }
     }
 
@@ -430,30 +431,30 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_1E4 > 0.0f) {
         if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-            D_801F4E32 = 1;
-            D_801F4E38.x = this->actor.world.pos.x + this->unk_1B0;
-            D_801F4E38.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
-            D_801F4E38.z = this->actor.world.pos.z;
+            gCustomLensFlare1On = true;
+            gCustomLensFlare1Pos.x = this->actor.world.pos.x + this->unk_1B0;
+            gCustomLensFlare1Pos.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
+            gCustomLensFlare1Pos.z = this->actor.world.pos.z;
             D_801F4E44 = this->unk_1E4;
             D_801F4E48 = 10.0f;
             D_801F4E4C = 0;
         } else {
-            D_801F4E4E = 1;
-            D_801F4E50.x = this->actor.world.pos.x + this->unk_1B0;
-            D_801F4E50.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
-            D_801F4E50.z = this->actor.world.pos.z;
+            gCustomLensFlare2On = true;
+            gCustomLensFlare2Pos.x = this->actor.world.pos.x + this->unk_1B0;
+            gCustomLensFlare2Pos.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
+            gCustomLensFlare2Pos.z = this->actor.world.pos.z;
             D_801F4E5C = this->unk_1E4;
             D_801F4E60 = 10.0f;
             D_801F4E64 = 0;
         }
     } else if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-        D_801F4E32 = 0;
+        gCustomLensFlare1On = false;
     } else {
-        D_801F4E4E = 0;
+        gCustomLensFlare2On = false;
     }
 
     if ((this->unk_1C8 != 0) && (this->unk_1C8 != 0)) {
-        play_sound(NA_SE_EV_FIRE_PLATE - SFX_FLAG);
+        Audio_PlaySfx(NA_SE_EV_FIRE_PLATE - SFX_FLAG);
         this->unk_1CC += 0.6f;
         this->unk_1D0 += 0.1f;
         this->unk_1D4 += 0.0200000014156f;

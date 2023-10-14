@@ -242,7 +242,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
         if (this->buttonIndex <= FS_BTN_MAIN_FILE_3) {
             if (!gSaveContext.flashSaveAvailable) {
                 if (!NO_FLASH_SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
-                    play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                    Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
                     this->configMode = CM_ROTATE_TO_NAME_ENTRY;
                     this->kbdButton = FS_KBD_BTN_NONE;
                     this->charPage = FS_CHAR_PAGE_HIRA;
@@ -258,7 +258,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                     this->nameEntryBoxAlpha = 0;
                     Lib_MemCpy(&this->fileNames[this->buttonIndex], &sEmptyName, ARRAY_COUNT(sEmptyName));
                 } else {
-                    play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                    Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
                     this->actionTimer = 4;
                     this->selectMode = SM_FADE_MAIN_TO_SELECT;
                     this->selectedFileIndex = this->buttonIndex;
@@ -266,7 +266,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                     this->nextTitleLabel = FS_TITLE_OPEN_FILE;
                 }
             } else if (!SLOT_OCCUPIED(this, this->buttonIndex)) {
-                play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
                 this->configMode = CM_ROTATE_TO_NAME_ENTRY;
                 this->kbdButton = FS_KBD_BTN_NONE;
                 this->charPage = FS_CHAR_PAGE_HIRA;
@@ -282,7 +282,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 this->nameEntryBoxAlpha = 0;
                 Lib_MemCpy(&this->fileNames[this->buttonIndex], &sEmptyName, ARRAY_COUNT(sEmptyName));
             } else {
-                play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
                 this->actionTimer = 4;
                 this->selectMode = SM_FADE_MAIN_TO_SELECT;
                 this->selectedFileIndex = this->buttonIndex;
@@ -290,7 +290,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 this->nextTitleLabel = FS_TITLE_OPEN_FILE;
             }
         } else if (this->warningLabel == FS_WARNING_NONE) {
-            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+            Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
             this->prevConfigMode = this->configMode;
 
             if (this->buttonIndex == FS_BTN_MAIN_COPY) {
@@ -310,7 +310,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
             }
             this->actionTimer = 4;
         } else {
-            play_sound(NA_SE_SY_FSEL_ERROR);
+            Audio_PlaySfx(NA_SE_SY_FSEL_ERROR);
         }
     } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         gSaveContext.gameMode = GAMEMODE_TITLE_SCREEN;
@@ -318,7 +318,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
         SET_NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
     } else {
         if (ABS_ALT(this->stickAdjY) > 30) {
-            play_sound(NA_SE_SY_FSEL_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_FSEL_CURSOR);
             if (this->stickAdjY > 30) {
                 this->buttonIndex--;
                 if (this->buttonIndex == FS_BTN_MAIN_FILE_3) {
@@ -2048,18 +2048,18 @@ void FileSelect_ConfirmFile(GameState* thisx) {
     if (CHECK_BTN_ALL(input->press.button, BTN_START) || (CHECK_BTN_ALL(input->press.button, BTN_A))) {
         if (this->confirmButtonIndex == FS_BTN_CONFIRM_YES) {
             Rumble_Request(300.0f, 180, 20, 100);
-            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+            Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
             this->selectMode = SM_FADE_OUT;
             func_801A4058(0xF);
         } else { // FS_BTN_CONFIRM_QUIT
-            play_sound(NA_SE_SY_FSEL_CLOSE);
+            Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
             this->selectMode++; // SM_FADE_OUT_FILE_INFO
         }
     } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        play_sound(NA_SE_SY_FSEL_CLOSE);
+        Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
         this->selectMode++; // SM_FADE_OUT_FILE_INFO
     } else if (ABS_ALT(this->stickAdjY) >= 30) {
-        play_sound(NA_SE_SY_FSEL_CURSOR);
+        Audio_PlaySfx(NA_SE_SY_FSEL_CURSOR);
         this->confirmButtonIndex ^= 1;
     }
 }
@@ -2197,7 +2197,7 @@ void FileSelect_LoadGame(GameState* thisx) {
     gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
     gSaveContext.cutsceneTrigger = 0;
     gSaveContext.chamberCutsceneNum = 0;
-    gSaveContext.nextDayTime = 0xFFFF;
+    gSaveContext.nextDayTime = NEXT_TIME_NONE;
     gSaveContext.retainWeatherMode = false;
 
     gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
@@ -2489,7 +2489,7 @@ void FileSelect_InitContext(GameState* thisx) {
     Skybox_Init(&this->state, &this->skyboxCtx, 1);
     R_TIME_SPEED = 10;
 
-    envCtx->changeSkyboxState = 0;
+    envCtx->changeSkyboxState = CHANGE_SKYBOX_INACTIVE;
     envCtx->changeSkyboxTimer = 0;
     envCtx->changeLightEnabled = false;
     envCtx->changeLightTimer = 0;
@@ -2521,7 +2521,7 @@ void FileSelect_Init(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
     size_t size;
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
     Matrix_Init(&this->state);
     ShrinkWindow_Init();
     View_Init(&this->view, this->state.gfxCtx);
@@ -2531,15 +2531,15 @@ void FileSelect_Init(GameState* thisx) {
     Font_LoadOrderedFont(&this->font);
 
     size = SEGMENT_ROM_SIZE(title_static);
-    this->staticSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->staticSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->staticSegment, SEGMENT_ROM_START(title_static), size);
 
     size = SEGMENT_ROM_SIZE(parameter_static);
-    this->parameterSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->parameterSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->parameterSegment, SEGMENT_ROM_START(parameter_static), size);
 
     size = gObjectTable[OBJECT_MAG].vromEnd - gObjectTable[OBJECT_MAG].vromStart;
-    this->titleSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->titleSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->titleSegment, gObjectTable[OBJECT_MAG].vromStart, size);
 
     Audio_SetSpec(0xA);

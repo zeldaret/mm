@@ -7,7 +7,7 @@
 #include "z_en_sb.h"
 #include "objects/object_sb/object_sb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnSb*)thisx)
 
@@ -93,7 +93,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_SHELLBLADE, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -337,7 +337,7 @@ void EnSb_UpdateDamage(EnSb* this, PlayState* play) {
         }
         if (hitPlayer) {
             this->unk_252 = 0;
-            if ((this->actor.draw != NULL) && (this->isDrawn == false)) {
+            if ((this->actor.draw != NULL) && !this->isDrawn) {
                 this->isDrawn = true;
             }
             this->isDead = true;

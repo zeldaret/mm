@@ -7,6 +7,8 @@ struct ObjWturn;
 
 typedef void (*ObjWturnActionFunc)(struct ObjWturn*, PlayState*);
 
+#define OBJWTURN_GET_SWITCH_FLAG(thisx) ((thisx)->params)
+
 typedef struct ObjWturn {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ObjWturnActionFunc actionFunc;

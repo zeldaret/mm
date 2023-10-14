@@ -49,7 +49,7 @@ void func_80919F30(BgUmajump* this, PlayState* play) {
 void BgUmajump_StopCutscene(BgUmajump* this, PlayState* play) {
     if ((play->csCtx.curFrame >= 6) && !this->hasSoundPlayed) {
         this->hasSoundPlayed = true;
-        play_sound(NA_SE_EV_KID_HORSE_NEIGH);
+        Audio_PlaySfx(NA_SE_EV_KID_HORSE_NEIGH);
     }
 
     if (play->csCtx.state == CS_STATE_IDLE) {
@@ -103,9 +103,9 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
             thisx->update = Actor_Noop;
         }
     } else {
-        this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_UMAJUMP);
+        this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_UMAJUMP);
 
-        if (this->objectIndex < 0) {
+        if (this->objectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(thisx);
         }
 
@@ -126,8 +126,8 @@ void BgUmajump_Destroy(Actor* thisx, PlayState* play) {
 void BgUmajump_Update(Actor* thisx, PlayState* play) {
     BgUmajump* this = THIS;
 
-    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-        this->dyna.actor.objBankIndex = this->objectIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->dyna.actor.objectSlot = this->objectSlot;
         this->dyna.actor.draw = BgUmajump_Draw;
 
         Actor_SetObjectDependency(play, &this->dyna.actor);

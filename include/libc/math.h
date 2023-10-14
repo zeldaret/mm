@@ -1,5 +1,5 @@
-#ifndef MATH_H
-#define MATH_H
+#ifndef LIBC_MATH_H
+#define LIBC_MATH_H
 
 #include "PR/ultratypes.h"
 
@@ -11,25 +11,12 @@
 #define SHT_MAX 32767.0f
 #define SHT_MINV (1.0f / SHT_MAX)
 
-typedef union {
-    f64 d;
-    struct {
-        u32 hi;
-        u32 lo;
-    } word;
-} du;
-
-typedef union {
-    u32 i;
-    f32 f;
-} fu;
-
-extern f32 __libm_qnan_f;
-
 float fabsf(float f);
 #pragma intrinsic(fabsf)
-float sqrtf(float f);
-#pragma intrinsic(sqrtf)
+#ifdef __GNUC__
+#define fabsf(f) __builtin_fabsf((float)(f))
+#endif
+
 double sqrt(double d);
 #pragma intrinsic(sqrt)
 

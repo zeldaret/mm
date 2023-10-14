@@ -1,28 +1,28 @@
 #include "global.h"
 
-void osCreateThread(OSThread* t, OSId id, void* entry, void* arg, void* sp, OSPri p) {
+void osCreateThread(OSThread* thread, OSId id, void* entry, void* arg, void* sp, OSPri p) {
     register u32 saveMask;
     OSIntMask mask;
 
-    t->id = id;
-    t->priority = p;
-    t->next = NULL;
-    t->queue = NULL;
-    t->context.pc = (u32)entry;
-    t->context.a0 = arg;
-    t->context.sp = (u64)(s32)sp - 16;
-    t->context.ra = __osCleanupThread;
+    thread->id = id;
+    thread->priority = p;
+    thread->next = NULL;
+    thread->queue = NULL;
+    thread->context.pc = (u32)entry;
+    thread->context.a0 = arg;
+    thread->context.sp = (u64)(s32)sp - 16;
+    thread->context.ra = __osCleanupThread;
 
     mask = 0x3FFF01;
-    t->context.sr = 0xFF03;
-    t->context.rcp = (mask & 0x3F0000) >> 16;
-    t->context.fpcsr = 0x01000800;
-    t->fp = 0;
-    t->state = 1;
-    t->flags = 0;
+    thread->context.sr = 0xFF03;
+    thread->context.rcp = (mask & 0x3F0000) >> 16;
+    thread->context.fpcsr = 0x01000800;
+    thread->fp = 0;
+    thread->state = 1;
+    thread->flags = 0;
 
     saveMask = __osDisableInt();
-    t->tlnext = __osActiveQueue;
-    __osActiveQueue = t;
+    thread->tlnext = __osActiveQueue;
+    __osActiveQueue = thread;
     __osRestoreInt(saveMask);
 }

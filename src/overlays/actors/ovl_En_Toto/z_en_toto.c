@@ -7,7 +7,7 @@
 #include "z_en_toto.h"
 #include "objects/object_zm/object_zm.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnToto*)thisx)
 
@@ -89,7 +89,7 @@ static EnTotoActionFunc D_80BA501C[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_1, ICHAIN_STOP),
 };
 
 static EnTotoText D_80BA502C[] = {
@@ -151,7 +151,12 @@ static Vec3s D_80BA510C[] = {
     { 0xFF64, 0x0016, 0xFE7E },
 };
 
-static u16 D_80BA5120[] = { 67, 68, 69, 70 };
+static u16 sOcarinaActionWindFishPrompts[] = {
+    OCARINA_ACTION_PROMPT_WIND_FISH_HUMAN,
+    OCARINA_ACTION_PROMPT_WIND_FISH_GORON,
+    OCARINA_ACTION_PROMPT_WIND_FISH_ZORA,
+    OCARINA_ACTION_PROMPT_WIND_FISH_DEKU,
+};
 
 static u8 D_80BA5128[] = { 8, 4, 2, 1 };
 
@@ -243,9 +248,9 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BA36C0(this, play, 1);
         if (play->sceneId != SCENE_SONCHONOIE) {
-            Flags_SetSwitch(play, this->actor.params & 0x7F);
+            Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor));
         } else if (player->transformation == PLAYER_FORM_DEKU) {
-            Flags_SetSwitch(play, this->actor.home.rot.x);
+            Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_3(&this->actor));
         }
         this->unk2B6 = 0;
         return;
@@ -257,13 +262,13 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= ACTOR_FLAG_10000;
-            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
+            Actor_OfferTalkExchange(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
         } else {
             this->actor.flags &= ~ACTOR_FLAG_10000;
-            func_800B8614(&this->actor, play, 50.0f);
+            Actor_OfferTalk(&this->actor, play, 50.0f);
             if (play->sceneId == SCENE_SONCHONOIE) {
                 if (player->transformation == PLAYER_FORM_DEKU) {
-                    if (!Flags_GetSwitch(play, this->actor.home.rot.x)) {
+                    if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_3(&this->actor))) {
                         this->text = D_80BA5068;
                     } else {
                         this->text = D_80BA5074;
@@ -273,7 +278,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
                 }
             } else if (ENTOTO_WEEK_EVENT_FLAGS) {
                 this->text = D_80BA502C;
-            } else if (!Flags_GetSwitch(play, this->actor.params & 0x7F)) {
+            } else if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor))) {
                 this->text = D_80BA5034;
             } else {
                 this->text = D_80BA5038;
@@ -332,7 +337,7 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
         }
     } else {
         player = GET_PLAYER(play);
-        if ((player->stateFlags1 & PLAYER_STATE1_400) && player->unk_AE7 != 0) {
+        if ((player->stateFlags1 & PLAYER_STATE1_400) && (player->actionVar1 != 0)) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_CIRCUS_LEADERS_MASK);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN);
@@ -423,9 +428,9 @@ s32 func_80BA4128(EnToto* this, PlayState* play) {
 s32 func_80BA415C(EnToto* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex != 0) {
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
         } else {
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
         }
         return ((play->msgCtx.choiceIndex != 0) ? 0 : this->text->unk1) + 1;
     }
@@ -542,22 +547,22 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
 
 s32 func_80BA46D8(EnToto* this, PlayState* play) {
     func_800B7298(play, NULL, PLAYER_CSMODE_68);
-    func_80152434(play, D_80BA5120[CUR_FORM]);
+    Message_DisplayOcarinaStaff(play, sOcarinaActionWindFishPrompts[CUR_FORM]);
     return 0;
 }
 
 s32 func_80BA4740(EnToto* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode == 4) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
             SET_WEEKEVENTREG(WEEKEVENTREG_56_10);
         }
-        if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
             SET_WEEKEVENTREG(WEEKEVENTREG_56_20);
         }
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             SET_WEEKEVENTREG(WEEKEVENTREG_56_40);
         }
-        if (gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_GORON) {
             SET_WEEKEVENTREG(WEEKEVENTREG_56_80);
         }
         return 1;
@@ -583,7 +588,7 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
         this->unk2B3 += 8;
     }
     for (i = 0; i < ARRAY_COUNT(D_80BA50DC); i++) {
-        if ((gSaveContext.save.playerForm != (i + 1)) && (D_80BA5128[i] & this->unk2B3)) {
+        if ((GET_PLAYER_FORM != (i + 1)) && (D_80BA5128[i] & this->unk2B3)) {
             Math_Vec3s_ToVec3f(&spawnPos, &D_80BA50DC[i].unk6);
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0,
@@ -641,15 +646,15 @@ s32 func_80BA4B24(EnToto* this, PlayState* play) {
         player = GET_PLAYER(play);
         Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_0028B8, -4.0f);
         if (player->transformation == PLAYER_FORM_ZORA) {
-            if (!Flags_GetSwitch(play, this->actor.params & 0x7F)) {
-                Flags_SetSwitch(play, this->actor.params & 0x7F);
+            if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor))) {
+                Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor));
                 return 1;
             } else {
                 return 3;
             }
         } else {
-            if (!Flags_GetSwitch(play, (this->actor.params >> 7) & 0x7F)) {
-                Flags_SetSwitch(play, (this->actor.params >> 7) & 0x7F);
+            if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_2(&this->actor))) {
+                Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_2(&this->actor));
                 return 4;
             } else {
                 return 7;

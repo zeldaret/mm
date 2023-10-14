@@ -5,10 +5,11 @@
  */
 
 #include "z_en_bigpo.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_bigpo/object_bigpo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnBigpo*)thisx)
 
@@ -159,16 +160,24 @@ static InitChainEntry sInitChain[] = {
 // used in the burning death actionfunc
 static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f };
 
-// bytes per limb, used in draw func? bit over my head
-static u8 D_80B65078[] = {
-    -1, 4, -1, 0, -1, 1, -1, 2, 5, 3,
+static s8 sLimbToBodyParts[BIG_POE_LIMB_MAX] = {
+    BODYPART_NONE,      // BIG_POE_LIMB_NONE
+    BIG_POE_BODYPART_4, // BIG_POE_LIMB_FACE
+    BODYPART_NONE,      // BIG_POE_LIMB_LEFT_UPPER_ARM
+    BIG_POE_BODYPART_0, // BIG_POE_LIMB_LEFT_FOREARM
+    BODYPART_NONE,      // BIG_POE_LIMB_RIGHT_UPPER_ARM
+    BIG_POE_BODYPART_1, // BIG_POE_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,      // BIG_POE_LIMB_RIGHT_HAND
+    BIG_POE_BODYPART_2, // BIG_POE_LIMB_LANTERN
+    BIG_POE_BODYPART_5, // BIG_POE_LIMB_HAT_AND_CLOAK
+    BIG_POE_BODYPART_3, // BIG_POE_LIMB_LOWER_ROBE
 };
 
 // used in limbdraw
 static Vec3f D_80B65084[] = {
-    { 2000.0f, 4000.0f, 0.0f },
-    { -1000.0f, 1500.0f, -2000.0f },
-    { -1000.0f, 1500.0f, 2000.0f },
+    { 2000.0f, 4000.0f, 0.0f },      // BIG_POE_BODYPART_6
+    { -1000.0f, 1500.0f, -2000.0f }, // BIG_POE_BODYPART_7
+    { -1000.0f, 1500.0f, 2000.0f },  // BIG_POE_BODYPART_8
 };
 
 void EnBigpo_Init(Actor* thisx, PlayState* play2) {
@@ -179,10 +188,10 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    this->switchFlags = BIGPO_GET_SWITCHFLAGS(thisx);
+    this->switchFlag = BIG_POE_GET_SWITCH_FLAG(thisx);
     thisx->params &= 0xFF;
-    if (thisx->params == ENBIGPO_POSSIBLEFIRE) {
-        if (Flags_GetSwitch(play, this->switchFlags)) {
+    if (thisx->params == BIG_POE_TYPE_POSSIBLE_FIRE) {
+        if (Flags_GetSwitch(play, this->switchFlag)) {
             Actor_Kill(&this->actor);
             return;
         }
@@ -192,8 +201,8 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    SkelAnime_Init(play, &this->skelAnime, &gBigpoSkeleton, &gBigpoFloatAnim, this->jointTable, this->morphTable,
-                   ENBIGPO_LIMBCOUNT);
+    SkelAnime_Init(play, &this->skelAnime, &gBigPoeSkel, &gBigPoeFloatAnim, this->jointTable, this->morphTable,
+                   BIG_POE_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
 
@@ -213,15 +222,15 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     this->mainColor.b = 210;
     this->mainColor.a = 0; // fully invisible
 
-    if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(play, this->switchFlags))) {
+    if ((this->switchFlag != 0xFF) && (Flags_GetSwitch(play, this->switchFlag))) {
         Actor_Kill(&this->actor);
     }
 
-    if (thisx->params == ENBIGPO_REGULAR) { // the well poe, starts immediately
-        thisx->flags &= ~ACTOR_FLAG_10;     // always update OFF
+    if (thisx->params == BIG_POE_TYPE_REGULAR) { // the well poe, starts immediately
+        thisx->flags &= ~ACTOR_FLAG_10;          // always update OFF
         this->storePrevBgm = true;
         EnBigpo_InitWellBigpo(this);
-    } else if (thisx->params == ENBIGPO_SUMMONED) { // dampe type
+    } else if (thisx->params == BIG_POE_TYPE_SUMMONED) { // dampe type
         EnBigpo_InitDampeMainPo(this);
     }
 }
@@ -231,10 +240,9 @@ void EnBigpo_Destroy(Actor* thisx, PlayState* play2) {
     EnBigpo* this = THIS;
     s32 fireCount;
 
-    if ((this->actor.params != ENBIGPO_POSSIBLEFIRE) && (this->actor.params != ENBIGPO_CHOSENFIRE) &&
-        (this->actor.params != ENBIGPO_REVEALEDFIRE) && (this->actor.params != ENBIGPO_UNK5)) {
-        // if NOT a fire type, *ENBIGPO_REGULAR and ENBIGPO_SUMMONED (combat types only)
-        if (1) {}
+    if ((thisx->params != BIG_POE_TYPE_POSSIBLE_FIRE) && (thisx->params != BIG_POE_TYPE_CHOSEN_FIRE) &&
+        (thisx->params != BIG_POE_TYPE_REVEALED_FIRE) && (thisx->params != BIG_POE_TYPE_UNK5)) {
+        // if NOT a fire type, *BIG_POE_TYPE_REGULAR and BIG_POE_TYPE_SUMMONED (combat types only)
         for (fireCount = 0; fireCount < ARRAY_COUNT(this->fires); fireCount++) {
             LightContext_RemoveLight(play, &play->lightCtx, this->fires[fireCount].light);
         }
@@ -281,7 +289,7 @@ void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_InitWellBigpo(EnBigpo* this) {
-    this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnBigpo_WellWaitForProximity;
     this->fireRadius = 200.0f;
 }
@@ -302,9 +310,9 @@ void EnBigpo_WaitCutsceneQueue(EnBigpo* this, PlayState* play) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
         func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
         this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
-        if (this->actor.params == ENBIGPO_REGULAR) { // and SUMMONED, got switched earlier
+        if (this->actor.params == BIG_POE_TYPE_REGULAR) { // and SUMMONED, got switched earlier
             EnBigpo_SpawnCutsceneStage1(this, play);
-        } else { // ENBIGPO_REVEALEDFIRE
+        } else { // BIG_POE_TYPE_REVEALED_FIRE
             EnBigpo_SetupFlameCirclePositions(this, play);
         }
     } else {
@@ -391,7 +399,7 @@ void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, PlayState* play) {
  *          big poe starts to visibly appear
  */
 void EnBigpo_SpawnCutsceneStage5(EnBigpo* this) {
-    Animation_PlayLoop(&this->skelAnime, &gBigpoAwakenStretchAnim);
+    Animation_PlayLoop(&this->skelAnime, &gBigPoeAwakenStretchAnim);
     this->actor.draw = EnBigpo_DrawMainBigpo;
     Actor_SetScale(&this->actor, 0.014f);
     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
@@ -459,7 +467,7 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
         subCam = Play_GetCamera(play, this->subCamId);
         Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
-        if (this->actor.params == ENBIGPO_SUMMONED) {
+        if (this->actor.params == BIG_POE_TYPE_SUMMONED) {
             dampe = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
             if (dampe != NULL) {
                 // if dampe exists, switch to viewing his running away cutscene
@@ -467,7 +475,7 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
             } else {
                 CutsceneManager_Stop(this->actor.csId);
             }
-        } else { // ENBIGPO_REGULAR
+        } else { // BIG_POE_TYPE_REGULAR
             CutsceneManager_Stop(this->actor.csId);
         }
         func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
@@ -480,7 +488,7 @@ void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->rotVelocity = 0x2000;
     this->idleTimer = 32;
-    this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.speed = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DISAPPEAR);
     this->actionFunc = EnBigpo_WarpingOut;
@@ -505,7 +513,7 @@ void EnBigpo_SetupWarpIn(EnBigpo* this, PlayState* play) {
     s16 randomYaw = ((s32)Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
-    Animation_PlayLoop(&this->skelAnime, &gBigpoAwakenStretchAnim);
+    Animation_PlayLoop(&this->skelAnime, &gBigPoeAwakenStretchAnim);
     this->rotVelocity = 0x2000;
     this->actor.world.pos.x = (Math_SinS(randomYaw) * distance) + player->actor.world.pos.x;
     this->actor.world.pos.z = (Math_CosS(randomYaw) * distance) + player->actor.world.pos.z;
@@ -532,7 +540,7 @@ void EnBigpo_WarpingIn(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_SetupIdleFlying(EnBigpo* this) {
-    Animation_MorphToLoop(&this->skelAnime, &gBigpoFloatAnim, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gBigPoeFloatAnim, -5.0f);
     // if poe missed attack, idle 4 seconds, otherwise its reappearing: attack immediately
     this->idleTimer = (this->actionFunc == EnBigpo_SpinningDown) ? 80 : 0;
     this->hoverHeightCycleTimer = 40;
@@ -541,7 +549,7 @@ void EnBigpo_SetupIdleFlying(EnBigpo* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
-    this->actor.flags |= ACTOR_FLAG_1; // targetable ON
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnBigpo_IdleFlying;
 }
 
@@ -556,7 +564,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
     Math_StepToF(&this->savedHeight, player->actor.world.pos.y + 100.0f, 1.5f);
     this->actor.world.pos.y = (Math_SinF(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
     Math_StepToF(&this->actor.speed, 3.0f, 0.2f);
-    func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
         this->unk208 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
@@ -643,7 +651,7 @@ void EnBigpo_SpinningDown(EnBigpo* this, PlayState* play) {
  * called by EnBigpo_ApplyDamage
  */
 void EnBigpo_HitStun(EnBigpo* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &gBigpoShockAnim, -6.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gBigPoeShockAnim, -6.0f);
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->collider.base.acFlags &= ~AC_ON;
     func_800BE504(&this->actor, &this->collider);
@@ -688,21 +696,20 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, PlayState* play) {
     if (this->idleTimer < 8) {
         camYaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x4800;
         if (this->idleTimer < 5) {
-            unkTemp = (this->idleTimer << 0xC) - 0x4000;
-            // 1.4.0...1 is NOT 1.4, the rodata demands it
-            tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * 1.4000001f) + this->actor.world.pos.y;
+            unkTemp = (this->idleTimer * 0x1000) - 0x4000;
+            tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * (1400.0f * 0.001f)) + this->actor.world.pos.y;
             unkTemp2 = Math_CosS(unkTemp) * 32.2f;
             tempVec.x = (Math_SinS(camYaw) * unkTemp2) + this->actor.world.pos.x;
             tempVec.z = (Math_CosS(camYaw) * unkTemp2) + this->actor.world.pos.z;
 
         } else {
-            tempVec.y = this->actor.world.pos.y + ((40.0f + (15.0f * (this->idleTimer - 5))) * 1.4000001f);
+            tempVec.y = this->actor.world.pos.y + ((40.0f + (15.0f * (this->idleTimer - 5))) * (1400.0f * 0.001f));
             tempVec.x = (Math_SinS(camYaw) * 32.2f) + this->actor.world.pos.x;
             tempVec.z = (Math_CosS(camYaw) * 32.2f) + this->actor.world.pos.z;
         }
 
         // not sure what we're turning this into, but its based on the timer
-        modifiedTimer = ((f32)((this->idleTimer * 10) + 80) * 1.4000001f);
+        modifiedTimer = ((this->idleTimer * 10) + 80) * (1400.0f * 0.001f);
         func_800B3030(play, &tempVec, &D_80B6506C, &gZeroVec3f, modifiedTimer, 0, 2);
         tempVec.x = (2.0f * this->actor.world.pos.x) - tempVec.x;
         tempVec.z = (2.0f * this->actor.world.pos.z) - tempVec.z;
@@ -721,7 +728,7 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, PlayState* play) {
     }
 
     if (this->idleTimer < 18) {
-        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // burning sfx
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // burning sfx
     }
     if (this->idleTimer == 18) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
@@ -742,19 +749,19 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     this->actor.world.pos.y -= 15.0f;
     func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
-    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4); // targetable OFF, enemy music OFF
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY); // targetable OFF, enemy music OFF
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_PLAYER_400;
     this->actionFunc = EnBigpo_LanternFalling;
 }
 
 void EnBigpo_LanternFalling(EnBigpo* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND || this->actor.floorHeight == BGCHECK_Y_MIN) {
-        if (this->switchFlags != 0xFF) {
-            Flags_SetSwitch(play, this->switchFlags);
+        if (this->switchFlag != 0xFF) {
+            Flags_SetSwitch(play, this->switchFlag);
         }
 
         EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_BIGPO, 10,
-                                 gBigpoDrawLanternFallingDL);
+                                 gBigPoeLanternFallingDL);
         EnBigpo_SpawnScoopSoul(this);
     }
 }
@@ -809,8 +816,8 @@ void EnBigpo_ScoopSoulAppearing(EnBigpo* this, PlayState* play) {
 void EnBigpo_SetupScoopSoulIdle(EnBigpo* this) {
     this->savedHeight = this->actor.world.pos.y;
     Actor_SetFocus(&this->actor, -10.0f);
-    this->idleTimer = 400;             // 20 seconds
-    this->actor.flags |= ACTOR_FLAG_1; // targetable ON
+    this->idleTimer = 400; // 20 seconds
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnBigpo_ScoopSoulIdle;
 }
 
@@ -832,7 +839,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_SetupScoopSoulLeaving(EnBigpo* this) {
-    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10000); // targetable OFF and unknown OFF
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10000); // unknown OFF
     this->actionFunc = EnBigpo_ScoopSoulFadingAway;
 }
 
@@ -844,7 +851,7 @@ void EnBigpo_ScoopSoulFadingAway(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_InitDampeMainPo(EnBigpo* this) {
-    this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnBigpo_SelectRandomFireLocations;
 }
 
@@ -860,7 +867,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
 
     // count the number of possible fires we can find (4 in vanilla)
     for (enemyPtr = GET_FIRST_ENEMY(play); enemyPtr != NULL; enemyPtr = enemyPtr->next) {
-        if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == ENBIGPO_POSSIBLEFIRE)) {
+        if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == BIG_POE_TYPE_POSSIBLE_FIRE)) {
             fireCount++;
         }
     }
@@ -881,16 +888,16 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
         randomIndex = ((s32)Rand_ZeroFloat(fireCount)) % fireCount;
 
         while (enemyPtr != NULL) {
-            if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == ENBIGPO_POSSIBLEFIRE)) {
+            if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == BIG_POE_TYPE_POSSIBLE_FIRE)) {
                 if (randomIndex == 0) {
                     randomFirePo = (EnBigpo*)enemyPtr;
-                    randomFirePo->actor.params = ENBIGPO_CHOSENFIRE;
+                    randomFirePo->actor.params = BIG_POE_TYPE_CHOSEN_FIRE;
                     Math_Vec3f_Copy(&this->fires[fireIndex].pos, &randomFirePo->actor.world.pos);
                     randomFirePo->actor.parent = (Actor*)this;
                     randomFirePo->actor.update = EnBigpo_UpdateFire;
                     func_800BC154(play, &play->actorCtx, &randomFirePo->actor, ACTORCAT_PROP);
                     randomFirePo->unk20C = fireIndex;
-                    randomFirePo->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
+                    randomFirePo->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                     // make invisible by size: 0
                     Actor_SetScale(&randomFirePo->actor, 0);
 
@@ -901,9 +908,9 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
                         this->actor.child = &randomFirePo->actor;
                     }
                     break;
-                } else {
-                    randomIndex--;
                 }
+
+                randomIndex--;
             }
             enemyPtr = enemyPtr->next;
         }
@@ -911,7 +918,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
 
     // remove unused fires
     for (enemyPtr = GET_FIRST_ENEMY(play); enemyPtr != NULL; enemyPtr = enemyPtr->next) {
-        if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == ENBIGPO_POSSIBLEFIRE) {
+        if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == BIG_POE_TYPE_POSSIBLE_FIRE)) {
             randomFirePo = (EnBigpo*)enemyPtr;
             randomFirePo->actionFunc = EnBigpo_Die;
             randomFirePo->actor.update = EnBigpo_UpdateFire;
@@ -934,7 +941,7 @@ void EnBigpo_FireCounting(EnBigpo* this, PlayState* play) {
     s32 activatedFireCount = 0;
 
     for (firePo = (EnBigpo*)this->actor.child; firePo; firePo = (EnBigpo*)firePo->actor.child) {
-        if (firePo->actor.params == ENBIGPO_REVEALEDFIRE && firePo->actionFunc == EnBigpo_RevealedFireIdle) {
+        if ((firePo->actor.params == BIG_POE_TYPE_REVEALED_FIRE) && (firePo->actionFunc == EnBigpo_RevealedFireIdle)) {
             activatedFireCount++;
         }
     }
@@ -973,10 +980,10 @@ void EnBigpo_InitHiddenFire(EnBigpo* this) {
 
 /*
  * idle until dampe finds this file by
- * changing this file params from ENBIGPO_POSSIBLEFIRE into ENBIGPO_REVEALEDFIRE
+ * changing this file params from BIG_POE_TYPE_POSSIBLE_FIRE into BIG_POE_TYPE_REVEALED_FIRE
  */
 void EnBigpo_WaitingForDampe(EnBigpo* this, PlayState* play) {
-    if (this->actor.params == ENBIGPO_REVEALEDFIRE) {
+    if (this->actor.params == BIG_POE_TYPE_REVEALED_FIRE) {
         EnBigpo_SetupFireRevealed(this);
     }
 }
@@ -1011,11 +1018,11 @@ void EnBigpo_RevealedFireIdle(EnBigpo* this, PlayState* play) {
     if (this->idleTimer > 0) {
         if (this->idleTimer == 0) {
             //! @bug: unreachable code
-            this->actor.params = ENBIGPO_UNK5;
+            this->actor.params = BIG_POE_TYPE_UNK5;
         }
     } else {
         if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.001f)) {
-            this->actor.params = ENBIGPO_CHOSENFIRE;
+            this->actor.params = BIG_POE_TYPE_CHOSEN_FIRE;
             EnBigpo_InitHiddenFire(this);
         }
         this->actor.scale.z = this->actor.scale.x;
@@ -1044,7 +1051,8 @@ void EnBigpo_FlameCircleCutscene(EnBigpo* this, PlayState* play) {
     this->idleTimer--;
     if (this->idleTimer == 0) {
         EnBigpo* parentPoh = (EnBigpo*)this->actor.parent;
-        Flags_SetSwitch(play, this->switchFlags);
+
+        Flags_SetSwitch(play, this->switchFlag);
         Math_Vec3f_Copy(&parentPoh->fires[this->unk20C].pos, &this->actor.world.pos);
         Actor_Kill(&this->actor);
         if (this->unk20C == 0) {
@@ -1121,10 +1129,10 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, PlayState* play) {
         }
 
         if (Actor_ApplyDamage(&this->actor) == 0) {
-            this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
-            if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
+            if (this->actor.params == BIG_POE_TYPE_SUMMONED) { // dampe type
                 Audio_RestorePrevBgm();
             }
         } else {
@@ -1137,7 +1145,7 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, PlayState* play) {
             this->drawDmgEffScale = 1.0f;
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                         this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                        CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         EnBigpo_HitStun(this);
         return true;
@@ -1156,7 +1164,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
     }
 
     if (EnBigpo_ApplyDamage(this, play) == 0) {
-        if ((this->actor.isTargeted) && (this->actionFunc != EnBigpo_WarpingOut) &&
+        if ((this->actor.isLockedOn) && (this->actionFunc != EnBigpo_WarpingOut) &&
             !(this->collider.base.acFlags & AC_HARD) && (this->actor.category == ACTORCAT_ENEMY)) {
             this->unk20C++;
         } else {
@@ -1205,7 +1213,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffAlpha = this->mainColor.a * (1.0f / 255.0f);
             }
         }
-        this->drawDmgEffScale = ((this->drawDmgEffAlpha + 1.0f) * 0.5f);
+        this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.5f;
         this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.0f);
     }
 }
@@ -1224,7 +1232,7 @@ s32 EnBigpo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
                              Gfx** gfx) {
     EnBigpo* this = THIS;
     // not fully invisible
-    if ((this->mainColor.a == 0) || (limbIndex == 7) ||
+    if ((this->mainColor.a == 0) || (limbIndex == BIG_POE_LIMB_LANTERN) ||
         ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2))) {
         *dList = NULL;
     }
@@ -1233,7 +1241,7 @@ s32 EnBigpo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
 void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnBigpo* this = THIS;
-    s8 limbByte;
+    s8 bodyPartIndex;
     Vec3f* v1ptr; // todo: figure out better names
     Vec3f* v2ptr;
     Vec3f unusedVec;
@@ -1241,12 +1249,13 @@ void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2) && (limbIndex == 8)) {
+    if ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2) &&
+        (limbIndex == BIG_POE_LIMB_HAT_AND_CLOAK)) {
         gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList((*gfx)++, &gBigpoDrawCrispyBodyDL);
+        gSPDisplayList((*gfx)++, &gBigPoeCrispyBodyDL);
     }
 
-    if (limbIndex == 7) {
+    if (limbIndex == BIG_POE_LIMB_LANTERN) {
         // we scale the vec3f... then do nothing with it?
         Matrix_MultVecY(1400.0f, &unusedVec);
         if ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer > 18)) {
@@ -1258,20 +1267,21 @@ void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         Matrix_Get(&this->drawMtxF);
     }
 
-    limbByte = D_80B65078[limbIndex];
-    if (limbByte != -1) {
-        if (limbByte < 3) {
-            Matrix_MultZero(&this->limbPos[limbByte]);
-        } else if (limbByte == 3) {
-            Matrix_MultVecX(3000.0f, &this->limbPos[limbByte]);
-        } else if (limbByte == 4) {
-            Matrix_MultVecY(-2000.0f, &this->limbPos[limbByte]);
+    bodyPartIndex = sLimbToBodyParts[limbIndex];
+    if (bodyPartIndex != BODYPART_NONE) {
+        if (bodyPartIndex <= BIG_POE_BODYPART_2) {
+            Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
+        } else if (bodyPartIndex == BIG_POE_BODYPART_3) {
+            Matrix_MultVecX(3000.0f, &this->bodyPartsPos[bodyPartIndex]);
+        } else if (bodyPartIndex == BIG_POE_BODYPART_4) {
+            Matrix_MultVecY(-2000.0f, &this->bodyPartsPos[bodyPartIndex]);
         } else {
-            v2ptr = &this->limbPos[limbByte + 1];
+            v2ptr = &this->bodyPartsPos[bodyPartIndex + 1];
             v1ptr = D_80B65084;
-            Matrix_MultVecX(-4000.0f, &this->limbPos[limbByte]);
+            // BIG_POE_BODYPART_5
+            Matrix_MultVecX(-4000.0f, &this->bodyPartsPos[bodyPartIndex]);
 
-            for (i = limbByte + 1; i < ARRAY_COUNT(this->limbPos); i++) {
+            for (i = bodyPartIndex + 1; i < BIG_POE_BODYPART_MAX; i++) {
                 Matrix_MultVec3f(v1ptr, v2ptr);
                 v2ptr++;
                 v1ptr++;
@@ -1310,7 +1320,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, PlayState* play) {
     }
 
     // 71.428566f might be 500/7 context unknown
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, BIG_POE_BODYPART_MAX,
                             this->actor.scale.x * 71.428566f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
                             ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
@@ -1347,7 +1357,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_XLU_DISP++, &gBigpoDrawSoulDL);
+    gSPDisplayList(POLY_XLU_DISP++, &gBigPoeSoulDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -1393,9 +1403,9 @@ void EnBigpo_DrawLantern(Actor* thisx, PlayState* play) {
 
     gSPMatrix(&dispHead[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(&dispHead[4], &gBigpoDrawLanternMainDL);
+    gSPDisplayList(&dispHead[4], &gBigPoeLanternMainDL);
 
-    gSPDisplayList(&dispHead[5], &gBigpoDrawLanternPurpleTopDL);
+    gSPDisplayList(&dispHead[5], &gBigPoeLanternPurpleTopDL);
 
     // fully transparent OR fully invisible
     if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {

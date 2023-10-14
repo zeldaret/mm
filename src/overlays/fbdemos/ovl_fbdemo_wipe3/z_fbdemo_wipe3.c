@@ -74,7 +74,7 @@ void TransitionWipe3_Start(void* thisx) {
     } else {
         this->scrollY = 500;
         if (this->texIndex == 2) {
-            func_8019F128(NA_SE_OC_SECRET_WARP_OUT);
+            Audio_PlaySfx_2(NA_SE_OC_SECRET_WARP_OUT);
         }
     }
     guPerspective(&this->projection, &this->normal, 60.0f, 4.0f / 3.0f, 10.0f, 12800.0f, 1.0f);
@@ -102,7 +102,7 @@ void TransitionWipe3_Update(void* thisx, s32 updateRate) {
 
     if (this->dir != TRANS_WIPE3_DIR_IN) {
         if ((this->scrollY == 0) && (this->texIndex == 2)) {
-            func_8019F128(NA_SE_OC_SECRET_WARP_IN);
+            Audio_PlaySfx_2(NA_SE_OC_SECRET_WARP_IN);
         }
         this->scrollY += (this->wipeSpeed * 3) / updateRate;
         if (this->scrollY >= 500) {

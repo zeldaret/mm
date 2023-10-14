@@ -6,7 +6,7 @@
 
 #include "z_en_hg.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnHg*)thisx)
 
@@ -28,17 +28,6 @@ void EnHg_SetupCsAction(EnHg* this);
 void EnHg_HandleCsAction(EnHg* this, PlayState* play);
 s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-
-typedef enum {
-    /* 0 */ HG_ANIM_IDLE,
-    /* 1 */ HG_ANIM_LURCH_FORWARD,
-    /* 2 */ HG_ANIM_RECOIL,
-    /* 3 */ HG_ANIM_LEAN_FORWARD,
-    /* 4 */ HG_ANIM_REACH_FORWARD,
-    /* 5 */ HG_ANIM_CURL_UP,
-    /* 6 */ HG_ANIM_CROUCHED_PANIC,
-    /* 7 */ HG_ANIM_PANIC
-} HgAnimation;
 
 typedef enum {
     /* 0 */ HG_CS_FIRST_ENCOUNTER,
@@ -118,15 +107,27 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, 0x80,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gPamelasFatherIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gPamelasFatherLurchForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gPamelasFatherRecoilFromHitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gPamelasFatherLeanForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gPamelasFatherReachForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gPamelasFatherCurlUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gPamelasFatherCrouchedPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gPamelasFatherPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum {
+    /* 0 */ HG_ANIM_IDLE,
+    /* 1 */ HG_ANIM_LURCH_FORWARD,
+    /* 2 */ HG_ANIM_RECOIL,
+    /* 3 */ HG_ANIM_LEAN_FORWARD,
+    /* 4 */ HG_ANIM_REACH_FORWARD,
+    /* 5 */ HG_ANIM_CURL_UP,
+    /* 6 */ HG_ANIM_CROUCHED_PANIC,
+    /* 7 */ HG_ANIM_PANIC,
+    /* 8 */ HG_ANIM_MAX
+} HgAnimation;
+
+static AnimationInfo sAnimationInfo[HG_ANIM_MAX] = {
+    { &gPamelasFatherIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },          // HG_ANIM_IDLE
+    { &gPamelasFatherLurchForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },  // HG_ANIM_LURCH_FORWARD
+    { &gPamelasFatherRecoilFromHitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, // HG_ANIM_RECOIL
+    { &gPamelasFatherLeanForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },    // HG_ANIM_LEAN_FORWARD
+    { &gPamelasFatherReachForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },   // HG_ANIM_REACH_FORWARD
+    { &gPamelasFatherCurlUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },         // HG_ANIM_CURL_UP
+    { &gPamelasFatherCrouchedPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },  // HG_ANIM_CROUCHED_PANIC
+    { &gPamelasFatherPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },          // HG_ANIM_PANIC
 };
 
 static u32 sHasSoundPlayed = false;
@@ -145,7 +146,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         Actor_Kill(&this->actor);
     }
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.colChkInfo.health = 0;
     this->actor.gravity = -1.0f;
     for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
@@ -192,7 +193,7 @@ void EnHg_ChasePlayer(EnHg* this, PlayState* play) {
     s32 pad;
 
     this->actor.speed = 1.6f;
-    if (!(player->stateFlags2 & PLAYER_STATE2_8000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_8000000) && (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
             Actor_MoveWithGravity(&this->actor);
@@ -233,10 +234,9 @@ void EnHg_ReactToHit(EnHg* this, PlayState* play) {
 void EnHg_HandleTatlDialog(EnHg* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            // "...Sort of looks different..."
             Message_StartTextbox(play, 0x24F, &this->actor);
         } else {
-            func_800B8614(&this->actor, play, 80.0f);
+            Actor_OfferTalk(&this->actor, play, 80.0f);
         }
     }
 }
@@ -245,7 +245,7 @@ void EnHg_PlayRedeadSfx(EnHg* this, PlayState* play) {
     if (this->actor.colChkInfo.health == 1) {
         if ((this->actionFunc == EnHg_ChasePlayer) || (this->actionFunc == EnHg_ReactToHit) ||
             (this->actionFunc == EnHg_ChasePlayerWait)) {
-            func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
         }
     }
 }
@@ -295,7 +295,7 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
             this->csIdList[3] = play->csCtx.actorCues[cueChannel]->id;
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
-                    this->animIndex = 0;
+                    this->animIndex = HG_ANIM_IDLE;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
                     break;
 
@@ -315,7 +315,7 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                     this->csIdList[2] = 0;
                     this->animIndex = HG_ANIM_PANIC;
                     if ((this->csIdIndex == HG_CS_GET_MASK) || (this->csIdIndex == HG_CS_SONG_OF_HEALING)) {
-                        func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
+                        Audio_PlaySfx_2(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_PANIC);
                     break;
@@ -329,6 +329,9 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_75_20);
                     Actor_Kill(&this->actor);
                     break;
+
+                default:
+                    break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             switch (this->animIndex) {
@@ -341,24 +344,30 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                     this->animIndex = HG_ANIM_CROUCHED_PANIC;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_CROUCHED_PANIC);
                     break;
+
+                default:
+                    break;
             }
         }
 
         switch (this->animIndex) {
             case HG_ANIM_LEAN_FORWARD:
             case HG_ANIM_REACH_FORWARD:
-                func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
                 break;
 
             case HG_ANIM_CURL_UP:
             case HG_ANIM_CROUCHED_PANIC:
-                func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 break;
 
             case HG_ANIM_PANIC:
                 if ((this->csIdIndex == HG_CS_FIRST_ENCOUNTER) || (this->csIdIndex == HG_CS_SUBSEQUENT_ENCOUNTER)) {
-                    func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
+                    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 }
+                break;
+
+            default:
                 break;
         }
 
@@ -382,16 +391,15 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
 
     if (player->stateFlags2 & PLAYER_STATE2_8000000) {
         if (!sHasSoundPlayed) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
         sHasSoundPlayed = true;
     } else {
         sHasSoundPlayed = false;
     }
 
-    if (play->msgCtx.ocarinaMode == 3) {
-        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
-            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
+        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
                 this->csIdIndex = HG_CS_SONG_OF_HEALING;
             } else {

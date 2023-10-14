@@ -6,12 +6,14 @@
 #include "z64dma.h"
 #include "z64math.h"
 
+struct GameState;
 struct PlayState;
 struct Actor;
 struct SkelAnime;
 struct PlayerAnimationFrame;
 
 #define LIMB_DONE 0xFF
+#define BODYPART_NONE -1
 
 #define ANIM_FLAG_1         (1 << 0)
 #define ANIM_FLAG_UPDATE_Y  (1 << 1)

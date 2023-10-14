@@ -5,19 +5,38 @@
 #include "objects/object_rd/object_rd.h"
 
 #define EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx) ((thisx)->params & 0xF)
-#define EN_TALK_GIBUD_SWITCH_FLAG(thisx) (((thisx)->params & 0xFF0) >> 4)
+#define EN_TALK_GIBUD_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0xFF0) >> 4)
 
 struct EnTalkGibud;
 
 typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, PlayState*);
+
+typedef enum EnTalkGibudBodyPart {
+    /*  0 */ EN_TALK_GIBUD_BODYPART_0,
+    /*  1 */ EN_TALK_GIBUD_BODYPART_1,
+    /*  2 */ EN_TALK_GIBUD_BODYPART_2,
+    /*  3 */ EN_TALK_GIBUD_BODYPART_3,
+    /*  4 */ EN_TALK_GIBUD_BODYPART_4,
+    /*  5 */ EN_TALK_GIBUD_BODYPART_5,
+    /*  6 */ EN_TALK_GIBUD_BODYPART_6,
+    /*  7 */ EN_TALK_GIBUD_BODYPART_7,
+    /*  8 */ EN_TALK_GIBUD_BODYPART_8,
+    /*  9 */ EN_TALK_GIBUD_BODYPART_9,
+    /* 10 */ EN_TALK_GIBUD_BODYPART_10,
+    /* 11 */ EN_TALK_GIBUD_BODYPART_11,
+    /* 12 */ EN_TALK_GIBUD_BODYPART_12,
+    /* 13 */ EN_TALK_GIBUD_BODYPART_13,
+    /* 14 */ EN_TALK_GIBUD_BODYPART_14,
+    /* 15 */ EN_TALK_GIBUD_BODYPART_MAX
+} EnTalkGibudBodyPart;
 
 typedef struct EnTalkGibud {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider;
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnTalkGibudActionFunc actionFunc;
-    /* 0x1D8 */ Vec3f limbPos[15];
-    /* 0x28C */ s32 limbIndex;
+    /* 0x1D8 */ Vec3f bodyPartsPos[EN_TALK_GIBUD_BODYPART_MAX];
+    /* 0x28C */ s32 bodyPartIndex;
     /* 0x290 */ s32 requestedItemIndex;
     /* 0x294 */ PlayerItemAction itemAction;
     /* 0x298 */ s32 switchFlag;

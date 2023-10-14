@@ -4,6 +4,7 @@
  * Description: Keaton grass
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_kusa2.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -111,7 +112,7 @@ void func_80A5B160(EnKusa2* this, PlayState* play) {
     }
 
     for (i = 1; i < ARRAY_COUNT(this->unk_194); i++) {
-        temp_s1 = (i << 0xD) - 0x2000;
+        temp_s1 = (i * 0x2000) - 0x2000;
         if (this->unk_194[i] == NULL) {
             ptr = &this->unk_194[i];
             actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(
@@ -1314,8 +1315,8 @@ void EnKusa2_Update(Actor* thisx, PlayState* play) {
 
 void func_80A5E6F0(Actor* thisx, PlayState* play) {
     static Gfx* D_80A5EB68[] = {
-        gKakeraLeafTip,
-        gKakeraLeafMiddle,
+        gKakeraLeafTipDL,
+        gKakeraLeafMiddleDL,
     };
     EnKusa2* this = THIS;
     s32 i;

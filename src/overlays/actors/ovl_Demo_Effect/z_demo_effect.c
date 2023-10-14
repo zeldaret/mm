@@ -16,14 +16,13 @@ void DemoEffect_Init(Actor* thisx, PlayState* play);
 void DemoEffect_Destroy(Actor* thisx, PlayState* play);
 void DemoEffect_Update(Actor* thisx, PlayState* play);
 
-void func_808CD940(DemoEffect* this, PlayState* play);
-void func_808CD998(DemoEffect* this, PlayState* play);
-void func_808CDBDC(DemoEffect* this, PlayState* play);
-void func_808CDCEC(DemoEffect* this, PlayState* play);
-void func_808CDD70(DemoEffect* this, PlayState* play);
-void func_808CDDE0(DemoEffect* this, PlayState* play);
-void func_808CDFF8(Actor* thisx, PlayState* play);
-void func_808CE078(Actor* thisx, PlayState* play2);
+void DemoEffect_WaitForObject(DemoEffect* this, PlayState* play);
+void DemoEffect_SetupTimewarp(DemoEffect* this, PlayState* play);
+void DemoEffect_StartTimewarp(DemoEffect* this, PlayState* play);
+void DemoEffect_ShrinkLight(DemoEffect* this, PlayState* play);
+void DemoEffect_ExpandLight(DemoEffect* this, PlayState* play);
+void DemoEffect_DrawTimewarp(Actor* thisx, PlayState* play);
+void DemoEffect_DrawLight(Actor* thisx, PlayState* play2);
 
 ActorInit Demo_Effect_InitVars = {
     ACTOR_DEMO_EFFECT,
@@ -38,42 +37,46 @@ ActorInit Demo_Effect_InitVars = {
 };
 
 void DemoEffect_Init(Actor* thisx, PlayState* play) {
-    static s16 sEffectTypeObjects[] = {
+    static s16 sEffectTypeObjectIds[] = {
         OBJECT_EFC_TW, OBJECT_EFC_TW, OBJECT_EFC_TW, OBJECT_EFC_TW, GAMEPLAY_KEEP,
         GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP,
     };
     s32 pad;
     DemoEffect* this = THIS;
     s32 type = DEMO_EFFECT_GET_TYPE(&this->actor);
-    s32 objectIndex;
+    s32 objectSlot;
     s32 pad2;
-    Color_RGB8 colors[] = {
-        { 200, 200, 0 }, { 255, 40, 100 }, { 50, 255, 0 }, { 0, 0, 255 }, { 255, 255, 80 },
+    Color_RGB8 lightColors[] = {
+        { 200, 200, 0 },  // Yellow
+        { 255, 40, 100 }, // Pink
+        { 50, 255, 0 },   // Light green
+        { 0, 0, 255 },    // Blue
+        { 255, 255, 80 }, // Light Yellow
     };
 
-    if (sEffectTypeObjects[type] == GAMEPLAY_KEEP) {
-        objectIndex = 0;
+    if (sEffectTypeObjectIds[type] == GAMEPLAY_KEEP) {
+        objectSlot = 0;
     } else {
-        objectIndex = Object_GetIndex(&play->objectCtx, sEffectTypeObjects[type]);
+        objectSlot = Object_GetSlot(&play->objectCtx, sEffectTypeObjectIds[type]);
     }
 
-    if (objectIndex < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         // assert on debug
     } else {
-        this->initObjectIndex = objectIndex;
+        this->initObjectSlot = objectSlot;
     }
 
     Actor_SetScale(&this->actor, 0.2f);
 
     switch (type) {
-        case DEMO_EFFECT_TYPE_0:
-        case DEMO_EFFECT_TYPE_1:
+        case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_LARGE:
+        case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_SMALL:
             this->actor.flags |= ACTOR_FLAG_2000000;
-
-        case DEMO_EFFECT_TYPE_2:
-        case DEMO_EFFECT_TYPE_3:
-            this->initDrawFunc = func_808CDFF8;
-            this->initActionFunc = func_808CD998;
+        // FALLTHROUGH
+        case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_LARGE:
+        case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_VERY_LARGE:
+            this->initDrawFunc = DemoEffect_DrawTimewarp;
+            this->initActionFunc = DemoEffect_SetupTimewarp;
             this->envXluColor[0] = 0;
             this->envXluColor[1] = 100;
             this->envXluColor[2] = 255;
@@ -81,17 +84,17 @@ void DemoEffect_Init(Actor* thisx, PlayState* play) {
             this->timer = 0;
             break;
 
-        case DEMO_EFFECT_TYPE_4:
-        case DEMO_EFFECT_TYPE_5:
-        case DEMO_EFFECT_TYPE_6:
-        case DEMO_EFFECT_TYPE_7:
-        case DEMO_EFFECT_TYPE_8:
-            this->envXluColor[0] = colors[type - 4].r;
-            this->envXluColor[1] = colors[type - 4].g;
-            this->envXluColor[2] = colors[type - 4].b;
+        case DEMO_EFFECT_TYPE_LIGHT_DARK_YELLOW:
+        case DEMO_EFFECT_TYPE_LIGHT_PINK:
+        case DEMO_EFFECT_TYPE_LIGHT_GREEN:
+        case DEMO_EFFECT_TYPE_LIGHT_BLUE:
+        case DEMO_EFFECT_TYPE_LIGHT_YELLOW:
+            this->envXluColor[0] = lightColors[type - DEMO_EFFECT_TYPE_LIGHT_BASE].r;
+            this->envXluColor[1] = lightColors[type - DEMO_EFFECT_TYPE_LIGHT_BASE].g;
+            this->envXluColor[2] = lightColors[type - DEMO_EFFECT_TYPE_LIGHT_BASE].b;
             Actor_SetScale(&this->actor, 0.0f);
-            this->initDrawFunc = func_808CE078;
-            this->initActionFunc = func_808CDDE0;
+            this->initDrawFunc = DemoEffect_DrawLight;
+            this->initActionFunc = DemoEffect_ExpandLight;
             this->timer = 0;
             break;
 
@@ -100,17 +103,17 @@ void DemoEffect_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    this->actionFunc = func_808CD940;
+    this->actionFunc = DemoEffect_WaitForObject;
 }
 
 void DemoEffect_Destroy(Actor* thisx, PlayState* play) {
     DemoEffect* this = THIS;
 
     switch (DEMO_EFFECT_GET_TYPE(&this->actor)) {
-        case DEMO_EFFECT_TYPE_0:
-        case DEMO_EFFECT_TYPE_1:
-        case DEMO_EFFECT_TYPE_2:
-        case DEMO_EFFECT_TYPE_3:
+        case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_LARGE:
+        case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_SMALL:
+        case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_LARGE:
+        case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_VERY_LARGE:
             SkelCurve_Destroy(play, &this->skelCurve);
             break;
 
@@ -119,49 +122,49 @@ void DemoEffect_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_808CD940(DemoEffect* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->initObjectIndex)) {
-        this->actor.objBankIndex = this->initObjectIndex;
+void DemoEffect_WaitForObject(DemoEffect* this, PlayState* play) {
+    if (Object_IsLoaded(&play->objectCtx, this->initObjectSlot)) {
+        this->actor.objectSlot = this->initObjectSlot;
         this->actor.draw = this->initDrawFunc;
         this->actionFunc = this->initActionFunc;
     }
 }
 
-void func_808CD998(DemoEffect* this, PlayState* play) {
+void DemoEffect_SetupTimewarp(DemoEffect* this, PlayState* play) {
     s32 type = DEMO_EFFECT_GET_TYPE(&this->actor);
 
-    if (SkelCurve_Init(play, &this->skelCurve, &object_efc_tw_Skel_0012E8, &object_efc_tw_CurveAnim_000050)) {}
+    if (SkelCurve_Init(play, &this->skelCurve, &gTimewarpSkel, &gTimewarpAnim)) {}
 
-    SkelCurve_SetAnim(&this->skelCurve, &object_efc_tw_CurveAnim_000050, 1.0f, 59.0f, 1.0f, 1.7f);
+    SkelCurve_SetAnim(&this->skelCurve, &gTimewarpAnim, 1.0f, 59.0f, 1.0f, 1.7f);
     SkelCurve_Update(play, &this->skelCurve);
-    this->actionFunc = func_808CDCEC;
+    this->actionFunc = DemoEffect_StartTimewarp;
 
     switch (type) {
-        case DEMO_EFFECT_TYPE_0:
-            Actor_SetScale(&this->actor, 0.16800001f);
+        case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_LARGE:
+            Actor_SetScale(&this->actor, 168.0f * 0.001f);
             break;
 
-        case DEMO_EFFECT_TYPE_1:
-            Actor_SetScale(&this->actor, 0.08400001f);
+        case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_SMALL:
+            Actor_SetScale(&this->actor, 84.0f * 0.001f);
             break;
 
-        case DEMO_EFFECT_TYPE_2:
-            Actor_SetScale(&this->actor, 0.16800001f);
+        case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_LARGE:
+            Actor_SetScale(&this->actor, 168.0f * 0.001f);
             break;
 
-        case DEMO_EFFECT_TYPE_3:
-            Actor_SetScale(&this->actor, 0.28f);
+        case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_VERY_LARGE:
+            Actor_SetScale(&this->actor, 280.0f * 0.001f);
             break;
 
         default:
-            Actor_SetScale(&this->actor, 0.014f);
+            Actor_SetScale(&this->actor, 14.0f * 0.001f);
             break;
     }
 }
 
-void func_808CDAD0(f32 alphaScale) {
+void DemoEffect_SetPerVertexAlpha(f32 alphaScale) {
     static u8 sAlphaTypes[] = { 1, 1, 2, 0, 1, 1, 2, 0, 1, 2, 0, 2, 1, 0, 1, 0, 2, 0, 2, 2, 0 };
-    Vtx* vtx = Lib_SegmentedToVirtual(object_efc_tw_Vtx_000060);
+    Vtx* vtx = Lib_SegmentedToVirtual(gTimewarpVtx);
     s32 i;
     u8 alphas[3];
 
@@ -176,7 +179,10 @@ void func_808CDAD0(f32 alphaScale) {
     }
 }
 
-void func_808CDBDC(DemoEffect* this, PlayState* play) {
+/**
+ * Shrink and fade linearly for 100 frames then remove.
+ */
+void DemoEffect_FinishTimewarp(DemoEffect* this, PlayState* play) {
     s32 type = DEMO_EFFECT_GET_TYPE(&this->actor);
     f32 scale;
     f32 alphaScale;
@@ -187,19 +193,19 @@ void func_808CDBDC(DemoEffect* this, PlayState* play) {
         scale = alphaScale * 0.14f;
 
         switch (type) {
-            case DEMO_EFFECT_TYPE_0:
+            case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_LARGE:
                 scale *= 1.2f;
                 break;
 
-            case DEMO_EFFECT_TYPE_1:
+            case DEMO_EFFECT_TIMEWARP_TIMEBLOCK_SMALL:
                 scale *= 0.6f;
                 break;
 
-            case DEMO_EFFECT_TYPE_2:
+            case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_LARGE:
                 scale *= 1.2f;
                 break;
 
-            case DEMO_EFFECT_TYPE_3:
+            case DEMO_EFFECT_TIMEWARP_LIGHTBLOCK_VERY_LARGE:
                 scale *= 2.0f;
                 break;
 
@@ -209,25 +215,31 @@ void func_808CDBDC(DemoEffect* this, PlayState* play) {
 
         this->actor.scale.x = scale;
         this->actor.scale.z = scale;
-        func_808CDAD0(alphaScale);
-        func_800B8FE8(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
+        DemoEffect_SetPerVertexAlpha(alphaScale);
+        Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
     } else {
-        func_808CDAD0(1.0f);
+        DemoEffect_SetPerVertexAlpha(1.0f);
         Actor_Kill(&this->actor);
     }
 }
 
-void func_808CDCEC(DemoEffect* this, PlayState* play) {
-    func_800B8FE8(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
+/**
+ * Runs until animation plays to frame 59 and pauses it on frame 59.
+ */
+void DemoEffect_StartTimewarp(DemoEffect* this, PlayState* play) {
+    Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
 
     if (SkelCurve_Update(play, &this->skelCurve)) {
-        SkelCurve_SetAnim(&this->skelCurve, &object_efc_tw_CurveAnim_000050, 1.0f, 60.0f, 59.0f, 0.0f);
-        this->actionFunc = func_808CDBDC;
+        SkelCurve_SetAnim(&this->skelCurve, &gTimewarpAnim, 1.0f, 60.0f, 59.0f, 0.0f);
+        this->actionFunc = DemoEffect_FinishTimewarp;
         this->timer = 0;
     }
 }
 
-void func_808CDD70(DemoEffect* this, PlayState* play) {
+/**
+ * Take scale to 0 linearly, when scale is small enough, remove.
+ */
+void DemoEffect_ShrinkLight(DemoEffect* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->actor.scale.x - 0.02f);
 
     this->timer++;
@@ -236,12 +248,16 @@ void func_808CDD70(DemoEffect* this, PlayState* play) {
     }
 }
 
-void func_808CDDE0(DemoEffect* this, PlayState* play) {
+/**
+ * Changes scale for 3 frames, scale is successively 0.0f, 0.2f, 0.3f, 0.35f (would converge to 0.4 exponentially if run
+ * for a long time).
+ */
+void DemoEffect_ExpandLight(DemoEffect* this, PlayState* play) {
     Actor_SetScale(&this->actor, (this->actor.scale.x * 0.5f) + 0.2f);
 
     this->timer++;
     if (this->timer >= 3) {
-        this->actionFunc = func_808CDD70;
+        this->actionFunc = DemoEffect_ShrinkLight;
     }
 }
 
@@ -251,7 +267,7 @@ void DemoEffect_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-s32 func_808CDE78(PlayState* play, SkelCurve* skelCurve, s32 limbIndex, Actor* thisx) {
+s32 DemoEffect_OverrideLimbDrawTimewarp(PlayState* play, SkelCurve* skelCurve, s32 limbIndex, Actor* thisx) {
     s32 pad;
     DemoEffect* this = THIS;
     u32 frames = play->gameplayFrames;
@@ -278,7 +294,7 @@ s32 func_808CDE78(PlayState* play, SkelCurve* skelCurve, s32 limbIndex, Actor* t
     return true;
 }
 
-void func_808CDFF8(Actor* thisx, PlayState* play) {
+void DemoEffect_DrawTimewarp(Actor* thisx, PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     DemoEffect* this = THIS;
 
@@ -287,12 +303,12 @@ void func_808CDFF8(Actor* thisx, PlayState* play) {
     POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_25);
 
     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
-    SkelCurve_Draw(&this->actor, play, &this->skelCurve, func_808CDE78, NULL, 1, &this->actor);
+    SkelCurve_Draw(&this->actor, play, &this->skelCurve, DemoEffect_OverrideLimbDrawTimewarp, NULL, 1, &this->actor);
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_808CE078(Actor* thisx, PlayState* play2) {
+void DemoEffect_DrawLight(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     DemoEffect* this = THIS;
     s16 zRot = (this->timer * 0x400) & 0xFFFF;
@@ -319,10 +335,10 @@ void func_808CE078(Actor* thisx, PlayState* play2) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    D_801F4E32 = 1;
-    D_801F4E38.x = thisx->world.pos.x;
-    D_801F4E38.y = thisx->world.pos.y;
-    D_801F4E38.z = thisx->world.pos.z;
+    gCustomLensFlare1On = true;
+    gCustomLensFlare1Pos.x = thisx->world.pos.x;
+    gCustomLensFlare1Pos.y = thisx->world.pos.y;
+    gCustomLensFlare1Pos.z = thisx->world.pos.z;
 
     D_801F4E44 = thisx->scale.x * 60.0f;
     D_801F4E48 = thisx->scale.x * 50.0f;

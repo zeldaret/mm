@@ -58,11 +58,11 @@ Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
 Color_RGBA8 sEnvColor = { 80, 80, 80, 255 };
 
 void EnNwc_Init(Actor* thisx, PlayState* play) {
-    s32 niwObjectIndex;
+    s32 niwObjectSlot;
     EnNwc* this = THIS;
 
-    niwObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_NIW);
-    if (niwObjectIndex < 0) {
+    niwObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_NIW);
+    if (niwObjectSlot <= OBJECT_SLOT_NONE) {
         // niw object does not exist, we need it for tranformation, despawn
         Actor_Kill(&this->actor);
         return;
@@ -75,8 +75,8 @@ void EnNwc_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->niwObjectIndex = niwObjectIndex;
-    this->nwcObjectIndex = this->actor.objBankIndex;
+    this->niwObjectSlot = niwObjectSlot;
+    this->nwcObjectIndex = this->actor.objectSlot;
     this->grog = EnNwc_FindGrog(play);
 
     this->footRotY = this->footRotZ = 0;
@@ -242,20 +242,20 @@ void EnNwc_CheckFound(EnNwc* this, PlayState* play) {
         }
 
         EnNwc_ChangeState(this, NWC_STATE_FOLLOWING);
-        func_801A0868(&gSfxDefaultPos, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
+        Audio_PlaySfx_AtPosWithAllChannelsIO(&gSfxDefaultPos, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
     }
 }
 
 void EnNwc_LoadNiwSkeleton(EnNwc* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->niwObjectIndex)) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->niwObjectIndex].segment);
+    if (Object_IsLoaded(&play->objectCtx, this->niwObjectSlot)) {
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->niwObjectSlot].segment);
 
-        SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
+        SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkel, &gNiwIdleAnim, this->jointTable, this->morphTable,
                            NIW_LIMB_MAX);
         Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim),
                          ANIMMODE_LOOP, 0.0f);
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->nwcObjectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->nwcObjectIndex].segment);
         this->state = NWC_STATE_NIW_LOADED;
         EnNwc_ToggleState(this);
     }
@@ -305,8 +305,8 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         }
     }
 
-    if (this->grog->actor.home.rot.z >= 20 && // all 10 chicks have been found
-        (this->hasGrownUp & 1) == false) {
+    if ((this->grog->actor.home.rot.z >= 20) && // all 10 chicks have been found
+        !(this->hasGrownUp & 1)) {
         this->transformTimer += 2;
         if (this->transformTimer >= (s32)(s16)((this->actor.home.rot.z * 0x1E) + 0x1E)) {
             // it is our turn to transform
@@ -468,11 +468,11 @@ void EnNwc_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     if (this->hasGrownUp & 1) {
-        this->actor.objBankIndex = this->niwObjectIndex;
+        this->actor.objectSlot = this->niwObjectSlot;
         this->actor.draw = EnNwc_DrawAdultBody;
         this->actor.shape.shadowScale = 15.0f;
     } else {
-        this->actor.objBankIndex = this->nwcObjectIndex;
+        this->actor.objectSlot = this->nwcObjectIndex;
         this->actor.draw = EnNwc_Draw;
         this->actor.shape.shadowScale = 6.0f;
     }

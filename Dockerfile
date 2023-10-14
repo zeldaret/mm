@@ -15,8 +15,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
     unzip \
     vbindiff \
     vim \
-    clang-tidy-11 \
-    clang-format-11 \
+    clang-tidy-14 \
+    clang-format-14 \
     libpng-dev && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*

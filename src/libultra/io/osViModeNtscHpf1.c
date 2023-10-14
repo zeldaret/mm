@@ -1,5 +1,5 @@
 #include "global.h"
-#include "ultra64/viint.h"
+#include "PR/viint.h"
 
 OSViMode osViModeNtscHpf1 = {
     OS_VI_NTSC_HPF1, // type

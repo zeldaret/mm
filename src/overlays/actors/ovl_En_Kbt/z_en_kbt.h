@@ -17,7 +17,7 @@ typedef struct EnKbt {
     /* 0x27C */ u16 unk_27C;
     /* 0x27E */ u8 unk_27E;
     /* 0x27F */ u8 unk_27F;
-    /* 0x280 */ s16 unk_280;
+    /* 0x280 */ s16 animIndex;
     /* 0x282 */ s16 unk_282;
     /* 0x284 */ s16 unk_284;
     /* 0x288 */ EnKbtActionFunc actionFunc;

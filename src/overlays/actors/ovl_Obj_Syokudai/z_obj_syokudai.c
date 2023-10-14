@@ -197,7 +197,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                 if (this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
-            } else if (player->heldItemAction == PLAYER_IA_STICK) {
+            } else if (player->heldItemAction == PLAYER_IA_DEKU_STICK) {
                 Vec3f stickTipSeparationVec;
 
                 Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);
@@ -211,7 +211,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                     if (interaction <= OBJ_SYOKUDAI_INTERACTION_STICK) {
                         if (player->unk_B28 == 0) {
                             player->unk_B28 = 0xD2;
-                            Audio_PlaySfxAtPos(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
+                            Audio_PlaySfx_AtPos(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
                         } else if (player->unk_B28 < 0xC8) {
                             player->unk_B28 = 0xC8;
                         }
@@ -248,7 +248,8 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                         }
                     } else {
-                        if (++sNumLitTorchesInGroup >= groupSize) {
+                        sNumLitTorchesInGroup++;
+                        if (sNumLitTorchesInGroup >= groupSize) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
                             this->snuffTimer =
@@ -280,7 +281,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
         }
         lightIntensity = Rand_ZeroOne() * 127;
         lightIntensity += 128;
-        func_800B9010(thisx, NA_SE_EV_TORCH - SFX_FLAG);
+        Actor_PlaySfx_Flagged(thisx, NA_SE_EV_TORCH - SFX_FLAG);
     }
     Lights_PointSetColorAndRadius(&this->lightInfo, lightIntensity, lightIntensity * 0.7f, 0, lightRadius);
     this->flameTexScroll++;

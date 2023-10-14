@@ -9,7 +9,7 @@
 #include "z_en_kujiya.h"
 #include "objects/object_kujiya/object_kujiya.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnKujiya*)thisx)
 
@@ -46,21 +46,21 @@ ActorInit En_Kujiya_InitVars = {
     (ActorFunc)EnKujiya_Draw,
 };
 
-#define CHECK_LOTTERY_NUMBERS                                                              \
-    (((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][0]) ==       \
-      ((((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF00) >> 8)) && \
-     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][1]) ==       \
-      ((((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF0) >> 4)) &&  \
-     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][2]) ==       \
-      (((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF)))
+#define CHECK_LOTTERY_NUMBERS()                                                      \
+    (((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][0]) == \
+      ((HS_GET_LOTTERY_CODE_GUESS() & 0xF00) >> 8)) &&                               \
+     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][1]) == \
+      ((HS_GET_LOTTERY_CODE_GUESS() & 0xF0) >> 4)) &&                                \
+     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][2]) == \
+      (HS_GET_LOTTERY_CODE_GUESS() & 0xF)))
 
 void EnKujiya_Init(Actor* thisx, PlayState* play) {
     EnKujiya* this = THIS;
 
     Actor_SetScale(&this->actor, 0.1f);
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actor.targetMode = 6;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.targetMode = TARGET_MODE_6;
 
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
@@ -104,7 +104,7 @@ void EnKujiya_Wait(EnKujiya* this, PlayState* play) {
                (this->actor.shape.rot.y == 0)) {
         EnKujiya_SetupTurnToOpen(this);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -112,17 +112,17 @@ void EnKujiya_HandlePlayerChoice(EnKujiya* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) { // Buy
             if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 Message_StartTextbox(play, 0x2B62, &this->actor);
                 this->textId = 0x2B62; // Not enough Rupees
             } else {
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 Rupees_ChangeBy(-10);
                 Message_StartTextbox(play, 0x2B5F, &this->actor);
                 this->textId = 0x2B5F; // Enter number
             }
         } else { // Don't buy
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             Message_StartTextbox(play, 0x2B5E, &this->actor);
             this->textId = 0x2B5E; // Too bad
         }
@@ -159,7 +159,7 @@ void EnKujiya_ChooseNextDialogue(EnKujiya* this, PlayState* play) {
                 break;
 
             case 0x2B65:
-                if (CHECK_LOTTERY_NUMBERS) {
+                if (CHECK_LOTTERY_NUMBERS()) {
                     Message_StartTextbox(play, 0x2B66, &this->actor);
                     this->textId = 0x2B66; // Won 50 Rupees
                 } else {
@@ -172,6 +172,9 @@ void EnKujiya_ChooseNextDialogue(EnKujiya* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 EnKujiya_SetupGivePrize(this);
                 EnKujiya_GivePrize(this, play);
+                break;
+
+            default:
                 break;
         }
     }
@@ -206,6 +209,9 @@ void EnKujiya_Talk(EnKujiya* this, PlayState* play) {
                 Message_StartTextbox(play, 0x2B60, &this->actor);
                 this->textId = 0x2B60; // Will announce winning numbers after 6
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -251,6 +257,9 @@ s32 EnKujiya_CheckBoughtTicket(void) {
                 return true;
             }
             break;
+
+        default:
+            break;
     }
     return false;
 }
@@ -267,6 +276,9 @@ void EnKujiya_SetBoughtTicket(void) {
 
         case 3:
             SET_WEEKEVENTREG(WEEKEVENTREG_33_40);
+            break;
+
+        default:
             break;
     }
 }
@@ -286,6 +298,9 @@ void EnKujiya_UnsetBoughtTicket(void) {
 
         case 3:
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_40);
+            break;
+
+        default:
             break;
     }
 }
@@ -314,7 +329,7 @@ void EnKujiya_TurnToOpen(EnKujiya* this, PlayState* play) {
             this->timer++;
         }
     } else {
-        func_800B9010(&this->actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
     }
 }
 
@@ -342,7 +357,7 @@ void EnKujiya_TurnToClosed(EnKujiya* this, PlayState* play) {
             this->timer++;
         }
     } else {
-        func_800B9010(&this->actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
     }
 }
 

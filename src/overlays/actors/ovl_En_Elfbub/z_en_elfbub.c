@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 #include "objects/object_bubble/object_bubble.h"
 
-#define FLAGS (ACTOR_FLAG_1)
+#define FLAGS (ACTOR_FLAG_TARGETABLE)
 
 #define THIS ((EnElfbub*)thisx)
 
@@ -56,7 +56,7 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     EnElfbub* this = THIS;
     Actor* childActor;
 
-    if (Flags_GetSwitch(play, ENELFBUB_GET_SWITCHFLAG(&this->actor))) {
+    if (Flags_GetSwitch(play, ENELFBUB_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -73,16 +73,17 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
-    childActor = Actor_SpawnAsChild(
-        &play->actorCtx, &this->actor, play, ACTOR_EN_ELFORG, this->actor.world.pos.x, this->actor.world.pos.y + 12.0f,
-        this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z,
-        STRAY_FAIRY_PARAMS(ENELFBUB_GET_SWITCHFLAG(&this->actor), 0, STRAY_FAIRY_TYPE_BUBBLE));
+    childActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ELFORG, this->actor.world.pos.x,
+                                    this->actor.world.pos.y + 12.0f, this->actor.world.pos.z, this->actor.world.rot.x,
+                                    this->actor.world.rot.y, this->actor.world.rot.z,
+                                    STRAY_FAIRY_PARAMS(ENELFBUB_GET_SWITCH_FLAG(&this->actor),
+                                                       STRAY_FAIRY_AREA_CLOCK_TOWN, STRAY_FAIRY_TYPE_BUBBLE));
     if (childActor != NULL) {
         childActor->parent = &this->actor;
     }
 
     this->oscillationAngle = 0;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void EnElfbub_Destroy(Actor* thisx, PlayState* play) {
@@ -140,6 +141,7 @@ void EnElfbub_Idle(EnElfbub* this, PlayState* play) {
 
 void EnElfbub_Update(Actor* thisx, PlayState* play) {
     EnElfbub* this = THIS;
+
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actionFunc(this, play);
     Actor_SetFocus(&this->actor, this->actor.shape.yOffset);

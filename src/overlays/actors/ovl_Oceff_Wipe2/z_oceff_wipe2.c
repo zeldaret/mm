@@ -43,7 +43,7 @@ void OceffWipe2_Destroy(Actor* thisx, PlayState* play) {
     OceffWipe2* this = THIS;
 
     Magic_Reset(play);
-    play->msgCtx.unk120B0 = 0;
+    play->msgCtx.ocarinaSongEffectActive = false;
 }
 
 void OceffWipe2_Update(Actor* thisx, PlayState* play) {
@@ -72,7 +72,7 @@ void OceffWipe2_Draw(Actor* thisx, PlayState* play) {
     vtxPtr = sEponaSongFrustumVtx;
 
     if (this->timer < 32) {
-        z = Math_SinS(this->timer << 9) * 1220.0f;
+        z = Math_SinS(this->timer * 0x200) * 1220.0f;
     } else {
         z = 1220.0f;
     }

@@ -39,14 +39,15 @@ void func_808A7954(ObjWturn* this) {
 }
 
 void func_808A7968(ObjWturn* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode >= 28 && play->msgCtx.ocarinaMode < 39) {
-        Flags_UnsetSwitch(play, this->actor.params);
+    if ((play->msgCtx.ocarinaMode >= OCARINA_MODE_WARP_TO_GREAT_BAY_COAST) &&
+        (play->msgCtx.ocarinaMode <= OCARINA_MODE_WARP_TO_ENTRANCE)) {
+        Flags_UnsetSwitch(play, OBJWTURN_GET_SWITCH_FLAG(&this->actor));
         Actor_Kill(&this->actor);
         return;
     }
 
-    if ((Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F40)) ||
-        (!Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F41))) {
+    if ((Flags_GetSwitch(play, OBJWTURN_GET_SWITCH_FLAG(&this->actor)) && (play->sceneId == SCENE_F40)) ||
+        (!Flags_GetSwitch(play, OBJWTURN_GET_SWITCH_FLAG(&this->actor)) && (play->sceneId == SCENE_F41))) {
         func_808A7A24(this);
     }
 }
@@ -87,7 +88,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play) {
     if (Math_ScaledStepToS(&this->actor.shape.rot.z, -0x8000, 0x0200)) {
         func_808A7C04(this, play);
     }
-    func_800B8FE8(&this->actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
     Play_SetCameraRoll(play, this->subCamId, this->actor.shape.rot.z);
 }
 

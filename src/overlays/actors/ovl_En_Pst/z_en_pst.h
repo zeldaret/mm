@@ -32,7 +32,7 @@ typedef struct EnPst {
     /* 0x20E */ s16 behaviour;
     /* 0x210 */ MsgEventFunc msgEventCallback;
     /* 0x214 */ s32 unk214; // Set and not used
-    /* 0x218 */ s32 exchangeItemId;
+    /* 0x218 */ s32 exchangeItemAction;
     /* 0x21C */ s32 isLetterToKafeiDeposited;
 } EnPst; // size = 0x220
 
