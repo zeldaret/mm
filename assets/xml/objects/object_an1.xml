@@ -33,19 +33,20 @@
         <DList Name="gAnju1LeftUpperArmDL" Offset="0xD730" />
         <DList Name="gAnju1TorsoDL" Offset="0xD850" />
 
-        <Texture Name="object_an1_TLUT_00DB20" OutName="tlut_00DB20" Format="rgba16" Width="16" Height="16" Offset="0xDB20" />
-        <Texture Name="object_an1_Tex_00DD20" OutName="tex_00DD20" Format="rgba16" Width="16" Height="16" Offset="0xDD20" />
-        <Texture Name="object_an1_Tex_00DF20" OutName="tex_00DF20" Format="rgba16" Width="16" Height="16" Offset="0xDF20" />
+        <Texture Name="gAnju1TLUT" OutName="tlut" Format="rgba16" Width="16" Height="16" Offset="0xDB20" />
+        <Texture Name="gAnju1EyesTLUT" OutName="eyes_tlut" Format="rgba16" Width="16" Height="16" Offset="0xDD20" />
+        <Texture Name="gAnju1MouthTLUT" OutName="mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0xDF20" />
+
         <Texture Name="object_an1_Tex_00E120" OutName="tex_00E120" Format="ci8" Width="8" Height="8" Offset="0xE120" />
-        <Texture Name="object_an1_Tex_00E160" OutName="tex_00E160" Format="ci8" Width="8" Height="16" Offset="0xE160" />
+        <Texture Name="gAnju1HairTex" OutName="anju_hair" Format="ci8" Width="8" Height="16" Offset="0xE160" />
         <Texture Name="gAnju1EyeOpenTex" OutName="anju_eye_open" Format="ci8" Width="32" Height="32" Offset="0xE1E0" TlutOffset="0xDD20" />
-        <Texture Name="object_an1_Tex_00E5E0" OutName="tex_00E5E0" Format="ci8" Width="16" Height="16" Offset="0xE5E0" />
+        <Texture Name="gAnju1EarTex" OutName="anju_ear" Format="ci8" Width="16" Height="16" Offset="0xE5E0" />
         <Texture Name="gAnju1Mouth00E6E0Tex" OutName="anju_mouth_00E6E0" Format="ci8" Width="32" Height="16" Offset="0xE6E0" TlutOffset="0xDF20" />
-        <Texture Name="object_an1_Tex_00E8E0" OutName="tex_00E8E0" Format="ci8" Width="8" Height="8" Offset="0xE8E0" />
+        <Texture Name="gAnju1ShirtButtonTex" OutName="anju_shirt_button" Format="ci8" Width="8" Height="8" Offset="0xE8E0" />
         <Texture Name="gAnju1HandTex" OutName="anju_hand" Format="ci8" Width="16" Height="16" Offset="0xE920" />
-        <Texture Name="object_an1_Tex_00EA20" OutName="tex_00EA20" Format="ci8" Width="32" Height="32" Offset="0xEA20" />
-        <Texture Name="object_an1_Tex_00EE20" OutName="tex_00EE20" Format="ci8" Width="16" Height="16" Offset="0xEE20" />
-        <Texture Name="object_an1_Tex_00EF20" OutName="tex_00EF20" Format="ci8" Width="8" Height="16" Offset="0xEF20" />
+        <Texture Name="gAnju1SkirtTex" OutName="anju_skirt" Format="ci8" Width="32" Height="32" Offset="0xEA20" />
+        <Texture Name="object_an1_Tex_00EE20" OutName="tex_00EE20" Format="ci8" Width="16" Height="16" Offset="0xEE20" /> <!-- shirt -->
+        <Texture Name="gAnju1SleeveTex" OutName="anju_sleeve" Format="ci8" Width="8" Height="16" Offset="0xEF20" />
         <Texture Name="gAnju1EyeHalfTex" OutName="anju_eye_half" Format="ci8" Width="32" Height="32" Offset="0xEFA0" TlutOffset="0xDD20" />
         <Texture Name="gAnju1EyeClosedTex" OutName="anju_eye_closed" Format="ci8" Width="32" Height="32" Offset="0xF3A0" TlutOffset="0xDD20" />
         <Texture Name="gAnju1MouthHappyTex" OutName="anju_mouth_happy" Format="ci8" Width="32" Height="16" Offset="0xF7A0" TlutOffset="0xDF20" />
@@ -54,15 +55,16 @@
         <Texture Name="gAnju1Mouth0101A0Tex" OutName="anju_mouth_0101A0" Format="ci8" Width="32" Height="16" Offset="0x101A0" TlutOffset="0xDF20" />
         <Texture Name="gAnju1EyeAngryTex" OutName="anju_eye_angry" Format="ci8" Width="32" Height="32" Offset="0x103A0" TlutOffset="0xDD20" />
 
+        <!-- Empty -->
         <DList Name="object_an1_DL_0111E0" Offset="0x111E0" />
-        <DList Name="gAnju1FoodTrayDL" Offset="0x111E8" /> <!-- Original name is "an_obon_model" -->
 
-        <Texture Name="gAnju1PlateTex" OutName="plate" Format="i8" Width="32" Height="32" Offset="0x11928" />
-        <Texture Name="object_an1_Tex_011D28" OutName="tex_011D28" Format="rgba16" Width="16" Height="16" Offset="0x11D28" />
-        <Texture Name="object_an1_Tex_011F28" OutName="tex_011F28" Format="rgba16" Width="16" Height="16" Offset="0x11F28" />
-        <Texture Name="object_an1_Tex_012128" OutName="tex_012128" Format="i8" Width="16" Height="16" Offset="0x12128" />
-        <Texture Name="object_an1_Tex_012228" OutName="tex_012228" Format="i4" Width="16" Height="16" Offset="0x12228" />
-        <Texture Name="object_an1_Tex_0122A8" OutName="tex_0122A8" Format="i8" Width="16" Height="16" Offset="0x122A8" />
+        <DList Name="gAnju1FoodTrayDL" Offset="0x111E8" /> <!-- Original name is "an_obon_model" -->
+        <Texture Name="gAnju1PlateTex" OutName="tray_plate" Format="i8" Width="32" Height="32" Offset="0x11928" />
+        <Texture Name="gAnju1Food1Tex" OutName="tray_food_1" Format="rgba16" Width="16" Height="16" Offset="0x11D28" />
+        <Texture Name="gAnju1Food2Tex" OutName="tray_food_2" Format="rgba16" Width="16" Height="16" Offset="0x11F28" />
+        <Texture Name="gAnju1CircleTex" OutName="tray_circle" Format="i8" Width="16" Height="16" Offset="0x12128" />
+        <Texture Name="gAnju1Steam1Tex" OutName="tray_steam_1" Format="i4" Width="16" Height="16" Offset="0x12228" />
+        <Texture Name="gAnju1Steam2Tex" OutName="tray_steam_2" Format="i8" Width="16" Height="16" Offset="0x122A8" />
 
         <!-- <Blob Name="object_an1_Blob_0123A8" Size="0x10" Offset="0x123A8" /> -->
 
