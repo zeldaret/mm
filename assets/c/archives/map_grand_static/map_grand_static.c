@@ -93,10 +93,6 @@ u64 map_grand_static_115[] = {
 #include "assets/archives/map_grand_static/map_115.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_010E68[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_116[] = {
 #include "assets/archives/map_grand_static/map_116.i4.inc.c"
 };
@@ -109,20 +105,12 @@ u64 map_grand_static_118[] = {
 #include "assets/archives/map_grand_static/map_118.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_012C08[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_119[] = {
 #include "assets/archives/map_grand_static/map_119.i4.inc.c"
 };
 
 u64 map_grand_static_11A[] = {
 #include "assets/archives/map_grand_static/map_11A.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_013DF8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_11B[] = {
@@ -137,16 +125,8 @@ u64 map_grand_static_11D[] = {
 #include "assets/archives/map_grand_static/map_11D.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_014FF8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_11E[] = {
 #include "assets/archives/map_grand_static/map_11E.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_015588[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_11F[] = {
@@ -157,32 +137,16 @@ u64 map_grand_static_120[] = {
 #include "assets/archives/map_grand_static/map_120.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_0162C8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_121[] = {
 #include "assets/archives/map_grand_static/map_121.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_016A68[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_122[] = {
 #include "assets/archives/map_grand_static/map_122.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_017858[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_123[] = {
 #include "assets/archives/map_grand_static/map_123.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_0180A8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_124[] = {
@@ -203,10 +167,6 @@ u64 map_grand_static_127[] = {
 
 u64 map_grand_static_128[] = {
 #include "assets/archives/map_grand_static/map_128.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_019F08[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_129[] = {
@@ -233,16 +193,8 @@ u64 map_grand_static_12E[] = {
 #include "assets/archives/map_grand_static/map_12E.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_01D9F8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_12F[] = {
 #include "assets/archives/map_grand_static/map_12F.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_01E798[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_130[] = {
@@ -251,10 +203,6 @@ u64 map_grand_static_130[] = {
 
 u64 map_grand_static_131[] = {
 #include "assets/archives/map_grand_static/map_131.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_01F398[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_132[] = {
@@ -269,20 +217,12 @@ u64 map_grand_static_134[] = {
 #include "assets/archives/map_grand_static/map_134.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_020DD8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_135[] = {
 #include "assets/archives/map_grand_static/map_135.i4.inc.c"
 };
 
 u64 map_grand_static_136[] = {
 #include "assets/archives/map_grand_static/map_136.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_021908[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_137[] = {
@@ -293,16 +233,8 @@ u64 map_grand_static_138[] = {
 #include "assets/archives/map_grand_static/map_138.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_0225B8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_139[] = {
 #include "assets/archives/map_grand_static/map_139.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_022D88[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_13A[] = {
@@ -315,10 +247,6 @@ u64 map_grand_static_13B[] = {
 
 u64 map_grand_static_13C[] = {
 #include "assets/archives/map_grand_static/map_13C.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_024B68[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_13D[] = {
@@ -353,10 +281,6 @@ u64 map_grand_static_144[] = {
 #include "assets/archives/map_grand_static/map_144.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_0274D8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_145[] = {
 #include "assets/archives/map_grand_static/map_145.i4.inc.c"
 };
@@ -365,16 +289,8 @@ u64 map_grand_static_146[] = {
 #include "assets/archives/map_grand_static/map_146.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_027E88[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_147[] = {
 #include "assets/archives/map_grand_static/map_147.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_028388[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_148[] = {
@@ -409,20 +325,12 @@ u64 map_grand_static_14F[] = {
 #include "assets/archives/map_grand_static/map_14F.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_02C1E8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_150[] = {
 #include "assets/archives/map_grand_static/map_150.i4.inc.c"
 };
 
 u64 map_grand_static_151[] = {
 #include "assets/archives/map_grand_static/map_151.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_02D4D8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_152[] = {
@@ -435,10 +343,6 @@ u64 map_grand_static_153[] = {
 
 u64 map_grand_static_154[] = {
 #include "assets/archives/map_grand_static/map_154.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_02EAD8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_155[] = {
@@ -461,10 +365,6 @@ u64 map_grand_static_159[] = {
 #include "assets/archives/map_grand_static/map_159.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_031C28[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_15A[] = {
 #include "assets/archives/map_grand_static/map_15A.i4.inc.c"
 };
@@ -477,10 +377,6 @@ u64 map_grand_static_15C[] = {
 #include "assets/archives/map_grand_static/map_15C.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_033698[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_15D[] = {
 #include "assets/archives/map_grand_static/map_15D.i4.inc.c"
 };
@@ -489,24 +385,12 @@ u64 map_grand_static_15E[] = {
 #include "assets/archives/map_grand_static/map_15E.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_034768[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_15F[] = {
 #include "assets/archives/map_grand_static/map_15F.i4.inc.c"
 };
 
-u8 map_grand_static.unarchive_possiblePadding_034BA8[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-};
-
 u64 map_grand_static_160[] = {
 #include "assets/archives/map_grand_static/map_160.i4.inc.c"
-};
-
-u8 map_grand_static.unarchive_possiblePadding_034F48[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
 u64 map_grand_static_161[] = {
