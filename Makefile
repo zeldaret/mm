@@ -353,7 +353,7 @@ build/assets/%.o: assets/%.c
 	$(OBJCOPY_BIN)
 	$(RM_MDEBUG)
 
-build/assets/archives/%.yar.o: build/assets/archives/%.o
+build/%.yar.o: build/%.o
 	$(MAKEYAR) $< $(@:.yar.o=.yar.bin) $(@:.yar.o=.symbols.o)
 	$(OBJCOPY) -I binary -O elf32-big $(@:.yar.o=.yar.bin) $@
 
