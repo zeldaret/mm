@@ -42,25 +42,25 @@ mapCompactId
 #define MAPDATA_DRAW_3 3
 
 typedef struct {
-    u8 texWidth;
-    u8 texHeight;
-    s16 offsetX;
-    s16 offsetY;
-    u8 drawType;
-    u8 colorIndex;
-    s16 scale;
-} MapSpriteInfo; // size 0x0A
+    /* 0x0 */ u8 texWidth;
+    /* 0x1 */ u8 texHeight;
+    /* 0x2 */ s16 offsetX;
+    /* 0x4 */ s16 offsetY;
+    /* 0x6 */ u8 drawType;
+    /* 0x7 */ u8 colorIndex;
+    /* 0x8 */ s16 scale;
+} MapSpriteInfo; // size = 0xA
 
 typedef struct {
-    /* 0x00 */ TexturePtr lmapTex; //minimap texture
-    /* 0x04 */ u8 width;
-    /* 0x05 */ u8 height;
-    /* 0x06 */ u8 offsetX;
-    /* 0x07 */ u8 offsetY;
-    /* 0x08 */ u8 drawType;
-    /* 0x09 */ u8 colorIndex;
-    /* 0x0A */ s16 scale;
-} MapSpriteInfo2; // size 0x0C
+    /* 0x0 */ TexturePtr lmapTex; //minimap texture
+    /* 0x4 */ u8 width;
+    /* 0x5 */ u8 height;
+    /* 0x6 */ u8 offsetX;
+    /* 0x7 */ u8 offsetY;
+    /* 0x8 */ u8 drawType;
+    /* 0x9 */ u8 colorIndex;
+    /* 0xA */ s16 scale;
+} MapSpriteInfo2; // size = 0xC
 
 /* z_map_disp */
 
@@ -96,22 +96,22 @@ typedef struct {
     /* 0x54 */ MinimapChest* unk54;
     /* 0x58 */ s16 unk58;
     /* 0x5A */ s16 unk5A;
-} T_801BEBB8;
+} struct_801BEBB8; // size = 0x5C
 
 typedef struct {
-    /* 0x00 */ s16 unk0; //scene
-    /* 0x02 */ s16 unk2;
-} T_801BEC5C;
+    /* 0x0 */ s16 unk0; //scene
+    /* 0x2 */ s16 unk2;
+} struct_801BEC5C; // size = 0x4
 
 typedef struct {
     /* 0x00 */ s32 unk0[5];
-} T_801BEC70;
+} struct_801BEC70; // size = 0x14
 
 typedef struct {
-    s16 unk0;
-    s32 unk4;
-    s32 unk8;
-} T_801BED24; // size 0x0C
+    /* 0x0 */ s16 unk0;
+    /* 0x4 */ s32 unk4;
+    /* 0x8 */ s32 unk8;
+} struct_801BED24; // size = 0xC
 
 typedef struct {
     /* 0x000 */ s32 rooms;
@@ -119,7 +119,7 @@ typedef struct {
     /* 0x084 */ void* unk84[32];
     /* 0x104 */ void* unk104[32];
     /* 0x184 */ s32 unk184;
-} T_801F56B0;
+} struct_801F56B0; // size = 0x188
 
 /* z_map_data */
 TexturePtr MapData_GetMapTexGameplayDangeonKeep(s32);
@@ -137,4 +137,5 @@ void MapData_GetMapScale(s32 mapId, s32 *scale);
 void MapData_CPID_GetTexDim(s32 mapCompactId, s32* width, s32* height);
 void MapData_CPID_GetTexOffset(s32 mapCompactId, s32* offsetX, s32* offsetY);
 s16 MapData_CPID_GetMapScale(s32 mapCompactId);
+
 #endif
