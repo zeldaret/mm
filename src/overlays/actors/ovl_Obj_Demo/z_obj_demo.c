@@ -33,7 +33,7 @@ void ObjDemo_Init(Actor* thisx, PlayState* play) {
     ObjDemo* this = THIS;
 
     thisx->params = OBJDEMO_GET_SWITCH_FLAG_MASK(thisx);
-    if ((OBJDEMO_GET_SWITCH_FLAG(thisx) != 0xFF) && (Flags_GetSwitch(play, OBJDEMO_GET_SWITCH_FLAG(thisx)))) {
+    if ((OBJDEMO_GET_SWITCH_FLAG(thisx) != 0xFF) && Flags_GetSwitch(play, OBJDEMO_GET_SWITCH_FLAG(thisx))) {
         Actor_Kill(&this->actor);
         return;
     }
