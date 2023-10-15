@@ -3161,7 +3161,7 @@ void EnAn_FollowSchedule(EnAn* this, PlayState* play) {
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
-    if (!(this->actor.params & ENAN_8000) && !this->unk_3C0 && CHECK_WEEKEVENTREG(WEEKEVENTREG_51_40)) {
+    if (!(this->actor.params & ENAN_8000) && !this->unk_3C0 && CHECK_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -3224,7 +3224,7 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
 
 void EnAn_HandleCutscene(EnAn* this, PlayState* play) {
     s32 animIds[] = {
-        /* 0 */ ENAN_ANIM_HOLDING_HANDS,
+        /* 0 */ 0,
         /* 1 */ ENAN_ANIM_SITTING_IN_DISBELIEVE,
         /* 2 */ ENAN_ANIM_SITTING_RAISE_FACE,
         /* 3 */ ENAN_ANIM_25,
@@ -3248,7 +3248,7 @@ void EnAn_HandleCutscene(EnAn* this, PlayState* play) {
             this->cueId = cueId;
 
             if (this->cueId == 3) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_87_02);
+                SET_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_STARTED);
                 this->drawMoonMask = true;
             }
             if (this->cueId == 9) {
@@ -3277,16 +3277,16 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnAn* this = THIS;
     s32 temp_v1;
-    s32 temp_v0;
+    s32 watchedCouplesMaskCs;
 
     if (play->sceneId != SCENE_YADOYA) {
         this->actor.params &= (s16)~ENAN_8000;
     }
 
     temp_v1 = (this->actor.params & ENAN_8000) >> 0xF;
-    temp_v0 = CHECK_WEEKEVENTREG(WEEKEVENTREG_51_40);
+    watchedCouplesMaskCs = CHECK_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED);
 
-    if (((temp_v0 == 0) && (temp_v1 == 1)) || ((temp_v0 != 0) && (temp_v1 == 0))) {
+    if ((!watchedCouplesMaskCs && (temp_v1 == 1)) || (watchedCouplesMaskCs && (temp_v1 == 0))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -3312,7 +3312,7 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
     gSaveContext.save.day = 3;
 
     if (gSaveContext.save.time > CLOCK_TIME(5, 0)) {
-        gSaveContext.save.time = CLOCK_TIME(4, 30);
+        gSaveContext.save.time = CLOCK_TIME(3, 0);
     }
 
     SET_WEEKEVENTREG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES);
@@ -3568,26 +3568,26 @@ void EnAn_DrawStruct(EnAn* this, PlayState* play) {
 }
 #endif
 
-static TexturePtr sMouthTextures[ENAN_MOUTH_MAX] = {
-    gAnju1Mouth00E6E0Tex, // ENAN_MOUTH_0
-    gAnju1MouthHappyTex,  // ENAN_MOUTH_HAPPY
-    gAnju1Mouth0101A0Tex, // ENAN_MOUTH_2
-};
-
-static TexturePtr sEyeTextures[ENAN_EYES_MAX] = {
-    gAnju1EyeOpenTex,   // ENAN_EYES_OPEN
-    gAnju1EyeHalfTex,   // ENAN_EYES_HALF1
-    gAnju1EyeClosedTex, // ENAN_EYES_CLOSED
-    gAnju1EyeHalfTex,   // ENAN_EYES_HALF2
-    gAnju1Eye00FDA0Tex, // ENAN_EYES_4
-    gAnju1EyeSadTex,    // ENAN_EYES_SAD
-    gAnju1EyeAngryTex,  // ENAN_EYES_ANGRY
-};
-
 void EnAn_Draw(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
 
     if ((this->scheduleResult != ANJU_SCH_NONE) || this->forceDraw) {
+        static TexturePtr sMouthTextures[ENAN_MOUTH_MAX] = {
+            gAnju1Mouth00E6E0Tex, // ENAN_MOUTH_0
+            gAnju1MouthHappyTex,  // ENAN_MOUTH_HAPPY
+            gAnju1Mouth0101A0Tex, // ENAN_MOUTH_2
+        };
+
+        static TexturePtr sEyeTextures[ENAN_EYES_MAX] = {
+            gAnju1EyeOpenTex,   // ENAN_EYES_OPEN
+            gAnju1EyeHalfTex,   // ENAN_EYES_HALF1
+            gAnju1EyeClosedTex, // ENAN_EYES_CLOSED
+            gAnju1EyeHalfTex,   // ENAN_EYES_HALF2
+            gAnju1Eye00FDA0Tex, // ENAN_EYES_4
+            gAnju1EyeSadTex,    // ENAN_EYES_SAD
+            gAnju1EyeAngryTex,  // ENAN_EYES_ANGRY
+        };
+
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
