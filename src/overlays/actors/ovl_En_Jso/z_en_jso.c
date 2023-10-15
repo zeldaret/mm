@@ -367,7 +367,7 @@ void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
             }
 
             CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_21);
             this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
             player->actor.world.pos.x = this->actor.home.pos.x + 30.0f;
             player->actor.world.pos.z = this->actor.home.pos.z + 30.0f;
@@ -472,7 +472,7 @@ void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
             }
 
             if (showTextbox) {
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_4);
                 Message_StartTextbox(play, sTextIds[this->textIndex], &this->actor);
                 this->textIndex++;
                 this->actor.shape.yOffset = 970.0f;
@@ -573,7 +573,7 @@ void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
             this->introCsTimer++;
 
             if (this->introCsTimer >= 10) {
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
                 CutsceneManager_Stop(this->csId);
                 this->rightArmRot.x = this->rightArmRot.y = this->rightArmRot.z = this->robeRightRot.x =
                     this->robeRightRot.y = this->robeRightRot.z = 0;
