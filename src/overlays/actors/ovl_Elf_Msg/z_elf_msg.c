@@ -40,8 +40,8 @@ void ElfMsg_SetupAction(ElfMsg* this, ElfMsgActionFunc actionFunc) {
 }
 
 s32 func_8092DF9C(ElfMsg* this, PlayState* play) {
-    if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
-        (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
+    if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y <= 0x80) &&
+        Flags_GetSwitch(play, this->actor.home.rot.y - 1)) {
         (void)"共倒れ"; // "Collapse together"
         if (ELFMSG_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG_GET_SWITCH_FLAG(&this->actor));
@@ -144,7 +144,7 @@ void ElfMsg_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
-            (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
+            Flags_GetSwitch(play, -1 - this->actor.home.rot.y)) {
             this->actionFunc(this, play);
         }
     }

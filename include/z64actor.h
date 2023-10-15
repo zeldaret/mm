@@ -369,6 +369,8 @@ typedef struct ActorSharedMemoryEntry {
     /* 0x4 */ void* ptr;
 } ActorSharedMemoryEntry; // size = 0x8
 
+#define SWITCH_FLAG_NONE -1
+
 typedef struct ActorContextSceneFlags {
     /* 0x00 */ u32 switches[4]; // First 0x40 are permanent, second 0x40 are temporary
     /* 0x10 */ u32 chest;

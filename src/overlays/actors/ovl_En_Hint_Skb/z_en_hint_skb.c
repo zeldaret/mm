@@ -5,6 +5,7 @@
  */
 
 #include "z_en_hint_skb.h"
+#include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
@@ -903,12 +904,12 @@ void EnHintSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Collider_UpdateSpheres(limbIndex, &this->collider);
 
         if ((limbIndex == STALCHILD_LIMB_HEAD) && (this->unk_3E8 & 1) && !(this->unk_3E8 & 2)) {
-            Actor_SpawnBodyParts(&this->actor, play, 1, dList);
+            Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_1), dList);
             this->unk_3E8 |= 2;
         } else if ((this->unk_3E8 & 4) && !(this->unk_3E8 & 8) &&
                    ((limbIndex != STALCHILD_LIMB_HEAD) || !(this->unk_3E8 & 1)) &&
                    (limbIndex != STALCHILD_LIMB_LOWER_JAW)) {
-            Actor_SpawnBodyParts(&this->actor, play, 1, dList);
+            Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_1), dList);
         }
 
         if (this->drawDmgEffTimer != 0) {

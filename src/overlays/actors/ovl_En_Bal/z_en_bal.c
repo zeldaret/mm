@@ -864,7 +864,7 @@ void EnBal_TryPurchaseMap(EnBal* this, PlayState* play) {
 
 void EnBal_HandleConversation(EnBal* this, PlayState* play) {
     if (((this->textId != 0x1D07) || Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
-        (Message_ShouldAdvance(play))) {
+        Message_ShouldAdvance(play)) {
         switch (this->textId) {
             case 0x1D00:
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);

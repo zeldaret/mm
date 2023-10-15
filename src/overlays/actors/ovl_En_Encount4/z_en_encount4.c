@@ -43,12 +43,12 @@ void EnEncount4_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnEncount4* this = THIS;
 
-    this->unk_148 = ENENCOUNT4_GET_F000(thisx);
-    this->switchFlag = ENENCOUNT4_GET_FLAG(thisx);
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    this->unk_148 = ENCOUNT4_GET_F000(thisx);
+    this->switchFlag = ENCOUNT4_GET_SWITCH_FLAG(thisx);
+    if (this->switchFlag == ENCOUNT4_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -64,7 +64,7 @@ void func_809C3FD8(EnEncount4* this, PlayState* play) {
     Actor* actor;
 
     this->unk_14E = 0;
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         this->timer = 100;
         this->actionFunc = func_809C464C;
     } else {
@@ -89,7 +89,7 @@ void func_809C4078(EnEncount4* this, PlayState* play) {
     s32 i;
     EnBsb* captainKeeta = this->captainKeeta;
 
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         this->timer = 100;
         this->actionFunc = func_809C464C;
     } else if (BREG(1) == 0) {
@@ -135,7 +135,7 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
     CollisionPoly* colPoly;
     s32 bgId;
 
-    if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         this->timer = 100;
         this->actionFunc = func_809C464C;
 
@@ -185,12 +185,12 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
 }
 
 void func_809C4598(EnEncount4* this, PlayState* play) {
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         this->timer = 100;
         this->actionFunc = func_809C464C;
     } else if (this->unk_14E >= 2) {
         this->timer = 100;
-        if (this->switchFlag >= 0) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         this->actionFunc = func_809C464C;
