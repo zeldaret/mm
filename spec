@@ -2162,8 +2162,7 @@ beginseg
     name "ovl_En_Jso"
     compress
     include "build/src/overlays/actors/ovl_En_Jso/z_en_jso.o"
-    include "build/data/ovl_En_Jso/ovl_En_Jso.data.o"
-    include "build/data/ovl_En_Jso/ovl_En_Jso.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Jso/ovl_En_Jso_reloc.o"
 endseg
 
 beginseg
