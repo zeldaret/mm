@@ -1122,7 +1122,7 @@ void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play) {
 }
 
 void EnSGoro_WinterShrineGoron_Talk(EnSGoro* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && (Message_ShouldAdvance(play))) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         if (this->actionFlags & EN_S_GORO_ACTIONFLAG_LASTMESSAGE) {
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_ENGAGED;
@@ -1230,7 +1230,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_BombshopGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
         }
-    } else if ((talkState == TEXT_STATE_CHOICE) && (Message_ShouldAdvance(play))) {
+    } else if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 this->bombbuyFlags |= EN_S_GORO_BOMBBUYFLAG_YESBUY;

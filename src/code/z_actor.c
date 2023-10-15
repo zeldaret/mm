@@ -728,7 +728,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor,
  * Tests if a current scene switch flag is set.
  */
 s32 Flags_GetSwitch(PlayState* play, s32 flag) {
-    if ((flag >= 0) && (flag < 0x80)) {
+    if ((flag > SWITCH_FLAG_NONE) && (flag < 0x80)) {
         return play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
@@ -738,7 +738,7 @@ s32 Flags_GetSwitch(PlayState* play, s32 flag) {
  * Sets a current scene switch flag.
  */
 void Flags_SetSwitch(PlayState* play, s32 flag) {
-    if ((flag >= 0) && (flag < 0x80)) {
+    if ((flag > SWITCH_FLAG_NONE) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
@@ -747,7 +747,7 @@ void Flags_SetSwitch(PlayState* play, s32 flag) {
  * Unsets a current scene switch flag.
  */
 void Flags_UnsetSwitch(PlayState* play, s32 flag) {
-    if ((flag >= 0) && (flag < 0x80)) {
+    if ((flag > SWITCH_FLAG_NONE) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
     }
 }

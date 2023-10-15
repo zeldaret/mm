@@ -115,11 +115,11 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
     this->switchFlag = OBJHAKAISI_GET_SWITCH_FLAG(thisx);
     this->csId = this->dyna.actor.csId;
 
-    if (this->switchFlag == 0xFF) {
-        this->switchFlag = -1;
+    if (this->switchFlag == OBJHAKAISI_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag != -1) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag != SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->dyna.actor);
     }
 
