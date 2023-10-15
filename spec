@@ -2000,8 +2000,7 @@ beginseg
     name "ovl_Obj_Sound"
     compress
     include "build/src/overlays/actors/ovl_Obj_Sound/z_obj_sound.o"
-    include "build/data/ovl_Obj_Sound/ovl_Obj_Sound.data.o"
-    include "build/data/ovl_Obj_Sound/ovl_Obj_Sound.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Sound/ovl_Obj_Sound_reloc.o"
 endseg
 
 beginseg
@@ -2079,8 +2078,7 @@ beginseg
     name "ovl_Door_Spiral"
     compress
     include "build/src/overlays/actors/ovl_Door_Spiral/z_door_spiral.o"
-    include "build/data/ovl_Door_Spiral/ovl_Door_Spiral.data.o"
-    include "build/data/ovl_Door_Spiral/ovl_Door_Spiral.reloc.o"
+    include "build/src/overlays/actors/ovl_Door_Spiral/ovl_Door_Spiral_reloc.o"
 endseg
 
 beginseg
@@ -2108,8 +2106,7 @@ beginseg
     name "ovl_Obj_Boyo"
     compress
     include "build/src/overlays/actors/ovl_Obj_Boyo/z_obj_boyo.o"
-    include "build/data/ovl_Obj_Boyo/ovl_Obj_Boyo.data.o"
-    include "build/data/ovl_Obj_Boyo/ovl_Obj_Boyo.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Boyo/ovl_Obj_Boyo_reloc.o"
 endseg
 
 beginseg
@@ -2137,8 +2134,7 @@ beginseg
     name "ovl_Obj_Grass_Unit"
     compress
     include "build/src/overlays/actors/ovl_Obj_Grass_Unit/z_obj_grass_unit.o"
-    include "build/data/ovl_Obj_Grass_Unit/ovl_Obj_Grass_Unit.data.o"
-    include "build/data/ovl_Obj_Grass_Unit/ovl_Obj_Grass_Unit.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Grass_Unit/ovl_Obj_Grass_Unit_reloc.o"
 endseg
 
 beginseg
@@ -2166,8 +2162,7 @@ beginseg
     name "ovl_En_Jso"
     compress
     include "build/src/overlays/actors/ovl_En_Jso/z_en_jso.o"
-    include "build/data/ovl_En_Jso/ovl_En_Jso.data.o"
-    include "build/data/ovl_En_Jso/ovl_En_Jso.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Jso/ovl_En_Jso_reloc.o"
 endseg
 
 beginseg

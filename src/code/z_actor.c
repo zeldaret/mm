@@ -728,7 +728,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor,
  * Tests if a current scene switch flag is set.
  */
 s32 Flags_GetSwitch(PlayState* play, s32 flag) {
-    if ((flag >= 0) && (flag < 0x80)) {
+    if ((flag > SWITCH_FLAG_NONE) && (flag < 0x80)) {
         return play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
@@ -738,7 +738,7 @@ s32 Flags_GetSwitch(PlayState* play, s32 flag) {
  * Sets a current scene switch flag.
  */
 void Flags_SetSwitch(PlayState* play, s32 flag) {
-    if ((flag >= 0) && (flag < 0x80)) {
+    if ((flag > SWITCH_FLAG_NONE) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
@@ -747,7 +747,7 @@ void Flags_SetSwitch(PlayState* play, s32 flag) {
  * Unsets a current scene switch flag.
  */
 void Flags_UnsetSwitch(PlayState* play, s32 flag) {
-    if ((flag >= 0) && (flag < 0x80)) {
+    if ((flag > SWITCH_FLAG_NONE) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
     }
 }
@@ -2767,11 +2767,11 @@ void Actor_UpdateFlaggedAudio(Actor* actor) {
     if (sfxId != NA_SE_NONE) {}
 
     if (actor->audioFlags & ACTOR_AUDIO_FLAG_SEQ_MUSIC_BOX_HOUSE) {
-        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
+        Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
     }
 
     if (actor->audioFlags & ACTOR_AUDIO_FLAG_SEQ_KAMARO_DANCE) {
-        func_801A1FB4(SEQ_PLAYER_BGM_MAIN, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
+        Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_MAIN, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
     }
 }
 

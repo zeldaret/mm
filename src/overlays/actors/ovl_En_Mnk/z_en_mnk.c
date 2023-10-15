@@ -897,7 +897,7 @@ void EnMnk_Monkey_Run(EnMnk* this, PlayState* play) {
         this->picto.actor.speed = 0.0f;
         if (MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDECHAMBER) {
             switchFlag = MONKEY_GET_SWITCH_FLAG(&this->picto.actor);
-            if (switchFlag != 0x7F) {
+            if (switchFlag != MONKEY_SWITCH_FLAG_NONE) {
                 Flags_SetSwitch(play, switchFlag + 1);
             }
             Actor_Kill(&this->picto.actor);
