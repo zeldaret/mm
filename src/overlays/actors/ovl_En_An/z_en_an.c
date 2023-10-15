@@ -17,6 +17,9 @@
 
 #define THIS ((EnAn*)thisx)
 
+// Change this to non-zero to enable debug printing
+#define DEBUG_PRINT 0
+
 void EnAn_Init(Actor* thisx, PlayState* play);
 void EnAn_Destroy(Actor* thisx, PlayState* play);
 void EnAn_Update(Actor* thisx, PlayState* play);
@@ -3266,6 +3269,10 @@ void EnAn_HandleCutscene(EnAn* this, PlayState* play) {
     }
 }
 
+#if DEBUG_PRINT
+u8 weekEventRegCopy[100];
+#endif
+
 void EnAn_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnAn* this = THIS;
@@ -3298,6 +3305,19 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
     }
 
     this->actionFunc = EnAn_Initialize;
+
+#if DEBUG_PRINT
+    Lib_MemCpy(weekEventRegCopy, gSaveContext.save.saveInfo.weekEventReg, sizeof(gSaveContext.save.saveInfo.weekEventReg));
+
+    gSaveContext.save.day = 3;
+
+    if (gSaveContext.save.time > CLOCK_TIME(5, 0)) {
+        gSaveContext.save.time = CLOCK_TIME(4, 30);
+    }
+
+    SET_WEEKEVENTREG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES);
+    SET_WEEKEVENTREG(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT);
+#endif
 }
 
 void EnAn_Destroy(Actor* thisx, PlayState* play) {
@@ -3386,6 +3406,168 @@ void EnAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 }
 
+#if DEBUG_PRINT
+#define BOOLSTR(x) ((x) ? "true" : "false")
+
+#define DEC_TIME_AUX(t) ((t) * (24 * 60) / 0x10000)
+#define DEC_TIME(t) ((DEC_TIME_AUX(t) / 60) * 100 + (DEC_TIME_AUX(t) % 60))
+
+void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
+    s32 x = 31;
+    s32 y = 3 + 22;
+    s32 i;
+    uintptr_t actionFuncReloc;
+
+    GfxPrint_SetColor(printer, 255, 255, 255, 255);
+
+    GfxPrint_SetPos(printer, 28, 1);
+    GfxPrint_Printf(printer, "gTime:%X", gSaveContext.save.time);
+
+    GfxPrint_SetPos(printer, 28, 2);
+    GfxPrint_Printf(printer, "gTime:%i:%i", DEC_TIME_AUX(gSaveContext.save.time) / 60, DEC_TIME_AUX(gSaveContext.save.time) % 60);
+
+    //GfxPrint_SetPos(printer, x - 7, ++y);
+    //actionFuncReloc = (uintptr_t)this->actionFunc - (uintptr_t)EnAn_InitializeObjectSlots + SEGMENT_START(ovl_En_An);
+    //GfxPrint_Printf(printer, "actionFunc:%X", actionFuncReloc & 0x0000FFFF);
+
+    GfxPrint_SetPos(printer, x-5, ++y);
+    GfxPrint_Printf(printer, "schedule:%d", this->scheduleResult);
+
+    //GfxPrint_SetPos(printer, x-3, ++y);
+    //GfxPrint_Printf(printer, "textId:%X", this->prevTextId);
+
+    GfxPrint_SetPos(printer, x-0, ++y);
+    GfxPrint_Printf(printer, "cue:%d", this->cueId);
+
+    //GfxPrint_SetPos(printer, x-2, ++y);
+    //GfxPrint_Printf(printer, "! 374:%f", this->unk_374);
+
+    //GfxPrint_SetPos(printer, x-6, ++y);
+    //GfxPrint_Printf(printer, "savedFace:%d", this->savedFaceIndex);
+
+    //GfxPrint_SetPos(printer, x-1, ++y);
+    //GfxPrint_Printf(printer, "face:%d", this->faceIndex);
+
+    //GfxPrint_SetPos(printer, x-5, ++y);
+    //GfxPrint_Printf(printer, "eyeTimer:%d", this->eyeTimer);
+
+    //GfxPrint_SetPos(printer, x-0, ++y);
+    //GfxPrint_Printf(printer, "eye:%d", this->eyeTexIndex);
+
+    //GfxPrint_SetPos(printer, x-2, ++y);
+    //GfxPrint_Printf(printer, "mouth:%d", this->mouthTexIndex);
+
+    GfxPrint_SetPos(printer, x-1, ++y);
+    GfxPrint_Printf(printer, "anim:%d", this->animIndex);
+
+    //GfxPrint_SetPos(printer, x-2, ++y);
+    //GfxPrint_Printf(printer, "! 3C0:%s", BOOLSTR(this->unk_3C0));
+
+    y = 0;
+    {
+        static const char* const subsFlags[8] = {
+            "SUBS_OFFER_MODE_NONE",
+            "SUBS_OFFER_MODE_GET_ITEM",
+            "SUBS_OFFER_MODE_NEARBY",
+            "SUBS_OFFER_MODE_ONSCREEN",
+            "SUBS_OFFER_MODE_AUTO",
+            "SUBS_OFFER_MODE_AUTO_TARGETED",
+            "SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN",
+            "SUBS_OFFER_MODE_INVALID",
+        };
+        s32 index = this->stateFlags & SUBS_OFFER_MODE_MASK;
+
+        GfxPrint_SetPos(printer, 1, ++y);
+        GfxPrint_Printf(printer, "SUBS_%s", &subsFlags[index][16]);
+    }
+
+    for (i = 3; i < 16; i++) {
+        static const char* const flagsMap[16] = {
+            "ENAN_STATE_PLACEHOLDER_1",
+            "ENAN_STATE_PLACEHOLDER_2",
+            "ENAN_STATE_PLACEHOLDER_4",
+            "ENAN_STATE_8",
+            "ENAN_STATE_REACHED_PATH_END",
+            "ENAN_STATE_20",
+            "ENAN_STATE_IGNORE_GRAVITY",
+            "ENAN_STATE_80",
+            "ENAN_STATE_UPDATE_EYES",
+            "ENAN_STATE_200",
+            "ENAN_STATE_TALKING",
+            "ENAN_STATE_DRAW_TRAY",
+            "ENAN_STATE_DRAW_UMBRELLA",
+            "ENAN_STATE_DRAW_BROOM",
+            "ENAN_STATE_DRAW_KAFEI_MASK",
+            "ENAN_STATE_DRAW_CHOPSTICKS",
+        };
+
+        if (this->stateFlags & (1 << i)) {
+            GfxPrint_SetPos(printer, 1, ++y);
+            GfxPrint_Printf(printer, "%s", &flagsMap[i][11]);
+        }
+    }
+
+    y = 20;
+    x = 3;
+
+    GfxPrint_SetPos(printer, x - 2, ++y);
+    GfxPrint_Printf(printer, "weekEvent");
+
+    for (i = 0; i < ARRAY_COUNT(weekEventRegCopy); i++){
+        if (weekEventRegCopy[i] != gSaveContext.save.saveInfo.weekEventReg[i]) {
+            u8 copy = weekEventRegCopy[i];
+            u8 real = gSaveContext.save.saveInfo.weekEventReg[i];
+            u8 diff = copy ^ real;
+            s32 j;
+
+            for (j = 0; j < 8; j++) {
+                u8 mask = (1 << j);
+
+                if (diff & mask) {
+                    if (real & mask) {
+                        GfxPrint_SetPos(printer, x, ++y);
+                        GfxPrint_Printf(printer, "SET [%i] & %X", i, mask);
+                    } else {
+
+                    }
+                }
+            }
+        }
+    }
+}
+
+void EnAn_DrawStruct(EnAn* this, PlayState* play) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
+    GfxPrint printer;
+    Gfx* gfxRef;
+    Gfx* gfx;
+
+    OPEN_DISPS(gfxCtx);
+
+    Gfx_SetupDL28_Opa(gfxCtx);
+
+    GfxPrint_Init(&printer);
+
+    gfxRef = POLY_OPA_DISP;
+    gfx = Graph_GfxPlusOne(gfxRef);
+    gSPDisplayList(OVERLAY_DISP++, gfx);
+
+    GfxPrint_Open(&printer, gfx);
+
+    EnAn_PrintStruct(this, play, &printer);
+
+    gfx = GfxPrint_Close(&printer);
+
+    gSPEndDisplayList(gfx++);
+    Graph_BranchDlist(gfxRef, gfx);
+    POLY_OPA_DISP = gfx;
+
+    GfxPrint_Destroy(&printer);
+
+    CLOSE_DISPS(gfxCtx);
+}
+#endif
+
 static TexturePtr sMouthTextures[ENAN_MOUTH_MAX] = {
     gAnju1Mouth00E6E0Tex, // ENAN_MOUTH_0
     gAnju1MouthHappyTex,  // ENAN_MOUTH_HAPPY
@@ -3419,4 +3601,8 @@ void EnAn_Draw(Actor* thisx, PlayState* play) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
+
+#if DEBUG_PRINT
+    EnAn_DrawStruct(this, play);
+#endif
 }
