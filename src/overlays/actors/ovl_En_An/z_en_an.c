@@ -929,7 +929,7 @@ typedef enum EnAnAnimation {
     /*  3 */ ENAN_ANIM_BOWING,
     /*  4 */ ENAN_ANIM_BOWING_MORPH,
     /*  5 */ ENAN_ANIM_SURPRISED,
-    /*  6 */ ENAN_ANIM_6,
+    /*  6 */ ENAN_ANIM_LOOKING_UP_RELIEVED,
     /*  7 */ ENAN_ANIM_WALK,
     /*  8 */ ENAN_ANIM_WALK2, // Duplicate of ENAN_ANIM_WALK
     /*  9 */ ENAN_ANIM_SIT,
@@ -975,7 +975,7 @@ static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
     { &gAnju1BowingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },              // ENAN_ANIM_BOWING
     { &gAnju1BowingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },             // ENAN_ANIM_BOWING_MORPH
     { &gAnju1SurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENAN_ANIM_SURPRISED
-    { &object_an1_Anim_001E74, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        // ENAN_ANIM_6
+    { &gAnju1LookingUpRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // ENAN_ANIM_LOOKING_UP_RELIEVED
     { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_WALK
     { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_WALK2
     { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                 // ENAN_ANIM_SIT
@@ -1904,7 +1904,7 @@ s32 EnAn_ChooseAnimAfterTalking(EnAn* this, PlayState* play) {
 
 void EnAn_DialogueFunc_80B556F8(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_6);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_LOOKING_UP_RELIEVED);
         this->stateFlags &= ~ENAN_STATE_20;
         this->stateFlags |= ENAN_STATE_200;
         this->dialogueFuncState++;

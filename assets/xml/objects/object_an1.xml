@@ -1,9 +1,10 @@
 ﻿<Root>
+    <!-- Assets for Anju -->
     <File Name="object_an1" Segment="6">
         <Animation Name="gAnju1TastingAnim" Offset="0x1090" /> <!-- Original name is "an_ajimi" ("tasting; sampling​") -->
         <Animation Name="gAnju1TastingEndAnim" Offset="0x144C" /> <!-- Original name is "an_ajimiend" -->
 
-        <Animation Name="object_an1_Anim_001E74" Offset="0x1E74" /> <!-- Original name is "an_aogu" ("to look up") -->
+        <Animation Name="gAnju1LookingUpRelievedAnim" Offset="0x1E74" /> <!-- Original name is "an_aogu" ("to look up") -->
         <Animation Name="gAnju1SurprisedAnim" Offset="0x26B4" /> <!-- Original name is "an_bikkuri" ("to be surprised") -->
         <Animation Name="gAnju1WaitingWithTrayAnim" Offset="0x341C" /> <!-- Original name is "an_obonwait" ("obon" = "tray") -->
         <Animation Name="gAnju1WalkingWithTrayAnim" Offset="0x3EA8" /> <!-- Original name is "an_obonwalk" -->
@@ -13,6 +14,7 @@
         <Animation Name="gAnju1SittingInDisbelieveAnim" Offset="0x7E08" /> <!-- Original name is "an_suzetsubou" ("su" = short for "suwaru", "zetsubou" = "despair; hopelessness​") -->
         <Animation Name="gAnju1IdleAnim" Offset="0x8B6C" /> <!-- Original name is "an_wait" -->
 
+        <!-- Skeleton's Display lists -->
         <DList Name="gAnju1Skirt4DL" Offset="0xBC20" />
         <DList Name="gAnju1Skirt3DL" Offset="0xBD20" />
         <DList Name="gAnju1Skirt2DL" Offset="0xBE60" />
@@ -33,11 +35,13 @@
         <DList Name="gAnju1LeftUpperArmDL" Offset="0xD730" />
         <DList Name="gAnju1TorsoDL" Offset="0xD850" />
 
+        <!-- Skeleton's TLUTs -->
         <Texture Name="gAnju1TLUT" OutName="tlut" Format="rgba16" Width="16" Height="16" Offset="0xDB20" />
         <Texture Name="gAnju1EyesTLUT" OutName="eyes_tlut" Format="rgba16" Width="16" Height="16" Offset="0xDD20" />
         <Texture Name="gAnju1MouthTLUT" OutName="mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0xDF20" />
 
-        <Texture Name="object_an1_Tex_00E120" OutName="tex_00E120" Format="ci8" Width="8" Height="8" Offset="0xE120" />
+        <!-- Skeleton's textures -->
+        <Texture Name="gAnju1SkinTex" OutName="anju_skin" Format="ci8" Width="8" Height="8" Offset="0xE120" />
         <Texture Name="gAnju1HairTex" OutName="anju_hair" Format="ci8" Width="8" Height="16" Offset="0xE160" />
         <Texture Name="gAnju1EyeOpenTex" OutName="anju_eye_open" Format="ci8" Width="32" Height="32" Offset="0xE1E0" TlutOffset="0xDD20" />
         <Texture Name="gAnju1EarTex" OutName="anju_ear" Format="ci8" Width="16" Height="16" Offset="0xE5E0" />
@@ -45,7 +49,7 @@
         <Texture Name="gAnju1ShirtButtonTex" OutName="anju_shirt_button" Format="ci8" Width="8" Height="8" Offset="0xE8E0" />
         <Texture Name="gAnju1HandTex" OutName="anju_hand" Format="ci8" Width="16" Height="16" Offset="0xE920" />
         <Texture Name="gAnju1SkirtTex" OutName="anju_skirt" Format="ci8" Width="32" Height="32" Offset="0xEA20" />
-        <Texture Name="object_an1_Tex_00EE20" OutName="tex_00EE20" Format="ci8" Width="16" Height="16" Offset="0xEE20" /> <!-- shirt -->
+        <Texture Name="gAnju1ShirtTex" OutName="anju_shirt" Format="ci8" Width="16" Height="16" Offset="0xEE20" />
         <Texture Name="gAnju1SleeveTex" OutName="anju_sleeve" Format="ci8" Width="8" Height="16" Offset="0xEF20" />
         <Texture Name="gAnju1EyeHalfTex" OutName="anju_eye_half" Format="ci8" Width="32" Height="32" Offset="0xEFA0" TlutOffset="0xDD20" />
         <Texture Name="gAnju1EyeClosedTex" OutName="anju_eye_closed" Format="ci8" Width="32" Height="32" Offset="0xF3A0" TlutOffset="0xDD20" />
@@ -58,6 +62,7 @@
         <!-- Empty -->
         <DList Name="object_an1_DL_0111E0" Offset="0x111E0" />
 
+        <!-- Food tray for Granny -->
         <DList Name="gAnju1FoodTrayDL" Offset="0x111E8" /> <!-- Original name is "an_obon_model" -->
         <Texture Name="gAnju1PlateTex" OutName="tray_plate" Format="i8" Width="32" Height="32" Offset="0x11928" />
         <Texture Name="gAnju1Food1Tex" OutName="tray_food_1" Format="rgba16" Width="16" Height="16" Offset="0x11D28" />
@@ -68,8 +73,10 @@
 
         <!-- <Blob Name="object_an1_Blob_0123A8" Size="0x10" Offset="0x123A8" /> -->
 
+        <!-- Chopsticks used for cooking -->
         <DList Name="gAnju1ChopsticksDL" Offset="0x12478" /> <!-- Original name is "an_hashi_model" ("chopsticks​") -->
 
+        <!-- Skeleton's limbs -->
         <Limb Name="gAnju1RootLimb" Type="Standard" EnumName="ANJU1_LIMB_ROOT" Offset="0x124D8" />
         <Limb Name="gAnju1TorsoLimb" Type="Standard" EnumName="ANJU1_LIMB_TORSO" Offset="0x124E4" />
         <Limb Name="gAnju1LeftUpperArmLimb" Type="Standard" EnumName="ANJU1_LIMB_LEFT_UPPERARM" Offset="0x124F0" />
@@ -91,6 +98,7 @@
         <Limb Name="gAnju1Skirt3Limb" Type="Standard" EnumName="ANJU1_LIMB_SKIRT3" Offset="0x125B0" />
         <Limb Name="gAnju1Skirt4Limb" Type="Standard" EnumName="ANJU1_LIMB_SKIRT4" Offset="0x125BC" />
 
+        <!-- Skeleton -->
         <Skeleton Name="gAnju1Skel" Type="Flex" LimbType="Standard" LimbNone="ANJU1_LIMB_NONE" LimbMax="ANJU1_LIMB_MAX" EnumName="Anju1Limb" Offset="0x12618" />
 
         <Animation Name="gAnju1WalkAnim" Offset="0x13048" /> <!-- Original name is "an_walk" -->
