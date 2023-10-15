@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-#
-#   Convert time values such as 0x1AAA to their clock time, i.e. 2,30
-#   The time is output with a comma for easy copy-pasting into a macro
-#
+
+# SPDX-FileCopyrightText: © 2023 ZeldaRET
+# SPDX-License-Identifier: MIT
+
+# Convert time values such as 0x1AA9 to their schedule clock time, i.e. 8,30
 
 from __future__ import annotations
 
