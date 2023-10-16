@@ -369,14 +369,14 @@ void DmGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 TexturePtr D_80C25238[] = {
-    gAnju1Mouth00E6E0Tex,
+    gAnju1MouthClosedTex,
     gAnju1MouthHappyTex,
-    gAnju1Mouth0101A0Tex,
+    gAnju1MouthOpenTex,
 };
 
 TexturePtr D_80C25244[] = {
     gAnju1EyeOpenTex,   gAnju1EyeHalfTex, gAnju1EyeClosedTex, gAnju1EyeHalfTex,
-    gAnju1Eye00FDA0Tex, gAnju1EyeSadTex,  gAnju1EyeAngryTex,
+    gAnju1EyeComfortingTex, gAnju1EyeSadTex,  gAnju1EyeRelievedClosedTex,
 };
 
 void func_80C25000(Actor* thisx, PlayState* play) {

@@ -369,14 +369,14 @@ void func_80C1CEFC(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 TexturePtr D_80C1D2E8[] = {
-    gAnju1Mouth00E6E0Tex,
+    gAnju1MouthClosedTex,
     gAnju1MouthHappyTex,
-    gAnju1Mouth0101A0Tex,
+    gAnju1MouthOpenTex,
 };
 
 TexturePtr D_80C1D2F4[] = {
     gAnju1EyeOpenTex,   gAnju1EyeHalfTex, gAnju1EyeClosedTex, gAnju1EyeHalfTex,
-    gAnju1Eye00FDA0Tex, gAnju1EyeSadTex,  gAnju1EyeAngryTex,
+    gAnju1EyeComfortingTex, gAnju1EyeSadTex,  gAnju1EyeRelievedClosedTex,
 };
 
 void func_80C1D0B0(Actor* thisx, PlayState* play) {

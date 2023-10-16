@@ -1131,16 +1131,16 @@ typedef enum EnAnEyes {
     /* 1 */ ENAN_EYES_HALF1,
     /* 2 */ ENAN_EYES_CLOSED,
     /* 3 */ ENAN_EYES_HALF2,
-    /* 4 */ ENAN_EYES_4,
+    /* 4 */ ENAN_EYES_COMFORTING,
     /* 5 */ ENAN_EYES_SAD,
-    /* 6 */ ENAN_EYES_ANGRY,
+    /* 6 */ ENAN_EYES_RELIEVED_CLOSED,
     /* 7 */ ENAN_EYES_MAX
 } EnAnEyes;
 
 typedef enum EnAnMouth {
-    /* 0 */ ENAN_MOUTH_0,
+    /* 0 */ ENAN_MOUTH_CLOSED,
     /* 1 */ ENAN_MOUTH_HAPPY,
-    /* 2 */ ENAN_MOUTH_2,
+    /* 2 */ ENAN_MOUTH_OPEN,
     /* 3 */ ENAN_MOUTH_MAX
 } EnAnMouth;
 
@@ -1152,21 +1152,21 @@ typedef enum EnAnFace {
     /*  4 */ ENAN_FACE_4,
     /*  5 */ ENAN_FACE_5,
     /*  6 */ ENAN_FACE_6,
-    /*  7 */ ENAN_FACE_7,
-    /*  8 */ ENAN_FACE_8,
-    /*  9 */ ENAN_FACE_9,
+    /*  7 */ ENAN_FACE_7, // RELIEVED?
+    /*  8 */ ENAN_FACE_8, // COMFORTING
+    /*  9 */ ENAN_FACE_9, // HAPPY_BLINK?
     /* 10 */ ENAN_FACE_MAX
 } EnAnFace;
 
 static s16 sMouthIndices[ENAN_FACE_MAX] = {
-    ENAN_MOUTH_0,     // ENAN_FACE_0
-    ENAN_MOUTH_2,     // ENAN_FACE_1
-    ENAN_MOUTH_0,     // ENAN_FACE_2
+    ENAN_MOUTH_CLOSED,     // ENAN_FACE_0
+    ENAN_MOUTH_OPEN,     // ENAN_FACE_1
+    ENAN_MOUTH_CLOSED,     // ENAN_FACE_2
     ENAN_MOUTH_HAPPY, // ENAN_FACE_3
-    ENAN_MOUTH_2,     // ENAN_FACE_4
-    ENAN_MOUTH_0,     // ENAN_FACE_5
+    ENAN_MOUTH_OPEN,     // ENAN_FACE_4
+    ENAN_MOUTH_CLOSED,     // ENAN_FACE_5
     ENAN_MOUTH_HAPPY, // ENAN_FACE_6
-    ENAN_MOUTH_2,     // ENAN_FACE_7
+    ENAN_MOUTH_OPEN,     // ENAN_FACE_7
     ENAN_MOUTH_HAPPY, // ENAN_FACE_8
     ENAN_MOUTH_HAPPY, // ENAN_FACE_9
 };
@@ -1189,24 +1189,24 @@ void EnAn_UpdateFace(EnAn* this) {
 
                 case ENAN_FACE_5:
                 case ENAN_FACE_7:
-                    if ((this->eyeTexIndex == ENAN_EYES_ANGRY) || (this->eyeTexIndex == ENAN_EYES_HALF1)) {
+                    if ((this->eyeTexIndex == ENAN_EYES_RELIEVED_CLOSED) || (this->eyeTexIndex == ENAN_EYES_HALF1)) {
                         skipBlink = true;
-                        this->eyeTexIndex = ENAN_EYES_ANGRY;
+                        this->eyeTexIndex = ENAN_EYES_RELIEVED_CLOSED;
                     }
                     break;
 
                 case ENAN_FACE_8:
-                    if ((this->eyeTexIndex == ENAN_EYES_4) || (this->eyeTexIndex == ENAN_EYES_CLOSED)) {
+                    if ((this->eyeTexIndex == ENAN_EYES_COMFORTING) || (this->eyeTexIndex == ENAN_EYES_CLOSED)) {
                         skipBlink = true;
-                        this->eyeTexIndex = ENAN_EYES_4;
+                        this->eyeTexIndex = ENAN_EYES_COMFORTING;
                     }
                     break;
             }
 
             if (!skipBlink) {
-                if ((this->eyeTexIndex == ENAN_EYES_4) || (this->eyeTexIndex == ENAN_EYES_SAD)) {
+                if ((this->eyeTexIndex == ENAN_EYES_COMFORTING) || (this->eyeTexIndex == ENAN_EYES_SAD)) {
                     this->eyeTexIndex = ENAN_EYES_OPEN;
-                } else if (this->eyeTexIndex == ENAN_EYES_ANGRY) {
+                } else if (this->eyeTexIndex == ENAN_EYES_RELIEVED_CLOSED) {
                     this->eyeTexIndex = ENAN_EYES_HALF1;
                 }
             }
@@ -3573,9 +3573,9 @@ void EnAn_Draw(Actor* thisx, PlayState* play) {
 
     if ((this->scheduleResult != ANJU_SCH_NONE) || this->forceDraw) {
         static TexturePtr sMouthTextures[ENAN_MOUTH_MAX] = {
-            gAnju1Mouth00E6E0Tex, // ENAN_MOUTH_0
+            gAnju1MouthClosedTex, // ENAN_MOUTH_CLOSED
             gAnju1MouthHappyTex,  // ENAN_MOUTH_HAPPY
-            gAnju1Mouth0101A0Tex, // ENAN_MOUTH_2
+            gAnju1MouthOpenTex, // ENAN_MOUTH_OPEN
         };
 
         static TexturePtr sEyeTextures[ENAN_EYES_MAX] = {
@@ -3583,9 +3583,9 @@ void EnAn_Draw(Actor* thisx, PlayState* play) {
             gAnju1EyeHalfTex,   // ENAN_EYES_HALF1
             gAnju1EyeClosedTex, // ENAN_EYES_CLOSED
             gAnju1EyeHalfTex,   // ENAN_EYES_HALF2
-            gAnju1Eye00FDA0Tex, // ENAN_EYES_4
+            gAnju1EyeComfortingTex, // ENAN_EYES_COMFORTING
             gAnju1EyeSadTex,    // ENAN_EYES_SAD
-            gAnju1EyeAngryTex,  // ENAN_EYES_ANGRY
+            gAnju1EyeRelievedClosedTex,  // ENAN_EYES_RELIEVED_CLOSED
         };
 
         OPEN_DISPS(play->state.gfxCtx);
