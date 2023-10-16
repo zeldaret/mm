@@ -1,5 +1,6 @@
 #include "global.h"
 #include "gfx.h"
+#include "assets/interface/parameter_static/parameter_static.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
@@ -132,76 +133,71 @@ void MapDisp_GetMapPos(MinimapEntry* minimapEntry, s32* offsetX, s32* offsetY) {
     }
 }
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/XPZfI
-void func_801031D0(PlayState* play, TexturePtr arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5) {
-    MinimapEntry* spCC;
-    s32 spC8;
-    s32 spC4;
-    s16 var_a0_4;
-    s16 var_a3;
-    s32 var_t0;
-    s32 var_t1;
-    s32 var_v1_4;
-    s32 var_v1_5;
+void func_801031D0(PlayState* play, TexturePtr texture, s32 arg2, s32 arg3, s32 arg4, f32 arg5) {
+    MinimapEntry* entry = &D_801BEBB8.minimapList->entry[arg4];
+    s32 texWidth;
+    s32 texHeight;
+    s32 dtdy;
+    s32 dsdx;
+    s32 t;
+    s32 s;
+    s16 var_v1_4;
+    s16 var_v1_5;
     Color_RGBA8 spAC_color;
     s32 spA8_drawType;
 
-    spCC = &D_801BEBB8.minimapList->entry[arg4];
-    if ((spCC->mapId != 0xFFFF) && (arg1 != 0)) {
-        MapDisp_GetMapTexDim(spCC, &spC8, &spC4);
-        OPEN_DISPS(play->state.gfxCtx);
-
-        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
-        MapData_GetMapColor(MapData_GetMapColorIndex(spCC->mapId), &spAC_color);
-        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, spAC_color.r, spAC_color.g, spAC_color.b,
-                        (s32)(play->interfaceCtx.minimapAlpha * arg5 * spAC_color.a / 255.0f));
-        MapData_GetDrawType(spCC->mapId, &spA8_drawType);
-        switch (spA8_drawType) {
-            case MAPDATA_DRAW_1:
-                gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-                gDPLoadTextureBlock_4b(OVERLAY_DISP++, arg1, G_IM_FMT_IA, spC8, spC4, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                break;
-            case MAPDATA_DRAW_3:
-                gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0,
-                                  TEXEL0);
-                gDPLoadTextureBlock_4b(OVERLAY_DISP++, arg1, G_IM_FMT_I, spC8, spC4, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                break;
-            default:
-            case MAPDATA_DRAW_0:
-                gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-                gDPLoadTextureBlock_4b(OVERLAY_DISP++, arg1, G_IM_FMT_I, spC8, spC4, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                break;
-        }
-
-        var_t1 = (spCC->unk8 & 1) ? (spC8 - 1) << 5 : 0;
-        var_t0 = (spCC->unk8 & 2) ? 0 : (spC4 - 1) << 5;
-
-        var_v1_4 = (spCC->unk8 & 1) ? -1 : 1;
-        var_a3 = var_v1_4 << 0xA;
-        var_v1_5 = (spCC->unk8 & 2) ? 1 : -1;
-
-        if ((spCC->unk8 & 1) != 0) {
-            var_a3 = var_a3 & 0xFFFF;
-        }
-        if ((spCC->unk8 & 2) != 0) {
-            var_a0_4 = var_v1_5 << 0xA;
-        } else {
-            var_a0_4 = (var_v1_5 << 0xA) & 0xFFFF;
-        }
-        gSPTextureRectangle(OVERLAY_DISP++, arg2 << 2, arg3 << 2, (spC8 + arg2) << 2, (arg3 + spC4) << 2,
-                            G_TX_RENDERTILE, var_t1, var_t0, var_a3, var_a0_4);
-
-        CLOSE_DISPS(play->state.gfxCtx);
+    if ((entry->mapId == 0xFFFF) || (texture == NULL)) {
+        return;
     }
+
+    MapDisp_GetMapTexDim(entry, &texWidth, &texHeight);
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    Gfx_SetupDL39_Overlay(play->state.gfxCtx);
+    MapData_GetMapColor(MapData_GetMapColorIndex(entry->mapId), &spAC_color);
+    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, spAC_color.r, spAC_color.g, spAC_color.b,
+                    (s32)(play->interfaceCtx.minimapAlpha * arg5 * spAC_color.a / 255.0f));
+    MapData_GetDrawType(entry->mapId, &spA8_drawType);
+
+    switch (spA8_drawType) {
+        case MAPDATA_DRAW_1:
+            gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, texture, G_IM_FMT_IA, texWidth, texHeight, 0,
+                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                   G_TX_NOLOD, G_TX_NOLOD);
+            break;
+
+        case MAPDATA_DRAW_3:
+            gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, texture, G_IM_FMT_I, texWidth, texHeight, 0,
+                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                   G_TX_NOLOD, G_TX_NOLOD);
+            break;
+
+        default:
+        case MAPDATA_DRAW_0:
+            gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+            gDPLoadTextureBlock_4b(OVERLAY_DISP++, texture, G_IM_FMT_I, texWidth, texHeight, 0,
+                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                   G_TX_NOLOD, G_TX_NOLOD);
+            break;
+    }
+
+    s = (entry->unk8 & 1) ? (texWidth - 1) << 5 : 0;
+    t = (entry->unk8 & 2) ? 0 : (texHeight - 1) << 5;
+
+    var_v1_4 = ((entry->unk8 & 1) ? -1 : 1) * (1 << 10);
+    var_v1_5 = ((entry->unk8 & 2) ? 1 : -1) * (1 << 10);
+
+    dsdx = (entry->unk8 & 1) ? var_v1_4 & 0xFFFF : var_v1_4;
+    dtdy = (entry->unk8 & 2) ? var_v1_5 : var_v1_5 & 0xFFFF;
+
+    gSPTextureRectangle(OVERLAY_DISP++, arg2 << 2, arg3 << 2, (texWidth + arg2) << 2, (arg3 + texHeight) << 2,
+                        G_TX_RENDERTILE, s, t, dsdx, dtdy);
+
+    CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-void func_801031D0(PlayState* play, TexturePtr arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801031D0.s")
-#endif
 
 // Tests if the map data should be rotated 180 degrees
 // SCENE_35TAKI is the only scene with data flipped in this manner.
@@ -234,8 +230,6 @@ s32 func_80103A10(PlayState* play) {
                        ((height)-1) << G_TEXTURE_IMAGE_FRAC);                                                         \
     })
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/TR5Jq
 void func_80103A58(PlayState* play, Actor* actor) {
     MinimapEntry* spDC;
     s32 spD8;
@@ -245,125 +239,104 @@ void func_80103A58(PlayState* play, Actor* actor) {
     s32 spC8;
     s32 spC4;
     f32 spC0;
-    u32 pad;
+    f32 unused1;
+    f32 unused2;
+    Player* player = GET_PLAYER(play);
     s32 scale;
-    Player* spB4;
-    u32 pad2;
-    s32 spAC_scaleTemp;
-    // GraphicsContext *spA8;
+
+    // inferred from `func_801045AC`
+    unused1 = fabsf(player->actor.world.pos.y - actor->world.pos.y);
+    unused2 = 1.0f - (1 / 350.0f) * unused1;
+
+    if (unused2 < 0.0f) {
+        unused2 = 0.0f;
+    }
 
     spDC = &D_801BEBB8.minimapList->entry[D_801BEBB8.curRoom];
-    spB4 = GET_PLAYER(play);
-    if (spDC->mapId != 0xFFFF) {
-        MapDisp_GetMapPos(spDC, &spD0, &spCC);
-        MapDisp_GetMapTexDim(spDC, &spC8, &spC4);
-        scale = D_801BEBB8.minimapList->scale;
-        if (D_801BEBB8.minimapList->scale == 0) {
-            scale = 20;
-        } else if (D_801BEBB8.minimapList->scale == -1) {
-            MapDisp_GetMapScale(spDC, &spAC_scaleTemp);
-            scale = spAC_scaleTemp;
-        }
-        spC0 = 1.0f / (f32)scale;
-        if (!MapDisp_IsDataRotated(play)) {
-            spD8 = (s32)((actor->world.pos.x - (f32)spDC->unk2) * spC0) + D_801BEBB8.unk8 + D_801BEBB8.unkC -
-                   D_801BEBB8.unk8 + spD0;
-            spD4 = (s32)((actor->world.pos.z - (f32)spDC->unk6) * spC0) + D_801BEBB8.unkA + D_801BEBB8.unkE -
-                   D_801BEBB8.unkA + spCC;
+    if (spDC->mapId == 0xFFFF) {
+        return;
+    }
+
+    MapDisp_GetMapPos(spDC, &spD0, &spCC);
+    MapDisp_GetMapTexDim(spDC, &spC8, &spC4);
+
+    scale = D_801BEBB8.minimapList->scale;
+    if (D_801BEBB8.minimapList->scale == 0) {
+        scale = 20;
+    } else if (D_801BEBB8.minimapList->scale == -1) {
+        s32 scaleTemp;
+
+        MapDisp_GetMapScale(spDC, &scaleTemp);
+        scale = scaleTemp;
+    }
+
+    spC0 = 1.0f / scale;
+    if (!MapDisp_IsDataRotated(play)) {
+        spD8 = (s32)((actor->world.pos.x - spDC->unk2) * spC0) + D_801BEBB8.unk8 + D_801BEBB8.unkC - D_801BEBB8.unk8 +
+               spD0;
+        spD4 = (s32)((actor->world.pos.z - spDC->unk6) * spC0) + D_801BEBB8.unkA + D_801BEBB8.unkE - D_801BEBB8.unkA +
+               spCC;
+    } else {
+        spD8 = -(s32)((actor->world.pos.x - spDC->unk2) * spC0) + D_801BEBB8.unk8 + D_801BEBB8.unkC - D_801BEBB8.unk8 +
+               spD0;
+        spD4 = -(s32)((actor->world.pos.z - spDC->unk6) * spC0) + D_801BEBB8.unkA + D_801BEBB8.unkE - D_801BEBB8.unkA +
+               spCC;
+    }
+
+    if ((spD8 > 0) && (spD8 < 0x3FF) && (spD4 > 0) && (spD4 < 0x3FF)) {
+        OPEN_DISPS(play->state.gfxCtx);
+
+        if ((actor->category == ACTORCAT_PLAYER) && (actor->flags & ACTOR_FLAG_80000000)) {
+            s16 spA2;
+
+            Gfx_SetupDL42_Overlay(play->state.gfxCtx);
+            gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+            gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, play->interfaceCtx.minimapAlpha);
+            gDPSetCombineMode(OVERLAY_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
+            gDPSetRenderMode(OVERLAY_DISP++, G_RM_AA_DEC_LINE, G_RM_NOOP2);
+
+            Matrix_Translate(spD8 - 160.0f, 120.0f - spD4, 0.0f, MTXMODE_NEW);
+            Matrix_RotateXFApply(-1.6f);
+            spA2 = (s32)(0x7FFF - actor->focus.rot.y) / 1024;
+            if (MapDisp_IsDataRotated(play)) {
+                spA2 += 0x7FFF;
+            }
+            Matrix_RotateYF(spA2 / 10.0f, MTXMODE_APPLY);
+            Matrix_Scale(0.4f, 0.4f, 0.4f, MTXMODE_APPLY);
+            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 200, 255, 0, play->interfaceCtx.minimapAlpha);
+            gSPDisplayList(OVERLAY_DISP++, gameplay_keep_DL_01ED00);
+        } else if ((actor->id == ACTOR_EN_BOX) && !Flags_GetTreasure(play, actor->params & 0x1F) &&
+                   (func_80102F9C(player->actor.world.pos.y) == func_80102F9C(actor->world.pos.y))) {
+            Gfx_SetupDL39_Overlay(play->state.gfxCtx);
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetTextureLUT(OVERLAY_DISP++, G_TT_NONE);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, play->interfaceCtx.minimapAlpha);
+            gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, play->interfaceCtx.minimapAlpha);
+            gDPPipeSync(OVERLAY_DISP++);
+
+            gDPLoadTextureBlock_TEST(OVERLAY_DISP++, gMapChestIconTex, G_IM_FMT_RGBA, D_801BEAE0[2], D_801BEAF0[2],
+                                     D_801BEB00[2], D_801BEB10[2], D_801BEB20[2], D_801BEAD0[2], 8, 8, 0,
+                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                     G_TX_NOLOD, G_TX_NOLOD);
+
+            gSPTextureRectangle(OVERLAY_DISP++, (spD8 - 4) << 2, (spD4 - 4) << 2, (spD8 + 4) << 2, (spD4 + 4) << 2,
+                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         } else {
-            spD8 = -(s32)((actor->world.pos.x - (f32)spDC->unk2) * spC0) + D_801BEBB8.unk8 + D_801BEBB8.unkC -
-                   D_801BEBB8.unk8 + spD0;
-            spD4 = -(s32)((actor->world.pos.z - (f32)spDC->unk6) * spC0) + D_801BEBB8.unkA + D_801BEBB8.unkE -
-                   D_801BEBB8.unkA + spCC;
-        }
-        if ((spD8 > 0) && (spD8 < 0x3FF) && (spD4 > 0) && (spD4 < 0x3FF)) {
-            OPEN_DISPS(play->state.gfxCtx);
-
-            if ((actor->category == ACTORCAT_PLAYER) && (actor->flags & 0x80000000)) {
-                s16 spA2;
-                Gfx_SetupDL42_Overlay(play->state.gfxCtx);
-                gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
-                                  PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-                gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, play->interfaceCtx.minimapAlpha);
-                gDPSetCombineMode(OVERLAY_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
-                gDPSetRenderMode(OVERLAY_DISP++, G_RM_AA_DEC_LINE, G_RM_NOOP2);
-
-                Matrix_Translate((f32)spD8 - 160.0f, 120.0f - (f32)spD4, 0.0f, MTXMODE_NEW);
-                Matrix_RotateXFApply(-1.6f);
-                spA2 = (s32)(0x7FFF - actor->focus.rot.y) / 1024;
-                if (MapDisp_IsDataRotated(play)) {
-                    spA2 += 0x7FFF;
-                }
-                Matrix_RotateYF((f32)spA2 / 10.0f, MTXMODE_APPLY);
-                Matrix_Scale(0.4f, 0.4f, 0.4f, MTXMODE_APPLY);
-                gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 200, 255, 0, play->interfaceCtx.minimapAlpha);
-                gSPDisplayList(OVERLAY_DISP++, &D_0401ED00);
-                return;
-            }
-            if (actor->id == ACTOR_EN_BOX) {
-                if (!Flags_GetTreasure(play, actor->params & 0x1F)) {
-                    if (func_80102F9C(spB4->actor.world.pos.y) == func_80102F9C(actor->world.pos.y)) {
-                        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
-                        gDPPipeSync(OVERLAY_DISP++);
-                        gDPSetTextureLUT(OVERLAY_DISP++, G_TT_NONE);
-                        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, play->interfaceCtx.minimapAlpha);
-                        gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, play->interfaceCtx.minimapAlpha);
-                        gDPPipeSync(OVERLAY_DISP++);
-
-                        gDPLoadTextureBlock_TEST(
-                            OVERLAY_DISP++, &D_02003F20, G_IM_FMT_RGBA, D_801BEAE0[2], D_801BEAF0[2], D_801BEB00[2],
-                            D_801BEB10[2], D_801BEB20[2], D_801BEAD0[2], 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-
-                        // gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_RGBA, D_801BEAE0.unk8, 1, &D_02003F20);
-                        // gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, D_801BEAE0.unk8, 0, 0x0000, G_TX_LOADTILE, 0,
-                        //     G_TX_NOMIRROR | G_TX_WRAP, // cmt
-                        //     G_TX_NOMASK, //maskt
-                        //     G_TX_NOLOD, //shiftt
-                        //     G_TX_NOMIRROR | G_TX_WRAP, //cms
-                        //     G_TX_NOMASK, //masks
-                        //     G_TX_NOLOD); //shifts
-                        // gDPLoadSync(OVERLAY_DISP++);
-                        // gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0,
-                        //  ((D_801BEAF8 + 0x40) >> D_801BEB08) - 1,
-                        //        (((D_801BEB18 * 8 >> 3 == 0)? 1 : D_801BEB18) + 0x7FF)
-                        //     /   ((D_801BEB18 * 8 >> 3 == 0)? 1 : D_801BEB18));
-                        // gDPPipeSync(OVERLAY_DISP++);
-                        // gDPSetTile(OVERLAY_DISP++, G_IM_FMT_RGBA, D_801BEAD8,
-                        //   ((D_801BEB28 * 8) + 7) >> 3, 0x0000, G_TX_RENDERTILE, 0,
-                        //     G_TX_NOMIRROR | G_TX_WRAP, // cmt
-                        //     G_TX_NOMASK,
-                        //     G_TX_NOLOD,
-                        //     G_TX_NOMIRROR | G_TX_WRAP,
-                        //     G_TX_NOMASK,
-                        //     G_TX_NOLOD);
-                        // gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 0x001C, 0x001C);
-                        gSPTextureRectangle(OVERLAY_DISP++, (spD8 - 4) << 2, (spD4 - 4) << 2, (spD8 + 4) << 2,
-                                            (spD4 + 4) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
-                        return;
-                    }
-                }
-            }
             Gfx_SetupDL39_Overlay(play->state.gfxCtx);
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-            if (actor->flags & 0x80000000) {
+            if (actor->flags & ACTOR_FLAG_80000000) {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, D_801BEC2C[actor->category].r, D_801BEC2C[actor->category].g,
                                 D_801BEC2C[actor->category].b, play->interfaceCtx.minimapAlpha);
                 gSPTextureRectangle(OVERLAY_DISP++, (spD8 - 1) << 2, (spD4 - 1) << 2, (spD8 + 1) << 2, (spD4 + 1) << 2,
                                     G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
             }
-
-            CLOSE_DISPS(play->state.gfxCtx);
         }
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
-#else
-void func_80103A58(PlayState* play, Actor* actor);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80103A58.s")
-#endif
 
 void func_8010439C(PlayState* play) {
     ActorContext* actorCtx;
@@ -916,8 +889,6 @@ void MapDisp_SwapRooms(s16 nextRoom) {
     }
 }
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/WiRnZ
 void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
     MinimapEntry* sp6C;
     s32 sp68;
@@ -926,59 +897,60 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
     s32 sp5C;
     s32 sp58;
     s32 sp54;
-    s32 var_v0;
+    s32 scale;
+    f32 sp4C;
 
     sp6C = &D_801BEBB8.minimapList->entry[D_801BEBB8.curRoom];
-    if (sp6C->mapId != 0xFFFF) {
-        f32 sp4C;
-        MapDisp_GetMapPos(sp6C, &sp60, &sp5C);
-        MapDisp_GetMapTexDim(sp6C, &sp58, &sp54);
-        var_v0 = D_801BEBB8.minimapList->scale;
-        if (D_801BEBB8.minimapList->scale == 0) {
-            var_v0 = 20;
-        } else if (D_801BEBB8.minimapList->scale == -1) {
-            s32 sp48;
+    if (sp6C->mapId == 0xFFFF) {
+        return;
+    }
 
-            MapDisp_GetMapScale(sp6C, &sp48);
-            var_v0 = sp48;
-        }
-        sp4C = (1.0f / var_v0);
-        if (!MapDisp_IsDataRotated(play)) {
-            sp68 = (s32)((x - (f32)sp6C->unk2) * sp4C) + D_801BEBB8.unk8 + (D_801BEBB8.unkC - D_801BEBB8.unk8) + sp60;
-            sp64 = (s32)((z - (f32)sp6C->unk6) * sp4C) + D_801BEBB8.unkA + (D_801BEBB8.unkE - D_801BEBB8.unkA) + sp5C;
-        } else {
-            sp68 = -(s32)((x - (f32)sp6C->unk2) * sp4C) + D_801BEBB8.unk8 + (D_801BEBB8.unkC - D_801BEBB8.unk8) + sp60;
-            sp64 = -(s32)((z - (f32)sp6C->unk6) * sp4C) + D_801BEBB8.unkA + (D_801BEBB8.unkE - D_801BEBB8.unkA) + sp5C;
-        }
-        if ((sp68 > 0) && (sp68 < 0x3FF) && (sp64 > 0) && (sp64 < 0x3FF)) {
-            OPEN_DISPS(play->state.gfxCtx);
+    MapDisp_GetMapPos(sp6C, &sp60, &sp5C);
+    MapDisp_GetMapTexDim(sp6C, &sp58, &sp54);
+    scale = D_801BEBB8.minimapList->scale;
 
-            Gfx_SetupDL42_Overlay(play->state.gfxCtx);
-            gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
-                              PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
-            gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 255);
-            gDPSetCombineMode(OVERLAY_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
-            gDPSetRenderMode(OVERLAY_DISP++, G_RM_AA_DEC_LINE, G_RM_NOOP2);
-            Matrix_Translate((f32)sp68 - 160.0f, 120.0f - (f32)sp64, 0.0f, MTXMODE_NEW);
-            Matrix_RotateXFApply(-1.6f);
-            if (MapDisp_IsDataRotated(play)) {
-                rot += 0x7FFF;
-            }
-            Matrix_RotateYF(rot / 10.0f, MTXMODE_APPLY);
-            Matrix_Scale(0.4f, 0.4f, 0.4f, MTXMODE_APPLY);
-            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gDPSetPrimColor(OVERLAY_DISP++, 0, 0xFF, 200, 0, 0, play->interfaceCtx.minimapAlpha);
-            gSPDisplayList(OVERLAY_DISP++, D_0401ED00);
+    if (D_801BEBB8.minimapList->scale == 0) {
+        scale = 20;
+    } else if (D_801BEBB8.minimapList->scale == -1) {
+        s32 scaleTemp;
 
-            CLOSE_DISPS(play->state.gfxCtx);
+        MapDisp_GetMapScale(sp6C, &scaleTemp);
+        scale = scaleTemp;
+    }
+
+    sp4C = 1.0f / scale;
+    if (!MapDisp_IsDataRotated(play)) {
+        sp68 = (s32)((x - (f32)sp6C->unk2) * sp4C) + D_801BEBB8.unk8 + (D_801BEBB8.unkC - D_801BEBB8.unk8) + sp60;
+        sp64 = (s32)((z - (f32)sp6C->unk6) * sp4C) + D_801BEBB8.unkA + (D_801BEBB8.unkE - D_801BEBB8.unkA) + sp5C;
+    } else {
+        sp68 = -(s32)((x - (f32)sp6C->unk2) * sp4C) + D_801BEBB8.unk8 + (D_801BEBB8.unkC - D_801BEBB8.unk8) + sp60;
+        sp64 = -(s32)((z - (f32)sp6C->unk6) * sp4C) + D_801BEBB8.unkA + (D_801BEBB8.unkE - D_801BEBB8.unkA) + sp5C;
+    }
+
+    if ((sp68 > 0) && (sp68 < 0x3FF) && (sp64 > 0) && (sp64 < 0x3FF)) {
+        OPEN_DISPS(play->state.gfxCtx);
+
+        Gfx_SetupDL42_Overlay(play->state.gfxCtx);
+        gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+        gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 255);
+        gDPSetCombineMode(OVERLAY_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
+        gDPSetRenderMode(OVERLAY_DISP++, G_RM_AA_DEC_LINE, G_RM_NOOP2);
+        Matrix_Translate(sp68 - 160.0f, 120.0f - sp64, 0.0f, MTXMODE_NEW);
+        Matrix_RotateXFApply(-1.6f);
+        if (MapDisp_IsDataRotated(play)) {
+            rot += 0x7FFF;
         }
+        Matrix_RotateYF(rot / 10.0f, MTXMODE_APPLY);
+        Matrix_Scale(0.4f, 0.4f, 0.4f, MTXMODE_APPLY);
+        gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0xFF, 200, 0, 0, play->interfaceCtx.minimapAlpha);
+        gSPDisplayList(OVERLAY_DISP++, gameplay_keep_DL_01ED00);
+
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
-#else
-void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80105FE0.s")
-#endif
 
 s32 func_80106408(PlayState* play) {
     if ((gSaveContext.save.entrance == 0x6400) && (Cutscene_GetSceneLayer(play) != 0)) {
@@ -1193,38 +1165,30 @@ s32 func_80106D08(s32 sceneId) {
     (s16)(((s32)(((r)*31.0f) / 255.0f) << 11) | ((s32)(((g)*31.0f) / 255.0f) << 6) | \
           ((s32)(((b)*31.0f) / 255.0f) << 1) | (a))
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/3cGkW
 void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5, s32 arg6) {
     PauseContext* pauseCtx = &play->pauseCtx;
-    // s32 var_a0;
     s32 var_a1_2;
     s32 var_a1_4;
     s32 var_a1_5;
     s32 var_v1;
-    s32 var_s2;
-    TexturePtr temp_s1;
-    s32 temp1;
-    s32 temp2;
-
-    temp1 = ((D_801F56B0.unk184 * -120.0f / 40.0f) + 200.0f) * 31.0f / 255.0f;
-    temp2 = ((D_801F56B0.unk184 * 115.0f / 40.0f) + 140.0f) * 31.0f / 255.0f;
+    s32 i;
+    s32 temp1 = ((D_801F56B0.unk184 * -120.0f / 40.0f) + 200.0f) * 31.0f / 255.0f;
+    s32 temp2 = ((D_801F56B0.unk184 * 115.0f / 40.0f) + 140.0f) * 31.0f / 255.0f;
 
     D_801BECC4[1] = (temp1 << 6) | (temp2 << 1) | 1;
+
     if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, arg6)) {
+        s32 requiredScopeTemp;
+
         D_801BEC84[0xF] = 0xAD5F;
         D_801BECA4[0xF] = 0xAD5F;
         D_801BECC4[0xF] = 0xAD5F;
     } else {
-        D_801BEC84[0xF] = 0;
-        D_801BECA4[0xF] = 0;
-        D_801BECC4[0xF] = 0;
+        D_801BECC4[0xF] = D_801BECA4[0xF] = D_801BEC84[0xF] = 0;
     }
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    // temp_a0 = play->state.gfxCtx;
-    // sp48 = arg6 + &gSaveContext;
     Gfx_SetupDL39_Opa(play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
     gDPLoadTLUT_pal16(POLY_OPA_DISP++, 0, D_801BEC84);
@@ -1232,273 +1196,175 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     gDPLoadTLUT_pal16(POLY_OPA_DISP++, 2, D_801BECC4);
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_RGBA16);
 
-    for (var_s2 = 0; var_s2 < D_801BEC1C; var_s2++) {
-        s32 sp118_texWidth;
-        s32 sp114_texHeight;
-        s32 sp110_offsetX;
-        s32 sp10C_offsetY;
-        MinimapEntry* sp108;
-        s32 pad104;
+    for (i = 0; i < D_801BEC1C; i++) {
+        s32 texWidth;
+        s32 texHeight;
+        s32 offsetX;
+        s32 offsetY;
+        MinimapEntry* entry;
+        TexturePtr texture;
         s32 sp100;
         s32 spFC;
         s32 spF8;
         s32 spF4;
-        s32 spF0;
-        s32 spEC;
+        s32 texPosX;
+        s32 texPosY;
         s32 spE8;
-        s32 padE4;
-        s32 padE0;
+        s32 two = 2;
 
-        sp108 = &D_801BEBB8.minimapList->entry[var_s2];
-        if ((sp108->mapId != 0xFFFF) && (sp108->mapId < 0x162)) {
-            if ((D_801BEBB8.unk42 >= D_801BEBB8.unk3C[var_s2]) &&
-                ((D_801BEBB8.unk3C[var_s2] + ((sp108->unk8 >> 2) & 7)) >= D_801BEBB8.unk42)) {
-                temp_s1 = D_801F56B0.unk104[var_s2];
-                if (temp_s1 != NULL) {
-                    spE8 = MapData_GetMapCompactId(sp108->mapId);
-                    if (spE8 == -1) {
-                        continue;
-                    } else {
-                        // sp3C = play + 0x18000;
-                        MapData_CPID_GetTexDim(spE8, &sp118_texWidth, &sp114_texHeight);
-                        MapData_CPID_GetTexOffset(spE8, &sp110_offsetX, &sp10C_offsetY);
-                        if (sp108->unk8 & 1) {
-                            sp110_offsetX = (sp118_texWidth / 2 - sp110_offsetX) + sp118_texWidth / 2;
-                            sp100 = (sp118_texWidth - 1) << 5;
-                            spF8 = 0xFC00;
-                        } else {
-                            sp100 = 0;
-                            spF8 = 0x400;
-                        }
-                        if (sp108->unk8 & 2) {
-                            sp10C_offsetY = (sp114_texHeight / 2 - sp10C_offsetY) + sp114_texHeight / 2;
-                            spFC = (sp114_texHeight - 1) << 5;
-                            spF4 = 0xFC00;
-                        } else {
-                            spFC = 0;
-                            spF4 = 0x400;
-                        }
-                        spF0 = ((sp108->unk2 - (f32)D_801BEBB8.sceneMidX) * arg5 - sp110_offsetX) + ((arg3 / 2) + arg1);
-                        spEC = ((sp108->unk6 - (f32)D_801BEBB8.sceneMidZ) * arg5 - sp10C_offsetY) + ((arg4 / 2) + arg2);
-
-                        if (var_s2 == play->roomCtx.curRoom.num) {
-                            if (Map_IsInBossArea(play)) {
-                                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118_texWidth,
-                                                       sp114_texHeight, 1, G_TX_NOMIRROR | G_TX_WRAP,
-                                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                                                       G_TX_NOLOD);
-                            } else {
-                                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118_texWidth,
-                                                       sp114_texHeight, 2, G_TX_NOMIRROR | G_TX_WRAP,
-                                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                                                       G_TX_NOLOD);
-                            }
-                        } else if (gSaveContext.save.saveInfo
-                                       .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
-                                       .rooms &
-                                   (1 << var_s2)) {
-                            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118_texWidth,
-                                                   sp114_texHeight, 1, G_TX_NOMIRROR | G_TX_WRAP,
-                                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                                                   G_TX_NOLOD);
-                        } else if (CHECK_DUNGEON_ITEM(
-                                       DUNGEON_MAP,
-                                       arg6)) { //*(gBitFlags + 8) & gSaveContext.save.inventory.dungeonItems[arg6]) {
-                            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118_texWidth,
-                                                   sp114_texHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                                                   G_TX_NOLOD);
-                        } else {
-                            continue;
-                        }
-                        gSPTextureRectangle(POLY_OPA_DISP++, (spF0 << 2), (spEC << 2), (spF0 + sp118_texWidth) << 2,
-                                            (spEC + sp114_texHeight) << 2, 0, sp100, spFC, spF8, spF4);
-                        gDPPipeSync(POLY_OPA_DISP++);
-                    }
-                }
-            }
+        entry = &D_801BEBB8.minimapList->entry[i];
+        if ((entry->mapId == 0xFFFF) || (entry->mapId >= 0x162)) {
+            continue;
         }
+
+        if ((D_801BEBB8.unk42 < D_801BEBB8.unk3C[i]) ||
+            ((D_801BEBB8.unk3C[i] + ((entry->unk8 >> 2) & 7)) < D_801BEBB8.unk42)) {
+            continue;
+        }
+
+        texture = D_801F56B0.unk104[i];
+        if (texture == NULL) {
+            continue;
+        }
+
+        spE8 = MapData_GetMapCompactId(entry->mapId);
+        if (spE8 == -1) {
+            continue;
+        }
+
+        MapData_CPID_GetTexDim(spE8, &texWidth, &texHeight);
+        MapData_CPID_GetTexOffset(spE8, &offsetX, &offsetY);
+
+        if (entry->unk8 & 1) {
+            offsetX = (texWidth / 2 - offsetX) + texWidth / 2;
+            sp100 = (texWidth - 1) << 5;
+            spF8 = 0xFC00;
+        } else {
+            sp100 = 0;
+            spF8 = 0x400;
+        }
+
+        if (entry->unk8 & 2) {
+            s32 requiredScopeTemp;
+
+            offsetY = (texHeight / 2 - offsetY) + texHeight / 2;
+            spFC = (texHeight - 1) << 5;
+            spF4 = 0xFC00;
+        } else {
+            spFC = 0;
+            spF4 = 0x400;
+        }
+
+        texPosX = ((entry->unk2 - (f32)D_801BEBB8.sceneMidX) * arg5 - offsetX) + ((arg3 / two) + arg1);
+        texPosY = ((entry->unk6 - (f32)D_801BEBB8.sceneMidZ) * arg5 - offsetY) + ((arg4 / two) + arg2);
+
+        if (i == play->roomCtx.curRoom.num) {
+            if (Map_IsInBossArea(play)) {
+                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, texture, G_IM_FMT_CI, texWidth, texHeight, 1,
+                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                       G_TX_NOLOD, G_TX_NOLOD);
+            } else {
+                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, texture, G_IM_FMT_CI, texWidth, texHeight, 2,
+                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                       G_TX_NOLOD, G_TX_NOLOD);
+            }
+        } else if (((void)0, gSaveContext.save.saveInfo
+                                 .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))])
+                       .rooms &
+                   (1 << i)) {
+            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, texture, G_IM_FMT_CI, texWidth, texHeight, 1,
+                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                   G_TX_NOLOD, G_TX_NOLOD);
+        } else if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, arg6)) {
+            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, texture, G_IM_FMT_CI, texWidth, texHeight, 0,
+                                   G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                   G_TX_NOLOD, G_TX_NOLOD);
+        } else {
+            continue;
+        }
+        gSPTextureRectangle(POLY_OPA_DISP++, (texPosX << 2), (texPosY << 2), (texPosX + texWidth) << 2,
+                            (texPosY + texHeight) << 2, 0, sp100, spFC, spF8, spF4);
+        gDPPipeSync(POLY_OPA_DISP++);
     }
+
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_NONE);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-void func_80106D5C(PlayState*, s32, s32, s32, s32, f32, s32);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80106D5C.s")
-#endif
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/dKnQx
-void func_80107B78(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5) {
+void func_80107B78(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5) {
+    s32 pad[23];
+    MinimapChest* var_s0 = D_801BEBB8.unk54;
     s32 sp3C;
     MinimapEntry* sp38;
-    GraphicsContext* temp_s1;
-    MinimapChest* var_s0;
-    s32 temp_ft0;
-    s32 temp_ft0_2;
-    s32 var_s3;
-    s32 var_v1;
+    s32 posX;
+    s32 posZ;
+    s32 i;
     s32 var_v1_2;
+    s32 offsetX = 4;
+    s32 offsetZ = 4;
 
-    // temp_t0 = ;
-    if (D_801BEBB8.unk54 != NULL) {
-        // temp_s1 = arg0->state.gfxCtx;
-        OPEN_DISPS(arg0->state.gfxCtx);
+    if (var_s0 == NULL) {
+        return;
+    }
 
-        // temp_v1 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_v1 + 8;
-        // temp_v1->words.w1 = 0x00000000;
-        // temp_v1->words.w0 = 0xE7000000;
+    OPEN_DISPS(play->state.gfxCtx);
 
-        // temp_v1_2 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_v1_2 + 8;
-        // temp_v1_2->words.w1 = 0x00000000;
-        // temp_v1_2->words.w0 = 0xE3001001;
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_NONE);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, play->pauseCtx.alpha);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+    gDPPipeSync(POLY_OPA_DISP++);
 
-        // temp_v1_3 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_v1_3 + 8;
-        // temp_v1_3->words.w0 = 0xFA000000;
-        // temp_v1_3->words.w1 = (arg0->pauseCtx.alpha & 0xFF) | ~0xFF;
+    gDPLoadTextureBlock_TEST(POLY_OPA_DISP++, gMapChestIconTex, G_IM_FMT_RGBA, D_801BEAE0[2], D_801BEAF0[2],
+                             D_801BEB00[2], D_801BEB10[2], D_801BEB20[2], D_801BEAD0[2], 8, 8, 0,
+                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                             G_TX_NOLOD);
 
-        // temp_v1_4 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_v1_4 + 8;
-        // temp_v1_4->words.w1 = 0x000000FF;
-        // temp_v1_4->words.w0 = 0xFB000000;
+    for (i = 0; i < D_801BEBB8.numChests; i++) {
+        sp3C = var_s0[i].unk0;
+        sp38 = &D_801BEBB8.minimapList->entry[sp3C];
 
-        // temp_v1_5 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_v1_5 + 8;
-        // temp_v1_5->words.w1 = 0x00000000;
-        // temp_v1_5->words.w0 = 0xE7000000;
+        switch (play->sceneId) {
+            case SCENE_MITURIN_BS:
+                var_v1_2 = ((void)0, gSaveContext.cycleSceneFlags[SCENE_MITURIN].chest) & (1 << var_s0[i].unk2);
+                break;
 
-        gDPPipeSync(POLY_OPA_DISP++);
-        gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_NONE);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, arg0->pauseCtx.alpha);
-        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
-        gDPPipeSync(POLY_OPA_DISP++);
+            case SCENE_HAKUGIN_BS:
+                var_v1_2 = ((void)0, gSaveContext.cycleSceneFlags[SCENE_HAKUGIN].chest) & (1 << var_s0[i].unk2);
+                break;
 
-        // temp_v1_6 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_v1_6 + 8;
-        // temp_v1_6->words.w1 = (u32) &D_02003F20;
-        // temp_v1_6->words.w0 = ((D_801BEAE0.unk8 & 3) << 0x13) | 0xFD000000;
+            case SCENE_SEA_BS:
+                var_v1_2 = ((void)0, gSaveContext.cycleSceneFlags[SCENE_SEA].chest) & (1 << var_s0[i].unk2);
+                break;
 
-        // temp_v1_7 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_v1_7 + 8;
-        // var_a0 = 0x7FF;
-        // temp_v1_7->words.w1 = 0x07000000;
-        // temp_v1_7->words.w0 = ((D_801BEAE0.unk8 & 3) << 0x13) | 0xF5000000;
+            case SCENE_INISIE_BS:
+                var_v1_2 = ((void)0, gSaveContext.cycleSceneFlags[SCENE_INISIE_N].chest) & (1 << var_s0[i].unk2);
+                break;
 
-        // temp_v1_8 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_v1_8 + 8;
-        // temp_v1_8->words.w1 = 0x00000000;
-        // temp_v1_8->words.w0 = 0xE6000000;
-
-        // temp_a1 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_a1 + 8;
-        // temp_a1->words.w0 = 0xF3000000;
-        // temp_v0 = ((u32) (D_801BEAF8 + 0x40) >> D_801BEB08) - 1;
-        // if (temp_v0 < 0x7FFU) {
-        //     var_a0 = temp_v0;
-        // }
-        // temp_v1_9 = (u32) (D_801BEB18 * 8) >> 3;
-        // var_a2 = temp_v1_9;
-        // if (temp_v1_9 == 0) {
-        //     var_a2 = 1;
-        // }
-        // if (temp_v1_9 == 0) {
-        //     var_v0 = 1;
-        // } else {
-        //     var_v0 = temp_v1_9;
-        // }
-        // temp_a1->words.w1 = (((u32) (var_a2 + 0x7FF) / var_v0) & 0xFFF) | 0x07000000U | ((var_a0 & 0xFFF) << 0xC);
-
-        // temp_v1_10 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_v1_10 + 8;
-        // temp_v1_10->words.w1 = 0x00000000;
-        // temp_v1_10->words.w0 = 0xE7000000;
-
-        // temp_v1_11 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_v1_11 + 8;
-        // temp_v1_11->words.w0 = ((((u32) ((D_801BEB28 * 8) + 7) >> 3) & 0x1FF) << 9) | 0xF5000000 | ((D_801BEAD8 & 3)
-        // << 0x13); temp_v1_11->words.w1 = 0x00000000;
-
-        // temp_v1_12 = temp_s1->polyOpa.p;
-        // temp_s1->polyOpa.p = temp_v1_12 + 8;
-        // temp_v1_12->words.w0 = 0xF2000000;
-        // temp_v1_12->words.w1 = 0x0001C01C;
-
-        // gDPSetTextureImage(POLY_OPA_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_4b, 1, 0x02003F20);
-        // gDPSetTile(POLY_OPA_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_4b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR |
-        // G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-        // gDPLoadSync(POLY_OPA_DISP++);
-        // gDPLoadBlock(POLY_OPA_DISP++, G_TX_LOADTILE, 0, 0, 0, 0);
-        // gDPPipeSync(POLY_OPA_DISP++);
-        // gDPSetTile(POLY_OPA_DISP++, G_IM_FMT_RGBA, G_IM_SIZ_4b, 0, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR |
-        // G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-        // gDPSetTileSize(POLY_OPA_DISP++, G_TX_RENDERTILE, 0, 0, 0x001C, 0x001C);
-
-        gDPLoadTextureBlock_TEST(OVERLAY_DISP++, &D_02003F20, G_IM_FMT_RGBA, D_801BEAE0[2], D_801BEAF0[2],
-                                 D_801BEB00[2], D_801BEB10[2], D_801BEB20[2], D_801BEAD0[2], 8, 8, 0,
-                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                                 G_TX_NOLOD, G_TX_NOLOD);
-
-        var_s3 = 0;
-        var_s0 = D_801BEBB8.unk54;
-        // if (D_801BEBB8.numChests > 0) {
-        for (var_s3 = 0; var_s3 < D_801BEBB8.numChests; var_s3++) {
-            sp3C = var_s0[var_s3].unk0;
-            sp38 = &D_801BEBB8.minimapList->entry[sp3C];
-            switch (arg0->sceneId) {
-                case SCENE_MITURIN_BS:
-                    var_v1_2 = gSaveContext.cycleSceneFlags[SCENE_MITURIN].chest & (1 << var_s0[var_s3].unk2);
-                    break;
-
-                case SCENE_HAKUGIN_BS:
-                    var_v1_2 = gSaveContext.cycleSceneFlags[SCENE_HAKUGIN].chest & (1 << var_s0[var_s3].unk2);
-                    break;
-
-                case SCENE_SEA_BS:
-                    var_v1_2 = gSaveContext.cycleSceneFlags[SCENE_SEA].chest & (1 << var_s0[var_s3].unk2);
-                    break;
-
-                case SCENE_INISIE_BS:
-                    var_v1_2 = gSaveContext.cycleSceneFlags[SCENE_INISIE_N].chest & (1 << var_s0[var_s3].unk2);
-                    break;
-
-                default:
-                    var_v1_2 = Flags_GetTreasure(arg0, (s32)var_s0[var_s3].unk2);
-                    break;
-            }
-            if ((D_801BEBB8.unk42 < D_801BEBB8.unk3C[sp3C]) ||
-                ((D_801BEBB8.unk3C[sp3C] + ((sp38->unk8 >> 2) & 7)) < (s32)D_801BEBB8.unk42) || (var_v1_2 != 0)) {
-                continue;
-            } else if (!func_80106BEC((s32)D_801BEBB8.unk42, (f32)var_s0[var_s3].unk6)) {
-                continue;
-            } else {
-                temp_ft0 = (s32)(((((f32)var_s0[var_s3].unk4 - (f32)D_801BEBB8.sceneMidX) * arg5) - (f32)4) +
-                                 (f32)((arg3 / 2) + arg1));
-                temp_ft0_2 = (s32)(((((f32)var_s0[var_s3].unk8 - (f32)D_801BEBB8.sceneMidZ) * arg5) - (f32)4) +
-                                   (f32)((arg4 / 2) + arg2));
-                // temp_v1_13 = temp_s1->polyOpa.p;
-                // temp_s1->polyOpa.p = temp_v1_13 + 8;
-                // temp_v1_13->words.w1 = (((temp_ft0 * 4) & 0xFFF) << 0xC) | ((temp_ft0_2 * 4) & 0xFFF);
-                // temp_v1_13->words.w0 = ((((temp_ft0 + 8) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((temp_ft0_2 + 8) * 4)
-                // & 0xFFF); temp_v1_14 = temp_s1->polyOpa.p; temp_s1->polyOpa.p = temp_v1_14 + 8; temp_v1_14->words.w1
-                // = 0; temp_v1_14->words.w0 = 0xE1000000; temp_v1_15 = temp_s1->polyOpa.p; temp_s1->polyOpa.p =
-                // temp_v1_15 + 8; temp_v1_15->words.w1 = 0x04000400; temp_v1_15->words.w0 = 0xF1000000;
-
-                gSPTextureRectangle(POLY_OPA_DISP++, temp_ft0 << 2, temp_ft0_2 << 2, (temp_ft0 + 8) << 2,
-                                    (temp_ft0_2 + 8) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
-            }
+            default:
+                var_v1_2 = Flags_GetTreasure(play, var_s0[i].unk2);
+                break;
         }
 
-        CLOSE_DISPS(arg0->state.gfxCtx);
+        if ((D_801BEBB8.unk42 < D_801BEBB8.unk3C[sp3C]) ||
+            ((D_801BEBB8.unk3C[sp3C] + ((sp38->unk8 >> 2) & 7)) < D_801BEBB8.unk42) || (var_v1_2 != 0)) {
+            continue;
+        }
+
+        if (!func_80106BEC((s32)D_801BEBB8.unk42, (f32)var_s0[i].unk6)) {
+            continue;
+        }
+
+        posX = (s32)((((var_s0[i].unk4 - (f32)D_801BEBB8.sceneMidX) * arg5) - offsetX) + ((arg3 / 2) + arg1));
+        posZ = (s32)((((var_s0[i].unk8 - (f32)D_801BEBB8.sceneMidZ) * arg5) - offsetZ) + ((arg4 / 2) + arg2));
+
+        gSPTextureRectangle(POLY_OPA_DISP++, posX << 2, posZ << 2, (posX + 8) << 2, (posZ + 8) << 2, G_TX_RENDERTILE, 0,
+                            0, 1 << 10, 1 << 10);
     }
+
+    CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-void func_80107B78(PlayState*, s32, s32, s32, s32, f32);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80107B78.s")
-#endif
 
 void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5, s32 arg6) {
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -1546,49 +1412,49 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     }
 }
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/nHYgx
-void func_80108558(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5, s32 arg6) {
-    TransitionActorList* sp30;
-    // TransitionActorEntry* var_s0;
-    s32 temp_ft0;
-    s32 temp_ft0_2;
-    s32 var_s2;
+void func_80108558(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5, s32 arg6) {
+    s32 i;
+    TransitionActorList* sp30 = &D_801BEC24;
+    s32 offsetX = 4;
+    s32 offsetZ = 4;
+    s32 posX;
+    s32 posZ;
 
-    sp30 = &D_801BEC24;
-    OPEN_DISPS(arg0->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_NONE);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_AA_DEC_LINE, G_RM_NOOP2);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, arg0->pauseCtx.alpha);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, play->pauseCtx.alpha);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gDPPipeSync(POLY_OPA_DISP++);
+
     if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, arg6)) {
-        gDPLoadTextureBlock_TEST(POLY_OPA_DISP++, &D_02002460, G_IM_FMT_IA, D_801BEAE0[1], D_801BEAF0[1], D_801BEB00[1],
-                                 D_801BEB10[1], D_801BEB20[1], D_801BEAD0[1], 8, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        for (var_s2 = 0; var_s2 < sp30->count; var_s2++) {
-            if ((func_80105328((s32)D_801F53B0[var_s2].params) != 0) &&
-                func_80106BEC((s32)D_801BEBB8.unk42, (f32)D_801F53B0[var_s2].pos.y)) {
-                if (ABS_ALT(D_801F53B0[var_s2].id) != ACTOR_EN_HOLL) {
-                    temp_ft0 =
-                        ((((f32)D_801F53B0[var_s2].pos.x - D_801BEBB8.sceneMidX) * arg5) - 4) + ((arg3 / 2) + arg1);
-                    temp_ft0_2 =
-                        ((((f32)D_801F53B0[var_s2].pos.z - D_801BEBB8.sceneMidZ) * arg5) - 4) + ((arg4 / 2) + arg2);
-                    gSPTextureRectangle(POLY_OPA_DISP++, temp_ft0 << 2, temp_ft0_2 << 2, (temp_ft0 + 8) << 2,
-                                        (temp_ft0_2 + 8) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
-                }
+        gDPLoadTextureBlock_TEST(POLY_OPA_DISP++, gMapBossIconTex, G_IM_FMT_IA, D_801BEAE0[1], D_801BEAF0[1],
+                                 D_801BEB00[1], D_801BEB10[1], D_801BEB20[1], D_801BEAD0[1], 8, 8, 0,
+                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                 G_TX_NOLOD, G_TX_NOLOD);
+
+        for (i = 0; i < sp30->count; i++) {
+            if (!func_80105328(D_801F53B0[i].params)) {
+                continue;
             }
+            if (!func_80106BEC(D_801BEBB8.unk42, D_801F53B0[i].pos.y)) {
+                continue;
+            }
+            if (ABS_ALT(D_801F53B0[i].id) == ACTOR_EN_HOLL) {
+                continue;
+            }
+
+            posX = ((((f32)D_801F53B0[i].pos.x - D_801BEBB8.sceneMidX) * arg5) - offsetX) + ((arg3 / 2) + arg1);
+            posZ = ((((f32)D_801F53B0[i].pos.z - D_801BEBB8.sceneMidZ) * arg5) - offsetZ) + ((arg4 / 2) + arg2);
+            gSPTextureRectangle(POLY_OPA_DISP++, posX << 2, posZ << 2, (posX + 8) << 2, (posZ + 8) << 2,
+                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         }
     }
 
-    CLOSE_DISPS(arg0->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-void func_80108558(PlayState*, s32, s32, s32, s32, f32, s32);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_80108558.s")
-#endif
 
 TexturePtr func_80108A10(s32 arg0) {
     if ((arg0 >= 0) && (arg0 < 8)) {
@@ -1663,7 +1529,7 @@ void func_80108AF8(PlayState* play) {
             if ((gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                      .unk_14 &
                  gBitFlags[4 - var_s1]) ||
-                CHECK_DUNGEON_ITEM2(DUNGEON_MAP, spB4)) {
+                CHECK_DUNGEON_ITEM_ALT(DUNGEON_MAP, spB4)) {
                 gDPLoadTextureBlock(POLY_OPA_DISP++, func_80108A10(D_801BEBB8.unk44 + var_s1), G_IM_FMT_IA, G_IM_SIZ_8b,
                                     24, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                                     G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -1731,72 +1597,76 @@ s32 func_80109124(s16 arg0) {
     return D_801BEBB8.unk40 - 1;
 }
 
-#ifdef NON_MATCHING
 void func_801091F0(PlayState* play) {
+    MinimapEntry* entry;
+    f32 temp;
     s32 var_t2;
-    u16 temp_a0;
-    s16 sp44;
-    s32 sp40;
-    s32 sp3C;
     s32 var_v0;
-    s32 temp_v0_2;
+    s32 sp44 = 0;
+    s32 sp40 = 0;
+    s32 sp3C = 0;
 
-    sp44 = 0;
-    sp40 = 0;
-    sp3C = 0;
-    if (!func_80108A64(play)) {
-        if (Map_IsInBossArea(play)) {
-            switch (play->sceneId) {
-                case SCENE_MITURIN_BS:
-                    sp44 = 0;
-                    break;
+    if (func_80108A64(play)) {
+        return;
+    }
 
-                case SCENE_HAKUGIN_BS:
-                    sp44 = 1;
-                    break;
+    if (Map_IsInBossArea(play)) {
+        switch (play->sceneId) {
+            case SCENE_MITURIN_BS:
+                sp44 = 0;
+                break;
 
-                case SCENE_SEA_BS:
-                    sp44 = 2;
-                    break;
+            case SCENE_HAKUGIN_BS:
+                sp44 = 1;
+                break;
 
-                case SCENE_INISIE_BS:
-                    sp44 = 3;
-                    break;
+            case SCENE_SEA_BS:
+                sp44 = 2;
+                break;
 
-                default:
-                    break;
-            }
-        } else {
-            sp44 = gSaveContext.mapIndex;
+            case SCENE_INISIE_BS:
+                sp44 = 3;
+                break;
+
+            default:
+                break;
         }
-        temp_a0 = D_801BEBB8.minimapList->entry->mapId;
-        if ((temp_a0 != 0xFFFF) && (temp_a0 < 0x162)) {
-            temp_v0_2 = MapData_GetMapCompactId(temp_a0);
-            if (temp_v0_2 != -1) {
-                var_t2 = MapData_CPID_GetMapScale(temp_v0_2);
-                if (var_t2 == 0) {
-                    var_t2 = 0x50;
-                }
-                for (var_v0 = 0; var_v0 < 2; var_v0++) {
-                    if (play->sceneId == D_801BED24[var_v0].unk0) {
-                        sp40 = D_801BED24[var_v0].unk4;
-                        sp3C = D_801BED24[var_v0].unk8;
-                    }
-                }
+    } else {
+        sp44 = gSaveContext.mapIndex;
+    }
 
-                func_80106D5C(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, 1.0f / var_t2, sp44);
-                func_80108124(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, 1.0f / var_t2, sp44);
-                func_80108558(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, 1.0f / var_t2, sp44);
-                if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, sp44)) {
-                    func_80107B78(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, 1.0f / var_t2);
-                }
-            }
+    entry = D_801BEBB8.minimapList->entry;
+    if ((entry->mapId == 0xFFFF) || (entry->mapId >= 0x162)) {
+        return;
+    }
+
+    var_v0 = MapData_GetMapCompactId(entry->mapId);
+    if (var_v0 == -1) {
+        return;
+    }
+
+    var_t2 = MapData_CPID_GetMapScale(var_v0);
+    if (var_t2 == 0) {
+        var_t2 = 0x50;
+    }
+
+    for (var_v0 = 0; var_v0 < 2; var_v0++) {
+        if (play->sceneId == D_801BED24[var_v0].unk0) {
+            sp40 = D_801BED24[var_v0].unk4;
+            sp3C = D_801BED24[var_v0].unk8;
         }
     }
+
+    temp = 1.0f / var_t2;
+
+    func_80106D5C(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, temp, sp44);
+    func_80108124(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, temp, sp44);
+    func_80108558(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, temp, sp44);
+
+    if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, sp44)) {
+        func_80107B78(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, temp);
+    }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801091F0.s")
-#endif
 
 void func_80109428(PlayState* play) {
     D_801BEBB8.unk4C++;

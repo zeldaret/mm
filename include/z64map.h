@@ -3,6 +3,8 @@
 #include "ultra64.h"
 #include "z64scene.h"
 
+struct PlayState;
+
 /*
 Handles L-minimap and pause screen dungeon minimap system.
 
@@ -121,7 +123,29 @@ typedef struct {
     /* 0x184 */ s32 unk184;
 } struct_801F56B0; // size = 0x188
 
+/* z_map_disp */
+void func_80102EB4(u32 param_1);
+void func_80102ED0(u32 param_1);
+s32 func_80102EF0(struct PlayState* play);
+void MapDisp_Init(struct PlayState* play);
+s32 func_80105294(void);
+s16 func_80105318(void);
+void func_8010549C(struct PlayState* play, void* segmentAddress);
+void func_8010565C(struct PlayState* play, s32 num, void* segmentAddress);
+void func_80105818(struct PlayState* play, s32 num, TransitionActorEntry* transitionActorList);
+void MapDisp_Destroy(struct PlayState* play);
+void func_80105B34(struct PlayState* play);
+void MapDisp_SwapRooms(s16 nextRoom);
+s32 func_80106530(struct PlayState* play);
+void func_80106644(struct PlayState* play, s32 x, s32 z, s32 rot);
+void* func_801068FC(struct PlayState* play, void* heap);
+void func_80108AF8(struct PlayState* play);
+s32 func_801090B0(s32 arg0);
+s32 func_80109124(s16 arg0);
+void func_801091F0(struct PlayState* play);
+
 /* z_map_data */
+void MapData_GetMapColor(s32 colorIndex, Color_RGBA8* color);
 TexturePtr MapData_GetMapTexGameplayDangeonKeep(s32);
 s32 MapData_GetMapCompactId(s32);
 s32 MapData_MID_GetType(s32);
@@ -137,5 +161,17 @@ void MapData_GetMapScale(s32 mapId, s32 *scale);
 void MapData_CPID_GetTexDim(s32 mapCompactId, s32* width, s32* height);
 void MapData_CPID_GetTexOffset(s32 mapCompactId, s32* offsetX, s32* offsetY);
 s16 MapData_CPID_GetMapScale(s32 mapCompactId);
+
+/* z_map_exp */
+s32 Map_GetDungeonOrBossAreaIndex(struct PlayState* play);
+s32 Map_IsInDungeonOrBossArea(struct PlayState* play);
+s32 func_8010A0A4(struct PlayState* play);
+s32 Map_IsInBossArea(struct PlayState* play);
+void Minimap_SavePlayerRoomInitInfo(struct PlayState* play);
+void Map_InitRoomData(struct PlayState* play, s16 room);
+void Map_Destroy(struct PlayState* play);
+void Map_Init(struct PlayState* play);
+void Minimap_Draw(struct PlayState* play);
+void Map_Update(struct PlayState* play);
 
 #endif

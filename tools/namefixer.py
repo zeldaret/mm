@@ -12,8 +12,8 @@ simpleReplace = {
 # if the occurence is the whole word
 # for example, if there is a space before and an open parenthesis after,
 # like for a function call: ` func_8002E4B4(`
-# 
-# Custom behaviour can be enabled by using a tuple as the value (see 
+#
+# Custom behaviour can be enabled by using a tuple as the value (see
 # explanation in replace_single below)
 wordReplace = {
     # Functions
@@ -1205,6 +1205,7 @@ wordReplace = {
     "play->actorCtx.targetCtx.unk4C": "play->actorCtx.targetCtx.lockOnIndex",
     "play->actorCtx.targetCtx.unk50": "play->actorCtx.targetCtx.lockOnTriangleSets",
     "play->actorCtx.targetCtx.unk8C": "play->actorCtx.targetCtx.nextTarget",
+    "play->doorCtx.transitionActorList": "play->transitionActors.list"
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
     "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",

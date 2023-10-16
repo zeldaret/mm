@@ -4,7 +4,7 @@
         <DList Name="gDoorChainDL" Offset="0x230" /> <!-- Original name is "doorkusari_model" ("chain") -->
         <Texture Name="gDoorLockTex" OutName="door_lock" Format="rgba16" Width="32" Height="32" Offset="0x2C0" />
         <Texture Name="gBossDoorLockTex" OutName="boss_door_lock" Format="rgba16" Width="32" Height="32" Offset="0xAC0" />
-        <Texture Name="gDoorChainTex" OutName="door_chain" Format="rgba16" Width="16" Height="128" Offset="0x12C0" />  
+        <Texture Name="gDoorChainTex" OutName="door_chain" Format="rgba16" Width="16" Height="128" Offset="0x12C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_0022C8" OutName="tex_0022C8" Format="i4" Width="96" Height="85" Offset="0x22C8" />
         <Texture Name="gameplay_dangeon_keep_Tex_0032C8" OutName="tex_0032C8" Format="i4" Width="96" Height="85" Offset="0x32C8" />
         <Texture Name="gameplay_dangeon_keep_Tex_0042C8" OutName="tex_0042C8" Format="i4" Width="96" Height="85" Offset="0x42C8" />
