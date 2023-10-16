@@ -5,6 +5,7 @@
  */
 
 #include "z_kaleido_scope.h"
+#include "z64map.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "archives/icon_item_static/icon_item_static_yar.h"

@@ -91,7 +91,7 @@ typedef struct {
     /* 0x3C */ s16* unk3C;
     /* 0x40 */ s16 unk40;
     /* 0x42 */ s16 unk42;
-    /* 0x44 */ s16 unk44;
+    /* 0x44 */ s16 lowestFloor;
     /* 0x48 */ s16* unk48;
     /* 0x4C */ s16 unk4C;
     /* 0x50 */ s32 numChests;
@@ -101,16 +101,16 @@ typedef struct {
 } struct_801BEBB8; // size = 0x5C
 
 typedef struct {
-    /* 0x0 */ s16 unk0; //scene
-    /* 0x2 */ s16 unk2;
-} struct_801BEC5C; // size = 0x4
+    /* 0x0 */ s16 sceneId;
+    /* 0x2 */ s16 lowestFloor;
+} MapCustomLowestFloor; // size = 0x4
 
 typedef struct {
     /* 0x00 */ s32 unk0[5];
 } struct_801BEC70; // size = 0x14
 
 typedef struct {
-    /* 0x0 */ s16 unk0;
+    /* 0x0 */ s16 sceneId;
     /* 0x4 */ s32 unk4;
     /* 0x8 */ s32 unk8;
 } struct_801BED24; // size = 0xC
@@ -143,6 +143,7 @@ void func_80108AF8(struct PlayState* play);
 s32 func_801090B0(s32 arg0);
 s32 func_80109124(s16 arg0);
 void func_801091F0(struct PlayState* play);
+void func_80109428(struct PlayState* play);
 
 /* z_map_data */
 void MapData_GetMapColor(s32 colorIndex, Color_RGBA8* color);

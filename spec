@@ -481,8 +481,6 @@ beginseg
     include "build/src/code/z_lights.o"
     include "build/src/code/z_malloc.o"
     include "build/src/code/z_map_disp.o"
-    include "build/data/code/z_map_disp.data.o"
-    include "build/data/code/z_map_disp.bss.o"
     include "build/src/code/z_map_data.o"
     include "build/src/code/z_map_exp.o"
     include "build/src/code/z_msgevent.o"
@@ -656,7 +654,7 @@ beginseg
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_NES.o"
     #ifdef NON_MATCHING
         include "build/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
-    #else 
+    #else
         include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
     #endif
 endseg

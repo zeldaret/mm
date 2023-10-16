@@ -1457,12 +1457,12 @@ asm/non_matchings/code/z_map_disp/MapDisp_InitMapI.s,MapDisp_InitMapI,0x801068B4
 asm/non_matchings/code/z_map_disp/MapDisp_DestroyMapI.s,MapDisp_DestroyMapI,0x801068D8,0x9
 asm/non_matchings/code/z_map_disp/func_801068FC.s,func_801068FC,0x801068FC,0xBC
 asm/non_matchings/code/z_map_disp/func_80106BEC.s,func_80106BEC,0x80106BEC,0x47
-asm/non_matchings/code/z_map_disp/func_80106D08.s,func_80106D08,0x80106D08,0x15
+asm/non_matchings/code/z_map_disp/MapDisp_ConvertBossSceneToDungeonScene.s,MapDisp_ConvertBossSceneToDungeonScene,0x80106D08,0x15
 asm/non_matchings/code/z_map_disp/func_80106D5C.s,func_80106D5C,0x80106D5C,0x387
 asm/non_matchings/code/z_map_disp/func_80107B78.s,func_80107B78,0x80107B78,0x16B
 asm/non_matchings/code/z_map_disp/func_80108124.s,func_80108124,0x80108124,0x10D
 asm/non_matchings/code/z_map_disp/func_80108558.s,func_80108558,0x80108558,0x12E
-asm/non_matchings/code/z_map_disp/func_80108A10.s,func_80108A10,0x80108A10,0x15
+asm/non_matchings/code/z_map_disp/MapDisp_GetDungeonMapFloorTexture.s,MapDisp_GetDungeonMapFloorTexture,0x80108A10,0x15
 asm/non_matchings/code/z_map_disp/func_80108A64.s,func_80108A64,0x80108A64,0x25
 asm/non_matchings/code/z_map_disp/func_80108AF8.s,func_80108AF8,0x80108AF8,0x16E
 asm/non_matchings/code/z_map_disp/func_801090B0.s,func_801090B0,0x801090B0,0x1D
