@@ -1948,7 +1948,7 @@ asm/non_matchings/code/z_scene/Scene_CommandMesh.s,Scene_CommandMesh,0x8012FBE8,
 asm/non_matchings/code/z_scene/Scene_CommandObjectList.s,Scene_CommandObjectList,0x8012FC18,0x63
 asm/non_matchings/code/z_scene/Scene_CommandLightList.s,Scene_CommandLightList,0x8012FDA4,0x22
 asm/non_matchings/code/z_scene/Scene_CommandPathList.s,Scene_CommandPathList,0x8012FE2C,0xC
-asm/non_matchings/code/z_scene/Scene_CommandTransiActorList.s,Scene_CommandTransiActorList,0x8012FE5C,0x18
+asm/non_matchings/code/z_scene/Scene_CommandTransitionActorList.s,Scene_CommandTransitionActorList,0x8012FE5C,0x18
 asm/non_matchings/code/z_scene/Door_InitContext.s,Door_InitContext,0x8012FEBC,0x4
 asm/non_matchings/code/z_scene/Scene_CommandEnvLightSettings.s,Scene_CommandEnvLightSettings,0x8012FECC,0x11
 asm/non_matchings/code/z_scene/Scene_LoadAreaTextures.s,Scene_LoadAreaTextures,0x8012FF10,0x1F

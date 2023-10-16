@@ -111,7 +111,9 @@ typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  num;
     /* 0x4 */ void* segment;
-} SCmdTransiActorList; // size = 0x8
+} SCmdTransitionActorList; // size = 0x8
+
+#define SCmdTransiActorList SCmdTransitionActorList
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -525,38 +527,38 @@ typedef struct {
 typedef ActorCsCamInfo CsCameraEntry; // TODO: Remove once ZAPD updates its structs
 
 typedef union {
-    /* Command: N/A  */ SCmdBase              base;
-    /* Command: 0x00 */ SCmdSpawnList         spawnList;
-    /* Command: 0x01 */ SCmdActorList         actorList;
-    /* Command: 0x02 */ SCmdCsCameraList      actorCsCamList;
-    /* Command: 0x03 */ SCmdColHeader         colHeader;
-    /* Command: 0x04 */ SCmdRoomList          roomList;
-    /* Command: 0x05 */ SCmdWindSettings      windSettings;
-    /* Command: 0x06 */ SCmdEntranceList      entranceList;
-    /* Command: 0x07 */ SCmdSpecialFiles      specialFiles;
-    /* Command: 0x08 */ SCmdRoomBehavior      roomBehavior;
+    /* Command: N/A  */ SCmdBase                base;
+    /* Command: 0x00 */ SCmdSpawnList           spawnList;
+    /* Command: 0x01 */ SCmdActorList           actorList;
+    /* Command: 0x02 */ SCmdCsCameraList        actorCsCamList;
+    /* Command: 0x03 */ SCmdColHeader           colHeader;
+    /* Command: 0x04 */ SCmdRoomList            roomList;
+    /* Command: 0x05 */ SCmdWindSettings        windSettings;
+    /* Command: 0x06 */ SCmdEntranceList        entranceList;
+    /* Command: 0x07 */ SCmdSpecialFiles        specialFiles;
+    /* Command: 0x08 */ SCmdRoomBehavior        roomBehavior;
     /* Command: 0x09 */ // Unused
-    /* Command: 0x0A */ SCmdMesh              mesh;
-    /* Command: 0x0B */ SCmdObjectList        objectList;
-    /* Command: 0x0C */ SCmdLightList         lightList;
-    /* Command: 0x0D */ SCmdPathList          pathList;
-    /* Command: 0x0E */ SCmdTransiActorList   transiActorList;
-    /* Command: 0x0F */ SCmdLightSettingList  lightSettingList;
-    /* Command: 0x10 */ SCmdTimeSettings      timeSettings;
-    /* Command: 0x11 */ SCmdSkyboxSettings    skyboxSettings;
-    /* Command: 0x12 */ SCmdSkyboxDisables    skyboxDisables;
-    /* Command: 0x13 */ SCmdExitList          exitList;
-    /* Command: 0x14 */ SCmdEndMarker         endMarker;
-    /* Command: 0x15 */ SCmdSoundSettings     soundSettings;
-    /* Command: 0x16 */ SCmdEchoSettings      echoSettings;
-    /* Command: 0x17 */ SCmdCsScriptList      scriptList;
-    /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
-    /* Command: 0x19 */ SCmdRegionVisited     regionVisited;
-    /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;
-    /* Command: 0x1B */ SCmdCutsceneList      cutsceneList;
-    /* Command: 0x1C */ SCmdMinimapSettings   minimapSettings;
+    /* Command: 0x0A */ SCmdMesh                mesh;
+    /* Command: 0x0B */ SCmdObjectList          objectList;
+    /* Command: 0x0C */ SCmdLightList           lightList;
+    /* Command: 0x0D */ SCmdPathList            pathList;
+    /* Command: 0x0E */ SCmdTransitionActorList transitionActorList;
+    /* Command: 0x0F */ SCmdLightSettingList    lightSettingList;
+    /* Command: 0x10 */ SCmdTimeSettings        timeSettings;
+    /* Command: 0x11 */ SCmdSkyboxSettings      skyboxSettings;
+    /* Command: 0x12 */ SCmdSkyboxDisables      skyboxDisables;
+    /* Command: 0x13 */ SCmdExitList            exitList;
+    /* Command: 0x14 */ SCmdEndMarker           endMarker;
+    /* Command: 0x15 */ SCmdSoundSettings       soundSettings;
+    /* Command: 0x16 */ SCmdEchoSettings        echoSettings;
+    /* Command: 0x17 */ SCmdCsScriptList        scriptList;
+    /* Command: 0x18 */ SCmdAltHeaders          altHeaders;
+    /* Command: 0x19 */ SCmdRegionVisited       regionVisited;
+    /* Command: 0x1A */ SCmdTextureAnimations   textureAnimations;
+    /* Command: 0x1B */ SCmdCutsceneList        cutsceneList;
+    /* Command: 0x1C */ SCmdMinimapSettings     minimapSettings;
     /* Command: 0x1D */ // Unused
-    /* Command: 0x1E */ SCmdMinimapChests     minimapChests;
+    /* Command: 0x1E */ SCmdMinimapChests       minimapChests;
 } SceneCmd; // size = 0x8
 
 // Sets cursor point options on the world map
@@ -920,8 +922,8 @@ void Scene_CommandMesh(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandObjectList(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandLightList(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandPathList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandTransiActorList(struct PlayState* play, SceneCmd* cmd);
-void Scene_ResetTransiActorList(GameState* gameState, TransitionActorList* transitionActors);
+void Scene_CommandTransitionActorList(struct PlayState* play, SceneCmd* cmd);
+void Scene_ResetTransitionActorList(GameState* gameState, TransitionActorList* transitionActors);
 void Scene_CommandEnvLightSettings(struct PlayState* play, SceneCmd* cmd);
 void Scene_LoadAreaTextures(struct PlayState* play, s32 fileIndex);
 void Scene_CommandSkyboxSettings(struct PlayState* play, SceneCmd* cmd);

@@ -1587,7 +1587,7 @@ void Play_InitScene(PlayState* this, s32 spawn) {
     this->numSetupActors = 0;
     Object_InitContext(&this->state, &this->objectCtx);
     LightContext_Init(this, &this->lightCtx);
-    Scene_ResetTransiActorList(&this->state, &this->transitionActors);
+    Scene_ResetTransitionActorList(&this->state, &this->transitionActors);
     Room_Init(this, &this->roomCtx);
     gSaveContext.worldMapArea = 0;
     Scene_ExecuteCommands(this, this->sceneSegment);

@@ -333,14 +333,14 @@ void Scene_CommandPathList(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x0E: Transition Actor List
-void Scene_CommandTransiActorList(PlayState* play, SceneCmd* cmd) {
-    play->transitionActors.count = cmd->transiActorList.num;
-    play->transitionActors.list = Lib_SegmentedToVirtual(cmd->transiActorList.segment);
+void Scene_CommandTransitionActorList(PlayState* play, SceneCmd* cmd) {
+    play->transitionActors.count = cmd->transitionActorList.num;
+    play->transitionActors.list = Lib_SegmentedToVirtual(cmd->transitionActorList.segment);
     func_80105818(play, play->transitionActors.count, play->transitionActors.list);
 }
 
 // Init function for the transition system.
-void Scene_ResetTransiActorList(GameState* state, TransitionActorList* transitionActors) {
+void Scene_ResetTransitionActorList(GameState* state, TransitionActorList* transitionActors) {
     transitionActors->count = 0;
 }
 
@@ -564,7 +564,7 @@ void (*sSceneCmdHandlers[SCENE_CMD_MAX])(PlayState*, SceneCmd*) = {
     Scene_CommandObjectList,           // SCENE_CMD_ID_OBJECT_LIST
     Scene_CommandLightList,            // SCENE_CMD_ID_LIGHT_LIST
     Scene_CommandPathList,             // SCENE_CMD_ID_PATH_LIST
-    Scene_CommandTransiActorList,      // SCENE_CMD_ID_TRANSI_ACTOR_LIST
+    Scene_CommandTransitionActorList,  // SCENE_CMD_ID_TRANSI_ACTOR_LIST
     Scene_CommandEnvLightSettings,     // SCENE_CMD_ID_ENV_LIGHT_SETTINGS
     Scene_CommandTimeSettings,         // SCENE_CMD_ID_TIME_SETTINGS
     Scene_CommandSkyboxSettings,       // SCENE_CMD_ID_SKYBOX_SETTINGS
