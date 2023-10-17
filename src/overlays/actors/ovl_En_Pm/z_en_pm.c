@@ -843,7 +843,7 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 1:
         case 3:
         case 5:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08) && (this->unk_378 == 3)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_LISTENED_ANJU_POSTMAN_CONVERSATION) && (this->unk_378 == 3)) {
                 CutsceneManager_Stop(csId);
             } else {
                 Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);

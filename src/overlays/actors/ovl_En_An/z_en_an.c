@@ -1400,7 +1400,7 @@ s32 EnAn_MsgEvent_ReceiveLetterFromPostman(Actor* thisx, PlayState* play) {
         case 0x1:
         case 0x3:
         case 0x5:
-            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08)) && (this->msgEventState == 3)) {
+            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_LISTENED_ANJU_POSTMAN_CONVERSATION)) && (this->msgEventState == 3)) {
                 CutsceneManager_Stop(csId);
             } else if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
                 Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
@@ -1558,7 +1558,7 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
 
     switch (this->msgEventState) {
         case 0x0:
-            if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) || CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
+            if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) || CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
                 this->msgEventState++;
                 goto label;
             } else {
@@ -1762,7 +1762,7 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
             this->stateFlags |= ENAN_STATE_20;
         }
 
-        if ((this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) && CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
+        if ((this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) && CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
             this->stateFlags &= ~ENAN_STATE_20;
         }
 
@@ -2635,7 +2635,7 @@ s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* s
                 this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
 
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRYING);
                     this->stateFlags |= ENAN_STATE_IGNORE_GRAVITY;
                     this->actor.world.rot.y += 0x7FF8;
