@@ -1258,7 +1258,7 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPSegment(
                     POLY_XLU_DISP++, 0x08,
-                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->trayTexScrollTimer1, 1, 16, 16, 1, 0, this->trayTexScrollTimer2, 16, 16));
+                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->trayTexScrollTimer1, 0, 16, 16, 1, 0, this->trayTexScrollTimer2, 16, 16));
                 gSPDisplayList(POLY_XLU_DISP++, gAnju1FoodTrayDL);
 
                 Gfx_SetupDL25_Opa(play->state.gfxCtx);
