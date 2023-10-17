@@ -53,10 +53,10 @@ typedef enum {
 } DmGmAnimation;
 
 static AnimationInfoS sAnimationInfo[DMGM_ANIM_MAX] = {
-    { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_0
-    { &object_an1_Anim_0071E8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_1
+    { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_0
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_1
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_2
-    { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_3
+    { &gAnju1HoldingHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_3
     { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_4
     { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_5
     { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_6
@@ -194,8 +194,8 @@ void func_80C248A8(DmGm* this, PlayState* play) {
     if ((this->an4ObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->an4ObjectSlot, play) &&
         (this->msmoObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->msmoObjectSlot, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_an1_Skel_012618, NULL, this->jointTable, this->morphTable,
-                           OBJECT_AN1_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gAnju1Skel, NULL, this->jointTable, this->morphTable,
+                           ANJU1_LIMB_MAX);
 
         this->animIndex = DMGM_ANIM_NONE;
         DmGm_ChangeAnim(this, play, DMGM_ANIM_0);
@@ -305,7 +305,7 @@ void DmGm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     s8 sp2B = this->actor.objectSlot;
     s8 sp2A = this->msmoObjectSlot;
 
-    if ((limbIndex == OBJECT_AN1_LIMB_05) && this->didAnimChangeInCs) {
+    if ((limbIndex == ANJU1_LIMB_LEFT_HAND) && this->didAnimChangeInCs) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
@@ -321,7 +321,7 @@ void DmGm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (limbIndex == OBJECT_AN1_LIMB_09) {
+    if (limbIndex == ANJU1_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80C2522C, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
@@ -344,7 +344,7 @@ void DmGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         overrideRot = false;
     }
 
-    if (limbIndex == OBJECT_AN1_LIMB_09) {
+    if (limbIndex == ANJU1_LIMB_HEAD) {
         SubS_UpdateLimb(this->unk_2BE + this->unk_2C2 + 0x4000,
                         this->unk_2C0 + this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_18C,
                         &this->unk_1A4, stepRot, overrideRot);
@@ -355,7 +355,7 @@ void DmGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         Matrix_RotateXS(this->unk_1A4.x, MTXMODE_APPLY);
         Matrix_RotateZS(this->unk_1A4.z, MTXMODE_APPLY);
         Matrix_Push();
-    } else if (limbIndex == OBJECT_AN1_LIMB_02) {
+    } else if (limbIndex == ANJU1_LIMB_TORSO) {
         SubS_UpdateLimb(this->unk_2C2 + 0x4000, this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_194,
                         &this->unk_1AA, stepRot, overrideRot);
         Matrix_Pop();
@@ -369,14 +369,14 @@ void DmGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 TexturePtr D_80C25238[] = {
-    object_an1_Tex_00E6E0,
-    object_an1_Tex_00F7A0,
-    object_an1_Tex_0101A0,
+    gAnju1MouthClosedTex,
+    gAnju1MouthHappyTex,
+    gAnju1MouthOpenTex,
 };
 
 TexturePtr D_80C25244[] = {
-    object_an1_Tex_00E1E0, object_an1_Tex_00EFA0, object_an1_Tex_00F3A0, object_an1_Tex_00EFA0,
-    object_an1_Tex_00FDA0, object_an1_Tex_00F9A0, object_an1_Tex_0103A0,
+    gAnju1EyeOpenTex, gAnju1EyeHalfTex, gAnju1EyeClosedTex, gAnju1EyeHalfTex,
+    gAnju1EyeComfortingTex, gAnju1EyeSadTex, gAnju1EyeRelievedClosedTex,
 };
 
 void func_80C25000(Actor* thisx, PlayState* play) {

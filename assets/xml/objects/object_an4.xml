@@ -8,7 +8,7 @@
         <Animation Name="object_an4_Anim_00353C" Offset="0x353C" /> <!-- Stop hugging while kneeled -->  <!-- Original name is "anj_hanare" ("to be separated; to be apart") -->
         <Animation Name="object_an4_Anim_004498" Offset="0x4498" /> <!-- Original name is "anj_hanare_loop" -->
 
-        <Animation Name="gAnju4SittingRaiseFaceAnim" Offset="0x4A78" /> <!-- Original name is "anj_kaoage" ("raising face") -->
+        <Animation Name="object_an4_Anim_004A78" Offset="0x4A78" /> <!-- Original name is "anj_kaoage" ("raising face") -->
         <Animation Name="object_an4_Anim_00506C" Offset="0x506C" /> <!-- Original name is "anj_kaoage_loop" -->
         <Animation Name="object_an4_Anim_0060B4" Offset="0x60B4" /> <!-- Shows Moon Mask to Kafei --> <!-- Original name is "anj_miseau" ("to show each other​") -->
         <Animation Name="object_an4_Anim_006CC0" Offset="0x6CC0" /> <!-- Holds the Moon Mask while standing --> <!-- Original name is "anj_mitume_loop" ("to stare (at); to gaze (at)") -->
