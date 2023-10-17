@@ -684,7 +684,7 @@ s32 sAnjuMsgScript_SchGiveLunchToGranny[0x15] = {
     0x09000018, 0x0E28CE0C, 0x09000017, 0x0E28CF2D, 0x12D00,    0x0E0C0900, 0x100000,
 };
 
-s32 sAnjuMsgScript_80B5885C[0x37] = {
+s32 sAnjuMsgScript_ReceptionistDay1[0x37] = {
     0x220B0000, 0x69002020, 0x64004B,   0x1000B700, 0x370100AA, 0x370200,   0x550E28A0, 0x0C090000,
     0x0F28A80C, 0x05000000, 0x30000030, 0x0E28A90C, 0x0F28AA0C, 0x0F28AB0C, 0x120600A0, 0x1300,
     0xA02F0000, 0x2E2D0014, 0x0C114B10, 0x0700000E, 0x28AD2D00, 0x010C2400, 0x41161031, 0x0E28A30C,
@@ -728,7 +728,7 @@ s32 sAnjuMsgScript_DekuDefault[8] = {
 
 s32 sAnjuMsgScript_SchLaundryPoolDeku[6] = { 0x524000, 0x0B0E2952, 0x2D00010C, 0x11524010, 0x0E29532D, 0x10C10 };
 
-s32 sAnjuMsgScript_80B58A3C[2] = { 0x0E28E02D, 0x10C10 };
+s32 sAnjuMsgScript_Receptionist[2] = { 0x0E28E02D, 0x10C10 };
 
 s32 sAnjuMsgScript_80B58A44[0x1E] = {
     0x320800,   0x080E28D5, 0x2D00010C, 0x10003220,  0x80E28,    -0x2BD2FFFF, 0x0C100033, 0x01001A25,
@@ -1158,20 +1158,19 @@ typedef enum EnAnFace {
     /* 10 */ ENAN_FACE_MAX
 } EnAnFace;
 
-static s16 sMouthIndices[ENAN_FACE_MAX] = {
-    ENAN_MOUTH_CLOSED,     // ENAN_FACE_0
-    ENAN_MOUTH_OPEN,     // ENAN_FACE_1
-    ENAN_MOUTH_CLOSED,     // ENAN_FACE_2
-    ENAN_MOUTH_HAPPY, // ENAN_FACE_3
-    ENAN_MOUTH_OPEN,     // ENAN_FACE_4
-    ENAN_MOUTH_CLOSED,     // ENAN_FACE_5
-    ENAN_MOUTH_HAPPY, // ENAN_FACE_6
-    ENAN_MOUTH_OPEN,     // ENAN_FACE_7
-    ENAN_MOUTH_HAPPY, // ENAN_FACE_8
-    ENAN_MOUTH_HAPPY, // ENAN_FACE_9
-};
-
 void EnAn_UpdateFace(EnAn* this) {
+    static s16 sMouthIndices[ENAN_FACE_MAX] = {
+        ENAN_MOUTH_CLOSED,     // ENAN_FACE_0
+        ENAN_MOUTH_OPEN,     // ENAN_FACE_1
+        ENAN_MOUTH_CLOSED,     // ENAN_FACE_2
+        ENAN_MOUTH_HAPPY, // ENAN_FACE_3
+        ENAN_MOUTH_OPEN,     // ENAN_FACE_4
+        ENAN_MOUTH_CLOSED,     // ENAN_FACE_5
+        ENAN_MOUTH_HAPPY, // ENAN_FACE_6
+        ENAN_MOUTH_OPEN,     // ENAN_FACE_7
+        ENAN_MOUTH_HAPPY, // ENAN_FACE_8
+        ENAN_MOUTH_HAPPY, // ENAN_FACE_9
+    };
     s32 skipBlink = false;
 
     if (this->stateFlags & ENAN_STATE_UPDATE_EYES) {
@@ -1251,15 +1250,15 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
     switch (accessoryId) {
         case ENAN_ACCESSORY_FOOD_TRAY:
             if ((this->stateFlags & ENAN_STATE_DRAW_TRAY) && !this->forceDraw) {
-                this->unk_3A8++;
-                this->unk_3AC -= 2;
+                this->trayTexScrollTimer1++;
+                this->trayTexScrollTimer2 -= 2;
                 Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPSegment(
                     POLY_XLU_DISP++, 0x08,
-                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->unk_3A8, 0, 16, 16, 1, 0, this->unk_3AC, 16, 16));
+                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->trayTexScrollTimer1, 1, 16, 16, 1, 0, this->trayTexScrollTimer2, 16, 16));
                 gSPDisplayList(POLY_XLU_DISP++, gAnju1FoodTrayDL);
 
                 Gfx_SetupDL25_Opa(play->state.gfxCtx);
@@ -1705,9 +1704,9 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
 
         case ANJU_SCH_RECEPTIONIST_IDLE:
             if (gSaveContext.save.day >= 2) {
-                return sAnjuMsgScript_80B58A3C;
+                return sAnjuMsgScript_Receptionist;
             }
-            return sAnjuMsgScript_80B5885C;
+            return sAnjuMsgScript_ReceptionistDay1;
 
         case ANJU_SCH_WAITING_CLOSING_TIME:
         case ANJU_SCH_WALKING_47:
@@ -1774,7 +1773,7 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
     return ret;
 }
 
-s32 func_80B552E4(EnAn* this, PlayState* play) {
+s32 EnAn_IsCouplesMaskCsPlaying(EnAn* this, PlayState* play) {
     u16 scriptIndex = play->csCtx.scriptIndex;
     s32 ret = false;
 
@@ -3222,9 +3221,9 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
     }
 }
 
-void EnAn_HandleCutscene(EnAn* this, PlayState* play) {
+void EnAn_HandleCouplesMaskCutscene(EnAn* this, PlayState* play) {
     s32 animIds[] = {
-        /* 0 */ 0,
+        /* 0 */ 0, // no cue
         /* 1 */ ENAN_ANIM_SITTING_IN_DISBELIEVE,
         /* 2 */ ENAN_ANIM_SITTING_RAISE_FACE,
         /* 3 */ ENAN_ANIM_25,
@@ -3333,8 +3332,8 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if ((this->actionFunc != EnAn_Initialize) && !EnAn_CheckTalk(this, play) && func_80B552E4(this, play)) {
-        EnAn_HandleCutscene(this, play);
+    if ((this->actionFunc != EnAn_Initialize) && !EnAn_CheckTalk(this, play) && EnAn_IsCouplesMaskCsPlaying(this, play)) {
+        EnAn_HandleCouplesMaskCutscene(this, play);
         EnAn_UpdateSkel(this, play);
         EnAn_UpdateFace(this);
         return;
@@ -3357,12 +3356,13 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-Vec3f D_80B58ED4 = { 1000.0f, 0.0f, 0.0f };
 
 void EnAn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnAn* this = THIS;
 
     if (limbIndex == ANJU1_LIMB_HEAD) {
+        static Vec3f D_80B58ED4 = { 1000.0f, 0.0f, 0.0f };
+
         Matrix_MultVec3f(&D_80B58ED4, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
         EnAn_DrawAccessory(this, play, ENAN_ACCESSORY_KAFEI_MASK);
@@ -3412,11 +3412,153 @@ void EnAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 #define DEC_TIME_AUX(t) ((t) * (24 * 60) / 0x10000)
 #define DEC_TIME(t) ((DEC_TIME_AUX(t) / 60) * 100 + (DEC_TIME_AUX(t) % 60))
 
-void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
-    s32 x = 31;
-    s32 y = 3 + 22;
+typedef struct SymbolDebug {
+    void* address;
+    const char* const name;
+} SymbolDebug;
+
+#define SYMBOL_DEBUG(sym) { &sym, #sym }
+
+const SymbolDebug sAnjuFunctions[] = {
+    SYMBOL_DEBUG(EnAn_InitializeObjectSlots),
+    SYMBOL_DEBUG(EnAn_FindActor),
+    SYMBOL_DEBUG(func_80B53A7C),
+    SYMBOL_DEBUG(EnAn_FindDoor),
+    SYMBOL_DEBUG(EnAn_UpdateSkel),
+    SYMBOL_DEBUG(EnAn_ChangeAnim),
+    SYMBOL_DEBUG(EnAn_UpdateCollider),
+    SYMBOL_DEBUG(EnAn_UpdateFace),
+    SYMBOL_DEBUG(EnAn_DrawAccessory),
+    SYMBOL_DEBUG(EnAn_ChangeCutscene),
+    SYMBOL_DEBUG(EnAn_GetCsId),
+    SYMBOL_DEBUG(EnAn_GetChildCsId),
+    SYMBOL_DEBUG(EnAn_MsgEvent_ReceiveLetterFromPostman),
+    SYMBOL_DEBUG(EnAn_MsgEvent_AttendGoron),
+    SYMBOL_DEBUG(EnAn_MsgEvent_GiveLunchToGranny),
+    SYMBOL_DEBUG(EnAn_MsgEvent_MidnightMeeting),
+    SYMBOL_DEBUG(EnAn_MsgEvent_Cooking),
+    SYMBOL_DEBUG(EnAn_MsgEvent_LaundryPool),
+    SYMBOL_DEBUG(EnAn_GetMsgEventScript),
+    SYMBOL_DEBUG(EnAn_CheckTalk),
+    SYMBOL_DEBUG(EnAn_IsCouplesMaskCsPlaying),
+    SYMBOL_DEBUG(EnAn_UpdateHeadRot),
+    SYMBOL_DEBUG(func_80B554E8),
+    SYMBOL_DEBUG(EnAn_ChooseAnimAfterTalking),
+    SYMBOL_DEBUG(EnAn_DialogueFunc_80B556F8),
+    SYMBOL_DEBUG(EnAn_DialogueFunc_80B557AC),
+    SYMBOL_DEBUG(EnAn_DialogueFunc_80B55860),
+    SYMBOL_DEBUG(EnAn_HandleDialogue),
+    SYMBOL_DEBUG(EnAn_FindLookAtActor),
+    SYMBOL_DEBUG(func_80B55D98),
+    SYMBOL_DEBUG(EnAn_IsFacingAndNearPlayer),
+    SYMBOL_DEBUG(func_80B55F8C),
+    SYMBOL_DEBUG(EnAn_ProcessSchedule_ReceiveLetterFromPostman),
+    SYMBOL_DEBUG(EnAn_ProcessSchedule_AttendGoron),
+    SYMBOL_DEBUG(EnAn_ProcessSchedule_GiveLunchToGranny),
+    SYMBOL_DEBUG(EnAn_ProcessSchedule_Door),
+    SYMBOL_DEBUG(EnAn_ProcessSchedule_Walking),
+    SYMBOL_DEBUG(EnAn_ProcessSchedule_Sweeping),
+    SYMBOL_DEBUG(EnAn_ProcessSchedule_80B56880),
+    SYMBOL_DEBUG(EnAn_ProcessSchedule_Ranch),
+    SYMBOL_DEBUG(EnAn_ProcessSchedule_StaffRoom),
+    SYMBOL_DEBUG(EnAn_ProcessSchedule_WithKafei),
+    SYMBOL_DEBUG(EnAn_ProcessScheduleOutput),
+    SYMBOL_DEBUG(EnAn_HandleSch_InteractActor),
+    SYMBOL_DEBUG(EnAn_HandleSch_Door),
+    SYMBOL_DEBUG(EnAn_HandleSch_FollowTimePath),
+    SYMBOL_DEBUG(EnAn_HandleSch_80B572D4),
+    SYMBOL_DEBUG(EnAn_HandleSch_LaundryPool),
+    SYMBOL_DEBUG(EnAn_HandleSch_WaitingForKafei),
+    SYMBOL_DEBUG(EnAn_HandleSch_WithKafei),
+    SYMBOL_DEBUG(EnAn_HandleSchedule),
+    SYMBOL_DEBUG(EnAn_Initialize),
+    SYMBOL_DEBUG(EnAn_FollowSchedule),
+    SYMBOL_DEBUG(EnAn_Talk),
+    SYMBOL_DEBUG(EnAn_HandleCouplesMaskCutscene),
+    SYMBOL_DEBUG(EnAn_Init),
+    SYMBOL_DEBUG(EnAn_Destroy),
+    SYMBOL_DEBUG(EnAn_Update),
+    SYMBOL_DEBUG(EnAn_PostLimbDraw),
+    SYMBOL_DEBUG(EnAn_TransformLimbDraw),
+    SYMBOL_DEBUG(EnAn_Draw),
+};
+
+const SymbolDebug sAnjuData[] = {
+    SYMBOL_DEBUG(sScheduleScript),
+    SYMBOL_DEBUG(sSearchTimePathLimit),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchReceiveLetterFromPostman),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchAttendGoron),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchGiveLunchToGranny),
+    SYMBOL_DEBUG(sAnjuMsgScript_ReceptionistDay1),
+    SYMBOL_DEBUG(sAnjuMsgScript_InnCloseTime),
+    SYMBOL_DEBUG(sAnjuMsgScript_80B58944),
+    SYMBOL_DEBUG(sAnjuMsgScript_80B5894C),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchCooking),
+    SYMBOL_DEBUG(sAnjuMsgScript_80B58980),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchSweeping),
+    SYMBOL_DEBUG(sAnjuMsgScript_80B58994),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchRanch),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchMidnightMeeting),
+    SYMBOL_DEBUG(sAnjuMsgScript_80B589FC),
+    SYMBOL_DEBUG(sAnjuMsgScript_DekuDefault),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchLaundryPoolDeku),
+    SYMBOL_DEBUG(sAnjuMsgScript_Receptionist),
+    SYMBOL_DEBUG(sAnjuMsgScript_80B58A44),
+    SYMBOL_DEBUG(sAnjuMsgScript_80B58ABC),
+    SYMBOL_DEBUG(sAnjuMsgScript_80B58AC4),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchWaitingForKafei),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchLaundryPoolDefault),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchLaundryPoolKafeiMask),
+    SYMBOL_DEBUG(sAnjuMsgScript_80B58B7C),
+    SYMBOL_DEBUG(sAnjuMsgScript_80B58B88),
+    SYMBOL_DEBUG(sAnjuMsgScript_SchWithKafei),
+    SYMBOL_DEBUG(En_An_InitVars),
+    SYMBOL_DEBUG(sCylinderInit),
+    SYMBOL_DEBUG(sColChkInfoInit),
+    SYMBOL_DEBUG(sAnimationInfo),
+    // SYMBOL_DEBUG(D_80B58E34),
+    // SYMBOL_DEBUG(sMouthIndices),
+    // SYMBOL_DEBUG(D_80B58E54),
+    // SYMBOL_DEBUG(D_80B58E60),
+    // SYMBOL_DEBUG(D_80B58E68),
+    // SYMBOL_DEBUG(D_80B58E74),
+    // SYMBOL_DEBUG(D_80B58E7C),
+    // SYMBOL_DEBUG(D_80B58E88),
+    // SYMBOL_DEBUG(D_80B58E90),
+    // SYMBOL_DEBUG(D_80B58E9C),
+    // SYMBOL_DEBUG(D_80B58EA4),
+    // SYMBOL_DEBUG(D_80B58EAC),
+    // SYMBOL_DEBUG(D_80B58ED4),
+    // SYMBOL_DEBUG(sMouthTextures),
+    // SYMBOL_DEBUG(sEyeTextures),
+};
+
+const char* const EnAn_GetSymbolName(void* address) {
     s32 i;
-    uintptr_t actionFuncReloc;
+
+    if (address == NULL) {
+        return "(null)";
+    }
+
+    for (i = 0; i < ARRAY_COUNT(sAnjuFunctions); i++) {
+        if (address == sAnjuFunctions[i].address) {
+            return &sAnjuFunctions[i].name[5];
+        }
+    }
+
+    for (i = 0; i < ARRAY_COUNT(sAnjuData); i++) {
+        if (address == sAnjuData[i].address) {
+            return sAnjuData[i].name;
+        }
+    }
+
+    return "(not_found)";
+}
+
+void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
+    s32 x;
+    s32 y;
+    s32 i;
 
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
@@ -3426,9 +3568,23 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
     GfxPrint_SetPos(printer, 28, 2);
     GfxPrint_Printf(printer, "gTime:%i:%i", DEC_TIME_AUX(gSaveContext.save.time) / 60, DEC_TIME_AUX(gSaveContext.save.time) % 60);
 
-    //GfxPrint_SetPos(printer, x - 7, ++y);
-    //actionFuncReloc = (uintptr_t)this->actionFunc - (uintptr_t)EnAn_InitializeObjectSlots + SEGMENT_START(ovl_En_An);
-    //GfxPrint_Printf(printer, "actionFunc:%X", actionFuncReloc & 0x0000FFFF);
+    x = 2;
+    y = 26;
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "    actionFunc:%s", EnAn_GetSymbolName(this->actionFunc));
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "  dialogueFunc:%s", EnAn_GetSymbolName(this->dialogueFunc));
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "  msgEventFunc:%s", EnAn_GetSymbolName(this->msgEventFunc));
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "msgEventScript:%s", EnAn_GetSymbolName(this->msgEventScript));
+
+    x = 31;
+    y = 3 + 20;
 
     GfxPrint_SetPos(printer, x-5, ++y);
     GfxPrint_Printf(printer, "schedule:%d", this->scheduleResult);
@@ -3445,23 +3601,23 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
     //GfxPrint_SetPos(printer, x-6, ++y);
     //GfxPrint_Printf(printer, "savedFace:%d", this->savedFaceIndex);
 
-    //GfxPrint_SetPos(printer, x-1, ++y);
-    //GfxPrint_Printf(printer, "face:%d", this->faceIndex);
+    GfxPrint_SetPos(printer, x-1, ++y);
+    GfxPrint_Printf(printer, "face:%d", this->faceIndex);
 
     //GfxPrint_SetPos(printer, x-5, ++y);
     //GfxPrint_Printf(printer, "eyeTimer:%d", this->eyeTimer);
 
-    //GfxPrint_SetPos(printer, x-0, ++y);
-    //GfxPrint_Printf(printer, "eye:%d", this->eyeTexIndex);
+    GfxPrint_SetPos(printer, x-0, ++y);
+    GfxPrint_Printf(printer, "eye:%d", this->eyeTexIndex);
 
-    //GfxPrint_SetPos(printer, x-2, ++y);
-    //GfxPrint_Printf(printer, "mouth:%d", this->mouthTexIndex);
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "mouth:%d", this->mouthTexIndex);
 
     GfxPrint_SetPos(printer, x-1, ++y);
     GfxPrint_Printf(printer, "anim:%d", this->animIndex);
 
-    //GfxPrint_SetPos(printer, x-2, ++y);
-    //GfxPrint_Printf(printer, "! 3C0:%s", BOOLSTR(this->unk_3C0));
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "! 3C0:%s", BOOLSTR(this->unk_3C0));
 
     y = 0;
     {

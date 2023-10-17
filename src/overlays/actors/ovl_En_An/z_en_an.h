@@ -89,8 +89,8 @@ typedef struct EnAn {
     /* 0x398 */ MsgEventFunc msgEventFunc;
     /* 0x39C */ s32 animIndex; // EnAnAnimation enum
     /* 0x3A0 */ UNK_TYPE1 unk_3A0[0x8];
-    /* 0x3A8 */ u32 unk_3A8; // TwoTexScroll
-    /* 0x3AC */ u32 unk_3AC; // TwoTexScroll
+    /* 0x3A8 */ u32 trayTexScrollTimer1; // TwoTexScroll
+    /* 0x3AC */ u32 trayTexScrollTimer2; // TwoTexScroll
     /* 0x3B0 */ s32 forceDraw;
     /* 0x3B4 */ s32 drawMoonMask;
     /* 0x3B8 */ s32 slotsInitialized;
