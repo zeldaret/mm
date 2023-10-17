@@ -18,7 +18,7 @@
 #define THIS ((EnAn*)thisx)
 
 // Change this to non-zero to enable debug printing
-#define DEBUG_PRINT 0
+#define DEBUG_PRINT 1
 
 void EnAn_Init(Actor* thisx, PlayState* play);
 void EnAn_Destroy(Actor* thisx, PlayState* play);
@@ -1570,8 +1570,8 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
 
         case 0x1:
         label:
-            this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_DRAW_KAFEI_MASK);
-            this->stateFlags |= ENAN_STATE_200;
+            this->stateFlags &= ~(ENAN_STATE_ENGAGED | ENAN_STATE_DRAW_KAFEI_MASK);
+            this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
             EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRYING);
             ret = true;
             this->msgEventState++;
@@ -1759,11 +1759,11 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
             (this->scheduleResult == ANJU_SCH_WALKING_45) || (this->scheduleResult == ANJU_SCH_WALKING_47) ||
             (this->scheduleResult == ANJU_SCH_WALKING_48) || (this->scheduleResult == ANJU_SCH_WALKING_49) ||
             (this->scheduleResult == ANJU_SCH_WALKING_52) || (this->scheduleResult == ANJU_SCH_WALKING_53)) {
-            this->stateFlags |= ENAN_STATE_20;
+            this->stateFlags |= ENAN_STATE_ENGAGED;
         }
 
         if ((this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) && CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
-            this->stateFlags &= ~ENAN_STATE_20;
+            this->stateFlags &= ~ENAN_STATE_ENGAGED;
         }
 
         this->actionFunc = EnAn_Talk;
@@ -1782,7 +1782,7 @@ s32 EnAn_IsCouplesMaskCsPlaying(EnAn* this, PlayState* play) {
         if (!this->forceDraw) {
             this->savedFaceIndex = ENAN_FACE_0;
             this->faceIndex = ENAN_FACE_0;
-            this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+            this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
             this->eyeTimer = 8;
             this->cueId = -1;
             this->forceDraw = true;
@@ -1829,28 +1829,28 @@ void EnAn_UpdateHeadRot(EnAn* this) {
     this->headRotZ = CLAMP(this->headRotZ, -0x1554, 0x1554);
 }
 
-void func_80B554E8(EnAn* this) {
-    if (this->stateFlags & ENAN_STATE_20) {
+void EnAn_UpdateAttention(EnAn* this) {
+    if (this->stateFlags & ENAN_STATE_ENGAGED) {
         if ((this->lookAtActor != NULL) && (this->lookAtActor->update != NULL)) {
-            if (DECR(this->unk_388) == 0) {
+            if (DECR(this->loseAttentionTimer) == 0) {
                 EnAn_UpdateHeadRot(this);
-                this->stateFlags &= ~ENAN_STATE_200;
-                this->stateFlags |= ENAN_STATE_80;
+                this->stateFlags &= ~ENAN_STATE_LOST_ATTENTION;
+                this->stateFlags |= ENAN_STATE_FACE_TARGET;
                 return;
             }
         }
     }
 
-    if (this->stateFlags & ENAN_STATE_80) {
-        this->stateFlags &= ~ENAN_STATE_80;
+    if (this->stateFlags & ENAN_STATE_FACE_TARGET) {
+        this->stateFlags &= ~ENAN_STATE_FACE_TARGET;
         this->headRotZ = 0;
         this->headRotY = 0;
-        this->unk_388 = 20;
+        this->loseAttentionTimer = 20;
         return;
     }
 
-    if (DECR(this->unk_388) == 0) {
-        this->stateFlags |= ENAN_STATE_200;
+    if (DECR(this->loseAttentionTimer) == 0) {
+        this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
     }
 }
 
@@ -1907,13 +1907,13 @@ s32 EnAn_ChooseAnimAfterTalking(EnAn* this, PlayState* play) {
 void EnAn_DialogueFunc_80B556F8(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_LOOKING_UP_RELIEVED);
-        this->stateFlags &= ~ENAN_STATE_20;
-        this->stateFlags |= ENAN_STATE_200;
+        this->stateFlags &= ~ENAN_STATE_ENGAGED;
+        this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
         this->dialogueFuncState++;
     } else if ((this->dialogueFuncState == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE_MORPH);
-        this->stateFlags &= ~ENAN_STATE_200;
-        this->stateFlags |= ENAN_STATE_20;
+        this->stateFlags &= ~ENAN_STATE_LOST_ATTENTION;
+        this->stateFlags |= ENAN_STATE_ENGAGED;
         this->dialogueFuncState++;
     }
 }
@@ -1921,13 +1921,13 @@ void EnAn_DialogueFunc_80B556F8(EnAn* this, PlayState* play) {
 void EnAn_DialogueFunc_80B557AC(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_BOWING);
-        this->stateFlags &= ~ENAN_STATE_20;
-        this->stateFlags |= ENAN_STATE_200;
+        this->stateFlags &= ~ENAN_STATE_ENGAGED;
+        this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
         this->dialogueFuncState++;
     } else if ((this->dialogueFuncState == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE_MORPH);
-        this->stateFlags &= ~ENAN_STATE_200;
-        this->stateFlags |= ENAN_STATE_20;
+        this->stateFlags &= ~ENAN_STATE_LOST_ATTENTION;
+        this->stateFlags |= ENAN_STATE_ENGAGED;
         this->dialogueFuncState++;
     }
 }
@@ -1935,13 +1935,13 @@ void EnAn_DialogueFunc_80B557AC(EnAn* this, PlayState* play) {
 void EnAn_DialogueFunc_80B55860(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_BOWING_MORPH);
-        this->stateFlags |= ENAN_STATE_200;
-        this->stateFlags &= ~ENAN_STATE_20;
+        this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
+        this->stateFlags &= ~ENAN_STATE_ENGAGED;
         this->dialogueFuncState++;
     } else if ((this->dialogueFuncState == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE_MORPH);
-        this->stateFlags &= ~ENAN_STATE_200;
-        this->stateFlags |= ENAN_STATE_20;
+        this->stateFlags &= ~ENAN_STATE_LOST_ATTENTION;
+        this->stateFlags |= ENAN_STATE_ENGAGED;
         this->dialogueFuncState++;
     }
 }
@@ -1989,8 +1989,8 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
 
                 case 0x28EB: // "I'm afraid to meet him..."
                     if (this->animIndex != ENAN_ANIM_UMBRELLA_CRYING) {
-                        this->stateFlags &= ~(ENAN_STATE_20 | ENAN_STATE_DRAW_KAFEI_MASK);
-                        this->stateFlags |= ENAN_STATE_200;
+                        this->stateFlags &= ~(ENAN_STATE_ENGAGED | ENAN_STATE_DRAW_KAFEI_MASK);
+                        this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
                         EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRYING);
                     }
                     break;
@@ -2309,8 +2309,8 @@ s32 EnAn_ProcessSchedule_ReceiveLetterFromPostman(EnAn* this, PlayState* play, S
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
-        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_UPDATE_EYES;
-        this->stateFlags |= ENAN_STATE_200;
+        this->stateFlags |= ENAN_STATE_ENGAGED | ENAN_STATE_UPDATE_EYES;
+        this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
     }
 
     return ret;
@@ -2324,8 +2324,8 @@ s32 EnAn_ProcessSchedule_AttendGoron(EnAn* this, PlayState* play, ScheduleOutput
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
-        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_UPDATE_EYES;
-        this->stateFlags |= ENAN_STATE_200;
+        this->stateFlags |= ENAN_STATE_ENGAGED | ENAN_STATE_UPDATE_EYES;
+        this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
     }
 
     return ret;
@@ -2339,8 +2339,8 @@ s32 EnAn_ProcessSchedule_GiveLunchToGranny(EnAn* this, PlayState* play, Schedule
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
-        this->stateFlags |= ENAN_STATE_20 | ENAN_STATE_UPDATE_EYES;
-        this->stateFlags |= ENAN_STATE_200 | ENAN_STATE_DRAW_TRAY;
+        this->stateFlags |= ENAN_STATE_ENGAGED | ENAN_STATE_UPDATE_EYES;
+        this->stateFlags |= ENAN_STATE_LOST_ATTENTION | ENAN_STATE_DRAW_TRAY;
     }
 
     return ret;
@@ -2420,7 +2420,7 @@ s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* sched
             }
 
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-            this->stateFlags |= ENAN_STATE_200;
+            this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
             this->actor.gravity = 0.0f;
             ret = true;
         }
@@ -2499,7 +2499,7 @@ s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* sc
             case ANJU_SCH_WALKING_44:
             case ANJU_SCH_WALKING_45:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
-                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 this->stateFlags |= ENAN_STATE_DRAW_TRAY;
                 break;
 
@@ -2507,14 +2507,14 @@ s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* sc
             case ANJU_SCH_WALKING_53:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_WALK);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 this->stateFlags |= ENAN_STATE_DRAW_BROOM;
                 break;
 
             case ANJU_SCH_WALKING_50:
             case ANJU_SCH_WALKING_51:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
-                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 break;
 
             case ANJU_SCH_WALKING_54:
@@ -2528,7 +2528,7 @@ s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* sc
             case ANJU_SCH_WALKING_62:
             case ANJU_SCH_WALKING_63:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_WALK);
-                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
                 break;
 
@@ -2537,7 +2537,7 @@ s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* sc
             case ANJU_SCH_WALKING_48:
             case ANJU_SCH_WALKING_49:
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 /* fallthrough */
             default:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
@@ -2580,7 +2580,7 @@ s32 EnAn_ProcessSchedule_Sweeping(EnAn* this, PlayState* play, ScheduleOutput* s
             EnAn_ChangeAnim(this, play, ENAN_ANIM_BROOM_SWEEP);
             SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
-            this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+            this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
             this->stateFlags |= ENAN_STATE_DRAW_BROOM;
         }
 
@@ -2625,14 +2625,14 @@ s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* s
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->var1.followScheduleState = 0;
-                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 if (scheduleOutput->result == ANJU_SCH_RECEPTIONIST_IDLE) {
                     this->unk_374 = 70.0f;
                 }
                 break;
 
             case ANJU_SCH_LAUNDRY_POOL_SIT:
-                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
 
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
@@ -2654,7 +2654,7 @@ s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* s
             case ANJU_SCH_COOKING:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_COOKING);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+                this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 this->stateFlags |= ENAN_STATE_DRAW_CHOPSTICKS;
                 break;
         }
@@ -2677,7 +2677,7 @@ s32 EnAn_ProcessSchedule_Ranch(EnAn* this, PlayState* play, ScheduleOutput* sche
         EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_IN_DISBELIEVE);
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
-        this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+        this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
         this->stateFlags |= ENAN_STATE_IGNORE_GRAVITY;
 
         this->savedFaceIndex = ENAN_FACE_5;
@@ -2711,7 +2711,7 @@ s32 EnAn_ProcessSchedule_StaffRoom(EnAn* this, PlayState* play, ScheduleOutput* 
             break;
     }
 
-    this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+    this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
     this->stateFlags |= ENAN_STATE_IGNORE_GRAVITY;
 
     this->actor.gravity = 0.0f;
@@ -2726,7 +2726,7 @@ s32 EnAn_ProcessSchedule_WithKafei(EnAn* this, PlayState* play, ScheduleOutput* 
     Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
     EnAn_ChangeAnim(this, play, ENAN_ANIM_HOLDING_HANDS);
     SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-    this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_200;
+    this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
 
     return true;
 }
@@ -2941,26 +2941,26 @@ s32 EnAn_HandleSch_80B572D4(EnAn* this, PlayState* play) {
     switch (this->scheduleResult) {
         case ANJU_SCH_MIDNIGHT_MEETING:
             if (func_80B55F8C(play) && EnAn_IsFacingAndNearPlayer(this)) {
-                this->stateFlags |= ENAN_STATE_20;
+                this->stateFlags |= ENAN_STATE_ENGAGED;
             } else {
-                this->stateFlags &= ~ENAN_STATE_20;
+                this->stateFlags &= ~ENAN_STATE_ENGAGED;
             }
             break;
 
         case ANJU_SCH_WAITING_FOR_KAFEI:
             if (EnAn_IsFacingAndNearPlayer(this)) {
-                this->stateFlags |= ENAN_STATE_20;
+                this->stateFlags |= ENAN_STATE_ENGAGED;
             } else {
-                this->stateFlags &= ~ENAN_STATE_20;
+                this->stateFlags &= ~ENAN_STATE_ENGAGED;
             }
             break;
 
         case ANJU_SCH_RECEPTIONIST_IDLE:
         case ANJU_SCH_WAITING_CLOSING_TIME:
             if (EnAn_IsFacingAndNearPlayer(this)) {
-                this->stateFlags |= ENAN_STATE_20;
+                this->stateFlags |= ENAN_STATE_ENGAGED;
             } else {
-                this->stateFlags &= ~ENAN_STATE_20;
+                this->stateFlags &= ~ENAN_STATE_ENGAGED;
             }
             break;
 
@@ -3029,9 +3029,9 @@ s32 EnAn_HandleSch_WaitingForKafei(EnAn* this, PlayState* play) {
     }
 
     if (EnAn_IsFacingAndNearPlayer(this)) {
-        this->stateFlags |= ENAN_STATE_20;
+        this->stateFlags |= ENAN_STATE_ENGAGED;
     } else {
-        this->stateFlags &= ~ENAN_STATE_20;
+        this->stateFlags &= ~ENAN_STATE_ENGAGED;
     }
 
     return 1;
@@ -3047,7 +3047,7 @@ s32 EnAn_HandleSch_WithKafei(EnAn* this, PlayState* play) {
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     }
 
-    this->stateFlags &= ~ENAN_STATE_20;
+    this->stateFlags &= ~ENAN_STATE_ENGAGED;
     return 1;
 }
 
@@ -3193,9 +3193,9 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
 
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
-        this->stateFlags &= ~ENAN_STATE_20;
-        this->stateFlags |= ENAN_STATE_200;
-        this->unk_388 = 20;
+        this->stateFlags &= ~ENAN_STATE_ENGAGED;
+        this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
+        this->loseAttentionTimer = 20;
         this->msgScriptResumePos = 0;
         this->actionFunc = EnAn_FollowSchedule;
 
@@ -3270,7 +3270,9 @@ void EnAn_HandleCouplesMaskCutscene(EnAn* this, PlayState* play) {
 }
 
 #if DEBUG_PRINT
+s32 clockTimePaused = false;
 u8 weekEventRegCopy[100];
+s32 downPressed = false;
 #endif
 
 void EnAn_Init(Actor* thisx, PlayState* play) {
@@ -3307,17 +3309,16 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = EnAn_Initialize;
 
 #if DEBUG_PRINT
+    //SET_WEEKEVENTREG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES);
+    //SET_WEEKEVENTREG(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT);
+
     Lib_MemCpy(weekEventRegCopy, gSaveContext.save.saveInfo.weekEventReg,
                sizeof(gSaveContext.save.saveInfo.weekEventReg));
 
-    gSaveContext.save.day = 3;
-
-    if (gSaveContext.save.time > CLOCK_TIME(5, 0)) {
-        gSaveContext.save.time = CLOCK_TIME(3, 0);
-    }
-
-    SET_WEEKEVENTREG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES);
-    SET_WEEKEVENTREG(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT);
+    //gSaveContext.save.day = 3;
+    //if (gSaveContext.save.time > CLOCK_TIME(5, 0)) {
+    //    gSaveContext.save.time = CLOCK_TIME(3, 0);
+    //}
 #endif
 }
 
@@ -3329,6 +3330,35 @@ void EnAn_Destroy(Actor* thisx, PlayState* play) {
 
 void EnAn_Update(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
+
+    #if DEBUG_PRINT
+    {
+        Input* input = CONTROLLER1(&play->state);
+
+        if (CHECK_BTN_ALL(input->press.button, BTN_DUP)) {
+            clockTimePaused = !clockTimePaused;
+        }
+
+        if (clockTimePaused) {
+            gSaveContext.save.time -= R_TIME_SPEED;
+            if (R_TIME_SPEED != 0) {
+                gSaveContext.save.time -= gSaveContext.save.timeSpeedOffset;
+            }
+        }
+
+        if (CHECK_BTN_ALL(input->press.button, BTN_DRIGHT)) {
+            gSaveContext.save.time += CLOCK_TIME(0, 10);
+        }
+        if (CHECK_BTN_ALL(input->press.button, BTN_DLEFT)) {
+            if (gSaveContext.save.time >= CLOCK_TIME(6, 0)) {
+                if (gSaveContext.save.time - CLOCK_TIME(0, 10) < CLOCK_TIME(6, 0)) {
+                    gSaveContext.save.day -= 2;
+                }
+            }
+            gSaveContext.save.time -= CLOCK_TIME(0, 10);
+        }
+    }
+    #endif
 
     if (EnAn_InitializeObjectSlots(this, play)) {
         return;
@@ -3347,7 +3377,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
         EnAn_HandleDialogue(this, play);
         EnAn_UpdateSkel(this, play);
         EnAn_UpdateFace(this);
-        func_80B554E8(this);
+        EnAn_UpdateAttention(this);
         SubS_Offer(&this->actor, play, this->unk_374, 30.0f, 0, this->stateFlags & SUBS_OFFER_MODE_MASK);
 
         if (!(this->stateFlags & ENAN_STATE_IGNORE_GRAVITY)) {
@@ -3357,6 +3387,20 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
 
         EnAn_UpdateCollider(this, play);
     }
+
+    #if DEBUG_PRINT
+    {
+        Input* input = CONTROLLER1(&play->state);
+
+        if (CHECK_BTN_ALL(input->press.button, BTN_DDOWN)) {
+            downPressed = !downPressed;
+        }
+
+        if (downPressed) {
+            this->stateFlags &= ~ENAN_STATE_8;
+        }
+    }
+    #endif
 }
 
 void EnAn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -3383,8 +3427,8 @@ void EnAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     s32 stepRot;
     s32 overrideRot;
 
-    if (!(this->stateFlags & ENAN_STATE_200)) {
-        if (this->stateFlags & ENAN_STATE_80) {
+    if (!(this->stateFlags & ENAN_STATE_LOST_ATTENTION)) {
+        if (this->stateFlags & ENAN_STATE_FACE_TARGET) {
             overrideRot = true;
         } else {
             overrideRot = false;
@@ -3445,7 +3489,7 @@ const SymbolDebug sAnjuFunctions[] = {
     SYMBOL_DEBUG(EnAn_CheckTalk),
     SYMBOL_DEBUG(EnAn_IsCouplesMaskCsPlaying),
     SYMBOL_DEBUG(EnAn_UpdateHeadRot),
-    SYMBOL_DEBUG(func_80B554E8),
+    SYMBOL_DEBUG(EnAn_UpdateAttention),
     SYMBOL_DEBUG(EnAn_ChooseAnimAfterTalking),
     SYMBOL_DEBUG(EnAn_DialogueFunc_80B556F8),
     SYMBOL_DEBUG(EnAn_DialogueFunc_80B557AC),
@@ -3536,7 +3580,7 @@ const SymbolDebug sAnjuData[] = {
     // SYMBOL_DEBUG(sEyeTextures),
 };
 
-const char* const EnAn_GetSymbolName(void* address) {
+const char* EnAn_GetSymbolName(void* address) {
     s32 i;
 
     if (address == NULL) {
@@ -3565,39 +3609,123 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
 
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
-    GfxPrint_SetPos(printer, 28, 1);
-    GfxPrint_Printf(printer, "gTime:%X", gSaveContext.save.time);
+    y = 0;
 
-    GfxPrint_SetPos(printer, 28, 2);
-    GfxPrint_Printf(printer, "gTime:%i:%i", DEC_TIME_AUX(gSaveContext.save.time) / 60,
+    GfxPrint_SetPos(printer, 29, ++y);
+    GfxPrint_Printf(printer, "gTime:x%X", gSaveContext.save.time);
+
+    GfxPrint_SetPos(printer, 29, ++y);
+    GfxPrint_Printf(printer, "gTime:%02i:%02i", DEC_TIME_AUX(gSaveContext.save.time) / 60,
                     DEC_TIME_AUX(gSaveContext.save.time) % 60);
 
-    x = 2;
-    y = 26;
+    if (clockTimePaused) {
+        GfxPrint_SetPos(printer, 28, ++y);
+        GfxPrint_Printf(printer, "clock paused");
+
+        GfxPrint_SetPos(printer, 28, ++y);
+        GfxPrint_Printf(printer, "offset:%X", gSaveContext.save.timeSpeedOffset);
+
+        GfxPrint_SetPos(printer, 29, ++y);
+        GfxPrint_Printf(printer, "speed:%X", R_TIME_SPEED);
+    }
+
+    x = 0;
+    y = 7;
 
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "    actionFunc:%s", EnAn_GetSymbolName(this->actionFunc));
+    GfxPrint_Printf(printer, "   action:%s", EnAn_GetSymbolName(this->actionFunc));
 
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "  dialogueFunc:%s", EnAn_GetSymbolName(this->dialogueFunc));
+    GfxPrint_Printf(printer, " dialogue:%s", EnAn_GetSymbolName(this->dialogueFunc));
 
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "  msgEventFunc:%s", EnAn_GetSymbolName(this->msgEventFunc));
+    GfxPrint_Printf(printer, " msgEvent:%s", EnAn_GetSymbolName(this->msgEventFunc));
 
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "msgEventScript:%s", EnAn_GetSymbolName(this->msgEventScript));
+    GfxPrint_Printf(printer, "msgScript:%s", EnAn_GetSymbolName(this->msgEventScript));
+
+    ++y;
+
+    {
+        static const char* const scheduleNames[ANJU_SCH_MAX] = {
+            "ANJU_SCH_NONE",
+            "ANJU_SCH_WAITING_FOR_KAFEI",
+            "ANJU_SCH_2",
+            "ANJU_SCH_LAUNDRY_POOL_SIT",
+            "ANJU_SCH_4",
+            "ANJU_SCH_5",
+            "ANJU_SCH_6",
+            "ANJU_SCH_7",
+            "ANJU_SCH_8",
+            "ANJU_SCH_9",
+            "ANJU_SCH_10",
+            "ANJU_SCH_11",
+            "ANJU_SCH_RANCH",
+            "ANJU_SCH_13",
+            "ANJU_SCH_COOKING",
+            "ANJU_SCH_15",
+            "ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN",
+            "ANJU_SCH_ATTEND_GORON",
+            "ANJU_SCH_RECEPTIONIST_IDLE",
+            "ANJU_SCH_WAITING_CLOSING_TIME",
+            "ANJU_SCH_20",
+            "ANJU_SCH_GIVE_LUNCH_TO_GRANNY",
+            "ANJU_SCH_SWEEPING",
+            "ANJU_SCH_MIDNIGHT_MEETING",
+            "ANJU_SCH_TALKING_WITH_MOM",
+            "ANJU_SCH_WITH_KAFEI",
+            "ANJU_SCH_DOOR_26",
+            "ANJU_SCH_DOOR_27",
+            "ANJU_SCH_DOOR_28",
+            "ANJU_SCH_DOOR_29",
+            "ANJU_SCH_DOOR_30",
+            "ANJU_SCH_DOOR_31",
+            "ANJU_SCH_DOOR_32",
+            "ANJU_SCH_DOOR_33",
+            "ANJU_SCH_DOOR_34",
+            "ANJU_SCH_DOOR_35",
+            "ANJU_SCH_DOOR_36",
+            "ANJU_SCH_DOOR_37",
+            "ANJU_SCH_DOOR_38",
+            "ANJU_SCH_DOOR_39",
+            "ANJU_SCH_WALKING_40",
+            "ANJU_SCH_41",
+            "ANJU_SCH_WALKING_42",
+            "ANJU_SCH_WALKING_43",
+            "ANJU_SCH_WALKING_44",
+            "ANJU_SCH_WALKING_45",
+            "ANJU_SCH_WALKING_46",
+            "ANJU_SCH_WALKING_47",
+            "ANJU_SCH_WALKING_48",
+            "ANJU_SCH_WALKING_49",
+            "ANJU_SCH_WALKING_50",
+            "ANJU_SCH_WALKING_51",
+            "ANJU_SCH_WALKING_52",
+            "ANJU_SCH_WALKING_53",
+            "ANJU_SCH_WALKING_54",
+            "ANJU_SCH_WALKING_55",
+            "ANJU_SCH_WALKING_56",
+            "ANJU_SCH_WALKING_57",
+            "ANJU_SCH_WALKING_58",
+            "ANJU_SCH_WALKING_59",
+            "ANJU_SCH_WALKING_60",
+            "ANJU_SCH_WALKING_61",
+            "ANJU_SCH_WALKING_62",
+            "ANJU_SCH_WALKING_63",
+        };
+
+        GfxPrint_SetPos(printer, x - 0, ++y);
+        GfxPrint_Printf(printer, " schedule:%s", &scheduleNames[this->scheduleResult][9]);
+    }
 
     x = 31;
-    y = 3 + 20;
+    y = 3 + 17;
 
-    GfxPrint_SetPos(printer, x - 5, ++y);
-    GfxPrint_Printf(printer, "schedule:%d", this->scheduleResult);
-
-    // GfxPrint_SetPos(printer, x-3, ++y);
-    // GfxPrint_Printf(printer, "textId:%X", this->prevTextId);
+    GfxPrint_SetPos(printer, x - 3, ++y);
+    GfxPrint_Printf(printer, "textId:%X", this->prevTextId);
 
     GfxPrint_SetPos(printer, x - 0, ++y);
-    GfxPrint_Printf(printer, "cue:%d", this->cueId);
+    GfxPrint_Printf(printer, "cue:%i", this->cueId);
 
     // GfxPrint_SetPos(printer, x-2, ++y);
     // GfxPrint_Printf(printer, "! 374:%f", this->unk_374);
@@ -3623,6 +3751,8 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
     GfxPrint_SetPos(printer, x - 2, ++y);
     GfxPrint_Printf(printer, "! 3C0:%s", BOOLSTR(this->unk_3C0));
 
+    GfxPrint_SetColor(printer, 120, 120, 180, 255);
+
     y = 0;
     {
         static const char* const subsFlags[8] = {
@@ -3645,9 +3775,9 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
         static const char* const flagsMap[16] = {
             "ENAN_STATE_PLACEHOLDER_1",    "ENAN_STATE_PLACEHOLDER_2",
             "ENAN_STATE_PLACEHOLDER_4",    "ENAN_STATE_8",
-            "ENAN_STATE_REACHED_PATH_END", "ENAN_STATE_20",
-            "ENAN_STATE_IGNORE_GRAVITY",   "ENAN_STATE_80",
-            "ENAN_STATE_UPDATE_EYES",      "ENAN_STATE_200",
+            "ENAN_STATE_REACHED_PATH_END", "ENAN_STATE_ENGAGED",
+            "ENAN_STATE_IGNORE_GRAVITY",   "ENAN_STATE_FACE_TARGET",
+            "ENAN_STATE_UPDATE_EYES",      "ENAN_STATE_LOST_ATTENTION",
             "ENAN_STATE_TALKING",          "ENAN_STATE_DRAW_TRAY",
             "ENAN_STATE_DRAW_UMBRELLA",    "ENAN_STATE_DRAW_BROOM",
             "ENAN_STATE_DRAW_KAFEI_MASK",  "ENAN_STATE_DRAW_CHOPSTICKS",
@@ -3658,6 +3788,8 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
             GfxPrint_Printf(printer, "%s", &flagsMap[i][11]);
         }
     }
+
+    GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
     y = 20;
     x = 3;
@@ -3685,6 +3817,15 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
             }
         }
     }
+
+    x = 0;
+    y = 27;
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "builtAddr:%X", SEGMENT_START(ovl_En_An));
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "  ovlAddr:%X", EnAn_InitializeObjectSlots);
 }
 
 void EnAn_DrawStruct(EnAn* this, PlayState* play) {
@@ -3701,7 +3842,7 @@ void EnAn_DrawStruct(EnAn* this, PlayState* play) {
 
     gfxRef = POLY_OPA_DISP;
     gfx = Graph_GfxPlusOne(gfxRef);
-    gSPDisplayList(OVERLAY_DISP++, gfx);
+    gSPDisplayList(DEBUG_DISP++, gfx);
 
     GfxPrint_Open(&printer, gfx);
 

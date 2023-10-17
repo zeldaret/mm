@@ -14,13 +14,13 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 #define ENAN_8000 0x8000
 //#define ENAN_GET_8000(thisx) (((thisx)->params & 0x8000) >> 0xF)
 
-#define ENAN_STATE_8                (1 << 3)
+#define ENAN_STATE_8                (1 << 3) // path related
 #define ENAN_STATE_REACHED_PATH_END (1 << 4)
-#define ENAN_STATE_20               (1 << 5) // rotate head?
+#define ENAN_STATE_ENGAGED          (1 << 5)
 #define ENAN_STATE_IGNORE_GRAVITY   (1 << 6)
-#define ENAN_STATE_80               (1 << 7)
+#define ENAN_STATE_FACE_TARGET      (1 << 7)
 #define ENAN_STATE_UPDATE_EYES      (1 << 8)
-#define ENAN_STATE_200              (1 << 9)
+#define ENAN_STATE_LOST_ATTENTION   (1 << 9)
 #define ENAN_STATE_TALKING          (1 << 10)
 #define ENAN_STATE_DRAW_TRAY        (1 << 11)
 #define ENAN_STATE_DRAW_UMBRELLA    (1 << 12)
@@ -78,7 +78,7 @@ typedef struct EnAn {
     /* 0x380 */ UNK_TYPE1 unk_380[0x4];
     /* 0x384 */ s16 timePathTimeSpeed;
     /* 0x386 */ s16 unk_386; // timer
-    /* 0x388 */ s16 unk_388; // timer
+    /* 0x388 */ s16 loseAttentionTimer;
     /* 0x38A */ s16 savedFaceIndex; // EnAnFace enum
     /* 0x38C */ s16 faceIndex; // EnAnFace enum
     /* 0x38E */ s16 eyeTimer;
