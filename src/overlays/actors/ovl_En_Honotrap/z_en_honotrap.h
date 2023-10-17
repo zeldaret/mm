@@ -23,10 +23,10 @@ typedef struct {
 } EnHonotrapFlameElement; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ f32 unk0;
-    /* 0x04 */ f32 unk4;
-    /* 0x08 */ f32 unk8;
-    /* 0x0C */ EnHonotrapFlameElement flameList[6];
+    /* 0x0 */ f32 unk0;
+    /* 0x4 */ f32 unk4;
+    /* 0x8 */ f32 unk8;
+    /* 0xC */ EnHonotrapFlameElement flameList[6];
 } EnHonotrapFlameGroup; // size = 0x84;
 
 typedef struct EnHonotrap {
@@ -45,11 +45,11 @@ typedef struct EnHonotrap {
 } EnHonotrap; // size = 0x2C4
 
 typedef enum {
-    HONOTRAP_TYPE_EYE,
-    HONOTRAP_TYPE_FLAME_MOVE,
-    HONOTRAP_TYPE_FLAME_DROP,
-    HONOTRAP_TYPE_EYE_MUTI_FLAME,
-    HONOTRAP_TYPE_FLAME_GROUP
+    /* 0 */ HONOTRAP_TYPE_EYE,
+    /* 1 */ HONOTRAP_TYPE_FLAME_MOVE,
+    /* 2 */ HONOTRAP_TYPE_FLAME_DROP,
+    /* 3 */ HONOTRAP_TYPE_EYE_MUTI_FLAME,
+    /* 4 */ HONOTRAP_TYPE_FLAME_GROUP
 } EnHonotrapType;
 
 #endif // Z_EN_HONOTRAP_H

@@ -64,8 +64,12 @@ void EnHonotrap_UpdateFlameGroup(Actor* thisx, PlayState* play);
 void EnHonotrap_DrawFlame(Actor* thisx, PlayState* play);
 void EnHonotrap_DrawFlameGroup(Actor* thisx, PlayState* play);
 
-static TexturePtr sSilverEyeTextures[HONOTRAP_EYE_MAX] = { gEyeSwitchSilverOpenTex, gEyeSwitchSilverHalfTex,
-                                                           gEyeSwitchSilverClosedTex, gEyeSwitchSilverClosedTex };
+static TexturePtr sSilverEyeTextures[HONOTRAP_EYE_MAX] = {
+    gEyeSwitchSilverOpenTex,
+    gEyeSwitchSilverHalfTex,
+    gEyeSwitchSilverClosedTex,
+    gEyeSwitchSilverClosedTex,
+};
 
 static s32 sIsFirstInitEye = true;
 
@@ -81,7 +85,7 @@ ActorInit En_Honotrap_InitVars = {
     (ActorFunc)EnHonotrap_Draw,
 };
 
-static ColliderTrisElementInit sTrisElementsInit[2] = {
+static ColliderTrisElementInit sTrisElementsInit[] = {
     {
         {
             ELEMTYPE_UNK4,
@@ -187,7 +191,7 @@ void EnHonotrap_InitEye(EnHonotrap* this, PlayState* play) {
 
     if (sIsFirstInitEye) {
         sIsFirstInitEye = false;
-        for (k = 0; k < ARRAY_COUNT(sSilverEyeTextures); k++) {
+        for (k = 0; k < HONOTRAP_EYE_MAX; k++) {
             sSilverEyeTextures[k] = Lib_SegmentedToVirtual(sSilverEyeTextures[k]);
         }
     }
@@ -684,8 +688,8 @@ void EnHonotrap_FlameGroup(EnHonotrap* this, PlayState* play) {
 }
 
 void EnHonotrap_Update(Actor* thisx, PlayState* play) {
-    static Vec3f velocity = { 0.0f, 0.0f, 0.0f };
-    static Vec3f accel = { 0.0f, 0.1f, 0.0f };
+    static Vec3f sVelocity = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sAccel = { 0.0f, 0.1f, 0.0f };
     EnHonotrap* this = (EnHonotrap*)thisx;
 
     if (this->timer > 0) {
@@ -696,7 +700,7 @@ void EnHonotrap_Update(Actor* thisx, PlayState* play) {
     }
     this->actionFunc(this, play);
     if (this->collider.tris.base.acFlags & AC_HIT) {
-        EffectSsBomb2_SpawnLayered(play, &this->actor.world.pos, &velocity, &accel, 15, 8);
+        EffectSsBomb2_SpawnLayered(play, &this->actor.world.pos, &sVelocity, &sAccel, 15, 8);
         Actor_Kill(&this->actor);
         return;
     }
@@ -786,6 +790,7 @@ void EnHonotrap_DrawFlameGroup(Actor* thisx, PlayState* play) {
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     Camera_GetCamDir(&camDir, GET_ACTIVE_CAM(play));
     camDir.y += 0x8000;
+    //! FAKE:
     this = ((EnHonotrap*)thisx);
     flameGroup = &this->flameGroup;
     for (i = 0; i < ARRAY_COUNT(flameGroup->flameList); i++) {
