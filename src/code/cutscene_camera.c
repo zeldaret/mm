@@ -818,7 +818,7 @@ void func_80162FF8(s16 arg0) {
     sKnots[i++] = val;
 }
 
-#define FUNC_801631DC_PATHING_ORDER 3
+#define FUNC_801631DC_ORDER 3
 
 // Only used by unused CutsceneCamera_Interp_Unused
 void func_801631DC(f32 progress, s32 arg2, f32* coeff) {
@@ -827,16 +827,16 @@ void func_801631DC(f32 progress, s32 arg2, f32* coeff) {
     s32 j;
     s32 k;
 
-    for (i = 0; i < FUNC_801631DC_PATHING_ORDER + 1; i++) {
-        for (j = 0; j < FUNC_801631DC_PATHING_ORDER + 1; j++) {
+    for (i = 0; i < FUNC_801631DC_ORDER + 1; i++) {
+        for (j = 0; j < FUNC_801631DC_ORDER + 1; j++) {
             coeffTemp[i][j] = 0.0f;
         }
     }
 
-    coeffTemp[0][FUNC_801631DC_PATHING_ORDER - 1] = 1.0f;
+    coeffTemp[0][FUNC_801631DC_ORDER - 1] = 1.0f;
 
-    for (i = 1; i < FUNC_801631DC_PATHING_ORDER; i++) {
-        for (j = arg2 - i, k = (FUNC_801631DC_PATHING_ORDER - 1) - i; j <= arg2; j++, k++) {
+    for (i = 1; i < FUNC_801631DC_ORDER; i++) {
+        for (j = arg2 - i, k = (FUNC_801631DC_ORDER - 1) - i; j <= arg2; j++, k++) {
             if (sKnots[j + i] != sKnots[j]) {
                 coeffTemp[i][k] = ((progress - sKnots[j]) / (sKnots[j + i] - sKnots[j])) * coeffTemp[i - 1][k];
             } else {
@@ -849,8 +849,8 @@ void func_801631DC(f32 progress, s32 arg2, f32* coeff) {
             }
         }
     }
-    for (j = 0; j < FUNC_801631DC_PATHING_ORDER; j++) {
-        coeff[j] = coeffTemp[FUNC_801631DC_PATHING_ORDER - 1][j];
+    for (j = 0; j < FUNC_801631DC_ORDER; j++) {
+        coeff[j] = coeffTemp[FUNC_801631DC_ORDER - 1][j];
     }
 }
 
