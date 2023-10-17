@@ -1160,16 +1160,16 @@ typedef enum EnAnFace {
 
 void EnAn_UpdateFace(EnAn* this) {
     static s16 sMouthIndices[ENAN_FACE_MAX] = {
-        ENAN_MOUTH_CLOSED,     // ENAN_FACE_0
-        ENAN_MOUTH_OPEN,     // ENAN_FACE_1
-        ENAN_MOUTH_CLOSED,     // ENAN_FACE_2
-        ENAN_MOUTH_HAPPY, // ENAN_FACE_3
-        ENAN_MOUTH_OPEN,     // ENAN_FACE_4
-        ENAN_MOUTH_CLOSED,     // ENAN_FACE_5
-        ENAN_MOUTH_HAPPY, // ENAN_FACE_6
-        ENAN_MOUTH_OPEN,     // ENAN_FACE_7
-        ENAN_MOUTH_HAPPY, // ENAN_FACE_8
-        ENAN_MOUTH_HAPPY, // ENAN_FACE_9
+        ENAN_MOUTH_CLOSED, // ENAN_FACE_0
+        ENAN_MOUTH_OPEN,   // ENAN_FACE_1
+        ENAN_MOUTH_CLOSED, // ENAN_FACE_2
+        ENAN_MOUTH_HAPPY,  // ENAN_FACE_3
+        ENAN_MOUTH_OPEN,   // ENAN_FACE_4
+        ENAN_MOUTH_CLOSED, // ENAN_FACE_5
+        ENAN_MOUTH_HAPPY,  // ENAN_FACE_6
+        ENAN_MOUTH_OPEN,   // ENAN_FACE_7
+        ENAN_MOUTH_HAPPY,  // ENAN_FACE_8
+        ENAN_MOUTH_HAPPY,  // ENAN_FACE_9
     };
     s32 skipBlink = false;
 
@@ -1256,9 +1256,9 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPSegment(
-                    POLY_XLU_DISP++, 0x08,
-                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->trayTexScrollTimer1, 0, 16, 16, 1, 0, this->trayTexScrollTimer2, 16, 16));
+                gSPSegment(POLY_XLU_DISP++, 0x08,
+                           Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->trayTexScrollTimer1, 0, 16, 16, 1, 0,
+                                            this->trayTexScrollTimer2, 16, 16));
                 gSPDisplayList(POLY_XLU_DISP++, gAnju1FoodTrayDL);
 
                 Gfx_SetupDL25_Opa(play->state.gfxCtx);
@@ -3160,7 +3160,8 @@ void EnAn_FollowSchedule(EnAn* this, PlayState* play) {
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
-    if (!(this->actor.params & ENAN_8000) && !this->unk_3C0 && CHECK_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED)) {
+    if (!(this->actor.params & ENAN_8000) && !this->unk_3C0 &&
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -3306,7 +3307,8 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = EnAn_Initialize;
 
 #if DEBUG_PRINT
-    Lib_MemCpy(weekEventRegCopy, gSaveContext.save.saveInfo.weekEventReg, sizeof(gSaveContext.save.saveInfo.weekEventReg));
+    Lib_MemCpy(weekEventRegCopy, gSaveContext.save.saveInfo.weekEventReg,
+               sizeof(gSaveContext.save.saveInfo.weekEventReg));
 
     gSaveContext.save.day = 3;
 
@@ -3332,7 +3334,8 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if ((this->actionFunc != EnAn_Initialize) && !EnAn_CheckTalk(this, play) && EnAn_IsCouplesMaskCsPlaying(this, play)) {
+    if ((this->actionFunc != EnAn_Initialize) && !EnAn_CheckTalk(this, play) &&
+        EnAn_IsCouplesMaskCsPlaying(this, play)) {
         EnAn_HandleCouplesMaskCutscene(this, play);
         EnAn_UpdateSkel(this, play);
         EnAn_UpdateFace(this);
@@ -3355,7 +3358,6 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
         EnAn_UpdateCollider(this, play);
     }
 }
-
 
 void EnAn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnAn* this = THIS;
@@ -3417,7 +3419,8 @@ typedef struct SymbolDebug {
     const char* const name;
 } SymbolDebug;
 
-#define SYMBOL_DEBUG(sym) { &sym, #sym }
+#define SYMBOL_DEBUG(sym) \
+    { &sym, #sym }
 
 const SymbolDebug sAnjuFunctions[] = {
     SYMBOL_DEBUG(EnAn_InitializeObjectSlots),
@@ -3566,7 +3569,8 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
     GfxPrint_Printf(printer, "gTime:%X", gSaveContext.save.time);
 
     GfxPrint_SetPos(printer, 28, 2);
-    GfxPrint_Printf(printer, "gTime:%i:%i", DEC_TIME_AUX(gSaveContext.save.time) / 60, DEC_TIME_AUX(gSaveContext.save.time) % 60);
+    GfxPrint_Printf(printer, "gTime:%i:%i", DEC_TIME_AUX(gSaveContext.save.time) / 60,
+                    DEC_TIME_AUX(gSaveContext.save.time) % 60);
 
     x = 2;
     y = 26;
@@ -3586,37 +3590,37 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
     x = 31;
     y = 3 + 20;
 
-    GfxPrint_SetPos(printer, x-5, ++y);
+    GfxPrint_SetPos(printer, x - 5, ++y);
     GfxPrint_Printf(printer, "schedule:%d", this->scheduleResult);
 
-    //GfxPrint_SetPos(printer, x-3, ++y);
-    //GfxPrint_Printf(printer, "textId:%X", this->prevTextId);
+    // GfxPrint_SetPos(printer, x-3, ++y);
+    // GfxPrint_Printf(printer, "textId:%X", this->prevTextId);
 
-    GfxPrint_SetPos(printer, x-0, ++y);
+    GfxPrint_SetPos(printer, x - 0, ++y);
     GfxPrint_Printf(printer, "cue:%d", this->cueId);
 
-    //GfxPrint_SetPos(printer, x-2, ++y);
-    //GfxPrint_Printf(printer, "! 374:%f", this->unk_374);
+    // GfxPrint_SetPos(printer, x-2, ++y);
+    // GfxPrint_Printf(printer, "! 374:%f", this->unk_374);
 
-    //GfxPrint_SetPos(printer, x-6, ++y);
-    //GfxPrint_Printf(printer, "savedFace:%d", this->savedFaceIndex);
+    // GfxPrint_SetPos(printer, x-6, ++y);
+    // GfxPrint_Printf(printer, "savedFace:%d", this->savedFaceIndex);
 
-    GfxPrint_SetPos(printer, x-1, ++y);
+    GfxPrint_SetPos(printer, x - 1, ++y);
     GfxPrint_Printf(printer, "face:%d", this->faceIndex);
 
-    //GfxPrint_SetPos(printer, x-5, ++y);
-    //GfxPrint_Printf(printer, "eyeTimer:%d", this->eyeTimer);
+    // GfxPrint_SetPos(printer, x-5, ++y);
+    // GfxPrint_Printf(printer, "eyeTimer:%d", this->eyeTimer);
 
-    GfxPrint_SetPos(printer, x-0, ++y);
+    GfxPrint_SetPos(printer, x - 0, ++y);
     GfxPrint_Printf(printer, "eye:%d", this->eyeTexIndex);
 
-    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_SetPos(printer, x - 2, ++y);
     GfxPrint_Printf(printer, "mouth:%d", this->mouthTexIndex);
 
-    GfxPrint_SetPos(printer, x-1, ++y);
+    GfxPrint_SetPos(printer, x - 1, ++y);
     GfxPrint_Printf(printer, "anim:%d", this->animIndex);
 
-    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_SetPos(printer, x - 2, ++y);
     GfxPrint_Printf(printer, "! 3C0:%s", BOOLSTR(this->unk_3C0));
 
     y = 0;
@@ -3639,22 +3643,14 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
 
     for (i = 3; i < 16; i++) {
         static const char* const flagsMap[16] = {
-            "ENAN_STATE_PLACEHOLDER_1",
-            "ENAN_STATE_PLACEHOLDER_2",
-            "ENAN_STATE_PLACEHOLDER_4",
-            "ENAN_STATE_8",
-            "ENAN_STATE_REACHED_PATH_END",
-            "ENAN_STATE_20",
-            "ENAN_STATE_IGNORE_GRAVITY",
-            "ENAN_STATE_80",
-            "ENAN_STATE_UPDATE_EYES",
-            "ENAN_STATE_200",
-            "ENAN_STATE_TALKING",
-            "ENAN_STATE_DRAW_TRAY",
-            "ENAN_STATE_DRAW_UMBRELLA",
-            "ENAN_STATE_DRAW_BROOM",
-            "ENAN_STATE_DRAW_KAFEI_MASK",
-            "ENAN_STATE_DRAW_CHOPSTICKS",
+            "ENAN_STATE_PLACEHOLDER_1",    "ENAN_STATE_PLACEHOLDER_2",
+            "ENAN_STATE_PLACEHOLDER_4",    "ENAN_STATE_8",
+            "ENAN_STATE_REACHED_PATH_END", "ENAN_STATE_20",
+            "ENAN_STATE_IGNORE_GRAVITY",   "ENAN_STATE_80",
+            "ENAN_STATE_UPDATE_EYES",      "ENAN_STATE_200",
+            "ENAN_STATE_TALKING",          "ENAN_STATE_DRAW_TRAY",
+            "ENAN_STATE_DRAW_UMBRELLA",    "ENAN_STATE_DRAW_BROOM",
+            "ENAN_STATE_DRAW_KAFEI_MASK",  "ENAN_STATE_DRAW_CHOPSTICKS",
         };
 
         if (this->stateFlags & (1 << i)) {
@@ -3669,7 +3665,7 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
     GfxPrint_SetPos(printer, x - 2, ++y);
     GfxPrint_Printf(printer, "weekEvent");
 
-    for (i = 0; i < ARRAY_COUNT(weekEventRegCopy); i++){
+    for (i = 0; i < ARRAY_COUNT(weekEventRegCopy); i++) {
         if (weekEventRegCopy[i] != gSaveContext.save.saveInfo.weekEventReg[i]) {
             u8 copy = weekEventRegCopy[i];
             u8 real = gSaveContext.save.saveInfo.weekEventReg[i];
@@ -3684,7 +3680,6 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
                         GfxPrint_SetPos(printer, x, ++y);
                         GfxPrint_Printf(printer, "SET [%i] & %X", i, mask);
                     } else {
-
                     }
                 }
             }
@@ -3731,17 +3726,17 @@ void EnAn_Draw(Actor* thisx, PlayState* play) {
         static TexturePtr sMouthTextures[ENAN_MOUTH_MAX] = {
             gAnju1MouthClosedTex, // ENAN_MOUTH_CLOSED
             gAnju1MouthHappyTex,  // ENAN_MOUTH_HAPPY
-            gAnju1MouthOpenTex, // ENAN_MOUTH_OPEN
+            gAnju1MouthOpenTex,   // ENAN_MOUTH_OPEN
         };
 
         static TexturePtr sEyeTextures[ENAN_EYES_MAX] = {
-            gAnju1EyeOpenTex,   // ENAN_EYES_OPEN
-            gAnju1EyeHalfTex,   // ENAN_EYES_HALF1
-            gAnju1EyeClosedTex, // ENAN_EYES_CLOSED
-            gAnju1EyeHalfTex,   // ENAN_EYES_HALF2
-            gAnju1EyeComfortingTex, // ENAN_EYES_COMFORTING
-            gAnju1EyeSadTex,    // ENAN_EYES_SAD
-            gAnju1EyeRelievedClosedTex,  // ENAN_EYES_RELIEVED_CLOSED
+            gAnju1EyeOpenTex,           // ENAN_EYES_OPEN
+            gAnju1EyeHalfTex,           // ENAN_EYES_HALF1
+            gAnju1EyeClosedTex,         // ENAN_EYES_CLOSED
+            gAnju1EyeHalfTex,           // ENAN_EYES_HALF2
+            gAnju1EyeComfortingTex,     // ENAN_EYES_COMFORTING
+            gAnju1EyeSadTex,            // ENAN_EYES_SAD
+            gAnju1EyeRelievedClosedTex, // ENAN_EYES_RELIEVED_CLOSED
         };
 
         OPEN_DISPS(play->state.gfxCtx);

@@ -375,7 +375,7 @@ TexturePtr D_80C1D2E8[] = {
 };
 
 TexturePtr D_80C1D2F4[] = {
-    gAnju1EyeOpenTex,   gAnju1EyeHalfTex, gAnju1EyeClosedTex, gAnju1EyeHalfTex,
+    gAnju1EyeOpenTex,       gAnju1EyeHalfTex, gAnju1EyeClosedTex,         gAnju1EyeHalfTex,
     gAnju1EyeComfortingTex, gAnju1EyeSadTex,  gAnju1EyeRelievedClosedTex,
 };
 
