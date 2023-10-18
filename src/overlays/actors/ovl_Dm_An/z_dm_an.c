@@ -17,7 +17,7 @@ void DmAn_Destroy(Actor* thisx, PlayState* play);
 void DmAn_Update(Actor* thisx, PlayState* play);
 
 void func_80C1C958(DmAn* this, PlayState* play);
-void DmAn_HandleCutscene(DmAn* this, PlayState* play);
+void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play);
 void DmAn_DoNothing(DmAn* this, PlayState* play);
 void DmAn_Draw(Actor* thisx, PlayState* play);
 
@@ -148,11 +148,11 @@ s32 func_80C1C62C(DmAn* this, PlayState* play) {
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
     sp32 = Math_Vec3f_Yaw(&sp34, &sp40);
 
-    Math_ApproachS(&this->unk_2C0, (sp32 - this->unk_2C4) - this->actor.shape.rot.y, 4, 0x2AA8);
-    this->unk_2C0 = CLAMP(this->unk_2C0, -0x1FFE, 0x1FFE);
+    Math_ApproachS(&this->headRotY, (sp32 - this->torsoRotY) - this->actor.shape.rot.y, 4, 0x2AA8);
+    this->headRotY = CLAMP(this->headRotY, -0x1FFE, 0x1FFE);
 
-    Math_ApproachS(&this->unk_2C4, (sp32 - this->unk_2C0) - this->actor.shape.rot.y, 4, 0x2AA8);
-    this->unk_2C4 = CLAMP(this->unk_2C4, -0x1C70, 0x1C70);
+    Math_ApproachS(&this->torsoRotY, (sp32 - this->headRotY) - this->actor.shape.rot.y, 4, 0x2AA8);
+    this->torsoRotY = CLAMP(this->torsoRotY, -0x1C70, 0x1C70);
 
     if (this->unk_2B4->id == ACTOR_PLAYER) {
         sp40.y = ((Player*)this->unk_2B4)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
@@ -161,28 +161,28 @@ s32 func_80C1C62C(DmAn* this, PlayState* play) {
     }
 
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
-    Math_ApproachS(&this->unk_2BE, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk_2C2, 4, 0x2AA8);
-    this->unk_2BE = CLAMP(this->unk_2BE, -0x1C70, 0x1C70);
+    Math_ApproachS(&this->headRotZ, Math_Vec3f_Pitch(&sp34, &sp40) - this->torsoRotZ, 4, 0x2AA8);
+    this->headRotZ = CLAMP(this->headRotZ, -0x1C70, 0x1C70);
 
-    Math_ApproachS(&this->unk_2C2, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk_2BE, 4, 0x2AA8);
-    this->unk_2C2 = CLAMP(this->unk_2C2, -0x1C70, 0x1C70);
+    Math_ApproachS(&this->torsoRotZ, Math_Vec3f_Pitch(&sp34, &sp40) - this->headRotZ, 4, 0x2AA8);
+    this->torsoRotZ = CLAMP(this->torsoRotZ, -0x1C70, 0x1C70);
     return true;
 }
 
-s32 func_80C1C83C(DmAn* this, PlayState* play) {
+s32 DmAn_UpdateAttention(DmAn* this, PlayState* play) {
     if (this->unk_2B4 != NULL) {
         func_80C1C62C(this, play);
-        this->unk_2AE &= ~1;
-        this->unk_2AE |= 2;
-    } else if (this->unk_2AE & 2) {
-        this->unk_2AE &= ~2;
-        this->unk_2BE = 0;
-        this->unk_2C0 = 0;
-        this->unk_2C2 = 0;
-        this->unk_2C4 = 0;
-        this->unk_2BC = 20;
-    } else if (DECR(this->unk_2BC) == 0) {
-        this->unk_2AE |= 1;
+        this->stateFlags &= ~DMAN_STATE_LOST_ATTENTION;
+        this->stateFlags |= DMAN_STATE_FACE_TARGET;
+    } else if (this->stateFlags & DMAN_STATE_FACE_TARGET) {
+        this->stateFlags &= ~DMAN_STATE_FACE_TARGET;
+        this->headRotZ = 0;
+        this->headRotY = 0;
+        this->torsoRotZ = 0;
+        this->torsoRotY = 0;
+        this->loseAttentionTimer = 20;
+    } else if (DECR(this->loseAttentionTimer) == 0) {
+        this->stateFlags |= DMAN_STATE_LOST_ATTENTION;
     }
     return true;
 }
@@ -219,7 +219,7 @@ void func_80C1C958(DmAn* this, PlayState* play) {
         DmAn_ChangeAnim(this, play, DMAN_ANIM_SITTING_IN_DISBELIEVE);
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         Actor_SetScale(&this->actor, 0.01f);
-        this->unk_2AE |= 1;
+        this->stateFlags |= DMAN_STATE_LOST_ATTENTION;
         this->actor.draw = DmAn_Draw;
 
         if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
@@ -227,12 +227,12 @@ void func_80C1C958(DmAn* this, PlayState* play) {
             DmAn_ChangeAnim(this, play, DMAN_ANIM_SIT);
             this->actionFunc = DmAn_DoNothing;
         } else {
-            this->actionFunc = DmAn_HandleCutscene;
+            this->actionFunc = DmAn_HandleCouplesMaskCs;
         }
     }
 }
 
-void DmAn_HandleCutscene(DmAn* this, PlayState* play) {
+void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play) {
     s32 csAnimIndex[] = {
         /* 0 */ 0, // no cue
         /* 1 */ DMAN_ANIM_SITTING_IN_DISBELIEVE,
@@ -312,7 +312,7 @@ void DmAn_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    func_80C1C83C(this, play);
+    DmAn_UpdateAttention(this, play);
 
     if (this->actor.draw != NULL) {
         DmAn_UpdateSkelAnime(this, play);
@@ -321,10 +321,6 @@ void DmAn_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
-Vec3f D_80C1D2C8 = { 450.0f, 700.0f, -760.0f };
-Vec3s D_80C1D2D4 = { 0x238C, 0, -0x3FFC };
-Vec3f D_80C1D2DC = { 1000.0f, 0.0f, 0.0f };
-
 void DmAn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad[2];
     DmAn* this = THIS;
@@ -332,6 +328,9 @@ void DmAn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     s8 msmoObjectSlot = this->msmoObjectSlot;
 
     if ((limbIndex == ANJU1_LIMB_LEFT_HAND) && this->didAnimChangeInCs) {
+        static Vec3f D_80C1D2C8 = { 450.0f, 700.0f, -760.0f };
+        static Vec3s D_80C1D2D4 = { 0x238C, 0, -0x3FFC };
+
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
@@ -348,6 +347,8 @@ void DmAn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     }
 
     if (limbIndex == ANJU1_LIMB_HEAD) {
+        static Vec3f D_80C1D2DC = { 1000.0f, 0.0f, 0.0f };
+
         Matrix_MultVec3f(&D_80C1D2DC, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
@@ -358,8 +359,8 @@ void DmAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     s16 stepRot;
     s16 overrideRot;
 
-    if (!(this->unk_2AE & 1)) {
-        if (this->unk_2AE & 2) {
+    if (!(this->stateFlags & DMAN_STATE_LOST_ATTENTION)) {
+        if (this->stateFlags & DMAN_STATE_FACE_TARGET) {
             overrideRot = true;
         } else {
             overrideRot = false;
@@ -371,25 +372,25 @@ void DmAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 
     if (limbIndex == ANJU1_LIMB_HEAD) {
-        SubS_UpdateLimb(this->unk_2BE + this->unk_2C2 + 0x4000,
-                        this->unk_2C0 + this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_18C,
-                        &this->unk_1A4, stepRot, overrideRot);
+        SubS_UpdateLimb(this->headRotZ + this->torsoRotZ + 0x4000,
+                        this->headRotY + this->torsoRotY + this->actor.shape.rot.y + 0x4000, &this->headComputedPos,
+                        &this->headComputedRot, stepRot, overrideRot);
         Matrix_Pop();
-        Matrix_Translate(this->unk_18C.x, this->unk_18C.y, this->unk_18C.z, MTXMODE_NEW);
+        Matrix_Translate(this->headComputedPos.x, this->headComputedPos.y, this->headComputedPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->unk_1A4.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk_1A4.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->unk_1A4.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->headComputedRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headComputedRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headComputedRot.z, MTXMODE_APPLY);
         Matrix_Push();
     } else if (limbIndex == ANJU1_LIMB_TORSO) {
-        SubS_UpdateLimb(this->unk_2C2 + 0x4000, this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_194,
-                        &this->unk_1AA, stepRot, overrideRot);
+        SubS_UpdateLimb(this->torsoRotZ + 0x4000, this->torsoRotY + this->actor.shape.rot.y + 0x4000, &this->torsoComputedPos,
+                        &this->torsoComputedRot, stepRot, overrideRot);
         Matrix_Pop();
-        Matrix_Translate(this->unk_194.x, this->unk_194.y, this->unk_194.z, MTXMODE_NEW);
+        Matrix_Translate(this->torsoComputedPos.x, this->torsoComputedPos.y, this->torsoComputedPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->unk_1AA.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk_1AA.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->unk_1AA.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->torsoComputedRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->torsoComputedRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->torsoComputedRot.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }
