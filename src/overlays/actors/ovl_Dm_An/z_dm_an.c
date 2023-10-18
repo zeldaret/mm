@@ -33,12 +33,17 @@ ActorInit Dm_An_InitVars = {
     (ActorFunc)NULL,
 };
 
-typedef enum {
+/**
+ * Anju stores her animations across different objects and the ones used by this actor are put together right next to each other in the sAnimationInfo array. Due to this, animation functions check which object to load by comparing index ranges. To make this a bit easier to read, this enum includes `DMAN_ANIMOBJ_*` values that mark when a range of animations of a certain object start
+ */
+typedef enum DmAnAnimation {
     /* -1 */ DMAN_ANIM_NONE = -1,
     /*  0 */ DMAN_ANIM_SITTING_IN_DISBELIEVE,
     /*  1 */ DMAN_ANIM_SIT,
-    /*  2 */ DMAN_ANIM_2,
-    /*  3 */ DMAN_ANIM_HOLDING_HANDS,
+
+    /*  2 */ DMAN_ANIMOBJ_AN4,
+    /*  2 */ DMAN_ANIM_2 = DMAN_ANIMOBJ_AN4,
+    /*  3 */ DMAN_ANIM_HOLDING_HANDS, //! @bug See note at `sAnimationInfo`
     /*  4 */ DMAN_ANIM_4,
     /*  5 */ DMAN_ANIM_5,
     /*  6 */ DMAN_ANIM_6,
@@ -55,7 +60,10 @@ typedef enum {
 static AnimationInfoS sAnimationInfo[DMAN_ANIM_MAX] = {
     { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SITTING_IN_DISBELIEVE
     { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SIT
+
+    // DMAN_ANIMOBJ_AN4
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_2
+    //! @bug Uses symbol from OBJECT_AN1 instead of OBJECT_AN4
     { &gAnju1HoldingHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_HOLDING_HANDS
     { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_4
     { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_5
@@ -74,13 +82,13 @@ s32 DmAn_UpdateSkelAnime(DmAn* this, PlayState* play) {
     s8 objectSlot2;
     s32 isAnimFinished = false;
 
-    if (this->animIndex <= DMAN_ANIM_SIT) {
+    if (this->animIndex < DMAN_ANIMOBJ_AN4) {
         objectSlot2 = this->actor.objectSlot;
     } else {
         objectSlot2 = this->an4ObjectSlot;
     }
 
-    if (objectSlot2 >= 0) {
+    if (objectSlot2 > OBJECT_SLOT_NONE) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
@@ -89,18 +97,18 @@ s32 DmAn_UpdateSkelAnime(DmAn* this, PlayState* play) {
     return isAnimFinished;
 }
 
-s32 DmAn_ChangeAnim(DmAn* this, PlayState* play, s32 animIndex) {
+s32 DmAn_ChangeAnim(DmAn* this, PlayState* play, DmAnAnimation animIndex) {
     s8 objectSlot = this->actor.objectSlot;
     s8 objectSlot2;
     s32 didAnimChange = false;
 
-    if (animIndex <= DMAN_ANIM_SIT) {
+    if (animIndex < DMAN_ANIMOBJ_AN4) {
         objectSlot2 = this->actor.objectSlot;
     } else {
         objectSlot2 = this->an4ObjectSlot;
     }
 
-    if ((objectSlot2 >= 0) && (this->animIndex != animIndex)) {
+    if ((objectSlot2 > OBJECT_SLOT_NONE) && (this->animIndex != animIndex)) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);

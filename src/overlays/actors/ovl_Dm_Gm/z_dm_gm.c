@@ -33,30 +33,38 @@ ActorInit Dm_Gm_InitVars = {
     (ActorFunc)NULL,
 };
 
-typedef enum {
-    /*  -1 */ DMGM_ANIM_NONE = -1,
-    /* 0x0 */ DMGM_ANIM_0,
-    /* 0x1 */ DMGM_ANIM_1,
-    /* 0x2 */ DMGM_ANIM_2,
-    /* 0x3 */ DMGM_ANIM_3,
-    /* 0x4 */ DMGM_ANIM_4,
-    /* 0x5 */ DMGM_ANIM_5,
-    /* 0x6 */ DMGM_ANIM_6,
-    /* 0x7 */ DMGM_ANIM_7,
-    /* 0x8 */ DMGM_ANIM_8,
-    /* 0x9 */ DMGM_ANIM_9,
-    /* 0xA */ DMGM_ANIM_10,
-    /* 0xB */ DMGM_ANIM_11,
-    /* 0xC */ DMGM_ANIM_12,
-    /* 0xD */ DMGM_ANIM_13,
-    /* 0xE */ DMGM_ANIM_MAX
+/**
+ * Anju stores her animations across different objects and the ones used by this actor are put together right next to each other in the sAnimationInfo array. Due to this, animation functions check which object to load by comparing index ranges. To make this a bit easier to read, this enum includes `DMGM_ANIMOBJ_*` values that mark when a range of animations of a certain object start
+ */
+typedef enum DmGmAnimation {
+    /* -1 */ DMGM_ANIM_NONE = -1,
+    /*  0 */ DMGM_ANIM_SITTING_IN_DISBELIEVE,
+    /*  1 */ DMGM_ANIM_SIT,
+
+    /*  2 */ DMGM_ANIMOBJ_AN4,
+    /*  2 */ DMGM_ANIM_2 = DMGM_ANIMOBJ_AN4,
+    /*  3 */ DMGM_ANIM_HOLDING_HANDS, //! @bug See note at `sAnimationInfo`
+    /*  4 */ DMGM_ANIM_4,
+    /*  5 */ DMGM_ANIM_5,
+    /*  6 */ DMGM_ANIM_6,
+    /*  7 */ DMGM_ANIM_7,
+    /*  8 */ DMGM_ANIM_8,
+    /*  9 */ DMGM_ANIM_9,
+    /* 10 */ DMGM_ANIM_10,
+    /* 11 */ DMGM_ANIM_11,
+    /* 12 */ DMGM_ANIM_12,
+    /* 13 */ DMGM_ANIM_13,
+    /* 14 */ DMGM_ANIM_MAX
 } DmGmAnimation;
 
 static AnimationInfoS sAnimationInfo[DMGM_ANIM_MAX] = {
-    { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_0
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_1
+    { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_SITTING_IN_DISBELIEVE
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_SIT
+
+    // DMGM_ANIMOBJ_AN4
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_2
-    { &gAnju1HoldingHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_3
+    //! @bug Uses symbol from OBJECT_AN1 instead of OBJECT_AN4
+    { &gAnju1HoldingHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_HOLDING_HANDS
     { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_4
     { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_5
     { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_6
@@ -74,13 +82,13 @@ s32 DmGm_UpdateSkelAnime(DmGm* this, PlayState* play) {
     s8 objectIndex2;
     s32 isAnimFinished = false;
 
-    if (this->animIndex <= DMGM_ANIM_1) {
+    if (this->animIndex < DMGM_ANIMOBJ_AN4) {
         objectIndex2 = this->actor.objectSlot;
     } else {
         objectIndex2 = this->an4ObjectSlot;
     }
 
-    if (objectIndex2 >= 0) {
+    if (objectIndex2 > OBJECT_SLOT_NONE) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectIndex2].segment);
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
@@ -89,18 +97,18 @@ s32 DmGm_UpdateSkelAnime(DmGm* this, PlayState* play) {
     return isAnimFinished;
 }
 
-s32 DmGm_ChangeAnim(DmGm* this, PlayState* play, s32 animIndex) {
+s32 DmGm_ChangeAnim(DmGm* this, PlayState* play, DmGmAnimation animIndex) {
     s8 objectSlot = this->actor.objectSlot;
     s8 objectIndex2;
     s32 didAnimChange = false;
 
-    if (animIndex <= DMGM_ANIM_1) {
+    if (animIndex < DMGM_ANIMOBJ_AN4) {
         objectIndex2 = this->actor.objectSlot;
     } else {
         objectIndex2 = this->an4ObjectSlot;
     }
 
-    if ((objectIndex2 >= 0) && (this->animIndex != animIndex)) {
+    if ((objectIndex2 > OBJECT_SLOT_NONE) && (this->animIndex != animIndex)) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectIndex2].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
@@ -198,7 +206,7 @@ void func_80C248A8(DmGm* this, PlayState* play) {
                            ANJU1_LIMB_MAX);
 
         this->animIndex = DMGM_ANIM_NONE;
-        DmGm_ChangeAnim(this, play, DMGM_ANIM_0);
+        DmGm_ChangeAnim(this, play, DMGM_ANIM_SITTING_IN_DISBELIEVE);
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         Actor_SetScale(&this->actor, 0.01f);
         this->unk_2AE |= 1;
@@ -206,7 +214,7 @@ void func_80C248A8(DmGm* this, PlayState* play) {
 
         if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
             this->unk_2B4 = func_80C24838(play);
-            DmGm_ChangeAnim(this, play, DMGM_ANIM_1);
+            DmGm_ChangeAnim(this, play, DMGM_ANIM_SIT);
             this->actionFunc = DmGm_DoNothing;
         } else {
             this->actionFunc = DmGm_HandleCutscene;
@@ -216,8 +224,8 @@ void func_80C248A8(DmGm* this, PlayState* play) {
 
 void DmGm_HandleCutscene(DmGm* this, PlayState* play) {
     s32 csAnimIndex[] = {
-        DMGM_ANIM_0, DMGM_ANIM_0, DMGM_ANIM_12, DMGM_ANIM_2,  DMGM_ANIM_4,
-        DMGM_ANIM_6, DMGM_ANIM_8, DMGM_ANIM_10, DMGM_ANIM_11, DMGM_ANIM_3,
+        DMGM_ANIM_SITTING_IN_DISBELIEVE, DMGM_ANIM_SITTING_IN_DISBELIEVE, DMGM_ANIM_12, DMGM_ANIM_2,  DMGM_ANIM_4,
+        DMGM_ANIM_6, DMGM_ANIM_8, DMGM_ANIM_10, DMGM_ANIM_11, DMGM_ANIM_HOLDING_HANDS,
     };
     u16 cueId;
     s32 cueChannel;
