@@ -9,6 +9,8 @@ typedef void (*ObjIcePolyActionFunc)(struct ObjIcePoly*, PlayState*);
 
 #define OBJICEPOLY_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0xFF)
 
+#define OBJICEPOLY_SWITCH_FLAG_NONE 0xFF
+
 typedef struct ObjIcePoly {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ObjIcePolyActionFunc actionFunc;

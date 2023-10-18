@@ -75,7 +75,7 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
         this->unk170 = Lib_SegmentedToVirtual(path->points);
         func_80AC94C0(this, this->unk168);
         if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAM_1) &&
-            (Flags_GetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor)))) {
+            Flags_GetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor))) {
             func_80AC96B4(this);
         } else {
             func_80AC9AB8(this);

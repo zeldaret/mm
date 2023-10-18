@@ -107,10 +107,10 @@ void EnStopheishi_Init(Actor* thisx, PlayState* play) {
     this->switchFlag = ENSTOPHEISHI_GET_SWITCH_FLAG(&this->actor);
     this->unk_288 = (this->actor.world.rot.z * 40.0f) + 50.0f;
     this->actor.world.rot.z = 0;
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == ENSTOPHEISHI_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
