@@ -1,17 +1,17 @@
 ﻿<Root>
     <!-- Assets for Anju -->
     <File Name="object_an1" Segment="6">
-        <Animation Name="gAnju1TastingAnim" Offset="0x1090" /> <!-- Original name is "an_ajimi" ("tasting; sampling​") -->
-        <Animation Name="gAnju1TastingEndAnim" Offset="0x144C" /> <!-- Original name is "an_ajimiend" -->
+        <Animation Name="gAnju1TasteAnim" Offset="0x1090" /> <!-- Original name is "an_ajimi" ("tasting; sampling​") -->
+        <Animation Name="gAnju1TasteEndAnim" Offset="0x144C" /> <!-- Original name is "an_ajimiend" -->
 
-        <Animation Name="gAnju1LookingUpRelievedAnim" Offset="0x1E74" /> <!-- Original name is "an_aogu" ("to look up") -->
+        <Animation Name="gAnju1LookUpRelievedAnim" Offset="0x1E74" /> <!-- Original name is "an_aogu" ("to look up") -->
         <Animation Name="gAnju1SurprisedAnim" Offset="0x26B4" /> <!-- Original name is "an_bikkuri" ("to be surprised") -->
-        <Animation Name="gAnju1WaitingWithTrayAnim" Offset="0x341C" /> <!-- Original name is "an_obonwait" ("obon" = "tray") -->
-        <Animation Name="gAnju1WalkingWithTrayAnim" Offset="0x3EA8" /> <!-- Original name is "an_obonwalk" -->
-        <Animation Name="gAnju1BowingAnim" Offset="0x544C" /> <!-- Original name is "an_ojigit" ("bow; bowing") -->
-        <Animation Name="gAnju1CookingAnim" Offset="0x65C8" /> <!-- Original name is "an_ryouri" ("cooking") -->
+        <Animation Name="gAnju1WaitWithTrayAnim" Offset="0x341C" /> <!-- Original name is "an_obonwait" ("obon" = "tray") -->
+        <Animation Name="gAnju1WalkWithTrayAnim" Offset="0x3EA8" /> <!-- Original name is "an_obonwalk" -->
+        <Animation Name="gAnju1BowAnim" Offset="0x544C" /> <!-- Original name is "an_ojigit" ("bow; bowing") -->
+        <Animation Name="gAnju1CookAnim" Offset="0x65C8" /> <!-- Original name is "an_ryouri" ("cooking") -->
         <Animation Name="gAnju1SitAnim" Offset="0x71E8" /> <!-- Original name is "an_suwaru" ("to sit") -->
-        <Animation Name="gAnju1SittingInDisbelieveAnim" Offset="0x7E08" /> <!-- Original name is "an_suzetsubou" ("su" = short for "suwaru", "zetsubou" = "despair; hopelessness​") -->
+        <Animation Name="gAnju1SitInDisbelieveAnim" Offset="0x7E08" /> <!-- Original name is "an_suzetsubou" ("su" = short for "suwaru", "zetsubou" = "despair; hopelessness​") -->
         <Animation Name="gAnju1IdleAnim" Offset="0x8B6C" /> <!-- Original name is "an_wait" -->
 
         <!-- Skeleton's Display lists -->
@@ -55,7 +55,7 @@
         <Texture Name="gAnju1EyeClosedTex" OutName="anju_eye_closed" Format="ci8" Width="32" Height="32" Offset="0xF3A0" TlutOffset="0xDD20" />
         <Texture Name="gAnju1MouthHappyTex" OutName="anju_mouth_happy" Format="ci8" Width="32" Height="16" Offset="0xF7A0" TlutOffset="0xDF20" />
         <Texture Name="gAnju1EyeSadTex" OutName="anju_eye_sad" Format="ci8" Width="32" Height="32" Offset="0xF9A0" TlutOffset="0xDD20" />
-        <Texture Name="gAnju1EyeComfortingTex" OutName="anju_eye_comforting" Format="ci8" Width="32" Height="32" Offset="0xFDA0" TlutOffset="0xDD20" />
+        <Texture Name="gAnju1EyeComfortTex" OutName="anju_eye_comfort" Format="ci8" Width="32" Height="32" Offset="0xFDA0" TlutOffset="0xDD20" />
         <Texture Name="gAnju1MouthOpenTex" OutName="anju_mouth_open" Format="ci8" Width="32" Height="16" Offset="0x101A0" TlutOffset="0xDF20" />
         <Texture Name="gAnju1EyeRelievedClosedTex" OutName="anju_eye_relieved_closed" Format="ci8" Width="32" Height="32" Offset="0x103A0" TlutOffset="0xDD20" />
 
@@ -102,6 +102,6 @@
         <Skeleton Name="gAnju1Skel" Type="Flex" LimbType="Standard" LimbNone="ANJU1_LIMB_NONE" LimbMax="ANJU1_LIMB_MAX" EnumName="Anju1Limb" Offset="0x12618" />
 
         <Animation Name="gAnju1WalkAnim" Offset="0x13048" /> <!-- Original name is "an_walk" -->
-        <Animation Name="gAnju1HoldingHandsAnim" Offset="0x13E1C" /> <!-- Holding hands with Kafei while kneeled --> <!-- Original name is "anj_tetunagu_loop" ("joined hands") -->
+        <Animation Name="gAnju1HoldHandsAnim" Offset="0x13E1C" /> <!-- Holding hands with Kafei while kneeled --> <!-- Original name is "anj_tetunagu_loop" ("joined hands") -->
     </File>
 </Root>

@@ -41,12 +41,12 @@ ActorInit Dm_An_InitVars = {
  */
 typedef enum DmAnAnimation {
     /* -1 */ DMAN_ANIM_NONE = -1,
-    /*  0 */ DMAN_ANIM_SITTING_IN_DISBELIEVE,
+    /*  0 */ DMAN_ANIM_SIT_IN_DISBELIEVE,
     /*  1 */ DMAN_ANIM_SIT,
 
     /*  2 */ DMAN_ANIMOBJ_AN4,
     /*  2 */ DMAN_ANIM_2 = DMAN_ANIMOBJ_AN4,
-    /*  3 */ DMAN_ANIM_HOLDING_HANDS, //! @bug See note at `sAnimationInfo`
+    /*  3 */ DMAN_ANIM_HOLD_HANDS, //! @bug See note at `sAnimationInfo`
     /*  4 */ DMAN_ANIM_4,
     /*  5 */ DMAN_ANIM_5,
     /*  6 */ DMAN_ANIM_6,
@@ -61,13 +61,13 @@ typedef enum DmAnAnimation {
 } DmAnAnimation;
 
 static AnimationInfoS sAnimationInfo[DMAN_ANIM_MAX] = {
-    { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SITTING_IN_DISBELIEVE
+    { &gAnju1SitInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SIT_IN_DISBELIEVE
     { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                 // DMAN_ANIM_SIT
 
     // DMAN_ANIMOBJ_AN4
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_2
     //! @bug Uses symbol from OBJECT_AN1 instead of OBJECT_AN4
-    { &gAnju1HoldingHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_HOLDING_HANDS
+    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_HOLD_HANDS
     { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_4
     { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_5
     { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_6
@@ -126,7 +126,7 @@ typedef enum DmAnEyes {
     /* 1 */ DMAN_EYES_HALF1,
     /* 2 */ DMAN_EYES_CLOSED,
     /* 3 */ DMAN_EYES_HALF2,
-    /* 4 */ DMAN_EYES_COMFORTING,
+    /* 4 */ DMAN_EYES_COMFORT,
     /* 5 */ DMAN_EYES_SAD,
     /* 6 */ DMAN_EYES_RELIEVED_CLOSED,
     /* 7 */ DMAN_EYES_MAX
@@ -228,7 +228,7 @@ void DmAn_Initialize(DmAn* this, PlayState* play) {
                            ANJU1_LIMB_MAX);
 
         this->animIndex = DMAN_ANIM_NONE;
-        DmAn_ChangeAnim(this, play, DMAN_ANIM_SITTING_IN_DISBELIEVE);
+        DmAn_ChangeAnim(this, play, DMAN_ANIM_SIT_IN_DISBELIEVE);
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         Actor_SetScale(&this->actor, 0.01f);
         this->stateFlags |= DMAN_STATE_LOST_ATTENTION;
@@ -247,7 +247,7 @@ void DmAn_Initialize(DmAn* this, PlayState* play) {
 void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play) {
     s32 csAnimIndex[] = {
         /* 0 */ 0, // no cue
-        /* 1 */ DMAN_ANIM_SITTING_IN_DISBELIEVE,
+        /* 1 */ DMAN_ANIM_SIT_IN_DISBELIEVE,
         /* 2 */ DMAN_ANIM_12,
         /* 3 */ DMAN_ANIM_2,
         /* 4 */ DMAN_ANIM_4,
@@ -255,7 +255,7 @@ void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play) {
         /* 6 */ DMAN_ANIM_8,
         /* 7 */ DMAN_ANIM_10,
         /* 8 */ DMAN_ANIM_11,
-        /* 9 */ DMAN_ANIM_HOLDING_HANDS,
+        /* 9 */ DMAN_ANIM_HOLD_HANDS,
     };
     u16 cueId;
     s32 cueChannel;
@@ -418,7 +418,7 @@ void DmAn_Draw(Actor* thisx, PlayState* play) {
         gAnju1EyeHalfTex,           // DMAN_EYES_HALF1
         gAnju1EyeClosedTex,         // DMAN_EYES_CLOSED
         gAnju1EyeHalfTex,           // DMAN_EYES_HALF2
-        gAnju1EyeComfortingTex,     // DMAN_EYES_COMFORTING
+        gAnju1EyeComfortTex,     // DMAN_EYES_COMFORT
         gAnju1EyeSadTex,            // DMAN_EYES_SAD
         gAnju1EyeRelievedClosedTex, // DMAN_EYES_RELIEVED_CLOSED
     };
