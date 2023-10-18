@@ -34,7 +34,10 @@ ActorInit Dm_Gm_InitVars = {
 };
 
 /**
- * Anju stores her animations across different objects and the ones used by this actor are put together right next to each other in the sAnimationInfo array. Due to this, animation functions check which object to load by comparing index ranges. To make this a bit easier to read, this enum includes `DMGM_ANIMOBJ_*` values that mark when a range of animations of a certain object start
+ * Anju stores her animations across different objects and the ones used by this actor are put together right next to
+ * each other in the sAnimationInfo array. Due to this, animation functions check which object to load by comparing
+ * index ranges. To make this a bit easier to read, this enum includes `DMGM_ANIMOBJ_*` values that mark when a range of
+ * animations of a certain object start
  */
 typedef enum DmGmAnimation {
     /* -1 */ DMGM_ANIM_NONE = -1,
@@ -58,8 +61,8 @@ typedef enum DmGmAnimation {
 } DmGmAnimation;
 
 static AnimationInfoS sAnimationInfo[DMGM_ANIM_MAX] = {
-    { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_SITTING_IN_DISBELIEVE
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_SIT
+    { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_SITTING_IN_DISBELIEVE
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                 // DMGM_ANIM_SIT
 
     // DMGM_ANIMOBJ_AN4
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_2
@@ -392,8 +395,8 @@ void DmGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         Matrix_RotateZS(this->headComputedRot.z, MTXMODE_APPLY);
         Matrix_Push();
     } else if (limbIndex == ANJU1_LIMB_TORSO) {
-        SubS_UpdateLimb(this->torsoRotZ + 0x4000, this->torsoRotY + this->actor.shape.rot.y + 0x4000, &this->torsoComputedPos,
-                        &this->torsoComputedRot, stepRot, overrideRot);
+        SubS_UpdateLimb(this->torsoRotZ + 0x4000, this->torsoRotY + this->actor.shape.rot.y + 0x4000,
+                        &this->torsoComputedPos, &this->torsoComputedRot, stepRot, overrideRot);
         Matrix_Pop();
         Matrix_Translate(this->torsoComputedPos.x, this->torsoComputedPos.y, this->torsoComputedPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -407,16 +410,16 @@ void DmGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void DmGm_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sMouthTextures[DMGM_MOUTH_MAX] = {
         gAnju1MouthClosedTex, // DMGM_MOUTH_CLOSED
-        gAnju1MouthHappyTex, // DMGM_MOUTH_HAPPY
-        gAnju1MouthOpenTex, // DMGM_MOUTH_OPEN
+        gAnju1MouthHappyTex,  // DMGM_MOUTH_HAPPY
+        gAnju1MouthOpenTex,   // DMGM_MOUTH_OPEN
     };
     static TexturePtr sEyeTextures[DMGM_EYES_MAX] = {
-        gAnju1EyeOpenTex, // DMGM_EYES_OPEN
-        gAnju1EyeHalfTex, // DMGM_EYES_HALF1
-        gAnju1EyeClosedTex, // DMGM_EYES_CLOSED
-        gAnju1EyeHalfTex, // DMGM_EYES_HALF2
-        gAnju1EyeComfortingTex, // DMGM_EYES_COMFORTING
-        gAnju1EyeSadTex, // DMGM_EYES_SAD
+        gAnju1EyeOpenTex,           // DMGM_EYES_OPEN
+        gAnju1EyeHalfTex,           // DMGM_EYES_HALF1
+        gAnju1EyeClosedTex,         // DMGM_EYES_CLOSED
+        gAnju1EyeHalfTex,           // DMGM_EYES_HALF2
+        gAnju1EyeComfortingTex,     // DMGM_EYES_COMFORTING
+        gAnju1EyeSadTex,            // DMGM_EYES_SAD
         gAnju1EyeRelievedClosedTex, // DMGM_EYES_RELIEVED_CLOSED
     };
     DmGm* this = THIS;

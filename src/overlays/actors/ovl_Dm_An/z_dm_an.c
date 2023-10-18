@@ -34,7 +34,10 @@ ActorInit Dm_An_InitVars = {
 };
 
 /**
- * Anju stores her animations across different objects and the ones used by this actor are put together right next to each other in the sAnimationInfo array. Due to this, animation functions check which object to load by comparing index ranges. To make this a bit easier to read, this enum includes `DMAN_ANIMOBJ_*` values that mark when a range of animations of a certain object start
+ * Anju stores her animations across different objects and the ones used by this actor are put together right next to
+ * each other in the sAnimationInfo array. Due to this, animation functions check which object to load by comparing
+ * index ranges. To make this a bit easier to read, this enum includes `DMAN_ANIMOBJ_*` values that mark when a range of
+ * animations of a certain object start
  */
 typedef enum DmAnAnimation {
     /* -1 */ DMAN_ANIM_NONE = -1,
@@ -59,7 +62,7 @@ typedef enum DmAnAnimation {
 
 static AnimationInfoS sAnimationInfo[DMAN_ANIM_MAX] = {
     { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SITTING_IN_DISBELIEVE
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SIT
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                 // DMAN_ANIM_SIT
 
     // DMAN_ANIMOBJ_AN4
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_2
@@ -392,8 +395,8 @@ void DmAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         Matrix_RotateZS(this->headComputedRot.z, MTXMODE_APPLY);
         Matrix_Push();
     } else if (limbIndex == ANJU1_LIMB_TORSO) {
-        SubS_UpdateLimb(this->torsoRotZ + 0x4000, this->torsoRotY + this->actor.shape.rot.y + 0x4000, &this->torsoComputedPos,
-                        &this->torsoComputedRot, stepRot, overrideRot);
+        SubS_UpdateLimb(this->torsoRotZ + 0x4000, this->torsoRotY + this->actor.shape.rot.y + 0x4000,
+                        &this->torsoComputedPos, &this->torsoComputedRot, stepRot, overrideRot);
         Matrix_Pop();
         Matrix_Translate(this->torsoComputedPos.x, this->torsoComputedPos.y, this->torsoComputedPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -407,16 +410,16 @@ void DmAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void DmAn_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sMouthTextures[DMAN_MOUTH_MAX] = {
         gAnju1MouthClosedTex, // DMAN_MOUTH_CLOSED
-        gAnju1MouthHappyTex, // DMAN_MOUTH_HAPPY
-        gAnju1MouthOpenTex, // DMAN_MOUTH_OPEN
+        gAnju1MouthHappyTex,  // DMAN_MOUTH_HAPPY
+        gAnju1MouthOpenTex,   // DMAN_MOUTH_OPEN
     };
     static TexturePtr sEyeTextures[DMAN_EYES_MAX] = {
-        gAnju1EyeOpenTex, // DMAN_EYES_OPEN
-        gAnju1EyeHalfTex, // DMAN_EYES_HALF1
-        gAnju1EyeClosedTex, // DMAN_EYES_CLOSED
-        gAnju1EyeHalfTex, // DMAN_EYES_HALF2
-        gAnju1EyeComfortingTex, // DMAN_EYES_COMFORTING
-        gAnju1EyeSadTex, // DMAN_EYES_SAD
+        gAnju1EyeOpenTex,           // DMAN_EYES_OPEN
+        gAnju1EyeHalfTex,           // DMAN_EYES_HALF1
+        gAnju1EyeClosedTex,         // DMAN_EYES_CLOSED
+        gAnju1EyeHalfTex,           // DMAN_EYES_HALF2
+        gAnju1EyeComfortingTex,     // DMAN_EYES_COMFORTING
+        gAnju1EyeSadTex,            // DMAN_EYES_SAD
         gAnju1EyeRelievedClosedTex, // DMAN_EYES_RELIEVED_CLOSED
     };
     DmAn* this = THIS;
@@ -429,7 +432,8 @@ void DmAn_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sMouthTextures[DMAN_MOUTH_CLOSED]));
 
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                   this->skelAnime.dListCount, NULL, DmAn_PostLimbDraw, DmAn_TransformLimbDraw, &this->actor);
+                                   this->skelAnime.dListCount, NULL, DmAn_PostLimbDraw, DmAn_TransformLimbDraw,
+                                   &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
