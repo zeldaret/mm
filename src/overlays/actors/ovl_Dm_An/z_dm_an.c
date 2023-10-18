@@ -62,12 +62,12 @@ typedef enum DmAnAnimation {
 
 static AnimationInfoS sAnimationInfo[DMAN_ANIM_MAX] = {
     { &gAnju1SitInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SIT_IN_DISBELIEVE
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                 // DMAN_ANIM_SIT
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // DMAN_ANIM_SIT
 
     // DMAN_ANIMOBJ_AN4
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_2
     //! @bug Uses symbol from OBJECT_AN1 instead of OBJECT_AN4
-    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_HOLD_HANDS
+    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },    // DMAN_ANIM_HOLD_HANDS
     { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_4
     { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_5
     { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_6
@@ -418,7 +418,7 @@ void DmAn_Draw(Actor* thisx, PlayState* play) {
         gAnju1EyeHalfTex,           // DMAN_EYES_HALF1
         gAnju1EyeClosedTex,         // DMAN_EYES_CLOSED
         gAnju1EyeHalfTex,           // DMAN_EYES_HALF2
-        gAnju1EyeComfortTex,     // DMAN_EYES_COMFORT
+        gAnju1EyeComfortTex,        // DMAN_EYES_COMFORT
         gAnju1EyeSadTex,            // DMAN_EYES_SAD
         gAnju1EyeRelievedClosedTex, // DMAN_EYES_RELIEVED_CLOSED
     };

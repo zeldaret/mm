@@ -62,22 +62,22 @@ typedef enum DmGmAnimation {
 
 static AnimationInfoS sAnimationInfo[DMGM_ANIM_MAX] = {
     { &gAnju1SitInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_SIT_IN_DISBELIEVE
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                 // DMGM_ANIM_SIT
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // DMGM_ANIM_SIT
 
     // DMGM_ANIMOBJ_AN4
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_2
     //! @bug Uses symbol from OBJECT_AN1 instead of OBJECT_AN4
-    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_HOLD_HANDS
-    { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_4
-    { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_5
-    { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_6
-    { &object_an4_Anim_002550, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_7
-    { &object_an4_Anim_00353C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_8
-    { &object_an4_Anim_004498, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_9
-    { &object_an4_Anim_0060B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_10
-    { &object_an4_Anim_00041C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_11
-    { &object_an4_Anim_004A78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_12
-    { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_13
+    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },   // DMGM_ANIM_HOLD_HANDS
+    { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_4
+    { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_5
+    { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_6
+    { &object_an4_Anim_002550, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_7
+    { &object_an4_Anim_00353C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_8
+    { &object_an4_Anim_004498, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_9
+    { &object_an4_Anim_0060B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_10
+    { &object_an4_Anim_00041C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_11
+    { &object_an4_Anim_004A78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_12
+    { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_13
 };
 
 s32 DmGm_UpdateSkelAnime(DmGm* this, PlayState* play) {
@@ -418,7 +418,7 @@ void DmGm_Draw(Actor* thisx, PlayState* play) {
         gAnju1EyeHalfTex,           // DMGM_EYES_HALF1
         gAnju1EyeClosedTex,         // DMGM_EYES_CLOSED
         gAnju1EyeHalfTex,           // DMGM_EYES_HALF2
-        gAnju1EyeComfortTex,     // DMGM_EYES_COMFORT
+        gAnju1EyeComfortTex,        // DMGM_EYES_COMFORT
         gAnju1EyeSadTex,            // DMGM_EYES_SAD
         gAnju1EyeRelievedClosedTex, // DMGM_EYES_RELIEVED_CLOSED
     };
