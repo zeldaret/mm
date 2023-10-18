@@ -18,7 +18,7 @@
 #define THIS ((EnAn*)thisx)
 
 // Change this to non-zero to enable debug printing
-#define DEBUG_PRINT 1
+#define DEBUG_PRINT 0
 
 void EnAn_Init(Actor* thisx, PlayState* play);
 void EnAn_Destroy(Actor* thisx, PlayState* play);
