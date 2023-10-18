@@ -16,7 +16,7 @@ void DmAn_Init(Actor* thisx, PlayState* play);
 void DmAn_Destroy(Actor* thisx, PlayState* play);
 void DmAn_Update(Actor* thisx, PlayState* play);
 
-void func_80C1C958(DmAn* this, PlayState* play);
+void DmAn_Initialize(DmAn* this, PlayState* play);
 void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play);
 void DmAn_DoNothing(DmAn* this, PlayState* play);
 void DmAn_Draw(Actor* thisx, PlayState* play);
@@ -138,40 +138,41 @@ void DmAn_Blink(DmAn* this) {
     }
 }
 
-s32 func_80C1C62C(DmAn* this, PlayState* play) {
+s32 DmAn_UpdateHeadRot(DmAn* this, PlayState* play) {
     s32 pad;
-    Vec3f sp40;
-    Vec3f sp34;
-    s16 sp32;
+    Vec3f lookAtActorPos;
+    Vec3f pos;
+    s16 yaw;
 
-    Math_Vec3f_Copy(&sp40, &this->unk_2B4->world.pos);
-    Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-    sp32 = Math_Vec3f_Yaw(&sp34, &sp40);
+    Math_Vec3f_Copy(&lookAtActorPos, &this->lookAtActor->world.pos);
+    Math_Vec3f_Copy(&pos, &this->actor.world.pos);
+    yaw = Math_Vec3f_Yaw(&pos, &lookAtActorPos);
 
-    Math_ApproachS(&this->headRotY, (sp32 - this->torsoRotY) - this->actor.shape.rot.y, 4, 0x2AA8);
+    Math_ApproachS(&this->headRotY, (yaw - this->torsoRotY) - this->actor.shape.rot.y, 4, 0x2AA8);
     this->headRotY = CLAMP(this->headRotY, -0x1FFE, 0x1FFE);
 
-    Math_ApproachS(&this->torsoRotY, (sp32 - this->headRotY) - this->actor.shape.rot.y, 4, 0x2AA8);
+    Math_ApproachS(&this->torsoRotY, (yaw - this->headRotY) - this->actor.shape.rot.y, 4, 0x2AA8);
     this->torsoRotY = CLAMP(this->torsoRotY, -0x1C70, 0x1C70);
 
-    if (this->unk_2B4->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_2B4)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
+    if (this->lookAtActor->id == ACTOR_PLAYER) {
+        lookAtActorPos.y = ((Player*)this->lookAtActor)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
-        Math_Vec3f_Copy(&sp40, &this->unk_2B4->focus.pos);
+        Math_Vec3f_Copy(&lookAtActorPos, &this->lookAtActor->focus.pos);
     }
 
-    Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
-    Math_ApproachS(&this->headRotZ, Math_Vec3f_Pitch(&sp34, &sp40) - this->torsoRotZ, 4, 0x2AA8);
+    Math_Vec3f_Copy(&pos, &this->actor.focus.pos);
+    Math_ApproachS(&this->headRotZ, Math_Vec3f_Pitch(&pos, &lookAtActorPos) - this->torsoRotZ, 4, 0x2AA8);
     this->headRotZ = CLAMP(this->headRotZ, -0x1C70, 0x1C70);
 
-    Math_ApproachS(&this->torsoRotZ, Math_Vec3f_Pitch(&sp34, &sp40) - this->headRotZ, 4, 0x2AA8);
+    Math_ApproachS(&this->torsoRotZ, Math_Vec3f_Pitch(&pos, &lookAtActorPos) - this->headRotZ, 4, 0x2AA8);
     this->torsoRotZ = CLAMP(this->torsoRotZ, -0x1C70, 0x1C70);
+
     return true;
 }
 
 s32 DmAn_UpdateAttention(DmAn* this, PlayState* play) {
-    if (this->unk_2B4 != NULL) {
-        func_80C1C62C(this, play);
+    if (this->lookAtActor != NULL) {
+        DmAn_UpdateHeadRot(this, play);
         this->stateFlags &= ~DMAN_STATE_LOST_ATTENTION;
         this->stateFlags |= DMAN_STATE_FACE_TARGET;
     } else if (this->stateFlags & DMAN_STATE_FACE_TARGET) {
@@ -187,7 +188,7 @@ s32 DmAn_UpdateAttention(DmAn* this, PlayState* play) {
     return true;
 }
 
-Actor* func_80C1C8E8(PlayState* play) {
+Actor* DmAn_FindAnjusMotherActor(PlayState* play) {
     Actor* tempActor;
     Actor* foundActor = NULL;
 
@@ -208,7 +209,7 @@ Actor* func_80C1C8E8(PlayState* play) {
     return foundActor;
 }
 
-void func_80C1C958(DmAn* this, PlayState* play) {
+void DmAn_Initialize(DmAn* this, PlayState* play) {
     if ((this->an4ObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->an4ObjectSlot, play) &&
         (this->msmoObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->msmoObjectSlot, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
@@ -223,7 +224,7 @@ void func_80C1C958(DmAn* this, PlayState* play) {
         this->actor.draw = DmAn_Draw;
 
         if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
-            this->unk_2B4 = func_80C1C8E8(play);
+            this->lookAtActor = DmAn_FindAnjusMotherActor(play);
             DmAn_ChangeAnim(this, play, DMAN_ANIM_SIT);
             this->actionFunc = DmAn_DoNothing;
         } else {
@@ -301,7 +302,7 @@ void DmAn_Init(Actor* thisx, PlayState* play) {
 
     this->an4ObjectSlot = SubS_GetObjectSlot(OBJECT_AN4, play);
     this->msmoObjectSlot = SubS_GetObjectSlot(OBJECT_MSMO, play);
-    this->actionFunc = func_80C1C958;
+    this->actionFunc = DmAn_Initialize;
 }
 
 void DmAn_Destroy(Actor* thisx, PlayState* play) {

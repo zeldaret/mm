@@ -25,7 +25,7 @@ typedef struct DmAn {
     /* 0x2AD */ s8 msmoObjectSlot;
     /* 0x2AE */ u16 stateFlags;
     /* 0x2B0 */ u8 cueId;
-    /* 0x2B4 */ Actor* unk_2B4; // lookAtActor
+    /* 0x2B4 */ Actor* lookAtActor;
     /* 0x2B8 */ s16 eyeTexIndex;
     /* 0x2BA */ s16 eyeTimer;
     /* 0x2BC */ s16 loseAttentionTimer;
