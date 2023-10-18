@@ -19,7 +19,7 @@ void DmAn_Update(Actor* thisx, PlayState* play);
 void func_80C1C958(DmAn* this, PlayState* play);
 void DmAn_HandleCutscene(DmAn* this, PlayState* play);
 void DmAn_DoNothing(DmAn* this, PlayState* play);
-void func_80C1D0B0(Actor* thisx, PlayState* play);
+void DmAn_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Dm_An_InitVars = {
     ACTOR_DM_AN,
@@ -34,29 +34,29 @@ ActorInit Dm_An_InitVars = {
 };
 
 typedef enum {
-    /*  -1 */ DMAN_ANIM_NONE = -1,
-    /* 0x0 */ DMAN_ANIM_0,
-    /* 0x1 */ DMAN_ANIM_1,
-    /* 0x2 */ DMAN_ANIM_2,
-    /* 0x3 */ DMAN_ANIM_3,
-    /* 0x4 */ DMAN_ANIM_4,
-    /* 0x5 */ DMAN_ANIM_5,
-    /* 0x6 */ DMAN_ANIM_6,
-    /* 0x7 */ DMAN_ANIM_7,
-    /* 0x8 */ DMAN_ANIM_8,
-    /* 0x9 */ DMAN_ANIM_9,
-    /* 0xA */ DMAN_ANIM_10,
-    /* 0xB */ DMAN_ANIM_11,
-    /* 0xC */ DMAN_ANIM_12,
-    /* 0xD */ DMAN_ANIM_13,
-    /* 0xE */ DMAN_ANIM_MAX
+    /* -1 */ DMAN_ANIM_NONE = -1,
+    /*  0 */ DMAN_ANIM_SITTING_IN_DISBELIEVE,
+    /*  1 */ DMAN_ANIM_SIT,
+    /*  2 */ DMAN_ANIM_2,
+    /*  3 */ DMAN_ANIM_HOLDING_HANDS,
+    /*  4 */ DMAN_ANIM_4,
+    /*  5 */ DMAN_ANIM_5,
+    /*  6 */ DMAN_ANIM_6,
+    /*  7 */ DMAN_ANIM_7,
+    /*  8 */ DMAN_ANIM_8,
+    /*  9 */ DMAN_ANIM_9,
+    /* 10 */ DMAN_ANIM_10,
+    /* 11 */ DMAN_ANIM_11,
+    /* 12 */ DMAN_ANIM_12,
+    /* 13 */ DMAN_ANIM_13,
+    /* 14 */ DMAN_ANIM_MAX
 } DmAnAnimation;
 
 static AnimationInfoS sAnimationInfo[DMAN_ANIM_MAX] = {
-    { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_0
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_1
+    { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SITTING_IN_DISBELIEVE
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SIT
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_2
-    { &gAnju1HoldingHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_3
+    { &gAnju1HoldingHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_HOLDING_HANDS
     { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_4
     { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_5
     { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMAN_ANIM_6
@@ -74,7 +74,7 @@ s32 DmAn_UpdateSkelAnime(DmAn* this, PlayState* play) {
     s8 objectSlot2;
     s32 isAnimFinished = false;
 
-    if (this->animIndex <= DMAN_ANIM_1) {
+    if (this->animIndex <= DMAN_ANIM_SIT) {
         objectSlot2 = this->actor.objectSlot;
     } else {
         objectSlot2 = this->an4ObjectSlot;
@@ -94,7 +94,7 @@ s32 DmAn_ChangeAnim(DmAn* this, PlayState* play, s32 animIndex) {
     s8 objectSlot2;
     s32 didAnimChange = false;
 
-    if (animIndex <= DMAN_ANIM_1) {
+    if (animIndex <= DMAN_ANIM_SIT) {
         objectSlot2 = this->actor.objectSlot;
     } else {
         objectSlot2 = this->an4ObjectSlot;
@@ -110,12 +110,30 @@ s32 DmAn_ChangeAnim(DmAn* this, PlayState* play, s32 animIndex) {
     return didAnimChange;
 }
 
-void func_80C1C5B4(DmAn* this) {
-    if (DECR(this->unk_2BA) == 0) {
-        this->unk_2B8++;
-        if (this->unk_2B8 >= 4) {
-            this->unk_2BA = Rand_S16Offset(30, 30);
-            this->unk_2B8 = 0;
+typedef enum DmAnEyes {
+    /* 0 */ DMAN_EYES_OPEN,
+    /* 1 */ DMAN_EYES_HALF1,
+    /* 2 */ DMAN_EYES_CLOSED,
+    /* 3 */ DMAN_EYES_HALF2,
+    /* 4 */ DMAN_EYES_COMFORTING,
+    /* 5 */ DMAN_EYES_SAD,
+    /* 6 */ DMAN_EYES_RELIEVED_CLOSED,
+    /* 7 */ DMAN_EYES_MAX
+} DmAnEyes;
+
+typedef enum DmAnMouth {
+    /* 0 */ DMAN_MOUTH_CLOSED,
+    /* 1 */ DMAN_MOUTH_HAPPY,
+    /* 2 */ DMAN_MOUTH_OPEN,
+    /* 3 */ DMAN_MOUTH_MAX
+} DmAnMouth;
+
+void DmAn_Blink(DmAn* this) {
+    if (DECR(this->eyeTimer) == 0) {
+        this->eyeTexIndex++;
+        if (this->eyeTexIndex > DMAN_EYES_HALF2) {
+            this->eyeTimer = Rand_S16Offset(30, 30);
+            this->eyeTexIndex = 0;
         }
     }
 }
@@ -198,15 +216,15 @@ void func_80C1C958(DmAn* this, PlayState* play) {
                            ANJU1_LIMB_MAX);
 
         this->animIndex = DMAN_ANIM_NONE;
-        DmAn_ChangeAnim(this, play, DMAN_ANIM_0);
+        DmAn_ChangeAnim(this, play, DMAN_ANIM_SITTING_IN_DISBELIEVE);
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         Actor_SetScale(&this->actor, 0.01f);
         this->unk_2AE |= 1;
-        this->actor.draw = func_80C1D0B0;
+        this->actor.draw = DmAn_Draw;
 
         if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
             this->unk_2B4 = func_80C1C8E8(play);
-            DmAn_ChangeAnim(this, play, DMAN_ANIM_1);
+            DmAn_ChangeAnim(this, play, DMAN_ANIM_SIT);
             this->actionFunc = DmAn_DoNothing;
         } else {
             this->actionFunc = DmAn_HandleCutscene;
@@ -216,8 +234,16 @@ void func_80C1C958(DmAn* this, PlayState* play) {
 
 void DmAn_HandleCutscene(DmAn* this, PlayState* play) {
     s32 csAnimIndex[] = {
-        DMAN_ANIM_0, DMAN_ANIM_0, DMAN_ANIM_12, DMAN_ANIM_2,  DMAN_ANIM_4,
-        DMAN_ANIM_6, DMAN_ANIM_8, DMAN_ANIM_10, DMAN_ANIM_11, DMAN_ANIM_3,
+        /* 0 */ 0, // no cue
+        /* 1 */ DMAN_ANIM_SITTING_IN_DISBELIEVE,
+        /* 2 */ DMAN_ANIM_12,
+        /* 3 */ DMAN_ANIM_2,
+        /* 4 */ DMAN_ANIM_4,
+        /* 5 */ DMAN_ANIM_6,
+        /* 6 */ DMAN_ANIM_8,
+        /* 7 */ DMAN_ANIM_10,
+        /* 8 */ DMAN_ANIM_11,
+        /* 9 */ DMAN_ANIM_HOLDING_HANDS,
     };
     u16 cueId;
     s32 cueChannel;
@@ -290,7 +316,7 @@ void DmAn_Update(Actor* thisx, PlayState* play) {
 
     if (this->actor.draw != NULL) {
         DmAn_UpdateSkelAnime(this, play);
-        func_80C1C5B4(this);
+        DmAn_Blink(this);
     }
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
@@ -299,7 +325,7 @@ Vec3f D_80C1D2C8 = { 450.0f, 700.0f, -760.0f };
 Vec3s D_80C1D2D4 = { 0x238C, 0, -0x3FFC };
 Vec3f D_80C1D2DC = { 1000.0f, 0.0f, 0.0f };
 
-void func_80C1CD80(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void DmAn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad[2];
     DmAn* this = THIS;
     s8 objectSlot = this->actor.objectSlot;
@@ -327,7 +353,7 @@ void func_80C1CD80(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     }
 }
 
-void func_80C1CEFC(PlayState* play, s32 limbIndex, Actor* thisx) {
+void DmAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     DmAn* this = THIS;
     s16 stepRot;
     s16 overrideRot;
@@ -368,29 +394,32 @@ void func_80C1CEFC(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 }
 
-TexturePtr D_80C1D2E8[] = {
-    gAnju1MouthClosedTex,
-    gAnju1MouthHappyTex,
-    gAnju1MouthOpenTex,
-};
-
-TexturePtr D_80C1D2F4[] = {
-    gAnju1EyeOpenTex, gAnju1EyeHalfTex, gAnju1EyeClosedTex, gAnju1EyeHalfTex,
-    gAnju1EyeComfortingTex, gAnju1EyeSadTex, gAnju1EyeRelievedClosedTex,
-};
-
-void func_80C1D0B0(Actor* thisx, PlayState* play) {
+void DmAn_Draw(Actor* thisx, PlayState* play) {
+    static TexturePtr sMouthTextures[DMAN_MOUTH_MAX] = {
+        gAnju1MouthClosedTex, // DMAN_MOUTH_CLOSED
+        gAnju1MouthHappyTex, // DMAN_MOUTH_HAPPY
+        gAnju1MouthOpenTex, // DMAN_MOUTH_OPEN
+    };
+    static TexturePtr sEyeTextures[DMAN_EYES_MAX] = {
+        gAnju1EyeOpenTex, // DMAN_EYES_OPEN
+        gAnju1EyeHalfTex, // DMAN_EYES_HALF1
+        gAnju1EyeClosedTex, // DMAN_EYES_CLOSED
+        gAnju1EyeHalfTex, // DMAN_EYES_HALF2
+        gAnju1EyeComfortingTex, // DMAN_EYES_COMFORTING
+        gAnju1EyeSadTex, // DMAN_EYES_SAD
+        gAnju1EyeRelievedClosedTex, // DMAN_EYES_RELIEVED_CLOSED
+    };
     DmAn* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C1D2F4[this->unk_2B8]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C1D2E8[0]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sMouthTextures[0]));
 
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                   this->skelAnime.dListCount, NULL, func_80C1CD80, func_80C1CEFC, &this->actor);
+                                   this->skelAnime.dListCount, NULL, DmAn_PostLimbDraw, DmAn_TransformLimbDraw, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
