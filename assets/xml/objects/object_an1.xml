@@ -11,7 +11,7 @@
         <Animation Name="gAnju1BowAnim" Offset="0x544C" /> <!-- Original name is "an_ojigit" ("bow; bowing") -->
         <Animation Name="gAnju1CookAnim" Offset="0x65C8" /> <!-- Original name is "an_ryouri" ("cooking") -->
         <Animation Name="gAnju1SitAnim" Offset="0x71E8" /> <!-- Original name is "an_suwaru" ("to sit") -->
-        <Animation Name="gAnju1SitInDisbelieveAnim" Offset="0x7E08" /> <!-- Original name is "an_suzetsubou" ("su" = short for "suwaru", "zetsubou" = "despair; hopelessness​") -->
+        <Animation Name="gAnju1SittingInDisbeliefAnim" Offset="0x7E08" /> <!-- Original name is "an_suzetsubou" ("su" = short for "suwaru", "zetsubou" = "despair; hopelessness​") -->
         <Animation Name="gAnju1IdleAnim" Offset="0x8B6C" /> <!-- Original name is "an_wait" -->
 
         <!-- Skeleton's Display lists -->

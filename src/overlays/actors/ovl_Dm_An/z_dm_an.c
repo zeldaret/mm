@@ -41,7 +41,7 @@ ActorInit Dm_An_InitVars = {
  */
 typedef enum DmAnAnimation {
     /* -1 */ DMAN_ANIM_NONE = -1,
-    /*  0 */ DMAN_ANIM_SIT_IN_DISBELIEVE,
+    /*  0 */ DMAN_ANIM_SITTING_IN_DISBELIEF,
     /*  1 */ DMAN_ANIM_SIT,
 
     /*  2 */ DMAN_ANIMOBJ_AN4,
@@ -61,8 +61,8 @@ typedef enum DmAnAnimation {
 } DmAnAnimation;
 
 static AnimationInfoS sAnimationInfo[DMAN_ANIM_MAX] = {
-    { &gAnju1SitInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SIT_IN_DISBELIEVE
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // DMAN_ANIM_SIT
+    { &gAnju1SittingInDisbeliefAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SITTING_IN_DISBELIEF
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // DMAN_ANIM_SIT
 
     // DMAN_ANIMOBJ_AN4
     { &gAnju4MaskStandLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_MASK_STAND_LOOP
@@ -228,7 +228,7 @@ void DmAn_Initialize(DmAn* this, PlayState* play) {
                            ANJU1_LIMB_MAX);
 
         this->animIndex = DMAN_ANIM_NONE;
-        DmAn_ChangeAnim(this, play, DMAN_ANIM_SIT_IN_DISBELIEVE);
+        DmAn_ChangeAnim(this, play, DMAN_ANIM_SITTING_IN_DISBELIEF);
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         Actor_SetScale(&this->actor, 0.01f);
         this->stateFlags |= DMAN_STATE_LOST_ATTENTION;
@@ -247,7 +247,7 @@ void DmAn_Initialize(DmAn* this, PlayState* play) {
 void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play) {
     s32 csAnimIndex[] = {
         /* 0 */ 0, // no cue
-        /* 1 */ DMAN_ANIM_SIT_IN_DISBELIEVE,
+        /* 1 */ DMAN_ANIM_SITTING_IN_DISBELIEF,
         /* 2 */ DMAN_ANIM_LOOK_UP,
         /* 3 */ DMAN_ANIM_MASK_STAND_LOOP,
         /* 4 */ DMAN_ANIM_MASK_KNEEL,
