@@ -2035,15 +2035,13 @@ void func_80B0A87C(BossHakugin* this) {
     this->actionFunc = func_80B0A8C4;
 }
 
-#ifdef NON_MATCHING
 typedef struct {
     s32 unk_00;
     u32 unk_04;
 } BossHakuginStruct_B0A8C4;
+
 static s32 D_80B0EB24[5] = { 0, 15, 26, 33, 36 };
-// static u32 D_80B0EB38[6][2] = {
-//     { 0, 0x28000 }, { 4, 0x1A0 }, { 7, 0x3400 }, { 0xE, 0xD0000000 }, { 0xA, 0x01A00000 }, { 1, 0x08104002 },
-// };
+
 static BossHakuginStruct_B0A8C4 D_80B0EB38[] = {
     { 0, 0x28000 }, { 4, 0x1A0 }, { 7, 0x3400 }, { 0xE, 0xD0000000 }, { 0xA, 0x01A00000 }, { 1, 0x08104002 },
 };
@@ -2058,16 +2056,15 @@ static BossHakuginStruct_B0A8C4 D_80B0EB38[] = {
 //     GOHT_LIMB_FLAG(GOHT_LIMB_PELVIS) | GOHT_LIMB_FLAG(GOHT_LIMB_THORAX) | GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_THIGH)
 //     | GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_THIGH)},
 // };
-// non-matchings seem to be caused by accesses to D_80B0EB38
 void func_80B0A8C4(BossHakugin* this, PlayState* play) {
-    EnBom* bomb = GOHT_LIMB_BACK_LEFT_HOOF;
+    EnBom* bomb;
     Vec3s* test;
     Camera* camera;
     Vec3f eyeTarget;
     s16 temp_s0;
     s32 sp60;
     s32 i;
-    s32 pad;
+    BossHakuginStruct_B0A8C4* unkStruct;
 
     camera = Play_GetCamera(play, this->unk_01AC);
     SkelAnime_Update(&this->skelAnime);
@@ -2089,12 +2086,13 @@ void func_80B0A8C4(BossHakugin* this, PlayState* play) {
         this->actor.draw = func_80B0E5A4;
         this->actor.update = func_80B0E548;
     } else if (((this->unk_019C % 6) == 0) && (sp60 < 6)) {
-        test = &this->unk_0484.elements[D_80B0EB38[sp60].unk_00].dim.worldSphere.center;
+        unkStruct = &D_80B0EB38[sp60];
+        test = &this->unk_0484.elements[unkStruct->unk_00].dim.worldSphere.center;
         bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, test->x, test->y, test->z, 1, 0, 0, 0);
         if (bomb != NULL) {
             bomb->timer = 0;
         }
-        this->unk_01B0 &= ~D_80B0EB38[sp60].unk_04;
+        this->unk_01B0 &= ~unkStruct->unk_04;
         if (sp60 == 5) {
             SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CLEAR_BOSS | SEQ_FLAG_ASYNC);
         }
@@ -2114,19 +2112,12 @@ void func_80B0A8C4(BossHakugin* this, PlayState* play) {
                 Audio_PlaySfx_AtPos(&this->unk_0458, NA_SE_EN_LAST1_DEMO_BREAK);
             }
         }
-        if (1) {} // TODO: probably fake
+        //! FAKE:
+        if (1) {}
     }
 
     this->unk_019C++;
 }
-#else
-s32 D_80B0EB24[5] = { 0, 0xF, 0x1A, 0x21, 0x24 };
-s32 D_80B0EB38[6][2] = {
-    { 0, 0x28000 }, { 4, 0x1A0 }, { 7, 0x3400 }, { 0xE, 0xD0000000 }, { 0xA, 0x01A00000 }, { 1, 0x08104002 },
-};
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0A8C4.s")
-#endif
 
 void func_80B0AC30(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
