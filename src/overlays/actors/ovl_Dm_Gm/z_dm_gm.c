@@ -45,18 +45,18 @@ typedef enum DmGmAnimation {
     /*  1 */ DMGM_ANIM_SIT,
 
     /*  2 */ DMGM_ANIMOBJ_AN4,
-    /*  2 */ DMGM_ANIM_2 = DMGM_ANIMOBJ_AN4,
+    /*  2 */ DMGM_ANIM_MASK_STAND_LOOP = DMGM_ANIMOBJ_AN4,
     /*  3 */ DMGM_ANIM_HOLD_HANDS, //! @bug See note at `sAnimationInfo`
-    /*  4 */ DMGM_ANIM_4,
-    /*  5 */ DMGM_ANIM_5,
-    /*  6 */ DMGM_ANIM_6,
-    /*  7 */ DMGM_ANIM_7,
-    /*  8 */ DMGM_ANIM_8,
-    /*  9 */ DMGM_ANIM_9,
-    /* 10 */ DMGM_ANIM_10,
-    /* 11 */ DMGM_ANIM_11,
-    /* 12 */ DMGM_ANIM_12,
-    /* 13 */ DMGM_ANIM_13,
+    /*  4 */ DMGM_ANIM_MASK_KNEEL,
+    /*  5 */ DMGM_ANIM_MASK_KNEEL_LOOP,
+    /*  6 */ DMGM_ANIM_HUG,
+    /*  7 */ DMGM_ANIM_HUG_LOOP,
+    /*  8 */ DMGM_ANIM_HUG_SEPARATE,
+    /*  9 */ DMGM_ANIM_HUG_SEPARATE_LOOP,
+    /* 10 */ DMGM_ANIM_COMBINE_MASKS_1,
+    /* 11 */ DMGM_ANIM_COMBINE_MASKS_2,
+    /* 12 */ DMGM_ANIM_LOOK_UP,
+    /* 13 */ DMGM_ANIM_LOOK_UP_LOOP,
     /* 14 */ DMGM_ANIM_MAX
 } DmGmAnimation;
 
@@ -65,19 +65,19 @@ static AnimationInfoS sAnimationInfo[DMGM_ANIM_MAX] = {
     { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // DMGM_ANIM_SIT
 
     // DMGM_ANIMOBJ_AN4
-    { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_2
+    { &gAnju4MaskStandLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_MASK_STAND_LOOP
     //! @bug Uses symbol from OBJECT_AN1 instead of OBJECT_AN4
-    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },   // DMGM_ANIM_HOLD_HANDS
-    { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_4
-    { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_5
-    { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_6
-    { &object_an4_Anim_002550, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_7
-    { &object_an4_Anim_00353C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_8
-    { &object_an4_Anim_004498, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_9
-    { &object_an4_Anim_0060B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_10
-    { &object_an4_Anim_00041C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_11
-    { &object_an4_Anim_004A78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // DMGM_ANIM_12
-    { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_13
+    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },      // DMGM_ANIM_HOLD_HANDS
+    { &gAnju4MaskKneelAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },       // DMGM_ANIM_MASK_KNEEL
+    { &gAnju4MaskKneelLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // DMGM_ANIM_MASK_KNEEL_LOOP
+    { &gAnju4HugAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // DMGM_ANIM_HUG
+    { &gAnju4HugLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         // DMGM_ANIM_HUG_LOOP
+    { &gAnju4HugSeparateAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // DMGM_ANIM_HUG_SEPARATE
+    { &gAnju4HugSeparateLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_HUG_SEPARATE_LOOP
+    { &gAnju4CombineMasks1Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // DMGM_ANIM_COMBINE_MASKS_1
+    { &gAnju4CombineMasks2Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // DMGM_ANIM_COMBINE_MASKS_2
+    { &gAnju4LookUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // DMGM_ANIM_LOOK_UP
+    { &gAnju4LookUpLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // DMGM_ANIM_LOOK_UP_LOOP
 };
 
 s32 DmGm_UpdateSkelAnime(DmGm* this, PlayState* play) {
@@ -248,13 +248,13 @@ void DmGm_HandleCouplesMaskCs(DmGm* this, PlayState* play) {
     s32 csAnimIndex[] = {
         /* 0 */ 0, // no cue
         /* 1 */ DMGM_ANIM_SIT_IN_DISBELIEVE,
-        /* 2 */ DMGM_ANIM_12,
-        /* 3 */ DMGM_ANIM_2,
-        /* 4 */ DMGM_ANIM_4,
-        /* 5 */ DMGM_ANIM_6,
-        /* 6 */ DMGM_ANIM_8,
-        /* 7 */ DMGM_ANIM_10,
-        /* 8 */ DMGM_ANIM_11,
+        /* 2 */ DMGM_ANIM_LOOK_UP,
+        /* 3 */ DMGM_ANIM_MASK_STAND_LOOP,
+        /* 4 */ DMGM_ANIM_MASK_KNEEL,
+        /* 5 */ DMGM_ANIM_HUG,
+        /* 6 */ DMGM_ANIM_HUG_SEPARATE,
+        /* 7 */ DMGM_ANIM_COMBINE_MASKS_1,
+        /* 8 */ DMGM_ANIM_COMBINE_MASKS_2,
         /* 9 */ DMGM_ANIM_HOLD_HANDS,
     };
     u16 cueId;
@@ -285,8 +285,8 @@ void DmGm_HandleCouplesMaskCs(DmGm* this, PlayState* play) {
                 case 6:
                 case 7:
                 case 8:
-                    if ((this->animIndex == DMGM_ANIM_12) || (this->animIndex == DMGM_ANIM_4) ||
-                        (this->animIndex == DMGM_ANIM_6) || (this->animIndex == DMGM_ANIM_8)) {
+                    if ((this->animIndex == DMGM_ANIM_LOOK_UP) || (this->animIndex == DMGM_ANIM_MASK_KNEEL) ||
+                        (this->animIndex == DMGM_ANIM_HUG) || (this->animIndex == DMGM_ANIM_HUG_SEPARATE)) {
                         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                             DmGm_ChangeAnim(this, play, this->animIndex + 1);
                         }
