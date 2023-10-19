@@ -3602,45 +3602,46 @@ s32 Camera_Battle1(Camera* camera) {
     VecGeo spB4;
     VecGeo atToTargetDir;
     VecGeo spA4;
-    VecGeo sp9C;
-    VecGeo sp94;
+    VecGeo atToEyeDir;
+    VecGeo atToEyeNextDir;
     s32 pad2;
     PosRot* sp8C;
     s16 sp8A;
     s16 sp88;
     s16 sp86;
     s16 isOffGround;
-    f32 sp80;
-    f32 sp7C;
-    f32 sp78;
+    f32 swingPitchInitial;
+    f32 swingPitchFinal;
+    f32 fov;
     f32 temp_f12;
     Battle1ReadOnlyData* roData = &camera->paramData.batt1.roData;
     Battle1ReadWriteData* rwData = &camera->paramData.batt1.rwData;
-    f32 sp68;
+    f32 focalActorHeight;
     s32 pad3;
 
     skipEyeAtCalc = false;
     sp8C = &camera->focalActor->focus;
-    sp68 = Camera_GetFocalActorHeight(camera);
+    focalActorHeight = Camera_GetFocalActorHeight(camera);
 
     if (!RELOAD_PARAMS(camera)) {
     } else {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        roData->unk_00 = GET_NEXT_RO_DATA(values) * 0.01f * sp68 * (0.8f - ((68.0f / sp68) * -0.2f));
+        roData->yOffset =
+            GET_NEXT_RO_DATA(values) * 0.01f * focalActorHeight * (0.8f - ((68.0f / focalActorHeight) * -0.2f));
         roData->unk_04 = GET_NEXT_RO_DATA(values);
         roData->unk_08 = GET_NEXT_RO_DATA(values);
         roData->unk_0C = GET_NEXT_RO_DATA(values);
         roData->unk_0C = 80.0f - (80.0f - roData->unk_0C);
         roData->unk_10 = GET_NEXT_RO_DATA(values);
         roData->unk_10 = 0.0f - (0.0f - roData->unk_10);
-        roData->unk_14 = GET_NEXT_RO_DATA(values);
-        roData->unk_14 = 40.0f - (40.0f - roData->unk_14);
-        roData->unk_18 = GET_NEXT_RO_DATA(values);
-        roData->unk_18 = 20.0f - (20.0f - roData->unk_18);
+        roData->swingPitchInitial = GET_NEXT_RO_DATA(values);
+        roData->swingPitchInitial = 40.0f - (40.0f - roData->swingPitchInitial);
+        roData->swingPitchFinal = GET_NEXT_RO_DATA(values);
+        roData->swingPitchFinal = 20.0f - (20.0f - roData->swingPitchFinal);
         roData->swingPitchAdj = GET_NEXT_RO_DATA(values) * 0.01f;
         roData->swingPitchAdj = 1.0f - (1.0f - roData->swingPitchAdj);
-        roData->unk_20 = GET_NEXT_RO_DATA(values);
+        roData->fov = GET_NEXT_RO_DATA(values);
         roData->unk_24 = GET_NEXT_RO_DATA(values) * 0.01f;
         roData->unk_24 = 1.0f - (1.0f - roData->unk_24);
         roData->interfaceFlags = GET_NEXT_RO_DATA(values);
@@ -3649,34 +3650,34 @@ s32 Camera_Battle1(Camera* camera) {
         roData->unk_2C = GET_NEXT_RO_DATA(values) * 0.01f;
         if (!RELOAD_PARAMS(camera)) {
         } else {
-            rwData->unk_18 = 40;
+            rwData->chargeTimer = 40;
             camera->pitchUpdateRateInv = 9.0f;
         }
     }
 
-    sp80 = roData->unk_14;
-    sp7C = roData->unk_18;
-    sp78 = roData->unk_20;
+    swingPitchInitial = roData->swingPitchInitial;
+    swingPitchFinal = roData->swingPitchFinal;
+    fov = roData->fov;
 
     if (Camera_IsChargingSwordOrDekuFlowerDive(camera)) {
         camera->pitchUpdateRateInv = Camera_ScaledStepToCeilF(18.0f, camera->pitchUpdateRateInv, 0.5f, 0.1f);
         camera->yOffsetUpdateRate = Camera_ScaledStepToCeilF(0.2f, camera->yOffsetUpdateRate, 0.5f, 0.0001f);
         camera->xzOffsetUpdateRate = Camera_ScaledStepToCeilF(0.2f, camera->xzOffsetUpdateRate, 0.5f, 0.0001f);
-        if (rwData->unk_18 > -20) {
-            rwData->unk_18--;
+        if (rwData->chargeTimer > -20) {
+            rwData->chargeTimer--;
         } else {
-            sp80 = 50.0f;
-            sp7C = 40.0f;
-            sp78 = 60.0f;
+            swingPitchInitial = 50.0f;
+            swingPitchFinal = 40.0f;
+            fov = 60.0f;
         }
     } else {
-        if (rwData->unk_18 < 0) {
-            sp80 = 50.0f;
-            sp7C = 40.0f;
-            sp78 = 60.0f;
-            rwData->unk_18++;
+        if (rwData->chargeTimer < 0) {
+            swingPitchInitial = 50.0f;
+            swingPitchFinal = 40.0f;
+            fov = 60.0f;
+            rwData->chargeTimer++;
         } else {
-            rwData->unk_18 = 40;
+            rwData->chargeTimer = 40;
             camera->pitchUpdateRateInv = Camera_ScaledStepToCeilF(9.0f, camera->pitchUpdateRateInv, 0.5f, 0.1f);
             camera->yOffsetUpdateRate =
                 Camera_ScaledStepToCeilF(0.6f, camera->yOffsetUpdateRate, camera->speedRatio * 0.5f, 0.0001f);
@@ -3688,10 +3689,10 @@ s32 Camera_Battle1(Camera* camera) {
     camera->fovUpdateRate =
         Camera_ScaledStepToCeilF(0.050f, camera->fovUpdateRate, camera->speedRatio * 0.05f, 0.0001f);
 
-    sp68 += roData->unk_00;
+    focalActorHeight += roData->yOffset;
 
-    OLib_Vec3fDiffToVecGeo(&sp9C, at, eye);
-    OLib_Vec3fDiffToVecGeo(&sp94, at, eyeNext);
+    OLib_Vec3fDiffToVecGeo(&atToEyeDir, at, eye);
+    OLib_Vec3fDiffToVecGeo(&atToEyeNextDir, at, eyeNext);
 
     if ((camera->target == NULL) || (camera->target->update == NULL)) {
         camera->target = NULL;
@@ -3707,23 +3708,23 @@ s32 Camera_Battle1(Camera* camera) {
         rwData->unk_08 = camera->target;
         camera->animState++;
         rwData->unk_16 = 7;
-        rwData->unk_12 = sp9C.yaw;
-        rwData->unk_14 = sp9C.pitch;
-        rwData->unk_00 = sp9C.r;
+        rwData->unk_12 = atToEyeDir.yaw;
+        rwData->unk_14 = atToEyeDir.pitch;
+        rwData->unk_00 = atToEyeDir.r;
         rwData->unk_04 = camera->focalActorPosRot.pos.y - camera->unk_0F0.y;
         if (camera->dist > (2.0f * roData->unk_04)) {
             camera->dist = 2.0f * roData->unk_04;
-            sp94.r = camera->dist;
-            sp9C.r = sp94.r;
-            OLib_AddVecGeoToVec3f(eye, at, &sp9C);
+            atToEyeNextDir.r = camera->dist;
+            atToEyeDir.r = atToEyeNextDir.r;
+            OLib_AddVecGeoToVec3f(eye, at, &atToEyeDir);
             *eyeNext = *eye;
         }
     }
 
     if (camera->status == CAM_STATUS_ACTIVE) {
         sUpdateCameraDirection = true;
-        camera->inputDir.x = -sp9C.pitch;
-        camera->inputDir.y = sp9C.yaw + 0x8000;
+        camera->inputDir.x = -atToEyeDir.pitch;
+        camera->inputDir.y = atToEyeDir.yaw + 0x8000;
         camera->inputDir.z = 0;
     }
 
@@ -3746,7 +3747,7 @@ s32 Camera_Battle1(Camera* camera) {
     }
 
     sp120 = camera->focalActorPosRot.pos;
-    sp120.y += sp68;
+    sp120.y += focalActorHeight;
     OLib_Vec3fDiffToVecGeo(&spA4, &sp120, &camera->targetPosRot.pos);
 
     sp104 = func_800CD6CC(camera->target);
@@ -3762,9 +3763,10 @@ s32 Camera_Battle1(Camera* camera) {
         spF8 = 2.0f;
     }
 
-    Camera_CalcAtForEnemyLockOn(
-        camera, &sp94, &camera->targetPosRot.pos, roData->unk_00, roData->unk_2C, 1.0f - distRatio, &rwData->unk_04,
-        &spA4, (isOffGround ? (BATTLE1_FLAG_7 | BATTLE1_FLAG_0) : BATTLE1_FLAG_0) | roData->interfaceFlags);
+    Camera_CalcAtForEnemyLockOn(camera, &atToEyeNextDir, &camera->targetPosRot.pos, roData->yOffset, roData->unk_2C,
+                                1.0f - distRatio, &rwData->unk_04, &spA4,
+                                (isOffGround ? (BATTLE1_FLAG_7 | BATTLE1_FLAG_0) : BATTLE1_FLAG_0) |
+                                    roData->interfaceFlags);
 
     sp88 = spA4.yaw;
     OLib_Vec3fDiffToVecGeo(&spBC, at, eyeNext);
@@ -3782,8 +3784,8 @@ s32 Camera_Battle1(Camera* camera) {
         spFC = roData->unk_0C + ((roData->unk_10 - roData->unk_0C) * (1.1f - distRatio));
     }
 
-    spBC.yaw = sp94.yaw;
-    sp8A = (s16)(atToTargetDir.yaw - (s16)(sp94.yaw + 0x8000));
+    spBC.yaw = atToEyeNextDir.yaw;
+    sp8A = (s16)(atToTargetDir.yaw - (s16)(atToEyeNextDir.yaw + 0x8000));
 
     if (rwData->unk_16 != 0) {
         if (rwData->unk_16 > 0) {
@@ -3793,9 +3795,9 @@ s32 Camera_Battle1(Camera* camera) {
             spF8 = (rwData->unk_00 - spB4.r) * (1.0f / 6.0f);
             sp8A = (s16)(rwData->unk_12 - spB4.yaw) * (1.0f / 6.0f);
             sp88 = (s16)(rwData->unk_14 - spB4.pitch) * (1.0f / 6.0f);
-            spBC.r = Camera_ScaledStepToCeilF((sp86 * spF8) + spB4.r, sp9C.r, 0.5f, 1.0f);
-            spBC.yaw = Camera_ScaledStepToCeilS(spB4.yaw + (sp8A * sp86), sp9C.yaw, 0.5f, 5);
-            spBC.pitch = Camera_ScaledStepToCeilS(spB4.pitch + (sp88 * sp86), sp9C.pitch, 0.5f, 5);
+            spBC.r = Camera_ScaledStepToCeilF((sp86 * spF8) + spB4.r, atToEyeDir.r, 0.5f, 1.0f);
+            spBC.yaw = Camera_ScaledStepToCeilS(spB4.yaw + (sp8A * sp86), atToEyeDir.yaw, 0.5f, 5);
+            spBC.pitch = Camera_ScaledStepToCeilS(spB4.pitch + (sp88 * sp86), atToEyeDir.pitch, 0.5f, 5);
         } else {
             skipEyeAtCalc = true;
         }
@@ -3813,16 +3815,16 @@ s32 Camera_Battle1(Camera* camera) {
             sp88 = -CAM_DEG_TO_BINANG(temp_f14);
         }
 
-        spBC.yaw = (s16)((s16)(sp94.yaw + 0x8000) + sp88) + 0x8000;
+        spBC.yaw = (s16)((s16)(atToEyeNextDir.yaw + 0x8000) + sp88) + 0x8000;
     } else {
         sp104 = (1.0f - camera->speedRatio) * 0.05f;
         sp88 = (sp8A >= 0) ? CAM_DEG_TO_BINANG(spFC) : -CAM_DEG_TO_BINANG(spFC);
-        spBC.yaw = sp94.yaw - (s16)((sp88 - sp8A) * sp104);
+        spBC.yaw = atToEyeNextDir.yaw - (s16)((sp88 - sp8A) * sp104);
     }
 
     if (!skipEyeAtCalc) {
         spF8 = atToTargetDir.pitch * roData->swingPitchAdj;
-        var2 = sp80 + ((sp7C - sp80) * distRatio);
+        var2 = swingPitchInitial + ((swingPitchFinal - swingPitchInitial) * distRatio);
         sp8A = CAM_DEG_TO_BINANG(var2) - (s16)((spA4.pitch * (0.5f + (distRatio * (1.0f - 0.5f)))) + 0.5f);
         sp8A += (s16)spF8;
 
@@ -3832,7 +3834,7 @@ s32 Camera_Battle1(Camera* camera) {
             sp8A = 0x2AA8;
         }
 
-        spBC.pitch = Camera_ScaledStepToCeilS(sp8A, sp94.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
+        spBC.pitch = Camera_ScaledStepToCeilS(sp8A, atToEyeNextDir.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
         OLib_AddVecGeoToVec3f(eyeNext, at, &spBC);
         spC4.pos = *eyeNext;
 
@@ -3928,15 +3930,15 @@ s32 Camera_Battle1(Camera* camera) {
     if (rwData->unk_16 != 0) {
         sp88 = 0;
     } else {
-        sp88 = (s16)(sp94.yaw - spBC.yaw) * 0.50f;
+        sp88 = (s16)(atToEyeNextDir.yaw - spBC.yaw) * 0.50f;
     }
     camera->roll = Camera_ScaledStepToCeilS(sp88, camera->roll, 0.06f, 5);
 
     if (func_800CBAAC(camera) != PLAYER_MELEE_WEAPON_STATE_0) {
-        temp_f12 = ((camera->play->state.frames & 8) != 0) ? roData->unk_20 - (roData->unk_20 * 0.5f) : roData->unk_20;
+        temp_f12 = ((camera->play->state.frames & 8) != 0) ? roData->fov - (roData->fov * 0.5f) : roData->fov;
     } else {
         temp_f12 =
-            ((gSaveContext.save.saveInfo.playerData.health <= 16) ? 0.8f : 1.0f) * (sp78 - (sp78 * 0.05f * distRatio));
+            ((gSaveContext.save.saveInfo.playerData.health <= 16) ? 0.8f : 1.0f) * (fov - (fov * 0.05f * distRatio));
     }
     camera->fov = Camera_ScaledStepToCeilF(temp_f12, camera->fov, camera->fovUpdateRate, 0.1f);
 

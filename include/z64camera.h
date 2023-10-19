@@ -800,15 +800,15 @@ typedef struct {
     { data18,  CAM_DATA_18 }
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
+    /* 0x00 */ f32 yOffset;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
+    /* 0x14 */ f32 swingPitchInitial;
+    /* 0x18 */ f32 swingPitchFinal;
     /* 0x1C */ f32 swingPitchAdj;
-    /* 0x20 */ f32 unk_20;
+    /* 0x20 */ f32 fov;
     /* 0x24 */ f32 unk_24;
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ f32 unk_2C;
@@ -818,13 +818,13 @@ typedef struct {
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
-    /* 0x08 */ Actor* unk_08; // targe3t
+    /* 0x08 */ Actor* unk_08; // target
     /* 0x0C */ s32 unk_0C; // unused?
     /* 0x10 */ s16 unk_10;
     /* 0x12 */ s16 unk_12;
     /* 0x14 */ s16 unk_14;
     /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
+    /* 0x18 */ s16 chargeTimer;
     /* 0x1A */ s16 unk_1A;
 } Battle1ReadWriteData; // size = 0x1C
 
