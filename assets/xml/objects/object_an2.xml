@@ -2,7 +2,7 @@
     <!-- Assets for Anju on the rainy second day -->
     <File Name="object_an2" Segment="6">
         <!-- Empty -->
-        <DList Name="object_an2_DL_000370" Offset="0x370" />
+        <DList Name="gAnju2EmptyDL" Offset="0x370" />
 
         <!-- Umbrella -->
         <DList Name="gAnju2UmbrellaDL" Offset="0x378" /> <!-- Original name is "an_kasa_model" ("umbrella; parasol") -->

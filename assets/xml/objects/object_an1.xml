@@ -60,7 +60,7 @@
         <Texture Name="gAnju1EyeRelievedClosedTex" OutName="anju_eye_relieved_closed" Format="ci8" Width="32" Height="32" Offset="0x103A0" TlutOffset="0xDD20" />
 
         <!-- Empty -->
-        <DList Name="object_an1_DL_0111E0" Offset="0x111E0" />
+        <DList Name="gAnju1EmptyDL" Offset="0x111E0" />
 
         <!-- Food tray for Granny -->
         <DList Name="gAnju1FoodTrayDL" Offset="0x111E8" /> <!-- Original name is "an_obon_model" -->
