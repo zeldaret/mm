@@ -3010,13 +3010,11 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(gfxCtx);
 }
 
-#ifdef NON_MATCHING
-// Saved float register alloc. Seems related to spB4.
 void func_80B0D9CC(BossHakugin* this) {
     s32 var_s3;
     Vec3f spC8;
     s32 var_s1 = 15;
-    BossHakuginEffect* var_s0 = &this->unk_09F8[0];
+    BossHakuginEffect* var_s0 = this->unk_09F8;
     s32 var_v1;
     s32 temp_a0;
     f32 spB4 = Math_SinS(this->actor.shape.rot.y) * 65.0f;
@@ -3027,12 +3025,15 @@ void func_80B0D9CC(BossHakugin* this) {
     f32 temp3;
     f32 temp4;
     f32 temp5;
-    f32 pad;
+    s32 pad;
 
     for (var_s3 = 4; var_s3 > 0; var_s3--, var_s1 -= 4) {
-        spC8.x = this->actor.world.pos.x - (var_s3 * spB4) + (2.3076923f * spB4); // 30 / 13
+        temp4 = (30.0f / 13.0f) * spB4;
+        temp5 = (30.0f / 13.0f) * spB0;
+
+        spC8.x = this->actor.world.pos.x - (var_s3 * spB4) + temp4;
         spC8.y = this->actor.world.pos.y + (85.0f * (4 - var_s3)) + 20.0f;
-        spC8.z = this->actor.world.pos.z - (var_s3 * spB0) + (2.3076923f * spB0); // 30 / 13
+        spC8.z = this->actor.world.pos.z - (var_s3 * spB0) + temp5;
 
         var_s0->unk_24 = ((var_s3 * 4.5f) + 22.0f) * 0.001f;
         Math_Vec3f_Copy(&var_s0->unk_0, &spC8);
@@ -3043,7 +3044,7 @@ void func_80B0D9CC(BossHakugin* this) {
         }
         var_s0++;
 
-        temp1 = (var_s3 / (f32)temp_a0);
+        temp1 = var_s3 / (f32)temp_a0;
         temp2 = (spB0 + spB4) * temp1;
         temp3 = (spB0 - spB4) * temp1;
 
@@ -3077,9 +3078,6 @@ void func_80B0D9CC(BossHakugin* this) {
         var_s0->unk_0.y += 850.0f;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D9CC.s")
-#endif
 
 void func_80B0DFA8(BossHakugin* this) {
     s32 i;
