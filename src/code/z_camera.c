@@ -3647,7 +3647,7 @@ s32 Camera_Battle1(Camera* camera) {
         roData->unk_28 = GET_NEXT_RO_DATA(values) * 0.01f;
         roData->unk_28 = 0.2f - (0.2f - roData->unk_28);
         roData->unk_2C = GET_NEXT_RO_DATA(values) * 0.01f;
-        if ((camera->animState != 0) && (camera->animState != 0xA) && (camera->animState != 0x14)) {
+        if (!RELOAD_PARAMS(camera)) {
         } else {
             rwData->unk_18 = 40;
             camera->pitchUpdateRateInv = 9.0f;
@@ -3687,9 +3687,12 @@ s32 Camera_Battle1(Camera* camera) {
 
     camera->fovUpdateRate =
         Camera_ScaledStepToCeilF(0.050f, camera->fovUpdateRate, camera->speedRatio * 0.05f, 0.0001f);
+
     sp68 += roData->unk_00;
+
     OLib_Vec3fDiffToVecGeo(&sp9C, at, eye);
     OLib_Vec3fDiffToVecGeo(&sp94, at, eyeNext);
+
     if ((camera->target == NULL) || (camera->target->update == NULL)) {
         camera->target = NULL;
         Camera_ChangeMode(camera, CAM_MODE_TARGET);
@@ -3768,6 +3771,7 @@ s32 Camera_Battle1(Camera* camera) {
     spF4 = F32_LERPIMP(roData->unk_04, roData->unk_08, distRatio);
     camera->rUpdateRateInv = Camera_ScaledStepToCeilF(spF8, camera->rUpdateRateInv, 0.5f, 0.1f);
     spBC.r = camera->dist = Camera_ScaledStepToCeilF(spF4, camera->dist, 1.0f / camera->rUpdateRateInv, 0.1f);
+
     OLib_Vec3fDiffToVecGeo(&atToTargetDir, at, &camera->targetPosRot.pos);
 
     atToTargetDir.r = spBC.r - (((spBC.r >= atToTargetDir.r) ? atToTargetDir.r : spBC.r) * 0.5f);
@@ -3786,9 +3790,9 @@ s32 Camera_Battle1(Camera* camera) {
             sp86 = rwData->unk_16 - 1;
             OLib_Vec3fDiffToVecGeo(&spB4, at, eye);
             spB4.yaw = sp88 + 0x8000;
-            spF8 = (rwData->unk_00 - spB4.r) * 0.16666667f;
-            sp8A = (s16)(rwData->unk_12 - spB4.yaw) * 0.16666667f;
-            sp88 = (s16)(rwData->unk_14 - spB4.pitch) * 0.16666667f;
+            spF8 = (rwData->unk_00 - spB4.r) * (1.0f / 6.0f);
+            sp8A = (s16)(rwData->unk_12 - spB4.yaw) * (1.0f / 6.0f);
+            sp88 = (s16)(rwData->unk_14 - spB4.pitch) * (1.0f / 6.0f);
             spBC.r = Camera_ScaledStepToCeilF((sp86 * spF8) + spB4.r, sp9C.r, 0.5f, 1.0f);
             spBC.yaw = Camera_ScaledStepToCeilS(spB4.yaw + (sp8A * sp86), sp9C.yaw, 0.5f, 5);
             spBC.pitch = Camera_ScaledStepToCeilS(spB4.pitch + (sp88 * sp86), sp9C.pitch, 0.5f, 5);
@@ -3852,8 +3856,8 @@ s32 Camera_Battle1(Camera* camera) {
                 rwData->unk_1A &= ~0x10;
             } else if (!camera->play->envCtx.skyboxDisabled || (roData->interfaceFlags & BATTLE1_FLAG_0)) {
                 if (func_800CBC84(camera, at, &spC4, 0) != 0) {
-                    s16 sp5E;
-                    s16 sp5C;
+                    s16 screenX;
+                    s16 screenY;
 
                     rwData->unk_1A |= 0x1000;
                     spF8 = OLib_Vec3fDist(at, &sp8C->pos);
@@ -3863,10 +3867,10 @@ s32 Camera_Battle1(Camera* camera) {
 
                     spF4 = OLib_Vec3fDist(at, &spC4.pos);
                     spF8 += (rwData->unk_1A & 0x10) ? 40.0f : 0.0f;
-                    Actor_GetScreenPos(camera->play, camera->focalActor, &sp5E, &sp5C);
+                    Actor_GetScreenPos(camera->play, camera->focalActor, &screenX, &screenY);
 
                     if ((spF4 < spF8) ||
-                        ((sp5E >= 0) && (sp5E <= SCREEN_WIDTH) && (sp5C >= 0) && (sp5C <= SCREEN_HEIGHT))) {
+                        ((screenX >= 0) && (screenX <= SCREEN_WIDTH) && (screenY >= 0) && (screenY <= SCREEN_HEIGHT))) {
                         rwData->unk_1A |= 0x10;
                         spB4.yaw = spA4.yaw + 0x8000;
                         spB4.pitch = -spA4.pitch;
