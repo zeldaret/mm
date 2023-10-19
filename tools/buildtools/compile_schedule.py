@@ -10,8 +10,8 @@ import argparse
 import dataclasses
 import enum
 from pathlib import Path
+from typing import Iterator
 import sys
-
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -43,14 +43,46 @@ class TokenType(enum.Enum):
     RETURN_TIME = "return_time"
     IF_BEFORETIME_S = "if_before_time_s"
     IF_BEFORETIME_L = "if_before_time_l"
-    BRANCH_S = "branch_s"
-    BRANCH_L = "branch_l"
+    BRANCH_S = "branch_s" # TODO
+    BRANCH_L = "branch_l" # TODO
 
     # Extra tokens
     ELSE = "else"
     BRACE_OPEN = "{"
     BRACE_CLOSE = "}"
     ARGS = "(args)"
+
+    def canBeStartingToken(self) -> bool:
+        if self in { TokenType.ELSE, TokenType.BRACE_OPEN, TokenType.BRACE_CLOSE, TokenType.ARGS }:
+            return False
+        return True
+
+    def isReturn(self) -> bool:
+        if self in { TokenType.RETURN_S, TokenType.RETURN_L, TokenType.RETURN_NONE, TokenType.RETURN_EMPTY, TokenType.RETURN_TIME }:
+            return True
+        return False
+
+    def hasArguments(self) -> bool:
+        if self in {
+        TokenType.IF_WEEKEVENTREG_S,
+        TokenType.IF_WEEKEVENTREG_L,
+        TokenType.IF_TIMERANGE_S,
+        TokenType.IF_TIMERANGE_L,
+        TokenType.RETURN_S,
+        TokenType.RETURN_L,
+        TokenType.IF_MISC_S,
+        TokenType.IF_SCENE_S,
+        TokenType.IF_SCENE_L,
+        TokenType.IF_DAY_S,
+        TokenType.IF_DAY_L,
+        TokenType.RETURN_TIME,
+        TokenType.IF_BEFORETIME_S,
+        TokenType.IF_BEFORETIME_L,
+        }:
+            return True
+
+        return False
+
 
 tokenLiterals: dict[str, TokenType] = {
     "if_week_event_reg_s": TokenType.IF_WEEKEVENTREG_S,
@@ -85,12 +117,13 @@ class Token:
     lineNumber: int
     columnNumber: int
 
+# TODO: consider changing to a plain function
 class Tokenizer:
     def __init__(self, contents: str, filename: str):
         self.contents = contents.replace("\t", " ")
         self.filename = filename
 
-    def __iter__(self):
+    def tokenize(self) -> Iterator[Token]:
         lineNumber = 1
         columnNumber = 1
 
@@ -163,6 +196,7 @@ class Tokenizer:
                 yield Token(TokenType.ARGS, parenContents, lineNumberStart, columnNumberStart)
 
                 i = subIndex + 1
+                columnNumber += 1
                 continue
 
             if char == "\n":
@@ -196,6 +230,115 @@ class Tokenizer:
             i += 1
 
 
+    def __iter__(self) -> Iterator[Token]:
+        return self.tokenize()
+
+@dataclasses.dataclass
+class Expression:
+    expr: Token
+    args: Token|None = None
+
+    left: list[Expression] = dataclasses.field(default_factory=list)
+    right: list[Expression] = dataclasses.field(default_factory=list)
+
+    def print(self, depth=0):
+        spaces = "    " * depth
+        print(f"{spaces}{self.expr.tokenLiteral} ", end="")
+        if self.args is not None:
+            print(f"({self.args.tokenLiteral}) ", end="")
+        if len(self.left) == 0:
+            print()
+        else:
+            print("{")
+            for expr in self.left:
+                expr.print(depth+1)
+            print(f"{spaces}}} else {{")
+            for expr in self.right:
+                expr.print(depth+1)
+            print(f"{spaces}}}")
+
+
+def makeTree(tokens: Iterator[Token], inputPath: str) -> list[Expression]:
+    exprs: list[Expression] = []
+
+    # debugPrint(f"Entering makeTree")
+
+    currentExpr: Expression|None = None
+    foundElse = False
+
+    prevToken: Token|None = None
+    while (token := next(tokens, None)) is not None:
+        if token.tokenType == TokenType.ARGS:
+            if currentExpr is None or currentExpr.args is not None:
+                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                debugPrint(f" foundElse: {foundElse}")
+                exit(1)
+
+            currentExpr.args = token
+
+        elif token.tokenType.canBeStartingToken():
+            if currentExpr is not None:
+                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                debugPrint(f" foundElse: {foundElse}")
+                exit(1)
+
+            currentExpr = Expression(token)
+            foundElse = False
+            exprs.append(currentExpr)
+            if not token.tokenType.hasArguments():
+                currentExpr = None
+
+        elif token.tokenType == TokenType.ELSE:
+            if currentExpr is None or currentExpr.args is None:
+                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                debugPrint(f" foundElse: {foundElse}")
+                exit(1)
+            foundElse = True
+
+        elif token.tokenType == TokenType.BRACE_OPEN:
+            if currentExpr is None or currentExpr.args is None:
+                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                debugPrint(f" foundElse: {foundElse}")
+                exit(1)
+
+            subExprs = makeTree(tokens, inputPath)
+            if foundElse:
+                if len(currentExpr.left) == 0 or len(currentExpr.right) != 0:
+                    eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                    debugPrint(f" foundElse: {foundElse}")
+                    exit(1)
+                currentExpr.right = subExprs
+            else:
+                if len(currentExpr.left) != 0 or len(currentExpr.right) != 0:
+                    eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                    debugPrint(f" foundElse: {foundElse}")
+                    exit(1)
+                currentExpr.left = subExprs
+
+        elif token.tokenType == TokenType.BRACE_CLOSE:
+            if len(exprs) == 0:
+                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                debugPrint(f" foundElse: {foundElse}")
+                exit(1)
+
+            # TODO: check for return
+
+            # debugPrint(f"Exiting makeTree")
+
+            return exprs
+
+        prevToken = token
+
+    return exprs
+
+
 def main():
     parser = argparse.ArgumentParser(description="")
     parser.add_argument("input", help="Schedule script path", type=Path)
@@ -211,8 +354,24 @@ def main():
         exit(1)
 
     inputContents = inputPath.read_text("UTF-8")
-    for token in Tokenizer(inputContents, str(inputPath)):
+
+    tokens = Tokenizer(inputContents, str(inputPath)).tokenize()
+    tree = makeTree(tokens, str(inputPath))
+    for expr in tree:
+        expr.print()
+
+    """
+    prevToken: Token|None = None
+    for token in tokens:
+        if prevToken is None:
+            if not token.tokenType.canBeStartingToken():
+                eprint(f"Error: Unexpected token at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                exit(1)
+
         print(token)
+
+        prevToken = token
+    """
 
 if __name__ == "__main__":
     main()
