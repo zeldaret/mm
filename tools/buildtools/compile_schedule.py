@@ -83,6 +83,13 @@ class TokenType(enum.Enum):
 
         return False
 
+    def needsToInvert(self) -> bool:
+        if self in {TokenType.IF_WEEKEVENTREG_S,
+                    TokenType.IF_WEEKEVENTREG_L,
+                    TokenType.IF_TIMERANGE_S,
+                    TokenType.IF_TIMERANGE_L,}:
+            return True
+        return False
 
 tokenLiterals: dict[str, TokenType] = {
     "if_week_event_reg_s": TokenType.IF_WEEKEVENTREG_S,
@@ -339,6 +346,59 @@ def makeTree(tokens: Iterator[Token], inputPath: str) -> list[Expression]:
     return exprs
 
 
+@dataclasses.dataclass
+class CommandInfo:
+    macro: str
+    cmdLenght: int
+
+cmdInfos: dict[TokenType, CommandInfo] = {
+    TokenType.IF_WEEKEVENTREG_S:    CommandInfo('SCHEDULE_CMD_CHECK_FLAG_S',         0x04,),
+    TokenType.IF_WEEKEVENTREG_L:    CommandInfo('SCHEDULE_CMD_CHECK_FLAG_L',         0x05,),
+    TokenType.IF_TIMERANGE_S:       CommandInfo('SCHEDULE_CMD_CHECK_TIME_RANGE_S',   0x06,),
+    TokenType.IF_TIMERANGE_L:       CommandInfo('SCHEDULE_CMD_CHECK_TIME_RANGE_L',   0x07,),
+    TokenType.RETURN_S:             CommandInfo('SCHEDULE_CMD_RET_VAL_S',            0x02,),
+    TokenType.RETURN_L:             CommandInfo('SCHEDULE_CMD_RET_VAL_L',            0x03,),
+    TokenType.RETURN_NONE:          CommandInfo('SCHEDULE_CMD_RET_NONE',             0x01,),
+    TokenType.RETURN_EMPTY:         CommandInfo('SCHEDULE_CMD_RET_EMPTY',            0x01,),
+    TokenType.IF_MISC_S:            CommandInfo('SCHEDULE_CMD_CHECK_MISC_S',         0x03,),
+    TokenType.IF_SCENE_S:           CommandInfo('SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S', 0x04,),
+    TokenType.IF_SCENE_L:           CommandInfo('SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L', 0x05,),
+    TokenType.IF_DAY_S:             CommandInfo('SCHEDULE_CMD_CHECK_NOT_IN_DAY_S',   0x04,),
+    TokenType.IF_DAY_L:             CommandInfo('SCHEDULE_CMD_CHECK_NOT_IN_DAY_L',   0x05,),
+    TokenType.NOP:                  CommandInfo('SCHEDULE_CMD_NOP',                  0x04,),
+    TokenType.RETURN_TIME:          CommandInfo('SCHEDULE_CMD_RET_TIME',             0x06,),
+    TokenType.IF_BEFORETIME_S:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_S',  0x04,),
+    TokenType.IF_BEFORETIME_L:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_L',  0x05,),
+    TokenType.BRANCH_S:             CommandInfo('SCHEDULE_CMD_BRANCH_S',             0x02,),
+    TokenType.BRANCH_L:             CommandInfo('SCHEDULE_CMD_BRANCH_L',             0x03,),
+}
+
+
+def emitMacros(tree: list[Expression], byteCount = 0) -> tuple[str, int]:
+    result = ""
+
+    for expr in tree:
+        pass
+        #
+        info = cmdInfos[expr.expr.tokenType]
+        result += f"    /* 0x{byteCount:02X} */ {info.macro},\n"
+        # TODO: args
+        byteCount += info.cmdLenght
+
+        if expr.expr.tokenType.needsToInvert():
+            subResult, byteCount = emitMacros(expr.right, byteCount)
+            result += subResult
+            subResult, byteCount = emitMacros(expr.left, byteCount)
+            result += subResult
+        else:
+            subResult, byteCount = emitMacros(expr.left, byteCount)
+            result += subResult
+            subResult, byteCount = emitMacros(expr.right, byteCount)
+            result += subResult
+
+    return result, byteCount
+
+
 def main():
     parser = argparse.ArgumentParser(description="")
     parser.add_argument("input", help="Schedule script path", type=Path)
@@ -357,8 +417,10 @@ def main():
 
     tokens = Tokenizer(inputContents, str(inputPath)).tokenize()
     tree = makeTree(tokens, str(inputPath))
-    for expr in tree:
-        expr.print()
+    # for expr in tree:
+    #     expr.print()
+    output, byteCount = emitMacros(tree)
+    print(output)
 
     """
     prevToken: Token|None = None
