@@ -3331,6 +3331,34 @@ void EnAn_Destroy(Actor* thisx, PlayState* play) {
 void EnAn_Update(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
 
+    if (EnAn_InitializeObjectSlots(this, play)) {
+        return;
+    }
+
+    if ((this->actionFunc != EnAn_Initialize) && !EnAn_CheckTalk(this, play) &&
+        EnAn_IsCouplesMaskCsPlaying(this, play)) {
+        EnAn_HandleCouplesMaskCutscene(this, play);
+        EnAn_UpdateSkel(this, play);
+        EnAn_UpdateFace(this);
+        return;
+    }
+
+    this->actionFunc(this, play);
+    if (this->scheduleResult != ANJU_SCH_NONE) {
+        EnAn_HandleDialogue(this, play);
+        EnAn_UpdateSkel(this, play);
+        EnAn_UpdateFace(this);
+        EnAn_UpdateAttention(this);
+        SubS_Offer(&this->actor, play, this->unk_374, 30.0f, 0, this->stateFlags & SUBS_OFFER_MODE_MASK);
+
+        if (!(this->stateFlags & ENAN_STATE_IGNORE_GRAVITY)) {
+            Actor_MoveWithGravity(&this->actor);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
+        }
+
+        EnAn_UpdateCollider(this, play);
+    }
+
     #if DEBUG_PRINT
     {
         Input* input = CONTROLLER1(&play->state);
@@ -3359,34 +3387,6 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
         }
     }
     #endif
-
-    if (EnAn_InitializeObjectSlots(this, play)) {
-        return;
-    }
-
-    if ((this->actionFunc != EnAn_Initialize) && !EnAn_CheckTalk(this, play) &&
-        EnAn_IsCouplesMaskCsPlaying(this, play)) {
-        EnAn_HandleCouplesMaskCutscene(this, play);
-        EnAn_UpdateSkel(this, play);
-        EnAn_UpdateFace(this);
-        return;
-    }
-
-    this->actionFunc(this, play);
-    if (this->scheduleResult != ANJU_SCH_NONE) {
-        EnAn_HandleDialogue(this, play);
-        EnAn_UpdateSkel(this, play);
-        EnAn_UpdateFace(this);
-        EnAn_UpdateAttention(this);
-        SubS_Offer(&this->actor, play, this->unk_374, 30.0f, 0, this->stateFlags & SUBS_OFFER_MODE_MASK);
-
-        if (!(this->stateFlags & ENAN_STATE_IGNORE_GRAVITY)) {
-            Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
-        }
-
-        EnAn_UpdateCollider(this, play);
-    }
 
     #if DEBUG_PRINT
     {
