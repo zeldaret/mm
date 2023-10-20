@@ -7,7 +7,7 @@
 #include "z_en_dinofos.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
 #define THIS ((EnDinofos*)thisx)
 
@@ -378,7 +378,7 @@ void func_8089AC70(EnDinofos* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
     this->colliderJntSph.base.colType = COLTYPE_HIT3;
-    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->unk_290 = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
@@ -439,7 +439,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
     }
 
     if ((this->actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
-        this->actor.isTargeted && (Rand_ZeroOne() < 0.5f) && func_8089A968(this) &&
+        this->actor.isLockedOn && (Rand_ZeroOne() < 0.5f) && func_8089A968(this) &&
         Player_IsFacingActor(&this->actor, 0x2000, play)) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089C024(this, 2);
@@ -450,7 +450,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         return true;
     }
 
-    if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->unk_AE7 == 1) &&
+    if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->actionVar1 == 1) &&
         (this->unk_28B == 0)) {
         this->unk_28B = 1;
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElement) - 3; i++) {
@@ -563,7 +563,7 @@ void func_8089B580(EnDinofos* this, PlayState* play) {
     }
 
     if ((play->sceneId == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 55.0f)) {
-        play->envCtx.lightSettingOverride = 0xFF;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -1118,7 +1118,7 @@ void func_8089CF00(EnDinofos* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &gDinolfosFireEndAnim);
     this->colliderJntSph.base.atFlags &= ~AT_ON;
     if (play->sceneId == SCENE_MITURIN) {
-        play->envCtx.lightSettingOverride = 255;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
     }
     this->actionFunc = func_8089CF70;
 }
@@ -1131,7 +1131,7 @@ void func_8089CF70(EnDinofos* this, PlayState* play) {
 
 void func_8089CFAC(EnDinofos* this) {
     Animation_PlayOnce(&this->skelAnime, &gDinolfosDieAnim);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_DEAD);
     this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1289,7 +1289,7 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
         func_8089ACEC(this, play);
         func_8089AD70(this);
         if (play->sceneId == SCENE_MITURIN) {
-            play->envCtx.lightSettingOverride = 255;
+            play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
         }
 
         this->colliderQuad.base.atFlags &= ~(AT_ON | AT_BOUNCED);

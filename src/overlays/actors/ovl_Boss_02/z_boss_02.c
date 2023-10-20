@@ -4,7 +4,6 @@
  * Description: Twinmold
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_boss_02.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -13,7 +12,7 @@
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss02*)thisx)
 
@@ -593,7 +592,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, BHEART_PARAM_NORMAL);
     }
 
-    this->actor.targetMode = 10;
+    this->actor.targetMode = TARGET_MODE_10;
     this->subCamUp.z = this->subCamUp.x = 0.0f;
     this->subCamUp.y = 1.0f;
     if (TWINMOLD_GET_TYPE(&this->actor) == TWINMOLD_TYPE_STATIC) {
@@ -601,7 +600,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         play->specialEffects = (void*)sEffects;
         this->actor.update = Boss02_Static_Update;
         this->actor.draw = Boss02_Static_Draw;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->playerScale = 0.01f;
         if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_55) || (sBlueWarp != NULL)) {
             this->unk_1D20 = 0;
@@ -772,7 +771,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
         }
 
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         if (this->unk_0195 != 0) {
             this->actor.world.rot.z = Math_SinS(this->unk_014C * 0x1200) * 0xE00;
         } else {
@@ -1192,9 +1191,9 @@ void Boss02_Tail_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((this->actor.focus.pos.y < BgCheck_EntityRaycastFloor1(&play->colCtx, &outPoly, &pos)) || sIsInGiantMode) {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         } else {
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         }
     }
 }
@@ -1321,7 +1320,7 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play) {
     Boss02* this = THIS;
 
     this->giantModeScaleFactor = sGiantModeScaleFactor;
-    play->envCtx.sandstormState = 0xD;
+    play->envCtx.sandstormState = SANDSTORM_D;
 
     if (sBlueWarp != NULL) {
         this->fogNear = KREG(23) + -15.0f;
@@ -1816,7 +1815,7 @@ void Boss02_HandleGiantsMaskCutscene(Boss02* this, PlayState* play) {
             func_80169AFC(play, this->subCamId, 0);
             this->subCamId = SUB_CAM_ID_DONE;
             Cutscene_StopManual(play, &play->csCtx);
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             player->stateFlags1 &= ~PLAYER_STATE1_100;
             this->playerScale = 0.01f;
             Play_DisableMotionBlur();
@@ -1829,7 +1828,7 @@ void Boss02_HandleGiantsMaskCutscene(Boss02* this, PlayState* play) {
         Actor_SetScale(&player->actor, this->playerScale);
     }
 
-    play->envCtx.lightSettings.fogNear = this->fogNear;
+    play->envCtx.adjLightSettings.fogNear = this->fogNear;
 
     // Switches from the "normal" variation of the arena to the "giant" variation (or vice versa)
     // at the appropriate point in the Giant's Mask cutscene.
@@ -2227,7 +2226,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
-                this->actor.flags |= ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
                 sRedTwinmold->unk_0146[0] = sBlueTwinmold->unk_0146[0] = 60;
@@ -2289,7 +2288,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 Cutscene_StopManual(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->unk_1D20 = 0;
-                this->actor.flags |= ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 sp68->unk_0144 = 10;
                 if ((sRedTwinmold->unk_0144 >= 10) && (sBlueTwinmold->unk_0144 >= 10)) {
                     f32 phi_f0;

@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnDekunuts*)thisx)
 
@@ -131,11 +131,11 @@ void EnDekunuts_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->actor.params == ENDEKUNUTS_GET_FF00_1) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->collider.base.colType = COLTYPE_NONE;
         this->collider.info.bumperFlags |= (BUMP_NO_HITMARK | BUMP_NO_SWORD_SFX | BUMP_NO_DAMAGE | BUMP_NO_AT_INFO);
     } else if (this->actor.params == ENDEKUNUTS_GET_FF00_2) {
-        this->actor.targetMode = 0;
+        this->actor.targetMode = TARGET_MODE_0;
     }
 
     func_808BD428(this);
@@ -150,7 +150,7 @@ void EnDekunuts_Destroy(Actor* thisx, PlayState* play) {
 void func_808BD348(EnDekunuts* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_190 = 80;

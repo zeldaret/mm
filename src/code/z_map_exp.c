@@ -181,7 +181,7 @@ void Map_Init(PlayState* play) {
     func_80105C40(play->roomCtx.curRoom.num);
     interfaceCtx->unk_278 = -1;
     interfaceCtx->dungeonOrBossAreaMapIndex = -1;
-    interfaceCtx->mapSegment = THA_AllocTailAlign16(&play->state.heap, 0x1000);
+    interfaceCtx->mapSegment = THA_AllocTailAlign16(&play->state.tha, 0x1000);
     if (func_8010A2AC(play)) {
         gSaveContext.mapIndex = func_8010A238(play);
         return;

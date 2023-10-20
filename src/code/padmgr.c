@@ -32,9 +32,11 @@
  */
 
 #include "global.h"
-#include "io/controller.h"
-#include "ultra64/motor.h"
+#include "PR/controller.h"
+#include "PR/os_motor.h"
 #include "fault.h"
+
+extern FaultMgr gFaultMgr;
 
 #define PADMGR_RETRACE_MSG (1 << 0)
 #define PADMGR_PRE_NMI_MSG (1 << 1)

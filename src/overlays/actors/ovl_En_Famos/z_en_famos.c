@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnFamos*)thisx)
 
@@ -173,7 +173,7 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawSquare, 30.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gFamosSkeleton, &gFamosIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &gFamosSkel, &gFamosIdleAnim, this->jointTable, this->morphTable,
                    FAMOS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
@@ -706,7 +706,7 @@ void EnFamos_DeathExplosion(EnFamos* this, PlayState* play) {
 
 void EnFamos_SetupDeathFade(EnFamos* this) {
     EnFamos_SetupDeathDebris(this);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.shape.shadowDraw = NULL;
     this->actionFunc = EnFamos_DeathFade;
     this->actor.speed = 0.0f;

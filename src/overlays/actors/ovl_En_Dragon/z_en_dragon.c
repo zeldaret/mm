@@ -7,7 +7,7 @@
 #include "z_en_dragon.h"
 #include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnDragon*)thisx)
 
@@ -208,7 +208,7 @@ void EnDragon_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.health = 4;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = 0xA;
+    this->actor.targetMode = TARGET_MODE_10;
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     this->collider.elements[0].dim.scale = this->collider.elements[1].dim.scale = this->collider.elements[2].dim.scale =
@@ -548,7 +548,7 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
 
         play->unk_18770(play, player);
         player->actor.parent = &this->actor;
-        player->unk_AE8 = 50;
+        player->actionVar2 = 50;
         this->action = DEEP_PYTHON_ACTION_GRAB;
         Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_EAT);
         EnDragon_SetupAttack(this);
@@ -626,7 +626,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
         this->grabWaitTimer = 30;
         CutsceneManager_Stop(this->grabCsId);
         if (player->stateFlags2 & PLAYER_STATE2_80) {
-            player->unk_AE8 = 100;
+            player->actionVar2 = 100;
         }
 
         this->actor.flags &= ~ACTOR_FLAG_100000;
@@ -751,7 +751,7 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_DEAD);
                 this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_100000;
                 this->action = DEEP_PYTHON_ACTION_SETUP_DEAD;
                 this->actionFunc = EnDragon_SetupDead;

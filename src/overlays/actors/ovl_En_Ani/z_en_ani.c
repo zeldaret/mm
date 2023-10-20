@@ -8,7 +8,7 @@
 #include "z_en_ani.h"
 #include "z64quake.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnAni*)thisx)
 
@@ -117,8 +117,8 @@ void EnAni_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gAniSkeleton, &gAniStandingNormalAnim, this->jointTable,
-                       this->morphTable, ANI_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gAniSkel, &gAniStandingNormalAnim, this->jointTable, this->morphTable,
+                       ANI_LIMB_MAX);
     Animation_PlayOnce(&this->skelAnime, &gAniStandingNormalAnim);
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit);
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit);

@@ -10,7 +10,7 @@
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnSuttari*)thisx)
 
@@ -993,7 +993,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_boj_Skel_00C240, &object_boj_Anim_00071C, this->jointTable,
                        this->morphTable, 16);
     this->actor.draw = EnSuttari_Draw;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     if (play->sceneId == SCENE_IKANA) {
         this->flags1 |= 1;
         if ((gSaveContext.save.day == 1) || (gSaveContext.save.day == 2)) {
@@ -1157,10 +1157,10 @@ void func_80BACEE0(EnSuttari* this, PlayState* play) {
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
         ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = 0;
     } else {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->unk428 = scheduleOutput.result;
     func_80BAC2FC(this, play);
@@ -1181,17 +1181,17 @@ void func_80BAD004(EnSuttari* this, PlayState* play) {
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
         ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = 0;
     } else {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->unk428 = scheduleOutput.result;
     func_80BAC2FC(this, play);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
-    } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isTargeted) {
+    } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isLockedOn) {
         Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
     Actor_MoveWithGravity(&this->actor);
@@ -1201,7 +1201,7 @@ void func_80BAD130(EnSuttari* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         if (this->flags1 & 8) {
             this->actionFunc = func_80BAD004;
@@ -1238,7 +1238,7 @@ void func_80BAD2B4(EnSuttari* this, PlayState* play) {
             this->actionFunc = func_80BAD230;
         } else {
             CutsceneManager_Stop(this->csIdList[1]);
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->flags1 |= 0x40;
             this->actionFunc = func_80BAD380;
@@ -1262,7 +1262,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
             player->stateFlags1 &= ~PLAYER_STATE1_10000000;
             this->flags1 &= ~0x4000;
             CutsceneManager_Stop(this->csIdList[1]);
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->flags1 |= 0x40;
         }
@@ -1308,10 +1308,10 @@ void func_80BAD5F8(EnSuttari* this, PlayState* play) {
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
         ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = 0;
     } else {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->unk428 = scheduleOutput.result;
     func_80BAC2FC(this, play);
@@ -1324,7 +1324,7 @@ void func_80BAD5F8(EnSuttari* this, PlayState* play) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             Message_StartTextbox(play, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
-        } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
+        } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
     }
@@ -1346,10 +1346,10 @@ void func_80BAD7F8(EnSuttari* this, PlayState* play) {
         this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
         if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
             ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             scheduleOutput.result = 0;
         } else {
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         }
         this->unk428 = scheduleOutput.result;
         func_80BAC2FC(this, play);
@@ -1361,7 +1361,7 @@ void func_80BAD7F8(EnSuttari* this, PlayState* play) {
             if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
                 Message_StartTextbox(play, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;
-            } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
+            } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
                 Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             }
         }
@@ -1403,7 +1403,7 @@ void func_80BADA9C(EnSuttari* this, PlayState* play) {
                     ((EnElf*)GET_PLAYER(play)->tatlActor)->unk_264 |= 0x10;
                     this->flags2 &= ~1;
                 }
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->textId = 0;
                 if (this->flags1 & 1) {
@@ -1508,7 +1508,7 @@ void EnSuttari_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     EnSuttari_GetPaths(this, play);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80BAC6E8;

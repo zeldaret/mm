@@ -6,7 +6,7 @@
 
 #include "z_en_hgo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnHgo*)thisx)
 
@@ -38,16 +38,6 @@ typedef enum {
     /* 2 */ HGO_EYE_CLOSED
 } EyeState;
 
-typedef enum {
-    /* 0 */ HGO_ANIM_ARMS_FOLDED,
-    /* 1 */ HGO_ANIM_ASTONISHED,
-    /* 2 */ HGO_ANIM_KNEEL_DOWN_AND_HUG,
-    /* 3 */ HGO_ANIM_CONSOLE,
-    /* 4 */ HGO_ANIM_CONSOLE_HEAD_UP,
-    /* 5 */ HGO_ANIM_REACH_DOWN_TO_LIFT,
-    /* 6 */ HGO_ANIM_TOSS
-} HgoAnimation;
-
 ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
     ACTORCAT_NPC,
@@ -60,14 +50,25 @@ ActorInit En_Hgo_InitVars = {
     (ActorFunc)EnHgo_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gPamelasFatherArmsFoldedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gPamelasFatherAstonishedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gPamelasFatherKneelDownAndHugAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gPamelasFatherConsoleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gPamelasFatherConsoleHeadUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gPamelasFatherReachDownToLiftAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gPamelasFatherTossAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum {
+    /* 0 */ HGO_ANIM_ARMS_FOLDED,
+    /* 1 */ HGO_ANIM_ASTONISHED,
+    /* 2 */ HGO_ANIM_KNEEL_DOWN_AND_HUG,
+    /* 3 */ HGO_ANIM_CONSOLE,
+    /* 4 */ HGO_ANIM_CONSOLE_HEAD_UP,
+    /* 5 */ HGO_ANIM_REACH_DOWN_TO_LIFT,
+    /* 6 */ HGO_ANIM_TOSS,
+    /* 7 */ HGO_ANIM_MAX
+} HgoAnimation;
+
+static AnimationInfo sAnimationInfo[HGO_ANIM_MAX] = {
+    { &gPamelasFatherArmsFoldedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },     // HGO_ANIM_ARMS_FOLDED
+    { &gPamelasFatherAstonishedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },      // HGO_ANIM_ASTONISHED
+    { &gPamelasFatherKneelDownAndHugAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f }, // HGO_ANIM_KNEEL_DOWN_AND_HUG
+    { &gPamelasFatherConsoleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },         // HGO_ANIM_CONSOLE
+    { &gPamelasFatherConsoleHeadUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },   // HGO_ANIM_CONSOLE_HEAD_UP
+    { &gPamelasFatherReachDownToLiftAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f }, // HGO_ANIM_REACH_DOWN_TO_LIFT
+    { &gPamelasFatherTossAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },            // HGO_ANIM_TOSS
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -102,13 +103,14 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
-    thisx->targetMode = 6;
+    thisx->targetMode = TARGET_MODE_6;
 
     this->eyeIndex = 0;
     this->blinkTimer = 0;
     this->textId = 0;
     this->talkFlags = TALK_FLAG_NONE;
     this->isInCutscene = false;
+
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         EnHgo_SetupTalk(this);
     } else {
@@ -124,7 +126,7 @@ void EnHgo_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnHgo_SetupDoNothing(EnHgo* this) {
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnHgo_DoNothing;
 }
 
@@ -143,7 +145,7 @@ void EnHgo_UpdateCollision(EnHgo* this, PlayState* play) {
 }
 
 void EnHgo_SetupTalk(EnHgo* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_ARMS_FOLDED);
     this->actionFunc = EnHgo_Talk;
 }
 
@@ -205,6 +207,9 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 EnHgo_SetupTalk(this);
             }
+            break;
+
+        default:
             break;
     }
 
@@ -271,6 +276,9 @@ void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 EnHgo_SetupTalk(this);
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -285,33 +293,36 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = HGO_ANIM_ARMS_FOLDED;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_ARMS_FOLDED);
                     break;
 
                 case 2:
                     this->actor.draw = EnHgo_Draw;
                     this->animIndex = HGO_ANIM_ASTONISHED;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_ASTONISHED);
                     break;
 
                 case 3:
                     this->animIndex = HGO_ANIM_KNEEL_DOWN_AND_HUG;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_KNEEL_DOWN_AND_HUG);
                     break;
 
                 case 4:
                     this->animIndex = HGO_ANIM_CONSOLE;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_CONSOLE);
                     break;
 
                 case 5:
                     this->animIndex = HGO_ANIM_CONSOLE_HEAD_UP;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_CONSOLE_HEAD_UP);
                     break;
 
                 case 6:
                     this->animIndex = HGO_ANIM_REACH_DOWN_TO_LIFT;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_REACH_DOWN_TO_LIFT);
+                    break;
+
+                default:
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -328,12 +339,15 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
 
                 case HGO_ANIM_KNEEL_DOWN_AND_HUG:
                     this->animIndex = HGO_ANIM_CONSOLE;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_CONSOLE);
                     break;
 
                 case HGO_ANIM_REACH_DOWN_TO_LIFT:
                     this->animIndex = HGO_ANIM_TOSS;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_TOSS);
+
+                default:
+                    break;
             }
         }
 

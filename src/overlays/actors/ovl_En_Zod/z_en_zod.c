@@ -6,7 +6,7 @@
 
 #include "z_en_zod.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZod*)thisx)
 
@@ -387,7 +387,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
     seqPos.y = this->actor.projectedPos.y;
     seqPos.z = this->actor.projectedPos.z;
 
-    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
+    Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
 }
 
 void func_80BAFA44(EnZod* this, PlayState* play) {
@@ -622,7 +622,7 @@ void EnZod_DrawDrums(EnZod* this, PlayState* play) {
 }
 
 void EnZod_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr sTijoEyesTextures[] = { &gTijoEyesOpen, &gTijoEyesHalfOpen, &gTijoEyesClosed };
+    static TexturePtr sTijoEyesTextures[] = { &gTijoEyesOpenTex, &gTijoEyesHalfOpenTex, &gTijoEyesClosedTex };
     EnZod* this = THIS;
     Gfx* gfx;
 

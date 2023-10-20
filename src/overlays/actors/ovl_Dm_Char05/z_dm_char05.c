@@ -178,10 +178,10 @@ void DmChar05_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AAC990(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_GOLONMASK);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_GOLONMASK);
 
-    if (objectIdx >= 0) {
-        this->unk_18F = objectIdx;
+    if (objectSlot > OBJECT_SLOT_NONE) {
+        this->objectSlot = objectSlot;
         this->actionFunc = func_80AAC9DC;
     }
 }
@@ -200,10 +200,10 @@ void func_80AAC9DC(DmChar05* this, PlayState* play) {
 }
 
 void func_80AACA98(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_MASK13);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_MASK13);
 
-    if (objectIdx >= 0) {
-        this->unk_18F = objectIdx;
+    if (objectSlot > OBJECT_SLOT_NONE) {
+        this->objectSlot = objectSlot;
         this->actionFunc = func_80AACAE4;
     }
 }
@@ -227,15 +227,15 @@ void func_80AACAE4(DmChar05* this, PlayState* play) {
 }
 
 void func_80AACBE4(DmChar05* this, PlayState* play) {
-    static s16 D_80AAE2F0[] = {
+    static s16 sObjectIds[] = {
         OBJECT_GI_MASK17, OBJECT_GI_MASK14, OBJECT_GI_MASK10,     OBJECT_GI_MASK21,
         OBJECT_GI_MASK11, OBJECT_GI_MASK20, OBJECT_GI_RABIT_MASK, OBJECT_GI_MASK12,
     };
     s32 params = DMCHAR05_GET(&this->actor) - DMCHAR05_5;
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, D_80AAE2F0[params]);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[params]);
 
-    if (objectIdx >= 0) {
-        this->unk_18F = objectIdx;
+    if (objectSlot > OBJECT_SLOT_NONE) {
+        this->objectSlot = objectSlot;
         this->actionFunc = func_80AACD0C;
     }
 }
@@ -278,10 +278,10 @@ void func_80AACD0C(DmChar05* this, PlayState* play) {
 }
 
 void func_80AACD1C(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_ZORAMASK);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_ZORAMASK);
 
-    if (objectIdx >= 0) {
-        this->unk_18F = objectIdx;
+    if (objectSlot > OBJECT_SLOT_NONE) {
+        this->objectSlot = objectSlot;
         this->actionFunc = func_80AACD68;
     }
 }
@@ -298,10 +298,10 @@ void func_80AACD68(DmChar05* this, PlayState* play) {
 }
 
 void func_80AACE10(DmChar05* this, PlayState* play) {
-    s32 objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_GI_MASK15);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_GI_MASK15);
 
-    if (objectIdx >= 0) {
-        this->unk_18F = objectIdx;
+    if (objectSlot > OBJECT_SLOT_NONE) {
+        this->objectSlot = objectSlot;
         this->actionFunc = func_80AACE5C;
     }
 }
@@ -723,55 +723,55 @@ void DmChar05_Draw(Actor* thisx, PlayState* play) {
 }
 
 void func_80AADD9C(PlayState* play, DmChar05* this) {
-    if (this->actor.objBankIndex == this->unk_18F) {
+    if (this->actor.objectSlot == this->objectSlot) {
         Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
         GetItem_Draw(play, GID_MASK_GORON);
     }
 
-    if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
-        this->actor.objBankIndex = this->unk_18F;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
     }
 }
 
 void func_80AADE78(PlayState* play, DmChar05* this) {
-    if (this->actor.objBankIndex == this->unk_18F) {
+    if (this->actor.objectSlot == this->objectSlot) {
         Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
         GetItem_Draw(play, GID_MASK_ZORA);
     }
 
-    if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
-        this->actor.objBankIndex = this->unk_18F;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
     }
 }
 
 void func_80AADF54(PlayState* play, DmChar05* this) {
-    if (this->actor.objBankIndex == this->unk_18F) {
+    if (this->actor.objectSlot == this->objectSlot) {
         Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
         GetItem_Draw(play, GID_MASK_GIBDO);
     }
 
-    if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
-        this->actor.objBankIndex = this->unk_18F;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
     }
 }
 
 void func_80AAE030(PlayState* play, DmChar05* this) {
     if (this->unk_18E != 0) {
-        if (this->actor.objBankIndex == this->unk_18F) {
+        if (this->actor.objectSlot == this->objectSlot) {
             Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
             Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
             Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
             GetItem_Draw(play, GID_MASK_COUPLE);
         }
 
-        if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
-            this->actor.objBankIndex = this->unk_18F;
+        if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+            this->actor.objectSlot = this->objectSlot;
         }
     }
 }
@@ -784,14 +784,14 @@ void func_80AAE114(PlayState* play, DmChar05* this) {
     };
 
     getItemDrawIndex = DMCHAR05_GET(&this->actor) - DMCHAR05_5;
-    if (this->actor.objBankIndex == this->unk_18F) {
+    if (this->actor.objectSlot == this->objectSlot) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
         GetItem_Draw(play, getItemDrawIds[getItemDrawIndex]);
     }
 
-    if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
-        this->actor.objBankIndex = this->unk_18F;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
     }
 }

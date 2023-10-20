@@ -12,7 +12,7 @@
 #include "objects/object_bigslime/object_bigslime.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
 
 #define THIS ((EnBigslime*)thisx)
 
@@ -308,7 +308,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_GEKKO_GIANT_SLIME, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(targetArrowOffset, -13221, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_STOP),
 };
 
 void EnBigslime_Init(Actor* thisx, PlayState* play2) {
@@ -372,7 +372,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
     this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(gBigslimeFrozenTexAnim);
     this->iceShardTexAnim = Lib_SegmentedToVirtual(gBigslimeIceShardTexAnim);
     this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.shape.shadowAlpha = 255;
     this->gekkoScale = 0.007f;
     this->actor.shape.rot.y = 0;
@@ -729,7 +729,7 @@ void EnBigslime_SetPlayerParams(EnBigslime* this, PlayState* play) {
 
     if (player->stateFlags2 & PLAYER_STATE2_80) {
         player->actor.parent = NULL;
-        player->unk_AE8 = 100;
+        player->actionVar2 = 100;
         func_800B8D98(play, &this->actor, 10.0f, this->actor.world.rot.y, 10.0f);
     }
 }
@@ -765,7 +765,7 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     EnBigslime_SetPlayerParams(this, play);
     EnBigslime_EndCutscene(this, play);
     this->actor.colChkInfo.mass = 50;
-    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_400);
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_400);
     this->actor.flags |= ACTOR_FLAG_200;
     this->actor.hintId = TATL_HINT_ID_GEKKO_GIANT_SLIME;
     this->gekkoRot.x = 0;
@@ -1001,7 +1001,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, PlayState* play) {
         if (this->callTimer == 0) {
             EnBigslime_EndCutscene(this, play);
             this->formBigslimeTimer = 2;
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             EnBigslime_SetupIdleNoticePlayer(this);
         }
     } else if (this->isAnimFinished) {
@@ -1009,7 +1009,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, PlayState* play) {
         EnBigslime_UpdateCameraIntroCs(this, play, 25);
         Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
         EnBigslime_InitFallMinislime(this);
-        play->envCtx.lightSettingOverride = 0xFF;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
         this->callTimer = 35;
         func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
     }
@@ -1528,7 +1528,7 @@ void EnBigslime_CutsceneGrabPlayer(EnBigslime* this, PlayState* play) {
     s32 i;
     s32 j;
 
-    player->unk_AE8 = 0;
+    player->actionVar2 = 0;
     Math_ScaledStepToS(&this->gekkoRot.x, 0, 0x400);
     EnBigslime_UpdateCameraGrabPlayer(this, play);
     if (this->grabPlayerTimer > 0) {
@@ -1577,7 +1577,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 pitch = this->scaleFactor * 0x3333; // polar (zenith) angle
 
-    player->unk_AE8 = 0;
+    player->actionVar2 = 0;
     Math_ScaledStepToS(&this->gekkoRot.x, 0, 0x400);
     EnBigslime_UpdateCameraGrabPlayer(this, play);
     EnBigslime_UpdateWavySurface(this);
@@ -1710,7 +1710,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
         if (this->windupPunchTimer == -5) {
             if (player->stateFlags2 & PLAYER_STATE2_80) {
                 player->actor.parent = NULL;
-                player->unk_AE8 = 100;
+                player->actionVar2 = 100;
             }
 
             player->actor.velocity.y = 0.0f;
@@ -1989,7 +1989,7 @@ void EnBigslime_Melt(EnBigslime* this, PlayState* play) {
     if (this->meltCounter == 100) {
         EnBigslime_SetTargetVtxFromPreFrozen(this);
     } else if (this->meltCounter == 50) {
-        play->envCtx.lightSettingOverride = 0xFF;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
     }
 }
 
@@ -2040,7 +2040,7 @@ void EnBigslime_JumpGekko(EnBigslime* this, PlayState* play) {
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->gekkoCollider.base.acFlags |= AC_ON;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 
     this->jumpTimer--;
@@ -2352,7 +2352,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, PlayState* play) {
         this->minislime[i]->actor.params = MINISLIME_DEFEAT_IDLE;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     EnBigslime_GekkoThaw(this, play);
     this->actionFunc = EnBigslime_CutsceneDefeat;
 }
@@ -2777,7 +2777,7 @@ void EnBigslime_UpdateBigslime(Actor* thisx, PlayState* play) {
     Vec3f vtxMin;
 
     if (play->envCtx.lightSettingOverride == 3) {
-        play->envCtx.lightSettingOverride = 0xFF;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
     }
 
     Audio_SetSfxUnderwaterReverb(true);
@@ -2822,7 +2822,7 @@ void EnBigslime_UpdateGekko(Actor* thisx, PlayState* play) {
     s32 pad;
 
     if (play->envCtx.lightSettingOverride == 3) {
-        play->envCtx.lightSettingOverride = 0xFF;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
     }
 
     Audio_SetSfxUnderwaterReverb(false);

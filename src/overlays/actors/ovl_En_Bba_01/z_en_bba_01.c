@@ -15,7 +15,7 @@
 #include "z_en_bba_01.h"
 #include "objects/object_bba/object_bba.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnBba01*)thisx)
 
@@ -158,7 +158,7 @@ void EnBba01_FinishInit(EnHy* this, PlayState* play) {
     //! @bug: gBbaSkel does not match EnHy's skeleton assumptions.
     //! Since gBbaSkel has more limbs than expected, joint and morph tables will overflow
     if (EnHy_Init(this, play, &gBbaSkel, ENHY_ANIM_BBA_6)) {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.draw = EnBba01_Draw;
         this->waitingOnInit = false;
         if (ENBBA01_GET_PATH_INDEX(&this->actor) == ENBBA01_PATH_INDEX_NONE) {
@@ -215,20 +215,20 @@ void EnBba01_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnBba01* this = THIS;
 
-    this->enHy.animObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
-    this->enHy.headObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
-    this->enHy.skelUpperObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
-    this->enHy.skelLowerObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
+    this->enHy.animObjectSlot = SubS_GetObjectSlot(OBJECT_BBA, play);
+    this->enHy.headObjectSlot = SubS_GetObjectSlot(OBJECT_BBA, play);
+    this->enHy.skelUpperObjectSlot = SubS_GetObjectSlot(OBJECT_BBA, play);
+    this->enHy.skelLowerObjectSlot = SubS_GetObjectSlot(OBJECT_BBA, play);
 
-    if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skelUpperObjIndex < 0) ||
-        (this->enHy.skelLowerObjIndex < 0)) {
+    if ((this->enHy.animObjectSlot <= OBJECT_SLOT_NONE) || (this->enHy.headObjectSlot <= OBJECT_SLOT_NONE) ||
+        (this->enHy.skelUpperObjectSlot <= OBJECT_SLOT_NONE) || (this->enHy.skelLowerObjectSlot <= OBJECT_SLOT_NONE)) {
         Actor_Kill(&this->enHy.actor);
     }
     this->enHy.actor.draw = NULL;
     Collider_InitCylinder(play, &this->enHy.collider);
     Collider_SetCylinder(play, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->enHy.actor.flags &= ~ACTOR_FLAG_1;
+    this->enHy.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->enHy.path = SubS_GetPathByIndex(play, ENBBA01_GET_PATH_INDEX(&this->enHy.actor), ENBBA01_PATH_INDEX_NONE);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);
@@ -264,9 +264,9 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.headObjIndex].segment);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.headObjIndex].segment);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.headObjectSlot].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjectSlot].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -303,8 +303,8 @@ void EnBba01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     if (limbIndex == BBA_LIMB_HEAD) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
-        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
+        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

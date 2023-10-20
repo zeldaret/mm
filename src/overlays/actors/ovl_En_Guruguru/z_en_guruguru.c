@@ -5,9 +5,8 @@
  */
 
 #include "z_en_guruguru.h"
-#include "objects/object_fu/object_fu.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnGuruguru*)thisx)
 
@@ -62,9 +61,27 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 20, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* sAnimations[] = { &gGuruGuruPlayStillAnim, &gGuruGuruPlayAndMoveHeadAnim };
-static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
-static f32 sPlaySpeeds[] = { 1.0f, 1.0f };
+typedef enum {
+    /* 0 */ GURU_GURU_ANIM_PLAY_STILL,
+    /* 1 */ GURU_GURU_ANIM_PLAY_MOVE_HEAD,
+    /* 2 */ GURU_GURU_ANIM_MAX
+} GuruGuruAnimation;
+
+static AnimationHeader* sAnimations[GURU_GURU_ANIM_MAX] = {
+    &gGuruGuruPlayStillAnim,       // GURU_GURU_ANIM_PLAY_STILL
+    &gGuruGuruPlayAndMoveHeadAnim, // GURU_GURU_ANIM_PLAY_MOVE_HEAD
+};
+
+static u8 sAnimationModes[GURU_GURU_ANIM_MAX] = {
+    ANIMMODE_LOOP, // GURU_GURU_ANIM_PLAY_STILL
+    ANIMMODE_LOOP, // GURU_GURU_ANIM_PLAY_MOVE_HEAD
+};
+
+static f32 sPlaySpeeds[GURU_GURU_ANIM_MAX] = {
+    1.0f, // GURU_GURU_ANIM_PLAY_STILL
+    1.0f, // GURU_GURU_ANIM_PLAY_MOVE_HEAD
+};
+
 static TexturePtr sEyeTextures[] = { gGuruGuruEyeClosedTex, gGuruGuruEyeAngryTex };
 static TexturePtr sMouthTextures[] = { gGuruGuruMouthOpenTex, gGuruGuruMouthAngryTex };
 
@@ -74,8 +91,8 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGuruGuruSkel, &gGuruGuruPlayStillAnim, this->jointTable,
-                       this->morphTable, 16);
-    this->actor.targetMode = 0;
+                       this->morphTable, GURU_GURU_LIMB_MAX);
+    this->actor.targetMode = TARGET_MODE_0;
     if (this->actor.params != 2) {
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     }
@@ -85,7 +102,7 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
         } else if (this->actor.params == 2) {
             this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
             this->actor.draw = NULL;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnGuruguru_DoNothing;
         } else {
             Actor_Kill(&this->actor);
@@ -106,8 +123,8 @@ void EnGuruguru_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnGuruguru_ChangeAnim(EnGuruguru* this, s32 animIndex) {
-    this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[animIndex], sPlaySpeeds[animIndex], 0.0f, this->frameCount,
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], sPlaySpeeds[animIndex], 0.0f, this->animEndFrame,
                      sAnimationModes[animIndex], -4.0f);
 }
 
@@ -115,7 +132,7 @@ void EnGuruguru_DoNothing(EnGuruguru* this, PlayState* play) {
 }
 
 void func_80BC6E10(EnGuruguru* this) {
-    EnGuruguru_ChangeAnim(this, 0);
+    EnGuruguru_ChangeAnim(this, GURU_GURU_ANIM_PLAY_STILL);
     this->textIdIndex = 0;
     this->unk270 = 0;
     if (this->actor.params == 0) {
@@ -333,12 +350,12 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
 
     if (this->actor.params == 2) {
         if (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 100.0f) {
-            func_801A1DB8(&this->actor.projectedPos, NA_BGM_SONG_OF_STORMS, 540.0f);
+            Audio_PlaySubBgmAtPosWithFilter(&this->actor.projectedPos, NA_BGM_SONG_OF_STORMS, 540.0f);
         }
         return;
     }
     if (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 200.0f) {
-        func_801A1D44(&this->actor.projectedPos, NA_BGM_SONG_OF_STORMS, 540.0f);
+        Audio_PlaySubBgmAtPos(&this->actor.projectedPos, NA_BGM_SONG_OF_STORMS, 540.0f);
     }
     if (this->unusedTimer != 0) {
         this->unusedTimer--;
@@ -373,7 +390,7 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
 s32 EnGuruguru_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnGuruguru* this = THIS;
 
-    if (limbIndex == 14) {
+    if (limbIndex == GURU_GURU_LIMB_HEAD) {
         rot->x += this->headXRot;
         rot->z += this->headZRot;
     }

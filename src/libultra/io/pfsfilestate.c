@@ -1,4 +1,4 @@
-#include "PR/pfs.h"
+#include "PR/os_pfs.h"
 #include "global.h"
 
 s32 osPfsFileState(OSPfs* pfs, s32 fileNo, OSPfsState* state) {

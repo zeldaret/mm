@@ -7,7 +7,7 @@
 #include "z_en_zob.h"
 #include "objects/object_zob/object_zob.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZob*)thisx)
 
@@ -268,7 +268,7 @@ void func_80B9FC70(EnZob* this, s16 csIdIndex) {
 
 void func_80B9FCA0(EnZob* this, PlayState* play) {
     Message_CloseTextbox(play);
-    play->msgCtx.ocarinaMode = 4;
+    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
     func_80B9FC0C(this);
     this->unk_2F4 &= ~1;
     this->actionFunc = func_80BA0728;
@@ -315,7 +315,7 @@ void func_80B9FE1C(EnZob* this, PlayState* play) {
 
 void func_80B9FE5C(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (play->msgCtx.ocarinaMode == 3) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         play->msgCtx.msgLength = 0;
         this->actionFunc = func_80B9FDDC;
         func_80B9FC70(this, 0);
@@ -331,7 +331,7 @@ void func_80B9FE5C(EnZob* this, PlayState* play) {
 void func_80B9FF20(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
-        func_80152434(play, 0x42);
+        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_PROMPT_EVAN_PART2_SECOND_HALF);
         this->actionFunc = func_80B9FE5C;
         func_80B9FC70(this, 2);
     }
@@ -339,11 +339,11 @@ void func_80B9FF20(EnZob* this, PlayState* play) {
 
 void func_80B9FF80(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (play->msgCtx.ocarinaMode == 3) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         this->actionFunc = func_80B9FF20;
         this->unk_304 = 6;
         func_80B9F7E4(this, 1, ANIMMODE_LOOP);
-        func_80152434(play, 0x3E);
+        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_DEMONSTRATE_EVAN_PART2_FIRST_HALF);
         func_80B9FC70(this, 1);
     } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_11) {
         play->msgCtx.msgLength = 0;
@@ -357,7 +357,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
 void func_80BA005C(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
-        func_80152434(play, 0x41);
+        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_PROMPT_EVAN_PART1_SECOND_HALF);
         this->actionFunc = func_80B9FF80;
         func_80B9FC70(this, 2);
     }
@@ -426,7 +426,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                         break;
 
                     case 0x1209:
-                        func_80152434(play, 0x3D);
+                        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_DEMONSTRATE_EVAN_PART1_FIRST_HALF);
                         this->unk_304 = 4;
                         func_80B9F7E4(this, 0, ANIMMODE_LOOP);
                         this->actionFunc = func_80BA005C;
@@ -439,7 +439,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
 }
 
 void func_80BA0318(EnZob* this, PlayState* play) {
-    func_80152434(play, 0x3D);
+    Message_DisplayOcarinaStaff(play, OCARINA_ACTION_DEMONSTRATE_EVAN_PART1_FIRST_HALF);
     this->unk_304 = 4;
     func_80B9F7E4(this, 0, ANIMMODE_LOOP);
     this->actionFunc = func_80BA005C;
@@ -558,7 +558,7 @@ void func_80BA06BC(EnZob* this, PlayState* play) {
 
 void func_80BA0728(EnZob* this, PlayState* play) {
     s32 pad;
-    Vec3f sp28;
+    Vec3f seqPos;
 
     func_80B9F86C(this);
 
@@ -585,10 +585,10 @@ void func_80BA0728(EnZob* this, PlayState* play) {
         func_800B874C(&this->actor, play, 200.0f, 150.0f);
     }
 
-    sp28.x = this->actor.projectedPos.x;
-    sp28.y = this->actor.projectedPos.y;
-    sp28.z = this->actor.projectedPos.z;
-    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_BASS_PLAY, 1000.0f);
+    seqPos.x = this->actor.projectedPos.x;
+    seqPos.y = this->actor.projectedPos.y;
+    seqPos.z = this->actor.projectedPos.z;
+    Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_BASS_PLAY, 1000.0f);
 }
 
 void func_80BA08E8(EnZob* this, PlayState* play) {

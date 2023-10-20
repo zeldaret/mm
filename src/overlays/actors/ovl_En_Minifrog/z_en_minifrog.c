@@ -7,7 +7,7 @@
 #include "z_en_minifrog.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnMinifrog*)thisx)
 
@@ -132,7 +132,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             this->frog = NULL;
         } else {
             this->frog = EnMinifrog_GetFrog(play);
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
             // Frog has been returned
             if (CHECK_WEEKEVENTREG(sIsFrogReturnedFlags[this->frogIndex])) {
@@ -150,7 +150,7 @@ void EnMinifrog_Destroy(Actor* thisx, PlayState* play) {
 
     Collider_DestroyCylinder(play, &this->collider);
     if (this->flags & 0x100) {
-        func_801A1F88();
+        Audio_StopSequenceAtDefaultPos();
     }
 }
 
@@ -438,7 +438,7 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, PlayState* play) {
         this->actionFunc = EnMinifrog_NextFrogMissing;
         this->timer = 60;
         this->actor.home.rot.y = Actor_WorldYawTowardActor(&this->actor, &this->frog->actor);
-        func_801A1F88();
+        Audio_StopSequenceAtDefaultPos();
         this->flags &= ~0x100;
         this->flags &=
             ~(0x2 << FROG_YELLOW | 0x2 << FROG_CYAN | 0x2 << FROG_PINK | 0x2 << FROG_BLUE | 0x2 << FROG_WHITE);
@@ -460,7 +460,7 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, PlayState* play) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
         this->actionFunc = EnMinifrog_SetupNextFrogChoir;
         this->timer = 5;
-        func_801A1F00(3, NA_BGM_FROG_SONG);
+        Audio_PlaySequenceAtDefaultPos(SEQ_PLAYER_BGM_SUB, NA_BGM_FROG_SONG);
         this->flags |= 0x100;
         play->setPlayerTalkAnim(play, &gPlayerAnim_pn_gakkiplay, ANIMMODE_LOOP);
     } else {

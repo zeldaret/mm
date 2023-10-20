@@ -7,7 +7,7 @@
 #include "z_en_fsn.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnFsn*)thisx)
 
@@ -126,7 +126,7 @@ static Vec3f sShopItemPositions[3] = {
 s32 EnFsn_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
@@ -410,7 +410,7 @@ void EnFsn_EndInteraction(EnFsn* this, PlayState* play) {
         this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &play->state);
-    play->msgCtx.msgMode = 0x43;
+    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     this->drawCursor = 0;
@@ -995,7 +995,7 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 Audio_PlaySfx_MessageDecide();
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                     CutsceneManager_Stop(this->csId);
@@ -1204,7 +1204,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
             item = this->items[this->cursorIndex];
             item->buyFanfareFunc(play, item);
             Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             this->drawCursor = 0;
@@ -1246,7 +1246,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, PlayState* play) {
             if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
             }
         } else {
@@ -1327,7 +1327,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
             if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
             }
         } else {
@@ -1378,7 +1378,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
             if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
             }
         } else {
@@ -1424,7 +1424,7 @@ void EnFsn_IdleBackroom(EnFsn* this, PlayState* play) {
         this->textId = 0;
         EnFsn_HandleConversationBackroom(this, play);
         this->actionFunc = EnFsn_ConverseBackroom;
-    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
+    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
@@ -1433,12 +1433,12 @@ void EnFsn_ConverseBackroom(EnFsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->flags & ENFSN_END_CONVERSATION) {
             this->flags &= ~ENFSN_END_CONVERSATION;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = EnFsn_IdleBackroom;
         } else if (this->flags & ENFSN_GIVE_ITEM) {
             this->flags &= ~ENFSN_GIVE_ITEM;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = EnFsn_GiveItem;
         } else {
@@ -1479,7 +1479,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
 
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, play);
     } else {
@@ -1491,8 +1491,8 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
-        this->actor.flags |= ACTOR_FLAG_1;
-        this->actor.targetMode = 0;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.targetMode = TARGET_MODE_0;
         this->animIndex = FSN_ANIM_IDLE;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnFsn_IdleBackroom;

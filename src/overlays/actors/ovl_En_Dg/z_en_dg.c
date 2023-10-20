@@ -7,7 +7,7 @@
 #include "z_en_dg.h"
 #include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnDg*)thisx)
 
@@ -491,7 +491,7 @@ void EnDg_TryPickUp(EnDg* this, PlayState* play) {
         }
 
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SIT_DOWN);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.speed = 0.0f;
         if (Player_GetMask(play) == PLAYER_MASK_TRUTH) {
             this->actor.flags |= ACTOR_FLAG_10000;
@@ -516,7 +516,7 @@ s32 EnDg_FindFollowerForBremenMask(PlayState* play) {
 
     while (enemy != NULL) {
         if (enemy->id == ACTOR_EN_DG) {
-            if (enemy->isTargeted) {
+            if (enemy->isLockedOn) {
                 sBremenMaskFollowerIndex = ((EnDg*)enemy)->index;
                 return true;
             }
@@ -1241,7 +1241,7 @@ void EnDg_JumpOutOfWater(EnDg* this, PlayState* play) {
 void EnDg_Held(EnDg* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->grabState = DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         if (sIsAnyDogHeld) {
             this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
             sIsAnyDogHeld = false;
@@ -1312,7 +1312,7 @@ void EnDg_Init(Actor* thisx, PlayState* play) {
 
     this->path = SubS_GetPathByIndex(play, ENDG_GET_PATH_INDEX(&this->actor), ENDG_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.0075f);
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.gravity = -3.0f;
     this->timer = Rand_S16Offset(60, 60);
     this->dogFlags = DOG_FLAG_NONE;

@@ -744,7 +744,7 @@ void func_8088E0F0(EnElf* this, PlayState* play) {
             if (this->unk_250 < 2.0f) {
                 this->unk_250 += 0.1f;
             } else {
-                gSaveContext.healthAccumulator = 160;
+                gSaveContext.healthAccumulator = 0xA0;
                 this->unk_246++;
             }
             break;
@@ -884,7 +884,7 @@ void func_8088E60C(EnElf* this, PlayState* play) {
 void func_8088E850(EnElf* this, PlayState* play) {
     Vec3f nextPos;
     Player* player = GET_PLAYER(play);
-    Actor* arrowPointedActor;
+    Actor* targetFairyActor;
     f32 xScale;
     f32 distFromLinksHead;
     u32 cueChannel;
@@ -970,15 +970,15 @@ void func_8088E850(EnElf* this, PlayState* play) {
                 break;
 
             default:
-                arrowPointedActor = play->actorCtx.targetContext.arrowPointedActor;
+                targetFairyActor = play->actorCtx.targetCtx.fairyActor;
                 if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor != NULL)) {
                     Math_Vec3f_Copy(&nextPos, &player->talkActor->focus.pos);
                 } else {
-                    Math_Vec3f_Copy(&nextPos, &play->actorCtx.targetContext.unk0);
+                    Math_Vec3f_Copy(&nextPos, &play->actorCtx.targetCtx.fairyPos);
                 }
                 nextPos.y += 1500.0f * this->actor.scale.y;
 
-                if (arrowPointedActor != NULL) {
+                if (targetFairyActor != NULL) {
                     func_8088DB4C(this, &nextPos, 0.0f, 30.0f, 0.2f);
                     if (this->actor.speed >= 5.0f) {
                         func_8088F5F4(this, play, 0x10);
@@ -1039,7 +1039,7 @@ void func_8088EF18(Color_RGBAf* dest, Color_RGBAf* newColor, Color_RGBAf* curCol
 }
 
 void func_8088EFA4(EnElf* this, PlayState* play) {
-    Actor* arrayPointerActor = play->actorCtx.targetContext.arrowPointedActor;
+    Actor* targetFairyActor = play->actorCtx.targetCtx.fairyActor;
     Player* player = GET_PLAYER(play);
     f32 transitionRate;
 
@@ -1064,35 +1064,35 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
             this->outerColor.b = 80.0f;
             this->outerColor.a = 0.0f;
         }
-    } else if (play->actorCtx.targetContext.unk40 != 0.0f) {
+    } else if (play->actorCtx.targetCtx.fairyMoveProgressFactor != 0.0f) {
         this->unk_268 = 0;
         this->unk_238 = 1.0f;
         if (!this->unk_269) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
         }
     } else if (this->unk_268 == 0) {
-        if ((arrayPointerActor == NULL) ||
-            (Math_Vec3f_DistXYZ(&this->actor.world.pos, &play->actorCtx.targetContext.unk0) < 50.0f)) {
+        if ((targetFairyActor == NULL) ||
+            (Math_Vec3f_DistXYZ(&this->actor.world.pos, &play->actorCtx.targetCtx.fairyPos) < 50.0f)) {
             this->unk_268 = 1;
         }
     } else if (this->unk_238 != 0.0f) {
         if (Math_StepToF(&this->unk_238, 0.0f, 0.25f)) {
-            this->innerColor = play->actorCtx.targetContext.fairyInner;
-            this->outerColor = play->actorCtx.targetContext.fairyOuter;
+            this->innerColor = play->actorCtx.targetCtx.fairyInnerColor;
+            this->outerColor = play->actorCtx.targetCtx.fairyOuterColor;
         } else {
             transitionRate = 0.25f / this->unk_238;
-            func_8088EF18(&this->innerColor, &play->actorCtx.targetContext.fairyInner, &this->innerColor,
+            func_8088EF18(&this->innerColor, &play->actorCtx.targetCtx.fairyInnerColor, &this->innerColor,
                           transitionRate);
-            func_8088EF18(&this->outerColor, &play->actorCtx.targetContext.fairyOuter, &this->outerColor,
+            func_8088EF18(&this->outerColor, &play->actorCtx.targetCtx.fairyOuterColor, &this->outerColor,
                           transitionRate);
         }
     }
 
     if (this->fairyFlags & 1) {
-        if ((arrayPointerActor == NULL) || (player->targetedActor == NULL)) {
+        if ((targetFairyActor == NULL) || (player->lockOnActor == NULL)) {
             this->fairyFlags ^= 1;
         }
-    } else if ((arrayPointerActor != NULL) && (player->targetedActor != NULL)) {
+    } else if ((targetFairyActor != NULL) && (player->lockOnActor != NULL)) {
         u8 temp = this->unk_269;
         u16 targetSfxId = (this->unk_269 == 0) ? NA_SE_NONE : NA_SE_NONE;
 
@@ -1105,7 +1105,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
 
 void func_8088F214(EnElf* this, PlayState* play) {
     s32 sp34;
-    Actor* arrowPointedActor;
+    Actor* targetFairyActor;
     Player* player = GET_PLAYER(play);
     s32 pad;
 
@@ -1136,12 +1136,12 @@ void func_8088F214(EnElf* this, PlayState* play) {
         sp34 = 1;
         Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BELL_ANGER - SFX_FLAG);
     } else {
-        arrowPointedActor = play->actorCtx.targetContext.arrowPointedActor;
+        targetFairyActor = play->actorCtx.targetCtx.fairyActor;
         if (player->stateFlags1 & PLAYER_STATE1_400) {
             sp34 = 10;
             this->unk_25C = 100;
-        } else if ((arrowPointedActor == NULL) || (arrowPointedActor->category == 4)) {
-            if (arrowPointedActor != NULL) {
+        } else if ((targetFairyActor == NULL) || (targetFairyActor->category == ACTORCAT_NPC)) {
+            if (targetFairyActor != NULL) {
                 this->unk_25C = 100;
                 player->stateFlags2 |= PLAYER_STATE2_100000;
                 sp34 = 0;
@@ -1280,13 +1280,13 @@ void func_8088FA38(EnElf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->fairyFlags & 0x10) {
-        refPos = play->actorCtx.targetContext.unk0;
+        refPos = play->actorCtx.targetCtx.fairyPos;
 
         if (this->unk_234 != NULL) {
             refPos = this->unk_234->world.pos;
         } else {
-            if ((player->targetedActor == NULL) || (&player->actor == player->targetedActor) ||
-                (&this->actor == player->targetedActor) || (this->unk_264 & 4)) {
+            if ((player->lockOnActor == NULL) || (&player->actor == player->lockOnActor) ||
+                (&this->actor == player->lockOnActor) || (this->unk_264 & 4)) {
                 refPos.x =
                     player->bodyPartsPos[PLAYER_BODYPART_HEAD].x + (Math_SinS(player->actor.shape.rot.y) * 20.0f);
                 refPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 5.0f;
@@ -1323,7 +1323,7 @@ void func_8088FC34(EnElf* this, PlayState* play) {
         } else {
             Math_StepToF(&this->unk_240, 1.0f, 0.05f);
         }
-        func_800FD2B4(play, SQ(this->unk_240), player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f);
+        Environment_AdjustLights(play, SQ(this->unk_240), player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f);
     }
 }
 
@@ -1462,7 +1462,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
     }
 
-    if ((player->tatlTextId == 0) && (player->targetedActor == NULL)) {
+    if ((player->tatlTextId == 0) && (player->lockOnActor == NULL)) {
         if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 600) &&
             (gSaveContext.save.saveInfo.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = QuestHint_GetTatlTextId(play);
@@ -1521,8 +1521,8 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     this->elfMsg = NULL;
     this->timer++;
 
-    if ((this->unk_240 >= 0.0f) &&
-        func_800FD2B4(play, SQ(this->unk_240) * this->unk_240, player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f)) {
+    if ((this->unk_240 >= 0.0f) && Environment_AdjustLights(play, SQ(this->unk_240) * this->unk_240,
+                                                            player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f)) {
         Math_StepToF(&this->unk_240, -0.05f, 0.05f);
     }
 

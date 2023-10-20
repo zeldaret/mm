@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_dnt/object_dnt.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnScopenuts*)thisx)
 
@@ -90,12 +90,12 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gBusinessScrubFlyEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-Gfx* D_80BCCCDC[] = { gKakeraLeafMiddle, gKakeraLeafTip };
+Gfx* D_80BCCCDC[] = { gKakeraLeafMiddleDL, gKakeraLeafTipDL };
 
 Vec3f D_80BCCCE4 = { 0.0f, -0.5f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -301,7 +301,7 @@ void func_80BCB52C(EnScopenuts* this, PlayState* play) {
         this->actionFunc = func_80BCB6D0;
     } else if (((this->actor.xzDistToPlayer < 100.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
-               this->actor.isTargeted) {
+               this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 100.0f);
     } else if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
                !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
@@ -318,9 +318,9 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_328 & 1) {
                 this->unk_328 &= ~1;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->unk_328 &= ~4;
                 this->unk_348 = 8;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 8);
@@ -341,7 +341,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                         Message_StartTextbox(play, this->unk_33C, &this->actor);
                     } else {
                         Audio_PlaySfx_MessageDecide();
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         Rupees_ChangeBy(-this->unk_358);
                         this->actionFunc = func_80BCB90C;

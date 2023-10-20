@@ -6,7 +6,7 @@
 
 #include "z_en_js.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnJs*)thisx)
 
@@ -117,6 +117,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_84_20);
             }
             break;
+
         case 1:
         case 2:
         case 3:
@@ -130,6 +131,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
                 return;
             }
             break;
+
         case 5:
         case 6:
         case 7:
@@ -137,6 +139,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             this->maskType = ENJS_GET_TYPE(&this->actor) - 4;
             this->actionFunc = func_8096A104;
             break;
+
         default:
             break;
     }
@@ -153,6 +156,7 @@ void EnJs_Destroy(Actor* thisx, PlayState* play) {
         case 0:
             Play_DisableMotionBlur();
             break;
+
         case 5:
         case 6:
         case 7:
@@ -161,6 +165,7 @@ void EnJs_Destroy(Actor* thisx, PlayState* play) {
                 func_80969400(ENJS_GET_TYPE(&this->actor));
             }
             break;
+
         default:
             break;
     }
@@ -414,6 +419,7 @@ s32 func_809692A8(s32 arg0) {
                 return false;
             }
             return true;
+
         case 5:
         case 6:
         case 7:
@@ -422,6 +428,7 @@ s32 func_809692A8(s32 arg0) {
                 return false;
             }
             return true;
+
         default:
             return false;
     }
@@ -441,6 +448,7 @@ s32 func_8096933C(s32 arg0) {
             } else {
                 return true;
             }
+
         case 5:
         case 6:
         case 7:
@@ -451,6 +459,7 @@ s32 func_8096933C(s32 arg0) {
             } else {
                 return true;
             }
+
         default:
             return false;
     }
@@ -579,13 +588,18 @@ void func_80969898(EnJs* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         Message_ContinueTextbox(play, 0x2217);
                         break;
+
                     case 1:
                         Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0x2216);
                         break;
+
+                    default:
+                        break;
                 }
             }
             break;
+
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -593,18 +607,21 @@ void func_80969898(EnJs* this, PlayState* play) {
                         this->unk_2B8 |= 1;
                         if (!func_8096933C(ENJS_GET_TYPE(&this->actor))) {
                             Message_ContinueTextbox(play, 0x220F);
-                            break;
+                        } else {
+                            Message_ContinueTextbox(play, 0x220D);
                         }
-                        Message_ContinueTextbox(play, 0x220D);
                         break;
+
                     case 0x220D:
                     case 0x2213:
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
+
                     case 0x220E:
                         Message_ContinueTextbox(play, 0xFF);
                         this->actionFunc = func_80969748;
                         break;
+
                     case 0x2210:
                     case 0x2211:
                     case 0x2212:
@@ -612,18 +629,22 @@ void func_80969898(EnJs* this, PlayState* play) {
                         Message_ContinueTextbox(play, 0xFF);
                         this->actionFunc = func_80969748;
                         break;
+
                     case 0x2214:
                     case 0x2217:
                         if (!func_809695FC(this, play)) {
                             func_80969494(this, play);
-                            break;
                         }
                         break;
+
                     default:
                         func_80969494(this, play);
                         break;
                 }
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -729,12 +750,15 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                         Audio_PlaySfx_MessageDecide();
                         if (!func_809695FC(this, play)) {
                             func_809694E8(this, play);
-                            break;
                         }
                         break;
+
                     case 1:
                         Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -745,49 +769,60 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                     case 0x221B:
                         if (!func_8096933C(ENJS_GET_TYPE(&this->actor))) {
                             Message_ContinueTextbox(play, 0x2219);
-                            break;
+                        } else {
+                            Message_ContinueTextbox(play, 0x221C);
                         }
-                        Message_ContinueTextbox(play, 0x221C);
                         break;
+
                     case 0x2224:
                     case 0x2226:
                     case 0x2228:
                     case 0x222A:
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
+
                     case 0x2225:
                     case 0x2227:
                     case 0x2229:
                     case 0x222B:
                         if (!func_809695FC(this, play)) {
                             func_809694E8(this, play);
-                            break;
                         }
                         break;
+
                     case 0x2222:
                         player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
+
                     case 0x2223:
                         switch (ENJS_GET_TYPE(&this->actor)) {
                             case 5:
                                 Message_ContinueTextbox(play, 0x2224);
                                 break;
+
                             case 6:
                                 Message_ContinueTextbox(play, 0x2226);
                                 break;
+
                             case 7:
                                 Message_ContinueTextbox(play, 0x2228);
                                 break;
+
                             case 8:
                                 Message_ContinueTextbox(play, 0x222A);
                                 break;
+
+                            default:
+                                break;
                         }
                         break;
+
                     case 0x221C:
                         Message_ContinueTextbox(play, 0xFF);
                         this->actionFunc = func_80969C54;
                         break;
+
                     case 0x221D:
                     case 0x2220:
                     case 0x2221:
@@ -795,11 +830,15 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                         Message_ContinueTextbox(play, 0xFF);
                         this->actionFunc = func_80969C54;
                         break;
+
                     default:
                         func_809694E8(this, play);
                         break;
                 }
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -892,6 +931,9 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                     case 1:
                         Audio_PlaySfx_MessageCancel();
                         break;
+
+                    default:
+                        break;
                 }
 
                 switch (play->msgCtx.currentTextId) {
@@ -902,8 +944,12 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                                 Animation_MorphToPlayOnce(&this->skelAnime, &gMoonChildGettingUpAnim, -5.0f);
                                 this->unk_2B8 |= 0x10;
                                 break;
+
                             case 1:
                                 Message_ContinueTextbox(play, 0x21FD);
+                                break;
+
+                            default:
                                 break;
                         }
                         break;
@@ -914,8 +960,12 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                                 Message_ContinueTextbox(play, 0x2200);
                                 func_809696EC(this, 0);
                                 break;
+
                             case 1:
                                 Message_ContinueTextbox(play, 0x21FF);
+                                break;
+
+                            default:
                                 break;
                         }
                         break;
@@ -927,13 +977,21 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                                 Animation_MorphToPlayOnce(&this->skelAnime, &gMoonChildGettingUpAnim, -5.0f);
                                 this->unk_2B8 |= 0x10;
                                 break;
+
                             case 1:
                                 Message_ContinueTextbox(play, 0x2204);
                                 break;
+
+                            default:
+                                break;
                         }
+
+                    default:
+                        break;
                 }
             }
             break;
+
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -962,7 +1020,6 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                         break;
 
                     case 0x2201:
-
                     case 0x220A:
                         if (!func_809695FC(this, play)) {
                             func_80969530(this, play);
@@ -974,6 +1031,9 @@ void func_8096A38C(EnJs* this, PlayState* play) {
                         break;
                 }
             }
+            break;
+
+        default:
             break;
     }
 }

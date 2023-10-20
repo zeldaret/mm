@@ -12,7 +12,7 @@
 #include "overlays/actors/ovl_En_Estone/z_en_estone.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnEgol*)thisx)
 
@@ -481,11 +481,11 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
     EYEGORE_SET_SPH_DIM(this->bodyCollider.elements[4], 300, 200, 0, 25, 1.0f);
     EYEGORE_SET_SPH_DIM(this->bodyCollider.elements[5], 2100, -300, 0, 37, 1.0f);
 
-    this->switchFlag = EYEGORE_GET_SWITCH(&this->actor);
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    this->switchFlag = EYEGORE_GET_SWITCH_FLAG(&this->actor);
+    if (this->switchFlag == EYEGORE_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag > -1) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -933,7 +933,7 @@ void EnEgol_Slam(EnEgol* this, PlayState* play) {
         }
         EnEgol_DestroyBlocks(this, play, this->rightHandPos, this->leftHandPos);
     }
-    if (this->animEndFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         EnEgol_SetupSlamWait(this);
     } else if ((this->skelAnime.curFrame <= 17.0f) && (this->skelAnime.curFrame >= 10.0f)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->bodyCollider.base);
@@ -1059,7 +1059,7 @@ void EnEgol_Damaged(EnEgol* this, PlayState* play) {
             Enemy_StartFinishingBlow(play, &this->actor);
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
             this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actor.flags |= ACTOR_FLAG_100000;
             this->actionFunc = EnEgol_StartDeathCutscene;
         }
@@ -1096,7 +1096,7 @@ void EnEgol_Death(EnEgol* this, PlayState* play) {
     Play_SetCameraAtEye(play, this->subCamId, &this->subCamEye, &this->subCamAt);
     Play_SetCameraFov(play, this->subCamId, this->subCamFov);
     if ((this->action == EYEGORE_ACTION_DEAD) && (this->waitTimer == 1)) {
-        if (this->switchFlag > -1) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         CutsceneManager_Stop(this->actor.csId);

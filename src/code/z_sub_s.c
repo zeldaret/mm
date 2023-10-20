@@ -865,7 +865,7 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
         case SUBS_OFFER_MODE_AUTO_TARGETED:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
-                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
+                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isLockedOn) {
                 actor->flags |= ACTOR_FLAG_10000;
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
@@ -1169,12 +1169,12 @@ s16 SubS_GetDistSqAndOrientPath(Path* path, s32 pointIndex, Vec3f* pos, f32* dis
     return Math_Atan2S(diffX, diffZ);
 }
 
-s8 SubS_IsObjectLoaded(s8 index, PlayState* play) {
-    return !Object_IsLoaded(&play->objectCtx, index) ? false : true;
+s8 SubS_IsObjectLoaded(s8 objectSlot, PlayState* play) {
+    return !Object_IsLoaded(&play->objectCtx, objectSlot) ? false : true;
 }
 
-s8 SubS_GetObjectIndex(s16 id, PlayState* play) {
-    return Object_GetIndex(&play->objectCtx, id);
+s8 SubS_GetObjectSlot(s16 objectId, PlayState* play) {
+    return Object_GetSlot(&play->objectCtx, objectId);
 }
 
 /**

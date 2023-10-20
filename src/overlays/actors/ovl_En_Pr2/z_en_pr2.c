@@ -8,7 +8,7 @@
 #include "objects/object_pr/object_pr.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPr2*)thisx)
 
@@ -108,14 +108,14 @@ s16 D_80A75C3C[] = {
 void EnPr2_Init(Actor* thisx, PlayState* play) {
     EnPr2* this = THIS;
 
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->actor.hintId = TATL_HINT_ID_SKULLFISH;
     this->unk_1EC = 255;
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &object_pr_Skel_004188, &object_pr_Anim_004340, this->jointTable,
-                       this->morphtable, 5);
+                       this->morphTable, 5);
     this->unk_1E0 = ENPR2_GET_F(&this->actor);
     this->actor.colChkInfo.mass = 10;
     Math_Vec3f_Copy(&this->unk_228, &this->actor.home.pos);
@@ -518,7 +518,7 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
 void func_80A751B4(EnPr2* this) {
     this->unk_1EC = 0;
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (this->unk_1E0 < 10) {
         func_80A74510(this, 2);
     } else {

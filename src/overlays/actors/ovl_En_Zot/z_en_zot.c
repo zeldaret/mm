@@ -8,7 +8,7 @@
 #include "z64snap.h"
 #include "objects/object_zo/object_zo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnZot*)thisx)
 
@@ -96,7 +96,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     this->unk_2F4 = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.world.rot.z = this->actor.shape.rot.z = 0;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -4.0f;
 
@@ -864,7 +864,7 @@ void func_80B98178(EnZot* this, PlayState* play) {
                     textId = 0x12A6;
                     SET_WEEKEVENTREG(WEEKEVENTREG_39_04);
                 }
-            } else if (Flags_GetSwitch(play, this->actor.home.rot.z & 0x7F)) {
+            } else if (Flags_GetSwitch(play, ENZOT_GET_SWITCH_FLAG(&this->actor))) {
                 textId = 0x12A0;
             } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_02)) {
                 textId = 0x12A5;
@@ -1146,7 +1146,7 @@ void func_80B98BF4(EnZot* this, PlayState* play) {
 
 void func_80B98CA8(EnZot* this, PlayState* play) {
     if (func_800B8718(&this->actor, &play->state)) {
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         AudioOcarina_StartDefault(0xFFFF);
         this->actionFunc = func_80B98BF4;
         this->actor.flags |= ACTOR_FLAG_10000;
@@ -1173,7 +1173,7 @@ void func_80B98E10(EnZot* this, PlayState* play) {
     u16 textId;
 
     if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
-        if (Flags_GetSwitch(play, this->actor.home.rot.z & 0x7F)) {
+        if (Flags_GetSwitch(play, ENZOT_GET_SWITCH_FLAG(&this->actor))) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_40_04)) {
                 textId = 0x12C5;
             } else {
@@ -1187,7 +1187,7 @@ void func_80B98E10(EnZot* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_40_02);
         }
     } else {
-        if (Flags_GetSwitch(play, this->actor.home.rot.z & 0x7F)) {
+        if (Flags_GetSwitch(play, ENZOT_GET_SWITCH_FLAG(&this->actor))) {
             if (this->unk_2F2 & 0x10) {
                 textId = 0x12BF;
             } else {

@@ -6,7 +6,7 @@
 
 #include "z_en_girla.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnGirlA*)thisx)
 
@@ -165,8 +165,8 @@ void EnGirlA_InitObjIndex(EnGirlA* this, PlayState* play) {
         return;
     }
 
-    this->objIndex = Object_GetIndex(&play->objectCtx, sShopItemEntries[params].objectId);
-    if (this->objIndex < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, sShopItemEntries[params].objectId);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -564,9 +564,9 @@ void EnGirlA_InitalUpdate(EnGirlA* this, PlayState* play) {
     s16 params = this->actor.params;
     ShopItemEntry* shopItem = &sShopItemEntries[params];
 
-    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.objBankIndex = this->objIndex;
+        this->actor.objectSlot = this->objectSlot;
         this->actor.textId = shopItem->descriptionTextId;
         this->choiceTextId = shopItem->choiceTextId;
 
@@ -585,7 +585,7 @@ void EnGirlA_InitalUpdate(EnGirlA* this, PlayState* play) {
         this->itemParams = shopItem->params;
         this->drawFunc = shopItem->drawFunc;
         this->getItemDrawId = shopItem->getItemDrawId;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         Actor_SetScale(&this->actor, 0.25f);
         this->actor.shape.yOffset = 24.0f;
         this->actor.shape.shadowScale = 4.0f;

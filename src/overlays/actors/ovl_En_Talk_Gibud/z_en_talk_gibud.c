@@ -7,7 +7,7 @@
 #include "z_en_talk_gibud.h"
 #include "z64rumble.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnTalkGibud*)thisx)
 
@@ -228,7 +228,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.hintId = TATL_HINT_ID_GIBDO;
     this->actor.textId = 0;
 
@@ -248,7 +248,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     this->isTalking = false;
     this->type = EN_TALK_GIBUD_TYPE_GIBDO;
     this->requestedItemIndex = EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx);
-    this->switchFlag = EN_TALK_GIBUD_SWITCH_FLAG(thisx);
+    this->switchFlag = EN_TALK_GIBUD_GET_SWITCH_FLAG(thisx);
     this->drawDmgEffAlpha = 0.0f;
     this->drawDmgEffScale = 0.0f;
 
@@ -264,11 +264,11 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
         this->requestedItemIndex = EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK;
     }
 
-    if (this->switchFlag == 0xFF) {
-        this->switchFlag = -1;
+    if (this->switchFlag == EN_TALK_GIBUD_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag != -1) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag != SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
 
@@ -383,7 +383,7 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, PlayState* play) {
 void EnTalkGibud_SetupGrab(EnTalkGibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_GRAB_START);
     this->grabDamageTimer = 0;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->grabState = EN_TALK_GIBUD_GRAB_START;
     this->actionFunc = EnTalkGibud_Grab;
 }
@@ -421,11 +421,11 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
             if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
                 if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->stateFlags2 &= ~PLAYER_STATE2_80;
-                    player->unk_AE8 = 100;
+                    player->actionVar2 = 100;
                 }
 
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_GRAB_END);
-                this->actor.flags |= ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 this->grabState = EN_TALK_GIBUD_GRAB_RELEASE;
                 this->grabDamageTimer = 0;
             }
@@ -569,8 +569,8 @@ void EnTalkGibud_Damage(EnTalkGibud* this, PlayState* play) {
         if ((this->drawDmgEffTimer > 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) &&
             (this->type == EN_TALK_GIBUD_TYPE_GIBDO)) {
             this->actor.hintId = TATL_HINT_ID_REDEAD;
-            this->actor.flags &= ~(ACTOR_FLAG_8 | ACTOR_FLAG_1);
-            this->actor.flags |= (ACTOR_FLAG_4 | ACTOR_FLAG_1);
+            this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE);
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
             SkelAnime_InitFlex(play, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
                                GIBDO_LIMB_MAX);
             this->type = EN_TALK_GIBUD_TYPE_REDEAD;
@@ -586,7 +586,7 @@ void EnTalkGibud_Damage(EnTalkGibud* this, PlayState* play) {
 
 void EnTalkGibud_SetupDead(EnTalkGibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_DEATH);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->deathTimer = 0;
     this->actionFunc = EnTalkGibud_Dead;
@@ -612,7 +612,7 @@ void EnTalkGibud_Dead(EnTalkGibud* this, PlayState* play) {
 void EnTalkGibud_SetupRevive(EnTalkGibud* this) {
     Animation_Change(&this->skelAnime, &gGibdoRedeadDeathAnim, -1.0f, Animation_GetLastFrame(&gGibdoRedeadDeathAnim),
                      0.0f, ANIMMODE_ONCE, -8.0f);
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_REVERSE);
     this->deathTimer = 0;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -852,7 +852,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
 
 void EnTalkGibud_SetupDisappear(EnTalkGibud* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_IDLE);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->disappearanceTimer = 40;
     this->actionFunc = EnTalkGibud_Disappear;
 }
@@ -880,7 +880,7 @@ void EnTalkGibud_Disappear(EnTalkGibud* this, PlayState* play) {
         player->stateFlags1 |= PLAYER_STATE1_20000000;
         this->disappearanceTimer--;
     } else {
-        if (this->switchFlag != -1) {
+        if (this->switchFlag != SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         player->stateFlags1 &= ~PLAYER_STATE1_20;
@@ -934,15 +934,15 @@ void EnTalkGibud_CheckForGibdoMask(EnTalkGibud* this, PlayState* play) {
         (this->actionFunc != EnTalkGibud_Damage) && (this->actionFunc != EnTalkGibud_Talk)) {
         if (this->actionFunc != EnTalkGibud_PassiveIdle) {
             if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
-                this->actor.flags &= ~(ACTOR_FLAG_4 | ACTOR_FLAG_1);
-                this->actor.flags |= (ACTOR_FLAG_8 | ACTOR_FLAG_1);
+                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+                this->actor.flags |= (ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE);
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 EnTalkGibud_SetupPassiveIdle(this);
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_GIBDO) {
-            this->actor.flags &= ~(ACTOR_FLAG_8 | ACTOR_FLAG_1);
-            this->actor.flags |= (ACTOR_FLAG_4 | ACTOR_FLAG_1);
+            this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TARGETABLE);
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
             if (this->type == EN_TALK_GIBUD_TYPE_REDEAD) {
                 this->actor.hintId = TATL_HINT_ID_REDEAD;
             } else {

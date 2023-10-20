@@ -7,7 +7,7 @@
 #include "z_en_owl.h"
 #include "objects/object_owl/object_owl.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnOwl*)thisx)
 
@@ -120,7 +120,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.1f);
         this->actor.update = func_8095CCF4;
         this->actor.draw = func_8095D074;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->unk_3D8 = 0;
         this->unk_3DA = 0x320;
         this->unk_3DC = 0x12C;
@@ -146,7 +146,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
     this->unk_40C = 4;
     this->csIdIndex = -1;
     owlType = ENOWL_GET_TYPE(&this->actor);
-    switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
+    switchFlag = ENOWL_GET_SWITCH_FLAG(&this->actor);
 
     switch (owlType) {
         case ENOWL_GET_TYPE_1:
@@ -258,7 +258,7 @@ void func_8095AA70(EnOwl* this) {
 }
 
 void func_8095AAD0(EnOwl* this, PlayState* play) {
-    s32 switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
+    s32 switchFlag = ENOWL_GET_SWITCH_FLAG(&this->actor);
 
     if (switchFlag < 0x7F) {
         Flags_SetSwitch(play, switchFlag);
@@ -741,7 +741,7 @@ void func_8095BE0C(EnOwl* this, PlayState* play) {
         this->csIdIndex = 1;
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {
-        if (this->actor.isTargeted) {
+        if (this->actor.isLockedOn) {
             Actor_OfferTalkExchange(&this->actor, play, 200.0f, 200.0f, PLAYER_IA_NONE);
         }
     } else if (this->actor.xzDistToPlayer < 200.0f) {

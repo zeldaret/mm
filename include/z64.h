@@ -9,14 +9,10 @@
 #include "libc/stdlib.h"
 
 #include "ultra64.h"
-#include "ultra64/gs2dex.h"
-#include "io/controller.h"
-#include "osint.h"
-#include "os.h"
+
 #include "irqmgr.h"
 #include "padmgr.h"
 #include "scheduler.h"
-#include "xstdio.h"
 
 #include "color.h"
 #include "ichain.h"
@@ -27,6 +23,7 @@
 
 #include "gfx.h"
 #include "gfxprint.h"
+#include "padutils.h"
 #include "sys_matrix.h"
 #include "tha.h"
 #include "thga.h"
@@ -43,6 +40,7 @@
 #include "z64dma.h"
 #include "z64eff_footmark.h"
 #include "z64effect.h"
+#include "z64environment.h"
 #include "z64frameadvance.h"
 #include "z64game_over.h"
 #include "z64game.h"
@@ -55,6 +53,7 @@
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64player.h"
+#include "z64prerender.h"
 #include "z64save.h"
 #include "z64scene.h"
 #include "z64schedule.h"
@@ -62,20 +61,13 @@
 #include "z64skybox.h"
 #include "z64sound_source.h"
 #include "z64subs.h"
+#include "z64rumble.h"
 #include "z64transition.h"
 #include "z64view.h"
 #include "regs.h"
 
-typedef struct {
-    /* 0x00 */ s32 requestType;
-    /* 0x04 */ OSMesg response;
-    /* 0x08 */ void* addr;
-    /* 0x0C */ s32 pageNum;
-    /* 0x10 */ s32 pageCount;
-    /* 0x14 */ OSMesgQueue messageQueue;
-} FlashromRequest; // size = 0x2C
 
-typedef struct {
+typedef struct PauseContext {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
     /* 0x16C */ u8* iconItem24Segment;
@@ -173,115 +165,6 @@ typedef enum {
     /* 0x01 */ KALEIDO_OVL_PLAYER_ACTOR,
     /* 0x02 */ KALEID_OVL_MAX
 } KaleidoMgrOverlayType;
-
-typedef struct {
-    /* 0x00 */ u16 unk_0;
-    /* 0x02 */ u16 sceneTimeSpeed;
-    /* 0x04 */ Vec3f sunPos;
-    /* 0x10 */ u8 skybox1Index;
-    /* 0x11 */ u8 skybox2Index;
-    /* 0x12 */ u8 unk_12;
-    /* 0x13 */ u8 skyboxBlend;
-    /* 0x14 */ u8 unk_14;
-    /* 0x15 */ u8 skyboxDisabled;
-    /* 0x16 */ u8 sunMoonDisabled;
-    /* 0x17 */ u8 skyboxConfig;
-    /* 0x18 */ u8 changeSkyboxNextConfig;
-    /* 0x19 */ u8 changeSkyboxState;
-    /* 0x1A */ u16 changeSkyboxTimer;
-    /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u8 lightMode;
-    /* 0x1F */ u8 lightConfig;
-    /* 0x20 */ u8 changeLightNextConfig;
-    /* 0x21 */ u8 changeLightEnabled;
-    /* 0x22 */ u16 changeLightTimer;
-    /* 0x24 */ u16 changeDuration;
-    /* 0x26 */ u8 unk_26;
-    /* 0x28 */ LightInfo dirLight1; // sun 1
-    /* 0x36 */ LightInfo unk_36; // sun 2
-    /* 0x44 */ s8 skyboxDmaState;
-    /* 0x48 */ DmaRequest dmaRequest;
-    /* 0x68 */ OSMesgQueue loadQueue;
-    /* 0x80 */ OSMesg loadMsg;
-    /* 0x84 */ f32 glareAlpha;
-    /* 0x88 */ f32 lensFlareAlphaScale;
-    /* 0x8C */ EnvLightSettings lightSettings;
-    /* 0xA8 */ f32 unk_A8;
-    /* 0xAC */ Vec3s windDir;
-    /* 0xB4 */ f32 windSpeed;
-    /* 0xB8 */ u8 numLightSettings;
-    /* 0xBC */ LightSettings* lightSettingsList;
-    /* 0xC0 */ u8 lightBlendEnabled;
-    /* 0xC1 */ u8 lightSetting;
-    /* 0xC2 */ u8 prevLightSetting;
-    /* 0xC3 */ u8 lightSettingOverride;
-    /* 0xC4 */ LightSettings unk_C4;
-    /* 0xDA */ u16 lightBlendRateOverride;
-    /* 0xDC */ f32 lightBlend;
-    /* 0xE0 */ u8 unk_E0;
-    /* 0xE1 */ u8 unk_E1;
-    /* 0xE2 */ s8 unk_E2;
-    /* 0xE3 */ u8 unk_E3; // modified by unused func in EnWeatherTag
-    /* 0xE4 */ u8 unk_E4;
-    /* 0xE5 */ u8 fillScreen;
-    /* 0xE6 */ u8 screenFillColor[4];
-    /* 0xEA */ u8 sandstormState;
-    /* 0xEB */ u8 sandstormPrimA;
-    /* 0xEC */ u8 sandstormEnvA;
-    /* 0xED */ u8 unk_ED;
-    /* 0xEE */ u8 unk_EE[4];
-    /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo effect count
-    /* 0xFA */ u8 unk_FA[4];
-} EnvironmentContext; // size = 0x100
-
-typedef struct ListAlloc {
-    /* 0x0 */ struct ListAlloc* prev;
-    /* 0x4 */ struct ListAlloc* next;
-} ListAlloc; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ u16 width;
-    /* 0x02 */ u16 height;
-    /* 0x04 */ u16 widthSave;
-    /* 0x06 */ u16 heightSave;
-    /* 0x08 */ char unk_8[8];
-    /* 0x10 */ u16* fbuf;
-    /* 0x14 */ u16* fbufSave;
-    /* 0x18 */ u8* cvgSave;
-    /* 0x1C */ u16* zbuf;
-    /* 0x20 */ u16* zbufSave;
-    /* 0x24 */ u16 ulxSave;
-    /* 0x26 */ u16 ulySave;
-    /* 0x28 */ u16 lrxSave;
-    /* 0x2A */ u16 lrySave;
-    /* 0x2C */ u16 ulx;
-    /* 0x2E */ u16 uly;
-    /* 0x30 */ u16 lrx;
-    /* 0x32 */ u16 lry;
-    /* 0x34 */ char unk_34[16];
-    /* 0x44 */ ListAlloc alloc;
-    /* 0x4C */ u8 unk_4C;
-    /* 0x4D */ u8 unk_4D;
-    /* 0x4E */ char unk_4E[2];
-} PreRender; // size = 0x50
-
-typedef struct {
-    /* 0x00 */ void* timg;
-    /* 0x04 */ void* tlut;
-    /* 0x08 */ u16 width;
-    /* 0x0A */ u16 height;
-    /* 0x0C */ u8 fmt;
-    /* 0x0D */ u8 siz;
-    /* 0x0E */ u16 tt;
-    /* 0x10 */ u16 unk_10;
-    /* 0x14 */ f32 x;
-    /* 0x18 */ f32 y;
-    /* 0x1C */ f32 xScale;
-    /* 0x20 */ f32 yScale;
-    /* 0x24 */ u32 flags;
-} PreRenderParams; // size = 0x28
-
-struct PlayState;
 
 typedef struct {
     /* 0x0 */ u8   seqId;
@@ -395,57 +278,5 @@ typedef struct {
     /* 0x0C */ Color_RGBA8_u32 primColor;
     /* 0x10 */ Color_RGBA8_u32 envColor;
 } Struct_80140E80; // size = 0x14
-
-// TODO: Dedicated Header?
-#define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
-#define FRAM_STATUS_REGISTER FRAM_BASE_ADDRESS // FRAM Base Address in Cart Memory
-#define FRAM_COMMAND_REGISTER 0x10000          // Located at 0x08010000 on the Cart
-
-#define FLASH_VERSION_MX_PROTO_A 0x00C20000
-#define FLASH_VERSION_MX_A       0x00C20001
-#define FLASH_VERSION_MX_C       0x00C2001E
-#define FLASH_VERSION_MX_B_AND_D 0x00C2001D
-#define FLASH_VERSION_MEI        0x003200F1
-
-#define FLASH_TYPE_MAGIC 0x11118001
-
-#define FLASH_PAGE_SIZE 128
-
-#define FLASHROM_REQUEST_WRITE 1
-#define FLASHROM_REQUEST_READ 2
-
-typedef enum FramCommand {
-    /* Does nothing for FRAM_COMMAND_SET_MODE_READ_AND_STATUS, FRAM_MODE_NOP, FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS
-       Initializes fram to 0xFF in FRAM_MODE_ERASE
-       Writes Contents in FLASHRAM_MODE_WRITE
-       After execution, sets FRAM_MODE to FRAM_MODE_NOP */
-    FRAM_COMMAND_EXECUTE = 0xD2000000,
-    /* flashram->erase_offset = (command & 0xFFFF) * 128; */
-    FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET = 0x4B000000,
-    /* flashram->mode = FLASHRAM_MODE_ERASE;
-       flashram->status = 0x1111800800C20000LL; */
-    FRAM_COMMAND_SET_MODE_ERASE_AND_STATUS = 0x78000000,
-    /* flashram->erase_offset = (command & 0xFFFF) * 128;
-       flashram->status = 0x1111800400C20000LL; */
-    FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET_AND_STATUS = 0xA5000000,
-    /* flashram->mode = FLASHRAM_MODE_WRITE; */
-    FRAM_COMMAND_SET_MODE_WRITE = 0xB4000000,
-    /* flashram->mode = FLASHRAM_MODE_STATUS;
-       flashram->status = 0x1111800100C20000LL; */
-    FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS = 0xE1000000,
-    /* flashram->mode = FLASHRAM_MODE_READ;
-       flashram->status = 0x11118004F0000000LL; */
-    FRAM_COMMAND_SET_MODE_READ_AND_STATUS = 0xF0000000,
-    /* unk */
-    FRAM_COMMAND_UNK_ERASE_OPERATION = 0x3C000000
-} FramCommand;
-
-typedef enum FramMode {
-    /* 0 */ FRAM_MODE_NOP,
-    /* 1 */ FRAM_MODE_ERASE,
-    /* 2 */ FRAM_MODE_WRITE,
-    /* 3 */ FRAM_MODE_READ,
-    /* 4 */ FRAM_MODE_STATUS
-} FramMode;
 
 #endif

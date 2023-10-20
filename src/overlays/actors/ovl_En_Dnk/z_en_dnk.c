@@ -6,7 +6,7 @@
 
 #include "z_en_dnk.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDnk*)thisx)
 
@@ -209,10 +209,10 @@ s32 func_80A515C4(EnDnk* this) {
 }
 
 void func_80A51648(EnDnk* this, PlayState* play) {
-    if (SubS_IsObjectLoaded(this->unk_28E, play) == true) {
-        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_28E].segment);
+    if (SubS_IsObjectLoaded(this->objectSlot, play) == true) {
+        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
         this->actor.draw = func_80A52018;
-        this->actor.objBankIndex = this->unk_28E;
+        this->actor.objectSlot = this->objectSlot;
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
 
         switch (ENDNK_GET_3(&this->actor)) {
@@ -239,12 +239,12 @@ void func_80A51648(EnDnk* this, PlayState* play) {
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         if (ENDNK_GET_3C(&this->actor) == 4) {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
             this->actionFunc = EnDnk_HandleCutscene;
             Actor_SetScale(&this->actor, 0.1f);
         } else {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnDnk_DoNothing;
             Actor_SetScale(&this->actor, 0.01f);
         }
@@ -263,22 +263,23 @@ void EnDnk_DoNothing(EnDnk* this, PlayState* play) {
 void EnDnk_Init(Actor* thisx, PlayState* play) {
     EnDnk* this = THIS;
 
-    this->unk_28E = -1;
+    this->objectSlot = OBJECT_SLOT_NONE;
+
     switch (ENDNK_GET_3(&this->actor)) {
         case ENDNK_GET_3_1:
-            this->unk_28E = SubS_GetObjectIndex(OBJECT_HINTNUTS, play);
+            this->objectSlot = SubS_GetObjectSlot(OBJECT_HINTNUTS, play);
             break;
 
         case ENDNK_GET_3_0:
-            this->unk_28E = SubS_GetObjectIndex(OBJECT_DNK, play);
+            this->objectSlot = SubS_GetObjectSlot(OBJECT_DNK, play);
             break;
 
         case ENDNK_GET_3_2:
-            this->unk_28E = SubS_GetObjectIndex(OBJECT_DEKUNUTS, play);
+            this->objectSlot = SubS_GetObjectSlot(OBJECT_DEKUNUTS, play);
             break;
     }
 
-    if (this->unk_28E >= 0) {
+    if (this->objectSlot > OBJECT_SLOT_NONE) {
         this->actionFunc = func_80A51648;
     } else {
         Actor_Kill(&this->actor);

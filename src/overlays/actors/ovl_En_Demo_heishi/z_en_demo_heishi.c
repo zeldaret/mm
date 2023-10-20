@@ -6,7 +6,7 @@
 
 #include "z_en_demo_heishi.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDemoheishi*)thisx)
 
@@ -58,10 +58,10 @@ void EnDemoheishi_Init(Actor* thisx, PlayState* play) {
     EnDemoheishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWave, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWaveAnim, this->jointTable, this->morphTable,
                        SOLDIER_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
     EnDemoheishi_SetupIdle(this);
@@ -83,11 +83,11 @@ typedef enum {
 } EnDemoheishiAnimation;
 
 static AnimationHeader* sAnimations[DEMOHEISHI_ANIM_MAX] = {
-    &gSoldierStandHandOnHip, // DEMOHEISHI_ANIM_STAND_HAND_ON_HIP
-    &gSoldierCheerWithSpear, // DEMOHEISHI_ANIM_CHEER_WITH_SPEAR
-    &gSoldierWave,           // DEMOHEISHI_ANIM_WAVE
-    &gSoldierSitAndReach,    // DEMOHEISHI_ANIM_SIT_AND_REACH
-    &gSoldierStandUp,        // DEMOHEISHI_ANIM_STAND_UP
+    &gSoldierStandHandOnHipAnim, // DEMOHEISHI_ANIM_STAND_HAND_ON_HIP
+    &gSoldierCheerWithSpearAnim, // DEMOHEISHI_ANIM_CHEER_WITH_SPEAR
+    &gSoldierWaveAnim,           // DEMOHEISHI_ANIM_WAVE
+    &gSoldierSitAndReachAnim,    // DEMOHEISHI_ANIM_SIT_AND_REACH
+    &gSoldierStandUpAnim,        // DEMOHEISHI_ANIM_STAND_UP
 };
 
 static u8 sAnimationModes[DEMOHEISHI_ANIM_MAX] = {

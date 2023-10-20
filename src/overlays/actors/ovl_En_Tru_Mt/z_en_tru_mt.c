@@ -7,7 +7,7 @@
 #include "z_en_tru_mt.h"
 #include "overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTruMt*)thisx)
 
@@ -350,11 +350,8 @@ void func_80B76980(EnTruMt* this, PlayState* play) {
         this->actor.speed = 0.0f;
         this->actionFunc = func_80B76BB8;
     } else if (CHECK_EVENTINF(EVENTINF_40)) {
-        u32 score = gSaveContext.minigameScore;
-
-        if (((gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF0000) >> 0x10) < score) {
-            gSaveContext.save.saveInfo.unk_EC4 =
-                ((gSaveContext.minigameScore & 0xFFFF) << 0x10) | (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF);
+        if (((void)0, gSaveContext.minigameScore) > HS_GET_BOAT_ARCHERY_HIGH_SCORE()) {
+            HS_SET_BOAT_ARCHERY_HIGH_SCORE((u32)((void)0, gSaveContext.minigameScore));
             SET_EVENTINF(EVENTINF_37);
         }
     }
@@ -432,7 +429,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
     this->collider.dim.worldSphere.radius = 22;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FF(&this->actor), ENTRUMT_PATH_INDEX_NONE);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
 
     Actor_SetScale(&this->actor, 0.008f);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);

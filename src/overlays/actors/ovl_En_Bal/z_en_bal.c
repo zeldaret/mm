@@ -7,7 +7,7 @@
 #include "z_en_bal.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnBal*)thisx)
 
@@ -864,7 +864,7 @@ void EnBal_TryPurchaseMap(EnBal* this, PlayState* play) {
 
 void EnBal_HandleConversation(EnBal* this, PlayState* play) {
     if (((this->textId != 0x1D07) || Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
-        (Message_ShouldAdvance(play))) {
+        Message_ShouldAdvance(play)) {
         switch (this->textId) {
             case 0x1D00:
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);

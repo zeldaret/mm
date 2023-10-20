@@ -6,7 +6,7 @@
 
 #include "z_en_ending_hero6.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnEndingHero6*)thisx)
 
@@ -56,15 +56,15 @@ static FlexSkeletonHeader* sSkeletons[ENDING_HERO6_TYPE_MAX] = {
 };
 
 static AnimationHeader* sAnimations[ENDING_HERO6_TYPE_MAX] = {
-    &object_dt_Anim_000BE0,    // ENDING_HERO6_TYPE_DT
-    &object_bai_Anim_0011C0,   // ENDING_HERO6_TYPE_BAI
-    &object_toryo_Anim_000E50, // ENDING_HERO6_TYPE_TORYO
-    &gSoldierCheerWithSpear,   // ENDING_HERO6_TYPE_SOLDIER
-    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_RED
-    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_BLUE
-    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_GREEN
-    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_PURPLE
-    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_ORANGE
+    &object_dt_Anim_000BE0,      // ENDING_HERO6_TYPE_DT
+    &object_bai_Anim_0011C0,     // ENDING_HERO6_TYPE_BAI
+    &object_toryo_Anim_000E50,   // ENDING_HERO6_TYPE_TORYO
+    &gSoldierCheerWithSpearAnim, // ENDING_HERO6_TYPE_SOLDIER
+    &object_daiku_Anim_002FA0,   // ENDING_HERO6_TYPE_DAIKU_RED
+    &object_daiku_Anim_002FA0,   // ENDING_HERO6_TYPE_DAIKU_BLUE
+    &object_daiku_Anim_002FA0,   // ENDING_HERO6_TYPE_DAIKU_GREEN
+    &object_daiku_Anim_002FA0,   // ENDING_HERO6_TYPE_DAIKU_PURPLE
+    &object_daiku_Anim_002FA0,   // ENDING_HERO6_TYPE_DAIKU_ORANGE
 };
 
 static s32 sLimbCounts[ENDING_HERO6_TYPE_MAX] = {
@@ -84,7 +84,7 @@ void EnEndingHero6_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
     SkelAnime_InitFlex(play, &this->skelAnime, sSkeletons[this->type], sAnimations[this->type], this->jointTable,
                        this->morphTable, sLimbCounts[this->type]);
@@ -171,8 +171,8 @@ void EnEndingHero6_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        if ((this->objectIndex >= 0) && Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-            gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectIndex].segment);
+        if ((this->objectSlot > OBJECT_SLOT_NONE) && Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+            gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->objectSlot].segment);
 
             switch (this->type) {
                 case ENDING_HERO6_TYPE_DAIKU_RED:

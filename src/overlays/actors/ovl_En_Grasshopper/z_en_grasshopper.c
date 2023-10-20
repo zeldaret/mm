@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnGrasshopper*)thisx)
 
@@ -75,8 +75,9 @@ typedef enum {
     /* 4 */ DRAGONFLY_ANIM_HOVER,
     /* 5 */ DRAGONFLY_ANIM_DAMAGE,
     /* 6 */ DRAGONFLY_ANIM_DEAD,
-    /* 7 */ DRAGONFLY_ANIM_FALL
-} EnGrasshopperAnim;
+    /* 7 */ DRAGONFLY_ANIM_FALL,
+    /* 8 */ DRAGONFLY_ANIM_MAX
+} DragonflyAnimation;
 
 static s32 sOccupiedIndices[] = {
     false, false, false, false, false,
@@ -264,7 +265,7 @@ void EnGrasshopper_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     this->actor.hintId = TATL_HINT_ID_DRAGONFLY;
-    this->actor.targetMode = 4;
+    this->actor.targetMode = TARGET_MODE_4;
     this->actor.colChkInfo.mass = 60;
     this->actor.colChkInfo.health = 2;
 
@@ -333,7 +334,7 @@ void EnGrasshopper_Destroy(Actor* thisx, PlayState* play) {
     sOccupiedIndices[this->index] = false;
 }
 
-static AnimationHeader* sAnimations[] = {
+static AnimationHeader* sAnimations[DRAGONFLY_ANIM_MAX] = {
     &gDragonflyRaiseTailAnim, // DRAGONFLY_ANIM_RAISE_TAIL
     &gDragonflyLowerTailAnim, // DRAGONFLY_ANIM_LOWER_TAIL
     &gDragonflyFlyAnim,       // DRAGONFLY_ANIM_FLY
@@ -344,7 +345,7 @@ static AnimationHeader* sAnimations[] = {
     &gDragonflyFallAnim,      // DRAGONFLY_ANIM_FALL
 };
 
-static u8 sAnimationModes[] = {
+static u8 sAnimationModes[DRAGONFLY_ANIM_MAX] = {
     ANIMMODE_ONCE, // DRAGONFLY_ANIM_RAISE_TAIL
     ANIMMODE_ONCE, // DRAGONFLY_ANIM_LOWER_TAIL
     ANIMMODE_LOOP, // DRAGONFLY_ANIM_FLY
@@ -358,15 +359,15 @@ static u8 sAnimationModes[] = {
 void EnGrasshopper_ChangeAnim(EnGrasshopper* this, s32 animIndex) {
     f32 morphFrames;
 
-    this->endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
     morphFrames = 0.0f;
     if ((animIndex == DRAGONFLY_ANIM_ATTACK) || (animIndex == DRAGONFLY_ANIM_HOVER) ||
         (animIndex == DRAGONFLY_ANIM_DAMAGE)) {
         morphFrames = -3.0f;
     }
 
-    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->endFrame, sAnimationModes[animIndex],
-                     morphFrames);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->animEndFrame,
+                     sAnimationModes[animIndex], morphFrames);
 }
 
 void EnGrasshopper_RaiseTail(EnGrasshopper* this) {
@@ -389,7 +390,7 @@ void EnGrasshopper_LowerTail(EnGrasshopper* this) {
 void EnGrasshopper_DecideAction(EnGrasshopper* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    if (curFrame >= this->endFrame) {
+    if (curFrame >= this->animEndFrame) {
         if (this->decision == DRAGONFLY_DECISION_ATTACK) {
             EnGrasshopper_SetupAttack(this);
         } else {
@@ -473,12 +474,12 @@ void EnGrasshopper_Fly(EnGrasshopper* this, PlayState* play) {
             this->targetRot.z = (this->actor.world.rot.y - this->targetRot.y) * 0.2f;
             targetSpeed = (this->index * 0.1f) + 4.0f;
             Math_ApproachF(&this->actor.speed, targetSpeed, 0.4f, 0.7f);
-            Math_ApproachF(&this->rotationalVelocity, 2000.0f, 1.0f, 50.0f);
-            Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->rotationalVelocity, 5);
+            Math_ApproachF(&this->angularVelocity, 2000.0f, 1.0f, 50.0f);
+            Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->angularVelocity, 5);
             if (this->timer == 0) {
                 if (Rand_ZeroFloat(1.0f) < 0.3f) {
                     this->waitTimer = Rand_S16Offset(10, 10);
-                    this->rotationalVelocity = 0.0f;
+                    this->angularVelocity = 0.0f;
                 }
 
                 this->targetRot.y = Math_Atan2S(diffX, diffZ);
@@ -580,6 +581,9 @@ void EnGrasshopper_Bank(EnGrasshopper* this, PlayState* play) {
                 this->actionFunc = EnGrasshopper_RoamInCircles;
             }
             break;
+
+        default:
+            break;
     }
 }
 
@@ -606,7 +610,7 @@ void EnGrasshopper_Bounced(EnGrasshopper* this, PlayState* play) {
     Math_ApproachF(&this->actor.speed, targetSpeed, 0.4f, 0.8f);
     Math_SmoothStepToS(&this->actor.world.rot.z, this->targetRot.z, 5, 0x3E8, 5);
     this->targetRot.z *= 0.8f;
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->rotationalVelocity, 5);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->angularVelocity, 5);
     if (this->timer == 0) {
         this->collider.elements[0].info.toucherFlags |= (TOUCH_ON | TOUCH_SFX_WOOD);
         this->timer = 0;
@@ -735,7 +739,7 @@ void EnGrasshopper_Attack(EnGrasshopper* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.y, this->targetApproachPos.y, 0.1f, this->approachSpeed);
     Math_ApproachF(&this->approachSpeed, 10.0f, 0.1f, 1.0f);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, 0xFA0, 0xA);
-    if (curFrame >= this->endFrame) {
+    if (curFrame >= this->animEndFrame) {
         EnGrasshopper_SetupWaitAfterAttack(this);
     }
 }
@@ -770,7 +774,7 @@ void EnGrasshopper_SetupDamaged(EnGrasshopper* this, PlayState* play) {
 
     EnGrasshopper_ChangeAnim(this, DRAGONFLY_ANIM_DAMAGE);
     this->actor.speed = 0.0f;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->approachSpeed = 0.0f;
     this->collider.elements[1].info.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
     Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
@@ -831,7 +835,7 @@ void EnGrasshopper_Dead(EnGrasshopper* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    if (curFrame >= this->endFrame) {
+    if (curFrame >= this->animEndFrame) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         EnGrasshopper_SetupFall(this);
     }

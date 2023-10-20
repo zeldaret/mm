@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_bat/object_bat.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnBat*)thisx)
 
@@ -136,7 +136,7 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
     this->animationFrame = Rand_ZeroOne() * 9.0f;
 
     this->paramFlags = BAD_BAT_GET_PARAMFLAGS(thisx);
-    this->switchFlag = BAD_BAT_GET_SWITCHFLAG(thisx);
+    this->switchFlag = BAD_BAT_GET_SWITCH_FLAG(thisx);
     thisx->params = BAD_BAT_GET_TYPE(thisx);
 
     thisx->depthInWater = BGCHECK_Y_MIN;
@@ -315,7 +315,7 @@ void EnBat_DiveAttack(EnBat* this, PlayState* play) {
 }
 
 void EnBat_SetupDie(EnBat* this, PlayState* play) {
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Enemy_StartFinishingBlow(play, &this->actor);
     this->actor.speed *= Math_CosS(this->actor.world.rot.x);
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;

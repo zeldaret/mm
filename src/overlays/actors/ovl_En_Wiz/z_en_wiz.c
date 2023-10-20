@@ -9,9 +9,9 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Wiz_Brock/z_en_wiz_brock.h"
 
-#define FLAGS                                                                                                    \
-    (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_100000 | \
-     ACTOR_FLAG_CANT_LOCK_ON | ACTOR_FLAG_80000000)
+#define FLAGS                                                                                                  \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE | \
+     ACTOR_FLAG_100000 | ACTOR_FLAG_CANT_LOCK_ON | ACTOR_FLAG_80000000)
 
 #define THIS ((EnWiz*)thisx)
 
@@ -330,17 +330,17 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     this->platformLightAlpha = 0;
     this->alpha = 255;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->unk_450 = 1.0f;
     this->actor.shape.yOffset = 700.0f;
     Collider_InitAndSetJntSph(play, &this->ghostColliders, &this->actor, &sJntSphInit, this->ghostColliderElements);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->staffFlameScroll = Rand_S16Offset(0, 7);
-    this->switchFlag = EN_WIZ_GET_SWITCHFLAG(&this->actor);
+    this->switchFlag = EN_WIZ_GET_SWITCH_FLAG(&this->actor);
     this->type = EN_WIZ_GET_TYPE(&this->actor);
 
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == EN_WIZ_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
     if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_BGM)) {
@@ -352,7 +352,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
         this->actor.colChkInfo.health = 6;
     }
 
-    if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -498,7 +498,7 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
             case EN_WIZ_INTRO_CS_WAIT_BEFORE_RUN:
                 if (this->introCutsceneTimer == 0) {
                     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_RUN, false);
-                    this->rotationalVelocity = 0;
+                    this->angularVelocity = 0;
                     this->introCutsceneTimer = 34;
                     this->introCutsceneState++;
                 }
@@ -510,8 +510,8 @@ void EnWiz_HandleIntroCutscene(EnWiz* this, PlayState* play) {
                     this->animLoopCounter = this->introCutsceneCameraAngle = 0;
                     this->introCutsceneState = EN_WIZ_INTRO_CS_DISAPPEAR;
                 } else {
-                    Math_SmoothStepToS(&this->rotationalVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
-                    this->actor.world.rot.y += this->rotationalVelocity;
+                    Math_SmoothStepToS(&this->angularVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
+                    this->actor.world.rot.y += this->angularVelocity;
                 }
 
                 Math_Vec3f_Copy(&eyeNext, &this->actor.world.pos);
@@ -784,7 +784,7 @@ void EnWiz_Appear(EnWiz* this, PlayState* play) {
 void EnWiz_SetupDance(EnWiz* this) {
     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DANCE, false);
     Math_ApproachF(&this->scale, 0.015f, 0.05f, 0.001f);
-    this->rotationalVelocity = 0;
+    this->angularVelocity = 0;
     this->animLoopCounter = 0;
     this->action = EN_WIZ_ACTION_DANCE;
     if (this->fightState >= EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE) {
@@ -808,16 +808,16 @@ void EnWiz_Dance(EnWiz* this, PlayState* play) {
     Math_SmoothStepToS(&this->alpha, 255, 1, 5, 0);
     Math_ApproachF(&this->scale, 0.015f, 0.05f, 0.001f);
     Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_RUN - SFX_FLAG);
-    this->actor.world.rot.y += this->rotationalVelocity;
+    this->actor.world.rot.y += this->angularVelocity;
     if (this->fightState >= EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND) {
         EnWiz_MoveGhosts(this);
     } else {
         for (i = 0; i < this->platformCount; i++) {
-            this->ghostRot[i].y += this->rotationalVelocity;
+            this->ghostRot[i].y += this->angularVelocity;
         }
     }
 
-    Math_SmoothStepToS(&this->rotationalVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
+    Math_SmoothStepToS(&this->angularVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
     Math_SmoothStepToS(&this->platformLightAlpha, this->targetPlatformLightAlpha, 20, 50, 10);
     if (this->endFrame <= curFrame) {
         if (this->animLoopCounter < 10) {
@@ -997,21 +997,21 @@ void EnWiz_Attack(EnWiz* this, PlayState* play) {
 
 void EnWiz_SetupDisappear(EnWiz* this) {
     if (this->action != EN_WIZ_ACTION_DAMAGED) {
-        this->rotationalVelocity = 0x2710;
+        this->angularVelocity = 0x2710;
         this->timer = 0;
         EnWiz_ChangeAnim(this, EN_WIZ_ANIM_IDLE, false);
         this->action = EN_WIZ_ACTION_DISAPPEAR;
     } else {
-        this->rotationalVelocity = 0x2710;
-        this->actor.world.rot.y += this->rotationalVelocity;
+        this->angularVelocity = 0x2710;
+        this->actor.world.rot.y += this->angularVelocity;
     }
 
     this->targetPlatformLightAlpha = 0;
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
-    Math_SmoothStepToS(&this->rotationalVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
-    this->actor.world.rot.y += this->rotationalVelocity;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    Math_SmoothStepToS(&this->angularVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
+    this->actor.world.rot.y += this->angularVelocity;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnWiz_Disappear;
 }
 
@@ -1022,8 +1022,8 @@ void EnWiz_SetupDisappear(EnWiz* this) {
 void EnWiz_Disappear(EnWiz* this, PlayState* play) {
     s32 i;
 
-    Math_SmoothStepToS(&this->rotationalVelocity, 0, 0xA, 0xBB8, 0x14);
-    this->actor.world.rot.y += this->rotationalVelocity;
+    Math_SmoothStepToS(&this->angularVelocity, 0, 0xA, 0xBB8, 0x14);
+    this->actor.world.rot.y += this->angularVelocity;
     if ((this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) || (this->action == EN_WIZ_ACTION_DAMAGED)) {
         Math_ApproachZeroF(&this->scale, 0.3f, 0.01f);
         Math_SmoothStepToS(&this->platformLightAlpha, this->targetPlatformLightAlpha, 5, 50, 0);
@@ -1031,7 +1031,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
         Math_ApproachZeroF(&this->scale, 0.3f, 0.001f);
         Math_SmoothStepToS(&this->platformLightAlpha, this->targetPlatformLightAlpha, 10, 50, 0);
         for (i = 0; i < this->platformCount; i++) {
-            this->ghostRot[i].y += this->rotationalVelocity;
+            this->ghostRot[i].y += this->angularVelocity;
         }
     }
 
@@ -1051,7 +1051,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
                 this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x1000202;
             }
 
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnWiz_SetupAppear;
         }
     }
@@ -1066,7 +1066,7 @@ void EnWiz_SetupDamaged(EnWiz* this, PlayState* play) {
         Enemy_StartFinishingBlow(play, &this->actor);
         Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DEAD);
         this->timer = 0;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
         Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DAMAGE);
     }
@@ -1079,9 +1079,9 @@ void EnWiz_SetupDamaged(EnWiz* this, PlayState* play) {
         this->timer = 0;
     }
 
-    this->rotationalVelocity = 0x4E20;
+    this->angularVelocity = 0x4E20;
     if ((this->drawDmgEffTimer != 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX)) {
-        this->rotationalVelocity = 0;
+        this->angularVelocity = 0;
         this->timer = 0;
     }
 
@@ -1100,7 +1100,7 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_WIZ_BODYPART_MAX, 2, 1.0f, 0.7f);
         this->drawDmgEffTimer = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->rotationalVelocity = 0x4E20;
+        this->angularVelocity = 0x4E20;
         this->actor.velocity.y = 30.0f;
         this->actor.gravity = -3.0f;
     }
@@ -1118,10 +1118,10 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
         this->isDead = true;
     }
 
-    this->actor.world.rot.y += this->rotationalVelocity;
-    Math_SmoothStepToS(&this->rotationalVelocity, 0, 0xA, 0xBB8, 0x14);
+    this->actor.world.rot.y += this->angularVelocity;
+    Math_SmoothStepToS(&this->angularVelocity, 0, 0xA, 0xBB8, 0x14);
     for (i = 0; i < this->platformCount; i++) {
-        this->ghostRot[i].y += this->rotationalVelocity;
+        this->ghostRot[i].y += this->angularVelocity;
     }
 
     //! @bug: When the Wizrobe is defeated, it is launched into the air by the code above, and the
@@ -1173,7 +1173,7 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
 
 void EnWiz_SetupDead(EnWiz* this) {
     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DAMAGE, false);
-    this->rotationalVelocity = 0x2710;
+    this->angularVelocity = 0x2710;
     this->action = EN_WIZ_ACTION_DEAD;
     this->timer = 0;
     this->actionFunc = EnWiz_Dead;
@@ -1186,9 +1186,9 @@ void EnWiz_SetupDead(EnWiz* this) {
 void EnWiz_Dead(EnWiz* this, PlayState* play) {
     s32 i;
 
-    this->actor.world.rot.y += this->rotationalVelocity;
-    Math_SmoothStepToS(&this->rotationalVelocity, 0, 0xA, 0xBB8, 0x14);
-    if (this->rotationalVelocity < 0x1E) {
+    this->actor.world.rot.y += this->angularVelocity;
+    Math_SmoothStepToS(&this->angularVelocity, 0, 0xA, 0xBB8, 0x14);
+    if (this->angularVelocity < 0x1E) {
         Math_SmoothStepToS(&this->alpha, 0, 10, 30, 20);
         for (i = 0; i < this->platformCount; i++) {
             Math_SmoothStepToS(&this->ghostAlpha[i], 0, 10, 30, 20);
@@ -1201,7 +1201,7 @@ void EnWiz_Dead(EnWiz* this, PlayState* play) {
         EnWiz_SelectPlatform(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_EXTINCT);
         Actor_Kill(&this->actor);
-        if (this->switchFlag >= 0) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
     }

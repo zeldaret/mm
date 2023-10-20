@@ -11,7 +11,8 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnFu*)thisx)
 
@@ -217,7 +218,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         Actor_SetScale(&this->actor, 0.01f);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.gravity = -0.2f;
         this->actor.shape.rot.y += 0x4000;
         this->actor.world.rot = this->actor.shape.rot;
@@ -230,7 +231,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
         this->unk_54E = 0;
         this->unk_550 = 0;
         func_809622FC(this);
-        this->actor.targetMode = 6;
+        this->actor.targetMode = TARGET_MODE_6;
         func_809619D0(this, play);
         if (CURRENT_DAY == 2) {
             Vec3f sp40 = this->actor.child->home.pos;
@@ -757,7 +758,7 @@ void func_80962EBC(EnFu* this, PlayState* play) {
 
 void func_80962F10(EnFu* this) {
     this->unk_548 = 0;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     SET_WEEKEVENTREG(WEEKEVENTREG_08_01);
     this->actionFunc = func_80962F4C;
 }
@@ -856,7 +857,7 @@ void func_809632D0(EnFu* this) {
         mizu->unk_160 = 0;
     }
 
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80963350;
 }
 
@@ -995,46 +996,46 @@ s32 func_80963810(PlayState* play, Vec3f pos) {
 s32 func_809638F8(PlayState* play) {
     s32 ret = true;
 
-    if (play->envCtx.lightSettings.diffuseColor1[0] > 25) {
-        play->envCtx.lightSettings.diffuseColor1[0] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[0] > 25) {
+        play->envCtx.adjLightSettings.light1Color[0] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.diffuseColor1[0] = 0;
+        play->envCtx.adjLightSettings.light1Color[0] = 0;
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[1] > 25) {
-        play->envCtx.lightSettings.diffuseColor1[1] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[1] > 25) {
+        play->envCtx.adjLightSettings.light1Color[1] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.diffuseColor1[1] = 0;
+        play->envCtx.adjLightSettings.light1Color[1] = 0;
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[2] > 25) {
-        play->envCtx.lightSettings.diffuseColor1[2] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[2] > 25) {
+        play->envCtx.adjLightSettings.light1Color[2] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.diffuseColor1[2] = 0;
+        play->envCtx.adjLightSettings.light1Color[2] = 0;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[0] > 25) {
-        play->envCtx.lightSettings.ambientColor[0] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[0] > 25) {
+        play->envCtx.adjLightSettings.ambientColor[0] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.ambientColor[0] = 0;
+        play->envCtx.adjLightSettings.ambientColor[0] = 0;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[1] > 25) {
-        play->envCtx.lightSettings.ambientColor[1] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[1] > 25) {
+        play->envCtx.adjLightSettings.ambientColor[1] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.ambientColor[1] = 0;
+        play->envCtx.adjLightSettings.ambientColor[1] = 0;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[2] > 25) {
-        play->envCtx.lightSettings.ambientColor[2] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[2] > 25) {
+        play->envCtx.adjLightSettings.ambientColor[2] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.ambientColor[2] = 0;
+        play->envCtx.adjLightSettings.ambientColor[2] = 0;
     }
     return ret;
 }
