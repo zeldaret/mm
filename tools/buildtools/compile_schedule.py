@@ -57,6 +57,23 @@ class TokenType(enum.Enum):
             return False
         return True
 
+    def isBranch(self) -> bool:
+        if self in {
+            TokenType.IF_WEEKEVENTREG_S,
+            TokenType.IF_WEEKEVENTREG_L,
+            TokenType.IF_TIMERANGE_S,
+            TokenType.IF_TIMERANGE_L,
+            TokenType.IF_MISC_S,
+            TokenType.IF_SCENE_S,
+            TokenType.IF_SCENE_L,
+            TokenType.IF_DAY_S,
+            TokenType.IF_DAY_L,
+            TokenType.IF_BEFORETIME_S,
+            TokenType.IF_BEFORETIME_L,
+        }:
+            return True
+        return False
+
     def isReturn(self) -> bool:
         if self in { TokenType.RETURN_S, TokenType.RETURN_L, TokenType.RETURN_NONE, TokenType.RETURN_EMPTY, TokenType.RETURN_TIME }:
             return True
@@ -80,7 +97,6 @@ class TokenType(enum.Enum):
         TokenType.IF_BEFORETIME_L,
         }:
             return True
-
         return False
 
     def needsToInvert(self) -> bool:
@@ -378,25 +394,37 @@ def emitMacros(tree: list[Expression], byteCount = 0) -> tuple[str, int]:
     result = ""
 
     for expr in tree:
-        pass
-        #
         info = cmdInfos[expr.expr.tokenType]
-        result += f"    /* 0x{byteCount:02X} */ {info.macro}("
-        if expr.args is not None:
-            result += f"{expr.args.tokenLiteral}"
-        result += "),\n"
-        byteCount += info.cmdLenght
+        currentMacro = f"    /* 0x{byteCount:02X} */ {info.macro}("
 
+        byteCount += info.cmdLenght
+        currentOffset = byteCount
+
+        subResults = ""
         if expr.expr.tokenType.needsToInvert():
-            subResult, byteCount = emitMacros(expr.right, byteCount)
-            result += subResult
-            subResult, byteCount = emitMacros(expr.left, byteCount)
-            result += subResult
+            sub, byteCount = emitMacros(expr.right, byteCount)
+            targetOffset = byteCount
+
+            subResults += sub
+            sub, byteCount = emitMacros(expr.left, byteCount)
+            subResults += sub
+            byteCount = byteCount
         else:
-            subResult, byteCount = emitMacros(expr.left, byteCount)
-            result += subResult
-            subResult, byteCount = emitMacros(expr.right, byteCount)
-            result += subResult
+            sub, byteCount = emitMacros(expr.left, byteCount)
+            targetOffset = byteCount
+
+            subResults += sub
+            sub, byteCount = emitMacros(expr.right, byteCount)
+            subResults += sub
+            byteCount = byteCount
+
+        if expr.args is not None:
+            currentMacro += f"{expr.args.tokenLiteral}"
+        if expr.expr.tokenType.isBranch():
+            currentMacro += f", 0x{targetOffset:02X} - 0x{currentOffset:02X}"
+        currentMacro += "),\n"
+
+        result += currentMacro + subResults
 
     return result, byteCount
 
