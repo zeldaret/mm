@@ -161,6 +161,13 @@ def processCommands(cmdList: list[tuple[int, str, str]]) -> list[Expression]:
             if cmd.needsToInvert:
                 right, left = left, right
 
+            if len(left) == 0:
+                eprint(f"Failed to tokenize left branch for command {macro}({entryArgs}) at offset {offset:02X}")
+                exit(1)
+            if len(right) == 0:
+                eprint(f"Failed to tokenize left branch for command {macro}({entryArgs}) at offset {offset:02X}")
+                exit(1)
+
             expr.left = processCommands(left)
             expr.right = processCommands(right)
 

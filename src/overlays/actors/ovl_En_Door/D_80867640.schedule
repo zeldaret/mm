@@ -1,0 +1,5 @@
+if_time_range_s (21, 0, 22, 0) {
+    return_s (11)
+} else {
+    return_none
+}

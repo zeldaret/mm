@@ -1,0 +1,5 @@
+if_misc_s (SCHEDULE_CHECK_MISC_ROOM_KEY) {
+    return_s (22)
+} else {
+    return_none
+}

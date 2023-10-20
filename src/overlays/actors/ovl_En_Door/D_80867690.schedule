@@ -1,0 +1,5 @@
+if_before_time_s (22, 0) {
+    return_s (16)
+} else {
+    return_none
+}
