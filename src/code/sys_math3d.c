@@ -18,37 +18,6 @@ struct Dummy207 { int x; };
 
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 
-// extern Vec3f D_801FBBF0;
-// extern Linef D_801FBC00;
-// extern Vec3f D_801FBC18;
-// extern Vec3f D_801FBC28;
-// extern Sphere16 D_801FBC38;
-// extern Sphere16 D_801FBC40;
-// extern Vec3f D_801FBC48;
-// extern Vec3f D_801FBC58;
-// extern Vec3f D_801FBC68; // can be global
-// extern Vec3f D_801FBC78; // can be global
-// extern Cylinderf D_801FBC88;
-// extern Spheref D_801FBCA0;
-// extern Cylinderf D_801FBCB0;
-// extern Cylinderf D_801FBCC8;
-// extern Vec3f D_801FBCE0;
-// extern Vec3f D_801FBCF0;
-// extern Vec3f D_801FBD00;
-// extern Vec3f D_801FBD10;
-// extern Vec3f D_801FBD20;
-// extern Vec3f D_801FBD30;
-// extern Vec3f D_801FBD40;
-// extern Vec3f D_801FBD50;
-// extern Vec3f D_801FBD60;
-// extern Vec3f D_801FBD70;
-// extern InfiniteLine D_801FBD80;
-// extern Linef D_801FBD98;
-// extern Vec3f D_801FBDB0;
-// extern InfiniteLine D_801FBDC0; // can be global
-// extern Vec3f D_801FBDD8;
-// extern Vec3f D_801FBDE8;
-
 f32 Math3D_Normalize(Vec3f* vec) {
     f32 magnitude = Math3D_Vec3fMagnitude(vec);
 
@@ -62,8 +31,6 @@ f32 Math3D_Normalize(Vec3f* vec) {
     return magnitude;
 }
 
-// #ifdef NON_MATCHING
-// in-function static bss
 s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB,
                                       f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB,
                                       Vec3f* closestPoint) {
@@ -89,9 +56,6 @@ s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32
     }
     return true;
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_PlaneVsLineSegClosestPoint.s")
-// #endif
 
 /**
  * Finds the two points on lines A and B where the lines are closest together.
@@ -221,8 +185,6 @@ s32 Math3D_PlaneVsPlaneNewLine(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeA
     return true;
 }
 
-// #ifdef NON_MATCHING
-// in-function static bss
 s32 Math3D_PlaneVsPlaneVsLineClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA,
                                           f32 planeBB, f32 planeBC, f32 planeBDist, Vec3f* point, Vec3f* closestPoint) {
     static InfiniteLine D_801FBDC0;
@@ -234,9 +196,6 @@ s32 Math3D_PlaneVsPlaneVsLineClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC,
     Math3D_LineClosestToPoint(&D_801FBDC0, point, closestPoint);
     return true;
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_PlaneVsPlaneVsLineClosestPoint.s")
-// #endif
 
 /**
  * Calculates the point on the line from starting point `v0`, in the direction `dir` scaled by `scale`. Result is placed
@@ -599,17 +558,11 @@ void Math3D_Vec3f_Cross(Vec3f* a, Vec3f* b, Vec3f* ret) {
     ret->z = (a->x * b->y) - (a->y * b->x);
 }
 
-// #ifdef NON_MATCHING
-// in-function static bss
-
 void Math3D_SurfaceNorm(Vec3f* va, Vec3f* vb, Vec3f* vc, Vec3f* normal) {
     Math_Vec3f_Diff(vb, va, &D_801FBC68);
     Math_Vec3f_Diff(vc, va, &D_801FBC78);
     Math3D_Vec3f_Cross(&D_801FBC68, &D_801FBC78, normal);
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_SurfaceNorm.s")
-// #endif
 
 s32 Math3D_PointRelativeToCubeFaces(Vec3f* point, Vec3f* min, Vec3f* max) {
     s32 ret = 0;
@@ -726,8 +679,6 @@ s32 Math3D_PointRelativeToCubeVertices(Vec3f* point, Vec3f* min, Vec3f* max) {
     return ret;
 }
 
-// #ifdef NON_MATCHING
-// in-function static bss
 s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
     static Vec3f D_801FBCE0;
     static Vec3f D_801FBCF0;
@@ -911,15 +862,10 @@ s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
 
     return false;
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_LineVsCube.s")
-// #endif
 
-// #ifdef NON_MATCHING
 /**
  * Checks if a line segment with endpoints `a` and `b` intersect a cube
  */
-// in-function static bss
 s32 Math3D_LineVsCubeShort(Vec3s* min, Vec3s* max, Vec3s* a, Vec3s* b) {
     static Vec3f D_801FBD20; // minF
     static Vec3f D_801FBD30; // maxF
@@ -941,9 +887,6 @@ s32 Math3D_LineVsCubeShort(Vec3s* min, Vec3s* max, Vec3s* a, Vec3s* b) {
 
     return Math3D_LineVsCube(&D_801FBD20, &D_801FBD30, &D_801FBD40, &D_801FBD50);
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_LineVsCubeShort.s")
-// #endif
 
 void Math3D_RotateXZPlane(Vec3f* pointOnPlane, s16 angle, f32* a, f32* c, f32* d) {
     *a = Math_SinS(angle) * 0x7FFF;
@@ -951,8 +894,6 @@ void Math3D_RotateXZPlane(Vec3f* pointOnPlane, s16 angle, f32* a, f32* c, f32* d
     *d = -((*a * pointOnPlane->x) + (*c * pointOnPlane->z));
 }
 
-// #ifdef NON_MATCHING
-// in-function static bss
 void Math3D_DefPlane(Vec3f* va, Vec3f* vb, Vec3f* vc, f32* nx, f32* ny, f32* nz, f32* originDist) {
     static Vec3f D_801FBD60;
 
@@ -974,9 +915,6 @@ void Math3D_DefPlane(Vec3f* va, Vec3f* vb, Vec3f* vc, f32* nx, f32* ny, f32* nz,
         *nx = 0.0f;
     }
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_DefPlane.s")
-// #endif
 
 f32 Math3D_PlaneF(f32 nx, f32 ny, f32 nz, f32 originDist, Vec3f* pointOnPlane) {
     return (nx * pointOnPlane->x) + (ny * pointOnPlane->y) + (nz * pointOnPlane->z) + originDist;
@@ -1273,8 +1211,6 @@ s32 Math3D_TriChkPointParaX(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 y, f32 
     return false;
 }
 
-// #ifdef NON_MATCHING
-// in-function static bss
 s32 Math3D_TriChkLineSegParaXIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 y,
                                        f32 z, f32* xIntersect, f32 x0, f32 x1) {
     static Vec3f D_801FBD70;
@@ -1304,9 +1240,6 @@ s32 Math3D_TriChkLineSegParaXIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, 
     }
     return false;
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkLineSegParaXIntersect.s")
-// #endif
 
 s32 Math3D_TriChkLineSegParaXDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, Plane* plane, f32 y, f32 z, f32 chkDist) {
     if (IS_ZERO(plane->normal.x)) {
@@ -1399,8 +1332,6 @@ s32 Math3D_TriChkPointParaZ(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 y, f32 
     return false;
 }
 
-// #ifdef NON_MATCHING
-// in-function static bss
 s32 Math3D_TriChkLineSegParaZIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 x,
                                        f32 y, f32* zIntersect, f32 z0, f32 z1) {
     static Vec3f D_801FBDB0;
@@ -1429,9 +1360,6 @@ s32 Math3D_TriChkLineSegParaZIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, 
     }
     return false;
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriChkLineSegParaZIntersect.s")
-// #endif
 
 s32 Math3D_TriChkLineSegParaZDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, Plane* plane, f32 x, f32 y, f32 chkDist) {
     if (IS_ZERO(plane->normal.z)) {
@@ -1627,8 +1555,6 @@ s32 func_8017DA24(f32 z0, f32 x0, Vec3f* p1, Vec3f* p2, f32* lineLenSq) {
     return ret;
 }
 
-// #ifdef NON_MATCHING
-// in-function static bss
 s32 Math3D_LineVsSph(Sphere16* sphere, Linef* line) {
     static Vec3f D_801FBDD8;
 
@@ -1667,12 +1593,7 @@ s32 Math3D_LineVsSph(Sphere16* sphere, Linef* line) {
     }
     return false;
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_LineVsSph.s")
-// #endif
 
-// #ifdef NON_MATCHING
-// in-function static bss
 void Math3D_GetSphVsTriIntersectPoint(Sphere16* sphere, TriNorm* tri, Vec3f* intersectPoint) {
     static Vec3f D_801FBDE8;
     static Vec3f D_801FBBF0;
@@ -1697,12 +1618,7 @@ void Math3D_GetSphVsTriIntersectPoint(Sphere16* sphere, TriNorm* tri, Vec3f* int
     splitRatio = sphere->radius / dist;
     Math3D_LineSplitRatio(&D_801FBBF0, &D_801FBDE8, splitRatio, intersectPoint);
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_GetSphVsTriIntersectPoint.s")
-// #endif
 
-// #ifdef NON_MATCHING
-// in-function static bss
 s32 Math3D_TriVsSphIntersect(Sphere16* sphere, TriNorm* tri, Vec3f* intersectPoint) {
     static Linef D_801FBC00;
     static Vec3f D_801FBC18;
@@ -1787,9 +1703,6 @@ s32 Math3D_TriVsSphIntersect(Sphere16* sphere, TriNorm* tri, Vec3f* intersectPoi
     }
     return false;
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_TriVsSphIntersect.s")
-// #endif
 
 s32 Math3D_PointInCyl(Cylinder16* cyl, Vec3f* point) {
     f32 bottom;
@@ -2001,8 +1914,6 @@ dummy:;
     return count;
 }
 
-// #ifdef NON_MATCHING
-// in-function static bss
 s32 Math3D_CylTriVsIntersect(Cylinder16* cyl, TriNorm* tri, Vec3f* intersect) {
     static Sphere16 D_801FBC38;
     static Sphere16 D_801FBC40;
@@ -2095,9 +2006,6 @@ s32 Math3D_CylTriVsIntersect(Cylinder16* cyl, TriNorm* tri, Vec3f* intersect) {
     }
     return false;
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_CylTriVsIntersect.s")
-// #endif
 
 s32 Math3D_CylVsTri(Cylinder16* cyl, TriNorm* tri) {
     Vec3f intersect;
@@ -2141,8 +2049,6 @@ s32 Math3D_SphVsCylOverlapDist(Sphere16* sph, Cylinder16* cyl, f32* overlapSize)
     return Math3D_SphVsCylOverlapCenterDist(sph, cyl, overlapSize, &centerDist);
 }
 
-// #ifdef NON_MATCHING
-// in-function static bss
 s32 Math3D_SphVsCylOverlapCenterDist(Sphere16* sph, Cylinder16* cyl, f32* overlapSize, f32* centerDist) {
     static Cylinderf D_801FBC88;
     static Spheref D_801FBCA0;
@@ -2186,9 +2092,6 @@ s32 Math3D_SphVsCylOverlapCenterDist(Sphere16* sph, Cylinder16* cyl, f32* overla
     }
     return false;
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_SphVsCylOverlapCenterDist.s")
-// #endif
 
 s32 Math3D_CylOutsideCyl(Cylinder16* ca, Cylinder16* cb, f32* deadSpace) {
     f32 xzDist;
@@ -2196,8 +2099,6 @@ s32 Math3D_CylOutsideCyl(Cylinder16* ca, Cylinder16* cb, f32* deadSpace) {
     return Math3D_CylOutsideCylDist(ca, cb, deadSpace, &xzDist);
 }
 
-// #ifdef NON_MATCHING
-// in-function static bss
 s32 Math3D_CylOutsideCylDist(Cylinder16* ca, Cylinder16* cb, f32* deadSpace, f32* xzDist) {
     static Cylinderf D_801FBCB0;
     static Cylinderf D_801FBCC8;
@@ -2228,9 +2129,6 @@ s32 Math3D_CylOutsideCylDist(Cylinder16* ca, Cylinder16* cb, f32* deadSpace, f32
     *deadSpace = D_801FBCB0.radius + D_801FBCC8.radius - *xzDist;
     return true;
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_CylOutsideCylDist.s")
-// #endif
 
 s32 Math3D_TriVsTriIntersect(TriNorm* ta, TriNorm* tb, Vec3f* intersect) {
     f32 dist0 = Math3D_Plane(&ta->plane, &tb->vtx[0]);
