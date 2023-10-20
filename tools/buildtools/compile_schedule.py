@@ -326,7 +326,7 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
             currentExpr.args = token
 
         elif token.tokenType.canBeStartingToken():
-            if currentExpr is not None:
+            if currentExpr is not None and currentExpr.expr.tokenType.isBranch():
                 eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
                 debugPrint(" makeTree: canBeStartingToken")
                 debugPrint(f" i: {i}")
