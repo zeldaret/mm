@@ -6,7 +6,7 @@ if_scene_s (SCENE_YADOYA) {
             if_time_range_s (21, 0, 23, 0) {
                 return_l (3)
             } else {
-                if_week_event_reg_s (WEEKEVENTREG_HAD_MIDNIGHT_MEETING) {
+                if_week_event_reg_s (WEEKEVENTREG_50_20) {
                     return_none
                 } else {
                     return_l (1)

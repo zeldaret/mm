@@ -81,20 +81,20 @@ class TokenType(enum.Enum):
 
     def hasArguments(self) -> bool:
         if self in {
-        TokenType.IF_WEEKEVENTREG_S,
-        TokenType.IF_WEEKEVENTREG_L,
-        TokenType.IF_TIMERANGE_S,
-        TokenType.IF_TIMERANGE_L,
-        TokenType.RETURN_S,
-        TokenType.RETURN_L,
-        TokenType.IF_MISC_S,
-        TokenType.IF_SCENE_S,
-        TokenType.IF_SCENE_L,
-        TokenType.IF_DAY_S,
-        TokenType.IF_DAY_L,
-        TokenType.RETURN_TIME,
-        TokenType.IF_BEFORETIME_S,
-        TokenType.IF_BEFORETIME_L,
+            TokenType.IF_WEEKEVENTREG_S,
+            TokenType.IF_WEEKEVENTREG_L,
+            TokenType.IF_TIMERANGE_S,
+            TokenType.IF_TIMERANGE_L,
+            TokenType.RETURN_S,
+            TokenType.RETURN_L,
+            TokenType.IF_MISC_S,
+            TokenType.IF_SCENE_S,
+            TokenType.IF_SCENE_L,
+            TokenType.IF_DAY_S,
+            TokenType.IF_DAY_L,
+            TokenType.RETURN_TIME,
+            TokenType.IF_BEFORETIME_S,
+            TokenType.IF_BEFORETIME_L,
         }:
             return True
         return False
@@ -259,13 +259,13 @@ class Expression:
 
     def print(self, depth=0):
         spaces = "    " * depth
-        print(f"{spaces}{self.expr.tokenLiteral} ", end="")
+        print(f"{spaces}{self.expr.tokenLiteral}", end="")
         if self.args is not None:
-            print(f"({self.args.tokenLiteral}) ", end="")
+            print(f"({self.args.tokenLiteral})", end="")
         if len(self.left) == 0:
             print()
         else:
-            print("{")
+            print(" {")
             for expr in self.left:
                 expr.print(depth+1)
             print(f"{spaces}}} else {{")
