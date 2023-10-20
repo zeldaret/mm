@@ -287,7 +287,7 @@ s32 func_8017A09C(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32
     }
 
     if (arg3 < (phi_f12 - arg5) || (phi_f14 + arg5) < arg3) {
-        return 0;
+        return false;
     }
     if (arg0->y < arg1->y) {
         phi_f12 = arg0->y;
@@ -303,9 +303,9 @@ s32 func_8017A09C(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32
     }
 
     if (arg4 < (phi_f12 - arg5) || arg4 > (phi_f14 + arg5)) {
-        return 0;
+        return false;
     }
-    return 1;
+    return true;
 }
 
 s32 func_8017A1D0(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5) {
@@ -327,7 +327,7 @@ s32 func_8017A1D0(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32
     }
 
     if (arg4 < (phi_f12 - arg5) || (phi_f14 + arg5) < arg4) {
-        return 0;
+        return false;
     }
 
     if (arg0->y < arg1->y) {
@@ -345,9 +345,9 @@ s32 func_8017A1D0(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32
     }
 
     if (arg3 < (phi_f12 - arg5) || (phi_f14 + arg5) < arg3) {
-        return 0;
+        return false;
     }
-    return 1;
+    return true;
 }
 
 s32 func_8017A304(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5) {
@@ -369,7 +369,7 @@ s32 func_8017A304(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32
     }
 
     if (arg4 < (phi_f12 - arg5) || (phi_f14 + arg5) < arg4) {
-        return 0;
+        return false;
     }
 
     if (arg0->z < arg1->z) {
@@ -387,9 +387,9 @@ s32 func_8017A304(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32
     }
 
     if (arg3 < (phi_f12 - arg5) || (phi_f14 + arg5) < arg3) {
-        return 0;
+        return false;
     }
-    return 1;
+    return true;
 }
 
 s32 Math3D_SphCubeVsTriCube(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4) {
@@ -411,7 +411,7 @@ s32 Math3D_SphCubeVsTriCube(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, 
     }
 
     if (arg3->x < (phi_f0 - arg4) || (phi_f2 + arg4) < arg3->x) {
-        return 0;
+        return false;
     }
 
     if (arg0->z < arg1->z) {
@@ -429,7 +429,7 @@ s32 Math3D_SphCubeVsTriCube(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, 
     }
 
     if (arg3->z < (phi_f0 - arg4) || (phi_f2 + arg4) < arg3->z) {
-        return 0;
+        return false;
     }
 
     if (arg0->y < arg1->y) {
@@ -447,9 +447,9 @@ s32 Math3D_SphCubeVsTriCube(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, 
     }
 
     if (arg3->y < (phi_f0 - arg4) || (phi_f2 + arg4) < arg3->y) {
-        return 0;
+        return false;
     }
-    return 1;
+    return true;
 }
 
 /**
@@ -684,7 +684,6 @@ s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
     static Vec3f D_801FBCF0;
     static Vec3f D_801FBD00;
     static Vec3f D_801FBD10;
-
     s32 flags[2];
 
     flags[0] = flags[1] = 0;
@@ -973,17 +972,17 @@ s32 Math3D_TriChkPointParaYImpl(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 z, f32 x, f
 
     if (fabsf(ny) > 0.5f && chkDistSq > 0.0f) {
         // Do a check on each face of the triangle, if the point is within `chkDist` units return true.
-        if ((func_8017DA24(z, x, v0, v1, &distToEdgeSq) != 0) && (distToEdgeSq < chkDistSq)) {
-            return 1;
+        if (func_8017DA24(z, x, v0, v1, &distToEdgeSq) && (distToEdgeSq < chkDistSq)) {
+            return true;
         }
-        if ((func_8017DA24(z, x, v1, v2, &distToEdgeSq) != 0) && (distToEdgeSq < chkDistSq)) {
-            return 1;
+        if (func_8017DA24(z, x, v1, v2, &distToEdgeSq) && (distToEdgeSq < chkDistSq)) {
+            return true;
         }
-        if ((func_8017DA24(z, x, v2, v0, &distToEdgeSq) != 0) && (distToEdgeSq < chkDistSq)) {
-            return 1;
+        if (func_8017DA24(z, x, v2, v0, &distToEdgeSq) && (distToEdgeSq < chkDistSq)) {
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
 s32 Math3D_TriChkPointParaYDeterminate(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 z, f32 x, f32 detMax, f32 ny) {
@@ -1106,13 +1105,13 @@ s32 Math3D_TriChkPointParaYImplNoCheckRange(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32
 
     if (fabsf(ny) > 0.5f && chkDistSq > 0.0f) {
         // Do a check on each face of the triangle, if the point is within `chkDist` units return true.
-        if ((func_8017DA24(z, x, v0, v1, &distToEdgeSq) != 0) && (distToEdgeSq < chkDistSq)) {
+        if (func_8017DA24(z, x, v0, v1, &distToEdgeSq) && (distToEdgeSq < chkDistSq)) {
             return true;
         }
-        if ((func_8017DA24(z, x, v1, v2, &distToEdgeSq) != 0) && (distToEdgeSq < chkDistSq)) {
+        if (func_8017DA24(z, x, v1, v2, &distToEdgeSq) && (distToEdgeSq < chkDistSq)) {
             return true;
         }
-        if ((func_8017DA24(z, x, v2, v0, &distToEdgeSq) != 0) && (distToEdgeSq < chkDistSq)) {
+        if (func_8017DA24(z, x, v2, v0, &distToEdgeSq) && (distToEdgeSq < chkDistSq)) {
             return true;
         }
     }
@@ -1420,9 +1419,9 @@ s32 Math3D_TriLineIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32
         return false;
     }
 
-    if (((nx == 0.0f) || (Math3D_TriChkPointParaX(v0, v1, v2, nx, intersect->y, intersect->z))) &&
-        ((ny == 0.0f) || (Math3D_TriChkPointParaY(v0, v1, v2, ny, intersect->z, intersect->x))) &&
-        ((nz == 0.0f) || (Math3D_TriChkPointParaZ(v0, v1, v2, nz, intersect->x, intersect->y)))) {
+    if (((nx == 0.0f) || Math3D_TriChkPointParaX(v0, v1, v2, nx, intersect->y, intersect->z)) &&
+        ((ny == 0.0f) || Math3D_TriChkPointParaY(v0, v1, v2, ny, intersect->z, intersect->x)) &&
+        ((nz == 0.0f) || Math3D_TriChkPointParaZ(v0, v1, v2, nz, intersect->x, intersect->y))) {
         return true;
     }
 
@@ -1601,9 +1600,9 @@ void Math3D_GetSphVsTriIntersectPoint(Sphere16* sphere, TriNorm* tri, Vec3f* int
     f32 dist;
     f32 splitRatio;
 
-    D_801FBDE8.x = ((tri->vtx[0].x + tri->vtx[1].x) * 0.5f);
-    D_801FBDE8.y = ((tri->vtx[0].y + tri->vtx[1].y) * 0.5f);
-    D_801FBDE8.z = ((tri->vtx[0].z + tri->vtx[1].z) * 0.5f);
+    D_801FBDE8.x = (tri->vtx[0].x + tri->vtx[1].x) * 0.5f;
+    D_801FBDE8.y = (tri->vtx[0].y + tri->vtx[1].y) * 0.5f;
+    D_801FBDE8.z = (tri->vtx[0].z + tri->vtx[1].z) * 0.5f;
     D_801FBBF0.x = sphere->center.x;
     D_801FBBF0.y = sphere->center.y;
     D_801FBBF0.z = sphere->center.z;
@@ -2000,8 +1999,8 @@ s32 Math3D_CylTriVsIntersect(Cylinder16* cyl, TriNorm* tri, Vec3f* intersect) {
     D_801FBC40.center.y = cylBottom;
     D_801FBC38.radius = D_801FBC40.radius = cyl->radius;
 
-    if ((Math3D_TriVsSphIntersect(&D_801FBC38, tri, intersect)) ||
-        (Math3D_TriVsSphIntersect(&D_801FBC40, tri, intersect))) {
+    if (Math3D_TriVsSphIntersect(&D_801FBC38, tri, intersect) ||
+        Math3D_TriVsSphIntersect(&D_801FBC40, tri, intersect)) {
         return true;
     }
     return false;
