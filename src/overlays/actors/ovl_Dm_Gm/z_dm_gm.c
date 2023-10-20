@@ -67,17 +67,17 @@ static AnimationInfoS sAnimationInfo[DMGM_ANIM_MAX] = {
     // DMGM_ANIMOBJ_AN4
     { &gAnju4MaskStandLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_MASK_STAND_LOOP
     //! @bug Uses symbol from OBJECT_AN1 instead of OBJECT_AN4
-    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },      // DMGM_ANIM_HOLD_HANDS
-    { &gAnju4MaskKneelAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },       // DMGM_ANIM_MASK_KNEEL
-    { &gAnju4MaskKneelLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // DMGM_ANIM_MASK_KNEEL_LOOP
-    { &gAnju4HugAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // DMGM_ANIM_HUG
-    { &gAnju4HugLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         // DMGM_ANIM_HUG_LOOP
+    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // DMGM_ANIM_HOLD_HANDS
+    { &gAnju4MaskKneelAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // DMGM_ANIM_MASK_KNEEL
+    { &gAnju4MaskKneelLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_MASK_KNEEL_LOOP
+    { &gAnju4HugAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },            // DMGM_ANIM_HUG
+    { &gAnju4HugLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // DMGM_ANIM_HUG_LOOP
     { &gAnju4HugReleaseAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // DMGM_ANIM_HUG_RELEASE
     { &gAnju4HugReleaseLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_HUG_RELEASE_LOOP
-    { &gAnju4CombineMasks1Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // DMGM_ANIM_COMBINE_MASKS_1
-    { &gAnju4CombineMasks2Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // DMGM_ANIM_COMBINE_MASKS_2
-    { &gAnju4LookUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // DMGM_ANIM_LOOK_UP
-    { &gAnju4LookUpLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // DMGM_ANIM_LOOK_UP_LOOP
+    { &gAnju4CombineMasks1Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_COMBINE_MASKS_1
+    { &gAnju4CombineMasks2Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_COMBINE_MASKS_2
+    { &gAnju4LookUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // DMGM_ANIM_LOOK_UP
+    { &gAnju4LookUpLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // DMGM_ANIM_LOOK_UP_LOOP
 };
 
 s32 DmGm_UpdateSkelAnime(DmGm* this, PlayState* play) {
