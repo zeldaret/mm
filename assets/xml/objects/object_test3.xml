@@ -2,22 +2,22 @@
     <!-- Object for Kafei -->
     <File Name="object_test3" Segment="6">
         <!-- Textures -->
-        <Texture Name="object_test3_TLUT_000000" OutName="tlut_000000" Format="rgba16" Width="16" Height="16" Offset="0x0" />
-        <Texture Name="object_test3_TLUT_000200" OutName="tlut_000200" Format="rgba16" Width="16" Height="16" Offset="0x200" />
-        <Texture Name="object_test3_TLUT_000400" OutName="tlut_000400" Format="rgba16" Width="16" Height="16" Offset="0x400" />
+        <Texture Name="gKafeiBody1TLUT" OutName="kafei_body_1_tlut" Format="rgba16" Width="16" Height="16" Offset="0x0" />
+        <Texture Name="gKafeiBody2TLUT" OutName="kafei_body_2_tlut" Format="rgba16" Width="16" Height="16" Offset="0x200" />
+        <Texture Name="gKafeiMouthTLUT" OutName="kafei_mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0x400" />
         <Texture Name="gKafeiEyesTLUT" OutName="kafei_eyes_tlut" Format="rgba16" Width="16" Height="16" Offset="0x600" />
         <Texture Name="gKafeiSkinTex" OutName="kafei_skin" Format="ci8" Width="8" Height="8" Offset="0x800" />
-        <Texture Name="gKafeiHair1Tex" OutName="kafei_hair1" Format="ci8" Width="8" Height="16" Offset="0x840" />
-        <Texture Name="gKafeiNoseTex" OutName="tex_0008C0" Format="ci8" Width="16" Height="16" Offset="0x8C0" />
+        <Texture Name="gKafeiHairTex" OutName="kafei_hair" Format="ci8" Width="8" Height="16" Offset="0x840" />
+        <Texture Name="gKafeiNoseTex" OutName="kafei_nose" Format="ci8" Width="16" Height="16" Offset="0x8C0" />
         <Texture Name="gKafeiMouthClosedTex" OutName="kafei_mouth_closed" Format="ci8" Width="32" Height="32" Offset="0x9C0" />
         <Texture Name="gKafeiEyesOpenTex" OutName="kafei_eyes_open" Format="ci8" Width="64" Height="32" Offset="0xDC0" />
-        <Texture Name="gKafeiHair2Tex" OutName="kafei_hair2" Format="ci8" Width="8" Height="16" Offset="0x15C0" />
+        <Texture Name="gKafeiHairPartAndUndersideTex" OutName="kafei_hair_part_and_underside" Format="ci8" Width="8" Height="16" Offset="0x15C0" />
         <Texture Name="gKafeiFingersTex" OutName="kafei_eyes_fingers" Format="ci8" Width="16" Height="16" Offset="0x1640" />
-        <Texture Name="object_test3_Tex_001740" OutName="tex_001740" Format="ci8" Width="32" Height="32" Offset="0x1740" />
+        <Texture Name="gKafeiBootTex" OutName="kafei_boot" Format="ci8" Width="32" Height="32" Offset="0x1740" />
         <Texture Name="gKafeiSleevePatternTex" OutName="kafei_sleeve_pattern" Format="ci8" Width="32" Height="32" Offset="0x1B40" />
         <Texture Name="gKafeiInnerSleeveTex" OutName="kafei_inner_sleeve" Format="ci8" Width="8" Height="8" Offset="0x1F40" />
         <Texture Name="gKafeiClothesNeckOpeningTex" OutName="kafei_clothes_neck_opening" Format="ci8" Width="32" Height="16" Offset="0x1F80" />
-        <Texture Name="gKafeiChainTex" OutName="tex_002180" Format="rgba16" Width="32" Height="64" Offset="0x2180" />
+        <Texture Name="gKafeiPendantOfMemoriesTex" OutName="kafei_pendant_of_memories" Format="rgba16" Width="32" Height="64" Offset="0x2180" />
         <Texture Name="gKafeiClothesPatternTex" OutName="kafei_clothes_pattern" Format="ci8" Width="16" Height="64" Offset="0x3180" />
         <Texture Name="gKafeiTrouserHemTex" OutName="kafei_trouser_hem" Format="ci8" Width="16" Height="16" Offset="0x3580" />
         <Texture Name="gKafeiEyesHalfTex" OutName="kafei_eyes_half" Format="ci8" Width="64" Height="32" Offset="0x3680" />
@@ -39,7 +39,7 @@
         <DList Name="gKafeiLeftShinDL" Offset="0xC708" />
         <DList Name="gKafeiLeftFootDL" Offset="0xC870" />
         <DList Name="gKafeiWaistDL" Offset="0xC9E8" />
-        <DList Name="gKafeiChainDL" Offset="0xCB60" />
+        <DList Name="gKafeiPendantOfMemoriesDL" Offset="0xCB60" />
         <DList Name="gKafeiTorsoDL" Offset="0xCC20" />
         <DList Name="gKafeiHeadDL" Offset="0xCF70" />
         <DList Name="gKafeiNose1DL" Offset="0xD670" />

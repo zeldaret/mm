@@ -1227,7 +1227,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
         } else {
             OPEN_DISPS(play->state.gfxCtx);
 
-            gSPDisplayList(POLY_OPA_DISP++, gKafeiChainDL);
+            gSPDisplayList(POLY_OPA_DISP++, gKafeiPendantOfMemoriesDL);
 
             CLOSE_DISPS(play->state.gfxCtx);
         }
