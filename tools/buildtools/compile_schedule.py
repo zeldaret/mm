@@ -381,8 +381,10 @@ def emitMacros(tree: list[Expression], byteCount = 0) -> tuple[str, int]:
         pass
         #
         info = cmdInfos[expr.expr.tokenType]
-        result += f"    /* 0x{byteCount:02X} */ {info.macro},\n"
-        # TODO: args
+        result += f"    /* 0x{byteCount:02X} */ {info.macro}("
+        if expr.args is not None:
+            result += f"{expr.args.tokenLiteral}"
+        result += "),\n"
         byteCount += info.cmdLenght
 
         if expr.expr.tokenType.needsToInvert():
