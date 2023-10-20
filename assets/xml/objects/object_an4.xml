@@ -6,8 +6,8 @@
         <Animation Name="gAnju4HugAnim" Offset="0x13C8" /> <!-- Start hugging while kneeled --> <!-- Original name is "anj_dakiau" ("to embrace each other​") -->
         <Animation Name="gAnju4HugLoopAnim" Offset="0x2550" /> <!-- hugging while kneeled --> <!-- Original name is "anj_dakiau_loop" -->
 
-        <Animation Name="gAnju4HugSeparateAnim" Offset="0x353C" /> <!-- Stop hugging while kneeled -->  <!-- Original name is "anj_hanare" ("to be separated; to be apart") -->
-        <Animation Name="gAnju4HugSeparateLoopAnim" Offset="0x4498" /> <!-- Original name is "anj_hanare_loop" -->
+        <Animation Name="gAnju4HugReleaseAnim" Offset="0x353C" /> <!-- Stop hugging while kneeled -->  <!-- Original name is "anj_hanare" ("to be separated; to be apart") -->
+        <Animation Name="gAnju4HugReleaseLoopAnim" Offset="0x4498" /> <!-- Original name is "anj_hanare_loop" -->
 
         <Animation Name="gAnju4LookUpAnim" Offset="0x4A78" /> <!-- Original name is "anj_kaoage" ("raising face") -->
         <Animation Name="gAnju4LookUpLoopAnim" Offset="0x506C" /> <!-- Original name is "anj_kaoage_loop" -->

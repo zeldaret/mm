@@ -16,7 +16,7 @@ void DmAn_Init(Actor* thisx, PlayState* play);
 void DmAn_Destroy(Actor* thisx, PlayState* play);
 void DmAn_Update(Actor* thisx, PlayState* play);
 
-void DmAn_Initialize(DmAn* this, PlayState* play);
+void DmAn_WaitForObject(DmAn* this, PlayState* play);
 void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play);
 void DmAn_DoNothing(DmAn* this, PlayState* play);
 void DmAn_Draw(Actor* thisx, PlayState* play);
@@ -51,8 +51,8 @@ typedef enum DmAnAnimation {
     /*  5 */ DMAN_ANIM_MASK_KNEEL_LOOP,
     /*  6 */ DMAN_ANIM_HUG,
     /*  7 */ DMAN_ANIM_HUG_LOOP,
-    /*  8 */ DMAN_ANIM_HUG_SEPARATE,
-    /*  9 */ DMAN_ANIM_HUG_SEPARATE_LOOP,
+    /*  8 */ DMAN_ANIM_HUG_RELEASE,
+    /*  9 */ DMAN_ANIM_HUG_RELEASE_LOOP,
     /* 10 */ DMAN_ANIM_COMBINE_MASKS_1,
     /* 11 */ DMAN_ANIM_COMBINE_MASKS_2,
     /* 12 */ DMAN_ANIM_LOOK_UP,
@@ -72,8 +72,8 @@ static AnimationInfoS sAnimationInfo[DMAN_ANIM_MAX] = {
     { &gAnju4MaskKneelLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // DMAN_ANIM_MASK_KNEEL_LOOP
     { &gAnju4HugAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // DMAN_ANIM_HUG
     { &gAnju4HugLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         // DMAN_ANIM_HUG_LOOP
-    { &gAnju4HugSeparateAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // DMAN_ANIM_HUG_SEPARATE
-    { &gAnju4HugSeparateLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_HUG_SEPARATE_LOOP
+    { &gAnju4HugReleaseAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // DMAN_ANIM_HUG_RELEASE
+    { &gAnju4HugReleaseLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_HUG_RELEASE_LOOP
     { &gAnju4CombineMasks1Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // DMAN_ANIM_COMBINE_MASKS_1
     { &gAnju4CombineMasks2Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // DMAN_ANIM_COMBINE_MASKS_2
     { &gAnju4LookUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // DMAN_ANIM_LOOK_UP
@@ -220,7 +220,7 @@ Actor* DmAn_FindAnjusMotherActor(PlayState* play) {
     return foundActor;
 }
 
-void DmAn_Initialize(DmAn* this, PlayState* play) {
+void DmAn_WaitForObject(DmAn* this, PlayState* play) {
     if ((this->an4ObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->an4ObjectSlot, play) &&
         (this->msmoObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->msmoObjectSlot, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
@@ -252,7 +252,7 @@ void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play) {
         /* 3 */ DMAN_ANIM_MASK_STAND_LOOP,
         /* 4 */ DMAN_ANIM_MASK_KNEEL,
         /* 5 */ DMAN_ANIM_HUG,
-        /* 6 */ DMAN_ANIM_HUG_SEPARATE,
+        /* 6 */ DMAN_ANIM_HUG_RELEASE,
         /* 7 */ DMAN_ANIM_COMBINE_MASKS_1,
         /* 8 */ DMAN_ANIM_COMBINE_MASKS_2,
         /* 9 */ DMAN_ANIM_HOLD_HANDS,
@@ -286,7 +286,7 @@ void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play) {
                 case 7:
                 case 8:
                     if ((this->animIndex == DMAN_ANIM_LOOK_UP) || (this->animIndex == DMAN_ANIM_MASK_KNEEL) ||
-                        (this->animIndex == DMAN_ANIM_HUG) || (this->animIndex == DMAN_ANIM_HUG_SEPARATE)) {
+                        (this->animIndex == DMAN_ANIM_HUG) || (this->animIndex == DMAN_ANIM_HUG_RELEASE)) {
                         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                             DmAn_ChangeAnim(this, play, this->animIndex + 1);
                         }
@@ -313,7 +313,7 @@ void DmAn_Init(Actor* thisx, PlayState* play) {
 
     this->an4ObjectSlot = SubS_GetObjectSlot(OBJECT_AN4, play);
     this->msmoObjectSlot = SubS_GetObjectSlot(OBJECT_MSMO, play);
-    this->actionFunc = DmAn_Initialize;
+    this->actionFunc = DmAn_WaitForObject;
 }
 
 void DmAn_Destroy(Actor* thisx, PlayState* play) {

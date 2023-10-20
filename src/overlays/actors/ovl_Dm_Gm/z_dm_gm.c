@@ -16,7 +16,7 @@ void DmGm_Init(Actor* thisx, PlayState* play);
 void DmGm_Destroy(Actor* thisx, PlayState* play);
 void DmGm_Update(Actor* thisx, PlayState* play);
 
-void DmGm_Initialize(DmGm* this, PlayState* play);
+void DmGm_WaitForObject(DmGm* this, PlayState* play);
 void DmGm_HandleCouplesMaskCs(DmGm* this, PlayState* play);
 void DmGm_DoNothing(DmGm* this, PlayState* play);
 void DmGm_Draw(Actor* thisx, PlayState* play);
@@ -51,8 +51,8 @@ typedef enum DmGmAnimation {
     /*  5 */ DMGM_ANIM_MASK_KNEEL_LOOP,
     /*  6 */ DMGM_ANIM_HUG,
     /*  7 */ DMGM_ANIM_HUG_LOOP,
-    /*  8 */ DMGM_ANIM_HUG_SEPARATE,
-    /*  9 */ DMGM_ANIM_HUG_SEPARATE_LOOP,
+    /*  8 */ DMGM_ANIM_HUG_RELEASE,
+    /*  9 */ DMGM_ANIM_HUG_RELEASE_LOOP,
     /* 10 */ DMGM_ANIM_COMBINE_MASKS_1,
     /* 11 */ DMGM_ANIM_COMBINE_MASKS_2,
     /* 12 */ DMGM_ANIM_LOOK_UP,
@@ -72,8 +72,8 @@ static AnimationInfoS sAnimationInfo[DMGM_ANIM_MAX] = {
     { &gAnju4MaskKneelLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // DMGM_ANIM_MASK_KNEEL_LOOP
     { &gAnju4HugAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // DMGM_ANIM_HUG
     { &gAnju4HugLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         // DMGM_ANIM_HUG_LOOP
-    { &gAnju4HugSeparateAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // DMGM_ANIM_HUG_SEPARATE
-    { &gAnju4HugSeparateLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_HUG_SEPARATE_LOOP
+    { &gAnju4HugReleaseAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // DMGM_ANIM_HUG_RELEASE
+    { &gAnju4HugReleaseLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMGM_ANIM_HUG_RELEASE_LOOP
     { &gAnju4CombineMasks1Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // DMGM_ANIM_COMBINE_MASKS_1
     { &gAnju4CombineMasks2Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // DMGM_ANIM_COMBINE_MASKS_2
     { &gAnju4LookUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // DMGM_ANIM_LOOK_UP
@@ -220,7 +220,7 @@ Actor* DmGm_FindAnjusMotherActor(PlayState* play) {
     return foundActor;
 }
 
-void DmGm_Initialize(DmGm* this, PlayState* play) {
+void DmGm_WaitForObject(DmGm* this, PlayState* play) {
     if ((this->an4ObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->an4ObjectSlot, play) &&
         (this->msmoObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->msmoObjectSlot, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
@@ -252,7 +252,7 @@ void DmGm_HandleCouplesMaskCs(DmGm* this, PlayState* play) {
         /* 3 */ DMGM_ANIM_MASK_STAND_LOOP,
         /* 4 */ DMGM_ANIM_MASK_KNEEL,
         /* 5 */ DMGM_ANIM_HUG,
-        /* 6 */ DMGM_ANIM_HUG_SEPARATE,
+        /* 6 */ DMGM_ANIM_HUG_RELEASE,
         /* 7 */ DMGM_ANIM_COMBINE_MASKS_1,
         /* 8 */ DMGM_ANIM_COMBINE_MASKS_2,
         /* 9 */ DMGM_ANIM_HOLD_HANDS,
@@ -286,7 +286,7 @@ void DmGm_HandleCouplesMaskCs(DmGm* this, PlayState* play) {
                 case 7:
                 case 8:
                     if ((this->animIndex == DMGM_ANIM_LOOK_UP) || (this->animIndex == DMGM_ANIM_MASK_KNEEL) ||
-                        (this->animIndex == DMGM_ANIM_HUG) || (this->animIndex == DMGM_ANIM_HUG_SEPARATE)) {
+                        (this->animIndex == DMGM_ANIM_HUG) || (this->animIndex == DMGM_ANIM_HUG_RELEASE)) {
                         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                             DmGm_ChangeAnim(this, play, this->animIndex + 1);
                         }
@@ -313,7 +313,7 @@ void DmGm_Init(Actor* thisx, PlayState* play) {
 
     this->an4ObjectSlot = SubS_GetObjectSlot(OBJECT_AN4, play);
     this->msmoObjectSlot = SubS_GetObjectSlot(OBJECT_MSMO, play);
-    this->actionFunc = DmGm_Initialize;
+    this->actionFunc = DmGm_WaitForObject;
 }
 
 void DmGm_Destroy(Actor* thisx, PlayState* play) {
