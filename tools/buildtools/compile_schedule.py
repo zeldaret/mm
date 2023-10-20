@@ -227,7 +227,7 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
             lineEndIndex = contents.find("\n", i)
             spaceIndex = contents.find(" ", i)
             if lineEndIndex < 0 and spaceIndex < 0:
-                tokenEndIndex = -1
+                tokenEndIndex = len(contents)
             elif lineEndIndex < 0 and spaceIndex >= 0:
                 tokenEndIndex = spaceIndex
             elif lineEndIndex >= 0 and spaceIndex < 0:
@@ -238,7 +238,7 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
             tokenType = tokenLiterals.get(literal)
             if tokenType is None:
                 eprint(f"Error: Unrecognized token found '{literal}' at {filename}:{lineNumber}:{columnNumber}")
-                debugPrint(f" internal index: {i}\n char: {char}")
+                debugPrint(f" internal index: {i}\n char: {char}\n tokenEndIndex: {tokenEndIndex}")
                 exit(1)
             yield Token(tokenType, literal, lineNumber, columnNumber)
             columnNumber += len(literal)
