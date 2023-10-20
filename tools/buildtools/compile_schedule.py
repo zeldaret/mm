@@ -141,6 +141,27 @@ class Token:
     columnNumber: int
 
 
+class TokenIterator:
+    def __init__(self, tokens: Iterator[Token]):
+        self.tokens = list(tokens)
+        self.index = 0
+
+    def get(self) -> Token|None:
+        if self.index >= len(self.tokens):
+            return None
+        token = self.tokens[self.index]
+        self.index += 1
+        return token
+
+    def unget(self) -> None:
+        self.index -= 1
+        if self.index < 0:
+            raise RuntimeError()
+
+    def remainingTokens(self) -> int:
+        return len(self.tokens) - self.index
+
+
 def tokenize(contents: str, filename: str) -> Iterator[Token]:
     lineNumber = 1
     columnNumber = 1
@@ -217,6 +238,16 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
             columnNumber += 1
             continue
 
+        if char in "{}":
+            if char == "{":
+                tokenType = TokenType.BRACE_OPEN
+            else:
+                tokenType = TokenType.BRACE_CLOSE
+            yield Token(tokenType, char, lineNumber, columnNumber)
+            i += 1
+            columnNumber += 1
+            continue
+
         if char == "\n":
             lineNumber += 1
             columnNumber = 1
@@ -274,19 +305,20 @@ class Expression:
             print(f"{spaces}}}")
 
 
-def makeTree(tokens: Iterator[Token], inputPath: str) -> list[Expression]:
+def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Expression]:
     exprs: list[Expression] = []
-
-    # debugPrint(f"Entering makeTree")
 
     currentExpr: Expression|None = None
     foundElse = False
 
-    prevToken: Token|None = None
-    while (token := next(tokens, None)) is not None:
+    i = 0
+    while (token := tokens.get()) is not None:
         if token.tokenType == TokenType.ARGS:
             if currentExpr is None or currentExpr.args is not None:
                 eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(" makeTree: ARGS")
+                debugPrint(f" i: {i}")
+                debugPrint(f" depth: {depth}")
                 debugPrint(f" token: {token}\n current expression: {currentExpr}")
                 debugPrint(f" foundElse: {foundElse}")
                 exit(1)
@@ -296,6 +328,9 @@ def makeTree(tokens: Iterator[Token], inputPath: str) -> list[Expression]:
         elif token.tokenType.canBeStartingToken():
             if currentExpr is not None:
                 eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(" makeTree: canBeStartingToken")
+                debugPrint(f" i: {i}")
+                debugPrint(f" depth: {depth}")
                 debugPrint(f" token: {token}\n current expression: {currentExpr}")
                 debugPrint(f" foundElse: {foundElse}")
                 exit(1)
@@ -307,24 +342,64 @@ def makeTree(tokens: Iterator[Token], inputPath: str) -> list[Expression]:
                 currentExpr = None
 
         elif token.tokenType == TokenType.ELSE:
-            if currentExpr is None or currentExpr.args is None:
+            if currentExpr is None or currentExpr.args is None or foundElse:
                 eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                debugPrint(" makeTree: ELSE")
+                debugPrint(f" i: {i}")
+                debugPrint(f" depth: {depth}")
+                debugPrint(f" token: {token}")
+                debugPrint(f" current expression: {currentExpr}")
                 debugPrint(f" foundElse: {foundElse}")
                 exit(1)
             foundElse = True
 
+            # Peek next token
+            nextToken = tokens.get()
+            if nextToken is None:
+                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                eprint(f"    missing expression after `else`")
+                debugPrint(" makeTree: ELSE")
+                debugPrint(f" i: {i}")
+                debugPrint(f" depth: {depth}")
+                debugPrint(f" token: {token}")
+                debugPrint(f" current expression: {currentExpr}")
+                debugPrint(f" foundElse: {foundElse}")
+                exit(1)
+
+            tokens.unget()
+            if nextToken.tokenType != TokenType.BRACE_OPEN:
+                # Else with no braces, try to parse it
+                if len(currentExpr.left) == 0 or len(currentExpr.right) != 0:
+                    eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                    debugPrint(" makeTree: BRACE_OPEN foundElse")
+                    debugPrint(f" i: {i}")
+                    debugPrint(f" depth: {depth}")
+                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                    debugPrint(f" foundElse: {foundElse}")
+                    exit(1)
+                subExprs = makeTree(tokens, inputPath, depth=depth+1)
+                currentExpr.right = subExprs
+                return exprs
+
         elif token.tokenType == TokenType.BRACE_OPEN:
+            # The body of an `if` or an `else`
+
             if currentExpr is None or currentExpr.args is None:
                 eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(" makeTree: BRACE_OPEN")
+                debugPrint(f" i: {i}")
+                debugPrint(f" depth: {depth}")
                 debugPrint(f" token: {token}\n current expression: {currentExpr}")
                 debugPrint(f" foundElse: {foundElse}")
                 exit(1)
 
-            subExprs = makeTree(tokens, inputPath)
+            subExprs = makeTree(tokens, inputPath, depth=depth+1)
             if foundElse:
                 if len(currentExpr.left) == 0 or len(currentExpr.right) != 0:
                     eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                    debugPrint(" makeTree: BRACE_OPEN foundElse")
+                    debugPrint(f" i: {i}")
+                    debugPrint(f" depth: {depth}")
                     debugPrint(f" token: {token}\n current expression: {currentExpr}")
                     debugPrint(f" foundElse: {foundElse}")
                     exit(1)
@@ -332,6 +407,9 @@ def makeTree(tokens: Iterator[Token], inputPath: str) -> list[Expression]:
             else:
                 if len(currentExpr.left) != 0 or len(currentExpr.right) != 0:
                     eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                    debugPrint(" makeTree: BRACE_OPEN not foundElse")
+                    debugPrint(f" i: {i}")
+                    debugPrint(f" depth: {depth}")
                     debugPrint(f" token: {token}\n current expression: {currentExpr}")
                     debugPrint(f" foundElse: {foundElse}")
                     exit(1)
@@ -340,17 +418,25 @@ def makeTree(tokens: Iterator[Token], inputPath: str) -> list[Expression]:
         elif token.tokenType == TokenType.BRACE_CLOSE:
             if len(exprs) == 0:
                 eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(" makeTree: BRACE_CLOSE")
+                debugPrint(f" i: {i}")
+                debugPrint(f" depth: {depth}")
                 debugPrint(f" token: {token}\n current expression: {currentExpr}")
                 debugPrint(f" foundElse: {foundElse}")
                 exit(1)
 
-            # TODO: check for return
-
-            # debugPrint(f"Exiting makeTree")
-
             return exprs
 
-        prevToken = token
+        else:
+            eprint("This code should be unreachable")
+            debugPrint(" makeTree: UNREACHABLE")
+            debugPrint(f" i: {i}")
+            debugPrint(f" depth: {depth}")
+            debugPrint(f" token: {token}\n current expression: {currentExpr}")
+            debugPrint(f" foundElse: {foundElse}")
+            exit(1)
+
+        i += 1
 
     return exprs
 
@@ -438,8 +524,9 @@ def main():
 
     inputContents = inputPath.read_text("UTF-8")
 
-    tokens = tokenize(inputContents, str(inputPath))
+    tokens = TokenIterator(tokenize(inputContents, str(inputPath)))
     tree = makeTree(tokens, str(inputPath))
+    assert tokens.remainingTokens() == 0
     output, byteCount = emitMacros(tree)
 
     if outputPath is None:
