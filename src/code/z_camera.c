@@ -1964,6 +1964,8 @@ s32 Camera_Noop(Camera* camera) {
 }
 
 #ifdef NON_MATCHING
+// https://decomp.me/scratch/7reuj
+// Stack
 s32 Camera_Normal1(Camera* camera) {
     Vec3f* sp4C = &camera->eye;
     Vec3f* sp48 = &camera->at;
