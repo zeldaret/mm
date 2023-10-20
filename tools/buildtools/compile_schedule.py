@@ -140,121 +140,114 @@ class Token:
     lineNumber: int
     columnNumber: int
 
-# TODO: consider changing to a plain function
-class Tokenizer:
-    def __init__(self, contents: str, filename: str):
-        self.contents = contents.replace("\t", " ")
-        self.filename = filename
 
-    def tokenize(self) -> Iterator[Token]:
-        lineNumber = 1
-        columnNumber = 1
+def tokenize(contents: str, filename: str) -> Iterator[Token]:
+    lineNumber = 1
+    columnNumber = 1
 
-        contentsLength = len(self.contents)
-        i = 0
-        while i < contentsLength:
-            char = self.contents[i]
+    contentsLength = len(contents)
+    i = 0
+    while i < contentsLength:
+        char = contents[i]
 
-            if self.contents[i:i+2] == "/*":
-                # comment
-                endIndex = self.contents.find("*/", i+2)
-                if endIndex == -1:
-                    eprint(f"Error: Unterminated comment at {self.filename}:{lineNumber}:{columnNumber}")
-                    debugPrint(f" internal index: {i}\n char: {char}")
-                    exit(1)
-                lineNumber += self.contents.count("\n", i+2, endIndex)
-                lastNewLineIndex = self.contents.rfind("\n", i+2, endIndex)
-                if lastNewLineIndex < 0:
-                    columnNumber += endIndex - i
-                else:
-                    columnNumber += endIndex - lastNewLineIndex
-                i = endIndex + 2
-                continue
-
-            if self.contents[i:i+2] == "//":
-                # comment
-                endIndex = self.contents.find("\n", i+2)
-                if endIndex == -1:
-                    eprint(f"Error: Unterminated comment at {self.filename}:{lineNumber}:{columnNumber}")
-                    debugPrint(f" internal index: {i}\n char: {char}")
-                    exit(1)
-                lineNumber += 1
+        if contents[i:i+2] == "/*":
+            # comment
+            endIndex = contents.find("*/", i+2)
+            if endIndex == -1:
+                eprint(f"Error: Unterminated comment at {filename}:{lineNumber}:{columnNumber}")
+                debugPrint(f" internal index: {i}\n char: {char}")
+                exit(1)
+            lineNumber += contents.count("\n", i+2, endIndex)
+            lastNewLineIndex = contents.rfind("\n", i+2, endIndex)
+            if lastNewLineIndex < 0:
                 columnNumber += endIndex - i
-                i = endIndex + 1
-                continue
-
-            if char == "(":
-                # Command arguments are handled in a special way
-                lineNumberStart = lineNumber
-                columnNumberStart = columnNumber
-
-                # debugPrint("Tokenizer: start (")
-
-                parenCount = 0
-                subIndex = i+1
-                parenEndFound = False
-                while subIndex < contentsLength:
-                    # We need to pair this parenthesis, allowing inner parenthesis
-                    subChar = self.contents[subIndex]
-                    columnNumber += 1
-                    if subChar == ")":
-                        parenCount -= 1
-                    elif subChar == "(":
-                        parenCount += 1
-                    elif subChar == "\n":
-                        lineNumber += 1
-                        columnNumber = 1
-                    if parenCount < 0:
-                        parenEndFound = True
-                        # debugPrint("Tokenizer: found paired )")
-                        break
-                    # debugPrint(f"Tokenizer: {parenCount=}")
-                    subIndex += 1
-
-                if not parenEndFound:
-                    eprint(f"Error: Unterminated parenthesis at {self.filename}:{lineNumber}:{columnNumber}")
-                    debugPrint(f" internal index: {i}\n char: {char}")
-                    exit(1)
-                parenContents = self.contents[i+1:subIndex]
-                yield Token(TokenType.ARGS, parenContents, lineNumberStart, columnNumberStart)
-
-                i = subIndex + 1
-                columnNumber += 1
-                continue
-
-            if char == "\n":
-                lineNumber += 1
-                columnNumber = 1
-            elif char.isspace():
-                columnNumber += 1
             else:
-                # Look for tokens
-                lineEndIndex = self.contents.find("\n", i)
-                spaceIndex = self.contents.find(" ", i)
-                if lineEndIndex < 0 and spaceIndex < 0:
-                    tokenEndIndex = -1
-                elif lineEndIndex < 0 and spaceIndex >= 0:
-                    tokenEndIndex = spaceIndex
-                elif lineEndIndex >= 0 and spaceIndex < 0:
-                    tokenEndIndex = lineEndIndex
-                else:
-                    tokenEndIndex = min(lineEndIndex, spaceIndex)
-                literal = self.contents[i:tokenEndIndex]
-                tokenType = tokenLiterals.get(literal)
-                if tokenType is None:
-                    eprint(f"Error: Unrecognized token found '{literal}' at {self.filename}:{lineNumber}:{columnNumber}")
-                    debugPrint(f" internal index: {i}\n char: {char}")
-                    exit(1)
-                yield Token(tokenType, literal, lineNumber, columnNumber)
-                columnNumber += len(literal)
-                i += len(literal)
-                continue
+                columnNumber += endIndex - lastNewLineIndex
+            i = endIndex + 2
+            continue
 
-            i += 1
+        if contents[i:i+2] == "//":
+            # comment
+            endIndex = contents.find("\n", i+2)
+            if endIndex == -1:
+                eprint(f"Error: Unterminated comment at {filename}:{lineNumber}:{columnNumber}")
+                debugPrint(f" internal index: {i}\n char: {char}")
+                exit(1)
+            lineNumber += 1
+            columnNumber += endIndex - i
+            i = endIndex + 1
+            continue
+
+        if char == "(":
+            # Command arguments are handled in a special way
+            lineNumberStart = lineNumber
+            columnNumberStart = columnNumber
+
+            # debugPrint("Tokenizer: start (")
+
+            parenCount = 0
+            subIndex = i+1
+            parenEndFound = False
+            while subIndex < contentsLength:
+                # We need to pair this parenthesis, allowing inner parenthesis
+                subChar = contents[subIndex]
+                columnNumber += 1
+                if subChar == ")":
+                    parenCount -= 1
+                elif subChar == "(":
+                    parenCount += 1
+                elif subChar == "\n":
+                    lineNumber += 1
+                    columnNumber = 1
+                if parenCount < 0:
+                    parenEndFound = True
+                    # debugPrint("Tokenizer: found paired )")
+                    break
+                # debugPrint(f"Tokenizer: {parenCount=}")
+                subIndex += 1
+
+            if not parenEndFound:
+                eprint(f"Error: Unterminated parenthesis at {filename}:{lineNumber}:{columnNumber}")
+                debugPrint(f" internal index: {i}\n char: {char}")
+                exit(1)
+            parenContents = contents[i+1:subIndex]
+            yield Token(TokenType.ARGS, parenContents, lineNumberStart, columnNumberStart)
+
+            i = subIndex + 1
+            columnNumber += 1
+            continue
+
+        if char == "\n":
+            lineNumber += 1
+            columnNumber = 1
+        elif char.isspace():
+            columnNumber += 1
+        else:
+            # Look for tokens
+            lineEndIndex = contents.find("\n", i)
+            spaceIndex = contents.find(" ", i)
+            if lineEndIndex < 0 and spaceIndex < 0:
+                tokenEndIndex = -1
+            elif lineEndIndex < 0 and spaceIndex >= 0:
+                tokenEndIndex = spaceIndex
+            elif lineEndIndex >= 0 and spaceIndex < 0:
+                tokenEndIndex = lineEndIndex
+            else:
+                tokenEndIndex = min(lineEndIndex, spaceIndex)
+            literal = contents[i:tokenEndIndex]
+            tokenType = tokenLiterals.get(literal)
+            if tokenType is None:
+                eprint(f"Error: Unrecognized token found '{literal}' at {filename}:{lineNumber}:{columnNumber}")
+                debugPrint(f" internal index: {i}\n char: {char}")
+                exit(1)
+            yield Token(tokenType, literal, lineNumber, columnNumber)
+            columnNumber += len(literal)
+            i += len(literal)
+            continue
+
+        i += 1
 
 
-    def __iter__(self) -> Iterator[Token]:
-        return self.tokenize()
 
 @dataclasses.dataclass
 class Expression:
@@ -445,25 +438,16 @@ def main():
 
     inputContents = inputPath.read_text("UTF-8")
 
-    tokens = Tokenizer(inputContents, str(inputPath)).tokenize()
+    tokens = tokenize(inputContents, str(inputPath))
     tree = makeTree(tokens, str(inputPath))
-    # for expr in tree:
-    #     expr.print()
     output, byteCount = emitMacros(tree)
-    print(output)
 
-    """
-    prevToken: Token|None = None
-    for token in tokens:
-        if prevToken is None:
-            if not token.tokenType.canBeStartingToken():
-                eprint(f"Error: Unexpected token at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                exit(1)
+    if outputPath is None:
+        print(output)
+    else:
+        outputPath.parent.mkdir(parents=True, exist_ok=True)
+        outputPath.write_text(output)
 
-        print(token)
-
-        prevToken = token
-    """
 
 if __name__ == "__main__":
     main()
