@@ -1987,7 +1987,7 @@ s32 Camera_Normal1(Camera* camera) {
     f32 sp88 = Camera_GetFocalActorHeight(camera);
     CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
     f32 phi_f2;
-    s32 pad;
+    f32 rand;
 
     roData->unk_00 = GET_NEXT_RO_DATA(values) * (sp88 * 0.01f * (0.8f - ((68.0f / sp88) * -0.2f)));
     roData->unk_04 = GET_NEXT_RO_DATA(values) * (sp88 * 0.01f * (0.8f - ((68.0f / sp88) * -0.2f)));
@@ -2223,7 +2223,7 @@ s32 Camera_Normal1(Camera* camera) {
         f32 sp6C;
 
         //! FAKE:
-        if (sp40) {}
+        if (1) {}
 
         temp = &D_801ED920->world.pos;
         OLib_Vec3fDiffToVecGeo(&sp74, &sp40->pos, temp);
@@ -2331,13 +2331,13 @@ s32 Camera_Normal1(Camera* camera) {
 
     if (roData->interfaceFlags & NORMAL1_FLAG_2) {
         spD4 = Math_SinS((s16)(spA4.yaw - spB4.yaw));
-        phi_f2 = Rand_ZeroOne() - 0.5f;
-        camera->roll = Camera_ScaledStepToCeilS(
-            (phi_f2 * 500.0f * camera->speedRatio) + (spD4 * spD4 * spD4 * 10000.0f), camera->roll, 0.1f, 5);
+        rand = Rand_ZeroOne() - 0.5f;
+        camera->roll = Camera_ScaledStepToCeilS((rand * 500.0f * camera->speedRatio) + (spD4 * spD4 * spD4 * 10000.0f),
+                                                camera->roll, 0.1f, 5);
     } else {
         if (gSaveContext.save.saveInfo.playerData.health <= 0x10) {
-            phi_f2 = Rand_ZeroOne() - 0.5f;
-            phi_v1_2 = phi_f2 * 100.0f * camera->speedRatio;
+            rand = Rand_ZeroOne() - 0.5f;
+            phi_v1_2 = rand * 100.0f * camera->speedRatio;
         } else {
             phi_v1_2 = 0.0f;
         }
