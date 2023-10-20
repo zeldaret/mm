@@ -859,7 +859,7 @@ typedef struct {
     { data11,  CAM_DATA_11 }
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
+    /* 0x00 */ f32 yOffset;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
