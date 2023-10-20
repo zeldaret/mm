@@ -79,6 +79,7 @@ void func_80A4084C(EnTest3* this, PlayState* play);
 void func_80A40908(EnTest3* this, PlayState* play);
 void func_80A40A6C(EnTest3* this, PlayState* play);
 
+// TODO
 static u8 sScheduleScript[] = {
     /* 0x000 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(1, 0x046 - 0x004),
     /* 0x004 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ALLEY, 0x020 - 0x008),

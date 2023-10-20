@@ -14,7 +14,7 @@ import re
 from typing import Iterator
 import sys
 
-entryRegex = re.compile(r"/\* (?P<offset>0x..) \*/ (?P<macro>\w+)\((?P<args>.*)\),")
+entryRegex = re.compile(r"/\* (?P<offset>0x(.+)) \*/ (?P<macro>\w+)\((?P<args>.*)\),")
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -138,7 +138,12 @@ def processCommands(cmdList: list[tuple[int, str, str]]) -> list[Expression]:
             expressions.append(expr)
 
             # print(branchInfo)
-            branchTarget = int(branchInfo.split(" - ")[0], 0)
+            branchesOffsets = branchInfo.split(" - ")
+            branchTarget = int(branchesOffsets[0], 0)
+            branchStart = int(branchesOffsets[1], 0)
+            if branchTarget - branchStart < 0:
+                eprint(f"Branch with negative offset found at offset {offset:02X}. Negative offsets are not supported")
+                exit(1)
 
             # Look up for branch target offset index
             j = -1

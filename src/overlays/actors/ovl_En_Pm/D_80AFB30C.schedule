@@ -1,0 +1,73 @@
+if_scene_s (SCENE_POSTHOUSE) {
+    if_time_range_s (0, 0, 0, 10) {
+        return_time (0, 0, 0, 10, 82)
+    } else {
+        if_time_range_s (0, 10, 0, 13) {
+            return_l (27)
+        } else {
+            if_time_range_s (0, 13, 0, 23) {
+                return_time (0, 13, 0, 23, 83)
+            } else {
+                if_time_range_s (0, 23, 0, 26) {
+                    return_time (0, 23, 0, 26, 32)
+                } else {
+                    return_none
+                }
+            }
+        }
+    }
+} else {
+    if_scene_s (SCENE_ICHIBA) {
+        if_time_range_s (0, 23, 0, 26) {
+            return_time (0, 23, 0, 26, 33)
+        } else {
+            if_time_range_s (0, 26, 0, 36) {
+                return_time (0, 26, 0, 36, 84)
+            } else {
+                return_none
+            }
+        }
+    } else {
+        if_scene_s (SCENE_CLOCKTOWER) {
+            if_time_range_s (0, 26, 0, 36) {
+                return_time (0, 26, 0, 36, 85)
+            } else {
+                if_time_range_s (0, 36, 0, 46) {
+                    return_time (0, 36, 0, 46, 86)
+                } else {
+                    return_none
+                }
+            }
+        } else {
+            if_scene_s (SCENE_TOWN) {
+                if_time_range_s (0, 46, 0, 56) {
+                    return_time (0, 46, 0, 56, 87)
+                } else {
+                    if_time_range_s (0, 56, 0, 59) {
+                        return_time (0, 56, 0, 59, 34)
+                    } else {
+                        return_none
+                    }
+                }
+            } else {
+                if_scene_s (SCENE_MILK_BAR) {
+                    if_time_range_s (0, 56, 0, 59) {
+                        return_time (0, 56, 0, 59, 36)
+                    } else {
+                        if_time_range_s (0, 59, 1, 9) {
+                            return_time (0, 59, 1, 9, 88)
+                        } else {
+                            if_time_range_s (1, 9, 1, 40) {
+                                return_time (1, 9, 1, 40, 28)
+                            } else {
+                                return_none
+                            }
+                        }
+                    }
+                } else {
+                    return_none
+                }
+            }
+        }
+    }
+}

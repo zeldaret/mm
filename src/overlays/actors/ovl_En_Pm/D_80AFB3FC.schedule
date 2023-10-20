@@ -1,0 +1,13 @@
+if_scene_s (SCENE_TOWN) {
+    if_time_range_s (18, 0, 6, 0) {
+        return_time (18, 0, 6, 0, 29)
+    } else {
+        if_time_range_s (5, 0, 5, 10) {
+            return_time (5, 0, 5, 10, 91)
+        } else {
+            return_none
+        }
+    }
+} else {
+    return_none
+}

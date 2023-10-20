@@ -1,0 +1,17 @@
+if_day_s (3) {
+    return_none
+} else {
+    if_time_range_s (6, 0, 18, 0) {
+        if_scene_s (SCENE_TOWN) {
+            return_l (1)
+        } else {
+            return_none
+        }
+    } else {
+        if_scene_s (SCENE_YADOYA) {
+            return_l (2)
+        } else {
+            return_none
+        }
+    }
+}

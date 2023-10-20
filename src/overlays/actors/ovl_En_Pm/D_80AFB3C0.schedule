@@ -1,0 +1,25 @@
+if_scene_s (SCENE_TOWN) {
+    if_time_range_s (0, 10, 0, 13) {
+        return_time (0, 10, 0, 13, 35)
+    } else {
+        if_time_range_s (0, 13, 0, 23) {
+            return_time (0, 13, 0, 23, 90)
+        } else {
+            return_none
+        }
+    }
+} else {
+    if_scene_s (SCENE_MILK_BAR) {
+        if_time_range_s (0, 0, 0, 10) {
+            return_time (0, 0, 0, 10, 89)
+        } else {
+            if_time_range_s (0, 10, 0, 13) {
+                return_time (0, 10, 0, 13, 37)
+            } else {
+                return_none
+            }
+        }
+    } else {
+        return_none
+    }
+}
