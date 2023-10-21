@@ -18,6 +18,7 @@
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BossHakugin*)thisx)
+
 #define GOHT_LIMB_FLAG(limbIndex) (1 << ((limbIndex)-1))
 
 void BossHakugin_Init(Actor* thisx, PlayState* play2);
@@ -365,7 +366,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 170, 40, 0, { 0, 0, 0 } },
 };
 
-static DamageTable D_80B0EA60 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -400,24 +401,59 @@ static DamageTable D_80B0EA60 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xC),
 };
 
-static CollisionCheckInfoInit D_80B0EA80 = { 30, 80, 100, MASS_IMMOVABLE };
+static CollisionCheckInfoInit sColChkInfoInit = { 30, 80, 100, MASS_IMMOVABLE };
 
 TexturePtr D_80B0EA88 = gGohtMetalPlateWithCirclePatternTex;
 
-s8 D_80B0EA8C[] = { -1, -1, 0,  -1, -1, -1, 3,  -1, 4,  5,  -1, 6,  -1, 7,  8,  1, 2,
-                    -1, -1, -1, -1, 9,  10, -1, -1, 11, -1, -1, 12, 13, -1, -1, 14 };
+static s8 sLimbToBodyParts[GOHT_LIMB_MAX] = {
+    BODYPART_NONE,                       // GOHT_LIMB_NONE
+    BODYPART_NONE,                       // GOHT_LIMB_ROOT
+    GOHT_BODYPART_PELVIS,                // GOHT_LIMB_PELVIS
+    BODYPART_NONE,                       // GOHT_LIMB_THORAX_ROOT
+    BODYPART_NONE,                       // GOHT_LIMB_THORAX_WRAPPER
+    BODYPART_NONE,                       // GOHT_LIMB_FRONT_RIGHT_LEG_ROOT
+    GOHT_BODYPART_FRONT_RIGHT_UPPER_LEG, // GOHT_LIMB_FRONT_RIGHT_UPPER_LEG
+    BODYPART_NONE,                       // GOHT_LIMB_FRONT_RIGHT_LOWER_LEG_ROOT
+    GOHT_BODYPART_FRONT_RIGHT_LOWER_LEG, // GOHT_LIMB_FRONT_RIGHT_LOWER_LEG
+    GOHT_BODYPART_FRONT_RIGHT_HOOF,      // GOHT_LIMB_FRONT_RIGHT_HOOF
+    BODYPART_NONE,                       // GOHT_LIMB_FRONT_LEFT_LEG_ROOT
+    GOHT_BODYPART_FRONT_LEFT_UPPER_LEG,  // GOHT_LIMB_FRONT_LEFT_UPPER_LEG
+    BODYPART_NONE,                       // GOHT_LIMB_FRONT_LEFT_LOWER_LEG_ROOT
+    GOHT_BODYPART_FRONT_LEFT_LOWER_LEG,  // GOHT_LIMB_FRONT_LEFT_LOWER_LEG
+    GOHT_BODYPART_FRONT_LEFT_HOOF,       // GOHT_LIMB_FRONT_LEFT_HOOF
+    GOHT_BODYPART_THORAX,                // GOHT_LIMB_THORAX
+    GOHT_BODYPART_HEAD,                  // GOHT_LIMB_HEAD
+    BODYPART_NONE,                       // GOHT_LIMB_JAW_ROOT
+    BODYPART_NONE,                       // GOHT_LIMB_JAW
+    BODYPART_NONE,                       // GOHT_LIMB_BACK_RIGHT_LEG_ROOT
+    BODYPART_NONE,                       // GOHT_LIMB_BACK_RIGHT_LEG_WRAPPER
+    GOHT_BODYPART_BACK_RIGHT_THIGH,      // GOHT_LIMB_BACK_RIGHT_THIGH
+    GOHT_BODYPART_BACK_RIGHT_SHIN,       // GOHT_LIMB_BACK_RIGHT_SHIN
+    BODYPART_NONE,                       // GOHT_LIMB_BACK_RIGHT_PASTERN_ROOT
+    BODYPART_NONE,                       // GOHT_LIMB_BACK_RIGHT_PASTERN
+    GOHT_BODYPART_BACK_RIGHT_HOOF,       // GOHT_LIMB_BACK_RIGHT_HOOF
+    BODYPART_NONE,                       // GOHT_LIMB_BACK_LEFT_LEG_ROOT
+    BODYPART_NONE,                       // GOHT_LIMB_BACK_LEFT_LEG_WRAPPER
+    GOHT_BODYPART_BACK_LEFT_THIGH,       // GOHT_LIMB_BACK_LEFT_THIGH
+    GOHT_BODYPART_BACK_LEFT_SHIN,        // GOHT_LIMB_BACK_LEFT_SHIN
+    BODYPART_NONE,                       // GOHT_LIMB_BACK_LEFT_PASTERN_ROOT
+    BODYPART_NONE,                       // GOHT_LIMB_BACK_LEFT_PASTERN
+    GOHT_BODYPART_BACK_LEFT_HOOF,        // GOHT_LIMB_BACK_LEFT_HOOF
+};
+
 s32 D_80B0EAB0[5] = {
     GOHT_LIMB_BACK_LEFT_THIGH,      GOHT_LIMB_BACK_RIGHT_PASTERN,    GOHT_LIMB_JAW_ROOT,
     GOHT_LIMB_FRONT_LEFT_LOWER_LEG, GOHT_LIMB_FRONT_RIGHT_UPPER_LEG,
 };
+
 Color_RGBA8 D_80B0EAC4 = { 250, 250, 250, 255 };
 Color_RGBA8 D_80B0EAC8 = { 180, 180, 180, 255 };
 Color_RGB8 D_80B0EACC = { 0, 150, 255 };
 Color_RGB8 D_80B0EAD0 = { 0, 255, 255 };
 
 void BossHakugin_Init(Actor* thisx, PlayState* play2) {
-    static s32 D_80B0EAD4 = 0;
-    static InitChainEntry D_80B0EAD8[] = {
+    static s32 sTextureDesegmented = false;
+    static InitChainEntry sInitChain[] = {
         ICHAIN_S8(hintId, 27, ICHAIN_CONTINUE),
         ICHAIN_VEC3F_DIV1000(scale, 27, ICHAIN_CONTINUE),
         ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
@@ -429,11 +465,11 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     s32 pad;
     s32 i;
 
-    Actor_ProcessInitChain(&this->actor, D_80B0EAD8);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGohtSkel, &gGohtRunAnim, this->jointTable, this->morphTable,
                        GOHT_LIMB_MAX);
-    if (!D_80B0EAD4) {
-        D_80B0EAD4 = true;
+    if (!sTextureDesegmented) {
+        sTextureDesegmented = true;
         D_80B0EA88 = Lib_SegmentedToVirtual(D_80B0EA88);
     }
 
@@ -475,7 +511,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
         this->unk_09F8[i].unk_18 = -1;
     }
 
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_80B0EA60, &D_80B0EA80);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_01A0 = this->actor.shape.rot.y;
     this->unk_01B0 = 0xFFFFFFFF;
 
@@ -517,9 +553,8 @@ void BossHakugin_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80B0573C(Vec3f* arg0) {
-    f32 magnitude;
+    f32 magnitude = Math3D_Vec3fMagnitude(arg0);
 
-    magnitude = Math3D_Vec3fMagnitude(arg0);
     if (magnitude < 0.0001f) {
         return false;
     }
@@ -531,10 +566,9 @@ s32 func_80B0573C(Vec3f* arg0) {
 void func_80B057A4(Vec3f* arg0, Vec3f* arg1, f32 arg2) {
     Vec3f sp34;
     Vec3f sp28;
-    f32 temp_fa0;
+    f32 temp_fa0 = (arg0->x * arg1->x) + (arg0->y * arg1->y) + (arg0->z * arg1->z);
     f32 var_fv1;
 
-    temp_fa0 = (arg0->x * arg1->x) + (arg0->y * arg1->y) + (arg0->z * arg1->z);
     if (fabsf(temp_fa0) < 1.0f) {
         var_fv1 = Math_FAcosF(temp_fa0);
     } else if (temp_fa0 >= 1.0f) {
@@ -663,14 +697,13 @@ void func_80B05D4C(BossHakugin* this) {
 }
 
 void func_80B05EE0(BossHakugin* this, PlayState* play) {
-    s16 atan;
+    s16 atan = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x);
     Vec3f warpPos;
     Vec3f heartPos;
     f32 sp50;
     f32 sin;
     f32 cos;
 
-    atan = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x);
     if (atan > 0x4000) {
         warpPos.x = 1400.0f;
         warpPos.y = 0.0f;
@@ -947,13 +980,12 @@ void func_80B06F48(BossHakugin* this, PlayState* play) {
     BossHakuginFhgFlashUnkStruct* iter2;
     BossHakuginFhgFlashUnkStruct* iter3;
     Vec3f spA0;
-    s32 sp9C;
+    s32 sp9C = this->unk_0191 + 3;
     s32 var_s4;
     s32 i;
     s32 j;
     s32 pad;
 
-    sp9C = this->unk_0191 + 3;
     if (sp9C >= ARRAY_COUNT(this->unk_3158[0])) {
         sp9C = 0;
     }
@@ -1006,9 +1038,8 @@ void func_80B06F48(BossHakugin* this, PlayState* play) {
 }
 
 s32 func_80B0728C(BossHakugin* this) {
-    s16 rand;
+    s16 rand = (Rand_Next() >> 0x12) + 0x4000;
 
-    rand = ((Rand_Next() >> 0x12) + 0x4000);
     this->unk_0198 += rand;
     if (this->unk_01A8 == 5) {
         if (Math_SmoothStepToS(&this->unk_01A6, -0x900, 4, 0x200, 0x80) == 0) {
@@ -1045,7 +1076,7 @@ void func_80B07450(BossHakugin* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_FOOTSTEP_OLD);
-        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EA8C[GOHT_LIMB_FRONT_LEFT_HOOF]]);
+        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[sLimbToBodyParts[GOHT_LIMB_FRONT_LEFT_HOOF]]);
         if (this->actor.xzDistToPlayer < 1500.0f) {
             temp = (1500.0f - this->actor.xzDistToPlayer) * (1.0f / 1500.0f);
             func_80B05A64(this, play, 17000, 6.5f * temp, 10);
@@ -1053,13 +1084,13 @@ void func_80B07450(BossHakugin* this, PlayState* play) {
 
         func_80B06C08(this);
     } else if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
-        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EA8C[GOHT_LIMB_BACK_LEFT_HOOF]]);
+        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[sLimbToBodyParts[GOHT_LIMB_BACK_LEFT_HOOF]]);
         func_80B06B20(this, &pos);
     } else if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EA8C[GOHT_LIMB_FRONT_RIGHT_HOOF]]);
+        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[sLimbToBodyParts[GOHT_LIMB_FRONT_RIGHT_HOOF]]);
         func_80B06D38(this, play);
     } else if (Animation_OnFrame(&this->skelAnime, 11.0f)) {
-        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EA8C[GOHT_LIMB_BACK_RIGHT_HOOF]]);
+        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[sLimbToBodyParts[GOHT_LIMB_BACK_RIGHT_HOOF]]);
         func_80B06B20(this, &pos);
     } else {
         return;
@@ -1143,7 +1174,7 @@ void func_80B07B88(BossHakugin* this, PlayState* play) {
     if (this->unk_0196 == 10) {
         this->unk_0196 = 0;
         this->unk_01E4 = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 3, 0.7f, 0.5f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, GOHT_BODYPART_MAX, 3, 0.7f, 0.5f);
     }
 }
 
@@ -2043,19 +2074,19 @@ typedef struct {
 static s32 D_80B0EB24[5] = { 0, 15, 26, 33, 36 };
 
 static BossHakuginStruct_B0A8C4 D_80B0EB38[] = {
-    { 0, 0x28000 }, { 4, 0x1A0 }, { 7, 0x3400 }, { 0xE, 0xD0000000 }, { 0xA, 0x01A00000 }, { 1, 0x08104002 },
+    { 0, GOHT_LIMB_FLAG(GOHT_LIMB_HEAD) | GOHT_LIMB_FLAG(GOHT_LIMB_JAW) },
+    { 4, GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_RIGHT_UPPER_LEG) | GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_RIGHT_LOWER_LEG) |
+             GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_RIGHT_HOOF) },
+    { 7, GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_LEFT_UPPER_LEG) | GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_LEFT_LOWER_LEG) |
+             GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_LEFT_HOOF) },
+    { 14, GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_SHIN) | GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_PASTERN) |
+              GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_HOOF) },
+    { 10, GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_SHIN) | GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_PASTERN) |
+              GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_HOOF) },
+    { 1, GOHT_LIMB_FLAG(GOHT_LIMB_PELVIS) | GOHT_LIMB_FLAG(GOHT_LIMB_THORAX) |
+             GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_THIGH) | GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_THIGH) },
 };
-// static BossHakuginStruct_B0A8C4 D_80B0EB38[] = {
-//     { 0, GOHT_LIMB_FLAG(GOHT_LIMB_HEAD) | GOHT_LIMB_FLAG(GOHT_LIMB_JAW) },
-//     { 4, GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_RIGHT_UPPER_LEG) | GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_RIGHT_LOWER_LEG) |
-//     GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_RIGHT_HOOF) }, { 7, GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_LEFT_UPPER_LEG) |
-//     GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_LEFT_LOWER_LEG) | GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_LEFT_HOOF)}, { 14,
-//     GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_SHIN) | GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_PASTERN) |
-//     GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_HOOF)}, { 10, GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_SHIN) |
-//     GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_PASTERN) | GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_HOOF)}, { 1,
-//     GOHT_LIMB_FLAG(GOHT_LIMB_PELVIS) | GOHT_LIMB_FLAG(GOHT_LIMB_THORAX) | GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_THIGH)
-//     | GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_THIGH)},
-// };
+
 void func_80B0A8C4(BossHakugin* this, PlayState* play) {
     EnBom* bomb;
     Vec3s* test;
@@ -2314,6 +2345,7 @@ void func_80B0B548(BossHakugin* this, PlayState* play) {
 
         if (unk_str->unk_14.base.atFlags & AT_HIT) {
             Player* player = GET_PLAYER(play);
+
             this->unk_018C = 1;
             Player_PlaySfx(player, NA_SE_EN_COMMON_E_BALL_HIT);
             unk_str->unk_14.base.atFlags &= ~AT_HIT;
@@ -2442,7 +2474,9 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     Actor_OffsetOfPointInActorCoords(&this->actor, &this->unk_044C, &player->actor.world.pos);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 450.0f, 89.100006f, 0.0f, 0x1D); // flags
+    Actor_UpdateBgCheckInfo(play, &this->actor, 450.0f, 89.100006f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     func_800BE3D0(&this->actor, this->actor.shape.rot.y, &sp70);
     Math_ScaledStepToS(&this->actor.shape.rot.x, sp70.x, 0x100);
     Math_ScaledStepToS(&this->actor.shape.rot.z, sp70.z, 0x100);
@@ -2535,7 +2569,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
 s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  Actor* thisx) {
     static s32 D_80B0EB68 = 4;
-    static s32 D_80B0EB6C = 6;
+    static s32 D_80B0EB6C = GOHT_LIMB_FRONT_RIGHT_UPPER_LEG;
     BossHakugin* this = THIS;
 
     if (this->actionFunc == func_80B0A8C4) {
@@ -2579,7 +2613,7 @@ void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     s16 angle;
 
     Collider_UpdateSpheres(limbIndex, &this->unk_0484);
-    bodyPartIndex = D_80B0EA8C[limbIndex];
+    bodyPartIndex = sLimbToBodyParts[limbIndex];
     if (bodyPartIndex > BODYPART_NONE) {
         for (i = 0; i < ARRAY_COUNT(this->unk_04A4); i++) {
             if (this->unk_0484.elements[i].dim.limb == limbIndex) {
@@ -2829,7 +2863,7 @@ void func_80B0CF24(BossHakugin* this, PlayState* play) {
 void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     BossHakugin* this = THIS;
-    u8* tex = GRAPH_ALLOC(play->state.gfxCtx, sizeof(u8[64][64]));
+    u8* tex = GRAPH_ALLOC(play->state.gfxCtx, GOHT_SHADOW_TEX_SIZE);
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -2840,8 +2874,8 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), this->unk_01DC,
-                            this->unk_01E0, this->unk_01E4, this->unk_0196);
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, GOHT_BODYPART_MAX, this->unk_01DC, this->unk_01E0,
+                            this->unk_01E4, this->unk_0196);
 
     SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_0380, &this->unk_0458);
     SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_3734[0], &this->unk_0464);
@@ -2880,8 +2914,42 @@ s32 D_80B0EB70[6] = { 1, 2, 3, 3, 2, 1 };
 s32 D_80B0EB88[7] = { 2, 3, 4, 4, 4, 3, 2 };
 s32 D_80B0EBA4[8] = { 2, 3, 4, 4, 4, 4, 3, 2 };
 s32 D_80B0EBC4[14] = { 2, 4, 5, 6, 7, 8, 8, 8, 8, 7, 6, 5, 4, 2 };
-s32 D_80B0EBFC[15] = { 1, -1, 1, 1, 3, 4, 1, 6, 7, 0, 9, 10, 0, 12, 13 };
-u8 D_80B0EC38[15] = { 1, 2, 1, 0, 3, 3, 0, 3, 3, 0, 3, 3, 0, 3, 3 };
+
+static s32 sParentShadowBodyParts[GOHT_BODYPART_MAX] = {
+    GOHT_BODYPART_THORAX,                // GOHT_BODYPART_PELVIS
+    BODYPART_NONE,                       // GOHT_BODYPART_THORAX
+    GOHT_BODYPART_THORAX,                // GOHT_BODYPART_HEAD
+    GOHT_BODYPART_THORAX,                // GOHT_BODYPART_FRONT_RIGHT_UPPER_LEG
+    GOHT_BODYPART_FRONT_RIGHT_UPPER_LEG, // GOHT_BODYPART_FRONT_RIGHT_LOWER_LEG
+    GOHT_BODYPART_FRONT_RIGHT_LOWER_LEG, // GOHT_BODYPART_FRONT_RIGHT_HOOF
+    GOHT_BODYPART_THORAX,                // GOHT_BODYPART_FRONT_LEFT_UPPER_LEG
+    GOHT_BODYPART_FRONT_LEFT_UPPER_LEG,  // GOHT_BODYPART_FRONT_LEFT_LOWER_LEG
+    GOHT_BODYPART_FRONT_LEFT_LOWER_LEG,  // GOHT_BODYPART_FRONT_LEFT_HOOF
+    GOHT_BODYPART_PELVIS,                // GOHT_BODYPART_BACK_RIGHT_THIGH
+    GOHT_BODYPART_BACK_RIGHT_THIGH,      // GOHT_BODYPART_BACK_RIGHT_SHIN
+    GOHT_BODYPART_BACK_RIGHT_SHIN,       // GOHT_BODYPART_BACK_RIGHT_HOOF
+    GOHT_BODYPART_PELVIS,                // GOHT_BODYPART_BACK_LEFT_THIGH
+    GOHT_BODYPART_BACK_LEFT_THIGH,       // GOHT_BODYPART_BACK_LEFT_SHIN
+    GOHT_BODYPART_BACK_LEFT_SHIN         // GOHT_BODYPART_BACK_LEFT_HOOF
+};
+
+static u8 sShadowSizes[GOHT_BODYPART_MAX] = {
+    1, // GOHT_BODYPART_PELVIS
+    2, // GOHT_BODYPART_THORAX
+    1, // GOHT_BODYPART_HEAD
+    0, // GOHT_BODYPART_FRONT_RIGHT_UPPER_LEG
+    3, // GOHT_BODYPART_FRONT_RIGHT_LOWER_LEG
+    3, // GOHT_BODYPART_FRONT_RIGHT_HOOF
+    0, // GOHT_BODYPART_FRONT_LEFT_UPPER_LEG
+    3, // GOHT_BODYPART_FRONT_LEFT_LOWER_LEG
+    3, // GOHT_BODYPART_FRONT_LEFT_HOOF
+    0, // GOHT_BODYPART_BACK_RIGHT_THIGH
+    3, // GOHT_BODYPART_BACK_RIGHT_SHIN
+    3, // GOHT_BODYPART_BACK_RIGHT_HOOF
+    0, // GOHT_BODYPART_BACK_LEFT_THIGH
+    3, // GOHT_BODYPART_BACK_LEFT_SHIN
+    3  // GOHT_BODYPART_BACK_LEFT_HOOF
+};
 
 void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
     s32 index;
@@ -2890,15 +2958,15 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
     s32 baseY;
     s32 addY;
     s32 x;
-    s32 y = -1;
+    s32 y = BODYPART_NONE;
     Vec3f lerp;
     Vec3f* parentBodyPartPos;
     Vec3f* bodyPartPos;
     Vec3f pos;
     Vec3f startVec;
 
-    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
-        if ((weight == 0.0f) || (y = D_80B0EBFC[i]) > BODYPART_NONE) {
+    for (i = 0; i < GOHT_BODYPART_MAX; i++) {
+        if ((weight == 0.0f) || (y = sParentShadowBodyParts[i]) > BODYPART_NONE) {
             bodyPartPos = &this->bodyPartsPos[i];
             if (weight > 0.0f) {
                 parentBodyPartPos = &this->bodyPartsPos[y];
@@ -2921,29 +2989,29 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
             baseX = (u16)(s32)(startVec.x + 32.0f);
             baseY = (u16)((s32)startVec.y * 64);
 
-            if (D_80B0EC38[i] == 2) {
+            if (sShadowSizes[i] == 2) {
                 for (y = 0, addY = -0x180; y < ARRAY_COUNT(D_80B0EBC4); y++, addY += 0x40) {
                     for (x = -D_80B0EBC4[y]; x < D_80B0EBC4[y]; x++) {
                         index = baseX + x + baseY + addY;
-                        if ((index >= 0) && (index < 0x1000)) {
+                        if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
                             tex[index] = 255;
                         }
                     }
                 }
-            } else if (D_80B0EC38[i] == 1) {
+            } else if (sShadowSizes[i] == 1) {
                 for (y = 0, addY = -0x100; y < ARRAY_COUNT(D_80B0EBA4); y++, addY += 0x40) {
                     for (x = -D_80B0EBA4[y]; x < D_80B0EBA4[y]; x++) {
                         index = baseX + x + baseY + addY;
-                        if ((index >= 0) && (index < 0x1000)) {
+                        if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
                             tex[index] = 255;
                         }
                     }
                 }
-            } else if (D_80B0EC38[i] == 0) {
+            } else if (sShadowSizes[i] == 0) {
                 for (y = 0, addY = -0xC0; y < ARRAY_COUNT(D_80B0EB88); y++, addY += 0x40) {
                     for (x = -D_80B0EB88[y]; x < D_80B0EB88[y]; x++) {
                         index = baseX + x + baseY + addY;
-                        if ((index >= 0) && (index < 0x1000)) {
+                        if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
                             tex[index] = 255;
                         }
                     }
@@ -2952,7 +3020,7 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
                 for (y = 0, addY = -0x80; y < ARRAY_COUNT(D_80B0EB70); y++, addY += 0x40) {
                     for (x = -D_80B0EB70[y]; x < D_80B0EB70[y]; x++) {
                         index = baseX + x + baseY + addY;
-                        if ((index >= 0) && (index < 0x1000)) {
+                        if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
                             tex[index] = 255;
                         }
                     }
@@ -2966,7 +3034,7 @@ void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this) {
     s32* iter = (s32*)tex;
     s16 i;
 
-    for (i = 0; i < (s32)((sizeof(u8[64][64])) / sizeof(s32)); i++, iter++) {
+    for (i = 0; i < (s32)(GOHT_SHADOW_TEX_SIZE / sizeof(s32)); i++, iter++) {
         *iter = 0;
     }
 
@@ -3003,8 +3071,8 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
     Matrix_Scale(4.25f, 1.0f, 4.25f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gShadowMaterialDL);
-    gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP,
-                        G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, GOHT_SHADOW_TEX_WIDTH, GOHT_SHADOW_TEX_HEIGHT, 0,
+                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
     gSPDisplayList(POLY_OPA_DISP++, gShadowModelDL);
 
     CLOSE_DISPS(gfxCtx);

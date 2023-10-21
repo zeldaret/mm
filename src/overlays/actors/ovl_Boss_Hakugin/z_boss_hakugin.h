@@ -6,6 +6,10 @@
 
 struct BossHakugin;
 
+#define GOHT_SHADOW_TEX_WIDTH 64
+#define GOHT_SHADOW_TEX_HEIGHT 64
+#define GOHT_SHADOW_TEX_SIZE ((s32)sizeof(u8[GOHT_SHADOW_TEX_HEIGHT][GOHT_SHADOW_TEX_WIDTH]))
+
 typedef void (*BossHakuginActionFunc)(struct BossHakugin*, PlayState*);
 
 typedef struct BossHakuginEffect {
@@ -33,6 +37,25 @@ typedef struct BossHakuginFhgFlashUnkStruct {
     /* 0x10 */ s16 unk_10;
     /* 0x12 */ s16 unk_12;
 } BossHakuginFhgFlashUnkStruct; // size = 0x14
+
+typedef enum GohtBodyPart {
+    /*  0 */ GOHT_BODYPART_PELVIS,
+    /*  1 */ GOHT_BODYPART_THORAX,
+    /*  2 */ GOHT_BODYPART_HEAD,
+    /*  3 */ GOHT_BODYPART_FRONT_RIGHT_UPPER_LEG,
+    /*  4 */ GOHT_BODYPART_FRONT_RIGHT_LOWER_LEG,
+    /*  5 */ GOHT_BODYPART_FRONT_RIGHT_HOOF,
+    /*  6 */ GOHT_BODYPART_FRONT_LEFT_UPPER_LEG,
+    /*  7 */ GOHT_BODYPART_FRONT_LEFT_LOWER_LEG,
+    /*  8 */ GOHT_BODYPART_FRONT_LEFT_HOOF,
+    /*  9 */ GOHT_BODYPART_BACK_RIGHT_THIGH,
+    /* 10 */ GOHT_BODYPART_BACK_RIGHT_SHIN,
+    /* 11 */ GOHT_BODYPART_BACK_RIGHT_HOOF,
+    /* 12 */ GOHT_BODYPART_BACK_LEFT_THIGH,
+    /* 13 */ GOHT_BODYPART_BACK_LEFT_SHIN,
+    /* 14 */ GOHT_BODYPART_BACK_LEFT_HOOF,
+    /* 15 */ GOHT_BODYPART_MAX
+} GohtBodyPart;
 
 typedef struct BossHakugin {
     /* 0x0000 */ Actor actor;
@@ -81,7 +104,7 @@ typedef struct BossHakugin {
     /* 0x037A */ Vec3s unk_037A;
     /* 0x0380 */ Vec3f unk_0380;
     /* 0x038C */ Vec3f unk_038C;
-    /* 0x0398 */ Vec3f bodyPartsPos[15];
+    /* 0x0398 */ Vec3f bodyPartsPos[GOHT_BODYPART_MAX];
     /* 0x044C */ Vec3f unk_044C;
     /* 0x0458 */ Vec3f unk_0458;
     /* 0x0464 */ Vec3f unk_0464;
