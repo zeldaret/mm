@@ -2,9 +2,9 @@ if_time_range_s (10, 0, 21, 0) {
     return_none
 } else if_time_range_s (22, 0, 5, 0) {
     if_misc_s (SCHEDULE_CHECK_MISC_MASK_ROMANI) {
-        return_s (34)
-    } else {
         return_s (33)
+    } else {
+        return_s (34)
     }
 } else {
     return_s (18)

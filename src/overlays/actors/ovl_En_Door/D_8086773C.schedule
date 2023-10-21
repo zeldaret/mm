@@ -1,5 +1,5 @@
 if_before_time_s (20, 0) {
-    return_s (26)
-} else {
     return_none
+} else {
+    return_s (26)
 }

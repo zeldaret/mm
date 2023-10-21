@@ -1,17 +1,13 @@
 if_misc_s (SCHEDULE_CHECK_MISC_ROOM_KEY) {
-    if_day_s (3) {
-        if_before_time_s (8, 0) {
-            return_none
-        } else {
-            return_s (19)
-        }
-    } else {
-        if_time_range_s (8, 0, 20, 30) {
-            return_none
-        } else {
-            return_s (19)
-        }
-    }
-} else {
     return_none
+} else if_day_s (3) {
+    if_before_time_s (8, 0) {
+        return_s (19)
+    } else {
+        return_none
+    }
+} else if_time_range_s (8, 0, 20, 30) {
+    return_none
+} else {
+    return_s (19)
 }

@@ -100,10 +100,15 @@ class TokenType(enum.Enum):
         return False
 
     def needsToInvert(self) -> bool:
-        if self in {TokenType.IF_WEEKEVENTREG_S,
-                    TokenType.IF_WEEKEVENTREG_L,
-                    TokenType.IF_TIMERANGE_S,
-                    TokenType.IF_TIMERANGE_L,}:
+        if self in {
+            TokenType.IF_WEEKEVENTREG_S,
+            TokenType.IF_WEEKEVENTREG_L,
+            TokenType.IF_TIMERANGE_S,
+            TokenType.IF_TIMERANGE_L,
+            TokenType.IF_MISC_S,
+            TokenType.IF_BEFORETIME_S,
+            TokenType.IF_BEFORETIME_L,
+            }:
             return True
         return False
 
