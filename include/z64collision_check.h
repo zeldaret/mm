@@ -625,7 +625,7 @@ void CollisionCheck_SetHitEffects(struct PlayState* play, CollisionCheckContext*
 void CollisionCheck_AC(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* colAT);
 void CollisionCheck_AT(struct PlayState* play, CollisionCheckContext* colCtxt);
 s32 CollisionCheck_GetMassType(u8 mass);
-void CollisionCheck_SetOCvsOC(struct PlayState* play, Collider* left, ColliderInfo* leftInfo, Vec3f* leftPos, Collider* right, ColliderInfo* rightInfo, Vec3f* rightPos, f32 overlap);
+void CollisionCheck_SetOCvsOC(struct PlayState* play, Collider* left, ColliderInfo* leftInfo, Vec3f* leftPos, Collider* right, ColliderInfo* rightInfo, Vec3f* rightPos, f32 overlapSize);
 void CollisionCheck_OC_JntSphVsJntSph(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
 void CollisionCheck_OC_JntSphVsCyl(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
 void CollisionCheck_OC_JntSphVsSphere(struct PlayState* play, CollisionCheckContext* colCtxt, Collider* l, Collider* r);

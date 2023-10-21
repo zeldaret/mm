@@ -351,7 +351,7 @@ s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f3
     D_801EDA18[2].y = sVerts->y;
     D_801EDA18[2].z = sVerts->z;
 
-    if (!func_8017A304(&D_801EDA18[0], &D_801EDA18[1], &D_801EDA18[2], z, x, checkDist)) {
+    if (!Math3D_CirSquareVsTriSquareZX(&D_801EDA18[0], &D_801EDA18[1], &D_801EDA18[2], z, x, checkDist)) {
         return 0;
     }
     nx = COLPOLY_GET_NORMAL(poly->normal.x);

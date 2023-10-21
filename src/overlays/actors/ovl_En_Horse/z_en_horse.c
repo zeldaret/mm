@@ -360,7 +360,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
         Math_Vec3s_ToVec3f(&sp80, &spA0[this->curRaceWaypoint - 1]);
     }
 
-    func_8017D7C0(this->actor.world.pos.x, this->actor.world.pos.z, sp80.x, sp80.z, sp8C.x, sp8C.z, &sp70);
+    Math3D_PointDistSqToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp80.x, sp80.z, sp8C.x, sp8C.z, &sp70);
 
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->unk_1EC & 4)) {
         EnHorse_RotateToPoint(this, play, &sp8C, 0xC80);

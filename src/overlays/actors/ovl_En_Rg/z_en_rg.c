@@ -382,8 +382,8 @@ s32 func_80BF43FC(EnRg* this) {
     do {
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 - 1, &sp9C);
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 + 1, &sp90);
-        if (Math3D_PointDistToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x, sp90.z,
-                                     &sp8C, &sp88, &sp84) &&
+        if (Math3D_PointDistSqToLine2DImpl(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x,
+                                           sp90.z, &sp8C, &sp88, &sp84) &&
             (!phi_s6 || ((phi_s4 + 1) == phi_s0) || (sp84 < phi_f20))) {
             phi_s6 = 1;
             phi_f20 = sp84;
