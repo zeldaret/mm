@@ -98,7 +98,7 @@ void ObjLightblock_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_lightblock_Colheader_000B80);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gSunBlockCol);
     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     this->collider.dim.radius = typeVars->radius;
@@ -200,13 +200,13 @@ void ObjLightblock_Draw(Actor* thisx, PlayState* play) {
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->alpha);
-        gSPDisplayList(POLY_XLU_DISP++, object_lightblock_DL_000178);
+        gSPDisplayList(POLY_XLU_DISP++, gSunBlockDL);
     } else {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
-        gSPDisplayList(POLY_OPA_DISP++, object_lightblock_DL_000178);
+        gSPDisplayList(POLY_OPA_DISP++, gSunBlockDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

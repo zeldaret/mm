@@ -20,9 +20,9 @@
         <DList Name="gDs2nLeftShinDL" Offset="0x3A68" />
         <DList Name="gDs2nLeftFootDL" Offset="0x3B40" />
         
-        <Texture Name="gDs2nMainTlut" OutName="tlut_main" Format="rgba16" Width="16" Height="16" Offset="0x3CD8" />
-        <Texture Name="gDs2nFingersTlut" OutName="tlut_fingers" Format="rgba16" Width="16" Height="16" Offset="0x3ED8" />
-        <Texture Name="gDs2nEyesTlut" OutName="tlut_eyes" Format="rgba16" Width="16" Height="16" Offset="0x40D8" />
+        <Texture Name="gDs2nMainTLUT" OutName="main_tlut" Format="rgba16" Width="16" Height="16" Offset="0x3CD8" />
+        <Texture Name="gDs2nFingersTLUT" OutName="fingers_tlut" Format="rgba16" Width="16" Height="16" Offset="0x3ED8" />
+        <Texture Name="gDs2nEyesTLUT" OutName="eyes_tlut" Format="rgba16" Width="16" Height="16" Offset="0x40D8" />
         <Texture Name="gDs2nPantsAndShirtBottomTex" OutName="pants_and_shirt_bottom" Format="rgba16" Width="16" Height="16" Offset="0x42D8" />
         <Texture Name="gDs2nShoesTex" OutName="shoes" Format="rgba16" Width="16" Height="32" Offset="0x44D8" />
 
@@ -49,9 +49,9 @@
         <!-- 6418 -> 6450: unknown small data -->
 
         <!-- Unused and unreferenced. Exact copies of the above used textures. -->
-        <Texture Name="gDs2nMain2Tlut" OutName="tlut_main2" Format="rgba16" Width="16" Height="16" Offset="0x6450" />
-        <Texture Name="gDs2nFingers2Tlut" OutName="tlut_fingers2" Format="rgba16" Width="16" Height="16" Offset="0x6650" />
-        <Texture Name="gDs2nEyes2Tlut" OutName="tlut_eyes2" Format="rgba16" Width="16" Height="16" Offset="0x6850" />
+        <Texture Name="gDs2nMain2TLUT" OutName="main2_tlut" Format="rgba16" Width="16" Height="16" Offset="0x6450" />
+        <Texture Name="gDs2nFingers2TLUT" OutName="fingers2_tlut" Format="rgba16" Width="16" Height="16" Offset="0x6650" />
+        <Texture Name="gDs2nEyes2TLUT" OutName="eyes2_tlut" Format="rgba16" Width="16" Height="16" Offset="0x6850" />
         <Texture Name="gDs2nPantsAndShirtBottom2Tex" OutName="pants_and_shirt_bottom2" Format="rgba16" Width="16" Height="16" Offset="0x6A50" />
         <Texture Name="gDs2nShoes2Tex" OutName="shoes2" Format="rgba16" Width="16" Height="32" Offset="0x6C50" />
         <Texture Name="gDs2nFingers2Tex" OutName="fingers2" Format="ci8" Width="16" Height="16" Offset="0x7050" TlutOffset="0x6650" />

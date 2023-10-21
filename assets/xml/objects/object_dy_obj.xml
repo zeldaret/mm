@@ -51,7 +51,7 @@
         <DList Name="gGreatFairyLeftHandDL" Offset="0x158E8" />
         <DList Name="gGreatFairyRightThighDL" Offset="0x15AC8" />
         <DList Name="gGreatFairyRightLowerLegDL" Offset="0x15E88" />
-        <DList Name="gGreatFairyRightFoot" Offset="0x15FE8" />
+        <DList Name="gGreatFairyRightFootDL" Offset="0x15FE8" />
         <DList Name="gGreatFairyLeftThighDL" Offset="0x160F8" />
         <DList Name="gGreatFairyLeftLowerLegDL" Offset="0x16360" />
         <DList Name="gGreatFairyLeftFootDL" Offset="0x164B8" />

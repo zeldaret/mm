@@ -60,7 +60,7 @@ typedef enum {
 } EnDnhAnimation;
 
 static AnimationInfoS sAnimationInfo[ENDNH_ANIM_MAX] = {
-    { &gKoumeKioskHeadMoving, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENDNH_ANIM_HEAD_MOVING
+    { &gKoumeKioskHeadMovingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENDNH_ANIM_HEAD_MOVING
 };
 
 static TexturePtr sEyeTextures[] = {

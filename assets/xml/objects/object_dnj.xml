@@ -59,7 +59,7 @@
         <Texture Name="gDekuButlerParasolPetalTex" OutName="deku_butler_parasol_petal" Format="rgba16" Width="16" Height="32" Offset="0xD848" />
         <Texture Name="gDekuButlerCandleTex" OutName="deku_butler_candle" Format="rgba16" Width="16" Height="8" Offset="0xDC48" />
         <Texture Name="gDekuButlerHairTex" OutName="deku_butler_hair" Format="rgba16" Width="16" Height="16" Offset="0xDD48" />
-        <Texture Name="gDekuButlerBowtieCenter" OutName="deku_butler_bowtie_center" Format="rgba16" Width="8" Height="16" Offset="0xDF48" />
+        <Texture Name="gDekuButlerBowtieCenterTex" OutName="deku_butler_bowtie_center" Format="rgba16" Width="8" Height="16" Offset="0xDF48" />
 
         <!-- Deku Butler Limbs -->
         <Limb Name="gDekuButlerRootLimb" Type="Standard" EnumName="DEKU_BUTLER_LIMB_ROOT" Offset="0xE048" />

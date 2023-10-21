@@ -90,7 +90,7 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gBusinessScrubFlyEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-Gfx* D_80BCCCDC[] = { gKakeraLeafMiddle, gKakeraLeafTip };
+Gfx* D_80BCCCDC[] = { gKakeraLeafMiddleDL, gKakeraLeafTipDL };
 
 Vec3f D_80BCCCE4 = { 0.0f, -0.5f, 0.0f };
 

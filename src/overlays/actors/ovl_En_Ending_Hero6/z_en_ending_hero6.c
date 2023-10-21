@@ -56,15 +56,15 @@ static FlexSkeletonHeader* sSkeletons[ENDING_HERO6_TYPE_MAX] = {
 };
 
 static AnimationHeader* sAnimations[ENDING_HERO6_TYPE_MAX] = {
-    &object_dt_Anim_000BE0,    // ENDING_HERO6_TYPE_DT
-    &object_bai_Anim_0011C0,   // ENDING_HERO6_TYPE_BAI
-    &object_toryo_Anim_000E50, // ENDING_HERO6_TYPE_TORYO
-    &gSoldierCheerWithSpear,   // ENDING_HERO6_TYPE_SOLDIER
-    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_RED
-    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_BLUE
-    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_GREEN
-    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_PURPLE
-    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_ORANGE
+    &object_dt_Anim_000BE0,      // ENDING_HERO6_TYPE_DT
+    &object_bai_Anim_0011C0,     // ENDING_HERO6_TYPE_BAI
+    &object_toryo_Anim_000E50,   // ENDING_HERO6_TYPE_TORYO
+    &gSoldierCheerWithSpearAnim, // ENDING_HERO6_TYPE_SOLDIER
+    &object_daiku_Anim_002FA0,   // ENDING_HERO6_TYPE_DAIKU_RED
+    &object_daiku_Anim_002FA0,   // ENDING_HERO6_TYPE_DAIKU_BLUE
+    &object_daiku_Anim_002FA0,   // ENDING_HERO6_TYPE_DAIKU_GREEN
+    &object_daiku_Anim_002FA0,   // ENDING_HERO6_TYPE_DAIKU_PURPLE
+    &object_daiku_Anim_002FA0,   // ENDING_HERO6_TYPE_DAIKU_ORANGE
 };
 
 static s32 sLimbCounts[ENDING_HERO6_TYPE_MAX] = {
