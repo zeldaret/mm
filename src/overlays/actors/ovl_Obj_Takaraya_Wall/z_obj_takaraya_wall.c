@@ -16,7 +16,7 @@ void ObjTakarayaWall_Destroy(Actor* thisx, PlayState* play);
 void ObjTakarayaWall_Update(Actor* thisx, PlayState* play2);
 void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play);
 
-void func_80AD9B04(ObjTakarayaWall* this, PlayState* play);
+void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play);
 
 ActorInit Obj_Takaraya_Wall_InitVars = {
     ACTOR_OBJ_TAKARAYA_WALL,
@@ -62,7 +62,7 @@ typedef struct ObjTakarayaWallSpace {
 typedef enum ObjTakarayaWallSpaceState {
     /* 0 */ TAKARAYA_WALL_INACTIVE,
     /* 1 */ TAKARAYA_WALL_RISING,
-    /* 2 */ TAKARAYA_WALL_FALLING,
+    /* 2 */ TAKARAYA_WALL_FALLING
 } ObjTakarayaWallSpaceState;
 
 s32 sPathBuilderIndex;
@@ -296,7 +296,7 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    this->actionFunc = func_80AD9B04;
+    this->actionFunc = ObjTakarayaWall_Manage;
 }
 
 void ObjTakarayaWall_Destroy(Actor* thisx, PlayState* play) {
@@ -314,7 +314,7 @@ void ObjTakarayaWall_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_80AD9B04(ObjTakarayaWall* this, PlayState* play) {
+void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     ColliderCylinder* collider;
     s32 playerRowBehind;

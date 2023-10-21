@@ -12284,7 +12284,7 @@
     0x80AD9488:("ObjTakarayaWall_BuildPath",),
     0x80AD97DC:("ObjTakarayaWall_Init",),
     0x80AD9A6C:("ObjTakarayaWall_Destroy",),
-    0x80AD9B04:("func_80AD9B04",),
+    0x80AD9B04:("ObjTakarayaWall_Manage",),
     0x80AD9F90:("ObjTakarayaWall_Update",),
     0x80AD9FF8:("ObjTakarayaWall_Draw",),
     0x80ADAAF0:("BgFuMizu_Init",),
