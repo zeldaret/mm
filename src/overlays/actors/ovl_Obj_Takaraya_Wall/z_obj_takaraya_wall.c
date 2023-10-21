@@ -118,18 +118,18 @@ s32 ObjTakarayaWall_SpaceOpen(s32 row, s32 column) {
     return true;
 }
 
-typedef enum TakarayaWallCheckDirection {
+typedef enum TakarayaWallDirection {
     /* 0 */ TAKARAYA_WALL_DIRECTION_BACK,
     /* 1 */ TAKARAYA_WALL_DIRECTION_RIGHT,
     /* 2 */ TAKARAYA_WALL_DIRECTION_FRONT,
     /* 3 */ TAKARAYA_WALL_DIRECTION_LEFT
-} TakarayaWallCheckDirection;
+} TakarayaWallDirection;
 
 /**
  * Checks nearby spaces if the adjacent space or any of the three adjacent spaces to that
  * space are closed (i.e the wall rises up).
  */
-s32 ObjTakarayaWall_NearbySpacesClosed(s32 row, s32 column, s32 direction) {
+s32 ObjTakarayaWall_NearbySpacesClosed(s32 row, s32 column, TakarayaWallDirection direction) {
     s32 row1;
     s32 column1;
     s32 adjacentSpaceRow;
@@ -258,7 +258,7 @@ void ObjTakarayaWall_BuildPath(s32 row, s32 column) {
         sPathBuilderIndex++;
         if (!sPathBuilderReachedStart) {
             D_80ADA508++;
-            if (row == 10) {
+            if (row == (TAKARAYA_WALL_ROWS - 1)) {
                 sPathBuilderReachedStart = true;
             }
         }
@@ -306,16 +306,19 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
     } while (sPathBuilderIndex >= 2);
 
     for (j = 1; j < TAKARAYA_WALL_COLUMNS - 1; j++) {
-        if (sWallHeights[10][j] == -10.0f) {
+        if (sWallHeights[TAKARAYA_WALL_ROWS - 1][j] == -10.0f) {
             break;
         }
     }
 
-    if (j == 7) {
-        if (sWallHeights[10][0] == -10.0f) {
-            sWallHeights[10][1] = -10.0f;
+    // If either corner in the front is part of the success path, but there is no other opening in the front,
+    // open up the space next to the open corner since the Treasure Chest Shop scene blocks of direct access to the
+    // front corners.
+    if (j == (TAKARAYA_WALL_COLUMNS - 1)) {
+        if (sWallHeights[TAKARAYA_WALL_ROWS - 1][0] == -10.0f) {
+            sWallHeights[TAKARAYA_WALL_ROWS - 1][1] = -10.0f;
         } else {
-            sWallHeights[10][6] = -10.0f;
+            sWallHeights[TAKARAYA_WALL_ROWS - 1][6] = -10.0f;
         }
     }
 
