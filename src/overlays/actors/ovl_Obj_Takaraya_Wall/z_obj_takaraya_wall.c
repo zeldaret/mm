@@ -4,6 +4,26 @@
  * Description: Treasure Chest Shop board manager
  */
 
+/**
+ * The board is laid out as follows:
+ *
+ *             Back
+ *         7 6 5 4 3 2 1 0
+ *       0 x x x x x x x x <-- Chest spawns in this row
+ *       1 x x x x x x x x
+ *       2 x x x x x x x x
+ *       3 x x x x x x x x
+ *       4 x x x x x x x x
+ * Left  5 x x x x x x x x   Right
+ *       6 x x x x x x x x
+ *       7 x x x x x x x x
+ *       8 x x x x x x x x
+ *       9 x x x x x x x x
+ *      10 x x x x x x x x
+ *             Front
+ *
+ */
+
 #include "z_obj_takaraya_wall.h"
 #include "objects/object_takaraya_objects/object_takaraya_objects.h"
 
@@ -54,6 +74,9 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#define TAKARAYA_WALL_ROWS 11
+#define TAKARAYA_WALL_COLUMNS 8
+
 typedef struct ObjTakarayaWallSpace {
     /* 0 */ u8 row;
     /* 1 */ u8 column;
@@ -66,29 +89,28 @@ typedef enum ObjTakarayaWallSpaceState {
 } ObjTakarayaWallSpaceState;
 
 s32 sPathBuilderIndex;
-ObjTakarayaWallSpace sPathBuilder[88];
+ObjTakarayaWallSpace sPathBuilder[TAKARAYA_WALL_ROWS * TAKARAYA_WALL_COLUMNS];
 s32 D_80ADA508; // Set but never used
 s32 sPathBuilderReachedStart;
-Vec3f sAudioPositions[11][8];
-u8 sSpaceStates[11][8];
-f32 sWallHeights[11][8]; // -10.0f means the wall does not raise (the space is open)
+Vec3f sAudioPositions[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
+u8 sSpaceStates[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
+f32 sWallHeights[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS]; // -10.0f means the wall does not raise (the space is open)
 
 s32 ObjTakarayaWall_PosToSpace(Vec3f* pos, s32* row, s32* column) {
     *row = ((s32)pos->x + (14 * 120)) / 120;
     *column = (s32)pos->z / 120;
 
-    if ((*row < 0) || (*row >= ARRAY_COUNT(sWallHeights)) || (*column < 0) ||
-        (*column >= ARRAY_COUNT(sWallHeights[0]))) {
+    if ((*row < 0) || (*row >= TAKARAYA_WALL_ROWS) || (*column < 0) || (*column >= TAKARAYA_WALL_COLUMNS)) {
         return false;
     }
     return true;
 }
 
-/*
+/**
  * Checks if the given row and coulmn is valid and is open, i.e does not raise up.
  */
 s32 ObjTakarayaWall_SpaceOpen(s32 row, s32 column) {
-    if ((row < 0) || (row >= ARRAY_COUNT(sWallHeights)) || (column < 0) || (column >= ARRAY_COUNT(sWallHeights[0])) ||
+    if ((row < 0) || (row >= TAKARAYA_WALL_ROWS) || (column < 0) || (column >= TAKARAYA_WALL_COLUMNS) ||
         (sWallHeights[row][column] == 0.0f)) {
         return false;
     }
@@ -96,17 +118,18 @@ s32 ObjTakarayaWall_SpaceOpen(s32 row, s32 column) {
     return true;
 }
 
-/*
- * Checks nearby spaces if the adjacent space (which depends on the mode) or any of the three adjacent spaces to that
+typedef enum TakarayaWallCheckDirection {
+    /* 0 */ TAKARAYA_WALL_DIRECTION_BACK,
+    /* 1 */ TAKARAYA_WALL_DIRECTION_RIGHT,
+    /* 2 */ TAKARAYA_WALL_DIRECTION_FRONT,
+    /* 3 */ TAKARAYA_WALL_DIRECTION_LEFT
+} TakarayaWallCheckDirection;
+
+/**
+ * Checks nearby spaces if the adjacent space or any of the three adjacent spaces to that
  * space are closed (i.e the wall rises up).
- * The modes check for the adjacent space towards the
- *  0: Back (towards the spawned chest)
- *  1: Right
- *  2: Front
- *  3: Left
- * of the supplied space.
  */
-s32 ObjTakarayaWall_NearbySpacesClosed(s32 row, s32 column, s32 mode) {
+s32 ObjTakarayaWall_NearbySpacesClosed(s32 row, s32 column, s32 direction) {
     s32 row1;
     s32 column1;
     s32 adjacentSpaceRow;
@@ -116,11 +139,11 @@ s32 ObjTakarayaWall_NearbySpacesClosed(s32 row, s32 column, s32 mode) {
     s32 row3;
     s32 column3;
 
-    if ((mode == 2) || (mode == 0)) {
-        if (mode == 0) {
+    if ((direction == TAKARAYA_WALL_DIRECTION_FRONT) || (direction == TAKARAYA_WALL_DIRECTION_BACK)) {
+        if (direction == TAKARAYA_WALL_DIRECTION_BACK) {
             adjacentSpaceRow = row - 1;
             row3 = row - 2;
-        } else {
+        } else { // TAKARAYA_WALL_DIRECTION_FRONT
             adjacentSpaceRow = row + 1;
             row3 = row + 2;
         }
@@ -131,10 +154,10 @@ s32 ObjTakarayaWall_NearbySpacesClosed(s32 row, s32 column, s32 mode) {
         row2 = adjacentSpaceRow;
         column2 = column - 1;
     } else {
-        if (mode == 1) {
+        if (direction == TAKARAYA_WALL_DIRECTION_RIGHT) {
             adjacentSpaceColumn = column - 1;
             column3 = column - 2;
-        } else {
+        } else { // TAKARAYA_WALL_DIRECTION_LEFT
             adjacentSpaceColumn = column + 1;
             column3 = column + 2;
         }
@@ -146,8 +169,8 @@ s32 ObjTakarayaWall_NearbySpacesClosed(s32 row, s32 column, s32 mode) {
         column2 = adjacentSpaceColumn;
     }
 
-    if ((adjacentSpaceRow < 0) || (adjacentSpaceRow >= ARRAY_COUNT(sWallHeights)) || (adjacentSpaceColumn < 0) ||
-        (adjacentSpaceColumn >= ARRAY_COUNT(sWallHeights[0])) ||
+    if ((adjacentSpaceRow < 0) || (adjacentSpaceRow >= TAKARAYA_WALL_ROWS) || (adjacentSpaceColumn < 0) ||
+        (adjacentSpaceColumn >= TAKARAYA_WALL_COLUMNS) ||
         (sWallHeights[adjacentSpaceRow][adjacentSpaceColumn] == -10.0f) || ObjTakarayaWall_SpaceOpen(row1, column1) ||
         ObjTakarayaWall_SpaceOpen(row2, column2) || ObjTakarayaWall_SpaceOpen(row3, column3)) {
         return false;
@@ -159,27 +182,27 @@ s32 ObjTakarayaWall_NearbySpacesClosed(s32 row, s32 column, s32 mode) {
 void ObjTakarayaWall_BuildPath(s32 row, s32 column) {
     s32 closedFlags = 0;
     s32 closedCount = 0;
-    s32 mode;
-    s32 shift;
+    s32 randMode;
+    s32 direction;
 
-    if (ObjTakarayaWall_NearbySpacesClosed(row, column, 0)) {
+    if (ObjTakarayaWall_NearbySpacesClosed(row, column, TAKARAYA_WALL_DIRECTION_BACK)) {
         closedCount++;
-        closedFlags |= 1;
+        closedFlags |= (1 << TAKARAYA_WALL_DIRECTION_BACK);
     }
 
-    if (ObjTakarayaWall_NearbySpacesClosed(row, column, 1)) {
+    if (ObjTakarayaWall_NearbySpacesClosed(row, column, TAKARAYA_WALL_DIRECTION_RIGHT)) {
         closedCount++;
-        closedFlags |= 2;
+        closedFlags |= (1 << TAKARAYA_WALL_DIRECTION_RIGHT);
     }
 
-    if (ObjTakarayaWall_NearbySpacesClosed(row, column, 2)) {
+    if (ObjTakarayaWall_NearbySpacesClosed(row, column, TAKARAYA_WALL_DIRECTION_FRONT)) {
         closedCount++;
-        closedFlags |= 4;
+        closedFlags |= (1 << TAKARAYA_WALL_DIRECTION_FRONT);
     }
 
-    if (ObjTakarayaWall_NearbySpacesClosed(row, column, 3)) {
+    if (ObjTakarayaWall_NearbySpacesClosed(row, column, TAKARAYA_WALL_DIRECTION_LEFT)) {
         closedCount++;
-        closedFlags |= 8;
+        closedFlags |= (1 << TAKARAYA_WALL_DIRECTION_LEFT);
     }
 
     if (closedCount == 0) {
@@ -188,44 +211,44 @@ void ObjTakarayaWall_BuildPath(s32 row, s32 column) {
             D_80ADA508--;
         }
     } else {
-        mode = (s32)Rand_ZeroFloat(closedCount) % closedCount;
-        if (mode == 0) {
-            shift = 0;
-            while (!((1 << shift) & closedFlags)) {
-                shift++;
+        randMode = (s32)Rand_ZeroFloat(closedCount) % closedCount;
+        if (randMode == 0) {
+            direction = TAKARAYA_WALL_DIRECTION_BACK;
+            while (!((1 << direction) & closedFlags)) {
+                direction++;
             }
-        } else if (mode == 1) {
-            shift = 3;
-            while (!((1 << shift) & closedFlags)) {
-                shift--;
+        } else if (randMode == 1) {
+            direction = TAKARAYA_WALL_DIRECTION_LEFT;
+            while (!((1 << direction) & closedFlags)) {
+                direction--;
             }
-        } else if (mode == 2) {
-            shift = 0;
-            while (!((1 << shift) & closedFlags)) {
-                shift++;
+        } else if (randMode == 2) {
+            direction = TAKARAYA_WALL_DIRECTION_BACK;
+            while (!((1 << direction) & closedFlags)) {
+                direction++;
             }
-            shift++;
-            while (!((1 << shift) & closedFlags)) {
-                shift++;
+            direction++;
+            while (!((1 << direction) & closedFlags)) {
+                direction++;
             }
         } else {
-            shift = 3;
-            while (!((1 << shift) & closedFlags)) {
-                shift--;
+            direction = TAKARAYA_WALL_DIRECTION_LEFT;
+            while (!((1 << direction) & closedFlags)) {
+                direction--;
             }
-            shift--;
-            while (!((1 << shift) & closedFlags)) {
-                shift--;
+            direction--;
+            while (!((1 << direction) & closedFlags)) {
+                direction--;
             }
         }
 
-        if (shift == 0) {
+        if (direction == TAKARAYA_WALL_DIRECTION_BACK) {
             row--;
-        } else if (shift == 2) {
+        } else if (direction == TAKARAYA_WALL_DIRECTION_FRONT) {
             row++;
-        } else if (shift == 1) {
+        } else if (direction == TAKARAYA_WALL_DIRECTION_RIGHT) {
             column--;
-        } else {
+        } else { // TAKARAYA_WALL_DIRECTION_LEFT
             column++;
         }
 
@@ -251,8 +274,8 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    for (i = 0; i < ARRAY_COUNT(sWallHeights); i++) {
-        for (j = 0; j < ARRAY_COUNT(sWallHeights[0]); j++) {
+    for (i = 0; i < TAKARAYA_WALL_ROWS; i++) {
+        for (j = 0; j < TAKARAYA_WALL_COLUMNS; j++) {
             sWallHeights[i][j] = 0.0f;
         }
     }
@@ -261,7 +284,7 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->rowCollider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
-    column = (s32)Rand_ZeroFloat(8.0f) % 8;
+    column = (s32)Rand_ZeroFloat(TAKARAYA_WALL_COLUMNS) % TAKARAYA_WALL_COLUMNS;
     chest = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_BOX, -1635.0f, 0.0f, (column * 120) + 60, 0,
                                           0x4000, this->actor.shape.rot.z, this->actor.params, this->actor.csId,
                                           HALFDAYBIT_ALL, NULL);
@@ -282,7 +305,7 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
         ObjTakarayaWall_BuildPath(sPathBuilder[sPathBuilderIndex - 1].row, sPathBuilder[sPathBuilderIndex - 1].column);
     } while (sPathBuilderIndex >= 2);
 
-    for (j = 1; j < ARRAY_COUNT(sWallHeights[0]) - 1; j++) {
+    for (j = 1; j < TAKARAYA_WALL_COLUMNS - 1; j++) {
         if (sWallHeights[10][j] == -10.0f) {
             break;
         }
@@ -307,8 +330,8 @@ void ObjTakarayaWall_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->columnCollider);
     Collider_DestroyCylinder(play, &this->rowCollider);
 
-    for (i = 0; i < ARRAY_COUNT(sAudioPositions); i++) {
-        for (j = 0; j < ARRAY_COUNT(sAudioPositions[0]); j++) {
+    for (i = 0; i < TAKARAYA_WALL_ROWS; i++) {
+        for (j = 0; j < TAKARAYA_WALL_COLUMNS; j++) {
             AudioSfx_StopByPos(&sAudioPositions[i][j]);
         }
     }
@@ -351,8 +374,8 @@ void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play) {
         playerColumnRight = playerColumn - 1;
     }
 
-    for (i = 0; i < ARRAY_COUNT(sWallHeights); i++) {
-        for (j = 0; j < ARRAY_COUNT(sWallHeights[0]); j++) {
+    for (i = 0; i < TAKARAYA_WALL_ROWS; i++) {
+        for (j = 0; j < TAKARAYA_WALL_COLUMNS; j++) {
             if (sWallHeights[i][j] >= 0.0f) {
                 if (((j == playerColumn) && ((i == playerRowInFront) || (i == playerRowBehind))) ||
                     ((i == playerRow) && ((j == playerColumnRight) || (j == playerColumnLeft)))) {
@@ -429,8 +452,8 @@ void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
     gDPSetPrimColor(gfx++, 0, 0, 255, 255, 255, 255);
 
-    for (i = 0; i < ARRAY_COUNT(sWallHeights); i++) {
-        for (j = 0; j < ARRAY_COUNT(sWallHeights[0]); j++) {
+    for (i = 0; i < TAKARAYA_WALL_ROWS; i++) {
+        for (j = 0; j < TAKARAYA_WALL_COLUMNS; j++) {
             if (sWallHeights[i][j] > 0.0f) {
                 mtx->xw = (i * 120) - 1620;
                 mtx->yw = sWallHeights[i][j] + (this->actor.world.pos.y - 120.0f);
@@ -439,9 +462,9 @@ void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play) {
                 gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                 if (((i + j) % 2) != 0) {
-                    gSPDisplayList(gfx++, TreasureChestShopWallWhiteDL);
+                    gSPDisplayList(gfx++, gTreasureChestShopWallWhiteDL);
                 } else {
-                    gSPDisplayList(gfx++, TreasureChestShopWallBlackDL);
+                    gSPDisplayList(gfx++, gTreasureChestShopWallBlackDL);
                 }
 
                 if (sSpaceStates[i][j] != TAKARAYA_WALL_INACTIVE) {
