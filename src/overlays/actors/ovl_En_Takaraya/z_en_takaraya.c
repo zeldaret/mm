@@ -5,6 +5,7 @@
  */
 
 #include "z_en_takaraya.h"
+#include "overlays/actors/ovl_En_Box/z_en_box.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -76,11 +77,11 @@ u16 D_80ADFB2C[PLAYER_FORM_MAX] = {
 };
 
 u8 D_80ADFB38[PLAYER_FORM_MAX][2] = {
-    { 5, 5 },   // PLAYER_FORM_FIERCE_DEITY
-    { 12, 5 },  // PLAYER_FORM_GORON
-    { 4, 4 },   // PLAYER_FORM_ZORA
-    { 42, 41 }, // PLAYER_FORM_DEKU
-    { 5, 5 },   // PLAYER_FORM_HUMAN
+    { GI_RUPEE_PURPLE, GI_RUPEE_PURPLE }, // PLAYER_FORM_FIERCE_DEITY
+    { GI_HEART_PIECE, GI_RUPEE_PURPLE },  // PLAYER_FORM_GORON
+    { GI_RUPEE_RED, GI_RUPEE_RED },       // PLAYER_FORM_ZORA
+    { GI_DEKU_NUTS_10, GI_DEKU_NUTS_5 },  // PLAYER_FORM_DEKU
+    { GI_RUPEE_PURPLE, GI_RUPEE_PURPLE }, // PLAYER_FORM_HUMAN
 };
 
 u16 D_80ADFB44[PLAYER_FORM_MAX] = {
@@ -190,16 +191,16 @@ void EnTakaraya_Wait(EnTakaraya* this, PlayState* play) {
 }
 
 void EnTakaraya_SpawnWalls(EnTakaraya* this, PlayState* play) {
-    u8 var_v1;
+    u8 item;
 
     if (Flags_GetSwitch(play, this->formSwitchFlag)) {
-        var_v1 = D_80ADFB38[GET_PLAYER_FORM][1];
+        item = D_80ADFB38[GET_PLAYER_FORM][1];
     } else {
-        var_v1 = D_80ADFB38[GET_PLAYER_FORM][0];
+        item = D_80ADFB38[GET_PLAYER_FORM][0];
     }
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_TAKARAYA_WALL, 0.0f, 0.0f, 0.0f, 0, 0, 5,
-                                  ((var_v1 << 5) + this->actor.params) + 0xB000, this->actor.csId, HALFDAYBIT_ALL,
-                                  NULL);
+                                  (ENBOX_TYPE_BIG_SWITCH_FLAG << 12) + (item << 5) + this->actor.params,
+                                  this->actor.csId, HALFDAYBIT_ALL, NULL);
 }
 
 void EnTakaraya_SetupTalk(EnTakaraya* this) {
