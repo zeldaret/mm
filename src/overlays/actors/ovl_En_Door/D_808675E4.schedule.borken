@@ -1,0 +1,69 @@
+if_before_time_s (9, 0) {
+    return_s (9)
+} else {
+    if_before_time_s (12, 0) {
+        goto label_0x1D
+    }
+
+    if_day_s (1) {
+        /* 0x0C */ SCHEDULE_CMD_BRANCH_S(0x0),
+
+        if_before_time_s (13, 0) {
+            goto label_0x1C
+        }
+
+        if_before_time_s (15, 0) {
+            goto label_0x1D
+        }
+
+        if_before_time_s (0, 0) {
+            goto label_0x1C
+        }
+
+        return_s (9)
+
+    label_0x1C:
+        return_none
+
+    label_0x1D:
+        return_s (8)
+    } else {
+        if_day_s (2) {
+            if_week_event_reg_s (WEEKEVENTREG_28_08) {
+                if_before_time_s (13, 0) {
+                    goto label_0x1C
+                }
+
+                if_before_time_s (17, 0) {
+                    goto label_0x1D
+                }
+
+                if_before_time_s (0, 0) {
+                    goto label_0x1C
+                }
+
+                return_s (9)
+            } else {
+                if_before_time_s (13, 0) {
+                    return_none
+                } else {
+                    return_s (9)
+                }
+            }
+        } else {
+            if_before_time_s (13, 0) {
+                goto label_0x1C
+            }
+
+            if_before_time_s (13, 0) {
+                goto label_0x1D
+            }
+
+            if_before_time_s (18, 0) {
+                return_s (9)
+            } else {
+                return_none
+            }
+        }
+    }
+}
