@@ -59,6 +59,8 @@ def toCommandList(inputContents: str) -> list[tuple[int, str, str]]:
     entries: list[tuple[int, str, str]] = []
     for entry in inputContents.split("\n"):
         entry = entry.strip()
+        if entry == "":
+            continue
         # print(entry)
         entryMatch = entryRegex.search(entry)
         if entryMatch is None:
@@ -162,10 +164,12 @@ def processCommands(cmdList: list[tuple[int, str, str]]) -> list[Expression]:
                 right, left = left, right
 
             if len(left) == 0:
-                eprint(f"Failed to tokenize left branch for command {macro}({entryArgs}) at offset {offset:02X}")
+                eprint(f"Failed to process left branch for command {macro}({entryArgs}) at offset {offset:02X}")
+                eprint(f"right: {right}")
                 exit(1)
             if len(right) == 0:
-                eprint(f"Failed to tokenize left branch for command {macro}({entryArgs}) at offset {offset:02X}")
+                eprint(f"Failed to process right branch for command {macro}({entryArgs}) at offset {offset:02X}")
+                eprint(f"left: {left}")
                 exit(1)
 
             expr.left = processCommands(left)
