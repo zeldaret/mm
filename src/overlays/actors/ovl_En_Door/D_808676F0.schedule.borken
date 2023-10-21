@@ -1,0 +1,15 @@
+if_day_s (3) {
+    if_before_time_s (10, 0) {
+        goto label_0xF
+    } else {
+    label_0x8:
+        return_none
+    }
+} else {
+    if_time_range_s (10, 0, 20, 0) {
+        goto label_0x8
+    } else {
+    label_0xF:
+        return_s (21)
+    }
+}

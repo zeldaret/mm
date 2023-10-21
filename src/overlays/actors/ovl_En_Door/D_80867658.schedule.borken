@@ -1,0 +1,30 @@
+if_day_s (2) {
+    if_week_event_reg_s (WEEKEVENTREG_28_08) {
+        if_time_range_s (15, 10, 22, 0) {
+            return_none
+        } else {
+            return_s (12)
+        }
+    } else {
+        return_s (12)
+    }
+} else {
+    if_day_s (3) {
+        if_before_time_s (13, 0) {
+            goto label_0x28
+        } else {
+            if_week_event_reg_s (WEEKEVENTREG_28_08) {
+                if_before_time_s (22, 0) {
+                    return_none
+                } else {
+                    return_s (12)
+                }
+            } else {
+                return_s (12)
+            }
+        }
+    } else {
+    label_0x28:
+        return_s (12)
+    }
+}
