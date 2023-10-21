@@ -1,5 +1,6 @@
 #include "libc/math.h"
-#include "macros.h"
+#include "ultra64.h"
+#include "z64math.h"
 
 #pragma weak sinf = __sinf
 

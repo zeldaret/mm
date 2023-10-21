@@ -1459,7 +1459,7 @@ extern f32 D_801E0134;
 extern f32 D_801E0138;
 extern f32 D_801E013C;
 extern f32 D_801E0140;
-extern f32 Math3D_CosOut_min_length;
+extern f32 Math3D_AngleBetweenVectors_min_length;
 extern f32 D_801E0148;
 extern f32 D_801E014C;
 extern f32 Math3D_UnitNormalVector_min_length;
