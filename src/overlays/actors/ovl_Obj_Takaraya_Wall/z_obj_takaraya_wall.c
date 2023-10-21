@@ -311,8 +311,8 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    // If either corner in the front is part of the success path, but there is no other opening in the front,
-    // open up the space next to the open corner since the Treasure Chest Shop scene blocks of direct access to the
+    // If either corner in the front is part of the success path, and there is no other opening in the front,
+    // open up the space next to the open corner since the Treasure Chest Shop scene blocks direct access to the
     // front corners.
     if (j == (TAKARAYA_WALL_COLUMNS - 1)) {
         if (sWallHeights[TAKARAYA_WALL_ROWS - 1][0] == -10.0f) {
