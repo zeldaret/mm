@@ -152,6 +152,7 @@ tokenLiterals: dict[str, TokenType] = {
 
 regex_label = re.compile(r"(?P<label>\w+)\s*:")
 regex_identifier = re.compile(r"(?P<identifier>\w+)")
+regex_individualTokens = re.compile(r"(?P<individual>[\{\}])")
 
 @dataclasses.dataclass
 class Token:
@@ -182,6 +183,70 @@ class TokenIterator:
         return len(self.tokens) - self.index
 
 
+# Strips comments
+def preprocess(contents: str, filename: str) -> str:
+    result = ""
+
+    lineNumber = 1
+    columnNumber = 1
+
+    blockComment = False
+    lineComment = False
+
+    contentsLength = len(contents)
+    i = 0
+    while i < contentsLength:
+        char = contents[i]
+
+        if blockComment and lineComment:
+            eprint(f"Error: internal error. {filename}:{lineNumber}:{columnNumber}")
+            debugPrint(f" if blockComment and lineComment:")
+            debugPrint(f" internal index: {i}")
+            exit(1)
+
+        if char == "\n":
+            lineComment = False
+            result += char
+            lineNumber += 1
+            columnNumber = 1
+            i += 1
+        elif blockComment or lineComment:
+            if blockComment and contents[i:i+2] == "*/":
+                # end of block comment
+                blockComment = False
+                result += " " * 2
+                columnNumber += 2
+                i += 2
+                continue
+
+            result += " "
+            columnNumber += 1
+            i += 1
+        elif contents[i:i+2] == "/*":
+            # block comment
+            endIndex = contents.find("*/", i+2)
+            if endIndex == -1:
+                eprint(f"Error: Unterminated comment at {filename}:{lineNumber}:{columnNumber}")
+                debugPrint(f" internal index: {i}")
+                exit(1)
+            blockComment = True
+            result += " " * 2
+            columnNumber += 2
+            i += 2
+        elif contents[i:i+2] == "//":
+            # line comment
+            lineComment = True
+            result += " " * 2
+            columnNumber += 2
+            i += 2
+        else:
+            result += char
+            columnNumber += 1
+            i += 1
+
+    return result
+
+
 def tokenize(contents: str, filename: str) -> Iterator[Token]:
     lineNumber = 1
     columnNumber = 1
@@ -191,40 +256,10 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
     while i < contentsLength:
         char = contents[i]
 
-        if contents[i:i+2] == "/*":
-            # comment
-            endIndex = contents.find("*/", i+2)
-            if endIndex == -1:
-                eprint(f"Error: Unterminated comment at {filename}:{lineNumber}:{columnNumber}")
-                debugPrint(f" internal index: {i}\n char: {char}")
-                exit(1)
-            lineNumber += contents.count("\n", i+2, endIndex)
-            lastNewLineIndex = contents.rfind("\n", i+2, endIndex)
-            if lastNewLineIndex < 0:
-                columnNumber += endIndex - i
-            else:
-                columnNumber += endIndex - lastNewLineIndex
-            i = endIndex + 2
-            continue
-
-        if contents[i:i+2] == "//":
-            # comment
-            endIndex = contents.find("\n", i+2)
-            if endIndex == -1:
-                eprint(f"Error: Unterminated comment at {filename}:{lineNumber}:{columnNumber}")
-                debugPrint(f" internal index: {i}\n char: {char}")
-                exit(1)
-            lineNumber += 1
-            columnNumber += endIndex - i
-            i = endIndex + 1
-            continue
-
         if char == "(":
             # Command arguments are handled in a special way
             lineNumberStart = lineNumber
             columnNumberStart = columnNumber
-
-            # debugPrint("Tokenizer: start (")
 
             parenCount = 0
             subIndex = i+1
@@ -242,9 +277,7 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
                     columnNumber = 1
                 if parenCount < 0:
                     parenEndFound = True
-                    # debugPrint("Tokenizer: found paired )")
                     break
-                # debugPrint(f"Tokenizer: {parenCount=}")
                 subIndex += 1
 
             if not parenEndFound:
@@ -258,16 +291,6 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
             columnNumber += 1
             continue
 
-        if char in "{}":
-            if char == "{":
-                tokenType = TokenType.BRACE_OPEN
-            else:
-                tokenType = TokenType.BRACE_CLOSE
-            yield Token(tokenType, char, lineNumber, columnNumber)
-            i += 1
-            columnNumber += 1
-            continue
-
         if char == "\n":
             lineNumber += 1
             columnNumber = 1
@@ -275,33 +298,14 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
             columnNumber += 1
         else:
             # Look for tokens
-            """
-            lineEndIndex = contents.find("\n", i)
-            spaceIndex = contents.find(" ", i)
-            if lineEndIndex < 0 and spaceIndex < 0:
-                tokenEndIndex = len(contents)
-            elif lineEndIndex < 0 and spaceIndex >= 0:
-                tokenEndIndex = spaceIndex
-            elif lineEndIndex >= 0 and spaceIndex < 0:
-                tokenEndIndex = lineEndIndex
-            else:
-                tokenEndIndex = min(lineEndIndex, spaceIndex)
-            literal = contents[i:tokenEndIndex]
-            tokenType = tokenLiterals.get(literal)
-            if tokenType is None:
-                eprint(f"Error: Unrecognized token found '{literal}' at {filename}:{lineNumber}:{columnNumber}")
-                debugPrint(f" internal index: {i}\n char: {char}\n tokenEndIndex: {tokenEndIndex}")
-                exit(1)
-            yield Token(tokenType, literal, lineNumber, columnNumber)
-            columnNumber += len(literal)
-            i += len(literal)
-            """
-            # regex_label.match(contents, pos=i)
             if (reMatch := regex_label.match(contents, pos=i)) is not None:
                 literal = reMatch["label"]
                 tokenType = TokenType.LABEL
             elif (reMatch := regex_identifier.match(contents, pos=i)) is not None:
                 literal = reMatch["identifier"]
+                tokenType = tokenLiterals.get(literal)
+            elif (reMatch := regex_individualTokens.match(contents, pos=i)) is not None:
+                literal = reMatch["individual"]
                 tokenType = tokenLiterals.get(literal)
             else:
                 eprint(f"Error: Unrecognized token found at {filename}:{lineNumber}:{columnNumber}")
@@ -318,11 +322,9 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
             matchLen = spanEnd - spanStart
             columnNumber += matchLen
             i += matchLen
-
             continue
 
         i += 1
-
 
 
 @dataclasses.dataclass
@@ -633,7 +635,9 @@ def main():
 
     inputContents = inputPath.read_text("UTF-8")
 
-    tokens = TokenIterator(tokenize(inputContents, str(inputPath)))
+    preprocessed = preprocess(inputContents, str(inputPath))
+
+    tokens = TokenIterator(tokenize(preprocessed, str(inputPath)))
     tree = makeTree(tokens, str(inputPath))
     assert tokens.remainingTokens() == 0
     if printTree:
