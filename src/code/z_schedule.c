@@ -4,7 +4,7 @@
     (temp) = (hour)*60.0f;                           \
     (temp) += (minute);                              \
     (dest) = (temp) * (0x10000 / 60 / 24.0f);        \
-    (dest) = SCHEDULE_CONVERT_TIME(dest);
+    (dest) = SCHEDULE_CONVERT_TIME(dest)
 
 s32 Schedule_CheckFlagS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckFlagS* cmd = (ScheduleCmdCheckFlagS*)*script;
@@ -239,7 +239,9 @@ s32 Schedule_BranchL(PlayState* play, u8** script, ScheduleOutput* output) {
     return false;
 }
 
-static s32 (*sScheduleCmdFuncs[])(PlayState*, u8**, ScheduleOutput*) = {
+typedef s32 (*ScheduleCmdFunc)(PlayState*, u8**, ScheduleOutput*);
+
+static ScheduleCmdFunc sScheduleCmdFuncs[] = {
     Schedule_CheckFlagS,       // SCHEDULE_CMD_ID_CHECK_FLAG_S
     Schedule_CheckFlagL,       // SCHEDULE_CMD_ID_CHECK_FLAG_L
     Schedule_CheckTimeRangeS,  // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S
@@ -262,25 +264,25 @@ static s32 (*sScheduleCmdFuncs[])(PlayState*, u8**, ScheduleOutput*) = {
 };
 
 static u8 sScheduleCmdSizes[] = {
-    sizeof(ScheduleCmdCheckFlagS),
-    sizeof(ScheduleCmdCheckFlagL),
-    sizeof(ScheduleCmdCheckTimeRangeS),
-    sizeof(ScheduleCmdCheckTimeRangeL),
-    sizeof(ScheduleCmdReturnValueL),
-    sizeof(ScheduleCmdBase),
-    sizeof(ScheduleCmdBase),
-    sizeof(ScheduleCmdNop),
-    sizeof(ScheduleCmdCheckMiscS),
-    sizeof(ScheduleCmdReturnValueS),
-    sizeof(ScheduleCmdCheckNotInSceneS),
-    sizeof(ScheduleCmdCheckNotInSceneL),
-    sizeof(ScheduleCmdCheckNotInDayS),
-    sizeof(ScheduleCmdCheckNotInDayL),
-    sizeof(ScheduleCmdReturnTime),
-    sizeof(ScheduleCmdCheckBeforeTimeS),
-    sizeof(ScheduleCmdCheckBeforeTimeL),
-    sizeof(ScheduleCmdBranchS),
-    sizeof(ScheduleCmdBranchL),
+    sizeof(ScheduleCmdCheckFlagS),       // SCHEDULE_CMD_ID_CHECK_FLAG_S
+    sizeof(ScheduleCmdCheckFlagL),       // SCHEDULE_CMD_ID_CHECK_FLAG_L
+    sizeof(ScheduleCmdCheckTimeRangeS),  // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S
+    sizeof(ScheduleCmdCheckTimeRangeL),  // SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L
+    sizeof(ScheduleCmdReturnValueL),     // SCHEDULE_CMD_ID_RET_VAL_L
+    sizeof(ScheduleCmdBase),             // SCHEDULE_CMD_ID_RET_NONE
+    sizeof(ScheduleCmdBase),             // SCHEDULE_CMD_ID_RET_EMPTY
+    sizeof(ScheduleCmdNop),              // SCHEDULE_CMD_ID_NOP
+    sizeof(ScheduleCmdCheckMiscS),       // SCHEDULE_CMD_ID_CHECK_MISC_S
+    sizeof(ScheduleCmdReturnValueS),     // SCHEDULE_CMD_ID_RET_VAL_S
+    sizeof(ScheduleCmdCheckNotInSceneS), // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S
+    sizeof(ScheduleCmdCheckNotInSceneL), // SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L
+    sizeof(ScheduleCmdCheckNotInDayS),   // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S
+    sizeof(ScheduleCmdCheckNotInDayL),   // SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L
+    sizeof(ScheduleCmdReturnTime),       // SCHEDULE_CMD_ID_RET_TIME
+    sizeof(ScheduleCmdCheckBeforeTimeS), // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S
+    sizeof(ScheduleCmdCheckBeforeTimeL), // SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L
+    sizeof(ScheduleCmdBranchS),          // SCHEDULE_CMD_ID_BRANCH_S
+    sizeof(ScheduleCmdBranchL),          // SCHEDULE_CMD_ID_BRANCH_L
 };
 
 s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output) {
@@ -289,7 +291,7 @@ s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output) {
 
     do {
         size = sScheduleCmdSizes[*script];
-        stop = (*sScheduleCmdFuncs[*script])(play, &script, output);
+        stop = sScheduleCmdFuncs[*script](play, &script, output);
         script += size;
     } while (!stop);
 
