@@ -79,10 +79,10 @@
         <!-- Skeleton's limbs -->
         <Limb Name="gAnju1RootLimb" Type="Standard" EnumName="ANJU1_LIMB_ROOT" Offset="0x124D8" />
         <Limb Name="gAnju1TorsoLimb" Type="Standard" EnumName="ANJU1_LIMB_TORSO" Offset="0x124E4" />
-        <Limb Name="gAnju1LeftUpperArmLimb" Type="Standard" EnumName="ANJU1_LIMB_LEFT_UPPERARM" Offset="0x124F0" />
+        <Limb Name="gAnju1LeftUpperArmLimb" Type="Standard" EnumName="ANJU1_LIMB_LEFT_UPPER_ARM" Offset="0x124F0" />
         <Limb Name="gAnju1LeftForearmLimb" Type="Standard" EnumName="ANJU1_LIMB_LEFT_FOREARM" Offset="0x124FC" />
         <Limb Name="gAnju1LeftHandLimb" Type="Standard" EnumName="ANJU1_LIMB_LEFT_HAND" Offset="0x12508" />
-        <Limb Name="gAnju1RightUpperArmLimb" Type="Standard" EnumName="ANJU1_LIMB_RIGHT_UPPERARM" Offset="0x12514" />
+        <Limb Name="gAnju1RightUpperArmLimb" Type="Standard" EnumName="ANJU1_LIMB_RIGHT_UPPER_ARM" Offset="0x12514" />
         <Limb Name="gAnju1RightForearmLimb" Type="Standard" EnumName="ANJU1_LIMB_RIGHT_FOREARM" Offset="0x12520" />
         <Limb Name="gAnju1RightHandLimb" Type="Standard" EnumName="ANJU1_LIMB_RIGHT_HAND" Offset="0x1252C" />
         <Limb Name="gAnju1HeadLimb" Type="Standard" EnumName="ANJU1_LIMB_HEAD" Offset="0x12538" />
