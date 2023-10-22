@@ -701,7 +701,7 @@ s32 func_80A3F9A4(EnTest3* this, PlayState* play) {
 }
 
 s32 func_80A3F9E4(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
-    scheduleOutput->time0 = SCHEDULE_TIME_NOW;
+    scheduleOutput->time0 = (u16)SCHEDULE_TIME_NOW;
     scheduleOutput->time1 = (u16)(scheduleOutput->time0 + 70);
     func_80A40098(this, play, arg2, scheduleOutput);
     if (this->player.actor.xzDistToPlayer < 300.0f) {
@@ -729,7 +729,7 @@ s32 func_80A3FA58(EnTest3* this, PlayState* play) {
         if (cond || this->unk_D8A <= 0) {
             func_80A3F114(this, play);
             sp40.unk_1_0 = 5;
-            scheduleOutput.time0 = SCHEDULE_TIME_NOW;
+            scheduleOutput.time0 = (u16)SCHEDULE_TIME_NOW;
             scheduleOutput.time1 = (u16)(scheduleOutput.time0 + (cond ? 80 : 140));
 
             func_80A40098(this, play, &sp40, &scheduleOutput);
@@ -805,7 +805,7 @@ s32 func_80A3FE20(EnTest3* this, PlayState* play) {
     if (D_80A41D64 == 0) {
         if (func_80A3E9DC(this, play)) {
             sp2C.unk_1_0 = 2;
-            scheduleOutput.time0 = SCHEDULE_TIME_NOW;
+            scheduleOutput.time0 = (u16)SCHEDULE_TIME_NOW;
             scheduleOutput.time1 = (u16)(scheduleOutput.time0 + 1000);
             func_80A40098(this, play, &sp2C, &scheduleOutput);
             D_80A41D64 = 1;
@@ -824,7 +824,7 @@ s32 func_80A3FE20(EnTest3* this, PlayState* play) {
 s32 func_80A3FF10(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
     static Vec3f D_80A418BC = { -420.0f, 210.0f, -162.0f };
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_51_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED)) {
         D_80A41D68 = 2;
         Math_Vec3f_Copy(&this->player.actor.world.pos, &D_80A418BC);
         Math_Vec3f_Copy(&this->player.actor.home.pos, &D_80A418BC);
@@ -856,7 +856,7 @@ s32 func_80A3FFD0(EnTest3* this, PlayState* play2) {
             D_80A41D68 = 2;
         }
     } else {
-        SET_WEEKEVENTREG(WEEKEVENTREG_51_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED);
         play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_110);
     }
     return false;
