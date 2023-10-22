@@ -191,15 +191,15 @@ void EnTakaraya_Wait(EnTakaraya* this, PlayState* play) {
 }
 
 void EnTakaraya_SpawnWalls(EnTakaraya* this, PlayState* play) {
-    u8 item;
+    u8 getItemId;
 
     if (Flags_GetSwitch(play, this->formSwitchFlag)) {
-        item = D_80ADFB38[GET_PLAYER_FORM][1];
+        getItemId = D_80ADFB38[GET_PLAYER_FORM][1];
     } else {
-        item = D_80ADFB38[GET_PLAYER_FORM][0];
+        getItemId = D_80ADFB38[GET_PLAYER_FORM][0];
     }
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_TAKARAYA_WALL, 0.0f, 0.0f, 0.0f, 0, 0, 5,
-                                  (ENBOX_TYPE_BIG_SWITCH_FLAG << 12) + (item << 5) + this->actor.params,
+                                  (ENBOX_TYPE_BIG_SWITCH_FLAG << 12) + (getItemId << 5) + this->actor.params,
                                   this->actor.csId, HALFDAYBIT_ALL, NULL);
 }
 

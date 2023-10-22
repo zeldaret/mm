@@ -78,8 +78,8 @@ static InitChainEntry sInitChain[] = {
 #define TAKARAYA_WALL_COLUMNS 8
 
 typedef struct ObjTakarayaWallSpace {
-    /* 0 */ u8 row;
-    /* 1 */ u8 column;
+    /* 0x0 */ u8 row;
+    /* 0x1 */ u8 column;
 } ObjTakarayaWallSpace; // size = 0x2
 
 typedef enum ObjTakarayaWallSpaceState {
@@ -88,13 +88,15 @@ typedef enum ObjTakarayaWallSpaceState {
     /* 2 */ TAKARAYA_WALL_FALLING
 } ObjTakarayaWallSpaceState;
 
-s32 sPathBuilderIndex;
-ObjTakarayaWallSpace sPathBuilder[TAKARAYA_WALL_ROWS * TAKARAYA_WALL_COLUMNS];
+s32 sTakarayaWallPathBuilderIndex;
+ObjTakarayaWallSpace sTakarayaWallPathBuilder[TAKARAYA_WALL_ROWS * TAKARAYA_WALL_COLUMNS];
 s32 D_80ADA508; // Set but never used
-s32 sPathBuilderReachedStart;
-Vec3f sAudioPositions[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
-u8 sSpaceStates[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
-f32 sWallHeights[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS]; // -10.0f means the wall does not raise (the space is open)
+s32 sTakarayaWallPathBuilderReachedFront;
+Vec3f sTakarayaWallAudioPositions[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
+u8 sTakarayaWallSpaceStates[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
+
+// -10.0f height means the wall does not raise (the space is open)
+f32 sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
 
 s32 ObjTakarayaWall_PosToSpace(Vec3f* pos, s32* row, s32* column) {
     *row = ((s32)pos->x + (14 * 120)) / 120;
@@ -111,7 +113,7 @@ s32 ObjTakarayaWall_PosToSpace(Vec3f* pos, s32* row, s32* column) {
  */
 s32 ObjTakarayaWall_SpaceOpen(s32 row, s32 column) {
     if ((row < 0) || (row >= TAKARAYA_WALL_ROWS) || (column < 0) || (column >= TAKARAYA_WALL_COLUMNS) ||
-        (sWallHeights[row][column] == 0.0f)) {
+        (sTakarayaWallWallHeights[row][column] == 0.0f)) {
         return false;
     }
 
@@ -171,8 +173,9 @@ s32 ObjTakarayaWall_NearbySpacesClosed(s32 row, s32 column, TakarayaWallDirectio
 
     if ((adjacentSpaceRow < 0) || (adjacentSpaceRow >= TAKARAYA_WALL_ROWS) || (adjacentSpaceColumn < 0) ||
         (adjacentSpaceColumn >= TAKARAYA_WALL_COLUMNS) ||
-        (sWallHeights[adjacentSpaceRow][adjacentSpaceColumn] == -10.0f) || ObjTakarayaWall_SpaceOpen(row1, column1) ||
-        ObjTakarayaWall_SpaceOpen(row2, column2) || ObjTakarayaWall_SpaceOpen(row3, column3)) {
+        (sTakarayaWallWallHeights[adjacentSpaceRow][adjacentSpaceColumn] == -10.0f) ||
+        ObjTakarayaWall_SpaceOpen(row1, column1) || ObjTakarayaWall_SpaceOpen(row2, column2) ||
+        ObjTakarayaWall_SpaceOpen(row3, column3)) {
         return false;
     }
 
@@ -206,8 +209,8 @@ void ObjTakarayaWall_BuildPath(s32 row, s32 column) {
     }
 
     if (closedCount == 0) {
-        sPathBuilderIndex--;
-        if (!sPathBuilderReachedStart) {
+        sTakarayaWallPathBuilderIndex--;
+        if (!sTakarayaWallPathBuilderReachedFront) {
             D_80ADA508--;
         }
     } else {
@@ -252,14 +255,14 @@ void ObjTakarayaWall_BuildPath(s32 row, s32 column) {
             column++;
         }
 
-        sWallHeights[row][column] = -10.0f;
-        sPathBuilder[sPathBuilderIndex].row = row;
-        sPathBuilder[sPathBuilderIndex].column = column;
-        sPathBuilderIndex++;
-        if (!sPathBuilderReachedStart) {
+        sTakarayaWallWallHeights[row][column] = -10.0f;
+        sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex].row = row;
+        sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex].column = column;
+        sTakarayaWallPathBuilderIndex++;
+        if (!sTakarayaWallPathBuilderReachedFront) {
             D_80ADA508++;
             if (row == (TAKARAYA_WALL_ROWS - 1)) {
-                sPathBuilderReachedStart = true;
+                sTakarayaWallPathBuilderReachedFront = true;
             }
         }
     }
@@ -276,7 +279,7 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
 
     for (i = 0; i < TAKARAYA_WALL_ROWS; i++) {
         for (j = 0; j < TAKARAYA_WALL_COLUMNS; j++) {
-            sWallHeights[i][j] = 0.0f;
+            sTakarayaWallWallHeights[i][j] = 0.0f;
         }
     }
 
@@ -295,18 +298,19 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
         chest->uncullZoneForward = 2000.0f;
     }
 
-    sWallHeights[0][column] = -10.0f;
-    sPathBuilder[sPathBuilderIndex].row = 0;
-    sPathBuilder[sPathBuilderIndex].column = column;
-    sPathBuilderIndex++;
+    sTakarayaWallWallHeights[0][column] = -10.0f;
+    sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex].row = 0;
+    sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex].column = column;
+    sTakarayaWallPathBuilderIndex++;
     D_80ADA508++;
 
     do {
-        ObjTakarayaWall_BuildPath(sPathBuilder[sPathBuilderIndex - 1].row, sPathBuilder[sPathBuilderIndex - 1].column);
-    } while (sPathBuilderIndex >= 2);
+        ObjTakarayaWall_BuildPath(sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex - 1].row,
+                                  sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex - 1].column);
+    } while (sTakarayaWallPathBuilderIndex >= 2);
 
     for (j = 1; j < TAKARAYA_WALL_COLUMNS - 1; j++) {
-        if (sWallHeights[TAKARAYA_WALL_ROWS - 1][j] == -10.0f) {
+        if (sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][j] == -10.0f) {
             break;
         }
     }
@@ -315,10 +319,10 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
     // open up the space next to the open corner since the Treasure Chest Shop scene blocks direct access to the
     // front corners.
     if (j == (TAKARAYA_WALL_COLUMNS - 1)) {
-        if (sWallHeights[TAKARAYA_WALL_ROWS - 1][0] == -10.0f) {
-            sWallHeights[TAKARAYA_WALL_ROWS - 1][1] = -10.0f;
+        if (sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][0] == -10.0f) {
+            sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][1] = -10.0f;
         } else {
-            sWallHeights[TAKARAYA_WALL_ROWS - 1][6] = -10.0f;
+            sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][6] = -10.0f;
         }
     }
 
@@ -335,7 +339,7 @@ void ObjTakarayaWall_Destroy(Actor* thisx, PlayState* play) {
 
     for (i = 0; i < TAKARAYA_WALL_ROWS; i++) {
         for (j = 0; j < TAKARAYA_WALL_COLUMNS; j++) {
-            AudioSfx_StopByPos(&sAudioPositions[i][j]);
+            AudioSfx_StopByPos(&sTakarayaWallAudioPositions[i][j]);
         }
     }
 }
@@ -379,13 +383,13 @@ void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play) {
 
     for (i = 0; i < TAKARAYA_WALL_ROWS; i++) {
         for (j = 0; j < TAKARAYA_WALL_COLUMNS; j++) {
-            if (sWallHeights[i][j] >= 0.0f) {
+            if (sTakarayaWallWallHeights[i][j] >= 0.0f) {
                 if (((j == playerColumn) && ((i == playerRowInFront) || (i == playerRowBehind))) ||
                     ((i == playerRow) && ((j == playerColumnRight) || (j == playerColumnLeft)))) {
-                    if (Math_StepToF(&sWallHeights[i][j], 120.0f, 15.0f)) {
-                        sSpaceStates[i][j] = TAKARAYA_WALL_INACTIVE;
+                    if (Math_StepToF(&sTakarayaWallWallHeights[i][j], 120.0f, 15.0f)) {
+                        sTakarayaWallSpaceStates[i][j] = TAKARAYA_WALL_INACTIVE;
                     } else {
-                        sSpaceStates[i][j] = TAKARAYA_WALL_RISING;
+                        sTakarayaWallSpaceStates[i][j] = TAKARAYA_WALL_RISING;
                     }
                     if (j == playerColumn) {
                         columnColliderActive = true;
@@ -393,8 +397,8 @@ void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play) {
                         rowColliderActive = true;
                     }
                 } else if ((i != playerRow) || (j != playerColumn)) {
-                    Math_SmoothStepToF(&sWallHeights[i][j], 0.0f, 0.2f, 5.0f, 1.0f);
-                    sSpaceStates[i][j] = TAKARAYA_WALL_FALLING;
+                    Math_SmoothStepToF(&sTakarayaWallWallHeights[i][j], 0.0f, 0.2f, 5.0f, 1.0f);
+                    sTakarayaWallSpaceStates[i][j] = TAKARAYA_WALL_FALLING;
                 }
             }
         }
@@ -457,9 +461,9 @@ void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play) {
 
     for (i = 0; i < TAKARAYA_WALL_ROWS; i++) {
         for (j = 0; j < TAKARAYA_WALL_COLUMNS; j++) {
-            if (sWallHeights[i][j] > 0.0f) {
+            if (sTakarayaWallWallHeights[i][j] > 0.0f) {
                 mtx->xw = (i * 120) - 1620;
-                mtx->yw = sWallHeights[i][j] + (this->actor.world.pos.y - 120.0f);
+                mtx->yw = sTakarayaWallWallHeights[i][j] + (this->actor.world.pos.y - 120.0f);
                 mtx->zw = (j * 120) + 60;
 
                 gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -470,17 +474,18 @@ void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play) {
                     gSPDisplayList(gfx++, gTreasureChestShopWallBlackDL);
                 }
 
-                if (sSpaceStates[i][j] != TAKARAYA_WALL_INACTIVE) {
+                if (sTakarayaWallSpaceStates[i][j] != TAKARAYA_WALL_INACTIVE) {
                     audioPos.x = mtx->xw;
                     audioPos.y = mtx->yw;
                     audioPos.z = mtx->zw;
 
-                    SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &audioPos, &sAudioPositions[i][j]);
+                    SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &audioPos,
+                                                &sTakarayaWallAudioPositions[i][j]);
 
-                    if (sSpaceStates[i][j] == TAKARAYA_WALL_RISING) {
-                        Audio_PlaySfx_AtPos(&sAudioPositions[i][j], NA_SE_EV_ROCK_CUBE_RISING - SFX_FLAG);
+                    if (sTakarayaWallSpaceStates[i][j] == TAKARAYA_WALL_RISING) {
+                        Audio_PlaySfx_AtPos(&sTakarayaWallAudioPositions[i][j], NA_SE_EV_ROCK_CUBE_RISING - SFX_FLAG);
                     } else { // TAKARAYA_WALL_FALLING
-                        Audio_PlaySfx_AtPos(&sAudioPositions[i][j], NA_SE_EV_ROCK_CUBE_FALL - SFX_FLAG);
+                        Audio_PlaySfx_AtPos(&sTakarayaWallAudioPositions[i][j], NA_SE_EV_ROCK_CUBE_FALL - SFX_FLAG);
                     }
                 }
             }
