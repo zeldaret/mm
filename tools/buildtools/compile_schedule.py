@@ -53,9 +53,10 @@ class TokenType(enum.Enum):
     BRACE_OPEN = "{"
     BRACE_CLOSE = "}"
     ARGS = "(args)"
+    NOT = "not"
 
     def canBeStartingToken(self) -> bool:
-        if self in { TokenType.ELSE, TokenType.BRACE_OPEN, TokenType.BRACE_CLOSE, TokenType.ARGS }:
+        if self in { TokenType.ELSE, TokenType.BRACE_OPEN, TokenType.BRACE_CLOSE, TokenType.ARGS, TokenType.NOT }:
             return False
         return True
 
@@ -144,6 +145,7 @@ tokenLiterals: dict[str, TokenType] = {
     "else": TokenType.ELSE,
     "{": TokenType.BRACE_OPEN,
     "}": TokenType.BRACE_CLOSE,
+    "not": TokenType.NOT,
 }
 
 @dataclasses.dataclass
@@ -301,9 +303,14 @@ class Expression:
     left: list[Expression] = dataclasses.field(default_factory=list)
     right: list[Expression] = dataclasses.field(default_factory=list)
 
+    negated: bool = False
+
     def print(self, depth=0):
         spaces = "    " * depth
-        print(f"{spaces}{self.expr.tokenLiteral}", end="")
+        print(f"{spaces}", end="")
+        if self.negated:
+            print(f"not ", end="")
+        print(f"{self.expr.tokenLiteral}", end="")
         if self.args is not None:
             print(f"({self.args.tokenLiteral})", end="")
         if len(self.left) == 0:
@@ -338,7 +345,7 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
 
             currentExpr.args = token
 
-        elif token.tokenType.canBeStartingToken():
+        elif token.tokenType.canBeStartingToken() or token.tokenType == TokenType.NOT:
             if currentExpr is not None and currentExpr.expr.tokenType.isBranch():
                 if len(currentExpr.left) == 0:
                     eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
@@ -349,7 +356,30 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
                     debugPrint(f" foundElse: {foundElse}")
                     exit(1)
 
+            negate = False
+            if token.tokenType == TokenType.NOT:
+                negate = True
+                tokenAux = tokens.get()
+                if tokenAux is None:
+                    eprint(f"Error: `not` operator followed by nothing at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                    debugPrint(" makeTree: NOT canBeStartingToken")
+                    debugPrint(f" i: {i}")
+                    debugPrint(f" depth: {depth}")
+                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                    debugPrint(f" foundElse: {foundElse}")
+                    exit(1)
+                token = tokenAux
+                if not token.tokenType.canBeStartingToken():
+                    eprint(f"Error: `not` operator followed invalid token at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                    debugPrint(" makeTree: NOT canBeStartingToken")
+                    debugPrint(f" i: {i}")
+                    debugPrint(f" depth: {depth}")
+                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                    debugPrint(f" foundElse: {foundElse}")
+                    exit(1)
+
             currentExpr = Expression(token)
+            currentExpr.negated = negate
             foundElse = False
             exprs.append(currentExpr)
             if not token.tokenType.hasArguments():
@@ -497,22 +527,20 @@ def emitMacros(tree: list[Expression], byteCount = 0) -> tuple[str, int]:
         currentOffset = byteCount
 
         subResults = ""
+        left = expr.left
+        right = expr.right
         if expr.expr.tokenType.needsToInvert():
-            sub, byteCount = emitMacros(expr.right, byteCount)
-            targetOffset = byteCount
+            left, right = right, left
+        if expr.negated:
+            left, right = right, left
 
-            subResults += sub
-            sub, byteCount = emitMacros(expr.left, byteCount)
-            subResults += sub
-            byteCount = byteCount
-        else:
-            sub, byteCount = emitMacros(expr.left, byteCount)
-            targetOffset = byteCount
+        sub, byteCount = emitMacros(left, byteCount)
+        targetOffset = byteCount
 
-            subResults += sub
-            sub, byteCount = emitMacros(expr.right, byteCount)
-            subResults += sub
-            byteCount = byteCount
+        subResults += sub
+        sub, byteCount = emitMacros(right, byteCount)
+        subResults += sub
+        byteCount = byteCount
 
         if expr.args is not None:
             currentMacro += f"{expr.args.tokenLiteral}"

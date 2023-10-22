@@ -36,13 +36,8 @@ void func_80867144(EnDoor*, PlayState*);
 void func_808670F0(EnDoor*, PlayState*);
 void func_80866A5C(EnDoor*, PlayState*);
 
-// TODO
 u8 D_808675D0[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x12 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 23, 0, 0x12 - 0x0A),
-    /* 0x0A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 6, 0, 0x12 - 0x10),
-    /* 0x10 */ SCHEDULE_CMD_RET_VAL_S(7),
-    /* 0x12 */ SCHEDULE_CMD_RET_NONE(),
+#include "D_808675D0.schedule.inc"
 };
 
 // TODO

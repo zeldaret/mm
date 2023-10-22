@@ -1,5 +1,0 @@
-if_not_day_s (3) or if_time_range_s (6, 0, 23, 0) or if_time_range_s (0, 0, 6, 0) {
-    return_none
-} else {
-    return_s (7)
-}
