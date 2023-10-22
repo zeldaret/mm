@@ -1,5 +1,5 @@
-if_before_time_s (22, 0) {
-    return_none
-} else {
+if_since_time_s (22, 0) {
     return_s (15)
+} else {
+    return_none
 }

@@ -57,10 +57,10 @@ if_day_s (2) {
                 if_time_range_s (0, 20, 0, 30) {
                     return_time (0, 20, 0, 30, 15)
                 } else {
-                    if_before_time_s (0, 30) {
-                        return_none
-                    } else {
+                    if_since_time_s (0, 30) {
                         return_l (4)
+                    } else {
+                        return_none
                     }
                 }
             }

@@ -43,6 +43,8 @@ class TokenType(enum.Enum):
     RETURN_TIME = "return_time"
     IF_BEFORETIME_S = "if_before_time_s"
     IF_BEFORETIME_L = "if_before_time_l"
+    IF_AFTERTIME_S = "if_since_time_s"
+    IF_AFTERTIME_L = "if_since_time_l"
     BRANCH_S = "branch_s" # TODO
     BRANCH_L = "branch_l" # TODO
 
@@ -70,6 +72,8 @@ class TokenType(enum.Enum):
             TokenType.IF_DAY_L,
             TokenType.IF_BEFORETIME_S,
             TokenType.IF_BEFORETIME_L,
+            TokenType.IF_AFTERTIME_S,
+            TokenType.IF_AFTERTIME_L,
         }:
             return True
         return False
@@ -95,6 +99,8 @@ class TokenType(enum.Enum):
             TokenType.RETURN_TIME,
             TokenType.IF_BEFORETIME_S,
             TokenType.IF_BEFORETIME_L,
+            TokenType.IF_AFTERTIME_S,
+            TokenType.IF_AFTERTIME_L,
         }:
             return True
         return False
@@ -130,6 +136,8 @@ tokenLiterals: dict[str, TokenType] = {
     "return_time": TokenType.RETURN_TIME,
     "if_before_time_s": TokenType.IF_BEFORETIME_S,
     "if_before_time_l": TokenType.IF_BEFORETIME_L,
+    "if_since_time_s": TokenType.IF_AFTERTIME_S,
+    "if_since_time_l": TokenType.IF_AFTERTIME_L,
     "branch_s": TokenType.BRANCH_S,
     "branch_l": TokenType.BRANCH_L,
 
@@ -469,6 +477,8 @@ cmdInfos: dict[TokenType, CommandInfo] = {
     TokenType.RETURN_TIME:          CommandInfo('SCHEDULE_CMD_RET_TIME',             0x06,),
     TokenType.IF_BEFORETIME_S:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_S',  0x04,),
     TokenType.IF_BEFORETIME_L:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_L',  0x05,),
+    TokenType.IF_AFTERTIME_S:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_S',  0x04,),
+    TokenType.IF_AFTERTIME_L:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_L',  0x05,),
     TokenType.BRANCH_S:             CommandInfo('SCHEDULE_CMD_BRANCH_S',             0x02,),
     TokenType.BRANCH_L:             CommandInfo('SCHEDULE_CMD_BRANCH_L',             0x03,),
 }
