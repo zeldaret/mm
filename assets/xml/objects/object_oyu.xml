@@ -1,5 +1,5 @@
 ﻿<Root>
-    <!-- Hot Spring Water found in the Goron Graveyard found in Snowhead Village -->
+    <!-- Hot Spring Water found in the Goron Graveyard -->
     <File Name="object_oyu" Segment="6">
         <DList Name="gGoronGraveyardHotSpringWaterDL" Offset="0x80" />
         <DList Name="gGoronGraveyardHotSpringWaterEmptyDL" Offset="0x158" />
