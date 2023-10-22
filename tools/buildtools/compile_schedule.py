@@ -319,9 +319,10 @@ class Expression:
             print(" {")
             for expr in self.left:
                 expr.print(depth+1)
-            print(f"{spaces}}} else {{")
-            for expr in self.right:
-                expr.print(depth+1)
+            if len(self.right) > 0:
+                print(f"{spaces}}} else {{")
+                for expr in self.right:
+                    expr.print(depth+1)
             print(f"{spaces}}}")
 
 

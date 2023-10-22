@@ -1,18 +1,17 @@
-if_day_s (1) {
-    if_before_time_s (2, 30) {
-    label_0x0A:
-        return_none
-    } else {
-        return_s (24)
-    }
-} else {
-    if_day_s (3) {
-        goto label_0x0A
-    } else {
-        if_before_time_s (20, 0) {
-            goto label_0x0A
-        } else {
+not if_day_s (1) {
+    not if_day_s (3) {
+        if_since_time_s (20, 0) {
             return_s (12)
+        //} else {
+        //    goto label_0x0A
         }
+    //} else {
+        //goto label_0x0A
     }
 }
+if_since_time_s (2, 30) {
+    return_s (24)
+}
+
+//label_0x0A:
+    return_none
