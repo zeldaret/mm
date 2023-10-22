@@ -247,7 +247,7 @@ f32 Math3D_Cos(Vec3f* a, Vec3f* b) {
 }
 
 /**
- * Calculates the cosine between vectors `a` and `b` and places the result in `ret`
+ * Calculates the cosine between vectors `a` and `b` and places the result in `dst`
  * returns true if the cosine cannot be calculated because the product of the magnitudes is zero
  */
 s32 Math3D_CosOut(Vec3f* a, Vec3f* b, f32* dst) {
