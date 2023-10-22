@@ -1,0 +1,6 @@
+if_day_s (3) {
+    if_since_time_s (18, 0) {
+        return_none
+    }
+}
+return_s (20)

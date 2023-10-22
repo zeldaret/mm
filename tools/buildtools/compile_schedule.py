@@ -340,13 +340,14 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
 
         elif token.tokenType.canBeStartingToken():
             if currentExpr is not None and currentExpr.expr.tokenType.isBranch():
-                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                debugPrint(" makeTree: canBeStartingToken")
-                debugPrint(f" i: {i}")
-                debugPrint(f" depth: {depth}")
-                debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                debugPrint(f" foundElse: {foundElse}")
-                exit(1)
+                if len(currentExpr.left) == 0:
+                    eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                    debugPrint(" makeTree: canBeStartingToken")
+                    debugPrint(f" i: {i}")
+                    debugPrint(f" depth: {depth}")
+                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                    debugPrint(f" foundElse: {foundElse}")
+                    exit(1)
 
             currentExpr = Expression(token)
             foundElse = False
