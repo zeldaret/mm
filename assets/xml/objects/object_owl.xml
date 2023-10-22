@@ -1,95 +1,121 @@
 ﻿<Root>
+    <!-- Object for Kaepora Gaebora (Owl) -->
     <File Name="object_owl" Segment="6">
-        <Animation Name="object_owl_Anim_001168" Offset="0x1168" />
-        <DList Name="object_owl_DL_001200" Offset="0x1200" />
-        <Texture Name="object_owl_Tex_001290" OutName="tex_001290" Format="rgba16" Width="16" Height="32" Offset="0x1290" />
-        <Animation Name="object_owl_Anim_001ADC" Offset="0x1ADC" />
-        <DList Name="object_owl_DL_005050" Offset="0x5050" />
-        <DList Name="object_owl_DL_0051C8" Offset="0x51C8" />
-        <DList Name="object_owl_DL_0052F0" Offset="0x52F0" />
-        <DList Name="object_owl_DL_005770" Offset="0x5770" />
-        <DList Name="object_owl_DL_005828" Offset="0x5828" />
-        <DList Name="object_owl_DL_0058E0" Offset="0x58E0" />
-        <DList Name="object_owl_DL_0059A8" Offset="0x59A8" />
-        <DList Name="object_owl_DL_005A98" Offset="0x5A98" />
-        <DList Name="object_owl_DL_005C30" Offset="0x5C30" />
-        <DList Name="object_owl_DL_005E70" Offset="0x5E70" />
-        <DList Name="object_owl_DL_0060C8" Offset="0x60C8" />
-        <DList Name="object_owl_DL_0062F8" Offset="0x62F8" />
-        <DList Name="object_owl_DL_006578" Offset="0x6578" />
-        <DList Name="object_owl_DL_0067B8" Offset="0x67B8" />
-        <DList Name="object_owl_DL_006A10" Offset="0x6A10" />
-        <DList Name="object_owl_DL_006C40" Offset="0x6C40" />
-        <DList Name="object_owl_DL_006EC0" Offset="0x6EC0" />
-        <DList Name="object_owl_DL_006F68" Offset="0x6F68" />
-        <DList Name="object_owl_DL_007030" Offset="0x7030" />
-        <DList Name="object_owl_DL_007120" Offset="0x7120" />
-        <Texture Name="object_owl_Tex_0072B8" OutName="tex_0072B8" Format="rgba16" Width="16" Height="16" Offset="0x72B8" />
-        <Texture Name="object_owl_Tex_0074B8" OutName="tex_0074B8" Format="rgba16" Width="16" Height="16" Offset="0x74B8" />
-        <Texture Name="object_owl_Tex_0076B8" OutName="tex_0076B8" Format="rgba16" Width="32" Height="32" Offset="0x76B8" />
-        <Texture Name="object_owl_Tex_007EB8" OutName="tex_007EB8" Format="rgba16" Width="32" Height="32" Offset="0x7EB8" />
-        <Texture Name="object_owl_Tex_0086B8" OutName="tex_0086B8" Format="rgba16" Width="32" Height="32" Offset="0x86B8" />
-        <Texture Name="object_owl_Tex_008EB8" OutName="tex_008EB8" Format="ci8" Width="32" Height="32" Offset="0x8EB8" />
-        <Texture Name="object_owl_Tex_0092B8" OutName="tex_0092B8" Format="ci8" Width="32" Height="32" Offset="0x92B8" />
-        <Texture Name="object_owl_Tex_0096B8" OutName="tex_0096B8" Format="ci8" Width="32" Height="32" Offset="0x96B8" />
-        <Texture Name="object_owl_Tex_009AB8" OutName="tex_009AB8" Format="rgba16" Width="32" Height="32" Offset="0x9AB8" />
-        <Texture Name="object_owl_Tex_00A2B8" OutName="tex_00A2B8" Format="rgba16" Width="16" Height="16" Offset="0xA2B8" />
-        <Texture Name="object_owl_Tex_00A4B8" OutName="tex_00A4B8" Format="rgba16" Width="64" Height="32" Offset="0xA4B8" />
-        <Texture Name="object_owl_Tex_00B4B8" OutName="tex_00B4B8" Format="rgba16" Width="32" Height="32" Offset="0xB4B8" />
-        <Texture Name="object_owl_Tex_00BCB8" OutName="tex_00BCB8" Format="rgba16" Width="32" Height="32" Offset="0xBCB8" />
-        <Limb Name="object_owl_Standardlimb_00C4B8" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_01" Offset="0xC4B8" />
-        <Limb Name="object_owl_Standardlimb_00C4C4" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_02" Offset="0xC4C4" />
-        <Limb Name="object_owl_Standardlimb_00C4D0" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_03" Offset="0xC4D0" />
-        <Limb Name="object_owl_Standardlimb_00C4DC" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_04" Offset="0xC4DC" />
-        <Limb Name="object_owl_Standardlimb_00C4E8" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_05" Offset="0xC4E8" />
-        <Limb Name="object_owl_Standardlimb_00C4F4" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_06" Offset="0xC4F4" />
-        <Limb Name="object_owl_Standardlimb_00C500" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_07" Offset="0xC500" />
-        <Limb Name="object_owl_Standardlimb_00C50C" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_08" Offset="0xC50C" />
-        <Limb Name="object_owl_Standardlimb_00C518" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_09" Offset="0xC518" />
-        <Limb Name="object_owl_Standardlimb_00C524" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_0A" Offset="0xC524" />
-        <Limb Name="object_owl_Standardlimb_00C530" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_0B" Offset="0xC530" />
-        <Limb Name="object_owl_Standardlimb_00C53C" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_0C" Offset="0xC53C" />
-        <Limb Name="object_owl_Standardlimb_00C548" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_0D" Offset="0xC548" />
-        <Limb Name="object_owl_Standardlimb_00C554" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_0E" Offset="0xC554" />
-        <Limb Name="object_owl_Standardlimb_00C560" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_0F" Offset="0xC560" />
-        <Limb Name="object_owl_Standardlimb_00C56C" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_10" Offset="0xC56C" />
-        <Limb Name="object_owl_Standardlimb_00C578" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_11" Offset="0xC578" />
-        <Limb Name="object_owl_Standardlimb_00C584" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_12" Offset="0xC584" />
-        <Limb Name="object_owl_Standardlimb_00C590" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_13" Offset="0xC590" />
-        <Limb Name="object_owl_Standardlimb_00C59C" Type="Standard" EnumName="OBJECT_OWL_1_LIMB_14" Offset="0xC59C" />
-        <Skeleton Name="object_owl_Skel_00C5F8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OWL_1_LIMB_NONE" LimbMax="OBJECT_OWL_1_LIMB_MAX" EnumName="ObjectOwl1Limb" Offset="0xC5F8" />
-        <Animation Name="object_owl_Anim_00C6D4" Offset="0xC6D4" />
-        <Animation Name="object_owl_Anim_00CB94" Offset="0xCB94" />
-        <Animation Name="object_owl_Anim_00CDB0" Offset="0xCDB0" />
-        <DList Name="object_owl_DL_00F220" Offset="0xF220" />
-        <DList Name="object_owl_DL_00F3B0" Offset="0xF3B0" />
-        <DList Name="object_owl_DL_00F540" Offset="0xF540" />
-        <DList Name="object_owl_DL_00F5E8" Offset="0xF5E8" />
-        <DList Name="object_owl_DL_00F6D0" Offset="0xF6D0" />
-        <DList Name="object_owl_DL_00F840" Offset="0xF840" />
-        <DList Name="object_owl_DL_00FCC0" Offset="0xFCC0" />
-        <DList Name="object_owl_DL_00FD78" Offset="0xFD78" />
-        <DList Name="object_owl_DL_00FE30" Offset="0xFE30" />
-        <DList Name="object_owl_DL_00FEF8" Offset="0xFEF8" />
-        <DList Name="object_owl_DL_00FFE8" Offset="0xFFE8" />
-        <DList Name="object_owl_DL_010180" Offset="0x10180" />
-        <DList Name="object_owl_DL_010248" Offset="0x10248" />
-        <DList Name="object_owl_DL_010338" Offset="0x10338" />
-        <Limb Name="object_owl_Standardlimb_0104D0" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_01" Offset="0x104D0" />
-        <Limb Name="object_owl_Standardlimb_0104DC" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_02" Offset="0x104DC" />
-        <Limb Name="object_owl_Standardlimb_0104E8" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_03" Offset="0x104E8" />
-        <Limb Name="object_owl_Standardlimb_0104F4" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_04" Offset="0x104F4" />
-        <Limb Name="object_owl_Standardlimb_010500" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_05" Offset="0x10500" />
-        <Limb Name="object_owl_Standardlimb_01050C" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_06" Offset="0x1050C" />
-        <Limb Name="object_owl_Standardlimb_010518" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_07" Offset="0x10518" />
-        <Limb Name="object_owl_Standardlimb_010524" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_08" Offset="0x10524" />
-        <Limb Name="object_owl_Standardlimb_010530" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_09" Offset="0x10530" />
-        <Limb Name="object_owl_Standardlimb_01053C" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_0A" Offset="0x1053C" />
-        <Limb Name="object_owl_Standardlimb_010548" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_0B" Offset="0x10548" />
-        <Limb Name="object_owl_Standardlimb_010554" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_0C" Offset="0x10554" />
-        <Limb Name="object_owl_Standardlimb_010560" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_0D" Offset="0x10560" />
-        <Limb Name="object_owl_Standardlimb_01056C" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_0E" Offset="0x1056C" />
-        <Limb Name="object_owl_Standardlimb_010578" Type="Standard" EnumName="OBJECT_OWL_2_LIMB_0F" Offset="0x10578" />
-        <Skeleton Name="object_owl_Skel_0105C0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OWL_2_LIMB_NONE" LimbMax="OBJECT_OWL_2_LIMB_MAX" EnumName="ObjectOwl2Limb" Offset="0x105C0" />
+        <!-- Animation -->
+        <Animation Name="gOwlTakeoffAnim" Offset="0x1168" />
+        
+        <!-- Single feather -->
+        <DList Name="gOwlFeatherDL" Offset="0x1200" />
+        <Texture Name="gOwlFeatherTex" OutName="owl_feather" Format="rgba16" Width="16" Height="32" Offset="0x1290" />
+        
+        <!-- Animation -->
+        <Animation Name="gOwlFlyAnim" Offset="0x1ADC" />
+        
+        <!-- Owl Flying DList -->
+        <DList Name="gOwlFlyingLowerBodyDL" Offset="0x5050" />
+        <DList Name="gOwlFlyingUpperBodyDL" Offset="0x51C8" />
+        <DList Name="gOwlFlyingHeadDL" Offset="0x52F0" />
+        <DList Name="gOwlFlyingRightEyebrowDL" Offset="0x5770" />
+        <DList Name="gOwlFlyingLeftEyebrowDL" Offset="0x5828" />
+        <DList Name="gOwlFlyingUpperRightLegDL" Offset="0x58E0" />
+        <DList Name="gOwlFlyingLowerRightLegDL" Offset="0x59A8" />
+        <DList Name="gOwlFlyingRightTalonDL" Offset="0x5A98" />
+        <DList Name="gOwlFlyingLowerLeftWingDL" Offset="0x5C30" />
+        <DList Name="gOwlFlyingMiddleLeftWing1DL" Offset="0x5E70" />
+        <DList Name="gOwlFlyingMiddleLeftWing2DL" Offset="0x60C8" />
+        <DList Name="gOwlFlyingUpperLeftWingDL" Offset="0x62F8" />
+        <DList Name="gOwlFlyingLowerRightWingDL" Offset="0x6578" />
+        <DList Name="gOwlFlyingMiddleRightWing1DL" Offset="0x67B8" />
+        <DList Name="gOwlFlyingMiddleRightWing2DL" Offset="0x6A10" />
+        <DList Name="gOwlFlyingUpperRightWingDL" Offset="0x6C40" />
+        <DList Name="gOwlFlyingTailDL" Offset="0x6EC0" />
+        <DList Name="gOwlFlyingUpperLeftLegDL" Offset="0x6F68" />
+        <DList Name="gOwlFlyingLowerLeftLegDL" Offset="0x7030" />
+        <DList Name="gOwlFlyingLeftTalonDL" Offset="0x7120" />
+        
+        <!-- The two following TLUTs are identical and both are used as TLUTs for the eye textures -->
+        <!-- TLUT used in gOwlPerchingHeadDL -->
+        <Texture Name="gOwlPerchingEyeTLUT" OutName="owl_perching_eye_tlut" Format="rgba16" Width="16" Height="16" Offset="0x72B8" />
+        <!-- TLUT used in gOwlFlyingHeadDL -->
+        <Texture Name="gOwlFlyingEyeTLUT" OutName="owl_flying_eye_tlut" Format="rgba16" Width="16" Height="16" Offset="0x74B8" />
+
+        <!-- Textures -->
+        <Texture Name="gOwlChinMarking1Tex" OutName="owl_chin_marking1" Format="rgba16" Width="32" Height="32" Offset="0x76B8" />
+        <Texture Name="gOwlForeheadMarkingTex" OutName="owl_forehead_marking" Format="rgba16" Width="32" Height="32" Offset="0x7EB8" />
+        <Texture Name="gOwlBeakTex" OutName="owl_beak" Format="rgba16" Width="32" Height="32" Offset="0x86B8" />
+        <Texture Name="gOwlEyeOpenTex" OutName="owl_eye_open" Format="ci8" Width="32" Height="32" Offset="0x8EB8" />
+        <Texture Name="gOwlEyeHalfTex" OutName="owl_eye_half" Format="ci8" Width="32" Height="32" Offset="0x92B8" />
+        <Texture Name="gOwlEyeClosedTex" OutName="owl_eye_closed" Format="ci8" Width="32" Height="32" Offset="0x96B8" />
+        <Texture Name="gOwlChinMarking2Tex" OutName="owl_chin_marking2" Format="rgba16" Width="32" Height="32" Offset="0x9AB8" />
+        <Texture Name="gOwlFeathersTex" OutName="owl_feathers" Format="rgba16" Width="16" Height="16" Offset="0xA2B8" />
+        <Texture Name="gOwlEyebrowTex" OutName="owl_eyebrow" Format="rgba16" Width="64" Height="32" Offset="0xA4B8" />
+        <Texture Name="gOwlFlightFeathers1Tex" OutName="owl_flight_feathers1" Format="rgba16" Width="32" Height="32" Offset="0xB4B8" />
+        <Texture Name="gOwlFlightFeathers2Tex" OutName="owl_flight_feathers2" Format="rgba16" Width="32" Height="32" Offset="0xBCB8" />
+        
+        <!-- Owl Flying Limbs -->
+        <Limb Name="gOwlFlyingLowerBodyLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_LOWER_BODY" Offset="0xC4B8" />
+        <Limb Name="gOwlFlyingUpperBodyLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_UPPER_BODY" Offset="0xC4C4" />
+        <Limb Name="gOwlFlyingHeadLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_HEAD" Offset="0xC4D0" />
+        <Limb Name="gOwlFlyingRightEyebrowLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_RIGHT_EYEBROW" Offset="0xC4DC" />
+        <Limb Name="gOwlFlyingLeftEyebrowLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_LEFT_EYEBROW" Offset="0xC4E8" />
+        <Limb Name="gOwlFlyingLowerLeftWingLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_LOWER_LEFT_WING" Offset="0xC4F4" />
+        <Limb Name="gOwlFlyingMiddleLeftWing1Limb" Type="Standard" EnumName="OWL_FLYING_LIMB_MIDDLE_LEFT_WING_1" Offset="0xC500" />
+        <Limb Name="gOwlFlyingMiddleLeftWing2Limb" Type="Standard" EnumName="OWL_FLYING_LIMB_MIDDLE_LEFT_WING_2" Offset="0xC50C" />
+        <Limb Name="gOwlFlyingUpperLeftWingLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_UPPER_LEFT_WING" Offset="0xC518" />
+        <Limb Name="gOwlFlyingLowerRightWingLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_LOWER_RIGHT_WING" Offset="0xC524" />
+        <Limb Name="gOwlFlyingMiddleRightWing1Limb" Type="Standard" EnumName="OWL_FLYING_LIMB_MIDDLE_RIGHT_WING_1" Offset="0xC530" />
+        <Limb Name="gOwlFlyingMiddleRightWing2Limb" Type="Standard" EnumName="OWL_FLYING_LIMB_MIDDLE_RIGHT_WING_2" Offset="0xC53C" />
+        <Limb Name="gOwlFlyingUpperRightWingLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_UPPER_RIGHT_WING" Offset="0xC548" />
+        <Limb Name="gOwlFlyingUpperRightLegLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_UPPER_RIGHT_LEG" Offset="0xC554" />
+        <Limb Name="gOwlFlyingLowerRightLegLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_LOWER_RIGHT_LEG" Offset="0xC560" />
+        <Limb Name="gOwlFlyingRightTalonLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_RIGHT_TALON" Offset="0xC56C" />
+        <Limb Name="gOwlFlyingUpperLeftLegLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_UPPER_LEFT_LEG" Offset="0xC578" />
+        <Limb Name="gOwlFlyingLowerLeftLegLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_LOWER_LEFT_LEG" Offset="0xC584" />
+        <Limb Name="gOwlFlyingLeftTalonLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_LEFT_TALON" Offset="0xC590" />
+        <Limb Name="gOwlFlyingTailLimb" Type="Standard" EnumName="OWL_FLYING_LIMB_TAIL" Offset="0xC59C" />
+        
+        <!-- Owl Flying Skeleton -->
+        <Skeleton Name="gOwlFlyingSkel" Type="Flex" LimbType="Standard" LimbNone="OWL_FLYING_LIMB_NONE" LimbMax="OWL_FLYING_LIMB_MAX" EnumName="OwlFlyingLimb" Offset="0xC5F8" />
+        
+        <!-- Animations -->
+        <Animation Name="gOwlGlideAnim" Offset="0xC6D4" />
+        <Animation Name="gOwlUnfoldWingsAnim" Offset="0xCB94" />
+        <Animation Name="gOwlPerchAnim" Offset="0xCDB0" />
+        
+        <!-- Owl Perching DList -->
+        <DList Name="gOwlPerchingLeftWingDL" Offset="0xF220" />
+        <DList Name="gOwlPerchingRightWingDL" Offset="0xF3B0" />
+        <DList Name="gOwlPerchingTailDL" Offset="0xF540" />
+        <DList Name="gOwlPerchingLowerBodyDL" Offset="0xF5E8" />
+        <DList Name="gOwlPerchingUpperBodyDL" Offset="0xF6D0" />
+        <DList Name="gOwlPerchingHeadDL" Offset="0xF840" />
+        <DList Name="gOwlPerchingRightEyebrowDL" Offset="0xFCC0" />
+        <DList Name="gOwlPerchingLeftEyebrowDL" Offset="0xFD78" />
+        <DList Name="gOwlPerchingUpperLeftLegDL" Offset="0xFE30" />
+        <DList Name="gOwlPerchingLowerLeftLegDL" Offset="0xFEF8" />
+        <DList Name="gOwlPerchingLeftTalonDL" Offset="0xFFE8" />
+        <DList Name="gOwlPerchingUpperRightLegDL" Offset="0x10180" />
+        <DList Name="gOwlPerchingLowerRightLegDL" Offset="0x10248" />
+        <DList Name="gOwlPerchingRightTalonDL" Offset="0x10338" />
+        
+        <!-- Owl Perching Limbs -->
+        <Limb Name="gOwlPerchingRootLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_ROOT" Offset="0x104D0" />
+        <Limb Name="gOwlPerchingUpperBodyLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_UPPER_BODY" Offset="0x104DC" />
+        <Limb Name="gOwlPerchingHeadLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_HEAD" Offset="0x104E8" />
+        <Limb Name="gOwlPerchingRightEyebrowLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_RIGHT_EYEBROW" Offset="0x104F4" />
+        <Limb Name="gOwlPerchingLeftEyebrowLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_LEFT_EYEBROW" Offset="0x10500" />
+        <Limb Name="gOwlPerchingLowerBodyLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_LOWER_BODY" Offset="0x1050C" />
+        <Limb Name="gOwlPerchingRightWingLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_RIGHT_WING" Offset="0x10518" />
+        <Limb Name="gOwlPerchingLeftWingLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_LEFT_WING" Offset="0x10524" />
+        <Limb Name="gOwlPerchingUpperLeftLegLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_UPPER_LEFT_LEG" Offset="0x10530" />
+        <Limb Name="gOwlPerchingLowerLeftLegLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_LOWER_LEFT_LEG" Offset="0x1053C" />
+        <Limb Name="gOwlPerchingLeftTalonLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_LEFT_TALON" Offset="0x10548" />
+        <Limb Name="gOwlPerchingUpperRightLegLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_UPPER_RIGHT_LEG" Offset="0x10554" />
+        <Limb Name="gOwlPerchingLowerRightLegLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_LOWER_RIGHT_LEG" Offset="0x10560" />
+        <Limb Name="gOwlPerchingRightTalonLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_RIGHT_TALON" Offset="0x1056C" />
+        <Limb Name="gOwlPerchingTailLimb" Type="Standard" EnumName="OWL_PERCHING_LIMB_TAIL" Offset="0x10578" />
+        
+        <!-- Owl Perching Skeleton -->
+        <Skeleton Name="gOwlPerchingSkel" Type="Flex" LimbType="Standard" LimbNone="OWL_PERCHING_LIMB_NONE" LimbMax="OWL_PERCHING_LIMB_MAX" EnumName="OwlPerchingLimb" Offset="0x105C0" />
     </File>
 </Root>
