@@ -431,13 +431,14 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
 
         elif token.tokenType == TokenType.BRACE_CLOSE:
             if len(exprs) == 0:
-                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                debugPrint(" makeTree: BRACE_CLOSE")
-                debugPrint(f" i: {i}")
-                debugPrint(f" depth: {depth}")
-                debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                debugPrint(f" foundElse: {foundElse}")
-                exit(1)
+                eprint(f"Warning: Braces with empty body at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                # eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                # debugPrint(" makeTree: BRACE_CLOSE")
+                # debugPrint(f" i: {i}")
+                # debugPrint(f" depth: {depth}")
+                # debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                # debugPrint(f" foundElse: {foundElse}")
+                # exit(1)
 
             return exprs
 
@@ -529,10 +530,15 @@ def main():
     parser.add_argument("input", help="Schedule script path", type=Path)
     parser.add_argument("-o", "--output", help="Output path. Will print to stdout if omitted", type=Path)
 
+    debuggingParser = parser.add_argument_group("Debugging options")
+    debuggingParser.add_argument("-p", "--print-tree", help="Prints the processed tree to stdout", action="store_true")
+
     args = parser.parse_args()
 
     inputPath: Path = args.input
     outputPath: Path|None = args.output
+
+    printTree: bool = args.print_tree
 
     if not inputPath.exists():
         eprint(f"Error: Input file '{inputPath}' not found")
@@ -543,6 +549,9 @@ def main():
     tokens = TokenIterator(tokenize(inputContents, str(inputPath)))
     tree = makeTree(tokens, str(inputPath))
     assert tokens.remainingTokens() == 0
+    if printTree:
+        for expr in tree:
+            expr.print()
     output, byteCount = emitMacros(tree)
 
     if outputPath is None:
