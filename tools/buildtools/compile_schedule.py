@@ -10,6 +10,7 @@ import argparse
 import dataclasses
 import enum
 from pathlib import Path
+import re
 from typing import Iterator
 import sys
 
@@ -54,9 +55,10 @@ class TokenType(enum.Enum):
     BRACE_CLOSE = "}"
     ARGS = "(args)"
     NOT = "not"
+    LABEL = "label"
 
     def canBeStartingToken(self) -> bool:
-        if self in { TokenType.ELSE, TokenType.BRACE_OPEN, TokenType.BRACE_CLOSE, TokenType.ARGS, TokenType.NOT }:
+        if self in { TokenType.ELSE, TokenType.BRACE_OPEN, TokenType.BRACE_CLOSE, TokenType.ARGS, TokenType.NOT, TokenType.LABEL }:
             return False
         return True
 
@@ -147,6 +149,9 @@ tokenLiterals: dict[str, TokenType] = {
     "}": TokenType.BRACE_CLOSE,
     "not": TokenType.NOT,
 }
+
+regex_label = re.compile(r"(?P<label>\w+)\s*:")
+regex_identifier = re.compile(r"(?P<identifier>\w+)")
 
 @dataclasses.dataclass
 class Token:
@@ -270,6 +275,7 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
             columnNumber += 1
         else:
             # Look for tokens
+            """
             lineEndIndex = contents.find("\n", i)
             spaceIndex = contents.find(" ", i)
             if lineEndIndex < 0 and spaceIndex < 0:
@@ -289,6 +295,30 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
             yield Token(tokenType, literal, lineNumber, columnNumber)
             columnNumber += len(literal)
             i += len(literal)
+            """
+            # regex_label.match(contents, pos=i)
+            if (reMatch := regex_label.match(contents, pos=i)) is not None:
+                literal = reMatch["label"]
+                tokenType = TokenType.LABEL
+            elif (reMatch := regex_identifier.match(contents, pos=i)) is not None:
+                literal = reMatch["identifier"]
+                tokenType = tokenLiterals.get(literal)
+            else:
+                eprint(f"Error: Unrecognized token found at {filename}:{lineNumber}:{columnNumber}")
+                debugPrint(f" internal index: {i}\n char: {char}")
+                exit(1)
+
+            if tokenType is None:
+                eprint(f"Error: Unrecognized token found '{literal}' at {filename}:{lineNumber}:{columnNumber}")
+                debugPrint(f" internal index: {i}\n char: {char}")
+                exit(1)
+            yield Token(tokenType, literal, lineNumber, columnNumber)
+
+            spanStart, spanEnd = reMatch.span()
+            matchLen = spanEnd - spanStart
+            columnNumber += matchLen
+            i += matchLen
+
             continue
 
         i += 1
@@ -311,6 +341,8 @@ class Expression:
         if self.negated:
             print(f"not ", end="")
         print(f"{self.expr.tokenLiteral}", end="")
+        if self.expr.tokenType == TokenType.LABEL:
+            print(f":", end="")
         if self.args is not None:
             print(f"({self.args.tokenLiteral})", end="")
         if len(self.left) == 0:
@@ -414,7 +446,7 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
             tokens.unget()
             if nextToken.tokenType != TokenType.BRACE_OPEN:
                 # Else with no braces, try to parse it
-                if len(currentExpr.left) == 0 or len(currentExpr.right) != 0:
+                if len(currentExpr.right) != 0:
                     eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
                     debugPrint(" makeTree: BRACE_OPEN foundElse")
                     debugPrint(f" i: {i}")
@@ -440,7 +472,7 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
 
             subExprs = makeTree(tokens, inputPath, depth=depth+1)
             if foundElse:
-                if len(currentExpr.left) == 0 or len(currentExpr.right) != 0:
+                if len(currentExpr.right) != 0:
                     eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
                     debugPrint(" makeTree: BRACE_OPEN foundElse")
                     debugPrint(f" i: {i}")
@@ -450,7 +482,7 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
                     exit(1)
                 currentExpr.right = subExprs
             else:
-                if len(currentExpr.left) != 0 or len(currentExpr.right) != 0:
+                if len(currentExpr.left) != 0:
                     eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
                     debugPrint(" makeTree: BRACE_OPEN not foundElse")
                     debugPrint(f" i: {i}")
@@ -472,6 +504,29 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
                 # exit(1)
 
             return exprs
+
+        elif token.tokenType == TokenType.LABEL:
+            nextToken = tokens.get()
+            tokens.unget()
+            if nextToken is None:
+                eprint(f"Error: label followed by nothing at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(" makeTree: NOT canBeStartingToken")
+                debugPrint(f" i: {i}")
+                debugPrint(f" depth: {depth}")
+                debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                debugPrint(f" foundElse: {foundElse}")
+                exit(1)
+            if not nextToken.tokenType.canBeStartingToken():
+                eprint(f"Error: label followed by not admitted token '{nextToken.tokenLiteral}' at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(" makeTree: NOT canBeStartingToken")
+                debugPrint(f" i: {i}")
+                debugPrint(f" depth: {depth}")
+                debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                debugPrint(f" foundElse: {foundElse}")
+                exit(1)
+            currentExpr = Expression(token)
+            foundElse = False
+            exprs.append(currentExpr)
 
         else:
             eprint("This code should be unreachable")
@@ -521,6 +576,9 @@ def emitMacros(tree: list[Expression], byteCount = 0) -> tuple[str, int]:
     result = ""
 
     for expr in tree:
+        if expr.expr.tokenType == TokenType.LABEL:
+            eprint("Warning: labels are not handled yet")
+            continue
         info = cmdInfos[expr.expr.tokenType]
         currentMacro = f"    /* 0x{byteCount:02X} */ {info.macro}("
 
