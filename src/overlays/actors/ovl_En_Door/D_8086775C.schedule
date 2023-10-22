@@ -1,11 +1,6 @@
-if_week_event_reg_s (WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) {
-label_0x1B:
-    return_none
-} else {
-    if_week_event_reg_s (WEEKEVENTREG_75_20) {
-        goto label_0x1B
-    } else {
-        if_week_event_reg_s (WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) {
+not if_week_event_reg_s (WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) {
+    not if_week_event_reg_s (WEEKEVENTREG_75_20) {
+        if_week_event_reg_s (WEEKEVENTREG_14_04) {
             if_week_event_reg_s (WEEKEVENTREG_59_01) {
                 return_none
             } else {
@@ -20,3 +15,5 @@ label_0x1B:
         }
     }
 }
+
+return_none
