@@ -1581,9 +1581,6 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
     return ret;
 }
 
-// TODO: figure out what to do with this
-#define SCHEDULE_CALC_TIME_ALT(hour, minute) SCHEDULE_CONVERT_TIME((((hour)*60.0f) + (minute)) * (0x10000 / 60 / 24.0f))
-
 s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -1659,10 +1656,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             return sAnjuMsgScript_80B58A44;
         }
 
-        // if ((gSaveContext.save.time - 0x3FFC) < 0x5883) {
-        // if (SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time) < SCHEDULE_CONVERT_TIME_ALT(CLOCK_TIME(14,
-        // 18))) {
-        if (SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time) < SCHEDULE_CALC_TIME_ALT(14, 18)) {
+        if (SCHEDULE_CONVERT_TIME(gSaveContext.save.time) < SCHEDULE_TIME(14, 18)) {
             return sAnjuMsgScript_80B58ABC;
         }
 
