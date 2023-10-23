@@ -172,6 +172,7 @@ regex_individualTokens = re.compile(r"(?P<individual>[\{\}])")
 class Token:
     tokenType: TokenType
     tokenLiteral: str
+    filename: str
     lineNumber: int
     columnNumber: int
 
@@ -299,7 +300,7 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
                 debugPrint(f" internal index: {i}\n char: {char}")
                 exit(1)
             parenContents = contents[i+1:subIndex]
-            yield Token(TokenType.ARGS, parenContents, lineNumberStart, columnNumberStart)
+            yield Token(TokenType.ARGS, parenContents, filename, lineNumberStart, columnNumberStart)
 
             i = subIndex + 1
             columnNumber += 1
@@ -330,7 +331,7 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
                 eprint(f"Error: Unrecognized token found '{literal}' at {filename}:{lineNumber}:{columnNumber}")
                 debugPrint(f" internal index: {i}\n char: {char}")
                 exit(1)
-            yield Token(tokenType, literal, lineNumber, columnNumber)
+            yield Token(tokenType, literal, filename, lineNumber, columnNumber)
 
             spanStart, spanEnd = reMatch.span()
             matchLen = spanEnd - spanStart
@@ -605,7 +606,7 @@ class LinearExpression:
 
     def getTargetOffset(self, linearizedExprs: list[LinearExpression]) -> int:
         if self.branchTarget is None:
-            eprint(f"Internal error: no target offset for expression? at :{self.expr.lineNumber}:{self.expr.columnNumber}")
+            eprint(f"Internal error: no target offset for expression? at {self.expr.filename}:{self.expr.lineNumber}:{self.expr.columnNumber}")
             debugPrint(f" getTargetOffset")
             exit(1)
         if isinstance(self.branchTarget, int):
@@ -614,7 +615,7 @@ class LinearExpression:
             if linExpr.labelName == self.branchTarget:
                 return linExpr.offset
 
-        eprint(f"Error: label name {self.branchTarget} not found, used at :{self.expr.lineNumber}:{self.expr.columnNumber}")
+        eprint(f"Error: label name {self.branchTarget} not found, used at {self.expr.filename}:{self.expr.lineNumber}:{self.expr.columnNumber}")
         debugPrint(f" getTargetOffset")
         exit(1)
 
@@ -651,10 +652,10 @@ def linearizeTree(tree: list[Expression], byteCount = 0) -> tuple[list[LinearExp
             sub = []
             branchExpr = right[0]
             if branchExpr.args is None:
-                eprint(f"Error: branch command without arguments? at :{branchExpr.expr.lineNumber}:{branchExpr.expr.columnNumber}")
+                eprint(f"Error: branch command without arguments? at {branchExpr.expr.filename}:{branchExpr.expr.lineNumber}:{branchExpr.expr.columnNumber}")
                 debugPrint(f" linearizeTree")
                 exit(1)
-            targetOffset = branchExpr.args.tokenLiteral
+            targetOffset = branchExpr.args.tokenLiteral.strip()
         else:
             sub, byteCount = linearizeTree(right, byteCount)
             subResults += sub
@@ -669,7 +670,7 @@ def linearizeTree(tree: list[Expression], byteCount = 0) -> tuple[list[LinearExp
 
     return result, byteCount
 
-def emitLinearizedMacros(linearizedExprs: list[LinearExpression], byteCount: int) -> str:
+def emitLinearizedMacros(linearizedExprs: list[LinearExpression], byteCount: int, debuggingLevel: int) -> str:
     result = ""
 
     offsetWidth = len(f"{byteCount:X}")
@@ -687,7 +688,12 @@ def emitLinearizedMacros(linearizedExprs: list[LinearExpression], byteCount: int
                 currentMacro += f"{linExpr.args.tokenLiteral}"
             if linExpr.expr.tokenType.isBranch():
                 currentMacro += f", 0x{linExpr.getTargetOffset(linearizedExprs):0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
-        currentMacro += "),\n"
+        currentMacro += "),"
+
+        if debuggingLevel >= 1:
+            currentMacro += f" /* {linExpr.expr.filename}:{linExpr.expr.lineNumber}:{linExpr.expr.columnNumber} */"
+
+        currentMacro += "\n"
 
         result += currentMacro
 
@@ -698,14 +704,17 @@ def main():
     parser = argparse.ArgumentParser(description="")
     parser.add_argument("input", help="Schedule script path", type=Path)
     parser.add_argument("-o", "--output", help="Output path. Will print to stdout if omitted", type=Path)
+    parser.add_argument("-g", type=int, nargs="?", const=1, default=0, dest="debuggingLevel", metavar="level", help="Emit debugging information on the generated macros. Level 0 means no debugging information. Passing no level at all implies level 1. Defaults to level 0")
 
-    debuggingParser = parser.add_argument_group("Debugging options")
+    debuggingParser = parser.add_argument_group("Compiler debugging options")
     debuggingParser.add_argument("-p", "--print-tree", help="Prints the processed tree to stdout", action="store_true")
 
     args = parser.parse_args()
 
     inputPath: Path = args.input
     outputPath: Path|None = args.output
+
+    debuggingLevel: int = args.debuggingLevel
 
     printTree: bool = args.print_tree
 
@@ -725,7 +734,7 @@ def main():
             expr.print()
 
     linearizedExprs, byteCount = linearizeTree(tree)
-    output = emitLinearizedMacros(linearizedExprs, byteCount)
+    output = emitLinearizedMacros(linearizedExprs, byteCount, debuggingLevel)
 
     if outputPath is None:
         print(output)
