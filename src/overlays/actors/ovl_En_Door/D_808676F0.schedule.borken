@@ -7,7 +7,8 @@ if_day_s (3) {
     }
 } else {
     if_time_range_s (10, 0, 20, 0) {
-        goto label_0x8
+        //goto label_0x8
+        branch (label_0x8)
     }
 }
 //label_0xF:

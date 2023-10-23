@@ -3,20 +3,21 @@ if_before_time_s (9, 0) {
 } else {
     if_since_time_s (12, 0) {
         if_day_s (1) {
-            /* 0x0C */ SCHEDULE_CMD_BRANCH_S(0x0),
+            branch (label_0x0E)
 
+            label_0x0E:
             if_since_time_s (13, 0) {
                 if_since_time_s (15, 0) {
                     if_since_time_s (0, 0) {
                         return_s (9)
                     } else {
-                        goto label_0x1C
+                        branch (label_0x1C)
                     }
                 } else {
-                    goto label_0x1D
+                    branch (label_0x1D)
                 }
             } else {
-                goto label_0x1C
+                branch (label_0x1C)
             }
 
         label_0x1C:
@@ -32,13 +33,13 @@ if_before_time_s (9, 0) {
                             if_since_time_s (0, 0) {
                                 return_s (9)
                             } else {
-                                goto label_0x1C
+                                branch (label_0x1C)
                             }
                         } else {
-                            goto label_0x1D
+                            branch (label_0x1D)
                         }
                     } else {
-                        goto label_0x1C
+                        branch (label_0x1C)
                     }
                 } else {
                     if_before_time_s (13, 0) {
@@ -56,14 +57,14 @@ if_before_time_s (9, 0) {
                             return_none
                         }
                     } else {
-                        goto label_0x1D
+                        branch (label_0x1D)
                     }
                 } else {
-                    goto label_0x1C
+                    branch (label_0x1C)
                 }
             }
         }
     } else {
-        goto label_0x1D
+        branch (label_0x1D)
     }
 }
