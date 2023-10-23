@@ -459,7 +459,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     this->player.heldItemId = ITEM_OCARINA_OF_TIME;
 
     Player_SetModelGroup(&this->player, 3);
-    play->playerInit(&this->player, play, &object_test3_Skel_00F7EC);
+    play->playerInit(&this->player, play, &gKafeiSkel);
 
     Effect_Add(play, &this->player.meleeWeaponEffectIndex[0], EFFECT_BLURE2, 0, 0, &sBlureInit);
     Effect_Add(play, &this->player.meleeWeaponEffectIndex[1], EFFECT_BLURE2, 0, 0, &sBlureInit);
@@ -1097,7 +1097,7 @@ s32 D_80A418C8 = false;
 s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTest3* this = THIS;
 
-    if (limbIndex == OBJECT_TEST3_LIMB_01) {
+    if (limbIndex == KAFEI_LIMB_ROOT) {
         D_80A41D6C = &this->player.bodyPartsPos[-1];
         if (!(this->player.skelAnime.moveFlags & ANIM_FLAG_4) || (this->player.skelAnime.moveFlags & ANIM_FLAG_1)) {
             pos->x *= this->player.ageProperties->unk_08;
@@ -1123,11 +1123,11 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         if (D_80A418C8) {
             *dList = NULL;
         }
-        if (limbIndex == OBJECT_TEST3_LIMB_0B) {
+        if (limbIndex == KAFEI_LIMB_HEAD) {
             rot->x += this->player.headLimbRot.z;
             rot->y -= this->player.headLimbRot.y;
             rot->z += this->player.headLimbRot.x;
-        } else if (limbIndex == OBJECT_TEST3_LIMB_0A) {
+        } else if (limbIndex == KAFEI_LIMB_UPPER_ROOT) {
             s32 requiredScopeTemp;
 
             if (this->player.unk_AA8 != 0) {
@@ -1155,7 +1155,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
     if (*dList2 != NULL) {
         Matrix_MultZero(D_80A41D6C);
     }
-    if (limbIndex == OBJECT_TEST3_LIMB_10) {
+    if (limbIndex == KAFEI_LIMB_LEFT_HAND) {
         MtxF curMtxF;
         Actor* leftHandActor;
 
@@ -1165,7 +1165,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             if (this->player.stateFlags3 & PLAYER_STATE3_20000000) {
                 OPEN_DISPS(play->state.gfxCtx);
 
-                gSPDisplayList(POLY_OPA_DISP++, object_test3_DL_00EDD0);
+                gSPDisplayList(POLY_OPA_DISP++, gKafeiSunMaskDL);
 
                 CLOSE_DISPS(play->state.gfxCtx);
             }
@@ -1184,7 +1184,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             func_80126B8C(play, &this->player);
         }
 
-    } else if (limbIndex == OBJECT_TEST3_LIMB_13) {
+    } else if (limbIndex == KAFEI_LIMB_RIGHT_HAND) {
         Actor* leftHandActor = this->player.heldActor;
 
         if (leftHandActor != NULL) {
@@ -1195,7 +1195,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             leftHandActor->world.pos.z =
                 (this->player.bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z + this->player.leftHandWorld.pos.z) / 2.0f;
         }
-    } else if (limbIndex == OBJECT_TEST3_LIMB_0B) {
+    } else if (limbIndex == KAFEI_LIMB_HEAD) {
         Actor* actor730 = this->player.lockOnActor;
 
         if ((*dList1 != NULL) && this->player.currentMask && !(this->player.stateFlags2 & PLAYER_STATE2_1000000)) {
@@ -1219,7 +1219,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
 
             Matrix_MultVec3f(&D_80A418CC, &this->player.actor.focus.pos);
         }
-    } else if (limbIndex == OBJECT_TEST3_LIMB_15) {
+    } else if (limbIndex == KAFEI_LIMB_TORSO) {
         if (D_80A41D60 || CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_PENDANT_OF_MEMORIES) ||
             (INV_CONTENT(ITEM_PENDANT_OF_MEMORIES) == ITEM_PENDANT_OF_MEMORIES) ||
             (this->player.getItemDrawIdPlusOne - 1 == GID_PENDANT_OF_MEMORIES)) {
@@ -1227,7 +1227,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
         } else {
             OPEN_DISPS(play->state.gfxCtx);
 
-            gSPDisplayList(POLY_OPA_DISP++, object_test3_DL_00CB60);
+            gSPDisplayList(POLY_OPA_DISP++, gKafeiPendantOfMemoriesDL);
 
             CLOSE_DISPS(play->state.gfxCtx);
         }
@@ -1237,15 +1237,15 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
 }
 
 static TexturePtr sEyeTextures[] = {
-    object_test3_Tex_000DC0, object_test3_Tex_003680, object_test3_Tex_003E80, object_test3_Tex_004680,
-    object_test3_Tex_004E80, object_test3_Tex_005680, object_test3_Tex_005E80, object_test3_Tex_006680,
+    gKafeiEyesOpenTex,     gKafeiEyesHalfTex,   gKafeiEyesClosedTex,   gKafeiEyesRollRightTex,
+    gKafeiEyesRollLeftTex, gKafeiEyesRollUpTex, gKafeiEyesRollDownTex, object_test3_Tex_006680,
 };
 
 static TexturePtr sMouthTextures[] = {
-    object_test3_Tex_0009C0,
-    object_test3_Tex_006E80,
-    object_test3_Tex_007280,
-    object_test3_Tex_007680,
+    gKafeiMouthClosedTex,
+    gKafeiMouthTeethTex,
+    gKafeiMouthAngryTex,
+    gKafeiMouthHappyTex,
 };
 
 typedef struct {
@@ -1261,8 +1261,8 @@ static KafeiFace sFaceExpressions[] = {
 void EnTest3_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnTest3* this = THIS;
-    s32 eyeTexIndex = (this->player.skelAnime.jointTable[OBJECT_TEST3_LIMB_MAX].x & 0xF) - 1;
-    s32 mouthTexIndex = ((this->player.skelAnime.jointTable[OBJECT_TEST3_LIMB_MAX].x >> 4) & 0xF) - 1;
+    s32 eyeTexIndex = GET_EYE_INDEX_FROM_JOINT_TABLE(this->player.skelAnime.jointTable);
+    s32 mouthTexIndex = GET_MOUTH_INDEX_FROM_JOINT_TABLE(this->player.skelAnime.jointTable);
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
