@@ -824,7 +824,7 @@ s32 func_80A3FE20(EnTest3* this, PlayState* play) {
 s32 func_80A3FF10(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
     static Vec3f D_80A418BC = { -420.0f, 210.0f, -162.0f };
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_51_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED)) {
         D_80A41D68 = 2;
         Math_Vec3f_Copy(&this->player.actor.world.pos, &D_80A418BC);
         Math_Vec3f_Copy(&this->player.actor.home.pos, &D_80A418BC);
@@ -856,7 +856,7 @@ s32 func_80A3FFD0(EnTest3* this, PlayState* play2) {
             D_80A41D68 = 2;
         }
     } else {
-        SET_WEEKEVENTREG(WEEKEVENTREG_51_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED);
         play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_110);
     }
     return false;

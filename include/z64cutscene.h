@@ -482,7 +482,7 @@ typedef enum {
     /* 0x22A */ CS_CMD_ACTOR_CUE_554,
     /* 0x22B */ CS_CMD_ACTOR_CUE_555,
     /* 0x22C */ CS_CMD_ACTOR_CUE_556,
-    /* 0x22D */ CS_CMD_ACTOR_CUE_557,
+    /* 0x22D */ CS_CMD_ACTOR_CUE_557, // Couple's Mask cs, Anju cues
     /* 0x22E */ CS_CMD_ACTOR_CUE_558,
     /* 0x22F */ CS_CMD_ACTOR_CUE_559,
     /* 0x230 */ CS_CMD_ACTOR_CUE_560,
