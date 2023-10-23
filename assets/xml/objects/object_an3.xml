@@ -2,7 +2,7 @@
     <!-- Assets for Anju sweeping on the third day -->
     <File Name="object_an3" Segment="6">
         <!-- Empty -->
-        <DList Name="object_an3_DL_000300" Offset="0x300" />
+        <DList Name="gAnju3EmptyDL" Offset="0x300" />
 
         <!-- Broom -->
         <DList Name="gAnju3BroomDL" Offset="0x308" /> <!-- Original name is "an_hoki_model" ("broom") -->

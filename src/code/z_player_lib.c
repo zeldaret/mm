@@ -2515,7 +2515,7 @@ u8 D_801C0B1C[] = {
 
 Gfx* D_801C0B20[] = {
     object_mask_truth_DL_0001A0,    // PLAYER_MASK_TRUTH
-    gKafeiMaskDL,                   // PLAYER_MASK_KAFEIS_MASK
+    gKafeisMaskDL,                  // PLAYER_MASK_KAFEIS_MASK
     object_mask_yofukasi_DL_000490, // PLAYER_MASK_ALL_NIGHT
     object_mask_rabit_DL_000610,    // PLAYER_MASK_BUNNY
     object_mask_ki_tan_DL_0004A0,   // PLAYER_MASK_KEATON

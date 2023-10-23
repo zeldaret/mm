@@ -926,29 +926,29 @@ EnDoor* EnAn_FindDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) 
  */
 typedef enum EnAnAnimation {
     /* -1 */ ENAN_ANIM_NONE = -1,
-    /*  0 */ ENAN_ANIM_HOLDING_HANDS,
+    /*  0 */ ENAN_ANIM_HOLD_HANDS,
     /*  1 */ ENAN_ANIM_IDLE,
     /*  2 */ ENAN_ANIM_IDLE_MORPH,
-    /*  3 */ ENAN_ANIM_BOWING,
-    /*  4 */ ENAN_ANIM_BOWING_MORPH,
+    /*  3 */ ENAN_ANIM_BOW,
+    /*  4 */ ENAN_ANIM_BOW_MORPH,
     /*  5 */ ENAN_ANIM_SURPRISED,
-    /*  6 */ ENAN_ANIM_LOOKING_UP_RELIEVED,
+    /*  6 */ ENAN_ANIM_LOOK_UP_RELIEVED,
     /*  7 */ ENAN_ANIM_WALK,
     /*  8 */ ENAN_ANIM_WALK2, // Duplicate of ENAN_ANIM_WALK
     /*  9 */ ENAN_ANIM_SIT,
     /* 10 */ ENAN_ANIM_SIT_MORPH,
-    /* 11 */ ENAN_ANIM_SITTING_IN_DISBELIEVE,
-    /* 12 */ ENAN_ANIM_COOKING,
-    /* 13 */ ENAN_ANIM_TASTING,
-    /* 14 */ ENAN_ANIM_TASTING_END,
-    /* 15 */ ENAN_ANIM_WAITING_WITH_TRAY,
-    /* 16 */ ENAN_ANIM_WALKING_WITH_TRAY,
+    /* 11 */ ENAN_ANIM_SITTING_IN_DISBELIEF,
+    /* 12 */ ENAN_ANIM_COOK,
+    /* 13 */ ENAN_ANIM_TASTE,
+    /* 14 */ ENAN_ANIM_TASTE_END,
+    /* 15 */ ENAN_ANIM_WAIT_WITH_TRAY,
+    /* 16 */ ENAN_ANIM_WALK_WITH_TRAY,
 
     /* 17 */ ENAN_ANIMOBJ_AN2,
     /* 17 */ ENAN_ANIM_UMBRELLA_IDLE = ENAN_ANIMOBJ_AN2,
     /* 18 */ ENAN_ANIM_UMBRELLA_WALK,
     /* 19 */ ENAN_ANIM_UMBRELLA_SIT,
-    /* 20 */ ENAN_ANIM_UMBRELLA_CRYING,
+    /* 20 */ ENAN_ANIM_UMBRELLA_CRY,
 
     /* 21 */ ENAN_ANIMOBJ_AN3,
     /* 21 */ ENAN_ANIM_BROOM_IDLE = ENAN_ANIMOBJ_AN3,
@@ -957,44 +957,44 @@ typedef enum EnAnAnimation {
     /* 24 */ ENAN_ANIM_24, //! @bug See note at `sAnimationInfo`
 
     /* 25 */ ENAN_ANIMOBJ_AN4,
-    /* 25 */ ENAN_ANIM_25 = ENAN_ANIMOBJ_AN4,
-    /* 26 */ ENAN_ANIM_26,
-    /* 27 */ ENAN_ANIM_27,
-    /* 28 */ ENAN_ANIM_28,
-    /* 29 */ ENAN_ANIM_29,
-    /* 30 */ ENAN_ANIM_30,
-    /* 31 */ ENAN_ANIM_31,
-    /* 32 */ ENAN_ANIM_32,
-    /* 33 */ ENAN_ANIM_33,
-    /* 34 */ ENAN_ANIM_SITTING_RAISE_FACE,
-    /* 35 */ ENAN_ANIM_35,
+    /* 25 */ ENAN_ANIM_MASK_STAND_LOOP = ENAN_ANIMOBJ_AN4,
+    /* 26 */ ENAN_ANIM_MASK_KNEEL,
+    /* 27 */ ENAN_ANIM_MASK_KNEEL_LOOP,
+    /* 28 */ ENAN_ANIM_HUG,
+    /* 29 */ ENAN_ANIM_HUG_LOOP,
+    /* 30 */ ENAN_ANIM_HUG_RELEASE,
+    /* 31 */ ENAN_ANIM_HUG_RELEASE_LOOP,
+    /* 32 */ ENAN_ANIM_COMBINE_MASKS_1,
+    /* 33 */ ENAN_ANIM_COMBINE_MASKS_2,
+    /* 34 */ ENAN_ANIM_LOOK_UP,
+    /* 35 */ ENAN_ANIM_LOOK_UP_LOOP,
     /* 36 */ ENAN_ANIM_MAX
 } EnAnAnimation;
 
 static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
-    { &gAnju1HoldingHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // ENAN_ANIM_HOLDING_HANDS
+    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // ENAN_ANIM_HOLD_HANDS
     { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_IDLE
     { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },               // ENAN_ANIM_IDLE_MORPH
-    { &gAnju1BowingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },              // ENAN_ANIM_BOWING
-    { &gAnju1BowingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },             // ENAN_ANIM_BOWING_MORPH
+    { &gAnju1BowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },              // ENAN_ANIM_BOW
+    { &gAnju1BowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },             // ENAN_ANIM_BOW_MORPH
     { &gAnju1SurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENAN_ANIM_SURPRISED
-    { &gAnju1LookingUpRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // ENAN_ANIM_LOOKING_UP_RELIEVED
+    { &gAnju1LookUpRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // ENAN_ANIM_LOOK_UP_RELIEVED
     { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_WALK
     { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_WALK2
     { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                 // ENAN_ANIM_SIT
     { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },                // ENAN_ANIM_SIT_MORPH
-    { &gAnju1SittingInDisbelieveAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_SITTING_IN_DISBELIEVE
-    { &gAnju1CookingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // ENAN_ANIM_COOKING
-    { &gAnju1TastingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // ENAN_ANIM_TASTING
-    { &gAnju1TastingEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // ENAN_ANIM_TASTING_END
-    { &gAnju1WaitingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_WAITING_WITH_TRAY
-    { &gAnju1WalkingWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_WALKING_WITH_TRAY
+    { &gAnju1SittingInDisbeliefAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_SITTING_IN_DISBELIEF
+    { &gAnju1CookAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // ENAN_ANIM_COOK
+    { &gAnju1TasteAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // ENAN_ANIM_TASTE
+    { &gAnju1TasteEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // ENAN_ANIM_TASTE_END
+    { &gAnju1WaitWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_WAIT_WITH_TRAY
+    { &gAnju1WalkWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_WALK_WITH_TRAY
 
     // ENAN_ANIMOBJ_AN2
     { &gAnju2UmbrellaIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENAN_ANIM_UMBRELLA_IDLE
     { &gAnju2UmbrellaWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENAN_ANIM_UMBRELLA_WALK
     { &gAnju2UmbrellaSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENAN_ANIM_UMBRELLA_SIT
-    { &gAnju2UmbrellaCryingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_UMBRELLA_CRYING
+    { &gAnju2UmbrellaCryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_UMBRELLA_CRY
 
     // ENAN_ANIMOBJ_AN3
     { &gAnju3BroomIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_BROOM_IDLE
@@ -1004,17 +1004,17 @@ static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
     { &gAnju2UmbrellaSitAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_24
 
     // ENAN_ANIMOBJ_AN4
-    { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_25
-    { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_26
-    { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_27
-    { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_28
-    { &object_an4_Anim_002550, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_29
-    { &object_an4_Anim_00353C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_30
-    { &object_an4_Anim_004498, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_31
-    { &object_an4_Anim_0060B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_32
-    { &object_an4_Anim_00041C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_33
-    { &gAnju4SittingRaiseFaceAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_SITTING_RAISE_FACE
-    { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_35
+    { &gAnju4MaskStandLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_MASK_STAND_LOOP
+    { &gAnju4MaskKneelAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_MASK_KNEEL
+    { &gAnju4MaskKneelLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_MASK_KNEEL_LOOP
+    { &gAnju4HugAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_HUG
+    { &gAnju4HugLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_HUG_LOOP
+    { &gAnju4HugReleaseAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_HUG_RELEASE
+    { &gAnju4HugReleaseLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_HUG_RELEASE_LOOP
+    { &gAnju4CombineMasks1Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_COMBINE_MASKS_1
+    { &gAnju4CombineMasks2Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_COMBINE_MASKS_2
+    { &gAnju4LookUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_LOOK_UP
+    { &gAnju4LookUpLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_LOOK_UP_LOOP
 };
 
 s32 EnAn_UpdateSkel(EnAn* this, PlayState* play) {
@@ -1131,7 +1131,7 @@ typedef enum EnAnEyes {
     /* 1 */ ENAN_EYES_HALF1,
     /* 2 */ ENAN_EYES_CLOSED,
     /* 3 */ ENAN_EYES_HALF2,
-    /* 4 */ ENAN_EYES_COMFORTING,
+    /* 4 */ ENAN_EYES_COMFORT,
     /* 5 */ ENAN_EYES_SAD,
     /* 6 */ ENAN_EYES_RELIEVED_CLOSED,
     /* 7 */ ENAN_EYES_MAX
@@ -1195,15 +1195,15 @@ void EnAn_UpdateFace(EnAn* this) {
                     break;
 
                 case ENAN_FACE_8:
-                    if ((this->eyeTexIndex == ENAN_EYES_COMFORTING) || (this->eyeTexIndex == ENAN_EYES_CLOSED)) {
+                    if ((this->eyeTexIndex == ENAN_EYES_COMFORT) || (this->eyeTexIndex == ENAN_EYES_CLOSED)) {
                         skipBlink = true;
-                        this->eyeTexIndex = ENAN_EYES_COMFORTING;
+                        this->eyeTexIndex = ENAN_EYES_COMFORT;
                     }
                     break;
             }
 
             if (!skipBlink) {
-                if ((this->eyeTexIndex == ENAN_EYES_COMFORTING) || (this->eyeTexIndex == ENAN_EYES_SAD)) {
+                if ((this->eyeTexIndex == ENAN_EYES_COMFORT) || (this->eyeTexIndex == ENAN_EYES_SAD)) {
                     this->eyeTexIndex = ENAN_EYES_OPEN;
                 } else if (this->eyeTexIndex == ENAN_EYES_RELIEVED_CLOSED) {
                     this->eyeTexIndex = ENAN_EYES_HALF1;
@@ -1278,7 +1278,7 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, gKafeiMaskDL);
+                gSPDisplayList(POLY_OPA_DISP++, gKafeisMaskDL);
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
             }
             break;
@@ -1531,7 +1531,7 @@ s32 EnAn_MsgEvent_Cooking(Actor* thisx, PlayState* play) {
 
     switch (this->msgEventState) {
         case 0x0:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_TASTING);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_TASTE);
             this->msgEventState++;
             break;
 
@@ -1544,7 +1544,7 @@ s32 EnAn_MsgEvent_Cooking(Actor* thisx, PlayState* play) {
             break;
 
         case 0x2:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_TASTING_END);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_TASTE_END);
             this->msgEventState++;
             break;
     }
@@ -1572,7 +1572,7 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
         label:
             this->stateFlags &= ~(ENAN_STATE_ENGAGED | ENAN_STATE_DRAW_KAFEI_MASK);
             this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRYING);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRY);
             ret = true;
             this->msgEventState++;
             break;
@@ -1864,11 +1864,11 @@ s32 EnAn_ChooseAnimAfterTalking(EnAn* this, PlayState* play) {
             break;
 
         case ANJU_SCH_COOKING:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_COOKING);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_COOK);
             break;
 
         case ANJU_SCH_GIVE_LUNCH_TO_GRANNY:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_WAIT_WITH_TRAY);
             break;
 
         case ANJU_SCH_WALKING_47:
@@ -1883,8 +1883,8 @@ s32 EnAn_ChooseAnimAfterTalking(EnAn* this, PlayState* play) {
             break;
 
         default:
-            if (this->animIndex == ENAN_ANIM_WAITING_WITH_TRAY) {
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
+            if (this->animIndex == ENAN_ANIM_WAIT_WITH_TRAY) {
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK_WITH_TRAY);
             }
             if (this->animIndex == ENAN_ANIM_UMBRELLA_IDLE) {
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_WALK);
@@ -1900,7 +1900,7 @@ s32 EnAn_ChooseAnimAfterTalking(EnAn* this, PlayState* play) {
 
 void EnAn_DialogueFunc_80B556F8(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_LOOKING_UP_RELIEVED);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_LOOK_UP_RELIEVED);
         this->stateFlags &= ~ENAN_STATE_ENGAGED;
         this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
         this->dialogueFuncState++;
@@ -1914,7 +1914,7 @@ void EnAn_DialogueFunc_80B556F8(EnAn* this, PlayState* play) {
 
 void EnAn_DialogueFunc_80B557AC(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_BOWING);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_BOW);
         this->stateFlags &= ~ENAN_STATE_ENGAGED;
         this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
         this->dialogueFuncState++;
@@ -1928,7 +1928,7 @@ void EnAn_DialogueFunc_80B557AC(EnAn* this, PlayState* play) {
 
 void EnAn_DialogueFunc_80B55860(EnAn* this, PlayState* play) {
     if (this->dialogueFuncState == 0) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_BOWING_MORPH);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_BOW_MORPH);
         this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
         this->stateFlags &= ~ENAN_STATE_ENGAGED;
         this->dialogueFuncState++;
@@ -1969,7 +1969,7 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
                     break;
 
                 case 0x28C6: // "Don't talk to me or I'll drop this plate"
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_WAIT_WITH_TRAY);
                     break;
 
                 case 0x28F5: // "The town will be crushed by the moon. Forget about the letter"
@@ -1982,10 +1982,10 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
                     break;
 
                 case 0x28EB: // "I'm afraid to meet him..."
-                    if (this->animIndex != ENAN_ANIM_UMBRELLA_CRYING) {
+                    if (this->animIndex != ENAN_ANIM_UMBRELLA_CRY) {
                         this->stateFlags &= ~(ENAN_STATE_ENGAGED | ENAN_STATE_DRAW_KAFEI_MASK);
                         this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
-                        EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRYING);
+                        EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRY);
                     }
                     break;
 
@@ -2083,8 +2083,8 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
                 case 0x28F4: // "But he said in the letter he'll come back"
                 case 0x28F6: // "Mother thank you"
                 default:
-                    if (this->animIndex == ENAN_ANIM_WALKING_WITH_TRAY) {
-                        EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
+                    if (this->animIndex == ENAN_ANIM_WALK_WITH_TRAY) {
+                        EnAn_ChangeAnim(this, play, ENAN_ANIM_WAIT_WITH_TRAY);
                     }
                     if (this->animIndex == ENAN_ANIM_UMBRELLA_WALK) {
                         EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_IDLE);
@@ -2329,7 +2329,7 @@ s32 EnAn_ProcessSchedule_GiveLunchToGranny(EnAn* this, PlayState* play, Schedule
     s32 ret = false;
 
     if (func_80B55D98(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_NB)) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_WAITING_WITH_TRAY);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_WAIT_WITH_TRAY);
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         ret = true;
 
@@ -2398,7 +2398,7 @@ s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* sched
                 case ANJU_SCH_DOOR_27:
                 case ANJU_SCH_DOOR_28:
                     this->stateFlags |= ENAN_STATE_DRAW_TRAY | ENAN_STATE_UPDATE_EYES;
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK_WITH_TRAY);
                     break;
 
                 case ANJU_SCH_DOOR_36:
@@ -2492,7 +2492,7 @@ s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* sc
                 /* fallthrough */
             case ANJU_SCH_WALKING_44:
             case ANJU_SCH_WALKING_45:
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_WALKING_WITH_TRAY);
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK_WITH_TRAY);
                 this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 this->stateFlags |= ENAN_STATE_DRAW_TRAY;
                 break;
@@ -2630,7 +2630,7 @@ s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* s
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
 
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
-                    EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRYING);
+                    EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRY);
                     this->stateFlags |= ENAN_STATE_IGNORE_GRAVITY;
                     this->actor.world.rot.y += 0x7FF8;
                     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -2646,7 +2646,7 @@ s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* s
                 break;
 
             case ANJU_SCH_COOKING:
-                EnAn_ChangeAnim(this, play, ENAN_ANIM_COOKING);
+                EnAn_ChangeAnim(this, play, ENAN_ANIM_COOK);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 this->stateFlags |= ENAN_STATE_DRAW_CHOPSTICKS;
@@ -2668,7 +2668,7 @@ s32 EnAn_ProcessSchedule_Ranch(EnAn* this, PlayState* play, ScheduleOutput* sche
     Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
 
     if (scheduleOutput->result == ANJU_SCH_RANCH) {
-        EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_IN_DISBELIEVE);
+        EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_IN_DISBELIEF);
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
         this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
@@ -2698,7 +2698,7 @@ s32 EnAn_ProcessSchedule_StaffRoom(EnAn* this, PlayState* play, ScheduleOutput* 
             break;
 
         case ANJU_SCH_TALKING_WITH_MOM:
-            EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_IN_DISBELIEVE);
+            EnAn_ChangeAnim(this, play, ENAN_ANIM_SITTING_IN_DISBELIEF);
             this->savedFaceIndex = ENAN_FACE_5;
             this->faceIndex = ENAN_FACE_5;
             this->eyeTimer = 8;
@@ -2718,7 +2718,7 @@ s32 EnAn_ProcessSchedule_WithKafei(EnAn* this, PlayState* play, ScheduleOutput* 
 
     Math_Vec3s_Copy(&this->actor.shape.rot, &D_80B58EA4);
     Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
-    EnAn_ChangeAnim(this, play, ENAN_ANIM_HOLDING_HANDS);
+    EnAn_ChangeAnim(this, play, ENAN_ANIM_HOLD_HANDS);
     SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
 
@@ -3219,15 +3219,15 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
 void EnAn_HandleCouplesMaskCutscene(EnAn* this, PlayState* play) {
     s32 animIds[] = {
         /* 0 */ 0, // no cue
-        /* 1 */ ENAN_ANIM_SITTING_IN_DISBELIEVE,
-        /* 2 */ ENAN_ANIM_SITTING_RAISE_FACE,
-        /* 3 */ ENAN_ANIM_25,
-        /* 4 */ ENAN_ANIM_26,
-        /* 5 */ ENAN_ANIM_28,
-        /* 6 */ ENAN_ANIM_30,
-        /* 7 */ ENAN_ANIM_32,
-        /* 8 */ ENAN_ANIM_33,
-        /* 9 */ ENAN_ANIM_HOLDING_HANDS,
+        /* 1 */ ENAN_ANIM_SITTING_IN_DISBELIEF,
+        /* 2 */ ENAN_ANIM_LOOK_UP,
+        /* 3 */ ENAN_ANIM_MASK_STAND_LOOP,
+        /* 4 */ ENAN_ANIM_MASK_KNEEL,
+        /* 5 */ ENAN_ANIM_HUG,
+        /* 6 */ ENAN_ANIM_HUG_RELEASE,
+        /* 7 */ ENAN_ANIM_COMBINE_MASKS_1,
+        /* 8 */ ENAN_ANIM_COMBINE_MASKS_2,
+        /* 9 */ ENAN_ANIM_HOLD_HANDS,
     };
     s32 pad;
 
@@ -3252,8 +3252,8 @@ void EnAn_HandleCouplesMaskCutscene(EnAn* this, PlayState* play) {
             EnAn_ChangeAnim(this, play, animIds[cueId]);
         }
 
-        if ((this->animIndex == ENAN_ANIM_26) || (this->animIndex == ENAN_ANIM_28) ||
-            (this->animIndex == ENAN_ANIM_30) || (this->animIndex == ENAN_ANIM_SITTING_RAISE_FACE)) {
+        if ((this->animIndex == ENAN_ANIM_MASK_KNEEL) || (this->animIndex == ENAN_ANIM_HUG) ||
+            (this->animIndex == ENAN_ANIM_HUG_RELEASE) || (this->animIndex == ENAN_ANIM_LOOK_UP)) {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 EnAn_ChangeAnim(this, play, this->animIndex + 1);
             }
@@ -3869,7 +3869,7 @@ void EnAn_Draw(Actor* thisx, PlayState* play) {
             gAnju1EyeHalfTex,           // ENAN_EYES_HALF1
             gAnju1EyeClosedTex,         // ENAN_EYES_CLOSED
             gAnju1EyeHalfTex,           // ENAN_EYES_HALF2
-            gAnju1EyeComfortingTex,     // ENAN_EYES_COMFORTING
+            gAnju1EyeComfortTex,     // ENAN_EYES_COMFORT
             gAnju1EyeSadTex,            // ENAN_EYES_SAD
             gAnju1EyeRelievedClosedTex, // ENAN_EYES_RELIEVED_CLOSED
         };
