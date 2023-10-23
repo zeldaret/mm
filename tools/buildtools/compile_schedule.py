@@ -48,6 +48,7 @@ class TokenType(enum.Enum):
     IF_AFTERTIME_L = "if_since_time_l"
     BRANCH_S = "branch_s" # TODO
     BRANCH_L = "branch_l" # TODO
+    BRANCH = "branch"
 
     # Extra tokens
     ELSE = "else"
@@ -81,6 +82,15 @@ class TokenType(enum.Enum):
             return True
         return False
 
+    def isUnconditionalBranch(self) -> bool:
+        if self in {
+            TokenType.BRANCH_S,
+            TokenType.BRANCH_L,
+            TokenType.BRANCH,
+        }:
+            return True
+        return False
+
     def isReturn(self) -> bool:
         if self in { TokenType.RETURN_S, TokenType.RETURN_L, TokenType.RETURN_NONE, TokenType.RETURN_EMPTY, TokenType.RETURN_TIME }:
             return True
@@ -104,6 +114,9 @@ class TokenType(enum.Enum):
             TokenType.IF_BEFORETIME_L,
             TokenType.IF_AFTERTIME_S,
             TokenType.IF_AFTERTIME_L,
+            TokenType.BRANCH_S,
+            TokenType.BRANCH_L,
+            TokenType.BRANCH,
         }:
             return True
         return False
@@ -117,7 +130,7 @@ class TokenType(enum.Enum):
             TokenType.IF_MISC_S,
             TokenType.IF_BEFORETIME_S,
             TokenType.IF_BEFORETIME_L,
-            }:
+        }:
             return True
         return False
 
@@ -143,6 +156,7 @@ tokenLiterals: dict[str, TokenType] = {
     "if_since_time_l": TokenType.IF_AFTERTIME_L,
     "branch_s": TokenType.BRANCH_S,
     "branch_l": TokenType.BRANCH_L,
+    "branch": TokenType.BRANCH,
 
     "else": TokenType.ELSE,
     "{": TokenType.BRACE_OPEN,
@@ -567,27 +581,58 @@ cmdInfos: dict[TokenType, CommandInfo] = {
     TokenType.RETURN_TIME:          CommandInfo('SCHEDULE_CMD_RET_TIME',             0x06,),
     TokenType.IF_BEFORETIME_S:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_S',  0x04,),
     TokenType.IF_BEFORETIME_L:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_L',  0x05,),
-    TokenType.IF_AFTERTIME_S:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_S',  0x04,),
-    TokenType.IF_AFTERTIME_L:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_L',  0x05,),
+    TokenType.IF_AFTERTIME_S:       CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_S',  0x04,),
+    TokenType.IF_AFTERTIME_L:       CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_L',  0x05,),
     TokenType.BRANCH_S:             CommandInfo('SCHEDULE_CMD_BRANCH_S',             0x02,),
     TokenType.BRANCH_L:             CommandInfo('SCHEDULE_CMD_BRANCH_L',             0x03,),
+
+    TokenType.BRANCH:               CommandInfo('SCHEDULE_CMD_BRANCH_S',             0x02,),
 }
 
 
-def emitMacros(tree: list[Expression], byteCount = 0) -> tuple[str, int]:
-    result = ""
+
+@dataclasses.dataclass
+class LinearExpression:
+    offset: int
+
+    expr: Token
+    args: Token|None
+
+    labelName: str|None
+
+    # The branch target can be either an int (offset), str (label) or None (no branch target)
+    branchTarget: int|str|None = None
+
+    def getTargetOffset(self, linearizedExprs: list[LinearExpression]) -> int:
+        if self.branchTarget is None:
+            eprint(f"Internal error: no target offset for expression? at :{self.expr.lineNumber}:{self.expr.columnNumber}")
+            debugPrint(f" getTargetOffset")
+            exit(1)
+        if isinstance(self.branchTarget, int):
+            return self.branchTarget
+        for linExpr in linearizedExprs:
+            if linExpr.labelName == self.branchTarget:
+                return linExpr.offset
+
+        eprint(f"Error: label name {self.branchTarget} not found, used at :{self.expr.lineNumber}:{self.expr.columnNumber}")
+        debugPrint(f" getTargetOffset")
+        exit(1)
+
+def linearizeTree(tree: list[Expression], byteCount = 0) -> tuple[list[LinearExpression], int]:
+    result: list[LinearExpression] = []
+    # To track labels
+    labelName: str|None = None
 
     for expr in tree:
         if expr.expr.tokenType == TokenType.LABEL:
-            eprint("Warning: labels are not handled yet")
+            labelName = expr.expr.tokenLiteral
             continue
         info = cmdInfos[expr.expr.tokenType]
-        currentMacro = f"    /* 0x{byteCount:02X} */ {info.macro}("
-
-        byteCount += info.cmdLenght
         currentOffset = byteCount
 
-        subResults = ""
+        byteCount += info.cmdLenght
+
+        subResults = []
         left = expr.left
         right = expr.right
         if expr.expr.tokenType.needsToInvert():
@@ -595,23 +640,58 @@ def emitMacros(tree: list[Expression], byteCount = 0) -> tuple[str, int]:
         if expr.negated:
             left, right = right, left
 
-        sub, byteCount = emitMacros(left, byteCount)
+        sub, byteCount = linearizeTree(left, byteCount)
         targetOffset = byteCount
 
         subResults += sub
-        sub, byteCount = emitMacros(right, byteCount)
-        subResults += sub
-        byteCount = byteCount
 
-        if expr.args is not None:
-            currentMacro += f"{expr.args.tokenLiteral}"
-        if expr.expr.tokenType.isBranch():
-            currentMacro += f", 0x{targetOffset:02X} - 0x{currentOffset:02X}"
-        currentMacro += "),\n"
+        if len(right) == 1 and right[0].expr.tokenType.isUnconditionalBranch():
+            # If an `if_` only has 1 expression and it is a branch then incorporate it as part of the `if_`,
+            # avoiding redundant branches
+            sub = []
+            branchExpr = right[0]
+            if branchExpr.args is None:
+                eprint(f"Error: branch command without arguments? at :{branchExpr.expr.lineNumber}:{branchExpr.expr.columnNumber}")
+                debugPrint(f" linearizeTree")
+                exit(1)
+            targetOffset = branchExpr.args.tokenLiteral
+        else:
+            sub, byteCount = linearizeTree(right, byteCount)
+            subResults += sub
 
-        result += currentMacro + subResults
+        linearExpr = LinearExpression(currentOffset, expr.expr, expr.args, labelName)
+        labelName = None
+
+        if expr.expr.tokenType.isBranch() or expr.expr.tokenType.isUnconditionalBranch():
+            linearExpr.branchTarget = targetOffset
+
+        result += [linearExpr] + subResults
 
     return result, byteCount
+
+def emitLinearizedMacros(linearizedExprs: list[LinearExpression], byteCount: int) -> str:
+    result = ""
+
+    offsetWidth = len(f"{byteCount:X}")
+
+    for linExpr in linearizedExprs:
+        info = cmdInfos[linExpr.expr.tokenType]
+        currentMacro = f"    /* 0x{linExpr.offset:0{offsetWidth}X} */ {info.macro}("
+
+        nextOffset = linExpr.offset + info.cmdLenght
+
+        if linExpr.expr.tokenType.isUnconditionalBranch():
+            currentMacro += f"0x{linExpr.getTargetOffset(linearizedExprs):0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
+        else:
+            if linExpr.args is not None:
+                currentMacro += f"{linExpr.args.tokenLiteral}"
+            if linExpr.expr.tokenType.isBranch():
+                currentMacro += f", 0x{linExpr.getTargetOffset(linearizedExprs):0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
+        currentMacro += "),\n"
+
+        result += currentMacro
+
+    return result
 
 
 def main():
@@ -643,7 +723,9 @@ def main():
     if printTree:
         for expr in tree:
             expr.print()
-    output, byteCount = emitMacros(tree)
+
+    linearizedExprs, byteCount = linearizeTree(tree)
+    output = emitLinearizedMacros(linearizedExprs, byteCount)
 
     if outputPath is None:
         print(output)
