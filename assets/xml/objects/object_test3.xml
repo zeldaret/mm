@@ -12,7 +12,7 @@
         <Texture Name="gKafeiMouthClosedTex" OutName="kafei_mouth_closed" Format="ci8" Width="32" Height="32" Offset="0x9C0" />
         <Texture Name="gKafeiEyesOpenTex" OutName="kafei_eyes_open" Format="ci8" Width="64" Height="32" Offset="0xDC0" />
         <Texture Name="gKafeiHairPartAndUndersideTex" OutName="kafei_hair_part_and_underside" Format="ci8" Width="8" Height="16" Offset="0x15C0" />
-        <Texture Name="gKafeiFingersTex" OutName="kafei_eyes_fingers" Format="ci8" Width="16" Height="16" Offset="0x1640" />
+        <Texture Name="gKafeiFingersTex" OutName="kafei_fingers" Format="ci8" Width="16" Height="16" Offset="0x1640" />
         <Texture Name="gKafeiBootTex" OutName="kafei_boot" Format="ci8" Width="32" Height="32" Offset="0x1740" />
         <Texture Name="gKafeiSleevePatternTex" OutName="kafei_sleeve_pattern" Format="ci8" Width="32" Height="32" Offset="0x1B40" />
         <Texture Name="gKafeiInnerSleeveTex" OutName="kafei_inner_sleeve" Format="ci8" Width="8" Height="8" Offset="0x1F40" />
