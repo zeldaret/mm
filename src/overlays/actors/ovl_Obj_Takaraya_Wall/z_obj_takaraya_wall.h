@@ -5,6 +5,8 @@
 
 struct ObjTakarayaWall;
 
+#define TAKARAYA_WALL_GET_SWTICH_FLAG(thisx) ((thisx)->shape.rot.z)
+
 typedef void (*ObjTakarayaWallActionFunc)(struct ObjTakarayaWall*, PlayState*);
 
 typedef struct ObjTakarayaWall {

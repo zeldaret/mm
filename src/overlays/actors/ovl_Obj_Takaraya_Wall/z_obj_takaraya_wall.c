@@ -98,6 +98,7 @@ u8 sTakarayaWallSpaceStates[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
 // -10.0f height means the wall does not raise (the space is open)
 f32 sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
 
+// Note: returns true if the space is valid
 s32 ObjTakarayaWall_PosToSpace(Vec3f* pos, s32* row, s32* column) {
     *row = ((s32)pos->x + (14 * 120)) / 120;
     *column = (s32)pos->z / 120;
@@ -109,7 +110,7 @@ s32 ObjTakarayaWall_PosToSpace(Vec3f* pos, s32* row, s32* column) {
 }
 
 /**
- * Checks if the given row and coulmn is valid and is open, i.e does not raise up.
+ * Checks if the given row and column is valid and is open, i.e does not raise up.
  */
 s32 ObjTakarayaWall_SpaceOpen(s32 row, s32 column) {
     if ((row < 0) || (row >= TAKARAYA_WALL_ROWS) || (column < 0) || (column >= TAKARAYA_WALL_COLUMNS) ||
@@ -291,7 +292,7 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
     chest = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_BOX, -1635.0f, 0.0f, (column * 120) + 60, 0,
                                           0x4000, this->actor.shape.rot.z, this->actor.params, this->actor.csId,
                                           HALFDAYBIT_ALL, NULL);
-    Flags_SetSwitch(play, this->actor.shape.rot.z);
+    Flags_SetSwitch(play, TAKARAYA_WALL_GET_SWTICH_FLAG(&this->actor));
     this->actor.shape.rot.z = 0;
 
     if (chest != NULL) {
@@ -322,7 +323,7 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
         if (sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][0] == -10.0f) {
             sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][1] = -10.0f;
         } else {
-            sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][6] = -10.0f;
+            sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][TAKARAYA_WALL_COLUMNS - 2] = -10.0f;
         }
     }
 
