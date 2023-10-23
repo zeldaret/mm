@@ -972,29 +972,29 @@ typedef enum EnAnAnimation {
 } EnAnAnimation;
 
 static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
-    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // ENAN_ANIM_HOLD_HANDS
-    { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_IDLE
-    { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },               // ENAN_ANIM_IDLE_MORPH
-    { &gAnju1BowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },              // ENAN_ANIM_BOW
-    { &gAnju1BowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },             // ENAN_ANIM_BOW_MORPH
-    { &gAnju1SurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENAN_ANIM_SURPRISED
-    { &gAnju1LookUpRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },   // ENAN_ANIM_LOOK_UP_RELIEVED
-    { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_WALK
-    { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_WALK2
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                 // ENAN_ANIM_SIT
-    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },                // ENAN_ANIM_SIT_MORPH
+    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // ENAN_ANIM_HOLD_HANDS
+    { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // ENAN_ANIM_IDLE
+    { &gAnju1IdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },              // ENAN_ANIM_IDLE_MORPH
+    { &gAnju1BowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },                // ENAN_ANIM_BOW
+    { &gAnju1BowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },               // ENAN_ANIM_BOW_MORPH
+    { &gAnju1SurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // ENAN_ANIM_SURPRISED
+    { &gAnju1LookUpRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_LOOK_UP_RELIEVED
+    { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // ENAN_ANIM_WALK
+    { &gAnju1WalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // ENAN_ANIM_WALK2
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // ENAN_ANIM_SIT
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },               // ENAN_ANIM_SIT_MORPH
     { &gAnju1SittingInDisbeliefAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_SITTING_IN_DISBELIEF
-    { &gAnju1CookAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // ENAN_ANIM_COOK
-    { &gAnju1TasteAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // ENAN_ANIM_TASTE
-    { &gAnju1TasteEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // ENAN_ANIM_TASTE_END
-    { &gAnju1WaitWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_WAIT_WITH_TRAY
-    { &gAnju1WalkWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_WALK_WITH_TRAY
+    { &gAnju1CookAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // ENAN_ANIM_COOK
+    { &gAnju1TasteAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },              // ENAN_ANIM_TASTE
+    { &gAnju1TasteEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENAN_ANIM_TASTE_END
+    { &gAnju1WaitWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },       // ENAN_ANIM_WAIT_WITH_TRAY
+    { &gAnju1WalkWithTrayAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },       // ENAN_ANIM_WALK_WITH_TRAY
 
     // ENAN_ANIMOBJ_AN2
-    { &gAnju2UmbrellaIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENAN_ANIM_UMBRELLA_IDLE
-    { &gAnju2UmbrellaWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENAN_ANIM_UMBRELLA_WALK
-    { &gAnju2UmbrellaSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENAN_ANIM_UMBRELLA_SIT
-    { &gAnju2UmbrellaCryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_UMBRELLA_CRY
+    { &gAnju2UmbrellaIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_UMBRELLA_IDLE
+    { &gAnju2UmbrellaWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_UMBRELLA_WALK
+    { &gAnju2UmbrellaSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_UMBRELLA_SIT
+    { &gAnju2UmbrellaCryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_UMBRELLA_CRY
 
     // ENAN_ANIMOBJ_AN3
     { &gAnju3BroomIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_BROOM_IDLE
@@ -1004,16 +1004,16 @@ static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
     { &gAnju2UmbrellaSitAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_24
 
     // ENAN_ANIMOBJ_AN4
-    { &gAnju4MaskStandLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_MASK_STAND_LOOP
-    { &gAnju4MaskKneelAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_MASK_KNEEL
-    { &gAnju4MaskKneelLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_MASK_KNEEL_LOOP
-    { &gAnju4HugAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_HUG
-    { &gAnju4HugLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_HUG_LOOP
+    { &gAnju4MaskStandLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_MASK_STAND_LOOP
+    { &gAnju4MaskKneelAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // ENAN_ANIM_MASK_KNEEL
+    { &gAnju4MaskKneelLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_MASK_KNEEL_LOOP
+    { &gAnju4HugAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },            // ENAN_ANIM_HUG
+    { &gAnju4HugLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // ENAN_ANIM_HUG_LOOP
     { &gAnju4HugReleaseAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_HUG_RELEASE
-    { &gAnju4HugReleaseLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_HUG_RELEASE_LOOP
-    { &gAnju4CombineMasks1Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_COMBINE_MASKS_1
-    { &gAnju4CombineMasks2Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAN_ANIM_COMBINE_MASKS_2
-    { &gAnju4LookUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_LOOK_UP
+    { &gAnju4HugReleaseLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_HUG_RELEASE_LOOP
+    { &gAnju4CombineMasks1Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_COMBINE_MASKS_1
+    { &gAnju4CombineMasks2Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAN_ANIM_COMBINE_MASKS_2
+    { &gAnju4LookUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // ENAN_ANIM_LOOK_UP
     { &gAnju4LookUpLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_LOOK_UP_LOOP
 };
 
@@ -1558,7 +1558,8 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
 
     switch (this->msgEventState) {
         case 0x0:
-            if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) || CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
+            if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
                 this->msgEventState++;
                 goto label;
             } else {
@@ -1756,7 +1757,8 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
             this->stateFlags |= ENAN_STATE_ENGAGED;
         }
 
-        if ((this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) && CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
+        if ((this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) &&
+            CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
             this->stateFlags &= ~ENAN_STATE_ENGAGED;
         }
 
@@ -3303,16 +3305,16 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = EnAn_Initialize;
 
 #if DEBUG_PRINT
-    //SET_WEEKEVENTREG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES);
-    //SET_WEEKEVENTREG(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT);
+    // SET_WEEKEVENTREG(WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES);
+    // SET_WEEKEVENTREG(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT);
 
     Lib_MemCpy(weekEventRegCopy, gSaveContext.save.saveInfo.weekEventReg,
                sizeof(gSaveContext.save.saveInfo.weekEventReg));
 
-    //gSaveContext.save.day = 3;
-    //if (gSaveContext.save.time > CLOCK_TIME(5, 0)) {
-    //    gSaveContext.save.time = CLOCK_TIME(3, 0);
-    //}
+    // gSaveContext.save.day = 3;
+    // if (gSaveContext.save.time > CLOCK_TIME(5, 0)) {
+    //     gSaveContext.save.time = CLOCK_TIME(3, 0);
+    // }
 #endif
 }
 
@@ -3353,7 +3355,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
         EnAn_UpdateCollider(this, play);
     }
 
-    #if DEBUG_PRINT
+#if DEBUG_PRINT
     {
         Input* input = CONTROLLER1(&play->state);
 
@@ -3380,9 +3382,9 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
             gSaveContext.save.time -= CLOCK_TIME(0, 10);
         }
     }
-    #endif
+#endif
 
-    #if DEBUG_PRINT
+#if DEBUG_PRINT
     {
         Input* input = CONTROLLER1(&play->state);
 
@@ -3394,7 +3396,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
             this->stateFlags &= ~ENAN_STATE_8;
         }
     }
-    #endif
+#endif
 }
 
 void EnAn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -3869,7 +3871,7 @@ void EnAn_Draw(Actor* thisx, PlayState* play) {
             gAnju1EyeHalfTex,           // ENAN_EYES_HALF1
             gAnju1EyeClosedTex,         // ENAN_EYES_CLOSED
             gAnju1EyeHalfTex,           // ENAN_EYES_HALF2
-            gAnju1EyeComfortTex,     // ENAN_EYES_COMFORT
+            gAnju1EyeComfortTex,        // ENAN_EYES_COMFORT
             gAnju1EyeSadTex,            // ENAN_EYES_SAD
             gAnju1EyeRelievedClosedTex, // ENAN_EYES_RELIEVED_CLOSED
         };
