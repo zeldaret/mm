@@ -2736,7 +2736,6 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
 
     switch (sandstormState) {
         case SANDSTORM_ACTIVE:
-            if (1) {}
             primA1 = play->state.frames % 128;
             if (primA1 > 128) {
                 primA1 = 255 - primA1;
@@ -2824,6 +2823,9 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
             primA1 = D_801F4E30;
             envA1 = D_801F4E30;
             step = 0xA;
+            break;
+
+        default:
             break;
     }
 
@@ -2934,7 +2936,7 @@ s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 
     if (!Play_CamIsNotFixed(&play->state)) {
         return 0;
     }
-    if (play->unk_18880 != 0) {
+    if (play->unk_18880) {
         return 0;
     }
     if ((player != NULL) && (player->stateFlags1 & PLAYER_STATE1_2)) {
@@ -3125,28 +3127,24 @@ void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height)
     *gfxp = gfx;
 }
 
-extern Vec3s D_801DD880[16];
-extern Color_RGBA8_u32 D_801DD8E0[8];
-extern Color_RGBA8_u32 D_801DD900[16];
-
-// Vec3s D_801DD880[] = {
-//     { 0x0384, 0x2328, 0xD508 }, { 0x09C4, 0x2328, 0xDA1C }, { 0x0E74, 0x22D8, 0xDA1C }, { 0x1450, 0x2468, 0xD8F0 },
-//     { 0x1C84, 0x28A0, 0xCBA8 }, { 0x1F40, 0x2134, 0xD8F0 }, { 0x1F40, 0x28A0, 0xDAE4 }, { 0xE4A8, 0x4A38, 0x4A38 },
-//     { 0xD058, 0x4C2C, 0x3A98 }, { 0xD8F0, 0x36B0, 0x47E0 }, { 0xD954, 0x3264, 0x3E1C }, { 0xD8F0, 0x3070, 0x37DC },
-//     { 0xD8F0, 0x1F40, 0x5208 }, { 0xD760, 0x1838, 0x27D8 }, { 0x0000, 0x4E20, 0x4A38 }, { 0x076C, 0x2328, 0xDCD8 },
-// };
-// u32 D_801DD8E0[] = {
-//     0x41A4FFFF, 0x83A4E6FF, 0x62CDFFFF, 0x5252FFFF, 0x7BA4A4FF, 0x62CDFFFF, 0x62A4E6FF, 0xFF5A00FF,
-// };
-// u32 D_801DD900[] = {
-//     0x405070FF, 0x606080FF, 0x807090FF, 0xA080A0FF, 0xC090A8FF, 0xE0A0B0FF, 0xE0A0B0FF, 0x686888FF,
-//     0x887898FF, 0xA888A8FF, 0xC898B8FF, 0xE8A8B8FF, 0xE0B0B8FF, 0xF0C0C0FF, 0xE8B8C0FF, 0xF8C8C0FF,
-// };
-
-#ifdef NON_EQUIVALENT
 #define PLAYER_NAME(index) (u32)(gSaveContext.save.saveInfo.playerData.playerName)[index]
 
+#ifdef NON_MATCHING
 void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
+    static const Vec3s D_801DD880[] = {
+        { 0x0384, 0x2328, 0xD508 }, { 0x09C4, 0x2328, 0xDA1C }, { 0x0E74, 0x22D8, 0xDA1C }, { 0x1450, 0x2468, 0xD8F0 },
+        { 0x1C84, 0x28A0, 0xCBA8 }, { 0x1F40, 0x2134, 0xD8F0 }, { 0x1F40, 0x28A0, 0xDAE4 }, { 0xE4A8, 0x4A38, 0x4A38 },
+        { 0xD058, 0x4C2C, 0x3A98 }, { 0xD8F0, 0x36B0, 0x47E0 }, { 0xD954, 0x3264, 0x3E1C }, { 0xD8F0, 0x3070, 0x37DC },
+        { 0xD8F0, 0x1F40, 0x5208 }, { 0xD760, 0x1838, 0x27D8 }, { 0x0000, 0x4E20, 0x4A38 }, { 0x076C, 0x2328, 0xDCD8 },
+    };
+    // Possibly Color_RGBA8_u32
+    static const u32 D_801DD8E0[] = {
+        0x41A4FFFF, 0x83A4E6FF, 0x62CDFFFF, 0x5252FFFF, 0x7BA4A4FF, 0x62CDFFFF, 0x62A4E6FF, 0xFF5A00FF,
+    };
+    static const u32 D_801DD900[] = {
+        0x405070FF, 0x606080FF, 0x807090FF, 0xA080A0FF, 0xC090A8FF, 0xE0A0B0FF, 0xE0A0B0FF, 0x686888FF,
+        0x887898FF, 0xA888A8FF, 0xC898B8FF, 0xE8A8B8FF, 0xE0B0B8FF, 0xF0C0C0FF, 0xE8B8C0FF, 0xF8C8C0FF,
+    };
     Vec3f pos;
     s32 pad1;
     f32 imgY; // spF4
@@ -3235,9 +3233,9 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
         }
 
         if ((i < 15) || ((i == 15) && ((((void)0, gSaveContext.save.day) % 7) == 0))) {
-            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD8E0[i & 7].rgba);
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD8E0[i % ARRAY_COUNTU(D_801DD8E0)]);
         } else if (((i & 0x3F) == 0) || (i == 16)) {
-            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD900[phi_v1 & 15].rgba);
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD900[phi_v1 % ARRAY_COUNTU(D_801DD900)]);
             phi_v1++;
         }
 
@@ -3453,9 +3451,8 @@ void Environment_LerpSandstormColors(Color_RGBA8* colorSrc, Color_RGBA8* colorDs
 }
 
 u8 func_800FE9B4(PlayState* play) {
-    u8 ret;
+    u8 ret = false;
 
-    ret = false;
     if ((play->envCtx.precipitation[PRECIP_SOS_MAX] == 60) && (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
         ret = true;
     }
@@ -3506,12 +3503,12 @@ void Environment_JumpForwardInTime(void) {
 }
 
 void func_800FEAF4(EnvironmentContext* envCtx) {
-    u8 phi_v1;
+    u8 phi_v1 = 0;
 
-    phi_v1 = 0;
     if (((void)0, gSaveContext.save.day) != 0) {
         phi_v1 = ((void)0, gSaveContext.save.day) - 1;
     }
+
     envCtx->skyboxConfig = phi_v1 + (D_801F4E31 * 3);
     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 

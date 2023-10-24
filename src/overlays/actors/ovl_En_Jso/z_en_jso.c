@@ -553,7 +553,7 @@ void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
 
                     if (parent->actor.update != NULL) {
                         parent->unk148 = 1;
-                        play->unk_18880 = 1;
+                        play->unk_18880 = true;
                     }
                 }
 

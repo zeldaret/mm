@@ -159,7 +159,7 @@ void EnEncount3_Update(Actor* thisx, PlayState* play2) {
         Math_ApproachZeroF(&this->unk170, 0.3f, 10.0f);
         Math_ApproachZeroF(&this->unk160, 0.3f, 5.0f);
         if (this->unk160 < 1.0f) {
-            play->unk_18880 = 0;
+            play->unk_18880 = false;
         }
     } else if (this->unk148 != 0) {
         Math_ApproachF(&this->unk170, 255.0f, 0.4f, 10.0f);
