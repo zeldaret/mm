@@ -1682,13 +1682,19 @@ void func_800F8970(void) {
     }
 }
 
-#ifdef NON_MATCHING
 void Environment_UpdatePostmanEvents(PlayState* play) {
     u8 v1;
+    u8 temp1;
+    u8 temp2;
     u16 temp_a2_2;
 
-    if ((u8)((void)0, ((gSaveContext.eventInf[7] & 0xE0) >> 5)) != (u8)((void)0, gSaveContext.save.day)) {
-        v1 = ((void)0, (gSaveContext.eventInf[7] & (u8)~0xE0)) | (((void)0, gSaveContext.save.day) << 5);
+    //! FAKE: excess temp usage?
+    temp1 = (u8)((void)0, ((gSaveContext.eventInf[7] & 0xE0) >> 5));
+    if (temp1 != (u8)((void)0, gSaveContext.save.day)) {
+        v1 = ((void)0, (gSaveContext.eventInf[7] & (u8)~0xE0));
+        temp1 = ((void)0, gSaveContext.save.day);
+        temp2 = temp1 << 5;
+        v1 |= temp2;
         gSaveContext.eventInf[7] = v1;
         SET_WEEKEVENTREG(WEEKEVENTREG_27_40);
         SET_WEEKEVENTREG(WEEKEVENTREG_27_80);
@@ -1725,7 +1731,7 @@ void Environment_UpdatePostmanEvents(PlayState* play) {
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
         temp_a2_2 = ((void)0, gSaveContext.save.time) - D_801F4E78;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((u16)SCHEDULE_TIME_NOW >= (SCHEDULE_TIME(29, 0) + 16))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((u16)SCHEDULE_TIME_NOW >= (u16)SCHEDULE_TIME(5, 0))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_90_01);
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && (temp_a2_2 >= CLOCK_TIME(0, 23))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_89_40);
@@ -1738,9 +1744,6 @@ void Environment_UpdatePostmanEvents(PlayState* play) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdatePostmanEvents.s")
-#endif
 
 void Environment_Update(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx, PauseContext* pauseCtx,
                         MessageContext* msgCtx, GameOverContext* gameOverCtx, GraphicsContext* gfxCtx) {
