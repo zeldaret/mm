@@ -6,23 +6,24 @@
 struct PlayState;
 
 /*
-Handles L-minimap and pause screen dungeon minimap system.
+Handles the minimap and pause screen dungeon map system.
 
 z_map_data.c stores MapSpriteInfo and helper functions to "simplify" accessing this data
 
 Two separate Id systems are used to access data
 
 mapId
-0x000-0x004 fetches L-minimap data from gameplay_dangeon_keep
-0x005-0x039 fetches dungeon minimap data from map_i_static
-0x100-0x161 fetches L-minimap data from map_grand_static
+0x000-0x004 fetches minimap sprite data from gameplay_dangeon_keep
+0x005-0x039 fetches dungeon map sprite data from map_i_static
+0x100-0x161 fetches minimap sprite data from map_grand_static
 
 mapCompactId
-0x000-0x039 fetches dungeon minimap data from map_i_static
-0x03A-0x09B fetches L-minimap data from map_grand_static
+0x000-0x039 fetches dungeon map sprite data from map_i_static
+0x03A-0x09B fetches minimap sprite data from map_grand_static
 */
 
 #define FLOOR_INDEX_MAX 4
+#define FLOOR_MIN_Y -32767
 
 /* z_map_data */
 #define MAPDATA_MAP_I_MAX 0x3A
@@ -43,41 +44,19 @@ mapCompactId
 #define MAPDATA_DRAW_2 2
 #define MAPDATA_DRAW_3 3
 
-typedef struct {
-    /* 0x0 */ u8 texWidth;
-    /* 0x1 */ u8 texHeight;
-    /* 0x2 */ s16 offsetX;
-    /* 0x4 */ s16 offsetY;
-    /* 0x6 */ u8 drawType;
-    /* 0x7 */ u8 colorIndex;
-    /* 0x8 */ s16 scale;
-} MapSpriteInfo; // size = 0xA
-
-typedef struct {
-    /* 0x0 */ TexturePtr lmapTex; //minimap texture
-    /* 0x4 */ u8 width;
-    /* 0x5 */ u8 height;
-    /* 0x6 */ u8 offsetX;
-    /* 0x7 */ u8 offsetY;
-    /* 0x8 */ u8 drawType;
-    /* 0x9 */ u8 colorIndex;
-    /* 0xA */ s16 scale;
-} MapSpriteInfo2; // size = 0xC
-
 /* z_map_disp */
-
 typedef struct {
-    /* 0x00 */ MinimapList* minimapList;
+    /* 0x00 */ MapDataScene* mapDataScene;
     /* 0x04 */ s32 curRoom;
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ s16 unkA;
-    /* 0x0C */ s16 unkC;
-    /* 0x0E */ s16 unkE;
-    /* 0x10 */ TexturePtr lMapCurTex; // gameplay cur minimap room
+    /* 0x08 */ s16 minimapBaseX;
+    /* 0x0A */ s16 minimapBaseY;
+    /* 0x0C */ s16 minimapCurX;
+    /* 0x0E */ s16 minimapCurY;
+    /* 0x10 */ TexturePtr minimapCurTex; // gameplay cur minimap room
     /* 0x14 */ s32 prevRoom;
-    /* 0x18 */ TexturePtr lMapPrevTex;
-    /* 0x1C */ s16 unk1C; //same as 0C
-    /* 0x1E */ s16 unk1E; //same as 0E
+    /* 0x18 */ TexturePtr minimapPrevTex;
+    /* 0x1C */ s16 minimapPrevX; // for room swap animation
+    /* 0x1E */ s16 minimapPrevY; // for room swap animation
     /* 0x20 */ s32 unk20;
     /* 0x24 */ s32 swapAnimTimer;
     /* 0x28 */ void* texBuff0;
@@ -88,62 +67,47 @@ typedef struct {
     /* 0x36 */ s16 sceneHeight; //scene boundsWidth.z
     /* 0x38 */ s16 sceneMidX; //scene boundsMidpoint.x
     /* 0x3A */ s16 sceneMidZ; //scene boundsMidpoint.z
-    /* 0x3C */ s16* unk3C;
-    /* 0x40 */ s16 unk40;
-    /* 0x42 */ s16 unk42;
-    /* 0x44 */ s16 lowestFloor;
-    /* 0x48 */ s16* unk48;
-    /* 0x4C */ s16 unk4C;
+    /* 0x3C */ s16* roomStoreyList; // list of lowest storey each room crosses
+    /* 0x40 */ s16 numStoreys; // number of distinct storeys
+    /* 0x42 */ s16 pauseMapCurStorey;
+    /* 0x44 */ s16 bottomStorey; // configures what storey 0 is displayed as
+    /* 0x48 */ s16* storeyYList; // list of min Ys for each storey
+    /* 0x4C */ s16 timer;
     /* 0x50 */ s32 numChests;
-    /* 0x54 */ MinimapChest* unk54;
-    /* 0x58 */ s16 unk58;
+    /* 0x54 */ MapDataChest* mapDataChests;
+    /* 0x58 */ s16 bossRoomStorey;
     /* 0x5A */ s16 unk5A;
-} struct_801BEBB8; // size = 0x5C
+} MapDisp; // size = 0x5C
 
 typedef struct {
-    /* 0x0 */ s16 sceneId;
-    /* 0x2 */ s16 lowestFloor;
-} MapCustomLowestFloor; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ s32 unk0[5];
-} struct_801BEC70; // size = 0x14
-
-typedef struct {
-    /* 0x0 */ s16 sceneId;
-    /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8;
-} struct_801BED24; // size = 0xC
-
-typedef struct {
-    /* 0x000 */ s32 rooms;
-    /* 0x004 */ s32 unk4[32];
-    /* 0x084 */ void* unk84[32];
-    /* 0x104 */ void* unk104[32];
-    /* 0x184 */ s32 unk184;
-} struct_801F56B0; // size = 0x188
+    /* 0x000 */ s32 textureCount;
+    /* 0x004 */ s32 mapI_mapCompactId[ROOM_MAX];
+    /* 0x084 */ void* mapI_roomTextures[ROOM_MAX];
+    /* 0x104 */ void* roomSprite[ROOM_MAX];
+    /* 0x184 */ s32 animTimer;
+} PauseDungeonMap; // size = 0x188
 
 /* z_map_disp */
 void func_80102EB4(u32 param_1);
 void func_80102ED0(u32 param_1);
-s32 func_80102EF0(struct PlayState* play);
+s32 MapDisp_CurRoomHasMapI(struct PlayState* play);
 void MapDisp_Init(struct PlayState* play);
-s32 func_80105294(void);
-s16 func_80105318(void);
-void func_8010549C(struct PlayState* play, void* segmentAddress);
-void func_8010565C(struct PlayState* play, s32 num, void* segmentAddress);
-void func_80105818(struct PlayState* play, s32 num, TransitionActorEntry* transitionActorList);
+s32 MapDisp_GetBossIconY(void);
+s16 MapDisp_GetBossRoomStorey(void);
+void MapDisp_InitMapData(struct PlayState* play, void* segmentAddress);
+void MapDisp_InitChestData(struct PlayState* play, s32 num, void* segmentAddress);
+void MapDisp_InitTransitionActorData(struct PlayState* play, s32 num, TransitionActorEntry* transitionActorList);
 void MapDisp_Destroy(struct PlayState* play);
-void func_80105B34(struct PlayState* play);
+void MapDisp_Update(struct PlayState* play);
 void MapDisp_SwapRooms(s16 nextRoom);
-s32 func_80106530(struct PlayState* play);
-void func_80106644(struct PlayState* play, s32 x, s32 z, s32 rot);
-void* func_801068FC(struct PlayState* play, void* heap);
-void func_80108AF8(struct PlayState* play);
-s32 func_801090B0(s32 arg0);
-s32 func_80109124(s16 arg0);
-void func_801091F0(struct PlayState* play);
-void func_80109428(struct PlayState* play);
+s32 MapDisp_IsMinimapToggleBlocked(struct PlayState* play);
+void MapDisp_DrawMinimap(struct PlayState* play, s32 playerInitX, s32 playerInitZ, s32 playerInitDir);
+void* MapDisp_AllocDungeonMap(struct PlayState* play, void* heap);
+void MapDisp_DrawDungeonFloorSelect(struct PlayState* play);
+s32 MapDisp_IsValidStorey(s32 storey);
+s32 MapDisp_GetPlayerStorey(s16 checkY);
+void MapDisp_DrawDungeonMap(struct PlayState* play);
+void MapDisp_UpdateDungeonMap(struct PlayState* play);
 
 /* z_map_data */
 void MapData_GetMapColor(s32 colorIndex, Color_RGBA8* color);
@@ -153,7 +117,7 @@ s32 MapData_MID_GetType(s32);
 s32 MapData_CPID_GetSizeOfMapTex(s32);
 void MapData_GetDrawType(s32, s32*);
 s32 MapData_GetMapColorIndex(s32);
-s32 MapDisp_GetSizeOfMapITex(s32);
+s32 MapDisp_GetSizeOfMapITex(s32 mapCompactId);
 s32 MapData_GetMapIId(s32);
 s32 MapData_GetSizeOfMapGrandTex(s32 mapId);
 void MapData_GetMapTexDim(s32 mapId, s32* width, s32* height);
@@ -166,13 +130,13 @@ s16 MapData_CPID_GetMapScale(s32 mapCompactId);
 /* z_map_exp */
 s32 Map_GetDungeonOrBossAreaIndex(struct PlayState* play);
 s32 Map_IsInDungeonOrBossArea(struct PlayState* play);
-s32 func_8010A0A4(struct PlayState* play);
-s32 Map_IsInBossArea(struct PlayState* play);
-void Minimap_SavePlayerRoomInitInfo(struct PlayState* play);
+s32 MapExp_CurRoomHasMapI(struct PlayState* play);
+s32 Map_IsInBossScene(struct PlayState* play);
+void Map_SetAreaEntrypoint(struct PlayState* play);
 void Map_InitRoomData(struct PlayState* play, s16 room);
 void Map_Destroy(struct PlayState* play);
 void Map_Init(struct PlayState* play);
-void Minimap_Draw(struct PlayState* play);
+void Map_DrawMinimap(struct PlayState* play);
 void Map_Update(struct PlayState* play);
 
 #endif

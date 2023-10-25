@@ -2,6 +2,27 @@
 #include "z64map.h"
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
+typedef struct {
+    /* 0x0 */ u8 texWidth;
+    /* 0x1 */ u8 texHeight;
+    /* 0x2 */ s16 offsetX;
+    /* 0x4 */ s16 offsetY;
+    /* 0x6 */ u8 drawType;
+    /* 0x7 */ u8 colorIndex;
+    /* 0x8 */ s16 scale;
+} MapSpriteInfo; // size = 0xA
+
+typedef struct {
+    /* 0x0 */ TexturePtr spriteTex;
+    /* 0x4 */ u8 width;
+    /* 0x5 */ u8 height;
+    /* 0x6 */ u8 offsetX;
+    /* 0x7 */ u8 offsetY;
+    /* 0x8 */ u8 drawType;
+    /* 0x9 */ u8 colorIndex;
+    /* 0xA */ s16 scale;
+} MapSpriteInfo2; // size = 0xC
+
 static Color_RGBA8 sMapColorTable[] = {
     { 255, 255, 255, 255 },
     { 0, 255, 255, 160 }, // Blue
@@ -209,7 +230,7 @@ static s32 sMapIForMapGrand[98] = {
     MAPDATA_MAP_I_MAX,
 };
 
-s32 MapDisp_GetSizeOfMapITex(s32 mapId);
+s32 MapDisp_GetSizeOfMapITex(s32 mapCompactId);
 
 void MapData_GetMapColor(s32 colorIndex, Color_RGBA8* color) {
     *color = sMapColorTable[colorIndex];
@@ -238,7 +259,7 @@ s16 MapData_GetMapGameplayDangeonKeepScale(s32 mapId) {
 }
 
 TexturePtr MapData_GetMapTexGameplayDangeonKeep(s32 mapId) {
-    return sGameplayDangeonKeepInfo[mapId].lmapTex;
+    return sGameplayDangeonKeepInfo[mapId].spriteTex;
 }
 
 void MapData_GetMapTexGameplayDangeonKeepDim(s32 mapId, s32* width, s32* height) {
@@ -404,8 +425,8 @@ s32 MapData_MapITexSizeTest(s32 mapId) {
     return size;
 }
 
-s32 MapDisp_GetSizeOfMapITex(s32 mapId) {
-    return (sMapIStaticInfo[mapId].texWidth * sMapIStaticInfo[mapId].texHeight) / 2;
+s32 MapDisp_GetSizeOfMapITex(s32 mapCompactId) {
+    return (sMapIStaticInfo[mapCompactId].texWidth * sMapIStaticInfo[mapCompactId].texHeight) / 2;
 }
 
 s32 MapData_GetMapIId(s32 mapId) {

@@ -69,179 +69,155 @@ static u64 sWhiteSquareTex[] = {
     0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF,
     0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF,
 };
-static struct_801BEBB8 D_801BEBB8 = {
-    NULL, -1, 0xD2, 0x8C, 0, 0,    NULL, -1, NULL, 0,    0, 0, 0,    NULL, NULL, 0,
-    0,    0,  0,    0,    0, NULL, 0,    0,  0,    NULL, 0, 0, NULL, 0,    0,
+static MapDisp sMapDisp = {
+    NULL, -1, 210, 140, 0, 0,    NULL, -1, NULL, 0,    0, 0, 0,    NULL, NULL, 0,
+    0,    0,  0,   0,   0, NULL, 0,    0,  0,    NULL, 0, 0, NULL, 0,    0,
 };
-extern s16 D_801BEBFA; // D_801BEBB8.unk42
+extern s16 D_801BEBFA; // sMapDisp.pauseMapCurStorey
 
-static MinimapEntry D_801F5130[32];
-static MinimapChest D_801F5270[32];
-
-static MinimapList D_801BEC14 = {
-    D_801F5130,
+static MapDataRoom sMapDataRooms[ROOM_MAX];
+static MapDataChest sMapDataChests[32];
+static MapDataScene sMapDataScene = {
+    sMapDataRooms,
     80,
 };
 static s32 sSceneNumRooms = 0; // current scene's no. of rooms
 static s32 sNumChests = 0;     // MinimapChest count
 static TransitionActorList sTransitionActorList = { 0, NULL };
-static Color_RGBA8 D_801BEC2C[12] = {
+static Color_RGBA8 sMinimapActorColors[12] = {
     { 255, 255, 255, 255 }, { 255, 255, 255, 255 }, { 0, 255, 0, 255 },     { 255, 255, 255, 255 },
     { 255, 255, 255, 255 }, { 255, 0, 0, 255 },     { 255, 255, 255, 255 }, { 255, 255, 255, 255 },
     { 255, 255, 255, 255 }, { 255, 0, 0, 255 },     { 255, 255, 255, 255 }, { 255, 255, 255, 255 },
 }; // cat colors
-static MapCustomLowestFloor sCustomLowestFloor[] = {
-    { SCENE_HAKUGIN, -1 }, { SCENE_HAKUGIN_BS, -1 }, { SCENE_SEA, -2 }, { SCENE_SEA_BS, -2 }, { SCENE_INISIE_N, -1 },
-};
-static struct_801BEC70 D_801BEC70 = { 0x43, 0x51, 0x5F, 0x6D, 0x7B };
-static u16 D_801BEC84[0x10] = {
-    0x0000, 0x0000, 0xFFC1, 0x07C1, 0x07FF, 0x003F, 0xFB3F, 0xF305,
-    0x0453, 0x0577, 0x0095, 0x82E5, 0xFD27, 0x7A49, 0x94A5, 0x0001,
-}; // palette 0
-static u16 D_801BECA4[0x10] = {
-    0x0000, 0x027F, 0xFFC1, 0x07C1, 0x07FF, 0x003F, 0xFB3F, 0xF305,
-    0x0453, 0x0577, 0x0095, 0x82E5, 0xFD27, 0x7A49, 0x94A5, 0x0001,
-}; // palette 1
-static u16 D_801BECC4[0x10] = {
-    0x0000, 0x0623, 0xFFC1, 0x07C1, 0x07FF, 0x003F, 0xFB3F, 0xF305,
-    0x0453, 0x0577, 0x0095, 0x82E5, 0xFD27, 0x7A49, 0x94A5, 0x0001,
-}; // palette 2
 
-static TexturePtr sDungeonMapFloorTextures[] = {
-    gDungeonMap1FButtonTex, gDungeonMap2FButtonTex, gDungeonMap3FButtonTex, gDungeonMap4FButtonTex,
-    gDungeonMap5FButtonTex, gDungeonMap6FButtonTex, gDungeonMap7FButtonTex, gDungeonMap8FButtonTex,
-    gDungeonMapB1ButtonTex, gDungeonMapB2ButtonTex, gDungeonMapB3ButtonTex, gDungeonMapB4ButtonTex,
-    gDungeonMapB5ButtonTex, gDungeonMapB6ButtonTex, gDungeonMapB7ButtonTex, gDungeonMapB8ButtonTex,
-};
-static struct_801BED24 D_801BED24[] = {
-    { SCENE_MITURIN, 0, -10 },
-    { SCENE_MITURIN_BS, 0, -10 },
-};
+static TransitionActorEntry sTransitionActors[ROOM_TRANSITION_MAX];
+static PauseDungeonMap sPauseDungeonMap;
 
-static TransitionActorEntry D_801F53B0[48];
-static struct_801F56B0 D_801F56B0;
-
-void MapDisp_GetMapITexture(void* dst, s32 mapId) {
-    if (MapDisp_GetSizeOfMapITex(mapId) != 0) {
-        CmpDma_LoadFile(SEGMENT_ROM_START(map_i_static), mapId, dst, MapDisp_GetSizeOfMapITex(mapId));
+void MapDisp_GetMapITexture(void* dst, s32 mapCompactId) {
+    if (MapDisp_GetSizeOfMapITex(mapCompactId) != 0) {
+        CmpDma_LoadFile(SEGMENT_ROM_START(map_i_static), mapCompactId, dst, MapDisp_GetSizeOfMapITex(mapCompactId));
     }
 }
 
-void func_80102E90(PlayState* play, s16* arg1) {
-    *arg1 = -1;
+void MapDisp_InitRoomStoreyRecord(PlayState* play, s16* roomStorey) {
+    *roomStorey = -1;
 }
 
-void func_80102EA4(PlayState* play, s16* arg1) {
+void MapDisp_DestroyRoomStoreyRecord(PlayState* play, s16* roomStory) {
 }
 
 void func_80102EB4(u32 param_1) {
-    D_801BEBB8.unk20 |= param_1;
+    sMapDisp.unk20 |= param_1;
 }
 
 void func_80102ED0(u32 param_1) {
-    D_801BEBB8.unk20 &= ~param_1;
+    sMapDisp.unk20 &= ~param_1;
 }
 
-s32 func_80102EF0(PlayState* play) {
-    MinimapEntry* entry;
+s32 MapDisp_CurRoomHasMapI(PlayState* play) {
+    MapDataRoom* mapDataRoom;
     s8 curRoom;
 
-    if (Map_IsInBossArea(play) == true) {
+    if (Map_IsInBossScene(play) == true) {
         return true;
     }
     curRoom = play->roomCtx.curRoom.num;
     if (curRoom == -1) {
         return false;
     }
-    entry = &D_801BEBB8.minimapList->entry[curRoom];
-    if (entry->mapId == 0xFFFF) {
+    mapDataRoom = &sMapDisp.mapDataScene->rooms[curRoom];
+    if (mapDataRoom->mapId == 0xFFFF) {
         return false;
     }
-    if (MapData_GetMapIId(entry->mapId) == MAPDATA_MAP_I_MAX) {
+    if (MapData_GetMapIId(mapDataRoom->mapId) == MAPDATA_MAP_I_MAX) {
         return false;
     }
     return true;
 }
 
-f32 func_80102F9C(f32 arg0) {
+/**
+ * Computes the storey containing checkY and returns the floor Y value.
+ * @note Only used to check if a chest is on the same storey as the player.
+ */
+f32 MapDisp_GetStoreyY(f32 checkY) {
     s32 i;
 
-    if ((D_801BEBB8.unk48[D_801BEBB8.unk40 - 1] - 80.0f) < arg0) {
-        return D_801BEBB8.unk48[D_801BEBB8.unk40 - 1];
+    if ((sMapDisp.storeyYList[sMapDisp.numStoreys - 1] - 80.0f) < checkY) {
+        return sMapDisp.storeyYList[sMapDisp.numStoreys - 1];
     }
-    for (i = D_801BEBB8.unk40 - 2; i >= 0; i--) {
-        if (((D_801BEBB8.unk48[i] - 80.0f) < arg0) && (arg0 < (D_801BEBB8.unk48[i + 1] + 80.0f))) {
-            return D_801BEBB8.unk48[i];
+    for (i = sMapDisp.numStoreys - 2; i >= 0; i--) {
+        if (((sMapDisp.storeyYList[i] - 80.0f) < checkY) && (checkY < (sMapDisp.storeyYList[i + 1] + 80.0f))) {
+            return sMapDisp.storeyYList[i];
         }
     }
-    if (arg0 < (D_801BEBB8.unk48[0] + 80.0f)) {
-        return D_801BEBB8.unk48[0];
+    if (checkY < (sMapDisp.storeyYList[0] + 80.0f)) {
+        return sMapDisp.storeyYList[0];
     }
     return 0.0f;
 }
 
-void MapDisp_GetMapTexDim(MinimapEntry* minimapEntry, s32* width, s32* height) {
-    MapData_GetMapTexDim(minimapEntry->mapId, width, height);
+void MapDisp_GetMapTexDim(MapDataRoom* mapDataRoom, s32* width, s32* height) {
+    MapData_GetMapTexDim(mapDataRoom->mapId, width, height);
 }
 
-void MapDisp_GetMapScale(MinimapEntry* minimapEntry, s32* scale) {
-    MapData_GetMapScale(minimapEntry->mapId, scale);
+void MapDisp_GetMapScale(MapDataRoom* mapDataRoom, s32* scale) {
+    MapData_GetMapScale(mapDataRoom->mapId, scale);
     if (*scale == 0) {
         *scale = 20;
     }
 }
 
-void MapDisp_GetMapPos(MinimapEntry* minimapEntry, s32* offsetX, s32* offsetY) {
+void MapDisp_GetMapOffset(MapDataRoom* mapDataRoom, s32* offsetX, s32* offsetY) {
     s32 width;
     s32 height;
-    s32 temp;
-    s32 temp2;
 
-    if (minimapEntry->mapId == 0xFFFF) {
+    if (mapDataRoom->mapId == 0xFFFF) {
         *offsetX = 0;
         *offsetY = 0;
         return;
     }
-    MapDisp_GetMapTexDim(minimapEntry, &width, &height);
-    MapData_GetMapTexOffset(minimapEntry->mapId, offsetX, offsetY);
-    if (minimapEntry->unk8 & 1) {
-        temp = width / 2;
-        *offsetX = (temp - *offsetX) + temp;
+    MapDisp_GetMapTexDim(mapDataRoom, &width, &height);
+    MapData_GetMapTexOffset(mapDataRoom->mapId, offsetX, offsetY);
+    if (mapDataRoom->flags & 1) {
+        s32 temp = (width / 2);
+
+        *offsetX = ((width / 2) - *offsetX) + (width / 2);
     }
-    if (minimapEntry->unk8 & 2) {
-        temp2 = height / 2;
-        *offsetY = (temp2 - *offsetY) + temp2;
+    if (mapDataRoom->flags & 2) {
+        s32 temp = (height / 2);
+
+        *offsetY = (temp - *offsetY) + temp;
     }
 }
 
-void func_801031D0(PlayState* play, TexturePtr texture, s32 arg2, s32 arg3, s32 arg4, f32 arg5) {
-    MinimapEntry* entry = &D_801BEBB8.minimapList->entry[arg4];
+void MapDisp_DrawMinimapRoom(PlayState* play, TexturePtr texture, s32 x, s32 y, s32 room, f32 intensity) {
+    MapDataRoom* mapDataRoom = &sMapDisp.mapDataScene->rooms[room];
     s32 texWidth;
     s32 texHeight;
     s32 dtdy;
     s32 dsdx;
     s32 t;
     s32 s;
-    s16 var_v1_4;
-    s16 var_v1_5;
-    Color_RGBA8 spAC_color;
-    s32 spA8_drawType;
+    s16 dsdx_temp;
+    s16 dtdy_temp;
+    Color_RGBA8 color;
+    s32 drawType;
 
-    if ((entry->mapId == 0xFFFF) || (texture == NULL)) {
+    if ((mapDataRoom->mapId == 0xFFFF) || (texture == NULL)) {
         return;
     }
 
-    MapDisp_GetMapTexDim(entry, &texWidth, &texHeight);
+    MapDisp_GetMapTexDim(mapDataRoom, &texWidth, &texHeight);
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL39_Overlay(play->state.gfxCtx);
-    MapData_GetMapColor(MapData_GetMapColorIndex(entry->mapId), &spAC_color);
-    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, spAC_color.r, spAC_color.g, spAC_color.b,
-                    (s32)(play->interfaceCtx.minimapAlpha * arg5 * spAC_color.a / 255.0f));
-    MapData_GetDrawType(entry->mapId, &spA8_drawType);
+    MapData_GetMapColor(MapData_GetMapColorIndex(mapDataRoom->mapId), &color);
+    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, color.r, color.g, color.b,
+                    (s32)(play->interfaceCtx.minimapAlpha * intensity * color.a / 255.0f));
+    MapData_GetDrawType(mapDataRoom->mapId, &drawType);
 
-    switch (spA8_drawType) {
+    switch (drawType) {
         case MAPDATA_DRAW_1:
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
             gDPLoadTextureBlock_4b(OVERLAY_DISP++, texture, G_IM_FMT_IA, texWidth, texHeight, 0,
@@ -265,17 +241,17 @@ void func_801031D0(PlayState* play, TexturePtr texture, s32 arg2, s32 arg3, s32 
             break;
     }
 
-    s = (entry->unk8 & 1) ? (texWidth - 1) << 5 : 0;
-    t = (entry->unk8 & 2) ? 0 : (texHeight - 1) << 5;
+    s = (mapDataRoom->flags & 1) ? (texWidth - 1) << 5 : 0;
+    t = (mapDataRoom->flags & 2) ? 0 : (texHeight - 1) << 5;
 
-    var_v1_4 = ((entry->unk8 & 1) ? -1 : 1) * (1 << 10);
-    var_v1_5 = ((entry->unk8 & 2) ? 1 : -1) * (1 << 10);
+    dsdx_temp = ((mapDataRoom->flags & 1) ? -1 : 1) * (1 << 10);
+    dtdy_temp = ((mapDataRoom->flags & 2) ? 1 : -1) * (1 << 10);
 
-    dsdx = (entry->unk8 & 1) ? var_v1_4 & 0xFFFF : var_v1_4;
-    dtdy = (entry->unk8 & 2) ? var_v1_5 : var_v1_5 & 0xFFFF;
+    dsdx = (mapDataRoom->flags & 1) ? dsdx_temp & 0xFFFF : dsdx_temp;
+    dtdy = (mapDataRoom->flags & 2) ? dtdy_temp : dtdy_temp & 0xFFFF;
 
-    gSPTextureRectangle(OVERLAY_DISP++, arg2 << 2, arg3 << 2, (texWidth + arg2) << 2, (arg3 + texHeight) << 2,
-                        G_TX_RENDERTILE, s, t, dsdx, dtdy);
+    gSPTextureRectangle(OVERLAY_DISP++, x << 2, y << 2, (texWidth + x) << 2, (y + texHeight) << 2, G_TX_RENDERTILE, s,
+                        t, dsdx, dtdy);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -289,28 +265,28 @@ s32 MapDisp_IsDataRotated(PlayState* play) {
     return false;
 }
 
-s32 func_80103A10(PlayState* play) {
+s32 MapDisp_CanDrawDoors(PlayState* play) {
     if ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && (Cutscene_GetSceneLayer(play) != 0)) {
         return false;
     }
     return true;
 }
 
-void func_80103A58(PlayState* play, Actor* actor) {
-    MinimapEntry* spDC;
-    s32 spD8;
-    s32 spD4;
-    s32 spD0;
-    s32 spCC;
-    s32 spC8;
-    s32 spC4;
-    f32 spC0;
+void MapDisp_Minimap_DrawActorIcon(PlayState* play, Actor* actor) {
+    MapDataRoom* mapDataRoom;
+    s32 posX;
+    s32 posY;
+    s32 texOffsetX;
+    s32 texOffsetY;
+    s32 texWidth;
+    s32 texHeight;
+    f32 scaleFrac;
     f32 unused1;
     f32 unused2;
     Player* player = GET_PLAYER(play);
     s32 scale;
 
-    // inferred from `func_801045AC`
+    // inferred from `MapDisp_Minimap_DrawDoorActor`
     unused1 = fabsf(player->actor.world.pos.y - actor->world.pos.y);
     unused2 = 1.0f - (1 / 350.0f) * unused1;
 
@@ -318,42 +294,42 @@ void func_80103A58(PlayState* play, Actor* actor) {
         unused2 = 0.0f;
     }
 
-    spDC = &D_801BEBB8.minimapList->entry[D_801BEBB8.curRoom];
-    if (spDC->mapId == 0xFFFF) {
+    mapDataRoom = &sMapDisp.mapDataScene->rooms[sMapDisp.curRoom];
+    if (mapDataRoom->mapId == 0xFFFF) {
         return;
     }
 
-    MapDisp_GetMapPos(spDC, &spD0, &spCC);
-    MapDisp_GetMapTexDim(spDC, &spC8, &spC4);
+    MapDisp_GetMapOffset(mapDataRoom, &texOffsetX, &texOffsetY);
+    MapDisp_GetMapTexDim(mapDataRoom, &texWidth, &texHeight);
 
-    scale = D_801BEBB8.minimapList->scale;
-    if (D_801BEBB8.minimapList->scale == 0) {
+    scale = sMapDisp.mapDataScene->scale;
+    if (sMapDisp.mapDataScene->scale == 0) {
         scale = 20;
-    } else if (D_801BEBB8.minimapList->scale == -1) {
+    } else if (sMapDisp.mapDataScene->scale == -1) {
         s32 scaleTemp;
 
-        MapDisp_GetMapScale(spDC, &scaleTemp);
+        MapDisp_GetMapScale(mapDataRoom, &scaleTemp);
         scale = scaleTemp;
     }
 
-    spC0 = 1.0f / scale;
+    scaleFrac = 1.0f / scale;
     if (!MapDisp_IsDataRotated(play)) {
-        spD8 = (s32)((actor->world.pos.x - spDC->unk2) * spC0) + D_801BEBB8.unk8 + D_801BEBB8.unkC - D_801BEBB8.unk8 +
-               spD0;
-        spD4 = (s32)((actor->world.pos.z - spDC->unk6) * spC0) + D_801BEBB8.unkA + D_801BEBB8.unkE - D_801BEBB8.unkA +
-               spCC;
+        posX = (s32)((actor->world.pos.x - mapDataRoom->centerX) * scaleFrac) + sMapDisp.minimapBaseX +
+               sMapDisp.minimapCurX - sMapDisp.minimapBaseX + texOffsetX;
+        posY = (s32)((actor->world.pos.z - mapDataRoom->centerZ) * scaleFrac) + sMapDisp.minimapBaseY +
+               sMapDisp.minimapCurY - sMapDisp.minimapBaseY + texOffsetY;
     } else {
-        spD8 = -(s32)((actor->world.pos.x - spDC->unk2) * spC0) + D_801BEBB8.unk8 + D_801BEBB8.unkC - D_801BEBB8.unk8 +
-               spD0;
-        spD4 = -(s32)((actor->world.pos.z - spDC->unk6) * spC0) + D_801BEBB8.unkA + D_801BEBB8.unkE - D_801BEBB8.unkA +
-               spCC;
+        posX = -(s32)((actor->world.pos.x - mapDataRoom->centerX) * scaleFrac) + sMapDisp.minimapBaseX +
+               sMapDisp.minimapCurX - sMapDisp.minimapBaseX + texOffsetX;
+        posY = -(s32)((actor->world.pos.z - mapDataRoom->centerZ) * scaleFrac) + sMapDisp.minimapBaseY +
+               sMapDisp.minimapCurY - sMapDisp.minimapBaseY + texOffsetY;
     }
 
-    if ((spD8 > 0) && (spD8 < 0x3FF) && (spD4 > 0) && (spD4 < 0x3FF)) {
+    if ((posX > 0) && (posX < 0x3FF) && (posY > 0) && (posY < 0x3FF)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if ((actor->category == ACTORCAT_PLAYER) && (actor->flags & ACTOR_FLAG_80000000)) {
-            s16 spA2;
+            s16 compassRot;
 
             Gfx_SetupDL42_Overlay(play->state.gfxCtx);
             gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -363,19 +339,19 @@ void func_80103A58(PlayState* play, Actor* actor) {
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
             gDPSetRenderMode(OVERLAY_DISP++, G_RM_AA_DEC_LINE, G_RM_NOOP2);
 
-            Matrix_Translate(spD8 - 160.0f, 120.0f - spD4, 0.0f, MTXMODE_NEW);
+            Matrix_Translate(posX - 160.0f, 120.0f - posY, 0.0f, MTXMODE_NEW);
             Matrix_RotateXFApply(-1.6f);
-            spA2 = (s32)(0x7FFF - actor->focus.rot.y) / 1024;
+            compassRot = (s32)(0x7FFF - actor->focus.rot.y) / 1024;
             if (MapDisp_IsDataRotated(play)) {
-                spA2 += 0x7FFF;
+                compassRot += 0x7FFF;
             }
-            Matrix_RotateYF(spA2 / 10.0f, MTXMODE_APPLY);
+            Matrix_RotateYF(compassRot / 10.0f, MTXMODE_APPLY);
             Matrix_Scale(0.4f, 0.4f, 0.4f, MTXMODE_APPLY);
             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 200, 255, 0, play->interfaceCtx.minimapAlpha);
-            gSPDisplayList(OVERLAY_DISP++, gameplay_keep_DL_01ED00);
+            gSPDisplayList(OVERLAY_DISP++, gCompassArrowDL);
         } else if ((actor->id == ACTOR_EN_BOX) && !Flags_GetTreasure(play, actor->params & 0x1F) &&
-                   (func_80102F9C(player->actor.world.pos.y) == func_80102F9C(actor->world.pos.y))) {
+                   (MapDisp_GetStoreyY(player->actor.world.pos.y) == MapDisp_GetStoreyY(actor->world.pos.y))) {
             Gfx_SetupDL39_Overlay(play->state.gfxCtx);
             gDPPipeSync(OVERLAY_DISP++);
             gDPSetTextureLUT(OVERLAY_DISP++, G_TT_NONE);
@@ -387,15 +363,16 @@ void func_80103A58(PlayState* play, Actor* actor) {
                                      G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                      G_TX_NOLOD, G_TX_NOLOD);
 
-            gSPTextureRectangle(OVERLAY_DISP++, (spD8 - 4) << 2, (spD4 - 4) << 2, (spD8 + 4) << 2, (spD4 + 4) << 2,
+            gSPTextureRectangle(OVERLAY_DISP++, (posX - 4) << 2, (posY - 4) << 2, (posX + 4) << 2, (posY + 4) << 2,
                                 G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         } else {
             Gfx_SetupDL39_Overlay(play->state.gfxCtx);
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
             if (actor->flags & ACTOR_FLAG_80000000) {
-                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, D_801BEC2C[actor->category].r, D_801BEC2C[actor->category].g,
-                                D_801BEC2C[actor->category].b, play->interfaceCtx.minimapAlpha);
-                gSPTextureRectangle(OVERLAY_DISP++, (spD8 - 1) << 2, (spD4 - 1) << 2, (spD8 + 1) << 2, (spD4 + 1) << 2,
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sMinimapActorColors[actor->category].r,
+                                sMinimapActorColors[actor->category].g, sMinimapActorColors[actor->category].b,
+                                play->interfaceCtx.minimapAlpha);
+                gSPTextureRectangle(OVERLAY_DISP++, (posX - 1) << 2, (posY - 1) << 2, (posX + 1) << 2, (posY + 1) << 2,
                                     G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
             }
         }
@@ -403,7 +380,7 @@ void func_80103A58(PlayState* play, Actor* actor) {
     }
 }
 
-void func_8010439C(PlayState* play) {
+void MapDisp_Minimap_DrawActors(PlayState* play) {
     ActorContext* actorCtx;
     s32 i;
 
@@ -420,11 +397,11 @@ void func_8010439C(PlayState* play) {
             if (actor != NULL) {
                 do {
                     if ((actor->update != NULL) && (actor->init == NULL) &&
-                        (Object_IsLoaded(&play->objectCtx, actor->objectSlot)) &&
+                        Object_IsLoaded(&play->objectCtx, actor->objectSlot) &&
                         ((actor->id == ACTOR_EN_BOX) || (i == ACTORCAT_PLAYER) ||
                          (actor->flags & ACTOR_FLAG_80000000)) &&
-                        ((D_801BEBB8.curRoom == actor->room) || (actor->room == -1))) {
-                        func_80103A58(play, actor);
+                        ((sMapDisp.curRoom == actor->room) || (actor->room == -1))) {
+                        MapDisp_Minimap_DrawActorIcon(play, actor);
                     }
                     actor = actor->next;
                 } while (actor != NULL);
@@ -435,83 +412,88 @@ void func_8010439C(PlayState* play) {
     }
 }
 
-void func_801045AC(PlayState* play, Actor* actor) {
-    MinimapEntry* sp7C;
-    s32 sp78;
-    s32 sp74;
-    s32 sp70;
-    s32 sp6C;
-    s32 sp68;
-    s32 sp64;
+void MapDisp_Minimap_DrawDoorActor(PlayState* play, Actor* actor) {
+    MapDataRoom* mapDataRoom;
+    s32 posX;
+    s32 posY;
+    s32 texOffsetX;
+    s32 texOffsetY;
+    s32 texWidth;
+    s32 texHeight;
     Player* player = GET_PLAYER(play);
-    f32 sp5C;
-    f32 temp_fv1 = fabsf(player->actor.world.pos.y - actor->world.pos.y);
-    s32 var_v1;
-    f32 sp50 = 1.0f - (1 / 350.0f) * temp_fv1;
+    f32 scaleFrac;
+    f32 yDistFromPlayer = fabsf(player->actor.world.pos.y - actor->world.pos.y);
+    s32 scale;
+    f32 yDistAlpha = 1.0f - (1.0f / 350.0f) * yDistFromPlayer;
 
-    if (sp50 < 0) {
-        sp50 = 0.0f;
+    if (yDistAlpha < 0.0f) {
+        yDistAlpha = 0.0f;
     }
-    sp7C = &D_801BEBB8.minimapList->entry[D_801BEBB8.curRoom];
-    if (sp7C->mapId != 0xFFFF) {
-        MapDisp_GetMapPos(sp7C, &sp70, &sp6C);
-        MapDisp_GetMapTexDim(sp7C, &sp68, &sp64);
+    mapDataRoom = &sMapDisp.mapDataScene->rooms[sMapDisp.curRoom];
+    if (mapDataRoom->mapId != 0xFFFF) {
+        MapDisp_GetMapOffset(mapDataRoom, &texOffsetX, &texOffsetY);
+        MapDisp_GetMapTexDim(mapDataRoom, &texWidth, &texHeight);
 
-        var_v1 = D_801BEBB8.minimapList->scale;
-        if (D_801BEBB8.minimapList->scale == 0) {
-            var_v1 = 20;
-        } else if (D_801BEBB8.minimapList->scale == -1) {
-            s32 sp4C;
+        scale = sMapDisp.mapDataScene->scale;
+        if (sMapDisp.mapDataScene->scale == 0) {
+            scale = 20;
+        } else if (sMapDisp.mapDataScene->scale == -1) {
+            s32 scaleTemp;
 
-            MapDisp_GetMapScale(sp7C, &sp4C);
-            var_v1 = sp4C;
+            MapDisp_GetMapScale(mapDataRoom, &scaleTemp);
+            scale = scaleTemp;
         }
-        sp5C = 1.0f / var_v1;
+        scaleFrac = 1.0f / scale;
         if (!MapDisp_IsDataRotated(play)) {
-            sp78 = (((s32)((actor->world.pos.x - sp7C->unk2) * sp5C) + D_801BEBB8.unk8 + D_801BEBB8.unkC) -
-                    D_801BEBB8.unk8) +
-                   sp70;
-            sp74 = (((s32)((actor->world.pos.z - sp7C->unk6) * sp5C) + D_801BEBB8.unkA + D_801BEBB8.unkE) -
-                    D_801BEBB8.unkA) +
-                   sp6C;
+            posX = (((s32)((actor->world.pos.x - mapDataRoom->centerX) * scaleFrac) + sMapDisp.minimapBaseX +
+                     sMapDisp.minimapCurX) -
+                    sMapDisp.minimapBaseX) +
+                   texOffsetX;
+            posY = (((s32)((actor->world.pos.z - mapDataRoom->centerZ) * scaleFrac) + sMapDisp.minimapBaseY +
+                     sMapDisp.minimapCurY) -
+                    sMapDisp.minimapBaseY) +
+                   texOffsetY;
         } else {
-            sp78 = (((D_801BEBB8.unk8 - (s32)((actor->world.pos.x - sp7C->unk2) * sp5C)) + D_801BEBB8.unkC) -
-                    D_801BEBB8.unk8) +
-                   sp70;
-            sp74 = (((D_801BEBB8.unkA - (s32)((actor->world.pos.z - sp7C->unk6) * sp5C)) + D_801BEBB8.unkE) -
-                    D_801BEBB8.unkA) +
-                   sp6C;
+            posX = (((sMapDisp.minimapBaseX - (s32)((actor->world.pos.x - mapDataRoom->centerX) * scaleFrac)) +
+                     sMapDisp.minimapCurX) -
+                    sMapDisp.minimapBaseX) +
+                   texOffsetX;
+            posY = (((sMapDisp.minimapBaseY - (s32)((actor->world.pos.z - mapDataRoom->centerZ) * scaleFrac)) +
+                     sMapDisp.minimapCurY) -
+                    sMapDisp.minimapBaseY) +
+                   texOffsetY;
         }
-        if ((sp78 > 0) && (sp78 < 0x3FF) && (sp74 > 0) && (sp74 < 0x3FF)) {
+        if ((posX > 0) && (posX < 0x3FF) && (posY > 0) && (posY < 0x3FF)) {
             OPEN_DISPS(play->state.gfxCtx);
 
             Gfx_SetupDL39_Overlay(play->state.gfxCtx);
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
-            if ((actor->category == 0xA) && (func_80103A10(play) != 0)) {
+            if ((actor->category == ACTORCAT_DOOR) && MapDisp_CanDrawDoors(play)) {
                 s32 pad;
 
-                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, D_801BEC2C[actor->category].r, D_801BEC2C[actor->category].g,
-                                D_801BEC2C[actor->category].b,
-                                (s32)((D_801BEC2C[actor->category].a * (1.0f - D_801BEBB8.swapAnimTimer * 0.05f) *
-                                       sp50 * play->interfaceCtx.minimapAlpha) /
-                                      255.0f));
+                gDPSetPrimColor(
+                    OVERLAY_DISP++, 0, 0, sMinimapActorColors[actor->category].r,
+                    sMinimapActorColors[actor->category].g, sMinimapActorColors[actor->category].b,
+                    (s32)((sMinimapActorColors[actor->category].a * (1.0f - sMapDisp.swapAnimTimer * 0.05f) *
+                           yDistAlpha * play->interfaceCtx.minimapAlpha) /
+                          255.0f));
 
-                var_v1 = D_801BEBB8.minimapList->scale;
-                if (D_801BEBB8.minimapList->scale == 0) {
-                    var_v1 = 20;
-                } else if (D_801BEBB8.minimapList->scale == -1) {
-                    s32 sp34;
+                scale = sMapDisp.mapDataScene->scale;
+                if (sMapDisp.mapDataScene->scale == 0) {
+                    scale = 20;
+                } else if (sMapDisp.mapDataScene->scale == -1) {
+                    s32 scaleTemp;
 
-                    MapDisp_GetMapScale(sp7C, &sp34);
-                    var_v1 = sp34;
+                    MapDisp_GetMapScale(mapDataRoom, &scaleTemp);
+                    scale = scaleTemp;
                 }
-                if (var_v1 <= 50) {
-                    gSPTextureRectangle(OVERLAY_DISP++, (sp78 - 2) << 2, (sp74 - 2) << 2, (sp78 + 2) << 2,
-                                        (sp74 + 2) << 2, G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
+                if (scale <= 50) {
+                    gSPTextureRectangle(OVERLAY_DISP++, (posX - 2) << 2, (posY - 2) << 2, (posX + 2) << 2,
+                                        (posY + 2) << 2, G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
                 } else {
-                    gSPTextureRectangle(OVERLAY_DISP++, (sp78 - 1) << 2, (sp74 - 1) << 2, (sp78 + 1) << 2,
-                                        (sp74 + 1) << 2, G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
+                    gSPTextureRectangle(OVERLAY_DISP++, (posX - 1) << 2, (posY - 1) << 2, (posX + 1) << 2,
+                                        (posY + 1) << 2, G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
                 }
             }
 
@@ -520,7 +502,7 @@ void func_801045AC(PlayState* play, Actor* actor) {
     }
 }
 
-void func_80104AE8(PlayState* play) {
+void MapDisp_Minimap_DrawDoorActors(PlayState* play) {
     s32 i;
     Actor* actor;
 
@@ -535,8 +517,8 @@ void func_80104AE8(PlayState* play) {
             do {
                 if ((actor->update != NULL) && (actor->init == NULL) &&
                     Object_IsLoaded(&play->objectCtx, actor->objectSlot) &&
-                    ((D_801BEBB8.curRoom == actor->room) || (actor->room == -1))) {
-                    func_801045AC(play, actor);
+                    ((sMapDisp.curRoom == actor->room) || (actor->room == -1))) {
+                    MapDisp_Minimap_DrawDoorActor(play, actor);
                 }
                 actor = actor->next;
             } while (actor != NULL);
@@ -546,11 +528,16 @@ void func_80104AE8(PlayState* play) {
     }
 }
 
-void func_80104C80(PlayState* play) {
+/**
+ * @brief Waits for GAMEPLAY_DANGEON_KEEP to load, if it is a current object depenency
+ *
+ * @param play
+ */
+void MapDisp_AwaitGameplayDangeonKeep(PlayState* play) {
     s32 objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_DANGEON_KEEP);
 
     if (objectSlot <= OBJECT_SLOT_NONE) {
-        D_801BEBB8.unk20 |= 1;
+        sMapDisp.unk20 |= 1;
     } else {
         do { } while (!Object_IsLoaded(&play->objectCtx, objectSlot)); }
 
@@ -561,391 +548,436 @@ void func_80104C80(PlayState* play) {
 void MapDisp_Init(PlayState* play) {
     s32 i;
 
-    D_801BEBB8.minimapList = NULL;
-    D_801BEBB8.curRoom = -1;
-    D_801BEBB8.unk8 = 0xD2;
-    D_801BEBB8.unkA = 0x8C;
-    D_801BEBB8.unkC = 0xD2;
-    D_801BEBB8.unkE = 0x8C;
-    D_801BEBB8.lMapCurTex = NULL;
-    D_801BEBB8.prevRoom = -1;
-    D_801BEBB8.lMapPrevTex = NULL;
-    D_801BEBB8.unk1C = 0;
-    D_801BEBB8.unk1E = 0;
-    D_801BEBB8.unk20 = 0;
-    D_801BEBB8.swapAnimTimer = 0;
+    sMapDisp.mapDataScene = NULL;
+    sMapDisp.curRoom = -1;
+    sMapDisp.minimapBaseX = 210;
+    sMapDisp.minimapBaseY = 140;
+    sMapDisp.minimapCurX = 210;
+    sMapDisp.minimapCurY = 140;
+    sMapDisp.minimapCurTex = NULL;
+    sMapDisp.prevRoom = -1;
+    sMapDisp.minimapPrevTex = NULL;
+    sMapDisp.minimapPrevX = 0;
+    sMapDisp.minimapPrevY = 0;
+    sMapDisp.unk20 = 0;
+    sMapDisp.swapAnimTimer = 0;
 
-    if (!Map_IsInBossArea(play)) {
+    if (!Map_IsInBossScene(play)) {
         sSceneNumRooms = play->numRooms;
     }
-    D_801BEBB8.texBuff0 = THA_AllocTailAlign16(&play->state.tha, 0x4000);
-    D_801BEBB8.texBuff1 = THA_AllocTailAlign16(&play->state.tha, 0x4000);
-    func_80104C80(play);
-    if (!Map_IsInBossArea(play)) {
-        D_801BEBB8.sceneMinX = 0;
-        D_801BEBB8.sceneMinZ = 0;
-        D_801BEBB8.sceneWidth = 100;
-        D_801BEBB8.sceneHeight = 100;
-        D_801BEBB8.sceneMidX = (s16)(s32)((f32)D_801BEBB8.sceneMinX + ((f32)D_801BEBB8.sceneWidth * 0.5f));
-        D_801BEBB8.sceneMidZ = (s16)(s32)((f32)D_801BEBB8.sceneMinZ + ((f32)D_801BEBB8.sceneHeight * 0.5f));
+    sMapDisp.texBuff0 = THA_AllocTailAlign16(&play->state.tha, 0x4000);
+    sMapDisp.texBuff1 = THA_AllocTailAlign16(&play->state.tha, 0x4000);
+    MapDisp_AwaitGameplayDangeonKeep(play);
+    if (!Map_IsInBossScene(play)) {
+        sMapDisp.sceneMinX = 0;
+        sMapDisp.sceneMinZ = 0;
+        sMapDisp.sceneWidth = 100;
+        sMapDisp.sceneHeight = 100;
+        sMapDisp.sceneMidX = TRUNCF_BINANG((f32)sMapDisp.sceneMinX + ((f32)sMapDisp.sceneWidth * 0.5f));
+        sMapDisp.sceneMidZ = TRUNCF_BINANG((f32)sMapDisp.sceneMinZ + ((f32)sMapDisp.sceneHeight * 0.5f));
     }
-    D_801BEBB8.unk3C = THA_AllocTailAlign16(&play->state.tha, sSceneNumRooms * sizeof(s16));
+    sMapDisp.roomStoreyList = THA_AllocTailAlign16(&play->state.tha, sSceneNumRooms * sizeof(s16));
 
     for (i = 0; i < sSceneNumRooms; i++) {
-        func_80102E90(play, &D_801BEBB8.unk3C[i]);
+        MapDisp_InitRoomStoreyRecord(play, &sMapDisp.roomStoreyList[i]);
     }
-    D_801BEBB8.unk48 = THA_AllocTailAlign16(&play->state.tha, 32 * sizeof(s16));
+    sMapDisp.storeyYList = THA_AllocTailAlign16(&play->state.tha, ROOM_MAX * sizeof(s16));
 
-    for (i = 0; i < 32; i++) {
-        D_801BEBB8.unk48[i] = -0x7FFF;
+    for (i = 0; i < ROOM_MAX; i++) {
+        sMapDisp.storeyYList[i] = FLOOR_MIN_Y;
     }
     MapDisp_InitMapI(play);
-    D_801BEBB8.unk58 = 0;
-    D_801BEBB8.unk5A = 0;
-    if (Map_IsInBossArea(play)) {
-        func_8010549C(play, NULL);
-        func_8010565C(play, 0, NULL);
+    sMapDisp.bossRoomStorey = 0;
+    sMapDisp.unk5A = 0;
+    if (Map_IsInBossScene(play)) {
+        MapDisp_InitMapData(play, NULL);
+        MapDisp_InitChestData(play, 0, NULL);
     }
 }
 
-void func_80104F34(PlayState* play) {
+typedef struct {
+    /* 0x0 */ s16 sceneId;
+    /* 0x2 */ s16 bottomStorey;
+} MapCustomBottomStorey; // size = 0x4
+
+void MapDisp_InitSceneFloorData(PlayState* play) {
+    static MapCustomBottomStorey sCustomBottomStorey[] = {
+        { SCENE_HAKUGIN, -1 }, { SCENE_HAKUGIN_BS, -1 }, { SCENE_SEA, -2 },
+        { SCENE_SEA_BS, -2 },  { SCENE_INISIE_N, -1 },
+    };
     s32 i1;
     s32 i2;
     s32 i3;
-    s32 i4;
+    s32 storey;
 
-    for (i1 = 0; i1 < 32; i1++) {
-        D_801BEBB8.unk48[i1] = -0x7FFF;
+    // init table
+    for (i1 = 0; i1 < ROOM_MAX; i1++) {
+        sMapDisp.storeyYList[i1] = FLOOR_MIN_Y;
     }
-    for (i2 = 0; i2 < sSceneNumRooms; i2++) {
-        MinimapEntry* mapEntry1 = &D_801BEBB8.minimapList->entry[i2];
 
-        if (mapEntry1->mapId == 0xFFFF) {
+    // for all rooms in scene
+    for (i2 = 0; i2 < sSceneNumRooms; i2++) {
+        MapDataRoom* mapDataRoom = &sMapDisp.mapDataScene->rooms[i2];
+
+        if (mapDataRoom->mapId == 0xFFFF) {
             continue;
         }
-        for (i1 = 0; i1 < 32; i1++) {
-            if (D_801BEBB8.unk48[i1] == -0x7FFF) {
-                D_801BEBB8.unk48[i1] = mapEntry1->unk4;
+        // add item to the table if it is a newish value
+        for (i1 = 0; i1 < ROOM_MAX; i1++) {
+            if (sMapDisp.storeyYList[i1] == FLOOR_MIN_Y) {
+                sMapDisp.storeyYList[i1] = mapDataRoom->floorY;
                 break;
-            } else if (fabsf((f32)D_801BEBB8.unk48[i1] - (f32)mapEntry1->unk4) < 5.0f) {
+            } else if (fabsf((f32)sMapDisp.storeyYList[i1] - (f32)mapDataRoom->floorY) < 5.0f) {
                 break;
             }
         }
     }
+
+    // sort the table in ascending order
     for (i2 = 0; i2 < sSceneNumRooms; i2++) {
-        if (D_801BEBB8.unk48[i2] == -0x7FFF) {
+        if (sMapDisp.storeyYList[i2] == FLOOR_MIN_Y) {
             break;
         }
         for (i3 = i2 + 1; i3 < sSceneNumRooms; i3++) {
-            if (D_801BEBB8.unk48[i3] == -0x7FFF) {
+            if (sMapDisp.storeyYList[i3] == FLOOR_MIN_Y) {
                 break;
             }
-            if (D_801BEBB8.unk48[i3] < D_801BEBB8.unk48[i2]) {
-                s16 temp_t3 = D_801BEBB8.unk48[i2];
+            if (sMapDisp.storeyYList[i3] < sMapDisp.storeyYList[i2]) {
+                s16 swap = sMapDisp.storeyYList[i2];
 
-                D_801BEBB8.unk48[i2] = D_801BEBB8.unk48[i3];
-                D_801BEBB8.unk48[i3] = temp_t3;
+                sMapDisp.storeyYList[i2] = sMapDisp.storeyYList[i3];
+                sMapDisp.storeyYList[i3] = swap;
             }
         }
     }
+
     for (i2 = 0; i2 < sSceneNumRooms; i2++) {
-        MinimapEntry* mapEntry2 = &D_801BEBB8.minimapList->entry[i2];
+        MapDataRoom* mapDataRoom = &sMapDisp.mapDataScene->rooms[i2];
 
-        D_801BEBB8.unk3C[i2] = -1;
+        sMapDisp.roomStoreyList[i2] = -1;
 
-        for (i4 = 0; i4 < sSceneNumRooms; i4++) {
-            if (D_801BEBB8.unk48[i4] != -0x7FFF) {
-                if (fabsf((f32)D_801BEBB8.unk48[i4] - (f32)mapEntry2->unk4) < 5.0f) {
-                    D_801BEBB8.unk3C[i2] = i4;
+        for (storey = 0; storey < sSceneNumRooms; storey++) {
+            if (sMapDisp.storeyYList[storey] != FLOOR_MIN_Y) {
+                if (fabsf((f32)sMapDisp.storeyYList[storey] - (f32)mapDataRoom->floorY) < 5.0f) {
+                    sMapDisp.roomStoreyList[i2] = storey;
                     break;
                 }
             }
         }
     }
-    D_801BEBB8.unk40 = 0;
+    sMapDisp.numStoreys = 0;
     for (i2 = 0; i2 < sSceneNumRooms; i2++) {
-        if (D_801BEBB8.unk48[i2] != -0x7FFF) {
-            D_801BEBB8.unk40++;
+        if (sMapDisp.storeyYList[i2] != FLOOR_MIN_Y) {
+            sMapDisp.numStoreys++;
         }
     }
-    D_801BEBB8.lowestFloor = 0;
-    for (i2 = 0; i2 < ARRAY_COUNT(sCustomLowestFloor); i2++) {
-        if (play->sceneId == sCustomLowestFloor[i2].sceneId) {
-            D_801BEBB8.lowestFloor = sCustomLowestFloor[i2].lowestFloor;
+    sMapDisp.bottomStorey = 0;
+    for (i2 = 0; i2 < ARRAY_COUNT(sCustomBottomStorey); i2++) {
+        if (play->sceneId == sCustomBottomStorey[i2].sceneId) {
+            sMapDisp.bottomStorey = sCustomBottomStorey[i2].bottomStorey;
         }
     }
 }
 
-s32 func_80105294(void) {
-    struct_801BEC70 sp4 = D_801BEC70;
+/**
+ * Unused result
+ * @returns the y position to place the boss room skull icon on the pause map.
+ * The result position is the inverse of what it should be, stacking lower rooms above higher ones
+ */
+s32 MapDisp_GetBossIconY(void) {
+    s32 dungeonMapFloorIconPosY[5] = { 67, 81, 95, 109, 123 };
 
-    if ((D_801BEBB8.minimapList == NULL) || (D_801BEBB8.unk58 < 0) || (D_801BEBB8.unk58 >= 5) ||
+    if ((sMapDisp.mapDataScene == NULL) || (sMapDisp.bossRoomStorey < 0) || (sMapDisp.bossRoomStorey >= 5) ||
         (sSceneNumRooms == 0)) {
-        return 0x7B;
+        return 123;
     }
-    return sp4.unk0[D_801BEBB8.unk58];
+    return dungeonMapFloorIconPosY[sMapDisp.bossRoomStorey];
 }
 
-s16 func_80105318(void) {
-    return D_801BEBB8.unk58;
+s16 MapDisp_GetBossRoomStorey(void) {
+    return sMapDisp.bossRoomStorey;
 }
 
 // TransitionActor params test
-s32 func_80105328(s32 params) {
+s32 MapDisp_IsBossDoor(s32 params) {
     if (ENDOOR_PARAMS_GET_TYPE((u16)params) == ENDOOR_TYPE_5) {
         return true;
     }
     return false;
 }
 
-void func_8010534C(PlayState* play) {
+void MapDisp_InitBossRoomStorey(PlayState* play) {
     TransitionActorList* transitionActors = &sTransitionActorList;
-    s32 var_v0;
+    s32 storey;
     s32 i;
 
     for (i = 0; i < transitionActors->count; i++) {
-        if (func_80105328(D_801F53B0[i].params) != 0) {
-            if (ABS_ALT(D_801F53B0[i].id) != 0x18) {
-                for (var_v0 = 0; var_v0 < D_801BEBB8.unk40; var_v0++) {
+        if (MapDisp_IsBossDoor(sTransitionActors[i].params)) {
+            if (ABS_ALT(sTransitionActors[i].id) != ACTOR_EN_HOLL) {
+                for (storey = 0; storey < sMapDisp.numStoreys; storey++) {
                     //! FAKE: needed for matching
-                    s32 temp = (D_801BEBB8.unk48[var_v0] - 5);
+                    s32 temp = (sMapDisp.storeyYList[storey] - 5);
 
-                    if (((var_v0 == D_801BEBB8.unk40 - 1) && (D_801F53B0[i].pos.y >= (D_801BEBB8.unk48[var_v0] - 5))) ||
-                        ((var_v0 != D_801BEBB8.unk40 - 1) && (D_801F53B0[i].pos.y >= (D_801BEBB8.unk48[var_v0] - 5)) &&
-                         (D_801F53B0[i].pos.y < (D_801BEBB8.unk48[var_v0 + 1] - 5)))) {
-                        D_801BEBB8.unk58 = var_v0;
+                    if (((storey == sMapDisp.numStoreys - 1) &&
+                         (sTransitionActors[i].pos.y >= (sMapDisp.storeyYList[storey] - 5))) ||
+                        ((storey != sMapDisp.numStoreys - 1) &&
+                         (sTransitionActors[i].pos.y >= (sMapDisp.storeyYList[storey] - 5)) &&
+                         (sTransitionActors[i].pos.y < (sMapDisp.storeyYList[storey + 1] - 5)))) {
+                        sMapDisp.bossRoomStorey = storey;
                         return;
                     }
                 }
             }
         }
     }
-    D_801BEBB8.unk58 = 0;
+    sMapDisp.bossRoomStorey = 0;
 }
 
-void func_8010549C(PlayState* play, void* segmentAddress) {
-    MinimapEntry* var_v1;
-    MinimapList* temp_v0;
+/**
+ * @brief Initializes the MapData for the current scene
+ *
+ * @param play
+ * @param segmentAddress
+ */
+void MapDisp_InitMapData(PlayState* play, void* segmentAddress) {
+    MapDataScene* mapDataScene;
+    MapDataRoom* mapDataRooms;
     s32 i;
 
-    if (!Map_IsInBossArea(play)) {
+    if (!Map_IsInBossScene(play)) {
         sSceneNumRooms = play->numRooms;
-        temp_v0 = Lib_SegmentedToVirtual(segmentAddress);
-        D_801BEC14 = *temp_v0;
-        var_v1 = Lib_SegmentedToVirtual(temp_v0->entry);
+        mapDataScene = Lib_SegmentedToVirtual(segmentAddress);
+        sMapDataScene = *mapDataScene;
+        mapDataRooms = Lib_SegmentedToVirtual(mapDataScene->rooms);
 
         for (i = 0; i < sSceneNumRooms; i++) {
-            D_801F5130[i] = *var_v1++;
+            sMapDataRooms[i] = *mapDataRooms++;
         }
 
-        D_801BEC14.entry = D_801F5130;
+        sMapDataScene.rooms = sMapDataRooms;
         if (play->colCtx.colHeader != NULL) {
-            D_801BEBB8.sceneMinX = play->colCtx.colHeader->minBounds.x;
-            D_801BEBB8.sceneMinZ = play->colCtx.colHeader->minBounds.z;
-            D_801BEBB8.sceneWidth = play->colCtx.colHeader->maxBounds.x - play->colCtx.colHeader->minBounds.x;
-            D_801BEBB8.sceneHeight = play->colCtx.colHeader->maxBounds.z - play->colCtx.colHeader->minBounds.z;
-            D_801BEBB8.sceneMidX = D_801BEBB8.sceneMinX + (D_801BEBB8.sceneWidth * 0.5f);
-            D_801BEBB8.sceneMidZ = D_801BEBB8.sceneMinZ + (D_801BEBB8.sceneHeight * 0.5f);
+            sMapDisp.sceneMinX = play->colCtx.colHeader->minBounds.x;
+            sMapDisp.sceneMinZ = play->colCtx.colHeader->minBounds.z;
+            sMapDisp.sceneWidth = play->colCtx.colHeader->maxBounds.x - play->colCtx.colHeader->minBounds.x;
+            sMapDisp.sceneHeight = play->colCtx.colHeader->maxBounds.z - play->colCtx.colHeader->minBounds.z;
+            sMapDisp.sceneMidX = sMapDisp.sceneMinX + (sMapDisp.sceneWidth * 0.5f);
+            sMapDisp.sceneMidZ = sMapDisp.sceneMinZ + (sMapDisp.sceneHeight * 0.5f);
         }
     }
-    D_801BEBB8.minimapList = &D_801BEC14;
-    func_80104F34(play);
-    func_8010534C(play);
+    sMapDisp.mapDataScene = &sMapDataScene;
+    MapDisp_InitSceneFloorData(play);
+    MapDisp_InitBossRoomStorey(play);
 }
 
-void func_8010565C(PlayState* play, s32 num, void* segmentAddress) {
-    MinimapChest* var_v1;
-    s32 var_a3;
+/**
+ * @brief Creates a deep copy of chest data from the scene data.
+ *
+ * @param play
+ * @param num
+ * @param segmentAddress
+ * @note If a boss scene is loaded, no data is copied. This allows the scene to borrow the main dungeon scene data
+ * instead.
+ */
+void MapDisp_InitChestData(PlayState* play, s32 num, void* segmentAddress) {
+    MapDataChest* mapDataChests;
+    s32 i;
 
-    if (!Map_IsInBossArea(play)) {
-        var_v1 = Lib_SegmentedToVirtual(segmentAddress);
-        for (var_a3 = 0; var_a3 < num; var_v1++, var_a3++) {
-            D_801F5270[var_a3] = *var_v1;
+    if (!Map_IsInBossScene(play)) {
+        mapDataChests = Lib_SegmentedToVirtual(segmentAddress);
+        for (i = 0; i < num; mapDataChests++, i++) {
+            sMapDataChests[i] = *mapDataChests;
         }
         sNumChests = num;
     }
-    D_801BEBB8.unk54 = D_801F5270;
-    D_801BEBB8.numChests = sNumChests;
+    sMapDisp.mapDataChests = sMapDataChests;
+    sMapDisp.numChests = sNumChests;
 }
 
-void func_80105818(PlayState* play, s32 num, TransitionActorEntry* transitionActorList) {
+/**
+ * @brief Creates a deep copy of transition actors from the scene data.
+ *
+ * @param play
+ * @param num number of transition actors within the list
+ * @param transitionActorList pointer to the list of transition actors
+ * @note If a boss scene is loaded, no data is copied. This allows the scene to borrow the main dungeon scene data
+ * instead.
+ */
+void MapDisp_InitTransitionActorData(PlayState* play, s32 num, TransitionActorEntry* transitionActorList) {
     s32 i;
 
-    if (!Map_IsInBossArea(play)) {
+    if (!Map_IsInBossScene(play)) {
         sTransitionActorList.count = num;
         for (i = 0; i < num; i++) {
-            D_801F53B0[i] = transitionActorList[i];
+            sTransitionActors[i] = transitionActorList[i];
         }
-        sTransitionActorList.list = D_801F53B0;
+        sTransitionActorList.list = sTransitionActors;
     }
 }
 
 void MapDisp_Destroy(PlayState* play) {
     s32 i;
 
-    D_801BEBB8.minimapList = NULL;
-    D_801BEBB8.curRoom = -1;
-    D_801BEBB8.unkC = 0xD2;
-    D_801BEBB8.unkE = 0x8C;
-    D_801BEBB8.lMapCurTex = NULL;
-    D_801BEBB8.prevRoom = -1;
-    D_801BEBB8.lMapPrevTex = NULL;
-    D_801BEBB8.unk1C = 0;
-    D_801BEBB8.unk1E = 0;
-    D_801BEBB8.unk20 = 0;
-    D_801BEBB8.swapAnimTimer = 0;
-    D_801BEBB8.texBuff0 = NULL;
-    D_801BEBB8.texBuff1 = NULL;
+    sMapDisp.mapDataScene = NULL;
+    sMapDisp.curRoom = -1;
+    sMapDisp.minimapCurX = 210;
+    sMapDisp.minimapCurY = 140;
+    sMapDisp.minimapCurTex = NULL;
+    sMapDisp.prevRoom = -1;
+    sMapDisp.minimapPrevTex = NULL;
+    sMapDisp.minimapPrevX = 0;
+    sMapDisp.minimapPrevY = 0;
+    sMapDisp.unk20 = 0;
+    sMapDisp.swapAnimTimer = 0;
+    sMapDisp.texBuff0 = NULL;
+    sMapDisp.texBuff1 = NULL;
 
     for (i = 0; i < sSceneNumRooms; i++) {
-        func_80102EA4(play, &D_801BEBB8.unk3C[i]);
+        MapDisp_DestroyRoomStoreyRecord(play, &sMapDisp.roomStoreyList[i]);
     }
 
-    D_801BEBB8.unk3C = NULL;
-    D_801BEBB8.unk40 = 0;
-    D_801BEBB8.unk42 = 0;
-    D_801BEBB8.lowestFloor = 0;
-    D_801BEBB8.unk4C = 0;
-    D_801BEBB8.unk48 = NULL;
-    D_801BEBB8.numChests = 0;
-    D_801BEBB8.unk54 = NULL;
+    sMapDisp.roomStoreyList = NULL;
+    sMapDisp.numStoreys = 0;
+    sMapDisp.pauseMapCurStorey = 0;
+    sMapDisp.bottomStorey = 0;
+    sMapDisp.timer = 0;
+    sMapDisp.storeyYList = NULL;
+    sMapDisp.numChests = 0;
+    sMapDisp.mapDataChests = NULL;
     MapDisp_DestroyMapI(play);
-    D_801BEBB8.unk5A = 0;
+    sMapDisp.unk5A = 0;
 }
 
-void func_80105B34(PlayState* play) {
-    s16 temp_a0;
-    s16 temp_a0_2;
-    s16 temp_v1;
-    s16 temp_v1_2;
+void MapDisp_Update(PlayState* play) {
+    s16 currentX;
+    s16 currentY;
+    s16 targetX;
+    s16 targetY;
 
-    if ((D_801BEBB8.minimapList != NULL) && (sSceneNumRooms != 0)) {
-        //! FAKE: D_801BEBFA should be D_801BEBB8.unk42
-        D_801BEBFA = 8 - play->pauseCtx.unk_256;
-        if (D_801BEBB8.prevRoom != -1) {
-            if (D_801BEBB8.swapAnimTimer > 0) {
-                temp_v1 = D_801BEBB8.unk8;
-                temp_a0 = D_801BEBB8.unkC;
-                if (temp_v1 != temp_a0) {
-                    D_801BEBB8.unkC =
-                        (s16)(s32)(((f32)(temp_v1 - temp_a0) / (f32)D_801BEBB8.swapAnimTimer) + (f32)temp_a0);
+    if ((sMapDisp.mapDataScene != NULL) && (sSceneNumRooms != 0)) {
+        //! FAKE: D_801BEBFA should be sMapDisp.pauseMapCurStorey
+        D_801BEBFA = DUNGEON_FLOOR_INDEX_0 - play->pauseCtx.cursorMapDungeonItem;
+        if (sMapDisp.prevRoom != -1) {
+            if (sMapDisp.swapAnimTimer > 0) {
+                targetX = sMapDisp.minimapBaseX;
+                currentX = sMapDisp.minimapCurX;
+                if (targetX != currentX) {
+                    sMapDisp.minimapCurX =
+                        TRUNCF_BINANG(((f32)(targetX - currentX) / (f32)sMapDisp.swapAnimTimer) + (f32)currentX);
                 }
-                temp_v1_2 = D_801BEBB8.unkA;
-                temp_a0_2 = D_801BEBB8.unkE;
-                if (temp_v1_2 != temp_a0_2) {
-                    D_801BEBB8.unkE =
-                        (s16)(s32)(((f32)(temp_v1_2 - temp_a0_2) / (f32)D_801BEBB8.swapAnimTimer) + (f32)temp_a0_2);
+                targetY = sMapDisp.minimapBaseY;
+                currentY = sMapDisp.minimapCurY;
+                if (targetY != currentY) {
+                    sMapDisp.minimapCurY =
+                        TRUNCF_BINANG(((f32)(targetY - currentY) / (f32)sMapDisp.swapAnimTimer) + (f32)currentY);
                 }
-                D_801BEBB8.swapAnimTimer--;
+                sMapDisp.swapAnimTimer--;
             } else {
-                D_801BEBB8.prevRoom = -1;
-                D_801BEBB8.swapAnimTimer = 0;
-                D_801BEBB8.unkC = D_801BEBB8.unk8;
-                D_801BEBB8.unkE = D_801BEBB8.unkA;
+                sMapDisp.prevRoom = -1;
+                sMapDisp.swapAnimTimer = 0;
+                sMapDisp.minimapCurX = sMapDisp.minimapBaseX;
+                sMapDisp.minimapCurY = sMapDisp.minimapBaseY;
             }
         } else {
-            D_801BEBB8.swapAnimTimer = 0;
+            sMapDisp.swapAnimTimer = 0;
         }
     }
 }
 
 void MapDisp_SwapRooms(s16 nextRoom) {
-    MinimapEntry* nextMinimapEntry;
-    MinimapEntry* prevMinimapEntry;
-    s32 sp54;
-    s32 sp50;
-    s32 sp4C;
-    s32 sp48;
-    s32 sp44;
-    s32 sp40;
+    MapDataRoom* nextMapDataRoom;
+    MapDataRoom* prevMapDataRoom;
+    s32 minimapBaseX;
+    s32 minimapBaseY;
+    s32 width;
+    s32 height;
+    s32 offsetX;
+    s32 offsetY;
 
-    if ((D_801BEBB8.minimapList != NULL) && (sSceneNumRooms != 0) && (nextRoom != -1)) {
-        nextMinimapEntry = &D_801BEBB8.minimapList->entry[nextRoom];
-        if ((nextMinimapEntry->mapId < 5) ||
-            ((nextMinimapEntry->mapId >= 0x100) && (nextMinimapEntry->mapId < 0x162)) ||
-            nextMinimapEntry->mapId == 0xFFFF) {
+    if ((sMapDisp.mapDataScene != NULL) && (sSceneNumRooms != 0) && (nextRoom != -1)) {
+        nextMapDataRoom = &sMapDisp.mapDataScene->rooms[nextRoom];
+        if ((nextMapDataRoom->mapId < 5) || ((nextMapDataRoom->mapId >= 0x100) && (nextMapDataRoom->mapId < 0x162)) ||
+            nextMapDataRoom->mapId == 0xFFFF) {
 
-            D_801BEBB8.prevRoom = D_801BEBB8.curRoom;
-            D_801BEBB8.curRoom = nextRoom;
-            D_801BEBB8.swapAnimTimer = 20;
+            sMapDisp.prevRoom = sMapDisp.curRoom;
+            sMapDisp.curRoom = nextRoom;
+            sMapDisp.swapAnimTimer = 20;
 
-            D_801BEBB8.lMapPrevTex = D_801BEBB8.lMapCurTex;
-            sp54 = D_801BEBB8.unk8;
-            sp50 = D_801BEBB8.unkA;
+            sMapDisp.minimapPrevTex = sMapDisp.minimapCurTex;
+            minimapBaseX = sMapDisp.minimapBaseX;
+            minimapBaseY = sMapDisp.minimapBaseY;
 
-            nextMinimapEntry = &D_801BEBB8.minimapList->entry[D_801BEBB8.curRoom];
+            nextMapDataRoom = &sMapDisp.mapDataScene->rooms[sMapDisp.curRoom];
 
-            if (nextMinimapEntry->mapId == 0xFFFF) {
-                D_801BEBB8.unk1E = 0;
-                D_801BEBB8.unk8 = 0xD2;
-                D_801BEBB8.unkA = 0x8C;
-                D_801BEBB8.unkC = 0xD2;
-                D_801BEBB8.unkE = 0x8C;
-                D_801BEBB8.lMapCurTex = NULL;
-                D_801BEBB8.unk1C = D_801BEBB8.unk1E;
+            if (nextMapDataRoom->mapId == 0xFFFF) {
+                sMapDisp.minimapPrevY = 0;
+                sMapDisp.minimapBaseX = 210;
+                sMapDisp.minimapBaseY = 140;
+                sMapDisp.minimapCurX = 210;
+                sMapDisp.minimapCurY = 140;
+                sMapDisp.minimapCurTex = NULL;
+                sMapDisp.minimapPrevX = sMapDisp.minimapPrevY;
                 return;
             }
-            MapDisp_GetMapPos(nextMinimapEntry, &sp44, &sp40);
-            MapDisp_GetMapTexDim(nextMinimapEntry, &sp4C, &sp48);
-            D_801BEBB8.unk8 = 0x127 - sp4C;
-            D_801BEBB8.unkA = 0xDC - sp48;
-            if (D_801BEBB8.prevRoom != -1) {
-                prevMinimapEntry = &D_801BEBB8.minimapList->entry[D_801BEBB8.prevRoom];
-                if (prevMinimapEntry->mapId == 0xFFFF) {
-                    D_801BEBB8.unk1E = 0;
-                    D_801BEBB8.lMapCurTex = NULL;
-                    D_801BEBB8.unk1C = D_801BEBB8.unk1E;
-                    D_801BEBB8.unkC = D_801BEBB8.unk8;
-                    D_801BEBB8.unkE = D_801BEBB8.unkA;
+            MapDisp_GetMapOffset(nextMapDataRoom, &offsetX, &offsetY);
+            MapDisp_GetMapTexDim(nextMapDataRoom, &width, &height);
+            sMapDisp.minimapBaseX = 295 - width;
+            sMapDisp.minimapBaseY = 220 - height;
+            if (sMapDisp.prevRoom != -1) {
+                prevMapDataRoom = &sMapDisp.mapDataScene->rooms[sMapDisp.prevRoom];
+                if (prevMapDataRoom->mapId == 0xFFFF) {
+                    sMapDisp.minimapCurTex = NULL;
+                    sMapDisp.minimapPrevX = sMapDisp.minimapPrevY = 0;
+                    sMapDisp.minimapCurX = sMapDisp.minimapBaseX;
+                    sMapDisp.minimapCurY = sMapDisp.minimapBaseY;
                     return;
                 } else {
-                    s32 sp3C;
-                    s32 sp38;
+                    s32 prevOffsetX;
+                    s32 prevOffsetY;
                     s32 scale;
                     s32 pad;
 
-                    MapDisp_GetMapPos(prevMinimapEntry, &sp3C, &sp38);
-                    scale = D_801BEBB8.minimapList->scale;
-                    if (D_801BEBB8.minimapList->scale == 0) {
+                    MapDisp_GetMapOffset(prevMapDataRoom, &prevOffsetX, &prevOffsetY);
+                    scale = sMapDisp.mapDataScene->scale;
+                    if (sMapDisp.mapDataScene->scale == 0) {
                         scale = 20;
-                    } else if (D_801BEBB8.minimapList->scale == -1) {
+                    } else if (sMapDisp.mapDataScene->scale == -1) {
                         s32 scaleTemp;
 
-                        MapDisp_GetMapScale(nextMinimapEntry, &scaleTemp);
+                        MapDisp_GetMapScale(nextMapDataRoom, &scaleTemp);
                         scale = scaleTemp;
                     }
-                    D_801BEBB8.unk1C =
-                        (s16)(s32)(((f32)sp44 +
-                                    (((f32)prevMinimapEntry->unk2 - (f32)nextMinimapEntry->unk2) * (1.0f / scale))) -
-                                   (f32)sp3C);
-                    D_801BEBB8.unk1E =
-                        (s16)(s32)(((f32)sp40 +
-                                    (((f32)prevMinimapEntry->unk6 - (f32)nextMinimapEntry->unk6) * (1.0f / scale))) -
-                                   (f32)sp38);
-                    D_801BEBB8.unkC = sp54 - D_801BEBB8.unk1C;
-                    D_801BEBB8.unkE = sp50 - D_801BEBB8.unk1E;
+                    sMapDisp.minimapPrevX =
+                        TRUNCF_BINANG(((f32)offsetX + (((f32)prevMapDataRoom->centerX - (f32)nextMapDataRoom->centerX) *
+                                                       (1.0f / scale))) -
+                                      (f32)prevOffsetX);
+                    sMapDisp.minimapPrevY =
+                        TRUNCF_BINANG(((f32)offsetY + (((f32)prevMapDataRoom->centerZ - (f32)nextMapDataRoom->centerZ) *
+                                                       (1.0f / scale))) -
+                                      (f32)prevOffsetY);
+                    sMapDisp.minimapCurX = minimapBaseX - sMapDisp.minimapPrevX;
+                    sMapDisp.minimapCurY = minimapBaseY - sMapDisp.minimapPrevY;
                 }
             } else {
-                D_801BEBB8.unk1C = D_801BEBB8.unk1E = 0;
-                D_801BEBB8.unkC = D_801BEBB8.unk8;
-                D_801BEBB8.unkE = D_801BEBB8.unkA;
+                sMapDisp.minimapPrevX = sMapDisp.minimapPrevY = 0;
+                sMapDisp.minimapCurX = sMapDisp.minimapBaseX;
+                sMapDisp.minimapCurY = sMapDisp.minimapBaseY;
             }
-            D_801BEBB8.lMapCurTex = NULL;
+            sMapDisp.minimapCurTex = NULL;
 
-            switch (MapData_MID_GetType(nextMinimapEntry->mapId)) {
+            switch (MapData_MID_GetType(nextMapDataRoom->mapId)) {
                 case MAPDATA_MID_GAMEPLAY_DANGEON_KEEP:
-                    D_801BEBB8.lMapCurTex = MapData_GetMapTexGameplayDangeonKeep(nextMinimapEntry->mapId);
+                    sMapDisp.minimapCurTex = MapData_GetMapTexGameplayDangeonKeep(nextMapDataRoom->mapId);
                     return;
 
                 case MAPDATA_MID_MAP_GRAND_STATIC:
-                    if (D_801BEBB8.lMapPrevTex == D_801BEBB8.texBuff0) {
-                        D_801BEBB8.lMapCurTex = D_801BEBB8.texBuff1;
+                    if (sMapDisp.minimapPrevTex == sMapDisp.texBuff0) {
+                        sMapDisp.minimapCurTex = sMapDisp.texBuff1;
                     } else {
-                        D_801BEBB8.lMapCurTex = D_801BEBB8.texBuff0;
+                        sMapDisp.minimapCurTex = sMapDisp.texBuff0;
                     }
-                    if (MapData_GetSizeOfMapGrandTex(nextMinimapEntry->mapId) != 0) {
-                        CmpDma_LoadFile(SEGMENT_ROM_START(map_grand_static), nextMinimapEntry->mapId - 0x100,
-                                        D_801BEBB8.lMapCurTex, MapData_GetSizeOfMapGrandTex(nextMinimapEntry->mapId));
+                    if (MapData_GetSizeOfMapGrandTex(nextMapDataRoom->mapId) != 0) {
+                        CmpDma_LoadFile(SEGMENT_ROM_START(map_grand_static), nextMapDataRoom->mapId - 0x100,
+                                        sMapDisp.minimapCurTex, MapData_GetSizeOfMapGrandTex(nextMapDataRoom->mapId));
                     }
                     break;
 
@@ -956,45 +988,49 @@ void MapDisp_SwapRooms(s16 nextRoom) {
     }
 }
 
-void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
-    MinimapEntry* sp6C;
-    s32 sp68;
-    s32 sp64;
-    s32 sp60;
-    s32 sp5C;
-    s32 sp58;
-    s32 sp54;
+void MapDisp_Minimap_DrawRedCompassIcon(PlayState* play, s32 x, s32 z, s32 rot) {
+    MapDataRoom* mapDataRoom;
+    s32 posX;
+    s32 posY;
+    s32 texOffsetX;
+    s32 texOffsetY;
+    s32 texWidth;
+    s32 texHeight;
     s32 scale;
-    f32 sp4C;
+    f32 scaleFrac;
 
-    sp6C = &D_801BEBB8.minimapList->entry[D_801BEBB8.curRoom];
-    if (sp6C->mapId == 0xFFFF) {
+    mapDataRoom = &sMapDisp.mapDataScene->rooms[sMapDisp.curRoom];
+    if (mapDataRoom->mapId == 0xFFFF) {
         return;
     }
 
-    MapDisp_GetMapPos(sp6C, &sp60, &sp5C);
-    MapDisp_GetMapTexDim(sp6C, &sp58, &sp54);
-    scale = D_801BEBB8.minimapList->scale;
+    MapDisp_GetMapOffset(mapDataRoom, &texOffsetX, &texOffsetY);
+    MapDisp_GetMapTexDim(mapDataRoom, &texWidth, &texHeight);
+    scale = sMapDisp.mapDataScene->scale;
 
-    if (D_801BEBB8.minimapList->scale == 0) {
+    if (sMapDisp.mapDataScene->scale == 0) {
         scale = 20;
-    } else if (D_801BEBB8.minimapList->scale == -1) {
+    } else if (sMapDisp.mapDataScene->scale == -1) {
         s32 scaleTemp;
 
-        MapDisp_GetMapScale(sp6C, &scaleTemp);
+        MapDisp_GetMapScale(mapDataRoom, &scaleTemp);
         scale = scaleTemp;
     }
 
-    sp4C = 1.0f / scale;
+    scaleFrac = 1.0f / scale;
     if (!MapDisp_IsDataRotated(play)) {
-        sp68 = (s32)((x - (f32)sp6C->unk2) * sp4C) + D_801BEBB8.unk8 + (D_801BEBB8.unkC - D_801BEBB8.unk8) + sp60;
-        sp64 = (s32)((z - (f32)sp6C->unk6) * sp4C) + D_801BEBB8.unkA + (D_801BEBB8.unkE - D_801BEBB8.unkA) + sp5C;
+        posX = (s32)((x - (f32)mapDataRoom->centerX) * scaleFrac) + sMapDisp.minimapBaseX +
+               (sMapDisp.minimapCurX - sMapDisp.minimapBaseX) + texOffsetX;
+        posY = (s32)((z - (f32)mapDataRoom->centerZ) * scaleFrac) + sMapDisp.minimapBaseY +
+               (sMapDisp.minimapCurY - sMapDisp.minimapBaseY) + texOffsetY;
     } else {
-        sp68 = -(s32)((x - (f32)sp6C->unk2) * sp4C) + D_801BEBB8.unk8 + (D_801BEBB8.unkC - D_801BEBB8.unk8) + sp60;
-        sp64 = -(s32)((z - (f32)sp6C->unk6) * sp4C) + D_801BEBB8.unkA + (D_801BEBB8.unkE - D_801BEBB8.unkA) + sp5C;
+        posX = -(s32)((x - (f32)mapDataRoom->centerX) * scaleFrac) + sMapDisp.minimapBaseX +
+               (sMapDisp.minimapCurX - sMapDisp.minimapBaseX) + texOffsetX;
+        posY = -(s32)((z - (f32)mapDataRoom->centerZ) * scaleFrac) + sMapDisp.minimapBaseY +
+               (sMapDisp.minimapCurY - sMapDisp.minimapBaseY) + texOffsetY;
     }
 
-    if ((sp68 > 0) && (sp68 < 0x3FF) && (sp64 > 0) && (sp64 < 0x3FF)) {
+    if ((posX > 0) && (posX < 0x3FF) && (posY > 0) && (posY < 0x3FF)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL42_Overlay(play->state.gfxCtx);
@@ -1004,7 +1040,7 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
         gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 255);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
         gDPSetRenderMode(OVERLAY_DISP++, G_RM_AA_DEC_LINE, G_RM_NOOP2);
-        Matrix_Translate(sp68 - 160.0f, 120.0f - sp64, 0.0f, MTXMODE_NEW);
+        Matrix_Translate(posX - 160.0f, 120.0f - posY, 0.0f, MTXMODE_NEW);
         Matrix_RotateXFApply(-1.6f);
         if (MapDisp_IsDataRotated(play)) {
             rot += 0x7FFF;
@@ -1012,85 +1048,87 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
         Matrix_RotateYF(rot / 10.0f, MTXMODE_APPLY);
         Matrix_Scale(0.4f, 0.4f, 0.4f, MTXMODE_APPLY);
         gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(OVERLAY_DISP++, 0, 0xFF, 200, 0, 0, play->interfaceCtx.minimapAlpha);
-        gSPDisplayList(OVERLAY_DISP++, gameplay_keep_DL_01ED00);
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 255, 200, 0, 0, play->interfaceCtx.minimapAlpha);
+        gSPDisplayList(OVERLAY_DISP++, gCompassArrowDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
-s32 func_80106408(PlayState* play) {
-    if ((gSaveContext.save.entrance == 0x6400) && (Cutscene_GetSceneLayer(play) != 0)) {
+s32 MapDisp_IsLocationRomaniRanchCutscene(PlayState* play) {
+    if ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && (Cutscene_GetSceneLayer(play) != 0)) {
         return true;
     }
     return false;
 }
 
-s32 func_80106450(PlayState* play) {
-    if ((!func_8010A0A4(play) && (Inventory_IsMapVisible(play->sceneId) != 0)) ||
-        (func_8010A0A4(play) && CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.mapIndex))) {
+s32 MapDisp_CanDisplayMinimap(PlayState* play) {
+    if ((!MapExp_CurRoomHasMapI(play) && Inventory_IsMapVisible(play->sceneId)) ||
+        (MapExp_CurRoomHasMapI(play) && CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.mapIndex))) {
         return true;
     }
     return false;
 }
 
-s32 func_801064CC(PlayState* play) {
-    if (((play->csCtx.state != CS_STATE_IDLE) && !func_80106408(play)) || (D_801BEBB8.unk20 & 2) ||
-        Map_IsInBossArea(play)) {
+s32 MapDisp_IsLocationMinimapBlocked(PlayState* play) {
+    if (((play->csCtx.state != CS_STATE_IDLE) && !MapDisp_IsLocationRomaniRanchCutscene(play)) ||
+        (sMapDisp.unk20 & 2) || Map_IsInBossScene(play)) {
         return true;
     }
     return false;
 }
 
-s32 func_80106530(PlayState* play) {
-    if ((func_801064CC(play) == true) || !func_80106450(play)) {
+s32 MapDisp_IsMinimapToggleBlocked(PlayState* play) {
+    if ((MapDisp_IsLocationMinimapBlocked(play) == true) || !MapDisp_CanDisplayMinimap(play)) {
         return true;
     }
     return false;
 }
 
-s32 func_8010657C(s32 curRoom, s32 prevRoom) {
-    MinimapEntry* entry;
-    s16* temp1; // Can be removed, but adds readability
+s32 MapDisp_AreRoomsSameStorey(s32 curRoom, s32 prevRoom) {
+    MapDataRoom* mapDataRoom;
+    s16* roomStoreyList; // Can be removed, but adds readability
 
     if ((curRoom == -1) || (prevRoom == -1)) {
-        return 0;
+        return false;
     }
-    entry = &D_801BEBB8.minimapList->entry[curRoom];
-    temp1 = D_801BEBB8.unk3C;
-    if ((temp1[curRoom] <= temp1[prevRoom]) && (temp1[prevRoom] <= (temp1[curRoom] + ((entry->unk8 >> 2) & 7)))) {
-        return 1;
+    mapDataRoom = &sMapDisp.mapDataScene->rooms[curRoom];
+    roomStoreyList = sMapDisp.roomStoreyList;
+    if ((roomStoreyList[curRoom] <= roomStoreyList[prevRoom]) &&
+        (roomStoreyList[prevRoom] <= (roomStoreyList[curRoom] + MAP_DATA_ROOM_GET_EXTRA_STOREYS(mapDataRoom)))) {
+        return true;
     }
-    entry = &D_801BEBB8.minimapList->entry[prevRoom];
-    if ((temp1[prevRoom] <= temp1[curRoom]) && (temp1[curRoom] <= (temp1[prevRoom] + ((entry->unk8 >> 2) & 7)))) {
-        return 1;
+    mapDataRoom = &sMapDisp.mapDataScene->rooms[prevRoom];
+    if ((roomStoreyList[prevRoom] <= roomStoreyList[curRoom]) &&
+        (roomStoreyList[curRoom] <= (roomStoreyList[prevRoom] + MAP_DATA_ROOM_GET_EXTRA_STOREYS(mapDataRoom)))) {
+        return true;
     }
-    return 0;
+    return false;
 }
 
-void func_80106644(PlayState* play, s32 x, s32 z, s32 rot) {
+void MapDisp_DrawMinimap(PlayState* play, s32 playerInitX, s32 playerInitZ, s32 playerInitDir) {
     PauseContext* pauseCtx = &play->pauseCtx;
 
-    if ((D_801BEBB8.minimapList != 0) && ((s32)pauseCtx->state <= PAUSE_STATE_OPENING_2) && (XREG(95) == 0) &&
+    if ((sMapDisp.mapDataScene != NULL) && ((s32)pauseCtx->state <= PAUSE_STATE_OPENING_2) && !R_MINIMAP_DISABLED &&
         (play->interfaceCtx.minimapAlpha != 0)) {
-        if (!func_801064CC(play) && (sSceneNumRooms != 0)) {
-            if (func_80106450(play)) {
-                func_801031D0(play, D_801BEBB8.lMapCurTex, D_801BEBB8.unkC, D_801BEBB8.unkE, D_801BEBB8.curRoom,
-                              1.0f - (D_801BEBB8.swapAnimTimer * 0.05f));
-                if ((D_801BEBB8.curRoom != D_801BEBB8.prevRoom) &&
-                    (func_8010657C(D_801BEBB8.curRoom, D_801BEBB8.prevRoom) != 0)) {
-                    func_801031D0(play, D_801BEBB8.lMapPrevTex, D_801BEBB8.unkC + D_801BEBB8.unk1C,
-                                  D_801BEBB8.unkE + D_801BEBB8.unk1E, D_801BEBB8.prevRoom,
-                                  D_801BEBB8.swapAnimTimer * 0.05f);
+        if (!MapDisp_IsLocationMinimapBlocked(play) && (sSceneNumRooms != 0)) {
+            if (MapDisp_CanDisplayMinimap(play)) {
+                MapDisp_DrawMinimapRoom(play, sMapDisp.minimapCurTex, sMapDisp.minimapCurX, sMapDisp.minimapCurY,
+                                        sMapDisp.curRoom, 1.0f - (sMapDisp.swapAnimTimer * 0.05f));
+                if ((sMapDisp.curRoom != sMapDisp.prevRoom) &&
+                    MapDisp_AreRoomsSameStorey(sMapDisp.curRoom, sMapDisp.prevRoom)) {
+                    MapDisp_DrawMinimapRoom(play, sMapDisp.minimapPrevTex, sMapDisp.minimapCurX + sMapDisp.minimapPrevX,
+                                            sMapDisp.minimapCurY + sMapDisp.minimapPrevY, sMapDisp.prevRoom,
+                                            sMapDisp.swapAnimTimer * 0.05f);
                 }
-                func_80104AE8(play);
+                MapDisp_Minimap_DrawDoorActors(play);
             }
-            if ((!func_8010A0A4(play) || CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.mapIndex)) &&
-                (func_8010A0A4(play) || Inventory_IsMapVisible(play->sceneId))) {
+            if ((!MapExp_CurRoomHasMapI(play) || CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.mapIndex)) &&
+                (MapExp_CurRoomHasMapI(play) || Inventory_IsMapVisible(play->sceneId))) {
                 if (play->interfaceCtx.minigameState == MINIGAME_STATE_NONE) {
-                    func_80105FE0(play, x, z, rot);
+                    MapDisp_Minimap_DrawRedCompassIcon(play, playerInitX, playerInitZ, playerInitDir);
                 }
-                func_8010439C(play);
+                MapDisp_Minimap_DrawActors(play);
             }
         }
     }
@@ -1099,15 +1137,15 @@ void func_80106644(PlayState* play, s32 x, s32 z, s32 rot) {
 void MapDisp_ResetIMap(void) {
     s32 i;
 
-    D_801F56B0.rooms = 0;
-    for (i = 0; i < 32; i++) {
-        D_801F56B0.unk4[i] = 0;
-        D_801F56B0.unk84[i] = NULL;
-        D_801F56B0.unk104[i] = NULL;
+    sPauseDungeonMap.textureCount = 0;
+    for (i = 0; i < ROOM_MAX; i++) {
+        sPauseDungeonMap.mapI_mapCompactId[i] = 0;
+        sPauseDungeonMap.mapI_roomTextures[i] = NULL;
+        sPauseDungeonMap.roomSprite[i] = NULL;
     }
 
-    D_801F56B0.unk184 = 0;
-    D_801BEBB8.unk20 &= ~1;
+    sPauseDungeonMap.animTimer = 0;
+    sMapDisp.unk20 &= ~1;
 }
 
 void MapDisp_InitMapI(PlayState* play) {
@@ -1119,91 +1157,96 @@ void MapDisp_DestroyMapI(PlayState* play) {
 }
 
 // alloc pause screen dungeon map
-void* func_801068FC(PlayState* play, void* heap) {
+void* MapDisp_AllocDungeonMap(PlayState* play, void* heap) {
     void* heapNext;
-    s32 mapId;
-    s32 mapCompactId;
     s32 dungeonMapRoomIter;
-    s32 var_s2;
-    s32 roomIter;
-    MinimapEntry* entry;
-    s32 var_s3;
+    s32 sceneRoomIter;
 
     heapNext = heap;
-    if ((D_801BEBB8.minimapList == NULL) || (sSceneNumRooms == 0)) {
+    if ((sMapDisp.mapDataScene == NULL) || (sSceneNumRooms == 0)) {
         return heapNext;
     }
-    D_801F56B0.rooms = 0;
+    sPauseDungeonMap.textureCount = 0;
 
     // loop for number of rooms
-    for (roomIter = 0; roomIter < sSceneNumRooms; roomIter++) {
-        var_s2 = false;
-        entry = &D_801BEBB8.minimapList->entry[roomIter];
-        if (entry->mapId == 0xFFFF) {
+    for (sceneRoomIter = 0; sceneRoomIter < sSceneNumRooms; sceneRoomIter++) {
+        s32 mapCompactId;
+        MapDataRoom* mapDataRoom = &sMapDisp.mapDataScene->rooms[sceneRoomIter];
+        s32 isDuplicateTexture = false;
+
+        if (mapDataRoom->mapId == 0xFFFF) {
             continue;
         }
-        mapCompactId = MapData_GetMapCompactId(entry->mapId);
+        mapCompactId = MapData_GetMapCompactId(mapDataRoom->mapId);
         if (mapCompactId == -1) {
             continue;
         }
-        for (dungeonMapRoomIter = 0; dungeonMapRoomIter < D_801F56B0.rooms; dungeonMapRoomIter++) {
-            if (mapCompactId == D_801F56B0.unk4[dungeonMapRoomIter]) {
-                var_s2 = true;
+        // test if the texture reference already exists
+        for (dungeonMapRoomIter = 0; dungeonMapRoomIter < sPauseDungeonMap.textureCount; dungeonMapRoomIter++) {
+            if (mapCompactId == sPauseDungeonMap.mapI_mapCompactId[dungeonMapRoomIter]) {
+                isDuplicateTexture = true;
                 break;
             }
         }
-        if (var_s2 == false) {
-            D_801F56B0.unk4[D_801F56B0.rooms] = mapCompactId;
-            D_801F56B0.rooms++;
+        if (isDuplicateTexture == false) {
+            sPauseDungeonMap.mapI_mapCompactId[sPauseDungeonMap.textureCount] = mapCompactId;
+            sPauseDungeonMap.textureCount++;
         }
     }
 
-    D_801F56B0.unk84[0] = heap;
-    for (dungeonMapRoomIter = 0; dungeonMapRoomIter < D_801F56B0.rooms; dungeonMapRoomIter++) {
-        mapId = D_801F56B0.unk4[dungeonMapRoomIter];
-        MapDisp_GetMapITexture(D_801F56B0.unk84[dungeonMapRoomIter], mapId);
-        if (dungeonMapRoomIter + 1 < D_801F56B0.rooms) {
-            D_801F56B0.unk84[dungeonMapRoomIter + 1] =
-                ALIGN16((intptr_t)D_801F56B0.unk84[dungeonMapRoomIter] + MapData_CPID_GetSizeOfMapTex(mapId));
+    // fetch all textures from rom
+    sPauseDungeonMap.mapI_roomTextures[0] = heap;
+    for (dungeonMapRoomIter = 0; dungeonMapRoomIter < sPauseDungeonMap.textureCount; dungeonMapRoomIter++) {
+        s32 mapCompactId = sPauseDungeonMap.mapI_mapCompactId[dungeonMapRoomIter];
+
+        MapDisp_GetMapITexture(sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter], mapCompactId);
+        if (dungeonMapRoomIter + 1 < sPauseDungeonMap.textureCount) {
+            sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter + 1] =
+                ALIGN16((intptr_t)sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter] +
+                        MapData_CPID_GetSizeOfMapTex(mapCompactId));
         } else {
-            heapNext = (intptr_t)D_801F56B0.unk84[dungeonMapRoomIter] + MapData_CPID_GetSizeOfMapTex(mapId);
+            heapNext = (intptr_t)sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter] +
+                       MapData_CPID_GetSizeOfMapTex(mapCompactId);
         }
     }
-    for (roomIter = 0; roomIter < sSceneNumRooms; roomIter++) {
-        entry = &D_801BEBB8.minimapList->entry[roomIter];
-        if (entry->mapId == 0xFFFF) {
-            D_801F56B0.unk104[roomIter] = NULL;
+
+    for (sceneRoomIter = 0; sceneRoomIter < sSceneNumRooms; sceneRoomIter++) {
+        MapDataRoom* mapDataRoom = &sMapDisp.mapDataScene->rooms[sceneRoomIter];
+        s32 foundTexture = false;
+        s32 mapCompactId;
+
+        if (mapDataRoom->mapId == 0xFFFF) {
+            sPauseDungeonMap.roomSprite[sceneRoomIter] = NULL;
         } else {
-            var_s3 = false;
-            mapCompactId = MapData_GetMapCompactId(entry->mapId);
-            for (dungeonMapRoomIter = 0; dungeonMapRoomIter < D_801F56B0.rooms; dungeonMapRoomIter++) {
-                if (mapCompactId == D_801F56B0.unk4[dungeonMapRoomIter]) {
-                    var_s3 = true;
+            mapCompactId = MapData_GetMapCompactId(mapDataRoom->mapId);
+            for (dungeonMapRoomIter = 0; dungeonMapRoomIter < sPauseDungeonMap.textureCount; dungeonMapRoomIter++) {
+                if (mapCompactId == sPauseDungeonMap.mapI_mapCompactId[dungeonMapRoomIter]) {
+                    foundTexture = true;
                     break;
                 }
             }
-            if (!var_s3) {
-                D_801F56B0.unk104[roomIter] = NULL;
+            if (!foundTexture) {
+                sPauseDungeonMap.roomSprite[sceneRoomIter] = NULL;
             } else {
-                void* dummy = D_801F56B0.unk84[dungeonMapRoomIter]; //! FAKE:
+                void* dummy = sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter]; //! FAKE:
 
-                D_801F56B0.unk104[roomIter] = D_801F56B0.unk84[dungeonMapRoomIter];
+                sPauseDungeonMap.roomSprite[sceneRoomIter] = sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter];
             }
         }
     }
     return heapNext;
 }
 
-s32 func_80106BEC(s32 arg0, f32 arg1) {
-    if (arg0 == 0) {
-        if ((D_801BEBB8.unk48[0] <= arg1) && ((D_801BEBB8.unk40 == 1) || (arg1 < D_801BEBB8.unk48[1]))) {
+s32 MapDisp_IsOnStorey(s32 storey, f32 checkY) {
+    if (storey == 0) {
+        if ((sMapDisp.storeyYList[0] <= checkY) && ((sMapDisp.numStoreys == 1) || (checkY < sMapDisp.storeyYList[1]))) {
             return true;
         }
-    } else if (arg0 >= (D_801BEBB8.unk40 - 1)) {
-        if (D_801BEBB8.unk48[D_801BEBB8.unk40 - 1] <= arg1) {
+    } else if (storey >= (sMapDisp.numStoreys - 1)) {
+        if (sMapDisp.storeyYList[sMapDisp.numStoreys - 1] <= checkY) {
             return true;
         }
-    } else if ((D_801BEBB8.unk48[arg0] <= arg1) && (arg1 < D_801BEBB8.unk48[arg0 + 1])) {
+    } else if ((sMapDisp.storeyYList[storey] <= checkY) && (checkY < sMapDisp.storeyYList[storey + 1])) {
         return true;
     }
     return false;
@@ -1228,39 +1271,56 @@ s32 MapDisp_ConvertBossSceneToDungeonScene(s32 sceneId) {
     }
 }
 
-#define COLOR16(r, g, b, a)                                                          \
-    (s16)(((s32)(((r)*31.0f) / 255.0f) << 11) | ((s32)(((g)*31.0f) / 255.0f) << 6) | \
-          ((s32)(((b)*31.0f) / 255.0f) << 1) | (a))
-
-void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5, s32 arg6) {
+/**
+ * @brief Draws the dungeon room sprites for the pause menu dungeon map
+ *
+ * @param play
+ * @param viewX top left x position of the dungeon map view window
+ * @param viewY top left y posiiton of the dungeon map view window
+ * @param viewWidth width in pixels of the dungeon map view window
+ * @param viewHeight height in pixels of the dungeon map view window
+ * @param scaleFrac ratio to convert world space coordinates to map coordinates
+ * @param dungeonIndex enum DungeonIndex for retrieving map/compass data
+ */
+void MapDisp_DrawRooms(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32 viewHeight, f32 scaleFrac,
+                       s32 dungeonIndex) {
+    static u16 sUnvisitedRoomPal[0x10] = {
+        0x0000, 0x0000, 0xFFC1, 0x07C1, 0x07FF, 0x003F, 0xFB3F, 0xF305,
+        0x0453, 0x0577, 0x0095, 0x82E5, 0xFD27, 0x7A49, 0x94A5, 0x0001,
+    }; // palette 0
+    static u16 sVisitedRoomPal[0x10] = {
+        0x0000, 0x027F, 0xFFC1, 0x07C1, 0x07FF, 0x003F, 0xFB3F, 0xF305,
+        0x0453, 0x0577, 0x0095, 0x82E5, 0xFD27, 0x7A49, 0x94A5, 0x0001,
+    }; // palette 1
+    static u16 sCurrentRoomPal[0x10] = {
+        0x0000, 0x0623, 0xFFC1, 0x07C1, 0x07FF, 0x003F, 0xFB3F, 0xF305,
+        0x0453, 0x0577, 0x0095, 0x82E5, 0xFD27, 0x7A49, 0x94A5, 0x0001,
+    }; // palette 2
     PauseContext* pauseCtx = &play->pauseCtx;
-    s32 var_a1_2;
-    s32 var_a1_4;
-    s32 var_a1_5;
-    s32 var_v1;
+    s32 pad[4];
     s32 i;
-    s32 temp1 = ((D_801F56B0.unk184 * -120.0f / 40.0f) + 200.0f) * 31.0f / 255.0f;
-    s32 temp2 = ((D_801F56B0.unk184 * 115.0f / 40.0f) + 140.0f) * 31.0f / 255.0f;
+    s32 green = ((sPauseDungeonMap.animTimer * -120.0f / 40.0f) + 200.0f) * 31.0f / 255.0f;
+    s32 blue = ((sPauseDungeonMap.animTimer * 115.0f / 40.0f) + 140.0f) * 31.0f / 255.0f;
 
-    D_801BECC4[1] = (temp1 << 6) | (temp2 << 1) | 1;
+    sCurrentRoomPal[1] = (green << 6) | (blue << 1) | 1;
 
-    if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, arg6)) {
+    if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, dungeonIndex)) {
         s32 requiredScopeTemp;
 
-        D_801BEC84[0xF] = 0xAD5F;
-        D_801BECA4[0xF] = 0xAD5F;
-        D_801BECC4[0xF] = 0xAD5F;
+        sUnvisitedRoomPal[0xF] = 0xAD5F;
+        sVisitedRoomPal[0xF] = 0xAD5F;
+        sCurrentRoomPal[0xF] = 0xAD5F;
     } else {
-        D_801BECC4[0xF] = D_801BECA4[0xF] = D_801BEC84[0xF] = 0;
+        sCurrentRoomPal[0xF] = sVisitedRoomPal[0xF] = sUnvisitedRoomPal[0xF] = 0;
     }
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL39_Opa(play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
-    gDPLoadTLUT_pal16(POLY_OPA_DISP++, 0, D_801BEC84);
-    gDPLoadTLUT_pal16(POLY_OPA_DISP++, 1, D_801BECA4);
-    gDPLoadTLUT_pal16(POLY_OPA_DISP++, 2, D_801BECC4);
+    gDPLoadTLUT_pal16(POLY_OPA_DISP++, 0, sUnvisitedRoomPal);
+    gDPLoadTLUT_pal16(POLY_OPA_DISP++, 1, sVisitedRoomPal);
+    gDPLoadTLUT_pal16(POLY_OPA_DISP++, 2, sCurrentRoomPal);
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_RGBA16);
 
     for (i = 0; i < sSceneNumRooms; i++) {
@@ -1268,33 +1328,34 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
         s32 texHeight;
         s32 offsetX;
         s32 offsetY;
-        MinimapEntry* entry;
-        TexturePtr texture;
-        s32 sp100;
-        s32 spFC;
-        s32 spF8;
-        s32 spF4;
+        MapDataRoom* mapDataRoom;
+        TexturePtr roomTexture;
+        s32 s;
+        s32 t;
+        s32 dsdx;
+        s32 dtdy;
         s32 texPosX;
         s32 texPosY;
         s32 spE8;
         s32 two = 2;
 
-        entry = &D_801BEBB8.minimapList->entry[i];
-        if ((entry->mapId == 0xFFFF) || (entry->mapId >= 0x162)) {
+        mapDataRoom = &sMapDisp.mapDataScene->rooms[i];
+        if ((mapDataRoom->mapId == 0xFFFF) || (mapDataRoom->mapId >= 0x162)) {
             continue;
         }
 
-        if ((D_801BEBB8.unk42 < D_801BEBB8.unk3C[i]) ||
-            ((D_801BEBB8.unk3C[i] + ((entry->unk8 >> 2) & 7)) < D_801BEBB8.unk42)) {
+        if ((sMapDisp.pauseMapCurStorey < sMapDisp.roomStoreyList[i]) ||
+            ((sMapDisp.roomStoreyList[i] + MAP_DATA_ROOM_GET_EXTRA_STOREYS(mapDataRoom)) <
+             sMapDisp.pauseMapCurStorey)) {
             continue;
         }
 
-        texture = D_801F56B0.unk104[i];
-        if (texture == NULL) {
+        roomTexture = sPauseDungeonMap.roomSprite[i];
+        if (roomTexture == NULL) {
             continue;
         }
 
-        spE8 = MapData_GetMapCompactId(entry->mapId);
+        spE8 = MapData_GetMapCompactId(mapDataRoom->mapId);
         if (spE8 == -1) {
             continue;
         }
@@ -1302,55 +1363,55 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
         MapData_CPID_GetTexDim(spE8, &texWidth, &texHeight);
         MapData_CPID_GetTexOffset(spE8, &offsetX, &offsetY);
 
-        if (entry->unk8 & 1) {
-            offsetX = (texWidth / 2 - offsetX) + texWidth / 2;
-            sp100 = (texWidth - 1) << 5;
-            spF8 = 0xFC00;
+        if (mapDataRoom->flags & 1) {
+            offsetX = ((texWidth / 2) - offsetX) + (texWidth / 2);
+            s = (texWidth - 1) << 5;
+            dsdx = 0xFC00;
         } else {
-            sp100 = 0;
-            spF8 = 0x400;
+            s = 0;
+            dsdx = 0x400;
         }
 
-        if (entry->unk8 & 2) {
+        if (mapDataRoom->flags & 2) {
             s32 requiredScopeTemp;
 
-            offsetY = (texHeight / 2 - offsetY) + texHeight / 2;
-            spFC = (texHeight - 1) << 5;
-            spF4 = 0xFC00;
+            offsetY = ((texHeight / 2) - offsetY) + (texHeight / 2);
+            t = (texHeight - 1) << 5;
+            dtdy = 0xFC00;
         } else {
-            spFC = 0;
-            spF4 = 0x400;
+            t = 0;
+            dtdy = 0x400;
         }
 
-        texPosX = ((entry->unk2 - (f32)D_801BEBB8.sceneMidX) * arg5 - offsetX) + ((arg3 / two) + arg1);
-        texPosY = ((entry->unk6 - (f32)D_801BEBB8.sceneMidZ) * arg5 - offsetY) + ((arg4 / two) + arg2);
+        texPosX =
+            ((mapDataRoom->centerX - (f32)sMapDisp.sceneMidX) * scaleFrac - offsetX) + ((viewWidth / two) + viewX);
+        texPosY =
+            ((mapDataRoom->centerZ - (f32)sMapDisp.sceneMidZ) * scaleFrac - offsetY) + ((viewHeight / two) + viewY);
 
         if (i == play->roomCtx.curRoom.num) {
-            if (Map_IsInBossArea(play)) {
-                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, texture, G_IM_FMT_CI, texWidth, texHeight, 1,
+            if (Map_IsInBossScene(play)) {
+                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, roomTexture, G_IM_FMT_CI, texWidth, texHeight, 1,
                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                        G_TX_NOLOD, G_TX_NOLOD);
             } else {
-                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, texture, G_IM_FMT_CI, texWidth, texHeight, 2,
+                gDPLoadTextureBlock_4b(POLY_OPA_DISP++, roomTexture, G_IM_FMT_CI, texWidth, texHeight, 2,
                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                        G_TX_NOLOD, G_TX_NOLOD);
             }
-        } else if (((void)0, gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(
-                                 MapDisp_ConvertBossSceneToDungeonScene(play->sceneId))])
-                       .rooms &
-                   (1 << i)) {
-            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, texture, G_IM_FMT_CI, texWidth, texHeight, 1,
+        } else if (GET_ROOM_VISITED(Play_GetOriginalSceneId(MapDisp_ConvertBossSceneToDungeonScene(play->sceneId)),
+                                    i)) {
+            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, roomTexture, G_IM_FMT_CI, texWidth, texHeight, 1,
                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-        } else if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, arg6)) {
-            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, texture, G_IM_FMT_CI, texWidth, texHeight, 0,
+        } else if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, dungeonIndex)) {
+            gDPLoadTextureBlock_4b(POLY_OPA_DISP++, roomTexture, G_IM_FMT_CI, texWidth, texHeight, 0,
                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
         } else {
             continue;
         }
         gSPTextureRectangle(POLY_OPA_DISP++, (texPosX << 2), (texPosY << 2), (texPosX + texWidth) << 2,
-                            (texPosY + texHeight) << 2, 0, sp100, spFC, spF8, spF4);
+                            (texPosY + texHeight) << 2, 0, s, t, dsdx, dtdy);
         gDPPipeSync(POLY_OPA_DISP++);
     }
 
@@ -1359,19 +1420,30 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80107B78(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5) {
+/**
+ * @brief Draws the chests for the pause menu dungeon map
+ *
+ * @param play
+ * @param viewX top left x position of the dungeon map view window
+ * @param viewY top left y posiiton of the dungeon map view window
+ * @param viewWidth width in pixels of the dungeon map view window
+ * @param viewHeight height in pixels of the dungeon map view window
+ * @param scaleFrac ratio to convert world space coordinates to map coordinates
+ * @param dungeonIndex enum DungeonIndex for retrieving map/compass data
+ */
+void MapDisp_DrawChests(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32 viewHeight, f32 scaleFrac) {
     s32 pad[23];
-    MinimapChest* var_s0 = D_801BEBB8.unk54;
-    s32 sp3C;
-    MinimapEntry* sp38;
-    s32 posX;
-    s32 posZ;
+    MapDataChest* mapDataChests = sMapDisp.mapDataChests;
+    s32 room;
+    MapDataRoom* mapDataRoom;
+    s32 texPosX;
+    s32 texPosY;
     s32 i;
-    s32 var_v1_2;
+    s32 isChestOpen;
     s32 offsetX = 4;
     s32 offsetZ = 4;
 
-    if (var_s0 == NULL) {
+    if (mapDataChests == NULL) {
         return;
     }
 
@@ -1387,57 +1459,72 @@ void func_80107B78(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                              G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                              G_TX_NOLOD);
 
-    for (i = 0; i < D_801BEBB8.numChests; i++) {
-        sp3C = var_s0[i].unk0;
-        sp38 = &D_801BEBB8.minimapList->entry[sp3C];
+    for (i = 0; i < sMapDisp.numChests; i++) {
+        room = mapDataChests[i].room;
+        mapDataRoom = &sMapDisp.mapDataScene->rooms[room];
 
         switch (play->sceneId) {
             case SCENE_MITURIN_BS:
-                var_v1_2 = ((void)0, gSaveContext.cycleSceneFlags[SCENE_MITURIN].chest) & (1 << var_s0[i].unk2);
+                isChestOpen = GET_CYCLE_CHEST_OPENED(SCENE_MITURIN, mapDataChests[i].chestFlagId);
                 break;
 
             case SCENE_HAKUGIN_BS:
-                var_v1_2 = ((void)0, gSaveContext.cycleSceneFlags[SCENE_HAKUGIN].chest) & (1 << var_s0[i].unk2);
+                isChestOpen = GET_CYCLE_CHEST_OPENED(SCENE_HAKUGIN, mapDataChests[i].chestFlagId);
                 break;
 
             case SCENE_SEA_BS:
-                var_v1_2 = ((void)0, gSaveContext.cycleSceneFlags[SCENE_SEA].chest) & (1 << var_s0[i].unk2);
+                isChestOpen = GET_CYCLE_CHEST_OPENED(SCENE_SEA, mapDataChests[i].chestFlagId);
                 break;
 
             case SCENE_INISIE_BS:
-                var_v1_2 = ((void)0, gSaveContext.cycleSceneFlags[SCENE_INISIE_N].chest) & (1 << var_s0[i].unk2);
+                isChestOpen = GET_CYCLE_CHEST_OPENED(SCENE_INISIE_N, mapDataChests[i].chestFlagId);
                 break;
 
             default:
-                var_v1_2 = Flags_GetTreasure(play, var_s0[i].unk2);
+                isChestOpen = Flags_GetTreasure(play, mapDataChests[i].chestFlagId);
                 break;
         }
 
-        if ((D_801BEBB8.unk42 < D_801BEBB8.unk3C[sp3C]) ||
-            ((D_801BEBB8.unk3C[sp3C] + ((sp38->unk8 >> 2) & 7)) < D_801BEBB8.unk42) || (var_v1_2 != 0)) {
+        if ((sMapDisp.pauseMapCurStorey < sMapDisp.roomStoreyList[room]) ||
+            ((sMapDisp.roomStoreyList[room] + MAP_DATA_ROOM_GET_EXTRA_STOREYS(mapDataRoom)) <
+             sMapDisp.pauseMapCurStorey) ||
+            (isChestOpen != 0)) {
             continue;
         }
 
-        if (!func_80106BEC((s32)D_801BEBB8.unk42, (f32)var_s0[i].unk6)) {
+        if (!MapDisp_IsOnStorey((s32)sMapDisp.pauseMapCurStorey, (f32)mapDataChests[i].y)) {
             continue;
         }
 
-        posX = (s32)((((var_s0[i].unk4 - (f32)D_801BEBB8.sceneMidX) * arg5) - offsetX) + ((arg3 / 2) + arg1));
-        posZ = (s32)((((var_s0[i].unk8 - (f32)D_801BEBB8.sceneMidZ) * arg5) - offsetZ) + ((arg4 / 2) + arg2));
+        texPosX =
+            (s32)((((mapDataChests[i].x - (f32)sMapDisp.sceneMidX) * scaleFrac) - offsetX) + ((viewWidth / 2) + viewX));
+        texPosY = (s32)((((mapDataChests[i].z - (f32)sMapDisp.sceneMidZ) * scaleFrac) - offsetZ) +
+                        ((viewHeight / 2) + viewY));
 
-        gSPTextureRectangle(POLY_OPA_DISP++, posX << 2, posZ << 2, (posX + 8) << 2, (posZ + 8) << 2, G_TX_RENDERTILE, 0,
-                            0, 1 << 10, 1 << 10);
+        gSPTextureRectangle(POLY_OPA_DISP++, texPosX << 2, texPosY << 2, (texPosX + 8) << 2, (texPosY + 8) << 2,
+                            G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5, s32 arg6) {
+/**
+ * @brief Draws the room exit points for the pause menu dungeon map
+ *
+ * @param play
+ * @param viewX top left x position of the dungeon map view window
+ * @param viewY top left y posiiton of the dungeon map view window
+ * @param viewWidth width in pixels of the dungeon map view window
+ * @param viewHeight height in pixels of the dungeon map view window
+ * @param scaleFrac ratio to convert world space coordinates to map coordinates
+ * @param dungeonIndex enum DungeonIndex for retrieving map/compass data
+ */
+void MapDisp_DrawRoomExits(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32 viewHeight, f32 scaleFrac,
+                           s32 dungeonIndex) {
     PauseContext* pauseCtx = &play->pauseCtx;
     TransitionActorList* transitionActors = &sTransitionActorList;
-    TransitionActorEntry* var_s1;
-    s32 tempX;
-    s32 tempY;
+    s32 texPosX;
+    s32 texPosY;
     s32 i;
     s8 roomA;
     s8 roomB;
@@ -1449,28 +1536,26 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
         gDPLoadTextureBlock_4b(POLY_OPA_DISP++, &sWhiteSquareTex, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         for (i = 0; i < transitionActors->count; i++) {
-            if (func_80106BEC(D_801BEBB8.unk42, D_801F53B0[i].pos.y)) {
-                if ((ABS_ALT(D_801F53B0[i].id) != ACTOR_EN_HOLL) && (func_80105328(D_801F53B0[i].params) == 0)) {
-                    roomA = D_801F53B0[i].sides[0].room;
-                    roomB = D_801F53B0[i].sides[1].room;
+            if (MapDisp_IsOnStorey(sMapDisp.pauseMapCurStorey, sTransitionActors[i].pos.y)) {
+                if ((ABS_ALT(sTransitionActors[i].id) != ACTOR_EN_HOLL) &&
+                    !MapDisp_IsBossDoor(sTransitionActors[i].params)) {
+                    roomA = sTransitionActors[i].sides[0].room;
+                    roomB = sTransitionActors[i].sides[1].room;
                     if (CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.mapIndex) || (roomA < 0) ||
-                        (gSaveContext.save.saveInfo
-                             .permanentSceneFlags[Play_GetOriginalSceneId(
-                                 MapDisp_ConvertBossSceneToDungeonScene(play->sceneId))]
-                             .rooms &
-                         (1 << roomA)) ||
+                        GET_ROOM_VISITED(Play_GetOriginalSceneId(MapDisp_ConvertBossSceneToDungeonScene(play->sceneId)),
+                                         roomA) ||
                         (roomB < 0) ||
-                        (gSaveContext.save.saveInfo
-                             .permanentSceneFlags[Play_GetOriginalSceneId(
-                                 MapDisp_ConvertBossSceneToDungeonScene(play->sceneId))]
-                             .rooms &
-                         (1 << roomB))) {
+                        GET_ROOM_VISITED(Play_GetOriginalSceneId(MapDisp_ConvertBossSceneToDungeonScene(play->sceneId)),
+                                         roomB)) {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-                        tempX = ((f32)D_801F53B0[i].pos.x - D_801BEBB8.sceneMidX) * arg5 + ((arg3 / 2) + arg1);
-                        tempY = ((f32)D_801F53B0[i].pos.z - D_801BEBB8.sceneMidZ) * arg5 + ((arg4 / 2) + arg2);
-                        gSPTextureRectangle(POLY_OPA_DISP++, ((tempX - 1) << 2), ((tempY - 1) << 2), ((tempX + 1) << 2),
-                                            ((tempY + 1) << 2), G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+                        texPosX = ((f32)sTransitionActors[i].pos.x - sMapDisp.sceneMidX) * scaleFrac +
+                                  ((viewWidth / 2) + viewX);
+                        texPosY = ((f32)sTransitionActors[i].pos.z - sMapDisp.sceneMidZ) * scaleFrac +
+                                  ((viewHeight / 2) + viewY);
+                        gSPTextureRectangle(POLY_OPA_DISP++, ((texPosX - 1) << 2), ((texPosY - 1) << 2),
+                                            ((texPosX + 1) << 2), ((texPosY + 1) << 2), G_TX_RENDERTILE, 0, 0, 1 << 10,
+                                            1 << 10);
                     }
                 }
             }
@@ -1480,13 +1565,25 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     }
 }
 
-void func_80108558(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 arg5, s32 arg6) {
+/**
+ * @brief Draws the boss room icon for the pause menu dungeon map.
+ *
+ * @param play
+ * @param viewX top left x position of the dungeon map view window
+ * @param viewY top left y posiiton of the dungeon map view window
+ * @param viewWidth width in pixels of the dungeon map view window
+ * @param viewHeight height in pixels of the dungeon map view window
+ * @param scaleFrac ratio to convert world space coordinates to map coordinates
+ * @param dungeonIndex enum DungeonIndex for retrieving map/compass data
+ */
+void MapDisp_DrawBossIcon(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32 viewHeight, f32 scaleFrac,
+                          s32 dungeonIndex) {
     s32 i;
-    TransitionActorList* sp30 = &sTransitionActorList;
+    TransitionActorList* transitionActorList = &sTransitionActorList;
     s32 offsetX = 4;
     s32 offsetZ = 4;
-    s32 posX;
-    s32 posZ;
+    s32 texPosX;
+    s32 texPosY;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1497,25 +1594,27 @@ void func_80108558(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gDPPipeSync(POLY_OPA_DISP++);
 
-    if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, arg6)) {
+    if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, dungeonIndex)) {
         gDPLoadTextureBlock_TEST(POLY_OPA_DISP++, gMapBossIconTex, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                  G_TX_NOLOD, G_TX_NOLOD);
 
-        for (i = 0; i < sp30->count; i++) {
-            if (!func_80105328(D_801F53B0[i].params)) {
+        for (i = 0; i < transitionActorList->count; i++) {
+            if (!MapDisp_IsBossDoor(sTransitionActors[i].params)) {
                 continue;
             }
-            if (!func_80106BEC(D_801BEBB8.unk42, D_801F53B0[i].pos.y)) {
+            if (!MapDisp_IsOnStorey(sMapDisp.pauseMapCurStorey, sTransitionActors[i].pos.y)) {
                 continue;
             }
-            if (ABS_ALT(D_801F53B0[i].id) == ACTOR_EN_HOLL) {
+            if (ABS_ALT(sTransitionActors[i].id) == ACTOR_EN_HOLL) {
                 continue;
             }
 
-            posX = ((((f32)D_801F53B0[i].pos.x - D_801BEBB8.sceneMidX) * arg5) - offsetX) + ((arg3 / 2) + arg1);
-            posZ = ((((f32)D_801F53B0[i].pos.z - D_801BEBB8.sceneMidZ) * arg5) - offsetZ) + ((arg4 / 2) + arg2);
-            gSPTextureRectangle(POLY_OPA_DISP++, posX << 2, posZ << 2, (posX + 8) << 2, (posZ + 8) << 2,
+            texPosX = ((((f32)sTransitionActors[i].pos.x - sMapDisp.sceneMidX) * scaleFrac) - offsetX) +
+                      ((viewWidth / 2) + viewX);
+            texPosY = ((((f32)sTransitionActors[i].pos.z - sMapDisp.sceneMidZ) * scaleFrac) - offsetZ) +
+                      ((viewHeight / 2) + viewY);
+            gSPTextureRectangle(POLY_OPA_DISP++, texPosX << 2, texPosY << 2, (texPosX + 8) << 2, (texPosY + 8) << 2,
                                 G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         }
     }
@@ -1524,6 +1623,12 @@ void func_80108558(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
 }
 
 TexturePtr MapDisp_GetDungeonMapFloorTexture(s32 floorNumber) {
+    static TexturePtr sDungeonMapFloorTextures[] = {
+        gDungeonMap1FButtonTex, gDungeonMap2FButtonTex, gDungeonMap3FButtonTex, gDungeonMap4FButtonTex,
+        gDungeonMap5FButtonTex, gDungeonMap6FButtonTex, gDungeonMap7FButtonTex, gDungeonMap8FButtonTex,
+        gDungeonMapB1ButtonTex, gDungeonMapB2ButtonTex, gDungeonMapB3ButtonTex, gDungeonMapB4ButtonTex,
+        gDungeonMapB5ButtonTex, gDungeonMapB6ButtonTex, gDungeonMapB7ButtonTex, gDungeonMapB8ButtonTex,
+    };
     if ((floorNumber >= 0) && (floorNumber < 8)) {
         return sDungeonMapFloorTextures[floorNumber];
     }
@@ -1533,7 +1638,13 @@ TexturePtr MapDisp_GetDungeonMapFloorTexture(s32 floorNumber) {
     return gDungeonMapBlankFloorButtonTex;
 }
 
-s32 func_80108A64(PlayState* play) {
+/**
+ * @brief Tests if the dungeon map on the Map screen should be drawn.
+ *
+ * @param play
+ * @return true if the map should be drawn, else false.
+ */
+s32 MapDisp_SkipDrawDungeonMap(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
 
     if (pauseCtx->pageIndex != PAUSE_MAP) {
@@ -1551,40 +1662,40 @@ s32 func_80108A64(PlayState* play) {
     return false;
 }
 
-void func_80108AF8(PlayState* play) {
+void MapDisp_DrawDungeonFloorSelect(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
-    s32 temp_a0_2;
-    s32 temp_a2_2;
-    s16 a3;
-    s16 a2;
+    s32 texULY;
+    s32 texLRY;
+    s16 texULX;
+    s16 texLRX;
     s32 pad;
-    s32 var_s1;
-    s32 spB4 = 0;
+    s32 storey;
+    s32 dungeonIndex = 0;
 
-    if ((D_801BEBB8.minimapList != NULL) && (sSceneNumRooms != 0) && !func_80108A64(play)) {
-        if (Map_IsInBossArea(play)) {
+    if ((sMapDisp.mapDataScene != NULL) && (sSceneNumRooms != 0) && !MapDisp_SkipDrawDungeonMap(play)) {
+        if (Map_IsInBossScene(play)) {
             switch (play->sceneId) {
                 case SCENE_MITURIN_BS:
-                    spB4 = 0;
+                    dungeonIndex = DUNGEON_INDEX_WOODFALL_TEMPLE;
                     break;
 
                 case SCENE_HAKUGIN_BS:
-                    spB4 = 1;
+                    dungeonIndex = DUNGEON_INDEX_SNOWHEAD_TEMPLE;
                     break;
 
                 case SCENE_SEA_BS:
-                    spB4 = 2;
+                    dungeonIndex = DUNGEON_INDEX_GREAT_BAY_TEMPLE;
                     break;
 
                 case SCENE_INISIE_BS:
-                    spB4 = 3;
+                    dungeonIndex = DUNGEON_INDEX_STONE_TOWER_TEMPLE;
                     break;
 
                 default:
                     break;
             }
         } else {
-            spB4 = gSaveContext.mapIndex;
+            dungeonIndex = gSaveContext.mapIndex;
         }
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -1592,41 +1703,42 @@ void func_80108AF8(PlayState* play) {
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 200, pauseCtx->alpha);
 
-        for (var_s1 = 0; var_s1 < D_801BEBB8.unk40; var_s1++) {
-            if ((gSaveContext.save.saveInfo
-                     .permanentSceneFlags[Play_GetOriginalSceneId(
-                         MapDisp_ConvertBossSceneToDungeonScene(play->sceneId))]
-                     .unk_14 &
-                 gBitFlags[4 - var_s1]) ||
-                CHECK_DUNGEON_ITEM_ALT(DUNGEON_MAP, spB4)) {
-                gDPLoadTextureBlock(POLY_OPA_DISP++, MapDisp_GetDungeonMapFloorTexture(D_801BEBB8.lowestFloor + var_s1),
+        // Draw unlocked storeys
+        for (storey = 0; storey < sMapDisp.numStoreys; storey++) {
+            if (GET_DUNGEON_FLOOR_VISITED(
+                    Play_GetOriginalSceneId(MapDisp_ConvertBossSceneToDungeonScene(play->sceneId)), 4 - storey) ||
+                CHECK_DUNGEON_ITEM_ALT(DUNGEON_MAP, dungeonIndex)) {
+                gDPLoadTextureBlock(POLY_OPA_DISP++, MapDisp_GetDungeonMapFloorTexture(sMapDisp.bottomStorey + storey),
                                     G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                gSPTextureRectangle(POLY_OPA_DISP++, 0x0144, (125 - var_s1 * 15) << 2, 0x01A4,
-                                    ((125 - var_s1 * 15) + 16) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+                gSPTextureRectangle(POLY_OPA_DISP++, 81 << 2, (125 - storey * 15) << 2, 105 << 2,
+                                    ((125 - storey * 15) + 16) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
             }
         }
         gDPPipeSync(POLY_OPA_DISP++);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 150, 255, pauseCtx->alpha);
-        gDPLoadTextureBlock(POLY_OPA_DISP++,
-                            MapDisp_GetDungeonMapFloorTexture((D_801BEBB8.lowestFloor - pauseCtx->unk_256) + 8),
-                            G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
-                            G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        a3 = 80;
-        a2 = 106;
-        temp_a0_2 = (5 + (pauseCtx->unk_256 * 0xF));
-        temp_a2_2 = temp_a0_2 + 0x10;
+        // Draw currently selected storey
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 150, 150, 255, pauseCtx->alpha);
+        gDPLoadTextureBlock(
+            POLY_OPA_DISP++,
+            MapDisp_GetDungeonMapFloorTexture((sMapDisp.bottomStorey - pauseCtx->cursorMapDungeonItem) + 8),
+            G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
+            G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+        texULX = 80;
+        texLRX = 106;
+        texULY = (5 + (pauseCtx->cursorMapDungeonItem * 0xF));
+        texLRY = texULY + 16;
         if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->cursorXIndex[1] == 0)) {
-            a2++;
-            a3--;
-            temp_a2_2 += 4;
-            temp_a0_2 -= 4;
-            gSPTextureRectangle(POLY_OPA_DISP++, a3 << 2, (temp_a0_2) << 2, a2 << 2, (temp_a2_2) << 2, G_TX_RENDERTILE,
+            texLRX++;
+            texULX--;
+            texLRY += 4;
+            texULY -= 4;
+            gSPTextureRectangle(POLY_OPA_DISP++, texULX << 2, texULY << 2, texLRX << 2, (texLRY) << 2, G_TX_RENDERTILE,
                                 0, 0, 0x036E, 0x02AA);
         } else {
-            gSPTextureRectangle(POLY_OPA_DISP++, (a3 + 1) << 2, temp_a0_2 << 2, (a2 - 1) << 2, temp_a2_2 << 2,
-                                G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+            gSPTextureRectangle(POLY_OPA_DISP++, (texULX + 1) << 2, texULY << 2, (texLRX - 1) << 2, texLRY << 2,
+                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         }
         Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
@@ -1634,83 +1746,98 @@ void func_80108AF8(PlayState* play) {
     }
 }
 
-s32 func_801090B0(s32 arg0) {
-    if ((D_801BEBB8.minimapList == NULL) || (sSceneNumRooms == 0)) {
+s32 MapDisp_IsValidStorey(s32 storey) {
+    if ((sMapDisp.mapDataScene == NULL) || (sSceneNumRooms == 0)) {
         return false;
     }
-    if ((arg0 < 0) || (arg0 >= 6)) {
+    if ((storey < 0) || (storey > 5)) {
         return false;
     }
-    if (D_801BEBB8.unk48[arg0] != -0x7FFF) {
+    if (sMapDisp.storeyYList[storey] != FLOOR_MIN_Y) {
         return true;
     }
     return false;
 }
 
-s32 func_80109124(s16 arg0) {
+s32 MapDisp_GetPlayerStorey(s16 checkY) {
     s32 i;
 
-    if ((D_801BEBB8.minimapList == NULL) || (sSceneNumRooms == 0)) {
+    if ((sMapDisp.mapDataScene == NULL) || (sSceneNumRooms == 0)) {
         return -1;
     }
-    if (D_801BEBB8.unk40 < 2) {
+    if (sMapDisp.numStoreys <= 1) {
         return 0;
     }
-    if ((D_801BEBB8.unk48[1] - 5) >= arg0) {
+    if ((sMapDisp.storeyYList[1] - 5) >= checkY) {
         return 0;
     }
-    for (i = 1; i < D_801BEBB8.unk40; i++) {
-        if (((D_801BEBB8.unk48[i] - 5) < arg0) && ((D_801BEBB8.unk48[i + 1] - 5) >= arg0)) {
+    for (i = 1; i < sMapDisp.numStoreys; i++) {
+        if (((sMapDisp.storeyYList[i] - 5) < checkY) && ((sMapDisp.storeyYList[i + 1] - 5) >= checkY)) {
             return i;
         }
     }
-    return D_801BEBB8.unk40 - 1;
+    return sMapDisp.numStoreys - 1;
 }
 
-void func_801091F0(PlayState* play) {
-    MinimapEntry* entry;
-    f32 temp;
+typedef struct {
+    /* 0x0 */ s16 sceneId;
+    /* 0x4 */ s32 offsetX;
+    /* 0x8 */ s32 offsetY;
+} MapCustomPosOffset; // size = 0xC
+
+/**
+ * Draws the dungeon map within the pause menu's Map screen.
+ *
+ * @param play
+ */
+void MapDisp_DrawDungeonMap(PlayState* play) {
+    static MapCustomPosOffset sCustomMapOffset[] = {
+        { SCENE_MITURIN, 0, -10 },
+        { SCENE_MITURIN_BS, 0, -10 },
+    };
+    MapDataRoom* mapDataRoom;
+    f32 scaleFrac;
     s32 scale;
     s32 var_v0;
-    s32 sp44 = 0;
-    s32 sp40 = 0;
-    s32 sp3C = 0;
+    s32 dungeonIndex = 0;
+    s32 offsetX = 0;
+    s32 offsetY = 0;
 
-    if (func_80108A64(play)) {
+    if (MapDisp_SkipDrawDungeonMap(play)) {
         return;
     }
 
-    if (Map_IsInBossArea(play)) {
+    if (Map_IsInBossScene(play)) {
         switch (play->sceneId) {
             case SCENE_MITURIN_BS:
-                sp44 = 0;
+                dungeonIndex = DUNGEON_INDEX_WOODFALL_TEMPLE;
                 break;
 
             case SCENE_HAKUGIN_BS:
-                sp44 = 1;
+                dungeonIndex = DUNGEON_INDEX_SNOWHEAD_TEMPLE;
                 break;
 
             case SCENE_SEA_BS:
-                sp44 = 2;
+                dungeonIndex = DUNGEON_INDEX_GREAT_BAY_TEMPLE;
                 break;
 
             case SCENE_INISIE_BS:
-                sp44 = 3;
+                dungeonIndex = DUNGEON_INDEX_STONE_TOWER_TEMPLE;
                 break;
 
             default:
                 break;
         }
     } else {
-        sp44 = gSaveContext.mapIndex;
+        dungeonIndex = gSaveContext.mapIndex;
     }
 
-    entry = D_801BEBB8.minimapList->entry;
-    if ((entry->mapId == 0xFFFF) || (entry->mapId >= 0x162)) {
+    mapDataRoom = sMapDisp.mapDataScene->rooms;
+    if ((mapDataRoom->mapId == 0xFFFF) || (mapDataRoom->mapId >= 0x162)) {
         return;
     }
 
-    var_v0 = MapData_GetMapCompactId(entry->mapId);
+    var_v0 = MapData_GetMapCompactId(mapDataRoom->mapId);
     if (var_v0 == -1) {
         return;
     }
@@ -1720,35 +1847,35 @@ void func_801091F0(PlayState* play) {
         scale = 80;
     }
 
-    for (var_v0 = 0; var_v0 < ARRAY_COUNT(D_801BED24); var_v0++) {
-        if (play->sceneId == D_801BED24[var_v0].sceneId) {
-            sp40 = D_801BED24[var_v0].unk4;
-            sp3C = D_801BED24[var_v0].unk8;
+    for (var_v0 = 0; var_v0 < ARRAY_COUNT(sCustomMapOffset); var_v0++) {
+        if (play->sceneId == sCustomMapOffset[var_v0].sceneId) {
+            offsetX = sCustomMapOffset[var_v0].offsetX;
+            offsetY = sCustomMapOffset[var_v0].offsetY;
         }
     }
 
-    temp = 1.0f / scale;
+    scaleFrac = 1.0f / scale;
 
-    func_80106D5C(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, temp, sp44);
-    func_80108124(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, temp, sp44);
-    func_80108558(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, temp, sp44);
+    MapDisp_DrawRooms(play, offsetX + 144, offsetY + 85, 120, 100, scaleFrac, dungeonIndex);
+    MapDisp_DrawRoomExits(play, offsetX + 144, offsetY + 85, 120, 100, scaleFrac, dungeonIndex);
+    MapDisp_DrawBossIcon(play, offsetX + 144, offsetY + 85, 120, 100, scaleFrac, dungeonIndex);
 
-    if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, sp44)) {
-        func_80107B78(play, sp40 + 0x90, sp3C + 0x55, 0x78, 0x64, temp);
+    if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, dungeonIndex)) {
+        MapDisp_DrawChests(play, offsetX + 144, offsetY + 85, 120, 100, scaleFrac);
     }
 }
 
-void func_80109428(PlayState* play) {
-    D_801BEBB8.unk4C++;
-    if (!(D_801BEBB8.unk20 & 1)) {
-        D_801F56B0.unk184++;
-        if (D_801F56B0.unk184 > 40) {
-            D_801BEBB8.unk20 |= 1;
+void MapDisp_UpdateDungeonMap(PlayState* play) {
+    sMapDisp.timer++;
+    if (!(sMapDisp.unk20 & 1)) {
+        sPauseDungeonMap.animTimer++;
+        if (sPauseDungeonMap.animTimer > 40) {
+            sMapDisp.unk20 |= 1;
         }
     } else {
-        D_801F56B0.unk184--;
-        if (D_801F56B0.unk184 < 0) {
-            D_801BEBB8.unk20 &= ~1;
+        sPauseDungeonMap.animTimer--;
+        if (sPauseDungeonMap.animTimer < 0) {
+            sMapDisp.unk20 &= ~1;
         }
     }
 }

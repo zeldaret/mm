@@ -6398,7 +6398,7 @@ void Interface_Draw(PlayState* play) {
         }
 
         Magic_DrawMeter(play);
-        Minimap_Draw(play);
+        Map_DrawMinimap(play);
 
         if ((R_PAUSE_BG_PRERENDER_STATE != 2) && (R_PAUSE_BG_PRERENDER_STATE != 3)) {
             Target_Draw(&play->actorCtx.targetCtx, play);

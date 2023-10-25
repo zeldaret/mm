@@ -2118,7 +2118,7 @@ void Message_LoadOwlWarpText(PlayState* play, s32* offset, f32* arg2, s16* decod
     s16 owlWarpId;
     s16 i;
 
-    if (func_8010A0A4(play) || (play->sceneId == SCENE_SECOM)) {
+    if (MapExp_CurRoomHasMapI(play) || (play->sceneId == SCENE_SECOM)) {
         owlWarpId = OWL_WARP_ENTRANCE;
     } else {
         owlWarpId = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
@@ -5679,7 +5679,7 @@ void Message_Update(PlayState* play) {
 
             if (sLastPlayedSong == OCARINA_SONG_SOARING) {
                 if (interfaceCtx->restrictions.songOfSoaring == 0) {
-                    if (func_8010A0A4(play) || (play->sceneId == SCENE_SECOM)) {
+                    if (MapExp_CurRoomHasMapI(play) || (play->sceneId == SCENE_SECOM)) {
                         Message_StartTextbox(play, 0x1B93, NULL);
                         play->msgCtx.ocarinaMode = OCARINA_MODE_1B;
                         sLastPlayedSong = 0xFF;

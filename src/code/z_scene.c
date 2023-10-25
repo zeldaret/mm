@@ -336,7 +336,7 @@ void Scene_CommandPathList(PlayState* play, SceneCmd* cmd) {
 void Scene_CommandTransitionActorList(PlayState* play, SceneCmd* cmd) {
     play->transitionActors.count = cmd->transitionActorList.num;
     play->transitionActors.list = Lib_SegmentedToVirtual(cmd->transitionActorList.segment);
-    func_80105818(play, play->transitionActors.count, play->transitionActors.list);
+    MapDisp_InitTransitionActorData(play, play->transitionActors.count, play->transitionActors.list);
 }
 
 // Init function for the transition system.
@@ -494,19 +494,19 @@ void Scene_CommandCutsceneList(PlayState* play, SceneCmd* cmd) {
     CutsceneManager_Init(play, Lib_SegmentedToVirtual(cmd->cutsceneList.segment), cmd->cutsceneList.num);
 }
 
-// SceneTableEntry Header Command 0x1C: Mini Maps
+// SceneTableEntry Header Command 0x1C: Map Data
 void Scene_CommandMiniMap(PlayState* play, SceneCmd* cmd) {
     MapDisp_Init(play);
-    func_8010549C(play, cmd->minimapSettings.segment);
+    MapDisp_InitMapData(play, cmd->mapData.segment);
 }
 
 // SceneTableEntry Header Command 0x1D: Undefined
 void Scene_Command1D(PlayState* play, SceneCmd* cmd) {
 }
 
-// SceneTableEntry Header Command 0x1E: Minimap Compass Icon Info
+// SceneTableEntry Header Command 0x1E: Map Data Chests
 void Scene_CommandMiniMapCompassInfo(PlayState* play, SceneCmd* cmd) {
-    func_8010565C(play, cmd->minimapChests.num, cmd->minimapChests.segment);
+    MapDisp_InitChestData(play, cmd->mapDataChests.num, cmd->mapDataChests.segment);
 }
 
 // SceneTableEntry Header Command 0x19: Sets Region Visited Flag

@@ -9,6 +9,9 @@
 struct GameState;
 struct PlayState;
 
+#define ROOM_MAX 32 // maximum number of rooms in a scene
+#define ROOM_TRANSITION_MAX 48 // maximum number of transition actors in a scene
+
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 
 typedef struct {
@@ -213,13 +216,13 @@ typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  data1;
     /* 0x4 */ void* segment;
-} SCmdMinimapSettings; // size = 0x8
+} SCmdMapData; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  num;
     /* 0x4 */ void* segment;
-} SCmdMinimapChests; // size = 0x8
+} SCmdMapDataChests; // size = 0x8
 
 typedef enum {
     /* 0 */ ROOM_SHAPE_TYPE_NORMAL,
@@ -497,25 +500,34 @@ typedef struct {
 } Path; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u16 mapId;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ s16 unk4;
-    /* 0x06 */ s16 unk6;
-    /* 0x08 */ u16 unk8; // flags; 1 = mirror x? 2 = mirror y?
-} MinimapEntry; // size = 0xA
+    /* 0x0 */ u16 mapId;
+    /* 0x2 */ s16 centerX;
+    /* 0x4 */ s16 floorY;
+    /* 0x6 */ s16 centerZ;
+    /* 0x8 */ u16 flags; // 1 = mirror x, 2 = mirror y
+} MapDataRoom; // size = 0xA
+
+#define MAP_DATA_ROOM_GET_EXTRA_STOREYS(e) ((((e)->flags) >> 2) & 7)
 
 typedef struct {
-    /* 0x00 */ MinimapEntry* entry;
-    /* 0x04 */ s16 scale;
-} MinimapList; // size  = 0x8
+    /* 0x0 */ MapDataRoom* rooms;
+    /* 0x4 */ s16 scale;
+} MapDataScene; // size  = 0x8
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE2 unk0;
-    /* 0x02 */ UNK_TYPE2 unk2;
-    /* 0x04 */ UNK_TYPE2 unk4;
-    /* 0x06 */ UNK_TYPE2 unk6;
-    /* 0x08 */ UNK_TYPE2 unk8;
-} MinimapChest; // size = 0xA
+    /* 0x0 */ s16 room;
+    /* 0x2 */ s16 chestFlagId;
+    /* 0x4 */ s16 x;
+    /* 0x6 */ s16 y;
+    /* 0x8 */ s16 z;
+} MapDataChest; // size = 0xA
+
+// TODO: ZAPD updates
+#define SCmdMinimapSettings SCmdMapData
+#define SCmdMinimapChests SCmdMapDataChests
+#define MinimapEntry MapDataRoom
+#define MinimapList MapDataScene
+#define MinimapChest MapDataChest
 
 // TODO: consider merging with bgCamInfo?
 typedef struct {
@@ -556,9 +568,9 @@ typedef union {
     /* Command: 0x19 */ SCmdRegionVisited       regionVisited;
     /* Command: 0x1A */ SCmdTextureAnimations   textureAnimations;
     /* Command: 0x1B */ SCmdCutsceneList        cutsceneList;
-    /* Command: 0x1C */ SCmdMinimapSettings     minimapSettings;
+    /* Command: 0x1C */ SCmdMapData             mapData;
     /* Command: 0x1D */ // Unused
-    /* Command: 0x1E */ SCmdMinimapChests       minimapChests;
+    /* Command: 0x1E */ SCmdMapDataChests       mapDataChests;
 } SceneCmd; // size = 0x8
 
 // Sets cursor point options on the world map

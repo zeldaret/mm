@@ -10876,7 +10876,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    Minimap_SavePlayerRoomInitInfo(play);
+    Map_SetAreaEntrypoint(play);
     func_80841A50(play, this);
     this->unk_3CF = 0;
     R_PLAY_FILL_SCREEN_ON = 0;
@@ -13719,7 +13719,7 @@ void Player_Action_1(Player* this, PlayState* play) {
     } else if (this->actionVar2 < 0) {
         if (Room_StartRoomTransition(play, &play->roomCtx, this->actionVar1)) {
             Map_InitRoomData(play, play->roomCtx.curRoom.num);
-            Minimap_SavePlayerRoomInitInfo(play);
+            Map_SetAreaEntrypoint(play);
             this->actionVar2 = 5;
         }
     } else if (this->actionVar2 > 0) {
@@ -15248,7 +15248,7 @@ void Player_Action_35(Player* this, PlayState* play) {
                                             (Play_GetCamera(play, CAM_ID_MAIN)->stateFlags & CAM_STATE_4))) {
                 if (this->unk_397 == 4) {
                     Map_InitRoomData(play, play->roomCtx.curRoom.num);
-                    Minimap_SavePlayerRoomInitInfo(play);
+                    Map_SetAreaEntrypoint(play);
                 }
 
                 R_PLAY_FILL_SCREEN_ON = 0;

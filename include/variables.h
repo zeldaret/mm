@@ -1610,13 +1610,6 @@ extern SaveContext gSaveContext;
 // extern UNK_TYPE1 D_801F4F68;
 // extern UNK_TYPE1 D_801F4F6A;
 // extern LightsBuffer sLightsBuffer;
-// extern UNK_TYPE1 D_801F5130;
-// extern UNK_TYPE1 D_801F5270;
-// extern UNK_TYPE1 D_801F53B0;
-// extern UNK_TYPE1 D_801F56B0;
-// extern UNK_TYPE1 D_801F5730;
-// extern UNK_TYPE1 D_801F57B4;
-// extern UNK_TYPE1 D_801F5834;
 
 // extern UNK_TYPE1 sSkyboxDrawMatrix;
 // extern UNK_TYPE1 D_801F6AF0;

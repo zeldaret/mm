@@ -495,6 +495,12 @@ typedef enum {
 #define CHECK_DUNGEON_ITEM_ALT(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[dungeonIndex] & gBitFlags[item])
 #define SET_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonIndex] |= (u8)gBitFlags[item])
 #define DUNGEON_KEY_COUNT(dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonKeys[(void)0, dungeonIndex])
+#define GET_DUNGEON_FLOOR_VISITED(sceneId, floor) (gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].unk_14 & gBitFlags[floor])
+#define SET_DUNGEON_FLOOR_VISITED(sceneId, floor) (gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].unk_14 |= gBitFlags[floor])
+#define GET_ROOM_VISITED(sceneId, room) (((void)0, gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].rooms) & (1 << (room)))
+#define SET_ROOM_VISITED(sceneId, room) (gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].rooms |= gBitFlags[room])
+#define GET_CYCLE_CHEST_OPENED(sceneId, chestFlagId) ((void)0, gSaveContext.cycleSceneFlags[(sceneId)].chest) & (1 << (chestFlagId));
+
 
 #define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == EQUIP_SLOT_B ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
 #define GET_CUR_FORM_BTN_SLOT(btn) ((u8)((btn) == EQUIP_SLOT_B ? C_SLOT_EQUIP(CUR_FORM, btn) : C_SLOT_EQUIP(0, btn)))

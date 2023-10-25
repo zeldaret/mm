@@ -880,7 +880,7 @@
         <!-- Bombchu -->
         <Texture Name="gBombchuBodyTex" OutName="bombchu_body" Format="rgba16" Width="8" Height="8" Offset="0x16060" />
         <DList Name="gBombchuDL" Offset="0x16360" />
-        
+
         <Texture Name="gEffBombExplosion1Tex" OutName="eff_bomb_explosion_1" Format="ia16" Width="32" Height="32" Offset="0x164D0" />
         <Texture Name="gEffBombExplosion2Tex" OutName="eff_bomb_explosion_2" Format="ia16" Width="32" Height="32" Offset="0x16CD0" />
         <Texture Name="gEffBombExplosion3Tex" OutName="eff_bomb_explosion_3" Format="ia16" Width="32" Height="32" Offset="0x174D0" />
@@ -908,7 +908,7 @@
         <Texture Name="gElegyShellBeltAndTunicTex" OutName="elegy_shell_human_belt_and_tunic" Format="rgba16" Width="32" Height="16" Offset="0x1E6F8" />
         <Texture Name="gElegyShellHumanHairTex" OutName="elegy_shell_human_hair" Format="rgba16" Width="16" Height="16" Offset="0x1EAF8" />
 
-        <DList Name="gameplay_keep_DL_01ED00" Offset="0x1ED00" />
+        <DList Name="gCompassArrowDL" Offset="0x1ED00" />
         <DList Name="gameplay_keep_DL_01ED90" Offset="0x1ED90" />
         <DList Name="gZTargetArrowDL" Offset="0x1F0F0" />
         <Texture Name="gameplay_keep_Tex_01F200" OutName="tex_01F200" Format="i8" Width="8" Height="8" Offset="0x1F200" />
@@ -1290,7 +1290,7 @@
         <Texture Name="gDropDekuNutTex" OutName="drop_deku_nut" Format="rgba16" Width="32" Height="32" Offset="0x607C0" />
         <Texture Name="gDropDekuStickTex" OutName="drop_deku_stick" Format="rgba16" Width="32" Height="32" Offset="0x60FC0" />
         <Texture Name="gDropMagicLargeTex" OutName="drop_magic_large" Format="rgba16" Width="32" Height="32" Offset="0x617C0" />
-        
+
         <!-- Rupees -->
         <Texture Name="gRupeeGreenTex" OutName="rupee_green" Format="rgba16" Width="4" Height="4" Offset="0x61FC0" />
         <Texture Name="gRupeeBlueTex" OutName="rupee_blue" Format="rgba16" Width="4" Height="4" Offset="0x61FE0" />
@@ -1306,7 +1306,7 @@
         <Texture Name="gRupeeLightRedTex" OutName="rupee_light_red" Format="rgba16" Width="4" Height="4" Offset="0x63B90" />
         <Texture Name="gRupeeLightBlueTex" OutName="rupee_light_blue" Format="rgba16" Width="4" Height="4" Offset="0x63BB0" />
         <Texture Name="gHeartContainerTex" OutName="heart_container" Format="rgba16" Width="32" Height="32" Offset="0x63BD0" />
-        
+
         <Texture Name="gameplay_keep_Tex_0643D0" OutName="tex_0643D0" Format="rgba16" Width="32" Height="32" Offset="0x643D0" />
         <Texture Name="gameplay_keep_Tex_064BD0" OutName="tex_064BD0" Format="rgba16" Width="32" Height="32" Offset="0x64BD0" />
         <Texture Name="gameplay_keep_Tex_0653D0" OutName="tex_0653D0" Format="rgba16" Width="32" Height="32" Offset="0x653D0" />
@@ -1315,12 +1315,12 @@
         <Texture Name="gameplay_keep_Tex_066BD0" OutName="tex_066BD0" Format="rgba16" Width="64" Height="32" Offset="0x66BD0" />
         <Texture Name="gameplay_keep_Tex_067BD0" OutName="tex_067BD0" Format="rgba16" Width="32" Height="32" Offset="0x67BD0" />
         <Texture Name="gameplay_keep_Tex_0683D0" OutName="tex_0683D0" Format="rgba16" Width="32" Height="32" Offset="0x683D0" />
-        
+
         <Texture Name="gSignRectangularSideTex" OutName="sign_rectangular_side" Format="rgba16" Width="32" Height="16" Offset="0x68BD0" />
         <Texture Name="gSignRectangularFrontTex" OutName="sign_rectangular_front" Format="rgba16" Width="32" Height="16" Offset="0x68FD0" />
         <Texture Name="gSignPostWoodTex" OutName="sign_post_wood" Format="rgba16" Width="64" Height="8" Offset="0x693D0" />
         <Texture Name="gSignLetteringTex" OutName="sign_lettering" Format="rgba16" Width="64" Height="32" Offset="0x697D0" />
-        
+
         <DList Name="gameplay_keep_DL_06A800" Offset="0x6A800" />
         <Texture Name="gameplay_keep_Tex_06A880" OutName="tex_06A880" Format="i8" Width="16" Height="16" Offset="0x6A880" />
         <DList Name="gameplay_keep_DL_06AB30" Offset="0x6AB30" />
@@ -1403,7 +1403,7 @@
         <Texture Name="gSunEvening1Tex" OutName="sun_evening_1" Format="i4" Width="64" Height="31" Offset="0x7A310" />
         <Texture Name="gSunEvening2Tex" OutName="sun_evening_2" Format="i4" Width="64" Height="16" Offset="0x7A6F0" />
         <Texture Name="gSunEvening3Tex" OutName="sun_evening_3" Format="i4" Width="64" Height="17" Offset="0x7A8F0" />
-        
+
         <DList Name="gSunSparkleMaterialDL" Offset="0x7AB10" /> <!-- sun (sparkles when small) displaylist -->
         <DList Name="gSunSparkleModelDL" Offset="0x7AB58" />
         <DList Name="gSunDL" Offset="0x7AB70" />
