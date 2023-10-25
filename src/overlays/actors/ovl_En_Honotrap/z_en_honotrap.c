@@ -649,7 +649,7 @@ void EnHonotrap_FlameGroup(EnHonotrap* this, PlayState* play) {
         var_fs0 += 1.0f / 6;
         flameElem->unkC *= (0.006f * (((1.0f - flameGroup->unk4) * 0.8f) + 0.2f));
         flameElem->flameScroll += flameScrollDisplacement;
-        flameElem->flameScroll &= 0x1FF;
+        flameElem->flameScroll %= 0x200u;
     }
 
     if (sp78 || (this->timer <= 0)) {
@@ -723,7 +723,7 @@ void EnHonotrap_UpdateFlame(Actor* thisx, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
     this->actionFunc(this, play);
     this->flameScroll -= 20;
-    this->flameScroll &= 0x1FF;
+    this->flameScroll %= 0x200u;
 }
 
 void EnHonotrap_UpdateFlameGroup(Actor* thisx, PlayState* play) {
