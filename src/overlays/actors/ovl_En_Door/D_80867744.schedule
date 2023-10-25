@@ -1,0 +1,24 @@
+not if_day_s (2) {
+    branch (label_0x08)
+} else {
+    if_week_event_reg_s (WEEKEVENTREG_99_80) {
+        branch (label_0x0E)
+    } else {
+        label_0x08:
+        if_before_time_s (20, 0) {
+            branch (label_0x14)
+        } else {
+            return_s (27)
+        }
+    }
+}
+
+label_0x0E:
+if_before_time_s (18, 0) {
+    branch (label_0x14)
+} else {
+    return_s (27)
+}
+
+label_0x14:
+return_none

@@ -3,6 +3,7 @@
 # SPDX-FileCopyrightText: © 2023 ZeldaRET
 # SPDX-License-Identifier: MIT
 
+# TODO: Check for repeated labels
 
 from __future__ import annotations
 
@@ -559,6 +560,75 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
     return exprs
 
 
+def normalizeTreeImpl(tree: list[Expression], postLabel: Expression, depth: int, autoLabelName: str) -> tuple[list[Expression], bool]:
+    newTree: list[Expression] = []
+    usedLabel = False
+
+    currentPostLabel: Expression = postLabel
+
+    i = 0
+    while i < len(tree):
+        expr = tree[i]
+
+        newTree.append(expr)
+
+        usedCurrentPostLabel = False
+        shouldAddPostLabel = True
+        if i + 1 < len(tree):
+            if tree[i + 1].expr.tokenType == TokenType.LABEL:
+                # Re-use label if there's already one
+                currentPostLabel = tree[i + 1]
+                shouldAddPostLabel = False
+            else:
+                # dot (.) is used to ensure no name crashes with user-declared labels
+                currentPostLabel = Expression(Token(TokenType.LABEL, f"{autoLabelName}.{depth}_{i}", "", 0, 0))
+
+        auxUsed = False
+        if expr.expr.tokenType.isBranch():
+            if len(expr.left) == 0:
+                branchExpr = Expression(Token(TokenType.BRANCH, f"branch", "", 0, 0), currentPostLabel.expr)
+                expr.left.append(branchExpr)
+                if currentPostLabel == postLabel:
+                    usedLabel = True
+                else:
+                    usedCurrentPostLabel = True
+            else:
+                expr.left, auxUsed = normalizeTreeImpl(expr.left, currentPostLabel, depth+1, f"{autoLabelName}_left")
+                if currentPostLabel == postLabel:
+                    usedLabel = usedLabel or auxUsed
+
+            if len(expr.right) == 0:
+                branchExpr = Expression(Token(TokenType.BRANCH, f"branch", "", 0, 0), currentPostLabel.expr)
+                expr.right.append(branchExpr)
+                if currentPostLabel == postLabel:
+                    usedLabel = True
+                else:
+                    usedCurrentPostLabel = True
+            else:
+                expr.right, auxUsed = normalizeTreeImpl(expr.right, currentPostLabel, depth+1, f"{autoLabelName}_right")
+                if currentPostLabel == postLabel:
+                    usedLabel = usedLabel or auxUsed
+
+        if currentPostLabel != postLabel and (usedCurrentPostLabel or auxUsed) and shouldAddPostLabel:
+            newTree.append(currentPostLabel)
+
+        currentPostLabel = postLabel
+
+        i += 1
+
+    return newTree, usedLabel
+
+def normalizeTree(tree: list[Expression]) -> list[Expression]:
+    postLabel = Expression(Token(TokenType.LABEL, "_autolabel.placeholder", "", -1, -1))
+
+    newTree, usedLabel = normalizeTreeImpl(tree, postLabel, 0, "_autolabel")
+
+    if usedLabel:
+        eprint("Warning: branching outside the script")
+        newTree.append(postLabel)
+    return newTree
+
+
 @dataclasses.dataclass
 class CommandInfo:
     macro: str
@@ -670,10 +740,10 @@ def linearizeTree(tree: list[Expression], byteCount = 0) -> tuple[list[LinearExp
 
     return result, byteCount
 
-def emitLinearizedMacros(linearizedExprs: list[LinearExpression], byteCount: int, debuggingLevel: int) -> str:
+def emitLinearizedMacros(linearizedExprs: list[LinearExpression], debuggingLevel: int) -> str:
     result = ""
 
-    offsetWidth = len(f"{byteCount:X}")
+    offsetWidth = len(f"{linearizedExprs[-1].offset:X}")
 
     for linExpr in linearizedExprs:
         info = cmdInfos[linExpr.expr.tokenType]
@@ -729,12 +799,13 @@ def main():
     tokens = TokenIterator(tokenize(preprocessed, str(inputPath)))
     tree = makeTree(tokens, str(inputPath))
     assert tokens.remainingTokens() == 0
+    tree = normalizeTree(tree)
     if printTree:
         for expr in tree:
             expr.print()
 
     linearizedExprs, byteCount = linearizeTree(tree)
-    output = emitLinearizedMacros(linearizedExprs, byteCount, debuggingLevel)
+    output = emitLinearizedMacros(linearizedExprs, debuggingLevel)
 
     if outputPath is None:
         print(output)

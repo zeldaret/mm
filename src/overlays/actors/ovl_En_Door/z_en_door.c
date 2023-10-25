@@ -105,13 +105,8 @@ u8 D_808676EC[] = {
 #include "D_808676EC.schedule.inc"
 };
 
-// TODO
 u8 D_808676F0[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x9 - 0x4),
-    /* 0x4 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(10, 0, 0xF - 0x8),
-    /* 0x8 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x9 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 0, 20, 0, 0x8 - 0xF),
-    /* 0xF */ SCHEDULE_CMD_RET_VAL_S(21),
+#include "D_808676F0.schedule.inc"
 };
 
 u8 D_80867704[] = {
@@ -134,15 +129,8 @@ u8 D_80867714[] = {
 #include "D_80867714.schedule.inc"
 };
 
-// TODO
 u8 D_8086771C[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(1, 0x0B - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(2, 30, 0x0A - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_RET_VAL_S(24),
-    /* 0x0A */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x0B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x0A - 0x0F),
-    /* 0x0F */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(20, 0, 0x0A - 0x13),
-    /* 0x13 */ SCHEDULE_CMD_RET_VAL_S(12),
+#include "D_8086771C.schedule.inc"
 };
 
 u8 D_80867734[] = {
@@ -153,15 +141,8 @@ u8 D_8086773C[] = {
 #include "D_8086773C.schedule.inc"
 };
 
-// TODO
 u8 D_80867744[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x08 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_99_80, 0x0E - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(20, 0, 0x14 - 0x0C),
-    /* 0x0C */ SCHEDULE_CMD_RET_VAL_S(27),
-    /* 0x0E */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(18, 0, 0x14 - 0x12),
-    /* 0x12 */ SCHEDULE_CMD_RET_VAL_S(27),
-    /* 0x14 */ SCHEDULE_CMD_RET_NONE(),
+#include "D_80867744.schedule.inc"
 };
 
 u8 D_8086775C[] = {

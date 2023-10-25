@@ -1,0 +1,16 @@
+if_day_s (1) {
+    if_since_time_s (2, 30) {
+        return_s (24)
+    } else {
+        label_0x0A:
+        return_none
+    }
+} else if_day_s (3) {
+    if_since_time_s (20, 0) {
+        return_s (12)
+    } else {
+        branch (label_0x0A)
+    }
+} else {
+    branch (label_0x0A)
+}
