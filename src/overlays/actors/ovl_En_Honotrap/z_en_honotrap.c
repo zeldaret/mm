@@ -180,13 +180,11 @@ void EnHonotrap_InitEye(EnHonotrap* this, PlayState* play) {
     s32 i;
     s32 j;
     s32 k;
-    f32 sin;
-    f32 cos;
+    f32 sin = Math_SinS(this->actor.home.rot.y);
+    f32 cos = Math_CosS(this->actor.home.rot.y);
     Vec3f triangle[3];
     Vec3f* vtx;
 
-    sin = Math_SinS(this->actor.home.rot.y);
-    cos = Math_CosS(this->actor.home.rot.y);
     Actor_SetScale(&this->actor, 0.1f);
 
     if (sIsFirstInitEye) {
