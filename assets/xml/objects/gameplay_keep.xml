@@ -1347,7 +1347,7 @@
         <DList Name="gameplay_keep_DL_06FF68" Offset="0x6FF68" />
         <Texture Name="gameplay_keep_Tex_0700B0" OutName="tex_0700B0" Format="rgba16" Width="16" Height="32" Offset="0x700B0" />
         <Texture Name="gameplay_keep_Tex_0704B0" OutName="tex_0704B0" Format="rgba16" Width="16" Height="16" Offset="0x704B0" />
-        <DList Name="gRainDropDL" Offset="0x706E0" />
+        <DList Name="gFallingRainDropDL" Offset="0x706E0" />
 
         <!-- Popped Deku Bubbles (EffSsSbn) -->
 

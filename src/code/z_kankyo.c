@@ -545,9 +545,9 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
 
     if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(18, 0)) ||
         (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))) {
-        gSaveContext.save.isNight = 1;
+        gSaveContext.save.isNight = true;
     } else {
-        gSaveContext.save.isNight = 0;
+        gSaveContext.save.isNight = false;
     }
 
     play->state.gfxCtx->callback = Environment_GraphCallback;
@@ -816,7 +816,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     sEnvSkyboxNumStars = 0;
     gSkyboxNumStars = 0;
     D_801BDBA8 = false;
-    sEnvIsTimeStopped = 0;
+    sEnvIsTimeStopped = false;
     sSunPrimAlpha = 255.0f;
 
     Environment_UpdatePostmanEvents(play);
@@ -1183,27 +1183,26 @@ void Environment_UpdateTime(PlayState* play, EnvironmentContext* envCtx, PauseCo
                             GameOverContext* gameOverCtx) {
     u16 time;
 
-    if ((sEnvIsTimeStopped == 0) && (pauseCtx->state == PAUSE_STATE_OFF) && (gameOverCtx->state == GAMEOVER_INACTIVE)) {
-        if ((msgCtx->msgMode == 0) || (msgCtx->currentTextId == 0xF7) || (msgCtx->currentTextId == 0x20D2) ||
+    if (!sEnvIsTimeStopped && (pauseCtx->state == PAUSE_STATE_OFF) && (gameOverCtx->state == GAMEOVER_INACTIVE)) {
+        if ((msgCtx->msgMode == MSGMODE_NONE) || (msgCtx->currentTextId == 0xF7) || (msgCtx->currentTextId == 0x20D2) ||
             (msgCtx->currentTextId == 0x140C) ||
             ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
-            (((void)0, gSaveContext.gameMode) == GAMEMODE_END_CREDITS)) {
+            (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) {
             if (!FrameAdvance_IsEnabled(&play->state) &&
-                ((play->transitionMode == TRANS_MODE_OFF) || (((void)0, gSaveContext.gameMode) != GAMEMODE_NORMAL))) {
+                ((play->transitionMode == TRANS_MODE_OFF) || (gSaveContext.gameMode != GAMEMODE_NORMAL))) {
                 if (play->transitionTrigger == TRANS_TRIGGER_OFF) {
-                    if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
-                        if (!Play_InCsMode(play)) {
-                            gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
-                            if (R_TIME_SPEED != 0) {
-                                gSaveContext.save.time = ((void)0, gSaveContext.save.time) +
-                                                         (u16)((void)0, gSaveContext.save.timeSpeedOffset);
-                            }
+                    if ((CutsceneManager_GetCurrentCsId() == CS_ID_NONE) && !Play_InCsMode(play)) {
+                        gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
+                        if (R_TIME_SPEED != 0) {
+                            gSaveContext.save.time =
+                                ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
                         }
                     }
                 }
             }
         }
     }
+
     if ((((void)0, gSaveContext.skyboxTime) >= CLOCK_TIME(6, 0)) ||
         (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)) ||
         (((void)0, gSaveContext.save.time) >= (CLOCK_TIME(6, 0) + 0x10))) {
@@ -1213,9 +1212,9 @@ void Environment_UpdateTime(PlayState* play, EnvironmentContext* envCtx, PauseCo
     time = ((void)0, gSaveContext.save.time);
 
     if ((time >= CLOCK_TIME(18, 0)) || (time < CLOCK_TIME(6, 0))) {
-        gSaveContext.save.isNight = 1;
+        gSaveContext.save.isNight = true;
     } else {
-        gSaveContext.save.isNight = 0;
+        gSaveContext.save.isNight = false;
     }
 }
 
@@ -2107,7 +2106,7 @@ void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxC
         Matrix_RotateXS(pitch + (s16)(i << 5), MTXMODE_APPLY);
         Matrix_Scale(0.3f, 1.0f, 0.3f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gRainDropDL);
+        gSPDisplayList(POLY_XLU_DISP++, gFallingRainDropDL);
     }
 
     if (player->actor.floorHeight < view->eye.y) {

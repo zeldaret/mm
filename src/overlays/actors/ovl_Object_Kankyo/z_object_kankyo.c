@@ -688,7 +688,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
             }
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gRainDropDL);
+            gSPDisplayList(POLY_XLU_DISP++, gFallingRainDropDL);
         }
     }
 
