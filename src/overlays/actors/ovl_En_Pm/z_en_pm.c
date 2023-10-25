@@ -240,7 +240,7 @@ s32 func_80AF7BAC(EnPm* this) {
 
         case 2:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40)) {
-                D_801F4E78 = 0;
+                D_801F4E78 = CLOCK_TIME(0, 0);
                 this->unk_38C++;
             }
             break;

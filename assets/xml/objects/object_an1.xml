@@ -1,88 +1,107 @@
 ﻿<Root>
+    <!-- Assets for Anju -->
     <File Name="object_an1" Segment="6">
-        <Animation Name="object_an1_Anim_001090" Offset="0x1090" /> <!-- Original name is "an_ajimi" ("tasting; sampling​") -->
-        <Animation Name="object_an1_Anim_00144C" Offset="0x144C" /> <!-- Original name is "an_ajimiend" -->
-        <Animation Name="object_an1_Anim_001E74" Offset="0x1E74" /> <!-- Original name is "an_aogu" ("to look up") -->
-        <Animation Name="object_an1_Anim_0026B4" Offset="0x26B4" /> <!-- Original name is "an_bikkuri" ("to be surprised") -->
-        <Animation Name="object_an1_Anim_00341C" Offset="0x341C" /> <!-- Original name is "an_obonwait" ("obon" = "tray") -->
-        <Animation Name="object_an1_Anim_003EA8" Offset="0x3EA8" /> <!-- Original name is "an_obonwalk" -->
-        <Animation Name="object_an1_Anim_00544C" Offset="0x544C" /> <!-- Original name is "an_ojigit" ("bow; bowing") -->
-        <Animation Name="object_an1_Anim_0065C8" Offset="0x65C8" /> <!-- Original name is "an_ryouri" ("cooking") -->
-        <Animation Name="object_an1_Anim_0071E8" Offset="0x71E8" /> <!-- Original name is "an_suwaru" ("to sit") -->
-        <Animation Name="object_an1_Anim_007E08" Offset="0x7E08" /> <!-- Original name is "an_suzetsubou" ("su" = short for "suwaru", "zetsubou" = "despair; hopelessness​") -->
-        <Animation Name="object_an1_Anim_008B6C" Offset="0x8B6C" /> <!-- Original name is "an_wait" -->
-        <DList Name="object_an1_DL_00BC20" Offset="0xBC20" />
-        <DList Name="object_an1_DL_00BD20" Offset="0xBD20" />
-        <DList Name="object_an1_DL_00BE60" Offset="0xBE60" />
-        <DList Name="object_an1_DL_00BF88" Offset="0xBF88" />
-        <DList Name="object_an1_DL_00C080" Offset="0xC080" />
-        <DList Name="object_an1_DL_00C2E8" Offset="0xC2E8" />
-        <DList Name="object_an1_DL_00C3C0" Offset="0xC3C0" />
-        <DList Name="object_an1_DL_00C480" Offset="0xC480" />
-        <DList Name="object_an1_DL_00C6E8" Offset="0xC6E8" />
-        <DList Name="object_an1_DL_00C7C0" Offset="0xC7C0" />
-        <DList Name="object_an1_DL_00C880" Offset="0xC880" />
-        <DList Name="object_an1_DL_00C940" Offset="0xC940" />
-        <DList Name="object_an1_DL_00D030" Offset="0xD030" />
-        <DList Name="object_an1_DL_00D208" Offset="0xD208" />
-        <DList Name="object_an1_DL_00D320" Offset="0xD320" />
-        <DList Name="object_an1_DL_00D440" Offset="0xD440" />
-        <DList Name="object_an1_DL_00D618" Offset="0xD618" />
-        <DList Name="object_an1_DL_00D730" Offset="0xD730" />
-        <DList Name="object_an1_DL_00D850" Offset="0xD850" />
-        <Texture Name="object_an1_TLUT_00DB20" OutName="tlut_00DB20" Format="rgba16" Width="16" Height="16" Offset="0xDB20" />
-        <Texture Name="object_an1_Tex_00DD20" OutName="tex_00DD20" Format="rgba16" Width="16" Height="16" Offset="0xDD20" />
-        <Texture Name="object_an1_Tex_00DF20" OutName="tex_00DF20" Format="rgba16" Width="16" Height="16" Offset="0xDF20" />
-        <Texture Name="object_an1_Tex_00E120" OutName="tex_00E120" Format="ci8" Width="8" Height="8" Offset="0xE120" />
-        <Texture Name="object_an1_Tex_00E160" OutName="tex_00E160" Format="ci8" Width="8" Height="16" Offset="0xE160" />
-        <Texture Name="object_an1_Tex_00E1E0" OutName="tex_00E1E0" Format="ci8" Width="32" Height="32" Offset="0xE1E0" />
-        <Texture Name="object_an1_Tex_00E5E0" OutName="tex_00E5E0" Format="ci8" Width="16" Height="16" Offset="0xE5E0" />
-        <Texture Name="object_an1_Tex_00E6E0" OutName="tex_00E6E0" Format="ci8" Width="32" Height="16" Offset="0xE6E0" />
-        <Texture Name="object_an1_Tex_00E8E0" OutName="tex_00E8E0" Format="ci8" Width="8" Height="8" Offset="0xE8E0" />
-        <Texture Name="object_an1_Tex_00E920" OutName="tex_00E920" Format="ci8" Width="16" Height="16" Offset="0xE920" />
-        <Texture Name="object_an1_Tex_00EA20" OutName="tex_00EA20" Format="ci8" Width="32" Height="32" Offset="0xEA20" />
-        <Texture Name="object_an1_Tex_00EE20" OutName="tex_00EE20" Format="ci8" Width="16" Height="16" Offset="0xEE20" />
-        <Texture Name="object_an1_Tex_00EF20" OutName="tex_00EF20" Format="ci8" Width="8" Height="16" Offset="0xEF20" />
-        <Texture Name="object_an1_Tex_00EFA0" OutName="tex_00EFA0" Format="ci8" Width="32" Height="32" Offset="0xEFA0" />
-        <Texture Name="object_an1_Tex_00F3A0" OutName="tex_00F3A0" Format="ci8" Width="32" Height="32" Offset="0xF3A0" />
-        <Texture Name="object_an1_Tex_00F7A0" OutName="tex_00F7A0" Format="ci8" Width="32" Height="16" Offset="0xF7A0" />
-        <Texture Name="object_an1_Tex_00F9A0" OutName="tex_00F9A0" Format="ci8" Width="32" Height="32" Offset="0xF9A0" />
-        <Texture Name="object_an1_Tex_00FDA0" OutName="tex_00FDA0" Format="ci8" Width="32" Height="32" Offset="0xFDA0" />
-        <Texture Name="object_an1_Tex_0101A0" OutName="tex_0101A0" Format="ci8" Width="32" Height="16" Offset="0x101A0" />
-        <Texture Name="object_an1_Tex_0103A0" OutName="tex_0103A0" Format="ci8" Width="32" Height="32" Offset="0x103A0" />
-        <!-- <Blob Name="object_an1_Blob_0107A0" Size="0xA40" Offset="0x107A0" /> -->
-        <DList Name="object_an1_DL_0111E0" Offset="0x111E0" />
-        <DList Name="object_an1_DL_0111E8" Offset="0x111E8" /> <!-- Original name is "an_obon_model" -->
-        <Texture Name="object_an1_Tex_011928" OutName="tex_011928" Format="i8" Width="32" Height="32" Offset="0x11928" />
-        <Texture Name="object_an1_Tex_011D28" OutName="tex_011D28" Format="rgba16" Width="16" Height="16" Offset="0x11D28" />
-        <Texture Name="object_an1_Tex_011F28" OutName="tex_011F28" Format="rgba16" Width="16" Height="16" Offset="0x11F28" />
-        <Texture Name="object_an1_Tex_012128" OutName="tex_012128" Format="i8" Width="16" Height="16" Offset="0x12128" />
-        <Texture Name="object_an1_Tex_012228" OutName="tex_012228" Format="i4" Width="16" Height="16" Offset="0x12228" />
-        <Texture Name="object_an1_Tex_0122A8" OutName="tex_0122A8" Format="i8" Width="16" Height="16" Offset="0x122A8" />
+        <Animation Name="gAnju1TasteAnim" Offset="0x1090" /> <!-- Original name is "an_ajimi" ("tasting; sampling​") -->
+        <Animation Name="gAnju1TasteEndAnim" Offset="0x144C" /> <!-- Original name is "an_ajimiend" -->
+
+        <Animation Name="gAnju1LookUpRelievedAnim" Offset="0x1E74" /> <!-- Original name is "an_aogu" ("to look up") -->
+        <Animation Name="gAnju1SurprisedAnim" Offset="0x26B4" /> <!-- Original name is "an_bikkuri" ("to be surprised") -->
+        <Animation Name="gAnju1WaitWithTrayAnim" Offset="0x341C" /> <!-- Original name is "an_obonwait" ("obon" = "tray") -->
+        <Animation Name="gAnju1WalkWithTrayAnim" Offset="0x3EA8" /> <!-- Original name is "an_obonwalk" -->
+        <Animation Name="gAnju1BowAnim" Offset="0x544C" /> <!-- Original name is "an_ojigit" ("bow; bowing") -->
+        <Animation Name="gAnju1CookAnim" Offset="0x65C8" /> <!-- Original name is "an_ryouri" ("cooking") -->
+        <Animation Name="gAnju1SitAnim" Offset="0x71E8" /> <!-- Original name is "an_suwaru" ("to sit") -->
+        <Animation Name="gAnju1SittingInDisbeliefAnim" Offset="0x7E08" /> <!-- Original name is "an_suzetsubou" ("su" = short for "suwaru", "zetsubou" = "despair; hopelessness​") -->
+        <Animation Name="gAnju1IdleAnim" Offset="0x8B6C" /> <!-- Original name is "an_wait" -->
+
+        <!-- Skeleton's Display lists -->
+        <DList Name="gAnju1Skirt4DL" Offset="0xBC20" />
+        <DList Name="gAnju1Skirt3DL" Offset="0xBD20" />
+        <DList Name="gAnju1Skirt2DL" Offset="0xBE60" />
+        <DList Name="gAnju1Skirt1DL" Offset="0xBF88" />
+        <DList Name="gAnju1LeftFootDL" Offset="0xC080" />
+        <DList Name="gAnju1LeftShinDL" Offset="0xC2E8" />
+        <DList Name="gAnju1LeftThighDL" Offset="0xC3C0" />
+        <DList Name="gAnju1RightFootDL" Offset="0xC480" />
+        <DList Name="gAnju1RightShinDL" Offset="0xC6E8" />
+        <DList Name="gAnju1RightThighDL" Offset="0xC7C0" />
+        <DList Name="gAnju1PelvisDL" Offset="0xC880" />
+        <DList Name="gAnju1HeadDL" Offset="0xC940" />
+        <DList Name="gAnju1RightHandDL" Offset="0xD030" />
+        <DList Name="gAnju1RightForearmDL" Offset="0xD208" />
+        <DList Name="gAnju1RightUpperArmDL" Offset="0xD320" />
+        <DList Name="gAnju1LeftHandDL" Offset="0xD440" />
+        <DList Name="gAnju1LeftForearmDL" Offset="0xD618" />
+        <DList Name="gAnju1LeftUpperArmDL" Offset="0xD730" />
+        <DList Name="gAnju1TorsoDL" Offset="0xD850" />
+
+        <!-- Skeleton's TLUTs -->
+        <Texture Name="gAnju1TLUT" OutName="tlut" Format="rgba16" Width="16" Height="16" Offset="0xDB20" />
+        <Texture Name="gAnju1EyesTLUT" OutName="eyes_tlut" Format="rgba16" Width="16" Height="16" Offset="0xDD20" />
+        <Texture Name="gAnju1MouthTLUT" OutName="mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0xDF20" />
+
+        <!-- Skeleton's textures -->
+        <Texture Name="gAnju1SkinTex" OutName="anju_skin" Format="ci8" Width="8" Height="8" Offset="0xE120" />
+        <Texture Name="gAnju1HairTex" OutName="anju_hair" Format="ci8" Width="8" Height="16" Offset="0xE160" />
+        <Texture Name="gAnju1EyeOpenTex" OutName="anju_eye_open" Format="ci8" Width="32" Height="32" Offset="0xE1E0" TlutOffset="0xDD20" />
+        <Texture Name="gAnju1EarTex" OutName="anju_ear" Format="ci8" Width="16" Height="16" Offset="0xE5E0" />
+        <Texture Name="gAnju1MouthClosedTex" OutName="anju_mouth_closed" Format="ci8" Width="32" Height="16" Offset="0xE6E0" TlutOffset="0xDF20" />
+        <Texture Name="gAnju1ShirtButtonTex" OutName="anju_shirt_button" Format="ci8" Width="8" Height="8" Offset="0xE8E0" />
+        <Texture Name="gAnju1HandTex" OutName="anju_hand" Format="ci8" Width="16" Height="16" Offset="0xE920" />
+        <Texture Name="gAnju1SkirtTex" OutName="anju_skirt" Format="ci8" Width="32" Height="32" Offset="0xEA20" />
+        <Texture Name="gAnju1ShirtTex" OutName="anju_shirt" Format="ci8" Width="16" Height="16" Offset="0xEE20" />
+        <Texture Name="gAnju1SleeveTex" OutName="anju_sleeve" Format="ci8" Width="8" Height="16" Offset="0xEF20" />
+        <Texture Name="gAnju1EyeHalfTex" OutName="anju_eye_half" Format="ci8" Width="32" Height="32" Offset="0xEFA0" TlutOffset="0xDD20" />
+        <Texture Name="gAnju1EyeClosedTex" OutName="anju_eye_closed" Format="ci8" Width="32" Height="32" Offset="0xF3A0" TlutOffset="0xDD20" />
+        <Texture Name="gAnju1MouthHappyTex" OutName="anju_mouth_happy" Format="ci8" Width="32" Height="16" Offset="0xF7A0" TlutOffset="0xDF20" />
+        <Texture Name="gAnju1EyeSadTex" OutName="anju_eye_sad" Format="ci8" Width="32" Height="32" Offset="0xF9A0" TlutOffset="0xDD20" />
+        <Texture Name="gAnju1EyeComfortTex" OutName="anju_eye_comfort" Format="ci8" Width="32" Height="32" Offset="0xFDA0" TlutOffset="0xDD20" />
+        <Texture Name="gAnju1MouthOpenTex" OutName="anju_mouth_open" Format="ci8" Width="32" Height="16" Offset="0x101A0" TlutOffset="0xDF20" />
+        <Texture Name="gAnju1EyeRelievedClosedTex" OutName="anju_eye_relieved_closed" Format="ci8" Width="32" Height="32" Offset="0x103A0" TlutOffset="0xDD20" />
+
+        <!-- Empty -->
+        <DList Name="gAnju1EmptyDL" Offset="0x111E0" />
+
+        <!-- Food tray for Granny -->
+        <DList Name="gAnju1FoodTrayDL" Offset="0x111E8" /> <!-- Original name is "an_obon_model" -->
+        <Texture Name="gAnju1PlateTex" OutName="tray_plate" Format="i8" Width="32" Height="32" Offset="0x11928" />
+        <Texture Name="gAnju1Food1Tex" OutName="tray_food_1" Format="rgba16" Width="16" Height="16" Offset="0x11D28" />
+        <Texture Name="gAnju1Food2Tex" OutName="tray_food_2" Format="rgba16" Width="16" Height="16" Offset="0x11F28" />
+        <Texture Name="gAnju1CircleTex" OutName="tray_circle" Format="i8" Width="16" Height="16" Offset="0x12128" />
+        <Texture Name="gAnju1Steam1Tex" OutName="tray_steam_1" Format="i4" Width="16" Height="16" Offset="0x12228" />
+        <Texture Name="gAnju1Steam2Tex" OutName="tray_steam_2" Format="i8" Width="16" Height="16" Offset="0x122A8" />
+
         <!-- <Blob Name="object_an1_Blob_0123A8" Size="0x10" Offset="0x123A8" /> -->
-        <DList Name="object_an1_DL_012478" Offset="0x12478" /> <!-- Original name is "an_hashi_model" ("chopsticks​") -->
-        <Limb Name="object_an1_Standardlimb_0124D8" Type="Standard" EnumName="OBJECT_AN1_LIMB_01" Offset="0x124D8" />
-        <Limb Name="object_an1_Standardlimb_0124E4" Type="Standard" EnumName="OBJECT_AN1_LIMB_02" Offset="0x124E4" />
-        <Limb Name="object_an1_Standardlimb_0124F0" Type="Standard" EnumName="OBJECT_AN1_LIMB_03" Offset="0x124F0" />
-        <Limb Name="object_an1_Standardlimb_0124FC" Type="Standard" EnumName="OBJECT_AN1_LIMB_04" Offset="0x124FC" />
-        <Limb Name="object_an1_Standardlimb_012508" Type="Standard" EnumName="OBJECT_AN1_LIMB_05" Offset="0x12508" />
-        <Limb Name="object_an1_Standardlimb_012514" Type="Standard" EnumName="OBJECT_AN1_LIMB_06" Offset="0x12514" />
-        <Limb Name="object_an1_Standardlimb_012520" Type="Standard" EnumName="OBJECT_AN1_LIMB_07" Offset="0x12520" />
-        <Limb Name="object_an1_Standardlimb_01252C" Type="Standard" EnumName="OBJECT_AN1_LIMB_08" Offset="0x1252C" />
-        <Limb Name="object_an1_Standardlimb_012538" Type="Standard" EnumName="OBJECT_AN1_LIMB_09" Offset="0x12538" />
-        <Limb Name="object_an1_Standardlimb_012544" Type="Standard" EnumName="OBJECT_AN1_LIMB_0A" Offset="0x12544" />
-        <Limb Name="object_an1_Standardlimb_012550" Type="Standard" EnumName="OBJECT_AN1_LIMB_0B" Offset="0x12550" />
-        <Limb Name="object_an1_Standardlimb_01255C" Type="Standard" EnumName="OBJECT_AN1_LIMB_0C" Offset="0x1255C" />
-        <Limb Name="object_an1_Standardlimb_012568" Type="Standard" EnumName="OBJECT_AN1_LIMB_0D" Offset="0x12568" />
-        <Limb Name="object_an1_Standardlimb_012574" Type="Standard" EnumName="OBJECT_AN1_LIMB_0E" Offset="0x12574" />
-        <Limb Name="object_an1_Standardlimb_012580" Type="Standard" EnumName="OBJECT_AN1_LIMB_0F" Offset="0x12580" />
-        <Limb Name="object_an1_Standardlimb_01258C" Type="Standard" EnumName="OBJECT_AN1_LIMB_10" Offset="0x1258C" />
-        <Limb Name="object_an1_Standardlimb_012598" Type="Standard" EnumName="OBJECT_AN1_LIMB_11" Offset="0x12598" />
-        <Limb Name="object_an1_Standardlimb_0125A4" Type="Standard" EnumName="OBJECT_AN1_LIMB_12" Offset="0x125A4" />
-        <Limb Name="object_an1_Standardlimb_0125B0" Type="Standard" EnumName="OBJECT_AN1_LIMB_13" Offset="0x125B0" />
-        <Limb Name="object_an1_Standardlimb_0125BC" Type="Standard" EnumName="OBJECT_AN1_LIMB_14" Offset="0x125BC" />
-        <Skeleton Name="object_an1_Skel_012618" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AN1_LIMB_NONE" LimbMax="OBJECT_AN1_LIMB_MAX" EnumName="ObjectAn1Limb" Offset="0x12618" />
-        <Animation Name="object_an1_Anim_013048" Offset="0x13048" /> <!-- Original name is "an_walk" -->
-        <Animation Name="object_an1_Anim_013E1C" Offset="0x13E1C" /> <!-- Original name is "anj_tetunagu_loop" ("joined hands") -->
+
+        <!-- Chopsticks used for cooking -->
+        <DList Name="gAnju1ChopsticksDL" Offset="0x12478" /> <!-- Original name is "an_hashi_model" ("chopsticks​") -->
+
+        <!-- Skeleton's limbs -->
+        <Limb Name="gAnju1RootLimb" Type="Standard" EnumName="ANJU1_LIMB_ROOT" Offset="0x124D8" />
+        <Limb Name="gAnju1TorsoLimb" Type="Standard" EnumName="ANJU1_LIMB_TORSO" Offset="0x124E4" />
+        <Limb Name="gAnju1LeftUpperArmLimb" Type="Standard" EnumName="ANJU1_LIMB_LEFT_UPPER_ARM" Offset="0x124F0" />
+        <Limb Name="gAnju1LeftForearmLimb" Type="Standard" EnumName="ANJU1_LIMB_LEFT_FOREARM" Offset="0x124FC" />
+        <Limb Name="gAnju1LeftHandLimb" Type="Standard" EnumName="ANJU1_LIMB_LEFT_HAND" Offset="0x12508" />
+        <Limb Name="gAnju1RightUpperArmLimb" Type="Standard" EnumName="ANJU1_LIMB_RIGHT_UPPER_ARM" Offset="0x12514" />
+        <Limb Name="gAnju1RightForearmLimb" Type="Standard" EnumName="ANJU1_LIMB_RIGHT_FOREARM" Offset="0x12520" />
+        <Limb Name="gAnju1RightHandLimb" Type="Standard" EnumName="ANJU1_LIMB_RIGHT_HAND" Offset="0x1252C" />
+        <Limb Name="gAnju1HeadLimb" Type="Standard" EnumName="ANJU1_LIMB_HEAD" Offset="0x12538" />
+        <Limb Name="gAnju1PelvisLimb" Type="Standard" EnumName="ANJU1_LIMB_PELVIS" Offset="0x12544" />
+        <Limb Name="gAnju1RightThighLimb" Type="Standard" EnumName="ANJU1_LIMB_RIGHT_THIGH" Offset="0x12550" />
+        <Limb Name="gAnju1RightShinLimb" Type="Standard" EnumName="ANJU1_LIMB_RIGHT_SHIN" Offset="0x1255C" />
+        <Limb Name="gAnju1RightFootLimb" Type="Standard" EnumName="ANJU1_LIMB_RIGHT_FOOT" Offset="0x12568" />
+        <Limb Name="gAnju1LeftThighLimb" Type="Standard" EnumName="ANJU1_LIMB_LEFT_THIGH" Offset="0x12574" />
+        <Limb Name="gAnju1LeftShinLimb" Type="Standard" EnumName="ANJU1_LIMB_LEFT_SHIN" Offset="0x12580" />
+        <Limb Name="gAnju1LeftFootLimb" Type="Standard" EnumName="ANJU1_LIMB_LEFT_FOOT" Offset="0x1258C" />
+        <Limb Name="gAnju1Skirt1Limb" Type="Standard" EnumName="ANJU1_LIMB_SKIRT1" Offset="0x12598" />
+        <Limb Name="gAnju1Skirt2Limb" Type="Standard" EnumName="ANJU1_LIMB_SKIRT2" Offset="0x125A4" />
+        <Limb Name="gAnju1Skirt3Limb" Type="Standard" EnumName="ANJU1_LIMB_SKIRT3" Offset="0x125B0" />
+        <Limb Name="gAnju1Skirt4Limb" Type="Standard" EnumName="ANJU1_LIMB_SKIRT4" Offset="0x125BC" />
+
+        <!-- Skeleton -->
+        <Skeleton Name="gAnju1Skel" Type="Flex" LimbType="Standard" LimbNone="ANJU1_LIMB_NONE" LimbMax="ANJU1_LIMB_MAX" EnumName="Anju1Limb" Offset="0x12618" />
+
+        <Animation Name="gAnju1WalkAnim" Offset="0x13048" /> <!-- Original name is "an_walk" -->
+        <Animation Name="gAnju1HoldHandsAnim" Offset="0x13E1C" /> <!-- Holding hands with Kafei while kneeled --> <!-- Original name is "anj_tetunagu_loop" ("joined hands") -->
     </File>
 </Root>
