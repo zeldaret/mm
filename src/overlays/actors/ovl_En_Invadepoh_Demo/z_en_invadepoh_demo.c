@@ -750,7 +750,8 @@ void EnInvadepohDemo_Ufo_Draw(EnInvadepohDemo* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (EnInvadepohDemo_Ufo_ShouldDrawLensFlare(play, &flashPos)) {
-        Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, flashPos, 20.0f, 9.0f, 0, 0);
+        Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, flashPos, 20.0f, 9.0f, 0,
+                                  false);
     }
 }
 

@@ -132,7 +132,9 @@ typedef union {
 
 #define LERPIMP(v0, v1, t) ((v0) + (((v1) - (v0)) * (t)))
 #define LERPIMP_ALT(v0, v1, t) (((v1) - (v0)) * (t) + (v0))
+#define S16_LERP(v0, v1, t) ((s16)(((v1) - (v0)) * (t)) + (v0))
 #define F32_LERP(v0, v1, t) ((1.0f - (t)) * (f32)(v0) + (t) * (f32)(v1))
+#define F32_LERP_ALT(v0, v1, t) ((f32)(v0) * (1.0f - (t)) + (t) * (f32)(v1))
 #define F32_LERPIMP(v0, v1, t) ((f32)(v0) + (((f32)(v1) - (f32)(v0)) * (t)))
 #define F32_LERPIMPINV(v0, v1, t) ((f32)(v0) + (((f32)(v1) - (f32)(v0)) / (t)))
 #define BINANG_LERPIMP(v0, v1, t) ((v0) + (s16)(BINANG_SUB((v1), (v0)) * (t)))

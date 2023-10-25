@@ -526,6 +526,8 @@ s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
 }
 
 #ifdef NON_MATCHING
+// The 2 constant from the `gWeatherMode` switch branch is reused `CURRENT_DAY`
+// A near identical issue is present in the non-matching `func_809F24C8` from `z_boss_06.c`
 void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     PlayState* play = play2;
     f32 temp_ft4;
@@ -721,7 +723,8 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     }
 
     if (gSaveContext.retainWeatherMode || (gSaveContext.respawnFlag != 0)) {
-        // if (gWeatherMode == 2) {
+        // if (gWeatherMode == WEATHER_MODE_2) {
+        //     if (1) {}
         //     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         //         play->skyboxId = SKYBOX_3;
         //         envCtx->lightConfig = 5;
@@ -1229,8 +1232,7 @@ void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
             adjLightSettings->light1Color[phi_t1] =
                 lightSettings[temp_v1_2 + temp_v1].light1Color[phi_t1] - lightSettings[temp_v1].light1Color[phi_t1];
             adjLightSettings->light2Color[phi_t1] =
-                lightSettings[temp_v1_2 + temp_v1].light2Color[phi_t1] -
-                lightSettings[temp_v1].light2Color[phi_t1]; // TODO rename to light2Color
+                lightSettings[temp_v1_2 + temp_v1].light2Color[phi_t1] - lightSettings[temp_v1].light2Color[phi_t1];
             adjLightSettings->fogColor[phi_t1] =
                 lightSettings[temp_v1_2 + temp_v1].fogColor[phi_t1] - lightSettings[temp_v1].fogColor[phi_t1];
         }
@@ -1260,7 +1262,7 @@ u8 func_800F6EA4(f32 arg0, f32 arg1, f32 arg2) {
     arg0 = CLAMP(arg0, 0.0f, 255.0f);
     arg1 = CLAMP(arg1, 0.0f, 255.0f);
 
-    return (((arg0 - arg1) * arg2) + arg1);
+    return ((arg0 - arg1) * arg2) + arg1;
 }
 
 s32 Environment_IsSceneUpsideDown(PlayState* play) {
@@ -1271,8 +1273,6 @@ s32 Environment_IsSceneUpsideDown(PlayState* play) {
     }
     return ret;
 }
-
-#define LERP16(x, y, scale) ((s16)(((y) - (x)) * (scale)) + (x))
 
 #ifdef NON_EQUIVALENT
 // Function is highly sensitive to sp94, sp95, sp96, sp97
@@ -1375,11 +1375,11 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                 }
 
                 if (Environment_IsSceneUpsideDown(play)) {
-                    var_v0 = ((void)0, gSaveContext.save.time) + 0x8000;
+                    var_v0 = ((void)0, gSaveContext.save.time) + CLOCK_TIME(12, 0);
                 } else {
                     var_v0 = ((void)0, gSaveContext.save.time);
                 }
-                temp_s0_2 = var_v0 - 0x8000;
+                temp_s0_2 = var_v0 - CLOCK_TIME(12, 0);
 
                 envCtx->lightSettings.light1Dir[0] = -(Math_SinS(temp_s0_2) * 120.0f);
                 envCtx->lightSettings.light1Dir[1] = Math_CosS(temp_s0_2) * 120.0f;
@@ -1416,15 +1416,15 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                 }
 
                 blend16[0] =
-                    LERP16(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)sp97].blendRateAndFogNear),
-                           ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)sp95].blendRateAndFogNear), temp_fv0);
+                    S16_LERP(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)sp97].blendRateAndFogNear),
+                             ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)sp95].blendRateAndFogNear), temp_fv0);
                 blend16[1] =
-                    LERP16(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)sp96].blendRateAndFogNear),
-                           ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)sp94].blendRateAndFogNear), temp_fv0);
+                    S16_LERP(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)sp96].blendRateAndFogNear),
+                             ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)sp94].blendRateAndFogNear), temp_fv0);
                 envCtx->lightSettings.fogNear = LERPIMP_ALT(blend16[0], blend16[1], var_fs3);
 
-                blend16[0] = LERP16(lightSettingsList[(s32)sp97].zFar, lightSettingsList[(s32)sp95].zFar, temp_fv0);
-                blend16[1] = LERP16(lightSettingsList[(s32)sp96].zFar, lightSettingsList[(s32)sp94].zFar, temp_fv0);
+                blend16[0] = S16_LERP(lightSettingsList[(s32)sp97].zFar, lightSettingsList[(s32)sp95].zFar, temp_fv0);
+                blend16[1] = S16_LERP(lightSettingsList[(s32)sp96].zFar, lightSettingsList[(s32)sp94].zFar, temp_fv0);
                 envCtx->lightSettings.zFar = LERPIMP_ALT(blend16[0], blend16[1], var_fs3);
 
                 break;
@@ -1594,7 +1594,7 @@ void Environment_UpdateSun(PlayState* play) {
         }
 
         if (Environment_IsSceneUpsideDown(play)) {
-            phi_v0 = ((void)0, gSaveContext.save.time) + 0x8000;
+            phi_v0 = ((void)0, gSaveContext.save.time) + CLOCK_TIME(12, 0);
         } else {
             phi_v0 = ((void)0, gSaveContext.save.time);
         }
@@ -1709,7 +1709,7 @@ void Environment_UpdatePostmanEvents(PlayState* play) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_28_04);
     }
 
-    if ((SCHEDULE_TIME_NOW < 0x1FFE) || (SCHEDULE_TIME_NOW >= 0x3FFD)) {
+    if ((SCHEDULE_TIME_NOW < SCHEDULE_TIME(9, 0)) || (SCHEDULE_TIME_NOW > SCHEDULE_TIME(12, 0))) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_08);
     }
 
@@ -1718,22 +1718,22 @@ void Environment_UpdatePostmanEvents(PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_55_02)) {
         if (((void)0, gSaveContext.save.day) >= 2) {
             SET_WEEKEVENTREG(WEEKEVENTREG_55_02);
-        } else if ((((void)0, gSaveContext.save.day) == 1) && (SCHEDULE_TIME_NOW >= 0x6FF9)) {
+        } else if ((((void)0, gSaveContext.save.day) == 1) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(16, 30))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_55_02);
         }
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
         temp_a2_2 = ((void)0, gSaveContext.save.time) - D_801F4E78;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((SCHEDULE_TIME_NOW & 0xFFFF) >= 0xF556)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((u16)SCHEDULE_TIME_NOW >= (SCHEDULE_TIME(29, 0) + 16))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_90_01);
-        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && (temp_a2_2 >= 0x416)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && (temp_a2_2 >= CLOCK_TIME(0, 23))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_89_40);
             D_801F4E78 = 0;
-        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80) && (temp_a2_2 >= 0x1198)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80) && (temp_a2_2 >= (CLOCK_TIME(1, 39) - 1))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_89_08);
             D_801F4E78 = gSaveContext.save.time;
-        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_01) && (temp_a2_2 >= 0xC43)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_01) && (temp_a2_2 >= (CLOCK_TIME(1, 9) - 1))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_85_80);
         }
     }
@@ -1768,7 +1768,7 @@ void Environment_DrawSun(PlayState* play) {
         if ((play->envCtx.sunPos.y > -800.0f) || Environment_IsSceneUpsideDown(play)) {
             Matrix_Translate(play->view.eye.x + play->envCtx.sunPos.x, play->view.eye.y + play->envCtx.sunPos.y,
                              play->view.eye.z + play->envCtx.sunPos.z, MTXMODE_NEW);
-            if (((void)0, gSaveContext.save.time) < 0x8000) {
+            if (((void)0, gSaveContext.save.time) < CLOCK_TIME(12, 0)) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, (u8)((u8)(sSunColor * 52.0f) + 203),
                                 (u8)((u8)(sSunColor * 19.0f) + 181), (u8)sSunPrimAlpha);
                 gDPSetEnvColor(POLY_OPA_DISP++, (u8)(-(u8)(sSunColor * 5.0f) + 175),
@@ -1793,7 +1793,7 @@ void Environment_DrawSunLensFlare(PlayState* play, EnvironmentContext* envCtx, V
                                   Vec3f vec) {
     if ((play->envCtx.precipitation[PRECIP_RAIN_CUR] == 0) &&
         !(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER) && (play->skyboxId == SKYBOX_NORMAL_SKY)) {
-        f32 v0 = Math_CosS(((void)0, gSaveContext.save.time) - 0x8000);
+        f32 v0 = Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0));
 
         Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, vec, 370.0f, v0 * 120.0f, 0x190,
                                   true);
@@ -2717,8 +2717,6 @@ u8 sSandstormEnvColors[] = {
     50,  40,  0,   //
 };
 
-#define F32_LERP_ALT(v0, v1, t) ((f32)(v0) * (1.0f - (t)) + (t) * (f32)(v1))
-
 void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
     s32 primA1 = 0;
     s32 envA1 = 0;
@@ -3127,8 +3125,6 @@ void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height)
     *gfxp = gfx;
 }
 
-#define PLAYER_NAME(index) (u32)(gSaveContext.save.saveInfo.playerData.playerName)[index]
-
 #ifdef NON_MATCHING
 void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     static const Vec3s D_801DD880[] = {
@@ -3183,9 +3179,15 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                     G_AC_NONE | G_ZS_PRIM | G_RM_AA_XLU_LINE | G_RM_AA_XLU_LINE2);
 
-    randInt = (PLAYER_NAME(0) << 0x18) ^ (PLAYER_NAME(1) << 0x14) ^ (PLAYER_NAME(2) << 0x10) ^ (PLAYER_NAME(3) << 0xC) ^
-              (PLAYER_NAME(4) << 8) ^ (PLAYER_NAME(5) << 4) ^ (PLAYER_NAME(6) << 0) ^ (PLAYER_NAME(7) >> 4) ^
-              (PLAYER_NAME(7) << 0x1C);
+    randInt = ((u32)gSaveContext.save.saveInfo.playerData.playerName[0] << 0x18) ^
+              ((u32)gSaveContext.save.saveInfo.playerData.playerName[1] << 0x14) ^
+              ((u32)gSaveContext.save.saveInfo.playerData.playerName[2] << 0x10) ^
+              ((u32)gSaveContext.save.saveInfo.playerData.playerName[3] << 0xC) ^
+              ((u32)gSaveContext.save.saveInfo.playerData.playerName[4] << 8) ^
+              ((u32)gSaveContext.save.saveInfo.playerData.playerName[5] << 4) ^
+              ((u32)gSaveContext.save.saveInfo.playerData.playerName[6] << 0) ^
+              ((u32)gSaveContext.save.saveInfo.playerData.playerName[7] >> 4) ^
+              ((u32)gSaveContext.save.saveInfo.playerData.playerName[7] << 0x1C);
 
     //! FAKE:
     if (play->view.viewingPtr && play->view.viewingPtr && play->view.viewingPtr) {}
