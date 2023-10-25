@@ -10412,7 +10412,7 @@
     0x80A42F20:("func_80A42F20",),
     0x80A430C8:("func_80A430C8",),
     0x80A431C8:("func_80A431C8",),
-    0x80A4323C:("func_80A4323C",),
+    0x80A4323C:("EnTest4_SetSkyboxNumStars",),
     0x80A43274:("EnTest4_Update",),
     0x80A434E0:("EnBat_Init",),
     0x80A437A0:("EnBat_Destroy",),
