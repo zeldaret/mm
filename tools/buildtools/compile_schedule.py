@@ -188,6 +188,7 @@ tokenLiterals: dict[str, TokenType] = {
     "branch_s": TokenType.BRANCH_S,
     "branch_l": TokenType.BRANCH_L,
 
+    # generics
     "if_week_event_reg": TokenType.IF_WEEKEVENTREG,
     "if_time_range": TokenType.IF_TIMERANGE,
     "if_misc": TokenType.IF_MISC,
@@ -400,7 +401,7 @@ class Expression:
         if self.expr.tokenType == TokenType.LABEL:
             print(f":", end="")
         if self.args is not None:
-            print(f"({self.args.tokenLiteral})", end="")
+            print(f" ({self.args.tokenLiteral})", end="")
         if len(self.left) == 0:
             print()
         else:
@@ -698,7 +699,7 @@ cmdInfos: dict[TokenType, CommandInfo] = {
     TokenType.BRANCH:               CommandInfo('SCHEDULE_CMD_BRANCH_S',             0x02,), # TODO
 }
 
-cmdRedirection: dict[TokenType, tuple[TokenType|None, TokenType|None]] = {
+cmdRedirection: dict[TokenType, tuple[TokenType, TokenType|None]] = {
     TokenType.IF_WEEKEVENTREG:  (TokenType.IF_WEEKEVENTREG_S, TokenType.IF_WEEKEVENTREG_L),
     TokenType.IF_TIMERANGE:     (TokenType.IF_TIMERANGE_S, TokenType.IF_TIMERANGE_L),
     TokenType.IF_MISC:          (TokenType.IF_MISC_S, None),
@@ -744,6 +745,7 @@ def linearizeTree(tree: list[Expression], byteCount = 0) -> tuple[list[LinearExp
 
     for expr in tree:
         if expr.expr.tokenType == TokenType.LABEL:
+            # Keep the labelname but ignore the label itself
             labelName = expr.expr.tokenLiteral
             continue
 
