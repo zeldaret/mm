@@ -526,7 +526,7 @@ s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
 }
 
 #ifdef NON_MATCHING
-// The 2 constant from the `gWeatherMode` switch branch is reused `CURRENT_DAY`
+// The 2 constant from the `gWeatherMode` switch branch is reused when checking `CURRENT_DAY`
 // A near identical issue is present in the non-matching `func_809F24C8` from `z_boss_06.c`
 void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     PlayState* play = play2;
