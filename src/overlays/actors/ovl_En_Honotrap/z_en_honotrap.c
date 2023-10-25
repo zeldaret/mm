@@ -47,8 +47,8 @@ void EnHonotrap_SetupEyeAttack2(EnHonotrap* this);
 void EnHonotrap_EyeAttack2(EnHonotrap* this, PlayState* play);
 void EnHonotrap_SetupEyeClose2(EnHonotrap* this);
 void EnHonotrap_EyeClose2(EnHonotrap* this, PlayState* play);
-void EnHonotrap_SetupFlame(EnHonotrap* this);
-void EnHonotrap_Flame(EnHonotrap* this, PlayState* play);
+void EnHonotrap_SetupFlameGrow(EnHonotrap* this);
+void EnHonotrap_FlameGrow(EnHonotrap* this, PlayState* play);
 void EnHonotrap_SetupFlameDrop(EnHonotrap* this);
 void EnHonotrap_FlameDrop(EnHonotrap* this, PlayState* play);
 void EnHonotrap_SetupFlameMove(EnHonotrap* this);
@@ -241,7 +241,7 @@ void EnHonotrap_InitFlame(EnHonotrap* this, PlayState* play) {
         this->collider.cyl.dim.height = 30;
         this->actor.shape.yOffset = -1000.0f;
     }
-    EnHonotrap_SetupFlame(this);
+    EnHonotrap_SetupFlameGrow(this);
 }
 
 void EnHonotrap_InitFlameGroup(EnHonotrap* this, PlayState* play) {
@@ -422,11 +422,11 @@ void EnHonotrap_EyeClose2(EnHonotrap* this, PlayState* play) {
     }
 }
 
-void EnHonotrap_SetupFlame(EnHonotrap* this) {
-    this->actionFunc = EnHonotrap_Flame;
+void EnHonotrap_SetupFlameGrow(EnHonotrap* this) {
+    this->actionFunc = EnHonotrap_FlameGrow;
 }
 
-void EnHonotrap_Flame(EnHonotrap* this, PlayState* play) {
+void EnHonotrap_FlameGrow(EnHonotrap* this, PlayState* play) {
     f32 targetScale = (this->actor.params == HONOTRAP_TYPE_FLAME_MOVE) ? 0.004f : 0.0048f;
     s32 targetReached = Math_StepToF(&this->actor.scale.x, targetScale, 0.0006f);
 
@@ -776,9 +776,9 @@ void EnHonotrap_DrawFlame(Actor* thisx, PlayState* play) {
 
 void EnHonotrap_DrawFlameGroup(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnHonotrap* this;
+    EnHonotrap* this = ((EnHonotrap*)thisx);
     EnHonotrapFlameElement* flameElem;
-    EnHonotrapFlameGroup* flameGroup;
+    EnHonotrapFlameGroup* flameGroup = &this->flameGroup;
     s32 i;
     s32 pad2;
     Vec3s camDir;
@@ -790,9 +790,7 @@ void EnHonotrap_DrawFlameGroup(Actor* thisx, PlayState* play) {
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     Camera_GetCamDir(&camDir, GET_ACTIVE_CAM(play));
     camDir.y += 0x8000;
-    //! FAKE:
-    this = ((EnHonotrap*)thisx);
-    flameGroup = &this->flameGroup;
+
     for (i = 0; i < ARRAY_COUNT(flameGroup->flameList); i++) {
         flameElem = &flameGroup->flameList[i];
         if (flameElem->isDrawn) {
