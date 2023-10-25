@@ -1,3 +1,4 @@
+//! @bug Uses long command, even when it isn't required
 if_time_range_l (6, 0, 18, 0) {
     return_time (6, 0, 18, 0, 1)
     //! @bug trailing return

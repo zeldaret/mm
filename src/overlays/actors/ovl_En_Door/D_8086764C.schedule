@@ -1,4 +1,4 @@
-if_time_range_s (22, 0, 5, 0) {
+if_time_range (22, 0, 5, 0) {
     return_none
 } else {
     return_s (10)

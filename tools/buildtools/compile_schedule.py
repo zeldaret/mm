@@ -50,6 +50,7 @@ class TokenType(enum.Enum):
     BRANCH_S = "branch_s"
     BRANCH_L = "branch_l"
 
+    # Generics
     IF_WEEKEVENTREG = "if_week_event_reg"
     IF_TIMERANGE = "if_time_range"
     IF_MISC = "if_misc" # !!!
@@ -164,6 +165,35 @@ class TokenType(enum.Enum):
         }:
             return True
         return False
+
+    def isGeneric(self) -> bool:
+        if self in {
+            TokenType.IF_WEEKEVENTREG,
+            TokenType.IF_TIMERANGE,
+            TokenType.IF_MISC,
+            TokenType.IF_SCENE,
+            TokenType.IF_DAY,
+            TokenType.IF_BEFORETIME,
+            TokenType.IF_SINCETIME,
+            TokenType.BRANCH,
+        }:
+            return True
+        return False
+
+    def isShort(self) -> bool:
+        if self in {
+            TokenType.IF_WEEKEVENTREG_S,
+            TokenType.IF_TIMERANGE_S,
+            TokenType.IF_MISC_S,
+            TokenType.IF_SCENE_S,
+            TokenType.IF_DAY_S,
+            TokenType.IF_BEFORETIME_S,
+            TokenType.IF_SINCETIME_S,
+            TokenType.BRANCH_S,
+        }:
+            return True
+        return False
+
 
 tokenLiterals: dict[str, TokenType] = {
     "if_week_event_reg_s": TokenType.IF_WEEKEVENTREG_S,
@@ -658,7 +688,7 @@ def normalizeTreeImpl(tree: list[Expression], postLabel: Expression, depth: int,
     return newTree, usedLabel
 
 def normalizeTree(tree: list[Expression]) -> list[Expression]:
-    postLabel = Expression(Token(TokenType.LABEL, "_autolabel.placeholder", "", -1, -1))
+    postLabel = Expression(Token(TokenType.LABEL, ".autolabel.placeholder", "", -1, -1))
 
     newTree, usedLabel = normalizeTreeImpl(tree, postLabel, 0, "_autolabel")
 
@@ -695,8 +725,6 @@ cmdInfos: dict[TokenType, CommandInfo] = {
     TokenType.IF_SINCETIME_L:       CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_L',  0x05,),
     TokenType.BRANCH_S:             CommandInfo('SCHEDULE_CMD_BRANCH_S',             0x02,),
     TokenType.BRANCH_L:             CommandInfo('SCHEDULE_CMD_BRANCH_L',             0x03,),
-
-    TokenType.BRANCH:               CommandInfo('SCHEDULE_CMD_BRANCH_S',             0x02,), # TODO
 }
 
 cmdRedirection: dict[TokenType, tuple[TokenType, TokenType|None]] = {
@@ -710,61 +738,69 @@ cmdRedirection: dict[TokenType, tuple[TokenType, TokenType|None]] = {
     TokenType.BRANCH:           (TokenType.BRANCH_S, TokenType.BRANCH_L),
 }
 
+cmdShortToLong: dict[TokenType, TokenType] = {
+    TokenType.IF_WEEKEVENTREG_S:    TokenType.IF_WEEKEVENTREG_L,
+    TokenType.IF_TIMERANGE_S:       TokenType.IF_TIMERANGE_L,
+    # TokenType.IF_MISC_S:            TokenType.IF_MISC_L, # Does not exist
+    TokenType.IF_SCENE_S:           TokenType.IF_SCENE_L,
+    TokenType.IF_DAY_S:             TokenType.IF_DAY_L,
+    TokenType.IF_BEFORETIME_S:      TokenType.IF_BEFORETIME_L,
+    TokenType.IF_SINCETIME_S:       TokenType.IF_SINCETIME_L,
+    TokenType.BRANCH_S:             TokenType.BRANCH_L,
+}
 
 @dataclasses.dataclass
-class LinearExpression:
-    offset: int
+class LabeledExpression:
+    index: int
 
-    expr: Token
+    token: Token
     args: Token|None
 
-    labelName: str|None
+    labelName: str
 
-    # The branch target can be either an int (offset), str (label) or None (no branch target)
-    branchTarget: int|str|None = None
+    canChange: bool
 
-    def getTargetOffset(self, linearizedExprs: list[LinearExpression]) -> int:
-        if self.branchTarget is None:
-            eprint(f"Internal error: no target offset for expression? at {self.expr.filename}:{self.expr.lineNumber}:{self.expr.columnNumber}")
-            debugPrint(f" getTargetOffset")
-            exit(1)
-        if isinstance(self.branchTarget, int):
-            return self.branchTarget
-        for linExpr in linearizedExprs:
-            if linExpr.labelName == self.branchTarget:
-                return linExpr.offset
+    # The branch target can be either a str (label) or None (no branch target)
+    branchTarget: str|None = None
 
-        eprint(f"Error: label name {self.branchTarget} not found, used at {self.expr.filename}:{self.expr.lineNumber}:{self.expr.columnNumber}")
-        debugPrint(f" getTargetOffset")
-        exit(1)
+    def __str__(self) -> str:
+        ret = f"/* {self.index:03} */ {self.labelName:<24}: {self.token.tokenLiteral}"
+        if self.canChange:
+            ret += "*"
+        if self.args is not None:
+            ret += f" ({self.args.tokenLiteral})"
+        if self.branchTarget is not None:
+            ret += f" -> {self.branchTarget}"
+        return ret
 
-def linearizeTree(tree: list[Expression], byteCount = 0) -> tuple[list[LinearExpression], int]:
-    result: list[LinearExpression] = []
+def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[list[LabeledExpression], int]:
+    result: list[LabeledExpression] = []
     # To track labels
     labelName: str|None = None
 
     for expr in tree:
-        if expr.expr.tokenType == TokenType.LABEL:
+        token = expr.expr
+        if token.tokenType == TokenType.LABEL:
             # Keep the labelname but ignore the label itself
-            labelName = expr.expr.tokenLiteral
+            labelName = token.tokenLiteral
             continue
 
         subResults = []
         left = expr.left
         right = expr.right
-        if expr.expr.tokenType.needsToInvert():
+        if token.tokenType.needsToInvert():
             left, right = right, left
         if expr.negated:
             left, right = right, left
 
-        info = cmdInfos[expr.expr.tokenType]
-        currentOffset = byteCount
-        byteCount += info.cmdLenght
+        currentIndex = index
+        index += 1
 
-        sub, byteCount = linearizeTree(left, byteCount)
-        targetOffset = byteCount
+        sub, index = convertTreeIntoLabeledList(left, index)
 
         subResults += sub
+
+        targetLabel = None
 
         if len(right) == 1 and right[0].expr.tokenType.isUnconditionalBranch():
             # If an `if_` only has 1 expression and it is a branch then incorporate it as part of the `if_`,
@@ -773,45 +809,139 @@ def linearizeTree(tree: list[Expression], byteCount = 0) -> tuple[list[LinearExp
             branchExpr = right[0]
             if branchExpr.args is None:
                 eprint(f"Error: branch command without arguments? at {branchExpr.expr.filename}:{branchExpr.expr.lineNumber}:{branchExpr.expr.columnNumber}")
-                debugPrint(f" linearizeTree")
+                debugPrint(f" convertTreeIntoLabeledList")
                 exit(1)
-            targetOffset = branchExpr.args.tokenLiteral.strip()
+            targetLabel = branchExpr.args.tokenLiteral.strip()
         else:
-            sub, byteCount = linearizeTree(right, byteCount)
+            sub, index = convertTreeIntoLabeledList(right, index)
             subResults += sub
+            if len(sub) != 0:
+                targetLabel = sub[0].labelName
 
-        linearExpr = LinearExpression(currentOffset, expr.expr, expr.args, labelName)
+        if labelName is None:
+            labelName = f".index.{currentIndex}"
+
+        canChange = False
+        if token.tokenType.isGeneric():
+            canChange = True
+            newTokenType = cmdRedirection[token.tokenType][0]
+            token = Token(newTokenType, newTokenType.value, token.filename, token.lineNumber, token.columnNumber)
+
+        if token.tokenType.isUnconditionalBranch():
+            assert expr.args is not None, expr
+            targetLabel = expr.args.tokenLiteral
+
+        linearExpr = LabeledExpression(currentIndex, token, expr.args, labelName, canChange)
         labelName = None
 
-        if expr.expr.tokenType.isBranch() or expr.expr.tokenType.isUnconditionalBranch():
-            linearExpr.branchTarget = targetOffset
+        if token.tokenType.isBranch() or token.tokenType.isUnconditionalBranch():
+            linearExpr.branchTarget = targetLabel
 
         result += [linearExpr] + subResults
 
-    return result, byteCount
+    return result, index
 
-def emitLinearizedMacros(linearizedExprs: list[LinearExpression], debuggingLevel: int) -> str:
+
+def removeGenerics(labeledList: list[LabeledExpression]) -> tuple[list[LabeledExpression], bool]:
+    modifiedAnything = False
+
+    offset = 0
+
+    for labeledExpr in labeledList:
+        info = cmdInfos[labeledExpr.token.tokenType]
+
+        nextOffset = offset + info.cmdLenght
+
+        if labeledExpr.canChange:
+            if labeledExpr.token.tokenType.isBranch() or labeledExpr.token.tokenType.isUnconditionalBranch():
+                if labeledExpr.token.tokenType.isShort():
+                    # There's no point on trying to change a long branch
+
+                    # find the target expression
+                    targetIndex = -1
+                    targetExpression = None
+                    subOffset = 0
+                    for j, auxExpr in enumerate(labeledList):
+                        if labeledExpr.branchTarget == auxExpr.labelName:
+                            targetIndex = j
+                            targetExpression = auxExpr
+                            break
+                        targetInfo = cmdInfos[auxExpr.token.tokenType]
+                        subOffset += targetInfo.cmdLenght
+
+                    if targetIndex < 0 or targetExpression is None:
+                        eprint(f"Error: Not able to find target '{labeledExpr.branchTarget}' for expression '{labeledExpr.token.tokenLiteral}' at {labeledExpr.token.filename}:{labeledExpr.token.lineNumber}:{labeledExpr.token.columnNumber}")
+                        debugPrint(f" removeGenerics")
+                        exit(1)
+
+                    diff = subOffset - nextOffset
+                    # print(f"{labeledExpr} {offset:X} {diff:X} {subOffset:X} {nextOffset:X}")
+                    # if offset == 0x258:
+                    #     print(f"{diff:X}")
+                    if diff >= 0x7F or diff <= -0x80:
+                        longTokenType = cmdShortToLong.get(labeledExpr.token.tokenType)
+                        if longTokenType is None:
+                            eprint(f"Error: Command '{labeledExpr.token.tokenLiteral}' will require a branch way too big for a short branch, but there's no long equivalent. At {labeledExpr.token.filename}:{labeledExpr.token.lineNumber}:{labeledExpr.token.columnNumber}")
+                            debugPrint(f" removeGenerics")
+                            exit(1)
+                        labeledExpr.token = Token(longTokenType, longTokenType.value, labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
+                        modifiedAnything = True
+
+        info = cmdInfos[labeledExpr.token.tokenType]
+        offset += info.cmdLenght
+
+    return labeledList, modifiedAnything
+
+
+def getTargetOffset(labeledExpr: LabeledExpression, labeledList: list[LabeledExpression], offsetList: list[int]) -> int:
+    if labeledExpr.branchTarget is None:
+        eprint(f"Internal Error: Command '{labeledExpr.token.tokenLiteral}' requested a target offset but it doesn't have a label. At {labeledExpr.token.filename}:{labeledExpr.token.lineNumber}:{labeledExpr.token.columnNumber}")
+        debugPrint(f" getTargetOffset")
+        exit(1)
+
+    for i, targetExpr in enumerate(labeledList):
+        if labeledExpr.branchTarget == targetExpr.labelName:
+            return offsetList[i]
+
+    eprint(f"Internal Error: Command '{labeledExpr.token.tokenLiteral}' requested label '{labeledExpr.branchTarget}', but it was not found. At {labeledExpr.token.filename}:{labeledExpr.token.lineNumber}:{labeledExpr.token.columnNumber}")
+    debugPrint(f" getTargetOffset")
+    exit(1)
+
+def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: int) -> str:
     result = ""
 
-    offsetWidth = len(f"{linearizedExprs[-1].offset:X}")
+    # Precompute the offsets of each expression
+    offsetList: list[int] = []
+    offset = 0
+    for labeledExpr in labeledList:
+        offsetList.append(offset)
+        offset += cmdInfos[labeledExpr.token.tokenType].cmdLenght
+    # To avoid reading outside of the list
+    offsetList.append(offset)
 
-    for linExpr in linearizedExprs:
-        info = cmdInfos[linExpr.expr.tokenType]
-        currentMacro = f"    /* 0x{linExpr.offset:0{offsetWidth}X} */ {info.macro}("
+    # Use the same amount of 0 pads for every entry
+    offsetWidth = len(f"{offsetList[-2]:X}")
 
-        nextOffset = linExpr.offset + info.cmdLenght
+    for i, labeledExpr in enumerate(labeledList):
+        currentOffset = offsetList[i]
+        nextOffset = offsetList[i+1]
 
-        if linExpr.expr.tokenType.isUnconditionalBranch():
-            currentMacro += f"0x{linExpr.getTargetOffset(linearizedExprs):0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
+        info = cmdInfos[labeledExpr.token.tokenType]
+        currentMacro = f"    /* 0x{currentOffset:0{offsetWidth}X} */ {info.macro}("
+
+        if labeledExpr.token.tokenType.isUnconditionalBranch():
+            targetOffset = getTargetOffset(labeledExpr, labeledList, offsetList)
+            currentMacro += f"0x{targetOffset:0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
         else:
-            if linExpr.args is not None:
-                currentMacro += f"{linExpr.args.tokenLiteral}"
-            if linExpr.expr.tokenType.isBranch():
-                currentMacro += f", 0x{linExpr.getTargetOffset(linearizedExprs):0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
+            if labeledExpr.args is not None:
+                currentMacro += f"{labeledExpr.args.tokenLiteral}"
+            if labeledExpr.token.tokenType.isBranch():
+                targetOffset = getTargetOffset(labeledExpr, labeledList, offsetList)
+                currentMacro += f", 0x{targetOffset:0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
         currentMacro += "),"
 
         if debuggingLevel >= 1:
-            currentMacro += f" /* {linExpr.expr.filename}:{linExpr.expr.lineNumber}:{linExpr.expr.columnNumber} */"
+            currentMacro += f" /* {labeledExpr.token.filename}:{labeledExpr.token.lineNumber}:{labeledExpr.token.columnNumber} */"
 
         currentMacro += "\n"
 
@@ -854,8 +984,23 @@ def main():
         for expr in tree:
             expr.print()
 
-    linearizedExprs, byteCount = linearizeTree(tree)
-    output = emitLinearizedMacros(linearizedExprs, debuggingLevel)
+    labeledList, _ = convertTreeIntoLabeledList(tree)
+    # for labeled in labeledList:
+    #     print(labeled)
+    # print()
+
+    genericsIterationCount = 0
+    keepGoing = True
+    while keepGoing:
+        labeledList, keepGoing = removeGenerics(labeledList)
+        genericsIterationCount += 1
+    # for labeled in labeledList:
+    #     print(labeled)
+    # print()
+    # print(f"{genericsIterationCount=}")
+    # print()
+
+    output = emitLabeledListMacros(labeledList, debuggingLevel)
 
     if outputPath is None:
         print(output)

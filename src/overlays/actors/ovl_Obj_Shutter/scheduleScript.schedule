@@ -1,4 +1,4 @@
-if_time_range_s (10, 0, 20, 0) {
+if_time_range (10, 0, 20, 0) {
     return_l (1)
 } else {
     return_l (2)

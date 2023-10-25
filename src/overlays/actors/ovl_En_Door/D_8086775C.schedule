@@ -1,10 +1,10 @@
-not if_week_event_reg_s (WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) {
-    not if_week_event_reg_s (WEEKEVENTREG_75_20) {
-        if_week_event_reg_s (WEEKEVENTREG_14_04) {
-            if_week_event_reg_s (WEEKEVENTREG_59_01) {
+not if_week_event_reg (WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) {
+    not if_week_event_reg (WEEKEVENTREG_75_20) {
+        if_week_event_reg (WEEKEVENTREG_14_04) {
+            if_week_event_reg (WEEKEVENTREG_59_01) {
                 return_none
             } else {
-                if_week_event_reg_s (WEEKEVENTREG_61_02) {
+                if_week_event_reg (WEEKEVENTREG_61_02) {
                     return_s (31)
                 } else {
                     return_s (30)

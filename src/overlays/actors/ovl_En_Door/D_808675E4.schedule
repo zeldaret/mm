@@ -1,14 +1,14 @@
-if_before_time_s (9, 0) {
+if_before_time (9, 0) {
     return_s (9)
 } else {
-    if_since_time_s (12, 0) {
-        if_day_s (1) {
+    if_since_time (12, 0) {
+        if_day (1) {
             branch (label_0x0E)
 
             label_0x0E:
-            if_since_time_s (13, 0) {
-                if_since_time_s (15, 0) {
-                    if_since_time_s (0, 0) {
+            if_since_time (13, 0) {
+                if_since_time (15, 0) {
+                    if_since_time (0, 0) {
                         return_s (9)
                     } else {
                         branch (label_0x1C)
@@ -26,11 +26,11 @@ if_before_time_s (9, 0) {
         label_0x1D:
             return_s (8)
         } else {
-            if_day_s (2) {
-                if_week_event_reg_s (WEEKEVENTREG_28_08) {
-                    if_since_time_s (13, 0) {
-                        if_since_time_s (17, 0) {
-                            if_since_time_s (0, 0) {
+            if_day (2) {
+                if_week_event_reg (WEEKEVENTREG_28_08) {
+                    if_since_time (13, 0) {
+                        if_since_time (17, 0) {
+                            if_since_time (0, 0) {
                                 return_s (9)
                             } else {
                                 branch (label_0x1C)
@@ -42,16 +42,16 @@ if_before_time_s (9, 0) {
                         branch (label_0x1C)
                     }
                 } else {
-                    if_before_time_s (13, 0) {
+                    if_before_time (13, 0) {
                         return_none
                     } else {
                         return_s (9)
                     }
                 }
             } else {
-                if_since_time_s (13, 0) {
-                    if_since_time_s (13, 0) {
-                        if_before_time_s (18, 0) {
+                if_since_time (13, 0) {
+                    if_since_time (13, 0) {
+                        if_before_time (18, 0) {
                             return_s (9)
                         } else {
                             return_none

@@ -1,4 +1,4 @@
-if_since_time_s (22, 0) {
+if_since_time (22, 0) {
     return_s (35)
 } else {
     return_none

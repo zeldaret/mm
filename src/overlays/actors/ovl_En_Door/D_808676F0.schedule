@@ -1,12 +1,12 @@
-if_day_s (3) {
-    if_since_time_s (10, 0) {
+if_day (3) {
+    if_since_time (10, 0) {
         label_0x8:
         return_none
     } else {
         branch (label_0xF)
     }
 } else {
-    if_time_range_s (10, 0, 20, 0) {
+    if_time_range (10, 0, 20, 0) {
         branch (label_0x8)
     } else {
         label_0xF:

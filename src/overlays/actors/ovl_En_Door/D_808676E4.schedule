@@ -1,4 +1,4 @@
-if_misc_s (SCHEDULE_CHECK_MISC_ROOM_KEY) {
+if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
     return_none
 } else {
     return_s (22)
