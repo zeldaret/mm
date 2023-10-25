@@ -1,0 +1,3 @@
+    /* 0x0 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(22, 0, 0x6 - 0x4),
+    /* 0x4 */ SCHEDULE_CMD_RET_VAL_S(35),
+    /* 0x6 */ SCHEDULE_CMD_RET_NONE(),

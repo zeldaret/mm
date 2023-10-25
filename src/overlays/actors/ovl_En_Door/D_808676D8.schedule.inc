@@ -1,0 +1,4 @@
+    /* 0x0 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x9 - 0x4),
+    /* 0x4 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(18, 0, 0x9 - 0x8),
+    /* 0x8 */ SCHEDULE_CMD_RET_NONE(),
+    /* 0x9 */ SCHEDULE_CMD_RET_VAL_S(20),
