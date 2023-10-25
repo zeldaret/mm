@@ -45,10 +45,18 @@ class TokenType(enum.Enum):
     RETURN_TIME = "return_time"
     IF_BEFORETIME_S = "if_before_time_s"
     IF_BEFORETIME_L = "if_before_time_l"
-    IF_AFTERTIME_S = "if_since_time_s"
-    IF_AFTERTIME_L = "if_since_time_l"
-    BRANCH_S = "branch_s" # TODO
-    BRANCH_L = "branch_l" # TODO
+    IF_SINCETIME_S = "if_since_time_s"
+    IF_SINCETIME_L = "if_since_time_l"
+    BRANCH_S = "branch_s"
+    BRANCH_L = "branch_l"
+
+    IF_WEEKEVENTREG = "if_week_event_reg"
+    IF_TIMERANGE = "if_time_range"
+    IF_MISC = "if_misc" # !!!
+    IF_SCENE = "if_scene"
+    IF_DAY = "if_day"
+    IF_BEFORETIME = "if_before_time"
+    IF_SINCETIME = "if_since_time"
     BRANCH = "branch"
 
     # Extra tokens
@@ -77,8 +85,16 @@ class TokenType(enum.Enum):
             TokenType.IF_DAY_L,
             TokenType.IF_BEFORETIME_S,
             TokenType.IF_BEFORETIME_L,
-            TokenType.IF_AFTERTIME_S,
-            TokenType.IF_AFTERTIME_L,
+            TokenType.IF_SINCETIME_S,
+            TokenType.IF_SINCETIME_L,
+
+            TokenType.IF_WEEKEVENTREG,
+            TokenType.IF_TIMERANGE,
+            TokenType.IF_MISC,
+            TokenType.IF_SCENE,
+            TokenType.IF_DAY,
+            TokenType.IF_BEFORETIME,
+            TokenType.IF_SINCETIME,
         }:
             return True
         return False
@@ -87,6 +103,7 @@ class TokenType(enum.Enum):
         if self in {
             TokenType.BRANCH_S,
             TokenType.BRANCH_L,
+
             TokenType.BRANCH,
         }:
             return True
@@ -113,10 +130,18 @@ class TokenType(enum.Enum):
             TokenType.RETURN_TIME,
             TokenType.IF_BEFORETIME_S,
             TokenType.IF_BEFORETIME_L,
-            TokenType.IF_AFTERTIME_S,
-            TokenType.IF_AFTERTIME_L,
+            TokenType.IF_SINCETIME_S,
+            TokenType.IF_SINCETIME_L,
             TokenType.BRANCH_S,
             TokenType.BRANCH_L,
+
+            TokenType.IF_WEEKEVENTREG,
+            TokenType.IF_TIMERANGE,
+            TokenType.IF_MISC,
+            TokenType.IF_SCENE,
+            TokenType.IF_DAY,
+            TokenType.IF_BEFORETIME,
+            TokenType.IF_SINCETIME,
             TokenType.BRANCH,
         }:
             return True
@@ -131,6 +156,11 @@ class TokenType(enum.Enum):
             TokenType.IF_MISC_S,
             TokenType.IF_BEFORETIME_S,
             TokenType.IF_BEFORETIME_L,
+
+            TokenType.IF_WEEKEVENTREG,
+            TokenType.IF_TIMERANGE,
+            TokenType.IF_MISC,
+            TokenType.IF_BEFORETIME,
         }:
             return True
         return False
@@ -153,10 +183,18 @@ tokenLiterals: dict[str, TokenType] = {
     "return_time": TokenType.RETURN_TIME,
     "if_before_time_s": TokenType.IF_BEFORETIME_S,
     "if_before_time_l": TokenType.IF_BEFORETIME_L,
-    "if_since_time_s": TokenType.IF_AFTERTIME_S,
-    "if_since_time_l": TokenType.IF_AFTERTIME_L,
+    "if_since_time_s": TokenType.IF_SINCETIME_S,
+    "if_since_time_l": TokenType.IF_SINCETIME_L,
     "branch_s": TokenType.BRANCH_S,
     "branch_l": TokenType.BRANCH_L,
+
+    "if_week_event_reg": TokenType.IF_WEEKEVENTREG,
+    "if_time_range": TokenType.IF_TIMERANGE,
+    "if_misc": TokenType.IF_MISC,
+    "if_scene": TokenType.IF_SCENE,
+    "if_day": TokenType.IF_DAY,
+    "if_before_time": TokenType.IF_BEFORETIME,
+    "if_since_time": TokenType.IF_SINCETIME,
     "branch": TokenType.BRANCH,
 
     "else": TokenType.ELSE,
@@ -652,14 +690,24 @@ cmdInfos: dict[TokenType, CommandInfo] = {
     TokenType.RETURN_TIME:          CommandInfo('SCHEDULE_CMD_RET_TIME',             0x06,),
     TokenType.IF_BEFORETIME_S:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_S',  0x04,),
     TokenType.IF_BEFORETIME_L:      CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_L',  0x05,),
-    TokenType.IF_AFTERTIME_S:       CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_S',  0x04,),
-    TokenType.IF_AFTERTIME_L:       CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_L',  0x05,),
+    TokenType.IF_SINCETIME_S:       CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_S',  0x04,),
+    TokenType.IF_SINCETIME_L:       CommandInfo('SCHEDULE_CMD_CHECK_BEFORE_TIME_L',  0x05,),
     TokenType.BRANCH_S:             CommandInfo('SCHEDULE_CMD_BRANCH_S',             0x02,),
     TokenType.BRANCH_L:             CommandInfo('SCHEDULE_CMD_BRANCH_L',             0x03,),
 
-    TokenType.BRANCH:               CommandInfo('SCHEDULE_CMD_BRANCH_S',             0x02,),
+    TokenType.BRANCH:               CommandInfo('SCHEDULE_CMD_BRANCH_S',             0x02,), # TODO
 }
 
+cmdRedirection: dict[TokenType, tuple[TokenType|None, TokenType|None]] = {
+    TokenType.IF_WEEKEVENTREG:  (TokenType.IF_WEEKEVENTREG_S, TokenType.IF_WEEKEVENTREG_L),
+    TokenType.IF_TIMERANGE:     (TokenType.IF_TIMERANGE_S, TokenType.IF_TIMERANGE_L),
+    TokenType.IF_MISC:          (TokenType.IF_MISC_S, None),
+    TokenType.IF_SCENE:         (TokenType.IF_SCENE_S, TokenType.IF_SCENE_L),
+    TokenType.IF_DAY:           (TokenType.IF_DAY_S, TokenType.IF_DAY_L),
+    TokenType.IF_BEFORETIME:    (TokenType.IF_BEFORETIME_S, TokenType.IF_BEFORETIME_L),
+    TokenType.IF_SINCETIME:     (TokenType.IF_SINCETIME_S, TokenType.IF_SINCETIME_L),
+    TokenType.BRANCH:           (TokenType.BRANCH_S, TokenType.BRANCH_L),
+}
 
 
 @dataclasses.dataclass
@@ -698,10 +746,6 @@ def linearizeTree(tree: list[Expression], byteCount = 0) -> tuple[list[LinearExp
         if expr.expr.tokenType == TokenType.LABEL:
             labelName = expr.expr.tokenLiteral
             continue
-        info = cmdInfos[expr.expr.tokenType]
-        currentOffset = byteCount
-
-        byteCount += info.cmdLenght
 
         subResults = []
         left = expr.left
@@ -710,6 +754,10 @@ def linearizeTree(tree: list[Expression], byteCount = 0) -> tuple[list[LinearExp
             left, right = right, left
         if expr.negated:
             left, right = right, left
+
+        info = cmdInfos[expr.expr.tokenType]
+        currentOffset = byteCount
+        byteCount += info.cmdLenght
 
         sub, byteCount = linearizeTree(left, byteCount)
         targetOffset = byteCount
