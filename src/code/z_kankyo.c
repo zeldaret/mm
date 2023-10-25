@@ -1684,17 +1684,16 @@ void func_800F8970(void) {
 void Environment_UpdatePostmanEvents(PlayState* play) {
     u8 v1;
     u8 temp1;
-    u8 temp2;
     u16 temp_a2_2;
 
     //! FAKE: excess temp usage?
     temp1 = (u8)((void)0, ((gSaveContext.eventInf[7] & 0xE0) >> 5));
     if (temp1 != (u8)((void)0, gSaveContext.save.day)) {
-        v1 = ((void)0, (gSaveContext.eventInf[7] & (u8)~0xE0));
         temp1 = ((void)0, gSaveContext.save.day);
-        temp2 = temp1 << 5;
-        v1 |= temp2;
+        v1 = gSaveContext.eventInf[7] & (u8)~0xE0;
+        v1 |= (u8)(temp1 << 5);
         gSaveContext.eventInf[7] = v1;
+
         SET_WEEKEVENTREG(WEEKEVENTREG_27_40);
         SET_WEEKEVENTREG(WEEKEVENTREG_27_80);
         SET_WEEKEVENTREG(WEEKEVENTREG_28_01);
