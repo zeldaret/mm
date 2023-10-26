@@ -5,8 +5,8 @@ typedef signed char            s8;
 typedef unsigned char          u8;
 typedef signed short int       s16;
 typedef unsigned short int     u16;
-typedef signed int             s32;
-typedef unsigned int           u32;
+typedef signed long            s32;
+typedef unsigned long          u32;
 typedef signed long long int   s64;
 typedef unsigned long long int u64;
 
@@ -21,12 +21,6 @@ typedef volatile s64 vs64;
 
 typedef float  f32;
 typedef double f64;
-
-typedef u32 size_t;
-
-#ifndef NULL
-#define NULL (void*)0
-#endif
 
 // TODO: move this somewhere else
 typedef void* TexturePtr;

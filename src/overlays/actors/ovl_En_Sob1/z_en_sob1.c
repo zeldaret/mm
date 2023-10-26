@@ -173,7 +173,7 @@ void EnSob1_SetupAction(EnSob1* this, EnSob1ActionFunc action) {
     this->actionFunc = action;
 }
 
-s32 EnSob1_TestItemSelected(PlayState* play) {
+int EnSob1_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {

@@ -1523,7 +1523,7 @@ void Play_Main(GameState* thisx) {
     CutsceneManager_ClearWaiting();
 }
 
-s32 Play_InCsMode(PlayState* this) {
+int Play_InCsMode(PlayState* this) {
     return (this->csCtx.state != CS_STATE_IDLE) || Player_InCsMode(this);
 }
 

@@ -547,7 +547,7 @@ void func_8087C288(PlayState* play, Vec3f* arg1, Vec3f* arg2, f32* arg3) {
     SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, arg1, arg2, arg3);
 }
 
-s32 func_8087C2B8(PlayState* play, EnHorse* this, Vec3f* arg2, f32 arg3) {
+int func_8087C2B8(PlayState* play, EnHorse* this, Vec3f* arg2, f32 arg3) {
     f32 phi_f14;
 
     if ((arg2->z > 0.0f) && (arg2->z < (this->actor.uncullZoneForward + this->actor.uncullZoneScale))) {
@@ -565,7 +565,7 @@ s32 func_8087C2B8(PlayState* play, EnHorse* this, Vec3f* arg2, f32 arg3) {
     return false;
 }
 
-s32 func_8087C38C(PlayState* play, EnHorse* this, Vec3f* arg2) {
+int func_8087C38C(PlayState* play, EnHorse* this, Vec3f* arg2) {
     Vec3f sp24;
     f32 sp20;
     f32 eyeDist;

@@ -366,13 +366,13 @@ void func_80122F28(Player* player) {
     }
 }
 
-s32 func_80122F9C(PlayState* play) {
+int func_80122F9C(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->actionVar1 == 2);
 }
 
-s32 func_80122FCC(PlayState* play) {
+int func_80122FCC(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags2 & PLAYER_STATE2_80000) && ((player->actionVar1 == 1) || (player->actionVar1 == 3));
@@ -493,29 +493,29 @@ void func_80123140(PlayState* play, Player* player) {
     Actor_SetScale(&player->actor, scale);
 }
 
-s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
+int Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
            (player->csAction != PLAYER_CSACTION_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
            (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
 }
 
-s32 Player_InCsMode(PlayState* play) {
+int Player_InCsMode(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return Player_InBlockingCsMode(play, player) || (player->unk_AA5 == PLAYER_UNKAA5_5);
 }
 
-s32 func_80123420(Player* player) {
+int func_80123420(Player* player) {
     return player->stateFlags3 & PLAYER_STATE3_80000000;
 }
 
-s32 func_80123434(Player* player) {
+int func_80123434(Player* player) {
     return player->stateFlags1 & (PLAYER_STATE1_10000 | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
 }
 
 // Unused
-s32 func_80123448(PlayState* play) {
+int func_80123448(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
@@ -524,11 +524,11 @@ s32 func_80123448(PlayState* play) {
 
 // TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
 // Hypothesis: this function checks if the current form would crouch when he tries to use the shield
-s32 Player_IsGoronOrDeku(Player* player) {
+int Player_IsGoronOrDeku(Player* player) {
     return player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_DEKU;
 }
 
-s32 func_801234D4(PlayState* play) {
+int func_801234D4(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags2 & PLAYER_STATE2_8) || (player->actor.speed != 0.0f) ||
@@ -538,7 +538,7 @@ s32 func_801234D4(PlayState* play) {
              (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)));
 }
 
-s32 func_80123590(PlayState* play, Actor* actor) {
+int func_80123590(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
     if ((player->stateFlags1 & PLAYER_STATE1_800) && (player->heldActor == actor)) {
@@ -1355,7 +1355,7 @@ void func_80123E90(PlayState* play, Actor* actor) {
     Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_FOLLOWTARGET);
 }
 
-s32 func_80123F14(PlayState* play) {
+int func_80123F14(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->stateFlags1 & PLAYER_STATE1_800000;
@@ -1367,7 +1367,7 @@ s32 func_80123F2C(PlayState* play, s32 ammo) {
     return 1;
 }
 
-s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange) {
+int Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
     Vec3f diff;
     s32 pad;
@@ -1397,24 +1397,24 @@ void Player_RemoveMask(PlayState* play) {
     player->currentMask = PLAYER_MASK_NONE;
 }
 
-s32 Player_HasMirrorShieldEquipped(PlayState* play) {
+int Player_HasMirrorShieldEquipped(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->transformation == PLAYER_FORM_HUMAN) && (player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD);
 }
 
-s32 Player_IsHoldingMirrorShield(PlayState* play) {
+int Player_IsHoldingMirrorShield(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->transformation == PLAYER_FORM_HUMAN) && (player->rightHandType == PLAYER_MODELTYPE_RH_SHIELD) &&
            (player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD);
 }
 
-s32 Player_IsHoldingHookshot(Player* player) {
+int Player_IsHoldingHookshot(Player* player) {
     return player->heldItemAction == PLAYER_IA_HOOKSHOT;
 }
 
-s32 func_801240DC(Player* player) {
+int func_801240DC(Player* player) {
     return Player_IsHoldingHookshot(player) && (player->heldActor == NULL);
 }
 
@@ -1499,7 +1499,7 @@ PlayerSword Player_SwordFromIA(Player* player, PlayerItemAction itemAction) {
     return PLAYER_SWORD_NONE;
 }
 
-s32 func_801242B4(Player* player) {
+int func_801242B4(Player* player) {
     return (player->stateFlags1 & PLAYER_STATE1_8000000) && (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER);
 }
 

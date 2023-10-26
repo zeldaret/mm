@@ -24,7 +24,7 @@ void ZeldaArena_Free(void* ptr) {
     __osFree(&sZeldaArena, ptr);
 }
 
-void* ZeldaArena_Calloc(u32 num, size_t size) {
+void* ZeldaArena_Calloc(u32 num, u32 size) {
     void* ret;
     u32 n = num * size;
 
