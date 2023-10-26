@@ -1234,7 +1234,7 @@ asm/non_matchings/code/z_kankyo/Environment_UpdateSkyboxRotY.s,Environment_Updat
 asm/non_matchings/code/z_kankyo/Environment_UpdateNextDayTime.s,Environment_UpdateNextDayTime,0x800F6AB8,0x23
 asm/non_matchings/code/z_kankyo/Environment_UpdateTime.s,Environment_UpdateTime,0x800F6B44,0x6A
 asm/non_matchings/code/z_kankyo/func_800F6CEC.s,func_800F6CEC,0x800F6CEC,0x6E
-asm/non_matchings/code/z_kankyo/func_800F6EA4.s,func_800F6EA4,0x800F6EA4,0x4A
+asm/non_matchings/code/z_kankyo/Environment_LerpColor.s,Environment_LerpColor,0x800F6EA4,0x4A
 asm/non_matchings/code/z_kankyo/Environment_IsSceneUpsideDown.s,Environment_IsSceneUpsideDown,0x800F6FCC,0xB
 asm/non_matchings/code/z_kankyo/Environment_UpdateLights.s,Environment_UpdateLights,0x800F6FF8,0x557
 asm/non_matchings/code/z_kankyo/Environment_UpdateSun.s,Environment_UpdateSun,0x800F8554,0xDC

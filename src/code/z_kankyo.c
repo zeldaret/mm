@@ -1224,7 +1224,7 @@ void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
     s32 temp_v1 = (arg1 % 4);
 
     if ((((void)0, gSaveContext.save.day) >= 2) && (arg1 >= 4) && (arg1 < 8)) {
-        temp_v1_2 = (((void)0, gSaveContext.save.day) * 4) + 4;
+        temp_v1_2 = (((void)0, gSaveContext.save.day) + 1) * 4;
         for (phi_t1 = 0; phi_t1 != 3; phi_t1++) {
             adjLightSettings->ambientColor[phi_t1] =
                 lightSettings[temp_v1_2 + temp_v1].ambientColor[phi_t1] - lightSettings[temp_v1].ambientColor[phi_t1];
@@ -1257,11 +1257,11 @@ void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
     }
 }
 
-u8 func_800F6EA4(f32 arg0, f32 arg1, f32 arg2) {
-    arg0 = CLAMP(arg0, 0.0f, 255.0f);
-    arg1 = CLAMP(arg1, 0.0f, 255.0f);
+u8 Environment_LerpColor(f32 to, f32 from, f32 lerp) {
+    to = CLAMP(to, 0.0f, 255.0f);
+    from = CLAMP(from, 0.0f, 255.0f);
 
-    return ((arg0 - arg1) * arg2) + arg1;
+    return ((to - from) * lerp) + from;
 }
 
 s32 Environment_IsSceneUpsideDown(PlayState* play) {
@@ -1362,11 +1362,11 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                     for (j = 0; j < 3; j++) {
                         arg0 = lightSettingsList[(s32)sp95].ambientColor[j] + spA4[1].ambientColor[j];
                         arg1 = lightSettingsList[(s32)sp97].ambientColor[j] + spA4[0].ambientColor[j];
-                        blend8[0] = func_800F6EA4(arg0, arg1, temp_fv0);
+                        blend8[0] = Environment_LerpColor(arg0, arg1, temp_fv0);
 
                         arg0 = lightSettingsList[(s32)sp94].ambientColor[j] + spA4[3].ambientColor[j];
                         arg1 = lightSettingsList[(s32)sp96].ambientColor[j] + spA4[2].ambientColor[j];
-                        blend8[1] = func_800F6EA4(arg0, arg1, temp_fv0);
+                        blend8[1] = Environment_LerpColor(arg0, arg1, temp_fv0);
 
                         envCtx->lightSettings.ambientColor[j] = LERPIMP_ALT(blend8[0], blend8[1], var_fs3);
                     }
@@ -1389,21 +1389,21 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                     for (j = 0; j < 3; j++) {
                         arg0 = lightSettingsList[(s32)sp95].light1Color[j] + spA4[1].light1Color[j];
                         arg1 = lightSettingsList[(s32)sp97].light1Color[j] + spA4[0].light1Color[j];
-                        blend8[0] = func_800F6EA4(arg0, arg1, temp_fv0);
+                        blend8[0] = Environment_LerpColor(arg0, arg1, temp_fv0);
 
                         arg0 = lightSettingsList[(s32)sp94].light1Color[j] + spA4[3].light1Color[j];
                         arg1 = lightSettingsList[(s32)sp96].light1Color[j] + spA4[2].light1Color[j];
-                        blend8[1] = func_800F6EA4(arg0, arg1, temp_fv0);
+                        blend8[1] = Environment_LerpColor(arg0, arg1, temp_fv0);
 
                         envCtx->lightSettings.light1Color[j] = LERPIMP_ALT(blend8[0], blend8[1], var_fs3);
 
                         arg0 = lightSettingsList[(s32)sp95].light2Color[j] + spA4[1].light2Color[j];
                         arg1 = lightSettingsList[(s32)sp97].light2Color[j] + spA4[0].light2Color[j];
-                        blend8[0] = func_800F6EA4(arg0, arg1, temp_fv0);
+                        blend8[0] = Environment_LerpColor(arg0, arg1, temp_fv0);
 
                         arg0 = lightSettingsList[(s32)sp94].light2Color[j] + spA4[3].light2Color[j];
                         arg1 = lightSettingsList[(s32)sp96].light2Color[j] + spA4[2].light2Color[j];
-                        blend8[1] = func_800F6EA4(arg0, arg1, temp_fv0);
+                        blend8[1] = Environment_LerpColor(arg0, arg1, temp_fv0);
 
                         envCtx->lightSettings.light2Color[j] = LERPIMP_ALT(blend8[0], blend8[1], var_fs3);
                     }
@@ -1411,11 +1411,11 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                     for (j = 0; j < 3; j++) {
                         arg0 = lightSettingsList[(s32)sp95].fogColor[j] + spA4[1].fogColor[j];
                         arg1 = lightSettingsList[(s32)sp97].fogColor[j] + spA4[0].fogColor[j];
-                        blend8[0] = func_800F6EA4(arg0, arg1, temp_fv0);
+                        blend8[0] = Environment_LerpColor(arg0, arg1, temp_fv0);
 
                         arg0 = lightSettingsList[(s32)sp94].fogColor[j] + spA4[3].fogColor[j];
                         arg1 = lightSettingsList[(s32)sp96].fogColor[j] + spA4[2].fogColor[j];
-                        blend8[1] = func_800F6EA4(arg0, arg1, temp_fv0);
+                        blend8[1] = Environment_LerpColor(arg0, arg1, temp_fv0);
 
                         envCtx->lightSettings.fogColor[j] = LERPIMP_ALT(blend8[0], blend8[1], var_fs3);
                     }
@@ -1611,7 +1611,7 @@ void Environment_UpdateSun(PlayState* play) {
             phi_v0 = ((void)0, gSaveContext.save.time);
         }
 
-        temp_a0 = phi_v0 - 0x8000;
+        temp_a0 = phi_v0 - CLOCK_TIME(12, 0);
 
         if (play->csCtx.state != CS_STATE_IDLE) {
             // TODO bug?
