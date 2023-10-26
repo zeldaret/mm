@@ -9,6 +9,8 @@
 
 struct GameState;
 
+#define TMEM_SIZE 0x1000
+
 typedef enum SetupDL {
     /* 0x00 */ SETUPDL_0,
     /* 0x01 */ SETUPDL_1,

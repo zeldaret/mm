@@ -923,9 +923,9 @@ void Play_UpdateMain(PlayState* this) {
     u8 freezeFlashTimer;
     s32 sp5C = false;
 
-    gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
-    gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+    gSegments[4] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
+    gSegments[5] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
+    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
 
     if (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_PROCESS) {
         R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_READY;
@@ -1155,9 +1155,9 @@ void Play_DrawMain(PlayState* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
-    gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+    gSegments[4] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
+    gSegments[5] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
+    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x04, this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
     gSPSegment(POLY_XLU_DISP++, 0x04, this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
@@ -1605,7 +1605,7 @@ void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn) {
     this->sceneConfig = scene->drawConfig;
     this->sceneSegment = Play_LoadFile(this, &scene->segment);
     scene->unk_D = 0;
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
     Play_InitScene(this, spawn);
     Room_AllocateAndLoad(this, &this->roomCtx);
 }

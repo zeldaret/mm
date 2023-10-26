@@ -1,4 +1,4 @@
-#include "global.h"
+#include "ultra64.h"
 
 s32 osEPiStartDma(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
     register s32 result;
@@ -9,13 +9,13 @@ s32 osEPiStartDma(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
 
     mb->piHandle = pihandle;
 
-    if (direction == 0) {
-        mb->hdr.type = 15;
+    if (direction == OS_READ) {
+        mb->hdr.type = OS_MESG_TYPE_EDMAREAD;
     } else {
-        mb->hdr.type = 16;
+        mb->hdr.type = OS_MESG_TYPE_EDMAWRITE;
     }
 
-    if (mb->hdr.pri == 1) {
+    if (mb->hdr.pri == OS_MESG_PRI_HIGH) {
         result = osJamMesg(osPiGetCmdQueue(), mb, OS_MESG_NOBLOCK);
     } else {
         result = osSendMesg(osPiGetCmdQueue(), mb, OS_MESG_NOBLOCK);

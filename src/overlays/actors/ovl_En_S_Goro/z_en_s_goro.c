@@ -788,7 +788,7 @@ s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
         if (((EnJg*)this->otherGoron)->flags & 1) {
             this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_TAISOU);
             if (this->objectSlot > OBJECT_SLOT_NONE) {
-                gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+                gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
                 this->animInfoIndex = EN_S_GORO_ANIM_TAISOU_CHEER;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
                 return true;
@@ -797,7 +797,7 @@ s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
     } else if ((this->animInfoIndex == EN_S_GORO_ANIM_TAISOU_CHEER) && !(((EnJg*)this->otherGoron)->flags & 1)) {
         this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
         if (this->objectSlot > OBJECT_SLOT_NONE) {
-            gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+            gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
             this->animInfoIndex = EN_S_GORO_ANIM_IDLE_STAND;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
             this->skelAnime.curFrame = this->skelAnime.endFrame;
@@ -1329,7 +1329,7 @@ void EnSGoro_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
     SkelAnime_Update(&this->skelAnime);
     if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
         EnSGoro_UpdateAttentionTarget(this, play);

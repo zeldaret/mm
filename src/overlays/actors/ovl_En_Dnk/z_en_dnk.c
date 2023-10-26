@@ -210,7 +210,7 @@ s32 func_80A515C4(EnDnk* this) {
 
 void func_80A51648(EnDnk* this, PlayState* play) {
     if (SubS_IsObjectLoaded(this->objectSlot, play) == true) {
-        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
         this->actor.draw = func_80A52018;
         this->actor.objectSlot = this->objectSlot;
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
