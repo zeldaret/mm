@@ -3610,7 +3610,10 @@ void KaleidoScope_Update(PlayState* play) {
             }
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(sUnpausedHudVisibility);
-            Audio_SetPauseState(0);
+            Audio_SetPauseState(false);
+            break;
+
+        default:
             break;
     }
 

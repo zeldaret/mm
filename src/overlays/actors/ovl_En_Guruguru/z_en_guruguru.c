@@ -250,7 +250,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         }
         if (this->textIdIndex == 12) {
             SET_WEEKEVENTREG(WEEKEVENTREG_38_40);
-            Audio_MuteSeqPlayerBgmSub(0);
+            Audio_MuteSeqPlayerBgmSub(false);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BREMEN_MASK);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GURU_GURU);
             func_80BC6E10(this);
@@ -275,15 +275,15 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             if ((this->unk268 != 0) && (this->textIdIndex >= 7)) {
                 this->skelAnime.playSpeed = 2.0f;
                 Audio_SetSeqTempoAndFreq(3, 1.18921f, 2);
-                Audio_MuteSeqPlayerBgmSub(0);
+                Audio_MuteSeqPlayerBgmSub(false);
             } else {
                 if (this->skelAnime.playSpeed == 2.0f) {
                     Audio_SetSeqTempoAndFreq(3, 1.0f, 2);
                 }
                 if (this->unk268 == 0) {
-                    Audio_MuteSeqPlayerBgmSub(1);
+                    Audio_MuteSeqPlayerBgmSub(true);
                 } else {
-                    Audio_MuteSeqPlayerBgmSub(0);
+                    Audio_MuteSeqPlayerBgmSub(false);
                 }
                 this->skelAnime.playSpeed = 1.0f;
             }
@@ -291,14 +291,14 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             Message_ContinueTextbox(play, textIDs[this->textIdIndex]);
             return;
         }
-        Audio_MuteSeqPlayerBgmSub(0);
+        Audio_MuteSeqPlayerBgmSub(false);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GURU_GURU);
         func_80BC6E10(this);
     }
 }
 
 void func_80BC73F4(EnGuruguru* this) {
-    Audio_MuteSeqPlayerBgmSub(0);
+    Audio_MuteSeqPlayerBgmSub(false);
     this->unk268 = 1;
     this->headZRotTarget = 0;
     this->unk272 = 2;
@@ -311,7 +311,7 @@ void func_80BC7440(EnGuruguru* this, PlayState* play) {
         this->actor.parent = NULL;
         this->textIdIndex++;
         this->actor.textId = textIDs[this->textIdIndex];
-        Audio_MuteSeqPlayerBgmSub(1);
+        Audio_MuteSeqPlayerBgmSub(true);
         Actor_OfferTalkExchange(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->unk268 = 0;
         SET_WEEKEVENTREG(WEEKEVENTREG_38_40);
