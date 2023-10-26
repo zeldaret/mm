@@ -2930,16 +2930,17 @@ void Boss01_Afterimage_Draw(Actor* thisx, PlayState* play) {
 
 /**
  * These four arrays encode circular shadow maps of various sizes. For an array of length N, the shadow map is N rows
- * tall, and each entry in the array describes the start and end point of the shadow within a given row (the start point
- * is just the negative end point). To illustrate using the sShadowSmallMap as an example:
- * -3 -2 -1  0  1  2  3
- *  --------------------
- *  0  0  1  1  1  0  0
- *  0  1  1  1  1  1  0
- *  1  1  1  1  1  1  1
- *  1  1  1  1  1  1  1
- *  0  1  1  1  1  1  0
- *  0  0  1  1  1  0  0
+ * tall, and each entry in the array describes the start and end point of the shadow within a given row (the exact
+ * values of the start and end points is determined by the loops within Boss01_FillShadowTex). To illustrate using the
+ * sShadowSmallMap as an example:
+ * -3 -2 -1  0  1  2
+ *  -----------------
+ *  0  0  1  1  1  0
+ *  0  1  1  1  1  1
+ *  1  1  1  1  1  1
+ *  1  1  1  1  1  1
+ *  0  1  1  1  1  1
+ *  0  0  1  1  1  0
  */
 static s32 sShadowSmallMap[] = {
     1, 2, 3, 3, 2, 1,
