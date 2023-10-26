@@ -76,9 +76,11 @@ class TokenProperties:
     isConditionalBranch: bool = False
     isUnconditionalBranch: bool = False
     hasArguments: bool = False
-    needsToInvert: bool = False
     isGeneric: bool = False
+    needsToInvert: bool = False
     isShort: bool = False
+    shortVersion: TokenType|None=None
+    longVersion: TokenType|None=None
 
     @property
     def isAnyBranch(self) -> bool:
@@ -86,37 +88,37 @@ class TokenProperties:
 
 tokenPropertiesDict: dict[TokenType, TokenProperties] = {
     # Schedule commands
-    TokenType.IF_WEEKEVENTREG_S:    TokenProperties(macro="SCHEDULE_CMD_CHECK_FLAG_S",         cmdLength=0x04, isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True),
-    TokenType.IF_WEEKEVENTREG_L:    TokenProperties(macro="SCHEDULE_CMD_CHECK_FLAG_L",         cmdLength=0x05, isConditionalBranch=True, hasArguments=True, needsToInvert=True),
-    TokenType.IF_TIMERANGE_S:       TokenProperties(macro="SCHEDULE_CMD_CHECK_TIME_RANGE_S",   cmdLength=0x06, isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True),
-    TokenType.IF_TIMERANGE_L:       TokenProperties(macro="SCHEDULE_CMD_CHECK_TIME_RANGE_L",   cmdLength=0x07, isConditionalBranch=True, hasArguments=True, needsToInvert=True),
+    TokenType.IF_WEEKEVENTREG_S:    TokenProperties(macro="SCHEDULE_CMD_CHECK_FLAG_S",         cmdLength=0x04, isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True, shortVersion=TokenType.IF_WEEKEVENTREG_S, longVersion=TokenType.IF_WEEKEVENTREG_L),
+    TokenType.IF_WEEKEVENTREG_L:    TokenProperties(macro="SCHEDULE_CMD_CHECK_FLAG_L",         cmdLength=0x05, isConditionalBranch=True, hasArguments=True, needsToInvert=True,               shortVersion=TokenType.IF_WEEKEVENTREG_S, longVersion=TokenType.IF_WEEKEVENTREG_L),
+    TokenType.IF_TIMERANGE_S:       TokenProperties(macro="SCHEDULE_CMD_CHECK_TIME_RANGE_S",   cmdLength=0x06, isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True, shortVersion=TokenType.IF_TIMERANGE_S, longVersion=TokenType.IF_TIMERANGE_L),
+    TokenType.IF_TIMERANGE_L:       TokenProperties(macro="SCHEDULE_CMD_CHECK_TIME_RANGE_L",   cmdLength=0x07, isConditionalBranch=True, hasArguments=True, needsToInvert=True,               shortVersion=TokenType.IF_TIMERANGE_S, longVersion=TokenType.IF_TIMERANGE_L),
     TokenType.RETURN_S:             TokenProperties(macro="SCHEDULE_CMD_RET_VAL_S",            cmdLength=0x02, hasArguments=True, isShort=True),
     TokenType.RETURN_L:             TokenProperties(macro="SCHEDULE_CMD_RET_VAL_L",            cmdLength=0x03, hasArguments=True),
     TokenType.RETURN_NONE:          TokenProperties(macro="SCHEDULE_CMD_RET_NONE",             cmdLength=0x01),
     TokenType.RETURN_EMPTY:         TokenProperties(macro="SCHEDULE_CMD_RET_EMPTY",            cmdLength=0x01),
-    TokenType.IF_MISC_S:            TokenProperties(macro="SCHEDULE_CMD_CHECK_MISC_S",         cmdLength=0x03, isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True),
-    TokenType.IF_SCENE_S:           TokenProperties(macro="SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S", cmdLength=0x04, isConditionalBranch=True, hasArguments=True, isShort=True),
-    TokenType.IF_SCENE_L:           TokenProperties(macro="SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L", cmdLength=0x05, isConditionalBranch=True, hasArguments=True),
-    TokenType.IF_DAY_S:             TokenProperties(macro="SCHEDULE_CMD_CHECK_NOT_IN_DAY_S",   cmdLength=0x04, isConditionalBranch=True, hasArguments=True, isShort=True),
-    TokenType.IF_DAY_L:             TokenProperties(macro="SCHEDULE_CMD_CHECK_NOT_IN_DAY_L",   cmdLength=0x05, isConditionalBranch=True, hasArguments=True),
+    TokenType.IF_MISC_S:            TokenProperties(macro="SCHEDULE_CMD_CHECK_MISC_S",         cmdLength=0x03, isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True, shortVersion=TokenType.IF_MISC_S),
+    TokenType.IF_SCENE_S:           TokenProperties(macro="SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S", cmdLength=0x04, isConditionalBranch=True, hasArguments=True, isShort=True, shortVersion=TokenType.IF_SCENE_S, longVersion=TokenType.IF_SCENE_L),
+    TokenType.IF_SCENE_L:           TokenProperties(macro="SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L", cmdLength=0x05, isConditionalBranch=True, hasArguments=True,               shortVersion=TokenType.IF_SCENE_S, longVersion=TokenType.IF_SCENE_L),
+    TokenType.IF_DAY_S:             TokenProperties(macro="SCHEDULE_CMD_CHECK_NOT_IN_DAY_S",   cmdLength=0x04, isConditionalBranch=True, hasArguments=True, isShort=True, shortVersion=TokenType.IF_DAY_S, longVersion=TokenType.IF_DAY_L),
+    TokenType.IF_DAY_L:             TokenProperties(macro="SCHEDULE_CMD_CHECK_NOT_IN_DAY_L",   cmdLength=0x05, isConditionalBranch=True, hasArguments=True,               shortVersion=TokenType.IF_DAY_S, longVersion=TokenType.IF_DAY_L),
     TokenType.NOP:                  TokenProperties(macro="SCHEDULE_CMD_NOP",                  cmdLength=0x04, hasArguments=True),
     TokenType.RETURN_TIME:          TokenProperties(macro="SCHEDULE_CMD_RET_TIME",             cmdLength=0x06, hasArguments=True),
-    TokenType.IF_BEFORETIME_S:      TokenProperties(macro="SCHEDULE_CMD_CHECK_BEFORE_TIME_S",  cmdLength=0x04, isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True),
-    TokenType.IF_BEFORETIME_L:      TokenProperties(macro="SCHEDULE_CMD_CHECK_BEFORE_TIME_L",  cmdLength=0x05, isConditionalBranch=True, hasArguments=True, needsToInvert=True),
-    TokenType.IF_SINCETIME_S:       TokenProperties(macro="SCHEDULE_CMD_CHECK_BEFORE_TIME_S",  cmdLength=0x04, isConditionalBranch=True, hasArguments=True, isShort=True),
-    TokenType.IF_SINCETIME_L:       TokenProperties(macro="SCHEDULE_CMD_CHECK_BEFORE_TIME_L",  cmdLength=0x05, isConditionalBranch=True, hasArguments=True),
-    TokenType.BRANCH_S:             TokenProperties(macro="SCHEDULE_CMD_BRANCH_S",             cmdLength=0x02, isUnconditionalBranch=True, hasArguments=True, isShort=True),
-    TokenType.BRANCH_L:             TokenProperties(macro="SCHEDULE_CMD_BRANCH_L",             cmdLength=0x03, isUnconditionalBranch=True, hasArguments=True),
+    TokenType.IF_BEFORETIME_S:      TokenProperties(macro="SCHEDULE_CMD_CHECK_BEFORE_TIME_S",  cmdLength=0x04, isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True, shortVersion=TokenType.IF_BEFORETIME_S, longVersion=TokenType.IF_BEFORETIME_L),
+    TokenType.IF_BEFORETIME_L:      TokenProperties(macro="SCHEDULE_CMD_CHECK_BEFORE_TIME_L",  cmdLength=0x05, isConditionalBranch=True, hasArguments=True, needsToInvert=True,               shortVersion=TokenType.IF_BEFORETIME_S, longVersion=TokenType.IF_BEFORETIME_L),
+    TokenType.IF_SINCETIME_S:       TokenProperties(macro="SCHEDULE_CMD_CHECK_BEFORE_TIME_S",  cmdLength=0x04, isConditionalBranch=True, hasArguments=True, isShort=True, shortVersion=TokenType.IF_SINCETIME_S, longVersion=TokenType.IF_SINCETIME_L),
+    TokenType.IF_SINCETIME_L:       TokenProperties(macro="SCHEDULE_CMD_CHECK_BEFORE_TIME_L",  cmdLength=0x05, isConditionalBranch=True, hasArguments=True,               shortVersion=TokenType.IF_SINCETIME_S, longVersion=TokenType.IF_SINCETIME_L),
+    TokenType.BRANCH_S:             TokenProperties(macro="SCHEDULE_CMD_BRANCH_S",             cmdLength=0x02, isUnconditionalBranch=True, hasArguments=True, isShort=True, shortVersion=TokenType.BRANCH_S, longVersion=TokenType.BRANCH_L),
+    TokenType.BRANCH_L:             TokenProperties(macro="SCHEDULE_CMD_BRANCH_L",             cmdLength=0x03, isUnconditionalBranch=True, hasArguments=True,               shortVersion=TokenType.BRANCH_S, longVersion=TokenType.BRANCH_L),
 
     # Generics
-    TokenType.IF_WEEKEVENTREG:      TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isGeneric=True),
-    TokenType.IF_TIMERANGE:         TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isGeneric=True),
-    TokenType.IF_MISC:              TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isGeneric=True),
-    TokenType.IF_SCENE:             TokenProperties(isConditionalBranch=True, hasArguments=True, isGeneric=True),
-    TokenType.IF_DAY:               TokenProperties(isConditionalBranch=True, hasArguments=True, isGeneric=True),
-    TokenType.IF_BEFORETIME:        TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isGeneric=True),
-    TokenType.IF_SINCETIME:         TokenProperties(isConditionalBranch=True, hasArguments=True, isGeneric=True),
-    TokenType.BRANCH:               TokenProperties(isUnconditionalBranch=True, hasArguments=True, isGeneric=True),
+    TokenType.IF_WEEKEVENTREG:      TokenProperties(isConditionalBranch=True,   hasArguments=True, isGeneric=True, needsToInvert=True, shortVersion=TokenType.IF_WEEKEVENTREG_S, longVersion=TokenType.IF_WEEKEVENTREG_L),
+    TokenType.IF_TIMERANGE:         TokenProperties(isConditionalBranch=True,   hasArguments=True, isGeneric=True, needsToInvert=True, shortVersion=TokenType.IF_TIMERANGE_S, longVersion=TokenType.IF_TIMERANGE_L),
+    TokenType.IF_MISC:              TokenProperties(isConditionalBranch=True,   hasArguments=True, isGeneric=True, needsToInvert=True, shortVersion=TokenType.IF_MISC_S),
+    TokenType.IF_SCENE:             TokenProperties(isConditionalBranch=True,   hasArguments=True, isGeneric=True,                     shortVersion=TokenType.IF_SCENE_S, longVersion=TokenType.IF_SCENE_L),
+    TokenType.IF_DAY:               TokenProperties(isConditionalBranch=True,   hasArguments=True, isGeneric=True,                     shortVersion=TokenType.IF_DAY_S, longVersion=TokenType.IF_DAY_L),
+    TokenType.IF_BEFORETIME:        TokenProperties(isConditionalBranch=True,   hasArguments=True, isGeneric=True, needsToInvert=True, shortVersion=TokenType.IF_BEFORETIME_S, longVersion=TokenType.IF_BEFORETIME_L),
+    TokenType.IF_SINCETIME:         TokenProperties(isConditionalBranch=True,   hasArguments=True, isGeneric=True,                     shortVersion=TokenType.IF_SINCETIME_S, longVersion=TokenType.IF_SINCETIME_L),
+    TokenType.BRANCH:               TokenProperties(isUnconditionalBranch=True, hasArguments=True, isGeneric=True,                     shortVersion=TokenType.BRANCH_S, longVersion=TokenType.BRANCH_L),
 
     # Extra tokens
     TokenType.ELSE:                 TokenProperties(isExtraToken=True),
@@ -608,28 +610,6 @@ def normalizeTree(tree: list[Expression]) -> list[Expression]:
     return newTree
 
 
-cmdRedirection: dict[TokenType, tuple[TokenType, TokenType|None]] = {
-    TokenType.IF_WEEKEVENTREG:  (TokenType.IF_WEEKEVENTREG_S, TokenType.IF_WEEKEVENTREG_L),
-    TokenType.IF_TIMERANGE:     (TokenType.IF_TIMERANGE_S, TokenType.IF_TIMERANGE_L),
-    TokenType.IF_MISC:          (TokenType.IF_MISC_S, None),
-    TokenType.IF_SCENE:         (TokenType.IF_SCENE_S, TokenType.IF_SCENE_L),
-    TokenType.IF_DAY:           (TokenType.IF_DAY_S, TokenType.IF_DAY_L),
-    TokenType.IF_BEFORETIME:    (TokenType.IF_BEFORETIME_S, TokenType.IF_BEFORETIME_L),
-    TokenType.IF_SINCETIME:     (TokenType.IF_SINCETIME_S, TokenType.IF_SINCETIME_L),
-    TokenType.BRANCH:           (TokenType.BRANCH_S, TokenType.BRANCH_L),
-}
-
-cmdShortToLong: dict[TokenType, TokenType] = {
-    TokenType.IF_WEEKEVENTREG_S:    TokenType.IF_WEEKEVENTREG_L,
-    TokenType.IF_TIMERANGE_S:       TokenType.IF_TIMERANGE_L,
-    # TokenType.IF_MISC_S:            TokenType.IF_MISC_L, # Does not exist
-    TokenType.IF_SCENE_S:           TokenType.IF_SCENE_L,
-    TokenType.IF_DAY_S:             TokenType.IF_DAY_L,
-    TokenType.IF_BEFORETIME_S:      TokenType.IF_BEFORETIME_L,
-    TokenType.IF_SINCETIME_S:       TokenType.IF_SINCETIME_L,
-    TokenType.BRANCH_S:             TokenType.BRANCH_L,
-}
-
 @dataclasses.dataclass
 class LabeledExpression:
     index: int
@@ -707,7 +687,8 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
         canChange = False
         if tokenProperties.isGeneric:
             canChange = True
-            newTokenType = cmdRedirection[token.tokenType][0]
+            newTokenType = tokenProperties.shortVersion
+            assert newTokenType is not None, token
             token = Token(newTokenType, newTokenType.value, token.filename, token.lineNumber, token.columnNumber)
             tokenProperties = token.getProperties()
 
@@ -761,7 +742,7 @@ def removeGenerics(labeledList: list[LabeledExpression]) -> tuple[list[LabeledEx
 
                     diff = subOffset - nextOffset
                     if diff >= 0x7F or diff <= -0x80:
-                        longTokenType = cmdShortToLong.get(labeledExpr.token.tokenType)
+                        longTokenType = tokenProperties.longVersion
                         if longTokenType is None:
                             eprint(f"Error: Command '{labeledExpr.token.tokenLiteral}' will require a branch way too big for a short branch, but there's no long equivalent. At {labeledExpr.token.filename}:{labeledExpr.token.lineNumber}:{labeledExpr.token.columnNumber}")
                             debugPrint(f" removeGenerics")
