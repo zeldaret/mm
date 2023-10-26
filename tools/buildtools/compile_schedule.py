@@ -315,7 +315,7 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
 
 @dataclasses.dataclass
 class Expression:
-    expr: Token
+    token: Token
     args: Token|None = None
 
     left: list[Expression] = dataclasses.field(default_factory=list)
@@ -328,8 +328,8 @@ class Expression:
         print(f"{spaces}", end="")
         if self.negated:
             print(f"not ", end="")
-        print(f"{self.expr.tokenLiteral}", end="")
-        if self.expr.tokenType == TokenType.LABEL:
+        print(f"{self.token.tokenLiteral}", end="")
+        if self.token.tokenType == TokenType.LABEL:
             print(f":", end="")
         if self.args is not None:
             print(f" ({self.args.tokenLiteral})", end="")
@@ -369,7 +369,7 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
             currentExpr.args = token
 
         elif not tokenProperties.isExtraToken or token.tokenType == TokenType.NOT:
-            if currentExpr is not None and currentExpr.expr.getProperties().isConditionalBranch:
+            if currentExpr is not None and currentExpr.token.getProperties().isConditionalBranch:
                 if len(currentExpr.left) == 0:
                     eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
                     debugPrint(" makeTree: isExtraToken")
@@ -486,14 +486,6 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
         elif token.tokenType == TokenType.BRACE_CLOSE:
             if len(exprs) == 0:
                 eprint(f"Warning: Braces with empty body at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                # eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                # debugPrint(" makeTree: BRACE_CLOSE")
-                # debugPrint(f" i: {i}")
-                # debugPrint(f" depth: {depth}")
-                # debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                # debugPrint(f" foundElse: {foundElse}")
-                # exit(1)
-
             return exprs
 
         elif token.tokenType == TokenType.LABEL:
@@ -556,7 +548,7 @@ def normalizeTreeImpl(tree: list[Expression], postLabel: Expression, depth: int,
         usedCurrentPostLabel = False
         shouldAddPostLabel = True
         if i + 1 < len(tree):
-            if tree[i + 1].expr.tokenType == TokenType.LABEL:
+            if tree[i + 1].token.tokenType == TokenType.LABEL:
                 # Re-use label if there's already one
                 currentPostLabel = tree[i + 1]
                 shouldAddPostLabel = False
@@ -565,9 +557,9 @@ def normalizeTreeImpl(tree: list[Expression], postLabel: Expression, depth: int,
                 currentPostLabel = Expression(Token(TokenType.LABEL, f"{autoLabelName}.{depth}_{i}", "", 0, 0))
 
         auxUsed = False
-        if expr.expr.getProperties().isConditionalBranch:
+        if expr.token.getProperties().isConditionalBranch:
             if len(expr.left) == 0:
-                branchExpr = Expression(Token(TokenType.BRANCH, f"branch", "", 0, 0), currentPostLabel.expr)
+                branchExpr = Expression(Token(TokenType.BRANCH, f"branch", "", 0, 0), currentPostLabel.token)
                 expr.left.append(branchExpr)
                 if currentPostLabel == postLabel:
                     usedLabel = True
@@ -579,7 +571,7 @@ def normalizeTreeImpl(tree: list[Expression], postLabel: Expression, depth: int,
                     usedLabel = usedLabel or auxUsed
 
             if len(expr.right) == 0:
-                branchExpr = Expression(Token(TokenType.BRANCH, f"branch", "", 0, 0), currentPostLabel.expr)
+                branchExpr = Expression(Token(TokenType.BRANCH, f"branch", "", 0, 0), currentPostLabel.token)
                 expr.right.append(branchExpr)
                 if currentPostLabel == postLabel:
                     usedLabel = True
@@ -640,7 +632,7 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
     labelName: str|None = None
 
     for expr in tree:
-        token = expr.expr
+        token = expr.token
         if token.tokenType == TokenType.LABEL:
             # Keep the labelname but ignore the label itself
             labelName = token.tokenLiteral
@@ -665,13 +657,13 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
 
         targetLabel = None
 
-        if len(right) == 1 and right[0].expr.getProperties().isUnconditionalBranch:
+        if len(right) == 1 and right[0].token.getProperties().isUnconditionalBranch:
             # If an `if_` only has 1 expression and it is a branch then incorporate it as part of the `if_`,
             # avoiding redundant branches
             sub = []
             branchExpr = right[0]
             if branchExpr.args is None:
-                eprint(f"Error: branch command without arguments? at {branchExpr.expr.filename}:{branchExpr.expr.lineNumber}:{branchExpr.expr.columnNumber}")
+                eprint(f"Error: branch command without arguments? at {branchExpr.token.filename}:{branchExpr.token.lineNumber}:{branchExpr.token.columnNumber}")
                 debugPrint(f" convertTreeIntoLabeledList")
                 exit(1)
             targetLabel = branchExpr.args.tokenLiteral.strip()
