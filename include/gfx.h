@@ -9,6 +9,8 @@
 
 struct GameState;
 
+#define TMEM_SIZE 0x1000
+
 typedef enum SetupDL {
     /* 0x00 */ SETUPDL_0,
     /* 0x01 */ SETUPDL_1,
@@ -271,5 +273,14 @@ extern Gfx gEmptyDL[];
                        ((height)-1) << G_TEXTURE_IMAGE_FRAC);                                                          \
     }                                                                                                                  \
     (void)0
+
+// used only by code_80140E80
+#define gDPSetLODColor(pkt, c, m, l, d)                                           \
+    _DW({                                                                         \
+        Gfx* _g = (Gfx*)(pkt);                                                    \
+                                                                                  \
+        _g->words.w0 = (_SHIFTL(c, 24, 8) | _SHIFTL(m, 8, 8) | _SHIFTL(l, 0, 8)); \
+        _g->words.w1 = (unsigned int)(d);                                         \
+    })
 
 #endif

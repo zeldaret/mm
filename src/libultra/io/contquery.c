@@ -1,19 +1,20 @@
-#include "global.h"
+#include "ultra64.h"
+#include "PR/controller.h"
 
 s32 osContStartQuery(OSMesgQueue* mq) {
     s32 ret;
 
     __osSiGetAccess();
 
-    if (__osContLastPoll != 0) {
-        __osPackRequestData(0);
+    if (__osContLastPoll != CONT_CMD_REQUEST_STATUS) {
+        __osPackRequestData(CONT_CMD_REQUEST_STATUS);
         __osSiRawStartDma(OS_WRITE, &__osContPifRam);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
     }
 
     ret = __osSiRawStartDma(OS_READ, &__osContPifRam);
 
-    __osContLastPoll = 0;
+    __osContLastPoll = CONT_CMD_REQUEST_STATUS;
 
     __osSiRelAccess();
 

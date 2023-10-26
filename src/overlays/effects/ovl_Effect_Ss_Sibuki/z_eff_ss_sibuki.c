@@ -40,7 +40,7 @@ u32 EffectSsSibuki_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
     {
         TexturePtr tex = (KREG(2) != 0) ? gEffBubble2Tex : gEffBubble1Tex;
 
-        this->gfx = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(tex));
+        this->gfx = OS_K0_TO_PHYSICAL(SEGMENTED_TO_K0(tex));
     }
 
     this->life = ((s32)((Rand_ZeroOne() * (500.0f + KREG(64))) * 0.01f)) + KREG(65) + 10;

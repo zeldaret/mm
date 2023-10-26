@@ -142,8 +142,6 @@ typedef struct {
     /* 0x7 */ s8 stick_y;
 } __OSContReadFormat;
 
-
-// Original name: __OSContRequesFormat
 typedef struct {
     /* 0x00 */ u8 align;
     /* 0x01 */ u8 txsize;
@@ -153,7 +151,7 @@ typedef struct {
     /* 0x05 */ u8 typel;
     /* 0x06 */ u8 status;
     /* 0x07 */ u8 align1;
-} __OSContRequestHeader; // size = 0x8
+} __OSContRequesFormat; // size = 0x8
 
 typedef struct {
     /* 0x00 */ u8 txsize;
