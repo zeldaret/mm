@@ -12280,7 +12280,7 @@
     0x80AD8D64:("EnKame_DrawSpikedSnapper",),
     0x80AD9240:("ObjTakarayaWall_PosToCell",),
     0x80AD92FC:("ObjTakarayaWall_IsCellOpen",),
-    0x80AD9358:("ObjTakarayaWall_NearbyUncarved",),
+    0x80AD9358:("ObjTakarayaWall_CanCarvePath",),
     0x80AD9488:("ObjTakarayaWall_CarvePath",),
     0x80AD97DC:("ObjTakarayaWall_Init",),
     0x80AD9A6C:("ObjTakarayaWall_Destroy",),

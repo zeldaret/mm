@@ -132,7 +132,7 @@ typedef enum TakarayaWallDirection {
  * Checks nearby spaces if the adjacent space or any of the three adjacent spaces to that
  * space are closed (i.e the wall rises up).
  */
-s32 ObjTakarayaWall_NearbyUncarved(s32 row, s32 column, TakarayaWallDirection direction) {
+s32 ObjTakarayaWall_CanCarvePath(s32 row, s32 column, TakarayaWallDirection direction) {
     s32 adjacentSpaceRow;
     s32 adjacentSpaceColumn;
     s32 row1;
@@ -189,22 +189,22 @@ void ObjTakarayaWall_CarvePath(s32 row, s32 column) {
     s32 randMode;
     s32 direction;
 
-    if (ObjTakarayaWall_NearbyUncarved(row, column, TAKARAYA_WALL_DIRECTION_BACK)) {
+    if (ObjTakarayaWall_CanCarvePath(row, column, TAKARAYA_WALL_DIRECTION_BACK)) {
         carveDirectionNum++;
         carveDirectionFlags |= (1 << TAKARAYA_WALL_DIRECTION_BACK);
     }
 
-    if (ObjTakarayaWall_NearbyUncarved(row, column, TAKARAYA_WALL_DIRECTION_RIGHT)) {
+    if (ObjTakarayaWall_CanCarvePath(row, column, TAKARAYA_WALL_DIRECTION_RIGHT)) {
         carveDirectionNum++;
         carveDirectionFlags |= (1 << TAKARAYA_WALL_DIRECTION_RIGHT);
     }
 
-    if (ObjTakarayaWall_NearbyUncarved(row, column, TAKARAYA_WALL_DIRECTION_FRONT)) {
+    if (ObjTakarayaWall_CanCarvePath(row, column, TAKARAYA_WALL_DIRECTION_FRONT)) {
         carveDirectionNum++;
         carveDirectionFlags |= (1 << TAKARAYA_WALL_DIRECTION_FRONT);
     }
 
-    if (ObjTakarayaWall_NearbyUncarved(row, column, TAKARAYA_WALL_DIRECTION_LEFT)) {
+    if (ObjTakarayaWall_CanCarvePath(row, column, TAKARAYA_WALL_DIRECTION_LEFT)) {
         carveDirectionNum++;
         carveDirectionFlags |= (1 << TAKARAYA_WALL_DIRECTION_LEFT);
     }
