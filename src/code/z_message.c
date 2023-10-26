@@ -5107,6 +5107,7 @@ void Message_Draw(PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
+
     polyOpa = POLY_OPA_DISP;
     nextDisplayList = Graph_GfxPlusOne(polyOpa);
     gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
@@ -5118,6 +5119,7 @@ void Message_Draw(PlayState* play) {
     gSPEndDisplayList(nextDisplayList++);
     Graph_BranchDlist(polyOpa, nextDisplayList);
     POLY_OPA_DISP = nextDisplayList;
+
     CLOSE_DISPS(gfxCtx);
 }
 

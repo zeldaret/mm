@@ -134,7 +134,7 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (player->csMode != PLAYER_CSMODE_26) {
+    if (player->csAction != PLAYER_CSACTION_26) {
         Math_ScaledStepToS(&this->dyna.actor.shape.rot.y, yawTarget, (s32)(fabsf(this->dyna.actor.speed) * 40.0f));
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
         Math_StepToF(&this->dyna.actor.speed, speedTarget, 0.05f);

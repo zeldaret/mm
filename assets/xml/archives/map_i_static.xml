@@ -1,62 +1,62 @@
 <Root>
     <File Name="map_i_static.unarchive">
-        <Blob Name="map_i_static_Blob_000000" Size="0x0FF0" Offset="0x0" />
-        <Blob Name="map_i_static_Blob_000FF0" Size="0x0FF0" Offset="0xFF0" />
-        <Blob Name="map_i_static_Blob_001FE0" Size="0x0FF0" Offset="0x1FE0" />
-        <Blob Name="map_i_static_Blob_002FD0" Size="0x0FF0" Offset="0x2FD0" />
-        <Blob Name="map_i_static_Blob_003FC0" Size="0x0FF0" Offset="0x3FC0" />
-        <Blob Name="map_i_static_Blob_004FB0" Size="0x01D0" Offset="0x4FB0" />
-        <Blob Name="map_i_static_Blob_005180" Size="0x01B0" Offset="0x5180" />
-        <Blob Name="map_i_static_Blob_005330" Size="0x01E0" Offset="0x5330" />
-        <Blob Name="map_i_static_Blob_005510" Size="0x0100" Offset="0x5510" />
-        <Blob Name="map_i_static_Blob_005610" Size="0x0060" Offset="0x5610" />
-        <Blob Name="map_i_static_Blob_005670" Size="0x01B0" Offset="0x5670" />
-        <Blob Name="map_i_static_Blob_005820" Size="0x0070" Offset="0x5820" />
-        <Blob Name="map_i_static_Blob_005890" Size="0x0130" Offset="0x5890" />
-        <Blob Name="map_i_static_Blob_0059C0" Size="0x01A0" Offset="0x59C0" />
-        <Blob Name="map_i_static_Blob_005B60" Size="0x0100" Offset="0x5B60" />
-        <Blob Name="map_i_static_Blob_005C60" Size="0x01B0" Offset="0x5C60" />
-        <Blob Name="map_i_static_Blob_005E10" Size="0x0120" Offset="0x5E10" />
-        <Blob Name="map_i_static_Blob_005F30" Size="0x0120" Offset="0x5F30" />
-        <Blob Name="map_i_static_Blob_006050" Size="0x0260" Offset="0x6050" />
-        <Blob Name="map_i_static_Blob_0062B0" Size="0x0150" Offset="0x62B0" />
-        <Blob Name="map_i_static_Blob_006400" Size="0x0220" Offset="0x6400" />
-        <Blob Name="map_i_static_Blob_006620" Size="0x0300" Offset="0x6620" />
-        <Blob Name="map_i_static_Blob_006920" Size="0x0110" Offset="0x6920" />
-        <Blob Name="map_i_static_Blob_006A30" Size="0x0110" Offset="0x6A30" />
-        <Blob Name="map_i_static_Blob_006B40" Size="0x0150" Offset="0x6B40" />
-        <Blob Name="map_i_static_Blob_006C90" Size="0x0120" Offset="0x6C90" />
-        <Blob Name="map_i_static_Blob_006DB0" Size="0x00C0" Offset="0x6DB0" />
-        <Blob Name="map_i_static_Blob_006E70" Size="0x00D0" Offset="0x6E70" />
-        <Blob Name="map_i_static_Blob_006F40" Size="0x0230" Offset="0x6F40" />
-        <Blob Name="map_i_static_Blob_007170" Size="0x00A0" Offset="0x7170" />
-        <Blob Name="map_i_static_Blob_007210" Size="0x01C0" Offset="0x7210" />
-        <Blob Name="map_i_static_Blob_0073D0" Size="0x0100" Offset="0x73D0" />
-        <Blob Name="map_i_static_Blob_0074D0" Size="0x0180" Offset="0x74D0" />
-        <Blob Name="map_i_static_Blob_007650" Size="0x0150" Offset="0x7650" />
-        <Blob Name="map_i_static_Blob_0077A0" Size="0x00B0" Offset="0x77A0" />
-        <Blob Name="map_i_static_Blob_007850" Size="0x0050" Offset="0x7850" />
-        <Blob Name="map_i_static_Blob_0078A0" Size="0x0040" Offset="0x78A0" />
-        <Blob Name="map_i_static_Blob_0078E0" Size="0x0170" Offset="0x78E0" />
-        <Blob Name="map_i_static_Blob_007A50" Size="0x0080" Offset="0x7A50" />
-        <Blob Name="map_i_static_Blob_007AD0" Size="0x0090" Offset="0x7AD0" />
-        <Blob Name="map_i_static_Blob_007B60" Size="0x00C0" Offset="0x7B60" />
-        <Blob Name="map_i_static_Blob_007C20" Size="0x0080" Offset="0x7C20" />
-        <Blob Name="map_i_static_Blob_007CA0" Size="0x00F0" Offset="0x7CA0" />
-        <Blob Name="map_i_static_Blob_007D90" Size="0x0110" Offset="0x7D90" />
-        <Blob Name="map_i_static_Blob_007EA0" Size="0x0100" Offset="0x7EA0" />
-        <Blob Name="map_i_static_Blob_007FA0" Size="0x0050" Offset="0x7FA0" />
-        <Blob Name="map_i_static_Blob_007FF0" Size="0x0090" Offset="0x7FF0" />
-        <Blob Name="map_i_static_Blob_008080" Size="0x0110" Offset="0x8080" />
-        <Blob Name="map_i_static_Blob_008190" Size="0x0060" Offset="0x8190" />
-        <Blob Name="map_i_static_Blob_0081F0" Size="0x0110" Offset="0x81F0" />
-        <Blob Name="map_i_static_Blob_008300" Size="0x0060" Offset="0x8300" />
-        <Blob Name="map_i_static_Blob_008360" Size="0x0090" Offset="0x8360" />
-        <Blob Name="map_i_static_Blob_0083F0" Size="0x0110" Offset="0x83F0" />
-        <Blob Name="map_i_static_Blob_008500" Size="0x00F0" Offset="0x8500" />
-        <Blob Name="map_i_static_Blob_0085F0" Size="0x0090" Offset="0x85F0" />
-        <Blob Name="map_i_static_Blob_008680" Size="0x0080" Offset="0x8680" />
-        <Blob Name="map_i_static_Blob_008700" Size="0x00F0" Offset="0x8700" />
-        <Blob Name="map_i_static_Blob_0087F0" Size="0x0050" Offset="0x87F0" />
+        <Texture Name="gMapIStatic00Tex" OutName="map_00" Format="i4" Width="96" Height="85" Offset="0x0" />
+        <Texture Name="gMapIStatic01Tex" OutName="map_01" Format="i4" Width="96" Height="85" Offset="0xFF0" />
+        <Texture Name="gMapIStatic02Tex" OutName="map_02" Format="i4" Width="96" Height="85" Offset="0x1FE0" />
+        <Texture Name="gMapIStatic03Tex" OutName="map_03" Format="i4" Width="96" Height="85" Offset="0x2FD0" />
+        <Texture Name="gMapIStatic04Tex" OutName="map_04" Format="i4" Width="96" Height="85" Offset="0x3FC0" />
+        <Texture Name="gMapIStatic05Tex" OutName="map_05" Format="i4" Width="32" Height="29" Offset="0x4FB0" />
+        <Texture Name="gMapIStatic06Tex" OutName="map_06" Format="i4" Width="32" Height="27" Offset="0x5180" />
+        <Texture Name="gMapIStatic07Tex" OutName="map_07" Format="i4" Width="32" Height="30" Offset="0x5330" />
+        <Texture Name="gMapIStatic08Tex" OutName="map_08" Format="i4" Width="16" Height="32" Offset="0x5510" />
+        <Texture Name="gMapIStatic09Tex" OutName="map_09" Format="i4" Width="16" Height="12" Offset="0x5610" />
+        <Texture Name="gMapIStatic0ATex" OutName="map_0A" Format="i4" Width="32" Height="27" Offset="0x5670" />
+        <Texture Name="gMapIStatic0BTex" OutName="map_0B" Format="i4" Width="16" Height="14" Offset="0x5820" />
+        <Texture Name="gMapIStatic0CTex" OutName="map_0C" Format="i4" Width="32" Height="19" Offset="0x5890" />
+        <Texture Name="gMapIStatic0DTex" OutName="map_0D" Format="i4" Width="32" Height="26" Offset="0x59C0" />
+        <Texture Name="gMapIStatic0ETex" OutName="map_0E" Format="i4" Width="16" Height="32" Offset="0x5B60" />
+        <Texture Name="gMapIStatic0FTex" OutName="map_0F" Format="i4" Width="32" Height="27" Offset="0x5C60" />
+        <Texture Name="gMapIStatic10Tex" OutName="map_10" Format="i4" Width="16" Height="35" Offset="0x5E10" />
+        <Texture Name="gMapIStatic11Tex" OutName="map_11" Format="i4" Width="32" Height="18" Offset="0x5F30" />
+        <Texture Name="gMapIStatic12Tex" OutName="map_12" Format="i4" Width="32" Height="38" Offset="0x6050" />
+        <Texture Name="gMapIStatic13Tex" OutName="map_13" Format="i4" Width="32" Height="21" Offset="0x62B0" />
+        <Texture Name="gMapIStatic14Tex" OutName="map_14" Format="i4" Width="32" Height="34" Offset="0x6400" />
+        <Texture Name="gMapIStatic15Tex" OutName="map_15" Format="i4" Width="48" Height="32" Offset="0x6620" />
+        <Texture Name="gMapIStatic16Tex" OutName="map_16" Format="i4" Width="32" Height="17" Offset="0x6920" />
+        <Texture Name="gMapIStatic17Tex" OutName="map_17" Format="i4" Width="32" Height="17" Offset="0x6A30" />
+        <Texture Name="gMapIStatic18Tex" OutName="map_18" Format="i4" Width="32" Height="21" Offset="0x6B40" />
+        <Texture Name="gMapIStatic19Tex" OutName="map_19" Format="i4" Width="32" Height="18" Offset="0x6C90" />
+        <Texture Name="gMapIStatic1ATex" OutName="map_1A" Format="i4" Width="16" Height="24" Offset="0x6DB0" />
+        <Texture Name="gMapIStatic1BTex" OutName="map_1B" Format="i4" Width="16" Height="25" Offset="0x6E70" />
+        <Texture Name="gMapIStatic1CTex" OutName="map_1C" Format="i4" Width="32" Height="35" Offset="0x6F40" />
+        <Texture Name="gMapIStatic1DTex" OutName="map_1D" Format="i4" Width="16" Height="19" Offset="0x7170" />
+        <Texture Name="gMapIStatic1ETex" OutName="map_1E" Format="i4" Width="32" Height="28" Offset="0x7210" />
+        <Texture Name="gMapIStatic1FTex" OutName="map_1F" Format="i4" Width="32" Height="16" Offset="0x73D0" />
+        <Texture Name="gMapIStatic20Tex" OutName="map_20" Format="i4" Width="32" Height="24" Offset="0x74D0" />
+        <Texture Name="gMapIStatic21Tex" OutName="map_21" Format="i4" Width="32" Height="21" Offset="0x7650" />
+        <Texture Name="gMapIStatic22Tex" OutName="map_22" Format="i4" Width="16" Height="21" Offset="0x77A0" />
+        <Texture Name="gMapIStatic23Tex" OutName="map_23" Format="i4" Width="16" Height="10" Offset="0x7850" />
+        <Texture Name="gMapIStatic24Tex" OutName="map_24" Format="i4" Width="16" Height="7" Offset="0x78A0" />
+        <Texture Name="gMapIStatic25Tex" OutName="map_25" Format="i4" Width="32" Height="23" Offset="0x78E0" />
+        <Texture Name="gMapIStatic26Tex" OutName="map_26" Format="i4" Width="16" Height="16" Offset="0x7A50" />
+        <Texture Name="gMapIStatic27Tex" OutName="map_27" Format="i4" Width="16" Height="17" Offset="0x7AD0" />
+        <Texture Name="gMapIStatic28Tex" OutName="map_28" Format="i4" Width="16" Height="23" Offset="0x7B60" />
+        <Texture Name="gMapIStatic29Tex" OutName="map_29" Format="i4" Width="16" Height="15" Offset="0x7C20" />
+        <Texture Name="gMapIStatic2ATex" OutName="map_2A" Format="i4" Width="32" Height="15" Offset="0x7CA0" />
+        <Texture Name="gMapIStatic2BTex" OutName="map_2B" Format="i4" Width="32" Height="17" Offset="0x7D90" />
+        <Texture Name="gMapIStatic2CTex" OutName="map_2C" Format="i4" Width="32" Height="16" Offset="0x7EA0" />
+        <Texture Name="gMapIStatic2DTex" OutName="map_2D" Format="i4" Width="16" Height="10" Offset="0x7FA0" />
+        <Texture Name="gMapIStatic2ETex" OutName="map_2E" Format="i4" Width="16" Height="17" Offset="0x7FF0" />
+        <Texture Name="gMapIStatic2FTex" OutName="map_2F" Format="i4" Width="32" Height="17" Offset="0x8080" />
+        <Texture Name="gMapIStatic30Tex" OutName="map_30" Format="i4" Width="16" Height="11" Offset="0x8190" />
+        <Texture Name="gMapIStatic31Tex" OutName="map_31" Format="i4" Width="32" Height="17" Offset="0x81F0" />
+        <Texture Name="gMapIStatic32Tex" OutName="map_32" Format="i4" Width="16" Height="12" Offset="0x8300" />
+        <Texture Name="gMapIStatic33Tex" OutName="map_33" Format="i4" Width="16" Height="18" Offset="0x8360" />
+        <Texture Name="gMapIStatic34Tex" OutName="map_34" Format="i4" Width="32" Height="17" Offset="0x83F0" />
+        <Texture Name="gMapIStatic35Tex" OutName="map_35" Format="i4" Width="32" Height="15" Offset="0x8500" />
+        <Texture Name="gMapIStatic36Tex" OutName="map_36" Format="i4" Width="16" Height="18" Offset="0x85F0" />
+        <Texture Name="gMapIStatic37Tex" OutName="map_37" Format="i4" Width="16" Height="16" Offset="0x8680" />
+        <Texture Name="gMapIStatic38Tex" OutName="map_38" Format="i4" Width="16" Height="30" Offset="0x8700" />
+        <Texture Name="gMapIStatic39Tex" OutName="map_39" Format="i4" Width="16" Height="9" Offset="0x87F0" />
     </File>
 </Root>

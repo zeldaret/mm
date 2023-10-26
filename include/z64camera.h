@@ -3,7 +3,11 @@
 
 #include "ultra64.h"
 #include "z64math.h"
+#include "z64actor.h"
 #include "z64save.h"
+#include "unk.h"
+
+struct CollisionPoly;
 
 // these two angle conversion macros are slightly inaccurate
 #define CAM_DEG_TO_BINANG(degrees) (s16)((degrees) * ((f32)0xFFFF / 360) + .5f)
@@ -374,7 +378,7 @@ typedef enum {
 typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f norm;
-    /* 0x18 */ CollisionPoly* poly;
+    /* 0x18 */ struct CollisionPoly* poly;
     /* 0x1C */ VecGeo geoNorm;
     /* 0x24 */ s32 bgId;
 } CameraCollision; // size = 0x28
