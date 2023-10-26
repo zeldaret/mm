@@ -4,7 +4,6 @@
  * Description: Pause Menu
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_kaleido_scope.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
@@ -2861,7 +2860,7 @@ void KaleidoScope_Update(PlayState* play) {
             size0 = SEGMENT_ROM_SIZE(icon_item_static_syms);
             CmpDma_LoadAllFiles((uintptr_t)SEGMENT_ROM_START(icon_item_static_yar), pauseCtx->iconItemSegment, size0);
 
-            gSegments[0x08] = VIRTUAL_TO_PHYSICAL(pauseCtx->iconItemSegment);
+            gSegments[0x08] = OS_K0_TO_PHYSICAL(pauseCtx->iconItemSegment);
 
             for (itemId = 0; itemId <= ITEM_BOW_FIRE; itemId++) {
                 if (!gPlayerFormItemRestrictions[GET_PLAYER_FORM][(s32)itemId]) {
@@ -3168,7 +3167,7 @@ void KaleidoScope_Update(PlayState* play) {
                             BgCheck_InitCollisionHeaders(&play->colCtx, play);
                             STOP_GAMESTATE(&play->state);
                             SET_NEXT_GAMESTATE(&play->state, TitleSetup_Init, sizeof(TitleSetupState));
-                            func_801A4058(0x14);
+                            Audio_MuteAllSeqExceptSystemAndOcarina(20);
                             gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                             gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                         }
@@ -3611,7 +3610,10 @@ void KaleidoScope_Update(PlayState* play) {
             }
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(sUnpausedHudVisibility);
-            func_801A3A7C(0);
+            Audio_SetPauseState(false);
+            break;
+
+        default:
             break;
     }
 

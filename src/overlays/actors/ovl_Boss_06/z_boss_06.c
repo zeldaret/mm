@@ -147,7 +147,7 @@ void Boss06_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.y = -0x8000;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    temp_v0 = SEGMENTED_TO_VIRTUAL(&object_knight_Tex_019490);
+    temp_v0 = SEGMENTED_TO_K0(&object_knight_Tex_019490);
     for (i = 0; i < ARRAY_COUNT(this->unk_200); i++) {
         this->unk_200[i] = temp_v0[i];
     }
@@ -530,7 +530,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
     if (this->unk_144 & 2) {
         temp_s0 = Math_SinS(D_809F4970->unk_144) * 1000.0f;
         temp_f10 = (Math_CosS(D_809F4970->unk_144) * -2000.0f) - 2000.0f;
-        temp_v0_2 = SEGMENTED_TO_VIRTUAL(&object_knight_Vtx_018BD0);
+        temp_v0_2 = SEGMENTED_TO_K0(&object_knight_Vtx_018BD0);
 
         temp_v0_2[0].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
         temp_v0_2[3].v.ob[1] = (s16)this->unk_1A0 + 0xE92;

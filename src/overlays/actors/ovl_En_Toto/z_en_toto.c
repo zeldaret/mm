@@ -604,7 +604,7 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
 
 s32 func_80BA49A4(EnToto* this, PlayState* play) {
     func_800B7298(play, NULL, PLAYER_CSACTION_68);
-    func_801A31EC(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4, this->unk2B3 ^ 0xF);
+    Audio_PlayFanfareWithPlayerIOCustomPort(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4, this->unk2B3 ^ 0xF);
     this->unk2B1 = 4;
     return 0;
 }
