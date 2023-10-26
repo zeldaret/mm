@@ -2484,7 +2484,7 @@ void FileSelect_InitContext(GameState* thisx) {
     ShrinkWindow_Letterbox_SetSizeTarget(0);
 
     gSaveContext.skyboxTime = 0;
-    gSaveContext.save.time = 0;
+    gSaveContext.save.time = CLOCK_TIME(0, 0);
 
     Skybox_Init(&this->state, &this->skyboxCtx, 1);
     R_TIME_SPEED = 10;

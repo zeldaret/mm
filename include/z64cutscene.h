@@ -482,7 +482,7 @@ typedef enum {
     /* 0x22A */ CS_CMD_ACTOR_CUE_554,
     /* 0x22B */ CS_CMD_ACTOR_CUE_555,
     /* 0x22C */ CS_CMD_ACTOR_CUE_556,
-    /* 0x22D */ CS_CMD_ACTOR_CUE_557,
+    /* 0x22D */ CS_CMD_ACTOR_CUE_557, // Couple's Mask cs, Anju cues
     /* 0x22E */ CS_CMD_ACTOR_CUE_558,
     /* 0x22F */ CS_CMD_ACTOR_CUE_559,
     /* 0x230 */ CS_CMD_ACTOR_CUE_560,
@@ -560,8 +560,8 @@ typedef enum {
     /* 0x1B */ CS_MISC_DEST_MOON_CRASH_FIRE_WALL,
     /* 0x1C */ CS_MISC_MOON_CRASH_SKYBOX,
     /* 0x1D */ CS_MISC_PLAYER_FORM_RESTORED,
-    /* 0x1E */ CS_MISC_DISABLE_PLAYER_CSMODE_START_POS,
-    /* 0x1F */ CS_MISC_ENABLE_PLAYER_CSMODE_START_POS,
+    /* 0x1E */ CS_MISC_DISABLE_PLAYER_CSACTION_START_POS,
+    /* 0x1F */ CS_MISC_ENABLE_PLAYER_CSACTION_START_POS,
     /* 0x20 */ CS_MISC_UNIMPLEMENTED_20,
     /* 0x21 */ CS_MISC_SAVE_ENTER_CLOCK_TOWN,
     /* 0x22 */ CS_MISC_RESET_SAVE_FROM_MOON_CRASH,
@@ -859,7 +859,7 @@ s32 CutsceneFlags_Get(struct PlayState* play, s16 flag);
 extern u8 gOpeningEntranceIndex;
 
 extern u8 D_801F4DDC;
-extern u8 gDisablePlayerCsModeStartPos;
+extern u8 gDisablePlayerCsActionStartPos;
 extern s16 gDungeonBossWarpSceneId;
 
 #endif

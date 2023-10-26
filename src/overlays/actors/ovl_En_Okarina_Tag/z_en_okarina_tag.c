@@ -50,8 +50,8 @@ void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
     }
     this->unk154 = zRot * 50.0f;
     this->unk158 = i * 50.0f;
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == ENOKARINATAG_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
     if (this->unk14A == 0xF) {
         this->unk14A = -1;
@@ -66,7 +66,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
     s16 yDiff;
     u16 var_v1;
 
-    if (this->switchFlag >= 0) {
+    if (this->switchFlag > SWITCH_FLAG_NONE) {
         if (this->unk148 == 0) {
             if (Flags_GetSwitch(play, this->switchFlag)) {
                 return;
@@ -122,7 +122,7 @@ void func_8093E68C(EnOkarinaTag* this, PlayState* play) {
                                       (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_SUNS) ||
                                       (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_STORMS) ||
                                       (play->msgCtx.ocarinaMode == OCARINA_MODE_F)))) {
-            if (this->switchFlag >= 0) {
+            if (this->switchFlag > SWITCH_FLAG_NONE) {
                 switch (this->unk148) {
                     case 0:
                         Flags_SetSwitch(play, this->switchFlag);
