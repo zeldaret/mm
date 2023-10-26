@@ -1144,7 +1144,7 @@ void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_SpringShrineGoron_Talk;
-        } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isLockedOn)) {
+        } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isLockedOn) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
