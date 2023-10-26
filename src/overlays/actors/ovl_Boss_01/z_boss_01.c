@@ -3535,7 +3535,7 @@ void Boss01_DrawEffects(PlayState* play) {
             Matrix_Translate(effect->pos.x, 0.0f, effect->pos.z, MTXMODE_NEW);
             Matrix_Scale(effect->scale * 50.0f, 1.0f, effect->scale * 50.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, SEGMENTED_TO_VIRTUAL(gCircleShadowDL));
+            gSPDisplayList(POLY_XLU_DISP++, SEGMENTED_TO_K0(gCircleShadowDL));
         }
     }
 
