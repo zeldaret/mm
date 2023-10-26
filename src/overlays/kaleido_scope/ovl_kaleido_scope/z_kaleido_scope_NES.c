@@ -3167,7 +3167,7 @@ void KaleidoScope_Update(PlayState* play) {
                             BgCheck_InitCollisionHeaders(&play->colCtx, play);
                             STOP_GAMESTATE(&play->state);
                             SET_NEXT_GAMESTATE(&play->state, TitleSetup_Init, sizeof(TitleSetupState));
-                            func_801A4058(0x14);
+                            Audio_MuteAllSeqExceptSystemAndOcarina(20);
                             gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                             gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                         }
@@ -3610,7 +3610,10 @@ void KaleidoScope_Update(PlayState* play) {
             }
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(sUnpausedHudVisibility);
-            func_801A3A7C(0);
+            Audio_SetPauseState(false);
+            break;
+
+        default:
             break;
     }
 

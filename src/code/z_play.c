@@ -525,7 +525,7 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
             Distortion_SetDuration(80);
         }
 
-        func_801A3EC0(0x20);
+        Audio_SetExtraFilter(0x20);
         Environment_EnableUnderwaterLights(this, lightIndex);
 
         if ((sQuakeIndex == -1) || (Quake_GetTimeLeft(sQuakeIndex) == 10)) {
@@ -556,7 +556,7 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
             Quake_RemoveRequest(sQuakeIndex);
         }
         Environment_DisableUnderwaterLights(this);
-        func_801A3EC0(0);
+        Audio_SetExtraFilter(0);
     }
 }
 
@@ -589,20 +589,20 @@ void Play_UpdateTransition(PlayState* this) {
                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE))) &&
                     (!Environment_IsFinalHours(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
                      (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS))) {
-                    func_801A4058(20);
+                    Audio_MuteAllSeqExceptSystemAndOcarina(20);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 }
 
                 if (Environment_IsForcedSequenceDisabled()) {
-                    func_801A4058(20);
+                    Audio_MuteAllSeqExceptSystemAndOcarina(20);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 }
 
                 if (Environment_IsFinalHours(this) && (Entrance_GetSceneId(this->nextEntrance + sceneLayer) >= 0) &&
                     (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
-                    func_801A41C8(20);
+                    Audio_MuteSfxAndAmbienceSeqExceptSysAndOca(20);
                 }
             }
 
@@ -2175,7 +2175,7 @@ void Play_Init(GameState* thisx) {
     KaleidoManager_Init(this);
     ShrinkWindow_Init();
     View_Init(&this->view, gfxCtx);
-    func_801A3EC0(0);
+    Audio_SetExtraFilter(0);
     Quake_Init();
     Distortion_Init(this);
 
