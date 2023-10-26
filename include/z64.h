@@ -271,12 +271,4 @@ typedef enum {
     /* 3 */ PICTO_PHOTO_STATE_READY
 } PictoPhotoState;
 
-typedef struct {
-    /* 0x00 */ u8 mode;
-    /* 0x04 */ f32 scale;
-    /* 0x08 */ f32 lodProportion; // expected to be between 0.0f and 1.0f
-    /* 0x0C */ Color_RGBA8_u32 primColor;
-    /* 0x10 */ Color_RGBA8_u32 envColor;
-} Struct_80140E80; // size = 0x14
-
 #endif

@@ -519,7 +519,7 @@ beginseg
     include "build/src/code/z_view.o"
     include "build/src/code/z_vimode.o"
     include "build/src/code/z_viscvg.o"
-    include "build/src/code/code_80140E80.o"
+    include "build/src/code/z_visfbuf.o"
     include "build/src/code/z_vismono.o"
     include "build/src/code/z_viszbuf.o"
     include "build/src/code/z_vr_box.o"
@@ -3158,8 +3158,7 @@ beginseg
     name "ovl_fbdemo_wipe4"
     compress
     include "build/src/overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.o"
-    include "build/data/ovl_fbdemo_wipe4/ovl_fbdemo_wipe4.data.o"
-    include "build/data/ovl_fbdemo_wipe4/ovl_fbdemo_wipe4.reloc.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe4/ovl_fbdemo_wipe4_reloc.o"
 endseg
 
 beginseg

@@ -897,17 +897,6 @@ void SkinMatrix_SetYRotation(MtxF* mf, s16 a);
 void SkinMatrix_MulYRotation(MtxF* mf, s16 a);
 void SkinMatrix_SetZRotation(MtxF* mf, s16 a);
 
-void func_80140E80(Struct_80140E80* arg0);
-void func_80140EA0(Struct_80140E80* arg0);
-// void func_80140EAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_80141008(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
-void func_8014116C(Gfx** gfxP, u16* arg1, u16* workBuffer, s32 width, s32 height, s32 arg5);
-// void func_801411B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
-// void func_80141200(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_8014151C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_80141678(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-void func_80141778(Struct_80140E80* arg0, Gfx** gfxp, void* unk_18E60, GraphicsContext* gfxCtx);
-
 uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param);
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
 void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
