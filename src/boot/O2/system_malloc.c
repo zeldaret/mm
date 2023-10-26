@@ -19,9 +19,9 @@ void SystemArena_Free(void* ptr) {
     __osFree(&gSystemArena, ptr);
 }
 
-void* SystemArena_Calloc(u32 elements, u32 size) {
+void* SystemArena_Calloc(size_t size, u32 num) {
     void* ptr;
-    size_t totalSize = elements * size;
+    size_t totalSize = size * num;
 
     ptr = __osMalloc(&gSystemArena, totalSize);
     if (ptr != NULL) {

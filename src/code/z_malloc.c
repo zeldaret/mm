@@ -24,16 +24,16 @@ void ZeldaArena_Free(void* ptr) {
     __osFree(&sZeldaArena, ptr);
 }
 
-void* ZeldaArena_Calloc(u32 num, u32 size) {
-    void* ret;
-    u32 n = num * size;
+void* ZeldaArena_Calloc(size_t size, u32 num) {
+    void* ptr;
+    size_t totalSize = size * num;
 
-    ret = __osMalloc(&sZeldaArena, n);
-    if (ret != NULL) {
-        bzero(ret, n);
+    ptr = __osMalloc(&sZeldaArena, totalSize);
+    if (ptr != NULL) {
+        bzero(ptr, totalSize);
     }
 
-    return ret;
+    return ptr;
 }
 
 void ZeldaArena_GetSizes(size_t* outMaxFree, size_t* outFree, size_t* outAlloc) {
