@@ -53,7 +53,7 @@ class TokenType(enum.Enum):
     # Generics
     IF_WEEKEVENTREG = "if_week_event_reg"
     IF_TIMERANGE = "if_time_range"
-    IF_MISC = "if_misc" # !!!
+    IF_MISC = "if_misc"
     IF_SCENE = "if_scene"
     IF_DAY = "if_day"
     IF_BEFORETIME = "if_before_time"
@@ -68,171 +68,65 @@ class TokenType(enum.Enum):
     NOT = "not"
     LABEL = "label"
 
-    def canBeStartingToken(self) -> bool:
-        if self in { TokenType.ELSE, TokenType.BRACE_OPEN, TokenType.BRACE_CLOSE, TokenType.ARGS, TokenType.NOT, TokenType.LABEL }:
-            return False
-        return True
+@dataclasses.dataclass
+class TokenProperties:
+    isExtraToken: bool = False
+    isConditionalBranch: bool = False
+    isUnconditionalBranch: bool = False
+    hasArguments: bool = False
+    needsToInvert: bool = False
+    isGeneric: bool = False
+    isShort: bool = False
 
-    def isBranch(self) -> bool:
-        if self in {
-            TokenType.IF_WEEKEVENTREG_S,
-            TokenType.IF_WEEKEVENTREG_L,
-            TokenType.IF_TIMERANGE_S,
-            TokenType.IF_TIMERANGE_L,
-            TokenType.IF_MISC_S,
-            TokenType.IF_SCENE_S,
-            TokenType.IF_SCENE_L,
-            TokenType.IF_DAY_S,
-            TokenType.IF_DAY_L,
-            TokenType.IF_BEFORETIME_S,
-            TokenType.IF_BEFORETIME_L,
-            TokenType.IF_SINCETIME_S,
-            TokenType.IF_SINCETIME_L,
+    @property
+    def isAnyBranch(self) -> bool:
+        return self.isConditionalBranch or self.isUnconditionalBranch
 
-            TokenType.IF_WEEKEVENTREG,
-            TokenType.IF_TIMERANGE,
-            TokenType.IF_MISC,
-            TokenType.IF_SCENE,
-            TokenType.IF_DAY,
-            TokenType.IF_BEFORETIME,
-            TokenType.IF_SINCETIME,
-        }:
-            return True
-        return False
+tokenPropertiesDict: dict[TokenType, TokenProperties] = {
+    # Schedule commands
+    TokenType.IF_WEEKEVENTREG_S:    TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True),
+    TokenType.IF_WEEKEVENTREG_L:    TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True),
+    TokenType.IF_TIMERANGE_S:       TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True),
+    TokenType.IF_TIMERANGE_L:       TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True),
+    TokenType.RETURN_S:             TokenProperties(hasArguments=True, isShort=True),
+    TokenType.RETURN_L:             TokenProperties(hasArguments=True),
+    TokenType.RETURN_NONE:          TokenProperties(),
+    TokenType.RETURN_EMPTY:         TokenProperties(),
+    TokenType.IF_MISC_S:            TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True),
+    TokenType.IF_SCENE_S:           TokenProperties(isConditionalBranch=True, hasArguments=True, isShort=True),
+    TokenType.IF_SCENE_L:           TokenProperties(isConditionalBranch=True, hasArguments=True),
+    TokenType.IF_DAY_S:             TokenProperties(isConditionalBranch=True, hasArguments=True, isShort=True),
+    TokenType.IF_DAY_L:             TokenProperties(isConditionalBranch=True, hasArguments=True),
+    TokenType.NOP:                  TokenProperties(hasArguments=True),
+    TokenType.RETURN_TIME:          TokenProperties(hasArguments=True),
+    TokenType.IF_BEFORETIME_S:      TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isShort=True),
+    TokenType.IF_BEFORETIME_L:      TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True),
+    TokenType.IF_SINCETIME_S:       TokenProperties(isConditionalBranch=True, hasArguments=True, isShort=True),
+    TokenType.IF_SINCETIME_L:       TokenProperties(isConditionalBranch=True, hasArguments=True),
+    TokenType.BRANCH_S:             TokenProperties(isUnconditionalBranch=True, hasArguments=True, isShort=True),
+    TokenType.BRANCH_L:             TokenProperties(isUnconditionalBranch=True, hasArguments=True),
 
-    def isUnconditionalBranch(self) -> bool:
-        if self in {
-            TokenType.BRANCH_S,
-            TokenType.BRANCH_L,
+    # Generics
+    TokenType.IF_WEEKEVENTREG:      TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isGeneric=True),
+    TokenType.IF_TIMERANGE:         TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isGeneric=True),
+    TokenType.IF_MISC:              TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isGeneric=True),
+    TokenType.IF_SCENE:             TokenProperties(isConditionalBranch=True, hasArguments=True, isGeneric=True),
+    TokenType.IF_DAY:               TokenProperties(isConditionalBranch=True, hasArguments=True, isGeneric=True),
+    TokenType.IF_BEFORETIME:        TokenProperties(isConditionalBranch=True, hasArguments=True, needsToInvert=True, isGeneric=True),
+    TokenType.IF_SINCETIME:         TokenProperties(isConditionalBranch=True, hasArguments=True, isGeneric=True),
+    TokenType.BRANCH:               TokenProperties(isUnconditionalBranch=True, hasArguments=True, isGeneric=True),
 
-            TokenType.BRANCH,
-        }:
-            return True
-        return False
-
-    def isReturn(self) -> bool:
-        if self in { TokenType.RETURN_S, TokenType.RETURN_L, TokenType.RETURN_NONE, TokenType.RETURN_EMPTY, TokenType.RETURN_TIME }:
-            return True
-        return False
-
-    def hasArguments(self) -> bool:
-        if self in {
-            TokenType.IF_WEEKEVENTREG_S,
-            TokenType.IF_WEEKEVENTREG_L,
-            TokenType.IF_TIMERANGE_S,
-            TokenType.IF_TIMERANGE_L,
-            TokenType.RETURN_S,
-            TokenType.RETURN_L,
-            TokenType.IF_MISC_S,
-            TokenType.IF_SCENE_S,
-            TokenType.IF_SCENE_L,
-            TokenType.IF_DAY_S,
-            TokenType.IF_DAY_L,
-            TokenType.RETURN_TIME,
-            TokenType.IF_BEFORETIME_S,
-            TokenType.IF_BEFORETIME_L,
-            TokenType.IF_SINCETIME_S,
-            TokenType.IF_SINCETIME_L,
-            TokenType.BRANCH_S,
-            TokenType.BRANCH_L,
-
-            TokenType.IF_WEEKEVENTREG,
-            TokenType.IF_TIMERANGE,
-            TokenType.IF_MISC,
-            TokenType.IF_SCENE,
-            TokenType.IF_DAY,
-            TokenType.IF_BEFORETIME,
-            TokenType.IF_SINCETIME,
-            TokenType.BRANCH,
-        }:
-            return True
-        return False
-
-    def needsToInvert(self) -> bool:
-        if self in {
-            TokenType.IF_WEEKEVENTREG_S,
-            TokenType.IF_WEEKEVENTREG_L,
-            TokenType.IF_TIMERANGE_S,
-            TokenType.IF_TIMERANGE_L,
-            TokenType.IF_MISC_S,
-            TokenType.IF_BEFORETIME_S,
-            TokenType.IF_BEFORETIME_L,
-
-            TokenType.IF_WEEKEVENTREG,
-            TokenType.IF_TIMERANGE,
-            TokenType.IF_MISC,
-            TokenType.IF_BEFORETIME,
-        }:
-            return True
-        return False
-
-    def isGeneric(self) -> bool:
-        if self in {
-            TokenType.IF_WEEKEVENTREG,
-            TokenType.IF_TIMERANGE,
-            TokenType.IF_MISC,
-            TokenType.IF_SCENE,
-            TokenType.IF_DAY,
-            TokenType.IF_BEFORETIME,
-            TokenType.IF_SINCETIME,
-            TokenType.BRANCH,
-        }:
-            return True
-        return False
-
-    def isShort(self) -> bool:
-        if self in {
-            TokenType.IF_WEEKEVENTREG_S,
-            TokenType.IF_TIMERANGE_S,
-            TokenType.IF_MISC_S,
-            TokenType.IF_SCENE_S,
-            TokenType.IF_DAY_S,
-            TokenType.IF_BEFORETIME_S,
-            TokenType.IF_SINCETIME_S,
-            TokenType.BRANCH_S,
-        }:
-            return True
-        return False
-
-
-tokenLiterals: dict[str, TokenType] = {
-    "if_week_event_reg_s": TokenType.IF_WEEKEVENTREG_S,
-    "if_week_event_reg_l": TokenType.IF_WEEKEVENTREG_L,
-    "if_time_range_s": TokenType.IF_TIMERANGE_S,
-    "if_time_range_l": TokenType.IF_TIMERANGE_L,
-    "return_s": TokenType.RETURN_S,
-    "return_l": TokenType.RETURN_L,
-    "return_none": TokenType.RETURN_NONE,
-    "return_empty": TokenType.RETURN_EMPTY,
-    "if_misc_s": TokenType.IF_MISC_S,
-    "if_scene_s": TokenType.IF_SCENE_S,
-    "if_scene_l": TokenType.IF_SCENE_L,
-    "if_day_s": TokenType.IF_DAY_S,
-    "if_day_l": TokenType.IF_DAY_L,
-    "nop": TokenType.NOP,
-    "return_time": TokenType.RETURN_TIME,
-    "if_before_time_s": TokenType.IF_BEFORETIME_S,
-    "if_before_time_l": TokenType.IF_BEFORETIME_L,
-    "if_since_time_s": TokenType.IF_SINCETIME_S,
-    "if_since_time_l": TokenType.IF_SINCETIME_L,
-    "branch_s": TokenType.BRANCH_S,
-    "branch_l": TokenType.BRANCH_L,
-
-    # generics
-    "if_week_event_reg": TokenType.IF_WEEKEVENTREG,
-    "if_time_range": TokenType.IF_TIMERANGE,
-    "if_misc": TokenType.IF_MISC,
-    "if_scene": TokenType.IF_SCENE,
-    "if_day": TokenType.IF_DAY,
-    "if_before_time": TokenType.IF_BEFORETIME,
-    "if_since_time": TokenType.IF_SINCETIME,
-    "branch": TokenType.BRANCH,
-
-    "else": TokenType.ELSE,
-    "{": TokenType.BRACE_OPEN,
-    "}": TokenType.BRACE_CLOSE,
-    "not": TokenType.NOT,
+    # Extra tokens
+    TokenType.ELSE:                 TokenProperties(isExtraToken=True),
+    TokenType.BRACE_OPEN:           TokenProperties(isExtraToken=True),
+    TokenType.BRACE_CLOSE:          TokenProperties(isExtraToken=True),
+    TokenType.ARGS:                 TokenProperties(isExtraToken=True),
+    TokenType.NOT:                  TokenProperties(isExtraToken=True),
+    TokenType.LABEL:                TokenProperties(isExtraToken=True),
 }
+
+tokenLiterals: dict[str, TokenType] = {x.value: x for x in TokenType}
+
 
 regex_label = re.compile(r"(?P<label>\w+)\s*:")
 regex_identifier = re.compile(r"(?P<identifier>\w+)")
@@ -245,6 +139,9 @@ class Token:
     filename: str
     lineNumber: int
     columnNumber: int
+
+    def getProperties(self) -> TokenProperties:
+        return tokenPropertiesDict[self.tokenType]
 
 
 class TokenIterator:
@@ -453,6 +350,8 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
 
     i = 0
     while (token := tokens.get()) is not None:
+        tokenProperties = token.getProperties()
+
         if token.tokenType == TokenType.ARGS:
             if currentExpr is None or currentExpr.args is not None:
                 eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
@@ -465,11 +364,11 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
 
             currentExpr.args = token
 
-        elif token.tokenType.canBeStartingToken() or token.tokenType == TokenType.NOT:
-            if currentExpr is not None and currentExpr.expr.tokenType.isBranch():
+        elif not tokenProperties.isExtraToken or token.tokenType == TokenType.NOT:
+            if currentExpr is not None and currentExpr.expr.getProperties().isConditionalBranch:
                 if len(currentExpr.left) == 0:
                     eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                    debugPrint(" makeTree: canBeStartingToken")
+                    debugPrint(" makeTree: isExtraToken")
                     debugPrint(f" i: {i}")
                     debugPrint(f" depth: {depth}")
                     debugPrint(f" token: {token}\n current expression: {currentExpr}")
@@ -482,16 +381,17 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
                 tokenAux = tokens.get()
                 if tokenAux is None:
                     eprint(f"Error: `not` operator followed by nothing at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                    debugPrint(" makeTree: NOT canBeStartingToken")
+                    debugPrint(" makeTree: NOT: tokenAux is None")
                     debugPrint(f" i: {i}")
                     debugPrint(f" depth: {depth}")
                     debugPrint(f" token: {token}\n current expression: {currentExpr}")
                     debugPrint(f" foundElse: {foundElse}")
                     exit(1)
                 token = tokenAux
-                if not token.tokenType.canBeStartingToken():
+                tokenProperties = token.getProperties()
+                if tokenProperties.isExtraToken:
                     eprint(f"Error: `not` operator followed invalid token at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                    debugPrint(" makeTree: NOT canBeStartingToken")
+                    debugPrint(" makeTree: NOT: isExtraToken")
                     debugPrint(f" i: {i}")
                     debugPrint(f" depth: {depth}")
                     debugPrint(f" token: {token}\n current expression: {currentExpr}")
@@ -502,7 +402,7 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
             currentExpr.negated = negate
             foundElse = False
             exprs.append(currentExpr)
-            if not token.tokenType.hasArguments():
+            if not tokenProperties.hasArguments:
                 currentExpr = None
 
         elif token.tokenType == TokenType.ELSE:
@@ -597,15 +497,23 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
             tokens.unget()
             if nextToken is None:
                 eprint(f"Error: label followed by nothing at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                debugPrint(" makeTree: NOT canBeStartingToken")
+                debugPrint(" makeTree: LABEL, nextToken is None")
                 debugPrint(f" i: {i}")
                 debugPrint(f" depth: {depth}")
                 debugPrint(f" token: {token}\n current expression: {currentExpr}")
                 debugPrint(f" foundElse: {foundElse}")
                 exit(1)
-            if not nextToken.tokenType.canBeStartingToken():
+            if nextToken.tokenType == TokenType.LABEL:
+                eprint(f"Error: label followed by another label '{nextToken.tokenLiteral}' at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                debugPrint(" makeTree: LABEL, nextToken == LABEL")
+                debugPrint(f" i: {i}")
+                debugPrint(f" depth: {depth}")
+                debugPrint(f" token: {token}\n current expression: {currentExpr}")
+                debugPrint(f" foundElse: {foundElse}")
+                exit(1)
+            if nextToken.getProperties().isExtraToken:
                 eprint(f"Error: label followed by not admitted token '{nextToken.tokenLiteral}' at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                debugPrint(" makeTree: NOT canBeStartingToken")
+                debugPrint(" makeTree: NOT isExtraToken")
                 debugPrint(f" i: {i}")
                 debugPrint(f" depth: {depth}")
                 debugPrint(f" token: {token}\n current expression: {currentExpr}")
@@ -653,7 +561,7 @@ def normalizeTreeImpl(tree: list[Expression], postLabel: Expression, depth: int,
                 currentPostLabel = Expression(Token(TokenType.LABEL, f"{autoLabelName}.{depth}_{i}", "", 0, 0))
 
         auxUsed = False
-        if expr.expr.tokenType.isBranch():
+        if expr.expr.getProperties().isConditionalBranch:
             if len(expr.left) == 0:
                 branchExpr = Expression(Token(TokenType.BRANCH, f"branch", "", 0, 0), currentPostLabel.expr)
                 expr.left.append(branchExpr)
@@ -785,10 +693,12 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
             labelName = token.tokenLiteral
             continue
 
+        tokenProperties = token.getProperties()
+
         subResults = []
         left = expr.left
         right = expr.right
-        if token.tokenType.needsToInvert():
+        if tokenProperties.needsToInvert:
             left, right = right, left
         if expr.negated:
             left, right = right, left
@@ -802,7 +712,7 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
 
         targetLabel = None
 
-        if len(right) == 1 and right[0].expr.tokenType.isUnconditionalBranch():
+        if len(right) == 1 and right[0].expr.getProperties().isUnconditionalBranch:
             # If an `if_` only has 1 expression and it is a branch then incorporate it as part of the `if_`,
             # avoiding redundant branches
             sub = []
@@ -822,19 +732,20 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
             labelName = f".index.{currentIndex}"
 
         canChange = False
-        if token.tokenType.isGeneric():
+        if tokenProperties.isGeneric:
             canChange = True
             newTokenType = cmdRedirection[token.tokenType][0]
             token = Token(newTokenType, newTokenType.value, token.filename, token.lineNumber, token.columnNumber)
+            tokenProperties = token.getProperties()
 
-        if token.tokenType.isUnconditionalBranch():
+        if tokenProperties.isUnconditionalBranch:
             assert expr.args is not None, expr
             targetLabel = expr.args.tokenLiteral
 
         linearExpr = LabeledExpression(currentIndex, token, expr.args, labelName, canChange)
         labelName = None
 
-        if token.tokenType.isBranch() or token.tokenType.isUnconditionalBranch():
+        if tokenProperties.isConditionalBranch or tokenProperties.isUnconditionalBranch:
             linearExpr.branchTarget = targetLabel
 
         result += [linearExpr] + subResults
@@ -850,11 +761,13 @@ def removeGenerics(labeledList: list[LabeledExpression]) -> tuple[list[LabeledEx
     for labeledExpr in labeledList:
         info = cmdInfos[labeledExpr.token.tokenType]
 
+        tokenProperties = labeledExpr.token.getProperties()
+
         nextOffset = offset + info.cmdLenght
 
         if labeledExpr.canChange:
-            if labeledExpr.token.tokenType.isBranch() or labeledExpr.token.tokenType.isUnconditionalBranch():
-                if labeledExpr.token.tokenType.isShort():
+            if tokenProperties.isConditionalBranch or tokenProperties.isUnconditionalBranch:
+                if tokenProperties.isShort:
                     # There's no point on trying to change a long branch
 
                     # find the target expression
@@ -885,6 +798,7 @@ def removeGenerics(labeledList: list[LabeledExpression]) -> tuple[list[LabeledEx
                             debugPrint(f" removeGenerics")
                             exit(1)
                         labeledExpr.token = Token(longTokenType, longTokenType.value, labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
+                        tokenProperties = labeledExpr.token.getProperties()
                         modifiedAnything = True
 
         info = cmdInfos[labeledExpr.token.tokenType]
@@ -926,16 +840,18 @@ def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: 
         currentOffset = offsetList[i]
         nextOffset = offsetList[i+1]
 
+        tokenProperties = labeledExpr.token.getProperties()
+
         info = cmdInfos[labeledExpr.token.tokenType]
         currentMacro = f"    /* 0x{currentOffset:0{offsetWidth}X} */ {info.macro}("
 
-        if labeledExpr.token.tokenType.isUnconditionalBranch():
+        if tokenProperties.isUnconditionalBranch:
             targetOffset = getTargetOffset(labeledExpr, labeledList, offsetList)
             currentMacro += f"0x{targetOffset:0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
         else:
             if labeledExpr.args is not None:
                 currentMacro += f"{labeledExpr.args.tokenLiteral}"
-            if labeledExpr.token.tokenType.isBranch():
+            if tokenProperties.isConditionalBranch:
                 targetOffset = getTargetOffset(labeledExpr, labeledList, offsetList)
                 currentMacro += f", 0x{targetOffset:0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
         currentMacro += "),"
@@ -1007,7 +923,6 @@ def main():
     else:
         outputPath.parent.mkdir(parents=True, exist_ok=True)
         outputPath.write_text(output)
-
 
 if __name__ == "__main__":
     main()
