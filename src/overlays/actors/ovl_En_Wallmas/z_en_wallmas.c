@@ -457,7 +457,7 @@ void EnWallmas_SetupTakePlayer(EnWallmas* this, PlayState* play) {
     this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->yTarget = this->actor.playerHeightRel;
-    func_800B724C(play, &this->actor, PLAYER_CSMODE_18);
+    func_800B724C(play, &this->actor, PLAYER_CSACTION_18);
 }
 
 void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {

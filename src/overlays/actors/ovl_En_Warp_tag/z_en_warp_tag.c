@@ -97,10 +97,10 @@ void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
     if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
         if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
-            func_800B7298(play, NULL, PLAYER_CSMODE_81);
+            func_800B7298(play, NULL, PLAYER_CSACTION_81);
             this->actionFunc = EnWarpTag_GrottoReturn;
         } else {
-            func_800B7298(play, NULL, PLAYER_CSMODE_15);
+            func_800B7298(play, NULL, PLAYER_CSACTION_15);
             this->actionFunc = EnWarpTag_RespawnPlayer;
         }
     }
@@ -129,7 +129,7 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
  */
 void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_STORMS) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+        func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
         this->actionFunc = EnWarpTag_RespawnPlayer;
         CutsceneManager_Stop(CutsceneManager_GetCurrentCsId());
 

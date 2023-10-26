@@ -259,7 +259,7 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
 
         case 6:
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_POISONED, 6);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;

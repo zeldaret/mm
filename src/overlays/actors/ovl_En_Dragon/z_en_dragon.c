@@ -542,7 +542,7 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
 
     if (this->grabTimer > sMaxGrabTimerPerPython[this->pythonIndex]) {
         if (this->state == DEEP_PYTHON_GRAB_STATE_START) {
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
             this->state = DEEP_PYTHON_GRAB_STATE_GRABBED;
         }
 

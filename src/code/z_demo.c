@@ -1,3 +1,6 @@
+#include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h"
+
 #include "PR/ultratypes.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -8,19 +11,9 @@ struct CutsceneCamera sCutsceneCameraInfo;
 u16 sCueTypeList[10];
 u8 D_801F4DDC;
 static s16 sBssPad;
-u8 gDisablePlayerCsModeStartPos;
+u8 gDisablePlayerCsActionStartPos;
 s16 gDungeonBossWarpSceneId;
 
-#include "prevent_bss_reordering.h"
-#include "prevent_bss_reordering2.h"
-// clang-format off
-// Partial structs taken from "prevent_bss_reordering.h"
-struct Dummy200 { int x; };
-struct Dummy201 { int x; };
-struct Dummy202 { int x; };
-// clang-format on
-
-#include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -54,7 +47,7 @@ void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
         sCueTypeList[i] = 0;
     }
 
-    gDisablePlayerCsModeStartPos = false;
+    gDisablePlayerCsActionStartPos = false;
 
     Audio_SetCutsceneFlag(false);
 }
@@ -346,12 +339,12 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             gSaveContext.save.playerForm = sCutsceneStoredPlayerForm;
             break;
 
-        case CS_MISC_DISABLE_PLAYER_CSMODE_START_POS:
-            gDisablePlayerCsModeStartPos = true;
+        case CS_MISC_DISABLE_PLAYER_CSACTION_START_POS:
+            gDisablePlayerCsActionStartPos = true;
             break;
 
-        case CS_MISC_ENABLE_PLAYER_CSMODE_START_POS:
-            gDisablePlayerCsModeStartPos = false;
+        case CS_MISC_ENABLE_PLAYER_CSACTION_START_POS:
+            gDisablePlayerCsActionStartPos = false;
             break;
 
         case CS_MISC_SAVE_ENTER_CLOCK_TOWN:

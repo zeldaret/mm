@@ -389,7 +389,7 @@ void func_809984F4(EnGs* this, PlayState* play) {
         }
     } while (gossipStone != NULL);
 
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+    func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
     this->actionFunc = func_809985B8;
 }
 
