@@ -3168,7 +3168,7 @@ void KaleidoScope_Update(PlayState* play) {
                             BgCheck_InitCollisionHeaders(&play->colCtx, play);
                             STOP_GAMESTATE(&play->state);
                             SET_NEXT_GAMESTATE(&play->state, TitleSetup_Init, sizeof(TitleSetupState));
-                            Audio_MuteAllSeqExceptSystemAndOcarina(0x14);
+                            Audio_MuteAllSeqExceptSystemAndOcarina(20);
                             gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                             gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                         }
