@@ -113,13 +113,13 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->pathIndex = LOOKNUTS_GET_PATH_INDEX(&this->actor);
-    this->switchFlag = LOOKNUTS_GET_SCENE_FLAG(&this->actor);
+    this->switchFlag = LOOKNUTS_GET_SWITCH_FLAG(&this->actor);
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
 
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == LOOKNUTS_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -359,7 +359,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
                     Audio_PlaySfx(NA_SE_SY_FOUND);
-                    func_800B7298(play, &this->actor, PLAYER_CSMODE_26);
+                    func_800B7298(play, &this->actor, PLAYER_CSACTION_26);
                     D_80A6862C = 1;
                     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;

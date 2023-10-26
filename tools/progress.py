@@ -239,7 +239,7 @@ for line in map_file:
                     eprint(f"Found file '{obj_file}' in unknown asset category '{assetCat}'")
                     eprint("I'll ignore this for now, but please fix it!")
 
-    elif len(line_split) == 2 and line_split[0].startswith("0x00000000"):
+    elif len(line_split) == 2 and line_split[0].startswith("0x"):
         varVramStr, varName = line_split
         varVram = int(varVramStr, 16)
         varName = varName.strip()
