@@ -1,4 +1,4 @@
-#include "global.h"
+#include "ultra64.h"
 #include "PR/gs2dex.h"
 
 void guS2DInitBg(uObjBg* bg) {

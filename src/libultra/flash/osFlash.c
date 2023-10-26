@@ -1,19 +1,25 @@
-#include "prevent_bss_reordering.h"
 #include "ultra64.h"
-#include "global.h"
 #include "PR/os_internal_flash.h"
+#include "alignment.h"
+#include "macros.h"
 
-u32 __osFlashID[4];
-OSIoMesg __osFlashMsg;
-OSMesgQueue __osFlashMessageQ;
-OSPiHandle __osFlashHandler;
+u32 __osFlashID[4] ALIGNED(8);
+OSIoMesg __osFlashMsg ALIGNED(8);
+OSMesgQueue __osFlashMessageQ ALIGNED(8);
+OSPiHandle __osFlashHandler ALIGNED(8);
 OSMesg __osFlashMsgBuf[1];
 s32 __osFlashVersion;
 static s32 sBssPad[5];
 
 uintptr_t osFlashGetAddr(u32 pageNum) {
-    // Account for hadware bug in old flash where the address bits are shifted 1-off where they should be
-    uintptr_t addr = (__osFlashVersion == OLD_FLASH) ? pageNum * (FLASH_BLOCK_SIZE >> 1) : pageNum * FLASH_BLOCK_SIZE;
+    uintptr_t addr;
+
+    if (__osFlashVersion == OLD_FLASH) {
+        // Account for hardware bug in old flash where the address bits are shifted 1-off where they should be
+        addr = pageNum * (FLASH_BLOCK_SIZE >> 1);
+    } else {
+        addr = pageNum * FLASH_BLOCK_SIZE;
+    }
 
     return addr;
 }

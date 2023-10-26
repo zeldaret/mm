@@ -1120,7 +1120,7 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
                 texture = gEffBubble1Tex;
             }
 
-            ptr->unk_20 = (TexturePtr)VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(texture));
+            ptr->unk_20 = (TexturePtr)OS_K0_TO_PHYSICAL(SEGMENTED_TO_K0(texture));
             ptr->unk_00 = true;
             ptr->unk_04 = *vec;
             ptr->unk_04.x += Rand_CenteredFloat(ptr->unk_00 + (this->unk_330 * 4000.0f));

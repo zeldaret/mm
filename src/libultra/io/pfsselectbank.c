@@ -1,5 +1,5 @@
-#include "PR/os_pfs.h"
-#include "global.h"
+#include "ultra64.h"
+#include "PR/controller.h"
 
 s32 __osPfsSelectBank(OSPfs* pfs, u8 bank) {
     u8 buf[BLOCKSIZE];

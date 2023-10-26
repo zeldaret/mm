@@ -81,10 +81,10 @@ ShutterInfo D_808A21B0[] = {
     { object_hakugin_obj_DL_000128, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { gGreatBayTempleObjectDoorDL, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_ikana_obj_DL_014A40, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
-    { object_redead_obj_DL_0001A0, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
+    { gBeneathTheWellSlidingDoorDL, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_ikninside_obj_DL_004440, object_ikninside_obj_DL_005260, 130, 0, 20, 15 },
-    { object_random_obj_DL_000190, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
-    { object_kinsta1_obj_DL_000198, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
+    { gSecretShrineSlidingDoorDL, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
+    { gSwampSpiderHouseSlidingDoorDL, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_kaizoku_obj_DL_0001A0, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_last_obj_DL_0039C0, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
 };
@@ -462,7 +462,7 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
         }
 
         if ((this->csId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->csId)) {
-            func_800B724C(play, &this->slidingDoor.dyna.actor, PLAYER_CSMODE_1);
+            func_800B724C(play, &this->slidingDoor.dyna.actor, PLAYER_CSACTION_1);
         }
     }
 
@@ -582,7 +582,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
             player->csId = CS_ID_NONE;
-            func_800B7298(play, NULL, PLAYER_CSMODE_115);
+            func_800B7298(play, NULL, PLAYER_CSACTION_115);
         }
     }
 }
@@ -636,8 +636,8 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
 
 void func_808A1C50(DoorShutter* this, PlayState* play) {
     if (this->unk_167++ > 30) {
-        if (GET_PLAYER(play)->csMode == PLAYER_CSMODE_115) {
-            func_800B7298(play, NULL, PLAYER_CSMODE_END);
+        if (GET_PLAYER(play)->csAction == PLAYER_CSACTION_115) {
+            func_800B7298(play, NULL, PLAYER_CSACTION_END);
         }
         DoorShutter_SetupDoor(this, play);
     }

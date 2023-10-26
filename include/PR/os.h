@@ -24,4 +24,15 @@
 #include "os_vi.h"
 #include "os_voice.h"
 
+/*
+ * Stack size for I/O device managers: PIM (PI Manager), VIM (VI Manager),
+ *	SIM (SI Manager)
+ *
+ */
+#define OS_PIM_STACKSIZE	4096
+#define OS_VIM_STACKSIZE	4096
+#define OS_SIM_STACKSIZE	4096
+
+#define	OS_MIN_STACKSIZE	72
+
 #endif

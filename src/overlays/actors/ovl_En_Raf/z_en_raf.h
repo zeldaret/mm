@@ -8,6 +8,8 @@
 #define EN_RAF_GET_REVIVE_TIMER(thisx) (((thisx)->params >> 7) & 0x1F)
 #define EN_RAF_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
+#define EN_RAF_SWITCH_FLAG_NONE 0x7F
+
 typedef enum {
     /* 0 */ EN_RAF_TYPE_NORMAL,
     /* 1 */ EN_RAF_TYPE_DORMANT,              // Spawns without trap, so it can't eat bombs/player

@@ -1,8 +1,9 @@
-#include "global.h"
+#include "ultra64.h"
 
 void guOrthoF(float m[4][4], float l, float r, float b, float t, float n, float f, float scale) {
     int i;
     int j;
+
     guMtxIdentF(m);
     m[0][0] = 2 / (r - l);
     m[1][1] = 2 / (t - b);
@@ -20,6 +21,7 @@ void guOrthoF(float m[4][4], float l, float r, float b, float t, float n, float 
 
 void guOrtho(Mtx* m, float l, float r, float b, float t, float n, float f, float scale) {
     float mf[4][4];
+
     guOrthoF(mf, l, r, b, t, n, f, scale);
     guMtxF2L(mf, m);
 }

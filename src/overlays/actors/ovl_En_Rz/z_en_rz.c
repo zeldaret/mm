@@ -418,7 +418,7 @@ void func_80BFC058(EnRz* this, PlayState* play) {
 
 void func_80BFC078(EnRz* this, PlayState* play) {
     s32 pad;
-    Vec3f sp28;
+    Vec3f seqPos;
 
     EnRz_UpdateSkelAnime(this, play);
 
@@ -444,10 +444,10 @@ void func_80BFC078(EnRz* this, PlayState* play) {
     }
 
     if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
-        sp28.x = this->actor.projectedPos.x;
-        sp28.y = this->actor.projectedPos.y;
-        sp28.z = this->actor.projectedPos.z;
-        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_ROSA_SISTERS, 900.0f);
+        seqPos.x = this->actor.projectedPos.x;
+        seqPos.y = this->actor.projectedPos.y;
+        seqPos.z = this->actor.projectedPos.z;
+        Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_ROSA_SISTERS, 900.0f);
     }
 }
 
@@ -505,7 +505,7 @@ void func_80BFC36C(EnRz* this, PlayState* play) {
 
 void func_80BFC3F8(EnRz* this, PlayState* play) {
     s32 pad;
-    Vec3f bgmPos;
+    Vec3f seqPos;
 
     EnRz_UpdateSkelAnime(this, play);
 
@@ -545,10 +545,10 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
         }
 
         if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
-            bgmPos.x = this->actor.projectedPos.x;
-            bgmPos.y = this->actor.projectedPos.y;
-            bgmPos.z = this->actor.projectedPos.z;
-            func_801A1FB4(SEQ_PLAYER_BGM_SUB, &bgmPos, NA_BGM_ROSA_SISTERS, 900.0f);
+            seqPos.x = this->actor.projectedPos.x;
+            seqPos.y = this->actor.projectedPos.y;
+            seqPos.z = this->actor.projectedPos.z;
+            Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_ROSA_SISTERS, 900.0f);
         }
     }
 }

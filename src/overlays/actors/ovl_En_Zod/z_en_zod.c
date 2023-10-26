@@ -387,7 +387,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
     seqPos.y = this->actor.projectedPos.y;
     seqPos.z = this->actor.projectedPos.z;
 
-    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
+    Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
 }
 
 void func_80BAFA44(EnZod* this, PlayState* play) {
@@ -480,7 +480,7 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
-        func_800B7298(play, NULL, PLAYER_CSMODE_68);
+        func_800B7298(play, NULL, PLAYER_CSACTION_68);
         Message_StartTextbox(play, 0x103A, &this->actor);
         this->actionFunc = EnZod_SetupRehearse;
     } else {

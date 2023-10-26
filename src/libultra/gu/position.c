@@ -1,4 +1,5 @@
-#include "global.h"
+#include "ultra64.h"
+#include "libc/math.h"
 
 /**
  * guPositionF

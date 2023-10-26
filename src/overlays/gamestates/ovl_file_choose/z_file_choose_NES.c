@@ -2050,7 +2050,7 @@ void FileSelect_ConfirmFile(GameState* thisx) {
             Rumble_Request(300.0f, 180, 20, 100);
             Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
             this->selectMode = SM_FADE_OUT;
-            func_801A4058(0xF);
+            Audio_MuteAllSeqExceptSystemAndOcarina(15);
         } else { // FS_BTN_CONFIRM_QUIT
             Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
             this->selectMode++; // SM_FADE_OUT_FILE_INFO
@@ -2484,7 +2484,7 @@ void FileSelect_InitContext(GameState* thisx) {
     ShrinkWindow_Letterbox_SetSizeTarget(0);
 
     gSaveContext.skyboxTime = 0;
-    gSaveContext.save.time = 0;
+    gSaveContext.save.time = CLOCK_TIME(0, 0);
 
     Skybox_Init(&this->state, &this->skyboxCtx, 1);
     R_TIME_SPEED = 10;

@@ -153,7 +153,7 @@ void BgGoronOyu_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
-    CollisionHeader_GetVirtual(&object_oyu_Colheader_000988, &colHeader);
+    CollisionHeader_GetVirtual(&gGoronGraveyardHotSpringWaterCol, &colHeader);
 
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
 
@@ -185,10 +185,10 @@ void BgGoronOyu_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_oyu_Matanimheader_000968));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGoronGraveyardHotSpringWaterTexAnim));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000158);
-    gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000080);
+    gSPDisplayList(POLY_XLU_DISP++, &gGoronGraveyardHotSpringWaterEmptyDL);
+    gSPDisplayList(POLY_XLU_DISP++, &gGoronGraveyardHotSpringWaterDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
