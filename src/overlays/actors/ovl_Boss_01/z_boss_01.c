@@ -784,7 +784,7 @@ void Boss01_SpawnEffectFallingBlock(OdolwaEffect* effect, Vec3f* pos, s16 isFrag
                 effect->velocity.z = Rand_CenteredFloat(13.0f);
             }
 
-            return;
+            break;
         }
     }
 }
@@ -1227,10 +1227,10 @@ void Boss01_SummonBugsCutscene(Boss01* this, PlayState* play) {
             this->subCamAt.y = this->actor.world.pos.y + this->subCamEyeNext.y;
             this->subCamAt.z = this->actor.world.pos.z;
 
-            if (this->cutsceneTimer >= 41) {
+            if (this->cutsceneTimer > 40) {
                 Math_ApproachF(&this->subCamEyeNext.y, 800.0f, 0.1f, this->subCamVelocity);
                 Math_ApproachF(&this->subCamVelocity, 100.0f, 1.0f, 1.0f);
-                if ((this->cutsceneTimer >= 81) && (this->cutsceneTimer % 16 == 0)) {
+                if ((this->cutsceneTimer > 80) && ((this->cutsceneTimer % 16) == 0)) {
                     Matrix_MultVecZ(100.0f, &offset);
                     pos.x = Rand_CenteredFloat(200.0f) + (this->actor.world.pos.x + offset.x);
                     pos.z = Rand_CenteredFloat(200.0f) + (this->actor.world.pos.z + offset.z);
@@ -1915,7 +1915,7 @@ void Boss01_SetupDamaged(Boss01* this, PlayState* play, u8 damageEffect) {
         this->animEndFrame = Animation_GetLastFrame(&gOdolwaDamagedStartAnim);
         this->actionFunc = Boss01_Damaged;
     } else if (damageEffect == ODOLWA_DMGEFF_DAMAGE_TIMER_CHECK) {
-        if (this->timers[TIMER_CURRENT_ACTION] >= 6) {
+        if (this->timers[TIMER_CURRENT_ACTION] > 5) {
             this->disableCollisionTimer = 20;
         } else {
             this->timers[TIMER_CURRENT_ACTION] = 20;
@@ -2193,12 +2193,12 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
                 fireAccel = gZeroVec3f;
                 fireAccel.y = 0.03f;
 
-                if (this->cutsceneTimer >= 81) {
+                if (this->cutsceneTimer > 80) {
                     Math_ApproachZeroF(&this->actor.scale.y, 0.1f, this->deathShrinkSpeed * 0.00075f);
                     Math_ApproachF(&this->deathShrinkSpeed, 1.0f, 1.0f, 0.01f);
                 }
 
-                if (this->cutsceneTimer >= 121) {
+                if (this->cutsceneTimer > 120) {
                     fireCount = 1;
                 } else {
                     fireCount = 2;
