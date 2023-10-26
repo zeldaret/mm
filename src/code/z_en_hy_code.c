@@ -133,7 +133,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
 }
 
 void EnHy_ChangeObjectAndAnim(EnHy* enHy, PlayState* play, s16 animIndex) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
     EnHy_ChangeAnim(&enHy->skelAnime, animIndex);
 }
 
@@ -141,7 +141,7 @@ s32 EnHy_UpdateSkelAnime(EnHy* enHy, PlayState* play) {
     s32 isUpdated = false;
 
     if (enHy->actor.draw != NULL) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
         SkelAnime_Update(&enHy->skelAnime);
         isUpdated = true;
     }
@@ -168,7 +168,7 @@ s32 EnHy_Init(EnHy* enHy, PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg
         enHy->actor.objectSlot = enHy->skelLowerObjectSlot;
         isInitialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[enHy->actor.objectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->actor.objectSlot].segment);
         SkelAnime_InitFlex(play, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
                            ENHY_LIMB_MAX);
         EnHy_ChangeObjectAndAnim(enHy, play, animIndex);

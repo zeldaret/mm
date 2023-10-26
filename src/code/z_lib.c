@@ -699,14 +699,14 @@ void Lib_Nop801004FC(void) {
 }
 
 void* Lib_SegmentedToVirtual(void* ptr) {
-    return SEGMENTED_TO_VIRTUAL(ptr);
+    return SEGMENTED_TO_K0(ptr);
 }
 
 void* Lib_SegmentedToVirtualNull(void* ptr) {
     if (((uintptr_t)ptr >> 28) == 0) {
         return ptr;
     } else {
-        return SEGMENTED_TO_VIRTUAL(ptr);
+        return SEGMENTED_TO_K0(ptr);
     }
 }
 
@@ -719,7 +719,7 @@ void* Lib_VirtualToPhysical(void* ptr) {
     if (ptr == NULL) {
         return NULL;
     } else {
-        return (void*)VIRTUAL_TO_PHYSICAL(ptr);
+        return (void*)OS_K0_TO_PHYSICAL(ptr);
     }
 }
 
@@ -732,6 +732,6 @@ void* Lib_PhysicalToVirtual(void* ptr) {
     if (ptr == NULL) {
         return NULL;
     } else {
-        return (void*)PHYSICAL_TO_VIRTUAL(ptr);
+        return OS_PHYSICAL_TO_K0(ptr);
     }
 }

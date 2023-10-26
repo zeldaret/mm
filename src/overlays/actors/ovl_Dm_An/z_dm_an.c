@@ -92,9 +92,9 @@ s32 DmAn_UpdateSkelAnime(DmAn* this, PlayState* play) {
     }
 
     if (objectSlot2 > OBJECT_SLOT_NONE) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return isAnimFinished;
@@ -112,10 +112,10 @@ s32 DmAn_ChangeAnim(DmAn* this, PlayState* play, DmAnAnimation animIndex) {
     }
 
     if ((objectSlot2 > OBJECT_SLOT_NONE) && (this->animIndex != animIndex)) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return didAnimChange;

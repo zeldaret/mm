@@ -34,7 +34,7 @@ u32 EffectSsBubble_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
     {
         TexturePtr tex = (Rand_ZeroOne() < 0.5f) ? gEffBubble1Tex : gEffBubble2Tex;
 
-        this->gfx = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(tex));
+        this->gfx = OS_K0_TO_PHYSICAL(SEGMENTED_TO_K0(tex));
     }
 
     this->pos.x = ((Rand_ZeroOne() - 0.5f) * initParams->xzPosRandScale) + initParams->pos.x;

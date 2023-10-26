@@ -255,9 +255,9 @@ s32 EnCne01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.headObjectSlot].segment);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjectSlot].segment);
         *dList = gCneHeadBrownHairDL;
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -295,7 +295,7 @@ void EnCne01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
-        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
