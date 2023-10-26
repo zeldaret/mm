@@ -1514,7 +1514,7 @@ s32 EnAn_MsgEvent_MidnightMeeting(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
 
     if (this->msgEventState == 0) {
-        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+        func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
         play->nextEntrance = ENTRANCE(STOCK_POT_INN, 3);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
