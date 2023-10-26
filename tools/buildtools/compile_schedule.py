@@ -147,9 +147,14 @@ class Token:
     def getProperties(self) -> TokenProperties:
         return tokenPropertiesDict[self.tokenType]
 
+    def newFromTokenType(self, newType: TokenType) -> Token:
+        return Token(newType, newType.value, self.filename, self.lineNumber, self.columnNumber)
+
+    def newFromTokenTypePreserveLiteral(self, newType: TokenType) -> Token:
+        return Token(newType, self.tokenLiteral, self.filename, self.lineNumber, self.columnNumber)
 
 class TokenIterator:
-    def __init__(self, tokens: Iterator[Token]):
+    def __init__(self, tokens: list[Token]):
         self.tokens = list(tokens)
         self.index = 0
 
@@ -233,7 +238,8 @@ def preprocess(contents: str, filename: str) -> str:
     return result
 
 
-def tokenize(contents: str, filename: str) -> Iterator[Token]:
+def tokenize(contents: str, filename: str) -> TokenIterator:
+    tokens: list[Token] = []
     lineNumber = 1
     columnNumber = 1
 
@@ -271,7 +277,7 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
                 debugPrint(f" internal index: {i}\n char: {char}")
                 exit(1)
             parenContents = contents[i+1:subIndex]
-            yield Token(TokenType.ARGS, parenContents, filename, lineNumberStart, columnNumberStart)
+            tokens.append(Token(TokenType.ARGS, parenContents, filename, lineNumberStart, columnNumberStart))
 
             i = subIndex + 1
             columnNumber += 1
@@ -302,7 +308,7 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
                 eprint(f"Error: Unrecognized token found '{literal}' at {filename}:{lineNumber}:{columnNumber}")
                 debugPrint(f" internal index: {i}\n char: {char}")
                 exit(1)
-            yield Token(tokenType, literal, filename, lineNumber, columnNumber)
+            tokens.append(Token(tokenType, literal, filename, lineNumber, columnNumber))
 
             spanStart, spanEnd = reMatch.span()
             matchLen = spanEnd - spanStart
@@ -311,7 +317,7 @@ def tokenize(contents: str, filename: str) -> Iterator[Token]:
             continue
 
         i += 1
-
+    return TokenIterator(tokens)
 
 @dataclasses.dataclass
 class Expression:
@@ -554,12 +560,14 @@ def normalizeTreeImpl(tree: list[Expression], postLabel: Expression, depth: int,
                 shouldAddPostLabel = False
             else:
                 # dot (.) is used to ensure no name crashes with user-declared labels
-                currentPostLabel = Expression(Token(TokenType.LABEL, f"{autoLabelName}.{depth}_{i}", "", 0, 0))
+                labelToken = expr.token.newFromTokenType(TokenType.LABEL)
+                labelToken.tokenLiteral = f".{autoLabelName}.{depth}_{i}"
+                currentPostLabel = Expression(labelToken)
 
         auxUsed = False
         if expr.token.getProperties().isConditionalBranch:
             if len(expr.left) == 0:
-                branchExpr = Expression(Token(TokenType.BRANCH, f"branch", "", 0, 0), currentPostLabel.token)
+                branchExpr = Expression(expr.token.newFromTokenType(TokenType.BRANCH), currentPostLabel.token)
                 expr.left.append(branchExpr)
                 if currentPostLabel == postLabel:
                     usedLabel = True
@@ -571,7 +579,7 @@ def normalizeTreeImpl(tree: list[Expression], postLabel: Expression, depth: int,
                     usedLabel = usedLabel or auxUsed
 
             if len(expr.right) == 0:
-                branchExpr = Expression(Token(TokenType.BRANCH, f"branch", "", 0, 0), currentPostLabel.token)
+                branchExpr = Expression(expr.token.newFromTokenType(TokenType.BRANCH), currentPostLabel.token)
                 expr.right.append(branchExpr)
                 if currentPostLabel == postLabel:
                     usedLabel = True
@@ -681,7 +689,7 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
             canChange = True
             newTokenType = tokenProperties.shortVersion
             assert newTokenType is not None, token
-            token = Token(newTokenType, newTokenType.value, token.filename, token.lineNumber, token.columnNumber)
+            token = token.newFromTokenTypePreserveLiteral(newTokenType)
             tokenProperties = token.getProperties()
 
         if tokenProperties.isUnconditionalBranch:
@@ -739,7 +747,7 @@ def removeGenerics(labeledList: list[LabeledExpression]) -> tuple[list[LabeledEx
                             eprint(f"Error: Command '{labeledExpr.token.tokenLiteral}' will require a branch way too big for a short branch, but there's no long equivalent. At {labeledExpr.token.filename}:{labeledExpr.token.lineNumber}:{labeledExpr.token.columnNumber}")
                             debugPrint(f" removeGenerics")
                             exit(1)
-                        labeledExpr.token = Token(longTokenType, longTokenType.value, labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
+                        labeledExpr.token = labeledExpr.token.newFromTokenTypePreserveLiteral(longTokenType)
                         tokenProperties = labeledExpr.token.getProperties()
                         modifiedAnything = True
 
@@ -836,7 +844,7 @@ def main():
 
     preprocessed = preprocess(inputContents, str(inputPath))
 
-    tokens = TokenIterator(tokenize(preprocessed, str(inputPath)))
+    tokens = tokenize(preprocessed, str(inputPath))
     tree = makeTree(tokens, str(inputPath))
     assert tokens.remainingTokens() == 0
     tree = normalizeTree(tree)
