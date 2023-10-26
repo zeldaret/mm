@@ -77,31 +77,31 @@ static InitChainEntry sInitChain[] = {
 #define TAKARAYA_WALL_ROWS 11
 #define TAKARAYA_WALL_COLUMNS 8
 
-typedef struct ObjTakarayaWallSpace {
+typedef struct ObjTakarayaWallCell {
     /* 0x0 */ u8 row;
     /* 0x1 */ u8 column;
-} ObjTakarayaWallSpace; // size = 0x2
+} ObjTakarayaWallCell; // size = 0x2
 
-typedef enum ObjTakarayaWallSpaceState {
+typedef enum ObjTakarayaWallCellState {
     /* 0 */ TAKARAYA_WALL_INACTIVE,
     /* 1 */ TAKARAYA_WALL_RISING,
     /* 2 */ TAKARAYA_WALL_FALLING
-} ObjTakarayaWallSpaceState;
+} ObjTakarayaWallCellState;
 
-s32 sTakarayaWallPathBuilderIndex;
-ObjTakarayaWallSpace sTakarayaWallPathBuilder[TAKARAYA_WALL_ROWS * TAKARAYA_WALL_COLUMNS];
-s32 D_80ADA508; // Set but never used
-s32 sTakarayaWallPathBuilderReachedFront;
+s32 sTakarayaWallPathStackDepth;
+ObjTakarayaWallCell sTakarayaWallPathStack[TAKARAYA_WALL_ROWS * TAKARAYA_WALL_COLUMNS];
+s32 sTakarayaWallSuccessfulPathStackDepth; // Set but never used
+s32 sTakarayaWallPathReachedFront;
 Vec3f sTakarayaWallAudioPositions[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
-u8 sTakarayaWallSpaceStates[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
+u8 sTakarayaWallStates[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
 
-// -10.0f height means the wall does not raise (the space is open)
-f32 sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
+// -10.0f height means the wall does not raise (the cell is open)
+f32 sTakarayaWallHeights[TAKARAYA_WALL_ROWS][TAKARAYA_WALL_COLUMNS];
 
-// Note: returns true if the space is valid
-s32 ObjTakarayaWall_PosToSpace(Vec3f* pos, s32* row, s32* column) {
-    *row = ((s32)pos->x + (14 * 120)) / 120;
-    *column = (s32)pos->z / 120;
+// Note: returns true if the cell is valid
+s32 ObjTakarayaWall_PosToCell(Vec3f* pos, s32* row, s32* column) {
+    *row = ((s32)pos->x - -1680) / 120;
+    *column = ((s32)pos->z - 0) / 120;
 
     if ((*row < 0) || (*row >= TAKARAYA_WALL_ROWS) || (*column < 0) || (*column >= TAKARAYA_WALL_COLUMNS)) {
         return false;
@@ -112,9 +112,9 @@ s32 ObjTakarayaWall_PosToSpace(Vec3f* pos, s32* row, s32* column) {
 /**
  * Checks if the given row and column is valid and is open, i.e does not raise up.
  */
-s32 ObjTakarayaWall_SpaceOpen(s32 row, s32 column) {
+s32 ObjTakarayaWall_IsCellOpen(s32 row, s32 column) {
     if ((row < 0) || (row >= TAKARAYA_WALL_ROWS) || (column < 0) || (column >= TAKARAYA_WALL_COLUMNS) ||
-        (sTakarayaWallWallHeights[row][column] == 0.0f)) {
+        (sTakarayaWallHeights[row][column] == 0.0f)) {
         return false;
     }
 
@@ -132,11 +132,11 @@ typedef enum TakarayaWallDirection {
  * Checks nearby spaces if the adjacent space or any of the three adjacent spaces to that
  * space are closed (i.e the wall rises up).
  */
-s32 ObjTakarayaWall_NearbySpacesClosed(s32 row, s32 column, TakarayaWallDirection direction) {
-    s32 row1;
-    s32 column1;
+s32 ObjTakarayaWall_NearbyUncarved(s32 row, s32 column, TakarayaWallDirection direction) {
     s32 adjacentSpaceRow;
     s32 adjacentSpaceColumn;
+    s32 row1;
+    s32 column1;
     s32 row2;
     s32 column2;
     s32 row3;
@@ -174,97 +174,102 @@ s32 ObjTakarayaWall_NearbySpacesClosed(s32 row, s32 column, TakarayaWallDirectio
 
     if ((adjacentSpaceRow < 0) || (adjacentSpaceRow >= TAKARAYA_WALL_ROWS) || (adjacentSpaceColumn < 0) ||
         (adjacentSpaceColumn >= TAKARAYA_WALL_COLUMNS) ||
-        (sTakarayaWallWallHeights[adjacentSpaceRow][adjacentSpaceColumn] == -10.0f) ||
-        ObjTakarayaWall_SpaceOpen(row1, column1) || ObjTakarayaWall_SpaceOpen(row2, column2) ||
-        ObjTakarayaWall_SpaceOpen(row3, column3)) {
+        (sTakarayaWallHeights[adjacentSpaceRow][adjacentSpaceColumn] == -10.0f) ||
+        ObjTakarayaWall_IsCellOpen(row1, column1) || ObjTakarayaWall_IsCellOpen(row2, column2) ||
+        ObjTakarayaWall_IsCellOpen(row3, column3)) {
         return false;
     }
 
     return true;
 }
 
-void ObjTakarayaWall_BuildPath(s32 row, s32 column) {
-    s32 closedFlags = 0;
-    s32 closedCount = 0;
+void ObjTakarayaWall_CarvePath(s32 row, s32 column) {
+    s32 carveDirectionFlags = 0;
+    s32 carveDirectionNum = 0;
     s32 randMode;
     s32 direction;
 
-    if (ObjTakarayaWall_NearbySpacesClosed(row, column, TAKARAYA_WALL_DIRECTION_BACK)) {
-        closedCount++;
-        closedFlags |= (1 << TAKARAYA_WALL_DIRECTION_BACK);
+    if (ObjTakarayaWall_NearbyUncarved(row, column, TAKARAYA_WALL_DIRECTION_BACK)) {
+        carveDirectionNum++;
+        carveDirectionFlags |= (1 << TAKARAYA_WALL_DIRECTION_BACK);
     }
 
-    if (ObjTakarayaWall_NearbySpacesClosed(row, column, TAKARAYA_WALL_DIRECTION_RIGHT)) {
-        closedCount++;
-        closedFlags |= (1 << TAKARAYA_WALL_DIRECTION_RIGHT);
+    if (ObjTakarayaWall_NearbyUncarved(row, column, TAKARAYA_WALL_DIRECTION_RIGHT)) {
+        carveDirectionNum++;
+        carveDirectionFlags |= (1 << TAKARAYA_WALL_DIRECTION_RIGHT);
     }
 
-    if (ObjTakarayaWall_NearbySpacesClosed(row, column, TAKARAYA_WALL_DIRECTION_FRONT)) {
-        closedCount++;
-        closedFlags |= (1 << TAKARAYA_WALL_DIRECTION_FRONT);
+    if (ObjTakarayaWall_NearbyUncarved(row, column, TAKARAYA_WALL_DIRECTION_FRONT)) {
+        carveDirectionNum++;
+        carveDirectionFlags |= (1 << TAKARAYA_WALL_DIRECTION_FRONT);
     }
 
-    if (ObjTakarayaWall_NearbySpacesClosed(row, column, TAKARAYA_WALL_DIRECTION_LEFT)) {
-        closedCount++;
-        closedFlags |= (1 << TAKARAYA_WALL_DIRECTION_LEFT);
+    if (ObjTakarayaWall_NearbyUncarved(row, column, TAKARAYA_WALL_DIRECTION_LEFT)) {
+        carveDirectionNum++;
+        carveDirectionFlags |= (1 << TAKARAYA_WALL_DIRECTION_LEFT);
     }
 
-    if (closedCount == 0) {
-        sTakarayaWallPathBuilderIndex--;
-        if (!sTakarayaWallPathBuilderReachedFront) {
-            D_80ADA508--;
+    if (carveDirectionNum == 0) {
+        sTakarayaWallPathStackDepth--;
+        if (!sTakarayaWallPathReachedFront) {
+            sTakarayaWallSuccessfulPathStackDepth--;
+        }
+
+        return;
+    }
+
+    // Randomly select direction to carve, each possible direction has an equal probability of getting carved out
+    randMode = (s32)Rand_ZeroFloat(carveDirectionNum) % carveDirectionNum;
+
+    if (randMode == 0) {
+        direction = TAKARAYA_WALL_DIRECTION_BACK;
+        while (!((1 << direction) & carveDirectionFlags)) {
+            direction++;
+        }
+    } else if (randMode == 1) {
+        direction = TAKARAYA_WALL_DIRECTION_LEFT;
+        while (!((1 << direction) & carveDirectionFlags)) {
+            direction--;
+        }
+    } else if (randMode == 2) {
+        direction = TAKARAYA_WALL_DIRECTION_BACK;
+        while (!((1 << direction) & carveDirectionFlags)) {
+            direction++;
+        }
+        direction++;
+        while (!((1 << direction) & carveDirectionFlags)) {
+            direction++;
         }
     } else {
-        randMode = (s32)Rand_ZeroFloat(closedCount) % closedCount;
-        if (randMode == 0) {
-            direction = TAKARAYA_WALL_DIRECTION_BACK;
-            while (!((1 << direction) & closedFlags)) {
-                direction++;
-            }
-        } else if (randMode == 1) {
-            direction = TAKARAYA_WALL_DIRECTION_LEFT;
-            while (!((1 << direction) & closedFlags)) {
-                direction--;
-            }
-        } else if (randMode == 2) {
-            direction = TAKARAYA_WALL_DIRECTION_BACK;
-            while (!((1 << direction) & closedFlags)) {
-                direction++;
-            }
-            direction++;
-            while (!((1 << direction) & closedFlags)) {
-                direction++;
-            }
-        } else {
-            direction = TAKARAYA_WALL_DIRECTION_LEFT;
-            while (!((1 << direction) & closedFlags)) {
-                direction--;
-            }
+        direction = TAKARAYA_WALL_DIRECTION_LEFT;
+        while (!((1 << direction) & carveDirectionFlags)) {
             direction--;
-            while (!((1 << direction) & closedFlags)) {
-                direction--;
-            }
         }
-
-        if (direction == TAKARAYA_WALL_DIRECTION_BACK) {
-            row--;
-        } else if (direction == TAKARAYA_WALL_DIRECTION_FRONT) {
-            row++;
-        } else if (direction == TAKARAYA_WALL_DIRECTION_RIGHT) {
-            column--;
-        } else { // TAKARAYA_WALL_DIRECTION_LEFT
-            column++;
+        direction--;
+        while (!((1 << direction) & carveDirectionFlags)) {
+            direction--;
         }
+    }
 
-        sTakarayaWallWallHeights[row][column] = -10.0f;
-        sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex].row = row;
-        sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex].column = column;
-        sTakarayaWallPathBuilderIndex++;
-        if (!sTakarayaWallPathBuilderReachedFront) {
-            D_80ADA508++;
-            if (row == (TAKARAYA_WALL_ROWS - 1)) {
-                sTakarayaWallPathBuilderReachedFront = true;
-            }
+    if (direction == TAKARAYA_WALL_DIRECTION_BACK) {
+        row--;
+    } else if (direction == TAKARAYA_WALL_DIRECTION_FRONT) {
+        row++;
+    } else if (direction == TAKARAYA_WALL_DIRECTION_RIGHT) {
+        column--;
+    } else { // TAKARAYA_WALL_DIRECTION_LEFT
+        column++;
+    }
+
+    sTakarayaWallHeights[row][column] = -10.0f;
+    sTakarayaWallPathStack[sTakarayaWallPathStackDepth].row = row;
+    sTakarayaWallPathStack[sTakarayaWallPathStackDepth].column = column;
+    sTakarayaWallPathStackDepth++;
+
+    if (!sTakarayaWallPathReachedFront) {
+        sTakarayaWallSuccessfulPathStackDepth++;
+        if (row == (TAKARAYA_WALL_ROWS - 1)) {
+            sTakarayaWallPathReachedFront = true;
         }
     }
 }
@@ -280,7 +285,7 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
 
     for (i = 0; i < TAKARAYA_WALL_ROWS; i++) {
         for (j = 0; j < TAKARAYA_WALL_COLUMNS; j++) {
-            sTakarayaWallWallHeights[i][j] = 0.0f;
+            sTakarayaWallHeights[i][j] = 0.0f;
         }
     }
 
@@ -299,19 +304,19 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
         chest->uncullZoneForward = 2000.0f;
     }
 
-    sTakarayaWallWallHeights[0][column] = -10.0f;
-    sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex].row = 0;
-    sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex].column = column;
-    sTakarayaWallPathBuilderIndex++;
-    D_80ADA508++;
+    sTakarayaWallHeights[0][column] = -10.0f;
+    sTakarayaWallPathStack[sTakarayaWallPathStackDepth].row = 0;
+    sTakarayaWallPathStack[sTakarayaWallPathStackDepth].column = column;
+    sTakarayaWallPathStackDepth++;
+    sTakarayaWallSuccessfulPathStackDepth++;
 
     do {
-        ObjTakarayaWall_BuildPath(sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex - 1].row,
-                                  sTakarayaWallPathBuilder[sTakarayaWallPathBuilderIndex - 1].column);
-    } while (sTakarayaWallPathBuilderIndex >= 2);
+        ObjTakarayaWall_CarvePath(sTakarayaWallPathStack[sTakarayaWallPathStackDepth - 1].row,
+                                  sTakarayaWallPathStack[sTakarayaWallPathStackDepth - 1].column);
+    } while (sTakarayaWallPathStackDepth >= 2);
 
     for (j = 1; j < TAKARAYA_WALL_COLUMNS - 1; j++) {
-        if (sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][j] == -10.0f) {
+        if (sTakarayaWallHeights[TAKARAYA_WALL_ROWS - 1][j] == -10.0f) {
             break;
         }
     }
@@ -320,10 +325,10 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
     // open up the space next to the open corner since the Treasure Chest Shop scene blocks direct access to the
     // front corners.
     if (j == (TAKARAYA_WALL_COLUMNS - 1)) {
-        if (sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][0] == -10.0f) {
-            sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][1] = -10.0f;
+        if (sTakarayaWallHeights[TAKARAYA_WALL_ROWS - 1][0] == -10.0f) {
+            sTakarayaWallHeights[TAKARAYA_WALL_ROWS - 1][1] = -10.0f;
         } else {
-            sTakarayaWallWallHeights[TAKARAYA_WALL_ROWS - 1][TAKARAYA_WALL_COLUMNS - 2] = -10.0f;
+            sTakarayaWallHeights[TAKARAYA_WALL_ROWS - 1][TAKARAYA_WALL_COLUMNS - 2] = -10.0f;
         }
     }
 
@@ -353,8 +358,8 @@ void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play) {
     s32 playerColumn;
     s32 columnColliderActive;
     s32 rowColliderActive;
-    s32 playerSpaceXPos;
-    s32 playerSpaceZPos;
+    s32 playerCellXPos;
+    s32 playerCellZPos;
     s32 i;
     s32 j;
     s32 playerColumnRight;
@@ -366,31 +371,31 @@ void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play) {
     playerRowBehind = playerRowInFront = -1;
     playerColumnLeft = playerColumnRight = -1;
 
-    ObjTakarayaWall_PosToSpace(&player->actor.world.pos, &playerRow, &playerColumn);
-    playerSpaceXPos = (((s32)player->actor.world.pos.x + (15 * 120)) % 120) - 60;
-    playerSpaceZPos = (((s32)player->actor.world.pos.z + (1 * 120)) % 120) - 60;
+    ObjTakarayaWall_PosToCell(&player->actor.world.pos, &playerRow, &playerColumn);
+    playerCellXPos = (((s32)player->actor.world.pos.x - -1800) % 120) - 60;
+    playerCellZPos = (((s32)player->actor.world.pos.z - -120) % 120) - 60;
 
-    if (playerSpaceXPos > 20) {
+    if (playerCellXPos > 20) {
         playerRowBehind = playerRow + 1;
-    } else if (playerSpaceXPos < -20) {
+    } else if (playerCellXPos < -20) {
         playerRowInFront = playerRow - 1;
     }
 
-    if (playerSpaceZPos > 20) {
+    if (playerCellZPos > 20) {
         playerColumnLeft = playerColumn + 1;
-    } else if (playerSpaceZPos < -20) {
+    } else if (playerCellZPos < -20) {
         playerColumnRight = playerColumn - 1;
     }
 
     for (i = 0; i < TAKARAYA_WALL_ROWS; i++) {
         for (j = 0; j < TAKARAYA_WALL_COLUMNS; j++) {
-            if (sTakarayaWallWallHeights[i][j] >= 0.0f) {
+            if (sTakarayaWallHeights[i][j] >= 0.0f) {
                 if (((j == playerColumn) && ((i == playerRowInFront) || (i == playerRowBehind))) ||
                     ((i == playerRow) && ((j == playerColumnRight) || (j == playerColumnLeft)))) {
-                    if (Math_StepToF(&sTakarayaWallWallHeights[i][j], 120.0f, 15.0f)) {
-                        sTakarayaWallSpaceStates[i][j] = TAKARAYA_WALL_INACTIVE;
+                    if (Math_StepToF(&sTakarayaWallHeights[i][j], 120.0f, 15.0f)) {
+                        sTakarayaWallStates[i][j] = TAKARAYA_WALL_INACTIVE;
                     } else {
-                        sTakarayaWallSpaceStates[i][j] = TAKARAYA_WALL_RISING;
+                        sTakarayaWallStates[i][j] = TAKARAYA_WALL_RISING;
                     }
                     if (j == playerColumn) {
                         columnColliderActive = true;
@@ -398,8 +403,8 @@ void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play) {
                         rowColliderActive = true;
                     }
                 } else if ((i != playerRow) || (j != playerColumn)) {
-                    Math_SmoothStepToF(&sTakarayaWallWallHeights[i][j], 0.0f, 0.2f, 5.0f, 1.0f);
-                    sTakarayaWallSpaceStates[i][j] = TAKARAYA_WALL_FALLING;
+                    Math_SmoothStepToF(&sTakarayaWallHeights[i][j], 0.0f, 0.2f, 5.0f, 1.0f);
+                    sTakarayaWallStates[i][j] = TAKARAYA_WALL_FALLING;
                 }
             }
         }
@@ -412,10 +417,10 @@ void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play) {
     } else {
         collider->dim.pos.y = (s32)this->actor.world.pos.y;
         collider->dim.pos.z = (s32)player->actor.world.pos.z;
-        if (playerSpaceXPos > 0) {
-            collider->dim.pos.x = ((((s32)player->actor.world.pos.x + (14 * 120)) / 120) * 120) - 1380;
+        if (playerCellXPos > 0) {
+            collider->dim.pos.x = ((((s32)player->actor.world.pos.x - -1680) / 120) * 120) - 1380;
         } else {
-            collider->dim.pos.x = ((((s32)player->actor.world.pos.x + (14 * 120)) / 120) * 120) - 1860;
+            collider->dim.pos.x = ((((s32)player->actor.world.pos.x - -1680) / 120) * 120) - 1860;
         }
     }
 
@@ -426,7 +431,7 @@ void ObjTakarayaWall_Manage(ObjTakarayaWall* this, PlayState* play) {
     } else {
         collider->dim.pos.y = (s32)this->actor.world.pos.y;
         collider->dim.pos.x = (s32)player->actor.world.pos.x;
-        if (playerSpaceZPos > 0) {
+        if (playerCellZPos > 0) {
             collider->dim.pos.z = (((s32)player->actor.world.pos.z / 120) * 120) + 300;
         } else {
             collider->dim.pos.z = (((s32)player->actor.world.pos.z / 120) * 120) - 180;
@@ -462,9 +467,9 @@ void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play) {
 
     for (i = 0; i < TAKARAYA_WALL_ROWS; i++) {
         for (j = 0; j < TAKARAYA_WALL_COLUMNS; j++) {
-            if (sTakarayaWallWallHeights[i][j] > 0.0f) {
+            if (sTakarayaWallHeights[i][j] > 0.0f) {
                 mtx->xw = (i * 120) - 1620;
-                mtx->yw = sTakarayaWallWallHeights[i][j] + (this->actor.world.pos.y - 120.0f);
+                mtx->yw = sTakarayaWallHeights[i][j] + (this->actor.world.pos.y - 120.0f);
                 mtx->zw = (j * 120) + 60;
 
                 gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -475,7 +480,7 @@ void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play) {
                     gSPDisplayList(gfx++, gTreasureChestShopWallBlackDL);
                 }
 
-                if (sTakarayaWallSpaceStates[i][j] != TAKARAYA_WALL_INACTIVE) {
+                if (sTakarayaWallStates[i][j] != TAKARAYA_WALL_INACTIVE) {
                     audioPos.x = mtx->xw;
                     audioPos.y = mtx->yw;
                     audioPos.z = mtx->zw;
@@ -483,7 +488,7 @@ void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play) {
                     SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &audioPos,
                                                 &sTakarayaWallAudioPositions[i][j]);
 
-                    if (sTakarayaWallSpaceStates[i][j] == TAKARAYA_WALL_RISING) {
+                    if (sTakarayaWallStates[i][j] == TAKARAYA_WALL_RISING) {
                         Audio_PlaySfx_AtPos(&sTakarayaWallAudioPositions[i][j], NA_SE_EV_ROCK_CUBE_RISING - SFX_FLAG);
                     } else { // TAKARAYA_WALL_FALLING
                         Audio_PlaySfx_AtPos(&sTakarayaWallAudioPositions[i][j], NA_SE_EV_ROCK_CUBE_FALL - SFX_FLAG);
