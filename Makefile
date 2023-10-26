@@ -126,6 +126,8 @@ FADO       := tools/fado/fado.elf
 MAKEYAR    := tools/buildtools/makeyar
 SCHEDULE_COMP := tools/buildtools/compile_schedule.py
 
+SCHEDULE_COMP_FLAGS :=
+
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
@@ -410,7 +412,7 @@ build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
 
 %.schedule.inc: %.schedule
-	$(SCHEDULE_COMP) $< -o $@
+	$(SCHEDULE_COMP) $(SCHEDULE_COMP_FLAGS) $< -o $@
 
 -include $(DEP_FILES)
 

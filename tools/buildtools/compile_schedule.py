@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 # TODO: Check for repeated labels
+# TODO: think on a catchy name for the schedule language and the compiler
 
 from __future__ import annotations
 
@@ -18,6 +19,7 @@ import sys
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
+# TODO: remember to change this to False/convert it into a flag
 DEBUG = True
 
 def debugPrint(*args, **kwargs):
@@ -25,18 +27,22 @@ def debugPrint(*args, **kwargs):
         return
     eprint(*args, **kwargs)
 
-def fatalError(message: str, filename: str, lineNumber: int, columnNumber: int, funcSection: str, **kwargs) -> NoReturn:
+def fatalError(message: str, filename: str, lineNumber: int, columnNumber: int, **kwargs) -> NoReturn:
+    # Print the filename/linenumber in a format that some IDEs can follow by ctrl-click on them
     eprint(f"Error: {message}. At {filename}:{lineNumber}:{columnNumber}")
 
-    frame = sys._getframe().f_back
-    if frame is None:
-        funcName = "(nofunc)"
-    else:
-        funcName = frame.f_code.co_name
-    debugPrint(f" {funcName}: {funcSection}")
+    if DEBUG:
+        # Get the info from the caller
+        frame = sys._getframe().f_back
+        if frame is not None:
+            funcName = frame.f_code.co_name
+            debugPrint(f" Halted from: {funcName} at {frame.f_code.co_filename}:{frame.f_lineno}")
 
-    for key, value in kwargs.items():
-        debugPrint(f"  {key}: {value}")
+        for key, value in kwargs.items():
+            debugPrint(f"  {key}: {value}")
+
+    # TODO: Add fun error messages
+
     exit(1)
 
 class TokenType(enum.Enum):
@@ -152,7 +158,11 @@ regex_individualTokens = re.compile(r"(?P<individual>[\{\}])")
 @dataclasses.dataclass
 class Token:
     tokenType: TokenType
+
+    # The literal read from the input. Some token types don't have a fixed literal, like LABEL or ARGS
     tokenLiteral: str
+
+    # Track the token position on the original file, for better error messages
     filename: str
     lineNumber: int
     columnNumber: int
@@ -166,6 +176,7 @@ class Token:
     def newFromTokenTypePreserveLiteral(self, newType: TokenType) -> Token:
         return Token(newType, self.tokenLiteral, self.filename, self.lineNumber, self.columnNumber)
 
+# Allows to know which token will be the next one, even with recursive functions
 class TokenIterator:
     def __init__(self, tokens: list[Token]):
         self.tokens = list(tokens)
@@ -185,6 +196,9 @@ class TokenIterator:
 
     def remainingTokens(self) -> int:
         return len(self.tokens) - self.index
+
+    def reset(self) -> None:
+        self.index = 0
 
 
 # Strips comments
@@ -250,7 +264,7 @@ def preprocess(contents: str, filename: str) -> str:
 
     return result
 
-
+# Takes a preprocessed input and converts them into a list of tokens
 def tokenize(contents: str, filename: str) -> TokenIterator:
     tokens: list[Token] = []
     lineNumber = 1
@@ -262,7 +276,8 @@ def tokenize(contents: str, filename: str) -> TokenIterator:
         char = contents[i]
 
         if char == "(":
-            # Command arguments are handled in a special way
+            # Command arguments are handled in a special way,
+            # all the arguments are grouped together as a single token
             lineNumberStart = lineNumber
             columnNumberStart = columnNumber
 
@@ -286,7 +301,7 @@ def tokenize(contents: str, filename: str) -> TokenIterator:
                 subIndex += 1
 
             if not parenEndFound:
-                fatalError("Unterminated parenthesis", filename, lineNumber, columnNumber, "not parenEndFound", i=i, char=char)
+                fatalError("Unterminated parenthesis", filename, lineNumber, columnNumber, i=i, char=char)
             parenContents = contents[i+1:subIndex]
             tokens.append(Token(TokenType.ARGS, parenContents, filename, lineNumberStart, columnNumberStart))
 
@@ -311,12 +326,13 @@ def tokenize(contents: str, filename: str) -> TokenIterator:
                 literal = reMatch["individual"]
                 tokenType = tokenLiterals.get(literal)
             else:
-                fatalError(f"Unrecognized token found", filename, lineNumber, columnNumber, "no regex match", i=i, char=char)
+                fatalError(f"Unrecognized token found", filename, lineNumber, columnNumber, i=i, char=char)
 
             if tokenType is None:
-                fatalError(f"Unrecognized token '{literal}' found", filename, lineNumber, columnNumber, "tokenType is None", i=i, char=char)
+                fatalError(f"Unrecognized token '{literal}' found", filename, lineNumber, columnNumber, i=i, char=char)
             tokens.append(Token(tokenType, literal, filename, lineNumber, columnNumber))
 
+            # Calculate how long the found token is
             spanStart, spanEnd = reMatch.span()
             matchLen = spanEnd - spanStart
             columnNumber += matchLen
@@ -326,14 +342,18 @@ def tokenize(contents: str, filename: str) -> TokenIterator:
         i += 1
     return TokenIterator(tokens)
 
+# Tree
 @dataclasses.dataclass
 class Expression:
     token: Token
     args: Token|None = None
 
+    # The body of an `if` check
     left: list[Expression] = dataclasses.field(default_factory=list)
+    # The body of an `else`
     right: list[Expression] = dataclasses.field(default_factory=list)
 
+    # This expression follows a `not` operator
     negated: bool = False
 
     def print(self, depth=0):
@@ -359,6 +379,7 @@ class Expression:
             print(f"{spaces}}}")
 
 
+# Parses the tokens into a basic AST
 def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Expression]:
     exprs: list[Expression] = []
 
@@ -371,42 +392,26 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
 
         if token.tokenType == TokenType.ARGS:
             if currentExpr is None or currentExpr.args is not None:
-                fatalError(f"Invalid syntax, args following invalid token", inputPath, token.lineNumber, token.columnNumber, "ARGS", i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
+                fatalError(f"Invalid syntax, args following invalid token", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
             currentExpr.args = token
 
         elif not tokenProperties.isExtraToken or token.tokenType == TokenType.NOT:
-            if currentExpr is not None and currentExpr.token.getProperties().isConditionalBranch:
+            if currentExpr is not None and currentExpr.token.getProperties().isAnyBranch:
                 if len(currentExpr.left) == 0:
-                    eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                    debugPrint(" makeTree: isExtraToken")
-                    debugPrint(f" i: {i}")
-                    debugPrint(f" depth: {depth}")
-                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                    debugPrint(f" foundElse: {foundElse}")
-                    exit(1)
+                    fatalError(f"invalid syntax", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
 
             negate = False
             if token.tokenType == TokenType.NOT:
                 negate = True
+
+                # Get the token that is being negated
                 tokenAux = tokens.get()
                 if tokenAux is None:
-                    eprint(f"Error: `not` operator followed by nothing at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                    debugPrint(" makeTree: NOT: tokenAux is None")
-                    debugPrint(f" i: {i}")
-                    debugPrint(f" depth: {depth}")
-                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                    debugPrint(f" foundElse: {foundElse}")
-                    exit(1)
+                    fatalError(f"`not` operator followed by nothing", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
                 token = tokenAux
                 tokenProperties = token.getProperties()
                 if tokenProperties.isExtraToken:
-                    eprint(f"Error: `not` operator followed invalid token at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                    debugPrint(" makeTree: NOT: isExtraToken")
-                    debugPrint(f" i: {i}")
-                    debugPrint(f" depth: {depth}")
-                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                    debugPrint(f" foundElse: {foundElse}")
-                    exit(1)
+                    fatalError(f"`not` operator followed by invalid `{token.tokenLiteral}` token", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
 
             currentExpr = Expression(token)
             currentExpr.negated = negate
@@ -417,77 +422,38 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
 
         elif token.tokenType == TokenType.ELSE:
             if currentExpr is None or currentExpr.args is None or foundElse:
-                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                debugPrint(" makeTree: ELSE")
-                debugPrint(f" i: {i}")
-                debugPrint(f" depth: {depth}")
-                debugPrint(f" token: {token}")
-                debugPrint(f" current expression: {currentExpr}")
-                debugPrint(f" foundElse: {foundElse}")
-                exit(1)
+                fatalError(f"Invalid syntax", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
             foundElse = True
 
             # Peek next token
             nextToken = tokens.get()
             if nextToken is None:
-                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                eprint(f"    missing expression after `else`")
-                debugPrint(" makeTree: ELSE")
-                debugPrint(f" i: {i}")
-                debugPrint(f" depth: {depth}")
-                debugPrint(f" token: {token}")
-                debugPrint(f" current expression: {currentExpr}")
-                debugPrint(f" foundElse: {foundElse}")
-                exit(1)
+                fatalError(f"Invalid syntax: missing expression after `{token.tokenLiteral}`", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
 
             tokens.unget()
             if nextToken.tokenType != TokenType.BRACE_OPEN:
-                # Else with no braces, try to parse it
+                # `else` with no braces, try to parse it
                 if len(currentExpr.right) != 0:
-                    eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                    debugPrint(" makeTree: BRACE_OPEN foundElse")
-                    debugPrint(f" i: {i}")
-                    debugPrint(f" depth: {depth}")
-                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                    debugPrint(f" foundElse: {foundElse}")
-                    exit(1)
-                subExprs = makeTree(tokens, inputPath, depth=depth+1)
-                currentExpr.right = subExprs
+                    fatalError(f"Invalid syntax", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
+                # Instead of storing the `else` as its own token, just store it as part of the corresponding `if` check
+                currentExpr.right = makeTree(tokens, inputPath, depth=depth+1)
                 return exprs
 
         elif token.tokenType == TokenType.BRACE_OPEN:
             # The body of an `if` or an `else`
 
             if currentExpr is None or currentExpr.args is None:
-                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                debugPrint(" makeTree: BRACE_OPEN")
-                debugPrint(f" i: {i}")
-                debugPrint(f" depth: {depth}")
-                debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                debugPrint(f" foundElse: {foundElse}")
-                exit(1)
+                fatalError(f"Invalid syntax: Opening braces doesn't follow a valid expression", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
 
-            subExprs = makeTree(tokens, inputPath, depth=depth+1)
             if foundElse:
                 if len(currentExpr.right) != 0:
-                    eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                    debugPrint(" makeTree: BRACE_OPEN foundElse")
-                    debugPrint(f" i: {i}")
-                    debugPrint(f" depth: {depth}")
-                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                    debugPrint(f" foundElse: {foundElse}")
-                    exit(1)
-                currentExpr.right = subExprs
+                    fatalError(f"Invalid syntax: Double body for an `else`", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
+                # Instead of storing the `else` as its own token, just store it as part of the corresponding `if` check
+                currentExpr.right = makeTree(tokens, inputPath, depth=depth+1)
             else:
                 if len(currentExpr.left) != 0:
-                    eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                    debugPrint(" makeTree: BRACE_OPEN not foundElse")
-                    debugPrint(f" i: {i}")
-                    debugPrint(f" depth: {depth}")
-                    debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                    debugPrint(f" foundElse: {foundElse}")
-                    exit(1)
-                currentExpr.left = subExprs
+                    fatalError(f"Invalid syntax: Double body for an `if_`", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
+                currentExpr.left = makeTree(tokens, inputPath, depth=depth+1)
 
         elif token.tokenType == TokenType.BRACE_CLOSE:
             if len(exprs) == 0:
@@ -495,38 +461,21 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
             return exprs
 
         elif token.tokenType == TokenType.LABEL:
+            # We need to check the token following a label is valid
             nextToken = tokens.get()
             tokens.unget()
             if nextToken is None:
-                eprint(f"Error: label followed by nothing at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                debugPrint(" makeTree: LABEL, nextToken is None")
-                debugPrint(f" i: {i}")
-                debugPrint(f" depth: {depth}")
-                debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                debugPrint(f" foundElse: {foundElse}")
-                exit(1)
+                fatalError(f"Labels should be followed by another valid expression", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
             if nextToken.tokenType == TokenType.LABEL:
-                eprint(f"Error: label followed by another label '{nextToken.tokenLiteral}' at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                debugPrint(" makeTree: LABEL, nextToken == LABEL")
-                debugPrint(f" i: {i}")
-                debugPrint(f" depth: {depth}")
-                debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                debugPrint(f" foundElse: {foundElse}")
-                exit(1)
+                fatalError(f"Labels can't be followed by another label", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
             if nextToken.getProperties().isExtraToken:
-                eprint(f"Error: label followed by not admitted token '{nextToken.tokenLiteral}' at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                debugPrint(" makeTree: NOT isExtraToken")
-                debugPrint(f" i: {i}")
-                debugPrint(f" depth: {depth}")
-                debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                debugPrint(f" foundElse: {foundElse}")
-                exit(1)
+                fatalError(f"Found label followed by not admitted token `{nextToken.tokenLiteral}`", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
             currentExpr = Expression(token)
             foundElse = False
             exprs.append(currentExpr)
 
         else:
-            fatalError(f"This code should be unreachable", inputPath, token.lineNumber, token.columnNumber, "UNREACHABLE", i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
+            fatalError(f"This code should be unreachable.\n Tell me dear user, is this a vanilla bug on the compiler?\n Or are you trying to implement new features and you forgot to add a check somewhere?\n Remember to enable the debug prints, they may help you either way.\n ", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
         i += 1
 
     return exprs
@@ -592,6 +541,7 @@ def normalizeTreeImpl(tree: list[Expression], postLabel: Expression, depth: int,
 
     return newTree, usedLabel
 
+# Searches for `if_` and `else`s with empty bodies and inserts in them an unconditional branch to avoid compiler-induced fallthroughs
 def normalizeTree(tree: list[Expression]) -> list[Expression]:
     postLabel = Expression(Token(TokenType.LABEL, ".autolabel.placeholder", "", -1, -1))
 
@@ -603,15 +553,20 @@ def normalizeTree(tree: list[Expression]) -> list[Expression]:
     return newTree
 
 
+# For linearizing a tree
 @dataclasses.dataclass
 class LabeledExpression:
+    # Index relative to the parent list
     index: int
 
     token: Token
     args: Token|None
 
+    # Label to jump into this command
     labelName: str
 
+    # True if this expression is allowed to change between `_s` and `_l` versions of the same command, like if the original script used a suffix-less version of the command
+    # False if the original script used a command with a `_s`/`_l` suffix
     canChange: bool
 
     # The branch target can be either a str (label) or None (no branch target)
@@ -627,9 +582,10 @@ class LabeledExpression:
             ret += f" -> {self.branchTarget}"
         return ret
 
+# Takes a tree and linearizes it, preserving the control flow by using labels (user-defined or autogenerated)
 def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[list[LabeledExpression], int]:
     result: list[LabeledExpression] = []
-    # To track labels
+    # To track the current label
     labelName: str|None = None
 
     for expr in tree:
@@ -641,23 +597,25 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
 
         tokenProperties = token.getProperties()
 
-        subResults = []
         left = expr.left
         right = expr.right
+
+        # Some commands need to invert theirs `if_`/`else` bodies to match the corresponding command
         if tokenProperties.needsToInvert:
             left, right = right, left
+
+        # Invert the bodies if the expression was negated
         if expr.negated:
             left, right = right, left
 
         currentIndex = index
         index += 1
 
-        sub, index = convertTreeIntoLabeledList(left, index)
+        # Linealize the left body
+        subResults, index = convertTreeIntoLabeledList(left, index)
 
-        subResults += sub
-
+        # Expressions always jump into the right body if their check is True
         targetLabel = None
-
         if len(right) == 1 and right[0].token.getProperties().isUnconditionalBranch:
             # If an `if_` only has 1 expression and it is a branch then incorporate it as part of the `if_`,
             # avoiding redundant branches
@@ -812,7 +770,7 @@ def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: 
 
 
 def main():
-    parser = argparse.ArgumentParser(description="")
+    parser = argparse.ArgumentParser(description="Compiler for the high level schedule language")
     parser.add_argument("input", help="Schedule script path", type=Path)
     parser.add_argument("-o", "--output", help="Output path. Will print to stdout if omitted", type=Path)
     parser.add_argument("-g", type=int, nargs="?", const=1, default=0, dest="debuggingLevel", metavar="level", help="Emit debugging information on the generated macros. Level 0 means no debugging information. Passing no level at all implies level 1. Defaults to level 0")
@@ -839,7 +797,7 @@ def main():
 
     tokens = tokenize(preprocessed, str(inputPath))
     tree = makeTree(tokens, str(inputPath))
-    assert tokens.remainingTokens() == 0
+    assert tokens.remainingTokens() == 0, tokens.remainingTokens()
     tree = normalizeTree(tree)
     if printTree:
         for expr in tree:
