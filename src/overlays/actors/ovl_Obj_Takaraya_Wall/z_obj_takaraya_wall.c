@@ -313,7 +313,7 @@ void ObjTakarayaWall_Init(Actor* thisx, PlayState* play) {
     do {
         ObjTakarayaWall_CarvePath(sTakarayaWallPathStack[sTakarayaWallPathStackDepth - 1].row,
                                   sTakarayaWallPathStack[sTakarayaWallPathStackDepth - 1].column);
-    } while (sTakarayaWallPathStackDepth >= 2);
+    } while (sTakarayaWallPathStackDepth > 1);
 
     for (j = 1; j < TAKARAYA_WALL_COLUMNS - 1; j++) {
         if (sTakarayaWallHeights[TAKARAYA_WALL_ROWS - 1][j] == -10.0f) {
