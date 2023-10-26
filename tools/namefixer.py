@@ -6,6 +6,7 @@ import argparse
 # all occurrences of keys will be replaced by associated value
 simpleReplace = {
     "PLAYER_AP_": "PLAYER_IA_",
+    "PLAYER_CSMODE_": "PLAYER_CSACTION_",
 }
 
 # all occurrences of keys will be replaced by associated value,
@@ -1095,7 +1096,8 @@ wordReplace = {
     "player->unk_386": "player->getItemDirection",
     "player->unk_388": "player->interactRangeActor",
     "player->unk_38C": "player->mountSide",
-    "player->unk_394": "player->csMode",
+    "player->csMode": "player->csAction",
+    "player->unk_394": "player->csAction",
     "player->swordQuads": "player->meleeWeaponQuads",
     "player->blureEffectIndex": "player->meleeWeaponEffectIndex",
     "player->unk_AD8": "player->underwaterTimer",
@@ -1349,8 +1351,6 @@ wordReplace = {
     "TRANS_TYPE_20": "TRANS_TYPE_FADE_DYNAMIC",
     "TRANS_TYPE_21": "TRANS_TYPE_CIRCLE",
     "TRANS_TYPE_22": "TRANS_TYPE_WIPE5",
-    "PLAYER_CSMODE_6": "PLAYER_CSMODE_END",
-    "PLAYER_CSMODE_7": "PLAYER_CSMODE_WAIT",
     "SUBS_CUTSCENE_SET_UNK_LINK_FIELDS": "SUBS_CUTSCENE_WITH_PLAYER",
     "SUBS_CUTSCENE_SET_FLAG": "SUBS_CUTSCENE_WITH_PLAYER_SET_FLAG",
 

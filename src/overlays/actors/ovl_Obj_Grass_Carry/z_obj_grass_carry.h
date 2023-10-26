@@ -5,17 +5,17 @@
 
 struct ObjGrassCarry;
 struct ObjGrass;
-struct ObjGrassStruct1_1;
+struct ObjGrassElement;
 
 typedef void (*ObjGrassCarryActionFunc)(struct ObjGrassCarry*, PlayState*);
 
 typedef struct ObjGrassCarry {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider;
-    /* 0x190 */ struct ObjGrass* unk_190;
-    /* 0x194 */ struct ObjGrassStruct1_1* unk_194;
-    /* 0x198 */ s16 unk_198;
-    /* 0x19A */ s16 unk_19A;
+    /* 0x190 */ struct ObjGrass* grassManager;
+    /* 0x194 */ struct ObjGrassElement* grassElem;
+    /* 0x198 */ s16 dropTable;
+    /* 0x19A */ s16 fallTimer;
     /* 0x19C */ ObjGrassCarryActionFunc actionFunc;
 } ObjGrassCarry; // size = 0x1A0
 

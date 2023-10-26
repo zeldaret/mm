@@ -9,9 +9,10 @@ struct EnLookNuts;
 typedef void (*EnLookNutsActionFunc)(struct EnLookNuts*, PlayState*);
 
 #define LOOKNUTS_GET_SPAWN_INDEX(thisx) (((thisx)->params >> 0xC) & 0xF)
-#define LOOKNUTS_GET_SCENE_FLAG(thisx) ((thisx)->params & 0x7F)
+#define LOOKNUTS_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define LOOKNUTS_GET_PATH_INDEX(thisx) (((thisx)->params >> 0x7) & 0x1F)
 
+#define LOOKNUTS_SWITCH_FLAG_NONE 0x7F
 #define LOOKNUTS_PATH_INDEX_NONE 0x1F
 
 typedef struct EnLookNuts {
