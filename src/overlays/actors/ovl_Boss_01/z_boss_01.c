@@ -1014,7 +1014,7 @@ void Boss01_IntroCutscene(Boss01* this, PlayState* play) {
             }
 
             Cutscene_StartManual(play, &play->csCtx);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1049,11 +1049,11 @@ void Boss01_IntroCutscene(Boss01* this, PlayState* play) {
             }
 
             if (this->cutsceneTimer == 40) {
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_21);
             }
 
             if (this->cutsceneTimer == 100) {
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_4);
             }
 
             if (this->cutsceneTimer >= 90) {
@@ -1149,7 +1149,7 @@ void Boss01_IntroCutscene(Boss01* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 SET_EVENTINF(EVENTINF_54);
             }
@@ -1202,7 +1202,7 @@ void Boss01_SummonBugsCutscene(Boss01* this, PlayState* play) {
             }
 
             Cutscene_StartManual(play, &play->csCtx);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1245,7 +1245,7 @@ void Boss01_SummonBugsCutscene(Boss01* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 player->actor.world.rot.y = player->actor.shape.rot.y = -0x8000;
                 player->actor.world.pos.x = 0.0f;
@@ -2133,7 +2133,7 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
             }
 
             Cutscene_StartManual(play, &play->csCtx);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_1);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -2250,7 +2250,7 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             }
             break;
