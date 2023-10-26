@@ -329,12 +329,12 @@ endseg
 
 beginseg
     name "map_i_static"
-    include "build/assets/archives/map_i_static/map_i_static.yar.o"
+    include "build/assets/c/archives/map_i_static/map_i_static.yar.o"
 endseg
 
 beginseg
     name "map_grand_static"
-    include "build/assets/archives/map_grand_static/map_grand_static.yar.o"
+    include "build/assets/c/archives/map_grand_static/map_grand_static.yar.o"
 endseg
 
 beginseg
