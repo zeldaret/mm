@@ -12,7 +12,7 @@ import dataclasses
 import enum
 from pathlib import Path
 import re
-from typing import Iterator
+from typing import NoReturn
 import sys
 
 def eprint(*args, **kwargs):
@@ -25,6 +25,19 @@ def debugPrint(*args, **kwargs):
         return
     eprint(*args, **kwargs)
 
+def fatalError(message: str, filename: str, lineNumber: int, columnNumber: int, funcSection: str, **kwargs) -> NoReturn:
+    eprint(f"Error: {message}. At {filename}:{lineNumber}:{columnNumber}")
+
+    frame = sys._getframe().f_back
+    if frame is None:
+        funcName = "(nofunc)"
+    else:
+        funcName = frame.f_code.co_name
+    debugPrint(f" {funcName}: {funcSection}")
+
+    for key, value in kwargs.items():
+        debugPrint(f"  {key}: {value}")
+    exit(1)
 
 class TokenType(enum.Enum):
     # Schedule commands
@@ -273,9 +286,7 @@ def tokenize(contents: str, filename: str) -> TokenIterator:
                 subIndex += 1
 
             if not parenEndFound:
-                eprint(f"Error: Unterminated parenthesis at {filename}:{lineNumber}:{columnNumber}")
-                debugPrint(f" internal index: {i}\n char: {char}")
-                exit(1)
+                fatalError("Unterminated parenthesis", filename, lineNumber, columnNumber, "not parenEndFound", i=i, char=char)
             parenContents = contents[i+1:subIndex]
             tokens.append(Token(TokenType.ARGS, parenContents, filename, lineNumberStart, columnNumberStart))
 
@@ -300,14 +311,10 @@ def tokenize(contents: str, filename: str) -> TokenIterator:
                 literal = reMatch["individual"]
                 tokenType = tokenLiterals.get(literal)
             else:
-                eprint(f"Error: Unrecognized token found at {filename}:{lineNumber}:{columnNumber}")
-                debugPrint(f" internal index: {i}\n char: {char}")
-                exit(1)
+                fatalError(f"Unrecognized token found", filename, lineNumber, columnNumber, "no regex match", i=i, char=char)
 
             if tokenType is None:
-                eprint(f"Error: Unrecognized token found '{literal}' at {filename}:{lineNumber}:{columnNumber}")
-                debugPrint(f" internal index: {i}\n char: {char}")
-                exit(1)
+                fatalError(f"Unrecognized token '{literal}' found", filename, lineNumber, columnNumber, "tokenType is None", i=i, char=char)
             tokens.append(Token(tokenType, literal, filename, lineNumber, columnNumber))
 
             spanStart, spanEnd = reMatch.span()
@@ -364,14 +371,7 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
 
         if token.tokenType == TokenType.ARGS:
             if currentExpr is None or currentExpr.args is not None:
-                eprint(f"Error: Invalid syntax at {inputPath}:{token.lineNumber}:{token.columnNumber}")
-                debugPrint(" makeTree: ARGS")
-                debugPrint(f" i: {i}")
-                debugPrint(f" depth: {depth}")
-                debugPrint(f" token: {token}\n current expression: {currentExpr}")
-                debugPrint(f" foundElse: {foundElse}")
-                exit(1)
-
+                fatalError(f"Invalid syntax, args following invalid token", inputPath, token.lineNumber, token.columnNumber, "ARGS", i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
             currentExpr.args = token
 
         elif not tokenProperties.isExtraToken or token.tokenType == TokenType.NOT:
@@ -526,14 +526,7 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
             exprs.append(currentExpr)
 
         else:
-            eprint("This code should be unreachable")
-            debugPrint(" makeTree: UNREACHABLE")
-            debugPrint(f" i: {i}")
-            debugPrint(f" depth: {depth}")
-            debugPrint(f" token: {token}\n current expression: {currentExpr}")
-            debugPrint(f" foundElse: {foundElse}")
-            exit(1)
-
+            fatalError(f"This code should be unreachable", inputPath, token.lineNumber, token.columnNumber, "UNREACHABLE", i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
         i += 1
 
     return exprs
