@@ -29,6 +29,7 @@
 #include "z64rumble.h"
 #include "z64shrink_window.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Tanron1/z_en_tanron1.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
@@ -162,16 +163,16 @@ typedef enum {
 } OdolwaDeathCsState;
 
 typedef enum {
-    /*  0 */ ODOLWA_DRAW_DMG_EFF_STATE_NONE,
-    /*  1 */ ODOLWA_DRAW_DMG_EFF_STATE_FIRE_INIT,
-    /*  2 */ ODOLWA_DRAW_DMG_EFF_STATE_FIRE_ACTIVE,
-    /* 10 */ ODOLWA_DRAW_DMG_EFF_STATE_FROZEN_INIT = 10,
-    /* 11 */ ODOLWA_DRAW_DMG_EFF_STATE_FROZEN_ACTIVE,
-    /* 20 */ ODOLWA_DRAW_DMG_EFF_STATE_LIGHT_ORB_INIT = 20,
-    /* 21 */ ODOLWA_DRAW_DMG_EFF_STATE_LIGHT_ORB_ACTIVE,
-    /* 30 */ ODOLWA_DRAW_DMG_EFF_STATE_BLUE_LIGHT_ORB_INIT = 30,
-    /* 40 */ ODOLWA_DRAW_DMG_EFF_STATE_ELECTRIC_SPARKS_INIT = 40,
-    /* 41 */ ODOLWA_DRAW_DMG_EFF_STATE_ELECTRIC_SPARKS_ACTIVE
+    /*  0 */ ODOLWA_DRAW_DMGEFF_STATE_NONE,
+    /*  1 */ ODOLWA_DRAW_DMGEFF_STATE_FIRE_INIT,
+    /*  2 */ ODOLWA_DRAW_DMGEFF_STATE_FIRE_ACTIVE,
+    /* 10 */ ODOLWA_DRAW_DMGEFF_STATE_FROZEN_INIT = 10,
+    /* 11 */ ODOLWA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE,
+    /* 20 */ ODOLWA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT = 20,
+    /* 21 */ ODOLWA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE,
+    /* 30 */ ODOLWA_DRAW_DMGEFF_STATE_BLUE_LIGHT_ORB_INIT = 30,
+    /* 40 */ ODOLWA_DRAW_DMGEFF_STATE_ELECTRIC_SPARKS_INIT = 40,
+    /* 41 */ ODOLWA_DRAW_DMGEFF_STATE_ELECTRIC_SPARKS_ACTIVE
 } OdolwaDrawDmgEffState;
 
 typedef enum {
@@ -721,9 +722,9 @@ u8 sOdolwaMusicStartTimer;
  */
 Vec3f sOdolwaDamageSfxPos;
 
-s32 sOdolwaSeed1;
-s32 sOdolwaSeed2;
-s32 sOdolwaSeed3;
+s32 sOdolwaRandSeed1;
+s32 sOdolwaRandSeed2;
+s32 sOdolwaRandSeed3;
 
 /**
  * Stores all of Odolwa's effects. Note that the first entry in this array is always reserved for the ring of fire, so
@@ -732,20 +733,20 @@ s32 sOdolwaSeed3;
 OdolwaEffect sOdolwaEffects[ODOLWA_EFFECT_COUNT];
 
 void Boss01_InitRand(s32 seedInit1, s32 seedInit2, s32 seedInit3) {
-    sOdolwaSeed1 = seedInit1;
-    sOdolwaSeed2 = seedInit2;
-    sOdolwaSeed3 = seedInit3;
+    sOdolwaRandSeed1 = seedInit1;
+    sOdolwaRandSeed2 = seedInit2;
+    sOdolwaRandSeed3 = seedInit3;
 }
 
 f32 Boss01_RandZeroOne(void) {
     // Wichmann-Hill algorithm
     f32 randFloat;
 
-    sOdolwaSeed1 = (sOdolwaSeed1 * 171) % 30269;
-    sOdolwaSeed2 = (sOdolwaSeed2 * 172) % 30307;
-    sOdolwaSeed3 = (sOdolwaSeed3 * 170) % 30323;
+    sOdolwaRandSeed1 = (sOdolwaRandSeed1 * 171) % 30269;
+    sOdolwaRandSeed2 = (sOdolwaRandSeed2 * 172) % 30307;
+    sOdolwaRandSeed3 = (sOdolwaRandSeed3 * 170) % 30323;
 
-    randFloat = (sOdolwaSeed1 / 30269.0f) + (sOdolwaSeed2 / 30307.0f) + (sOdolwaSeed3 / 30323.0f);
+    randFloat = (sOdolwaRandSeed1 / 30269.0f) + (sOdolwaRandSeed2 / 30307.0f) + (sOdolwaRandSeed3 / 30323.0f);
 
     while (randFloat >= 1.0f) {
         randFloat -= 1.0f;
@@ -912,7 +913,8 @@ void Boss01_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
-            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, 0.0f, 0.0f, 0, 0, 0, 1);
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, 0.0f, 0.0f, 0, 0, 0,
+                               ENDOORWARP1_FF_1);
             Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 0.0f, 250.0f, 0, 0, 0, BHEART_PARAM_NORMAL);
             Actor_Kill(&this->actor);
             return;
@@ -1376,10 +1378,10 @@ void Boss01_Wait(Boss01* this, PlayState* play) {
     // The thrust attack and double slash wait types select Odolwa's next action after their animations end rather than
     // waiting until the full 80 frames like every other wait type. The timer for the current action is not set to 0
     // here, though, which may cause some unintended behavior in Boss01_HorizontalSlash.
-    if (((this->timers[TIMER_CURRENT_ACTION] == 0) && ((this->waitType != ODOLWA_WAIT_THRUST_ATTACK)) &&
+    if (((this->timers[TIMER_CURRENT_ACTION] == 0) && (this->waitType != ODOLWA_WAIT_THRUST_ATTACK) &&
          (this->waitType != ODOLWA_WAIT_DOUBLE_SLASH)) ||
         (Animation_OnFrame(&this->skelAnime, this->animEndFrame) &&
-         (((this->waitType == ODOLWA_WAIT_THRUST_ATTACK)) || (this->waitType == ODOLWA_WAIT_DOUBLE_SLASH)))) {
+         ((this->waitType == ODOLWA_WAIT_THRUST_ATTACK) || (this->waitType == ODOLWA_WAIT_DOUBLE_SLASH)))) {
         if (this->actor.xzDistToPlayer <= 450.0f) {
             Boss01_SelectAttack(this, play, false);
         } else if (Rand_ZeroOne() < 0.5f) {
@@ -1984,26 +1986,26 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
 
                 switch (this->actor.colChkInfo.damageEffect) {
                     case ODOLWA_DMGEFF_FREEZE:
-                        this->drawDmgEffState = ODOLWA_DRAW_DMG_EFF_STATE_FROZEN_INIT;
+                        this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_FROZEN_INIT;
                         goto stunned;
 
                     case ODOLWA_DMGEFF_FIRE:
-                        this->drawDmgEffState = ODOLWA_DRAW_DMG_EFF_STATE_FIRE_INIT;
+                        this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_FIRE_INIT;
                         break;
 
                     case ODOLWA_DMGEFF_LIGHT_ORB:
-                        this->drawDmgEffState = ODOLWA_DRAW_DMG_EFF_STATE_LIGHT_ORB_INIT;
+                        this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT;
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
                                     this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0,
                                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                         break;
 
                     case ODOLWA_DMGEFF_ELECTRIC_STUN:
-                        this->drawDmgEffState = ODOLWA_DRAW_DMG_EFF_STATE_ELECTRIC_SPARKS_INIT;
+                        this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_ELECTRIC_SPARKS_INIT;
                         goto stunned;
 
                     case ODOLWA_DMGEFF_BLUE_LIGHT_ORB:
-                        this->drawDmgEffState = ODOLWA_DRAW_DMG_EFF_STATE_BLUE_LIGHT_ORB_INIT;
+                        this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_BLUE_LIGHT_ORB_INIT;
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
                                     this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 3,
                                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
@@ -2242,7 +2244,7 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
                 }
 
                 Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, warpX, 0.0f, warpZ, 0, 0, 0,
-                                   1);
+                                   ENDOORWARP1_FF_1);
                 this->cutsceneState = ODOLWA_DEATH_CS_STATE_DONE;
                 mainCam->eye = this->subCamEye;
                 mainCam->eyeNext = this->subCamEye;
@@ -2306,7 +2308,7 @@ void Boss01_Thaw(Boss01* this, PlayState* play) {
 
     SoundSource_PlaySfxAtFixedWorldPos(play, this->bodyPartsPos, 30, NA_SE_EV_ICE_BROKEN);
 
-    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos) * 2; i++) {
+    for (i = 0; i < ODOLWA_BODYPART_MAX * 2; i++) {
         velocity.x = Rand_CenteredFloat(7.0f);
         velocity.z = Rand_CenteredFloat(7.0f);
         velocity.y = Rand_ZeroFloat(6.0f) + 4.0f;
@@ -2501,13 +2503,13 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
     DECR(this->drawDmgEffTimer);
 
     switch (this->drawDmgEffState) {
-        case ODOLWA_DRAW_DMG_EFF_STATE_NONE:
+        case ODOLWA_DRAW_DMGEFF_STATE_NONE:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
             this->drawDmgEffTimer = 0;
             this->drawDmgEffAlpha = 0.0f;
             break;
 
-        case ODOLWA_DRAW_DMG_EFF_STATE_FIRE_INIT:
+        case ODOLWA_DRAW_DMGEFF_STATE_FIRE_INIT:
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffScale = 0.0f;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
@@ -2515,18 +2517,18 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffState++;
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 120, COLORFILTER_BUFFLAG_OPA, 60);
             // fallthrough
-        case ODOLWA_DRAW_DMG_EFF_STATE_FIRE_ACTIVE:
+        case ODOLWA_DRAW_DMGEFF_STATE_FIRE_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffAlpha, 1.0f, 0.02f);
                 if (this->drawDmgEffAlpha == 0.0f) {
-                    this->drawDmgEffState = ODOLWA_DRAW_DMG_EFF_STATE_NONE;
+                    this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_NONE;
                 }
             } else {
                 Math_ApproachF(&this->drawDmgEffScale, 1.0f, 0.1f, 0.5f);
             }
             break;
 
-        case ODOLWA_DRAW_DMG_EFF_STATE_FROZEN_INIT:
+        case ODOLWA_DRAW_DMGEFF_STATE_FROZEN_INIT:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
             this->drawDmgEffTimer = 40;
             this->drawDmgEffState++;
@@ -2534,10 +2536,10 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffScale = 0.0f;
             this->drawDmgEffFrozenSteamScale = 1.0f;
             // fallthrough
-        case ODOLWA_DRAW_DMG_EFF_STATE_FROZEN_ACTIVE:
+        case ODOLWA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Boss01_Thaw(this, play);
-                this->drawDmgEffState = ODOLWA_DRAW_DMG_EFF_STATE_NONE;
+                this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_NONE;
                 break;
             }
 
@@ -2549,25 +2551,25 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
             Math_ApproachF(&this->drawDmgEffFrozenSteamScale, 1.0f, 0.05f, 0.05f);
             break;
 
-        case ODOLWA_DRAW_DMG_EFF_STATE_LIGHT_ORB_INIT:
+        case ODOLWA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
             this->drawDmgEffTimer = 40;
             this->drawDmgEffScale = 1.0f;
             goto lightOrbInitCommon;
 
-        case ODOLWA_DRAW_DMG_EFF_STATE_BLUE_LIGHT_ORB_INIT:
+        case ODOLWA_DRAW_DMGEFF_STATE_BLUE_LIGHT_ORB_INIT:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS;
             this->drawDmgEffTimer = 40;
             this->drawDmgEffScale = 3.0f;
         lightOrbInitCommon:
-            this->drawDmgEffState = ODOLWA_DRAW_DMG_EFF_STATE_LIGHT_ORB_ACTIVE;
+            this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE;
             this->drawDmgEffAlpha = 1.0f;
             // fallthrough
-        case ODOLWA_DRAW_DMG_EFF_STATE_LIGHT_ORB_ACTIVE:
+        case ODOLWA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.03f);
                 if (this->drawDmgEffScale == 0.0f) {
-                    this->drawDmgEffState = ODOLWA_DRAW_DMG_EFF_STATE_NONE;
+                    this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_NONE;
                     this->drawDmgEffAlpha = 0.0f;
                 }
             } else {
@@ -2575,18 +2577,18 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
             }
             break;
 
-        case ODOLWA_DRAW_DMG_EFF_STATE_ELECTRIC_SPARKS_INIT:
+        case ODOLWA_DRAW_DMGEFF_STATE_ELECTRIC_SPARKS_INIT:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
             this->drawDmgEffTimer = 50;
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffScale = (KREG(18) * 0.1f) + 1.0f;
             this->drawDmgEffState++;
             // fallthrough
-        case ODOLWA_DRAW_DMG_EFF_STATE_ELECTRIC_SPARKS_ACTIVE:
+        case ODOLWA_DRAW_DMGEFF_STATE_ELECTRIC_SPARKS_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.05f);
                 if (this->drawDmgEffScale == 0.0f) {
-                    this->drawDmgEffState = ODOLWA_DRAW_DMG_EFF_STATE_NONE;
+                    this->drawDmgEffState = ODOLWA_DRAW_DMGEFF_STATE_NONE;
                     this->drawDmgEffAlpha = 0.0f;
                 }
             }
@@ -2716,9 +2718,17 @@ static s8 sLimbToColliderBodyParts[] = {
 };
 
 static Vec3f sLimbColliderOffsets[ODOLWA_COLLIDER_BODYPART_MAX] = {
-    { 1300.0f, 0.0f, 0.0f }, { 1000.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f },    { 1000.0f, 0.0f, 0.0f },
-    { 1000.0f, 0.0f, 0.0f }, { 1000.0f, 0.0f, 0.0f }, { 1000.0f, 0.0f, 0.0f }, { 1500.0f, 0.0f, 0.0f },
-    { 1500.0f, 0.0f, 0.0f }, { 1500.0f, 0.0f, 0.0f }, { 1500.0f, 0.0f, 0.0f },
+    { 1300.0f, 0.0f, 0.0f }, // ODOLWA_COLLIDER_BODYPART_HEAD
+    { 1000.0f, 0.0f, 0.0f }, // ODOLWA_COLLIDER_BODYPART_TORSO
+    { 0.0f, 0.0f, 0.0f },    // ODOLWA_COLLIDER_BODYPART_PELVIS
+    { 1000.0f, 0.0f, 0.0f }, // ODOLWA_COLLIDER_BODYPART_LEFT_UPPER_ARM
+    { 1000.0f, 0.0f, 0.0f }, // ODOLWA_COLLIDER_BODYPART_LEFT_FOREARM
+    { 1000.0f, 0.0f, 0.0f }, // ODOLWA_COLLIDER_BODYPART_RIGHT_UPPER_ARM
+    { 1000.0f, 0.0f, 0.0f }, // ODOLWA_COLLIDER_BODYPART_RIGHT_FOREARM
+    { 1500.0f, 0.0f, 0.0f }, // ODOLWA_COLLIDER_BODYPART_LEFT_THIGH
+    { 1500.0f, 0.0f, 0.0f }, // ODOLWA_COLLIDER_BODYPART_LEFT_SHIN
+    { 1500.0f, 0.0f, 0.0f }, // ODOLWA_COLLIDER_BODYPART_RIGHT_THIGH
+    { 1500.0f, 0.0f, 0.0f }, // ODOLWA_COLLIDER_BODYPART_RIGHT_SHIN
 };
 
 static Vec3f sShieldColliderOffset = { 0.0f, 500.0f, 0.0f };
@@ -2903,7 +2913,7 @@ void Boss01_Draw(Actor* thisx, PlayState* play) {
         Math_ApproachZeroF(&sOdolwaSwordTrailAlpha, 1.0f, 50.0f);
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, 15, this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ODOLWA_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     Boss01_DrawEffects(play);
@@ -2931,16 +2941,16 @@ void Boss01_Afterimage_Draw(Actor* thisx, PlayState* play) {
 /**
  * These four arrays encode circular shadow maps of various sizes. For an array of length N, the shadow map is N rows
  * tall, and each entry in the array describes the start and end point of the shadow within a given row (the exact
- * values of the start and end points is determined by the loops within Boss01_FillShadowTex). To illustrate using the
+ * values of the start and end points are determined by the loops within Boss01_FillShadowTex). To illustrate using the
  * sShadowSmallMap as an example:
- * -3 -2 -1  0  1  2
- *  -----------------
- *  0  0  1  1  1  0
- *  0  1  1  1  1  1
- *  1  1  1  1  1  1
- *  1  1  1  1  1  1
- *  0  1  1  1  1  1
- *  0  0  1  1  1  0
+ * -3 -2 -1  0  1
+ *  -------------
+ *  0  0  1  0  0
+ *  0  1  1  1  0
+ *  1  1  1  1  1
+ *  1  1  1  1  1
+ *  0  1  1  1  0
+ *  0  0  1  0  0
  */
 static s32 sShadowSmallMap[] = {
     1, 2, 3, 3, 2, 1,
@@ -3096,7 +3106,7 @@ void Boss01_DrawShadowTex(u8* tex, Boss01* this, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    alpha = (400.0f - this->actor.world.pos.y) * 0.0025f;
+    alpha = (400.0f - this->actor.world.pos.y) * (1.0f / 400.0f);
     alpha = CLAMP_MIN(alpha, 0.0f);
     alpha = CLAMP_MAX(alpha, 1.0f);
 
@@ -3473,7 +3483,7 @@ void Boss01_UpdateEffects(Boss01* this, PlayState* play) {
                         temp2 = (player->actor.world.pos.y + 20.0f) - effect->pos.y;
                         diffZ = player->actor.world.pos.z - effect->pos.z;
 
-                        if ((SQ(diffX) + SQ(diffZ) + SQ(temp2)) < 2500.0f) {
+                        if ((SQ(diffX) + SQ(diffZ) + SQ(temp2)) < SQ(50.0f)) {
                             func_800B8D50(play, NULL, 0.0f, Rand_ZeroFloat(65526.0f), 0.0f, 8);
                         }
 

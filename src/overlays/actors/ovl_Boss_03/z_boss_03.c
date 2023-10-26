@@ -231,25 +231,25 @@ void Boss03_UpdateSphereElement(s32 index, ColliderJntSph* collider, Vec3f* sphe
 
 /* Start of RNG section */
 
-s32 sGyorgSeed1;
-s32 sGyorgSeed2;
-s32 sGyorgSeed3;
+s32 sGyorgRandSeed1;
+s32 sGyorgRandSeed2;
+s32 sGyorgRandSeed3;
 
 void Boss03_InitRand(s32 seedInit1, s32 seedInit2, s32 seedInit3) {
-    sGyorgSeed1 = seedInit1;
-    sGyorgSeed2 = seedInit2;
-    sGyorgSeed3 = seedInit3;
+    sGyorgRandSeed1 = seedInit1;
+    sGyorgRandSeed2 = seedInit2;
+    sGyorgRandSeed3 = seedInit3;
 }
 
 f32 Boss03_RandZeroOne(void) {
     // Wichmann-Hill algorithm
     f32 randFloat;
 
-    sGyorgSeed1 = (sGyorgSeed1 * 171) % 30269;
-    sGyorgSeed2 = (sGyorgSeed2 * 172) % 30307;
-    sGyorgSeed3 = (sGyorgSeed3 * 170) % 30323;
+    sGyorgRandSeed1 = (sGyorgRandSeed1 * 171) % 30269;
+    sGyorgRandSeed2 = (sGyorgRandSeed2 * 172) % 30307;
+    sGyorgRandSeed3 = (sGyorgRandSeed3 * 170) % 30323;
 
-    randFloat = (sGyorgSeed1 / 30269.0f) + (sGyorgSeed2 / 30307.0f) + (sGyorgSeed3 / 30323.0f);
+    randFloat = (sGyorgRandSeed1 / 30269.0f) + (sGyorgRandSeed2 / 30307.0f) + (sGyorgRandSeed3 / 30323.0f);
     while (randFloat >= 1.0f) {
         randFloat -= 1.0f;
     }

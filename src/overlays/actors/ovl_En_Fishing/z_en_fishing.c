@@ -147,9 +147,9 @@ f32 sSubCamVelFactor;
 f32 D_80911F50;
 Vec3f sSinkingLureBasePos;
 f32 D_80911F64;
-s32 sFishingSeed1;
-s32 sFishingSeed2;
-s32 sFishingSeed3;
+s32 sFishingRandSeed1;
+s32 sFishingRandSeed2;
+s32 sFishingRandSeed3;
 FishingProp sPondProps[POND_PROP_COUNT];
 FishingGroupFish sGroupFishes[GROUP_FISH_COUNT];
 f32 sFishGroupAngle1;
@@ -405,20 +405,20 @@ void EnFishing_SetColliderElement(s32 index, ColliderJntSph* collider, Vec3f* po
 }
 
 void EnFishing_InitRand(s32 seedInit1, s32 seedInit2, s32 seedInit3) {
-    sFishingSeed1 = seedInit1;
-    sFishingSeed2 = seedInit2;
-    sFishingSeed3 = seedInit3;
+    sFishingRandSeed1 = seedInit1;
+    sFishingRandSeed2 = seedInit2;
+    sFishingRandSeed3 = seedInit3;
 }
 
 f32 EnFishing_RandZeroOne(void) {
     // Wichmann-Hill algorithm
     f32 randFloat;
 
-    sFishingSeed1 = (sFishingSeed1 * 171) % 30269;
-    sFishingSeed2 = (sFishingSeed2 * 172) % 30307;
-    sFishingSeed3 = (sFishingSeed3 * 170) % 30323;
+    sFishingRandSeed1 = (sFishingRandSeed1 * 171) % 30269;
+    sFishingRandSeed2 = (sFishingRandSeed2 * 172) % 30307;
+    sFishingRandSeed3 = (sFishingRandSeed3 * 170) % 30323;
 
-    randFloat = (sFishingSeed1 / 30269.0f) + (sFishingSeed2 / 30307.0f) + (sFishingSeed3 / 30323.0f);
+    randFloat = (sFishingRandSeed1 / 30269.0f) + (sFishingRandSeed2 / 30307.0f) + (sFishingRandSeed3 / 30323.0f);
     while (randFloat >= 1.0f) {
         randFloat -= 1.0f;
     }
