@@ -614,27 +614,28 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
         # Linealize the left body
         subResults, index = convertTreeIntoLabeledList(left, index)
 
-        # Expressions always jump into the right body if their check is True
+        # Expressions always jump into the right body if their check evaluates to True
         targetLabel = None
         if len(right) == 1 and right[0].token.getProperties().isUnconditionalBranch:
             # If an `if_` only has 1 expression and it is a branch then incorporate it as part of the `if_`,
             # avoiding redundant branches
-            sub = []
             branchExpr = right[0]
             if branchExpr.args is None:
-                eprint(f"Error: branch command without arguments? at {branchExpr.token.filename}:{branchExpr.token.lineNumber}:{branchExpr.token.columnNumber}")
-                debugPrint(f" convertTreeIntoLabeledList")
-                exit(1)
+                fatalError(f"Branch command without arguments?", branchExpr.token.filename, branchExpr.token.lineNumber, branchExpr.token.columnNumber)
             targetLabel = branchExpr.args.tokenLiteral.strip()
         else:
             sub, index = convertTreeIntoLabeledList(right, index)
             subResults += sub
             if len(sub) != 0:
+                # Get the label name of the first expression
                 targetLabel = sub[0].labelName
 
+        # If there's no user-defined label, then autogenerate one. Use dots to avoid name crashes with user-defined ones
         if labelName is None:
             labelName = f".index.{currentIndex}"
 
+        # Process generics into non-generic short version for now.
+        # A different pass will check if the short commands produced from generics will require a long version instead
         canChange = False
         if tokenProperties.isGeneric:
             canChange = True
@@ -643,11 +644,15 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
             token = token.newFromTokenTypePreserveLiteral(newTokenType)
             tokenProperties = token.getProperties()
 
+        # Take the target label of a `branch` command
         if tokenProperties.isUnconditionalBranch:
-            assert expr.args is not None, expr
+            if expr.args is None:
+                fatalError(f"Branch command `{expr.token.tokenLiteral}` without arguments?", expr.token.filename, expr.token.lineNumber, expr.token.columnNumber)
             targetLabel = expr.args.tokenLiteral
 
         linearExpr = LabeledExpression(currentIndex, token, expr.args, labelName, canChange)
+
+        # Reset the label, so we don't accidentally reuse it
         labelName = None
 
         if tokenProperties.isAnyBranch:
@@ -658,6 +663,17 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
     return result, index
 
 
+# Checks for every short command that was produced from a generic and calculate if the branch offset will
+# fit on the short command, if it doesn't then change the command into a long version.
+#
+# The algorithm is basic and linear, so if an already-processed expression's branch offset will no longer fit
+# because of latter processed expressions changed to long commands (which uses more bytes), then those won't
+# be re-updated.
+# To work-around this, this function returns a boolean on the second element of the returned tuple indicating
+# if this pass modified any expression, so this function needs to be called again until that boolean is False
+#
+# Returns a 2-tuple with a list of the expressions and a boolean indicating if any expression was modified.
+# Please note this function also modifies the parameter
 def removeGenerics(labeledList: list[LabeledExpression]) -> tuple[list[LabeledExpression], bool]:
     modifiedAnything = False
 
@@ -687,17 +703,13 @@ def removeGenerics(labeledList: list[LabeledExpression]) -> tuple[list[LabeledEx
                         subOffset += targetProperties.cmdLength
 
                     if targetIndex < 0 or targetExpression is None:
-                        eprint(f"Error: Not able to find target '{labeledExpr.branchTarget}' for expression '{labeledExpr.token.tokenLiteral}' at {labeledExpr.token.filename}:{labeledExpr.token.lineNumber}:{labeledExpr.token.columnNumber}")
-                        debugPrint(f" removeGenerics")
-                        exit(1)
+                        fatalError(f"Not able to find target '{labeledExpr.branchTarget}' for expression '{labeledExpr.token.tokenLiteral}'", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
 
                     diff = subOffset - nextOffset
                     if diff >= 0x7F or diff <= -0x80:
                         longTokenType = tokenProperties.longVersion
                         if longTokenType is None:
-                            eprint(f"Error: Command '{labeledExpr.token.tokenLiteral}' will require a branch way too big for a short branch, but there's no long equivalent. At {labeledExpr.token.filename}:{labeledExpr.token.lineNumber}:{labeledExpr.token.columnNumber}")
-                            debugPrint(f" removeGenerics")
-                            exit(1)
+                            fatalError(f"Command '{labeledExpr.token.tokenLiteral}' will require a branch way too big for a short branch, but there's no long equivalent", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
                         labeledExpr.token = labeledExpr.token.newFromTokenTypePreserveLiteral(longTokenType)
                         tokenProperties = labeledExpr.token.getProperties()
                         modifiedAnything = True
@@ -710,18 +722,15 @@ def removeGenerics(labeledList: list[LabeledExpression]) -> tuple[list[LabeledEx
 
 def getTargetOffset(labeledExpr: LabeledExpression, labeledList: list[LabeledExpression], offsetList: list[int]) -> int:
     if labeledExpr.branchTarget is None:
-        eprint(f"Internal Error: Command '{labeledExpr.token.tokenLiteral}' requested a target offset but it doesn't have a label. At {labeledExpr.token.filename}:{labeledExpr.token.lineNumber}:{labeledExpr.token.columnNumber}")
-        debugPrint(f" getTargetOffset")
-        exit(1)
+        fatalError(f"Command '{labeledExpr.token.tokenLiteral}' requested a target offset but it doesn't have a label", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
 
     for i, targetExpr in enumerate(labeledList):
         if labeledExpr.branchTarget == targetExpr.labelName:
             return offsetList[i]
 
-    eprint(f"Internal Error: Command '{labeledExpr.token.tokenLiteral}' requested label '{labeledExpr.branchTarget}', but it was not found. At {labeledExpr.token.filename}:{labeledExpr.token.lineNumber}:{labeledExpr.token.columnNumber}")
-    debugPrint(f" getTargetOffset")
-    exit(1)
+    fatalError(f"Command '{labeledExpr.token.tokenLiteral}' requested label '{labeledExpr.branchTarget}', but it was not found", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
 
+# Generate a string containing all the macros based on the labeled expression
 def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: int) -> str:
     result = ""
 
@@ -736,7 +745,7 @@ def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: 
     # To avoid reading outside of the list
     offsetList.append(offset)
 
-    # Use the same amount of 0 pads for every entry
+    # Use the same amount of pads for every entry
     offsetWidth = len(f"{offsetList[-2]:X}")
 
     for i, labeledExpr in enumerate(labeledList):
@@ -750,12 +759,26 @@ def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: 
 
         if tokenProperties.isUnconditionalBranch:
             targetOffset = getTargetOffset(labeledExpr, labeledList, offsetList)
+            diff = targetOffset - nextOffset
+            if tokenProperties.isShort:
+                if diff not in range(-0x80, 0x7F):
+                    fatalError(f"Trying to use a short command, but the branch offset is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
+            else:
+                if diff not in range(-0x8000, 0x7FFF):
+                    fatalError(f"Trying to use a long command, but the branch offset is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
             currentMacro += f"0x{targetOffset:0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
         else:
             if labeledExpr.args is not None:
                 currentMacro += f"{labeledExpr.args.tokenLiteral}"
             if tokenProperties.isConditionalBranch:
                 targetOffset = getTargetOffset(labeledExpr, labeledList, offsetList)
+                diff = targetOffset - nextOffset
+                if tokenProperties.isShort:
+                    if diff not in range(-0x80, 0x7F):
+                        fatalError(f"Trying to use a short command, but the branch offset is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
+                else:
+                    if diff not in range(-0x8000, 0x7FFF):
+                        fatalError(f"Trying to use a long command, but the branch offset is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
                 currentMacro += f", 0x{targetOffset:0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
         currentMacro += "),"
 
