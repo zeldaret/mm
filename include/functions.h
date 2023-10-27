@@ -312,8 +312,8 @@ s32 func_800B7128(Player* player);
 s32 func_800B715C(PlayState* play);
 void Actor_SetCameraHorseSetting(PlayState* play, Player* player);
 void Actor_MountHorse(PlayState* play, Player* player, Actor* horse);
-s32 func_800B724C(PlayState* play, Actor* actor, u8 csAction);
-s32 func_800B7298(PlayState* play, Actor* actor, u8 csAction);
+s32 Player_SetCsAction(PlayState* play, Actor* csActor, u8 csAction);
+s32 Player_SetCsActionWithHaltedActors(PlayState* play, Actor* csActor, u8 csAction);
 void func_800B72F8(DynaPolyActor* dyna, f32 extraPushForce, s16 yRotation);
 
 s32 Player_IsFacingActor(Actor* actor, s16 maxAngleDiff, PlayState* play);

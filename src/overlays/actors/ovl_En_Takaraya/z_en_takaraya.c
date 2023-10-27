@@ -322,7 +322,7 @@ void func_80ADF520(EnTakaraya* this, PlayState* play) {
 }
 
 void func_80ADF608(EnTakaraya* this, PlayState* play) {
-    func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
     this->unk2AD = true;
     this->actionFunc = func_80ADF654;
 }

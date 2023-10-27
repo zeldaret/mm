@@ -200,7 +200,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             }
 
             Cutscene_StartManual(play, &play->csCtx);
-            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -240,7 +240,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 this->unk_1D8 = 0.0f;
                 if (this->unk_1CA == 60) {
                     D_809F4970->unk_154++;
-                    func_800B7298(play, &this->actor, PLAYER_CSACTION_132);
+                    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_132);
                     player->actor.shape.rot.y = 0;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
                 }
@@ -333,7 +333,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 D_809F4970->unk_151 = 0;
             }
             break;
