@@ -5,6 +5,9 @@
 
 # TODO: Check for repeated labels
 # TODO: think on a catchy name for the schedule language and the compiler
+# TODO: Warning/Error for control flows that do not led to a return
+# TODO: consider adding optimization options
+# TODO: consider adding and/or operators
 
 from __future__ import annotations
 
@@ -421,7 +424,7 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
                     fatalError(f"`not` operator followed by nothing", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
                 token = tokenAux
                 tokenProperties = token.getProperties()
-                if tokenProperties.isExtraToken:
+                if not tokenProperties.isAnyBranch:
                     fatalError(f"`not` operator followed by invalid `{token.tokenLiteral}` token", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
 
             currentExpr = Expression(token)

@@ -1,26 +1,21 @@
 if_day (2) {
-    if_week_event_reg (WEEKEVENTREG_28_08) {
-        if_time_range (15, 10, 22, 0) {
-            return_none
-        } else {
-            return_s (12)
-        }
+    not if_week_event_reg (WEEKEVENTREG_28_08) {
+        return_s (12)
+    } else if_time_range (15, 10, 22, 0) {
+        return_none
     } else {
         return_s (12)
     }
-} else {
-    if_day (3) {
-        if_since_time (13, 0) {
-            if_week_event_reg (WEEKEVENTREG_51_08) {
-                if_before_time (22, 0) {
-                    return_none
-                } else {
-                    return_s (12)
-                }
-            } else {
-                return_s (12)
-            }
+}
+if_day (3) {
+    if_since_time (13, 0) {
+        not if_week_event_reg (WEEKEVENTREG_51_08) {
+            return_s (12)
+        } else if_since_time (22, 0) {
+            return_s (12)
+        } else {
+            return_none
         }
     }
-    return_s (12)
 }
+return_s (12)

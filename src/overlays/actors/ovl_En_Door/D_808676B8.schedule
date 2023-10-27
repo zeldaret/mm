@@ -1,13 +1,15 @@
-if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
-    return_none
-} else if_day (3) {
-    if_since_time (8, 0) {
+not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
+    if_day (3) {
+        if_before_time (8, 0) {
+            return_s (19)
+        } else {
+            return_none
+        }
+    } else if_time_range (8, 0, 20, 30) {
         return_none
     } else {
         return_s (19)
     }
-} else if_time_range (8, 0, 20, 30) {
-    return_none
 } else {
-    return_s (19)
+    return_none
 }
