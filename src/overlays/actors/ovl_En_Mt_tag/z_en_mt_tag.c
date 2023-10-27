@@ -29,15 +29,15 @@ typedef enum {
 } PlayerCheatStatus;
 
 ActorInit En_Mt_tag_InitVars = {
-    ACTOR_EN_MT_TAG,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnMttag),
-    (ActorFunc)EnMttag_Init,
-    (ActorFunc)EnMttag_Destroy,
-    (ActorFunc)EnMttag_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_MT_TAG,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnMttag),
+    /**/ EnMttag_Init,
+    /**/ EnMttag_Destroy,
+    /**/ EnMttag_Update,
+    /**/ NULL,
 };
 
 static s32 sStartingCheckpointPerSceneExitIndex[] = {
@@ -256,7 +256,7 @@ s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType
 void EnMttag_ShowFalseStartMessage(EnMttag* this, PlayState* play) {
     gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_OFF;
     Message_StartTextbox(play, 0xE95, NULL); // An entrant made a false start
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+    func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
     this->actionFunc = EnMttag_PotentiallyRestartRace;
 }
@@ -267,7 +267,7 @@ void EnMttag_ShowFalseStartMessage(EnMttag* this, PlayState* play) {
  */
 void EnMttag_ShowCantWinMessage(EnMttag* this, PlayState* play) {
     Message_StartTextbox(play, 0xE97, NULL); // You can't win now...
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+    func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
     this->actionFunc = EnMttag_HandleCantWinChoice;
 }
 
@@ -433,7 +433,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             play->transitionType = TRANS_TYPE_FADE_BLACK;
             gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
             Message_CloseTextbox(play);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
             Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
 
             CLEAR_EVENTINF(EVENTINF_10);
@@ -468,7 +468,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
         // Keep racing
         Audio_PlaySfx_MessageDecide();
         Message_CloseTextbox(play);
-        func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+        func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
         CLEAR_EVENTINF(EVENTINF_13);
         this->timer = 100;
         this->actionFunc = EnMttag_Race;

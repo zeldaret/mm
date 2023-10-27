@@ -37,15 +37,15 @@ static s16 D_80927388 = 0;
 static s16 D_8092738C = 0;
 
 ActorInit Obj_Kibako_InitVars = {
-    ACTOR_OBJ_KIBAKO,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjKibako),
-    (ActorFunc)ObjKibako_Init,
-    (ActorFunc)ObjKibako_Destroy,
-    (ActorFunc)ObjKibako_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_KIBAKO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjKibako),
+    /**/ ObjKibako_Init,
+    /**/ ObjKibako_Destroy,
+    /**/ ObjKibako_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

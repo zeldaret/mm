@@ -29,15 +29,15 @@ void func_80BC58E0(EnPoComposer* this, PlayState* play);
 
 #if 0
 ActorInit En_Po_Composer_InitVars = {
-    ACTOR_EN_PO_COMPOSER,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_PO_COMPOSER,
-    sizeof(EnPoComposer),
-    (ActorFunc)EnPoComposer_Init,
-    (ActorFunc)EnPoComposer_Destroy,
-    (ActorFunc)EnPoComposer_Update,
-    (ActorFunc)EnPoComposer_Draw,
+    /**/ ACTOR_EN_PO_COMPOSER,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_PO_COMPOSER,
+    /**/ sizeof(EnPoComposer),
+    /**/ EnPoComposer_Init,
+    /**/ EnPoComposer_Destroy,
+    /**/ EnPoComposer_Update,
+    /**/ EnPoComposer_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

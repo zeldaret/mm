@@ -36,15 +36,15 @@ void func_80C12744(EnThiefbird* this);
 void func_80C127F4(EnThiefbird* this, PlayState* play);
 
 ActorInit En_Thiefbird_InitVars = {
-    ACTOR_EN_THIEFBIRD,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_THIEFBIRD,
-    sizeof(EnThiefbird),
-    (ActorFunc)EnThiefbird_Init,
-    (ActorFunc)EnThiefbird_Destroy,
-    (ActorFunc)EnThiefbird_Update,
-    (ActorFunc)EnThiefbird_Draw,
+    /**/ ACTOR_EN_THIEFBIRD,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_THIEFBIRD,
+    /**/ sizeof(EnThiefbird),
+    /**/ EnThiefbird_Init,
+    /**/ EnThiefbird_Destroy,
+    /**/ EnThiefbird_Update,
+    /**/ EnThiefbird_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[3] = {

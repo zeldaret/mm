@@ -61,15 +61,15 @@ void func_80938E00(Actor* thisx, PlayState* play);
 void func_80938F50(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Bean_InitVars = {
-    ACTOR_OBJ_BEAN,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_MAMENOKI,
-    sizeof(ObjBean),
-    (ActorFunc)ObjBean_Init,
-    (ActorFunc)ObjBean_Destroy,
-    (ActorFunc)ObjBean_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_BEAN,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_MAMENOKI,
+    /**/ sizeof(ObjBean),
+    /**/ ObjBean_Init,
+    /**/ ObjBean_Destroy,
+    /**/ ObjBean_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
@@ -593,7 +593,7 @@ void func_809381C4(ObjBean* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         if (this->dyna.actor.csId >= 0) {
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_1);
         }
         this->unk_1E4 = 2;
         func_80938284(this);
@@ -750,7 +750,7 @@ void func_80938780(ObjBean* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         if (this->dyna.actor.csId >= 0) {
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_1);
         }
         this->unk_1B4 = 36;
         func_80937130(this);

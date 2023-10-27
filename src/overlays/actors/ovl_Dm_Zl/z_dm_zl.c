@@ -18,15 +18,15 @@ void DmZl_Draw(Actor* thisx, PlayState* play);
 void DmZl_DoNothing(DmZl* this, PlayState* play);
 
 ActorInit Dm_Zl_InitVars = {
-    ACTOR_DM_ZL,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_ZL4,
-    sizeof(DmZl),
-    (ActorFunc)DmZl_Init,
-    (ActorFunc)DmZl_Destroy,
-    (ActorFunc)DmZl_Update,
-    (ActorFunc)DmZl_Draw,
+    /**/ ACTOR_DM_ZL,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_ZL4,
+    /**/ sizeof(DmZl),
+    /**/ DmZl_Init,
+    /**/ DmZl_Destroy,
+    /**/ DmZl_Update,
+    /**/ DmZl_Draw,
 };
 
 typedef enum {

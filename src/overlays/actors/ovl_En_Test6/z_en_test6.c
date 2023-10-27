@@ -52,15 +52,15 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play);
 SoTCsAmmoDrops sSoTCsAmmoDrops[12];
 
 ActorInit En_Test6_InitVars = {
-    ACTOR_EN_TEST6,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTest6),
-    (ActorFunc)EnTest6_Init,
-    (ActorFunc)EnTest6_Destroy,
-    (ActorFunc)EnTest6_Update,
-    (ActorFunc)EnTest6_Draw,
+    /**/ ACTOR_EN_TEST6,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTest6),
+    /**/ EnTest6_Init,
+    /**/ EnTest6_Destroy,
+    /**/ EnTest6_Update,
+    /**/ EnTest6_Draw,
 };
 
 CutsceneData sDoubleSoTCsCamData[] = {
@@ -451,7 +451,7 @@ void EnTest6_StopInvertedSoTCutscene(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = false;
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
-    func_800B7298(play, NULL, PLAYER_CSMODE_END);
+    func_800B7298(play, NULL, PLAYER_CSACTION_END);
     EnTest6_DisableMotionBlur();
     Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
@@ -615,30 +615,30 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
 
     // Update Player Cutscene Animation
     if (this->screenFillAlpha != 0) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+        func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
     } else {
         if (this->timer == 90) {
             // Look side-to-side but downwards, with chin down
             // gPlayerAnim_al_elf_tobidasi
-            func_800B7298(play, NULL, PLAYER_CSMODE_66);
+            func_800B7298(play, NULL, PLAYER_CSACTION_66);
         }
 
         if (this->timer == 70) {
             // close eyes and sway body in circles
             // gPlayerAnim_alink_yurayura
-            func_800B7298(play, NULL, PLAYER_CSMODE_82);
+            func_800B7298(play, NULL, PLAYER_CSACTION_82);
         }
 
         if (this->timer == 30) {
             // Look side-to-side but upwards, with chin up
             // gPlayerAnim_alink_kyoro
-            func_800B7298(play, NULL, PLAYER_CSMODE_81);
+            func_800B7298(play, NULL, PLAYER_CSACTION_81);
         }
 
         if (this->timer == 5) {
             // Give a big nod of approval
             // gPlayerAnim_al_yes
-            func_800B7298(play, NULL, PLAYER_CSMODE_74);
+            func_800B7298(play, NULL, PLAYER_CSACTION_74);
         }
     }
 
@@ -705,7 +705,7 @@ void EnTest6_StopDoubleSoTCutscene(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = false;
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
-    func_800B7298(play, NULL, PLAYER_CSMODE_END);
+    func_800B7298(play, NULL, PLAYER_CSACTION_END);
     EnTest6_DisableMotionBlur();
     Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
@@ -864,23 +864,23 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
             break;
 
         case 98:
-            func_800B7298(play, NULL, PLAYER_CSMODE_64);
+            func_800B7298(play, NULL, PLAYER_CSACTION_64);
             break;
 
         case 68:
-            func_800B7298(play, NULL, PLAYER_CSMODE_65);
+            func_800B7298(play, NULL, PLAYER_CSACTION_65);
             break;
 
         case 52:
-            func_800B7298(play, NULL, PLAYER_CSMODE_88);
+            func_800B7298(play, NULL, PLAYER_CSACTION_88);
             break;
 
         case 43:
-            func_800B7298(play, NULL, PLAYER_CSMODE_114);
+            func_800B7298(play, NULL, PLAYER_CSACTION_114);
             break;
 
         case 38:
-            func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+            func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
             break;
 
         case 14:

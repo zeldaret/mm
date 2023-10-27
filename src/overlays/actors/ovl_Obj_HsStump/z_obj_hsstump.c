@@ -22,15 +22,15 @@ void ObjHsStump_SetupAppear(ObjHsStump* this, PlayState* play);
 void ObjHsStump_Appear(ObjHsStump* this, PlayState* play);
 
 ActorInit Obj_HsStump_InitVars = {
-    ACTOR_OBJ_HSSTUMP,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HSSTUMP,
-    sizeof(ObjHsStump),
-    (ActorFunc)ObjHsStump_Init,
-    (ActorFunc)ObjHsStump_Destroy,
-    (ActorFunc)ObjHsStump_Update,
-    (ActorFunc)ObjHsStump_Draw,
+    /**/ ACTOR_OBJ_HSSTUMP,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HSSTUMP,
+    /**/ sizeof(ObjHsStump),
+    /**/ ObjHsStump_Init,
+    /**/ ObjHsStump_Destroy,
+    /**/ ObjHsStump_Update,
+    /**/ ObjHsStump_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

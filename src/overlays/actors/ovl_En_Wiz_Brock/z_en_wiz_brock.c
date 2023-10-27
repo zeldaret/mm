@@ -22,15 +22,15 @@ void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play);
 s16 sPlatformIndex = 0;
 
 ActorInit En_Wiz_Brock_InitVars = {
-    ACTOR_EN_WIZ_BROCK,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_WIZ,
-    sizeof(EnWizBrock),
-    (ActorFunc)EnWizBrock_Init,
-    (ActorFunc)EnWizBrock_Destroy,
-    (ActorFunc)EnWizBrock_Update,
-    (ActorFunc)EnWizBrock_Draw,
+    /**/ ACTOR_EN_WIZ_BROCK,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_WIZ,
+    /**/ sizeof(EnWizBrock),
+    /**/ EnWizBrock_Init,
+    /**/ EnWizBrock_Destroy,
+    /**/ EnWizBrock_Update,
+    /**/ EnWizBrock_Draw,
 };
 
 void EnWizBrock_Init(Actor* thisx, PlayState* play) {

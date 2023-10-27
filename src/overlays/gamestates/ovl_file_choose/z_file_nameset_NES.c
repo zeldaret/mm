@@ -766,7 +766,7 @@ void FileSelect_UpdateOptionsMenu(GameState* thisx) {
             Sram_StartWriteToFlashDefault(sramCtx);
             this->configMode = CM_OPTIONS_WAIT_FOR_FLASH_SAVE;
         }
-        func_801A3D98(gSaveContext.options.audioSetting);
+        Audio_SetFileSelectSettings(gSaveContext.options.audioSetting);
         return;
     }
 

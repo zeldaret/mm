@@ -59,7 +59,7 @@ s16 Distortion_GetTimeLeft(void);
 s16 Distortion_GetType(void);
 void Distortion_RemoveRequest(s32 type);
 
-void Distortion_Init(PlayState* play);
+void Distortion_Init(struct PlayState* play);
 void Distortion_Update(void);
 
 #endif

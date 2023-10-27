@@ -5,6 +5,7 @@
 #include "PR/os.h"
 #include "z64item.h"
 #include "z64math.h"
+#include "unk.h"
 
 struct GameState;
 struct PlayState;

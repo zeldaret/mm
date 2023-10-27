@@ -35,15 +35,15 @@ s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 void EnTakaraya_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx);
 
 ActorInit En_Takaraya_InitVars = {
-    ACTOR_EN_TAKARAYA,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
-    sizeof(EnTakaraya),
-    (ActorFunc)EnTakaraya_Init,
-    (ActorFunc)EnTakaraya_Destroy,
-    (ActorFunc)EnTakaraya_Update,
-    (ActorFunc)EnTakaraya_Draw,
+    /**/ ACTOR_EN_TAKARAYA,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
+    /**/ sizeof(EnTakaraya),
+    /**/ EnTakaraya_Init,
+    /**/ EnTakaraya_Destroy,
+    /**/ EnTakaraya_Update,
+    /**/ EnTakaraya_Draw,
 };
 
 TexturePtr sEyesUpTextures[] = {
@@ -322,7 +322,7 @@ void func_80ADF520(EnTakaraya* this, PlayState* play) {
 }
 
 void func_80ADF608(EnTakaraya* this, PlayState* play) {
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+    func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
     this->unk2AD = true;
     this->actionFunc = func_80ADF654;
 }

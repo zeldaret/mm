@@ -43,15 +43,15 @@ typedef enum {
 } NejironRollDirection;
 
 ActorInit En_Baguo_InitVars = {
-    ACTOR_EN_BAGUO,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_GMO,
-    sizeof(EnBaguo),
-    (ActorFunc)EnBaguo_Init,
-    (ActorFunc)EnBaguo_Destroy,
-    (ActorFunc)EnBaguo_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_BAGUO,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_GMO,
+    /**/ sizeof(EnBaguo),
+    /**/ EnBaguo_Init,
+    /**/ EnBaguo_Destroy,
+    /**/ EnBaguo_Update,
+    /**/ NULL,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

@@ -276,15 +276,15 @@ Actor* Boss03_FindActorDblueMovebg(PlayState* play) {
 /* Start of Gyorg's Init and actionFuncs section */
 
 ActorInit Boss_03_InitVars = {
-    ACTOR_BOSS_03,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS03,
-    sizeof(Boss03),
-    (ActorFunc)Boss03_Init,
-    (ActorFunc)Boss03_Destroy,
-    (ActorFunc)Boss03_Update,
-    (ActorFunc)Boss03_Draw,
+    /**/ ACTOR_BOSS_03,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS03,
+    /**/ sizeof(Boss03),
+    /**/ Boss03_Init,
+    /**/ Boss03_Destroy,
+    /**/ Boss03_Update,
+    /**/ Boss03_Draw,
 };
 
 // The limbs referenced here are not used. The spheres are positioned manually by Boss03_PostLimbDraw
@@ -685,9 +685,9 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
          (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
-            player->actionVar2 = 101;
+            player->av2.actionVar2 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_NONE;
+            player->csAction = PLAYER_CSACTION_NONE;
         }
 
         func_809E344C(this, play);
@@ -781,9 +781,9 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
          (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
-            player->actionVar2 = 101;
+            player->av2.actionVar2 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_NONE;
+            player->csAction = PLAYER_CSACTION_NONE;
             Play_DisableMotionBlur();
         }
 
@@ -909,9 +909,9 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
     // Stop chewing when the timer runs out
     if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0) {
         if (&this->actor == player->actor.parent) {
-            player->actionVar2 = 101;
+            player->av2.actionVar2 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_NONE;
+            player->csAction = PLAYER_CSACTION_NONE;
             Play_DisableMotionBlur();
             func_800B8D50(play, NULL, 10.0f, this->actor.shape.rot.y, 0.0f, 0x20);
         }
@@ -1149,7 +1149,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (player->actor.world.pos.y < 1350.0f) {
                 Cutscene_StartManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1260,7 +1260,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
 
             if (this->csTimer == 5) {
                 // Rotates Player towards Gyorg
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_8);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_8);
             }
 
             this->subCamEye.x = player->actor.world.pos.x + 30.0f;
@@ -1371,7 +1371,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
 
                 func_80169AFC(play, this->subCamId, 0);
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
                 this->subCamId = SUB_CAM_ID_DONE;
 
                 func_809E344C(this, play);
@@ -1449,7 +1449,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Cutscene_StartManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_1);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1628,7 +1628,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
                 this->csState = 3;
                 Play_DisableMotionBlur();
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_INIT_OLD);
@@ -1662,7 +1662,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Cutscene_StartManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_1);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1723,7 +1723,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                         func_80169AFC(play, this->subCamId, 0);
                         this->subCamId = SUB_CAM_ID_DONE;
                         Cutscene_StopManual(play, &play->csCtx);
-                        func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                        func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
 
                         func_809E344C(this, play);
                         this->workTimer[WORK_TIMER_UNK1_A] = 50;
@@ -1751,9 +1751,9 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
     }
 
     if (&this->actor == player->actor.parent) {
-        player->actionVar2 = 101;
+        player->av2.actionVar2 = 101;
         player->actor.parent = NULL;
-        player->csMode = PLAYER_CSMODE_NONE;
+        player->csAction = PLAYER_CSACTION_NONE;
         Play_DisableMotionBlur();
     }
 
@@ -1903,9 +1903,9 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
                     Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_DAMAGE_OLD);
 
                     if (&this->actor == player->actor.parent) {
-                        player->actionVar2 = 101;
+                        player->av2.actionVar2 = 101;
                         player->actor.parent = NULL;
-                        player->csMode = PLAYER_CSMODE_NONE;
+                        player->csAction = PLAYER_CSACTION_NONE;
                         Play_DisableMotionBlur();
                     }
 
@@ -2156,7 +2156,7 @@ void Boss03_SetObject(PlayState* play, s16 objectId) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
     gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);

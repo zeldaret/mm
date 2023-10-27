@@ -4556,8 +4556,8 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     AudioOcarina_SetInstrument(sPlayerFormOcarinaInstruments[CUR_FORM]);
                     AudioOcarina_SetPlaybackSong((u8)msgCtx->songPlayed + 1, 1);
                     if (msgCtx->songPlayed != OCARINA_SONG_SCARECROW_SPAWN) {
-                        func_801A3000((u16)sOcarinaSongFanfares[msgCtx->songPlayed],
-                                      (u8)sOcarinaSongFanfareIoData[CUR_FORM]);
+                        Audio_PlayFanfareWithPlayerIOPort7((u16)sOcarinaSongFanfares[msgCtx->songPlayed],
+                                                           (u8)sOcarinaSongFanfareIoData[CUR_FORM]);
                         AudioSfx_MuteBanks(0x20);
                     }
                 }
@@ -5107,6 +5107,7 @@ void Message_Draw(PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
+
     polyOpa = POLY_OPA_DISP;
     nextDisplayList = Graph_GfxPlusOne(polyOpa);
     gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
@@ -5118,6 +5119,7 @@ void Message_Draw(PlayState* play) {
     gSPEndDisplayList(nextDisplayList++);
     Graph_BranchDlist(polyOpa, nextDisplayList);
     POLY_OPA_DISP = nextDisplayList;
+
     CLOSE_DISPS(gfxCtx);
 }
 

@@ -94,15 +94,15 @@ typedef enum {
 } EnInvadepohDemoUfoCueId;
 
 ActorInit En_Invadepoh_Demo_InitVars = {
-    ACTOR_EN_INVADEPOH_DEMO,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnInvadepohDemo),
-    (ActorFunc)EnInvadepohDemo_Init,
-    (ActorFunc)EnInvadepohDemo_Destroy,
-    (ActorFunc)EnInvadepohDemo_Update,
-    (ActorFunc)EnInvadepohDemo_Draw,
+    /**/ ACTOR_EN_INVADEPOH_DEMO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnInvadepohDemo),
+    /**/ EnInvadepohDemo_Init,
+    /**/ EnInvadepohDemo_Destroy,
+    /**/ EnInvadepohDemo_Update,
+    /**/ EnInvadepohDemo_Draw,
 };
 
 static s32 sCueTypes[EN_INVADEPOH_DEMO_TYPE_MAX] = {

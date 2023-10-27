@@ -25,15 +25,15 @@ void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
 ActorInit En_Look_Nuts_InitVars = {
-    ACTOR_EN_LOOK_NUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNK,
-    sizeof(EnLookNuts),
-    (ActorFunc)EnLookNuts_Init,
-    (ActorFunc)EnLookNuts_Destroy,
-    (ActorFunc)EnLookNuts_Update,
-    (ActorFunc)EnLookNuts_Draw,
+    /**/ ACTOR_EN_LOOK_NUTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNK,
+    /**/ sizeof(EnLookNuts),
+    /**/ EnLookNuts_Init,
+    /**/ EnLookNuts_Destroy,
+    /**/ EnLookNuts_Update,
+    /**/ EnLookNuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -359,7 +359,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
                     Audio_PlaySfx(NA_SE_SY_FOUND);
-                    func_800B7298(play, &this->actor, PLAYER_CSMODE_26);
+                    func_800B7298(play, &this->actor, PLAYER_CSACTION_26);
                     D_80A6862C = 1;
                     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;

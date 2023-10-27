@@ -36,15 +36,15 @@ static DemoTreLgtInfo D_808E1490[2] = {
 };
 
 ActorInit Demo_Tre_Lgt_InitVars = {
-    ACTOR_DEMO_TRE_LGT,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_BOX,
-    sizeof(DemoTreLgt),
-    (ActorFunc)DemoTreLgt_Init,
-    (ActorFunc)DemoTreLgt_Destroy,
-    (ActorFunc)DemoTreLgt_Update,
-    (ActorFunc)DemoTreLgt_Draw,
+    /**/ ACTOR_DEMO_TRE_LGT,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_BOX,
+    /**/ sizeof(DemoTreLgt),
+    /**/ DemoTreLgt_Init,
+    /**/ DemoTreLgt_Destroy,
+    /**/ DemoTreLgt_Update,
+    /**/ DemoTreLgt_Draw,
 };
 
 static CurveAnimationHeader* sBoxLightAnimations[] = {

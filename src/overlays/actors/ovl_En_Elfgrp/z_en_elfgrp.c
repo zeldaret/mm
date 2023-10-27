@@ -67,15 +67,15 @@ typedef enum ElfgrpSpawnedFairyTypes {
 } ElfgrpSpawnedFairyTypes;
 
 ActorInit En_Elfgrp_InitVars = {
-    ACTOR_EN_ELFGRP,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnElfgrp),
-    (ActorFunc)EnElfgrp_Init,
-    (ActorFunc)EnElfgrp_Destroy,
-    (ActorFunc)EnElfgrp_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_ELFGRP,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnElfgrp),
+    /**/ EnElfgrp_Init,
+    /**/ EnElfgrp_Destroy,
+    /**/ EnElfgrp_Update,
+    /**/ NULL,
 };
 
 /**

@@ -16,15 +16,15 @@ void BgInibsMovebg_Destroy(Actor* thisx, PlayState* play);
 void BgInibsMovebg_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Inibs_Movebg_InitVars = {
-    ACTOR_BG_INIBS_MOVEBG,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_INIBS_OBJECT,
-    sizeof(BgInibsMovebg),
-    (ActorFunc)BgInibsMovebg_Init,
-    (ActorFunc)BgInibsMovebg_Destroy,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)BgInibsMovebg_Draw,
+    /**/ ACTOR_BG_INIBS_MOVEBG,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_INIBS_OBJECT,
+    /**/ sizeof(BgInibsMovebg),
+    /**/ BgInibsMovebg_Init,
+    /**/ BgInibsMovebg_Destroy,
+    /**/ Actor_Noop,
+    /**/ BgInibsMovebg_Draw,
 };
 
 Gfx* sOpaDLists[] = { gTwinmoldArenaNormalModeSandDL, gTwinmoldArenaGiantModeSandDL };

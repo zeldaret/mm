@@ -37,15 +37,15 @@ void func_80BB3318(EnGeg* this, PlayState* play);
 void func_80BB347C(EnGeg* this, PlayState* play);
 
 ActorInit En_Geg_InitVars = {
-    ACTOR_EN_GEG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_OF1D_MAP,
-    sizeof(EnGeg),
-    (ActorFunc)EnGeg_Init,
-    (ActorFunc)EnGeg_Destroy,
-    (ActorFunc)EnGeg_Update,
-    (ActorFunc)EnGeg_Draw,
+    /**/ ACTOR_EN_GEG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_OF1D_MAP,
+    /**/ sizeof(EnGeg),
+    /**/ EnGeg_Init,
+    /**/ EnGeg_Destroy,
+    /**/ EnGeg_Update,
+    /**/ EnGeg_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -416,12 +416,12 @@ s32 func_80BB1D64(EnGeg* this, PlayState* play) {
 }
 
 void EnGeg_UpdateSkelAnime(EnGeg* this, PlayState* play) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
     SkelAnime_Update(&this->skelAnime);
 }
 
 void EnGeg_ChangeAnim(EnGeg* this, PlayState* play) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
 }
 

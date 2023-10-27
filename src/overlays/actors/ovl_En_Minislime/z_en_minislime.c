@@ -42,15 +42,15 @@ void EnMinislime_SetupGekkoThrow(EnMinislime* this);
 void EnMinislime_GekkoThrow(EnMinislime* this, PlayState* play);
 
 ActorInit En_Minislime_InitVars = {
-    ACTOR_EN_MINISLIME,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BIGSLIME,
-    sizeof(EnMinislime),
-    (ActorFunc)EnMinislime_Init,
-    (ActorFunc)EnMinislime_Destroy,
-    (ActorFunc)EnMinislime_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_MINISLIME,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BIGSLIME,
+    /**/ sizeof(EnMinislime),
+    /**/ EnMinislime_Init,
+    /**/ EnMinislime_Destroy,
+    /**/ EnMinislime_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

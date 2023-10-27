@@ -30,15 +30,15 @@ void func_808FAD1C(EnRr* this, PlayState* play);
 void func_808FB398(EnRr* this, PlayState* play);
 
 ActorInit En_Rr_InitVars = {
-    ACTOR_EN_RR,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_RR,
-    sizeof(EnRr),
-    (ActorFunc)EnRr_Init,
-    (ActorFunc)EnRr_Destroy,
-    (ActorFunc)EnRr_Update,
-    (ActorFunc)EnRr_Draw,
+    /**/ ACTOR_EN_RR,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_RR,
+    /**/ sizeof(EnRr),
+    /**/ EnRr_Init,
+    /**/ EnRr_Destroy,
+    /**/ EnRr_Update,
+    /**/ EnRr_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
@@ -299,7 +299,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
 
     if (player->stateFlags2 & PLAYER_STATE2_80) {
         player->actor.parent = NULL;
-        player->actionVar2 = 100;
+        player->av2.actionVar2 = 100;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->unk_1F0 = 110;
         this->unk_1F6 = 2500;
@@ -636,7 +636,7 @@ void func_808FB1C0(EnRr* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
     }
 
-    player->actionVar2 = 0;
+    player->av2.actionVar2 = 0;
     this->unk_1F0 = 8;
     this->unk_1EA--;
 
@@ -654,7 +654,7 @@ void func_808FB2C0(EnRr* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->unk_1E6--;
-    player->actionVar2 = 0;
+    player->av2.actionVar2 = 0;
     Math_StepToF(&player->actor.world.pos.x, this->unk_228.x, 30.0f);
     Math_StepToF(&player->actor.world.pos.y, this->unk_228.y + this->unk_218, 30.0f);
     Math_StepToF(&player->actor.world.pos.z, this->unk_228.z, 30.0f);

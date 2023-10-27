@@ -1,5 +1,5 @@
-#include "global.h"
+#include "ultra64.h"
 
 void osSpTaskYield(void) {
-    __osSpSetStatus(0x400);
+    __osSpSetStatus(SP_SET_YIELD);
 }

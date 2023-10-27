@@ -23,15 +23,15 @@ void func_80A60D10(BgSpoutFire* this, PlayState* play);
 void func_80A60E08(BgSpoutFire* this, PlayState* play);
 
 ActorInit Bg_Spout_Fire_InitVars = {
-    ACTOR_BG_SPOUT_FIRE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_FWALL,
-    sizeof(BgSpoutFire),
-    (ActorFunc)BgSpoutFire_Init,
-    (ActorFunc)BgSpoutFire_Destroy,
-    (ActorFunc)BgSpoutFire_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_SPOUT_FIRE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_FWALL,
+    /**/ sizeof(BgSpoutFire),
+    /**/ BgSpoutFire_Init,
+    /**/ BgSpoutFire_Destroy,
+    /**/ BgSpoutFire_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

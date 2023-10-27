@@ -33,15 +33,15 @@ void EnAob01_AfterRace_Talk(EnAob01* this, PlayState* play);
 s32 EnAob01_PlayerIsHoldingDog(EnAob01* this, PlayState* play);
 
 ActorInit En_Aob_01_InitVars = {
-    ACTOR_EN_AOB_01,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AOB,
-    sizeof(EnAob01),
-    (ActorFunc)EnAob01_Init,
-    (ActorFunc)EnAob01_Destroy,
-    (ActorFunc)EnAob01_Update,
-    (ActorFunc)EnAob01_Draw,
+    /**/ ACTOR_EN_AOB_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AOB,
+    /**/ sizeof(EnAob01),
+    /**/ EnAob01_Init,
+    /**/ EnAob01_Destroy,
+    /**/ EnAob01_Update,
+    /**/ EnAob01_Draw,
 };
 
 typedef enum {
@@ -448,7 +448,7 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
             if (this->stateFlags & ENAOB01_FLAG_PLAYER_CONFIRMED_CHOICE) {
                 this->stateFlags &= ~ENAOB01_FLAG_PLAYER_CONFIRMED_CHOICE;
                 Rupees_ChangeBy(-this->rupeesBet);
-                func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+                func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
                 play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnAob01_BeforeRace_StartRace;

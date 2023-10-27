@@ -42,15 +42,15 @@ s16 D_80929508 = 0;
 s16 D_8092950C = 0;
 
 ActorInit Obj_Tsubo_InitVars = {
-    ACTOR_OBJ_TSUBO,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjTsubo),
-    (ActorFunc)ObjTsubo_Init,
-    (ActorFunc)ObjTsubo_Destroy,
-    (ActorFunc)ObjTsubo_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_TSUBO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjTsubo),
+    /**/ ObjTsubo_Init,
+    /**/ ObjTsubo_Destroy,
+    /**/ ObjTsubo_Update,
+    /**/ NULL,
 };
 
 typedef struct {

@@ -70,15 +70,15 @@ void func_80BDA2E0(EnPamera* this, PlayState* play);
 void func_80BDA344(Actor* thisx, PlayState* play);
 
 ActorInit En_Pamera_InitVars = {
-    ACTOR_EN_PAMERA,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_PAMERA,
-    sizeof(EnPamera),
-    (ActorFunc)EnPamera_Init,
-    (ActorFunc)EnPamera_Destroy,
-    (ActorFunc)EnPamera_Update,
-    (ActorFunc)EnPamera_Draw,
+    /**/ ACTOR_EN_PAMERA,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_PAMERA,
+    /**/ sizeof(EnPamera),
+    /**/ EnPamera_Init,
+    /**/ EnPamera_Destroy,
+    /**/ EnPamera_Update,
+    /**/ EnPamera_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -556,9 +556,9 @@ void EnPamera_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80BDA604[this->unk_312]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(D_80BDA610[this->unk_314]));
-    gSPSegment(POLY_OPA_DISP++, 0x0A, SEGMENTED_TO_VIRTUAL(D_80BDA5FC[this->unk_310]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(D_80BDA604[this->unk_312]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_K0(D_80BDA610[this->unk_314]));
+    gSPSegment(POLY_OPA_DISP++, 0x0A, SEGMENTED_TO_K0(D_80BDA5FC[this->unk_310]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnPamera_OverrideLimbDraw, EnPamera_PostLimbDraw, &this->actor);
 

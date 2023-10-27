@@ -45,15 +45,15 @@ typedef enum {
 static s32 sNumPythonsDead = 0;
 
 ActorInit En_Dragon_InitVars = {
-    ACTOR_EN_DRAGON,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_UTUBO,
-    sizeof(EnDragon),
-    (ActorFunc)EnDragon_Init,
-    (ActorFunc)EnDragon_Destroy,
-    (ActorFunc)EnDragon_Update,
-    (ActorFunc)EnDragon_Draw,
+    /**/ ACTOR_EN_DRAGON,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_UTUBO,
+    /**/ sizeof(EnDragon),
+    /**/ EnDragon_Init,
+    /**/ EnDragon_Destroy,
+    /**/ EnDragon_Update,
+    /**/ EnDragon_Draw,
 };
 
 typedef enum {
@@ -542,13 +542,13 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
 
     if (this->grabTimer > sMaxGrabTimerPerPython[this->pythonIndex]) {
         if (this->state == DEEP_PYTHON_GRAB_STATE_START) {
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
             this->state = DEEP_PYTHON_GRAB_STATE_GRABBED;
         }
 
         play->unk_18770(play, player);
         player->actor.parent = &this->actor;
-        player->actionVar2 = 50;
+        player->av2.actionVar2 = 50;
         this->action = DEEP_PYTHON_ACTION_GRAB;
         Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_EAT);
         EnDragon_SetupAttack(this);
@@ -626,7 +626,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
         this->grabWaitTimer = 30;
         CutsceneManager_Stop(this->grabCsId);
         if (player->stateFlags2 & PLAYER_STATE2_80) {
-            player->actionVar2 = 100;
+            player->av2.actionVar2 = 100;
         }
 
         this->actor.flags &= ~ACTOR_FLAG_100000;

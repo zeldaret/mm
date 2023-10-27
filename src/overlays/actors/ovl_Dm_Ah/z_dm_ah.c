@@ -16,15 +16,15 @@ void DmAh_Update(Actor* thisx, PlayState* play);
 void DmAh_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Dm_Ah_InitVars = {
-    ACTOR_DM_AH,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AH,
-    sizeof(DmAh),
-    (ActorFunc)DmAh_Init,
-    (ActorFunc)DmAh_Destroy,
-    (ActorFunc)DmAh_Update,
-    (ActorFunc)DmAh_Draw,
+    /**/ ACTOR_DM_AH,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AH,
+    /**/ sizeof(DmAh),
+    /**/ DmAh_Init,
+    /**/ DmAh_Destroy,
+    /**/ DmAh_Update,
+    /**/ DmAh_Draw,
 };
 
 typedef enum {
