@@ -5,7 +5,6 @@
  */
 
 #include "z_en_insect.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000000
 
@@ -132,7 +131,7 @@ void EnInsect_Init(Actor* thisx, PlayState* play) {
     func_8091A8A0(this);
 
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_0527A0, &gameplay_keep_Anim_05140C, this->jointTable,
-                   this->morphTable, 24);
+                   this->morphTable, BUG_LIMB_MAX);
     Animation_Change(&this->skelAnime, &gameplay_keep_Anim_05140C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, 0.0f);
     Collider_InitJntSph(play, &this->collider);
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
@@ -278,7 +277,9 @@ void func_8091B07C(EnInsect* this, PlayState* play) {
             yaw -= 0x2000;
         }
 
+        //! FAKE:
         if (play) {}
+
         Math_ScaledStepToS(&this->actor.world.rot.y, yaw, 0x7D0);
     }
 

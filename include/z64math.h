@@ -40,6 +40,11 @@ typedef struct {
 } Vec3i; // size = 0xC
 
 typedef struct {
+    /* 0x0 */ f32 distance;
+    /* 0x4 */ s16 angle;
+} VecPolar; // size = 0x8
+
+typedef struct {
     /* 0x0 */ Vec3s center;
     /* 0x6 */ s16   radius;
 } Sphere16; // size = 0x8
@@ -49,8 +54,8 @@ typedef struct {
     /* 0xC */ f32   radius;
 } Spheref; // size = 0x10
 
-/* 
-The plane paramaters are of form `ax + by + cz + d = 0` 
+/*
+The plane paramaters are of form `ax + by + cz + d = 0`
 where `(a,b,c)` is the plane's normal vector and d is the originDist
  */
 typedef struct {
@@ -113,6 +118,17 @@ typedef enum {
     /* 1 */ OLIB_DIFF_OFFSET, // Sub `a` and `b` to dest, and also subs the yaw of `a` to the dest
     /* 2 */ OLIB_DIFF // Sub `a` and `b` to dest
 } OlibVec3fDiff;
+
+typedef float MtxF_t[4][4];
+typedef union {
+    MtxF_t mf;
+    struct {
+        float xx, yx, zx, wx,
+              xy, yy, zy, wy,
+              xz, yz, zz, wz,
+              xw, yw, zw, ww;
+    };
+} MtxF; // size = 0x40
 
 #define LERPIMP(v0, v1, t) ((v0) + (((v1) - (v0)) * (t)))
 #define F32_LERP(v0, v1, t) ((1.0f - (t)) * (f32)(v0) + (t) * (f32)(v1))

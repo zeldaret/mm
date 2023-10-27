@@ -7,7 +7,7 @@
 #include "z_en_ms.h"
 #include "objects/object_ms/object_ms.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnMs*)thisx)
 
@@ -53,7 +53,7 @@ static ColliderCylinderInitType1 sCylinderInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
@@ -61,7 +61,7 @@ void EnMs_Init(Actor* thisx, PlayState* play) {
     EnMs* this = THIS;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ms_Skel_003DC0, &object_ms_Anim_0005EC, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBeanSalesmanSkel, &gBeanSalesmanEatingAnim, this->jointTable,
                        this->morphTable, 9);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
@@ -92,7 +92,7 @@ void EnMs_Wait(EnMs* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnMs_Talk;
     } else if ((this->actor.xzDistToPlayer < 90.0f) && (ABS_ALT(yawDiff) < 0x2000)) {
-        func_800B8614(&this->actor, play, 90.0f);
+        Actor_OfferTalk(&this->actor, play, 90.0f);
     }
 }
 
@@ -149,7 +149,8 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
 void EnMs_Sell(EnMs* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.textId = 0;
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
+        Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+                                PLAYER_IA_NONE);
         this->actionFunc = EnMs_TalkAfterPurchase;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
@@ -161,7 +162,8 @@ void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play) {
         Message_ContinueTextbox(play, 0x936); // "You can plant 'em whenever you want [...]"
         this->actionFunc = EnMs_Talk;
     } else {
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+                                PLAYER_IA_MINUS1);
     }
 }
 

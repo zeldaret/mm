@@ -1,8 +1,8 @@
-#include "global.h"
+#include "ultra64.h"
 
-u32* osViGetCurrentFramebuffer(void) {
+void* osViGetCurrentFramebuffer(void) {
     register u32 prevInt = __osDisableInt();
-    u32* curBuf = __osViCurr->buffer;
+    void* curBuf = __osViCurr->buffer;
 
     __osRestoreInt(prevInt);
 

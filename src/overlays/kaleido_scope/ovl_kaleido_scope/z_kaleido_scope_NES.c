@@ -3,102 +3,97 @@
  * Overlay: ovl_kaleido_scope
  * Description: Pause Menu
  */
-#include "prevent_bss_reordering.h"
+
 #include "z_kaleido_scope.h"
-#include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
-#include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
+#include "archives/icon_item_static/icon_item_static_yar.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 #include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
 #include "interface/icon_item_vtx_static/icon_item_vtx_static.h"
-
-// iconItemSegment
-extern TexturePtr D_08064340; // gPauseMenuCursorTex
 
 // Page Textures (Background of Page):
 // Broken up into multiple textures.
 // Numbered by column/row.
 TexturePtr sMaskPageBgTextures[] = {
     // Column 0
-    0x08064440, // gPauseMasks00Tex
-    0x0806E440, // gPauseMasks01Tex
-    0x08077A40, // gPauseMasks02Tex
-    0x08081040, // gPauseMasks03Tex
-    0x0808A640, // gPauseMasks04Tex
+    gPauseMasks00Tex,
+    gPauseMasks01Tex,
+    gPauseMasks02Tex,
+    gPauseMasks03Tex,
+    gPauseMasks04Tex,
     // Column 1
     gPauseMasks10ENGTex,
-    0x0806EE40, // gPauseMasks11Tex
-    0x08078440, // gPauseMasks12Tex
-    0x08081A40, // gPauseMasks13Tex
-    0x0808B040, // gPauseMasks14Tex
+    gPauseMasks11Tex,
+    gPauseMasks12Tex,
+    gPauseMasks13Tex,
+    gPauseMasks14Tex,
     // Column 2
-    0x08065840, // gPauseMasks20Tex
-    0x0806F840, // gPauseMasks21Tex
-    0x08078E40, // gPauseMasks22Tex
-    0x08082440, // gPauseMasks23Tex
-    0x0808BA40, // gPauseMasks24Tex
+    gPauseMasks20Tex,
+    gPauseMasks21Tex,
+    gPauseMasks22Tex,
+    gPauseMasks23Tex,
+    gPauseMasks24Tex,
 };
 TexturePtr sItemPageBgTextures[] = {
     // Column 0
     gPauseSelectItem00ENGTex,
-    0x08070240, // gPauseSelectItem01Tex
-    0x08079840, // gPauseSelectItem02Tex
-    0x08082E40, // gPauseSelectItem03Tex
-    0x0808C440, // gPauseSelectItem04Tex
+    gPauseSelectItem01Tex,
+    gPauseSelectItem02Tex,
+    gPauseSelectItem03Tex,
+    gPauseSelectItem04Tex,
     // Column 1
     gPauseSelectItem10ENGTex,
-    0x08070C40, // gPauseSelectItem11Tex
-    0x0807A240, // gPauseSelectItem12Tex
-    0x08083840, // gPauseSelectItem13Tex
-    0x0808CE40, // gPauseSelectItem14Tex
+    gPauseSelectItem11Tex,
+    gPauseSelectItem12Tex,
+    gPauseSelectItem13Tex,
+    gPauseSelectItem14Tex,
     // Column 2
     gPauseSelectItem20ENGTex,
-    0x08071640, // gPauseSelectItem21Tex
-    0x0807AC40, // gPauseSelectItem22Tex
-    0x08084240, // gPauseSelectItem23Tex
-    0x0808D840, // gPauseSelectItem24Tex
+    gPauseSelectItem21Tex,
+    gPauseSelectItem22Tex,
+    gPauseSelectItem23Tex,
+    gPauseSelectItem24Tex,
 };
 TexturePtr sMapPageBgTextures[] = {
     // Column 0
-    0x08068040, // gPauseMap00Tex
-    0x08072040, // gPauseMap01Tex
-    0x0807B640, // gPauseMap02Tex
-    0x08084C40, // gPauseMap03Tex
-    0x0808E240, // gPauseMap04Tex
+    gPauseMap00Tex,
+    gPauseMap01Tex,
+    gPauseMap02Tex,
+    gPauseMap03Tex,
+    gPauseMap04Tex,
     // Column 1
     gPauseMap10ENGTex,
-    0x08072A40, // gPauseMap11Tex
-    0x0807C040, // gPauseMap12Tex
-    0x08085640, // gPauseMap13Tex
-    0x0808EC40, // gPauseMap14Tex
+    gPauseMap11Tex,
+    gPauseMap12Tex,
+    gPauseMap13Tex,
+    gPauseMap14Tex,
     // Column 2
-    0x08069440, // gPauseMap20Tex
-    0x08073440, // gPauseMap21Tex
-    0x0807CA40, // gPauseMap22Tex
-    0x08086040, // gPauseMap23Tex
-    0x0808F640, // gPauseMap24Tex
+    gPauseMap20Tex,
+    gPauseMap21Tex,
+    gPauseMap22Tex,
+    gPauseMap23Tex,
+    gPauseMap24Tex,
 };
 TexturePtr sQuestPageBgTextures[] = {
     // Column 0
     gPauseQuestStatus00ENGTex,
-    0x08073E40, // gPauseQuestStatus01Tex
-    0x0807D440, // gPauseQuestStatus02Tex
-    0x08086A40, // gPauseQuestStatus03Tex
-    0x08090040, // gPauseQuestStatus04Tex
+    gPauseQuestStatus01Tex,
+    gPauseQuestStatus02Tex,
+    gPauseQuestStatus03Tex,
+    gPauseQuestStatus04Tex,
     // Column 1
     gPauseQuestStatus10ENGTex,
-    0x08074840, // gPauseQuestStatus11Tex
-    0x0807DE40, // gPauseQuestStatus12Tex
-    0x08087440, // gPauseQuestStatus13Tex
-    0x08090A40, // gPauseQuestStatus14Tex
+    gPauseQuestStatus11Tex,
+    gPauseQuestStatus12Tex,
+    gPauseQuestStatus13Tex,
+    gPauseQuestStatus14Tex,
     // Column 2
     gPauseQuestStatus20ENGTex,
-    0x08075240, // gPauseQuestStatus21Tex
-    0x0807E840, // gPauseQuestStatus22Tex
-    0x08087E40, // gPauseQuestStatus23Tex
-    0x08091440, // gPauseQuestStatus24Tex
+    gPauseQuestStatus21Tex,
+    gPauseQuestStatus22Tex,
+    gPauseQuestStatus23Tex,
+    gPauseQuestStatus24Tex,
 };
 
 s16 gVtxPageMapWorldQuadsWidth[VTX_PAGE_MAP_WORLD_QUADS] = {
@@ -252,6 +247,7 @@ void Kaleido_LoadMapNameStatic(void* segment, u32 texIndex) {
     CmpDma_LoadFile(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0x400);
 }
 
+//! note: nothing from `map_name_static` is of size `0xA00` in US 1.0
 void Kaleido_LoadMapNameStaticLarge(void* segment, u32 texIndex) {
     CmpDma_LoadFile(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0xA00);
 }
@@ -2607,7 +2603,7 @@ void KaleidoScope_DrawCursor(PlayState* play) {
             Matrix_Translate(sCursorCirclesX[i], sCursorCirclesY[i], -50.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPPipeSync(POLY_OPA_DISP++);
-            gDPLoadTextureBlock(POLY_OPA_DISP++, &D_08064340, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
+            gDPLoadTextureBlock(POLY_OPA_DISP++, gPauseMenuCursorTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             gSPVertex(POLY_OPA_DISP++, &pauseCtx->cursorVtx[0], 4, 0);
@@ -2802,10 +2798,14 @@ void KaleidoScope_UpdateOpening(PlayState* play) {
     }
 }
 
+u16 sCursorPointsToOcarinaModes[] = {
+    OCARINA_MODE_WARP_TO_GREAT_BAY_COAST,  OCARINA_MODE_WARP_TO_ZORA_CAPE,        OCARINA_MODE_WARP_TO_SNOWHEAD,
+    OCARINA_MODE_WARP_TO_MOUNTAIN_VILLAGE, OCARINA_MODE_WARP_TO_SOUTH_CLOCK_TOWN, OCARINA_MODE_WARP_TO_MILK_ROAD,
+    OCARINA_MODE_WARP_TO_WOODFALL,         OCARINA_MODE_WARP_TO_SOUTHERN_SWAMP,   OCARINA_MODE_WARP_TO_IKANA_CANYON,
+    OCARINA_MODE_WARP_TO_STONE_TOWER,
+};
+
 void KaleidoScope_Update(PlayState* play) {
-    static u16 sCursorPointsToOcarinaModes[] = {
-        28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
-    };
     static s16 sUnpausedHudVisibility = HUD_VISIBILITY_IDLE;
     static s16 sNextMainState = PAUSE_MAIN_STATE_IDLE;
     static s16 sDelayTimer = 10;
@@ -2860,10 +2860,10 @@ void KaleidoScope_Update(PlayState* play) {
             size0 = SEGMENT_ROM_SIZE(icon_item_static_syms);
             CmpDma_LoadAllFiles((uintptr_t)SEGMENT_ROM_START(icon_item_static_yar), pauseCtx->iconItemSegment, size0);
 
-            gSegments[0x08] = VIRTUAL_TO_PHYSICAL(pauseCtx->iconItemSegment);
+            gSegments[0x08] = OS_K0_TO_PHYSICAL(pauseCtx->iconItemSegment);
 
-            for (itemId = 0; itemId <= ITEM_BOW_ARROW_FIRE; itemId++) {
-                if (!gPlayerFormItemRestrictions[(void)0, gSaveContext.save.playerForm][(s32)itemId]) {
+            for (itemId = 0; itemId <= ITEM_BOW_FIRE; itemId++) {
+                if (!gPlayerFormItemRestrictions[GET_PLAYER_FORM][(s32)itemId]) {
                     KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual(gItemIcons[(s32)itemId]), 0x400);
                 }
             }
@@ -2896,7 +2896,9 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemLangSegment + size2);
             func_8011552C(play, DO_ACTION_INFO);
-            if (((void)0, gSaveContext.worldMapArea) < 0x16) {
+
+            //! note: `worldMapArea` never set to a value other than 0
+            if (((void)0, gSaveContext.worldMapArea) < 22) {
                 Kaleido_LoadMapNameStaticLarge(pauseCtx->nameSegment + 0x400, ((void)0, gSaveContext.worldMapArea));
             }
 
@@ -3159,13 +3161,13 @@ void KaleidoScope_Update(PlayState* play) {
                         if (interfaceCtx->screenFillAlpha >= 255) {
                             interfaceCtx->screenFillAlpha = 255;
                             pauseCtx->state = PAUSE_STATE_OFF;
-                            Game_SetFramerateDivisor(&play->state, 3);
+                            GameState_SetFramerateDivisor(&play->state, 3);
                             R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_UNK4;
                             Object_LoadAll(&play->objectCtx);
                             BgCheck_InitCollisionHeaders(&play->colCtx, play);
                             STOP_GAMESTATE(&play->state);
                             SET_NEXT_GAMESTATE(&play->state, TitleSetup_Init, sizeof(TitleSetupState));
-                            func_801A4058(0x14);
+                            Audio_MuteAllSeqExceptSystemAndOcarina(20);
                             gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                             gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                         }
@@ -3316,7 +3318,7 @@ void KaleidoScope_Update(PlayState* play) {
                     pauseCtx->promptChoice = PAUSE_PROMPT_YES;
                     Audio_PlaySfx(NA_SE_SY_DECIDE);
                     pauseCtx->state = PAUSE_STATE_OFF;
-                    Game_SetFramerateDivisor(&play->state, 3);
+                    GameState_SetFramerateDivisor(&play->state, 3);
                     R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_UNK4;
                     Object_LoadAll(&play->objectCtx);
                     BgCheck_InitCollisionHeaders(&play->colCtx, play);
@@ -3349,7 +3351,7 @@ void KaleidoScope_Update(PlayState* play) {
         case PAUSE_STATE_GAMEOVER_7:
             if (sramCtx->status == 0) {
                 pauseCtx->state = PAUSE_STATE_OFF;
-                Game_SetFramerateDivisor(&play->state, 3);
+                GameState_SetFramerateDivisor(&play->state, 3);
                 R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_UNK4;
                 Object_LoadAll(&play->objectCtx);
                 BgCheck_InitCollisionHeaders(&play->colCtx, play);
@@ -3389,7 +3391,7 @@ void KaleidoScope_Update(PlayState* play) {
                     interfaceCtx->screenFillAlpha = 255;
 
                     pauseCtx->state = PAUSE_STATE_OFF;
-                    Game_SetFramerateDivisor(&play->state, 3);
+                    GameState_SetFramerateDivisor(&play->state, 3);
                     R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_UNK4;
                     Object_LoadAll(&play->objectCtx);
                     BgCheck_InitCollisionHeaders(&play->colCtx, play);
@@ -3485,7 +3487,7 @@ void KaleidoScope_Update(PlayState* play) {
                 pauseCtx->state = PAUSE_STATE_OWLWARP_6;
                 sPauseMenuVerticalOffset = -6240.0f;
                 Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
             } else if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
                 Audio_PlaySfx(NA_SE_SY_DECIDE);
@@ -3499,7 +3501,7 @@ void KaleidoScope_Update(PlayState* play) {
         case PAUSE_STATE_OWLWARP_CONFIRM:
             if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
                 msgCtx->msgLength = 0;
-                msgCtx->msgMode = 0;
+                msgCtx->msgMode = MSGMODE_NONE;
                 if (msgCtx->choiceIndex == 0) {
                     func_8011552C(play, DO_ACTION_NONE);
                     pauseCtx->state = PAUSE_STATE_OWLWARP_6;
@@ -3514,17 +3516,17 @@ void KaleidoScope_Update(PlayState* play) {
                 }
             } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
                 msgCtx->msgLength = 0;
-                msgCtx->msgMode = 0;
+                msgCtx->msgMode = MSGMODE_NONE;
                 pauseCtx->state = PAUSE_STATE_OWLWARP_SELECT;
                 Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
             } else if (CHECK_BTN_ALL(input->press.button, BTN_START)) {
                 msgCtx->msgLength = 0;
-                msgCtx->msgMode = 0;
+                msgCtx->msgMode = MSGMODE_NONE;
                 func_8011552C(play, DO_ACTION_NONE);
                 pauseCtx->state = PAUSE_STATE_OWLWARP_6;
                 sPauseMenuVerticalOffset = -6240.0f;
                 Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
             }
             break;
@@ -3582,7 +3584,7 @@ void KaleidoScope_Update(PlayState* play) {
 
         case PAUSE_STATE_UNPAUSE_CLOSE:
             pauseCtx->state = PAUSE_STATE_OFF;
-            Game_SetFramerateDivisor(&play->state, 3);
+            GameState_SetFramerateDivisor(&play->state, 3);
             R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_UNK4;
             Object_LoadAll(&play->objectCtx);
             BgCheck_InitCollisionHeaders(&play->colCtx, play);
@@ -3599,7 +3601,7 @@ void KaleidoScope_Update(PlayState* play) {
             MsgEvent_SendNullTask();
             func_80143324(play, &play->skyboxCtx, play->skyboxId);
 
-            if ((msgCtx->msgMode != 0) && (msgCtx->currentTextId == 0xFF)) {
+            if ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId == 0xFF)) {
                 func_80115844(play, DO_ACTION_STOP);
                 func_8011552C(play, DO_ACTION_STOP);
                 Interface_SetHudVisibility(HUD_VISIBILITY_A_B_C);
@@ -3608,7 +3610,10 @@ void KaleidoScope_Update(PlayState* play) {
             }
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(sUnpausedHudVisibility);
-            func_801A3A7C(0);
+            Audio_SetPauseState(false);
+            break;
+
+        default:
             break;
     }
 

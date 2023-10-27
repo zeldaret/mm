@@ -33,7 +33,7 @@ struct CollisionPoly;
 #define rgEnvColorG regs[8]
 #define rgEnvColorB regs[9]
 #define rgEnvColorA regs[10]
-#define rgObjBankIndex regs[11]
+#define rgObjectSlot regs[11]
 
 typedef struct {
     /* 0x0 */ u8 active;

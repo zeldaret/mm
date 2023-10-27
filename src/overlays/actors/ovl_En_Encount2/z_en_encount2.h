@@ -7,6 +7,10 @@ struct EnEncount2;
 
 typedef void (*EnEncount2ActionFunc)(struct EnEncount2*, PlayState*);
 
+#define ENCOUNT2_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
+
+#define ENCOUNT2_SWITCH_FLAG_NONE 0x7F
+
 typedef struct EnEncount2Effect{
    /* 0x00 */ u8 isEnabled;
    /* 0x04 */ Vec3f pos;
@@ -32,7 +36,5 @@ typedef struct EnEncount2 {
     /* 0x0190 */ ColliderJntSphElement colElement;
     /* 0x01D0 */ EnEncount2Effect effects[EN_ENCOUNT2_EFFECT_COUNT];
 } EnEncount2; // size = 0x2A70
-
-#define ENCOUNT2_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 #endif // Z_EN_ENCOUNT2_H

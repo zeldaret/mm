@@ -5,9 +5,10 @@
  */
 
 #include "z_en_bat.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_bat/object_bat.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnBat*)thisx)
 
@@ -135,7 +136,7 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
     this->animationFrame = Rand_ZeroOne() * 9.0f;
 
     this->paramFlags = BAD_BAT_GET_PARAMFLAGS(thisx);
-    this->switchFlag = BAD_BAT_GET_SWITCHFLAG(thisx);
+    this->switchFlag = BAD_BAT_GET_SWITCH_FLAG(thisx);
     thisx->params = BAD_BAT_GET_TYPE(thisx);
 
     thisx->depthInWater = BGCHECK_Y_MIN;
@@ -314,7 +315,7 @@ void EnBat_DiveAttack(EnBat* this, PlayState* play) {
 }
 
 void EnBat_SetupDie(EnBat* this, PlayState* play) {
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Enemy_StartFinishingBlow(play, &this->actor);
     this->actor.speed *= Math_CosS(this->actor.world.rot.x);
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
@@ -332,7 +333,7 @@ void EnBat_SetupDie(EnBat* this, PlayState* play) {
         this->drawDmgEffScale = 0.45f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                     this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                    CLEAR_TAG_SMALL_LIGHT_RAYS);
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == BAD_BAT_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 4.0f;
@@ -362,8 +363,7 @@ void EnBat_Die(EnBat* this, PlayState* play) {
 
         if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
             if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
-                Actor_SpawnIceEffects(play, &this->actor, this->bodyPartPoss, ARRAY_COUNT(this->bodyPartPoss), 2, 0.2f,
-                                      0.2f);
+                Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, BAD_BAT_BODYPART_MAX, 2, 0.2f, 0.2f);
             }
 
             func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 100, 0, 0);
@@ -551,13 +551,12 @@ void EnBat_Draw(Actor* thisx, PlayState* play) {
                             ? (this->animationFrame * (15 * (0x10000 / 360))) - (120 * (0x10000 / 360))
                             : 0;
         }
-        Matrix_MultZero(&this->bodyPartPoss[0]);
+        Matrix_MultZero(&this->bodyPartsPos[BAD_BAT_BODYPART_0]);
         Matrix_RotateZS(rollAngle, MTXMODE_APPLY);
-        Matrix_MultVecX(1700.0f, &this->bodyPartPoss[1]);
+        Matrix_MultVecX(1700.0f, &this->bodyPartsPos[BAD_BAT_BODYPART_1]);
         Matrix_RotateZS(-2 * rollAngle, MTXMODE_APPLY);
-        Matrix_MultVecX(-1700.0f, &this->bodyPartPoss[2]);
-        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartPoss, ARRAY_COUNT(this->bodyPartPoss),
-                                this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
-                                this->drawDmgEffType);
+        Matrix_MultVecX(-1700.0f, &this->bodyPartsPos[BAD_BAT_BODYPART_2]);
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, BAD_BAT_BODYPART_MAX, this->drawDmgEffScale,
+                                this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 }

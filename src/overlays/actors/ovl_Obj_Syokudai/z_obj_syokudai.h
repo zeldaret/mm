@@ -5,6 +5,13 @@
 
 struct ObjSyokudai;
 
+#define OBJ_SYOKUDAI_GET_TYPE(thisx) ((thisx)->params >> 0xC)
+#define OBJ_SYOKUDAI_GET_START_LIT(thisx) ((thisx)->params & 0x800)
+#define OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx) (((thisx)->params >> 7) & 0xF)
+#define OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
+
+#define OBJ_SYOKUDAI_SWITCH_FLAG_NONE 0x7F
+
 typedef struct ObjSyokudai {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder standCollider;
@@ -47,11 +54,6 @@ typedef enum {
 #define OBJ_SYOKUDAI_STICK_IGNITION_RADIUS 20.0f
 #define OBJ_SYOKUDAI_SNUFF_TIMER_JUST_LIT_BONUS 10
 #define OBJ_SYOKUDAI_LIGHT_RADIUS_MAX 250
-
-#define OBJ_SYOKUDAI_GET_TYPE(thisx) ((thisx)->params >> 0xC)
-#define OBJ_SYOKUDAI_GET_START_LIT(thisx) ((thisx)->params & 0x800)
-#define OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx) (((thisx)->params >> 7) & 0xF)
-#define OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 #define OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize) ((groupSize * 50) + 100)
 

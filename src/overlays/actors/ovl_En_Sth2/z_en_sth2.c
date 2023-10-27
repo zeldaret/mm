@@ -6,7 +6,7 @@
 
 #include "z_en_sth2.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnSth2*)thisx)
 
@@ -35,7 +35,7 @@ ActorInit En_Sth2_InitVars = {
 void EnSth2_Init(Actor* thisx, PlayState* play) {
     EnSth2* this = THIS;
 
-    this->objIndex = Object_GetIndex(&play->objectCtx, OBJECT_STH);
+    this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_STH);
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     this->unused = 0;
@@ -60,8 +60,8 @@ void EnSth2_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnSth2* this = THIS;
 
-    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
-        this->actor.objBankIndex = this->objIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         SkelAnime_InitFlex(play, &this->skelAnime, &gSthSkel, &gEnSth2WavingHandAnim, this->jointTable,
                            this->morphTable, STH_LIMB_MAX);

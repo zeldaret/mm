@@ -42,19 +42,19 @@ void ObjMoonStone_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.3f);
     this->unk194 = (this->actor.params & 0xF000) >> 0xC;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.shape.yOffset = 25.0f;
     this->actor.focus.pos.y += 10.0f;
     if (this->unk194 == 0) {
         this->actor.colChkInfo.health = 0;
-        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         func_80C0662C(this);
     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
             Actor_Spawn(&play->actorCtx, play, 1, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, 0, -1);
         }
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_80C0673C(this);
     } else {
         Actor_Kill(&this->actor);
@@ -80,7 +80,7 @@ void func_80C06640(ObjMoonStone* this, PlayState* play) {
     } else {
         s32 phi_v0 = ABS_ALT(sp1A);
         if (phi_v0 < 0x1555) {
-            func_800B8614(&this->actor, play, 80.0f);
+            Actor_OfferTalk(&this->actor, play, 80.0f);
         }
     }
 }
@@ -117,7 +117,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play) {
             this->actor.draw = NULL;
             func_80C0685C(this);
         } else if (this->actor.xzDistToPlayer < 25.0f) {
-            Actor_OfferGetItem(&this->actor, play, GI_MOON_TEAR, 100.0f, 30.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MOONS_TEAR, 100.0f, 30.0f);
         }
     }
 }

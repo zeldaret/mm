@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjUm*)thisx)
 
@@ -708,7 +708,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            this->dyna.actor.targetMode = 6;
+            this->dyna.actor.targetMode = TARGET_MODE_6;
             this->unk_2B4 = 0;
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
@@ -897,7 +897,7 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play) && func_80B795A0(play, this, arg2)) {
-                msgCtx->msgMode = 0x43;
+                msgCtx->msgMode = MSGMODE_TEXT_CLOSING;
                 ret = true;
             }
             break;
@@ -911,7 +911,7 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
 u16 ObjUm_RanchGetDialogue(PlayState* play, ObjUm* this, s32 arg2) {
     u16 textId = 0;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_40)) {
             // "Want a ride?"
             textId = 0x33CF;
@@ -965,15 +965,15 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
 
-    if ((this->dyna.actor.xyzDistToPlayerSq > SQ(100.0f)) && !this->dyna.actor.isTargeted) {
+    if ((this->dyna.actor.xyzDistToPlayerSq > SQ(100.0f)) && !this->dyna.actor.isLockedOn) {
         return 0;
     }
 
     if (this->dyna.actor.xyzDistToPlayerSq <= SQ(50.0f)) {
-        if (func_800B8614(&this->dyna.actor, play, 50.0f)) {
+        if (Actor_OfferTalk(&this->dyna.actor, play, 50.0f)) {
             this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
         }
-    } else if (func_800B863C(&this->dyna.actor, play)) {
+    } else if (Actor_OfferTalkNearColChkInfoCylinder(&this->dyna.actor, play)) {
         this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
     }
 
@@ -995,7 +995,7 @@ s32 func_80B79A24(s32 arg0) {
 void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    this->dyna.actor.flags |= ACTOR_FLAG_1;
+    this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
     SkelAnime_Update(&this->skelAnime);
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     this->flags |= OBJ_UM_FLAG_WAITING;

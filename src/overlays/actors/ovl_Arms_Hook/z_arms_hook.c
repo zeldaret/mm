@@ -327,7 +327,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play) {
         f0 = sqrtf(SQ(sp68.y) + sp48);
         Matrix_Scale(0.015f, 0.015f, f0 * 0.01f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0008D0);
+        gSPDisplayList(POLY_OPA_DISP++, gHookshotChainDL);
         func_801229A0(play, player);
 
         CLOSE_DISPS(play->state.gfxCtx);

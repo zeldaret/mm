@@ -4,7 +4,6 @@
  * Description: Kafei
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_test3.h"
 #include "objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
@@ -122,8 +121,8 @@ static u8 sScheduleScript[] = {
     /* 0x094 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 10, 12),
     /* 0x09A */ SCHEDULE_CMD_RET_NONE(),
     /* 0x09B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(3, 0x138 - 0x0A0),
-    /* 0x0A0 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_33_08, 0x12C - 0x0A5),
-    /* 0x0A5 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_79_40, 0x12C - 0x0AA),
+    /* 0x0A0 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG, 0x12C - 0x0A5),
+    /* 0x0A5 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_SAKON_DEAD, 0x12C - 0x0AA),
     /* 0x0AA */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_SECOM, 0x0B0 - 0x0AE),
     /* 0x0AE */ SCHEDULE_CMD_RET_VAL_S(7),
     /* 0x0B0 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT, 0x0DD - 0x0B4),
@@ -354,13 +353,13 @@ s32 func_80A3EA30(EnTest3* this, PlayState* play) {
         Actor* hideoutDoor = SubS_FindActor(play, NULL, ACTORCAT_BG, ACTOR_BG_IKNV_OBJ);
 
         if (hideoutDoor != NULL) {
-            this->player.targetedActor = hideoutDoor;
+            this->player.lockOnActor = hideoutDoor;
         }
     }
     if (this->unk_D78->unk_1 != 0) {
         CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         CutsceneManager_Queue(this->csId);
-        play->msgCtx.msgMode = 0x44;
+        play->msgCtx.msgMode = MSGMODE_PAUSED;
     }
     return false;
 }
@@ -378,7 +377,7 @@ s32 func_80A3EAF8(EnTest3* this, PlayState* play) {
             CutsceneManager_Stop(this->csId);
             this->csId = CS_ID_GLOBAL_TALK;
             CutsceneManager_Queue(this->csId);
-            this->player.targetedActor = &GET_PLAYER(play)->actor;
+            this->player.lockOnActor = &GET_PLAYER(play)->actor;
         }
         return 1;
     }
@@ -390,9 +389,9 @@ s32 func_80A3EB8C(EnTest3* this, PlayState* play) {
         Actor* hideoutObject = SubS_FindActor(play, NULL, ACTORCAT_ITEMACTION, ACTOR_OBJ_NOZOKI);
 
         if (hideoutObject != NULL) {
-            this->player.targetedActor = hideoutObject;
+            this->player.lockOnActor = hideoutObject;
         }
-        play->msgCtx.msgMode = 0x44;
+        play->msgCtx.msgMode = MSGMODE_PAUSED;
         return 1;
     }
     return 0;
@@ -457,10 +456,10 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     this->player.transformation = PLAYER_FORM_HUMAN;
     this->player.ageProperties = &sAgeProperties;
     this->player.heldItemAction = PLAYER_IA_NONE;
-    this->player.heldItemId = ITEM_OCARINA;
+    this->player.heldItemId = ITEM_OCARINA_OF_TIME;
 
     Player_SetModelGroup(&this->player, 3);
-    play->playerInit(&this->player, play, &object_test3_Skel_00F7EC);
+    play->playerInit(&this->player, play, &gKafeiSkel);
 
     Effect_Add(play, &this->player.meleeWeaponEffectIndex[0], EFFECT_BLURE2, 0, 0, &sBlureInit);
     Effect_Add(play, &this->player.meleeWeaponEffectIndex[1], EFFECT_BLURE2, 0, 0, &sBlureInit);
@@ -471,7 +470,8 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     this->unk_D90 = GET_PLAYER(play);
     this->player.giObjectSegment = this->unk_D90->giObjectSegment;
     this->player.tatlActor = this->unk_D90->tatlActor;
-    if ((CURRENT_DAY != 3) || CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) || !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
+    if ((CURRENT_DAY != 3) || CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) ||
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
         this->player.currentMask = PLAYER_MASK_KEATON;
     }
     this->player.prevMask = this->player.currentMask;
@@ -527,8 +527,8 @@ void func_80A3F0B0(EnTest3* this, PlayState* play) {
 }
 
 void func_80A3F114(EnTest3* this, PlayState* play) {
-    if (this->player.csMode != PLAYER_CSMODE_0) {
-        play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_END);
+    if (this->player.csAction != PLAYER_CSACTION_NONE) {
+        play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_END);
     }
 }
 
@@ -654,7 +654,7 @@ s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
 s32 func_80A3F73C(EnTest3* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->player.actor, &play->state)) {
         func_80A3E7E0(this, func_80A4084C);
-        this->player.targetedActor = &GET_PLAYER(play)->actor;
+        this->player.lockOnActor = &GET_PLAYER(play)->actor;
         this->player.stateFlags2 &= ~PLAYER_STATE2_40000;
         D_80A41D5C = true;
         if ((this->unk_D78->unk_0 == 4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
@@ -668,16 +668,16 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             func_800BC154(play, &play->actorCtx, &this->unk_D90->actor, 4);
             func_800BC154(play, &play->actorCtx, &this->player.actor, 2);
             CutsceneManager_SetReturnCamera(this->subCamId);
-            play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_WAIT);
+            play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_WAIT);
         }
-        func_800B863C(&this->player.actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->player.actor, play);
         if (this->unk_D88 == 3) {
             func_80A3F534(this, play);
         } else if (this->unk_D88 == 5) {
             func_80A3F5A4(this, play);
         }
         this->player.actor.textId = this->unk_D78->textId;
-        this->player.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->player.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
     return false;
 }
@@ -690,7 +690,7 @@ s32 func_80A3F8D4(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
         ((postActor = func_80A3F2BC(play, this, ACTOR_EN_PM, ACTORCAT_NPC, 100.0f, 20.0f)) != NULL)) {
         this->player.actor.home.rot.y = Actor_WorldYawTowardActor(&this->player.actor, postActor);
     }
-    play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_97);
+    play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_97);
     return true;
 }
 
@@ -701,7 +701,7 @@ s32 func_80A3F9A4(EnTest3* this, PlayState* play) {
 }
 
 s32 func_80A3F9E4(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
-    scheduleOutput->time0 = SCHEDULE_TIME_NOW;
+    scheduleOutput->time0 = (u16)SCHEDULE_TIME_NOW;
     scheduleOutput->time1 = (u16)(scheduleOutput->time0 + 70);
     func_80A40098(this, play, arg2, scheduleOutput);
     if (this->player.actor.xzDistToPlayer < 300.0f) {
@@ -729,7 +729,7 @@ s32 func_80A3FA58(EnTest3* this, PlayState* play) {
         if (cond || this->unk_D8A <= 0) {
             func_80A3F114(this, play);
             sp40.unk_1_0 = 5;
-            scheduleOutput.time0 = SCHEDULE_TIME_NOW;
+            scheduleOutput.time0 = (u16)SCHEDULE_TIME_NOW;
             scheduleOutput.time1 = (u16)(scheduleOutput.time0 + (cond ? 80 : 140));
 
             func_80A40098(this, play, &sp40, &scheduleOutput);
@@ -737,7 +737,7 @@ s32 func_80A3FA58(EnTest3* this, PlayState* play) {
             return false;
         }
         if (this->unk_D8A == 90) {
-            play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_21);
+            play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_21);
         }
     } else {
         this->unk_D8A++;
@@ -782,7 +782,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
         CutsceneManager_SetReturnCamera(CAM_ID_MAIN);
         Environment_StartTime();
         if (((void)0, gSaveContext.save.time) > CLOCK_TIME(6, 0)) {
-            func_800FE658(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
+            Environment_SetTimeJump(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
         }
         if (play->actorCtx.flags & ACTORCTX_FLAG_6) {
             SET_WEEKEVENTREG(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT);
@@ -805,7 +805,7 @@ s32 func_80A3FE20(EnTest3* this, PlayState* play) {
     if (D_80A41D64 == 0) {
         if (func_80A3E9DC(this, play)) {
             sp2C.unk_1_0 = 2;
-            scheduleOutput.time0 = SCHEDULE_TIME_NOW;
+            scheduleOutput.time0 = (u16)SCHEDULE_TIME_NOW;
             scheduleOutput.time1 = (u16)(scheduleOutput.time0 + 1000);
             func_80A40098(this, play, &sp2C, &scheduleOutput);
             D_80A41D64 = 1;
@@ -824,7 +824,7 @@ s32 func_80A3FE20(EnTest3* this, PlayState* play) {
 s32 func_80A3FF10(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
     static Vec3f D_80A418BC = { -420.0f, 210.0f, -162.0f };
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_51_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED)) {
         D_80A41D68 = 2;
         Math_Vec3f_Copy(&this->player.actor.world.pos, &D_80A418BC);
         Math_Vec3f_Copy(&this->player.actor.home.pos, &D_80A418BC);
@@ -856,8 +856,8 @@ s32 func_80A3FFD0(EnTest3* this, PlayState* play2) {
             D_80A41D68 = 2;
         }
     } else {
-        SET_WEEKEVENTREG(WEEKEVENTREG_51_40);
-        play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_110);
+        SET_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED);
+        play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_110);
     }
     return false;
 }
@@ -950,7 +950,7 @@ s32 func_80A40230(EnTest3* this, PlayState* play) {
     dx = this->player.actor.world.pos.x - this->player.actor.prevPos.x;
     dy = this->player.actor.world.pos.z - this->player.actor.prevPos.z;
     this->player.linearVelocity = sqrtf(SQ(dx) + SQ(dy));
-    this->player.linearVelocity *= 1.0f + (1.05f * fabsf(Math_SinS(this->player.unk_B6C)));
+    this->player.linearVelocity *= 1.0f + (1.05f * fabsf(Math_SinS(this->player.floorPitch)));
     D_80A41D40 = (this->player.linearVelocity * 10.0f) + 20.0f;
     D_80A41D40 = CLAMP_MAX(D_80A41D40, 60.0f);
     D_80A41D44 = this->player.actor.world.rot.y;
@@ -1007,7 +1007,7 @@ void func_80A4084C(EnTest3* this, PlayState* play) {
             } else {
                 func_80A3E7E0(this, func_80A40678);
             }
-            this->player.targetedActor = NULL;
+            this->player.lockOnActor = NULL;
         }
     } else if (func_80A3ED24(this, play)) {
         func_80A3E7E0(this, func_80A40908);
@@ -1017,15 +1017,15 @@ void func_80A4084C(EnTest3* this, PlayState* play) {
 void func_80A40908(EnTest3* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->player.actor, &play->state)) {
         func_80A3E7E0(this, func_80A4084C);
-        this->player.targetedActor = &GET_PLAYER(play)->actor;
+        this->player.lockOnActor = &GET_PLAYER(play)->actor;
         SET_WEEKEVENTREG(WEEKEVENTREG_51_08);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_PENDANT_OF_MEMORIES);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
     } else {
-        func_800B8500(&this->player.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->player.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
         this->unk_D78 = &D_80A41854[6];
         this->player.actor.textId = this->unk_D78->textId;
-        this->player.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->player.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
 }
 
@@ -1055,17 +1055,17 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
     play->actorCtx.flags &= ~ACTORCTX_FLAG_7;
     this->player.actor.draw = EnTest3_Draw;
     D_80A41D48 = false;
-    this->player.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+    this->player.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_506) &&
         !((this->player.actor.category == ACTORCAT_PLAYER) &&
           ((play->actorCtx.flags & ACTORCTX_FLAG_5) || (play->actorCtx.flags & ACTORCTX_FLAG_4)))) {
-        if (this->player.csMode != PLAYER_CSMODE_5) {
-            play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_5);
+        if (this->player.csAction != PLAYER_CSACTION_5) {
+            play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_5);
         }
         play->actorCtx.flags &= ~ACTORCTX_FLAG_4;
     } else if (this->player.actor.category == ACTORCAT_PLAYER) {
         func_80A409D4(this, play);
-    } else if (play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_0)) {
+    } else if (play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_NONE)) {
         if (this->unk_D88 >= 7) {
             Vec3f worldPos;
 
@@ -1097,7 +1097,7 @@ s32 D_80A418C8 = false;
 s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTest3* this = THIS;
 
-    if (limbIndex == OBJECT_TEST3_LIMB_01) {
+    if (limbIndex == KAFEI_LIMB_ROOT) {
         D_80A41D6C = &this->player.bodyPartsPos[-1];
         if (!(this->player.skelAnime.moveFlags & ANIM_FLAG_4) || (this->player.skelAnime.moveFlags & ANIM_FLAG_1)) {
             pos->x *= this->player.ageProperties->unk_08;
@@ -1123,11 +1123,11 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         if (D_80A418C8) {
             *dList = NULL;
         }
-        if (limbIndex == OBJECT_TEST3_LIMB_0B) {
+        if (limbIndex == KAFEI_LIMB_HEAD) {
             rot->x += this->player.headLimbRot.z;
             rot->y -= this->player.headLimbRot.y;
             rot->z += this->player.headLimbRot.x;
-        } else if (limbIndex == OBJECT_TEST3_LIMB_0A) {
+        } else if (limbIndex == KAFEI_LIMB_UPPER_ROOT) {
             s32 requiredScopeTemp;
 
             if (this->player.unk_AA8 != 0) {
@@ -1155,7 +1155,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
     if (*dList2 != NULL) {
         Matrix_MultZero(D_80A41D6C);
     }
-    if (limbIndex == OBJECT_TEST3_LIMB_10) {
+    if (limbIndex == KAFEI_LIMB_LEFT_HAND) {
         MtxF curMtxF;
         Actor* leftHandActor;
 
@@ -1165,7 +1165,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             if (this->player.stateFlags3 & PLAYER_STATE3_20000000) {
                 OPEN_DISPS(play->state.gfxCtx);
 
-                gSPDisplayList(POLY_OPA_DISP++, object_test3_DL_00EDD0);
+                gSPDisplayList(POLY_OPA_DISP++, gKafeiSunMaskDL);
 
                 CLOSE_DISPS(play->state.gfxCtx);
             }
@@ -1184,16 +1184,19 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             func_80126B8C(play, &this->player);
         }
 
-    } else if (limbIndex == OBJECT_TEST3_LIMB_13) {
+    } else if (limbIndex == KAFEI_LIMB_RIGHT_HAND) {
         Actor* leftHandActor = this->player.heldActor;
 
         if (leftHandActor != NULL) {
-            leftHandActor->world.pos.x = (this->player.bodyPartsPos[15].x + this->player.leftHandWorld.pos.x) / 2.0f;
-            leftHandActor->world.pos.y = (this->player.bodyPartsPos[15].y + this->player.leftHandWorld.pos.y) / 2.0f;
-            leftHandActor->world.pos.z = (this->player.bodyPartsPos[15].z + this->player.leftHandWorld.pos.z) / 2.0f;
+            leftHandActor->world.pos.x =
+                (this->player.bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].x + this->player.leftHandWorld.pos.x) / 2.0f;
+            leftHandActor->world.pos.y =
+                (this->player.bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].y + this->player.leftHandWorld.pos.y) / 2.0f;
+            leftHandActor->world.pos.z =
+                (this->player.bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z + this->player.leftHandWorld.pos.z) / 2.0f;
         }
-    } else if (limbIndex == OBJECT_TEST3_LIMB_0B) {
-        Actor* actor730 = this->player.targetedActor;
+    } else if (limbIndex == KAFEI_LIMB_HEAD) {
+        Actor* actor730 = this->player.lockOnActor;
 
         if ((*dList1 != NULL) && this->player.currentMask && !(this->player.stateFlags2 & PLAYER_STATE2_1000000)) {
             // this->player.currentMask != PLAYER_MASK_NONE
@@ -1216,7 +1219,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
 
             Matrix_MultVec3f(&D_80A418CC, &this->player.actor.focus.pos);
         }
-    } else if (limbIndex == OBJECT_TEST3_LIMB_15) {
+    } else if (limbIndex == KAFEI_LIMB_TORSO) {
         if (D_80A41D60 || CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_PENDANT_OF_MEMORIES) ||
             (INV_CONTENT(ITEM_PENDANT_OF_MEMORIES) == ITEM_PENDANT_OF_MEMORIES) ||
             (this->player.getItemDrawIdPlusOne - 1 == GID_PENDANT_OF_MEMORIES)) {
@@ -1224,7 +1227,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
         } else {
             OPEN_DISPS(play->state.gfxCtx);
 
-            gSPDisplayList(POLY_OPA_DISP++, object_test3_DL_00CB60);
+            gSPDisplayList(POLY_OPA_DISP++, gKafeiPendantOfMemoriesDL);
 
             CLOSE_DISPS(play->state.gfxCtx);
         }
@@ -1234,15 +1237,15 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
 }
 
 static TexturePtr sEyeTextures[] = {
-    object_test3_Tex_000DC0, object_test3_Tex_003680, object_test3_Tex_003E80, object_test3_Tex_004680,
-    object_test3_Tex_004E80, object_test3_Tex_005680, object_test3_Tex_005E80, object_test3_Tex_006680,
+    gKafeiEyesOpenTex,     gKafeiEyesHalfTex,   gKafeiEyesClosedTex,   gKafeiEyesRollRightTex,
+    gKafeiEyesRollLeftTex, gKafeiEyesRollUpTex, gKafeiEyesRollDownTex, object_test3_Tex_006680,
 };
 
 static TexturePtr sMouthTextures[] = {
-    object_test3_Tex_0009C0,
-    object_test3_Tex_006E80,
-    object_test3_Tex_007280,
-    object_test3_Tex_007680,
+    gKafeiMouthClosedTex,
+    gKafeiMouthTeethTex,
+    gKafeiMouthAngryTex,
+    gKafeiMouthHappyTex,
 };
 
 typedef struct {
@@ -1258,8 +1261,8 @@ static KafeiFace sFaceExpressions[] = {
 void EnTest3_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnTest3* this = THIS;
-    s32 eyeTexIndex = (this->player.skelAnime.jointTable[OBJECT_TEST3_LIMB_MAX].x & 0xF) - 1;
-    s32 mouthTexIndex = ((this->player.skelAnime.jointTable[OBJECT_TEST3_LIMB_MAX].x >> 4) & 0xF) - 1;
+    s32 eyeTexIndex = GET_EYE_INDEX_FROM_JOINT_TABLE(this->player.skelAnime.jointTable);
+    s32 mouthTexIndex = GET_MOUTH_INDEX_FROM_JOINT_TABLE(this->player.skelAnime.jointTable);
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);

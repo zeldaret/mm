@@ -2050,7 +2050,7 @@ void FileSelect_ConfirmFile(GameState* thisx) {
             Rumble_Request(300.0f, 180, 20, 100);
             Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
             this->selectMode = SM_FADE_OUT;
-            func_801A4058(0xF);
+            Audio_MuteAllSeqExceptSystemAndOcarina(15);
         } else { // FS_BTN_CONFIRM_QUIT
             Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
             this->selectMode++; // SM_FADE_OUT_FILE_INFO
@@ -2197,7 +2197,7 @@ void FileSelect_LoadGame(GameState* thisx) {
     gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
     gSaveContext.cutsceneTrigger = 0;
     gSaveContext.chamberCutsceneNum = 0;
-    gSaveContext.nextDayTime = 0xFFFF;
+    gSaveContext.nextDayTime = NEXT_TIME_NONE;
     gSaveContext.retainWeatherMode = false;
 
     gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
@@ -2484,12 +2484,12 @@ void FileSelect_InitContext(GameState* thisx) {
     ShrinkWindow_Letterbox_SetSizeTarget(0);
 
     gSaveContext.skyboxTime = 0;
-    gSaveContext.save.time = 0;
+    gSaveContext.save.time = CLOCK_TIME(0, 0);
 
     Skybox_Init(&this->state, &this->skyboxCtx, 1);
     R_TIME_SPEED = 10;
 
-    envCtx->changeSkyboxState = 0;
+    envCtx->changeSkyboxState = CHANGE_SKYBOX_INACTIVE;
     envCtx->changeSkyboxTimer = 0;
     envCtx->changeLightEnabled = false;
     envCtx->changeLightTimer = 0;
@@ -2521,7 +2521,7 @@ void FileSelect_Init(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
     size_t size;
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
     Matrix_Init(&this->state);
     ShrinkWindow_Init();
     View_Init(&this->view, this->state.gfxCtx);
@@ -2531,15 +2531,15 @@ void FileSelect_Init(GameState* thisx) {
     Font_LoadOrderedFont(&this->font);
 
     size = SEGMENT_ROM_SIZE(title_static);
-    this->staticSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->staticSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->staticSegment, SEGMENT_ROM_START(title_static), size);
 
     size = SEGMENT_ROM_SIZE(parameter_static);
-    this->parameterSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->parameterSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->parameterSegment, SEGMENT_ROM_START(parameter_static), size);
 
     size = gObjectTable[OBJECT_MAG].vromEnd - gObjectTable[OBJECT_MAG].vromStart;
-    this->titleSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->titleSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->titleSegment, gObjectTable[OBJECT_MAG].vromStart, size);
 
     Audio_SetSpec(0xA);

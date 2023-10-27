@@ -3,7 +3,7 @@
 
 #include "PR/ultratypes.h"
 #include "unk.h"
-#include "ultra64/os_voice.h"
+#include "PR/os_voice.h"
 
 typedef enum {
     /* 0  */ VOICE_WORD_ID_HOURS,

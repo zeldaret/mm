@@ -7,7 +7,7 @@
 #include "z_en_mkk.h"
 #include "objects/object_mkk/object_mkk.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnMkk*)thisx)
 
@@ -128,8 +128,8 @@ static Color_RGBA8 sEffPrimColors[] = { { 50, 50, 50, 255 }, { 255, 255, 255, 25
 static Color_RGBA8 sEffEnvColors[] = { { 200, 200, 200, 255 }, { 255, 255, 255, 255 } };
 
 static EnMkkDlists sBoeDLists[] = {
-    { object_mkk_DL_000030, object_mkk_DL_0000B0, object_mkk_DL_0000C8, object_mkk_DL_000140 },
-    { object_mkk_DL_0001F0, object_mkk_DL_000278, object_mkk_DL_000290, object_mkk_DL_000310 },
+    { gBlackBoeBodyMaterialDL, gBlackBoeBodyModelDL, gBlackBoeEndDL, gBlackBoeEyesDL },
+    { gWhiteBoeBodyMaterialDL, gWhiteBoeBodyModelDL, gWhiteBoeEndDL, gWhiteBoeEyesDL },
 };
 
 static Color_RGBA8 D_80A4F7C4[] = {
@@ -195,7 +195,7 @@ void EnMkk_Destroy(Actor* thisx, PlayState* play) {
 void func_80A4E0CC(EnMkk* this) {
     this->alpha = 0;
     this->unk_14B |= 3;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80A4E100;
 }
 
@@ -211,7 +211,7 @@ void func_80A4E100(EnMkk* this, PlayState* play) {
         this->primColorSelect = 3;
         this->collider.base.acFlags |= AC_ON;
         this->alpha = 255;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
         this->unk_14B &= ~4;
         func_80A4E190(this);
@@ -266,9 +266,9 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
     } else {
         sp20 = Math_StepToF(&this->actor.speed, 0.0f, 0.7f);
     }
-    if ((player->stateFlags3 & 0x100) || (Player_GetMask(play) == PLAYER_MASK_STONE)) {
+    if ((player->stateFlags3 & PLAYER_STATE3_100) || (Player_GetMask(play) == PLAYER_MASK_STONE)) {
         Math_ScaledStepToS(&this->unk_150, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), 0x400);
-    } else if ((player->stateFlags2 & 0x80) || (player->actor.freezeTimer > 0)) {
+    } else if ((player->stateFlags2 & PLAYER_STATE2_80) || (player->actor.freezeTimer > 0)) {
         Math_ScaledStepToS(&this->unk_150, this->actor.yawTowardsPlayer + 0x8000, 0x400);
     } else {
         Math_ScaledStepToS(&this->unk_150, this->actor.yawTowardsPlayer, 0x400);
@@ -279,7 +279,7 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
     if (sp20) {
         this->unk_14B &= ~2;
         func_80A4E190(this);
-    } else if ((this->unk_149 == 0) && (!(player->stateFlags3 & 0x100)) &&
+    } else if ((this->unk_149 == 0) && (!(player->stateFlags3 & PLAYER_STATE3_100)) &&
                (Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
                (Actor_IsFacingPlayer(&this->actor, 0x1800)) && (this->actor.xzDistToPlayer < 120.0f) &&
                (fabsf(this->actor.playerHeightRel) < 100.0f)) {
@@ -310,7 +310,7 @@ void func_80A4E60C(EnMkk* this, PlayState* play) {
 
 void func_80A4E67C(EnMkk* this) {
     this->unk_14B |= 1;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= ACTOR_FLAG_10;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
@@ -442,7 +442,7 @@ void EnMkk_Update(Actor* thisx, PlayState* play) {
 void func_80A4EDF0(EnMkk* this) {
     this->alpha = 0;
     this->unk_14B |= 3;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.draw = NULL;
     this->actor.update = func_80A4F16C;
     this->actor.gravity = -0.5f;

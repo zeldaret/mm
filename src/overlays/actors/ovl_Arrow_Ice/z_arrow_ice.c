@@ -21,7 +21,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play);
 
 #include "overlays/ovl_Arrow_Ice/ovl_Arrow_Ice.c"
 
-s32 unused; // Needed for bss
+static s32 sBssPad;
 
 ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
@@ -176,7 +176,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play) {
 void ArrowIce_Update(Actor* thisx, PlayState* play) {
     ArrowIce* this = THIS;
 
-    if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
+    if ((play->msgCtx.msgMode == MSGMODE_E) || (play->msgCtx.msgMode == MSGMODE_SONG_PLAYED)) {
         Actor_Kill(&this->actor);
         return;
     } else {

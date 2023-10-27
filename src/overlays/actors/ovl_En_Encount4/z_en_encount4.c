@@ -43,17 +43,17 @@ void EnEncount4_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnEncount4* this = THIS;
 
-    this->unk_148 = ENENCOUNT4_GET_F000(thisx);
-    this->switchFlag = ENENCOUNT4_GET_FLAG(thisx);
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    this->unk_148 = ENCOUNT4_GET_F000(thisx);
+    this->switchFlag = ENCOUNT4_GET_SWITCH_FLAG(thisx);
+    if (this->switchFlag == ENCOUNT4_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_809C3FD8;
 }
 
@@ -64,7 +64,7 @@ void func_809C3FD8(EnEncount4* this, PlayState* play) {
     Actor* actor;
 
     this->unk_14E = 0;
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         this->timer = 100;
         this->actionFunc = func_809C464C;
     } else {
@@ -72,11 +72,12 @@ void func_809C3FD8(EnEncount4* this, PlayState* play) {
         while (actor != NULL) {
             if (actor->id != ACTOR_EN_BSB) {
                 actor = actor->next;
-            } else {
-                this->captainKeeta = (EnBsb*)actor;
-                this->actionFunc = func_809C4078;
-                break;
+                continue;
             }
+
+            this->captainKeeta = (EnBsb*)actor;
+            this->actionFunc = func_809C4078;
+            break;
         }
     }
 }
@@ -88,7 +89,7 @@ void func_809C4078(EnEncount4* this, PlayState* play) {
     s32 i;
     EnBsb* captainKeeta = this->captainKeeta;
 
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         this->timer = 100;
         this->actionFunc = func_809C464C;
     } else if (BREG(1) == 0) {
@@ -134,7 +135,7 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
     CollisionPoly* colPoly;
     s32 bgId;
 
-    if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         this->timer = 100;
         this->actionFunc = func_809C464C;
 
@@ -145,15 +146,16 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
         if ((this->captainKeeta->actor.id != ACTOR_EN_BSB) || (captainKeeta->actor.update == NULL)) {
             Actor_Kill(&this->actor);
         }
-
         return;
-    } else if (this->unk_14E >= 2) {
+    }
+
+    if (this->unk_14E >= 2) {
         this->timer = 100;
         this->actionFunc = func_809C464C;
-
         return;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_40) || (this->unk_14C >= 2) ||
-               (this->actor.xzDistToPlayer > 240.0f)) {
+    }
+
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_40) || (this->unk_14C >= 2) || (this->actor.xzDistToPlayer > 240.0f)) {
         return;
     }
 
@@ -167,7 +169,7 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
     }
 
     pos.y = yIntersect;
-    yRot = (s32)Rand_ZeroFloat(512.0f) + this->actor.world.rot.y + 0x3800;
+    yRot = (s32)Rand_ZeroFloat(0x200) + this->actor.world.rot.y + 0x3800;
     if (this->unk_14C != 0) {
         yRot += 0x8000;
     }
@@ -183,12 +185,12 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
 }
 
 void func_809C4598(EnEncount4* this, PlayState* play) {
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         this->timer = 100;
         this->actionFunc = func_809C464C;
     } else if (this->unk_14E >= 2) {
         this->timer = 100;
-        if (this->switchFlag >= 0) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         this->actionFunc = func_809C464C;

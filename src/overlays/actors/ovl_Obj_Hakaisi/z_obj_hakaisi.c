@@ -7,7 +7,7 @@
 #include "z_obj_hakaisi.h"
 #include "objects/object_hakaisi/object_hakaisi.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 
 #define THIS ((ObjHakaisi*)thisx)
 
@@ -98,7 +98,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_SetScale(&this->dyna.actor, 1.0f);
-    this->dyna.actor.targetMode = 0;
+    this->dyna.actor.targetMode = TARGET_MODE_0;
     this->dyna.actor.colChkInfo.health = 30;
     if (OBJHAKAISI_GET_FF(&this->dyna.actor) == 3) {
         this->dyna.actor.draw = NULL;
@@ -112,14 +112,14 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp7C);
     this->unk_19A = 0;
     this->unk_198 = 0;
-    this->switchFlag = OBJHAKAISI_GET_SWITCHFLAG(thisx);
+    this->switchFlag = OBJHAKAISI_GET_SWITCH_FLAG(thisx);
     this->csId = this->dyna.actor.csId;
 
-    if (this->switchFlag == 0xFF) {
-        this->switchFlag = -1;
+    if (this->switchFlag == OBJHAKAISI_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag != -1) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag != SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->dyna.actor);
     }
 
@@ -168,7 +168,7 @@ void func_80B14460(ObjHakaisi* this, PlayState* play) {
         func_80B14510(this);
     } else if (this->dyna.actor.textId != 0) {
         if (ABS_ALT(sp26) < 0x2000) {
-            func_800B8614(&this->dyna.actor, play, 100.0f);
+            Actor_OfferTalk(&this->dyna.actor, play, 100.0f);
         }
     }
 
@@ -208,7 +208,7 @@ void func_80B1456C(ObjHakaisi* this, PlayState* play) {
 void func_80B145F4(ObjHakaisi* this) {
     this->unk_19A = 0;
     this->dyna.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->dyna.actor.flags &= ~ACTOR_FLAG_1;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
     this->actionFunc = func_80B14648;
 }
@@ -375,7 +375,7 @@ void func_80B151E0(ObjHakaisi* this, PlayState* play) {
     this->dyna.actor.destroy = func_80B15254;
     Actor_SetScale(&this->dyna.actor, 0.1f);
     this->dyna.actor.shape.yOffset = 100.0f;
-    this->dyna.actor.flags &= ~ACTOR_FLAG_1;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     func_80B15264(this);
 }
 

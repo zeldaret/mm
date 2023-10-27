@@ -26,7 +26,7 @@
 #include "z64rumble.h"
 #include "objects/object_rd/object_rd.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnRd*)thisx)
 
@@ -188,7 +188,7 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     this->upperBodyYRotation = this->headYRotation = 0;
@@ -523,7 +523,7 @@ void EnRd_SetupPirouette(EnRd* this) {
     Animation_MorphToLoop(&this->skelAnime, &gGibdoRedeadPirouetteAnim, -6.0f);
     this->action = EN_RD_ACTION_PIROUETTE;
     this->animationJudderTimer = (Rand_ZeroOne() * 10.0f) + 5.0f;
-    this->pirouetteRotationalVelocity = 0x1112;
+    this->pirouetteAngularVelocity = 0x1112;
     this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnRd_Pirouette;
@@ -562,12 +562,12 @@ void EnRd_Pirouette(EnRd* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        this->pirouetteRotationalVelocity = 0x1112;
+        this->pirouetteAngularVelocity = 0x1112;
     } else if (Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        this->pirouetteRotationalVelocity = 0x199A;
+        this->pirouetteAngularVelocity = 0x199A;
     }
 
-    this->actor.world.rot.y -= this->pirouetteRotationalVelocity;
+    this->actor.world.rot.y -= this->pirouetteAngularVelocity;
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
 
@@ -577,13 +577,13 @@ void EnRd_EndPirouetteWhenPlayerIsClose(EnRd* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
-    this->actor.world.rot.y -= this->pirouetteRotationalVelocity;
+    this->actor.world.rot.y -= this->pirouetteAngularVelocity;
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
-    this->pirouetteRotationalVelocity -= 0x64;
-    if ((this->pirouetteRotationalVelocity < 0x834) && (this->pirouetteRotationalVelocity >= 0x7D0)) {
+    this->pirouetteAngularVelocity -= 0x64;
+    if ((this->pirouetteAngularVelocity < 0x834) && (this->pirouetteAngularVelocity >= 0x7D0)) {
         Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, ANIMMODE_ONCE, -10.0f);
-    } else if (this->pirouetteRotationalVelocity < 0x3E8) {
+    } else if (this->pirouetteAngularVelocity < 0x3E8) {
         if ((EN_RD_GET_TYPE(&this->actor) != EN_RD_TYPE_CRYING) && (!this->isMourning)) {
             EnRd_SetupAttemptPlayerFreeze(this);
         } else {
@@ -688,7 +688,7 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
                 EnRd_SetupWalkToHome(this, play);
             }
         } else if (play->grabPlayer(play, player)) {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             EnRd_SetupGrab(this);
         }
     } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING) {
@@ -736,11 +736,12 @@ void EnRd_WalkToHome(EnRd* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     SkelAnime_Update(&this->skelAnime);
 
-    if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
-        !(player->stateFlags2 & (0x4000 | 0x80)) && (player->transformation != PLAYER_FORM_GORON) &&
-        (player->transformation != PLAYER_FORM_DEKU) &&
+    if (!(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
+                                 PLAYER_STATE1_80000 | PLAYER_STATE1_200000)) &&
+        !(player->stateFlags2 & (PLAYER_STATE2_80 | PLAYER_STATE2_4000)) &&
+        (player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_DEKU) &&
         (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
-        this->actor.targetMode = 0;
+        this->actor.targetMode = TARGET_MODE_0;
         EnRd_SetupWalkToPlayer(this, play);
     } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING) {
         if (this->actor.parent != NULL) {
@@ -842,7 +843,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
                 if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->stateFlags2 &= ~PLAYER_STATE2_80;
-                    player->unk_AE8 = 100;
+                    player->actionVar2 = 100;
                 }
                 Animation_Change(&this->skelAnime, &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f,
                                  Animation_GetLastFrame(&gGibdoRedeadGrabEndAnim), ANIMMODE_ONCE_INTERP, 0.0f);
@@ -895,8 +896,8 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
                 Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 1.0f, 400.0f, 0.0f);
             }
-            this->actor.targetMode = 0;
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.targetMode = TARGET_MODE_0;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->playerStunWaitTimer = 10;
             this->grabWaitTimer = 15;
             EnRd_SetupWalkToPlayer(this, play);
@@ -1008,7 +1009,7 @@ void EnRd_SetupDamage(EnRd* this) {
         this->actor.speed = -2.0f;
     }
 
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->action = EN_RD_ACTION_DAMAGE;
     this->actionFunc = EnRd_Damage;
@@ -1042,7 +1043,7 @@ void EnRd_SetupDead(EnRd* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGibdoRedeadDeathAnim, -1.0f);
     this->action = EN_RD_ACTION_DEAD;
     this->deathTimer = 300;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.speed = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->actionFunc = EnRd_Dead;
@@ -1322,8 +1323,8 @@ void EnRd_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
          (limbIndex == REDEAD_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM) || (limbIndex == REDEAD_LIMB_RIGHT_FOREARM) ||
          (limbIndex == REDEAD_LIMB_RIGHT_HAND) || (limbIndex == REDEAD_LIMB_HEAD) ||
          (limbIndex == REDEAD_LIMB_PELVIS))) {
-        Matrix_MultZero(&this->limbPos[this->limbIndex]);
-        this->limbIndex++;
+        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
+        this->bodyPartIndex++;
     }
 }
 
@@ -1335,7 +1336,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    this->limbIndex = 0;
+    this->bodyPartIndex = 0;
 
     if (this->alpha == 255) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
@@ -1363,7 +1364,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (this->drawDmgEffTimer > 0) {
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                                0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EN_RD_BODYPART_MAX, this->drawDmgEffScale, 0.5f,
+                                this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 }

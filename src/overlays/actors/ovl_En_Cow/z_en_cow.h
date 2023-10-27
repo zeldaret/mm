@@ -27,8 +27,8 @@ typedef struct EnCow {
     /* 0x0244 */ Vec3s morphTable[COW_LIMB_MAX];
     /* 0x0268 */ Vec3s headTilt;
     /* 0x026E */ u16 flags;
-    /* 0x0270 */ u16 animationTimer;
-    /* 0x0272 */ u16 animationCycle;
+    /* 0x0270 */ u16 animTimer;
+    /* 0x0272 */ u16 animCycle;
     /* 0x0274 */ EnCowActionFunc actionFunc;
 } EnCow; // size = 0x278
 

@@ -53,7 +53,7 @@ void ObjMakekinsuta_Init(Actor* thisx, PlayState* play) {
     if (!func_8099FA40(this, play)) {
         this->unk144 = -1;
     }
-    if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAGS(thisx))) {
+    if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAG(thisx))) {
         Actor_Kill(&this->actor);
     }
 }
@@ -62,7 +62,7 @@ void ObjMakekinsuta_Destroy(Actor* thisx, PlayState* play) {
     ObjMakekinsuta* this = THIS;
 
     if (func_8099FA40(this, play)) {
-        Flags_UnsetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAGS(thisx));
+        Flags_UnsetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAG(thisx));
     }
 }
 
@@ -107,7 +107,7 @@ void func_8099FB64(Actor* thisx, PlayState* play) {
 void ObjMakekinsuta_Update(Actor* thisx, PlayState* play) {
     ObjMakekinsuta* this = THIS;
 
-    if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAGS(thisx))) {
+    if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAG(thisx))) {
         this->actor.update = func_8099FD7C;
         CutsceneManager_Queue(this->actor.csId);
     } else {
@@ -130,7 +130,7 @@ void func_8099FD7C(Actor* thisx, PlayState* play) {
     if (CutsceneManager_IsNext(thisx->csId)) {
         CutsceneManager_StartWithPlayerCs(thisx->csId, thisx);
         if (thisx->csId >= 0) {
-            func_800B7298(play, thisx, PLAYER_CSMODE_4);
+            func_800B7298(play, thisx, PLAYER_CSACTION_4);
         }
         func_8099FB64(thisx, play);
         thisx->update = Actor_Noop;

@@ -4,9 +4,9 @@
  * Gets voice recognition result from the Voice Recognition System
  */
 
-#include "ultra64/controller_voice.h"
-#include "ultra64/os_voice.h"
-#include "io/controller.h"
+#include "PR/controller_voice.h"
+#include "PR/os_voice.h"
+#include "PR/controller.h"
 
 s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
     static u8 sHandleStatus;

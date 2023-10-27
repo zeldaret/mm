@@ -68,7 +68,7 @@ Vec3f D_80947B10[] = {
     { -1.0f, -2.0f, -0.2f }, { 0.0f, -2.0f, -0.2f },  { 1.0f, -2.0f, -0.2f },  { 0.0f, -3.0f, -0.5f },
 };
 
-static s32 sPad[2] = { 0, 0 };
+static s32 sPad = 0;
 
 #include "overlays/ovl_En_Sda/ovl_En_Sda.c"
 

@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/object_tk/object_tk.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnTk*)thisx)
 
@@ -204,10 +204,10 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     EnTk* this = THIS;
 
     this->unk_2B0 = ENTK_GET_F(&this->actor);
-    this->unk_2B1 = ENTK_GET_7F0(&this->actor);
+    this->switchFlag = ENTK_GET_SWITCH_FLAG(&this->actor);
     Collider_InitCylinder(play, &this->collider);
 
-    if (Flags_GetSwitch(play, this->unk_2B1)) {
+    if (Flags_GetSwitch(play, this->switchFlag)) {
         if (this->unk_2B0 == 0) {
             Actor_Kill(&this->actor);
             return;
@@ -218,7 +218,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->unk_2B0 == 1) || (this->unk_2B0 == 3)) {
-        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         this->actor.update = func_80AEF2C8;
         this->actor.draw = NULL;
         return;
@@ -231,7 +231,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     this->unk_318 = 0;
     this->unk_2D4 = -1;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     if (this->unk_2B0 == 2) {
@@ -290,11 +290,11 @@ void func_80AECA3C(EnTk* this, PlayState* play) {
 
 void func_80AECA90(EnTk* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_80AEDE10(this, play);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -317,14 +317,14 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
 
     this->actor.textId = 0;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_80AED4F8(this, play);
         return;
     }
 
     if (R_TIME_SPEED != 0.0f) {
-        this->skelAnime.playSpeed = (f32)func_800FE620(play) / R_TIME_SPEED;
+        this->skelAnime.playSpeed = (f32)Environment_GetTimeSpeed(play) / R_TIME_SPEED;
     } else {
         this->skelAnime.playSpeed = 0.0f;
     }
@@ -358,9 +358,9 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
 
     if (!temp4 && (this->unk_3CC != 0)) {
         this->actor.draw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     } else if (temp4 && (this->unk_3CC == 0)) {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.draw = EnTk_Draw;
     }
 
@@ -368,7 +368,7 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
     func_80AECE0C(this, play);
 
     if (this->unk_3CE & 8) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.draw = NULL;
     }
 }
@@ -486,7 +486,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
     }
 
     if (!(this->unk_3CE & 8) && !(this->unk_2CA & 0x10) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
+        SubS_OfferTalkExchangeFacing(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
     }
 
     return false;
@@ -562,7 +562,7 @@ void func_80AED610(EnTk* this, PlayState* play) {
                     Message_StartTextbox(play, 0x13FD, &this->actor);
                 } else if (CURRENT_DAY != 2) {
                     func_80AED544(this, play);
-                } else if (!Flags_GetSwitch(play, ENTK_GET_7F0(&this->actor))) {
+                } else if (!Flags_GetSwitch(play, ENTK_GET_SWITCH_FLAG(&this->actor))) {
                     Message_StartTextbox(play, 0x1403, &this->actor);
                 } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_02)) {
                     func_80AED544(this, play);
@@ -691,15 +691,16 @@ void func_80AED940(EnTk* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_2CA &= ~0x80;
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_80AEDE10(this, play);
     } else if (!(this->unk_2CA & 0x80)) {
         if (this->actor.xzDistToPlayer < 100.0f) {
-            func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
+            SubS_OfferTalkExchangeFacing(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
         }
     } else {
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
+        Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+                                PLAYER_IA_NONE);
     }
 }
 
@@ -873,7 +874,7 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
                         this->unk_2CA |= 2;
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            play->msgCtx.msgMode = 0x44;
+                            play->msgCtx.msgMode = MSGMODE_PAUSED;
                             func_80AEE2A8(this, play);
                         } else {
                             Audio_PlaySfx_MessageCancel();
@@ -1073,7 +1074,7 @@ s32 func_80AEEA4C(EnTk* this, PlayState* play) {
         ret = 3;
     } else if (this->actor.xyzDistToPlayerSq < SQ(60.0f)) {
         ret = 0;
-    } else if (this->actor.isTargeted || (play->actorCtx.targetContext.unk_94 == &this->actor) ||
+    } else if (this->actor.isLockedOn || (play->actorCtx.targetCtx.arrowPointedActor == &this->actor) ||
                (this->actor.xyzDistToPlayerSq < SQ(80.0f))) {
         ret = 1;
     } else {

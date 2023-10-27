@@ -8,7 +8,7 @@
 #include "objects/object_an4/object_an4.h"
 #include "objects/object_msmo/object_msmo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmAn*)thisx)
 
@@ -16,10 +16,10 @@ void DmAn_Init(Actor* thisx, PlayState* play);
 void DmAn_Destroy(Actor* thisx, PlayState* play);
 void DmAn_Update(Actor* thisx, PlayState* play);
 
-void func_80C1C958(DmAn* this, PlayState* play);
-void func_80C1CAB0(DmAn* this, PlayState* play);
-void func_80C1CC80(DmAn* this, PlayState* play);
-void func_80C1D0B0(Actor* thisx, PlayState* play);
+void DmAn_WaitForObject(DmAn* this, PlayState* play);
+void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play);
+void DmAn_DoNothing(DmAn* this, PlayState* play);
+void DmAn_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Dm_An_InitVars = {
     ACTOR_DM_AN,
@@ -33,122 +33,173 @@ ActorInit Dm_An_InitVars = {
     (ActorFunc)NULL,
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an1_Anim_0071E8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_002550, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an4_Anim_00353C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_004498, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an4_Anim_0060B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_00041C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_004A78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+/**
+ * Anju stores her animations across different objects and the ones used by this actor are put together right next to
+ * each other in the sAnimationInfo array. Due to this, animation functions check which object to load by comparing
+ * index ranges. To make this a bit easier to read, this enum includes `DMAN_ANIMOBJ_*` values that mark when a range of
+ * animations of a certain object start
+ */
+typedef enum DmAnAnimation {
+    /* -1 */ DMAN_ANIM_NONE = -1,
+    /*  0 */ DMAN_ANIM_SITTING_IN_DISBELIEF,
+    /*  1 */ DMAN_ANIM_SIT,
+
+    /*  2 */ DMAN_ANIMOBJ_AN4,
+    /*  2 */ DMAN_ANIM_MASK_STAND_LOOP = DMAN_ANIMOBJ_AN4,
+    /*  3 */ DMAN_ANIM_HOLD_HANDS, //! @bug See note at `sAnimationInfo`
+    /*  4 */ DMAN_ANIM_MASK_KNEEL,
+    /*  5 */ DMAN_ANIM_MASK_KNEEL_LOOP,
+    /*  6 */ DMAN_ANIM_HUG,
+    /*  7 */ DMAN_ANIM_HUG_LOOP,
+    /*  8 */ DMAN_ANIM_HUG_RELEASE,
+    /*  9 */ DMAN_ANIM_HUG_RELEASE_LOOP,
+    /* 10 */ DMAN_ANIM_COMBINE_MASKS_1,
+    /* 11 */ DMAN_ANIM_COMBINE_MASKS_2,
+    /* 12 */ DMAN_ANIM_LOOK_UP,
+    /* 13 */ DMAN_ANIM_LOOK_UP_LOOP,
+    /* 14 */ DMAN_ANIM_MAX
+} DmAnAnimation;
+
+static AnimationInfoS sAnimationInfo[DMAN_ANIM_MAX] = {
+    { &gAnju1SittingInDisbeliefAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_SITTING_IN_DISBELIEF
+    { &gAnju1SitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // DMAN_ANIM_SIT
+
+    // DMAN_ANIMOBJ_AN4
+    { &gAnju4MaskStandLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_MASK_STAND_LOOP
+    //! @bug Uses symbol from OBJECT_AN1 instead of OBJECT_AN4
+    { &gAnju1HoldHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // DMAN_ANIM_HOLD_HANDS
+    { &gAnju4MaskKneelAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // DMAN_ANIM_MASK_KNEEL
+    { &gAnju4MaskKneelLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMAN_ANIM_MASK_KNEEL_LOOP
+    { &gAnju4HugAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },            // DMAN_ANIM_HUG
+    { &gAnju4HugLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // DMAN_ANIM_HUG_LOOP
+    { &gAnju4HugReleaseAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // DMAN_ANIM_HUG_RELEASE
+    { &gAnju4HugReleaseLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // DMAN_ANIM_HUG_RELEASE_LOOP
+    { &gAnju4CombineMasks1Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMAN_ANIM_COMBINE_MASKS_1
+    { &gAnju4CombineMasks2Anim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMAN_ANIM_COMBINE_MASKS_2
+    { &gAnju4LookUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // DMAN_ANIM_LOOK_UP
+    { &gAnju4LookUpLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // DMAN_ANIM_LOOK_UP_LOOP
 };
 
-s32 func_80C1C410(DmAn* this, PlayState* play) {
-    s8 objectIndex = this->actor.objBankIndex;
-    s8 objectIndex2;
-    s32 ret = false;
+s32 DmAn_UpdateSkelAnime(DmAn* this, PlayState* play) {
+    s8 objectSlot = this->actor.objectSlot;
+    s8 objectSlot2;
+    s32 isAnimFinished = false;
 
-    if (this->unk_2C8 < 2) {
-        objectIndex2 = this->actor.objBankIndex;
+    if (this->animIndex < DMAN_ANIMOBJ_AN4) {
+        objectSlot2 = this->actor.objectSlot;
     } else {
-        objectIndex2 = this->unk_2AC;
+        objectSlot2 = this->an4ObjectSlot;
     }
 
-    if (objectIndex2 >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
-        ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+    if (objectSlot2 > OBJECT_SLOT_NONE) {
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
+        isAnimFinished = SkelAnime_Update(&this->skelAnime);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
-    return ret;
+
+    return isAnimFinished;
 }
 
-s32 func_80C1C4D8(DmAn* this, PlayState* play, s32 arg2) {
-    s8 objectIndex = this->actor.objBankIndex;
-    s8 objectIndex2;
-    s32 ret = false;
+s32 DmAn_ChangeAnim(DmAn* this, PlayState* play, DmAnAnimation animIndex) {
+    s8 objectSlot = this->actor.objectSlot;
+    s8 objectSlot2;
+    s32 didAnimChange = false;
 
-    if (arg2 < 2) {
-        objectIndex2 = this->actor.objBankIndex;
+    if (animIndex < DMAN_ANIMOBJ_AN4) {
+        objectSlot2 = this->actor.objectSlot;
     } else {
-        objectIndex2 = this->unk_2AC;
+        objectSlot2 = this->an4ObjectSlot;
     }
 
-    if ((objectIndex2 >= 0) && (arg2 != this->unk_2C8)) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
-        this->unk_2C8 = arg2;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+    if ((objectSlot2 > OBJECT_SLOT_NONE) && (this->animIndex != animIndex)) {
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot2].segment);
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
-    return ret;
+
+    return didAnimChange;
 }
 
-void func_80C1C5B4(DmAn* this) {
-    if (DECR(this->unk_2BA) == 0) {
-        this->unk_2B8++;
-        if (this->unk_2B8 >= 4) {
-            this->unk_2BA = Rand_S16Offset(30, 30);
-            this->unk_2B8 = 0;
+typedef enum DmAnEyes {
+    /* 0 */ DMAN_EYES_OPEN,
+    /* 1 */ DMAN_EYES_HALF1,
+    /* 2 */ DMAN_EYES_CLOSED,
+    /* 3 */ DMAN_EYES_HALF2,
+    /* 4 */ DMAN_EYES_COMFORT,
+    /* 5 */ DMAN_EYES_SAD,
+    /* 6 */ DMAN_EYES_RELIEVED_CLOSED,
+    /* 7 */ DMAN_EYES_MAX
+} DmAnEyes;
+
+typedef enum DmAnMouth {
+    /* 0 */ DMAN_MOUTH_CLOSED,
+    /* 1 */ DMAN_MOUTH_HAPPY,
+    /* 2 */ DMAN_MOUTH_OPEN,
+    /* 3 */ DMAN_MOUTH_MAX
+} DmAnMouth;
+
+void DmAn_Blink(DmAn* this) {
+    if (DECR(this->eyeTimer) == 0) {
+        this->eyeTexIndex++;
+        if (this->eyeTexIndex > DMAN_EYES_HALF2) {
+            this->eyeTimer = Rand_S16Offset(30, 30);
+            this->eyeTexIndex = 0;
         }
     }
 }
 
-s32 func_80C1C62C(DmAn* this, PlayState* play) {
+s32 DmAn_UpdateHeadRot(DmAn* this, PlayState* play) {
     s32 pad;
-    Vec3f sp40;
-    Vec3f sp34;
-    s16 sp32;
+    Vec3f lookAtActorPos;
+    Vec3f pos;
+    s16 yaw;
 
-    Math_Vec3f_Copy(&sp40, &this->unk_2B4->world.pos);
-    Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-    sp32 = Math_Vec3f_Yaw(&sp34, &sp40);
+    Math_Vec3f_Copy(&lookAtActorPos, &this->lookAtActor->world.pos);
+    Math_Vec3f_Copy(&pos, &this->actor.world.pos);
+    yaw = Math_Vec3f_Yaw(&pos, &lookAtActorPos);
 
-    Math_ApproachS(&this->unk_2C0, (sp32 - this->unk_2C4) - this->actor.shape.rot.y, 4, 0x2AA8);
-    this->unk_2C0 = CLAMP(this->unk_2C0, -0x1FFE, 0x1FFE);
+    Math_ApproachS(&this->headRotY, (yaw - this->torsoRotY) - this->actor.shape.rot.y, 4, 0x2AA8);
+    this->headRotY = CLAMP(this->headRotY, -0x1FFE, 0x1FFE);
 
-    Math_ApproachS(&this->unk_2C4, (sp32 - this->unk_2C0) - this->actor.shape.rot.y, 4, 0x2AA8);
-    this->unk_2C4 = CLAMP(this->unk_2C4, -0x1C70, 0x1C70);
+    Math_ApproachS(&this->torsoRotY, (yaw - this->headRotY) - this->actor.shape.rot.y, 4, 0x2AA8);
+    this->torsoRotY = CLAMP(this->torsoRotY, -0x1C70, 0x1C70);
 
-    if (this->unk_2B4->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_2B4)->bodyPartsPos[7].y + 3.0f;
+    if (this->lookAtActor->id == ACTOR_PLAYER) {
+        lookAtActorPos.y = ((Player*)this->lookAtActor)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
-        Math_Vec3f_Copy(&sp40, &this->unk_2B4->focus.pos);
+        Math_Vec3f_Copy(&lookAtActorPos, &this->lookAtActor->focus.pos);
     }
 
-    Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
-    Math_ApproachS(&this->unk_2BE, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk_2C2, 4, 0x2AA8);
-    this->unk_2BE = CLAMP(this->unk_2BE, -0x1C70, 0x1C70);
+    Math_Vec3f_Copy(&pos, &this->actor.focus.pos);
+    Math_ApproachS(&this->headRotZ, Math_Vec3f_Pitch(&pos, &lookAtActorPos) - this->torsoRotZ, 4, 0x2AA8);
+    this->headRotZ = CLAMP(this->headRotZ, -0x1C70, 0x1C70);
 
-    Math_ApproachS(&this->unk_2C2, Math_Vec3f_Pitch(&sp34, &sp40) - this->unk_2BE, 4, 0x2AA8);
-    this->unk_2C2 = CLAMP(this->unk_2C2, -0x1C70, 0x1C70);
+    Math_ApproachS(&this->torsoRotZ, Math_Vec3f_Pitch(&pos, &lookAtActorPos) - this->headRotZ, 4, 0x2AA8);
+    this->torsoRotZ = CLAMP(this->torsoRotZ, -0x1C70, 0x1C70);
+
     return true;
 }
 
-s32 func_80C1C83C(DmAn* this, PlayState* play) {
-    if (this->unk_2B4 != NULL) {
-        func_80C1C62C(this, play);
-        this->unk_2AE &= ~1;
-        this->unk_2AE |= 2;
-    } else if (this->unk_2AE & 2) {
-        this->unk_2AE &= ~2;
-        this->unk_2BE = 0;
-        this->unk_2C0 = 0;
-        this->unk_2C2 = 0;
-        this->unk_2C4 = 0;
-        this->unk_2BC = 20;
-    } else if (DECR(this->unk_2BC) == 0) {
-        this->unk_2AE |= 1;
+s32 DmAn_UpdateAttention(DmAn* this, PlayState* play) {
+    if (this->lookAtActor != NULL) {
+        DmAn_UpdateHeadRot(this, play);
+        this->stateFlags &= ~DMAN_STATE_LOST_ATTENTION;
+        this->stateFlags |= DMAN_STATE_FACE_TARGET;
+    } else if (this->stateFlags & DMAN_STATE_FACE_TARGET) {
+        this->stateFlags &= ~DMAN_STATE_FACE_TARGET;
+        this->headRotZ = 0;
+        this->headRotY = 0;
+        this->torsoRotZ = 0;
+        this->torsoRotY = 0;
+        this->loseAttentionTimer = 20;
+    } else if (DECR(this->loseAttentionTimer) == 0) {
+        this->stateFlags |= DMAN_STATE_LOST_ATTENTION;
     }
     return true;
 }
 
-Actor* func_80C1C8E8(PlayState* play) {
+Actor* DmAn_FindAnjusMotherActor(PlayState* play) {
     Actor* tempActor;
     Actor* foundActor = NULL;
 
@@ -169,41 +220,52 @@ Actor* func_80C1C8E8(PlayState* play) {
     return foundActor;
 }
 
-void func_80C1C958(DmAn* this, PlayState* play) {
-    if ((this->unk_2AC >= 0) && SubS_IsObjectLoaded(this->unk_2AC, play) && (this->unk_2AD >= 0) &&
-        SubS_IsObjectLoaded(this->unk_2AD, play)) {
+void DmAn_WaitForObject(DmAn* this, PlayState* play) {
+    if ((this->an4ObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->an4ObjectSlot, play) &&
+        (this->msmoObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->msmoObjectSlot, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_an1_Skel_012618, NULL, this->jointTable, this->morphTable,
-                           OBJECT_AN1_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gAnju1Skel, NULL, this->jointTable, this->morphTable,
+                           ANJU1_LIMB_MAX);
 
-        this->unk_2C8 = -1;
-        func_80C1C4D8(this, play, 0);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->animIndex = DMAN_ANIM_NONE;
+        DmAn_ChangeAnim(this, play, DMAN_ANIM_SITTING_IN_DISBELIEF);
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         Actor_SetScale(&this->actor, 0.01f);
-        this->unk_2AE |= 1;
-        this->actor.draw = func_80C1D0B0;
+        this->stateFlags |= DMAN_STATE_LOST_ATTENTION;
+        this->actor.draw = DmAn_Draw;
 
         if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
-            this->unk_2B4 = func_80C1C8E8(play);
-            func_80C1C4D8(this, play, 1);
-            this->actionFunc = func_80C1CC80;
+            this->lookAtActor = DmAn_FindAnjusMotherActor(play);
+            DmAn_ChangeAnim(this, play, DMAN_ANIM_SIT);
+            this->actionFunc = DmAn_DoNothing;
         } else {
-            this->actionFunc = func_80C1CAB0;
+            this->actionFunc = DmAn_HandleCouplesMaskCs;
         }
     }
 }
 
-void func_80C1CAB0(DmAn* this, PlayState* play) {
-    s32 sp28[] = { 0, 0, 12, 2, 4, 6, 8, 10, 11, 3 };
+void DmAn_HandleCouplesMaskCs(DmAn* this, PlayState* play) {
+    s32 csAnimIndex[] = {
+        /* 0 */ 0, // no cue
+        /* 1 */ DMAN_ANIM_SITTING_IN_DISBELIEF,
+        /* 2 */ DMAN_ANIM_LOOK_UP,
+        /* 3 */ DMAN_ANIM_MASK_STAND_LOOP,
+        /* 4 */ DMAN_ANIM_MASK_KNEEL,
+        /* 5 */ DMAN_ANIM_HUG,
+        /* 6 */ DMAN_ANIM_HUG_RELEASE,
+        /* 7 */ DMAN_ANIM_COMBINE_MASKS_1,
+        /* 8 */ DMAN_ANIM_COMBINE_MASKS_2,
+        /* 9 */ DMAN_ANIM_HOLD_HANDS,
+    };
     u16 cueId;
     s32 cueChannel;
 
     if (play->csCtx.state != CS_STATE_IDLE) {
-        if (this->unk_2D0 == 0) {
+        if (!this->isCutscenePlaying) {
             this->cueId = 255;
-            this->unk_2D0 = 1;
-            this->unk_2D4 = 0;
-            this->unk_2CC = this->unk_2C8;
+            this->isCutscenePlaying = true;
+            this->didAnimChangeInCs = false;
+            this->prevAnimIndex = this->animIndex;
         }
 
         if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_557)) {
@@ -212,8 +274,8 @@ void func_80C1CAB0(DmAn* this, PlayState* play) {
 
             if (this->cueId != (u8)cueId) {
                 this->cueId = cueId;
-                this->unk_2D4 = 1;
-                func_80C1C4D8(this, play, sp28[cueId]);
+                this->didAnimChangeInCs = true;
+                DmAn_ChangeAnim(this, play, csAnimIndex[cueId]);
             }
 
             switch (this->cueId) {
@@ -223,9 +285,10 @@ void func_80C1CAB0(DmAn* this, PlayState* play) {
                 case 6:
                 case 7:
                 case 8:
-                    if ((this->unk_2C8 == 12) || (this->unk_2C8 == 4) || (this->unk_2C8 == 6) || (this->unk_2C8 == 8)) {
+                    if ((this->animIndex == DMAN_ANIM_LOOK_UP) || (this->animIndex == DMAN_ANIM_MASK_KNEEL) ||
+                        (this->animIndex == DMAN_ANIM_HUG) || (this->animIndex == DMAN_ANIM_HUG_RELEASE)) {
                         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                            func_80C1C4D8(this, play, this->unk_2C8 + 1);
+                            DmAn_ChangeAnim(this, play, this->animIndex + 1);
                         }
                     }
                     break;
@@ -235,22 +298,22 @@ void func_80C1CAB0(DmAn* this, PlayState* play) {
             }
             Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
-    } else if (this->unk_2D0 != 0) {
-        this->unk_2D0 = 0;
-        this->unk_2D4 = 0;
-        func_80C1C4D8(this, play, this->unk_2CC);
+    } else if (this->isCutscenePlaying) {
+        this->isCutscenePlaying = false;
+        this->didAnimChangeInCs = false;
+        DmAn_ChangeAnim(this, play, this->prevAnimIndex);
     }
 }
 
-void func_80C1CC80(DmAn* this, PlayState* play) {
+void DmAn_DoNothing(DmAn* this, PlayState* play) {
 }
 
 void DmAn_Init(Actor* thisx, PlayState* play) {
     DmAn* this = THIS;
 
-    this->unk_2AC = SubS_GetObjectIndex(OBJECT_AN4, play);
-    this->unk_2AD = SubS_GetObjectIndex(OBJECT_MSMO, play);
-    this->actionFunc = func_80C1C958;
+    this->an4ObjectSlot = SubS_GetObjectSlot(OBJECT_AN4, play);
+    this->msmoObjectSlot = SubS_GetObjectSlot(OBJECT_MSMO, play);
+    this->actionFunc = DmAn_WaitForObject;
 }
 
 void DmAn_Destroy(Actor* thisx, PlayState* play) {
@@ -261,54 +324,55 @@ void DmAn_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    func_80C1C83C(this, play);
+    DmAn_UpdateAttention(this, play);
 
     if (this->actor.draw != NULL) {
-        func_80C1C410(this, play);
-        func_80C1C5B4(this);
+        DmAn_UpdateSkelAnime(this, play);
+        DmAn_Blink(this);
     }
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
-Vec3f D_80C1D2C8 = { 450.0f, 700.0f, -760.0f };
-Vec3s D_80C1D2D4 = { 0x238C, 0, -0x3FFC };
-Vec3f D_80C1D2DC = { 1000.0f, 0.0f, 0.0f };
-
-void func_80C1CD80(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void DmAn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad[2];
     DmAn* this = THIS;
-    s8 sp2B = this->actor.objBankIndex;
-    s8 sp2A = this->unk_2AD;
+    s8 objectSlot = this->actor.objectSlot;
+    s8 msmoObjectSlot = this->msmoObjectSlot;
 
-    if ((limbIndex == OBJECT_AN1_LIMB_05) && (this->unk_2D4 != 0)) {
+    if ((limbIndex == ANJU1_LIMB_LEFT_HAND) && this->didAnimChangeInCs) {
+        static Vec3f D_80C1D2C8 = { 450.0f, 700.0f, -760.0f };
+        static Vec3s D_80C1D2D4 = { 0x238C, 0, -0x3FFC };
+
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
         Matrix_TranslateRotateZYX(&D_80C1D2C8, &D_80C1D2D4);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp2A].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[msmoObjectSlot].segment);
         gSPDisplayList(POLY_OPA_DISP++, gMoonMaskDL);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp2B].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
 
         Matrix_Pop();
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (limbIndex == OBJECT_AN1_LIMB_09) {
+    if (limbIndex == ANJU1_LIMB_HEAD) {
+        static Vec3f D_80C1D2DC = { 1000.0f, 0.0f, 0.0f };
+
         Matrix_MultVec3f(&D_80C1D2DC, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
 }
 
-void func_80C1CEFC(PlayState* play, s32 limbIndex, Actor* thisx) {
+void DmAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     DmAn* this = THIS;
     s16 stepRot;
     s16 overrideRot;
 
-    if (!(this->unk_2AE & 1)) {
-        if (this->unk_2AE & 2) {
+    if (!(this->stateFlags & DMAN_STATE_LOST_ATTENTION)) {
+        if (this->stateFlags & DMAN_STATE_FACE_TARGET) {
             overrideRot = true;
         } else {
             overrideRot = false;
@@ -319,53 +383,57 @@ void func_80C1CEFC(PlayState* play, s32 limbIndex, Actor* thisx) {
         overrideRot = false;
     }
 
-    if (limbIndex == OBJECT_AN1_LIMB_09) {
-        SubS_UpdateLimb(this->unk_2BE + this->unk_2C2 + 0x4000,
-                        this->unk_2C0 + this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_18C,
-                        &this->unk_1A4, stepRot, overrideRot);
+    if (limbIndex == ANJU1_LIMB_HEAD) {
+        SubS_UpdateLimb(this->headRotZ + this->torsoRotZ + 0x4000,
+                        this->headRotY + this->torsoRotY + this->actor.shape.rot.y + 0x4000, &this->headComputedPos,
+                        &this->headComputedRot, stepRot, overrideRot);
         Matrix_Pop();
-        Matrix_Translate(this->unk_18C.x, this->unk_18C.y, this->unk_18C.z, MTXMODE_NEW);
+        Matrix_Translate(this->headComputedPos.x, this->headComputedPos.y, this->headComputedPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->unk_1A4.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk_1A4.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->unk_1A4.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->headComputedRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headComputedRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headComputedRot.z, MTXMODE_APPLY);
         Matrix_Push();
-    } else if (limbIndex == OBJECT_AN1_LIMB_02) {
-        SubS_UpdateLimb(this->unk_2C2 + 0x4000, this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_194,
-                        &this->unk_1AA, stepRot, overrideRot);
+    } else if (limbIndex == ANJU1_LIMB_TORSO) {
+        SubS_UpdateLimb(this->torsoRotZ + 0x4000, this->torsoRotY + this->actor.shape.rot.y + 0x4000,
+                        &this->torsoComputedPos, &this->torsoComputedRot, stepRot, overrideRot);
         Matrix_Pop();
-        Matrix_Translate(this->unk_194.x, this->unk_194.y, this->unk_194.z, MTXMODE_NEW);
+        Matrix_Translate(this->torsoComputedPos.x, this->torsoComputedPos.y, this->torsoComputedPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateYS(this->unk_1AA.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk_1AA.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->unk_1AA.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->torsoComputedRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->torsoComputedRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->torsoComputedRot.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }
 
-TexturePtr D_80C1D2E8[] = {
-    object_an1_Tex_00E6E0,
-    object_an1_Tex_00F7A0,
-    object_an1_Tex_0101A0,
-};
-
-TexturePtr D_80C1D2F4[] = {
-    object_an1_Tex_00E1E0, object_an1_Tex_00EFA0, object_an1_Tex_00F3A0, object_an1_Tex_00EFA0,
-    object_an1_Tex_00FDA0, object_an1_Tex_00F9A0, object_an1_Tex_0103A0,
-};
-
-void func_80C1D0B0(Actor* thisx, PlayState* play) {
+void DmAn_Draw(Actor* thisx, PlayState* play) {
+    static TexturePtr sMouthTextures[DMAN_MOUTH_MAX] = {
+        gAnju1MouthClosedTex, // DMAN_MOUTH_CLOSED
+        gAnju1MouthHappyTex,  // DMAN_MOUTH_HAPPY
+        gAnju1MouthOpenTex,   // DMAN_MOUTH_OPEN
+    };
+    static TexturePtr sEyeTextures[DMAN_EYES_MAX] = {
+        gAnju1EyeOpenTex,           // DMAN_EYES_OPEN
+        gAnju1EyeHalfTex,           // DMAN_EYES_HALF1
+        gAnju1EyeClosedTex,         // DMAN_EYES_CLOSED
+        gAnju1EyeHalfTex,           // DMAN_EYES_HALF2
+        gAnju1EyeComfortTex,        // DMAN_EYES_COMFORT
+        gAnju1EyeSadTex,            // DMAN_EYES_SAD
+        gAnju1EyeRelievedClosedTex, // DMAN_EYES_RELIEVED_CLOSED
+    };
     DmAn* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C1D2F4[this->unk_2B8]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C1D2E8[0]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sMouthTextures[DMAN_MOUTH_CLOSED]));
 
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                   this->skelAnime.dListCount, NULL, func_80C1CD80, func_80C1CEFC, &this->actor);
+                                   this->skelAnime.dListCount, NULL, DmAn_PostLimbDraw, DmAn_TransformLimbDraw,
+                                   &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

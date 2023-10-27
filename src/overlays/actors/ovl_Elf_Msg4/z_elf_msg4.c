@@ -40,28 +40,28 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 func_80AFD380(ElfMsg4* this, PlayState* play) {
-    if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
-        (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
+    if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y <= 0x80) &&
+        Flags_GetSwitch(play, this->actor.home.rot.y - 1)) {
         (void)"共倒れ"; // "Collapse together"
-        if (ELFMSG4_GET_SWITCHFLAG(&this->actor) != 0x7F) {
-            Flags_SetSwitch(play, ELFMSG4_GET_SWITCHFLAG(&this->actor));
+        if (ELFMSG4_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
+            Flags_SetSwitch(play, ELFMSG4_GET_SWITCH_FLAG(&this->actor));
         }
         Actor_Kill(&this->actor);
         return true;
     }
     if (this->actor.home.rot.y == 0x81) {
         if (Flags_GetClear(play, this->actor.room)) {
-            if (ELFMSG4_GET_SWITCHFLAG(&this->actor) != 0x7F) {
-                Flags_SetSwitch(play, ELFMSG4_GET_SWITCHFLAG(&this->actor));
+            if (ELFMSG4_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG4_GET_SWITCH_FLAG(&this->actor));
             }
             Actor_Kill(&this->actor);
             return true;
         }
     }
-    if (ELFMSG4_GET_SWITCHFLAG(&this->actor) == 0x7F) {
+    if (ELFMSG4_GET_SWITCH_FLAG(&this->actor) == 0x7F) {
         return false;
     }
-    if (Flags_GetSwitch(play, ELFMSG4_GET_SWITCHFLAG(&this->actor))) {
+    if (Flags_GetSwitch(play, ELFMSG4_GET_SWITCH_FLAG(&this->actor))) {
         (void)"共倒れ"; // "Collapse together"
         Actor_Kill(&this->actor);
         return true;
@@ -160,16 +160,16 @@ void ElfMsg4_Update(Actor* thisx, PlayState* play) {
             return;
         }
 
-        if ((bgActor != NULL) && (Actor_ProcessTalkRequest(bgActor, &play->state))) {
-            if (ELFMSG4_GET_SWITCHFLAG(thisx) != 0x7F) {
-                Flags_SetSwitch(play, ELFMSG4_GET_SWITCHFLAG(thisx));
+        if ((bgActor != NULL) && Actor_ProcessTalkRequest(bgActor, &play->state)) {
+            if (ELFMSG4_GET_SWITCH_FLAG(thisx) != 0x7F) {
+                Flags_SetSwitch(play, ELFMSG4_GET_SWITCH_FLAG(thisx));
             }
             Actor_Kill(&this->actor);
             return;
         }
 
         if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
-            (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
+            Flags_GetSwitch(play, -1 - this->actor.home.rot.y)) {
             this->actionFunc(this, play);
         }
     }

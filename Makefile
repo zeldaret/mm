@@ -23,6 +23,8 @@ FULL_DISASM ?= 0
 RUN_CC_CHECK ?= 1
 # Dump build object files
 OBJDUMP_BUILD ?= 0
+# Force asm processor to run on every file
+ASM_PROC_FORCE ?= 0
 # Number of threads to disassmble, extract, and compress with
 N_THREADS ?= $(shell nproc)
 
@@ -91,6 +93,10 @@ OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 ASM_PROC   := python3 tools/asm-processor/build.py
 
 ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
+
+ifneq ($(ASM_PROC_FORCE), 0)
+	ASM_PROC_FLAGS += --force
+endif
 
 IINC       := -Iinclude -Isrc -Iassets -Ibuild -I.
 
@@ -167,14 +173,12 @@ SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 
 ## Assets binaries (PNGs, JPGs, etc)
-ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
+ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c")
 # Prevents building C files that will be #include'd
 ASSET_BIN_DIRS_C_FILES := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/code*" -not -path "assets/overlays*")
 
-ASSET_FILES_XML := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.xml))
 ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
-ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_XML:.xml=.c),$f) \
-				   $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
+ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
 
 TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
 TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
@@ -198,11 +202,10 @@ OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' 
 DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 
 # create build directories
-$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
+$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS) $(ASSET_BIN_DIRS_C_FILES),build/$(dir)))
 
 # directory flags
-build/src/boot_O2/%.o: OPTFLAGS := -O2
-build/src/boot_O2_g3/%.o: OPTFLAGS := -O2 -g3
+build/src/boot/O2/%.o: OPTFLAGS := -O2
 
 build/src/libultra/os/%.o: OPTFLAGS := -O1
 build/src/libultra/voice/%.o: OPTFLAGS := -O2
@@ -219,8 +222,8 @@ build/assets/%.o: OPTFLAGS := -O1
 build/assets/%.o: ASM_PROC_FLAGS := 
 
 # file flags
-build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
-build/src/boot_O2_g3/fault_drawer.o: CFLAGS += -trapuv
+build/src/boot/fault.o: CFLAGS += -trapuv
+build/src/boot/fault_drawer.o: CFLAGS += -trapuv
 
 build/src/code/jpegutils.o: OPTFLAGS := -O2
 build/src/code/jpegdecoder.o: OPTFLAGS := -O2
@@ -233,8 +236,8 @@ build/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
 build/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
 # cc & asm-processor
-build/src/boot_O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
-build/src/boot_O2_g3/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot/O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 build/src/libultra/%.o: CC := $(CC_OLD)
 # Needed at least until voice is decompiled
@@ -309,7 +312,7 @@ setup:
 	python3 tools/decompress_yars.py
 
 assets:
-	python3 extract_assets.py -j $(N_THREADS)
+	python3 extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
 
 ## Assembly generation
 disasm:
@@ -348,7 +351,7 @@ build/assets/%.o: assets/%.c
 	$(OBJCOPY_BIN)
 	$(RM_MDEBUG)
 
-build/assets/archives/%.yar.o: build/assets/archives/%.o
+build/%.yar.o: build/%.o
 	$(MAKEYAR) $< $(@:.yar.o=.yar.bin) $(@:.yar.o=.symbols.o)
 	$(OBJCOPY) -I binary -O elf32-big $(@:.yar.o=.yar.bin) $@
 

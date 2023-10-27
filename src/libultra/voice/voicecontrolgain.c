@@ -4,9 +4,9 @@
  * Adjusts the input gain of the Voice Recognition System
  */
 
-#include "ultra64/controller_voice.h"
-#include "ultra64/os_voice.h"
-#include "io/controller.h"
+#include "PR/controller_voice.h"
+#include "PR/os_voice.h"
+#include "PR/controller.h"
 #include "macros.h"
 
 u8 sDigitalTable[] = { 0x00, 0x80, 0x40, 0xC0, 0x20, 0xA0, 0x60, 0xE0 };

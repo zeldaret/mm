@@ -254,7 +254,7 @@ void func_80A1BA44(ObjFlowerpot* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spC4, &spB8, &spC4, -600, phi_s0, 30, 0, 0, (Rand_ZeroOne() * 12.0f) + 16.6f,
-                             phi_s1, 0, 35, -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0015B0);
+                             phi_s1, 0, 35, -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0015B0);
     }
 
     spD0.y += 20.0f;
@@ -297,7 +297,7 @@ void func_80A1BD80(ObjFlowerpot* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spBC, &spB0, &spBC, -240, phi_s0, 40, 0, 0, (Rand_ZeroOne() * 20.0f) + 10.6f, 0, 0,
-                             42, -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0015B0);
+                             42, -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0015B0);
     }
 
     spBC.y = this->actor.world.pos.y + this->actor.depthInWater;
@@ -337,7 +337,7 @@ void func_80A1C0FC(ObjFlowerpot* this, PlayState* play) {
 
         Math_Vec3f_Sum(&spB8, &spC4, &spB8);
         EffectSsKakera_Spawn(play, &spB8, &spAC, &spB8, -100, 64, 40, 0, 0, (Rand_ZeroOne() * 16.0f) + 14.0f, 0, 0, 80,
-                             -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0014F0);
+                             -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0014F0);
     }
 }
 
@@ -364,7 +364,7 @@ void func_80A1C328(ObjFlowerpot* this, PlayState* play) {
 
         Math_Vec3f_Sum(&spB8, &spC4, &spB8);
         EffectSsKakera_Spawn(play, &spB8, &spAC, &spB8, -80, 64, 44, 0, 0, (Rand_ZeroOne() * 16.0f) + 14.0f, 0, 0, 80,
-                             -1, ACTOR_DEMO_GETITEM, object_flowerpot_DL_0014F0);
+                             -1, OBJECT_FLOWERPOT, object_flowerpot_DL_0014F0);
     }
 }
 

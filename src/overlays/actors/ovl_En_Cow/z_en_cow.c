@@ -8,7 +8,7 @@
 #include "z64horse.h"
 #include "z64voice.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnCow*)thisx)
 
@@ -128,9 +128,9 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
                                EN_COW_TYPE_TAIL);
 
-            this->animationTimer = Rand_ZeroFloat(1000.0f) + 40.0f;
-            this->animationCycle = 0;
-            this->actor.targetMode = 6;
+            this->animTimer = Rand_ZeroFloat(1000.0f) + 40.0f;
+            this->animCycle = 0;
+            this->actor.targetMode = TARGET_MODE_6;
 
             gHorsePlayedEponasSong = false;
             func_801A5080(VOICE_WORD_ID_MILK);
@@ -147,8 +147,8 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             EnCow_SetTailPos(this);
 
-            this->actor.flags &= ~ACTOR_FLAG_1;
-            this->animationTimer = Rand_ZeroFloat(1000.0f) + 40.0f;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->animTimer = Rand_ZeroFloat(1000.0f) + 40.0f;
             break;
 
         default:
@@ -172,10 +172,10 @@ void EnCow_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnCow_UpdateAnimation(EnCow* this, PlayState* play) {
-    if (this->animationTimer > 0) {
-        this->animationTimer--;
+    if (this->animTimer > 0) {
+        this->animTimer--;
     } else {
-        this->animationTimer = Rand_ZeroFloat(500.0f) + 40.0f;
+        this->animTimer = Rand_ZeroFloat(500.0f) + 40.0f;
         Animation_Change(&this->skelAnime, &gCowChewAnim, 1.0f, this->skelAnime.curFrame,
                          Animation_GetLastFrame(&gCowChewAnim), ANIMMODE_ONCE, 1.0f);
     }
@@ -183,23 +183,23 @@ void EnCow_UpdateAnimation(EnCow* this, PlayState* play) {
         if (!(this->flags & EN_COW_FLAG_PLAYER_HAS_APPROACHED)) {
             this->flags |= EN_COW_FLAG_PLAYER_HAS_APPROACHED;
             if (this->skelAnime.animation == &gCowChewAnim) {
-                this->animationTimer = 0;
+                this->animTimer = 0;
             }
         }
     }
-    this->animationCycle++;
-    if (this->animationCycle > 0x30) {
-        this->animationCycle = 0;
+    this->animCycle++;
+    if (this->animCycle > 0x30) {
+        this->animCycle = 0;
     }
 
-    if (this->animationCycle < 0x20) {
-        this->actor.scale.x = ((Math_SinS(this->animationCycle * 0x400) * (1.0f / 100.0f)) + 1.0f) * 0.01f;
+    if (this->animCycle < 0x20) {
+        this->actor.scale.x = ((Math_SinS(this->animCycle * 0x400) * (1.0f / 100.0f)) + 1.0f) * 0.01f;
     } else {
         this->actor.scale.x = 0.01f;
     }
 
-    if (this->animationCycle > 0x10) {
-        this->actor.scale.y = ((Math_SinS((this->animationCycle * 0x400) - 0x4000) * (1.0f / 100.0f)) + 1.0f) * 0.01f;
+    if (this->animCycle > 0x10) {
+        this->actor.scale.y = ((Math_SinS((this->animCycle * 0x400) - 0x4000) * (1.0f / 100.0f)) + 1.0f) * 0.01f;
     } else {
         this->actor.scale.y = 0.01f;
     }
@@ -261,7 +261,7 @@ void EnCow_Talk(EnCow* this, PlayState* play) {
         }
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 170.0f);
+        Actor_OfferTalk(&this->actor, play, 170.0f);
         this->actor.textId = 0x32C8; //! @bug textId is reset to this no matter the intial value
     }
 
@@ -269,7 +269,7 @@ void EnCow_Talk(EnCow* this, PlayState* play) {
 }
 
 void EnCow_Idle(EnCow* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaMode == 0) || (play->msgCtx.ocarinaMode == 4)) {
+    if ((play->msgCtx.ocarinaMode == OCARINA_MODE_NONE) || (play->msgCtx.ocarinaMode == OCARINA_MODE_END)) {
         if (gHorsePlayedEponasSong) {
             if (this->flags & EN_COW_FLAG_WONT_GIVE_MILK) {
                 this->flags &= ~EN_COW_FLAG_WONT_GIVE_MILK;
@@ -279,7 +279,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
                 gHorsePlayedEponasSong = false;
                 this->actionFunc = EnCow_Talk;
                 this->actor.flags |= ACTOR_FLAG_10000;
-                func_800B8614(&this->actor, play, 170.0f);
+                Actor_OfferTalk(&this->actor, play, 170.0f);
                 this->actor.textId = 0x32C8; // Text to give milk after playing Epona's Song.
 
                 EnCow_UpdateAnimation(this, play);
@@ -303,7 +303,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
                     this->actor.textId = 0x32CA; // Text if you don't have an empty bottle.
                 }
                 this->actor.flags |= ACTOR_FLAG_10000;
-                func_800B8614(&this->actor, play, 170.0f);
+                Actor_OfferTalk(&this->actor, play, 170.0f);
                 this->actionFunc = EnCow_Talk;
             }
         } else {
@@ -315,10 +315,10 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
 }
 
 void EnCow_DoTail(EnCow* this, PlayState* play) {
-    if (this->animationTimer > 0) {
-        this->animationTimer--;
+    if (this->animTimer > 0) {
+        this->animTimer--;
     } else {
-        this->animationTimer = Rand_ZeroFloat(200.0f) + 40.0f;
+        this->animTimer = Rand_ZeroFloat(200.0f) + 40.0f;
         Animation_Change(&this->skelAnime, &gCowTailIdleAnim, 1.0f, this->skelAnime.curFrame,
                          Animation_GetLastFrame(&gCowTailIdleAnim), ANIMMODE_ONCE, 1.0f);
     }
@@ -328,7 +328,7 @@ void EnCow_DoTail(EnCow* this, PlayState* play) {
         if (!(this->flags & EN_COW_FLAG_PLAYER_HAS_APPROACHED)) {
             this->flags |= EN_COW_FLAG_PLAYER_HAS_APPROACHED;
             if (this->skelAnime.animation == &gCowTailIdleAnim) {
-                this->animationTimer = 0;
+                this->animTimer = 0;
             }
         }
     }

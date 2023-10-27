@@ -4,13 +4,14 @@
  * Description: Igos du Ikana window - curtains and ray effects
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_knight/object_knight.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss06*)thisx)
 
@@ -146,12 +147,12 @@ void Boss06_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.y = -0x8000;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    temp_v0 = SEGMENTED_TO_VIRTUAL(&object_knight_Tex_019490);
+    temp_v0 = SEGMENTED_TO_K0(&object_knight_Tex_019490);
     for (i = 0; i < ARRAY_COUNT(this->unk_200); i++) {
         this->unk_200[i] = temp_v0[i];
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void Boss06_Destroy(Actor* thisx, PlayState* play) {
@@ -199,7 +200,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             }
 
             Cutscene_StartManual(play, &play->csCtx);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -239,7 +240,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 this->unk_1D8 = 0.0f;
                 if (this->unk_1CA == 60) {
                     D_809F4970->unk_154++;
-                    func_800B7298(play, &this->actor, PLAYER_CSMODE_132);
+                    func_800B7298(play, &this->actor, PLAYER_CSACTION_132);
                     player->actor.shape.rot.y = 0;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
                 }
@@ -332,7 +333,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
                 D_809F4970->unk_151 = 0;
             }
             break;
@@ -430,26 +431,26 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_1E4 > 0.0f) {
         if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-            D_801F4E32 = 1;
-            D_801F4E38.x = this->actor.world.pos.x + this->unk_1B0;
-            D_801F4E38.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
-            D_801F4E38.z = this->actor.world.pos.z;
+            gCustomLensFlare1On = true;
+            gCustomLensFlare1Pos.x = this->actor.world.pos.x + this->unk_1B0;
+            gCustomLensFlare1Pos.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
+            gCustomLensFlare1Pos.z = this->actor.world.pos.z;
             D_801F4E44 = this->unk_1E4;
             D_801F4E48 = 10.0f;
             D_801F4E4C = 0;
         } else {
-            D_801F4E4E = 1;
-            D_801F4E50.x = this->actor.world.pos.x + this->unk_1B0;
-            D_801F4E50.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
-            D_801F4E50.z = this->actor.world.pos.z;
+            gCustomLensFlare2On = true;
+            gCustomLensFlare2Pos.x = this->actor.world.pos.x + this->unk_1B0;
+            gCustomLensFlare2Pos.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
+            gCustomLensFlare2Pos.z = this->actor.world.pos.z;
             D_801F4E5C = this->unk_1E4;
             D_801F4E60 = 10.0f;
             D_801F4E64 = 0;
         }
     } else if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-        D_801F4E32 = 0;
+        gCustomLensFlare1On = false;
     } else {
-        D_801F4E4E = 0;
+        gCustomLensFlare2On = false;
     }
 
     if ((this->unk_1C8 != 0) && (this->unk_1C8 != 0)) {
@@ -529,7 +530,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
     if (this->unk_144 & 2) {
         temp_s0 = Math_SinS(D_809F4970->unk_144) * 1000.0f;
         temp_f10 = (Math_CosS(D_809F4970->unk_144) * -2000.0f) - 2000.0f;
-        temp_v0_2 = SEGMENTED_TO_VIRTUAL(&object_knight_Vtx_018BD0);
+        temp_v0_2 = SEGMENTED_TO_K0(&object_knight_Vtx_018BD0);
 
         temp_v0_2[0].v.ob[1] = (s16)this->unk_1A0 + 0xE92;
         temp_v0_2[3].v.ob[1] = (s16)this->unk_1A0 + 0xE92;

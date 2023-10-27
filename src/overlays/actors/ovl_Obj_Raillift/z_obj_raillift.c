@@ -92,7 +92,7 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
         this->direction = 1;
         this->points = Lib_SegmentedToVirtual(path->points);
         ObjRaillift_UpdatePosition(this, this->curPoint);
-        if (OBJRAILLIFT_HAS_FLAG(thisx) && !Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(thisx))) {
+        if (OBJRAILLIFT_HAS_FLAG(thisx) && !Flags_GetSwitch(play, OBJRAILLIFT_GET_SWITCH_FLAG(thisx))) {
             this->actionFunc = ObjRaillift_Idle;
         } else {
             this->actionFunc = ObjRaillift_Move;
@@ -120,7 +120,7 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
     Vec3s* endPoint;
 
     if (OBJRAILLIFT_HAS_FLAG(thisx)) {
-        if (!Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(thisx))) {
+        if (!Flags_GetSwitch(play, OBJRAILLIFT_GET_SWITCH_FLAG(thisx))) {
             this->actionFunc = ObjRaillift_Idle;
             return;
         }
@@ -196,7 +196,7 @@ void ObjRaillift_Wait(ObjRaillift* this, PlayState* play) {
 }
 
 void ObjRaillift_Idle(ObjRaillift* this, PlayState* play) {
-    if (Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJRAILLIFT_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->dyna.actor.speed = 0.0f;
         CutsceneManager_Queue(this->dyna.actor.csId);
         this->actionFunc = ObjRaillift_StartCutscene;
@@ -215,8 +215,6 @@ void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play) {
 
 void ObjRaillift_Update(Actor* thisx, PlayState* play) {
     ObjRaillift* this = THIS;
-    f32 target;
-    f32 step;
 
     this->actionFunc(this, play);
     Actor_SetFocus(thisx, 10.0f);
@@ -227,7 +225,8 @@ void ObjRaillift_Update(Actor* thisx, PlayState* play) {
         }
     }
     if (OBJRAILLIFT_REACT_TO_PLAYER_ON_TOP(thisx)) {
-        s32 requiredScopeTemp;
+        f32 target;
+        f32 step;
 
         this->isPlayerOnTopPrev = this->isPlayerOnTop;
         this->isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna) ? true : false;

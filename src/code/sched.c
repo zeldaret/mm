@@ -1,14 +1,8 @@
-#include "prevent_bss_reordering.h"
-#include "global.h"
-#include "stackcheck.h"
-#include "z64thread.h"
+#include "fault.h"
+#include "idle.h"
+#include "z64.h"
 
-#define RSP_DONE_MSG 667
-#define RDP_DONE_MSG 668
-#define ENTRY_MSG 670
-#define RDP_AUDIO_CANCEL_MSG 671
-#define RSP_GFX_CANCEL_MSG 672
-
+// Variables are put before most headers as a hacky way to bypass bss reordering
 FaultClient sSchedFaultClient;
 
 OSTime sRSPGFXStartTime;
@@ -19,15 +13,25 @@ OSTime sRDPStartTime;
 u64* gAudioSPDataPtr;
 u32 gAudioSPDataSize;
 
-void Sched_SwapFramebuffer(CfbInfo* cfbInfo) {
-    s32 one = 1;
+#include "functions.h"
+#include "variables.h"
+#include "stackcheck.h"
+#include "z64speed_meter.h"
+#include "z64thread.h"
 
+#define RSP_DONE_MSG 667
+#define RDP_DONE_MSG 668
+#define ENTRY_MSG 670
+#define RDP_AUDIO_CANCEL_MSG 671
+#define RSP_GFX_CANCEL_MSG 672
+
+void Sched_SwapFramebuffer(CfbInfo* cfbInfo) {
     if (cfbInfo->swapBuffer != NULL) {
         osViSwapBuffer(cfbInfo->swapBuffer);
         cfbInfo->updateRate2 = cfbInfo->updateRate;
 
         if ((SREG(62) == 0) && (cfbInfo->viMode != NULL)) {
-            D_80096B20 = one;
+            D_80096B20 = 1;
             osViSetMode(cfbInfo->viMode);
             osViSetSpecialFeatures(cfbInfo->features);
             osViSetXScale(cfbInfo->xScale);
@@ -43,7 +47,7 @@ void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo) {
         sched->shouldUpdateVi = false;
 
         if (gIrqMgrResetStatus == 0) {
-            ViConfig_UpdateVi(0);
+            ViConfig_UpdateVi(false);
         }
     }
     Sched_SwapFramebuffer(cfbInfo);
@@ -53,7 +57,7 @@ void Sched_HandleReset(SchedContext* sched) {
 }
 
 void Sched_HandleStop(SchedContext* sched) {
-    ViConfig_UpdateVi(1);
+    ViConfig_UpdateVi(true);
 }
 
 /**
@@ -70,14 +74,14 @@ void Sched_HandleAudioCancel(SchedContext* sched) {
     osSyncPrintf("AUDIO SP キャンセルします\n");
 
     if ((sched->curRSPTask != NULL) && (sched->curRSPTask->list.t.type == M_AUDTASK)) {
-        if (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+        if (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
             // Attempts to stop AUDIO SP
             osSyncPrintf("AUDIO SP止めようとします\n");
 
-            HW_REG(SP_STATUS_REG, u32) = SP_SET_HALT;
+            IO_WRITE(SP_STATUS_REG, SP_SET_HALT);
 
             i = 0;
-            while (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+            while (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
                 if (i++ > 100) {
                     // AUDIO SP did not stop (10ms timeout)
                     osSyncPrintf("AUDIO SP止まりませんでした(10msタイムアウト)\n");
@@ -132,14 +136,14 @@ void Sched_HandleGfxCancel(SchedContext* sched) {
     osSyncPrintf("GRAPH SP キャンセルします\n");
 
     if ((sched->curRSPTask != NULL) && (sched->curRSPTask->list.t.type == M_GFXTASK)) {
-        if (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+        if (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
             // GRAPH SP tries to stop
             osSyncPrintf("GRAPH SP止めようとします\n");
 
-            HW_REG(SP_STATUS_REG, u32) = SP_SET_HALT;
+            IO_WRITE(SP_STATUS_REG, SP_SET_HALT);
 
             i = 0;
-            while (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+            while (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
                 if (i++ > 100) {
                     // GRAPH SP did not stop (10ms timeout)
                     osSyncPrintf("GRAPH SP止まりませんでした(10msタイムアウト)\n");
@@ -423,16 +427,16 @@ void Sched_HandleRSPDone(SchedContext* sched) {
     time = osGetTime();
     switch (sched->curRSPTask->list.t.type) {
         case M_AUDTASK:
-            gRSPAudioTotalTime += time - sRSPAudioStartTime;
+            gRSPAudioTimeAcc += time - sRSPAudioStartTime;
             break;
 
         case M_GFXTASK:
-            sRSPGFXTotalTime += time - sRSPGFXStartTime;
+            gRSPGfxTimeAcc += time - sRSPGFXStartTime;
             break;
 
         default:
             if (1) {}
-            sRSPOtherTotalTime += time - sRSPOtherStartTime;
+            gRSPOtherTimeAcc += time - sRSPOtherStartTime;
             break;
     }
 
@@ -478,7 +482,7 @@ void Sched_HandleRDPDone(SchedContext* sched) {
     }
 
     // Log run time
-    gRDPTotalTime = osGetTime() - sRDPStartTime;
+    gRDPTimeAcc = osGetTime() - sRDPStartTime;
 
     // Mark task done
     curRDP = sched->curRDPTask;
@@ -600,7 +604,7 @@ void Sched_ThreadEntry(void* arg) {
  * Registers an IrqClient for the thread and fault client for the SchedContext.
  * Directs the OS to send SP and DP OS messages to interruptQ when the RSP or RDP signal task completion.
  */
-void Sched_Init(SchedContext* sched, void* stack, OSPri pri, UNK_TYPE arg3, UNK_TYPE arg4, IrqMgr* irqMgr) {
+void Sched_Init(SchedContext* sched, void* stack, OSPri pri, u8 viModeType, UNK_TYPE arg4, IrqMgr* irqMgr) {
     bzero(sched, sizeof(SchedContext));
 
     sched->shouldUpdateVi = true;
