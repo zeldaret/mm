@@ -32,15 +32,15 @@ void func_80AC9C20(ObjOcarinalift* this);
 void func_80AC9C48(ObjOcarinalift* this, PlayState* play);
 
 ActorInit Obj_Ocarinalift_InitVars = {
-    ACTOR_OBJ_OCARINALIFT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_RAILLIFT,
-    sizeof(ObjOcarinalift),
-    (ActorFunc)ObjOcarinalift_Init,
-    (ActorFunc)ObjOcarinalift_Destroy,
-    (ActorFunc)ObjOcarinalift_Update,
-    (ActorFunc)ObjOcarinalift_Draw,
+    /**/ ACTOR_OBJ_OCARINALIFT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_RAILLIFT,
+    /**/ sizeof(ObjOcarinalift),
+    /**/ ObjOcarinalift_Init,
+    /**/ ObjOcarinalift_Destroy,
+    /**/ ObjOcarinalift_Update,
+    /**/ ObjOcarinalift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

@@ -19,15 +19,15 @@ void EnCha_Draw(Actor* thisx, PlayState* play);
 void EnCha_Idle(EnCha* this, PlayState* play);
 
 ActorInit En_Cha_InitVars = {
-    ACTOR_EN_CHA,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_CHA,
-    sizeof(EnCha),
-    (ActorFunc)EnCha_Init,
-    (ActorFunc)EnCha_Destroy,
-    (ActorFunc)EnCha_Update,
-    (ActorFunc)EnCha_Draw,
+    /**/ ACTOR_EN_CHA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_CHA,
+    /**/ sizeof(EnCha),
+    /**/ EnCha_Init,
+    /**/ EnCha_Destroy,
+    /**/ EnCha_Update,
+    /**/ EnCha_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

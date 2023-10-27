@@ -21,15 +21,15 @@ void func_80A42AB8(EnTest4* this, PlayState* play);
 void func_80A42F20(EnTest4* this, PlayState* play);
 
 ActorInit En_Test4_InitVars = {
-    ACTOR_EN_TEST4,
-    ACTORCAT_SWITCH,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTest4),
-    (ActorFunc)EnTest4_Init,
-    (ActorFunc)EnTest4_Destroy,
-    (ActorFunc)EnTest4_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_TEST4,
+    /**/ ACTORCAT_SWITCH,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTest4),
+    /**/ EnTest4_Init,
+    /**/ EnTest4_Destroy,
+    /**/ EnTest4_Update,
+    /**/ NULL,
 };
 
 static s32 sIsLoaded = false;

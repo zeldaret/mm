@@ -26,15 +26,15 @@ void func_80C06DC8(ObjMuPict* this, PlayState* play);
 void func_80C06E88(ObjMuPict* this, PlayState* play);
 
 ActorInit Obj_Mu_Pict_InitVars = {
-    ACTOR_OBJ_MU_PICT,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjMuPict),
-    (ActorFunc)ObjMuPict_Init,
-    (ActorFunc)ObjMuPict_Destroy,
-    (ActorFunc)ObjMuPict_Update,
-    (ActorFunc)ObjMuPict_Draw,
+    /**/ ACTOR_OBJ_MU_PICT,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjMuPict),
+    /**/ ObjMuPict_Init,
+    /**/ ObjMuPict_Destroy,
+    /**/ ObjMuPict_Update,
+    /**/ ObjMuPict_Draw,
 };
 
 void ObjMuPict_Init(Actor* thisx, PlayState* play) {

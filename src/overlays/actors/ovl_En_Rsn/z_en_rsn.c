@@ -19,15 +19,15 @@ void EnRsn_Draw(Actor* thisx, PlayState* play);
 void func_80C25D84(EnRsn* this, PlayState* play);
 
 ActorInit En_Rsn_InitVars = {
-    ACTOR_EN_RSN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_RS,
-    sizeof(EnRsn),
-    (ActorFunc)EnRsn_Init,
-    (ActorFunc)EnRsn_Destroy,
-    (ActorFunc)EnRsn_Update,
-    (ActorFunc)EnRsn_Draw,
+    /**/ ACTOR_EN_RSN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_RS,
+    /**/ sizeof(EnRsn),
+    /**/ EnRsn_Init,
+    /**/ EnRsn_Destroy,
+    /**/ EnRsn_Update,
+    /**/ EnRsn_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = { { &gBombShopkeeperSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };

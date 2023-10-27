@@ -30,15 +30,15 @@ AnimatedMaterial* D_80B83C70;
 AnimatedMaterial* D_80B83C74;
 
 ActorInit Bg_Dblue_Balance_InitVars = {
-    ACTOR_BG_DBLUE_BALANCE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_DBLUE_OBJECT,
-    sizeof(BgDblueBalance),
-    (ActorFunc)BgDblueBalance_Init,
-    (ActorFunc)BgDblueBalance_Destroy,
-    (ActorFunc)BgDblueBalance_Update,
-    (ActorFunc)BgDblueBalance_Draw,
+    /**/ ACTOR_BG_DBLUE_BALANCE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_DBLUE_OBJECT,
+    /**/ sizeof(BgDblueBalance),
+    /**/ BgDblueBalance_Init,
+    /**/ BgDblueBalance_Destroy,
+    /**/ BgDblueBalance_Update,
+    /**/ BgDblueBalance_Draw,
 };
 
 typedef struct {

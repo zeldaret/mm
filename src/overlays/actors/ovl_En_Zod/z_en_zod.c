@@ -45,16 +45,16 @@ typedef enum {
     /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM
 } EnZodInstrument;
 
-const ActorInit En_Zod_InitVars = {
-    ACTOR_EN_ZOD,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZOD,
-    sizeof(EnZod),
-    (ActorFunc)EnZod_Init,
-    (ActorFunc)EnZod_Destroy,
-    (ActorFunc)EnZod_Update,
-    (ActorFunc)EnZod_Draw,
+ActorInit En_Zod_InitVars = {
+    /**/ ACTOR_EN_ZOD,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZOD,
+    /**/ sizeof(EnZod),
+    /**/ EnZod_Init,
+    /**/ EnZod_Destroy,
+    /**/ EnZod_Update,
+    /**/ EnZod_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

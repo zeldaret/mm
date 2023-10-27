@@ -38,15 +38,15 @@ void EnTimeTag_KickOut_WaitForTrigger(EnTimeTag* this, PlayState* play);
 void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play);
 
 ActorInit En_Time_Tag_InitVars = {
-    ACTOR_EN_TIME_TAG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTimeTag),
-    (ActorFunc)EnTimeTag_Init,
-    (ActorFunc)EnTimeTag_Destroy,
-    (ActorFunc)EnTimeTag_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_TIME_TAG,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTimeTag),
+    /**/ EnTimeTag_Init,
+    /**/ EnTimeTag_Destroy,
+    /**/ EnTimeTag_Update,
+    /**/ NULL,
 };
 
 void EnTimeTag_Init(Actor* thisx, PlayState* play) {

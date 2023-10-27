@@ -22,15 +22,15 @@ void func_8098F66C(ObjMure3* this);
 void func_8098F680(ObjMure3* this, PlayState* play);
 
 ActorInit Obj_Mure3_InitVars = {
-    ACTOR_OBJ_MURE3,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjMure3),
-    (ActorFunc)ObjMure3_Init,
-    (ActorFunc)ObjMure3_Destroy,
-    (ActorFunc)ObjMure3_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_MURE3,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjMure3),
+    /**/ ObjMure3_Init,
+    /**/ ObjMure3_Destroy,
+    /**/ ObjMure3_Update,
+    /**/ NULL,
 };
 
 static s16 sRupeeCounts[] = { 5, 5, 7, 0 };

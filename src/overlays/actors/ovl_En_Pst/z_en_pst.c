@@ -119,15 +119,15 @@ s32 D_80B2C488[] = { 0x2C27A40C, 0x10000000 };
 s32 D_80B2C490[] = { 0x2C27850C, 0x10000000 };
 
 ActorInit En_Pst_InitVars = {
-    ACTOR_EN_PST,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_PST,
-    sizeof(EnPst),
-    (ActorFunc)EnPst_Init,
-    (ActorFunc)EnPst_Destroy,
-    (ActorFunc)EnPst_Update,
-    (ActorFunc)EnPst_Draw,
+    /**/ ACTOR_EN_PST,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_PST,
+    /**/ sizeof(EnPst),
+    /**/ EnPst_Init,
+    /**/ EnPst_Destroy,
+    /**/ EnPst_Update,
+    /**/ EnPst_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

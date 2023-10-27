@@ -41,15 +41,15 @@ void func_808BE680(EnDekunuts* this);
 void func_808BE6C4(EnDekunuts* this, PlayState* play);
 
 ActorInit En_Dekunuts_InitVars = {
-    ACTOR_EN_DEKUNUTS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DEKUNUTS,
-    sizeof(EnDekunuts),
-    (ActorFunc)EnDekunuts_Init,
-    (ActorFunc)EnDekunuts_Destroy,
-    (ActorFunc)EnDekunuts_Update,
-    (ActorFunc)EnDekunuts_Draw,
+    /**/ ACTOR_EN_DEKUNUTS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DEKUNUTS,
+    /**/ sizeof(EnDekunuts),
+    /**/ EnDekunuts_Init,
+    /**/ EnDekunuts_Destroy,
+    /**/ EnDekunuts_Update,
+    /**/ EnDekunuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

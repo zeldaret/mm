@@ -58,15 +58,15 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, PlayState* play);
 void EnHoll_RoomTransitionIdle(EnHoll* this, PlayState* play);
 
 ActorInit En_Holl_InitVars = {
-    ACTOR_EN_HOLL,
-    ACTORCAT_DOOR,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnHoll),
-    (ActorFunc)EnHoll_Init,
-    (ActorFunc)EnHoll_Destroy,
-    (ActorFunc)EnHoll_Update,
-    (ActorFunc)EnHoll_Draw,
+    /**/ ACTOR_EN_HOLL,
+    /**/ ACTORCAT_DOOR,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnHoll),
+    /**/ EnHoll_Init,
+    /**/ EnHoll_Destroy,
+    /**/ EnHoll_Update,
+    /**/ EnHoll_Draw,
 };
 
 #include "overlays/ovl_En_Holl/ovl_En_Holl.c"

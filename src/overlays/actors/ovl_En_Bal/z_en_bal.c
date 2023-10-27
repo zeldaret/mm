@@ -91,15 +91,15 @@ void EnBal_SetupThankYou(EnBal* this);
 void EnBal_ThankYou(EnBal* this, PlayState* play);
 
 ActorInit En_Bal_InitVars = {
-    ACTOR_EN_BAL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BAL,
-    sizeof(EnBal),
-    (ActorFunc)EnBal_Init,
-    (ActorFunc)EnBal_Destroy,
-    (ActorFunc)EnBal_Update,
-    (ActorFunc)EnBal_Draw,
+    /**/ ACTOR_EN_BAL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BAL,
+    /**/ sizeof(EnBal),
+    /**/ EnBal_Init,
+    /**/ EnBal_Destroy,
+    /**/ EnBal_Update,
+    /**/ EnBal_Draw,
 };
 
 static DamageTable sDamageTable = {

@@ -21,15 +21,15 @@ void EnHeishi_SetupIdle(EnHeishi* this);
 void EnHeishi_Idle(EnHeishi* this, PlayState* play);
 
 ActorInit En_Heishi_InitVars = {
-    ACTOR_EN_HEISHI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SDN,
-    sizeof(EnHeishi),
-    (ActorFunc)EnHeishi_Init,
-    (ActorFunc)EnHeishi_Destroy,
-    (ActorFunc)EnHeishi_Update,
-    (ActorFunc)EnHeishi_Draw,
+    /**/ ACTOR_EN_HEISHI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnHeishi),
+    /**/ EnHeishi_Init,
+    /**/ EnHeishi_Destroy,
+    /**/ EnHeishi_Update,
+    /**/ EnHeishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

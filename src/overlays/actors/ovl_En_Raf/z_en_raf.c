@@ -69,15 +69,15 @@ typedef enum {
 } EnRafPetalScaleType;
 
 ActorInit En_Raf_InitVars = {
-    ACTOR_EN_RAF,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_RAF,
-    sizeof(EnRaf),
-    (ActorFunc)EnRaf_Init,
-    (ActorFunc)EnRaf_Destroy,
-    (ActorFunc)EnRaf_Update,
-    (ActorFunc)EnRaf_Draw,
+    /**/ ACTOR_EN_RAF,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_RAF,
+    /**/ sizeof(EnRaf),
+    /**/ EnRaf_Init,
+    /**/ EnRaf_Destroy,
+    /**/ EnRaf_Update,
+    /**/ EnRaf_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

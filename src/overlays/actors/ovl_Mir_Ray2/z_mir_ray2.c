@@ -16,15 +16,15 @@ void MirRay2_Update(Actor* thisx, PlayState* play);
 void MirRay2_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Mir_Ray2_InitVars = {
-    ACTOR_MIR_RAY2,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_MIR_RAY,
-    sizeof(MirRay2),
-    (ActorFunc)MirRay2_Init,
-    (ActorFunc)MirRay2_Destroy,
-    (ActorFunc)MirRay2_Update,
-    (ActorFunc)MirRay2_Draw,
+    /**/ ACTOR_MIR_RAY2,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_MIR_RAY,
+    /**/ sizeof(MirRay2),
+    /**/ MirRay2_Init,
+    /**/ MirRay2_Destroy,
+    /**/ MirRay2_Update,
+    /**/ MirRay2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

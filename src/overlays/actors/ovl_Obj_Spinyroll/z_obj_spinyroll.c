@@ -29,15 +29,15 @@ void func_80A1ECC0(ObjSpinyroll* this);
 void func_80A1ECD4(ObjSpinyroll* this, PlayState* play);
 
 ActorInit Obj_Spinyroll_InitVars = {
-    ACTOR_OBJ_SPINYROLL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_SPINYROLL,
-    sizeof(ObjSpinyroll),
-    (ActorFunc)ObjSpinyroll_Init,
-    (ActorFunc)ObjSpinyroll_Destroy,
-    (ActorFunc)ObjSpinyroll_Update,
-    (ActorFunc)ObjSpinyroll_Draw,
+    /**/ ACTOR_OBJ_SPINYROLL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_SPINYROLL,
+    /**/ sizeof(ObjSpinyroll),
+    /**/ ObjSpinyroll_Init,
+    /**/ ObjSpinyroll_Destroy,
+    /**/ ObjSpinyroll_Update,
+    /**/ ObjSpinyroll_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[] = {

@@ -56,15 +56,15 @@ void func_809647EC(PlayState* play, EnFuUnkStruct* ptr, s32 len);
 void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len);
 
 ActorInit En_Fu_InitVars = {
-    ACTOR_EN_FU,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MU,
-    sizeof(EnFu),
-    (ActorFunc)EnFu_Init,
-    (ActorFunc)EnFu_Destroy,
-    (ActorFunc)EnFu_Update,
-    (ActorFunc)EnFu_Draw,
+    /**/ ACTOR_EN_FU,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MU,
+    /**/ sizeof(EnFu),
+    /**/ EnFu_Init,
+    /**/ EnFu_Destroy,
+    /**/ EnFu_Update,
+    /**/ EnFu_Draw,
 };
 
 static s32 D_80964B00[] = { 300, 100, 100 };

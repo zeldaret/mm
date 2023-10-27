@@ -25,15 +25,15 @@ void BgIkanaDharma_SetupWaitForCutsceneToEnd(BgIkanaDharma* this);
 void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play);
 
 ActorInit Bg_Ikana_Dharma_InitVars = {
-    ACTOR_BG_IKANA_DHARMA,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_IKANA_OBJ,
-    sizeof(BgIkanaDharma),
-    (ActorFunc)BgIkanaDharma_Init,
-    (ActorFunc)BgIkanaDharma_Destroy,
-    (ActorFunc)BgIkanaDharma_Update,
-    (ActorFunc)BgIkanaDharma_Draw,
+    /**/ ACTOR_BG_IKANA_DHARMA,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_IKANA_OBJ,
+    /**/ sizeof(BgIkanaDharma),
+    /**/ BgIkanaDharma_Init,
+    /**/ BgIkanaDharma_Destroy,
+    /**/ BgIkanaDharma_Update,
+    /**/ BgIkanaDharma_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

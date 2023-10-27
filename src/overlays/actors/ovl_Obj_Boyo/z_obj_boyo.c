@@ -17,16 +17,16 @@ void ObjBoyo_PushPirate(ObjBoyo* this, Actor* actor);
 void ObjBoyo_ExplodeBomb(ObjBoyo* this, Actor* actor);
 Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index);
 
-const ActorInit Obj_Boyo_InitVars = {
-    ACTOR_OBJ_BOYO,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_BOYO,
-    sizeof(ObjBoyo),
-    (ActorFunc)ObjBoyo_Init,
-    (ActorFunc)ObjBoyo_Destroy,
-    (ActorFunc)ObjBoyo_Update,
-    (ActorFunc)ObjBoyo_Draw,
+ActorInit Obj_Boyo_InitVars = {
+    /**/ ACTOR_OBJ_BOYO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_BOYO,
+    /**/ sizeof(ObjBoyo),
+    /**/ ObjBoyo_Init,
+    /**/ ObjBoyo_Destroy,
+    /**/ ObjBoyo_Update,
+    /**/ ObjBoyo_Draw,
 };
 
 typedef void (*ObjBoyoCollisionHandler)(ObjBoyo* this, Actor* actor);

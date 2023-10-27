@@ -22,15 +22,15 @@ void DmAn_DoNothing(DmAn* this, PlayState* play);
 void DmAn_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Dm_An_InitVars = {
-    ACTOR_DM_AN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AN1,
-    sizeof(DmAn),
-    (ActorFunc)DmAn_Init,
-    (ActorFunc)DmAn_Destroy,
-    (ActorFunc)DmAn_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_DM_AN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AN1,
+    /**/ sizeof(DmAn),
+    /**/ DmAn_Init,
+    /**/ DmAn_Destroy,
+    /**/ DmAn_Update,
+    /**/ NULL,
 };
 
 /**

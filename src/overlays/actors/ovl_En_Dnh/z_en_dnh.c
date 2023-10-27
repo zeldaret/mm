@@ -43,15 +43,15 @@ UNK_TYPE D_80A5138C[] = {
 };
 
 ActorInit En_Dnh_InitVars = {
-    ACTOR_EN_DNH,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TRO,
-    sizeof(EnDnh),
-    (ActorFunc)EnDnh_Init,
-    (ActorFunc)EnDnh_Destroy,
-    (ActorFunc)EnDnh_Update,
-    (ActorFunc)EnDnh_Draw,
+    /**/ ACTOR_EN_DNH,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TRO,
+    /**/ sizeof(EnDnh),
+    /**/ EnDnh_Init,
+    /**/ EnDnh_Destroy,
+    /**/ EnDnh_Update,
+    /**/ EnDnh_Draw,
 };
 
 typedef enum {

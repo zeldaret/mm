@@ -28,15 +28,15 @@ typedef enum {
 } BGOpenShutterDoorState;
 
 ActorInit Bg_Open_Shutter_InitVars = {
-    ACTOR_BG_OPEN_SHUTTER,
-    ACTORCAT_DOOR,
-    FLAGS,
-    OBJECT_OPEN_OBJ,
-    sizeof(BgOpenShutter),
-    (ActorFunc)BgOpenShutter_Init,
-    (ActorFunc)BgOpenShutter_Destroy,
-    (ActorFunc)BgOpenShutter_Update,
-    (ActorFunc)BgOpenShutter_Draw,
+    /**/ ACTOR_BG_OPEN_SHUTTER,
+    /**/ ACTORCAT_DOOR,
+    /**/ FLAGS,
+    /**/ OBJECT_OPEN_OBJ,
+    /**/ sizeof(BgOpenShutter),
+    /**/ BgOpenShutter_Init,
+    /**/ BgOpenShutter_Destroy,
+    /**/ BgOpenShutter_Update,
+    /**/ BgOpenShutter_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

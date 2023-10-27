@@ -19,15 +19,15 @@ void EnEndingHero6_SetupIdle(EnEndingHero6* this);
 void EnEndingHero6_Idle(EnEndingHero6* this, PlayState* play);
 
 ActorInit En_Ending_Hero6_InitVars = {
-    ACTOR_EN_ENDING_HERO6,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnEndingHero6),
-    (ActorFunc)EnEndingHero6_Init,
-    (ActorFunc)EnEndingHero6_Destroy,
-    (ActorFunc)EnEndingHero6_Update,
-    (ActorFunc)EnEndingHero6_Draw,
+    /**/ ACTOR_EN_ENDING_HERO6,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnEndingHero6),
+    /**/ EnEndingHero6_Init,
+    /**/ EnEndingHero6_Destroy,
+    /**/ EnEndingHero6_Update,
+    /**/ EnEndingHero6_Draw,
 };
 
 typedef enum {
