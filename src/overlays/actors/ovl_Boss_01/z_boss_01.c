@@ -652,28 +652,13 @@ static Color_RGBA8 sDustPrimColor = { 60, 50, 20, 255 };
 
 static Color_RGBA8 sDustEnvColor = { 40, 30, 30, 255 };
 
-static AnimationHeader* sWaitAnimations[ODOLWA_WAIT_MAX] = {
-    &gOdolwaReadyAnim,           // ODOLWA_WAIT_READY,
-    &gOdolwaSpinSwordAnim,       // ODOLWA_WAIT_SPIN_SWORD,
-    &gOdolwaVerticalHopAnim,     // ODOLWA_WAIT_VERTICAL_HOP,
-    &gOdolwaHipShakeDanceAnim,   // ODOLWA_WAIT_SHAKE_DANCE,
-    &gOdolwaUpAndDownDanceAnim,  // ODOLWA_WAIT_UP_AND_DOWN_DANCE,
-    &gOdolwaArmSwingDanceAnim,   // ODOLWA_WAIT_ARM_SWING_DANCE,
-    &gOdolwaThurstAttackAnim,    // ODOLWA_WAIT_THRUST_ATTACK,
-    &gOdolwaDoubleSlashAnim,     // ODOLWA_WAIT_DOUBLE_SLASH,
-    &gOdolwaSideToSideHopAnim,   // ODOLWA_WAIT_SIDE_TO_SIDE_HOP,
-    &gOdolwaSideToSideDanceAnim, // ODOLWA_WAIT_SIDE_TO_SIDE_DANCE,
-    &gOdolwaSpinDanceAnim,       // ODOLWA_WAIT_SPIN_DANCE
-    &gOdolwaJumpDanceAnim,       // ODOLWA_WAIT_JUMP_DANCE
-};
-
 typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;
     /* 0x18 */ f32 gravity;
     /* 0x1C */ s16 rotX;
     /* 0x1E */ s16 rotY;
-    /* 0x20 */ char unk_20[0x8];
+    /* 0x20 */ UNK_TYPE1 unk_20[0x8];
     /* 0x28 */ u8 type;
     /* 0x2A */ s16 timer;
     /* 0x2C */ s16 isFallingBlockFragment;
@@ -1274,6 +1259,21 @@ void Boss01_Afterimage_WaitToDespawn(Boss01* this, PlayState* play) {
         Actor_Kill(&this->actor);
     }
 }
+
+static AnimationHeader* sWaitAnimations[ODOLWA_WAIT_MAX] = {
+    &gOdolwaReadyAnim,           // ODOLWA_WAIT_READY,
+    &gOdolwaSpinSwordAnim,       // ODOLWA_WAIT_SPIN_SWORD,
+    &gOdolwaVerticalHopAnim,     // ODOLWA_WAIT_VERTICAL_HOP,
+    &gOdolwaHipShakeDanceAnim,   // ODOLWA_WAIT_SHAKE_DANCE,
+    &gOdolwaUpAndDownDanceAnim,  // ODOLWA_WAIT_UP_AND_DOWN_DANCE,
+    &gOdolwaArmSwingDanceAnim,   // ODOLWA_WAIT_ARM_SWING_DANCE,
+    &gOdolwaThurstAttackAnim,    // ODOLWA_WAIT_THRUST_ATTACK,
+    &gOdolwaDoubleSlashAnim,     // ODOLWA_WAIT_DOUBLE_SLASH,
+    &gOdolwaSideToSideHopAnim,   // ODOLWA_WAIT_SIDE_TO_SIDE_HOP,
+    &gOdolwaSideToSideDanceAnim, // ODOLWA_WAIT_SIDE_TO_SIDE_DANCE,
+    &gOdolwaSpinDanceAnim,       // ODOLWA_WAIT_SPIN_DANCE
+    &gOdolwaJumpDanceAnim,       // ODOLWA_WAIT_JUMP_DANCE
+};
 
 /**
  * Prepares Odolwa to enter his "wait" state, i.e., his primary state where he waits for a bit of time before attacking.
