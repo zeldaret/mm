@@ -14,15 +14,15 @@ void EnAObj_Idle(EnAObj* this, PlayState* play);
 void EnAObj_Talk(EnAObj* this, PlayState* play);
 
 ActorInit En_A_Obj_InitVars = {
-    /* */ ACTOR_EN_A_OBJ,
-    /* */ ACTORCAT_PROP,
-    /* */ FLAGS,
-    /* */ GAMEPLAY_KEEP,
-    /* */ sizeof(EnAObj),
-    /* */ EnAObj_Init,
-    /* */ EnAObj_Destroy,
-    /* */ EnAObj_Update,
-    /* */ EnAObj_Draw,
+    /**/ ACTOR_EN_A_OBJ,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnAObj),
+    /**/ EnAObj_Init,
+    /**/ EnAObj_Destroy,
+    /**/ EnAObj_Update,
+    /**/ EnAObj_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
