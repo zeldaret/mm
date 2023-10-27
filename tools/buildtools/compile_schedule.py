@@ -19,8 +19,7 @@ import sys
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
-# TODO: remember to change this to False/convert it into a flag
-DEBUG = True
+DEBUG = False
 
 def debugPrint(*args, **kwargs):
     if not DEBUG:
@@ -175,6 +174,14 @@ class Token:
 
     def newFromTokenTypePreserveLiteral(self, newType: TokenType) -> Token:
         return Token(newType, self.tokenLiteral, self.filename, self.lineNumber, self.columnNumber)
+
+    def __str__(self) -> str:
+        ret = f"{self.filename}:{self.lineNumber}:{self.columnNumber}\n"
+        ret += f"  {self.tokenType.name}"
+        if self.tokenLiteral != self.tokenType.value:
+            ret += f" '{self.tokenLiteral}'"
+        return ret
+
 
 # Allows to know which token will be the next one, even with recursive functions
 class TokenIterator:
@@ -356,27 +363,31 @@ class Expression:
     # This expression follows a `not` operator
     negated: bool = False
 
-    def print(self, depth=0):
+    def toStr(self, depth=0) -> str:
         spaces = "    " * depth
-        print(f"{spaces}", end="")
+        ret = f"{spaces}"
         if self.negated:
-            print(f"not ", end="")
-        print(f"{self.token.tokenLiteral}", end="")
+            ret += f"not "
+        ret += f"{self.token.tokenLiteral}"
         if self.token.tokenType == TokenType.LABEL:
-            print(f":", end="")
+            ret += f":"
         if self.args is not None:
-            print(f" ({self.args.tokenLiteral})", end="")
+            ret += f" ({self.args.tokenLiteral})"
         if len(self.left) == 0:
-            print()
+            ret += f"\n"
         else:
-            print(" {")
+            ret += f" {{\n"
             for expr in self.left:
-                expr.print(depth+1)
+                ret += expr.toStr(depth+1)
             if len(self.right) > 0:
-                print(f"{spaces}}} else {{")
+                ret += f"{spaces}}} else {{\n"
                 for expr in self.right:
-                    expr.print(depth+1)
-            print(f"{spaces}}}")
+                    ret += expr.toStr(depth+1)
+            ret += f"{spaces}}}\n"
+        return ret
+
+    def __str__(self) -> str:
+        return self.toStr()
 
 
 # Parses the tokens into a basic AST
@@ -799,7 +810,12 @@ def main():
     parser.add_argument("-g", type=int, nargs="?", const=1, default=0, dest="debuggingLevel", metavar="level", help="Emit debugging information on the generated macros. Level 0 means no debugging information. Passing no level at all implies level 1. Defaults to level 0")
 
     debuggingParser = parser.add_argument_group("Compiler debugging options")
-    debuggingParser.add_argument("-p", "--print-tree", help="Prints the processed tree to stdout", action="store_true")
+    debuggingParser.add_argument("-d", "--debug-prints", help="Enables debug prints for fatal errors", action="store_true")
+    debuggingParser.add_argument("--print-tokens", help="Prints the processed tokens to stdout", action="store_true")
+    debuggingParser.add_argument("--print-raw-tree", help="Prints the raw tree to stdout", action="store_true")
+    debuggingParser.add_argument("--print-tree", help="Prints the processed and normalized tree to stdout", action="store_true")
+    debuggingParser.add_argument("--print-labeleds", help="Prints the linearized labeled expressions to stdout", action="store_true")
+    debuggingParser.add_argument("--print-labeleds-post", help="Prints the linearized labeled expressions after processing the generics to stdout", action="store_true")
 
     args = parser.parse_args()
 
@@ -808,7 +824,14 @@ def main():
 
     debuggingLevel: int = args.debuggingLevel
 
+    global DEBUG
+    DEBUG = args.debug_prints
+
+    printTokens: bool = args.print_tokens
+    printRawTree: bool = args.print_raw_tree
     printTree: bool = args.print_tree
+    printLabeleds: bool = args.print_labeleds
+    printLabeledsPost: bool = args.print_labeleds_post
 
     if not inputPath.exists():
         eprint(f"Error: Input file '{inputPath}' not found")
@@ -819,28 +842,35 @@ def main():
     preprocessed = preprocess(inputContents, str(inputPath))
 
     tokens = tokenize(preprocessed, str(inputPath))
+    if printTokens:
+        for token in tokens.tokens:
+            print(token)
+
     tree = makeTree(tokens, str(inputPath))
+    if printRawTree:
+        for expr in tree:
+            print(expr)
+
     assert tokens.remainingTokens() == 0, tokens.remainingTokens()
+
     tree = normalizeTree(tree)
     if printTree:
         for expr in tree:
-            expr.print()
+            print(expr)
 
     labeledList, _ = convertTreeIntoLabeledList(tree)
-    # for labeled in labeledList:
-    #     print(labeled)
-    # print()
+    if printLabeleds:
+        for labeled in labeledList:
+            print(labeled)
+        print()
 
-    genericsIterationCount = 0
     keepGoing = True
     while keepGoing:
         labeledList, keepGoing = removeGenerics(labeledList)
-        genericsIterationCount += 1
-    # for labeled in labeledList:
-    #     print(labeled)
-    # print()
-    # print(f"{genericsIterationCount=}")
-    # print()
+    if printLabeledsPost:
+        for labeled in labeledList:
+            print(labeled)
+        print()
 
     output = emitLabeledListMacros(labeledList, debuggingLevel)
 
