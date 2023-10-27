@@ -30,23 +30,23 @@ typedef enum {
 } PostboxBehaviour;
 
 static u8 D_80B2C200[] = {
-#include "D_80B2C200.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Pst/D_80B2C200.schedule.inc"
 };
 
 static u8 D_80B2C20C[] = {
-#include "D_80B2C20C.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Pst/D_80B2C20C.schedule.inc"
 };
 
 static u8 D_80B2C218[] = {
-#include "D_80B2C218.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Pst/D_80B2C218.schedule.inc"
 };
 
 static u8 D_80B2C224[] = {
-#include "D_80B2C224.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Pst/D_80B2C224.schedule.inc"
 };
 
 static u8 D_80B2C230[] = {
-#include "D_80B2C230.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Pst/D_80B2C230.schedule.inc"
 };
 
 s32 D_80B2C23C[] = {

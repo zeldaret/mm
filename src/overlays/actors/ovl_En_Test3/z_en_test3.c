@@ -79,9 +79,8 @@ void func_80A4084C(EnTest3* this, PlayState* play);
 void func_80A40908(EnTest3* this, PlayState* play);
 void func_80A40A6C(EnTest3* this, PlayState* play);
 
-// TODO
 static u8 sScheduleScript[] = {
-#include "sScheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Test3/sScheduleScript.schedule.inc"
 };
 
 ActorInit En_Test3_InitVars = {

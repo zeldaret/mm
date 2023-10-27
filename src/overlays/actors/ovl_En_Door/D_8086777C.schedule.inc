@@ -1,1 +1,0 @@
-    /* 0x0 */ SCHEDULE_CMD_RET_NONE(),

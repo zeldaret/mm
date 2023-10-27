@@ -130,7 +130,7 @@ static DamageTable sDamageTable = {
 };
 
 static u8 sSchedule[] = {
-#include "scheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Baba/scheduleScript.schedule.inc"
 };
 
 static s32 sSearchTimePathLimit[] = { -1, -1, 0 };

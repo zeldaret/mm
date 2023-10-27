@@ -35,7 +35,7 @@ void ObjShutter_Destroy(Actor* thisx, PlayState* play) {
 }
 
 static u8 sScheduleScript[] = {
-#include "scheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_Obj_Shutter/scheduleScript.schedule.inc"
 };
 
 void ObjShutter_Update(Actor* thisx, PlayState* play2) {

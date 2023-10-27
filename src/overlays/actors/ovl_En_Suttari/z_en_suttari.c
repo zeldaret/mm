@@ -129,7 +129,7 @@ static TrackOptionsSet sTrackOptions = {
 };
 
 static u8 D_80BAE820[] = {
-#include "scheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Suttari/scheduleScript.schedule.inc"
 };
 
 static s32 D_80BAE8F8[] = {

@@ -20,7 +20,7 @@ void func_80950CDC(EnGm* this, PlayState* play);
 void func_80950DB8(EnGm* this, PlayState* play);
 
 static u8 D_80951820[] = {
-#include "scheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Gm/scheduleScript.schedule.inc"
 };
 
 static s32 D_80951A0C[] = {

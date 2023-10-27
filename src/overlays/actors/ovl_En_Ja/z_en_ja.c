@@ -22,7 +22,7 @@ void func_80BC32D8(EnJa* this, PlayState* play);
 void func_80BC3594(EnJa* this, PlayState* play);
 
 static u8 D_80BC35F0[] = {
-#include "scheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Ja/scheduleScript.schedule.inc"
 };
 
 s32 D_80BC360C[] = {

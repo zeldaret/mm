@@ -20,7 +20,7 @@ void func_80BD36B8(EnAh* this, PlayState* play);
 void func_80BD3768(EnAh* this, PlayState* play);
 
 static u8 D_80BD3DB0[] = {
-#include "scheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Ah/scheduleScript.schedule.inc"
 };
 
 s32 D_80BD3DE8[] = { 0x0E28FF0C, 0x10000000 };

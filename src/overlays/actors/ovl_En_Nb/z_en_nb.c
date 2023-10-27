@@ -44,7 +44,7 @@ typedef enum EnNbScheduleResult {
 } EnNbScheduleResult;
 
 static u8 sScheduleScript[] = {
-#include "scheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Nb/scheduleScript.schedule.inc"
 };
 
 u8 D_80BC1464[] = {

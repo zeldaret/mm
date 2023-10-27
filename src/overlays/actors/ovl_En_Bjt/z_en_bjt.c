@@ -30,7 +30,7 @@ typedef enum {
 } ToiletHandScheduleResult;
 
 static u8 sScheduleScript[] = {
-#include "scheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Bjt/scheduleScript.schedule.inc"
 };
 
 static u8 sMsgEventScript[] = {

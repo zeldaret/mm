@@ -21,7 +21,7 @@ void func_80BE127C(EnTab* this, PlayState* play);
 void func_80BE1348(EnTab* this, PlayState* play);
 
 static u8 D_80BE18D0[] = {
-#include "scheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Tab/scheduleScript.schedule.inc"
 };
 
 s32 D_80BE1914[] = {

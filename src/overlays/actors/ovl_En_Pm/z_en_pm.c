@@ -21,23 +21,23 @@ void func_80AFA4D0(EnPm* this, PlayState* play);
 void func_80AFA5FC(EnPm* this, PlayState* play);
 
 static u8 D_80AFAD80[] = {
-#include "D_80AFAD80.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Pm/D_80AFAD80.schedule.inc"
 };
 
 static u8 D_80AFB30C[] = {
-#include "D_80AFB30C.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Pm/D_80AFB30C.schedule.inc"
 };
 
 static u8 D_80AFB3C0[] = {
-#include "D_80AFB3C0.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Pm/D_80AFB3C0.schedule.inc"
 };
 
 static u8 D_80AFB3FC[] = {
-#include "D_80AFB3FC.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Pm/D_80AFB3FC.schedule.inc"
 };
 
 static u8 D_80AFB41C[] = {
-#include "D_80AFB41C.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Pm/D_80AFB41C.schedule.inc"
 };
 
 static s32 D_80AFB430[] = {

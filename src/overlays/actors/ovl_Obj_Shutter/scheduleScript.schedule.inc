@@ -1,3 +1,0 @@
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(10, 0, 20, 0, 0x9 - 0x6),
-    /* 0x6 */ SCHEDULE_CMD_RET_VAL_L(2),
-    /* 0x9 */ SCHEDULE_CMD_RET_VAL_L(1),

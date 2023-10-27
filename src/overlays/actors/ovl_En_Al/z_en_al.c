@@ -19,7 +19,7 @@ void func_80BDF5E8(EnAl* this, PlayState* play);
 void func_80BDF6C4(EnAl* this, PlayState* play);
 
 static u8 D_80BDFC70[] = {
-#include "scheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Al/scheduleScript.schedule.inc"
 };
 
 s32 D_80BDFCBC[] = {
