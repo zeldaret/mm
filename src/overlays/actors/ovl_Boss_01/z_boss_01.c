@@ -1956,7 +1956,7 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
         if (this->damageTimer == 0) {
             ColliderInfo* acHitInfo = this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].info.acHitInfo;
 
-            if (acHitInfo->toucher.dmgFlags == 0x2000000) {
+            if (acHitInfo->toucher.dmgFlags == DMG_SWORD_BEAM) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
                             this->actor.focus.pos.z, 0, 0, 3, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
