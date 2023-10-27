@@ -2467,7 +2467,7 @@ void Environment_PlaySceneSequence(PlayState* play) {
                 }
             }
         }
-        func_801A3CD8(play->roomCtx.curRoom.echo);
+        Audio_SetEnvReverb(play->roomCtx.curRoom.echo);
         gSceneSeqState = SCENESEQ_DEFAULT;
     }
 }
