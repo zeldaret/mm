@@ -19,15 +19,15 @@ void func_80BCD590(EnScopecrow* this, PlayState* play);
 void func_80BCD640(EnScopecrow* this, PlayState* play);
 
 ActorInit En_Scopecrow_InitVars = {
-    ACTOR_EN_SCOPECROW,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_CROW,
-    sizeof(EnScopecrow),
-    (ActorFunc)EnScopecrow_Init,
-    (ActorFunc)EnScopecrow_Destroy,
-    (ActorFunc)EnScopecrow_Update,
-    (ActorFunc)EnScopecrow_Draw,
+    /**/ ACTOR_EN_SCOPECROW,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_CROW,
+    /**/ sizeof(EnScopecrow),
+    /**/ EnScopecrow_Init,
+    /**/ EnScopecrow_Destroy,
+    /**/ EnScopecrow_Update,
+    /**/ EnScopecrow_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[] = {

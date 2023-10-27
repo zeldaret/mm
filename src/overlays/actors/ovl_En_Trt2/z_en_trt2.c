@@ -53,15 +53,15 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 ActorInit En_Trt2_InitVars = {
-    ACTOR_EN_TRT2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TRT,
-    sizeof(EnTrt2),
-    (ActorFunc)EnTrt2_Init,
-    (ActorFunc)EnTrt2_Destroy,
-    (ActorFunc)EnTrt2_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_TRT2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TRT,
+    /**/ sizeof(EnTrt2),
+    /**/ EnTrt2_Init,
+    /**/ EnTrt2_Destroy,
+    /**/ EnTrt2_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

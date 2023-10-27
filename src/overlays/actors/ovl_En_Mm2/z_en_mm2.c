@@ -19,15 +19,15 @@ void EnMm2_Reading(EnMm2* this, PlayState* play);
 void EnMm2_WaitForRead(EnMm2* this, PlayState* play);
 
 ActorInit En_Mm2_InitVars = {
-    ACTOR_EN_MM2,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnMm2),
-    (ActorFunc)EnMm2_Init,
-    (ActorFunc)EnMm2_Destroy,
-    (ActorFunc)EnMm2_Update,
-    (ActorFunc)EnMm2_Draw,
+    /**/ ACTOR_EN_MM2,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnMm2),
+    /**/ EnMm2_Init,
+    /**/ EnMm2_Destroy,
+    /**/ EnMm2_Update,
+    /**/ EnMm2_Draw,
 };
 
 #include "overlays/ovl_En_Mm2/ovl_En_Mm2.c"

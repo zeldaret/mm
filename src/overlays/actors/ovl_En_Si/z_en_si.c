@@ -18,15 +18,15 @@ void EnSi_Draw(Actor* thisx, PlayState* play);
 void EnSi_DraggedByHookshot(EnSi* this, PlayState* play);
 
 ActorInit En_Si_InitVars = {
-    ACTOR_EN_SI,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_ST,
-    sizeof(EnSi),
-    (ActorFunc)EnSi_Init,
-    (ActorFunc)EnSi_Destroy,
-    (ActorFunc)EnSi_Update,
-    (ActorFunc)EnSi_Draw,
+    /**/ ACTOR_EN_SI,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_ST,
+    /**/ sizeof(EnSi),
+    /**/ EnSi_Init,
+    /**/ EnSi_Destroy,
+    /**/ EnSi_Update,
+    /**/ EnSi_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

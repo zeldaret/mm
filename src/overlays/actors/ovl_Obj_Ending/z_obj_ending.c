@@ -16,15 +16,15 @@ void ObjEnding_Update(Actor* thisx, PlayState* play);
 void ObjEnding_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Ending_InitVars = {
-    ACTOR_OBJ_ENDING,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_ENDING_OBJ,
-    sizeof(ObjEnding),
-    (ActorFunc)ObjEnding_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)ObjEnding_Update,
-    (ActorFunc)ObjEnding_Draw,
+    /**/ ACTOR_OBJ_ENDING,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_ENDING_OBJ,
+    /**/ sizeof(ObjEnding),
+    /**/ ObjEnding_Init,
+    /**/ Actor_Noop,
+    /**/ ObjEnding_Update,
+    /**/ ObjEnding_Draw,
 };
 
 static ObjEndingModelInfo sModelInfo[] = {

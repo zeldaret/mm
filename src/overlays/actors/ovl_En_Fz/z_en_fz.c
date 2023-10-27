@@ -50,15 +50,15 @@ void func_80934178(EnFz* this, PlayState* play);
 void func_80934464(EnFz* this, PlayState* play);
 
 ActorInit En_Fz_InitVars = {
-    ACTOR_EN_FZ,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_FZ,
-    sizeof(EnFz),
-    (ActorFunc)EnFz_Init,
-    (ActorFunc)EnFz_Destroy,
-    (ActorFunc)EnFz_Update,
-    (ActorFunc)EnFz_Draw,
+    /**/ ACTOR_EN_FZ,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_FZ,
+    /**/ sizeof(EnFz),
+    /**/ EnFz_Init,
+    /**/ EnFz_Destroy,
+    /**/ EnFz_Update,
+    /**/ EnFz_Draw,
 };
 
 static s16 D_809346F0[] = { 0, 0x2000, 0x4000, 0 };

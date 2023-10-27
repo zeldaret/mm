@@ -169,15 +169,15 @@ static u8 sScheduleScript[] = {
 };
 
 ActorInit En_Test3_InitVars = {
-    ACTOR_EN_TEST3,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TEST3,
-    sizeof(EnTest3),
-    (ActorFunc)EnTest3_Init,
-    (ActorFunc)EnTest3_Destroy,
-    (ActorFunc)EnTest3_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_TEST3,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TEST3,
+    /**/ sizeof(EnTest3),
+    /**/ EnTest3_Init,
+    /**/ EnTest3_Destroy,
+    /**/ EnTest3_Update,
+    /**/ NULL,
 };
 
 static struct_80A4168C D_80A4168C[] = {

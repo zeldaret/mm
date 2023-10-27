@@ -19,15 +19,15 @@ void DmChar04_Draw(Actor* thisx, PlayState* play);
 void DmChar04_HandleCutscene(DmChar04* this, PlayState* play);
 
 ActorInit Dm_Char04_InitVars = {
-    ACTOR_DM_CHAR04,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DmChar04),
-    (ActorFunc)DmChar04_Init,
-    (ActorFunc)DmChar04_Destroy,
-    (ActorFunc)DmChar04_Update,
-    (ActorFunc)DmChar04_Draw,
+    /**/ ACTOR_DM_CHAR04,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(DmChar04),
+    /**/ DmChar04_Init,
+    /**/ DmChar04_Destroy,
+    /**/ DmChar04_Update,
+    /**/ DmChar04_Draw,
 };
 
 typedef enum {

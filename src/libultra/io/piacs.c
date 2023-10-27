@@ -1,4 +1,5 @@
-#include "global.h"
+#include "ultra64.h"
+#include "macros.h"
 
 u32 __osPiAccessQueueEnabled = 0;
 
@@ -13,6 +14,7 @@ void __osPiCreateAccessQueue(void) {
 
 void __osPiGetAccess(void) {
     OSMesg dummyMesg;
+
     if (!__osPiAccessQueueEnabled) {
         __osPiCreateAccessQueue();
     }

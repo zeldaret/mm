@@ -525,7 +525,7 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
             Distortion_SetDuration(80);
         }
 
-        func_801A3EC0(0x20);
+        Audio_SetExtraFilter(0x20);
         Environment_EnableUnderwaterLights(this, lightIndex);
 
         if ((sQuakeIndex == -1) || (Quake_GetTimeLeft(sQuakeIndex) == 10)) {
@@ -556,7 +556,7 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
             Quake_RemoveRequest(sQuakeIndex);
         }
         Environment_DisableUnderwaterLights(this);
-        func_801A3EC0(0);
+        Audio_SetExtraFilter(0);
     }
 }
 
@@ -589,20 +589,20 @@ void Play_UpdateTransition(PlayState* this) {
                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE))) &&
                     (!Environment_IsFinalHours(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
                      (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS))) {
-                    func_801A4058(20);
+                    Audio_MuteAllSeqExceptSystemAndOcarina(20);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 }
 
                 if (Environment_IsForcedSequenceDisabled()) {
-                    func_801A4058(20);
+                    Audio_MuteAllSeqExceptSystemAndOcarina(20);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 }
 
                 if (Environment_IsFinalHours(this) && (Entrance_GetSceneId(this->nextEntrance + sceneLayer) >= 0) &&
                     (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
-                    func_801A41C8(20);
+                    Audio_MuteSfxAndAmbienceSeqExceptSysAndOca(20);
                 }
             }
 
@@ -923,9 +923,9 @@ void Play_UpdateMain(PlayState* this) {
     u8 freezeFlashTimer;
     s32 sp5C = false;
 
-    gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
-    gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+    gSegments[4] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
+    gSegments[5] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
+    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
 
     if (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_PROCESS) {
         R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_READY;
@@ -1155,9 +1155,9 @@ void Play_DrawMain(PlayState* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
-    gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+    gSegments[4] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
+    gSegments[5] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
+    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x04, this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
     gSPSegment(POLY_XLU_DISP++, 0x04, this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
@@ -1605,7 +1605,7 @@ void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn) {
     this->sceneConfig = scene->drawConfig;
     this->sceneSegment = Play_LoadFile(this, &scene->segment);
     scene->unk_D = 0;
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
     Play_InitScene(this, spawn);
     Room_AllocateAndLoad(this, &this->roomCtx);
 }
@@ -2175,7 +2175,7 @@ void Play_Init(GameState* thisx) {
     KaleidoManager_Init(this);
     ShrinkWindow_Init();
     View_Init(&this->view, gfxCtx);
-    func_801A3EC0(0);
+    Audio_SetExtraFilter(0);
     Quake_Init();
     Distortion_Init(this);
 

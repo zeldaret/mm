@@ -19,15 +19,15 @@ void BgUmajump_Draw(Actor* thisx, PlayState* play);
 void func_8091A5A0(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Umajump_InitVars = {
-    ACTOR_BG_UMAJUMP,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(BgUmajump),
-    (ActorFunc)BgUmajump_Init,
-    (ActorFunc)BgUmajump_Destroy,
-    (ActorFunc)BgUmajump_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_UMAJUMP,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(BgUmajump),
+    /**/ BgUmajump_Init,
+    /**/ BgUmajump_Destroy,
+    /**/ BgUmajump_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {

@@ -20,15 +20,15 @@ void EnNutsball_Draw(Actor* thisx, PlayState* play);
 void EnNutsball_InitColliderParams(EnNutsball* this);
 
 ActorInit En_Nutsball_InitVars = {
-    ACTOR_EN_NUTSBALL,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnNutsball),
-    (ActorFunc)EnNutsball_Init,
-    (ActorFunc)EnNutsball_Destroy,
-    (ActorFunc)EnNutsball_Update,
-    (ActorFunc)EnNutsball_Draw,
+    /**/ ACTOR_EN_NUTSBALL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnNutsball),
+    /**/ EnNutsball_Init,
+    /**/ EnNutsball_Destroy,
+    /**/ EnNutsball_Update,
+    /**/ EnNutsball_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

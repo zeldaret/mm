@@ -25,15 +25,15 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play);
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play);
 
 ActorInit En_Warp_tag_InitVars = {
-    ACTOR_EN_WARP_TAG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnWarptag),
-    (ActorFunc)EnWarptag_Init,
-    (ActorFunc)EnWarptag_Destroy,
-    (ActorFunc)EnWarptag_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_WARP_TAG,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnWarptag),
+    /**/ EnWarptag_Init,
+    /**/ EnWarptag_Destroy,
+    /**/ EnWarptag_Update,
+    /**/ NULL,
 };
 
 // this appears to be unused, as the code never accesses it in known vanilla cases
@@ -247,7 +247,7 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
         Audio_PlaySfx_2(NA_SE_OC_SECRET_HOLE_OUT);
-        func_801A4058(5);
+        Audio_MuteAllSeqExceptSystemAndOcarina(5);
         gSaveContext.seqId = (u8)NA_BGM_DISABLED;
         gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     }

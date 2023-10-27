@@ -26,15 +26,15 @@ void func_80A674A8(ObjDriftice* this);
 void func_80A674C4(ObjDriftice* this, PlayState* play);
 
 ActorInit Obj_Driftice_InitVars = {
-    ACTOR_OBJ_DRIFTICE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_DRIFTICE,
-    sizeof(ObjDriftice),
-    (ActorFunc)ObjDriftice_Init,
-    (ActorFunc)ObjDriftice_Destroy,
-    (ActorFunc)ObjDriftice_Update,
-    (ActorFunc)ObjDriftice_Draw,
+    /**/ ACTOR_OBJ_DRIFTICE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_DRIFTICE,
+    /**/ sizeof(ObjDriftice),
+    /**/ ObjDriftice_Init,
+    /**/ ObjDriftice_Destroy,
+    /**/ ObjDriftice_Update,
+    /**/ ObjDriftice_Draw,
 };
 
 static f32 D_80A67620[][3] = {

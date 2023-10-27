@@ -19,15 +19,15 @@ void ObjBoat_Draw(Actor* thisx, PlayState* play);
 void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2);
 
 ActorInit Obj_Boat_InitVars = {
-    ACTOR_OBJ_BOAT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KAIZOKU_OBJ,
-    sizeof(ObjBoat),
-    (ActorFunc)ObjBoat_Init,
-    (ActorFunc)ObjBoat_Destroy,
-    (ActorFunc)ObjBoat_Update,
-    (ActorFunc)ObjBoat_Draw,
+    /**/ ACTOR_OBJ_BOAT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_KAIZOKU_OBJ,
+    /**/ sizeof(ObjBoat),
+    /**/ ObjBoat_Init,
+    /**/ ObjBoat_Destroy,
+    /**/ ObjBoat_Update,
+    /**/ ObjBoat_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

@@ -69,15 +69,15 @@ typedef enum {
 } EnRafPetalScaleType;
 
 ActorInit En_Raf_InitVars = {
-    ACTOR_EN_RAF,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_RAF,
-    sizeof(EnRaf),
-    (ActorFunc)EnRaf_Init,
-    (ActorFunc)EnRaf_Destroy,
-    (ActorFunc)EnRaf_Update,
-    (ActorFunc)EnRaf_Draw,
+    /**/ ACTOR_EN_RAF,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_RAF,
+    /**/ sizeof(EnRaf),
+    /**/ EnRaf_Init,
+    /**/ EnRaf_Destroy,
+    /**/ EnRaf_Update,
+    /**/ EnRaf_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -319,7 +319,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->grabTarget = EN_RAF_GRAB_TARGET_GORON_PLAYER;
             } else {
-                player->actionVar2 = 50;
+                player->av2.actionVar2 = 50;
             }
 
             this->playerRotYWhenGrabbed = player->actor.world.rot.y;
@@ -455,7 +455,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
             case EN_RAF_GRAB_TARGET_GORON_PLAYER:
                 if (this->chewCount > (BREG(54) + 4)) {
                     player->actor.parent = NULL;
-                    player->actionVar2 = 1000;
+                    player->av2.actionVar2 = 1000;
                     EnRaf_Explode(this, play);
                 }
                 break;

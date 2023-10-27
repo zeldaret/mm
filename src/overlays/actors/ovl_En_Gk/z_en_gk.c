@@ -33,15 +33,15 @@ void func_80B525E0(EnGk* this, PlayState* play);
 void func_80B52654(EnGk* this, PlayState* play);
 
 ActorInit En_Gk_InitVars = {
-    ACTOR_EN_GK,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GK,
-    sizeof(EnGk),
-    (ActorFunc)EnGk_Init,
-    (ActorFunc)EnGk_Destroy,
-    (ActorFunc)EnGk_Update,
-    (ActorFunc)EnGk_Draw,
+    /**/ ACTOR_EN_GK,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_GK,
+    /**/ sizeof(EnGk),
+    /**/ EnGk_Init,
+    /**/ EnGk_Destroy,
+    /**/ EnGk_Update,
+    /**/ EnGk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

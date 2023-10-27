@@ -42,15 +42,15 @@ typedef enum {
 u8 sIsLoaded[32];
 
 ActorInit Bg_Crace_Movebg_InitVars = {
-    ACTOR_BG_CRACE_MOVEBG,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_CRACE_OBJECT,
-    sizeof(BgCraceMovebg),
-    (ActorFunc)BgCraceMovebg_Init,
-    (ActorFunc)BgCraceMovebg_Destroy,
-    (ActorFunc)BgCraceMovebg_Update,
-    (ActorFunc)BgCraceMovebg_Draw,
+    /**/ ACTOR_BG_CRACE_MOVEBG,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_CRACE_OBJECT,
+    /**/ sizeof(BgCraceMovebg),
+    /**/ BgCraceMovebg_Init,
+    /**/ BgCraceMovebg_Destroy,
+    /**/ BgCraceMovebg_Update,
+    /**/ BgCraceMovebg_Draw,
 };
 
 static u8 sHasInitializedIsLoaded = 0;

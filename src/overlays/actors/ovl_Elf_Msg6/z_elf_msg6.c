@@ -24,15 +24,15 @@ void func_80BA215C(ElfMsg6* this, PlayState* play);
 void func_80BA21C4(ElfMsg6* this, PlayState* play);
 
 ActorInit Elf_Msg6_InitVars = {
-    ACTOR_ELF_MSG6,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ElfMsg6),
-    (ActorFunc)ElfMsg6_Init,
-    (ActorFunc)ElfMsg6_Destroy,
-    (ActorFunc)ElfMsg6_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_ELF_MSG6,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ElfMsg6),
+    /**/ ElfMsg6_Init,
+    /**/ ElfMsg6_Destroy,
+    /**/ ElfMsg6_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {

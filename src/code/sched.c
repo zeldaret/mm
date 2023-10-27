@@ -74,14 +74,14 @@ void Sched_HandleAudioCancel(SchedContext* sched) {
     osSyncPrintf("AUDIO SP キャンセルします\n");
 
     if ((sched->curRSPTask != NULL) && (sched->curRSPTask->list.t.type == M_AUDTASK)) {
-        if (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+        if (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
             // Attempts to stop AUDIO SP
             osSyncPrintf("AUDIO SP止めようとします\n");
 
-            HW_REG(SP_STATUS_REG, u32) = SP_SET_HALT;
+            IO_WRITE(SP_STATUS_REG, SP_SET_HALT);
 
             i = 0;
-            while (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+            while (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
                 if (i++ > 100) {
                     // AUDIO SP did not stop (10ms timeout)
                     osSyncPrintf("AUDIO SP止まりませんでした(10msタイムアウト)\n");
@@ -136,14 +136,14 @@ void Sched_HandleGfxCancel(SchedContext* sched) {
     osSyncPrintf("GRAPH SP キャンセルします\n");
 
     if ((sched->curRSPTask != NULL) && (sched->curRSPTask->list.t.type == M_GFXTASK)) {
-        if (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+        if (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
             // GRAPH SP tries to stop
             osSyncPrintf("GRAPH SP止めようとします\n");
 
-            HW_REG(SP_STATUS_REG, u32) = SP_SET_HALT;
+            IO_WRITE(SP_STATUS_REG, SP_SET_HALT);
 
             i = 0;
-            while (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+            while (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
                 if (i++ > 100) {
                     // GRAPH SP did not stop (10ms timeout)
                     osSyncPrintf("GRAPH SP止まりませんでした(10msタイムアウト)\n");

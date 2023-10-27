@@ -45,15 +45,15 @@ typedef enum {
 s32 sFragmentAndItemDropCount = 0;
 
 ActorInit En_Tanron5_InitVars = {
-    ACTOR_EN_TANRON5,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS02,
-    sizeof(EnTanron5),
-    (ActorFunc)EnTanron5_Init,
-    (ActorFunc)EnTanron5_Destroy,
-    (ActorFunc)EnTanron5_Update,
-    (ActorFunc)EnTanron5_Draw,
+    /**/ ACTOR_EN_TANRON5,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS02,
+    /**/ sizeof(EnTanron5),
+    /**/ EnTanron5_Init,
+    /**/ EnTanron5_Destroy,
+    /**/ EnTanron5_Update,
+    /**/ EnTanron5_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

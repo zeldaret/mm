@@ -35,15 +35,15 @@ void func_80B0A8C4(BossHakugin* this, PlayState* play);
 
 #if 0
 ActorInit Boss_Hakugin_InitVars = {
-    ACTOR_BOSS_HAKUGIN,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS_HAKUGIN,
-    sizeof(BossHakugin),
-    (ActorFunc)BossHakugin_Init,
-    (ActorFunc)BossHakugin_Destroy,
-    (ActorFunc)BossHakugin_Update,
-    (ActorFunc)BossHakugin_Draw,
+    /**/ ACTOR_BOSS_HAKUGIN,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS_HAKUGIN,
+    /**/ sizeof(BossHakugin),
+    /**/ BossHakugin_Init,
+    /**/ BossHakugin_Destroy,
+    /**/ BossHakugin_Update,
+    /**/ BossHakugin_Draw,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[19] = {

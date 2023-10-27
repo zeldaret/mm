@@ -369,13 +369,14 @@ void func_80122F28(Player* player) {
 s32 func_80122F9C(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->actionVar1 == 2);
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->av1.actionVar1 == 2);
 }
 
 s32 func_80122FCC(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && ((player->actionVar1 == 1) || (player->actionVar1 == 3));
+    return (player->stateFlags2 & PLAYER_STATE2_80000) &&
+           ((player->av1.actionVar1 == 1) || (player->av1.actionVar1 == 3));
 }
 
 void func_8012300C(PlayState* play, s32 arg1) {
@@ -389,15 +390,15 @@ void func_8012301C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Player* this = (Player*)thisx;
 
-    this->actionVar1++;
+    this->av1.actionVar1++;
 
-    if (this->actionVar1 == 2) {
+    if (this->av1.actionVar1 == 2) {
         s16 objectId = gPlayerFormObjectIds[GET_PLAYER_FORM];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
         func_8012F73C(&play->objectCtx, this->actor.objectSlot, objectId);
         this->actor.objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_KEEP);
-    } else if (this->actionVar1 >= 3) {
+    } else if (this->av1.actionVar1 >= 3) {
         s32 objectSlot = Object_GetSlot(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
 
         if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
@@ -2590,7 +2591,7 @@ void Player_DrawGetItemImpl(PlayState* play, Player* player, Vec3f* refPos, s32 
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(player->giObjectSegment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(player->giObjectSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, player->giObjectSegment);
     gSPSegment(POLY_XLU_DISP++, 0x06, player->giObjectSegment);
@@ -2852,7 +2853,7 @@ void func_80127488(PlayState* play, Player* player, u8 alpha) {
 }
 
 void Player_DrawCouplesMask(PlayState* play, Player* player) {
-    gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
+    gSegments[0xA] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
@@ -2884,7 +2885,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
             Matrix_Scale(scaleXZ, scaleY, scaleXZ, MTXMODE_APPLY);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(&gfx[1], 0x08, VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(gEffBubble1Tex)));
+            gSPSegment(&gfx[1], 0x08, OS_K0_TO_PHYSICAL(SEGMENTED_TO_K0(gEffBubble1Tex)));
             gDPSetPrimColor(&gfx[2], 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(&gfx[3], 150, 150, 150, 0);
             gSPDisplayList(&gfx[4], gEffBubbleDL);
@@ -2940,7 +2941,7 @@ void Player_DrawBlastMask(PlayState* play, Player* player) {
     if (player->blastMaskTimer != 0) {
         s32 alpha;
 
-        gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
+        gSegments[0xA] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
@@ -3750,7 +3751,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
 
-        if ((player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_100)) && (player->actionVar2 != 0)) {
+        if ((player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_100)) && (player->av2.actionVar2 != 0)) {
             static Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
                 { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_FIERCE_DEITY
                 { -578.3f, -1100.9f, 0.0f }, // PLAYER_FORM_GORON
@@ -3770,7 +3771,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, (u8)player->actionVar2);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, (u8)player->av2.actionVar2);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054C90);
 
             Matrix_Pop();

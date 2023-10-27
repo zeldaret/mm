@@ -33,15 +33,15 @@ void func_80A6B078(EnMushi2* this);
 void func_80A6B0D8(EnMushi2* this, PlayState* play);
 
 ActorInit En_Mushi2_InitVars = {
-    ACTOR_EN_MUSHI2,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnMushi2),
-    (ActorFunc)EnMushi2_Init,
-    (ActorFunc)EnMushi2_Destroy,
-    (ActorFunc)EnMushi2_Update,
-    (ActorFunc)EnMushi2_Draw,
+    /**/ ACTOR_EN_MUSHI2,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnMushi2),
+    /**/ EnMushi2_Init,
+    /**/ EnMushi2_Destroy,
+    /**/ EnMushi2_Update,
+    /**/ EnMushi2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

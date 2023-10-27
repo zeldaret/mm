@@ -26,15 +26,15 @@ void BgDyYoseizo_UpdateEffects(BgDyYoseizo* this, PlayState* play);
 void BgDyYoseizo_DrawEffects(BgDyYoseizo* this, PlayState* play);
 
 ActorInit Bg_Dy_Yoseizo_InitVars = {
-    ACTOR_BG_DY_YOSEIZO,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_DY_OBJ,
-    sizeof(BgDyYoseizo),
-    (ActorFunc)BgDyYoseizo_Init,
-    (ActorFunc)BgDyYoseizo_Destroy,
-    (ActorFunc)BgDyYoseizo_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_DY_YOSEIZO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_DY_OBJ,
+    /**/ sizeof(BgDyYoseizo),
+    /**/ BgDyYoseizo_Init,
+    /**/ BgDyYoseizo_Destroy,
+    /**/ BgDyYoseizo_Update,
+    /**/ NULL,
 };
 
 typedef enum GreatFairyAnimation {

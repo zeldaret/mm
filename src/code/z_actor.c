@@ -1098,7 +1098,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 }
 
 void Actor_SetObjectDependency(PlayState* play, Actor* actor) {
-    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[actor->objectSlot].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[actor->objectSlot].segment);
 }
 
 void Actor_Init(Actor* actor, PlayState* play) {
@@ -1412,7 +1412,7 @@ s32 func_800B724C(PlayState* play, Actor* actor, u8 csAction) {
 
     player->csAction = csAction;
     player->csActor = actor;
-    player->unk_3BA = false;
+    player->cv.haltActorsDuringCsAction = false;
     return true;
 }
 
@@ -1420,7 +1420,7 @@ s32 func_800B7298(PlayState* play, Actor* actor, u8 csAction) {
     Player* player = GET_PLAYER(play);
 
     if (func_800B724C(play, actor, csAction)) {
-        player->unk_3BA = true;
+        player->cv.haltActorsDuringCsAction = true;
         return true;
     }
     return false;

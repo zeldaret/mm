@@ -151,15 +151,15 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit En_Kaizoku_InitVars = {
-    ACTOR_EN_KAIZOKU,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_KZ,
-    sizeof(EnKaizoku),
-    (ActorFunc)EnKaizoku_Init,
-    (ActorFunc)EnKaizoku_Destroy,
-    (ActorFunc)EnKaizoku_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_KAIZOKU,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_KZ,
+    /**/ sizeof(EnKaizoku),
+    /**/ EnKaizoku_Init,
+    /**/ EnKaizoku_Destroy,
+    /**/ EnKaizoku_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -2142,7 +2142,7 @@ void EnKaizoku_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnKaizoku_OverrideLimbDraw, EnKaizoku_PostLimbDraw,
                                    EnKaizoku_TransformLimbDraw, &this->picto.actor);

@@ -14,15 +14,15 @@ void ObjMakeoshihiki_Init(Actor* thisx, PlayState* play);
 void ObjMakeoshihiki_Update(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Makeoshihiki_InitVars = {
-    ACTOR_OBJ_MAKEOSHIHIKI,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjMakeoshihiki),
-    (ActorFunc)ObjMakeoshihiki_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)ObjMakeoshihiki_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_MAKEOSHIHIKI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjMakeoshihiki),
+    /**/ ObjMakeoshihiki_Init,
+    /**/ Actor_Noop,
+    /**/ ObjMakeoshihiki_Update,
+    /**/ NULL,
 };
 
 s32 ObjMakeoshihiki_GetChildSpawnPointIndex(ObjMakeoshihiki* this, PlayState* play) {

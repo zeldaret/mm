@@ -26,15 +26,15 @@ void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play);
 s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Po_Fusen_InitVars = {
-    ACTOR_EN_PO_FUSEN,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_PO_FUSEN,
-    sizeof(EnPoFusen),
-    (ActorFunc)EnPoFusen_Init,
-    (ActorFunc)EnPoFusen_Destroy,
-    (ActorFunc)EnPoFusen_Update,
-    (ActorFunc)EnPoFusen_Draw,
+    /**/ ACTOR_EN_PO_FUSEN,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_PO_FUSEN,
+    /**/ sizeof(EnPoFusen),
+    /**/ EnPoFusen_Init,
+    /**/ EnPoFusen_Destroy,
+    /**/ EnPoFusen_Update,
+    /**/ EnPoFusen_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

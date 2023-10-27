@@ -24,15 +24,15 @@ void BgGoronOyu_SpawnEffects(BgGoronOyu* this, PlayState* play);
 void func_80B40160(BgGoronOyu* this, PlayState* play);
 
 ActorInit Bg_Goron_Oyu_InitVars = {
-    ACTOR_BG_GORON_OYU,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_OYU,
-    sizeof(BgGoronOyu),
-    (ActorFunc)BgGoronOyu_Init,
-    (ActorFunc)BgGoronOyu_Destroy,
-    (ActorFunc)BgGoronOyu_Update,
-    (ActorFunc)BgGoronOyu_Draw,
+    /**/ ACTOR_BG_GORON_OYU,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_OYU,
+    /**/ sizeof(BgGoronOyu),
+    /**/ BgGoronOyu_Init,
+    /**/ BgGoronOyu_Destroy,
+    /**/ BgGoronOyu_Update,
+    /**/ BgGoronOyu_Draw,
 };
 
 void func_80B40080(BgGoronOyu* this) {

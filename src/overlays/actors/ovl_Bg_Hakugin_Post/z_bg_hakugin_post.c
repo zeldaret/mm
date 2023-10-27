@@ -40,15 +40,15 @@ BgHakuginPostColliders D_80A9DDC0;
 BgHakuginPostUnkStruct D_80A9E028;
 
 ActorInit Bg_Hakugin_Post_InitVars = {
-    ACTOR_BG_HAKUGIN_POST,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HAKUGIN_OBJ,
-    sizeof(BgHakuginPost),
-    (ActorFunc)BgHakuginPost_Init,
-    (ActorFunc)BgHakuginPost_Destroy,
-    (ActorFunc)BgHakuginPost_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_HAKUGIN_POST,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HAKUGIN_OBJ,
+    /**/ sizeof(BgHakuginPost),
+    /**/ BgHakuginPost_Init,
+    /**/ BgHakuginPost_Destroy,
+    /**/ BgHakuginPost_Update,
+    /**/ NULL,
 };
 
 typedef struct {

@@ -22,15 +22,15 @@ void DmGm_DoNothing(DmGm* this, PlayState* play);
 void DmGm_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Dm_Gm_InitVars = {
-    ACTOR_DM_GM,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AN1,
-    sizeof(DmGm),
-    (ActorFunc)DmGm_Init,
-    (ActorFunc)DmGm_Destroy,
-    (ActorFunc)DmGm_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_DM_GM,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AN1,
+    /**/ sizeof(DmGm),
+    /**/ DmGm_Init,
+    /**/ DmGm_Destroy,
+    /**/ DmGm_Update,
+    /**/ NULL,
 };
 
 /**
@@ -92,9 +92,9 @@ s32 DmGm_UpdateSkelAnime(DmGm* this, PlayState* play) {
     }
 
     if (objectIndex2 > OBJECT_SLOT_NONE) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectIndex2].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectIndex2].segment);
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return isAnimFinished;
@@ -112,10 +112,10 @@ s32 DmGm_ChangeAnim(DmGm* this, PlayState* play, DmGmAnimation animIndex) {
     }
 
     if ((objectIndex2 > OBJECT_SLOT_NONE) && (this->animIndex != animIndex)) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectIndex2].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectIndex2].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return didAnimChange;

@@ -19,15 +19,15 @@ void EnEndingHero2_SetupIdle(EnEndingHero2* this);
 void EnEndingHero2_Idle(EnEndingHero2* this, PlayState* play);
 
 ActorInit En_Ending_Hero2_InitVars = {
-    ACTOR_EN_ENDING_HERO2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BAI,
-    sizeof(EnEndingHero2),
-    (ActorFunc)EnEndingHero2_Init,
-    (ActorFunc)EnEndingHero2_Destroy,
-    (ActorFunc)EnEndingHero2_Update,
-    (ActorFunc)EnEndingHero2_Draw,
+    /**/ ACTOR_EN_ENDING_HERO2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BAI,
+    /**/ sizeof(EnEndingHero2),
+    /**/ EnEndingHero2_Init,
+    /**/ EnEndingHero2_Destroy,
+    /**/ EnEndingHero2_Update,
+    /**/ EnEndingHero2_Draw,
 };
 
 void EnEndingHero2_Init(Actor* thisx, PlayState* play) {

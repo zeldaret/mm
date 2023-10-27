@@ -27,15 +27,15 @@ void EnBombal_UpdateEffects(EnBombal* this, PlayState* play);
 void EnBombal_DrawEffects(EnBombal*, PlayState*);
 
 ActorInit En_Bombal_InitVars = {
-    ACTOR_EN_BOMBAL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_FUSEN,
-    sizeof(EnBombal),
-    (ActorFunc)EnBombal_Init,
-    (ActorFunc)EnBombal_Destroy,
-    (ActorFunc)EnBombal_Update,
-    (ActorFunc)EnBombal_Draw,
+    /**/ ACTOR_EN_BOMBAL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_FUSEN,
+    /**/ sizeof(EnBombal),
+    /**/ EnBombal_Init,
+    /**/ EnBombal_Destroy,
+    /**/ EnBombal_Update,
+    /**/ EnBombal_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

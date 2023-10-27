@@ -22,9 +22,15 @@
 void ObjGrassUnit_Init(Actor* this, PlayState* play2);
 
 ActorInit Obj_Grass_Unit_InitVars = {
-    ACTOR_OBJ_GRASS_UNIT,  ACTORCAT_BG,           FLAGS,
-    GAMEPLAY_FIELD_KEEP,   sizeof(ObjGrassUnit),  (ActorFunc)ObjGrassUnit_Init,
-    (ActorFunc)Actor_Noop, (ActorFunc)Actor_Noop, (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_GRASS_UNIT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_FIELD_KEEP,
+    /**/ sizeof(ObjGrassUnit),
+    /**/ ObjGrassUnit_Init,
+    /**/ Actor_Noop,
+    /**/ Actor_Noop,
+    /**/ NULL,
 };
 
 // Neat circular pattern with a single bush in the center

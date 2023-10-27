@@ -34,15 +34,15 @@ void func_80B04B60(ObjSnowball* this, PlayState* play);
 void func_80B04D34(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Snowball_InitVars = {
-    ACTOR_OBJ_SNOWBALL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GOROIWA,
-    sizeof(ObjSnowball),
-    (ActorFunc)ObjSnowball_Init,
-    (ActorFunc)ObjSnowball_Destroy,
-    (ActorFunc)ObjSnowball_Update,
-    (ActorFunc)ObjSnowball_Draw,
+    /**/ ACTOR_OBJ_SNOWBALL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_GOROIWA,
+    /**/ sizeof(ObjSnowball),
+    /**/ ObjSnowball_Init,
+    /**/ ObjSnowball_Destroy,
+    /**/ ObjSnowball_Update,
+    /**/ ObjSnowball_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

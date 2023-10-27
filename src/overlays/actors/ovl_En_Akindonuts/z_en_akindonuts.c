@@ -32,15 +32,15 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play);
 void func_80BEFD74(EnAkindonuts* this, PlayState* play);
 
 ActorInit En_Akindonuts_InitVars = {
-    ACTOR_EN_AKINDONUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNT,
-    sizeof(EnAkindonuts),
-    (ActorFunc)EnAkindonuts_Init,
-    (ActorFunc)EnAkindonuts_Destroy,
-    (ActorFunc)EnAkindonuts_Update,
-    (ActorFunc)EnAkindonuts_Draw,
+    /**/ ACTOR_EN_AKINDONUTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNT,
+    /**/ sizeof(EnAkindonuts),
+    /**/ EnAkindonuts_Init,
+    /**/ EnAkindonuts_Destroy,
+    /**/ EnAkindonuts_Update,
+    /**/ EnAkindonuts_Draw,
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {

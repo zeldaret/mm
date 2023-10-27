@@ -41,15 +41,15 @@ typedef enum {
 } KoumeMtAnimation;
 
 ActorInit En_Tru_Mt_InitVars = {
-    ACTOR_EN_TRU_MT,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TRU,
-    sizeof(EnTruMt),
-    (ActorFunc)EnTruMt_Init,
-    (ActorFunc)EnTruMt_Destroy,
-    (ActorFunc)EnTruMt_Update,
-    (ActorFunc)EnTruMt_Draw,
+    /**/ ACTOR_EN_TRU_MT,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TRU,
+    /**/ sizeof(EnTruMt),
+    /**/ EnTruMt_Init,
+    /**/ EnTruMt_Destroy,
+    /**/ EnTruMt_Update,
+    /**/ EnTruMt_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

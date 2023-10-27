@@ -17,15 +17,15 @@ void ObjSmork_Update(Actor* thisx, PlayState* play);
 void ObjSmork_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Smork_InitVars = {
-    ACTOR_OBJ_SMORK,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_F53_OBJ,
-    sizeof(ObjSmork),
-    (ActorFunc)ObjSmork_Init,
-    (ActorFunc)ObjSmork_Destroy,
-    (ActorFunc)ObjSmork_Update,
-    (ActorFunc)ObjSmork_Draw,
+    /**/ ACTOR_OBJ_SMORK,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_F53_OBJ,
+    /**/ sizeof(ObjSmork),
+    /**/ ObjSmork_Init,
+    /**/ ObjSmork_Destroy,
+    /**/ ObjSmork_Update,
+    /**/ ObjSmork_Draw,
 };
 
 #include "overlays/ovl_Obj_Smork/ovl_Obj_Smork.c"

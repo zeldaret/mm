@@ -38,15 +38,15 @@ void EnDg_SetupTalk(EnDg* this, PlayState* play);
 void EnDg_Talk(EnDg* this, PlayState* play);
 
 ActorInit En_Dg_InitVars = {
-    ACTOR_EN_DG,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DOG,
-    sizeof(EnDg),
-    (ActorFunc)EnDg_Init,
-    (ActorFunc)EnDg_Destroy,
-    (ActorFunc)EnDg_Update,
-    (ActorFunc)EnDg_Draw,
+    /**/ ACTOR_EN_DG,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DOG,
+    /**/ sizeof(EnDg),
+    /**/ EnDg_Init,
+    /**/ EnDg_Destroy,
+    /**/ EnDg_Update,
+    /**/ EnDg_Draw,
 };
 
 #define DOG_FLAG_NONE 0

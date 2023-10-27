@@ -28,15 +28,15 @@ void func_808DDE9C(Actor* thisx, PlayState* play2);
 static f32 D_808DE5B0;
 
 ActorInit Object_Kankyo_InitVars = {
-    ACTOR_OBJECT_KANKYO,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjectKankyo),
-    (ActorFunc)ObjectKankyo_Init,
-    (ActorFunc)ObjectKankyo_Destroy,
-    (ActorFunc)ObjectKankyo_Update,
-    (ActorFunc)ObjectKankyo_Draw,
+    /**/ ACTOR_OBJECT_KANKYO,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjectKankyo),
+    /**/ ObjectKankyo_Init,
+    /**/ ObjectKankyo_Destroy,
+    /**/ ObjectKankyo_Update,
+    /**/ ObjectKankyo_Draw,
 };
 
 static u16 D_808DE340 = 0;

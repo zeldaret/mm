@@ -76,15 +76,15 @@ static Gfx* sIronKnuckleArmorType[3][3] = {
 };
 
 ActorInit En_Ik_InitVars = {
-    ACTOR_EN_IK,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_IK,
-    sizeof(EnIk),
-    (ActorFunc)EnIk_Init,
-    (ActorFunc)EnIk_Destroy,
-    (ActorFunc)EnIk_Update,
-    (ActorFunc)EnIk_Draw,
+    /**/ ACTOR_EN_IK,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_IK,
+    /**/ sizeof(EnIk),
+    /**/ EnIk_Init,
+    /**/ EnIk_Destroy,
+    /**/ EnIk_Update,
+    /**/ EnIk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
