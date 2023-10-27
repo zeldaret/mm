@@ -1111,8 +1111,10 @@ wordReplace = {
     "player->unk_AA0": "player->closestSecretDistSq",
     "player->unk_AAC": "player->headLimbRot",
     "player->unk_AB2": "player->upperLimbRot",
-    "player->unk_AE7": "player->actionVar1",
-    "player->unk_AE8": "player->actionVar2",
+    "player->unk_AE7": "player->av1.actionVar1",
+    "player->unk_AE8": "player->av2.actionVar2",
+    "player->actionVar1": "player->av1.actionVar1",
+    "player->actionVar2": "player->av2.actionVar2",
     "player->unk_B2A": "player->getItemDrawIdPlusOne",
     "player->getItemDrawId": "player->getItemDrawIdPlusOne",
     "player->unk_B68": "player->fallStartHeight",
@@ -1323,6 +1325,9 @@ wordReplace = {
     "WEEKEVENTREG_33_80": "WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE",
     "WEEKEVENTREG_52_20": "WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE",
     "WEEKEVENTREG_55_80": "WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE",
+
+    "VIRTUAL_TO_PHYSICAL": "OS_K0_TO_PHYSICAL",
+    "SEGMENTED_TO_VIRTUAL": "SEGMENTED_TO_K0",
 
     # Enums
     "TRANS_TYPE_00": "TRANS_TYPE_WIPE",

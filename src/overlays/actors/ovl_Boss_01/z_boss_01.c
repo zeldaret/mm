@@ -235,15 +235,15 @@ static ColliderCylinderInit D_809D7CA0 = {
 };
 
 ActorInit Boss_01_InitVars = {
-    ACTOR_BOSS_01,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS01,
-    sizeof(Boss01),
-    (ActorFunc)Boss01_Init,
-    (ActorFunc)Boss01_Destroy,
-    (ActorFunc)Boss01_Update,
-    (ActorFunc)Boss01_Draw,
+    /**/ ACTOR_BOSS_01,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS01,
+    /**/ sizeof(Boss01),
+    /**/ Boss01_Init,
+    /**/ Boss01_Destroy,
+    /**/ Boss01_Update,
+    /**/ Boss01_Draw,
 };
 
 #endif

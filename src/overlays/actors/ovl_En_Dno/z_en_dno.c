@@ -92,15 +92,15 @@ static AnimationSpeedInfo sAnimationSpeedInfo[EN_DNO_ANIM_MAX] = {
 };
 
 ActorInit En_Dno_InitVars = {
-    ACTOR_EN_DNO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNJ,
-    sizeof(EnDno),
-    (ActorFunc)EnDno_Init,
-    (ActorFunc)EnDno_Destroy,
-    (ActorFunc)EnDno_Update,
-    (ActorFunc)EnDno_Draw,
+    /**/ ACTOR_EN_DNO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNJ,
+    /**/ sizeof(EnDno),
+    /**/ EnDno_Init,
+    /**/ EnDno_Destroy,
+    /**/ EnDno_Update,
+    /**/ EnDno_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -52,15 +52,15 @@ void func_80B72830(EnRailSkb* this, s16 arg1);
 s32 func_80B7285C(EnRailSkb* this);
 
 ActorInit En_Rail_Skb_InitVars = {
-    ACTOR_EN_RAIL_SKB,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_SKB,
-    sizeof(EnRailSkb),
-    (ActorFunc)EnRailSkb_Init,
-    (ActorFunc)EnRailSkb_Destroy,
-    (ActorFunc)EnRailSkb_Update,
-    (ActorFunc)EnRailSkb_Draw,
+    /**/ ACTOR_EN_RAIL_SKB,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_SKB,
+    /**/ sizeof(EnRailSkb),
+    /**/ EnRailSkb_Init,
+    /**/ EnRailSkb_Destroy,
+    /**/ EnRailSkb_Update,
+    /**/ EnRailSkb_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

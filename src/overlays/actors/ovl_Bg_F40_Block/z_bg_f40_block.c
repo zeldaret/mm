@@ -27,15 +27,15 @@ void func_80BC4530(BgF40Block* this, PlayState* play);
 void func_80BC457C(BgF40Block* this, PlayState* play);
 
 ActorInit Bg_F40_Block_InitVars = {
-    ACTOR_BG_F40_BLOCK,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_F40_OBJ,
-    sizeof(BgF40Block),
-    (ActorFunc)BgF40Block_Init,
-    (ActorFunc)BgF40Block_Destroy,
-    (ActorFunc)BgF40Block_Update,
-    (ActorFunc)BgF40Block_Draw,
+    /**/ ACTOR_BG_F40_BLOCK,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_F40_OBJ,
+    /**/ sizeof(BgF40Block),
+    /**/ BgF40Block_Init,
+    /**/ BgF40Block_Destroy,
+    /**/ BgF40Block_Update,
+    /**/ BgF40Block_Draw,
 };
 
 static Vec3f D_80BC4620[] = {

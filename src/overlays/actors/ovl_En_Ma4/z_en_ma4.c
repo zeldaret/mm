@@ -55,15 +55,15 @@ typedef enum {
 } EnMa4State;
 
 ActorInit En_Ma4_InitVars = {
-    ACTOR_EN_MA4,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MA1,
-    sizeof(EnMa4),
-    (ActorFunc)EnMa4_Init,
-    (ActorFunc)EnMa4_Destroy,
-    (ActorFunc)EnMa4_Update,
-    (ActorFunc)EnMa4_Draw,
+    /**/ ACTOR_EN_MA4,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MA1,
+    /**/ sizeof(EnMa4),
+    /**/ EnMa4_Init,
+    /**/ EnMa4_Destroy,
+    /**/ EnMa4_Update,
+    /**/ EnMa4_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -1083,8 +1083,8 @@ void EnMa4_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(sEyeTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_K0(sMouthTextures[this->mouthTexIndex]));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMa4_OverrideLimbDraw, EnMa4_PostLimbDraw, &this->actor);

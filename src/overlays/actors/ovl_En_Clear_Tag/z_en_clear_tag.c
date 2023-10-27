@@ -32,15 +32,15 @@ void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play);
 void EnClearTag_DrawEffects(Actor* thisx, PlayState* play);
 
 ActorInit En_Clear_Tag_InitVars = {
-    ACTOR_EN_CLEAR_TAG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnClearTag),
-    (ActorFunc)EnClearTag_Init,
-    (ActorFunc)EnClearTag_Destroy,
-    (ActorFunc)EnClearTag_Update,
-    (ActorFunc)EnClearTag_Draw,
+    /**/ ACTOR_EN_CLEAR_TAG,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnClearTag),
+    /**/ EnClearTag_Init,
+    /**/ EnClearTag_Destroy,
+    /**/ EnClearTag_Update,
+    /**/ EnClearTag_Draw,
 };
 
 static Vec3f sZeroVector = { 0.0f, 0.0f, 0.0f };

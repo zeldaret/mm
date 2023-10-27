@@ -58,15 +58,15 @@ typedef enum {
 } EnKameEyeTexture;
 
 ActorInit En_Kame_InitVars = {
-    ACTOR_EN_KAME,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_TL,
-    sizeof(EnKame),
-    (ActorFunc)EnKame_Init,
-    (ActorFunc)EnKame_Destroy,
-    (ActorFunc)EnKame_Update,
-    (ActorFunc)EnKame_Draw,
+    /**/ ACTOR_EN_KAME,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_TL,
+    /**/ sizeof(EnKame),
+    /**/ EnKame_Init,
+    /**/ EnKame_Destroy,
+    /**/ EnKame_Update,
+    /**/ EnKame_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

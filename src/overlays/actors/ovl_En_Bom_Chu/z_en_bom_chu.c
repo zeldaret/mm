@@ -26,15 +26,15 @@ void EnBomChu_Explode(EnBomChu* this, PlayState* play);
 void EnBomChu_WaitForDeath(EnBomChu* this, PlayState* play);
 
 ActorInit En_Bom_Chu_InitVars = {
-    ACTOR_EN_BOM_CHU,
-    ACTORCAT_EXPLOSIVES,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnBomChu),
-    (ActorFunc)EnBomChu_Init,
-    (ActorFunc)EnBomChu_Destroy,
-    (ActorFunc)EnBomChu_Update,
-    (ActorFunc)EnBomChu_Draw,
+    /**/ ACTOR_EN_BOM_CHU,
+    /**/ ACTORCAT_EXPLOSIVES,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnBomChu),
+    /**/ EnBomChu_Init,
+    /**/ EnBomChu_Destroy,
+    /**/ EnBomChu_Update,
+    /**/ EnBomChu_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

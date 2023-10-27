@@ -17,15 +17,15 @@ void EnWdhand_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit En_Wdhand_InitVars = {
-    ACTOR_EN_WDHAND,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_WDHAND,
-    sizeof(EnWdhand),
-    (ActorFunc)EnWdhand_Init,
-    (ActorFunc)EnWdhand_Destroy,
-    (ActorFunc)EnWdhand_Update,
-    (ActorFunc)EnWdhand_Draw,
+    /**/ ACTOR_EN_WDHAND,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_WDHAND,
+    /**/ sizeof(EnWdhand),
+    /**/ EnWdhand_Init,
+    /**/ EnWdhand_Destroy,
+    /**/ EnWdhand_Update,
+    /**/ EnWdhand_Draw,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[7] = {

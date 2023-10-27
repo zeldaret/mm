@@ -17,15 +17,15 @@ void EnTest_Update(Actor* thisx, PlayState* play);
 void EnTest_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Test_InitVars = {
-    ACTOR_EN_TEST,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTest),
-    (ActorFunc)EnTest_Init,
-    (ActorFunc)EnTest_Destroy,
-    (ActorFunc)EnTest_Update,
-    (ActorFunc)EnTest_Draw,
+    /**/ ACTOR_EN_TEST,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTest),
+    /**/ EnTest_Init,
+    /**/ EnTest_Destroy,
+    /**/ EnTest_Update,
+    /**/ EnTest_Draw,
 };
 
 void func_80862B70(EnTestStruct* arg0) {

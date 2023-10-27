@@ -29,15 +29,15 @@ typedef enum EffLastDayAction {
 } EffLastDayAction;
 
 ActorInit Eff_Lastday_InitVars = {
-    ACTOR_EFF_LASTDAY,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_LASTDAY,
-    sizeof(EffLastday),
-    (ActorFunc)EffLastday_Init,
-    (ActorFunc)EffLastday_Destroy,
-    (ActorFunc)EffLastday_Update,
-    (ActorFunc)EffLastday_Draw,
+    /**/ ACTOR_EFF_LASTDAY,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_LASTDAY,
+    /**/ sizeof(EffLastday),
+    /**/ EffLastday_Init,
+    /**/ EffLastday_Destroy,
+    /**/ EffLastday_Update,
+    /**/ EffLastday_Draw,
 };
 
 void EffLastday_Init(Actor* thisx, PlayState* play2) {

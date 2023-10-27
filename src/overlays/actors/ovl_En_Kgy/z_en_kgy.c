@@ -46,15 +46,15 @@ typedef enum EnKgyAnimation {
 } EnKgyAnimation;
 
 ActorInit En_Kgy_InitVars = {
-    ACTOR_EN_KGY,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_KGY,
-    sizeof(EnKgy),
-    (ActorFunc)EnKgy_Init,
-    (ActorFunc)EnKgy_Destroy,
-    (ActorFunc)EnKgy_Update,
-    (ActorFunc)EnKgy_Draw,
+    /**/ ACTOR_EN_KGY,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_KGY,
+    /**/ sizeof(EnKgy),
+    /**/ EnKgy_Init,
+    /**/ EnKgy_Destroy,
+    /**/ EnKgy_Update,
+    /**/ EnKgy_Draw,
 };
 
 void EnKgy_Init(Actor* thisx, PlayState* play) {

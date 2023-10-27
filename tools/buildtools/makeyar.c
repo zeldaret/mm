@@ -188,20 +188,27 @@ void createArchive(Bytearray *archive, const DataSection *dataSect) {
     offset = firstEntryOffset;
     for (i = 0; i < dataSect->symbols.len; i++) {
         const struct Elf32_Symbol *sym = &dataSect->symbols.symbols[i];
-        size_t uncompressedSize = sym->size;
-        uint8_t *output = malloc(uncompressedSize * sizeof(uint8_t)); // assume compressed shouldn't be bigger than uncompressed
+        size_t realUncompressedSize = sym->size;
+        size_t alignedUncompressedSize = ALIGN16(realUncompressedSize);
+        uint8_t *inputBuf = malloc(alignedUncompressedSize* sizeof(uint8_t));
+        uint8_t *output = malloc(alignedUncompressedSize * sizeof(uint8_t)); // assume compressed shouldn't be bigger than uncompressed
         size_t compressedSize;
+
+        // Make sure to pad each entry to a 0x10 boundary
+        memcpy(inputBuf, &dataSect->data.bytes[sym->value], realUncompressedSize);
+        if (realUncompressedSize < alignedUncompressedSize) {
+            memset(&inputBuf[realUncompressedSize], 0, alignedUncompressedSize - realUncompressedSize);
+        }
 
         output[0] = 'Y';
         output[1] = 'a';
         output[2] = 'z';
         output[3] = '0';
-        util_write_uint32_be(&output[4], uncompressedSize);
+        util_write_uint32_be(&output[4], alignedUncompressedSize);
         memset(&output[8], 0, 8);
         compressedSize = 0x10;
 
-        assert(sym->value + uncompressedSize <= dataSect->data.size);
-        compressedSize += yaz0_encode(&dataSect->data.bytes[sym->value], &output[0x10], uncompressedSize);
+        compressedSize += yaz0_encode(inputBuf, &output[0x10], alignedUncompressedSize);
 
         // Pad to 0x10
         while (compressedSize % 0x10 != 0) {

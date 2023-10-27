@@ -22,15 +22,15 @@ void func_80B23934(EnHanabi* this, PlayState* play);
 void EnHanabi_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Hanabi_InitVars = {
-    ACTOR_EN_HANABI,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnHanabi),
-    (ActorFunc)EnHanabi_Init,
-    (ActorFunc)EnHanabi_Destroy,
-    (ActorFunc)EnHanabi_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_HANABI,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnHanabi),
+    /**/ EnHanabi_Init,
+    /**/ EnHanabi_Destroy,
+    /**/ EnHanabi_Update,
+    /**/ NULL,
 };
 
 Vec3s D_80B23AA0[] = {

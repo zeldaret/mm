@@ -1,4 +1,4 @@
-#include "global.h"
+#include "ultra64.h"
 
 /**
  * Compute the sine of a hex angle and return a short, using the formula cos(x) = sin(x+pi).

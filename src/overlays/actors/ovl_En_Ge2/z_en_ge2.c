@@ -24,15 +24,15 @@ void EnGe2_GuardStationary(EnGe2* this, PlayState* play);
 s32 EnGe2_ValidatePictograph(PlayState* play, Actor* thisx);
 
 ActorInit En_Ge2_InitVars = {
-    ACTOR_EN_GE2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GLA,
-    sizeof(EnGe2),
-    (ActorFunc)EnGe2_Init,
-    (ActorFunc)EnGe2_Destroy,
-    (ActorFunc)EnGe2_Update,
-    (ActorFunc)EnGe2_Draw,
+    /**/ ACTOR_EN_GE2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_GLA,
+    /**/ sizeof(EnGe2),
+    /**/ EnGe2_Init,
+    /**/ EnGe2_Destroy,
+    /**/ EnGe2_Update,
+    /**/ EnGe2_Draw,
 };
 
 typedef enum {
@@ -772,7 +772,7 @@ void EnGe2_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL37_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(sEyeTextures[this->eyeIndex]));
     func_800B8050(&this->picto.actor, play, 0);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnGe2_OverrideLimbDraw, EnGe2_PostLimbDraw, &this->picto.actor);

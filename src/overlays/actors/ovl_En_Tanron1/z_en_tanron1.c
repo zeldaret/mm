@@ -19,15 +19,15 @@ void func_80BB5318(EnTanron1* this, PlayState* play);
 void func_80BB5AAC(EnTanron1* this, PlayState* play);
 
 ActorInit En_Tanron1_InitVars = {
-    ACTOR_EN_TANRON1,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTanron1),
-    (ActorFunc)EnTanron1_Init,
-    (ActorFunc)EnTanron1_Destroy,
-    (ActorFunc)EnTanron1_Update,
-    (ActorFunc)EnTanron1_Draw,
+    /**/ ACTOR_EN_TANRON1,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTanron1),
+    /**/ EnTanron1_Init,
+    /**/ EnTanron1_Destroy,
+    /**/ EnTanron1_Update,
+    /**/ EnTanron1_Draw,
 };
 
 static s32 sPad = 0;

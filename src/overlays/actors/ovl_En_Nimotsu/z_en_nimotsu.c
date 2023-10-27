@@ -19,15 +19,15 @@ void EnNimotsu_Draw(Actor* thisx, PlayState* play);
 void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play);
 
 ActorInit En_Nimotsu_InitVars = {
-    ACTOR_EN_NIMOTSU,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_BOJ,
-    sizeof(EnNimotsu),
-    (ActorFunc)EnNimotsu_Init,
-    (ActorFunc)EnNimotsu_Destroy,
-    (ActorFunc)EnNimotsu_Update,
-    (ActorFunc)EnNimotsu_Draw,
+    /**/ ACTOR_EN_NIMOTSU,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_BOJ,
+    /**/ sizeof(EnNimotsu),
+    /**/ EnNimotsu_Init,
+    /**/ EnNimotsu_Destroy,
+    /**/ EnNimotsu_Update,
+    /**/ EnNimotsu_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

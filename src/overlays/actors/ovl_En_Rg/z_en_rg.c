@@ -23,15 +23,15 @@ void func_80BF4FC4(EnRg* this, PlayState* play);
 s32 D_80BF5C10;
 
 ActorInit En_Rg_InitVars = {
-    ACTOR_EN_RG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_OF1D_MAP,
-    sizeof(EnRg),
-    (ActorFunc)EnRg_Init,
-    (ActorFunc)EnRg_Destroy,
-    (ActorFunc)EnRg_Update,
-    (ActorFunc)EnRg_Draw,
+    /**/ ACTOR_EN_RG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_OF1D_MAP,
+    /**/ sizeof(EnRg),
+    /**/ EnRg_Init,
+    /**/ EnRg_Destroy,
+    /**/ EnRg_Update,
+    /**/ EnRg_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

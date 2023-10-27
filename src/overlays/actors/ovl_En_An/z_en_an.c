@@ -20,15 +20,15 @@ void func_80B57A44(EnAn* this, PlayState* play);
 
 #if 0
 ActorInit En_An_InitVars = {
-    ACTOR_EN_AN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AN1,
-    sizeof(EnAn),
-    (ActorFunc)EnAn_Init,
-    (ActorFunc)EnAn_Destroy,
-    (ActorFunc)EnAn_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_AN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AN1,
+    /**/ sizeof(EnAn),
+    /**/ EnAn_Init,
+    /**/ EnAn_Destroy,
+    /**/ EnAn_Update,
+    /**/ NULL,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

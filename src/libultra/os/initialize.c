@@ -1,8 +1,9 @@
-#include "global.h"
+#include "ultra64.h"
+#include "libc/stdbool.h"
 
 #define COLD_RESET 0
 
-typedef struct {
+typedef struct __osExceptionVector {
     /* 0x0 */ u32 ins_00; // lui     k0, 0x8000
     /* 0x4 */ u32 ins_04; // addiu   k0, k0, 0x39E0
     /* 0x8 */ u32 ins_08; // jr      k0 ; __osException
@@ -14,22 +15,22 @@ extern __osExceptionVector __osExceptionPreamble;
 u64 osClockRate = OS_CLOCK_RATE;
 s32 osViClock = VI_NTSC_CLOCK;
 u32 __osShutdown = 0;
-u32 __OSGlobalIntMask = 0x003FFF01;
+u32 __OSGlobalIntMask = OS_IM_ALL;
 
 u32 __osFinalrom;
 
 void __createSpeedParam(void) {
     __Dom1SpeedParam.type = DEVICE_TYPE_INIT;
-    __Dom1SpeedParam.latency = HW_REG(PI_BSD_DOM1_LAT_REG, u32);
-    __Dom1SpeedParam.pulse = HW_REG(PI_BSD_DOM1_PWD_REG, u32);
-    __Dom1SpeedParam.pageSize = HW_REG(PI_BSD_DOM1_PGS_REG, u32);
-    __Dom1SpeedParam.relDuration = HW_REG(PI_BSD_DOM1_RLS_REG, u32);
+    __Dom1SpeedParam.latency = IO_READ(PI_BSD_DOM1_LAT_REG);
+    __Dom1SpeedParam.pulse = IO_READ(PI_BSD_DOM1_PWD_REG);
+    __Dom1SpeedParam.pageSize = IO_READ(PI_BSD_DOM1_PGS_REG);
+    __Dom1SpeedParam.relDuration = IO_READ(PI_BSD_DOM1_RLS_REG);
 
     __Dom2SpeedParam.type = DEVICE_TYPE_INIT;
-    __Dom2SpeedParam.latency = HW_REG(PI_BSD_DOM2_LAT_REG, u32);
-    __Dom2SpeedParam.pulse = HW_REG(PI_BSD_DOM2_PWD_REG, u32);
-    __Dom2SpeedParam.pageSize = HW_REG(PI_BSD_DOM2_PGS_REG, u32);
-    __Dom2SpeedParam.relDuration = HW_REG(PI_BSD_DOM2_RLS_REG, u32);
+    __Dom2SpeedParam.latency = IO_READ(PI_BSD_DOM2_LAT_REG);
+    __Dom2SpeedParam.pulse = IO_READ(PI_BSD_DOM2_PWD_REG);
+    __Dom2SpeedParam.pageSize = IO_READ(PI_BSD_DOM2_PGS_REG);
+    __Dom2SpeedParam.relDuration = IO_READ(PI_BSD_DOM2_RLS_REG);
 }
 
 void __osInitialize_common(void) {
@@ -37,29 +38,29 @@ void __osInitialize_common(void) {
 
     __osFinalrom = 1;
 
-    __osSetSR(__osGetSR() | 0x20000000);
-    __osSetFpcCsr(0x01000800);
+    __osSetSR(__osGetSR() | SR_CU1);
+    __osSetFpcCsr(FPCSR_FS | FPCSR_EV);
     __osSetWatchLo(0x04900000);
 
-    while (__osSiRawReadIo(0x1FC007FC, &pifdata)) {}
+    while (__osSiRawReadIo(PIF_RAM_END - 3, &pifdata)) {}
 
-    while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8)) {}
+    while (__osSiRawWriteIo(PIF_RAM_END - 3, pifdata | 8)) {}
 
-    *(__osExceptionVector*)0x80000000 = __osExceptionPreamble;
-    *(__osExceptionVector*)0x80000080 = __osExceptionPreamble;
-    *(__osExceptionVector*)0x80000100 = __osExceptionPreamble;
-    *(__osExceptionVector*)0x80000180 = __osExceptionPreamble;
+    *(__osExceptionVector*)UT_VEC = __osExceptionPreamble;
+    *(__osExceptionVector*)XUT_VEC = __osExceptionPreamble;
+    *(__osExceptionVector*)ECC_VEC = __osExceptionPreamble;
+    *(__osExceptionVector*)E_VEC = __osExceptionPreamble;
 
-    osWritebackDCache(0x80000000, 400);
-    osInvalICache(0x80000000, 400);
+    osWritebackDCache((void*)UT_VEC, E_VEC - UT_VEC + sizeof(__osExceptionVector));
+    osInvalICache((void*)UT_VEC, E_VEC - UT_VEC + sizeof(__osExceptionVector));
     __createSpeedParam();
     osUnmapTLBAll();
     osMapTLBRdb();
 
-    osClockRate = (u64)((osClockRate * 3LL) / 4ULL);
+    osClockRate = osClockRate * 3 / 4;
 
     if (osResetType == COLD_RESET) {
-        bzero(osAppNMIBuffer, 64);
+        bzero(osAppNMIBuffer, OS_APP_NMI_BUFSIZE);
     }
 
     if (osTvType == OS_TV_PAL) {
@@ -70,13 +71,13 @@ void __osInitialize_common(void) {
         osViClock = VI_NTSC_CLOCK;
     }
 
-    if (__osGetCause() & 0x1000) {
+    if (__osGetCause() & CAUSE_IP5) {
         while (true) {}
     }
 
-    HW_REG(AI_CONTROL_REG, u32) = 1;
-    HW_REG(AI_DACRATE_REG, u32) = 0x3FFF;
-    HW_REG(AI_BITRATE_REG, u32) = 0xF;
+    IO_WRITE(AI_CONTROL_REG, AI_CONTROL_DMA_ON);
+    IO_WRITE(AI_DACRATE_REG, AI_MAX_DAC_RATE - 1);
+    IO_WRITE(AI_BITRATE_REG, AI_MAX_BIT_RATE - 1);
 }
 
 void __osInitialize_autodetect(void) {

@@ -41,15 +41,15 @@ void func_808A1C50(DoorShutter* this, PlayState* play);
 void DoorShutter_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Door_Shutter_InitVars = {
-    ACTOR_DOOR_SHUTTER,
-    ACTORCAT_DOOR,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DoorShutter),
-    (ActorFunc)DoorShutter_Init,
-    (ActorFunc)DoorShutter_Destroy,
-    (ActorFunc)DoorShutter_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_DOOR_SHUTTER,
+    /**/ ACTORCAT_DOOR,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(DoorShutter),
+    /**/ DoorShutter_Init,
+    /**/ DoorShutter_Destroy,
+    /**/ DoorShutter_Update,
+    /**/ NULL,
 };
 
 typedef struct {
@@ -410,7 +410,7 @@ void func_808A1288(DoorShutter* this, PlayState* play) {
         this->unk_164 = sp38;
         this->unk_168 = 0.0f;
 
-        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->slidingDoor.dyna.actor, player->doorBgCamIndex,
+        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->slidingDoor.dyna.actor, player->cv.doorBgCamIndex,
                              this->unk_168, 12, sp34, 10);
     }
 }

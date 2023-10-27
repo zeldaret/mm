@@ -21,15 +21,15 @@ void ObjTree_SetupDoNothing(ObjTree* this);
 void ObjTree_Sway(ObjTree* this, PlayState* play);
 
 ActorInit Obj_Tree_InitVars = {
-    ACTOR_OBJ_TREE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_TREE,
-    sizeof(ObjTree),
-    (ActorFunc)ObjTree_Init,
-    (ActorFunc)ObjTree_Destroy,
-    (ActorFunc)ObjTree_Update,
-    (ActorFunc)ObjTree_Draw,
+    /**/ ACTOR_OBJ_TREE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_TREE,
+    /**/ sizeof(ObjTree),
+    /**/ ObjTree_Init,
+    /**/ ObjTree_Destroy,
+    /**/ ObjTree_Update,
+    /**/ ObjTree_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

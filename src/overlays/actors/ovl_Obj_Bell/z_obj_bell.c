@@ -20,15 +20,15 @@ s32 func_80A356D8(ObjBell* this);
 s32 func_80A357A8(ObjBell* this, PlayState* play);
 
 ActorInit Obj_Bell_InitVars = {
-    ACTOR_OBJ_BELL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_F52_OBJ,
-    sizeof(ObjBell),
-    (ActorFunc)ObjBell_Init,
-    (ActorFunc)ObjBell_Destroy,
-    (ActorFunc)ObjBell_Update,
-    (ActorFunc)ObjBell_Draw,
+    /**/ ACTOR_OBJ_BELL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_F52_OBJ,
+    /**/ sizeof(ObjBell),
+    /**/ ObjBell_Init,
+    /**/ ObjBell_Destroy,
+    /**/ ObjBell_Update,
+    /**/ ObjBell_Draw,
 };
 
 // Bell Post?

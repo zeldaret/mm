@@ -25,15 +25,15 @@ void DemoEffect_DrawTimewarp(Actor* thisx, PlayState* play);
 void DemoEffect_DrawLight(Actor* thisx, PlayState* play2);
 
 ActorInit Demo_Effect_InitVars = {
-    ACTOR_DEMO_EFFECT,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DemoEffect),
-    (ActorFunc)DemoEffect_Init,
-    (ActorFunc)DemoEffect_Destroy,
-    (ActorFunc)DemoEffect_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_DEMO_EFFECT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(DemoEffect),
+    /**/ DemoEffect_Init,
+    /**/ DemoEffect_Destroy,
+    /**/ DemoEffect_Update,
+    /**/ NULL,
 };
 
 void DemoEffect_Init(Actor* thisx, PlayState* play) {

@@ -66,16 +66,16 @@ void EnSlime_WaitForRevive(EnSlime* this, PlayState* play);
 void EnSlime_SetupRevive(EnSlime* this);
 void EnSlime_Revive(EnSlime* this, PlayState* play);
 
-const ActorInit En_Slime_InitVars = {
-    ACTOR_EN_SLIME,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_SLIME,
-    sizeof(EnSlime),
-    (ActorFunc)EnSlime_Init,
-    (ActorFunc)EnSlime_Destroy,
-    (ActorFunc)EnSlime_Update,
-    (ActorFunc)EnSlime_Draw,
+ActorInit En_Slime_InitVars = {
+    /**/ ACTOR_EN_SLIME,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_SLIME,
+    /**/ sizeof(EnSlime),
+    /**/ EnSlime_Init,
+    /**/ EnSlime_Destroy,
+    /**/ EnSlime_Update,
+    /**/ EnSlime_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

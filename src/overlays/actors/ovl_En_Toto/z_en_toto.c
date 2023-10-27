@@ -51,15 +51,15 @@ s32 func_80BA4C0C(EnToto* this, PlayState* play);
 s32 func_80BA4C44(EnToto* this, PlayState* play);
 
 ActorInit En_Toto_InitVars = {
-    ACTOR_EN_TOTO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZM,
-    sizeof(EnToto),
-    (ActorFunc)EnToto_Init,
-    (ActorFunc)EnToto_Destroy,
-    (ActorFunc)EnToto_Update,
-    (ActorFunc)EnToto_Draw,
+    /**/ ACTOR_EN_TOTO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZM,
+    /**/ sizeof(EnToto),
+    /**/ EnToto_Init,
+    /**/ EnToto_Destroy,
+    /**/ EnToto_Update,
+    /**/ EnToto_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -337,7 +337,7 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
         }
     } else {
         player = GET_PLAYER(play);
-        if ((player->stateFlags1 & PLAYER_STATE1_400) && (player->actionVar1 != 0)) {
+        if ((player->stateFlags1 & PLAYER_STATE1_400) && (player->av1.actionVar1 != 0)) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_CIRCUS_LEADERS_MASK);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN);
@@ -604,7 +604,7 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
 
 s32 func_80BA49A4(EnToto* this, PlayState* play) {
     func_800B7298(play, NULL, PLAYER_CSACTION_68);
-    func_801A31EC(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4, this->unk2B3 ^ 0xF);
+    Audio_PlayFanfareWithPlayerIOCustomPort(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4, this->unk2B3 ^ 0xF);
     this->unk2B1 = 4;
     return 0;
 }

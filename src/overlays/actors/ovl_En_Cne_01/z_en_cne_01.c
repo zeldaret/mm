@@ -21,15 +21,15 @@ void EnCne01_FaceForward(EnHy* this, PlayState* play);
 void EnCne01_Talk(EnHy* this, PlayState* play);
 
 ActorInit En_Cne_01_InitVars = {
-    ACTOR_EN_CNE_01,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnCne01),
-    (ActorFunc)EnCne01_Init,
-    (ActorFunc)EnCne01_Destroy,
-    (ActorFunc)EnCne01_Update,
-    (ActorFunc)EnCne01_Draw,
+    /**/ ACTOR_EN_CNE_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnCne01),
+    /**/ EnCne01_Init,
+    /**/ EnCne01_Destroy,
+    /**/ EnCne01_Update,
+    /**/ EnCne01_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -255,9 +255,9 @@ s32 EnCne01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.headObjectSlot].segment);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjectSlot].segment);
         *dList = gCneHeadBrownHairDL;
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -295,7 +295,7 @@ void EnCne01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
-        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

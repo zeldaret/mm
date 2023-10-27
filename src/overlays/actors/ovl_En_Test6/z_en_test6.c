@@ -52,15 +52,15 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play);
 SoTCsAmmoDrops sSoTCsAmmoDrops[12];
 
 ActorInit En_Test6_InitVars = {
-    ACTOR_EN_TEST6,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTest6),
-    (ActorFunc)EnTest6_Init,
-    (ActorFunc)EnTest6_Destroy,
-    (ActorFunc)EnTest6_Update,
-    (ActorFunc)EnTest6_Draw,
+    /**/ ACTOR_EN_TEST6,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTest6),
+    /**/ EnTest6_Init,
+    /**/ EnTest6_Destroy,
+    /**/ EnTest6_Update,
+    /**/ EnTest6_Draw,
 };
 
 CutsceneData sDoubleSoTCsCamData[] = {

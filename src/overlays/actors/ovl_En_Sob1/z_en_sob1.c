@@ -65,15 +65,15 @@ static AnimationInfoS sAnimationInfoBombShopkeeper[] = {
 };
 
 ActorInit En_Sob1_InitVars = {
-    ACTOR_EN_OSSAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnSob1),
-    (ActorFunc)EnSob1_Init,
-    (ActorFunc)EnSob1_Destroy,
-    (ActorFunc)EnSob1_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_OSSAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnSob1),
+    /**/ EnSob1_Init,
+    /**/ EnSob1_Destroy,
+    /**/ EnSob1_Update,
+    /**/ NULL,
 };
 
 static s16 sObjectIds[][3] = {
@@ -1345,7 +1345,7 @@ void EnSob1_Blink(EnSob1* this) {
 }
 
 void EnSob1_ChangeObject(EnSob1* this, PlayState* play) {
-    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
 }
 
 s32 EnSob1_AreObjectsLoaded(EnSob1* this, PlayState* play) {
@@ -1364,7 +1364,7 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, PlayState* play) {
 
 void EnSob1_ZoraShopkeeper_Init(EnSob1* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, ZORA_LIMB_MAX);
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
     Animation_Change(&this->skelAnime, &gZoraShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gZoraShopkeeperAnim),
                      ANIMMODE_LOOP, 0.0f);
     this->actor.draw = EnSob1_ZoraShopkeeper_Draw;
@@ -1373,7 +1373,7 @@ void EnSob1_ZoraShopkeeper_Init(EnSob1* this, PlayState* play) {
 
 void EnSob1_GoronShopkeeper_Init(EnSob1* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable, GORON_LIMB_MAX);
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
     Animation_Change(&this->skelAnime, &gGoronShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gGoronShopkeeperAnim),
                      ANIMMODE_LOOP, 0.0f);
     this->actor.draw = EnSob1_GoronShopkeeper_Draw;

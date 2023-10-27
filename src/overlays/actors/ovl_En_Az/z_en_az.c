@@ -95,15 +95,15 @@ static AnimationSpeedInfo sAnimationSpeedInfo[BEAVER_ANIM_IDLE_FACE_MAX] = {
 };
 
 ActorInit En_Az_InitVars = {
-    ACTOR_EN_AZ,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AZ,
-    sizeof(EnAz),
-    (ActorFunc)EnAz_Init,
-    (ActorFunc)EnAz_Destroy,
-    (ActorFunc)EnAz_Update,
-    (ActorFunc)EnAz_Draw,
+    /**/ ACTOR_EN_AZ,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AZ,
+    /**/ sizeof(EnAz),
+    /**/ EnAz_Init,
+    /**/ EnAz_Destroy,
+    /**/ EnAz_Update,
+    /**/ EnAz_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

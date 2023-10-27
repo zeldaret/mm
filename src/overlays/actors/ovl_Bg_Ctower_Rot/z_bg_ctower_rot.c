@@ -22,15 +22,15 @@ void BgCtowerRot_DoorIdle(BgCtowerRot* this, PlayState* play);
 void BgCtowerRot_SetupDoorClose(BgCtowerRot* this, PlayState* play);
 
 ActorInit Bg_Ctower_Rot_InitVars = {
-    ACTOR_BG_CTOWER_ROT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_CTOWER_ROT,
-    sizeof(BgCtowerRot),
-    (ActorFunc)BgCtowerRot_Init,
-    (ActorFunc)BgCtowerRot_Destroy,
-    (ActorFunc)BgCtowerRot_Update,
-    (ActorFunc)BgCtowerRot_Draw,
+    /**/ ACTOR_BG_CTOWER_ROT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_CTOWER_ROT,
+    /**/ sizeof(BgCtowerRot),
+    /**/ BgCtowerRot_Init,
+    /**/ BgCtowerRot_Destroy,
+    /**/ BgCtowerRot_Update,
+    /**/ BgCtowerRot_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

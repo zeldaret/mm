@@ -30,15 +30,15 @@ void func_80C0AD64(BgIkninSusceil* this, PlayState* play);
 void func_80C0AE5C(BgIkninSusceil* this, PlayState* play);
 
 ActorInit Bg_Iknin_Susceil_InitVars = {
-    ACTOR_BG_IKNIN_SUSCEIL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_IKNINSIDE_OBJ,
-    sizeof(BgIkninSusceil),
-    (ActorFunc)BgIkninSusceil_Init,
-    (ActorFunc)BgIkninSusceil_Destroy,
-    (ActorFunc)BgIkninSusceil_Update,
-    (ActorFunc)BgIkninSusceil_Draw,
+    /**/ ACTOR_BG_IKNIN_SUSCEIL,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_IKNINSIDE_OBJ,
+    /**/ sizeof(BgIkninSusceil),
+    /**/ BgIkninSusceil_Init,
+    /**/ BgIkninSusceil_Destroy,
+    /**/ BgIkninSusceil_Update,
+    /**/ BgIkninSusceil_Draw,
 };
 
 static s32 sPad = 0;

@@ -23,15 +23,15 @@ void func_809AD194(EnEncount3* this, PlayState* play);
 void func_809AD1EC(EnEncount3* this, PlayState* play);
 
 ActorInit En_Encount3_InitVars = {
-    ACTOR_EN_ENCOUNT3,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BIG_FWALL,
-    sizeof(EnEncount3),
-    (ActorFunc)EnEncount3_Init,
-    (ActorFunc)EnEncount3_Destroy,
-    (ActorFunc)EnEncount3_Update,
-    (ActorFunc)EnEncount3_Draw,
+    /**/ ACTOR_EN_ENCOUNT3,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BIG_FWALL,
+    /**/ sizeof(EnEncount3),
+    /**/ EnEncount3_Init,
+    /**/ EnEncount3_Destroy,
+    /**/ EnEncount3_Update,
+    /**/ EnEncount3_Draw,
 };
 
 s32 D_809AD810 = false;

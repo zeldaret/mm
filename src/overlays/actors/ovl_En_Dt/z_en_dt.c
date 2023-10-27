@@ -17,15 +17,15 @@ void EnDt_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit En_Dt_InitVars = {
-    ACTOR_EN_DT,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DT,
-    sizeof(EnDt),
-    (ActorFunc)EnDt_Init,
-    (ActorFunc)EnDt_Destroy,
-    (ActorFunc)EnDt_Update,
-    (ActorFunc)EnDt_Draw,
+    /**/ ACTOR_EN_DT,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DT,
+    /**/ sizeof(EnDt),
+    /**/ EnDt_Init,
+    /**/ EnDt_Destroy,
+    /**/ EnDt_Update,
+    /**/ EnDt_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {
