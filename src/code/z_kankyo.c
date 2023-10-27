@@ -1697,14 +1697,12 @@ void func_800F8970(void) {
 void Environment_UpdatePostmanEvents(PlayState* play) {
     u16 temp_a2_2;
     u8 eventInfBits;
-    u8 day = (gSaveContext.eventInf[7] & 0xE0) >> 5;
+    u8 day = EVENTINF_GET_7_E0;
 
     if (day != (u8)((void)0, gSaveContext.save.day)) {
         day = (u8)((void)0, gSaveContext.save.day);
 
-        eventInfBits = gSaveContext.eventInf[7] & (u8)~0xE0;
-        eventInfBits |= (u8)(day << 5);
-        gSaveContext.eventInf[7] = eventInfBits;
+        EVENTINF_SET_7_E0(day, eventInfBits);
 
         SET_WEEKEVENTREG(WEEKEVENTREG_27_40);
         SET_WEEKEVENTREG(WEEKEVENTREG_27_80);
