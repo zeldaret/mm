@@ -38,9 +38,17 @@ plus a variable number of arguments.
 
 Due to the commands themselves using a variable amount of bytes it is possible to do some small optimizations, like if
 a branch distance (which is the amount of bytes the interpreter should skip if a check evaluates to true) can fit on a
-signed byte then a short command is used, otherwise a long version of the command is used, one that uses two bytes to
-store the branch distance, meaning the command itself will be one byte longer. There are no commands  hat use more than
-2 bytes to store the branch distance.
+signed byte then a **short** (noted with the `_S` suffix) command is used, otherwise a **long** version (noted with the
+`_L` suffix) of the command is used instead.
+
+A long command uses two bytes to store the branch distance, meaning the command itself will be one byte longer.
+
+There are no commands that use more than 2 bytes to store the branch distance.
+
+The short and long distinction also exists for the returned value, in case the user wants to return a value that
+wouldn't fit on a single unsigned byte and requires an unsgined short (two bytes) instead. Please note that the vanilla
+built-in system interpreter has a bug on which the upper byte of a long returned value will be discarded, so please
+ensure your returned values always fit on the 0-255 range.
 
 ## How a schedule script looks like
 
@@ -174,11 +182,14 @@ To see how the command's arguments work, please see the [corresponding section](
 
 Commands can be categorized in 4 major types: [Conditional checks](#conditional-checks),
 [unconditional branches](#unconditional-branches), [return commands](#return-commands) and
-[miscellaneous commands](#miscellaneous commands).
+[miscellaneous commands](#miscellaneous-commands).
 
 ### Generics and non-generics
 
-TODO
+The schedule scripting language uses both [short and long commands](#short-and-long-commands) for most of the
+[conditional checks](#conditional-checks) and [unconditional branches](#unconditional-branches) commands, making it
+optimal space-wise, but terrible to worry about when actually writing a schedule script from the user's point of view.
+Due to this, this high level language allows for generic versions of those commands (a.k.a. suffix-less versions) TODO
 
 ### Command's arguments
 
@@ -201,6 +212,12 @@ TODO
 TODO
 
 ### Operators
+
+Operators can be applied to some commands.
+
+Currently only one operator is allowed on the language, the [`not`](#not) operator.
+
+#### `not`
 
 TODO
 

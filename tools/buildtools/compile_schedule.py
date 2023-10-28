@@ -18,6 +18,9 @@
 
 from __future__ import annotations
 
+__prog_name__ = "schc"
+__version__ = "1.0.0"
+
 import argparse
 import dataclasses
 import enum
@@ -814,10 +817,13 @@ def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: 
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Compiler for the high level schedule language")
+    parser = argparse.ArgumentParser(description="Compiler for the high level schedule language", prog=__prog_name__)
+
     parser.add_argument("input", help="Schedule script path", type=Path)
     parser.add_argument("-o", "--output", help="Output path. Will print to stdout if omitted", type=Path)
     parser.add_argument("-g", type=int, nargs="?", const=1, default=0, dest="debuggingLevel", metavar="level", help="Emit debugging information on the generated macros. Level 0 means no debugging information. Passing no level at all implies level 1. Defaults to level 0")
+
+    parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
 
     debuggingParser = parser.add_argument_group("Compiler debugging options")
     debuggingParser.add_argument("-d", "--debug-prints", help="Enables debug prints for fatal errors", action="store_true")
