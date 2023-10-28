@@ -186,28 +186,159 @@ Commands can be categorized in 4 major types: [Conditional checks](#conditional-
 
 ### Generics and non-generics
 
-The schedule scripting language uses both [short and long commands](#short-and-long-commands) for most of the
+Schedule scripts use both [short and long commands](#short-and-long-commands) for most of the
 [conditional checks](#conditional-checks) and [unconditional branches](#unconditional-branches) commands, making it
 optimal space-wise, but terrible to worry about when actually writing a schedule script from the user's point of view.
-Due to this, this high level language allows for generic versions of those commands (a.k.a. suffix-less versions) TODO
+
+Due to this, this high level language allows for generic versions of those commands (a.k.a. suffix-less versions) that
+allow not having to worry about how many commands the body of a check has (and the byte length of them).
+
+The rest of this section will mostly refer to the generic versions of the commands. The non-generic versions of each
+command are available to be used too, but their use is not recommended.
 
 ### Command's arguments
 
-TODO
+Some commands require arguments. Arguments are used by checking commands to check something specific of the stae of the
+game (what's the current day? what's the current scene? etc) and take a decision based on it (branch to another
+command).
+
+Arguments are enclosed in parenthesis (`(` and `)`) and passed verbatim to the generated output, allowing a compiler
+for this language to not need to recognize any identifier used in arguments, allowing to use any custom identifier
+(specially useful for schedule result enums). Take in mind this behaviour may change in a future version of the
+language.
 
 ### Conditional checks
+
+Conditional checks commands consist on commands that take a decision based on the state of the game, allowing it to
+decide which set of subcommands to execute.
+
+All conditional checks require an argument and a body of subcommands. A conditional check can be optionally be followed
+by an `else`.
+
+If the condition of any of these commands is not satisfied and said command have an `else`, then said the control flow
+jumps to the body of that `else`. If there's no `else` and the condition isn't satisfied then the control flow just
+fallthroughs into the next command.
+
+#### `if_week_event_reg`
+
+Checks if the passed WeekEventReg flag is set, and execute the body of the command if it is set.
+
+##### Arguments
+
+- Argument 0: A WeekEventReg flag. `WEEKEVENTREG_` macros are preferred.
+
+##### Example
+
+```c
+if_week_event_reg (WEEKEVENTREG_61_02) {
+    return_s (31)
+}
+return_s (30)
+```
+
+##### Non generics
+
+`if_week_event_reg_s` and `if_week_event_reg_l`
+
+TODO
+
+#### `if_time_range`
+
+Checks if the current time is between the passed time range.
+
+##### Arguments
+
+- Argument 0: Hour component of the start time
+- Argument 1: Minute component of the start time
+- Argument 2: Hour component of the end time
+- Argument 3: Minute component of the end time
+
+##### Example
+
+```c
+// Checks if the current time is between 18:00 ~ 6:00
+if_time_range (18, 0, 6, 0) {
+    return_time (18, 0, 6, 0, 2)
+} else {
+    return_none
+}
+```
+
+##### Non generics
+
+`if_time_range_s` and `if_time_range_l`
+
+TODO
+
+#### `if_misc`
+
+IF_MISC_S = "if_misc_s"
+
+TODO
+
+#### `if_scene`
+
+IF_SCENE_S = "if_scene_s"
+IF_SCENE_L = "if_scene_l"
+
+TODO
+
+#### `if_day`
+
+IF_DAY_S = "if_day_s"
+IF_DAY_L = "if_day_l"
+
+TODO
+
+#### `if_before_time`/`if_since_time`
+
+IF_BEFORETIME_S = "if_before_time_s"
+IF_BEFORETIME_L = "if_before_time_l"
+IF_SINCETIME_S = "if_since_time_s"
+IF_SINCETIME_L = "if_since_time_l"
 
 TODO
 
 ### Unconditional branches
 
+#### `branch`
+
+BRANCH_S = "branch_s"
+BRANCH_L = "branch_l"
+
 TODO
 
+### `else`
+
+TODO
+
+ELSE = "else"
+
 ### Return commands
+
+#### `return_s`
+
+TODO
+
+#### `return_l`
+
+TODO
+
+#### `return_none`
+
+TODO
+
+#### `return_empty`
+
+TODO
+
+#### `return_time`
 
 TODO
 
 ### Miscellaneous commands
+
+NOP = "nop"
 
 TODO
 
@@ -219,8 +350,12 @@ Currently only one operator is allowed on the language, the [`not`](#not) operat
 
 #### `not`
 
+NOT = "not"
+
 TODO
 
 ### Labels
+
+LABEL = "label"
 
 TODO
