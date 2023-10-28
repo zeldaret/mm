@@ -240,8 +240,6 @@ return_s (30)
 
 `if_week_event_reg_s` and `if_week_event_reg_l`
 
-TODO
-
 #### `if_time_range`
 
 Checks if the current time is between the passed time range.
@@ -268,27 +266,56 @@ if_time_range (18, 0, 6, 0) {
 
 `if_time_range_s` and `if_time_range_l`
 
-TODO
-
 #### `if_misc`
 
-IF_MISC_S = "if_misc_s"
+Checks if the passed miscellaneous argument is true.
 
-TODO
+##### Arguments
+
+- Argument 0: A value of the `ScheduleCheckMisc` enum.
+
+##### Example
+
+```c
+if_misc (SCHEDULE_CHECK_MISC_MASK_ROMANI) {
+    return_s (33)
+} else {
+    return_s (34)
+}
+```
+
+##### Non generics
+
+`if_misc_s`. Note there's no long version of this command. It is advised to minimize the amount of commands used on a
+`ìf_misc` body and `else`'s body.
 
 #### `if_scene`
 
-IF_SCENE_S = "if_scene_s"
-IF_SCENE_L = "if_scene_l"
+Checks if the current scene matches the one passed as parameter.
 
-TODO
+##### Arguments
+
+- Argument 0: A value of the `SceneId` enum.
+
+##### Example
+
+```c
+if_scene (SCENE_SECOM) {
+    return_s (7)
+}
+```
+
+##### Non generics
+
+`if_scene_s` and `if_scene_l`
 
 #### `if_day`
 
-IF_DAY_S = "if_day_s"
-IF_DAY_L = "if_day_l"
-
 TODO
+
+##### Non generics
+
+`if_day_s` and `if_day_l`
 
 #### `if_before_time`/`if_since_time`
 
