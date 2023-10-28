@@ -14,6 +14,7 @@
 # TODO: Warning/Error for control flows that do not led to a return. Maybe consider inserting return_none on those cases
 # TODO: consider adding optimization options
 # TODO: consider adding and/or operators
+# TODO: Warning if the user tries to negate a `if_before_time`/`if_since_time`
 
 from __future__ import annotations
 
@@ -683,10 +684,10 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
     return result, index
 
 
-# Checks for every short command that was produced from a generic and calculate if the branch offset will
+# Checks for every short command that was produced from a generic and calculate if the branch distance will
 # fit on the short command, if it doesn't then change the command into a long version.
 #
-# The algorithm is basic and linear, so if an already-processed expression's branch offset will no longer fit
+# The algorithm is basic and linear, so if an already-processed expression's branch distance will no longer fit
 # because of latter processed expressions changed to long commands (which uses more bytes), then those won't
 # be re-updated.
 # To work-around this, this function returns a boolean on the second element of the returned tuple indicating
@@ -782,10 +783,10 @@ def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: 
             diff = targetOffset - nextOffset
             if tokenProperties.isShort:
                 if diff not in range(-0x80, 0x7F):
-                    fatalError(f"Trying to use a short command, but the branch offset is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
+                    fatalError(f"Trying to use a short command, but the branch distance is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
             else:
                 if diff not in range(-0x8000, 0x7FFF):
-                    fatalError(f"Trying to use a long command, but the branch offset is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
+                    fatalError(f"Trying to use a long command, but the branch distance is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
             currentMacro += f"0x{targetOffset:0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
         else:
             if labeledExpr.args is not None:
@@ -795,10 +796,10 @@ def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: 
                 diff = targetOffset - nextOffset
                 if tokenProperties.isShort:
                     if diff not in range(-0x80, 0x7F):
-                        fatalError(f"Trying to use a short command, but the branch offset is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
+                        fatalError(f"Trying to use a short command, but the branch distance is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
                 else:
                     if diff not in range(-0x8000, 0x7FFF):
-                        fatalError(f"Trying to use a long command, but the branch offset is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
+                        fatalError(f"Trying to use a long command, but the branch distance is too big to fit on a single byte ({diff})", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
                 currentMacro += f", 0x{targetOffset:0{offsetWidth}X} - 0x{nextOffset:0{offsetWidth}X}"
         currentMacro += "),"
 
