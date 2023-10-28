@@ -231,30 +231,30 @@ void Boss03_UpdateSphereElement(s32 index, ColliderJntSph* collider, Vec3f* sphe
 
 /* Start of RNG section */
 
-static s32 sRandSeed0;
-static s32 sRandSeed1;
-static s32 sRandSeed2;
+s32 sGyorgRandSeed1;
+s32 sGyorgRandSeed2;
+s32 sGyorgRandSeed3;
 
-void Boss03_SeedRand(s32 seed0, s32 seed1, s32 seed2) {
-    sRandSeed0 = seed0;
-    sRandSeed1 = seed1;
-    sRandSeed2 = seed2;
+void Boss03_InitRand(s32 seedInit1, s32 seedInit2, s32 seedInit3) {
+    sGyorgRandSeed1 = seedInit1;
+    sGyorgRandSeed2 = seedInit2;
+    sGyorgRandSeed3 = seedInit3;
 }
 
 f32 Boss03_RandZeroOne(void) {
-    f32 rand;
-
     // Wichmann-Hill algorithm
-    sRandSeed0 = (sRandSeed0 * 171) % 30269;
-    sRandSeed1 = (sRandSeed1 * 172) % 30307;
-    sRandSeed2 = (sRandSeed2 * 170) % 30323;
+    f32 randFloat;
 
-    rand = (sRandSeed0 / 30269.0f) + (sRandSeed1 / 30307.0f) + (sRandSeed2 / 30323.0f);
-    while (rand >= 1.0f) {
-        rand -= 1.0f;
+    sGyorgRandSeed1 = (sGyorgRandSeed1 * 171) % 30269;
+    sGyorgRandSeed2 = (sGyorgRandSeed2 * 172) % 30307;
+    sGyorgRandSeed3 = (sGyorgRandSeed3 * 170) % 30323;
+
+    randFloat = (sGyorgRandSeed1 / 30269.0f) + (sGyorgRandSeed2 / 30307.0f) + (sGyorgRandSeed3 / 30323.0f);
+    while (randFloat >= 1.0f) {
+        randFloat -= 1.0f;
     }
 
-    return fabsf(rand);
+    return fabsf(randFloat);
 }
 
 /* End of RNG section */
@@ -483,7 +483,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
     this->actor.world.pos = sGyorgInitialPos;
 
     // Since Boss03_RandZeroOne is only used on this Init function, the resulting values end up being deterministic
-    Boss03_SeedRand(1, 29093, 9786);
+    Boss03_InitRand(1, 29093, 9786);
 
     for (i = 0; i < 5; i++) {
         f32 rand;
