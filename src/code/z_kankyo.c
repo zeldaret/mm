@@ -3137,6 +3137,9 @@ void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height)
 }
 
 #ifdef NON_MATCHING
+// `D_801DD900`is loading unaligned but storing aligned
+// Also small float regalloc and the randomized
+// https://decomp.me/scratch/3zFop
 void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     static const Vec3s D_801DD880[] = {
         { 0x0384, 0x2328, 0xD508 }, { 0x09C4, 0x2328, 0xDA1C }, { 0x0E74, 0x22D8, 0xDA1C }, { 0x1450, 0x2468, 0xD8F0 },
@@ -3463,6 +3466,7 @@ void Environment_LerpSandstormColors(Color_RGBA8* colorSrc, Color_RGBA8* colorDs
     }
 }
 
+// Related to soft soil
 u8 func_800FE9B4(PlayState* play) {
     u8 ret = false;
 
