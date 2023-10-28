@@ -3,9 +3,15 @@
 # SPDX-FileCopyrightText: © 2023 ZeldaRET
 # SPDX-License-Identifier: MIT
 
+#
+# Schedule scripting language compiler
+#
+# For a reference about the language see https://github.com/zeldaret/mm/blob/main/docs/schedule_scripting_language.md
+#
+
 # TODO: Check for repeated labels
 # TODO: think on a catchy name for the schedule language and the compiler
-# TODO: Warning/Error for control flows that do not led to a return
+# TODO: Warning/Error for control flows that do not led to a return. Maybe consider inserting return_none on those cases
 # TODO: consider adding optimization options
 # TODO: consider adding and/or operators
 
