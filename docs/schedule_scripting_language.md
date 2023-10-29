@@ -1,58 +1,70 @@
 # Schedule scripting language
 
-The Schedule scripting language is a high level language that was made to help reading and modifying the schedule
-scripts used by various actors.
+The Schedule scripting language is a high level language that was made to help
+reading and modifying the schedule scripts used by various actors.
 
 ## Features of the schedule system
 
-The Schedule system is a very simple scripting language, it is composed of a series of commands that can check the
-state of the game and return a value depending on said state. This system can't declare variables, hold its own state
-or modify the game's state.
+The Schedule system is a very simple scripting language, it is composed of a
+series of commands that can check the state of the game and return a value
+depending on said state. This system can't declare variables, hold its own
+state or modify the game's state.
 
 A schedule script can check the state of the following:
 
 - Current in-game [day](#if_day).
 - If a [WeekEventReg flag](#if_week_event_reg) is set or not.
 - Current time is in a specified [time range](#if_time_range).
-- Current time is [before](#if_before_time)/[after](#if_since_time) a specified time.
-- Some other [miscellaneous](#if_misc) checks (see the `ScheduleCheckMisc` enum).
+- Current time is [before](#if_before_time)/[after](#if_since_time) a specified
+  time.
+- Some other [miscellaneous](#if_misc) checks (see the `ScheduleCheckMisc`
+  enum).
 
-All of those checks act as conditional branches into some other command. The schedule system also supports
-unconditional branches.
+All of those checks act as conditional branches into some other command. The
+schedule system also supports unconditional branches.
 
-The schedule script is run until a return command is executed. There are various return commands that allow different
-things:
+The schedule script is run until a return command is executed. There are various
+return commands that allow different things:
 
 - [Return none](#return_none): The schedule finished without returning a value.
-- [Return empty](#return_empty): The schedule finished without changing the previous value.
+- [Return empty](#return_empty): The schedule finished without changing the
+  previous value.
 - [Return s](#return_s): The script returns a value that's 1 byte long.
-- [Return l](#return_l): The script returns a value that's 2 bytes long (Note this is bugged and will be truncated to 1 byte).
+- [Return l](#return_l): The script returns a value that's 2 bytes long (Note
+  this is bugged and will be truncated to 1 byte).
 - [Return time](#return_time): Returns a time range and a 1 byte value.
 
-Running an unknown command or branching to the middle of a command is undefined behaviour.
+Running an unknown command or branching to the middle of a command is undefined
+behaviour.
 
-A low level schedule script can be compared to a multi byte assembly language, on which each command occupies 1 byte
-plus a variable number of arguments.
+A low level schedule script can be compared to a multi byte assembly language,
+on which each command occupies 1 byte plus a variable number of arguments.
 
 ### Short and long commands
 
-Due to the commands themselves using a variable amount of bytes it is possible to do some small optimizations, like if
-a branch distance (which is the amount of bytes the interpreter should skip if a check evaluates to true) can fit on a
-signed byte then a **short** (noted with the `_S` suffix) command is used, otherwise a **long** version (noted with the
-`_L` suffix) of the command is used instead.
+Due to the commands themselves using a variable amount of bytes it is possible
+to do some small optimizations, like if a branch distance (which is the amount
+of bytes the interpreter should skip if a check evaluates to true) can fit on a
+signed byte then a **short** (noted with the `_S` suffix) command is used,
+otherwise a **long** version (noted with the `_L` suffix) of the command is used
+instead.
 
-A long command uses two bytes to store the branch distance, meaning the command itself will be one byte longer.
+A long command uses two bytes to store the branch distance, meaning the command
+itself will be one byte longer.
 
 There are no commands that use more than 2 bytes to store the branch distance.
 
-The short and long distinction also exists for the returned value, in case the user wants to return a value that
-wouldn't fit on a single unsigned byte and requires an unsgined short (two bytes) instead. Please note that the vanilla
-built-in system interpreter has a bug on which the upper byte of a long returned value will be discarded, so please
-ensure your returned values always fit on the 0-255 range.
+The short and long distinction also exists for the returned value, in case the
+user wants to return a value that wouldn't fit on a single unsigned byte and
+requires an unsgined short (two bytes) instead. Please note that the vanilla
+built-in system interpreter has a bug on which the upper byte of a long returned
+value will be discarded, so please ensure your returned values always fit on the
+0-255 range.
 
 ## How a schedule script looks like
 
-An extracted schedule script is just an array of raw data. A macroified version looks like this:
+An extracted schedule script is just an array of raw data. A macroified version
+looks like this:
 
 ```c
 static u8 D_80BD3DB0[] = {
@@ -78,11 +90,14 @@ static u8 D_80BD3DB0[] = {
 
 Having this scripts as arrays like this have two major flaws:
 
-- The control flow is not clear at a first glance (this is specially problematic for larger scripts).
-- The branch distances are hardcoded into each command, making the script itself hard to modify.
+- The control flow is not clear at a first glance (this is specially problematic
+  for larger scripts).
+- The branch distances are hardcoded into each command, making the script itself
+  hard to modify.
 
-As a solution, the high level Schedule script language uses a C-like syntax to better represent the control flow. The
-above script can be written as the following:
+As a solution, the high level Schedule script language uses a C-like syntax to
+better represent the control flow. The above script can be written as the
+following:
 
 ```c
 if_scene (SCENE_YADOYA) {
@@ -116,32 +131,38 @@ if_scene (SCENE_YADOYA) {
 
 ## Syntax
 
-The syntax is very simple, it consist on a sucession of commands. Some commands require arguments (by using
-parenthesis) and some (conditional checks) can have bodies with subcommands and an optional `else` with its
-correspnding body with subcommands.
+The syntax is very simple, it consist on a sucession of commands. Some commands
+require arguments (by using parenthesis) and some (conditional checks) can have
+bodies with subcommands and an optional `else` with its correspnding body with
+subcommands.
 
-Like in C, both whitespace and newlines are not part of the language and they get ignored during compilation. At the
-same time, this language accepts both C and C++ styles of comments, known as block comments (`/**/`) and line comments
+Like in C, both whitespace and newlines are not part of the language and they
+get ignored during compilation. At the same time, this language accepts both C
+and C++ styles of comments, known as block comments (`/**/`) and line comments
 (`//`).
 
-A command's body is delimited by braces (`{` and `}`). A body must follow either a
-[conditional check](#conditional-checks) command or an `else`, meaning top-level bodies are not allowed. At the same
-time a conditional check must be followed by a body. An `else` must be followed by either a body or another conditional
-check command.
+A command's body is delimited by braces (`{` and `}`). A body must follow either
+a [conditional check](#conditional-checks) command or an `else`, meaning
+top-level bodies are not allowed. At the same time a conditional check must be
+followed by a body. An `else` must be followed by either a body or another
+conditional check command.
 
 Even if this language's syntax is inspired by C, there are a few key differences:
 
-- Commands are not separated by semicolons (`;`). Instead just a whitespace is used as separation.
-- Instead of having a single `if` conditional of which its parameters should evaluate to non-zero, this language uses
-  [conditional checks](#conditional-checks). These are commands that receive parameters and have a body with parameters
-  that would be executed if the command itself evaluated to true. This commands may be followed by an `else`, which has
-  its own body.
+- Commands are not separated by semicolons (`;`). Instead just a whitespace is
+  used as separation.
+- Instead of having a single `if` conditional of which its parameters should
+  evaluate to non-zero, this language uses
+  [conditional checks](#conditional-checks). These are commands that receive
+  parameters and have a body with parameters that would be executed if the
+  command itself evaluated to true. This commands may be followed by an `else`,
+  which has its own body.
 - There's no concept of functions, variables, loops, scopes, etc.
 
 ## Compiling
 
-Compiling a high level schedule script should produce a series of macros that can be `#include`d by a C preprocessor,
-like in the following example:
+Compiling a high level schedule script should produce a series of macros that
+can be `#include`d by a C preprocessor, like in the following example:
 
 File: `build/src/overlays/actors/ovl_En_Ah/scheduleScript.schedule.inc`
 
@@ -175,53 +196,66 @@ static u8 D_80BD3DB0[] = {
 
 ## Commands
 
-Commands are the fundamental (and almost only) building block of this language. A schedule script must always have at
-least one command. It's undefined behaviour if script's control flow doesn't always lead to a return command.
+Commands are the fundamental (and almost only) building block of this language.
+A schedule script must always have at least one command. It's undefined
+behaviour if script's control flow doesn't always lead to a return command.
 
-To see how the command's arguments work, please see the [corresponding section](#commands-arguments).
+To see how the command's arguments work, please see the
+[corresponding section](#commands-arguments).
 
-Commands can be categorized in 4 major types: [Conditional checks](#conditional-checks),
-[unconditional branches](#unconditional-branches), [return commands](#return-commands) and
+Commands can be categorized in 4 major types:
+[Conditional checks](#conditional-checks),
+[unconditional branches](#unconditional-branches),
+[return commands](#return-commands) and
 [miscellaneous commands](#miscellaneous-commands).
 
 ### Generics and non-generics
 
-Schedule scripts use both [short and long commands](#short-and-long-commands) for most of the
-[conditional checks](#conditional-checks) and [unconditional branches](#unconditional-branches) commands, making it
-optimal space-wise, but terrible to worry about when actually writing a schedule script from the user's point of view.
+Schedule scripts use both [short and long commands](#short-and-long-commands)
+for most of the [conditional checks](#conditional-checks) and
+[unconditional branches](#unconditional-branches) commands, making it optimal
+space-wise, but terrible to worry about when actually writing a schedule script
+from the user's point of view.
 
-Due to this, this high level language allows for generic versions of those commands (a.k.a. suffix-less versions) that
-allow not having to worry about how many commands the body of a check has (and the byte length of them).
+Due to this, this high level language allows for generic versions of those
+commands (a.k.a. suffix-less versions) that allow not having to worry about how
+many commands the body of a check has (and the byte length of them).
 
-The rest of this section will mostly refer to the generic versions of the commands. The non-generic versions of each
-command are available to be used too, but their use is not recommended.
+The rest of this section will mostly refer to the generic versions of the
+commands. The non-generic versions of each command are available to be used too,
+but their use is not recommended.
 
 ### Command's arguments
 
-Some commands require arguments. Arguments are used by checking commands to check something specific of the stae of the
-game (what's the current day? what's the current scene? etc) and take a decision based on it (branch to another
+Some commands require arguments. Arguments are used by checking commands to
+check something specific of the stae of the game (what's the current day? what's
+the current scene? etc) and take a decision based on it (branch to another
 command).
 
-Arguments are enclosed in parenthesis (`(` and `)`) and passed verbatim to the generated output, allowing a compiler
-for this language to not need to recognize any identifier used in arguments, allowing to use any custom identifier
-(specially useful for schedule result enums). Take in mind this behaviour may change in a future version of the
-language.
+Arguments are enclosed in parenthesis (`(` and `)`) and passed verbatim to the
+generated output, allowing a compiler for this language to not need to recognize
+any identifier used in arguments, allowing to use any custom identifier
+(specially useful for schedule result enums). Take in mind this behaviour may
+change in a future version of the language.
 
 ### Conditional checks
 
-Conditional checks commands consist on commands that take a decision based on the state of the game, allowing it to
-decide which set of subcommands to execute.
+Conditional checks commands consist on commands that take a decision based on
+the state of the game, allowing it to decide which set of subcommands to
+execute.
 
-All conditional checks require an argument and a body of subcommands. A conditional check can be optionally be followed
-by an `else`.
+All conditional checks require an argument and a body of subcommands. A
+conditional check can be optionally be followed by an `else`.
 
-If the condition of any of these commands is not satisfied and said command have an `else`, then said the control flow
-jumps to the body of that `else`. If there's no `else` and the condition isn't satisfied then the control flow just
+If the condition of any of these commands is not satisfied and said command have
+an `else`, then said the control flow jumps to the body of that `else`. If
+there's no `else` and the condition isn't satisfied then the control flow just
 fallthroughs into the next command.
 
 #### `if_week_event_reg`
 
-Checks if the passed WeekEventReg flag is set, and execute the body of the command if it is set.
+Checks if the passed WeekEventReg flag is set, and execute the body of the
+command if it is set.
 
 ##### Arguments
 
@@ -286,8 +320,8 @@ if_misc (SCHEDULE_CHECK_MISC_MASK_ROMANI) {
 
 ##### Non generics
 
-`if_misc_s`. Note there's no long version of this command. It is advised to minimize the amount of commands used on a
-`ìf_misc` body and `else`'s body.
+`if_misc_s`. Note there's no long version of this command. It is advised to
+minimize the amount of commands used on a `ìf_misc` body and `else`'s body.
 
 #### `if_scene`
 
@@ -385,8 +419,8 @@ This command performs the contrary check to `if_before_time`.
 
 ### Unconditional branches
 
-Unconditional branches are basically the equivalent of C's `goto`s. They require a [label](#labels) to know where to
-branch to.
+Unconditional branches are basically the equivalent of C's `goto`s. They require
+a [label](#labels) to know where to branch to.
 
 #### `branch`
 
@@ -422,10 +456,11 @@ if_day (3) {
 
 ### `else`
 
-An `else` signals which commands should be executed in case a [conditional check](#conditional-checks) does not
-evaluates to true. The `else` signals this by either having those instructions inside its own body (marked by braces)
-or by not having those braces but being immediately followed by another conditional check command, similar to C's
-`else if`.
+An `else` signals which commands should be executed in case a
+[conditional check](#conditional-checks) does not evaluates to true. The `else`
+signals this by either having those instructions inside its own body (marked by
+braces) or by not having those braces but being immediately followed by another
+conditional check command, similar to C's `else if`.
 
 ##### Example
 
@@ -457,10 +492,11 @@ if_time_range (9, 50, 18, 1) {
 
 A return command signals the end of the script and halts its execution.
 
-A return command allows to optionally return a value and/or a time range to the calling actor so it can change behavior
-accordingly.
+A return command allows to optionally return a value and/or a time range to the
+calling actor so it can change behavior accordingly.
 
-A schedule script with a control flow that leads to no return command is undefined behaviour.
+A schedule script with a control flow that leads to no return command is
+undefined behaviour.
 
 #### `return_s`
 
@@ -482,9 +518,10 @@ if_time_range (8, 0, 12, 0) {
 
 Allows to return a long value.
 
-Please note that the vanilla interpreter for the schedule scripts has a bug on which the upper byte of a long returned
-value will be discarded (will be truncated to a `u8`), so please ensure your returned values always fit on the 0-255
-range.
+Please note that the vanilla interpreter for the schedule scripts has a bug on
+which the upper byte of a long returned value will be discarded (will be
+truncated to a `u8`), so please ensure your returned values always fit on the
+0-255 range.
 
 ##### Arguments
 
@@ -580,9 +617,11 @@ Currently only one operator is allowed on the language, the [`not`](#not) operat
 
 #### `not`
 
-A label is a special kind of command that doesn't get compiled into the actual low level script, instead it changes the
-meaning of the check that's right next ot it by inverting the logic of the check. In other words, the subcommands of a
-conditional check command will be executed if the check of said command evaluates to false instead of true.
+A label is a special kind of command that doesn't get compiled into the actual
+low level script, instead it changes the meaning of the check that's right next
+to it by inverting the logic of the check. In other words, the subcommands of a
+conditional check command will be executed if the check of said command
+evaluates to false instead of true.
 
 A `not` must always be followed by a [conditional check command](#conditional-checks).
 
@@ -616,10 +655,12 @@ not if_week_event_reg (WEEKEVENTREG_51_08) {
 
 ### Labels
 
-A label is a special kind of command that doesn't get compiled into the actual low level script, instead it is used as
-a marker to be used for [`branch`es](#branch).
+A label is a special kind of command that doesn't get compiled into the actual
+low level script, instead it is used as a marker to be used for
+[`branch`es](#branch).
 
-A label is defined as an alphanumeric identifier (a to z, digits and underscores) followed by a colon (`:`). The colon
-is not considered part of the label's name.
+A label is defined as an alphanumeric identifier (a to z, digits and
+underscores) followed by a colon (`:`). The colon is not considered part of the
+label's name.
 
 A label must always be followed by another command that isn't another label.
