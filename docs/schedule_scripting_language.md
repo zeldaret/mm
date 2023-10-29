@@ -311,35 +311,118 @@ if_scene (SCENE_SECOM) {
 
 #### `if_day`
 
-TODO
+Checks if the current day matches the passed argument.
+
+##### Arguments
+
+- Argument 0: The day to check.
+
+##### Example
+
+```c
+if_day (3) {
+    return_l (1)
+}
+```
 
 ##### Non generics
 
 `if_day_s` and `if_day_l`
 
-#### `if_before_time`/`if_since_time`
+#### `if_before_time`
 
-IF_BEFORETIME_S = "if_before_time_s"
-IF_BEFORETIME_L = "if_before_time_l"
-IF_SINCETIME_S = "if_since_time_s"
-IF_SINCETIME_L = "if_since_time_l"
+Checks if the current time is before the time passed as parameter.
 
-TODO
+##### Arguments
+
+- Argument 0: The hour component of the time.
+- Argument 1: The minute component of the time.
+
+##### Example
+
+```c
+if_before_time (8, 0) {
+    return_s (19)
+} else {
+    return_none
+}
+```
+
+##### Non generics
+
+`if_before_time_s` and `if_before_time_l`
+
+##### Notes
+
+This command performs the contrary check to `if_since_time`.
+
+#### `if_since_time`
+
+Checks if the current time is after or equal to the time passed as parameter.
+
+##### Arguments
+
+- Argument 0: The hour component of the time.
+- Argument 1: The minute component of the time.
+
+##### Example
+
+```c
+if_since_time (13, 0) {
+    return_s (9)
+} else {
+    return_none
+}
+```
+
+##### Non generics
+
+`if_since_time_s` and `if_since_time_l`
+
+##### Notes
+
+This command performs the contrary check to `if_before_time`.
 
 ### Unconditional branches
 
+Unconditional branches are basically the equivalent of C's `goto`s. They require a [label](#labels) to know where to
+branch to.
+
 #### `branch`
 
-BRANCH_S = "branch_s"
-BRANCH_L = "branch_l"
+Unconditionally move the control flow to the passed label.
 
-TODO
+##### Arguments
+
+- Argument 0: The label to branch to.
+
+##### Example
+
+```c
+if_day (3) {
+    if_since_time (10, 0) {
+        label_0x8:
+        return_none
+    } else {
+        branch (label_0xF)
+    }
+} else {
+    if_time_range (10, 0, 20, 0) {
+        branch (label_0x8)
+    } else {
+        label_0xF:
+        return_s (21)
+    }
+}
+```
+
+##### Non generics
+
+`branch_s` and `branch_l`
 
 ### `else`
 
 TODO
-
-ELSE = "else"
 
 ### Return commands
 
@@ -365,7 +448,7 @@ TODO
 
 ### Miscellaneous commands
 
-NOP = "nop"
+#### `nop`
 
 TODO
 
@@ -383,6 +466,7 @@ TODO
 
 ### Labels
 
-LABEL = "label"
+A label is a special kind of command that doesn't get compiled into the actual low level script, but instead it is used
+as a marker to be used for [`branch`es](#branch).
 
 TODO
