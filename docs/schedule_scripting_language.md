@@ -664,3 +664,164 @@ underscores) followed by a colon (`:`). The colon is not considered part of the
 label's name.
 
 A label must always be followed by another command that isn't another label.
+
+## Grammar
+
+This section presents the formal grammar for the Schedule scripting language.
+
+```yac
+<scriptFile>            : <cmdList>
+                        ;
+
+<cmdList>               : <labeledCmd>
+                        | <cmdList> <labeledCmd>
+                        ;
+
+<labeledCmd>            : <command>
+                        | IDENTIFIER ':' <command>
+                        ;
+
+<command>               : <conditionalCmd>
+                        | <unconditionalCmd>
+                        | <returnCmd>
+                        | <miscCmd>
+                        ;
+
+<conditionalCmd>        : <conditionalExprBody> <else>
+                        | <conditionalExprBody>
+                        ;
+
+<unconditionalCmd>      : <tokenBranch> <args>
+                        ;
+
+<returnCmd>             : RETURN_S <args>
+                        | RETURN_L <args>
+                        | RETURN_NONE
+                        | RETURN_EMPTY
+                        | RETURN_TIME <args>
+                        ;
+
+<miscCmd>               : NOP <args>
+                        ;
+
+<conditionalExprBody>   : NOT <conditionalExpr> <body>
+                        | <conditionalExpr> <body>
+                        ;
+
+<conditionalExpr>       : <tokenIfWeekEventReg> <args>
+                        | <tokenIfTimeRange> <args>
+                        | <tokenIfMisc> <args>
+                        | <tokenIfScene> <args>
+                        | <tokenIfDay> <args>
+                        | <tokenIfBeforeTime> <args>
+                        | <tokenIfSinceTime> <args>
+                        ;
+
+<else>                  : ELSE <body>
+                        | ELSE <conditionalCmd>
+                        ;
+
+<tokenIfWeekEventReg>   : IF_WEEK_EVENT_REG
+                        | IF_WEEK_EVENT_REG_S
+                        | IF_WEEK_EVENT_REG_L
+                        ;
+
+<tokenIfTimeRange>      : IF_TIME_RANGE
+                        | IF_TIME_RANGE_S
+                        | IF_TIME_RANGE_L
+                        ;
+
+<tokenIfMisc>           : IF_MISC
+                        | IF_MISC_S
+                        ;
+
+<tokenIfScene>          : IF_SCENE
+                        | IF_SCENE_S
+                        | IF_SCENE_L
+                        ;
+
+<tokenIfDay>            : IF_DAY
+                        | IF_DAY_S
+                        | IF_DAY_L
+                        ;
+
+<tokenIfBeforeTime>     : IF_BEFORE_TIME
+                        | IF_BEFORE_TIME_S
+                        | IF_BEFORE_TIME_L
+                        ;
+
+<tokenIfSinceTime>      : IF_SINCE_TIME
+                        | IF_SINCE_TIME_S
+                        | IF_SINCE_TIME_L
+                        ;
+
+<tokenBranch>           : BRANCH
+                        | BRANCH_S
+                        | BRANCH_L
+                        ;
+
+<body>                  : '{' '}'
+                        | '{' <cmdList> '}'
+                        ;
+
+<args>                  : '(' ')'
+                        | '(' <args_list> ')'
+                        ;
+
+<args_list>             : <arg_elem>
+                        | <args_list> ',' <arg_elem>
+                        ;
+
+<arg_elem>              : NO_PARENTHESIS
+                        | <args>
+                        ;
+```
+
+### Tokens
+
+The presented grammar expects the a few tokens.
+
+First column is the corresponding token and right is a regular expression to
+match said token.
+
+```regex
+IDENTIFIER              [a-zA-Z0-9_]+
+
+IF_WEEK_EVENT_REG       if_week_event_reg
+IF_WEEK_EVENT_REG_S     if_week_event_reg_s
+IF_WEEK_EVENT_REG_L     if_week_event_reg_l
+IF_TIME_RANGE           if_time_range
+IF_TIME_RANGE_S         if_time_range_s
+IF_TIME_RANGE_L         if_time_range_l
+IF_MISC                 if_misc
+IF_MISC_S               if_misc_s
+IF_SCENE                if_scene
+IF_SCENE_S              if_scene_s
+IF_SCENE_L              if_scene_l
+IF_DAY                  if_day
+IF_DAY_S                if_day_s
+IF_DAY_L                if_day_l
+IF_BEFORE_TIME          if_before_time
+IF_BEFORE_TIME_S        if_before_time_s
+IF_BEFORE_TIME_L        if_before_time_l
+IF_SINCE_TIME           if_since_time
+IF_SINCE_TIME_S         if_since_time_s
+IF_SINCE_TIME_L         if_since_time_l
+
+BRANCH                  branch
+BRANCH_S                branch_s
+BRANCH_L                branch_l
+
+RETURN_S                return_s
+RETURN_L                return_l
+RETURN_NONE             return_none
+RETURN_EMPTY            return_empty
+RETURN_TIME             return_time
+
+NOP                     nop
+
+ELSE                    else
+NOT                     not
+
+NO_PARENTHESIS          [^\(\)]+
+```
