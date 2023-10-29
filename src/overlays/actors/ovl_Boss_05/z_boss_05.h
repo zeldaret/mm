@@ -56,8 +56,8 @@ typedef struct Boss05 {
     /* 0x1C8 */ ColliderJntSph lilyPadCollider;
     /* 0x1E8 */ ColliderJntSphElement lilyPadColliderElements[2];
     /* 0x268 */ SkelAnime lilyPadSkelAnime;
-    /* 0x2AC */ Vec3s lilyPadJointTable[BIODEKUBABALILYPAD_LIMB_MAX];
-    /* 0x2E8 */ Vec3s lilyPadMorphTable[BIODEKUBABALILYPAD_LIMB_MAX];
+    /* 0x2AC */ Vec3s lilyPadJointTable[BIO_DEKU_BABA_LILY_PAD_LIMB_MAX];
+    /* 0x2E8 */ Vec3s lilyPadMorphTable[BIO_DEKU_BABA_LILY_PAD_LIMB_MAX];
     /* 0x324 */ Vec3f unk324; // pos used for spawning and drawing
     /* 0x330 */ Vec3s unk330; // rotation used for spawning and drawing
     /* 0x338 */ f32 unk338;
@@ -68,11 +68,11 @@ typedef struct Boss05 {
     /* 0x35C */ f32 unk35C;
     /* 0x360 */ f32 unk360;
     /* 0x364 */ f32 unk364;
-    /* 0x368 */ ColliderJntSph bodyCollider;
-    /* 0x388 */ ColliderJntSphElement bodyColliderElements[1];
-    /* 0x3C8 */ SkelAnime bodySkelAnime;
-    /* 0x40C */ Vec3s bodyJointTable[BIODEKUBABABODY_LIMB_MAX];
-    /* 0x484 */ Vec3s bodyMorphTable[BIODEKUBABABODY_LIMB_MAX];
+    /* 0x368 */ ColliderJntSph headCollider;
+    /* 0x388 */ ColliderJntSphElement headColliderElements[1];
+    /* 0x3C8 */ SkelAnime headSkelAnime;
+    /* 0x40C */ Vec3s headJointTable[BIO_DEKU_BABA_HEAD_LIMB_MAX];
+    /* 0x484 */ Vec3s headMorphTable[BIO_DEKU_BABA_HEAD_LIMB_MAX];
     /* 0x4FC */ f32 lastAnimFrame;
     /* 0x500 */ Vec3s unk500;
 } Boss05; // size = 0x508
