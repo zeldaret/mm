@@ -195,7 +195,7 @@ void EnOssan_SetupAction(EnOssan* this, EnOssanActionFunc action) {
     this->actionFunc = action;
 }
 
-int EnOssan_TestItemSelected(PlayState* play) {
+bool EnOssan_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {

@@ -235,7 +235,7 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
 void ElfMsg6_Destroy(Actor* thisx, PlayState* play) {
 }
 
-int func_80BA1C00(ElfMsg6* this) {
+bool func_80BA1C00(ElfMsg6* this) {
     return (this->actor.xzDistToPlayer < (100.0f * this->actor.scale.x)) &&
            ((this->actor.playerHeightRel >= 0.0f) && (this->actor.playerHeightRel < (100.0f * this->actor.scale.y)));
 }

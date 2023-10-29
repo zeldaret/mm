@@ -6,7 +6,7 @@
 struct BgBreakwall;
 
 typedef void (*BgBreakwallActionFunc)(struct BgBreakwall*, PlayState*);
-typedef int (*BgBreakwallUnkFunc)(struct BgBreakwall*, PlayState*);
+typedef bool (*BgBreakwallUnkFunc)(struct BgBreakwall*, PlayState*);
 typedef void (*BgBreakwallUnkFunc2)(struct BgBreakwall*, PlayState*);
 
 #define BGBREAKWALL_GET_F(thisx) ((thisx)-> params & 0xF)

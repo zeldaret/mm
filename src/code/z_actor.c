@@ -1363,15 +1363,15 @@ f32 Player_GetRunSpeedLimit(Player* player) {
     }
 }
 
-int func_800B7118(Player* player) {
+bool func_800B7118(Player* player) {
     return player->stateFlags1 & PLAYER_STATE1_8;
 }
 
-int func_800B7128(Player* player) {
+bool func_800B7128(Player* player) {
     return func_800B7118(player) && (player->unk_ACC != 0);
 }
 
-int func_800B715C(PlayState* play) {
+bool func_800B715C(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->stateFlags2 & PLAYER_STATE2_8;
@@ -1393,7 +1393,7 @@ void Actor_MountHorse(PlayState* play, Player* player, Actor* horse) {
     horse->child = &player->actor;
 }
 
-int func_800B7200(Player* player) {
+bool func_800B7200(Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) ||
            (player->csAction != PLAYER_CSACTION_NONE);
 }
@@ -2084,7 +2084,7 @@ void Actor_GetScreenPos(PlayState* play, Actor* actor, s16* x, s16* y) {
     *y = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
 }
 
-int Actor_OnScreen(PlayState* play, Actor* actor) {
+bool Actor_OnScreen(PlayState* play, Actor* actor) {
     Vec3f projectedPos;
     f32 invW;
     s32 pad[2];
@@ -3476,7 +3476,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
     return newHead;
 }
 
-int Target_InTargetableScreenRegion(PlayState* play, Actor* actor) {
+bool Target_InTargetableScreenRegion(PlayState* play, Actor* actor) {
     s16 x;
     s16 y;
 

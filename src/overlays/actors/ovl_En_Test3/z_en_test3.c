@@ -603,7 +603,7 @@ s32 func_80A3F384(EnTest3* this, PlayState* play) {
     return false;
 }
 
-int func_80A3F4A4(PlayState* play) {
+bool func_80A3F4A4(PlayState* play) {
     return (Player_GetMask(play) == PLAYER_MASK_NONE) || (Player_GetMask(play) == PLAYER_MASK_BUNNY) ||
            (Player_GetMask(play) == PLAYER_MASK_POSTMAN) || (Player_GetMask(play) == PLAYER_MASK_KEATON) ||
            (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK);
