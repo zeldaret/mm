@@ -11,11 +11,11 @@ or modify the game's state.
 
 A schedule script can check the state of the following:
 
-- Current in-game day
-- If a WeekEventReg flag is set or not
-- Current time is in a specified time range
-- Current time is before/after a specified time
-- Some other miscellaneous checks (see the `ScheduleCheckMisc` enum).
+- Current in-game [day](#if_day).
+- If a [WeekEventReg flag](#if_week_event_reg) is set or not.
+- Current time is in a specified [time range](#if_time_range).
+- Current time is [before](#if_before_time)/[after](#if_since_time) a specified time.
+- Some other [miscellaneous](#if_misc) checks (see the `ScheduleCheckMisc` enum).
 
 All of those checks act as conditional branches into some other command. The schedule system also supports
 unconditional branches.
@@ -23,11 +23,11 @@ unconditional branches.
 The schedule script is run until a return command is executed. There are various return commands that allow different
 things:
 
-- Return none: The schedule finished without returning a value.
-- Return empty: The schedule finished without changing the previous value.
-- Return s: The script returns a value that's 1 byte long.
-- Return l: The script returns a value that's 2 bytes long (Note this is bugged and will be truncated to 1 byte).
-- Return time: Returns a time range and a 1 byte value.
+- [Return none](#return_none): The schedule finished without returning a value.
+- [Return empty](#return_empty): The schedule finished without changing the previous value.
+- [Return s](#return_s): The script returns a value that's 1 byte long.
+- [Return l](#return_l): The script returns a value that's 2 bytes long (Note this is bugged and will be truncated to 1 byte).
+- [Return time](#return_time): Returns a time range and a 1 byte value.
 
 Running an unknown command or branching to the middle of a command is undefined behaviour.
 
@@ -455,74 +455,103 @@ if_time_range (9, 50, 18, 1) {
 
 ### Return commands
 
+A return command signals the end of the script and halts its execution.
+
+A return command allows to optionally return a value and/or a time range to the calling actor so it can change behavior
+accordingly.
+
+A schedule script with a control flow that leads to no return command is undefined behaviour.
+
 #### `return_s`
 
-TODO
+Allows to return a short value.
 
 ##### Arguments
 
-- Argument 0: TODO.
+- Argument 0: The value to return. It must fit on a `u8`.
 
 ##### Example
 
 ```c
-TODO
+if_time_range (8, 0, 12, 0) {
+    return_s (EN_NB_SCH_1)
+}
 ```
 
 #### `return_l`
 
-TODO
+Allows to return a long value.
+
+Please note that the vanilla interpreter for the schedule scripts has a bug on which the upper byte of a long returned
+value will be discarded (will be truncated to a `u8`), so please ensure your returned values always fit on the 0-255
+range.
 
 ##### Arguments
 
-- Argument 0: TODO.
+- Argument 0: The value to return. It must fit on a `u16`.
 
 ##### Example
 
 ```c
-TODO
+if_scene (SCENE_TOWN) {
+    return_l (1)
+} else {
+    return_none
+}
 ```
 
 #### `return_none`
 
-TODO
+The schedule finished without returning a value.
 
 ##### Arguments
 
-- Argument 0: TODO.
+No arguments.
 
 ##### Example
 
 ```c
-TODO
+if_week_event_reg (WEEKEVENTREG_HAD_MIDNIGHT_MEETING) {
+    return_none
+}
 ```
 
 #### `return_empty`
 
-TODO
+The schedule finished without changing the previous value.
 
 ##### Arguments
 
-- Argument 0: TODO.
+No arguments.
 
 ##### Example
 
 ```c
-TODO
+if_time_range (15, 50, 16, 15) {
+    return_empty
+}
 ```
 
 #### `return_time`
 
-TODO
+Returns a time range and a 1 byte value.
 
 ##### Arguments
 
-- Argument 0: TODO.
+- Argument 0: Hour component of the start time
+- Argument 1: Minute component of the start time
+- Argument 2: Hour component of the end time
+- Argument 3: Minute component of the end time
+- Argument 4: A value to return. It must fit on a `u8`
 
 ##### Example
 
 ```c
-TODO
+if_time_range (0, 0, 6, 0) {
+    return_time (0, 0, 6, 0, TOILET_HAND_SCH_AVAILABLE)
+} else {
+    return_none
+}
 ```
 
 ### Miscellaneous commands
