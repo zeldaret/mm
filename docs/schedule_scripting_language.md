@@ -74,7 +74,7 @@ reading and modifying the schedule scripts used by various actors.
       - [`not`](#not)
         - [`not` example](#not-example)
     - [Labels](#labels)
-  - [Grammar](#grammar)
+  - [Formal grammar](#formal-grammar)
     - [Tokens](#tokens)
 
 ## Features of the schedule system
@@ -739,7 +739,7 @@ label's name.
 
 A label must always be followed by another command that isn't another label.
 
-## Grammar
+## Formal grammar
 
 This section presents the formal grammar for the Schedule scripting language.
 
