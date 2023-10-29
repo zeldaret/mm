@@ -19,15 +19,15 @@ void DmBal_SetupDoNothing(DmBal* this);
 void DmBal_DoNothing(DmBal* this, PlayState* play);
 
 ActorInit Dm_Bal_InitVars = {
-    ACTOR_DM_BAL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BAL,
-    sizeof(DmBal),
-    (ActorFunc)DmBal_Init,
-    (ActorFunc)DmBal_Destroy,
-    (ActorFunc)DmBal_Update,
-    (ActorFunc)DmBal_Draw,
+    /**/ ACTOR_DM_BAL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BAL,
+    /**/ sizeof(DmBal),
+    /**/ DmBal_Init,
+    /**/ DmBal_Destroy,
+    /**/ DmBal_Update,
+    /**/ DmBal_Draw,
 };
 
 // These animations are the same and in the same order as in the main NPC actor EnBal

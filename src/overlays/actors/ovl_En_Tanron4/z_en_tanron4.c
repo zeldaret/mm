@@ -32,15 +32,15 @@ typedef enum {
 } SeagullTimer;
 
 ActorInit En_Tanron4_InitVars = {
-    ACTOR_EN_TANRON4,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_TANRON4,
-    sizeof(EnTanron4),
-    (ActorFunc)EnTanron4_Init,
-    (ActorFunc)EnTanron4_Destroy,
-    (ActorFunc)EnTanron4_Update,
-    (ActorFunc)EnTanron4_Draw,
+    /**/ ACTOR_EN_TANRON4,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_TANRON4,
+    /**/ sizeof(EnTanron4),
+    /**/ EnTanron4_Init,
+    /**/ EnTanron4_Destroy,
+    /**/ EnTanron4_Update,
+    /**/ EnTanron4_Draw,
 };
 
 void EnTanron4_Init(Actor* thisx, PlayState* play2) {

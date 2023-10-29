@@ -22,15 +22,15 @@ void ArrowLight_Fly(ArrowLight* this, PlayState* play);
 #include "overlays/ovl_Arrow_Light/ovl_Arrow_Light.c"
 
 ActorInit Arrow_Light_InitVars = {
-    ACTOR_ARROW_LIGHT,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ArrowLight),
-    (ActorFunc)ArrowLight_Init,
-    (ActorFunc)ArrowLight_Destroy,
-    (ActorFunc)ArrowLight_Update,
-    (ActorFunc)ArrowLight_Draw,
+    /**/ ACTOR_ARROW_LIGHT,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ArrowLight),
+    /**/ ArrowLight_Init,
+    /**/ ArrowLight_Destroy,
+    /**/ ArrowLight_Update,
+    /**/ ArrowLight_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

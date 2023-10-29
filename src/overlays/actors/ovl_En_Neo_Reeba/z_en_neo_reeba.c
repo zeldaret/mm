@@ -37,15 +37,15 @@ void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, PlayState* play);
 void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play);
 
 ActorInit En_Neo_Reeba_InitVars = {
-    ACTOR_EN_NEO_REEBA,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_RB,
-    sizeof(EnNeoReeba),
-    (ActorFunc)EnNeoReeba_Init,
-    (ActorFunc)EnNeoReeba_Destroy,
-    (ActorFunc)EnNeoReeba_Update,
-    (ActorFunc)EnNeoReeba_Draw,
+    /**/ ACTOR_EN_NEO_REEBA,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_RB,
+    /**/ sizeof(EnNeoReeba),
+    /**/ EnNeoReeba_Init,
+    /**/ EnNeoReeba_Destroy,
+    /**/ EnNeoReeba_Update,
+    /**/ EnNeoReeba_Draw,
 };
 
 typedef enum {

@@ -21,15 +21,15 @@ void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play);
 void ObjEtcetera_DrawAnimated(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Etcetera_InitVars = {
-    ACTOR_OBJ_ETCETERA,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjEtcetera),
-    (ActorFunc)ObjEtcetera_Init,
-    (ActorFunc)ObjEtcetera_Destroy,
-    (ActorFunc)ObjEtcetera_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_ETCETERA,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjEtcetera),
+    /**/ ObjEtcetera_Init,
+    /**/ ObjEtcetera_Destroy,
+    /**/ ObjEtcetera_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

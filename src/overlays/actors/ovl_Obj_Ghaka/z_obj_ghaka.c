@@ -25,15 +25,15 @@ void func_80B3C4E0(ObjGhaka* this, PlayState* play);
 void func_80B3C624(ObjGhaka* this, PlayState* play);
 
 ActorInit Obj_Ghaka_InitVars = {
-    ACTOR_OBJ_GHAKA,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GHAKA,
-    sizeof(ObjGhaka),
-    (ActorFunc)ObjGhaka_Init,
-    (ActorFunc)ObjGhaka_Destroy,
-    (ActorFunc)ObjGhaka_Update,
-    (ActorFunc)ObjGhaka_Draw,
+    /**/ ACTOR_OBJ_GHAKA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_GHAKA,
+    /**/ sizeof(ObjGhaka),
+    /**/ ObjGhaka_Init,
+    /**/ ObjGhaka_Destroy,
+    /**/ ObjGhaka_Update,
+    /**/ ObjGhaka_Draw,
 };
 
 static Vec3f D_80B3C960 = { 0.0f, 0.0f, 0.0f };

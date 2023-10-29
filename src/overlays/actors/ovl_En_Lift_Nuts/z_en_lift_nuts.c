@@ -50,15 +50,15 @@ void EnLiftNuts_UpdateEyes(EnLiftNuts* this);
 void EnLiftNuts_SpawnDust(EnLiftNuts* this, PlayState* play);
 
 ActorInit En_Lift_Nuts_InitVars = {
-    ACTOR_EN_LIFT_NUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNT,
-    sizeof(EnLiftNuts),
-    (ActorFunc)EnLiftNuts_Init,
-    (ActorFunc)EnLiftNuts_Destroy,
-    (ActorFunc)EnLiftNuts_Update,
-    (ActorFunc)EnLiftNuts_Draw,
+    /**/ ACTOR_EN_LIFT_NUTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNT,
+    /**/ sizeof(EnLiftNuts),
+    /**/ EnLiftNuts_Init,
+    /**/ EnLiftNuts_Destroy,
+    /**/ EnLiftNuts_Update,
+    /**/ EnLiftNuts_Draw,
 };
 
 typedef enum {

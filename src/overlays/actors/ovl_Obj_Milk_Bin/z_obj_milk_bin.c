@@ -17,15 +17,15 @@ void ObjMilkBin_Update(Actor* thisx, PlayState* play2);
 void ObjMilkBin_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Milk_Bin_InitVars = {
-    ACTOR_OBJ_MILK_BIN,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_OBJ_MILK_BIN,
-    sizeof(ObjMilkBin),
-    (ActorFunc)ObjMilkBin_Init,
-    (ActorFunc)ObjMilkBin_Destroy,
-    (ActorFunc)ObjMilkBin_Update,
-    (ActorFunc)ObjMilkBin_Draw,
+    /**/ ACTOR_OBJ_MILK_BIN,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_OBJ_MILK_BIN,
+    /**/ sizeof(ObjMilkBin),
+    /**/ ObjMilkBin_Init,
+    /**/ ObjMilkBin_Destroy,
+    /**/ ObjMilkBin_Update,
+    /**/ ObjMilkBin_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

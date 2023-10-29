@@ -84,15 +84,15 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play);
 void EnBigpo_RevealedFire(Actor* thisx, PlayState* play);
 
 ActorInit En_Bigpo_InitVars = {
-    ACTOR_EN_BIGPO,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BIGPO,
-    sizeof(EnBigpo),
-    (ActorFunc)EnBigpo_Init,
-    (ActorFunc)EnBigpo_Destroy,
-    (ActorFunc)EnBigpo_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_BIGPO,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BIGPO,
+    /**/ sizeof(EnBigpo),
+    /**/ EnBigpo_Init,
+    /**/ EnBigpo_Destroy,
+    /**/ EnBigpo_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -19,15 +19,15 @@ void BgBotihasira_Draw(Actor* thisx, PlayState* play);
 void BgBotihasira_DoNothing(BgBotihasira* this, PlayState* play);
 
 ActorInit Bg_Botihasira_InitVars = {
-    ACTOR_BG_BOTIHASIRA,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_BOTIHASIRA,
-    sizeof(BgBotihasira),
-    (ActorFunc)BgBotihasira_Init,
-    (ActorFunc)BgBotihasira_Destroy,
-    (ActorFunc)BgBotihasira_Update,
-    (ActorFunc)BgBotihasira_Draw,
+    /**/ ACTOR_BG_BOTIHASIRA,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_BOTIHASIRA,
+    /**/ sizeof(BgBotihasira),
+    /**/ BgBotihasira_Init,
+    /**/ BgBotihasira_Destroy,
+    /**/ BgBotihasira_Update,
+    /**/ BgBotihasira_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

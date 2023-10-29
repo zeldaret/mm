@@ -102,15 +102,15 @@ static Vec3f sVelocity = { 0.0f, 20.0f, 0.0f };
 static Vec3f sAccel = { 0.0f, 0.0f, 0.0f };
 
 ActorInit En_Syateki_Wf_InitVars = {
-    ACTOR_EN_SYATEKI_WF,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_WF,
-    sizeof(EnSyatekiWf),
-    (ActorFunc)EnSyatekiWf_Init,
-    (ActorFunc)EnSyatekiWf_Destroy,
-    (ActorFunc)EnSyatekiWf_Update,
-    (ActorFunc)EnSyatekiWf_Draw,
+    /**/ ACTOR_EN_SYATEKI_WF,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_WF,
+    /**/ sizeof(EnSyatekiWf),
+    /**/ EnSyatekiWf_Init,
+    /**/ EnSyatekiWf_Destroy,
+    /**/ EnSyatekiWf_Update,
+    /**/ EnSyatekiWf_Draw,
 };
 
 typedef enum {

@@ -23,15 +23,15 @@ s32 ElfMsg4_GetTextId(ElfMsg4* this);
 s32 func_80AFD5E0(ElfMsg4* this);
 
 ActorInit Elf_Msg4_InitVars = {
-    ACTOR_ELF_MSG4,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ElfMsg4),
-    (ActorFunc)ElfMsg4_Init,
-    (ActorFunc)ElfMsg4_Destroy,
-    (ActorFunc)ElfMsg4_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_ELF_MSG4,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ElfMsg4),
+    /**/ ElfMsg4_Init,
+    /**/ ElfMsg4_Destroy,
+    /**/ ElfMsg4_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {

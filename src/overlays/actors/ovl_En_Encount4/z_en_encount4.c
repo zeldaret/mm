@@ -21,15 +21,15 @@ void func_809C4598(EnEncount4* this, PlayState* play);
 void func_809C464C(EnEncount4* this, PlayState* play);
 
 ActorInit En_Encount4_InitVars = {
-    ACTOR_EN_ENCOUNT4,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnEncount4),
-    (ActorFunc)EnEncount4_Init,
-    (ActorFunc)EnEncount4_Destroy,
-    (ActorFunc)EnEncount4_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_ENCOUNT4,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnEncount4),
+    /**/ EnEncount4_Init,
+    /**/ EnEncount4_Destroy,
+    /**/ EnEncount4_Update,
+    /**/ NULL,
 };
 
 s16 D_809C46D0[] = {

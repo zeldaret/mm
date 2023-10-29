@@ -20,16 +20,16 @@ void func_80C17B60(DemoMoonend* this, PlayState* play);
 void func_80C17C48(DemoMoonend* this, PlayState* play);
 void func_80C17FCC(Actor* thisx, PlayState* play);
 
-const ActorInit Demo_Moonend_InitVars = {
-    ACTOR_DEMO_MOONEND,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_MOONEND,
-    sizeof(DemoMoonend),
-    (ActorFunc)DemoMoonend_Init,
-    (ActorFunc)DemoMoonend_Destroy,
-    (ActorFunc)DemoMoonend_Update,
-    (ActorFunc)DemoMoonend_Draw,
+ActorInit Demo_Moonend_InitVars = {
+    /**/ ACTOR_DEMO_MOONEND,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_MOONEND,
+    /**/ sizeof(DemoMoonend),
+    /**/ DemoMoonend_Init,
+    /**/ DemoMoonend_Destroy,
+    /**/ DemoMoonend_Update,
+    /**/ DemoMoonend_Draw,
 };
 
 void DemoMoonend_Init(Actor* thisx, PlayState* play) {

@@ -42,16 +42,16 @@ void func_80AB92CC(EnMnk* this, PlayState* play);
 s32 EnMnk_ValidatePictograph(PlayState* play, Actor* thisx);
 s32 EnMnk_AlreadyExists(EnMnk* this, PlayState* play);
 
-const ActorInit En_Mnk_InitVars = {
-    ACTOR_EN_MNK,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MNK,
-    sizeof(EnMnk),
-    (ActorFunc)EnMnk_Init,
-    (ActorFunc)EnMnk_Destroy,
-    (ActorFunc)EnMnk_Update,
-    (ActorFunc)EnMnk_Draw,
+ActorInit En_Mnk_InitVars = {
+    /**/ ACTOR_EN_MNK,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MNK,
+    /**/ sizeof(EnMnk),
+    /**/ EnMnk_Init,
+    /**/ EnMnk_Destroy,
+    /**/ EnMnk_Update,
+    /**/ EnMnk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -89,15 +89,15 @@ static s32 D_80BF33F0[] = {
 };
 
 ActorInit En_Ig_InitVars = {
-    ACTOR_EN_IG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DAI,
-    sizeof(EnIg),
-    (ActorFunc)EnIg_Init,
-    (ActorFunc)EnIg_Destroy,
-    (ActorFunc)EnIg_Update,
-    (ActorFunc)EnIg_Draw,
+    /**/ ACTOR_EN_IG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DAI,
+    /**/ sizeof(EnIg),
+    /**/ EnIg_Init,
+    /**/ EnIg_Destroy,
+    /**/ EnIg_Update,
+    /**/ EnIg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

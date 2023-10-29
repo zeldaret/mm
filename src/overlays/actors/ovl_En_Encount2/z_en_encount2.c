@@ -27,15 +27,15 @@ void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play);
 void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play);
 
 ActorInit En_Encount2_InitVars = {
-    ACTOR_EN_ENCOUNT2,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_FUSEN,
-    sizeof(EnEncount2),
-    (ActorFunc)EnEncount2_Init,
-    (ActorFunc)EnEncount2_Destroy,
-    (ActorFunc)EnEncount2_Update,
-    (ActorFunc)EnEncount2_Draw,
+    /**/ ACTOR_EN_ENCOUNT2,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_FUSEN,
+    /**/ sizeof(EnEncount2),
+    /**/ EnEncount2_Init,
+    /**/ EnEncount2_Destroy,
+    /**/ EnEncount2_Update,
+    /**/ EnEncount2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

@@ -40,15 +40,15 @@ void func_80B165E0(BgHakuginSwitch* this, PlayState* play);
 u32 D_80B16AF0;
 
 ActorInit Bg_Hakugin_Switch_InitVars = {
-    ACTOR_BG_HAKUGIN_SWITCH,
-    ACTORCAT_SWITCH,
-    FLAGS,
-    OBJECT_GORONSWITCH,
-    sizeof(BgHakuginSwitch),
-    (ActorFunc)BgHakuginSwitch_Init,
-    (ActorFunc)BgHakuginSwitch_Destroy,
-    (ActorFunc)BgHakuginSwitch_Update,
-    (ActorFunc)BgHakuginSwitch_Draw,
+    /**/ ACTOR_BG_HAKUGIN_SWITCH,
+    /**/ ACTORCAT_SWITCH,
+    /**/ FLAGS,
+    /**/ OBJECT_GORONSWITCH,
+    /**/ sizeof(BgHakuginSwitch),
+    /**/ BgHakuginSwitch_Init,
+    /**/ BgHakuginSwitch_Destroy,
+    /**/ BgHakuginSwitch_Update,
+    /**/ BgHakuginSwitch_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

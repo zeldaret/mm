@@ -148,15 +148,15 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit En_Jso_InitVars = {
-    ACTOR_EN_JSO,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_JSO,
-    sizeof(EnJso),
-    (ActorFunc)EnJso_Init,
-    (ActorFunc)EnJso_Destroy,
-    (ActorFunc)EnJso_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_JSO,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_JSO,
+    /**/ sizeof(EnJso),
+    /**/ EnJso_Init,
+    /**/ EnJso_Destroy,
+    /**/ EnJso_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

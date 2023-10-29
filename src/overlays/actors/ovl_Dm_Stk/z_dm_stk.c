@@ -152,15 +152,15 @@ typedef enum {
 } SkullKidDekuPipesCutsceneState;
 
 ActorInit Dm_Stk_InitVars = {
-    ACTOR_DM_STK,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_STK,
-    sizeof(DmStk),
-    (ActorFunc)DmStk_Init,
-    (ActorFunc)DmStk_Destroy,
-    (ActorFunc)DmStk_Update,
-    (ActorFunc)DmStk_Draw,
+    /**/ ACTOR_DM_STK,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_STK,
+    /**/ sizeof(DmStk),
+    /**/ DmStk_Init,
+    /**/ DmStk_Destroy,
+    /**/ DmStk_Update,
+    /**/ DmStk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

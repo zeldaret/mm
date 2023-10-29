@@ -764,15 +764,15 @@ s32 sAnjuMsgScript_80B58B88[2] = { 0x0E29612D, 0x10C10 };
 s32 sAnjuMsgScript_SchWithKafei[3] = { 0x0E291B2D, 0x10C12, 0x10000000 };
 
 ActorInit En_An_InitVars = {
-    ACTOR_EN_AN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AN1,
-    sizeof(EnAn),
-    (ActorFunc)EnAn_Init,
-    (ActorFunc)EnAn_Destroy,
-    (ActorFunc)EnAn_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_AN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AN1,
+    /**/ sizeof(EnAn),
+    /**/ EnAn_Init,
+    /**/ EnAn_Destroy,
+    /**/ EnAn_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

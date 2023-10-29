@@ -82,15 +82,15 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 ActorInit En_Pr2_InitVars = {
-    ACTOR_EN_PR2,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_PR,
-    sizeof(EnPr2),
-    (ActorFunc)EnPr2_Init,
-    (ActorFunc)EnPr2_Destroy,
-    (ActorFunc)EnPr2_Update,
-    (ActorFunc)EnPr2_Draw,
+    /**/ ACTOR_EN_PR2,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_PR,
+    /**/ sizeof(EnPr2),
+    /**/ EnPr2_Init,
+    /**/ EnPr2_Destroy,
+    /**/ EnPr2_Update,
+    /**/ EnPr2_Draw,
 };
 
 static AnimationHeader* sAnimations[] = {

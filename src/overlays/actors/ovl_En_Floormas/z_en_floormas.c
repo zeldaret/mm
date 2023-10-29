@@ -61,15 +61,15 @@ void func_808D2DC0(EnFloormas* this, PlayState* play);
 void func_808D3754(Actor* thisx, PlayState* play);
 
 ActorInit En_Floormas_InitVars = {
-    ACTOR_EN_FLOORMAS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_WALLMASTER,
-    sizeof(EnFloormas),
-    (ActorFunc)EnFloormas_Init,
-    (ActorFunc)EnFloormas_Destroy,
-    (ActorFunc)EnFloormas_Update,
-    (ActorFunc)EnFloormas_Draw,
+    /**/ ACTOR_EN_FLOORMAS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_WALLMASTER,
+    /**/ sizeof(EnFloormas),
+    /**/ EnFloormas_Init,
+    /**/ EnFloormas_Destroy,
+    /**/ EnFloormas_Update,
+    /**/ EnFloormas_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

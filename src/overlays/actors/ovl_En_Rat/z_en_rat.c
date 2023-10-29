@@ -36,15 +36,15 @@ typedef enum {
 } EnRatHookedState;
 
 ActorInit En_Rat_InitVars = {
-    ACTOR_EN_RAT,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_RAT,
-    sizeof(EnRat),
-    (ActorFunc)EnRat_Init,
-    (ActorFunc)EnRat_Destroy,
-    (ActorFunc)EnRat_Update,
-    (ActorFunc)EnRat_Draw,
+    /**/ ACTOR_EN_RAT,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_RAT,
+    /**/ sizeof(EnRat),
+    /**/ EnRat_Init,
+    /**/ EnRat_Destroy,
+    /**/ EnRat_Update,
+    /**/ EnRat_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

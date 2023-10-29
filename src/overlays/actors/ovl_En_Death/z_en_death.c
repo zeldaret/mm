@@ -39,15 +39,15 @@ void func_808C7DCC(EnDeath* this, PlayState* play);
 
 #if 0
 ActorInit En_Death_InitVars = {
-    ACTOR_EN_DEATH,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DEATH,
-    sizeof(EnDeath),
-    (ActorFunc)EnDeath_Init,
-    (ActorFunc)EnDeath_Destroy,
-    (ActorFunc)EnDeath_Update,
-    (ActorFunc)EnDeath_Draw,
+    /**/ ACTOR_EN_DEATH,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DEATH,
+    /**/ sizeof(EnDeath),
+    /**/ EnDeath_Init,
+    /**/ EnDeath_Destroy,
+    /**/ EnDeath_Update,
+    /**/ EnDeath_Draw,
 };
 
 // static ColliderSphereInit sSphereInit = {

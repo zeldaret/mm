@@ -49,15 +49,15 @@ void func_80C10290(EnRecepgirl* this);
 void func_80C102D4(EnRecepgirl* this, PlayState* play);
 
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
-    sizeof(EnRecepgirl),
-    (ActorFunc)EnRecepgirl_Init,
-    (ActorFunc)EnRecepgirl_Destroy,
-    (ActorFunc)EnRecepgirl_Update,
-    (ActorFunc)EnRecepgirl_Draw,
+    /**/ ACTOR_EN_RECEPGIRL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
+    /**/ sizeof(EnRecepgirl),
+    /**/ EnRecepgirl_Init,
+    /**/ EnRecepgirl_Destroy,
+    /**/ EnRecepgirl_Update,
+    /**/ EnRecepgirl_Draw,
 };
 
 static void* D_80C106B0[4] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };
@@ -317,10 +317,10 @@ As we discussed last time, `D_80C106B0` is an array of [segmented pointers](data
 
 ```C
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
+    /**/ ACTOR_EN_RECEPGIRL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
 ```
 
 the fourth element is the object (it is actually an enum, but the file itself has the same name as the object enum). So, we need to look at the object file. We are very lucky that a custom tool has been written for such a thing: Z64Utils.

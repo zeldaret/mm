@@ -40,15 +40,15 @@ void EnKarebaba_SetupDead(EnKarebaba* this);
 void EnKarebaba_Dead(EnKarebaba* this, PlayState* play);
 
 ActorInit En_Karebaba_InitVars = {
-    ACTOR_EN_KAREBABA,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DEKUBABA,
-    sizeof(EnKarebaba),
-    (ActorFunc)EnKarebaba_Init,
-    (ActorFunc)EnKarebaba_Destroy,
-    (ActorFunc)EnKarebaba_Update,
-    (ActorFunc)EnKarebaba_Draw,
+    /**/ ACTOR_EN_KAREBABA,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DEKUBABA,
+    /**/ sizeof(EnKarebaba),
+    /**/ EnKarebaba_Init,
+    /**/ EnKarebaba_Destroy,
+    /**/ EnKarebaba_Update,
+    /**/ EnKarebaba_Draw,
 };
 
 static ColliderCylinderInit sHurtCylinderInit = {
