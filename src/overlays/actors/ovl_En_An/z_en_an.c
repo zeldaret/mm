@@ -1476,7 +1476,7 @@ s32 EnAn_MsgEvent_GiveLunchToGranny(Actor* thisx, PlayState* play) {
     switch (this->msgEventState) {
         case 0x0:
             ret = 0;
-            if (EnAn_ChangeCutscene(this, csId)) {
+            if (!EnAn_ChangeCutscene(this, csId)) {
                 break;
             }
             FALLTHROUGH;
