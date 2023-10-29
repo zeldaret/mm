@@ -3,6 +3,80 @@
 The Schedule scripting language is a high level language that was made to help
 reading and modifying the schedule scripts used by various actors.
 
+- [Schedule scripting language](#schedule-scripting-language)
+  - [Features of the schedule system](#features-of-the-schedule-system)
+    - [Short and long commands](#short-and-long-commands)
+  - [How a schedule script looks like](#how-a-schedule-script-looks-like)
+  - [Syntax](#syntax)
+  - [Compiling](#compiling)
+  - [Commands](#commands)
+    - [Generics and non-generics](#generics-and-non-generics)
+    - [Command's arguments](#commands-arguments)
+    - [Conditional checks](#conditional-checks)
+      - [`if_week_event_reg`](#if_week_event_reg)
+        - [`if_week_event_reg` arguments](#if_week_event_reg-arguments)
+        - [`if_week_event_reg` example](#if_week_event_reg-example)
+        - [`if_week_event_reg` non-generics](#if_week_event_reg-non-generics)
+      - [`if_time_range`](#if_time_range)
+        - [`if_time_range` arguments](#if_time_range-arguments)
+        - [`if_time_range` example](#if_time_range-example)
+        - [`if_time_range` non-generics](#if_time_range-non-generics)
+      - [`if_misc`](#if_misc)
+        - [`if_misc` arguments](#if_misc-arguments)
+        - [`if_misc` example](#if_misc-example)
+        - [`if_misc` non-generics](#if_misc-non-generics)
+      - [`if_scene`](#if_scene)
+        - [`if_scene` arguments](#if_scene-arguments)
+        - [`if_scene` example](#if_scene-example)
+        - [`if_scene` non-generics](#if_scene-non-generics)
+      - [`if_day`](#if_day)
+        - [`if_day` arguments](#if_day-arguments)
+        - [`if_day` example](#if_day-example)
+        - [`if_day` non-generics](#if_day-non-generics)
+      - [`if_before_time`](#if_before_time)
+        - [`if_before_time` arguments](#if_before_time-arguments)
+        - [`if_before_time` example](#if_before_time-example)
+        - [`if_before_time` non-generics](#if_before_time-non-generics)
+        - [`if_before_time` notes](#if_before_time-notes)
+      - [`if_since_time`](#if_since_time)
+        - [`if_since_time` arguments](#if_since_time-arguments)
+        - [`if_since_time` example](#if_since_time-example)
+        - [`if_since_time` non-generics](#if_since_time-non-generics)
+        - [`if_since_time` notes](#if_since_time-notes)
+    - [Unconditional branches](#unconditional-branches)
+      - [`branch`](#branch)
+        - [`branch` arguments](#branch-arguments)
+        - [`branch` example](#branch-example)
+        - [`branch` non-generics](#branch-non-generics)
+    - [`else`](#else)
+      - [`else` example](#else-example)
+    - [Return commands](#return-commands)
+      - [`return_s`](#return_s)
+        - [`return_s` arguments](#return_s-arguments)
+        - [`return_s` example](#return_s-example)
+      - [`return_l`](#return_l)
+        - [`return_l` arguments](#return_l-arguments)
+        - [`return_l` example](#return_l-example)
+      - [`return_none`](#return_none)
+        - [`return_none` arguments](#return_none-arguments)
+        - [`return_none` example](#return_none-example)
+      - [`return_empty`](#return_empty)
+        - [`return_empty` arguments](#return_empty-arguments)
+        - [`return_empty` example](#return_empty-example)
+      - [`return_time`](#return_time)
+        - [`return_time` arguments](#return_time-arguments)
+        - [`return_time` example](#return_time-example)
+    - [Miscellaneous commands](#miscellaneous-commands)
+      - [`nop`](#nop)
+        - [`nop` arguments](#nop-arguments)
+        - [`nop` example](#nop-example)
+    - [Operators](#operators)
+      - [`not`](#not)
+        - [`not` example](#not-example)
+    - [Labels](#labels)
+  - [Grammar](#grammar)
+    - [Tokens](#tokens)
+
 ## Features of the schedule system
 
 The Schedule system is a very simple scripting language, it is composed of a
@@ -257,11 +331,11 @@ fallthroughs into the next command.
 Checks if the passed WeekEventReg flag is set, and execute the body of the
 command if it is set.
 
-##### Arguments
+##### `if_week_event_reg` arguments
 
 - Argument 0: A WeekEventReg flag. `WEEKEVENTREG_` macros are preferred.
 
-##### Example
+##### `if_week_event_reg` example
 
 ```c
 if_week_event_reg (WEEKEVENTREG_61_02) {
@@ -270,7 +344,7 @@ if_week_event_reg (WEEKEVENTREG_61_02) {
 return_s (30)
 ```
 
-##### Non generics
+##### `if_week_event_reg` non-generics
 
 `if_week_event_reg_s` and `if_week_event_reg_l`
 
@@ -278,14 +352,14 @@ return_s (30)
 
 Checks if the current time is between the passed time range.
 
-##### Arguments
+##### `if_time_range` arguments
 
 - Argument 0: Hour component of the start time
 - Argument 1: Minute component of the start time
 - Argument 2: Hour component of the end time
 - Argument 3: Minute component of the end time
 
-##### Example
+##### `if_time_range` example
 
 ```c
 // Checks if the current time is between 18:00 ~ 6:00
@@ -296,7 +370,7 @@ if_time_range (18, 0, 6, 0) {
 }
 ```
 
-##### Non generics
+##### `if_time_range` non-generics
 
 `if_time_range_s` and `if_time_range_l`
 
@@ -304,11 +378,11 @@ if_time_range (18, 0, 6, 0) {
 
 Checks if the passed miscellaneous argument is true.
 
-##### Arguments
+##### `if_misc` arguments
 
 - Argument 0: A value of the `ScheduleCheckMisc` enum.
 
-##### Example
+##### `if_misc` example
 
 ```c
 if_misc (SCHEDULE_CHECK_MISC_MASK_ROMANI) {
@@ -318,7 +392,7 @@ if_misc (SCHEDULE_CHECK_MISC_MASK_ROMANI) {
 }
 ```
 
-##### Non generics
+##### `if_misc` non-generics
 
 `if_misc_s`. Note there's no long version of this command. It is advised to
 minimize the amount of commands used on a `ìf_misc` body and `else`'s body.
@@ -327,11 +401,11 @@ minimize the amount of commands used on a `ìf_misc` body and `else`'s body.
 
 Checks if the current scene matches the one passed as parameter.
 
-##### Arguments
+##### `if_scene` arguments
 
 - Argument 0: A value of the `SceneId` enum.
 
-##### Example
+##### `if_scene` example
 
 ```c
 if_scene (SCENE_SECOM) {
@@ -339,7 +413,7 @@ if_scene (SCENE_SECOM) {
 }
 ```
 
-##### Non generics
+##### `if_scene` non-generics
 
 `if_scene_s` and `if_scene_l`
 
@@ -347,11 +421,11 @@ if_scene (SCENE_SECOM) {
 
 Checks if the current day matches the passed argument.
 
-##### Arguments
+##### `if_day` arguments
 
 - Argument 0: The day to check.
 
-##### Example
+##### `if_day` example
 
 ```c
 if_day (3) {
@@ -359,7 +433,7 @@ if_day (3) {
 }
 ```
 
-##### Non generics
+##### `if_day` non-generics
 
 `if_day_s` and `if_day_l`
 
@@ -367,12 +441,12 @@ if_day (3) {
 
 Checks if the current time is before the time passed as parameter.
 
-##### Arguments
+##### `if_before_time` arguments
 
 - Argument 0: The hour component of the time.
 - Argument 1: The minute component of the time.
 
-##### Example
+##### `if_before_time` example
 
 ```c
 if_before_time (8, 0) {
@@ -382,11 +456,11 @@ if_before_time (8, 0) {
 }
 ```
 
-##### Non generics
+##### `if_before_time` non-generics
 
 `if_before_time_s` and `if_before_time_l`
 
-##### Notes
+##### `if_before_time` notes
 
 This command performs the contrary check to `if_since_time`.
 
@@ -394,12 +468,12 @@ This command performs the contrary check to `if_since_time`.
 
 Checks if the current time is after or equal to the time passed as parameter.
 
-##### Arguments
+##### `if_since_time` arguments
 
 - Argument 0: The hour component of the time.
 - Argument 1: The minute component of the time.
 
-##### Example
+##### `if_since_time` example
 
 ```c
 if_since_time (13, 0) {
@@ -409,11 +483,11 @@ if_since_time (13, 0) {
 }
 ```
 
-##### Non generics
+##### `if_since_time` non-generics
 
 `if_since_time_s` and `if_since_time_l`
 
-##### Notes
+##### `if_since_time` notes
 
 This command performs the contrary check to `if_before_time`.
 
@@ -426,11 +500,11 @@ a [label](#labels) to know where to branch to.
 
 Unconditionally move the control flow to the passed label.
 
-##### Arguments
+##### `branch` arguments
 
 - Argument 0: The label to branch to.
 
-##### Example
+##### `branch` example
 
 ```c
 if_day (3) {
@@ -450,7 +524,7 @@ if_day (3) {
 }
 ```
 
-##### Non generics
+##### `branch` non-generics
 
 `branch_s` and `branch_l`
 
@@ -462,7 +536,7 @@ signals this by either having those instructions inside its own body (marked by
 braces) or by not having those braces but being immediately followed by another
 conditional check command, similar to C's `else if`.
 
-##### Example
+#### `else` example
 
 The following two scripts are equivalent:
 
@@ -502,11 +576,11 @@ undefined behaviour.
 
 Allows to return a short value.
 
-##### Arguments
+##### `return_s` arguments
 
 - Argument 0: The value to return. It must fit on a `u8`.
 
-##### Example
+##### `return_s` example
 
 ```c
 if_time_range (8, 0, 12, 0) {
@@ -523,11 +597,11 @@ which the upper byte of a long returned value will be discarded (will be
 truncated to a `u8`), so please ensure your returned values always fit on the
 0-255 range.
 
-##### Arguments
+##### `return_l` arguments
 
 - Argument 0: The value to return. It must fit on a `u16`.
 
-##### Example
+##### `return_l` example
 
 ```c
 if_scene (SCENE_TOWN) {
@@ -541,11 +615,11 @@ if_scene (SCENE_TOWN) {
 
 The schedule finished without returning a value.
 
-##### Arguments
+##### `return_none` arguments
 
 No arguments.
 
-##### Example
+##### `return_none` example
 
 ```c
 if_week_event_reg (WEEKEVENTREG_HAD_MIDNIGHT_MEETING) {
@@ -557,11 +631,11 @@ if_week_event_reg (WEEKEVENTREG_HAD_MIDNIGHT_MEETING) {
 
 The schedule finished without changing the previous value.
 
-##### Arguments
+##### `return_empty` arguments
 
 No arguments.
 
-##### Example
+##### `return_empty` example
 
 ```c
 if_time_range (15, 50, 16, 15) {
@@ -573,7 +647,7 @@ if_time_range (15, 50, 16, 15) {
 
 Returns a time range and a 1 byte value.
 
-##### Arguments
+##### `return_time` arguments
 
 - Argument 0: Hour component of the start time
 - Argument 1: Minute component of the start time
@@ -581,7 +655,7 @@ Returns a time range and a 1 byte value.
 - Argument 3: Minute component of the end time
 - Argument 4: A value to return. It must fit on a `u8`
 
-##### Example
+##### `return_time` example
 
 ```c
 if_time_range (0, 0, 6, 0) {
@@ -597,13 +671,13 @@ if_time_range (0, 0, 6, 0) {
 
 No operation. Doesn't perform an action or a check.
 
-##### Arguments
+##### `nop` arguments
 
-- Argument 0: Unknown meaning. Ignored.
-- Argument 1: Unknown meaning. Ignored.
-- Argument 2: Unknown meaning. Ignored.
+- Argument 0: Unknown meaning.
+- Argument 1: Unknown meaning.
+- Argument 2: Unknown meaning.
 
-##### Example
+##### `nop` example
 
 ```c
 nop (0, 1, 2)
@@ -625,7 +699,7 @@ evaluates to false instead of true.
 
 A `not` must always be followed by a [conditional check command](#conditional-checks).
 
-##### Example
+##### `not` example
 
 The following two scripts are equivalent:
 
