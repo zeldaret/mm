@@ -854,6 +854,7 @@ Actor* EnAn_FindActor(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId
     return foundActor;
 }
 
+// Name after ENAN_8000
 Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* foundActor = NULL;
 
@@ -1175,7 +1176,6 @@ void EnAn_UpdateFace(EnAn* this) {
 
     if (this->stateFlags & ENAN_STATE_UPDATE_EYES) {
         if (DECR(this->eyeTimer) == 0) {
-            // default case doesn't match
             switch (this->faceIndex) {
                 case ENAN_FACE_2:
                 case ENAN_FACE_4:
@@ -1325,6 +1325,9 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
                 gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[originalObjectSlot].segment);
             }
             break;
+
+        default:
+            break;
     }
 
     Matrix_Pop();
@@ -1415,6 +1418,9 @@ s32 EnAn_MsgEvent_ReceiveLetterFromPostman(Actor* thisx, PlayState* play) {
             ret = true;
             this->msgEventState++;
             break;
+
+        default:
+            break;
     }
 
     return ret;
@@ -1458,6 +1464,9 @@ s32 EnAn_MsgEvent_AttendGoron(Actor* thisx, PlayState* play) {
             CutsceneManager_Stop(csId);
             ret = true;
             this->msgEventState++;
+            break;
+
+        default:
             break;
     }
 
@@ -1504,6 +1513,9 @@ s32 EnAn_MsgEvent_GiveLunchToGranny(Actor* thisx, PlayState* play) {
             ret = 1;
             this->msgEventState++;
             break;
+
+        default:
+            break;
     }
 
     return ret;
@@ -1522,12 +1534,13 @@ s32 EnAn_MsgEvent_MidnightMeeting(Actor* thisx, PlayState* play) {
         gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
         this->msgEventState++;
     }
+
     return 0;
 }
 
 s32 EnAn_MsgEvent_Cooking(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
-    s32 sp20 = false;
+    s32 ret = false;
 
     switch (this->msgEventState) {
         case 0x0:
@@ -1539,7 +1552,7 @@ s32 EnAn_MsgEvent_Cooking(Actor* thisx, PlayState* play) {
         case 0x3:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->msgEventState++;
-                sp20 = true;
+                ret = true;
             }
             break;
 
@@ -1547,9 +1560,12 @@ s32 EnAn_MsgEvent_Cooking(Actor* thisx, PlayState* play) {
             EnAn_ChangeAnim(this, play, ENAN_ANIM_TASTE_END);
             this->msgEventState++;
             break;
+
+        default:
+            break;
     }
 
-    return sp20;
+    return ret;
 }
 
 s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
@@ -1576,6 +1592,9 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
             EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRY);
             ret = true;
             this->msgEventState++;
+            break;
+
+        default:
             break;
     }
 
@@ -1798,29 +1817,29 @@ s32 EnAn_IsCouplesMaskCsPlaying(EnAn* this, PlayState* play) {
 }
 
 void EnAn_UpdateHeadRot(EnAn* this) {
-    Actor* temp_v0_2;
-    Vec3f sp40;
-    Vec3f sp34;
+    Actor* lookAtActor;
+    Vec3f lookAtPos;
+    Vec3f pos;
     Player* player;
 
-    Math_Vec3f_Copy(&sp40, &this->lookAtActor->world.pos);
-    Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-    Math_ApproachS(&this->headRotY, Math_Vec3f_Yaw(&sp34, &sp40) - this->actor.shape.rot.y, 4, 0x2AA8);
+    Math_Vec3f_Copy(&lookAtPos, &this->lookAtActor->world.pos);
+    Math_Vec3f_Copy(&pos, &this->actor.world.pos);
+    Math_ApproachS(&this->headRotY, Math_Vec3f_Yaw(&pos, &lookAtPos) - this->actor.shape.rot.y, 4, 0x2AA8);
 
     this->headRotY = CLAMP(this->headRotY, -0x1FFE, 0x1FFE);
 
-    Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
+    Math_Vec3f_Copy(&pos, &this->actor.focus.pos);
 
-    temp_v0_2 = this->lookAtActor;
-    if (temp_v0_2->id == ACTOR_PLAYER) {
-        player = (Player*)temp_v0_2;
+    lookAtActor = this->lookAtActor;
+    if (lookAtActor->id == ACTOR_PLAYER) {
+        player = (Player*)lookAtActor;
 
-        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
+        lookAtPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
-        Math_Vec3f_Copy(&sp40, &temp_v0_2->focus.pos);
+        Math_Vec3f_Copy(&lookAtPos, &lookAtActor->focus.pos);
     }
 
-    Math_ApproachS(&this->headRotZ, Math_Vec3f_Pitch(&sp34, &sp40), 4, 0x2AA8);
+    Math_ApproachS(&this->headRotZ, Math_Vec3f_Pitch(&pos, &lookAtPos), 4, 0x2AA8);
 
     this->headRotZ = CLAMP(this->headRotZ, -0x1554, 0x1554);
 }
@@ -2103,7 +2122,7 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
             switch (textId) {
                 case 0x28F5: // "The town will be crushed by the moon. Forget about the letter"
                     this->savedFaceIndex = ENAN_FACE_0;
-                    /* fallthrough */
+                    FALLTHROUGH;
                 case 0x28A5: // "Visit us again in the future"
                 case 0x28AA: // "One moment please"
                 case 0x28F8: // "We'll go to Romani Ranch to take refuge"
@@ -2169,7 +2188,7 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
 
                 case 0x28EC: // "Should I wait?"
                     this->savedFaceIndex = ENAN_FACE_5;
-                    /* fallthrough */
+                    FALLTHROUGH;
                 case 0x28DC: // "Thank you"
                 case 0x28EB: // "I'm afraid to meet him..."
                 case 0x28F2: // "I wonder if Kafei is really at Cremia's"
@@ -2187,6 +2206,9 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
                 case 0x28A9: // "You do have a reservation?"
                     this->faceIndex = ENAN_FACE_7;
                     this->eyeTimer = 8;
+                    break;
+
+                default:
                     break;
             }
         }
@@ -2378,7 +2400,7 @@ s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* sched
             }
 
             this->doorTimeTotalDiff = scheduleOutput->time1 - scheduleOutput->time0;
-            this->var1.doorTimeProgress = now - scheduleOutput->time0;
+            this->schState.doorTimeProgress = now - scheduleOutput->time0;
 
             switch (scheduleOutput->result) {
                 case ANJU_SCH_DOOR_27:
@@ -2392,6 +2414,9 @@ s32 EnAn_ProcessSchedule_Door(EnAn* this, PlayState* play, ScheduleOutput* sched
                     this->savedFaceIndex = ENAN_FACE_2;
                     this->faceIndex = ENAN_FACE_2;
                     this->eyeTimer = 8;
+                    break;
+
+                default:
                     break;
             }
 
@@ -2485,13 +2510,16 @@ s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* sc
                 this->faceIndex = ENAN_FACE_2;
                 this->eyeTimer = 8;
                 break;
+
+            default:
+                break;
         }
 
         switch (scheduleOutput->result) {
             case ANJU_SCH_WALKING_42:
             case ANJU_SCH_WALKING_43:
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-                /* fallthrough */
+                FALLTHROUGH;
             case ANJU_SCH_WALKING_44:
             case ANJU_SCH_WALKING_45:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK_WITH_TRAY);
@@ -2534,7 +2562,7 @@ s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* sc
             case ANJU_SCH_WALKING_49:
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
-                /* fallthrough */
+                FALLTHROUGH;
             default:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
                 break;
@@ -2615,15 +2643,15 @@ s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* s
         switch (scheduleOutput->result) {
             case ANJU_SCH_WAITING_CLOSING_TIME:
                 this->actor.world.rot.y += 0x7FF8;
-                /* fallthrough */
+                FALLTHROUGH;
             case ANJU_SCH_RECEPTIONIST_IDLE:
             case ANJU_SCH_MIDNIGHT_MEETING:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-                this->var1.followScheduleState = 0;
+                this->schState.followScheduleState = 0;
                 this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 if (scheduleOutput->result == ANJU_SCH_RECEPTIONIST_IDLE) {
-                    this->unk_374 = 70.0f;
+                    this->offerRange = 70.0f;
                 }
                 break;
 
@@ -2636,10 +2664,10 @@ s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* s
                     this->stateFlags |= ENAN_STATE_IGNORE_GRAVITY;
                     this->actor.world.rot.y += 0x7FF8;
                     this->actor.shape.rot.y = this->actor.world.rot.y;
-                    this->var1.laundryPoolState = 4;
+                    this->schState.laundryPoolState = 4;
                 } else {
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_WALK);
-                    this->var1.laundryPoolState = 0;
+                    this->schState.laundryPoolState = 0;
                 }
 
                 this->savedFaceIndex = ENAN_FACE_2;
@@ -2653,7 +2681,11 @@ s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* s
                 this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 this->stateFlags |= ENAN_STATE_DRAW_CHOPSTICKS;
                 break;
+
+            default:
+                break;
         }
+
         ret = true;
     }
 
@@ -2705,6 +2737,9 @@ s32 EnAn_ProcessSchedule_StaffRoom(EnAn* this, PlayState* play, ScheduleOutput* 
             this->faceIndex = ENAN_FACE_5;
             this->eyeTimer = 8;
             break;
+
+        default:
+            break;
     }
 
     this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
@@ -2736,7 +2771,7 @@ s32 EnAn_ProcessScheduleOutput(EnAn* this, PlayState* play, ScheduleOutput* sche
     this->savedFaceIndex = ENAN_FACE_0;
     this->faceIndex = ENAN_FACE_0;
     this->eyeTimer = 8;
-    this->unk_374 = 40.0f;
+    this->offerRange = 40.0f;
 
     switch (scheduleOutput->result) {
         case ANJU_SCH_RECEIVE_LETTER_FROM_POSTMAN:
@@ -2852,23 +2887,23 @@ s32 EnAn_HandleSch_Door(EnAn* this, PlayState* play) {
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             // Tell the door actor to be open while passing through it and which orientation
-            if ((this->var1.doorTimeProgress / (f32)this->doorTimeTotalDiff) <= 0.9f) {
+            if ((this->schState.doorTimeProgress / (f32)this->doorTimeTotalDiff) <= 0.9f) {
                 door->openTimer = this->doorOpenTimer;
             } else {
                 door->openTimer = 0;
             }
         }
 
-        this->var1.doorTimeProgress = CLAMP(this->var1.doorTimeProgress, 0, this->doorTimeTotalDiff);
+        this->schState.doorTimeProgress = CLAMP(this->schState.doorTimeProgress, 0, this->doorTimeTotalDiff);
         distance = Math_Vec3f_DistXZ(&this->doorEntrancePos, &this->doorExitPos) / this->doorTimeTotalDiff;
 
         sp38.x = 0.0f;
         sp38.y = 0.0f;
-        sp38.z = this->var1.doorTimeProgress * distance;
+        sp38.z = this->schState.doorTimeProgress * distance;
 
         Lib_Vec3f_TranslateAndRotateY(&this->doorEntrancePos, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
 
-        this->var1.doorTimeProgress += this->timePathTimeSpeed;
+        this->schState.doorTimeProgress += this->timePathTimeSpeed;
         if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_PIRATE_WALK);
         }
@@ -2965,6 +3000,9 @@ s32 EnAn_HandleSch_80B572D4(EnAn* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_SWEEP);
             }
             break;
+
+        default:
+            break;
     }
 
     return 0;
@@ -2974,10 +3012,10 @@ s32 EnAn_HandleSch_LaundryPool(EnAn* this, PlayState* play) {
     s16 worldRot;
     s16 shapeRot;
 
-    switch (this->var1.laundryPoolState) {
+    switch (this->schState.laundryPoolState) {
         case 0x0:
             this->actor.world.rot.y += 0x7FF8;
-            this->var1.laundryPoolState++;
+            this->schState.laundryPoolState++;
             break;
 
         case 0x1:
@@ -2987,13 +3025,13 @@ s32 EnAn_HandleSch_LaundryPool(EnAn* this, PlayState* play) {
                 Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_SIT);
                 this->stateFlags |= ENAN_STATE_IGNORE_GRAVITY;
-                this->var1.laundryPoolState++;
+                this->schState.laundryPoolState++;
             }
             break;
 
         case 0x2:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                this->var1.laundryPoolState++;
+                this->schState.laundryPoolState++;
             }
             break;
 
@@ -3007,7 +3045,10 @@ s32 EnAn_HandleSch_LaundryPool(EnAn* this, PlayState* play) {
 
         case 0x4:
             SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-            this->var1.laundryPoolState++;
+            this->schState.laundryPoolState++;
+            break;
+
+        default:
             break;
     }
 
@@ -3124,6 +3165,9 @@ void EnAn_HandleSchedule(EnAn* this, PlayState* play) {
         case ANJU_SCH_WALKING_63:
             EnAn_HandleSch_FollowTimePath(this, play);
             break;
+
+        default:
+            break;
     }
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
@@ -3206,15 +3250,15 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
 
     if ((this->lookAtActor != NULL) && (this->lookAtActor->update != NULL)) {
         // Rotate towards actor
-        s32 temp;
-        Vec3f sp38;
-        Vec3f sp2C;
+        s16 yaw;
+        Vec3f lookAtPos;
+        Vec3f pos;
 
-        Math_Vec3f_Copy(&sp38, &this->lookAtActor->world.pos);
-        Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
-        temp = Math_Vec3f_Yaw(&sp2C, &sp38);
+        Math_Vec3f_Copy(&lookAtPos, &this->lookAtActor->world.pos);
+        Math_Vec3f_Copy(&pos, &this->actor.world.pos);
+        yaw = Math_Vec3f_Yaw(&pos, &lookAtPos);
 
-        Math_ApproachS(&this->actor.shape.rot.y, temp, 4, 0x2AA8);
+        Math_ApproachS(&this->actor.shape.rot.y, yaw, 4, 0x2AA8);
     }
 }
 
@@ -3345,7 +3389,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
         EnAn_UpdateSkel(this, play);
         EnAn_UpdateFace(this);
         EnAn_UpdateAttention(this);
-        SubS_Offer(&this->actor, play, this->unk_374, 30.0f, 0, this->stateFlags & SUBS_OFFER_MODE_MASK);
+        SubS_Offer(&this->actor, play, this->offerRange, 30.0f, 0, this->stateFlags & SUBS_OFFER_MODE_MASK);
 
         if (!(this->stateFlags & ENAN_STATE_IGNORE_GRAVITY)) {
             Actor_MoveWithGravity(&this->actor);
@@ -3723,8 +3767,8 @@ void EnAn_PrintStruct(EnAn* this, PlayState* play, GfxPrint* printer) {
     GfxPrint_SetPos(printer, x - 0, ++y);
     GfxPrint_Printf(printer, "cue:%i", this->cueId);
 
-    // GfxPrint_SetPos(printer, x-2, ++y);
-    // GfxPrint_Printf(printer, "! 374:%f", this->unk_374);
+    // GfxPrint_SetPos(printer, x-7, ++y);
+    // GfxPrint_Printf(printer, "offerRange:%f", this->offerRange);
 
     // GfxPrint_SetPos(printer, x-6, ++y);
     // GfxPrint_Printf(printer, "savedFace:%d", this->savedFaceIndex);

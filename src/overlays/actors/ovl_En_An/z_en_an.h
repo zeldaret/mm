@@ -12,7 +12,6 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENAN_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 #define ENAN_8000 0x8000
-//#define ENAN_GET_8000(thisx) (((thisx)->params & 0x8000) >> 0xF)
 
 #define ENAN_STATE_8                (1 << 3) // path related
 #define ENAN_STATE_REACHED_PATH_END (1 << 4)
@@ -66,13 +65,13 @@ typedef struct EnAn {
     /* 0x364 */ u8 cueId;
     /* 0x368 */ f32 unk_368;
     /* 0x36C */ UNK_TYPE1 unk_36C[0x8];
-    /* 0x374 */ f32 unk_374;
+    /* 0x374 */ f32 offerRange;
     /* 0x378 */ s16 doorTimeTotalDiff; // Time difference between the point before going through a door and after going through it
     /* 0x37A */ union {
         s16 doorTimeProgress; // schedule time diff
         s16 laundryPoolState;
         s16 followScheduleState; // unused
-    } var1;
+    } schState;
     /* 0x37C */ s16 headRotZ;
     /* 0x37E */ s16 headRotY;
     /* 0x380 */ UNK_TYPE1 unk_380[0x4];
