@@ -3289,9 +3289,7 @@ beginseg
     name "ovl_Obj_Takaraya_Wall"
     compress
     include "build/src/overlays/actors/ovl_Obj_Takaraya_Wall/z_obj_takaraya_wall.o"
-    include "build/data/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall.data.o"
-    include "build/data/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall.bss.o"
-    include "build/data/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall_reloc.o"
 endseg
 
 beginseg
