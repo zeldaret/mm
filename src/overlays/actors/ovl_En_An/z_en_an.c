@@ -1197,6 +1197,9 @@ void EnAn_UpdateFace(EnAn* this) {
                         this->eyeTexIndex = ENAN_EYES_COMFORT;
                     }
                     break;
+
+                default:
+                    break;
             }
 
             if (!skipBlink) {
@@ -1572,7 +1575,7 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
     switch (this->msgEventState) {
         case 0x0:
             if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) ||
-                CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL)) {
                 this->msgEventState++;
                 goto label;
             } else {
@@ -1774,7 +1777,7 @@ s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
         }
 
         if ((this->scheduleResult == ANJU_SCH_LAUNDRY_POOL_SIT) &&
-            CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
+            CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL)) {
             this->stateFlags &= ~ENAN_STATE_ENGAGED;
         }
 
@@ -2656,7 +2659,7 @@ s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* s
                 this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 this->stateFlags |= ENAN_STATE_DRAW_UMBRELLA;
 
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SPOKE_TO_ANJU_IN_LAUNDRY_POOL)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL)) {
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRY);
                     this->stateFlags |= ENAN_STATE_IGNORE_GRAVITY;
                     this->actor.world.rot.y += 0x7FF8;
