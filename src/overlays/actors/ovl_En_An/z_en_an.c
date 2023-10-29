@@ -1383,15 +1383,14 @@ s32 EnAn_MsgEvent_ReceiveLetterFromPostman(Actor* thisx, PlayState* play) {
     switch (this->msgEventState) {
         case 0x0:
             ret = false;
-            if (EnAn_ChangeCutscene(this, csId)) {
-                goto label;
+            if (!EnAn_ChangeCutscene(this, csId)) {
+                break;
             }
-            break;
+            FALLTHROUGH;
 
         case 0x2:
         case 0x4:
         case 0x6:
-        label:
             Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             ret = true;
             this->msgEventState++;
@@ -1431,14 +1430,13 @@ s32 EnAn_MsgEvent_AttendGoron(Actor* thisx, PlayState* play) {
     switch (this->msgEventState) {
         case 0x0:
             ret = false;
-            if (EnAn_ChangeCutscene(this, csId)) {
-                goto label;
+            if (!EnAn_ChangeCutscene(this, csId)) {
+                break;
             }
-            break;
+            FALLTHROUGH;
 
         case 0x2:
         case 0x4:
-        label:
             Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             ret = true;
             this->msgEventState++;
@@ -1479,15 +1477,14 @@ s32 EnAn_MsgEvent_GiveLunchToGranny(Actor* thisx, PlayState* play) {
         case 0x0:
             ret = 0;
             if (EnAn_ChangeCutscene(this, csId)) {
-                goto label;
+                break;
             }
-            break;
+            FALLTHROUGH;
 
         case 0x2:
         case 0x4:
         case 0x6:
         case 0x8:
-        label:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
                 Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
                                       this->actor.child);
