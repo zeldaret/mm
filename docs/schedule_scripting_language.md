@@ -422,7 +422,36 @@ if_day (3) {
 
 ### `else`
 
-TODO
+An `else` signals which commands should be executed in case a [conditional check](#conditional-checks) does not
+evaluates to true. The `else` signals this by either having those instructions inside its own body (marked by braces)
+or by not having those braces but being immediately followed by another conditional check command, similar to C's
+`else if`.
+
+##### Example
+
+The following two scripts are equivalent:
+
+```c
+if_time_range (9, 50, 18, 1) {
+    return_time (9, 50, 18, 1, 1)
+} else {
+    if_time_range (18, 0, 6, 0) {
+        return_time (18, 0, 6, 0, 2)
+    } else {
+        return_l (0)
+    }
+}
+```
+
+```c
+if_time_range (9, 50, 18, 1) {
+    return_time (9, 50, 18, 1, 1)
+} else if_time_range (18, 0, 6, 0) {
+    return_time (18, 0, 6, 0, 2)
+} else {
+    return_l (0)
+}
+```
 
 ### Return commands
 
@@ -430,27 +459,89 @@ TODO
 
 TODO
 
+##### Arguments
+
+- Argument 0: TODO.
+
+##### Example
+
+```c
+TODO
+```
+
 #### `return_l`
 
 TODO
+
+##### Arguments
+
+- Argument 0: TODO.
+
+##### Example
+
+```c
+TODO
+```
 
 #### `return_none`
 
 TODO
 
+##### Arguments
+
+- Argument 0: TODO.
+
+##### Example
+
+```c
+TODO
+```
+
 #### `return_empty`
 
 TODO
+
+##### Arguments
+
+- Argument 0: TODO.
+
+##### Example
+
+```c
+TODO
+```
 
 #### `return_time`
 
 TODO
 
+##### Arguments
+
+- Argument 0: TODO.
+
+##### Example
+
+```c
+TODO
+```
+
 ### Miscellaneous commands
 
 #### `nop`
 
-TODO
+No operation. Doesn't perform an action or a check.
+
+##### Arguments
+
+- Argument 0: Unknown meaning. Ignored.
+- Argument 1: Unknown meaning. Ignored.
+- Argument 2: Unknown meaning. Ignored.
+
+##### Example
+
+```c
+nop (0, 1, 2)
+```
 
 ### Operators
 
@@ -460,13 +551,46 @@ Currently only one operator is allowed on the language, the [`not`](#not) operat
 
 #### `not`
 
-NOT = "not"
+A label is a special kind of command that doesn't get compiled into the actual low level script, instead it changes the
+meaning of the check that's right next ot it by inverting the logic of the check. In other words, the subcommands of a
+conditional check command will be executed if the check of said command evaluates to false instead of true.
 
-TODO
+A `not` must always be followed by a [conditional check command](#conditional-checks).
+
+##### Example
+
+The following two scripts are equivalent:
+
+```c
+if_week_event_reg (WEEKEVENTREG_51_08) {
+    if_since_time (22, 0) {
+        return_s (12)
+    } else {
+        return_none
+    }
+} else {
+    return_s (12)
+}
+```
+
+```c
+not if_week_event_reg (WEEKEVENTREG_51_08) {
+    return_s (12)
+} else {
+    if_since_time (22, 0) {
+        return_s (12)
+    } else {
+        return_none
+    }
+}
+```
 
 ### Labels
 
-A label is a special kind of command that doesn't get compiled into the actual low level script, but instead it is used
-as a marker to be used for [`branch`es](#branch).
+A label is a special kind of command that doesn't get compiled into the actual low level script, instead it is used as
+a marker to be used for [`branch`es](#branch).
 
-TODO
+A label is defined as an alphanumeric identifier (a to z, digits and underscores) followed by a colon (`:`). The colon
+is not considered part of the label's name.
+
+A label must always be followed by another command that isn't another label.

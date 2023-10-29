@@ -1,38 +1,34 @@
 if_day (2) {
     if_week_event_reg (WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) {
         return_none
-    } else {
-        if_scene (SCENE_ICHIBA) {
-            if_time_range (0, 0, 0, 25) {
-                return_time (0, 0, 0, 25, 13)
-            } else if_time_range (0, 25, 0, 30) {
-                return_time (0, 25, 0, 30, 6)
-            } else if_time_range (1, 15, 1, 20) {
-                return_time (1, 15, 1, 20, 7)
-            } else if_time_range (1, 20, 1, 45) {
-                return_time (1, 20, 1, 45, 14)
-            } else {
-                return_none
-            }
+    } else if_scene (SCENE_ICHIBA) {
+        if_time_range (0, 0, 0, 25) {
+            return_time (0, 0, 0, 25, 13)
+        } else if_time_range (0, 25, 0, 30) {
+            return_time (0, 25, 0, 30, 6)
+        } else if_time_range (1, 15, 1, 20) {
+            return_time (1, 15, 1, 20, 7)
+        } else if_time_range (1, 20, 1, 45) {
+            return_time (1, 20, 1, 45, 14)
         } else {
-            if_scene (SCENE_AYASHIISHOP) {
-                if_time_range (0, 25, 0, 30) {
-                    return_time (0, 25, 0, 30, 8)
-                } else if_time_range (0, 30, 0, 45) {
-                    return_time (0, 30, 0, 45, 10)
-                } else if_time_range (0, 45, 1, 0) {
-                    return_time (0, 45, 1, 0, 2)
-                } else if_time_range (1, 0, 1, 15) {
-                    return_time (1, 0, 1, 15, 11)
-                } else if_time_range (1, 15, 1, 20) {
-                    return_time (1, 15, 1, 20, 9)
-                } else {
-                    return_none
-                }
-            } else {
-                return_none
-            }
+            return_none
         }
+    } else if_scene (SCENE_AYASHIISHOP) {
+        if_time_range (0, 25, 0, 30) {
+            return_time (0, 25, 0, 30, 8)
+        } else if_time_range (0, 30, 0, 45) {
+            return_time (0, 30, 0, 45, 10)
+        } else if_time_range (0, 45, 1, 0) {
+            return_time (0, 45, 1, 0, 2)
+        } else if_time_range (1, 0, 1, 15) {
+            return_time (1, 0, 1, 15, 11)
+        } else if_time_range (1, 15, 1, 20) {
+            return_time (1, 15, 1, 20, 9)
+        } else {
+            return_none
+        }
+    } else {
+        return_none
     }
 } else if_day (1) {
     if_scene (SCENE_BACKTOWN) {
