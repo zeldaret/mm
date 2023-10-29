@@ -1197,9 +1197,6 @@ void EnAn_UpdateFace(EnAn* this) {
                         this->eyeTexIndex = ENAN_EYES_COMFORT;
                     }
                     break;
-
-                default:
-                    break;
             }
 
             if (!skipBlink) {
