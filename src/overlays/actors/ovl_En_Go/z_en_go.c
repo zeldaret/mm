@@ -12,7 +12,6 @@
  *     one outside the shop, not all Gorons in the Goron Shrine are covered by this actor).
  * - Medigoron: The Powder Keg making Medigoron in Goron Village.
  */
-
 #include "z_en_go.h"
 #include "z64quake.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
