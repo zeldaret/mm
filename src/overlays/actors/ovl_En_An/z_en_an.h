@@ -24,7 +24,7 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 #define ENAN_STATE_DRAW_TRAY        (1 << 11)
 #define ENAN_STATE_DRAW_UMBRELLA    (1 << 12)
 #define ENAN_STATE_DRAW_BROOM       (1 << 13)
-#define ENAN_STATE_DRAW_KAFEI_MASK  (1 << 14)
+#define ENAN_STATE_DRAW_KAFEIS_MASK (1 << 14)
 #define ENAN_STATE_DRAW_CHOPSTICKS  (1 << 15)
 
 typedef struct EnAn {
@@ -63,7 +63,7 @@ typedef struct EnAn {
     /* 0x360 */ u16 stateFlags;
     /* 0x362 */ u16 prevTextId;
     /* 0x364 */ u8 cueId;
-    /* 0x368 */ f32 unk_368;
+    /* 0x368 */ f32 animPlaySpeed;
     /* 0x36C */ UNK_TYPE1 unk_36C[0x8];
     /* 0x374 */ f32 offerRange;
     /* 0x378 */ s16 doorTimeTotalDiff; // Time difference between the point before going through a door and after going through it

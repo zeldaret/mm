@@ -14011,7 +14011,7 @@
     0x80B539CC:("EnAn_FindActor",),
     0x80B53A7C:("func_80B53A7C",),
     0x80B53B3C:("EnAn_FindDoor",),
-    0x80B53BA8:("EnAn_UpdateSkel",),
+    0x80B53BA8:("EnAn_UpdateSkelAnime",),
     0x80B53CE8:("EnAn_ChangeAnim",),
     0x80B53ED4:("EnAn_UpdateCollider",),
     0x80B53F84:("EnAn_UpdateFace",),

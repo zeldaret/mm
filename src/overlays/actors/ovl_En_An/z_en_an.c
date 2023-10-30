@@ -1015,7 +1015,7 @@ static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
     { &gAnju4LookUpLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAN_ANIM_LOOK_UP_LOOP
 };
 
-s32 EnAn_UpdateSkel(EnAn* this, PlayState* play) {
+s32 EnAn_UpdateSkelAnime(EnAn* this, PlayState* play) {
     s8 originalObjectSlot = this->actor.objectSlot;
     s8 otherObjectSlot = OBJECT_SLOT_NONE;
     s32 ret = 0;
@@ -1036,7 +1036,7 @@ s32 EnAn_UpdateSkel(EnAn* this, PlayState* play) {
 
     if (otherObjectSlot > OBJECT_SLOT_NONE) {
         gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
-        this->skelAnime.playSpeed = this->unk_368;
+        this->skelAnime.playSpeed = this->animPlaySpeed;
         ret = SkelAnime_Update(&this->skelAnime);
         gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
     }
@@ -1048,7 +1048,7 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
     s8 originalObjectSlot = this->actor.objectSlot;
     s8 otherObjectSlot = OBJECT_SLOT_NONE;
     s32 changeAnim = false;
-    s32 ret = false;
+    s32 didAnimChange = false;
 
     if ((animIndex >= ENAN_ANIMOBJ_AN4) && (this->an4ObjectSlot > OBJECT_SLOT_NONE)) {
         otherObjectSlot = this->an4ObjectSlot;
@@ -1061,7 +1061,7 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
     }
 
     if (otherObjectSlot <= OBJECT_SLOT_NONE) {
-        return 0;
+        return false;
     }
 
     switch (animIndex) {
@@ -1096,12 +1096,12 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
     if (changeAnim && (otherObjectSlot > OBJECT_SLOT_NONE)) {
         gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[otherObjectSlot].segment);
         this->animIndex = animIndex;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        this->unk_368 = this->skelAnime.playSpeed;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
         gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[originalObjectSlot].segment);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 void EnAn_UpdateCollider(EnAn* this, PlayState* play) {
@@ -1264,7 +1264,7 @@ void EnAn_DrawAccessory(EnAn* this, PlayState* play, EnAnAccessory accessoryId) 
 
         case ENAN_ACCESSORY_KAFEI_MASK:
             otherObjectSlot = this->maskKerfayObjectSlot;
-            if ((this->stateFlags & ENAN_STATE_DRAW_KAFEI_MASK) && !this->forceDraw &&
+            if ((this->stateFlags & ENAN_STATE_DRAW_KAFEIS_MASK) && !this->forceDraw &&
                 (otherObjectSlot > OBJECT_SLOT_NONE)) {
                 static Vec3f D_80B58E54 = { 190.0f, -130.0f, 0.0f };
                 static Vec3s D_80B58E60 = { 0, 0, 0x4168 };
@@ -1471,11 +1471,11 @@ s32 EnAn_MsgEvent_AttendGoron(Actor* thisx, PlayState* play) {
 s32 EnAn_MsgEvent_GiveLunchToGranny(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
     s16 csId = EnAn_GetChildCsId(this, 0);
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (this->msgEventState) {
         case 0x0:
-            ret = 0;
+            ret = false;
             if (!EnAn_ChangeCutscene(this, csId)) {
                 break;
             }
@@ -1489,7 +1489,7 @@ s32 EnAn_MsgEvent_GiveLunchToGranny(Actor* thisx, PlayState* play) {
                 Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
                                       this->actor.child);
             }
-            ret = 1;
+            ret = true;
             this->msgEventState++;
             break;
 
@@ -1498,13 +1498,13 @@ s32 EnAn_MsgEvent_GiveLunchToGranny(Actor* thisx, PlayState* play) {
         case 0x5:
         case 0x7:
             Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
-            ret = 1;
+            ret = true;
             this->msgEventState++;
             break;
 
         case 0x9:
             CutsceneManager_Stop(csId);
-            ret = 1;
+            ret = true;
             this->msgEventState++;
             break;
 
@@ -1571,17 +1571,17 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
             if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL)) {
                 this->msgEventState++;
-                goto label;
+                // fallthrough
             } else {
                 ret = true;
-                this->stateFlags |= ENAN_STATE_DRAW_KAFEI_MASK;
+                this->stateFlags |= ENAN_STATE_DRAW_KAFEIS_MASK;
                 this->msgEventState++;
             }
-            break;
+            FALLTHROUGH;
 
         case 0x1:
         label:
-            this->stateFlags &= ~(ENAN_STATE_ENGAGED | ENAN_STATE_DRAW_KAFEI_MASK);
+            this->stateFlags &= ~(ENAN_STATE_ENGAGED | ENAN_STATE_DRAW_KAFEIS_MASK);
             this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
             EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRY);
             ret = true;
@@ -1996,7 +1996,7 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
 
                 case 0x28EB: // "I'm afraid to meet him..."
                     if (this->animIndex != ENAN_ANIM_UMBRELLA_CRY) {
-                        this->stateFlags &= ~(ENAN_STATE_ENGAGED | ENAN_STATE_DRAW_KAFEI_MASK);
+                        this->stateFlags &= ~(ENAN_STATE_ENGAGED | ENAN_STATE_DRAW_KAFEIS_MASK);
                         this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
                         EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRY);
                     }
@@ -2115,6 +2115,7 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
                 case 0x28F5: // "The town will be crushed by the moon. Forget about the letter"
                     this->savedFaceIndex = ENAN_FACE_0;
                     FALLTHROUGH;
+
                 case 0x28A5: // "Visit us again in the future"
                 case 0x28AA: // "One moment please"
                 case 0x28F8: // "We'll go to Romani Ranch to take refuge"
@@ -2181,6 +2182,7 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
                 case 0x28EC: // "Should I wait?"
                     this->savedFaceIndex = ENAN_FACE_5;
                     FALLTHROUGH;
+
                 case 0x28DC: // "Thank you"
                 case 0x28EB: // "I'm afraid to meet him..."
                 case 0x28F2: // "I wonder if Kafei is really at Cremia's"
@@ -2228,10 +2230,6 @@ Actor* EnAn_FindLookAtActor(EnAn* this, PlayState* play) {
     Actor* actor;
 
     switch (this->scheduleResult) {
-        default:
-            actor = &GET_PLAYER(play)->actor;
-            break;
-
         case ANJU_SCH_GIVE_LUNCH_TO_GRANNY:
             actor = EnAn_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_NB);
             break;
@@ -2242,6 +2240,10 @@ Actor* EnAn_FindLookAtActor(EnAn* this, PlayState* play) {
 
         case ANJU_SCH_ATTEND_GORON:
             actor = EnAn_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_IG);
+            break;
+
+        default:
+            actor = &GET_PLAYER(play)->actor;
             break;
     }
 
@@ -2512,6 +2514,7 @@ s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* sc
             case ANJU_SCH_WALKING_43:
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 FALLTHROUGH;
+
             case ANJU_SCH_WALKING_44:
             case ANJU_SCH_WALKING_45:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK_WITH_TRAY);
@@ -2555,6 +2558,7 @@ s32 EnAn_ProcessSchedule_Walking(EnAn* this, PlayState* play, ScheduleOutput* sc
                 SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->stateFlags |= ENAN_STATE_UPDATE_EYES | ENAN_STATE_LOST_ATTENTION;
                 FALLTHROUGH;
+
             default:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_WALK);
                 break;
@@ -2636,6 +2640,7 @@ s32 EnAn_ProcessSchedule_80B56880(EnAn* this, PlayState* play, ScheduleOutput* s
             case ANJU_SCH_WAITING_CLOSING_TIME:
                 this->actor.world.rot.y += 0x7FF8;
                 FALLTHROUGH;
+
             case ANJU_SCH_RECEPTIONIST_IDLE:
             case ANJU_SCH_MIDNIGHT_MEETING:
                 EnAn_ChangeAnim(this, play, ENAN_ANIM_IDLE);
@@ -3255,7 +3260,7 @@ void EnAn_Talk(EnAn* this, PlayState* play) {
 }
 
 void EnAn_HandleCouplesMaskCutscene(EnAn* this, PlayState* play) {
-    s32 animIds[] = {
+    s32 csAnimIndex[] = {
         /* 0 */ 0, // no cue
         /* 1 */ ENAN_ANIM_SITTING_IN_DISBELIEF,
         /* 2 */ ENAN_ANIM_LOOK_UP,
@@ -3287,7 +3292,7 @@ void EnAn_HandleCouplesMaskCutscene(EnAn* this, PlayState* play) {
                 this->drawMoonMask = false;
             }
 
-            EnAn_ChangeAnim(this, play, animIds[cueId]);
+            EnAn_ChangeAnim(this, play, csAnimIndex[cueId]);
         }
 
         if ((this->animIndex == ENAN_ANIM_MASK_KNEEL) || (this->animIndex == ENAN_ANIM_HUG) ||
@@ -3351,7 +3356,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
     if ((this->actionFunc != EnAn_Initialize) && !EnAn_CheckTalk(this, play) &&
         EnAn_IsCouplesMaskCsPlaying(this, play)) {
         EnAn_HandleCouplesMaskCutscene(this, play);
-        EnAn_UpdateSkel(this, play);
+        EnAn_UpdateSkelAnime(this, play);
         EnAn_UpdateFace(this);
         return;
     }
@@ -3359,7 +3364,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     if (this->scheduleResult != ANJU_SCH_NONE) {
         EnAn_HandleDialogue(this, play);
-        EnAn_UpdateSkel(this, play);
+        EnAn_UpdateSkelAnime(this, play);
         EnAn_UpdateFace(this);
         EnAn_UpdateAttention(this);
         SubS_Offer(&this->actor, play, this->offerRange, 30.0f, 0, this->stateFlags & SUBS_OFFER_MODE_MASK);
