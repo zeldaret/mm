@@ -5,6 +5,7 @@
  */
 
 #include "z_dm_tsg.h"
+#include "objects/object_open_obj/object_open_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -15,7 +16,6 @@ void DmTsg_Destroy(Actor* thisx, PlayState* play);
 void DmTsg_Update(Actor* thisx, PlayState* play);
 void DmTsg_Draw(Actor* thisx, PlayState* play);
 
-#if 0
 ActorInit Dm_Tsg_InitVars = {
     /**/ ACTOR_DM_TSG,
     /**/ ACTORCAT_ITEMACTION,
@@ -28,14 +28,66 @@ ActorInit Dm_Tsg_InitVars = {
     /**/ DmTsg_Draw,
 };
 
-#endif
+void DmTsg_Init(Actor* thisx, PlayState* play) {
+    DmTsg* this = THIS;
+    s32 i;
 
-extern UNK_TYPE D_06011458;
+    if (gSaveContext.save.entrance == 0x2E00) {
+        Actor_SetScale(&this->actor, 0.1f);
+        for (i = 0; i < 100; i++) {
+            this->unk_78C[i] = (Rand_ZeroOne() * 65535.0f);
+            this->unk_856[i] = (s16)(Rand_ZeroOne() * 200.0f) + 100;
+        }
+    } else {
+        Actor_Kill(&this->actor);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tsg/DmTsg_Init.s")
+void DmTsg_Destroy(Actor* thisx, PlayState* play) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tsg/DmTsg_Destroy.s")
+void DmTsg_Update(Actor* thisx, PlayState* play) {
+    DmTsg* this = (DmTsg*)thisx;
+    s32 cueChannel;
+    s16 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tsg/DmTsg_Update.s")
+    for (i = 0; i < 100; i++) {
+        this->unk_5F8[i] = (Math_SinS((i & 0xF) * this->unk_854) * 60.0f) + 120.0f;
+        this->unk_148[i].x = Math_CosS(this->unk_78C[i]) * this->unk_5F8[i];
+        this->unk_148[i].y = this->unk_788 + (i * 16);
+        this->unk_148[i].z = Math_SinS(this->unk_78C[i]) * this->unk_5F8[i];
+        this->unk_78C[i] += this->unk_856[i];
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tsg/DmTsg_Draw.s")
+    this->unk_91E = 0;
+    this->unk_854 += 40;
+
+    if (Cutscene_IsCueInChannel(play, 0x202)) {
+        cueChannel = Cutscene_GetCueChannel(play, 0x202);
+        if (play->csCtx.actorCues[cueChannel]->id != 1) {
+            this->unk_91E = 1;
+        }
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
+    }
+}
+
+void DmTsg_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    DmTsg* this = THIS;
+    s32 i;
+    u32 j;
+
+    if (this->unk_91E != 0) {
+        for (i = 0, j = 0; i < 100; i += 1) {
+            Matrix_Translate(this->unk_148[i].x + this->actor.world.pos.x, this->unk_148[i].y + this->actor.world.pos.y,
+                             this->unk_148[i].z + this->actor.world.pos.z, MTXMODE_NEW);
+            Matrix_Scale(0.3f, 0.3f, 0.3f, MTXMODE_APPLY);
+            AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(object_open_obj_Matanimheader_011458), j++);
+            Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
+            Gfx_DrawDListXlu(play, object_open_obj_DL_002D30);
+            if (j >= 10) {
+                j = 0;
+            }
+        }
+    }
+}
