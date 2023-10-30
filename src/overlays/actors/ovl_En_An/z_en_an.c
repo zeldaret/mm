@@ -1361,7 +1361,7 @@ s16 EnAn_GetCsId(EnAn* this, s32 numCutscenes) {
 
 s16 EnAn_GetChildCsId(EnAn* this, s32 numCutscenes) {
     Actor* child = this->actor.child;
-    s16 csId = -1;
+    s16 csId = CS_ID_NONE;
     s32 i;
 
     if ((child != NULL) && (child->update != NULL)) {
