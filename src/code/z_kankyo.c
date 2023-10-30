@@ -2789,7 +2789,7 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
             envA1 = D_801F4E30;
             step = 1;
             if (sandstormState == SANDSTORM_8) {
-                step = 0xA;
+                step = 10;
             }
             break;
 
@@ -2800,7 +2800,7 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
                 play->envCtx.sandstormState = SANDSTORM_OFF;
             }
             if (sandstormState == SANDSTORM_9) {
-                step = 0xA;
+                step = 10;
             }
             break;
 
@@ -2815,11 +2815,11 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
 
         case SANDSTORM_B:
             primA1 = play->state.frames & 0x7F;
-            if (primA1 >= 0x41) {
-                primA1 = 0x80 - primA1;
+            if (primA1 > 64) {
+                primA1 = 128 - primA1;
             }
-            primA1 += 0x49;
-            envA1 = 0x80;
+            primA1 += 73;
+            envA1 = 128;
             break;
 
         case SANDSTORM_C:
@@ -2831,7 +2831,7 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
         case SANDSTORM_D:
             primA1 = D_801F4E30;
             envA1 = D_801F4E30;
-            step = 0xA;
+            step = 10;
             break;
 
         default:
@@ -3138,7 +3138,7 @@ void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height)
 
 #ifdef NON_MATCHING
 // `D_801DD900`is loading unaligned but storing aligned
-// Also small float regalloc and the randomized
+// Also small float regalloc at the sRandFloat section
 // https://decomp.me/scratch/3zFop
 void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     static const Vec3s D_801DD880[] = {
