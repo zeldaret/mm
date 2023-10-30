@@ -1670,7 +1670,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
             return sAnjuMsgScript_80B58A44;
         }
 
-        if (SCHEDULE_CONVERT_TIME(gSaveContext.save.time) < SCHEDULE_TIME(14, 18)) {
+        if (SCHEDULE_TIME_NOW < SCHEDULE_TIME(14, 18)) {
             return sAnjuMsgScript_80B58ABC;
         }
 
