@@ -1213,7 +1213,7 @@ void EnAn_UpdateFace(EnAn* this) {
                 if (this->eyeTexIndex > ENAN_EYES_HALF2) {
                     if ((this->faceIndex == ENAN_FACE_0) || (this->faceIndex == ENAN_FACE_1) ||
                         (this->faceIndex == ENAN_FACE_3)) {
-                        this->eyeTimer = Rand_S16Offset(0x1E, 0x1E);
+                        this->eyeTimer = Rand_S16Offset(30, 30);
                     } else {
                         this->eyeTimer = 8;
                     }
