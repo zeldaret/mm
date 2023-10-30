@@ -14,7 +14,7 @@
 void DmTsg_Init(Actor* thisx, PlayState* play);
 void DmTsg_Destroy(Actor* thisx, PlayState* play);
 void DmTsg_Update(Actor* thisx, PlayState* play);
-void DmTsg_Draw(Actor* thisx, PlayState* play);
+void DmTsg_Draw(Actor* thisx, PlayState* play2);
 
 ActorInit Dm_Tsg_InitVars = {
     /**/ ACTOR_DM_TSG,
