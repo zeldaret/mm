@@ -1576,6 +1576,7 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
                 ret = true;
                 this->stateFlags |= ENAN_STATE_DRAW_KAFEIS_MASK;
                 this->msgEventState++;
+                break;
             }
             FALLTHROUGH;
 
@@ -2906,7 +2907,7 @@ s32 EnAn_HandleSch_Door(EnAn* this, PlayState* play) {
         }
     }
 
-    return 0;
+    return false;
 }
 
 s32 EnAn_HandleSch_FollowTimePath(EnAn* this, PlayState* play) {
@@ -2962,7 +2963,7 @@ s32 EnAn_HandleSch_FollowTimePath(EnAn* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_PIRATE_WALK);
     }
 
-    return 0;
+    return false;
 }
 
 s32 EnAn_HandleSch_80B572D4(EnAn* this, PlayState* play) {
