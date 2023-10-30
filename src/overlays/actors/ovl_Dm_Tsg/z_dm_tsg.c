@@ -32,7 +32,7 @@ void DmTsg_Init(Actor* thisx, PlayState* play) {
     DmTsg* this = THIS;
     s32 i;
 
-    if (gSaveContext.save.entrance == 0x2E00) {
+    if (gSaveContext.save.entrance == ENTRANCE(OPENING_DUNGEON, 0)) {
         Actor_SetScale(&this->actor, 0.1f);
         for (i = 0; i < 100; i++) {
             this->unk_78C[i] = (Rand_ZeroOne() * 65535.0f);
@@ -47,7 +47,7 @@ void DmTsg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DmTsg_Update(Actor* thisx, PlayState* play) {
-    DmTsg* this = (DmTsg*)thisx;
+    DmTsg* this = THIS;
     s32 cueChannel;
     s16 i;
 
@@ -62,8 +62,8 @@ void DmTsg_Update(Actor* thisx, PlayState* play) {
     this->unk_91E = 0;
     this->unk_854 += 40;
 
-    if (Cutscene_IsCueInChannel(play, 0x202)) {
-        cueChannel = Cutscene_GetCueChannel(play, 0x202);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_514)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_514);
         if (play->csCtx.actorCues[cueChannel]->id != 1) {
             this->unk_91E = 1;
         }
@@ -78,7 +78,7 @@ void DmTsg_Draw(Actor* thisx, PlayState* play2) {
     u32 j;
 
     if (this->unk_91E != 0) {
-        for (i = 0, j = 0; i < 100; i += 1) {
+        for (i = 0, j = 0; i < 100; i++) {
             Matrix_Translate(this->unk_148[i].x + this->actor.world.pos.x, this->unk_148[i].y + this->actor.world.pos.y,
                              this->unk_148[i].z + this->actor.world.pos.z, MTXMODE_NEW);
             Matrix_Scale(0.3f, 0.3f, 0.3f, MTXMODE_APPLY);
