@@ -1444,7 +1444,7 @@ s32 EnAn_MsgEvent_AttendGoron(Actor* thisx, PlayState* play) {
 
         case 0x1:
         case 0x3:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY)) && (this->msgEventState == 3)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY) && (this->msgEventState == 3)) {
                 CutsceneManager_Stop(csId);
                 this->msgEventState = 5;
             } else if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
