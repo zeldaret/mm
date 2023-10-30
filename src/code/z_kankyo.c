@@ -3138,7 +3138,7 @@ void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height)
 
 #ifdef NON_MATCHING
 // `D_801DD900`is loading unaligned but storing aligned
-// Also small float regalloc at the sRandFloat section
+// Also small float regalloc at the gRandFloat section
 // https://decomp.me/scratch/3zFop
 void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     static const Vec3s D_801DD880[] = {
@@ -3219,13 +3219,13 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
 
             // temp_f4 = Rand_ZeroOne_Variable(&randInt);
             randInt = (randInt * 1664525) + 1013904223;
-            sRandFloat = (randInt >> 9) | 0x3F800000;
-            temp_f4 = *((f32*)&sRandFloat) - 1.0f;
+            gRandFloat = (randInt >> 9) | 0x3F800000;
+            temp_f4 = *((f32*)&gRandFloat) - 1.0f;
 
             // temp_f20 = Rand_ZeroOne_Variable(&randInt);
             randInt = (randInt * 1664525) + 1013904223;
-            sRandFloat = (randInt >> 9) | 0x3F800000;
-            temp_f20 = ((*((f32*)&sRandFloat) - 1.0f) + temp_f4) * 0.5f;
+            gRandFloat = (randInt >> 9) | 0x3F800000;
+            temp_f20 = ((*((f32*)&gRandFloat) - 1.0f) + temp_f4) * 0.5f;
 
             // randInt = Rand_Next_Variable(&randInt);
             randInt = (randInt * 1664525) + 1013904223;
@@ -3237,8 +3237,8 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
 
             // temp_f2 = Rand_ZeroOne_Variable(&randInt);
             randInt = (randInt * 1664525) + 1013904223;
-            sRandFloat = ((randInt >> 9) | 0x3F800000);
-            temp_f2 = *((f32*)&sRandFloat) - 1.0f;
+            gRandFloat = ((randInt >> 9) | 0x3F800000);
+            temp_f2 = *((f32*)&gRandFloat) - 1.0f;
 
             // Set random width
             imgWidth = (u32)((SQ(temp_f2) * 8.0f) + 2.0f);
