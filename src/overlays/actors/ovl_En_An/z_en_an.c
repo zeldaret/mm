@@ -1645,10 +1645,8 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
                 return sAnjuMsgScript_80B589FC;
 
             default:
-                break;
+                return sAnjuMsgScript_DekuDefault;
         }
-
-        return sAnjuMsgScript_DekuDefault;
     }
 
     if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
