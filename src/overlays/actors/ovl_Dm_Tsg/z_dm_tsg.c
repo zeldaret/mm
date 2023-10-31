@@ -59,13 +59,13 @@ void DmTsg_Update(Actor* thisx, PlayState* play) {
         this->unk_78C[i] += this->unk_856[i];
     }
 
-    this->unk_91E = 0;
+    this->unk_91E = false;
     this->unk_854 += 40;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_514)) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_514);
         if (play->csCtx.actorCues[cueChannel]->id != 1) {
-            this->unk_91E = 1;
+            this->unk_91E = true;
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
@@ -77,7 +77,7 @@ void DmTsg_Draw(Actor* thisx, PlayState* play2) {
     s32 i;
     u32 j;
 
-    if (this->unk_91E != 0) {
+    if (this->unk_91E) {
         for (i = 0, j = 0; i < 100; i++) {
             Matrix_Translate(this->unk_148[i].x + this->actor.world.pos.x, this->unk_148[i].y + this->actor.world.pos.y,
                              this->unk_148[i].z + this->actor.world.pos.z, MTXMODE_NEW);
