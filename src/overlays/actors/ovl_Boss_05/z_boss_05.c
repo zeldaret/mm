@@ -207,15 +207,15 @@ static DamageTable sDamageTable2 = {
 };
 
 ActorInit Boss_05_InitVars = {
-    ACTOR_BOSS_05,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BOSS05,
-    sizeof(Boss05),
-    (ActorFunc)Boss05_Init,
-    (ActorFunc)Boss05_Destroy,
-    (ActorFunc)Boss05_Update,
-    (ActorFunc)Boss05_Draw,
+    /**/ ACTOR_BOSS_05,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS05,
+    /**/ sizeof(Boss05),
+    /**/ Boss05_Init,
+    /**/ Boss05_Destroy,
+    /**/ Boss05_Update,
+    /**/ Boss05_Draw,
 };
 
 void func_809EE4E0(Boss05* this, PlayState* play) {

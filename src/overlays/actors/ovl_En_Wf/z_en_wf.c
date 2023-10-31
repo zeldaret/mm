@@ -57,15 +57,15 @@ void func_8099357C(EnWf* this, PlayState* play);
 s32 func_8099408C(PlayState* play, EnWf* this);
 
 ActorInit En_Wf_InitVars = {
-    ACTOR_EN_WF,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_WF,
-    sizeof(EnWf),
-    (ActorFunc)EnWf_Init,
-    (ActorFunc)EnWf_Destroy,
-    (ActorFunc)EnWf_Update,
-    (ActorFunc)EnWf_Draw,
+    /**/ ACTOR_EN_WF,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_WF,
+    /**/ sizeof(EnWf),
+    /**/ EnWf_Init,
+    /**/ EnWf_Destroy,
+    /**/ EnWf_Update,
+    /**/ EnWf_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[4] = {

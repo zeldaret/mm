@@ -46,15 +46,15 @@ void func_80A26B74(ObjIceblock* this, PlayState* play);
 void func_80A26BF8(ObjIceblock* this, PlayState* play);
 
 ActorInit Obj_Iceblock_InitVars = {
-    ACTOR_OBJ_ICEBLOCK,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_ICE_BLOCK,
-    sizeof(ObjIceblock),
-    (ActorFunc)ObjIceblock_Init,
-    (ActorFunc)ObjIceblock_Destroy,
-    (ActorFunc)ObjIceblock_Update,
-    (ActorFunc)ObjIceblock_Draw,
+    /**/ ACTOR_OBJ_ICEBLOCK,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_ICE_BLOCK,
+    /**/ sizeof(ObjIceblock),
+    /**/ ObjIceblock_Init,
+    /**/ ObjIceblock_Destroy,
+    /**/ ObjIceblock_Update,
+    /**/ ObjIceblock_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -1209,7 +1209,7 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
         func_80A23370(this, sp2C);
         func_80A260E8(this);
         sp30 = false;
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
         this->unk_1B0 |= 1;
     }
 
@@ -1255,7 +1255,7 @@ void func_80A26144(ObjIceblock* this, PlayState* play) {
 
     if ((this->unk_1B0 & 1) && (isBool || sp28 || (this->dyna.actor.xzDistToPlayer > 400.0f))) {
         this->unk_1B0 &= ~1;
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_END);
     }
 
     if (isBool) {
@@ -1454,7 +1454,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         this->unk_1B0 &= ~0x100;
         if (this->unk_1B0 & 1) {
             this->unk_1B0 &= ~1;
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_END);
         }
         func_80A266C4(this);
     }

@@ -19,16 +19,16 @@ void BgF40Swlift_Draw(Actor* thisx, PlayState* play);
 static s32 sSwitchFlags[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
 static s32 sHeights[4];
 
-const ActorInit Bg_F40_Swlift_InitVars = {
-    ACTOR_BG_F40_SWLIFT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_F40_OBJ,
-    sizeof(BgF40Swlift),
-    (ActorFunc)BgF40Swlift_Init,
-    (ActorFunc)BgF40Swlift_Destroy,
-    (ActorFunc)BgF40Swlift_Update,
-    (ActorFunc)BgF40Swlift_Draw,
+ActorInit Bg_F40_Swlift_InitVars = {
+    /**/ ACTOR_BG_F40_SWLIFT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_F40_OBJ,
+    /**/ sizeof(BgF40Swlift),
+    /**/ BgF40Swlift_Init,
+    /**/ BgF40Swlift_Destroy,
+    /**/ BgF40Swlift_Update,
+    /**/ BgF40Swlift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

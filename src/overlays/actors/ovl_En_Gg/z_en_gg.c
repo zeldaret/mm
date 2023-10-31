@@ -26,15 +26,15 @@ void func_80B363E8(EnGgStruct* ptr, PlayState* play, Vec3f* arg1, Vec3f* arg2, V
 void func_80B364D4(EnGgStruct* ptr, PlayState* play);
 
 ActorInit En_Gg_InitVars = {
-    ACTOR_EN_GG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GG,
-    sizeof(EnGg),
-    (ActorFunc)EnGg_Init,
-    (ActorFunc)EnGg_Destroy,
-    (ActorFunc)EnGg_Update,
-    (ActorFunc)EnGg_Draw,
+    /**/ ACTOR_EN_GG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_GG,
+    /**/ sizeof(EnGg),
+    /**/ EnGg_Init,
+    /**/ EnGg_Destroy,
+    /**/ EnGg_Update,
+    /**/ EnGg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

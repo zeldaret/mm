@@ -77,15 +77,15 @@ static UNK_TYPE D_80A889A4[] = {
 };
 
 ActorInit En_Tru_InitVars = {
-    ACTOR_EN_TRU,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TRU,
-    sizeof(EnTru),
-    (ActorFunc)EnTru_Init,
-    (ActorFunc)EnTru_Destroy,
-    (ActorFunc)EnTru_Update,
-    (ActorFunc)EnTru_Draw,
+    /**/ ACTOR_EN_TRU,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TRU,
+    /**/ sizeof(EnTru),
+    /**/ EnTru_Init,
+    /**/ EnTru_Destroy,
+    /**/ EnTru_Update,
+    /**/ EnTru_Draw,
 };
 
 #include "overlays/ovl_En_Tru/ovl_En_Tru.c"

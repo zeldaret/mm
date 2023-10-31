@@ -23,15 +23,15 @@ void func_809AD194(EnEncount3* this, PlayState* play);
 void func_809AD1EC(EnEncount3* this, PlayState* play);
 
 ActorInit En_Encount3_InitVars = {
-    ACTOR_EN_ENCOUNT3,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BIG_FWALL,
-    sizeof(EnEncount3),
-    (ActorFunc)EnEncount3_Init,
-    (ActorFunc)EnEncount3_Destroy,
-    (ActorFunc)EnEncount3_Update,
-    (ActorFunc)EnEncount3_Draw,
+    /**/ ACTOR_EN_ENCOUNT3,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BIG_FWALL,
+    /**/ sizeof(EnEncount3),
+    /**/ EnEncount3_Init,
+    /**/ EnEncount3_Destroy,
+    /**/ EnEncount3_Update,
+    /**/ EnEncount3_Draw,
 };
 
 s32 D_809AD810 = false;
@@ -49,10 +49,10 @@ void EnEncount3_Init(Actor* thisx, PlayState* play) {
     } else if (this->unk16C > 1000.0f) {
         this->unk16C = 1000.0f;
     }
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == ENCOUNT3_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
@@ -71,7 +71,7 @@ void func_809AD058(EnEncount3* this) {
 }
 
 void func_809AD084(EnEncount3* this, PlayState* play) {
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -94,7 +94,7 @@ void func_809AD084(EnEncount3* this, PlayState* play) {
 void func_809AD194(EnEncount3* this, PlayState* play) {
     if (this->unk14E == 0) {
         this->unk178 = 0.0f;
-        if (this->switchFlag >= 0) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         this->actionFunc = func_809AD1EC;
@@ -199,7 +199,7 @@ void EnEncount3_Draw(Actor* thisx, PlayState* play) {
         Matrix_Scale(this->unk168, this->unk174, this->unk168, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, object_big_fwall_DL_0009A0);
+        gSPDisplayList(POLY_XLU_DISP++, gRingOfFireDL);
 
         Matrix_Pop();
         CLOSE_DISPS(play->state.gfxCtx);

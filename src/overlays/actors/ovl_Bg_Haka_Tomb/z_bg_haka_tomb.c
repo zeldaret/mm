@@ -24,15 +24,15 @@ void BgHakaTomb_SetupDoNothing(BgHakaTomb* this);
 void BgHakaTomb_DoNothing(BgHakaTomb* this, PlayState* play);
 
 ActorInit Bg_Haka_Tomb_InitVars = {
-    ACTOR_BG_HAKA_TOMB,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HAKA_OBJ,
-    sizeof(BgHakaTomb),
-    (ActorFunc)BgHakaTomb_Init,
-    (ActorFunc)BgHakaTomb_Destroy,
-    (ActorFunc)BgHakaTomb_Update,
-    (ActorFunc)BgHakaTomb_Draw,
+    /**/ ACTOR_BG_HAKA_TOMB,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HAKA_OBJ,
+    /**/ sizeof(BgHakaTomb),
+    /**/ BgHakaTomb_Init,
+    /**/ BgHakaTomb_Destroy,
+    /**/ BgHakaTomb_Update,
+    /**/ BgHakaTomb_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

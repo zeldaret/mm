@@ -23,15 +23,15 @@ void func_80931E58(ObjIcePoly* this, PlayState* play);
 void func_80931EEC(ObjIcePoly* this, PlayState* play);
 
 ActorInit Obj_Ice_Poly_InitVars = {
-    ACTOR_OBJ_ICE_POLY,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjIcePoly),
-    (ActorFunc)ObjIcePoly_Init,
-    (ActorFunc)ObjIcePoly_Destroy,
-    (ActorFunc)ObjIcePoly_Update,
-    (ActorFunc)ObjIcePoly_Draw,
+    /**/ ACTOR_OBJ_ICE_POLY,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjIcePoly),
+    /**/ ObjIcePoly_Init,
+    /**/ ObjIcePoly_Destroy,
+    /**/ ObjIcePoly_Update,
+    /**/ ObjIcePoly_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
@@ -115,7 +115,7 @@ void ObjIcePoly_Init(Actor* thisx, PlayState* play) {
     thisx->shape.rot.x = 0x500;
     thisx->shape.rot.z = -0x500;
 
-    if (((this->switchFlag != 0xFF) && Flags_GetSwitch(play, this->switchFlag)) ||
+    if (((this->switchFlag != OBJICEPOLY_SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) ||
         ((play->sceneId == SCENE_KAJIYA) && CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE))) {
         Actor_Kill(thisx);
         return;
@@ -219,7 +219,7 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
                 }
             } while (actor != NULL);
         }
-    } else if ((this->switchFlag != 0xFF) && Flags_GetSwitch(play, this->switchFlag)) {
+    } else if ((this->switchFlag != OBJICEPOLY_SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         CutsceneManager_Queue(this->actor.csId);
         this->unk_14A = 1;
         this->actionFunc = func_80931E58;
@@ -328,7 +328,7 @@ void func_80931EEC(ObjIcePoly* this, PlayState* play) {
 
     if (this->unk_14A == 0) {
         CutsceneManager_Stop(this->actor.csId);
-        if (this->switchFlag != 0xFF) {
+        if (this->switchFlag != OBJICEPOLY_SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         Actor_Kill(&this->actor);

@@ -64,15 +64,15 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit Boss_04_InitVars = {
-    ACTOR_BOSS_04,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS04,
-    sizeof(Boss04),
-    (ActorFunc)Boss04_Init,
-    (ActorFunc)Boss04_Destroy,
-    (ActorFunc)Boss04_Update,
-    (ActorFunc)Boss04_Draw,
+    /**/ ACTOR_BOSS_04,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS04,
+    /**/ sizeof(Boss04),
+    /**/ Boss04_Init,
+    /**/ Boss04_Destroy,
+    /**/ Boss04_Update,
+    /**/ Boss04_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
@@ -264,7 +264,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     this->subCamId = Play_CreateSubCamera(play);
                     Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                     Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-                    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+                    func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
                     player->actor.shape.rot.y = 0x7FFF;
@@ -314,7 +314,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
             if (this->unk_704 == 45) {
                 this->unk_708 = 1;
                 this->unk_704 = 0;
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_21);
                 this->actor.gravity = 0.0f;
                 break;
             }
@@ -391,7 +391,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
                 Play_DisableMotionBlur();
                 SET_EVENTINF(EVENTINF_60);
             }

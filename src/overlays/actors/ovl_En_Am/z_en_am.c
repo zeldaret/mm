@@ -39,15 +39,15 @@ void func_808B0B4C(EnAm* this, PlayState* play);
 void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Am_InitVars = {
-    ACTOR_EN_AM,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_AM,
-    sizeof(EnAm),
-    (ActorFunc)EnAm_Init,
-    (ActorFunc)EnAm_Destroy,
-    (ActorFunc)EnAm_Update,
-    (ActorFunc)EnAm_Draw,
+    /**/ ACTOR_EN_AM,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_AM,
+    /**/ sizeof(EnAm),
+    /**/ EnAm_Init,
+    /**/ EnAm_Destroy,
+    /**/ EnAm_Update,
+    /**/ EnAm_Draw,
 };
 
 static ColliderCylinderInit sEnemyCylinderInit = {

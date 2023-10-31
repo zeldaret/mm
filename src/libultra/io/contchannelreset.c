@@ -1,4 +1,5 @@
-#include "global.h"
+#include "ultra64.h"
+#include "PR/controller.h"
 
 s32 __osContChannelReset(OSMesgQueue* mq, s32 channel) {
     s32 i;
@@ -7,13 +8,13 @@ s32 __osContChannelReset(OSMesgQueue* mq, s32 channel) {
 
     __osSiGetAccess();
 
-    __osPfsPifRam.status = 1;
+    __osPfsPifRam.status = CONT_CMD_EXE;
 
     for (i = 0; i < channel; i++) {
-        *bufptr++ = 0;
+        *bufptr++ = CONT_CMD_REQUEST_STATUS;
     }
 
-    *bufptr++ = 0xFD;
+    *bufptr++ = CONT_CMD_CHANNEL_RESET;
     *bufptr = CONT_CMD_END;
 
     __osSiRawStartDma(OS_WRITE, &__osPfsPifRam);

@@ -32,15 +32,15 @@ void func_8091B984(EnInsect* this, PlayState* play);
 s16 D_8091BD60 = 0;
 
 ActorInit En_Insect_InitVars = {
-    ACTOR_EN_INSECT,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnInsect),
-    (ActorFunc)EnInsect_Init,
-    (ActorFunc)EnInsect_Destroy,
-    (ActorFunc)EnInsect_Update,
-    (ActorFunc)EnInsect_Draw,
+    /**/ ACTOR_EN_INSECT,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnInsect),
+    /**/ EnInsect_Init,
+    /**/ EnInsect_Destroy,
+    /**/ EnInsect_Update,
+    /**/ EnInsect_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

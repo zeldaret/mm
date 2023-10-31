@@ -115,6 +115,12 @@ typedef struct {
 
 #define OS_VI_UNK28         28
 
+extern OSViMode osViModeNtscHpf1;
+extern OSViMode osViModePalLan1;
+extern OSViMode osViModeNtscHpn1;
+extern OSViMode osViModeNtscLan1;
+extern OSViMode osViModeMpalLan1;
+extern OSViMode osViModeFpalLan1;
 
 extern OSViMode osViModeNtscHpf1;
 extern OSViMode osViModePalLan1;
@@ -127,7 +133,7 @@ void* osViGetCurrentFramebuffer(void);
 void* osViGetNextFramebuffer(void);
 void osViSetXScale(f32 value);
 void osViSetYScale(f32 value);
-void osViExtendVStart(u32 a0);
+void osViExtendVStart(u32 value);
 void osViSetSpecialFeatures(u32 func);
 void osViSetMode(OSViMode* modep);
 void osViSetEvent(OSMesgQueue* mq, OSMesg m, u32 retraceCount);

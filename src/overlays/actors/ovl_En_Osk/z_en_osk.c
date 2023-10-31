@@ -23,15 +23,15 @@ void func_80BF656C(EnOsk* this, PlayState* play);
 void func_80BF6A20(EnOsk* this, PlayState* play);
 
 ActorInit En_Osk_InitVars = {
-    ACTOR_EN_OSK,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_IKN_DEMO,
-    sizeof(EnOsk),
-    (ActorFunc)EnOsk_Init,
-    (ActorFunc)EnOsk_Destroy,
-    (ActorFunc)EnOsk_Update,
-    (ActorFunc)EnOsk_Draw,
+    /**/ ACTOR_EN_OSK,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_IKN_DEMO,
+    /**/ sizeof(EnOsk),
+    /**/ EnOsk_Init,
+    /**/ EnOsk_Destroy,
+    /**/ EnOsk_Update,
+    /**/ EnOsk_Draw,
 };
 
 AnimationHeader* D_80BF6FA0[] = {

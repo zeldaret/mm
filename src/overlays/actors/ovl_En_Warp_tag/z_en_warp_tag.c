@@ -25,15 +25,15 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play);
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play);
 
 ActorInit En_Warp_tag_InitVars = {
-    ACTOR_EN_WARP_TAG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnWarptag),
-    (ActorFunc)EnWarptag_Init,
-    (ActorFunc)EnWarptag_Destroy,
-    (ActorFunc)EnWarptag_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_WARP_TAG,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnWarptag),
+    /**/ EnWarptag_Init,
+    /**/ EnWarptag_Destroy,
+    /**/ EnWarptag_Update,
+    /**/ NULL,
 };
 
 // this appears to be unused, as the code never accesses it in known vanilla cases
@@ -97,10 +97,10 @@ void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
     if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
         if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
-            func_800B7298(play, NULL, PLAYER_CSMODE_81);
+            func_800B7298(play, NULL, PLAYER_CSACTION_81);
             this->actionFunc = EnWarpTag_GrottoReturn;
         } else {
-            func_800B7298(play, NULL, PLAYER_CSMODE_15);
+            func_800B7298(play, NULL, PLAYER_CSACTION_15);
             this->actionFunc = EnWarpTag_RespawnPlayer;
         }
     }
@@ -129,7 +129,7 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
  */
 void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_STORMS) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+        func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
         this->actionFunc = EnWarpTag_RespawnPlayer;
         CutsceneManager_Stop(CutsceneManager_GetCurrentCsId());
 
@@ -247,7 +247,7 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
         Audio_PlaySfx_2(NA_SE_OC_SECRET_HOLE_OUT);
-        func_801A4058(5);
+        Audio_MuteAllSeqExceptSystemAndOcarina(5);
         gSaveContext.seqId = (u8)NA_BGM_DISABLED;
         gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     }

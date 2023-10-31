@@ -69,15 +69,15 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play)
 void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, PlayState* play);
 
 ActorInit En_Pametfrog_InitVars = {
-    ACTOR_EN_PAMETFROG,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BIGSLIME,
-    sizeof(EnPametfrog),
-    (ActorFunc)EnPametfrog_Init,
-    (ActorFunc)EnPametfrog_Destroy,
-    (ActorFunc)EnPametfrog_Update,
-    (ActorFunc)EnPametfrog_Draw,
+    /**/ ACTOR_EN_PAMETFROG,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BIGSLIME,
+    /**/ sizeof(EnPametfrog),
+    /**/ EnPametfrog_Init,
+    /**/ EnPametfrog_Destroy,
+    /**/ EnPametfrog_Update,
+    /**/ EnPametfrog_Draw,
 };
 
 typedef enum {
@@ -343,7 +343,7 @@ void EnPametfrog_StopCutscene(EnPametfrog* this, PlayState* play) {
         Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
         CutsceneManager_Stop(this->csId);
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
+        func_800B724C(play, &this->actor, PLAYER_CSACTION_END);
     }
 }
 
@@ -1007,7 +1007,7 @@ void EnPametfrog_PlayCutscene(EnPametfrog* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->csId)) {
         CutsceneManager_Start(this->csId, &this->actor);
         this->subCamId = CutsceneManager_GetCurrentSubCamId(this->csId);
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
+        func_800B724C(play, &this->actor, PLAYER_CSACTION_WAIT);
         if (this->actor.colChkInfo.health == 0) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
                 EnPametfrog_SetupCallSnapper(this, play);

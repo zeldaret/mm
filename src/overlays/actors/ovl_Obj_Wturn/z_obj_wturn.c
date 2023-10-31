@@ -23,9 +23,15 @@ void func_808A7C04(ObjWturn* this, PlayState* play);
 void func_808A7C78(ObjWturn* this, PlayState* play);
 
 ActorInit Obj_Wturn_InitVars = {
-    ACTOR_OBJ_WTURN,       ACTORCAT_ITEMACTION,        FLAGS,
-    GAMEPLAY_KEEP,         sizeof(ObjWturn),           (ActorFunc)ObjWturn_Init,
-    (ActorFunc)Actor_Noop, (ActorFunc)ObjWturn_Update, (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_WTURN,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjWturn),
+    /**/ ObjWturn_Init,
+    /**/ Actor_Noop,
+    /**/ ObjWturn_Update,
+    /**/ NULL,
 };
 
 void ObjWturn_Init(Actor* thisx, PlayState* play) {
@@ -73,7 +79,7 @@ void func_808A7AAC(ObjWturn* this, PlayState* play) {
     CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
     Play_EnableMotionBlur(140);
     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
+    func_800B7298(play, &this->actor, PLAYER_CSACTION_21);
     subCamAt.x = player->actor.focus.pos.x;
     subCamAt.z = player->actor.focus.pos.z;
     subCamAt.y = player->actor.focus.pos.y;
@@ -97,7 +103,7 @@ void func_808A7C04(ObjWturn* this, PlayState* play) {
 
     this->actor.world.pos.y += this->actor.playerHeightRel;
     player->actor.shape.shadowAlpha = 0;
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_84);
+    func_800B7298(play, &this->actor, PLAYER_CSACTION_84);
     Player_PlaySfx(player, NA_SE_VO_NAVY_ENEMY);
     this->unk_14A = 0;
     Play_DisableMotionBlur();

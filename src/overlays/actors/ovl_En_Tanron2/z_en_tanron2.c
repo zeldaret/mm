@@ -31,15 +31,15 @@ f32 D_80BB8454;
 EnTanron2* D_80BB8458[82];
 
 ActorInit En_Tanron2_InitVars = {
-    ACTOR_EN_TANRON2,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS04,
-    sizeof(EnTanron2),
-    (ActorFunc)EnTanron2_Init,
-    (ActorFunc)EnTanron2_Destroy,
-    (ActorFunc)EnTanron2_Update,
-    (ActorFunc)EnTanron2_Draw,
+    /**/ ACTOR_EN_TANRON2,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS04,
+    /**/ sizeof(EnTanron2),
+    /**/ EnTanron2_Init,
+    /**/ EnTanron2_Destroy,
+    /**/ EnTanron2_Update,
+    /**/ EnTanron2_Draw,
 };
 
 static DamageTable sDamageTable = {

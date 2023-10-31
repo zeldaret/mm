@@ -69,15 +69,15 @@ typedef enum {
 } EnRafPetalScaleType;
 
 ActorInit En_Raf_InitVars = {
-    ACTOR_EN_RAF,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_RAF,
-    sizeof(EnRaf),
-    (ActorFunc)EnRaf_Init,
-    (ActorFunc)EnRaf_Destroy,
-    (ActorFunc)EnRaf_Update,
-    (ActorFunc)EnRaf_Draw,
+    /**/ ACTOR_EN_RAF,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_RAF,
+    /**/ sizeof(EnRaf),
+    /**/ EnRaf_Init,
+    /**/ EnRaf_Destroy,
+    /**/ EnRaf_Update,
+    /**/ EnRaf_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -225,8 +225,8 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     this->mainType = EN_RAF_GET_TYPE(&this->dyna.actor);
     this->reviveTimer = EN_RAF_GET_REVIVE_TIMER(&this->dyna.actor);
     this->switchFlag = EN_RAF_GET_SWITCH_FLAG(&this->dyna.actor);
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == EN_RAF_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
     if (this->reviveTimer == 31) {
@@ -235,7 +235,7 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
         this->reviveTimer = 30;
     }
 
-    if (((this->switchFlag >= 0) || (this->mainType == EN_RAF_TYPE_DORMANT) ||
+    if (((this->switchFlag > SWITCH_FLAG_NONE) || (this->mainType == EN_RAF_TYPE_DORMANT) ||
          CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) &&
         (Flags_GetSwitch(play, this->switchFlag) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
         s32 i;
@@ -319,7 +319,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->grabTarget = EN_RAF_GRAB_TARGET_GORON_PLAYER;
             } else {
-                player->actionVar2 = 50;
+                player->av2.actionVar2 = 50;
             }
 
             this->playerRotYWhenGrabbed = player->actor.world.rot.y;
@@ -455,7 +455,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
             case EN_RAF_GRAB_TARGET_GORON_PLAYER:
                 if (this->chewCount > (BREG(54) + 4)) {
                     player->actor.parent = NULL;
-                    player->actionVar2 = 1000;
+                    player->av2.actionVar2 = 1000;
                     EnRaf_Explode(this, play);
                 }
                 break;
@@ -515,7 +515,7 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
                 CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
     Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
-    if (this->switchFlag >= 0) {
+    if (this->switchFlag > SWITCH_FLAG_NONE) {
         Flags_SetSwitch(play, this->switchFlag);
     }
 
@@ -579,7 +579,7 @@ void EnRaf_Convulse(EnRaf* this, PlayState* play) {
     if (this->endFrame <= curFrame) {
         this->chewCount++;
         if (this->chewCount > (BREG(2) + 2)) {
-            if (this->switchFlag >= 0) {
+            if (this->switchFlag > SWITCH_FLAG_NONE) {
                 Flags_SetSwitch(play, this->switchFlag);
             }
 

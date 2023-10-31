@@ -28,15 +28,15 @@ void EnStoneheishi_GiveItemReward(EnStoneheishi* this, PlayState* play);
 void EnStoneheishi_SetupDrinkBottleProcess(EnStoneheishi* this);
 
 ActorInit En_Stone_heishi_InitVars = {
-    ACTOR_EN_STONE_HEISHI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SDN,
-    sizeof(EnStoneheishi),
-    (ActorFunc)EnStoneheishi_Init,
-    (ActorFunc)EnStoneheishi_Destroy,
-    (ActorFunc)EnStoneheishi_Update,
-    (ActorFunc)EnStoneheishi_Draw,
+    /**/ ACTOR_EN_STONE_HEISHI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnStoneheishi),
+    /**/ EnStoneheishi_Init,
+    /**/ EnStoneheishi_Destroy,
+    /**/ EnStoneheishi_Update,
+    /**/ EnStoneheishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

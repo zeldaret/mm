@@ -5,8 +5,9 @@
  */
 
 #include "z_en_rail_skb.h"
-#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_skb/object_skb.h"
+#include "overlays/actors/ovl_En_Part/z_en_part.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
@@ -51,15 +52,15 @@ void func_80B72830(EnRailSkb* this, s16 arg1);
 s32 func_80B7285C(EnRailSkb* this);
 
 ActorInit En_Rail_Skb_InitVars = {
-    ACTOR_EN_RAIL_SKB,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_SKB,
-    sizeof(EnRailSkb),
-    (ActorFunc)EnRailSkb_Init,
-    (ActorFunc)EnRailSkb_Destroy,
-    (ActorFunc)EnRailSkb_Update,
-    (ActorFunc)EnRailSkb_Draw,
+    /**/ ACTOR_EN_RAIL_SKB,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_SKB,
+    /**/ sizeof(EnRailSkb),
+    /**/ EnRailSkb_Init,
+    /**/ EnRailSkb_Destroy,
+    /**/ EnRailSkb_Update,
+    /**/ EnRailSkb_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {
@@ -1119,10 +1120,10 @@ void EnRailSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Collider_UpdateSpheres(limbIndex, &this->collider);
 
         if ((limbIndex == 11) && (this->unk_402 & 1) && !(this->unk_402 & 2)) {
-            Actor_SpawnBodyParts(&this->actor, play, 1, dList);
+            Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_1), dList);
             this->unk_402 |= 2;
         } else if ((this->unk_402 & 0x40) && ((limbIndex != 11) || !(this->unk_402 & 1)) && (limbIndex != 12)) {
-            Actor_SpawnBodyParts(&this->actor, play, 1, dList);
+            Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_1), dList);
         }
 
         if (this->drawDmgEffTimer != 0) {

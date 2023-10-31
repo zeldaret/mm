@@ -16,15 +16,15 @@ void OceffWipe6_Update(Actor* thisx, PlayState* play);
 void OceffWipe6_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Oceff_Wipe6_InitVars = {
-    ACTOR_OCEFF_WIPE6,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(OceffWipe6),
-    (ActorFunc)OceffWipe6_Init,
-    (ActorFunc)OceffWipe6_Destroy,
-    (ActorFunc)OceffWipe6_Update,
-    (ActorFunc)OceffWipe6_Draw,
+    /**/ ACTOR_OCEFF_WIPE6,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(OceffWipe6),
+    /**/ OceffWipe6_Init,
+    /**/ OceffWipe6_Destroy,
+    /**/ OceffWipe6_Update,
+    /**/ OceffWipe6_Draw,
 };
 
 #include "overlays/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.c"

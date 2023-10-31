@@ -42,15 +42,15 @@ typedef enum EnNwcState {
 } EnNwcState;
 
 ActorInit En_Nwc_InitVars = {
-    ACTOR_EN_NWC,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_NWC,
-    sizeof(EnNwc),
-    (ActorFunc)EnNwc_Init,
-    (ActorFunc)EnNwc_Destroy,
-    (ActorFunc)EnNwc_Update,
-    (ActorFunc)EnNwc_Draw,
+    /**/ ACTOR_EN_NWC,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_NWC,
+    /**/ sizeof(EnNwc),
+    /**/ EnNwc_Init,
+    /**/ EnNwc_Destroy,
+    /**/ EnNwc_Update,
+    /**/ EnNwc_Draw,
 };
 
 Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
@@ -248,14 +248,14 @@ void EnNwc_CheckFound(EnNwc* this, PlayState* play) {
 
 void EnNwc_LoadNiwSkeleton(EnNwc* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->niwObjectSlot)) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->niwObjectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->niwObjectSlot].segment);
 
         SkelAnime_InitFlex(play, &this->niwSkeleton, &gNiwSkel, &gNiwIdleAnim, this->jointTable, this->morphTable,
                            NIW_LIMB_MAX);
         Animation_Change(&this->niwSkeleton, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim),
                          ANIMMODE_LOOP, 0.0f);
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->nwcObjectIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->nwcObjectIndex].segment);
         this->state = NWC_STATE_NIW_LOADED;
         EnNwc_ToggleState(this);
     }

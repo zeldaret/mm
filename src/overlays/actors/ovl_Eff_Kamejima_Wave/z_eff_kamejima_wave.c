@@ -23,15 +23,15 @@ void func_80BCED34(EffKamejimaWave* this, PlayState* play);
 void EffKamejimaWave_SetVtxAlpha(u8 alpha);
 
 ActorInit Eff_Kamejima_Wave_InitVars = {
-    ACTOR_EFF_KAMEJIMA_WAVE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_KAMEJIMA,
-    sizeof(EffKamejimaWave),
-    (ActorFunc)EffKamejimaWave_Init,
-    (ActorFunc)EffKamejimaWave_Destroy,
-    (ActorFunc)EffKamejimaWave_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EFF_KAMEJIMA_WAVE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_KAMEJIMA,
+    /**/ sizeof(EffKamejimaWave),
+    /**/ EffKamejimaWave_Init,
+    /**/ EffKamejimaWave_Destroy,
+    /**/ EffKamejimaWave_Update,
+    /**/ NULL,
 };
 
 static Color_RGBA8 sPrimColors[] = {

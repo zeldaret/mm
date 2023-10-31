@@ -42,16 +42,16 @@ void func_80AB92CC(EnMnk* this, PlayState* play);
 s32 EnMnk_ValidatePictograph(PlayState* play, Actor* thisx);
 s32 EnMnk_AlreadyExists(EnMnk* this, PlayState* play);
 
-const ActorInit En_Mnk_InitVars = {
-    ACTOR_EN_MNK,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MNK,
-    sizeof(EnMnk),
-    (ActorFunc)EnMnk_Init,
-    (ActorFunc)EnMnk_Destroy,
-    (ActorFunc)EnMnk_Update,
-    (ActorFunc)EnMnk_Draw,
+ActorInit En_Mnk_InitVars = {
+    /**/ ACTOR_EN_MNK,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MNK,
+    /**/ sizeof(EnMnk),
+    /**/ EnMnk_Init,
+    /**/ EnMnk_Destroy,
+    /**/ EnMnk_Update,
+    /**/ EnMnk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -897,7 +897,7 @@ void EnMnk_Monkey_Run(EnMnk* this, PlayState* play) {
         this->picto.actor.speed = 0.0f;
         if (MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDECHAMBER) {
             switchFlag = MONKEY_GET_SWITCH_FLAG(&this->picto.actor);
-            if (switchFlag != 0x7F) {
+            if (switchFlag != MONKEY_SWITCH_FLAG_NONE) {
                 Flags_SetSwitch(play, switchFlag + 1);
             }
             Actor_Kill(&this->picto.actor);
@@ -1620,7 +1620,7 @@ void EnMnk_MonkeyHanging_WaitForTextboxAfterDunk(EnMnk* this, PlayState* play) {
         }
         Message_CloseTextbox(play);
         this->actionFunc = EnMnk_MonkeyHanging_WaitAfterDunk;
-        func_800B7298(play, NULL, PLAYER_CSMODE_END);
+        func_800B7298(play, NULL, PLAYER_CSACTION_END);
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_08);
     }
 }
@@ -1693,7 +1693,7 @@ void EnMnk_MonkeyHanging_Plead(EnMnk* this, PlayState* play) {
             case 0x8E9:
                 this->actionFunc = EnMnk_MonkeyHanging_Dunk2;
                 Message_CloseTextbox(play);
-                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_WAIT);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSACTION_WAIT);
                 this->unk_3C8 = 60;
                 break;
 

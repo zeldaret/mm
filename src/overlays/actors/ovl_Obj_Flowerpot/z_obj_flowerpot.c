@@ -33,15 +33,15 @@ s16 D_80A1DA3E;
 s16 D_80A1DA40;
 
 ActorInit Obj_Flowerpot_InitVars = {
-    ACTOR_OBJ_FLOWERPOT,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_FLOWERPOT,
-    sizeof(ObjFlowerpot),
-    (ActorFunc)ObjFlowerpot_Init,
-    (ActorFunc)ObjFlowerpot_Destroy,
-    (ActorFunc)ObjFlowerpot_Update,
-    (ActorFunc)ObjFlowerpot_Draw,
+    /**/ ACTOR_OBJ_FLOWERPOT,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_FLOWERPOT,
+    /**/ sizeof(ObjFlowerpot),
+    /**/ ObjFlowerpot_Init,
+    /**/ ObjFlowerpot_Destroy,
+    /**/ ObjFlowerpot_Update,
+    /**/ ObjFlowerpot_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {

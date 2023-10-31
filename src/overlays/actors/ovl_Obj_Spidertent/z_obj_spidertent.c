@@ -24,15 +24,15 @@ void func_80B30AD4(ObjSpidertent* this);
 void func_80B30AF8(ObjSpidertent* this, PlayState* play);
 
 ActorInit Obj_Spidertent_InitVars = {
-    ACTOR_OBJ_SPIDERTENT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_SPIDERTENT,
-    sizeof(ObjSpidertent),
-    (ActorFunc)ObjSpidertent_Init,
-    (ActorFunc)ObjSpidertent_Destroy,
-    (ActorFunc)ObjSpidertent_Update,
-    (ActorFunc)ObjSpidertent_Draw,
+    /**/ ACTOR_OBJ_SPIDERTENT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_SPIDERTENT,
+    /**/ sizeof(ObjSpidertent),
+    /**/ ObjSpidertent_Init,
+    /**/ ObjSpidertent_Destroy,
+    /**/ ObjSpidertent_Update,
+    /**/ ObjSpidertent_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit1[] = {
@@ -679,7 +679,7 @@ void func_80B30A4C(ObjSpidertent* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         if (this->dyna.actor.csId >= 0) {
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_1);
         }
         Flags_SetSwitch(play, OBJSPIDERTENT_GET_SWITCH_FLAG(&this->dyna.actor));
         func_80B30AD4(this);

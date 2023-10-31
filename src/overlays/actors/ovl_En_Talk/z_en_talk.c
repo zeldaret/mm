@@ -17,15 +17,15 @@ void func_80BDE058(EnTalk* this, PlayState* play);
 void func_80BDE090(EnTalk* this, PlayState* play);
 
 ActorInit En_Talk_InitVars = {
-    ACTOR_EN_TALK,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTalk),
-    (ActorFunc)EnTalk_Init,
-    (ActorFunc)EnTalk_Destroy,
-    (ActorFunc)EnTalk_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_TALK,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTalk),
+    /**/ EnTalk_Init,
+    /**/ EnTalk_Destroy,
+    /**/ EnTalk_Update,
+    /**/ NULL,
 };
 
 void EnTalk_Init(Actor* thisx, PlayState* play) {

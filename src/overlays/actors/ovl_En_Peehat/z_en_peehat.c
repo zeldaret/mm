@@ -40,15 +40,15 @@ void func_80898654(EnPeehat* this);
 void func_808986A4(EnPeehat* this, PlayState* play);
 
 ActorInit En_Peehat_InitVars = {
-    ACTOR_EN_PEEHAT,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_PH,
-    sizeof(EnPeehat),
-    (ActorFunc)EnPeehat_Init,
-    (ActorFunc)EnPeehat_Destroy,
-    (ActorFunc)EnPeehat_Update,
-    (ActorFunc)EnPeehat_Draw,
+    /**/ ACTOR_EN_PEEHAT,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_PH,
+    /**/ sizeof(EnPeehat),
+    /**/ EnPeehat_Init,
+    /**/ EnPeehat_Destroy,
+    /**/ EnPeehat_Update,
+    /**/ EnPeehat_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

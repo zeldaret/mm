@@ -63,15 +63,15 @@ typedef enum {
 } EnSnowmanCombineState;
 
 ActorInit En_Snowman_InitVars = {
-    ACTOR_EN_SNOWMAN,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_SNOWMAN,
-    sizeof(EnSnowman),
-    (ActorFunc)EnSnowman_Init,
-    (ActorFunc)EnSnowman_Destroy,
-    (ActorFunc)EnSnowman_Update,
-    (ActorFunc)EnSnowman_Draw,
+    /**/ ACTOR_EN_SNOWMAN,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_SNOWMAN,
+    /**/ sizeof(EnSnowman),
+    /**/ EnSnowman_Init,
+    /**/ EnSnowman_Destroy,
+    /**/ EnSnowman_Update,
+    /**/ EnSnowman_Draw,
 };
 
 static ColliderCylinderInit sEenoCylinderInit = {

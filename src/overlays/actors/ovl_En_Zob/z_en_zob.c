@@ -38,15 +38,15 @@ void func_80BA0C14(EnZob* this, PlayState* play);
 void func_80BA0CF4(EnZob* this, PlayState* play);
 
 ActorInit En_Zob_InitVars = {
-    ACTOR_EN_ZOB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZOB,
-    sizeof(EnZob),
-    (ActorFunc)EnZob_Init,
-    (ActorFunc)EnZob_Destroy,
-    (ActorFunc)EnZob_Update,
-    (ActorFunc)EnZob_Draw,
+    /**/ ACTOR_EN_ZOB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZOB,
+    /**/ sizeof(EnZob),
+    /**/ EnZob_Init,
+    /**/ EnZob_Destroy,
+    /**/ EnZob_Update,
+    /**/ EnZob_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -558,7 +558,7 @@ void func_80BA06BC(EnZob* this, PlayState* play) {
 
 void func_80BA0728(EnZob* this, PlayState* play) {
     s32 pad;
-    Vec3f sp28;
+    Vec3f seqPos;
 
     func_80B9F86C(this);
 
@@ -585,10 +585,10 @@ void func_80BA0728(EnZob* this, PlayState* play) {
         func_800B874C(&this->actor, play, 200.0f, 150.0f);
     }
 
-    sp28.x = this->actor.projectedPos.x;
-    sp28.y = this->actor.projectedPos.y;
-    sp28.z = this->actor.projectedPos.z;
-    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_BASS_PLAY, 1000.0f);
+    seqPos.x = this->actor.projectedPos.x;
+    seqPos.y = this->actor.projectedPos.y;
+    seqPos.z = this->actor.projectedPos.z;
+    Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_BASS_PLAY, 1000.0f);
 }
 
 void func_80BA08E8(EnZob* this, PlayState* play) {

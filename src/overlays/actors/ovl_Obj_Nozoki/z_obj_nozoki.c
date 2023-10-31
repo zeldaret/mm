@@ -33,15 +33,15 @@ s32 D_80BA36B4;
 f32 D_80BA36B8;
 
 ActorInit Obj_Nozoki_InitVars = {
-    ACTOR_OBJ_NOZOKI,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjNozoki),
-    (ActorFunc)ObjNozoki_Init,
-    (ActorFunc)ObjNozoki_Destroy,
-    (ActorFunc)ObjNozoki_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_NOZOKI,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjNozoki),
+    /**/ ObjNozoki_Init,
+    /**/ ObjNozoki_Destroy,
+    /**/ ObjNozoki_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {

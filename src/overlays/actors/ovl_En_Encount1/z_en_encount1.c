@@ -19,15 +19,15 @@ void EnEncount1_Update(Actor* thisx, PlayState* play);
 void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play);
 
 ActorInit En_Encount1_InitVars = {
-    ACTOR_EN_ENCOUNT1,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnEncount1),
-    (ActorFunc)EnEncount1_Init,
-    (ActorFunc)NULL,
-    (ActorFunc)EnEncount1_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_ENCOUNT1,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnEncount1),
+    /**/ EnEncount1_Init,
+    /**/ NULL,
+    /**/ EnEncount1_Update,
+    /**/ NULL,
 };
 
 static s16 sActorIds[] = {

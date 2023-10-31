@@ -29,15 +29,15 @@ void ObjRaillift_Wait(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Move(ObjRaillift* this, PlayState* play);
 
 ActorInit Obj_Raillift_InitVars = {
-    ACTOR_OBJ_RAILLIFT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_RAILLIFT,
-    sizeof(ObjRaillift),
-    (ActorFunc)ObjRaillift_Init,
-    (ActorFunc)ObjRaillift_Destroy,
-    (ActorFunc)ObjRaillift_Update,
-    (ActorFunc)ObjRaillift_Draw,
+    /**/ ACTOR_OBJ_RAILLIFT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_RAILLIFT,
+    /**/ sizeof(ObjRaillift),
+    /**/ ObjRaillift_Init,
+    /**/ ObjRaillift_Destroy,
+    /**/ ObjRaillift_Update,
+    /**/ ObjRaillift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

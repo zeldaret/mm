@@ -69,9 +69,9 @@ u8 sIsInGiantMode;
 Boss02* sRedTwinmold;
 Boss02* sBlueTwinmold;
 Boss02* sTwinmoldStatic;
-u8 sMusicStartTimer;
+u8 sTwinmoldMusicStartTimer;
 DoorWarp1* sBlueWarp;
-TwinmoldEffect sEffects[TWINMOLD_EFFECT_COUNT];
+TwinmoldEffect sTwinmoldEffects[TWINMOLD_EFFECT_COUNT];
 
 static DamageTable sBlueTwinmoldDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -144,15 +144,15 @@ static DamageTable sRedTwinmoldDamageTable = {
 };
 
 ActorInit Boss_02_InitVars = {
-    ACTOR_BOSS_02,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS02,
-    sizeof(Boss02),
-    (ActorFunc)Boss02_Init,
-    (ActorFunc)Boss02_Destroy,
-    (ActorFunc)Boss02_Twinmold_Update,
-    (ActorFunc)Boss02_Twinmold_Draw,
+    /**/ ACTOR_BOSS_02,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS02,
+    /**/ sizeof(Boss02),
+    /**/ Boss02_Init,
+    /**/ Boss02_Destroy,
+    /**/ Boss02_Twinmold_Update,
+    /**/ Boss02_Twinmold_Draw,
 };
 
 /**
@@ -588,7 +588,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) &&
         (TWINMOLD_GET_TYPE(&this->actor) == TWINMOLD_TYPE_RED)) {
         sBlueWarp = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, 60.0f,
-                                                   0.0f, 0, 0, 0, 1);
+                                                   0.0f, 0, 0, 0, ENDOORWARP1_FF_1);
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, BHEART_PARAM_NORMAL);
     }
 
@@ -597,14 +597,14 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     this->subCamUp.y = 1.0f;
     if (TWINMOLD_GET_TYPE(&this->actor) == TWINMOLD_TYPE_STATIC) {
         sTwinmoldStatic = this;
-        play->specialEffects = (void*)sEffects;
+        play->specialEffects = (void*)sTwinmoldEffects;
         this->actor.update = Boss02_Static_Update;
         this->actor.draw = Boss02_Static_Draw;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->playerScale = 0.01f;
         if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_55) || (sBlueWarp != NULL)) {
             this->unk_1D20 = 0;
-            sMusicStartTimer = KREG(15) + 20;
+            sTwinmoldMusicStartTimer = KREG(15) + 20;
         } else {
             this->unk_1D20 = 1;
         }
@@ -1346,9 +1346,9 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play) {
     }
 
     if (sBlueWarp == NULL) {
-        if (sMusicStartTimer != 0) {
-            sMusicStartTimer--;
-            if (sMusicStartTimer == 0) {
+        if (sTwinmoldMusicStartTimer != 0) {
+            sTwinmoldMusicStartTimer--;
+            if (sTwinmoldMusicStartTimer == 0) {
                 SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_BOSS | SEQ_FLAG_ASYNC);
             }
         }
@@ -2172,8 +2172,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
 
             if (this->unk_1D1C == 45) {
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
-                sMusicStartTimer = KREG(91) + 43;
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_21);
+                sTwinmoldMusicStartTimer = KREG(91) + 43;
             }
 
             if (this->unk_1D1C == 85) {
@@ -2186,7 +2186,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
 
             if (this->unk_1D1C == 100) {
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_115);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_115);
             }
 
             if (this->unk_1D1C == 112) {
@@ -2225,7 +2225,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
@@ -2286,7 +2286,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
                 this->unk_1D20 = 0;
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 sp68->unk_0144 = 10;
@@ -2304,7 +2304,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                         phi_f0 = 3155.0f;
                     }
                     sBlueWarp = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1,
-                                                               0.0f, phi_f0, 0.0f, 0, 0, 0, 1);
+                                                               0.0f, phi_f0, 0.0f, 0, 0, 0, ENDOORWARP1_FF_1);
 
                     if (!sIsInGiantMode) {
                         sBlueWarp->unk_203 = 0;

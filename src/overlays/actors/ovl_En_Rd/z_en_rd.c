@@ -98,15 +98,15 @@ typedef enum {
 } EnRdGrabState;
 
 ActorInit En_Rd_InitVars = {
-    ACTOR_EN_RD,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_RD,
-    sizeof(EnRd),
-    (ActorFunc)EnRd_Init,
-    (ActorFunc)EnRd_Destroy,
-    (ActorFunc)EnRd_Update,
-    (ActorFunc)EnRd_Draw,
+    /**/ ACTOR_EN_RD,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_RD,
+    /**/ sizeof(EnRd),
+    /**/ EnRd_Init,
+    /**/ EnRd_Destroy,
+    /**/ EnRd_Update,
+    /**/ EnRd_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -736,9 +736,10 @@ void EnRd_WalkToHome(EnRd* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     SkelAnime_Update(&this->skelAnime);
 
-    if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
-        !(player->stateFlags2 & (0x4000 | 0x80)) && (player->transformation != PLAYER_FORM_GORON) &&
-        (player->transformation != PLAYER_FORM_DEKU) &&
+    if (!(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
+                                 PLAYER_STATE1_80000 | PLAYER_STATE1_200000)) &&
+        !(player->stateFlags2 & (PLAYER_STATE2_80 | PLAYER_STATE2_4000)) &&
+        (player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_DEKU) &&
         (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
         this->actor.targetMode = TARGET_MODE_0;
         EnRd_SetupWalkToPlayer(this, play);
@@ -842,7 +843,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
                 if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->stateFlags2 &= ~PLAYER_STATE2_80;
-                    player->actionVar2 = 100;
+                    player->av2.actionVar2 = 100;
                 }
                 Animation_Change(&this->skelAnime, &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f,
                                  Animation_GetLastFrame(&gGibdoRedeadGrabEndAnim), ANIMMODE_ONCE_INTERP, 0.0f);
