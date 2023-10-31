@@ -73,10 +73,9 @@ static MapDisp sMapDisp = {
     NULL, -1, 210, 140, 0, 0,    NULL, -1, NULL, 0,    0, 0, 0,    NULL, NULL, 0,
     0,    0,  0,   0,   0, NULL, 0,    0,  0,    NULL, 0, 0, NULL, 0,    0,
 };
-extern s16 D_801BEBFA; // sMapDisp.pauseMapCurStorey
 
-static MapDataRoom sMapDataRooms[ROOM_MAX];
-static MapDataChest sMapDataChests[32];
+MapDataRoom sMapDataRooms[ROOM_MAX];
+MapDataChest sMapDataChests[32];
 static MapDataScene sMapDataScene = {
     sMapDataRooms,
     80,
@@ -84,14 +83,14 @@ static MapDataScene sMapDataScene = {
 static s32 sSceneNumRooms = 0; // current scene's no. of rooms
 static s32 sNumChests = 0;     // MinimapChest count
 static TransitionActorList sTransitionActorList = { 0, NULL };
-static Color_RGBA8 sMinimapActorColors[12] = {
+static Color_RGBA8 sMinimapActorCategoryColors[12] = {
     { 255, 255, 255, 255 }, { 255, 255, 255, 255 }, { 0, 255, 0, 255 },     { 255, 255, 255, 255 },
     { 255, 255, 255, 255 }, { 255, 0, 0, 255 },     { 255, 255, 255, 255 }, { 255, 255, 255, 255 },
     { 255, 255, 255, 255 }, { 255, 0, 0, 255 },     { 255, 255, 255, 255 }, { 255, 255, 255, 255 },
-}; // cat colors
+};
 
-static TransitionActorEntry sTransitionActors[ROOM_TRANSITION_MAX];
-static PauseDungeonMap sPauseDungeonMap;
+TransitionActorEntry sTransitionActors[ROOM_TRANSITION_MAX];
+PauseDungeonMap sPauseDungeonMap;
 
 void MapDisp_GetMapITexture(void* dst, s32 mapCompactId) {
     if (MapDisp_GetSizeOfMapITex(mapCompactId) != 0) {
@@ -106,12 +105,12 @@ void MapDisp_InitRoomStoreyRecord(PlayState* play, s16* roomStorey) {
 void MapDisp_DestroyRoomStoreyRecord(PlayState* play, s16* roomStory) {
 }
 
-void func_80102EB4(u32 param_1) {
-    sMapDisp.unk20 |= param_1;
+void func_80102EB4(u32 flag) {
+    sMapDisp.unk20 |= flag;
 }
 
-void func_80102ED0(u32 param_1) {
-    sMapDisp.unk20 &= ~param_1;
+void func_80102ED0(u32 flag) {
+    sMapDisp.unk20 &= ~flag;
 }
 
 s32 MapDisp_CurRoomHasMapI(PlayState* play) {
@@ -126,7 +125,7 @@ s32 MapDisp_CurRoomHasMapI(PlayState* play) {
         return false;
     }
     mapDataRoom = &sMapDisp.mapDataScene->rooms[curRoom];
-    if (mapDataRoom->mapId == 0xFFFF) {
+    if (mapDataRoom->mapId == MAP_DATA_NO_MAP) {
         return false;
     }
     if (MapData_GetMapIId(mapDataRoom->mapId) == MAPDATA_MAP_I_MAX) {
@@ -171,19 +170,19 @@ void MapDisp_GetMapOffset(MapDataRoom* mapDataRoom, s32* offsetX, s32* offsetY) 
     s32 width;
     s32 height;
 
-    if (mapDataRoom->mapId == 0xFFFF) {
+    if (mapDataRoom->mapId == MAP_DATA_NO_MAP) {
         *offsetX = 0;
         *offsetY = 0;
         return;
     }
     MapDisp_GetMapTexDim(mapDataRoom, &width, &height);
     MapData_GetMapTexOffset(mapDataRoom->mapId, offsetX, offsetY);
-    if (mapDataRoom->flags & 1) {
+    if (mapDataRoom->flags & MAP_DATA_ROOM_FLIP_X) {
         s32 temp = (width / 2);
 
         *offsetX = ((width / 2) - *offsetX) + (width / 2);
     }
-    if (mapDataRoom->flags & 2) {
+    if (mapDataRoom->flags & MAP_DATA_ROOM_FLIP_Y) {
         s32 temp = (height / 2);
 
         *offsetY = (temp - *offsetY) + temp;
@@ -203,7 +202,7 @@ void MapDisp_DrawMinimapRoom(PlayState* play, TexturePtr texture, s32 x, s32 y, 
     Color_RGBA8 color;
     s32 drawType;
 
-    if ((mapDataRoom->mapId == 0xFFFF) || (texture == NULL)) {
+    if ((mapDataRoom->mapId == MAP_DATA_NO_MAP) || (texture == NULL)) {
         return;
     }
 
@@ -241,14 +240,14 @@ void MapDisp_DrawMinimapRoom(PlayState* play, TexturePtr texture, s32 x, s32 y, 
             break;
     }
 
-    s = (mapDataRoom->flags & 1) ? (texWidth - 1) << 5 : 0;
-    t = (mapDataRoom->flags & 2) ? 0 : (texHeight - 1) << 5;
+    s = (mapDataRoom->flags & MAP_DATA_ROOM_FLIP_X) ? (texWidth - 1) << 5 : 0;
+    t = (mapDataRoom->flags & MAP_DATA_ROOM_FLIP_Y) ? 0 : (texHeight - 1) << 5;
 
-    dsdx_temp = ((mapDataRoom->flags & 1) ? -1 : 1) * (1 << 10);
-    dtdy_temp = ((mapDataRoom->flags & 2) ? 1 : -1) * (1 << 10);
+    dsdx_temp = ((mapDataRoom->flags & MAP_DATA_ROOM_FLIP_X) ? -1 : 1) * (1 << 10);
+    dtdy_temp = ((mapDataRoom->flags & MAP_DATA_ROOM_FLIP_Y) ? 1 : -1) * (1 << 10);
 
-    dsdx = (mapDataRoom->flags & 1) ? dsdx_temp & 0xFFFF : dsdx_temp;
-    dtdy = (mapDataRoom->flags & 2) ? dtdy_temp : dtdy_temp & 0xFFFF;
+    dsdx = (mapDataRoom->flags & MAP_DATA_ROOM_FLIP_X) ? dsdx_temp & 0xFFFF : dsdx_temp;
+    dtdy = (mapDataRoom->flags & MAP_DATA_ROOM_FLIP_Y) ? dtdy_temp : dtdy_temp & 0xFFFF;
 
     gSPTextureRectangle(OVERLAY_DISP++, x << 2, y << 2, (texWidth + x) << 2, (y + texHeight) << 2, G_TX_RENDERTILE, s,
                         t, dsdx, dtdy);
@@ -295,7 +294,7 @@ void MapDisp_Minimap_DrawActorIcon(PlayState* play, Actor* actor) {
     }
 
     mapDataRoom = &sMapDisp.mapDataScene->rooms[sMapDisp.curRoom];
-    if (mapDataRoom->mapId == 0xFFFF) {
+    if (mapDataRoom->mapId == MAP_DATA_NO_MAP) {
         return;
     }
 
@@ -369,9 +368,9 @@ void MapDisp_Minimap_DrawActorIcon(PlayState* play, Actor* actor) {
             Gfx_SetupDL39_Overlay(play->state.gfxCtx);
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
             if (actor->flags & ACTOR_FLAG_80000000) {
-                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sMinimapActorColors[actor->category].r,
-                                sMinimapActorColors[actor->category].g, sMinimapActorColors[actor->category].b,
-                                play->interfaceCtx.minimapAlpha);
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sMinimapActorCategoryColors[actor->category].r,
+                                sMinimapActorCategoryColors[actor->category].g,
+                                sMinimapActorCategoryColors[actor->category].b, play->interfaceCtx.minimapAlpha);
                 gSPTextureRectangle(OVERLAY_DISP++, (posX - 1) << 2, (posY - 1) << 2, (posX + 1) << 2, (posY + 1) << 2,
                                     G_TX_RENDERTILE, 0, 0, 0x0001, 0x0001);
             }
@@ -394,17 +393,14 @@ void MapDisp_Minimap_DrawActors(PlayState* play) {
         for (i = 0; i < ACTORCAT_MAX; i++) {
             Actor* actor = actorCtx->actorLists[i].first;
 
-            if (actor != NULL) {
-                do {
-                    if ((actor->update != NULL) && (actor->init == NULL) &&
-                        Object_IsLoaded(&play->objectCtx, actor->objectSlot) &&
-                        ((actor->id == ACTOR_EN_BOX) || (i == ACTORCAT_PLAYER) ||
-                         (actor->flags & ACTOR_FLAG_80000000)) &&
-                        ((sMapDisp.curRoom == actor->room) || (actor->room == -1))) {
-                        MapDisp_Minimap_DrawActorIcon(play, actor);
-                    }
-                    actor = actor->next;
-                } while (actor != NULL);
+            while (actor != NULL) {
+                if ((actor->update != NULL) && (actor->init == NULL) &&
+                    Object_IsLoaded(&play->objectCtx, actor->objectSlot) &&
+                    ((actor->id == ACTOR_EN_BOX) || (i == ACTORCAT_PLAYER) || (actor->flags & ACTOR_FLAG_80000000)) &&
+                    ((sMapDisp.curRoom == actor->room) || (actor->room == -1))) {
+                    MapDisp_Minimap_DrawActorIcon(play, actor);
+                }
+                actor = actor->next;
             }
         }
 
@@ -430,7 +426,7 @@ void MapDisp_Minimap_DrawDoorActor(PlayState* play, Actor* actor) {
         yDistAlpha = 0.0f;
     }
     mapDataRoom = &sMapDisp.mapDataScene->rooms[sMapDisp.curRoom];
-    if (mapDataRoom->mapId != 0xFFFF) {
+    if (mapDataRoom->mapId != MAP_DATA_NO_MAP) {
         MapDisp_GetMapOffset(mapDataRoom, &texOffsetX, &texOffsetY);
         MapDisp_GetMapTexDim(mapDataRoom, &texWidth, &texHeight);
 
@@ -473,9 +469,9 @@ void MapDisp_Minimap_DrawDoorActor(PlayState* play, Actor* actor) {
                 s32 pad;
 
                 gDPSetPrimColor(
-                    OVERLAY_DISP++, 0, 0, sMinimapActorColors[actor->category].r,
-                    sMinimapActorColors[actor->category].g, sMinimapActorColors[actor->category].b,
-                    (s32)((sMinimapActorColors[actor->category].a * (1.0f - sMapDisp.swapAnimTimer * 0.05f) *
+                    OVERLAY_DISP++, 0, 0, sMinimapActorCategoryColors[actor->category].r,
+                    sMinimapActorCategoryColors[actor->category].g, sMinimapActorCategoryColors[actor->category].b,
+                    (s32)((sMinimapActorCategoryColors[actor->category].a * (1.0f - sMapDisp.swapAnimTimer * 0.05f) *
                            yDistAlpha * play->interfaceCtx.minimapAlpha) /
                           255.0f));
 
@@ -513,15 +509,13 @@ void MapDisp_Minimap_DrawDoorActors(PlayState* play) {
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         actor = play->actorCtx.actorLists[ACTORCAT_DOOR].first;
-        if (actor != NULL) {
-            do {
-                if ((actor->update != NULL) && (actor->init == NULL) &&
-                    Object_IsLoaded(&play->objectCtx, actor->objectSlot) &&
-                    ((sMapDisp.curRoom == actor->room) || (actor->room == -1))) {
-                    MapDisp_Minimap_DrawDoorActor(play, actor);
-                }
-                actor = actor->next;
-            } while (actor != NULL);
+        while (actor != NULL) {
+            if ((actor->update != NULL) && (actor->init == NULL) &&
+                Object_IsLoaded(&play->objectCtx, actor->objectSlot) &&
+                ((sMapDisp.curRoom == actor->room) || (actor->room == -1))) {
+                MapDisp_Minimap_DrawDoorActor(play, actor);
+            }
+            actor = actor->next;
         }
 
         CLOSE_DISPS(play->state.gfxCtx);
@@ -619,7 +613,7 @@ void MapDisp_InitSceneFloorData(PlayState* play) {
     for (i2 = 0; i2 < sSceneNumRooms; i2++) {
         MapDataRoom* mapDataRoom = &sMapDisp.mapDataScene->rooms[i2];
 
-        if (mapDataRoom->mapId == 0xFFFF) {
+        if (mapDataRoom->mapId == MAP_DATA_NO_MAP) {
             continue;
         }
         // add item to the table if it is a newish value
@@ -848,14 +842,14 @@ void MapDisp_Destroy(PlayState* play) {
 }
 
 void MapDisp_Update(PlayState* play) {
+    PauseContext* pauseCtx = &play->pauseCtx;
     s16 currentX;
     s16 currentY;
     s16 targetX;
     s16 targetY;
 
     if ((sMapDisp.mapDataScene != NULL) && (sSceneNumRooms != 0)) {
-        //! FAKE: D_801BEBFA should be sMapDisp.pauseMapCurStorey
-        D_801BEBFA = DUNGEON_FLOOR_INDEX_0 - play->pauseCtx.cursorMapDungeonItem;
+        sMapDisp.pauseMapCurStorey = DUNGEON_FLOOR_INDEX_0 - pauseCtx->cursorMapDungeonItem;
         if (sMapDisp.prevRoom != -1) {
             if (sMapDisp.swapAnimTimer > 0) {
                 targetX = sMapDisp.minimapBaseX;
@@ -895,8 +889,9 @@ void MapDisp_SwapRooms(s16 nextRoom) {
 
     if ((sMapDisp.mapDataScene != NULL) && (sSceneNumRooms != 0) && (nextRoom != -1)) {
         nextMapDataRoom = &sMapDisp.mapDataScene->rooms[nextRoom];
-        if ((nextMapDataRoom->mapId < 5) || ((nextMapDataRoom->mapId >= 0x100) && (nextMapDataRoom->mapId < 0x162)) ||
-            nextMapDataRoom->mapId == 0xFFFF) {
+        if ((nextMapDataRoom->mapId < MAPDATA_GAMEPLAY_DANGEON_KEEP_MAX) ||
+            ((nextMapDataRoom->mapId >= MAPDATA_MAP_GRAND) && (nextMapDataRoom->mapId < MAPDATA_MAP_GRAND_MAX)) ||
+            nextMapDataRoom->mapId == MAP_DATA_NO_MAP) {
 
             sMapDisp.prevRoom = sMapDisp.curRoom;
             sMapDisp.curRoom = nextRoom;
@@ -908,7 +903,7 @@ void MapDisp_SwapRooms(s16 nextRoom) {
 
             nextMapDataRoom = &sMapDisp.mapDataScene->rooms[sMapDisp.curRoom];
 
-            if (nextMapDataRoom->mapId == 0xFFFF) {
+            if (nextMapDataRoom->mapId == MAP_DATA_NO_MAP) {
                 sMapDisp.minimapPrevY = 0;
                 sMapDisp.minimapBaseX = 210;
                 sMapDisp.minimapBaseY = 140;
@@ -924,7 +919,7 @@ void MapDisp_SwapRooms(s16 nextRoom) {
             sMapDisp.minimapBaseY = 220 - height;
             if (sMapDisp.prevRoom != -1) {
                 prevMapDataRoom = &sMapDisp.mapDataScene->rooms[sMapDisp.prevRoom];
-                if (prevMapDataRoom->mapId == 0xFFFF) {
+                if (prevMapDataRoom->mapId == MAP_DATA_NO_MAP) {
                     sMapDisp.minimapCurTex = NULL;
                     sMapDisp.minimapPrevX = sMapDisp.minimapPrevY = 0;
                     sMapDisp.minimapCurX = sMapDisp.minimapBaseX;
@@ -976,7 +971,8 @@ void MapDisp_SwapRooms(s16 nextRoom) {
                         sMapDisp.minimapCurTex = sMapDisp.texBuff0;
                     }
                     if (MapData_GetSizeOfMapGrandTex(nextMapDataRoom->mapId) != 0) {
-                        CmpDma_LoadFile(SEGMENT_ROM_START(map_grand_static), nextMapDataRoom->mapId - 0x100,
+                        CmpDma_LoadFile(SEGMENT_ROM_START(map_grand_static),
+                                        MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(nextMapDataRoom->mapId),
                                         sMapDisp.minimapCurTex, MapData_GetSizeOfMapGrandTex(nextMapDataRoom->mapId));
                     }
                     break;
@@ -1000,7 +996,7 @@ void MapDisp_Minimap_DrawRedCompassIcon(PlayState* play, s32 x, s32 z, s32 rot) 
     f32 scaleFrac;
 
     mapDataRoom = &sMapDisp.mapDataScene->rooms[sMapDisp.curRoom];
-    if (mapDataRoom->mapId == 0xFFFF) {
+    if (mapDataRoom->mapId == MAP_DATA_NO_MAP) {
         return;
     }
 
@@ -1087,7 +1083,7 @@ s32 MapDisp_IsMinimapToggleBlocked(PlayState* play) {
 
 s32 MapDisp_AreRoomsSameStorey(s32 curRoom, s32 prevRoom) {
     MapDataRoom* mapDataRoom;
-    s16* roomStoreyList; // Can be removed, but adds readability
+    s16* roomStoreyList;
 
     if ((curRoom == -1) || (prevRoom == -1)) {
         return false;
@@ -1174,7 +1170,7 @@ void* MapDisp_AllocDungeonMap(PlayState* play, void* heap) {
         MapDataRoom* mapDataRoom = &sMapDisp.mapDataScene->rooms[sceneRoomIter];
         s32 isDuplicateTexture = false;
 
-        if (mapDataRoom->mapId == 0xFFFF) {
+        if (mapDataRoom->mapId == MAP_DATA_NO_MAP) {
             continue;
         }
         mapCompactId = MapData_GetMapCompactId(mapDataRoom->mapId);
@@ -1215,7 +1211,7 @@ void* MapDisp_AllocDungeonMap(PlayState* play, void* heap) {
         s32 foundTexture = false;
         s32 mapCompactId;
 
-        if (mapDataRoom->mapId == 0xFFFF) {
+        if (mapDataRoom->mapId == MAP_DATA_NO_MAP) {
             sPauseDungeonMap.roomSprite[sceneRoomIter] = NULL;
         } else {
             mapCompactId = MapData_GetMapCompactId(mapDataRoom->mapId);
@@ -1340,7 +1336,7 @@ void MapDisp_DrawRooms(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32
         s32 two = 2;
 
         mapDataRoom = &sMapDisp.mapDataScene->rooms[i];
-        if ((mapDataRoom->mapId == 0xFFFF) || (mapDataRoom->mapId >= 0x162)) {
+        if ((mapDataRoom->mapId == MAP_DATA_NO_MAP) || (mapDataRoom->mapId >= MAPDATA_MAP_GRAND_MAX)) {
             continue;
         }
 
@@ -1363,7 +1359,7 @@ void MapDisp_DrawRooms(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32
         MapData_CPID_GetTexDim(spE8, &texWidth, &texHeight);
         MapData_CPID_GetTexOffset(spE8, &offsetX, &offsetY);
 
-        if (mapDataRoom->flags & 1) {
+        if (mapDataRoom->flags & MAP_DATA_ROOM_FLIP_X) {
             offsetX = ((texWidth / 2) - offsetX) + (texWidth / 2);
             s = (texWidth - 1) << 5;
             dsdx = 0xFC00;
@@ -1372,7 +1368,7 @@ void MapDisp_DrawRooms(PlayState* play, s32 viewX, s32 viewY, s32 viewWidth, s32
             dsdx = 0x400;
         }
 
-        if (mapDataRoom->flags & 2) {
+        if (mapDataRoom->flags & MAP_DATA_ROOM_FLIP_Y) {
             s32 requiredScopeTemp;
 
             offsetY = ((texHeight / 2) - offsetY) + (texHeight / 2);
@@ -1833,7 +1829,7 @@ void MapDisp_DrawDungeonMap(PlayState* play) {
     }
 
     mapDataRoom = sMapDisp.mapDataScene->rooms;
-    if ((mapDataRoom->mapId == 0xFFFF) || (mapDataRoom->mapId >= 0x162)) {
+    if ((mapDataRoom->mapId == MAP_DATA_NO_MAP) || (mapDataRoom->mapId >= MAPDATA_MAP_GRAND_MAX)) {
         return;
     }
 

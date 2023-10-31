@@ -26,8 +26,10 @@ mapCompactId
 #define FLOOR_MIN_Y -32767
 
 /* z_map_data */
+#define MAPDATA_GAMEPLAY_DANGEON_KEEP_MAX 5
 #define MAPDATA_MAP_I_MAX 0x3A
 #define MAPDATA_MAP_GRAND 0x100
+#define MAPDATA_MAP_GRAND_MAX 0x162
 #define MAPDATA_GET_MAP_GRAND_ID_FROM_COMPACT_ID(id) (id + (MAPDATA_MAP_GRAND - MAPDATA_MAP_I_MAX))
 #define MAPDATA_GET_MAP_GRAND_ID_FROM_MAP_ID(mapId) (mapId - MAPDATA_MAP_GRAND)
 
@@ -88,8 +90,8 @@ typedef struct {
 } PauseDungeonMap; // size = 0x188
 
 /* z_map_disp */
-void func_80102EB4(u32 param_1);
-void func_80102ED0(u32 param_1);
+void func_80102EB4(u32 flag);
+void func_80102ED0(u32 flag);
 s32 MapDisp_CurRoomHasMapI(struct PlayState* play);
 void MapDisp_Init(struct PlayState* play);
 s32 MapDisp_GetBossIconY(void);

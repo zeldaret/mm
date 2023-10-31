@@ -495,7 +495,7 @@ void Scene_CommandCutsceneList(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x1C: Map Data
-void Scene_CommandMiniMap(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandMapData(PlayState* play, SceneCmd* cmd) {
     MapDisp_Init(play);
     MapDisp_InitMapData(play, cmd->mapData.segment);
 }
@@ -505,7 +505,7 @@ void Scene_Command1D(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x1E: Map Data Chests
-void Scene_CommandMiniMapCompassInfo(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandMapDataChests(PlayState* play, SceneCmd* cmd) {
     MapDisp_InitChestData(play, cmd->mapDataChests.num, cmd->mapDataChests.segment);
 }
 
@@ -578,9 +578,9 @@ void (*sSceneCmdHandlers[SCENE_CMD_MAX])(PlayState*, SceneCmd*) = {
     Scene_CommandSetRegionVisitedFlag, // SCENE_CMD_ID_SET_REGION_VISITED
     Scene_CommandAnimatedMaterials,    // SCENE_CMD_ID_ANIMATED_MATERIAL_LIST
     Scene_CommandCutsceneList,         // SCENE_CMD_ID_ACTOR_CUTSCENE_LIST
-    Scene_CommandMiniMap,              // SCENE_CMD_ID_MINIMAP_INFO
+    Scene_CommandMapData,              // SCENE_CMD_ID_MAP_DATA
     Scene_Command1D,                   // SCENE_CMD_ID_UNUSED_1D
-    Scene_CommandMiniMapCompassInfo,   // SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO
+    Scene_CommandMapDataChests,        // SCENE_CMD_ID_MAP_DATA_CHESTS
 };
 
 /**

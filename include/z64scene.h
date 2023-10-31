@@ -116,8 +116,6 @@ typedef struct {
     /* 0x4 */ void* segment;
 } SCmdTransitionActorList; // size = 0x8
 
-#define SCmdTransiActorList SCmdTransitionActorList
-
 typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  num;
@@ -504,10 +502,13 @@ typedef struct {
     /* 0x2 */ s16 centerX;
     /* 0x4 */ s16 floorY;
     /* 0x6 */ s16 centerZ;
-    /* 0x8 */ u16 flags; // 1 = mirror x, 2 = mirror y
+    /* 0x8 */ u16 flags;
 } MapDataRoom; // size = 0xA
 
-#define MAP_DATA_ROOM_GET_EXTRA_STOREYS(e) ((((e)->flags) >> 2) & 7)
+#define MAP_DATA_NO_MAP 0xFFFF
+#define MAP_DATA_ROOM_FLIP_X 1
+#define MAP_DATA_ROOM_FLIP_Y 2
+#define MAP_DATA_ROOM_GET_EXTRA_STOREYS(mapDataRoom) ((((mapDataRoom)->flags) >> 2) & 7)
 
 typedef struct {
     /* 0x0 */ MapDataRoom* rooms;
@@ -523,11 +524,12 @@ typedef struct {
 } MapDataChest; // size = 0xA
 
 // TODO: ZAPD updates
-#define SCmdMinimapSettings SCmdMapData
-#define SCmdMinimapChests SCmdMapDataChests
-#define MinimapEntry MapDataRoom
-#define MinimapList MapDataScene
-#define MinimapChest MapDataChest
+typedef SCmdMapData SCmdMinimapSettings;
+typedef SCmdMapDataChests SCmdMinimapChests;
+typedef MapDataRoom MinimapEntry;
+typedef MapDataScene MinimapList;
+typedef MapDataChest MinimapChest;
+typedef SCmdTransitionActorList SCmdTransiActorList;
 
 // TODO: consider merging with bgCamInfo?
 typedef struct {
@@ -810,9 +812,9 @@ typedef enum {
     /* 0x19 */ SCENE_CMD_ID_SET_REGION_VISITED,
     /* 0x1A */ SCENE_CMD_ID_ANIMATED_MATERIAL_LIST,
     /* 0x1B */ SCENE_CMD_ID_ACTOR_CUTSCENE_LIST,
-    /* 0x1C */ SCENE_CMD_ID_MINIMAP_INFO,
+    /* 0x1C */ SCENE_CMD_ID_MAP_DATA,
     /* 0x1D */ SCENE_CMD_ID_UNUSED_1D,
-    /* 0x1E */ SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO,
+    /* 0x1E */ SCENE_CMD_ID_MAP_DATA_CHESTS,
     /* 0x1F */ SCENE_CMD_MAX
 } SceneCommandTypeId;
 
@@ -905,15 +907,17 @@ typedef enum {
 #define SCENE_CMD_ACTOR_CUTSCENE_LIST(numEntries, actorCutsceneList) \
     { SCENE_CMD_ID_ACTOR_CUTSCENE_LIST, numEntries, CMD_PTR(actorCutsceneList) }
 
-#define SCENE_CMD_MINIMAP_INFO(minimapInfo) \
-    { SCENE_CMD_ID_MINIMAP_INFO, 0, CMD_PTR(minimapInfo) }
+#define SCENE_CMD_MAP_DATA(mapData) \
+    { SCENE_CMD_ID_MAP_DATA, 0, CMD_PTR(mapData) }
 
-#define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO(compassIconCount, compassIconInfo) \
-    { SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO, compassIconCount, CMD_PTR(compassIconInfo) }
+#define SCENE_CMD_MAP_DATA_CHESTS(chestCount, chestInfo) \
+    { SCENE_CMD_ID_MAP_DATA_CHESTS, chestCount, CMD_PTR(chestInfo) }
 
  // TODO: ZAPD Capatability
 #define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED
 #define SCENE_CMD_CUTSCENE_LIST SCENE_CMD_CUTSCENE_SCRIPT_LIST
+#define SCENE_CMD_MINIMAP_INFO SCENE_CMD_MAP_DATA
+#define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO SCENE_CMD_MAP_DATA_CHESTS
 
 s32 Object_SpawnPersistent(ObjectContext* objectCtx, s16 id);
 void Object_InitContext(struct GameState* gameState, ObjectContext* objectCtx);
@@ -949,9 +953,9 @@ void Scene_CommandEchoSetting(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandAltHeaderList(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandCutsceneScriptList(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandCutsceneList(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandMiniMap(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandMapData(struct PlayState* play, SceneCmd* cmd);
 void Scene_Command1D(struct PlayState* play, SceneCmd* cmd);
-void Scene_CommandMiniMapCompassInfo(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandMapDataChests(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandSetRegionVisitedFlag(struct PlayState* play, SceneCmd* cmd);
 void Scene_CommandAnimatedMaterials(struct PlayState* play, SceneCmd* cmd);
 void Scene_SetExitFade(struct PlayState* play);

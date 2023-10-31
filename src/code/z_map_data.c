@@ -30,11 +30,11 @@ static Color_RGBA8 sMapColorTable[] = {
 };
 
 static MapSpriteInfo2 sGameplayDangeonKeepInfo[5] = {
-    { &gameplay_dangeon_keep_Tex_0022C8, 96, 85, 48, 42, MAPDATA_DRAW_0, 0, 20 },
-    { &gameplay_dangeon_keep_Tex_0042C8, 96, 85, 48, 62, MAPDATA_DRAW_0, 0, 20 },
-    { &gameplay_dangeon_keep_Tex_0052C8, 96, 85, 68, 42, MAPDATA_DRAW_0, 0, 20 },
-    { &gameplay_dangeon_keep_Tex_0032C8, 96, 85, 48, 62, MAPDATA_DRAW_0, 0, 20 },
-    { &gameplay_dangeon_keep_Tex_0062C8, 96, 85, 68, 62, MAPDATA_DRAW_0, 0, 20 },
+    { gameplay_dangeon_keep_Tex_0022C8, 96, 85, 48, 42, MAPDATA_DRAW_0, 0, 20 },
+    { gameplay_dangeon_keep_Tex_0042C8, 96, 85, 48, 62, MAPDATA_DRAW_0, 0, 20 },
+    { gameplay_dangeon_keep_Tex_0052C8, 96, 85, 68, 42, MAPDATA_DRAW_0, 0, 20 },
+    { gameplay_dangeon_keep_Tex_0032C8, 96, 85, 48, 62, MAPDATA_DRAW_0, 0, 20 },
+    { gameplay_dangeon_keep_Tex_0062C8, 96, 85, 68, 62, MAPDATA_DRAW_0, 0, 20 },
 };
 
 static MapSpriteInfo sMapGrandStaticInfo[98] = {
@@ -229,8 +229,6 @@ static s32 sMapIForMapGrand[98] = {
     MAPDATA_MAP_I_MAX,
     MAPDATA_MAP_I_MAX,
 };
-
-s32 MapDisp_GetSizeOfMapITex(s32 mapCompactId);
 
 void MapData_GetMapColor(s32 colorIndex, Color_RGBA8* color) {
     *color = sMapColorTable[colorIndex];

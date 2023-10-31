@@ -1963,9 +1963,9 @@ asm/non_matchings/code/z_scene/Scene_CommandEchoSetting.s,Scene_CommandEchoSetti
 asm/non_matchings/code/z_scene/Scene_CommandAltHeaderList.s,Scene_CommandAltHeaderList,0x80130454,0x1E
 asm/non_matchings/code/z_scene/Scene_CommandCutsceneScriptList.s,Scene_CommandCutsceneScriptList,0x801304CC,0xD
 asm/non_matchings/code/z_scene/Scene_CommandCutsceneList.s,Scene_CommandCutsceneList,0x80130500,0x10
-asm/non_matchings/code/z_scene/Scene_CommandMiniMap.s,Scene_CommandMiniMap,0x80130540,0xE
+asm/non_matchings/code/z_scene/Scene_CommandMapData.s,Scene_CommandMapData,0x80130540,0xE
 asm/non_matchings/code/z_scene/Scene_Command1D.s,Scene_Command1D,0x80130578,0x4
-asm/non_matchings/code/z_scene/Scene_CommandMiniMapCompassInfo.s,Scene_CommandMiniMapCompassInfo,0x80130588,0xA
+asm/non_matchings/code/z_scene/Scene_CommandMapDataChests.s,Scene_CommandMapDataChests,0x80130588,0xA
 asm/non_matchings/code/z_scene/Scene_CommandSetRegionVisitedFlag.s,Scene_CommandSetRegionVisitedFlag,0x801305B0,0x31
 asm/non_matchings/code/z_scene/Scene_CommandAnimatedMaterials.s,Scene_CommandAnimatedMaterials,0x80130674,0xC
 asm/non_matchings/code/z_scene/Scene_SetExitFade.s,Scene_SetExitFade,0x801306A4,0x11
