@@ -34,7 +34,7 @@ typedef struct Boss05 {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ u8 unk15C;
     /* 0x15E */ s16 unk15E;
-    /* 0x160 */ s16 unk160;
+    /* 0x160 */ s16 frameCounter;
     /* 0x162 */ s16 unk162[3]; // timers
     /* 0x168 */ s16 unk168; // timer
     /* 0x16A */ s16 unk16A; // timer
@@ -43,13 +43,13 @@ typedef struct Boss05 {
     /* 0x174 */ u8 unk174;
     /* 0x176 */ s16 unk176;
     /* 0x178 */ s16 unk178;
-    /* 0x17A */ s16 unk17A; // timer
+    /* 0x17A */ s16 drawDmgEffTimer;
     /* 0x17C */ f32 drawDmgEffScale;
     /* 0x180 */ f32 dmgEffFrozenSteamScale;
     /* 0x184 */ f32 drawDmgEffAlpha;
-    /* 0x188 */ u8 drawDmgEffState; // A bit more than just type, possibly we should name it as an internal type?
+    /* 0x188 */ u8 drawDmgEffState;
     /* 0x189 */ u8 drawDmgEffType;
-    /* 0x18C */ Vec3f limbPos[1];
+    /* 0x18C */ Vec3f bodyPartsPos[1];
     /* 0x198 */ f32 unk198;
     /* 0x19C */ s16 unk19C;
     /* 0x19E */ Vec3s unk19E[7];
@@ -73,7 +73,7 @@ typedef struct Boss05 {
     /* 0x3C8 */ SkelAnime headSkelAnime;
     /* 0x40C */ Vec3s headJointTable[BIO_DEKU_BABA_HEAD_LIMB_MAX];
     /* 0x484 */ Vec3s headMorphTable[BIO_DEKU_BABA_HEAD_LIMB_MAX];
-    /* 0x4FC */ f32 lastAnimFrame;
+    /* 0x4FC */ f32 animEndFrame;
     /* 0x500 */ Vec3s unk500;
 } Boss05; // size = 0x508
 

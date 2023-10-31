@@ -9379,7 +9379,7 @@
     0x809EDECC:("Boss04_PostLimbDraw",),
     0x809EDF58:("Boss04_Draw",),
     0x809EE4E0:("func_809EE4E0",),
-    0x809EE668:("func_809EE668",),
+    0x809EE668:("Boss05_SetColliderSphere",),
     0x809EE6F8:("Boss05_Init",),
     0x809EEC70:("Boss05_Destroy",),
     0x809EECBC:("func_809EECBC",),
