@@ -394,7 +394,8 @@ typedef enum {
 
 #define DMG_ENTRY(damage, effect) ((damage) | ((effect) << 4))
 
-// These flags are not to be used in code until we figure out how we want to format them. They are only here for reference 
+// Don't use combinations of these flags in code until we figure out how we want to format them.
+// It's okay to use these flags if the code is only checking a single flag, though.
 #define DMG_DEKU_NUT       (1 << 0x00)
 #define DMG_DEKU_STICK     (1 << 0x01)
 #define DMG_HORSE_TRAMPLE  (1 << 0x02)
