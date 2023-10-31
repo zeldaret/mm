@@ -431,7 +431,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                 this->unk_146 = gSaveContext.save.time += CLOCK_TIME_MINUTE;
             }
         } else if ((new_var * bellDiff) <= 0) {
-            Audio_PlaySfx_BigBells(&this->actor.projectedPos, (this->actor.params >> 5) & 0xF);
+            Audio_PlaySfx_BigBells(&this->actor.projectedPos, TEST4_GET_BIG_BELLS_SFX_VOLUME_INDEX(&this->actor));
             this->lastBellTime = gSaveContext.save.time;
 
             if (CURRENT_DAY == 3) {
@@ -553,11 +553,11 @@ void func_80A431C8(EnTest4* this, PlayState* play) {
     }
 }
 
-void func_80A4323C(EnTest4* this, PlayState* play) {
-    s32 temp_v0 = (this->actor.params >> 0xA) * 0x64;
+void EnTest4_SetSkyboxNumStars(EnTest4* this, PlayState* play) {
+    s32 numStars = TEST4_GET_SKYBOX_NUM_STARS(&this->actor);
 
-    if (temp_v0 > 0) {
-        gSkyboxNumStars = temp_v0;
+    if (numStars > 0) {
+        gSkyboxNumStars = numStars;
     }
 }
 
@@ -578,6 +578,6 @@ void EnTest4_Update(Actor* thisx, PlayState* play) {
                     break;
             }
         }
-        func_80A4323C(this, play);
+        EnTest4_SetSkyboxNumStars(this, play);
     }
 }
