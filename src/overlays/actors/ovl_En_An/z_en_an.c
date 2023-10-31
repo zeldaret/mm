@@ -3308,7 +3308,7 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
         this->actor.params &= (s16)~ENAN_8000;
     }
 
-    temp_v1 = (this->actor.params & ENAN_8000) >> 0xF;
+    temp_v1 = ENAN_GET_8000(&this->actor) >> 0xF;
     watchedCouplesMaskCs = CHECK_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED);
 
     if ((!watchedCouplesMaskCs && (temp_v1 == 1)) || (watchedCouplesMaskCs && (temp_v1 == 0))) {

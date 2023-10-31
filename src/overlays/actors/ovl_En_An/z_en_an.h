@@ -10,8 +10,10 @@ typedef void (*EnAnActionFunc)(struct EnAn*, PlayState*);
 typedef void (*EnAnDialogueFunc)(struct EnAn*, PlayState*);
 typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
-#define ENAN_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 #define ENAN_8000 0x8000
+
+#define ENAN_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
+#define ENAN_GET_8000(thisx) ((thisx)->params & ENAN_8000)
 
 #define ENAN_STATE_8                (1 << 3) // path related
 #define ENAN_STATE_REACHED_PATH_END (1 << 4)
