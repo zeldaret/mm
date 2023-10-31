@@ -9,7 +9,7 @@ typedef void (*DmTsgActionFunc)(struct DmTsg*, PlayState*);
 
 typedef struct DmTsg {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ DmTsgActionFunc ActionFunc;
+    /* 0x144 */ UNK_TYPE4 unk_144;
     /* 0x148 */ Vec3f unk_148[100];
     /* 0x5F8 */ f32 unk_5F8[100];
     /* 0x788 */ f32 unk_788;
