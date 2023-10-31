@@ -1614,9 +1614,9 @@ void Environment_UpdateSun(PlayState* play) {
         temp_a0 = phi_v0 - CLOCK_TIME(12, 0);
 
         if (play->csCtx.state != CS_STATE_IDLE) {
-            // TODO bug?
             Math_SmoothStepToF(&play->envCtx.sunPos.x, -(Math_SinS(temp_a0) * 120.0f) * 25.0f, 1.0f, 0.8f, 0.8f);
             Math_SmoothStepToF(&play->envCtx.sunPos.y, Math_CosS(temp_a0) * 120.0f * 25.0f, 1.0f, 0.8f, 0.8f);
+            //! @bug This should be z.
             Math_SmoothStepToF(&play->envCtx.sunPos.y, Math_CosS(temp_a0) * 20.0f * 25.0f, 1.0f, 0.8f, 0.8f);
         } else {
             play->envCtx.sunPos.x = -(Math_SinS(temp_a0) * 120.0f) * 25.0f;
