@@ -988,6 +988,6 @@ void EnTest7_Draw(Actor* thisx, PlayState* play) {
 
     if (this->unk_144 & 4) {
         Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, this->actor.world.pos, 70.0f,
-                                  5.0f, 0, 0);
+                                  5.0f, 0, false);
     }
 }

@@ -32,7 +32,7 @@ extern u8* sYaz0MaxPtr;
 extern void* gYaz0DecompressDstEnd;
 
 // extern UNK_TYPE4 D_8009CD10;
-extern u32 sRandFloat;
+extern u32 gRandFloat;
 // extern UNK_TYPE4 sArenaLockMsg;
 
 extern DmaEntry dmadata[1568];
