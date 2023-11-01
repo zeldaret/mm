@@ -541,8 +541,8 @@ void Color_RGB8_Lerp(Color_RGB8* from, Color_RGB8* to, f32 lerp, Color_RGB8* dst
 void Lib_Nop801004FC(void);
 void* Lib_SegmentedToVirtual(void* ptr);
 void* Lib_SegmentedToVirtualNull(void* ptr);
-void* Lib_VirtualToPhysical(void* ptr);
-void* Lib_PhysicalToVirtual(void* ptr);
+uintptr_t Lib_VirtualToPhysical(void* ptr);
+void* Lib_PhysicalToVirtual(uintptr_t ptr);
 void LifeMeter_Init(PlayState* play);
 void LifeMeter_UpdateColors(PlayState* play);
 s32 LifeMeter_SaveInterfaceHealth(PlayState* play);

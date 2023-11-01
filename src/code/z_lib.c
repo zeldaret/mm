@@ -715,11 +715,11 @@ void* Lib_SegmentedToVirtualNull(void* ptr) {
  * the NULL virtual address being 0x00000000 and not 0x80000000. Used by transition overlays, which store their
  * addresses in 24-bit fields.
  */
-void* Lib_VirtualToPhysical(void* ptr) {
+uintptr_t Lib_VirtualToPhysical(void* ptr) {
     if (ptr == NULL) {
-        return NULL;
+        return 0;
     } else {
-        return (void*)OS_K0_TO_PHYSICAL(ptr);
+        return OS_K0_TO_PHYSICAL(ptr);
     }
 }
 
@@ -728,8 +728,8 @@ void* Lib_VirtualToPhysical(void* ptr) {
  * the NULL virtual address being 0x00000000 and not 0x80000000. Used by transition overlays, which store their
  * addresses in 24-bit fields.
  */
-void* Lib_PhysicalToVirtual(void* ptr) {
-    if (ptr == NULL) {
+void* Lib_PhysicalToVirtual(uintptr_t ptr) {
+    if (ptr == 0) {
         return NULL;
     } else {
         return OS_PHYSICAL_TO_K0(ptr);

@@ -33,7 +33,7 @@ void osSpTaskLoad(OSTask* intp) {
         intp->t.flags &= ~OS_TASK_YIELDED;
 
         if (tp->t.flags & OS_TASK_LOADABLE) {
-            tp->t.ucode = IO_READ((uintptr_t)intp->t.yieldDataPtr + OS_YIELD_DATA_SIZE - 4);
+            tp->t.ucode = (void*)IO_READ((uintptr_t)intp->t.yieldDataPtr + OS_YIELD_DATA_SIZE - 4);
         }
     }
 

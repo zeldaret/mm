@@ -206,12 +206,12 @@ void SysFlashrom_ThreadEntry(void* arg) {
     switch (req->requestType) {
         case FLASHROM_REQUEST_WRITE:
             req->response = SysFlashrom_WriteData(req->addr, req->pageNum, req->pageCount);
-            osSendMesg(&req->messageQueue, req->response, OS_MESG_BLOCK);
+            osSendMesg(&req->messageQueue, (OSMesg)req->response, OS_MESG_BLOCK);
             break;
 
         case FLASHROM_REQUEST_READ:
             req->response = SysFlashrom_ReadData(req->addr, req->pageNum, req->pageCount);
-            osSendMesg(&req->messageQueue, req->response, OS_MESG_BLOCK);
+            osSendMesg(&req->messageQueue, (OSMesg)req->response, OS_MESG_BLOCK);
             break;
     }
 }
