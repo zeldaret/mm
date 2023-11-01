@@ -8,6 +8,7 @@ __pycache__/
 .vs/
 .idea/
 CMakeLists.txt
+ignore.txt
 cmake-build-debug
 venv/
 tags

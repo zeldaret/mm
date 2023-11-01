@@ -2,6 +2,7 @@
 #define Z_EN_PM_H
 
 #include "global.h"
+#include "objects/object_mm/object_mm.h"
 
 struct EnPm;
 
@@ -34,8 +35,8 @@ typedef struct EnPm {
     /* 0x278 */ Vec3f unk_278;
     /* 0x284 */ Vec3f unk_284;
     /* 0x290 */ Vec3s unk_290;
-    /* 0x296 */ Vec3s jointTable[16];
-    /* 0x2F6 */ Vec3s morphTable[16];
+    /* 0x296 */ Vec3s jointTable[POSTMAN_LIMB_MAX];
+    /* 0x2F6 */ Vec3s morphTable[POSTMAN_LIMB_MAX];
     /* 0x356 */ u16 unk_356;
     /* 0x358 */ u16 unk_358;
     /* 0x35C */ f32 unk_35C;

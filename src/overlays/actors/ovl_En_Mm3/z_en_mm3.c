@@ -64,30 +64,30 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_mm_Anim_002238, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
-    { &object_mm_Anim_00A4E0, -1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -7.0f },
-    { &object_mm_Anim_00C640, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
-    { &object_mm_Anim_00A4E0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -7.0f },
-    { &object_mm_Anim_000468, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
-    { &object_mm_Anim_00CD90, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -12.0f },
-    { &object_mm_Anim_00DA50, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -12.0f },
-    { &object_mm_Anim_00DA50, 1.0f, 0.0f, 10.0f, ANIMMODE_ONCE, -10.0f },
+    { &gPostmanRunningAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
+    { &gPostmanStandingUpAnim, -1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -7.0f },
+    { &gPostmanSittingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
+    { &gPostmanStandingUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -7.0f },
+    { &gPostmanSkippingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -7.0f },
+    { &gPostmanExercisingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -12.0f },
+    { &gPostmanStartledAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -12.0f },
+    { &gPostmanStartledAnim, 1.0f, 0.0f, 10.0f, ANIMMODE_ONCE, -10.0f },
 };
 
 #include "overlays/ovl_En_Mm3/ovl_En_Mm3.c"
 
 Vec3f D_80A704F0 = { 0.0f, 0.0f, 0.0f };
 
-TexturePtr D_80A704FC[] = { object_mm_Tex_002950, object_mm_Tex_002750 };
+TexturePtr D_80A704FC[] = { gPostmanMouthOpenTex, gPostmanMouthClosedTex };
 
 void EnMm3_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnMm3* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 21.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_mm_Skel_0096E8, &object_mm_Anim_00A4E0, this->jointTable,
-                       this->morphTable, 16);
-    Animation_Change(&this->skelAnime, &object_mm_Anim_00A4E0, -1.0f, Animation_GetLastFrame(&object_mm_Anim_00A4E0),
+    SkelAnime_InitFlex(play, &this->skelAnime, &gPostmanSkel, &gPostmanStandingUpAnim, this->jointTable,
+                       this->morphTable, POSTMAN_LIMB_MAX);
+    Animation_Change(&this->skelAnime, &gPostmanStandingUpAnim, -1.0f, Animation_GetLastFrame(&gPostmanStandingUpAnim),
                      0.0f, ANIMMODE_ONCE, 0.0f);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -541,10 +541,10 @@ void EnMm3_Update(Actor* thisx, PlayState* play) {
 s32 EnMm3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMm3* this = THIS;
 
-    if (limbIndex == 8) {
+    if (limbIndex == POSTMAN_LIMB_TORSO) {
         rot->x += this->unk_2A6.y;
         rot->y -= this->unk_2A6.x;
-    } else if (limbIndex == 15) {
+    } else if (limbIndex == POSTMAN_LIMB_HEAD) {
         rot->x += this->unk_2A0.y;
         rot->z += this->unk_2A0.x;
         if ((this->unk_2B0 & 2) && ((play->gameplayFrames % 3) == 0)) {
@@ -557,7 +557,7 @@ s32 EnMm3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnMm3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMm3* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == POSTMAN_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80A704F0, &this->actor.focus.pos);
     }
 }

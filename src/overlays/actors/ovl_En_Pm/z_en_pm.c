@@ -527,20 +527,20 @@ static ColliderSphereInit sSphereInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &object_mm_Anim_002238, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_mm_Anim_002238, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_mm_Anim_00A4E0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_mm_Anim_00B09C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_mm_Anim_00B09C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_mm_Anim_00BA78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_mm_Anim_00C32C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_mm_Anim_0099B4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_mm_Anim_000FC4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_mm_Anim_00A8D8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_mm_Anim_00099C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_mm_Anim_001F84, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_mm_Anim_000468, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_mm_Anim_00C640, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gPostmanRunningAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gPostmanRunningAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gPostmanStandingUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gPostmanIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gPostmanIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gPostmanHandingMailAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gPostmanHandingMailLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gPostmanJoggingInPlaceAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gPostmanSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gPostmanOnHandsAndKneesAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gPostmanHeadInHandsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gPostmanCheckingMailAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gPostmanSkippingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gPostmanSittingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 s32 func_80AF7B40(void) {
@@ -1044,19 +1044,19 @@ void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
     switch (arg2) {
         case 0:
             if (this->unk_356 & 0x800) {
-                gSPDisplayList((*gfx)++, object_mm_DL_008348);
+                gSPDisplayList((*gfx)++, gPostmanLetterDL);
             }
             break;
 
         case 1:
             if (this->unk_356 & 0x1000) {
-                gSPDisplayList((*gfx)++, object_mm_DL_0085C8);
+                gSPDisplayList((*gfx)++, gPostmanHatDL);
             }
             break;
 
         case 2:
             if (this->unk_356 & 0x1000) {
-                gSPDisplayList((*gfx)++, object_mm_DL_0083E0);
+                gSPDisplayList((*gfx)++, gPostmanBagDL);
             }
             break;
     }
@@ -2059,7 +2059,7 @@ void EnPm_Init(Actor* thisx, PlayState* play) {
     EnPm* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_mm_Skel_0096E8, NULL, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gPostmanSkel, NULL, this->jointTable, this->morphTable, 16);
     this->unk_384 = -1;
     func_80AF7E98(this, 0);
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -2179,8 +2179,8 @@ void EnPm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx, Gfx** 
 
 void EnPm_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr D_80AFB914[] = {
-        object_mm_Tex_002950,
-        object_mm_Tex_002750,
+        gPostmanMouthOpenTex,
+        gPostmanMouthClosedTex,
     };
     EnPm* this = THIS;
     s32 pad;
