@@ -2059,7 +2059,7 @@ void EnPm_Init(Actor* thisx, PlayState* play) {
     EnPm* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gPostmanSkel, NULL, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gPostmanSkel, NULL, this->jointTable, this->morphTable, POSTMAN_LIMB_MAX);
     this->unk_384 = -1;
     func_80AF7E98(this, 0);
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
