@@ -3171,7 +3171,7 @@ void EnAn_Initialize(EnAn* this, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
 
-    if (this->actor.params & ENAN_8000) {
+    if (ENAN_GET_8000(&this->actor)) {
         this->unk_3C0 = true;
     }
 
