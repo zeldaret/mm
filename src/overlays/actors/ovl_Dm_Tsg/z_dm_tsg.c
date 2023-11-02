@@ -78,7 +78,7 @@ void DmTsg_Draw(Actor* thisx, PlayState* play2) {
     u32 j;
 
     if (this->canDraw) {
-        for (i = 0, j = 0; i < 100; i++) {
+        for (i = 0, j = 0; i < DMTSG_UNK_SIZE; i++) {
             Matrix_Translate(this->unk_148[i].x + this->actor.world.pos.x, this->unk_148[i].y + this->actor.world.pos.y,
                              this->unk_148[i].z + this->actor.world.pos.z, MTXMODE_NEW);
             Matrix_Scale(0.3f, 0.3f, 0.3f, MTXMODE_APPLY);
