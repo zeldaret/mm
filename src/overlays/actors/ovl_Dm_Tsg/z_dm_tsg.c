@@ -36,7 +36,7 @@ void DmTsg_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.1f);
         for (i = 0; i < DMTSG_UNK_SIZE; i++) {
             this->unk_78C[i] = (Rand_ZeroOne() * 65535.0f);
-            this->unk_856[i] = (s16)(Rand_ZeroOne() * 200.0f) + 100;
+            this->unk_856[i] = TRUNCF_BINANG(Rand_ZeroOne() * 200.0f) + 100;
         }
     } else {
         Actor_Kill(&this->actor);
@@ -51,7 +51,7 @@ void DmTsg_Update(Actor* thisx, PlayState* play) {
     s32 cueChannel;
     s16 i;
 
-    for (i = 0; i < 100; i++) {
+    for (i = 0; i < DMTSG_UNK_SIZE; i++) {
         this->unk_5F8[i] = (Math_SinS((i & 15) * this->unk_854) * 60.0f) + 120.0f;
         this->unk_148[i].x = Math_CosS(this->unk_78C[i]) * this->unk_5F8[i];
         this->unk_148[i].y = this->unk_788 + (i * 16);
