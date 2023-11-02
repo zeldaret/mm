@@ -18,7 +18,7 @@ typedef struct DmTsg {
     /* 0x78C */ s16 unk_78C[DMTSG_UNK_SIZE];
     /* 0x854 */ s16 unk_854;
     /* 0x856 */ s16 unk_856[DMTSG_UNK_SIZE];
-    /* 0x91E */ u8 unk_91E;
+    /* 0x91E */ u8 canDraw;
 } DmTsg; // size = 0x920
 
 #endif // Z_DM_TSG_H
