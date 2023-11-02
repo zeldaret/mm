@@ -728,9 +728,9 @@ void func_809DAB78(Boss02* this, PlayState* play) {
         Math_ApproachS(&this->actor.world.rot.y, temp_s0, 0x14, this->unk_0164);
         Math_ApproachS(&this->actor.shape.rot.x, temp_s2, 0x14, this->unk_0164);
         Math_ApproachS(&this->unk_0198, this->unk_019A, 1, 0x20);
-        this->unk_0196 += this->unk_0198;
+        this->drawDmgEffType += this->unk_0198;
         Math_ApproachF(&this->unk_019C, this->unk_01A0, 0.1f, 100.0f);
-        this->unk_01A4 = Math_SinS(this->unk_0196) * this->unk_019C;
+        this->unk_01A4 = Math_SinS(this->drawDmgEffType) * this->unk_019C;
         this->actor.world.rot.x = this->actor.shape.rot.x + this->unk_01A4;
 
         if (!(this->unk_014C & 0x1F) && (sTwinmoldStatic->unk_1D20 == 0)) {

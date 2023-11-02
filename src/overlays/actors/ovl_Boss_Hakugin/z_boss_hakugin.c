@@ -8,10 +8,12 @@
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Hakurock/z_en_hakurock.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 #include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -446,8 +448,8 @@ s32 D_80B0EAB0[5] = {
     GOHT_LIMB_FRONT_LEFT_LOWER_LEG, GOHT_LIMB_FRONT_RIGHT_UPPER_LEG,
 };
 
-Color_RGBA8 D_80B0EAC4 = { 250, 250, 250, 255 };
-Color_RGBA8 D_80B0EAC8 = { 180, 180, 180, 255 };
+static Color_RGBA8 sSparklePrimColor = { 250, 250, 250, 255 };
+static Color_RGBA8 sSparkleEnvColor = { 180, 180, 180, 255 };
 Color_RGB8 D_80B0EACC = { 0, 150, 255 };
 Color_RGB8 D_80B0EAD0 = { 0, 255, 255 };
 
@@ -481,7 +483,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     Collider_InitAndSetSphere(play, &this->unk_37B8, &this->actor, &sSphereInit);
     this->unk_37B8.dim.worldSphere.radius = 40;
     Collider_InitAndSetCylinder(play, &this->unk_0964, &this->actor, &sCylinderInit);
-    this->unk_0964.dim.pos.x = (this->actor.world.pos.x - 50.0f);
+    this->unk_0964.dim.pos.x = this->actor.world.pos.x - 50.0f;
     this->unk_0964.dim.pos.y = this->actor.world.pos.y;
     this->unk_0964.dim.pos.z = this->actor.world.pos.z;
     this->unk_0964.dim.radius = 150;
@@ -625,14 +627,15 @@ void func_80B058C0(BossHakugin* this) {
     }
 }
 
-void func_80B05A64(BossHakugin* this, PlayState* play, s16 speed, s32 y, s16 duration) {
+void BossHakugin_RequestQuakeAndRumble(BossHakugin* this, PlayState* play, s16 speed, s32 verticalMag, s16 duration) {
     s16 quakeIndex;
 
-    if (y > 0) {
-        quakeIndex = Quake_Request(play->cameraPtrs[play->activeCamId], QUAKE_TYPE_3);
+    if (verticalMag > 0) {
+        quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, speed);
-        Quake_SetPerturbations(quakeIndex, y, 0, 0, 0);
+        Quake_SetPerturbations(quakeIndex, verticalMag, 0, 0, 0);
         Quake_SetDuration(quakeIndex, duration);
+
         Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
     }
 }
@@ -653,7 +656,8 @@ void func_80B05B04(BossHakugin* this, PlayState* play) {
         var_v0 = (Rand_ZeroOne() < 0.5f) ? -1 : 1;
         sp34.z = (var_v0 * (15.0f + (sp2C * 15.0f)) * 4.0f) + this->actor.world.pos.z;
 
-        EffectSsKirakira_SpawnDispersed(play, &sp34, &gZeroVec3f, &gZeroVec3f, &D_80B0EAC4, &D_80B0EAC8, 2000, 5);
+        EffectSsKirakira_SpawnDispersed(play, &sp34, &gZeroVec3f, &gZeroVec3f, &sSparklePrimColor, &sSparkleEnvColor,
+                                        2000, 5);
     }
 }
 
@@ -728,7 +732,7 @@ void func_80B05EE0(BossHakugin* this, PlayState* play) {
     heartPos.x = ((100.0f * sin) + warpPos.x) + (sp50 * cos);
     heartPos.z = ((100.0f * cos) + warpPos.z) - (sp50 * sin);
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, warpPos.x, warpPos.y, warpPos.z, 0, 0, 0,
-                       1);
+                       ENDOORWARP1_FF_1);
     Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, heartPos.x, warpPos.y, heartPos.z, 0, 0, 0,
                 BHEART_PARAM_NORMAL);
 }
@@ -736,7 +740,7 @@ void func_80B05EE0(BossHakugin* this, PlayState* play) {
 void func_80B0607C(BossHakugin* this, PlayState* play) {
     CollisionPoly* sp8C = NULL;
     CollisionPoly* sp88 = NULL;
-    s32 sp84;
+    s32 bgId;
     s16 sp82;
     s16 sp80;
     s16 var_v0;
@@ -754,29 +758,31 @@ void func_80B0607C(BossHakugin* this, PlayState* play) {
     sp4C.y = sp58.y;
     sp4C.z = sp58.z + (Math_SinS(this->unk_01A0) * 1000.0f);
 
-    if (BgCheck_EntityLineTest1(&play->colCtx, &sp58, &sp4C, &sp70, &sp8C, 1, 1, 0, 1, &sp84)) {
-        sp82 =
-            Math_Atan2S_XY(sp8C->normal.z * COLPOLY_NORMAL_FRAC, sp8C->normal.x * COLPOLY_NORMAL_FRAC) - this->unk_01A0;
+    if (BgCheck_EntityLineTest1(&play->colCtx, &sp58, &sp4C, &sp70, &sp8C, true, true, false, true, &bgId)) {
+        sp82 = Math_Atan2S_XY(COLPOLY_GET_NORMAL(sp8C->normal.z), COLPOLY_GET_NORMAL(sp8C->normal.x)) - this->unk_01A0;
         this->unk_01BC = Math_Vec3f_DistXZ(&sp58, &sp70);
     } else {
         sp82 = 0;
         this->unk_01BC = 30000.0f;
     }
+
     sp4C.x = (2.0f * sp58.x) - sp4C.x;
     sp4C.z = (2.0f * sp58.z) - sp4C.z;
-    if (BgCheck_EntityLineTest1(&play->colCtx, &sp58, &sp4C, &sp64, &sp88, 1, 1, 0, 1, &sp84)) {
-        sp80 =
-            Math_Atan2S_XY(sp88->normal.z * COLPOLY_NORMAL_FRAC, sp88->normal.x * COLPOLY_NORMAL_FRAC) - this->unk_01A0;
+
+    if (BgCheck_EntityLineTest1(&play->colCtx, &sp58, &sp4C, &sp64, &sp88, true, true, false, true, &bgId)) {
+        sp80 = Math_Atan2S_XY(COLPOLY_GET_NORMAL(sp88->normal.z), COLPOLY_GET_NORMAL(sp88->normal.x)) - this->unk_01A0;
         this->unk_01C0 = Math_Vec3f_DistXZ(&sp58, &sp64);
     } else {
         sp80 = 0;
         this->unk_01C0 = 30000.0f;
     }
+
     if (this->unk_01B4 == 1) {
         this->unk_01C0 -= 50.0f;
     } else {
         this->unk_01BC -= 50.0f;
     }
+
     if (this->unk_01BC <= 89.100006f) {
         sp48 = (this->unk_01B4 == 1) ? 89.100006f : 139.1f;
         this->actor.world.pos.x =
@@ -790,6 +796,7 @@ void func_80B0607C(BossHakugin* this, PlayState* play) {
         this->actor.world.pos.z =
             (sp64.z + (sp48 * Math_SinS(this->unk_01A0))) - (Math_CosS(this->unk_01A0) * (5.0f * this->actor.speed));
     }
+
     if ((this->unk_01C0 < 30000.0f) && (this->unk_01BC < 30000.0f)) {
         var_v0 = (s16)(sp82 + sp80) >> 1;
         if (((this->unk_01B4 == 1) && (var_v0 < 0)) || ((this->unk_01B4 == -1) && (var_v0 > 0))) {
@@ -821,7 +828,7 @@ void func_80B06600(BossHakugin* this, Vec3f* arg1, PlayState* play) {
     Vec3f sp98;
     Vec3f sp8C;
     BossHakuginUnkStruct_2618* effect;
-    s32 sp84;
+    s32 bgId;
 
     Math_Vec3f_Copy(&spC8, arg1);
     spBC.x = player->actor.world.pos.x - (Math_SinS(this->actor.shape.rot.y) * 50.0f);
@@ -829,14 +836,17 @@ void func_80B06600(BossHakugin* this, Vec3f* arg1, PlayState* play) {
     spBC.z = player->actor.world.pos.z - (Math_CosS(this->actor.shape.rot.y) * 50.0f);
     Actor_OffsetOfPointInActorCoords(&this->actor, &sp98, &spBC);
     Audio_PlaySfx_AtPos(&this->unk_0458, NA_SE_EN_COMMON_THUNDER_THR);
+
     for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
         effect = &this->unk_2618[i];
         Actor_OffsetOfPointInActorCoords(&this->actor, &sp8C, &spC8);
+
         if (sp98.z < sp8C.z) {
             effect->unk_0E.y = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x13);
         } else {
             effect->unk_0E.y = Math_Vec3f_Yaw(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
         }
+
         effect->unk_0E.x = Math_Vec3f_Pitch(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
         effect->unk_0E.z = 0;
         effect->unk_00.x = spC8.x + (80.0f * Math_CosS(effect->unk_0E.x) * Math_SinS(effect->unk_0E.y));
@@ -845,7 +855,8 @@ void func_80B06600(BossHakugin* this, Vec3f* arg1, PlayState* play) {
         spB0.x = (2.0f * effect->unk_00.x) - spC8.x;
         spB0.y = (2.0f * effect->unk_00.y) - spC8.y;
         spB0.z = (2.0f * effect->unk_00.z) - spC8.z;
-        if (BgCheck_EntityLineTest1(&play->colCtx, &spC8, &spB0, &spA4, &spD4, 0, 1, 0, 1, &sp84)) {
+
+        if (BgCheck_EntityLineTest1(&play->colCtx, &spC8, &spB0, &spA4, &spD4, false, true, false, true, &bgId)) {
             effect->unk_0E.x -= 0x2000;
             effect->unk_00.x = spC8.x + (80.0f * Math_CosS(effect->unk_0E.x) * Math_SinS(effect->unk_0E.y));
             effect->unk_00.y = spC8.y - (80.0f * Math_SinS(effect->unk_0E.x));
@@ -856,6 +867,7 @@ void func_80B06600(BossHakugin* this, Vec3f* arg1, PlayState* play) {
         } else {
             Math_Vec3f_Copy(&spC8, &spB0);
         }
+
         effect->unk_0C = 255 + 20 * (i + 1);
         func_80B06558(effect);
         effect->unk_0E.z = (s32)Rand_Next() >> 0x10;
@@ -919,7 +931,7 @@ void func_80B06B20(BossHakugin* this, Vec3f* arg1) {
 void func_80B06C08(BossHakugin* this) {
     s32 i;
 
-    if ((this->unk_018E == 0) && (this->actor.colChkInfo.health < 20) && (Rand_ZeroOne() < 0.35f)) {
+    if ((this->unk_018E == 0) && (this->actor.colChkInfo.health < 0x14) && (Rand_ZeroOne() < 0.35f)) {
         this->unk_018E = 4;
     } else {
         if (this->unk_018E > 0) {
@@ -927,6 +939,7 @@ void func_80B06C08(BossHakugin* this) {
         }
         return;
     }
+
     for (i = 0; i < ARRAY_COUNT(this->unk_09D0); i++) {
         Actor* tmp = this->unk_09D0[i];
 
@@ -938,10 +951,10 @@ void func_80B06C08(BossHakugin* this) {
 }
 
 void func_80B06D38(BossHakugin* this, PlayState* play) {
-    EnBom* sp44;
+    EnBom* bomb;
     s16 temp_a1;
 
-    if ((this->actor.speed > 10.0f) && ((s32)this->actor.colChkInfo.health < 10) && (this->unk_018F == 0) &&
+    if ((this->actor.speed > 10.0f) && ((s32)this->actor.colChkInfo.health < 0xA) && (this->unk_018F == 0) &&
         (Rand_ZeroOne() < 0.35f)) {
         this->unk_018F = 4;
     } else {
@@ -950,28 +963,30 @@ void func_80B06D38(BossHakugin* this, PlayState* play) {
         }
         return;
     }
-    sp44 = (EnBom*)Actor_Spawn(
+
+    bomb = (EnBom*)Actor_Spawn(
         &play->actorCtx, play, ACTOR_EN_BOM,
         this->unk_0484.elements[1].dim.worldSphere.center.x - (100.0f * Math_SinS(this->actor.shape.rot.y)),
         this->unk_0484.elements[1].dim.worldSphere.center.y + 100.0f,
-        this->unk_0484.elements[1].dim.worldSphere.center.z - (Math_CosS(this->actor.shape.rot.y) * 100.0f), 0, 0, 0,
-        0);
-    if (sp44 != NULL) {
+        this->unk_0484.elements[1].dim.worldSphere.center.z - (Math_CosS(this->actor.shape.rot.y) * 100.0f),
+        BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
+
+    if (bomb != NULL) {
         temp_a1 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - 0x8000;
         if (temp_a1 > 0x2000) {
-            sp44->actor.world.rot.y = this->actor.shape.rot.y + 0xA000;
+            bomb->actor.world.rot.y = this->actor.shape.rot.y + 0xA000;
         } else if (temp_a1 < -0x2000) {
-            sp44->actor.world.rot.y = this->actor.shape.rot.y + 0x6000;
+            bomb->actor.world.rot.y = this->actor.shape.rot.y + 0x6000;
         } else {
-            sp44->actor.world.rot.y = this->actor.yawTowardsPlayer;
+            bomb->actor.world.rot.y = this->actor.yawTowardsPlayer;
         }
 
-        sp44->timer = (Rand_Next() >> 0x1C) + 17;
-        sp44->actor.velocity.y = 2.0f;
-        sp44->actor.speed = this->actor.xzDistToPlayer * 0.01f;
-        sp44->actor.speed = CLAMP(sp44->actor.speed, 6.0f, 12.0f);
+        bomb->timer = (Rand_Next() >> 0x1C) + 17;
+        bomb->actor.velocity.y = 2.0f;
+        bomb->actor.speed = this->actor.xzDistToPlayer * 0.01f;
+        bomb->actor.speed = CLAMP(bomb->actor.speed, 6.0f, 12.0f);
 
-        Actor_SetScale(&sp44->actor, 0.02f);
+        Actor_SetScale(&bomb->actor, 0.02f);
     }
 }
 
@@ -1071,15 +1086,15 @@ s32 func_80B0728C(BossHakugin* this) {
 void func_80B07450(BossHakugin* this, PlayState* play) {
     Vec3f velocity;
     Vec3f pos;
-    f32 temp;
+    f32 quakeVerticalMag;
     s32 i;
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_FOOTSTEP_OLD);
         Math_Vec3f_Copy(&pos, &this->bodyPartsPos[sLimbToBodyParts[GOHT_LIMB_FRONT_LEFT_HOOF]]);
         if (this->actor.xzDistToPlayer < 1500.0f) {
-            temp = (1500.0f - this->actor.xzDistToPlayer) * (1.0f / 1500.0f);
-            func_80B05A64(this, play, 17000, 6.5f * temp, 10);
+            quakeVerticalMag = (1500.0f - this->actor.xzDistToPlayer) * (1.0f / 1500.0f);
+            BossHakugin_RequestQuakeAndRumble(this, play, 17000, 6.5f * quakeVerticalMag, 10);
         }
 
         func_80B06C08(this);
@@ -1109,28 +1124,29 @@ void func_80B07450(BossHakugin* this, PlayState* play) {
 }
 
 void func_80B07700(BossHakugin* this, PlayState* play, s32 arg2) {
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f pos;
 
-    if (arg2 != 0) {
-        vel.y = (this->unk_019C - 30) * (1 / 70.0f);
+    if (arg2) {
+        velocity.y = (this->unk_019C - 30) * (1 / 70.0f);
     } else {
-        vel.y = 0.1f;
+        velocity.y = 0.1f;
     }
 
-    vel.x = Rand_CenteredFloat(2.0f) * vel.y;
-    vel.z = Rand_CenteredFloat(2.0f) * vel.y;
+    velocity.x = Rand_CenteredFloat(2.0f) * velocity.y;
+    velocity.z = Rand_CenteredFloat(2.0f) * velocity.y;
 
-    pos.x = ((vel.x >= 0.0f ? 1.0f : -1.0f) * (Rand_ZeroFloat(20.0f) + 5.0f) * 4.0f) + this->unk_0964.dim.pos.x;
-    pos.z = ((vel.z >= 0.0f ? 1.0f : -1.0f) * (Rand_ZeroFloat(20.0f) + 5.0f) * 4.0f) + this->unk_0964.dim.pos.z;
-    if (arg2 != 0) {
-        pos.y = this->unk_0964.dim.pos.y + (this->unk_0964.dim.height * vel.y);
+    pos.x = ((velocity.x >= 0.0f ? 1.0f : -1.0f) * (Rand_ZeroFloat(20.0f) + 5.0f) * 4.0f) + this->unk_0964.dim.pos.x;
+    pos.z = ((velocity.z >= 0.0f ? 1.0f : -1.0f) * (Rand_ZeroFloat(20.0f) + 5.0f) * 4.0f) + this->unk_0964.dim.pos.z;
+
+    if (arg2) {
+        pos.y = this->unk_0964.dim.pos.y + (this->unk_0964.dim.height * velocity.y);
     } else {
         pos.y = (Rand_ZeroFloat(this->unk_0964.dim.height) * 0.8f) + this->unk_0964.dim.pos.y;
     }
-    vel.y += 0.8f;
+    velocity.y += 0.8f;
 
-    EffectSsIceSmoke_Spawn(play, &pos, &vel, &gZeroVec3f, 600);
+    EffectSsIceSmoke_Spawn(play, &pos, &velocity, &gZeroVec3f, 600);
 }
 
 s32 func_80B0791C(BossHakugin* this, PlayState* play) {
@@ -1171,35 +1187,35 @@ s32 func_80B0791C(BossHakugin* this, PlayState* play) {
 }
 
 void func_80B07B88(BossHakugin* this, PlayState* play) {
-    if (this->unk_0196 == 10) {
-        this->unk_0196 = 0;
-        this->unk_01E4 = 0.0f;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+        this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, GOHT_BODYPART_MAX, 3, 0.7f, 0.5f);
     }
 }
 
 void func_80B07BFC(BossHakugin* this, PlayState* play, s32 arg2) {
     if (this->actor.colChkInfo.damageEffect == 0x2) {
-        this->unk_0196 = 0;
-        this->unk_01E4 = 3.0f;
-        this->unk_01DC = 2.5f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+        this->drawDmgEffAlpha = 3.0f;
+        this->drawDmgEffScale = 2.5f;
     } else if (this->actor.colChkInfo.damageEffect == 0x4) {
-        this->unk_0196 = 20;
-        this->unk_01E4 = 3.0f;
-        this->unk_01DC = 2.5f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+        this->drawDmgEffAlpha = 3.0f;
+        this->drawDmgEffScale = 2.5f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->unk_0484.elements[arg2].info.bumper.hitPos.x,
                     this->unk_0484.elements[arg2].info.bumper.hitPos.y,
                     this->unk_0484.elements[arg2].info.bumper.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == 0x3) {
-        this->unk_0196 = 10;
-        this->unk_01DC = 2.5f;
-        this->unk_01E0 = 3.75f;
-        this->unk_01E4 = 1.0f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+        this->drawDmgEffScale = 2.5f;
+        this->drawDmgEffFrozenSteamScale = 3.75f;
+        this->drawDmgEffAlpha = 1.0f;
     } else if (this->actor.colChkInfo.damageEffect == 0xD) {
-        this->unk_0196 = 21;
-        this->unk_01DC = 2.5f;
-        this->unk_01E4 = 3.0f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS;
+        this->drawDmgEffScale = 2.5f;
+        this->drawDmgEffAlpha = 3.0f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->unk_0484.elements[arg2].info.bumper.hitPos.x,
                     this->unk_0484.elements[arg2].info.bumper.hitPos.y,
                     this->unk_0484.elements[arg2].info.bumper.hitPos.z, 0, 0, 3,
@@ -1208,12 +1224,12 @@ void func_80B07BFC(BossHakugin* this, PlayState* play, s32 arg2) {
 }
 
 void func_80B07DA4(BossHakugin* this, PlayState* play, f32 arg2, s16 arg3) {
-    Camera* camera = Play_GetCamera(play, this->unk_01AC);
+    Camera* subCam = Play_GetCamera(play, this->subCamId);
     Vec3f sp38;
     Vec3f sp2C;
 
-    Math_Vec3f_Diff(&camera->at, &camera->eye, &sp38);
-    Math_Vec3f_StepTo(&camera->eye, &this->unk_038C, arg2);
+    Math_Vec3f_Diff(&subCam->at, &subCam->eye, &sp38);
+    Math_Vec3f_StepTo(&subCam->eye, &this->subCamEye, arg2);
 
     if (func_80B0573C(&sp38)) {
         sp2C.x = Math_CosS(this->unk_037A.x) * Math_SinS(this->unk_037A.y);
@@ -1222,43 +1238,48 @@ void func_80B07DA4(BossHakugin* this, PlayState* play, f32 arg2, s16 arg3) {
         func_80B057A4(&sp38, &sp2C, BINANG_TO_RAD(arg3));
     }
 
-    camera->at.x = camera->eye.x + (50.0f * sp38.x);
-    camera->at.y = camera->eye.y + (50.0f * sp38.y);
-    camera->at.z = camera->eye.z + (50.0f * sp38.z);
-    Play_SetCameraAtEye(play, this->unk_01AC, &camera->at, &camera->eye);
+    subCam->at.x = subCam->eye.x + (50.0f * sp38.x);
+    subCam->at.y = subCam->eye.y + (50.0f * sp38.y);
+    subCam->at.z = subCam->eye.z + (50.0f * sp38.z);
+    Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCam->eye);
 }
 
 void func_80B07EEC(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Vec3f sp20;
+    Vec3f subCamAt;
 
     Animation_PlayOnce(&this->skelAnime, &gGohtThawAndBreakWallAnim);
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    this->unk_01AC = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
-    sp20.x = player->actor.focus.pos.x;
-    sp20.y = player->actor.focus.pos.y;
-    sp20.z = player->actor.focus.pos.z;
-    this->unk_038C.x = (Math_SinS(player->actor.shape.rot.y) * 70.0f) + player->actor.focus.pos.x;
-    this->unk_038C.y = player->actor.focus.pos.y + 20.0f;
-    this->unk_038C.z = (Math_CosS(player->actor.shape.rot.y) * 70.0f) + player->actor.focus.pos.z;
-    Play_SetCameraAtEye(play, this->unk_01AC, &sp20, &this->unk_038C);
+
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
+
+    subCamAt.x = player->actor.focus.pos.x;
+    subCamAt.y = player->actor.focus.pos.y;
+    subCamAt.z = player->actor.focus.pos.z;
+
+    this->subCamEye.x = player->actor.focus.pos.x + (Math_SinS(player->actor.shape.rot.y) * 70.0f);
+    this->subCamEye.y = player->actor.focus.pos.y + 20.0f;
+    this->subCamEye.z = player->actor.focus.pos.z + (Math_CosS(player->actor.shape.rot.y) * 70.0f);
+
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &this->subCamEye);
+
     this->unk_037A.x = Math_Atan2S_XY(70.0f, -20.0f);
     this->unk_037A.y = player->actor.shape.rot.y + 0x8000;
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
+    func_800B7298(play, &this->actor, PLAYER_CSACTION_21);
     this->unk_019C = 0;
     this->actionFunc = func_80B08018;
 }
 
 void func_80B08018(BossHakugin* this, PlayState* play) {
-    static Vec3f D_80B0EAE8 = { 492.0f, 28.0f, -1478.0f };
+    static Vec3f sSubCamAt = { 492.0f, 28.0f, -1478.0f };
 
     this->unk_019C++;
     if (this->unk_019C == 30) {
-        this->unk_038C.x = 417.0f;
-        this->unk_038C.y = 40.0f;
-        this->unk_038C.z = -1417.0f;
-        Play_SetCameraAtEye(play, this->unk_01AC, &D_80B0EAE8, &this->unk_038C);
-        func_800BE33C(&this->unk_038C, &D_80B0EAE8, &this->unk_037A, true);
+        this->subCamEye.x = 417.0f;
+        this->subCamEye.y = 40.0f;
+        this->subCamEye.z = -1417.0f;
+        Play_SetCameraAtEye(play, this->subCamId, &sSubCamAt, &this->subCamEye);
+        func_800BE33C(&this->subCamEye, &sSubCamAt, &this->unk_037A, true);
     } else if (this->unk_019C == 50) {
         this->unk_037A.x = 0x1500;
     } else if (this->unk_019C == 120) {
@@ -1309,55 +1330,55 @@ void func_80B0813C(BossHakugin* this, PlayState* play) {
 
 void func_80B0825C(BossHakugin* this) {
     this->unk_019C = 100;
-    this->unk_01AC = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
     Play_EnableMotionBlur(140);
     this->actionFunc = func_80B082AC;
 }
 
 void func_80B082AC(BossHakugin* this, PlayState* play) {
-    Vec3f eye;
-    Vec3f at;
+    Vec3f subCamEye;
+    Vec3f subCamAt;
     s32 temp_v1;
 
     this->unk_019C--;
     if ((this->unk_019C >= 30) && ((this->unk_019C % 2) != 0)) {
-        func_80B07700(this, play, 1);
+        func_80B07700(this, play, true);
     } else if ((this->unk_019C % 4) == 0) {
-        func_80B07700(this, play, 0);
+        func_80B07700(this, play, false);
     }
 
     if (this->unk_019C == 99) {
-        at.x = 479.0f;
-        at.y = 181.0f;
-        at.z = -1637.0f;
-        eye.x = 328.0f;
-        eye.y = 164.0f;
-        eye.z = -1693.0f;
-        Play_SetCameraAtEye(play, this->unk_01AC, &at, &eye);
+        subCamAt.x = 479.0f;
+        subCamAt.y = 181.0f;
+        subCamAt.z = -1637.0f;
+        subCamEye.x = 328.0f;
+        subCamEye.y = 164.0f;
+        subCamEye.z = -1693.0f;
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     } else if (this->unk_019C == 75) {
-        at.x = 693.0f;
-        at.y = 162.0f;
-        at.z = -1550.0f;
-        eye.x = 638.0f;
-        eye.y = 200.0f;
-        eye.z = -1407.0f;
-        Play_SetCameraAtEye(play, this->unk_01AC, &at, &eye);
+        subCamAt.x = 693.0f;
+        subCamAt.y = 162.0f;
+        subCamAt.z = -1550.0f;
+        subCamEye.x = 638.0f;
+        subCamEye.y = 200.0f;
+        subCamEye.z = -1407.0f;
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     } else if (this->unk_019C == 50) {
-        at.x = 825.0f;
-        at.y = 123.0f;
-        at.z = -1637.0f;
-        eye.x = 734.0f;
-        eye.y = 145.0f;
-        eye.z = -1762.0f;
-        Play_SetCameraAtEye(play, this->unk_01AC, &at, &eye);
+        subCamAt.x = 825.0f;
+        subCamAt.y = 123.0f;
+        subCamAt.z = -1637.0f;
+        subCamEye.x = 734.0f;
+        subCamEye.y = 145.0f;
+        subCamEye.z = -1762.0f;
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     } else if (this->unk_019C == 25) {
-        at.x = 711.0f;
-        at.y = 76.0f;
-        at.z = -1602.0f;
-        eye.x = 634.0f;
-        eye.y = 54.0f;
-        eye.z = -1735.0f;
-        Play_SetCameraAtEye(play, this->unk_01AC, &at, &eye);
+        subCamAt.x = 711.0f;
+        subCamAt.y = 76.0f;
+        subCamAt.z = -1602.0f;
+        subCamEye.x = 634.0f;
+        subCamEye.y = 54.0f;
+        subCamEye.z = -1735.0f;
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     }
 
     this->unk_01D4 -= 0.027f;
@@ -1365,6 +1386,7 @@ void func_80B082AC(BossHakugin* this, PlayState* play) {
     this->unk_0193 = CLAMP_MAX(temp_v1, 255);
 
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+
     if (this->unk_019C == 0) {
         this->unk_0193 = 0;
         func_80B08550(this, play);
@@ -1372,41 +1394,41 @@ void func_80B082AC(BossHakugin* this, PlayState* play) {
 }
 
 void func_80B08550(BossHakugin* this, PlayState* play) {
-    static Vec3f D_80B0EAF4 = { 894.0f, 176.0f, -1600.0f };
-    static Vec3f D_80B0EB00 = { 972.0f, 176.0f, -1600.0f };
+    static Vec3f sSubCamAt = { 894.0f, 176.0f, -1600.0f };
+    static Vec3f sSubCamEye = { 972.0f, 176.0f, -1600.0f };
     Player* player = GET_PLAYER(play);
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_STEAM_DEMO_UP_OLD);
-    Play_SetCameraAtEye(play, this->unk_01AC, &D_80B0EAF4, &D_80B0EB00);
+    Play_SetCameraAtEye(play, this->subCamId, &sSubCamAt, &sSubCamEye);
     this->unk_037A.x = -0x1F00;
     this->unk_037A.y = -0x4000;
     this->unk_019C = 70;
-    this->unk_038C.x = 680.0f;
-    this->unk_038C.y = 370.0f;
-    this->unk_038C.z = -1600.0f;
+    this->subCamEye.x = 680.0f;
+    this->subCamEye.y = 370.0f;
+    this->subCamEye.z = -1600.0f;
     player->actor.world.pos.x = 250.0f;
     player->actor.world.pos.z = -1560.0f;
     player->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     player->currentYaw = player->actor.world.rot.y = player->actor.shape.rot.y;
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_131);
+    func_800B7298(play, &this->actor, PLAYER_CSACTION_131);
     this->actionFunc = func_80B0863C;
 }
 
 void func_80B0863C(BossHakugin* this, PlayState* play) {
-    static Vec3f D_80B0EB0C = { 377.0f, 140.0f, -1600.0f };
-    static Vec3f D_80B0EB18 = { 282.0f, 108.0f, -1600.0f };
+    static Vec3f sSubCamAt = { 377.0f, 140.0f, -1600.0f };
+    static Vec3f sSubCamEye = { 282.0f, 108.0f, -1600.0f };
     s32 i;
 
     this->unk_019C--;
     if (this->unk_019C > 0) {
         func_80B07DA4(this, play, 7.0f, 0xC0);
     } else if (this->unk_019C == 0) {
-        Play_SetCameraAtEye(play, this->unk_01AC, &D_80B0EB0C, &D_80B0EB18);
+        Play_SetCameraAtEye(play, this->subCamId, &sSubCamAt, &sSubCamEye);
         this->unk_037A.y = 0x4000;
         this->unk_037A.x = Math_Atan2S_XY(95.0f, 32.0f);
-        this->unk_038C.x = 232.0f;
-        this->unk_038C.y = 43.0f;
-        this->unk_038C.z = -1600.0f;
+        this->subCamEye.x = 232.0f;
+        this->subCamEye.y = 43.0f;
+        this->subCamEye.z = -1600.0f;
         Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_STEAMS_DEMO_OLD);
     } else {
         func_80B07DA4(this, play, 1.0f, 0xC0);
@@ -1442,7 +1464,7 @@ void func_80B0863C(BossHakugin* this, PlayState* play) {
     }
 
     if (((this->unk_019C + 12) >= 0) && ((this->unk_019C % 4) == 0)) {
-        func_80B07700(this, play, 0);
+        func_80B07700(this, play, false);
     }
 }
 
@@ -1450,17 +1472,17 @@ void func_80B08848(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f sp30;
 
-    this->unk_038C.x = player->actor.world.pos.x - 150.0f;
-    this->unk_038C.y = player->actor.world.pos.y + 30.0f;
-    this->unk_038C.z = player->actor.world.pos.z - 30.0f;
+    this->subCamEye.x = player->actor.world.pos.x - 150.0f;
+    this->subCamEye.y = player->actor.world.pos.y + 30.0f;
+    this->subCamEye.z = player->actor.world.pos.z - 30.0f;
     sp30.x = this->actor.world.pos.x - 100.0f;
     sp30.y = this->actor.world.pos.y + 100.0f;
     sp30.z = this->actor.world.pos.z;
-    func_800BE33C(&this->unk_038C, &sp30, &this->unk_037A, true);
+    func_800BE33C(&this->subCamEye, &sp30, &this->unk_037A, true);
     Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -3.0f);
     this->unk_019C = 0;
     this->actor.speed = 5.0f;
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+    func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
     player->stateFlags1 |= PLAYER_STATE1_20;
     play->actorCtx.unk268 = true;
     this->actionFunc = func_80B08960;
@@ -1468,8 +1490,8 @@ void func_80B08848(BossHakugin* this, PlayState* play) {
 
 void func_80B08960(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Camera* camera = Play_GetCamera(play, this->unk_01AC);
-    Vec3f at;
+    Camera* subCam = Play_GetCamera(play, this->subCamId);
+    Vec3f subCamAt;
     f32 var_fv0;
     s32 i;
 
@@ -1483,9 +1505,9 @@ void func_80B08960(BossHakugin* this, PlayState* play) {
     if (this->unk_019C < 8) {
         func_80B07DA4(this, play, 25.0f, 0x120);
     } else if (this->unk_019C == 22) {
-        this->unk_038C.x = camera->eye.x;
-        this->unk_038C.y = camera->eye.y;
-        this->unk_038C.z = camera->eye.z + 450.0f;
+        this->subCamEye.x = subCam->eye.x;
+        this->subCamEye.y = subCam->eye.y;
+        this->subCamEye.z = subCam->eye.z + 450.0f;
     } else if (this->unk_019C == 62) {
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         CutsceneManager_Stop(this->actor.csId);
@@ -1495,11 +1517,11 @@ void func_80B08960(BossHakugin* this, PlayState* play) {
         func_80B08C1C(this);
         return;
     } else if (this->unk_019C > 22) {
-        at.x = this->actor.world.pos.x;
-        at.y = this->actor.world.pos.y + 150.0f;
-        at.z = this->actor.world.pos.z;
-        Math_Vec3f_StepTo(&camera->eye, &this->unk_038C, 35.0f);
-        Play_SetCameraAtEye(play, this->unk_01AC, &at, &camera->eye);
+        subCamAt.x = this->actor.world.pos.x;
+        subCamAt.y = this->actor.world.pos.y + 150.0f;
+        subCamAt.z = this->actor.world.pos.z;
+        Math_Vec3f_StepTo(&subCam->eye, &this->subCamEye, 35.0f);
+        Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCam->eye);
 
         if (this->unk_019C == 42) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_WALL);
@@ -1533,7 +1555,7 @@ void func_80B08C1C(BossHakugin* this) {
 }
 
 void func_80B08CB8(BossHakugin* this, PlayState* play) {
-    s16 temp_a0;
+    s16 yawDiff;
 
     if (this->unk_01A4 == 0) {
         this->unk_0484.base.atFlags |= AT_ON;
@@ -1563,26 +1585,26 @@ void func_80B08CB8(BossHakugin* this, PlayState* play) {
         }
         if ((this->unk_019C == 40) &&
             (Math_SmoothStepToF(&this->actor.speed, this->unk_01C4, 0.15f, 1.0f, 0.1f) < 0.05f)) {
-            this->unk_019C -= 1;
-        } else {
-            if (this->unk_019C != 40) {
-                this->unk_019C--;
-                if (this->unk_019C == 0) {
-                    if (this->actor.xzDistToPlayer > 1500.0f) {
-                        this->unk_01C4 = 12.5f;
-                    } else if (this->unk_044C.z > 0.0f) {
-                        this->unk_01C4 = 21.0f;
-                    } else {
-                        this->unk_01C4 = 14.5f;
-                    }
-                    this->unk_01C4 += (30 - this->actor.colChkInfo.health) * (1.0f / 30.0f);
-                    this->unk_019C = 40;
+            this->unk_019C--;
+        } else if (this->unk_019C != 40) {
+            this->unk_019C--;
+            if (this->unk_019C == 0) {
+                if (this->actor.xzDistToPlayer > 1500.0f) {
+                    this->unk_01C4 = 12.5f;
+                } else if (this->unk_044C.z > 0.0f) {
+                    this->unk_01C4 = 21.0f;
+                } else {
+                    this->unk_01C4 = 14.5f;
                 }
+                this->unk_01C4 += (30 - this->actor.colChkInfo.health) * (1.0f / 30.0f);
+                this->unk_019C = 40;
             }
         }
+
         this->skelAnime.playSpeed = (this->actor.speed / 32.0f) + 0.5f;
         SkelAnime_Update(&this->skelAnime);
         func_80B07450(this, play);
+
         if ((this->unk_01BC < (this->unk_01C0 * 0.5f)) || (this->unk_01BC < 89.100006f)) {
             this->unk_019E = (Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f;
         } else if ((this->unk_01C0 < (this->unk_01BC * 0.5f)) || (this->unk_01C0 < 89.100006f)) {
@@ -1594,20 +1616,21 @@ void func_80B08CB8(BossHakugin* this, PlayState* play) {
                 this->unk_019E = ((Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f);
             }
         }
+
         Math_SmoothStepToS(&this->unk_01A2, this->unk_019E, 5, 0x800, 0x10);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_01A0 + this->unk_01A2, 5, 0x800, 0x10);
 
-        temp_a0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+        yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if ((this->unk_018C != 1) && (this->actor.xzDistToPlayer > 750.0f) && (this->actor.xzDistToPlayer < 1650.0f) &&
-            (ABS_ALT(temp_a0) < 0x3000)) {
+            (ABS_ALT(yawDiff) < 0x3000)) {
             func_80B09178(this);
         }
     }
 }
 
 void func_80B09178(BossHakugin* this) {
-    Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.5f, 0.0f, 0.0f, 0, -3.0f);
+    Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -3.0f);
     this->actionFunc = func_80B091D8;
 }
 
@@ -1618,6 +1641,7 @@ void func_80B091D8(BossHakugin* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 25.0f, 2.0f);
     SkelAnime_Update(&this->skelAnime);
     func_80B07450(this, play);
+
     if ((this->unk_044C.z < 0.0f) || (this->unk_0484.base.atFlags & AT_HIT)) {
         func_80B08C1C(this);
     } else {
@@ -1680,7 +1704,7 @@ void func_80B094E0(BossHakugin* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (!this->unk_0195) {
             this->unk_0195 = true;
-            func_80B05A64(this, play, 17000, 7, 10);
+            BossHakugin_RequestQuakeAndRumble(this, play, 17000, 7, 10);
         }
 
         if (this->actor.speed > 5.0f) {
@@ -1752,25 +1776,23 @@ void func_80B098BC(BossHakugin* this, PlayState* play) {
             this->unk_0484.base.ocFlags1 |= OC1_ON;
             func_80B08C1C(this);
         }
+    } else if (Math_ScaledStepToS(&this->unk_01A6, -0x800, 0x1C0)) {
+        player->av2.actionVar2 = 100;
+        player->actor.parent = NULL;
+        player->invincibilityTimer = 0;
+        player->actor.shape.rot.x = 0;
+        func_800B8D50(play, &this->actor, 10.0f, (this->actor.shape.rot.y + 0x8000), 15.0f, 0x10);
+        player->actor.world.pos.y += 30.0f;
+        this->unk_019C--;
     } else {
-        if (Math_ScaledStepToS(&this->unk_01A6, -0x800, 0x1C0)) {
-            player->actionVar2 = 100;
-            player->actor.parent = NULL;
-            player->invincibilityTimer = 0;
-            player->actor.shape.rot.x = 0;
-            func_800B8D50(play, &this->actor, 10.0f, (this->actor.shape.rot.y + 0x8000), 15.0f, 0x10);
-            player->actor.world.pos.y += 30.0f;
-            this->unk_019C--;
-        } else {
-            player->actionVar2 = 0;
-            sp32 = -this->unk_0374.z + 0x1F40;
-            player->actor.shape.rot.x = -this->unk_0374.z + 0x8FC0;
+        player->av2.actionVar2 = 0;
+        sp32 = -this->unk_0374.z + 0x1F40;
+        player->actor.shape.rot.x = -this->unk_0374.z + 0x8FC0;
 
-            sp2C = Math_CosS(sp32);
-            player->actor.world.pos.x = this->actor.focus.pos.x - (Math_SinS(this->unk_01A0) * (20.0f * sp2C));
-            player->actor.world.pos.y = this->actor.focus.pos.y - (Math_SinS(sp32) * 20.0f);
-            player->actor.world.pos.z = this->actor.focus.pos.z - (Math_CosS(this->unk_01A0) * (20.0f * sp2C));
-        }
+        sp2C = Math_CosS(sp32);
+        player->actor.world.pos.x = this->actor.focus.pos.x - (Math_SinS(this->unk_01A0) * (20.0f * sp2C));
+        player->actor.world.pos.y = this->actor.focus.pos.y - (Math_SinS(sp32) * 20.0f);
+        player->actor.world.pos.z = this->actor.focus.pos.z - (Math_CosS(this->unk_01A0) * (20.0f * sp2C));
     }
 }
 
@@ -1899,18 +1921,16 @@ void func_80B09F7C(BossHakugin* this) {
     f32 temp_fv0_2;
 
     Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.3f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
-    this->unk_01AC = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
 
     if ((this->actor.world.pos.z >= 0.0f) && (this->actor.world.pos.x >= 0.0f)) {
         this->unk_019E = -0x4000;
+    } else if ((this->actor.world.pos.z >= 0.0f) && (this->actor.world.pos.x < 0.0f)) {
+        this->unk_019E = -0x8000;
+    } else if ((this->actor.world.pos.x >= 0.0f) && (this->actor.world.pos.z < 0.0f)) {
+        this->unk_019E = 0;
     } else {
-        if ((this->actor.world.pos.z >= 0.0f) && (this->actor.world.pos.x < 0.0f)) {
-            this->unk_019E = -0x8000;
-        } else if ((this->actor.world.pos.x >= 0.0f) && (this->actor.world.pos.z < 0.0f)) {
-            this->unk_019E = 0;
-        } else {
-            this->unk_019E = 0x4000;
-        }
+        this->unk_019E = 0x4000;
     }
 
     if (this->unk_01B4 == 1) {
@@ -1919,21 +1939,21 @@ void func_80B09F7C(BossHakugin* this) {
 
     temp_fv0_2 = this->unk_01B4;
     if ((this->unk_019E > 0x6000) || (this->unk_019E < -0x6000)) {
-        this->unk_038C.x = temp_fv0_2 * -1200.0f;
-        this->unk_038C.y = (temp_fv0_2 * 80.0f) + -240.0f + 60.0f;
-        this->unk_038C.z = 1200.0f;
+        this->subCamEye.x = temp_fv0_2 * -1200.0f;
+        this->subCamEye.y = (temp_fv0_2 * 80.0f) + -240.0f + 60.0f;
+        this->subCamEye.z = 1200.0f;
     } else if ((this->unk_019E < 0x2000) && (this->unk_019E > -0x2000)) {
-        this->unk_038C.x = temp_fv0_2 * 1200.0f;
-        this->unk_038C.y = 60.0f;
-        this->unk_038C.z = -1200.0f;
+        this->subCamEye.x = temp_fv0_2 * 1200.0f;
+        this->subCamEye.y = 60.0f;
+        this->subCamEye.z = -1200.0f;
     } else if (this->unk_019E >= 0x2000) {
-        this->unk_038C.x = -1200.0f;
-        this->unk_038C.y = (80.0f * temp_fv0_2) + -80.0f + 60.0f;
-        this->unk_038C.z = temp_fv0_2 * -1200.0f;
+        this->subCamEye.x = -1200.0f;
+        this->subCamEye.y = (80.0f * temp_fv0_2) + -80.0f + 60.0f;
+        this->subCamEye.z = temp_fv0_2 * -1200.0f;
     } else {
-        this->unk_038C.x = 1200.0f;
-        this->unk_038C.y = (-160.0f * temp_fv0_2) + -160.0f + 60.0f;
-        this->unk_038C.z = temp_fv0_2 * 1200.0f;
+        this->subCamEye.x = 1200.0f;
+        this->subCamEye.y = (-160.0f * temp_fv0_2) + -160.0f + 60.0f;
+        this->subCamEye.z = temp_fv0_2 * 1200.0f;
     }
 
     this->unk_01C8 = 0.0f;
@@ -1957,7 +1977,7 @@ void func_80B09F7C(BossHakugin* this) {
 }
 
 void func_80B0A2A4(BossHakugin* this, PlayState* play) {
-    Vec3f at;
+    Vec3f subCamAt;
     f32 absPosX;
     f32 absPosZ;
     s32 absRotY;
@@ -1987,10 +2007,10 @@ void func_80B0A2A4(BossHakugin* this, PlayState* play) {
     this->unk_0374.y = (8192.0f * Math_CosS(this->unk_01AE)) * Math_SinF(this->unk_019C * (M_PI / 9));
     this->actor.shape.rot.z = Math_SinF(this->unk_019C * (M_PI / 18)) * -(this->unk_01A2 * 0.3f);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    at.x = (Math_SinS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.x;
-    at.y = this->actor.world.pos.y + 200.0f;
-    at.z = (Math_CosS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.z;
-    Play_SetCameraAtEye(play, this->unk_01AC, &at, &this->unk_038C);
+    subCamAt.x = (Math_SinS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.x;
+    subCamAt.y = this->actor.world.pos.y + 200.0f;
+    subCamAt.z = (Math_CosS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.z;
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &this->subCamEye);
 
     if (this->unk_019E == this->unk_01A0) {
         absPosX = fabsf(this->actor.world.pos.x);
@@ -2016,42 +2036,41 @@ void func_80B0A5EC(BossHakugin* this) {
 }
 
 void func_80B0A638(BossHakugin* this, PlayState* play) {
-    Vec3f at;
+    Vec3f subCamAt;
     Vec3f eyeTarget;
     s32 var_v0;
     s16 temp_a0;
 
     SkelAnime_Update(&this->skelAnime);
-    at.x = (Math_SinS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.x;
-    at.y = this->actor.world.pos.y + 200.0f;
-    at.z = (Math_CosS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.z;
+    subCamAt.x = (Math_SinS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.x;
+    subCamAt.y = this->actor.world.pos.y + 200.0f;
+    subCamAt.z = (Math_CosS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.z;
     temp_a0 = this->actor.shape.rot.y - (this->unk_01B4 * 0x6000);
     eyeTarget.x = (Math_SinS(temp_a0) * 400.0f) + this->actor.world.pos.x;
     eyeTarget.y = this->actor.world.pos.y + 100.0f;
     eyeTarget.z = Math_CosS(temp_a0) * 400.0f + this->actor.world.pos.z;
-    Math_Vec3f_StepTo(&this->unk_038C, &eyeTarget, 25.0f);
-    Play_SetCameraAtEye(play, this->unk_01AC, &at, &this->unk_038C);
+
+    Math_Vec3f_StepTo(&this->subCamEye, &eyeTarget, 25.0f);
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &this->subCamEye);
     this->unk_018D = 10;
     this->unk_018E = 10;
     this->unk_018F = 10;
     func_80B07450(this, play);
 
-    if ((Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_019E, 0x300)) &&
+    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_019E, 0x300) &&
         ((this->unk_01BC <= 189.00002f) || (this->unk_01C0 <= 189.00002f))) {
         func_80B0A87C(this);
-    } else {
-        if (((this->unk_01B4 == 1) && (this->unk_01BC <= 189.00002f)) ||
-            ((this->unk_01B4 == -1) && (this->unk_01C0 <= 189.00002f))) {
-            var_v0 = ABS_ALT(this->unk_019E);
-            if (var_v0 < 0x2000) {
-                this->actor.world.pos.z = -1389.0f;
-            } else if (var_v0 > 0x6000) {
-                this->actor.world.pos.z = 1389.0f;
-            } else if (this->unk_019E > 0) {
-                this->actor.world.pos.x = -1389.0f;
-            } else {
-                this->actor.world.pos.x = 1389.0f;
-            }
+    } else if (((this->unk_01B4 == 1) && (this->unk_01BC <= 189.00002f)) ||
+               ((this->unk_01B4 == -1) && (this->unk_01C0 <= 189.00002f))) {
+        var_v0 = ABS_ALT(this->unk_019E);
+        if (var_v0 < 0x2000) {
+            this->actor.world.pos.z = -1389.0f;
+        } else if (var_v0 > 0x6000) {
+            this->actor.world.pos.z = 1389.0f;
+        } else if (this->unk_019E > 0) {
+            this->actor.world.pos.x = -1389.0f;
+        } else {
+            this->actor.world.pos.x = 1389.0f;
         }
     }
 
@@ -2090,28 +2109,28 @@ static BossHakuginStruct_B0A8C4 D_80B0EB38[] = {
 void func_80B0A8C4(BossHakugin* this, PlayState* play) {
     EnBom* bomb;
     Vec3s* test;
-    Camera* camera;
+    Camera* subCam = Play_GetCamera(play, this->subCamId);
     Vec3f eyeTarget;
     s16 temp_s0;
     s32 sp60;
     s32 i;
     BossHakuginStruct_B0A8C4* unkStruct;
 
-    camera = Play_GetCamera(play, this->unk_01AC);
     SkelAnime_Update(&this->skelAnime);
     sp60 = this->unk_019C / 6;
     temp_s0 = this->actor.shape.rot.y + (0x6000 * this->unk_01B4);
     eyeTarget.x = (Math_SinS(temp_s0) * 500.0f) + this->actor.world.pos.x;
     eyeTarget.y = this->actor.world.pos.y + 250.0f;
     eyeTarget.z = (Math_CosS(temp_s0) * 500.0f) + this->actor.world.pos.z;
-    Math_Vec3f_StepTo(&this->unk_038C, &eyeTarget, 25.0f);
-    Play_SetCameraAtEye(play, this->unk_01AC, &camera->at, &this->unk_038C);
+    Math_Vec3f_StepTo(&this->subCamEye, &eyeTarget, 25.0f);
+    Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &this->subCamEye);
+
     if (sp60 == 30) {
-        Camera* camera2 = Play_GetCamera(play, 0);
+        Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
         Play_DisableMotionBlur();
         CutsceneManager_Stop(this->actor.csId);
-        Play_SetCameraAtEye(play, this->unk_01AC, &camera2->at, &camera2->eye);
+        Play_SetCameraAtEye(play, this->subCamId, &mainCam->at, &mainCam->eye);
         func_80B05EE0(this, play);
         func_80B0DFA8(this);
         this->actor.draw = func_80B0E5A4;
@@ -2119,7 +2138,8 @@ void func_80B0A8C4(BossHakugin* this, PlayState* play) {
     } else if (((this->unk_019C % 6) == 0) && (sp60 < 6)) {
         unkStruct = &D_80B0EB38[sp60];
         test = &this->unk_0484.elements[unkStruct->unk_00].dim.worldSphere.center;
-        bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, test->x, test->y, test->z, 1, 0, 0, 0);
+        bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, test->x, test->y, test->z,
+                                   BOMB_EXPLOSIVE_TYPE_POWDER_KEG, 0, 0, BOMB_TYPE_BODY);
         if (bomb != NULL) {
             bomb->timer = 0;
         }
@@ -2156,7 +2176,7 @@ void func_80B0AC30(BossHakugin* this, PlayState* play) {
     if ((this->unk_0484.base.atFlags & AT_HIT) &&
         ((this->actionFunc == func_80B091D8) || !(player->stateFlags3 & PLAYER_STATE3_80000))) {
         if ((this->actionFunc == func_80B091D8) && (this->unk_0484.elements->info.toucherFlags & TOUCH_HIT) &&
-            !(this->unk_0484.base.atFlags & AT_BOUNCED) && (play->grabPlayer(play, player))) {
+            !(this->unk_0484.base.atFlags & AT_BOUNCED) && play->grabPlayer(play, player)) {
             func_80B09840(this, play);
         } else if (player->stateFlags3 & PLAYER_STATE3_1000) {
             player->unk_B08 = player->linearVelocity = -5.0f;
@@ -2192,7 +2212,8 @@ s32 func_80B0ADFC(BossHakugin* this, PlayState* play) {
         }
         // DMG_DEKU_NUT | DMG_DEKU_STICK | DMG_ZORA_BOOMERANG | DMG_NORMAL_ARROW | DMG_HOOKSHOT | DMG_ICE_ARROW
         // | DMG_LIGHT_ARROW | DMG_DEKU_SPIN | DMG_DEKU_BUBBLE | DMG_DEKU_LAUNCH | DMG_ZORA_BARRIER
-        if ((this->unk_0196 == 10) && (this->unk_0484.elements[i].info.acHitInfo->toucher.dmgFlags & 0x000DB0B3)) {
+        if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
+            (this->unk_0484.elements[i].info.acHitInfo->toucher.dmgFlags & 0x000DB0B3)) {
             return false;
         }
         func_80B07B88(this, play);
@@ -2260,14 +2281,14 @@ s32 func_80B0ADFC(BossHakugin* this, PlayState* play) {
 
             this->unk_01A4 = 20;
             for (j = 0; j < ARRAY_COUNT(this->unk_04A4); j++) {
-                Vec3f sp40;
+                Vec3f hitPos;
                 ColliderInfo* hurtbox = &this->unk_0484.elements[j].info;
 
                 if ((hurtbox->bumperFlags & BUMP_HIT) && (hurtbox->acHitInfo != NULL) &&
                     !(hurtbox->acHitInfo->toucherFlags & TOUCH_SFX_NONE)) {
-                    Math_Vec3s_ToVec3f(&sp40, &hurtbox->bumper.hitPos);
-                    EffectSsHitmark_SpawnFixedScale(play, 3, &sp40);
-                    CollisionCheck_SpawnShieldParticlesMetalSound(play, &sp40, &this->actor.projectedPos);
+                    Math_Vec3s_ToVec3f(&hitPos, &hurtbox->bumper.hitPos);
+                    EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &hitPos);
+                    CollisionCheck_SpawnShieldParticlesMetalSound(play, &hitPos, &this->actor.projectedPos);
                     break;
                 }
             }
@@ -2376,7 +2397,7 @@ void func_80B0B660(BossHakugin* this, PlayState* play) {
     Vec3f* var_s0;
     s32 var_s0_2;
     f32 sp60;
-    s32 sp5C;
+    s32 bgId;
     s32 sp58 = false;
     s16 temp_v1;
 
@@ -2398,10 +2419,13 @@ void func_80B0B660(BossHakugin* this, PlayState* play) {
     } else if (this->unk_0192 != 4) {
         return;
     }
+
     Audio_PlaySfx_AtPos(&this->unk_0464, NA_SE_EN_COMMON_E_BALL - SFX_FLAG);
+
     if (this->unk_01AA < 10) {
         this->unk_01AA++;
     }
+
     if ((this->unk_0192 == 4) && (this->unk_01AA == 9)) {
         this->unk_0192 = 0;
         this->unk_01AA = 0;
@@ -2424,16 +2448,17 @@ void func_80B0B660(BossHakugin* this, PlayState* play) {
             sp88.x = sp6C->x + (this->unk_01B8 * this->unk_37AC.x);
             sp88.y = sp6C->y + (this->unk_01B8 * this->unk_37AC.y);
             sp88.z = sp6C->z + (this->unk_01B8 * this->unk_37AC.z);
-            if (BgCheck_EntityLineTest1(&play->colCtx, sp6C, &sp88, &sp94, &spA0, 1, 1, 1, 1, &sp5C)) {
+            if (BgCheck_EntityLineTest1(&play->colCtx, sp6C, &sp88, &sp94, &spA0, true, true, true, true, &bgId)) {
                 var_s0_2 = 0;
                 Math_Vec3f_Copy(sp6C, &sp94);
 
                 if ((spA0->normal.y > -0x6665) && (spA0->normal.y < 0x3FFF)) {
-                    temp_v1 =
-                        Math_Vec3f_Yaw(sp6C, &spA4->actor.world.pos) -
-                        Math_Atan2S_XY(spA0->normal.z * COLPOLY_NORMAL_FRAC, spA0->normal.x * COLPOLY_NORMAL_FRAC);
-                    var_s0_2 = (ABS_ALT(temp_v1) > 0x4000) ? 1 : 0LL; // TODO: make less fake
+                    temp_v1 = Math_Vec3f_Yaw(sp6C, &spA4->actor.world.pos) -
+                              Math_Atan2S_XY(COLPOLY_GET_NORMAL(spA0->normal.z), COLPOLY_GET_NORMAL(spA0->normal.x));
+                    //! FAKE: 0LL
+                    var_s0_2 = (ABS_ALT(temp_v1) > 0x4000) ? 1 : 0LL;
                 }
+
                 if ((this->unk_0192 == 3) && (var_s0_2 || (spA0->normal.y >= 0x4000))) {
                     this->unk_0192 = 4;
                     this->unk_01AA = 0;
@@ -2441,15 +2466,16 @@ void func_80B0B660(BossHakugin* this, PlayState* play) {
                         Audio_PlaySfx_AtPos(&this->unk_0464, NA_SE_EN_COMMON_E_BALL_HIT);
                     }
                 } else {
-                    sp7C.x = spA0->normal.x * COLPOLY_NORMAL_FRAC;
-                    sp7C.y = spA0->normal.y * COLPOLY_NORMAL_FRAC;
-                    sp7C.z = spA0->normal.z * COLPOLY_NORMAL_FRAC;
+                    sp7C.x = COLPOLY_GET_NORMAL(spA0->normal.x);
+                    sp7C.y = COLPOLY_GET_NORMAL(spA0->normal.y);
+                    sp7C.z = COLPOLY_GET_NORMAL(spA0->normal.z);
                     func_80179F64(&this->unk_37AC, &sp7C, &sp70);
                     Math_Vec3f_Copy(&this->unk_37AC, &sp70);
                 }
             } else {
                 Math_Vec3f_Copy(sp6C, &sp88);
             }
+
             this->unk_37B8.dim.worldSphere.center.x = sp6C->x;
             this->unk_37B8.dim.worldSphere.center.y = sp6C->y;
             this->unk_37B8.dim.worldSphere.center.z = sp6C->z;
@@ -2470,6 +2496,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     if ((this->actionFunc != func_80B09EDC) && !func_80B0ADFC(this, play)) {
         func_80B0AC30(this, play);
     }
+
     func_80B0607C(this, play);
     Actor_OffsetOfPointInActorCoords(&this->actor, &this->unk_044C, &player->actor.world.pos);
     this->actionFunc(this, play);
@@ -2480,17 +2507,20 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     func_800BE3D0(&this->actor, this->actor.shape.rot.y, &sp70);
     Math_ScaledStepToS(&this->actor.shape.rot.x, sp70.x, 0x100);
     Math_ScaledStepToS(&this->actor.shape.rot.z, sp70.z, 0x100);
+
     if (this->actionFunc == func_80B0A8C4) {
         func_80B0B34C(this);
     } else {
         func_80B0B238(this);
     }
+
     func_80B0B3F4(this);
     func_80B0B548(this, play);
     func_80B0B660(this, play);
     func_80B05B04(this, play);
     func_80B05CBC(this, player);
     func_80B05D4C(this);
+
     if ((this->unk_0484.base.atFlags & AT_ON) && (this->actor.colorFilterTimer == 0)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->unk_0484.base);
     } else {
@@ -2507,12 +2537,12 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     } else {
         this->unk_0484.base.ocFlags1 &= ~OC1_HIT;
     }
-    if (this->unk_01E4 > 0.0f) {
-        if (this->unk_0196 != 10) {
-            Math_StepToF(&this->unk_01E4, 0.0f, 0.05f);
-            this->unk_01DC = (this->unk_01E4 + 1.0f) * 1.25f;
-            this->unk_01DC = CLAMP_MAX(this->unk_01DC, 2.5f);
-        } else if (!Math_StepToF(&this->unk_01E0, 2.5f, 5.0f / 12.0f)) {
+    if (this->drawDmgEffAlpha > 0.0f) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+            this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 1.25f;
+            this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 2.5f);
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 2.5f, 5.0f / 12.0f)) {
             Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         } else {
             func_80B07B88(this, play);
@@ -2523,7 +2553,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
         CollisionPoly* sp68 = NULL;
         Vec3f sp5C;
         Vec3f sp50;
-        s32 sp4C;
+        s32 bgId;
 
         if ((fabsf(player->actor.world.pos.z) < 1200.0f) && (fabsf(player->actor.world.pos.x) < 1200.0f)) {
             s16 temp_v0_5 = Math_Atan2S_XY(player->actor.world.pos.z, player->actor.world.pos.x);
@@ -2549,7 +2579,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
         sp50.y = 100.0f;
 
         if (BgCheck_EntityLineTest1(&play->colCtx, &sp50, &player->actor.world.pos, &sp5C, &sp68, true, true, false,
-                                    true, &sp4C)) {
+                                    true, &bgId)) {
             Math_Vec3f_Copy(&player->actor.world.pos, &sp5C);
             Math_Vec3f_Copy(&player->actor.home.pos, &player->actor.world.pos);
             Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
@@ -2874,8 +2904,8 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, GOHT_BODYPART_MAX, this->unk_01DC, this->unk_01E0,
-                            this->unk_01E4, this->unk_0196);
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, GOHT_BODYPART_MAX, this->drawDmgEffScale,
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_0380, &this->unk_0458);
     SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_3734[0], &this->unk_0464);

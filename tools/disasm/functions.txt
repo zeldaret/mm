@@ -12912,7 +12912,7 @@
     0x80B0573C:("func_80B0573C",),
     0x80B057A4:("func_80B057A4",),
     0x80B058C0:("func_80B058C0",),
-    0x80B05A64:("func_80B05A64",),
+    0x80B05A64:("BossHakugin_RequestQuakeAndRumble",),
     0x80B05B04:("func_80B05B04",),
     0x80B05CBC:("func_80B05CBC",),
     0x80B05D4C:("func_80B05D4C",),

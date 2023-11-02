@@ -63,7 +63,7 @@ typedef struct Boss02 {
     /* 0x0188 */ Vec3f unk_0188;
     /* 0x0194 */ u8 unk_0194;
     /* 0x0195 */ u8 unk_0195;
-    /* 0x0196 */ s16 unk_0196;
+    /* 0x0196 */ s16 drawDmgEffType;
     /* 0x0198 */ s16 unk_0198;
     /* 0x019A */ s16 unk_019A;
     /* 0x019C */ f32 unk_019C;

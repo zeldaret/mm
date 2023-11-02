@@ -71,7 +71,7 @@ typedef struct BossHakugin {
     /* 0x0193 */ u8 unk_0193;
     /* 0x0194 */ u8 unk_0194;
     /* 0x0194 */ u8 unk_0195;
-    /* 0x0196 */ u8 unk_0196;
+    /* 0x0196 */ u8 drawDmgEffType;
     /* 0x0198 */ s16 unk_0198;
     /* 0x019A */ s16 unk_019A;
     /* 0x019C */ s16 unk_019C;
@@ -82,7 +82,7 @@ typedef struct BossHakugin {
     /* 0x01A6 */ s16 unk_01A6;
     /* 0x01A8 */ s16 unk_01A8; // Counter of some kind?
     /* 0x01AA */ s16 unk_01AA;
-    /* 0x01AC */ s16 unk_01AC;
+    /* 0x01AC */ s16 subCamId;
     /* 0x01AE */ s16 unk_01AE;
     /* 0x01B0 */ u32 unk_01B0;
     /* 0x01B4 */ s32 unk_01B4;
@@ -94,16 +94,16 @@ typedef struct BossHakugin {
     /* 0x01CC */ f32 unk_01CC;
     /* 0x01D0 */ f32 unk_01D0;
     /* 0x01D4 */ f32 unk_01D4;
-    /* 0x01D8 */ char unk_01D8[0x4]; // probably unused float
-    /* 0x01DC */ f32 unk_01DC;
-    /* 0x01E0 */ f32 unk_01E0;
-    /* 0x01E4 */ f32 unk_01E4;
+    /* 0x01D8 */ UNK_TYPE1 unk_01D8[0x4]; // probably unused float
+    /* 0x01DC */ f32 drawDmgEffScale;
+    /* 0x01E0 */ f32 drawDmgEffFrozenSteamScale;
+    /* 0x01E4 */ f32 drawDmgEffAlpha;
     /* 0x01E8 */ Vec3s jointTable[GOHT_LIMB_MAX];
     /* 0x02AE */ Vec3s morphTable[GOHT_LIMB_MAX];
     /* 0x0374 */ Vec3s unk_0374;
     /* 0x037A */ Vec3s unk_037A;
     /* 0x0380 */ Vec3f unk_0380;
-    /* 0x038C */ Vec3f unk_038C;
+    /* 0x038C */ Vec3f subCamEye;
     /* 0x0398 */ Vec3f bodyPartsPos[GOHT_BODYPART_MAX];
     /* 0x044C */ Vec3f unk_044C;
     /* 0x0458 */ Vec3f unk_0458;
