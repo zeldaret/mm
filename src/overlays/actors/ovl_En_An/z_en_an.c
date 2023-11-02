@@ -3189,7 +3189,7 @@ void EnAn_FollowSchedule(EnAn* this, PlayState* play) {
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
-    if (!(this->actor.params & ENAN_8000) && !this->unk_3C0 &&
+    if (!ENAN_GET_8000(&this->actor) && !this->unk_3C0 &&
         CHECK_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED)) {
         Actor_Kill(&this->actor);
         return;
