@@ -863,7 +863,7 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
         }
 
         if ((this != (EnAn*)foundActor) && (foundActor->update != NULL)) {
-            if (!(foundActor->params & ENAN_8000)) {
+            if (!ENAN_GET_8000(foundActor)) {
                 break;
             }
         }
@@ -3317,6 +3317,8 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
+    // Check if there's an Anju actor with the ENAN_8000 flag, if there's one then give priority to that Anju and Kill
+    // all the others
     if (temp_v1 == 0) {
         if (func_80B53A7C(this, play, ACTORCAT_NPC, ACTOR_EN_AN) != NULL) {
             Actor_Kill(&this->actor);
