@@ -33,15 +33,15 @@ s32 D_80BA36B4;
 f32 D_80BA36B8;
 
 ActorInit Obj_Nozoki_InitVars = {
-    ACTOR_OBJ_NOZOKI,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjNozoki),
-    (ActorFunc)ObjNozoki_Init,
-    (ActorFunc)ObjNozoki_Destroy,
-    (ActorFunc)ObjNozoki_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_NOZOKI,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjNozoki),
+    /**/ ObjNozoki_Init,
+    /**/ ObjNozoki_Destroy,
+    /**/ ObjNozoki_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -49,7 +49,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_STOP),
 };
 
-s16 D_80BA34B8[] = { OBJECT_SECOM_OBJ, OBJECT_GI_MSSA, OBJECT_SECOM_OBJ, OBJECT_SECOM_OBJ };
+static s16 sObjectIds[] = { OBJECT_SECOM_OBJ, OBJECT_GI_MSSA, OBJECT_SECOM_OBJ, OBJECT_SECOM_OBJ };
 
 Vec3f D_80BA34C0 = { 0.0f, 0.0f, -1110.0f };
 
@@ -93,15 +93,15 @@ void ObjNozoki_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BA2514(ObjNozoki* this, PlayState* play) {
-    s32 sp24 = Object_GetSlot(&play->objectCtx, D_80BA34B8[this->unk_15C]);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[this->unk_15C]);
 
-    if (sp24 < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
 
-    if (Object_IsLoaded(&play->objectCtx, sp24)) {
-        this->dyna.actor.objBankIndex = sp24;
+    if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
+        this->dyna.actor.objectSlot = objectSlot;
         this->dyna.actor.draw = ObjNozoki_Draw;
 
         if (this->unk_15C == 0) {

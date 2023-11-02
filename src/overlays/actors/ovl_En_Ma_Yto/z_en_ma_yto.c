@@ -70,15 +70,15 @@ s32 EnMaYto_HasSpokenToPlayer(void);
 void EnMaYto_SetTalkedFlag(void);
 
 ActorInit En_Ma_Yto_InitVars = {
-    ACTOR_EN_MA_YTO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MA2,
-    sizeof(EnMaYto),
-    (ActorFunc)EnMaYto_Init,
-    (ActorFunc)EnMaYto_Destroy,
-    (ActorFunc)EnMaYto_Update,
-    (ActorFunc)EnMaYto_Draw,
+    /**/ ACTOR_EN_MA_YTO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MA2,
+    /**/ sizeof(EnMaYto),
+    /**/ EnMaYto_Init,
+    /**/ EnMaYto_Destroy,
+    /**/ EnMaYto_Update,
+    /**/ EnMaYto_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -1081,7 +1081,7 @@ void EnMaYto_SetupPostMilkRunWaitDialogueEnd(EnMaYto* this) {
 void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) || (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
         if (Message_ShouldAdvance(play) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
             Message_CloseTextbox(play);
         }
     }

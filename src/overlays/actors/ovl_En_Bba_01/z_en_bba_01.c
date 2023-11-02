@@ -29,15 +29,15 @@ void EnBba01_FaceFoward(EnHy* this, PlayState* play);
 void EnBba01_Talk(EnHy* this, PlayState* play);
 
 ActorInit En_Bba_01_InitVars = {
-    ACTOR_EN_BBA_01,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnBba01),
-    (ActorFunc)EnBba01_Init,
-    (ActorFunc)EnBba01_Destroy,
-    (ActorFunc)EnBba01_Update,
-    (ActorFunc)EnBba01_Draw,
+    /**/ ACTOR_EN_BBA_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnBba01),
+    /**/ EnBba01_Init,
+    /**/ EnBba01_Destroy,
+    /**/ EnBba01_Update,
+    /**/ EnBba01_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -215,13 +215,13 @@ void EnBba01_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnBba01* this = THIS;
 
-    this->enHy.animObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
-    this->enHy.headObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
-    this->enHy.skelUpperObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
-    this->enHy.skelLowerObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
+    this->enHy.animObjectSlot = SubS_GetObjectSlot(OBJECT_BBA, play);
+    this->enHy.headObjectSlot = SubS_GetObjectSlot(OBJECT_BBA, play);
+    this->enHy.skelUpperObjectSlot = SubS_GetObjectSlot(OBJECT_BBA, play);
+    this->enHy.skelLowerObjectSlot = SubS_GetObjectSlot(OBJECT_BBA, play);
 
-    if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skelUpperObjIndex < 0) ||
-        (this->enHy.skelLowerObjIndex < 0)) {
+    if ((this->enHy.animObjectSlot <= OBJECT_SLOT_NONE) || (this->enHy.headObjectSlot <= OBJECT_SLOT_NONE) ||
+        (this->enHy.skelUpperObjectSlot <= OBJECT_SLOT_NONE) || (this->enHy.skelLowerObjectSlot <= OBJECT_SLOT_NONE)) {
         Actor_Kill(&this->enHy.actor);
     }
     this->enHy.actor.draw = NULL;
@@ -264,9 +264,9 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.headObjIndex].segment);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjIndex].segment);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjIndex].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.headObjectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -303,8 +303,8 @@ void EnBba01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     if (limbIndex == BBA_LIMB_HEAD) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.skelUpperObjIndex].segment);
-        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelUpperObjIndex].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

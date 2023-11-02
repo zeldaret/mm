@@ -19,15 +19,15 @@ void DmBal_SetupDoNothing(DmBal* this);
 void DmBal_DoNothing(DmBal* this, PlayState* play);
 
 ActorInit Dm_Bal_InitVars = {
-    ACTOR_DM_BAL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BAL,
-    sizeof(DmBal),
-    (ActorFunc)DmBal_Init,
-    (ActorFunc)DmBal_Destroy,
-    (ActorFunc)DmBal_Update,
-    (ActorFunc)DmBal_Draw,
+    /**/ ACTOR_DM_BAL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BAL,
+    /**/ sizeof(DmBal),
+    /**/ DmBal_Init,
+    /**/ DmBal_Destroy,
+    /**/ DmBal_Update,
+    /**/ DmBal_Draw,
 };
 
 // These animations are the same and in the same order as in the main NPC actor EnBal
@@ -222,7 +222,7 @@ void DmBal_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           DmBal_OverrideLimbDraw, DmBal_PostLimbDraw, &this->actor);
 

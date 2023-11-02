@@ -1663,7 +1663,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         gSaveContext.options.zTargetSetting = 0;
                     }
                 }
-                func_801A3D98(gSaveContext.options.audioSetting);
+                Audio_SetFileSelectSettings(gSaveContext.options.audioSetting);
             }
         }
 
@@ -1861,7 +1861,7 @@ void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx) {
 void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
     if (gSaveContext.save.entrance) {} // Required to match
 
-    func_801A3D98(gSaveContext.options.audioSetting);
+    Audio_SetFileSelectSettings(gSaveContext.options.audioSetting);
 }
 
 void Sram_Alloc(GameState* gameState, SramContext* sramCtx) {

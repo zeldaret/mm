@@ -26,15 +26,15 @@ static s32 D_8092DCB0[] = {
 };
 
 ActorInit En_Dns_InitVars = {
-    ACTOR_EN_DNS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNS,
-    sizeof(EnDns),
-    (ActorFunc)EnDns_Init,
-    (ActorFunc)EnDns_Destroy,
-    (ActorFunc)EnDns_Update,
-    (ActorFunc)EnDns_Draw,
+    /**/ ACTOR_EN_DNS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNS,
+    /**/ sizeof(EnDns),
+    /**/ EnDns_Init,
+    /**/ EnDns_Destroy,
+    /**/ EnDns_Update,
+    /**/ EnDns_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -386,7 +386,7 @@ void func_8092D108(EnDns* this, PlayState* play) {
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlower);
+    gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlowerDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

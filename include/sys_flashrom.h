@@ -5,7 +5,7 @@
 
 typedef struct {
     /* 0x00 */ s32 requestType;
-    /* 0x04 */ OSMesg response;
+    /* 0x04 */ s32 response;
     /* 0x08 */ void* addr;
     /* 0x0C */ s32 pageNum;
     /* 0x10 */ s32 pageCount;

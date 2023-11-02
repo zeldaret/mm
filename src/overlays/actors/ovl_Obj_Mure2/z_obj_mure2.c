@@ -19,15 +19,15 @@ void func_80961490(ObjMure2* this, PlayState* play);
 
 #if 0
 ActorInit Obj_Mure2_InitVars = {
-    ACTOR_OBJ_MURE2,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjMure2),
-    (ActorFunc)ObjMure2_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)ObjMure2_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_MURE2,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjMure2),
+    /**/ ObjMure2_Init,
+    /**/ Actor_Noop,
+    /**/ ObjMure2_Update,
+    /**/ NULL,
 };
 
 // static InitChainEntry sInitChain[] = {

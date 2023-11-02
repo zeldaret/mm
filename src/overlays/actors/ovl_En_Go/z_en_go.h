@@ -93,8 +93,8 @@ typedef struct EnGo {
     /* 0x1E0 */ ColliderCylinder unusedCylinder;
     /* 0x22C */ ColliderSphere colliderSphere;
     /* 0x284 */ Path* gatekeeperPath;
-    /* 0x288 */ s8 taisouObjIndex;
-    /* 0x289 */ s8 hakuginDemoObjIndex;
+    /* 0x288 */ s8 taisouObjectSlot;
+    /* 0x289 */ s8 hakuginDemoObjectSlot;
     /* 0x28C */ s32 msgScriptResumePos;
     /* 0x290 */ Vec3f headPos;
     /* 0x29C */ Vec3f bodyPos;

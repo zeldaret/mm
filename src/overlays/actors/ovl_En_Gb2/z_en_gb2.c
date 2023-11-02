@@ -36,15 +36,15 @@ void func_80B11268(EnGb2* this, PlayState* play);
 void func_80B11344(EnGb2* this, PlayState* play);
 
 ActorInit En_Gb2_InitVars = {
-    ACTOR_EN_GB2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_PS,
-    sizeof(EnGb2),
-    (ActorFunc)EnGb2_Init,
-    (ActorFunc)EnGb2_Destroy,
-    (ActorFunc)EnGb2_Update,
-    (ActorFunc)EnGb2_Draw,
+    /**/ ACTOR_EN_GB2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_PS,
+    /**/ sizeof(EnGb2),
+    /**/ EnGb2_Init,
+    /**/ EnGb2_Destroy,
+    /**/ EnGb2_Update,
+    /**/ EnGb2_Draw,
 };
 
 typedef struct {
@@ -445,7 +445,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+                    func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
                     this->actionFunc = func_80B11344;
                     break;
 
@@ -600,7 +600,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+                    func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
                     this->actionFunc = func_80B11344;
                 }
                 break;

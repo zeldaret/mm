@@ -7,6 +7,8 @@
 #define EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx) ((thisx)->params & 0xF)
 #define EN_TALK_GIBUD_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0xFF0) >> 4)
 
+#define EN_TALK_GIBUD_SWITCH_FLAG_NONE 0xFF
+
 struct EnTalkGibud;
 
 typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, PlayState*);

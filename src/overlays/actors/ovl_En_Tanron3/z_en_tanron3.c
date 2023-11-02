@@ -32,15 +32,15 @@ static Vec3f sZeroVec[] = { 0.0f, 0.0f, 0.0f };
 static Boss03* sGyorg = NULL;
 
 ActorInit En_Tanron3_InitVars = {
-    ACTOR_EN_TANRON3,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS03,
-    sizeof(EnTanron3),
-    (ActorFunc)EnTanron3_Init,
-    (ActorFunc)EnTanron3_Destroy,
-    (ActorFunc)EnTanron3_Update,
-    (ActorFunc)EnTanron3_Draw,
+    /**/ ACTOR_EN_TANRON3,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS03,
+    /**/ sizeof(EnTanron3),
+    /**/ EnTanron3_Init,
+    /**/ EnTanron3_Destroy,
+    /**/ EnTanron3_Update,
+    /**/ EnTanron3_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

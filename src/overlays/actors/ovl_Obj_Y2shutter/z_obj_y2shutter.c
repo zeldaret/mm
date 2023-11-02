@@ -30,15 +30,15 @@ typedef struct ShutterInfo {
 } ShutterInfo; // size = 0x20
 
 ActorInit Obj_Y2shutter_InitVars = {
-    ACTOR_OBJ_Y2SHUTTER,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KAIZOKU_OBJ,
-    sizeof(ObjY2shutter),
-    (ActorFunc)ObjY2shutter_Init,
-    (ActorFunc)ObjY2shutter_Destroy,
-    (ActorFunc)ObjY2shutter_Update,
-    (ActorFunc)ObjY2shutter_Draw,
+    /**/ ACTOR_OBJ_Y2SHUTTER,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_KAIZOKU_OBJ,
+    /**/ sizeof(ObjY2shutter),
+    /**/ ObjY2shutter_Init,
+    /**/ ObjY2shutter_Destroy,
+    /**/ ObjY2shutter_Update,
+    /**/ ObjY2shutter_Draw,
 };
 
 ShutterInfo sShutterInfo[] = {

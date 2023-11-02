@@ -14,7 +14,7 @@
         <DList Name="gGoronSmallSnowballFragmentMaterialDL" Offset="0xD50" />
         <DList Name="gGoronSmallSnowballFragmentModelDL" Offset="0xDD8" />
 
-        <DList Name="gGoronSnowballDL" Offset="0x1560" />
+        <DList Name="gGoronSnowballDL" Offset="0x1560" /> <!-- Original name is "of1_snowgoroniwa_model" -->
         <Blob Name="object_oF1d_map_Blob_001750" Size="0x20" Offset="0x1750" />
         <Texture Name="gGoronSnowBallTex" OutName="goron_snow" Format="rgba16" Width="32" Height="64" Offset="0x1770" />
         <Blob Name="object_oF1d_map_Blob_002770" Size="0x800" Offset="0x2770" />
@@ -32,9 +32,9 @@
         <DList Name="object_oF1d_map_DL_003340" Offset="0x3340" />
 
         <!-- Animations -->
-        <Animation Name="gGoronCoverEarsAnim" Offset="0x3650" />
-        <Animation Name="gGoronDropKegAnim" Offset="0x39D8" />
-        <Animation Name="gGoronShiverAnim" Offset="0x3E28" />
+        <Animation Name="gGoronCoverEarsAnim" Offset="0x3650" /> <!-- Original name is "goron_urusaina" -->
+        <Animation Name="gGoronDropKegAnim" Offset="0x39D8" /> <!-- Original name is "gr_gift_bom" -->
+        <Animation Name="gGoronShiverAnim" Offset="0x3E28" /> <!-- Original name is "gr_samui" -->
 
         <!-- Don Gero's Mask -->
         <DList Name="gGoronDonGeroMaskDL" Offset="0x4DB0" />
@@ -60,7 +60,7 @@
 
         <!-- Rolled Up -->
         <DList Name="gGoronEmpty2DL" Offset="0x91A0" />
-        <DList Name="gGoronRolledUpDL" Offset="0x91A8" />
+        <DList Name="gGoronRolledUpDL" Offset="0x91A8" /> <!-- Original name is "oF1d_iwa2_model" -->
         <Texture Name="gGoronRolledUpTLUT" OutName="goron_rolled_up_tlut" Format="rgba16" Width="16" Height="16" Offset="0x94E0" />
         <Texture Name="gGoronRolledUpSkinTex" OutName="goron_rolled_up_skin" Format="ci8" Width="16" Height="16" Offset="0x96E0" />
         <Texture Name="gGoronRolledUpBellyButtonTex" OutName="goron_rolled_up_belly_button" Format="ci8" Width="8" Height="8" Offset="0x97E0" />
@@ -68,7 +68,7 @@
         <Texture Name="gGoronRolledUpRocksTex" OutName="goron_rolled_up_rocks" Format="ci8" Width="32" Height="64" Offset="0x98A0" />
 
         <!-- Animation -->
-        <Animation Name="gGoronTPoseAnim" Offset="0xA118" />
+        <Animation Name="gGoronTPoseAnim" Offset="0xA118" /> <!-- Original name is "ng_kihon" -->
 
         <!-- DLists -->
         <DList Name="gGoronBodyDL" Offset="0xCC50" />
@@ -128,15 +128,15 @@
         <Skeleton Name="gGoronSkel" Type="Flex" LimbType="Standard" LimbNone="GORON_LIMB_NONE" LimbMax="GORON_LIMB_MAX" EnumName="GoronLimb" Offset="0x11AC8" />
 
         <!-- Animations -->
-        <Animation Name="gGoronLyingDownIdleAnim" Offset="0x11D98" />
-        <Animation Name="gGoronUnrollAnim" Offset="0x12DE0" />
-        <Animation Name="gGoronShiveringSurprisedAnim" Offset="0x135E8" />
-        <Animation Name="gGoronStandingHandTappingAnim" Offset="0x13DB0" />
-        <Animation Name="gGoronSleepyAnim" Offset="0x143AC" />
-        <Animation Name="gGoronStandingIdleAnim" Offset="0x14CE0" />
+        <Animation Name="gGoronLyingDownIdleAnim" Offset="0x11D98" /> <!-- Original name is "oF1d_chyu_goron" -->
+        <Animation Name="gGoronUnrollAnim" Offset="0x12DE0" /> <!-- Original name is "oF1d_konnnichiwa" -->
+        <Animation Name="gGoronShiveringSurprisedAnim" Offset="0x135E8" /> <!-- Original name is "ofx_odoroku" -->
+        <Animation Name="gGoronStandingHandTappingAnim" Offset="0x13DB0" /> <!-- Original name is "ofx_uri" -->
+        <Animation Name="gGoronSleepyAnim" Offset="0x143AC" /> <!-- Original name is "ofx_wabi" -->
+        <Animation Name="gGoronStandingIdleAnim" Offset="0x14CE0" /> <!-- Original name is "ofx_wait01" -->
 
         <!-- Dust -->
         <DList Name="gGoronDustMaterialDL" Offset="0x14CF0" />
-        <DList Name="gGoronDustModelDL" Offset="0x14D00" />
+        <DList Name="gGoronDustModelDL" Offset="0x14D00" /> <!-- Original name might be "snowgoron_effct_set" -->
     </File>
 </Root>

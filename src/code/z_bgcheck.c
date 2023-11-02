@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "fault.h"
 #include "fixed_point.h"
@@ -3956,7 +3957,7 @@ s32 BgCheck_SphVsFirstDynaPoly(CollisionContext* colCtx, u16 xpFlags, CollisionP
 }
 
 /**
- * SEGMENTED_TO_VIRTUAL CollisionHeader members
+ * SEGMENTED_TO_K0 CollisionHeader members
  */
 void CollisionHeader_SegmentedToVirtual(CollisionHeader* colHeader) {
     colHeader->vtxList = Lib_SegmentedToVirtual(colHeader->vtxList);

@@ -40,15 +40,15 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 ActorInit En_Tubo_Trap_InitVars = {
-    ACTOR_EN_TUBO_TRAP,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_DANGEON_KEEP,
-    sizeof(EnTuboTrap),
-    (ActorFunc)EnTuboTrap_Init,
-    (ActorFunc)EnTuboTrap_Destroy,
-    (ActorFunc)EnTuboTrap_Update,
-    (ActorFunc)EnTuboTrap_Draw,
+    /**/ ACTOR_EN_TUBO_TRAP,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_DANGEON_KEEP,
+    /**/ sizeof(EnTuboTrap),
+    /**/ EnTuboTrap_Init,
+    /**/ EnTuboTrap_Destroy,
+    /**/ EnTuboTrap_Update,
+    /**/ EnTuboTrap_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

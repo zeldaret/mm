@@ -194,15 +194,15 @@ static ColliderCylinderInit D_809BDC64 = {
 };
 
 ActorInit En_Knight_InitVars = {
-    ACTOR_EN_KNIGHT,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_KNIGHT,
-    sizeof(EnKnight),
-    (ActorFunc)EnKnight_Init,
-    (ActorFunc)EnKnight_Destroy,
-    (ActorFunc)EnKnight_Update,
-    (ActorFunc)EnKnight_Draw,
+    /**/ ACTOR_EN_KNIGHT,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_KNIGHT,
+    /**/ sizeof(EnKnight),
+    /**/ EnKnight_Init,
+    /**/ EnKnight_Destroy,
+    /**/ EnKnight_Update,
+    /**/ EnKnight_Draw,
 };
 
 #endif

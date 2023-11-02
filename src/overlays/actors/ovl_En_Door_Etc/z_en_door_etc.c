@@ -21,15 +21,15 @@ void func_80AC2354(EnDoorEtc* this, PlayState* play);
 void EnDoorEtc_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Door_Etc_InitVars = {
-    ACTOR_EN_DOOR_ETC,
-    ACTORCAT_DOOR,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnDoorEtc),
-    (ActorFunc)EnDoorEtc_Init,
-    (ActorFunc)EnDoorEtc_Destroy,
-    (ActorFunc)EnDoorEtc_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_DOOR_ETC,
+    /**/ ACTORCAT_DOOR,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnDoorEtc),
+    /**/ EnDoorEtc_Init,
+    /**/ EnDoorEtc_Destroy,
+    /**/ EnDoorEtc_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -58,7 +58,7 @@ typedef struct {
     /* 0x4 */ s16 objectId;
 } EnDoorEtcInfo; // size = 0x6
 
-EnDoorEtcInfo sObjInfo[] = {
+EnDoorEtcInfo sObjectInfo[] = {
     { SCENE_MITURIN, 1, OBJECT_NUMA_OBJ },
     { -1, 0, GAMEPLAY_KEEP },
     { -1, 13, GAMEPLAY_FIELD_KEEP },
@@ -87,8 +87,8 @@ static InitChainEntry sInitChain[] = {
 
 void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    s32 objectIndex;
-    EnDoorEtcInfo* objectInfo = sObjInfo;
+    s32 objectSlot;
+    EnDoorEtcInfo* objectInfo = sObjectInfo;
     s32 i;
     EnDoorEtc* this = THIS;
 
@@ -101,16 +101,16 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
             break;
         }
     }
-    if ((i >= 15) && (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
+    if ((i >= 15) && (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) > OBJECT_SLOT_NONE)) {
         objectInfo++;
     }
-    objectIndex = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
-    if (objectIndex < 0) {
+    objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->knobDoor.dyna.actor);
     } else {
-        this->knobDoor.requiredObjBankIndex = objectIndex;
+        this->knobDoor.objectSlot = objectSlot;
         this->knobDoor.dlIndex = objectInfo->dListIndex;
-        if (this->knobDoor.dyna.actor.objBankIndex == this->knobDoor.requiredObjBankIndex) {
+        if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
             EnDoorEtc_WaitForObject(this, play);
         } else {
             this->actionFunc = EnDoorEtc_WaitForObject;
@@ -139,9 +139,9 @@ s32 EnDoorEtc_IsDistanceGreater(Vec3f* a, Vec3f* b, f32 c) {
 }
 
 void EnDoorEtc_WaitForObject(EnDoorEtc* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->knobDoor.requiredObjBankIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->knobDoor.objectSlot)) {
         this->knobDoor.dyna.actor.flags &= ~ACTOR_FLAG_10;
-        this->knobDoor.dyna.actor.objBankIndex = this->knobDoor.requiredObjBankIndex;
+        this->knobDoor.dyna.actor.objectSlot = this->knobDoor.objectSlot;
         this->actionFunc = func_80AC2354;
         this->knobDoor.dyna.actor.draw = EnDoorEtc_Draw;
     }

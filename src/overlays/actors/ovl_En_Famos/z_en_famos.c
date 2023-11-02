@@ -48,15 +48,15 @@ void EnFamos_SetupDeathFade(EnFamos* this);
 void EnFamos_DeathFade(EnFamos* this, PlayState* play);
 
 ActorInit En_Famos_InitVars = {
-    ACTOR_EN_FAMOS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_FAMOS,
-    sizeof(EnFamos),
-    (ActorFunc)EnFamos_Init,
-    (ActorFunc)EnFamos_Destroy,
-    (ActorFunc)EnFamos_Update,
-    (ActorFunc)EnFamos_Draw,
+    /**/ ACTOR_EN_FAMOS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_FAMOS,
+    /**/ sizeof(EnFamos),
+    /**/ EnFamos_Init,
+    /**/ EnFamos_Destroy,
+    /**/ EnFamos_Update,
+    /**/ EnFamos_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
@@ -173,7 +173,7 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawSquare, 30.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gFamosSkeleton, &gFamosIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &gFamosSkel, &gFamosIdleAnim, this->jointTable, this->morphTable,
                    FAMOS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);

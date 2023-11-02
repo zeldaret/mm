@@ -1,4 +1,5 @@
-#include "global.h"
+#include "ultra64.h"
+#include "libc/stdbool.h"
 
 void __osDevMgrMain(void* arg) {
     OSIoMesg* ioMesg;
@@ -34,31 +35,32 @@ void __osDevMgrMain(void* arg) {
             }
 
             osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
-            __osResetGlobalIntMask(0x00100401);
-            __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x80000000);
+            __osResetGlobalIntMask(OS_IM_PI);
+            __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL, transfer->bmCtlShadow | LEO_BM_CTL_START);
 
-        label:
+        readblock1:
             osRecvMesg(devMgr->evtQueue, &sp70, OS_MESG_BLOCK);
             transfer = &ioMesg->piHandle->transferInfo;
             block = &transfer->block[transfer->blockNum];
             if (block->errStatus == 0x1D) {
                 u32 status;
 
-                __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x10000000);
-                __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow);
-                __osEPiRawReadIo(ioMesg->piHandle, 0x05000508, &status);
-                if (status & 0x02000000) {
-                    __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x1000000);
+                __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL, transfer->bmCtlShadow | LEO_BM_CTL_RESET);
+                __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL, transfer->bmCtlShadow);
+                __osEPiRawReadIo(ioMesg->piHandle, LEO_STATUS, &status);
+                if (status & LEO_STATUS_MECHANIC_INTERRUPT) {
+                    __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL,
+                                      transfer->bmCtlShadow | LEO_BM_CTL_CLR_MECHANIC_INTR);
                 }
                 block->errStatus = 4;
-                HW_REG(PI_STATUS_REG, u32) = PI_CLR_INTR;
-                __osSetGlobalIntMask(0x00100C01);
+                IO_WRITE(PI_STATUS_REG, PI_CLR_INTR);
+                __osSetGlobalIntMask(OS_IM_PI | SR_IBIT4);
             }
             osSendMesg(ioMesg->hdr.retQueue, (OSMesg)ioMesg, OS_MESG_NOBLOCK);
 
             if ((msgVar == 1) && (ioMesg->piHandle->transferInfo.block[0].errStatus == 0)) {
                 msgVar = 0;
-                goto label;
+                goto readblock1;
             }
 
             osSendMesg(devMgr->acsQueue, NULL, OS_MESG_NOBLOCK);

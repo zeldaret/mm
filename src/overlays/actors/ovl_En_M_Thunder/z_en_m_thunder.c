@@ -30,15 +30,15 @@ void EnMThunder_UnkType_Attack(EnMThunder* this, PlayState* play);
 #define ENMTHUNDER_TYPE_MAX 4
 
 ActorInit En_M_Thunder_InitVars = {
-    ACTOR_EN_M_THUNDER,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnMThunder),
-    (ActorFunc)EnMThunder_Init,
-    (ActorFunc)EnMThunder_Destroy,
-    (ActorFunc)EnMThunder_Update,
-    (ActorFunc)EnMThunder_Draw,
+    /**/ ACTOR_EN_M_THUNDER,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnMThunder),
+    /**/ EnMThunder_Init,
+    /**/ EnMThunder_Destroy,
+    /**/ EnMThunder_Update,
+    /**/ EnMThunder_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -17,15 +17,15 @@ void EnOnpuman_Update(Actor* thisx, PlayState* play);
 void func_80B121D8(EnOnpuman* this, PlayState* play);
 
 ActorInit En_Onpuman_InitVars = {
-    ACTOR_EN_ONPUMAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnOnpuman),
-    (ActorFunc)EnOnpuman_Init,
-    (ActorFunc)EnOnpuman_Destroy,
-    (ActorFunc)EnOnpuman_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_ONPUMAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnOnpuman),
+    /**/ EnOnpuman_Init,
+    /**/ EnOnpuman_Destroy,
+    /**/ EnOnpuman_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -102,7 +102,7 @@ void func_80B11F78(EnOnpuman* this, PlayState* play) {
 void func_80B1202C(EnOnpuman* this, PlayState* play2) {
     PlayState* play = play2;
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && (Message_ShouldAdvance(play))) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x8D4:
                 this->unk_2A4 |= 1;
@@ -138,7 +138,7 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
 }
 
 void func_80B1217C(EnOnpuman* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && (Message_ShouldAdvance(play))) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = func_80B121D8;
         Message_CloseTextbox(play);
     }

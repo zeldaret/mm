@@ -50,15 +50,15 @@ static u16 D_80ADD938[] = { 0x0615, 0x060F, 0x060F };
 static u8 D_80ADD940 = 0;
 
 ActorInit En_Sellnuts_InitVars = {
-    ACTOR_EN_SELLNUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNT,
-    sizeof(EnSellnuts),
-    (ActorFunc)EnSellnuts_Init,
-    (ActorFunc)EnSellnuts_Destroy,
-    (ActorFunc)EnSellnuts_Update,
-    (ActorFunc)EnSellnuts_Draw,
+    /**/ ACTOR_EN_SELLNUTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNT,
+    /**/ sizeof(EnSellnuts),
+    /**/ EnSellnuts_Init,
+    /**/ EnSellnuts_Destroy,
+    /**/ EnSellnuts_Update,
+    /**/ EnSellnuts_Draw,
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {
@@ -473,7 +473,7 @@ void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80ADBBEC;
-        func_800B7298(play, NULL, PLAYER_CSMODE_19);
+        func_800B7298(play, NULL, PLAYER_CSACTION_19);
     }
 }
 

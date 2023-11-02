@@ -15,7 +15,7 @@ typedef struct EnSekihi {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ Gfx* opaDList;
     /* 0x160 */ Gfx* xluDList;
-    /* 0x164 */ s8 objectIndex;
+    /* 0x164 */ s8 objectSlot;
     /* 0x168 */ EnSekihiActionFunc actionFunc;
 } EnSekihi; // size = 0x16C
 

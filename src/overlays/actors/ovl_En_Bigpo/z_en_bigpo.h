@@ -8,6 +8,10 @@ struct EnBigpo;
 
 typedef void (*EnBigPoActionFunc)(struct EnBigpo*, PlayState*);
 
+#define BIG_POE_GET_SWITCH_FLAG(thisx) (u8)((thisx)->params >> 0x8)
+
+#define BIG_POE_SWITCH_FLAG_NONE 0xFF
+
 typedef enum BigPoeBodyPart {
     /* 0 */ BIG_POE_BODYPART_0,
     /* 1 */ BIG_POE_BODYPART_1,
@@ -74,7 +78,5 @@ typedef enum EnBigpoType {
   /* 4 */ BIG_POE_TYPE_REVEALED_FIRE,
   /* 5 */ BIG_POE_TYPE_UNK5
 } EnBigpoType;
-
-#define BIG_POE_GET_SWITCH_FLAG(thisx) (u8)((thisx)->params >> 0x8) 
 
 #endif // Z_EN_BIGPO_H

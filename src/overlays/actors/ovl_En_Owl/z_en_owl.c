@@ -5,7 +5,6 @@
  */
 
 #include "z_en_owl.h"
-#include "objects/object_owl/object_owl.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -49,15 +48,15 @@ typedef enum {
 } EnOwlMessageChoice;
 
 ActorInit En_Owl_InitVars = {
-    ACTOR_EN_OWL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_OWL,
-    sizeof(EnOwl),
-    (ActorFunc)EnOwl_Init,
-    (ActorFunc)EnOwl_Destroy,
-    (ActorFunc)EnOwl_Update,
-    (ActorFunc)EnOwl_Draw,
+    /**/ ACTOR_EN_OWL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_OWL,
+    /**/ sizeof(EnOwl),
+    /**/ EnOwl_Init,
+    /**/ EnOwl_Destroy,
+    /**/ EnOwl_Update,
+    /**/ EnOwl_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -128,15 +127,15 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime1, &object_owl_Skel_00C5F8, &object_owl_Anim_001ADC, this->jointTable1,
-                       this->morphTable1, 21);
-    SkelAnime_InitFlex(play, &this->skelAnime2, &object_owl_Skel_0105C0, &object_owl_Anim_00CDB0, this->jointTable2,
-                       this->morphTable2, 16);
+    SkelAnime_InitFlex(play, &this->skelAnimeFlying, &gOwlFlyingSkel, &gOwlFlyAnim, this->jointTableFlying,
+                       this->morphTableFlying, OWL_FLYING_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnimePerching, &gOwlPerchingSkel, &gOwlPerchAnim, this->jointTablePerching,
+                       this->morphTablePerching, OWL_PERCHING_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.terminalVelocity = -10.0f;
     this->actor.targetArrowOffset = 500.0f;
-    EnOwl_ChangeMode(this, func_8095BF58, func_8095C484, &this->skelAnime2, &object_owl_Anim_00CDB0, 0.0f);
+    EnOwl_ChangeMode(this, func_8095BF58, func_8095C484, &this->skelAnimePerching, &gOwlPerchAnim, 0.0f);
 
     this->actionFlags = 0;
     this->unk_40D = 0;
@@ -252,7 +251,7 @@ s32 func_8095A9FC(EnOwl* this, PlayState* play, u16 textId) {
 }
 
 void func_8095AA70(EnOwl* this) {
-    EnOwl_ChangeMode(this, func_8095C1C8, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94, 0.0f);
+    EnOwl_ChangeMode(this, func_8095C1C8, func_8095C484, &this->skelAnimeFlying, &gOwlUnfoldWingsAnim, 0.0f);
     this->eyeTexIndex = 0;
     this->blinkTimer = Rand_S16Offset(60, 60);
 }
@@ -425,9 +424,9 @@ void func_8095B0C8(EnOwl* this) {
 }
 
 void func_8095B158(EnOwl* this) {
-    if (Animation_OnFrame(&this->skelAnime1, 2.0f) || Animation_OnFrame(&this->skelAnime1, 9.0f) ||
-        Animation_OnFrame(&this->skelAnime1, 23.0f) || Animation_OnFrame(&this->skelAnime1, 40.0f) ||
-        Animation_OnFrame(&this->skelAnime1, 58.0f)) {
+    if (Animation_OnFrame(&this->skelAnimeFlying, 2.0f) || Animation_OnFrame(&this->skelAnimeFlying, 9.0f) ||
+        Animation_OnFrame(&this->skelAnimeFlying, 23.0f) || Animation_OnFrame(&this->skelAnimeFlying, 40.0f) ||
+        Animation_OnFrame(&this->skelAnimeFlying, 58.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_OWL_FLUTTER);
     }
 }
@@ -448,7 +447,7 @@ void func_8095B254(EnOwl* this, PlayState* play) {
     }
 
     if (this->actionFlags & 1) {
-        EnOwl_ChangeMode(this, func_8095B1E4, func_8095C328, &this->skelAnime1, &object_owl_Anim_001ADC, 0.0f);
+        EnOwl_ChangeMode(this, func_8095B1E4, func_8095C328, &this->skelAnimeFlying, &gOwlFlyAnim, 0.0f);
         this->unk_3EA = 6;
         this->actor.flags |= ACTOR_FLAG_20;
     }
@@ -458,7 +457,7 @@ void func_8095B254(EnOwl* this, PlayState* play) {
 
 void func_8095B2F8(EnOwl* this, PlayState* play) {
     func_8095B06C(this);
-    if (this->skelAnime1.curFrame >= 18.0f) {
+    if (this->skelAnimeFlying.curFrame >= 18.0f) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x200, 0x80);
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
@@ -466,7 +465,7 @@ void func_8095B2F8(EnOwl* this, PlayState* play) {
     if ((this->actor.shape.rot.y == this->unk_3EC) && (this->actionFlags & 1)) {
         this->actionFunc = func_8095B254;
         Animation_Change(this->skelAnime3, this->skelAnime3->animation, 1.0f, 19.0f,
-                         Animation_GetLastFrame(&object_owl_Anim_001168), ANIMMODE_ONCE, 0.0f);
+                         Animation_GetLastFrame(&gOwlTakeoffAnim), ANIMMODE_ONCE, 0.0f);
         this->unk_414 = func_8095C484;
     }
 
@@ -476,7 +475,7 @@ void func_8095B2F8(EnOwl* this, PlayState* play) {
 void func_8095B3DC(EnOwl* this, PlayState* play) {
     if (this->actionFlags & 1) {
         this->actionFunc = func_8095B2F8;
-        Animation_Change(this->skelAnime3, &object_owl_Anim_001168, 1.0f, 0.0f, 35.0f, ANIMMODE_ONCE, 0.0f);
+        Animation_Change(this->skelAnime3, &gOwlTakeoffAnim, 1.0f, 0.0f, 35.0f, ANIMMODE_ONCE, 0.0f);
         this->unk_414 = func_8095C408;
         this->unk_3EC = 0x5500;
         this->actor.world.pos.y += 100.0f;
@@ -489,7 +488,7 @@ void func_8095B480(EnOwl* this, PlayState* play) {
 
     if (player->stateFlags3 & PLAYER_STATE3_10000000) {
         this->actor.textId = 0xBF1;
-        EnOwl_ChangeMode(this, func_8095BF58, func_8095C484, &this->skelAnime2, &object_owl_Anim_00CDB0, 0.0f);
+        EnOwl_ChangeMode(this, func_8095BF58, func_8095C484, &this->skelAnimePerching, &gOwlPerchAnim, 0.0f);
         this->eyeTexIndex = 0;
         this->actionFlags &= ~8;
         this->blinkTimer = Rand_S16Offset(60, 60);
@@ -523,7 +522,7 @@ void func_8095B574(EnOwl* this, PlayState* play) {
 
 void func_8095B650(EnOwl* this, PlayState* play) {
     if (this->actionFlags & 1) {
-        EnOwl_ChangeMode(this, func_8095B574, func_8095C484, &this->skelAnime2, &object_owl_Anim_00CDB0, 0.0f);
+        EnOwl_ChangeMode(this, func_8095B574, func_8095C484, &this->skelAnimePerching, &gOwlPerchAnim, 0.0f);
         this->actor.textId = 0xBF5;
         this->actionFlags &= ~8;
     }
@@ -532,8 +531,8 @@ void func_8095B650(EnOwl* this, PlayState* play) {
 
 void func_8095B6C8(EnOwl* this, PlayState* play) {
     if (this->actionFlags & 1) {
-        Animation_Change(this->skelAnime3, &object_owl_Anim_00CB94, -1.0f,
-                         Animation_GetLastFrame(&object_owl_Anim_00CB94), 0.0f, ANIMMODE_ONCE, 0.0f);
+        Animation_Change(this->skelAnime3, &gOwlUnfoldWingsAnim, -1.0f, Animation_GetLastFrame(&gOwlUnfoldWingsAnim),
+                         0.0f, ANIMMODE_ONCE, 0.0f);
         this->unk_414 = func_8095C484;
         this->actionFunc = func_8095B650;
     }
@@ -588,7 +587,7 @@ void func_8095B76C(EnOwl* this, PlayState* play) {
 }
 
 void func_8095B960(EnOwl* this, PlayState* play) {
-    if (this->skelAnime1.curFrame >= 18.0f) {
+    if (this->skelAnimeFlying.curFrame >= 18.0f) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x200, 0x80);
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
@@ -605,7 +604,7 @@ void func_8095B960(EnOwl* this, PlayState* play) {
 void func_8095B9FC(EnOwl* this, PlayState* play) {
     if (this->actionFlags & 1) {
         this->actionFunc = func_8095B960;
-        Animation_Change(this->skelAnime3, &object_owl_Anim_001168, 1.0f, 0.0f, 35.0f, ANIMMODE_ONCE, 0.0f);
+        Animation_Change(this->skelAnime3, &gOwlTakeoffAnim, 1.0f, 0.0f, 35.0f, ANIMMODE_ONCE, 0.0f);
         this->unk_414 = func_8095C408;
         func_8095B0C8(this);
     }
@@ -684,8 +683,8 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                     case 0xBEE:
                         Message_CloseTextbox(play);
                         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
-                        EnOwl_ChangeMode(this, func_8095B9FC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
-                                         0.0f);
+                        EnOwl_ChangeMode(this, func_8095B9FC, func_8095C484, &this->skelAnimeFlying,
+                                         &gOwlUnfoldWingsAnim, 0.0f);
                         this->eyeTexIndex = 0;
                         this->blinkTimer = Rand_S16Offset(60, 60);
                         this->actionFlags |= 8;
@@ -714,8 +713,8 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         Message_CloseTextbox(play);
                         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
-                        EnOwl_ChangeMode(this, func_8095B3DC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
-                                         0.0f);
+                        EnOwl_ChangeMode(this, func_8095B3DC, func_8095C484, &this->skelAnimeFlying,
+                                         &gOwlUnfoldWingsAnim, 0.0f);
                         this->eyeTexIndex = 0;
                         this->blinkTimer = Rand_S16Offset(60, 60);
                         this->actionFlags |= 8;
@@ -783,23 +782,23 @@ void func_8095BF78(EnOwl* this, PlayState* play) {
 }
 
 void func_8095C09C(EnOwl* this, PlayState* play) {
-    if (this->skelAnime1.curFrame > 10.0f) {
+    if (this->skelAnimeFlying.curFrame > 10.0f) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x400, 0x40);
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    if (this->skelAnime1.curFrame > 45.0f) {
+    if (this->skelAnimeFlying.curFrame > 45.0f) {
         this->actor.velocity.y = 2.0f;
         this->actor.gravity = 0.0f;
         this->actor.speed = 8.0f;
-    } else if (this->skelAnime1.curFrame > 17.0f) {
+    } else if (this->skelAnimeFlying.curFrame > 17.0f) {
         this->actor.velocity.y = 6.0f;
         this->actor.gravity = 0.0f;
         this->actor.speed = 4.0f;
     }
 
     if (this->actionFlags & 1) {
-        EnOwl_ChangeMode(this, func_8095BF78, func_8095C328, &this->skelAnime1, &object_owl_Anim_001ADC, 0.0f);
+        EnOwl_ChangeMode(this, func_8095BF78, func_8095C328, &this->skelAnimeFlying, &gOwlFlyAnim, 0.0f);
         this->unk_3EA = 6;
         this->unk_3EC += 0x2000;
     }
@@ -810,7 +809,7 @@ void func_8095C09C(EnOwl* this, PlayState* play) {
 void func_8095C1C8(EnOwl* this, PlayState* play) {
     if (this->actionFlags & 1) {
         this->unk_3EA = 3;
-        EnOwl_ChangeMode(this, func_8095C09C, func_8095C484, &this->skelAnime1, &object_owl_Anim_001168, 0.0f);
+        EnOwl_ChangeMode(this, func_8095C09C, func_8095C484, &this->skelAnimeFlying, &gOwlTakeoffAnim, 0.0f);
         this->unk_3EC = BINANG_ADD(this->actor.world.rot.y, 0x4000);
         this->unk_3E4 = this->actor.world.pos.y;
         this->actor.velocity.y = 2.0f;
@@ -826,8 +825,8 @@ void func_8095C258(EnOwl* this) {
     } else {
         this->unk_414 = func_8095C328;
         this->unk_3EA = 6;
-        Animation_Change(this->skelAnime3, &object_owl_Anim_001ADC, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&object_owl_Anim_001ADC), ANIMMODE_ONCE, 5.0f);
+        Animation_Change(this->skelAnime3, &gOwlFlyAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gOwlFlyAnim),
+                         ANIMMODE_ONCE, 5.0f);
     }
 }
 
@@ -840,8 +839,8 @@ void func_8095C328(EnOwl* this) {
         } else {
             this->unk_3EA = 160;
             this->unk_414 = func_8095C258;
-            Animation_Change(this->skelAnime3, &object_owl_Anim_00C6D4, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&object_owl_Anim_00C6D4), ANIMMODE_LOOP, 5.0f);
+            Animation_Change(this->skelAnime3, &gOwlGlideAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gOwlGlideAnim),
+                             ANIMMODE_LOOP, 5.0f);
         }
     }
 }
@@ -925,7 +924,7 @@ void EnOwl_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if ((this->skelAnime1.animation == &object_owl_Anim_001ADC) && Animation_OnFrame(&this->skelAnime1, 4.0f)) {
+    if ((this->skelAnimeFlying.animation == &gOwlFlyAnim) && Animation_OnFrame(&this->skelAnimeFlying, 4.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_OWL_FLUTTER);
     }
 
@@ -1180,9 +1179,9 @@ void EnOwl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
 void EnOwl_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr eyeTextures[] = {
-        object_owl_Tex_008EB8,
-        object_owl_Tex_0092B8,
-        object_owl_Tex_0096B8,
+        gOwlEyeOpenTex,
+        gOwlEyeHalfTex,
+        gOwlEyeClosedTex,
     };
     s32 pad;
     EnOwl* this = THIS;
@@ -1214,7 +1213,7 @@ void func_8095D074(Actor* thisx, PlayState* play) {
 
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
-        gSPDisplayList(POLY_OPA_DISP++, object_owl_DL_001200);
+        gSPDisplayList(POLY_OPA_DISP++, gOwlFeatherDL);
     } else {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -1222,7 +1221,7 @@ void func_8095D074(Actor* thisx, PlayState* play) {
 
         gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_XLU_SURF2);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, (u8)(this->unk_3DC * 8));
-        gSPDisplayList(POLY_XLU_DISP++, object_owl_DL_001200);
+        gSPDisplayList(POLY_XLU_DISP++, gOwlFeatherDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

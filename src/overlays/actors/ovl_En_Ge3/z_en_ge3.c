@@ -36,15 +36,15 @@ typedef enum GerudoAveilAnimation {
 } GerudoAveilAnimation;
 
 ActorInit En_Ge3_InitVars = {
-    ACTOR_EN_GE3,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GELDB,
-    sizeof(EnGe3),
-    (ActorFunc)EnGe3_Init,
-    (ActorFunc)EnGe3_Destroy,
-    (ActorFunc)EnGe3_Update,
-    (ActorFunc)EnGe3_Draw,
+    /**/ ACTOR_EN_GE3,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_GELDB,
+    /**/ sizeof(EnGe3),
+    /**/ EnGe3_Init,
+    /**/ EnGe3_Destroy,
+    /**/ EnGe3_Update,
+    /**/ EnGe3_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -273,7 +273,7 @@ void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play) {
         }
     } else if ((this->picto.actor.xzDistToPlayer < 700.0f) && (fabsf(this->picto.actor.playerHeightRel) < 100.0f) &&
                !Play_InCsMode(play)) {
-        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_26);
+        func_800B7298(play, &this->picto.actor, PLAYER_CSACTION_26);
         Lib_PlaySfx(NA_SE_SY_FOUND);
 
         if (Player_GetMask(play) == PLAYER_MASK_STONE) { // Not fooled by Stone Mask

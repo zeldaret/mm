@@ -3,6 +3,7 @@
 #include "regs.h"
 #include "functions.h"
 #include "z64vismono.h"
+#include "z64visfbuf.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 s16 sTransitionFillTimer;
@@ -11,8 +12,8 @@ TransitionTile sTransitionTile;
 s32 gTransitionTileState;
 VisMono sPlayVisMono;
 Color_RGBA8_u32 gVisMonoColor;
-Struct_80140E80 D_801F6D38;
-Struct_80140E80* D_801F6D4C;
+VisFbuf sPlayVisFbuf;
+VisFbuf* sPlayVisFbufInstance;
 BombersNotebook sBombersNotebook;
 u8 sBombersNotebookOpen;
 u8 sMotionBlurStatus;
@@ -384,7 +385,7 @@ void Play_Destroy(GameState* thisx) {
 
     BombersNotebook_Destroy(&sBombersNotebook);
     this->state.gfxCtx->callback = NULL;
-    this->state.gfxCtx->callbackArg = 0;
+    this->state.gfxCtx->callbackArg = NULL;
     Play_DestroyMotionBlur();
 
     if (R_PAUSE_BG_PRERENDER_STATE != PAUSE_BG_PRERENDER_OFF) {
@@ -417,8 +418,8 @@ void Play_Destroy(GameState* thisx) {
     ShrinkWindow_Destroy();
     TransitionFade_Destroy(&this->unk_18E48);
     VisMono_Destroy(&sPlayVisMono);
-    func_80140EA0(D_801F6D4C);
-    D_801F6D4C = NULL;
+    VisFbuf_Destroy(sPlayVisFbufInstance);
+    sPlayVisFbufInstance = NULL;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_92_80)) {
         Actor_CleanupContext(&this->actorCtx, this);
@@ -524,7 +525,7 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
             Distortion_SetDuration(80);
         }
 
-        func_801A3EC0(0x20);
+        Audio_SetExtraFilter(0x20);
         Environment_EnableUnderwaterLights(this, lightIndex);
 
         if ((sQuakeIndex == -1) || (Quake_GetTimeLeft(sQuakeIndex) == 10)) {
@@ -555,7 +556,7 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
             Quake_RemoveRequest(sQuakeIndex);
         }
         Environment_DisableUnderwaterLights(this);
-        func_801A3EC0(0);
+        Audio_SetExtraFilter(0);
     }
 }
 
@@ -588,20 +589,20 @@ void Play_UpdateTransition(PlayState* this) {
                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE))) &&
                     (!Environment_IsFinalHours(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
                      (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS))) {
-                    func_801A4058(20);
+                    Audio_MuteAllSeqExceptSystemAndOcarina(20);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 }
 
                 if (Environment_IsForcedSequenceDisabled()) {
-                    func_801A4058(20);
+                    Audio_MuteAllSeqExceptSystemAndOcarina(20);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 }
 
                 if (Environment_IsFinalHours(this) && (Entrance_GetSceneId(this->nextEntrance + sceneLayer) >= 0) &&
                     (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
-                    func_801A41C8(20);
+                    Audio_MuteSfxAndAmbienceSeqExceptSysAndOca(20);
                 }
             }
 
@@ -922,9 +923,9 @@ void Play_UpdateMain(PlayState* this) {
     u8 freezeFlashTimer;
     s32 sp5C = false;
 
-    gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
-    gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+    gSegments[4] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
+    gSegments[5] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
+    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
 
     if (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_PROCESS) {
         R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_READY;
@@ -1110,7 +1111,7 @@ void Play_PostWorldDraw(PlayState* this) {
         Gfx* opa;
         GraphicsContext* gfxCtx = this->state.gfxCtx;
 
-        D_801F6D4C->scale = gSaveContext.screenScale / 1000.0f;
+        sPlayVisFbufInstance->scale = gSaveContext.screenScale / 1000.0f;
 
         OPEN_DISPS(gfxCtx);
 
@@ -1118,7 +1119,7 @@ void Play_PostWorldDraw(PlayState* this) {
         nextOpa = Graph_GfxPlusOne(opa);
         gSPDisplayList(OVERLAY_DISP++, nextOpa);
 
-        func_80141778(D_801F6D4C, &nextOpa, this->unk_18E60, gfxCtx);
+        VisFbuf_Draw(sPlayVisFbufInstance, &nextOpa, this->unk_18E60);
 
         gSPEndDisplayList(nextOpa++);
         Graph_BranchDlist(opa, nextOpa);
@@ -1154,9 +1155,9 @@ void Play_DrawMain(PlayState* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
-    gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+    gSegments[4] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
+    gSegments[5] = OS_K0_TO_PHYSICAL(this->objectCtx.slots[this->objectCtx.subKeepSlot].segment);
+    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x04, this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
     gSPSegment(POLY_XLU_DISP++, 0x04, this->objectCtx.slots[this->objectCtx.mainKeepSlot].segment);
@@ -1331,7 +1332,7 @@ void Play_DrawMain(PlayState* this) {
             }
 
             if (1) {
-                Environment_FillScreen(gfxCtx, 0, 0, 0, this->bgCoverAlpha, 1);
+                Environment_FillScreen(gfxCtx, 0, 0, 0, this->bgCoverAlpha, FILL_SCREEN_OPA);
             }
 
             if (1) {
@@ -1352,13 +1353,14 @@ void Play_DrawMain(PlayState* this) {
             if (1) {
                 if (R_PLAY_FILL_SCREEN_ON) {
                     Environment_FillScreen(gfxCtx, R_PLAY_FILL_SCREEN_R, R_PLAY_FILL_SCREEN_G, R_PLAY_FILL_SCREEN_B,
-                                           R_PLAY_FILL_SCREEN_ALPHA, 3);
+                                           R_PLAY_FILL_SCREEN_ALPHA, FILL_SCREEN_OPA | FILL_SCREEN_XLU);
                 }
 
                 switch (this->envCtx.fillScreen) {
                     case 1:
                         Environment_FillScreen(gfxCtx, this->envCtx.screenFillColor[0], this->envCtx.screenFillColor[1],
-                                               this->envCtx.screenFillColor[2], this->envCtx.screenFillColor[3], 3);
+                                               this->envCtx.screenFillColor[2], this->envCtx.screenFillColor[3],
+                                               FILL_SCREEN_OPA | FILL_SCREEN_XLU);
                         break;
 
                     default:
@@ -1373,7 +1375,7 @@ void Play_DrawMain(PlayState* this) {
             }
 
             if (this->worldCoverAlpha != 0) {
-                Environment_FillScreen(gfxCtx, 0, 0, 0, this->worldCoverAlpha, 3);
+                Environment_FillScreen(gfxCtx, 0, 0, 0, this->worldCoverAlpha, FILL_SCREEN_OPA | FILL_SCREEN_XLU);
             }
 
             if (1) {
@@ -1604,7 +1606,7 @@ void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn) {
     this->sceneConfig = scene->drawConfig;
     this->sceneSegment = Play_LoadFile(this, &scene->segment);
     scene->unk_D = 0;
-    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+    gSegments[2] = OS_K0_TO_PHYSICAL(this->sceneSegment);
     Play_InitScene(this, spawn);
     Room_AllocateAndLoad(this, &this->roomCtx);
 }
@@ -2174,7 +2176,7 @@ void Play_Init(GameState* thisx) {
     KaleidoManager_Init(this);
     ShrinkWindow_Init();
     View_Init(&this->view, gfxCtx);
-    func_801A3EC0(0);
+    Audio_SetExtraFilter(0);
     Quake_Init();
     Distortion_Init(this);
 
@@ -2311,23 +2313,26 @@ void Play_Init(GameState* thisx) {
     VisMono_Init(&sPlayVisMono);
 
     gVisMonoColor.a = 0;
-    D_801F6D4C = &D_801F6D38;
-    func_80140E80(D_801F6D4C);
-    D_801F6D4C->lodProportion = 0.0f;
-    D_801F6D4C->mode = 1;
-    D_801F6D4C->primColor.r = 0;
-    D_801F6D4C->primColor.g = 0;
-    D_801F6D4C->primColor.b = 0;
-    D_801F6D4C->primColor.a = 0;
-    D_801F6D4C->envColor.r = 0;
-    D_801F6D4C->envColor.g = 0;
-    D_801F6D4C->envColor.b = 0;
-    D_801F6D4C->envColor.a = 0;
+    sPlayVisFbufInstance = &sPlayVisFbuf;
+    VisFbuf_Init(sPlayVisFbufInstance);
+    sPlayVisFbufInstance->lodProportion = 0.0f;
+    sPlayVisFbufInstance->mode = VIS_FBUF_MODE_GENERAL;
+    sPlayVisFbufInstance->primColor.r = 0;
+    sPlayVisFbufInstance->primColor.g = 0;
+    sPlayVisFbufInstance->primColor.b = 0;
+    sPlayVisFbufInstance->primColor.a = 0;
+    sPlayVisFbufInstance->envColor.r = 0;
+    sPlayVisFbufInstance->envColor.g = 0;
+    sPlayVisFbufInstance->envColor.b = 0;
+    sPlayVisFbufInstance->envColor.a = 0;
     CutsceneFlags_UnsetAll(this);
     THA_GetRemaining(&this->state.tha);
     zAllocSize = THA_GetRemaining(&this->state.tha);
     zAlloc = (uintptr_t)THA_AllocTailAlign16(&this->state.tha, zAllocSize);
-    ZeldaArena_Init(((zAlloc + 8) & ~0xF), (zAllocSize - ((zAlloc + 8) & ~0xF)) + zAlloc); //! @bug: Incorrect ALIGN16s
+
+    //! @bug: Incorrect ALIGN16s
+    ZeldaArena_Init((void*)((zAlloc + 8) & ~0xF), (zAllocSize - ((zAlloc + 8) & ~0xF)) + zAlloc);
+
     Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
 
     while (!Room_HandleLoadCallbacks(this, &this->roomCtx)) {}

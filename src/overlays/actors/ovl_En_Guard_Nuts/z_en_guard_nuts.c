@@ -26,15 +26,15 @@ void EnGuardNuts_SetupUnburrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play);
 
 ActorInit En_Guard_Nuts_InitVars = {
-    ACTOR_EN_GUARD_NUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNK,
-    sizeof(EnGuardNuts),
-    (ActorFunc)EnGuardNuts_Init,
-    (ActorFunc)EnGuardNuts_Destroy,
-    (ActorFunc)EnGuardNuts_Update,
-    (ActorFunc)EnGuardNuts_Draw,
+    /**/ ACTOR_EN_GUARD_NUTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNK,
+    /**/ sizeof(EnGuardNuts),
+    /**/ EnGuardNuts_Init,
+    /**/ EnGuardNuts_Destroy,
+    /**/ EnGuardNuts_Update,
+    /**/ EnGuardNuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -389,7 +389,7 @@ void EnGuardNuts_Draw(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_OPA_DISP++, gDekuPalaceGuardFlower);
+    gSPDisplayList(POLY_OPA_DISP++, gDekuPalaceGuardFlowerDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

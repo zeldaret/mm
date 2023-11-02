@@ -28,15 +28,15 @@ void func_80A3D0FC(ObjVspinyroll* this, PlayState* play);
 void func_80A3D2C0(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Vspinyroll_InitVars = {
-    ACTOR_OBJ_VSPINYROLL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_SPINYROLL,
-    sizeof(ObjVspinyroll),
-    (ActorFunc)ObjVspinyroll_Init,
-    (ActorFunc)ObjVspinyroll_Destroy,
-    (ActorFunc)ObjVspinyroll_Update,
-    (ActorFunc)ObjVspinyroll_Draw,
+    /**/ ACTOR_OBJ_VSPINYROLL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_SPINYROLL,
+    /**/ sizeof(ObjVspinyroll),
+    /**/ ObjVspinyroll_Init,
+    /**/ ObjVspinyroll_Destroy,
+    /**/ ObjVspinyroll_Update,
+    /**/ ObjVspinyroll_Draw,
 };
 
 f32 D_80A3D450[] = { 1.0f, 2.0f };

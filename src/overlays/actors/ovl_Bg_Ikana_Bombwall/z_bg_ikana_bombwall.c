@@ -26,15 +26,15 @@ void func_80BD5118(BgIkanaBombwall* this);
 void func_80BD5134(BgIkanaBombwall* this, PlayState* play);
 
 ActorInit Bg_Ikana_Bombwall_InitVars = {
-    ACTOR_BG_IKANA_BOMBWALL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_IKANA_OBJ,
-    sizeof(BgIkanaBombwall),
-    (ActorFunc)BgIkanaBombwall_Init,
-    (ActorFunc)BgIkanaBombwall_Destroy,
-    (ActorFunc)BgIkanaBombwall_Update,
-    (ActorFunc)BgIkanaBombwall_Draw,
+    /**/ ACTOR_BG_IKANA_BOMBWALL,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_IKANA_OBJ,
+    /**/ sizeof(BgIkanaBombwall),
+    /**/ BgIkanaBombwall_Init,
+    /**/ BgIkanaBombwall_Destroy,
+    /**/ BgIkanaBombwall_Update,
+    /**/ BgIkanaBombwall_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

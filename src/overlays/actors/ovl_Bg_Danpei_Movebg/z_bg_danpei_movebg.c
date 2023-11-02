@@ -16,15 +16,15 @@ void BgDanpeiMovebg_Update(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit Bg_Danpei_Movebg_InitVars = {
-    ACTOR_BG_DANPEI_MOVEBG,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(BgDanpeiMovebg),
-    (ActorFunc)BgDanpeiMovebg_Init,
-    (ActorFunc)BgDanpeiMovebg_Destroy,
-    (ActorFunc)BgDanpeiMovebg_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_DANPEI_MOVEBG,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(BgDanpeiMovebg),
+    /**/ BgDanpeiMovebg_Init,
+    /**/ BgDanpeiMovebg_Destroy,
+    /**/ BgDanpeiMovebg_Update,
+    /**/ NULL,
 };
 
 // static InitChainEntry sInitChain[] = {

@@ -37,15 +37,15 @@ typedef enum {
 } EnBbfallBodyPartDrawStatus;
 
 ActorInit En_Bbfall_InitVars = {
-    ACTOR_EN_BBFALL,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BB,
-    sizeof(EnBbfall),
-    (ActorFunc)EnBbfall_Init,
-    (ActorFunc)EnBbfall_Destroy,
-    (ActorFunc)EnBbfall_Update,
-    (ActorFunc)EnBbfall_Draw,
+    /**/ ACTOR_EN_BBFALL,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BB,
+    /**/ sizeof(EnBbfall),
+    /**/ EnBbfall_Init,
+    /**/ EnBbfall_Destroy,
+    /**/ EnBbfall_Update,
+    /**/ EnBbfall_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[3] = {

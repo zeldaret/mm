@@ -52,15 +52,15 @@ static UNK_TYPE D_80AE71C4[] = { 0x00374000, 0x1C2C09DB, 0x0C2F0000, 0x0C0F09DC,
                                  0x0C113740, 0x102C09E0, 0x0C2F0000, 0x0C0F09E1, 0x0C0F09E2, 0x0C100000 };
 
 ActorInit En_Shn_InitVars = {
-    ACTOR_EN_SHN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SHN,
-    sizeof(EnShn),
-    (ActorFunc)EnShn_Init,
-    (ActorFunc)EnShn_Destroy,
-    (ActorFunc)EnShn_Update,
-    (ActorFunc)EnShn_Draw,
+    /**/ ACTOR_EN_SHN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SHN,
+    /**/ sizeof(EnShn),
+    /**/ EnShn_Init,
+    /**/ EnShn_Destroy,
+    /**/ EnShn_Update,
+    /**/ EnShn_Draw,
 };
 
 void func_80AE6130(EnShn* this) {
@@ -259,7 +259,7 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
 
         case 6:
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_POISONED, 6);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;

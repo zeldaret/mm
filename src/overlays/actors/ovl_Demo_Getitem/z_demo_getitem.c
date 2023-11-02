@@ -19,18 +19,18 @@ void DemoGetitem_PerformCutsceneActions(DemoGetitem* this, PlayState* play);
 void DemoGetitem_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Demo_Getitem_InitVars = {
-    ACTOR_DEMO_GETITEM,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DemoGetitem),
-    (ActorFunc)DemoGetitem_Init,
-    (ActorFunc)DemoGetitem_Destroy,
-    (ActorFunc)DemoGetitem_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_DEMO_GETITEM,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(DemoGetitem),
+    /**/ DemoGetitem_Init,
+    /**/ DemoGetitem_Destroy,
+    /**/ DemoGetitem_Update,
+    /**/ NULL,
 };
 
-static s16 sObjectBankIndices[] = { OBJECT_GI_MASK14, OBJECT_GI_SWORD_4 };
+static s16 sObjectIds[] = { OBJECT_GI_MASK14, OBJECT_GI_SWORD_4 };
 
 static s16 sGetItemDraws[] = { GID_MASK_GREAT_FAIRY, GID_SWORD_GREAT_FAIRY };
 
@@ -43,7 +43,7 @@ typedef enum GreatFairyRewardItem {
 
 void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    s32 objectIndex;
+    s32 objectSlot;
     s32 itemIndex;
     DemoGetitem* this = THIS;
 
@@ -57,22 +57,22 @@ void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     this->getItemDrawId = sGetItemDraws[itemIndex];
     this->cueType = sCueTypes[itemIndex];
 
-    objectIndex = Object_GetSlot(&play->objectCtx, sObjectBankIndices[itemIndex]);
-    if (objectIndex < 0) {
+    objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[itemIndex]);
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    this->objectIndex = objectIndex;
+    this->objectSlot = objectSlot;
 }
 
 void DemoGetitem_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DemoGetitem_Wait(DemoGetitem* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actor.draw = NULL;
-        this->actor.objBankIndex = this->objectIndex;
+        this->actor.objectSlot = this->objectSlot;
         this->actionFunc = DemoGetitem_PerformCutsceneActions;
     }
 }

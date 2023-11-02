@@ -38,15 +38,15 @@ s32 D_809C6100 = 0;
 s32 D_809C6104 = 0;
 
 ActorInit En_Bom_Bowl_Man_InitVars = {
-    ACTOR_EN_BOM_BOWL_MAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_CS,
-    sizeof(EnBomBowlMan),
-    (ActorFunc)EnBomBowlMan_Init,
-    (ActorFunc)EnBomBowlMan_Destroy,
-    (ActorFunc)EnBomBowlMan_Update,
-    (ActorFunc)EnBomBowlMan_Draw,
+    /**/ ACTOR_EN_BOM_BOWL_MAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_CS,
+    /**/ sizeof(EnBomBowlMan),
+    /**/ EnBomBowlMan_Init,
+    /**/ EnBomBowlMan_Destroy,
+    /**/ EnBomBowlMan_Update,
+    /**/ EnBomBowlMan_Draw,
 };
 
 typedef enum {
@@ -427,7 +427,7 @@ void func_809C5310(EnBomBowlMan* this, PlayState* play) {
     if (player->actor.world.pos.x < 1510.0f) {
         if (player->transformation != PLAYER_FORM_DEKU) {
             if (this->actor.xzDistToPlayer < this->unk_2C8) {
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+                func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
                 func_809C53A4(this);
             }
         } else {
@@ -485,7 +485,7 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
         } else if (this->actor.textId == 0x734) {
             this->actor.textId = 0x715;
         } else if (this->actor.textId == 0x715) {
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
             EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_17, 1.0f);
             func_809C59A4(this, play);
             return;
@@ -497,7 +497,7 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BOMBERS_NOTEBOOK);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_BOMBERS);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
             this->actionFunc = func_809C5738;
             return;
         }

@@ -33,15 +33,15 @@ void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 ar
 void func_80BE7718(EnDaiku2* this, PlayState* play);
 
 ActorInit En_Daiku2_InitVars = {
-    ACTOR_EN_DAIKU2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DAIKU,
-    sizeof(EnDaiku2),
-    (ActorFunc)EnDaiku2_Init,
-    (ActorFunc)EnDaiku2_Destroy,
-    (ActorFunc)EnDaiku2_Update,
-    (ActorFunc)EnDaiku2_Draw,
+    /**/ ACTOR_EN_DAIKU2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DAIKU,
+    /**/ sizeof(EnDaiku2),
+    /**/ EnDaiku2_Init,
+    /**/ EnDaiku2_Destroy,
+    /**/ EnDaiku2_Update,
+    /**/ EnDaiku2_Draw,
 };
 
 static u16 sTextIds[] = {
@@ -97,8 +97,8 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        if (this->switchFlag == 0x7F) {
-            this->switchFlag = -1;
+        if (this->switchFlag == ENDAIKU2_SWITCH_FLAG_NONE) {
+            this->switchFlag = SWITCH_FLAG_NONE;
         } else if (Flags_GetSwitch(play, this->switchFlag)) {
             this->unk_25C = this->path->count - 1;
             func_80BE61D0(this);
@@ -185,7 +185,7 @@ s32 func_80BE64C0(EnDaiku2* this, PlayState* play) {
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     bomb = (EnBom*)Actor_FindNearby(play, &this->actor, -1, ACTORCAT_EXPLOSIVES, BREG(7) + 240.0f);
     Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
-    if ((this->switchFlag >= 0) && !Flags_GetSwitch(play, this->switchFlag) && (bomb != NULL) &&
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && !Flags_GetSwitch(play, this->switchFlag) && (bomb != NULL) &&
         (bomb->actor.id == ACTOR_EN_BOM)) {
         if (!bomb->isPowderKeg) {
             this->actor.textId = 0x32D3;
@@ -228,7 +228,7 @@ void func_80BE65B4(EnDaiku2* this, PlayState* play) {
     }
 
     this->unk_264 = 1.0f;
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         this->unk_28A = 5;
         if (this->animIndex != ENDAIKU2_ANIM_10) {
             EnDaiku2_ChangeAnim(this, ENDAIKU2_ANIM_10);
@@ -251,7 +251,7 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0x0);
     if (sp98 != 2) {
-        if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+        if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
             this->unk_28A = 5;
             if (this->animIndex != ENDAIKU2_ANIM_10) {
                 EnDaiku2_ChangeAnim(this, ENDAIKU2_ANIM_10);
@@ -433,7 +433,7 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
                     EnDaiku2_ChangeAnim(this, ENDAIKU2_ANIM_3);
                 }
 
-                if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+                if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
                     this->unk_28A = 5;
                     if (this->animIndex != ENDAIKU2_ANIM_10) {
                         EnDaiku2_ChangeAnim(this, ENDAIKU2_ANIM_10);
@@ -582,16 +582,16 @@ void func_80BE7718(EnDaiku2* this, PlayState* play) {
     s32 i;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     EnDaiku2Effect* effect = this->effects;
-    s32 objectIdx;
+    s32 objectSlot;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    objectIdx = Object_GetSlot(&play->objectCtx, OBJECT_BOMBIWA);
-    if ((objectIdx >= 0) && Object_IsLoaded(&play->objectCtx, objectIdx)) {
+    objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_BOMBIWA);
+    if ((objectSlot > OBJECT_SLOT_NONE) && Object_IsLoaded(&play->objectCtx, objectSlot)) {
         gDPPipeSync(POLY_OPA_DISP++);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectIdx].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
 
         for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
             if (effect->isEnabled) {

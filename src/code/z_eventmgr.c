@@ -213,7 +213,7 @@ void CutsceneManager_End(void) {
             sCutsceneMgr.targetActor->flags &= ~ACTOR_FLAG_100000;
             // fallthrough
         case CS_START_1:
-            func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_END);
+            func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSACTION_END);
             sCutsceneMgr.startMethod = CS_START_0;
             break;
 
@@ -338,13 +338,13 @@ s16 CutsceneManager_IsNext(s16 csId) {
 }
 
 /**
- * Start an actor cutscene, activate Player Cutscene Mode "Wait"
+ * Start an actor cutscene, activate Player Cutscene Action "Wait"
  */
 s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
     if (startCsId >= 0) {
-        func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_WAIT);
+        func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSACTION_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);
         }
@@ -354,13 +354,13 @@ s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor) {
 }
 
 /**
- * Start an actor cutscene, activate Player Cutscene Mode "Wait", turn on ACTOR_FLAG_100000
+ * Start an actor cutscene, activate Player Cutscene Action "Wait", turn on ACTOR_FLAG_100000
  */
 s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
     if (startCsId >= 0) {
-        func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_WAIT);
+        func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSACTION_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);
         }

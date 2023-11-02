@@ -19,15 +19,15 @@ void ObjYasi_Update(Actor* thisx, PlayState* play);
 void ObjYasi_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Yasi_InitVars = {
-    ACTOR_OBJ_YASI,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_OBJ_YASI,
-    sizeof(ObjYasi),
-    (ActorFunc)ObjYasi_Init,
-    (ActorFunc)ObjYasi_Destroy,
-    (ActorFunc)ObjYasi_Update,
-    (ActorFunc)ObjYasi_Draw,
+    /**/ ACTOR_OBJ_YASI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_OBJ_YASI,
+    /**/ sizeof(ObjYasi),
+    /**/ ObjYasi_Init,
+    /**/ ObjYasi_Destroy,
+    /**/ ObjYasi_Update,
+    /**/ ObjYasi_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
