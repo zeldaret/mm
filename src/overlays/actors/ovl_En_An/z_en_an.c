@@ -2245,6 +2245,7 @@ Actor* EnAn_FindLookAtActor(EnAn* this, PlayState* play) {
     return actor;
 }
 
+// Known uses: looks for En_Ig, En_Nb, En_Pm
 s32 func_80B55D98(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 actorCategory, s16 actorId) {
     u8 pathIndex = ENAN_GET_PATH_INDEX(&this->actor);
     Vec3s* points;
