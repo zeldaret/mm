@@ -59,15 +59,15 @@ s16 D_80936CDE;
 s16 D_80936CE0;
 
 ActorInit En_Kusa_InitVars = {
-    ACTOR_EN_KUSA,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnKusa),
-    (ActorFunc)EnKusa_Init,
-    (ActorFunc)EnKusa_Destroy,
-    (ActorFunc)EnKusa_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_KUSA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnKusa),
+    /**/ EnKusa_Init,
+    /**/ EnKusa_Destroy,
+    /**/ EnKusa_Update,
+    /**/ NULL,
 };
 
 static s16 sObjectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_KUSA, OBJECT_KUSA, OBJECT_KUSA };

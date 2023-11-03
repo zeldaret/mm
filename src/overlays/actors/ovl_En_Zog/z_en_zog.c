@@ -34,15 +34,15 @@ void func_80B95240(EnZog* this, PlayState* play);
 static u8 D_80B95E10;
 
 ActorInit En_Zog_InitVars = {
-    ACTOR_EN_ZOG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZOG,
-    sizeof(EnZog),
-    (ActorFunc)EnZog_Init,
-    (ActorFunc)EnZog_Destroy,
-    (ActorFunc)EnZog_Update,
-    (ActorFunc)EnZog_Draw,
+    /**/ ACTOR_EN_ZOG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZOG,
+    /**/ sizeof(EnZog),
+    /**/ EnZog_Init,
+    /**/ EnZog_Destroy,
+    /**/ EnZog_Update,
+    /**/ EnZog_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

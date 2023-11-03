@@ -53,15 +53,15 @@ typedef enum {
 } EnFsnCutsceneState;
 
 ActorInit En_Fsn_InitVars = {
-    ACTOR_EN_FSN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_FSN,
-    sizeof(EnFsn),
-    (ActorFunc)EnFsn_Init,
-    (ActorFunc)EnFsn_Destroy,
-    (ActorFunc)EnFsn_Update,
-    (ActorFunc)EnFsn_Draw,
+    /**/ ACTOR_EN_FSN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_FSN,
+    /**/ sizeof(EnFsn),
+    /**/ EnFsn_Init,
+    /**/ EnFsn_Destroy,
+    /**/ EnFsn_Update,
+    /**/ EnFsn_Draw,
 };
 
 typedef enum {

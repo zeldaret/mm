@@ -37,15 +37,15 @@ typedef enum {
 } HgCsIndex;
 
 ActorInit En_Hg_InitVars = {
-    ACTOR_EN_HG,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_HARFGIBUD,
-    sizeof(EnHg),
-    (ActorFunc)EnHg_Init,
-    (ActorFunc)EnHg_Destroy,
-    (ActorFunc)EnHg_Update,
-    (ActorFunc)EnHg_Draw,
+    /**/ ACTOR_EN_HG,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_HARFGIBUD,
+    /**/ sizeof(EnHg),
+    /**/ EnHg_Init,
+    /**/ EnHg_Destroy,
+    /**/ EnHg_Update,
+    /**/ EnHg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

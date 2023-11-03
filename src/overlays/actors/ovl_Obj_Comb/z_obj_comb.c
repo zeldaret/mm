@@ -23,15 +23,15 @@ void func_8098E098(ObjComb* this);
 void func_8098E0B8(ObjComb* this, PlayState* play);
 
 ActorInit Obj_Comb_InitVars = {
-    ACTOR_OBJ_COMB,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_COMB,
-    sizeof(ObjComb),
-    (ActorFunc)ObjComb_Init,
-    (ActorFunc)ObjComb_Destroy,
-    (ActorFunc)ObjComb_Update,
-    (ActorFunc)ObjComb_Draw,
+    /**/ ACTOR_OBJ_COMB,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_COMB,
+    /**/ sizeof(ObjComb),
+    /**/ ObjComb_Init,
+    /**/ ObjComb_Destroy,
+    /**/ ObjComb_Update,
+    /**/ ObjComb_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

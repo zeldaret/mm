@@ -39,15 +39,15 @@ void func_80BADE8C(EnSuttari* this, PlayState* play);
 void func_80BADF3C(EnSuttari* this, PlayState* play);
 
 ActorInit En_Suttari_InitVars = {
-    ACTOR_EN_SUTTARI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BOJ,
-    sizeof(EnSuttari),
-    (ActorFunc)EnSuttari_Init,
-    (ActorFunc)EnSuttari_Destroy,
-    (ActorFunc)EnSuttari_Update,
-    (ActorFunc)EnSuttari_Draw,
+    /**/ ACTOR_EN_SUTTARI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BOJ,
+    /**/ sizeof(EnSuttari),
+    /**/ EnSuttari_Init,
+    /**/ EnSuttari_Destroy,
+    /**/ EnSuttari_Update,
+    /**/ EnSuttari_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

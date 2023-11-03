@@ -8,19 +8,19 @@ void EnInvadepoh_Init(Actor* thisx, PlayState* play);
 void EnInvadepoh_Destroy(Actor* thisx, PlayState* play);
 void EnInvadepoh_Update(Actor* thisx, PlayState* play);
 
-/*
-const ActorInit En_Invadepoh_InitVars = {
-    ACTOR_EN_INVADEPOH,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnInvadepoh),
-    (ActorFunc)EnInvadepoh_Init,
-    (ActorFunc)EnInvadepoh_Destroy,
-    (ActorFunc)EnInvadepoh_Update,
-    (ActorFunc)NULL,
+#if 0
+ActorInit En_Invadepoh_InitVars = {
+    /**/ ACTOR_EN_INVADEPOH,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnInvadepoh),
+    /**/ EnInvadepoh_Init,
+    /**/ EnInvadepoh_Destroy,
+    /**/ EnInvadepoh_Update,
+    /**/ NULL,
 };
-*/
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh/func_80B439B0.s")
 

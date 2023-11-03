@@ -16,15 +16,15 @@ void OceffWipe5_Update(Actor* thisx, PlayState* play);
 void OceffWipe5_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Oceff_Wipe5_InitVars = {
-    ACTOR_OCEFF_WIPE5,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(OceffWipe5),
-    (ActorFunc)OceffWipe5_Init,
-    (ActorFunc)OceffWipe5_Destroy,
-    (ActorFunc)OceffWipe5_Update,
-    (ActorFunc)OceffWipe5_Draw,
+    /**/ ACTOR_OCEFF_WIPE5,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(OceffWipe5),
+    /**/ OceffWipe5_Init,
+    /**/ OceffWipe5_Destroy,
+    /**/ OceffWipe5_Update,
+    /**/ OceffWipe5_Draw,
 };
 
 UNK_TYPE4 D_80BC9260;

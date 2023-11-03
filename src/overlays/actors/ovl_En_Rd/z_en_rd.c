@@ -98,15 +98,15 @@ typedef enum {
 } EnRdGrabState;
 
 ActorInit En_Rd_InitVars = {
-    ACTOR_EN_RD,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_RD,
-    sizeof(EnRd),
-    (ActorFunc)EnRd_Init,
-    (ActorFunc)EnRd_Destroy,
-    (ActorFunc)EnRd_Update,
-    (ActorFunc)EnRd_Draw,
+    /**/ ACTOR_EN_RD,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_RD,
+    /**/ sizeof(EnRd),
+    /**/ EnRd_Init,
+    /**/ EnRd_Destroy,
+    /**/ EnRd_Update,
+    /**/ EnRd_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -843,7 +843,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
                 if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->stateFlags2 &= ~PLAYER_STATE2_80;
-                    player->actionVar2 = 100;
+                    player->av2.actionVar2 = 100;
                 }
                 Animation_Change(&this->skelAnime, &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f,
                                  Animation_GetLastFrame(&gGibdoRedeadGrabEndAnim), ANIMMODE_ONCE_INTERP, 0.0f);

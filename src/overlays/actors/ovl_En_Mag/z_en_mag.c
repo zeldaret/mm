@@ -86,15 +86,15 @@ static s16 sTextAlphaTargetIndex = 0;
 static s16 sTextAlphaTimer = 20;
 
 ActorInit En_Mag_InitVars = {
-    ACTOR_EN_MAG,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_MAG,
-    sizeof(EnMag),
-    (ActorFunc)EnMag_Init,
-    (ActorFunc)EnMag_Destroy,
-    (ActorFunc)EnMag_Update,
-    (ActorFunc)EnMag_Draw,
+    /**/ ACTOR_EN_MAG,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_MAG,
+    /**/ sizeof(EnMag),
+    /**/ EnMag_Init,
+    /**/ EnMag_Destroy,
+    /**/ EnMag_Update,
+    /**/ EnMag_Draw,
 };
 
 void EnMag_Init(Actor* thisx, PlayState* play) {
@@ -556,7 +556,7 @@ void EnMag_DrawImageRGBA32(Gfx** gfxp, s16 centerX, s16 centerY, TexturePtr sour
 
     Gfx_SetupDL56_Ptr(&gfx);
 
-    curTexture = source;
+    curTexture = (uintptr_t)source;
     rectLeft = centerX - (width / 2);
     rectTop = centerY - (height / 2);
     textureHeight = TMEM_SIZE / (width << 2);

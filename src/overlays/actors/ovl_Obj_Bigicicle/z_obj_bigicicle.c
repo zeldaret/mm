@@ -25,15 +25,15 @@ void func_80AE9258(ObjBigicicle* this, PlayState* play);
 void func_80AE939C(ObjBigicicle* this, PlayState* play);
 
 ActorInit Obj_Bigicicle_InitVars = {
-    ACTOR_OBJ_BIGICICLE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_BIGICICLE,
-    sizeof(ObjBigicicle),
-    (ActorFunc)ObjBigicicle_Init,
-    (ActorFunc)ObjBigicicle_Destroy,
-    (ActorFunc)ObjBigicicle_Update,
-    (ActorFunc)ObjBigicicle_Draw,
+    /**/ ACTOR_OBJ_BIGICICLE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_BIGICICLE,
+    /**/ sizeof(ObjBigicicle),
+    /**/ ObjBigicicle_Init,
+    /**/ ObjBigicicle_Destroy,
+    /**/ ObjBigicicle_Update,
+    /**/ ObjBigicicle_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

@@ -23,15 +23,15 @@ void func_80C04D00(EnBombers2* this);
 void func_80C050B8(EnBombers2* this, PlayState* play);
 
 ActorInit En_Bombers2_InitVars = {
-    ACTOR_EN_BOMBERS2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_CS,
-    sizeof(EnBombers2),
-    (ActorFunc)EnBombers2_Init,
-    (ActorFunc)EnBombers2_Destroy,
-    (ActorFunc)EnBombers2_Update,
-    (ActorFunc)EnBombers2_Draw,
+    /**/ ACTOR_EN_BOMBERS2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_CS,
+    /**/ sizeof(EnBombers2),
+    /**/ EnBombers2_Init,
+    /**/ EnBombers2_Destroy,
+    /**/ EnBombers2_Update,
+    /**/ EnBombers2_Draw,
 };
 
 static u16 sTextIds[] = {

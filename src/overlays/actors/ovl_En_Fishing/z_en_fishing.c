@@ -147,9 +147,9 @@ f32 sSubCamVelFactor;
 f32 D_80911F50;
 Vec3f sSinkingLureBasePos;
 f32 D_80911F64;
-s32 sRandSeed0;
-s32 sRandSeed1;
-s32 sRandSeed2;
+s32 sFishingRandSeed1;
+s32 sFishingRandSeed2;
+s32 sFishingRandSeed3;
 FishingProp sPondProps[POND_PROP_COUNT];
 FishingGroupFish sGroupFishes[GROUP_FISH_COUNT];
 f32 sFishGroupAngle1;
@@ -202,15 +202,15 @@ u8 D_80917274;
 Vec3f D_80917278;
 
 ActorInit En_Fishing_InitVars = {
-    ACTOR_EN_FISHING,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_FISH,
-    sizeof(EnFishing),
-    (ActorFunc)EnFishing_Init,
-    (ActorFunc)EnFishing_Destroy,
-    (ActorFunc)EnFishing_UpdateFish,
-    (ActorFunc)EnFishing_DrawFish,
+    /**/ ACTOR_EN_FISHING,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_FISH,
+    /**/ sizeof(EnFishing),
+    /**/ EnFishing_Init,
+    /**/ EnFishing_Destroy,
+    /**/ EnFishing_UpdateFish,
+    /**/ EnFishing_DrawFish,
 };
 
 f32 D_8090CCD0 = 0.0f;
@@ -404,26 +404,26 @@ void EnFishing_SetColliderElement(s32 index, ColliderJntSph* collider, Vec3f* po
         collider->elements[index].dim.modelSphere.radius * collider->elements[index].dim.scale * scale * 1.6f;
 }
 
-void EnFishing_SeedRand(s32 seed0, s32 seed1, s32 seed2) {
-    sRandSeed0 = seed0;
-    sRandSeed1 = seed1;
-    sRandSeed2 = seed2;
+void EnFishing_InitRand(s32 seedInit1, s32 seedInit2, s32 seedInit3) {
+    sFishingRandSeed1 = seedInit1;
+    sFishingRandSeed2 = seedInit2;
+    sFishingRandSeed3 = seedInit3;
 }
 
 f32 EnFishing_RandZeroOne(void) {
-    f32 rand;
-
     // Wichmann-Hill algorithm
-    sRandSeed0 = (sRandSeed0 * 171) % 30269;
-    sRandSeed1 = (sRandSeed1 * 172) % 30307;
-    sRandSeed2 = (sRandSeed2 * 170) % 30323;
+    f32 randFloat;
 
-    rand = (sRandSeed0 / 30269.0f) + (sRandSeed1 / 30307.0f) + (sRandSeed2 / 30323.0f);
-    while (rand >= 1.0f) {
-        rand -= 1.0f;
+    sFishingRandSeed1 = (sFishingRandSeed1 * 171) % 30269;
+    sFishingRandSeed2 = (sFishingRandSeed2 * 172) % 30307;
+    sFishingRandSeed3 = (sFishingRandSeed3 * 170) % 30323;
+
+    randFloat = (sFishingRandSeed1 / 30269.0f) + (sFishingRandSeed2 / 30307.0f) + (sFishingRandSeed3 / 30323.0f);
+    while (randFloat >= 1.0f) {
+        randFloat -= 1.0f;
     }
 
-    return fabsf(rand);
+    return fabsf(randFloat);
 }
 
 s16 EnFishing_SmoothStepToS(s16* pValue, s16 target, s16 scale, s16 step) {
@@ -730,7 +730,7 @@ void EnFishing_InitPondProps(EnFishing* this, PlayState* play) {
     Vec3f colliderPos;
     s16 i;
 
-    EnFishing_SeedRand(1, 29100, 9786);
+    EnFishing_InitRand(1, 29100, 9786);
 
     for (i = 0; i < POND_PROP_COUNT; i++) {
         if (sPondPropInits[i].type == FS_PROP_INIT_STOP) {

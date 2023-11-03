@@ -24,15 +24,15 @@ void func_80C0A458(BgAstrBombwall* this, PlayState* play);
 void func_80C0A4BC(BgAstrBombwall* this, PlayState* play);
 
 ActorInit Bg_Astr_Bombwall_InitVars = {
-    ACTOR_BG_ASTR_BOMBWALL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_ASTR_OBJ,
-    sizeof(BgAstrBombwall),
-    (ActorFunc)BgAstrBombwall_Init,
-    (ActorFunc)BgAstrBombwall_Destroy,
-    (ActorFunc)BgAstrBombwall_Update,
-    (ActorFunc)BgAstrBombwall_Draw,
+    /**/ ACTOR_BG_ASTR_BOMBWALL,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_ASTR_OBJ,
+    /**/ sizeof(BgAstrBombwall),
+    /**/ BgAstrBombwall_Init,
+    /**/ BgAstrBombwall_Destroy,
+    /**/ BgAstrBombwall_Update,
+    /**/ BgAstrBombwall_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[2] = {

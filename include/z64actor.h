@@ -23,7 +23,7 @@ struct CollisionPoly;
 struct EnBox;
 struct EnTorch2;
 
-typedef void(*ActorFunc)(struct Actor* this, struct PlayState* play);
+typedef void (*ActorFunc)(struct Actor* this, struct PlayState* play);
 typedef u16 (*NpcGetTextIdFunc)(struct PlayState*, struct Actor*);
 typedef s16 (*NpcUpdateTalkStateFunc)(struct PlayState*, struct Actor*);
 
@@ -67,7 +67,7 @@ typedef struct ActorOverlay {
     /* 0x1E */ s8 numLoaded; // original name: "clients"
 } ActorOverlay; // size = 0x20
 
-typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct PlayState* play);
+typedef void (*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct PlayState* play);
 
 typedef struct {
     /* 0x00 */ Vec3s rot; // Current actor shape rotation
@@ -195,7 +195,6 @@ typedef struct {
     /* 0x154 */ u32 transformFlags;
     /* 0x158 */ u8 interactFlags;
 } DynaPolyActor; // size = 0x15C
-
 
 typedef enum Item00Type {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
@@ -451,7 +450,6 @@ typedef enum {
     /* 32 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE
 } ActorDrawDamageEffectType;
 
-
 #define DEFINE_ACTOR(_name, enumValue, _allocType, _debugName) enumValue,
 #define DEFINE_ACTOR_INTERNAL(_name, enumValue, _allocType, _debugName) enumValue,
 #define DEFINE_ACTOR_UNSET(enumValue) enumValue,
@@ -651,12 +649,12 @@ typedef enum {
     /* 0x5B */ TATL_HINT_ID_SKULLFISH,
     /* 0x5C */ TATL_HINT_ID_DESBREKO,
     /* 0x5D */ TATL_HINT_ID_GREEN_CHUCHU,
-    /* 0x5E */ TATL_HINT_ID_ODOLWA_1,
+    /* 0x5E */ TATL_HINT_ID_ODOLWA_PHASE_ONE, // 799 or fewer frames have passed, says Odolwa is dangerous to get close to
     /* 0x5F */ TATL_HINT_ID_GEKKO_GIANT_SLIME,
     /* 0x60 */ TATL_HINT_ID_BAD_BAT,
     /* 0x61 */ TATL_HINT_ID_REAL_BOMBCHU,
-    /* 0x62 */ TATL_HINT_ID_ODOLWA_2,
-    /* 0x63 */ TATL_HINT_ID_ODOLWA_3,
+    /* 0x62 */ TATL_HINT_ID_ODOLWA_CLOSE_TO_PHASE_TWO, // 800 frames have passed, warns that Odolwa will attack after dancing
+    /* 0x63 */ TATL_HINT_ID_ODOLWA_PHASE_TWO, // 1000 or more frames have passed, explains that the bugs are drawn to fire
     /* 0x64 */ TATL_HINT_ID_MUSHROOM,
     /* 0xFF */ TATL_HINT_ID_NONE = 0xFF
 } TatlHintId;

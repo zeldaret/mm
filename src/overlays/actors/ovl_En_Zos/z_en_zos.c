@@ -51,15 +51,15 @@ typedef enum {
 } EnZosAnimation;
 
 ActorInit En_Zos_InitVars = {
-    ACTOR_EN_ZOS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZOS,
-    sizeof(EnZos),
-    (ActorFunc)EnZos_Init,
-    (ActorFunc)EnZos_Destroy,
-    (ActorFunc)EnZos_Update,
-    (ActorFunc)EnZos_Draw,
+    /**/ ACTOR_EN_ZOS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZOS,
+    /**/ sizeof(EnZos),
+    /**/ EnZos_Init,
+    /**/ EnZos_Destroy,
+    /**/ EnZos_Update,
+    /**/ EnZos_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

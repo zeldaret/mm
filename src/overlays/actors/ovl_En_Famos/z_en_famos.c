@@ -48,15 +48,15 @@ void EnFamos_SetupDeathFade(EnFamos* this);
 void EnFamos_DeathFade(EnFamos* this, PlayState* play);
 
 ActorInit En_Famos_InitVars = {
-    ACTOR_EN_FAMOS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_FAMOS,
-    sizeof(EnFamos),
-    (ActorFunc)EnFamos_Init,
-    (ActorFunc)EnFamos_Destroy,
-    (ActorFunc)EnFamos_Update,
-    (ActorFunc)EnFamos_Draw,
+    /**/ ACTOR_EN_FAMOS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_FAMOS,
+    /**/ sizeof(EnFamos),
+    /**/ EnFamos_Init,
+    /**/ EnFamos_Destroy,
+    /**/ EnFamos_Update,
+    /**/ EnFamos_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

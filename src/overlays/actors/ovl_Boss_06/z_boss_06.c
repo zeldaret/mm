@@ -71,15 +71,15 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit Boss_06_InitVars = {
-    ACTOR_BOSS_06,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_KNIGHT,
-    sizeof(Boss06),
-    (ActorFunc)Boss06_Init,
-    (ActorFunc)Boss06_Destroy,
-    (ActorFunc)Boss06_Update,
-    (ActorFunc)Boss06_Draw,
+    /**/ ACTOR_BOSS_06,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_KNIGHT,
+    /**/ sizeof(Boss06),
+    /**/ Boss06_Init,
+    /**/ Boss06_Destroy,
+    /**/ Boss06_Update,
+    /**/ Boss06_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

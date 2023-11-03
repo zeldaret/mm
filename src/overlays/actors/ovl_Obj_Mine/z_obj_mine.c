@@ -17,15 +17,15 @@ void ObjMine_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit Obj_Mine_InitVars = {
-    ACTOR_OBJ_MINE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_NY,
-    sizeof(ObjMine),
-    (ActorFunc)ObjMine_Init,
-    (ActorFunc)ObjMine_Destroy,
-    (ActorFunc)ObjMine_Update,
-    (ActorFunc)ObjMine_Draw,
+    /**/ ACTOR_OBJ_MINE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_NY,
+    /**/ sizeof(ObjMine),
+    /**/ ObjMine_Init,
+    /**/ ObjMine_Destroy,
+    /**/ ObjMine_Update,
+    /**/ ObjMine_Draw,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {

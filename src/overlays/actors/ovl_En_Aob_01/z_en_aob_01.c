@@ -33,15 +33,15 @@ void EnAob01_AfterRace_Talk(EnAob01* this, PlayState* play);
 s32 EnAob01_PlayerIsHoldingDog(EnAob01* this, PlayState* play);
 
 ActorInit En_Aob_01_InitVars = {
-    ACTOR_EN_AOB_01,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AOB,
-    sizeof(EnAob01),
-    (ActorFunc)EnAob01_Init,
-    (ActorFunc)EnAob01_Destroy,
-    (ActorFunc)EnAob01_Update,
-    (ActorFunc)EnAob01_Draw,
+    /**/ ACTOR_EN_AOB_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AOB,
+    /**/ sizeof(EnAob01),
+    /**/ EnAob01_Init,
+    /**/ EnAob01_Destroy,
+    /**/ EnAob01_Update,
+    /**/ EnAob01_Draw,
 };
 
 typedef enum {

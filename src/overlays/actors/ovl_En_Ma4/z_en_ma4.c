@@ -55,15 +55,15 @@ typedef enum {
 } EnMa4State;
 
 ActorInit En_Ma4_InitVars = {
-    ACTOR_EN_MA4,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MA1,
-    sizeof(EnMa4),
-    (ActorFunc)EnMa4_Init,
-    (ActorFunc)EnMa4_Destroy,
-    (ActorFunc)EnMa4_Update,
-    (ActorFunc)EnMa4_Draw,
+    /**/ ACTOR_EN_MA4,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MA1,
+    /**/ sizeof(EnMa4),
+    /**/ EnMa4_Init,
+    /**/ EnMa4_Destroy,
+    /**/ EnMa4_Update,
+    /**/ EnMa4_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

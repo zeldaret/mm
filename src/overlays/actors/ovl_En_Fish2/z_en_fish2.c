@@ -49,15 +49,15 @@ static s32 D_80B2B2F0 = 0;
 static Actor* D_80B2B2F4 = NULL;
 
 ActorInit En_Fish2_InitVars = {
-    ACTOR_EN_FISH2,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_FB,
-    sizeof(EnFish2),
-    (ActorFunc)EnFish2_Init,
-    (ActorFunc)EnFish2_Destroy,
-    (ActorFunc)EnFish2_Update,
-    (ActorFunc)EnFish2_Draw,
+    /**/ ACTOR_EN_FISH2,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_FB,
+    /**/ sizeof(EnFish2),
+    /**/ EnFish2_Init,
+    /**/ EnFish2_Destroy,
+    /**/ EnFish2_Update,
+    /**/ EnFish2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -1112,15 +1112,15 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (!ptr->unk_00) {
-            TexturePtr phi_v0;
+            TexturePtr texture;
 
             if (Rand_ZeroOne() < 0.5f) {
-                phi_v0 = gEffBubble2Tex;
+                texture = gEffBubble2Tex;
             } else {
-                phi_v0 = gEffBubble1Tex;
+                texture = gEffBubble1Tex;
             }
 
-            ptr->unk_20 = OS_K0_TO_PHYSICAL(SEGMENTED_TO_K0(phi_v0));
+            ptr->unk_20 = (TexturePtr)OS_K0_TO_PHYSICAL(SEGMENTED_TO_K0(texture));
             ptr->unk_00 = true;
             ptr->unk_04 = *vec;
             ptr->unk_04.x += Rand_CenteredFloat(ptr->unk_00 + (this->unk_330 * 4000.0f));

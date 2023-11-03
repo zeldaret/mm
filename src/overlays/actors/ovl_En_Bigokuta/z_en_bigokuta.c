@@ -32,15 +32,15 @@ void EnBigokuta_SetupDeathEffects(EnBigokuta* this);
 void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play);
 
 ActorInit En_Bigokuta_InitVars = {
-    ACTOR_EN_BIGOKUTA,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BIGOKUTA,
-    sizeof(EnBigokuta),
-    (ActorFunc)EnBigokuta_Init,
-    (ActorFunc)EnBigokuta_Destroy,
-    (ActorFunc)EnBigokuta_Update,
-    (ActorFunc)EnBigokuta_Draw,
+    /**/ ACTOR_EN_BIGOKUTA,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BIGOKUTA,
+    /**/ sizeof(EnBigokuta),
+    /**/ EnBigokuta_Init,
+    /**/ EnBigokuta_Destroy,
+    /**/ EnBigokuta_Update,
+    /**/ EnBigokuta_Draw,
 };
 
 static ColliderCylinderInit sShellCylinderInit = {
@@ -169,7 +169,7 @@ void EnBigokuta_ShootPlayer(EnBigokuta* this, PlayState* play) {
 
     if (&this->picto.actor == player->actor.parent) {
         player->actor.parent = NULL;
-        player->actionVar2 = 100;
+        player->av2.actionVar2 = 100;
         player->actor.velocity.y = 0.0f;
         player->actor.world.pos.x += 20.0f * Math_SinS(this->picto.actor.home.rot.y);
         player->actor.world.pos.z += 20.0f * Math_CosS(this->picto.actor.home.rot.y);
@@ -310,7 +310,7 @@ void EnBigokuta_SuckInPlayer(EnBigokuta* this, PlayState* play) {
         this->timer++;
     }
 
-    player->actionVar2 = 0;
+    player->av2.actionVar2 = 0;
     Math_Vec3f_Copy(&player->actor.world.pos, &this->playerPos);
     if (Math_Vec3f_StepTo(&player->actor.world.pos, &this->playerHoldPos, sqrtf(this->timer) * 5.0f) < 0.1f) {
         s16 rotY = this->picto.actor.shape.rot.y;

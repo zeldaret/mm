@@ -27,15 +27,15 @@ void func_80BC7520(EnGuruguru* this, PlayState* play);
 extern ColliderCylinderInit D_80BC79A0;
 
 ActorInit En_Guruguru_InitVars = {
-    ACTOR_EN_GURUGURU,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_FU,
-    sizeof(EnGuruguru),
-    (ActorFunc)EnGuruguru_Init,
-    (ActorFunc)EnGuruguru_Destroy,
-    (ActorFunc)EnGuruguru_Update,
-    (ActorFunc)EnGuruguru_Draw,
+    /**/ ACTOR_EN_GURUGURU,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_FU,
+    /**/ sizeof(EnGuruguru),
+    /**/ EnGuruguru_Init,
+    /**/ EnGuruguru_Destroy,
+    /**/ EnGuruguru_Update,
+    /**/ EnGuruguru_Draw,
 };
 
 static u16 textIDs[] = { 0x292A, 0x292B, 0x292C, 0x292D, 0x292E, 0x292F, 0x2930, 0x2931,

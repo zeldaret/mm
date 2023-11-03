@@ -19,15 +19,15 @@ void EnFall2_DoNothing(EnFall2* this, PlayState* play);
 void EnFall2_HandleCutscene(EnFall2* this, PlayState* play);
 
 ActorInit En_Fall2_InitVars = {
-    ACTOR_EN_FALL2,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_FALL2,
-    sizeof(EnFall2),
-    (ActorFunc)EnFall2_Init,
-    (ActorFunc)EnFall2_Destroy,
-    (ActorFunc)EnFall2_Update,
-    (ActorFunc)EnFall2_Draw,
+    /**/ ACTOR_EN_FALL2,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_FALL2,
+    /**/ sizeof(EnFall2),
+    /**/ EnFall2_Init,
+    /**/ EnFall2_Destroy,
+    /**/ EnFall2_Update,
+    /**/ EnFall2_Draw,
 };
 
 void EnFall2_Init(Actor* thisx, PlayState* play) {

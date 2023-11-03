@@ -21,15 +21,15 @@ void EnDs2n_Draw(Actor* thisx, PlayState* play);
 void EnDs2n_Idle(EnDs2n* this, PlayState* play);
 
 ActorInit En_Ds2n_InitVars = {
-    ACTOR_EN_DS2N,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DS2N,
-    sizeof(EnDs2n),
-    (ActorFunc)EnDs2n_Init,
-    (ActorFunc)EnDs2n_Destroy,
-    (ActorFunc)EnDs2n_Update,
-    (ActorFunc)EnDs2n_Draw,
+    /**/ ACTOR_EN_DS2N,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DS2N,
+    /**/ sizeof(EnDs2n),
+    /**/ EnDs2n_Init,
+    /**/ EnDs2n_Destroy,
+    /**/ EnDs2n_Update,
+    /**/ EnDs2n_Draw,
 };
 
 typedef enum {

@@ -93,15 +93,15 @@ typedef enum {
 } AniAnimation;
 
 ActorInit En_Ossan_InitVars = {
-    ACTOR_EN_OSSAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnOssan),
-    (ActorFunc)EnOssan_Init,
-    (ActorFunc)EnOssan_Destroy,
-    (ActorFunc)EnOssan_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_OSSAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnOssan),
+    /**/ EnOssan_Init,
+    /**/ EnOssan_Destroy,
+    /**/ EnOssan_Update,
+    /**/ NULL,
 };
 
 static AnimationInfoS sCuriosityShopManAnimationInfo[] = {
