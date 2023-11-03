@@ -14,7 +14,6 @@
 # TODO: Warning/Error for control flows that do not led to a return. Maybe consider inserting return_none on those cases
 # TODO: consider adding optimization options
 # TODO: consider adding and/or operators
-# TODO: Warning if the user tries to negate a `if_before_time`/`if_since_time`
 
 from __future__ import annotations
 
@@ -57,6 +56,20 @@ def fatalError(message: str, filename: str, lineNumber: int, columnNumber: int, 
     # TODO: Add fun error messages
 
     exit(1)
+
+def warning(message: str, filename: str, lineNumber: int, columnNumber: int, **kwargs) -> None:
+    # Print the filename/linenumber in a format that some IDEs can follow by ctrl-click on them
+    eprint(f"Warning: {message}. At {filename}:{lineNumber}:{columnNumber}")
+
+    if DEBUG:
+        # Get the info from the caller
+        frame = sys._getframe().f_back
+        if frame is not None:
+            funcName = frame.f_code.co_name
+            debugPrint(f" Warning triggered in: {funcName} at {frame.f_code.co_filename}:{frame.f_lineno}")
+
+        for key, value in kwargs.items():
+            debugPrint(f"  {key}: {value}")
 
 class TokenType(enum.Enum):
     # Schedule commands
@@ -438,6 +451,11 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
                 if not tokenProperties.isAnyBranch:
                     fatalError(f"`not` operator followed by invalid `{token.tokenLiteral}` token", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
 
+                if tokenAux.tokenType in { TokenType.IF_BEFORETIME, TokenType.IF_BEFORETIME_S, TokenType.IF_BEFORETIME_L }:
+                    warning(f"Negating a '{tokenAux.tokenLiteral}' command. Consider using a '{TokenType.IF_SINCETIME.value}' command instead", inputPath, token.lineNumber, token.columnNumber)
+                if tokenAux.tokenType in { TokenType.IF_SINCETIME, TokenType.IF_SINCETIME_S, TokenType.IF_SINCETIME_L }:
+                    warning(f"Negating a '{tokenAux.tokenLiteral}' command. Consider using a '{TokenType.IF_BEFORETIME.value}' command instead", inputPath, token.lineNumber, token.columnNumber)
+
             currentExpr = Expression(token)
             currentExpr.negated = negate
             foundElse = False
@@ -482,7 +500,7 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
 
         elif token.tokenType == TokenType.BRACE_CLOSE:
             if len(exprs) == 0:
-                eprint(f"Warning: Braces with empty body at {inputPath}:{token.lineNumber}:{token.columnNumber}")
+                warning(f"Braces with empty body", inputPath, token.lineNumber, token.columnNumber)
             return exprs
 
         elif token.tokenType == TokenType.LABEL:
