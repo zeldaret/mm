@@ -1577,7 +1577,6 @@ s32 EnAn_MsgEvent_LaundryPool(Actor* thisx, PlayState* play) {
             }
             FALLTHROUGH;
         case 0x1:
-        label:
             this->stateFlags &= ~(ENAN_STATE_ENGAGED | ENAN_STATE_DRAW_KAFEIS_MASK);
             this->stateFlags |= ENAN_STATE_LOST_ATTENTION;
             EnAn_ChangeAnim(this, play, ENAN_ANIM_UMBRELLA_CRY);
