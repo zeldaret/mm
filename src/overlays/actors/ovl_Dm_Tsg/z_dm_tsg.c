@@ -52,7 +52,7 @@ void DmTsg_Update(Actor* thisx, PlayState* play) {
     s16 i;
 
     for (i = 0; i < DMTSG_UNK_SIZE; i++) {
-        this->unk_5F8[i] = (Math_SinS((i & 15) * this->unk_854) * 60.0f) + 120.0f;
+        this->unk_5F8[i] = (Math_SinS((i % 16U) * this->unk_854) * 60.0f) + 120.0f;
         this->unk_148[i].x = Math_CosS(this->unk_78C[i]) * this->unk_5F8[i];
         this->unk_148[i].y = this->unk_788 + (i * 16);
         this->unk_148[i].z = Math_SinS(this->unk_78C[i]) * this->unk_5F8[i];
