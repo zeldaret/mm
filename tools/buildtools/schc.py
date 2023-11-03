@@ -21,6 +21,9 @@ from __future__ import annotations
 __prog_name__ = "schc"
 __version__ = "1.0.0"
 
+import colorama
+colorama.init()
+
 import argparse
 import dataclasses
 import enum
@@ -41,7 +44,7 @@ def debugPrint(*args, **kwargs):
 
 def fatalError(message: str, filename: str, lineNumber: int, columnNumber: int, **kwargs) -> NoReturn:
     # Print the filename/linenumber in a format that some IDEs can follow by ctrl-click on them
-    eprint(f"Error: {message}. At {filename}:{lineNumber}:{columnNumber}")
+    eprint(f"{colorama.Style.BRIGHT}{filename}:{lineNumber}:{columnNumber}{colorama.Style.RESET_ALL}: {colorama.Style.BRIGHT}{colorama.Fore.RED}Error{colorama.Style.RESET_ALL}: {message}")
 
     if DEBUG:
         # Get the info from the caller
@@ -59,7 +62,7 @@ def fatalError(message: str, filename: str, lineNumber: int, columnNumber: int, 
 
 def warning(message: str, filename: str, lineNumber: int, columnNumber: int, **kwargs) -> None:
     # Print the filename/linenumber in a format that some IDEs can follow by ctrl-click on them
-    eprint(f"Warning: {message}. At {filename}:{lineNumber}:{columnNumber}")
+    eprint(f"{colorama.Style.BRIGHT}{filename}:{lineNumber}:{columnNumber}{colorama.Style.RESET_ALL}: {colorama.Style.BRIGHT}{colorama.Fore.MAGENTA}Warning{colorama.Style.RESET_ALL}: {message}")
 
     if DEBUG:
         # Get the info from the caller
@@ -360,7 +363,7 @@ def tokenize(contents: str, filename: str) -> TokenIterator:
                 literal = reMatch["individual"]
                 tokenType = tokenLiterals.get(literal)
             else:
-                fatalError(f"Unrecognized token found", filename, lineNumber, columnNumber, i=i, char=char)
+                fatalError(f"Unrecognized token found (starts with '{char}')", filename, lineNumber, columnNumber, i=i, char=char)
 
             if tokenType is None:
                 fatalError(f"Unrecognized token '{literal}' found", filename, lineNumber, columnNumber, i=i, char=char)
@@ -446,15 +449,16 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
                 tokenAux = tokens.get()
                 if tokenAux is None:
                     fatalError(f"`not` operator followed by nothing", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
-                token = tokenAux
-                tokenProperties = token.getProperties()
-                if not tokenProperties.isAnyBranch:
-                    fatalError(f"`not` operator followed by invalid `{token.tokenLiteral}` token", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
 
                 if tokenAux.tokenType in { TokenType.IF_BEFORETIME, TokenType.IF_BEFORETIME_S, TokenType.IF_BEFORETIME_L }:
                     warning(f"Negating a '{tokenAux.tokenLiteral}' command. Consider using a '{TokenType.IF_SINCETIME.value}' command instead", inputPath, token.lineNumber, token.columnNumber)
                 if tokenAux.tokenType in { TokenType.IF_SINCETIME, TokenType.IF_SINCETIME_S, TokenType.IF_SINCETIME_L }:
                     warning(f"Negating a '{tokenAux.tokenLiteral}' command. Consider using a '{TokenType.IF_BEFORETIME.value}' command instead", inputPath, token.lineNumber, token.columnNumber)
+
+                token = tokenAux
+                tokenProperties = token.getProperties()
+                if not tokenProperties.isAnyBranch:
+                    fatalError(f"`not` operator followed by invalid `{token.tokenLiteral}` token", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
 
             currentExpr = Expression(token)
             currentExpr.negated = negate
