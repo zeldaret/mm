@@ -79,7 +79,7 @@ void func_80A4084C(EnTest3* this, PlayState* play);
 void func_80A40908(EnTest3* this, PlayState* play);
 void func_80A40A6C(EnTest3* this, PlayState* play);
 
-static u8 sScheduleScript[] = {
+static ScheduleScript sScheduleScript[] = {
 #include "build/src/overlays/actors/ovl_En_Test3/sScheduleScript.schedule.inc"
 };
 

@@ -29,7 +29,7 @@ typedef enum {
     /* 1 */ TOILET_HAND_SCH_AVAILABLE
 } ToiletHandScheduleResult;
 
-static u8 sScheduleScript[] = {
+static ScheduleScript sScheduleScript[] = {
 #include "build/src/overlays/actors/ovl_En_Bjt/scheduleScript.schedule.inc"
 };
 

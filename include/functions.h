@@ -870,8 +870,6 @@ void Inventory_IncrementSkullTokenCount(s16 sceneIndex);
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex);
 void Inventory_SaveLotteryCodeGuess(PlayState* play);
 
-s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output);
-
 void SkinMatrix_Vec3fMtxFMultXYZW(MtxF* mf, Vec3f* src, Vec3f* xyzDest, f32* wDest);
 void SkinMatrix_Vec3fMtxFMultXYZ(MtxF* mf, Vec3f* src, Vec3f* dest);
 void SkinMatrix_MtxFMtxFMult(MtxF* mfB, MtxF* mfA, MtxF* dest);

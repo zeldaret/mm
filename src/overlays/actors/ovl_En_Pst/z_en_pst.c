@@ -29,23 +29,23 @@ typedef enum {
     /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM
 } PostboxBehaviour;
 
-static u8 D_80B2C200[] = {
+static ScheduleScript D_80B2C200[] = {
 #include "build/src/overlays/actors/ovl_En_Pst/D_80B2C200.schedule.inc"
 };
 
-static u8 D_80B2C20C[] = {
+static ScheduleScript D_80B2C20C[] = {
 #include "build/src/overlays/actors/ovl_En_Pst/D_80B2C20C.schedule.inc"
 };
 
-static u8 D_80B2C218[] = {
+static ScheduleScript D_80B2C218[] = {
 #include "build/src/overlays/actors/ovl_En_Pst/D_80B2C218.schedule.inc"
 };
 
-static u8 D_80B2C224[] = {
+static ScheduleScript D_80B2C224[] = {
 #include "build/src/overlays/actors/ovl_En_Pst/D_80B2C224.schedule.inc"
 };
 
-static u8 D_80B2C230[] = {
+static ScheduleScript D_80B2C230[] = {
 #include "build/src/overlays/actors/ovl_En_Pst/D_80B2C230.schedule.inc"
 };
 
@@ -322,7 +322,7 @@ void EnPst_HandleSchedule(EnPst* this, PlayState* play) {
 }
 
 void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
-    static u8* sScheduleScripts[] = {
+    static ScheduleScript* sScheduleScripts[] = {
         D_80B2C200, D_80B2C20C, D_80B2C218, D_80B2C224, D_80B2C230,
     };
     s16 params = this->actor.params;

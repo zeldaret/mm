@@ -20,23 +20,23 @@ void EnPm_Draw(Actor* thisx, PlayState* play);
 void func_80AFA4D0(EnPm* this, PlayState* play);
 void func_80AFA5FC(EnPm* this, PlayState* play);
 
-static u8 D_80AFAD80[] = {
+static ScheduleScript D_80AFAD80[] = {
 #include "build/src/overlays/actors/ovl_En_Pm/D_80AFAD80.schedule.inc"
 };
 
-static u8 D_80AFB30C[] = {
+static ScheduleScript D_80AFB30C[] = {
 #include "build/src/overlays/actors/ovl_En_Pm/D_80AFB30C.schedule.inc"
 };
 
-static u8 D_80AFB3C0[] = {
+static ScheduleScript D_80AFB3C0[] = {
 #include "build/src/overlays/actors/ovl_En_Pm/D_80AFB3C0.schedule.inc"
 };
 
-static u8 D_80AFB3FC[] = {
+static ScheduleScript D_80AFB3FC[] = {
 #include "build/src/overlays/actors/ovl_En_Pm/D_80AFB3FC.schedule.inc"
 };
 
-static u8 D_80AFB41C[] = {
+static ScheduleScript D_80AFB41C[] = {
 #include "build/src/overlays/actors/ovl_En_Pm/D_80AFB41C.schedule.inc"
 };
 
@@ -1646,7 +1646,7 @@ void func_80AFA438(EnPm* this, PlayState* play) {
 }
 
 void func_80AFA4D0(EnPm* this, PlayState* play) {
-    static u8* D_80AFB900[] = {
+    static ScheduleScript* D_80AFB900[] = {
         D_80AFAD80, D_80AFB30C, D_80AFB3C0, D_80AFB3FC, D_80AFB41C,
     };
     u16 time = gSaveContext.save.time;

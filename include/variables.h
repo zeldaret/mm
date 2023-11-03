@@ -185,8 +185,7 @@ extern ObjectId gObjectTableSize;
 extern RomFile gObjectTable[OBJECT_ID_MAX];
 
 extern SceneTableEntry gSceneTable[SCENE_MAX];
-extern UNK_PTR D_801C5C50;
-// extern UNK_TYPE1 D_801C5C9C;
+
 extern UNK_PTR D_801C5CB0;
 
 extern KaleidoMgrOverlay gKaleidoMgrOverlayTable[2];

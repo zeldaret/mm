@@ -19,7 +19,7 @@ void EnIg_Draw(Actor* thisx, PlayState* play);
 void func_80BF2AF8(EnIg* this, PlayState* play);
 void func_80BF2BD4(EnIg* this, PlayState* play);
 
-static u8 D_80BF3260[] = {
+static ScheduleScript D_80BF3260[] = {
 #include "build/src/overlays/actors/ovl_En_Ig/scheduleScript.schedule.inc"
 };
 

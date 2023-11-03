@@ -256,4 +256,8 @@ typedef struct {
 #define SCHEDULE_CMD_BRANCH_L(offset) \
     SCHEDULE_CMD_ID_BRANCH_L, SCHEDULE_PACK_S16(offset)
 
+typedef u8 ScheduleScript;
+
+s32 Schedule_RunScript(PlayState* play, ScheduleScript* script, ScheduleOutput* output);
+
 #endif

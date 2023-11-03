@@ -128,7 +128,7 @@ static TrackOptionsSet sTrackOptions = {
     { 0x1770, 4, 1, 6 },
 };
 
-static u8 D_80BAE820[] = {
+static ScheduleScript D_80BAE820[] = {
 #include "build/src/overlays/actors/ovl_En_Suttari/scheduleScript.schedule.inc"
 };
 

@@ -268,7 +268,7 @@ File: `build/src/overlays/actors/ovl_En_Ah/scheduleScript.schedule.inc`
 In the actor's C code:
 
 ```c
-static u8 D_80BD3DB0[] = {
+static ScheduleScript D_80BD3DB0[] = {
 #include "build/src/overlays/actors/ovl_En_Ah/scheduleScript.schedule.inc"
 };
 ```

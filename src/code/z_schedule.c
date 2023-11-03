@@ -285,7 +285,7 @@ static u8 sScheduleCmdSizes[] = {
     sizeof(ScheduleCmdBranchL),          // SCHEDULE_CMD_ID_BRANCH_L
 };
 
-s32 Schedule_RunScript(PlayState* play, u8* script, ScheduleOutput* output) {
+s32 Schedule_RunScript(PlayState* play, ScheduleScript* script, ScheduleOutput* output) {
     u8 size;
     s32 stop;
 

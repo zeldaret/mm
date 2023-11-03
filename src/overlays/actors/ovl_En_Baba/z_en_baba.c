@@ -129,7 +129,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static u8 sSchedule[] = {
+static ScheduleScript sSchedule[] = {
 #include "build/src/overlays/actors/ovl_En_Baba/scheduleScript.schedule.inc"
 };
 

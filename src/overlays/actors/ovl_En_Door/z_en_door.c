@@ -36,135 +36,135 @@ void func_80867144(EnDoor*, PlayState*);
 void func_808670F0(EnDoor*, PlayState*);
 void func_80866A5C(EnDoor*, PlayState*);
 
-u8 D_808675D0[] = {
+ScheduleScript D_808675D0[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_808675D0.schedule.inc"
 };
 
-u8 D_808675E4[] = {
+ScheduleScript D_808675E4[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_808675E4.schedule.inc"
 };
 
-u8 D_80867634[] = {
+ScheduleScript D_80867634[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867634.schedule.inc"
 };
 
-u8 D_80867640[] = {
+ScheduleScript D_80867640[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867640.schedule.inc"
 };
 
-u8 D_8086764C[] = {
+ScheduleScript D_8086764C[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_8086764C.schedule.inc"
 };
 
-u8 D_80867658[] = {
+ScheduleScript D_80867658[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867658.schedule.inc"
 };
 
-u8 D_80867684[] = {
+ScheduleScript D_80867684[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867684.schedule.inc"
 };
 
-u8 D_80867688[] = {
+ScheduleScript D_80867688[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867688.schedule.inc"
 };
 
-u8 D_80867690[] = {
+ScheduleScript D_80867690[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867690.schedule.inc"
 };
 
-u8 D_80867698[] = {
+ScheduleScript D_80867698[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867698.schedule.inc"
 };
 
-u8 D_808676A0[] = {
+ScheduleScript D_808676A0[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_808676A0.schedule.inc"
 };
 
-u8 D_808676B8[] = {
+ScheduleScript D_808676B8[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_808676B8.schedule.inc"
 };
 
-u8 D_808676D0[] = {
+ScheduleScript D_808676D0[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_808676D0.schedule.inc"
 };
 
-u8 D_808676D4[] = {
+ScheduleScript D_808676D4[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_808676D0.schedule.inc"
 };
 
-u8 D_808676D8[] = {
+ScheduleScript D_808676D8[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_808676D8.schedule.inc"
 };
 
-u8 D_808676E4[] = {
+ScheduleScript D_808676E4[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_808676E4.schedule.inc"
 };
 
-u8 D_808676EC[] = {
+ScheduleScript D_808676EC[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_808676EC.schedule.inc"
 };
 
-u8 D_808676F0[] = {
+ScheduleScript D_808676F0[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_808676F0.schedule.inc"
 };
 
-u8 D_80867704[] = {
+ScheduleScript D_80867704[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867704.schedule.inc"
 };
 
-u8 D_80867708[] = {
+ScheduleScript D_80867708[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867708.schedule.inc"
 };
 
-u8 D_8086770C[] = {
+ScheduleScript D_8086770C[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_8086770C.schedule.inc"
 };
 
-u8 D_80867710[] = {
+ScheduleScript D_80867710[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867710.schedule.inc"
 };
 
-u8 D_80867714[] = {
+ScheduleScript D_80867714[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867714.schedule.inc"
 };
 
-u8 D_8086771C[] = {
+ScheduleScript D_8086771C[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_8086771C.schedule.inc"
 };
 
-u8 D_80867734[] = {
+ScheduleScript D_80867734[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867734.schedule.inc"
 };
 
-u8 D_8086773C[] = {
+ScheduleScript D_8086773C[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_8086773C.schedule.inc"
 };
 
-u8 D_80867744[] = {
+ScheduleScript D_80867744[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867744.schedule.inc"
 };
 
-u8 D_8086775C[] = {
+ScheduleScript D_8086775C[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_8086775C.schedule.inc"
 };
 
-u8 D_80867778[] = {
+ScheduleScript D_80867778[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867778.schedule.inc"
 };
 
-u8 D_8086777C[] = {
+ScheduleScript D_8086777C[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867710.schedule.inc"
 };
 
-u8 D_80867780[] = {
+ScheduleScript D_80867780[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867780.schedule.inc"
 };
 
-u8 D_80867784[] = {
+ScheduleScript D_80867784[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867784.schedule.inc"
 };
 
-u8* D_8086778C[] = {
+ScheduleScript* D_8086778C[] = {
     D_808675D0, D_808675E4, D_80867634, D_80867640, D_8086764C, D_80867658, D_80867684, D_80867688,
     D_80867690, D_80867698, D_808676A0, D_808676B8, D_808676D0, D_808676D4, D_808676D8, D_808676E4,
     D_808676EC, D_808676F0, D_80867704, D_80867708, D_8086770C, D_80867710, D_80867714, D_8086771C,
