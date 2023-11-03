@@ -124,9 +124,9 @@ YAZ0       := tools/buildtools/yaz0
 ZAPD       := tools/ZAPD/ZAPD.out
 FADO       := tools/fado/fado.elf
 MAKEYAR    := tools/buildtools/makeyar
-SCHEDULE_COMP := tools/buildtools/compile_schedule.py
+SCHC       := tools/buildtools/schc.py
 
-SCHEDULE_COMP_FLAGS :=
+SCHC_FLAGS :=
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
@@ -412,7 +412,7 @@ build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
 
 build/%.schedule.inc: %.schedule
-	$(SCHEDULE_COMP) $(SCHEDULE_COMP_FLAGS) -o $@ $<
+	$(SCHC) $(SCHC_FLAGS) -o $@ $<
 
 -include $(DEP_FILES)
 

@@ -18,6 +18,7 @@
 
 from __future__ import annotations
 
+# Short for "schedule compiler"
 __prog_name__ = "schc"
 __version__ = "1.0.0"
 
