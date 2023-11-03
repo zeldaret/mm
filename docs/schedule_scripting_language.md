@@ -162,9 +162,9 @@ static u8 D_80BD3DB0[] = {
 };
 ```
 
-Having this scripts as arrays like this have two major flaws:
+Having these scripts as arrays like this has two major flaws:
 
-- The control flow is not clear at a first glance (this is specially problematic
+- The control flow is not clear at a first glance (this is especially problematic
   for larger scripts).
 - The branch distances are hardcoded into each command, making the script itself
   hard to modify.
@@ -205,9 +205,9 @@ if_scene (SCENE_YADOYA) {
 
 ## Syntax
 
-The syntax is very simple, it consist on a sucession of commands. Some commands
-require arguments (by using parenthesis) and some (conditional checks) can have
-bodies with subcommands and an optional `else` with its correspnding body with
+The syntax is very simple, it consists in a sucession of commands. Some commands
+require arguments (by using parentheses) and some (conditional checks) can have
+bodies with subcommands and an optional `else` with its corresponding body with
 subcommands.
 
 Like in C, both whitespace and newlines are not part of the language and they
@@ -260,7 +260,7 @@ File: `build/src/overlays/actors/ovl_En_Ah/scheduleScript.schedule.inc`
     /* 0x37 */ SCHEDULE_CMD_RET_NONE(),
 ```
 
-On actor's C code:
+In the actor's C code:
 
 ```c
 static u8 D_80BD3DB0[] = {
@@ -272,9 +272,9 @@ static u8 D_80BD3DB0[] = {
 
 Commands are the fundamental (and almost only) building block of this language.
 A schedule script must always have at least one command. It's undefined
-behaviour if script's control flow doesn't always lead to a return command.
+behaviour if the script's control flow doesn't always lead to a return command.
 
-To see how the command's arguments work, please see the
+To see how the command arguments work, please see the
 [corresponding section](#commands-arguments).
 
 Commands can be categorized in 4 major types:
@@ -299,32 +299,32 @@ The rest of this section will mostly refer to the generic versions of the
 commands. The non-generic versions of each command are available to be used too,
 but their use is not recommended.
 
-### Command's arguments
+### Command arguments
 
 Some commands require arguments. Arguments are used by checking commands to
-check something specific of the stae of the game (what's the current day? what's
-the current scene? etc) and take a decision based on it (branch to another
+check something specific of the state of the game (what's the current day? what's
+the current scene? etc.) and take a decision based on it (branch to another
 command).
 
-Arguments are enclosed in parenthesis (`(` and `)`) and passed verbatim to the
+Arguments are enclosed in parentheses (`(` and `)`) and passed verbatim to the
 generated output, allowing a compiler for this language to not need to recognize
 any identifier used in arguments, allowing to use any custom identifier
-(specially useful for schedule result enums). Take in mind this behaviour may
+(specially useful for schedule result enums). Note this behaviour may
 change in a future version of the language.
 
 ### Conditional checks
 
-Conditional checks commands consist on commands that take a decision based on
+Conditional checks commands are commands that take a decision based on
 the state of the game, allowing it to decide which set of subcommands to
 execute.
 
 All conditional checks require an argument and a body of subcommands. A
-conditional check can be optionally be followed by an `else`.
+conditional check can optionally be followed by an `else`.
 
-If the condition of any of these commands is not satisfied and said command have
-an `else`, then said the control flow jumps to the body of that `else`. If
-there's no `else` and the condition isn't satisfied then the control flow just
-fallthroughs into the next command.
+If the condition of a command is not satisfied and that command has
+an `else`, then control jumps to the body of that `else`. If
+there's no `else` and the condition isn't satisfied then control just
+falls through into the next command.
 
 #### `if_week_event_reg`
 
@@ -399,7 +399,7 @@ minimize the amount of commands used on a `ìf_misc` body and `else`'s body.
 
 #### `if_scene`
 
-Checks if the current scene matches the one passed as parameter.
+Checks if the current scene matches the one passed as argument.
 
 ##### `if_scene` arguments
 
@@ -439,7 +439,7 @@ if_day (3) {
 
 #### `if_before_time`
 
-Checks if the current time is before the time passed as parameter.
+Checks if the current time is before the time passed as argument.
 
 ##### `if_before_time` arguments
 
@@ -462,11 +462,11 @@ if_before_time (8, 0) {
 
 ##### `if_before_time` notes
 
-This command performs the contrary check to `if_since_time`.
+This command performs the opposite check of `if_since_time`.
 
 #### `if_since_time`
 
-Checks if the current time is after or equal to the time passed as parameter.
+Checks if the current time is after or equal to the time passed as argument.
 
 ##### `if_since_time` arguments
 
@@ -498,7 +498,7 @@ a [label](#labels) to know where to branch to.
 
 #### `branch`
 
-Unconditionally move the control flow to the passed label.
+Unconditionally transfer control to the passed label.
 
 ##### `branch` arguments
 
@@ -574,11 +574,11 @@ undefined behaviour.
 
 #### `return_s`
 
-Allows to return a short value.
+Allows to return a short (one byte) value.
 
 ##### `return_s` arguments
 
-- Argument 0: The value to return. It must fit on a `u8`.
+- Argument 0: The value to return. It must fit in a `u8`.
 
 ##### `return_s` example
 
@@ -590,16 +590,16 @@ if_time_range (8, 0, 12, 0) {
 
 #### `return_l`
 
-Allows to return a long value.
+Allows to return a long (two bytes) value.
 
 Please note that the vanilla interpreter for the schedule scripts has a bug on
 which the upper byte of a long returned value will be discarded (will be
-truncated to a `u8`), so please ensure your returned values always fit on the
+truncated to a `u8`), so please ensure your returned values always fit in the
 0-255 range.
 
 ##### `return_l` arguments
 
-- Argument 0: The value to return. It must fit on a `u16`.
+- Argument 0: The value to return. It must fit in a `u16`.
 
 ##### `return_l` example
 
@@ -653,7 +653,7 @@ Returns a time range and a 1 byte value.
 - Argument 1: Minute component of the start time
 - Argument 2: Hour component of the end time
 - Argument 3: Minute component of the end time
-- Argument 4: A value to return. It must fit on a `u8`
+- Argument 4: A value to return. It must fit in a `u8`
 
 ##### `return_time` example
 
@@ -853,7 +853,7 @@ This section presents the formal grammar for the Schedule scripting language.
 
 ### Tokens
 
-The presented grammar expects the a few tokens.
+The presented grammar expects a few tokens.
 
 First column is the corresponding token and right is a regular expression to
 match said token.

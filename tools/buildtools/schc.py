@@ -647,7 +647,7 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
         left = expr.left
         right = expr.right
 
-        # Some commands need to invert theirs `if_`/`else` bodies to match the corresponding command
+        # Some commands need to invert their `if_`/`else` bodies to match the corresponding command
         if tokenProperties.needsToInvert:
             left, right = right, left
 
@@ -658,7 +658,7 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
         currentIndex = index
         index += 1
 
-        # Linealize the left body
+        # Linearize the left body
         subResults, index = convertTreeIntoLabeledList(left, index)
 
         # Expressions always jump into the right body if their check evaluates to True
@@ -677,7 +677,7 @@ def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[
                 # Get the label name of the first expression
                 targetLabel = sub[0].labelName
 
-        # If there's no user-defined label, then autogenerate one. Use dots to avoid name crashes with user-defined ones
+        # If there's no user-defined label, then autogenerate one. Use dots to avoid name clashes with user-defined ones
         if labelName is None:
             labelName = f".index.{currentIndex}"
 
@@ -844,7 +844,7 @@ def main():
 
     parser.add_argument("input", help="Schedule script path", type=Path)
     parser.add_argument("-o", "--output", help="Output path. Will print to stdout if omitted", type=Path)
-    parser.add_argument("-g", type=int, nargs="?", const=1, default=0, dest="debuggingLevel", metavar="level", help="Emit debugging information on the generated macros. Level 0 means no debugging information. Passing no level at all implies level 1. Defaults to level 0")
+    parser.add_argument("-g", type=int, nargs="?", const=1, default=0, dest="debuggingLevel", metavar="level", help="Emit debugging information on the generated macros. Level 0 means no debugging information. -g is like -g1. Default is -g0")
 
     parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
 
