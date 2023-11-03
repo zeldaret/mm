@@ -56,7 +56,6 @@ u8 D_8086764C[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_8086764C.schedule.inc"
 };
 
-// TODO
 u8 D_80867658[] = {
 #include "build/src/overlays/actors/ovl_En_Door/D_80867658.schedule.inc"
 };
