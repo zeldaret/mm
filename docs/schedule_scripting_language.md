@@ -11,7 +11,7 @@ reading and modifying the schedule scripts used by various actors.
   - [Compiling](#compiling)
   - [Commands](#commands)
     - [Generics and non-generics](#generics-and-non-generics)
-    - [Command's arguments](#commands-arguments)
+    - [Command arguments](#command-arguments)
     - [Conditional checks](#conditional-checks)
       - [`if_week_event_reg`](#if_week_event_reg)
         - [`if_week_event_reg` arguments](#if_week_event_reg-arguments)
@@ -66,7 +66,7 @@ reading and modifying the schedule scripts used by various actors.
       - [`return_time`](#return_time)
         - [`return_time` arguments](#return_time-arguments)
         - [`return_time` example](#return_time-example)
-    - [Miscellaneous commands](#miscellaneous-commands)
+    - [Other commands](#other-commands)
       - [`nop`](#nop)
         - [`nop` arguments](#nop-arguments)
         - [`nop` example](#nop-example)
@@ -275,13 +275,13 @@ A schedule script must always have at least one command. It's undefined
 behaviour if the script's control flow doesn't always lead to a return command.
 
 To see how the command arguments work, please see the
-[corresponding section](#commands-arguments).
+[corresponding section](#command-arguments).
 
 Commands can be categorized in 4 major types:
 [Conditional checks](#conditional-checks),
 [unconditional branches](#unconditional-branches),
 [return commands](#return-commands) and
-[miscellaneous commands](#miscellaneous-commands).
+[other commands](#other-commands).
 
 ### Generics and non-generics
 
@@ -423,7 +423,7 @@ Checks if the current day matches the passed argument.
 
 ##### `if_day` arguments
 
-- Argument 0: The day to check.
+- Argument 0: The day to check. For example, passing `1` will check for day 1.
 
 ##### `if_day` example
 
@@ -613,7 +613,8 @@ if_scene (SCENE_TOWN) {
 
 #### `return_none`
 
-The schedule finished without returning a value.
+The schedule finished without returning a value. The internal `hasResult`
+member of the `ScheduleOutput` struct will be set to `false`.
 
 ##### `return_none` arguments
 
@@ -629,7 +630,8 @@ if_week_event_reg (WEEKEVENTREG_HAD_MIDNIGHT_MEETING) {
 
 #### `return_empty`
 
-The schedule finished without changing the previous value.
+The schedule finished without changing the previous value. The internal `hasResult`
+member of the `ScheduleOutput` struct will be set to `true`.
 
 ##### `return_empty` arguments
 
@@ -665,7 +667,7 @@ if_time_range (0, 0, 6, 0) {
 }
 ```
 
-### Miscellaneous commands
+### Other commands
 
 #### `nop`
 
@@ -691,7 +693,7 @@ Currently only one operator is allowed on the language, the [`not`](#not) operat
 
 #### `not`
 
-A label is a special kind of command that doesn't get compiled into the actual
+A `not` is a special kind of command that doesn't get compiled into the actual
 low level script, instead it changes the meaning of the check that's right next
 to it by inverting the logic of the check. In other words, the subcommands of a
 conditional check command will be executed if the check of said command
