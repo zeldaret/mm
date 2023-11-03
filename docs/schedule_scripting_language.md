@@ -3,6 +3,11 @@
 The Schedule scripting language is a high level language that was made to help
 reading and modifying the schedule scripts used by various actors.
 
+It should be noted that the language discussed on this document was invented
+and made up by the community. There's no presence of higher level abstraction
+on the game ROM, neither it was used by the original development team at
+Nintendo.
+
 - [Schedule scripting language](#schedule-scripting-language)
   - [Features of the schedule system](#features-of-the-schedule-system)
     - [Short and long commands](#short-and-long-commands)
