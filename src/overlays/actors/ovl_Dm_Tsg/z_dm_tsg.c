@@ -35,7 +35,7 @@ void DmTsg_Init(Actor* thisx, PlayState* play) {
     if (gSaveContext.save.entrance == ENTRANCE(OPENING_DUNGEON, 0)) {
         Actor_SetScale(&this->actor, 0.1f);
         for (i = 0; i < DMTSG_UNK_SIZE; i++) {
-            this->unk_78C[i] = (Rand_ZeroOne() * 65535.0f);
+            this->unk_78C[i] = Rand_ZeroOne() * 0xFFFF;
             this->unk_856[i] = TRUNCF_BINANG(Rand_ZeroOne() * 200.0f) + 100;
         }
     } else {
