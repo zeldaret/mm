@@ -471,7 +471,7 @@ void Camera_EarthquakeDay3(Camera* camera);
 s32 Camera_UpdateHotRoom(Camera* camera);
 s32 Camera_SetSwordDistortion(Camera* camera);
 s32 Camera_RequestGiantsMaskSetting(Camera* camera);
-Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera);
+Vec3s Camera_Update(Camera* camera);
 s32 func_800DF498(Camera* camera);
 s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange);
 s32 Camera_ChangeMode(Camera* camera, s16 mode);
