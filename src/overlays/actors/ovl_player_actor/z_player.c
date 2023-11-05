@@ -7283,9 +7283,9 @@ void Player_StopCutscene(Player* this) {
 }
 
 /**
- * If appropriate, setup action for performing a `csAction`
+ * @brief If appropriate, setup action for performing a `csAction`
  *
- * @return  true if a `csAction` is started, false if not
+ * @return true if a `csAction` is started, false if not
  */
 s32 Player_StartCsAction(PlayState* play, Player* this) {
     if (this->unk_AA5 == PLAYER_UNKAA5_4) {
@@ -20467,6 +20467,7 @@ s32 Player_TryCsAction(PlayState* play, Player* this, PlayerCsAction csAction) {
             return Player_Action_36 == this->actionFunc;
         }
 
+        // Specific to Kafei, any negative csAction works
         if ((this->actor.id == ACTOR_EN_TEST3) && (csAction < 0)) {
             // PLAYER_CSACTION_NEG1
             func_8083B0E4(play, this, this->actor.home.rot.y);
