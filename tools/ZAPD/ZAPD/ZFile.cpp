@@ -1032,11 +1032,8 @@ std::string ZFile::ProcessDeclarations()
 			item.second->size++;
 	}
 
-    if ((name.find("map_i_static.unarchive") == std::string::npos)
-    && (name.find("map_grand_static.unarchive") == std::string::npos))
-    {
-        HandleUnaccountedData();
-    }
+	HandleUnaccountedData();
+
 	// Go through include declarations
 	// First, handle the prototypes (static only for now)
 	for (std::pair<uint32_t, Declaration*> item : declarations)

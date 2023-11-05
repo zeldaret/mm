@@ -1198,11 +1198,11 @@ void* MapDisp_AllocDungeonMap(PlayState* play, void* heap) {
         MapDisp_GetMapITexture(sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter], mapCompactId);
         if (dungeonMapRoomIter + 1 < sPauseDungeonMap.textureCount) {
             sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter + 1] =
-                ALIGN16((intptr_t)sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter] +
-                        MapData_CPID_GetSizeOfMapTex(mapCompactId));
+                (void*)ALIGN16((intptr_t)sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter] +
+                               MapData_CPID_GetSizeOfMapTex(mapCompactId));
         } else {
-            heapNext = (intptr_t)sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter] +
-                       MapData_CPID_GetSizeOfMapTex(mapCompactId);
+            heapNext = (void*)((intptr_t)sPauseDungeonMap.mapI_roomTextures[dungeonMapRoomIter] +
+                               MapData_CPID_GetSizeOfMapTex(mapCompactId));
         }
     }
 
