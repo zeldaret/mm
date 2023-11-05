@@ -136,9 +136,8 @@ VecSph OLib_Vec3fToVecSph(Vec3f* vec) {
  * Takes the point `vec`, and converts it to a geographic coordinate
  */
 VecGeo OLib_Vec3fToVecGeo(Vec3f* vec) {
-    VecSph sph;
+    VecSph sph = OLib_Vec3fToVecSph(vec);
 
-    sph = OLib_Vec3fToVecSph(vec);
     sph.pitch = 0x4000 - sph.pitch;
 
     return sph;
@@ -176,9 +175,8 @@ VecGeo OLib_Vec3fDiffToVecGeo(Vec3f* a, Vec3f* b) {
  */
 Vec3f OLib_AddVecGeoToVec3f(Vec3f* a, VecGeo* geo) {
     Vec3f sum;
-    Vec3f b;
+    Vec3f b = OLib_VecGeoToVec3f(geo);
 
-    b = OLib_VecGeoToVec3f(geo);
     sum.x = a->x + b.x;
     sum.y = a->y + b.y;
     sum.z = a->z + b.z;

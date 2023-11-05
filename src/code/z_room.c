@@ -330,9 +330,7 @@ void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
             gfx = POLY_OPA_DISP;
 
             {
-                Vec3f quakeOffset;
-
-                quakeOffset = Camera_GetQuakeOffset(activeCam);
+                Vec3f quakeOffset = Camera_GetQuakeOffset(activeCam);
 
                 Prerender_DrawBackground2D(
                     &gfx, roomShape->source, roomShape->tlut, roomShape->width, roomShape->height, roomShape->fmt,
@@ -429,9 +427,8 @@ void Room_DrawImageMulti(PlayState* play, Room* room, u32 flags) {
             gfx = POLY_OPA_DISP;
 
             {
-                Vec3f quakeOffset;
+                Vec3f quakeOffset = Camera_GetQuakeOffset(activeCam);
 
-                quakeOffset = Camera_GetQuakeOffset(activeCam);
                 Prerender_DrawBackground2D(&gfx, bgEntry->source, bgEntry->tlut, bgEntry->width, bgEntry->height,
                                            bgEntry->fmt, bgEntry->siz, bgEntry->tlutMode, bgEntry->tlutCount,
                                            (quakeOffset.x + quakeOffset.z) * 1.2f + quakeOffset.y * 0.6f,

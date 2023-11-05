@@ -59,13 +59,10 @@ void OceffWipe6_Draw(Actor* thisx, PlayState* play) {
     u8 alpha;
     s32 i;
     s32 counter;
-    Vec3f activeCamEye;
+    Vec3f activeCamEye = GET_ACTIVE_CAM(play)->eye;
     s32 pad;
-    Vec3f quakeOffset;
+    Vec3f quakeOffset = Camera_GetQuakeOffset(GET_ACTIVE_CAM(play));
     s32 pad2;
-
-    activeCamEye = GET_ACTIVE_CAM(play)->eye;
-    quakeOffset = Camera_GetQuakeOffset(GET_ACTIVE_CAM(play));
 
     if (this->counter < 32) {
         counter = this->counter;
