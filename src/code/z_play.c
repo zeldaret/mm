@@ -964,12 +964,12 @@ void Play_UpdateMain(PlayState* this) {
         Play_UpdateTransition(this);
 
         if (gTransitionTileState != TRANS_TILE_READY) {
-            if (((gSaveContext.gameMode == GAMEMODE_NORMAL) &&
-                 (((this->msgCtx.msgMode == MSGMODE_NONE) ||
-                   (((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == MSGMODE_TEXT_DONE)) &&
+            if ((gSaveContext.gameMode == GAMEMODE_NORMAL &&
+                 ((this->msgCtx.msgMode == MSGMODE_NONE ||
+                   ((this->msgCtx.currentTextId == 0xFF && this->msgCtx.msgMode == MSGMODE_TEXT_DONE) &&
                     (this->msgCtx.textboxEndType == TEXTBOX_ENDTYPE_41))) ||
                   ((this->msgCtx.currentTextId >= 0x100) && (this->msgCtx.currentTextId <= 0x200)))) &&
-                (this->gameOverCtx.state == GAMEOVER_INACTIVE)) {
+                this->gameOverCtx.state == GAMEOVER_INACTIVE) {
                 KaleidoSetup_Update(this);
             }
 
@@ -981,7 +981,7 @@ void Play_UpdateMain(PlayState* this) {
                 this->gameplayFrames++;
                 Rumble_SetUpdateEnabled(true);
 
-                if ((this->actorCtx.freezeFlashTimer != 0) && ((this->actorCtx.freezeFlashTimer--) < 5)) {
+                if ((this->actorCtx.freezeFlashTimer != 0) && (this->actorCtx.freezeFlashTimer-- < 5)) {
                     freezeFlashTimer = this->actorCtx.freezeFlashTimer;
                     if ((freezeFlashTimer > 0) && ((freezeFlashTimer % 2) != 0)) {
                         this->envCtx.fillScreen = true;
@@ -1029,7 +1029,7 @@ void Play_UpdateMain(PlayState* this) {
         }
     }
 
-    if ((!sp5C) || gDbgCamEnabled) {
+    if (!sp5C || gDbgCamEnabled) {
         s32 i;
 
         this->nextCamera = this->activeCamId;
