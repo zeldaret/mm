@@ -23,15 +23,15 @@ void func_80BDD6BC(EnZow* this, PlayState* play);
 void func_80BDD79C(EnZow* this, PlayState* play);
 
 ActorInit En_Zow_InitVars = {
-    ACTOR_EN_ZOW,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZO,
-    sizeof(EnZow),
-    (ActorFunc)EnZow_Init,
-    (ActorFunc)EnZow_Destroy,
-    (ActorFunc)EnZow_Update,
-    (ActorFunc)EnZow_Draw,
+    /**/ ACTOR_EN_ZOW,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZO,
+    /**/ sizeof(EnZow),
+    /**/ EnZow_Init,
+    /**/ EnZow_Destroy,
+    /**/ EnZow_Update,
+    /**/ EnZow_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

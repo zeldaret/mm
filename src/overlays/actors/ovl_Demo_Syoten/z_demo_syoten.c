@@ -26,15 +26,15 @@ void func_80C173B4(Actor* thisx, PlayState* play);
 void func_80C17690(Actor* thisx, PlayState* play);
 
 ActorInit Demo_Syoten_InitVars = {
-    ACTOR_DEMO_SYOTEN,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_SYOTEN,
-    sizeof(DemoSyoten),
-    (ActorFunc)DemoSyoten_Init,
-    (ActorFunc)DemoSyoten_Destroy,
-    (ActorFunc)DemoSyoten_Update,
-    (ActorFunc)DemoSyoten_Draw,
+    /**/ ACTOR_DEMO_SYOTEN,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_SYOTEN,
+    /**/ sizeof(DemoSyoten),
+    /**/ DemoSyoten_Init,
+    /**/ DemoSyoten_Destroy,
+    /**/ DemoSyoten_Update,
+    /**/ DemoSyoten_Draw,
 };
 
 u8 D_80C177D0[] = {

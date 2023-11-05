@@ -57,15 +57,15 @@ void func_80867FBC(struct_80867BDC_a0* arg0, PlayState* play, s32 arg2);
 void func_80867FE4(struct_80867BDC_a0* arg0, PlayState* play);
 
 ActorInit En_Box_InitVars = {
-    ACTOR_EN_BOX,
-    ACTORCAT_CHEST,
-    FLAGS,
-    OBJECT_BOX,
-    sizeof(EnBox),
-    (ActorFunc)EnBox_Init,
-    (ActorFunc)EnBox_Destroy,
-    (ActorFunc)EnBox_Update,
-    (ActorFunc)EnBox_Draw,
+    /**/ ACTOR_EN_BOX,
+    /**/ ACTORCAT_CHEST,
+    /**/ FLAGS,
+    /**/ OBJECT_BOX,
+    /**/ sizeof(EnBox),
+    /**/ EnBox_Init,
+    /**/ EnBox_Destroy,
+    /**/ EnBox_Update,
+    /**/ EnBox_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -425,9 +425,9 @@ void func_80868B74(EnBox* this, PlayState* play) {
         this->unk_1A0++;
         if ((this->csId1 != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->csId1)) {
             if (this->unk_1A0 == 2) {
-                func_800B724C(play, &this->dyna.actor, PLAYER_CSMODE_4);
+                func_800B724C(play, &this->dyna.actor, PLAYER_CSACTION_4);
             } else if (this->unk_1A0 == 22) {
-                func_800B724C(play, &this->dyna.actor, PLAYER_CSMODE_1);
+                func_800B724C(play, &this->dyna.actor, PLAYER_CSACTION_1);
             }
         }
     } else if (this->unk_1A0 < 60) {

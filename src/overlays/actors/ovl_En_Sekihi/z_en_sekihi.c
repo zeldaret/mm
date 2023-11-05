@@ -25,15 +25,15 @@ void func_80A450B0(EnSekihi* this, PlayState* play);
 void EnSekihi_DoNothing(EnSekihi* this, PlayState* play);
 
 ActorInit En_Sekihi_InitVars = {
-    ACTOR_EN_SEKIHI,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnSekihi),
-    (ActorFunc)EnSekihi_Init,
-    (ActorFunc)EnSekihi_Destroy,
-    (ActorFunc)EnSekihi_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_SEKIHI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnSekihi),
+    /**/ EnSekihi_Init,
+    /**/ EnSekihi_Destroy,
+    /**/ EnSekihi_Update,
+    /**/ NULL,
 };
 
 static s16 sObjectIds[] = { OBJECT_SEKIHIL, OBJECT_SEKIHIG, OBJECT_SEKIHIN, OBJECT_SEKIHIZ, OBJECT_ZOG };

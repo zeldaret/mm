@@ -37,15 +37,15 @@ void BgIkanaShutter_SetupDoNothing(BgIkanaShutter* this);
 void BgIkanaShutter_DoNothing(BgIkanaShutter* this, PlayState* play);
 
 ActorInit Bg_Ikana_Shutter_InitVars = {
-    ACTOR_BG_IKANA_SHUTTER,
-    ACTORCAT_SWITCH,
-    FLAGS,
-    OBJECT_IKANA_OBJ,
-    sizeof(BgIkanaShutter),
-    (ActorFunc)BgIkanaShutter_Init,
-    (ActorFunc)BgIkanaShutter_Destroy,
-    (ActorFunc)BgIkanaShutter_Update,
-    (ActorFunc)BgIkanaShutter_Draw,
+    /**/ ACTOR_BG_IKANA_SHUTTER,
+    /**/ ACTORCAT_SWITCH,
+    /**/ FLAGS,
+    /**/ OBJECT_IKANA_OBJ,
+    /**/ sizeof(BgIkanaShutter),
+    /**/ BgIkanaShutter_Init,
+    /**/ BgIkanaShutter_Destroy,
+    /**/ BgIkanaShutter_Update,
+    /**/ BgIkanaShutter_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

@@ -194,6 +194,7 @@ void createArchive(Bytearray *archive, const DataSection *dataSect) {
         uint8_t *output = malloc(alignedUncompressedSize * sizeof(uint8_t)); // assume compressed shouldn't be bigger than uncompressed
         size_t compressedSize;
 
+        // Make sure to pad each entry to a 0x10 boundary
         memcpy(inputBuf, &dataSect->data.bytes[sym->value], realUncompressedSize);
         if (realUncompressedSize < alignedUncompressedSize) {
             memset(&inputBuf[realUncompressedSize], 0, alignedUncompressedSize - realUncompressedSize);

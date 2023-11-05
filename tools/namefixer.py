@@ -6,6 +6,7 @@ import argparse
 # all occurrences of keys will be replaced by associated value
 simpleReplace = {
     "PLAYER_AP_": "PLAYER_IA_",
+    "PLAYER_CSMODE_": "PLAYER_CSACTION_",
 }
 
 # all occurrences of keys will be replaced by associated value,
@@ -1098,7 +1099,8 @@ wordReplace = {
     "player->unk_386": "player->getItemDirection",
     "player->unk_388": "player->interactRangeActor",
     "player->unk_38C": "player->mountSide",
-    "player->unk_394": "player->csMode",
+    "player->csMode": "player->csAction",
+    "player->unk_394": "player->csAction",
     "player->swordQuads": "player->meleeWeaponQuads",
     "player->blureEffectIndex": "player->meleeWeaponEffectIndex",
     "player->unk_AD8": "player->underwaterTimer",
@@ -1112,8 +1114,10 @@ wordReplace = {
     "player->unk_AA0": "player->closestSecretDistSq",
     "player->unk_AAC": "player->headLimbRot",
     "player->unk_AB2": "player->upperLimbRot",
-    "player->unk_AE7": "player->actionVar1",
-    "player->unk_AE8": "player->actionVar2",
+    "player->unk_AE7": "player->av1.actionVar1",
+    "player->unk_AE8": "player->av2.actionVar2",
+    "player->actionVar1": "player->av1.actionVar1",
+    "player->actionVar2": "player->av2.actionVar2",
     "player->unk_B2A": "player->getItemDrawIdPlusOne",
     "player->getItemDrawId": "player->getItemDrawIdPlusOne",
     "player->unk_B68": "player->fallStartHeight",
@@ -1326,6 +1330,9 @@ wordReplace = {
     "WEEKEVENTREG_52_20": "WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE",
     "WEEKEVENTREG_55_80": "WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE",
 
+    "VIRTUAL_TO_PHYSICAL": "OS_K0_TO_PHYSICAL",
+    "SEGMENTED_TO_VIRTUAL": "SEGMENTED_TO_K0",
+
     # Enums
     "TRANS_TYPE_00": "TRANS_TYPE_WIPE",
     "TRANS_TYPE_01": "TRANS_TYPE_TRIFORCE",
@@ -1350,8 +1357,6 @@ wordReplace = {
     "TRANS_TYPE_20": "TRANS_TYPE_FADE_DYNAMIC",
     "TRANS_TYPE_21": "TRANS_TYPE_CIRCLE",
     "TRANS_TYPE_22": "TRANS_TYPE_WIPE5",
-    "PLAYER_CSMODE_6": "PLAYER_CSMODE_END",
-    "PLAYER_CSMODE_7": "PLAYER_CSMODE_WAIT",
     "SUBS_CUTSCENE_SET_UNK_LINK_FIELDS": "SUBS_CUTSCENE_WITH_PLAYER",
     "SUBS_CUTSCENE_SET_FLAG": "SUBS_CUTSCENE_WITH_PLAYER_SET_FLAG",
 

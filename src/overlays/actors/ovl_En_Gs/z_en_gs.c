@@ -40,15 +40,15 @@ void func_80999A8C(EnGs* this, PlayState* play);
 void func_80999AC0(EnGs* this);
 
 ActorInit En_Gs_InitVars = {
-    ACTOR_EN_GS,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GS,
-    sizeof(EnGs),
-    (ActorFunc)EnGs_Init,
-    (ActorFunc)EnGs_Destroy,
-    (ActorFunc)EnGs_Update,
-    (ActorFunc)EnGs_Draw,
+    /**/ ACTOR_EN_GS,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_GS,
+    /**/ sizeof(EnGs),
+    /**/ EnGs_Init,
+    /**/ EnGs_Destroy,
+    /**/ EnGs_Update,
+    /**/ EnGs_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -389,7 +389,7 @@ void func_809984F4(EnGs* this, PlayState* play) {
         }
     } while (gossipStone != NULL);
 
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+    func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
     this->actionFunc = func_809985B8;
 }
 

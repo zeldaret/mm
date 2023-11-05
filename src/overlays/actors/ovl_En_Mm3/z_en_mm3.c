@@ -30,15 +30,15 @@ s32 func_80A6FFAC(EnMm3* this, PlayState* play);
 void func_80A70084(EnMm3* this, PlayState* play);
 
 ActorInit En_Mm3_InitVars = {
-    ACTOR_EN_MM3,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MM,
-    sizeof(EnMm3),
-    (ActorFunc)EnMm3_Init,
-    (ActorFunc)EnMm3_Destroy,
-    (ActorFunc)EnMm3_Update,
-    (ActorFunc)EnMm3_Draw,
+    /**/ ACTOR_EN_MM3,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MM,
+    /**/ sizeof(EnMm3),
+    /**/ EnMm3_Init,
+    /**/ EnMm3_Destroy,
+    /**/ EnMm3_Update,
+    /**/ EnMm3_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

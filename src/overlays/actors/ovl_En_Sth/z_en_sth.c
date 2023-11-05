@@ -28,15 +28,15 @@ void EnSth_Update(Actor* thisx, PlayState* play);
 void EnSth_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Sth_InitVars = {
-    ACTOR_EN_STH,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnSth),
-    (ActorFunc)EnSth_Init,
-    (ActorFunc)EnSth_Destroy,
-    (ActorFunc)EnSth_UpdateWaitForObject,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_STH,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnSth),
+    /**/ EnSth_Init,
+    /**/ EnSth_Destroy,
+    /**/ EnSth_UpdateWaitForObject,
+    /**/ NULL,
 };
 
 #include "overlays/ovl_En_Sth/ovl_En_Sth.c"

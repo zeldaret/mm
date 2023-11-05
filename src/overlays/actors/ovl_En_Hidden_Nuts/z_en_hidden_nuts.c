@@ -31,15 +31,15 @@ void func_80BDBE70(EnHiddenNuts* this, PlayState* play);
 void func_80BDBED4(EnHiddenNuts* this, PlayState* play);
 
 ActorInit En_Hidden_Nuts_InitVars = {
-    ACTOR_EN_HIDDEN_NUTS,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_HINTNUTS,
-    sizeof(EnHiddenNuts),
-    (ActorFunc)EnHiddenNuts_Init,
-    (ActorFunc)EnHiddenNuts_Destroy,
-    (ActorFunc)EnHiddenNuts_Update,
-    (ActorFunc)EnHiddenNuts_Draw,
+    /**/ ACTOR_EN_HIDDEN_NUTS,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_HINTNUTS,
+    /**/ sizeof(EnHiddenNuts),
+    /**/ EnHiddenNuts_Init,
+    /**/ EnHiddenNuts_Destroy,
+    /**/ EnHiddenNuts_Update,
+    /**/ EnHiddenNuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -115,11 +115,11 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     this->pathIndex = ENHIDDENNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = ENHIDDENNUTS_GET_SWITCH_FLAG(&this->actor);
 
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == ENHIDDENNUTS_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -411,7 +411,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
 }
 
 void func_80BDBE70(EnHiddenNuts* this, PlayState* play) {
-    if (this->switchFlag >= 0) {
+    if (this->switchFlag > SWITCH_FLAG_NONE) {
         Flags_SetSwitch(play, this->switchFlag);
     }
     EnHiddenNuts_ChangeAnim(this, ENHIDDENNUTS_ANIM_8);

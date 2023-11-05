@@ -21,15 +21,15 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play);
 void EnAttackNiw_FlyAway(EnAttackNiw* this, PlayState* play);
 
 ActorInit En_Attack_Niw_InitVars = {
-    ACTOR_EN_ATTACK_NIW,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_NIW,
-    sizeof(EnAttackNiw),
-    (ActorFunc)EnAttackNiw_Init,
-    (ActorFunc)EnAttackNiw_Destroy,
-    (ActorFunc)EnAttackNiw_Update,
-    (ActorFunc)EnAttackNiw_Draw,
+    /**/ ACTOR_EN_ATTACK_NIW,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_NIW,
+    /**/ sizeof(EnAttackNiw),
+    /**/ EnAttackNiw_Init,
+    /**/ EnAttackNiw_Destroy,
+    /**/ EnAttackNiw_Update,
+    /**/ EnAttackNiw_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

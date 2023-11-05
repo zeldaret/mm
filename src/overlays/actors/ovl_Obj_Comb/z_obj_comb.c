@@ -23,15 +23,15 @@ void func_8098E098(ObjComb* this);
 void func_8098E0B8(ObjComb* this, PlayState* play);
 
 ActorInit Obj_Comb_InitVars = {
-    ACTOR_OBJ_COMB,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_COMB,
-    sizeof(ObjComb),
-    (ActorFunc)ObjComb_Init,
-    (ActorFunc)ObjComb_Destroy,
-    (ActorFunc)ObjComb_Update,
-    (ActorFunc)ObjComb_Draw,
+    /**/ ACTOR_OBJ_COMB,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_COMB,
+    /**/ sizeof(ObjComb),
+    /**/ ObjComb_Init,
+    /**/ ObjComb_Destroy,
+    /**/ ObjComb_Update,
+    /**/ ObjComb_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -495,7 +495,7 @@ void func_8098E0B8(ObjComb* this, PlayState* play) {
 
     if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.csId >= 0)) {
         if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
+            func_800B7298(play, &this->actor, PLAYER_CSACTION_4);
         }
     }
 }
@@ -529,7 +529,7 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
                 if (CutsceneManager_IsNext(this->actor.csId)) {
                     CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
                     if (this->actor.csId >= 0) {
-                        func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
+                        func_800B7298(play, &this->actor, PLAYER_CSACTION_1);
                     }
 
                     if (((OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor)) == 1) &&

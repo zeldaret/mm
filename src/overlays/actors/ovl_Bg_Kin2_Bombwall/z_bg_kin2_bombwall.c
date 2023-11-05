@@ -23,15 +23,15 @@ void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall* this);
 void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, PlayState* play);
 
 ActorInit Bg_Kin2_Bombwall_InitVars = {
-    ACTOR_BG_KIN2_BOMBWALL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KIN2_OBJ,
-    sizeof(BgKin2Bombwall),
-    (ActorFunc)BgKin2Bombwall_Init,
-    (ActorFunc)BgKin2Bombwall_Destroy,
-    (ActorFunc)BgKin2Bombwall_Update,
-    (ActorFunc)BgKin2Bombwall_Draw,
+    /**/ ACTOR_BG_KIN2_BOMBWALL,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_KIN2_OBJ,
+    /**/ sizeof(BgKin2Bombwall),
+    /**/ BgKin2Bombwall_Init,
+    /**/ BgKin2Bombwall_Destroy,
+    /**/ BgKin2Bombwall_Update,
+    /**/ BgKin2Bombwall_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

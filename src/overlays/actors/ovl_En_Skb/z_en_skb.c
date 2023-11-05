@@ -5,9 +5,10 @@
  */
 
 #include "z_en_skb.h"
-#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "overlays/actors/ovl_En_Encount4/z_en_encount4.h"
 #include "objects/object_skb/object_skb.h"
+#include "overlays/actors/ovl_En_Encount4/z_en_encount4.h"
+#include "overlays/actors/ovl_En_Part/z_en_part.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
@@ -146,15 +147,15 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit En_Skb_InitVars = {
-    ACTOR_EN_SKB,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_SKB,
-    sizeof(EnSkb),
-    (ActorFunc)EnSkb_Init,
-    (ActorFunc)EnSkb_Destroy,
-    (ActorFunc)EnSkb_Update,
-    (ActorFunc)EnSkb_Draw,
+    /**/ ACTOR_EN_SKB,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_SKB,
+    /**/ sizeof(EnSkb),
+    /**/ EnSkb_Init,
+    /**/ EnSkb_Destroy,
+    /**/ EnSkb_Update,
+    /**/ EnSkb_Draw,
 };
 
 void func_809947B0(PlayState* play, EnSkb* this, Vec3f* inPos) {
@@ -1106,12 +1107,12 @@ void EnSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     Collider_UpdateSpheres(limbIndex, &this->collider);
     if ((this->unk_3D8 & 1) && !(this->unk_3D8 & 2)) {
         if (limbIndex == 11) {
-            Actor_SpawnBodyParts(&this->actor, play, 1, dList);
+            Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_1), dList);
             this->unk_3D8 |= 2;
         }
     } else if ((this->unk_3D8 & 0x40) && !(this->unk_3D8 & 0x80) && ((limbIndex != 11) || !(this->unk_3D8 & 1)) &&
                (limbIndex != 12)) {
-        Actor_SpawnBodyParts(&this->actor, play, 1, dList);
+        Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_1), dList);
     }
 
     if (this->drawDmgEffTimer != 0) {

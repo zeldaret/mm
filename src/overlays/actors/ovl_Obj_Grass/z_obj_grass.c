@@ -6,7 +6,6 @@
  * Instances of ObjGrass must be spawned by ObjGrassUnit to function correctly.
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_obj_grass.h"
 #include "overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -28,15 +27,15 @@ f32 sNearestGrassElementsDistSq[OBJ_GRASS_NEAREST_ELEM_MAX];
 #include "overlays/ovl_Obj_Grass/ovl_Obj_Grass.c"
 
 ActorInit Obj_Grass_InitVars = {
-    ACTOR_OBJ_GRASS,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_FIELD_KEEP,
-    sizeof(ObjGrass),
-    (ActorFunc)ObjGrass_Init,
-    (ActorFunc)ObjGrass_Destroy,
-    (ActorFunc)ObjGrass_Update,
-    (ActorFunc)ObjGrass_Draw,
+    /**/ ACTOR_OBJ_GRASS,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_FIELD_KEEP,
+    /**/ sizeof(ObjGrass),
+    /**/ ObjGrass_Init,
+    /**/ ObjGrass_Destroy,
+    /**/ ObjGrass_Update,
+    /**/ ObjGrass_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

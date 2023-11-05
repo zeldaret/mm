@@ -22,15 +22,15 @@ s32 func_80A5086C(EnDnbUnkStruct* arg0);
 s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2);
 
 ActorInit En_Dnb_InitVars = {
-    ACTOR_EN_DNB,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HANAREYAMA_OBJ,
-    sizeof(EnDnb),
-    (ActorFunc)EnDnb_Init,
-    (ActorFunc)EnDnb_Destroy,
-    (ActorFunc)EnDnb_Update,
-    (ActorFunc)EnDnb_Draw,
+    /**/ ACTOR_EN_DNB,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HANAREYAMA_OBJ,
+    /**/ sizeof(EnDnb),
+    /**/ EnDnb_Init,
+    /**/ EnDnb_Destroy,
+    /**/ EnDnb_Update,
+    /**/ EnDnb_Draw,
 };
 
 void func_80A4FDD0(EnDnbEffect* effect, EnDnb* this, s16* alloc, s32 idx) {

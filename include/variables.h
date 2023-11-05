@@ -32,7 +32,7 @@ extern u8* sYaz0MaxPtr;
 extern void* gYaz0DecompressDstEnd;
 
 // extern UNK_TYPE4 D_8009CD10;
-extern u32 sRandFloat;
+extern u32 gRandFloat;
 // extern UNK_TYPE4 sArenaLockMsg;
 
 extern DmaEntry dmadata[1568];
@@ -1617,20 +1617,7 @@ extern SaveContext gSaveContext;
 // extern UNK_TYPE4 D_801F6B00;
 // extern UNK_TYPE4 D_801F6B04;
 // extern UNK_TYPE4 D_801F6B08;
-// extern UNK_TYPE1 D_801F6B0C;
-// extern UNK_TYPE1 D_801F6B0E;
-// extern UNK_TYPE1 D_801F6B10;
-// extern UNK_TYPE1 D_801F6B12;
-// extern UNK_TYPE1 D_801F6B14;
-// extern UNK_TYPE1 D_801F6B16;
-// extern UNK_TYPE1 D_801F6B18;
-// extern UNK_TYPE1 D_801F6B1A;
-// extern UNK_TYPE1 D_801F6B1C;
-// extern UNK_TYPE1 D_801F6B1E;
-// extern UNK_TYPE1 D_801F6B20;
-// extern UNK_TYPE1 D_801F6B22;
-// extern UNK_TYPE4 sCurCsCamera;
-// extern UNK_TYPE1 D_801F6B58;
+
 extern void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
 
@@ -1743,8 +1730,8 @@ extern s32 D_801FD120;
 // extern UNK_TYPE1 D_801FD29C;
 // extern UNK_TYPE1 D_801FD2A0;
 // extern UNK_TYPE1 D_801FD2A8;
-// extern UNK_TYPE1 D_801FD3A8;
-// extern UNK_TYPE1 D_801FD3A9;
+// extern UNK_TYPE1 sRomaniSingingTimer;
+// extern UNK_TYPE1 sRomaniSingingDisabled;
 // extern UNK_TYPE1 D_801FD3AA;
 // extern UNK_TYPE1 D_801FD3AB;
 // extern UNK_TYPE1 D_801FD3AC;

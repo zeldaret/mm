@@ -20,15 +20,15 @@ void EnTorch2_UpdateIdle(Actor* thisx, PlayState* play);
 void EnTorch2_UpdateDeath(Actor* thisx, PlayState* play);
 
 ActorInit En_Torch2_InitVars = {
-    ACTOR_EN_TORCH2,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTorch2),
-    (ActorFunc)EnTorch2_Init,
-    (ActorFunc)EnTorch2_Destroy,
-    (ActorFunc)EnTorch2_Update,
-    (ActorFunc)EnTorch2_Draw,
+    /**/ ACTOR_EN_TORCH2,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTorch2),
+    /**/ EnTorch2_Init,
+    /**/ EnTorch2_Destroy,
+    /**/ EnTorch2_Update,
+    /**/ EnTorch2_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -1,12 +1,18 @@
-#include "global.h"
+#include "ultra64.h"
+#include "alignment.h"
 #include "stack.h"
+#include "macros.h"
 
-OSPiHandle __Dom1SpeedParam;
-OSPiHandle __Dom2SpeedParam;
+OSPiHandle __Dom1SpeedParam ALIGNED(8);
+OSPiHandle __Dom2SpeedParam ALIGNED(8);
 OSThread sPiMgrThread;
 STACK(sPiMgrStack, 0x1000);
-OSMesgQueue piEventQueue;
+OSMesgQueue piEventQueue ALIGNED(8);
 OSMesg piEventBuf[1];
+
+OSDevMgr __osPiDevMgr = { 0 };
+OSPiHandle* __osPiTable = NULL;
+OSPiHandle* __osCurrentHandle[2] ALIGNED(8) = { &__Dom1SpeedParam, &__Dom2SpeedParam };
 
 void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt) {
     u32 savedMask;

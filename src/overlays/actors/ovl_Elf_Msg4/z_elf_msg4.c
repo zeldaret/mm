@@ -23,15 +23,15 @@ s32 ElfMsg4_GetTextId(ElfMsg4* this);
 s32 func_80AFD5E0(ElfMsg4* this);
 
 ActorInit Elf_Msg4_InitVars = {
-    ACTOR_ELF_MSG4,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ElfMsg4),
-    (ActorFunc)ElfMsg4_Init,
-    (ActorFunc)ElfMsg4_Destroy,
-    (ActorFunc)ElfMsg4_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_ELF_MSG4,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ElfMsg4),
+    /**/ ElfMsg4_Init,
+    /**/ ElfMsg4_Destroy,
+    /**/ ElfMsg4_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -40,8 +40,8 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 func_80AFD380(ElfMsg4* this, PlayState* play) {
-    if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y < 0x81) &&
-        (Flags_GetSwitch(play, this->actor.home.rot.y - 1))) {
+    if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y <= 0x80) &&
+        Flags_GetSwitch(play, this->actor.home.rot.y - 1)) {
         (void)"共倒れ"; // "Collapse together"
         if (ELFMSG4_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG4_GET_SWITCH_FLAG(&this->actor));
@@ -169,7 +169,7 @@ void ElfMsg4_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
-            (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
+            Flags_GetSwitch(play, -1 - this->actor.home.rot.y)) {
             this->actionFunc(this, play);
         }
     }

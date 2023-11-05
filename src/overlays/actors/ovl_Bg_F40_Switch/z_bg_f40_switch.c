@@ -25,15 +25,15 @@ void BgF40Switch_WaitToPress(BgF40Switch* this, PlayState* play);
 void BgF40Switch_IdleUnpressed(BgF40Switch* this, PlayState* play);
 
 ActorInit Bg_F40_Switch_InitVars = {
-    ACTOR_BG_F40_SWITCH,
-    ACTORCAT_SWITCH,
-    FLAGS,
-    OBJECT_F40_SWITCH,
-    sizeof(BgF40Switch),
-    (ActorFunc)BgF40Switch_Init,
-    (ActorFunc)BgF40Switch_Destroy,
-    (ActorFunc)BgF40Switch_Update,
-    (ActorFunc)BgF40Switch_Draw,
+    /**/ ACTOR_BG_F40_SWITCH,
+    /**/ ACTORCAT_SWITCH,
+    /**/ FLAGS,
+    /**/ OBJECT_F40_SWITCH,
+    /**/ sizeof(BgF40Switch),
+    /**/ BgF40Switch_Init,
+    /**/ BgF40Switch_Destroy,
+    /**/ BgF40Switch_Update,
+    /**/ BgF40Switch_Draw,
 };
 
 s32 sBgF40SwitchGlobalsInitialized = false;
@@ -74,7 +74,7 @@ void BgF40Switch_CheckAll(BgF40Switch* this, PlayState* play) {
                 }
                 if (actorAsSwitch->isPressed) {
                     switchFlag = BGF40SWITCH_GET_SWITCH_FLAG(&actorAsSwitch->dyna.actor);
-                    if ((switchFlag >= 0) && (switchFlag < 0x80)) {
+                    if ((switchFlag > SWITCH_FLAG_NONE) && (switchFlag < 0x80)) {
                         pressedSwitchFlags[(switchFlag & ~0x1F) >> 5] |= 1 << (switchFlag & 0x1F);
                         if (!actorAsSwitch->wasPressed && (actorAsSwitch->actionFunc == BgF40Switch_IdleUnpressed) &&
                             !Flags_GetSwitch(play, switchFlag)) {
@@ -88,7 +88,7 @@ void BgF40Switch_CheckAll(BgF40Switch* this, PlayState* play) {
             if ((actor->id == ACTOR_BG_F40_SWITCH) && (actor->room == this->dyna.actor.room) &&
                 (actor->update != NULL)) {
                 switchFlag = BGF40SWITCH_GET_SWITCH_FLAG(actor);
-                if ((switchFlag >= 0) && (switchFlag < 0x80) && Flags_GetSwitch(play, switchFlag) &&
+                if ((switchFlag > SWITCH_FLAG_NONE) && (switchFlag < 0x80) && Flags_GetSwitch(play, switchFlag) &&
                     !(pressedSwitchFlags[(switchFlag & ~0x1F) >> 5] & (1 << (switchFlag & 0x1F)))) {
                     Flags_UnsetSwitch(play, switchFlag);
                 }

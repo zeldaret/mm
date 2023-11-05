@@ -30,15 +30,15 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
 void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play);
 
 ActorInit En_Ma_Yts_InitVars = {
-    ACTOR_EN_MA_YTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MA1,
-    sizeof(EnMaYts),
-    (ActorFunc)EnMaYts_Init,
-    (ActorFunc)EnMaYts_Destroy,
-    (ActorFunc)EnMaYts_Update,
-    (ActorFunc)EnMaYts_Draw,
+    /**/ ACTOR_EN_MA_YTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MA1,
+    /**/ sizeof(EnMaYts),
+    /**/ EnMaYts_Init,
+    /**/ EnMaYts_Destroy,
+    /**/ EnMaYts_Update,
+    /**/ EnMaYts_Draw,
 };
 
 void EnMaYts_UpdateEyes(EnMaYts* this) {
@@ -551,8 +551,8 @@ void EnMaYts_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_K0(sMouthTextures[this->mouthTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(sEyeTextures[this->eyeTexIndex]));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMaYts_OverrideLimbDraw, EnMaYts_PostLimbDraw, &this->actor);

@@ -33,15 +33,15 @@ void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f3
 s32 EnYb_CanTalk(EnYb* this, PlayState* play);
 
 ActorInit En_Yb_InitVars = {
-    ACTOR_EN_YB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_YB,
-    sizeof(EnYb),
-    (ActorFunc)EnYb_Init,
-    (ActorFunc)EnYb_Destroy,
-    (ActorFunc)EnYb_Update,
-    (ActorFunc)EnYb_Draw,
+    /**/ ACTOR_EN_YB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_YB,
+    /**/ sizeof(EnYb),
+    /**/ EnYb_Init,
+    /**/ EnYb_Destroy,
+    /**/ EnYb_Update,
+    /**/ EnYb_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

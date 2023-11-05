@@ -106,7 +106,7 @@ void KaleidoSetup_Update(PlayState* play) {
                                     func_800F4A10(play);
                                     // Set next page mode to scroll left
                                     pauseCtx->nextPageMode = pauseCtx->pageIndex * 2 + 1;
-                                    func_801A3A7C(1);
+                                    Audio_SetPauseState(true);
                                 }
 
                                 if (pauseCtx->state == PAUSE_STATE_OPENING_0) {

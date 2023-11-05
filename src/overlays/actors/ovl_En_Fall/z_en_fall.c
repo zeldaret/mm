@@ -64,15 +64,15 @@ typedef struct {
 EnFallDebrisEffect debrisEffects[EN_FALL_DEBRIS_EFFECT_COUNT];
 
 ActorInit En_Fall_InitVars = {
-    ACTOR_EN_FALL,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnFall),
-    (ActorFunc)EnFall_Init,
-    (ActorFunc)EnFall_Destroy,
-    (ActorFunc)EnFall_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_FALL,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnFall),
+    /**/ EnFall_Init,
+    /**/ EnFall_Destroy,
+    /**/ EnFall_Update,
+    /**/ NULL,
 };
 
 /**

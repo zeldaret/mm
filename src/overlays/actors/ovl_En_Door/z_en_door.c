@@ -277,15 +277,15 @@ u8* D_8086778C[] = {
 };
 
 ActorInit En_Door_InitVars = {
-    ACTOR_EN_DOOR,
-    ACTORCAT_DOOR,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnDoor),
-    (ActorFunc)EnDoor_Init,
-    (ActorFunc)EnDoor_Destroy,
-    (ActorFunc)EnDoor_Update,
-    (ActorFunc)EnDoor_Draw,
+    /**/ ACTOR_EN_DOOR,
+    /**/ ACTORCAT_DOOR,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnDoor),
+    /**/ EnDoor_Init,
+    /**/ EnDoor_Destroy,
+    /**/ EnDoor_Update,
+    /**/ EnDoor_Draw,
 };
 
 typedef struct {

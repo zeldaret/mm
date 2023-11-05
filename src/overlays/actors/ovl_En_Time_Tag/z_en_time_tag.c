@@ -38,15 +38,15 @@ void EnTimeTag_KickOut_WaitForTrigger(EnTimeTag* this, PlayState* play);
 void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play);
 
 ActorInit En_Time_Tag_InitVars = {
-    ACTOR_EN_TIME_TAG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTimeTag),
-    (ActorFunc)EnTimeTag_Init,
-    (ActorFunc)EnTimeTag_Destroy,
-    (ActorFunc)EnTimeTag_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_TIME_TAG,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTimeTag),
+    /**/ EnTimeTag_Init,
+    /**/ EnTimeTag_Destroy,
+    /**/ EnTimeTag_Update,
+    /**/ NULL,
 };
 
 void EnTimeTag_Init(Actor* thisx, PlayState* play) {
@@ -301,7 +301,7 @@ void EnTimeTag_KickOut_Transition(EnTimeTag* this, PlayState* play) {
  */
 void EnTimeTag_KickOut_WaitForTrigger(EnTimeTag* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
-        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+        func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
         Message_StartTextbox(play, 0x1883 + TIMETAG_KICKOUT_GET_TEXT(&this->actor), NULL);
         this->actionFunc = EnTimeTag_KickOut_Transition;
     }
@@ -334,7 +334,7 @@ void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play) {
         }
     } else if ((hour == TIMETAG_KICKOUT_HOUR(&this->actor)) && (minute == TIMETAG_KICKOUT_MINUTE(&this->actor)) &&
                !Play_InCsMode(play)) {
-        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+        func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
         Message_StartTextbox(play, 0x1883 + TIMETAG_KICKOUT_GET_TEXT(&this->actor), NULL);
         this->actionFunc = EnTimeTag_KickOut_Transition;
     }

@@ -58,15 +58,15 @@ void func_8089C164(EnDinofos* this);
 void func_8089C244(EnDinofos* this);
 
 ActorInit En_Dinofos_InitVars = {
-    ACTOR_EN_DINOFOS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DINOFOS,
-    sizeof(EnDinofos),
-    (ActorFunc)EnDinofos_Init,
-    (ActorFunc)EnDinofos_Destroy,
-    (ActorFunc)EnDinofos_Update,
-    (ActorFunc)EnDinofos_Draw,
+    /**/ ACTOR_EN_DINOFOS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DINOFOS,
+    /**/ sizeof(EnDinofos),
+    /**/ EnDinofos_Init,
+    /**/ EnDinofos_Destroy,
+    /**/ EnDinofos_Update,
+    /**/ EnDinofos_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[9] = {
@@ -369,7 +369,7 @@ void func_8089ABF4(EnDinofos* this, PlayState* play) {
         this->subCamId = SUB_CAM_ID_DONE;
         CutsceneManager_Stop(this->actor.csId);
         if (this->actor.colChkInfo.health == 0) {
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
+            func_800B724C(play, &this->actor, PLAYER_CSACTION_END);
         }
     }
 }
@@ -450,7 +450,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         return true;
     }
 
-    if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->actionVar1 == 1) &&
+    if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->av1.actionVar1 == 1) &&
         (this->unk_28B == 0)) {
         this->unk_28B = 1;
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElement) - 3; i++) {
@@ -1209,7 +1209,7 @@ void func_8089D318(EnDinofos* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->actor.csId)) {
         if (this->actor.colChkInfo.health == 0) {
             CutsceneManager_Start(this->actor.csId, &this->actor);
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
+            func_800B724C(play, &this->actor, PLAYER_CSACTION_WAIT);
         } else {
             CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         }
