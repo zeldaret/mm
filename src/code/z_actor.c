@@ -1794,19 +1794,15 @@ void func_800B8118(Actor* actor, PlayState* play, s32 flag) {
     }
 }
 
-PosRot* Actor_GetFocus(PosRot* dest, Actor* actor) {
-    *dest = actor->focus;
-
-    return dest;
+PosRot Actor_GetFocus(Actor* actor) {
+    return actor->focus;
 }
 
-PosRot* Actor_GetWorld(PosRot* dest, Actor* actor) {
-    *dest = actor->world;
-
-    return dest;
+PosRot Actor_GetWorld(Actor* actor) {
+    return actor->world;
 }
 
-PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
+PosRot Actor_GetWorldPosShapeRot(Actor* actor) {
     PosRot sp1C;
 
     Math_Vec3f_Copy(&sp1C.pos, &actor->world.pos);
@@ -1816,9 +1812,8 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
         sp1C.pos.y += player->unk_AC0 * actor->scale.y;
     }
     sp1C.rot = actor->shape.rot;
-    *dest = sp1C;
 
-    return dest;
+    return sp1C;
 }
 
 /**

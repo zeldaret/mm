@@ -281,7 +281,7 @@ f32 Camera_GetFocalActorHeight(Camera* camera) {
     if (focalActor == &GET_PLAYER(camera->play)->actor) {
         focalActorHeight = Player_GetHeight((Player*)focalActor);
     } else {
-        Actor_GetFocus(&focalActorFocus, focalActor);
+        focalActorFocus = Actor_GetFocus(focalActor);
         focalActorHeight = focalActorFocus.pos.y - camera->focalActorPosRot.pos.y;
         if (focalActorHeight == 0.0f) {
             focalActorHeight = 10.0f;
@@ -485,7 +485,7 @@ Vec3f* Camera_GetFocalActorPos(Vec3f* dst, Camera* camera) {
         *dst = ((Player*)focalActor)->bodyPartsPos[PLAYER_BODYPART_WAIST];
         return dst;
     } else {
-        Actor_GetWorldPosShapeRot(&focalPosRot, camera->focalActor);
+        focalPosRot = Actor_GetWorldPosShapeRot(camera->focalActor);
         *dst = focalPosRot.pos;
         return dst;
     }
@@ -686,7 +686,7 @@ s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecGeo* arg3, Actor*
     s32 i;
 
     sp64 = *arg2;
-    Actor_GetFocus(&playerFocus, &player->actor); // playerFocus unused
+    playerFocus = Actor_GetFocus(&player->actor); // playerFocus unused
     sp90 = *arg3;
 
     angleCount = ARRAY_COUNT(D_801B9E18);
@@ -848,7 +848,7 @@ s32 Camera_GetWaterBoxBgCamSetting(Camera* camera, f32* waterY) {
     s32 camSetting;
     s32 bgId;
 
-    Actor_GetWorldPosShapeRot(&playerPosShape, camera->focalActor);
+    playerPosShape = Actor_GetWorldPosShapeRot(camera->focalActor);
     *waterY = playerPosShape.pos.y;
 
     if (!WaterBox_GetSurfaceImpl(camera->play, &camera->play->colCtx, playerPosShape.pos.x, playerPosShape.pos.z,
@@ -1672,7 +1672,7 @@ s32 Camera_CalcAtForHorse(Camera* camera, VecGeo* eyeAtDir, f32 yOffset, f32* yP
     Player* player = (Player*)camera->focalActor;
     PosRot horsePosRot;
 
-    Actor_GetWorld(&horsePosRot, player->rideActor);
+    horsePosRot = Actor_GetWorld(player->rideActor);
 
     if (EN_HORSE_CHECK_JUMPING((EnHorse*)player->rideActor)) {
         horsePosRot.pos.y -= 49.0f;
@@ -3330,7 +3330,7 @@ s32 Camera_Jump3(Camera* camera) {
     s32 sp58;
 
     focalActorHeight = Camera_GetFocalActorHeight(camera);
-    Actor_GetFocus(&focalActorFocus, camera->focalActor);
+    focalActorFocus = Actor_GetFocus(camera->focalActor);
     sp60 = camera->waterYPos - sp48->y;
 
     sp58 = false;
@@ -3699,7 +3699,7 @@ s32 Camera_Battle1(Camera* camera) {
         camera->atLerpStepScale = Camera_ClampLerpScale(camera, isOffGround ? roData->unk_28 : roData->unk_24);
     }
 
-    Actor_GetFocus(&camera->targetPosRot, camera->target);
+    camera->targetPosRot = Actor_GetFocus(camera->target);
 
     if (rwData->unk_08 != camera->target) {
         camera->animState = 0;
@@ -4032,11 +4032,11 @@ s32 Camera_KeepOn1(Camera* camera) {
     sp114 = roData->unk_04;
 
     if (camera->target->id != ACTOR_EN_BOOM) {
-        Actor_GetWorldPosShapeRot(&camera->targetPosRot, camera->target);
-        Actor_GetFocus(&spA8, camera->target);
+        camera->targetPosRot = Actor_GetWorldPosShapeRot(camera->target);
+        spA8 = Actor_GetFocus(camera->target);
         camera->targetPosRot.pos.y = spA8.pos.y;
     } else {
-        Actor_GetFocus(&camera->targetPosRot, camera->target);
+        camera->targetPosRot = Actor_GetFocus(camera->target);
     }
     if (rwData->unk_0C != camera->target) {
         rwData->unk_0C = camera->target;
@@ -4332,7 +4332,7 @@ s32 Camera_KeepOn3(Camera* camera) {
 
     OLib_Vec3fDiffToVecGeo(&sp88, at, eye);
     OLib_Vec3fDiffToVecGeo(&sp80, at, eyeNext);
-    Actor_GetFocus(&camera->targetPosRot, camera->target);
+    camera->targetPosRot = Actor_GetFocus(camera->target);
     spD8 = focalActorPosRot->pos;
     spD8.y += focalActorHeight;
     OLib_Vec3fDiffToVecGeo(&spA0, &spD8, &camera->targetPosRot.pos);
@@ -4664,7 +4664,7 @@ s32 Camera_KeepOn4(Camera* camera) {
 
                 case KEEPON4_FLAG_3:
                     if (camera->target != NULL) {
-                        Actor_GetWorldPosShapeRot(&sp60, camera->target);
+                        sp60 = Actor_GetWorldPosShapeRot(camera->target);
                         spA2 = CAM_DEG_TO_BINANG(roData->unk_08) - sp60.rot.x;
                         spA0 = (BINANG_SUB(BINANG_ROT180(sp60.rot.y), spA8.yaw) > 0)
                                    ? BINANG_ROT180(sp60.rot.y) + CAM_DEG_TO_BINANG(roData->unk_0C)
@@ -4677,7 +4677,7 @@ s32 Camera_KeepOn4(Camera* camera) {
                     // fallthrough
                 case (KEEPON4_FLAG_3 | KEEPON4_FLAG_1):
                     if (camera->target != 0) {
-                        Actor_GetWorld(&sp4C, camera->target);
+                        sp4C = Actor_GetWorld(camera->target);
                         spA2 = CAM_DEG_TO_BINANG(roData->unk_08);
                         sp9E = Camera_CalcXZAngle(&sp4C.pos, &focalActorPosRot->pos);
                         spA0 = (BINANG_SUB(sp9E, spA8.yaw) > 0) ? sp9E + CAM_DEG_TO_BINANG(roData->unk_0C)
@@ -5149,7 +5149,7 @@ s32 Camera_Subject1(Camera* camera) {
     f32 temp_f0;
     f32 focalActorHeight;
 
-    Actor_GetFocus(&sp58, camera->focalActor);
+    sp58 = Actor_GetFocus(camera->focalActor);
     focalActorHeight = Camera_GetFocalActorHeight(camera);
     Camera_SetUpdateRatesFastPitch(camera);
 
@@ -5458,7 +5458,7 @@ s32 Camera_Unique0(Camera* camera) {
     OLib_Vec3fDiffToVecGeo(&sp7C, &camera->at, &camera->eye);
 
     if (player->rideActor != NULL) {
-        Actor_GetWorld(&sp9C, player->rideActor);
+        sp9C = Actor_GetWorld(player->rideActor);
         sp8C = sp9C.pos;
         sp8C.y += playerHeight + 20.0f;
     } else {
@@ -5713,8 +5713,8 @@ s32 Camera_Demo1(Camera* camera) {
         rwData->unk_1C = 0;
         OLib_Vec3fDiffToVecGeo(&rwData->unk_0C, &camera->targetPosRot.pos, eye);
         OLib_Vec3fDiffToVecGeo(&rwData->unk_14, &camera->at, eye);
-        Actor_GetFocus(&targetHead, camera->target);
-        Actor_GetWorld(&sp74, camera->target);
+        targetHead = Actor_GetFocus(camera->target);
+        sp74 = Actor_GetWorld(camera->target);
         camera->targetPosRot.pos.x = (sp74.pos.x + targetHead.pos.x) * 0.5f;
         camera->targetPosRot.pos.y = (sp74.pos.y + targetHead.pos.y) * 0.5f;
         camera->targetPosRot.pos.z = (sp74.pos.z + targetHead.pos.z) * 0.5f;
@@ -6132,7 +6132,7 @@ s32 Camera_Demo3(Camera* camera) {
     Demo3ReadWriteData* rwData = &camera->paramData.demo3.rwData;
 
     OLib_Vec3fDiffToVecGeo(&atToEye, at, eye);
-    Actor_GetFocus(&focalActorFocus, camera->focalActor);
+    focalActorFocus = Actor_GetFocus(camera->focalActor);
     focalActorFocus.pos.x = camera->focalActorPosRot.pos.x;
     focalActorFocus.pos.z = camera->focalActorPosRot.pos.z;
     focalActorFocus.pos.y -= (focalActorFocus.pos.y - camera->focalActorPosRot.pos.y) * 0.4f;
@@ -6227,7 +6227,7 @@ s32 Camera_Demo4(Camera* camera) {
         rwData->unk_14 = camera->fov;
     }
 
-    Actor_GetFocus(&focalActorFocus, camera->focalActor);
+    focalActorFocus = Actor_GetFocus(camera->focalActor);
     sCameraInterfaceFlags = roData->interfaceFlags;
 
     switch (camera->animState) {
@@ -6336,7 +6336,7 @@ s32 Camera_Demo4(Camera* camera) {
             break;
 
         case 999:
-            Actor_GetFocus(&focalActorFocus, camera->focalActor);
+            focalActorFocus = Actor_GetFocus(camera->focalActor);
             Distortion_RemoveRequest(DISTORTION_TYPE_MASK_TRANSFORM_1);
             Distortion_RemoveRequest(DISTORTION_TYPE_MASK_TRANSFORM_2);
             camera->animState = 4;
@@ -6387,7 +6387,7 @@ s32 Camera_Demo5(Camera* camera) {
         rwData->unk_18 = camera->fov;
     }
 
-    Actor_GetFocus(&focalActorFocus, camera->focalActor);
+    focalActorFocus = Actor_GetFocus(camera->focalActor);
 
     sCameraInterfaceFlags = roData->interfaceFlags;
 
@@ -6442,7 +6442,7 @@ s32 Camera_Demo5(Camera* camera) {
             break;
 
         case 999:
-            Actor_GetFocus(&focalActorFocus, camera->focalActor);
+            focalActorFocus = Actor_GetFocus(camera->focalActor);
             camera->animState = 3;
             Distortion_RemoveRequest(DISTORTION_TYPE_MASK_TRANSFORM_1);
             break;
@@ -6655,7 +6655,7 @@ s32 Camera_Special5(Camera* camera) {
 
     OLib_Vec3fDiffToVecGeo(&atToEye, at, eye);
     OLib_Vec3fDiffToVecGeo(&atToEyeNext, at, eyeNext);
-    Actor_GetWorld(&spA8, camera->target);
+    spA8 = Actor_GetWorld(camera->target);
 
     sCameraInterfaceFlags = roData->interfaceFlags;
 
@@ -6850,7 +6850,7 @@ s32 Camera_Special9(Camera* camera) {
     }
 
     if (doorParams->doorActor != NULL) {
-        Actor_GetWorldPosShapeRot(&sp84, doorParams->doorActor);
+        sp84 = Actor_GetWorldPosShapeRot(doorParams->doorActor);
     } else {
         sp84 = *focalActorPosRot;
         sp84.pos.y += focalActorHeight + roData->yOffset;
@@ -7110,7 +7110,7 @@ void Camera_InitFocalActorSettings(Camera* camera, Actor* focalActor) {
     f32 focalActorHeight;
     Vec3f* eye = &camera->eye;
 
-    Actor_GetWorldPosShapeRot(&focalActorPosRot, focalActor);
+    focalActorPosRot = Actor_GetWorldPosShapeRot(focalActor);
 
     camera->focalActor = focalActor;
     focalActorHeight = Camera_GetFocalActorHeight(camera);
@@ -7404,9 +7404,9 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
             // Updates camera info on the actor it's tracking
 
             if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-                Actor_GetWorldPosShapeRot(&focalActorPosRot, camera->focalActor);
+                focalActorPosRot = Actor_GetWorldPosShapeRot(camera->focalActor);
             } else {
-                Actor_GetWorld(&focalActorPosRot, camera->focalActor);
+                focalActorPosRot = Actor_GetWorld(camera->focalActor);
             }
             camera->unk_0F0.x = focalActorPosRot.pos.x - camera->focalActorPosRot.pos.x;
             camera->unk_0F0.y = focalActorPosRot.pos.y - camera->focalActorPosRot.pos.y;
@@ -8103,9 +8103,9 @@ s32 Camera_Copy(Camera* dstCam, Camera* srcCam) {
 
     if (dstCam->focalActor != NULL) {
         if (dstCam->focalActor == &GET_PLAYER(dstCam->play)->actor) {
-            Actor_GetWorldPosShapeRot(&dstCam->focalActorPosRot, dstCam->focalActor);
+            dstCam->focalActorPosRot = Actor_GetWorldPosShapeRot(dstCam->focalActor);
         } else {
-            Actor_GetWorld(&dstCam->focalActorPosRot, dstCam->focalActor);
+            dstCam->focalActorPosRot = Actor_GetWorld(dstCam->focalActor);
         }
         Camera_SetFocalActorAtOffset(dstCam, &dstCam->focalActorPosRot.pos);
     }
@@ -8160,9 +8160,9 @@ s16 func_800E0238(Camera* camera) {
 void Camera_SetFocalActor(Camera* camera, Actor* actor) {
     camera->focalActor = actor;
     if (actor == &GET_PLAYER(camera->play)->actor) {
-        Actor_GetWorldPosShapeRot(&camera->focalActorPosRot, actor);
+        camera->focalActorPosRot = Actor_GetWorldPosShapeRot(actor);
     } else {
-        Actor_GetWorld(&camera->focalActorPosRot, camera->focalActor);
+        camera->focalActorPosRot = Actor_GetWorld(camera->focalActor);
     }
 
     camera->animState = 0;

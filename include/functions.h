@@ -328,9 +328,9 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
 Hilite* Hilite_DrawOpa(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx);
 void func_800B8050(Actor* actor, PlayState* play, s32 flag);
 void func_800B8118(Actor* actor, PlayState* play, s32 flag);
-PosRot* Actor_GetFocus(PosRot* dest, Actor* actor);
-PosRot* Actor_GetWorld(PosRot* dest, Actor* actor);
-PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
+PosRot Actor_GetFocus(Actor* actor);
+PosRot Actor_GetWorld(Actor* actor);
+PosRot Actor_GetWorldPosShapeRot(Actor* actor);
 
 s32 Target_OutsideLeashRange(Actor* actor, Player* player, s32 ignoreLeash);
 s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState);

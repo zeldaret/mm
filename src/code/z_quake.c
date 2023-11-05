@@ -752,7 +752,7 @@ void Distortion_Update(void) {
             player = GET_PLAYER(play);
 
             if (player != NULL) {
-                Actor_GetWorldPosShapeRot(&playerPosRot, &player->actor);
+                playerPosRot = Actor_GetWorldPosShapeRot(&player->actor);
             }
 
             depthPhaseStep = 359.2f;
