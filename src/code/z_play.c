@@ -985,8 +985,8 @@ void Play_UpdateMain(PlayState* this) {
                     freezeFlashTimer = this->actorCtx.freezeFlashTimer;
                     if ((freezeFlashTimer > 0) && ((freezeFlashTimer % 2) != 0)) {
                         this->envCtx.fillScreen = true;
-                        this->envCtx.screenFillColor[0] =
-                            (this->envCtx.screenFillColor[1] = (this->envCtx.screenFillColor[2] = 150));
+                        this->envCtx.screenFillColor[0] = this->envCtx.screenFillColor[1] =
+                            this->envCtx.screenFillColor[2] = 150;
                         this->envCtx.screenFillColor[3] = 80;
                     } else {
                         this->envCtx.fillScreen = false;
