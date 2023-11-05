@@ -964,16 +964,17 @@ void Play_UpdateMain(PlayState* this) {
         Play_UpdateTransition(this);
 
         if (gTransitionTileState != TRANS_TILE_READY) {
-            if ((gSaveContext.gameMode == GAMEMODE_NORMAL &&
-                 ((this->msgCtx.msgMode == MSGMODE_NONE ||
-                   ((this->msgCtx.currentTextId == 0xFF && this->msgCtx.msgMode == MSGMODE_TEXT_DONE) &&
-                    (this->msgCtx.textboxEndType == TEXTBOX_ENDTYPE_41))) ||
-                  ((this->msgCtx.currentTextId >= 0x100) && (this->msgCtx.currentTextId <= 0x200)))) &&
-                this->gameOverCtx.state == GAMEOVER_INACTIVE) {
+            if ((gSaveContext.gameMode == GAMEMODE_NORMAL) &&
+                (((this->msgCtx.msgMode == MSGMODE_NONE)) ||
+                 ((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == MSGMODE_TEXT_DONE) &&
+                  (this->msgCtx.textboxEndType == TEXTBOX_ENDTYPE_41)) ||
+                 ((this->msgCtx.currentTextId >= 0x100) && (this->msgCtx.currentTextId <= 0x200))) &&
+                (this->gameOverCtx.state == GAMEOVER_INACTIVE)) {
                 KaleidoSetup_Update(this);
             }
 
             sp5C = (this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE);
+
             AnimationContext_Reset(&this->animationCtx);
             Object_UpdateEntries(&this->objectCtx);
 
