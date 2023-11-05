@@ -425,9 +425,9 @@ void func_80868B74(EnBox* this, PlayState* play) {
         this->unk_1A0++;
         if ((this->csId1 != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->csId1)) {
             if (this->unk_1A0 == 2) {
-                func_800B724C(play, &this->dyna.actor, PLAYER_CSACTION_4);
+                Player_SetCsAction(play, &this->dyna.actor, PLAYER_CSACTION_4);
             } else if (this->unk_1A0 == 22) {
-                func_800B724C(play, &this->dyna.actor, PLAYER_CSACTION_1);
+                Player_SetCsAction(play, &this->dyna.actor, PLAYER_CSACTION_1);
             }
         }
     } else if (this->unk_1A0 < 60) {

@@ -445,7 +445,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
+                    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
                     this->actionFunc = func_80B11344;
                     break;
 
@@ -600,7 +600,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
+                    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
                     this->actionFunc = func_80B11344;
                 }
                 break;

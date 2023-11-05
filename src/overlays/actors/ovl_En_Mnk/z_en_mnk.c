@@ -1620,7 +1620,7 @@ void EnMnk_MonkeyHanging_WaitForTextboxAfterDunk(EnMnk* this, PlayState* play) {
         }
         Message_CloseTextbox(play);
         this->actionFunc = EnMnk_MonkeyHanging_WaitAfterDunk;
-        func_800B7298(play, NULL, PLAYER_CSACTION_END);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_08);
     }
 }
@@ -1693,7 +1693,7 @@ void EnMnk_MonkeyHanging_Plead(EnMnk* this, PlayState* play) {
             case 0x8E9:
                 this->actionFunc = EnMnk_MonkeyHanging_Dunk2;
                 Message_CloseTextbox(play);
-                func_800B7298(play, &this->picto.actor, PLAYER_CSACTION_WAIT);
+                Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_WAIT);
                 this->unk_3C8 = 60;
                 break;
 

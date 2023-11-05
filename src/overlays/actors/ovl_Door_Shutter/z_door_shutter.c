@@ -462,7 +462,7 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
         }
 
         if ((this->csId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->csId)) {
-            func_800B724C(play, &this->slidingDoor.dyna.actor, PLAYER_CSACTION_1);
+            Player_SetCsAction(play, &this->slidingDoor.dyna.actor, PLAYER_CSACTION_1);
         }
     }
 
@@ -582,7 +582,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
             player->csId = CS_ID_NONE;
-            func_800B7298(play, NULL, PLAYER_CSACTION_115);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_115);
         }
     }
 }
@@ -637,7 +637,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
 void func_808A1C50(DoorShutter* this, PlayState* play) {
     if (this->unk_167++ > 30) {
         if (GET_PLAYER(play)->csAction == PLAYER_CSACTION_115) {
-            func_800B7298(play, NULL, PLAYER_CSACTION_END);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
         }
         DoorShutter_SetupDoor(this, play);
     }
