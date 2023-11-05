@@ -88,7 +88,7 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
         colorIndex = 0;
     }
 
-    Camera_GetQuakeOffset(&quakeOffset, activeCam);
+    quakeOffset = Camera_GetQuakeOffset(activeCam);
 
     if (this->counter < 32) {
         z = Math_SinS(this->counter << 9) * phi_fv1;

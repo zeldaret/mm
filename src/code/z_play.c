@@ -1320,7 +1320,7 @@ void Play_DrawMain(PlayState* this) {
                     Vec3f sp78;
 
                     if (1) {
-                        Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
+                        sp78 = Camera_GetQuakeOffset(GET_ACTIVE_CAM(this));
                         Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
                                     this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
                     }

@@ -73,7 +73,7 @@ void OceffWipe_Draw(Actor* thisx, PlayState* play) {
     Vtx* vtxPtr;
     Vec3f quakeOffset;
 
-    Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
+    quakeOffset = Camera_GetQuakeOffset(GET_ACTIVE_CAM(play));
 
     OPEN_DISPS(play->state.gfxCtx);
 
