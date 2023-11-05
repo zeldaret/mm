@@ -477,7 +477,7 @@ PlayerMeleeWeaponState func_800CBAAC(Camera* camera) {
     }
 }
 
-s32 Camera_GetFocalActorPos(Vec3f* dst, Camera* camera) {
+Vec3f* Camera_GetFocalActorPos(Vec3f* dst, Camera* camera) {
     PosRot focalPosRot;
     Actor* focalActor = camera->focalActor;
 

@@ -5,6 +5,9 @@
 
 struct EnTest4;
 
+#define TEST4_GET_SKYBOX_NUM_STARS(thisx) (((thisx)->params >> 10) * 100)
+#define TEST4_GET_BIG_BELLS_SFX_VOLUME_INDEX(thisx) (((thisx)->params >> 5) & 0xF)
+
 typedef void (*EnTest4ActionFunc)(struct EnTest4*, PlayState*);
 
 typedef struct EnTest4 {
