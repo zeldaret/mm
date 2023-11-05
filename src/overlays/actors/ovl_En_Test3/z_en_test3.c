@@ -528,7 +528,7 @@ void func_80A3F0B0(EnTest3* this, PlayState* play) {
 
 void func_80A3F114(EnTest3* this, PlayState* play) {
     if (this->player.csAction != PLAYER_CSACTION_NONE) {
-        play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_END);
+        play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_END);
     }
 }
 
@@ -645,7 +645,7 @@ s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
             this->player.actor.home.rot.y = this->player.actor.shape.rot.y + 0x8000;
         }
         this->player.stateFlags2 |= PLAYER_STATE2_40000;
-        play->startPlayerCutscene(play, &this->player, -1);
+        play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_NEG1);
     }
     this->unk_D78 = D_80A418A8[arg2->unk_1_4];
     return true;
@@ -668,7 +668,7 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             func_800BC154(play, &play->actorCtx, &this->unk_D90->actor, 4);
             func_800BC154(play, &play->actorCtx, &this->player.actor, 2);
             CutsceneManager_SetReturnCamera(this->subCamId);
-            play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_WAIT);
+            play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_WAIT);
         }
         Actor_OfferTalkNearColChkInfoCylinder(&this->player.actor, play);
         if (this->unk_D88 == 3) {
@@ -690,7 +690,7 @@ s32 func_80A3F8D4(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
         ((postActor = func_80A3F2BC(play, this, ACTOR_EN_PM, ACTORCAT_NPC, 100.0f, 20.0f)) != NULL)) {
         this->player.actor.home.rot.y = Actor_WorldYawTowardActor(&this->player.actor, postActor);
     }
-    play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_97);
+    play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_97);
     return true;
 }
 
@@ -737,7 +737,7 @@ s32 func_80A3FA58(EnTest3* this, PlayState* play) {
             return false;
         }
         if (this->unk_D8A == 90) {
-            play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_21);
+            play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_21);
         }
     } else {
         this->unk_D8A++;
@@ -857,7 +857,7 @@ s32 func_80A3FFD0(EnTest3* this, PlayState* play2) {
         }
     } else {
         SET_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED);
-        play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_110);
+        play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_110);
     }
     return false;
 }
@@ -983,7 +983,7 @@ void func_80A40678(EnTest3* this, PlayState* play) {
             if (scheduleOutput.result == 6) {
                 this->player.actor.home.rot.y = 0x7FFF;
                 this->player.stateFlags2 |= PLAYER_STATE2_40000;
-                play->startPlayerCutscene(play, &this->player, -1);
+                play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_NEG1);
             }
         }
     } else {
@@ -1060,12 +1060,12 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
         !((this->player.actor.category == ACTORCAT_PLAYER) &&
           ((play->actorCtx.flags & ACTORCTX_FLAG_5) || (play->actorCtx.flags & ACTORCTX_FLAG_4)))) {
         if (this->player.csAction != PLAYER_CSACTION_5) {
-            play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_5);
+            play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_5);
         }
         play->actorCtx.flags &= ~ACTORCTX_FLAG_4;
     } else if (this->player.actor.category == ACTORCAT_PLAYER) {
         func_80A409D4(this, play);
-    } else if (play->startPlayerCutscene(play, &this->player, PLAYER_CSACTION_NONE)) {
+    } else if (play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_NONE)) {
         if (this->unk_D88 >= 7) {
             Vec3f worldPos;
 

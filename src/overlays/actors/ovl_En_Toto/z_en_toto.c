@@ -361,7 +361,7 @@ s32 func_80BA3ED4(EnToto* this, PlayState* play) {
 
 s32 func_80BA3EE8(EnToto* this, PlayState* play) {
     if (this->text->unk1 == 2) {
-        func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
     }
     return 0;
 }
@@ -456,7 +456,7 @@ s32 func_80BA42BC(EnToto* this, PlayState* play) {
     Vec3s* end = &D_80BA510C[3];
 
     func_80BA3FB0(this, play);
-    func_800B7298(play, NULL, PLAYER_CSACTION_END);
+    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
     if (player->actor.world.pos.z > -310.0f) {
         if ((player->actor.world.pos.x > -150.0f) || (player->actor.world.pos.z > -172.0f)) {
             phi_s0 = 3;
@@ -476,7 +476,7 @@ s32 func_80BA42BC(EnToto* this, PlayState* play) {
 s32 func_80BA43F4(EnToto* this, PlayState* play) {
     func_80BA3C88(this);
     if (func_80122760(play, &this->unk_2BC, 60.0f)) {
-        func_800B7298(play, NULL, PLAYER_CSACTION_19);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_19);
         return func_80BA4204(this, play);
     }
     return 0;
@@ -484,7 +484,7 @@ s32 func_80BA43F4(EnToto* this, PlayState* play) {
 
 s32 func_80BA445C(EnToto* this, PlayState* play) {
     if (func_80BA4128(this, play)) {
-        func_800B7298(play, NULL, PLAYER_CSACTION_END);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
         return 1;
     }
     return 0;
@@ -546,7 +546,7 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA46D8(EnToto* this, PlayState* play) {
-    func_800B7298(play, NULL, PLAYER_CSACTION_68);
+    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_68);
     Message_DisplayOcarinaStaff(play, sOcarinaActionWindFishPrompts[CUR_FORM]);
     return 0;
 }
@@ -603,7 +603,7 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA49A4(EnToto* this, PlayState* play) {
-    func_800B7298(play, NULL, PLAYER_CSACTION_68);
+    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_68);
     Audio_PlayFanfareWithPlayerIOCustomPort(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4, this->unk2B3 ^ 0xF);
     this->unk2B1 = 4;
     return 0;
@@ -623,7 +623,7 @@ s32 func_80BA4A00(EnToto* this, PlayState* play) {
             if (this->spotlights != NULL) {
                 Actor_Kill(this->spotlights);
             }
-            func_800B7298(play, NULL, PLAYER_CSACTION_69);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_69);
             if (this->unk2B3 == 0xF) {
                 if (CURRENT_DAY == 1) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_50_01);
