@@ -1034,7 +1034,7 @@ void Play_UpdateMain(PlayState* this) {
         s32 i;
 
         this->nextCamera = this->activeCamId;
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < NUM_CAMS; i++) {
             if ((i != this->nextCamera) && (this->cameraPtrs[i] != NULL)) {
                 Camera_Update(this->cameraPtrs[i]);
             }
