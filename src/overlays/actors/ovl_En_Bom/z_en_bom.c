@@ -35,15 +35,15 @@ typedef struct {
 PowderKegFuseSegment sPowderKegFuseSegments[16];
 
 ActorInit En_Bom_InitVars = {
-    ACTOR_EN_BOM,
-    ACTORCAT_EXPLOSIVES,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnBom),
-    (ActorFunc)EnBom_Init,
-    (ActorFunc)EnBom_Destroy,
-    (ActorFunc)EnBom_Update,
-    (ActorFunc)EnBom_Draw,
+    /**/ ACTOR_EN_BOM,
+    /**/ ACTORCAT_EXPLOSIVES,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnBom),
+    /**/ EnBom_Init,
+    /**/ EnBom_Destroy,
+    /**/ EnBom_Update,
+    /**/ EnBom_Draw,
 };
 
 static f32 enBomScales[] = { 0.01f, 0.03f };

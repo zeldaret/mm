@@ -23,13 +23,13 @@
         <Texture Name="gSkullKidUnusedEyeTex" OutName="skull_kid_unused_eye" Format="rgba16" Width="8" Height="8" Offset="0x7EA0" /> <!-- Duplicate of gSkullKidEyeTex -->
 
         <!-- Various Hand DisplayLists -->
-        <DList Name="gSkullKidUntexturedLeftHand" Offset="0x84C0" />
-        <DList Name="gSkullKidOpenLeftHand" Offset="0x87B0" />
-        <DList Name="gSkullKidFluteHoldingLeftHand" Offset="0x8A80" />
-        <DList Name="gSkullKidTwoFingersExtendedLeftHand" Offset="0x90C0" />
-        <DList Name="gSkullKidMaskHoldingRightHand" Offset="0x9710" />
-        <DList Name="gSkullKidUntexturedRightHand" Offset="0x9AC0" />
-        <DList Name="gSkullKidOcarinaHoldingRightHand" Offset="0x9DA0" />
+        <DList Name="gSkullKidUntexturedLeftHandDL" Offset="0x84C0" />
+        <DList Name="gSkullKidOpenLeftHandDL" Offset="0x87B0" />
+        <DList Name="gSkullKidFluteHoldingLeftHandDL" Offset="0x8A80" />
+        <DList Name="gSkullKidTwoFingersExtendedLeftHandDL" Offset="0x90C0" />
+        <DList Name="gSkullKidMaskHoldingRightHandDL" Offset="0x9710" />
+        <DList Name="gSkullKidUntexturedRightHandDL" Offset="0x9AC0" />
+        <DList Name="gSkullKidOcarinaHoldingRightHandDL" Offset="0x9DA0" />
 
         <!-- Head DisplayLists with two different expressions -->
         <DList Name="gSkullKidNormalEyesDL" Offset="0xA530" />

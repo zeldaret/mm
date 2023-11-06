@@ -17,15 +17,15 @@ void EnTest5_HandleBottleAction(EnTest5* this, PlayState* play);
 void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc);
 
 ActorInit En_Test5_InitVars = {
-    ACTOR_EN_TEST5,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTest5),
-    (ActorFunc)EnTest5_Init,
-    (ActorFunc)EnTest5_Destroy,
-    (ActorFunc)EnTest5_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_TEST5,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTest5),
+    /**/ EnTest5_Init,
+    /**/ EnTest5_Destroy,
+    /**/ EnTest5_Update,
+    /**/ NULL,
 };
 
 void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc) {

@@ -36,15 +36,15 @@ void func_80AF2F98(EnTest7* this, PlayState* play);
 void func_80AF30F4(EnTest7* this, PlayState* play);
 
 ActorInit En_Test7_InitVars = {
-    ACTOR_EN_TEST7,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTest7),
-    (ActorFunc)EnTest7_Init,
-    (ActorFunc)EnTest7_Destroy,
-    (ActorFunc)EnTest7_Update,
-    (ActorFunc)EnTest7_Draw,
+    /**/ ACTOR_EN_TEST7,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTest7),
+    /**/ EnTest7_Init,
+    /**/ EnTest7_Destroy,
+    /**/ EnTest7_Update,
+    /**/ EnTest7_Draw,
 };
 
 void EnTest7_SetupAction(EnTest7* this, EnTest7ActionFunc actionFunc) {
@@ -988,6 +988,6 @@ void EnTest7_Draw(Actor* thisx, PlayState* play) {
 
     if (this->unk_144 & 4) {
         Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, this->actor.world.pos, 70.0f,
-                                  5.0f, 0, 0);
+                                  5.0f, 0, false);
     }
 }

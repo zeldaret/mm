@@ -15,15 +15,15 @@ void EnRiverSound_Update(Actor* thisx, PlayState* play);
 void EnRiverSound_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_River_Sound_InitVars = {
-    ACTOR_EN_RIVER_SOUND,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnRiverSound),
-    (ActorFunc)EnRiverSound_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)EnRiverSound_Update,
-    (ActorFunc)EnRiverSound_Draw,
+    /**/ ACTOR_EN_RIVER_SOUND,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnRiverSound),
+    /**/ EnRiverSound_Init,
+    /**/ Actor_Noop,
+    /**/ EnRiverSound_Update,
+    /**/ EnRiverSound_Draw,
 };
 
 void EnRiverSound_Init(Actor* thisx, PlayState* play) {

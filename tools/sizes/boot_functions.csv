@@ -241,7 +241,7 @@ asm/non_matchings/boot/printutils/Sleep_Sec.s,Sleep_Sec,0x80087AC0,0x10
 asm/non_matchings/boot/setcause/__osSetCause.s,__osSetCause,0x80087B00,0x4
 asm/non_matchings/boot/sendmesg/osSendMesg.s,osSendMesg,0x80087B10,0x54
 asm/non_matchings/boot/pfsfreeblocks/osPfsFreeBlocks.s,osPfsFreeBlocks,0x80087C60,0x68
-asm/non_matchings/boot/viextend/osViExtendVStart.s,osViExtendVStart,0x80087E00,0x4
+asm/non_matchings/boot/viextendvstart/osViExtendVStart.s,osViExtendVStart,0x80087E00,0x4
 asm/non_matchings/boot/stopthread/osStopThread.s,osStopThread,0x80087E10,0x30
 asm/non_matchings/boot/recvmesg/osRecvMesg.s,osRecvMesg,0x80087ED0,0x50
 asm/non_matchings/boot/setintmask/osSetIntMask.s,osSetIntMask,0x80088010,0x28
@@ -419,7 +419,7 @@ asm/non_matchings/boot/pfsisplug/__osPfsRequestData.s,__osPfsRequestData,0x80092
 asm/non_matchings/boot/pfsisplug/__osPfsGetInitData.s,__osPfsGetInitData,0x80092680,0x2C
 asm/non_matchings/boot/voicegetstatus/__osVoiceGetStatus.s,__osVoiceGetStatus,0x80092730,0x7C
 asm/non_matchings/boot/cartrominit/osCartRomInit.s,osCartRomInit,0x80092920,0x58
-asm/non_matchings/boot/guS2DInitBg/guS2DInitBg.s,guS2DInitBg,0x80092A80,0x60
+asm/non_matchings/boot/us2dex/guS2DInitBg.s,guS2DInitBg,0x80092A80,0x60
 asm/non_matchings/boot/pfsselectbank/__osPfsSelectBank.s,__osPfsSelectBank,0x80092C00,0x20
 asm/non_matchings/boot/contsetch/osContSetCh.s,osContSetCh,0x80092C80,0x18
 asm/non_matchings/boot/setfpccsr/__osSetFpcCsr.s,__osSetFpcCsr,0x80092CE0,0x4

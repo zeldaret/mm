@@ -36,8 +36,8 @@
         <Texture Name="gDinolfosScaleTex" OutName="dinolfos_scale" Format="rgba16" Width="16" Height="16" Offset="0x84B0" />
         <Texture Name="gDinolfosArmorTex" OutName="dinolfos_armor" Format="rgba16" Width="16" Height="16" Offset="0x86B0" />
         <Texture Name="gDinolfosSpikeTex" OutName="dinolfos_spike" Format="rgba16" Width="8" Height="8" Offset="0x88B0" />
-        <Texture Name="gDinolfosInnerMouth" OutName="dinolfos_inner_mouth" Format="rgba16" Width="16" Height="16" Offset="0x8930" />
-        <Texture Name="gDinolfosKnifeHole" OutName="dinolfos_knife_hole" Format="rgba16" Width="8" Height="8" Offset="0x8B30" />
+        <Texture Name="gDinolfosInnerMouthTex" OutName="dinolfos_inner_mouth" Format="rgba16" Width="16" Height="16" Offset="0x8930" />
+        <Texture Name="gDinolfosKnifeHoleTex" OutName="dinolfos_knife_hole" Format="rgba16" Width="8" Height="8" Offset="0x8B30" />
         <Texture Name="gDinolfosJawTex" OutName="dinolfos_jaw" Format="rgba16" Width="8" Height="16" Offset="0x8BB0" />
         <Texture Name="gDinolfosEyeHoleTex" OutName="dinolfos_eye_hole" Format="rgba16" Width="16" Height="8" Offset="0x8CB0" />
         <Texture Name="gDinolfosClawTex" OutName="dinolfos_claw" Format="rgba16" Width="8" Height="8" Offset="0x8DB0" />
@@ -64,7 +64,7 @@
         <Limb Name="gDinolfosJawLimb" Type="Standard" EnumName="DINOLFOS_LIMB_JAW" Offset="0x94F0" />
         <Limb Name="gDinolfosUpperTailLimb" Type="Standard" EnumName="DINOLFOS_LIMB_UPPER_TAIL" Offset="0x94FC" />
         <Limb Name="gDinolfosLowerTailLimb" Type="Standard" EnumName="DINOLFOS_LIMB_LOWER_TAIL" Offset="0x9508" />
-        <Limb Name="gDinolfosKnife" Type="Standard" EnumName="DINOLFOS_LIMB_KNIFE" Offset="0x9514" />
+        <Limb Name="gDinolfosKnifeLimb" Type="Standard" EnumName="DINOLFOS_LIMB_KNIFE" Offset="0x9514" />
         <Skeleton Name="gDinolfosSkel" Type="Flex" LimbType="Standard" LimbNone="DINOLFOS_LIMB_NONE" LimbMax="DINOLFOS_LIMB_MAX" EnumName="DinolfosLimb" Offset="0x9570" />
 
         <Animation Name="gDinolfosCryAnim" Offset="0x9B70" /> <!-- Original name is "zf2_sakebi" -->

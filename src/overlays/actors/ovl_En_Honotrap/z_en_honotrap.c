@@ -74,15 +74,15 @@ static TexturePtr sSilverEyeTextures[HONOTRAP_EYE_MAX] = {
 static s32 sIsFirstInitEye = true;
 
 ActorInit En_Honotrap_InitVars = {
-    ACTOR_EN_HONOTRAP,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_DANGEON_KEEP,
-    sizeof(EnHonotrap),
-    (ActorFunc)EnHonotrap_Init,
-    (ActorFunc)EnHonotrap_Destroy,
-    (ActorFunc)EnHonotrap_Update,
-    (ActorFunc)EnHonotrap_Draw,
+    /**/ ACTOR_EN_HONOTRAP,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_DANGEON_KEEP,
+    /**/ sizeof(EnHonotrap),
+    /**/ EnHonotrap_Init,
+    /**/ EnHonotrap_Destroy,
+    /**/ EnHonotrap_Update,
+    /**/ EnHonotrap_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[] = {

@@ -2,7 +2,7 @@
     <!-- Son of the butler cursed into the corpse/body of a dead tree by Skullkid-->
     <!--    the player walks past before meeting the Happy Mask Salesman -->
     <File Name="object_nnh" Segment="6">
-        <DList Name="gButlerSonMainBodyDL" Offset="0x1510" />
+        <DList Name="gButlerSonMainBodyDL" Offset="0x1510" /> <!-- Original name is "nnh_body_model" -->
         <Texture Name="gButlerSonTLUT" OutName="tlut_001AA0" Format="rgba16" Width="16" Height="16" Offset="0x1AA0" />
 
         <!-- Similar to MainBodyTex but with dark green mold under the roots -->

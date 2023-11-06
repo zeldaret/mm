@@ -27,7 +27,7 @@ typedef struct EnGirlA {
     /* 0x000 */ Actor actor;
     /* 0x144 */ UNK_TYPE1 unk144[0x44];
     /* 0x188 */ EnGirlAActionFunc actionFunc;
-    /* 0x18C */ s8 objIndex;
+    /* 0x18C */ s8 objectSlot;
     /* 0x190 */ EnGirlAActionFunc mainActionFunc;
     /* 0x194 */ s32 isInitialized;
     /* 0x198 */ u16 choiceTextId;

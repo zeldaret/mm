@@ -34,15 +34,15 @@ s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_);
 f32 func_80BCC448(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
 ActorInit En_Scopenuts_InitVars = {
-    ACTOR_EN_SCOPENUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNT,
-    sizeof(EnScopenuts),
-    (ActorFunc)EnScopenuts_Init,
-    (ActorFunc)EnScopenuts_Destroy,
-    (ActorFunc)EnScopenuts_Update,
-    (ActorFunc)EnScopenuts_Draw,
+    /**/ ACTOR_EN_SCOPENUTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNT,
+    /**/ sizeof(EnScopenuts),
+    /**/ EnScopenuts_Init,
+    /**/ EnScopenuts_Destroy,
+    /**/ EnScopenuts_Update,
+    /**/ EnScopenuts_Draw,
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {
@@ -90,7 +90,7 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gBusinessScrubFlyEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-Gfx* D_80BCCCDC[] = { gKakeraLeafMiddle, gKakeraLeafTip };
+Gfx* D_80BCCCDC[] = { gKakeraLeafMiddleDL, gKakeraLeafTipDL };
 
 Vec3f D_80BCCCE4 = { 0.0f, -0.5f, 0.0f };
 

@@ -25,15 +25,15 @@ void BgDkjailIvy_SetupFadeOut(BgDkjailIvy* this);
 void BgDkjailIvy_FadeOut(BgDkjailIvy* this, PlayState* play);
 
 ActorInit Bg_Dkjail_Ivy_InitVars = {
-    ACTOR_BG_DKJAIL_IVY,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_DKJAIL_OBJ,
-    sizeof(BgDkjailIvy),
-    (ActorFunc)BgDkjailIvy_Init,
-    (ActorFunc)BgDkjailIvy_Destroy,
-    (ActorFunc)BgDkjailIvy_Update,
-    (ActorFunc)BgDkjailIvy_Draw,
+    /**/ ACTOR_BG_DKJAIL_IVY,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_DKJAIL_OBJ,
+    /**/ sizeof(BgDkjailIvy),
+    /**/ BgDkjailIvy_Init,
+    /**/ BgDkjailIvy_Destroy,
+    /**/ BgDkjailIvy_Update,
+    /**/ BgDkjailIvy_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -57,7 +57,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
-    static Gfx* sLeafDlists[] = { gKakeraLeafMiddle, gKakeraLeafTip };
+    static Gfx* sLeafDlists[] = { gKakeraLeafMiddleDL, gKakeraLeafTipDL };
     static s16 sLeafScales[] = { 110, 80, 60, 40 };
     f32 phi_fs0;
     s32 i;

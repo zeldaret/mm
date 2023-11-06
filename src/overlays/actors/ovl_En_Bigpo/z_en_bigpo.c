@@ -84,15 +84,15 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play);
 void EnBigpo_RevealedFire(Actor* thisx, PlayState* play);
 
 ActorInit En_Bigpo_InitVars = {
-    ACTOR_EN_BIGPO,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BIGPO,
-    sizeof(EnBigpo),
-    (ActorFunc)EnBigpo_Init,
-    (ActorFunc)EnBigpo_Destroy,
-    (ActorFunc)EnBigpo_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_BIGPO,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BIGPO,
+    /**/ sizeof(EnBigpo),
+    /**/ EnBigpo_Init,
+    /**/ EnBigpo_Destroy,
+    /**/ EnBigpo_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -222,7 +222,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     this->mainColor.b = 210;
     this->mainColor.a = 0; // fully invisible
 
-    if ((this->switchFlag != 0xFF) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag != BIG_POE_SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
 
@@ -308,7 +308,7 @@ void EnBigpo_SetupSpawnCutscene(EnBigpo* this) {
 void EnBigpo_WaitCutsceneQueue(EnBigpo* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
+        Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_WAIT);
         this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         if (this->actor.params == BIG_POE_TYPE_REGULAR) { // and SUMMONED, got switched earlier
             EnBigpo_SpawnCutsceneStage1(this, play);
@@ -478,7 +478,7 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
         } else { // BIG_POE_TYPE_REGULAR
             CutsceneManager_Stop(this->actor.csId);
         }
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
+        Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_END);
         EnBigpo_SetupIdleFlying(this); // setup idle flying
     }
 }
@@ -756,7 +756,7 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
 
 void EnBigpo_LanternFalling(EnBigpo* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND || this->actor.floorHeight == BGCHECK_Y_MIN) {
-        if (this->switchFlag != 0xFF) {
+        if (this->switchFlag != BIG_POE_SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
 
@@ -1164,7 +1164,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
     }
 
     if (EnBigpo_ApplyDamage(this, play) == 0) {
-        if ((this->actor.isLockedOn) && (this->actionFunc != EnBigpo_WarpingOut) &&
+        if (this->actor.isLockedOn && (this->actionFunc != EnBigpo_WarpingOut) &&
             !(this->collider.base.acFlags & AC_HARD) && (this->actor.category == ACTORCAT_ENEMY)) {
             this->unk20C++;
         } else {

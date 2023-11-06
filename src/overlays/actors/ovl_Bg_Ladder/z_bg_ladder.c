@@ -21,15 +21,15 @@ void BgLadder_FadeIn(BgLadder* this, PlayState* play);
 void BgLadder_DoNothing(BgLadder* this, PlayState* play);
 
 ActorInit Bg_Ladder_InitVars = {
-    ACTOR_BG_LADDER,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_LADDER,
-    sizeof(BgLadder),
-    (ActorFunc)BgLadder_Init,
-    (ActorFunc)BgLadder_Destroy,
-    (ActorFunc)BgLadder_Update,
-    (ActorFunc)BgLadder_Draw,
+    /**/ ACTOR_BG_LADDER,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_LADDER,
+    /**/ sizeof(BgLadder),
+    /**/ BgLadder_Init,
+    /**/ BgLadder_Destroy,
+    /**/ BgLadder_Update,
+    /**/ BgLadder_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -37,10 +37,10 @@ static InitChainEntry sInitChain[] = {
 };
 
 static Gfx* sLadderDLists[] = {
-    object_ladder_DL_0000A0, // 12 Rung
-    object_ladder_DL_0002D0, // 16 Rung
-    object_ladder_DL_000500, // 20 Rung
-    object_ladder_DL_000730, // 24 Rung
+    gWoodenLadder12RungDL,
+    gWoodenLadder16RungDL,
+    gWoodenLadder20RungDL,
+    gWoodenLadder24RungDL,
 };
 
 void BgLadder_Init(Actor* thisx, PlayState* play) {
@@ -55,13 +55,13 @@ void BgLadder_Init(Actor* thisx, PlayState* play) {
     size = thisx->params;
 
     if (size == LADDER_SIZE_12RUNG) {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &object_ladder_Colheader_0001D8);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodenLadder12RungCol);
     } else if (size == LADDER_SIZE_16RUNG) {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &object_ladder_Colheader_000408);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodenLadder16RungCol);
     } else if (size == LADDER_SIZE_20RUNG) {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &object_ladder_Colheader_000638);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodenLadder20RungCol);
     } else if (size == LADDER_SIZE_24RUNG) {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &object_ladder_Colheader_000868);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodenLadder24RungCol);
     } else {
         Actor_Kill(&this->dyna.actor);
         return;

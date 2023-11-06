@@ -36,15 +36,15 @@ void func_809674C8(EnWeatherTag* this, PlayState* play);
 void func_80967608(EnWeatherTag* this, PlayState* play);
 
 ActorInit En_Weather_Tag_InitVars = {
-    ACTOR_EN_WEATHER_TAG,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnWeatherTag),
-    (ActorFunc)EnWeatherTag_Init,
-    (ActorFunc)EnWeatherTag_Destroy,
-    (ActorFunc)EnWeatherTag_Update,
-    (ActorFunc)EnWeatherTag_Draw,
+    /**/ ACTOR_EN_WEATHER_TAG,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnWeatherTag),
+    /**/ EnWeatherTag_Init,
+    /**/ EnWeatherTag_Destroy,
+    /**/ EnWeatherTag_Update,
+    /**/ EnWeatherTag_Draw,
 };
 
 void EnWeatherTag_SetupAction(EnWeatherTag* this, EnWeatherTagActionFunc func) {
@@ -86,7 +86,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             EnWeatherTag_SetupAction(this, func_80966EF0);
             break;
 
-        case WEATHERTAG_TYPE_UNK4:
+        case WEATHERTAG_TYPE_SKYBOX_STARS:
             EnWeatherTag_SetupAction(this, func_80966FEC);
             break;
 
@@ -352,14 +352,11 @@ void func_80966F74(EnWeatherTag* this, PlayState* play) {
     }
 }
 
-// WEATHERTAG_TYPE_UNK4: no visible effect, what does it doooo??
-// used in south clock town??? romani ranch, clock tower rooftop woodfall..? stt
-// all of them have shorter distances though, like 0xA and 0x6, so their locations are important
 void func_80966FEC(EnWeatherTag* this, PlayState* play) {
-    // weirdly, not the same as the other param lookup used in the rest of the file, which is float
-    s32 distance = WEATHER_TAG_RANGE100INT(&this->actor);
-    if (distance > 0) {
-        gSkyboxNumStars = distance;
+    s32 numStars = WEATHER_TAG_GET_SKYBOX_NUM_STARS(&this->actor);
+
+    if (numStars > 0) {
+        gSkyboxNumStars = numStars;
     }
 
     if ((play->sceneId == SCENE_KAIZOKU) && (play->actorCtx.flags & ACTORCTX_FLAG_1)) {

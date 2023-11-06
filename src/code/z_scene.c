@@ -26,7 +26,7 @@ s32 Object_SpawnPersistent(ObjectContext* objectCtx, s16 id) {
 
     if (objectCtx->numEntries < ARRAY_COUNT(objectCtx->slots) - 1) {
         objectCtx->slots[objectCtx->numEntries + 1].segment =
-            ALIGN16((u32)objectCtx->slots[objectCtx->numEntries].segment + size);
+            (void*)ALIGN16((uintptr_t)objectCtx->slots[objectCtx->numEntries].segment + size);
     }
 
     objectCtx->numEntries++;
@@ -65,7 +65,7 @@ void Object_InitContext(GameState* gameState, ObjectContext* objectCtx) {
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepSlot = Object_SpawnPersistent(objectCtx, GAMEPLAY_KEEP);
 
-    gSegments[4] = VIRTUAL_TO_PHYSICAL(objectCtx->slots[objectCtx->mainKeepSlot].segment);
+    gSegments[4] = OS_K0_TO_PHYSICAL(objectCtx->slots[objectCtx->mainKeepSlot].segment);
 }
 
 void Object_UpdateEntries(ObjectContext* objectCtx) {
@@ -157,7 +157,7 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 slot, s16 id) {
 void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd) {
     s32 loadedCount;
     s16 playerObjectId;
-    void* nextObject;
+    void* objectPtr;
 
     play->linkActorEntry =
         (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + play->setupEntranceList[play->curSpawn].spawn;
@@ -170,14 +170,14 @@ void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd) {
     }
 
     loadedCount = Object_SpawnPersistent(&play->objectCtx, OBJECT_LINK_CHILD);
-    nextObject = play->objectCtx.slots[play->objectCtx.numEntries].segment;
+    objectPtr = play->objectCtx.slots[play->objectCtx.numEntries].segment;
     play->objectCtx.numEntries = loadedCount;
     play->objectCtx.numPersistentEntries = loadedCount;
-    playerObjectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
+    playerObjectId = gPlayerFormObjectIds[GET_PLAYER_FORM];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_SpawnPersistent(&play->objectCtx, playerObjectId);
 
-    play->objectCtx.slots[play->objectCtx.numEntries].segment = nextObject;
+    play->objectCtx.slots[play->objectCtx.numEntries].segment = objectPtr;
 }
 
 // SceneTableEntry Header Command 0x01: Actor List
@@ -240,7 +240,7 @@ void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     if (cmd->specialFiles.subKeepId != 0) {
         play->objectCtx.subKeepSlot = Object_SpawnPersistent(&play->objectCtx, cmd->specialFiles.subKeepId);
         // TODO: Segment number enum?
-        gSegments[0x05] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[play->objectCtx.subKeepSlot].segment);
+        gSegments[0x05] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[play->objectCtx.subKeepSlot].segment);
     }
 
     if (cmd->specialFiles.naviQuestHintFileId != NAVI_QUEST_HINTS_NONE) {

@@ -24,15 +24,15 @@ void ObjKzsaku_Rise(ObjKzsaku* this, PlayState* play);
 void func_80C08CB0(ObjKzsaku* this, PlayState* play);
 
 ActorInit Obj_Kzsaku_InitVars = {
-    ACTOR_OBJ_KZSAKU,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_KZSAKU,
-    sizeof(ObjKzsaku),
-    (ActorFunc)ObjKzsaku_Init,
-    (ActorFunc)ObjKzsaku_Destroy,
-    (ActorFunc)ObjKzsaku_Update,
-    (ActorFunc)ObjKzsaku_Draw,
+    /**/ ACTOR_OBJ_KZSAKU,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_KZSAKU,
+    /**/ sizeof(ObjKzsaku),
+    /**/ ObjKzsaku_Init,
+    /**/ ObjKzsaku_Destroy,
+    /**/ ObjKzsaku_Update,
+    /**/ ObjKzsaku_Draw,
 };
 
 void ObjKzsaku_Init(Actor* thisx, PlayState* play) {
@@ -42,7 +42,7 @@ void ObjKzsaku_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->dyna.actor, 1.0f);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
-    CollisionHeader_GetVirtual(&object_kzsaku_Colheader_001118, &col);
+    CollisionHeader_GetVirtual(&gUnderwaterGrateCol, &col);
 
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, thisx, col);
 
@@ -124,7 +124,7 @@ void ObjKzsaku_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_kzsaku_DL_000040);
+    gSPDisplayList(POLY_OPA_DISP++, gUnderwaterGrateDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

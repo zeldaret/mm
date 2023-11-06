@@ -17,15 +17,15 @@ void EnHitTag_Update(Actor* thisx, PlayState* play);
 void EnHitTag_WaitForHit(EnHitTag* this, PlayState* play);
 
 ActorInit En_Hit_Tag_InitVars = {
-    ACTOR_EN_HIT_TAG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnHitTag),
-    (ActorFunc)EnHitTag_Init,
-    (ActorFunc)EnHitTag_Destroy,
-    (ActorFunc)EnHitTag_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_HIT_TAG,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnHitTag),
+    /**/ EnHitTag_Init,
+    /**/ EnHitTag_Destroy,
+    /**/ EnHitTag_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -63,15 +63,15 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex);
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
 ActorInit Obj_Um_InitVars = {
-    ACTOR_OBJ_UM,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_UM,
-    sizeof(ObjUm),
-    (ActorFunc)ObjUm_Init,
-    (ActorFunc)ObjUm_Destroy,
-    (ActorFunc)ObjUm_Update,
-    (ActorFunc)ObjUm_Draw,
+    /**/ ACTOR_OBJ_UM,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_UM,
+    /**/ sizeof(ObjUm),
+    /**/ ObjUm_Init,
+    /**/ ObjUm_Destroy,
+    /**/ ObjUm_Update,
+    /**/ ObjUm_Draw,
 };
 
 static TexturePtr sEyeTextures[] = {

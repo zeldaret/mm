@@ -22,15 +22,15 @@ void EnNnh_SetupDialogue(EnNnh* this);
 void EnNnh_Dialogue(EnNnh* this, PlayState* play);
 
 ActorInit En_Nnh_InitVars = {
-    ACTOR_EN_NNH,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_NNH,
-    sizeof(EnNnh),
-    (ActorFunc)EnNnh_Init,
-    (ActorFunc)EnNnh_Destroy,
-    (ActorFunc)EnNnh_Update,
-    (ActorFunc)EnNnh_Draw,
+    /**/ ACTOR_EN_NNH,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_NNH,
+    /**/ sizeof(EnNnh),
+    /**/ EnNnh_Init,
+    /**/ EnNnh_Destroy,
+    /**/ EnNnh_Update,
+    /**/ EnNnh_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

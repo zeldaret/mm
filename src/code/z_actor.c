@@ -4,12 +4,14 @@
  */
 
 #include "z64actor.h"
+#include "prevent_bss_reordering.h"
 #include "fault.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
 #include "z64horse.h"
 #include "z64quake.h"
 #include "z64rumble.h"
+
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
@@ -728,7 +730,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor,
  * Tests if a current scene switch flag is set.
  */
 s32 Flags_GetSwitch(PlayState* play, s32 flag) {
-    if ((flag >= 0) && (flag < 0x80)) {
+    if ((flag > SWITCH_FLAG_NONE) && (flag < 0x80)) {
         return play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
@@ -738,7 +740,7 @@ s32 Flags_GetSwitch(PlayState* play, s32 flag) {
  * Sets a current scene switch flag.
  */
 void Flags_SetSwitch(PlayState* play, s32 flag) {
-    if ((flag >= 0) && (flag < 0x80)) {
+    if ((flag > SWITCH_FLAG_NONE) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
@@ -747,7 +749,7 @@ void Flags_SetSwitch(PlayState* play, s32 flag) {
  * Unsets a current scene switch flag.
  */
 void Flags_UnsetSwitch(PlayState* play, s32 flag) {
-    if ((flag >= 0) && (flag < 0x80)) {
+    if ((flag > SWITCH_FLAG_NONE) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
     }
 }
@@ -1096,7 +1098,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 }
 
 void Actor_SetObjectDependency(PlayState* play, Actor* actor) {
-    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[actor->objBankIndex].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[actor->objectSlot].segment);
 }
 
 void Actor_Init(Actor* actor, PlayState* play) {
@@ -1119,7 +1121,7 @@ void Actor_Init(Actor* actor, PlayState* play) {
     actor->floorBgId = BGCHECK_SCENE;
 
     ActorShape_Init(&actor->shape, 0.0f, NULL, 0.0f);
-    if (Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, actor->objectSlot)) {
         Actor_SetObjectDependency(play, actor);
         actor->init(actor, play);
         actor->init = NULL;
@@ -1393,32 +1395,53 @@ void Actor_MountHorse(PlayState* play, Player* player, Actor* horse) {
 
 s32 func_800B7200(Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) ||
-           (player->csMode != PLAYER_CSMODE_NONE);
+           (player->csAction != PLAYER_CSACTION_NONE);
 }
 
 void Actor_SpawnHorse(PlayState* play, Player* player) {
     Horse_Spawn(play, player);
 }
 
-s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
+/**
+ * Sets a Player Cutscene Action specified by `csAction`.
+ *
+ * `haltActorsDuringCsAction` being set to false in this function means that all actors will
+ * be able to update while Player is performing the cutscene action.
+ *
+ * Note: due to how player implements initializing the cutscene action state, `haltActorsDuringCsAction`
+ * will only be considered the first time player starts a `csAction`.
+ * Player must leave the cutscene action state and enter it again before halting actors can be toggled.
+ */
+s32 Player_SetCsAction(PlayState* play, Actor* csActor, u8 csAction) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->csMode == PLAYER_CSMODE_5) ||
-        ((csMode == PLAYER_CSMODE_END) && (player->csMode == PLAYER_CSMODE_NONE))) {
+    if ((player->csAction == PLAYER_CSACTION_5) ||
+        ((csAction == PLAYER_CSACTION_END) && (player->csAction == PLAYER_CSACTION_NONE))) {
         return false;
     }
 
-    player->csMode = csMode;
-    player->csActor = actor;
-    player->unk_3BA = false;
+    player->csAction = csAction;
+    player->csActor = csActor;
+    player->cv.haltActorsDuringCsAction = false;
     return true;
 }
 
-s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
+/**
+ * Sets a Player Cutscene Action specified by `csAction`.
+ *
+ * `haltActorsDuringCsAction` being set to true in this function means that eventually `PLAYER_STATE1_20000000` will be
+ * set. This makes it so actors belonging to categories `ACTORCAT_ENEMY` and `ACTORCAT_MISC` will not update while
+ * Player is performing the cutscene action.
+ *
+ * Note: due to how player implements initializing the cutscene action state, `haltActorsDuringCsAction`
+ * will only be considered the first time player starts a `csAction`.
+ * Player must leave the cutscene action state and enter it again before halting actors can be toggled.
+ */
+s32 Player_SetCsActionWithHaltedActors(PlayState* play, Actor* csActor, u8 csAction) {
     Player* player = GET_PLAYER(play);
 
-    if (func_800B724C(play, actor, csMode)) {
-        player->unk_3BA = true;
+    if (Player_SetCsAction(play, csActor, csAction)) {
+        player->cv.haltActorsDuringCsAction = true;
         return true;
     }
     return false;
@@ -1939,8 +1962,8 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  * - Positive values (`PLAYER_IA_NONE < exchangeItemAction < PLAYER_IA_MAX`):
  *    Offers the ability to initiate the conversation with an item from the player.
  *    Not all positive values are implemented properly for this to work.
- *    Working ones are PLAYER_IA_PICTO_BOX and PLAYER_IA_BOTTLE_MIN <= exchangeItemAction < PLAYER_IA_MASK_MIN
- *    Note: While PLAYER_IA_BEANS works, it is special cased to just plant the bean with no talking.
+ *    Working ones are PLAYER_IA_PICTOGRAPH_BOX and PLAYER_IA_BOTTLE_MIN <= exchangeItemAction < PLAYER_IA_MASK_MIN
+ *    Note: While PLAYER_IA_MAGIC_BEANS works, it is special cased to just plant the bean with no talking.
  * - `PLAYER_IA_NONE`:
  *    Allows the player to speak to or check the actor (by pressing A).
  * - `PLAYER_IA_MINUS1`:
@@ -2486,7 +2509,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     actor->audioFlags &= ~ACTOR_AUDIO_FLAG_ALL;
 
     if (actor->init != NULL) {
-        if (Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
+        if (Object_IsLoaded(&play->objectCtx, actor->objectSlot)) {
             Actor_SetObjectDependency(play, actor);
             actor->init(actor, play);
             actor->init = NULL;
@@ -2500,7 +2523,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
             nextActor = actor->next;
         }
     } else {
-        if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
+        if (!Object_IsLoaded(&play->objectCtx, actor->objectSlot)) {
             Actor_Kill(actor);
         } else if ((params->requiredActorFlag && !(actor->flags & params->requiredActorFlag)) ||
                    (((!params->requiredActorFlag) != 0) &&
@@ -2700,8 +2723,8 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     Matrix_Scale(actor->scale.x, actor->scale.y, actor->scale.z, MTXMODE_APPLY);
     Actor_SetObjectDependency(play, actor);
 
-    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[actor->objBankIndex].segment);
-    gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[actor->objBankIndex].segment);
+    gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[actor->objectSlot].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[actor->objectSlot].segment);
 
     if (actor->colorFilterTimer != 0) {
         s32 colorFlag = COLORFILTER_GET_COLORFLAG(actor->colorFilterParams);
@@ -2767,11 +2790,11 @@ void Actor_UpdateFlaggedAudio(Actor* actor) {
     if (sfxId != NA_SE_NONE) {}
 
     if (actor->audioFlags & ACTOR_AUDIO_FLAG_SEQ_MUSIC_BOX_HOUSE) {
-        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
+        Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
     }
 
     if (actor->audioFlags & ACTOR_AUDIO_FLAG_SEQ_KAMARO_DANCE) {
-        func_801A1FB4(SEQ_PLAYER_BGM_MAIN, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
+        Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_MAIN, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
     }
 }
 
@@ -3055,7 +3078,7 @@ void Actor_KillAllWithMissingObject(PlayState* play, ActorContext* actorCtx) {
         actor = actorCtx->actorLists[i].first;
 
         while (actor != NULL) {
-            if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
+            if (!Object_IsLoaded(&play->objectCtx, actor->objectSlot)) {
                 Actor_Kill(actor);
             }
 
@@ -3287,7 +3310,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     s32 pad;
     Actor* actor;
     ActorInit* actorInit;
-    s32 objBankIndex;
+    s32 objectSlot;
     ActorOverlay* overlayEntry;
 
     if (actorCtx->totalLoadedActors >= 0xFF) {
@@ -3299,9 +3322,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
         return NULL;
     }
 
-    objBankIndex = Object_GetSlot(&play->objectCtx, actorInit->objectId);
-    if ((objBankIndex < 0) || ((actorInit->type == ACTORCAT_ENEMY) && Flags_GetClear(play, play->roomCtx.curRoom.num) &&
-                               (actorInit->id != ACTOR_BOSS_05))) {
+    objectSlot = Object_GetSlot(&play->objectCtx, actorInit->objectId);
+    if ((objectSlot <= OBJECT_SLOT_NONE) ||
+        ((actorInit->type == ACTORCAT_ENEMY) && Flags_GetClear(play, play->roomCtx.curRoom.num) &&
+         (actorInit->id != ACTOR_BOSS_05))) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);
         return NULL;
     }
@@ -3323,10 +3347,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     actor->flags = actorInit->flags;
 
     if (actorInit->id == ACTOR_EN_PART) {
-        actor->objBankIndex = rotZ;
+        actor->objectSlot = rotZ;
         rotZ = 0;
     } else {
-        actor->objBankIndex = objBankIndex;
+        actor->objectSlot = objectSlot;
     }
 
     actor->init = actorInit->init;
@@ -3705,7 +3729,7 @@ void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 partParams, Gfx** d
 
         spawnedPart =
             Actor_SpawnAsChild(&play->actorCtx, actor, play, ACTOR_EN_PART, currentMatrix->mf[3][0],
-                               currentMatrix->mf[3][1], currentMatrix->mf[3][2], 0, 0, actor->objBankIndex, partParams);
+                               currentMatrix->mf[3][1], currentMatrix->mf[3][2], 0, 0, actor->objectSlot, partParams);
 
         if (spawnedPart != NULL) {
             part = (EnPart*)spawnedPart;

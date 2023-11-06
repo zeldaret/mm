@@ -104,7 +104,7 @@
 
         <!-- Used in MM -->
         <Animation Name="gDmZl4TurningAroundAnim" Offset="0xF250" />
-        <Animation Name="gDmZl4FacingAwayIdle" Offset="0x11294" />
+        <Animation Name="gDmZl4FacingAwayIdleAnim" Offset="0x11294" />
         <Animation Name="gDmZl4GivingItemStartAnim" Offset="0x11BB8" />
         <Animation Name="gDmZl4GivingItemLoopAnim" Offset="0x122E0" />
         <Animation Name="gDmZl4RaisingOcarinaToPlayAnim" Offset="0x12A84" />
@@ -118,7 +118,7 @@
         <!-- Used in MM --> 
         <Animation Name="gDmZl4TurningAround2Anim" Offset="0x15494" />
         <Animation Name="gDmZl4HandsOverEmblemLoopAnim" Offset="0x15A4C" />
-        <Animation Name="gDmZl4FacingAwayHandsOverEmblemLoop" Offset="0x15DA0" />
+        <Animation Name="gDmZl4FacingAwayHandsOverEmblemLoopAnim" Offset="0x15DA0" />
 
         <!-- Unused in MM, copy of OoT Animations in object_zl4:(0xE050 -> End) --> 
         <Animation Name="gDmZl4Anim_016328" Offset="0x16328" />

@@ -18,15 +18,15 @@ void DmZl_Draw(Actor* thisx, PlayState* play);
 void DmZl_DoNothing(DmZl* this, PlayState* play);
 
 ActorInit Dm_Zl_InitVars = {
-    ACTOR_DM_ZL,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_ZL4,
-    sizeof(DmZl),
-    (ActorFunc)DmZl_Init,
-    (ActorFunc)DmZl_Destroy,
-    (ActorFunc)DmZl_Update,
-    (ActorFunc)DmZl_Draw,
+    /**/ ACTOR_DM_ZL,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_ZL4,
+    /**/ sizeof(DmZl),
+    /**/ DmZl_Init,
+    /**/ DmZl_Destroy,
+    /**/ DmZl_Update,
+    /**/ DmZl_Draw,
 };
 
 typedef enum {
@@ -41,7 +41,7 @@ typedef enum {
 } DmZlAnimation;
 
 static AnimationInfo sAnimationInfo[ZELDA_ANIM_MAX] = {
-    { &gDmZl4FacingAwayHandsOverEmblemLoop, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f }, // ZELDA_ANIM_FACING_AWAY
+    { &gDmZl4FacingAwayHandsOverEmblemLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f }, // ZELDA_ANIM_FACING_AWAY
     { &gDmZl4TurningAround2Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },       // ZELDA_ANIM_TURNING_TOWARD_PLAYER
     { &gDmZl4HandsOverEmblemLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },  // ZELDA_ANIM_FACING_PLAYER
     { &gDmZl4GivingItemStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },      // ZELDA_ANIM_GIVING_OCARINA_START

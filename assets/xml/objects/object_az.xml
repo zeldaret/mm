@@ -64,8 +64,8 @@
         <Animation Name="gBeaverGlitchyLimbSpinAnim" Offset="0x750C" /> <!-- Original name might be "bea_wait". Unused -->
         <Animation Name="gBeaverLaughLeftAnim" Offset="0x7D3C" /> <!-- Original name is "bev_chukletoL" -->
         <Animation Name="gBeaverLaughRightAnim" Offset="0x86AC" /> <!-- Original name is "bev_chukletoR" -->
-        <Animation Name="gBeaverSwimWithSpinningTail" Offset="0x8960" /> <!-- Original name is "bev_propellerswim" -->
-        <Animation Name="gBeaverSwimWithRaisedTail" Offset="0x8BB4" /> <!-- Unused variation of gBeaverSwimWithSpinningTail where the tail just stays upright. Original name is "bev_propellerswim2" -->
+        <Animation Name="gBeaverSwimWithSpinningTailAnim" Offset="0x8960" /> <!-- Original name is "bev_propellerswim" -->
+        <Animation Name="gBeaverSwimWithRaisedTailAnim" Offset="0x8BB4" /> <!-- Unused variation of gBeaverSwimWithSpinningTailAnim where the tail just stays upright. Original name is "bev_propellerswim2" -->
         <Animation Name="gBeaverSwimAnim" Offset="0x8EAC" /> <!-- Original name is "bev_swim" -->
         <Animation Name="gBeaverTalkAnim" Offset="0x925C" /> <!-- Original name is "bev_talk1" -->
         <Animation Name="gBeaverTalkWaveArmsAnim" Offset="0x9B4C" /> <!-- Original name is "bev_talk2" -->

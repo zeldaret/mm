@@ -87,15 +87,15 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 #define SG_SWAMP_HEART_PIECE_SCORE (SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS + (6 * SG_BONUS_POINTS_PER_SECOND))
 
 ActorInit En_Syateki_Man_InitVars = {
-    ACTOR_EN_SYATEKI_MAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SHN,
-    sizeof(EnSyatekiMan),
-    (ActorFunc)EnSyatekiMan_Init,
-    (ActorFunc)EnSyatekiMan_Destroy,
-    (ActorFunc)EnSyatekiMan_Update,
-    (ActorFunc)EnSyatekiMan_Draw,
+    /**/ ACTOR_EN_SYATEKI_MAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SHN,
+    /**/ sizeof(EnSyatekiMan),
+    /**/ EnSyatekiMan_Init,
+    /**/ EnSyatekiMan_Destroy,
+    /**/ EnSyatekiMan_Update,
+    /**/ EnSyatekiMan_Draw,
 };
 
 typedef enum {

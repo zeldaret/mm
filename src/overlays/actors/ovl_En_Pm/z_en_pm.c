@@ -473,15 +473,15 @@ static UNK_TYPE D_80AFB764[] = {
 };
 
 ActorInit En_Pm_InitVars = {
-    ACTOR_EN_PM,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MM,
-    sizeof(EnPm),
-    (ActorFunc)EnPm_Init,
-    (ActorFunc)EnPm_Destroy,
-    (ActorFunc)EnPm_Update,
-    (ActorFunc)EnPm_Draw,
+    /**/ ACTOR_EN_PM,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MM,
+    /**/ sizeof(EnPm),
+    /**/ EnPm_Init,
+    /**/ EnPm_Destroy,
+    /**/ EnPm_Update,
+    /**/ EnPm_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -581,7 +581,7 @@ s32 func_80AF7BAC(EnPm* this) {
 
         case 2:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40)) {
-                D_801F4E78 = 0;
+                D_801F4E78 = CLOCK_TIME(0, 0);
                 this->unk_38C++;
             }
             break;

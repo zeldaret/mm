@@ -5,6 +5,8 @@
 
 struct EnPart;
 
+#define ENPART_PARAMS(type) (type)
+
 typedef void (*EnPartActionFunc)(struct EnPart*, PlayState*);
 
 typedef enum {

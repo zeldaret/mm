@@ -78,32 +78,32 @@ typedef enum {
 } BeaverAnimation;
 
 static AnimationSpeedInfo sAnimationSpeedInfo[BEAVER_ANIM_IDLE_FACE_MAX] = {
-    { &gBeaverIdleAnim, 1.0f, ANIMMODE_LOOP, -10.0f },            // BEAVER_ANIM_IDLE
-    { &gBeaverWalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },             // BEAVER_ANIM_WALK
-    { &gBeaverSwimWithSpinningTail, 1.0f, ANIMMODE_LOOP, -5.0f }, // BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL
-    { &gBeaverSwimWithRaisedTail, 1.0f, ANIMMODE_LOOP, -5.0f },   // BEAVER_ANIM_SWIM_WITH_RAISED_TAIL
-    { &gBeaverTalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },             // BEAVER_ANIM_TALK
-    { &gBeaverTalkWaveArmsAnim, 1.0f, ANIMMODE_LOOP, -5.0f },     // BEAVER_ANIM_TALK_WAVE_ARMS
-    { &gBeaverLaughRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },       // BEAVER_ANIM_LAUGH_RIGHT
-    { &gBeaverLaughLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },        // BEAVER_ANIM_LAUGH_LEFT
-    { &gBeaverSwimAnim, 2.0f, ANIMMODE_LOOP, -5.0f },             // BEAVER_ANIM_SWIM
-    { &gBeaverTalkToLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },       // BEAVER_ANIM_TALK_TO_LEFT
-    { &gBeaverTalkToRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },      // BEAVER_ANIM_TALK_TO_RIGHT
-    { &gBeaverBowAnim, 1.0f, ANIMMODE_ONCE, -5.0f },              // BEAVER_ANIM_BOW
-    { &gBeaverIdleFaceLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },     // BEAVER_ANIM_IDLE_FACE_LEFT
-    { &gBeaverIdleFaceRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },    // BEAVER_ANIM_IDLE_FACE_RIGHT
+    { &gBeaverIdleAnim, 1.0f, ANIMMODE_LOOP, -10.0f },                // BEAVER_ANIM_IDLE
+    { &gBeaverWalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },                 // BEAVER_ANIM_WALK
+    { &gBeaverSwimWithSpinningTailAnim, 1.0f, ANIMMODE_LOOP, -5.0f }, // BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL
+    { &gBeaverSwimWithRaisedTailAnim, 1.0f, ANIMMODE_LOOP, -5.0f },   // BEAVER_ANIM_SWIM_WITH_RAISED_TAIL
+    { &gBeaverTalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },                 // BEAVER_ANIM_TALK
+    { &gBeaverTalkWaveArmsAnim, 1.0f, ANIMMODE_LOOP, -5.0f },         // BEAVER_ANIM_TALK_WAVE_ARMS
+    { &gBeaverLaughRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },           // BEAVER_ANIM_LAUGH_RIGHT
+    { &gBeaverLaughLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },            // BEAVER_ANIM_LAUGH_LEFT
+    { &gBeaverSwimAnim, 2.0f, ANIMMODE_LOOP, -5.0f },                 // BEAVER_ANIM_SWIM
+    { &gBeaverTalkToLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },           // BEAVER_ANIM_TALK_TO_LEFT
+    { &gBeaverTalkToRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },          // BEAVER_ANIM_TALK_TO_RIGHT
+    { &gBeaverBowAnim, 1.0f, ANIMMODE_ONCE, -5.0f },                  // BEAVER_ANIM_BOW
+    { &gBeaverIdleFaceLeftAnim, 1.0f, ANIMMODE_LOOP, -5.0f },         // BEAVER_ANIM_IDLE_FACE_LEFT
+    { &gBeaverIdleFaceRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },        // BEAVER_ANIM_IDLE_FACE_RIGHT
 };
 
 ActorInit En_Az_InitVars = {
-    ACTOR_EN_AZ,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AZ,
-    sizeof(EnAz),
-    (ActorFunc)EnAz_Init,
-    (ActorFunc)EnAz_Destroy,
-    (ActorFunc)EnAz_Update,
-    (ActorFunc)EnAz_Draw,
+    /**/ ACTOR_EN_AZ,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AZ,
+    /**/ sizeof(EnAz),
+    /**/ EnAz_Init,
+    /**/ EnAz_Destroy,
+    /**/ EnAz_Update,
+    /**/ EnAz_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

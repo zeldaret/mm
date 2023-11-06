@@ -40,15 +40,15 @@ void func_80C02DAC(EnBomjimb* this, PlayState* play);
 static Actor* D_80C03170 = NULL;
 
 ActorInit En_Bomjimb_InitVars = {
-    ACTOR_EN_BOMJIMB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_CS,
-    sizeof(EnBomjimb),
-    (ActorFunc)EnBomjimb_Init,
-    (ActorFunc)EnBomjimb_Destroy,
-    (ActorFunc)EnBomjimb_Update,
-    (ActorFunc)EnBomjimb_Draw,
+    /**/ ACTOR_EN_BOMJIMB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_CS,
+    /**/ sizeof(EnBomjimb),
+    /**/ EnBomjimb_Init,
+    /**/ EnBomjimb_Destroy,
+    /**/ EnBomjimb_Update,
+    /**/ EnBomjimb_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

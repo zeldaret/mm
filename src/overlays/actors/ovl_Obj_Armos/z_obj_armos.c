@@ -24,15 +24,15 @@ void func_809A57D8(ObjArmos* this);
 void func_809A57F4(ObjArmos* this, PlayState* play);
 
 ActorInit Obj_Armos_InitVars = {
-    ACTOR_OBJ_ARMOS,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_AM,
-    sizeof(ObjArmos),
-    (ActorFunc)ObjArmos_Init,
-    (ActorFunc)ObjArmos_Destroy,
-    (ActorFunc)ObjArmos_Update,
-    (ActorFunc)ObjArmos_Draw,
+    /**/ ACTOR_OBJ_ARMOS,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_AM,
+    /**/ sizeof(ObjArmos),
+    /**/ ObjArmos_Init,
+    /**/ ObjArmos_Destroy,
+    /**/ ObjArmos_Update,
+    /**/ ObjArmos_Draw,
 };
 
 s16 D_809A5BB0[] = { 1, -1, 0, 0 };

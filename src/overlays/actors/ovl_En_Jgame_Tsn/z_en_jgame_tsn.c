@@ -37,15 +37,15 @@ s32 func_80C149B0(PlayState* play, EnJgameTsnStruct* arg1);
 s32 func_80C14BCC(EnJgameTsn* this, PlayState* play);
 
 ActorInit En_Jgame_Tsn_InitVars = {
-    ACTOR_EN_JGAME_TSN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TSN,
-    sizeof(EnJgameTsn),
-    (ActorFunc)EnJgameTsn_Init,
-    (ActorFunc)EnJgameTsn_Destroy,
-    (ActorFunc)EnJgameTsn_Update,
-    (ActorFunc)EnJgameTsn_Draw,
+    /**/ ACTOR_EN_JGAME_TSN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TSN,
+    /**/ sizeof(EnJgameTsn),
+    /**/ EnJgameTsn_Init,
+    /**/ EnJgameTsn_Destroy,
+    /**/ EnJgameTsn_Update,
+    /**/ EnJgameTsn_Draw,
 };
 
 typedef enum EnJgameTsnAnimation {

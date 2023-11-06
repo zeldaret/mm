@@ -26,15 +26,15 @@ void func_80B84EF0(BgDblueWaterfall* this, PlayState* play);
 void func_80B84F20(BgDblueWaterfall* this, PlayState* play);
 
 ActorInit Bg_Dblue_Waterfall_InitVars = {
-    ACTOR_BG_DBLUE_WATERFALL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_DBLUE_OBJECT,
-    sizeof(BgDblueWaterfall),
-    (ActorFunc)BgDblueWaterfall_Init,
-    (ActorFunc)BgDblueWaterfall_Destroy,
-    (ActorFunc)BgDblueWaterfall_Update,
-    (ActorFunc)BgDblueWaterfall_Draw,
+    /**/ ACTOR_BG_DBLUE_WATERFALL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_DBLUE_OBJECT,
+    /**/ sizeof(BgDblueWaterfall),
+    /**/ BgDblueWaterfall_Init,
+    /**/ BgDblueWaterfall_Destroy,
+    /**/ BgDblueWaterfall_Update,
+    /**/ BgDblueWaterfall_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

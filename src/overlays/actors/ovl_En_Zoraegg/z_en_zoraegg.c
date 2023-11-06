@@ -6,7 +6,6 @@
 
 #include "z_en_zoraegg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_zoraegg/object_zoraegg.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -39,15 +38,15 @@ void func_80B32C34(EnZoraegg* this, PlayState* play);
 void func_80B32D08(EnZoraegg* this, PlayState* play);
 
 ActorInit En_Zoraegg_InitVars = {
-    ACTOR_EN_ZORAEGG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_ZORAEGG,
-    sizeof(EnZoraegg),
-    (ActorFunc)EnZoraegg_Init,
-    (ActorFunc)EnZoraegg_Destroy,
-    (ActorFunc)EnZoraegg_Update,
-    (ActorFunc)EnZoraegg_Draw,
+    /**/ ACTOR_EN_ZORAEGG,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_ZORAEGG,
+    /**/ sizeof(EnZoraegg),
+    /**/ EnZoraegg_Init,
+    /**/ EnZoraegg_Destroy,
+    /**/ EnZoraegg_Update,
+    /**/ EnZoraegg_Draw,
 };
 
 void func_80B31590(EnZoraegg* this) {
@@ -81,9 +80,9 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
     };
 
     Actor_SetScale(&this->actor, 0.006f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_zoraegg_Skel_004C90, &object_zoraegg_Anim_005098,
-                       this->jointTable, this->morphTable, 7);
-    Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_005098);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gZoraBabySkel, &gZoraBabySwimAnim, this->jointTable, this->morphTable,
+                       ZORA_BABY_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &gZoraBabySwimAnim);
     ActorShape_Init(&this->actor.shape, 1100.0f, NULL, 0.0f);
 
     this->actionFunc = func_80B32084;
@@ -166,7 +165,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
         case ZORA_EGG_TYPE_08:
         case ZORA_EGG_TYPE_09:
             this->cueType = cueTypes[ZORA_EGG_GET_TYPE(&this->actor) - ZORA_EGG_TYPE_03];
-            Animation_PlayOnce(&this->skelAnime, &object_zoraegg_Anim_001E08);
+            Animation_PlayOnce(&this->skelAnime, &gZoraBabyHatchAnim);
             this->unk_1EC = 1;
             this->unk_1EE = 0;
             this->unk_1EF = 0;
@@ -187,7 +186,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
             this->cueType = cueTypes[ZORA_EGG_GET_TYPE(&this->actor) - ZORA_EGG_TYPE_0A];
             this->unk_1EC = 2;
             this->actionFunc = func_80B324B0;
-            Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
+            Animation_PlayLoop(&this->skelAnime, &gZoraBabyNoteAnim);
             this->unk_1EE = 0;
             this->unk_1ED = 0;
             this->unk_1EA |= 3;
@@ -426,13 +425,13 @@ void func_80B324B0(EnZoraegg* this, PlayState* play) {
         if (this->unk_1EA & 4) {
             if (Cutscene_IsCueInChannel(play, this->cueType) &&
                 (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 3)) {
-                Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
+                Animation_PlayLoop(&this->skelAnime, &gZoraBabyNoteAnim);
                 this->unk_1EA &= ~4;
             }
         } else {
             if (Cutscene_IsCueInChannel(play, this->cueType) &&
                 (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 4)) {
-                Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004E04);
+                Animation_PlayLoop(&this->skelAnime, &gZoraBabySongLearnedAnim);
                 this->unk_1EA |= 4;
             }
         }
@@ -444,14 +443,14 @@ void func_80B324B0(EnZoraegg* this, PlayState* play) {
             this->unk_1E4 = Rand_ZeroFloat(5.0f);
         }
     } else if (this->unk_1EA & 4) {
-        Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
+        Animation_PlayLoop(&this->skelAnime, &gZoraBabyNoteAnim);
         this->unk_1EA &= ~4;
     }
 }
 
 void func_80B32644(EnZoraegg* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
+        Animation_PlayLoop(&this->skelAnime, &gZoraBabyNoteAnim);
         this->unk_1EE = 0;
         this->unk_1EA |= 2;
     }
@@ -474,8 +473,8 @@ void func_80B326F4(EnZoraegg* this, PlayState* play) {
 
     if (Cutscene_IsCueInChannel(play, this->cueType) &&
         (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id == 3)) {
-        Animation_Change(&this->skelAnime, &object_zoraegg_Anim_004D20, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&object_zoraegg_Anim_004D20), ANIMMODE_ONCE, 5.0f);
+        Animation_Change(&this->skelAnime, &gZoraBabyFormNoteAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gZoraBabyFormNoteAnim), ANIMMODE_ONCE, 5.0f);
         this->unk_1E8 = 0;
         this->actionFunc = func_80B32644;
         SET_WEEKEVENTREG(WEEKEVENTREG_19_40);
@@ -495,14 +494,14 @@ void func_80B32820(EnZoraegg* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_1E8 >= 2) {
             this->actionFunc = func_80B326F4;
-            Animation_Change(&this->skelAnime, &object_zoraegg_Anim_005098, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&object_zoraegg_Anim_005098), ANIMMODE_LOOP, 10.0f);
+            Animation_Change(&this->skelAnime, &gZoraBabySwimAnim, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&gZoraBabySwimAnim), ANIMMODE_LOOP, 10.0f);
             this->unk_1E8 = 0;
             SkelAnime_Update(&this->skelAnime);
             return;
         }
 
-        Animation_PlayOnce(&this->skelAnime, &object_zoraegg_Anim_0005D4);
+        Animation_PlayOnce(&this->skelAnime, &gZoraBabySwimUpAnim);
         this->unk_1E8 += 1;
         SkelAnime_Update(&this->skelAnime);
     }
@@ -520,7 +519,7 @@ void func_80B32928(EnZoraegg* this, PlayState* play) {
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        Animation_PlayOnce(&this->skelAnime, &object_zoraegg_Anim_0005D4);
+        Animation_PlayOnce(&this->skelAnime, &gZoraBabySwimUpAnim);
         this->unk_1EA |= 1;
         this->actionFunc = func_80B32820;
         this->unk_1E8 = 0;
@@ -653,13 +652,13 @@ void EnZoraegg_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (DECR(this->unk_1F4) == 0) {
-        this->unk_1F4 = Rand_S16Offset(60, 60);
+    if (DECR(this->blinkTimer) == 0) {
+        this->blinkTimer = Rand_S16Offset(60, 60);
     }
 
-    this->unk_1F2 = this->unk_1F4;
-    if (this->unk_1F2 >= 3) {
-        this->unk_1F2 = 0;
+    this->eyeIndex = this->blinkTimer;
+    if (this->eyeIndex >= 3) {
+        this->eyeIndex = 0;
     }
 }
 
@@ -730,14 +729,14 @@ void func_80B331C8(Actor* thisx, PlayState* play) {
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);
-        gSPDisplayList(POLY_OPA_DISP++, object_zoraegg_DL_005250);
+        gSPDisplayList(POLY_OPA_DISP++, gZoraEggDL);
     } else {
         Gfx_SetupDL72(POLY_XLU_DISP++);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_1ED);
-        gSPDisplayList(POLY_XLU_DISP++, object_zoraegg_DL_005250);
+        gSPDisplayList(POLY_XLU_DISP++, gZoraEggDL);
     }
 
     Matrix_Pop();
@@ -856,16 +855,15 @@ void EnZoraegg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-TexturePtr D_80B33950[] = { object_zoraegg_Tex_003430, object_zoraegg_Tex_004430, object_zoraegg_Tex_004830 };
-
 void func_80B33818(Actor* thisx, PlayState* play) {
+    static TexturePtr sZoraBabyEyeTextures[] = { gZoraBabyEyeOpenTex, gZoraBabyEyeHalfTex, gZoraBabyEyeClosedTex };
     EnZoraegg* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B33950[this->unk_1F2]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sZoraBabyEyeTextures[this->eyeIndex]));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnZoraegg_OverrideLimbDraw, EnZoraegg_PostLimbDraw, &this->actor);

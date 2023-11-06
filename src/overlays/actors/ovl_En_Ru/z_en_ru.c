@@ -18,15 +18,15 @@ void EnRu_Draw(Actor* thisx, PlayState* play);
 void EnRu_DoNothing(EnRu* this, PlayState* play);
 
 ActorInit En_Ru_InitVars = {
-    ACTOR_EN_RU,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_RU2,
-    sizeof(EnRu),
-    (ActorFunc)EnRu_Init,
-    (ActorFunc)EnRu_Destroy,
-    (ActorFunc)EnRu_Update,
-    (ActorFunc)EnRu_Draw,
+    /**/ ACTOR_EN_RU,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_RU2,
+    /**/ sizeof(EnRu),
+    /**/ EnRu_Init,
+    /**/ EnRu_Destroy,
+    /**/ EnRu_Update,
+    /**/ EnRu_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
