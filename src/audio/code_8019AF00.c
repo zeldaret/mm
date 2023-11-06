@@ -3427,21 +3427,15 @@ void AudioOcarina_PlayCustomSequence(void) {
 s32 AudioOcarina_CreateCustomSequence(void) {
     OcarinaNote* prevNote;
     u16 i;
-    u16 phi_s4;
-    u16 delay;
+    u16 delay = 0;
     u8 absPitch;
     s8 adjBendIndex;
-    s8 prevBend;
-    u8 prevVibrato;
-    u8 isLegato;
+    u8 prevVibrato = 0;
+    s8 prevBend = 0;
+    u8 isLegato = false;
+    u16 phi_s4 = 0;
     u16 temp1; // prevNoteLength, reused temp
     u16 temp2;
-
-    delay = 0;
-    prevVibrato = 0;
-    prevBend = 0;
-    isLegato = false;
-    phi_s4 = 0;
 
     sCustomSequencePc = 39; // .channel chan_loop
 
