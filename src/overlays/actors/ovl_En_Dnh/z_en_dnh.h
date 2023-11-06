@@ -14,7 +14,7 @@ typedef struct EnDnh {
     /* 0x144 */ EnDnhActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ u16 unk18C;
-    /* 0x190 */ s32 msgEventScript;
+    /* 0x190 */ s32* msgEventScript;
     /* 0x194 */ s32 unk194;
     /* 0x198 */ s16 unk198;
     /* 0x19A */ UNK_TYPE1 pad19A[0x2];

@@ -26,7 +26,7 @@ s32 Object_SpawnPersistent(ObjectContext* objectCtx, s16 id) {
 
     if (objectCtx->numEntries < ARRAY_COUNT(objectCtx->slots) - 1) {
         objectCtx->slots[objectCtx->numEntries + 1].segment =
-            ALIGN16((u32)objectCtx->slots[objectCtx->numEntries].segment + size);
+            (void*)ALIGN16((uintptr_t)objectCtx->slots[objectCtx->numEntries].segment + size);
     }
 
     objectCtx->numEntries++;

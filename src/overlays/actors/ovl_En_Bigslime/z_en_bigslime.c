@@ -850,7 +850,7 @@ void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
         this->subCamId = SUB_CAM_ID_DONE;
         CutsceneManager_Stop(this->csId);
         this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
-        func_800B724C(play, &this->actor, PLAYER_CSACTION_END);
+        Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_END);
     }
 }
 
@@ -939,7 +939,7 @@ void EnBigslime_SetupCutsceneStartBattle(EnBigslime* this, PlayState* play) {
     this->bigslimeCollider[0].base.acFlags &= ~AC_ON;
 
     Math_Vec3f_Copy(&subCam->at, &this->actor.focus.pos);
-    func_800B7298(play, &this->actor, PLAYER_CSACTION_4);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_4);
 
     player->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     player->actor.world.pos.x = Math_SinS(this->actor.yawTowardsPlayer) * 347.0f + this->actor.world.pos.x;
@@ -987,7 +987,7 @@ void EnBigslime_SetupCallMinislime(EnBigslime* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGekkoCallAnim, 5.0f);
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_GREET);
     this->callTimer = 0;
-    func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
     this->actionFunc = EnBigslime_CallMinislime;
 }
 
@@ -1011,7 +1011,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, PlayState* play) {
         EnBigslime_InitFallMinislime(this);
         play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
         this->callTimer = 35;
-        func_800B7298(play, &this->actor, PLAYER_CSACTION_4);
+        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_4);
     }
 }
 
@@ -2546,7 +2546,7 @@ void EnBigslime_PlayCutscene(EnBigslime* this, PlayState* play) {
     } else if (CutsceneManager_IsNext(this->csId)) {
         CutsceneManager_Start(this->csId, &this->actor);
         if (this->actionFuncStored != EnBigslime_SquishFlat) {
-            func_800B724C(play, &this->actor, PLAYER_CSACTION_WAIT);
+            Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_WAIT);
         }
 
         this->subCamId = CutsceneManager_GetCurrentSubCamId(this->csId);

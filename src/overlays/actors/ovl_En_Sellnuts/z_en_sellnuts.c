@@ -473,7 +473,7 @@ void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80ADBBEC;
-        func_800B7298(play, NULL, PLAYER_CSACTION_19);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_19);
     }
 }
 

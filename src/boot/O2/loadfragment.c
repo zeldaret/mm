@@ -135,10 +135,10 @@ void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelo
     }
 }
 
-size_t Fragment_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart, void* allocatedRamAddr,
+size_t Fragment_Load(uintptr_t vromStart, uintptr_t vromEnd, void* vramStart, void* allocatedRamAddr,
                      size_t allocatedBytes) {
     size_t size = vromEnd - vromStart;
-    void* end;
+    uintptr_t end;
     s32 pad;
     OverlayRelocationSection* ovlRelocs;
 
@@ -148,7 +148,7 @@ size_t Fragment_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart
     end = (uintptr_t)allocatedRamAddr + size;
     DmaMgr_SendRequest0(allocatedRamAddr, vromStart, size);
 
-    ovlRelocs = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
+    ovlRelocs = (OverlayRelocationSection*)(end - ((s32*)end)[-1]);
 
     if (gLoadLogSeverity >= 3) {}
 
@@ -161,11 +161,11 @@ size_t Fragment_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart
 
     if (gLoadLogSeverity >= 3) {}
 
-    Fragment_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
+    Fragment_Relocate(allocatedRamAddr, ovlRelocs, (uintptr_t)vramStart);
 
     if (ovlRelocs->bssSize != 0) {
         if (gLoadLogSeverity >= 3) {}
-        bzero(end, ovlRelocs->bssSize);
+        bzero((void*)end, ovlRelocs->bssSize);
     }
 
     osWritebackDCache(allocatedRamAddr, allocatedBytes);
@@ -176,9 +176,9 @@ size_t Fragment_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart
     return allocatedBytes;
 }
 
-void* Fragment_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart) {
+void* Fragment_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, void* vramStart) {
     size_t size = vromEnd - vromStart;
-    void* end;
+    uintptr_t end;
     void* allocatedRamAddr;
     uintptr_t ovlOffset;
     OverlayRelocationSection* ovlRelocs;
@@ -195,8 +195,8 @@ void* Fragment_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t
 
     if (gLoadLogSeverity >= 3) {}
 
-    ovlOffset = (uintptr_t)end - 4;
-    ovlRelocs = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
+    ovlOffset = end - sizeof(s32);
+    ovlRelocs = (OverlayRelocationSection*)(end - ((s32*)end)[-1]);
 
     if (1) {}
 
@@ -212,15 +212,15 @@ void* Fragment_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t
     }
 
     end = (uintptr_t)allocatedRamAddr + size;
-    ovlRelocs = (OverlayRelocationSection*)((uintptr_t)end - *(uintptr_t*)ovlOffset);
+    ovlRelocs = (OverlayRelocationSection*)(end - *(uintptr_t*)ovlOffset);
 
     if (gLoadLogSeverity >= 3) {}
 
-    Fragment_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
+    Fragment_Relocate(allocatedRamAddr, ovlRelocs, (uintptr_t)vramStart);
 
     if (ovlRelocs->bssSize != 0) {
         if (gLoadLogSeverity >= 3) {}
-        bzero(end, ovlRelocs->bssSize);
+        bzero((void*)end, ovlRelocs->bssSize);
     }
 
     osInvalICache(allocatedRamAddr, allocatedBytes);
