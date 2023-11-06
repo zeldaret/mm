@@ -5211,10 +5211,6 @@ s16 D_801D0464[] = {
     0x1B8E,
 };
 
-#ifdef NON_MATCHING
-// Down to a single compiler-managed stack variable
-// Also contains in-function data
-// https://decomp.me/scratch/QcQ0a
 void Message_Update(PlayState* play) {
     static u8 D_801D0468 = 0;
     MessageContext* msgCtx = &play->msgCtx;
@@ -5730,7 +5726,7 @@ void Message_Update(PlayState* play) {
                 ((play->activeCamId == CAM_ID_MAIN) ||
                  ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF))) &&
                 (play->msgCtx.ocarinaMode == OCARINA_MODE_END)) {
-                if ((gSaveContext.prevHudVisibility == HUD_VISIBILITY_IDLE) ||
+                if (((u32)gSaveContext.prevHudVisibility == HUD_VISIBILITY_IDLE) ||
                     (gSaveContext.prevHudVisibility == HUD_VISIBILITY_NONE) ||
                     (gSaveContext.prevHudVisibility == HUD_VISIBILITY_NONE_ALT)) {
                     gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
@@ -6001,10 +5997,6 @@ void Message_Update(PlayState* play) {
             break;
     }
 }
-#else
-u8 D_801D0468 = 0;
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_Update.s")
-#endif
 
 void Message_SetTables(PlayState* play) {
     play->msgCtx.messageEntryTableNes = D_801C6B98;
