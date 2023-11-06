@@ -792,9 +792,8 @@ void EnHonotrap_DrawFlameGroup(Actor* thisx, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(flameGroup->flameList); i++) {
         flameElem = &flameGroup->flameList[i];
         if (flameElem->isDrawn) {
-            gSPSegment(
-                POLY_XLU_DISP++, 0x08,
-                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, flameElem->flameScroll, 32, 128));
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, flameElem->flameScroll, 32, 128));
             Matrix_SetTranslateRotateYXZ(flameElem->pos.x, flameElem->pos.y - (4000.0f * flameElem->unkC),
                                          flameElem->pos.z, &camDir);
             Matrix_Scale(((fabsf(Math_SinS((s16)(camDir.y - thisx->shape.rot.y) >> 1)) * 0.2f) + 1.7f) *
