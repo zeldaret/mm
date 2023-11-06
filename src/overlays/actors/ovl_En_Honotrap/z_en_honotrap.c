@@ -510,7 +510,7 @@ void EnHonotrap_FlameMove(EnHonotrap* this, PlayState* play) {
         shieldVec.z = -player->shieldMf.zz;
         EnHonotrap_GetNormal(&shieldNorm, &shieldVec);
         tempVel = thisx->velocity;
-        func_80179F64(&tempVel, &shieldNorm, &thisx->velocity);
+        Math3D_Vec3fReflect(&tempVel, &shieldNorm, &thisx->velocity);
         thisx->speed = this->speedMod * 0.5f;
         thisx->world.rot.y = Math_Atan2S_XY(thisx->velocity.z, thisx->velocity.x);
         EnHonotrap_SetupFlameVanish(this);
