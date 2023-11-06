@@ -62,17 +62,17 @@
         <Skeleton Name="gPostmanSkel" Type="Flex" LimbType="Standard" LimbNone="POSTMAN_LIMB_NONE" LimbMax="POSTMAN_LIMB_MAX" EnumName="PostmanLimb" Offset="0x96E8" />
         <Limb Name="gPostmanWaistLimb" Type="Standard" EnumName="POSTMAN_LIMB_WAIST" Offset="0x95F8" />
         <Limb Name="gPostmanLeftThighLimb" Type="Standard" EnumName="POSTMAN_LIMB_LEFT_THIGH" Offset="0x9604" />
-        <Limb Name="gPostmanLeftLegLimb" Type="Standard" EnumName="POSTMAN_LIMB_LEFT_LEG" Offset="0x9610" />
+        <Limb Name="gPostmanLeftShinLimb" Type="Standard" EnumName="POSTMAN_LIMB_LEFT_SHIN" Offset="0x9610" />
         <Limb Name="gPostmanLeftFootLimb" Type="Standard" EnumName="POSTMAN_LIMB_LEFT_FOOT" Offset="0x961C" />
         <Limb Name="gPostmanRightThighLimb" Type="Standard" EnumName="POSTMAN_LIMB_RIGHT_THIGH" Offset="0x9628" />
-        <Limb Name="gPostmanRightLegLimb" Type="Standard" EnumName="POSTMAN_LIMB_RIGHT_LEG" Offset="0x9634" />
+        <Limb Name="gPostmanRightShinLimb" Type="Standard" EnumName="POSTMAN_LIMB_RIGHT_SHIN" Offset="0x9634" />
         <Limb Name="gPostmanRightFootLimb" Type="Standard" EnumName="POSTMAN_LIMB_RIGHT_FOOT" Offset="0x9640" />
         <Limb Name="gPostmanTorsoLimb" Type="Standard" EnumName="POSTMAN_LIMB_TORSO" Offset="0x964C" />
-        <Limb Name="gPostmanLeftShoulderLimb" Type="Standard" EnumName="POSTMAN_LIMB_LEFT_SHOULDER" Offset="0x9658" />
-        <Limb Name="gPostmanLeftArmLimb" Type="Standard" EnumName="POSTMAN_LIMB_LEFT_ARM" Offset="0x9664" />
+        <Limb Name="gPostmanLeftUpperArmLimb" Type="Standard" EnumName="POSTMAN_LIMB_LEFT_UPPER_ARM" Offset="0x9658" />
+        <Limb Name="gPostmanLeftForarmLimb" Type="Standard" EnumName="POSTMAN_LIMB_LEFT_FORARM" Offset="0x9664" />
         <Limb Name="gPostmanLeftHandLimb" Type="Standard" EnumName="POSTMAN_LIMB_LEFT_HAND" Offset="0x9670" />
-        <Limb Name="gPostmanRightShoulderLimb" Type="Standard" EnumName="POSTMAN_LIMB_RIGHT_SHOULDER" Offset="0x967C" />
-        <Limb Name="gPostmanRightArmLimb" Type="Standard" EnumName="POSTMAN_LIMB_RIGHT_ARM" Offset="0x9688" />
+        <Limb Name="gPostmanRightUpperArmLimb" Type="Standard" EnumName="POSTMAN_LIMB_RIGHT_UPPER_ARM" Offset="0x967C" />
+        <Limb Name="gPostmanRightForarmLimb" Type="Standard" EnumName="POSTMAN_LIMB_RIGHT_FORARM" Offset="0x9688" />
         <Limb Name="gPostmanRightHandLimb" Type="Standard" EnumName="POSTMAN_LIMB_RIGHT_HAND" Offset="0x9694" />
         <Limb Name="gPostmanHeadLimb" Type="Standard" EnumName="POSTMAN_LIMB_HEAD" Offset="0x96A0" />
         
