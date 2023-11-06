@@ -530,12 +530,6 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     f32 temp_ft4;
     u8 var_a0;
     s16 i;
-    u32 two; //! FAKE: See @note below:
-
-    //! @note: The 2 constant from the `gWeatherMode` switch branch was being reused when checking `CURRENT_DAY`
-    //! A fake temp is created `two` to prevent reloading the value. However, the stack was too big.
-    //! To reduce the stack, the `(void)0, ` is removed from `gSaveContext.save.time` when calculating `envCtx->sunPos`
-    //! To mimic the regalloc from the `(void)0, `, the Fake match `two = gSaveContext.save.time` is used
 
     CREG(1) = 0;
 
@@ -646,10 +640,9 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     envCtx->adjLightSettings.fogNear = 0;
     envCtx->adjLightSettings.zFar = 0;
 
-    //! FAKE: See @note above
-    envCtx->sunPos.x = -(Math_SinS((two = gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
-    envCtx->sunPos.y = (Math_CosS((two = gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
-    envCtx->sunPos.z = (Math_CosS((two = gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
+    envCtx->sunPos.x = -(Math_SinS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    envCtx->sunPos.y = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    envCtx->sunPos.z = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
 
     envCtx->windDirection.x = 80;
     envCtx->windDirection.y = 80;
@@ -724,28 +717,28 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
         D_801F4E74 = 1.0f;
     }
 
-    two = 2;
     if (gSaveContext.retainWeatherMode || (gSaveContext.respawnFlag != 0)) {
-        if (gWeatherMode == two) {
-            //! FAKE: can be removed by making a switch case from `gWeatherMode`
-            //! Need to use a constant instead of a fake temp `two`
-            if (1) {}
+        switch ((u32)gWeatherMode) {
+            case WEATHER_MODE_2:
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
+                    play->skyboxId = SKYBOX_3;
+                    envCtx->lightConfig = 5;
+                    envCtx->changeLightNextConfig = 5;
+                    D_801F4E74 = 1.0f;
+                } else {
+                    gWeatherMode = WEATHER_MODE_CLEAR;
+                }
+                break;
 
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
-                play->skyboxId = SKYBOX_3;
-                envCtx->lightConfig = 5;
-                envCtx->changeLightNextConfig = 5;
-                D_801F4E74 = 1.0f;
-            } else {
-                gWeatherMode = WEATHER_MODE_CLEAR;
-            }
+            default:
+                break;
         }
 
         play->envCtx.precipitation[PRECIP_SNOW_CUR] = 0;
         play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
 
         if (gWeatherMode == WEATHER_MODE_1) {
-            if ((CURRENT_DAY == two) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
+            if (((u32)CURRENT_DAY == 2) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(17, 30))) {
                 if (Environment_GetStormState(play) != STORM_STATE_OFF) {
                     play->envCtx.precipitation[PRECIP_RAIN_MAX] = 60;
