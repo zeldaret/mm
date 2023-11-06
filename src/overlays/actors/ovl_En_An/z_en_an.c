@@ -2032,11 +2032,11 @@ s32 EnAn_HandleDialogue(EnAn* this, PlayState* play) {
                 case 0x28A7: // Enjoy the carnival
                 case 0x28A8: // Did you have a reservation?
                 case 0x28AA: // One moment please
-                case 0x28AB: // I expected your arrival for afternon. Your room is on the second floor
-                case 0x28AC: // Have you been to the plaza yet? They are putting the carnival stuff
+                case 0x28AB: // I expected your arrival for afternoon. Your room is on the second floor
+                case 0x28AC: // Have you been to the plaza yet? They are putting up the carnival stuff
                 case 0x28AD: // Relax...
-                case 0x28AE: // oesn't exis
-                case 0x28B0: // It's hard to find one's way on the city goro
+                case 0x28AE: // doesn't exist
+                case 0x28B0: // It's hard to find one's way on the city, goro
                 case 0x28B2: // I should have a reservation-goro
                 case 0x28B3: // I do have your reservation. Your room is on the second floor
                 case 0x28B4: // The place is falling apart-goro
