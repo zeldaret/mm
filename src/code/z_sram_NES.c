@@ -1421,7 +1421,6 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
                     Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
                 } else {
-                    // phi_s2 = true;
                     Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
 
                     // test checksum of main save
