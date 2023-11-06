@@ -257,7 +257,7 @@ void EnHonotrap_InitFlameGroup(EnHonotrap* this, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(flameGroup->flameList); i++) {
         flameGroup->flameList[i].flameScroll = flameScroll;
         flameScroll += (s32)Rand_ZeroFloat(300.0f) + 100;
-        flameScroll &= 0x1FF;
+        flameScroll %= 0x200U;
     }
 
     Actor_PlaySfx(&this->actor, NA_SE_EV_FLAME_IGNITION);
@@ -649,7 +649,7 @@ void EnHonotrap_FlameGroup(EnHonotrap* this, PlayState* play) {
         var_fs0 += 1.0f / 6;
         flameElem->unkC *= (0.006f * (((1.0f - flameGroup->unk4) * 0.8f) + 0.2f));
         flameElem->flameScroll += flameScrollDisplacement;
-        flameElem->flameScroll %= 0x200u;
+        flameElem->flameScroll %= 0x200U;
     }
 
     if (sp78 || (this->timer <= 0)) {
@@ -723,7 +723,7 @@ void EnHonotrap_UpdateFlame(Actor* thisx, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
     this->actionFunc(this, play);
     this->flameScroll -= 20;
-    this->flameScroll %= 0x200u;
+    this->flameScroll %= 0x200U;
 }
 
 void EnHonotrap_UpdateFlameGroup(Actor* thisx, PlayState* play) {
@@ -774,7 +774,7 @@ void EnHonotrap_DrawFlame(Actor* thisx, PlayState* play) {
 
 void EnHonotrap_DrawFlameGroup(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnHonotrap* this = ((EnHonotrap*)thisx);
+    EnHonotrap* this = (EnHonotrap*)thisx;
     EnHonotrapFlameElement* flameElem;
     EnHonotrapFlameGroup* flameGroup = &this->flameGroup;
     s32 i;
@@ -794,7 +794,7 @@ void EnHonotrap_DrawFlameGroup(Actor* thisx, PlayState* play) {
         if (flameElem->isDrawn) {
             gSPSegment(
                 POLY_XLU_DISP++, 0x08,
-                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, flameElem->flameScroll, 0x20, 0x80));
+                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, flameElem->flameScroll, 32, 128));
             Matrix_SetTranslateRotateYXZ(flameElem->pos.x, flameElem->pos.y - (4000.0f * flameElem->unkC),
                                          flameElem->pos.z, &camDir);
             Matrix_Scale(((fabsf(Math_SinS((s16)(camDir.y - thisx->shape.rot.y) >> 1)) * 0.2f) + 1.7f) *
