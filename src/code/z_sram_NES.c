@@ -1382,11 +1382,10 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
     u16 sp76;
     u16 sp64;
     u16 phi_s2;
-    u16 phi_s7;
+    u16 pad;
     u16 sp6E;
     u16 newCheckSum;
     u16 maskCount;
-    u8 temp;
 
     if (gSaveContext.flashSaveAvailable) {
         D_801F6AF0 = gSaveContext.save.time;
