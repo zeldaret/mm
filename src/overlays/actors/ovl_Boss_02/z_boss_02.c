@@ -2172,7 +2172,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
 
             if (this->unk_1D1C == 45) {
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_21);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_21);
                 sTwinmoldMusicStartTimer = KREG(91) + 43;
             }
 
@@ -2186,7 +2186,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
 
             if (this->unk_1D1C == 100) {
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_115);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_115);
             }
 
             if (this->unk_1D1C == 112) {
@@ -2225,7 +2225,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
@@ -2286,7 +2286,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 this->unk_1D20 = 0;
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                 sp68->unk_0144 = 10;

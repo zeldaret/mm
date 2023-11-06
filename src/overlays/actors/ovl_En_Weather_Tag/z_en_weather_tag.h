@@ -22,14 +22,14 @@ typedef struct EnWeatherTag {
 #define WEATHER_TAG_TYPE(thisx) ((thisx)->params & 0xF)
 #define WEATHER_TAG_PATHID(thisx) (((thisx)->params >> 4) & 0xF)
 #define WEATHER_TAG_RANGE100(thisx) ((u8)(((thisx)->params >> 8) & 0xFF) * 100.0f)
-#define WEATHER_TAG_RANGE100INT(thisx) ((u8)(((thisx)->params >> 8) & 0xFF) * 100)
+#define WEATHER_TAG_GET_SKYBOX_NUM_STARS(thisx) ((u8)(((thisx)->params >> 8) & 0xFF) * 100)
 
 typedef enum {
     /* 0 */ WEATHERTAG_TYPE_UNK0,
     /* 1 */ WEATHERTAG_TYPE_UNK1,
     /* 2 */ WEATHERTAG_TYPE_WINTERFOG,
     /* 3 */ WEATHERTAG_TYPE_UNK3,
-    /* 4 */ WEATHERTAG_TYPE_UNK4,
+    /* 4 */ WEATHERTAG_TYPE_SKYBOX_STARS,
     /* 5 */ WEATHERTAG_TYPE_UNK5,
     /* 6 */ WEATHERTAG_TYPE_WATERMURK,
     /* 7 */ WEATHERTAG_TYPE_LOCALDAY2RAIN

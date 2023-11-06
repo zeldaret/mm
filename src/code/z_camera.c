@@ -477,7 +477,7 @@ PlayerMeleeWeaponState func_800CBAAC(Camera* camera) {
     }
 }
 
-s32 Camera_GetFocalActorPos(Vec3f* dst, Camera* camera) {
+Vec3f* Camera_GetFocalActorPos(Vec3f* dst, Camera* camera) {
     PosRot focalPosRot;
     Actor* focalActor = camera->focalActor;
 
@@ -7368,7 +7368,7 @@ s32 Camera_RequestGiantsMaskSetting(Camera* camera) {
     }
 }
 
-Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
+Vec3s Camera_Update(Camera* camera) {
     Vec3f viewAt;
     Vec3f viewEye;
     Vec3f viewUp;
@@ -7392,8 +7392,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
 
     // Camera of status CUT only updates to this point
     if (camera->status == CAM_STATUS_CUT) {
-        *inputDir = camera->inputDir;
-        return inputDir;
+        return camera->inputDir;
     }
 
     sUpdateCameraDirection = false;
@@ -7537,8 +7536,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
 
         // Camera of status WAIT only updates to this point
         if (camera->status == CAM_STATUS_WAIT) {
-            *inputDir = camera->inputDir;
-            return inputDir;
+            return camera->inputDir;
         }
 
         camera->behaviorFlags = 0;
@@ -7568,8 +7566,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
 
     // Camera of status UNK3 only updates to this point
     if (camera->status == CAM_STATUS_UNK3) {
-        *inputDir = camera->inputDir;
-        return inputDir;
+        return camera->inputDir;
     }
 
     /**
@@ -7627,9 +7624,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         camera->inputDir.z = 0;
     }
 
-    *inputDir = camera->inputDir;
-
-    return inputDir;
+    return camera->inputDir;
 }
 
 s32 func_800DF498(Camera* camera) {

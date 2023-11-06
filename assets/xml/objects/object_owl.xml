@@ -2,14 +2,14 @@
     <!-- Object for Kaepora Gaebora (Owl) -->
     <File Name="object_owl" Segment="6">
         <!-- Animation -->
-        <Animation Name="gOwlTakeoffAnim" Offset="0x1168" />
+        <Animation Name="gOwlTakeoffAnim" Offset="0x1168" /> <!-- Original name is "hovering" -->
         
         <!-- Single feather -->
-        <DList Name="gOwlFeatherDL" Offset="0x1200" />
+        <DList Name="gOwlFeatherDL" Offset="0x1200" /> <!-- Original name is "owl_feather_model" -->
         <Texture Name="gOwlFeatherTex" OutName="owl_feather" Format="rgba16" Width="16" Height="32" Offset="0x1290" />
         
         <!-- Animation -->
-        <Animation Name="gOwlFlyAnim" Offset="0x1ADC" />
+        <Animation Name="gOwlFlyAnim" Offset="0x1ADC" /> <!-- Original name is "owl_fly" -->
         
         <!-- Owl Flying DList -->
         <DList Name="gOwlFlyingLowerBodyDL" Offset="0x5050" />
@@ -78,9 +78,9 @@
         <Skeleton Name="gOwlFlyingSkel" Type="Flex" LimbType="Standard" LimbNone="OWL_FLYING_LIMB_NONE" LimbMax="OWL_FLYING_LIMB_MAX" EnumName="OwlFlyingLimb" Offset="0xC5F8" />
         
         <!-- Animations -->
-        <Animation Name="gOwlGlideAnim" Offset="0xC6D4" />
-        <Animation Name="gOwlUnfoldWingsAnim" Offset="0xCB94" />
-        <Animation Name="gOwlPerchAnim" Offset="0xCDB0" />
+        <Animation Name="gOwlGlideAnim" Offset="0xC6D4" /> <!-- Original name is "owl_kakku" -->
+        <Animation Name="gOwlUnfoldWingsAnim" Offset="0xCB94" /> <!-- Original name is "owl_openwing" -->
+        <Animation Name="gOwlPerchAnim" Offset="0xCDB0" /> <!-- Original name is "owl_wait" -->
         
         <!-- Owl Perching DList -->
         <DList Name="gOwlPerchingLeftWingDL" Offset="0xF220" />

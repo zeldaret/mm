@@ -531,7 +531,6 @@ beginseg
     include "build/src/code/z_player_call.o"
     include "build/src/code/z_shrink_window.o"
     include "build/src/code/cutscene_camera.o"
-    include "build/data/code/cutscene_camera.bss.o"
     include "build/src/code/z_kaleido_manager.o"
     include "build/src/code/z_kaleido_scope_call.o"
     include "build/src/code/z_fbdemo_dlftbls.o"
@@ -656,7 +655,7 @@ beginseg
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_NES.o"
     #ifdef NON_MATCHING
         include "build/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
-    #else 
+    #else
         include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
     #endif
 endseg
@@ -1340,8 +1339,7 @@ beginseg
     name "ovl_En_Honotrap"
     compress
     include "build/src/overlays/actors/ovl_En_Honotrap/z_en_honotrap.o"
-    include "build/data/ovl_En_Honotrap/ovl_En_Honotrap.data.o"
-    include "build/data/ovl_En_Honotrap/ovl_En_Honotrap.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Honotrap/ovl_En_Honotrap_reloc.o"
 endseg
 
 beginseg
@@ -2578,8 +2576,7 @@ beginseg
     name "ovl_Dm_Tsg"
     compress
     include "build/src/overlays/actors/ovl_Dm_Tsg/z_dm_tsg.o"
-    include "build/data/ovl_Dm_Tsg/ovl_Dm_Tsg.data.o"
-    include "build/data/ovl_Dm_Tsg/ovl_Dm_Tsg.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Tsg/ovl_Dm_Tsg_reloc.o"
 endseg
 
 beginseg
@@ -3289,9 +3286,7 @@ beginseg
     name "ovl_Obj_Takaraya_Wall"
     compress
     include "build/src/overlays/actors/ovl_Obj_Takaraya_Wall/z_obj_takaraya_wall.o"
-    include "build/data/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall.data.o"
-    include "build/data/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall.bss.o"
-    include "build/data/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall_reloc.o"
 endseg
 
 beginseg
