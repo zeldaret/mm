@@ -655,7 +655,7 @@ beginseg
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_NES.o"
     #ifdef NON_MATCHING
         include "build/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
-    #else 
+    #else
         include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
     #endif
 endseg
@@ -1339,8 +1339,7 @@ beginseg
     name "ovl_En_Honotrap"
     compress
     include "build/src/overlays/actors/ovl_En_Honotrap/z_en_honotrap.o"
-    include "build/data/ovl_En_Honotrap/ovl_En_Honotrap.data.o"
-    include "build/data/ovl_En_Honotrap/ovl_En_Honotrap.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Honotrap/ovl_En_Honotrap_reloc.o"
 endseg
 
 beginseg
