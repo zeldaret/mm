@@ -246,14 +246,13 @@ void Camera_SetUpdateRatesSlow(Camera* camera) {
     camera->fovUpdateRate = 0.01f;
 }
 
-Vec3f* Camera_Vec3sToVec3f(Vec3f* dest, Vec3s* src) {
-    Vec3f copy;
+Vec3f Camera_Vec3sToVec3f(Vec3s* src) {
+    Vec3f dest;
 
-    copy.x = src->x;
-    copy.y = src->y;
-    copy.z = src->z;
+    dest.x = src->x;
+    dest.y = src->y;
+    dest.z = src->z;
 
-    *dest = copy;
     return dest;
 }
 
@@ -477,17 +476,15 @@ PlayerMeleeWeaponState func_800CBAAC(Camera* camera) {
     }
 }
 
-Vec3f* Camera_GetFocalActorPos(Vec3f* dst, Camera* camera) {
+Vec3f Camera_GetFocalActorPos(Camera* camera) {
     PosRot focalPosRot;
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        *dst = ((Player*)focalActor)->bodyPartsPos[PLAYER_BODYPART_WAIST];
-        return dst;
+        return ((Player*)focalActor)->bodyPartsPos[PLAYER_BODYPART_WAIST];
     } else {
         focalPosRot = Actor_GetWorldPosShapeRot(camera->focalActor);
-        *dst = focalPosRot.pos;
-        return dst;
+        return focalPosRot.pos;
     }
 }
 
@@ -1076,7 +1073,7 @@ f32 func_800CCCEC(Camera* camera, s16 reset) {
 /**
  * Calculates a new Up vector from the pitch, yaw, roll
  */
-Vec3f* Camera_CalcUpVec(Vec3f* viewUp, s16 pitch, s16 yaw, s16 roll) {
+Vec3f Camera_CalcUpVec(s16 pitch, s16 yaw, s16 roll) {
     f32 sinP = Math_SinS(pitch);
     f32 cosP = Math_CosS(pitch);
     f32 sinY = Math_SinS(yaw);
@@ -1119,9 +1116,7 @@ Vec3f* Camera_CalcUpVec(Vec3f* viewUp, s16 pitch, s16 yaw, s16 roll) {
     up.y = DOTXYZ(baseUp, rollMtxRow2);
     up.z = DOTXYZ(baseUp, rollMtxRow3);
 
-    *viewUp = up;
-
-    return viewUp;
+    return up;
 }
 
 f32 Camera_ClampLerpScale(Camera* camera, f32 maxLerpScale) {
@@ -1183,14 +1178,13 @@ void Camera_UpdateInterface(s32 interfaceFlags) {
     }
 }
 
-Vec3f* Camera_BgCheckCorner(Vec3f* dst, Vec3f* linePointA, Vec3f* linePointB, CameraCollision* pointAColChk,
-                            CameraCollision* pointBColChk) {
+Vec3f Camera_BgCheckCorner(Vec3f* linePointA, Vec3f* linePointB, CameraCollision* pointAColChk,
+                           CameraCollision* pointBColChk) {
     Vec3f closestPoint;
 
     func_800CAA14(pointAColChk->poly, pointBColChk->poly, linePointA, linePointB, &closestPoint);
-    *dst = closestPoint;
 
-    return dst;
+    return closestPoint;
 }
 
 /**
@@ -1891,8 +1885,8 @@ void Camera_CalcDefaultSwing(Camera* camera, VecGeo* arg1, VecGeo* arg2, f32 arg
 
     switch (sp8C) {
         case 1:
-            Camera_BgCheckCorner(&swing->collisionClosePoint, &camera->at, &camera->eyeNext, &swing->atEyeColChk,
-                                 &swing->eyeAtColChk);
+            swing->collisionClosePoint =
+                Camera_BgCheckCorner(&camera->at, &camera->eyeNext, &swing->atEyeColChk, &swing->eyeAtColChk);
             // fallthrough
         case 2:
             peekAroundPoint.x = swing->collisionClosePoint.x + (swing->atEyeColChk.norm.x + swing->eyeAtColChk.norm.x);
@@ -2610,7 +2604,7 @@ s32 Camera_Normal0(Camera* camera) {
 
     if (RELOAD_PARAMS(camera)) {
         bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
-        Camera_Vec3sToVec3f(&rwData->unk_00, &bgCamFuncData->pos);
+        rwData->unk_00 = Camera_Vec3sToVec3f(&bgCamFuncData->pos);
         rwData->unk_20 = bgCamFuncData->rot.x;
         rwData->unk_22 = bgCamFuncData->rot.y;
         rwData->unk_24 = focalActorPosRot->pos.y;
@@ -2802,7 +2796,7 @@ s32 Camera_Parallel1(Camera* camera) {
 
     sp80 = OLib_Vec3fDiffToVecGeo(at, eye);
     sp78 = OLib_Vec3fDiffToVecGeo(at, eyeNext);
-    Camera_GetFocalActorPos(&spA4, camera);
+    spA4 = Camera_GetFocalActorPos(camera);
 
     switch (camera->animState) {
         case 20:
@@ -4792,7 +4786,7 @@ s32 Camera_Fixed1(Camera* camera) {
     } else {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
         bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
-        Camera_Vec3sToVec3f(&rwData->eyePosRotTarget.pos, &bgCamFuncData->pos);
+        rwData->eyePosRotTarget.pos = Camera_Vec3sToVec3f(&bgCamFuncData->pos);
 
         rwData->eyePosRotTarget.rot = bgCamFuncData->rot;
         rwData->fov = bgCamFuncData->fov;
@@ -4913,7 +4907,7 @@ s32 Camera_Fixed2(Camera* camera) {
         bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
         if (bgCamFuncData != NULL) {
             if (!(roData->interfaceFlags & FIXED2_FLAG_1)) {
-                Camera_Vec3sToVec3f(&rwData->unk_00, &bgCamFuncData->pos);
+                rwData->unk_00 = Camera_Vec3sToVec3f(&bgCamFuncData->pos);
             } else {
                 if (camera->focalActor != &GET_PLAYER(camera->play)->actor) {
                     player = GET_PLAYER(camera->play);
@@ -5471,7 +5465,7 @@ s32 Camera_Unique0(Camera* camera) {
     switch (camera->animState) {
         case 0:
             bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
-            Camera_Vec3sToVec3f(&rwData->unk_1C, &bgCamFuncData->pos);
+            rwData->unk_1C = Camera_Vec3sToVec3f(&bgCamFuncData->pos);
             camera->eye = camera->eyeNext = rwData->unk_1C;
             rwData->unk_34 = bgCamFuncData->rot;
 
@@ -6884,7 +6878,7 @@ s32 Camera_Special9(Camera* camera) {
             // Setup for the camera moving behind the door
             if (roData->interfaceFlags & SPECIAL9_FLAG_0) {
                 bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
-                Camera_Vec3sToVec3f(eyeNext, &bgCamFuncData->pos);
+                *eyeNext = Camera_Vec3sToVec3f(&bgCamFuncData->pos);
                 spB8 = *eye = *eyeNext;
             } else {
                 s16 camEyeSide;
@@ -7585,7 +7579,7 @@ Vec3s Camera_Update(Camera* camera) {
         viewEye.y = camera->eye.y + camShake.eyeOffset.y;
         viewEye.z = camera->eye.z + camShake.eyeOffset.z;
         sp3C = OLib_Vec3fDiffToVecGeo(&viewEye, &viewAt);
-        Camera_CalcUpVec(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll + camShake.upRollOffset);
+        viewUp = Camera_CalcUpVec(sp3C.pitch, sp3C.yaw, camera->roll + camShake.upRollOffset);
         viewFov = camera->fov + CAM_BINANG_TO_DEG(camShake.fovOffset);
     } else if (sIsFalse) {
         //! condition is impossible to achieve
@@ -7598,7 +7592,7 @@ Vec3s Camera_Update(Camera* camera) {
         viewAt = camera->at;
         viewEye = camera->eye;
         sp3C = OLib_Vec3fDiffToVecGeo(&viewEye, &viewAt);
-        Camera_CalcUpVec(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll);
+        viewUp = Camera_CalcUpVec(sp3C.pitch, sp3C.yaw, camera->roll);
         viewFov = camera->fov;
     }
 
