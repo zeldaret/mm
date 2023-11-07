@@ -14007,7 +14007,7 @@
     0x80B52AF0:("EnGk_PostLimbDraw",),
     0x80B52D8C:("EnGk_TransformLimbDraw",),
     0x80B52F74:("EnGk_Draw",),
-    0x80B53840:("EnAn_InitializeObjectSlots",),
+    0x80B53840:("EnAn_InitObjectSlots",),
     0x80B539CC:("EnAn_FindActor",),
     0x80B53A7C:("func_80B53A7C",),
     0x80B53B3C:("EnAn_FindDoor",),

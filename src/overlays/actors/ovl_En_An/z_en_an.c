@@ -794,7 +794,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-s32 EnAn_InitializeObjectSlots(EnAn* this, PlayState* play) {
+s32 EnAn_InitObjectSlots(EnAn* this, PlayState* play) {
     s32 ret = false;
 
     if ((this->roomNum != play->roomCtx.curRoom.num) && (play->roomCtx.status == 0) && !this->slotsInitialized) {
@@ -1018,7 +1018,7 @@ static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
 s32 EnAn_UpdateSkelAnime(EnAn* this, PlayState* play) {
     s8 originalObjectSlot = this->actor.objectSlot;
     s8 otherObjectSlot = OBJECT_SLOT_NONE;
-    s32 ret = 0;
+    s32 ret = false;
 
     if ((this->animIndex >= ENAN_ANIMOBJ_AN4) && (this->an4ObjectSlot > OBJECT_SLOT_NONE)) {
         otherObjectSlot = this->an4ObjectSlot;
@@ -1105,7 +1105,7 @@ s32 EnAn_ChangeAnim(EnAn* this, PlayState* play, EnAnAnimation animIndex) {
 }
 
 void EnAn_UpdateCollider(EnAn* this, PlayState* play) {
-    f32 temp;
+    f32 height;
     s32 pad;
     Vec3f sp24;
 
@@ -1119,8 +1119,8 @@ void EnAn_UpdateCollider(EnAn* this, PlayState* play) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
     }
 
-    temp = this->actor.focus.pos.y - this->actor.world.pos.y;
-    this->collider.dim.height = TRUNCF_BINANG(temp);
+    height = this->actor.focus.pos.y - this->actor.world.pos.y;
+    this->collider.dim.height = TRUNCF_BINANG(height);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
@@ -1526,7 +1526,7 @@ s32 EnAn_MsgEvent_MidnightMeeting(Actor* thisx, PlayState* play) {
         this->msgEventState++;
     }
 
-    return 0;
+    return false;
 }
 
 s32 EnAn_MsgEvent_Cooking(Actor* thisx, PlayState* play) {
@@ -3343,7 +3343,7 @@ void EnAn_Destroy(Actor* thisx, PlayState* play) {
 void EnAn_Update(Actor* thisx, PlayState* play) {
     EnAn* this = THIS;
 
-    if (EnAn_InitializeObjectSlots(this, play)) {
+    if (EnAn_InitObjectSlots(this, play)) {
         return;
     }
 
