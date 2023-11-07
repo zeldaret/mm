@@ -182,8 +182,6 @@ void func_809F24A8(Boss06* this) {
     this->unk_1AC = 0.0f;
 }
 
-#ifdef NON_MATCHING
-// The 1 constant from the switch branch is reused in case 2 for some reason.
 void func_809F24C8(Boss06* this, PlayState* play) {
     s16 sp4E = 0;
     Player* player = GET_PLAYER(play);
@@ -344,9 +342,6 @@ void func_809F24C8(Boss06* this, PlayState* play) {
         Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F24C8.s")
-#endif
 
 void func_809F2B64(Boss06* this, PlayState* play) {
     this->actionFunc = func_809F2C44;

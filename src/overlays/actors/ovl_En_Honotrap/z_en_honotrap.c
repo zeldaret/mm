@@ -786,7 +786,7 @@ void EnHonotrap_DrawFlameGroup(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 200, 0, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
-    Camera_GetCamDir(&camDir, GET_ACTIVE_CAM(play));
+    camDir = Camera_GetCamDir(GET_ACTIVE_CAM(play));
     camDir.y += 0x8000;
 
     for (i = 0; i < ARRAY_COUNT(flameGroup->flameList); i++) {

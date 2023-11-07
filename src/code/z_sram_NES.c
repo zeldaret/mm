@@ -1694,8 +1694,6 @@ void Sram_EraseSave(FileSelectState* fileSelect2, SramContext* sramCtx, s32 file
     gSaveContext.flashSaveAvailable = D_801F6AF2;
 }
 
-#ifdef NON_MATCHING
-// v0/v1
 void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     FileSelectState* fileSelect = fileSelect2;
     u16 i;
@@ -1737,13 +1735,11 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         // clear buffer
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         // read to buffer
-        SysFlashrom_ReadData(&sramCtx->saveBuf[0], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2],
-                             gFlashSaveNumPages[fileSelect->selectedFileIndex * 2]);
-        if (1) {}
+        if (SysFlashrom_ReadData(&sramCtx->saveBuf[0], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2],
+                                 gFlashSaveNumPages[fileSelect->selectedFileIndex * 2])) {}
 
-        SysFlashrom_ReadData(&sramCtx->saveBuf[0x2000], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2 + 1],
-                             gFlashSaveNumPages[fileSelect->selectedFileIndex * 2 + 1]);
-        if (1) {}
+        if (SysFlashrom_ReadData(&sramCtx->saveBuf[0x2000], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2 + 1],
+                                 gFlashSaveNumPages[fileSelect->selectedFileIndex * 2 + 1])) {}
 
         // copy buffer to save context
         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
@@ -1780,9 +1776,6 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     gSaveContext.save.time = D_801F6AF0;
     gSaveContext.flashSaveAvailable = D_801F6AF2;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_CopySave.s")
-#endif
 
 void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     s32 phi_v0;

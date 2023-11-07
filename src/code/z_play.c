@@ -1129,10 +1129,10 @@ void Play_PostWorldDraw(PlayState* this) {
 
 void Play_DrawMain(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
-    Lights* sp268;
+    Lights* lights;
     Vec3f temp;
     u8 sp25B = false;
-    f32 var_fv0; // zFar
+    f32 zFar;
 
     if (R_PAUSE_BG_PRERENDER_STATE >= PAUSE_BG_PRERENDER_UNK4) {
         PreRender_ApplyFiltersSlowlyDestroy(&this->pauseBgPreRender);
@@ -1169,19 +1169,17 @@ void Play_DrawMain(PlayState* this) {
     gSPSegment(OVERLAY_DISP++, 0x02, this->sceneSegment);
 
     if (1) {
-
         ShrinkWindow_Draw(gfxCtx);
 
         POLY_OPA_DISP = Play_SetFog(this, POLY_OPA_DISP);
         POLY_XLU_DISP = Play_SetFog(this, POLY_XLU_DISP);
 
-        // zFar
-        var_fv0 = this->lightCtx.zFar;
-        if (var_fv0 > 12800.0f) {
-            var_fv0 = 12800.0f;
+        zFar = this->lightCtx.zFar;
+        if (zFar > 12800.0f) {
+            zFar = 12800.0f;
         }
 
-        View_SetPerspective(&this->view, this->view.fovy, this->view.zNear, var_fv0);
+        View_SetPerspective(&this->view, this->view.fovy, this->view.zNear, zFar);
 
         View_Apply(&this->view, 0xF);
 
@@ -1293,14 +1291,14 @@ void Play_DrawMain(PlayState* this) {
                     Environment_Draw(this);
                 }
 
-                sp268 = LightContext_NewLights(&this->lightCtx, gfxCtx);
+                lights = LightContext_NewLights(&this->lightCtx, gfxCtx);
 
                 if (this->roomCtx.curRoom.enablePosLights || (MREG(93) != 0)) {
-                    sp268->enablePosLights = true;
+                    lights->enablePosLights = true;
                 }
 
-                Lights_BindAll(sp268, this->lightCtx.listHead, NULL, this);
-                Lights_Draw(sp268, gfxCtx);
+                Lights_BindAll(lights, this->lightCtx.listHead, NULL, this);
+                Lights_Draw(lights, gfxCtx);
 
                 if (1) {
                     u32 roomDrawFlags = ((1) ? 1 : 0) | (((void)0, 1) ? 2 : 0); // FAKE:
@@ -1313,12 +1311,12 @@ void Play_DrawMain(PlayState* this) {
                 }
 
                 if (this->skyboxCtx.skyboxShouldDraw) {
-                    Vec3f sp78;
+                    Vec3f quakeOffset;
 
                     if (1) {
-                        Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
-                        Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
-                                    this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+                        quakeOffset = Camera_GetQuakeOffset(GET_ACTIVE_CAM(this));
+                        Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + quakeOffset.x,
+                                    this->view.eye.y + quakeOffset.y, this->view.eye.z + quakeOffset.z);
                     }
                 }
 
