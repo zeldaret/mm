@@ -3430,7 +3430,6 @@ void EnAn_Draw(Actor* thisx, PlayState* play) {
             gAnju1MouthHappyTex,  // ENAN_MOUTH_HAPPY
             gAnju1MouthOpenTex,   // ENAN_MOUTH_OPEN
         };
-
         static TexturePtr sEyeTextures[ENAN_EYES_MAX] = {
             gAnju1EyeOpenTex,           // ENAN_EYES_OPEN
             gAnju1EyeHalfTex,           // ENAN_EYES_HALF1
