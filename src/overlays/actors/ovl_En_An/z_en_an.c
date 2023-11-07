@@ -3273,7 +3273,7 @@ void EnAn_HandleCouplesMaskCutscene(EnAn* this, PlayState* play) {
         s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_557);
         u16 cueId = play->csCtx.actorCues[cueChannel]->id;
 
-        if (this->cueId != (cueId & 0xFF)) {
+        if (this->cueId != (u8)cueId) {
             this->cueId = cueId;
 
             if (this->cueId == 3) {
