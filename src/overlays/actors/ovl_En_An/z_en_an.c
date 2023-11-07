@@ -3267,7 +3267,7 @@ void EnAn_HandleCouplesMaskCutscene(EnAn* this, PlayState* play) {
     s32 pad;
 
     //! FAKE
-    if (0) {}
+    if (1) {}
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_557)) {
         s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_557);
