@@ -525,14 +525,10 @@ s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-// The 2 constant from the `gWeatherMode` switch branch is reused when checking `CURRENT_DAY`
-// A near identical issue is present in the non-matching `func_809F24C8` from `z_boss_06.c`
 void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     PlayState* play = play2;
     f32 temp_ft4;
     u8 var_a0;
-    u8 temp;
     s16 i;
 
     CREG(1) = 0;
@@ -672,8 +668,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
 
     var_a0 = 0;
     if (((void)0, gSaveContext.save.day) != 0) {
-        //! FAKE: temp
-        var_a0 = ((void)0, temp = gSaveContext.save.day) - 1;
+        var_a0 = ((void)0, gSaveContext.save.day) - 1;
     }
     envCtx->skyboxConfig = var_a0 + (D_801F4E31 * 3);
     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
@@ -723,19 +718,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     }
 
     if (gSaveContext.retainWeatherMode || (gSaveContext.respawnFlag != 0)) {
-        // if (gWeatherMode == WEATHER_MODE_2) {
-        //     if (1) {}
-        //     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
-        //         play->skyboxId = SKYBOX_3;
-        //         envCtx->lightConfig = 5;
-        //         envCtx->changeLightNextConfig = 5;
-        //         D_801F4E74 = 1.0f;
-        //     } else {
-        //         gWeatherMode = WEATHER_MODE_CLEAR;
-        //     }
-        // }
-
-        switch (gWeatherMode) {
+        switch ((u32)gWeatherMode) {
             case WEATHER_MODE_2:
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                     play->skyboxId = SKYBOX_3;
@@ -755,7 +738,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
         play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
 
         if (gWeatherMode == WEATHER_MODE_1) {
-            if ((CURRENT_DAY == 2) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
+            if (((u32)CURRENT_DAY == 2) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(17, 30))) {
                 if (Environment_GetStormState(play) != STORM_STATE_OFF) {
                     play->envCtx.precipitation[PRECIP_RAIN_MAX] = 60;
@@ -821,9 +804,6 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
 
     Environment_UpdatePostmanEvents(play);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Init.s")
-#endif
 
 u8 Environment_SmoothStepToU8(u8* pvalue, u8 target, u8 scale, u8 step, u8 minStep) {
     s16 stepSize = 0;
