@@ -3134,7 +3134,7 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
         RGBA8(224, 176, 184, 255), RGBA8(240, 192, 192, 255), RGBA8(232, 184, 192, 255), RGBA8(248, 200, 192, 255),
     };
     Vec3f pos;
-    s32 pad1;
+    f32 temp;
     f32 imgY;
     f32 imgX;
     Gfx* gfx;
@@ -3150,8 +3150,7 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     f32* imgXPtr;
     f32* imgYPtr;
     Vec3f* posPtr;
-    s32 pad2;
-    f32 temp;
+    s32 pad[2];
     f32(*viewProjectionMtxF)[4];
 
     gfx = *gfxP;
