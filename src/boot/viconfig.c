@@ -1,4 +1,4 @@
-#include "global.h"
+#include "libc/stdbool.h"
 #include "idle.h"
 
 void ViConfig_UpdateVi(u32 black) {
