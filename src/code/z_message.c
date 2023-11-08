@@ -2151,7 +2151,7 @@ u16 D_801D027C[] = { 0x2001, 0x2003, 0x2004, 0x2002 };
 // Counterpart to NES sMaskCodeTextENG
 u16 D_801D0284[] = { 0x90D4, 0x90C2, 0x89A9, 0x97CE };
 
-#ifdef NON_MATCHING
+// #ifdef NON_MATCHING
 // https://decomp.me/scratch/ZTbP4
 void Message_Decode(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -2161,7 +2161,7 @@ void Message_Decode(PlayState* play) {
     u32 timeToMoonCrash;
     s16 temp2;
     s16 spE0;
-    s32 pad4;
+    s32 index2;
     s16 digits[4]; // spD4/D6/D8/DA
     s16 spD2;
     f32 timeInSeconds;
@@ -2252,19 +2252,19 @@ void Message_Decode(PlayState* play) {
             if (curChar == 0x100) {
                 for (playerNameLen = ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); playerNameLen > 0;
                      playerNameLen--) {
-                    if (gSaveContext.save.saveInfo.playerData.playerName[playerNameLen - 1] != 0x3E) {
-                        break;
+                    if (((void)0, gSaveContext.save.saveInfo.playerData.playerName[playerNameLen - 1]) == 0x3E) {
+                        continue;
                     }
+                    break;
                 }
 
                 for (i = 0; i < playerNameLen; i++) {
-                    ptr2 = &font->fontBuf[((void)0, gSaveContext.save.saveInfo.playerData.playerName[i]) *
-                                          FONT_CHAR_TEX_SIZE];
+                    // index2 = ((void)0, gSaveContext.save.saveInfo.playerData.playerName[i]);
+                    ptr2 = &font->fontBuf[((void)0, gSaveContext.save.saveInfo.playerData.playerName[i]) * FONT_CHAR_TEX_SIZE];
                     msgCtx->decodedBuffer.wchar[decodedBufPos + i] = 0x100;
 
                     for (var_v0 = 0; var_v0 < FONT_CHAR_TEX_SIZE; var_v0 += 4) {
-                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] =
-                            ptr2[var_v0 + 0] & 0xFF; //! FAKE: Fixes later regalloc
+                        font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] = ptr2[var_v0 + 0];
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 1] = ptr2[var_v0 + 1];
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 2] = ptr2[var_v0 + 2];
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 3] = ptr2[var_v0 + 3];
@@ -3038,10 +3038,10 @@ void Message_Decode(PlayState* play) {
         Message_DecodeNES(play);
     }
 }
-#else
-void Message_Decode(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_Decode.s")
-#endif
+// #else
+// void Message_Decode(PlayState* play);
+// #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_Decode.s")
+// #endif
 
 void func_80150A84(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;

@@ -954,7 +954,7 @@ u8 sMaskCodeTextLengthENG[] = {
     sizeof(GREEN_STR) - 1,
 };
 
-#ifdef NON_MATCHING
+// #ifdef NON_MATCHING
 // https://decomp.me/scratch/w2ckG
 void Message_DecodeNES(PlayState* play) {
     f32 var_fs0;
@@ -979,7 +979,7 @@ void Message_DecodeNES(PlayState* play) {
     u8 curChar; // sp78
     s8 charOffset;
     s16 temp_s2_2;
-    s16 var_s2_9;
+    
 
     player = GET_PLAYER(play);
     decodedBufPos = 0;
@@ -1032,13 +1032,13 @@ void Message_DecodeNES(PlayState* play) {
                     }
                 }
             }
+            {
+            s16 pad;
 
-        //! FAKE: Perhaps a locally required temp for scoping
-        dummy:;
             if ((curChar == 0x1B) || (curChar == 0x1C) || (curChar == 0x1D)) {
                 //! FAKE: & 0xFFFF to fix regalloc
-                msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos + 1] & 0xFFFF;
-                msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos + 2];
+                msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[(msgCtx->msgBufPos & 0xFFFF) + 1];
+                msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[(msgCtx->msgBufPos) + 2];
                 msgCtx->msgBufPos += 3;
             }
             msgCtx->decodedTextLen = decodedBufPos;
@@ -1053,6 +1053,7 @@ void Message_DecodeNES(PlayState* play) {
             msgCtx->unk120CA = msgCtx->unk120D0;
             msgCtx->unk120CC = msgCtx->unk120D2;
             break;
+            }
         } else if (curChar == 0x16) {
             // Substitute the player name control character for the file's player name.
             for (playerNameLen = ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); playerNameLen > 0;
@@ -1429,23 +1430,22 @@ void Message_DecodeNES(PlayState* play) {
             }
             decodedBufPos--;
         } else if (curChar == 0xD3) {
-            if (gSaveContext.save.timeSpeedOffset == 18) {
-                var_s2_9 = 0;
-            } else if (gSaveContext.save.timeSpeedOffset == 0) {
-                var_s2_9 = 1;
+            if (((void)0, gSaveContext.save.timeSpeedOffset) == 18) {
+                temp_s2_2 = 0;
+            } else if (((void)0, gSaveContext.save.timeSpeedOffset) == 0) {
+                temp_s2_2 = 1;
             } else {
-                var_s2_9 = 2;
+                temp_s2_2 = 2;
             }
 
-            for (i = 0; i < 4; i++) {
-                msgCtx->decodedBuffer.schar[decodedBufPos] = D_801D08D8[var_s2_9][i];
-                Font_LoadCharNES(play, D_801D08D8[var_s2_9][i], charTexIdx);
-                decodedBufPos++;
+            for (i = 0; i < 4; i++, decodedBufPos++) {
+                msgCtx->decodedBuffer.schar[decodedBufPos] = D_801D08D8[temp_s2_2][i];
+                Font_LoadCharNES(play, D_801D08D8[temp_s2_2][i], charTexIdx);
                 charTexIdx += FONT_CHAR_TEX_SIZE;
             }
             decodedBufPos--;
             spA4 += 3.0f * (16.0f * msgCtx->textCharScale);
-            msgCtx->choiceIndex = var_s2_9;
+            msgCtx->choiceIndex = temp_s2_2;
         } else if (curChar == 0xD4) {
             Message_LoadOwlWarpTextNES(play, &charTexIdx, &spA4, &decodedBufPos);
         } else if (curChar == 0xD5) {
@@ -1592,19 +1592,10 @@ void Message_DecodeNES(PlayState* play) {
             }
             decodedBufPos--;
         } else if ((curChar >= 0xE1) && (curChar < 0xE7)) {
-            msgCtx->decodedBuffer.schar[decodedBufPos] =
-                D_801D08E4[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
-            temp_s2_2 = sMaskCodeTextLengthENG[(
-                (void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
-            decodedBufPos++;
-
-            for (i = 0; i < temp_s2_2; i++) {
-                Message_LoadCharNES(
-                    play,
-                    sMaskCodeTextENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])]
-                                    [i],
-                    &charTexIdx, &spA4, decodedBufPos);
-                decodedBufPos++;
+            msgCtx->decodedBuffer.schar[decodedBufPos++] = D_801D08E4[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
+            temp_s2_2 = sMaskCodeTextLengthENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
+            for (i = 0; i < temp_s2_2; i++, decodedBufPos++) {
+                Message_LoadCharNES(play, sMaskCodeTextENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])][i], &charTexIdx, &spA4, decodedBufPos);
             }
 
             msgCtx->decodedBuffer.schar[decodedBufPos] = 0;
@@ -1783,18 +1774,19 @@ void Message_DecodeNES(PlayState* play) {
             decodedBufPos--;
         } else if ((curChar == 0xFD) || (curChar == 0xFE) || (curChar == 0xFF)) {
             for (playerNameLen = 8; playerNameLen > 0; playerNameLen--) {
-                if (gSaveContext.save.saveInfo.inventory
-                        .dekuPlaygroundPlayerName[(s16)(curChar - 0xFD)][playerNameLen - 1] != 0x3E) {
+                if (((void)0, gSaveContext.save.saveInfo.inventory
+                        .dekuPlaygroundPlayerName[(s16)(curChar - 0xFD)][playerNameLen - 1]) != 0x3E) {
                     break;
                 }
             }
 
             for (i = 0; i < playerNameLen; i++) {
-                ptr = &font->fontBuf[((void)0, gSaveContext.save.saveInfo.inventory
-                                                   .dekuPlaygroundPlayerName[(s16)(curChar - 0xFD)][i]) *
-                                     FONT_CHAR_TEX_SIZE];
+                temp_s2_2 = ((void)0, gSaveContext.save.saveInfo.inventory
+                                                   .dekuPlaygroundPlayerName[(s16)(curChar - 0xFD)][i]);
                 msgCtx->decodedBuffer.schar[decodedBufPos + i] = 0xFD;
 
+                // playerName
+                ptr = &font->fontBuf[temp_s2_2 * FONT_CHAR_TEX_SIZE];
                 for (var_v1_3 = 0; var_v1_3 < FONT_CHAR_TEX_SIZE; var_v1_3 += 4) {
                     font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 0] = ptr[var_v1_3 + 0];
                     font->charBuf[font->unk_11D88][charTexIdx + var_v1_3 + 1] = ptr[var_v1_3 + 1];
@@ -1885,6 +1877,6 @@ void Message_DecodeNES(PlayState* play) {
         msgCtx->msgBufPos++;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/Message_DecodeNES.s")
-#endif
+// #else
+// #pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/Message_DecodeNES.s")
+// #endif
