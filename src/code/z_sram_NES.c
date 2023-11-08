@@ -1,6 +1,7 @@
 #include "global.h"
 #include "z64horse.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 void Sram_SyncWriteToFlash(SramContext* sramCtx, s32 curPage, s32 numPages);
 void func_80147314(SramContext* sramCtx, s32 fileNum);
@@ -270,7 +271,7 @@ u32 gSramSlotOffsets[] = {
     OOT_SLOT_OFFSET(5),
 };
 
-u8 gAmmoItems[] = {
+u8 gAmmoItems[ITEM_NUM_SLOTS] = {
     ITEM_NONE,           // SLOT_OCARINA
     ITEM_BOW,            // SLOT_BOW
     ITEM_NONE,           // SLOT_ARROW_FIRE
@@ -529,7 +530,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         }
     }
 
-    for (i = 0; i < ARRAY_COUNT(gAmmoItems); i++) {
+    for (i = 0; i < ITEM_NUM_SLOTS; i++) {
         if (gAmmoItems[i] != ITEM_NONE) {
             if ((gSaveContext.save.saveInfo.inventory.items[i] != ITEM_NONE) && (i != SLOT_PICTOGRAPH_BOX)) {
                 item = gSaveContext.save.saveInfo.inventory.items[i];
@@ -1487,8 +1488,8 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
                     fileSelect->walletUpgrades[sp76] = CUR_UPG_VALUE(UPG_WALLET);
 
-                    for (sp7A = 0, maskCount = 0; sp7A < 24; sp7A++) {
-                        if (gSaveContext.save.saveInfo.inventory.items[sp7A + 24] == ITEM_NONE) {
+                    for (sp7A = 0, maskCount = 0; sp7A < ITEM_NUM_SLOTS; sp7A++) {
+                        if (gSaveContext.save.saveInfo.inventory.items[sp7A + ITEM_NUM_SLOTS] == ITEM_NONE) {
                             continue;
                         }
                         maskCount++;
@@ -1601,8 +1602,8 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
                         fileSelect->walletUpgrades[sp76] = CUR_UPG_VALUE(UPG_WALLET);
 
-                        for (sp7A = 0, maskCount = 0; sp7A < 24; sp7A++) {
-                            if (gSaveContext.save.saveInfo.inventory.items[sp7A + 24] == ITEM_NONE) {
+                        for (sp7A = 0, maskCount = 0; sp7A < ITEM_NUM_SLOTS; sp7A++) {
+                            if (gSaveContext.save.saveInfo.inventory.items[sp7A + ITEM_NUM_SLOTS] == ITEM_NONE) {
                                 continue;
                             }
                             maskCount++;
@@ -1718,8 +1719,8 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
             fileSelect->rupees[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.playerData.rupees;
             fileSelect->walletUpgrades[fileSelect->copyDestFileIndex + 2] = CUR_UPG_VALUE(UPG_WALLET);
 
-            for (i = 0, maskCount = 0; i < 24; i++) {
-                if (gSaveContext.save.saveInfo.inventory.items[i + 24] != ITEM_NONE) {
+            for (i = 0, maskCount = 0; i < ITEM_NUM_SLOTS; i++) {
+                if (gSaveContext.save.saveInfo.inventory.items[i + ITEM_NUM_SLOTS] != ITEM_NONE) {
                     maskCount++;
                 }
             }
@@ -1759,8 +1760,8 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         fileSelect->rupees[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.rupees;
         fileSelect->walletUpgrades[fileSelect->copyDestFileIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
-        for (i = 0, maskCount = 0; i < 24; i++) {
-            if (gSaveContext.save.saveInfo.inventory.items[i + 24] != ITEM_NONE) {
+        for (i = 0, maskCount = 0; i < ITEM_NUM_SLOTS; i++) {
+            if (gSaveContext.save.saveInfo.inventory.items[i + ITEM_NUM_SLOTS] != ITEM_NONE) {
                 maskCount++;
             }
         }
@@ -1823,8 +1824,8 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         fileSelect->rupees[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.rupees;
         fileSelect->walletUpgrades[fileSelect->buttonIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
-        for (i = 0, maskCount = 0; i < 24; i++) {
-            if (gSaveContext.save.saveInfo.inventory.items[i + 24] != ITEM_NONE) {
+        for (i = 0, maskCount = 0; i < ITEM_NUM_SLOTS; i++) {
+            if (gSaveContext.save.saveInfo.inventory.items[i + ITEM_NUM_SLOTS] != ITEM_NONE) {
                 maskCount++;
             }
         }

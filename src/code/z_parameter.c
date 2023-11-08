@@ -3121,7 +3121,7 @@ void Inventory_UnequipItem(s16 item) {
 s32 Inventory_ReplaceItem(PlayState* play, u8 oldItem, u8 newItem) {
     u8 i;
 
-    for (i = 0; i < 24; i++) {
+    for (i = 0; i < ITEM_NUM_SLOTS; i++) {
         if (gSaveContext.save.saveInfo.inventory.items[i] == oldItem) {
             gSaveContext.save.saveInfo.inventory.items[i] = newItem;
 

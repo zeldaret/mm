@@ -461,7 +461,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
         for (j = 0, rectLeft = 204; j < 6; j++, slot++, rectLeft += 14) {
             counterDigits[2] = 0;
 
-            if (gSaveContext.save.saveInfo.inventory.items[SLOT_MASK_POSTMAN + slot] != ITEM_NONE) {
+            if (gSaveContext.save.saveInfo.inventory.items[slot + ITEM_NUM_SLOTS] != ITEM_NONE) {
                 counterDigits[2] = 1;
             }
             KaleidoScope_DrawDigit(play, counterDigits[2], rectLeft, rectTop);
