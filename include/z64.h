@@ -54,6 +54,7 @@
 #include "z64ocarina.h"
 #include "z64player.h"
 #include "z64prerender.h"
+#include "z64rand.h"
 #include "z64save.h"
 #include "z64scene.h"
 #include "z64schedule.h"

@@ -3116,10 +3116,6 @@ void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height)
     *gfxp = gfx;
 }
 
-#ifdef NON_MATCHING
-// `D_801DD900`is loading unaligned but storing aligned
-// Also small float regalloc at the gRandFloat section
-// https://decomp.me/scratch/3zFop
 void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     static const Vec3s D_801DD880[] = {
         { 0x0384, 0x2328, 0xD508 }, { 0x09C4, 0x2328, 0xDA1C }, { 0x0E74, 0x22D8, 0xDA1C }, { 0x1450, 0x2468, 0xD8F0 },
@@ -3127,24 +3123,26 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
         { 0xD058, 0x4C2C, 0x3A98 }, { 0xD8F0, 0x36B0, 0x47E0 }, { 0xD954, 0x3264, 0x3E1C }, { 0xD8F0, 0x3070, 0x37DC },
         { 0xD8F0, 0x1F40, 0x5208 }, { 0xD760, 0x1838, 0x27D8 }, { 0x0000, 0x4E20, 0x4A38 }, { 0x076C, 0x2328, 0xDCD8 },
     };
-    // Possibly Color_RGBA8_u32
     static const u32 D_801DD8E0[] = {
-        0x41A4FFFF, 0x83A4E6FF, 0x62CDFFFF, 0x5252FFFF, 0x7BA4A4FF, 0x62CDFFFF, 0x62A4E6FF, 0xFF5A00FF,
+        RGBA8(65, 164, 255, 255),  RGBA8(131, 164, 230, 255), RGBA8(98, 205, 255, 255), RGBA8(82, 82, 255, 255),
+        RGBA8(123, 164, 164, 255), RGBA8(98, 205, 255, 255),  RGBA8(98, 164, 230, 255), RGBA8(255, 90, 0, 255),
     };
-    static const u32 D_801DD900[] = {
-        0x405070FF, 0x606080FF, 0x807090FF, 0xA080A0FF, 0xC090A8FF, 0xE0A0B0FF, 0xE0A0B0FF, 0x686888FF,
-        0x887898FF, 0xA888A8FF, 0xC898B8FF, 0xE8A8B8FF, 0xE0B0B8FF, 0xF0C0C0FF, 0xE8B8C0FF, 0xF8C8C0FF,
+    UNALIGNED static const u32 D_801DD900[] = {
+        RGBA8(64, 80, 112, 255),   RGBA8(96, 96, 128, 255),   RGBA8(128, 112, 144, 255), RGBA8(160, 128, 160, 255),
+        RGBA8(192, 144, 168, 255), RGBA8(224, 160, 176, 255), RGBA8(224, 160, 176, 255), RGBA8(104, 104, 136, 255),
+        RGBA8(136, 120, 152, 255), RGBA8(168, 136, 168, 255), RGBA8(200, 152, 184, 255), RGBA8(232, 168, 184, 255),
+        RGBA8(224, 176, 184, 255), RGBA8(240, 192, 192, 255), RGBA8(232, 184, 192, 255), RGBA8(248, 200, 192, 255),
     };
     Vec3f pos;
     s32 pad1;
-    f32 imgY; // spF4
-    f32 imgX; // spF0
+    f32 imgY;
+    f32 imgX;
     Gfx* gfx;
-    s32 phi_v1;  // spE8
-    s32 negateY; // spE4
+    s32 phi_v1;
+    s32 negateY;
     f32 invScale;
     f32 temp_f20;
-    Gfx* gfxTemp; // spD8
+    Gfx* gfxTemp;
     f32 scale;
     s32 i;
     u32 randInt;
@@ -3152,7 +3150,8 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     f32* imgXPtr;
     f32* imgYPtr;
     Vec3f* posPtr;
-    s32 pad[2];
+    s32 pad2;
+    f32 temp;
     f32(*viewProjectionMtxF)[4];
 
     gfx = *gfxP;
@@ -3198,17 +3197,18 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
             f32 temp_f2;
 
             // temp_f4 = Rand_ZeroOne_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
             gRandFloat = (randInt >> 9) | 0x3F800000;
-            temp_f4 = *((f32*)&gRandFloat) - 1.0f;
+            temp = *((f32*)&gRandFloat);
+            temp_f4 = temp - 1.0f;
 
             // temp_f20 = Rand_ZeroOne_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
             gRandFloat = (randInt >> 9) | 0x3F800000;
             temp_f20 = ((*((f32*)&gRandFloat) - 1.0f) + temp_f4) * 0.5f;
 
             // randInt = Rand_Next_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
 
             // Set random position
             pos.y = play->view.eye.y + (SQ(temp_f20) * SQ(128.0f)) - 1000.0f;
@@ -3216,7 +3216,7 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
             pos.z = play->view.eye.z + (Math_CosS(randInt) * (1.2f - temp_f20) * SQ(128.0f));
 
             // temp_f2 = Rand_ZeroOne_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
             gRandFloat = ((randInt >> 9) | 0x3F800000);
             temp_f2 = *((f32*)&gRandFloat) - 1.0f;
 
@@ -3273,10 +3273,6 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     gDPPipeSync(gfx++);
     *gfxP = gfx;
 }
-#else
-void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSkyboxStarsImpl.s")
-#endif
 
 void Environment_Draw(PlayState* play) {
     Environment_SetupSkyboxStars(play);
