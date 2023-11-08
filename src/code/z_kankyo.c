@@ -3123,15 +3123,15 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
         { 0xD058, 0x4C2C, 0x3A98 }, { 0xD8F0, 0x36B0, 0x47E0 }, { 0xD954, 0x3264, 0x3E1C }, { 0xD8F0, 0x3070, 0x37DC },
         { 0xD8F0, 0x1F40, 0x5208 }, { 0xD760, 0x1838, 0x27D8 }, { 0x0000, 0x4E20, 0x4A38 }, { 0x076C, 0x2328, 0xDCD8 },
     };
-    static const u32 D_801DD8E0[] = {
-        RGBA8(65, 164, 255, 255),  RGBA8(131, 164, 230, 255), RGBA8(98, 205, 255, 255), RGBA8(82, 82, 255, 255),
-        RGBA8(123, 164, 164, 255), RGBA8(98, 205, 255, 255),  RGBA8(98, 164, 230, 255), RGBA8(255, 90, 0, 255),
+    static const Color_RGBA8_u32 D_801DD8E0[] = {
+        { 65, 164, 255, 255 },  { 131, 164, 230, 255 }, { 98, 205, 255, 255 }, { 82, 82, 255, 255 },
+        { 123, 164, 164, 255 }, { 98, 205, 255, 255 },  { 98, 164, 230, 255 }, { 255, 90, 0, 255 },
     };
-    UNALIGNED static const u32 D_801DD900[] = {
-        RGBA8(64, 80, 112, 255),   RGBA8(96, 96, 128, 255),   RGBA8(128, 112, 144, 255), RGBA8(160, 128, 160, 255),
-        RGBA8(192, 144, 168, 255), RGBA8(224, 160, 176, 255), RGBA8(224, 160, 176, 255), RGBA8(104, 104, 136, 255),
-        RGBA8(136, 120, 152, 255), RGBA8(168, 136, 168, 255), RGBA8(200, 152, 184, 255), RGBA8(232, 168, 184, 255),
-        RGBA8(224, 176, 184, 255), RGBA8(240, 192, 192, 255), RGBA8(232, 184, 192, 255), RGBA8(248, 200, 192, 255),
+    UNALIGNED static const Color_RGBA8_u32 D_801DD900[] = {
+        { 64, 80, 112, 255 },   { 96, 96, 128, 255 },   { 128, 112, 144, 255 }, { 160, 128, 160, 255 },
+        { 192, 144, 168, 255 }, { 224, 160, 176, 255 }, { 224, 160, 176, 255 }, { 104, 104, 136, 255 },
+        { 136, 120, 152, 255 }, { 168, 136, 168, 255 }, { 200, 152, 184, 255 }, { 232, 168, 184, 255 },
+        { 224, 176, 184, 255 }, { 240, 192, 192, 255 }, { 232, 184, 192, 255 }, { 248, 200, 192, 255 },
     };
     Vec3f pos;
     f32 temp;
@@ -3228,9 +3228,9 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
         }
 
         if ((i < 15) || ((i == 15) && ((((void)0, gSaveContext.save.day) % 7) == 0))) {
-            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD8E0[i % ARRAY_COUNTU(D_801DD8E0)]);
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD8E0[i % ARRAY_COUNTU(D_801DD8E0)].rgba);
         } else if (((i & 0x3F) == 0) || (i == 16)) {
-            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD900[phi_v1 % ARRAY_COUNTU(D_801DD900)]);
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD900[phi_v1 % ARRAY_COUNTU(D_801DD900)].rgba);
             phi_v1++;
         }
 
