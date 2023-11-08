@@ -1,5 +1,5 @@
-#ifndef Z64RAND_H
-#define Z64RAND_H
+#ifndef RAND_H
+#define RAND_H
 
 #include "PR/ultratypes.h"
 
