@@ -4,8 +4,8 @@
  * Description: Group of three bugs that burrow underground
  */
 
-#include "z_en_mushi2.h"
 #include "overlays/actors/ovl_Obj_Bean/z_obj_bean.h"
+#include "z_en_mushi2.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
