@@ -1488,7 +1488,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
                     fileSelect->walletUpgrades[sp76] = CUR_UPG_VALUE(UPG_WALLET);
 
-                    for (sp7A = 0, maskCount = 0; sp7A < ITEM_NUM_SLOTS; sp7A++) {
+                    for (sp7A = 0, maskCount = 0; sp7A < MASK_NUM_SLOTS; sp7A++) {
                         if (gSaveContext.save.saveInfo.inventory.items[sp7A + ITEM_NUM_SLOTS] == ITEM_NONE) {
                             continue;
                         }
@@ -1602,7 +1602,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
                         fileSelect->walletUpgrades[sp76] = CUR_UPG_VALUE(UPG_WALLET);
 
-                        for (sp7A = 0, maskCount = 0; sp7A < ITEM_NUM_SLOTS; sp7A++) {
+                        for (sp7A = 0, maskCount = 0; sp7A < MASK_NUM_SLOTS; sp7A++) {
                             if (gSaveContext.save.saveInfo.inventory.items[sp7A + ITEM_NUM_SLOTS] == ITEM_NONE) {
                                 continue;
                             }
@@ -1719,7 +1719,7 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
             fileSelect->rupees[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.playerData.rupees;
             fileSelect->walletUpgrades[fileSelect->copyDestFileIndex + 2] = CUR_UPG_VALUE(UPG_WALLET);
 
-            for (i = 0, maskCount = 0; i < ITEM_NUM_SLOTS; i++) {
+            for (i = 0, maskCount = 0; i < MASK_NUM_SLOTS; i++) {
                 if (gSaveContext.save.saveInfo.inventory.items[i + ITEM_NUM_SLOTS] != ITEM_NONE) {
                     maskCount++;
                 }
@@ -1760,7 +1760,7 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         fileSelect->rupees[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.rupees;
         fileSelect->walletUpgrades[fileSelect->copyDestFileIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
-        for (i = 0, maskCount = 0; i < ITEM_NUM_SLOTS; i++) {
+        for (i = 0, maskCount = 0; i < MASK_NUM_SLOTS; i++) {
             if (gSaveContext.save.saveInfo.inventory.items[i + ITEM_NUM_SLOTS] != ITEM_NONE) {
                 maskCount++;
             }
@@ -1824,7 +1824,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         fileSelect->rupees[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.rupees;
         fileSelect->walletUpgrades[fileSelect->buttonIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
-        for (i = 0, maskCount = 0; i < ITEM_NUM_SLOTS; i++) {
+        for (i = 0, maskCount = 0; i < MASK_NUM_SLOTS; i++) {
             if (gSaveContext.save.saveInfo.inventory.items[i + ITEM_NUM_SLOTS] != ITEM_NONE) {
                 maskCount++;
             }
