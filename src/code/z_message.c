@@ -2160,7 +2160,7 @@ void Message_Decode(PlayState* play) {
     u32 timeToMoonCrash;
     s16 var_v0;
     s16 numLines;
-    u8* ptr2;
+    u8* fontBuf;
     s16 digits[4];
     s16 spD2;
     f32 timeInSeconds;
@@ -2223,9 +2223,12 @@ void Message_Decode(PlayState* play) {
                     }
                 }
 
-                if ((curChar == 0x110) || (curChar == 0x111) || (curChar == 0x112)) {
-                    msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[msgCtx->msgBufPos + 1];
-                    msgCtx->msgBufPos += 2;
+                {
+
+                    if ((curChar == 0x110) || (curChar == 0x111) || (curChar == 0x112)) {
+                        msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[msgCtx->msgBufPos + 1];
+                        msgCtx->msgBufPos += 2;
+                    }
                 }
 
                 msgCtx->decodedTextLen = decodedBufPos;
@@ -2252,20 +2255,20 @@ void Message_Decode(PlayState* play) {
 
                 for (i = 0; i < playerNameLen; i++) {
                     curChar = gSaveContext.save.saveInfo.playerData.playerName[i];
-                    index2 = (curChar & 0xFFFF);
-                    ptr2 = &font->fontBuf[index2 * FONT_CHAR_TEX_SIZE];
+                    index2 = curChar & 0xFFFF;
+                    fontBuf = &font->fontBuf[index2 * FONT_CHAR_TEX_SIZE];
                     msgCtx->decodedBuffer.wchar[decodedBufPos + i] = 0x100;
 
                     for (var_v0 = 0; var_v0 < FONT_CHAR_TEX_SIZE; var_v0 += 4) {
-                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 0] = ptr2[var_v0 + 0];
-                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 1] = ptr2[var_v0 + 1];
-                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 2] = ptr2[var_v0 + 2];
-                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 3] = ptr2[var_v0 + 3];
+                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 0] = fontBuf[var_v0 + 0];
+                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 1] = fontBuf[var_v0 + 1];
+                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 2] = fontBuf[var_v0 + 2];
+                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 3] = fontBuf[var_v0 + 3];
                     }
                     charTexIndex += FONT_CHAR_TEX_SIZE;
                 }
                 //! FAKE:
-                ptr2 = &font->fontBuf[index2 * FONT_CHAR_TEX_SIZE];
+                fontBuf = &font->fontBuf[index2 * FONT_CHAR_TEX_SIZE];
 
                 decodedBufPos += playerNameLen - 1;
                 spC0 += playerNameLen * (16.0f * msgCtx->textCharScale);
@@ -2921,14 +2924,14 @@ void Message_Decode(PlayState* play) {
                 for (i = 0; i < playerNameLen; i++) {
                     curChar = ((void)0, gSaveContext.save.saveInfo.inventory.dekuPlaygroundPlayerName[index][i]);
                     //! FAKE: 0xFFFF
-                    ptr2 = &font->fontBuf[(curChar & 0xFFFF) * FONT_CHAR_TEX_SIZE];
+                    fontBuf = &font->fontBuf[(curChar & 0xFFFF) * FONT_CHAR_TEX_SIZE];
                     msgCtx->decodedBuffer.wchar[decodedBufPos + i] = 0x30D;
 
                     for (var_v0 = 0; var_v0 < FONT_CHAR_TEX_SIZE; var_v0 += 4) {
-                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 0] = ptr2[var_v0 + 0];
-                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 1] = ptr2[var_v0 + 1];
-                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 2] = ptr2[var_v0 + 2];
-                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 3] = ptr2[var_v0 + 3];
+                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 0] = fontBuf[var_v0 + 0];
+                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 1] = fontBuf[var_v0 + 1];
+                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 2] = fontBuf[var_v0 + 2];
+                        font->charBuf[font->unk_11D88][charTexIndex + var_v0 + 3] = fontBuf[var_v0 + 3];
                     }
                     charTexIndex += FONT_CHAR_TEX_SIZE;
                 }
