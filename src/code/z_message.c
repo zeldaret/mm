@@ -2223,12 +2223,9 @@ void Message_Decode(PlayState* play) {
                     }
                 }
 
-                {
-
-                    if ((curChar == 0x110) || (curChar == 0x111) || (curChar == 0x112)) {
-                        msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[msgCtx->msgBufPos + 1];
-                        msgCtx->msgBufPos += 2;
-                    }
+                if ((curChar == 0x110) || (curChar == 0x111) || (curChar == 0x112)) {
+                    msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[msgCtx->msgBufPos + 1];
+                    msgCtx->msgBufPos += 2;
                 }
 
                 msgCtx->decodedTextLen = decodedBufPos;

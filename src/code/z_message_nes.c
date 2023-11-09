@@ -1029,6 +1029,7 @@ void Message_DecodeNES(PlayState* play) {
                 s8 requiredScopeTemp;
 
                 if ((curChar == 0x1B) || (curChar == 0x1C) || (curChar == 0x1D)) {
+                    //! FAKE: & 0xFFFF to fix regalloc
                     msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[(msgCtx->msgBufPos & 0xFFFF) + 1];
                     msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos + 2];
                     msgCtx->msgBufPos += 3;
