@@ -1253,9 +1253,6 @@ s32 Environment_IsSceneUpsideDown(PlayState* play) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-// Something is happening with the indexing of:
-// `lightSettingsList[(s32)envCtx->lightSetting]` and `lightSettingsList[(s32)envCtx->prevLightSetting]`
 void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx) {
     EnvLightSettings* lightSettingsList;
     f32 var_fs3;
@@ -1418,30 +1415,30 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                 }
             }
         } else {
+            u8 lightSetting;
+            u8 var_v0_3;
+
             if ((envCtx->lightSetting >= envCtx->numLightSettings) && !D_801BDBA8) {
                 D_801BDBA8 = true;
             }
 
             if (!envCtx->lightBlendEnabled) {
+
                 for (i = 0; i < 3; i++) {
-                    envCtx->lightSettings.ambientColor[i] =
-                        lightSettingsList[(s32)envCtx->lightSetting].ambientColor[i];
-                    envCtx->lightSettings.light1Dir[i] = lightSettingsList[(s32)envCtx->lightSetting].light1Dir[i];
-                    envCtx->lightSettings.light1Color[i] = lightSettingsList[(s32)envCtx->lightSetting].light1Color[i];
-                    envCtx->lightSettings.light2Dir[i] = lightSettingsList[(s32)envCtx->lightSetting].light2Dir[i];
-                    envCtx->lightSettings.light2Color[i] = lightSettingsList[(s32)envCtx->lightSetting].light2Color[i];
-                    envCtx->lightSettings.fogColor[i] = lightSettingsList[(s32)envCtx->lightSetting].fogColor[i];
+                    envCtx->lightSettings.ambientColor[i] = lightSettingsList[envCtx->lightSetting].ambientColor[i];
+                    envCtx->lightSettings.light1Dir[i] = lightSettingsList[envCtx->lightSetting].light1Dir[i];
+                    envCtx->lightSettings.light1Color[i] = lightSettingsList[envCtx->lightSetting].light1Color[i];
+                    envCtx->lightSettings.light2Dir[i] = lightSettingsList[envCtx->lightSetting].light2Dir[i];
+                    envCtx->lightSettings.light2Color[i] = lightSettingsList[envCtx->lightSetting].light2Color[i];
+                    envCtx->lightSettings.fogColor[i] = lightSettingsList[envCtx->lightSetting].fogColor[i];
                 }
+
+                lightSetting = envCtx->lightSetting;
                 envCtx->lightSettings.fogNear =
-                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)envCtx->lightSetting].blendRateAndFogNear);
-                envCtx->lightSettings.zFar = lightSettingsList[(s32)envCtx->lightSetting].zFar;
+                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)lightSetting].blendRateAndFogNear);
+                envCtx->lightSettings.zFar = lightSettingsList[(s32)lightSetting].zFar;
                 envCtx->lightBlend = 1.0f;
             } else {
-                u8 var_v0_3;
-
-                //! FAKE:
-                if (1) {}
-
                 var_v0_3 =
                     ENV_LIGHT_SETTINGS_BLEND_RATE_U8(lightSettingsList[(s32)envCtx->lightSetting].blendRateAndFogNear);
 
@@ -1463,33 +1460,33 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
 
                 for (i = 0; i < 3; i++) {
                     envCtx->lightSettings.ambientColor[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].ambientColor[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].ambientColor[i],
+                                    lightSettingsList[envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
                     envCtx->lightSettings.light1Dir[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light1Dir[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light1Dir[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light1Dir[i],
+                                    lightSettingsList[envCtx->lightSetting].light1Dir[i], envCtx->lightBlend);
                     envCtx->lightSettings.light1Color[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light1Color[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light1Color[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light1Color[i],
+                                    lightSettingsList[envCtx->lightSetting].light1Color[i], envCtx->lightBlend);
                     envCtx->lightSettings.light2Dir[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light2Dir[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light2Dir[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light2Dir[i],
+                                    lightSettingsList[envCtx->lightSetting].light2Dir[i], envCtx->lightBlend);
                     envCtx->lightSettings.light2Color[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light2Color[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light2Color[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light2Color[i],
+                                    lightSettingsList[envCtx->lightSetting].light2Color[i], envCtx->lightBlend);
                     envCtx->lightSettings.fogColor[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].fogColor[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].fogColor[i],
+                                    lightSettingsList[envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
                 }
 
+                lightSetting = envCtx->lightSetting;
                 envCtx->lightSettings.fogNear = LERPIMP_ALT(
                     ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)envCtx->prevLightSetting].blendRateAndFogNear),
-                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)envCtx->lightSetting].blendRateAndFogNear),
+                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)lightSetting].blendRateAndFogNear),
                     envCtx->lightBlend);
 
-                envCtx->lightSettings.zFar =
-                    LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].zFar,
-                                lightSettingsList[(s32)envCtx->lightSetting].zFar, envCtx->lightBlend);
+                envCtx->lightSettings.zFar = LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].zFar,
+                                                         lightSettingsList[(s32)lightSetting].zFar, envCtx->lightBlend);
             }
         }
     }
@@ -1568,10 +1565,6 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
         envCtx->dirLight2.params.dir.x = 1;
     }
 }
-#else
-void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateLights.s")
-#endif
 
 void Environment_UpdateSun(PlayState* play) {
     f32 temp_f0;
