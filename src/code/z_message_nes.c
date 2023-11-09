@@ -1779,7 +1779,7 @@ void Message_DecodeNES(PlayState* play) {
             }
 
             for (i = 0; i < playerNameLen; i++) {
-                curChar = (gSaveContext.save.saveInfo.inventory.dekuPlaygroundPlayerName[index][i]);
+                curChar = ((void)0, gSaveContext.save.saveInfo.inventory.dekuPlaygroundPlayerName[index][i]);
                 msgCtx->decodedBuffer.schar[decodedBufPos + i] = 0xFD;
                 fontBuf = &font->fontBuf[(curChar & 0xFFFF) * FONT_CHAR_TEX_SIZE];
 
