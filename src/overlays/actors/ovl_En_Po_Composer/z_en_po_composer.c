@@ -311,7 +311,7 @@ void EnPoComposer_PlayCurse(EnPoComposer* this, PlayState* play) {
     }
 
     // Song check, check if player just played song of storms or song of healing
-    if (play->msgCtx.ocarinaMode == 3) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         switch (play->msgCtx.lastPlayedSong) {
             case OCARINA_SONG_STORMS:
                 this->sharpCsNum = SHARP_CS_SONG_STORMS;
