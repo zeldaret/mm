@@ -4,6 +4,9 @@
 #include "alignment.h"
 #include "PR/os.h"
 #include "z64actor.h"
+#include "z64interface.h"
+#include "z64item.h"
+#include "z64light.h"
 
 struct Player;
 struct PlayState;
