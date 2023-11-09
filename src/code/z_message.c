@@ -2922,12 +2922,10 @@ void Message_Decode(PlayState* play) {
                 for (i = 0; i < playerNameLen; i++) {
                     curChar = ((void)0, gSaveContext.save.saveInfo.inventory.dekuPlaygroundPlayerName[index][i]);
                     //! FAKE: 0xFFFF
-                    // index2 = (curChar & 0xFFFF) * FONT_CHAR_TEX_SIZE;
                     ptr2 = &font->fontBuf[(curChar & 0xFFFF) * FONT_CHAR_TEX_SIZE];
                     msgCtx->decodedBuffer.wchar[decodedBufPos + i] = 0x30D;
 
                     for (var_v0 = 0; var_v0 < FONT_CHAR_TEX_SIZE; var_v0 += 4) {
-                        //! FAKE: (u32)
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 0] = ptr2[var_v0 + 0];
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 1] = ptr2[var_v0 + 1];
                         font->charBuf[font->unk_11D88][charTexIdx + var_v0 + 2] = ptr2[var_v0 + 2];
