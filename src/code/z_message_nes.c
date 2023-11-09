@@ -1029,30 +1029,28 @@ void Message_DecodeNES(PlayState* play) {
                     }
                 }
             }
-            {
-            //! FAKE: Use pad once stack has enough space
-            dummy:;
 
-                if ((curChar == 0x1B) || (curChar == 0x1C) || (curChar == 0x1D)) {
-                    //! FAKE: & 0xFFFF to fix regalloc
+        //! FAKE: Use requiredScopePad here once stack has enough space
+        dummy:;
 
-                    msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[(msgCtx->msgBufPos & 0xFFFF) + 1];
-                    msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[(msgCtx->msgBufPos) + 2];
-                    msgCtx->msgBufPos += 3;
-                }
-                msgCtx->decodedTextLen = decodedBufPos;
-                msgCtx->unk120D8 = spD0;
-                if (msgCtx->textboxSkipped || (msgCtx->textBoxType == TEXTBOX_TYPE_1) ||
-                    (msgCtx->textBoxType == TEXTBOX_TYPE_3) || (msgCtx->textBoxType == TEXTBOX_TYPE_6) ||
-                    (msgCtx->textBoxType == TEXTBOX_TYPE_8) || (msgCtx->textBoxType == TEXTBOX_TYPE_9) ||
-                    (msgCtx->textBoxType == TEXTBOX_TYPE_B) || (msgCtx->unk11F0C == 3)) {
-                    msgCtx->textDrawPos = msgCtx->decodedTextLen;
-                }
-                msgCtx->unk120C8 = msgCtx->unk120CE;
-                msgCtx->unk120CA = msgCtx->unk120D0;
-                msgCtx->unk120CC = msgCtx->unk120D2;
-                break;
+            if ((curChar == 0x1B) || (curChar == 0x1C) || (curChar == 0x1D)) {
+                //! FAKE: & 0xFFFF to fix regalloc
+                msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[(msgCtx->msgBufPos & 0xFFFF) + 1];
+                msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[(msgCtx->msgBufPos) + 2];
+                msgCtx->msgBufPos += 3;
             }
+            msgCtx->decodedTextLen = decodedBufPos;
+            msgCtx->unk120D8 = spD0;
+            if (msgCtx->textboxSkipped || (msgCtx->textBoxType == TEXTBOX_TYPE_1) ||
+                (msgCtx->textBoxType == TEXTBOX_TYPE_3) || (msgCtx->textBoxType == TEXTBOX_TYPE_6) ||
+                (msgCtx->textBoxType == TEXTBOX_TYPE_8) || (msgCtx->textBoxType == TEXTBOX_TYPE_9) ||
+                (msgCtx->textBoxType == TEXTBOX_TYPE_B) || (msgCtx->unk11F0C == 3)) {
+                msgCtx->textDrawPos = msgCtx->decodedTextLen;
+            }
+            msgCtx->unk120C8 = msgCtx->unk120CE;
+            msgCtx->unk120CA = msgCtx->unk120D0;
+            msgCtx->unk120CC = msgCtx->unk120D2;
+            break;
         } else if (curChar == 0x16) {
             // Substitute the player name control character for the file's player name.
             for (playerNameLen = ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); playerNameLen > 0;
