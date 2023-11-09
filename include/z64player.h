@@ -1319,8 +1319,8 @@ f32 Player_GetRunSpeedLimit(Player* player);
 s32 func_800B7118(Player* player);
 s32 func_800B7128(Player* player);
 s32 func_800B715C(PlayState* play);
-void Actor_SetCameraHorseSetting(PlayState* play, Player* player);
-void Actor_MountHorse(PlayState* play, Player* player, Actor* horse);
+void Player_SetCameraHorseSetting(PlayState* play, Player* player);
+void Player_MountHorse(PlayState* play, Player* player, Actor* horse);
 s32 Player_SetCsAction(PlayState* play, Actor* csActor, u8 csAction);
 s32 Player_SetCsActionWithHaltedActors(PlayState* play, Actor* csActor, u8 csAction);
 
