@@ -6,6 +6,7 @@
 #include "z64actor.h"
 
 struct Player;
+struct PlayState;
 
 typedef enum PlayerShield {
     /* 0 */ PLAYER_SHIELD_NONE,
@@ -1307,10 +1308,10 @@ typedef struct Player {
 
 // z_player_call.c functions
 
-void PlayerCall_Init(Actor* thisx, PlayState* play);
-void PlayerCall_Destroy(Actor* thisx, PlayState* play);
-void PlayerCall_Update(Actor* thisx, PlayState* play);
-void PlayerCall_Draw(Actor* thisx, PlayState* play);
+void PlayerCall_Init(Actor* thisx, struct PlayState* play);
+void PlayerCall_Destroy(Actor* thisx, struct PlayState* play);
+void PlayerCall_Update(Actor* thisx, struct PlayState* play);
+void PlayerCall_Draw(Actor* thisx, struct PlayState* play);
 
 // z_actor.c functions
 
@@ -1318,70 +1319,70 @@ f32 Player_GetHeight(Player* player);
 f32 Player_GetRunSpeedLimit(Player* player);
 s32 func_800B7118(Player* player);
 s32 func_800B7128(Player* player);
-s32 func_800B715C(PlayState* play);
-void Player_SetCameraHorseSetting(PlayState* play, Player* player);
-void Player_MountHorse(PlayState* play, Player* player, Actor* horse);
-s32 Player_SetCsAction(PlayState* play, Actor* csActor, u8 csAction);
-s32 Player_SetCsActionWithHaltedActors(PlayState* play, Actor* csActor, u8 csAction);
+s32 func_800B715C(struct PlayState* play);
+void Player_SetCameraHorseSetting(struct PlayState* play, Player* player);
+void Player_MountHorse(struct PlayState* play, Player* player, Actor* horse);
+s32 Player_SetCsAction(struct PlayState* play, Actor* csActor, u8 csAction);
+s32 Player_SetCsActionWithHaltedActors(struct PlayState* play, Actor* csActor, u8 csAction);
 
-s32 Player_IsFacingActor(Actor* actor, s16 maxAngleDiff, PlayState* play);
+s32 Player_IsFacingActor(Actor* actor, s16 maxAngleDiff, struct PlayState* play);
 
-PlayerItemAction Player_GetExchangeItemAction(PlayState* play);
+PlayerItemAction Player_GetExchangeItemAction(struct PlayState* play);
 
-void func_800B8D10(PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5, u32 arg6);
-void func_800B8D50(PlayState* play, Actor* actor, f32 arg2, s16 yaw, f32 arg4, u32 arg5);
-void func_800B8D98(PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
-void func_800B8DD4(PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5);
-void func_800B8E1C(PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
+void func_800B8D10(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5, u32 arg6);
+void func_800B8D50(struct PlayState* play, Actor* actor, f32 arg2, s16 yaw, f32 arg4, u32 arg5);
+void func_800B8D98(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
+void func_800B8DD4(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5);
+void func_800B8E1C(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
 void Player_PlaySfx(Player* player, u16 sfxId);
 
 // z_player_lib.c functions
 
-s32 func_801226E0(PlayState* play, s32 arg1);
-s32 func_80122744(PlayState* play, struct_80122744_arg1* arg1, u32 arg2, Vec3s* arg3);
-s32 func_80122760(PlayState* play, struct_80122744_arg1* arg1, f32 arg2);
-void func_80122868(PlayState* play, Player* player);
-void func_801229A0(PlayState* play, Player* player);
-void func_801229EC(Actor* thisx, PlayState* play);
+s32 func_801226E0(struct PlayState* play, s32 arg1);
+s32 func_80122744(struct PlayState* play, struct_80122744_arg1* arg1, u32 arg2, Vec3s* arg3);
+s32 func_80122760(struct PlayState* play, struct_80122744_arg1* arg1, f32 arg2);
+void func_80122868(struct PlayState* play, Player* player);
+void func_801229A0(struct PlayState* play, Player* player);
+void func_801229EC(Actor* thisx, struct PlayState* play);
 void func_801229FC(Player* player);
-void func_80122BA4(PlayState* play, struct_80122D44_arg1* arg1, s32 arg2, s32 alpha);
-void func_80122C20(PlayState* play, struct_80122D44_arg1* arg1);
-void func_80122D44(PlayState* play, struct_80122D44_arg1* arg1);
+void func_80122BA4(struct PlayState* play, struct_80122D44_arg1* arg1, s32 arg2, s32 alpha);
+void func_80122C20(struct PlayState* play, struct_80122D44_arg1* arg1);
+void func_80122D44(struct PlayState* play, struct_80122D44_arg1* arg1);
 u8 Player_MaskIdToItemId(s32 maskIdMinusOne);
-s32 Player_GetCurMaskItemId(PlayState* play);
+s32 Player_GetCurMaskItemId(struct PlayState* play);
 void func_80122F28(Player* player);
-s32 func_80122F9C(PlayState* play);
-s32 func_80122FCC(PlayState* play);
-void func_8012300C(PlayState* play, s32 arg1);
-void func_8012301C(Actor* thisx, PlayState* play2);
-void func_80123140(PlayState* play, Player* player);
-s32 Player_InBlockingCsMode(PlayState* play, Player* player);
-s32 Player_InCsMode(PlayState* play);
+s32 func_80122F9C(struct PlayState* play);
+s32 func_80122FCC(struct PlayState* play);
+void func_8012300C(struct PlayState* play, s32 arg1);
+void func_8012301C(Actor* thisx, struct PlayState* play2);
+void func_80123140(struct PlayState* play, Player* player);
+s32 Player_InBlockingCsMode(struct PlayState* play, Player* player);
+s32 Player_InCsMode(struct PlayState* play);
 s32 func_80123420(Player* player);
 s32 func_80123434(Player* player);
-s32 func_80123448(PlayState* play);
+s32 func_80123448(struct PlayState* play);
 s32 Player_IsGoronOrDeku(Player* player);
-s32 func_801234D4(PlayState* play);
-s32 func_80123590(PlayState* play, Actor* actor);
-ItemId Player_GetItemOnButton(PlayState* play, Player* player, EquipSlot slot);
-PlayerItemAction func_80123810(PlayState* play);
+s32 func_801234D4(struct PlayState* play);
+s32 func_80123590(struct PlayState* play, Actor* actor);
+ItemId Player_GetItemOnButton(struct PlayState* play, Player* player, EquipSlot slot);
+PlayerItemAction func_80123810(struct PlayState* play);
 PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerItemAction itemAction);
 void Player_SetModelsForHoldingShield(Player* player);
 void Player_SetModels(Player* player, PlayerModelGroup modelGroup);
 void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup);
 void func_80123C58(Player* player);
-void Player_SetEquipmentData(PlayState* play, Player* player);
-void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, PlayerItemAction itemAction);
+void Player_SetEquipmentData(struct PlayState* play, Player* player);
+void Player_UpdateBottleHeld(struct PlayState* play, Player* player, ItemId itemId, PlayerItemAction itemAction);
 void Player_Untarget(Player* player);
 void func_80123DC0(Player* player);
-void func_80123E90(PlayState* play, Actor* actor);
-s32 func_80123F2C(PlayState* play, s32 ammo);
-s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange);
+void func_80123E90(struct PlayState* play, Actor* actor);
+s32 func_80123F2C(struct PlayState* play, s32 ammo);
+s32 Player_IsBurningStickInRange(struct PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange);
 u8 Player_GetStrength(void);
-u8 Player_GetMask(PlayState* play);
-void Player_RemoveMask(PlayState* play);
-s32 Player_HasMirrorShieldEquipped(PlayState* play);
-s32 Player_IsHoldingMirrorShield(PlayState* play);
+u8 Player_GetMask(struct PlayState* play);
+void Player_RemoveMask(struct PlayState* play);
+s32 Player_HasMirrorShieldEquipped(struct PlayState* play);
+s32 Player_IsHoldingMirrorShield(struct PlayState* play);
 s32 Player_IsHoldingHookshot(Player* player);
 s32 func_801240DC(Player* player);
 PlayerBButtonSword Player_BButtonSwordFromIA(Player* player, PlayerItemAction itemAction);
@@ -1395,22 +1396,22 @@ PlayerExplosive Player_ExplosiveFromIA(Player* player, PlayerItemAction itemActi
 PlayerExplosive Player_GetExplosiveHeld(Player* player);
 PlayerSword Player_SwordFromIA(Player* player, PlayerItemAction itemAction);
 s32 func_801242B4(Player* player);
-s32 Player_GetEnvironmentalHazard(PlayState* play);
+s32 Player_GetEnvironmentalHazard(struct PlayState* play);
 void Player_UpdateBunnyEars(Player* player);
 void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2);
-void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor);
+void Player_DrawImpl(struct PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor);
 void func_80125318(Vec3f* arg0, Vec3s* arg1);
-void Player_DrawZoraShield(PlayState* play, Player* player);
-void func_80125500(PlayState* play, Player* player, s32 limbIndex, Vec3f* pos, Vec3s* rot);
-s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
-s32 Player_OverrideLimbDrawGameplayFirstPerson(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
-s32 Player_OverrideLimbDrawGameplayCrawling(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-s32 func_80126440(PlayState* play, ColliderQuad* collider, WeaponInfo* weaponInfo, Vec3f* newTip, Vec3f* newBase);
-void Player_DrawGetItem(PlayState* play, Player* player);
-void func_80126B8C(PlayState* play, Player* player);
-s32 func_80127438(PlayState* play, Player* player, s32 currentMask);
-s32 func_80128640(PlayState* play, Player* player, Gfx* dlist);
-void Player_SetFeetPos(PlayState* play, Player* player, s32 limbIndex);
-void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
+void Player_DrawZoraShield(struct PlayState* play, Player* player);
+void func_80125500(struct PlayState* play, Player* player, s32 limbIndex, Vec3f* pos, Vec3s* rot);
+s32 Player_OverrideLimbDrawGameplayDefault(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
+s32 Player_OverrideLimbDrawGameplayFirstPerson(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
+s32 Player_OverrideLimbDrawGameplayCrawling(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+s32 func_80126440(struct PlayState* play, ColliderQuad* collider, WeaponInfo* weaponInfo, Vec3f* newTip, Vec3f* newBase);
+void Player_DrawGetItem(struct PlayState* play, Player* player);
+void func_80126B8C(struct PlayState* play, Player* player);
+s32 func_80127438(struct PlayState* play, Player* player, s32 currentMask);
+s32 func_80128640(struct PlayState* play, Player* player, Gfx* dlist);
+void Player_SetFeetPos(struct PlayState* play, Player* player, s32 limbIndex);
+void Player_PostLimbDrawGameplay(struct PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
 
 #endif
