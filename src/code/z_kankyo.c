@@ -1423,7 +1423,6 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
             }
 
             if (!envCtx->lightBlendEnabled) {
-
                 for (i = 0; i < 3; i++) {
                     envCtx->lightSettings.ambientColor[i] = lightSettingsList[envCtx->lightSetting].ambientColor[i];
                     envCtx->lightSettings.light1Dir[i] = lightSettingsList[envCtx->lightSetting].light1Dir[i];
