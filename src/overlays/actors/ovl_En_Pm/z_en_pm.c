@@ -843,7 +843,7 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 1:
         case 3:
         case 5:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08) && (this->unk_378 == 3)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_LISTENED_ANJU_POSTMAN_CONVERSATION) && (this->unk_378 == 3)) {
                 CutsceneManager_Stop(csId);
             } else {
                 Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
@@ -1711,9 +1711,9 @@ s32 func_80AF9D04(EnPm* this, PlayState* play) {
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if (((f32)this->unk_36E / this->unk_36C) <= 0.9f) {
-                door->unk_1A7 = this->unk_260;
+                door->openTimer = this->unk_260;
             } else {
-                door->unk_1A7 = 0;
+                door->openTimer = 0;
             }
         }
         this->unk_36E = CLAMP(this->unk_36E, 0, this->unk_36C);

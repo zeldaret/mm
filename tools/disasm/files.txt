@@ -247,7 +247,7 @@
             # .data section
             0x800969C0 : "rspboot",
             0x80096B20 : "idle",
-            0x80096B40 : "viconfig",
+            0x80096B40 : "carthandle",
             0x80096B50 : "z_std_dma",
             0x80096B60 : "irqmgr",
             0x80096B80 : "fault",
