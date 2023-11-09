@@ -12,7 +12,7 @@
         <Animation Name="gPoeComposerIdleAnim" Offset="0x188C" />
         <Animation Name="gPoeComposerArmsRaisedAnim" Offset="0x1F44" />
         <Animation Name="gPoeComposerLowerArmsAnim" Offset="0x23E8" />
-        <Animation Name="gPoeComposerLookingDownAnim" Offset="0x2AE0" />
+        <Animation Name="gPoeComposerLookDownAnim" Offset="0x2AE0" />
         <Animation Name="gPoeComposerBeginRollAnim" Offset="0x3024" />
         <Animation Name="gPoeComposerRollAnim" Offset="0x334C" />
         <Animation Name="gPoeComposerAppearDisappearAnim" Offset="0x3954" />
@@ -59,6 +59,6 @@
         <Limb Name="gPoeComposerLowerBodyLimb" Type="Standard" EnumName="POE_COMPOSER_LIMB_LOWER_BODY" Offset="0x98F8" />
 
         <!-- Skeleton -->
-        <Skeleton Name="gPoeComposerSkel" Type="Flex" LimbType="Standard" LimbNone="POE_COMPOSER_LIMB_NONE" LimbMax="POE_COMPOSER_LIMB_MAX" EnumName="PoComposerLimb" Offset="0x9930" />
+        <Skeleton Name="gPoeComposerSkel" Type="Flex" LimbType="Standard" LimbNone="POE_COMPOSER_LIMB_NONE" LimbMax="POE_COMPOSER_LIMB_MAX" EnumName="PoeComposerLimb" Offset="0x9930" />
     </File>
 </Root>

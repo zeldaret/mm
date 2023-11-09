@@ -4,8 +4,8 @@
 #include "global.h"
 #include "objects/object_po_composer/object_po_composer.h"
 
-#define POE_COMPOSER_IS_FLAT(actor) ((actor)->params & 0x8000)
-#define POE_COMPOSER_4000(actor)    ((actor)->params & 0x4000)
+#define POE_COMPOSER_IS_FLAT(thisx) ((thisx)->params & 0x8000)
+#define POE_COMPOSER_4000(thisx)    ((thisx)->params & 0x4000)
 
 typedef enum {
     /*  1 */ POE_COMPOSER_CUEID_IDLE = 1,
