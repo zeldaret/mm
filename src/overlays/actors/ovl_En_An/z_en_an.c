@@ -23,7 +23,7 @@ void EnAn_Update(Actor* thisx, PlayState* play);
 void EnAn_Draw(Actor* thisx, PlayState* play);
 
 // Action funcs
-void EnAn_Initialize(EnAn* this, PlayState* play);
+void EnAn_FinishInit(EnAn* this, PlayState* play);
 void EnAn_FollowSchedule(EnAn* this, PlayState* play);
 void EnAn_Talk(EnAn* this, PlayState* play);
 
@@ -998,7 +998,9 @@ static AnimationInfoS sAnimationInfo[ENAN_ANIM_MAX] = {
     { &gAnju3BroomIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_BROOM_IDLE
     { &gAnju3BroomWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAN_ANIM_BROOM_WALK
     { &gAnju3BroomSweepAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_BROOM_SWEEP
-    //! @bug Uses symbol from OBJECT_AN2 instead of OBJECT_AN3
+    //! @bug Uses symbol from OBJECT_AN2 instead of OBJECT_AN3. Because of this entry being in the OBJECT_AN3 block,
+    //! then the actor will try to load this address from OBJECT_AN3, but this address is way outside said object,
+    //! producing an OoB read and reading garbage, possible from other object. This will likely produce a crash.
     { &gAnju2UmbrellaSitAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAN_ANIM_24
 
     // ENAN_ANIMOBJ_AN4
@@ -1740,6 +1742,7 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
     return NULL;
 }
 
+// TODO: consider renaming this (and similar functions of other schedule actors) to `TryTalking`
 s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
     s32 ret = false;
 
@@ -3162,7 +3165,7 @@ void EnAn_HandleSchedule(EnAn* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
 }
 
-void EnAn_Initialize(EnAn* this, PlayState* play) {
+void EnAn_FinishInit(EnAn* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gAnju1Skel, NULL, this->jointTable, this->morphTable, ANJU1_LIMB_MAX);
 
@@ -3331,7 +3334,7 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
         this->actor.room = -1;
     }
 
-    this->actionFunc = EnAn_Initialize;
+    this->actionFunc = EnAn_FinishInit;
 }
 
 void EnAn_Destroy(Actor* thisx, PlayState* play) {
@@ -3347,7 +3350,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if ((this->actionFunc != EnAn_Initialize) && !EnAn_CheckTalk(this, play) &&
+    if ((this->actionFunc != EnAn_FinishInit) && !EnAn_CheckTalk(this, play) &&
         EnAn_IsCouplesMaskCsPlaying(this, play)) {
         EnAn_HandleCouplesMaskCutscene(this, play);
         EnAn_UpdateSkelAnime(this, play);

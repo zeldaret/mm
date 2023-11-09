@@ -14058,7 +14058,7 @@
     0x80B575BC:("EnAn_HandleSch_WaitingForKafei",),
     0x80B57674:("EnAn_HandleSch_WithKafei",),
     0x80B57718:("EnAn_HandleSchedule",),
-    0x80B577F0:("EnAn_Initialize",),
+    0x80B577F0:("EnAn_FinishInit",),
     0x80B578F8:("EnAn_FollowSchedule",),
     0x80B57A44:("EnAn_Talk",),
     0x80B57B48:("EnAn_HandleCouplesMaskCutscene",),
