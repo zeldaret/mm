@@ -26,15 +26,15 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play);
 void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play);
 
 ActorInit En_Minifrog_InitVars = {
-    ACTOR_EN_MINIFROG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_FR,
-    sizeof(EnMinifrog),
-    (ActorFunc)EnMinifrog_Init,
-    (ActorFunc)EnMinifrog_Destroy,
-    (ActorFunc)EnMinifrog_Update,
-    (ActorFunc)EnMinifrog_Draw,
+    /**/ ACTOR_EN_MINIFROG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_FR,
+    /**/ sizeof(EnMinifrog),
+    /**/ EnMinifrog_Init,
+    /**/ EnMinifrog_Destroy,
+    /**/ EnMinifrog_Update,
+    /**/ EnMinifrog_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -150,7 +150,7 @@ void EnMinifrog_Destroy(Actor* thisx, PlayState* play) {
 
     Collider_DestroyCylinder(play, &this->collider);
     if (this->flags & 0x100) {
-        func_801A1F88();
+        Audio_StopSequenceAtDefaultPos();
     }
 }
 
@@ -438,7 +438,7 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, PlayState* play) {
         this->actionFunc = EnMinifrog_NextFrogMissing;
         this->timer = 60;
         this->actor.home.rot.y = Actor_WorldYawTowardActor(&this->actor, &this->frog->actor);
-        func_801A1F88();
+        Audio_StopSequenceAtDefaultPos();
         this->flags &= ~0x100;
         this->flags &=
             ~(0x2 << FROG_YELLOW | 0x2 << FROG_CYAN | 0x2 << FROG_PINK | 0x2 << FROG_BLUE | 0x2 << FROG_WHITE);
@@ -460,7 +460,7 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, PlayState* play) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
         this->actionFunc = EnMinifrog_SetupNextFrogChoir;
         this->timer = 5;
-        func_801A1F00(3, NA_BGM_FROG_SONG);
+        Audio_PlaySequenceAtDefaultPos(SEQ_PLAYER_BGM_SUB, NA_BGM_FROG_SONG);
         this->flags |= 0x100;
         play->setPlayerTalkAnim(play, &gPlayerAnim_pn_gakkiplay, ANIMMODE_LOOP);
     } else {

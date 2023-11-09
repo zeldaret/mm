@@ -21,15 +21,15 @@ void EnHeishi_SetupIdle(EnHeishi* this);
 void EnHeishi_Idle(EnHeishi* this, PlayState* play);
 
 ActorInit En_Heishi_InitVars = {
-    ACTOR_EN_HEISHI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SDN,
-    sizeof(EnHeishi),
-    (ActorFunc)EnHeishi_Init,
-    (ActorFunc)EnHeishi_Destroy,
-    (ActorFunc)EnHeishi_Update,
-    (ActorFunc)EnHeishi_Draw,
+    /**/ ACTOR_EN_HEISHI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnHeishi),
+    /**/ EnHeishi_Init,
+    /**/ EnHeishi_Destroy,
+    /**/ EnHeishi_Update,
+    /**/ EnHeishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -56,7 +56,7 @@ void EnHeishi_Init(Actor* thisx, PlayState* play) {
     EnHeishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWave, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWaveAnim, this->jointTable, this->morphTable,
                        SOLDIER_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->paramsCopy = this->actor.params;
@@ -99,11 +99,11 @@ typedef enum EnHeishiAnimation {
 } EnHeishiAnimation;
 
 static AnimationHeader* sAnimations[HEISHI_ANIM_MAX] = {
-    &gSoldierStandHandOnHip, // HEISHI_ANIM_STAND_HAND_ON_HIP
-    &gSoldierCheerWithSpear, // HEISHI_ANIM_CHEER_WITH_SPEAR
-    &gSoldierWave,           // HEISHI_ANIM_WAVE
-    &gSoldierSitAndReach,    // HEISHI_ANIM_SIT_AND_REACH
-    &gSoldierStandUp,        // HEISHI_ANIM_STAND_UP
+    &gSoldierStandHandOnHipAnim, // HEISHI_ANIM_STAND_HAND_ON_HIP
+    &gSoldierCheerWithSpearAnim, // HEISHI_ANIM_CHEER_WITH_SPEAR
+    &gSoldierWaveAnim,           // HEISHI_ANIM_WAVE
+    &gSoldierSitAndReachAnim,    // HEISHI_ANIM_SIT_AND_REACH
+    &gSoldierStandUpAnim,        // HEISHI_ANIM_STAND_UP
 };
 
 static u8 sAnimationModes[HEISHI_ANIM_MAX] = {

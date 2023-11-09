@@ -24,15 +24,15 @@ void func_809A57D8(ObjArmos* this);
 void func_809A57F4(ObjArmos* this, PlayState* play);
 
 ActorInit Obj_Armos_InitVars = {
-    ACTOR_OBJ_ARMOS,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_AM,
-    sizeof(ObjArmos),
-    (ActorFunc)ObjArmos_Init,
-    (ActorFunc)ObjArmos_Destroy,
-    (ActorFunc)ObjArmos_Update,
-    (ActorFunc)ObjArmos_Draw,
+    /**/ ACTOR_OBJ_ARMOS,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_AM,
+    /**/ sizeof(ObjArmos),
+    /**/ ObjArmos_Init,
+    /**/ ObjArmos_Destroy,
+    /**/ ObjArmos_Update,
+    /**/ ObjArmos_Draw,
 };
 
 s16 D_809A5BB0[] = { 1, -1, 0, 0 };
@@ -198,7 +198,7 @@ void ObjArmos_Init(Actor* thisx, PlayState* play) {
 
     if (sp40 == 0) {
         func_809A57D8(this);
-    } else if (Flags_GetSwitch(play, OBJARMOS_GET_7F(&this->dyna.actor))) {
+    } else if (Flags_GetSwitch(play, OBJARMOS_GET_SWITCH_FLAG(&this->dyna.actor))) {
         if (sp44 == OBJARMOS_ROT_7_0) {
             this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (sp40 * 60);
             func_809A57D8(this);
@@ -285,7 +285,7 @@ void func_809A562C(ObjArmos* this, PlayState* play) {
             }
         } else {
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-            Flags_SetSwitch(play, OBJARMOS_GET_7F(&this->dyna.actor));
+            Flags_SetSwitch(play, OBJARMOS_GET_SWITCH_FLAG(&this->dyna.actor));
             sp20 = true;
         }
 

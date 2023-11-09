@@ -37,15 +37,15 @@ s16 D_80AAAE26;
 #include "overlays/ovl_Dm_Char01/ovl_Dm_Char01.c"
 
 ActorInit Dm_Char01_InitVars = {
-    ACTOR_DM_CHAR01,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_MTORIDE,
-    sizeof(DmChar01),
-    (ActorFunc)DmChar01_Init,
-    (ActorFunc)DmChar01_Destroy,
-    (ActorFunc)DmChar01_Update,
-    (ActorFunc)DmChar01_Draw,
+    /**/ ACTOR_DM_CHAR01,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_MTORIDE,
+    /**/ sizeof(DmChar01),
+    /**/ DmChar01_Init,
+    /**/ DmChar01_Destroy,
+    /**/ DmChar01_Update,
+    /**/ DmChar01_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -176,7 +176,7 @@ void func_80AA8698(DmChar01* this, PlayState* play) {
         D_80AAAAB4 = false;
     }
 
-    if ((player->transformation == PLAYER_FORM_DEKU) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_DEKU) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA)) {
 
         if ((player2->actor.world.pos.x > -40.0f) && (player2->actor.world.pos.x < 40.0f) &&

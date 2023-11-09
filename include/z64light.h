@@ -8,26 +8,14 @@
 
 struct PlayState;
 
-
-typedef struct {
-    /* 0x00 */ u8 ambientColor[3];
-    /* 0x03 */ s8 diffuseDir1[3];
-    /* 0x06 */ u8 diffuseColor1[3];
-    /* 0x09 */ s8 diffusePos2[3];
-    /* 0x0C */ u8 diffuseColor[3];
-    /* 0x0F */ u8 fogColor[3];
-    /* 0x12 */ s16 fogNear;
-    /* 0x14 */ s16 zFar;
-} LightSettings; // size = 0x16
-
 typedef struct {
     /* 0x00 */ s16 ambientColor[3];
-    /* 0x06 */ s16 diffuseColor1[3];
-    /* 0x0C */ s16 diffuseColor2[3];
+    /* 0x06 */ s16 light1Color[3];
+    /* 0x0C */ s16 light2Color[3];
     /* 0x12 */ s16 fogColor[3];
     /* 0x18 */ s16 fogNear;
     /* 0x1A */ s16 zFar;
-} EnvLightSettings; // size = 0x1C
+} AdjLightSettings; // size = 0x1C
 
 typedef struct {
     /* 0x0 */ s16 x;
@@ -77,8 +65,8 @@ typedef struct LightsBuffer {
 
 typedef struct LightContext {
     /* 0x0 */ LightNode* listHead;
-    /* 0x4 */ Color_RGB8 ambient;
-    /* 0x7 */ Color_RGB8 fogColor;
+    /* 0x4 */ u8 ambientColor[3];
+    /* 0x7 */ u8 fogColor[3];
     /* 0xA */ s16 fogNear; // how close until fog starts taking effect. range 0 - 996
     /* 0xC */ s16 zFar; // draw distance. range 0 - 12800
 } LightContext; // size = 0x10

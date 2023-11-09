@@ -37,15 +37,15 @@ void func_80BB3318(EnGeg* this, PlayState* play);
 void func_80BB347C(EnGeg* this, PlayState* play);
 
 ActorInit En_Geg_InitVars = {
-    ACTOR_EN_GEG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_OF1D_MAP,
-    sizeof(EnGeg),
-    (ActorFunc)EnGeg_Init,
-    (ActorFunc)EnGeg_Destroy,
-    (ActorFunc)EnGeg_Update,
-    (ActorFunc)EnGeg_Draw,
+    /**/ ACTOR_EN_GEG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_OF1D_MAP,
+    /**/ sizeof(EnGeg),
+    /**/ EnGeg_Init,
+    /**/ EnGeg_Destroy,
+    /**/ EnGeg_Update,
+    /**/ EnGeg_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -416,12 +416,12 @@ s32 func_80BB1D64(EnGeg* this, PlayState* play) {
 }
 
 void EnGeg_UpdateSkelAnime(EnGeg* this, PlayState* play) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
     SkelAnime_Update(&this->skelAnime);
 }
 
 void EnGeg_ChangeAnim(EnGeg* this, PlayState* play) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
 }
 
@@ -454,7 +454,7 @@ s32 func_80BB2088(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB217C(EnGeg* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->unk_248)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->animIndex = ENGEG_ANIM_5;
         EnGeg_ChangeAnim(this, play);
         Actor_SetScale(&this->actor, 0.01f);
@@ -550,8 +550,8 @@ void func_80BB2520(EnGeg* this, PlayState* play) {
                 break;
 
             case 0xD66:
-                this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
-                if (this->unk_248 >= 0) {
+                this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
+                if (this->objectSlot > OBJECT_SLOT_NONE) {
                     this->animIndex = ENGEG_ANIM_19;
                     EnGeg_ChangeAnim(this, play);
                 }
@@ -568,8 +568,8 @@ void func_80BB2520(EnGeg* this, PlayState* play) {
             case 0xD72:
             case 0xD75:
             case 0xD8B:
-                this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
-                if (this->unk_248 >= 0) {
+                this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
+                if (this->objectSlot > OBJECT_SLOT_NONE) {
                     this->animIndex = ENGEG_ANIM_4;
                     EnGeg_ChangeAnim(this, play);
                 }
@@ -598,7 +598,7 @@ void func_80BB26EC(EnGeg* this, PlayState* play) {
 
             case 0xD61:
                 CutsceneManager_Stop(this->csId);
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_230 &= ~0x10;
                 this->actionFunc = func_80BB221C;
@@ -617,14 +617,14 @@ void func_80BB27D4(EnGeg* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (this->unk_496) {
             case 0xD63:
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_80BB221C;
                 break;
 
             case 0xD69:
                 this->nextCsId = this->csIdList[6];
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_80BB2520;
                 break;
@@ -632,7 +632,7 @@ void func_80BB27D4(EnGeg* this, PlayState* play) {
             case 0xD6D:
             case 0xD6F:
             case 0xD8A:
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_80BB31B8;
                 break;
@@ -640,7 +640,7 @@ void func_80BB27D4(EnGeg* this, PlayState* play) {
             case 0xD72:
             case 0xD75:
             case 0xD8B:
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_230 &= ~0x10;
                 this->nextCsId = this->csIdList[7];
@@ -667,7 +667,7 @@ void func_80BB2944(EnGeg* this, PlayState* play) {
         }
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_496 == 0xD67) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->nextCsId = this->csIdList[4];
             this->actionFunc = func_80BB2520;
@@ -684,7 +684,7 @@ void func_80BB2A54(EnGeg* this, PlayState* play) {
             CutsceneManager_Stop(this->csId);
             this->unk_230 &= ~0x10;
             this->unk_244 = 65;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = func_80BB347C;
         } else {
@@ -713,8 +713,8 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
             CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->unk_496 = 0xD68;
             Message_ContinueTextbox(play, this->unk_496);
-            this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_TAISOU);
-            if (this->unk_248 >= 0) {
+            this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_TAISOU);
+            if (this->objectSlot > OBJECT_SLOT_NONE) {
                 this->animIndex = ENGEG_ANIM_13;
                 EnGeg_ChangeAnim(this, play);
             }
@@ -926,8 +926,8 @@ void EnGeg_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     if (this->actor.update != NULL) {
-        this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
-        if (this->unk_248 < 0) {
+        this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
+        if (this->objectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
         }
     }

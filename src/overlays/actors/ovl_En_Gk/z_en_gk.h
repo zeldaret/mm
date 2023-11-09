@@ -10,7 +10,7 @@ typedef void (*EnGkActionFunc)(struct EnGk*, PlayState*);
 
 #define ENGK_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENGK_GET_PATH_INDEX(thisx) (((thisx)->params & 0xF0) >> 4)
-#define ENGK_GET_3F00(thisx) (((thisx)->params & 0x3F00) >> 8)
+#define ENGK_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x3F00) >> 8)
 
 #define ENGK_PATH_INDEX_NONE 0xF
 

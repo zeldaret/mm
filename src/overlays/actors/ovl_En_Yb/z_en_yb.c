@@ -33,15 +33,15 @@ void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f3
 s32 EnYb_CanTalk(EnYb* this, PlayState* play);
 
 ActorInit En_Yb_InitVars = {
-    ACTOR_EN_YB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_YB,
-    sizeof(EnYb),
-    (ActorFunc)EnYb_Init,
-    (ActorFunc)EnYb_Destroy,
-    (ActorFunc)EnYb_Update,
-    (ActorFunc)EnYb_Draw,
+    /**/ ACTOR_EN_YB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_YB,
+    /**/ sizeof(EnYb),
+    /**/ EnYb_Init,
+    /**/ EnYb_Destroy,
+    /**/ EnYb_Update,
+    /**/ EnYb_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -87,9 +87,10 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, EnYb_ActorShadowFunc, 20.0f);
 
-    // @bug this alignment is because of player animations, but should be using ALIGN16
-    SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200, (uintptr_t)this->jointTable & ~0xF,
-                       (uintptr_t)this->morphTable & ~0xF, YB_LIMB_MAX);
+    //! @bug this alignment is because of player animations, but should be using ALIGN16
+    SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkel, &object_yb_Anim_000200,
+                       (void*)((uintptr_t)this->jointTable & ~0xF), (void*)((uintptr_t)this->morphTable & ~0xF),
+                       YB_LIMB_MAX);
 
     Animation_PlayLoop(&this->skelAnime, &object_yb_Anim_000200);
 
@@ -358,7 +359,7 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
 
     EnYb_UpdateAnimation(this, play);
     if ((this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.playerHeightRel) < 50.0f) &&
-        (play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
+        (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
         (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;

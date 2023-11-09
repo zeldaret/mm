@@ -4,7 +4,7 @@
 
 vs32 gIrqMgrResetStatus = 0;
 volatile OSTime sIrqMgrResetTime = 0;
-volatile OSTime sIrqMgrRetraceTime = 0;
+volatile OSTime gIrqMgrRetraceTime = 0;
 s32 sIrqMgrRetraceCount = 0;
 
 void IrqMgr_AddClient(IrqMgr* irqmgr, IrqMgrClient* client, OSMesgQueue* msgQueue) {
@@ -109,11 +109,11 @@ void IrqMgr_HandlePRENMI500(IrqMgr* irqmgr) {
     IrqMgr_CheckStack();
 }
 void IrqMgr_HandleRetrace(IrqMgr* irqmgr) {
-    if (sIrqMgrRetraceTime == 0) {
+    if (gIrqMgrRetraceTime == 0) {
         if (irqmgr->lastFrameTime == 0) {
             irqmgr->lastFrameTime = osGetTime();
         } else {
-            sIrqMgrRetraceTime = osGetTime() - irqmgr->lastFrameTime;
+            gIrqMgrRetraceTime = osGetTime() - irqmgr->lastFrameTime;
         }
     }
 

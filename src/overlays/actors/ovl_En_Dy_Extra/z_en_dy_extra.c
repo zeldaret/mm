@@ -16,19 +16,19 @@ void EnDyExtra_Destroy(Actor* thisx, PlayState* play);
 void EnDyExtra_Update(Actor* thisx, PlayState* play);
 void EnDyExtra_Draw(Actor* thisx, PlayState* play);
 
-void func_80A61334(EnDyExtra* this, PlayState* play);
-void func_80A613C8(EnDyExtra* this, PlayState* play);
+void EnDyExtra_WaitForTrigger(EnDyExtra* this, PlayState* play);
+void EnDyExtra_Fall(EnDyExtra* this, PlayState* play);
 
 ActorInit En_Dy_Extra_InitVars = {
-    ACTOR_EN_DY_EXTRA,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_DY_OBJ,
-    sizeof(EnDyExtra),
-    (ActorFunc)EnDyExtra_Init,
-    (ActorFunc)EnDyExtra_Destroy,
-    (ActorFunc)EnDyExtra_Update,
-    (ActorFunc)EnDyExtra_Draw,
+    /**/ ACTOR_EN_DY_EXTRA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_DY_OBJ,
+    /**/ sizeof(EnDyExtra),
+    /**/ EnDyExtra_Init,
+    /**/ EnDyExtra_Destroy,
+    /**/ EnDyExtra_Update,
+    /**/ EnDyExtra_Draw,
 };
 
 void EnDyExtra_Destroy(Actor* thisx, PlayState* play) {
@@ -41,35 +41,35 @@ void EnDyExtra_Init(Actor* thisx, PlayState* play) {
     this->actor.scale.x = 0.025f;
     this->actor.scale.y = 0.039f;
     this->actor.scale.z = 0.025f;
-    this->unk160 = this->actor.world.pos;
+    this->initPos = this->actor.world.pos;
     this->actor.gravity = -0.2f;
-    this->unk150 = 1.0f;
-    this->unk14C = 0x3C;
-    this->actionFunc = func_80A61334;
+    this->alphaScale = 1.0f;
+    this->timer = 60;
+    this->actionFunc = EnDyExtra_WaitForTrigger;
 }
 
-void func_80A61334(EnDyExtra* this, PlayState* play) {
+void EnDyExtra_WaitForTrigger(EnDyExtra* this, PlayState* play) {
     Math_ApproachF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
     if (this->actor.world.pos.y < -85.0f) {
         this->actor.velocity.y = 0.0f;
     }
 
-    if ((this->unk14C == 0) && (this->unk14A != 0)) {
-        this->unk14C = 0x32;
-        this->actionFunc = func_80A613C8;
+    if ((this->timer == 0) && this->trigger) {
+        this->timer = 50;
+        this->actionFunc = EnDyExtra_Fall;
     }
 }
 
-void func_80A613C8(EnDyExtra* this, PlayState* play) {
+void EnDyExtra_Fall(EnDyExtra* this, PlayState* play) {
     Math_ApproachF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
-    if ((this->unk14C == 0) || (this->unk150 < 0.02f)) {
+    if ((this->timer == 0) || (this->alphaScale < 0.02f)) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    this->unk150 -= 0.02f;
+    this->alphaScale -= 0.02f;
 
     if (this->actor.world.pos.y < -85.0f) {
         this->actor.velocity.y = 0.0f;
@@ -79,40 +79,40 @@ void func_80A613C8(EnDyExtra* this, PlayState* play) {
 void EnDyExtra_Update(Actor* thisx, PlayState* play) {
     EnDyExtra* this = THIS;
 
-    DECR(this->unk14C);
+    DECR(this->timer);
     Actor_PlaySfx(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
 }
 
-static Color_RGBA8 D_80A61740[] = {
+static Color_RGBA8 sPrimColors[] = {
     { 255, 255, 170, 255 }, { 255, 170, 255, 255 }, { 255, 255, 170, 255 },
     { 170, 255, 255, 255 }, { 255, 255, 170, 255 },
 };
 
-static Color_RGBA8 D_80A61754[] = {
+static Color_RGBA8 sEnvColors[] = {
     { 255, 100, 0, 255 }, { 255, 0, 100, 255 }, { 100, 255, 0, 255 }, { 0, 100, 255, 255 }, { 255, 230, 0, 255 }
 };
 
-static u8 D_80A61768[] = {
-    2, 1, 1, 2, 0, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 1, 2, 0, 0,
+static u8 sAlphaTypeIndices[] = {
+    2, 1, 1, 2, 0, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 1, 2, 0,
 };
 
 void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
-    EnDyExtra* this = THIS;
     s32 pad;
+    EnDyExtra* this = THIS;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
-    Vtx* vertices = Lib_SegmentedToVirtual(object_dy_obj_Vtx_00DD40);
+    Vtx* vertices = Lib_SegmentedToVirtual(gGreatFairySpiralBeamVtx);
     s32 i;
-    u8 unk[3];
+    u8 alphas[3];
 
-    unk[0] = 0.0f;
-    unk[1] = (s8)(this->unk150 * 240.0f);
-    unk[2] = (s8)(this->unk150 * 255.0f);
+    alphas[0] = 0.0f;
+    alphas[1] = (s32)(this->alphaScale * 240.0f);
+    alphas[2] = (s32)(this->alphaScale * 255.0f);
 
-    for (i = 0; i < 27; i++) {
-        if (D_80A61768[i]) {
-            vertices[i].v.cn[3] = unk[D_80A61768[i]];
+    for (i = 0; i < ARRAY_COUNT(sAlphaTypeIndices); i++) {
+        if (sAlphaTypeIndices[i]) {
+            vertices[i].v.cn[3] = alphas[sAlphaTypeIndices[i]];
         }
     }
 
@@ -124,10 +124,10 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
                                 play->state.frames * -8, 0x10, 0x10));
     gDPPipeSync(POLY_XLU_DISP++);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, D_80A61740[this->type].r, D_80A61740[this->type].g,
-                    D_80A61740[this->type].b, 255);
-    gDPSetEnvColor(POLY_XLU_DISP++, D_80A61754[this->type].r, D_80A61754[this->type].g, D_80A61754[this->type].b, 128);
-    gSPDisplayList(POLY_XLU_DISP++, object_dy_obj_DL_00DEF0);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sPrimColors[this->type].r, sPrimColors[this->type].g,
+                    sPrimColors[this->type].b, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, sEnvColors[this->type].r, sEnvColors[this->type].g, sEnvColors[this->type].b, 128);
+    gSPDisplayList(POLY_XLU_DISP++, gGreatFairySpiralBeamDL);
 
     CLOSE_DISPS(gfxCtx);
 }

@@ -30,15 +30,15 @@ void func_80C0AD64(BgIkninSusceil* this, PlayState* play);
 void func_80C0AE5C(BgIkninSusceil* this, PlayState* play);
 
 ActorInit Bg_Iknin_Susceil_InitVars = {
-    ACTOR_BG_IKNIN_SUSCEIL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_IKNINSIDE_OBJ,
-    sizeof(BgIkninSusceil),
-    (ActorFunc)BgIkninSusceil_Init,
-    (ActorFunc)BgIkninSusceil_Destroy,
-    (ActorFunc)BgIkninSusceil_Update,
-    (ActorFunc)BgIkninSusceil_Draw,
+    /**/ ACTOR_BG_IKNIN_SUSCEIL,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_IKNINSIDE_OBJ,
+    /**/ sizeof(BgIkninSusceil),
+    /**/ BgIkninSusceil_Init,
+    /**/ BgIkninSusceil_Destroy,
+    /**/ BgIkninSusceil_Update,
+    /**/ BgIkninSusceil_Draw,
 };
 
 static s32 sPad = 0;
@@ -159,7 +159,7 @@ void func_80C0ABA8(BgIkninSusceil* this, PlayState* play) {
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
         BgIkninSusceil_RequestQuakeAndRumble(this, play, 4, 14, 1);
-        Flags_UnsetSwitch(play, SUSCEIL_GET_SWITCHFLAG(&this->dyna.actor));
+        Flags_UnsetSwitch(play, SUSCEIL_GET_SWITCH_FLAG(&this->dyna.actor));
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
     } else {
@@ -173,7 +173,7 @@ void func_80C0AC74(BgIkninSusceil* this) {
 }
 
 void func_80C0AC90(BgIkninSusceil* this, PlayState* play) {
-    if (Flags_GetSwitch(play, SUSCEIL_GET_SWITCHFLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, SUSCEIL_GET_SWITCH_FLAG(&this->dyna.actor))) {
         func_80C0ACD4(this);
     }
 }

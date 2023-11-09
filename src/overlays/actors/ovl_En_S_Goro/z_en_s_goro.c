@@ -95,15 +95,15 @@ typedef enum EnSGoroAnimation {
 } EnSGoroAnimation;
 
 ActorInit En_S_Goro_InitVars = {
-    ACTOR_EN_S_GORO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_OF1D_MAP,
-    sizeof(EnSGoro),
-    (ActorFunc)EnSGoro_Init,
-    (ActorFunc)EnSGoro_Destroy,
-    (ActorFunc)EnSGoro_Update,
-    (ActorFunc)EnSGoro_Draw,
+    /**/ ACTOR_EN_S_GORO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_OF1D_MAP,
+    /**/ sizeof(EnSGoro),
+    /**/ EnSGoro_Init,
+    /**/ EnSGoro_Destroy,
+    /**/ EnSGoro_Update,
+    /**/ EnSGoro_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -264,7 +264,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                 }
             } else {
                 // Scene flag - Checks whether the chandelier has been lit
-                if (!Flags_GetSwitch(play, EN_S_GORO_SCENEFLAG_INDEX(&this->actor))) {
+                if (!Flags_GetSwitch(play, EN_S_GORO_GET_SWITCH_FLAG(&this->actor))) {
                     if (player->transformation == PLAYER_FORM_GORON) {
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_08)) {
                             if (this->textId == 0xD02) {
@@ -786,18 +786,18 @@ void EnSGoro_UpdateSleeping(EnSGoro* this, PlayState* play) {
 s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
     if (this->animInfoIndex == EN_S_GORO_ANIM_IDLE_STAND) {
         if (((EnJg*)this->otherGoron)->flags & 1) {
-            this->loadedObjIndex = Object_GetIndex(&play->objectCtx, OBJECT_TAISOU);
-            if (this->loadedObjIndex >= 0) {
-                gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->loadedObjIndex].segment);
+            this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_TAISOU);
+            if (this->objectSlot > OBJECT_SLOT_NONE) {
+                gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
                 this->animInfoIndex = EN_S_GORO_ANIM_TAISOU_CHEER;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
                 return true;
             }
         }
     } else if ((this->animInfoIndex == EN_S_GORO_ANIM_TAISOU_CHEER) && !(((EnJg*)this->otherGoron)->flags & 1)) {
-        this->loadedObjIndex = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
-        if (this->loadedObjIndex >= 0) {
-            gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->loadedObjIndex].segment);
+        this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
+        if (this->objectSlot > OBJECT_SLOT_NONE) {
+            gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
             this->animInfoIndex = EN_S_GORO_ANIM_IDLE_STAND;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
             this->skelAnime.curFrame = this->skelAnime.endFrame;
@@ -811,7 +811,7 @@ s32 EnSGoro_CheckLullaby(EnSGoro* this, PlayState* play) {
     s32 actorType;
     Player* player = GET_PLAYER(play);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3)) {
+    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT)) {
         if (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) {
             this->animInfoIndex = EN_S_GORO_ANIM_ROLLUP;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
@@ -1023,7 +1023,7 @@ s32 EnSGoro_UpdateAttentionTarget(EnSGoro* this, PlayState* play) {
 }
 
 void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->loadedObjIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actionFlags = 0;
         if (EN_S_GORO_OFTYPE_WSHRINE) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
@@ -1122,7 +1122,7 @@ void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play) {
 }
 
 void EnSGoro_WinterShrineGoron_Talk(EnSGoro* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && (Message_ShouldAdvance(play))) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         if (this->actionFlags & EN_S_GORO_ACTIONFLAG_LASTMESSAGE) {
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_ENGAGED;
@@ -1144,7 +1144,7 @@ void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_SpringShrineGoron_Talk;
-        } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isLockedOn)) {
+        } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isLockedOn) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
@@ -1157,7 +1157,7 @@ void EnSGoro_SpringShrineGoron_Talk(EnSGoro* this, PlayState* play) {
         if (this->actionFlags & EN_S_GORO_ACTIONFLAG_LASTMESSAGE) {
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_ENGAGED;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = EnSGoro_SpringShrineGoron_Idle;
             return;
@@ -1230,7 +1230,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_BombshopGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
         }
-    } else if ((talkState == TEXT_STATE_CHOICE) && (Message_ShouldAdvance(play))) {
+    } else if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 this->bombbuyFlags |= EN_S_GORO_BOMBBUYFLAG_YESBUY;
@@ -1243,7 +1243,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
 
         this->textId = EnSGoro_BombshopGoron_NextTextId(this, play);
         if ((this->textId == 0x675) || (this->textId == 0x676)) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             Actor_OfferGetItem(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
             this->actionFunc = EnSGoro_ShopGoron_TakePayment;
@@ -1288,7 +1288,7 @@ void EnSGoro_Sleep(EnSGoro* this, PlayState* play) {
 void EnSGoro_SleepTalk(EnSGoro* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = EnSGoro_Sleep;
         }
@@ -1307,10 +1307,10 @@ void EnSGoro_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     if (this->actor.update != NULL) {
-        s32 objIndex = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
+        s32 objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
 
-        this->loadedObjIndex = objIndex;
-        if (objIndex < 0) {
+        this->objectSlot = objectSlot;
+        if (objectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
         }
     }
@@ -1329,7 +1329,7 @@ void EnSGoro_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->loadedObjIndex].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
     SkelAnime_Update(&this->skelAnime);
     if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
         EnSGoro_UpdateAttentionTarget(this, play);

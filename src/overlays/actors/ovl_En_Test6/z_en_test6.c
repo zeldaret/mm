@@ -52,15 +52,15 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play);
 SoTCsAmmoDrops sSoTCsAmmoDrops[12];
 
 ActorInit En_Test6_InitVars = {
-    ACTOR_EN_TEST6,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTest6),
-    (ActorFunc)EnTest6_Init,
-    (ActorFunc)EnTest6_Destroy,
-    (ActorFunc)EnTest6_Update,
-    (ActorFunc)EnTest6_Draw,
+    /**/ ACTOR_EN_TEST6,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTest6),
+    /**/ EnTest6_Init,
+    /**/ EnTest6_Destroy,
+    /**/ EnTest6_Update,
+    /**/ EnTest6_Draw,
 };
 
 CutsceneData sDoubleSoTCsCamData[] = {
@@ -68,34 +68,34 @@ CutsceneData sDoubleSoTCsCamData[] = {
     CS_CAM_SPLINE(13, 424, 0, 100),
 
     // Camera At Data
-    /* 0x0 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 13, 0, 21, -19, CS_CAM_REL_0),
-    /* 0x1 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 18, 0, 21, -19, CS_CAM_REL_0),
-    /* 0x2 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 16, 0, 21, -19, CS_CAM_REL_0),
-    /* 0x3 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 17, -26, -5, -32, CS_CAM_REL_0),
-    /* 0x4 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 15, 0, 18, -32, CS_CAM_REL_0),
-    /* 0x5 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 14, 1, 22, -27, CS_CAM_REL_0),
-    /* 0x6 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 12, 0, 1, -5, CS_CAM_REL_0),
-    /* 0x7 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 7, 16, 29, -77, CS_CAM_REL_0),
-    /* 0x8 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, 1, 19, 111, CS_CAM_REL_0),
-    /* 0x9 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -59, 21, 91, CS_CAM_REL_0),
-    /* 0xA */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -19, 59, 84, CS_CAM_REL_0),
-    /* 0xB */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 136, -19, 59, 84, CS_CAM_REL_0),
-    /* 0xC */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 108, -17, 57, 82, CS_CAM_REL_0),
+    /* 0x0 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 13, 0, 21, -19, CS_CAM_REL_0),
+    /* 0x1 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 18, 0, 21, -19, CS_CAM_REL_0),
+    /* 0x2 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 16, 0, 21, -19, CS_CAM_REL_0),
+    /* 0x3 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 17, -26, -5, -32, CS_CAM_REL_0),
+    /* 0x4 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 15, 0, 18, -32, CS_CAM_REL_0),
+    /* 0x5 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 14, 1, 22, -27, CS_CAM_REL_0),
+    /* 0x6 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 12, 0, 1, -5, CS_CAM_REL_0),
+    /* 0x7 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 7, 16, 29, -77, CS_CAM_REL_0),
+    /* 0x8 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, 1, 19, 111, CS_CAM_REL_0),
+    /* 0x9 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, -59, 21, 91, CS_CAM_REL_0),
+    /* 0xA */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, -19, 59, 84, CS_CAM_REL_0),
+    /* 0xB */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 136, -19, 59, 84, CS_CAM_REL_0),
+    /* 0xC */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 108, -17, 57, 82, CS_CAM_REL_0),
 
     // Camera Eye Data
-    /* 0x0 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 13, 0, 50, 681, CS_CAM_REL_0),
-    /* 0x1 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 18, 0, 50, 681, CS_CAM_REL_0),
-    /* 0x2 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 16, 0, 50, 681, CS_CAM_REL_0),
-    /* 0x3 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 17, -104, 375, 345, CS_CAM_REL_0),
-    /* 0x4 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 15, 0, -62, 289, CS_CAM_REL_0),
-    /* 0x5 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 14, -47, 125, 205, CS_CAM_REL_0),
-    /* 0x6 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 12, -58, -17, 199, CS_CAM_REL_0),
-    /* 0x7 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 7, 16, 53, 211, CS_CAM_REL_0),
-    /* 0x8 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -31, 63, 623, CS_CAM_REL_0),
-    /* 0x9 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -341, 464, 542, CS_CAM_REL_0),
-    /* 0xA */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -341, 464, 542, CS_CAM_REL_0),
-    /* 0xB */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 136, -341, 464, 542, CS_CAM_REL_0),
-    /* 0xC */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 108, -339, 462, 540, CS_CAM_REL_0),
+    /* 0x0 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 13, 0, 50, 681, CS_CAM_REL_0),
+    /* 0x1 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 18, 0, 50, 681, CS_CAM_REL_0),
+    /* 0x2 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 16, 0, 50, 681, CS_CAM_REL_0),
+    /* 0x3 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 17, -104, 375, 345, CS_CAM_REL_0),
+    /* 0x4 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 15, 0, -62, 289, CS_CAM_REL_0),
+    /* 0x5 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 14, -47, 125, 205, CS_CAM_REL_0),
+    /* 0x6 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 12, -58, -17, 199, CS_CAM_REL_0),
+    /* 0x7 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 7, 16, 53, 211, CS_CAM_REL_0),
+    /* 0x8 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, -31, 63, 623, CS_CAM_REL_0),
+    /* 0x9 */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, -341, 464, 542, CS_CAM_REL_0),
+    /* 0xA */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 3, -341, 464, 542, CS_CAM_REL_0),
+    /* 0xB */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 136, -341, 464, 542, CS_CAM_REL_0),
+    /* 0xC */ CS_CAM_POINT(CS_CAM_INTERP_MP_CUBIC, 100, 108, -339, 462, 540, CS_CAM_REL_0),
 
     // Camera Roll and Fov Data
     /* 0x0 */ CS_CAM_MISC(15, 0xA, 70, 0),
@@ -375,24 +375,24 @@ void EnTest6_Destroy(Actor* thisx, PlayState* play2) {
     EnTest6* this = THIS;
     s32 i;
 
-    play->envCtx.lightSettings.ambientColor[0] = 0;
-    play->envCtx.lightSettings.ambientColor[1] = 0;
-    play->envCtx.lightSettings.ambientColor[2] = 0;
+    play->envCtx.adjLightSettings.ambientColor[0] = 0;
+    play->envCtx.adjLightSettings.ambientColor[1] = 0;
+    play->envCtx.adjLightSettings.ambientColor[2] = 0;
 
-    play->envCtx.lightSettings.diffuseColor1[0] = 0;
-    play->envCtx.lightSettings.diffuseColor1[1] = 0;
-    play->envCtx.lightSettings.diffuseColor1[2] = 0;
+    play->envCtx.adjLightSettings.light1Color[0] = 0;
+    play->envCtx.adjLightSettings.light1Color[1] = 0;
+    play->envCtx.adjLightSettings.light1Color[2] = 0;
 
-    play->envCtx.lightSettings.diffuseColor2[0] = 0;
-    play->envCtx.lightSettings.diffuseColor2[1] = 0;
-    play->envCtx.lightSettings.diffuseColor2[2] = 0;
+    play->envCtx.adjLightSettings.light2Color[0] = 0;
+    play->envCtx.adjLightSettings.light2Color[1] = 0;
+    play->envCtx.adjLightSettings.light2Color[2] = 0;
 
-    play->envCtx.lightSettings.fogColor[0] = 0;
-    play->envCtx.lightSettings.fogColor[1] = 0;
-    play->envCtx.lightSettings.fogColor[2] = 0;
+    play->envCtx.adjLightSettings.fogColor[0] = 0;
+    play->envCtx.adjLightSettings.fogColor[1] = 0;
+    play->envCtx.adjLightSettings.fogColor[2] = 0;
 
-    play->envCtx.lightSettings.fogNear = 0;
-    play->envCtx.lightSettings.zFar = 0;
+    play->envCtx.adjLightSettings.fogNear = 0;
+    play->envCtx.adjLightSettings.zFar = 0;
 
     play->envCtx.fillScreen = false;
 
@@ -425,7 +425,7 @@ void EnTest6_StartCutscene(EnTest6* this, PlayState* play) {
             break;
 
         default:
-            gSaveContext.save.daysElapsed = 0;
+            gSaveContext.save.eventDayCount = 0;
             gSaveContext.save.day = 0;
             gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
             EnTest6_SetupAction(this, EnTest6_SharedSoTCutscene);
@@ -451,7 +451,7 @@ void EnTest6_StopInvertedSoTCutscene(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = false;
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
-    func_800B7298(play, NULL, PLAYER_CSMODE_END);
+    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
     EnTest6_DisableMotionBlur();
     Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
@@ -615,30 +615,30 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
 
     // Update Player Cutscene Animation
     if (this->screenFillAlpha != 0) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
     } else {
         if (this->timer == 90) {
             // Look side-to-side but downwards, with chin down
             // gPlayerAnim_al_elf_tobidasi
-            func_800B7298(play, NULL, PLAYER_CSMODE_66);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_66);
         }
 
         if (this->timer == 70) {
             // close eyes and sway body in circles
             // gPlayerAnim_alink_yurayura
-            func_800B7298(play, NULL, PLAYER_CSMODE_82);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_82);
         }
 
         if (this->timer == 30) {
             // Look side-to-side but upwards, with chin up
             // gPlayerAnim_alink_kyoro
-            func_800B7298(play, NULL, PLAYER_CSMODE_81);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_81);
         }
 
         if (this->timer == 5) {
             // Give a big nod of approval
             // gPlayerAnim_al_yes
-            func_800B7298(play, NULL, PLAYER_CSMODE_74);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_74);
         }
     }
 
@@ -685,7 +685,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
 
     if (DECR(this->timer) == 0) {
         EnTest6_StopInvertedSoTCutscene(this, play);
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
     }
 }
 
@@ -705,7 +705,7 @@ void EnTest6_StopDoubleSoTCutscene(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = false;
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
-    func_800B7298(play, NULL, PLAYER_CSMODE_END);
+    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
     EnTest6_DisableMotionBlur();
     Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
@@ -864,23 +864,23 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
             break;
 
         case 98:
-            func_800B7298(play, NULL, PLAYER_CSMODE_64);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_64);
             break;
 
         case 68:
-            func_800B7298(play, NULL, PLAYER_CSMODE_65);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_65);
             break;
 
         case 52:
-            func_800B7298(play, NULL, PLAYER_CSMODE_88);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_88);
             break;
 
         case 43:
-            func_800B7298(play, NULL, PLAYER_CSMODE_114);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_114);
             break;
 
         case 38:
-            func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
             break;
 
         case 14:
@@ -1091,7 +1091,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 } else {
                     gSaveContext.respawnFlag = 2;
                 }
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 return;
         }
     } else {
@@ -1168,7 +1168,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                     play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
                     play->transitionType = TRANS_TYPE_FADE_BLACK;
                     gSaveContext.respawnFlag = 2;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
                 return;
         }

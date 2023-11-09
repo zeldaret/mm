@@ -19,15 +19,15 @@ void EffStk_Draw(Actor* thisx, PlayState* play);
 void func_80BF0DE0(EffStk* this, PlayState* play);
 
 ActorInit Eff_Stk_InitVars = {
-    ACTOR_EFF_STK,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_STK2,
-    sizeof(EffStk),
-    (ActorFunc)EffStk_Init,
-    (ActorFunc)EffStk_Destroy,
-    (ActorFunc)EffStk_Update,
-    (ActorFunc)EffStk_Draw,
+    /**/ ACTOR_EFF_STK,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_STK2,
+    /**/ sizeof(EffStk),
+    /**/ EffStk_Init,
+    /**/ EffStk_Destroy,
+    /**/ EffStk_Update,
+    /**/ EffStk_Draw,
 };
 
 void EffStk_Init(Actor* thisx, PlayState* play) {
@@ -83,7 +83,7 @@ void EffStk_Draw(Actor* thisx, PlayState* play) {
     Vec3f eye = activeCam->eye;
     Vec3f quakeOffset;
 
-    Camera_GetQuakeOffset(&quakeOffset, activeCam);
+    quakeOffset = Camera_GetQuakeOffset(activeCam);
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -659,22 +659,19 @@ s16 D_80814650[] = { 940, 944 };
  * fileSelect->windowContentVtx[956]  -> Warning labels
  */
 
-#ifdef NON_MATCHING
-// regalloc at the beginning is fixed by removing FAKE: labelled code
 void FileSelect_SetWindowContentVtx(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
     u16 vtxId;
     s16 j;
-    s16 index;
+    s16 i;
     s16 spAC;
-    s16 i; // a3
     u16 spA4[3];
     u16* ptr;
-    s32 posY;    // sp9C
-    s32 relPosY; // sp98
+    s32 posY;
+    s32 relPosY;
     s32 tempPosY;
-    s32 posX; // s1
-    s32 temp_t5;
+    s32 posX;
+    s32 index;
 
     this->windowContentVtx = GRAPH_ALLOC(this->state.gfxCtx, 960 * sizeof(Vtx));
 
@@ -695,9 +692,6 @@ void FileSelect_SetWindowContentVtx(GameState* thisx) {
         // z-coordinate
         this->windowContentVtx[vtxId + 0].v.ob[2] = this->windowContentVtx[vtxId + 1].v.ob[2] =
             this->windowContentVtx[vtxId + 2].v.ob[2] = this->windowContentVtx[vtxId + 3].v.ob[2] = 0;
-
-        //! FAKE:
-        if (index && index && index) {}
 
         // flag
         this->windowContentVtx[vtxId + 0].v.flag = this->windowContentVtx[vtxId + 1].v.flag =
@@ -1193,7 +1187,7 @@ void FileSelect_SetWindowContentVtx(GameState* thisx) {
         /* Time Digits */
 
         posX += 6;
-        temp_t5 = vtxId;
+        index = vtxId;
 
         for (i = 0; i < 5; i++, vtxId += 4, posX += 8) {
 
@@ -1220,17 +1214,17 @@ void FileSelect_SetWindowContentVtx(GameState* thisx) {
         }
 
         // Adjust the colon to the right
-        this->windowContentVtx[temp_t5 + 8].v.ob[0] = this->windowContentVtx[temp_t5 + 10].v.ob[0] =
-            this->windowContentVtx[temp_t5 + 8].v.ob[0] + 3;
+        this->windowContentVtx[index + 8].v.ob[0] = this->windowContentVtx[index + 10].v.ob[0] =
+            this->windowContentVtx[index + 8].v.ob[0] + 3;
 
-        this->windowContentVtx[temp_t5 + 9].v.ob[0] = this->windowContentVtx[temp_t5 + 11].v.ob[0] =
-            this->windowContentVtx[temp_t5 + 8].v.ob[0] + 0xC;
+        this->windowContentVtx[index + 9].v.ob[0] = this->windowContentVtx[index + 11].v.ob[0] =
+            this->windowContentVtx[index + 8].v.ob[0] + 0xC;
 
-        this->windowContentVtx[temp_t5 + 0x1C].v.ob[0] = this->windowContentVtx[temp_t5 + 0x1E].v.ob[0] =
-            this->windowContentVtx[temp_t5 + 8].v.ob[0] + 1;
+        this->windowContentVtx[index + 0x1C].v.ob[0] = this->windowContentVtx[index + 0x1E].v.ob[0] =
+            this->windowContentVtx[index + 8].v.ob[0] + 1;
 
-        this->windowContentVtx[temp_t5 + 0x1D].v.ob[0] = this->windowContentVtx[temp_t5 + 0x1F].v.ob[0] =
-            this->windowContentVtx[temp_t5 + 0x1C].v.ob[0] + 0xC;
+        this->windowContentVtx[index + 0x1D].v.ob[0] = this->windowContentVtx[index + 0x1F].v.ob[0] =
+            this->windowContentVtx[index + 0x1C].v.ob[0] + 0xC;
 
         vtxId += 20;
     }
@@ -1312,10 +1306,6 @@ void FileSelect_SetWindowContentVtx(GameState* thisx) {
 
     this->windowContentVtx[vtxId + 5].v.tc[0] = this->windowContentVtx[vtxId + 7].v.tc[0] = 0x1000;
 }
-#else
-void FileSelect_SetWindowContentVtx(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_SetWindowContentVtx.s")
-#endif
 
 u16 D_80814654[] = {
     0x88,
@@ -2050,7 +2040,7 @@ void FileSelect_ConfirmFile(GameState* thisx) {
             Rumble_Request(300.0f, 180, 20, 100);
             Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
             this->selectMode = SM_FADE_OUT;
-            func_801A4058(0xF);
+            Audio_MuteAllSeqExceptSystemAndOcarina(15);
         } else { // FS_BTN_CONFIRM_QUIT
             Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
             this->selectMode++; // SM_FADE_OUT_FILE_INFO
@@ -2197,7 +2187,7 @@ void FileSelect_LoadGame(GameState* thisx) {
     gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
     gSaveContext.cutsceneTrigger = 0;
     gSaveContext.chamberCutsceneNum = 0;
-    gSaveContext.nextDayTime = 0xFFFF;
+    gSaveContext.nextDayTime = NEXT_TIME_NONE;
     gSaveContext.retainWeatherMode = false;
 
     gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
@@ -2484,12 +2474,12 @@ void FileSelect_InitContext(GameState* thisx) {
     ShrinkWindow_Letterbox_SetSizeTarget(0);
 
     gSaveContext.skyboxTime = 0;
-    gSaveContext.save.time = 0;
+    gSaveContext.save.time = CLOCK_TIME(0, 0);
 
     Skybox_Init(&this->state, &this->skyboxCtx, 1);
     R_TIME_SPEED = 10;
 
-    envCtx->changeSkyboxState = 0;
+    envCtx->changeSkyboxState = CHANGE_SKYBOX_INACTIVE;
     envCtx->changeSkyboxTimer = 0;
     envCtx->changeLightEnabled = false;
     envCtx->changeLightTimer = 0;
@@ -2531,15 +2521,15 @@ void FileSelect_Init(GameState* thisx) {
     Font_LoadOrderedFont(&this->font);
 
     size = SEGMENT_ROM_SIZE(title_static);
-    this->staticSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->staticSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->staticSegment, SEGMENT_ROM_START(title_static), size);
 
     size = SEGMENT_ROM_SIZE(parameter_static);
-    this->parameterSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->parameterSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->parameterSegment, SEGMENT_ROM_START(parameter_static), size);
 
     size = gObjectTable[OBJECT_MAG].vromEnd - gObjectTable[OBJECT_MAG].vromStart;
-    this->titleSegment = THA_AllocTailAlign16(&this->state.heap, size);
+    this->titleSegment = THA_AllocTailAlign16(&this->state.tha, size);
     DmaMgr_SendRequest0(this->titleSegment, gObjectTable[OBJECT_MAG].vromStart, size);
 
     Audio_SetSpec(0xA);

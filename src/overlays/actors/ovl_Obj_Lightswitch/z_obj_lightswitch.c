@@ -28,15 +28,15 @@ void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play);
 void ObjLightswitch_Idle(ObjLightswitch* this, PlayState* play);
 
 ActorInit Obj_Lightswitch_InitVars = {
-    ACTOR_OBJ_LIGHTSWITCH,
-    ACTORCAT_SWITCH,
-    FLAGS,
-    OBJECT_LIGHTSWITCH,
-    sizeof(ObjLightswitch),
-    (ActorFunc)ObjLightswitch_Init,
-    (ActorFunc)ObjLightswitch_Destroy,
-    (ActorFunc)ObjLightswitch_Update,
-    (ActorFunc)ObjLightswitch_Draw,
+    /**/ ACTOR_OBJ_LIGHTSWITCH,
+    /**/ ACTORCAT_SWITCH,
+    /**/ FLAGS,
+    /**/ OBJECT_LIGHTSWITCH,
+    /**/ sizeof(ObjLightswitch),
+    /**/ ObjLightswitch_Init,
+    /**/ ObjLightswitch_Destroy,
+    /**/ ObjLightswitch_Update,
+    /**/ ObjLightswitch_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -100,9 +100,9 @@ void ObjLightswitch_UpdateSwitchFlags(ObjLightswitch* this, PlayState* play, s32
     if (this) {}
 
     if (set) {
-        Flags_SetSwitch(play, LIGHTSWITCH_GET_SWITCHFLAG(&this->actor));
+        Flags_SetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(&this->actor));
     } else {
-        Flags_UnsetSwitch(play, LIGHTSWITCH_GET_SWITCHFLAG(&this->actor));
+        Flags_UnsetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(&this->actor));
     }
 }
 
@@ -150,7 +150,7 @@ void ObjLightswitch_Init(Actor* thisx, PlayState* play) {
     u32 isSwitchActivated;
     s32 isTriggered;
 
-    isSwitchActivated = Flags_GetSwitch(play, LIGHTSWITCH_GET_SWITCHFLAG(&this->actor));
+    isSwitchActivated = Flags_GetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(&this->actor));
     isTriggered = false;
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetFocus(&this->actor, 0.0f);
@@ -264,7 +264,7 @@ void ObjLightSwitch_Enabled(ObjLightswitch* this, PlayState* play) {
 
     if (actorType == LIGHTSWITCH_TYPE_REGULAR) {
         // switch can be disabled outside of this actor by flag
-        if (!Flags_GetSwitch(play, LIGHTSWITCH_GET_SWITCHFLAG(&this->actor))) {
+        if (!Flags_GetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(&this->actor))) {
             ObjLightSwitch_SetupDisabled(this);
         }
     } else if (actorType == LIGHTSWITCH_TYPE_FLIP) {

@@ -47,15 +47,15 @@ static u8 sMsgEventScript[] = {
 };
 
 ActorInit En_Bjt_InitVars = {
-    ACTOR_EN_BJT,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BJT,
-    sizeof(EnBjt),
-    (ActorFunc)EnBjt_Init,
-    (ActorFunc)EnBjt_Destroy,
-    (ActorFunc)EnBjt_Update,
-    (ActorFunc)EnBjt_Draw,
+    /**/ ACTOR_EN_BJT,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BJT,
+    /**/ sizeof(EnBjt),
+    /**/ EnBjt_Init,
+    /**/ EnBjt_Destroy,
+    /**/ EnBjt_Update,
+    /**/ EnBjt_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -21,15 +21,15 @@ void EnJcMato_SetupIdle(EnJcMato* this);
 void EnJcMato_Idle(EnJcMato* this, PlayState* play);
 
 ActorInit En_Jc_Mato_InitVars = {
-    ACTOR_EN_JC_MATO,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_TRU,
-    sizeof(EnJcMato),
-    (ActorFunc)EnJcMato_Init,
-    (ActorFunc)EnJcMato_Destroy,
-    (ActorFunc)EnJcMato_Update,
-    (ActorFunc)EnJcMato_Draw,
+    /**/ ACTOR_EN_JC_MATO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_TRU,
+    /**/ sizeof(EnJcMato),
+    /**/ EnJcMato_Init,
+    /**/ EnJcMato_Destroy,
+    /**/ EnJcMato_Update,
+    /**/ EnJcMato_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

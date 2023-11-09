@@ -42,16 +42,16 @@ void func_80AB92CC(EnMnk* this, PlayState* play);
 s32 EnMnk_ValidatePictograph(PlayState* play, Actor* thisx);
 s32 EnMnk_AlreadyExists(EnMnk* this, PlayState* play);
 
-const ActorInit En_Mnk_InitVars = {
-    ACTOR_EN_MNK,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MNK,
-    sizeof(EnMnk),
-    (ActorFunc)EnMnk_Init,
-    (ActorFunc)EnMnk_Destroy,
-    (ActorFunc)EnMnk_Update,
-    (ActorFunc)EnMnk_Draw,
+ActorInit En_Mnk_InitVars = {
+    /**/ ACTOR_EN_MNK,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MNK,
+    /**/ sizeof(EnMnk),
+    /**/ EnMnk_Init,
+    /**/ EnMnk_Destroy,
+    /**/ EnMnk_Update,
+    /**/ EnMnk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -249,7 +249,7 @@ void EnMnk_MonkeyTiedUp_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = EnMnk_MonkeyTiedUp_Wait;
     this->picto.actor.flags |= ACTOR_FLAG_2000000;
-    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyTiedUpPoleSkeleton, &object_mnk_Anim_003584,
+    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyTiedUpPoleSkel, &object_mnk_Anim_003584,
                        this->propJointTable, this->propMorphTable, OBJECT_MNK_1_LIMB_MAX);
     this->cueId = 4;
     this->animIndex = MONKEY_TIEDUP_ANIM_NONE;
@@ -277,7 +277,7 @@ void EnMnk_MonkeyHanging_Init(Actor* thisx, PlayState* play) {
     func_800BC154(play, &play->actorCtx, &this->picto.actor, ACTORCAT_PROP);
     this->actionFunc = EnMnk_MonkeyHanging_StruggleBeforeDunk;
     this->picto.actor.textId = 0x8E8;
-    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyHangingRopeSkeleton, &gMonkeyHangingStruggleAnim,
+    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyHangingRopeSkel, &gMonkeyHangingStruggleAnim,
                        this->propJointTable, this->propMorphTable, OBJECT_MNK_3_LIMB_MAX);
     EnMnk_MonkeyHanging_ChangeAnim(this, MONKEY_HANGING_ANIM_STRUGGLE, ANIMMODE_LOOP, 0.0f);
     this->unk_3E0 = 5;
@@ -297,7 +297,7 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->picto.actor, 0.012f);
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 12.0f);
     this->actionFunc = EnMnk_DoNothing;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gMonkeySkeleton, &object_mnk_Anim_0105DC, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMonkeySkel, &object_mnk_Anim_0105DC, this->jointTable,
                        this->morphTable, OBJECT_MNK_2_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_mnk_Anim_0105DC);
     this->flags = 0;
@@ -897,7 +897,7 @@ void EnMnk_Monkey_Run(EnMnk* this, PlayState* play) {
         this->picto.actor.speed = 0.0f;
         if (MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDECHAMBER) {
             switchFlag = MONKEY_GET_SWITCH_FLAG(&this->picto.actor);
-            if (switchFlag != 0x7F) {
+            if (switchFlag != MONKEY_SWITCH_FLAG_NONE) {
                 Flags_SetSwitch(play, switchFlag + 1);
             }
             Actor_Kill(&this->picto.actor);
@@ -1318,7 +1318,7 @@ void EnMnk_MonkeyTiedUp_ReactToWrongInstrument(EnMnk* this, PlayState* play) {
             case 0x8DB:
                 Message_CloseTextbox(play);
                 this->actionFunc = EnMnk_MonkeyTiedUp_WaitForInstrument;
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 EnMnk_MonkeyTiedUp_SetAnim(this, MONKEY_TIEDUP_ANIM_WAIT);
                 if (this->csId != CS_ID_NONE) {
                     CutsceneManager_Stop(this->csId);
@@ -1489,7 +1489,7 @@ void EnMnk_MonkeyTiedUp_WaitForInstrument(EnMnk* this, PlayState* play) {
                 this->csId = 2;
                 SET_EVENTINF(EVENTINF_24);
                 this->picto.actor.csId = this->csIdList[2];
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 CutsceneManager_Queue(this->csIdList[2]);
                 return;
 
@@ -1577,7 +1577,7 @@ void EnMnk_MonkeyTiedUp_Wait(EnMnk* this, PlayState* play) {
         this->csId = 2;
         SET_EVENTINF(EVENTINF_24);
         this->picto.actor.csId = this->csIdList[2];
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         CutsceneManager_Queue(this->csIdList[2]);
     } else if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
@@ -1620,7 +1620,7 @@ void EnMnk_MonkeyHanging_WaitForTextboxAfterDunk(EnMnk* this, PlayState* play) {
         }
         Message_CloseTextbox(play);
         this->actionFunc = EnMnk_MonkeyHanging_WaitAfterDunk;
-        func_800B7298(play, NULL, PLAYER_CSMODE_END);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_08);
     }
 }
@@ -1693,7 +1693,7 @@ void EnMnk_MonkeyHanging_Plead(EnMnk* this, PlayState* play) {
             case 0x8E9:
                 this->actionFunc = EnMnk_MonkeyHanging_Dunk2;
                 Message_CloseTextbox(play);
-                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_WAIT);
+                Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_WAIT);
                 this->unk_3C8 = 60;
                 break;
 

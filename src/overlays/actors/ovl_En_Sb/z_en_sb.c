@@ -6,6 +6,7 @@
 
 #include "z_en_sb.h"
 #include "objects/object_sb/object_sb.h"
+#include "overlays/actors/ovl_En_Part/z_en_part.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
@@ -26,15 +27,15 @@ void EnSb_Bounce(EnSb* this, PlayState* play);
 void EnSb_ReturnToIdle(EnSb* this, PlayState* play);
 
 ActorInit En_Sb_InitVars = {
-    ACTOR_EN_SB,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_SB,
-    sizeof(EnSb),
-    (ActorFunc)EnSb_Init,
-    (ActorFunc)EnSb_Destroy,
-    (ActorFunc)EnSb_Update,
-    (ActorFunc)EnSb_Draw,
+    /**/ ACTOR_EN_SB,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_SB,
+    /**/ sizeof(EnSb),
+    /**/ EnSb_Init,
+    /**/ EnSb_Destroy,
+    /**/ EnSb_Update,
+    /**/ EnSb_Draw,
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {
@@ -388,13 +389,13 @@ void EnSb_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnSb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    s8 phi_a2;
+    s8 partParams;
     EnSb* this = THIS;
 
     if (this->isDrawn) {
         if (limbIndex < 7) {
-            phi_a2 = (this->actor.depthInWater > 0) ? 4 : 1;
-            Actor_SpawnBodyParts(thisx, play, phi_a2, dList);
+            partParams = (this->actor.depthInWater > 0) ? ENPART_PARAMS(ENPART_TYPE_4) : ENPART_PARAMS(ENPART_TYPE_1);
+            Actor_SpawnBodyParts(thisx, play, partParams, dList);
         }
         if (limbIndex == 6) {
             this->isDrawn = false;

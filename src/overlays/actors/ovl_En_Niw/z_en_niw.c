@@ -49,15 +49,15 @@ typedef enum EnNiwState {
 } EnNiwState;
 
 ActorInit En_Niw_InitVars = {
-    ACTOR_EN_NIW,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_NIW,
-    sizeof(EnNiw),
-    (ActorFunc)EnNiw_Init,
-    (ActorFunc)EnNiw_Destroy,
-    (ActorFunc)EnNiw_Update,
-    (ActorFunc)EnNiw_Draw,
+    /**/ ACTOR_EN_NIW,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_NIW,
+    /**/ sizeof(EnNiw),
+    /**/ EnNiw_Init,
+    /**/ EnNiw_Destroy,
+    /**/ EnNiw_Update,
+    /**/ EnNiw_Draw,
 };
 
 static f32 sHeadRotations[] = { 5000.0f, -5000.0f };
@@ -108,7 +108,7 @@ void EnNiw_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gNiwSkel, &gNiwIdleAnim, this->jointTable, this->morphTable,
                        NIW_LIMB_MAX);
     Math_Vec3f_Copy(&this->unk2A4, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk2B0, &this->actor.world.pos);

@@ -142,10 +142,10 @@
 
         <!-- Odolwa Animations -->
         <Animation Name="gOdolwaClimbAnim" Offset="0xF918" /> <!-- Unused and glitchy. Original name might be "jmp_crym" -->
-        <Animation Name="gOdolwaDamageStartAnim" Offset="0xFDEC" /> <!-- Original name is "jmp_dam02" -->
+        <Animation Name="gOdolwaDamagedStartAnim" Offset="0xFDEC" /> <!-- Original name is "jmp_dam02" -->
         <Animation Name="gOdolwaShieldGuardAnim" Offset="0xFF94" /> <!-- Original name is "jmp_def" -->
         <Animation Name="gOdolwaSwordGuardAnim" Offset="0x10150" /> <!-- Original name is "jmp_def02" -->
-        <Animation Name="gOdolwaDamageLoopAnim" Offset="0x10980" /> <!-- Original name is "jmp_dm01" -->
+        <Animation Name="gOdolwaDamagedLoopAnim" Offset="0x10980" /> <!-- Original name is "jmp_dm01" -->
         <Animation Name="gOdolwaDeathAnim" Offset="0x124CC" /> <!-- Original name is "jmp_down" -->
         <Animation Name="gOdolwaMothSummonDanceAnim" Offset="0x12B70" /> <!-- Named "dance_bug" in MM3D, but it was probably renamed by Grezzo, since it doesn't fit with other names. -->
         <Animation Name="gOdolwaCrouchAnim" Offset="0x12D10" /> <!-- Original name is "jmp_jmp01" -->

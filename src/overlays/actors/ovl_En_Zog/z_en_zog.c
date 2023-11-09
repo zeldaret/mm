@@ -34,15 +34,15 @@ void func_80B95240(EnZog* this, PlayState* play);
 static u8 D_80B95E10;
 
 ActorInit En_Zog_InitVars = {
-    ACTOR_EN_ZOG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZOG,
-    sizeof(EnZog),
-    (ActorFunc)EnZog_Init,
-    (ActorFunc)EnZog_Destroy,
-    (ActorFunc)EnZog_Update,
-    (ActorFunc)EnZog_Draw,
+    /**/ ACTOR_EN_ZOG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZOG,
+    /**/ sizeof(EnZog),
+    /**/ EnZog_Init,
+    /**/ EnZog_Destroy,
+    /**/ EnZog_Update,
+    /**/ EnZog_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -627,7 +627,7 @@ void func_80B9451C(EnZog* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B94470;
-    } else if ((play->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
+    } else if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (this->actor.xzDistToPlayer < 120.0f)) {
         if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
@@ -715,7 +715,7 @@ void func_80B948A8(EnZog* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B946FC;
-    } else if ((play->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
+    } else if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (this->actor.xzDistToPlayer < 120.0f)) {
         if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;

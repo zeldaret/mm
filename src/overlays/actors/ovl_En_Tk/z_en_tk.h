@@ -9,7 +9,7 @@ typedef void (*EnTkActionFunc)(struct EnTk*, PlayState*);
 typedef void (*EnTkUnkFunc)(struct EnTk*, PlayState*);
 
 #define ENTK_GET_F(thisx) ((thisx)->params & 0xF)
-#define ENTK_GET_7F0(thisx) (((thisx)->params >> 4) & 0x7F)
+#define ENTK_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 4) & 0x7F)
 #define ENTK_GET_PATH_INDEX(thisx) (((thisx)->params >> 0xB) & 0x1F)
 
 typedef struct EnTk {
@@ -20,7 +20,7 @@ typedef struct EnTk {
     /* 0x1D8 */ Vec3s jointTable[18];
     /* 0x244 */ Vec3s morphTable[18];
     /* 0x2B0 */ s8 unk_2B0;
-    /* 0x2B1 */ s8 unk_2B1;
+    /* 0x2B1 */ s8 switchFlag;
     /* 0x2B4 */ Vec3f unk_2B4;
     /* 0x2C0 */ s16 unk_2C0;
     /* 0x2C2 */ s16 unk_2C2;

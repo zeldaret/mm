@@ -92,15 +92,15 @@ static AnimationSpeedInfo sAnimationSpeedInfo[EN_DNO_ANIM_MAX] = {
 };
 
 ActorInit En_Dno_InitVars = {
-    ACTOR_EN_DNO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNJ,
-    sizeof(EnDno),
-    (ActorFunc)EnDno_Init,
-    (ActorFunc)EnDno_Destroy,
-    (ActorFunc)EnDno_Update,
-    (ActorFunc)EnDno_Draw,
+    /**/ ACTOR_EN_DNO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNJ,
+    /**/ sizeof(EnDno),
+    /**/ EnDno_Init,
+    /**/ EnDno_Destroy,
+    /**/ EnDno_Update,
+    /**/ EnDno_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -372,7 +372,7 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_80A71E54(this, play);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
@@ -482,7 +482,7 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                             if (Message_ShouldAdvance(play)) {
                                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
                                                                 EN_DNO_ANIM_IMPLORE_END, &this->animIndex);
-                                play->msgCtx.msgMode = 0x44;
+                                play->msgCtx.msgMode = MSGMODE_PAUSED;
                             }
                             break;
 
@@ -688,7 +688,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                 case 0x800:
                 case 0x801:
                     if (Message_ShouldAdvance(play)) {
-                        play->msgCtx.msgMode = 0x44;
+                        play->msgCtx.msgMode = MSGMODE_PAUSED;
                         this->unk_452 = 1;
                         this->unk_454 = 0.0f;
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_OPEN_PARASOL,

@@ -1,6 +1,7 @@
-#include "PR/ultratypes.h"
 #include "prevent_bss_reordering.h"
 #include "prevent_bss_reordering2.h"
+
+#include "PR/ultratypes.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 struct CutsceneCamera;
@@ -10,10 +11,9 @@ struct CutsceneCamera sCutsceneCameraInfo;
 u16 sCueTypeList[10];
 u8 D_801F4DDC;
 static s16 sBssPad;
-u8 gDisablePlayerCsModeStartPos;
+u8 gDisablePlayerCsActionStartPos;
 s16 gDungeonBossWarpSceneId;
 
-#include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -47,7 +47,7 @@ void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
         sCueTypeList[i] = 0;
     }
 
-    gDisablePlayerCsModeStartPos = false;
+    gDisablePlayerCsActionStartPos = false;
 
     Audio_SetCutsceneFlag(false);
 }
@@ -154,8 +154,8 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
     switch (cmd->type) {
         case CS_MISC_RAIN:
             if (isFirstFrame) {
-                func_800FD78C(play);
-                play->envCtx.unk_F2[0] = 60;
+                Environment_PlayStormNatureAmbience(play);
+                play->envCtx.precipitation[PRECIP_RAIN_MAX] = 60;
             }
             break;
 
@@ -163,19 +163,19 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             if (isFirstFrame) {
                 Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
                 Environment_AddLightningBolts(play, 3);
-                D_801F4E68 = 1;
+                gLightningStrike.state = LIGHTNING_STRIKE_START;
             }
             break;
 
         case CS_MISC_LIFT_FOG:
-            if (play->envCtx.lightSettings.zFar < 12800) {
-                play->envCtx.lightSettings.zFar += 35;
+            if (play->envCtx.adjLightSettings.zFar < 12800) {
+                play->envCtx.adjLightSettings.zFar += 35;
             }
             break;
 
         case CS_MISC_CLOUDY_SKY:
             if (isFirstFrame) {
-                play->envCtx.changeSkyboxState = 1;
+                play->envCtx.changeSkyboxState = CHANGE_SKYBOX_REQUESTED;
                 play->envCtx.skyboxConfig = 1;
                 play->envCtx.changeSkyboxNextConfig = 0;
                 play->envCtx.changeSkyboxTimer = 60;
@@ -197,7 +197,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             if (isFirstFrame) {
                 loadedScene = play->loadedScene;
                 if (loadedScene->titleTextId != 0) {
-                    func_80151A68(play, loadedScene->titleTextId);
+                    Message_DisplaySceneTitleCard(play, loadedScene->titleTextId);
                 }
             }
             break;
@@ -238,16 +238,16 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_RED_PULSATING_LIGHTS:
             if (play->state.frames & 8) {
-                if (play->envCtx.lightSettings.ambientColor[0] < 40) {
-                    play->envCtx.lightSettings.ambientColor[0] += 2;
-                    play->envCtx.lightSettings.diffuseColor1[1] -= 3;
-                    play->envCtx.lightSettings.diffuseColor1[2] -= 3;
+                if (play->envCtx.adjLightSettings.ambientColor[0] < 40) {
+                    play->envCtx.adjLightSettings.ambientColor[0] += 2;
+                    play->envCtx.adjLightSettings.light1Color[1] -= 3;
+                    play->envCtx.adjLightSettings.light1Color[2] -= 3;
                 }
             } else {
-                if (play->envCtx.lightSettings.ambientColor[0] > 2) {
-                    play->envCtx.lightSettings.ambientColor[0] -= 2;
-                    play->envCtx.lightSettings.diffuseColor1[1] += 3;
-                    play->envCtx.lightSettings.diffuseColor1[2] += 3;
+                if (play->envCtx.adjLightSettings.ambientColor[0] > 2) {
+                    play->envCtx.adjLightSettings.ambientColor[0] -= 2;
+                    play->envCtx.adjLightSettings.light1Color[1] += 3;
+                    play->envCtx.adjLightSettings.light1Color[2] += 3;
                 }
             }
             break;
@@ -262,7 +262,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_SANDSTORM_FILL:
             if (isFirstFrame) {
-                play->envCtx.sandstormState = 1;
+                play->envCtx.sandstormState = SANDSTORM_FILL;
             }
             Audio_PlaySfx_2(NA_SE_EV_SAND_STORM - SFX_FLAG);
             break;
@@ -339,12 +339,12 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             gSaveContext.save.playerForm = sCutsceneStoredPlayerForm;
             break;
 
-        case CS_MISC_DISABLE_PLAYER_CSMODE_START_POS:
-            gDisablePlayerCsModeStartPos = true;
+        case CS_MISC_DISABLE_PLAYER_CSACTION_START_POS:
+            gDisablePlayerCsActionStartPos = true;
             break;
 
-        case CS_MISC_ENABLE_PLAYER_CSMODE_START_POS:
-            gDisablePlayerCsModeStartPos = false;
+        case CS_MISC_ENABLE_PLAYER_CSACTION_START_POS:
+            gDisablePlayerCsActionStartPos = false;
             break;
 
         case CS_MISC_SAVE_ENTER_CLOCK_TOWN:
@@ -409,7 +409,7 @@ void CutsceneCmd_SetLightSetting(PlayState* play, CutsceneContext* csCtx, CsCmdL
             play->envCtx.lightSettingOverride = cmd->settingPlusOne - 1;
             play->envCtx.lightBlend = 1.0f;
         } else {
-            play->envCtx.lightSettingOverride = 0xFF;
+            play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
         }
     }
 }
@@ -1043,7 +1043,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
         if (sCurOcarinaAction != cmd->textId) {
             sCutsceneTextboxType = CS_TEXT_OCARINA_ACTION;
             sCurOcarinaAction = cmd->textId;
-            func_80152434(play, cmd->textId);
+            Message_DisplayOcarinaStaff(play, cmd->textId);
             return;
         }
     }
@@ -1098,7 +1098,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
             }
 
             if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_80152434(play, cmd->textId);
+                Message_DisplayOcarinaStaff(play, cmd->textId);
             }
         }
 
@@ -1565,7 +1565,7 @@ void Cutscene_HandleEntranceTriggers(PlayState* play) {
             if ((Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) +
                                              ((void)0, gSaveContext.sceneLayer)) &
                  0x4000) != 0) {
-                func_80151A68(play, scene->titleTextId);
+                Message_DisplaySceneTitleCard(play, scene->titleTextId);
             }
         }
 

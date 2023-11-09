@@ -10,7 +10,7 @@ typedef void (*BgHakuginSwitchUnkFunc)(struct BgHakuginSwitch*, PlayState*);
 
 #define BGHAKUGINSWITCH_GET_7(thisx) ((thisx)->params & 7)
 #define BGHAKUGINSWITCH_GET_10(thisx) (((thisx)->params >> 4) & 1)
-#define BGHAKUGINSWITCH_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0x7F)
+#define BGHAKUGINSWITCH_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 
 #define BGHAKUGINSWITCH_GET_7_1 1
 

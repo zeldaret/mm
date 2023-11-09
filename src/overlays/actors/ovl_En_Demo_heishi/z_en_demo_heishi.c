@@ -21,15 +21,15 @@ void EnDemoheishi_SetupTalk(EnDemoheishi* this);
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play);
 
 ActorInit En_Demo_heishi_InitVars = {
-    ACTOR_EN_DEMO_HEISHI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SDN,
-    sizeof(EnDemoheishi),
-    (ActorFunc)EnDemoheishi_Init,
-    (ActorFunc)EnDemoheishi_Destroy,
-    (ActorFunc)EnDemoheishi_Update,
-    (ActorFunc)EnDemoheishi_Draw,
+    /**/ ACTOR_EN_DEMO_HEISHI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnDemoheishi),
+    /**/ EnDemoheishi_Init,
+    /**/ EnDemoheishi_Destroy,
+    /**/ EnDemoheishi_Update,
+    /**/ EnDemoheishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -58,7 +58,7 @@ void EnDemoheishi_Init(Actor* thisx, PlayState* play) {
     EnDemoheishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWave, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWaveAnim, this->jointTable, this->morphTable,
                        SOLDIER_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = TARGET_MODE_6;
@@ -83,11 +83,11 @@ typedef enum {
 } EnDemoheishiAnimation;
 
 static AnimationHeader* sAnimations[DEMOHEISHI_ANIM_MAX] = {
-    &gSoldierStandHandOnHip, // DEMOHEISHI_ANIM_STAND_HAND_ON_HIP
-    &gSoldierCheerWithSpear, // DEMOHEISHI_ANIM_CHEER_WITH_SPEAR
-    &gSoldierWave,           // DEMOHEISHI_ANIM_WAVE
-    &gSoldierSitAndReach,    // DEMOHEISHI_ANIM_SIT_AND_REACH
-    &gSoldierStandUp,        // DEMOHEISHI_ANIM_STAND_UP
+    &gSoldierStandHandOnHipAnim, // DEMOHEISHI_ANIM_STAND_HAND_ON_HIP
+    &gSoldierCheerWithSpearAnim, // DEMOHEISHI_ANIM_CHEER_WITH_SPEAR
+    &gSoldierWaveAnim,           // DEMOHEISHI_ANIM_WAVE
+    &gSoldierSitAndReachAnim,    // DEMOHEISHI_ANIM_SIT_AND_REACH
+    &gSoldierStandUpAnim,        // DEMOHEISHI_ANIM_STAND_UP
 };
 
 static u8 sAnimationModes[DEMOHEISHI_ANIM_MAX] = {

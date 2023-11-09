@@ -24,15 +24,15 @@ void func_80BE8AAC(EnBaisen* this, PlayState* play);
 void func_80BE89D8(EnBaisen* this, PlayState* play);
 
 ActorInit En_Baisen_InitVars = {
-    ACTOR_EN_BAISEN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BAI,
-    sizeof(EnBaisen),
-    (ActorFunc)EnBaisen_Init,
-    (ActorFunc)EnBaisen_Destroy,
-    (ActorFunc)EnBaisen_Update,
-    (ActorFunc)EnBaisen_Draw,
+    /**/ ACTOR_EN_BAISEN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BAI,
+    /**/ sizeof(EnBaisen),
+    /**/ EnBaisen_Init,
+    /**/ EnBaisen_Destroy,
+    /**/ EnBaisen_Update,
+    /**/ EnBaisen_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

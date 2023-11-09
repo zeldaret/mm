@@ -29,15 +29,15 @@ void EnCow_UpdateTail(Actor* thisx, PlayState* play);
 void EnCow_DrawTail(Actor* thisx, PlayState* play);
 
 ActorInit En_Cow_InitVars = {
-    ACTOR_EN_COW,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_COW,
-    sizeof(EnCow),
-    (ActorFunc)EnCow_Init,
-    (ActorFunc)EnCow_Destroy,
-    (ActorFunc)EnCow_Update,
-    (ActorFunc)EnCow_Draw,
+    /**/ ACTOR_EN_COW,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_COW,
+    /**/ sizeof(EnCow),
+    /**/ EnCow_Init,
+    /**/ EnCow_Destroy,
+    /**/ EnCow_Update,
+    /**/ EnCow_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -268,7 +268,7 @@ void EnCow_Talk(EnCow* this, PlayState* play) {
 }
 
 void EnCow_Idle(EnCow* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaMode == 0) || (play->msgCtx.ocarinaMode == 4)) {
+    if ((play->msgCtx.ocarinaMode == OCARINA_MODE_NONE) || (play->msgCtx.ocarinaMode == OCARINA_MODE_END)) {
         if (gHorsePlayedEponasSong) {
             if (this->flags & EN_COW_FLAG_WONT_GIVE_MILK) {
                 this->flags &= ~EN_COW_FLAG_WONT_GIVE_MILK;

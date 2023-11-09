@@ -33,15 +33,15 @@ void EnAob01_AfterRace_Talk(EnAob01* this, PlayState* play);
 s32 EnAob01_PlayerIsHoldingDog(EnAob01* this, PlayState* play);
 
 ActorInit En_Aob_01_InitVars = {
-    ACTOR_EN_AOB_01,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AOB,
-    sizeof(EnAob01),
-    (ActorFunc)EnAob01_Init,
-    (ActorFunc)EnAob01_Destroy,
-    (ActorFunc)EnAob01_Update,
-    (ActorFunc)EnAob01_Draw,
+    /**/ ACTOR_EN_AOB_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AOB,
+    /**/ sizeof(EnAob01),
+    /**/ EnAob01_Init,
+    /**/ EnAob01_Destroy,
+    /**/ EnAob01_Update,
+    /**/ EnAob01_Draw,
 };
 
 typedef enum {
@@ -448,8 +448,8 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
             if (this->stateFlags & ENAOB01_FLAG_PLAYER_CONFIRMED_CHOICE) {
                 this->stateFlags &= ~ENAOB01_FLAG_PLAYER_CONFIRMED_CHOICE;
                 Rupees_ChangeBy(-this->rupeesBet);
-                func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
-                play->msgCtx.msgMode = 0x43;
+                Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnAob01_BeforeRace_StartRace;
                 return;
@@ -475,7 +475,7 @@ void EnAob01_BeforeRace_StartRace(EnAob01* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
         this->stateFlags |= ENAOB01_FLAG_STARTED_RACE;
-        func_800FD750(NA_BGM_HORSE);
+        Environment_ForcePlaySequence(NA_BGM_HORSE);
         play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_64;
@@ -518,7 +518,7 @@ void EnAob01_BeforeRace_RespondToPlayAgainQuestion(EnAob01* this, PlayState* pla
             }
         }
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->textId = 0;
         this->actionFunc = EnAob01_BeforeRace_Idle;
@@ -672,7 +672,7 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
             this->stateFlags &= ~ENAOB01_FLAG_LAUGH;
             if (this->stateFlags & ENAOB01_FLAG_CONVERSATION_OVER) {
                 this->stateFlags &= ~ENAOB01_FLAG_CONVERSATION_OVER;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnAob01_BeforeRace_Idle;
             } else {
@@ -898,7 +898,7 @@ void EnAob01_AfterRace_GiveReward(EnAob01* this, PlayState* play) {
     if (EnAob01_ProcessIdleAnim(this)) {
         if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             this->rupeesBet = 0;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
         }
 

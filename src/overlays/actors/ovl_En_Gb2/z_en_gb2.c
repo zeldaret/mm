@@ -36,15 +36,15 @@ void func_80B11268(EnGb2* this, PlayState* play);
 void func_80B11344(EnGb2* this, PlayState* play);
 
 ActorInit En_Gb2_InitVars = {
-    ACTOR_EN_GB2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_PS,
-    sizeof(EnGb2),
-    (ActorFunc)EnGb2_Init,
-    (ActorFunc)EnGb2_Destroy,
-    (ActorFunc)EnGb2_Update,
-    (ActorFunc)EnGb2_Draw,
+    /**/ ACTOR_EN_GB2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_PS,
+    /**/ sizeof(EnGb2),
+    /**/ EnGb2_Init,
+    /**/ EnGb2_Destroy,
+    /**/ EnGb2_Update,
+    /**/ EnGb2_Draw,
 };
 
 typedef struct {
@@ -364,7 +364,7 @@ void func_80B0FD8C(EnGb2* this, PlayState* play) {
 }
 
 void func_80B0FE18(PlayState* play) {
-    func_800FD750(NA_BGM_MINI_BOSS);
+    Environment_ForcePlaySequence(NA_BGM_MINI_BOSS);
     play->nextEntrance = ENTRANCE(GHOST_HUT, 1);
     play->transitionType = TRANS_TYPE_64;
     gSaveContext.nextTransitionType = TRANS_TYPE_64;
@@ -379,8 +379,8 @@ void func_80B0FE7C(PlayState* play) {
 }
 
 void func_80B0FEBC(EnGb2* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
-        play->msgCtx.ocarinaMode = 4;
+    if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         SET_EVENTINF(EVENTINF_47);
         this->unk_26E = 0x14D1;
         this->unk_288 = 10;
@@ -400,7 +400,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
     if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_26E = 0x14D1;
                 this->unk_288 = 30;
@@ -443,9 +443,9 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                 case 0:
                     Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-this->unk_288);
-                    play->msgCtx.msgMode = 0x43;
+                    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+                    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
                     this->actionFunc = func_80B11344;
                     break;
 
@@ -568,7 +568,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
     if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_26C &= ~2;
                 if (this->unk_26E == 0x14DD) {
@@ -598,9 +598,9 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 } else {
                     Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-this->unk_288);
-                    play->msgCtx.msgMode = 0x43;
+                    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+                    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
                     this->actionFunc = func_80B11344;
                 }
                 break;
@@ -681,7 +681,7 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
             case ENGB2_7_2:
                 CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 if (this->unk_26E == 0x14FB) {
-                    Flags_SetSwitch(play, ENGB2_GET_7F8(&this->actor));
+                    Flags_SetSwitch(play, ENGB2_GET_SWITCH_FLAG(&this->actor));
                     Actor_Kill(&this->actor);
                     return;
                 }
@@ -752,7 +752,7 @@ void func_80B10DAC(EnGb2* this, PlayState* play) {
             if (this->csIdIndex != 2) {
                 this->actionFunc = func_80B10E98;
             } else {
-                Flags_SetSwitch(play, ENGB2_GET_7F8(&this->actor));
+                Flags_SetSwitch(play, ENGB2_GET_SWITCH_FLAG(&this->actor));
                 this->actionFunc = func_80B10868;
             }
         } else {
@@ -771,12 +771,12 @@ void func_80B10E98(EnGb2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             if ((this->unk_26E != 0x14E8) && (this->unk_26E != 0x14EA)) {
                 CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->actionFunc = func_80B10B5C;
-            } else if (Flags_GetSwitch(play, ENGB2_GET_7F8(&this->actor))) {
+            } else if (Flags_GetSwitch(play, ENGB2_GET_SWITCH_FLAG(&this->actor))) {
                 this->actionFunc = func_80B10A48;
             } else {
                 CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
@@ -814,7 +814,7 @@ void func_80B11048(EnGb2* this, PlayState* play) {
 void func_80B110F8(EnGb2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->unk_26C &= ~2;
             this->actionFunc = func_80B10A48;
@@ -936,7 +936,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            if (Flags_GetSwitch(play, ENGB2_GET_7F8(thisx))) {
+            if (Flags_GetSwitch(play, ENGB2_GET_SWITCH_FLAG(thisx))) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -950,7 +950,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
         case ENGB2_7_2:
             this->csIdIndex = 0;
             this->csIdList[0] = this->actor.csId;
-            if (Flags_GetSwitch(play, ENGB2_GET_7F8(thisx))) {
+            if (Flags_GetSwitch(play, ENGB2_GET_SWITCH_FLAG(thisx))) {
                 Actor_Kill(&this->actor);
                 return;
             }

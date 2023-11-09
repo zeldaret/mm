@@ -24,15 +24,15 @@ void func_80953354(EnHs* this, PlayState* play);
 void func_8095345C(EnHs* this, PlayState* play);
 
 ActorInit En_Hs_InitVars = {
-    ACTOR_EN_HS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_HS,
-    sizeof(EnHs),
-    (ActorFunc)EnHs_Init,
-    (ActorFunc)EnHs_Destroy,
-    (ActorFunc)EnHs_Update,
-    (ActorFunc)EnHs_Draw,
+    /**/ ACTOR_EN_HS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_HS,
+    /**/ sizeof(EnHs),
+    /**/ EnHs_Init,
+    /**/ EnHs_Destroy,
+    /**/ EnHs_Update,
+    /**/ EnHs_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -74,7 +74,7 @@ void EnHs_Init(Actor* thisx, PlayState* play) {
     EnHs* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gHsSkeleton, &gHsIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHsSkel, &gHsIdleAnim, this->jointTable, this->morphTable,
                        OBJECT_HS_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gHsIdleAnim);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -225,7 +225,7 @@ void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play) {
 
 void func_80953354(EnHs* this, PlayState* play) {
     if (!Play_InCsMode(play)) {
-        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
         this->actionFunc = EnHs_SceneTransitToBunnyHoodDialogue;
     }
 }

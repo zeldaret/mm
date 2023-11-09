@@ -19,15 +19,15 @@ void BgUmajump_Draw(Actor* thisx, PlayState* play);
 void func_8091A5A0(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Umajump_InitVars = {
-    ACTOR_BG_UMAJUMP,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(BgUmajump),
-    (ActorFunc)BgUmajump_Init,
-    (ActorFunc)BgUmajump_Destroy,
-    (ActorFunc)BgUmajump_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_UMAJUMP,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(BgUmajump),
+    /**/ BgUmajump_Init,
+    /**/ BgUmajump_Destroy,
+    /**/ BgUmajump_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -103,9 +103,9 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
             thisx->update = Actor_Noop;
         }
     } else {
-        this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_UMAJUMP);
+        this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_UMAJUMP);
 
-        if (this->objectIndex < 0) {
+        if (this->objectSlot <= OBJECT_SLOT_NONE) {
             Actor_Kill(thisx);
         }
 
@@ -126,8 +126,8 @@ void BgUmajump_Destroy(Actor* thisx, PlayState* play) {
 void BgUmajump_Update(Actor* thisx, PlayState* play) {
     BgUmajump* this = THIS;
 
-    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-        this->dyna.actor.objBankIndex = this->objectIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->dyna.actor.objectSlot = this->objectSlot;
         this->dyna.actor.draw = BgUmajump_Draw;
 
         Actor_SetObjectDependency(play, &this->dyna.actor);

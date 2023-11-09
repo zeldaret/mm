@@ -25,15 +25,15 @@ void func_80919768(Actor* thisx, PlayState* play2);
 void func_809199FC(Actor* thisx, PlayState* play2);
 
 ActorInit Eff_Dust_InitVars = {
-    ACTOR_EFF_DUST,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EffDust),
-    (ActorFunc)EffDust_Init,
-    (ActorFunc)EffDust_Destroy,
-    (ActorFunc)EffDust_Update,
-    (ActorFunc)EffDust_Draw,
+    /**/ ACTOR_EFF_DUST,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EffDust),
+    /**/ EffDust_Init,
+    /**/ EffDust_Destroy,
+    /**/ EffDust_Update,
+    /**/ EffDust_Draw,
 };
 
 void func_80918B40(EffDust* this) {

@@ -5,12 +5,14 @@
 #include "z64snap.h"
 #include "objects/object_kz/object_kz.h"
 
-#define KAIZOKU_GET_EXIT_INDEX(thisx) ((thisx)->params & 0x3F)
-#define KAIZOKU_GET_SWITCHFLAG(thisx) (((thisx)->params >> 6) & 0x7F)
-
 struct EnKaizoku;
 
 typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
+
+#define KAIZOKU_GET_EXIT_INDEX(thisx) ((thisx)->params & 0x3F)
+#define KAIZOKU_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 6) & 0x7F)
+
+#define KAIZOKU_SWITCH_FLAG_NONE 0x7F
 
 typedef enum EnKaizokuAnimation {
     /*  0 */ EN_KAIZOKU_ANIM_0,

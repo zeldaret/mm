@@ -20,15 +20,15 @@ void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play);
 void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play);
 
 ActorInit Shot_Sun_InitVars = {
-    ACTOR_SHOT_SUN,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ShotSun),
-    (ActorFunc)ShotSun_Init,
-    (ActorFunc)ShotSun_Destroy,
-    (ActorFunc)ShotSun_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_SHOT_SUN,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ShotSun),
+    /**/ ShotSun_Init,
+    /**/ ShotSun_Destroy,
+    /**/ ShotSun_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -129,18 +129,18 @@ void ShotSun_TriggerFairy(ShotSun* this, PlayState* play) {
 void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play) {
     s32 type = SHOTSUN_GET_TYPE(&this->actor);
 
-    if (play->msgCtx.ocarinaMode == 3) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         switch (play->msgCtx.lastPlayedSong) {
             case OCARINA_SONG_STORMS:
                 if (type == SHOTSUN_FAIRY_SPAWNER_STORMS) {
                     this->actionFunc = ShotSun_TriggerFairy;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
                 break;
             case OCARINA_SONG_SUNS:
                 if (type == SHOTSUN_FAIRY_SPAWNER_SUNS) {
                     this->actionFunc = ShotSun_TriggerFairy;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
                 break;
         }

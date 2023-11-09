@@ -190,15 +190,15 @@ static s32 sMsgScriptGoronAthleticHamstring[] = { 0x100060E, 0xE060C12, 0x100E0E
 static s32 sMsgScriptGoronSleeping[] = { 0xE023A0C, 0x12100000 };
 
 ActorInit En_Go_InitVars = {
-    ACTOR_EN_GO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_OF1D_MAP,
-    sizeof(EnGo),
-    (ActorFunc)EnGo_Init,
-    (ActorFunc)EnGo_Destroy,
-    (ActorFunc)EnGo_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_GO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_OF1D_MAP,
+    /**/ sizeof(EnGo),
+    /**/ EnGo_Init,
+    /**/ EnGo_Destroy,
+    /**/ EnGo_Update,
+    /**/ NULL,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -748,7 +748,7 @@ s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 isFallingAsleep = false;
 
-    if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+    if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->sleepState == ENGO_AWAKE) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
         (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON) && (play->sceneId == SCENE_16GORON_HOUSE) &&
@@ -978,23 +978,23 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
  * @return True if non-repeating animation has finished
  */
 s32 EnGo_UpdateSkelAnime(EnGo* this, PlayState* play) {
-    s8 objIndex = this->actor.objBankIndex;
+    s8 objectSlot = this->actor.objectSlot;
     s8 extraObjIndex = -1;
     s32 isAnimFinished = false;
 
-    if ((this->animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
-        extraObjIndex = this->hakuginDemoObjIndex;
-    } else if ((this->animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjIndex >= 0)) {
-        extraObjIndex = this->taisouObjIndex;
+    if ((this->animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot > OBJECT_SLOT_NONE)) {
+        extraObjIndex = this->hakuginDemoObjectSlot;
+    } else if ((this->animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot > OBJECT_SLOT_NONE)) {
+        extraObjIndex = this->taisouObjectSlot;
     } else if (this->animIndex < ENGO_ANIM_ATHLETICS_MIN) {
-        extraObjIndex = this->actor.objBankIndex;
+        extraObjIndex = this->actor.objectSlot;
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
         this->skelAnime.playSpeed = this->animPlaySpeed;
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return isAnimFinished;
@@ -1038,24 +1038,24 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
  * @return True if animation was changed
  */
 s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimation animIndex) {
-    s8 objIndex = this->actor.objBankIndex;
+    s8 objectSlot = this->actor.objectSlot;
     s8 extraObjIndex = -1;
     s32 didAnimChange = false;
 
-    if ((animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
-        extraObjIndex = this->hakuginDemoObjIndex;
-    } else if ((animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjIndex >= 0)) {
-        extraObjIndex = this->taisouObjIndex;
+    if ((animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjectSlot > OBJECT_SLOT_NONE)) {
+        extraObjIndex = this->hakuginDemoObjectSlot;
+    } else if ((animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjectSlot > OBJECT_SLOT_NONE)) {
+        extraObjIndex = this->taisouObjectSlot;
     } else if (animIndex < ENGO_ANIM_ATHLETICS_MIN) {
-        extraObjIndex = this->actor.objBankIndex;
+        extraObjIndex = this->actor.objectSlot;
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[objectSlot].segment);
     }
 
     return didAnimChange;
@@ -1893,8 +1893,8 @@ void EnGo_SetupMedigoron(EnGo* this, PlayState* play) {
 void EnGo_SetupInitialAction(EnGo* this, PlayState* play) {
     EffectTireMarkInit tireMarkInit = { 0, 62, { 0, 0, 15, 100 } };
 
-    if (((this->taisouObjIndex < 0) || SubS_IsObjectLoaded(this->taisouObjIndex, play)) ||
-        ((this->hakuginDemoObjIndex < 0) || SubS_IsObjectLoaded(this->hakuginDemoObjIndex, play))) {
+    if (((this->taisouObjectSlot <= OBJECT_SLOT_NONE) || SubS_IsObjectLoaded(this->taisouObjectSlot, play)) ||
+        ((this->hakuginDemoObjectSlot <= OBJECT_SLOT_NONE) || SubS_IsObjectLoaded(this->hakuginDemoObjectSlot, play))) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
@@ -2318,7 +2318,7 @@ void EnGo_Snowball(EnGo* this, PlayState* play) {
  * Return the MsgEvent script appropriate for the actor.
  */
 s32* EnGo_GetMsgEventScript(EnGo* this, PlayState* play) {
-    static s32 sMsgScriptGraveyard[] = {
+    static s32* sMsgScriptGraveyard[] = {
         sMsgScriptGoronGravemaker,
         sMsgScriptGoronFrozen,
     };
@@ -2412,8 +2412,8 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
 void EnGo_Init(Actor* thisx, PlayState* play) {
     EnGo* this = THIS;
 
-    this->taisouObjIndex = SubS_GetObjectIndex(OBJECT_TAISOU, play);
-    this->hakuginDemoObjIndex = SubS_GetObjectIndex(OBJECT_HAKUGIN_DEMO, play);
+    this->taisouObjectSlot = SubS_GetObjectSlot(OBJECT_TAISOU, play);
+    this->hakuginDemoObjectSlot = SubS_GetObjectSlot(OBJECT_HAKUGIN_DEMO, play);
     this->actionFunc = EnGo_SetupInitialAction;
 }
 

@@ -108,15 +108,15 @@ u8 D_80BC15C8[] = {
 };
 
 ActorInit En_Nb_InitVars = {
-    ACTOR_EN_NB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_NB,
-    sizeof(EnNb),
-    (ActorFunc)EnNb_Init,
-    (ActorFunc)EnNb_Destroy,
-    (ActorFunc)EnNb_Update,
-    (ActorFunc)EnNb_Draw,
+    /**/ ACTOR_EN_NB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_NB,
+    /**/ sizeof(EnNb),
+    /**/ EnNb_Init,
+    /**/ EnNb_Destroy,
+    /**/ EnNb_Update,
+    /**/ EnNb_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -366,7 +366,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
                 gSaveContext.save.time = CLOCK_TIME(8, 0);
                 Sram_IncrementDay();
             } else {
-                func_800FE658(120.0f);
+                Environment_SetTimeJump(120.0f);
             }
 
             this->behaviour++;

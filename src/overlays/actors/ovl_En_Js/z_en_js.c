@@ -28,15 +28,15 @@ void func_8096A38C(EnJs* this, PlayState* play);
 void func_8096A6F4(EnJs* this, PlayState* play);
 
 ActorInit En_Js_InitVars = {
-    ACTOR_EN_JS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_OB,
-    sizeof(EnJs),
-    (ActorFunc)EnJs_Init,
-    (ActorFunc)EnJs_Destroy,
-    (ActorFunc)EnJs_Update,
-    (ActorFunc)EnJs_Draw,
+    /**/ ACTOR_EN_JS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_OB,
+    /**/ sizeof(EnJs),
+    /**/ EnJs_Init,
+    /**/ EnJs_Destroy,
+    /**/ EnJs_Update,
+    /**/ EnJs_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

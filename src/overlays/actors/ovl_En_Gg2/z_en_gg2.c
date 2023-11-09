@@ -27,15 +27,15 @@ s32 func_80B3B648(EnGg2* this, Path* path, s32 arg2_);
 f32 func_80B3B7E4(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
 ActorInit En_Gg2_InitVars = {
-    ACTOR_EN_GG2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GG,
-    sizeof(EnGg2),
-    (ActorFunc)EnGg2_Init,
-    (ActorFunc)EnGg2_Destroy,
-    (ActorFunc)EnGg2_Update,
-    (ActorFunc)EnGg2_Draw,
+    /**/ ACTOR_EN_GG2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_GG,
+    /**/ sizeof(EnGg2),
+    /**/ EnGg2_Init,
+    /**/ EnGg2_Destroy,
+    /**/ EnGg2_Update,
+    /**/ EnGg2_Draw,
 };
 
 typedef enum {
@@ -201,7 +201,7 @@ void func_80B3B05C(EnGg2* this, PlayState* play) {
 
 void func_80B3B0A0(EnGg2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_2F0 = 0;
         this->actionFunc = func_80B3B5D4;

@@ -13,6 +13,7 @@
  */
 
 #include "z_en_water_effect.h"
+#include "overlays/actors/ovl_Bg_Ikana_Rotaryroom/z_bg_ikana_rotaryroom.h"
 #include "objects/object_water_effect/object_water_effect.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -31,15 +32,15 @@ void func_80A5A534(Actor* thisx, PlayState* play);
 void func_80A5A6B8(Actor* thisx, PlayState* play2);
 
 ActorInit En_Water_Effect_InitVars = {
-    ACTOR_EN_WATER_EFFECT,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_WATER_EFFECT,
-    sizeof(EnWaterEffect),
-    (ActorFunc)EnWaterEffect_Init,
-    (ActorFunc)EnWaterEffect_Destroy,
-    (ActorFunc)EnWaterEffect_Update,
-    (ActorFunc)EnWaterEffect_Draw,
+    /**/ ACTOR_EN_WATER_EFFECT,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_WATER_EFFECT,
+    /**/ sizeof(EnWaterEffect),
+    /**/ EnWaterEffect_Init,
+    /**/ EnWaterEffect_Destroy,
+    /**/ EnWaterEffect_Update,
+    /**/ EnWaterEffect_Draw,
 };
 
 static Vec3f D_80A5AFB0 = { 0.0f, 0.0f, 0.0f };
@@ -414,7 +415,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
         this->unk_DC6--;
     }
 
-    if ((rotaryRoom != NULL) && Flags_GetSwitch(play, (rotaryRoom->params >> 1) & 0x7F)) {
+    if ((rotaryRoom != NULL) && Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_SWITCH_FLAG_1(rotaryRoom))) {
         this->unk_DC6 = Rand_ZeroFloat(150.0f) + 100.0f;
     } else if (!Play_InCsMode(play)) {
         this->unk_DC4++;

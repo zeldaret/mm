@@ -216,7 +216,7 @@ s32 Horse_IsActive(PlayState* play, ActorContext* actorCtx) {
     if (bgActor != NULL) {
         while (true) {
             if ((bgActor->update != NULL) && (bgActor->init == NULL)) {
-                if (Object_IsLoaded(&play->objectCtx, bgActor->objBankIndex)) {
+                if (Object_IsLoaded(&play->objectCtx, bgActor->objectSlot)) {
                     if ((bgActor->id == ACTOR_EN_HORSE) && (((EnHorse*)bgActor)->action != ENHORSE_ACTION_INACTIVE)) {
                         return true;
                     }

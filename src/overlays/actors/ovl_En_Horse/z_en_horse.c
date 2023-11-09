@@ -162,15 +162,15 @@ static SkeletonHeader* sSkeletonHeaders[HORSE_TYPE_MAX] = {
 };
 
 ActorInit En_Horse_InitVars = {
-    ACTOR_EN_HORSE,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnHorse),
-    (ActorFunc)EnHorse_Init,
-    (ActorFunc)EnHorse_Destroy,
-    (ActorFunc)EnHorse_Update,
-    (ActorFunc)EnHorse_Draw,
+    /**/ ACTOR_EN_HORSE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnHorse),
+    /**/ EnHorse_Init,
+    /**/ EnHorse_Destroy,
+    /**/ EnHorse_Update,
+    /**/ EnHorse_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
@@ -692,7 +692,7 @@ s32 EnHorse_PlayerCanMove(EnHorse* this, PlayState* play) {
         (((this->stateFlags & ENHORSE_FLAG_19) || (this->stateFlags & ENHORSE_FLAG_29)) && !this->inRace) ||
         (this->action == ENHORSE_ACTION_HBA) || (player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
         (play->csCtx.state != CS_STATE_IDLE) || (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) ||
-        (player->stateFlags1 & PLAYER_STATE1_20) || (player->csMode != PLAYER_CSMODE_NONE)) {
+        (player->stateFlags1 & PLAYER_STATE1_20) || (player->csAction != PLAYER_CSACTION_NONE)) {
         return false;
     }
     return true;
@@ -738,7 +738,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->type = HORSE_TYPE_DONKEY;
         this->unk_528 = 80.0f;
         this->boostSpeed = 12;
-        if ((this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_HA)) < 0) {
+        if ((this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_HA)) <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
             return;
         }
@@ -748,8 +748,8 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->type = HORSE_TYPE_2;
         this->unk_528 = 64.8f;
         this->boostSpeed = 15;
-        if ((this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_HORSE_LINK_CHILD)) < 0) {
-            thisx->objBankIndex = Object_Spawn(&play->objectCtx, OBJECT_HORSE_LINK_CHILD);
+        if ((this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_HORSE_LINK_CHILD)) <= OBJECT_SLOT_NONE) {
+            thisx->objectSlot = Object_SpawnPersistent(&play->objectCtx, OBJECT_HORSE_LINK_CHILD);
             Actor_SetObjectDependency(play, &this->actor);
             Skin_Init(&play->state, &this->skin, sSkeletonHeaders[this->type], sAnimationHeaders[this->type][0]);
             Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
@@ -760,7 +760,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     } else if (ENHORSE_IS_BANDIT_TYPE(&this->actor)) {
         this->type = HORSE_TYPE_BANDIT;
         this->boostSpeed = 12;
-        if ((this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_HA)) < 0) {
+        if ((this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_HA)) <= OBJECT_SLOT_NONE) {
             Actor_Kill(&this->actor);
             return;
         }
@@ -948,8 +948,8 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
 void func_8087D540(Actor* thisx, PlayState* play) {
     EnHorse* this = THIS;
 
-    if (Object_IsLoaded(&play->objectCtx, this->bankIndex)) {
-        this->actor.objBankIndex = this->bankIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         this->actor.update = EnHorse_Update;
         if (this->unk_1EC & 1) {

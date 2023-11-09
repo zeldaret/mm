@@ -19,15 +19,15 @@ void DmChar09_DoNothing(DmChar09* this, PlayState* play);
 void DmChar09_HandleCutscene(DmChar09* this, PlayState* play);
 
 ActorInit Dm_Char09_InitVars = {
-    ACTOR_DM_CHAR09,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_BEE,
-    sizeof(DmChar09),
-    (ActorFunc)DmChar09_Init,
-    (ActorFunc)DmChar09_Destroy,
-    (ActorFunc)DmChar09_Update,
-    (ActorFunc)DmChar09_Draw,
+    /**/ ACTOR_DM_CHAR09,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_BEE,
+    /**/ sizeof(DmChar09),
+    /**/ DmChar09_Init,
+    /**/ DmChar09_Destroy,
+    /**/ DmChar09_Update,
+    /**/ DmChar09_Draw,
 };
 
 typedef enum {

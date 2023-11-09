@@ -97,7 +97,8 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     /* 20 */ 0,
     /* 21 */ 0,
     /* 22 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_22_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_22_80),
-    /* 23 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_80),
+    /* 23 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_80),
     /* 24 */ PERSISTENT_WEEKEVENTREG_ALT(WEEKEVENTREG_24_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_24_80),
     /* 25 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_25_01),
     /* 26 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_26_40),
@@ -429,7 +430,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     u8 item;
 
     gSaveContext.save.timeSpeedOffset = 0;
-    gSaveContext.save.daysElapsed = 0;
+    gSaveContext.save.eventDayCount = 0;
     gSaveContext.save.day = 0;
     gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
 
@@ -637,7 +638,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     }
 
     gSaveContext.save.saveInfo.playerData.rupees = 0;
-    gSaveContext.save.saveInfo.unk_F41 = 0;
+    gSaveContext.save.saveInfo.scarecrowSpawnSongSet = false;
     gSaveContext.powderKegTimer = 0;
     gSaveContext.unk_1014 = 0;
     gSaveContext.jinxTimer = 0;
@@ -649,7 +650,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
 void Sram_IncrementDay(void) {
     if (CURRENT_DAY <= 3) {
         gSaveContext.save.day++;
-        gSaveContext.save.daysElapsed++;
+        gSaveContext.save.eventDayCount++;
     }
 
     gSaveContext.save.saveInfo.bombersCaughtNum = 0;
@@ -917,7 +918,7 @@ u16 sSaveDefaultChecksum = 0;
  */
 void Sram_InitNewSave(void) {
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
-    gSaveContext.save.daysElapsed = 0;
+    gSaveContext.save.eventDayCount = 0;
     gSaveContext.save.day = 0;
     gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
     Sram_ResetSave();
@@ -1303,7 +1304,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             gSaveContext.cycleSceneFlags[i].collectible = gSaveContext.save.saveInfo.permanentSceneFlags[i].collectible;
         }
 
-        if (gSaveContext.save.saveInfo.unk_F41) {
+        if (gSaveContext.save.saveInfo.scarecrowSpawnSongSet) {
             Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.saveInfo.scarecrowSpawnSong,
                        sizeof(gSaveContext.save.saveInfo.scarecrowSpawnSong));
 
@@ -1648,7 +1649,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
             } else {
                 if (phi_s2) {
                     gSaveContext.options.optionId = 0xA51D;
-                    gSaveContext.options.language = 1;
+                    gSaveContext.options.language = LANGUAGE_ENG;
                     gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
                     gSaveContext.options.languageSetting = 0;
                     gSaveContext.options.zTargetSetting = 0;
@@ -1656,13 +1657,13 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     Lib_MemCpy(&gSaveContext.options, sramCtx->saveBuf, sizeof(SaveOptions));
                     if (gSaveContext.options.optionId != 0xA51D) {
                         gSaveContext.options.optionId = 0xA51D;
-                        gSaveContext.options.language = 1;
+                        gSaveContext.options.language = LANGUAGE_ENG;
                         gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
                         gSaveContext.options.languageSetting = 0;
                         gSaveContext.options.zTargetSetting = 0;
                     }
                 }
-                func_801A3D98(gSaveContext.options.audioSetting);
+                Audio_SetFileSelectSettings(gSaveContext.options.audioSetting);
             }
         }
 
@@ -1670,7 +1671,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
         gSaveContext.flashSaveAvailable = D_801F6AF2;
     }
 
-    gSaveContext.options.language = 1;
+    gSaveContext.options.language = LANGUAGE_ENG;
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
@@ -1693,8 +1694,6 @@ void Sram_EraseSave(FileSelectState* fileSelect2, SramContext* sramCtx, s32 file
     gSaveContext.flashSaveAvailable = D_801F6AF2;
 }
 
-#ifdef NON_MATCHING
-// v0/v1
 void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     FileSelectState* fileSelect = fileSelect2;
     u16 i;
@@ -1736,13 +1735,11 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         // clear buffer
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         // read to buffer
-        SysFlashrom_ReadData(&sramCtx->saveBuf[0], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2],
-                             gFlashSaveNumPages[fileSelect->selectedFileIndex * 2]);
-        if (1) {}
+        if (SysFlashrom_ReadData(&sramCtx->saveBuf[0], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2],
+                                 gFlashSaveNumPages[fileSelect->selectedFileIndex * 2])) {}
 
-        SysFlashrom_ReadData(&sramCtx->saveBuf[0x2000], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2 + 1],
-                             gFlashSaveNumPages[fileSelect->selectedFileIndex * 2 + 1]);
-        if (1) {}
+        if (SysFlashrom_ReadData(&sramCtx->saveBuf[0x2000], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2 + 1],
+                                 gFlashSaveNumPages[fileSelect->selectedFileIndex * 2 + 1])) {}
 
         // copy buffer to save context
         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
@@ -1779,9 +1776,6 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     gSaveContext.save.time = D_801F6AF0;
     gSaveContext.flashSaveAvailable = D_801F6AF2;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_CopySave.s")
-#endif
 
 void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     s32 phi_v0;
@@ -1852,8 +1846,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
  */
 void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx) {
     if (gSaveContext.flashSaveAvailable) {
-        // TODO: macros for languages
-        gSaveContext.options.language = 1;
+        gSaveContext.options.language = LANGUAGE_ENG;
         Lib_MemCpy(sramCtx->saveBuf, &gSaveContext.options, sizeof(SaveOptions));
     }
 }
@@ -1861,12 +1854,12 @@ void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx) {
 void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
     if (gSaveContext.save.entrance) {} // Required to match
 
-    func_801A3D98(gSaveContext.options.audioSetting);
+    Audio_SetFileSelectSettings(gSaveContext.options.audioSetting);
 }
 
 void Sram_Alloc(GameState* gameState, SramContext* sramCtx) {
     if (gSaveContext.flashSaveAvailable) {
-        sramCtx->saveBuf = THA_AllocTailAlign16(&gameState->heap, SAVE_BUFFER_SIZE);
+        sramCtx->saveBuf = THA_AllocTailAlign16(&gameState->tha, SAVE_BUFFER_SIZE);
         sramCtx->status = 0;
     }
 }

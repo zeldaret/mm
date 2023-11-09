@@ -57,15 +57,15 @@ void func_80867FBC(struct_80867BDC_a0* arg0, PlayState* play, s32 arg2);
 void func_80867FE4(struct_80867BDC_a0* arg0, PlayState* play);
 
 ActorInit En_Box_InitVars = {
-    ACTOR_EN_BOX,
-    ACTORCAT_CHEST,
-    FLAGS,
-    OBJECT_BOX,
-    sizeof(EnBox),
-    (ActorFunc)EnBox_Init,
-    (ActorFunc)EnBox_Destroy,
-    (ActorFunc)EnBox_Update,
-    (ActorFunc)EnBox_Draw,
+    /**/ ACTOR_EN_BOX,
+    /**/ ACTORCAT_CHEST,
+    /**/ FLAGS,
+    /**/ OBJECT_BOX,
+    /**/ sizeof(EnBox),
+    /**/ EnBox_Init,
+    /**/ EnBox_Destroy,
+    /**/ EnBox_Update,
+    /**/ EnBox_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -425,9 +425,9 @@ void func_80868B74(EnBox* this, PlayState* play) {
         this->unk_1A0++;
         if ((this->csId1 != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->csId1)) {
             if (this->unk_1A0 == 2) {
-                func_800B724C(play, &this->dyna.actor, PLAYER_CSMODE_4);
+                Player_SetCsAction(play, &this->dyna.actor, PLAYER_CSACTION_4);
             } else if (this->unk_1A0 == 22) {
-                func_800B724C(play, &this->dyna.actor, PLAYER_CSMODE_1);
+                Player_SetCsAction(play, &this->dyna.actor, PLAYER_CSACTION_1);
             }
         }
     } else if (this->unk_1A0 < 60) {
@@ -539,7 +539,8 @@ void EnBox_Open(EnBox* this, PlayState* play) {
             Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_EN_ELFORG, this->dyna.actor.world.pos.x,
                                this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.world.rot.x,
                                this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
-                               STRAY_FAIRY_PARAMS(ENBOX_GET_CHEST_FLAG(&this->dyna.actor), 0, STRAY_FAIRY_TYPE_CHEST));
+                               STRAY_FAIRY_PARAMS(ENBOX_GET_CHEST_FLAG(&this->dyna.actor), STRAY_FAIRY_AREA_CLOCK_TOWN,
+                                                  STRAY_FAIRY_TYPE_CHEST));
         } else if (this->movementFlags & ENBOX_MOVE_0x40) {
             this->movementFlags &= ~ENBOX_MOVE_0x40;
         }

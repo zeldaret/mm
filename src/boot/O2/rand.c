@@ -1,17 +1,11 @@
-#include "global.h"
+#include "rand.h"
 
 //! The latest generated random number, used to generate the next number in the sequence.
 static u32 sRandInt = 1;
 
 //! Space to store a value to be re-interpreted as a float.
 //! This can't be static because it is used in z_kankyo.
-u32 sRandFloat;
-
-//! These values are recommended by the algorithms book *Numerical Recipes in C. The Art of Scientific Computing*, 2nd
-//! Edition, 1992, ISBN 0-521-43108-5. (p. 284):
-//! > This is about as good as any 32-bit linear congruential generator, entirely adequate for many uses.
-#define RAND_MULTIPLIER 1664525
-#define RAND_INCREMENT 1013904223
+u32 gRandFloat;
 
 /**
  * Generates the next pseudo-random integer.
@@ -37,8 +31,8 @@ void Rand_Seed(u32 seed) {
  */
 f32 Rand_ZeroOne(void) {
     sRandInt = (sRandInt * RAND_MULTIPLIER) + RAND_INCREMENT;
-    sRandFloat = ((sRandInt >> 9) | 0x3F800000);
-    return *((f32*)&sRandFloat) - 1.0f;
+    gRandFloat = ((sRandInt >> 9) | 0x3F800000);
+    return *((f32*)&gRandFloat) - 1.0f;
 }
 
 /**
@@ -46,8 +40,8 @@ f32 Rand_ZeroOne(void) {
  */
 f32 Rand_Centered(void) {
     sRandInt = (sRandInt * RAND_MULTIPLIER) + RAND_INCREMENT;
-    sRandFloat = ((sRandInt >> 9) | 0x3F800000);
-    return *((f32*)&sRandFloat) - 1.5f;
+    gRandFloat = ((sRandInt >> 9) | 0x3F800000);
+    return *((f32*)&gRandFloat) - 1.5f;
 }
 
 //! All functions below are unused variants of the above four, that use a provided random number variable instead of the
@@ -79,8 +73,8 @@ u32 Rand_Next_Variable(u32* rndNum) {
 f32 Rand_ZeroOne_Variable(u32* rndNum) {
     u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
 
-    sRandFloat = ((*rndNum = next) >> 9) | 0x3F800000;
-    return *((f32*)&sRandFloat) - 1.0f;
+    gRandFloat = ((*rndNum = next) >> 9) | 0x3F800000;
+    return *((f32*)&gRandFloat) - 1.0f;
 }
 
 /**
@@ -91,6 +85,6 @@ f32 Rand_ZeroOne_Variable(u32* rndNum) {
 f32 Rand_Centered_Variable(u32* rndNum) {
     u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
 
-    sRandFloat = ((*rndNum = next) >> 9) | 0x3F800000;
-    return *((f32*)&sRandFloat) - 1.5f;
+    gRandFloat = ((*rndNum = next) >> 9) | 0x3F800000;
+    return *((f32*)&gRandFloat) - 1.5f;
 }

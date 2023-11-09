@@ -89,15 +89,15 @@ static s32 D_80BF33F0[] = {
 };
 
 ActorInit En_Ig_InitVars = {
-    ACTOR_EN_IG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DAI,
-    sizeof(EnIg),
-    (ActorFunc)EnIg_Init,
-    (ActorFunc)EnIg_Destroy,
-    (ActorFunc)EnIg_Update,
-    (ActorFunc)EnIg_Draw,
+    /**/ ACTOR_EN_IG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DAI,
+    /**/ sizeof(EnIg),
+    /**/ EnIg_Init,
+    /**/ EnIg_Destroy,
+    /**/ EnIg_Update,
+    /**/ EnIg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -767,9 +767,9 @@ s32 func_80BF2470(EnIg* this, PlayState* play) {
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if (((f32)this->unk_3E2 / this->unk_3E0) <= 0.9f) {
-                door->unk_1A7 = this->unk_2A4;
+                door->openTimer = this->unk_2A4;
             } else {
-                door->unk_1A7 = 0;
+                door->openTimer = 0;
             }
         }
         this->unk_3E2 = CLAMP(this->unk_3E2, 0, this->unk_3E0);

@@ -64,15 +64,15 @@ EnOt* D_80B5E884;
 EnOt* D_80B5E888;
 
 ActorInit En_Ot_InitVars = {
-    ACTOR_EN_OT,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_OT,
-    sizeof(EnOt),
-    (ActorFunc)EnOt_Init,
-    (ActorFunc)EnOt_Destroy,
-    (ActorFunc)EnOt_Update,
-    (ActorFunc)EnOt_Draw,
+    /**/ ACTOR_EN_OT,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_OT,
+    /**/ sizeof(EnOt),
+    /**/ EnOt_Init,
+    /**/ EnOt_Destroy,
+    /**/ EnOt_Update,
+    /**/ EnOt_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -459,8 +459,8 @@ void func_80B5C3D8(EnOt* this, PlayState* play) {
     this->unk_360->actor.shape.rot.y = BINANG_ROT180(temp);
 
     if (this->unk_740 < 1.0f) {
-        Lib_LerpRGB(&D_80B5E408, &D_80B5E40C, this->unk_740, &this->unk_744);
-        Lib_LerpRGB(&D_80B5E408, &D_80B5E40C, this->unk_740, &this->unk_360->unk_744);
+        Color_RGB8_Lerp(&D_80B5E408, &D_80B5E40C, this->unk_740, &this->unk_744);
+        Color_RGB8_Lerp(&D_80B5E408, &D_80B5E40C, this->unk_740, &this->unk_360->unk_744);
         Math_StepToF(&this->unk_740, 1.0f, 0.05f);
     }
 

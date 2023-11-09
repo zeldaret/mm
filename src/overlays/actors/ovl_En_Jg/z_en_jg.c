@@ -42,15 +42,15 @@ typedef enum {
 } EnJgAction;
 
 ActorInit En_Jg_InitVars = {
-    ACTOR_EN_JG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_JG,
-    sizeof(EnJg),
-    (ActorFunc)EnJg_Init,
-    (ActorFunc)EnJg_Destroy,
-    (ActorFunc)EnJg_Update,
-    (ActorFunc)EnJg_Draw,
+    /**/ ACTOR_EN_JG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_JG,
+    /**/ sizeof(EnJg),
+    /**/ EnJg_Init,
+    /**/ EnJg_Destroy,
+    /**/ EnJg_Update,
+    /**/ EnJg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -355,7 +355,7 @@ void EnJg_GoronShrineIdle(EnJg* this, PlayState* play) {
         this->flags |= FLAG_LOOKING_AT_PLAYER;
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnJg_GoronShrineTalk;
-    } else if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isLockedOn)) {
+    } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
         Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         this->textId = EnJg_GetStartingConversationTextId(this, play);
     }
@@ -365,7 +365,7 @@ void EnJg_GoronShrineTalk(EnJg* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if ((this->textId == 0xDCC) || (this->textId == 0xDDD) || (this->textId == 0xDE0)) {
             // There is nothing more to say after these lines, so end the current conversation.
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = EnJg_GoronShrineIdle;
@@ -430,7 +430,7 @@ void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, PlayState* play) {
         }
     } else if (this->animIndex == EN_JG_ANIM_SURPRISE_LOOP) {
         if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->animIndex = EN_JG_ANIM_WALK;
@@ -488,7 +488,7 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
         temp = this->textId;
         if ((temp == 0xDB4) || (temp == 0xDB5) || (temp == 0xDC4) || (temp == 0xDC6)) {
             // There is nothing more to say after these lines, so end the current conversation.
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = EnJg_SetupWalk;
@@ -500,7 +500,7 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_24_80)) {
                 // The player hasn't talked to the Goron Child at least once, so they can't learn
                 // the Lullaby Intro. End the current conversation with the player.
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->actionFunc = EnJg_SetupWalk;
@@ -514,7 +514,7 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
                 // To get to this point, the player *has* talked to the Goron Child, but doesn't
                 // already have the Lullaby or Lullaby Intro. End the current conversation and
                 // start the cutscene that teaches the Lullaby Intro.
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->csId = EnJg_GetCsIdForTeachingLullabyIntro(this);
@@ -605,7 +605,7 @@ void EnJg_FrozenIdle(EnJg* this, PlayState* play) {
 
 void EnJg_EndFrozenInteraction(EnJg* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = EnJg_FrozenIdle;
     }
@@ -919,7 +919,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnJg_SetupTalk;
     } else {
-        if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isLockedOn)) {
+        if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             if (this->action == EN_JG_ACTION_FIRST_THAW) {
                 this->textId = EnJg_GetStartingConversationTextId(this, play);

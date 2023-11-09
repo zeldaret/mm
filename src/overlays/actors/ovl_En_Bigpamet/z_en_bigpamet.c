@@ -47,15 +47,15 @@ void func_80A28D80(EnBigpamet* this);
 void func_80A28ED4(EnBigpamet* this);
 
 ActorInit En_Bigpamet_InitVars = {
-    ACTOR_EN_BIGPAMET,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_TL,
-    sizeof(EnBigpamet),
-    (ActorFunc)EnBigpamet_Init,
-    (ActorFunc)EnBigpamet_Destroy,
-    (ActorFunc)EnBigpamet_Update,
-    (ActorFunc)EnBigpamet_Draw,
+    /**/ ACTOR_EN_BIGPAMET,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_TL,
+    /**/ sizeof(EnBigpamet),
+    /**/ EnBigpamet_Init,
+    /**/ EnBigpamet_Destroy,
+    /**/ EnBigpamet_Update,
+    /**/ EnBigpamet_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

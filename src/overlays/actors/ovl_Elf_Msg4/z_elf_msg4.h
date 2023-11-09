@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define ELFMSG4_GET_SWITCHFLAG(thisx) (((thisx)->params & 0x7F00) >> 8)
+#define ELFMSG4_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x7F00) >> 8)
 #define ELFMSG4_GET_8000(thisx) ((thisx)->params & 0x8000)
 #define ELFMSG4_GET_TEXT(thisx) ((thisx)->params & 0xFF)
 

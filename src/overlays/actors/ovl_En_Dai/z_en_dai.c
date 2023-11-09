@@ -19,15 +19,15 @@ void func_80B3F00C(EnDai* this, PlayState* play);
 void func_80B3EF90(EnDai* this, PlayState* play);
 
 ActorInit En_Dai_InitVars = {
-    ACTOR_EN_DAI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DAI,
-    sizeof(EnDai),
-    (ActorFunc)EnDai_Init,
-    (ActorFunc)EnDai_Destroy,
-    (ActorFunc)EnDai_Update,
-    (ActorFunc)EnDai_Draw,
+    /**/ ACTOR_EN_DAI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DAI,
+    /**/ sizeof(EnDai),
+    /**/ EnDai_Init,
+    /**/ EnDai_Destroy,
+    /**/ EnDai_Update,
+    /**/ EnDai_Draw,
 };
 
 static Vec3f D_80B3FBF0 = { 1.0f, 1.0f, 1.0f };
@@ -429,7 +429,7 @@ void func_80B3EE8C(EnDai* this, PlayState* play) {
 void func_80B3EEDC(EnDai* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         EnDai_ChangeAnim(this, ENDAI_ANIM_1);
         this->actionFunc = func_80B3EE8C;

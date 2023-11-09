@@ -16,15 +16,15 @@ void MirRay2_Update(Actor* thisx, PlayState* play);
 void MirRay2_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Mir_Ray2_InitVars = {
-    ACTOR_MIR_RAY2,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_MIR_RAY,
-    sizeof(MirRay2),
-    (ActorFunc)MirRay2_Init,
-    (ActorFunc)MirRay2_Destroy,
-    (ActorFunc)MirRay2_Update,
-    (ActorFunc)MirRay2_Draw,
+    /**/ ACTOR_MIR_RAY2,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_MIR_RAY,
+    /**/ sizeof(MirRay2),
+    /**/ MirRay2_Init,
+    /**/ MirRay2_Destroy,
+    /**/ MirRay2_Update,
+    /**/ MirRay2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -92,7 +92,7 @@ void MirRay2_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = this->actor.shape.rot.x;
     if (MIRRAY2_GET_F(thisx) != 1) {
-        if ((MIRRAY2_GET_SWITCH_FLAGS(thisx) != 0x7F) && !Flags_GetSwitch(play, MIRRAY2_GET_SWITCH_FLAGS(thisx))) {
+        if ((MIRRAY2_GET_SWITCH_FLAG(thisx) != 0x7F) && !Flags_GetSwitch(play, MIRRAY2_GET_SWITCH_FLAG(thisx))) {
             this->unk1A4 |= 1;
         }
     }
@@ -109,7 +109,7 @@ void MirRay2_Update(Actor* thisx, PlayState* play) {
     MirRay2* this = THIS;
 
     if (this->unk1A4 & 1) {
-        if (Flags_GetSwitch(play, MIRRAY2_GET_SWITCH_FLAGS(thisx))) {
+        if (Flags_GetSwitch(play, MIRRAY2_GET_SWITCH_FLAG(thisx))) {
             this->unk1A4 &= ~1;
         }
     } else {

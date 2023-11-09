@@ -25,15 +25,15 @@ void func_809CEE74(BgSpdweb* this);
 void func_809CEEAC(BgSpdweb* this, PlayState* play);
 
 ActorInit Bg_Spdweb_InitVars = {
-    ACTOR_BG_SPDWEB,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_SPDWEB,
-    sizeof(BgSpdweb),
-    (ActorFunc)BgSpdweb_Init,
-    (ActorFunc)BgSpdweb_Destroy,
-    (ActorFunc)BgSpdweb_Update,
-    (ActorFunc)BgSpdweb_Draw,
+    /**/ ACTOR_BG_SPDWEB,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_SPDWEB,
+    /**/ sizeof(BgSpdweb),
+    /**/ BgSpdweb_Init,
+    /**/ BgSpdweb_Destroy,
+    /**/ BgSpdweb_Update,
+    /**/ BgSpdweb_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit1[2] = {
@@ -148,7 +148,7 @@ void BgSpdweb_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_161 = 0;
-    this->switchFlag = BGSPDWEB_GET_SWITCHFLAG(&this->dyna.actor);
+    this->switchFlag = BGSPDWEB_GET_SWITCH_FLAG(&this->dyna.actor);
     thisx->params &= 0xFF;
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 

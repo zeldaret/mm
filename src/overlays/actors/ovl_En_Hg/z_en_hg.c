@@ -37,15 +37,15 @@ typedef enum {
 } HgCsIndex;
 
 ActorInit En_Hg_InitVars = {
-    ACTOR_EN_HG,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_HARFGIBUD,
-    sizeof(EnHg),
-    (ActorFunc)EnHg_Init,
-    (ActorFunc)EnHg_Destroy,
-    (ActorFunc)EnHg_Update,
-    (ActorFunc)EnHg_Draw,
+    /**/ ACTOR_EN_HG,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_HARFGIBUD,
+    /**/ sizeof(EnHg),
+    /**/ EnHg_Init,
+    /**/ EnHg_Destroy,
+    /**/ EnHg_Update,
+    /**/ EnHg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -398,7 +398,7 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
         sHasSoundPlayed = false;
     }
 
-    if (play->msgCtx.ocarinaMode == 3) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
                 this->csIdIndex = HG_CS_SONG_OF_HEALING;

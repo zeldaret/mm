@@ -28,15 +28,15 @@ void BgKin2Fence_SetupDoNothing(BgKin2Fence* this);
 void BgKin2Fence_DoNothing(BgKin2Fence* this, PlayState* play);
 
 ActorInit Bg_Kin2_Fence_InitVars = {
-    ACTOR_BG_KIN2_FENCE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KIN2_OBJ,
-    sizeof(BgKin2Fence),
-    (ActorFunc)BgKin2Fence_Init,
-    (ActorFunc)BgKin2Fence_Destroy,
-    (ActorFunc)BgKin2Fence_Update,
-    (ActorFunc)BgKin2Fence_Draw,
+    /**/ ACTOR_BG_KIN2_FENCE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_KIN2_OBJ,
+    /**/ sizeof(BgKin2Fence),
+    /**/ BgKin2Fence_Init,
+    /**/ BgKin2Fence_Destroy,
+    /**/ BgKin2Fence_Update,
+    /**/ BgKin2Fence_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[4] = {
@@ -161,7 +161,7 @@ void BgKin2Fence_Init(Actor* thisx, PlayState* play) {
         Collider_UpdateSpheres(i, &this->collider);
     }
 
-    if (Flags_GetSwitch(play, this->dyna.actor.params & 0x7F)) {
+    if (Flags_GetSwitch(play, BG_KIN2_FENCE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         BgKin2Fence_SetupDoNothing(this);
         return;
     }
@@ -219,7 +219,7 @@ void BgKin2Fence_SetupPlayOpenCutscene(BgKin2Fence* this) {
 void BgKin2Fence_PlayOpenCutscene(BgKin2Fence* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        Flags_SetSwitch(play, this->dyna.actor.params & 0x7F);
+        Flags_SetSwitch(play, BG_KIN2_FENCE_GET_SWITCH_FLAG(&this->dyna.actor));
         BgKin2Fence_SetupWaitBeforeOpen(this);
         return;
     }

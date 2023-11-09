@@ -24,15 +24,15 @@ void func_80959D28(EnMk* this, PlayState* play);
 void func_80959E18(EnMk* this, PlayState* play);
 
 ActorInit En_Mk_InitVars = {
-    ACTOR_EN_MK,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MK,
-    sizeof(EnMk),
-    (ActorFunc)EnMk_Init,
-    (ActorFunc)EnMk_Destroy,
-    (ActorFunc)EnMk_Update,
-    (ActorFunc)EnMk_Draw,
+    /**/ ACTOR_EN_MK,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MK,
+    /**/ sizeof(EnMk),
+    /**/ EnMk_Init,
+    /**/ EnMk_Destroy,
+    /**/ EnMk_Update,
+    /**/ EnMk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -412,7 +412,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
     }
 
     if (func_800B8718(&this->actor, &play->state)) {
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = func_80959D28;
         if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             this->actor.csId = this->csIdList[0];

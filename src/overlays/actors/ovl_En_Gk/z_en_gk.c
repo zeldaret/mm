@@ -33,15 +33,15 @@ void func_80B525E0(EnGk* this, PlayState* play);
 void func_80B52654(EnGk* this, PlayState* play);
 
 ActorInit En_Gk_InitVars = {
-    ACTOR_EN_GK,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GK,
-    sizeof(EnGk),
-    (ActorFunc)EnGk_Init,
-    (ActorFunc)EnGk_Destroy,
-    (ActorFunc)EnGk_Update,
-    (ActorFunc)EnGk_Draw,
+    /**/ ACTOR_EN_GK,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_GK,
+    /**/ sizeof(EnGk),
+    /**/ EnGk_Init,
+    /**/ EnGk_Destroy,
+    /**/ EnGk_Update,
+    /**/ EnGk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -294,9 +294,9 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
         this->unk_1E4 &= ~0x40;
     }
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
-        Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
+        Flags_SetSwitch(play, ENGK_GET_SWITCH_FLAG(&this->actor));
         this->animIndex = ENGK_ANIM_3;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGK_ANIM_3);
         this->actionFunc = func_80B521E8;
@@ -545,7 +545,7 @@ void func_80B51410(EnGk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->actor.xzDistToPlayer < 100.0f) {
-        if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+        if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
             (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY_INTRO)) {
             this->unk_1E4 |= 0x20;
         }
@@ -612,7 +612,7 @@ void func_80B51510(EnGk* this, PlayState* play) {
                     break;
 
                 case 7:
-                    Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
+                    Flags_SetSwitch(play, ENGK_GET_SWITCH_FLAG(&this->actor));
                     break;
 
                 default:
@@ -673,7 +673,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
     } else {
-        if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
+        if (Flags_GetSwitch(play, ENGK_GET_SWITCH_FLAG(&this->actor))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_40_40);
             this->actionFunc = func_80B51D9C;
             return;
@@ -906,7 +906,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
         }
 
         if (this->unk_1E4 & 2) {
-            if ((play->msgCtx.ocarinaMode != 1) && (play->msgCtx.ocarinaMode != 3) &&
+            if ((play->msgCtx.ocarinaMode != OCARINA_MODE_ACTIVE) && (play->msgCtx.ocarinaMode != OCARINA_MODE_EVENT) &&
                 (play->csCtx.state == CS_STATE_IDLE)) {
                 Audio_PlaySfx_AtFixedPos(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
             }
@@ -918,7 +918,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
 
 void func_80B5216C(EnGk* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80B51698;
     }
@@ -1070,7 +1070,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
         this->animIndex = ENGK_ANIM_5;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENGK_ANIM_5);
         if (play->sceneId == SCENE_17SETUGEN2) {
-            if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
+            if (Flags_GetSwitch(play, ENGK_GET_SWITCH_FLAG(&this->actor))) {
                 Actor_Kill(&this->actor);
                 return;
             }

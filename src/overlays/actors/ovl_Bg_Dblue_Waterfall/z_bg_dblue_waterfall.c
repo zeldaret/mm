@@ -26,15 +26,15 @@ void func_80B84EF0(BgDblueWaterfall* this, PlayState* play);
 void func_80B84F20(BgDblueWaterfall* this, PlayState* play);
 
 ActorInit Bg_Dblue_Waterfall_InitVars = {
-    ACTOR_BG_DBLUE_WATERFALL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_DBLUE_OBJECT,
-    sizeof(BgDblueWaterfall),
-    (ActorFunc)BgDblueWaterfall_Init,
-    (ActorFunc)BgDblueWaterfall_Destroy,
-    (ActorFunc)BgDblueWaterfall_Update,
-    (ActorFunc)BgDblueWaterfall_Draw,
+    /**/ ACTOR_BG_DBLUE_WATERFALL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_DBLUE_OBJECT,
+    /**/ sizeof(BgDblueWaterfall),
+    /**/ BgDblueWaterfall_Init,
+    /**/ BgDblueWaterfall_Destroy,
+    /**/ BgDblueWaterfall_Update,
+    /**/ BgDblueWaterfall_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -80,7 +80,7 @@ s32 func_80B83D04(BgDblueWaterfall* this, PlayState* play) {
     s32 phi_v1;
     s32 sp18 = BGDBLUEWATERFALL_GET_100(&this->actor);
 
-    if (Flags_GetSwitch(play, BGDBLUEWATERFALL_GET_7F(&this->actor))) {
+    if (Flags_GetSwitch(play, BGDBLUEWATERFALL_GET_SWITCH_FLAG(&this->actor))) {
         phi_v1 = true;
     } else {
         phi_v1 = false;
@@ -91,7 +91,7 @@ s32 func_80B83D04(BgDblueWaterfall* this, PlayState* play) {
 s32 func_80B83D58(Actor* thisx, PlayState* play) {
     BgDblueWaterfall* this = THIS;
 
-    if (Flags_GetSwitch(play, BGDBLUEWATERFALL_GET_7F(&this->actor))) {
+    if (Flags_GetSwitch(play, BGDBLUEWATERFALL_GET_SWITCH_FLAG(&this->actor))) {
         return false;
     }
     return true;
@@ -99,11 +99,11 @@ s32 func_80B83D58(Actor* thisx, PlayState* play) {
 
 void func_80B83D94(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
-    s32 sp20 = BGDBLUEWATERFALL_GET_7F(&this->actor);
+    s32 switchFlag = BGDBLUEWATERFALL_GET_SWITCH_FLAG(&this->actor);
     s32 sp1C = BGDBLUEWATERFALL_GET_100(&this->actor);
     s32 phi_v0;
 
-    if (Flags_GetSwitch(play, sp20)) {
+    if (Flags_GetSwitch(play, switchFlag)) {
         phi_v0 = true;
     } else {
         phi_v0 = false;
@@ -111,20 +111,20 @@ void func_80B83D94(BgDblueWaterfall* this, PlayState* play) {
 
     if (phi_v0 != sp1C) {
         if (phi_v0) {
-            Flags_UnsetSwitch(play, sp20);
+            Flags_UnsetSwitch(play, switchFlag);
         } else {
-            Flags_SetSwitch(play, sp20);
+            Flags_SetSwitch(play, switchFlag);
         }
     }
 }
 
 void func_80B83E1C(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
-    s32 sp20 = BGDBLUEWATERFALL_GET_7F(&this->actor);
+    s32 switchFlag = BGDBLUEWATERFALL_GET_SWITCH_FLAG(&this->actor);
     s32 sp1C = BGDBLUEWATERFALL_GET_100(&this->actor);
     s32 phi_v0;
 
-    if (Flags_GetSwitch(play, sp20)) {
+    if (Flags_GetSwitch(play, switchFlag)) {
         phi_v0 = true;
     } else {
         phi_v0 = false;
@@ -132,9 +132,9 @@ void func_80B83E1C(BgDblueWaterfall* this, PlayState* play) {
 
     if (phi_v0 == sp1C) {
         if (phi_v0) {
-            Flags_UnsetSwitch(play, sp20);
+            Flags_UnsetSwitch(play, switchFlag);
         } else {
-            Flags_SetSwitch(play, sp20);
+            Flags_SetSwitch(play, switchFlag);
         }
     }
 }

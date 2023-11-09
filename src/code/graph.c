@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "z64.h"
 #include "regs.h"
 #include "functions.h"
@@ -8,7 +9,7 @@ FaultAddrConvClient sGraphFaultAddrConvClient;
 FaultClient sGraphFaultClient;
 GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
-OSTime sGraphTaskStartTime;
+OSTime sGraphPrevUpdateEndTime;
 
 #include "variables.h"
 #include "macros.h"
@@ -16,6 +17,7 @@ OSTime sGraphTaskStartTime;
 #include "idle.h"
 #include "sys_cfb.h"
 #include "system_malloc.h"
+#include "z64speed_meter.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
@@ -42,7 +44,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     GfxPool* pool = &gGfxPools[gfxCtx->gfxPoolIdx % 2];
 
     gGfxMasterDL = &pool->master;
-    gSegments[0x0E] = gGfxMasterDL;
+    gSegments[0x0E] = (uintptr_t)gGfxMasterDL;
 
     pool->headMagic = GFXPOOL_HEAD_MAGIC;
     pool->tailMagic = GFXPOOL_TAIL_MAGIC;
@@ -60,7 +62,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     gfxCtx->debugBuffer = pool->debugBuffer;
 
     gfxCtx->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx->framebufferIndex % 2);
-    gSegments[0x0F] = gfxCtx->curFrameBuffer;
+    gSegments[0x0F] = (uintptr_t)gfxCtx->curFrameBuffer;
 
     gfxCtx->zbuffer = SysCfb_GetZBuffer();
 
@@ -178,7 +180,7 @@ retry:
     task->dramStack = (u64*)gGfxSPTaskStack;
     task->dramStackSize = sizeof(gGfxSPTaskStack);
     task->outputBuff = gGfxSPTaskOutputBufferPtr;
-    task->outputBuffSize = gGfxSPTaskOutputBufferEnd;
+    task->outputBuffSize = (void*)gGfxSPTaskOutputBufferEnd;
     task->dataPtr = (u64*)gGfxMasterDL;
     task->dataSize = 0;
     task->yieldDataPtr = (u64*)gGfxSPTaskYieldBuffer;
@@ -310,17 +312,17 @@ void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {
     {
         OSTime time = osGetTime();
 
-        D_801FBAE8 = sRSPGFXTotalTime;
-        D_801FBAE0 = gRSPAudioTotalTime;
+        gRSPGfxTimeTotal = gRSPGfxTimeAcc;
+        gRSPAudioTimeTotal = gRSPAudioTimeAcc;
         gRDPTimeTotal = gRDPTimeAcc;
-        sRSPGFXTotalTime = 0;
-        gRSPAudioTotalTime = 0;
+        gRSPGfxTimeAcc = 0;
+        gRSPAudioTimeAcc = 0;
         gRDPTimeAcc = 0;
 
-        if (sGraphTaskStartTime != 0) {
-            lastRenderFrameDuration = time - sGraphTaskStartTime;
+        if (sGraphPrevUpdateEndTime != 0) {
+            gGraphUpdatePeriod = time - sGraphPrevUpdateEndTime;
         }
-        sGraphTaskStartTime = time;
+        sGraphPrevUpdateEndTime = time;
     }
 }
 

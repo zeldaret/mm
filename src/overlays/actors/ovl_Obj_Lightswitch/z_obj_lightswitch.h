@@ -40,6 +40,6 @@ typedef struct ObjLightswitch {
 
 #define LIGHTSWITCH_GET_TYPE(thisx) (((thisx)->params >> 4) & 0x3)
 #define LIGHTSWITCH_GET_INVISIBLE(thisx) (((thisx)->params >> 3) & 1)
-#define LIGHTSWITCH_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0x7F)
+#define LIGHTSWITCH_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 
 #endif // Z_OBJ_LIGHTSWITCH_H

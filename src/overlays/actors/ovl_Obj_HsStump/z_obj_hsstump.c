@@ -22,15 +22,15 @@ void ObjHsStump_SetupAppear(ObjHsStump* this, PlayState* play);
 void ObjHsStump_Appear(ObjHsStump* this, PlayState* play);
 
 ActorInit Obj_HsStump_InitVars = {
-    ACTOR_OBJ_HSSTUMP,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HSSTUMP,
-    sizeof(ObjHsStump),
-    (ActorFunc)ObjHsStump_Init,
-    (ActorFunc)ObjHsStump_Destroy,
-    (ActorFunc)ObjHsStump_Update,
-    (ActorFunc)ObjHsStump_Draw,
+    /**/ ACTOR_OBJ_HSSTUMP,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HSSTUMP,
+    /**/ sizeof(ObjHsStump),
+    /**/ ObjHsStump_Init,
+    /**/ ObjHsStump_Destroy,
+    /**/ ObjHsStump_Update,
+    /**/ ObjHsStump_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -44,7 +44,7 @@ void ObjHsStump_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->isHidden = OBJHSSTUMP_GET_ISHIDDEN(thisx);
-    this->switchFlag = OBJHSSTUMP_GET_SWITCHFLAG(thisx);
+    this->switchFlag = OBJHSSTUMP_GET_SWITCH_FLAG(thisx);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_hsstump_Colheader_0011B0);
     switch (this->isHidden) {
@@ -71,7 +71,7 @@ void ObjHsStump_SetupIdle(ObjHsStump* this, PlayState* play) {
 }
 
 void ObjHsStump_Idle(ObjHsStump* this, PlayState* play) {
-    if (this->isHidden == true && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->isHidden == true) && Flags_GetSwitch(play, this->switchFlag)) {
         ObjHsStump_SetupAppear(this, play);
     }
 }

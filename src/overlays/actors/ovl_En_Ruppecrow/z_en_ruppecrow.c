@@ -41,15 +41,15 @@ void EnRuppecrow_UpdateSpeed(EnRuppecrow*, PlayState*);
 void EnRuppecrow_FlyToDespawn(EnRuppecrow*, PlayState*);
 
 ActorInit En_Ruppecrow_InitVars = {
-    ACTOR_EN_RUPPECROW,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_CROW,
-    sizeof(EnRuppecrow),
-    (ActorFunc)EnRuppecrow_Init,
-    (ActorFunc)EnRuppecrow_Destroy,
-    (ActorFunc)EnRuppecrow_Update,
-    (ActorFunc)EnRuppecrow_Draw,
+    /**/ ACTOR_EN_RUPPECROW,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_CROW,
+    /**/ sizeof(EnRuppecrow),
+    /**/ EnRuppecrow_Init,
+    /**/ EnRuppecrow_Destroy,
+    /**/ EnRuppecrow_Update,
+    /**/ EnRuppecrow_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -368,7 +368,7 @@ void EnRuppecrow_UpdatePosition(EnRuppecrow* this, PlayState* play) {
 s32 EnRuppecrow_CheckPlayedMatchingSong(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->msgCtx.ocarinaMode == 0x3) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         switch (player->transformation) {
             case PLAYER_FORM_DEKU:
                 if (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA) {

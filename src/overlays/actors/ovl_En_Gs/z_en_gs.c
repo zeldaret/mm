@@ -40,15 +40,15 @@ void func_80999A8C(EnGs* this, PlayState* play);
 void func_80999AC0(EnGs* this);
 
 ActorInit En_Gs_InitVars = {
-    ACTOR_EN_GS,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GS,
-    sizeof(EnGs),
-    (ActorFunc)EnGs_Init,
-    (ActorFunc)EnGs_Destroy,
-    (ActorFunc)EnGs_Update,
-    (ActorFunc)EnGs_Draw,
+    /**/ ACTOR_EN_GS,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_GS,
+    /**/ sizeof(EnGs),
+    /**/ EnGs_Init,
+    /**/ EnGs_Destroy,
+    /**/ EnGs_Update,
+    /**/ EnGs_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -143,7 +143,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
     this->unk_204 = 1;
     this->unk_198 = this->actor.world.rot.z;
     this->unk_195 = ENGS_GET_1F(thisx);
-    this->unk_196 = ENGS_GET_FE0(thisx);
+    this->switchFlag = ENGS_GET_SWITCH_FLAG(thisx);
     this->actor.params = ENGS_GET_F000(thisx);
     this->actor.world.rot.z = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -277,32 +277,32 @@ void func_80997FF0(EnGs* this, PlayState* play) {
 }
 
 void func_80998040(EnGs* this, PlayState* play) {
-    func_80152434(play, 1);
+    Message_DisplayOcarinaStaff(play, OCARINA_ACTION_FREE_PLAY);
     this->actionFunc = func_8099807C;
 }
 
 void func_8099807C(EnGs* this, PlayState* play) {
     switch (play->msgCtx.ocarinaMode) {
-        case 3:
+        case OCARINA_MODE_EVENT:
             switch (play->msgCtx.lastPlayedSong) {
                 case OCARINA_SONG_HEALING:
                 case OCARINA_SONG_EPONAS:
-                    if (!Flags_GetSwitch(play, this->unk_196)) {
+                    if (!Flags_GetSwitch(play, this->switchFlag)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0,
                                     FAIRY_PARAMS(FAIRY_TYPE_2, false, 0));
                         Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
-                        Flags_SetSwitch(play, this->unk_196);
+                        Flags_SetSwitch(play, this->switchFlag);
                     }
                     break;
 
                 case OCARINA_SONG_STORMS:
-                    if (!Flags_GetSwitch(play, this->unk_196)) {
+                    if (!Flags_GetSwitch(play, this->switchFlag)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0,
                                     FAIRY_PARAMS(FAIRY_TYPE_7, false, 0));
                         Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
-                        Flags_SetSwitch(play, this->unk_196);
+                        Flags_SetSwitch(play, this->switchFlag);
                     }
                     break;
 
@@ -341,11 +341,11 @@ void func_8099807C(EnGs* this, PlayState* play) {
             }
             break;
 
-        case 0:
-        case 4:
+        case OCARINA_MODE_NONE:
+        case OCARINA_MODE_END:
             func_80998300(this, play);
 
-        case 26:
+        case OCARINA_MODE_APPLY_DOUBLE_SOT:
             func_80997D14(this, play);
             break;
 
@@ -389,7 +389,7 @@ void func_809984F4(EnGs* this, PlayState* play) {
         }
     } while (gossipStone != NULL);
 
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
     this->actionFunc = func_809985B8;
 }
 
@@ -1030,7 +1030,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
     EnGs* this = THIS;
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         this->collider.base.acFlags &= ~AC_HIT;
         func_80997DEC(this, play);
@@ -1066,7 +1066,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
                 Math_StepToF(&this->unk_200, 1.0f, 0.02f);
             }
             func_80997AFC(this->unk_194, &this->unk_1F7);
-            Lib_LerpRGB(&this->unk_1F4, &this->unk_1F7, this->unk_200, &this->unk_1FA);
+            Color_RGB8_Lerp(&this->unk_1F4, &this->unk_1F7, this->unk_200, &this->unk_1FA);
             if (this->unk_200 >= 1.0f) {
                 this->unk_1F4 = this->unk_1FA;
             }

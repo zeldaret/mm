@@ -4,10 +4,10 @@
  * Description: Pause Menu
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_kaleido_scope.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
+
 #include "archives/icon_item_static/icon_item_static_yar.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 #include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
@@ -2799,10 +2799,14 @@ void KaleidoScope_UpdateOpening(PlayState* play) {
     }
 }
 
+u16 sCursorPointsToOcarinaModes[] = {
+    OCARINA_MODE_WARP_TO_GREAT_BAY_COAST,  OCARINA_MODE_WARP_TO_ZORA_CAPE,        OCARINA_MODE_WARP_TO_SNOWHEAD,
+    OCARINA_MODE_WARP_TO_MOUNTAIN_VILLAGE, OCARINA_MODE_WARP_TO_SOUTH_CLOCK_TOWN, OCARINA_MODE_WARP_TO_MILK_ROAD,
+    OCARINA_MODE_WARP_TO_WOODFALL,         OCARINA_MODE_WARP_TO_SOUTHERN_SWAMP,   OCARINA_MODE_WARP_TO_IKANA_CANYON,
+    OCARINA_MODE_WARP_TO_STONE_TOWER,
+};
+
 void KaleidoScope_Update(PlayState* play) {
-    static u16 sCursorPointsToOcarinaModes[] = {
-        28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
-    };
     static s16 sUnpausedHudVisibility = HUD_VISIBILITY_IDLE;
     static s16 sNextMainState = PAUSE_MAIN_STATE_IDLE;
     static s16 sDelayTimer = 10;
@@ -2855,9 +2859,9 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItemSegment = (void*)ALIGN16((uintptr_t)play->objectCtx.spaceStart);
             size0 = SEGMENT_ROM_SIZE(icon_item_static_syms);
-            CmpDma_LoadAllFiles((uintptr_t)SEGMENT_ROM_START(icon_item_static_yar), pauseCtx->iconItemSegment, size0);
+            CmpDma_LoadAllFiles(SEGMENT_ROM_START(icon_item_static_yar), pauseCtx->iconItemSegment, size0);
 
-            gSegments[0x08] = VIRTUAL_TO_PHYSICAL(pauseCtx->iconItemSegment);
+            gSegments[0x08] = OS_K0_TO_PHYSICAL(pauseCtx->iconItemSegment);
 
             for (itemId = 0; itemId <= ITEM_BOW_FIRE; itemId++) {
                 if (!gPlayerFormItemRestrictions[GET_PLAYER_FORM][(s32)itemId]) {
@@ -2867,8 +2871,7 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItem24Segment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + size0);
             size1 = SEGMENT_ROM_SIZE(icon_item_24_static_syms);
-            CmpDma_LoadAllFiles((uintptr_t)SEGMENT_ROM_START(icon_item_24_static_yar), pauseCtx->iconItem24Segment,
-                                size1);
+            CmpDma_LoadAllFiles(SEGMENT_ROM_START(icon_item_24_static_yar), pauseCtx->iconItem24Segment, size1);
 
             pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
             if (func_8010A0A4(play)) {
@@ -2883,7 +2886,7 @@ void KaleidoScope_Update(PlayState* play) {
 
                 sInDungeonScene = false;
                 size = SEGMENT_ROM_SIZE(icon_item_field_static);
-                DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, _icon_item_field_staticSegmentRomStart, size);
+                DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_field_static), size);
                 iconItemLangSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size);
             }
 
@@ -3164,7 +3167,7 @@ void KaleidoScope_Update(PlayState* play) {
                             BgCheck_InitCollisionHeaders(&play->colCtx, play);
                             STOP_GAMESTATE(&play->state);
                             SET_NEXT_GAMESTATE(&play->state, TitleSetup_Init, sizeof(TitleSetupState));
-                            func_801A4058(0x14);
+                            Audio_MuteAllSeqExceptSystemAndOcarina(20);
                             gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                             gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                         }
@@ -3484,7 +3487,7 @@ void KaleidoScope_Update(PlayState* play) {
                 pauseCtx->state = PAUSE_STATE_OWLWARP_6;
                 sPauseMenuVerticalOffset = -6240.0f;
                 Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
             } else if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
                 Audio_PlaySfx(NA_SE_SY_DECIDE);
@@ -3498,7 +3501,7 @@ void KaleidoScope_Update(PlayState* play) {
         case PAUSE_STATE_OWLWARP_CONFIRM:
             if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
                 msgCtx->msgLength = 0;
-                msgCtx->msgMode = 0;
+                msgCtx->msgMode = MSGMODE_NONE;
                 if (msgCtx->choiceIndex == 0) {
                     func_8011552C(play, DO_ACTION_NONE);
                     pauseCtx->state = PAUSE_STATE_OWLWARP_6;
@@ -3513,17 +3516,17 @@ void KaleidoScope_Update(PlayState* play) {
                 }
             } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
                 msgCtx->msgLength = 0;
-                msgCtx->msgMode = 0;
+                msgCtx->msgMode = MSGMODE_NONE;
                 pauseCtx->state = PAUSE_STATE_OWLWARP_SELECT;
                 Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
             } else if (CHECK_BTN_ALL(input->press.button, BTN_START)) {
                 msgCtx->msgLength = 0;
-                msgCtx->msgMode = 0;
+                msgCtx->msgMode = MSGMODE_NONE;
                 func_8011552C(play, DO_ACTION_NONE);
                 pauseCtx->state = PAUSE_STATE_OWLWARP_6;
                 sPauseMenuVerticalOffset = -6240.0f;
                 Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
-                play->msgCtx.ocarinaMode = 4;
+                play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
             }
             break;
@@ -3598,7 +3601,7 @@ void KaleidoScope_Update(PlayState* play) {
             MsgEvent_SendNullTask();
             func_80143324(play, &play->skyboxCtx, play->skyboxId);
 
-            if ((msgCtx->msgMode != 0) && (msgCtx->currentTextId == 0xFF)) {
+            if ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId == 0xFF)) {
                 func_80115844(play, DO_ACTION_STOP);
                 func_8011552C(play, DO_ACTION_STOP);
                 Interface_SetHudVisibility(HUD_VISIBILITY_A_B_C);
@@ -3607,7 +3610,10 @@ void KaleidoScope_Update(PlayState* play) {
             }
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(sUnpausedHudVisibility);
-            func_801A3A7C(0);
+            Audio_SetPauseState(false);
+            break;
+
+        default:
             break;
     }
 

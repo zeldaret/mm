@@ -55,15 +55,15 @@ s16 D_80A60B0E;
 s16 D_80A60B10;
 
 ActorInit En_Kusa2_InitVars = {
-    ACTOR_EN_KUSA2,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_FIELD_KEEP,
-    sizeof(EnKusa2),
-    (ActorFunc)EnKusa2_Init,
-    (ActorFunc)EnKusa2_Destroy,
-    (ActorFunc)EnKusa2_Update,
-    (ActorFunc)EnKusa2_Draw,
+    /**/ ACTOR_EN_KUSA2,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_FIELD_KEEP,
+    /**/ sizeof(EnKusa2),
+    /**/ EnKusa2_Init,
+    /**/ EnKusa2_Destroy,
+    /**/ EnKusa2_Update,
+    /**/ EnKusa2_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -1315,8 +1315,8 @@ void EnKusa2_Update(Actor* thisx, PlayState* play) {
 
 void func_80A5E6F0(Actor* thisx, PlayState* play) {
     static Gfx* D_80A5EB68[] = {
-        gKakeraLeafTip,
-        gKakeraLeafMiddle,
+        gKakeraLeafTipDL,
+        gKakeraLeafMiddleDL,
     };
     EnKusa2* this = THIS;
     s32 i;
