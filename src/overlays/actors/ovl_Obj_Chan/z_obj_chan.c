@@ -29,15 +29,15 @@ void ObjChan_ChandelierAction(ObjChan* this, PlayState* play);
 void ObjChan_PotAction(ObjChan* this, PlayState* play);
 
 ActorInit Obj_Chan_InitVars = {
-    ACTOR_OBJ_CHAN,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_OBJ_CHAN,
-    sizeof(ObjChan),
-    (ActorFunc)ObjChan_Init,
-    (ActorFunc)ObjChan_Destroy,
-    (ActorFunc)ObjChan_Update,
-    (ActorFunc)ObjChan_Draw,
+    /**/ ACTOR_OBJ_CHAN,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_OBJ_CHAN,
+    /**/ sizeof(ObjChan),
+    /**/ ObjChan_Init,
+    /**/ ObjChan_Destroy,
+    /**/ ObjChan_Update,
+    /**/ ObjChan_Draw,
 };
 
 static ColliderCylinderInit sObjChanCylinderInit = {
@@ -191,7 +191,7 @@ void ObjChan_InitChandelier(ObjChan* this, PlayState* play) {
         }
     }
 
-    if (Flags_GetSwitch(play, thisx->params & 0x7F)) {
+    if (Flags_GetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx))) {
         this->stateFlags |= OBJCHAN_STATE_FIRE_DELAY;
         this->stateFlags |= OBJCHAN_STATE_ON_FIRE;
 
@@ -261,9 +261,9 @@ void ObjChan_ChandelierAction(ObjChan* this, PlayState* play) {
         }
     }
     if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800)) {
-        Flags_SetSwitch(play, thisx->params & 0x7F);
+        Flags_SetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx));
     }
-    if (Flags_GetSwitch(play, thisx->params & 0x7F)) {
+    if (Flags_GetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx))) {
         if (!(this->stateFlags & OBJCHAN_STATE_FIRE_DELAY)) {
             this->rotationSpeed = 0;
             this->flameSize = 0.0f;

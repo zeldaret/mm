@@ -24,15 +24,15 @@ void func_80AC4C34(BgIcefloe* this, PlayState* play);
 void func_80AC4CF0(BgIcefloe* this);
 
 ActorInit Bg_Icefloe_InitVars = {
-    ACTOR_BG_ICEFLOE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_ICEFLOE,
-    sizeof(BgIcefloe),
-    (ActorFunc)BgIcefloe_Init,
-    (ActorFunc)BgIcefloe_Destroy,
-    (ActorFunc)BgIcefloe_Update,
-    (ActorFunc)BgIcefloe_Draw,
+    /**/ ACTOR_BG_ICEFLOE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_ICEFLOE,
+    /**/ sizeof(BgIcefloe),
+    /**/ BgIcefloe_Init,
+    /**/ BgIcefloe_Destroy,
+    /**/ BgIcefloe_Update,
+    /**/ BgIcefloe_Draw,
 };
 static BgIcefloe* sSpawnedInstances[] = { NULL, NULL, NULL };
 

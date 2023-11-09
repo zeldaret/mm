@@ -50,15 +50,15 @@ typedef enum {
 } EnRzPathStatus;
 
 ActorInit En_Rz_InitVars = {
-    ACTOR_EN_RZ,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_RZ,
-    sizeof(EnRz),
-    (ActorFunc)EnRz_Init,
-    (ActorFunc)EnRz_Destroy,
-    (ActorFunc)EnRz_Update,
-    (ActorFunc)EnRz_Draw,
+    /**/ ACTOR_EN_RZ,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_RZ,
+    /**/ sizeof(EnRz),
+    /**/ EnRz_Init,
+    /**/ EnRz_Destroy,
+    /**/ EnRz_Update,
+    /**/ EnRz_Draw,
 };
 
 static TexturePtr sEyeTextures[] = {
@@ -101,9 +101,10 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, EnRz_ActorShadowFunc, 20.0f);
 
-    // @bug this alignment is because of player animations, but should be using ALIGN16
+    //! @bug this alignment is because of player animations, but should be using ALIGN16
     SkelAnime_InitFlex(play, &this->skelAnime, &object_rz_Skel_00D8D8, &gRosaSistersStandingAnim,
-                       (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF, OBJECT_RZ_LIMB_MAX);
+                       (void*)((uintptr_t)this->jointTable & ~0xF), (void*)((uintptr_t)this->morphTable & ~0xF),
+                       OBJECT_RZ_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gRosaSistersStandingAnim);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -417,7 +418,7 @@ void func_80BFC058(EnRz* this, PlayState* play) {
 
 void func_80BFC078(EnRz* this, PlayState* play) {
     s32 pad;
-    Vec3f sp28;
+    Vec3f seqPos;
 
     EnRz_UpdateSkelAnime(this, play);
 
@@ -443,10 +444,10 @@ void func_80BFC078(EnRz* this, PlayState* play) {
     }
 
     if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
-        sp28.x = this->actor.projectedPos.x;
-        sp28.y = this->actor.projectedPos.y;
-        sp28.z = this->actor.projectedPos.z;
-        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_ROSA_SISTERS, 900.0f);
+        seqPos.x = this->actor.projectedPos.x;
+        seqPos.y = this->actor.projectedPos.y;
+        seqPos.z = this->actor.projectedPos.z;
+        Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_ROSA_SISTERS, 900.0f);
     }
 }
 
@@ -504,7 +505,7 @@ void func_80BFC36C(EnRz* this, PlayState* play) {
 
 void func_80BFC3F8(EnRz* this, PlayState* play) {
     s32 pad;
-    Vec3f bgmPos;
+    Vec3f seqPos;
 
     EnRz_UpdateSkelAnime(this, play);
 
@@ -544,10 +545,10 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
         }
 
         if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
-            bgmPos.x = this->actor.projectedPos.x;
-            bgmPos.y = this->actor.projectedPos.y;
-            bgmPos.z = this->actor.projectedPos.z;
-            func_801A1FB4(SEQ_PLAYER_BGM_SUB, &bgmPos, NA_BGM_ROSA_SISTERS, 900.0f);
+            seqPos.x = this->actor.projectedPos.x;
+            seqPos.y = this->actor.projectedPos.y;
+            seqPos.z = this->actor.projectedPos.z;
+            Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_ROSA_SISTERS, 900.0f);
         }
     }
 }

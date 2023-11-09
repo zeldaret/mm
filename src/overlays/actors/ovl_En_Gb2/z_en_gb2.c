@@ -5,7 +5,6 @@
  */
 
 #include "z_en_gb2.h"
-#include "objects/object_ps/object_ps.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -37,15 +36,15 @@ void func_80B11268(EnGb2* this, PlayState* play);
 void func_80B11344(EnGb2* this, PlayState* play);
 
 ActorInit En_Gb2_InitVars = {
-    ACTOR_EN_GB2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_PS,
-    sizeof(EnGb2),
-    (ActorFunc)EnGb2_Init,
-    (ActorFunc)EnGb2_Destroy,
-    (ActorFunc)EnGb2_Update,
-    (ActorFunc)EnGb2_Draw,
+    /**/ ACTOR_EN_GB2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_PS,
+    /**/ sizeof(EnGb2),
+    /**/ EnGb2_Init,
+    /**/ EnGb2_Destroy,
+    /**/ EnGb2_Update,
+    /**/ EnGb2_Draw,
 };
 
 typedef struct {
@@ -163,7 +162,7 @@ u16 func_80B0F7FC(EnGb2* this) {
                 return 0x14E4;
             }
 
-            if (gSaveContext.save.saveInfo.playerData.health > 48) {
+            if (gSaveContext.save.saveInfo.playerData.health > 0x30) {
                 return 0x14D2;
             }
 
@@ -171,7 +170,7 @@ u16 func_80B0F7FC(EnGb2* this) {
             return 0x14D3;
 
         case 0x14E4:
-            if (gSaveContext.save.saveInfo.playerData.health > 48) {
+            if (gSaveContext.save.saveInfo.playerData.health > 0x30) {
                 return 0x14D2;
             }
 
@@ -193,8 +192,10 @@ u16 func_80B0F7FC(EnGb2* this) {
 
         case 0x14D9:
             return 0x14DA;
+
+        default:
+            return 0;
     }
-    return 0;
 }
 
 u16 func_80B0F8F8(EnGb2* this) {
@@ -213,8 +214,10 @@ u16 func_80B0F8F8(EnGb2* this) {
 
         case 0x14E1:
             return 0x14E2;
+
+        default:
+            return 0;
     }
-    return 0;
 }
 
 u16 func_80B0F97C(EnGb2* this) {
@@ -236,8 +239,10 @@ u16 func_80B0F97C(EnGb2* this) {
         case 0x14FA:
             this->unk_26C |= 2;
             return 0x14FB;
+
+        default:
+            return 0;
     }
-    return 0;
 }
 
 void func_80B0FA04(EnGb2* this) {
@@ -262,17 +267,19 @@ s32 func_80B0FA48(EnGb2* this, PlayState* play) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_40)) {
                 this->unk_26E = 0x14EB;
                 return false;
+            } else {
+                this->unk_26E = 0x14EE;
+                return true;
             }
-            this->unk_26E = 0x14EE;
-            return true;
-    }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_20)) {
-        this->unk_26E = 0x14EF;
-        return false;
-    } else {
-        this->unk_26E = 0x14F4;
-        return true;
+        default:
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_20)) {
+                this->unk_26E = 0x14EF;
+                return false;
+            } else {
+                this->unk_26E = 0x14F4;
+                return true;
+            }
     }
 }
 
@@ -314,12 +321,14 @@ u16 func_80B0FB24(EnGb2* this) {
         case 0x14F2:
             this->unk_26C |= 2;
             return 0x14F3;
+
+        default:
+            return 0;
     }
-    return 0;
 }
 
 void func_80B0FBF0(EnGb2* this, PlayState* play) {
-    Vec3f sp90[4] = {
+    Vec3f sp90[] = {
         { 120.0f, 0.0f, 800.0f },
         { -120.0f, 0.0f, 750.0f },
         { 60.0f, 0.0f, 750.0f },
@@ -355,7 +364,7 @@ void func_80B0FD8C(EnGb2* this, PlayState* play) {
 }
 
 void func_80B0FE18(PlayState* play) {
-    func_800FD750(NA_BGM_MINI_BOSS);
+    Environment_ForcePlaySequence(NA_BGM_MINI_BOSS);
     play->nextEntrance = ENTRANCE(GHOST_HUT, 1);
     play->transitionType = TRANS_TYPE_64;
     gSaveContext.nextTransitionType = TRANS_TYPE_64;
@@ -370,8 +379,8 @@ void func_80B0FE7C(PlayState* play) {
 }
 
 void func_80B0FEBC(EnGb2* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
-        play->msgCtx.ocarinaMode = 4;
+    if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         SET_EVENTINF(EVENTINF_47);
         this->unk_26E = 0x14D1;
         this->unk_288 = 10;
@@ -391,7 +400,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
     if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_26E = 0x14D1;
                 this->unk_288 = 30;
@@ -425,15 +434,18 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
                     break;
+
+                default:
+                    break;
             }
         } else if (this->unk_26E == 0x14DA) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-this->unk_288);
-                    play->msgCtx.msgMode = 0x43;
+                    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+                    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
                     this->actionFunc = func_80B11344;
                     break;
 
@@ -442,6 +454,9 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     this->unk_26E = 0x14DB;
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
+                    break;
+
+                default:
                     break;
             }
         }
@@ -505,7 +520,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         }
     }
 
-    if (gSaveContext.save.saveInfo.playerData.health < 49) {
+    if (gSaveContext.save.saveInfo.playerData.health <= 0x30) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         SET_EVENTINF(EVENTINF_46);
         SET_EVENTINF(EVENTINF_45);
@@ -553,7 +568,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
     if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_26C &= ~2;
                 if (this->unk_26E == 0x14DD) {
@@ -583,9 +598,9 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 } else {
                     Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-this->unk_288);
-                    play->msgCtx.msgMode = 0x43;
+                    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+                    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
                     this->actionFunc = func_80B11344;
                 }
                 break;
@@ -595,6 +610,9 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 this->unk_26E = 0x14E3;
                 this->unk_26C |= 2;
                 Message_StartTextbox(play, this->unk_26E, &this->actor);
+                break;
+
+            default:
                 break;
         }
     }
@@ -663,7 +681,7 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
             case ENGB2_7_2:
                 CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 if (this->unk_26E == 0x14FB) {
-                    Flags_SetSwitch(play, ENGB2_GET_7F8(&this->actor));
+                    Flags_SetSwitch(play, ENGB2_GET_SWITCH_FLAG(&this->actor));
                     Actor_Kill(&this->actor);
                     return;
                 }
@@ -672,6 +690,9 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
                 this->unk_26C |= 0x100;
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actionFunc = func_80B111AC;
+                break;
+
+            default:
                 break;
         }
     }
@@ -731,7 +752,7 @@ void func_80B10DAC(EnGb2* this, PlayState* play) {
             if (this->csIdIndex != 2) {
                 this->actionFunc = func_80B10E98;
             } else {
-                Flags_SetSwitch(play, ENGB2_GET_7F8(&this->actor));
+                Flags_SetSwitch(play, ENGB2_GET_SWITCH_FLAG(&this->actor));
                 this->actionFunc = func_80B10868;
             }
         } else {
@@ -750,12 +771,12 @@ void func_80B10E98(EnGb2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             if ((this->unk_26E != 0x14E8) && (this->unk_26E != 0x14EA)) {
                 CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->actionFunc = func_80B10B5C;
-            } else if (Flags_GetSwitch(play, ENGB2_GET_7F8(&this->actor))) {
+            } else if (Flags_GetSwitch(play, ENGB2_GET_SWITCH_FLAG(&this->actor))) {
                 this->actionFunc = func_80B10A48;
             } else {
                 CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
@@ -793,7 +814,7 @@ void func_80B11048(EnGb2* this, PlayState* play) {
 void func_80B110F8(EnGb2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->unk_26C &= ~2;
             this->actionFunc = func_80B10A48;
@@ -877,7 +898,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
     this->actor.room = -1;
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_ps_Skel_007230, &object_ps_Anim_00049C, this->jointTable,
-                       this->morphTable, 12);
+                       this->morphTable, OBJECT_PS_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
@@ -915,7 +936,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            if (Flags_GetSwitch(play, ENGB2_GET_7F8(thisx))) {
+            if (Flags_GetSwitch(play, ENGB2_GET_SWITCH_FLAG(thisx))) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -929,7 +950,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
         case ENGB2_7_2:
             this->csIdIndex = 0;
             this->csIdList[0] = this->actor.csId;
-            if (Flags_GetSwitch(play, ENGB2_GET_7F8(thisx))) {
+            if (Flags_GetSwitch(play, ENGB2_GET_SWITCH_FLAG(thisx))) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -981,11 +1002,11 @@ s32 EnGb2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
                            Gfx** gfx) {
     EnGb2* this = THIS;
 
-    if (limbIndex == 7) {
+    if (limbIndex == OBJECT_PS_LIMB_07) {
         Matrix_RotateYS(this->unk_270.y, MTXMODE_APPLY);
     }
 
-    if (limbIndex == 1) {
+    if (limbIndex == OBJECT_PS_LIMB_01) {
         *dList = NULL;
     }
 
@@ -996,7 +1017,7 @@ void EnGb2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     EnGb2* this = THIS;
     Vec3f sp18 = { 2400.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 7) {
+    if (limbIndex == OBJECT_PS_LIMB_07) {
         Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
     }
 }

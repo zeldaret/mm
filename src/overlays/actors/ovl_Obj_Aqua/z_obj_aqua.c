@@ -25,15 +25,15 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play);
 void func_80ACBD34(ObjAqua* this);
 
 ActorInit Obj_Aqua_InitVars = {
-    ACTOR_OBJ_AQUA,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjAqua),
-    (ActorFunc)ObjAqua_Init,
-    (ActorFunc)ObjAqua_Destroy,
-    (ActorFunc)ObjAqua_Update,
-    (ActorFunc)ObjAqua_Draw,
+    /**/ ACTOR_OBJ_AQUA,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjAqua),
+    /**/ ObjAqua_Init,
+    /**/ ObjAqua_Destroy,
+    /**/ ObjAqua_Update,
+    /**/ ObjAqua_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

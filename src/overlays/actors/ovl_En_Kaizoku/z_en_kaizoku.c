@@ -151,15 +151,15 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit En_Kaizoku_InitVars = {
-    ACTOR_EN_KAIZOKU,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_KZ,
-    sizeof(EnKaizoku),
-    (ActorFunc)EnKaizoku_Init,
-    (ActorFunc)EnKaizoku_Destroy,
-    (ActorFunc)EnKaizoku_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_KAIZOKU,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_KZ,
+    /**/ sizeof(EnKaizoku),
+    /**/ EnKaizoku_Init,
+    /**/ EnKaizoku_Destroy,
+    /**/ EnKaizoku_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -259,7 +259,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->unk_2CA = this->picto.actor.world.rot.z;
     this->picto.actor.colChkInfo.health = 8;
     this->exitIndex = KAIZOKU_GET_EXIT_INDEX(&this->picto.actor);
-    this->switchFlag = KAIZOKU_GET_SWITCHFLAG(&this->picto.actor);
+    this->switchFlag = KAIZOKU_GET_SWITCH_FLAG(&this->picto.actor);
 
     if (this->unk_2CA >= 2) {
         this->unk_2CA = 0;
@@ -287,11 +287,11 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->picto.actor, 0.0125f);
     this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    if (this->switchFlag == 127) {
-        this->switchFlag = -1;
+    if (this->switchFlag == KAIZOKU_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->picto.actor);
         return;
     }
@@ -442,8 +442,8 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
 
 void EnKaizoku_ChangeAnim(EnKaizoku* this, EnKaizokuAnimation animIndex) {
     this->animIndex = animIndex;
-    this->frameCount = Animation_GetLastFrame(sAnimations[this->animIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[this->animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animEndFrame,
                      sAnimationModes[this->animIndex], 0.0f);
 }
 
@@ -481,7 +481,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             }
 
             CutsceneManager_StartWithPlayerCs(this->csId, &this->picto.actor);
-            func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_21);
+            Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_21);
             this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
 
@@ -538,7 +538,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                     this->unk_2D8 = 0;
                     this->picto.actor.world.pos.y = this->picto.actor.floorHeight;
                     this->picto.actor.velocity.y = 0.0f;
-                    func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_4);
+                    Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_4);
                     Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->leftFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
                     Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->rightFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
                     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_ONGND);
@@ -553,7 +553,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             break;
 
         case 3:
-            if (this->frameCount <= curFrame) {
+            if (curFrame >= this->animEndFrame) {
                 sp54 = this->unk_2CA * 4 + this->unk_2C8;
                 if (Player_GetMask(play) == PLAYER_MASK_STONE) {
                     if (D_80B8A8D0[sp54] == 0x11A5) {
@@ -595,7 +595,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
 
         case 6:
             Math_ApproachF(&this->unk_5E0, 5.0f, 0.3f, 1.0f);
-            if (this->frameCount <= curFrame) {
+            if (curFrame >= this->animEndFrame) {
                 this->unk_598 = 7;
                 this->unk_2F8.x = 1.0f;
                 this->unk_59C++;
@@ -609,7 +609,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
 
         case 7:
             if (this->unk_598 == 0) {
-                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_END);
+                Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_END);
                 CutsceneManager_Stop(this->csId);
                 this->unk_59C = 0;
                 this->subCamId = SUB_CAM_ID_DONE;
@@ -674,7 +674,7 @@ void func_80B86804(EnKaizoku* this, PlayState* play) {
         CutsceneManager_StartWithPlayerCs(this->csId, &this->picto.actor);
     }
 
-    func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_96);
+    Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_96);
     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
     this->unk_2B2 = 30;
     this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -700,7 +700,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
 
     switch (this->unk_59C) {
         case 0:
-            if (this->frameCount <= curFrame) {
+            if (curFrame >= this->animEndFrame) {
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_14);
                 this->unk_2C8 = 3;
                 this->unk_598 = 0;
@@ -709,7 +709,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
             break;
 
         case 1:
-            if (this->frameCount <= curFrame) {
+            if (curFrame >= this->animEndFrame) {
                 s32 textId;
 
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_15);
@@ -724,7 +724,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
         case 2:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
-                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_END);
+                Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_END);
                 CutsceneManager_Stop(this->csId);
                 this->subCamId = SUB_CAM_ID_DONE;
                 play->nextEntrance = play->setupExitList[this->exitIndex];
@@ -787,7 +787,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
             break;
 
         case 1:
-            if (this->frameCount <= curFrame) {
+            if (curFrame >= this->animEndFrame) {
                 if (this->unk_2D9 == 0) {
                     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DAMM_BREATH);
                     this->unk_2D9 = 1;
@@ -799,7 +799,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_18);
-                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_133);
+                Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_133);
                 this->unk_5A0 = 0;
                 this->unk_598 = 0;
                 this->unk_59C++;
@@ -843,7 +843,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
                     255;
             }
 
-            if ((this->frameCount <= curFrame) && (this->unk_5A0 >= 0x28)) {
+            if ((curFrame >= this->animEndFrame) && (this->unk_5A0 >= 0x28)) {
                 this->picto.actor.draw = NULL;
                 this->unk_598 = 10;
                 Math_Vec3f_Copy(&this->unk_2F8, &gZeroVec3f);
@@ -865,9 +865,9 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
                     play->envCtx.fillScreen = false;
                     this->unk_59C = 0;
                     this->subCamId = SUB_CAM_ID_DONE;
-                    func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_END);
+                    Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_END);
                     CutsceneManager_Stop(this->csId);
-                    if (this->switchFlag >= 0) {
+                    if (this->switchFlag > SWITCH_FLAG_NONE) {
                         Flags_SetSwitch(play, this->switchFlag);
                     }
                     Actor_Kill(&this->picto.actor);
@@ -1127,7 +1127,7 @@ void func_80B87D3C(EnKaizoku* this, PlayState* play) {
     }
 
     this->unk_2D8 = 0;
-    if ((this->frameCount <= curFrame) &&
+    if ((curFrame >= this->animEndFrame) &&
         (this->picto.actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH))) {
         this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
         this->bodyCollider.base.colType = COLTYPE_HIT3;
@@ -1157,7 +1157,7 @@ void func_80B87E9C(EnKaizoku* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     this->unk_2D8 = 0;
-    if (this->frameCount <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         if ((this->picto.actor.xzDistToPlayer < 170.0f) && (this->picto.actor.xzDistToPlayer > 140.0f) &&
             (Rand_ZeroOne() < 0.2f)) {
             func_80B88910(this);
@@ -1207,7 +1207,7 @@ void func_80B87FDC(EnKaizoku* this, PlayState* play2) {
     }
 
     this->unk_2D8 = 0;
-    if (this->frameCount <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         if (!Actor_IsFacingPlayer(&this->picto.actor, 0x1554)) {
             func_80B872A4(this);
 
@@ -1252,7 +1252,7 @@ void func_80B88278(EnKaizoku* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     this->unk_2D8 = 0;
-    if (this->frameCount <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         this->picto.actor.speed = 0.0f;
         if (!Actor_IsFacingPlayer(&this->picto.actor, 0x1554)) {
             func_80B872A4(this);
@@ -1404,22 +1404,20 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
 
     if (this->skelAnime.curFrame <= 8.0f) {
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
-    } else {
-        if (Animation_OnFrame(&this->skelAnime, 13.0f)) {
-            Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->leftFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
-            Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->rightFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
-            this->swordState = 1;
-            this->picto.actor.speed = 10.0f;
-            Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_ATTACK);
-        } else if (Animation_OnFrame(&this->skelAnime, 21.0f)) {
-            this->picto.actor.speed = 0.0f;
-        } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
-            this->swordState = -1;
-        }
+    } else if (Animation_OnFrame(&this->skelAnime, 13.0f)) {
+        Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->leftFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
+        Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->rightFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
+        this->swordState = 1;
+        this->picto.actor.speed = 10.0f;
+        Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_ATTACK);
+    } else if (Animation_OnFrame(&this->skelAnime, 21.0f)) {
+        this->picto.actor.speed = 0.0f;
+    } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
+        this->swordState = -1;
     }
 
     this->unk_2D8 = 0;
-    if ((this->frameCount <= curFrame) && (this->unk_2D0 < 2)) {
+    if ((curFrame >= this->animEndFrame) && (this->unk_2D0 < 2)) {
         if (!Actor_IsFacingPlayer(&this->picto.actor, 0x1554)) {
             func_80B872A4(this);
             this->unk_2B2 = Rand_ZeroOne() * 5.0f + 5.0f;
@@ -1683,7 +1681,7 @@ void func_80B8960C(EnKaizoku* this, PlayState* play) {
     }
     this->picto.actor.speed = 0.0f;
     this->unk_2D8 = 1;
-    func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_123);
+    Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_123);
     Enemy_StartFinishingBlow(play, &this->picto.actor);
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
     this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
@@ -1755,7 +1753,7 @@ void func_80B8971C(EnKaizoku* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0xFA0, 1);
     SkelAnime_Update(&this->skelAnime);
-    if (this->frameCount <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         this->unk_2D8 = 0;
         func_80B86B58(this);
     } else if (Animation_OnFrame(&this->skelAnime, 10.0f)) {
@@ -2144,7 +2142,7 @@ void EnKaizoku_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnKaizoku_OverrideLimbDraw, EnKaizoku_PostLimbDraw,
                                    EnKaizoku_TransformLimbDraw, &this->picto.actor);

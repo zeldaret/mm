@@ -84,7 +84,7 @@ void DayTelop_Update(DayTelopState* this, GameState* thisx) {
         SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
 
         gSaveContext.save.time = CLOCK_TIME(6, 0);
-        D_801BDBC8 = 0xFE;
+        gSceneSeqState = SCENESEQ_MORNING;
     } else if (this->transitionCountdown == 90) {
         this->fadeInState = DAYTELOP_HOURSTEXT_FADEIN;
         this->alpha = 0;
@@ -215,11 +215,11 @@ void DayTelop_Noop(DayTelopState* this) {
 void DayTelop_LoadGraphics(DayTelopState* this) {
     size_t segmentSize = SEGMENT_ROM_SIZE(daytelop_static);
 
-    this->daytelopStaticFile = THA_AllocTailAlign16(&this->state.heap, segmentSize);
+    this->daytelopStaticFile = THA_AllocTailAlign16(&this->state.tha, segmentSize);
     DmaMgr_SendRequest0(this->daytelopStaticFile, SEGMENT_ROM_START(daytelop_static), segmentSize);
 
     segmentSize = SEGMENT_ROM_SIZE(icon_item_gameover_static);
-    this->gameoverStaticFile = THA_AllocTailAlign16(&this->state.heap, segmentSize);
+    this->gameoverStaticFile = THA_AllocTailAlign16(&this->state.tha, segmentSize);
     DmaMgr_SendRequest0(this->gameoverStaticFile, SEGMENT_ROM_START(icon_item_gameover_static), segmentSize);
 }
 

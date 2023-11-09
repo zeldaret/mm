@@ -25,20 +25,22 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play);
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play);
 
 ActorInit En_Warp_tag_InitVars = {
-    ACTOR_EN_WARP_TAG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnWarptag),
-    (ActorFunc)EnWarptag_Init,
-    (ActorFunc)EnWarptag_Destroy,
-    (ActorFunc)EnWarptag_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_WARP_TAG,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnWarptag),
+    /**/ EnWarptag_Init,
+    /**/ EnWarptag_Destroy,
+    /**/ EnWarptag_Update,
+    /**/ NULL,
 };
 
 // this appears to be unused, as the code never accesses it in known vanilla cases
-// these unknown values get passed to a unknown z_message function
-u8 D_809C1000[] = { 0x28, 0x29, 0x2A, 0x2B, 0x2D, 0x2C, 0, 0 };
+u8 D_809C1000[] = {
+    OCARINA_ACTION_CHECK_TIME,    OCARINA_ACTION_CHECK_HEALING, OCARINA_ACTION_CHECK_EPONAS,
+    OCARINA_ACTION_CHECK_SOARING, OCARINA_ACTION_CHECK_SUNS,    OCARINA_ACTION_CHECK_STORMS,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
@@ -58,7 +60,8 @@ void EnWarptag_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnWarpTag_WaitForPlayer;
 
         } else {
-            if ((this->dangeonKeepObject = Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP)) < 0) {
+            if ((this->dangeonKeepObjectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_DANGEON_KEEP)) <=
+                OBJECT_SLOT_NONE) {
                 Actor_Kill(&this->dyna.actor);
             }
 
@@ -81,11 +84,11 @@ void EnWarptag_Destroy(Actor* thisx, PlayState* play) {
  * Loads DynaPoly from GAMEPLAY_DANGEON_KEEP.
  */
 void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->dangeonKeepObject)) {
+    if (Object_IsLoaded(&play->objectCtx, this->dangeonKeepObjectSlot)) {
         this->actionFunc = EnWarpTag_WaitForPlayer;
         DynaPolyActor_Init(&this->dyna, 0x1);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gWarpTagGoronTrialBaseCol);
-        this->dyna.actor.objBankIndex = this->dangeonKeepObject;
+        this->dyna.actor.objectSlot = this->dangeonKeepObjectSlot;
         this->dyna.actor.draw = EnWarpTag_Draw;
     }
 }
@@ -94,10 +97,10 @@ void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
     if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
         if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
-            func_800B7298(play, NULL, PLAYER_CSMODE_81);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_81);
             this->actionFunc = EnWarpTag_GrottoReturn;
         } else {
-            func_800B7298(play, NULL, PLAYER_CSMODE_15);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_15);
             this->actionFunc = EnWarpTag_RespawnPlayer;
         }
     }
@@ -113,7 +116,7 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
         //   and I doubt its set externally by another actor, so I believe this is unused
         // might be a bug, they might have meant to set actor flag (0x2000 0000) up above but mistyped (0x200 0000)
         // also WARPTAG_GET_3C0 should always return 2C0 -> 0xF for all known in-game uses, which is OOB
-        func_80152434(play, D_809C1000[WARPTAG_GET_3C0(&this->dyna.actor)]); // unk message function
+        Message_DisplayOcarinaStaff(play, D_809C1000[WARPTAG_GET_3C0(&this->dyna.actor)]);
         this->actionFunc = EnWarpTag_Unused809C0A20;
 
     } else {
@@ -125,13 +128,13 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
  * Unused ActionFunc: assigned by EnWarpTag_Unused809C09A0, no known variants use.
  */
 void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode == 9) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_STORMS) {
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
         this->actionFunc = EnWarpTag_RespawnPlayer;
         CutsceneManager_Stop(CutsceneManager_GetCurrentCsId());
 
-    } else if (play->msgCtx.ocarinaMode >= 2) {
-        play->msgCtx.ocarinaMode = 4;
+    } else if (play->msgCtx.ocarinaMode >= OCARINA_MODE_WARP) {
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = EnWarpTag_Unused809C09A0;
     }
 }
@@ -244,7 +247,7 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
         Audio_PlaySfx_2(NA_SE_OC_SECRET_HOLE_OUT);
-        func_801A4058(5);
+        Audio_MuteAllSeqExceptSystemAndOcarina(5);
         gSaveContext.seqId = (u8)NA_BGM_DISABLED;
         gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     }

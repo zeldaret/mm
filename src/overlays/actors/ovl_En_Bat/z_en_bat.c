@@ -30,15 +30,15 @@ void EnBat_Die(EnBat* this, PlayState* play);
 void EnBat_Stunned(EnBat* this, PlayState* play);
 
 ActorInit En_Bat_InitVars = {
-    ACTOR_EN_BAT,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BAT,
-    sizeof(EnBat),
-    (ActorFunc)EnBat_Init,
-    (ActorFunc)EnBat_Destroy,
-    (ActorFunc)EnBat_Update,
-    (ActorFunc)EnBat_Draw,
+    /**/ ACTOR_EN_BAT,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BAT,
+    /**/ sizeof(EnBat),
+    /**/ EnBat_Init,
+    /**/ EnBat_Destroy,
+    /**/ EnBat_Update,
+    /**/ EnBat_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -136,7 +136,7 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
     this->animationFrame = Rand_ZeroOne() * 9.0f;
 
     this->paramFlags = BAD_BAT_GET_PARAMFLAGS(thisx);
-    this->switchFlag = BAD_BAT_GET_SWITCHFLAG(thisx);
+    this->switchFlag = BAD_BAT_GET_SWITCH_FLAG(thisx);
     thisx->params = BAD_BAT_GET_TYPE(thisx);
 
     thisx->depthInWater = BGCHECK_Y_MIN;

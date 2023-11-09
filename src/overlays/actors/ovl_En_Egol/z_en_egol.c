@@ -276,15 +276,15 @@ static Color_RGB8 sLightOrbColors[] = {
 };
 
 ActorInit En_Egol_InitVars = {
-    ACTOR_EN_EGOL,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_EG,
-    sizeof(EnEgol),
-    (ActorFunc)EnEgol_Init,
-    (ActorFunc)EnEgol_Destroy,
-    (ActorFunc)EnEgol_Update,
-    (ActorFunc)EnEgol_Draw,
+    /**/ ACTOR_EN_EGOL,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_EG,
+    /**/ sizeof(EnEgol),
+    /**/ EnEgol_Init,
+    /**/ EnEgol_Destroy,
+    /**/ EnEgol_Update,
+    /**/ EnEgol_Draw,
 };
 
 typedef enum {
@@ -481,11 +481,11 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
     EYEGORE_SET_SPH_DIM(this->bodyCollider.elements[4], 300, 200, 0, 25, 1.0f);
     EYEGORE_SET_SPH_DIM(this->bodyCollider.elements[5], 2100, -300, 0, 37, 1.0f);
 
-    this->switchFlag = EYEGORE_GET_SWITCH(&this->actor);
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    this->switchFlag = EYEGORE_GET_SWITCH_FLAG(&this->actor);
+    if (this->switchFlag == EYEGORE_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag > -1) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -933,7 +933,7 @@ void EnEgol_Slam(EnEgol* this, PlayState* play) {
         }
         EnEgol_DestroyBlocks(this, play, this->rightHandPos, this->leftHandPos);
     }
-    if (this->animEndFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         EnEgol_SetupSlamWait(this);
     } else if ((this->skelAnime.curFrame <= 17.0f) && (this->skelAnime.curFrame >= 10.0f)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->bodyCollider.base);
@@ -1096,7 +1096,7 @@ void EnEgol_Death(EnEgol* this, PlayState* play) {
     Play_SetCameraAtEye(play, this->subCamId, &this->subCamEye, &this->subCamAt);
     Play_SetCameraFov(play, this->subCamId, this->subCamFov);
     if ((this->action == EYEGORE_ACTION_DEAD) && (this->waitTimer == 1)) {
-        if (this->switchFlag > -1) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         CutsceneManager_Stop(this->actor.csId);

@@ -72,15 +72,15 @@ static TexturePtr sEyeSwitchTextures[][4] = {
 static s32 sIsSegmentTableInit = false;
 
 ActorInit Obj_Switch_InitVars = {
-    ACTOR_OBJ_SWITCH,
-    ACTORCAT_SWITCH,
-    FLAGS,
-    GAMEPLAY_DANGEON_KEEP,
-    sizeof(ObjSwitch),
-    (ActorFunc)ObjSwitch_Init,
-    (ActorFunc)ObjSwitch_Destroy,
-    (ActorFunc)ObjSwitch_Update,
-    (ActorFunc)ObjSwitch_Draw,
+    /**/ ACTOR_OBJ_SWITCH,
+    /**/ ACTORCAT_SWITCH,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_DANGEON_KEEP,
+    /**/ sizeof(ObjSwitch),
+    /**/ ObjSwitch_Init,
+    /**/ ObjSwitch_Destroy,
+    /**/ ObjSwitch_Update,
+    /**/ ObjSwitch_Draw,
 };
 
 static f32 sHeights[] = { 10.0f, 10.0f, 0.0f, 30.0f, 30.0f, 15.0f };
@@ -250,13 +250,13 @@ Actor* ObjSwitch_SpawnIce(ObjSwitch* this, PlayState* play) {
 
 void ObjSwitch_SetSwitchFlagState(ObjSwitch* this, PlayState* play, s32 setFlag) {
     if (setFlag) {
-        s32 flag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
+        s32 switchFlag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
 
-        Flags_SetSwitch(play, flag);
+        Flags_SetSwitch(play, switchFlag);
     } else {
-        s32 flag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
+        s32 switchFlag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
 
-        Flags_UnsetSwitch(play, flag);
+        Flags_UnsetSwitch(play, switchFlag);
     }
 }
 

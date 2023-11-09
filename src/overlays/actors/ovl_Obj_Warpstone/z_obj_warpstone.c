@@ -23,15 +23,15 @@ s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, PlayState* play);
 
 ActorInit Obj_Warpstone_InitVars = {
-    ACTOR_OBJ_WARPSTONE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_SEK,
-    sizeof(ObjWarpstone),
-    (ActorFunc)ObjWarpstone_Init,
-    (ActorFunc)ObjWarpstone_Destroy,
-    (ActorFunc)ObjWarpstone_Update,
-    (ActorFunc)ObjWarpstone_Draw,
+    /**/ ACTOR_OBJ_WARPSTONE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_SEK,
+    /**/ sizeof(ObjWarpstone),
+    /**/ ObjWarpstone_Init,
+    /**/ ObjWarpstone_Destroy,
+    /**/ ObjWarpstone_Update,
+    /**/ ObjWarpstone_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -141,7 +141,7 @@ void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
         } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
             if (play->msgCtx.choiceIndex != 0) {
                 Audio_PlaySfx_MessageDecide();
-                play->msgCtx.msgMode = 0x4D;
+                play->msgCtx.msgMode = MSGMODE_OWL_SAVE_0;
                 play->msgCtx.unk120D6 = 0;
                 play->msgCtx.unk120D4 = 0;
                 gSaveContext.save.owlSaveLocation = OBJ_WARPSTONE_GET_ID(&this->dyna.actor);

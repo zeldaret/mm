@@ -2,10 +2,10 @@
     <!-- Assets for Anju's Grandma -->
     <File Name="object_nb" Segment="6">
         <!-- Anju's Grandma Animations-->
-        <Animation Name="gNbTalkAnim" Offset="0x290" />
-        <Animation Name="gNbAngryAnim" Offset="0x52C" />
-        <Animation Name="gNbRelievedAnim" Offset="0x6D4" />
-        <Animation Name="gNbIdleAnim" Offset="0x990" />
+        <Animation Name="gNbTalkAnim" Offset="0x290" /> <!-- Original name is "nb_talk01" -->
+        <Animation Name="gNbAngryAnim" Offset="0x52C" /> <!-- Original name is "nb_talk02" -->
+        <Animation Name="gNbRelievedAnim" Offset="0x6D4" /> <!-- Original name is "nb_talk03" -->
+        <Animation Name="gNbIdleAnim" Offset="0x990" /> <!-- Original name is "nb_wait01" -->
 
         <!-- Anju's Grandma DisplayLists -->
         <DList Name="gNbWheelchairDL" Offset="0x4A70" /> <!-- Includes legs -->

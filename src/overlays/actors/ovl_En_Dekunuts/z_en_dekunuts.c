@@ -41,15 +41,15 @@ void func_808BE680(EnDekunuts* this);
 void func_808BE6C4(EnDekunuts* this, PlayState* play);
 
 ActorInit En_Dekunuts_InitVars = {
-    ACTOR_EN_DEKUNUTS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DEKUNUTS,
-    sizeof(EnDekunuts),
-    (ActorFunc)EnDekunuts_Init,
-    (ActorFunc)EnDekunuts_Destroy,
-    (ActorFunc)EnDekunuts_Update,
-    (ActorFunc)EnDekunuts_Draw,
+    /**/ ACTOR_EN_DEKUNUTS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DEKUNUTS,
+    /**/ sizeof(EnDekunuts),
+    /**/ EnDekunuts_Init,
+    /**/ EnDekunuts_Destroy,
+    /**/ EnDekunuts_Update,
+    /**/ EnDekunuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -150,7 +150,7 @@ void EnDekunuts_Destroy(Actor* thisx, PlayState* play) {
 void func_808BD348(EnDekunuts* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_190 = 80;

@@ -56,15 +56,15 @@ void func_809647EC(PlayState* play, EnFuUnkStruct* ptr, s32 len);
 void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len);
 
 ActorInit En_Fu_InitVars = {
-    ACTOR_EN_FU,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MU,
-    sizeof(EnFu),
-    (ActorFunc)EnFu_Init,
-    (ActorFunc)EnFu_Destroy,
-    (ActorFunc)EnFu_Update,
-    (ActorFunc)EnFu_Draw,
+    /**/ ACTOR_EN_FU,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MU,
+    /**/ sizeof(EnFu),
+    /**/ EnFu_Init,
+    /**/ EnFu_Destroy,
+    /**/ EnFu_Update,
+    /**/ EnFu_Draw,
 };
 
 static s32 D_80964B00[] = { 300, 100, 100 };
@@ -996,46 +996,46 @@ s32 func_80963810(PlayState* play, Vec3f pos) {
 s32 func_809638F8(PlayState* play) {
     s32 ret = true;
 
-    if (play->envCtx.lightSettings.diffuseColor1[0] > 25) {
-        play->envCtx.lightSettings.diffuseColor1[0] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[0] > 25) {
+        play->envCtx.adjLightSettings.light1Color[0] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.diffuseColor1[0] = 0;
+        play->envCtx.adjLightSettings.light1Color[0] = 0;
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[1] > 25) {
-        play->envCtx.lightSettings.diffuseColor1[1] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[1] > 25) {
+        play->envCtx.adjLightSettings.light1Color[1] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.diffuseColor1[1] = 0;
+        play->envCtx.adjLightSettings.light1Color[1] = 0;
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[2] > 25) {
-        play->envCtx.lightSettings.diffuseColor1[2] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[2] > 25) {
+        play->envCtx.adjLightSettings.light1Color[2] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.diffuseColor1[2] = 0;
+        play->envCtx.adjLightSettings.light1Color[2] = 0;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[0] > 25) {
-        play->envCtx.lightSettings.ambientColor[0] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[0] > 25) {
+        play->envCtx.adjLightSettings.ambientColor[0] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.ambientColor[0] = 0;
+        play->envCtx.adjLightSettings.ambientColor[0] = 0;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[1] > 25) {
-        play->envCtx.lightSettings.ambientColor[1] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[1] > 25) {
+        play->envCtx.adjLightSettings.ambientColor[1] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.ambientColor[1] = 0;
+        play->envCtx.adjLightSettings.ambientColor[1] = 0;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[2] > 25) {
-        play->envCtx.lightSettings.ambientColor[2] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[2] > 25) {
+        play->envCtx.adjLightSettings.ambientColor[2] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.ambientColor[2] = 0;
+        play->envCtx.adjLightSettings.ambientColor[2] = 0;
     }
     return ret;
 }

@@ -24,15 +24,15 @@ void func_80953354(EnHs* this, PlayState* play);
 void func_8095345C(EnHs* this, PlayState* play);
 
 ActorInit En_Hs_InitVars = {
-    ACTOR_EN_HS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_HS,
-    sizeof(EnHs),
-    (ActorFunc)EnHs_Init,
-    (ActorFunc)EnHs_Destroy,
-    (ActorFunc)EnHs_Update,
-    (ActorFunc)EnHs_Draw,
+    /**/ ACTOR_EN_HS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_HS,
+    /**/ sizeof(EnHs),
+    /**/ EnHs_Init,
+    /**/ EnHs_Destroy,
+    /**/ EnHs_Update,
+    /**/ EnHs_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -74,7 +74,7 @@ void EnHs_Init(Actor* thisx, PlayState* play) {
     EnHs* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gHsSkeleton, &gHsIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHsSkel, &gHsIdleAnim, this->jointTable, this->morphTable,
                        OBJECT_HS_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gHsIdleAnim);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -110,7 +110,7 @@ void EnHs_UpdateChickPos(Vec3f* dst, Vec3f src, f32 offset) {
 
     Math_Vec3f_Diff(&src, dst, &diff);
 
-    distance = SQ(diff.x) + SQ(diff.z); // gets un-squared after we check if we are too close
+    distance = SQXZ(diff); // gets un-squared after we check if we are too close
 
     if (SQ(offset) > distance) {
         return;
@@ -176,20 +176,20 @@ void func_80953098(EnHs* this, PlayState* play) {
 void func_80953180(EnHs* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
-            case 0x33F4: // text: laughing that they are all roosters (!)
-            case 0x33F6: // text: Grog regrets not being able to see his chicks reach adult hood
+            case 0x33F4: // laughing that they are all roosters (!)
+            case 0x33F6: // Grog regrets not being able to see his chicks reach adult hood
                 Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
 
-            case 0x33F7: // text: notice his chicks are grown up, happy, wants to give you bunny hood
+            case 0x33F7: // notice his chicks are grown up, happy, wants to give you bunny hood
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80953098;
                 func_80953098(this, play);
                 break;
 
-            case 0x33F9: // text: laughing that they are all roosters (.)
+            case 0x33F9: // laughing that they are all roosters (.)
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
@@ -225,7 +225,7 @@ void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play) {
 
 void func_80953354(EnHs* this, PlayState* play) {
     if (!Play_InCsMode(play)) {
-        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
         this->actionFunc = EnHs_SceneTransitToBunnyHoodDialogue;
     }
 }
@@ -340,6 +340,9 @@ s32 EnHs_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
                 *dList = NULL;
                 return false;
             }
+            break;
+
+        default:
             break;
     }
     return false;

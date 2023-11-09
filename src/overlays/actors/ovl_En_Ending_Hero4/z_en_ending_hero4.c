@@ -19,15 +19,15 @@ void EnEndingHero4_SetupIdle(EnEndingHero4* this);
 void EnEndingHero4_Idle(EnEndingHero4* this, PlayState* play);
 
 ActorInit En_Ending_Hero4_InitVars = {
-    ACTOR_EN_ENDING_HERO4,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SDN,
-    sizeof(EnEndingHero4),
-    (ActorFunc)EnEndingHero4_Init,
-    (ActorFunc)EnEndingHero4_Destroy,
-    (ActorFunc)EnEndingHero4_Update,
-    (ActorFunc)EnEndingHero4_Draw,
+    /**/ ACTOR_EN_ENDING_HERO4,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnEndingHero4),
+    /**/ EnEndingHero4_Init,
+    /**/ EnEndingHero4_Destroy,
+    /**/ EnEndingHero4_Update,
+    /**/ EnEndingHero4_Draw,
 };
 
 void EnEndingHero4_Init(Actor* thisx, PlayState* play) {
@@ -37,7 +37,7 @@ void EnEndingHero4_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierCheerWithSpear, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierCheerWithSpearAnim, this->jointTable,
                        this->morphTable, SOLDIER_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     EnEndingHero4_SetupIdle(this);

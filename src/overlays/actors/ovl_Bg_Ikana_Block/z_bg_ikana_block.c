@@ -26,15 +26,15 @@ void func_80B7F398(BgIkanaBlock* this, PlayState* play);
 void func_80B7F564(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Ikana_Block_InitVars = {
-    ACTOR_BG_IKANA_BLOCK,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_DANGEON_KEEP,
-    sizeof(BgIkanaBlock),
-    (ActorFunc)BgIkanaBlock_Init,
-    (ActorFunc)BgIkanaBlock_Destroy,
-    (ActorFunc)BgIkanaBlock_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_IKANA_BLOCK,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_DANGEON_KEEP,
+    /**/ sizeof(BgIkanaBlock),
+    /**/ BgIkanaBlock_Init,
+    /**/ BgIkanaBlock_Destroy,
+    /**/ BgIkanaBlock_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {

@@ -369,13 +369,14 @@ void func_80122F28(Player* player) {
 s32 func_80122F9C(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->unk_AE7 == 2);
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->av1.actionVar1 == 2);
 }
 
 s32 func_80122FCC(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && ((player->unk_AE7 == 1) || (player->unk_AE7 == 3));
+    return (player->stateFlags2 & PLAYER_STATE2_80000) &&
+           ((player->av1.actionVar1 == 1) || (player->av1.actionVar1 == 3));
 }
 
 void func_8012300C(PlayState* play, s32 arg1) {
@@ -389,19 +390,19 @@ void func_8012301C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Player* this = (Player*)thisx;
 
-    this->unk_AE7++;
+    this->av1.actionVar1++;
 
-    if (this->unk_AE7 == 2) {
-        s16 objectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
+    if (this->av1.actionVar1 == 2) {
+        s16 objectId = gPlayerFormObjectIds[GET_PLAYER_FORM];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
-        func_8012F73C(&play->objectCtx, this->actor.objBankIndex, objectId);
-        this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
-    } else if (this->unk_AE7 >= 3) {
-        s32 objBankIndex = Object_GetIndex(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
+        func_8012F73C(&play->objectCtx, this->actor.objectSlot, objectId);
+        this->actor.objectSlot = Object_GetSlot(&play->objectCtx, GAMEPLAY_KEEP);
+    } else if (this->av1.actionVar1 >= 3) {
+        s32 objectSlot = Object_GetSlot(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
 
-        if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
-            this->actor.objBankIndex = objBankIndex;
+        if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
+            this->actor.objectSlot = objectSlot;
             this->actor.shape.rot.z = GET_PLAYER_FORM + 1;
             this->actor.init = PlayerCall_Init;
             this->actor.update = PlayerCall_Update;
@@ -495,7 +496,7 @@ void func_80123140(PlayState* play, Player* player) {
 
 s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
-           (player->csMode != PLAYER_CSMODE_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
+           (player->csAction != PLAYER_CSACTION_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
            (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
 }
@@ -570,12 +571,12 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     return false;
 }
 
-ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
-    if (arg2 >= 4) {
+ItemId Player_GetItemOnButton(PlayState* play, Player* player, EquipSlot slot) {
+    if (slot >= EQUIP_SLOT_A) {
         return ITEM_NONE;
     }
 
-    if (arg2 == 0) {
+    if (slot == EQUIP_SLOT_B) {
         ItemId item = Inventory_GetBtnBItem(play);
 
         if (item >= ITEM_FD) {
@@ -597,18 +598,24 @@ ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
         return item;
     }
 
-    if (arg2 == 1) {
+    if (slot == EQUIP_SLOT_C_LEFT) {
         return C_BTN_ITEM(EQUIP_SLOT_C_LEFT);
     }
 
-    if (arg2 == 2) {
+    if (slot == EQUIP_SLOT_C_DOWN) {
         return C_BTN_ITEM(EQUIP_SLOT_C_DOWN);
     }
+
+    // EQUIP_SLOT_C_RIGHT
 
     return C_BTN_ITEM(EQUIP_SLOT_C_RIGHT);
 }
 
-u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
+u16 sCItemButtons[] = {
+    BTN_CLEFT,
+    BTN_CDOWN,
+    BTN_CRIGHT,
+};
 
 PlayerItemAction func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -620,7 +627,7 @@ PlayerItemAction func_80123810(PlayState* play) {
         if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_A | BTN_B)) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
-            Interface_SetHudVisibility(play->msgCtx.unk_120BC);
+            Interface_SetHudVisibility(play->msgCtx.hudVisibility);
             return PLAYER_IA_MINUS1;
         }
     } else {
@@ -630,11 +637,11 @@ PlayerItemAction func_80123810(PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(sCItemButtons); i++) {
         if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, sCItemButtons[i])) {
             i++;
-            itemId = func_8012364C(play, player, i);
+            itemId = Player_GetItemOnButton(play, player, i);
 
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
-            Interface_SetHudVisibility(play->msgCtx.unk_120BC);
+            Interface_SetHudVisibility(play->msgCtx.hudVisibility);
 
             if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_MINUS1)) {
                 Audio_PlaySfx(NA_SE_SY_ERROR);
@@ -1030,7 +1037,7 @@ Gfx* sPlayerFirstPersonRightShoulderDLs[PLAYER_FORM_MAX] = {
 Gfx* sPlayerFirstPersonRightHandDLs[PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightHandDL,
     //! @bug This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts dlist
-    0x060038C0,
+    (Gfx*)0x060038C0,
     gLinkZoraRightHandOpenDL,
     gLinkDekuRightHandDL,
     object_link_child_DL_018490,
@@ -1039,7 +1046,7 @@ Gfx* sPlayerFirstPersonRightHandDLs[PLAYER_FORM_MAX] = {
 Gfx* sPlayerFirstPersonRightHandHookshotDLs[PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightHandDL,
     //! @bug This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts dlist
-    0x060038C0,
+    (Gfx*)0x060038C0,
     gLinkZoraRightHandOpenDL,
     gLinkDekuRightHandDL,
     object_link_child_DL_017B40,
@@ -1291,9 +1298,9 @@ void func_80123C58(Player* player) {
 }
 
 void Player_SetEquipmentData(PlayState* play, Player* player) {
-    if (player->csMode != PLAYER_CSMODE_134) {
+    if (player->csAction != PLAYER_CSACTION_134) {
         player->currentShield = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
-        if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) &&
+        if ((player->transformation != PLAYER_FORM_ZORA) || ((player->currentBoots != PLAYER_BOOTS_ZORA_LAND) &&
                                                              (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
             player->currentBoots = D_801BFF90[player->transformation];
         }
@@ -1863,7 +1870,7 @@ void Player_DrawHookshotReticle(PlayState* play, Player* player, f32 hookshotDis
 
             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPSegment(OVERLAY_DISP++, 0x06, play->objectCtx.status[player->actor.objBankIndex].segment);
+            gSPSegment(OVERLAY_DISP++, 0x06, play->objectCtx.slots[player->actor.objectSlot].segment);
             gSPDisplayList(OVERLAY_DISP++, gHookshotReticleDL);
 
             CLOSE_DISPS(play->state.gfxCtx);
@@ -2092,7 +2099,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                 EnArrow* bubble = NULL;
 
                 if (((player->skelAnime.animation == &gPlayerAnim_pn_drinkend)) ||
-                    (player->unk_284.animation == &gPlayerAnim_pn_tamahaki) ||
+                    (player->skelAnimeUpper.animation == &gPlayerAnim_pn_tamahaki) ||
                     ((player->stateFlags3 & PLAYER_STATE3_40) && ((bubble = (EnArrow*)player->heldActor) != NULL))) {
                     Matrix_TranslateRotateZYX(pos, rot);
                     func_80125340();
@@ -2108,7 +2115,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                     } else if (player->skelAnime.animation == &gPlayerAnim_pn_drinkend) {
                         func_80124618(D_801C03E0, player->skelAnime.curFrame, player->unk_AF0);
                     } else {
-                        func_80124618(D_801C03C0, player->unk_284.curFrame, player->unk_AF0);
+                        func_80124618(D_801C03C0, player->skelAnimeUpper.curFrame, player->unk_AF0);
                     }
 
                     Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
@@ -2509,7 +2516,7 @@ u8 D_801C0B1C[] = {
 
 Gfx* D_801C0B20[] = {
     object_mask_truth_DL_0001A0,    // PLAYER_MASK_TRUTH
-    object_mask_kerfay_DL_000D40,   // PLAYER_MASK_KAFEIS_MASK
+    gKafeisMaskDL,                  // PLAYER_MASK_KAFEIS_MASK
     object_mask_yofukasi_DL_000490, // PLAYER_MASK_ALL_NIGHT
     object_mask_rabit_DL_000610,    // PLAYER_MASK_BUNNY
     object_mask_ki_tan_DL_0004A0,   // PLAYER_MASK_KEATON
@@ -2584,7 +2591,7 @@ void Player_DrawGetItemImpl(PlayState* play, Player* player, Vec3f* refPos, s32 
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(player->giObjectSegment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(player->giObjectSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, player->giObjectSegment);
     gSPSegment(POLY_XLU_DISP++, 0x06, player->giObjectSegment);
@@ -2846,7 +2853,7 @@ void func_80127488(PlayState* play, Player* player, u8 alpha) {
 }
 
 void Player_DrawCouplesMask(PlayState* play, Player* player) {
-    gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
+    gSegments[0xA] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
@@ -2878,7 +2885,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
             Matrix_Scale(scaleXZ, scaleY, scaleXZ, MTXMODE_APPLY);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(&gfx[1], 0x08, VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(gEffBubble1Tex)));
+            gSPSegment(&gfx[1], 0x08, OS_K0_TO_PHYSICAL(SEGMENTED_TO_K0(gEffBubble1Tex)));
             gDPSetPrimColor(&gfx[2], 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(&gfx[3], 150, 150, 150, 0);
             gSPDisplayList(&gfx[4], gEffBubbleDL);
@@ -2934,7 +2941,7 @@ void Player_DrawBlastMask(PlayState* play, Player* player) {
     if (player->blastMaskTimer != 0) {
         s32 alpha;
 
-        gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
+        gSegments[0xA] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
@@ -3744,7 +3751,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
 
-        if ((player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_100)) && (player->unk_AE8 != 0)) {
+        if ((player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_100)) && (player->av2.actionVar2 != 0)) {
             static Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
                 { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_FIERCE_DEITY
                 { -578.3f, -1100.9f, 0.0f }, // PLAYER_FORM_GORON
@@ -3764,7 +3771,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, (u8)player->unk_AE8);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, (u8)player->av2.actionVar2);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054C90);
 
             Matrix_Pop();
@@ -3784,7 +3791,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 Matrix_MultVec3f(&sPlayerFocusHeadLimbModelPos, &player->actor.focus.pos);
                 Matrix_MultVec3f(&D_801C0E94, sPlayerCurBodyPartPos);
                 if ((player->skelAnime.animation == &gPlayerAnim_pn_drinkend) ||
-                    (player->unk_284.animation == &gPlayerAnim_pn_tamahaki) ||
+                    (player->skelAnimeUpper.animation == &gPlayerAnim_pn_tamahaki) ||
                     ((player->stateFlags3 & PLAYER_STATE3_40) && ((spA8 = player->heldActor) != NULL))) {
                     if (spA8 != NULL) {
                         static Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };

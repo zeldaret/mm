@@ -21,10 +21,7 @@
 
 #define ARRAY_COUNT_2D(arr) (ARRAY_COUNT(arr) * ARRAY_COUNT(arr[0]))
 
-// TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
-#define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + RDRAM_CACHED)
-#define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr) - RDRAM_CACHED)
-#define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
+#define SEGMENTED_TO_K0(addr) (void*)((gSegments[SEGMENT_NUMBER(addr)] + K0BASE) + SEGMENT_OFFSET(addr))
 
 #define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamId])
 
@@ -38,6 +35,7 @@
 #define DAY_LENGTH (CLOCK_TIME(24, 0))
 
 #define TIME_TO_HOURS_F(time) ((time) * (24.0f / 0x10000))
+#define TIME_TO_HOURS_F_ALT(time) (TIME_TO_MINUTES_F(time) / 60.0f)
 #define TIME_TO_MINUTES_F(time) ((time) * ((24.0f * 60.0f) / 0x10000)) // 0.021972656f
 #define TIME_TO_MINUTES_ALT_F(time) ((time) / (0x10000 / (24.0f * 60.0f)))
 #define TIME_TO_SECONDS_F(time) ((time) * ((24.0f * 60.0f * 60.0f) / 0x10000))
@@ -91,7 +89,10 @@
 #define ABS_ALT(x) ((x) < 0 ? -(x) : (x))
 #define DECR(x) ((x) == 0 ? 0 : --(x))
 
+//! checks min first
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : (x) > (max) ? (max) : (x))
+//! checks max first
+#define CLAMP_ALT(x, min, max) ((x) > (max) ? (max) : (x) < (min) ? (min) : (x))
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
 

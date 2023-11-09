@@ -4,6 +4,7 @@
 #include "irqmgr.h"
 #include "padmgr.h"
 #include "scheduler.h"
+#include "CIC6105.h"
 #include "stack.h"
 #include "stackcheck.h"
 
@@ -52,10 +53,10 @@ void Main(void* arg) {
     Check_RegionIsSupported();
     Check_ExpansionPak();
 
-    sysHeap = gSystemHeap;
+    sysHeap = (intptr_t)gSystemHeap;
     fb = 0x80780000;
     gSystemHeapSize = fb - sysHeap;
-    SystemHeap_Init(sysHeap, gSystemHeapSize);
+    SystemHeap_Init((void*)sysHeap, gSystemHeapSize);
 
     Regs_Init();
 

@@ -15,15 +15,15 @@ void func_80AD6A88(BgLotus* this, PlayState* play);
 void func_80AD6B68(BgLotus* this, PlayState* play);
 
 ActorInit Bg_Lotus_InitVars = {
-    ACTOR_BG_LOTUS,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_LOTUS,
-    sizeof(BgLotus),
-    (ActorFunc)BgLotus_Init,
-    (ActorFunc)BgLotus_Destroy,
-    (ActorFunc)BgLotus_Update,
-    (ActorFunc)BgLotus_Draw,
+    /**/ ACTOR_BG_LOTUS,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_LOTUS,
+    /**/ sizeof(BgLotus),
+    /**/ BgLotus_Init,
+    /**/ BgLotus_Destroy,
+    /**/ BgLotus_Update,
+    /**/ BgLotus_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

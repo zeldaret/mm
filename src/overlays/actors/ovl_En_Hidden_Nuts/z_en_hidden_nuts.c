@@ -6,7 +6,6 @@
 
 #include "z_en_hidden_nuts.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_hintnuts/object_hintnuts.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_2000000)
 
@@ -32,15 +31,15 @@ void func_80BDBE70(EnHiddenNuts* this, PlayState* play);
 void func_80BDBED4(EnHiddenNuts* this, PlayState* play);
 
 ActorInit En_Hidden_Nuts_InitVars = {
-    ACTOR_EN_HIDDEN_NUTS,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_HINTNUTS,
-    sizeof(EnHiddenNuts),
-    (ActorFunc)EnHiddenNuts_Init,
-    (ActorFunc)EnHiddenNuts_Destroy,
-    (ActorFunc)EnHiddenNuts_Update,
-    (ActorFunc)EnHiddenNuts_Draw,
+    /**/ ACTOR_EN_HIDDEN_NUTS,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_HINTNUTS,
+    /**/ sizeof(EnHiddenNuts),
+    /**/ EnHiddenNuts_Init,
+    /**/ EnHiddenNuts_Destroy,
+    /**/ EnHiddenNuts_Update,
+    /**/ EnHiddenNuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -63,15 +62,41 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 20, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BDC0FC[] = {
-    &object_hintnuts_Anim_000168, &object_hintnuts_Anim_0024CC, &object_hintnuts_Anim_0026C4,
-    &object_hintnuts_Anim_002894, &object_hintnuts_Anim_002B90, &object_hintnuts_Anim_002F7C,
-    &object_hintnuts_Anim_003128, &object_hintnuts_Anim_0029BC, &object_hintnuts_Anim_0024CC,
+typedef enum EnHiddenNutsAnimation {
+    /* 0 */ ENHIDDENNUTS_ANIM_0,
+    /* 1 */ ENHIDDENNUTS_ANIM_1,
+    /* 2 */ ENHIDDENNUTS_ANIM_2,
+    /* 3 */ ENHIDDENNUTS_ANIM_3,
+    /* 4 */ ENHIDDENNUTS_ANIM_4,
+    /* 5 */ ENHIDDENNUTS_ANIM_5,
+    /* 6 */ ENHIDDENNUTS_ANIM_6,
+    /* 7 */ ENHIDDENNUTS_ANIM_7,
+    /* 8 */ ENHIDDENNUTS_ANIM_8,
+    /* 9 */ ENHIDDENNUTS_ANIM_MAX
+} EnHiddenNutsAnimation;
+
+static AnimationHeader* sAnimations[ENHIDDENNUTS_ANIM_MAX] = {
+    &object_hintnuts_Anim_000168, // ENHIDDENNUTS_ANIM_0
+    &object_hintnuts_Anim_0024CC, // ENHIDDENNUTS_ANIM_1
+    &object_hintnuts_Anim_0026C4, // ENHIDDENNUTS_ANIM_2
+    &object_hintnuts_Anim_002894, // ENHIDDENNUTS_ANIM_3
+    &object_hintnuts_Anim_002B90, // ENHIDDENNUTS_ANIM_4
+    &object_hintnuts_Anim_002F7C, // ENHIDDENNUTS_ANIM_5
+    &object_hintnuts_Anim_003128, // ENHIDDENNUTS_ANIM_6
+    &object_hintnuts_Anim_0029BC, // ENHIDDENNUTS_ANIM_7
+    &object_hintnuts_Anim_0024CC, // ENHIDDENNUTS_ANIM_8
 };
 
-u8 D_80BDC120[] = {
-    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP,
+static u8 sAnimationModes[ENHIDDENNUTS_ANIM_MAX] = {
+    ANIMMODE_ONCE, // ENHIDDENNUTS_ANIM_0
+    ANIMMODE_ONCE, // ENHIDDENNUTS_ANIM_1
+    ANIMMODE_ONCE, // ENHIDDENNUTS_ANIM_2
+    ANIMMODE_LOOP, // ENHIDDENNUTS_ANIM_3
+    ANIMMODE_ONCE, // ENHIDDENNUTS_ANIM_4
+    ANIMMODE_LOOP, // ENHIDDENNUTS_ANIM_5
+    ANIMMODE_LOOP, // ENHIDDENNUTS_ANIM_6
+    ANIMMODE_ONCE, // ENHIDDENNUTS_ANIM_7
+    ANIMMODE_ONCE, // ENHIDDENNUTS_ANIM_8
 };
 
 void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
@@ -79,7 +104,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, &object_hintnuts_Anim_0024CC,
-                   this->jointTable, this->morphTable, 10);
+                   this->jointTable, this->morphTable, OBJECT_HINTNUTS_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -88,13 +113,13 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->pathIndex = ENHIDDENNUTS_GET_PATH_INDEX(&this->actor);
-    this->switchFlag = ENHIDDENNUTS_GET_SWITCHFLAG(&this->actor);
+    this->switchFlag = ENHIDDENNUTS_GET_SWITCH_FLAG(&this->actor);
 
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == ENHIDDENNUTS_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -116,27 +141,29 @@ void EnHiddenNuts_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80BDB1B4(EnHiddenNuts* this, s32 arg1) {
-    f32 sp34;
-    f32 sp30;
+void EnHiddenNuts_ChangeAnim(EnHiddenNuts* this, s32 animIndex) {
+    f32 startFrame;
+    f32 morphFrames;
 
-    this->unk_220 = arg1;
-    sp34 = 0.0f;
-    sp30 = -4.0f;
-    this->unk_22C = Animation_GetLastFrame(D_80BDC0FC[arg1]);
-    if (this->unk_220 == 1) {
-        sp34 = this->unk_22C;
-        sp30 = 0.0f;
+    this->animIndex = animIndex;
+    startFrame = 0.0f;
+    morphFrames = -4.0f;
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+
+    if (this->animIndex == ENHIDDENNUTS_ANIM_1) {
+        startFrame = this->animEndFrame;
+        morphFrames = 0.0f;
     }
-    Animation_Change(&this->skelAnime, D_80BDC0FC[this->unk_220], 1.0f, sp34, this->unk_22C, D_80BDC120[this->unk_220],
-                     sp30);
+
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, startFrame, this->animEndFrame,
+                     sAnimationModes[this->animIndex], morphFrames);
 }
 
 void func_80BDB268(EnHiddenNuts* this) {
     this->actor.textId = 0x234;
     this->unk_228 = 1600.0f;
     this->actor.shape.yOffset = 1600.0f;
-    func_80BDB1B4(this, 1);
+    EnHiddenNuts_ChangeAnim(this, ENHIDDENNUTS_ANIM_1);
     this->unk_21A = 0;
     this->actionFunc = func_80BDB2B8;
 }
@@ -148,12 +175,12 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_NEMURI_SLEEP - SFX_FLAG);
 
     if (player->stateFlags2 & PLAYER_STATE2_8000000) {
-        if (this->unk_20A == 0) {
+        if (!this->unk_20A) {
             Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
-            this->unk_20A = 1;
+            this->unk_20A = true;
         }
     } else {
-        this->unk_20A = 0;
+        this->unk_20A = false;
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -183,8 +210,8 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
     }
 
     if (!(this->actor.xzDistToPlayer > 120.0f)) {
-        if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA)) {
-            play->msgCtx.ocarinaMode = 4;
+        if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA)) {
+            play->msgCtx.ocarinaMode = OCARINA_MODE_END;
             func_80BDB788(this);
         } else if (func_801A5100() == 2) {
             func_80BDB788(this);
@@ -263,20 +290,20 @@ void func_80BDB7E8(EnHiddenNuts* this, PlayState* play) {
     EffectSsHahen_SpawnBurst(play, &sp3C, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
-    func_80BDB1B4(this, 7);
+    EnHiddenNuts_ChangeAnim(this, ENHIDDENNUTS_ANIM_7);
     this->actionFunc = func_80BDB8F4;
 }
 
 void func_80BDB8F4(EnHiddenNuts* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    if (this->unk_22C <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         func_80BDB930(this);
     }
 }
 
 void func_80BDB930(EnHiddenNuts* this) {
-    func_80BDB1B4(this, 3);
+    EnHiddenNuts_ChangeAnim(this, ENHIDDENNUTS_ANIM_3);
     this->unk_21A = 3;
     this->unk_228 = 500.0f;
     this->actionFunc = func_80BDB978;
@@ -290,7 +317,7 @@ void func_80BDB978(EnHiddenNuts* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUT_FAINT);
     }
 
-    if (this->unk_22C <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         this->unk_224++;
         if (this->unk_224 >= 2) {
             func_80BDBA28(this, play);
@@ -301,7 +328,7 @@ void func_80BDB978(EnHiddenNuts* this, PlayState* play) {
 void func_80BDBA28(EnHiddenNuts* this, PlayState* play) {
     Vec3f sp44;
 
-    func_80BDB1B4(this, 2);
+    EnHiddenNuts_ChangeAnim(this, ENHIDDENNUTS_ANIM_2);
     this->unk_228 = 0.0f;
 
     Math_Vec3f_Copy(&sp44, &this->actor.world.pos);
@@ -326,10 +353,10 @@ void func_80BDBA28(EnHiddenNuts* this, PlayState* play) {
 
 void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
     s32 pad[3];
-    f32 sp58 = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
     WaterBox* sp54;
     f32 sp50;
-    s16 sp4E = 0;
+    s16 sp4E = false;
     Vec3f sp40;
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
@@ -346,23 +373,23 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
             Animation_OnFrame(&this->skelAnime, 10.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_WALK_WATER);
-            sp4E = 1;
+            sp4E = true;
         }
     }
 
-    if ((sp4E != 0) && (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
-                        Animation_OnFrame(&this->skelAnime, 10.0f))) {
+    if (sp4E && (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
+                 Animation_OnFrame(&this->skelAnime, 10.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_20C), 1, 0x1388, 0);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 1, 0x3E8, 0);
 
-    if (this->unk_220 == 2) {
-        if (this->unk_22C <= sp58) {
+    if (this->animIndex == ENHIDDENNUTS_ANIM_2) {
+        if (curFrame >= this->animEndFrame) {
             this->actor.speed = 0.0f;
             this->actor.velocity.y = 0.0f;
-            func_80BDB1B4(this, 6);
+            EnHiddenNuts_ChangeAnim(this, ENHIDDENNUTS_ANIM_6);
         }
     } else {
         Math_ApproachF(&this->actor.world.pos.x, this->unk_20C.x, 0.5f,
@@ -384,10 +411,10 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
 }
 
 void func_80BDBE70(EnHiddenNuts* this, PlayState* play) {
-    if (this->switchFlag >= 0) {
+    if (this->switchFlag > SWITCH_FLAG_NONE) {
         Flags_SetSwitch(play, this->switchFlag);
     }
-    func_80BDB1B4(this, 8);
+    EnHiddenNuts_ChangeAnim(this, ENHIDDENNUTS_ANIM_8);
     this->unk_21A = 5;
     this->actionFunc = func_80BDBED4;
 }
@@ -396,7 +423,7 @@ void func_80BDBED4(EnHiddenNuts* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
     Vec3f sp38;
 
-    if (this->unk_22C <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         Math_Vec3f_Copy(&sp38, &this->actor.world.pos);
         sp38.y = this->actor.floorHeight;
 

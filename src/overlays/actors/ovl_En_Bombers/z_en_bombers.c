@@ -25,15 +25,15 @@ void func_80C04354(EnBombers* this, PlayState* play);
 void func_80C043C8(EnBombers* this, PlayState* play);
 
 ActorInit En_Bombers_InitVars = {
-    ACTOR_EN_BOMBERS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_CS,
-    sizeof(EnBombers),
-    (ActorFunc)EnBombers_Init,
-    (ActorFunc)EnBombers_Destroy,
-    (ActorFunc)EnBombers_Update,
-    (ActorFunc)EnBombers_Draw,
+    /**/ ACTOR_EN_BOMBERS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_CS,
+    /**/ sizeof(EnBombers),
+    /**/ EnBombers_Init,
+    /**/ EnBombers_Destroy,
+    /**/ EnBombers_Update,
+    /**/ EnBombers_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -142,7 +142,7 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     this->actor.gravity = -1.0f;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
-                       this->morphtable, OBJECT_CS_LIMB_MAX);
+                       this->morphTable, OBJECT_CS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.targetMode = TARGET_MODE_0;
     Actor_SetScale(&this->actor, 0.01f);

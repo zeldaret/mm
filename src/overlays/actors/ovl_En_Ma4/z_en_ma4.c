@@ -55,15 +55,15 @@ typedef enum {
 } EnMa4State;
 
 ActorInit En_Ma4_InitVars = {
-    ACTOR_EN_MA4,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MA1,
-    sizeof(EnMa4),
-    (ActorFunc)EnMa4_Init,
-    (ActorFunc)EnMa4_Destroy,
-    (ActorFunc)EnMa4_Update,
-    (ActorFunc)EnMa4_Draw,
+    /**/ ACTOR_EN_MA4,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MA1,
+    /**/ sizeof(EnMa4),
+    /**/ EnMa4_Init,
+    /**/ EnMa4_Destroy,
+    /**/ EnMa4_Update,
+    /**/ EnMa4_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -916,9 +916,9 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x336D;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
+                    if ((s32)time < HS_GET_HORSE_BACK_BALLOON_TIME()) {
                         // [Score] New record!
-                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
+                        HS_SET_HORSE_BACK_BALLOON_TIME(time);
                         EnMa4_SetFaceExpression(this, 0, 3);
                         Message_StartTextbox(play, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -960,8 +960,8 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x3356;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
-                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
+                    if ((s32)time < HS_GET_HORSE_BACK_BALLOON_TIME()) {
+                        HS_SET_HORSE_BACK_BALLOON_TIME(time);
                         EnMa4_SetFaceExpression(this, 0, 3);
                         Message_StartTextbox(play, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -987,9 +987,9 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x3356;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
+                    if ((s32)time < HS_GET_HORSE_BACK_BALLOON_TIME()) {
                         // New record
-                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
+                        HS_SET_HORSE_BACK_BALLOON_TIME(time);
                         Message_StartTextbox(play, 0x335D, &this->actor);
                         this->textId = 0x335D;
                     } else {
@@ -1083,8 +1083,8 @@ void EnMa4_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(sEyeTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_K0(sMouthTextures[this->mouthTexIndex]));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMa4_OverrideLimbDraw, EnMa4_PostLimbDraw, &this->actor);

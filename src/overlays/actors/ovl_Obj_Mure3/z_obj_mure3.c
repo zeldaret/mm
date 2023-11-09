@@ -22,15 +22,15 @@ void func_8098F66C(ObjMure3* this);
 void func_8098F680(ObjMure3* this, PlayState* play);
 
 ActorInit Obj_Mure3_InitVars = {
-    ACTOR_OBJ_MURE3,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjMure3),
-    (ActorFunc)ObjMure3_Init,
-    (ActorFunc)ObjMure3_Destroy,
-    (ActorFunc)ObjMure3_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_MURE3,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjMure3),
+    /**/ ObjMure3_Init,
+    /**/ ObjMure3_Destroy,
+    /**/ ObjMure3_Update,
+    /**/ NULL,
 };
 
 static s16 sRupeeCounts[] = { 5, 5, 7, 0 };
@@ -134,7 +134,7 @@ void func_8098F438(ObjMure3* this, PlayState* play) {
 
         if ((*collectible != NULL) && !((this->unk164 >> i) & 1)) {
             if ((*collectible)->unk1A4 != 0) {
-                Flags_SetSwitch(play, OBJMURE3_PARAM_7F(&this->actor));
+                Flags_SetSwitch(play, OBJMURE3_GET_SWITCH_FLAG(&this->actor));
             }
             if ((*collectible)->actor.update == NULL) {
                 this->unk164 |= (1 << i);
@@ -147,7 +147,7 @@ void func_8098F438(ObjMure3* this, PlayState* play) {
 void ObjMure3_Init(Actor* thisx, PlayState* play) {
     ObjMure3* this = THIS;
 
-    if (Flags_GetSwitch(play, OBJMURE3_PARAM_7F(&this->actor))) {
+    if (Flags_GetSwitch(play, OBJMURE3_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }

@@ -28,15 +28,15 @@ void func_80ACEFC4(EnFuMato* this);
 void func_80ACEFD8(EnFuMato* this, PlayState* play);
 
 ActorInit En_Fu_Mato_InitVars = {
-    ACTOR_EN_FU_MATO,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_FU_MATO,
-    sizeof(EnFuMato),
-    (ActorFunc)EnFuMato_Init,
-    (ActorFunc)EnFuMato_Destroy,
-    (ActorFunc)EnFuMato_Update,
-    (ActorFunc)EnFuMato_Draw,
+    /**/ ACTOR_EN_FU_MATO,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_FU_MATO,
+    /**/ sizeof(EnFuMato),
+    /**/ EnFuMato_Init,
+    /**/ EnFuMato_Destroy,
+    /**/ EnFuMato_Update,
+    /**/ EnFuMato_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

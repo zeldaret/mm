@@ -24,15 +24,15 @@ void func_80C2572C(ObjSwprize* this, PlayState* play);
 void ObjSwprize_SetupDoNothing(ObjSwprize* this);
 
 ActorInit Obj_Swprize_InitVars = {
-    ACTOR_OBJ_SWPRIZE,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjSwprize),
-    (ActorFunc)ObjSwprize_Init,
-    (ActorFunc)ObjSwprize_Destroy,
-    (ActorFunc)ObjSwprize_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_SWPRIZE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjSwprize),
+    /**/ ObjSwprize_Init,
+    /**/ ObjSwprize_Destroy,
+    /**/ ObjSwprize_Update,
+    /**/ NULL,
 };
 
 s16 D_80C257F0[] = { 2, 0x14, 1, 8 };

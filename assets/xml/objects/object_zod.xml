@@ -24,9 +24,9 @@
         <Texture Name="gTijoHandTex" OutName="tijo_hand" Format="rgba16" Width="16" Height="16" Offset="0x53D0" />
         <Texture Name="gTijoNoseTex" OutName="tijo_nose" Format="rgba16" Width="8" Height="8" Offset="0x55D0" />
         <Texture Name="gTijoSkinSpotsTex" OutName="tijo_skin_spots" Format="rgba16" Width="32" Height="32" Offset="0x5650" />
-        <Texture Name="gTijoEyesOpen" OutName="tijo_eyes_open" Format="rgba16" Width="32" Height="32" Offset="0x5E50" />
-        <Texture Name="gTijoEyesHalfOpen" OutName="tijo_eyes_half_open" Format="rgba16" Width="32" Height="32" Offset="0x6650" />
-        <Texture Name="gTijoEyesClosed" OutName="tijo_eyes_closed" Format="rgba16" Width="32" Height="32" Offset="0x6E50" />
+        <Texture Name="gTijoEyesOpenTex" OutName="tijo_eyes_open" Format="rgba16" Width="32" Height="32" Offset="0x5E50" />
+        <Texture Name="gTijoEyesHalfOpenTex" OutName="tijo_eyes_half_open" Format="rgba16" Width="32" Height="32" Offset="0x6650" />
+        <Texture Name="gTijoEyesClosedTex" OutName="tijo_eyes_closed" Format="rgba16" Width="32" Height="32" Offset="0x6E50" />
         <Texture Name="gTijoMouthClosedTex" OutName="tijo_mouth_closed" Format="rgba16" Width="32" Height="32" Offset="0x7650" />
         <Texture Name="gTijoMouthOpenTex" OutName="tijo_mouth_open" Format="rgba16" Width="32" Height="32" Offset="0x7E50" />
 

@@ -248,7 +248,7 @@ typedef enum {
  * @param sfxState
  */
 #define AUDIOCMD_CHANNEL_SET_SFX_STATE(seqPlayerIndex, channelIndex, sfxState) \
-    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_CHANNEL_SET_SFX_STATE, seqPlayerIndex, channelIndex, 0), sfxState)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_CHANNEL_SET_SFX_STATE, seqPlayerIndex, channelIndex, 0), (s32)sfxState)
 
 /**
  * Set the reverb index.
@@ -493,7 +493,7 @@ typedef enum {
  * @param functionPtr
  */
 #define AUDIOCMD_GLOBAL_SET_CUSTOM_FUNCTION(functionType, functionPtr) \
-    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_CUSTOM_FUNCTION, 0, 0, functionType), functionPtr)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_CUSTOM_FUNCTION, 0, 0, functionType), (s32)functionPtr)
 
 /**
  * Do something related to the unloaded-type audio data in the heap.
@@ -514,7 +514,7 @@ typedef enum {
  * @param data
  */
 #define AUDIOCMD_GLOBAL_SET_REVERB_DATA(reverbIndex, dataType, data) \
-    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_REVERB_DATA, dataType, reverbIndex, 0), data)
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_REVERB_DATA, dataType, reverbIndex, 0), (s32)data)
 
 /**
  * Change the sound mode of audio

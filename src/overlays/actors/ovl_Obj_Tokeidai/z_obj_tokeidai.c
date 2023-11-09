@@ -63,15 +63,15 @@ void ObjTokeidai_Counterweight_Draw(Actor* thisx, PlayState* play);
 void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Tokeidai_InitVars = {
-    ACTOR_OBJ_TOKEIDAI,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_OBJ_TOKEIDAI,
-    sizeof(ObjTokeidai),
-    (ActorFunc)ObjTokeidai_Init,
-    (ActorFunc)ObjTokeidai_Destroy,
-    (ActorFunc)ObjTokeidai_Update,
-    (ActorFunc)ObjTokeidai_Draw,
+    /**/ ACTOR_OBJ_TOKEIDAI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_OBJ_TOKEIDAI,
+    /**/ sizeof(ObjTokeidai),
+    /**/ ObjTokeidai_Init,
+    /**/ ObjTokeidai_Destroy,
+    /**/ ObjTokeidai_Update,
+    /**/ ObjTokeidai_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -835,9 +835,9 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     if (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_WALL_CLOCK ||
         OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_SMALL_WALL_CLOCK) {
-        gSPDisplayList(POLY_OPA_DISP++, gWallClockClockFace);
+        gSPDisplayList(POLY_OPA_DISP++, gWallClockClockFaceDL);
     } else {
-        gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockFace);
+        gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockFaceDL);
     }
 
     Matrix_Translate(0.0f, -1112.0f, -19.6f, MTXMODE_APPLY);

@@ -18,21 +18,21 @@ void ObjBlockstop_CheckForBlock(ObjBlockstop* this, PlayState* play);
 void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, PlayState* play);
 
 ActorInit Obj_Blockstop_InitVars = {
-    ACTOR_OBJ_BLOCKSTOP,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjBlockstop),
-    (ActorFunc)ObjBlockstop_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)ObjBlockstop_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_BLOCKSTOP,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjBlockstop),
+    /**/ ObjBlockstop_Init,
+    /**/ Actor_Noop,
+    /**/ ObjBlockstop_Update,
+    /**/ NULL,
 };
 
 void ObjBlockstop_Init(Actor* thisx, PlayState* play) {
     ObjBlockstop* this = THIS;
 
-    if (Flags_GetSwitch(play, this->actor.params)) {
+    if (Flags_GetSwitch(play, OBJBLOCKSTOP_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
     }
     this->actionFunc = ObjBlockstop_CheckForBlock;
@@ -58,7 +58,7 @@ void ObjBlockstop_CheckForBlock(ObjBlockstop* this, PlayState* play) {
 
 void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->actor.csId)) {
-        Flags_SetSwitch(play, this->actor.params);
+        Flags_SetSwitch(play, OBJBLOCKSTOP_GET_SWITCH_FLAG(&this->actor));
         if (CutsceneManager_GetLength(this->actor.csId) != -1) {
             CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         }

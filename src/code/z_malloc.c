@@ -40,7 +40,7 @@ void ZeldaArena_GetSizes(size_t* outMaxFree, size_t* outFree, size_t* outAlloc) 
     __osGetSizes(&sZeldaArena, outMaxFree, outFree, outAlloc);
 }
 
-s32 ZeldaArena_Check() {
+s32 ZeldaArena_Check(void) {
     return __osCheckArena(&sZeldaArena);
 }
 
@@ -48,10 +48,10 @@ void ZeldaArena_Init(void* start, size_t size) {
     __osMallocInit(&sZeldaArena, start, size);
 }
 
-void ZeldaArena_Cleanup() {
+void ZeldaArena_Cleanup(void) {
     __osMallocCleanup(&sZeldaArena);
 }
 
-u8 ZeldaArena_IsInitialized() {
+u8 ZeldaArena_IsInitialized(void) {
     return __osMallocIsInitalized(&sZeldaArena);
 }

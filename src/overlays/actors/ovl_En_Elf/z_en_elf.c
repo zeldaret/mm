@@ -33,15 +33,15 @@ void func_8089010C(Actor* thisx, PlayState* play);
 void func_808908D0(Vec3f* vec, PlayState* play, u32 action);
 
 ActorInit En_Elf_InitVars = {
-    ACTOR_EN_ELF,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnElf),
-    (ActorFunc)EnElf_Init,
-    (ActorFunc)EnElf_Destroy,
-    (ActorFunc)EnElf_Update,
-    (ActorFunc)EnElf_Draw,
+    /**/ ACTOR_EN_ELF,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnElf),
+    /**/ EnElf_Init,
+    /**/ EnElf_Destroy,
+    /**/ EnElf_Update,
+    /**/ EnElf_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -744,7 +744,7 @@ void func_8088E0F0(EnElf* this, PlayState* play) {
             if (this->unk_250 < 2.0f) {
                 this->unk_250 += 0.1f;
             } else {
-                gSaveContext.healthAccumulator = 160;
+                gSaveContext.healthAccumulator = 0xA0;
                 this->unk_246++;
             }
             break;
@@ -1323,7 +1323,7 @@ void func_8088FC34(EnElf* this, PlayState* play) {
         } else {
             Math_StepToF(&this->unk_240, 1.0f, 0.05f);
         }
-        func_800FD2B4(play, SQ(this->unk_240), player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f);
+        Environment_AdjustLights(play, SQ(this->unk_240), player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f);
     }
 }
 
@@ -1521,8 +1521,8 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     this->elfMsg = NULL;
     this->timer++;
 
-    if ((this->unk_240 >= 0.0f) &&
-        func_800FD2B4(play, SQ(this->unk_240) * this->unk_240, player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f)) {
+    if ((this->unk_240 >= 0.0f) && Environment_AdjustLights(play, SQ(this->unk_240) * this->unk_240,
+                                                            player->actor.projectedPos.z + 780.0f, 0.2f, 0.5f)) {
         Math_StepToF(&this->unk_240, -0.05f, 0.05f);
     }
 

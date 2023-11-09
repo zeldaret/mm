@@ -34,15 +34,15 @@ void func_80B04B60(ObjSnowball* this, PlayState* play);
 void func_80B04D34(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Snowball_InitVars = {
-    ACTOR_OBJ_SNOWBALL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GOROIWA,
-    sizeof(ObjSnowball),
-    (ActorFunc)ObjSnowball_Init,
-    (ActorFunc)ObjSnowball_Destroy,
-    (ActorFunc)ObjSnowball_Update,
-    (ActorFunc)ObjSnowball_Draw,
+    /**/ ACTOR_OBJ_SNOWBALL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_GOROIWA,
+    /**/ sizeof(ObjSnowball),
+    /**/ ObjSnowball_Init,
+    /**/ ObjSnowball_Destroy,
+    /**/ ObjSnowball_Update,
+    /**/ ObjSnowball_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -110,7 +110,7 @@ void func_80B02CD0(ObjSnowball* this, PlayState* play) {
 }
 
 void func_80B02D58(ObjSnowball* this, PlayState* play) {
-    s32 temp_v0 = func_800A8150(OBJSNOWBALL_GET_3F(&this->actor));
+    s32 temp_v0 = func_800A8150(OBJSNOWBALL_GET_SWITCH_FLAG(&this->actor));
 
     if (temp_v0 >= 0) {
         Item_DropCollectible(play, &this->actor.home.pos, (OBJSNOWBALL_GET_7F00(&this->actor) << 8) | temp_v0);
@@ -443,7 +443,7 @@ void func_80B03FF8(ObjSnowball* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
     if (rotY == 5) {
-        Flags_SetSwitch(play, OBJSNOWBALL_GET_3F(&this->actor));
+        Flags_SetSwitch(play, OBJSNOWBALL_GET_SWITCH_FLAG(&this->actor));
     }
 }
 
@@ -509,7 +509,7 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
 
     func_80B04338(this, play);
 
-    if ((sp40 == 5) && Flags_GetSwitch(play, OBJSNOWBALL_GET_3F(&this->actor))) {
+    if ((sp40 == 5) && Flags_GetSwitch(play, OBJSNOWBALL_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
     }
 }

@@ -17,15 +17,15 @@ void EnOnpuman_Update(Actor* thisx, PlayState* play);
 void func_80B121D8(EnOnpuman* this, PlayState* play);
 
 ActorInit En_Onpuman_InitVars = {
-    ACTOR_EN_ONPUMAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnOnpuman),
-    (ActorFunc)EnOnpuman_Init,
-    (ActorFunc)EnOnpuman_Destroy,
-    (ActorFunc)EnOnpuman_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_ONPUMAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnOnpuman),
+    /**/ EnOnpuman_Init,
+    /**/ EnOnpuman_Destroy,
+    /**/ EnOnpuman_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -84,14 +84,14 @@ Actor* func_80B11F44(PlayState* play) {
 }
 
 void func_80B11F78(EnOnpuman* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode == 4) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
         this->actionFunc = func_80B121D8;
         if (this->actor.csId != CS_ID_NONE) {
             CutsceneManager_Stop(this->actor.csId);
         }
-    } else if (play->msgCtx.ocarinaMode == 3) {
+    } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         if (this->actor.csId != CS_ID_NONE) {
             CutsceneManager_Stop(this->actor.csId);
         }
@@ -102,7 +102,7 @@ void func_80B11F78(EnOnpuman* this, PlayState* play) {
 void func_80B1202C(EnOnpuman* this, PlayState* play2) {
     PlayState* play = play2;
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && (Message_ShouldAdvance(play))) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x8D4:
                 this->unk_2A4 |= 1;
@@ -118,7 +118,7 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
 
             case 0x8D6:
                 this->actionFunc = func_80B11F78;
-                func_80152434(play, 0x3A);
+                Message_DisplayOcarinaStaff(play, OCARINA_ACTION_3A);
                 if (this->unk_2A0 != NULL) {
                     this->unk_2A0->home.rot.x = 0;
                 }
@@ -138,7 +138,7 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
 }
 
 void func_80B1217C(EnOnpuman* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && (Message_ShouldAdvance(play))) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = func_80B121D8;
         Message_CloseTextbox(play);
     }

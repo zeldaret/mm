@@ -40,6 +40,7 @@
 #include "z64dma.h"
 #include "z64eff_footmark.h"
 #include "z64effect.h"
+#include "z64environment.h"
 #include "z64frameadvance.h"
 #include "z64game_over.h"
 #include "z64game.h"
@@ -60,11 +61,13 @@
 #include "z64skybox.h"
 #include "z64sound_source.h"
 #include "z64subs.h"
+#include "z64rumble.h"
 #include "z64transition.h"
 #include "z64view.h"
 #include "regs.h"
 
-typedef struct {
+
+typedef struct PauseContext {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
     /* 0x16C */ u8* iconItem24Segment;
@@ -164,68 +167,6 @@ typedef enum {
 } KaleidoMgrOverlayType;
 
 typedef struct {
-    /* 0x00 */ u16 unk_0;
-    /* 0x02 */ u16 sceneTimeSpeed;
-    /* 0x04 */ Vec3f sunPos;
-    /* 0x10 */ u8 skybox1Index;
-    /* 0x11 */ u8 skybox2Index;
-    /* 0x12 */ u8 unk_12;
-    /* 0x13 */ u8 skyboxBlend;
-    /* 0x14 */ u8 unk_14;
-    /* 0x15 */ u8 skyboxDisabled;
-    /* 0x16 */ u8 sunMoonDisabled;
-    /* 0x17 */ u8 skyboxConfig;
-    /* 0x18 */ u8 changeSkyboxNextConfig;
-    /* 0x19 */ u8 changeSkyboxState;
-    /* 0x1A */ u16 changeSkyboxTimer;
-    /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u8 lightMode;
-    /* 0x1F */ u8 lightConfig;
-    /* 0x20 */ u8 changeLightNextConfig;
-    /* 0x21 */ u8 changeLightEnabled;
-    /* 0x22 */ u16 changeLightTimer;
-    /* 0x24 */ u16 changeDuration;
-    /* 0x26 */ u8 unk_26;
-    /* 0x28 */ LightInfo dirLight1; // sun 1
-    /* 0x36 */ LightInfo unk_36; // sun 2
-    /* 0x44 */ s8 skyboxDmaState;
-    /* 0x48 */ DmaRequest dmaRequest;
-    /* 0x68 */ OSMesgQueue loadQueue;
-    /* 0x80 */ OSMesg loadMsg;
-    /* 0x84 */ f32 glareAlpha;
-    /* 0x88 */ f32 lensFlareAlphaScale;
-    /* 0x8C */ EnvLightSettings lightSettings;
-    /* 0xA8 */ f32 unk_A8;
-    /* 0xAC */ Vec3s windDir;
-    /* 0xB4 */ f32 windSpeed;
-    /* 0xB8 */ u8 numLightSettings;
-    /* 0xBC */ LightSettings* lightSettingsList;
-    /* 0xC0 */ u8 lightBlendEnabled;
-    /* 0xC1 */ u8 lightSetting;
-    /* 0xC2 */ u8 prevLightSetting;
-    /* 0xC3 */ u8 lightSettingOverride;
-    /* 0xC4 */ LightSettings unk_C4;
-    /* 0xDA */ u16 lightBlendRateOverride;
-    /* 0xDC */ f32 lightBlend;
-    /* 0xE0 */ u8 unk_E0;
-    /* 0xE1 */ u8 unk_E1;
-    /* 0xE2 */ s8 unk_E2;
-    /* 0xE3 */ u8 unk_E3; // modified by unused func in EnWeatherTag
-    /* 0xE4 */ u8 unk_E4;
-    /* 0xE5 */ u8 fillScreen;
-    /* 0xE6 */ u8 screenFillColor[4];
-    /* 0xEA */ u8 sandstormState;
-    /* 0xEB */ u8 sandstormPrimA;
-    /* 0xEC */ u8 sandstormEnvA;
-    /* 0xED */ u8 unk_ED;
-    /* 0xEE */ u8 unk_EE[4];
-    /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo effect count
-    /* 0xFA */ u8 unk_FA[4];
-} EnvironmentContext; // size = 0x100
-
-struct PlayState;
-
-typedef struct {
     /* 0x0 */ u8   seqId;
     /* 0x1 */ u8   ambienceId;
 } SequenceContext; // size = 0x2
@@ -267,7 +208,7 @@ typedef struct PlayState {
     /* 0x18770 */ void (*unk_18770)(struct PlayState* play, Player* player);
     /* 0x18774 */ s32 (*startPlayerFishing)(struct PlayState* play);
     /* 0x18778 */ s32 (*grabPlayer)(struct PlayState* play, Player* player);
-    /* 0x1877C */ s32 (*startPlayerCutscene)(struct PlayState* play, Player* player, PlayerCsMode csMode);
+    /* 0x1877C */ s32 (*tryPlayerCsAction)(struct PlayState* play, Player* player, PlayerCsAction csAction);
     /* 0x18780 */ void (*func_18780)(Player* player, struct PlayState* play);
     /* 0x18784 */ s32 (*damagePlayer)(struct PlayState* play, s32 damage);
     /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);
@@ -329,13 +270,5 @@ typedef enum {
     /* 2 */ PICTO_PHOTO_STATE_PROCESS,
     /* 3 */ PICTO_PHOTO_STATE_READY
 } PictoPhotoState;
-
-typedef struct {
-    /* 0x00 */ u8 mode;
-    /* 0x04 */ f32 scale;
-    /* 0x08 */ f32 lodProportion; // expected to be between 0.0f and 1.0f
-    /* 0x0C */ Color_RGBA8_u32 primColor;
-    /* 0x10 */ Color_RGBA8_u32 envColor;
-} Struct_80140E80; // size = 0x14
 
 #endif

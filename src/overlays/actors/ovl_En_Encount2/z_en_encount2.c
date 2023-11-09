@@ -27,15 +27,15 @@ void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play);
 void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play);
 
 ActorInit En_Encount2_InitVars = {
-    ACTOR_EN_ENCOUNT2,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_FUSEN,
-    sizeof(EnEncount2),
-    (ActorFunc)EnEncount2_Init,
-    (ActorFunc)EnEncount2_Destroy,
-    (ActorFunc)EnEncount2_Update,
-    (ActorFunc)EnEncount2_Draw,
+    /**/ ACTOR_EN_ENCOUNT2,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_FUSEN,
+    /**/ sizeof(EnEncount2),
+    /**/ EnEncount2_Init,
+    /**/ EnEncount2_Destroy,
+    /**/ EnEncount2_Update,
+    /**/ EnEncount2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -117,11 +117,11 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
     this->scale = 0.1f;
     this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);
 
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == ENCOUNT2_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -180,7 +180,7 @@ void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
 
 void EnEncount2_Die(EnEncount2* this, PlayState* play) {
     if (this->deathTimer == 0) {
-        if (this->switchFlag >= 0) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         Actor_Kill(&this->dyna.actor);

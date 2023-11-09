@@ -27,15 +27,15 @@ void EnSsh_Start(EnSsh* this, PlayState* play);
 extern AnimationHeader D_06000304;
 
 ActorInit En_Ssh_InitVars = {
-    ACTOR_EN_SSH,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SSH,
-    sizeof(EnSsh),
-    (ActorFunc)EnSsh_Init,
-    (ActorFunc)EnSsh_Destroy,
-    (ActorFunc)EnSsh_Update,
-    (ActorFunc)EnSsh_Draw,
+    /**/ ACTOR_EN_SSH,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SSH,
+    /**/ sizeof(EnSsh),
+    /**/ EnSsh_Init,
+    /**/ EnSsh_Destroy,
+    /**/ EnSsh_Update,
+    /**/ EnSsh_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
@@ -636,7 +636,7 @@ void EnSsh_Init(Actor* thisx, PlayState* play) {
     EnSsh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_ssh_Skel_006470, NULL, this->jointTable, this->morphtable, 30);
+    SkelAnime_Init(play, &this->skelAnime, &object_ssh_Skel_006470, NULL, this->jointTable, this->morphTable, 30);
     Animation_Change(&this->skelAnime, &object_ssh_Anim_001494, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP_INTERP, 0.0f);
     this->blureIdx = EnSsh_CreateBlureEffect(play);
     EnSsh_InitColliders(this, play);
@@ -931,7 +931,7 @@ void EnSsh_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80976178[this->blinkState]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(D_80976178[this->blinkState]));
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSsh_OverrideLimbDraw,
                       EnSsh_PostLimbDraw, &this->actor);

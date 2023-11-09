@@ -40,15 +40,15 @@ void func_80898654(EnPeehat* this);
 void func_808986A4(EnPeehat* this, PlayState* play);
 
 ActorInit En_Peehat_InitVars = {
-    ACTOR_EN_PEEHAT,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_PH,
-    sizeof(EnPeehat),
-    (ActorFunc)EnPeehat_Init,
-    (ActorFunc)EnPeehat_Destroy,
-    (ActorFunc)EnPeehat_Update,
-    (ActorFunc)EnPeehat_Draw,
+    /**/ ACTOR_EN_PEEHAT,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_PH,
+    /**/ sizeof(EnPeehat),
+    /**/ EnPeehat_Init,
+    /**/ EnPeehat_Destroy,
+    /**/ EnPeehat_Update,
+    /**/ EnPeehat_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -231,7 +231,7 @@ void EnPeehat_Destroy(Actor* thisx, PlayState* play) {
 void func_80897170(EnPeehat* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 1.1f;
-    this->drawDmgEffFrozenSteamScale = 1.6500001f;
+    this->drawDmgEffFrozenSteamScale = 1650.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->colliderSphere.base.colType = COLTYPE_HIT3;
     this->unk_2B0 = 80;

@@ -25,15 +25,15 @@ void func_809CD70C(EnBji01* this, PlayState* play);
 void func_809CD77C(EnBji01* this, PlayState* play);
 
 ActorInit En_Bji_01_InitVars = {
-    ACTOR_EN_BJI_01,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BJI,
-    sizeof(EnBji01),
-    (ActorFunc)EnBji01_Init,
-    (ActorFunc)EnBji01_Destroy,
-    (ActorFunc)EnBji01_Update,
-    (ActorFunc)EnBji01_Draw,
+    /**/ ACTOR_EN_BJI_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BJI,
+    /**/ sizeof(EnBji01),
+    /**/ EnBji01_Init,
+    /**/ EnBji01_Destroy,
+    /**/ EnBji01_Update,
+    /**/ EnBji01_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -101,7 +101,7 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
         }
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_809CD028(this, play);
     } else {

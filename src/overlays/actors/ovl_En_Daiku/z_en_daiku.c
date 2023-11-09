@@ -21,15 +21,15 @@ void func_80943BDC(EnDaiku* this, PlayState* play);
 void func_809438F8(EnDaiku* this, PlayState* play);
 
 ActorInit En_Daiku_InitVars = {
-    ACTOR_EN_DAIKU,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DAIKU,
-    sizeof(EnDaiku),
-    (ActorFunc)EnDaiku_Init,
-    (ActorFunc)EnDaiku_Destroy,
-    (ActorFunc)EnDaiku_Update,
-    (ActorFunc)EnDaiku_Draw,
+    /**/ ACTOR_EN_DAIKU,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DAIKU,
+    /**/ sizeof(EnDaiku),
+    /**/ EnDaiku_Init,
+    /**/ EnDaiku_Destroy,
+    /**/ EnDaiku_Update,
+    /**/ EnDaiku_Draw,
 };
 
 static u16 sTextIds[] = {

@@ -45,15 +45,15 @@ void EnWallmas_WaitForSwitchFlag(EnWallmas* this, PlayState* play);
 void EnWallmas_Stun(EnWallmas* this, PlayState* play);
 
 ActorInit En_Wallmas_InitVars = {
-    ACTOR_EN_WALLMAS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_WALLMASTER,
-    sizeof(EnWallmas),
-    (ActorFunc)EnWallmas_Init,
-    (ActorFunc)EnWallmas_Destroy,
-    (ActorFunc)EnWallmas_Update,
-    (ActorFunc)EnWallmas_Draw,
+    /**/ ACTOR_EN_WALLMAS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_WALLMASTER,
+    /**/ sizeof(EnWallmas),
+    /**/ EnWallmas_Init,
+    /**/ EnWallmas_Destroy,
+    /**/ EnWallmas_Update,
+    /**/ EnWallmas_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -198,7 +198,7 @@ void EnWallmas_Destroy(Actor* thisx, PlayState* play) {
 void EnWallmas_Freeze(EnWallmas* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = 3;
     this->timer = 80;
@@ -457,7 +457,7 @@ void EnWallmas_SetupTakePlayer(EnWallmas* this, PlayState* play) {
     this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->yTarget = this->actor.playerHeightRel;
-    func_800B724C(play, &this->actor, PLAYER_CSMODE_18);
+    Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_18);
 }
 
 void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {

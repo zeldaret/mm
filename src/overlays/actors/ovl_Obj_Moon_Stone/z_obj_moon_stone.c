@@ -26,15 +26,15 @@ void func_80C0685C(ObjMoonStone* this);
 void func_80C06870(ObjMoonStone* this, PlayState* play);
 
 ActorInit Obj_Moon_Stone_InitVars = {
-    ACTOR_OBJ_MOON_STONE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GI_RESERVE00,
-    sizeof(ObjMoonStone),
-    (ActorFunc)ObjMoonStone_Init,
-    (ActorFunc)ObjMoonStone_Destroy,
-    (ActorFunc)ObjMoonStone_Update,
-    (ActorFunc)ObjMoonStone_Draw,
+    /**/ ACTOR_OBJ_MOON_STONE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_GI_RESERVE00,
+    /**/ sizeof(ObjMoonStone),
+    /**/ ObjMoonStone_Init,
+    /**/ ObjMoonStone_Destroy,
+    /**/ ObjMoonStone_Update,
+    /**/ ObjMoonStone_Draw,
 };
 
 void ObjMoonStone_Init(Actor* thisx, PlayState* play) {

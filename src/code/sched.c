@@ -16,6 +16,7 @@ u32 gAudioSPDataSize;
 #include "functions.h"
 #include "variables.h"
 #include "stackcheck.h"
+#include "z64speed_meter.h"
 #include "z64thread.h"
 
 #define RSP_DONE_MSG 667
@@ -73,14 +74,14 @@ void Sched_HandleAudioCancel(SchedContext* sched) {
     osSyncPrintf("AUDIO SP キャンセルします\n");
 
     if ((sched->curRSPTask != NULL) && (sched->curRSPTask->list.t.type == M_AUDTASK)) {
-        if (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+        if (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
             // Attempts to stop AUDIO SP
             osSyncPrintf("AUDIO SP止めようとします\n");
 
-            HW_REG(SP_STATUS_REG, u32) = SP_SET_HALT;
+            IO_WRITE(SP_STATUS_REG, SP_SET_HALT);
 
             i = 0;
-            while (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+            while (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
                 if (i++ > 100) {
                     // AUDIO SP did not stop (10ms timeout)
                     osSyncPrintf("AUDIO SP止まりませんでした(10msタイムアウト)\n");
@@ -94,8 +95,9 @@ void Sched_HandleAudioCancel(SchedContext* sched) {
             // AUDIO SP seems to be stopped
             osSyncPrintf("AUDIO SP止まっているようです\n");
         }
+
     send_mesg:
-        osSendMesg(&sched->interruptQ, RSP_DONE_MSG, OS_MESG_NOBLOCK);
+        osSendMesg(&sched->interruptQ, (OSMesg)RSP_DONE_MSG, OS_MESG_NOBLOCK);
         return;
     }
 
@@ -135,14 +137,14 @@ void Sched_HandleGfxCancel(SchedContext* sched) {
     osSyncPrintf("GRAPH SP キャンセルします\n");
 
     if ((sched->curRSPTask != NULL) && (sched->curRSPTask->list.t.type == M_GFXTASK)) {
-        if (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+        if (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
             // GRAPH SP tries to stop
             osSyncPrintf("GRAPH SP止めようとします\n");
 
-            HW_REG(SP_STATUS_REG, u32) = SP_SET_HALT;
+            IO_WRITE(SP_STATUS_REG, SP_SET_HALT);
 
             i = 0;
-            while (!(HW_REG(SP_STATUS_REG, u32) & SP_STATUS_HALT)) {
+            while (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
                 if (i++ > 100) {
                     // GRAPH SP did not stop (10ms timeout)
                     osSyncPrintf("GRAPH SP止まりませんでした(10msタイムアウト)\n");
@@ -156,8 +158,9 @@ void Sched_HandleGfxCancel(SchedContext* sched) {
             // GRAPH SP seems to be stopped
             osSyncPrintf("GRAPH SP止まっているようです\n");
         }
+
     send_mesg:
-        osSendMesg(&sched->interruptQ, RSP_DONE_MSG, OS_MESG_NOBLOCK);
+        osSendMesg(&sched->interruptQ, (OSMesg)RSP_DONE_MSG, OS_MESG_NOBLOCK);
         goto halt_rdp;
     }
 
@@ -185,8 +188,8 @@ halt_rdp:
         if (dpTask->type == M_GFXTASK) {
             // Try to stop DP
             osSyncPrintf("DP止めようとします\n");
-            bzero(dpTask->outputBuff, (u32)dpTask->outputBuffSize - (u32)dpTask->outputBuff);
-            osSendMesg(&sched->interruptQ, RDP_DONE_MSG, OS_MESG_NOBLOCK);
+            bzero(dpTask->outputBuff, (uintptr_t)dpTask->outputBuffSize - (uintptr_t)dpTask->outputBuff);
+            osSendMesg(&sched->interruptQ, (OSMesg)RDP_DONE_MSG, OS_MESG_NOBLOCK);
         }
     }
 }
@@ -426,16 +429,16 @@ void Sched_HandleRSPDone(SchedContext* sched) {
     time = osGetTime();
     switch (sched->curRSPTask->list.t.type) {
         case M_AUDTASK:
-            gRSPAudioTotalTime += time - sRSPAudioStartTime;
+            gRSPAudioTimeAcc += time - sRSPAudioStartTime;
             break;
 
         case M_GFXTASK:
-            sRSPGFXTotalTime += time - sRSPGFXStartTime;
+            gRSPGfxTimeAcc += time - sRSPGFXStartTime;
             break;
 
         default:
             if (1) {}
-            sRSPOtherTotalTime += time - sRSPOtherStartTime;
+            gRSPOtherTimeAcc += time - sRSPOtherStartTime;
             break;
     }
 
@@ -502,7 +505,7 @@ void Sched_HandleRDPDone(SchedContext* sched) {
  * been sent down the command queue.
  */
 void Sched_SendEntryMsg(SchedContext* sched) {
-    osSendMesg(&sched->interruptQ, ENTRY_MSG, OS_MESG_BLOCK);
+    osSendMesg(&sched->interruptQ, (OSMesg)ENTRY_MSG, OS_MESG_BLOCK);
 }
 
 /**
@@ -510,7 +513,7 @@ void Sched_SendEntryMsg(SchedContext* sched) {
  * to stop the last dispatched audio task.
  */
 void Sched_SendAudioCancelMsg(SchedContext* sched) {
-    osSendMesg(&sched->interruptQ, RDP_AUDIO_CANCEL_MSG, OS_MESG_BLOCK);
+    osSendMesg(&sched->interruptQ, (OSMesg)RDP_AUDIO_CANCEL_MSG, OS_MESG_BLOCK);
 }
 
 /**
@@ -518,7 +521,7 @@ void Sched_SendAudioCancelMsg(SchedContext* sched) {
  * to stop the last dispatched gfx task.
  */
 void Sched_SendGfxCancelMsg(SchedContext* sched) {
-    osSendMesg(&sched->interruptQ, RSP_GFX_CANCEL_MSG, OS_MESG_BLOCK);
+    osSendMesg(&sched->interruptQ, (OSMesg)RSP_GFX_CANCEL_MSG, OS_MESG_BLOCK);
 }
 
 /**
@@ -553,14 +556,14 @@ void Sched_FaultClient(void* param1, void* param2) {
  * threads or the OS.
  */
 void Sched_ThreadEntry(void* arg) {
-    OSMesg msg = NULL;
+    s32 msg = 0;
     SchedContext* sched = (SchedContext*)arg;
 
     while (true) {
-        osRecvMesg(&sched->interruptQ, &msg, OS_MESG_BLOCK);
+        osRecvMesg(&sched->interruptQ, (OSMesg*)&msg, OS_MESG_BLOCK);
 
         // Check if it's a message from another thread or the OS
-        switch ((s32)msg) {
+        switch (msg) {
             case RDP_AUDIO_CANCEL_MSG:
                 Sched_HandleAudioCancel(sched);
                 continue;
@@ -581,6 +584,7 @@ void Sched_ThreadEntry(void* arg) {
                 Sched_HandleRDPDone(sched);
                 continue;
         }
+
         // Check if it's a message from the IrqMgr
         switch (((OSScMsg*)msg)->type) {
             case OS_SC_RETRACE_MSG:
@@ -610,8 +614,8 @@ void Sched_Init(SchedContext* sched, void* stack, OSPri pri, u8 viModeType, UNK_
 
     osCreateMesgQueue(&sched->interruptQ, sched->intBuf, ARRAY_COUNT(sched->intBuf));
     osCreateMesgQueue(&sched->cmdQ, sched->cmdMsgBuf, ARRAY_COUNT(sched->cmdMsgBuf));
-    osSetEventMesg(OS_EVENT_SP, &sched->interruptQ, RSP_DONE_MSG);
-    osSetEventMesg(OS_EVENT_DP, &sched->interruptQ, RDP_DONE_MSG);
+    osSetEventMesg(OS_EVENT_SP, &sched->interruptQ, (OSMesg)RSP_DONE_MSG);
+    osSetEventMesg(OS_EVENT_DP, &sched->interruptQ, (OSMesg)RDP_DONE_MSG);
     IrqMgr_AddClient(irqMgr, &sched->irqClient, &sched->interruptQ);
     Fault_AddClient(&sSchedFaultClient, Sched_FaultClient, sched, NULL);
     osCreateThread(&sched->thread, Z_THREAD_ID_SCHED, Sched_ThreadEntry, sched, stack, pri);
