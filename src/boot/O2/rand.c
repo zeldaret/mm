@@ -1,4 +1,4 @@
-#include "global.h"
+#include "rand.h"
 
 //! The latest generated random number, used to generate the next number in the sequence.
 static u32 sRandInt = 1;
@@ -6,12 +6,6 @@ static u32 sRandInt = 1;
 //! Space to store a value to be re-interpreted as a float.
 //! This can't be static because it is used in z_kankyo.
 u32 gRandFloat;
-
-//! These values are recommended by the algorithms book *Numerical Recipes in C. The Art of Scientific Computing*, 2nd
-//! Edition, 1992, ISBN 0-521-43108-5. (p. 284):
-//! > This is about as good as any 32-bit linear congruential generator, entirely adequate for many uses.
-#define RAND_MULTIPLIER 1664525
-#define RAND_INCREMENT 1013904223
 
 /**
  * Generates the next pseudo-random integer.

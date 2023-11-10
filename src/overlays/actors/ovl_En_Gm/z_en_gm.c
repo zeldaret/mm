@@ -1480,9 +1480,9 @@ s32 func_80950804(EnGm* this, PlayState* play) {
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if ((this->unk_3BA / (f32)this->unk_3B8) <= 0.9f) {
-                door->unk_1A7 = this->unk_261;
+                door->openTimer = this->unk_261;
             } else {
-                door->unk_1A7 = 0;
+                door->openTimer = 0;
             }
         }
 
