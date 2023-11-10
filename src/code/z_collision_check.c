@@ -1250,13 +1250,9 @@ ColChkResetFunc sOCResetFuncs[] = {
     Collider_ResetQuadOC,   Collider_ResetSphereOC,
 };
 
-struct TriNorm2 {
-    TriNorm norm1;
-    u8 pad[4];
-    TriNorm norm2;
-};
-
-struct TriNorm2 D_801EE6C8;
+TriNorm D_801EE6C8;
+u8 D_801EE6FC_unused[4];
+TriNorm D_801EE700;
 
 /**
  * Sets collider as an OC (object collider) for the current frame, allowing it to detect other OCs.
@@ -2668,11 +2664,11 @@ void CollisionCheck_AC_SphereVsQuad(PlayState* play, CollisionCheckContext* colC
         return;
     }
 
-    Math3D_TriSetCoords(&D_801EE6C8.norm1, &ac->dim.quad[2], &ac->dim.quad[3], &ac->dim.quad[1]);
-    Math3D_TriSetCoords(&D_801EE6C8.norm2, &ac->dim.quad[1], &ac->dim.quad[0], &ac->dim.quad[2]);
+    Math3D_TriSetCoords(&D_801EE6C8, &ac->dim.quad[2], &ac->dim.quad[3], &ac->dim.quad[1]);
+    Math3D_TriSetCoords(&D_801EE700, &ac->dim.quad[1], &ac->dim.quad[0], &ac->dim.quad[2]);
 
-    if (Math3D_ColSphereTri(&at->dim.worldSphere, &D_801EE6C8.norm1, &hitPos) != 0 ||
-        Math3D_ColSphereTri(&at->dim.worldSphere, &D_801EE6C8.norm2, &hitPos) != 0) {
+    if (Math3D_ColSphereTri(&at->dim.worldSphere, &D_801EE6C8, &hitPos) != 0 ||
+        Math3D_ColSphereTri(&at->dim.worldSphere, &D_801EE700, &hitPos) != 0) {
         Vec3f atPos;
         Vec3f acPos;
 
