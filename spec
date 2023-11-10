@@ -17,7 +17,7 @@ beginseg
     include "build/data/boot/rspboot.data.o"
     include "build/src/boot/idle.o"
     include "build/src/boot/viconfig.o"
-    include "build/data/boot/viconfig.data.o"
+    include "build/src/boot/carthandle.o"
     include "build/src/boot/z_std_dma.o"
     include "build/src/boot/yaz0.o"
     include "build/src/boot/irqmgr.o"
@@ -42,7 +42,7 @@ beginseg
     include "build/src/boot/O2/system_malloc.o"
     include "build/src/boot/O2/rand.o"
     include "build/src/boot/O2/__osMalloc.o"
-    include "build/src/libultra/libc/sprintf.o"
+    include "build/src/boot/O2/sprintf.o"
     include "build/src/boot/O2/printutils.o"
     include "build/src/boot/O2/sleep.o"
     include "build/asm/boot/setcause.text.o"
@@ -653,11 +653,7 @@ beginseg
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_copy_erase.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_nameset_NES.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_NES.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
-    #else 
-        include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
-    #endif
+    include "build/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
 endseg
 
 beginseg
@@ -1339,8 +1335,7 @@ beginseg
     name "ovl_En_Honotrap"
     compress
     include "build/src/overlays/actors/ovl_En_Honotrap/z_en_honotrap.o"
-    include "build/data/ovl_En_Honotrap/ovl_En_Honotrap.data.o"
-    include "build/data/ovl_En_Honotrap/ovl_En_Honotrap.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Honotrap/ovl_En_Honotrap_reloc.o"
 endseg
 
 beginseg
@@ -2333,11 +2328,7 @@ beginseg
     name "ovl_Boss_06"
     compress
     include "build/src/overlays/actors/ovl_Boss_06/z_boss_06.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Boss_06/ovl_Boss_06_reloc.o"
-#else
-    include "build/data/ovl_Boss_06/ovl_Boss_06.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -3761,8 +3752,7 @@ beginseg
     name "ovl_En_An"
     compress
     include "build/src/overlays/actors/ovl_En_An/z_en_an.o"
-    include "build/data/ovl_En_An/ovl_En_An.data.o"
-    include "build/data/ovl_En_An/ovl_En_An.reloc.o"
+    include "build/src/overlays/actors/ovl_En_An/ovl_En_An_reloc.o"
 endseg
 
 beginseg

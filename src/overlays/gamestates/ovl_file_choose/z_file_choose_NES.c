@@ -659,22 +659,19 @@ s16 D_80814650[] = { 940, 944 };
  * fileSelect->windowContentVtx[956]  -> Warning labels
  */
 
-#ifdef NON_MATCHING
-// regalloc at the beginning is fixed by removing FAKE: labelled code
 void FileSelect_SetWindowContentVtx(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
     u16 vtxId;
     s16 j;
-    s16 index;
+    s16 i;
     s16 spAC;
-    s16 i; // a3
     u16 spA4[3];
     u16* ptr;
-    s32 posY;    // sp9C
-    s32 relPosY; // sp98
+    s32 posY;
+    s32 relPosY;
     s32 tempPosY;
-    s32 posX; // s1
-    s32 temp_t5;
+    s32 posX;
+    s32 index;
 
     this->windowContentVtx = GRAPH_ALLOC(this->state.gfxCtx, 960 * sizeof(Vtx));
 
@@ -695,9 +692,6 @@ void FileSelect_SetWindowContentVtx(GameState* thisx) {
         // z-coordinate
         this->windowContentVtx[vtxId + 0].v.ob[2] = this->windowContentVtx[vtxId + 1].v.ob[2] =
             this->windowContentVtx[vtxId + 2].v.ob[2] = this->windowContentVtx[vtxId + 3].v.ob[2] = 0;
-
-        //! FAKE:
-        if (index && index && index) {}
 
         // flag
         this->windowContentVtx[vtxId + 0].v.flag = this->windowContentVtx[vtxId + 1].v.flag =
@@ -1193,7 +1187,7 @@ void FileSelect_SetWindowContentVtx(GameState* thisx) {
         /* Time Digits */
 
         posX += 6;
-        temp_t5 = vtxId;
+        index = vtxId;
 
         for (i = 0; i < 5; i++, vtxId += 4, posX += 8) {
 
@@ -1220,17 +1214,17 @@ void FileSelect_SetWindowContentVtx(GameState* thisx) {
         }
 
         // Adjust the colon to the right
-        this->windowContentVtx[temp_t5 + 8].v.ob[0] = this->windowContentVtx[temp_t5 + 10].v.ob[0] =
-            this->windowContentVtx[temp_t5 + 8].v.ob[0] + 3;
+        this->windowContentVtx[index + 8].v.ob[0] = this->windowContentVtx[index + 10].v.ob[0] =
+            this->windowContentVtx[index + 8].v.ob[0] + 3;
 
-        this->windowContentVtx[temp_t5 + 9].v.ob[0] = this->windowContentVtx[temp_t5 + 11].v.ob[0] =
-            this->windowContentVtx[temp_t5 + 8].v.ob[0] + 0xC;
+        this->windowContentVtx[index + 9].v.ob[0] = this->windowContentVtx[index + 11].v.ob[0] =
+            this->windowContentVtx[index + 8].v.ob[0] + 0xC;
 
-        this->windowContentVtx[temp_t5 + 0x1C].v.ob[0] = this->windowContentVtx[temp_t5 + 0x1E].v.ob[0] =
-            this->windowContentVtx[temp_t5 + 8].v.ob[0] + 1;
+        this->windowContentVtx[index + 0x1C].v.ob[0] = this->windowContentVtx[index + 0x1E].v.ob[0] =
+            this->windowContentVtx[index + 8].v.ob[0] + 1;
 
-        this->windowContentVtx[temp_t5 + 0x1D].v.ob[0] = this->windowContentVtx[temp_t5 + 0x1F].v.ob[0] =
-            this->windowContentVtx[temp_t5 + 0x1C].v.ob[0] + 0xC;
+        this->windowContentVtx[index + 0x1D].v.ob[0] = this->windowContentVtx[index + 0x1F].v.ob[0] =
+            this->windowContentVtx[index + 0x1C].v.ob[0] + 0xC;
 
         vtxId += 20;
     }
@@ -1312,10 +1306,6 @@ void FileSelect_SetWindowContentVtx(GameState* thisx) {
 
     this->windowContentVtx[vtxId + 5].v.tc[0] = this->windowContentVtx[vtxId + 7].v.tc[0] = 0x1000;
 }
-#else
-void FileSelect_SetWindowContentVtx(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileSelect_SetWindowContentVtx.s")
-#endif
 
 u16 D_80814654[] = {
     0x88,

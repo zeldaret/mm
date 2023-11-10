@@ -71,9 +71,7 @@ void OceffWipe_Draw(Actor* thisx, PlayState* play) {
     s32 i;
     Vec3f eye = GET_ACTIVE_CAM(play)->eye;
     Vtx* vtxPtr;
-    Vec3f quakeOffset;
-
-    Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
+    Vec3f quakeOffset = Camera_GetQuakeOffset(GET_ACTIVE_CAM(play));
 
     OPEN_DISPS(play->state.gfxCtx);
 

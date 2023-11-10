@@ -525,14 +525,10 @@ s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-// The 2 constant from the `gWeatherMode` switch branch is reused when checking `CURRENT_DAY`
-// A near identical issue is present in the non-matching `func_809F24C8` from `z_boss_06.c`
 void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     PlayState* play = play2;
     f32 temp_ft4;
     u8 var_a0;
-    u8 temp;
     s16 i;
 
     CREG(1) = 0;
@@ -672,8 +668,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
 
     var_a0 = 0;
     if (((void)0, gSaveContext.save.day) != 0) {
-        //! FAKE: temp
-        var_a0 = ((void)0, temp = gSaveContext.save.day) - 1;
+        var_a0 = ((void)0, gSaveContext.save.day) - 1;
     }
     envCtx->skyboxConfig = var_a0 + (D_801F4E31 * 3);
     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
@@ -723,19 +718,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     }
 
     if (gSaveContext.retainWeatherMode || (gSaveContext.respawnFlag != 0)) {
-        // if (gWeatherMode == WEATHER_MODE_2) {
-        //     if (1) {}
-        //     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
-        //         play->skyboxId = SKYBOX_3;
-        //         envCtx->lightConfig = 5;
-        //         envCtx->changeLightNextConfig = 5;
-        //         D_801F4E74 = 1.0f;
-        //     } else {
-        //         gWeatherMode = WEATHER_MODE_CLEAR;
-        //     }
-        // }
-
-        switch (gWeatherMode) {
+        switch ((u32)gWeatherMode) {
             case WEATHER_MODE_2:
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                     play->skyboxId = SKYBOX_3;
@@ -755,7 +738,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
         play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
 
         if (gWeatherMode == WEATHER_MODE_1) {
-            if ((CURRENT_DAY == 2) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
+            if (((u32)CURRENT_DAY == 2) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(17, 30))) {
                 if (Environment_GetStormState(play) != STORM_STATE_OFF) {
                     play->envCtx.precipitation[PRECIP_RAIN_MAX] = 60;
@@ -821,9 +804,6 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
 
     Environment_UpdatePostmanEvents(play);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Init.s")
-#endif
 
 u8 Environment_SmoothStepToU8(u8* pvalue, u8 target, u8 scale, u8 step, u8 minStep) {
     s16 stepSize = 0;
@@ -1273,9 +1253,6 @@ s32 Environment_IsSceneUpsideDown(PlayState* play) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-// Something is happening with the indexing of:
-// `lightSettingsList[(s32)envCtx->lightSetting]` and `lightSettingsList[(s32)envCtx->prevLightSetting]`
 void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx) {
     EnvLightSettings* lightSettingsList;
     f32 var_fs3;
@@ -1438,30 +1415,29 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                 }
             }
         } else {
+            u8 lightSetting;
+            u8 var_v0_3;
+
             if ((envCtx->lightSetting >= envCtx->numLightSettings) && !D_801BDBA8) {
                 D_801BDBA8 = true;
             }
 
             if (!envCtx->lightBlendEnabled) {
                 for (i = 0; i < 3; i++) {
-                    envCtx->lightSettings.ambientColor[i] =
-                        lightSettingsList[(s32)envCtx->lightSetting].ambientColor[i];
-                    envCtx->lightSettings.light1Dir[i] = lightSettingsList[(s32)envCtx->lightSetting].light1Dir[i];
-                    envCtx->lightSettings.light1Color[i] = lightSettingsList[(s32)envCtx->lightSetting].light1Color[i];
-                    envCtx->lightSettings.light2Dir[i] = lightSettingsList[(s32)envCtx->lightSetting].light2Dir[i];
-                    envCtx->lightSettings.light2Color[i] = lightSettingsList[(s32)envCtx->lightSetting].light2Color[i];
-                    envCtx->lightSettings.fogColor[i] = lightSettingsList[(s32)envCtx->lightSetting].fogColor[i];
+                    envCtx->lightSettings.ambientColor[i] = lightSettingsList[envCtx->lightSetting].ambientColor[i];
+                    envCtx->lightSettings.light1Dir[i] = lightSettingsList[envCtx->lightSetting].light1Dir[i];
+                    envCtx->lightSettings.light1Color[i] = lightSettingsList[envCtx->lightSetting].light1Color[i];
+                    envCtx->lightSettings.light2Dir[i] = lightSettingsList[envCtx->lightSetting].light2Dir[i];
+                    envCtx->lightSettings.light2Color[i] = lightSettingsList[envCtx->lightSetting].light2Color[i];
+                    envCtx->lightSettings.fogColor[i] = lightSettingsList[envCtx->lightSetting].fogColor[i];
                 }
+
+                lightSetting = envCtx->lightSetting;
                 envCtx->lightSettings.fogNear =
-                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)envCtx->lightSetting].blendRateAndFogNear);
-                envCtx->lightSettings.zFar = lightSettingsList[(s32)envCtx->lightSetting].zFar;
+                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)lightSetting].blendRateAndFogNear);
+                envCtx->lightSettings.zFar = lightSettingsList[(s32)lightSetting].zFar;
                 envCtx->lightBlend = 1.0f;
             } else {
-                u8 var_v0_3;
-
-                //! FAKE:
-                if (1) {}
-
                 var_v0_3 =
                     ENV_LIGHT_SETTINGS_BLEND_RATE_U8(lightSettingsList[(s32)envCtx->lightSetting].blendRateAndFogNear);
 
@@ -1483,33 +1459,33 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
 
                 for (i = 0; i < 3; i++) {
                     envCtx->lightSettings.ambientColor[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].ambientColor[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].ambientColor[i],
+                                    lightSettingsList[envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
                     envCtx->lightSettings.light1Dir[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light1Dir[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light1Dir[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light1Dir[i],
+                                    lightSettingsList[envCtx->lightSetting].light1Dir[i], envCtx->lightBlend);
                     envCtx->lightSettings.light1Color[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light1Color[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light1Color[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light1Color[i],
+                                    lightSettingsList[envCtx->lightSetting].light1Color[i], envCtx->lightBlend);
                     envCtx->lightSettings.light2Dir[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light2Dir[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light2Dir[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light2Dir[i],
+                                    lightSettingsList[envCtx->lightSetting].light2Dir[i], envCtx->lightBlend);
                     envCtx->lightSettings.light2Color[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].light2Color[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].light2Color[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].light2Color[i],
+                                    lightSettingsList[envCtx->lightSetting].light2Color[i], envCtx->lightBlend);
                     envCtx->lightSettings.fogColor[i] =
-                        LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].fogColor[i],
-                                    lightSettingsList[(s32)envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
+                        LERPIMP_ALT(lightSettingsList[envCtx->prevLightSetting].fogColor[i],
+                                    lightSettingsList[envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
                 }
 
+                lightSetting = envCtx->lightSetting;
                 envCtx->lightSettings.fogNear = LERPIMP_ALT(
                     ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)envCtx->prevLightSetting].blendRateAndFogNear),
-                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)envCtx->lightSetting].blendRateAndFogNear),
+                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[(s32)lightSetting].blendRateAndFogNear),
                     envCtx->lightBlend);
 
-                envCtx->lightSettings.zFar =
-                    LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].zFar,
-                                lightSettingsList[(s32)envCtx->lightSetting].zFar, envCtx->lightBlend);
+                envCtx->lightSettings.zFar = LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].zFar,
+                                                         lightSettingsList[(s32)lightSetting].zFar, envCtx->lightBlend);
             }
         }
     }
@@ -1588,10 +1564,6 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
         envCtx->dirLight2.params.dir.x = 1;
     }
 }
-#else
-void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateLights.s")
-#endif
 
 void Environment_UpdateSun(PlayState* play) {
     f32 temp_f0;
@@ -3136,10 +3108,6 @@ void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height)
     *gfxp = gfx;
 }
 
-#ifdef NON_MATCHING
-// `D_801DD900`is loading unaligned but storing aligned
-// Also small float regalloc at the gRandFloat section
-// https://decomp.me/scratch/3zFop
 void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     static const Vec3s D_801DD880[] = {
         { 0x0384, 0x2328, 0xD508 }, { 0x09C4, 0x2328, 0xDA1C }, { 0x0E74, 0x22D8, 0xDA1C }, { 0x1450, 0x2468, 0xD8F0 },
@@ -3147,24 +3115,26 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
         { 0xD058, 0x4C2C, 0x3A98 }, { 0xD8F0, 0x36B0, 0x47E0 }, { 0xD954, 0x3264, 0x3E1C }, { 0xD8F0, 0x3070, 0x37DC },
         { 0xD8F0, 0x1F40, 0x5208 }, { 0xD760, 0x1838, 0x27D8 }, { 0x0000, 0x4E20, 0x4A38 }, { 0x076C, 0x2328, 0xDCD8 },
     };
-    // Possibly Color_RGBA8_u32
-    static const u32 D_801DD8E0[] = {
-        0x41A4FFFF, 0x83A4E6FF, 0x62CDFFFF, 0x5252FFFF, 0x7BA4A4FF, 0x62CDFFFF, 0x62A4E6FF, 0xFF5A00FF,
+    static const Color_RGBA8_u32 D_801DD8E0[] = {
+        { 65, 164, 255, 255 },  { 131, 164, 230, 255 }, { 98, 205, 255, 255 }, { 82, 82, 255, 255 },
+        { 123, 164, 164, 255 }, { 98, 205, 255, 255 },  { 98, 164, 230, 255 }, { 255, 90, 0, 255 },
     };
-    static const u32 D_801DD900[] = {
-        0x405070FF, 0x606080FF, 0x807090FF, 0xA080A0FF, 0xC090A8FF, 0xE0A0B0FF, 0xE0A0B0FF, 0x686888FF,
-        0x887898FF, 0xA888A8FF, 0xC898B8FF, 0xE8A8B8FF, 0xE0B0B8FF, 0xF0C0C0FF, 0xE8B8C0FF, 0xF8C8C0FF,
+    UNALIGNED static const Color_RGBA8_u32 D_801DD900[] = {
+        { 64, 80, 112, 255 },   { 96, 96, 128, 255 },   { 128, 112, 144, 255 }, { 160, 128, 160, 255 },
+        { 192, 144, 168, 255 }, { 224, 160, 176, 255 }, { 224, 160, 176, 255 }, { 104, 104, 136, 255 },
+        { 136, 120, 152, 255 }, { 168, 136, 168, 255 }, { 200, 152, 184, 255 }, { 232, 168, 184, 255 },
+        { 224, 176, 184, 255 }, { 240, 192, 192, 255 }, { 232, 184, 192, 255 }, { 248, 200, 192, 255 },
     };
     Vec3f pos;
-    s32 pad1;
-    f32 imgY; // spF4
-    f32 imgX; // spF0
+    f32 temp;
+    f32 imgY;
+    f32 imgX;
     Gfx* gfx;
-    s32 phi_v1;  // spE8
-    s32 negateY; // spE4
+    s32 phi_v1;
+    s32 negateY;
     f32 invScale;
     f32 temp_f20;
-    Gfx* gfxTemp; // spD8
+    Gfx* gfxTemp;
     f32 scale;
     s32 i;
     u32 randInt;
@@ -3218,17 +3188,18 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
             f32 temp_f2;
 
             // temp_f4 = Rand_ZeroOne_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
             gRandFloat = (randInt >> 9) | 0x3F800000;
-            temp_f4 = *((f32*)&gRandFloat) - 1.0f;
+            temp = *((f32*)&gRandFloat);
+            temp_f4 = temp - 1.0f;
 
             // temp_f20 = Rand_ZeroOne_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
             gRandFloat = (randInt >> 9) | 0x3F800000;
             temp_f20 = ((*((f32*)&gRandFloat) - 1.0f) + temp_f4) * 0.5f;
 
             // randInt = Rand_Next_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
 
             // Set random position
             pos.y = play->view.eye.y + (SQ(temp_f20) * SQ(128.0f)) - 1000.0f;
@@ -3236,7 +3207,7 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
             pos.z = play->view.eye.z + (Math_CosS(randInt) * (1.2f - temp_f20) * SQ(128.0f));
 
             // temp_f2 = Rand_ZeroOne_Variable(&randInt);
-            randInt = (randInt * 1664525) + 1013904223;
+            randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
             gRandFloat = ((randInt >> 9) | 0x3F800000);
             temp_f2 = *((f32*)&gRandFloat) - 1.0f;
 
@@ -3249,9 +3220,9 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
         }
 
         if ((i < 15) || ((i == 15) && ((((void)0, gSaveContext.save.day) % 7) == 0))) {
-            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD8E0[i % ARRAY_COUNTU(D_801DD8E0)]);
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD8E0[i % ARRAY_COUNTU(D_801DD8E0)].rgba);
         } else if (((i & 0x3F) == 0) || (i == 16)) {
-            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD900[phi_v1 % ARRAY_COUNTU(D_801DD900)]);
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD900[phi_v1 % ARRAY_COUNTU(D_801DD900)].rgba);
             phi_v1++;
         }
 
@@ -3293,10 +3264,6 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     gDPPipeSync(gfx++);
     *gfxP = gfx;
 }
-#else
-void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSkyboxStarsImpl.s")
-#endif
 
 void Environment_Draw(PlayState* play) {
     Environment_SetupSkyboxStars(play);
