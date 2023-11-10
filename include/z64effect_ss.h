@@ -6,6 +6,8 @@
 #include "color.h"
 #include "z64math.h"
 
+#include "z64eff_ss_dead.h"
+
 struct Actor;
 struct PlayState;
 struct EffectSs;

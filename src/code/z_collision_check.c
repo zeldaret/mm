@@ -9,7 +9,7 @@ typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
 typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Collider*);
 typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
-
+/*
 extern Vec3f D_801EDE00;
 extern Vec3f D_801EDE10;
 extern Vec3f D_801EDE20;
@@ -49,7 +49,7 @@ extern TriNorm D_801EF590;
 extern TriNorm D_801EF5C8;
 extern TriNorm D_801EF600;
 extern TriNorm D_801EF638;
-
+*/
 Vec3f D_801EDE00;
 Vec3f D_801EDE10;
 Vec3f D_801EDE20;

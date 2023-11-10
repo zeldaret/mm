@@ -110,13 +110,6 @@ s32 func_800A8150(s32 index);
 s32 func_800A817C(s32 index);
 s32 Item_CanDropBigFairy(PlayState* play, s32 index, s32 collectibleFlag);
 
-void func_800AE2A0(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
-void func_800AE434(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
-void func_800AE5A0(PlayState* play);
-void func_800AE5E4(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
-void func_800AE778(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
-void func_800AE8EC(PlayState* play);
-
 void FlagSet_Update(GameState* gameState);
 void FlagSet_Draw(GameState* gameState);
 void Overlay_LoadGameState(GameStateOverlay* overlayEntry);

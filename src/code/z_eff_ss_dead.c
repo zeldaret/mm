@@ -1,3 +1,4 @@
+#include "z64eff_ss_dead.h"
 #include "global.h"
 
 void func_800AE2A0(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3) {
