@@ -31,12 +31,12 @@ typedef u32 (*EffectSsInitFunc)(struct PlayState* play, u32 index, struct Effect
 typedef void(*EffectSsUpdateFunc)(struct PlayState* play, u32 index, struct EffectSs* particle);
 typedef void(*EffectSsDrawFunc)(struct PlayState* play, u32 index, struct EffectSs* particle);
 
-typedef struct {
+typedef struct EffectSsInit {
     /* 0x0 */ u32 type;
     /* 0x4 */ EffectSsInitFunc init;
 } EffectSsInit; // size = 0x8
 
-typedef struct {
+typedef struct EffectSsOverlay {
     /* 0x00 */ uintptr_t vromStart;
     /* 0x04 */ uintptr_t vromEnd;
     /* 0x08 */ void* vramStart;
@@ -62,9 +62,8 @@ typedef struct EffectSs {
     /* 0x5F */ u8 type;
 } EffectSs; // size = 0x60
 
-// TODO: remame data_table
-typedef struct {
-    /* 0x0 */ EffectSs* data_table; // Name from debug assert
+typedef struct EffectSsInfo {
+    /* 0x0 */ EffectSs* dataTable; // "data_table" from debug assert
     /* 0x4 */ s32 searchIndex;
     /* 0x8 */ s32 size;
 } EffectSsInfo; // size = 0xC

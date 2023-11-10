@@ -932,7 +932,7 @@ void EnGeg_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    Effect_Add(play, &this->unk_4DC, 4, 0, 0, &sp34);
+    Effect_Add(play, &this->unk_4DC, EFFECT_TIRE_MARK, 0, 0, &sp34);
     thisx->draw = NULL;
     this->unk_4E0 = 100;
     this->actor.draw = EnGeg_Draw;

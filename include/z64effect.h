@@ -31,7 +31,7 @@ typedef enum EffectType {
 struct PlayState* Effect_GetPlayState(void);
 void* Effect_GetByIndex(s32 index);
 void Effect_Init(struct PlayState* play);
-void Effect_Add(struct PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* initParams);
+void Effect_Add(struct PlayState* play, s32* pIndex, EffectType type, u8 arg3, u8 arg4, void* initParams);
 void Effect_DrawAll(struct GraphicsContext* gfxCtx);
 void Effect_UpdateAll(struct PlayState* play);
 void Effect_Destroy(struct PlayState* play, s32 index);

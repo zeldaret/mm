@@ -36,7 +36,7 @@ typedef struct EffectContext {
 
 EffectContext sEffectContext;
 
-typedef struct {
+typedef struct EffectInfo {
     /* 0x00 */ u32 size;
     /* 0x04 */ void (*init)(void* effect, void* initParams);
     /* 0x08 */ void (*destroy)(void* effect);
@@ -44,7 +44,7 @@ typedef struct {
     /* 0x10 */ void (*draw)(void* effect, struct GraphicsContext* gfxCtx);
 } EffectInfo; // size = 0x14
 
-EffectInfo sEffectInfoTable[] = {
+EffectInfo sEffectInfoTable[EFFECT_MAX] = {
     {
         sizeof(EffectSpark),
         EffectSpark_Init,
@@ -158,7 +158,7 @@ void Effect_Init(PlayState* play) {
     sEffectContext.play = play;
 }
 
-void Effect_Add(PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* initParams) {
+void Effect_Add(PlayState* play, s32* pIndex, EffectType type, u8 arg3, u8 arg4, void* initParams) {
     u32 slotFound;
     s32 i;
     void* effect = NULL;
@@ -180,6 +180,7 @@ void Effect_Add(PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* 
                     }
                 }
                 break;
+
             case EFFECT_BLURE1:
             case EFFECT_BLURE2:
                 for (i = 0; i < BLURE_COUNT; i++) {
@@ -192,6 +193,7 @@ void Effect_Add(PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* 
                     }
                 }
                 break;
+
             case EFFECT_SHIELD_PARTICLE:
                 for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
                     if (sEffectContext.shieldParticles[i].status.active == false) {
@@ -203,6 +205,7 @@ void Effect_Add(PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* 
                     }
                 }
                 break;
+
             case EFFECT_TIRE_MARK:
                 for (i = 0; i < TIRE_MARK_COUNT; i++) {
                     if (sEffectContext.tireMarks[i].status.active == false) {
@@ -213,6 +216,9 @@ void Effect_Add(PlayState* play, s32* pIndex, s32 type, u8 arg3, u8 arg4, void* 
                         break;
                     }
                 }
+                break;
+
+            default:
                 break;
         }
 

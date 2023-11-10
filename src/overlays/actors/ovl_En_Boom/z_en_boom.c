@@ -130,7 +130,7 @@ void EnBoom_Init(Actor* thisx, PlayState* play) {
     sp30.unkFlag = 0;
     sp30.calcMode = 0;
 
-    Effect_Add(play, &this->effectIndex, 1, 0, 0, &sp30);
+    Effect_Add(play, &this->effectIndex, EFFECT_BLURE1, 0, 0, &sp30);
 
     Collider_InitQuad(play, &this->collider);
     Collider_SetQuad(play, &this->collider, &this->actor, &sQuadInit);

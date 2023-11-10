@@ -140,7 +140,7 @@ s32 EnSsh_CreateBlureEffect(PlayState* play) {
     blureInit.unkFlag = false;
     blureInit.calcMode = 3;
 
-    Effect_Add(play, &blureIdx, 1, 0, 0, &blureInit);
+    Effect_Add(play, &blureIdx, EFFECT_BLURE1, 0, 0, &blureInit);
     return blureIdx;
 }
 
