@@ -329,7 +329,7 @@ void EnPoComposer_PlayCurse(EnPoComposer* this, PlayState* play) {
     }
 
     // Play sharp's curse bgm
-    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &this->actor.projectedPos, NA_BGM_SHARPS_CURSE, 2000.0f);
+    Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &this->actor.projectedPos, NA_BGM_SHARPS_CURSE, 2000.0f);
 }
 
 void EnPoComposer_SetupIdleStill(EnPoComposer* this) {
