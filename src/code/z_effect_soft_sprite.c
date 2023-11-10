@@ -1,3 +1,4 @@
+#include "z64effect_ss.h"
 #include "global.h"
 #include "loadfragment.h"
 

@@ -1,4 +1,12 @@
+#include "z64eff_blure.h"
+
+#include "libc/stdbool.h"
+#include "gfx.h"
+#include "macros.h"
+#include "sys_matrix.h"
+#include "z64effect_ss.h"
 #include "global.h"
+
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 void EffectBlure_AddVertex(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
@@ -726,9 +734,8 @@ void EffectBlure_SetupSimpleAlt(GraphicsContext* gfxCtx, EffectBlure* this, Vtx*
 void (*sSetupHandlers[])(GraphicsContext* gfxCtx, EffectBlure* this, Vtx* vtx) = {
     EffectBlure_SetupSimple,
     EffectBlure_SetupSimpleAlt,
+    NULL,
 };
-
-s32 D_801AE268 = 0; // unused
 
 void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, Vtx* vtx) {
     Mtx* mtx;

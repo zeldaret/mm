@@ -1,4 +1,7 @@
+#include "z64effect_ss.h"
+
 #include "global.h"
+
 #include "overlays/effects/ovl_Effect_En_Ice_Block/z_eff_en_ice_block.h"
 #include "overlays/effects/ovl_Effect_Ss_Blast/z_eff_ss_blast.h"
 #include "overlays/effects/ovl_Effect_Ss_Bomb2/z_eff_ss_bomb2.h"

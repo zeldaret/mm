@@ -1,3 +1,6 @@
+#include "z64eff_shield_particle.h"
+#include "z64effect.h"
+
 #include "global.h"
 #include "vt.h"
 

@@ -3,8 +3,9 @@
 
 #include "PR/ultratypes.h"
 #include "PR/os_message.h"
-#include "z64math.h"
 #include "z64dma.h"
+#include "z64light.h"
+#include "z64math.h"
 #include "unk.h"
 
 struct GameOverContext;

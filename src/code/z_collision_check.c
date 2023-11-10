@@ -1,12 +1,54 @@
 #include "prevent_bss_reordering.h"
-#include "global.h"
 #include "z64collision_check.h"
+
+#include "z64effect.h"
+#include "global.h"
 
 typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
 typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
 typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Collider*);
 typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
+
+extern Vec3f D_801EDE00;
+extern Vec3f D_801EDE10;
+extern Vec3f D_801EDE20;
+extern Vec3f D_801EDE30;
+extern TriNorm D_801EDE40;
+extern TriNorm D_801EDE78;
+extern LineSegment D_801EDEB0;
+extern TriNorm D_801EDEC8;
+extern TriNorm D_801EDF00;
+extern Vec3f D_801EDF38;
+extern Vec3f D_801EDF48;
+extern TriNorm D_801EDF58;
+extern TriNorm D_801EDF90;
+extern LineSegment D_801EDFC8;
+extern Vec3f D_801EDFE0;
+extern Vec3f D_801EDFF0;
+extern TriNorm D_801EE000;
+extern TriNorm D_801EE038;
+extern TriNorm D_801EE070[2];
+extern Vec3f D_801EE0D8;
+extern TriNorm D_801EE0E8[2];
+extern TriNorm D_801EE150;
+extern TriNorm D_801EE188;
+extern Vec3f D_801EE1C0;
+extern Vec3f D_801EE1D0;
+extern Vec3f D_801EE1E0;
+extern Vec3f D_801EE1F0;
+// extern UNK_TYPE1 D_801EE1F4;
+// extern UNK_TYPE1 D_801EE1F8;
+extern EffectSparkInit D_801EE200;
+extern TriNorm D_801EE6C8;
+extern TriNorm D_801EE700;
+extern EffectSparkInit D_801EE738;
+extern EffectSparkInit D_801EEC00;
+extern EffectSparkInit D_801EF0C8;
+extern TriNorm D_801EF590;
+extern TriNorm D_801EF5C8;
+extern TriNorm D_801EF600;
+extern TriNorm D_801EF638;
 
 Vec3f D_801EDE00;
 Vec3f D_801EDE10;
