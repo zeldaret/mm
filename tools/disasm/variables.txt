@@ -2269,8 +2269,6 @@
     0x801D703C:("sOcarinaMemoryGameEndPos","UNK_TYPE1","",0x1),
     0x801D7040:("sOcarinaMemoryGameNumNotes","UNK_TYPE1","",0x1),
     0x801D7044:("sOcarinaSongNotes","OcarinaNote","[24][20]",0xF00),
-    0x801D7E04:("D_801D7E04","UNK_TYPE1","",0x1),
-    0x801D7EA4:("D_801D7EA4","UNK_TYPE1","",0x1),
     0x801D7F44:("sOoTOcarinaSongNotes","OcarinaNote","[9][20]",0x5A0),
     0x801D84E4:("sOoTOcarinaSongsNumNotes","UNK_TYPE1","",0x1),
     0x801D84F0:("sPlaybackSong","UNK_PTR","",0x4),
