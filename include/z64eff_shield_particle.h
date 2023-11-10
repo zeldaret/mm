@@ -9,7 +9,7 @@
 
 struct GraphicsContext;
 
-typedef struct {
+typedef struct EffectShieldParticleElement {
     /* 0x00 */ f32 initialSpeed;
     /* 0x04 */ f32 endXChange;
     /* 0x08 */ f32 endX;
@@ -19,7 +19,7 @@ typedef struct {
     /* 0x16 */ s16 pitch;
 } EffectShieldParticleElement; // size = 0x18
 
-typedef struct {
+typedef struct EffectShieldParticleInit {
     /* 0x00 */ u8 numElements;
     /* 0x02 */ Vec3s position;
     /* 0x08 */ Color_RGBA8 primColorStart;
@@ -36,7 +36,7 @@ typedef struct {
     /* 0x3C */ s32 lightDecay; // halves light radius every frame when set to 1
 } EffectShieldParticleInit; // size = 0x40
 
-typedef struct {
+typedef struct EffectShieldParticle {
     /* 0x000 */ EffectShieldParticleElement elements[16];
     /* 0x180 */ u8 numElements;
     /* 0x182 */ Vec3s position;
