@@ -8,7 +8,22 @@
 
 struct GraphicsContext;
 
-typedef struct {
+#define EFFECT_BLURE_COLOR_COUNT 4
+
+//#define EFFECT_BLURE_FLAG_1         (1 << 0)
+#define EFFECT_BLURE_FLAG_2         (1 << 1)
+#define EFFECT_BLURE_FLAG_4         (1 << 2)
+//#define EFFECT_BLURE_FLAG_8         (1 << 3)
+#define EFFECT_BLURE_FLAG_10        (1 << 4)
+
+#define EFFECT_BLURE_ELEMENT_FLAG_1         (1 << 0)
+#define EFFECT_BLURE_ELEMENT_FLAG_2         (1 << 1)
+#define EFFECT_BLURE_ELEMENT_FLAG_4         (1 << 2)
+#define EFFECT_BLURE_ELEMENT_FLAG_8         (1 << 3)
+#define EFFECT_BLURE_ELEMENT_FLAG_10        (1 << 4)
+#define EFFECT_BLURE_ELEMENT_FLAG_20        (1 << 5)
+
+typedef struct EffectBlureElement {
     /* 0x00 */ s32 state;
     /* 0x04 */ s32 timer;
     /* 0x08 */ Vec3s p1;
@@ -16,25 +31,25 @@ typedef struct {
     /* 0x14 */ u16 flags;
 } EffectBlureElement; // size = 0x18
 
-typedef struct {
+typedef struct EffectBlureInit1 {
     /* 0x000 */ char unk_00[0x184];
-    /* 0x184 */ u8 p1StartColor[4];
-    /* 0x188 */ u8 p2StartColor[4];
-    /* 0x18C */ u8 p1EndColor[4];
-    /* 0x190 */ u8 p2EndColor[4];
+    /* 0x184 */ u8 p1StartColor[EFFECT_BLURE_COLOR_COUNT];
+    /* 0x188 */ u8 p2StartColor[EFFECT_BLURE_COLOR_COUNT];
+    /* 0x18C */ u8 p1EndColor[EFFECT_BLURE_COLOR_COUNT];
+    /* 0x190 */ u8 p2EndColor[EFFECT_BLURE_COLOR_COUNT];
     /* 0x194 */ s32 elemDuration;
     /* 0x198 */ s32 unkFlag;
     /* 0x19C */ s32 calcMode;
 } EffectBlureInit1; // size = 0x1A0
 
-typedef struct {
+typedef struct EffectBlureInit2 {
     /* 0x00 */ s32 calcMode;
     /* 0x04 */ u16 flags;
     /* 0x06 */ s16 addAngleChange;
-    /* 0x08 */ u8 p1StartColor[4];
-    /* 0x0C */ u8 p2StartColor[4];
-    /* 0x10 */ u8 p1EndColor[4];
-    /* 0x14 */ u8 p2EndColor[4];
+    /* 0x08 */ u8 p1StartColor[EFFECT_BLURE_COLOR_COUNT];
+    /* 0x0C */ u8 p2StartColor[EFFECT_BLURE_COLOR_COUNT];
+    /* 0x10 */ u8 p1EndColor[EFFECT_BLURE_COLOR_COUNT];
+    /* 0x14 */ u8 p2EndColor[EFFECT_BLURE_COLOR_COUNT];
     /* 0x18 */ u8 elemDuration;
     /* 0x19 */ u8 unkFlag;
     /* 0x1A */ u8 drawMode; // 0: simple; 1: simple with alt colors; 2+: smooth
@@ -43,17 +58,17 @@ typedef struct {
     /* 0x20 */ Color_RGBA8 altEnvColor; // used with drawMode 1
 } EffectBlureInit2; // size = 0x24
 
-typedef struct {
+typedef struct EffectBlure {
     /* 0x000 */ EffectBlureElement elements[16];
     /* 0x180 */ s32 calcMode;
     /* 0x184 */ f32 mode4Param;
     /* 0x188 */ u16 flags;
     /* 0x18A */ s16 addAngleChange;
     /* 0x18C */ s16 addAngle;
-    /* 0x18E */ u8 p1StartColor[4];
-    /* 0x192 */ u8 p2StartColor[4];
-    /* 0x196 */ u8 p1EndColor[4];
-    /* 0x19A */ u8 p2EndColor[4];
+    /* 0x18E */ u8 p1StartColor[EFFECT_BLURE_COLOR_COUNT];
+    /* 0x192 */ u8 p2StartColor[EFFECT_BLURE_COLOR_COUNT];
+    /* 0x196 */ u8 p1EndColor[EFFECT_BLURE_COLOR_COUNT];
+    /* 0x19A */ u8 p2EndColor[EFFECT_BLURE_COLOR_COUNT];
     /* 0x19E */ u8 numElements; // "now_edge_num"
     /* 0x19F */ u8 elemDuration;
     /* 0x1A0 */ u8 unkFlag;

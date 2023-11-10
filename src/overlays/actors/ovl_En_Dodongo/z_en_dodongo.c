@@ -280,7 +280,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnDodongo_Init(Actor* thisx, PlayState* play) {
     static EffectBlureInit2 D_80879308 = {
-        2, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 8,
+        2, EFFECT_BLURE_ELEMENT_FLAG_8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 8,
         0, 0, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
     };
     EnDodongo* this = THIS;
