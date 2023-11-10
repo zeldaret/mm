@@ -8,14 +8,14 @@
 
 struct GraphicsContext;
 
-typedef struct {
+typedef struct EffectSparkElement {
     /* 0x00 */ Vec3f velocity;
     /* 0x0C */ Vec3f position;
     /* 0x18 */ Vec3s unkVelocity;
     /* 0x1E */ Vec3s unkPosition;
 } EffectSparkElement; // size = 0x24
 
-typedef struct {
+typedef struct EffectSparkInit {
     /* 0x000 */ Vec3s position;
     /* 0x008 */ s32 numElements; // "table_size"; calculated as uDiv * vDiv + 2
     /* 0x00C */ EffectSparkElement elements[32];
@@ -29,7 +29,7 @@ typedef struct {
     /* 0x4C0 */ s32 duration;
 } EffectSparkInit; // size = 0x4C4
 
-typedef struct {
+typedef struct EffectSpark {
     /* 0x000 */ Vec3s position;
     /* 0x008 */ s32 numElements; // "table_size"; calculated as uDiv * vDiv + 2
     /* 0x00C */ EffectSparkElement elements[32];

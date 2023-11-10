@@ -61,8 +61,8 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
 
         if ((func_80179798(&sp84, &sp90, &sp54, &sp60, &sp6C, &sp30) != 0) &&
             (func_80179798(&sp84, &sp90, &sp3C, &sp48, &sp78, &sp30) != 0)) {
-            if (!(spAC->flags & 2)) {
-                spAC->flags |= 1;
+            if (!(spAC->flags & EFFECT_TIRE_MARK_ELEMENT_FLAG_2)) {
+                spAC->flags |= EFFECT_TIRE_MARK_ELEMENT_FLAG_1;
             }
 
             spA8 = &this->elements[this->numElements];
@@ -78,8 +78,8 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
             this->numElements++;
 
             spAC = &this->elements[this->numElements - 1];
-            if (!(spAC->flags & 2)) {
-                spAC->flags |= 1;
+            if (!(spAC->flags & EFFECT_TIRE_MARK_ELEMENT_FLAG_2)) {
+                spAC->flags |= EFFECT_TIRE_MARK_ELEMENT_FLAG_1;
             }
 
             //! FAKE:
@@ -95,8 +95,8 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
             return;
         }
 
-        if (!(spAC->flags & 2)) {
-            spAC->flags |= 1;
+        if (!(spAC->flags & EFFECT_TIRE_MARK_ELEMENT_FLAG_2)) {
+            spAC->flags |= EFFECT_TIRE_MARK_ELEMENT_FLAG_1;
         }
 
         spA8 = &this->elements[this->numElements];
@@ -110,8 +110,8 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
         return;
     }
 
-    if (!(spAC->flags & 2)) {
-        spAC->flags |= 1;
+    if (!(spAC->flags & EFFECT_TIRE_MARK_ELEMENT_FLAG_2)) {
+        spAC->flags |= EFFECT_TIRE_MARK_ELEMENT_FLAG_1;
     }
 
     spA8 = &this->elements[this->numElements];
@@ -127,7 +127,7 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
 void func_800AEF44(EffectTireMark* this) {
     EffectTireMarkElement* elem = &this->elements[this->numElements - 1];
 
-    elem->flags |= 2;
+    elem->flags |= EFFECT_TIRE_MARK_ELEMENT_FLAG_2;
 }
 
 void EffectTireMark_InitElement(EffectTireMarkElement* elem) {
@@ -257,15 +257,15 @@ void EffectTireMark_Draw(void* thisx, GraphicsContext* gfxCtx) {
 
                 EffectTireMark_SetVertices(vtx, elem, i, 255);
 
-                if ((elem - 1)->flags & 1) {
-                    if (!(elem->flags & 1)) {
+                if ((elem - 1)->flags & EFFECT_TIRE_MARK_ELEMENT_FLAG_1) {
+                    if (!(elem->flags & EFFECT_TIRE_MARK_ELEMENT_FLAG_1)) {
                         s32 requiredScopeTemp;
 
                         vtx[i * 2 + 0].v.tc[0] = 0;
                         vtx[i * 2 + 0].v.tc[1] = 0;
                         vtx[i * 2 + 1].v.tc[0] = 0;
                         vtx[i * 2 + 1].v.tc[1] = 1024;
-                    } else if ((i >= 2) && !((elem - 2)->flags & 1)) {
+                    } else if ((i >= 2) && !((elem - 2)->flags & EFFECT_TIRE_MARK_ELEMENT_FLAG_1)) {
                         vtx[i * 2 - 2].v.tc[0] = 0;
                         vtx[i * 2 - 2].v.tc[1] = 0;
                         vtx[i * 2 - 1].v.tc[0] = 0;

@@ -11,7 +11,10 @@ struct CollisionContext;
 struct CollisionPoly;
 struct GraphicsContext;
 
-typedef struct {
+#define EFFECT_TIRE_MARK_ELEMENT_FLAG_1      (1 << 0)
+#define EFFECT_TIRE_MARK_ELEMENT_FLAG_2      (1 << 1)
+
+typedef struct EffectTireMarkElement {
     /* 0x00 */ u16 flags;
     /* 0x02 */ Vec3s p1;
     /* 0x08 */ Vec3s p2;
@@ -20,13 +23,13 @@ typedef struct {
     /* 0x14 */ struct CollisionPoly* colPoly;
 } EffectTireMarkElement; // size = 0x18
 
-typedef struct {
+typedef struct EffectTireMarkInit {
     /* 0x0 */ s16 unk0;
     /* 0x2 */ s16 elemDuration;
     /* 0x4 */ Color_RGBA8 color;
 } EffectTireMarkInit; // size = 0x8
 
-typedef struct {
+typedef struct EffectTireMark {
     /* 0x000 */ EffectTireMarkElement elements[64];
     /* 0x600 */ s16 unk600;
     /* 0x602 */ s16 numElements;
