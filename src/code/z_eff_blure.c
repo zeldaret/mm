@@ -538,7 +538,8 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
     Math_Vec3f_Scale(&sp1B4, 0.5f);
     Math_Vec3f_Scale(&sp1A8, 0.5f);
 
-    if (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == EFFECT_BLURE_ELEMENT_FLAG_2) {
+    if (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) ==
+        EFFECT_BLURE_ELEMENT_FLAG_2) {
         Math_Vec3f_Diff(&sp18C, &sp1CC, &sp174);
         Math_Vec3f_Diff(&sp180, &sp1C0, &sp168);
     } else {
@@ -686,10 +687,18 @@ void EffectBlure_DrawSmooth(EffectBlure* this2, GraphicsContext* gfxCtx) {
         if ((elem->state == 0) || ((elem + 1)->state == 0)) {
             continue;
         }
-        if ((((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0) && (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0)) ||
-            (((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == EFFECT_BLURE_ELEMENT_FLAG_2) && (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0)) ||
-            (((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0) && (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == EFFECT_BLURE_ELEMENT_FLAG_2)) ||
-            (((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == EFFECT_BLURE_ELEMENT_FLAG_2) && (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == EFFECT_BLURE_ELEMENT_FLAG_2))) {
+        if ((((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0) &&
+             (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0)) ||
+            (((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) ==
+              EFFECT_BLURE_ELEMENT_FLAG_2) &&
+             (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0)) ||
+            (((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0) &&
+             (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) ==
+              EFFECT_BLURE_ELEMENT_FLAG_2)) ||
+            (((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) ==
+              EFFECT_BLURE_ELEMENT_FLAG_2) &&
+             (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) ==
+              EFFECT_BLURE_ELEMENT_FLAG_2))) {
             EffectBlure_DrawElemNoInterpolation(this, elem, i, gfxCtx);
         } else {
             EffectBlure_DrawElemHermiteInterpolation(this, elem, i, gfxCtx);
