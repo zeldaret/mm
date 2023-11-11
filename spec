@@ -20,7 +20,7 @@ endseg
 beginseg
     name "pre_boot_buffer"
     flags NOLOAD
-    // This segment is a just a dummy so we can symbolize this address range.
+    // This segment is a placeholder so we can symbolize the address range
     include "build/src/buffers/pre_boot_buffer.o"
 endseg
 
