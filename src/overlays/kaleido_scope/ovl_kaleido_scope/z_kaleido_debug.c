@@ -422,9 +422,9 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
 
     // Items
     // Loop over rows (i)
-    for (slot = 0, i = 0, rectTop = 38; i < 4; i++, rectTop += 14) {
+    for (slot = 0, i = 0, rectTop = 38; i < ITEM_GRID_ROWS; i++, rectTop += 14) {
         // Loop over columns (j)
-        for (j = 0, rectLeft = 44; j < 6; j++, slot++, rectLeft += 23) {
+        for (j = 0, rectLeft = 44; j < ITEM_GRID_COLS; j++, slot++, rectLeft += 23) {
             counterDigits[3] = 0;
             counterDigits[2] = 0;
             if ((slot == SLOT_BOW) || ((slot >= SLOT_BOMB) && (slot <= SLOT_DEKU_NUT)) || (slot == SLOT_POWDER_KEG) ||
@@ -456,12 +456,12 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
 
     // Masks
     // Loop over rows (i)
-    for (slot = 0, i = 0, rectTop = 38; i < 4; i++, rectTop += 14) {
+    for (slot = 0, i = 0, rectTop = 38; i < MASK_GRID_ROWS; i++, rectTop += 14) {
         // Loop over columns (j)
-        for (j = 0, rectLeft = 204; j < 6; j++, slot++, rectLeft += 14) {
+        for (j = 0, rectLeft = 204; j < MASK_GRID_COLS; j++, slot++, rectLeft += 14) {
             counterDigits[2] = 0;
 
-            if (gSaveContext.save.saveInfo.inventory.items[SLOT_MASK_POSTMAN + slot] != ITEM_NONE) {
+            if (gSaveContext.save.saveInfo.inventory.items[slot + ITEM_NUM_SLOTS] != ITEM_NONE) {
                 counterDigits[2] = 1;
             }
             KaleidoScope_DrawDigit(play, counterDigits[2], rectLeft, rectTop);
