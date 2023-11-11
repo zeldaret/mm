@@ -648,7 +648,7 @@ endseg
 beginseg
     name "framebuffers"
     flags NOLOAD
-    // This is has to be fixed location in VRAM. See Makefile for a more in-depth explanation
+    // This has to be fixed location in VRAM. See Makefile for a more in-depth explanation
     address SYSTEM_HEAP_END_ADDR
     include "build/data/code/framebuffers.bss.o"
 endseg
