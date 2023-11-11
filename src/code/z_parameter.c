@@ -4634,7 +4634,7 @@ void Interface_DrawClock(PlayState* play) {
                               R_THREE_DAY_CLOCK_SUN_MOON_CUTOFF * 4.0f);
 
             // determines the current hour
-            for (sp1C6 = 0; sp1C6 < ARRAY_COUNT(sThreeDayClockHours)-1; sp1C6++) {
+            for (sp1C6 = 0; sp1C6 < ARRAY_COUNT(sThreeDayClockHours) - 1; sp1C6++) {
                 //! @bug In the original game, this loop iterates over an array of clock hour
                 // values to determine what the current hour is which is used to index into a
                 // texture pointer array. When the loop reaches the last value, the clock is
