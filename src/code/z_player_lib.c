@@ -96,29 +96,32 @@ s32 func_801226E0(PlayState* play, s32 arg1) {
     return arg1;
 }
 
-s32 func_80122744(PlayState* play, struct_80122744_arg1* arg1, u32 arg2, Vec3s* arg3) {
-    arg1->unk_00 = arg2;
-    arg1->unk_01 = 0;
-    arg1->unk_04 = arg3;
+s32 Player_InitOverrideInput(PlayState* play, PlayerOverrideInputEntry* inputEntry, u32 numPoints,
+                             Vec3s* targetPosList) {
+    inputEntry->numPoints = numPoints;
+    inputEntry->curPoint = 0;
+    inputEntry->targetPosList = targetPosList;
     return 1;
 }
 
-s32 func_80122760(PlayState* play, struct_80122744_arg1* arg1, f32 arg2) {
-    if (arg1->unk_01 < arg1->unk_00) {
+s32 Player_UpdateOverrideInput(PlayState* play, PlayerOverrideInputEntry* inputEntry, f32 distXZRange) {
+    if (inputEntry->curPoint < inputEntry->numPoints) {
         Player* player = GET_PLAYER(play);
-        Vec3f sp30;
+        Vec3f targetPos;
         s32 pad;
         s16 yaw;
         f32 distXZ;
 
-        Math_Vec3s_ToVec3f(&sp30, &arg1->unk_04[arg1->unk_01]);
-        yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &sp30);
-        func_800B6F20(play, &play->actorCtx.unk_26C, arg2, yaw);
-        play->actorCtx.unk268 = 1;
-        distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &sp30);
+        Math_Vec3s_ToVec3f(&targetPos, &inputEntry->targetPosList[inputEntry->curPoint]);
+        yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &targetPos);
 
-        if ((fabsf(player->actor.world.pos.y - sp30.y) < 50.0f) && (distXZ < arg2)) {
-            arg1->unk_01++;
+        Actor_SetControlStickData(play, &play->actorCtx.overrideInput, distXZRange, yaw);
+        play->actorCtx.isOverrideInputOn = true;
+
+        distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &targetPos);
+
+        if ((fabsf(player->actor.world.pos.y - targetPos.y) < 50.0f) && (distXZ < distXZRange)) {
+            inputEntry->curPoint++;
         }
 
         return false;
@@ -498,7 +501,7 @@ s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
            (player->csAction != PLAYER_CSACTION_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
-           (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
+           (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.isOverrideInputOn != 0);
 }
 
 s32 Player_InCsMode(PlayState* play) {

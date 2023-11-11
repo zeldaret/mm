@@ -12412,8 +12412,8 @@ void Player_Update(Actor* thisx, PlayState* play) {
         Player_DetachHeldActor(play, this);
     }
 
-    if ((play->actorCtx.unk268 != 0) && (this == GET_PLAYER(play))) {
-        input = play->actorCtx.unk_26C;
+    if (play->actorCtx.isOverrideInputOn && (this == GET_PLAYER(play))) {
+        input = play->actorCtx.overrideInput;
     } else if ((this->csAction == PLAYER_CSACTION_5) ||
                (this->stateFlags1 & (PLAYER_STATE1_20 | PLAYER_STATE1_20000000)) || (this != GET_PLAYER(play)) ||
                func_8082DA90(play) || (gSaveContext.save.saveInfo.playerData.health == 0)) {
@@ -12428,8 +12428,8 @@ void Player_Update(Actor* thisx, PlayState* play) {
     }
 
     Player_UpdateCommon(this, play, &input);
-    play->actorCtx.unk268 = 0;
-    bzero(&play->actorCtx.unk_26C, sizeof(Input));
+    play->actorCtx.isOverrideInputOn = false;
+    bzero(&play->actorCtx.overrideInput, sizeof(Input));
 
     MREG(52) = this->actor.world.pos.x;
     MREG(53) = this->actor.world.pos.y;

@@ -30,7 +30,7 @@ void EnLiftNuts_HandleConversation(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_SetupMove(EnLiftNuts* this);
 void EnLiftNuts_Move(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_SetupMovePlayer(EnLiftNuts* this);
-void EnLiftNuts_MovePlayer(EnLiftNuts* this, PlayState* play);
+void EnLiftNuts_MovePlayerToPos(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_SetupStartGame(EnLiftNuts* this);
 void EnLiftNuts_StartGame(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_SetupStartGameImmediately(EnLiftNuts* this);
@@ -775,40 +775,40 @@ void EnLiftNuts_Move(EnLiftNuts* this, PlayState* play) {
 }
 
 void EnLiftNuts_SetupMovePlayer(EnLiftNuts* this) {
-    this->actionFunc = EnLiftNuts_MovePlayer;
+    this->actionFunc = EnLiftNuts_MovePlayerToPos;
 }
 
-void EnLiftNuts_MovePlayer(EnLiftNuts* this, PlayState* play) {
+void EnLiftNuts_MovePlayerToPos(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    f32 dist;
-    f32 magnitude;
-    s16 playerYaw;
+    f32 distXZ;
+    f32 controlStickMagnitude;
+    s16 controlStickAngle;
     s16 yaw;
     s16 yawDiff;
 
     yaw = this->actor.yawTowardsPlayer - 0x8000;
-    playerYaw = Math_Vec3f_Yaw(&player->actor.world.pos, &this->actor.home.pos);
-    yawDiff = playerYaw - yaw;
-    dist = Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos);
+    controlStickAngle = Math_Vec3f_Yaw(&player->actor.world.pos, &this->actor.home.pos);
+    yawDiff = controlStickAngle - yaw;
+    distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos);
 
-    if (this->actor.xzDistToPlayer < dist) {
+    if (this->actor.xzDistToPlayer < distXZ) {
         if (ABS_ALT(yawDiff) < 0x2000) {
-            playerYaw = (yawDiff > 0) ? (playerYaw + 0x2000) : (playerYaw - 0x2000);
+            controlStickAngle = (yawDiff > 0) ? (controlStickAngle + 0x2000) : (controlStickAngle - 0x2000);
         }
     }
 
-    if (dist < 5.0f) {
-        magnitude = 10.0f;
-    } else if (dist < 30.0f) {
-        magnitude = 40.0f;
+    if (distXZ < 5.0f) {
+        controlStickMagnitude = 10.0f;
+    } else if (distXZ < 30.0f) {
+        controlStickMagnitude = 40.0f;
     } else {
-        magnitude = 80.0f;
+        controlStickMagnitude = 80.0f;
     }
 
-    play->actorCtx.unk268 = true;
-    func_800B6F20(play, &play->actorCtx.unk_26C, magnitude, playerYaw);
+    play->actorCtx.isOverrideInputOn = true;
+    Actor_SetControlStickData(play, &play->actorCtx.overrideInput, controlStickMagnitude, controlStickAngle);
 
-    if (dist < 5.0f) {
+    if (distXZ < 5.0f) {
         EnLiftNuts_SetupIdle(this);
     }
 }
