@@ -621,7 +621,21 @@ beginseg
     include "build/src/buffers/gfxyield.o"
     include "build/src/buffers/gfxstack.o"
     include "build/src/buffers/gfxpools.o"
-    include "build/data/code/buffers.bss.o"
+    include "build/src/buffers/audio_heap.o"
+endseg
+
+beginseg
+    name "system_heap"
+    flags NOLOAD
+    // This segment is a just a dummy that is used to know where the other buffers (non framebuffers) end
+    include "build/src/buffers/system_heap.o"
+endseg
+
+beginseg
+    name "framebuffers"
+    flags NOLOAD
+    address 0x80780000 // this is a fixed location
+    include "build/data/code/framebuffers.bss.o"
 endseg
 
 beginseg
