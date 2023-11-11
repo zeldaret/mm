@@ -178,9 +178,8 @@ void func_800B139C(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, C
 
 void func_800B13D8(Vec3f* srcPos, f32 randScale, Vec3f* newPos, Vec3f* velocity, Vec3f* accel) {
     s16 randAngle;
-    f32 rand;
+    f32 rand = Rand_ZeroOne() * randScale;
 
-    rand = Rand_ZeroOne() * randScale;
     randAngle = Rand_ZeroOne() * 0x10000;
 
     *newPos = *srcPos;

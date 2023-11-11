@@ -161,7 +161,7 @@ void EffectBlure_Init2(void* thisx, void* initParamsx) {
 
         EffectBlure_InitElements(this);
 
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < EFFECT_BLURE_COLOR_COUNT; i++) {
             this->p1StartColor[i] = initParams->p1StartColor[i];
             this->p2StartColor[i] = initParams->p2StartColor[i];
             this->p1EndColor[i] = initParams->p1EndColor[i];
@@ -741,7 +741,9 @@ void EffectBlure_SetupSimpleAlt(GraphicsContext* gfxCtx, EffectBlure* this, Vtx*
     CLOSE_DISPS(gfxCtx);
 }
 
-void (*sSetupHandlers[])(GraphicsContext* gfxCtx, EffectBlure* this, Vtx* vtx) = {
+typedef void (*SetupHandler)(GraphicsContext* gfxCtx, EffectBlure* this, Vtx* vtx);
+
+SetupHandler sSetupHandlers[] = {
     EffectBlure_SetupSimple,
     EffectBlure_SetupSimpleAlt,
     NULL,

@@ -1,6 +1,10 @@
 #include "z64effect_ss.h"
-#include "global.h"
+
+#include "tha.h"
 #include "loadfragment.h"
+#include "global.h"
+
+void EffectSS_ResetEntry(EffectSs* particle);
 
 EffectSsInfo sEffectSsInfo = { NULL, 0, 0 };
 
