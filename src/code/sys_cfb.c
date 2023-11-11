@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "z64.h"
+#include "buffers.h"
 #include "regs.h"
 #include "functions.h"
 #include "macros.h"

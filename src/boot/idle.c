@@ -1,4 +1,5 @@
 #include "prevent_bss_reordering.h"
+#include "buffers.h"
 #include "irqmgr.h"
 #include "main.h"
 #include "stack.h"
@@ -52,9 +53,9 @@ void Main_InitMemory(void) {
     void* memStart = (void*)0x80000400;
     void* memEnd = OS_PHYSICAL_TO_K0(osMemSize);
 
-    Main_ClearMemory(memStart, gFramebuffer1);
-    Main_ClearMemory(D_80025D00, bootproc);
-    Main_ClearMemory(gGfxSPTaskYieldBuffer, memEnd);
+    Main_ClearMemory(memStart, SEGMENT_START(framebuffer_1));
+    Main_ClearMemory(SEGMENT_START(pre_boot_buffer), SEGMENT_START(boot));
+    Main_ClearMemory(SEGMENT_END(code), memEnd);
 }
 
 void Main_Init(void) {

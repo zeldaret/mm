@@ -124,10 +124,8 @@ D_A4800018 = 0xA4800018; // SI_STATUS_REG
 
 // sys_cfb buffers
 
-gFramebuffer1 = 0x80000500;
 gFramebufferHiRes0 = _framebuffersSegmentStart;
-gFramebufferHiRes1 = 0x80000500;
-D_80025D00 = 0x80025D00;
+gFramebufferHiRes1 = _framebuffer_1SegmentStart;
 
 // Ucode symbols
 

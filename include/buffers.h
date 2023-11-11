@@ -5,6 +5,10 @@
 #include "macros.h"
 #include "stack.h"
 
+// pre-boot variables
+extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
+extern u8 gPreBootBuffer[];
+
 
 extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
 extern STACK(gGfxSPTaskStack, 0x400);

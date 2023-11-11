@@ -4,10 +4,24 @@
 
 beginseg
     name "makerom"
-    address 0x8007F000
+    address 0x80000000
     include "build/asm/makerom/rom_header.o"
     include "build/asm/makerom/ipl3.o"
     include "build/asm/makerom/entry.o"
+endseg
+
+beginseg
+    name "framebuffer_1"
+    address 0x80000500
+    flags NOLOAD
+    include "build/src/buffers/framebuffer_1.o"
+endseg
+
+beginseg
+    name "pre_boot_buffer"
+    flags NOLOAD
+    // This segment is a just a dummy so we can symbolize this address range.
+    include "build/src/buffers/pre_boot_buffer.o"
 endseg
 
 beginseg
