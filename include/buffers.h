@@ -12,6 +12,10 @@ extern GfxPool gGfxPools[2];
 extern u8 gAudioHeap[0x138000];
 extern u8 gSystemHeap[];
 
+#ifndef SYSTEM_HEAP_END_ADDR
+#define SYSTEM_HEAP_END_ADDR 0x80780000
+#endif
+
 extern u8 gPictoPhotoI8[PICTO_PHOTO_SIZE];
 extern u8 D_80784600[0x56200];
 extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];

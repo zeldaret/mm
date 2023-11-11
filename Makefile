@@ -132,6 +132,22 @@ MIPS_VERSION := -mips2
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Suppress the warnings with -woff.
 CFLAGS += -G 0 -non_shared -fullwarn -verbose -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_mul -woff 649,838,712,516
 
+# The system heap is an area of memory that covers all the VRAM that is not
+# used by compiled code/data.
+# It starts just after the end of compiled code (that is not an overlay) and
+# ends at a fixed location in VRAM.
+# That fixed location in VRAM is used by the framebuffers of the game and have
+# a fixed size.
+# This address is calculated by doing `0x80800000 - (size of framebuffers)`,
+# where 0x80800000 is the end of the Expansion Pak address range
+# This is a define in the Makefile because references in code require a raw
+# value to match (opposed to a linker symbol). This way, the define can also be
+# used in the spec file.
+SYSTEM_HEAP_END_ADDR ?= 0x80780000
+CFLAGS               += -DSYSTEM_HEAP_END_ADDR=$(SYSTEM_HEAP_END_ADDR)
+CPPFLAGS             += -DSYSTEM_HEAP_END_ADDR=$(SYSTEM_HEAP_END_ADDR)
+CC_CHECK             += -DSYSTEM_HEAP_END_ADDR=$(SYSTEM_HEAP_END_ADDR)
+
 # Use relocations and abi fpr names in the dump
 OBJDUMP_FLAGS := --disassemble --reloc --disassemble-zeroes -Mreg-names=32
 
