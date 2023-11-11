@@ -10634,7 +10634,7 @@ EffectBlureInit2 D_8085D30C = {
     { 255, 255, 255, 0 },
     4,
     0,
-    2,
+    EFF_BLURE_DRAW_MODE_SMOOTH,
     0,
     { 0, 0, 0, 0 },
     { 0, 0, 0, 0 },

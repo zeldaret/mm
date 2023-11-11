@@ -270,7 +270,7 @@ void EnDinofos_Init(Actor* thisx, PlayState* play) {
         { 255, 255, 255, 0 },
         8,
         0,
-        2,
+        EFF_BLURE_DRAW_MODE_SMOOTH,
         0,
         { 0, 0, 0, 0 },
         { 0, 0, 0, 0 },

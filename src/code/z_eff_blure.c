@@ -139,7 +139,7 @@ void EffectBlure_Init1(void* thisx, void* initParamsx) {
         this->flags = 0;
         this->addAngleChange = 0;
         this->addAngle = 0;
-        this->drawMode = 0;
+        this->drawMode = EFF_BLURE_DRAW_MODE_SIMPLE;
         this->altPrimColor.r = 0;
         this->altPrimColor.g = 0;
         this->altPrimColor.b = 0;
@@ -743,10 +743,10 @@ void EffectBlure_SetupSimpleAlt(GraphicsContext* gfxCtx, EffectBlure* this, Vtx*
 
 typedef void (*SetupHandler)(GraphicsContext* gfxCtx, EffectBlure* this, Vtx* vtx);
 
-SetupHandler sSetupHandlers[] = {
-    EffectBlure_SetupSimple,
-    EffectBlure_SetupSimpleAlt,
-    NULL,
+SetupHandler sSetupHandlers[EFF_BLURE_DRAW_MODE_MAX] = {
+    EffectBlure_SetupSimple,    // EFF_BLURE_DRAW_MODE_SIMPLE
+    EffectBlure_SetupSimpleAlt, // EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS
+    NULL,                       // EFF_BLURE_DRAW_MODE_SMOOTH
 };
 
 void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, Vtx* vtx) {
@@ -773,7 +773,7 @@ void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, 
         j = 0;
 
         for (i = 0; i < this->numElements - 1; i++, j += 4) {
-            if (this->drawMode == 1) {
+            if (this->drawMode == EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS) {
                 alphaRatio = (f32)this->elements[i].timer / (f32)this->elemDuration;
                 gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, this->altPrimColor.r, this->altPrimColor.g,
                                 this->altPrimColor.b, this->altPrimColor.a * (1.0f - alphaRatio));
@@ -1038,7 +1038,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
                     }
                 }
             }
-        } else if (this->drawMode < 2) {
+        } else if (this->drawMode <= EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS) {
             EffectBlure_DrawSimple(this, gfxCtx);
         } else {
             EffectBlure_DrawSmooth(this, gfxCtx);

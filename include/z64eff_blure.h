@@ -42,6 +42,13 @@ typedef struct EffectBlureInit1 {
     /* 0x19C */ s32 calcMode;
 } EffectBlureInit1; // size = 0x1A0
 
+typedef enum EffectBlureDrawMode {
+    /* 0 */ EFF_BLURE_DRAW_MODE_SIMPLE,
+    /* 1 */ EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS,
+    /* 2 */ EFF_BLURE_DRAW_MODE_SMOOTH,
+    /* 3 */ EFF_BLURE_DRAW_MODE_MAX
+} EffectBlureDrawMode;
+
 typedef struct EffectBlureInit2 {
     /* 0x00 */ s32 calcMode;
     /* 0x04 */ u16 flags;
@@ -52,7 +59,7 @@ typedef struct EffectBlureInit2 {
     /* 0x14 */ u8 p2EndColor[EFFECT_BLURE_COLOR_COUNT];
     /* 0x18 */ u8 elemDuration;
     /* 0x19 */ u8 unkFlag;
-    /* 0x1A */ u8 drawMode; // 0: simple; 1: simple with alt colors; 2+: smooth
+    /* 0x1A */ u8 drawMode; // EffectBlureDrawMode enum
     /* 0x1B */ u8 mode4Param;
     /* 0x1C */ Color_RGBA8 altPrimColor; // used with drawMode 1
     /* 0x20 */ Color_RGBA8 altEnvColor; // used with drawMode 1
@@ -72,7 +79,7 @@ typedef struct EffectBlure {
     /* 0x19E */ u8 numElements; // "now_edge_num"
     /* 0x19F */ u8 elemDuration;
     /* 0x1A0 */ u8 unkFlag;
-    /* 0x1A1 */ u8 drawMode; // 0: simple; 1: simple with alt colors; 2+: smooth
+    /* 0x1A1 */ u8 drawMode; // EffectBlureDrawMode enum
     /* 0x1A2 */ Color_RGBA8 altPrimColor; // used with drawMode 1
     /* 0x1A6 */ Color_RGBA8 altEnvColor; // used with drawMode 1
 } EffectBlure; // size = 0x1AC
