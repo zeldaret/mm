@@ -40,7 +40,7 @@ void func_80963540(EnFu* this);
 void func_80963560(EnFu* this, PlayState* play);
 void func_80963610(EnFu* this);
 void func_80963630(EnFu* this, PlayState* play);
-s32 EnFu_MovePlayer(PlayState* play, Vec3f pos);
+s32 EnFu_MovePlayerToPos(PlayState* play, Vec3f pos);
 s32 func_809638F8(PlayState* play);
 void func_809639D0(EnFu* this, PlayState* play);
 void func_80963DE4(EnFu* this, PlayState* play);
@@ -839,7 +839,7 @@ void func_80963258(EnFu* this) {
 
 void func_8096326C(EnFu* this, PlayState* play) {
     func_80963FF8(this, play);
-    if (EnFu_MovePlayer(play, this->actor.world.pos)) {
+    if (EnFu_MovePlayerToPos(play, this->actor.world.pos)) {
         func_809622FC(this);
     }
 }
@@ -967,7 +967,7 @@ void func_80963630(EnFu* this, PlayState* play) {
     }
 }
 
-s32 EnFu_MovePlayer(PlayState* play, Vec3f targetPos) {
+s32 EnFu_MovePlayerToPos(PlayState* play, Vec3f targetPos) {
     Player* player = GET_PLAYER(play);
     f32 distXZ;
     f32 controlStickMagnitude;

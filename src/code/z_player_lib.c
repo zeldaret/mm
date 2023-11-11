@@ -501,7 +501,7 @@ s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
            (player->csAction != PLAYER_CSACTION_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
-           (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.isOverrideInputOn != 0);
+           (player->stateFlags3 & PLAYER_STATE3_80) || play->actorCtx.isOverrideInputOn;
 }
 
 s32 Player_InCsMode(PlayState* play) {
