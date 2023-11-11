@@ -3430,7 +3430,6 @@ beginseg
     name "ovl_En_Wdhand"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_En_Wdhand/z_en_wdhand.o"
-    include "$(BUILD_DIR)/data/ovl_En_Wdhand/ovl_En_Wdhand.data.o"
     include "$(BUILD_DIR)/data/ovl_En_Wdhand/ovl_En_Wdhand.reloc.o"
 endseg
 
