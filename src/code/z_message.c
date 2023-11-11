@@ -1921,7 +1921,7 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
  * every digit will be added 0x824F to get an actual S-JIS
  * printable character.
  */
-void Message_GetTimerDigits(OSTime time, s16* digits) {
+void Message_GetTimerDigits(OSTime time, s16 digits[8]) {
     OSTime t = time;
 
     // 6 minutes
@@ -2290,6 +2290,7 @@ void Message_Decode(PlayState* play) {
 
                 loadChar = false;
                 for (i = 0; i < 5; i++) {
+                    //! @bug OoB read on spAC[i + 3]. The only access that is in-bounds is for `i == 0`. All the others will be reading garbage from the stack
                     if ((i == 1) || (spAC[i + 3] != 0)) {
                         loadChar = true;
                     }
@@ -2305,6 +2306,7 @@ void Message_Decode(PlayState* play) {
 
                 loadChar = false;
                 for (i = 0; i < 8; i++) {
+                    //! @bug OoB read on spAC[i]. For every `i >= 4` this will read garbage
                     if ((i == 4) || ((i != 2) && (i != 5) && (spAC[i] != '\0'))) {
                         loadChar = true;
                     }
@@ -2820,16 +2822,20 @@ void Message_Decode(PlayState* play) {
                        (curChar == 0x30C)) {
                 var_fs0 = 8.0f;
                 if (curChar == 0x307) {
+                    //! @bug Message_GetTimerDigits expects an array of 8 elements, but spAC is big enough for 4
                     Message_GetTimerDigits(GET_HIGH_SCORE(HS_UNK_1), spAC);
                 } else if (curChar == 0x309) {
+                    //! @bug Message_GetTimerDigits expects an array of 8 elements, but spAC is big enough for 4
                     Message_GetTimerDigits(GET_HIGH_SCORE(HS_HORSE_BACK_BALLOON), spAC);
                 } else {
+                    //! @bug Message_GetTimerDigits expects an array of 8 elements, but spAC is big enough for 4
                     Message_GetTimerDigits(
                         ((void)0, gSaveContext.save.saveInfo.dekuPlaygroundHighScores[curChar - 0x30A]), spAC);
                 }
 
                 loadChar = false;
                 for (i = 0; i < 8; i++) {
+                    //! @bug OoB read on spAC[i]. For every `i >= 4` this will read garbage
                     if ((i == 4) || ((i != 2) && (i != 5) && (spAC[i] != '\0'))) {
                         loadChar = true;
                     }
