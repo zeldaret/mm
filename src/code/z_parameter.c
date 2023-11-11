@@ -4338,7 +4338,7 @@ void Interface_DrawClock(PlayState* play) {
     static s16 sThreeDayClockAlpha = 255;
     static s16 sClockAlphaTimer1 = 0;
     static s16 sClockAlphaTimer2 = 0;
-    static u16 sThreeDayClockHours[] = {
+    static u16 sThreeDayClockHours[26] = {
         CLOCK_TIME(0, 0),  CLOCK_TIME(1, 0),  CLOCK_TIME(2, 0),  CLOCK_TIME(3, 0),  CLOCK_TIME(4, 0),
         CLOCK_TIME(5, 0),  CLOCK_TIME(6, 0),  CLOCK_TIME(7, 0),  CLOCK_TIME(8, 0),  CLOCK_TIME(9, 0),
         CLOCK_TIME(10, 0), CLOCK_TIME(11, 0), CLOCK_TIME(12, 0), CLOCK_TIME(13, 0), CLOCK_TIME(14, 0),
@@ -4634,8 +4634,20 @@ void Interface_DrawClock(PlayState* play) {
                               R_THREE_DAY_CLOCK_SUN_MOON_CUTOFF * 4.0f);
 
             // determines the current hour
-            for (sp1C6 = 0; sp1C6 <= 24; sp1C6++) {
+            for (sp1C6 = 0; sp1C6 < ARRAY_COUNT(sThreeDayClockHours)-1; sp1C6++) {
+                //! @bug In the original game, this loop iterates over an array of clock hour
+                // values to determine what the current hour is which is used to index into a
+                // texture pointer array. When the loop reaches the last value, the clock is
+                // actually equal to this value for a frame or two before it rolls over.
+                // Because this check is < and not <=, it will actually iterate past it by one
+                // due to the for loop terminating. This results in 25, which is OOB for the
+                // sThreeDayClockHourTextures[] read later. On console, this results in the hour
+                // disappearing for a frame or two between 11 changing to 12.
+#ifdef AVOID_UB
+                if (((void)0, gSaveContext.save.time) <= sThreeDayClockHours[sp1C6 + 1]) {
+#else
                 if (((void)0, gSaveContext.save.time) < sThreeDayClockHours[sp1C6 + 1]) {
+#endif
                     break;
                 }
             }
