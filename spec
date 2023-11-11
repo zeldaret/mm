@@ -4229,8 +4229,7 @@ beginseg
     name "ovl_En_Po_Composer"
     compress
     include "build/src/overlays/actors/ovl_En_Po_Composer/z_en_po_composer.o"
-    include "build/data/ovl_En_Po_Composer/ovl_En_Po_Composer.data.o"
-    include "build/data/ovl_En_Po_Composer/ovl_En_Po_Composer.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Po_Composer/ovl_En_Po_Composer_reloc.o"
 endseg
 
 beginseg
