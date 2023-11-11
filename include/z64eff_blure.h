@@ -61,8 +61,8 @@ typedef struct EffectBlureInit2 {
     /* 0x19 */ u8 unkFlag;
     /* 0x1A */ u8 drawMode; // EffectBlureDrawMode enum
     /* 0x1B */ u8 mode4Param;
-    /* 0x1C */ Color_RGBA8 altPrimColor; // used with drawMode 1
-    /* 0x20 */ Color_RGBA8 altEnvColor; // used with drawMode 1
+    /* 0x1C */ Color_RGBA8 altPrimColor; // used with EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS
+    /* 0x20 */ Color_RGBA8 altEnvColor; // used with EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS
 } EffectBlureInit2; // size = 0x24
 
 typedef struct EffectBlure {
@@ -80,8 +80,8 @@ typedef struct EffectBlure {
     /* 0x19F */ u8 elemDuration;
     /* 0x1A0 */ u8 unkFlag;
     /* 0x1A1 */ u8 drawMode; // EffectBlureDrawMode enum
-    /* 0x1A2 */ Color_RGBA8 altPrimColor; // used with drawMode 1
-    /* 0x1A6 */ Color_RGBA8 altEnvColor; // used with drawMode 1
+    /* 0x1A2 */ Color_RGBA8 altPrimColor; // used with EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS
+    /* 0x1A6 */ Color_RGBA8 altEnvColor; // used with EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS
 } EffectBlure; // size = 0x1AC
 
 void EffectBlure_AddVertex(EffectBlure* this, Vec3f* p1, Vec3f* p2);
