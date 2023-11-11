@@ -11983,7 +11983,7 @@
     0x80A7B634:("sQuadInit","ColliderQuadInit","",0x50),
     0x80A7B684:("sAnimations","AnimationHeader*","[22]",0x58),
     0x80A7B6DC:("sAnimationModes","u8","[22]",0x16),
-    0x80A7B6F4:("D_80A7B6F4","Vec3s","",0x6),
+    0x80A7B6F4:("sPlayerOverrideInputPosList","Vec3s","[1]",0x6),
     0x80A7B6FC:("bombOffset","Vec3f","",0xC),
     0x80A7B708:("sSwordTipOffset","Vec3f","",0xC),
     0x80A7B714:("sSwordBaseOffset","Vec3f","",0xC),

@@ -465,7 +465,7 @@ void EnJso2_SetupIntroCutscene(EnJso2* this) {
     this->actionFunc = EnJso2_IntroCutscene;
 }
 
-static Vec3s D_80A7B6F4 = { 350, 65516, 62106 };
+static Vec3s sPlayerOverrideInputPosList[] = { { 350, -20, -3430 } };
 
 /**
  * Responsible for handling all aspects of the intro cutscene, including manipulating the sub-camera, making the Garo
@@ -500,9 +500,9 @@ void EnJso2_IntroCutscene(EnJso2* this, PlayState* play) {
                 player->actor.world.pos.z = -3430.0f;
                 this->actor.draw = EnJso2_Draw;
                 EnJso2_ChangeAnim(this, EN_JSO2_ANIM_LAUGH);
-                pos.x = D_80A7B6F4.x;
-                pos.y = D_80A7B6F4.y;
-                pos.z = D_80A7B6F4.z;
+                pos.x = sPlayerOverrideInputPosList[0].x;
+                pos.y = sPlayerOverrideInputPosList[0].y;
+                pos.z = sPlayerOverrideInputPosList[0].z;
                 this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &pos);
                 this->subCamFov = this->subCamFovNext = 60.0f;
                 this->actor.world.pos.x = -285.0f;
@@ -520,7 +520,8 @@ void EnJso2_IntroCutscene(EnJso2* this, PlayState* play) {
                 Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeNext);
                 Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtNext);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
-                func_80122744(play, &this->unk_27C, 1, &D_80A7B6F4);
+                func_80122744(play, &this->overrideInputEntry, ARRAY_COUNT(sPlayerOverrideInputPosList),
+                              sPlayerOverrideInputPosList);
                 this->cutsceneState++;
             }
             break;
@@ -540,7 +541,7 @@ void EnJso2_IntroCutscene(EnJso2* this, PlayState* play) {
             Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeNext);
             Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtNext);
 
-            if (func_80122760(play, &this->unk_27C, 60.0f)) {
+            if (func_80122760(play, &this->overrideInputEntry, 60.0f)) {
                 Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_19);
                 this->cutsceneTimer = 10;
                 this->cutsceneState++;
