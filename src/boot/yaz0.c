@@ -1,7 +1,7 @@
 #include "global.h"
 #include "fault.h"
 
-u8 sYaz0DataBuffer[0x400];
+ALIGNED(8) u8 sYaz0DataBuffer[0x400];
 u8* sYaz0CurDataEnd;
 uintptr_t sYaz0CurRomStart;
 u32 sYaz0CurSize;

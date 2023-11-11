@@ -2452,8 +2452,8 @@ void FileSelect_InitContext(GameState* thisx) {
             this->nameBoxAlpha[2] = this->nameAlpha[0] = this->nameAlpha[1] = this->nameAlpha[2] =
                 this->connectorAlpha[0] = this->connectorAlpha[1] = this->connectorAlpha[2] = this->fileInfoAlpha[0] =
                     this->fileInfoAlpha[1] = this->fileInfoAlpha[2] = this->actionButtonAlpha[FS_BTN_ACTION_COPY] =
-                        this->actionButtonAlpha[FS_BTN_ACTION_ERASE] = this->actionButtonAlpha[2] =
-                            this->actionButtonAlpha[3] = this->optionButtonAlpha = this->nameEntryBoxAlpha =
+                        this->actionButtonAlpha[FS_BTN_ACTION_ERASE] = this->confirmButtonAlpha[0] =
+                            this->confirmButtonAlpha[1] = this->optionButtonAlpha = this->nameEntryBoxAlpha =
                                 this->controlsAlpha = this->emptyFileTextAlpha = 0;
 
     this->windowPosX = 6;
