@@ -51,7 +51,7 @@ void EnJso2_SetupBlowUp(EnJso2* this);
 void EnJso2_BlowUp(EnJso2* this, PlayState* play);
 void EnJso2_FadeAway(EnJso2* this, PlayState* play);
 
-typedef enum {
+typedef enum EnJso2Action {
     /*  0 */ EN_JSO2_ACTION_INTRO_CUTSCENE,
     /*  1 */ EN_JSO2_ACTION_UNK_1, // Checked in EnJso2_Update, but never actually used
     /*  2 */ EN_JSO2_ACTION_UNK_2, // Checked in EnJso2_UpdateDamage, but never actually used
@@ -71,7 +71,7 @@ typedef enum {
     /* 16 */ EN_JSO2_ACTION_FALL_FROM_TELEPORT
 } EnJso2Action;
 
-typedef enum {
+typedef enum EnJso2IntroCsState {
     // Waits for the player to walk toward the Garo Master, then starts the cutscene and transitions to the next state.
     /*  0 */ EN_JSO2_INTRO_CS_STATE_WAITING_FOR_PLAYER_TO_APPROACH,
 
@@ -110,7 +110,7 @@ typedef enum {
     /* 11 */ EN_JSO2_INTRO_CS_STATE_DRAW_SWORDS
 } EnJso2IntroCsState;
 
-typedef enum {
+typedef enum EnJso2AppearState {
     // Spawns a dust ring, disables the current BGM, plays the "appearance" SFX, and transitions to the next state.
     /* 0 */ EN_JSO2_APPEAR_STATE_STARTED,
 
@@ -119,7 +119,7 @@ typedef enum {
     /* 1 */ EN_JSO2_APPEAR_STATE_APPEARING
 } EnJso2AppearState;
 
-typedef enum {
+typedef enum EnJso2DeathCsState {
     // Starts the cutscene and immediately transitions to the next state.
     /* 0 */ EN_JSO2_DEATH_CS_STATE_STARTED,
 
@@ -139,7 +139,7 @@ typedef enum {
     /* 5 */ EN_JSO2_DEATH_CS_STATE_WAIT_AND_END
 } EnJso2DeathCsState;
 
-typedef enum {
+typedef enum EnJso2SwordState {
     /* 0 */ EN_JSO2_SWORD_STATE_BOTH_DRAWN,
 
     // If the Garo Master is about to blow itself up, it will use this sword state, but EnJso2_OverrideLimbDraw will
@@ -148,7 +148,7 @@ typedef enum {
     /* 2 */ EN_JSO2_SWORD_STATE_NONE_DRAWN = 2
 } EnJso2SwordState;
 
-typedef enum {
+typedef enum EnJso2DamageEffect {
     /* 0x0 */ EN_JSO2_DMGEFF_IMMUNE,        // Deals no damage and has no special effect
     /* 0x1 */ EN_JSO2_DMGEFF_STUN,          // Deals no damage but stuns the Garo Master
     /* 0x2 */ EN_JSO2_DMGEFF_FIRE,          // Damages and sets the Garo Master on fire
@@ -263,7 +263,7 @@ static ColliderQuadInit sQuadInit = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-typedef enum {
+typedef enum EnJso2Animation {
     /*  0 */ EN_JSO2_ANIM_DASH_ATTACK,
     /*  1 */ EN_JSO2_ANIM_SLASH_START,
     /*  2 */ EN_JSO2_ANIM_SLASH_LOOP,
@@ -1451,11 +1451,9 @@ void EnJso2_DeathCutscene(EnJso2* this, PlayState* play) {
         this->subCamEyeNext.x = this->actor.world.pos.x + subCamEyeNextOffset.x;
         this->subCamEyeNext.y = BREG(50) + -43.0f + this->actor.world.pos.y + 50.0f;
         this->subCamEyeNext.z = this->actor.world.pos.z + subCamEyeNextOffset.z;
-        this->subCamAtNext.x =
-            player->actor.world.pos.x + ((this->actor.world.pos.x - player->actor.world.pos.x) * 0.5f);
+        this->subCamAtNext.x = F32_LERPIMP(player->actor.world.pos.x, this->actor.world.pos.x, 0.5f);
         this->subCamAtNext.y = BREG(51) + 6.0f + player->actor.world.pos.y + 5.0f;
-        this->subCamAtNext.z =
-            player->actor.world.pos.z + ((this->actor.world.pos.z - player->actor.world.pos.z) * 0.5f);
+        this->subCamAtNext.z = F32_LERPIMP(player->actor.world.pos.z, this->actor.world.pos.z, 0.5f);
     }
 
     EnJso2_UpdateSubCam(this, play);

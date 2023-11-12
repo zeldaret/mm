@@ -15,7 +15,7 @@ typedef void (*EnJsoActionFunc)(struct EnJso*, PlayState*);
 // For the four `VARIABLE` hint types, the former hint is used if the player hasn't restored the river in
 // Ikana Canyon yet, and the latter hint is used if the player has. If the player has the Elegy of Emptiness,
 // then all hints will be replaced with a hint telling the player to use the song to climb Stone Tower.
-typedef enum {
+typedef enum EnJsoHintType {
     /* 0 */ EN_JSO_HINT_FREEZE_OCTOROKS,
     /* 1 */ EN_JSO_HINT_FLATS_LOCATION,
     /* 2 */ EN_JSO_HINT_VARIABLE_1, // Hints that Pamela's family is in the house or that the Song of Healing can heal Pamela's father
@@ -28,7 +28,7 @@ typedef enum {
     /* 9 */ EN_JSO_HINT_KING_WEAK_TO_MIRROR_SHIELD
 } EnJsoHintType;
 
-typedef enum {
+typedef enum EnJsoBodyPart {
     /*  0 */ EN_JSO_BODYPART_LEFT_SWORD,
     /*  1 */ EN_JSO_BODYPART_RIGHT_SWORD,
     /*  2 */ EN_JSO_BODYPART_ROBE_TOP,

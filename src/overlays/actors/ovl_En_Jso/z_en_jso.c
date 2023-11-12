@@ -46,7 +46,7 @@ void EnJso_FallDownAndTalk(EnJso* this, PlayState* play);
 void EnJso_TellHint(EnJso* this, PlayState* play);
 void EnJso_BurstIntoFlames(EnJso* this, PlayState* play);
 
-typedef enum {
+typedef enum EnJsoAction {
     /*  0 */ EN_JSO_ACTION_INTRO_CUTSCENE,
     /*  1 */ EN_JSO_ACTION_REAPPEAR,
     /*  2 */ EN_JSO_ACTION_CIRCLE_PLAYER,
@@ -65,14 +65,14 @@ typedef enum {
     /* 15 */ EN_JSO_ACTION_UNK_15 // Checked in EnJso_Update, but never actually used
 } EnJsoAction;
 
-typedef enum {
+typedef enum EnJsoIntroType {
     /* 0 */ EN_JSO_INTRO_SPIN_UP_FROM_GROUND,
     /* 1 */ EN_JSO_INTRO_JUMP_OUT_FROM_GROUND,
     /* 2 */ EN_JSO_INTRO_LAND_FROM_ABOVE,
     /* 3 */ EN_JSO_INTRO_SCALE_UP
 } EnJsoIntroType;
 
-typedef enum {
+typedef enum EnJsoIntroCsState {
     // Either the cutscene started (in which case, we'll transition to the next state on the next frame) or it's done.
     /* 0 */ EN_JSO_INTRO_CS_STATE_DONE_OR_STARTED,
 
@@ -93,7 +93,7 @@ typedef enum {
     /* 5 */ EN_JSO_INTRO_CS_STATE_ENDING
 } EnJsoIntroCsState;
 
-typedef enum {
+typedef enum EnJsoSwordState {
     /* 0 */ EN_JSO_SWORD_STATE_BOTH_DRAWN,
     /* 1 */ EN_JSO_SWORD_STATE_KNOCKED_OUT_OF_HANDS,
     /* 2 */ EN_JSO_SWORD_STATE_RIGHT_DRAWN,
@@ -107,7 +107,7 @@ static s32 sIsAttacking = false;
 // Seemingly a duplicate of the isPlayerLockedOn instance variable. Its purpose is unknown.
 static s32 sIsPlayerLockedOn = false;
 
-typedef enum {
+typedef enum EnJsoDamageEffect {
     /* 0x0 */ EN_JSO_DMGEFF_IMMUNE,        // Deals no damage and has no special effect
     /* 0x1 */ EN_JSO_DMGEFF_STUN,          // Deals no damage but stuns the Garo
     /* 0x2 */ EN_JSO_DMGEFF_FIRE,          // Damages and sets the Garo on fire
@@ -213,7 +213,7 @@ static u16 sTextIds[] = {
     0x1399,
 };
 
-typedef enum {
+typedef enum EnJsoAnimation {
     /*  0 */ EN_JSO_ANIM_APPEAR,
     /*  1 */ EN_JSO_ANIM_IDLE,
     /*  2 */ EN_JSO_ANIM_BOUNCE,

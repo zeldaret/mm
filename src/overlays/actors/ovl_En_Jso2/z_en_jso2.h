@@ -13,7 +13,7 @@ struct EnJso2;
 
 typedef void (*EnJso2ActionFunc)(struct EnJso2*, PlayState*);
 
-typedef enum {
+typedef enum EnJso2Type {
     // This type is exclusively used by the Garo Master in Stone Tower Temple who guards the Light Arrow.
     // It has an intro and death cutscene, and the intro cutscene uses many hardcoded coordinates which
     // assume the Garo Master is in the Light Arrow room.
@@ -23,7 +23,7 @@ typedef enum {
     /* 1 */ EN_JSO2_TYPE_NORMAL
 } EnJso2Type;
 
-typedef enum {
+typedef enum EnJso2BodyPart {
     /*  0 */ EN_JSO2_BODYPART_LEFT_SWORD,
     /*  1 */ EN_JSO2_BODYPART_RIGHT_SWORD,
     /*  2 */ EN_JSO2_BODYPART_ROBE_TOP,
