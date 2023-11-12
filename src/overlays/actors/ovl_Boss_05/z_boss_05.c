@@ -261,7 +261,8 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->dyna.actor, 0.01f);
 
-    if ((this->dyna.actor.params == BIO_DEKU_BABA_TYPE_0) || (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_1)) {
+    if ((this->dyna.actor.params == BIO_DEKU_BABA_LILY_PAD_WITH_HEAD) ||
+        (this->dyna.actor.params == BIO_DEKU_BABA_NO_LEAF_LILY_PAD_WITH_HEAD)) {
         if (this->dyna.actor.world.rot.z == 0) {
             this->dyna.actor.world.rot.z = 0;
         }
@@ -288,12 +289,12 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
                                   this->headColliderElements);
 
         if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
-            this->dyna.actor.params = BIO_DEKU_BABA_TYPE_2;
+            this->dyna.actor.params = BIO_DEKU_BABA_TYPE_LILY_PAD;
             this->actionFunc = func_809EF9BC;
             this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         }
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_2) {
+    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_LILY_PAD) {
         this->actionFunc = func_809EF9BC;
 
         CollisionHeader_GetVirtual(&sBioBabaLilypadCol, &colHeader);
@@ -303,7 +304,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
                            this->lilyPadJointTable, this->lilyPadMorphTable, BIO_DEKU_BABA_LILY_PAD_LIMB_MAX);
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_3) {
+    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_FALLING_HEAD) {
         this->actionFunc = func_809EFAB4;
         this->unk198 = 1.0f;
 
@@ -320,7 +321,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 
         ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
         this->dyna.actor.colChkInfo.damageTable = &sDamageTable1;
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_4) {
+    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
         func_809F00CC(this, play);
         this->dyna.actor.colChkInfo.mass = 90;
 
@@ -333,7 +334,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
         this->dyna.actor.colChkInfo.damageTable = &sDamageTable2;
         this->dyna.actor.flags |= ACTOR_FLAG_10 | ACTOR_FLAG_20;
-    } else if (this->dyna.actor.params >= BIO_DEKU_BABA_TYPE_10) {
+    } else if (this->dyna.actor.params >= BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW) {
         SkelAnime_InitFlex(play, &this->headSkelAnime, &gBioDekuBabaHeadSkel, &gBioDekuBabaHeadChompAnim,
                            this->headJointTable, this->headMorphTable, BIO_DEKU_BABA_HEAD_LIMB_MAX);
 
@@ -354,8 +355,9 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 void Boss05_Destroy(Actor* thisx, PlayState* play) {
     Boss05* this = THIS;
 
-    if ((this->dyna.actor.params == BIO_DEKU_BABA_TYPE_2) || (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_0) ||
-        (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_1)) {
+    if ((this->dyna.actor.params == BIO_DEKU_BABA_TYPE_LILY_PAD) ||
+        (this->dyna.actor.params == BIO_DEKU_BABA_LILY_PAD_WITH_HEAD) ||
+        (this->dyna.actor.params == BIO_DEKU_BABA_NO_LEAF_LILY_PAD_WITH_HEAD)) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -629,7 +631,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
     if ((var_s4_2 != 0) || (this->unk168 == 1)) {
         Boss05* temp_v0_6;
 
-        this->dyna.actor.params = BIO_DEKU_BABA_TYPE_2;
+        this->dyna.actor.params = BIO_DEKU_BABA_TYPE_LILY_PAD;
         this->actionFunc = func_809EF9BC;
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
@@ -641,7 +643,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
             temp_v0_6 = (Boss05*)Actor_SpawnAsChild(
                 &play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->dyna.actor.world.pos.x,
                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, BIO_DEKU_BABA_TYPE_3);
+                this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, BIO_DEKU_BABA_TYPE_FALLING_HEAD);
 
             if (temp_v0_6 != NULL) {
                 Player* player = GET_PLAYER(play);
@@ -667,9 +669,10 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
             }
         } else if (var_s4_2 == 2) {
             for (i = 0; i < 2; i++) {
-                temp_v0_6 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
-                                                        this->unk324.x, this->unk324.y, this->unk324.z, this->unk330.x,
-                                                        this->unk330.y, this->unk330.z, i + BIO_DEKU_BABA_TYPE_10);
+                temp_v0_6 =
+                    (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->unk324.x,
+                                                this->unk324.y, this->unk324.z, this->unk330.x, this->unk330.y,
+                                                this->unk330.z, i + BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW);
                 if (temp_v0_6 != NULL) {
                     for (j = 0; j < BIO_DEKU_BABA_HEAD_LIMB_MAX; j++) {
                         temp_v0_6->headSkelAnime.jointTable[j] = this->headSkelAnime.jointTable[j];
@@ -762,7 +765,7 @@ void func_809EFAB4(Boss05* this, PlayState* play) {
         if (this->unk198 == 0.0f) {
             temp_v0 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
                                                   this->unk324.x, this->unk324.y, this->unk324.z, this->unk330.x,
-                                                  this->unk330.y, this->unk330.z, BIO_DEKU_BABA_TYPE_4);
+                                                  this->unk330.y, this->unk330.z, BIO_DEKU_BABA_TYPE_WALKING_HEAD);
 
             if (temp_v0 != NULL) {
                 player = GET_PLAYER(play);
@@ -1000,10 +1003,11 @@ void func_809F0780(Boss05* this, PlayState* play) {
     if ((s8)this->dyna.actor.colChkInfo.health <= 0) {
         if (Animation_OnFrame(&this->headSkelAnime, 22.0f)) {
             for (i = 0; i < 14; i++) {
-                temp_v0 = (Boss05*)Actor_SpawnAsChild(
-                    &play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->dyna.actor.world.pos.x,
-                    this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                    this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, i + BIO_DEKU_BABA_TYPE_10);
+                temp_v0 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
+                                                      this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                                      this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
+                                                      this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
+                                                      i + BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW);
 
                 if (temp_v0 != NULL) {
                     for (j = 0; j < BIO_DEKU_BABA_HEAD_LIMB_MAX; j++) {
@@ -1113,7 +1117,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_4) {
+    if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
         Actor_MoveWithGravity(&this->dyna.actor);
         Matrix_RotateYS(this->unk348, MTXMODE_NEW);
         Matrix_MultVecZ(this->unk338, &this->unk33C);
@@ -1224,7 +1228,8 @@ s32 Boss05_OverrideLimbDraw_LilyPad1(PlayState* play, s32 limbIndex, Gfx** dList
         rot->z += KREG(35) * 0x100;
     }
 
-    if ((this->dyna.actor.params == BIO_DEKU_BABA_TYPE_1) && (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_LEAF)) {
+    if ((this->dyna.actor.params == BIO_DEKU_BABA_NO_LEAF_LILY_PAD_WITH_HEAD) &&
+        (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_LEAF)) {
         *dList = NULL;
     }
 
@@ -1293,7 +1298,7 @@ void Boss05_PostLimbDraw_Head1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         Matrix_MultVec3f(&D_809F1CD0, &D_809F2110);
         Boss05_SetColliderSphere(0, &this->headCollider, &D_809F2110);
 
-        if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_4) {
+        if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
             Matrix_MultVec3f(&D_809F1CDC, &thisx->focus.pos);
         }
 
@@ -1352,26 +1357,26 @@ void Boss05_TransformLimbDraw_LilyPad3(PlayState* play, s32 limbIndex, Actor* th
 }
 
 BioDekuBabaHeadLimb D_809F1CE8[] = {
-    BIO_DEKU_BABA_HEAD_LIMB_LOWER_JAW,            // BIO_DEKU_BABA_TYPE_10
-    BIO_DEKU_BABA_HEAD_LIMB_UPPER_JAW,            // BIO_DEKU_BABA_TYPE_11
-    BIO_DEKU_BABA_HEAD_LIMB_BODY,                 // BIO_DEKU_BABA_TYPE_12
-    BIO_DEKU_BABA_HEAD_LIMB_BACK_UPPER_LEG,       // BIO_DEKU_BABA_TYPE_13
-    BIO_DEKU_BABA_HEAD_LIMB_BACK_LOWER_LEG,       // BIO_DEKU_BABA_TYPE_14
-    BIO_DEKU_BABA_HEAD_LIMB_LEFT_UPPER_LEG,       // BIO_DEKU_BABA_TYPE_15
-    BIO_DEKU_BABA_HEAD_LIMB_LEFT_LOWER_LEG,       // BIO_DEKU_BABA_TYPE_16
-    BIO_DEKU_BABA_HEAD_LIMB_LEFT_LOWER_EYESTALK,  // BIO_DEKU_BABA_TYPE_17
-    BIO_DEKU_BABA_HEAD_LIMB_LEFT_UPPER_EYESTALK,  // BIO_DEKU_BABA_TYPE_18
-    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_LOWER_EYESTALK, // BIO_DEKU_BABA_TYPE_19
-    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_UPPER_EYESTALK, // BIO_DEKU_BABA_TYPE_20
-    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_UPPER_LEG,      // BIO_DEKU_BABA_TYPE_21
-    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_LOWER_LEG,      // BIO_DEKU_BABA_TYPE_22
-    BIO_DEKU_BABA_HEAD_LIMB_LEAVES,               // BIO_DEKU_BABA_TYPE_23
+    BIO_DEKU_BABA_HEAD_LIMB_LOWER_JAW,            // BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW
+    BIO_DEKU_BABA_HEAD_LIMB_UPPER_JAW,            // BIO_DEKU_BABA_TYPE_FRAGMENT_UPPER_JAW
+    BIO_DEKU_BABA_HEAD_LIMB_BODY,                 // BIO_DEKU_BABA_TYPE_FRAGMENT_BODY
+    BIO_DEKU_BABA_HEAD_LIMB_BACK_UPPER_LEG,       // BIO_DEKU_BABA_TYPE_FRAGMENT_BACK_UPPER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_BACK_LOWER_LEG,       // BIO_DEKU_BABA_TYPE_FRAGMENT_BACK_LOWER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_LEFT_UPPER_LEG,       // BIO_DEKU_BABA_TYPE_FRAGMENT_LEFT_UPPER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_LEFT_LOWER_LEG,       // BIO_DEKU_BABA_TYPE_FRAGMENT_LEFT_LOWER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_LEFT_LOWER_EYESTALK,  // BIO_DEKU_BABA_TYPE_FRAGMENT_LEFT_LOWER_EYESTALK
+    BIO_DEKU_BABA_HEAD_LIMB_LEFT_UPPER_EYESTALK,  // BIO_DEKU_BABA_TYPE_FRAGMENT_LEFT_UPPER_EYESTALK
+    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_LOWER_EYESTALK, // BIO_DEKU_BABA_TYPE_FRAGMENT_RIGHT_LOWER_EYESTALK
+    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_UPPER_EYESTALK, // BIO_DEKU_BABA_TYPE_FRAGMENT_RIGHT_UPPER_EYESTALK
+    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_UPPER_LEG,      // BIO_DEKU_BABA_TYPE_FRAGMENT_RIGHT_UPPER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_LOWER_LEG,      // BIO_DEKU_BABA_TYPE_FRAGMENT_RIGHT_LOWER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_LEAVES,               // BIO_DEKU_BABA_TYPE_FRAGMENT_LEAVES
 };
 
 s32 Boss05_OverrideLimbDraw_Head2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Boss05* this = THIS;
 
-    if (limbIndex != D_809F1CE8[this->dyna.actor.params - BIO_DEKU_BABA_TYPE_10]) {
+    if (limbIndex != D_809F1CE8[this->dyna.actor.params - BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW]) {
         *dList = NULL;
     } else if (this->unk15C >= 2) {
         rot->x += this->frameCounter * 0x3000;
@@ -1384,7 +1389,7 @@ s32 Boss05_OverrideLimbDraw_Head2(PlayState* play, s32 limbIndex, Gfx** dList, V
 void Boss05_PostLimbDraw_Head2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Boss05* this = THIS;
 
-    if (limbIndex != D_809F1CE8[this->dyna.actor.params - BIO_DEKU_BABA_TYPE_10]) {
+    if (limbIndex != D_809F1CE8[this->dyna.actor.params - BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW]) {
         Matrix_MultZero(&this->unk324);
     }
 }
@@ -1417,7 +1422,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         SkelAnime_DrawTransformFlexOpa(play, this->headSkelAnime.skeleton, this->headSkelAnime.jointTable,
                                        this->headSkelAnime.dListCount, Boss05_OverrideLimbDraw_Head1,
                                        Boss05_PostLimbDraw_Head1, Boss05_TransformLimbDraw_Head1, &this->dyna.actor);
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_2) {
+    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_LILY_PAD) {
         Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                          MTXMODE_NEW);
         Matrix_RotateYS(this->unk176, MTXMODE_APPLY);
@@ -1431,7 +1436,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         SkelAnime_DrawFlexOpa(play, this->lilyPadSkelAnime.skeleton, this->lilyPadSkelAnime.jointTable,
                               this->lilyPadSkelAnime.dListCount, Boss05_OverrideLimbDraw_LilyPad2, NULL,
                               &this->dyna.actor);
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_3) {
+    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_FALLING_HEAD) {
         SkelAnime_DrawTransformFlexOpa(play, this->lilyPadSkelAnime.skeleton, this->lilyPadSkelAnime.jointTable,
                                        this->lilyPadSkelAnime.dListCount, Boss05_OverrideLimbDraw_LilyPad3,
                                        Boss05_PostLimbDraw_LilyPad1, Boss05_TransformLimbDraw_LilyPad3,
@@ -1452,7 +1457,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         Actor_DrawDamageEffects(play, &this->dyna.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
                                 this->drawDmgEffScale, this->dmgEffFrozenSteamScale, this->drawDmgEffAlpha,
                                 this->drawDmgEffType);
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_4) {
+    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));
 
         if ((this->unk16C % 2) != 0) {
@@ -1466,7 +1471,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         Actor_DrawDamageEffects(play, &this->dyna.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
                                 this->drawDmgEffScale, this->dmgEffFrozenSteamScale, this->drawDmgEffAlpha,
                                 this->drawDmgEffType);
-    } else if (this->dyna.actor.params >= BIO_DEKU_BABA_TYPE_10) {
+    } else if (this->dyna.actor.params >= BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));
 
         SkelAnime_DrawFlexOpa(play, this->headSkelAnime.skeleton, this->headSkelAnime.jointTable,
