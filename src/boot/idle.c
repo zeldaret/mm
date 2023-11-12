@@ -55,6 +55,8 @@ void Main_InitMemory(void) {
 
     Main_ClearMemory(memStart, SEGMENT_START(framebuffer_1));
     Main_ClearMemory(SEGMENT_START(pre_boot_buffer), SEGMENT_START(boot));
+
+    // Clear all the buffers after the `code` segment, up to the end of the available RAM space
     Main_ClearMemory(SEGMENT_END(code), memEnd);
 }
 
