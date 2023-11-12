@@ -15,28 +15,28 @@ void Boss05_Destroy(Actor* thisx, PlayState* play);
 void Boss05_Update(Actor* thisx, PlayState* play);
 void Boss05_Draw(Actor* thisx, PlayState* play);
 
-void func_809EEDD0(Boss05* this, PlayState* play);
-void func_809EEDE8(Boss05* this, PlayState* play);
-void func_809EF9BC(Boss05* this, PlayState* play);
-void func_809EFAB4(Boss05* this, PlayState* play);
-void func_809F00CC(Boss05* this, PlayState* play);
-void func_809F010C(Boss05* this, PlayState* play);
-void func_809F01CC(Boss05* this, PlayState* play);
-void func_809F0244(Boss05* this, PlayState* play);
-void func_809F02D0(Boss05* this, PlayState* play);
-void func_809F0374(Boss05* this, PlayState* play);
-void func_809F0474(Boss05* this, PlayState* play);
-void func_809F04C0(Boss05* this, PlayState* play);
-void func_809F0538(Boss05* this, PlayState* arg1);
-void func_809F0590(Boss05* this, PlayState* play);
-void func_809F0650(Boss05* this, PlayState* arg1);
-void func_809F06B8(Boss05* this, PlayState* play);
-void func_809F0708(Boss05* this, PlayState* play);
-void func_809F0780(Boss05* this, PlayState* play);
-void func_809F0A0C(Boss05* this, PlayState* play);
-void func_809F0A64(Boss05* this, PlayState* play);
-void func_809F0ABC(Boss05* this, PlayState* play);
-void func_809F0B0C(Boss05* this, PlayState* play);
+void Boss05_LilyPadWithHead_SetupMove(Boss05* this, PlayState* play);
+void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play);
+void Boss05_LilyPad_Idle(Boss05* this, PlayState* play);
+void Boss05_FallingHead_Fall(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_SetupTransform(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_Transform(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_SetupIdle(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_Idle(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_SetupWalk(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_Walk(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_SetupSpottedPlayer(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_SpottedPlayer(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_SetupCharge(Boss05* this, PlayState* arg1);
+void Boss05_WalkingHead_Charge(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_SetupAttack(Boss05* this, PlayState* arg1);
+void Boss05_WalkingHead_Attack(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_SetupDamaged(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_Damaged(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_SetupStunned(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_SetupFreeze(Boss05* this, PlayState* play);
+void Boss05_WalkingHead_Stunned(Boss05* this, PlayState* play);
+void Boss05_Fragment_Move(Boss05* this, PlayState* play);
 
 #include "assets/overlays/ovl_Boss_05/ovl_Boss_05.c"
 
@@ -218,7 +218,7 @@ ActorInit Boss_05_InitVars = {
     /**/ Boss05_Draw,
 };
 
-void func_809EE4E0(Boss05* this, PlayState* play) {
+void Boss05_WalkingHead_Thaw(Boss05* this, PlayState* play) {
     Vec3f icePos;
     Vec3f iceVelocity;
     s32 i;
@@ -275,7 +275,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         DynaPolyActor_Init(&this->dyna, 0);
         CollisionHeader_GetVirtual(&sBioBabaLilypadCol, &colHeader);
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-        func_809EEDD0(this, play);
+        Boss05_LilyPadWithHead_SetupMove(this, play);
 
         SkelAnime_InitFlex(play, &this->lilyPadSkelAnime, &gBioDekuBabaLilyPadSkel, &gBioDekuBabaLilyPadIdleAnim,
                            this->lilyPadJointTable, this->lilyPadMorphTable, BIO_DEKU_BABA_LILY_PAD_LIMB_MAX);
@@ -290,12 +290,12 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 
         if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
             this->dyna.actor.params = BIO_DEKU_BABA_TYPE_LILY_PAD;
-            this->actionFunc = func_809EF9BC;
+            this->actionFunc = Boss05_LilyPad_Idle;
             this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         }
     } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_LILY_PAD) {
-        this->actionFunc = func_809EF9BC;
+        this->actionFunc = Boss05_LilyPad_Idle;
 
         CollisionHeader_GetVirtual(&sBioBabaLilypadCol, &colHeader);
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
@@ -305,7 +305,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
     } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_FALLING_HEAD) {
-        this->actionFunc = func_809EFAB4;
+        this->actionFunc = Boss05_FallingHead_Fall;
         this->fallingHeadLimbScale = 1.0f;
 
         SkelAnime_InitFlex(play, &this->lilyPadSkelAnime, &gBioDekuBabaLilyPadSkel, &gBioDekuBabaLilyPadIdleAnim,
@@ -322,7 +322,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
         this->dyna.actor.colChkInfo.damageTable = &sDamageTable1;
     } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
-        func_809F00CC(this, play);
+        Boss05_WalkingHead_SetupTransform(this, play);
         this->dyna.actor.colChkInfo.mass = 90;
 
         SkelAnime_InitFlex(play, &this->headSkelAnime, &gBioDekuBabaHeadSkel, &gBioDekuBabaHeadChompAnim,
@@ -348,7 +348,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         this->unk162[0] = (s32)(Rand_ZeroFloat(30.0f) + 50.0f);
 
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        this->actionFunc = func_809F0B0C;
+        this->actionFunc = Boss05_Fragment_Move;
     }
 }
 
@@ -362,7 +362,7 @@ void Boss05_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 func_809EECBC(Boss05* this, PlayState* play) {
+s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
     if (this->unk16C == 0) {
         s32 i = 0;
 
@@ -405,8 +405,8 @@ s32 func_809EECBC(Boss05* this, PlayState* play) {
     return 0;
 }
 
-void func_809EEDD0(Boss05* this, PlayState* play) {
-    this->actionFunc = func_809EEDE8;
+void Boss05_LilyPadWithHead_SetupMove(Boss05* this, PlayState* play) {
+    this->actionFunc = Boss05_LilyPadWithHead_Move;
 }
 
 Vec3s D_809F1C60[7] = {
@@ -416,7 +416,7 @@ Vec3s D_809F1C8C[7] = {
     { -0x3200, 0, 0 }, { 0, 0, 0 }, { 0x1E00, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 },
 };
 
-void func_809EEDE8(Boss05* this, PlayState* play) {
+void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
     s32 i;
     Player* sp108 = GET_PLAYER(play);
     s32 j;
@@ -627,12 +627,12 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
             break;
     }
 
-    var_s4_2 = func_809EECBC(this, play);
+    var_s4_2 = Boss05_LilyPadWithHead_UpdateDamage(this, play);
     if ((var_s4_2 != 0) || (this->unk168 == 1)) {
         Boss05* temp_v0_6;
 
         this->dyna.actor.params = BIO_DEKU_BABA_TYPE_LILY_PAD;
-        this->actionFunc = func_809EF9BC;
+        this->actionFunc = Boss05_LilyPad_Idle;
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         if (this->unk168 != 0) {
@@ -694,7 +694,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->headCollider.base);
 }
 
-void func_809EF9BC(Boss05* this, PlayState* play) {
+void Boss05_LilyPad_Idle(Boss05* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 distToPlayer = sqrtf(this->dyna.actor.xyzDistToPlayerSq);
     s16 var_a1;
@@ -713,7 +713,7 @@ void func_809EF9BC(Boss05* this, PlayState* play) {
     }
 }
 
-void func_809EFAB4(Boss05* this, PlayState* play) {
+void Boss05_FallingHead_Fall(Boss05* this, PlayState* play) {
     s32 i;
     Vec3f unusedPos;
     Vec3f bubblePos;
@@ -786,10 +786,10 @@ void func_809EFAB4(Boss05* this, PlayState* play) {
     }
 }
 
-void func_809EFE50(Actor* thisx, PlayState* play2) {
+void Boss05_WalkingHead_UpdateDamage(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Boss05* this = THIS;
-    u8 takeDamage = false;
+    u8 attackDealsDamage = false;
     ColliderInfo* hitInfo;
 
     if ((this->unk16A == 0) && (this->headCollider.elements[0].info.bumperFlags & BUMP_HIT)) {
@@ -811,35 +811,35 @@ void func_809EFE50(Actor* thisx, PlayState* play2) {
 
         switch (this->dyna.actor.colChkInfo.damageEffect) {
             case 1:
-                func_809F0A0C(this, play);
+                Boss05_WalkingHead_SetupStunned(this, play);
                 break;
 
             case 2:
                 this->drawDmgEffState = 1;
-                takeDamage = true;
+                attackDealsDamage = true;
                 break;
 
             case 3:
-                func_809F0A64(this, play);
+                Boss05_WalkingHead_SetupFreeze(this, play);
                 this->drawDmgEffState = 10;
                 break;
 
             case 4:
                 this->drawDmgEffState = 20;
-                takeDamage = true;
+                attackDealsDamage = true;
                 break;
 
             default:
-                takeDamage = true;
+                attackDealsDamage = true;
                 break;
         }
 
-        if (takeDamage) {
-            u8 damage; // Probably fake?
+        if (attackDealsDamage) {
+            u8 damage;
 
-            if ((this->actionFunc == func_809F0ABC) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-                (this->drawDmgEffTimer != 0)) {
-                func_809EE4E0(this, play);
+            if ((this->actionFunc == Boss05_WalkingHead_Stunned) &&
+                (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) && (this->drawDmgEffTimer != 0)) {
+                Boss05_WalkingHead_Thaw(this, play);
                 this->drawDmgEffState = 0;
             }
 
@@ -849,13 +849,13 @@ void func_809EFE50(Actor* thisx, PlayState* play2) {
                 Enemy_StartFinishingBlow(play, &this->dyna.actor);
             }
 
-            func_809F0708(this, play);
+            Boss05_WalkingHead_SetupDamaged(this, play);
             this->unk16C = 15;
         }
     }
 }
 
-s32 func_809F0014(Boss05* this, PlayState* play) {
+s32 Boss05_WalkingHead_IsLookingAtPlayer(Boss05* this, PlayState* play) {
     s16 yawDiff = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
     if (ABS_ALT(yawDiff) < 0x3000) {
@@ -865,19 +865,19 @@ s32 func_809F0014(Boss05* this, PlayState* play) {
     }
 }
 
-void func_809F0058(Boss05* this, PlayState* play) {
-    if (func_809F0014(this, play) && (this->dyna.actor.xyzDistToPlayerSq <= SQ(200.0f)) &&
+void Boss05_WalkingHead_CheckIfPlayerWasSpotted(Boss05* this, PlayState* play) {
+    if (Boss05_WalkingHead_IsLookingAtPlayer(this, play) && (this->dyna.actor.xyzDistToPlayerSq <= SQ(200.0f)) &&
         (fabsf(this->dyna.actor.playerHeightRel) < 70.0f)) {
-        func_809F0474(this, play);
+        Boss05_WalkingHead_SetupSpottedPlayer(this, play);
     }
 }
 
-void func_809F00CC(Boss05* this, PlayState* play) {
-    this->actionFunc = func_809F010C;
+void Boss05_WalkingHead_SetupTransform(Boss05* this, PlayState* play) {
+    this->actionFunc = Boss05_WalkingHead_Transform;
     Animation_MorphToPlayOnce(&this->headSkelAnime, &gBioDekuBabaHeadTransformAnim, -5.0f);
 }
 
-void func_809F010C(Boss05* this, PlayState* play) {
+void Boss05_WalkingHead_Transform(Boss05* this, PlayState* play) {
     SkelAnime_Update(&this->headSkelAnime);
     Math_ApproachS(&this->dyna.actor.shape.rot.x, 0, 2, 0x400);
     Math_ApproachS(&this->dyna.actor.shape.rot.z, 0, 2, 0x400);
@@ -885,32 +885,32 @@ void func_809F010C(Boss05* this, PlayState* play) {
     Math_ApproachF(&this->limbScale, 1.0f, 1.0f, 0.14f);
 
     if (this->limbScale == 1.0f) {
-        func_809F01CC(this, play);
+        Boss05_WalkingHead_SetupIdle(this, play);
     }
 }
 
-void func_809F01CC(Boss05* this, PlayState* play) {
-    this->actionFunc = func_809F0244;
+void Boss05_WalkingHead_SetupIdle(Boss05* this, PlayState* play) {
+    this->actionFunc = Boss05_WalkingHead_Idle;
     Animation_MorphToLoop(&this->headSkelAnime, &gBioDekuBabaHeadIdleAnim, -10.0f);
     this->unk162[0] = (s32)(Rand_ZeroFloat(25.0f) + 25.0f);
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
 }
 
-void func_809F0244(Boss05* this, PlayState* play) {
+void Boss05_WalkingHead_Idle(Boss05* this, PlayState* play) {
     SkelAnime_Update(&this->headSkelAnime);
     Math_ApproachZeroF(&this->dyna.actor.speed, 1.0f, 2.5f);
     Math_ApproachS(&this->dyna.actor.shape.rot.x, 0, 2, 0x400);
     Math_ApproachS(&this->dyna.actor.shape.rot.z, 0, 2, 0x400);
 
     if (this->unk162[0] == 0) {
-        func_809F02D0(this, play);
+        Boss05_WalkingHead_SetupWalk(this, play);
     }
 
-    func_809F0058(this, play);
+    Boss05_WalkingHead_CheckIfPlayerWasSpotted(this, play);
 }
 
-void func_809F02D0(Boss05* this, PlayState* play) {
-    this->actionFunc = func_809F0374;
+void Boss05_WalkingHead_SetupWalk(Boss05* this, PlayState* play) {
+    this->actionFunc = Boss05_WalkingHead_Walk;
     Animation_MorphToLoop(&this->headSkelAnime, &gBioDekuBabaHeadWalkAnim, 0.0f);
     this->unk162[0] = (s32)(Rand_ZeroFloat(80.0f) + 60.0f);
     this->unk34C.x = Rand_CenteredFloat(400.0f) + this->dyna.actor.world.pos.x;
@@ -918,7 +918,7 @@ void func_809F02D0(Boss05* this, PlayState* play) {
     this->unk358 = 0.0f;
 }
 
-void func_809F0374(Boss05* this, PlayState* play) {
+void Boss05_WalkingHead_Walk(Boss05* this, PlayState* play) {
     f32 deltaX;
     f32 deltaZ;
 
@@ -931,36 +931,36 @@ void func_809F0374(Boss05* this, PlayState* play) {
     Math_ApproachF(&this->unk358, 2000.0f, 1.0f, 100.0f);
 
     if ((this->unk162[0] == 0) || ((SQ(deltaX) + SQ(deltaZ)) < 2500.0f)) {
-        func_809F01CC(this, play);
+        Boss05_WalkingHead_SetupIdle(this, play);
     }
 
-    func_809F0058(this, play);
+    Boss05_WalkingHead_CheckIfPlayerWasSpotted(this, play);
 }
 
-void func_809F0474(Boss05* this, PlayState* play) {
-    this->actionFunc = func_809F04C0;
+void Boss05_WalkingHead_SetupSpottedPlayer(Boss05* this, PlayState* play) {
+    this->actionFunc = Boss05_WalkingHead_SpottedPlayer;
     Animation_MorphToPlayOnce(&this->headSkelAnime, &gBioDekuBabaHeadSpotAnim, 0.0f);
     this->unk162[0] = 20;
 }
 
-void func_809F04C0(Boss05* this, PlayState* play) {
+void Boss05_WalkingHead_SpottedPlayer(Boss05* this, PlayState* play) {
     SkelAnime_Update(&this->headSkelAnime);
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_VOICE - SFX_FLAG);
     Math_ApproachZeroF(&this->dyna.actor.speed, 1.0f, 2.5f);
     Math_ApproachS(&this->dyna.actor.world.rot.y, this->dyna.actor.yawTowardsPlayer, 5, 0x1000);
     if (this->unk162[0] == 0) {
-        func_809F0538(this, play);
+        Boss05_WalkingHead_SetupCharge(this, play);
     }
 }
 
-void func_809F0538(Boss05* this, PlayState* arg1) {
-    this->actionFunc = func_809F0590;
+void Boss05_WalkingHead_SetupCharge(Boss05* this, PlayState* arg1) {
+    this->actionFunc = Boss05_WalkingHead_Charge;
     Animation_MorphToLoop(&this->headSkelAnime, &gBioDekuBabaHeadChargeAnim, 0.0f);
     this->unk162[0] = 60;
     this->unk358 = 0.0f;
 }
 
-void func_809F0590(Boss05* this, PlayState* play) {
+void Boss05_WalkingHead_Charge(Boss05* this, PlayState* play) {
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_VOICE - SFX_FLAG);
     SkelAnime_Update(&this->headSkelAnime);
     Math_ApproachF(&this->dyna.actor.speed, 8.0f, 1.0f, 4.0f);
@@ -968,50 +968,49 @@ void func_809F0590(Boss05* this, PlayState* play) {
     Math_ApproachF(&this->unk358, 4000.0f, 1.0f, 400.0f);
 
     if ((this->unk162[0] == 0) || (this->dyna.actor.xyzDistToPlayerSq <= SQ(150.0f))) {
-        func_809F0650(this, play);
+        Boss05_WalkingHead_SetupAttack(this, play);
     }
 }
 
-void func_809F0650(Boss05* this, PlayState* arg1) {
-    this->actionFunc = func_809F06B8;
+void Boss05_WalkingHead_SetupAttack(Boss05* this, PlayState* arg1) {
+    this->actionFunc = Boss05_WalkingHead_Attack;
     Animation_MorphToPlayOnce(&this->headSkelAnime, &gBioDekuBabaHeadAttackAnim, 0.0f);
     this->animEndFrame = Animation_GetLastFrame(&gBioDekuBabaHeadAttackAnim);
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_ATTACK);
 }
 
-void func_809F06B8(Boss05* this, PlayState* play) {
+void Boss05_WalkingHead_Attack(Boss05* this, PlayState* play) {
     SkelAnime_Update(&this->headSkelAnime);
     if (Animation_OnFrame(&this->headSkelAnime, this->animEndFrame)) {
-        func_809F01CC(this, play);
+        Boss05_WalkingHead_SetupIdle(this, play);
     }
 }
 
-void func_809F0708(Boss05* this, PlayState* play) {
-    this->actionFunc = func_809F0780;
+void Boss05_WalkingHead_SetupDamaged(Boss05* this, PlayState* play) {
+    this->actionFunc = Boss05_WalkingHead_Damaged;
     Animation_MorphToPlayOnce(&this->headSkelAnime, &gBioDekuBabaHeadDamagedAnim, 0.0f);
     this->animEndFrame = Animation_GetLastFrame(&gBioDekuBabaHeadAttackAnim);
-    Actor_SetColorFilter(&this->dyna.actor, 0x4000, 120, 0, 30);
+    Actor_SetColorFilter(&this->dyna.actor, COLORFILTER_COLORFLAG_RED, 120, COLORFILTER_BUFFLAG_OPA, 30);
 }
 
-void func_809F0780(Boss05* this, PlayState* play) {
+void Boss05_WalkingHead_Damaged(Boss05* this, PlayState* play) {
     s32 i;
     s32 j;
     Vec3f bubblePos;
-    Boss05* temp_v0;
+    Boss05* fragment;
 
     SkelAnime_Update(&this->headSkelAnime);
     if ((s8)this->dyna.actor.colChkInfo.health <= 0) {
         if (Animation_OnFrame(&this->headSkelAnime, 22.0f)) {
             for (i = 0; i < 14; i++) {
-                temp_v0 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
-                                                      this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                                      this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                                                      this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
-                                                      i + BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW);
+                fragment = (Boss05*)Actor_SpawnAsChild(
+                    &play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->dyna.actor.world.pos.x,
+                    this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
+                    this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, i + BIO_DEKU_BABA_TYPE_FRAGMENT_BASE);
 
-                if (temp_v0 != NULL) {
+                if (fragment != NULL) {
                     for (j = 0; j < BIO_DEKU_BABA_HEAD_LIMB_MAX; j++) {
-                        temp_v0->headSkelAnime.jointTable[j] = this->headSkelAnime.jointTable[j];
+                        fragment->headSkelAnime.jointTable[j] = this->headSkelAnime.jointTable[j];
                     }
                 }
             }
@@ -1028,32 +1027,32 @@ void func_809F0780(Boss05* this, PlayState* play) {
             Item_DropCollectibleRandom(play, NULL, &this->dyna.actor.world.pos, 0xE0);
         }
     } else if (Animation_OnFrame(&this->headSkelAnime, this->animEndFrame)) {
-        func_809F0474(this, play);
+        Boss05_WalkingHead_SetupSpottedPlayer(this, play);
     }
 }
 
-void func_809F0A0C(Boss05* this, PlayState* play) {
-    this->actionFunc = func_809F0ABC;
+void Boss05_WalkingHead_SetupStunned(Boss05* this, PlayState* play) {
+    this->actionFunc = Boss05_WalkingHead_Stunned;
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
     this->unk162[0] = 40;
-    Actor_SetColorFilter(&this->dyna.actor, 0, 120, 0, 40);
+    Actor_SetColorFilter(&this->dyna.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
 }
 
-void func_809F0A64(Boss05* this, PlayState* play) {
-    this->actionFunc = func_809F0ABC;
+void Boss05_WalkingHead_SetupFreeze(Boss05* this, PlayState* play) {
+    this->actionFunc = Boss05_WalkingHead_Stunned;
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
     this->unk162[0] = 80;
-    Actor_SetColorFilter(&this->dyna.actor, 0, 120, 0, 80);
+    Actor_SetColorFilter(&this->dyna.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
-void func_809F0ABC(Boss05* this, PlayState* play) {
+void Boss05_WalkingHead_Stunned(Boss05* this, PlayState* play) {
     Math_ApproachZeroF(&this->dyna.actor.speed, 1.0f, 2.5f);
     if (this->unk162[0] == 0) {
-        func_809F01CC(this, play);
+        Boss05_WalkingHead_SetupIdle(this, play);
     }
 }
 
-void func_809F0B0C(Boss05* this, PlayState* play) {
+void Boss05_Fragment_Move(Boss05* this, PlayState* play) {
     Actor_MoveWithGravity(&this->dyna.actor);
 
     if (this->unk15C == 0) {
@@ -1126,7 +1125,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
         Math_ApproachZeroF(&this->unk338, 1.0f, 1.0f);
         Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 50.0f, 40.0f,
                                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
-        func_809EFE50(&this->dyna.actor, play);
+        Boss05_WalkingHead_UpdateDamage(&this->dyna.actor, play);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->headCollider.base);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->headCollider.base);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->headCollider.base);
@@ -1168,7 +1167,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
             // fallthrough
         case 11:
             if (this->drawDmgEffTimer == 0) {
-                func_809EE4E0(this, play);
+                Boss05_WalkingHead_Thaw(this, play);
                 this->drawDmgEffState = 0;
             } else {
                 Math_ApproachF(&this->drawDmgEffScale, 1.0f, 1.0f, 0.25f);
@@ -1258,7 +1257,7 @@ void Boss05_PostLimbDraw_LilyPad(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     if (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_LOWER_STEM) {
         Matrix_MultVec3f(&D_809F1CC4, &this->unk324);
 
-        if (this->actionFunc == func_809EFAB4) {
+        if (this->actionFunc == Boss05_FallingHead_Fall) {
             Matrix_MultVec3f(&D_809F1CC4, &this->dyna.actor.focus.pos);
         }
 
@@ -1276,7 +1275,7 @@ void Boss05_PostLimbDraw_LilyPad(PlayState* play, s32 limbIndex, Gfx** dList, Ve
         Matrix_MultVecY(-500.0f, &spherePos1);
         Boss05_SetColliderSphere(1, &this->lilyPadCollider, &spherePos1);
 
-        if (this->actionFunc == func_809EEDE8) {
+        if (this->actionFunc == Boss05_LilyPadWithHead_Move) {
             Matrix_MultVecY(1500.0f, &this->dyna.actor.focus.pos);
         }
     }
@@ -1402,7 +1401,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    if (this->actionFunc == func_809EEDE8) {
+    if (this->actionFunc == Boss05_LilyPadWithHead_Move) {
         SkelAnime_DrawFlexOpa(play, this->lilyPadSkelAnime.skeleton, this->lilyPadSkelAnime.jointTable,
                               this->lilyPadSkelAnime.dListCount, Boss05_OverrideLimbDraw_LilyPadWithHead,
                               Boss05_PostLimbDraw_LilyPad, &this->dyna.actor);
