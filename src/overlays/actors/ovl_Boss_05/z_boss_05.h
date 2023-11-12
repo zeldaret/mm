@@ -14,7 +14,8 @@ typedef enum BioDekuBabaType {
     /*  2 */ BIO_DEKU_BABA_TYPE_LILY_PAD,
     /*  3 */ BIO_DEKU_BABA_TYPE_FALLING_HEAD,
     /*  4 */ BIO_DEKU_BABA_TYPE_WALKING_HEAD,
-    /* 10 */ BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW = 10,
+    /* 10 */ BIO_DEKU_BABA_TYPE_FRAGMENT_BASE = 10,
+    /* 10 */ BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW = BIO_DEKU_BABA_TYPE_FRAGMENT_BASE,
     /* 11 */ BIO_DEKU_BABA_TYPE_FRAGMENT_UPPER_JAW,
     /* 12 */ BIO_DEKU_BABA_TYPE_FRAGMENT_BODY,
     /* 13 */ BIO_DEKU_BABA_TYPE_FRAGMENT_BACK_UPPER_LEG,
@@ -50,7 +51,7 @@ typedef struct Boss05 {
     /* 0x188 */ u8 drawDmgEffState;
     /* 0x189 */ u8 drawDmgEffType;
     /* 0x18C */ Vec3f bodyPartsPos[1];
-    /* 0x198 */ f32 unk198;
+    /* 0x198 */ f32 fallingHeadLimbScale;
     /* 0x19C */ s16 unk19C;
     /* 0x19E */ Vec3s unk19E[7];
     /* 0x1C8 */ ColliderJntSph lilyPadCollider;
@@ -65,9 +66,9 @@ typedef struct Boss05 {
     /* 0x348 */ s16 unk348;
     /* 0x34C */ Vec3f unk34C;
     /* 0x35C */ f32 unk358;
-    /* 0x35C */ f32 unk35C;
-    /* 0x360 */ f32 unk360;
-    /* 0x364 */ f32 unk364;
+    /* 0x35C */ f32 lowerJawScaleXZ;
+    /* 0x360 */ f32 bodyScale;
+    /* 0x364 */ f32 limbScale;
     /* 0x368 */ ColliderJntSph headCollider;
     /* 0x388 */ ColliderJntSphElement headColliderElements[1];
     /* 0x3C8 */ SkelAnime headSkelAnime;
