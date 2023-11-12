@@ -132,8 +132,8 @@ MIPS_VERSION := -mips2
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Suppress the warnings with -woff.
 CFLAGS += -G 0 -non_shared -fullwarn -verbose -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_mul -woff 649,838,712,516
 
-# The system heap is an area of memory that covers all the VRAM that is not
-# used by compiled code/data.
+# The system heap is an area of memory that covers all the RAM that is not
+# taken by compiled code/data.
 # It starts just after the end of compiled code (that is not an overlay) and
 # ends at a fixed location in VRAM.
 # That fixed location in VRAM is used by the framebuffers of the game and have
