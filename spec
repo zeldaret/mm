@@ -641,7 +641,7 @@ endseg
 beginseg
     name "system_heap"
     flags NOLOAD
-    // This segment is a just a dummy that is used to know where the other buffers (non framebuffers) end
+    // This segment is just a dummy that is used to know where the other buffers (non framebuffers) end
     include "build/src/buffers/system_heap.o"
 endseg
 
