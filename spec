@@ -629,6 +629,8 @@ beginseg
     include "build/data/code/njpgdspMain.rodata.o"
 endseg
 
+// The game expects all the segments after the `code` segment and before the first overlay to be `NOLOAD` ones
+
 beginseg
     name "buffers"
     flags NOLOAD
