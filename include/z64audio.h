@@ -597,6 +597,7 @@ typedef struct {
         /* 0x4 */ s8 asSbyte;
         /* 0x4 */ u8 asUbyte;
         /* 0x4 */ u32 asUInt;
+        /* 0x4 */ void* asPtr;
     };
 } AudioCmd; // size = 0x8
 
@@ -931,7 +932,7 @@ typedef struct {
 
 typedef void (*AudioCustomUpdateFunction)(void);
 typedef u32 (*AudioCustomSeqFunction)(s8 value, SequenceChannel* channel);
-typedef s32 (*AudioCustomReverbFunction)(Sample*, s32, s8, s32);
+typedef void* (*AudioCustomReverbFunction)(Sample*, s32, s8, s32);
 typedef Acmd* (*AudioCustomSynthFunction)(Acmd*, s32, s32);
 
 extern OSVoiceHandle gVoiceHandle;

@@ -19,7 +19,7 @@ void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAdd
     void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);
 
     if ((loadedRamAddr != NULL) && (vramAddr >= overlayEntry->vramStart) && (vramAddr < overlayEntry->vramEnd)) {
-        return ((uintptr_t)loadedRamAddr - (uintptr_t)overlayEntry->vramStart) + (uintptr_t)vramAddr;
+        return (void*)(((uintptr_t)loadedRamAddr - (uintptr_t)overlayEntry->vramStart) + (uintptr_t)vramAddr);
     }
     return vramAddr;
 }

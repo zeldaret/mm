@@ -448,7 +448,7 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
             if (this->stateFlags & ENAOB01_FLAG_PLAYER_CONFIRMED_CHOICE) {
                 this->stateFlags &= ~ENAOB01_FLAG_PLAYER_CONFIRMED_CHOICE;
                 Rupees_ChangeBy(-this->rupeesBet);
-                func_800B7298(play, NULL, PLAYER_CSACTION_WAIT);
+                Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
                 play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnAob01_BeforeRace_StartRace;

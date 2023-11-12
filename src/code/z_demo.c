@@ -1127,7 +1127,7 @@ void Cutscene_SetActorCue(CutsceneContext* csCtx, u8** script, s16 cueChannel) {
     *script += sizeof(numCues);
 
     for (i = 0; i < numCues; i++) {
-        CsCmdActorCue* cue = *(CsCmdActorCue**)script;
+        CsCmdActorCue* cue = (CsCmdActorCue*)(*script);
 
         if ((csCtx->curFrame >= cue->startFrame) && (csCtx->curFrame < cue->endFrame)) {
             csCtx->actorCues[cueChannel] = cue;

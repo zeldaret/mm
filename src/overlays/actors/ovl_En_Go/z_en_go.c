@@ -2318,7 +2318,7 @@ void EnGo_Snowball(EnGo* this, PlayState* play) {
  * Return the MsgEvent script appropriate for the actor.
  */
 s32* EnGo_GetMsgEventScript(EnGo* this, PlayState* play) {
-    static s32 sMsgScriptGraveyard[] = {
+    static s32* sMsgScriptGraveyard[] = {
         sMsgScriptGoronGravemaker,
         sMsgScriptGoronFrozen,
     };
