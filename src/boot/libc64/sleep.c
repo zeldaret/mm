@@ -5,7 +5,7 @@ void Sleep_Cycles(u64 time) {
     OSMesg msg[1];
     OSTimer timer;
 
-    osCreateMesgQueue(&mq, msg, ARRAY_COUNT(msg));
+    osCreateMesgQueue(&mq, msg, 1);
     osSetTimer(&timer, time, 0, &mq, NULL);
     osRecvMesg(&mq, NULL, OS_MESG_BLOCK);
 }

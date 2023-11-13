@@ -9,7 +9,9 @@
  * @note The only coded effect has a visual effect to blend the tiles to a single point, which looks like the screen
  * gets sucked into.
  */
+
 #include "global.h"
+#include "libc64/sleep.h"
 #include "system_malloc.h"
 
 Gfx sTransTileSetupDL[] = {

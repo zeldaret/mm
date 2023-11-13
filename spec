@@ -44,7 +44,7 @@ beginseg
     include "build/src/boot/libc64/__osMalloc.o"
     include "build/src/boot/O2/sprintf.o"
     include "build/src/boot/O2/printutils.o"
-    include "build/src/boot/O2/sleep.o"
+    include "build/src/boot/libc64/sleep.o"
     include "build/asm/boot/setcause.text.o"
     include "build/src/libultra/os/sendmesg.o"
     include "build/src/libultra/io/pfsfreeblocks.o"
