@@ -3,8 +3,6 @@
 
 #include "PR/ultratypes.h"
 
-#include "other_types.h"
-
 //! These values are recommended by the algorithms book *Numerical Recipes in C. The Art of Scientific Computing*, 2nd
 //! Edition, 1992, ISBN 0-521-43108-5. (p. 284):
 //! > This is about as good as any 32-bit linear congruential generator, entirely adequate for many uses.
@@ -19,6 +17,11 @@ void Rand_Seed_Variable(u32* rndNum, u32 seed);
 u32 Rand_Next_Variable(u32* rndNum);
 f32 Rand_ZeroOne_Variable(u32* rndNum);
 f32 Rand_Centered_Variable(u32* rndNum);
+
+typedef union HexFloat {
+    u32 hex;
+    f32 flt;
+} HexFloat;
 
 extern HexFloat gRandFloat;
 
