@@ -274,7 +274,7 @@ s32 D_80A41D5C;
 s32 D_80A41D60;
 s32 D_80A41D64;
 s32 D_80A41D68;
-Vec3f* D_80A41D6C;
+Vec3f* sKafeiCurBodyPartPos;
 
 s32 func_80A3E7E0(EnTest3* this, EnTest3ActionFunc actionFunc) {
     if (actionFunc == this->unk_D94) {
@@ -1098,7 +1098,7 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     EnTest3* this = THIS;
 
     if (limbIndex == KAFEI_LIMB_ROOT) {
-        D_80A41D6C = this->player.bodyPartsPos - 1;
+        sKafeiCurBodyPartPos = &this->player.bodyPartsPos[0] - 1;
         if (!(this->player.skelAnime.moveFlags & ANIM_FLAG_4) || (this->player.skelAnime.moveFlags & ANIM_FLAG_1)) {
             pos->x *= this->player.ageProperties->unk_08;
             pos->z *= this->player.ageProperties->unk_08;
@@ -1118,7 +1118,7 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         }
     } else {
         if (*dList != NULL) {
-            D_80A41D6C++;
+            sKafeiCurBodyPartPos++;
         }
         if (D_80A418C8) {
             *dList = NULL;
@@ -1153,13 +1153,13 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
     EnTest3* this = THIS;
 
     if (*dList2 != NULL) {
-        Matrix_MultZero(D_80A41D6C);
+        Matrix_MultZero(sKafeiCurBodyPartPos);
     }
     if (limbIndex == KAFEI_LIMB_LEFT_HAND) {
         MtxF curMtxF;
         Actor* leftHandActor;
 
-        Math_Vec3f_Copy(&this->player.leftHandWorld.pos, D_80A41D6C);
+        Math_Vec3f_Copy(&this->player.leftHandWorld.pos, sKafeiCurBodyPartPos);
         if (*dList1 != NULL) {
             func_80128640(play, &this->player, *dList1);
             if (this->player.stateFlags3 & PLAYER_STATE3_20000000) {
