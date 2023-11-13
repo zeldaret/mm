@@ -1,6 +1,6 @@
 #include "global.h"
 
-ALIGNED(8)
+ALIGNED(16)
 s16 gLowPassFilterData[16 * 8] = {
     /* 0x0 */ 0,     0,     0,    32767, 0,    0,     0,     0,    // Identity filter (delta function)
     /* 0x1 */ 3854,  4188,  4398, 4469,  4398, 4188,  3854,  3416, // low-freq cutoff (more filtering)
@@ -20,7 +20,7 @@ s16 gLowPassFilterData[16 * 8] = {
     /* 0xF */ 841,   -853,  863,  26829, 863,  -853,  841,   -820, // high-freq cutoff (less filtering)
 };
 
-ALIGNED(8)
+ALIGNED(16)
 s16 gHighPassFilterData[15 * 8] = {
     /* 0x0 */ -289,  -291,  -289,  30736, -289,  -291,  -289,  -290, // low-freq cutoff (less filtering)
     /* 0x1 */ -464,  -467,  -467,  29506, -467,  -467,  -464,  -463,
@@ -40,7 +40,7 @@ s16 gHighPassFilterData[15 * 8] = {
 };
 
 // clang-format off
-ALIGNED(8) s16 gBandStopFilterData[105 * 8] = {
+ALIGNED(16) s16 gBandStopFilterData[105 * 8] = {
     // Block 0
     /* 0x00 */ -43,   -716,  -1205, 28210, -1205, -716,  -43,   629,
     /* 0x01 */ 249,   -919,  -1819, 25489, -1819, -919,  249,   1301,
@@ -175,7 +175,7 @@ ALIGNED(8) s16 gBandStopFilterData[105 * 8] = {
     /* 0x68 */ 434,   -453,  467,   29652, 467,   -453,  434,   -405,
 };
 
-ALIGNED(8) s16 gBandPassFilterData[105 * 8] = {
+ALIGNED(16) s16 gBandPassFilterData[105 * 8] = {
     // Block 0
     /* 0x00 */ 687,   4058,  6599,  7544,  6599,  4058,  687,   -2532,
     /* 0x01 */ -1303, 2777,  6337,  7745,  6337,  2777,  -1303, -4185,
@@ -310,7 +310,7 @@ ALIGNED(8) s16 gBandPassFilterData[105 * 8] = {
     /* 0x68 */ -3854, 4188,  -4398, 4469,  -4398, 4188,  -3854, 3415,
 };
 
-ALIGNED(8) s16 gSawtoothWaveSample[] = {
+ALIGNED(16) s16 gSawtoothWaveSample[] = {
     // 1st Harmonic
     0,      1023,   2047,   3071,   4095,   5119,   6143,   7167,
     8191,   9215,   10239,  11263,  12287,  13311,  14335,  15359,
@@ -352,7 +352,7 @@ ALIGNED(8) s16 gSawtoothWaveSample[] = {
     0,      8191,   16383,  24575,  -32767, -24575, -16383, -8191,
 };
 
-ALIGNED(8) s16 gTriangleWaveSample[] = {
+ALIGNED(16) s16 gTriangleWaveSample[] = {
     // 1st Harmonic
     0,      2047,   4095,   6143,   8191,   10239,  12287,  14335,
     16383,  18431,  20479,  22527,  24575,  26623,  28671,  30719,
@@ -394,7 +394,7 @@ ALIGNED(8) s16 gTriangleWaveSample[] = {
     0,      16383,  32767,  16383,  0,      -16383, -32767, -16383,
 };
 
-ALIGNED(8) s16 gSineWaveSample[] = {
+ALIGNED(16) s16 gSineWaveSample[] = {
     // 1st Harmonic
     0,      3211,   6392,   9511,   12539,  15446,  18204,  20787,
     23169,  25329,  27244,  28897,  30272,  31356,  32137,  32609,
@@ -436,7 +436,7 @@ ALIGNED(8) s16 gSineWaveSample[] = {
     0,      23169,  32767,  23169,  0,      -23169, -32767, -23169,
 };
 
-ALIGNED(8) s16 gSquareWaveSample[] = {
+ALIGNED(16) s16 gSquareWaveSample[] = {
     // 1st Harmonic
     0,      0,      0,      0,      0,      0,      0,      0,
     0,      0,      0,      0,      0,      0,      0,      0,
@@ -478,7 +478,7 @@ ALIGNED(8) s16 gSquareWaveSample[] = {
     0,      0,      32767,  32767,  0,      0,      -32767, -32767,
 };
 
-ALIGNED(8) s16 gWhiteNoiseSample[] = {
+ALIGNED(16) s16 gWhiteNoiseSample[] = {
     // 1st Harmonic
     0,      -25689, -25791, 27803,  -27568, -21030, 22174,  6298,
     27071,  -18531, 28649,  2284,   3380,   6890,   -12682, -21114,
@@ -521,7 +521,7 @@ ALIGNED(8) s16 gWhiteNoiseSample[] = {
 };
 
 // Sine White Noise?
-ALIGNED(8) s16 D_801D4790[] = {
+ALIGNED(16) s16 D_801D4790[] = {
     // 1st Harmonic
     0,      16316,  20148,  20257,  27209,  -32657, 29264,  27259,
     -29394, -21494, -26410, 30770,  30033,  29130,  20206,  14129,
@@ -564,7 +564,7 @@ ALIGNED(8) s16 D_801D4790[] = {
 };
 
 // Pulse Wave (duty cycle = 12.5%)
-ALIGNED(8) s16 gEighthPulseWaveSample[] = {
+ALIGNED(16) s16 gEighthPulseWaveSample[] = {
     // 1st Harmonic
     0,      0,      0,      0,      0,      0, 0,      0,
     0,      0,      0,      0,      0,      0, 0,      0,
@@ -607,7 +607,7 @@ ALIGNED(8) s16 gEighthPulseWaveSample[] = {
 };
 
 // Pulse Wave (duty cycle = 25%)
-ALIGNED(8) s16 gQuarterPulseWaveSample[] = {
+ALIGNED(16) s16 gQuarterPulseWaveSample[] = {
     // 1st Harmonic
     0,      0,      0,      0,      0,      0,      0,      0,
     0,      0,      0,      0,      0,      0,      0,      0,

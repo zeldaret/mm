@@ -1,6 +1,12 @@
-#include "global.h"
+#include "z64save.h"
 
-SaveContext gSaveContext;
+#include "alignment.h"
+#include "sequence.h"
+#include "libc/stdbool.h"
+#include "z64environment.h"
+#include "z64transition.h"
+
+ALIGNED(16) SaveContext gSaveContext;
 
 void SaveContext_Init(void) {
     bzero(&gSaveContext, sizeof(SaveContext));
