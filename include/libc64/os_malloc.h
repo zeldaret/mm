@@ -1,5 +1,5 @@
-#ifndef OS_MALLOC_H
-#define OS_MALLOC_H
+#ifndef LIBC64_OS_MALLOC_H
+#define LIBC64_OS_MALLOC_H
 
 #include "PR/ultratypes.h"
 #include "PR/os_message.h"
@@ -13,7 +13,7 @@ typedef struct ArenaNode {
     /* 0xC */ struct ArenaNode* prev;
 } ArenaNode; // size = 0x10
 
-typedef struct {
+typedef struct Arena {
     /* 0x00 */ ArenaNode* head;
     /* 0x04 */ void* start;
     /* 0x08 */ OSMesgQueue lock;
