@@ -295,7 +295,7 @@ f32 Actor_WorldDistXZToActor(Actor* actorA, Actor* actorB);
 f32 Actor_WorldDistXZToPoint(Actor* actor, Vec3f* refPoint);
 void Actor_OffsetOfPointInActorCoords(Actor* actor, Vec3f* offset, Vec3f* point);
 f32 Actor_HeightDiff(Actor* actor1, Actor* actor2);
-void Actor_SetControlStickData(PlayState* play, Input* input, f32 magnitude, s16 baseYaw);
+void Actor_SetControlStickData(PlayState* play, Input* input, f32 controlStickMagnitude, s16 controlStickAngle);
 f32 Player_GetHeight(Player* player);
 f32 Player_GetRunSpeedLimit(Player* player);
 s32 func_800B7118(Player* player);

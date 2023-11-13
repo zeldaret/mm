@@ -460,11 +460,11 @@ s32 func_80BA42BC(EnToto* this, PlayState* play) {
 
     if (player->actor.world.pos.z > -310.0f) {
         if ((player->actor.world.pos.x > -150.0f) || (player->actor.world.pos.z > -172.0f)) {
-            numPoints = 3;
+            numPoints = ARRAY_COUNT(sPlayerOverrideInputPosList);
         } else if (player->actor.world.pos.z > -232.0f) {
-            numPoints = 2;
+            numPoints = ARRAY_COUNT(sPlayerOverrideInputPosList) - 1;
         } else {
-            numPoints = 1;
+            numPoints = ARRAY_COUNT(sPlayerOverrideInputPosList) - 2;
         }
     }
 

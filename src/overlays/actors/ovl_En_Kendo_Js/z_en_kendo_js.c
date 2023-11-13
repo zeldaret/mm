@@ -33,7 +33,7 @@ void func_80B276D8(EnKendoJs* this, PlayState* play);
 void func_80B27760(EnKendoJs* this);
 void func_80B27774(EnKendoJs* this, PlayState* play);
 void func_80B2783C(EnKendoJs* this, PlayState* play);
-s32 EnKendoJs_MovePlayerToPos(PlayState* play, Vec3f arg1);
+s32 EnKendoJs_MovePlayerToPos(PlayState* play, Vec3f targetPos);
 void func_80B279F0(EnKendoJs* this, PlayState* play, s32 arg2);
 void func_80B27A90(EnKendoJs* this, PlayState* play);
 

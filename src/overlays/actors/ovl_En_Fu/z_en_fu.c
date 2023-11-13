@@ -40,7 +40,7 @@ void func_80963540(EnFu* this);
 void func_80963560(EnFu* this, PlayState* play);
 void func_80963610(EnFu* this);
 void func_80963630(EnFu* this, PlayState* play);
-s32 EnFu_MovePlayerToPos(PlayState* play, Vec3f pos);
+s32 EnFu_MovePlayerToPos(PlayState* play, Vec3f targetPos);
 s32 func_809638F8(PlayState* play);
 void func_809639D0(EnFu* this, PlayState* play);
 void func_80963DE4(EnFu* this, PlayState* play);
