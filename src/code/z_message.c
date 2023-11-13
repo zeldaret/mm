@@ -2290,7 +2290,8 @@ void Message_Decode(PlayState* play) {
 
                 loadChar = false;
                 for (i = 0; i < 5; i++) {
-                    //! @bug OoB read on spAC[i + 3]. The only access that is in-bounds is for `i == 0`. All the others will be reading garbage from the stack
+                    //! @bug OoB read on spAC[i + 3]. The only access that is in-bounds is for `i == 0`. All the others
+                    //! will be reading garbage from the stack
                     if ((i == 1) || (spAC[i + 3] != 0)) {
                         loadChar = true;
                     }
@@ -2725,8 +2726,8 @@ void Message_Decode(PlayState* play) {
                 func_8014CCB4(play, &decodedBufPos, &charTexIndex, &spC0);
             } else if (curChar == 0x22F) {
                 for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.bomberCode); i++) {
-                    //! @bug The array `gSaveContext.save.saveInfo.bomberCode` is larger than `digits` (a length of 5 vs 4).
-                    //! This produces an OoB read and write on `digits` the last iteration of this loop
+                    //! @bug The array `gSaveContext.save.saveInfo.bomberCode` is larger than `digits` (a length of 5 vs
+                    //! 4). This produces an OoB read and write on `digits` the last iteration of this loop
                     digits[i] = gSaveContext.save.saveInfo.bomberCode[i];
                     Font_LoadChar(play, digits[i] + 0x824F, charTexIndex);
                     charTexIndex += FONT_CHAR_TEX_SIZE;

@@ -1,6 +1,7 @@
 #include "global.h"
 
-ALIGNED(8) s16 gLowPassFilterData[16 * 8] = {
+ALIGNED(8)
+s16 gLowPassFilterData[16 * 8] = {
     /* 0x0 */ 0,     0,     0,    32767, 0,    0,     0,     0,    // Identity filter (delta function)
     /* 0x1 */ 3854,  4188,  4398, 4469,  4398, 4188,  3854,  3416, // low-freq cutoff (more filtering)
     /* 0x2 */ 3415,  4314,  4915, 5126,  4915, 4314,  3415,  2351,
@@ -19,7 +20,8 @@ ALIGNED(8) s16 gLowPassFilterData[16 * 8] = {
     /* 0xF */ 841,   -853,  863,  26829, 863,  -853,  841,   -820, // high-freq cutoff (less filtering)
 };
 
-ALIGNED(8) s16 gHighPassFilterData[15 * 8] = {
+ALIGNED(8)
+s16 gHighPassFilterData[15 * 8] = {
     /* 0x0 */ -289,  -291,  -289,  30736, -289,  -291,  -289,  -290, // low-freq cutoff (less filtering)
     /* 0x1 */ -464,  -467,  -467,  29506, -467,  -467,  -464,  -463,
     /* 0x2 */ -662,  -670,  -672,  28101, -672,  -670,  -662,  -656,
