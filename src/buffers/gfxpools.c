@@ -1,3 +1,3 @@
 #include "buffers.h"
 
-ALIGNED(16) GfxPool gGfxPools[2];
+GfxPool gGfxPools[2] ALIGNED(16);

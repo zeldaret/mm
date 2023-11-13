@@ -1,3 +1,3 @@
 #include "buffers.h"
 
-ALIGNED(16) STACK(gGfxSPTaskStack, 0x400);
+STACK(gGfxSPTaskStack, 0x400) ALIGNED(16);
