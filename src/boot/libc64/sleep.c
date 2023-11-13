@@ -1,6 +1,6 @@
-#include "global.h"
+#include "libc64/sleep.h"
 
-void Sleep_Cycles(u64 time) {
+void Sleep_Cycles(OSTime time) {
     OSMesgQueue mq;
     OSMesg msg[1];
     OSTimer timer;

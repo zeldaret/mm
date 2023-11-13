@@ -1,5 +1,5 @@
-#include "ultra64.h"
-#include "libc/stdlib.h"
+#include "libc64/sprintf.h"
+
 #include "libc/string.h"
 
 void* proutSprintf(void* dst, const char* fmt, size_t size) {
