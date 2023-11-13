@@ -45,17 +45,6 @@ typedef struct {
     /* 0x258 */ u8 numWords;
 } OSVoiceDictionary; // size = 0x25C
 
-typedef struct {
-    /* 0x00 */ OSVoiceDictionary* dict;
-    /* 0x04 */ s8 mode;
-    /* 0x08 */ OSVoiceData* data;
-    /* 0x0C */ u16 distance;
-    /* 0x0E */ u16 answerNum;
-    /* 0x10 */ u16 warning;
-    /* 0x12 */ u16 voiceLevel;
-    /* 0x14 */ u16 voiceRelLevel;
-} OSVoiceUnk; // size = 0x18
-
 s32 osVoiceInit(OSMesgQueue* mq, OSVoiceHandle* hd, int channel);
 s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word);
 s32 osVoiceCheckWord(u8* word);

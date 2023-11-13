@@ -16,19 +16,21 @@ typedef enum {
     /* -1 */ VOICE_WORD_ID_NONE = 0xFFFF
 } OSVoiceWordId;
 
-void func_801A4EB0(void);
+void AudioVoice_Noop(void);
 void func_801A4FD8(void);
 void func_801A5080(u16 wordId);
 u16 AudioVoice_GetWord(void);
-void func_801A5118(void);
+void AudioVoice_Update(void);
 s32 func_801A51F0(s32 errorCode);
 s32 func_801A5228(OSVoiceDictionary* dict);
 OSVoiceData* func_801A5390(void);
 void func_801A53E8(u16 distance, u16 answerNum, u16 warning, u16 voiceLevel, u16 voiceRelLevel);
-u8* func_801A54C4(void);
-s32 func_801A54D0(u16 wordId);
-s32 func_801A5680(u16 wordId);
+u8* AudioVoice_GetVoiceMaskPattern(void);
+s32 AudioVoice_ProcessWord1(u16 wordId);
+s32 AudioVoice_ProcessWord2(u16 wordId);
 s32 func_801A5808(void);
 void AudioVoice_ResetData(void);
+
+extern OSVoiceHandle gVoiceHandle;
 
 #endif

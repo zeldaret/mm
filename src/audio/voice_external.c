@@ -1,9 +1,7 @@
 #include "global.h"
 #include "z64voice.h"
 
-extern OSVoiceHandle gVoiceHandle;
-
-OSVoiceDictionary D_801D8BE0 = {
+OSVoiceDictionary sVoiceDictionary = {
     {
         // "アトナンジカン" - "atonanjikan" -  "How many hours"
         { 0x8341, 0x8367, 0x8369, 0x8393, 0x8357, 0x834A, 0x8393 },
@@ -28,11 +26,12 @@ OSVoiceDictionary D_801D8BE0 = {
 };
 
 u8 D_801D8E3C = 0;
-OSVoiceData* D_801D8E40 = NULL;
+OSVoiceData* sVoiceData = NULL;
 u16 sTopScoreWordId = VOICE_WORD_ID_NONE;
 u8 D_801D8E48 = 0;
 
-void func_801A4EB0(void) {
+// Relation to voice initialization
+void AudioVoice_Noop(void) {
 }
 
 void func_801A4EB8(void) {
@@ -48,17 +47,17 @@ void func_801A4EB8(void) {
         PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
     }
 
-    new_var = func_801A54C4();
+    new_var = AudioVoice_GetVoiceMaskPattern();
 
     for (i = 0; i < 1; i++) {
         sp38[i] = new_var[i];
     }
 
-    if (func_801A5228(&D_801D8BE0) == 0) {
+    if (func_801A5228(&sVoiceDictionary) == 0) {
         for (i = 0; i < VOICE_WORD_ID_MAX; i++) {
             index = i / 8;
             if (((sp38[index] >> (i % 8)) & 1) == 1) {
-                func_801A54D0(i);
+                AudioVoice_ProcessWord1(i);
             }
         }
 
@@ -72,14 +71,15 @@ void func_801A4FD8(void) {
     s32 errorCode;
     OSMesgQueue* serialEventQueue;
 
-    func_801A54D0(VOICE_WORD_ID_NONE);
+    AudioVoice_ProcessWord1(VOICE_WORD_ID_NONE);
+
     if (D_801D8E3C != 0) {
         serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
         osVoiceStopReadData(&gVoiceHandle);
         PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
-        errorCode = func_801A5228(&D_801D8BE0);
-        func_801A54D0(VOICE_WORD_ID_NONE);
+        errorCode = func_801A5228(&sVoiceDictionary);
+        AudioVoice_ProcessWord1(VOICE_WORD_ID_NONE);
         if (errorCode == 0) {
             func_801A53E8(800, 2, VOICE_WARN_TOO_SMALL, 500, 2000);
             D_801D8E3C = 1;
@@ -92,18 +92,17 @@ void func_801A4FD8(void) {
 
 void func_801A5080(u16 wordId) {
     if ((D_801D8E3C != 0) && (wordId < VOICE_WORD_ID_MAX)) {
-        func_801A5680(wordId);
+        AudioVoice_ProcessWord2(wordId);
     }
 }
 
 // Unused
 void func_801A50C0(u16 wordId) {
     if ((D_801D8E3C != 0) && (wordId < VOICE_WORD_ID_MAX)) {
-        func_801A54D0(wordId);
+        AudioVoice_ProcessWord1(wordId);
     }
 }
 
-// Used externally in many files
 u16 AudioVoice_GetWord(void) {
     return sTopScoreWordId;
 }
@@ -113,8 +112,7 @@ u8 func_801A510C(void) {
     return D_801D8E3C;
 }
 
-// Used externally in Audio_Update (code_8019AF00)
-void func_801A5118(void) {
+void AudioVoice_Update(void) {
     if (D_801D8E3C & 2) {
         D_801D8E3C &= 1;
         func_801A4EB8();
@@ -132,9 +130,9 @@ void func_801A5118(void) {
             D_801D8E48 = 0;
         }
 
-        D_801D8E40 = func_801A5390();
-        if (D_801D8E40 != 0) {
-            sTopScoreWordId = D_801D8E40->answer[0];
+        sVoiceData = func_801A5390();
+        if (sVoiceData != 0) {
+            sTopScoreWordId = sVoiceData->answer[0];
         } else {
             sTopScoreWordId = VOICE_WORD_ID_NONE;
         }

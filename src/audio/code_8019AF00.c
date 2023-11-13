@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64voice.h"
 
 typedef struct {
     /* 0x0 */ s8 x;
@@ -3626,7 +3627,7 @@ void Audio_Update(void) {
     if ((AudioSeq_UpdateAudioHeapReset() == 0) && !AudioSeq_ResetReverb()) {
         AudioOcarina_SetCustomSequence();
         AudioOcarina_Update();
-        func_801A5118();
+        AudioVoice_Update();
         Audio_StepFreqLerp(&sRiverFreqScaleLerp);
         Audio_StepFreqLerp(&sWaterfallFreqScaleLerp);
         Audio_UpdateRiverSoundVolumes();
