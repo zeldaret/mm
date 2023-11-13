@@ -3,10 +3,10 @@
 
 #include "ultra64.h"
 
-void Sleep_Cycles(OSTime time);
-void Sleep_Nsec(u32 nsec);
-void Sleep_Usec(u32 usec);
-void Sleep_Msec(u32 ms);
-void Sleep_Sec(u32 sec);
+void csleep(OSTime time);
+void nsleep(u32 nsec);
+void usleep(u32 usec);
+void msleep(u32 ms);
+void sleep(u32 sec);
 
 #endif

@@ -1,6 +1,6 @@
 #include "libc64/sleep.h"
 
-void Sleep_Cycles(OSTime time) {
+void csleep(OSTime time) {
     OSMesgQueue mq;
     OSMesg msg[1];
     OSTimer timer;
@@ -10,18 +10,18 @@ void Sleep_Cycles(OSTime time) {
     osRecvMesg(&mq, NULL, OS_MESG_BLOCK);
 }
 
-void Sleep_Nsec(u32 nsec) {
-    Sleep_Cycles(OS_NSEC_TO_CYCLES(nsec));
+void nsleep(u32 nsec) {
+    csleep(OS_NSEC_TO_CYCLES(nsec));
 }
 
-void Sleep_Usec(u32 usec) {
-    Sleep_Cycles(OS_USEC_TO_CYCLES(usec));
+void usleep(u32 usec) {
+    csleep(OS_USEC_TO_CYCLES(usec));
 }
 
-void Sleep_Msec(u32 ms) {
-    Sleep_Cycles((ms * OS_CPU_COUNTER) / 1000ULL);
+void msleep(u32 ms) {
+    csleep((ms * OS_CPU_COUNTER) / 1000ULL);
 }
 
-void Sleep_Sec(u32 sec) {
-    Sleep_Cycles(sec * OS_CPU_COUNTER);
+void sleep(u32 sec) {
+    csleep(sec * OS_CPU_COUNTER);
 }

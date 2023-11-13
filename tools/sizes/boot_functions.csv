@@ -233,11 +233,11 @@ asm/non_matchings/boot/sprintf/vsprintf.s,vsprintf,0x80087854,0x14
 asm/non_matchings/boot/sprintf/sprintf.s,sprintf,0x800878A4,0x17
 asm/non_matchings/boot/printutils/vaprintf.s,vaprintf,0x80087900,0xD
 asm/non_matchings/boot/printutils/aprintf.s,aprintf,0x80087934,0xB
-asm/non_matchings/boot/printutils/Sleep_Cycles.s,Sleep_Cycles,0x80087960,0x1B
-asm/non_matchings/boot/printutils/Sleep_Nsec.s,Sleep_Nsec,0x800879CC,0x14
-asm/non_matchings/boot/printutils/Sleep_Usec.s,Sleep_Usec,0x80087A1C,0x14
-asm/non_matchings/boot/printutils/Sleep_Msec.s,Sleep_Msec,0x80087A6C,0x15
-asm/non_matchings/boot/printutils/Sleep_Sec.s,Sleep_Sec,0x80087AC0,0x10
+asm/non_matchings/boot/printutils/csleep.s,csleep,0x80087960,0x1B
+asm/non_matchings/boot/printutils/nsleep.s,nsleep,0x800879CC,0x14
+asm/non_matchings/boot/printutils/usleep.s,usleep,0x80087A1C,0x14
+asm/non_matchings/boot/printutils/msleep.s,msleep,0x80087A6C,0x15
+asm/non_matchings/boot/printutils/sleep.s,sleep,0x80087AC0,0x10
 asm/non_matchings/boot/setcause/__osSetCause.s,__osSetCause,0x80087B00,0x4
 asm/non_matchings/boot/sendmesg/osSendMesg.s,osSendMesg,0x80087B10,0x54
 asm/non_matchings/boot/pfsfreeblocks/osPfsFreeBlocks.s,osPfsFreeBlocks,0x80087C60,0x68

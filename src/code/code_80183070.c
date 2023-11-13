@@ -3,6 +3,6 @@
 
 void func_80183070(void) {
     for (;;) {
-        Sleep_Msec(1000);
+        msleep(1000);
     }
 }
