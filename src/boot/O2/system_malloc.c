@@ -1,5 +1,4 @@
-#include "global.h"
-#include "os_malloc.h"
+#include "system_malloc.h"
 
 Arena gSystemArena;
 

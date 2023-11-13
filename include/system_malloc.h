@@ -1,8 +1,8 @@
 #ifndef SYSTEM_MALLOC_H
 #define SYSTEM_MALLOC_H
 
-#include "PR/ultratypes.h"
-#include "os_malloc.h"
+#include "ultra64.h"
+#include "libc64/os_malloc.h"
 
 void* SystemArena_Malloc(size_t size);
 void* SystemArena_MallocR(size_t size);

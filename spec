@@ -41,7 +41,7 @@ beginseg
     include "build/data/boot/fp.data.o"
     include "build/src/boot/O2/system_malloc.o"
     include "build/src/boot/libc64/qrand.o"
-    include "build/src/boot/O2/__osMalloc.o"
+    include "build/src/boot/libc64/__osMalloc.o"
     include "build/src/boot/O2/sprintf.o"
     include "build/src/boot/O2/printutils.o"
     include "build/src/boot/O2/sleep.o"
