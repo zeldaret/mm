@@ -5,7 +5,7 @@
 
 #include "libc64/math64.h"
 
-#include "fixed_point.h"
+#include "libc64/fixed_point.h"
 #include "libc/stdbool.h"
 #include "libc/math.h"
 
