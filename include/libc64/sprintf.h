@@ -3,7 +3,7 @@
 
 #include "ultra64.h"
 
-int vsprintf(char* dst, char* fmt, va_list args);
+int vsprintf(char* dst, const char* fmt, va_list args);
 int sprintf(char* dst, const char* fmt, ...);
 
 #endif

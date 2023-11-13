@@ -3,7 +3,7 @@
 
 #include "ultra64.h"
 
-s32 vaprintf(PrintCallback* pfn, const char* fmt, va_list args);
-s32 aprintf(PrintCallback* pfn, const char* fmt, ...);
+int vaprintf(PrintCallback* pfn, const char* fmt, va_list args);
+int aprintf(PrintCallback* pfn, const char* fmt, ...);
 
 #endif

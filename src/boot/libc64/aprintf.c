@@ -1,11 +1,11 @@
 #include "libc64/aprintf.h"
 
-s32 vaprintf(PrintCallback* pfn, const char* fmt, va_list args) {
+int vaprintf(PrintCallback* pfn, const char* fmt, va_list args) {
     return _Printf(*pfn, pfn, fmt, args);
 }
 
-s32 aprintf(PrintCallback* pfn, const char* fmt, ...) {
-    s32 ret;
+int aprintf(PrintCallback* pfn, const char* fmt, ...) {
+    int ret;
     va_list args;
     va_start(args, fmt);
 

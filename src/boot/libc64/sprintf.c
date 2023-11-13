@@ -6,7 +6,7 @@ void* proutPrintf(void* dst, const char* fmt, size_t size) {
     return (void*)((uintptr_t)memcpy(dst, fmt, size) + size);
 }
 
-int vsprintf(char* dst, char* fmt, va_list args) {
+int vsprintf(char* dst, const char* fmt, va_list args) {
     int ans = _Printf(proutPrintf, dst, fmt, args);
 
     if (ans > -1) {

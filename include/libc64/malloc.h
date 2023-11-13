@@ -1,5 +1,5 @@
-#ifndef SYSTEM_MALLOC_H
-#define SYSTEM_MALLOC_H
+#ifndef LIBC64_MALLOC_H
+#define LIBC64_MALLOC_H
 
 #include "ultra64.h"
 #include "libc64/os_malloc.h"
