@@ -6472,7 +6472,7 @@ void Audio_ResetForAudioHeapStep1(s32 specId) {
     AudioSfx_ResetSfxChannelState();
     AudioSeq_ResetActiveSequences();
     AudioSfx_Reset();
-    func_801A4FD8();
+    AudioVoice_ResetWord();
     if (gAudioSpecId == 0xB) {
         AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
                            (1 << BANK_OCARINA) | (1 << BANK_VOICE));
@@ -6485,5 +6485,5 @@ void Audio_UnusedReset(void) {
     Audio_ResetData();
     AudioSfx_ResetSfxChannelState();
     AudioSfx_Init(1);
-    func_801A4FD8();
+    AudioVoice_ResetWord();
 }

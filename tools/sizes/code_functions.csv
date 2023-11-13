@@ -3528,9 +3528,9 @@ asm/non_matchings/code/code_8019AF00/Audio_ResetForAudioHeapStep1.s,Audio_ResetF
 asm/non_matchings/code/code_8019AF00/Audio_UnusedReset.s,Audio_UnusedReset,0x801A4E64,0x13
 asm/non_matchings/code/voice_external/AudioVoice_Noop.s,AudioVoice_Noop,0x801A4EB0,0x2
 asm/non_matchings/code/voice_external/func_801A4EB8.s,func_801A4EB8,0x801A4EB8,0x48
-asm/non_matchings/code/voice_external/func_801A4FD8.s,func_801A4FD8,0x801A4FD8,0x2A
-asm/non_matchings/code/voice_external/func_801A5080.s,func_801A5080,0x801A5080,0x10
-asm/non_matchings/code/voice_external/func_801A50C0.s,func_801A50C0,0x801A50C0,0x10
+asm/non_matchings/code/voice_external/AudioVoice_ResetWord.s,AudioVoice_ResetWord,0x801A4FD8,0x2A
+asm/non_matchings/code/voice_external/AudioVoice_InitWord.s,AudioVoice_InitWord,0x801A5080,0x10
+asm/non_matchings/code/voice_external/AudioVoice_InitWordAlt.s,AudioVoice_InitWordAlt,0x801A50C0,0x10
 asm/non_matchings/code/voice_external/AudioVoice_GetWord.s,AudioVoice_GetWord,0x801A5100,0x3
 asm/non_matchings/code/voice_external/func_801A510C.s,func_801A510C,0x801A510C,0x3
 asm/non_matchings/code/voice_external/AudioVoice_Update.s,AudioVoice_Update,0x801A5118,0x36
@@ -3542,8 +3542,8 @@ asm/non_matchings/code/voice_internal/func_801A53E8.s,func_801A53E8,0x801A53E8,0
 asm/non_matchings/code/voice_internal/func_801A541C.s,func_801A541C,0x801A541C,0x1B
 asm/non_matchings/code/voice_internal/func_801A5488.s,func_801A5488,0x801A5488,0xF
 asm/non_matchings/code/voice_internal/AudioVoice_GetVoiceMaskPattern.s,AudioVoice_GetVoiceMaskPattern,0x801A54C4,0x3
-asm/non_matchings/code/voice_internal/AudioVoice_ProcessWord1.s,AudioVoice_ProcessWord1,0x801A54D0,0x6C
-asm/non_matchings/code/voice_internal/AudioVoice_ProcessWord2.s,AudioVoice_ProcessWord2,0x801A5680,0x62
+asm/non_matchings/code/voice_internal/AudioVoice_InitWordImplAlt.s,AudioVoice_InitWordImplAlt,0x801A54D0,0x6C
+asm/non_matchings/code/voice_internal/AudioVoice_InitWordImpl.s,AudioVoice_InitWordImpl,0x801A5680,0x62
 asm/non_matchings/code/voice_internal/func_801A5808.s,func_801A5808,0x801A5808,0x82
 asm/non_matchings/code/voice_internal/AudioVoice_ResetData.s,AudioVoice_ResetData,0x801A5A10,0x3
 asm/non_matchings/code/voice_internal/func_801A5A1C.s,func_801A5A1C,0x801A5A1C,0x69

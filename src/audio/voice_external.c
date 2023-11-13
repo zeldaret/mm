@@ -35,7 +35,7 @@ void AudioVoice_Noop(void) {
 }
 
 void func_801A4EB8(void) {
-    u8* new_var;
+    u8* voiceMaskPattern;
     OSMesgQueue* serialEventQueue;
     s32 index;
     u8 sp38[1];
@@ -47,17 +47,17 @@ void func_801A4EB8(void) {
         PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
     }
 
-    new_var = AudioVoice_GetVoiceMaskPattern();
+    voiceMaskPattern = AudioVoice_GetVoiceMaskPattern();
 
     for (i = 0; i < 1; i++) {
-        sp38[i] = new_var[i];
+        sp38[i] = voiceMaskPattern[i];
     }
 
     if (func_801A5228(&sVoiceDictionary) == 0) {
         for (i = 0; i < VOICE_WORD_ID_MAX; i++) {
             index = i / 8;
             if (((sp38[index] >> (i % 8)) & 1) == 1) {
-                AudioVoice_ProcessWord1(i);
+                AudioVoice_InitWordImplAlt(i);
             }
         }
 
@@ -66,12 +66,11 @@ void func_801A4EB8(void) {
     }
 }
 
-// Used externally in code_8019AF00
-void func_801A4FD8(void) {
+void AudioVoice_ResetWord(void) {
     s32 errorCode;
     OSMesgQueue* serialEventQueue;
 
-    AudioVoice_ProcessWord1(VOICE_WORD_ID_NONE);
+    AudioVoice_InitWordImplAlt(VOICE_WORD_ID_NONE);
 
     if (D_801D8E3C != 0) {
         serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
@@ -79,27 +78,27 @@ void func_801A4FD8(void) {
         PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
         errorCode = func_801A5228(&sVoiceDictionary);
-        AudioVoice_ProcessWord1(VOICE_WORD_ID_NONE);
+        AudioVoice_InitWordImplAlt(VOICE_WORD_ID_NONE);
         if (errorCode == 0) {
             func_801A53E8(800, 2, VOICE_WARN_TOO_SMALL, 500, 2000);
             D_801D8E3C = 1;
         }
 
-        func_801A5080(VOICE_WORD_ID_HIYA);
-        func_801A5080(VOICE_WORD_ID_CHEESE);
+        AudioVoice_InitWord(VOICE_WORD_ID_HIYA);
+        AudioVoice_InitWord(VOICE_WORD_ID_CHEESE);
     }
 }
 
-void func_801A5080(u16 wordId) {
+void AudioVoice_InitWord(u16 wordId) {
     if ((D_801D8E3C != 0) && (wordId < VOICE_WORD_ID_MAX)) {
-        AudioVoice_ProcessWord2(wordId);
+        AudioVoice_InitWordImpl(wordId);
     }
 }
 
 // Unused
-void func_801A50C0(u16 wordId) {
+void AudioVoice_InitWordAlt(u16 wordId) {
     if ((D_801D8E3C != 0) && (wordId < VOICE_WORD_ID_MAX)) {
-        AudioVoice_ProcessWord1(wordId);
+        AudioVoice_InitWordImplAlt(wordId);
     }
 }
 

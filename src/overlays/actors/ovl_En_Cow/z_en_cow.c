@@ -133,7 +133,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
             this->actor.targetMode = TARGET_MODE_6;
 
             gHorsePlayedEponasSong = false;
-            func_801A5080(VOICE_WORD_ID_MILK);
+            AudioVoice_InitWord(VOICE_WORD_ID_MILK);
             break;
 
         case EN_COW_TYPE_TAIL:

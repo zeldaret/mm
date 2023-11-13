@@ -174,7 +174,7 @@ u8* AudioVoice_GetVoiceMaskPattern(void) {
     return sVoiceMaskPattern;
 }
 
-s32 AudioVoice_ProcessWord1(u16 wordId) {
+s32 AudioVoice_InitWordImplAlt(u16 wordId) {
     s32 errorCode;
     u8 stopReadingData = true;
     u8 numWords;
@@ -217,7 +217,7 @@ s32 AudioVoice_ProcessWord1(u16 wordId) {
     return errorCode;
 }
 
-s32 AudioVoice_ProcessWord2(u16 wordId) {
+s32 AudioVoice_InitWordImpl(u16 wordId) {
     s32 errorCode;
     u8 stopReadingData = true;
     u8 numWords;
