@@ -83,9 +83,10 @@ void Rand_Seed_Variable(u32* rndNum, u32 seed) {
  * Original name: qrand_r
  */
 u32 Rand_Next_Variable(u32* rndNum) {
-    *rndNum = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
+    u32 t = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
 
-    return *rndNum;
+    *rndNum = t;
+    return t;
 }
 
 /**

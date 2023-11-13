@@ -3198,7 +3198,7 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
             gRandFloat.hex = (randInt >> 9) | 0x3F800000;
             temp_f20 = ((gRandFloat.flt - 1.0f) + temp_f4) * 0.5f;
 
-            // randInt = Rand_Next_Variable(&randInt);
+            // Rand_Next_Variable(&randInt);
             randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
 
             // Set random position
