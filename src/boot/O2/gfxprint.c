@@ -1,4 +1,5 @@
 #include "global.h"
+#include "libc64/aprintf.h"
 
 #define GFXP_FLAG_HIRAGANA (1 << 0)
 #define GFXP_FLAG_RAINBOW (1 << 1)

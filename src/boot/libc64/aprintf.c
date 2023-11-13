@@ -1,4 +1,4 @@
-#include "global.h"
+#include "libc64/aprintf.h"
 
 s32 PrintUtils_VPrintf(PrintCallback* pfn, const char* fmt, va_list args) {
     return _Printf(*pfn, pfn, fmt, args);
