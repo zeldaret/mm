@@ -10,6 +10,8 @@
 
 #include "ultra64.h"
 
+#include "other_types.h"
+
 #include "irqmgr.h"
 #include "padmgr.h"
 #include "scheduler.h"

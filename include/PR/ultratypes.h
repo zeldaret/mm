@@ -28,7 +28,4 @@ typedef u32 size_t;
 #define NULL (void*)0
 #endif
 
-// TODO: move this somewhere else
-typedef void* TexturePtr;
-
 #endif

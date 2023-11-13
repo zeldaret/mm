@@ -3,6 +3,7 @@
 
 #include "PR/ultratypes.h"
 #include "color.h"
+#include "other_types.h"
 #include "padutils.h"
 #include "z64math.h"
 #include "z64animation.h"
