@@ -1,6 +1,7 @@
-#include "global.h"
 #include "z64voice.h"
+#include "libc/stdbool.h"
 #include "libc/string.h"
+#include "padmgr.h"
 
 // internal voice functions
 char* func_801A5A1C(s8* words);

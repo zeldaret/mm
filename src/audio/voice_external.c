@@ -1,5 +1,5 @@
-#include "global.h"
 #include "z64voice.h"
+#include "padmgr.h"
 
 OSVoiceDictionary sVoiceDictionary = {
     {
