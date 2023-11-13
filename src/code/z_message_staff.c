@@ -35,12 +35,9 @@ f32 sCreditsFontWidths[144] = {
     14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f,
 };
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/yc8Or
-// v0/v1 swap between `character` and `i`
 void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
     MessageContext* msgCtx = &play->msgCtx;
-    u16 lookAheadCharacter;
+    u16 pad;
     u16 j;
     u16 i;
     u16 sfxHi;
@@ -122,14 +119,13 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                      ((msgCtx->msgMode >= MSGMODE_OCARINA_STARTING) && (msgCtx->msgMode <= MSGMODE_26)))) {
                     j = i;
                     while (true) {
-                        lookAheadCharacter = msgCtx->decodedBuffer.schar[j];
-                        if (lookAheadCharacter == 6) {
+                        character = msgCtx->decodedBuffer.schar[j];
+                        if (character == 6) {
                             j += 2;
                             continue;
                         }
-                        if ((lookAheadCharacter != 9) && (lookAheadCharacter != 0xA) && (lookAheadCharacter != 0xB) &&
-                            (lookAheadCharacter != 0xC) && (lookAheadCharacter != 0xD) && (lookAheadCharacter != 4) &&
-                            (lookAheadCharacter != 2)) {
+                        if ((character != 9) && (character != 0xA) && (character != 0xB) && (character != 0xC) &&
+                            (character != 0xD) && (character != 4) && (character != 2)) {
                             j++;
                             continue;
                         }
@@ -329,9 +325,6 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
 
     *gfxP = gfx;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_staff/Message_DrawTextCredits.s")
-#endif
 
 void Message_DecodeCredits(PlayState* play) {
     u16 curChar;

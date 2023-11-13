@@ -190,15 +190,15 @@ static s32 sMsgScriptGoronAthleticHamstring[] = { 0x100060E, 0xE060C12, 0x100E0E
 static s32 sMsgScriptGoronSleeping[] = { 0xE023A0C, 0x12100000 };
 
 ActorInit En_Go_InitVars = {
-    ACTOR_EN_GO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_OF1D_MAP,
-    sizeof(EnGo),
-    (ActorFunc)EnGo_Init,
-    (ActorFunc)EnGo_Destroy,
-    (ActorFunc)EnGo_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_GO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_OF1D_MAP,
+    /**/ sizeof(EnGo),
+    /**/ EnGo_Init,
+    /**/ EnGo_Destroy,
+    /**/ EnGo_Update,
+    /**/ NULL,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -2318,7 +2318,7 @@ void EnGo_Snowball(EnGo* this, PlayState* play) {
  * Return the MsgEvent script appropriate for the actor.
  */
 s32* EnGo_GetMsgEventScript(EnGo* this, PlayState* play) {
-    static s32 sMsgScriptGraveyard[] = {
+    static s32* sMsgScriptGraveyard[] = {
         sMsgScriptGoronGravemaker,
         sMsgScriptGoronFrozen,
     };

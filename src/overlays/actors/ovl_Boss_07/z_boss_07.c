@@ -235,15 +235,15 @@ static DamageTable D_80A07A00 = {
 };
 
 ActorInit Boss_07_InitVars = {
-    ACTOR_BOSS_07,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS07,
-    sizeof(Boss07),
-    (ActorFunc)Boss07_Init,
-    (ActorFunc)Boss07_Destroy,
-    (ActorFunc)Boss07_Update,
-    (ActorFunc)Boss07_Draw,
+    /**/ ACTOR_BOSS_07,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS07,
+    /**/ sizeof(Boss07),
+    /**/ Boss07_Init,
+    /**/ Boss07_Destroy,
+    /**/ Boss07_Update,
+    /**/ Boss07_Draw,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[11] = {

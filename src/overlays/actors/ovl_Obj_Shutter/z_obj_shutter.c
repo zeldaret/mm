@@ -17,15 +17,15 @@ void ObjShutter_Update(Actor* thisx, PlayState* play2);
 void ObjShutter_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Shutter_InitVars = {
-    ACTOR_OBJ_SHUTTER,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_F53_OBJ,
-    sizeof(ObjShutter),
-    (ActorFunc)ObjShutter_Init,
-    (ActorFunc)ObjShutter_Destroy,
-    (ActorFunc)ObjShutter_Update,
-    (ActorFunc)ObjShutter_Draw,
+    /**/ ACTOR_OBJ_SHUTTER,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_F53_OBJ,
+    /**/ sizeof(ObjShutter),
+    /**/ ObjShutter_Init,
+    /**/ ObjShutter_Destroy,
+    /**/ ObjShutter_Update,
+    /**/ ObjShutter_Draw,
 };
 
 void ObjShutter_Init(Actor* thisx, PlayState* play) {

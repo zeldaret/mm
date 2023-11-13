@@ -24,15 +24,15 @@ void ObjHariko_BobHead(ObjHariko* this, PlayState* play);
 void ObjHariko_CheckForQuakes(ObjHariko* this);
 
 ActorInit Obj_Hariko_InitVars = {
-    ACTOR_OBJ_HARIKO,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_HARIKO,
-    sizeof(ObjHariko),
-    (ActorFunc)ObjHariko_Init,
-    (ActorFunc)ObjHariko_Destroy,
-    (ActorFunc)ObjHariko_Update,
-    (ActorFunc)ObjHariko_Draw,
+    /**/ ACTOR_OBJ_HARIKO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_HARIKO,
+    /**/ sizeof(ObjHariko),
+    /**/ ObjHariko_Init,
+    /**/ ObjHariko_Destroy,
+    /**/ ObjHariko_Update,
+    /**/ ObjHariko_Draw,
 };
 
 void ObjHariko_Init(Actor* thisx, PlayState* play) {

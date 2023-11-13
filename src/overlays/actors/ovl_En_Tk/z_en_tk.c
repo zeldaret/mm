@@ -70,15 +70,15 @@ static u8 D_80AEF800[] = {
 };
 
 ActorInit En_Tk_InitVars = {
-    ACTOR_EN_TK,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TK,
-    sizeof(EnTk),
-    (ActorFunc)EnTk_Init,
-    (ActorFunc)EnTk_Destroy,
-    (ActorFunc)EnTk_Update,
-    (ActorFunc)EnTk_Draw,
+    /**/ ACTOR_EN_TK,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TK,
+    /**/ sizeof(EnTk),
+    /**/ EnTk_Init,
+    /**/ EnTk_Destroy,
+    /**/ EnTk_Update,
+    /**/ EnTk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -472,7 +472,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
         Vec3f sp5C;
 
         Actor_OffsetOfPointInActorCoords(&this->actor, &sp5C, &door->knobDoor.dyna.actor.world.pos);
-        door->unk_1A7 = 2;
+        door->openTimer = 2;
         if (sp5C.z < -20.0f) {
             this->unk_2CA &= ~0x400;
             this->unk_2CA |= 0x800;
@@ -480,7 +480,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
     }
 
     if (door != NULL) {
-        if ((this->unk_2CA & 0x800) && (door->unk_1A7 == 0)) {
+        if ((this->unk_2CA & 0x800) && (door->openTimer == 0)) {
             this->unk_2CA &= ~0x800;
         }
     }

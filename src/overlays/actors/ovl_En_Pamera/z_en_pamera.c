@@ -70,15 +70,15 @@ void func_80BDA2E0(EnPamera* this, PlayState* play);
 void func_80BDA344(Actor* thisx, PlayState* play);
 
 ActorInit En_Pamera_InitVars = {
-    ACTOR_EN_PAMERA,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_PAMERA,
-    sizeof(EnPamera),
-    (ActorFunc)EnPamera_Init,
-    (ActorFunc)EnPamera_Destroy,
-    (ActorFunc)EnPamera_Update,
-    (ActorFunc)EnPamera_Draw,
+    /**/ ACTOR_EN_PAMERA,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_PAMERA,
+    /**/ sizeof(EnPamera),
+    /**/ EnPamera_Init,
+    /**/ EnPamera_Destroy,
+    /**/ EnPamera_Update,
+    /**/ EnPamera_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -473,7 +473,7 @@ void func_80BD9338(EnPamera* this, PlayState* play) {
     func_80BD84F0(this, play);
     actor = this->actor.child;
     if ((actor != NULL) && (actor->id == ACTOR_EN_DOOR)) {
-        ((EnDoor*)actor)->unk_1A7 = -0x32;
+        ((EnDoor*)actor)->openTimer = -50;
     }
 }
 

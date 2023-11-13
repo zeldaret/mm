@@ -40,15 +40,15 @@ typedef enum EnKbtAnimation {
 } EnKbtAnimation;
 
 ActorInit En_Kbt_InitVars = {
-    ACTOR_EN_KBT,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_KBT,
-    sizeof(EnKbt),
-    (ActorFunc)EnKbt_Init,
-    (ActorFunc)EnKbt_Destroy,
-    (ActorFunc)EnKbt_Update,
-    (ActorFunc)EnKbt_Draw,
+    /**/ ACTOR_EN_KBT,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_KBT,
+    /**/ sizeof(EnKbt),
+    /**/ EnKbt_Init,
+    /**/ EnKbt_Destroy,
+    /**/ EnKbt_Update,
+    /**/ EnKbt_Draw,
 };
 
 void EnKbt_Init(Actor* thisx, PlayState* play) {

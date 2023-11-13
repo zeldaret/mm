@@ -23,15 +23,15 @@ void EnBee_Attack(EnBee* this, PlayState* play);
 s32 sNumLoadedBees = 0;
 
 ActorInit En_Bee_InitVars = {
-    ACTOR_EN_BEE,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BEE,
-    sizeof(EnBee),
-    (ActorFunc)EnBee_Init,
-    (ActorFunc)EnBee_Destroy,
-    (ActorFunc)EnBee_Update,
-    (ActorFunc)EnBee_Draw,
+    /**/ ACTOR_EN_BEE,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BEE,
+    /**/ sizeof(EnBee),
+    /**/ EnBee_Init,
+    /**/ EnBee_Destroy,
+    /**/ EnBee_Update,
+    /**/ EnBee_Draw,
 };
 
 static DamageTable sDamageTable = {

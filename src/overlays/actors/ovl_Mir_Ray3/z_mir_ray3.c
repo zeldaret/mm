@@ -17,15 +17,15 @@ void MirRay3_Update(Actor* thisx, PlayState* play);
 void MirRay3_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Mir_Ray3_InitVars = {
-    ACTOR_MIR_RAY3,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_MIR_RAY,
-    sizeof(MirRay3),
-    (ActorFunc)MirRay3_Init,
-    (ActorFunc)MirRay3_Destroy,
-    (ActorFunc)MirRay3_Update,
-    (ActorFunc)MirRay3_Draw,
+    /**/ ACTOR_MIR_RAY3,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_MIR_RAY,
+    /**/ sizeof(MirRay3),
+    /**/ MirRay3_Init,
+    /**/ MirRay3_Destroy,
+    /**/ MirRay3_Update,
+    /**/ MirRay3_Draw,
 };
 
 static ColliderQuadInit sQuadInit = {

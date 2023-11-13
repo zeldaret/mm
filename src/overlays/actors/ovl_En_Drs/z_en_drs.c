@@ -18,15 +18,15 @@ void EnDrs_Draw(Actor* thisx, PlayState* play);
 void EnDrs_Idle(EnDrs* this, PlayState* play);
 
 ActorInit En_Drs_InitVars = {
-    ACTOR_EN_DRS,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_DRS,
-    sizeof(EnDrs),
-    (ActorFunc)EnDrs_Init,
-    (ActorFunc)EnDrs_Destroy,
-    (ActorFunc)EnDrs_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_DRS,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_DRS,
+    /**/ sizeof(EnDrs),
+    /**/ EnDrs_Init,
+    /**/ EnDrs_Destroy,
+    /**/ EnDrs_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -115,7 +115,8 @@ void EnDrs_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
 
     // Anju removes the Moon Mask at the start of the Couple's Mask cutscene
     // after that it will no longer be rendered.
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_87_02) && (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_STARTED) &&
+        (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[temp].segment);

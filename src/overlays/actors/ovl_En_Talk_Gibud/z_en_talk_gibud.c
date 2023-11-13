@@ -103,15 +103,15 @@ typedef enum {
 } EnTalkGibudGrabState;
 
 ActorInit En_Talk_Gibud_InitVars = {
-    ACTOR_EN_TALK_GIBUD,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_RD,
-    sizeof(EnTalkGibud),
-    (ActorFunc)EnTalkGibud_Init,
-    (ActorFunc)EnTalkGibud_Destroy,
-    (ActorFunc)EnTalkGibud_Update,
-    (ActorFunc)EnTalkGibud_Draw,
+    /**/ ACTOR_EN_TALK_GIBUD,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_RD,
+    /**/ sizeof(EnTalkGibud),
+    /**/ EnTalkGibud_Init,
+    /**/ EnTalkGibud_Destroy,
+    /**/ EnTalkGibud_Update,
+    /**/ EnTalkGibud_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {
@@ -421,7 +421,7 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
             if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
                 if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->stateFlags2 &= ~PLAYER_STATE2_80;
-                    player->actionVar2 = 100;
+                    player->av2.actionVar2 = 100;
                 }
 
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_GRAB_END);

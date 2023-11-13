@@ -17,15 +17,15 @@ void ObjKepnKoya_Update(Actor* thisx, PlayState* play);
 void ObjKepnKoya_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Kepn_Koya_InitVars = {
-    ACTOR_OBJ_KEPN_KOYA,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_KEPN_KOYA,
-    sizeof(ObjKepnKoya),
-    (ActorFunc)ObjKepnKoya_Init,
-    (ActorFunc)ObjKepnKoya_Destroy,
-    (ActorFunc)ObjKepnKoya_Update,
-    (ActorFunc)ObjKepnKoya_Draw,
+    /**/ ACTOR_OBJ_KEPN_KOYA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_KEPN_KOYA,
+    /**/ sizeof(ObjKepnKoya),
+    /**/ ObjKepnKoya_Init,
+    /**/ ObjKepnKoya_Destroy,
+    /**/ ObjKepnKoya_Update,
+    /**/ ObjKepnKoya_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

@@ -19,15 +19,15 @@ void EnSth2_UpdateSkelAnime(EnSth2* this, PlayState* play);
 void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play);
 
 ActorInit En_Sth2_InitVars = {
-    ACTOR_EN_STH2,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnSth2),
-    (ActorFunc)EnSth2_Init,
-    (ActorFunc)EnSth2_Destroy,
-    (ActorFunc)EnSth2_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_STH2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnSth2),
+    /**/ EnSth2_Init,
+    /**/ EnSth2_Destroy,
+    /**/ EnSth2_Update,
+    /**/ NULL,
 };
 
 #include "overlays/ovl_En_Sth2/ovl_En_Sth2.c"

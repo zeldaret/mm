@@ -22,15 +22,15 @@ void BgIknvObj_UpdateRaisedDoor(BgIknvObj* this, PlayState* play);
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, PlayState* play);
 
 ActorInit Bg_Iknv_Obj_InitVars = {
-    ACTOR_BG_IKNV_OBJ,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_IKNV_OBJ,
-    sizeof(BgIknvObj),
-    (ActorFunc)BgIknvObj_Init,
-    (ActorFunc)BgIknvObj_Destroy,
-    (ActorFunc)BgIknvObj_Update,
-    (ActorFunc)BgIknvObj_Draw,
+    /**/ ACTOR_BG_IKNV_OBJ,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_IKNV_OBJ,
+    /**/ sizeof(BgIknvObj),
+    /**/ BgIknvObj_Init,
+    /**/ BgIknvObj_Destroy,
+    /**/ BgIknvObj_Update,
+    /**/ BgIknvObj_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

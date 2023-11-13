@@ -19,15 +19,15 @@ void EnEndingHero4_SetupIdle(EnEndingHero4* this);
 void EnEndingHero4_Idle(EnEndingHero4* this, PlayState* play);
 
 ActorInit En_Ending_Hero4_InitVars = {
-    ACTOR_EN_ENDING_HERO4,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SDN,
-    sizeof(EnEndingHero4),
-    (ActorFunc)EnEndingHero4_Init,
-    (ActorFunc)EnEndingHero4_Destroy,
-    (ActorFunc)EnEndingHero4_Update,
-    (ActorFunc)EnEndingHero4_Draw,
+    /**/ ACTOR_EN_ENDING_HERO4,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnEndingHero4),
+    /**/ EnEndingHero4_Init,
+    /**/ EnEndingHero4_Destroy,
+    /**/ EnEndingHero4_Update,
+    /**/ EnEndingHero4_Draw,
 };
 
 void EnEndingHero4_Init(Actor* thisx, PlayState* play) {

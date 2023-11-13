@@ -45,16 +45,16 @@ typedef enum {
     /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM
 } EnZodInstrument;
 
-const ActorInit En_Zod_InitVars = {
-    ACTOR_EN_ZOD,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZOD,
-    sizeof(EnZod),
-    (ActorFunc)EnZod_Init,
-    (ActorFunc)EnZod_Destroy,
-    (ActorFunc)EnZod_Update,
-    (ActorFunc)EnZod_Draw,
+ActorInit En_Zod_InitVars = {
+    /**/ ACTOR_EN_ZOD,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZOD,
+    /**/ sizeof(EnZod),
+    /**/ EnZod_Init,
+    /**/ EnZod_Destroy,
+    /**/ EnZod_Update,
+    /**/ EnZod_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -480,7 +480,7 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
-        func_800B7298(play, NULL, PLAYER_CSACTION_68);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_68);
         Message_StartTextbox(play, 0x103A, &this->actor);
         this->actionFunc = EnZod_SetupRehearse;
     } else {

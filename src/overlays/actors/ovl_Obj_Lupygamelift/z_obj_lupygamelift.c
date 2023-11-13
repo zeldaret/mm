@@ -22,15 +22,15 @@ void func_80AF0514(ObjLupygamelift* this);
 void func_80AF0530(ObjLupygamelift* this, PlayState* play);
 
 ActorInit Obj_Lupygamelift_InitVars = {
-    ACTOR_OBJ_LUPYGAMELIFT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_RAILLIFT,
-    sizeof(ObjLupygamelift),
-    (ActorFunc)ObjLupygamelift_Init,
-    (ActorFunc)ObjLupygamelift_Destroy,
-    (ActorFunc)ObjLupygamelift_Update,
-    (ActorFunc)ObjLupygamelift_Draw,
+    /**/ ACTOR_OBJ_LUPYGAMELIFT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_RAILLIFT,
+    /**/ sizeof(ObjLupygamelift),
+    /**/ ObjLupygamelift_Init,
+    /**/ ObjLupygamelift_Destroy,
+    /**/ ObjLupygamelift_Update,
+    /**/ ObjLupygamelift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

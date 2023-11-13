@@ -19,15 +19,15 @@ void EnSnowwd_Draw(Actor* thisx, PlayState* play);
 void EnSnowwd_Idle(EnSnowwd* this, PlayState* play);
 
 ActorInit En_Snowwd_InitVars = {
-    ACTOR_EN_SNOWWD,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_SNOWWD,
-    sizeof(EnSnowwd),
-    (ActorFunc)EnSnowwd_Init,
-    (ActorFunc)EnSnowwd_Destroy,
-    (ActorFunc)EnSnowwd_Update,
-    (ActorFunc)EnSnowwd_Draw,
+    /**/ ACTOR_EN_SNOWWD,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_SNOWWD,
+    /**/ sizeof(EnSnowwd),
+    /**/ EnSnowwd_Init,
+    /**/ EnSnowwd_Destroy,
+    /**/ EnSnowwd_Update,
+    /**/ EnSnowwd_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

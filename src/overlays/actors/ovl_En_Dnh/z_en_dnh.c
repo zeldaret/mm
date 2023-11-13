@@ -43,15 +43,15 @@ UNK_TYPE D_80A5138C[] = {
 };
 
 ActorInit En_Dnh_InitVars = {
-    ACTOR_EN_DNH,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TRO,
-    sizeof(EnDnh),
-    (ActorFunc)EnDnh_Init,
-    (ActorFunc)EnDnh_Destroy,
-    (ActorFunc)EnDnh_Update,
-    (ActorFunc)EnDnh_Draw,
+    /**/ ACTOR_EN_DNH,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TRO,
+    /**/ sizeof(EnDnh),
+    /**/ EnDnh_Init,
+    /**/ EnDnh_Destroy,
+    /**/ EnDnh_Update,
+    /**/ EnDnh_Draw,
 };
 
 typedef enum {
@@ -71,7 +71,7 @@ static TexturePtr sEyeTextures[] = {
 };
 
 s32 func_80A50D40(Actor* actor, PlayState* play) {
-    func_800B7298(play, actor, PLAYER_CSACTION_WAIT);
+    Player_SetCsActionWithHaltedActors(play, actor, PLAYER_CSACTION_WAIT);
     if (CHECK_EVENTINF(EVENTINF_35)) {
         play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 6);
     } else {

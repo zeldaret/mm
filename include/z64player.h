@@ -607,6 +607,7 @@ typedef struct struct_80122744_arg1 {
 } struct_80122744_arg1; // size = 0x8
 
 typedef enum PlayerCsAction {
+    /*   -1 */ PLAYER_CSACTION_NEG1 = -1, // Specific to Kafei, any negative number works
     /* 0x00 */ PLAYER_CSACTION_NONE,
     /* 0x01 */ PLAYER_CSACTION_1,
     /* 0x02 */ PLAYER_CSACTION_2,
@@ -1145,15 +1146,15 @@ typedef struct Player {
     /* 0x395 */ u8 prevCsAction; // PlayerCsAction enum
     /* 0x396 */ u8 cueId; // PlayerCueId enum
     /* 0x397 */ u8 unk_397; // PlayerDoorType enum
-    /* 0x398 */ Actor* csActor;
+    /* 0x398 */ Actor* csActor; // Actor involved in a `csAction`. Typically the actor that invoked the cutscene.
     /* 0x39C */ UNK_TYPE1 unk_39C[0x4];
     /* 0x3A0 */ Vec3f unk_3A0;
     /* 0x3AC */ Vec3f unk_3AC;
     /* 0x3B8 */ u16 unk_3B8;
     /* 0x3BA */ union {
-                    s16 doorBgCamIndex;
-                    s16 unk_3BA; // When in a cutscene, boolean to determine if `PLAYER_STATE1_20000000` is set
-                };
+                    s16 haltActorsDuringCsAction; // If true, halt actors belonging to certain categories during a `csAction`
+                    s16 doorBgCamIndex; // `BgCamIndex` used during a sliding door and spiral staircase cutscenes
+                } cv; // "Cutscene Variable": context dependent variable that has different meanings depending on what function is called
     /* 0x3BC */ s16 subCamId;
     /* 0x3BE */ char unk_3BE[2];
     /* 0x3C0 */ Vec3f unk_3C0;
@@ -1221,8 +1222,12 @@ typedef struct Player {
     /* 0xADE */ u8 unk_ADE;
     /* 0xADF */ s8 unk_ADF[4]; // Circular buffer used for testing for triggering a quickspin
     /* 0xAE3 */ s8 unk_AE3[4]; // Circular buffer used for ?
-    /* 0xAE7 */ s8 actionVar1; // context dependent variable that has different meanings depending on what action is currently running
-    /* 0xAE8 */ s16 actionVar2; // context dependent variable that has different meanings depending on what action is currently running
+    /* 0xAE7 */ union { 
+        s8 actionVar1;
+    } av1; // "Action Variable 1": context dependent variable that has different meanings depending on what action is currently running
+    /* 0xAE8 */ union { 
+        s16 actionVar2;
+    } av2; // "Action Variable 2": context dependent variable that has different meanings depending on what action is currently running
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ union {
                     Vec3f unk_AF0[2];

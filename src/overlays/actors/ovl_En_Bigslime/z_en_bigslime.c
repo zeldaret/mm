@@ -213,15 +213,15 @@ static EnBigslimeTri sBigslimeTri[BIGSLIME_NUM_FACES] = {
 };
 
 ActorInit En_Bigslime_InitVars = {
-    ACTOR_EN_BIGSLIME,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BIGSLIME,
-    sizeof(EnBigslime),
-    (ActorFunc)EnBigslime_Init,
-    (ActorFunc)EnBigslime_Destroy,
-    (ActorFunc)EnBigslime_UpdateGekko,
-    (ActorFunc)EnBigslime_DrawGekko,
+    /**/ ACTOR_EN_BIGSLIME,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BIGSLIME,
+    /**/ sizeof(EnBigslime),
+    /**/ EnBigslime_Init,
+    /**/ EnBigslime_Destroy,
+    /**/ EnBigslime_UpdateGekko,
+    /**/ EnBigslime_DrawGekko,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -729,7 +729,7 @@ void EnBigslime_SetPlayerParams(EnBigslime* this, PlayState* play) {
 
     if (player->stateFlags2 & PLAYER_STATE2_80) {
         player->actor.parent = NULL;
-        player->actionVar2 = 100;
+        player->av2.actionVar2 = 100;
         func_800B8D98(play, &this->actor, 10.0f, this->actor.world.rot.y, 10.0f);
     }
 }
@@ -850,7 +850,7 @@ void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
         this->subCamId = SUB_CAM_ID_DONE;
         CutsceneManager_Stop(this->csId);
         this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
-        func_800B724C(play, &this->actor, PLAYER_CSACTION_END);
+        Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_END);
     }
 }
 
@@ -939,7 +939,7 @@ void EnBigslime_SetupCutsceneStartBattle(EnBigslime* this, PlayState* play) {
     this->bigslimeCollider[0].base.acFlags &= ~AC_ON;
 
     Math_Vec3f_Copy(&subCam->at, &this->actor.focus.pos);
-    func_800B7298(play, &this->actor, PLAYER_CSACTION_4);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_4);
 
     player->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     player->actor.world.pos.x = Math_SinS(this->actor.yawTowardsPlayer) * 347.0f + this->actor.world.pos.x;
@@ -987,7 +987,7 @@ void EnBigslime_SetupCallMinislime(EnBigslime* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGekkoCallAnim, 5.0f);
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_GREET);
     this->callTimer = 0;
-    func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
     this->actionFunc = EnBigslime_CallMinislime;
 }
 
@@ -1011,7 +1011,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, PlayState* play) {
         EnBigslime_InitFallMinislime(this);
         play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
         this->callTimer = 35;
-        func_800B7298(play, &this->actor, PLAYER_CSACTION_4);
+        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_4);
     }
 }
 
@@ -1528,7 +1528,7 @@ void EnBigslime_CutsceneGrabPlayer(EnBigslime* this, PlayState* play) {
     s32 i;
     s32 j;
 
-    player->actionVar2 = 0;
+    player->av2.actionVar2 = 0;
     Math_ScaledStepToS(&this->gekkoRot.x, 0, 0x400);
     EnBigslime_UpdateCameraGrabPlayer(this, play);
     if (this->grabPlayerTimer > 0) {
@@ -1577,7 +1577,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 pitch = this->scaleFactor * 0x3333; // polar (zenith) angle
 
-    player->actionVar2 = 0;
+    player->av2.actionVar2 = 0;
     Math_ScaledStepToS(&this->gekkoRot.x, 0, 0x400);
     EnBigslime_UpdateCameraGrabPlayer(this, play);
     EnBigslime_UpdateWavySurface(this);
@@ -1710,7 +1710,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
         if (this->windupPunchTimer == -5) {
             if (player->stateFlags2 & PLAYER_STATE2_80) {
                 player->actor.parent = NULL;
-                player->actionVar2 = 100;
+                player->av2.actionVar2 = 100;
             }
 
             player->actor.velocity.y = 0.0f;
@@ -2546,7 +2546,7 @@ void EnBigslime_PlayCutscene(EnBigslime* this, PlayState* play) {
     } else if (CutsceneManager_IsNext(this->csId)) {
         CutsceneManager_Start(this->csId, &this->actor);
         if (this->actionFuncStored != EnBigslime_SquishFlat) {
-            func_800B724C(play, &this->actor, PLAYER_CSACTION_WAIT);
+            Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_WAIT);
         }
 
         this->subCamId = CutsceneManager_GetCurrentSubCamId(this->csId);

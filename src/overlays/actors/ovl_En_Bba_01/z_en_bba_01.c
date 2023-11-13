@@ -29,15 +29,15 @@ void EnBba01_FaceFoward(EnHy* this, PlayState* play);
 void EnBba01_Talk(EnHy* this, PlayState* play);
 
 ActorInit En_Bba_01_InitVars = {
-    ACTOR_EN_BBA_01,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnBba01),
-    (ActorFunc)EnBba01_Init,
-    (ActorFunc)EnBba01_Destroy,
-    (ActorFunc)EnBba01_Update,
-    (ActorFunc)EnBba01_Draw,
+    /**/ ACTOR_EN_BBA_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnBba01),
+    /**/ EnBba01_Init,
+    /**/ EnBba01_Destroy,
+    /**/ EnBba01_Update,
+    /**/ EnBba01_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

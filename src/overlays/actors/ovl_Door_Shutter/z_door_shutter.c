@@ -41,15 +41,15 @@ void func_808A1C50(DoorShutter* this, PlayState* play);
 void DoorShutter_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Door_Shutter_InitVars = {
-    ACTOR_DOOR_SHUTTER,
-    ACTORCAT_DOOR,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DoorShutter),
-    (ActorFunc)DoorShutter_Init,
-    (ActorFunc)DoorShutter_Destroy,
-    (ActorFunc)DoorShutter_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_DOOR_SHUTTER,
+    /**/ ACTORCAT_DOOR,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(DoorShutter),
+    /**/ DoorShutter_Init,
+    /**/ DoorShutter_Destroy,
+    /**/ DoorShutter_Update,
+    /**/ NULL,
 };
 
 typedef struct {
@@ -410,7 +410,7 @@ void func_808A1288(DoorShutter* this, PlayState* play) {
         this->unk_164 = sp38;
         this->unk_168 = 0.0f;
 
-        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->slidingDoor.dyna.actor, player->doorBgCamIndex,
+        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->slidingDoor.dyna.actor, player->cv.doorBgCamIndex,
                              this->unk_168, 12, sp34, 10);
     }
 }
@@ -462,7 +462,7 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
         }
 
         if ((this->csId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->csId)) {
-            func_800B724C(play, &this->slidingDoor.dyna.actor, PLAYER_CSACTION_1);
+            Player_SetCsAction(play, &this->slidingDoor.dyna.actor, PLAYER_CSACTION_1);
         }
     }
 
@@ -582,7 +582,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
             player->csId = CS_ID_NONE;
-            func_800B7298(play, NULL, PLAYER_CSACTION_115);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_115);
         }
     }
 }
@@ -637,7 +637,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
 void func_808A1C50(DoorShutter* this, PlayState* play) {
     if (this->unk_167++ > 30) {
         if (GET_PLAYER(play)->csAction == PLAYER_CSACTION_115) {
-            func_800B7298(play, NULL, PLAYER_CSACTION_END);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
         }
         DoorShutter_SetupDoor(this, play);
     }

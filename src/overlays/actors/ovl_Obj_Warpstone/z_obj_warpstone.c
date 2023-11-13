@@ -23,15 +23,15 @@ s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, PlayState* play);
 
 ActorInit Obj_Warpstone_InitVars = {
-    ACTOR_OBJ_WARPSTONE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_SEK,
-    sizeof(ObjWarpstone),
-    (ActorFunc)ObjWarpstone_Init,
-    (ActorFunc)ObjWarpstone_Destroy,
-    (ActorFunc)ObjWarpstone_Update,
-    (ActorFunc)ObjWarpstone_Draw,
+    /**/ ACTOR_OBJ_WARPSTONE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_SEK,
+    /**/ sizeof(ObjWarpstone),
+    /**/ ObjWarpstone_Init,
+    /**/ ObjWarpstone_Destroy,
+    /**/ ObjWarpstone_Update,
+    /**/ ObjWarpstone_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

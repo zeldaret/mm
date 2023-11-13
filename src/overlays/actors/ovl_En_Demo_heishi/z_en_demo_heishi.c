@@ -21,15 +21,15 @@ void EnDemoheishi_SetupTalk(EnDemoheishi* this);
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play);
 
 ActorInit En_Demo_heishi_InitVars = {
-    ACTOR_EN_DEMO_HEISHI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SDN,
-    sizeof(EnDemoheishi),
-    (ActorFunc)EnDemoheishi_Init,
-    (ActorFunc)EnDemoheishi_Destroy,
-    (ActorFunc)EnDemoheishi_Update,
-    (ActorFunc)EnDemoheishi_Draw,
+    /**/ ACTOR_EN_DEMO_HEISHI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnDemoheishi),
+    /**/ EnDemoheishi_Init,
+    /**/ EnDemoheishi_Destroy,
+    /**/ EnDemoheishi_Update,
+    /**/ EnDemoheishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

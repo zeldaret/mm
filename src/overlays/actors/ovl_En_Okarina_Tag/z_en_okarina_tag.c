@@ -18,15 +18,15 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play);
 void func_8093E68C(EnOkarinaTag* this, PlayState* play);
 
 ActorInit En_Okarina_Tag_InitVars = {
-    ACTOR_EN_OKARINA_TAG,
-    ACTORCAT_SWITCH,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnOkarinaTag),
-    (ActorFunc)EnOkarinaTag_Init,
-    (ActorFunc)EnOkarinaTag_Destroy,
-    (ActorFunc)EnOkarinaTag_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_OKARINA_TAG,
+    /**/ ACTORCAT_SWITCH,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnOkarinaTag),
+    /**/ EnOkarinaTag_Init,
+    /**/ EnOkarinaTag_Destroy,
+    /**/ EnOkarinaTag_Update,
+    /**/ NULL,
 };
 
 void EnOkarinaTag_Destroy(Actor* thisx, PlayState* play) {
