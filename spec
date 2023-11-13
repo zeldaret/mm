@@ -40,7 +40,7 @@ beginseg
     include "build/asm/boot/fp.text.o"
     include "build/data/boot/fp.data.o"
     include "build/src/boot/O2/system_malloc.o"
-    include "build/src/boot/O2/rand.o"
+    include "build/src/boot/libc64/qrand.o"
     include "build/src/boot/O2/__osMalloc.o"
     include "build/src/boot/O2/sprintf.o"
     include "build/src/boot/O2/printutils.o"
