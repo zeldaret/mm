@@ -228,7 +228,7 @@ asm/non_matchings/boot/__osMalloc/__osFree.s,__osFree,0x800874EC,0x3E
 asm/non_matchings/boot/__osMalloc/__osRealloc.s,__osRealloc,0x800875E4,0x4C
 asm/non_matchings/boot/__osMalloc/__osGetSizes.s,__osGetSizes,0x80087714,0x2C
 asm/non_matchings/boot/__osMalloc/__osCheckArena.s,__osCheckArena,0x800877C4,0x1B
-asm/non_matchings/boot/sprintf/proutSprintf.s,proutSprintf,0x80087830,0x9
+asm/non_matchings/boot/sprintf/proutPrintf.s,proutPrintf,0x80087830,0x9
 asm/non_matchings/boot/sprintf/vsprintf.s,vsprintf,0x80087854,0x14
 asm/non_matchings/boot/sprintf/sprintf.s,sprintf,0x800878A4,0x17
 asm/non_matchings/boot/printutils/vaprintf.s,vaprintf,0x80087900,0xD

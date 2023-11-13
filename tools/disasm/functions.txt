@@ -231,7 +231,7 @@
     0x800875E4:("__osRealloc",),
     0x80087714:("__osGetSizes",),
     0x800877C4:("__osCheckArena",),
-    0x80087830:("proutSprintf",),
+    0x80087830:("proutPrintf",),
     0x80087854:("vsprintf",),
     0x800878A4:("sprintf",),
     0x80087900:("vaprintf",),
