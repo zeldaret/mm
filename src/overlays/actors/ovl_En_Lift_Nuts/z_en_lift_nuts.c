@@ -29,8 +29,8 @@ void EnLiftNuts_StartConversation(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_HandleConversation(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_SetupMove(EnLiftNuts* this);
 void EnLiftNuts_Move(EnLiftNuts* this, PlayState* play);
-void EnLiftNuts_SetupMovePlayer(EnLiftNuts* this);
-void EnLiftNuts_MovePlayerToPos(EnLiftNuts* this, PlayState* play);
+void EnLiftNuts_SetupMovePlayerToActor(EnLiftNuts* this);
+void EnLiftNuts_MovePlayerToActor(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_SetupStartGame(EnLiftNuts* this);
 void EnLiftNuts_StartGame(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_SetupStartGameImmediately(EnLiftNuts* this);
@@ -770,15 +770,15 @@ void EnLiftNuts_Move(EnLiftNuts* this, PlayState* play) {
     this->actor.world.pos.y += this->actor.gravity;
 
     if (dist == 0.0f) {
-        EnLiftNuts_SetupMovePlayer(this);
+        EnLiftNuts_SetupMovePlayerToActor(this);
     }
 }
 
-void EnLiftNuts_SetupMovePlayer(EnLiftNuts* this) {
-    this->actionFunc = EnLiftNuts_MovePlayerToPos;
+void EnLiftNuts_SetupMovePlayerToActor(EnLiftNuts* this) {
+    this->actionFunc = EnLiftNuts_MovePlayerToActor;
 }
 
-void EnLiftNuts_MovePlayerToPos(EnLiftNuts* this, PlayState* play) {
+void EnLiftNuts_MovePlayerToActor(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 distXZ;
     f32 controlStickMagnitude;
