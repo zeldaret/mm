@@ -1,5 +1,5 @@
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "loadfragment.h"
 
 void Overlay_LoadGameState(GameStateOverlay* overlayEntry) {

@@ -6,7 +6,7 @@
  *
  */
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 
 typedef void (*BlockFunc)(uintptr_t);
 typedef void (*BlockFunc1)(uintptr_t, u32);

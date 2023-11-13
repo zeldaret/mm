@@ -3,7 +3,7 @@
 #include "fault.h"
 #include "stack.h"
 #include "stackcheck.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "z64thread.h"
 #include "sys_flashrom.h"
 #include "PR/os_internal_flash.h"

@@ -7,7 +7,7 @@
  *     These are for specific fragment overlays with the .ovl file extension
  */
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "loadfragment.h"
 
 s32 gOverlayLogSeverity = 2;

@@ -5,7 +5,7 @@
 
 #include "global.h"
 #include "z64vismono.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 
 // Height of the fragments the color frame buffer (CFB) is split into.
 // It is the maximum amount of lines such that all rgba16 SCREEN_WIDTH-long lines fit into

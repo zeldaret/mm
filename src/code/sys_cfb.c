@@ -38,7 +38,7 @@ u8 gSysCfbHiResEnabled;
 #include "sys_cfb.h"
 #include "libc/stdbool.h"
 #include "buffers.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "z64vimode.h"
 
 extern u16 gFramebufferHiRes0[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];

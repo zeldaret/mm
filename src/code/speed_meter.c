@@ -2,7 +2,7 @@
 #include "sys_cfb.h"
 #include "z64speed_meter.h"
 #include "z64view.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 
 /**
  * How much time the RSP ran audio tasks for over the course of `gGraphUpdatePeriod`.

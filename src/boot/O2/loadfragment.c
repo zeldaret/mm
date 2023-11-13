@@ -11,7 +11,7 @@
  */
 
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "loadfragment.h"
 
 s32 gLoadLogSeverity = 2;

@@ -39,7 +39,7 @@ beginseg
     include "build/src/boot/libc64/math64.o"
     include "build/asm/boot/fp.text.o"
     include "build/data/boot/fp.data.o"
-    include "build/src/boot/O2/system_malloc.o"
+    include "build/src/boot/libc64/malloc.o"
     include "build/src/boot/libc64/qrand.o"
     include "build/src/boot/libc64/__osMalloc.o"
     include "build/src/boot/libc64/sprintf.o"

@@ -1,5 +1,5 @@
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 
 typedef struct {
     /* 0x0 */ union {

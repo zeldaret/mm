@@ -1,5 +1,5 @@
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 
 void GameAlloc_Log(GameAlloc* this) {
     GameAllocEntry* iter;

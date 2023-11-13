@@ -12,7 +12,7 @@
 
 #include "global.h"
 #include "libc64/sleep.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 
 Gfx sTransTileSetupDL[] = {
     gsDPPipeSync(),
