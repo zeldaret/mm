@@ -6,7 +6,7 @@
 #include "z64environment.h"
 #include "z64transition.h"
 
-ALIGNED(16) SaveContext gSaveContext;
+SaveContext gSaveContext ALIGNED(16);
 
 void SaveContext_Init(void) {
     bzero(&gSaveContext, sizeof(SaveContext));
