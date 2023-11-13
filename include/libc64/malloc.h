@@ -4,17 +4,17 @@
 #include "ultra64.h"
 #include "libc64/os_malloc.h"
 
-void* SystemArena_Malloc(size_t size);
-void* SystemArena_MallocR(size_t size);
-void* SystemArena_Realloc(void* oldPtr, size_t newSize);
-void SystemArena_Free(void* ptr);
-void* SystemArena_Calloc(u32 elements, size_t size);
-void SystemArena_GetSizes(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated);
-u32 SystemArena_CheckArena(void);
-void SystemArena_Init(void* start, size_t size);
-void SystemArena_Cleanup(void);
-u8 SystemArena_IsInitialized(void);
+void* malloc(size_t size);
+void* malloc_r(size_t size);
+void* realloc(void* oldPtr, size_t newSize);
+void free(void* ptr);
+void* calloc(u32 elements, size_t size);
+void GetFreeArena(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated);
+s32 CheckArena(void);
+void MallocInit(void* start, size_t size);
+void MallocCleanup(void);
+s32 MallocIsInitialized(void);
 
-extern Arena gSystemArena;
+extern Arena malloc_arena;
 
 #endif

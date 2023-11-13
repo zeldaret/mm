@@ -89,7 +89,7 @@ void Overlay_FreeGameState(GameStateOverlay* overlayEntry) {
                                                                                (uintptr_t)overlayEntry->loadedRamAddr))
                                                           : NULL);
 
-            SystemArena_Free(overlayEntry->loadedRamAddr);
+            free(overlayEntry->loadedRamAddr);
             overlayEntry->loadedRamAddr = NULL;
         }
     }

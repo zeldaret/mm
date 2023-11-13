@@ -172,7 +172,7 @@ s32 SysFlashrom_WriteData(void* addr, u32 pageNum, u32 pageCount) {
         return -1;
     }
     size = pageCount * FLASH_BLOCK_SIZE;
-    data = SystemArena_Malloc(size);
+    data = malloc(size);
     if (data == NULL) {
         ret = SysFlashrom_AttemptWrite(addr, pageNum, pageCount);
     } else {
@@ -195,7 +195,7 @@ s32 SysFlashrom_WriteData(void* addr, u32 pageNum, u32 pageCount) {
                 }
             }
         }
-        SystemArena_Free(data);
+        free(data);
     }
     return ret;
 }

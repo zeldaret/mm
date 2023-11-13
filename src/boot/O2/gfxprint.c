@@ -221,7 +221,7 @@ Gfx* GfxPrint_Close(GfxPrint* this) {
 }
 
 s32 GfxPrint_VPrintf(GfxPrint* this, const char* fmt, va_list args) {
-    return PrintUtils_VPrintf(&this->callback, fmt, args);
+    return vaprintf(&this->callback, fmt, args);
 }
 
 s32 GfxPrint_Printf(GfxPrint* this, const char* fmt, ...) {

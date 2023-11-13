@@ -105,19 +105,19 @@ void TransitionTile_Destroy(TransitionTile* this) {
     Sleep_Msec(100);
 
     if (this->vtxData != NULL) {
-        SystemArena_Free(this->vtxData);
+        free(this->vtxData);
         this->vtxData = NULL;
     }
     if (this->vtxFrame1 != NULL) {
-        SystemArena_Free(this->vtxFrame1);
+        free(this->vtxFrame1);
         this->vtxFrame1 = NULL;
     }
     if (this->vtxFrame2 != NULL) {
-        SystemArena_Free(this->vtxFrame2);
+        free(this->vtxFrame2);
         this->vtxFrame2 = NULL;
     }
     if (this->gfx != NULL) {
-        SystemArena_Free(this->gfx);
+        free(this->gfx);
         this->gfx = NULL;
     }
 }
@@ -130,26 +130,26 @@ TransitionTile* TransitionTile_Init(TransitionTile* this, s32 cols, s32 rows) {
     this->cols = cols;
     this->rows = rows;
     gridSize = (cols + 1) * (rows + 1);
-    this->vtxData = SystemArena_Malloc(gridSize * sizeof(TransitionTileVtxData));
-    this->vtxFrame1 = SystemArena_Malloc(gridSize * sizeof(Vtx));
-    this->vtxFrame2 = SystemArena_Malloc(gridSize * sizeof(Vtx));
-    this->gfx = SystemArena_Malloc(((cols * 9 + 1) * rows + 2) * sizeof(Gfx));
+    this->vtxData = malloc(gridSize * sizeof(TransitionTileVtxData));
+    this->vtxFrame1 = malloc(gridSize * sizeof(Vtx));
+    this->vtxFrame2 = malloc(gridSize * sizeof(Vtx));
+    this->gfx = malloc(((cols * 9 + 1) * rows + 2) * sizeof(Gfx));
 
     if ((this->vtxData == NULL) || (this->vtxFrame1 == NULL) || (this->vtxFrame2 == NULL) || (this->gfx == NULL)) {
         if (this->vtxData != NULL) {
-            SystemArena_Free(this->vtxData);
+            free(this->vtxData);
             this->vtxData = NULL;
         }
         if (this->vtxFrame1 != NULL) {
-            SystemArena_Free(this->vtxFrame1);
+            free(this->vtxFrame1);
             this->vtxFrame1 = NULL;
         }
         if (this->vtxFrame2 != NULL) {
-            SystemArena_Free(this->vtxFrame2);
+            free(this->vtxFrame2);
             this->vtxFrame2 = NULL;
         }
         if (this->gfx != NULL) {
-            SystemArena_Free(this->gfx);
+            free(this->gfx);
             this->gfx = NULL;
         }
         return NULL;

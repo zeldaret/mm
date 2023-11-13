@@ -99,7 +99,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            SystemArena_Free(this);
+            free(this);
             break;
     }
     this->life = 10;

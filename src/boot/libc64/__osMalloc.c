@@ -1,8 +1,9 @@
 #include "libc64/os_malloc.h"
+
+#include "alignment.h"
+#include "functions.h" // for __osMemcpy
 #include "libc/stdbool.h"
 #include "libc/stdint.h"
-#include "macros.h"
-#include "functions.h"
 
 #define FILL_ALLOCBLOCK (1 << 0)
 #define FILL_FREEBLOCK (1 << 1)
@@ -22,7 +23,7 @@ OSMesg sArenaLockMsg[1];
 void __osMallocAddHeap(Arena* arena, void* heap, size_t size);
 
 void ArenaImpl_LockInit(Arena* arena) {
-    osCreateMesgQueue(&arena->lock, sArenaLockMsg, ARRAY_COUNT(sArenaLockMsg));
+    osCreateMesgQueue(&arena->lock, sArenaLockMsg, sizeof(sArenaLockMsg) / sizeof(*sArenaLockMsg));
 }
 
 void ArenaImpl_Lock(Arena* arena) {

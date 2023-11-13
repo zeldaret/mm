@@ -1,50 +1,50 @@
 #include "libc64/malloc.h"
 
-Arena gSystemArena;
+Arena malloc_arena;
 
-void* SystemArena_Malloc(size_t size) {
-    return __osMalloc(&gSystemArena, size);
+void* malloc(size_t size) {
+    return __osMalloc(&malloc_arena, size);
 }
 
-void* SystemArena_MallocR(size_t size) {
-    return __osMallocR(&gSystemArena, size);
+void* malloc_r(size_t size) {
+    return __osMallocR(&malloc_arena, size);
 }
 
-void* SystemArena_Realloc(void* oldPtr, size_t newSize) {
-    return __osRealloc(&gSystemArena, oldPtr, newSize);
+void* realloc(void* oldPtr, size_t newSize) {
+    return __osRealloc(&malloc_arena, oldPtr, newSize);
 }
 
-void SystemArena_Free(void* ptr) {
-    __osFree(&gSystemArena, ptr);
+void free(void* ptr) {
+    __osFree(&malloc_arena, ptr);
 }
 
-void* SystemArena_Calloc(u32 elements, size_t size) {
+void* calloc(u32 elements, size_t size) {
     void* ptr;
     size_t totalSize = elements * size;
 
-    ptr = __osMalloc(&gSystemArena, totalSize);
+    ptr = __osMalloc(&malloc_arena, totalSize);
     if (ptr != NULL) {
         bzero(ptr, totalSize);
     }
     return ptr;
 }
 
-void SystemArena_GetSizes(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated) {
-    __osGetSizes(&gSystemArena, maxFreeBlock, bytesFree, bytesAllocated);
+void GetFreeArena(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated) {
+    __osGetSizes(&malloc_arena, maxFreeBlock, bytesFree, bytesAllocated);
 }
 
-u32 SystemArena_CheckArena(void) {
-    return __osCheckArena(&gSystemArena);
+s32 CheckArena(void) {
+    return __osCheckArena(&malloc_arena);
 }
 
-void SystemArena_Init(void* start, size_t size) {
-    __osMallocInit(&gSystemArena, start, size);
+void MallocInit(void* start, size_t size) {
+    __osMallocInit(&malloc_arena, start, size);
 }
 
-void SystemArena_Cleanup(void) {
-    __osMallocCleanup(&gSystemArena);
+void MallocCleanup(void) {
+    __osMallocCleanup(&malloc_arena);
 }
 
-u8 SystemArena_IsInitialized(void) {
-    return __osMallocIsInitalized(&gSystemArena);
+s32 MallocIsInitialized(void) {
+    return __osMallocIsInitalized(&malloc_arena);
 }

@@ -182,7 +182,7 @@ void GameState_Realloc(GameState* gameState, size_t size) {
 
     THA_Destroy(&gameState->tha);
     GameAlloc_Free(alloc, heapStart);
-    SystemArena_GetSizes(&systemMaxFree, &bytesFree, &bytesAllocated);
+    GetFreeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
     size = ((systemMaxFree - sizeof(ArenaNode)) < size) ? 0 : size;
     if (size == 0) {
         size = systemMaxFree - sizeof(ArenaNode);
