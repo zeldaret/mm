@@ -2160,20 +2160,20 @@ void Message_Decode(PlayState* play) {
     u32 timeToMoonCrash;
     s16 var_v0;
     s16 numLines;
-    u8* fontBuf;
-    s16 digits[4];
+    s16 value;
+    s16 digits[5];
     s16 spD2;
     f32 timeInSeconds;
     s32 charTexIndex;
-    f32 var_fs0;
+    u8* fontBuf;
     f32 spC0;
     s16 index;
-    s16 value;
     s16 playerNameLen;
+    s16 spAC[8];
+    f32 var_fs0;
     s16 i;
-    u16 index2 = 0;
-    s16 spAC[4];
     u16 curChar;
+    u8 index2 = 0;
 
     msgCtx->textDelayTimer = 0;
     msgCtx->textDelay = msgCtx->textDelayTimer;
@@ -2212,7 +2212,7 @@ void Message_Decode(PlayState* play) {
                         }
                     }
                 } else {
-                    s32 requiredScopeTemp;
+                    s8 requiredScopeTemp;
 
                     if ((msgCtx->textBoxType != TEXTBOX_TYPE_3) && (msgCtx->textBoxType != TEXTBOX_TYPE_4)) {
                         if (numLines == 0) {
