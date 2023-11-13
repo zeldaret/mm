@@ -24,19 +24,22 @@ extern u8 gPictoPhotoI8[PICTO_PHOTO_SIZE];
 extern u8 D_80784600[0x56200];
 extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
 
+#ifndef FRAMEBUFFERS_START_ADDR
 /**
- * The system heap is an area of memory that covers all the RAM that is not
- * taken by compiled code/data.
- * It starts just after the end of compiled code/data (that is not an overlay)
- * and ends at a fixed location in RAM.
- * That fixed location in RAM is used by the framebuffers of the game and have
- * a fixed size.
+ * The `framebuffers` segment is located at a fixed location in RAM and has a
+ * fixed size.
+ * Those framebuffers are placed at the end of the RAM space.
  * This address is calculated by doing `0x80800000 - (size of framebuffers)`,
  * where 0x80800000 is the end of the Expansion Pak address range.
  * In the vanilla game this value expands to `0x80780000`.
+ *
+ * Since the start of the `framebuffers` segment is the end of the not-fixed
+ * available RAM, then the `system_heap` covers all the remaining RAM that is
+ * not used by the non-relocatable code/data (i.e. `boot`, `code`, and other
+ * buffers) up to the start of the `framebuffers` segmemt.
+ * @see `Main`
  */
-#ifndef SYSTEM_HEAP_END_ADDR
-#define SYSTEM_HEAP_END_ADDR (PHYS_TO_K0(0x800000) - sizeof(gFramebuffer0) - sizeof(D_80784600) - sizeof(gPictoPhotoI8))
+#define FRAMEBUFFERS_START_ADDR (PHYS_TO_K0(0x800000) - sizeof(gFramebuffer0) - sizeof(D_80784600) - sizeof(gPictoPhotoI8))
 #endif
 
 

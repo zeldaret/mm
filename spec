@@ -650,7 +650,7 @@ endseg
 beginseg
     name "framebuffers"
     flags NOLOAD
-    // This has to be fixed location in VRAM. See the SYSTEM_HEAP_END_ADDR define on `buffers.h` for a more in-depth explanation
+    // This has to be fixed location in VRAM. See the FRAMEBUFFERS_START_ADDR define on `buffers.h` for a more in-depth explanation
     address 0x80780000
     include "build/src/buffers/framebuffers.o"
 endseg

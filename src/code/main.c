@@ -54,7 +54,7 @@ void Main(void* arg) {
     Check_ExpansionPak();
 
     sysHeap = (intptr_t)SEGMENT_START(system_heap);
-    fb = SYSTEM_HEAP_END_ADDR;
+    fb = FRAMEBUFFERS_START_ADDR;
     gSystemHeapSize = fb - sysHeap;
     SystemHeap_Init((void*)sysHeap, gSystemHeapSize);
 
