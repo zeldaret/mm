@@ -27,7 +27,7 @@ void EnTest7_WarpCsPart6(EnTest7* this, PlayState* play);
 void EnTest7_WarpCsWait(EnTest7* this, PlayState* play);
 void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play);
 
-void EnTest7_PlayerAndCameraControl(EnTest7* this, PlayState* play);
+void EnTest7_PlayerAndSubCamAction(EnTest7* this, PlayState* play);
 
 void EnTest7_SetupArriveCs(EnTest7* this, PlayState* play);
 void EnTest7_StartArriveCs(EnTest7* this, PlayState* play);
@@ -398,7 +398,7 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
         EnTest7_SetupPlayerCamFunc(this, NULL);
     } else {
         EnTest7_SetupAction(this, EnTest7_StartWarpCs);
-        EnTest7_SetupPlayerCamFunc(this, EnTest7_PlayerAndCameraControl);
+        EnTest7_SetupPlayerCamFunc(this, EnTest7_PlayerAndSubCamAction);
         Audio_PlayBgm_StorePrevBgm(NA_BGM_SONG_OF_SOARING);
     }
 
@@ -680,82 +680,80 @@ void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play) {
     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 }
 
-void EnTest7_CameraControl1(EnTest7* this, PlayState* play, f32 lerp) {
-    Vec3f sp3C;
-    Vec3f* pos;
+void EnTest7_UpdateSubCamPart2(EnTest7* this, PlayState* play, f32 lerp) {
+    Vec3f eyeNext;
+    Vec3f* playerPos;
     Player* player = GET_PLAYER(play);
     Camera* subCam =
         Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
 
-    pos = &player->actor.world.pos;
+    playerPos = &player->actor.world.pos;
     subCam->focalActor = NULL;
 
-    sp3C.x = ((180.0f * Math_SinS(this->unk_1E8E)) * Math_CosS(0xFA0)) + pos->x;
-    sp3C.y = (Math_SinS(0xFA0) * 180.0f) + pos->y;
-    sp3C.z = ((180.0f * Math_CosS(this->unk_1E8E)) * Math_CosS(0xFA0)) + pos->z;
+    eyeNext.x = playerPos->x + 180.0f * Math_SinS(this->unk_1E8E) * Math_CosS(0xFA0);
+    eyeNext.y = playerPos->y + 180.0f * Math_SinS(0xFA0);
+    eyeNext.z = playerPos->z + 180.0f * Math_CosS(this->unk_1E8E) * Math_CosS(0xFA0);
 
-    subCam->eye.x = ((sp3C.x - subCam->eye.x) * lerp) + subCam->eye.x;
-    subCam->eye.y = ((sp3C.y - subCam->eye.y) * lerp) + subCam->eye.y;
-    subCam->eye.z = ((sp3C.z - subCam->eye.z) * lerp) + subCam->eye.z;
+    subCam->eye.x = LERPIMP_ALT(subCam->eye.x, eyeNext.x, lerp);
+    subCam->eye.y = LERPIMP_ALT(subCam->eye.y, eyeNext.y, lerp);
+    subCam->eye.z = LERPIMP_ALT(subCam->eye.z, eyeNext.z, lerp);
 
-    subCam->fov = ((this->subCamFov - subCam->fov) * lerp) + subCam->fov;
+    subCam->fov = LERPIMP_ALT(subCam->fov, this->subCamFov, lerp);
+
     subCam->at.y += 1.4444444f;
 }
 
-void EnTest7_CameraControl2(EnTest7* this, PlayState* play, f32 lerp) {
-    Vec3f* pos;
+void EnTest7_UpdateSubCamPart1(EnTest7* this, PlayState* play, f32 lerp) {
+    Vec3f* playerPos;
     Player* player = GET_PLAYER(play);
-    Camera* subCam;
-    Vec3f sp30;
+    Camera* subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
+    Vec3f eyeNext;
 
-    subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
     subCam->focalActor = NULL;
 
-    pos = &player->actor.world.pos;
+    playerPos = &player->actor.world.pos;
 
-    sp30.x = ((80.0f * Math_SinS(this->unk_1E8E)) * Math_CosS(0xBB8)) + pos->x;
-    sp30.y = (Math_SinS(0xBB8) * 80.0f) + pos->y;
-    sp30.z = ((80.0f * Math_CosS(this->unk_1E8E)) * Math_CosS(0xBB8)) + pos->z;
+    eyeNext.x = playerPos->x + 80.0f * Math_SinS(this->unk_1E8E) * Math_CosS(0xBB8);
+    eyeNext.y = playerPos->y + 80.0f * Math_SinS(0xBB8);
+    eyeNext.z = playerPos->z + 80.0f * Math_CosS(this->unk_1E8E) * Math_CosS(0xBB8);
 
-    subCam->eye.x = ((sp30.x - subCam->eye.x) * lerp) + subCam->eye.x;
-    subCam->eye.y = ((sp30.y - subCam->eye.y) * lerp) + subCam->eye.y;
-    subCam->eye.z = ((sp30.z - subCam->eye.z) * lerp) + subCam->eye.z;
+    subCam->eye.x = LERPIMP_ALT(subCam->eye.x, eyeNext.x, lerp);
+    subCam->eye.y = LERPIMP_ALT(subCam->eye.y, eyeNext.y, lerp);
+    subCam->eye.z = LERPIMP_ALT(subCam->eye.z, eyeNext.z, lerp);
 
-    subCam->at.x = ((pos->x - subCam->at.x) * lerp) + subCam->at.x;
-    subCam->at.y = (((pos->y + 40.0f) - subCam->at.y) * lerp) + subCam->at.y;
-    subCam->at.z = ((pos->z - subCam->at.z) * lerp) + subCam->at.z;
+    subCam->at.x = LERPIMP_ALT(subCam->at.x, playerPos->x, lerp);
+    subCam->at.y = LERPIMP_ALT(subCam->at.y, playerPos->y + 40.0f, lerp);
+    subCam->at.z = LERPIMP_ALT(subCam->at.z, playerPos->z, lerp);
 
-    subCam->fov = ((this->subCamFov - subCam->fov) * lerp) + subCam->fov;
+    subCam->fov = LERPIMP_ALT(subCam->fov, this->subCamFov, lerp);
 }
 
-void EnTest7_PlayerControl(EnTest7* this, PlayState* play, f32 lerp) {
+void EnTest7_SpinAndSquishPlayer(EnTest7* this, PlayState* play, f32 lerp) {
     Player* player = GET_PLAYER(play);
 
     // Spin Player
     player->actor.shape.rot.y += 0x2EE0;
 
     // Squish Player thin
-    // player->actor.scale.x = LERPIMP(this->playerScaleX, 0.0f, lerp);
-    // player->actor.scale.z = LERPIMP(this->playerScaleZ, 0.0f, lerp);
-    player->actor.scale.x = ((0.0f - this->playerScaleX) * lerp) + this->playerScaleX;
-    player->actor.scale.z = ((0.0f - this->playerScaleZ) * lerp) + this->playerScaleZ;
+    player->actor.scale.x = LERPIMP_ALT(this->playerScaleX, 0.0f, lerp);
+    player->actor.scale.z = LERPIMP_ALT(this->playerScaleZ, 0.0f, lerp);
 }
 
-void EnTest7_PlayerAndCameraControl(EnTest7* this, PlayState* play) {
+void EnTest7_PlayerAndSubCamAction(EnTest7* this, PlayState* play) {
     f32 lerp;
     f32 sixteen = 16.0f;
 
     if ((this->timer >= 12) && (this->timer <= 30)) {
         lerp = (this->timer - 12) / 18.0f;
-        EnTest7_CameraControl1(this, play, lerp);
+        EnTest7_UpdateSubCamPart2(this, play, lerp);
     } else if ((this->timer >= 79) && (this->timer <= 95)) {
         lerp = (this->timer - 79) / sixteen;
-        EnTest7_CameraControl2(this, play, lerp);
+        EnTest7_UpdateSubCamPart1(this, play, lerp);
     }
 
     if ((this->timer >= 42) && (this->timer < 69)) {
         lerp = (this->timer - 42) / 26.0f;
-        EnTest7_PlayerControl(this, play, lerp);
+        EnTest7_SpinAndSquishPlayer(this, play, lerp);
     }
 }
 
