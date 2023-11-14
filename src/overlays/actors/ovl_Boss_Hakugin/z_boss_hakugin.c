@@ -1265,7 +1265,7 @@ void func_80B07EEC(BossHakugin* this, PlayState* play) {
 
     this->unk_037A.x = Math_Atan2S_XY(70.0f, -20.0f);
     this->unk_037A.y = player->actor.shape.rot.y + 0x8000;
-    func_800B7298(play, &this->actor, PLAYER_CSACTION_21);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_21);
     this->unk_019C = 0;
     this->actionFunc = func_80B08018;
 }
@@ -1410,7 +1410,7 @@ void func_80B08550(BossHakugin* this, PlayState* play) {
     player->actor.world.pos.z = -1560.0f;
     player->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     player->currentYaw = player->actor.world.rot.y = player->actor.shape.rot.y;
-    func_800B7298(play, &this->actor, PLAYER_CSACTION_131);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_131);
     this->actionFunc = func_80B0863C;
 }
 
@@ -1482,7 +1482,7 @@ void func_80B08848(BossHakugin* this, PlayState* play) {
     Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -3.0f);
     this->unk_019C = 0;
     this->actor.speed = 5.0f;
-    func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
     player->stateFlags1 |= PLAYER_STATE1_20;
     play->actorCtx.unk268 = true;
     this->actionFunc = func_80B08960;
