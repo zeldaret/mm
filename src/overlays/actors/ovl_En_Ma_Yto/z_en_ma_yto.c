@@ -1081,7 +1081,7 @@ void EnMaYto_SetupPostMilkRunWaitDialogueEnd(EnMaYto* this) {
 void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) || (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
         if (Message_ShouldAdvance(play) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
-            func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
             Message_CloseTextbox(play);
         }
     }

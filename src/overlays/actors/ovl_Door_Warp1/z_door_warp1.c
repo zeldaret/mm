@@ -344,7 +344,7 @@ void func_808B921C(DoorWarp1* this, PlayState* play) {
     }
 
     if (func_808B866C(this, play) && !Play_InCsMode(play)) {
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
+        Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
         Message_StartTextbox(play, 0xF2, &this->dyna.actor);
         DoorWarp1_SetupAction(this, func_808B93A0);
     }
@@ -360,14 +360,14 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
         Message_CloseTextbox(play);
         if (play->msgCtx.choiceIndex == 0) {
             Audio_PlaySfx_MessageDecide();
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_9);
+            Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_9);
             player->unk_3A0.x = this->dyna.actor.world.pos.x;
             player->unk_3A0.z = this->dyna.actor.world.pos.z;
             this->unk_1CA = 1;
             DoorWarp1_SetupAction(this, func_808B9524);
         } else {
             Audio_PlaySfx_MessageCancel();
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_END);
+            Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_END);
             DoorWarp1_SetupAction(this, func_808B94A4);
         }
     }
@@ -448,7 +448,7 @@ void func_808B977C(DoorWarp1* this, PlayState* play) {
 
         AudioSfx_PlaySfx(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_9);
+        Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
         this->unk_1CA = 1;
@@ -602,7 +602,7 @@ void func_808B9F10(DoorWarp1* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSACTION_9);
+        Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
         this->unk_1CA = 20;

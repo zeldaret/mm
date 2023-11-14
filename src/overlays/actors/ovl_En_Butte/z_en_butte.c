@@ -144,7 +144,7 @@ void func_8091C178(EnButte* this, PlayState* play) {
     sp48 = Math_SinS(D_8091D3A0) * 250.0f;
     sp48 = CLAMP(sp48, 0, 255);
 
-    Camera_GetCamDir(&sp40, GET_ACTIVE_CAM(play));
+    sp40 = Camera_GetCamDir(GET_ACTIVE_CAM(play));
     Matrix_RotateYS(sp40.y, MTXMODE_NEW);
     Matrix_RotateXS(sp40.x, MTXMODE_APPLY);
     Matrix_RotateZS(sp40.z, MTXMODE_APPLY);

@@ -10,7 +10,6 @@ extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
 extern u8 D_80025D00[];
 
 // data
-extern OSPiHandle* gCartHandle;
 extern size_t gDmaMgrDmaBuffSize;
 extern vs32 gIrqMgrResetStatus;
 extern volatile OSTime sIrqMgrResetTime;
@@ -32,7 +31,6 @@ extern u8* sYaz0MaxPtr;
 extern void* gYaz0DecompressDstEnd;
 
 // extern UNK_TYPE4 D_8009CD10;
-extern u32 gRandFloat;
 // extern UNK_TYPE4 sArenaLockMsg;
 
 extern DmaEntry dmadata[1568];

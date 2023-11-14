@@ -258,8 +258,8 @@ asm/non_matchings/code/z_actor/Actor_SetCameraHorseSetting.s,Actor_SetCameraHors
 asm/non_matchings/code/z_actor/Actor_MountHorse.s,Actor_MountHorse,0x800B71DC,0x9
 asm/non_matchings/code/z_actor/func_800B7200.s,func_800B7200,0x800B7200,0xB
 asm/non_matchings/code/z_actor/Actor_SpawnHorse.s,Actor_SpawnHorse,0x800B722C,0x8
-asm/non_matchings/code/z_actor/func_800B724C.s,func_800B724C,0x800B724C,0x13
-asm/non_matchings/code/z_actor/func_800B7298.s,func_800B7298,0x800B7298,0x12
+asm/non_matchings/code/z_actor/Player_SetCsAction.s,Player_SetCsAction,0x800B724C,0x13
+asm/non_matchings/code/z_actor/Player_SetCsActionWithHaltedActors.s,Player_SetCsActionWithHaltedActors,0x800B7298,0x12
 asm/non_matchings/code/z_actor/func_800B72E0.s,func_800B72E0,0x800B72E0,0x6
 asm/non_matchings/code/z_actor/func_800B72F8.s,func_800B72F8,0x800B72F8,0xA
 asm/non_matchings/code/z_actor/Player_IsFacingActor.s,Player_IsFacingActor,0x800B7320,0x16

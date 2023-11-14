@@ -1,8 +1,10 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "carthandle.h"
 #include "fault.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "z64dma.h"
 #include "z64thread.h"
 
 size_t gDmaMgrDmaBuffSize = 0x2000;

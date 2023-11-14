@@ -308,7 +308,7 @@ void EnBigpo_SetupSpawnCutscene(EnBigpo* this) {
 void EnBigpo_WaitCutsceneQueue(EnBigpo* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
-        func_800B724C(play, &this->actor, PLAYER_CSACTION_WAIT);
+        Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_WAIT);
         this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         if (this->actor.params == BIG_POE_TYPE_REGULAR) { // and SUMMONED, got switched earlier
             EnBigpo_SpawnCutsceneStage1(this, play);
@@ -478,7 +478,7 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
         } else { // BIG_POE_TYPE_REGULAR
             CutsceneManager_Stop(this->actor.csId);
         }
-        func_800B724C(play, &this->actor, PLAYER_CSACTION_END);
+        Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_END);
         EnBigpo_SetupIdleFlying(this); // setup idle flying
     }
 }
