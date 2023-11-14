@@ -223,14 +223,14 @@ void Boss05_WalkingHead_Thaw(Boss05* this, PlayState* play) {
     Vec3f iceVelocity;
     s32 i;
 
-    SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[0], 30, NA_SE_EV_ICE_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD], 30, NA_SE_EV_ICE_BROKEN);
     for (i = 0; i < 8; i++) {
         iceVelocity.x = Rand_CenteredFloat(7.0f);
         iceVelocity.z = Rand_CenteredFloat(7.0f);
         iceVelocity.y = Rand_ZeroFloat(6.0f) + 4.0f;
-        icePos.x = this->bodyPartsPos[0].x + iceVelocity.x;
-        icePos.y = this->bodyPartsPos[0].y + iceVelocity.y;
-        icePos.z = this->bodyPartsPos[0].z + iceVelocity.z;
+        icePos.x = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].x + iceVelocity.x;
+        icePos.y = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].y + iceVelocity.y;
+        icePos.z = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].z + iceVelocity.z;
         EffectSsEnIce_Spawn(play, &icePos, Rand_ZeroFloat(0.5f) + 0.7f, &iceVelocity, &D_809F1BF4, &D_809F1BEC,
                             &D_809F1BF0, 30);
     }
@@ -381,8 +381,8 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
             }
 
             i++;
-            if (i == 2) {
-                if (this->headCollider.elements[0].info.bumperFlags & BUMP_HIT) {
+            if (i == BIO_DEKU_BABA_LILY_PAD_COLLIDER_MAX) {
+                if (this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags & BUMP_HIT) {
                     u8 damage = this->dyna.actor.colChkInfo.damage;
                     this->dyna.actor.colChkInfo.health -= damage;
                     if ((s8)this->dyna.actor.colChkInfo.health <= 0) {
@@ -669,10 +669,10 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
             }
         } else if (var_s4_2 == 2) {
             for (i = 0; i < 2; i++) {
-                temp_v0_6 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
-                                                        this->headPos.x, this->headPos.y, this->headPos.z,
-                                                        this->headRot.x, this->headRot.y, this->headRot.z,
-                                                        i + BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW);
+                temp_v0_6 =
+                    (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
+                                                this->headPos.x, this->headPos.y, this->headPos.z, this->headRot.x,
+                                                this->headRot.y, this->headRot.z, i + BIO_DEKU_BABA_TYPE_FRAGMENT_BASE);
                 if (temp_v0_6 != NULL) {
                     for (j = 0; j < BIO_DEKU_BABA_HEAD_LIMB_MAX; j++) {
                         temp_v0_6->headSkelAnime.jointTable[j] = this->headSkelAnime.jointTable[j];
@@ -786,15 +786,15 @@ void Boss05_FallingHead_Fall(Boss05* this, PlayState* play) {
     }
 }
 
-void Boss05_WalkingHead_UpdateDamage(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2;
-    Boss05* this = THIS;
+void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
+    s32 pad[2];
     u8 attackDealsDamage = false;
     ColliderInfo* hitInfo;
 
-    if ((this->damagedTimer == 0) && (this->headCollider.elements[0].info.bumperFlags & BUMP_HIT)) {
-        this->headCollider.elements[0].info.bumperFlags &= ~BUMP_HIT;
-        hitInfo = this->headCollider.elements[0].info.acHitInfo;
+    if ((this->damagedTimer == 0) &&
+        (this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags & BUMP_HIT)) {
+        this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags &= ~BUMP_HIT;
+        hitInfo = this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.acHitInfo;
         if (hitInfo->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
             this->knockbackMagnitude = -12.0f;
             this->knockbackAngle = this->dyna.actor.yawTowardsPlayer;
@@ -1100,7 +1100,7 @@ void Boss05_Fragment_Move(Boss05* this, PlayState* play) {
 
 void Boss05_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    Boss05* this = (Boss05*)thisx;
+    Boss05* this = THIS;
     s16 i;
 
     this->frameCounter++;
@@ -1125,7 +1125,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
         Math_ApproachZeroF(&this->knockbackMagnitude, 1.0f, 1.0f);
         Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 50.0f, 40.0f,
                                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
-        Boss05_WalkingHead_UpdateDamage(&this->dyna.actor, play);
+        Boss05_WalkingHead_UpdateDamage(this, play);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->headCollider.base);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->headCollider.base);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->headCollider.base);
@@ -1246,19 +1246,18 @@ s32 Boss05_OverrideLimbDraw_LilyPadWithHead(PlayState* play, s32 limbIndex, Gfx*
     return false;
 }
 
-Vec3f D_809F1CC4 = { 0.0f, -1400.0f, 600.0f };
-
 void Boss05_PostLimbDraw_LilyPad(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f sHeadOffset = { 0.0f, -1400.0f, 600.0f };
     Boss05* this = THIS;
     MtxF mf;
-    Vec3f spherePos0;
-    Vec3f spherePos1;
+    Vec3f upperStemPos;
+    Vec3f lowerStemPos;
 
     if (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_LOWER_STEM) {
-        Matrix_MultVec3f(&D_809F1CC4, &this->headPos);
+        Matrix_MultVec3f(&sHeadOffset, &this->headPos);
 
         if (this->actionFunc == Boss05_FallingHead_Fall) {
-            Matrix_MultVec3f(&D_809F1CC4, &this->dyna.actor.focus.pos);
+            Matrix_MultVec3f(&sHeadOffset, &this->dyna.actor.focus.pos);
         }
 
         Matrix_Get(&mf);
@@ -1267,13 +1266,13 @@ void Boss05_PostLimbDraw_LilyPad(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     }
 
     if (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_UPPER_STEM) {
-        Matrix_MultZero(&spherePos0);
-        Boss05_SetColliderSphere(0, &this->lilyPadCollider, &spherePos0);
+        Matrix_MultZero(&upperStemPos);
+        Boss05_SetColliderSphere(BIO_DEKU_BABA_LILY_PAD_COLLIDER_UPPER_STEM, &this->lilyPadCollider, &upperStemPos);
     }
 
     if (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_MIDDLE_STEM) {
-        Matrix_MultVecY(-500.0f, &spherePos1);
-        Boss05_SetColliderSphere(1, &this->lilyPadCollider, &spherePos1);
+        Matrix_MultVecY(-500.0f, &lowerStemPos);
+        Boss05_SetColliderSphere(BIO_DEKU_BABA_LILY_PAD_COLLIDER_MIDDLE_STEM, &this->lilyPadCollider, &lowerStemPos);
 
         if (this->actionFunc == Boss05_LilyPadWithHead_Move) {
             Matrix_MultVecY(1500.0f, &this->dyna.actor.focus.pos);
@@ -1285,26 +1284,25 @@ s32 Boss05_OverrideLimbDraw_Head(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     return false;
 }
 
-Vec3f D_809F1CD0 = { 1600.0f, -300.0f, 0.0f };
-Vec3f D_809F1CDC = { 700.0f, 0.0f, 0.0f };
-
-Vec3f D_809F2110;
+Vec3f sBioDekuBabaHeadColliderPos;
 
 void Boss05_PostLimbDraw_Head(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f sHeadColliderOffset = { 1600.0f, -300.0f, 0.0f };
+    static Vec3f sHeadOffset = { 700.0f, 0.0f, 0.0f };
     Boss05* this = THIS;
 
     if (limbIndex == BIO_DEKU_BABA_HEAD_LIMB_BODY) {
-        Matrix_MultVec3f(&D_809F1CD0, &D_809F2110);
-        Boss05_SetColliderSphere(0, &this->headCollider, &D_809F2110);
+        Matrix_MultVec3f(&sHeadColliderOffset, &sBioDekuBabaHeadColliderPos);
+        Boss05_SetColliderSphere(BIO_DEKU_BABA_HEAD_COLLIDER_HEAD, &this->headCollider, &sBioDekuBabaHeadColliderPos);
 
         if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
-            Matrix_MultVec3f(&D_809F1CDC, &thisx->focus.pos);
+            Matrix_MultVec3f(&sHeadOffset, &this->dyna.actor.focus.pos);
         }
 
         if (this->drawDmgEffState != 0) {
-            Matrix_MultVec3f(&D_809F1CDC, &this->bodyPartsPos[0]);
+            Matrix_MultVec3f(&sHeadOffset, &this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD]);
             if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) {
-                this->bodyPartsPos[0].y -= 15.0f;
+                this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].y -= 15.0f;
             }
         }
     }

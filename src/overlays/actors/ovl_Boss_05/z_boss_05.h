@@ -31,6 +31,22 @@ typedef enum BioDekuBabaType {
     /* 23 */ BIO_DEKU_BABA_TYPE_FRAGMENT_LEAVES
 } BioDekuBabaType;
 
+typedef enum BioDekuBabaBodyPart {
+    /* 0 */ BIO_DEKU_BABA_BODYPART_HEAD,
+    /* 1 */ BIO_DEKU_BABA_BODYPART_MAX
+} BioDekuBabaBodyPart;
+
+typedef enum BioDekuBabaHeadCollider {
+    /* 0 */ BIO_DEKU_BABA_HEAD_COLLIDER_HEAD,
+    /* 1 */ BIO_DEKU_BABA_HEAD_COLLIDER_MAX
+} BioDekuBabaHeadCollider;
+
+typedef enum BioDekuBabaLilyPadCollider {
+    /* 0 */ BIO_DEKU_BABA_LILY_PAD_COLLIDER_UPPER_STEM,
+    /* 1 */ BIO_DEKU_BABA_LILY_PAD_COLLIDER_MIDDLE_STEM,
+    /* 2 */ BIO_DEKU_BABA_LILY_PAD_COLLIDER_MAX
+} BioDekuBabaLilyPadCollider;
+
 typedef struct Boss05 {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ u8 unk15C;
@@ -50,12 +66,12 @@ typedef struct Boss05 {
     /* 0x184 */ f32 drawDmgEffAlpha;
     /* 0x188 */ u8 drawDmgEffState;
     /* 0x189 */ u8 drawDmgEffType;
-    /* 0x18C */ Vec3f bodyPartsPos[1];
+    /* 0x18C */ Vec3f bodyPartsPos[BIO_DEKU_BABA_BODYPART_MAX];
     /* 0x198 */ f32 fallingHeadLimbScale;
     /* 0x19C */ s16 unk19C;
     /* 0x19E */ Vec3s unk19E[7];
     /* 0x1C8 */ ColliderJntSph lilyPadCollider;
-    /* 0x1E8 */ ColliderJntSphElement lilyPadColliderElements[2];
+    /* 0x1E8 */ ColliderJntSphElement lilyPadColliderElements[BIO_DEKU_BABA_LILY_PAD_COLLIDER_MAX];
     /* 0x268 */ SkelAnime lilyPadSkelAnime;
     /* 0x2AC */ Vec3s lilyPadJointTable[BIO_DEKU_BABA_LILY_PAD_LIMB_MAX];
     /* 0x2E8 */ Vec3s lilyPadMorphTable[BIO_DEKU_BABA_LILY_PAD_LIMB_MAX];
@@ -73,7 +89,7 @@ typedef struct Boss05 {
     /* 0x360 */ f32 bodyScale;
     /* 0x364 */ f32 limbScale;
     /* 0x368 */ ColliderJntSph headCollider;
-    /* 0x388 */ ColliderJntSphElement headColliderElements[1];
+    /* 0x388 */ ColliderJntSphElement headColliderElements[BIO_DEKU_BABA_HEAD_COLLIDER_MAX];
     /* 0x3C8 */ SkelAnime headSkelAnime;
     /* 0x40C */ Vec3s headJointTable[BIO_DEKU_BABA_HEAD_LIMB_MAX];
     /* 0x484 */ Vec3s headMorphTable[BIO_DEKU_BABA_HEAD_LIMB_MAX];
