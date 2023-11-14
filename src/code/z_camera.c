@@ -543,25 +543,19 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CameraCollision* to, s32 arg3) {
     CollisionContext* colCtx = &camera->play->colCtx;
     Vec3f toNewPos;
     Vec3f toPoint;
-    Vec3f fromToNorm;
+    Vec3f fromToNorm = OLib_Vec3fDistNormalize(from, &to->pos);
     f32 floorPolyY;
-    CollisionPoly** floorPoly;
+    s32 pad;
     s32 floorBgId;
 
-    fromToNorm = OLib_Vec3fDistNormalize(from, &to->pos);
     toPoint.x = to->pos.x + fromToNorm.x;
     toPoint.y = to->pos.y + fromToNorm.y;
     toPoint.z = to->pos.z + fromToNorm.z;
-    floorPoly = &to->poly;
 
-    if (!BgCheck_CameraLineTest1(colCtx, from, &toPoint, &toNewPos, floorPoly, (arg3 & 1) ? 0 : 1, 1,
+    if (!BgCheck_CameraLineTest1(colCtx, from, &toPoint, &toNewPos, &to->poly, (arg3 & 1) ? 0 : 1, 1,
                                  (arg3 & 2) ? 0 : 1, -1, &floorBgId)) {
         toNewPos = to->pos;
         toNewPos.y += 5.0f;
-
-        //! FAKE:
-        if (1) {}
-        if (1) {}
 
         if ((arg3 != 0) && func_800CB7CC(camera)) {
             to->poly = camera->focalActor->floorPoly;
@@ -578,7 +572,7 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CameraCollision* to, s32 arg3) {
                 floorPolyY = to->pos.y;
             }
         } else {
-            floorPolyY = BgCheck_CameraRaycastFloor2(colCtx, floorPoly, &floorBgId, &toNewPos);
+            floorPolyY = BgCheck_CameraRaycastFloor2(colCtx, &to->poly, &floorBgId, &toNewPos);
         }
 
         if ((to->pos.y - floorPolyY) > 5.0f) {
@@ -1573,10 +1567,9 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, VecGeo* arg1, Vec3f* arg2, f32 y
     VecGeo sp58;
     f32 temp_f0_3;
     f32 deltaY;
-    f32 new_var2;
-    f32 sp4C;
-    f32 phi_f14;
+    f32 temp;
     f32 fovHeight;
+    f32 pad[2];
 
     focalActorAtOffsetTarget.y = Camera_GetFocalActorHeight(camera) + yOffset;
     focalActorAtOffsetTarget.x = 0.0f;
@@ -1597,8 +1590,7 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, VecGeo* arg1, Vec3f* arg2, f32 y
     focalActorAtOffsetTarget.z += sp60.z;
 
     if (func_800CB950(camera)) {
-        phi_f14 = *arg6;
-        *arg6 = Camera_ScaledStepToCeilF(focalActorPosRot->pos.y, phi_f14, 0.4f, 0.1f);
+        *arg6 = Camera_ScaledStepToCeilF(focalActorPosRot->pos.y, *arg6, 0.4f, 0.1f);
         deltaY = focalActorPosRot->pos.y - *arg6;
         focalActorAtOffsetTarget.y -= deltaY;
         Camera_ScaledStepToCeilVec3f(&focalActorAtOffsetTarget, &camera->focalActorAtOffset, camera->xzOffsetUpdateRate,
@@ -1606,12 +1598,11 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, VecGeo* arg1, Vec3f* arg2, f32 y
     } else {
         deltaY = focalActorPosRot->pos.y - *arg6;
 
-        //! FAKE: unnecessary temp?
-        sp4C = new_var2 = arg1->r;
-        temp_f0_3 = Math_FAtan2F(deltaY, sp4C);
+        temp = arg1->r;
+        temp_f0_3 = Math_FAtan2F(deltaY, temp);
 
         if (!(flags & 0x80)) {
-            fovHeight = Math_FTanF(DEG_TO_RAD(camera->fov * 0.4f)) * sp4C;
+            fovHeight = Math_FTanF(DEG_TO_RAD(camera->fov * 0.4f)) * temp;
 
             if (fovHeight < deltaY) {
                 *arg6 += deltaY - fovHeight;
@@ -1624,14 +1615,14 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, VecGeo* arg1, Vec3f* arg2, f32 y
             focalActorAtOffsetTarget.y -= deltaY;
         } else {
             if (temp_f0_3 > 0.34906584f) { // (M_PI / 9)
-                phi_f14 = 1.0f - Math_SinF(temp_f0_3 - 0.34906584f);
+                temp = 1.0f - Math_SinF(temp_f0_3 - 0.34906584f);
             } else if (temp_f0_3 < -0.17453292f) { // (M_PI / 18)
-                phi_f14 = 1.0f - Math_SinF(-0.17453292f - temp_f0_3);
+                temp = 1.0f - Math_SinF(-0.17453292f - temp_f0_3);
             } else {
-                phi_f14 = 1.0f;
+                temp = 1.0f;
             }
 
-            focalActorAtOffsetTarget.y -= deltaY * phi_f14;
+            focalActorAtOffsetTarget.y -= deltaY * temp;
         }
         Camera_ScaledStepToCeilVec3f(&focalActorAtOffsetTarget, &camera->focalActorAtOffset, 0.5f, 0.5f, 0.1f);
         camera->xzOffsetUpdateRate = 0.5f;
