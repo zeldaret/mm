@@ -2553,9 +2553,9 @@ s32 Camera_Normal4(Camera* camera) {
 
 s32 Camera_Normal0(Camera* camera) {
     f32 phi_f0;
-    f32 yNormal;
+    f32 playerHeight = Player_GetHeight((Player*)camera->focalActor);
     s32 pad;
-    f32 playerHeight;
+    f32 yNormal = 0.8f - ((68.0f / playerHeight) * -0.2f);
     f32 spA4;
     f32 spA0;
     VecGeo sp98;
@@ -2574,9 +2574,6 @@ s32 Camera_Normal0(Camera* camera) {
     f32 new_var;
     Normal0ReadOnlyData* roData = &camera->paramData.norm0.roData;
     Normal0ReadWriteData* rwData = &camera->paramData.norm0.rwData;
-
-    playerHeight = Player_GetHeight((Player*)camera->focalActor);
-    yNormal = 0.8f - ((68.0f / playerHeight) * -0.2f);
 
     if (!RELOAD_PARAMS(camera)) {
     } else {
@@ -2763,11 +2760,11 @@ s32 Camera_Parallel1(Camera* camera) {
     s16 new_var2;
     s16 phi_a0;
     s32 phi_a0_2;
-    CameraModeValue* values;
 
     if (!RELOAD_PARAMS(camera)) {
     } else {
-        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+        CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+
         roData->unk_00 =
             GET_NEXT_SCALED_RO_DATA(values) * focalActorHeight * (0.8f - ((68.0f / focalActorHeight) * -0.2f));
         roData->unk_04 =
@@ -5280,12 +5277,12 @@ s32 Camera_Unique2(Camera* camera) {
     Unique2ReadWriteData* rwData = &camera->paramData.uniq2.rwData;
     f32 focalActorHeight = Camera_GetFocalActorHeight(camera);
     Vec3f* eyeNext = &camera->eyeNext;
-    CameraModeValue* values;
 
     sp60 = OLib_Vec3fDiffToVecGeo(at, eye);
 
     if (RELOAD_PARAMS(camera)) {
-        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+        CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+
         roData->unk_00 =
             GET_NEXT_SCALED_RO_DATA(values) * focalActorHeight * (0.8f - ((68.0f / focalActorHeight) * -0.2f));
         roData->unk_04 = GET_NEXT_RO_DATA(values);
@@ -5323,7 +5320,7 @@ s32 Camera_Unique2(Camera* camera) {
     at->y += ((sp70.y + focalActorHeight + roData->unk_00) - at->y) * 0.2f;
     at->z += (sp70.z - at->z) * phi_f16 * 0.3f;
 
-    rwData->unk_00 = rwData->unk_00 + ((2.0f - rwData->unk_00) * 0.05f);
+    rwData->unk_00 = F32_LERPIMP(rwData->unk_00, 2.0f, 0.05f);
 
     if (roData->interfaceFlags & UNIQUE2_FLAG_0) {
         sp68 = OLib_Vec3fDiffToVecGeo(at, eyeNext);
@@ -5395,10 +5392,10 @@ s32 Camera_Unique5(Camera* camera) {
  * Entering a room or scene (camera settings START0/START1/START2)
  */
 s32 Camera_Unique0(Camera* camera) {
-    f32 playerHeight;
+    f32 playerHeight = Player_GetHeight((Player*)camera->focalActor);
     PosRot* focalActorPosRot = &camera->focalActorPosRot;
     PosRot sp9C;
-    Player* player;
+    Player* player = (Player*)camera->focalActor;
     Vec3f sp8C;
     VecGeo sp84;
     VecGeo sp7C;
@@ -5408,14 +5405,10 @@ s32 Camera_Unique0(Camera* camera) {
     s16 temp_v1;
     Unique0ReadOnlyData* roData = &camera->paramData.uniq0.roData;
     Unique0ReadWriteData* rwData = &camera->paramData.uniq0.rwData;
-    CameraModeValue* values;
-    Vec3f sp54;
-
-    playerHeight = Player_GetHeight((Player*)camera->focalActor);
-    player = (Player*)camera->focalActor;
 
     if (RELOAD_PARAMS(camera)) {
-        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+        CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+
         roData->unk_00 = GET_NEXT_RO_DATA(values);
         roData->unk_04 = GET_NEXT_RO_DATA(values);
         roData->interfaceFlags = GET_NEXT_RO_DATA(values);
@@ -5486,6 +5479,8 @@ s32 Camera_Unique0(Camera* camera) {
             }
 
             if (roData->interfaceFlags & UNIQUE0_FLAG_4) {
+                Vec3f sp54;
+
                 sp54.x = focalActorPosRot->pos.x;
                 sp54.y = focalActorPosRot->pos.y + playerHeight + roData->unk_00;
                 sp54.z = focalActorPosRot->pos.z;
@@ -5568,6 +5563,9 @@ s32 Camera_Unique0(Camera* camera) {
             if (rwData->timer == 0) {
                 rwData->unk_3E = 9;
             }
+            break;
+
+        default:
             break;
     }
 
@@ -5722,8 +5720,6 @@ s32 Camera_Demo1(Camera* camera) {
     }
 
     switch (phi_v0) {
-        Vec3f sp44;
-
         case 1:
             Camera_ScaledStepToCeilVec3f(&camera->targetPosRot.pos, at, 0.1f, 0.1f, 0.1f);
             sp88 = OLib_Vec3fDiffToVecGeo(at, eye);
@@ -5767,9 +5763,7 @@ s32 Camera_Demo1(Camera* camera) {
                 func_800CC260(camera, &rwData->unk_00, &targetPosRot->pos, &rwData->unk_0C, sp98, 1);
             }
             *at = *eyeNext;
-            sp44 = rwData->unk_00;
-            camera->eyeNext = sp44;
-            *eye = sp44;
+            *eye = camera->eyeNext = rwData->unk_00;
             break;
 
         case 6:
@@ -5792,9 +5786,7 @@ s32 Camera_Demo1(Camera* camera) {
                 func_800CC260(camera, &rwData->unk_00, &targetPosRot->pos, &rwData->unk_0C, sp98, 1);
             }
             *at = targetPosRot->pos;
-            sp44 = rwData->unk_00;
-            camera->eyeNext = sp44;
-            *eye = sp44;
+            *eye = camera->eyeNext = rwData->unk_00;
             break;
 
         case 8:
@@ -5807,6 +5799,9 @@ s32 Camera_Demo1(Camera* camera) {
             Camera_ScaledStepToCeilVec3f(&rwData->unk_00, eyeNext, 0.1f, 0.1f, 0.1f);
             *eye = *eyeNext;
             Camera_BgCheck(camera, at, eye);
+            break;
+
+        default:
             break;
     }
 
@@ -6156,6 +6151,9 @@ s32 Camera_Demo3(Camera* camera) {
                 camera->animState++;
             }
             break;
+
+        default:
+            break;
     }
 
     *eyeNext = OLib_AddVecGeoToVec3f(at, &atToEye);
@@ -6338,12 +6336,12 @@ s32 Camera_Demo5(Camera* camera) {
     f32 sin;
     Demo5ReadOnlyData* roData = &camera->paramData.demo5.roData;
     Demo5ReadWriteData* rwData = &camera->paramData.demo5.rwData;
-    CameraModeValue* values;
 
     atToEye = OLib_Vec3fDiffToVecGeo(at, eye);
 
     if (RELOAD_PARAMS(camera)) {
-        values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+        CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+
         roData->interfaceFlags = GET_NEXT_RO_DATA(values);
         camera->animState = 0;
         rwData->unk_00 = *at;
@@ -6419,6 +6417,9 @@ s32 Camera_Demo5(Camera* camera) {
             atToEye = rwData->unk_1C;
             camera->fov = rwData->unk_18;
             break;
+
+        default:
+            break;
     }
 
     *eyeNext = OLib_AddVecGeoToVec3f(at, &atToEye);
@@ -6445,7 +6446,7 @@ s32 Camera_Demo9(Camera* camera) {
 
 /**
  * Smoothly and gradually return camera to Player after a cutscene
- * Used for global actorCsId = 0x7E (Connect Camera Setting)
+ * Used for global csId = 0x7E (Connect Camera Setting)
  */
 s32 Camera_Demo0(Camera* camera) {
     s32 pad;
@@ -6783,7 +6784,7 @@ s32 Camera_Special9(Camera* camera) {
     VecGeo spA8;
     f32 focalActorHeight = Camera_GetFocalActorHeight(camera);
     s32 phi_v1_2;
-    s16 actorCsId = CutsceneManager_GetCurrentCsId();
+    s16 csId = CutsceneManager_GetCurrentCsId();
     f32 yNormal;
     PosRot sp84;
     Vec3f* eyeNext = &camera->eyeNext;
@@ -6794,7 +6795,7 @@ s32 Camera_Special9(Camera* camera) {
     s32 sp50[1];
     BgCamFuncData* bgCamFuncData;
 
-    if ((actorCsId != CS_ID_NONE) && (actorCsId != 0x7D)) {
+    if ((csId != CS_ID_NONE) && (csId != 0x7D)) {
         func_800E0348(camera);
     }
 
@@ -7101,7 +7102,7 @@ void Camera_InitFocalActorSettings(Camera* camera, Actor* focalActor) {
     camera->up.x = upXZ;
 
     {
-        s32 pad;
+        s32 requiredScopeTemp;
 
         if (Camera_GetFloorYNorm(camera, &floorPos, &camera->at, &bgId) != BGCHECK_Y_MIN) {
             camera->bgId = bgId;
@@ -7113,7 +7114,7 @@ void Camera_InitFocalActorSettings(Camera* camera, Actor* focalActor) {
     camera->waterQuakeId = -1;
 
     {
-        s32 pad;
+        s32 requiredScopeTemp;
 
         func_800DDFE0(camera);
     }
@@ -7312,6 +7313,9 @@ s32 Camera_SetSwordDistortion(Camera* camera) {
                 Distortion_Request(DISTORTION_TYPE_GORON_BUTT);
                 Distortion_SetDuration(15);
             }
+            break;
+
+        default:
             break;
     }
     return true;
