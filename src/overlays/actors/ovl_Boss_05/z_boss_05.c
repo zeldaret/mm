@@ -343,8 +343,8 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.speed = Rand_ZeroFloat(3.0f) + 3.0f;
         this->dyna.actor.velocity.y = Rand_ZeroFloat(1.5f) + 1.5f;
 
-        this->unk500.x = (s32)Rand_CenteredFloat(700.0f);
-        this->unk500.y = (s32)Rand_CenteredFloat(1500.0f);
+        this->fragmentAngularVelocity.x = Rand_CenteredFloat(700.0f);
+        this->fragmentAngularVelocity.y = Rand_CenteredFloat(1500.0f);
         this->unk162[0] = (s32)(Rand_ZeroFloat(30.0f) + 50.0f);
 
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -363,7 +363,7 @@ void Boss05_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
-    if (this->unk16C == 0) {
+    if (this->damagedFlashTimer == 0) {
         s32 i = 0;
 
         while (true) {
@@ -390,7 +390,7 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
                         return 2;
                     } else {
                         Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
-                        this->unk16C = 15;
+                        this->damagedFlashTimer = 15;
                         this->unk15C = 0;
                         this->unk162[0] = 30;
                         return 0;
@@ -458,7 +458,7 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
         var_s6 = 0xA;
         var_s7 = 0x300;
 
-        if (this->unk16C != 0) {
+        if (this->damagedFlashTimer != 0) {
             spD4 = 0x1B58;
             spCC = 0x1770;
 
@@ -669,10 +669,10 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
             }
         } else if (var_s4_2 == 2) {
             for (i = 0; i < 2; i++) {
-                temp_v0_6 =
-                    (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->unk324.x,
-                                                this->unk324.y, this->unk324.z, this->unk330.x, this->unk330.y,
-                                                this->unk330.z, i + BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW);
+                temp_v0_6 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
+                                                        this->headPos.x, this->headPos.y, this->headPos.z,
+                                                        this->headRot.x, this->headRot.y, this->headRot.z,
+                                                        i + BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW);
                 if (temp_v0_6 != NULL) {
                     for (j = 0; j < BIO_DEKU_BABA_HEAD_LIMB_MAX; j++) {
                         temp_v0_6->headSkelAnime.jointTable[j] = this->headSkelAnime.jointTable[j];
@@ -764,8 +764,8 @@ void Boss05_FallingHead_Fall(Boss05* this, PlayState* play) {
 
         if (this->fallingHeadLimbScale == 0.0f) {
             temp_v0 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
-                                                  this->unk324.x, this->unk324.y, this->unk324.z, this->unk330.x,
-                                                  this->unk330.y, this->unk330.z, BIO_DEKU_BABA_TYPE_WALKING_HEAD);
+                                                  this->headPos.x, this->headPos.y, this->headPos.z, this->headRot.x,
+                                                  this->headRot.y, this->headRot.z, BIO_DEKU_BABA_TYPE_WALKING_HEAD);
 
             if (temp_v0 != NULL) {
                 player = GET_PLAYER(play);
@@ -792,20 +792,20 @@ void Boss05_WalkingHead_UpdateDamage(Actor* thisx, PlayState* play2) {
     u8 attackDealsDamage = false;
     ColliderInfo* hitInfo;
 
-    if ((this->unk16A == 0) && (this->headCollider.elements[0].info.bumperFlags & BUMP_HIT)) {
+    if ((this->damagedTimer == 0) && (this->headCollider.elements[0].info.bumperFlags & BUMP_HIT)) {
         this->headCollider.elements[0].info.bumperFlags &= ~BUMP_HIT;
         hitInfo = this->headCollider.elements[0].info.acHitInfo;
         if (hitInfo->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
-            this->unk338 = -12.0f;
-            this->unk348 = this->dyna.actor.yawTowardsPlayer;
-            this->unk16A = 6;
+            this->knockbackMagnitude = -12.0f;
+            this->knockbackAngle = this->dyna.actor.yawTowardsPlayer;
+            this->damagedTimer = 6;
             return;
         }
 
-        this->unk16A = 10;
+        this->damagedTimer = 10;
         this->dyna.actor.speed = 0.0f;
-        this->unk338 = -20.0f;
-        this->unk348 = this->dyna.actor.yawTowardsPlayer;
+        this->knockbackMagnitude = -20.0f;
+        this->knockbackAngle = this->dyna.actor.yawTowardsPlayer;
 
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
 
@@ -850,7 +850,7 @@ void Boss05_WalkingHead_UpdateDamage(Actor* thisx, PlayState* play2) {
             }
 
             Boss05_WalkingHead_SetupDamaged(this, play);
-            this->unk16C = 15;
+            this->damagedFlashTimer = 15;
         }
     }
 }
@@ -913,9 +913,9 @@ void Boss05_WalkingHead_SetupWalk(Boss05* this, PlayState* play) {
     this->actionFunc = Boss05_WalkingHead_Walk;
     Animation_MorphToLoop(&this->headSkelAnime, &gBioDekuBabaHeadWalkAnim, 0.0f);
     this->unk162[0] = (s32)(Rand_ZeroFloat(80.0f) + 60.0f);
-    this->unk34C.x = Rand_CenteredFloat(400.0f) + this->dyna.actor.world.pos.x;
-    this->unk34C.z = Rand_CenteredFloat(400.0f) + this->dyna.actor.world.pos.z;
-    this->unk358 = 0.0f;
+    this->walkTargetPos.x = Rand_CenteredFloat(400.0f) + this->dyna.actor.world.pos.x;
+    this->walkTargetPos.z = Rand_CenteredFloat(400.0f) + this->dyna.actor.world.pos.z;
+    this->walkAngularVelocityY = 0.0f;
 }
 
 void Boss05_WalkingHead_Walk(Boss05* this, PlayState* play) {
@@ -925,10 +925,10 @@ void Boss05_WalkingHead_Walk(Boss05* this, PlayState* play) {
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_WALK - SFX_FLAG);
     SkelAnime_Update(&this->headSkelAnime);
     Math_ApproachF(&this->dyna.actor.speed, 5.0f, 1.0f, 2.0f);
-    deltaX = this->unk34C.x - this->dyna.actor.world.pos.x;
-    deltaZ = this->unk34C.z - this->dyna.actor.world.pos.z;
-    Math_ApproachS(&this->dyna.actor.world.rot.y, Math_Atan2S(deltaX, deltaZ), 5, (s32)this->unk358);
-    Math_ApproachF(&this->unk358, 2000.0f, 1.0f, 100.0f);
+    deltaX = this->walkTargetPos.x - this->dyna.actor.world.pos.x;
+    deltaZ = this->walkTargetPos.z - this->dyna.actor.world.pos.z;
+    Math_ApproachS(&this->dyna.actor.world.rot.y, Math_Atan2S(deltaX, deltaZ), 5, this->walkAngularVelocityY);
+    Math_ApproachF(&this->walkAngularVelocityY, 2000.0f, 1.0f, 100.0f);
 
     if ((this->unk162[0] == 0) || ((SQ(deltaX) + SQ(deltaZ)) < 2500.0f)) {
         Boss05_WalkingHead_SetupIdle(this, play);
@@ -957,15 +957,15 @@ void Boss05_WalkingHead_SetupCharge(Boss05* this, PlayState* arg1) {
     this->actionFunc = Boss05_WalkingHead_Charge;
     Animation_MorphToLoop(&this->headSkelAnime, &gBioDekuBabaHeadChargeAnim, 0.0f);
     this->unk162[0] = 60;
-    this->unk358 = 0.0f;
+    this->walkAngularVelocityY = 0.0f;
 }
 
 void Boss05_WalkingHead_Charge(Boss05* this, PlayState* play) {
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_VOICE - SFX_FLAG);
     SkelAnime_Update(&this->headSkelAnime);
     Math_ApproachF(&this->dyna.actor.speed, 8.0f, 1.0f, 4.0f);
-    Math_ApproachS(&this->dyna.actor.world.rot.y, this->dyna.actor.yawTowardsPlayer, 5, (s32)this->unk358);
-    Math_ApproachF(&this->unk358, 4000.0f, 1.0f, 400.0f);
+    Math_ApproachS(&this->dyna.actor.world.rot.y, this->dyna.actor.yawTowardsPlayer, 5, this->walkAngularVelocityY);
+    Math_ApproachF(&this->walkAngularVelocityY, 4000.0f, 1.0f, 400.0f);
 
     if ((this->unk162[0] == 0) || (this->dyna.actor.xyzDistToPlayerSq <= SQ(150.0f))) {
         Boss05_WalkingHead_SetupAttack(this, play);
@@ -1068,8 +1068,8 @@ void Boss05_Fragment_Move(Boss05* this, PlayState* play) {
     if (this->unk15C == 1) {
         Math_ApproachF(&this->dyna.actor.velocity.y, 1.0f, 1.0f, 0.1f);
         Math_ApproachZeroF(&this->dyna.actor.speed, 0.5f, 0.5f);
-        this->dyna.actor.shape.rot.x += this->unk500.x;
-        this->dyna.actor.shape.rot.y += this->unk500.y;
+        this->dyna.actor.shape.rot.x += this->fragmentAngularVelocity.x;
+        this->dyna.actor.shape.rot.y += this->fragmentAngularVelocity.y;
 
         if (this->unk162[0] == 0) {
             Actor_Kill(&this->dyna.actor);
@@ -1087,7 +1087,7 @@ void Boss05_Fragment_Move(Boss05* this, PlayState* play) {
             case 3:
                 Actor_MoveWithGravity(&this->dyna.actor);
 
-                if (this->unk324.y < (this->dyna.actor.floorHeight - 30.0f)) {
+                if (this->fragmentPos.y < (this->dyna.actor.floorHeight - 30.0f)) {
                     Actor_Kill(&this->dyna.actor);
                 }
                 break;
@@ -1109,8 +1109,8 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
         DECR(this->unk162[i]);
     }
 
-    DECR(this->unk16A);
-    DECR(this->unk16C);
+    DECR(this->damagedTimer);
+    DECR(this->damagedFlashTimer);
     DECR(this->unk168);
     DECR(this->drawDmgEffTimer);
 
@@ -1118,11 +1118,11 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
 
     if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
         Actor_MoveWithGravity(&this->dyna.actor);
-        Matrix_RotateYS(this->unk348, MTXMODE_NEW);
-        Matrix_MultVecZ(this->unk338, &this->unk33C);
-        this->dyna.actor.world.pos.x += this->unk33C.x;
-        this->dyna.actor.world.pos.z += this->unk33C.z;
-        Math_ApproachZeroF(&this->unk338, 1.0f, 1.0f);
+        Matrix_RotateYS(this->knockbackAngle, MTXMODE_NEW);
+        Matrix_MultVecZ(this->knockbackMagnitude, &this->knockbackVelocity);
+        this->dyna.actor.world.pos.x += this->knockbackVelocity.x;
+        this->dyna.actor.world.pos.z += this->knockbackVelocity.z;
+        Math_ApproachZeroF(&this->knockbackMagnitude, 1.0f, 1.0f);
         Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 50.0f, 40.0f,
                                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
         Boss05_WalkingHead_UpdateDamage(&this->dyna.actor, play);
@@ -1255,15 +1255,15 @@ void Boss05_PostLimbDraw_LilyPad(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     Vec3f spherePos1;
 
     if (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_LOWER_STEM) {
-        Matrix_MultVec3f(&D_809F1CC4, &this->unk324);
+        Matrix_MultVec3f(&D_809F1CC4, &this->headPos);
 
         if (this->actionFunc == Boss05_FallingHead_Fall) {
             Matrix_MultVec3f(&D_809F1CC4, &this->dyna.actor.focus.pos);
         }
 
         Matrix_Get(&mf);
-        Matrix_MtxFToYXZRot(&mf, &this->unk330, false);
-        this->unk330.x += 0xF00;
+        Matrix_MtxFToYXZRot(&mf, &this->headRot, false);
+        this->headRot.x += 0xF00;
     }
 
     if (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_UPPER_STEM) {
@@ -1389,7 +1389,7 @@ void Boss05_PostLimbDraw_Fragment(PlayState* play, s32 limbIndex, Gfx** dList, V
     Boss05* this = THIS;
 
     if (limbIndex != D_809F1CE8[this->dyna.actor.params - BIO_DEKU_BABA_TYPE_FRAGMENT_BASE]) {
-        Matrix_MultZero(&this->unk324);
+        Matrix_MultZero(&this->fragmentPos);
     }
 }
 
@@ -1406,14 +1406,14 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
                               this->lilyPadSkelAnime.dListCount, Boss05_OverrideLimbDraw_LilyPadWithHead,
                               Boss05_PostLimbDraw_LilyPad, &this->dyna.actor);
 
-        if ((this->unk16C % 2) != 0) {
+        if ((this->damagedFlashTimer % 2) != 0) {
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
         }
 
-        Matrix_Translate(this->unk324.x, this->unk324.y, this->unk324.z, MTXMODE_NEW);
-        Matrix_RotateYS(this->unk330.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk330.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->unk330.z, MTXMODE_APPLY);
+        Matrix_Translate(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
+        Matrix_RotateYS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headRot.z, MTXMODE_APPLY);
         Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
 
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));
@@ -1441,10 +1441,10 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
                                        Boss05_PostLimbDraw_LilyPad, Boss05_TransformLimbDraw_FallingHeadLilyPad,
                                        &this->dyna.actor);
 
-        Matrix_Translate(this->unk324.x, this->unk324.y, this->unk324.z, MTXMODE_NEW);
-        Matrix_RotateYS(this->unk330.y, MTXMODE_APPLY);
-        Matrix_RotateXS(this->unk330.x, MTXMODE_APPLY);
-        Matrix_RotateZS(this->unk330.z, MTXMODE_APPLY);
+        Matrix_Translate(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
+        Matrix_RotateYS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headRot.z, MTXMODE_APPLY);
         Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
 
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));
@@ -1459,7 +1459,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
     } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));
 
-        if ((this->unk16C % 2) != 0) {
+        if ((this->damagedFlashTimer % 2) != 0) {
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
         }
 

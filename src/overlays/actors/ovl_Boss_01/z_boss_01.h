@@ -85,8 +85,8 @@ typedef struct Boss01 {
     /* 0x14E */ s16 timers[3];
     /* 0x154 */ f32 animMorphFrames1;
     /* 0x158 */ f32 animMorphFrames2;
-    /* 0x15C */ s16 damageTimer;
-    /* 0x15E */ s16 damageFlashTimer;
+    /* 0x15C */ s16 damagedTimer;
+    /* 0x15E */ s16 damagedFlashTimer;
     /* 0x160 */ u8 isPerformingVerticalSlash; // set, but never checked
     /* 0x160 */ u8 landedFromJump;
     /* 0x162 */ u8 waitType;

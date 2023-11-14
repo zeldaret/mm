@@ -38,8 +38,8 @@ typedef struct Boss05 {
     /* 0x160 */ s16 frameCounter;
     /* 0x162 */ s16 unk162[3]; // timers
     /* 0x168 */ s16 unk168; // timer
-    /* 0x16A */ s16 unk16A; // timer
-    /* 0x16C */ s16 unk16C; // timer
+    /* 0x16A */ s16 damagedTimer;
+    /* 0x16C */ s16 damagedFlashTimer;
     /* 0x170 */ Boss05ActionFunc actionFunc;
     /* 0x174 */ u8 unk174;
     /* 0x176 */ s16 unk176;
@@ -59,13 +59,16 @@ typedef struct Boss05 {
     /* 0x268 */ SkelAnime lilyPadSkelAnime;
     /* 0x2AC */ Vec3s lilyPadJointTable[BIO_DEKU_BABA_LILY_PAD_LIMB_MAX];
     /* 0x2E8 */ Vec3s lilyPadMorphTable[BIO_DEKU_BABA_LILY_PAD_LIMB_MAX];
-    /* 0x324 */ Vec3f unk324; // pos used for spawning and drawing
-    /* 0x330 */ Vec3s unk330; // rotation used for spawning and drawing
-    /* 0x338 */ f32 unk338;
-    /* 0x33C */ Vec3f unk33C;
-    /* 0x348 */ s16 unk348;
-    /* 0x34C */ Vec3f unk34C;
-    /* 0x35C */ f32 unk358;
+    /* 0x324 */ union {
+                    Vec3f headPos;
+                    Vec3f fragmentPos;
+                };
+    /* 0x330 */ Vec3s headRot;
+    /* 0x338 */ f32 knockbackMagnitude;
+    /* 0x33C */ Vec3f knockbackVelocity;
+    /* 0x348 */ s16 knockbackAngle;
+    /* 0x34C */ Vec3f walkTargetPos;
+    /* 0x35C */ f32 walkAngularVelocityY;
     /* 0x35C */ f32 lowerJawScaleXZ;
     /* 0x360 */ f32 bodyScale;
     /* 0x364 */ f32 limbScale;
@@ -75,7 +78,7 @@ typedef struct Boss05 {
     /* 0x40C */ Vec3s headJointTable[BIO_DEKU_BABA_HEAD_LIMB_MAX];
     /* 0x484 */ Vec3s headMorphTable[BIO_DEKU_BABA_HEAD_LIMB_MAX];
     /* 0x4FC */ f32 animEndFrame;
-    /* 0x500 */ Vec3s unk500;
+    /* 0x500 */ Vec3s fragmentAngularVelocity;
 } Boss05; // size = 0x508
 
 #endif // Z_BOSS_05_H
