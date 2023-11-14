@@ -49,17 +49,20 @@ typedef enum BioDekuBabaLilyPadCollider {
 
 typedef struct Boss05 {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ u8 unk15C;
-    /* 0x15E */ s16 unk15E;
+    /* 0x15C */ union {
+                    u8 lilyPadWithHeadAttackState;
+                    u8 fragmentState;
+                };
+    /* 0x15E */ s16 standingOnLilyPadWithHeadFrameCounter;
     /* 0x160 */ s16 frameCounter;
-    /* 0x162 */ s16 unk162[3]; // timers
-    /* 0x168 */ s16 unk168; // timer
+    /* 0x162 */ s16 timers[3];
+    /* 0x168 */ s16 forceDetachTimer;
     /* 0x16A */ s16 damagedTimer;
     /* 0x16C */ s16 damagedFlashTimer;
     /* 0x170 */ Boss05ActionFunc actionFunc;
-    /* 0x174 */ u8 unk174;
-    /* 0x176 */ s16 unk176;
-    /* 0x178 */ s16 unk178;
+    /* 0x174 */ u8 lilyPadWithHeadLimbRotState;
+    /* 0x176 */ s16 lilyPadRotY;
+    /* 0x178 */ s16 lilyPadRotX;
     /* 0x17A */ s16 drawDmgEffTimer;
     /* 0x17C */ f32 drawDmgEffScale;
     /* 0x180 */ f32 dmgEffFrozenSteamScale;
@@ -67,9 +70,9 @@ typedef struct Boss05 {
     /* 0x188 */ u8 drawDmgEffState;
     /* 0x189 */ u8 drawDmgEffType;
     /* 0x18C */ Vec3f bodyPartsPos[BIO_DEKU_BABA_BODYPART_MAX];
-    /* 0x198 */ f32 fallingHeadLimbScale;
-    /* 0x19C */ s16 unk19C;
-    /* 0x19E */ Vec3s unk19E[7];
+    /* 0x198 */ f32 fallingHeadLilyPadLimbScale;
+    /* 0x19C */ s16 lilyPadWithHeadStemRotX;
+    /* 0x19E */ Vec3s lilyPadWithHeadLimbRot[7];
     /* 0x1C8 */ ColliderJntSph lilyPadCollider;
     /* 0x1E8 */ ColliderJntSphElement lilyPadColliderElements[BIO_DEKU_BABA_LILY_PAD_COLLIDER_MAX];
     /* 0x268 */ SkelAnime lilyPadSkelAnime;
@@ -86,8 +89,8 @@ typedef struct Boss05 {
     /* 0x34C */ Vec3f walkTargetPos;
     /* 0x35C */ f32 walkAngularVelocityY;
     /* 0x35C */ f32 lowerJawScaleXZ;
-    /* 0x360 */ f32 bodyScale;
-    /* 0x364 */ f32 limbScale;
+    /* 0x360 */ f32 headBodyScale;
+    /* 0x364 */ f32 headLimbScale;
     /* 0x368 */ ColliderJntSph headCollider;
     /* 0x388 */ ColliderJntSphElement headColliderElements[BIO_DEKU_BABA_HEAD_COLLIDER_MAX];
     /* 0x3C8 */ SkelAnime headSkelAnime;
