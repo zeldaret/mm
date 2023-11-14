@@ -23,15 +23,15 @@ void func_8098E098(ObjComb* this);
 void func_8098E0B8(ObjComb* this, PlayState* play);
 
 ActorInit Obj_Comb_InitVars = {
-    ACTOR_OBJ_COMB,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_COMB,
-    sizeof(ObjComb),
-    (ActorFunc)ObjComb_Init,
-    (ActorFunc)ObjComb_Destroy,
-    (ActorFunc)ObjComb_Update,
-    (ActorFunc)ObjComb_Draw,
+    /**/ ACTOR_OBJ_COMB,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_COMB,
+    /**/ sizeof(ObjComb),
+    /**/ ObjComb_Init,
+    /**/ ObjComb_Destroy,
+    /**/ ObjComb_Update,
+    /**/ ObjComb_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -127,7 +127,7 @@ void func_8098CEAC(ObjComb* this, PlayState* play) {
             phi_v0 = 0x20;
         }
         EffectSsKakera_Spawn(play, &spD0, &spC4, &spD0, phi_s0, phi_v0, phi_s1, 4, 0, temp_f10, 0, 0, 60, -1,
-                             OBJECT_COMB, object_comb_DL_001040);
+                             OBJECT_COMB, gBeehiveFragmentDL);
     }
 
     spD0.x = this->actor.world.pos.x;
@@ -185,7 +185,7 @@ void func_8098D19C(ObjComb* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spD0, &spC4, &spD0, phi_s0, phi_v0, phi_s1, 4, 0, temp_f8, 0, 0, 60, -1,
-                             OBJECT_COMB, object_comb_DL_001040);
+                             OBJECT_COMB, gBeehiveFragmentDL);
     }
 
     spD0.x = this->actor.world.pos.x;
@@ -236,7 +236,7 @@ void func_8098D47C(ObjComb* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spC8, &spBC, &spC8, phi_s0, phi_v0, 40, 0, 0, temp_f10, 0, 0, 80, -1, OBJECT_COMB,
-                             object_comb_DL_001040);
+                             gBeehiveFragmentDL);
     }
 }
 
@@ -309,7 +309,7 @@ void func_8098D99C(ObjComb* this, PlayState* play) {
                 temp_v0->speed = 2.0f;
             }
             this->unk_1B6 = 1;
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
     }
 }
@@ -339,7 +339,7 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, &this->colliderElement);
+    Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     if ((sp2C == 0) && Item_CanDropBigFairy(play, OBJCOMB_GET_3F(&this->actor), OBJCOMB_GET_7F00(&this->actor))) {
         this->unk_1B7 = 1;
@@ -469,7 +469,7 @@ void func_8098DEA0(ObjComb* this, PlayState* play) {
             if (this->unk_1B0 > 0x258) {
                 this->unk_1B0 = 0x258;
             }
-            func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
         }
 
         Actor_MoveWithGravity(&this->actor);
@@ -495,7 +495,7 @@ void func_8098E0B8(ObjComb* this, PlayState* play) {
 
     if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.csId >= 0)) {
         if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_4);
         }
     }
 }
@@ -529,7 +529,7 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
                 if (CutsceneManager_IsNext(this->actor.csId)) {
                     CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
                     if (this->actor.csId >= 0) {
-                        func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
+                        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_1);
                     }
 
                     if (((OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor)) == 1) &&
@@ -566,7 +566,7 @@ void ObjComb_Draw(Actor* thisx, PlayState* play) {
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_comb_DL_000CB0);
+    gSPDisplayList(POLY_OPA_DISP++, gBeehiveDL);
 
     Collider_UpdateSpheres(0, &this->collider);
 

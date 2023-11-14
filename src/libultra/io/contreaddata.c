@@ -1,4 +1,8 @@
-#include "global.h"
+#include "ultra64.h"
+#include "PR/controller.h"
+#include "macros.h"
+
+void __osPackReadData(void);
 
 s32 osContStartReadData(OSMesgQueue* mq) {
     s32 ret;
@@ -37,7 +41,7 @@ void osContGetReadData(OSContPad* data) {
     }
 }
 
-void __osPackReadData() {
+void __osPackReadData(void) {
     u8* ptr;
     __OSContReadFormat readformat;
     int i;

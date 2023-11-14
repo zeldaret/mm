@@ -7,7 +7,7 @@
 #include "z_en_zow.h"
 #include "objects/object_zo/object_zo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnZow*)thisx)
 
@@ -23,15 +23,15 @@ void func_80BDD6BC(EnZow* this, PlayState* play);
 void func_80BDD79C(EnZow* this, PlayState* play);
 
 ActorInit En_Zow_InitVars = {
-    ACTOR_EN_ZOW,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZO,
-    sizeof(EnZow),
-    (ActorFunc)EnZow_Init,
-    (ActorFunc)EnZow_Destroy,
-    (ActorFunc)EnZow_Update,
-    (ActorFunc)EnZow_Draw,
+    /**/ ACTOR_EN_ZOW,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZO,
+    /**/ sizeof(EnZow),
+    /**/ EnZow_Init,
+    /**/ EnZow_Destroy,
+    /**/ EnZow_Update,
+    /**/ EnZow_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -324,7 +324,7 @@ void EnZow_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.textId = 0;
     this->actor.world.rot.z = this->actor.shape.rot.z;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void EnZow_Destroy(Actor* thisx, PlayState* play) {
@@ -361,7 +361,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
 
     if (ENZOW_GET_F(&this->actor) == ENZOW_F_1) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_04)) {
                     phi_a1 = 0x12FD;
                 } else {
@@ -374,7 +374,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_78_10);
                 phi_a1 = 0x12FF;
             }
-        } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_08)) {
                 phi_a1 = 0x12F8;
             } else {
@@ -388,12 +388,12 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
             phi_a1 = 0x12FF;
         }
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             phi_a1 = 0x12EC;
         } else {
             phi_a1 = 0x12F1;
         }
-    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_02)) {
             phi_a1 = 0x12EB;
         } else {
@@ -410,7 +410,7 @@ void func_80BDD350(EnZow* this, PlayState* play) {
     if (this->unk_2CA & 2) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_WATER);
         func_80BDCDA8(this, this->unk_2D0);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->skelAnime.playSpeed = 0.0f;
         this->actor.velocity.y = -4.0f;
     }
@@ -502,7 +502,7 @@ void func_80BDD634(EnZow* this, PlayState* play) {
         this->actionFunc = func_80BDD570;
         func_80BDD1E0(this, play);
     } else if (func_80BDD154(this, play)) {
-        func_800B8614(&this->actor, play, 180.0f);
+        Actor_OfferTalk(&this->actor, play, 180.0f);
     }
 }
 
@@ -517,7 +517,7 @@ void func_80BDD6BC(EnZow* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         func_80BDCDA8(this, this->unk_2D0);
         func_80BDD04C(this, 1, ANIMMODE_ONCE);
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.velocity.y = 0.0f;
         this->actionFunc = func_80BDD634;
     } else if (this->actor.depthInWater < 80.0f) {

@@ -17,15 +17,15 @@ void DmRavine_Update(Actor* thisx, PlayState* play);
 void DmRavine_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Dm_Ravine_InitVars = {
-    ACTOR_DM_RAVINE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_KEIKOKU_DEMO,
-    sizeof(DmRavine),
-    (ActorFunc)DmRavine_Init,
-    (ActorFunc)DmRavine_Destroy,
-    (ActorFunc)DmRavine_Update,
-    (ActorFunc)DmRavine_Draw,
+    /**/ ACTOR_DM_RAVINE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_KEIKOKU_DEMO,
+    /**/ sizeof(DmRavine),
+    /**/ DmRavine_Init,
+    /**/ DmRavine_Destroy,
+    /**/ DmRavine_Update,
+    /**/ DmRavine_Draw,
 };
 
 void DmRavine_Init(Actor* thisx, PlayState* play) {
@@ -55,9 +55,10 @@ void DmRavine_Update(Actor* thisx, PlayState* play) {
     DmRavine* this = THIS;
     RoomContext* roomCtx;
 
-    switch ((DmRavineState)this->state) {
+    switch (this->state) {
         case DM_RAVINE_STATE_INITIALIZED:
-            return;
+            break;
+
         case DM_RAVINE_STATE_ACTIVE:
             this->isActive = true;
             play->roomCtx.unk7A[1]++;
@@ -70,8 +71,12 @@ void DmRavine_Update(Actor* thisx, PlayState* play) {
                 }
             }
             break;
+
         case DM_RAVINE_STATE_PENDING_DEATH:
             Actor_Kill(&this->actor);
+            break;
+
+        default:
             break;
     }
 }

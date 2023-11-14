@@ -9,7 +9,7 @@
 
 #include "z_en_sth.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnSth*)thisx)
 
@@ -28,15 +28,15 @@ void EnSth_Update(Actor* thisx, PlayState* play);
 void EnSth_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Sth_InitVars = {
-    ACTOR_EN_STH,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnSth),
-    (ActorFunc)EnSth_Init,
-    (ActorFunc)EnSth_Destroy,
-    (ActorFunc)EnSth_UpdateWaitForObject,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_STH,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnSth),
+    /**/ EnSth_Init,
+    /**/ EnSth_Destroy,
+    /**/ EnSth_UpdateWaitForObject,
+    /**/ NULL,
 };
 
 #include "overlays/ovl_En_Sth/ovl_En_Sth.c"
@@ -108,16 +108,16 @@ static Color_RGB8 sShirtColors[] = {
 void EnSth_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnSth* this = THIS;
-    s32 objectId;
+    s32 objectSlot;
 
     // this actor can draw two separate bodies that use different objects
     if (STH_GET_SWAMP_BODY(&this->actor)) {
-        objectId = Object_GetIndex(&play->objectCtx, OBJECT_AHG);
+        objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_AHG);
     } else {
-        objectId = Object_GetIndex(&play->objectCtx, OBJECT_STH);
+        objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_STH);
     }
-    this->mainObjectId = objectId;
-    this->maskOfTruthObjectId = Object_GetIndex(&play->objectCtx, OBJECT_MASK_TRUTH);
+    this->mainObjectSlot = objectSlot;
+    this->maskOfTruthObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_MASK_TRUTH);
 
     Actor_SetScale(&this->actor, 0.01f);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -161,7 +161,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
 
             this->actionFunc = EnSth_MoonLookingIdle;
             this->sthFlags |= STH_FLAG_DISABLE_HEAD_TRACK;
-            this->actor.targetMode = 3;
+            this->actor.targetMode = TARGET_MODE_3;
             this->actor.uncullZoneForward = 800.0f;
             break;
 
@@ -247,7 +247,7 @@ void EnSth_PanicIdle(EnSth* this, PlayState* play) {
         EnSth_GetInitialPanicText(this, play);
         this->actionFunc = EnSth_HandlePanicConversation;
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferTalk(&this->actor, play, 110.0f);
     }
 }
 
@@ -310,7 +310,7 @@ void EnSth_PostOceanspiderhouseReward(EnSth* this, PlayState* play) {
         }
         Message_StartTextbox(play, nextTextId, &this->actor);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -321,7 +321,7 @@ void EnSth_GiveOceansideSpiderHouseReward(EnSth* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnSth_PostOceanspiderhouseReward;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
         if (CURRENT_DAY == 3) {
             EnSth_ChangeAnim(this, STH_ANIM_PLEAD);
         } else {
@@ -434,7 +434,7 @@ void EnSth_OceansideSpiderHouseIdle(EnSth* this, PlayState* play) {
         EnSth_GetInitialOceansideSpiderHouseText(this, play);
         this->actionFunc = EnSth_HandleOceansideSpiderHouseConversation;
     } else if (EnSth_CanSpeakToPlayer(this, play)) {
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferTalk(&this->actor, play, 110.0f);
     }
 }
 
@@ -453,13 +453,13 @@ void EnSth_MoonLookingIdle(EnSth* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnSth_HandleMoonLookingConversation;
-    } else if (EnSth_CanSpeakToPlayer(this, play) || this->actor.isTargeted) {
+    } else if (EnSth_CanSpeakToPlayer(this, play) || this->actor.isLockedOn) {
         if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= CLOCK_TIME(18, 0))) {
             this->actor.textId = 0x1130; // Huh? The Moon...
         } else {
             this->actor.textId = 0x1131; // (The Moon) gotten bigger again
         }
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferTalk(&this->actor, play, 110.0f);
     }
     this->headRot.x = -0x1388;
 }
@@ -510,7 +510,7 @@ void EnSth_TalkAfterSwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
         Message_StartTextbox(play, 0x918, &this->actor); // I've had enough of this, going home
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -521,7 +521,7 @@ void EnSth_SwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnSth_TalkAfterSwampSpiderHouseGiveMask;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         this->sthFlags &= ~STH_FLAG_DRAW_MASK_OF_TRUTH;
         // This flag is used to keep track if the player has already spoken to the actor, triggering secondary dialogue.
@@ -593,7 +593,7 @@ void EnSth_SwampSpiderHouseIdle(EnSth* this, PlayState* play) {
         this->actionFunc = EnSth_HandleSwampSpiderHouseConversation;
     } else if (EnSth_CanSpeakToPlayer(this, play)) {
         this->actor.textId = 0;
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferTalk(&this->actor, play, 110.0f);
     }
 }
 
@@ -607,7 +607,7 @@ void EnSth_UpdateOceansideSpiderHouseWaitForTokens(Actor* thisx, PlayState* play
     if (Inventory_GetSkullTokenCount(play->sceneId) >= SPIDER_HOUSE_TOKENS_REQUIRED) {
         this->actor.update = EnSth_Update;
         this->actor.draw = EnSth_Draw;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 }
 
@@ -619,8 +619,8 @@ void EnSth_UpdateWaitForObject(Actor* thisx, PlayState* play) {
     s32 pad;
     EnSth* this = THIS;
 
-    if (Object_IsLoaded(&play->objectCtx, this->mainObjectId)) {
-        this->actor.objBankIndex = this->mainObjectId;
+    if (Object_IsLoaded(&play->objectCtx, this->mainObjectSlot)) {
+        this->actor.objectSlot = this->mainObjectSlot;
         Actor_SetObjectDependency(play, &this->actor);
 
         if (STH_GET_SWAMP_BODY(&this->actor)) {
@@ -665,7 +665,7 @@ void EnSth_UpdateWaitForObject(Actor* thisx, PlayState* play) {
             (Inventory_GetSkullTokenCount(play->sceneId) < SPIDER_HOUSE_TOKENS_REQUIRED)) {
             this->actor.update = EnSth_UpdateOceansideSpiderHouseWaitForTokens;
             this->actor.draw = NULL;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         }
     }
 }
@@ -733,14 +733,14 @@ void EnSth_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             OPEN_DISPS(play->state.gfxCtx);
 
             if (this->sthFlags & STH_FLAG_DRAW_MASK_OF_TRUTH) {
-                if (Object_IsLoaded(&play->objectCtx, this->maskOfTruthObjectId)) {
+                if (Object_IsLoaded(&play->objectCtx, this->maskOfTruthObjectSlot)) {
                     Matrix_Push();
                     Matrix_RotateZS(0x3A98, MTXMODE_APPLY);
                     Matrix_Translate(0.0f, 190.0f, 0.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.status[this->maskOfTruthObjectId].segment);
+                    gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.slots[this->maskOfTruthObjectSlot].segment);
                     gSPDisplayList(POLY_OPA_DISP++, object_mask_truth_DL_0001A0);
 
                     Matrix_Pop();

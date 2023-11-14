@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_Boss_03/z_boss_03.h"
 #include "objects/object_boss03/object_boss03.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron3*)thisx)
 
@@ -32,15 +32,15 @@ static Vec3f sZeroVec[] = { 0.0f, 0.0f, 0.0f };
 static Boss03* sGyorg = NULL;
 
 ActorInit En_Tanron3_InitVars = {
-    ACTOR_EN_TANRON3,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS03,
-    sizeof(EnTanron3),
-    (ActorFunc)EnTanron3_Init,
-    (ActorFunc)EnTanron3_Destroy,
-    (ActorFunc)EnTanron3_Update,
-    (ActorFunc)EnTanron3_Draw,
+    /**/ ACTOR_EN_TANRON3,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS03,
+    /**/ sizeof(EnTanron3),
+    /**/ EnTanron3_Init,
+    /**/ EnTanron3_Destroy,
+    /**/ EnTanron3_Update,
+    /**/ EnTanron3_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -117,7 +117,7 @@ void EnTanron3_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, GYORG_SMALL_FISH_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.02f);
     EnTanron3_SetupLive(this, play);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->currentRotationAngle = Rand_ZeroFloat(500000.0f);
     this->waterSurfaceYPos = 430.0f;
     sGyorg = (Boss03*)this->actor.parent;

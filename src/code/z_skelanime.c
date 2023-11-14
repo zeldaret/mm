@@ -1007,11 +1007,11 @@ void AnimationContext_SetLoadFrame(PlayState* play, PlayerAnimationHeader* anima
 
     if (entry != NULL) {
         PlayerAnimationHeader* playerAnimHeader = Lib_SegmentedToVirtual(animation);
-        void* ram = (void*)frameTable;
+        s32 pad;
 
         osCreateMesgQueue(&entry->data.load.msgQueue, entry->data.load.msg, ARRAY_COUNT(entry->data.load.msg));
         DmaMgr_SendRequestImpl(
-            &entry->data.load.req, ram,
+            &entry->data.load.req, frameTable,
             LINK_ANIMETION_OFFSET(playerAnimHeader->linkAnimSegment, (sizeof(Vec3s) * limbCount + sizeof(s16)) * frame),
             sizeof(Vec3s) * limbCount + sizeof(s16), 0, &entry->data.load.msgQueue, NULL);
     }
@@ -1680,7 +1680,8 @@ void SkelAnime_AnimateFrame(SkelAnime* skelAnime) {
         s32 frame = skelAnime->curFrame;
         f32 partialFrame = skelAnime->curFrame - frame;
 
-        if (++frame >= (s32)skelAnime->animLength) {
+        frame++;
+        if (frame >= (s32)skelAnime->animLength) {
             frame = 0;
         }
         SkelAnime_GetFrameData(skelAnime->animation, frame, skelAnime->limbCount, nextjointTable);

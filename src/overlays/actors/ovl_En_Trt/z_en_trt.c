@@ -8,13 +8,13 @@
 #include "objects/object_trt/object_trt.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnTrt*)thisx)
 
 #define ENTRT_FULLY_AWAKE (1 << 0)
 #define ENTRT_GIVEN_MUSHROOM (1 << 1)
-#define ENTRT_MET (1 << 2)
+#define ENTRT_TALKED (1 << 2)
 
 void EnTrt_Init(Actor* thisx, PlayState* play);
 void EnTrt_Destroy(Actor* thisx, PlayState* play);
@@ -91,15 +91,15 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 ActorInit En_Trt_InitVars = {
-    ACTOR_EN_TRT,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TRT,
-    sizeof(EnTrt),
-    (ActorFunc)EnTrt_Init,
-    (ActorFunc)EnTrt_Destroy,
-    (ActorFunc)EnTrt_Update,
-    (ActorFunc)EnTrt_Draw,
+    /**/ ACTOR_EN_TRT,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TRT,
+    /**/ sizeof(EnTrt),
+    /**/ EnTrt_Init,
+    /**/ EnTrt_Destroy,
+    /**/ EnTrt_Update,
+    /**/ EnTrt_Draw,
 };
 
 static f32 sActorScale = 0.008f;
@@ -126,7 +126,7 @@ void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 a
 s32 EnTrt_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
@@ -202,7 +202,7 @@ u16 EnTrt_GetItemTextId(EnTrt* this) {
 u16 EnTrt_GetItemChoiceTextId(EnTrt* this) {
     EnGirlA* item = this->items[this->cursorIndex];
 
-    if ((item->actor.params == SI_POTION_BLUE) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_53_10)) {
+    if ((item->actor.params == SI_POTION_BLUE) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FREE_BLUE_POTION)) {
         this->textId = 0x881;
         return 0x881;
     }
@@ -217,7 +217,7 @@ void EnTrt_EndInteraction(PlayState* play, EnTrt* this) {
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &play->state);
-    play->msgCtx.msgMode = 0x43;
+    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     this->drawCursor = 0;
@@ -326,7 +326,7 @@ void EnTrt_Hello(EnTrt* this, PlayState* play) {
         }
     }
     if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play_sound(NA_SE_SY_MESSAGE_PASS);
+        Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
         if (!EnTrt_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
             EnTrt_StartShopping(play, this);
         }
@@ -348,7 +348,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
             case 0x883:
                 this->textId = 0x884;
                 Message_StartTextbox(play, this->textId, &this->actor);
-                SET_WEEKEVENTREG(WEEKEVENTREG_53_08);
+                SET_WEEKEVENTREG(WEEKEVENTREG_GAVE_KOTAKE_MUSHROOM);
                 Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
                 break;
 
@@ -362,7 +362,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
                     CutsceneManager_Stop(this->csId);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnTrt_PayForMushroom;
                 break;
@@ -407,39 +407,39 @@ void EnTrt_Goodbye(EnTrt* this, PlayState* play) {
 void EnTrt_StartRedPotionConversation(EnTrt* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x88F) {
-            if (Inventory_HasEmptyBottle() || !CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
+            if (Inventory_HasEmptyBottle() || !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     CutsceneManager_Stop(this->csId);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
                 this->prevTextId = this->textId;
                 this->textId = 0x88E;
-                SET_WEEKEVENTREG(WEEKEVENTREG_85_08);
+                SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_SHOP);
                 Message_StartTextbox(play, this->textId, &this->actor);
                 this->actionFunc = EnTrt_EndConversation;
             }
         } else {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
                 this->textId = 0x83D;
                 EnTrt_SetupStartShopping(play, this, 0);
-            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
                 this->textId = 0x83B;
                 if (Inventory_HasItemInBottle(ITEM_POTION_RED)) {
                     EnTrt_SetupStartShopping(play, this, false);
                 } else {
                     this->actionFunc = EnTrt_TryToGiveRedPotion;
                 }
-            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
                 this->timer = 30;
                 this->textId = 0x838;
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING_SPECIAL;
                 this->actionFunc = EnTrt_Surprised;
                 return;
-            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_01)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_KIOSK_EMPTY)) {
                 this->textId = 0x835;
                 EnTrt_SetupStartShopping(play, this, false);
             }
@@ -453,13 +453,13 @@ void EnTrt_GiveRedPotionForKoume(EnTrt* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_12_10);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE);
         }
-        SET_WEEKEVENTREG(WEEKEVENTREG_84_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME);
         player->stateFlags2 &= ~PLAYER_STATE2_20000000;
         this->actionFunc = EnTrt_GivenRedPotionForKoume;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
         Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
@@ -486,7 +486,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, PlayState* play) {
                 CutsceneManager_Queue(this->csId);
             }
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = EnTrt_ItemGiven;
     }
 }
@@ -508,12 +508,12 @@ void EnTrt_EndConversation(EnTrt* this, PlayState* play) {
 s32 EnTrt_FacingShopkeeperDialogResult(EnTrt* this, PlayState* play) {
     switch (play->msgCtx.choiceIndex) {
         case 0:
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             EnTrt_SetupTalkToShopkeeper(play, this);
             return true;
 
         case 1:
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             EnTrt_EndInteraction(play, this);
             return true;
 
@@ -552,7 +552,7 @@ void EnTrt_FaceShopkeeper(EnTrt* this, PlayState* play) {
                     this->actionFunc = EnTrt_LookToShelf;
                     func_8011552C(play, DO_ACTION_DECIDE);
                     this->stickRightPrompt.isEnabled = false;
-                    play_sound(NA_SE_SY_CURSOR);
+                    Audio_PlaySfx(NA_SE_SY_CURSOR);
                 }
             }
         }
@@ -616,13 +616,13 @@ s32 EnTrt_HasPlayerSelectedItem(PlayState* play, EnTrt* this, Input* input) {
         if ((item->actor.params != SI_POTION_BLUE) || (this->flags & ENTRT_GIVEN_MUSHROOM)) {
             this->prevActionFunc = this->actionFunc;
             Message_ContinueTextbox(play, EnTrt_GetItemChoiceTextId(this));
-            play_sound(NA_SE_SY_DECIDE);
+            Audio_PlaySfx(NA_SE_SY_DECIDE);
             this->stickLeftPrompt.isEnabled = false;
             this->stickRightPrompt.isEnabled = false;
             this->drawCursor = 0;
             this->actionFunc = EnTrt_SelectItem;
         } else {
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
         }
         return true;
     }
@@ -649,7 +649,7 @@ void EnTrt_BrowseShelf(EnTrt* this, PlayState* play) {
                 EnTrt_CursorLeftRight(play, this);
                 if (this->cursorIndex != prevCursorIdx) {
                     Message_ContinueTextbox(play, EnTrt_GetItemTextId(this));
-                    play_sound(NA_SE_SY_CURSOR);
+                    Audio_PlaySfx(NA_SE_SY_CURSOR);
                 }
             }
         }
@@ -660,7 +660,7 @@ void EnTrt_SetupBuyItemWithFanfare(PlayState* play, EnTrt* this) {
     Player* player = GET_PLAYER(play);
 
     Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
-    play->msgCtx.msgMode = 0x43;
+    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
@@ -688,7 +688,7 @@ void EnTrt_HandleCanBuyItem(PlayState* play, EnTrt* this) {
                 CutsceneManager_Stop(this->csId);
                 this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
             }
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             item2 = this->items[this->cursorIndex];
             item2->buyFanfareFunc(play, item2);
             EnTrt_SetupBuyItemWithFanfare(play, this);
@@ -698,7 +698,7 @@ void EnTrt_HandleCanBuyItem(PlayState* play, EnTrt* this) {
             break;
 
         case CANBUY_RESULT_SUCCESS_2:
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             item->buyFunc(play, item);
             EnTrt_SetupCanBuy(play, this, 0x848);
             this->drawCursor = 0;
@@ -707,22 +707,22 @@ void EnTrt_HandleCanBuyItem(PlayState* play, EnTrt* this) {
             break;
 
         case CANBUY_RESULT_NO_ROOM:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnTrt_SetupCannotBuy(play, this, 0x641);
             break;
 
         case CANBUY_RESULT_NEED_EMPTY_BOTTLE:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnTrt_SetupCannotBuy(play, this, 0x846);
             break;
 
         case CANBUY_RESULT_NEED_RUPEES:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnTrt_SetupCannotBuy(play, this, 0x847);
             break;
 
         case CANBUY_RESULT_CANNOT_GET_NOW:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnTrt_SetupCannotBuy(play, this, 0x643);
             break;
 
@@ -745,7 +745,7 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
                         break;
 
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         this->actionFunc = this->prevActionFunc;
                         Message_ContinueTextbox(play, EnTrt_GetItemTextId(this));
                         break;
@@ -756,7 +756,7 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
             }
         } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             if (!Inventory_HasEmptyBottle()) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 EnTrt_SetupCannotBuy(play, this, 0x846);
             } else {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
@@ -767,7 +767,7 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
                 this->drawCursor = 0;
                 this->shopItemSelectedTween = 0.0f;
                 item->boughtFunc(play, item);
-                SET_WEEKEVENTREG(WEEKEVENTREG_53_10);
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FREE_BLUE_POTION);
             }
         }
     }
@@ -776,14 +776,15 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
 void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_SHOP) &&
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
         this->textId = 0x88F;
-    } else if (!(this->flags & ENTRT_MET)) {
+    } else if (!(this->flags & ENTRT_TALKED)) {
         this->textId = 0x834;
     } else {
         this->textId = 0x83E;
     }
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_08)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_GAVE_KOTAKE_MUSHROOM)) {
         this->talkOptionTextId = 0x845;
     } else if (this->flags & ENTRT_GIVEN_MUSHROOM) {
         this->talkOptionTextId = 0x882;
@@ -801,7 +802,7 @@ void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            this->flags |= ENTRT_MET;
+            this->flags |= ENTRT_TALKED;
         }
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
@@ -816,7 +817,7 @@ void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
         this->actionFunc = EnTrt_BeginInteraction;
     } else if (((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= -25.0f)) &&
                ((player->actor.world.pos.z >= -19.0f) && (player->actor.world.pos.z <= 30.0f))) {
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
     }
     if (DECR(this->timer) == 0) {
         this->timer = 40;
@@ -826,7 +827,7 @@ void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
         this->blinkFunc = EnTrt_OpenThenCloseEyes;
     }
     if (DECR(this->sleepSoundTimer) == 0) {
-        func_800B9010(&this->actor, NA_SE_EN_KOTAKE_SLEEP - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_KOTAKE_SLEEP - SFX_FLAG);
     }
 }
 
@@ -854,7 +855,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
         }
         player->stateFlags2 |= PLAYER_STATE2_20000000;
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            this->flags |= ENTRT_MET;
+            this->flags |= ENTRT_TALKED;
         }
         EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_SLEEPING);
         this->blinkFunc = EnTrt_EyesClosed;
@@ -862,7 +863,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
         this->actionFunc = EnTrt_BeginInteraction;
     } else if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= -25.0f) &&
                (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
     }
     if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(150, 100);
@@ -908,8 +909,10 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
         this->animIndex = TRT_ANIM_HANDS_ON_COUNTER;
         switch (this->textId) {
             case 0x834:
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40) &&
-                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_17_01)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) &&
+                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME) &&
+                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED) &&
+                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_KIOSK_EMPTY)) {
                     func_8011552C(play, DO_ACTION_DECIDE);
                     this->stickLeftPrompt.isEnabled = false;
                     this->stickRightPrompt.isEnabled = true;
@@ -972,7 +975,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, PlayState* play) {
 
     this->blinkFunc = EnTrt_Blink;
     if ((talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        if (Inventory_HasEmptyBottle() || !CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
+        if (Inventory_HasEmptyBottle() || !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
             if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                 CutsceneManager_Stop(this->csId);
                 this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
@@ -981,7 +984,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, PlayState* play) {
         } else {
             this->prevTextId = this->textId;
             this->textId = 0x88E;
-            SET_WEEKEVENTREG(WEEKEVENTREG_85_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_SHOP);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnTrt_EndConversation;
         }
@@ -996,13 +999,13 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, PlayState* play) {
                     CutsceneManager_Stop(this->csId);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
                 this->prevTextId = this->textId;
                 this->textId = 0x88E;
-                SET_WEEKEVENTREG(WEEKEVENTREG_85_08);
+                SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_SHOP);
                 Message_StartTextbox(play, this->textId, &this->actor);
                 this->actionFunc = EnTrt_EndConversation;
             }
@@ -1055,7 +1058,7 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
         }
         Message_ContinueTextbox(play, this->textId);
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1074,7 +1077,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, PlayState* play) {
     } else {
         if ((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= 50.0f) &&
             (player->actor.world.pos.z >= -19.0f) && (player->actor.world.pos.z <= 30.0f)) {
-            func_800B8614(&this->actor, play, 200.0f);
+            Actor_OfferTalk(&this->actor, play, 200.0f);
         }
     }
     if ((talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
@@ -1128,7 +1131,7 @@ void EnTrt_SetupItemGiven(EnTrt* this, PlayState* play) {
             this->csId = this->lookToShopkeeperCsId;
             CutsceneManager_Queue(this->csId);
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1146,17 +1149,17 @@ void EnTrt_ContinueShopping(EnTrt* this, PlayState* play) {
             if (!EnTrt_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
                         player->stateFlags2 |= PLAYER_STATE2_20000000;
                         Message_StartTextbox(play, this->textId, &this->actor);
                         EnTrt_SetupStartShopping(play, this, true);
-                        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+                        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
                         break;
 
                     case 1:
                     default:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         EnTrt_EndInteraction(play, this);
                         break;
                 }
@@ -1419,13 +1422,13 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
         itemAction = func_80123810(play);
         if (itemAction > PLAYER_IA_NONE) {
             if (itemAction == PLAYER_IA_BOTTLE_MUSHROOM) {
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_08)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_GAVE_KOTAKE_MUSHROOM)) {
                     player->actor.textId = 0x888;
                 } else {
                     player->actor.textId = 0x883;
                 }
                 this->textId = player->actor.textId;
-                player->exchangeItemId = itemAction;
+                player->exchangeItemAction = itemAction;
                 this->actionFunc = EnTrt_GetMushroom;
             } else {
                 if (this->flags & ENTRT_GIVEN_MUSHROOM) {
@@ -1458,7 +1461,7 @@ void EnTrt_SetupTalkToShopkeeper(PlayState* play, EnTrt* this) {
 }
 
 void EnTrt_SetupLookToShopkeeperFromShelf(PlayState* play, EnTrt* this) {
-    play_sound(NA_SE_SY_CURSOR);
+    Audio_PlaySfx(NA_SE_SY_CURSOR);
     this->drawCursor = 0;
     this->actionFunc = EnTrt_LookToShopkeeperFromShelf;
 }
@@ -1488,8 +1491,8 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, PlayState* play) {
 
 void EnTrt_InitShopkeeper(EnTrt* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gKotakeSkel, &gKotakeSleepingAnim, NULL, NULL, 0);
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40) &&
-        (gSaveContext.save.day >= 2)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) &&
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME) && (gSaveContext.save.day >= 2)) {
         this->actor.draw = NULL;
     } else {
         this->actor.draw = EnTrt_Draw;
@@ -1504,8 +1507,8 @@ void EnTrt_InitShop(EnTrt* this, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.colChkInfo.cylRadius = 50;
     this->timer = Rand_S16Offset(40, 20);
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40) &&
-        gSaveContext.save.day >= 2) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) &&
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME) && gSaveContext.save.day >= 2) {
         this->textId = 0x84A;
         this->actionFunc = EnTrt_ShopkeeperGone;
     } else {
@@ -1570,11 +1573,11 @@ void EnTrt_InitShop(EnTrt* this, PlayState* play) {
     this->blinkTimer = 20;
     this->eyeTexIndex = 0;
     this->blinkFunc = EnTrt_EyesClosed;
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_GAVE_KOTAKE_MUSHROOM)) {
         this->flags |= ENTRT_GIVEN_MUSHROOM;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void EnTrt_GetCutscenes(EnTrt* this, PlayState* play) {

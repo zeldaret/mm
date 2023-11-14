@@ -28,15 +28,15 @@ void func_80ACEFC4(EnFuMato* this);
 void func_80ACEFD8(EnFuMato* this, PlayState* play);
 
 ActorInit En_Fu_Mato_InitVars = {
-    ACTOR_EN_FU_MATO,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_FU_MATO,
-    sizeof(EnFuMato),
-    (ActorFunc)EnFuMato_Init,
-    (ActorFunc)EnFuMato_Destroy,
-    (ActorFunc)EnFuMato_Update,
-    (ActorFunc)EnFuMato_Draw,
+    /**/ ACTOR_EN_FU_MATO,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_FU_MATO,
+    /**/ sizeof(EnFuMato),
+    /**/ EnFuMato_Init,
+    /**/ EnFuMato_Destroy,
+    /**/ EnFuMato_Update,
+    /**/ EnFuMato_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -373,7 +373,7 @@ s32 func_80ACF04C(EnFuMato* this, PlayState* play) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
 
         fu->unk_548++;
-        if ((fu->unk_542 == 2) || (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
+        if ((fu->unk_542 == 2) || (GET_PLAYER_FORM == PLAYER_FORM_DEKU)) {
             fu->unk_546 = 1;
             func_80ACE680(this);
         } else {

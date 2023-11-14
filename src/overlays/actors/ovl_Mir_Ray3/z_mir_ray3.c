@@ -17,15 +17,15 @@ void MirRay3_Update(Actor* thisx, PlayState* play);
 void MirRay3_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Mir_Ray3_InitVars = {
-    ACTOR_MIR_RAY3,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_MIR_RAY,
-    sizeof(MirRay3),
-    (ActorFunc)MirRay3_Init,
-    (ActorFunc)MirRay3_Destroy,
-    (ActorFunc)MirRay3_Update,
-    (ActorFunc)MirRay3_Draw,
+    /**/ ACTOR_MIR_RAY3,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_MIR_RAY,
+    /**/ sizeof(MirRay3),
+    /**/ MirRay3_Init,
+    /**/ MirRay3_Destroy,
+    /**/ MirRay3_Update,
+    /**/ MirRay3_Draw,
 };
 
 static ColliderQuadInit sQuadInit = {
@@ -139,7 +139,7 @@ void MirRay3_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_214 > 0.1f) {
-        func_800B8F98(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
     }
 
     Math_ApproachZeroF(&this->unk_214, 1.0f, 0.1f);

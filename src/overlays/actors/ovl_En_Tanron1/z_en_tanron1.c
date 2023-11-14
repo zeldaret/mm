@@ -6,7 +6,7 @@
 
 #include "z_en_tanron1.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron1*)thisx)
 
@@ -19,25 +19,25 @@ void func_80BB5318(EnTanron1* this, PlayState* play);
 void func_80BB5AAC(EnTanron1* this, PlayState* play);
 
 ActorInit En_Tanron1_InitVars = {
-    ACTOR_EN_TANRON1,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTanron1),
-    (ActorFunc)EnTanron1_Init,
-    (ActorFunc)EnTanron1_Destroy,
-    (ActorFunc)EnTanron1_Update,
-    (ActorFunc)EnTanron1_Draw,
+    /**/ ACTOR_EN_TANRON1,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTanron1),
+    /**/ EnTanron1_Init,
+    /**/ EnTanron1_Destroy,
+    /**/ EnTanron1_Update,
+    /**/ EnTanron1_Draw,
 };
 
-static u64 sPad = { 0 };
+static s32 sPad = 0;
 
 #include "overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
 
 void EnTanron1_Init(Actor* thisx, PlayState* play) {
     EnTanron1* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (!ENTANRON1_GET_100(&this->actor)) {
         this->unk_144 = 0;
     } else {
@@ -149,7 +149,7 @@ void EnTanron1_Update(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
+    if ((player->heldItemAction == PLAYER_IA_DEKU_STICK) && (player->unk_B28 != 0)) {
         this->unk_14C.x = player->meleeWeaponInfo[0].tip.x;
         this->unk_14C.y = player->meleeWeaponInfo[0].tip.y;
         this->unk_14C.z = player->meleeWeaponInfo[0].tip.z;
@@ -354,9 +354,9 @@ void func_80BB5318(EnTanron1* this, PlayState* play) {
     if (spB4 != NULL) {
         SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, spB4, &this->unk_3360, &spB0);
         if (spB8 >= (s16)(KREG(39) + 20)) {
-            Audio_PlaySfxAtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_DEAD);
+            Audio_PlaySfx_AtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_DEAD);
         } else if (spBA >= 20) {
-            Audio_PlaySfxAtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_FLY - SFX_FLAG);
+            Audio_PlaySfx_AtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_FLY - SFX_FLAG);
         }
     }
 }

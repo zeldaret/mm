@@ -25,15 +25,15 @@ void func_8093A418(Actor* thisx, PlayState* play);
 void func_8093A608(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Bombiwa_InitVars = {
-    ACTOR_OBJ_BOMBIWA,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_BOMBIWA,
-    sizeof(ObjBombiwa),
-    (ActorFunc)ObjBombiwa_Init,
-    (ActorFunc)ObjBombiwa_Destroy,
-    (ActorFunc)ObjBombiwa_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_BOMBIWA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_BOMBIWA,
+    /**/ sizeof(ObjBombiwa),
+    /**/ ObjBombiwa_Init,
+    /**/ ObjBombiwa_Destroy,
+    /**/ ObjBombiwa_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
@@ -182,7 +182,7 @@ void ObjBombiwa_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitCylinder(play, &this->collider);
 
-    if (Flags_GetSwitch(play, OBJBOMBIWA_GET_7F(&this->actor))) {
+    if (Flags_GetSwitch(play, OBJBOMBIWA_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -342,10 +342,10 @@ void func_80939EF4(ObjBombiwa* this, PlayState* play) {
     }
 
     if (sp28->unk_0C(&this->actor)) {
-        Flags_SetSwitch(play, OBJBOMBIWA_GET_7F(&this->actor));
+        Flags_SetSwitch(play, OBJBOMBIWA_GET_SWITCH_FLAG(&this->actor));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
         if (OBJBOMBIWA_GET_8000(&this->actor)) {
-            play_sound(NA_SE_SY_CORRECT_CHIME);
+            Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
         }
 
         if (params == OBJBOMBIWA_100_0) {

@@ -5,7 +5,7 @@
  */
 
 #include "z_en_door.h"
-#include "objects/object_mkk/object_mkk.h"
+#include "objects/object_kinsta2_obj/object_kinsta2_obj.h"
 #include "objects/object_dor01/object_dor01.h"
 #include "objects/object_dor02/object_dor02.h"
 #include "objects/object_dor03/object_dor03.h"
@@ -277,15 +277,15 @@ u8* D_8086778C[] = {
 };
 
 ActorInit En_Door_InitVars = {
-    ACTOR_EN_DOOR,
-    ACTORCAT_DOOR,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnDoor),
-    (ActorFunc)EnDoor_Init,
-    (ActorFunc)EnDoor_Destroy,
-    (ActorFunc)EnDoor_Update,
-    (ActorFunc)EnDoor_Draw,
+    /**/ ACTOR_EN_DOOR,
+    /**/ ACTORCAT_DOOR,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnDoor),
+    /**/ EnDoor_Init,
+    /**/ EnDoor_Destroy,
+    /**/ EnDoor_Update,
+    /**/ EnDoor_Draw,
 };
 
 typedef struct {
@@ -294,7 +294,7 @@ typedef struct {
     /* 0x4 */ s16 objectId;
 } EnDoorInfo; // size = 0x6
 
-static EnDoorInfo sObjInfo[] = {
+static EnDoorInfo sObjectInfo[] = {
     { SCENE_MITURIN, 0x01, OBJECT_NUMA_OBJ },
     { SCENE_TENMON_DAI, 0x02, OBJECT_DOR01 },
     { SCENE_00KEIKOKU, 0x02, OBJECT_DOR01 },
@@ -347,46 +347,77 @@ static EnDoorInfo sObjInfo[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.x, 0, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
 };
 
-static AnimationHeader* sAnimations[] = {
-    &gameplay_keep_Anim_020658, &gameplay_keep_Anim_022CA8, &gameplay_keep_Anim_020658, &gameplay_keep_Anim_022E68,
-    &gameplay_keep_Anim_0204B4, &gameplay_keep_Anim_022BE8, &gameplay_keep_Anim_022D90, &gameplay_keep_Anim_022BE8,
-    &gameplay_keep_Anim_022FF0, &gameplay_keep_Anim_0205A0,
+static AnimationHeader* sAnimations[2 * PLAYER_FORM_MAX] = {
+    // left
+    &gameplay_keep_Anim_020658, // PLAYER_FORM_FIERCE_DEITY
+    &gameplay_keep_Anim_022CA8, // PLAYER_FORM_GORON
+    &gameplay_keep_Anim_020658, // PLAYER_FORM_ZORA
+    &gameplay_keep_Anim_022E68, // PLAYER_FORM_DEKU
+    &gameplay_keep_Anim_0204B4, // PLAYER_FORM_HUMAN
+    // right
+    &gameplay_keep_Anim_022BE8, // PLAYER_FORM_FIERCE_DEITY
+    &gameplay_keep_Anim_022D90, // PLAYER_FORM_GORON
+    &gameplay_keep_Anim_022BE8, // PLAYER_FORM_ZORA
+    &gameplay_keep_Anim_022FF0, // PLAYER_FORM_DEKU
+    &gameplay_keep_Anim_0205A0, // PLAYER_FORM_HUMAN
 };
-static u8 sAnimOpenFrames[10] = {
-    25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
+static u8 sAnimOpenFrames[2 * PLAYER_FORM_MAX] = {
+    // left
+    25, // PLAYER_FORM_FIERCE_DEITY
+    25, // PLAYER_FORM_GORON
+    25, // PLAYER_FORM_ZORA
+    25, // PLAYER_FORM_DEKU
+    25, // PLAYER_FORM_HUMAN
+    // right
+    25, // PLAYER_FORM_FIERCE_DEITY
+    25, // PLAYER_FORM_GORON
+    25, // PLAYER_FORM_ZORA
+    25, // PLAYER_FORM_DEKU
+    25, // PLAYER_FORM_HUMAN
 };
 
-static u8 sAnimCloseFrames[10] = {
-    60, 60, 60, 70, 70, 60, 60, 60, 60, 70,
+static u8 sAnimCloseFrames[2 * PLAYER_FORM_MAX] = {
+    // left
+    60, // PLAYER_FORM_FIERCE_DEITY
+    60, // PLAYER_FORM_GORON
+    60, // PLAYER_FORM_ZORA
+    70, // PLAYER_FORM_DEKU
+    70, // PLAYER_FORM_HUMAN
+    // right
+    60, // PLAYER_FORM_FIERCE_DEITY
+    60, // PLAYER_FORM_GORON
+    60, // PLAYER_FORM_ZORA
+    60, // PLAYER_FORM_DEKU
+    70, // PLAYER_FORM_HUMAN
 };
 
 static Gfx* D_808679A4[14][2] = {
     { gDoorLeftDL, gDoorRightDL },
     { gWoodfallDoorDL, gWoodfallDoorDL },
-    { object_dor01_DL_000448, object_dor01_DL_000448 },
+    { gObservatoryLabDoorDL, gObservatoryLabDoorDL },
     { gZoraHallDoorDL, gZoraHallDoorDL },
     { gSwampDoorDL, gSwampDoorDL },
     { gMagicHagPotionShopDoorDL, gMagicHagPotionShopDoorDL },
-    { object_wdor01_DL_000548, object_wdor01_DL_000548 }, // Lottery Shop / Curiosity Shop / Mayor's House Door
-    { object_wdor02_DL_000548, object_wdor02_DL_000548 }, // Trading Post / Post Office Door
-    { object_wdor03_DL_000548, object_wdor03_DL_000548 }, // Stockpot Inn & Swordsman's School Door
+    { gLotteryCuriosityShopMayorHouseDoorDL, gLotteryCuriosityShopMayorHouseDoorDL },
+    { gPostOfficeTradingPostDoorDL, gPostOfficeTradingPostDoorDL },
+    { gInnSchoolDoorDL, gInnSchoolDoorDL },
     { gMilkBarDoorDL, gMilkBarDoorDL },
     { gMusicBoxHouseDoorDL, gMusicBoxHouseDoorDL },
     { gPiratesFortressDoorDL, gPiratesFortressDoorDL },
-    { object_mkk_DL_000310, object_mkk_DL_000310 },
+    { gOceansideSpiderHouseDoorDL, gOceansideSpiderHouseDoorDL },
     { gFieldWoodDoorLeftDL, gFieldWoodDoorRightDL },
 };
 
 void EnDoor_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    s32 objectBankIndex;
-    EnDoorInfo* objectInfo = &sObjInfo[0];
+    s32 objectSlot;
+    EnDoorInfo* objectInfo = &sObjectInfo[0];
     EnDoor* this = THIS;
     s32 i;
 
@@ -394,7 +425,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
 
     this->doorType = ENDOOR_GET_TYPE(thisx);
 
-    this->switchFlag = ENDOOR_GET_PARAM_7F(thisx);
+    this->switchFlag = ENDOOR_GET_SWITCH_FLAG(thisx);
     if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {
         DynaPolyActor_Init(&this->knobDoor.dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->knobDoor.dyna, &gDoorCol);
@@ -402,31 +433,32 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
     SkelAnime_Init(play, &this->knobDoor.skelAnime, &gDoorSkel, &gameplay_keep_Anim_020658, this->limbTable,
                    this->limbTable, DOOR_LIMB_MAX);
     if (this->doorType == ENDOOR_TYPE_5) {
-        objectInfo = &sObjInfo[17 + this->switchFlag];
+        objectInfo = &sObjectInfo[17 + this->switchFlag];
     } else {
-        for (i = 0; i < ARRAY_COUNT(sObjInfo) - 34; i++, objectInfo++) {
+        for (i = 0; i < ARRAY_COUNT(sObjectInfo) - 34; i++, objectInfo++) {
             if (play->sceneId == objectInfo->sceneId) {
                 break;
             }
         }
-        if ((i >= ARRAY_COUNT(sObjInfo) - 34) && (Object_GetIndex(&play->objectCtx, GAMEPLAY_FIELD_KEEP) >= 0)) {
+        if ((i >= ARRAY_COUNT(sObjectInfo) - 34) &&
+            (Object_GetSlot(&play->objectCtx, GAMEPLAY_FIELD_KEEP) > OBJECT_SLOT_NONE)) {
             objectInfo++;
         }
     }
 
     this->knobDoor.dlIndex = objectInfo->dListIndex;
-    objectBankIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
-    if (objectBankIndex < 0) {
-        objectInfo = &sObjInfo[15];
-        objectBankIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
-        if (objectBankIndex != 0) {
+    objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
+    if (objectSlot <= OBJECT_SLOT_NONE) {
+        objectInfo = &sObjectInfo[15];
+        objectSlot = Object_GetSlot(&play->objectCtx, objectInfo->objectId);
+        if (objectSlot != 0) {
             Actor_Kill(&this->knobDoor.dyna.actor);
             return;
         }
     }
-    this->knobDoor.requiredObjBankIndex = objectBankIndex;
+    this->knobDoor.objectSlot = objectSlot;
     this->knobDoor.dlIndex = objectInfo->dListIndex; // Set twice?
-    if (this->knobDoor.dyna.actor.objBankIndex == this->knobDoor.requiredObjBankIndex) {
+    if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
         func_80866A5C(this, play);
     } else {
         this->actionFunc = func_80866A5C;
@@ -449,8 +481,8 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80866A5C(EnDoor* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->knobDoor.requiredObjBankIndex)) {
-        this->knobDoor.dyna.actor.objBankIndex = this->knobDoor.requiredObjBankIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->knobDoor.objectSlot)) {
+        this->knobDoor.dyna.actor.objectSlot = this->knobDoor.objectSlot;
         this->actionFunc = func_80866B20;
         this->knobDoor.dyna.actor.world.rot.y = 0;
         if (this->doorType == ENDOOR_TYPE_1) {
@@ -482,7 +514,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
             Flags_SetSwitch(play, this->switchFlag);
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
         }
-    } else if (this->unk_1A7 != 0) {
+    } else if (this->openTimer != 0) {
         this->actionFunc = func_80866F94;
         Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_DOOR_OPEN);
     } else if (!Player_InCsMode(play)) {
@@ -553,14 +585,14 @@ void func_80866B20(EnDoor* this, PlayState* play) {
 void func_80866F94(EnDoor* this, PlayState* play) {
     s32 direction;
 
-    if (this->unk_1A7 != 0) {
-        if (this->unk_1A7 >= 0) {
+    if (this->openTimer != 0) {
+        if (this->openTimer >= 0) {
             direction = 1;
         } else {
             direction = -1;
         }
         if (Math_ScaledStepToS(&this->knobDoor.dyna.actor.world.rot.y, direction * 0x3E80, 0x7D0)) {
-            Math_StepToC(&this->unk_1A7, 0, 1);
+            Math_StepToC(&this->openTimer, 0, 1);
         }
     } else {
         if (Math_ScaledStepToS(&this->knobDoor.dyna.actor.world.rot.y, 0, 0x7D0)) {
@@ -638,8 +670,9 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
             (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {
             s32 pad;
 
-            temp = (this->knobDoor.dyna.actor.shape.rot.y + this->knobDoor.skelAnime.jointTable[3].z + rot->z) -
-                   Math_Vec3f_Yaw(&play->view.eye, &this->knobDoor.dyna.actor.world.pos);
+            temp =
+                (this->knobDoor.dyna.actor.shape.rot.y + this->knobDoor.skelAnime.jointTable[DOOR_LIMB_3].z + rot->z) -
+                Math_Vec3f_Yaw(&play->view.eye, &this->knobDoor.dyna.actor.world.pos);
             *dList = (ABS_ALT(temp) < 0x4000) ? dl[0] : dl[1];
 
         } else {
@@ -656,7 +689,7 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 void EnDoor_Draw(Actor* thisx, PlayState* play) {
     EnDoor* this = THIS;
 
-    if (this->knobDoor.dyna.actor.objBankIndex == this->knobDoor.requiredObjBankIndex) {
+    if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {

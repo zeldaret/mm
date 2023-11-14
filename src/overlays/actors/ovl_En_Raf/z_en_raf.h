@@ -8,6 +8,8 @@
 #define EN_RAF_GET_REVIVE_TIMER(thisx) (((thisx)->params >> 7) & 0x1F)
 #define EN_RAF_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
+#define EN_RAF_SWITCH_FLAG_NONE 0x7F
+
 typedef enum {
     /* 0 */ EN_RAF_TYPE_NORMAL,
     /* 1 */ EN_RAF_TYPE_DORMANT,              // Spawns without trap, so it can't eat bombs/player
@@ -23,7 +25,7 @@ typedef struct {
     /* 0x04 */ Vec3f pos;
     /* 0x10 */ Vec3f velocity;
     /* 0x1C */ Vec3f accel;
-    /* 0x28 */ Vec3s rotation;
+    /* 0x28 */ Vec3s rot;
     /* 0x30 */ f32 scale;
     /* 0x34 */ s16 timer;
 } EnRafEffect; // size = 0x38

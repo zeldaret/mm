@@ -17,7 +17,7 @@
         <Texture Name="gAdultRutoEyeClosedTex" OutName="adult_ruto_eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x2AE0"/>
 
         <!-- Adult Ruto Textures -->
-        <Texture Name="gAdultRutoSkinGradient" OutName="adult_ruto_skin_gradient" Format="ci8" Width="8" Height="8" Offset="0x1720" TlutOffset="0xE00"/>
+        <Texture Name="gAdultRutoSkinGradientTex" OutName="adult_ruto_skin_gradient" Format="ci8" Width="8" Height="8" Offset="0x1720" TlutOffset="0xE00"/>
         <Texture Name="gAdultRutoEar1Tex" OutName="adult_ruto_ear_1" Format="ci8" Width="16" Height="16" Offset="0x1760" TlutOffset="0xE00"/>
         <Texture Name="gAdultRutoHeadGradientTex" OutName="adult_ruto_head_gradient" Format="ci8" Width="16" Height="16" Offset="0x1860" TlutOffset="0xE00"/>
         <Texture Name="gAdultRutoHeadHoleTex" OutName="adult_ruto_head_hole" Format="ci8" Width="8" Height="8" Offset="0x1960" TlutOffset="0xE00"/>
@@ -74,12 +74,12 @@
         <Limb Name="gAdultRutoLeftUpperArmLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_UPPER_ARM" Offset="0xC618"/>
         <Limb Name="gAdultRutoLeftUpperWingLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_UPPER_WING" Offset="0xC624"/>
         <Limb Name="gAdultRutoLeftLowerWingLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_LOWER_WING" Offset="0xC630"/>
-        <Limb Name="gAdultRutoLeftForearmLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_FORARM" Offset="0xC63C"/>
+        <Limb Name="gAdultRutoLeftForearmLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_FOREARM" Offset="0xC63C"/>
         <Limb Name="gAdultRutoLeftHandLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_HAND" Offset="0xC648"/>
         <Limb Name="gAdultRutoRightUpperArmLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_UPPER_ARM" Offset="0xC654"/>
         <Limb Name="gAdultRutoRightUpperWingLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_UPPER_WING" Offset="0xC660"/>
         <Limb Name="gAdultRutoRightLowerWingLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_LOWER_WING" Offset="0xC66C"/>
-        <Limb Name="gAdultRutoRightForearmLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_FORARM" Offset="0xC678"/>
+        <Limb Name="gAdultRutoRightForearmLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_FOREARM" Offset="0xC678"/>
         <Limb Name="gAdultRutoRightHandLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_HAND" Offset="0xC684"/>
         <Limb Name="gAdultRutoHeadLimb" LimbType="Standard" EnumName="RU2_LIMB_HEAD" Offset="0xC690"/>
         <Limb Name="gAdultRutoWaistLimb" LimbType="Standard" EnumName="RU2_LIMB_WAIST" Offset="0xC69C"/>

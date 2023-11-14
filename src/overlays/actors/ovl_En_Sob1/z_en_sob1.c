@@ -9,7 +9,7 @@
 #include "objects/object_masterzoora/object_masterzoora.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnSob1*)thisx)
 
@@ -65,15 +65,15 @@ static AnimationInfoS sAnimationInfoBombShopkeeper[] = {
 };
 
 ActorInit En_Sob1_InitVars = {
-    ACTOR_EN_OSSAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnSob1),
-    (ActorFunc)EnSob1_Init,
-    (ActorFunc)EnSob1_Destroy,
-    (ActorFunc)EnSob1_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_OSSAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnSob1),
+    /**/ EnSob1_Init,
+    /**/ EnSob1_Destroy,
+    /**/ EnSob1_Update,
+    /**/ NULL,
 };
 
 static s16 sObjectIds[][3] = {
@@ -176,7 +176,7 @@ void EnSob1_SetupAction(EnSob1* this, EnSob1ActionFunc action) {
 s32 EnSob1_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
@@ -188,9 +188,9 @@ u16 EnSob1_GetTalkOption(EnSob1* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->shopType == BOMB_SHOP) {
-        if ((gSaveContext.save.day == 1) && (gSaveContext.save.time >= CLOCK_TIME(6, 00))) {
+        if ((gSaveContext.save.day == 1) && (gSaveContext.save.time >= CLOCK_TIME(6, 0))) {
             return 0x648;
-        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
             return 0x649;
         } else {
             return 0x64A;
@@ -270,34 +270,34 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
     } else if (this->shopType == ZORA_SHOP) {
         switch (player->transformation) {
             case PLAYER_FORM_HUMAN:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_10)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_HUMAN)) {
                     return 0x12CF;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_10);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_HUMAN);
                     return 0x12CE;
                 }
 
             case PLAYER_FORM_DEKU:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_20)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_DEKU)) {
                     return 0x12D1;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_20);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_DEKU);
                     return 0x12D0;
                 }
 
             case PLAYER_FORM_GORON:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_40)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_GORON)) {
                     return 0x12D3;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_40);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_GORON);
                     return 0x12D2;
                 }
 
             case PLAYER_FORM_ZORA:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_80)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_ZORA)) {
                     return 0x12D5;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_80);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_ZORA);
                     return 0x12D4;
                 }
 
@@ -306,33 +306,33 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
         }
     } else if (this->shopType == GORON_SHOP) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_04)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_NON_GORON)) {
                 return 0xBB9;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_04);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_NON_GORON);
                 return 0xBB8;
             }
         } else {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_GORON)) {
                 return 0xBBB;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_08);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_GORON);
                 return 0xBBA;
             }
         }
     } else if (this->shopType == GORON_SHOP_SPRING) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_10)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_NON_GORON)) {
                 return 0xBBD;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_10);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_NON_GORON);
                 return 0xBBC;
             }
         } else {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_GORON)) {
                 return 0xBBF;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_20);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_GORON);
                 return 0xBBE;
             }
         }
@@ -379,22 +379,22 @@ void EnSob1_SpawnShopItems(EnSob1* this, PlayState* play, ShopItem* shopItem) {
     }
 }
 
-s32 EnSob1_GetObjIndices(EnSob1* this, PlayState* play, s16* objIds) {
-    if (objIds[1] != OBJECT_ID_MAX) {
-        this->unusedObjIndex = Object_GetIndex(&play->objectCtx, objIds[1]);
-        if (this->unusedObjIndex < 0) {
+s32 EnSob1_GetObjectIndices(EnSob1* this, PlayState* play, s16* objectIds) {
+    if (objectIds[1] != OBJECT_ID_MAX) {
+        this->unusedObjectSlot = Object_GetSlot(&play->objectCtx, objectIds[1]);
+        if (this->unusedObjectSlot <= OBJECT_SLOT_NONE) {
             return false;
         }
     } else {
-        this->unusedObjIndex = -1;
+        this->unusedObjectSlot = OBJECT_SLOT_NONE;
     }
-    if (objIds[2] != OBJECT_ID_MAX) {
-        this->shopkeeperAnimObjIndex = Object_GetIndex(&play->objectCtx, objIds[2]);
-        if (this->shopkeeperAnimObjIndex < 0) {
+    if (objectIds[2] != OBJECT_ID_MAX) {
+        this->shopkeeperAnimObjectSlot = Object_GetSlot(&play->objectCtx, objectIds[2]);
+        if (this->shopkeeperAnimObjectSlot <= OBJECT_SLOT_NONE) {
             return false;
         }
     } else {
-        this->shopkeeperAnimObjIndex = -1;
+        this->shopkeeperAnimObjectSlot = OBJECT_SLOT_NONE;
     }
     return true;
 }
@@ -402,7 +402,7 @@ s32 EnSob1_GetObjIndices(EnSob1* this, PlayState* play, s16* objIds) {
 void EnSob1_Init(Actor* thisx, PlayState* play) {
     EnSob1* this = THIS;
     s32 pad;
-    s16* objIds;
+    s16* objectIds;
 
     switch (ENSOB1_GET_SHOPTYPE(thisx)) {
         case ZORA_SHOP:
@@ -426,13 +426,13 @@ void EnSob1_Init(Actor* thisx, PlayState* play) {
             return;
     }
 
-    objIds = sObjectIds[this->shopType];
-    this->mainObjIndex = Object_GetIndex(&play->objectCtx, objIds[0]);
-    if (this->mainObjIndex < 0) {
+    objectIds = sObjectIds[this->shopType];
+    this->mainObjectSlot = Object_GetSlot(&play->objectCtx, objectIds[0]);
+    if (this->mainObjectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
-    if (!EnSob1_GetObjIndices(this, play, objIds)) {
+    if (!EnSob1_GetObjectIndices(this, play, objectIds)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -466,7 +466,7 @@ void EnSob1_EndInteraction(PlayState* play, EnSob1* this) {
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &play->state);
-    play->msgCtx.msgMode = 0x43;
+    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     this->drawCursor = 0;
@@ -526,7 +526,7 @@ void EnSob1_TalkToShopkeeper(PlayState* play, EnSob1* this) {
 }
 
 void EnSob1_SetupLookToShopkeeperFromShelf(PlayState* play, EnSob1* this) {
-    play_sound(NA_SE_SY_CURSOR);
+    Audio_PlaySfx(NA_SE_SY_CURSOR);
     this->drawCursor = 0;
     EnSob1_SetupAction(this, EnSob1_LookToShopkeeperFromShelf);
 }
@@ -571,7 +571,7 @@ void EnSob1_Idle(EnSob1* this, PlayState* play) {
              player->actor.world.pos.x <= this->posXZRange.xMax) &&
             (player->actor.world.pos.z >= this->posXZRange.zMin &&
              player->actor.world.pos.z <= this->posXZRange.zMax)) {
-            func_800B8614(&this->actor, play, 400.0f);
+            Actor_OfferTalk(&this->actor, play, 400.0f);
         }
         if (this->wasTalkedToWhileWalking == true) {
             this->wasTalkedToWhileWalking = false;
@@ -649,12 +649,12 @@ void EnSob1_Hello(EnSob1* this, PlayState* play) {
 s32 EnSob1_FacingShopkeeperDialogResult(EnSob1* this, PlayState* play) {
     switch (play->msgCtx.choiceIndex) {
         case 0:
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             EnSob1_TalkToShopkeeper(play, this);
             return true;
 
         case 1:
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             if (this->shopType == BOMB_SHOP) {
                 EnSob1_BombShopkeeper_EndInteraction(this, play);
             } else {
@@ -697,7 +697,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, PlayState* play) {
                             EnSob1_SetupAction(this, EnSob1_LookToShelf);
                             func_8011552C(play, DO_ACTION_DECIDE);
                             this->stickRightPrompt.isEnabled = false;
-                            play_sound(NA_SE_SY_CURSOR);
+                            Audio_PlaySfx(NA_SE_SY_CURSOR);
                         }
                     }
                 }
@@ -826,7 +826,7 @@ void EnSob1_Walking(EnSob1* this, PlayState* play) {
              player->actor.world.pos.x <= this->posXZRange.xMax) &&
             (player->actor.world.pos.z >= this->posXZRange.zMin &&
              player->actor.world.pos.z <= this->posXZRange.zMax)) {
-            func_800B8614(&this->actor, play, 400.0f);
+            Actor_OfferTalk(&this->actor, play, 400.0f);
         }
     }
 }
@@ -851,7 +851,7 @@ void EnSob1_ItemPurchased(EnSob1* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_ContinueTextbox(play, 0x647);
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -912,13 +912,13 @@ s32 EnSob1_HasPlayerSelectedItem(PlayState* play, EnSob1* this, Input* input) {
         if (!item->isOutOfStock) {
             this->prevActionFunc = this->actionFunc;
             Message_ContinueTextbox(play, this->items[this->cursorIndex]->choiceTextId);
-            play_sound(NA_SE_SY_DECIDE);
+            Audio_PlaySfx(NA_SE_SY_DECIDE);
             this->stickLeftPrompt.isEnabled = false;
             this->stickRightPrompt.isEnabled = false;
             this->drawCursor = 0;
             EnSob1_SetupAction(this, EnSob1_SelectItem);
         } else {
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
         }
         return true;
     }
@@ -946,7 +946,7 @@ void EnSob1_BrowseShelf(EnSob1* this, PlayState* play) {
                 cursorIndex = this->cursorIndex;
                 if (cursorIndex != prevCursorIndex) {
                     Message_ContinueTextbox(play, this->items[cursorIndex]->actor.textId);
-                    play_sound(NA_SE_SY_CURSOR);
+                    Audio_PlaySfx(NA_SE_SY_CURSOR);
                 }
             }
         }
@@ -957,7 +957,7 @@ void EnSob1_SetupBuyItemWithFanfare(PlayState* play, EnSob1* this) {
     Player* player = GET_PLAYER(play);
 
     Actor_OfferGetItem(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
-    play->msgCtx.msgMode = 0x43;
+    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
@@ -985,7 +985,7 @@ void EnSob1_HandleCanBuyItem(PlayState* play, EnSob1* this) {
                 CutsceneManager_Stop(this->csId);
                 this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
             }
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             item2 = this->items[this->cursorIndex];
             item2->buyFanfareFunc(play, item2);
             EnSob1_SetupBuyItemWithFanfare(play, this);
@@ -995,7 +995,7 @@ void EnSob1_HandleCanBuyItem(PlayState* play, EnSob1* this) {
             break;
 
         case CANBUY_RESULT_SUCCESS_2:
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             item->buyFunc(play, item);
             if ((this->shopType == GORON_SHOP) && (item->actor.params == SI_POTION_RED_5)) {
                 EnSob1_SetupCanBuy(play, this, 0xBD7);
@@ -1012,42 +1012,42 @@ void EnSob1_HandleCanBuyItem(PlayState* play, EnSob1* this) {
             break;
 
         case CANBUY_RESULT_NO_ROOM:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sNoRoomTextIds[this->shopType]);
             break;
 
         case CANBUY_RESULT_NEED_EMPTY_BOTTLE:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sNeedEmptyBottleTextIds[this->shopType]);
             break;
 
         case CANBUY_RESULT_NEED_RUPEES:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sNeedRupeesTextIds[this->shopType]);
             break;
 
         case CANBUY_RESULT_CANNOT_GET_NOW:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sCannotGetNowTextIds[this->shopType]);
             break;
 
         case CANBUY_RESULT_CANNOT_GET_NOW_2:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sCannotGetNow2TextIds[this->shopType]);
             break;
 
         case CANBUY_RESULT_NO_ROOM_2:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, sNoRoom2TextIds[this->shopType]);
             break;
 
         case CANBUY_RESULT_ALREADY_HAVE:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, 0x658);
             break;
 
         case CANBUY_RESULT_HAVE_BETTER:
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             EnSob1_SetupCannotBuy(play, this, 0x659);
             break;
 
@@ -1068,7 +1068,7 @@ void EnSob1_SelectItem(EnSob1* this, PlayState* play) {
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     this->actionFunc = this->prevActionFunc;
                     Message_ContinueTextbox(play, this->items[this->cursorIndex]->actor.textId);
                     break;
@@ -1110,7 +1110,7 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, PlayState* play) {
 
 void EnSob1_SetupItemPurchased(EnSob1* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
@@ -1120,7 +1120,7 @@ void EnSob1_SetupItemPurchased(EnSob1* this, PlayState* play) {
             this->csId = this->lookToShopkeeperCsId;
             CutsceneManager_Queue(this->csId);
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1136,7 +1136,7 @@ void EnSob1_ContinueShopping(EnSob1* this, PlayState* play) {
         player->stateFlags2 |= PLAYER_STATE2_20000000;
         Message_StartTextbox(play, this->welcomeTextId, &this->actor);
         EnSob1_SetupStartShopping(play, this, true);
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1345,15 +1345,16 @@ void EnSob1_Blink(EnSob1* this) {
 }
 
 void EnSob1_ChangeObject(EnSob1* this, PlayState* play) {
-    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->shopkeeperAnimObjIndex].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
 }
 
 s32 EnSob1_AreObjectsLoaded(EnSob1* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->mainObjIndex)) {
-        if ((this->unusedObjIndex >= 0) && !Object_IsLoaded(&play->objectCtx, this->unusedObjIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->mainObjectSlot)) {
+        if ((this->unusedObjectSlot > OBJECT_SLOT_NONE) && !Object_IsLoaded(&play->objectCtx, this->unusedObjectSlot)) {
             return false;
         }
-        if ((this->shopkeeperAnimObjIndex >= 0) && !Object_IsLoaded(&play->objectCtx, this->shopkeeperAnimObjIndex)) {
+        if ((this->shopkeeperAnimObjectSlot > OBJECT_SLOT_NONE) &&
+            !Object_IsLoaded(&play->objectCtx, this->shopkeeperAnimObjectSlot)) {
             return false;
         }
         return true;
@@ -1363,7 +1364,7 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, PlayState* play) {
 
 void EnSob1_ZoraShopkeeper_Init(EnSob1* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, ZORA_LIMB_MAX);
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->shopkeeperAnimObjIndex].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
     Animation_Change(&this->skelAnime, &gZoraShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gZoraShopkeeperAnim),
                      ANIMMODE_LOOP, 0.0f);
     this->actor.draw = EnSob1_ZoraShopkeeper_Draw;
@@ -1372,7 +1373,7 @@ void EnSob1_ZoraShopkeeper_Init(EnSob1* this, PlayState* play) {
 
 void EnSob1_GoronShopkeeper_Init(EnSob1* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable, GORON_LIMB_MAX);
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->shopkeeperAnimObjIndex].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->shopkeeperAnimObjectSlot].segment);
     Animation_Change(&this->skelAnime, &gGoronShopkeeperAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gGoronShopkeeperAnim),
                      ANIMMODE_LOOP, 0.0f);
     this->actor.draw = EnSob1_GoronShopkeeper_Draw;
@@ -1394,14 +1395,14 @@ void EnSob1_InitShop(EnSob1* this, PlayState* play) {
 
     if (EnSob1_AreObjectsLoaded(this, play)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.objBankIndex = this->mainObjIndex;
+        this->actor.objectSlot = this->mainObjectSlot;
         Actor_SetObjectDependency(play, &this->actor);
         posOffset = &sPosOffset[this->shopType];
         this->actor.world.pos.x += posOffset->x;
         this->actor.world.pos.y += posOffset->y;
         this->actor.world.pos.z += posOffset->z;
         shopItems = sShops[this->shopType];
-        if ((this->shopType == BOMB_SHOP) && CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+        if ((this->shopType == BOMB_SHOP) && CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
             sShops[this->shopType][0].shopItemId = SI_BOMB_BAG_30_2;
         }
 
@@ -1482,7 +1483,7 @@ void EnSob1_InitShop(EnSob1* this, PlayState* play) {
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
         this->blinkFunc = EnSob1_WaitForBlink;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     }
 }
 

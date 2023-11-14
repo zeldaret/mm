@@ -1,4 +1,6 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
+#include "fault.h"
 
 // Init Vars declarations (also used in the table below)
 #define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName) extern ActorInit name##_InitVars;
@@ -52,7 +54,7 @@ void ActorOverlayTable_FaultClient(void* arg0, void* arg1) {
     FaultDrawer_Printf("No. RamStart- RamEnd cn  Name\n");
 
     for (actorId = 0, overlayEntry = &gActorOverlayTable[0]; actorId < gMaxActorId; actorId++, overlayEntry++) {
-        overlaySize = VRAM_PTR_SIZE(overlayEntry);
+        overlaySize = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
         if (overlayEntry->loadedRamAddr != NULL) {
             FaultDrawer_Printf("%3d %08x-%08x %3d %s\n", actorId, overlayEntry->loadedRamAddr,
                                (u32)overlayEntry->loadedRamAddr + overlaySize, overlayEntry->numLoaded, "");
@@ -60,7 +62,7 @@ void ActorOverlayTable_FaultClient(void* arg0, void* arg1) {
     }
 }
 
-void* ActorOverlayTable_FaultAddrConv(void* address, void* param) {
+uintptr_t ActorOverlayTable_FaultAddrConv(uintptr_t address, void* param) {
     uintptr_t addr = address;
     ActorOverlay* actorOvl = &gActorOverlayTable[0];
     size_t ramConv;
@@ -69,7 +71,7 @@ void* ActorOverlayTable_FaultAddrConv(void* address, void* param) {
     ActorId actorId;
 
     for (actorId = 0; actorId < gMaxActorId; actorId++, actorOvl++) {
-        diff = VRAM_PTR_SIZE(actorOvl);
+        diff = (uintptr_t)actorOvl->vramEnd - (uintptr_t)actorOvl->vramStart;
         ramStart = actorOvl->loadedRamAddr;
         ramConv = (uintptr_t)actorOvl->vramStart - (uintptr_t)ramStart;
 
@@ -79,7 +81,8 @@ void* ActorOverlayTable_FaultAddrConv(void* address, void* param) {
             }
         }
     }
-    return NULL;
+
+    return 0;
 }
 
 void ActorOverlayTable_Init(void) {

@@ -40,15 +40,15 @@ void func_80B165E0(BgHakuginSwitch* this, PlayState* play);
 u32 D_80B16AF0;
 
 ActorInit Bg_Hakugin_Switch_InitVars = {
-    ACTOR_BG_HAKUGIN_SWITCH,
-    ACTORCAT_SWITCH,
-    FLAGS,
-    OBJECT_GORONSWITCH,
-    sizeof(BgHakuginSwitch),
-    (ActorFunc)BgHakuginSwitch_Init,
-    (ActorFunc)BgHakuginSwitch_Destroy,
-    (ActorFunc)BgHakuginSwitch_Update,
-    (ActorFunc)BgHakuginSwitch_Draw,
+    /**/ ACTOR_BG_HAKUGIN_SWITCH,
+    /**/ ACTORCAT_SWITCH,
+    /**/ FLAGS,
+    /**/ OBJECT_GORONSWITCH,
+    /**/ sizeof(BgHakuginSwitch),
+    /**/ BgHakuginSwitch_Init,
+    /**/ BgHakuginSwitch_Destroy,
+    /**/ BgHakuginSwitch_Update,
+    /**/ BgHakuginSwitch_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -109,7 +109,7 @@ void func_80B15790(BgHakuginSwitch* this, u16 sfxId) {
 
 void func_80B157C4(BgHakuginSwitch* this, u16 arg1) {
     if (this->unk_1B2 <= 0) {
-        func_800B9010(&this->dyna.actor, arg1);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, arg1);
     }
 }
 
@@ -121,7 +121,7 @@ void BgHakuginSwitch_Init(Actor* thisx, PlayState* play) {
     s32 pad2;
     s32 sp28;
 
-    if (Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCH_FLAG(&this->dyna.actor))) {
         sp30 = true;
     } else {
         sp30 = false;
@@ -228,7 +228,7 @@ void func_80B15B74(BgHakuginSwitch* this, PlayState* play) {
     s32 sp24;
     s32 sp20;
 
-    if (Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCH_FLAG(&this->dyna.actor))) {
         sp2C = 1;
     } else {
         sp2C = 0;
@@ -254,7 +254,7 @@ void func_80B15B74(BgHakuginSwitch* this, PlayState* play) {
     if (this->unk_1B0 > 0) {
         this->unk_1B0--;
         if (sp38->unk_14 & 8) {
-            func_800B9038(&this->dyna.actor, this->unk_1B0);
+            Actor_PlaySfx_FlaggedTimer(&this->dyna.actor, this->unk_1B0);
             if (this->unk_1B0 == 0) {
                 sp24 = true;
                 sp20 = sp28;
@@ -274,9 +274,9 @@ void func_80B15B74(BgHakuginSwitch* this, PlayState* play) {
 
     if (sp24) {
         if (sp20 == 1) {
-            Flags_SetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor));
+            Flags_SetSwitch(play, BGHAKUGINSWITCH_GET_SWITCH_FLAG(&this->dyna.actor));
         } else if (sp20 == 0) {
-            Flags_UnsetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor));
+            Flags_UnsetSwitch(play, BGHAKUGINSWITCH_GET_SWITCH_FLAG(&this->dyna.actor));
         }
 
         D_80B16AF0 = play->gameplayFrames;
@@ -329,7 +329,7 @@ void func_80B15F88(BgHakuginSwitch* this, PlayState* play) {
     BgHakuginSwitchStruct* sp18 = &D_80B1688C[BGHAKUGINSWITCH_GET_7(&this->dyna.actor)];
     s32 phi_v1;
 
-    if (Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCH_FLAG(&this->dyna.actor))) {
         phi_a0 = true;
     } else {
         phi_a0 = false;
@@ -384,9 +384,9 @@ void func_80B161A0(BgHakuginSwitch* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->curCsId)) {
         CutsceneManager_StartWithPlayerCs(this->curCsId, &this->dyna.actor);
         if (this->unk_1BE != 0) {
-            Flags_SetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor));
+            Flags_SetSwitch(play, BGHAKUGINSWITCH_GET_SWITCH_FLAG(&this->dyna.actor));
         } else {
-            Flags_UnsetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor));
+            Flags_UnsetSwitch(play, BGHAKUGINSWITCH_GET_SWITCH_FLAG(&this->dyna.actor));
         }
         this->unk_1BF = 50;
         this->unk_1B4(this, play);
@@ -421,7 +421,7 @@ void func_80B162AC(BgHakuginSwitch* this, PlayState* play) {
     }
 
     if (sp30 == 1) {
-        if (Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor))) {
+        if (Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCH_FLAG(&this->dyna.actor))) {
             sp24 = true;
         }
     }
@@ -465,7 +465,7 @@ void func_80B16494(BgHakuginSwitch* this, PlayState* play) {
 }
 
 void func_80B16520(BgHakuginSwitch* this, PlayState* play) {
-    if (!Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor))) {
+    if (!Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCH_FLAG(&this->dyna.actor))) {
         if (BGHAKUGINSWITCH_GET_7(&this->dyna.actor) == BGHAKUGINSWITCH_GET_7_1) {
             func_80B16180(this, func_80B165A0, 0, this->additionalCsId);
         } else {

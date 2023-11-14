@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "objects/object_bb/object_bb.h"
+#include "overlays/actors/ovl_En_Bb/z_en_bb.h"
 
 struct EnBbfall;
 
@@ -25,8 +26,8 @@ typedef struct EnBbfall {
     /* 0x260 */ f32 drawDmgEffScale;
     /* 0x264 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x268 */ Vec3f flamePos[6];
-    /* 0x2B0 */ Vec3f bodyPartsPos[5];
-    /* 0x2EC */ Vec3f bodyPartsVelocity[5];
+    /* 0x2B0 */ Vec3f bodyPartsPos[BUBBLE_BODYPART_MAX];
+    /* 0x2EC */ Vec3f bodyPartsVelocity[BUBBLE_BODYPART_MAX];
     /* 0x328 */ Gfx* limbDList;
     /* 0x32C */ UNK_TYPE1 unk_32C[0x58];
     /* 0x384 */ ColliderJntSph collider;

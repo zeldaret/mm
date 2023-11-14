@@ -24,15 +24,15 @@ void EnEstone_UpdateEffects(EnEstone* this, PlayState* play);
 void EnEstone_DrawEffects(EnEstone* this, PlayState* play);
 
 ActorInit En_Estone_InitVars = {
-    ACTOR_EN_ESTONE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_EG,
-    sizeof(EnEstone),
-    (ActorFunc)EnEstone_Init,
-    (ActorFunc)EnEstone_Destroy,
-    (ActorFunc)EnEstone_Update,
-    (ActorFunc)EnEstone_Draw,
+    /**/ ACTOR_EN_ESTONE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_EG,
+    /**/ sizeof(EnEstone),
+    /**/ EnEstone_Init,
+    /**/ EnEstone_Destroy,
+    /**/ EnEstone_Update,
+    /**/ EnEstone_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -75,7 +75,7 @@ void EnEstone_Init(Actor* thisx, PlayState* play) {
         this->scale = (Rand_ZeroFloat(1.0f) * 0.005f) + 0.005f;
         this->actor.velocity.y = Rand_ZeroFloat(10.0f) + 15.0f;
         this->actor.gravity = -2.0f;
-    } else {
+    } else { // ENESTONE_TYPE_SMALL
         this->actor.speed = Rand_ZeroFloat(3.0f) + 1.0f;
         this->scale = (Rand_ZeroFloat(1.0f) * 0.003f) + 0.003f;
         this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 7.0f;

@@ -37,15 +37,15 @@ void EnTest7_ArriveCsPart2(EnTest7* this, PlayState* play);
 void EnTest7_ArriveCsPart3(EnTest7* this, PlayState* play);
 
 ActorInit En_Test7_InitVars = {
-    ACTOR_EN_TEST7,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTest7),
-    (ActorFunc)EnTest7_Init,
-    (ActorFunc)EnTest7_Destroy,
-    (ActorFunc)EnTest7_Update,
-    (ActorFunc)EnTest7_Draw,
+    /**/ ACTOR_EN_TEST7,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTest7),
+    /**/ EnTest7_Init,
+    /**/ EnTest7_Destroy,
+    /**/ EnTest7_Update,
+    /**/ EnTest7_Draw,
 };
 
 void EnTest7_SetupPlayerCamFunc(EnTest7* this, EnTest7PlayerAndCameraControl playerCamFunc) {
@@ -451,7 +451,7 @@ void EnTest7_WarpCsPart1(EnTest7* this, PlayState* play) {
 
         EnTest7_SetupAction(this, EnTest7_WarpCsPart2);
         this->flags |= OWL_WARP_FLAGS_20;
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_OPEN);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_OPEN);
         Play_EnableMotionBlur(120);
     }
 }
@@ -495,13 +495,13 @@ void EnTest7_WarpCsPart2(EnTest7* this, PlayState* play) {
 
     if ((this->skeletonInfo.frameCtrl.unk_10 > 20.0f) && !(this->flags & OWL_WARP_FLAGS_40)) {
         this->flags |= OWL_WARP_FLAGS_40;
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_CLOSE);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_CLOSE);
     }
 
     if (this->skeletonInfo.frameCtrl.unk_10 > 42.0f) {
         if (!(this->flags & OWL_WARP_FLAGS_80)) {
             this->flags |= OWL_WARP_FLAGS_80;
-            Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_ROLL);
+            Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_ROLL);
         }
 
         if (Rand_ZeroOne() < 0.3f) {
@@ -606,7 +606,7 @@ void EnTest7_WarpCsPart6(EnTest7* this, PlayState* play) {
     Color_RGB8 ambientColor = { 220, 220, 255 };
 
     if (R_PLAY_FILL_SCREEN_ON) {
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_VANISH);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_VANISH);
         R_PLAY_FILL_SCREEN_ON = false;
         R_PLAY_FILL_SCREEN_R = 0;
         R_PLAY_FILL_SCREEN_G = 0;
@@ -745,10 +745,10 @@ void EnTest7_PlayerAndCameraControl(EnTest7* this, PlayState* play) {
     f32 lerp;
     f32 sixteen = 16.0f;
 
-    if ((this->timer >= 12) && (this->timer < 31)) {
+    if ((this->timer >= 12) && (this->timer <= 30)) {
         lerp = (this->timer - 12) / 18.0f;
         EnTest7_CameraControl1(this, play, lerp);
-    } else if ((this->timer >= 79) && (this->timer < 96)) {
+    } else if ((this->timer >= 79) && (this->timer <= 95)) {
         lerp = (this->timer - 79) / sixteen;
         EnTest7_CameraControl2(this, play, lerp);
     }
@@ -851,7 +851,7 @@ void EnTest7_ArriveCsPart1(EnTest7* this, PlayState* play) {
     subCam->at.y = this->actor.world.pos.y + 40.0f;
     subCam->at.z = this->actor.world.pos.z;
 
-    func_800B9010(&this->actor, NA_SE_PL_WARP_WING_ROLL_2 - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_WARP_WING_ROLL_2 - SFX_FLAG);
     if (this->timer >= 40) {
         this->flags &= ~OWL_WARP_FLAGS_DRAW_LENS_FLARE;
         EnTest7_SetupAction(this, EnTest7_ArriveCsPart2);
@@ -897,7 +897,7 @@ void EnTest7_ArriveCsPart2(EnTest7* this, PlayState* play) {
     Player* player2 = GET_PLAYER(play);
     Vec3f featherPos;
 
-    func_800B9010(&this->actor, NA_SE_PL_WARP_WING_ROLL_2 - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_WARP_WING_ROLL_2 - SFX_FLAG);
 
     featherPos = this->actor.world.pos;
 
@@ -994,6 +994,6 @@ void EnTest7_Draw(Actor* thisx, PlayState* play) {
 
     if (this->flags & OWL_WARP_FLAGS_DRAW_LENS_FLARE) {
         Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, this->actor.world.pos, 70.0f,
-                                  5.0f, 0, 0);
+                                  5.0f, 0, false);
     }
 }

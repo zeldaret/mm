@@ -8,7 +8,7 @@
 #include "objects/object_pr/object_pr.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPr2*)thisx)
 
@@ -82,15 +82,15 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 ActorInit En_Pr2_InitVars = {
-    ACTOR_EN_PR2,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_PR,
-    sizeof(EnPr2),
-    (ActorFunc)EnPr2_Init,
-    (ActorFunc)EnPr2_Destroy,
-    (ActorFunc)EnPr2_Update,
-    (ActorFunc)EnPr2_Draw,
+    /**/ ACTOR_EN_PR2,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_PR,
+    /**/ sizeof(EnPr2),
+    /**/ EnPr2_Init,
+    /**/ EnPr2_Destroy,
+    /**/ EnPr2_Update,
+    /**/ EnPr2_Draw,
 };
 
 static AnimationHeader* sAnimations[] = {
@@ -99,7 +99,7 @@ static AnimationHeader* sAnimations[] = {
     &object_pr_Anim_003904,
 };
 
-u8 D_80A75C38[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP };
+u8 D_80A75C38[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE };
 
 s16 D_80A75C3C[] = {
     0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0,
@@ -108,14 +108,14 @@ s16 D_80A75C3C[] = {
 void EnPr2_Init(Actor* thisx, PlayState* play) {
     EnPr2* this = THIS;
 
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->actor.hintId = TATL_HINT_ID_SKULLFISH;
     this->unk_1EC = 255;
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &object_pr_Skel_004188, &object_pr_Anim_004340, this->jointTable,
-                       this->morphtable, 5);
+                       this->morphTable, 5);
     this->unk_1E0 = ENPR2_GET_F(&this->actor);
     this->actor.colChkInfo.mass = 10;
     Math_Vec3f_Copy(&this->unk_228, &this->actor.home.pos);
@@ -518,7 +518,7 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
 void func_80A751B4(EnPr2* this) {
     this->unk_1EC = 0;
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (this->unk_1E0 < 10) {
         func_80A74510(this, 2);
     } else {

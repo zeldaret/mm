@@ -6,7 +6,7 @@
 
 #include "z_en_ma4.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnMa4*)thisx)
 
@@ -55,15 +55,15 @@ typedef enum {
 } EnMa4State;
 
 ActorInit En_Ma4_InitVars = {
-    ACTOR_EN_MA4,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MA1,
-    sizeof(EnMa4),
-    (ActorFunc)EnMa4_Init,
-    (ActorFunc)EnMa4_Destroy,
-    (ActorFunc)EnMa4_Update,
-    (ActorFunc)EnMa4_Draw,
+    /**/ ACTOR_EN_MA4,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MA1,
+    /**/ sizeof(EnMa4),
+    /**/ EnMa4_Init,
+    /**/ EnMa4_Destroy,
+    /**/ EnMa4_Update,
+    /**/ EnMa4_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -193,7 +193,7 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->interactInfo.talkState = NPC_TALK_STATE_IDLE;
     this->unk_334 = 0;
     this->hasBow = true;
@@ -350,7 +350,7 @@ void EnMa4_Wait(EnMa4* this, PlayState* play) {
         EnMa4_SetupDialogueHandler(this);
     } else if (this->type != MA4_TYPE_ALIENS_WON || ABS_ALT(yaw) < 0x4000) {
         if (!(player->stateFlags1 & PLAYER_STATE1_800000)) {
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferTalk(&this->actor, play, 100.0f);
         }
     }
 }
@@ -361,11 +361,11 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
         switch (this->textId) {
             case 0x3339:
                 if (play->msgCtx.choiceIndex == 0) {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Message_StartTextbox(play, 0x333A, &this->actor);
                     this->textId = 0x333A;
                 } else {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Message_StartTextbox(play, 0x333B, &this->actor);
                     this->textId = 0x333B;
                 }
@@ -373,12 +373,12 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
 
             case 0x3341:
                 if (play->msgCtx.choiceIndex == 0) {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     SET_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM);
                     Message_StartTextbox(play, 0x3343, &this->actor);
                     this->textId = 0x3343;
                 } else {
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     EnMa4_SetFaceExpression(this, 0, 1);
                     Message_StartTextbox(play, 0x3342, &this->actor);
                     this->textId = 0x3342;
@@ -389,12 +389,12 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
 
             case 0x3346:
                 if (play->msgCtx.choiceIndex == 0) {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     SET_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM);
                     Message_StartTextbox(play, 0x3343, &this->actor);
                     this->textId = 0x3343;
                 } else {
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     EnMa4_SetFaceExpression(this, 0, 1);
                     Message_StartTextbox(play, 0x3342, &this->actor);
                     this->textId = 0x3342;
@@ -403,11 +403,11 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
 
             case 0x3347:
                 if (play->msgCtx.choiceIndex == 0) {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Message_StartTextbox(play, 0x3349, &this->actor);
                     this->textId = 0x3349;
                 } else {
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     Message_StartTextbox(play, 0x3348, &this->actor);
                     this->textId = 0x3348;
                     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
@@ -418,7 +418,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                 if (play->msgCtx.choiceIndex == 0) { // Yes
                     s32 aux;
 
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Message_StartTextbox(play, 0x334E, &this->actor);
                     this->textId = 0x334E;
                     if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
@@ -426,7 +426,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
                     }
                     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 } else { // No.
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     EnMa4_SetFaceExpression(this, 0, 0);
                     Message_StartTextbox(play, 0x334C, &this->actor);
                     this->textId = 0x334C;
@@ -435,11 +435,11 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
 
             case 0x3354:
                 if (play->msgCtx.choiceIndex == 0) {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Message_StartTextbox(play, 0x3349, &this->actor);
                     this->textId = 0x3349;
                 } else {
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     EnMa4_SetFaceExpression(this, 1, 0);
                     Message_StartTextbox(play, 0x3355, &this->actor);
                     this->textId = 0x3355;
@@ -450,18 +450,18 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
             case 0x3356:
                 // "Try again?"
                 if (play->msgCtx.choiceIndex == 0) { // Yes
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Message_CloseTextbox(play);
                     EnMa4_SetupBeginHorsebackGame(this);
                 } else { // No
                     if (this->type == MA4_TYPE_ALIENS_DEFEATED) {
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         EnMa4_SetFaceExpression(this, 3, 3);
                         Message_StartTextbox(play, 0x3357, &this->actor);
                         this->textId = 0x3357;
                         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                     } else {
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         EnMa4_SetFaceExpression(this, 4, 2);
                         Message_StartTextbox(play, 0x335B, &this->actor);
                         this->textId = 0x335B;
@@ -472,11 +472,11 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
 
             case 0x3359:
                 if (play->msgCtx.choiceIndex == 0) {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Message_StartTextbox(play, 0x3349, &this->actor);
                     this->textId = 0x3349;
                 } else {
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     EnMa4_SetFaceExpression(this, 4, 2);
                     Message_StartTextbox(play, 0x335A, &this->actor);
                     this->textId = 0x335A;
@@ -608,7 +608,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                 break;
 
             case 0x3358:
-                if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) || !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
+                if ((GET_PLAYER_FORM != PLAYER_FORM_HUMAN) || !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
                     Message_StartTextbox(play, 0x335C, &this->actor);
                     this->textId = 0x335C;
                     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
@@ -683,7 +683,7 @@ void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, PlayState* play) {
         Message_StartTextbox(play, 0x336E, &this->actor);
         this->actionFunc = EnMa4_HorsebackGameTalking;
     } else if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] < SECONDS_TO_TIMER(115)) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -839,7 +839,7 @@ void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         player->stateFlags1 |= PLAYER_STATE1_20;
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
         sCueId = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
@@ -861,7 +861,7 @@ void EnMa4_EndEponasSongCs(EnMa4* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         EnMa4_SetupDialogueHandler(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -883,7 +883,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
 
     switch (this->type) {
         case MA4_TYPE_DAY1:
-            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_80)) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);
@@ -916,9 +916,9 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x336D;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
+                    if ((s32)time < HS_GET_HORSE_BACK_BALLOON_TIME()) {
                         // [Score] New record!
-                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
+                        HS_SET_HORSE_BACK_BALLOON_TIME(time);
                         EnMa4_SetFaceExpression(this, 0, 3);
                         Message_StartTextbox(play, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -939,7 +939,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
             break;
 
         case MA4_TYPE_ALIENS_DEFEATED:
-            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_80)) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);
@@ -960,8 +960,8 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x3356;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
-                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
+                    if ((s32)time < HS_GET_HORSE_BACK_BALLOON_TIME()) {
+                        HS_SET_HORSE_BACK_BALLOON_TIME(time);
                         EnMa4_SetFaceExpression(this, 0, 3);
                         Message_StartTextbox(play, 0x3350, &this->actor);
                         this->textId = 0x3350;
@@ -987,9 +987,9 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x3356;
                 } else {
                     time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-                    if ((s32)time < (s32)gSaveContext.save.saveInfo.horseBackBalloonHighScore) {
+                    if ((s32)time < HS_GET_HORSE_BACK_BALLOON_TIME()) {
                         // New record
-                        gSaveContext.save.saveInfo.horseBackBalloonHighScore = time;
+                        HS_SET_HORSE_BACK_BALLOON_TIME(time);
                         Message_StartTextbox(play, 0x335D, &this->actor);
                         this->textId = 0x335D;
                     } else {
@@ -1083,8 +1083,8 @@ void EnMa4_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(sEyeTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_K0(sMouthTextures[this->mouthTexIndex]));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMa4_OverrideLimbDraw, EnMa4_PostLimbDraw, &this->actor);

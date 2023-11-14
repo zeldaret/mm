@@ -28,15 +28,15 @@ void BgKin2Picture_SetupDoNothing(BgKin2Picture* this);
 void BgKin2Picture_DoNothing(BgKin2Picture* this, PlayState* play);
 
 ActorInit Bg_Kin2_Picture_InitVars = {
-    ACTOR_BG_KIN2_PICTURE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_KIN2_OBJ,
-    sizeof(BgKin2Picture),
-    (ActorFunc)BgKin2Picture_Init,
-    (ActorFunc)BgKin2Picture_Destroy,
-    (ActorFunc)BgKin2Picture_Update,
-    (ActorFunc)BgKin2Picture_Draw,
+    /**/ ACTOR_BG_KIN2_PICTURE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_KIN2_OBJ,
+    /**/ sizeof(BgKin2Picture),
+    /**/ BgKin2Picture_Init,
+    /**/ BgKin2Picture_Destroy,
+    /**/ BgKin2Picture_Update,
+    /**/ BgKin2Picture_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[] = {
@@ -105,7 +105,7 @@ void BgKin2Picture_SpawnSkulltula(BgKin2Picture* this, PlayState* play2) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.home.pos.x,
                         this->dyna.actor.home.pos.y + 23.0f, this->dyna.actor.home.pos.z, 0,
                         this->dyna.actor.home.rot.y, 0, skulltulaSpawnParams)) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
     }
 }

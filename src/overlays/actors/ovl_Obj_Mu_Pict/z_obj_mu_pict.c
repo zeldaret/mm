@@ -6,7 +6,7 @@
 
 #include "z_obj_mu_pict.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((ObjMuPict*)thisx)
 
@@ -26,15 +26,15 @@ void func_80C06DC8(ObjMuPict* this, PlayState* play);
 void func_80C06E88(ObjMuPict* this, PlayState* play);
 
 ActorInit Obj_Mu_Pict_InitVars = {
-    ACTOR_OBJ_MU_PICT,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjMuPict),
-    (ActorFunc)ObjMuPict_Init,
-    (ActorFunc)ObjMuPict_Destroy,
-    (ActorFunc)ObjMuPict_Update,
-    (ActorFunc)ObjMuPict_Draw,
+    /**/ ACTOR_OBJ_MU_PICT,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjMuPict),
+    /**/ ObjMuPict_Init,
+    /**/ ObjMuPict_Destroy,
+    /**/ ObjMuPict_Update,
+    /**/ ObjMuPict_Draw,
 };
 
 void ObjMuPict_Init(Actor* thisx, PlayState* play) {
@@ -46,7 +46,7 @@ void ObjMuPict_Init(Actor* thisx, PlayState* play) {
 
     func_80C06D90(this, play);
     this->unk14A = OBJMUPICT_GET_F000(&this->actor);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
     this->unk148 = 0;
@@ -76,7 +76,7 @@ void func_80C06B70(ObjMuPict* this, PlayState* play) {
             func_80C06C54(this);
         }
     } else if (ABS_ALT(yawDiff) < 0x2AAA) {
-        func_800B8614(&this->actor, play, 80.0f);
+        Actor_OfferTalk(&this->actor, play, 80.0f);
     }
 }
 

@@ -19,15 +19,15 @@ void EffZoraband_Draw(Actor* thisx, PlayState* play2);
 void EffZoraband_MikauFadeOut(EffZoraband* this, PlayState* play);
 
 ActorInit Eff_Zoraband_InitVars = {
-    ACTOR_EFF_ZORABAND,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_ZORABAND,
-    sizeof(EffZoraband),
-    (ActorFunc)EffZoraband_Init,
-    (ActorFunc)EffZoraband_Destroy,
-    (ActorFunc)EffZoraband_Update,
-    (ActorFunc)EffZoraband_Draw,
+    /**/ ACTOR_EFF_ZORABAND,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_ZORABAND,
+    /**/ sizeof(EffZoraband),
+    /**/ EffZoraband_Init,
+    /**/ EffZoraband_Destroy,
+    /**/ EffZoraband_Update,
+    /**/ EffZoraband_Draw,
 };
 
 void EffZoraband_Init(Actor* thisx, PlayState* play) {
@@ -55,7 +55,7 @@ void EffZoraband_MikauFadeOut(EffZoraband* this, PlayState* play) {
         }
     }
     if ((this->actor.home.rot.z != 0) && (this->actor.draw != NULL)) {
-        func_800B9010(&this->actor, NA_SE_EV_UFO_LIGHT_BEAM - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_UFO_LIGHT_BEAM - SFX_FLAG);
     }
     if (this->stateFlags & 2) {
         if (this->alpha < 240) {

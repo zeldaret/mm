@@ -19,21 +19,21 @@ void func_80973D3C(ObjRoomtimer* this, PlayState* play);
 void func_80973DE0(ObjRoomtimer* this, PlayState* play);
 
 ActorInit Obj_Roomtimer_InitVars = {
-    ACTOR_OBJ_ROOMTIMER,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjRoomtimer),
-    (ActorFunc)ObjRoomtimer_Init,
-    (ActorFunc)ObjRoomtimer_Destroy,
-    (ActorFunc)ObjRoomtimer_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_ROOMTIMER,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjRoomtimer),
+    /**/ ObjRoomtimer_Init,
+    /**/ ObjRoomtimer_Destroy,
+    /**/ ObjRoomtimer_Update,
+    /**/ NULL,
 };
 
 void ObjRoomtimer_Init(Actor* thisx, PlayState* play) {
     ObjRoomtimer* this = THIS;
 
-    this->switchFlag = ROOMTIMER_GET_SWITCHFLAG(thisx);
+    this->switchFlag = ROOMTIMER_GET_SWITCH_FLAG(thisx);
     this->actor.params &= 0x1FF;
 
     if (this->actor.params != 0x1FF) {
@@ -67,7 +67,7 @@ void func_80973D3C(ObjRoomtimer* this, PlayState* play) {
         CutsceneManager_Queue(this->actor.csId);
         this->actionFunc = func_80973DE0;
     } else if ((this->actor.params != 0x1FF) && (gSaveContext.timerStates[TIMER_ID_MINIGAME_2] == TIMER_STATE_OFF)) {
-        play_sound(NA_SE_OC_ABYSS);
+        Audio_PlaySfx(NA_SE_OC_ABYSS);
         func_80169EFC(&play->state);
         Actor_Kill(&this->actor);
     }

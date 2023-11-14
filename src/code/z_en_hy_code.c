@@ -11,51 +11,100 @@
 #include "objects/object_boj/object_boj.h"
 #include "objects/object_os_anime/object_os_anime.h"
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gMamamuYanUnusedIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_boj_Anim_0008C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBbaIdleHoldingBagAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_bji_Anim_000FDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_bji_Anim_000AB0, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_bji_Anim_00066C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_00071C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_os_anime_Anim_001EE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_00DED8, 1.5f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_boj_Anim_00F920, 1.5f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_boj_Anim_00FC1C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_00FEE4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_010330, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_00FC1C, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_boj_Anim_00FEE4, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_boj_Anim_010330, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_boj_Anim_005D9C, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
+static AnimationInfoS sAnimationInfo[ENHY_ANIM_MAX] = {
+    { &gMamamuYanUnusedIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },    // ENHY_ANIM_AOB_0
+    { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_1
+    { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_2
+    { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_3
+    { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_4
+    { &object_boj_Anim_0008C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_5
+    { &gBbaIdleHoldingBagAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BBA_6
+    { &object_bji_Anim_000FDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BJI_7
+    { &object_bji_Anim_000AB0, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BJI_8
+    { &object_bji_Anim_00066C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BJI_9
+    { &object_boj_Anim_00071C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_10
+    { &object_os_anime_Anim_001EE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENHY_ANIM_OS_ANIME_11
+    { &object_boj_Anim_00DED8, 1.5f, 0, -1, ANIMMODE_ONCE, 0 },      // ENHY_ANIM_BOJ_12
+    { &object_boj_Anim_00F920, 1.5f, 0, -1, ANIMMODE_ONCE, 0 },      // ENHY_ANIM_BOJ_13
+    { &object_boj_Anim_00FC1C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_14
+    { &object_boj_Anim_00FEE4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_15
+    { &object_boj_Anim_010330, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_16
+    { &object_boj_Anim_00FC1C, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_17
+    { &object_boj_Anim_00FEE4, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_18
+    { &object_boj_Anim_010330, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_19
+    { &object_boj_Anim_005D9C, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_20
 };
 
-s8 gEnHyBodyParts[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2 };
+s8 gEnHyLimbToBodyParts[ENHY_LIMB_MAX] = {
+    BODYPART_NONE,    // ENHY_LIMB_NONE
+    ENHY_BODYPART_1,  // ENHY_LIMB_PELVIS
+    ENHY_BODYPART_12, // ENHY_LIMB_LEFT_THIGH
+    ENHY_BODYPART_13, // ENHY_LIMB_LEFT_SHIN
+    ENHY_BODYPART_14, // ENHY_LIMB_LEFT_FOOT
+    ENHY_BODYPART_9,  // ENHY_LIMB_RIGHT_THIGH
+    ENHY_BODYPART_10, // ENHY_LIMB_RIGHT_SHIN
+    ENHY_BODYPART_11, // ENHY_LIMB_RIGHT_FOOT
+    ENHY_BODYPART_0,  // ENHY_LIMB_TORSO
+    ENHY_BODYPART_6,  // ENHY_LIMB_LEFT_UPPER_ARM
+    ENHY_BODYPART_7,  // ENHY_LIMB_LEFT_FOREARM
+    ENHY_BODYPART_8,  // ENHY_LIMB_LEFT_HAND
+    ENHY_BODYPART_3,  // ENHY_LIMB_RIGHT_UPPER_ARM
+    ENHY_BODYPART_4,  // ENHY_LIMB_RIGHT_FOREARM
+    ENHY_BODYPART_5,  // ENHY_LIMB_RIGHT_HAND
+    ENHY_BODYPART_2,  // ENHY_LIMB_HEAD
+};
 
-s8 gEnHyParentBodyParts[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
+s8 gEnHyParentShadowBodyParts[ENHY_BODYPART_MAX] = {
+    ENHY_BODYPART_0,  // ENHY_BODYPART_0
+    ENHY_BODYPART_0,  // ENHY_BODYPART_1
+    ENHY_BODYPART_0,  // ENHY_BODYPART_2
+    ENHY_BODYPART_0,  // ENHY_BODYPART_3
+    ENHY_BODYPART_3,  // ENHY_BODYPART_4
+    ENHY_BODYPART_4,  // ENHY_BODYPART_5
+    ENHY_BODYPART_0,  // ENHY_BODYPART_6
+    ENHY_BODYPART_6,  // ENHY_BODYPART_7
+    ENHY_BODYPART_7,  // ENHY_BODYPART_8
+    ENHY_BODYPART_0,  // ENHY_BODYPART_9
+    ENHY_BODYPART_9,  // ENHY_BODYPART_10
+    ENHY_BODYPART_10, // ENHY_BODYPART_11
+    ENHY_BODYPART_0,  // ENHY_BODYPART_12
+    ENHY_BODYPART_12, // ENHY_BODYPART_13
+    ENHY_BODYPART_13, // ENHY_BODYPART_14
+};
 
-u8 gEnHyShadowSizes[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+u8 gEnHyShadowSizes[ENHY_BODYPART_MAX] = {
+    0, // ENHY_BODYPART_0
+    0, // ENHY_BODYPART_1
+    0, // ENHY_BODYPART_2
+    0, // ENHY_BODYPART_3
+    0, // ENHY_BODYPART_4
+    0, // ENHY_BODYPART_5
+    0, // ENHY_BODYPART_6
+    0, // ENHY_BODYPART_7
+    0, // ENHY_BODYPART_8
+    0, // ENHY_BODYPART_9
+    0, // ENHY_BODYPART_10
+    0, // ENHY_BODYPART_11
+    0, // ENHY_BODYPART_12
+    0, // ENHY_BODYPART_13
+    0, // ENHY_BODYPART_14
+};
 
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
-    s16 frameCount;
-    s32 isChanged = false;
+    s16 endFrame;
+    s32 didAnimChange = false;
 
-    if (animIndex >= ENHY_ANIM_AOB_0 && animIndex < ENHY_ANIM_MAX) {
-        isChanged = true;
-        frameCount = sAnimationInfo[animIndex].frameCount;
-        if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(&sAnimationInfo[animIndex].animation->common);
+    if ((animIndex > ENHY_ANIM_NONE) && (animIndex < ENHY_ANIM_MAX)) {
+        didAnimChange = true;
+        endFrame = sAnimationInfo[animIndex].frameCount;
+        if (endFrame < 0) {
+            endFrame = Animation_GetLastFrame(&sAnimationInfo[animIndex].animation->common);
         }
         Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
-                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].startFrame, endFrame, sAnimationInfo[animIndex].mode,
                          sAnimationInfo[animIndex].morphFrames);
     }
-    return isChanged;
+    return didAnimChange;
 }
 
 EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
@@ -84,7 +133,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
 }
 
 void EnHy_ChangeObjectAndAnim(EnHy* enHy, PlayState* play, s16 animIndex) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[enHy->animObjIndex].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
     EnHy_ChangeAnim(&enHy->skelAnime, animIndex);
 }
 
@@ -92,7 +141,7 @@ s32 EnHy_UpdateSkelAnime(EnHy* enHy, PlayState* play) {
     s32 isUpdated = false;
 
     if (enHy->actor.draw != NULL) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[enHy->animObjIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
         SkelAnime_Update(&enHy->skelAnime);
         isUpdated = true;
     }
@@ -112,14 +161,14 @@ void EnHy_Blink(EnHy* enHy, s32 eyeTexMaxIndex) {
 s32 EnHy_Init(EnHy* enHy, PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex) {
     s32 isInitialized = false;
 
-    if ((SubS_IsObjectLoaded(enHy->animObjIndex, play) == true) &&
-        (SubS_IsObjectLoaded(enHy->headObjIndex, play) == true) &&
-        (SubS_IsObjectLoaded(enHy->skelUpperObjIndex, play) == true) &&
-        (SubS_IsObjectLoaded(enHy->skelLowerObjIndex, play) == true)) {
-        enHy->actor.objBankIndex = enHy->skelLowerObjIndex;
+    if ((SubS_IsObjectLoaded(enHy->animObjectSlot, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->headObjectSlot, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelUpperObjectSlot, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelLowerObjectSlot, play) == true)) {
+        enHy->actor.objectSlot = enHy->skelLowerObjectSlot;
         isInitialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[enHy->actor.objBankIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->actor.objectSlot].segment);
         SkelAnime_InitFlex(play, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
                            ENHY_LIMB_MAX);
         EnHy_ChangeObjectAndAnim(enHy, play, animIndex);
@@ -182,7 +231,7 @@ s32 func_800F0DD4(EnHy* enHy, PlayState* play, s16 arg2, s16 arg3) {
             enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->knobDoor.dyna.actor.world.pos);
             enHy->actor.world.rot.y = enHy->actor.shape.rot.y;
             enHy->actor.gravity = 0.0f;
-            enHy->actor.flags &= ~ACTOR_FLAG_1;
+            enHy->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         }
     }
     return ret;
@@ -190,7 +239,7 @@ s32 func_800F0DD4(EnHy* enHy, PlayState* play, s16 arg2, s16 arg3) {
 
 s32 EnHy_SetPointFowards(EnHy* enHy, PlayState* play, f32 gravity, s16 animIndex) {
     enHy->actor.gravity = gravity;
-    enHy->actor.flags |= ACTOR_FLAG_1;
+    enHy->actor.flags |= ACTOR_FLAG_TARGETABLE;
     EnHy_ChangeObjectAndAnim(enHy, play, animIndex);
     enHy->curPoint++;
     return false;

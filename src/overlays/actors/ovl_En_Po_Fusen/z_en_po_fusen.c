@@ -5,6 +5,7 @@
  */
 
 #include "z_en_po_fusen.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Ma4/z_en_ma4.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
@@ -25,15 +26,15 @@ void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play);
 s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Po_Fusen_InitVars = {
-    ACTOR_EN_PO_FUSEN,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_PO_FUSEN,
-    sizeof(EnPoFusen),
-    (ActorFunc)EnPoFusen_Init,
-    (ActorFunc)EnPoFusen_Destroy,
-    (ActorFunc)EnPoFusen_Update,
-    (ActorFunc)EnPoFusen_Draw,
+    /**/ ACTOR_EN_PO_FUSEN,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_PO_FUSEN,
+    /**/ sizeof(EnPoFusen),
+    /**/ EnPoFusen_Init,
+    /**/ EnPoFusen_Destroy,
+    /**/ EnPoFusen_Update,
+    /**/ EnPoFusen_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -101,7 +102,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     f32 flyingHeightMin;
 
     this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = 0.007f;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
     Collider_InitSphere(play, &this->collider);
@@ -239,7 +240,7 @@ void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
 
 void EnPoFusen_Pop(EnPoFusen* this, PlayState* play) {
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y + 20.0f,
-                this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
+                this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_PARAMS(CLEAR_TAG_POP));
     Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_Kill(&this->actor);
 }

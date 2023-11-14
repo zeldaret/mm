@@ -1,9 +1,12 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "fault.h"
 #include "stack.h"
 #include "stackcheck.h"
 #include "system_malloc.h"
 #include "z64thread.h"
+#include "sys_flashrom.h"
+#include "PR/os_internal_flash.h"
 
 OSMesgQueue sFlashromMesgQueue;
 OSMesg sFlashromMesg[1];
@@ -80,7 +83,7 @@ s32 SysFlashrom_ReadData(void* addr, u32 pageNum, u32 pageCount) {
     if (!SysFlashrom_IsInit()) {
         return -1;
     }
-    osInvalDCache(addr, pageCount * FLASH_PAGE_SIZE);
+    osInvalDCache(addr, pageCount * FLASH_BLOCK_SIZE);
     osFlashReadArray(&msg, OS_MESG_PRI_NORMAL, pageNum, addr, pageCount, &sFlashromMesgQueue);
     osRecvMesg(&sFlashromMesgQueue, NULL, OS_MESG_BLOCK);
     return 0;
@@ -102,12 +105,12 @@ s32 SysFlashrom_ExecWrite(void* addr, u32 pageNum, u32 pageCount) {
         return -1;
     }
     // Ensure the page is always aligned to a sector boundary.
-    if ((pageNum % FLASH_PAGE_SIZE) != 0) {
+    if ((pageNum % FLASH_BLOCK_SIZE) != 0) {
         Fault_AddHungupAndCrash("../sys_flashrom.c", 275);
     }
-    osWritebackDCache(addr, pageCount * FLASH_PAGE_SIZE);
+    osWritebackDCache(addr, pageCount * FLASH_BLOCK_SIZE);
     for (i = 0; i < pageCount; i++) {
-        osFlashWriteBuffer(&msg, OS_MESG_PRI_NORMAL, (u8*)addr + i * FLASH_PAGE_SIZE, &sFlashromMesgQueue);
+        osFlashWriteBuffer(&msg, OS_MESG_PRI_NORMAL, (u8*)addr + i * FLASH_BLOCK_SIZE, &sFlashromMesgQueue);
         osRecvMesg(&sFlashromMesgQueue, NULL, OS_MESG_BLOCK);
         result = osFlashWriteArray(i + pageNum);
         if (result != 0) {
@@ -124,7 +127,7 @@ s32 SysFlashrom_AttemptWrite(void* addr, u32 pageNum, u32 pageCount) {
     if (!SysFlashrom_IsInit()) {
         return -1;
     }
-    osWritebackDCache(addr, pageCount * FLASH_PAGE_SIZE);
+    osWritebackDCache(addr, pageCount * FLASH_BLOCK_SIZE);
     i = 0;
 failRetry:
     result = SysFlashrom_EraseSector(pageNum);
@@ -152,7 +155,7 @@ s32 SysFlashrom_NeedsToErase(void* data, void* addr, u32 pageCount) {
     u32 size;
     u32 i;
 
-    for (i = 0; i < pageCount * FLASH_PAGE_SIZE; i += 4) {
+    for (i = 0; i < pageCount * FLASH_BLOCK_SIZE; i += 4) {
         if ((*(s32*)data & *(s32*)addr) != *(s32*)addr) {
             return false;
         }
@@ -168,7 +171,7 @@ s32 SysFlashrom_WriteData(void* addr, u32 pageNum, u32 pageCount) {
     if (!SysFlashrom_IsInit()) {
         return -1;
     }
-    size = pageCount * FLASH_PAGE_SIZE;
+    size = pageCount * FLASH_BLOCK_SIZE;
     data = SystemArena_Malloc(size);
     if (data == NULL) {
         ret = SysFlashrom_AttemptWrite(addr, pageNum, pageCount);
@@ -203,12 +206,12 @@ void SysFlashrom_ThreadEntry(void* arg) {
     switch (req->requestType) {
         case FLASHROM_REQUEST_WRITE:
             req->response = SysFlashrom_WriteData(req->addr, req->pageNum, req->pageCount);
-            osSendMesg(&req->messageQueue, req->response, OS_MESG_BLOCK);
+            osSendMesg(&req->messageQueue, (OSMesg)req->response, OS_MESG_BLOCK);
             break;
 
         case FLASHROM_REQUEST_READ:
             req->response = SysFlashrom_ReadData(req->addr, req->pageNum, req->pageCount);
-            osSendMesg(&req->messageQueue, req->response, OS_MESG_BLOCK);
+            osSendMesg(&req->messageQueue, (OSMesg)req->response, OS_MESG_BLOCK);
             break;
     }
 }

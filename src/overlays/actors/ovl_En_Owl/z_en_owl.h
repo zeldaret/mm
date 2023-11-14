@@ -2,6 +2,7 @@
 #define Z_EN_OWL_H
 
 #include "global.h"
+#include "objects/object_owl/object_owl.h"
 
 struct EnOwl;
 
@@ -10,7 +11,7 @@ typedef void (*EnOwlFunc)(struct EnOwl*);
 
 #define ENOWL_GET_F000(thisx) (((thisx)->params & 0xF000) >> 0xC)
 #define ENOWL_GET_TYPE(thisx) (((thisx)->params & 0xF80) >> 7)
-#define ENOWL_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define ENOWL_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 typedef enum {
     /* 0x001 */ ENOWL_GET_TYPE_1 = 1,
@@ -23,12 +24,12 @@ typedef enum {
 typedef struct EnOwl {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider;
-    /* 0x190 */ SkelAnime skelAnime1;
-    /* 0x1D4 */ Vec3s jointTable1[21];
-    /* 0x252 */ Vec3s morphTable1[21];
-    /* 0x2D0 */ SkelAnime skelAnime2;
-    /* 0x314 */ Vec3s jointTable2[16];
-    /* 0x374 */ Vec3s morphTable2[16];
+    /* 0x190 */ SkelAnime skelAnimeFlying;
+    /* 0x1D4 */ Vec3s jointTableFlying[OWL_FLYING_LIMB_MAX];
+    /* 0x252 */ Vec3s morphTableFlying[OWL_FLYING_LIMB_MAX];
+    /* 0x2D0 */ SkelAnime skelAnimePerching;
+    /* 0x314 */ Vec3s jointTablePerching[OWL_PERCHING_LIMB_MAX];
+    /* 0x374 */ Vec3s morphTablePerching[OWL_PERCHING_LIMB_MAX];
     /* 0x3D4 */ SkelAnime* skelAnime3;
     /* 0x3D8 */ s16 unk_3D8;
     /* 0x3DA */ s16 unk_3DA;

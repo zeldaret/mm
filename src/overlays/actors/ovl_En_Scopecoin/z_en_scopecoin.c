@@ -17,15 +17,15 @@ void EnScopecoin_Update(Actor* thisx, PlayState* play);
 void EnScopecoin_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Scopecoin_InitVars = {
-    ACTOR_EN_SCOPECOIN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnScopecoin),
-    (ActorFunc)EnScopecoin_Init,
-    (ActorFunc)EnScopecoin_Destroy,
-    (ActorFunc)EnScopecoin_Update,
-    (ActorFunc)EnScopecoin_Draw,
+    /**/ ACTOR_EN_SCOPECOIN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnScopecoin),
+    /**/ EnScopecoin_Init,
+    /**/ EnScopecoin_Destroy,
+    /**/ EnScopecoin_Update,
+    /**/ EnScopecoin_Draw,
 };
 
 void EnScopecoin_Spin(EnScopecoin* this, PlayState* play) {

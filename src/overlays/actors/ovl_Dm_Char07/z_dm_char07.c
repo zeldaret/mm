@@ -19,15 +19,15 @@ void DmChar07_Draw(Actor* thisx, PlayState* play);
 void DmChar07_DoNothing(DmChar07* this, PlayState* play);
 
 ActorInit Dm_Char07_InitVars = {
-    ACTOR_DM_CHAR07,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_MILKBAR,
-    sizeof(DmChar07),
-    (ActorFunc)DmChar07_Init,
-    (ActorFunc)DmChar07_Destroy,
-    (ActorFunc)DmChar07_Update,
-    (ActorFunc)DmChar07_Draw,
+    /**/ ACTOR_DM_CHAR07,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_MILKBAR,
+    /**/ sizeof(DmChar07),
+    /**/ DmChar07_Init,
+    /**/ DmChar07_Destroy,
+    /**/ DmChar07_Update,
+    /**/ DmChar07_Draw,
 };
 
 void DmChar07_SetupAction(DmChar07* this, DmChar07ActionFunc actionFunc) {
@@ -81,6 +81,7 @@ void DmChar07_Draw(Actor* thisx, PlayState* play) {
         case DMCHAR07_STAGE:
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_002CD0);
             break;
+
         case DMCHAR07_CREDITS_STAGE:
             AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_milkbar_Matanimheader_0105F8));
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_007918);
@@ -90,6 +91,7 @@ void DmChar07_Draw(Actor* thisx, PlayState* play) {
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_001210);
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_0016B8);
             break;
+
         case DMCHAR07_SPOTLIGHTS:
             if (this->spotlightFlags & DMCHAR07_STAGE_RIGHT_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000240);
@@ -107,17 +109,23 @@ void DmChar07_Draw(Actor* thisx, PlayState* play) {
                 gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_0016B8);
             }
             break;
+
         case DMCHAR07_DISHES:
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_010D68);
+            break;
+
+        default:
             break;
     }
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
     switch (this->dyna.actor.params) {
         case DMCHAR07_STAGE:
             gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_002BA0);
             break;
+
         case DMCHAR07_CREDITS_STAGE:
             gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_0076A0);
             gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_000100);
@@ -126,6 +134,7 @@ void DmChar07_Draw(Actor* thisx, PlayState* play) {
             gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_0010D0);
             gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_0015E0);
             break;
+
         case DMCHAR07_SPOTLIGHTS:
             if (this->spotlightFlags & DMCHAR07_STAGE_RIGHT_SPOTLIGHT) {
                 gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000100);
@@ -143,7 +152,11 @@ void DmChar07_Draw(Actor* thisx, PlayState* play) {
                 gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_0015E0);
             }
             break;
+
         case DMCHAR07_DISHES:
+            break;
+
+        default:
             break;
     }
 

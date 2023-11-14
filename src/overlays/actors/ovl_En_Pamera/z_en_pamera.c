@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPamera*)thisx)
 
@@ -70,15 +70,15 @@ void func_80BDA2E0(EnPamera* this, PlayState* play);
 void func_80BDA344(Actor* thisx, PlayState* play);
 
 ActorInit En_Pamera_InitVars = {
-    ACTOR_EN_PAMERA,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_PAMERA,
-    sizeof(EnPamera),
-    (ActorFunc)EnPamera_Init,
-    (ActorFunc)EnPamera_Destroy,
-    (ActorFunc)EnPamera_Update,
-    (ActorFunc)EnPamera_Draw,
+    /**/ ACTOR_EN_PAMERA,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_PAMERA,
+    /**/ sizeof(EnPamera),
+    /**/ EnPamera_Init,
+    /**/ EnPamera_Destroy,
+    /**/ EnPamera_Update,
+    /**/ EnPamera_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -140,7 +140,7 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit2);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->unk_312 = 0;
     this->unk_310 = 0;
     this->unk_314 = 0;
@@ -233,7 +233,7 @@ void EnPamera_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80BD8700(EnPamera* this) {
     this->hideInisdeTimer = 0;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80BD8758;
 }
@@ -275,7 +275,7 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
 
 void func_80BD8908(EnPamera* this) {
     this->actor.draw = EnPamera_Draw;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80BD8964;
 }
@@ -473,7 +473,7 @@ void func_80BD9338(EnPamera* this, PlayState* play) {
     func_80BD84F0(this, play);
     actor = this->actor.child;
     if ((actor != NULL) && (actor->id == ACTOR_EN_DOOR)) {
-        ((EnDoor*)actor)->unk_1A7 = -0x32;
+        ((EnDoor*)actor)->openTimer = -50;
     }
 }
 
@@ -556,9 +556,9 @@ void EnPamera_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80BDA604[this->unk_312]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(D_80BDA610[this->unk_314]));
-    gSPSegment(POLY_OPA_DISP++, 0x0A, SEGMENTED_TO_VIRTUAL(D_80BDA5FC[this->unk_310]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(D_80BDA604[this->unk_312]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_K0(D_80BDA610[this->unk_314]));
+    gSPSegment(POLY_OPA_DISP++, 0x0A, SEGMENTED_TO_K0(D_80BDA5FC[this->unk_310]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnPamera_OverrideLimbDraw, EnPamera_PostLimbDraw, &this->actor);
 
@@ -585,7 +585,7 @@ void func_80BD9840(EnPamera* this, PlayState* play) {
 }
 
 void func_80BD9904(EnPamera* this) {
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = &func_80BD9928;
 }
 
@@ -603,7 +603,7 @@ void func_80BD994C(EnPamera* this, PlayState* play) {
             Message_StartTextbox(play, 0x15A8, &this->actor);
 
             this->unk_324 = 0x15A8;
-        } else if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) ||
+        } else if ((GET_PLAYER_FORM != PLAYER_FORM_HUMAN) ||
                    (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) &&
                     !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20))) {
             func_80BD93CC(this, 1, 0);
@@ -621,7 +621,7 @@ void func_80BD994C(EnPamera* this, PlayState* play) {
         }
         func_80BD9A9C(this);
     } else {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -709,7 +709,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
                 case 2:
                     if (this->actor.draw == NULL) {
                         this->actor.draw = EnPamera_Draw;
-                        this->actor.flags |= ACTOR_FLAG_1;
+                        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                     }
                     func_80BD9EE0(this);
                     break;

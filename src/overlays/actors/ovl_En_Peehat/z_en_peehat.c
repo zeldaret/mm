@@ -6,10 +6,11 @@
 
 #include "z_en_peehat.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_ph/object_ph.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPeehat*)thisx)
 
@@ -39,15 +40,15 @@ void func_80898654(EnPeehat* this);
 void func_808986A4(EnPeehat* this, PlayState* play);
 
 ActorInit En_Peehat_InitVars = {
-    ACTOR_EN_PEEHAT,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_PH,
-    sizeof(EnPeehat),
-    (ActorFunc)EnPeehat_Init,
-    (ActorFunc)EnPeehat_Destroy,
-    (ActorFunc)EnPeehat_Update,
-    (ActorFunc)EnPeehat_Draw,
+    /**/ ACTOR_EN_PEEHAT,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_PH,
+    /**/ sizeof(EnPeehat),
+    /**/ EnPeehat_Init,
+    /**/ EnPeehat_Destroy,
+    /**/ EnPeehat_Update,
+    /**/ EnPeehat_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -230,7 +231,7 @@ void EnPeehat_Destroy(Actor* thisx, PlayState* play) {
 void func_80897170(EnPeehat* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 1.1f;
-    this->drawDmgEffFrozenSteamScale = 1.6500001f;
+    this->drawDmgEffFrozenSteamScale = 1650.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->colliderSphere.base.colType = COLTYPE_HIT3;
     this->unk_2B0 = 80;
@@ -242,7 +243,7 @@ void func_808971DC(EnPeehat* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->colliderSphere.base.colType = COLTYPE_HIT6;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.5f, 0.35f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, PEEHAT_BODYPART_MAX, 2, 0.5f, 0.35f);
     }
 }
 
@@ -297,7 +298,7 @@ void func_80897498(EnPeehat* this) {
 
 void func_80897520(EnPeehat* this, PlayState* play) {
     if (!gSaveContext.save.isNight) {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->colliderSphere.base.acFlags |= AC_ON;
         if (this->actor.xzDistToPlayer < 740.0f) {
             func_80897648(this);
@@ -305,7 +306,7 @@ void func_80897520(EnPeehat* this, PlayState* play) {
             Math_StepToF(&this->actor.shape.yOffset, -1000.0f, 10.0f);
         }
     } else {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->colliderSphere.base.acFlags &= ~AC_ON;
         Math_StepToF(&this->actor.shape.yOffset, -1000.0f, 50.0f);
         if (this->unk_2B0 != 0) {
@@ -390,7 +391,7 @@ void func_80897910(EnPeehat* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_2B2, 4000, 500);
     this->unk_2B4 += this->unk_2B2;
     Math_StepToF(&this->unk_2C4, 0.075f, 0.005f);
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_80897A34(EnPeehat* this) {
@@ -426,7 +427,7 @@ void func_80897A94(EnPeehat* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_2B2, 4000, 500);
     this->unk_2B4 += this->unk_2B2;
     Math_StepToF(&this->unk_2C4, 0.075f, 0.005f);
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_SM_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_SM_FLY - SFX_FLAG);
 
     if (this->colliderTris.base.atFlags & AT_BOUNCED) {
         this->colliderTris.base.atFlags &= ~(AT_BOUNCED | AT_ON);
@@ -531,7 +532,7 @@ void func_80897F44(EnPeehat* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_2B2, 4000, 500);
     this->unk_2B4 += this->unk_2B2;
     Math_StepToF(&this->unk_2C4, 0.075f, 0.005f);
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_80898124(EnPeehat* this) {
@@ -569,7 +570,7 @@ void func_80898144(EnPeehat* this, PlayState* play) {
     if (!gSaveContext.save.isNight && (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 1200.0f)) {
         func_80897864(this);
     }
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_808982E0(EnPeehat* this) {
@@ -593,7 +594,7 @@ void func_80898338(EnPeehat* this, PlayState* play) {
             func_80897864(this);
         }
     }
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_80898414(EnPeehat* this) {
@@ -727,7 +728,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderSphere.info.bumper.hitPos.x,
                                 this->colliderSphere.info.bumper.hitPos.y, this->colliderSphere.info.bumper.hitPos.z, 0,
-                                0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 func_800BE568(&this->actor, &this->colliderSphere);
                 func_808984E0(this);
@@ -827,7 +828,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.1f);
             }
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.1f, 0.0275f)) {
-            func_800B9010(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
@@ -865,25 +866,50 @@ s32 EnPeehat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
     return false;
 }
 
+static Vec3f D_80899570[] = {
+    { 1300.0f, 1200.0f, 0.0f },  // PEEHAT_BODYPART_12
+    { 1300.0f, -1200.0f, 0.0f }, // PEEHAT_BODYPART_13
+    { 1300.0f, 0.0f, 1200.0f },  // PEEHAT_BODYPART_14
+    { 1300.0f, 0.0f, -1200.0f }, // PEEHAT_BODYPART_15
+};
+
+static s8 sLimbToBodyParts[OBJECT_PH_LIMB_MAX] = {
+    BODYPART_NONE,      // OBJECT_PH_LIMB_NONE
+    BODYPART_NONE,      // OBJECT_PH_LIMB_01
+    BODYPART_NONE,      // OBJECT_PH_LIMB_02
+    BODYPART_NONE,      // OBJECT_PH_LIMB_03
+    BODYPART_NONE,      // OBJECT_PH_LIMB_04
+    BODYPART_NONE,      // OBJECT_PH_LIMB_05
+    BODYPART_NONE,      // OBJECT_PH_LIMB_06
+    PEEHAT_BODYPART_0,  // OBJECT_PH_LIMB_07
+    BODYPART_NONE,      // OBJECT_PH_LIMB_08
+    BODYPART_NONE,      // OBJECT_PH_LIMB_09
+    PEEHAT_BODYPART_2,  // OBJECT_PH_LIMB_0A
+    BODYPART_NONE,      // OBJECT_PH_LIMB_0B
+    BODYPART_NONE,      // OBJECT_PH_LIMB_0C
+    PEEHAT_BODYPART_4,  // OBJECT_PH_LIMB_0D
+    BODYPART_NONE,      // OBJECT_PH_LIMB_0E
+    BODYPART_NONE,      // OBJECT_PH_LIMB_0F
+    PEEHAT_BODYPART_6,  // OBJECT_PH_LIMB_10
+    BODYPART_NONE,      // OBJECT_PH_LIMB_11
+    BODYPART_NONE,      // OBJECT_PH_LIMB_12
+    PEEHAT_BODYPART_8,  // OBJECT_PH_LIMB_13
+    BODYPART_NONE,      // OBJECT_PH_LIMB_14
+    BODYPART_NONE,      // OBJECT_PH_LIMB_15
+    PEEHAT_BODYPART_10, // OBJECT_PH_LIMB_16
+    BODYPART_NONE,      // OBJECT_PH_LIMB_17
+};
+
 void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_80899570[] = {
-        { 1300.0f, 1200.0f, 0.0f },
-        { 1300.0f, -1200.0f, 0.0f },
-        { 1300.0f, 0.0f, 1200.0f },
-        { 1300.0f, 0.0f, -1200.0f },
-    };
-    static s8 D_808995A0[] = {
-        -1, -1, -1, -1, -1, -1, -1, 0, -1, -1, 2, -1, -1, 4, -1, -1, 6, -1, -1, 8, -1, -1, 10, -1,
-    };
     PlayState* play = play2;
     EnPeehat* this = THIS;
     s32 i;
-    s32 index = D_808995A0[limbIndex];
+    s32 bodyPartIndex = sLimbToBodyParts[limbIndex];
     Gfx* gfx;
 
-    if (index != -1) {
-        Matrix_MultVecX(2000.0f, &this->limbPos[index]);
-        Matrix_MultVecX(4000.0f, &this->limbPos[index + 1]);
+    if (bodyPartIndex != BODYPART_NONE) {
+        Matrix_MultVecX(2000.0f, &this->bodyPartsPos[bodyPartIndex]);
+        Matrix_MultVecX(4000.0f, &this->bodyPartsPos[bodyPartIndex + 1]);
     }
 
     if (limbIndex == 4) {
@@ -891,14 +917,14 @@ void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVecZ(-5500.0f, &this->unk_2D4[1]);
     } else if ((limbIndex == 3) && (thisx->params == 0)) {
         Vec3f* vec = &D_80899570[0];
-        Vec3f* vec2 = &this->limbPos[12];
+        Vec3f* bodyPartPosPtr = &this->bodyPartsPos[PEEHAT_BODYPART_12];
 
-        for (i = 0; i < ARRAY_COUNT(D_80899570); i++, vec++, vec2++) {
-            Matrix_MultVec3f(vec, vec2);
+        for (i = 0; i < ARRAY_COUNT(D_80899570); i++, vec++, bodyPartPosPtr++) {
+            Matrix_MultVec3f(vec, bodyPartPosPtr);
         }
 
-        Matrix_MultVecX(3000.0f, vec2++);
-        Matrix_MultVecX(-400.0f, vec2);
+        Matrix_MultVecX(3000.0f, bodyPartPosPtr++); // PEEHAT_BODYPART_16
+        Matrix_MultVecX(-400.0f, bodyPartPosPtr);   // PEEHAT_BODYPART_17
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -942,11 +968,11 @@ void EnPeehat_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) {
-        for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-            this->limbPos[i].y -= 50.0f;
+        for (i = 0; i < PEEHAT_BODYPART_MAX; i++) {
+            this->bodyPartsPos[i].y -= 50.0f;
         }
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, PEEHAT_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

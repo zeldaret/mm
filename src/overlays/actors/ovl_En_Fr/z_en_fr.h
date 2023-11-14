@@ -5,7 +5,7 @@
 
 struct EnFr;
 
-#define ENFR_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define ENFR_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define ENFR_GET_TARGETMODE(thisx) (((thisx)->params >> 7) & 0xF)
 
 typedef struct EnFr {

@@ -29,15 +29,15 @@ void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play);
 void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this);
 
 ActorInit En_Syateki_Okuta_InitVars = {
-    ACTOR_EN_SYATEKI_OKUTA,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_OKUTA,
-    sizeof(EnSyatekiOkuta),
-    (ActorFunc)EnSyatekiOkuta_Init,
-    (ActorFunc)EnSyatekiOkuta_Destroy,
-    (ActorFunc)EnSyatekiOkuta_Update,
-    (ActorFunc)EnSyatekiOkuta_Draw,
+    /**/ ACTOR_EN_SYATEKI_OKUTA,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_OKUTA,
+    /**/ sizeof(EnSyatekiOkuta),
+    /**/ EnSyatekiOkuta_Init,
+    /**/ EnSyatekiOkuta_Destroy,
+    /**/ EnSyatekiOkuta_Update,
+    /**/ EnSyatekiOkuta_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -249,7 +249,7 @@ void EnSyatekiOkuta_Float(EnSyatekiOkuta* this, PlayState* play) {
     // In practice, if the Octorok is floating, then the octorokState is either SG_OCTO_STATE_APPEARED or
     // SG_OCTO_STATE_HIDING. Only the latter state is greater than SG_OCTO_STATE_INITIAL, so that's what
     // this check is looking for.
-    if (syatekiMan->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL) {
+    if (syatekiMan->octorokState >= SG_OCTO_STATE_INITIAL) {
         EnSyatekiOkuta_SetupHide(this);
     }
 }
@@ -405,7 +405,7 @@ void EnSyatekiOkuta_CheckForSignal(EnSyatekiOkuta* this, PlayState* play) {
 
     if ((this->actionFunc != EnSyatekiOkuta_Float) && (this->actionFunc != EnSyatekiOkuta_Appear) &&
         (syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) &&
-        (syatekiMan->perGameVar1.octorokState == SG_OCTO_STATE_APPEARING)) {
+        (syatekiMan->octorokState == SG_OCTO_STATE_APPEARING)) {
         type = SG_OCTO_GET_TYPE(syatekiMan->octorokFlags, SG_OCTO_GET_INDEX(&this->actor));
         if (type > SG_OCTO_TYPE_NONE) {
             Actor_SetScale(&this->actor, 0.01f);
@@ -434,10 +434,10 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             play->interfaceCtx.minigamePoints++;
             syatekiMan->score++;
-            syatekiMan->perGameVar2.lastHitOctorokType = SG_OCTO_TYPE_RED;
+            syatekiMan->lastHitOctorokType = SG_OCTO_TYPE_RED;
         } else {
             Actor_PlaySfx(&this->actor, NA_SE_SY_ERROR);
-            syatekiMan->perGameVar2.lastHitOctorokType = SG_OCTO_TYPE_BLUE;
+            syatekiMan->lastHitOctorokType = SG_OCTO_TYPE_BLUE;
         }
 
         EnSyatekiOkuta_SetupDie(this);

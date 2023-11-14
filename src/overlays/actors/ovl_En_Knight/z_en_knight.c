@@ -7,7 +7,7 @@
 #include "z_en_knight.h"
 #include "z64shrink_window.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnKnight*)thisx)
 
@@ -194,15 +194,15 @@ static ColliderCylinderInit D_809BDC64 = {
 };
 
 ActorInit En_Knight_InitVars = {
-    ACTOR_EN_KNIGHT,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_KNIGHT,
-    sizeof(EnKnight),
-    (ActorFunc)EnKnight_Init,
-    (ActorFunc)EnKnight_Destroy,
-    (ActorFunc)EnKnight_Update,
-    (ActorFunc)EnKnight_Draw,
+    /**/ ACTOR_EN_KNIGHT,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_KNIGHT,
+    /**/ sizeof(EnKnight),
+    /**/ EnKnight_Init,
+    /**/ EnKnight_Destroy,
+    /**/ EnKnight_Update,
+    /**/ EnKnight_Draw,
 };
 
 #endif

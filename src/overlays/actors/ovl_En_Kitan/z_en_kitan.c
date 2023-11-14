@@ -6,7 +6,7 @@
 
 #include "z_en_kitan.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnKitan*)thisx)
 
@@ -16,15 +16,15 @@ void EnKitan_Update(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit En_Kitan_InitVars = {
-    ACTOR_EN_KITAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_KITAN,
-    sizeof(EnKitan),
-    (ActorFunc)EnKitan_Init,
-    (ActorFunc)EnKitan_Destroy,
-    (ActorFunc)EnKitan_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_KITAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_KITAN,
+    /**/ sizeof(EnKitan),
+    /**/ EnKitan_Init,
+    /**/ EnKitan_Destroy,
+    /**/ EnKitan_Update,
+    /**/ NULL,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

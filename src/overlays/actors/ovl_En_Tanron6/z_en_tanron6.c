@@ -6,7 +6,7 @@
 
 #include "z_en_tanron6.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnTanron6*)thisx)
 
@@ -19,15 +19,15 @@ void EnTanron6_DoNothing(EnTanron6* this);
 void func_80BE60D0(EnTanron6* this, PlayState* play);
 
 ActorInit En_Tanron6_InitVars = {
-    ACTOR_EN_TANRON6,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_TANRON5,
-    sizeof(EnTanron6),
-    (ActorFunc)EnTanron6_Init,
-    (ActorFunc)EnTanron6_Destroy,
-    (ActorFunc)EnTanron6_Update,
-    (ActorFunc)EnTanron6_Draw,
+    /**/ ACTOR_EN_TANRON6,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_TANRON5,
+    /**/ sizeof(EnTanron6),
+    /**/ EnTanron6_Init,
+    /**/ EnTanron6_Destroy,
+    /**/ EnTanron6_Update,
+    /**/ EnTanron6_Draw,
 };
 
 static DamageTable sDamageTable = {
@@ -72,7 +72,7 @@ void EnTanron6_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 19.0f);
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     EnTanron6_DoNothing(this);
 }
 

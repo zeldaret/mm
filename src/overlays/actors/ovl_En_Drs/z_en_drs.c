@@ -18,15 +18,15 @@ void EnDrs_Draw(Actor* thisx, PlayState* play);
 void EnDrs_Idle(EnDrs* this, PlayState* play);
 
 ActorInit En_Drs_InitVars = {
-    ACTOR_EN_DRS,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_DRS,
-    sizeof(EnDrs),
-    (ActorFunc)EnDrs_Init,
-    (ActorFunc)EnDrs_Destroy,
-    (ActorFunc)EnDrs_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_DRS,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_DRS,
+    /**/ sizeof(EnDrs),
+    /**/ EnDrs_Init,
+    /**/ EnDrs_Destroy,
+    /**/ EnDrs_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -51,7 +51,14 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo = { &gWeddingDressMannequinIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
+typedef enum {
+    /* 0 */ WEDDING_DRESS_MANNEQUIN_ANIM_IDLE,
+    /* 1 */ WEDDING_DRESS_MANNEQUIN_ANIM_MAX
+} WeddingDressMannequinAnimation;
+
+static AnimationInfoS sAnimationInfo[WEDDING_DRESS_MANNEQUIN_ANIM_MAX] = {
+    { &gWeddingDressMannequinIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // WEDDING_DRESS_MANNEQUIN_ANIM_IDLE
+};
 
 void EnDrs_CollisionUpdate(EnDrs* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -61,11 +68,11 @@ void EnDrs_CollisionUpdate(EnDrs* this, PlayState* play) {
 void EnDrs_Setup(EnDrs* this, PlayState* play) {
     s32 pad[2];
 
-    if ((this->moonMaskObjBankIndex >= 0) && SubS_IsObjectLoaded(this->moonMaskObjBankIndex, play)) {
+    if ((this->moonMaskObjectSlot > OBJECT_SLOT_NONE) && SubS_IsObjectLoaded(this->moonMaskObjectSlot, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gWeddingDressMannequinSkel, NULL, this->jointTable,
                            this->morphTable, WEDDING_DRESS_MANNEQUIN_LIMB_MAX);
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, &sAnimationInfo, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, WEDDING_DRESS_MANNEQUIN_ANIM_IDLE);
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
         Actor_SetScale(&this->actor, 0.01f);
@@ -80,7 +87,7 @@ void EnDrs_Idle(EnDrs* this, PlayState* play) {
 void EnDrs_Init(Actor* thisx, PlayState* play) {
     EnDrs* this = THIS;
 
-    this->moonMaskObjBankIndex = SubS_GetObjectIndex(OBJECT_MSMO, play);
+    this->moonMaskObjectSlot = SubS_GetObjectSlot(OBJECT_MSMO, play);
     this->actionFunc = EnDrs_Setup;
 }
 
@@ -103,17 +110,18 @@ void EnDrs_Update(Actor* thisx, PlayState* play) {
 void EnDrs_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDrs* this = THIS;
     PlayState* play = play2;
-    s8 temp = this->moonMaskObjBankIndex;
-    s8 temp2 = this->actor.objBankIndex;
+    s8 temp = this->moonMaskObjectSlot;
+    s8 temp2 = this->actor.objectSlot;
 
     // Anju removes the Moon Mask at the start of the Couple's Mask cutscene
     // after that it will no longer be rendered.
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_87_02) && (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_COUPLES_MASK_CUTSCENE_STARTED) &&
+        (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[temp].segment);
         gSPDisplayList(POLY_OPA_DISP++, &gMoonMaskDL);
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp2].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[temp2].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

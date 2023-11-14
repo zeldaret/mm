@@ -7,11 +7,11 @@ struct ObjNozoki;
 
 typedef void (*ObjNozokiActionFunc)(struct ObjNozoki*, PlayState*);
 
-#define OBJNOZOKI_GET_SWITCHFLAG1(thisx) ((thisx)->params & 0x7F)
+#define OBJNOZOKI_GET_SWITCH_FLAG1(thisx) ((thisx)->params & 0x7F)
 #define OBJNOZOKI_GET_180(thisx) (((thisx)->params >> 7) & 3)
 #define OBJNOZOKI_GET_200(thisx) ((thisx)->params & 0x200)
 #define OBJNOZOKI_GET_400(thisx) ((thisx)->params & 0x400)
-#define OBJNOZOKI_GET_SWITCHFLAG2(thisx) (((thisx)->params >> 9) & 0x7F)
+#define OBJNOZOKI_GET_SWITCH_FLAG2(thisx) (((thisx)->params >> 9) & 0x7F)
 
 #define OBJNOZOKI_400 0x400
 

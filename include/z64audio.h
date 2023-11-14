@@ -2,9 +2,17 @@
 #define Z64AUDIO_H
 
 #include "PR/ultratypes.h"
-#include "ultra64/os_voice.h"
+#include "PR/os_voice.h"
 #include "audiothread_cmd.h"
 #include "libc/stddef.h"
+#include "unk.h"
+#include "audiothread_cmd.h"
+
+#include "audio/effects.h"
+#include "audio/heap.h"
+#include "audio/load.h"
+#include "audio/soundfont.h"
+#include "sequence.h"
 
 #define NO_LAYER ((SequenceLayer*)(-1))
 
@@ -44,11 +52,6 @@ typedef enum {
 #define MUTE_FLAGS_STOP_SCRIPT (1 << 7) // stop processing sequence/channel scripts
 
 #define AUDIO_LERPIMP(v0, v1, t) (v0 + ((v1 - v0) * t))
-
-#define ADSR_DISABLE 0
-#define ADSR_HANG -1
-#define ADSR_GOTO -2
-#define ADSR_RESTART -3
 
 // size of a single sample point
 #define SAMPLE_SIZE sizeof(s16)
@@ -111,69 +114,6 @@ typedef enum {
     /* 4 */ SOUNDMODE_SURROUND
 } SoundMode;
 
-typedef enum {
-    /* 0 */ ADSR_STATE_DISABLED,
-    /* 1 */ ADSR_STATE_INITIAL,
-    /* 2 */ ADSR_STATE_START_LOOP,
-    /* 3 */ ADSR_STATE_LOOP,
-    /* 4 */ ADSR_STATE_FADE,
-    /* 5 */ ADSR_STATE_HANG,
-    /* 6 */ ADSR_STATE_DECAY,
-    /* 7 */ ADSR_STATE_RELEASE,
-    /* 8 */ ADSR_STATE_SUSTAIN
-} AdsrStatus;
-
-typedef enum {
-    /* 0 */ MEDIUM_RAM,
-    /* 1 */ MEDIUM_UNK,
-    /* 2 */ MEDIUM_CART,
-    /* 3 */ MEDIUM_DISK_DRIVE,
-    /* 5 */ MEDIUM_RAM_UNLOADED = 5
-} SampleMedium;
-
-typedef enum {
-    /* 0 */ CODEC_ADPCM, // 16 2-byte samples (32 bytes) compressed into 4-bit samples (8 bytes) + 1 header byte
-    /* 1 */ CODEC_S8, // 16 2-byte samples (32 bytes) compressed into 8-bit samples (16 bytes)
-    /* 2 */ CODEC_S16_INMEMORY,
-    /* 3 */ CODEC_SMALL_ADPCM, // 16 2-byte samples (32 bytes) compressed into 2-bit samples (4 bytes) + 1 header byte
-    /* 4 */ CODEC_REVERB,
-    /* 5 */ CODEC_S16,
-    /* 6 */ CODEC_UNK6,
-    /* 7 */ CODEC_UNK7 // processed as uncompressed samples
-} SampleCodec;
-
-typedef enum {
-    /* 0 */ SEQUENCE_TABLE,
-    /* 1 */ FONT_TABLE,
-    /* 2 */ SAMPLE_TABLE
-} SampleBankTableType;
-
-typedef enum {
-    /* 0 */ CACHE_LOAD_PERMANENT,
-    /* 1 */ CACHE_LOAD_PERSISTENT,
-    /* 2 */ CACHE_LOAD_TEMPORARY,
-    /* 3 */ CACHE_LOAD_EITHER,
-    /* 4 */ CACHE_LOAD_EITHER_NOSYNC
-} AudioCacheLoadType;
-
-typedef enum {
-    /* 0 */ CACHE_TEMPORARY,
-    /* 1 */ CACHE_PERSISTENT,
-    /* 2 */ CACHE_EITHER,
-    /* 3 */ CACHE_PERMANENT
-} AudioCacheType;
-
-typedef enum {
-    /* 0 */ LOAD_STATUS_NOT_LOADED,
-    /* 1 */ LOAD_STATUS_IN_PROGRESS,
-    /* 2 */ LOAD_STATUS_COMPLETE,
-    /* 3 */ LOAD_STATUS_DISCARDABLE,
-    /* 4 */ LOAD_STATUS_MAYBE_DISCARDABLE,
-    /* 5 */ LOAD_STATUS_PERMANENT
-} AudioLoadStatus;
-
-typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
-
 struct Note;
 struct NotePool;
 struct SequenceChannel;
@@ -202,57 +142,6 @@ typedef struct NotePool {
     /* 0x20 */ AudioListItem releasing;
     /* 0x30 */ AudioListItem active;
 } NotePool; // size = 0x40
-
-// Pitch sliding by up to one octave in the positive direction. Negative
-// direction is "supported" by setting extent to be negative. The code
-// extrapolates exponentially in the wrong direction in that case, but that
-// doesn't prevent seqplayer from doing it, AFAICT.
-typedef struct {
-    /* 0x0 */ u8 mode; // bit 0x80 denotes something; the rest are an index 0-5
-    /* 0x2 */ u16 cur;
-    /* 0x4 */ u16 speed;
-    /* 0x8 */ f32 extent;
-} Portamento; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ s16 delay;
-    /* 0x2 */ s16 arg;
-} EnvelopePoint; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ u32 start;
-    /* 0x04 */ u32 loopEnd; // numSamples into the sample where the loop ends
-    /* 0x08 */ u32 count;
-    /* 0x0C */ u32 sampleEnd; // total number of s16-samples in the 
-    /* 0x10 */ s16 predictorState[16]; // only exists if count != 0. 8-byte aligned
-} AdpcmLoop; // size = 0x30 (or 0x10)
-
-/**
- * The procedure used to design the codeBook is based on an adaptive clustering algorithm.
- * The size of the codeBook is (8 * order * numPredictors) and is 8-byte aligned
- */
-typedef struct {
-    /* 0x00 */ s32 order;
-    /* 0x04 */ s32 numPredictors;
-    /* 0x08 */ s16 codeBook[1]; // a table of prediction coefficients that the coder selects from to optimize sound quality.
-} AdpcmBook; // size >= 0x8
-
-typedef struct {
-    /* 0x00 */ u32 unk_0 : 1;
-    /* 0x00 */ u32 codec : 3; // The state of compression or decompression
-    /* 0x00 */ u32 medium : 2; // Medium where sample is currently stored
-    /* 0x00 */ u32 unk_bit26 : 1;
-    /* 0x00 */ u32 isRelocated : 1; // Has the sample header been relocated (offsets to pointers)
-    /* 0x01 */ u32 size : 24; // Size of the sample
-    /* 0x04 */ u8* sampleAddr; // Raw sample data. Offset from the start of the sample bank or absolute address to either rom or ram
-    /* 0x08 */ AdpcmLoop* loop; // Adpcm loop parameters used by the sample. Offset from the start of the sound font / pointer to ram
-    /* 0x0C */ AdpcmBook* book; // Adpcm book parameters used by the sample. Offset from the start of the sound font / pointer to ram
-} Sample; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ Sample* sample;
-    /* 0x04 */ f32 tuning; // frequency scale factor
-} TunedSample; // size = 0x8
 
 /**
  * Stores an entry of decompressed samples in a reverb ring buffer.
@@ -315,40 +204,6 @@ typedef struct {
 } SynthesisReverb; // size = 0x2D0
 
 typedef struct {
-    /* 0x00 */ u8 isRelocated; // have the envelope and all samples been relocated (offsets to pointers)
-    /* 0x01 */ u8 normalRangeLo;
-    /* 0x02 */ u8 normalRangeHi;
-    /* 0x03 */ u8 adsrDecayIndex; // index used to obtain adsr decay rate from adsrDecayTable
-    /* 0x04 */ EnvelopePoint* envelope;
-    /* 0x08 */ TunedSample lowPitchTunedSample;
-    /* 0x10 */ TunedSample normalPitchTunedSample;
-    /* 0x18 */ TunedSample highPitchTunedSample;
-} Instrument; // size = 0x20
-
-typedef struct {
-    /* 0x00 */ u8 adsrDecayIndex; // index used to obtain adsr decay rate from adsrDecayTable
-    /* 0x01 */ u8 pan;
-    /* 0x02 */ u8 isRelocated; // have tunedSample.sample and envelope been relocated (offsets to pointers)
-    /* 0x04 */ TunedSample tunedSample;
-    /* 0x0C */ EnvelopePoint* envelope;
-} Drum; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ TunedSample tunedSample;
-} SoundEffect; // size = 0x08
-
-typedef struct {
-    /* 0x00 */ u8 numInstruments;
-    /* 0x01 */ u8 numDrums;
-    /* 0x02 */ u8 sampleBankId1;
-    /* 0x03 */ u8 sampleBankId2;
-    /* 0x04 */ u16 numSfx;
-    /* 0x08 */ Instrument** instruments;
-    /* 0x0C */ Drum** drums;
-    /* 0x10 */ SoundEffect* soundEffects;
-} SoundFont; // size = 0x14
-
-typedef struct {
     /* 0x00 */ u8* pc; // program counter
     /* 0x04 */ u8* stack[4];
     /* 0x14 */ u8 remLoopIters[4]; // remaining loop iterations
@@ -357,7 +212,7 @@ typedef struct {
 } SeqScriptState; // size = 0x1C
 
 // Also known as a Group, according to debug strings.
-typedef struct {
+typedef struct SequencePlayer {
     /* 0x000 */ u8 enabled : 1;
     /* 0x000 */ u8 finished : 1;
     /* 0x000 */ u8 muted : 1;
@@ -400,34 +255,6 @@ typedef struct {
     /* 0x158 */ s8 seqScriptIO[8];
 } SequencePlayer; // size = 0x160
 
-typedef struct {
-    /* 0x0 */ u8 decayIndex; // index used to obtain adsr decay rate from adsrDecayTable
-    /* 0x1 */ u8 sustain;
-    /* 0x4 */ EnvelopePoint* envelope;
-} AdsrSettings; // size = 0x8
-
-typedef struct {
-    union {
-        struct {
-            /* 0x00 */ u8 unused : 1;
-            /* 0x00 */ u8 hang : 1;
-            /* 0x00 */ u8 decay : 1;
-            /* 0x00 */ u8 release : 1;
-            /* 0x00 */ u8 state : 4;
-        } s;
-        /* 0x00 */ u8 asByte;
-    } action;
-    /* 0x01 */ u8 envIndex;
-    /* 0x02 */ s16 delay;
-    /* 0x04 */ f32 sustain;
-    /* 0x08 */ f32 velocity;
-    /* 0x0C */ f32 fadeOutVel;
-    /* 0x10 */ f32 current;
-    /* 0x14 */ f32 target;
-    /* 0x18 */ UNK_TYPE1 unk_18[4];
-    /* 0x1C */ EnvelopePoint* envelope;
-} AdsrState; // size = 0x20
-
 typedef union {
     struct {
         /* 0x0 */ u8 unused : 2;
@@ -453,16 +280,6 @@ typedef struct {
     /* 0x10 */ s16* filter;
     /* 0x14 */ s16* filterBuf;
 } NoteAttributes; // size = 0x18
-
-typedef struct VibratoSubStruct {
-    /* 0x0 */ u16 vibratoRateStart;
-    /* 0x2 */ u16 vibratoDepthStart;
-    /* 0x4 */ u16 vibratoRateTarget;
-    /* 0x6 */ u16 vibratoDepthTarget;
-    /* 0x8 */ u16 vibratoRateChangeDelay;
-    /* 0xA */ u16 vibratoDepthChangeDelay;
-    /* 0xC */ u16 vibratoDelay;
-} VibratoSubStruct; // size = 0xE
 
 // Also known as a SubTrack, according to sm64 debug strings.
 typedef struct SequenceChannel {
@@ -551,7 +368,7 @@ typedef struct SequenceLayer {
             /* 0x0A */ u16 bit_0 : 1;
             /* 0x0A */ u16 bit_1 : 1;
             /* 0x0A */ u16 bit_2 : 1;
-            /* 0x0A */ u16 bit_3 : 1;
+            /* 0x0A */ u16 useVibrato : 1;
             /* 0x0A */ u16 bit_4 : 1;
             /* 0x0A */ u16 bit_5 : 1;
             /* 0x0A */ u16 bit_6 : 1;
@@ -622,18 +439,6 @@ typedef struct {
     /* 0x1F */ u8 unk_1F;
     /* 0x20 */ UNK_TYPE1 unk_20[0x4];
 } NoteSynthesisState; // size = 0x24
-
-typedef struct {
-    /* 0x00 */ struct VibratoSubStruct* vibSubStruct; // Something else?
-    /* 0x04 */ u32 time;
-    /* 0x08 */ s16* curve;
-    /* 0x0C */ f32 depth;
-    /* 0x10 */ f32 rate;
-    /* 0x14 */ u8 active;
-    /* 0x16 */ u16 rateChangeTimer;
-    /* 0x18 */ u16 depthChangeTimer;
-    /* 0x1A */ u16 delay;
-} VibratoState; // size = 0x1C
 
 typedef enum {
     /* 0 */ PLAYBACK_STATUS_0,
@@ -774,91 +579,6 @@ typedef struct {
     /* 0x24 */ f32 updatesPerFrameScaled; // updatesPerFrame scaled down by a factor of 4
 } AudioBufferParameters; // size = 0x28
 
-/**
- * Meta-data associated with a pool (contain withing the Audio Heap)
- */
-typedef struct {
-    /* 0x0 */ u8* startAddr; // start addr of the pool
-    /* 0x4 */ u8* curAddr; // address of the next available memory for allocation
-    /* 0x8 */ size_t size; // size of the pool
-    /* 0xC */ s32 count; // number of entries allocated to the pool
-} AudioAllocPool; // size = 0x10
-
-/**
- * Audio cache entry data to store a single entry containing either a sequence, soundfont, or entire sample banks
- */
-typedef struct {
-    /* 0x0 */ u8* addr;
-    /* 0x4 */ size_t size;
-    /* 0x8 */ s16 tableType;
-    /* 0xA */ s16 id;
-} AudioCacheEntry; // size = 0xC
-
-/**
- * Audio cache entry data to store a single entry containing an individual sample
- */
-typedef struct {
-    /* 0x00 */ s8 inUse;
-    /* 0x01 */ s8 origMedium;
-    /* 0x02 */ u8 sampleBankId;
-    /* 0x03 */ char unk_03[0x5];
-    /* 0x08 */ u8* allocatedAddr;
-    /* 0x0C */ void* sampleAddr;
-    /* 0x10 */ size_t size;
-} SampleCacheEntry; // size = 0x14
-
-/**
- * Audio cache entry data to store individual samples
- */
-typedef struct {
-    /* 0x000 */ AudioAllocPool pool;
-    /* 0x010 */ SampleCacheEntry entries[128];
-    /* 0xA10 */ s32 numEntries;
-} AudioSampleCache; // size = 0xA14
-
-typedef struct {
-    /* 0x00 */ u32 numEntries;
-    /* 0x04 */ AudioAllocPool pool;
-    /* 0x14 */ AudioCacheEntry entries[16];
-} AudioPersistentCache; // size = 0xD4
-
-typedef struct {
-    /* 0x00 */ u32 nextSide;
-    /* 0x04 */ AudioAllocPool pool;
-    /* 0x14 */ AudioCacheEntry entries[2];
-} AudioTemporaryCache; // size = 0x3C
-
-typedef struct {
-    /* 0x000 */ AudioPersistentCache persistent;
-    /* 0x0D4 */ AudioTemporaryCache temporary;
-    /* 0x100 */ u8 unk_100[0x10];
-} AudioCache; // size = 0x110
-
-typedef struct {
-    /* 0x0 */ size_t persistentCommonPoolSize;
-    /* 0x4 */ size_t temporaryCommonPoolSize;
-} AudioCachePoolSplit; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ size_t seqCacheSize;
-    /* 0x4 */ size_t fontCacheSize;
-    /* 0x8 */ size_t sampleBankCacheSize;
-} AudioCommonPoolSplit; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ size_t miscPoolSize;
-    /* 0x4 */ u32 unkSizes[2];
-    /* 0xC */ size_t cachePoolSize; 
-} AudioSessionPoolSplit; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ u32 endAndMediumKey;
-    /* 0x04 */ Sample* sample;
-    /* 0x08 */ u8* ramAddr;
-    /* 0x0C */ u32 encodedInfo;
-    /* 0x10 */ s32 isFree;
-} AudioPreloadReq; // size = 0x14
-
 typedef struct {
     union {
     /* 0x0 */ u32 opArgs;
@@ -877,60 +597,9 @@ typedef struct {
         /* 0x4 */ s8 asSbyte;
         /* 0x4 */ u8 asUbyte;
         /* 0x4 */ u32 asUInt;
+        /* 0x4 */ void* asPtr;
     };
 } AudioCmd; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ s8 status;
-    /* 0x01 */ s8 delay;
-    /* 0x02 */ s8 medium;
-    /* 0x04 */ u8* ramAddr;
-    /* 0x08 */ uintptr_t curDevAddr;
-    /* 0x0C */ u8* curRamAddr;
-    /* 0x10 */ size_t bytesRemaining;
-    /* 0x14 */ size_t chunkSize;
-    /* 0x18 */ s32 unkMediumParam;
-    /* 0x1C */ u32 retMsg;
-    /* 0x20 */ OSMesgQueue* retQueue;
-    /* 0x24 */ OSMesgQueue msgQueue;
-    /* 0x3C */ OSMesg msg;
-    /* 0x40 */ OSIoMesg ioMesg;
-} AudioAsyncLoad; // size = 0x58
-
-typedef struct {
-    /* 0x00 */ u8 medium;
-    /* 0x01 */ u8 seqOrFontId;
-    /* 0x02 */ u16 instId;
-    /* 0x04 */ s32 unkMediumParam;
-    /* 0x08 */ uintptr_t curDevAddr;
-    /* 0x0C */ u8* curRamAddr;
-    /* 0x10 */ u8* ramAddr;
-    /* 0x14 */ s32 status;
-    /* 0x18 */ size_t bytesRemaining;
-    /* 0x1C */ s8* isDone; // TODO: rename in OoT and sync up here. This is an external status while (s32 status) is an internal status
-    /* 0x20 */ Sample sample;
-    /* 0x30 */ OSMesgQueue msgqueue;
-    /* 0x48 */ OSMesg msg;
-    /* 0x4C */ OSIoMesg ioMesg;
-} AudioSlowLoad; // size = 0x64
-
-typedef struct {
-    /* 0x00 */ uintptr_t romAddr;
-    /* 0x04 */ size_t size;
-    /* 0x08 */ s8 medium;
-    /* 0x09 */ s8 cachePolicy;
-    /* 0x0A */ s16 shortData1;
-    /* 0x0C */ s16 shortData2;
-    /* 0x0E */ s16 shortData3;
-} AudioTableEntry; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ s16 numEntries;
-    /* 0x02 */ s16 unkMediumParam;
-    /* 0x04 */ uintptr_t romAddr;
-    /* 0x08 */ char pad[0x8];
-    /* 0x10 */ AudioTableEntry entries[1]; // (dynamic size)
-} AudioTable; // size >= 0x20
 
 typedef struct {
     /* 0x00 */ OSTask task;
@@ -938,16 +607,6 @@ typedef struct {
     /* 0x44 */ void* unk_44; // probably a message that gets unused.
     /* 0x48 */ char unk_48[0x8];
 } AudioTask; // size = 0x50
-
-typedef struct {
-    /* 0x00 */ u8* ramAddr;
-    /* 0x04 */ uintptr_t devAddr;
-    /* 0x08 */ u16 sizeUnused;
-    /* 0x0A */ u16 size;
-    /* 0x0C */ u8 unused;
-    /* 0x0D */ u8 reuseIndex; // position in sSampleDmaReuseQueue1/2, if ttl == 0
-    /* 0x0E */ u8 ttl;        // Time To Live: duration after which the DMA can be discarded
-} SampleDma; // size = 0x10
 
 typedef struct {
     /* 0x0000 */ char unk_0000;
@@ -1091,12 +750,6 @@ typedef struct {
     /* 0x18 */ u8 combFilterSize;
     /* 0x1A */ u16 combFilterGain;
 } NoteSubAttributes; // size = 0x1A
-
-typedef struct {
-    /* 0x0 */ size_t heapSize; // total number of bytes allocated to the audio heap. Must be <= the size of `gAudioHeap` (ideally about the same size)
-    /* 0x4 */ size_t initPoolSize; // The entire audio heap is split into two pools. 
-    /* 0x8 */ size_t permanentPoolSize;
-} AudioHeapInitSizes; // size = 0xC
 
 typedef struct {
     /* 0x00 */ f32 volCur;
@@ -1279,7 +932,7 @@ typedef struct {
 
 typedef void (*AudioCustomUpdateFunction)(void);
 typedef u32 (*AudioCustomSeqFunction)(s8 value, SequenceChannel* channel);
-typedef s32 (*AudioCustomReverbFunction)(Sample*, s32, s8, s32);
+typedef void* (*AudioCustomReverbFunction)(Sample*, s32, s8, s32);
 typedef Acmd* (*AudioCustomSynthFunction)(Acmd*, s32, s32);
 
 extern OSVoiceHandle gVoiceHandle;

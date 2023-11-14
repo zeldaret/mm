@@ -22,15 +22,15 @@ void ObjDanpeilift_Teleport(ObjDanpeilift* this, PlayState* play);
 void ObjDanpeilift_Wait(ObjDanpeilift* this, PlayState* play);
 
 ActorInit Obj_Danpeilift_InitVars = {
-    ACTOR_OBJ_DANPEILIFT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_OBJ_DANPEILIFT,
-    sizeof(ObjDanpeilift),
-    (ActorFunc)ObjDanpeilift_Init,
-    (ActorFunc)ObjDanpeilift_Destroy,
-    (ActorFunc)ObjDanpeilift_Update,
-    (ActorFunc)ObjDanpeilift_Draw,
+    /**/ ACTOR_OBJ_DANPEILIFT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_OBJ_DANPEILIFT,
+    /**/ sizeof(ObjDanpeilift),
+    /**/ ObjDanpeilift_Init,
+    /**/ ObjDanpeilift_Destroy,
+    /**/ ObjDanpeilift_Update,
+    /**/ ObjDanpeilift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

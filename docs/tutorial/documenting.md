@@ -49,15 +49,15 @@ void func_80C10290(EnRecepgirl* this);
 void func_80C102D4(EnRecepgirl* this, PlayState* play);
 
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
-    sizeof(EnRecepgirl),
-    (ActorFunc)EnRecepgirl_Init,
-    (ActorFunc)EnRecepgirl_Destroy,
-    (ActorFunc)EnRecepgirl_Update,
-    (ActorFunc)EnRecepgirl_Draw,
+    /**/ ACTOR_EN_RECEPGIRL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
+    /**/ sizeof(EnRecepgirl),
+    /**/ EnRecepgirl_Init,
+    /**/ EnRecepgirl_Destroy,
+    /**/ EnRecepgirl_Update,
+    /**/ EnRecepgirl_Draw,
 };
 
 static void* D_80C106B0[4] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };
@@ -137,7 +137,7 @@ void func_80C1019C(EnRecepgirl* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         func_80C10290(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        func_800B8614(&this->actor, play, 60.0f);
+        Actor_OfferTalk(&this->actor, play, 60.0f);
         if (Player_GetMask(play) == 2) {
             this->actor.textId = 0x2367;
         } else if (Flags_GetSwitch(play, this->actor.params)) {
@@ -317,10 +317,10 @@ As we discussed last time, `D_80C106B0` is an array of [segmented pointers](data
 
 ```C
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
+    /**/ ACTOR_EN_RECEPGIRL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
 ```
 
 the fourth element is the object (it is actually an enum, but the file itself has the same name as the object enum). So, we need to look at the object file. We are very lucky that a custom tool has been written for such a thing: Z64Utils.
@@ -473,7 +473,7 @@ void func_80C1019C(EnRecepgirl* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         func_80C10290(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        func_800B8614(&this->actor, play, 60.0f);
+        Actor_OfferTalk(&this->actor, play, 60.0f);
         if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
             this->actor.textId = 0x2367; // "... doesn't Kafei want to break off his engagement ... ?"
         } else if (Flags_GetSwitch(play, this->actor.params)) {

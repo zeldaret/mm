@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tag_obj.h"
+#include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 
 #define FLAGS 0x00000000
 
@@ -35,15 +36,15 @@ static ColliderCylinderInit sUnusedColliderInit = {
 };
 
 ActorInit En_Tag_Obj_InitVars = {
-    ACTOR_EN_TAG_OBJ,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTagObj),
-    (ActorFunc)EnTagObj_Init,
-    (ActorFunc)EnTagObj_Destroy,
-    (ActorFunc)EnTagObj_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_TAG_OBJ,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTagObj),
+    /**/ EnTagObj_Init,
+    /**/ EnTagObj_Destroy,
+    /**/ EnTagObj_Update,
+    /**/ NULL,
 };
 
 void EnTagObj_Init(Actor* thisx, PlayState* play) {
@@ -60,7 +61,7 @@ void EnTagObj_Update(Actor* thisx, PlayState* play) {
 
     if (!this->hasSpawnedSeahorse) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OT, this->actor.world.pos.x, this->actor.world.pos.y,
-                    this->actor.world.pos.z, 0, 0, 0, 0);
+                    this->actor.world.pos.z, 0, 0, 0, SEAHORSE_PARAMS(SEAHORSE_TYPE_0, 0, 0));
         this->hasSpawnedSeahorse = true;
     }
 }

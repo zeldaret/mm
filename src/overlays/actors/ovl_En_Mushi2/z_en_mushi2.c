@@ -33,15 +33,15 @@ void func_80A6B078(EnMushi2* this);
 void func_80A6B0D8(EnMushi2* this, PlayState* play);
 
 ActorInit En_Mushi2_InitVars = {
-    ACTOR_EN_MUSHI2,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnMushi2),
-    (ActorFunc)EnMushi2_Init,
-    (ActorFunc)EnMushi2_Destroy,
-    (ActorFunc)EnMushi2_Update,
-    (ActorFunc)EnMushi2_Draw,
+    /**/ ACTOR_EN_MUSHI2,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnMushi2),
+    /**/ EnMushi2_Init,
+    /**/ EnMushi2_Destroy,
+    /**/ EnMushi2_Update,
+    /**/ EnMushi2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -103,7 +103,11 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 20, ICHAIN_STOP),
 };
 
-static f32 D_80A6BA14[] = { 0.06f, 0.1f, 0.13f };
+f32 D_80A6BA14[] = {
+    0.06f, // ENMUSHI2_0
+    0.1f,  // ENMUSHI2_1
+    0.13f, // ENMUSHI2_2
+};
 
 void func_80A687A0(EnMushi2* this) {
     MtxF* matrix = Matrix_GetCurrent();
@@ -743,10 +747,10 @@ void EnMushi2_Init(Actor* thisx, PlayState* play) {
     s32 sp3C;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (!ENMUSHI2_GET_3(&this->actor)) {
+    if (ENMUSHI2_GET_3(&this->actor) == ENMUSHI2_0) {
         func_80A68A78(this, play);
     }
-    this->actor.shape.rot.y += Rand_S16Offset(-2000, 4000);
+    this->actor.shape.rot.y += Rand_S16Offset(-0x7D0, 0xFA0);
     this->actor.home.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_80A68F24(this);
@@ -759,7 +763,8 @@ void EnMushi2_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = 30;
     sp3C = func_80A69EE4(this, play);
 
-    if ((sp3C == 0) && func_80A68860(this, play) && func_80A68910(this, play) && !ENMUSHI2_GET_3(&this->actor)) {
+    if ((sp3C == 0) && func_80A68860(this, play) && func_80A68910(this, play) &&
+        (ENMUSHI2_GET_3(&this->actor) == ENMUSHI2_0)) {
         func_80A6A024(this);
     }
 

@@ -27,15 +27,15 @@ void func_80BC4530(BgF40Block* this, PlayState* play);
 void func_80BC457C(BgF40Block* this, PlayState* play);
 
 ActorInit Bg_F40_Block_InitVars = {
-    ACTOR_BG_F40_BLOCK,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_F40_OBJ,
-    sizeof(BgF40Block),
-    (ActorFunc)BgF40Block_Init,
-    (ActorFunc)BgF40Block_Destroy,
-    (ActorFunc)BgF40Block_Update,
-    (ActorFunc)BgF40Block_Draw,
+    /**/ ACTOR_BG_F40_BLOCK,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_F40_OBJ,
+    /**/ sizeof(BgF40Block),
+    /**/ BgF40Block_Init,
+    /**/ BgF40Block_Destroy,
+    /**/ BgF40Block_Update,
+    /**/ BgF40Block_Draw,
 };
 
 static Vec3f D_80BC4620[] = {
@@ -238,7 +238,7 @@ void BgF40Block_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->path != NULL) {
-        if (Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCHFLAG(&this->dyna.actor))) {
+        if (Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCH_FLAG(&this->dyna.actor))) {
             this->actionFunc = func_80BC4530;
             this->dyna.actor.speed = 40.0f;
             func_80BC3A2C(this, play);
@@ -261,7 +261,7 @@ void BgF40Block_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80BC41AC(BgF40Block* this, PlayState* play) {
     if (func_80BC3D08(this, play, 1)) {
-        if (!Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCHFLAG(&this->dyna.actor))) {
+        if (!Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCH_FLAG(&this->dyna.actor))) {
             func_80BC4038(this);
             this->actionFunc = func_80BC44F4;
         }
@@ -292,17 +292,17 @@ void func_80BC4228(BgF40Block* this, PlayState* play) {
     switch (this->unk_168) {
         case 0:
         case 3:
-            func_800B9010(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_X - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_X - SFX_FLAG);
             break;
 
         case 1:
         case 4:
-            func_800B9010(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_Y - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_Y - SFX_FLAG);
             break;
 
         case 2:
         case 5:
-            func_800B9010(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_Z - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_Z - SFX_FLAG);
             break;
     }
 }
@@ -314,14 +314,14 @@ void func_80BC4344(BgF40Block* this, PlayState* play) {
 }
 
 void func_80BC4380(BgF40Block* this, PlayState* play) {
-    if (Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCHFLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->actionFunc = func_80BC4344;
     }
 }
 
 void func_80BC43CC(BgF40Block* this, PlayState* play) {
     if (func_80BC3D08(this, play, 1)) {
-        if (Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCHFLAG(&this->dyna.actor))) {
+        if (Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCH_FLAG(&this->dyna.actor))) {
             func_80BC4038(this);
             this->actionFunc = func_80BC4344;
         }
@@ -356,7 +356,7 @@ void func_80BC44F4(BgF40Block* this, PlayState* play) {
 }
 
 void func_80BC4530(BgF40Block* this, PlayState* play) {
-    if (!Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCHFLAG(&this->dyna.actor))) {
+    if (!Flags_GetSwitch(play, BGF40BLOCK_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->actionFunc = func_80BC44F4;
     }
 }

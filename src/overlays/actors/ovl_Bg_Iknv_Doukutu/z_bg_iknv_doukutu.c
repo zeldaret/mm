@@ -28,15 +28,15 @@ void func_80BD78C4(Actor* thisx, PlayState* play);
 void func_80BD7538(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Iknv_Doukutu_InitVars = {
-    ACTOR_BG_IKNV_DOUKUTU,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_IKNV_OBJ,
-    sizeof(BgIknvDoukutu),
-    (ActorFunc)BgIknvDoukutu_Init,
-    (ActorFunc)BgIknvDoukutu_Destroy,
-    (ActorFunc)BgIknvDoukutu_Update,
-    (ActorFunc)BgIknvDoukutu_Draw,
+    /**/ ACTOR_BG_IKNV_DOUKUTU,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_IKNV_OBJ,
+    /**/ sizeof(BgIknvDoukutu),
+    /**/ BgIknvDoukutu_Init,
+    /**/ BgIknvDoukutu_Destroy,
+    /**/ BgIknvDoukutu_Update,
+    /**/ BgIknvDoukutu_Draw,
 };
 
 void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
@@ -131,7 +131,7 @@ void func_80BD7250(BgIknvDoukutu* this, PlayState* play) {
         this->dyna.actor.world.pos.y = temp_fv0;
         this->actionFunc = func_80BD73D0;
     }
-    func_8019F128(NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
+    Audio_PlaySfx_2(NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
 void func_80BD72BC(BgIknvDoukutu* this, PlayState* play) {

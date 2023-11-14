@@ -26,15 +26,15 @@ void func_80B7F398(BgIkanaBlock* this, PlayState* play);
 void func_80B7F564(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Ikana_Block_InitVars = {
-    ACTOR_BG_IKANA_BLOCK,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_DANGEON_KEEP,
-    sizeof(BgIkanaBlock),
-    (ActorFunc)BgIkanaBlock_Init,
-    (ActorFunc)BgIkanaBlock_Destroy,
-    (ActorFunc)BgIkanaBlock_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_IKANA_BLOCK,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_DANGEON_KEEP,
+    /**/ sizeof(BgIkanaBlock),
+    /**/ BgIkanaBlock_Init,
+    /**/ BgIkanaBlock_Destroy,
+    /**/ BgIkanaBlock_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -306,7 +306,7 @@ void func_80B7F290(BgIkanaBlock* this, PlayState* play) {
             func_80B7F360(this);
         }
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 }
 

@@ -20,6 +20,8 @@
  */
 
 #include "z64frameadvance.h"
+#include "libc/stdbool.h"
+#include "padutils.h"
 #include "macros.h"
 
 void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx) {

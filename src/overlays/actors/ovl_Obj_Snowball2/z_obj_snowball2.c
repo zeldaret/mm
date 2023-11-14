@@ -27,15 +27,15 @@ void func_80B3A498(ObjSnowball2* this);
 void func_80B3A500(ObjSnowball2* this, PlayState* play);
 
 ActorInit Obj_Snowball2_InitVars = {
-    ACTOR_OBJ_SNOWBALL2,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GOROIWA,
-    sizeof(ObjSnowball2),
-    (ActorFunc)ObjSnowball2_Init,
-    (ActorFunc)ObjSnowball2_Destroy,
-    (ActorFunc)ObjSnowball2_Update,
-    (ActorFunc)ObjSnowball2_Draw,
+    /**/ ACTOR_OBJ_SNOWBALL2,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_GOROIWA,
+    /**/ sizeof(ObjSnowball2),
+    /**/ ObjSnowball2_Init,
+    /**/ ObjSnowball2_Destroy,
+    /**/ ObjSnowball2_Update,
+    /**/ ObjSnowball2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -594,7 +594,7 @@ void func_80B3A500(ObjSnowball2* this, PlayState* play) {
             func_80B38E88(this, play);
         }
 
-        func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     } else {
         func_80B38E20(this);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

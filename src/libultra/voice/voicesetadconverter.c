@@ -2,10 +2,10 @@
  * File: voicesetadconverter.c
  */
 
-#include "ultra64/controller_voice.h"
-#include "io/controller.h"
-#include "functions.h"
-#include "variables.h"
+#include "ultra64.h"
+#include "PR/controller_voice.h"
+#include "PR/voiceinternal.h"
+#include "PR/controller.h"
 
 #define SWRITEFORMAT(ptr) ((__OSVoiceSWriteFormat*)(ptr))
 

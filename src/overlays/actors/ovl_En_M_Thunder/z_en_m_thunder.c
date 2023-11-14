@@ -30,15 +30,15 @@ void EnMThunder_UnkType_Attack(EnMThunder* this, PlayState* play);
 #define ENMTHUNDER_TYPE_MAX 4
 
 ActorInit En_M_Thunder_InitVars = {
-    ACTOR_EN_M_THUNDER,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnMThunder),
-    (ActorFunc)EnMThunder_Init,
-    (ActorFunc)EnMThunder_Destroy,
-    (ActorFunc)EnMThunder_Update,
-    (ActorFunc)EnMThunder_Draw,
+    /**/ ACTOR_EN_M_THUNDER,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnMThunder),
+    /**/ EnMThunder_Init,
+    /**/ EnMThunder_Destroy,
+    /**/ EnMThunder_Update,
+    /**/ EnMThunder_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -119,7 +119,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
     this->collider.dim.yShift = -20;
     this->timer = 8;
     this->scroll = 0.0f;
-    this->actor.world.pos = player->bodyPartsPos[0];
+    this->actor.world.pos = player->bodyPartsPos[PLAYER_BODYPART_WAIST];
     this->lightColorFrac = 0.0f;
     this->adjustLightsArg1 = 0.0f;
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
@@ -143,11 +143,11 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
         player->stateFlags2 &= ~PLAYER_STATE2_20000;
         this->isCharging = false;
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK)) {
             player->unk_B08 = 1.0f;
             this->collider.info.toucher.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
-            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
+            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRYS_SWORD) {
                 this->scaleTarget = 6;
             } else if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
                 this->scaleTarget = 4;
@@ -158,7 +158,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
             player->unk_B08 = 0.5f;
             this->collider.info.toucher.damage = sDamages[this->type];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_REGULAR;
-            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
+            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRYS_SWORD) {
                 this->scaleTarget = 4;
             } else if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
                 this->scaleTarget = 3;
@@ -203,7 +203,7 @@ void EnMThunder_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnMThunder_AdjustLights(PlayState* play, f32 arg1) {
-    func_800FD2B4(play, arg1, 850.0f, 0.2f, 0.0f);
+    Environment_AdjustLights(play, arg1, 850.0f, 0.2f, 0.0f);
 }
 
 void EnMThunder_Spin_AttackNoMagic(EnMThunder* this, PlayState* play) {
@@ -230,7 +230,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
     Actor* child = this->actor.child;
 
     this->unk1B0 = player->unk_B08;
-    this->actor.world.pos = player->bodyPartsPos[0];
+    this->actor.world.pos = player->bodyPartsPos[PLAYER_BODYPART_WAIST];
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
 
     if (!this->isCharging && (player->unk_B08 >= 0.1f)) {
@@ -276,7 +276,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
         if (player->unk_B08 < 0.85f) {
             this->collider.info.toucher.damage = sDamages[this->type];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_REGULAR;
-            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
+            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRYS_SWORD) {
                 this->scaleTarget = 4;
             } else if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
                 this->scaleTarget = 3;
@@ -286,7 +286,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
         } else {
             this->collider.info.toucher.damage = sDamages[this->type + ENMTHUNDER_TYPE_MAX];
             this->subtype = ENMTHUNDER_SUBTYPE_SPIN_GREAT;
-            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD) {
+            if (this->type == ENMTHUNDER_TYPE_GREAT_FAIRYS_SWORD) {
                 this->scaleTarget = 6;
             } else if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
                 this->scaleTarget = 4;
@@ -336,11 +336,11 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
     }
 
     if (player->unk_B08 > 0.85f) {
-        func_8019F900(&player->actor.projectedPos, 2);
+        Audio_PlaySfx_SwordCharge(&player->actor.projectedPos, 2);
     } else if (player->unk_B08 > 0.15f) {
-        func_8019F900(&player->actor.projectedPos, 1);
+        Audio_PlaySfx_SwordCharge(&player->actor.projectedPos, 1);
     } else if (player->unk_B08 > 0.1f) {
-        func_8019F900(&player->actor.projectedPos, 0);
+        Audio_PlaySfx_SwordCharge(&player->actor.projectedPos, 0);
     }
 
     if (Play_InCsMode(play)) {
@@ -380,8 +380,8 @@ void EnMThunder_Spin_Attack(EnMThunder* this, PlayState* play) {
     }
 
     if (this->timer > 0) {
-        this->actor.world.pos.x = player->bodyPartsPos[0].x;
-        this->actor.world.pos.z = player->bodyPartsPos[0].z;
+        this->actor.world.pos.x = player->bodyPartsPos[PLAYER_BODYPART_WAIST].x;
+        this->actor.world.pos.z = player->bodyPartsPos[PLAYER_BODYPART_WAIST].z;
         this->timer--;
     }
 

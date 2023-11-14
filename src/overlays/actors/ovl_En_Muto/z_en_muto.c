@@ -7,7 +7,7 @@
 #include "z_en_muto.h"
 #include "objects/object_toryo/object_toryo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnMuto*)thisx)
 
@@ -25,15 +25,15 @@ void EnMuto_InDialogue(EnMuto* this, PlayState* play);
 s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Muto_InitVars = {
-    ACTOR_EN_MUTO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TORYO,
-    sizeof(EnMuto),
-    (ActorFunc)EnMuto_Init,
-    (ActorFunc)EnMuto_Destroy,
-    (ActorFunc)EnMuto_Update,
-    (ActorFunc)EnMuto_Draw,
+    /**/ ACTOR_EN_MUTO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TORYO,
+    /**/ sizeof(EnMuto),
+    /**/ EnMuto_Init,
+    /**/ EnMuto_Destroy,
+    /**/ EnMuto_Update,
+    /**/ EnMuto_Draw,
 };
 
 static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x0624, 0x0623, 0x2AC6 };
@@ -87,7 +87,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     EnMuto_SetupIdle(this);
@@ -177,7 +177,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
         }
     }
 
-    func_800B8614(&this->actor, play, 80.0f);
+    Actor_OfferTalk(&this->actor, play, 80.0f);
 }
 
 void EnMuto_SetupDialogue(EnMuto* this, PlayState* play) {

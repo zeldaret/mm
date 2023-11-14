@@ -22,15 +22,15 @@ void func_80B23934(EnHanabi* this, PlayState* play);
 void EnHanabi_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Hanabi_InitVars = {
-    ACTOR_EN_HANABI,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnHanabi),
-    (ActorFunc)EnHanabi_Init,
-    (ActorFunc)EnHanabi_Destroy,
-    (ActorFunc)EnHanabi_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_HANABI,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnHanabi),
+    /**/ EnHanabi_Init,
+    /**/ EnHanabi_Destroy,
+    /**/ EnHanabi_Update,
+    /**/ NULL,
 };
 
 Vec3s D_80B23AA0[] = {
@@ -194,6 +194,7 @@ void EnHanabi_Init(Actor* thisx, PlayState* play2) {
     EnHanabi* this = THIS;
     s32 i;
 
+    //! FAKE:
     if (1) {}
 
     Actor_SetScale(thisx, 1.0f);
@@ -327,7 +328,7 @@ void func_80B23934(EnHanabi* this, PlayState* play) {
     if ((gSaveContext.save.entrance == ENTRANCE(TERMINA_FIELD, 1)) && (gSaveContext.sceneLayer == 7)) {
         if (play->csCtx.curFrame > 1650) {
             func_80B236C8(this, play);
-            func_800B8FE8(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
+            Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
         }
     }
 

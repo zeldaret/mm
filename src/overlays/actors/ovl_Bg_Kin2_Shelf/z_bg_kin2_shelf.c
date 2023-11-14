@@ -24,15 +24,15 @@ void func_80B70498(BgKin2Shelf* this);
 void func_80B704B4(BgKin2Shelf* this, PlayState* play);
 
 ActorInit Bg_Kin2_Shelf_InitVars = {
-    ACTOR_BG_KIN2_SHELF,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KIN2_OBJ,
-    sizeof(BgKin2Shelf),
-    (ActorFunc)BgKin2Shelf_Init,
-    (ActorFunc)BgKin2Shelf_Destroy,
-    (ActorFunc)BgKin2Shelf_Update,
-    (ActorFunc)BgKin2Shelf_Draw,
+    /**/ ACTOR_BG_KIN2_SHELF,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_KIN2_OBJ,
+    /**/ sizeof(BgKin2Shelf),
+    /**/ BgKin2Shelf_Init,
+    /**/ BgKin2Shelf_Destroy,
+    /**/ BgKin2Shelf_Update,
+    /**/ BgKin2Shelf_Draw,
 };
 
 f32 D_80B70750[] = { 60.0f, 120.0f };
@@ -307,7 +307,7 @@ void func_80B70230(BgKin2Shelf* this, PlayState* play) {
         this->dyna.actor.world.pos.z = ((Math_CosS(sp36) * phi_f20) * D_80B70750[sp40]) + this->dyna.actor.home.pos.z;
 
         if (this->unk_166 != 0) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
         func_80B700A8(this);
     } else {
@@ -353,7 +353,7 @@ void func_80B704B4(BgKin2Shelf* this, PlayState* play) {
         this->dyna.actor.world.pos.z = ((Math_CosS(sp36) * temp_f20) * D_80B70758[sp40]) + this->dyna.actor.home.pos.z;
 
         if (this->unk_167 != 0) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
         func_80B700A8(this);
     } else {

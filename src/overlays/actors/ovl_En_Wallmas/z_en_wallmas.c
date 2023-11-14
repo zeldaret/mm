@@ -5,10 +5,11 @@
  */
 
 #include "z_en_wallmas.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnWallmas*)thisx)
 
@@ -44,15 +45,15 @@ void EnWallmas_WaitForSwitchFlag(EnWallmas* this, PlayState* play);
 void EnWallmas_Stun(EnWallmas* this, PlayState* play);
 
 ActorInit En_Wallmas_InitVars = {
-    ACTOR_EN_WALLMAS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_WALLMASTER,
-    sizeof(EnWallmas),
-    (ActorFunc)EnWallmas_Init,
-    (ActorFunc)EnWallmas_Destroy,
-    (ActorFunc)EnWallmas_Update,
-    (ActorFunc)EnWallmas_Draw,
+    /**/ ACTOR_EN_WALLMAS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_WALLMASTER,
+    /**/ sizeof(EnWallmas),
+    /**/ EnWallmas_Init,
+    /**/ EnWallmas_Destroy,
+    /**/ EnWallmas_Update,
+    /**/ EnWallmas_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -128,15 +129,12 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_STOP),
 };
 
-static f32 sYOffsetPerForm[] = { 50.0f, 55.0f, 50.0f, 20.0f, 30.0f };
-
-/**
- * This maps a given limb based on its limbIndex to its appropriate index
- * in the limbPos array. An index of -1 indicates that the limb is not part
- * of the limbPos array.
- */
-static s8 sLimbIndexToLimbPosIndex[] = {
-    -1, -1, -1, -1, 0, -1, -1, 1, -1, 2, -1, -1, 3, -1, 4, -1, -1, 5, -1, -1, -1, 6, 7, -1, 8,
+static f32 sYOffsetPerForm[PLAYER_FORM_MAX] = {
+    50.0f, // PLAYER_FORM_FIERCE_DEITY
+    55.0f, // PLAYER_FORM_GORON
+    50.0f, // PLAYER_FORM_ZORA
+    20.0f, // PLAYER_FORM_DEKU
+    30.0f, // PLAYER_FORM_HUMAN
 };
 
 void EnWallmas_Init(Actor* thisx, PlayState* play) {
@@ -200,7 +198,7 @@ void EnWallmas_Destroy(Actor* thisx, PlayState* play) {
 void EnWallmas_Freeze(EnWallmas* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = 3;
     this->timer = 80;
@@ -213,7 +211,7 @@ void EnWallmas_ThawIfFrozen(EnWallmas* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = 0;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 11, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, WALLMASTER_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -221,7 +219,7 @@ void EnWallmas_ThawIfFrozen(EnWallmas* this, PlayState* play) {
 void EnWallmas_TimerInit(EnWallmas* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.flags |= ACTOR_FLAG_20;
     this->timer = 130;
     this->actor.velocity.y = 0.0f;
@@ -272,7 +270,7 @@ void EnWallmas_SetupDrop(EnWallmas* this, PlayState* play) {
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.floorHeight = player->actor.floorHeight;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actor.flags &= ~ACTOR_FLAG_20;
     this->actionFunc = EnWallmas_Drop;
 }
@@ -459,7 +457,7 @@ void EnWallmas_SetupTakePlayer(EnWallmas* this, PlayState* play) {
     this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->yTarget = this->actor.playerHeightRel;
-    func_800B724C(play, &this->actor, PLAYER_CSMODE_18);
+    Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_18);
 }
 
 void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
@@ -498,7 +496,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
     Math_StepToF(&this->actor.world.pos.z, player->actor.world.pos.z, 3.0f);
 
     if (this->timer == 30) {
-        play_sound(NA_SE_OC_ABYSS);
+        Audio_PlaySfx(NA_SE_OC_ABYSS);
         func_80169FDC(&play->state);
     }
 }
@@ -506,7 +504,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
 void EnWallmas_ProximityOrSwitchInit(EnWallmas* this) {
     this->timer = 0;
     this->actor.draw = NULL;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_PROXIMITY) {
         this->actionFunc = EnWallmas_WaitForProximity;
     } else {
@@ -565,7 +563,7 @@ void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             } else if (this->actor.colChkInfo.damage != 0) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_DAMAGE);
             }
@@ -605,7 +603,7 @@ void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                     this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                                    CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     }
 
                     EnWallmas_SetupDamage(this, true);
@@ -651,7 +649,7 @@ void EnWallmas_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
             } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
-                func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
     }
@@ -705,17 +703,49 @@ s32 EnWallmas_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     return false;
 }
 
+/**
+ * This maps a given limb based on its limbIndex to its appropriate index
+ * in the bodyPartsPos array.
+ */
+static s8 sLimbToBodyParts[WALLMASTER_LIMB_MAX] = {
+    BODYPART_NONE,         // WALLMASTER_LIMB_NONE
+    BODYPART_NONE,         // WALLMASTER_LIMB_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_HAND
+    BODYPART_NONE,         // WALLMASTER_LIMB_INDEX_FINGER_ROOT
+    WALLMASTER_BODYPART_0, // WALLMASTER_LIMB_INDEX_FINGER_PROXIMAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_INDEX_FINGER_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_INDEX_FINGER_MIDDLE
+    WALLMASTER_BODYPART_1, // WALLMASTER_LIMB_INDEX_FINGER_DISTAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_RING_FINGER_ROOT
+    WALLMASTER_BODYPART_2, // WALLMASTER_LIMB_RING_FINGER_PROXIMAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_RING_FINGER_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_RING_FINGER_MIDDLE
+    WALLMASTER_BODYPART_3, // WALLMASTER_LIMB_RING_FINGER_DISTAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_MIDDLE_FINGER_ROOT
+    WALLMASTER_BODYPART_4, // WALLMASTER_LIMB_MIDDLE_FINGER_PROXIMAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_MIDDLE_FINGER_MIDDLE
+    WALLMASTER_BODYPART_5, // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_WRIST_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_WRIST
+    BODYPART_NONE,         // WALLMASTER_LIMB_THUMB_ROOT
+    WALLMASTER_BODYPART_6, // WALLMASTER_LIMB_THUMB_PROXIMAL
+    WALLMASTER_BODYPART_7, // WALLMASTER_LIMB_THUMB_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_THUMB_MIDDLE
+    WALLMASTER_BODYPART_8, // WALLMASTER_LIMB_THUMB_DISTAL
+};
+
 void EnWallmas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnWallmas* this = THIS;
     Gfx* gfx;
 
-    if (sLimbIndexToLimbPosIndex[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[sLimbIndexToLimbPosIndex[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if (limbIndex == WALLMASTER_LIMB_WRIST) {
-        Matrix_MultVecX(1000.0f, &this->limbPos[9]);
-        Matrix_MultVecX(-1000.0f, &this->limbPos[10]);
+        Matrix_MultVecX(1000.0f, &this->bodyPartsPos[WALLMASTER_BODYPART_9]);
+        Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[WALLMASTER_BODYPART_10]);
     } else if (limbIndex == WALLMASTER_LIMB_HAND) {
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -745,7 +775,7 @@ void EnWallmas_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               EnWallmas_OverrideLimbDraw, EnWallmas_PostLimbDraw, &this->actor);
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, WALLMASTER_BODYPART_MAX, this->drawDmgEffScale,
                                 this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 

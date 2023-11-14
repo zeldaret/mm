@@ -24,15 +24,15 @@ void func_80C0A458(BgAstrBombwall* this, PlayState* play);
 void func_80C0A4BC(BgAstrBombwall* this, PlayState* play);
 
 ActorInit Bg_Astr_Bombwall_InitVars = {
-    ACTOR_BG_ASTR_BOMBWALL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_ASTR_OBJ,
-    sizeof(BgAstrBombwall),
-    (ActorFunc)BgAstrBombwall_Init,
-    (ActorFunc)BgAstrBombwall_Destroy,
-    (ActorFunc)BgAstrBombwall_Update,
-    (ActorFunc)BgAstrBombwall_Draw,
+    /**/ ACTOR_BG_ASTR_BOMBWALL,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_ASTR_OBJ,
+    /**/ sizeof(BgAstrBombwall),
+    /**/ BgAstrBombwall_Init,
+    /**/ BgAstrBombwall_Destroy,
+    /**/ BgAstrBombwall_Update,
+    /**/ BgAstrBombwall_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[2] = {
@@ -103,7 +103,7 @@ void BgAstrBombwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_astr_obj_Colheader_002498);
     Collider_InitTris(play, &this->collider);
-    if (Flags_GetSwitch(play, BGASTRBOMBWALL_GET_SWITCHFLAG(thisx))) {
+    if (Flags_GetSwitch(play, BGASTRBOMBWALL_GET_SWITCH_FLAG(thisx))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -163,7 +163,7 @@ void func_80C0A378(BgAstrBombwall* this) {
 void func_80C0A38C(BgAstrBombwall* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Flags_SetSwitch(play, BGASTRBOMBWALL_GET_SWITCHFLAG(&this->dyna.actor));
+        Flags_SetSwitch(play, BGASTRBOMBWALL_GET_SWITCH_FLAG(&this->dyna.actor));
         func_80C0A400(this, play);
     } else {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

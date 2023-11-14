@@ -6,6 +6,7 @@
 
 #include "z_en_bom.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -34,15 +35,15 @@ typedef struct {
 PowderKegFuseSegment sPowderKegFuseSegments[16];
 
 ActorInit En_Bom_InitVars = {
-    ACTOR_EN_BOM,
-    ACTORCAT_EXPLOSIVES,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnBom),
-    (ActorFunc)EnBom_Init,
-    (ActorFunc)EnBom_Destroy,
-    (ActorFunc)EnBom_Update,
-    (ActorFunc)EnBom_Draw,
+    /**/ ACTOR_EN_BOM,
+    /**/ ACTORCAT_EXPLOSIVES,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnBom),
+    /**/ EnBom_Init,
+    /**/ EnBom_Destroy,
+    /**/ EnBom_Update,
+    /**/ EnBom_Draw,
 };
 
 static f32 enBomScales[] = { 0.01f, 0.03f };
@@ -138,7 +139,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.cylHeight = 10;
 
     this->flashSpeedScale = 7;
-    this->isPowderKeg = ENBOM_GETX_1(&this->actor);
+    this->isPowderKeg = ENBOM_GET_1(&this->actor);
     if (this->isPowderKeg) {
         play->actorCtx.flags |= ACTORCTX_FLAG_0;
         this->timer = gSaveContext.powderKegTimer;
@@ -151,19 +152,19 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider1, &this->actor, &sCylinderInit);
 
     if (!this->isPowderKeg) {
-        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit1, &this->collider3);
+        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit1, this->collider2Elements);
         this->collider1.dim.radius = 6;
         this->collider1.dim.height = 11;
     } else {
-        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, &this->collider3);
+        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
         this->collider1.dim.radius = 20;
         this->collider1.dim.height = 36;
         func_80872648(play, &this->actor.world.pos);
     }
 
-    this->collider3.info.toucher.damage += ENBOM_GETZ_FF00(thisx);
+    this->collider2Elements[0].info.toucher.damage += ENBOM_GET_FF00(thisx);
     this->actor.shape.rot.z &= 0xFF;
-    if (ENBOM_GETZ_80(&this->actor)) {
+    if (ENBOM_GET_80(&this->actor)) {
         this->actor.shape.rot.z |= 0xFF00;
     }
 
@@ -355,28 +356,28 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[0] != 0) {
-        play->envCtx.lightSettings.diffuseColor1[0] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[0] != 0) {
+        play->envCtx.adjLightSettings.light1Color[0] -= 25;
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[1] != 0) {
-        play->envCtx.lightSettings.diffuseColor1[1] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[1] != 0) {
+        play->envCtx.adjLightSettings.light1Color[1] -= 25;
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[2] != 0) {
-        play->envCtx.lightSettings.diffuseColor1[2] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[2] != 0) {
+        play->envCtx.adjLightSettings.light1Color[2] -= 25;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[0] != 0) {
-        play->envCtx.lightSettings.ambientColor[0] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[0] != 0) {
+        play->envCtx.adjLightSettings.ambientColor[0] -= 25;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[1] != 0) {
-        play->envCtx.lightSettings.ambientColor[1] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[1] != 0) {
+        play->envCtx.adjLightSettings.ambientColor[1] -= 25;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[2] != 0) {
-        play->envCtx.lightSettings.ambientColor[2] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[2] != 0) {
+        play->envCtx.adjLightSettings.ambientColor[2] -= 25;
     }
 
     if (this->timer == 0) {
@@ -493,10 +494,10 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 EffectSsGSpk_SpawnFuse(play, thisx, &effPos, &effVelocity, &effAccel);
             }
             if (this->isPowderKeg) {
-                func_801A0810(&thisx->projectedPos, NA_SE_IT_BIG_BOMB_IGNIT - SFX_FLAG,
-                              (this->flashSpeedScale == 7)   ? 0
-                              : (this->flashSpeedScale == 3) ? 1
-                                                             : 2);
+                Audio_PlaySfx_AtPosWithChannelIO(&thisx->projectedPos, NA_SE_IT_BIG_BOMB_IGNIT - SFX_FLAG,
+                                                 (this->flashSpeedScale == 7)   ? 0
+                                                 : (this->flashSpeedScale == 3) ? 1
+                                                                                : 2);
             } else {
                 Actor_PlaySfx(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
             }
@@ -543,14 +544,16 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 if (Actor_HasParent(thisx, play)) {
                     effPos.y += 30.0f;
                 }
+                //! @note Assumes `isPowderKeg` values aligns with clearTag params.
+                //! Here, 0/1 are small/large explosions respectively.
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y - 10.0f, effPos.z, 0, 0, 0,
-                            this->isPowderKeg);
+                            CLEAR_TAG_PARAMS(this->isPowderKeg));
                 Actor_RequestQuakeAndRumble(thisx, play, sQuakeY[this->isPowderKeg],
                                             sQuakeDurations[this->isPowderKeg]);
-                play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
-                    play->envCtx.lightSettings.diffuseColor1[2] = 250;
-                play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =
-                    play->envCtx.lightSettings.ambientColor[2] = 250;
+                play->envCtx.adjLightSettings.light1Color[0] = play->envCtx.adjLightSettings.light1Color[1] =
+                    play->envCtx.adjLightSettings.light1Color[2] = 250;
+                play->envCtx.adjLightSettings.ambientColor[0] = play->envCtx.adjLightSettings.ambientColor[1] =
+                    play->envCtx.adjLightSettings.ambientColor[2] = 250;
                 Camera_AddQuake(&play->mainCamera, 2, 11, 8);
                 thisx->params = BOMB_TYPE_EXPLOSION;
                 this->timer = 10;
@@ -579,16 +582,17 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
 
         if ((enBomScales[this->isPowderKeg] <= thisx->scale.x) && (thisx->params != BOMB_TYPE_EXPLOSION)) {
             if (thisx->depthInWater >= 20.0f) {
-                Vec3f sp54;
+                Vec3f effPos;
 
-                sp54.x = thisx->world.pos.x;
-                sp54.y = thisx->world.pos.y + thisx->depthInWater;
-                sp54.z = thisx->world.pos.z;
-                EffectSsGRipple_Spawn(play, &sp54, 70, 500, 0);
-                EffectSsGRipple_Spawn(play, &sp54, 70, 500, 10);
-                sp54.y += 10.0f;
-                EffectSsGSplash_Spawn(play, &sp54, NULL, NULL, 1, 500);
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp54.x, sp54.y, sp54.z, 0, 0, 1, 200);
+                effPos.x = thisx->world.pos.x;
+                effPos.y = thisx->world.pos.y + thisx->depthInWater;
+                effPos.z = thisx->world.pos.z;
+                EffectSsGRipple_Spawn(play, &effPos, 70, 500, 0);
+                EffectSsGRipple_Spawn(play, &effPos, 70, 500, 10);
+                effPos.y += 10.0f;
+                EffectSsGSplash_Spawn(play, &effPos, NULL, NULL, 1, 500);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y, effPos.z, 0, 0, 1,
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_SMOKE));
                 SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
                 this->unk_1F4 = 0.0f;
                 thisx->velocity.y = (KREG(83) * 0.1f) + -2.0f;

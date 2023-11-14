@@ -5,9 +5,10 @@
  */
 
 #include "z_en_pp.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnPp*)thisx)
 
@@ -116,15 +117,15 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit En_Pp_InitVars = {
-    ACTOR_EN_PP,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_PP,
-    sizeof(EnPp),
-    (ActorFunc)EnPp_Init,
-    (ActorFunc)EnPp_Destroy,
-    (ActorFunc)EnPp_Update,
-    (ActorFunc)EnPp_Draw,
+    /**/ ACTOR_EN_PP,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_PP,
+    /**/ sizeof(EnPp),
+    /**/ EnPp_Init,
+    /**/ EnPp_Destroy,
+    /**/ EnPp_Update,
+    /**/ EnPp_Draw,
 };
 
 static ColliderJntSphElementInit sMaskColliderJntSphElementsInit[1] = {
@@ -234,7 +235,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
     EnPp* this = THIS;
     EffectBlureInit1 blureInit;
 
-    this->actor.targetMode = 4;
+    this->actor.targetMode = TARGET_MODE_4;
     this->actor.colChkInfo.mass = 60;
     this->actor.colChkInfo.health = 3;
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -555,14 +556,14 @@ void EnPp_Idle(EnPp* this, PlayState* play) {
                 EnPp_ChangeAnim(this, EN_PP_ANIM_WALK);
             }
 
-            if ((this->maskBounceRotationalVelocity < 0x64) &&
+            if ((this->maskBounceAngularVelocity < 0x64) &&
                 (fabsf(this->actor.world.rot.y - this->targetRotY) < 100.0f)) {
                 Math_ApproachF(&this->actor.speed, 1.0f, 0.3f, 1.0f);
             }
 
-            Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1,
-                               (this->maskBounceRotationalVelocity + 0x258), 0);
-            Math_SmoothStepToS(&this->maskBounceRotationalVelocity, 0, 1, 0x1F4, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, this->maskBounceAngularVelocity + 0x258,
+                               0);
+            Math_SmoothStepToS(&this->maskBounceAngularVelocity, 0, 1, 0x1F4, 0);
         }
     }
 }
@@ -601,11 +602,10 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
             this->targetPos.z += distanceFromWorldPos.z;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, (this->maskBounceRotationalVelocity + 0x7D0),
-                           0);
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, this->maskBounceAngularVelocity + 0x7D0, 0);
     }
 
-    Math_SmoothStepToS(&this->maskBounceRotationalVelocity, 0, 1, 0x1F4, 0);
+    Math_SmoothStepToS(&this->maskBounceAngularVelocity, 0, 1, 0x1F4, 0);
     if (!this->actionVar.isCharging) {
         Math_ApproachZeroF(&this->actor.speed, 0.5f, 1.0f);
         if (fabsf(this->actor.world.rot.y - this->targetRotY) < 100.0f) {
@@ -868,8 +868,7 @@ void EnPp_StunnedOrFrozen(EnPp* this, PlayState* play) {
     if ((this->secondaryTimer == 0) && (this->drawDmgEffTimer == 0)) {
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
             (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
-            Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.7f,
-                                  0.4f);
+            Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_PP_BODYPART_MAX, 2, 0.7f, 0.4f);
             this->drawDmgEffTimer = 0;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         }
@@ -905,7 +904,7 @@ void EnPp_SetupDamaged(EnPp* this, PlayState* play) {
     if (((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
          (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) &&
         (this->drawDmgEffTimer != 0)) {
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.7f, 0.4f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_PP_BODYPART_MAX, 2, 0.7f, 0.4f);
         this->drawDmgEffTimer = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
@@ -985,7 +984,7 @@ void EnPp_SetupDead(EnPp* this, PlayState* play) {
         this->targetPos.z += deadVelocity.z;
     }
 
-    this->maskBounceRotationalVelocity = this->actionVar.isCharging = 0;
+    this->maskBounceAngularVelocity = this->actionVar.isCharging = 0;
     EnPp_ChangeAnim(this, EN_PP_ANIM_DAMAGE);
     this->timer = 15;
     if (((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
@@ -998,7 +997,7 @@ void EnPp_SetupDead(EnPp* this, PlayState* play) {
     Enemy_StartFinishingBlow(play, &this->actor);
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_HIPLOOP_DEAD);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->action = EN_PP_ACTION_DEAD;
     this->actionFunc = EnPp_Dead;
 }
@@ -1025,7 +1024,7 @@ void EnPp_Dead(EnPp* this, PlayState* play) {
             return;
         }
 
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.7f, 0.4f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_PP_BODYPART_MAX, 2, 0.7f, 0.4f);
         this->drawDmgEffTimer = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
@@ -1093,7 +1092,7 @@ void EnPp_Mask_SetupDetach(EnPp* this, PlayState* play) {
 
         this->actor.gravity = 0.0f;
         this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actionVar.maskDetachState = EN_PP_MASK_DETACH_STATE_START;
         EnPp_ChangeAnim(this, EN_PP_ANIM_IDLE);
         SkelAnime_Update(&this->skelAnime);
@@ -1165,8 +1164,8 @@ void EnPp_BodyPart_SetupMove(EnPp* this) {
     this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 13.0f;
     this->actor.gravity = -2.0f;
     this->timer = Rand_S16Offset(30, 30);
-    this->deadBodyPartRotationalVelocity.x = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
-    this->deadBodyPartRotationalVelocity.z = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
+    this->deadBodyPartAngularVelocity.x = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
+    this->deadBodyPartAngularVelocity.z = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
     if (EN_PP_GET_TYPE(&this->actor) != EN_PP_TYPE_BODY_PART_BODY) {
         this->actor.speed = Rand_ZeroFloat(4.0f) + 4.0f;
         this->actor.world.rot.y = ((s32)Rand_CenteredFloat(223.0f) + 0x1999) * this->deadBodyPartIndex;
@@ -1188,18 +1187,18 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_BODY_PART_BODY) {
-        this->deadBodyPartDrawDmgEffCount = 10;
-        for (i = 0; i < ARRAY_COUNT(this->deadBodyPartDrawDmgEffPos); i++) {
-            Math_Vec3f_Copy(&this->deadBodyPartDrawDmgEffPos[i], &this->deadBodyPartPos);
-            this->deadBodyPartDrawDmgEffPos[i].x += Math_SinS(0xCCC * i) * 15.0f;
-            this->deadBodyPartDrawDmgEffPos[i].y += -5.0f;
-            this->deadBodyPartDrawDmgEffPos[i].z += Math_CosS(0xCCC * i) * 15.0f;
+        this->deadBodyPartCount = EN_PP_DEAD_BODYPART_MAX;
+        for (i = 0; i < EN_PP_DEAD_BODYPART_MAX; i++) {
+            Math_Vec3f_Copy(&this->deadBodyPartsPos[i], &this->deadBodyPartPos);
+            this->deadBodyPartsPos[i].x += Math_SinS(0xCCC * i) * 15.0f;
+            this->deadBodyPartsPos[i].y += -5.0f;
+            this->deadBodyPartsPos[i].z += Math_CosS(0xCCC * i) * 15.0f;
         }
     } else {
-        Math_Vec3f_Copy(&this->deadBodyPartDrawDmgEffPos[0], &this->deadBodyPartPos);
-        this->deadBodyPartDrawDmgEffCount = 1;
-        this->actor.shape.rot.x += this->deadBodyPartRotationalVelocity.x;
-        this->actor.shape.rot.z += this->deadBodyPartRotationalVelocity.z;
+        Math_Vec3f_Copy(&this->deadBodyPartsPos[0], &this->deadBodyPartPos);
+        this->deadBodyPartCount = 1;
+        this->actor.shape.rot.x += this->deadBodyPartAngularVelocity.x;
+        this->actor.shape.rot.z += this->deadBodyPartAngularVelocity.z;
     }
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
@@ -1320,7 +1319,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                                 (this->drawDmgEffTimer == 0))) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
                                     this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0,
-                                    CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                         Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, 255, COLORFILTER_BUFFLAG_OPA,
                                              25);
                         this->drawDmgEffTimer = 20;
@@ -1348,12 +1347,12 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                                  (this->action == EN_PP_ACTION_ROAR))) {
         this->secondaryTimer = 0;
         this->timer = 10;
-        this->maskBounceRotationalVelocity = 0x20D0;
+        this->maskBounceAngularVelocity = 0x20D0;
         this->actor.speed = 0.0f;
         if (this->action == EN_PP_ACTION_CHARGE) {
             this->actionVar.isCharging = false;
             EnPp_ChangeAnim(this, EN_PP_ANIM_TURN_TO_FACE_PLAYER);
-            this->maskBounceRotationalVelocity = 0x1B58;
+            this->maskBounceAngularVelocity = 0x1B58;
         }
 
         this->targetRotY = this->actor.yawTowardsPlayer;
@@ -1540,10 +1539,10 @@ void EnPp_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             (limbIndex == HIPLOOP_LIMB_CENTER_WING_BASE) || (limbIndex == HIPLOOP_LIMB_CENTER_WING_MIDDLE) ||
             (limbIndex == HIPLOOP_LIMB_BACK_LEFT_LOWER_LEG) || (limbIndex == HIPLOOP_LIMB_RIGHT_EYE) ||
             (limbIndex == HIPLOOP_LIMB_LEFT_EYE)) {
-            Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
-            this->bodyPartsPosIndex++;
-            if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
-                this->bodyPartsPosIndex = 0;
+            Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
+            this->bodyPartIndex++;
+            if (this->bodyPartIndex >= EN_PP_BODYPART_MAX) {
+                this->bodyPartIndex = 0;
             }
 
             if ((this->action == EN_PP_ACTION_SPAWN_BODY_PARTS) && (this->deadBodyPartsSpawnedCount < 6) &&
@@ -1574,14 +1573,14 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnPp_OverrideLimbDraw, EnPp_PostLimbDraw, &this->actor);
 
-    if (this->deadBodyPartDrawDmgEffCount != 0) {
+    if (this->deadBodyPartCount != 0) {
         scale = 0.4f;
         if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_BODY_PART_BODY) {
             scale = 0.6f;
         }
 
-        Actor_DrawDamageEffects(play, &this->actor, this->deadBodyPartDrawDmgEffPos, this->deadBodyPartDrawDmgEffCount,
-                                scale, scale, 1.0f, ACTOR_DRAW_DMGEFF_BLUE_FIRE);
+        Actor_DrawDamageEffects(play, &this->actor, this->deadBodyPartsPos, this->deadBodyPartCount, scale, scale, 1.0f,
+                                ACTOR_DRAW_DMGEFF_BLUE_FIRE);
     }
 
     if (this->drawDmgEffTimer != 0) {
@@ -1599,8 +1598,8 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
             this->drawDmgEffFrozenSteamScale = 0.8f;
         }
 
-        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
-                                this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, alpha, this->drawDmgEffType);
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EN_PP_BODYPART_MAX, this->drawDmgEffScale,
+                                this->drawDmgEffFrozenSteamScale, alpha, this->drawDmgEffType);
     }
 
     if (this->floorPolyForCircleShadow != NULL) {

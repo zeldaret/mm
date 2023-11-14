@@ -17,7 +17,7 @@ typedef struct EnPr2 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[5];
-    /* 0x1A6 */ Vec3s morphtable[5];
+    /* 0x1A6 */ Vec3s morphTable[5];
     /* 0x1C4 */ EnPr2ActionFunc actionFunc;
     /* 0x1C8 */ s16 pathIndex;
     /* 0x1CC */ Path* path;
