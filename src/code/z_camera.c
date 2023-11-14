@@ -4842,7 +4842,7 @@ s32 Camera_Fixed2(Camera* camera) {
     Vec3f sp98;
     PosRot* focalActorPosRot = &camera->focalActorPosRot;
     f32 temp_f0_3;
-    f32 zero;
+    s32 pad;
     BgCamFuncData* bgCamFuncData;
     VecGeo sp80;
     PosRot* sp7C;
@@ -4858,9 +4858,6 @@ s32 Camera_Fixed2(Camera* camera) {
     if (!RELOAD_PARAMS(camera)) {
     } else {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
-
-        //! FAKE:
-        if (targetActorPos) {}
 
         roData->unk_00 =
             GET_NEXT_SCALED_RO_DATA(values) * focalActorHeight * (0.8f - ((68.0f / focalActorHeight) * -0.2f));
@@ -4949,8 +4946,6 @@ s32 Camera_Fixed2(Camera* camera) {
     }
 
     sCameraInterfaceFlags = roData->interfaceFlags;
-    //! FAKE:
-    zero = 0.0f;
 
     if (roData->interfaceFlags & FIXED2_FLAG_3) {
         if (camera->target == NULL) {
@@ -4965,17 +4960,16 @@ s32 Camera_Fixed2(Camera* camera) {
         camera->focalActorAtOffset.y = spB0.y - focalActorPosRot->pos.y;
         camera->focalActorAtOffset.z = spB0.z - focalActorPosRot->pos.z;
     } else if (roData->interfaceFlags & FIXED2_FLAG_6) {
-        sp98.x = zero;
+        sp98.x = 0.0f;
         sp98.y = roData->unk_00 + focalActorHeight;
-        sp98.z = zero;
+        sp98.z = 0.0f;
 
         if (camera->target != NULL) {
-            focalActorPos = &camera->focalActor->focus.pos;
             targetActorPos = &camera->target->focus.pos;
-            //! FAKE:
-            sp98.x = ((void)0, zero) + ((targetActorPos->x - focalActorPos->x) * 0.4f);
+            focalActorPos = &camera->focalActor->focus.pos;
+            sp98.x += (targetActorPos->x - focalActorPos->x) * 0.4f;
             sp98.y += (targetActorPos->y - focalActorPos->y) * 0.4f;
-            sp98.z = ((void)0, zero) + ((targetActorPos->z - focalActorPos->z) * 0.4f);
+            sp98.z += (targetActorPos->z - focalActorPos->z) * 0.4f;
         }
 
         Camera_ScaledStepToCeilVec3f(&sp98, &camera->focalActorAtOffset, 0.25f, 0.25f, 0.1f);
@@ -4983,17 +4977,16 @@ s32 Camera_Fixed2(Camera* camera) {
         spB0.y = focalActorPosRot->pos.y + camera->focalActorAtOffset.y;
         spB0.z = focalActorPosRot->pos.z + camera->focalActorAtOffset.z;
     } else if (roData->interfaceFlags & FIXED2_FLAG_7) {
-        sp98.x = zero;
+        sp98.x = 0.0f;
         sp98.y = roData->unk_00 + focalActorHeight;
-        sp98.z = zero;
+        sp98.z = 0.0f;
 
         if (camera->target != NULL) {
-            focalActorPos = &camera->focalActor->focus.pos;
             targetActorPos = &camera->target->focus.pos;
-            //! FAKE:
-            sp98.x = ((void)0, zero) + ((targetActorPos->x - focalActorPos->x) * 0.7f);
+            focalActorPos = &camera->focalActor->focus.pos;
+            sp98.x += (targetActorPos->x - focalActorPos->x) * 0.7f;
             sp98.y += (targetActorPos->y - focalActorPos->y) * 0.7f;
-            sp98.z = ((void)0, zero) + ((targetActorPos->z - focalActorPos->z) * 0.7f);
+            sp98.z += (targetActorPos->z - focalActorPos->z) * 0.7f;
         }
 
         Camera_ScaledStepToCeilVec3f(&sp98, &camera->focalActorAtOffset, 0.25f, 0.25f, 0.1f);
@@ -5001,8 +4994,8 @@ s32 Camera_Fixed2(Camera* camera) {
         spB0.y = focalActorPosRot->pos.y + camera->focalActorAtOffset.y;
         spB0.z = focalActorPosRot->pos.z + camera->focalActorAtOffset.z;
     } else {
-        sp98.x = zero;
-        sp98.z = zero;
+        sp98.x = 0.0f;
+        sp98.z = 0.0f;
 
         if ((((Player*)camera->focalActor)->stateFlags1 & PLAYER_STATE1_4000) ||
             (((Player*)camera->focalActor)->stateFlags1 & PLAYER_STATE1_4)) {
