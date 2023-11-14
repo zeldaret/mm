@@ -17,7 +17,7 @@ void EnHakurock_Init(Actor* thisx, PlayState* play);
 void EnHakurock_Destroy(Actor* thisx, PlayState* play);
 void EnHakurock_Update(Actor* thisx, PlayState* play);
 
-void func_80B21BE0(BossHakugin* parent, Vec3f* arg1, s32 arg2);
+void func_80B21BE0(BossHakugin* parent, Vec3f* pos, s32 arg2);
 void func_80B21EA4(EnHakurock* this, s32 arg1);
 void func_80B21FFC(EnHakurock* this);
 void func_80B22040(EnHakurock* this, PlayState* play);
@@ -90,40 +90,42 @@ void EnHakurock_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80B21BE0(BossHakugin* parent, Vec3f* arg1, s32 arg2) {
+void func_80B21BE0(BossHakugin* parent, Vec3f* pos, s32 arg2) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(parent->unk_09F8); i++) {
-        BossHakuginEffect* gohtEffect = &parent->unk_09F8[i];
-        if (gohtEffect->unk_18 < 0) {
-            s16 sp2E;
-            s16 sp2C;
-            f32 sp28;
+    for (i = 0; i < GOHT_EFFECT_COUNT; i++) {
+        GohtEffect* gohtEffect = &parent->effect[i];
 
-            Math_Vec3f_Copy(&gohtEffect->unk_0, arg1);
-            sp2C = Rand_S16Offset(0x1000, 0x3000);
-            sp2E = Rand_Next() >> 0x10;
-            sp28 = Rand_ZeroFloat(5.0f) + 10.0f;
-            gohtEffect->unk_C.x = (sp28 * Math_CosS(sp2C)) * Math_SinS(sp2E);
-            gohtEffect->unk_C.y = (Math_SinS(sp2C) * sp28);
-            gohtEffect->unk_C.z = (sp28 * Math_CosS(sp2C)) * Math_CosS(sp2E);
+        if (gohtEffect->timer < 0) {
+            VecGeo velocityGeo;
+
+            Math_Vec3f_Copy(&gohtEffect->pos, pos);
+
+            velocityGeo.pitch = Rand_S16Offset(0x1000, 0x3000);
+            velocityGeo.yaw = Rand_Next() >> 0x10;
+            velocityGeo.r = Rand_ZeroFloat(5.0f) + 10.0f;
+            gohtEffect->velocity.x = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_SinS(velocityGeo.yaw);
+            gohtEffect->velocity.y = velocityGeo.r * Math_SinS(velocityGeo.pitch);
+            gohtEffect->velocity.z = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_CosS(velocityGeo.yaw);
+
             if ((arg2 == 1) || (arg2 == 3)) {
-                gohtEffect->unk_24 = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
-                gohtEffect->unk_0.x = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtEffect->unk_C.x) + arg1->x;
-                gohtEffect->unk_0.y = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->unk_C.y) + arg1->y;
-                gohtEffect->unk_0.z = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtEffect->unk_C.z) + arg1->z;
-                gohtEffect->unk_1A = 1;
+                gohtEffect->scale = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
+                gohtEffect->pos.x = pos->x + ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtEffect->velocity.x);
+                gohtEffect->pos.y = pos->y + ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->velocity.y);
+                gohtEffect->pos.z = pos->z + ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtEffect->velocity.z);
+                gohtEffect->type = GOHT_EFFECT_STALACTITE;
             } else {
-                gohtEffect->unk_24 = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
-                gohtEffect->unk_0.x = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->unk_C.x) + arg1->x;
-                gohtEffect->unk_0.y = ((Rand_ZeroFloat(3.0f) + 1.0f) * gohtEffect->unk_C.y) + arg1->y;
-                gohtEffect->unk_0.z = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->unk_C.z) + arg1->z;
-                gohtEffect->unk_1A = 0;
+                gohtEffect->scale = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
+                gohtEffect->pos.x = pos->x + ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->velocity.x);
+                gohtEffect->pos.y = pos->y + ((Rand_ZeroFloat(3.0f) + 1.0f) * gohtEffect->velocity.y);
+                gohtEffect->pos.z = pos->z + ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->velocity.z);
+                gohtEffect->type = GOHT_EFFECT_ROCK;
             }
-            gohtEffect->unk_1C.x = (s32)Rand_Next() >> 0x10;
-            gohtEffect->unk_1C.y = (s32)Rand_Next() >> 0x10;
-            gohtEffect->unk_1C.z = (s32)Rand_Next() >> 0x10;
-            gohtEffect->unk_18 = 0x28;
+
+            gohtEffect->rot.x = (s32)Rand_Next() >> 0x10;
+            gohtEffect->rot.y = (s32)Rand_Next() >> 0x10;
+            gohtEffect->rot.z = (s32)Rand_Next() >> 0x10;
+            gohtEffect->timer = 40;
             return;
         }
     }

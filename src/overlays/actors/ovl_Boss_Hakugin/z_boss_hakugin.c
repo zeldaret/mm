@@ -31,7 +31,7 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play);
 void func_80B0E5A4(Actor* thisx, PlayState* play);
 
 void func_80B058C0(BossHakugin* this);
-void func_80B05EE0(BossHakugin* this, PlayState* play);
+void BossHakugin_SpawnBlueWarp(BossHakugin* this, PlayState* play);
 void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
 void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
 void func_80B0D9CC(BossHakugin* this);
@@ -368,39 +368,50 @@ static ColliderCylinderInit sCylinderInit = {
     { 170, 40, 0, { 0, 0, 0 } },
 };
 
+typedef enum GohtDamageEffect {
+    /* 0x0 */ GOHT_DMGEFF_NONE,
+    /* 0x2 */ GOHT_DMGEFF_FIRE = 2,
+    /* 0x3 */ GOHT_DMGEFF_FREEZE,
+    /* 0x4 */ GOHT_DMGEFF_LIGHT_ORB,
+    /* 0xC */ GOHT_DMGEFF_C = 0xC,
+    /* 0xD */ GOHT_DMGEFF_BLUE_LIGHT_ORB,
+    /* 0xE */ GOHT_DMGEFF_E,
+    /* 0xF */ GOHT_DMGEFF_F
+} GohtDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(1, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xC),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0xE),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(1, 0x0),
-    /* Goron punch    */ DMG_ENTRY(1, 0x0),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(1, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(1, 0x3),
-    /* Light arrow    */ DMG_ENTRY(1, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(1, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(1, 0xD),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xC),
+    /* Deku Nut       */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, GOHT_DMGEFF_C),
+    /* Zora boomerang */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, GOHT_DMGEFF_E),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Goron punch    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(1, GOHT_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(1, GOHT_DMGEFF_FREEZE),
+    /* Light arrow    */ DMG_ENTRY(1, GOHT_DMGEFF_LIGHT_ORB),
+    /* Goron spikes   */ DMG_ENTRY(1, GOHT_DMGEFF_F),
+    /* Deku spin      */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(1, GOHT_DMGEFF_BLUE_LIGHT_ORB),
+    /* Normal Roll    */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, GOHT_DMGEFF_C),
 };
 
 static CollisionCheckInfoInit sColChkInfoInit = { 30, 80, 100, MASS_IMMOVABLE };
@@ -450,8 +461,9 @@ s32 D_80B0EAB0[5] = {
 
 static Color_RGBA8 sSparklePrimColor = { 250, 250, 250, 255 };
 static Color_RGBA8 sSparkleEnvColor = { 180, 180, 180, 255 };
-Color_RGB8 D_80B0EACC = { 0, 150, 255 };
-Color_RGB8 D_80B0EAD0 = { 0, 255, 255 };
+
+Color_RGB8 sGohtLightColor = { 0, 150, 255 }; // For lights and light orbs
+Color_RGB8 sGohtLightningColor = { 0, 255, 255 };
 
 void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     static s32 sTextureDesegmented = false;
@@ -493,7 +505,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     this->unk_01B4 = -1;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
-        func_80B05EE0(this, play);
+        BossHakugin_SpawnBlueWarp(this, play);
         Actor_Kill(&this->actor);
         return;
     }
@@ -509,8 +521,8 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
                                                0, 0, 0, EN_HAKUROCK_TYPE_UNK_2);
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_09F8); i++) {
-        this->unk_09F8[i].unk_18 = -1;
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++) {
+        this->effect[i].timer = -1;
     }
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -554,14 +566,14 @@ void BossHakugin_Destroy(Actor* thisx, PlayState* play) {
     AudioSfx_StopByPos(&this->unk_0464);
 }
 
-s32 func_80B0573C(Vec3f* arg0) {
-    f32 magnitude = Math3D_Vec3fMagnitude(arg0);
+s32 BossHakugin_Vec3fNormalize(Vec3f* vec) {
+    f32 magnitude = Math3D_Vec3fMagnitude(vec);
 
     if (magnitude < 0.0001f) {
         return false;
     }
 
-    Math_Vec3f_Scale(arg0, 1.0f / magnitude);
+    Math_Vec3f_Scale(vec, 1.0f / magnitude);
     return true;
 }
 
@@ -579,17 +591,20 @@ void func_80B057A4(Vec3f* arg0, Vec3f* arg1, f32 arg2) {
         var_fv1 = M_PI;
     }
 
-    if (var_fv1 < arg2) {
+    if (arg2 > var_fv1) {
         arg2 = var_fv1;
     }
 
-    if (!(arg2 < (M_PI / 180.0f))) {
-        Math3D_CrossProduct(arg0, arg1, &sp34);
-        if (func_80B0573C(&sp34)) {
-            Matrix_RotateAxisF(arg2, &sp34, MTXMODE_NEW);
-            Matrix_MultVec3f(arg0, &sp28);
-            Math_Vec3f_Copy(arg0, &sp28);
-        }
+    if (arg2 < (M_PI / 180.0f)) {
+        return;
+    }
+
+    Math3D_CrossProduct(arg0, arg1, &sp34);
+
+    if (BossHakugin_Vec3fNormalize(&sp34)) {
+        Matrix_RotateAxisF(arg2, &sp34, MTXMODE_NEW);
+        Matrix_MultVec3f(arg0, &sp28);
+        Math_Vec3f_Copy(arg0, &sp28);
     }
 }
 
@@ -601,7 +616,7 @@ void func_80B058C0(BossHakugin* this) {
     now->params = 4;
     now->world.pos.x = -500.0f;
     now->world.pos.y = this->actor.world.pos.y;
-    now->world.pos.z = -1266.6666667f; // 3800 / 3
+    now->world.pos.z = -3800.0f / 3.0f;
     now->shape.rot.y = this->actor.shape.rot.y + 0x4000;
 
     while (i < 6) {
@@ -673,34 +688,34 @@ void func_80B05CBC(BossHakugin* this, Player* player) {
 }
 
 void func_80B05D4C(BossHakugin* this) {
-    Vec3f* var_t0 = &this->actor.world.pos;
+    Vec3f* lightPos = &this->actor.world.pos;
     s32 i;
     s16 var_t1 = 0;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
         if (this->unk_2618[i].unk_0C == 255) {
-            var_t0 = &this->unk_2618[i].unk_00;
+            lightPos = &this->unk_2618[i].unk_00;
             var_t1 = 5000;
             break;
         }
     }
     if (i == ARRAY_COUNT(this->unk_2618)) {
         if (this->unk_01C8 > 0.0f) {
-            var_t0 = &this->unk_0380;
+            lightPos = &this->unk_0380;
             var_t1 = (this->unk_01C8 / 30.0f) * 5000.0f;
         } else if ((this->unk_0192 == 3) || (this->unk_0192 == 2)) {
-            var_t0 = &this->unk_3734[0];
+            lightPos = &this->unk_3734[0];
             var_t1 = 5000;
         } else if (this->unk_0192 == 4) {
-            var_t0 = &this->unk_3734[this->unk_01AA];
+            lightPos = &this->unk_3734[this->unk_01AA];
             var_t1 = (10 - this->unk_01AA) * 500.0f;
         }
     }
-    Lights_PointNoGlowSetInfo(&this->lightInfo, var_t0->x, var_t0->y, var_t0->z, D_80B0EACC.r, D_80B0EACC.g,
-                              D_80B0EACC.b, var_t1);
+    Lights_PointNoGlowSetInfo(&this->lightInfo, lightPos->x, lightPos->y, lightPos->z, sGohtLightColor.r,
+                              sGohtLightColor.g, sGohtLightColor.b, var_t1);
 }
 
-void func_80B05EE0(BossHakugin* this, PlayState* play) {
+void BossHakugin_SpawnBlueWarp(BossHakugin* this, PlayState* play) {
     s16 atan = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x);
     Vec3f warpPos;
     Vec3f heartPos;
@@ -874,30 +889,28 @@ void func_80B06600(BossHakugin* this, Vec3f* arg1, PlayState* play) {
     }
 }
 
-void func_80B0696C(BossHakugin* this, Vec3f* arg1) {
+void func_80B0696C(BossHakugin* this, Vec3f* pos) {
     s32 i;
-    BossHakuginEffect* temp_s0;
+    GohtEffect* effect;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_09F8); i++) {
-        temp_s0 = &this->unk_09F8[i];
-        if (temp_s0->unk_18 < 0) {
-            s16 sp2E;
-            s16 sp2C;
-            f32 sp28;
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++) {
+        effect = &this->effect[i];
+        if (effect->timer < 0) {
+            VecGeo velocityGeo;
 
-            Math_Vec3f_Copy(&temp_s0->unk_0, arg1);
-            sp2C = Rand_S16Offset(0x1000, 0x3000);
-            sp2E = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x12) + 0x8000;
-            sp28 = Rand_ZeroFloat(5.0f) + 7.0f;
-            temp_s0->unk_C.x = sp28 * Math_CosS(sp2C) * Math_SinS(sp2E);
-            temp_s0->unk_C.y = sp28 * Math_SinS(sp2C);
-            temp_s0->unk_C.z = sp28 * Math_CosS(sp2C) * Math_CosS(sp2E);
-            temp_s0->unk_0.x = arg1->x + (Rand_ZeroFloat(3.0f) * temp_s0->unk_C.x);
-            temp_s0->unk_0.y = arg1->y + (Rand_ZeroFloat(3.0f) * temp_s0->unk_C.y);
-            temp_s0->unk_0.z = arg1->z + (Rand_ZeroFloat(3.0f) * temp_s0->unk_C.z);
-            temp_s0->unk_24 = (Rand_ZeroFloat(6.0f) + 15.0f) * 0.0001f;
-            temp_s0->unk_18 = 40;
-            temp_s0->unk_1A = 0;
+            Math_Vec3f_Copy(&effect->pos, pos);
+            velocityGeo.pitch = Rand_S16Offset(0x1000, 0x3000);
+            velocityGeo.yaw = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x12) + 0x8000;
+            velocityGeo.r = Rand_ZeroFloat(5.0f) + 7.0f;
+            effect->velocity.x = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_SinS(velocityGeo.yaw);
+            effect->velocity.y = velocityGeo.r * Math_SinS(velocityGeo.pitch);
+            effect->velocity.z = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_CosS(velocityGeo.yaw);
+            effect->pos.x = pos->x + (Rand_ZeroFloat(3.0f) * effect->velocity.x);
+            effect->pos.y = pos->y + (Rand_ZeroFloat(3.0f) * effect->velocity.y);
+            effect->pos.z = pos->z + (Rand_ZeroFloat(3.0f) * effect->velocity.z);
+            effect->scale = (Rand_ZeroFloat(6.0f) + 15.0f) * 0.0001f;
+            effect->timer = 40;
+            effect->type = GOHT_EFFECT_ROCK;
             break;
         }
     }
@@ -1186,6 +1199,7 @@ s32 func_80B0791C(BossHakugin* this, PlayState* play) {
     return false;
 }
 
+// BossHakugin_Thaw
 void func_80B07B88(BossHakugin* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
@@ -1195,11 +1209,11 @@ void func_80B07B88(BossHakugin* this, PlayState* play) {
 }
 
 void func_80B07BFC(BossHakugin* this, PlayState* play, s32 arg2) {
-    if (this->actor.colChkInfo.damageEffect == 0x2) {
+    if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 3.0f;
         this->drawDmgEffScale = 2.5f;
-    } else if (this->actor.colChkInfo.damageEffect == 0x4) {
+    } else if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_LIGHT_ORB) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffAlpha = 3.0f;
         this->drawDmgEffScale = 2.5f;
@@ -1207,12 +1221,12 @@ void func_80B07BFC(BossHakugin* this, PlayState* play, s32 arg2) {
                     this->unk_0484.elements[arg2].info.bumper.hitPos.y,
                     this->unk_0484.elements[arg2].info.bumper.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
-    } else if (this->actor.colChkInfo.damageEffect == 0x3) {
+    } else if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_FREEZE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
         this->drawDmgEffScale = 2.5f;
         this->drawDmgEffFrozenSteamScale = 3.75f;
         this->drawDmgEffAlpha = 1.0f;
-    } else if (this->actor.colChkInfo.damageEffect == 0xD) {
+    } else if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_BLUE_LIGHT_ORB) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS;
         this->drawDmgEffScale = 2.5f;
         this->drawDmgEffAlpha = 3.0f;
@@ -1231,7 +1245,7 @@ void func_80B07DA4(BossHakugin* this, PlayState* play, f32 arg2, s16 arg3) {
     Math_Vec3f_Diff(&subCam->at, &subCam->eye, &sp38);
     Math_Vec3f_StepTo(&subCam->eye, &this->subCamEye, arg2);
 
-    if (func_80B0573C(&sp38)) {
+    if (BossHakugin_Vec3fNormalize(&sp38)) {
         sp2C.x = Math_CosS(this->unk_037A.x) * Math_SinS(this->unk_037A.y);
         sp2C.y = Math_SinS(this->unk_037A.x);
         sp2C.z = Math_CosS(this->unk_037A.x) * Math_CosS(this->unk_037A.y);
@@ -2131,7 +2145,7 @@ void func_80B0A8C4(BossHakugin* this, PlayState* play) {
         Play_DisableMotionBlur();
         CutsceneManager_Stop(this->actor.csId);
         Play_SetCameraAtEye(play, this->subCamId, &mainCam->at, &mainCam->eye);
-        func_80B05EE0(this, play);
+        BossHakugin_SpawnBlueWarp(this, play);
         func_80B0DFA8(this);
         this->actor.draw = func_80B0E5A4;
         this->actor.update = func_80B0E548;
@@ -2153,7 +2167,7 @@ void func_80B0A8C4(BossHakugin* this, PlayState* play) {
         sp60 = (this->unk_019C + 3) / 6 - 1;
         if (sp60 < 4) {
             for (i = D_80B0EB24[sp60]; i < D_80B0EB24[sp60 + 1]; i++) {
-                this->unk_09F8[i].unk_C.y = Rand_ZeroFloat(5.0f) + 5.0f;
+                this->effect[i].velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
             }
         }
         if (sp60 < 6) {
@@ -2198,7 +2212,7 @@ void func_80B0AC30(BossHakugin* this, PlayState* play) {
     }
 }
 
-s32 func_80B0ADFC(BossHakugin* this, PlayState* play) {
+s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
     if (this->unk_0484.base.acFlags & AC_HIT) {
         s32 i;
 
@@ -2230,15 +2244,18 @@ s32 func_80B0ADFC(BossHakugin* this, PlayState* play) {
             this->unk_01A4 = 15;
             return true;
         }
-        if (((this->actor.colChkInfo.damageEffect == 0xF) || (this->actor.colChkInfo.damageEffect == 0xE) ||
-             (this->actor.colChkInfo.damageEffect == 2) || (this->actor.colChkInfo.damageEffect == 3) ||
-             (this->actor.colChkInfo.damageEffect == 4) || (this->actor.colChkInfo.damageEffect == 0xD) ||
-             (this->actor.colChkInfo.damageEffect == 0xC)) &&
+        if (((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F) ||
+             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_E) ||
+             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_FIRE) ||
+             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_FREEZE) ||
+             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_LIGHT_ORB) ||
+             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_BLUE_LIGHT_ORB) ||
+             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_C)) &&
             ((this->actionFunc == func_80B08CB8) || (this->actionFunc == func_80B09E20) ||
              (this->actionFunc == func_80B09C78) || (this->actionFunc == func_80B091D8))) {
             Player* player = GET_PLAYER(play);
 
-            if (this->actor.colChkInfo.damageEffect == 0xF) {
+            if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F) {
                 player->pushedSpeed = 15.0f;
                 if ((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y) > 0) {
                     player->pushedYaw = this->actor.shape.rot.y + 0x4000;
@@ -2256,8 +2273,8 @@ s32 func_80B0ADFC(BossHakugin* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_DEAD_OLD);
                 func_80B09E84(this);
             } else {
-                if ((this->actor.colChkInfo.damageEffect == 0xC) ||
-                    ((this->actor.colChkInfo.damageEffect == 0xF) && (this->actionFunc != func_80B091D8) &&
+                if ((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_C) ||
+                    ((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F) && (this->actionFunc != func_80B091D8) &&
                      ((this->unk_0484.elements[0].info.bumperFlags & BUMP_HIT) ||
                       (this->unk_0484.elements[1].info.bumperFlags & BUMP_HIT) ||
                       (this->unk_0484.elements[2].info.bumperFlags & BUMP_HIT) ||
@@ -2269,7 +2286,7 @@ s32 func_80B0ADFC(BossHakugin* this, PlayState* play) {
                       (this->unk_0484.elements[18].info.bumperFlags & BUMP_HIT)))) {
                     func_80B093C0(this);
                 } else if ((this->unk_0192 == 0) && (this->unk_01AA == 0) && (this->actionFunc == func_80B08CB8) &&
-                           (this->actor.colChkInfo.damageEffect == 0xF)) {
+                           (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F)) {
                     this->unk_01A8 = 5;
                     this->unk_0192 = 1;
                 }
@@ -2298,37 +2315,37 @@ s32 func_80B0ADFC(BossHakugin* this, PlayState* play) {
     return false;
 }
 
-void func_80B0B238(BossHakugin* this) {
-    BossHakuginEffect* temp_s0;
+void BossHakugin_UpdateEffects(BossHakugin* this) {
+    GohtEffect* effect;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_09F8); i++) {
-        temp_s0 = &this->unk_09F8[i];
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++) {
+        effect = &this->effect[i];
 
-        if (temp_s0->unk_18 >= 0) {
-            temp_s0->unk_18--;
-            temp_s0->unk_C.y += -1.0f;
-            Math_Vec3f_Sum(&temp_s0->unk_0, &temp_s0->unk_C, &temp_s0->unk_0);
-            if (temp_s0->unk_0.y < -500.0f) {
-                temp_s0->unk_18 = -1;
+        if (effect->timer >= 0) {
+            effect->timer--;
+            effect->velocity.y += -1.0f;
+            Math_Vec3f_Sum(&effect->pos, &effect->velocity, &effect->pos);
+            if (effect->pos.y < -500.0f) {
+                effect->timer = -1;
             } else {
-                temp_s0->unk_1C.x += (s16)(0x700 + (Rand_Next() >> 0x17));
-                temp_s0->unk_1C.y += (s16)(0x900 + (Rand_Next() >> 0x17));
-                temp_s0->unk_1C.z += (s16)(0xB00 + (Rand_Next() >> 0x17));
+                effect->rot.x += (s16)(0x700 + (Rand_Next() >> 0x17));
+                effect->rot.y += (s16)(0x900 + (Rand_Next() >> 0x17));
+                effect->rot.z += (s16)(0xB00 + (Rand_Next() >> 0x17));
             }
         }
     }
 }
 
 void func_80B0B34C(BossHakugin* this) {
-    BossHakuginEffect* effect;
+    GohtEffect* effect;
     s32 i;
 
     for (i = 0; i < 36; i++) {
-        effect = &this->unk_09F8[i];
-        Math_StepToF(&effect->unk_0.y, effect->unk_C.x, effect->unk_C.y);
-        if (effect->unk_C.y > 0.0f) {
-            effect->unk_C.y = effect->unk_C.y + 6.0f;
+        effect = &this->effect[i];
+        Math_StepToF(&effect->pos.y, effect->velocity.x, effect->velocity.y);
+        if (effect->velocity.y > 0.0f) {
+            effect->velocity.y += 6.0f;
         }
     }
 }
@@ -2413,7 +2430,7 @@ void func_80B0B660(BossHakugin* this, PlayState* play) {
             sp60 = M_PI / 4.0f;
         }
         Math_Vec3f_Diff(&spA4->actor.world.pos, sp6C, &sp70);
-        if (func_80B0573C(&sp70)) {
+        if (BossHakugin_Vec3fNormalize(&sp70)) {
             func_80B057A4(&this->unk_37AC, &sp70, sp60);
         }
     } else if (this->unk_0192 != 4) {
@@ -2493,8 +2510,10 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     this->unk_0190 = false;
     DECR(this->unk_019A);
 
-    if ((this->actionFunc != func_80B09EDC) && !func_80B0ADFC(this, play)) {
-        func_80B0AC30(this, play);
+    if (this->actionFunc != func_80B09EDC) {
+        if (!BossHakugin_UpdateDamage(this, play)) {
+            func_80B0AC30(this, play);
+        }
     }
 
     func_80B0607C(this, play);
@@ -2511,7 +2530,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     if (this->actionFunc == func_80B0A8C4) {
         func_80B0B34C(this);
     } else {
-        func_80B0B238(this);
+        BossHakugin_UpdateEffects(this);
     }
 
     func_80B0B3F4(this);
@@ -2674,28 +2693,28 @@ void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void func_80B0C398(BossHakugin* this, PlayState* play) {
-    BossHakuginEffect* effect;
+    GohtEffect* effect;
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPDisplayList(POLY_OPA_DISP++, gGohtRockMaterialDL);
-    for (i = 0; i < ARRAY_COUNT(this->unk_09F8); i++) {
-        effect = &this->unk_09F8[i];
-        if ((effect->unk_18 >= 0) && (effect->unk_1A == 0)) {
-            Matrix_SetTranslateRotateYXZ(effect->unk_0.x, effect->unk_0.y, effect->unk_0.z, &effect->unk_1C);
-            Matrix_Scale(effect->unk_24, effect->unk_24, effect->unk_24, MTXMODE_APPLY);
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++) {
+        effect = &this->effect[i];
+        if ((effect->timer >= 0) && (effect->type == GOHT_EFFECT_ROCK)) {
+            Matrix_SetTranslateRotateYXZ(effect->pos.x, effect->pos.y, effect->pos.z, &effect->rot);
+            Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gGohtRockModelDL);
         }
     }
 
     gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteMaterialDL);
-    for (i = 0; i < ARRAY_COUNT(this->unk_09F8); i++) {
-        effect = &this->unk_09F8[i];
-        if ((effect->unk_18 >= 0) && (effect->unk_1A == 1)) {
-            Matrix_SetTranslateRotateYXZ(effect->unk_0.x, effect->unk_0.y, effect->unk_0.z, &effect->unk_1C);
-            Matrix_Scale(effect->unk_24, effect->unk_24, effect->unk_24, MTXMODE_APPLY);
+    for (i = 0; i < ARRAY_COUNT(this->effect); i++) {
+        effect = &this->effect[i];
+        if ((effect->timer >= 0) && (effect->type == GOHT_EFFECT_STALACTITE)) {
+            Matrix_SetTranslateRotateYXZ(effect->pos.x, effect->pos.y, effect->pos.z, &effect->rot);
+            Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteModelDL);
         }
@@ -2748,7 +2767,7 @@ void func_80B0C7B0(BossHakugin* this, PlayState* play) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     if (this->unk_01C8 > 0.0f) {
-        gDPSetEnvColor(POLY_XLU_DISP++, D_80B0EAD0.r, D_80B0EAD0.g, D_80B0EAD0.b, 0);
+        gDPSetEnvColor(POLY_XLU_DISP++, sGohtLightningColor.r, sGohtLightningColor.g, sGohtLightningColor.b, 0);
         gSPDisplayList(POLY_XLU_DISP++, gGohtLightningMaterialDL);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
 
@@ -2770,7 +2789,7 @@ void func_80B0C7B0(BossHakugin* this, PlayState* play) {
         }
 
         gDPPipeSync(POLY_XLU_DISP++);
-        gDPSetEnvColor(POLY_XLU_DISP++, D_80B0EACC.r, D_80B0EACC.g, D_80B0EACC.b, 0);
+        gDPSetEnvColor(POLY_XLU_DISP++, sGohtLightColor.r, sGohtLightColor.g, sGohtLightColor.b, 0);
         Matrix_Translate(this->unk_0380.x, this->unk_0380.y, this->unk_0380.z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(this->unk_01C8, this->unk_01C8, this->unk_01C8, MTXMODE_APPLY);
@@ -2791,7 +2810,7 @@ void func_80B0CAF0(BossHakugin* this, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gDPSetEnvColor(POLY_XLU_DISP++, D_80B0EAD0.r, D_80B0EAD0.g, D_80B0EAD0.b, 0);
+    gDPSetEnvColor(POLY_XLU_DISP++, sGohtLightningColor.r, sGohtLightningColor.g, sGohtLightningColor.b, 0);
     gSPDisplayList(POLY_XLU_DISP++, gGohtLightningMaterialDL);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
@@ -2842,7 +2861,7 @@ void func_80B0CCD8(BossHakugin* this, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    gDPSetEnvColor(POLY_XLU_DISP++, D_80B0EACC.r, D_80B0EACC.g, D_80B0EACC.b, 0);
+    gDPSetEnvColor(POLY_XLU_DISP++, sGohtLightColor.r, sGohtLightColor.g, sGohtLightColor.b, 0);
 
     rotZ = this->unk_0198;
 
@@ -3110,9 +3129,9 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
 
 void func_80B0D9CC(BossHakugin* this) {
     s32 var_s3;
-    Vec3f spC8;
+    Vec3f pos;
     s32 var_s1 = 15;
-    BossHakuginEffect* var_s0 = this->unk_09F8;
+    GohtEffect* effect = this->effect;
     s32 var_v1;
     s32 temp_a0;
     f32 spB4 = Math_SinS(this->actor.shape.rot.y) * 65.0f;
@@ -3129,67 +3148,67 @@ void func_80B0D9CC(BossHakugin* this) {
         temp4 = (30.0f / 13.0f) * spB4;
         temp5 = (30.0f / 13.0f) * spB0;
 
-        spC8.x = this->actor.world.pos.x - (var_s3 * spB4) + temp4;
-        spC8.y = this->actor.world.pos.y + (85.0f * (4 - var_s3)) + 20.0f;
-        spC8.z = this->actor.world.pos.z - (var_s3 * spB0) + temp5;
+        pos.x = this->actor.world.pos.x - (var_s3 * spB4) + temp4;
+        pos.y = this->actor.world.pos.y + (85.0f * (4 - var_s3)) + 20.0f;
+        pos.z = this->actor.world.pos.z - (var_s3 * spB0) + temp5;
 
-        var_s0->unk_24 = ((var_s3 * 4.5f) + 22.0f) * 0.001f;
-        Math_Vec3f_Copy(&var_s0->unk_0, &spC8);
+        effect->scale = ((var_s3 * 4.5f) + 22.0f) * 0.001f;
+        Math_Vec3f_Copy(&effect->pos, &pos);
 
         temp_a0 = var_s1 >> 1;
         if (temp_a0 == 0) {
             break;
         }
-        var_s0++;
+        effect++;
 
         temp1 = var_s3 / (f32)temp_a0;
         temp2 = (spB0 + spB4) * temp1;
         temp3 = (spB0 - spB4) * temp1;
 
-        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, var_s0++) {
-            var_s0->unk_0.x = spC8.x + temp2 * (temp_a0 - var_v1);
-            var_s0->unk_0.y = spC8.y + var_s3 * spAC;
-            var_s0->unk_0.z = spC8.z + temp3 * (temp_a0 - var_v1);
-            var_s0->unk_24 = ((var_s3 * 4.5f) + 22.0f) * 0.001f;
+        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, effect++) {
+            effect->pos.x = pos.x + temp2 * (temp_a0 - var_v1);
+            effect->pos.y = pos.y + var_s3 * spAC;
+            effect->pos.z = pos.z + temp3 * (temp_a0 - var_v1);
+            effect->scale = ((var_s3 * 4.5f) + 22.0f) * 0.001f;
         }
 
         temp4 = (spB4 - spB0) * temp1;
         temp5 = (spB0 + spB4) * temp1;
 
-        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, var_s0++) {
-            var_s0->unk_0.x = spC8.x + temp4 * (temp_a0 - var_v1);
-            var_s0->unk_0.y = spC8.y - var_s3 * spAC;
-            var_s0->unk_0.z = spC8.z + temp5 * (temp_a0 - var_v1);
-            var_s0->unk_24 = ((var_s3 * 4.5f) + 22.0f) * 0.001f;
+        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, effect++) {
+            effect->pos.x = pos.x + temp4 * (temp_a0 - var_v1);
+            effect->pos.y = pos.y - var_s3 * spAC;
+            effect->pos.z = pos.z + temp5 * (temp_a0 - var_v1);
+            effect->scale = ((var_s3 * 4.5f) + 22.0f) * 0.001f;
         }
     }
 
     for (var_s3 = 0; var_s3 < 36; var_s3++) {
-        var_s0 = &this->unk_09F8[var_s3];
+        effect = &this->effect[var_s3];
 
-        var_s0->unk_24 += Rand_ZeroFloat(5.0f) * 0.001f;
-        var_s0->unk_1C.x = (s32)Rand_Next() >> 0x10;
-        var_s0->unk_1C.y = (s32)Rand_Next() >> 0x10;
-        var_s0->unk_1C.z = (s32)Rand_Next() >> 0x10;
-        var_s0->unk_C.x = var_s0->unk_0.y;
-        var_s0->unk_C.y = 0.0f;
-        var_s0->unk_0.y += 850.0f;
+        effect->scale += Rand_ZeroFloat(5.0f) * 0.001f;
+        effect->rot.x = (s32)Rand_Next() >> 0x10;
+        effect->rot.y = (s32)Rand_Next() >> 0x10;
+        effect->rot.z = (s32)Rand_Next() >> 0x10;
+        effect->velocity.x = effect->pos.y;
+        effect->velocity.y = 0.0f;
+        effect->pos.y += 850.0f;
     }
 }
 
 void func_80B0DFA8(BossHakugin* this) {
     s32 i;
-    BossHakuginEffect* effect;
+    GohtEffect* effect;
     ColliderJntSphElement* element;
 
     for (i = 0; i < 36 / 2; i++) {
-        effect = &this->unk_09F8[i << 1];
+        effect = &this->effect[i << 1];
         element = &this->unk_0484.elements[i];
 
-        element->dim.worldSphere.center.x = effect->unk_0.x;
-        element->dim.worldSphere.center.y = effect->unk_0.y;
-        element->dim.worldSphere.center.z = effect->unk_0.z;
-        element->dim.worldSphere.radius = effect->unk_24 * 3000.0f;
+        element->dim.worldSphere.center.x = effect->pos.x;
+        element->dim.worldSphere.center.y = effect->pos.y;
+        element->dim.worldSphere.center.z = effect->pos.z;
+        element->dim.worldSphere.radius = effect->scale * 3000.0f;
         element->info.bumper.dmgFlags = 0xF3CFBBFF;
         element->info.bumperFlags &= ~BUMP_NO_HITMARK;
 
@@ -3215,7 +3234,7 @@ void func_80B0E548(Actor* thisx, PlayState* play2) {
 void func_80B0E5A4(Actor* thisx, PlayState* play) {
     BossHakugin* this = THIS;
     s32 i;
-    BossHakuginEffect* effect;
+    GohtEffect* effect;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -3223,10 +3242,10 @@ void func_80B0E5A4(Actor* thisx, PlayState* play) {
     gSPDisplayList(POLY_OPA_DISP++, gGohtRockMaterialDL);
 
     for (i = 0; i < 36; i++) {
-        effect = &this->unk_09F8[i];
+        effect = &this->effect[i];
 
-        Matrix_SetTranslateRotateYXZ(effect->unk_0.x, effect->unk_0.y, effect->unk_0.z, &effect->unk_1C);
-        Matrix_Scale(effect->unk_24, effect->unk_24, effect->unk_24, MTXMODE_APPLY);
+        Matrix_SetTranslateRotateYXZ(effect->pos.x, effect->pos.y, effect->pos.z, &effect->rot);
+        Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gGohtRockModelDL);

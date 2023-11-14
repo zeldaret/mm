@@ -12,16 +12,21 @@ struct BossHakugin;
 
 typedef void (*BossHakuginActionFunc)(struct BossHakugin*, PlayState*);
 
-typedef struct BossHakuginEffect {
-    /* 0x00 */ Vec3f unk_0;
-    /* 0x0C */ Vec3f unk_C;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-    /* 0x1C */ Vec3s unk_1C;
-    /* 0x24 */ f32 unk_24;
-} BossHakuginEffect; // size = 0x28
+typedef enum GohtEffectType {
+    /* 0 */ GOHT_EFFECT_ROCK,
+    /* 1 */ GOHT_EFFECT_STALACTITE
+} GohtEffectType;
 
-#define BOSS_HAKUGIN_EFFECT_COUNT 180
+typedef struct GohtEffect {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3f velocity;
+    /* 0x18 */ s16 timer;
+    /* 0x1A */ s16 type;
+    /* 0x1C */ Vec3s rot;
+    /* 0x24 */ f32 scale;
+} GohtEffect; // size = 0x28
+
+#define GOHT_EFFECT_COUNT 180
 
 typedef struct BossHakuginUnkStruct_2618 {
     /* 0x00 */ Vec3f unk_00;
@@ -115,7 +120,7 @@ typedef struct BossHakugin {
     /* 0x0964 */ ColliderCylinder unk_0964;
     /* 0x09B0 */ Actor* unk_09B0[8];
     /* 0x09D0 */ Actor* unk_09D0[10];
-    /* 0x09F8 */ BossHakuginEffect unk_09F8[BOSS_HAKUGIN_EFFECT_COUNT];
+    /* 0x09F8 */ GohtEffect effect[GOHT_EFFECT_COUNT];
     /* 0x2618 */ BossHakuginUnkStruct_2618 unk_2618[20];
     /* 0x3158 */ BossHakuginFhgFlashUnkStruct unk_3158[5][15];
     /* 0x3734 */ Vec3f unk_3734[10];
