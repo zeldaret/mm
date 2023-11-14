@@ -1921,7 +1921,7 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
  * every digit will be added 0x824F to get an actual S-JIS
  * printable character.
  */
-void Message_GetTimerDigits(OSTime time, s16* digits) {
+void Message_GetTimerDigits(OSTime time, s16 digits[8]) {
     OSTime t = time;
 
     // 6 minutes
@@ -2160,20 +2160,20 @@ void Message_Decode(PlayState* play) {
     u32 timeToMoonCrash;
     s16 var_v0;
     s16 numLines;
-    u8* fontBuf;
-    s16 digits[4];
+    s16 value;
+    s16 digits[5];
     s16 spD2;
     f32 timeInSeconds;
     s32 charTexIndex;
-    f32 var_fs0;
+    u8* fontBuf;
     f32 spC0;
     s16 index;
-    s16 value;
     s16 playerNameLen;
+    s16 spAC[8];
+    f32 var_fs0;
     s16 i;
-    u16 index2 = 0;
-    s16 spAC[4];
     u16 curChar;
+    u8 index2 = 0;
 
     msgCtx->textDelayTimer = 0;
     msgCtx->textDelay = msgCtx->textDelayTimer;
@@ -2212,7 +2212,7 @@ void Message_Decode(PlayState* play) {
                         }
                     }
                 } else {
-                    s32 requiredScopeTemp;
+                    s8 requiredScopeTemp;
 
                     if ((msgCtx->textBoxType != TEXTBOX_TYPE_3) && (msgCtx->textBoxType != TEXTBOX_TYPE_4)) {
                         if (numLines == 0) {
@@ -2289,7 +2289,7 @@ void Message_Decode(PlayState* play) {
                 Message_GetTimerDigits(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
 
                 loadChar = false;
-                for (i = 0; i < 5; i++) {
+                for (i = 0; i < ARRAY_COUNT(spAC) - 3; i++) {
                     if ((i == 1) || (spAC[i + 3] != 0)) {
                         loadChar = true;
                     }
@@ -2304,7 +2304,7 @@ void Message_Decode(PlayState* play) {
                 Message_GetTimerDigits(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
 
                 loadChar = false;
-                for (i = 0; i < 8; i++) {
+                for (i = 0; i < ARRAY_COUNT(spAC); i++) {
                     if ((i == 4) || ((i != 2) && (i != 5) && (spAC[i] != '\0'))) {
                         loadChar = true;
                     }
@@ -2722,7 +2722,7 @@ void Message_Decode(PlayState* play) {
                 }
                 func_8014CCB4(play, &decodedBufPos, &charTexIndex, &spC0);
             } else if (curChar == 0x22F) {
-                for (i = 0; i < 5; i++) {
+                for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.bomberCode); i++) {
                     digits[i] = gSaveContext.save.saveInfo.bomberCode[i];
                     Font_LoadChar(play, digits[i] + 0x824F, charTexIndex);
                     charTexIndex += FONT_CHAR_TEX_SIZE;
@@ -2827,7 +2827,7 @@ void Message_Decode(PlayState* play) {
                 }
 
                 loadChar = false;
-                for (i = 0; i < 8; i++) {
+                for (i = 0; i < ARRAY_COUNT(spAC); i++) {
                     if ((i == 4) || ((i != 2) && (i != 5) && (spAC[i] != '\0'))) {
                         loadChar = true;
                     }
