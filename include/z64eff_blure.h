@@ -10,10 +10,8 @@ struct GraphicsContext;
 
 #define EFFECT_BLURE_COLOR_COUNT 4
 
-//#define EFFECT_BLURE_FLAG_1         (1 << 0)
 #define EFFECT_BLURE_FLAG_2         (1 << 1)
 #define EFFECT_BLURE_FLAG_4         (1 << 2)
-//#define EFFECT_BLURE_FLAG_8         (1 << 3)
 #define EFFECT_BLURE_FLAG_10        (1 << 4)
 
 #define EFFECT_BLURE_ELEMENT_FLAG_1         (1 << 0)
