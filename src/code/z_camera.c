@@ -4858,6 +4858,7 @@ s32 Camera_Fixed2(Camera* camera) {
     if (!RELOAD_PARAMS(camera)) {
     } else {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+
         //! FAKE:
         if (targetActorPos) {}
 
