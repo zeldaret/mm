@@ -7688,7 +7688,7 @@
     0x80958CA8:("EnAttackNiw_Update",),
     0x80958F6C:("EnAttackNiw_OverrideLimbDraw",),
     0x8095909C:("EnAttackNiw_Draw",),
-    0x809592E0:("func_809592E0",),
+    0x809592E0:("EnMk_ChangeAnim",),
     0x80959390:("EnMk_Init",),
     0x809594F8:("EnMk_Destroy",),
     0x80959524:("func_80959524",),
