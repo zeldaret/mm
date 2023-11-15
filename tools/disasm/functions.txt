@@ -1786,7 +1786,7 @@
     0x800FEA50:("func_800FEA50",),
     0x800FEAB0:("func_800FEAB0",),
     0x800FEAC0:("Environment_JumpForwardInTime",),
-    0x800FEAF4:("func_800FEAF4",),
+    0x800FEAF4:("Environment_NewDay",),
     0x800FEC90:("Lib_MemCpy",),
     0x800FECC0:("Lib_MemSet",),
     0x800FED44:("Math_CosS",),

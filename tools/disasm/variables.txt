@@ -3866,7 +3866,7 @@
     0x801F4E10:("sNextCutsceneList","u8","[16]",0x10),
     0x801F4E20:("D_801F4E20","UNK_TYPE1","",0x1),
     0x801F4E30:("D_801F4E30","UNK_TYPE1","",0x1),
-    0x801F4E31:("D_801F4E31","UNK_TYPE1","",0x1),
+    0x801F4E31:("sEnvSkyboxConfig","UNK_TYPE1","",0x1),
     0x801F4E32:("gCustomLensFlare1On","UNK_TYPE1","",0x1),
     0x801F4E38:("gCustomLensFlare1Pos","UNK_TYPE1","",0x1),
     0x801F4E3C:("D_801F4E3C","UNK_TYPE1","",0x1),

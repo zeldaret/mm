@@ -23,7 +23,7 @@ typedef struct {
 struct LightningStrike;
 
 u8 D_801F4E30;
-u8 D_801F4E31;
+u8 sEnvSkyboxConfig;
 u8 gCustomLensFlare1On;
 Vec3f gCustomLensFlare1Pos;
 f32 D_801F4E44;
@@ -528,7 +528,7 @@ s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
 void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     PlayState* play = play2;
     f32 temp_ft4;
-    u8 var_a0;
+    u8 dayOffset;
     s16 i;
 
     CREG(1) = 0;
@@ -664,39 +664,39 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
     play->envCtx.precipitation[PRECIP_SOS_MAX] = 0;
 
-    D_801F4E31 = envCtx->skyboxConfig;
+    sEnvSkyboxConfig = envCtx->skyboxConfig;
 
-    var_a0 = 0;
+    dayOffset = 0;
     if (((void)0, gSaveContext.save.day) != 0) {
-        var_a0 = ((void)0, gSaveContext.save.day) - 1;
+        dayOffset = ((void)0, gSaveContext.save.day) - 1;
     }
-    envCtx->skyboxConfig = var_a0 + (D_801F4E31 * 3);
+    envCtx->skyboxConfig = dayOffset + (sEnvSkyboxConfig * 3);
     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 
-    if (D_801F4E31 == 4) {
+    if (sEnvSkyboxConfig == 4) {
         envCtx->skyboxConfig = 0xE;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 5) {
+    } else if (sEnvSkyboxConfig == 5) {
         envCtx->skyboxConfig = 0x10;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 6) {
+    } else if (sEnvSkyboxConfig == 6) {
         envCtx->skyboxConfig = 0x11;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 7) {
-        envCtx->skyboxConfig = var_a0 + 0x12;
+    } else if (sEnvSkyboxConfig == 7) {
+        envCtx->skyboxConfig = dayOffset + 0x12;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 8) {
-        envCtx->skyboxConfig = var_a0 + 0x15;
+    } else if (sEnvSkyboxConfig == 8) {
+        envCtx->skyboxConfig = dayOffset + 0x15;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 9) {
+    } else if (sEnvSkyboxConfig == 9) {
         envCtx->skyboxConfig = 0x18;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 0xA) {
-        envCtx->skyboxConfig = var_a0 + 0x19;
+    } else if (sEnvSkyboxConfig == 0xA) {
+        envCtx->skyboxConfig = dayOffset + 0x19;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     }
 
-    if (var_a0 >= 3) {
+    if (dayOffset >= 3) {
         envCtx->skyboxConfig = 0xD;
         envCtx->changeSkyboxNextConfig = 0xD;
     }
@@ -3486,40 +3486,40 @@ void Environment_JumpForwardInTime(void) {
     }
 }
 
-void func_800FEAF4(EnvironmentContext* envCtx) {
-    u8 phi_v1 = 0;
+void Environment_NewDay(EnvironmentContext* envCtx) {
+    u8 dayOffset = 0;
 
     if (((void)0, gSaveContext.save.day) != 0) {
-        phi_v1 = ((void)0, gSaveContext.save.day) - 1;
+        dayOffset = ((void)0, gSaveContext.save.day) - 1;
     }
 
-    envCtx->skyboxConfig = phi_v1 + (D_801F4E31 * 3);
+    envCtx->skyboxConfig = dayOffset + (sEnvSkyboxConfig * 3);
     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 
-    if (D_801F4E31 == 4) {
+    if (sEnvSkyboxConfig == 4) {
         envCtx->skyboxConfig = 0xE;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 5) {
+    } else if (sEnvSkyboxConfig == 5) {
         envCtx->skyboxConfig = 0x10;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 6) {
+    } else if (sEnvSkyboxConfig == 6) {
         envCtx->skyboxConfig = 0x11;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 7) {
-        envCtx->skyboxConfig = phi_v1 + 0x12;
+    } else if (sEnvSkyboxConfig == 7) {
+        envCtx->skyboxConfig = dayOffset + 0x12;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 8) {
-        envCtx->skyboxConfig = phi_v1 + 0x15;
+    } else if (sEnvSkyboxConfig == 8) {
+        envCtx->skyboxConfig = dayOffset + 0x15;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 9) {
+    } else if (sEnvSkyboxConfig == 9) {
         envCtx->skyboxConfig = 0x18;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 0xA) {
-        envCtx->skyboxConfig = phi_v1 + 0x19;
+    } else if (sEnvSkyboxConfig == 0xA) {
+        envCtx->skyboxConfig = dayOffset + 0x19;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     }
 
-    if (phi_v1 >= 3) {
+    if (dayOffset >= 3) {
         envCtx->skyboxConfig = 0xD;
         envCtx->changeSkyboxNextConfig = 0xD;
     }

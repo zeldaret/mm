@@ -1,7 +1,9 @@
 /*
  * File: z_en_test4.c
  * Overlay: ovl_En_Test4
- * Description: Three-Day Events
+ * Description: Three-Day Events: day-night transitions, shrink screen before next day,
+ * play bell sounds, triggers clocktown midnight cutscene, controls weather events,
+ * sets skybox star count
  */
 
 #include "z_en_test4.h"
@@ -51,11 +53,16 @@ static u16 sDayNightTransitionTimes[DAYTIME_INDEX_MAX] = {
 static s16 sCsIdList[DAYTIME_INDEX_MAX];
 static s16 sCurCsId;
 
+/**
+ * Only differs from `EnTest4_HandleDayNightSwap` with an extra telescope check when turning day
+ * Does not handle DayTelop transitions
+ */
 void EnTest4_HandleDayNightSwapFromInit(EnTest4* this, PlayState* play) {
     if (this->daytimeIndex != DAYTIME_INDEX_NIGHT) {
+        // Previously day, turning night
         Message_DisplaySceneTitleCard(play, sNightOfTextIds1[CURRENT_DAY - 1]);
     } else if ((sCsIdList[this->daytimeIndex] <= CS_ID_NONE) || (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
-        // Increment day without a cutscene
+        // Previously night, turning day, without a cutscene
         if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
             Sram_IncrementDay();
             gSaveContext.save.time = CLOCK_TIME(6, 0);
@@ -69,21 +76,23 @@ void EnTest4_HandleDayNightSwapFromInit(EnTest4* this, PlayState* play) {
         Interface_NewDay(play, CURRENT_DAY);
         gSceneSeqState = SCENESEQ_MORNING;
         Environment_PlaySceneSequence(play);
-        func_800FEAF4(&play->envCtx);
+        Environment_NewDay(&play->envCtx);
         this->actionFunc = EnTest4_HandleEvents;
     }
 
     if (gSaveContext.cutsceneTrigger == 0) {
+        // No scripted cutscene
         if ((sCsIdList[this->daytimeIndex] > CS_ID_NONE) && !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
+            // Day-Night transition cutscene
             this->actionFunc = EnTest4_HandleCutscene;
             sCurCsId = sCsIdList[this->daytimeIndex];
             this->transitionCsTimer = 0;
             SET_EVENTINF(EVENTINF_17);
         } else if (this->daytimeIndex == DAYTIME_INDEX_NIGHT) {
-            // Previously night, turning day
+            // Previously night, turning day, without cutscene
             Audio_PlaySfx(NA_SE_EV_CHICKEN_CRY_M);
         } else {
-            // Previously day, turning night
+            // Previously day, turning night, without cutscene
             Audio_PlaySfx_2(NA_SE_EV_DOG_CRY_EVENING);
         }
     } else {
@@ -100,32 +109,38 @@ void EnTest4_HandleDayNightSwapFromInit(EnTest4* this, PlayState* play) {
     }
 }
 
+/**
+ * Does not handle DayTelop transitions
+ */
 void EnTest4_HandleDayNightSwap(EnTest4* this, PlayState* play) {
     if (this->daytimeIndex != DAYTIME_INDEX_NIGHT) {
+        // Previously day, turning night
         Message_DisplaySceneTitleCard(play, sNightOfTextIds2[CURRENT_DAY - 1]);
     } else if ((sCsIdList[this->daytimeIndex] <= CS_ID_NONE) || (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
-        // Increment day without a cutscene
+        // Previously night, turning day, without a cutscene
         Sram_IncrementDay();
         gSaveContext.save.time = CLOCK_TIME(6, 0);
         Interface_NewDay(play, CURRENT_DAY);
         Message_DisplaySceneTitleCard(play, sDawnOfTextIds2[CURRENT_DAY - 1]);
         gSceneSeqState = SCENESEQ_MORNING;
         Environment_PlaySceneSequence(play);
-        func_800FEAF4(&play->envCtx);
+        Environment_NewDay(&play->envCtx);
         this->actionFunc = EnTest4_HandleEvents;
     }
 
     if (gSaveContext.cutsceneTrigger == 0) {
+        // No scripted cutscene
         if ((sCsIdList[this->daytimeIndex] > CS_ID_NONE) && !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
+            // Day-Night transition cutscene
             this->actionFunc = EnTest4_HandleCutscene;
             sCurCsId = sCsIdList[this->daytimeIndex];
             this->transitionCsTimer = 0;
             SET_EVENTINF(EVENTINF_17);
         } else if (this->daytimeIndex == DAYTIME_INDEX_NIGHT) {
-            // Previously night, turning day
+            // Previously night, turning day, without cutscene
             Audio_PlaySfx(NA_SE_EV_CHICKEN_CRY_M);
         } else {
-            // Previously day, turning night
+            // Previously day, turning night, without cutscene
             Audio_PlaySfx_2(NA_SE_EV_DOG_CRY_EVENING);
         }
     } else {
@@ -387,7 +402,7 @@ void EnTest4_Destroy(Actor* thisx, PlayState* play) {
 /**
  * This function checks for two-specific time-based events:
  * 1) The day-night transitions
- * 2) The play bells sfx event, which contains screen shrinking and the clocktown day 3 midnight cutscene
+ * 2) The play bells sfx event, which contains screen shrinking and the clocktown day 3 midnight cutscene trigger
  */
 void EnTest4_HandleEvents(EnTest4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -433,7 +448,7 @@ void EnTest4_HandleEvents(EnTest4* this, PlayState* play) {
                     // Turn day without cutscene
                     EnTest4_HandleDayNightSwap(this, play);
                 } else {
-                    // Turn day with cutscene
+                    // Turn day with DayTelop cutscene
                     gSaveContext.screenScale = 0.0f;
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
                                         PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);

@@ -298,7 +298,7 @@ void Environment_LerpSandstormColors(Color_RGBA8* colorSrc, Color_RGBA8* colorDs
 u8 func_800FE9B4(struct PlayState* play);
 void func_800FEA50(struct PlayState* play);
 void func_800FEAB0(void);
-void func_800FEAF4(EnvironmentContext* envCtx);
+void Environment_NewDay(EnvironmentContext* envCtx);
 
 // Data
 extern u8 gWeatherMode;
