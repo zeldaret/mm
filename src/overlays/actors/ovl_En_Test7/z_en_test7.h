@@ -20,8 +20,14 @@ typedef struct {
     /* 0x10 */ s16 yaw;
 } OwlWarpWindCapsule; // size = 0x14
 
+typedef enum OwlWarpFeatherType {
+    /* 0 */ OWL_WARP_FEATHER_TYPE_DISABLED,
+    /* 1 */ OWL_WARP_FEATHER_TYPE_1,
+    /* 2 */ OWL_WARP_FEATHER_TYPE_2
+} OwlWarpFeatherType;
+
 typedef struct {
-    /* 0x00 */ s32 type;
+    /* 0x00 */ OwlWarpFeatherType type;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ Vec3f pos;
     /* 0x14 */ Vec3f velocity;
@@ -30,12 +36,6 @@ typedef struct {
     /* 0x30 */ Vec3s rot;
     /* 0x36 */ Vec3s angularVelocity;
 } OwlWarpFeather; // size = 0x3C
-
-typedef enum OwlWarpFeatherType {
-    /* 0 */ OWL_WARP_FEATHER_TYPE_DISABLED,
-    /* 1 */ OWL_WARP_FEATHER_TYPE_1,
-    /* 2 */ OWL_WARP_FEATHER_TYPE_2
-} OwlWarpFeatherType;
 
 #define OWL_WARP_NUM_FEATHERS 100
 
