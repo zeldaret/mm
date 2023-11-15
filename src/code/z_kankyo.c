@@ -23,7 +23,7 @@ typedef struct {
 struct LightningStrike;
 
 u8 D_801F4E30;
-u8 sEnvSkyboxConfig;
+u8 sInitSkyboxConfig;
 u8 gCustomLensFlare1On;
 Vec3f gCustomLensFlare1Pos;
 f32 D_801F4E44;
@@ -692,34 +692,34 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
     play->envCtx.precipitation[PRECIP_SOS_MAX] = 0;
 
-    sEnvSkyboxConfig = envCtx->skyboxConfig;
+    sInitSkyboxConfig = envCtx->skyboxConfig;
 
     dayOffset = 0;
     if (((void)0, gSaveContext.save.day) != 0) {
         dayOffset = ((void)0, gSaveContext.save.day) - 1;
     }
-    envCtx->skyboxConfig = dayOffset + (sEnvSkyboxConfig * 3);
+    envCtx->skyboxConfig = dayOffset + (sInitSkyboxConfig * 3);
     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 
-    if (sEnvSkyboxConfig == SKYBOX_CONFIG_4) {
+    if (sInitSkyboxConfig == SKYBOX_CONFIG_4) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_14;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_5) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_5) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_16;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_6) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_6) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_17;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_7) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_7) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_18 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_8) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_8) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_21 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_9) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_9) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_24;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_10) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_10) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_25 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     }
@@ -3102,7 +3102,7 @@ void Environment_SetupSkyboxStars(PlayState* play) {
             phi_f0 = 0.0f;
         }
 
-        phi_f0 = (play->envCtx.skyboxConfig == 0x18) ? 1.0f : phi_f0;
+        phi_f0 = (play->envCtx.skyboxConfig == SKYBOX_CONFIG_24) ? 1.0f : phi_f0;
 
         D_801F4F28 = phi_f0;
         sEnvSkyboxNumStars = gSkyboxNumStars;
@@ -3521,28 +3521,28 @@ void Environment_NewDay(EnvironmentContext* envCtx) {
         dayOffset = ((void)0, gSaveContext.save.day) - 1;
     }
 
-    envCtx->skyboxConfig = dayOffset + (sEnvSkyboxConfig * 3);
+    envCtx->skyboxConfig = dayOffset + (sInitSkyboxConfig * 3);
     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 
-    if (sEnvSkyboxConfig == SKYBOX_CONFIG_4) {
+    if (sInitSkyboxConfig == SKYBOX_CONFIG_4) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_14;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_5) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_5) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_16;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_6) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_6) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_17;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_7) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_7) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_18 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_8) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_8) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_21 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_9) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_9) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_24;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (sEnvSkyboxConfig == SKYBOX_CONFIG_10) {
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_10) {
         envCtx->skyboxConfig = SKYBOX_CONFIG_25 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     }
