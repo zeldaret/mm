@@ -34,7 +34,7 @@ typedef struct EnGoEffect {
     /* 0x01 */ u8 alphaDenom;
     /* 0x02 */ u8 alphaNumer;
     /* 0x04 */ Vec3s angularVelocity;
-    /* 0x0A */ Vec3s rotAngle;
+    /* 0x0A */ Vec3s rot;
     /* 0x10 */ Vec3f pos;
     /* 0x1C */ Vec3f accel;
     /* 0x28 */ Vec3f velocity;

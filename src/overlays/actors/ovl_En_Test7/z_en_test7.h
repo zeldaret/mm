@@ -5,7 +5,7 @@
 
 struct EnTest7;
 
-typedef void (*EnTest7PlayerAndCameraControl)(struct EnTest7*, PlayState*);
+typedef void (*EnTest7PlayerCamFunc)(struct EnTest7*, PlayState*);
 typedef void (*EnTest7ActionFunc)(struct EnTest7*, PlayState*);
 
 #define OWL_WARP_CS_GET_OCARINA_MODE(thisx) ((thisx)->params)
@@ -31,7 +31,7 @@ typedef struct {
     /* 0x36 */ Vec3s angularVelocity;
 } OwlWarpFeather; // size = 0x3C
 
-typedef enum {
+typedef enum OwlWarpFeatherType {
     /* 0 */ OWL_WARP_FEATHER_TYPE_DISABLED,
     /* 1 */ OWL_WARP_FEATHER_TYPE_1,
     /* 2 */ OWL_WARP_FEATHER_TYPE_2
@@ -58,7 +58,7 @@ typedef struct EnTest7 {
     /* 0x1BA8 */ Vec3s unk_1BA8[114];
     /* 0x1E54 */ s32 timer;
     /* 0x1E58 */ EnTest7ActionFunc actionFunc;
-    /* 0x1E5C */ EnTest7PlayerAndCameraControl playerCamFunc;
+    /* 0x1E5C */ EnTest7PlayerCamFunc playerCamFunc;
     /* 0x1E60 */ Vec3f subCamEye;
     /* 0x1E6C */ Vec3f subCamAt;
     /* 0x1E78 */ f32 subCamFov;

@@ -632,9 +632,9 @@ void EnGo_UpdateSnow(EnGoEffect* effect, f32 dustConversionHeight) {
         Math_StepToF(&effect->velocity.z, z, (sREG(14) + 40) * 0.01f);
     }
 
-    effect->rotAngle.x += effect->angularVelocity.x;
-    effect->rotAngle.y += effect->angularVelocity.y;
-    effect->rotAngle.z += effect->angularVelocity.z;
+    effect->rot.x += effect->angularVelocity.x;
+    effect->rot.y += effect->angularVelocity.y;
+    effect->rot.z += effect->angularVelocity.z;
 }
 
 /**
@@ -667,9 +667,9 @@ void EnGo_DrawSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], PlayState* play, G
         Matrix_Push();
         Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
         Matrix_Scale(0.08f, 0.08f, 0.08f, MTXMODE_APPLY);
-        Matrix_RotateZS(effect->rotAngle.z, MTXMODE_APPLY);
-        Matrix_RotateXS(effect->rotAngle.x, MTXMODE_APPLY);
-        Matrix_RotateYS(effect->rotAngle.y, MTXMODE_APPLY);
+        Matrix_RotateZS(effect->rot.z, MTXMODE_APPLY);
+        Matrix_RotateXS(effect->rot.x, MTXMODE_APPLY);
+        Matrix_RotateYS(effect->rot.y, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, model);

@@ -48,7 +48,7 @@ ActorInit En_Test7_InitVars = {
     /**/ EnTest7_Draw,
 };
 
-void EnTest7_SetupPlayerCamFunc(EnTest7* this, EnTest7PlayerAndCameraControl playerCamFunc) {
+void EnTest7_SetupPlayerCamFunc(EnTest7* this, EnTest7PlayerCamFunc playerCamFunc) {
     this->playerCamFunc = playerCamFunc;
 }
 
