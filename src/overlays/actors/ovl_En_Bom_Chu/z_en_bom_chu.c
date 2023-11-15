@@ -474,7 +474,7 @@ void EnBomChu_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->actionFunc != EnBomChu_WaitForDeath) &&
-        (SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
+        SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
         EnBomChu_Explode(this, play);
         return;
     }

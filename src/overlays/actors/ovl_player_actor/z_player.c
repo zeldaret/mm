@@ -4074,7 +4074,7 @@ s32 func_80830E30(Player* this, PlayState* play) {
         }
 
         PlayerAnimation_PlayOnce(play, &this->skelAnimeUpper,
-                                 (Player_IsHoldingHookshot(this))
+                                 Player_IsHoldingHookshot(this)
                                      ? &gPlayerAnim_link_hook_shot_ready
                                      : ((this->transformation == PLAYER_FORM_DEKU) ? &gPlayerAnim_pn_tamahakidf
                                                                                    : &gPlayerAnim_link_bow_bow_ready));

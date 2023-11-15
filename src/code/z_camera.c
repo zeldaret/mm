@@ -7482,7 +7482,7 @@ Vec3s Camera_Update(Camera* camera) {
 
                 bgCamIndex = Camera_GetBgCamIndex(camera, &bgId, sp90);
                 if ((bgCamIndex != -1) && (camera->bgId == BGCHECK_SCENE)) {
-                    if (Camera_IsUsingZoraFins(camera) == 0) {
+                    if (!Camera_IsUsingZoraFins(camera)) {
                         camera->nextCamSceneDataId = bgCamIndex | CAM_DATA_IS_BG;
                     }
                 }
