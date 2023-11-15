@@ -37,20 +37,20 @@ ActorInit En_Test4_InitVars = {
 static s32 sIsLoaded = false;
 
 // "Night of ..."
-static s16 sNightOfTextIds1[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
-// "Dawn of ..." (Note: first two message are the same)
-static s16 sDawnOfTextIds1[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
-// "Night of ..."
 static s16 sNightOfTextIds2[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
 // "Dawn of ..." (Note: first two message are the same)
 static s16 sDawnOfTextIds2[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
+// "Night of ..."
+static s16 sNightOfTextIds[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
+// "Dawn of ..." (Note: first two message are the same)
+static s16 sDawnOfTextIds[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
 
-static u16 sDayNightTransitionTimes[DAYTIME_INDEX_MAX] = {
-    CLOCK_TIME(6, 0),  // DAYTIME_INDEX_NIGHT
-    CLOCK_TIME(18, 0), // DAYTIME_INDEX_DAY
+static u16 sDayNightTransitionTimes[THREEDAY_DAYTIME_MAX] = {
+    CLOCK_TIME(6, 0),  // THREEDAY_DAYTIME_NIGHT
+    CLOCK_TIME(18, 0), // THREEDAY_DAYTIME_DAY
 };
 
-static s16 sCsIdList[DAYTIME_INDEX_MAX];
+static s16 sCsIdList[THREEDAY_DAYTIME_MAX];
 static s16 sCurCsId;
 
 /**
@@ -58,17 +58,17 @@ static s16 sCurCsId;
  * Does not handle DayTelop transitions
  */
 void EnTest4_HandleDayNightSwapFromInit(EnTest4* this, PlayState* play) {
-    if (this->daytimeIndex != DAYTIME_INDEX_NIGHT) {
+    if (this->daytimeIndex != THREEDAY_DAYTIME_NIGHT) {
         // Previously day, turning night
-        Message_DisplaySceneTitleCard(play, sNightOfTextIds1[CURRENT_DAY - 1]);
+        Message_DisplaySceneTitleCard(play, sNightOfTextIds2[CURRENT_DAY - 1]);
     } else if ((sCsIdList[this->daytimeIndex] <= CS_ID_NONE) || (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
         // Previously night, turning day, without a cutscene
         if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
             Sram_IncrementDay();
             gSaveContext.save.time = CLOCK_TIME(6, 0);
-            Message_DisplaySceneTitleCard(play, sDawnOfTextIds1[CURRENT_DAY - 1]);
+            Message_DisplaySceneTitleCard(play, sDawnOfTextIds2[CURRENT_DAY - 1]);
         } else {
-            this->daytimeIndex = DAYTIME_INDEX_NIGHT;
+            this->daytimeIndex = THREEDAY_DAYTIME_NIGHT;
             gSaveContext.save.time += CLOCK_TIME_MINUTE;
             this->prevTime = CURRENT_TIME;
         }
@@ -88,7 +88,7 @@ void EnTest4_HandleDayNightSwapFromInit(EnTest4* this, PlayState* play) {
             sCurCsId = sCsIdList[this->daytimeIndex];
             this->transitionCsTimer = 0;
             SET_EVENTINF(EVENTINF_17);
-        } else if (this->daytimeIndex == DAYTIME_INDEX_NIGHT) {
+        } else if (this->daytimeIndex == THREEDAY_DAYTIME_NIGHT) {
             // Previously night, turning day, without cutscene
             Audio_PlaySfx(NA_SE_EV_CHICKEN_CRY_M);
         } else {
@@ -98,10 +98,10 @@ void EnTest4_HandleDayNightSwapFromInit(EnTest4* this, PlayState* play) {
     } else {
         // In a scripted cutscene
         this->actionFunc = EnTest4_HandleEvents;
-        if (this->daytimeIndex == DAYTIME_INDEX_NIGHT) {
-            this->daytimeIndex = DAYTIME_INDEX_DAY;
+        if (this->daytimeIndex == THREEDAY_DAYTIME_NIGHT) {
+            this->daytimeIndex = THREEDAY_DAYTIME_DAY;
         } else {
-            this->daytimeIndex = DAYTIME_INDEX_NIGHT;
+            this->daytimeIndex = THREEDAY_DAYTIME_NIGHT;
         }
 
         gSaveContext.save.time += CLOCK_TIME_MINUTE;
@@ -113,15 +113,15 @@ void EnTest4_HandleDayNightSwapFromInit(EnTest4* this, PlayState* play) {
  * Does not handle DayTelop transitions
  */
 void EnTest4_HandleDayNightSwap(EnTest4* this, PlayState* play) {
-    if (this->daytimeIndex != DAYTIME_INDEX_NIGHT) {
+    if (this->daytimeIndex != THREEDAY_DAYTIME_NIGHT) {
         // Previously day, turning night
-        Message_DisplaySceneTitleCard(play, sNightOfTextIds2[CURRENT_DAY - 1]);
+        Message_DisplaySceneTitleCard(play, sNightOfTextIds[CURRENT_DAY - 1]);
     } else if ((sCsIdList[this->daytimeIndex] <= CS_ID_NONE) || (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
         // Previously night, turning day, without a cutscene
         Sram_IncrementDay();
         gSaveContext.save.time = CLOCK_TIME(6, 0);
         Interface_NewDay(play, CURRENT_DAY);
-        Message_DisplaySceneTitleCard(play, sDawnOfTextIds2[CURRENT_DAY - 1]);
+        Message_DisplaySceneTitleCard(play, sDawnOfTextIds[CURRENT_DAY - 1]);
         gSceneSeqState = SCENESEQ_MORNING;
         Environment_PlaySceneSequence(play);
         Environment_NewDay(&play->envCtx);
@@ -136,7 +136,7 @@ void EnTest4_HandleDayNightSwap(EnTest4* this, PlayState* play) {
             sCurCsId = sCsIdList[this->daytimeIndex];
             this->transitionCsTimer = 0;
             SET_EVENTINF(EVENTINF_17);
-        } else if (this->daytimeIndex == DAYTIME_INDEX_NIGHT) {
+        } else if (this->daytimeIndex == THREEDAY_DAYTIME_NIGHT) {
             // Previously night, turning day, without cutscene
             Audio_PlaySfx(NA_SE_EV_CHICKEN_CRY_M);
         } else {
@@ -146,10 +146,10 @@ void EnTest4_HandleDayNightSwap(EnTest4* this, PlayState* play) {
     } else {
         // In a scripted cutscene
         this->actionFunc = EnTest4_HandleEvents;
-        if (this->daytimeIndex == DAYTIME_INDEX_NIGHT) {
-            this->daytimeIndex = DAYTIME_INDEX_DAY;
+        if (this->daytimeIndex == THREEDAY_DAYTIME_NIGHT) {
+            this->daytimeIndex = THREEDAY_DAYTIME_DAY;
         } else {
-            this->daytimeIndex = DAYTIME_INDEX_NIGHT;
+            this->daytimeIndex = THREEDAY_DAYTIME_NIGHT;
         }
 
         gSaveContext.save.time += CLOCK_TIME_MINUTE;
@@ -329,15 +329,15 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s8 csId = this->actor.csId;
 
-    sCsIdList[DAYTIME_INDEX_NIGHT] = csId;
+    sCsIdList[THREEDAY_DAYTIME_NIGHT] = csId;
     if (csId > CS_ID_NONE) {
-        ActorCutscene* csEntry = CutsceneManager_GetCutsceneEntry(sCsIdList[DAYTIME_INDEX_NIGHT]);
+        ActorCutscene* csEntry = CutsceneManager_GetCutsceneEntry(sCsIdList[THREEDAY_DAYTIME_NIGHT]);
 
         SET_EVENTINF(EVENTINF_UNIQUE_DAY_NIGHT_TRANSITIONS);
-        sCsIdList[DAYTIME_INDEX_DAY] = csEntry->additionalCsId;
+        sCsIdList[THREEDAY_DAYTIME_DAY] = csEntry->additionalCsId;
     } else {
         CLEAR_EVENTINF(EVENTINF_UNIQUE_DAY_NIGHT_TRANSITIONS);
-        sCsIdList[DAYTIME_INDEX_DAY] = sCsIdList[DAYTIME_INDEX_NIGHT];
+        sCsIdList[THREEDAY_DAYTIME_DAY] = sCsIdList[THREEDAY_DAYTIME_NIGHT];
     }
 
     if (sIsLoaded || CHECK_EVENTINF(EVENTINF_TRIGGER_DAYTELOP)) {
@@ -347,25 +347,26 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
         this->actor.room = -1;
         gSaveContext.screenScaleFlag = false;
         gSaveContext.screenScale = 1000.0f;
+
         if (CURRENT_DAY == 0) {
             if (CURRENT_TIME < CLOCK_TIME(6, 1)) {
                 gSaveContext.save.time = CLOCK_TIME(6, 0);
                 gSaveContext.gameMode = GAMEMODE_NORMAL;
                 STOP_GAMESTATE(&play->state);
                 SET_NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
-                this->daytimeIndex = DAYTIME_INDEX_DAY;
+                this->daytimeIndex = THREEDAY_DAYTIME_DAY;
                 gSaveContext.save.time = CLOCK_TIME(6, 0);
                 Actor_Kill(&this->actor);
             } else {
                 gSaveContext.save.day = 1;
                 eventDayCount = gSaveContext.save.day;
                 gSaveContext.save.eventDayCount = eventDayCount;
-                this->daytimeIndex = DAYTIME_INDEX_DAY;
+                this->daytimeIndex = THREEDAY_DAYTIME_DAY;
                 this->prevTime = CURRENT_TIME;
                 this->actionFunc = EnTest4_HandleEvents;
             }
         } else if (CURRENT_TIME == CLOCK_TIME(6, 0)) {
-            this->daytimeIndex = DAYTIME_INDEX_NIGHT;
+            this->daytimeIndex = THREEDAY_DAYTIME_NIGHT;
             EnTest4_HandleDayNightSwapFromInit(this, play);
             if ((gSaveContext.cutsceneTrigger == 0) && (sCsIdList[this->daytimeIndex] > CS_ID_NONE) &&
                 !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
@@ -373,9 +374,9 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
             }
         } else {
             if ((CURRENT_TIME > CLOCK_TIME(18, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0))) {
-                this->daytimeIndex = DAYTIME_INDEX_NIGHT;
+                this->daytimeIndex = THREEDAY_DAYTIME_NIGHT;
             } else {
-                this->daytimeIndex = DAYTIME_INDEX_DAY;
+                this->daytimeIndex = THREEDAY_DAYTIME_DAY;
             }
             this->prevTime = CURRENT_TIME;
             this->actionFunc = EnTest4_HandleEvents;
@@ -475,10 +476,10 @@ void EnTest4_HandleEvents(EnTest4* this, PlayState* play) {
                 player->stateFlags1 |= PLAYER_STATE1_200;
                 this->prevTime = CURRENT_TIME;
             } else {
-                if (this->daytimeIndex == DAYTIME_INDEX_NIGHT) {
-                    this->daytimeIndex = DAYTIME_INDEX_DAY;
+                if (this->daytimeIndex == THREEDAY_DAYTIME_NIGHT) {
+                    this->daytimeIndex = THREEDAY_DAYTIME_DAY;
                 } else {
-                    this->daytimeIndex = DAYTIME_INDEX_NIGHT;
+                    this->daytimeIndex = THREEDAY_DAYTIME_NIGHT;
                 }
 
                 gSaveContext.save.time += CLOCK_TIME_MINUTE;
@@ -492,7 +493,7 @@ void EnTest4_HandleEvents(EnTest4* this, PlayState* play) {
         // `prevTimeUntilBell` will be slightly negative (behind bell time)
         // Only when the signs are different will this condition pass
         if ((curTimeUntilBell * prevTimeUntilBell) <= 0) {
-            Audio_PlaySfx_BigBells(&this->actor.projectedPos, TEST4_GET_BIG_BELLS_SFX_VOLUME_INDEX(&this->actor));
+            Audio_PlaySfx_BigBells(&this->actor.projectedPos, THREEDAY_GET_BIG_BELLS_SFX_VOLUME_INDEX(&this->actor));
             this->prevBellTime = CURRENT_TIME;
 
             if (CURRENT_DAY == 3) {
@@ -546,7 +547,7 @@ void EnTest4_HandleCutscene(EnTest4* this, PlayState* play) {
     } else if (this->transitionCsTimer < 60) {
         this->transitionCsTimer++;
         if (this->transitionCsTimer == 10) {
-            if (this->daytimeIndex == DAYTIME_INDEX_NIGHT) {
+            if (this->daytimeIndex == THREEDAY_DAYTIME_NIGHT) {
                 Audio_PlaySfx(NA_SE_EV_CHICKEN_CRY_M);
             } else {
                 Audio_PlaySfx_2(NA_SE_EV_DOG_CRY_EVENING);
@@ -562,10 +563,10 @@ void EnTest4_HandleCutscene(EnTest4* this, PlayState* play) {
         }
     } else {
         this->actionFunc = EnTest4_HandleEvents;
-        if (this->daytimeIndex == DAYTIME_INDEX_NIGHT) {
-            this->daytimeIndex = DAYTIME_INDEX_DAY;
+        if (this->daytimeIndex == THREEDAY_DAYTIME_NIGHT) {
+            this->daytimeIndex = THREEDAY_DAYTIME_DAY;
         } else {
-            this->daytimeIndex = DAYTIME_INDEX_NIGHT;
+            this->daytimeIndex = THREEDAY_DAYTIME_NIGHT;
         }
 
         if (sCurCsId > CS_ID_NONE) {
@@ -578,7 +579,7 @@ void EnTest4_HandleCutscene(EnTest4* this, PlayState* play) {
     }
 }
 
-void EnTest4_UpdateClearSkies(EnTest4* this, PlayState* play) {
+void EnTest4_UpdateWeatherClear(EnTest4* this, PlayState* play) {
     if ((CURRENT_DAY == 2) && (CURRENT_TIME >= CLOCK_TIME(7, 0)) && (CURRENT_TIME < CLOCK_TIME(17, 30)) &&
         (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
         gWeatherMode = WEATHER_MODE_RAIN;
@@ -593,11 +594,11 @@ void EnTest4_UpdateClearSkies(EnTest4* this, PlayState* play) {
     }
 
     if (gWeatherMode == WEATHER_MODE_RAIN) {
-        this->weather = TEST4_WEATHER_RAIN;
+        this->weather = THREEDAY_WEATHER_RAIN;
     }
 }
 
-void EnTest4_UpdateRainySkies(EnTest4* this, PlayState* play) {
+void EnTest4_UpdateWeatherRainy(EnTest4* this, PlayState* play) {
     if (((CURRENT_TIME >= CLOCK_TIME(17, 30)) && (CURRENT_TIME < CLOCK_TIME(23, 0)) &&
          (play->envCtx.precipitation[PRECIP_RAIN_MAX] != 0)) ||
         (play->envCtx.precipitation[PRECIP_SNOW_CUR] != 0)) {
@@ -606,12 +607,12 @@ void EnTest4_UpdateRainySkies(EnTest4* this, PlayState* play) {
     }
 
     if (gWeatherMode == WEATHER_MODE_CLEAR) {
-        this->weather = TEST4_WEATHER_CLEAR;
+        this->weather = THREEDAY_WEATHER_CLEAR;
     }
 }
 
 void EnTest4_SetSkyboxNumStars(EnTest4* this, PlayState* play) {
-    s32 numStars = TEST4_GET_SKYBOX_NUM_STARS(&this->actor);
+    s32 numStars = THREEDAY_GET_SKYBOX_NUM_STARS(&this->actor);
 
     if (numStars > 0) {
         gSkyboxNumStars = numStars;
@@ -630,12 +631,12 @@ void EnTest4_Update(Actor* thisx, PlayState* play) {
 
     if (Environment_GetStormState(play) != STORM_STATE_OFF) {
         switch (this->weather) {
-            case TEST4_WEATHER_CLEAR:
-                EnTest4_UpdateClearSkies(this, play);
+            case THREEDAY_WEATHER_CLEAR:
+                EnTest4_UpdateWeatherClear(this, play);
                 break;
 
-            case TEST4_WEATHER_RAIN:
-                EnTest4_UpdateRainySkies(this, play);
+            case THREEDAY_WEATHER_RAIN:
+                EnTest4_UpdateWeatherRainy(this, play);
                 break;
 
             default:

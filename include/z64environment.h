@@ -100,16 +100,16 @@ typedef enum SkyboxConfig {
     /* 0x0F */ SKYBOX_CONFIG_15,
     /* 0x10 */ SKYBOX_CONFIG_16,
     /* 0x11 */ SKYBOX_CONFIG_17,
-    /* 0x12 */ SKYBOX_CONFIG_18, // day 1
-    /* 0x13 */ SKYBOX_CONFIG_19, // day 2
-    /* 0x14 */ SKYBOX_CONFIG_20, // day 3
-    /* 0x15 */ SKYBOX_CONFIG_21, // day 1
-    /* 0x16 */ SKYBOX_CONFIG_22, // day 2
-    /* 0x17 */ SKYBOX_CONFIG_23, // day 3
+    /* 0x12 */ SKYBOX_CONFIG_18,
+    /* 0x13 */ SKYBOX_CONFIG_19,
+    /* 0x14 */ SKYBOX_CONFIG_20,
+    /* 0x15 */ SKYBOX_CONFIG_21,
+    /* 0x16 */ SKYBOX_CONFIG_22,
+    /* 0x17 */ SKYBOX_CONFIG_23,
     /* 0x18 */ SKYBOX_CONFIG_24,
-    /* 0x19 */ SKYBOX_CONFIG_25, // day 1
-    /* 0x1A */ SKYBOX_CONFIG_26, // day 2
-    /* 0x1B */ SKYBOX_CONFIG_27, // day 3
+    /* 0x19 */ SKYBOX_CONFIG_25,
+    /* 0x1A */ SKYBOX_CONFIG_26,
+    /* 0x1B */ SKYBOX_CONFIG_27,
     /* 0x1C */ SKYBOX_CONFIG_MAX
 } SkyboxConfig;
 
