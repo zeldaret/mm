@@ -54,8 +54,9 @@ static s16 sCsIdList[THREEDAY_DAYTIME_MAX];
 static s16 sCurCsId;
 
 /**
- * Only differs from `EnTest4_HandleDayNightSwap` with an extra telescope check when turning day
- * Does not handle DayTelop transitions
+ * Handles the transition from day-night and night-day.
+ * This does not handle DayTelop transitions.
+ * Only differs from `EnTest4_HandleDayNightSwap` with an extra telescope check when turning day without a cutscene.
  */
 void EnTest4_HandleDayNightSwapFromInit(EnTest4* this, PlayState* play) {
     if (this->daytimeIndex != THREEDAY_DAYTIME_NIGHT) {
@@ -110,7 +111,8 @@ void EnTest4_HandleDayNightSwapFromInit(EnTest4* this, PlayState* play) {
 }
 
 /**
- * Does not handle DayTelop transitions
+ * Handles the transition from day-night and night-day.
+ * This does not handle DayTelop transitions.
  */
 void EnTest4_HandleDayNightSwap(EnTest4* this, PlayState* play) {
     if (this->daytimeIndex != THREEDAY_DAYTIME_NIGHT) {
