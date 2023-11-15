@@ -737,7 +737,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
         play->envCtx.precipitation[PRECIP_SNOW_CUR] = 0;
         play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
 
-        if (gWeatherMode == WEATHER_MODE_1) {
+        if (gWeatherMode == WEATHER_MODE_RAIN) {
             if (((u32)CURRENT_DAY == 2) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(17, 30))) {
                 if (Environment_GetStormState(play) != STORM_STATE_OFF) {
@@ -1219,7 +1219,7 @@ void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
             lightSettings[temp_v1_2 + temp_v1].blendRateAndFogNear - lightSettings[temp_v1].blendRateAndFogNear;
     }
 
-    if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == WEATHER_MODE_1)) {
+    if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == WEATHER_MODE_RAIN)) {
         adjLightSettings->ambientColor[0] = -50;
         adjLightSettings->ambientColor[1] = -100;
         adjLightSettings->ambientColor[2] = -100;
@@ -2448,7 +2448,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
     //! FAKE:
     if (!gSaveContext.sceneLayer) {}
 
-    if ((play->csCtx.state == 0) && !(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+    if ((play->csCtx.state == 0) && !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
         switch (play->envCtx.timeSeqState) {
             case TIMESEQ_DAY_BGM:
                 break;

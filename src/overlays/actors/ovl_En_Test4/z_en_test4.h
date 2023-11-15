@@ -10,20 +10,26 @@ struct EnTest4;
 
 typedef void (*EnTest4ActionFunc)(struct EnTest4*, PlayState*);
 
+typedef enum DaytimeIndex {
+    /* 0 */ DAYTIME_INDEX_NIGHT,
+    /* 1 */ DAYTIME_INDEX_DAY,
+    /* 2 */ DAYTIME_INDEX_MAX
+} DaytimeIndex;
+
 typedef struct EnTest4 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ s8 csIdIndex; // 0 on night, 1 on day
+    /* 0x144 */ s8 daytimeIndex; // See `DaytimeIndex`
     /* 0x145 */ u8 transitionCsTimer;
-    /* 0x146 */ u16 unk_146;
+    /* 0x146 */ u16 prevTime;
     /* 0x148 */ u16 nextBellTime; // Next time the bell will sound
-    /* 0x14A */ u16 lastBellTime; // Last time the bell sounded
-    /* 0x14C */ u8 state;
+    /* 0x14A */ u16 prevBellTime; // Last time the bell sounded
+    /* 0x14C */ u8 weather;
     /* 0x150 */ EnTest4ActionFunc actionFunc;
 } EnTest4; // size = 0x154
 
 typedef enum {
-    /* 0 */ TEST4_STATE_0,
-    /* 1 */ TEST4_STATE_1
+    /* 0 */ TEST4_WEATHER_CLEAR,
+    /* 1 */ TEST4_WEATHER_RAIN
 } EnTest4State;
 
 #endif // Z_EN_TEST4_H

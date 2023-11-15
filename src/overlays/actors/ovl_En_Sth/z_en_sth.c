@@ -131,7 +131,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
 
     switch (STH_GET_TYPE(&this->actor)) {
         case STH_TYPE_UNUSED_1:
-            if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+            if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
                 this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
                 this->actionFunc = EnSth_DefaultIdle;
             } else {

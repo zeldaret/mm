@@ -63,7 +63,7 @@ typedef enum {
 
 typedef enum {
     /* 0 */ WEATHER_MODE_CLEAR,
-    /* 1 */ WEATHER_MODE_1, // rain?
+    /* 1 */ WEATHER_MODE_RAIN,
     /* 2 */ WEATHER_MODE_2,
     /* 3 */ WEATHER_MODE_SNOW
 } WeatherMode;

@@ -8284,7 +8284,7 @@ void Player_InitMode_Telescope(PlayState* play, Player* this) {
         this->actor.focus.rot.y = 0x2102;
         this->av2.actionVar2 = 20;
     }
-    play->actorCtx.flags |= ACTORCTX_FLAG_1;
+    play->actorCtx.flags |= ACTORCTX_FLAG_TELESCOPE_ON;
 }
 
 void Player_InitMode_B(PlayState* play, Player* this) {
