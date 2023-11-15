@@ -818,29 +818,28 @@ void EnTest7_StartArriveCs(EnTest7* this, PlayState* play) {
 }
 
 void EnTest7_UpdateSubCamArrivalCs2(EnTest7* this, PlayState* play, Vec3f* atNext, f32 lerp) {
-    f32 x;
-    f32 y;
-    f32 z;
+    Vec3f subCamAt;
     Camera* subCam =
         Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
 
     subCam->focalActor = NULL;
 
-    x = LERPIMP_ALT(atNext->x, subCam->at.x, lerp);
-    y = LERPIMP_ALT(atNext->y, subCam->at.y, lerp);
-    z = LERPIMP_ALT(atNext->z, subCam->at.z, lerp);
+    subCamAt.x = LERPIMP_ALT(atNext->x, subCam->at.x, lerp);
+    subCamAt.y = LERPIMP_ALT(atNext->y, subCam->at.y, lerp);
+    subCamAt.z = LERPIMP_ALT(atNext->z, subCam->at.z, lerp);
 
-    subCam->at.x = x;
-    subCam->at.y = y;
-    subCam->at.z = z;
+    subCam->at.x = subCamAt.x;
+    subCam->at.y = subCamAt.y;
+    subCam->at.z = subCamAt.z;
 }
 
 void EnTest7_ArriveCsPart1(EnTest7* this, PlayState* play) {
     f32 lerp = (40 - this->timer) / 40.0f;
     Camera* subCam;
 
-    this->windCapsule.unk_00 = 11.0f;
     this->flags |= OWL_WARP_FLAGS_DRAW_LENS_FLARE;
+
+    this->windCapsule.unk_00 = 11.0f;
     this->windCapsule.xzScale = 0.05f;
     this->windCapsule.yScale = 0.05f;
     this->windCapsule.yaw += 0x2EE0;
