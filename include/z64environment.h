@@ -81,6 +81,38 @@ typedef enum {
     /* 11 */ SKYBOX_DMA_TEXTURE2_START = 11
 } SkyboxDmaState;
 
+typedef enum SkyboxConfig {
+    /* 0x00 */ SKYBOX_CONFIG_0,
+    /* 0x01 */ SKYBOX_CONFIG_1,
+    /* 0x02 */ SKYBOX_CONFIG_2,
+    /* 0x03 */ SKYBOX_CONFIG_3,
+    /* 0x04 */ SKYBOX_CONFIG_4,
+    /* 0x05 */ SKYBOX_CONFIG_5,
+    /* 0x06 */ SKYBOX_CONFIG_6,
+    /* 0x07 */ SKYBOX_CONFIG_7,
+    /* 0x08 */ SKYBOX_CONFIG_8,
+    /* 0x09 */ SKYBOX_CONFIG_9,
+    /* 0x0A */ SKYBOX_CONFIG_10,
+    /* 0x0B */ SKYBOX_CONFIG_11,
+    /* 0x0C */ SKYBOX_CONFIG_12,
+    /* 0x0D */ SKYBOX_CONFIG_13,
+    /* 0x0E */ SKYBOX_CONFIG_14,
+    /* 0x0F */ SKYBOX_CONFIG_15,
+    /* 0x10 */ SKYBOX_CONFIG_16,
+    /* 0x11 */ SKYBOX_CONFIG_17,
+    /* 0x12 */ SKYBOX_CONFIG_18, // day 1
+    /* 0x13 */ SKYBOX_CONFIG_19, // day 2
+    /* 0x14 */ SKYBOX_CONFIG_20, // day 3
+    /* 0x15 */ SKYBOX_CONFIG_21, // day 1
+    /* 0x16 */ SKYBOX_CONFIG_22, // day 2
+    /* 0x17 */ SKYBOX_CONFIG_23, // day 3
+    /* 0x18 */ SKYBOX_CONFIG_24,
+    /* 0x19 */ SKYBOX_CONFIG_25, // day 1
+    /* 0x1A */ SKYBOX_CONFIG_26, // day 2
+    /* 0x1B */ SKYBOX_CONFIG_27, // day 3
+    /* 0x1C */ SKYBOX_CONFIG_MAX
+} SkyboxConfig;
+
 //! @TODO: Verify from OoT (may not be the same)
 typedef enum {
     /* 0 */ PRECIP_RAIN_MAX, // max number of raindrops that can draw; uses this or SOS_MAX, whichever is larger

@@ -176,8 +176,8 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
         case CS_MISC_CLOUDY_SKY:
             if (isFirstFrame) {
                 play->envCtx.changeSkyboxState = CHANGE_SKYBOX_REQUESTED;
-                play->envCtx.skyboxConfig = 1;
-                play->envCtx.changeSkyboxNextConfig = 0;
+                play->envCtx.skyboxConfig = SKYBOX_CONFIG_1;
+                play->envCtx.changeSkyboxNextConfig = SKYBOX_CONFIG_0;
                 play->envCtx.changeSkyboxTimer = 60;
                 play->envCtx.changeLightEnabled = true;
                 play->envCtx.lightConfig = 0;
@@ -331,7 +331,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_MOON_CRASH_SKYBOX:
             if (isFirstFrame) {
-                play->envCtx.skyboxConfig = 0xD;
+                play->envCtx.skyboxConfig = SKYBOX_CONFIG_13;
             }
             break;
 
