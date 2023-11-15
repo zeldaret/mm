@@ -1085,7 +1085,7 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
 
             if ((i != ARRAY_COUNT(this->colliderElements)) &&
                 ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-                 (!(sphElement->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)))) {
+                 !(sphElement->info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
                 EnDekubaba_SpawnIceEffects(this, play);
                 newHealth = this->actor.colChkInfo.health - this->actor.colChkInfo.damage;
 

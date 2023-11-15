@@ -102,8 +102,8 @@ void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
     this->actor.floorHeight =
         BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &this->actor.world.pos);
 
-    if (!(WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
-                                 &waterbox)) ||
+    if (!WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+                                &waterbox) ||
         (ySurface <= this->actor.floorHeight)) {
         Actor_Kill(&this->actor);
     } else {

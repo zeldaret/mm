@@ -272,7 +272,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
 
         this->bodyCollider.elements[0].dim.scale = 1.0f;
         if (EN_PP_GET_TYPE(&this->actor) > EN_PP_TYPE_MASKED) {
-            this->actor.hintId = 0x25;
+            this->actor.hintId = TATL_HINT_ID_HIPLOOP;
             this->maskColliderElements[0].info.toucherFlags &= ~TOUCH_ON;
             this->maskColliderElements[0].info.bumperFlags &= ~BUMP_ON;
             this->maskColliderElements[0].info.ocElemFlags &= ~OCELEM_ON;
@@ -286,7 +286,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
             this->bodyCollider.elements[0].dim.modelSphere.center.x = 400;
             this->bodyCollider.elements[0].dim.modelSphere.center.y = -400;
         } else {
-            this->actor.hintId = 0x26;
+            this->actor.hintId = TATL_HINT_ID_MASKED_HIPLOOP;
             this->maskCollider.elements[0].dim.modelSphere.radius = 10;
             this->maskCollider.elements[0].dim.scale = 1.0f;
             this->maskCollider.elements[0].dim.modelSphere.center.x = 1000;
@@ -647,7 +647,7 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
             return;
         }
 
-        if (!(this->maskCollider.base.atFlags & AT_BOUNCED) && (!(this->bodyCollider.base.atFlags & AT_BOUNCED))) {
+        if (!(this->maskCollider.base.atFlags & AT_BOUNCED) && !(this->bodyCollider.base.atFlags & AT_BOUNCED)) {
             if ((this->maskCollider.base.atFlags & AT_HIT) || (this->bodyCollider.base.atFlags & AT_HIT)) {
                 EnPp_SetupAttack(this);
                 return;
