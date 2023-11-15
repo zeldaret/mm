@@ -432,7 +432,7 @@ void EnTest7_StartWarpCs(EnTest7* this, PlayState* play) {
 void EnTest7_WarpCsPart1(EnTest7* this, PlayState* play) {
     Color_RGB8 fogColor = { 64, 0, 0 };
     Color_RGB8 ambientColor = { 220, 220, 255 };
-    f32 envLerp = this->timer / 10.0f;
+    f32 envLerp = this->timer / (f32)(10 - 0);
 
     Environment_LerpAmbientColor(play, &ambientColor, envLerp);
     Environment_LerpFogColor(play, &fogColor, envLerp);
@@ -544,7 +544,7 @@ void EnTest7_WarpCsPart3(EnTest7* this, PlayState* play) {
 void EnTest7_WarpCsPart4(EnTest7* this, PlayState* play) {
     s32 pad;
     s32 temp = this->timer - 86;
-    f32 temp_f0 = temp / 10.0f;
+    f32 temp_f0 = temp / (f32)(96 - 86);
     Vec3f featherPos;
 
     this->flags |= OWL_WARP_FLAGS_10;
@@ -566,7 +566,7 @@ void EnTest7_WarpCsPart4(EnTest7* this, PlayState* play) {
 void EnTest7_WarpCsPart5(EnTest7* this, PlayState* play) {
     s32 pad;
     s32 temp = this->timer - 96;
-    f32 lerp = 1.0f - ((f32)temp / 4);
+    f32 lerp = 1.0f - (temp / (f32)(100 - 96));
     Camera* subCam;
     f32 temp_f2;
     f32 temp_f4;
@@ -614,7 +614,7 @@ void EnTest7_WarpCsPart6(EnTest7* this, PlayState* play) {
         R_PLAY_FILL_SCREEN_ALPHA = 0;
     }
 
-    envLerp = 1.0f - (sp2C / 10.0f);
+    envLerp = 1.0f - (sp2C / (f32)(110 - 100));
     Environment_LerpAmbientColor(play, &ambientColor, envLerp);
     Environment_LerpFogColor(play, &fogColor, envLerp);
     Environment_LerpFog(play, 2000, 4000, envLerp);
@@ -744,18 +744,17 @@ void EnTest7_SpinAndSquishPlayer(EnTest7* this, PlayState* play, f32 lerp) {
 
 void EnTest7_PlayerAndSubCamAction(EnTest7* this, PlayState* play) {
     f32 lerp;
-    f32 sixteen = 16.0f;
 
     if ((this->timer >= 12) && (this->timer <= 30)) {
-        lerp = (this->timer - 12) / 18.0f;
+        lerp = (this->timer - 12) / (f32)(30 - 12);
         EnTest7_UpdateSubCamWarpCs2(this, play, lerp);
     } else if ((this->timer >= 79) && (this->timer <= 95)) {
-        lerp = (this->timer - 79) / sixteen;
+        lerp = (this->timer - 79) / (f32)(95 - 79);
         EnTest7_UpdateSubCamWarpCs1(this, play, lerp);
     }
 
     if ((this->timer >= 42) && (this->timer <= 68)) {
-        lerp = (this->timer - 42) / 26.0f;
+        lerp = (this->timer - 42) / (f32)(68 - 42);
         EnTest7_SpinAndSquishPlayer(this, play, lerp);
     }
 }
@@ -834,7 +833,7 @@ void EnTest7_UpdateSubCamArrivalCs2(EnTest7* this, PlayState* play, Vec3f* atNex
 }
 
 void EnTest7_ArriveCsPart1(EnTest7* this, PlayState* play) {
-    f32 lerp = (40 - this->timer) / 40.0f;
+    f32 lerp = (40 - this->timer) / (f32)(40 - 0);
     Camera* subCam;
 
     this->flags |= OWL_WARP_FLAGS_DRAW_LENS_FLARE;
