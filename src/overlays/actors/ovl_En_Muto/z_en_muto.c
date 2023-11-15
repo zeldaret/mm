@@ -15,7 +15,6 @@ void EnMuto_Destroy(Actor* thisx, PlayState* play);
 void EnMuto_Update(Actor* thisx, PlayState* play2);
 void EnMuto_Draw(Actor* thisx, PlayState* play);
 
-void EnMuto_SetHeadRotation(EnMuto* this);
 void EnMuto_SetupIdle(EnMuto* this);
 void EnMuto_Idle(EnMuto* this, PlayState* play);
 void EnMuto_SetupDialogue(EnMuto* this, PlayState* play);
@@ -96,7 +95,7 @@ void EnMuto_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-typedef enum {
+typedef enum EnMutoAnimation {
     /* -1 */ ENMUTO_ANIM_NONE = -1,
     /*  0 */ ENMUTO_ANIM_0,
     /*  1 */ ENMUTO_ANIM_1,
