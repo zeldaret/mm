@@ -780,7 +780,7 @@ SavePlayerData sSaveDefaultPlayerData = {
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
     OWL_WARP_NONE,                                      // owlWarpId
-    0x0000,                                             // owlActivationFlags
+    0,                                                  // owlActivationFlags
     0xFF,                                               // unk_24
     SCENE_SPOT00,                                       // savedSceneId
 };
