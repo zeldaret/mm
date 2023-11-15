@@ -27,7 +27,7 @@ typedef struct EnTest4 {
     /* 0x150 */ EnTest4ActionFunc actionFunc;
 } EnTest4; // size = 0x154
 
-typedef enum {
+typedef enum ThreeDayWeather {
     /* 0 */ THREEDAY_WEATHER_CLEAR,
     /* 1 */ THREEDAY_WEATHER_RAIN
 } ThreeDayWeather;

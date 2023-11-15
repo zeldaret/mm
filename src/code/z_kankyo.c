@@ -156,6 +156,15 @@ TimeBasedLightEntry sTimeBasedLightConfigs[][7] = {
     },
 };
 
+typedef struct {
+    /* 0x0 */ u16 startTime;
+    /* 0x2 */ u16 endTime;
+    /* 0x4 */ u8 skybox1Index;
+    /* 0x5 */ u8 skybox2Index;
+    /* 0x6 */ u8 color1Index;
+    /* 0x7 */ u8 color2Index;
+} TimeBasedSkyboxEntry; // size = 0x8
+
 TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[SKYBOX_CONFIG_MAX][9] = {
     // SKYBOX_CONFIG_0
     {

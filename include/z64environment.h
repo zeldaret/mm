@@ -177,15 +177,6 @@ typedef struct LightningStrike {
     /* 0x08 */ f32 delayTimer;
 } LightningStrike; // size = 0xC
 
-typedef struct {
-    /* 0x0 */ u16 startTime;
-    /* 0x2 */ u16 endTime;
-    /* 0x4 */ u8 skybox1Index;
-    /* 0x5 */ u8 skybox2Index;
-    /* 0x6 */ u8 color1Index;
-    /* 0x7 */ u8 color2Index;
-} TimeBasedSkyboxEntry; // size = 0x8
-
 #define ENV_FOGNEAR_MAX 996
 #define ENV_ZFAR_MAX 15000
 
