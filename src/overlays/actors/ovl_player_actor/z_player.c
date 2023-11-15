@@ -10601,26 +10601,25 @@ void func_80841A50(PlayState* play, Player* this) {
 
 typedef void (*PlayerInitModeFunc)(PlayState*, Player*);
 
-// Initialisation functions for various gameplay modes depending on spawn params. There may be at most 0x10 due to it
-// using a single nybble.
-// sInitModeFuncs
-PlayerInitModeFunc D_8085D2CC[PLAYER_INITMODE_MAX] = {
-    /* 0x0 */ Player_InitMode_0,         // PLAYER_INITMODE_0
-    /* 0x1 */ Player_InitMode_1,         // PLAYER_INITMODE_1
-    /* 0x2 */ Player_InitMode_2,         // PLAYER_INITMODE_2
-    /* 0x3 */ Player_InitMode_3,         // PLAYER_INITMODE_3
-    /* 0x4 */ Player_InitMode_4,         // PLAYER_INITMODE_4
-    /* 0x5 */ Player_InitMode_5,         // PLAYER_INITMODE_5
-    /* 0x6 */ Player_InitMode_6,         // PLAYER_INITMODE_6
-    /* 0x7 */ Player_InitMode_7,         // PLAYER_INITMODE_7
-    /* 0x8 */ func_80841744,             // PLAYER_INITMODE_8
-    /* 0x9 */ func_80841744,             // PLAYER_INITMODE_9
-    /* 0xA */ func_8083ADF0,             // PLAYER_INITMODE_A
-    /* 0xB */ Player_InitMode_B,         // PLAYER_INITMODE_B
-    /* 0xC */ Player_InitMode_Telescope, // PLAYER_INITMODE_TELESCOPE
-    /* 0xD */ Player_InitMode_D,         // PLAYER_INITMODE_D
-    /* 0xE */ func_8083ADF0,             // PLAYER_INITMODE_E
-    /* 0xF */ Player_InitMode_F,         // PLAYER_INITMODE_F
+// Initialisation functions for various gameplay modes depending on spawn params.
+// There may be at most 0x10 due to it using a single nybble.
+PlayerInitModeFunc sPlayerInitModeFuncs[PLAYER_INITMODE_MAX] = {
+    Player_InitMode_0,         // PLAYER_INITMODE_0
+    Player_InitMode_1,         // PLAYER_INITMODE_1
+    Player_InitMode_2,         // PLAYER_INITMODE_2
+    Player_InitMode_3,         // PLAYER_INITMODE_3
+    Player_InitMode_4,         // PLAYER_INITMODE_4
+    Player_InitMode_5,         // PLAYER_INITMODE_5
+    Player_InitMode_6,         // PLAYER_INITMODE_6
+    Player_InitMode_7,         // PLAYER_INITMODE_7
+    func_80841744,             // PLAYER_INITMODE_8
+    func_80841744,             // PLAYER_INITMODE_9
+    func_8083ADF0,             // PLAYER_INITMODE_A
+    Player_InitMode_B,         // PLAYER_INITMODE_B
+    Player_InitMode_Telescope, // PLAYER_INITMODE_TELESCOPE
+    Player_InitMode_D,         // PLAYER_INITMODE_D
+    func_8083ADF0,             // PLAYER_INITMODE_E
+    Player_InitMode_F,         // PLAYER_INITMODE_F
 };
 
 // sBlureInit
@@ -10858,7 +10857,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
         initMode = PLAYER_INITMODE_D;
     }
 
-    D_8085D2CC[initMode](play, this);
+    sPlayerInitModeFuncs[initMode](play, this);
 
     if ((this->actor.draw != NULL) && gSaveContext.save.hasTatl &&
         ((gSaveContext.gameMode == GAMEMODE_NORMAL) || (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) &&
