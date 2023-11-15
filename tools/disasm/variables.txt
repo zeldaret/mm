@@ -1936,7 +1936,7 @@
     0x801C6A44:("sSaveDebugChecksum","u16","",0x2),
     0x801C6A48:("D_801C6A48","UNK_TYPE1","",0x1),
     0x801C6A50:("D_801C6A50","UNK_TYPE1","",0x1),
-    0x801C6A58:("D_801C6A58","UNK_TYPE1","",0x1),
+    0x801C6A58:("sOwlWarpEntrances","UNK_TYPE1","",0x1),
     0x801C6A70:("D_801C6A70","UNK_TYPE1","",0x1),
     0x801C6A74:("sOcarinaButtonIndexBufPos","UNK_TYPE2","",0x2),
     0x801C6A78:("sOcarinaButtonIndexBufLen","UNK_TYPE2","",0x2),

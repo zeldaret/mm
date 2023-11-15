@@ -630,7 +630,7 @@ void EnTest7_WarpCsWait(EnTest7* this, PlayState* play) {
     }
 }
 
-u16 sOwlWarpEntrances[OWL_WARP_MAX - 1] = {
+static u16 sOwlWarpEntrances[OWL_WARP_MAX - 1] = {
     ENTRANCE(GREAT_BAY_COAST, 11),         // OWL_WARP_GREAT_BAY_COAST
     ENTRANCE(ZORA_CAPE, 6),                // OWL_WARP_ZORA_CAPE
     ENTRANCE(SNOWHEAD, 3),                 // OWL_WARP_SNOWHEAD
