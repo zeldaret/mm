@@ -4020,7 +4020,7 @@
     0x801A51F0:("func_801A51F0",),
     0x801A5228:("func_801A5228",),
     0x801A5390:("func_801A5390",),
-    0x801A53DC:("func_801A53DC",),
+    0x801A53DC:("AudioVoice_GetVoiceDict",),
     0x801A53E8:("func_801A53E8",),
     0x801A541C:("func_801A541C",),
     0x801A5488:("func_801A5488",),

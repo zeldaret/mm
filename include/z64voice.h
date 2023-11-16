@@ -5,7 +5,7 @@
 #include "unk.h"
 #include "PR/os_voice.h"
 
-typedef enum {
+typedef enum OSVoiceWordId {
     /*  0 */ VOICE_WORD_ID_HOURS,
     /*  1 */ VOICE_WORD_ID_CHEESE,
     /*  2 */ VOICE_WORD_ID_WAKE_UP,

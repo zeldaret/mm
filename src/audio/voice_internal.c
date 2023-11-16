@@ -130,7 +130,7 @@ OSVoiceData* func_801A5390(void) {
 }
 
 // Unused
-OSVoiceDictionary* func_801A53DC(void) {
+OSVoiceDictionary* AudioVoice_GetVoiceDict(void) {
     return sVoiceContext.dict;
 }
 

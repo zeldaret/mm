@@ -3537,7 +3537,7 @@ asm/non_matchings/code/voice_external/AudioVoice_Update.s,AudioVoice_Update,0x80
 asm/non_matchings/code/voice_internal/func_801A51F0.s,func_801A51F0,0x801A51F0,0xE
 asm/non_matchings/code/voice_internal/func_801A5228.s,func_801A5228,0x801A5228,0x5A
 asm/non_matchings/code/voice_internal/func_801A5390.s,func_801A5390,0x801A5390,0x13
-asm/non_matchings/code/voice_internal/func_801A53DC.s,func_801A53DC,0x801A53DC,0x3
+asm/non_matchings/code/voice_internal/AudioVoice_GetVoiceDict.s,AudioVoice_GetVoiceDict,0x801A53DC,0x3
 asm/non_matchings/code/voice_internal/func_801A53E8.s,func_801A53E8,0x801A53E8,0xD
 asm/non_matchings/code/voice_internal/func_801A541C.s,func_801A541C,0x801A541C,0x1B
 asm/non_matchings/code/voice_internal/func_801A5488.s,func_801A5488,0x801A5488,0xF
