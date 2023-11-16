@@ -20,7 +20,6 @@ void func_80AFD668(ElfMsg4* this, PlayState* play);
 void func_80AFD770(ElfMsg4* this, PlayState* play);
 s32 func_80AFD380(ElfMsg4* this, PlayState* play);
 s32 ElfMsg4_GetTextId(ElfMsg4* this);
-s32 func_80AFD5E0(ElfMsg4* this);
 
 ActorInit Elf_Msg4_InitVars = {
     /**/ ACTOR_ELF_MSG4,
@@ -104,7 +103,7 @@ s32 ElfMsg4_GetTextId(ElfMsg4* this) {
     }
 }
 
-s32 func_80AFD5E0(ElfMsg4* this) {
+bool func_80AFD5E0(ElfMsg4* this) {
     return (this->actor.xzDistToPlayer < (100.0f * this->actor.scale.x)) && (this->actor.playerHeightRel >= 0.0f) &&
            (this->actor.playerHeightRel < (100.0f * this->actor.scale.y));
 }

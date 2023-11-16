@@ -105,7 +105,7 @@ void func_809A43A8(ObjToge* this, PlayState* play) {
     }
 }
 
-s32 func_809A43EC(ObjToge* this, PlayState* play) {
+bool func_809A43EC(ObjToge* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 temp_fv1 = player->actor.world.pos.x - this->unk_1B8;
     f32 temp_fa0 = player->actor.world.pos.z - this->unk_1BC;
