@@ -1236,7 +1236,7 @@ void SkelAnime_InitPlayer(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHea
         skelAnime->morphTable = (void*)ALIGN16((uintptr_t)morphTableBuffer);
     }
 
-    PlayerAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
+    PlayerAnimation_Change(play, skelAnime, animation, PLAYER_ANIM_NORMAL_SPEED, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
 }
 
 /**
@@ -1386,8 +1386,8 @@ void PlayerAnimation_Change(PlayState* play, SkelAnime* skelAnime, PlayerAnimati
  * Immediately changes to a Player animation that plays once at the default speed.
  */
 void PlayerAnimation_PlayOnce(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation) {
-    PlayerAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, Animation_GetLastFrame(&animation->common),
-                           ANIMMODE_ONCE, 0.0f);
+    PlayerAnimation_Change(play, skelAnime, animation, PLAYER_ANIM_NORMAL_SPEED, 0.0f,
+                           Animation_GetLastFrame(&animation->common), ANIMMODE_ONCE, 0.0f);
 }
 
 /**
@@ -1403,8 +1403,8 @@ void PlayerAnimation_PlayOnceSetSpeed(PlayState* play, SkelAnime* skelAnime, Pla
  * Immediately changes to a Player animation that loops at the default speed.
  */
 void PlayerAnimation_PlayLoop(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation) {
-    PlayerAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, Animation_GetLastFrame(&animation->common),
-                           ANIMMODE_LOOP, 0.0f);
+    PlayerAnimation_Change(play, skelAnime, animation, PLAYER_ANIM_NORMAL_SPEED, 0.0f,
+                           Animation_GetLastFrame(&animation->common), ANIMMODE_LOOP, 0.0f);
 }
 
 /**
