@@ -6780,7 +6780,7 @@ s32 Camera_Special9(Camera* camera) {
     s32 sp50[1];
     BgCamFuncData* bgCamFuncData;
 
-    if ((csId != CS_ID_NONE) && (csId != 0x7D)) {
+    if ((csId != CS_ID_NONE) && (csId != CS_ID_GLOBAL_DOOR)) {
         func_800E0348(camera);
     }
 
