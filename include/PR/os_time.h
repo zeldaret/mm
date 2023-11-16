@@ -18,8 +18,8 @@ typedef struct OSTimer_s {
 
 OSTime osGetTime(void);
 void osSetTime(OSTime ticks);
-s32 osSetTimer(OSTimer* t, OSTime countdown, OSTime interval, OSMesgQueue* mq, OSMesg msg);
-s32 osStopTimer(OSTimer* t);
+int osSetTimer(OSTimer* t, OSTime countdown, OSTime interval, OSMesgQueue* mq, OSMesg msg);
+int osStopTimer(OSTimer* t);
 
 
 #endif

@@ -123,7 +123,7 @@ static Vec3f sShopItemPositions[3] = {
     { 31.0f, 35.0f, -95.0f },
 };
 
-s32 EnFsn_TestItemSelected(PlayState* play) {
+bool EnFsn_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {

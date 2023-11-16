@@ -375,7 +375,7 @@ s32 func_80B2FB94(Vec3f* arg0, f32 arg1, TriNorm* triNorm, Vec3f* arg3, f32* arg
     return false;
 }
 
-s32 func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
+bool func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
     Vec3f sp84;
     Vec3f sp78;
     Vec3f* vtx;

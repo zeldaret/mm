@@ -123,7 +123,7 @@ void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 a
                      frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
-s32 EnTrt_TestItemSelected(PlayState* play) {
+bool EnTrt_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {

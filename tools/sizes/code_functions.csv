@@ -248,7 +248,7 @@ asm/non_matchings/code/z_actor/Actor_WorldDistXZToActor.s,Actor_WorldDistXZToAct
 asm/non_matchings/code/z_actor/Actor_WorldDistXZToPoint.s,Actor_WorldDistXZToPoint,0x800B6E48,0x9
 asm/non_matchings/code/z_actor/Actor_OffsetOfPointInActorCoords.s,Actor_OffsetOfPointInActorCoords,0x800B6E6C,0x28
 asm/non_matchings/code/z_actor/Actor_HeightDiff.s,Actor_HeightDiff,0x800B6F0C,0x5
-asm/non_matchings/code/z_actor/func_800B6F20.s,func_800B6F20,0x800B6F20,0x2A
+asm/non_matchings/code/z_actor/Actor_SetControlStickData.s,Actor_SetControlStickData,0x800B6F20,0x2A
 asm/non_matchings/code/z_actor/Player_GetHeight.s,Player_GetHeight,0x800B6FC8,0x32
 asm/non_matchings/code/z_actor/Player_GetRunSpeedLimit.s,Player_GetRunSpeedLimit,0x800B7090,0x22
 asm/non_matchings/code/z_actor/func_800B7118.s,func_800B7118,0x800B7118,0x4
@@ -1687,8 +1687,8 @@ asm/non_matchings/code/z_path/func_801225CC.s,func_801225CC,0x801225CC,0x25
 asm/non_matchings/code/z_pause/func_80122660.s,func_80122660,0x80122660,0x4
 asm/non_matchings/code/z_pause/func_80122670.s,func_80122670,0x80122670,0x1C
 asm/non_matchings/code/z_player_lib/func_801226E0.s,func_801226E0,0x801226E0,0x19
-asm/non_matchings/code/z_player_lib/func_80122744.s,func_80122744,0x80122744,0x7
-asm/non_matchings/code/z_player_lib/func_80122760.s,func_80122760,0x80122760,0x42
+asm/non_matchings/code/z_player_lib/Player_InitOverrideInput.s,Player_InitOverrideInput,0x80122744,0x7
+asm/non_matchings/code/z_player_lib/Player_UpdateOverrideInput.s,Player_UpdateOverrideInput,0x80122760,0x42
 asm/non_matchings/code/z_player_lib/func_80122868.s,func_80122868,0x80122868,0x4E
 asm/non_matchings/code/z_player_lib/func_801229A0.s,func_801229A0,0x801229A0,0x13
 asm/non_matchings/code/z_player_lib/func_801229EC.s,func_801229EC,0x801229EC,0x4
