@@ -418,123 +418,128 @@ Vec3s D_809F1C8C[7] = {
 
 void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
     s32 i;
-    Player* sp108 = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     s32 j;
-    u8 sp103 = 0;
-    Vec3s spD8[7];
-    s32 spD4;
-    s32 spD0;
-    s32 spCC;
-    s32 spC8;
-    s32 spC4;
-    s32 spC0;
-    s32 spBC;
-    s32 spB8;
-    s32 spB4;
-    s32 var_s6;
-    s32 var_s7;
-    s16 var_s5;
-    s16 var_s4;
-    f32 spA4;
-    f32 var_fv1;
-    Vec3f sp94;
-    s32 var_s4_2;
+    u8 disableATCollisions = false;
+    Vec3s targetLimbRot[7];
+    s32 frequency1;
+    s32 shift1;
+    s32 amplitude1;
+    s32 frequency2;
+    s32 shift2;
+    s32 amplitude2;
+    s32 frequency3;
+    s32 shift3;
+    s32 amplitude3;
+    s32 limbRotMaxAngularVelocityFrac;
+    s32 limbRotAngularVelocity;
+    s16 rotAngularVelocity;
+    s16 rotMaxAngularVelocityFrac;
+    f32 diffY;
+    f32 attackRange;
+    Vec3f splashPos;
+    s32 damageEffect;
 
     this->dyna.actor.hintId = TATL_HINT_ID_BIO_DEKU_BABA;
 
     if (this->lilyPadWithHeadLimbRotState == 0) {
-        spD4 = 0x3E8;
-        spD0 = 0x3E80;
-        spCC = 0x7D0;
+        frequency1 = 0x3E8;
+        shift1 = 0x3E80;
+        amplitude1 = 0x7D0;
 
-        spC8 = 0x5DC;
-        spC4 = 0x1770;
-        spC0 = 0xBB8;
+        frequency2 = 0x5DC;
+        shift2 = 0x1770;
+        amplitude2 = 0xBB8;
 
-        spBC = 0x514;
-        spB8 = 0x5208;
-        spB4 = 0xDAC;
+        frequency3 = 0x514;
+        shift3 = 0x5208;
+        amplitude3 = 0xDAC;
 
-        var_s6 = 0xA;
-        var_s7 = 0x300;
+        limbRotMaxAngularVelocityFrac = 0xA;
+        limbRotAngularVelocity = 0x300;
 
         if (this->damagedFlashTimer != 0) {
-            spD4 = 0x1B58;
-            spCC = 0x1770;
+            frequency1 = 0x1B58;
+            amplitude1 = 0x1770;
 
-            spC0 = 0x1770;
+            amplitude2 = 0x1770;
 
-            spBC = 0x1C84;
-            spB4 = 0x1964;
+            frequency3 = 0x1C84;
+            amplitude3 = 0x1964;
 
-            var_s6 = 1;
-            var_s7 = 0x1000;
+            limbRotMaxAngularVelocityFrac = 1;
+            limbRotAngularVelocity = 0x1000;
         }
     } else if (this->lilyPadWithHeadLimbRotState == 3) {
-        spD4 = 0x1B58;
-        spD0 = 0x3E80;
-        spCC = 0x1388;
+        frequency1 = 0x1B58;
+        shift1 = 0x3E80;
+        amplitude1 = 0x1388;
 
-        spC8 = 0x5DC;
-        spC4 = 0x2328;
-        spC0 = 0x1388;
+        frequency2 = 0x5DC;
+        shift2 = 0x2328;
+        amplitude2 = 0x1388;
 
-        spBC = 0x1C84;
-        spB8 = 0x5208;
-        spB4 = 0x157C;
+        frequency3 = 0x1C84;
+        shift3 = 0x5208;
+        amplitude3 = 0x157C;
 
-        var_s6 = 1;
-        var_s7 = 0x1000;
+        limbRotMaxAngularVelocityFrac = 1;
+        limbRotAngularVelocity = 0x1000;
     } else {
-        spD4 = spD0 = spCC = spC8 = spC4 = spC0 = spBC = spB8 = spB4 = var_s6 = var_s7 = 0;
+        frequency1 = shift1 = amplitude1 = frequency2 = shift2 = amplitude2 = frequency3 = shift3 = amplitude3 =
+            limbRotMaxAngularVelocityFrac = limbRotAngularVelocity = 0;
     }
 
     for (i = 0; i < 7; i++) {
         if ((this->lilyPadWithHeadLimbRotState == 0) || (this->lilyPadWithHeadLimbRotState == 3)) {
             if (i < 3) {
-                spD8[i].y = 0;
-                spD8[i].x = (s32)(Math_SinS((this->frameCounter * spD4) + (i * spD0)) * spCC);
+                targetLimbRot[i].y = 0;
+                targetLimbRot[i].x = Math_SinS((this->frameCounter * frequency1) + (i * shift1)) * amplitude1;
             } else {
-                spD8[i].x = 0;
-                spD8[i].y = (s32)(Math_SinS((this->frameCounter * spC8) + (i * spC4)) * spC0);
+                targetLimbRot[i].x = 0;
+                targetLimbRot[i].y = Math_SinS((this->frameCounter * frequency2) + (i * shift2)) * amplitude2;
             }
 
             if ((i == 4) || (i == 6)) {
-                spD8[i].z = (s32)(Math_SinS((this->frameCounter * spBC) + (i * spB8)) * spB4 * 2.0f);
+                targetLimbRot[i].z = Math_SinS((this->frameCounter * frequency3) + (i * shift3)) * amplitude3 * 2.0f;
             } else {
-                spD8[i].z = (s32)(Math_SinS((this->frameCounter * spBC) + (i * spB8)) * spB4);
+                targetLimbRot[i].z = Math_SinS((this->frameCounter * frequency3) + (i * shift3)) * amplitude3;
             }
 
-            var_s4 = var_s6;
-            var_s5 = var_s7;
+            rotMaxAngularVelocityFrac = limbRotMaxAngularVelocityFrac;
+            rotAngularVelocity = limbRotAngularVelocity;
         } else {
             if (this->lilyPadWithHeadLimbRotState == 1) {
-                var_s6 = 5;
-                var_s7 = 0x1000;
+                limbRotMaxAngularVelocityFrac = 5;
+                limbRotAngularVelocity = 0x1000;
 
-                spD8[i].x = D_809F1C60[i].x;
-                spD8[i].y = D_809F1C60[i].y;
-                spD8[i].z = D_809F1C60[i].z;
+                targetLimbRot[i].x = D_809F1C60[i].x;
+                targetLimbRot[i].y = D_809F1C60[i].y;
+                targetLimbRot[i].z = D_809F1C60[i].z;
             } else if (this->lilyPadWithHeadLimbRotState == 2) {
-                var_s6 = 1;
-                var_s7 = 0x2000;
+                limbRotMaxAngularVelocityFrac = 1;
+                limbRotAngularVelocity = 0x2000;
 
-                spD8[i].x = D_809F1C8C[i].x;
-                spD8[i].y = D_809F1C8C[i].y;
-                spD8[i].z = D_809F1C8C[i].z;
+                targetLimbRot[i].x = D_809F1C8C[i].x;
+                targetLimbRot[i].y = D_809F1C8C[i].y;
+                targetLimbRot[i].z = D_809F1C8C[i].z;
             }
-            var_s4 = var_s6;
-            var_s5 = var_s7;
+            rotMaxAngularVelocityFrac = limbRotMaxAngularVelocityFrac;
+            rotAngularVelocity = limbRotAngularVelocity;
         }
 
-        Math_ApproachS(&this->lilyPadWithHeadLimbRot[i].x, spD8[i].x, var_s6, var_s7);
-        Math_ApproachS(&this->lilyPadWithHeadLimbRot[i].y, spD8[i].y, var_s6, var_s7);
-        Math_ApproachS(&this->lilyPadWithHeadLimbRot[i].z, spD8[i].z, var_s6, var_s7);
+        Math_ApproachS(&this->lilyPadWithHeadLimbRot[i].x, targetLimbRot[i].x, limbRotMaxAngularVelocityFrac,
+                       limbRotAngularVelocity);
+        Math_ApproachS(&this->lilyPadWithHeadLimbRot[i].y, targetLimbRot[i].y, limbRotMaxAngularVelocityFrac,
+                       limbRotAngularVelocity);
+        Math_ApproachS(&this->lilyPadWithHeadLimbRot[i].z, targetLimbRot[i].z, limbRotMaxAngularVelocityFrac,
+                       limbRotAngularVelocity);
     }
 
-    spA4 = (sp108->actor.world.pos.y - this->dyna.actor.world.pos.y) + 10.0f;
-    if (spA4 < 0.0f) {
-        Math_ApproachS(&this->dyna.actor.shape.rot.y, this->dyna.actor.yawTowardsPlayer, var_s4, var_s5);
+    diffY = (player->actor.world.pos.y - this->dyna.actor.world.pos.y) + 10.0f;
+    if (diffY < 0.0f) {
+        Math_ApproachS(&this->dyna.actor.shape.rot.y, this->dyna.actor.yawTowardsPlayer, rotMaxAngularVelocityFrac,
+                       rotAngularVelocity);
     }
 
     SkelAnime_Update(&this->headSkelAnime);
@@ -548,29 +553,29 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
         case 0:
             this->lilyPadWithHeadLimbRotState = 0;
             this->headSkelAnime.playSpeed = 1.0f;
-            if (spA4 < 0.0f) {
-                if (sp108->actor.speed > 10.0f) {
-                    var_fv1 = 220.0f;
+            if (diffY < 0.0f) {
+                if (player->actor.speed > 10.0f) {
+                    attackRange = 220.0f;
                 } else {
-                    var_fv1 = 150.0f;
+                    attackRange = 150.0f;
                 }
-                if ((this->timers[0] == 0) && (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= var_fv1)) {
+                if ((this->timers[0] == 0) && (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= attackRange)) {
                     this->lilyPadWithHeadAttackState = 1;
                     this->timers[0] = 10;
                 }
-                this->standingOnLilyPadWithHeadFrameCounter = 0;
+                this->flipAttackFrameCounter = 0;
             } else {
-                sp103 = 1;
+                disableATCollisions = true;
 
                 if (sqrtf(this->dyna.actor.xyzDistToPlayerSq) <= 40.0f) {
-                    this->standingOnLilyPadWithHeadFrameCounter++;
-                    if (this->standingOnLilyPadWithHeadFrameCounter > 30) {
+                    this->flipAttackFrameCounter++;
+                    if (this->flipAttackFrameCounter > 30) {
                         this->lilyPadWithHeadAttackState = 10;
                         this->timers[0] = 30;
                         Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_ATTACK);
                     }
                 } else {
-                    this->standingOnLilyPadWithHeadFrameCounter = 0;
+                    this->flipAttackFrameCounter = 0;
                 }
             }
             if (((this->frameCounter % 4) == 0) && (Rand_ZeroOne() < 0.5f)) {
@@ -588,14 +593,14 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
             Math_ApproachS(&this->dyna.actor.shape.rot.x, -0x8000, 2, 0x2000);
             Math_ApproachS(&this->dyna.actor.shape.rot.y, this->dyna.actor.yawTowardsPlayer, 2, 0x2000);
             if (this->timers[0] == 0) {
-                this->standingOnLilyPadWithHeadFrameCounter = 0;
+                this->flipAttackFrameCounter = 0;
                 this->lilyPadWithHeadAttackState = 0;
                 this->timers[0] = 100;
             }
             if (this->timers[0] == 27) {
-                Math_Vec3f_Copy(&sp94, &this->dyna.actor.world.pos);
-                sp94.y += 40.0f;
-                EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, 1, 2000);
+                Math_Vec3f_Copy(&splashPos, &this->dyna.actor.world.pos);
+                splashPos.y += 40.0f;
+                EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 1, 2000);
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_OUT_OF_WATER);
             }
             break;
@@ -627,8 +632,8 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
             break;
     }
 
-    var_s4_2 = Boss05_LilyPadWithHead_UpdateDamage(this, play);
-    if ((var_s4_2 != 0) || (this->forceDetachTimer == 1)) {
+    damageEffect = Boss05_LilyPadWithHead_UpdateDamage(this, play);
+    if ((damageEffect != 0) || (this->forceDetachTimer == 1)) {
         Boss05* child;
 
         this->dyna.actor.params = BIO_DEKU_BABA_TYPE_LILY_PAD;
@@ -636,20 +641,20 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         if (this->forceDetachTimer != 0) {
-            var_s4_2 = 10;
+            damageEffect = 10;
         }
 
-        if (var_s4_2 >= 10) {
+        if (damageEffect >= 10) {
             child = (Boss05*)Actor_SpawnAsChild(
                 &play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->dyna.actor.world.pos.x,
                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                 this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, BIO_DEKU_BABA_TYPE_FALLING_HEAD);
 
             if (child != NULL) {
-                Player* player = GET_PLAYER(play);
+                Player* player2 = GET_PLAYER(play);
 
-                if (player->lockOnActor == &this->dyna.actor) {
-                    player->lockOnActor = &child->dyna.actor;
+                if (player2->lockOnActor == &this->dyna.actor) {
+                    player2->lockOnActor = &child->dyna.actor;
                     play->actorCtx.targetCtx.fairyActor = &child->dyna.actor;
                     play->actorCtx.targetCtx.lockOnActor = &child->dyna.actor;
                 }
@@ -663,11 +668,11 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
                 }
 
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_DAMAGE);
-                if (var_s4_2 > 10) {
-                    child->drawDmgEffState = var_s4_2 - 10;
+                if (damageEffect > 10) {
+                    child->drawDmgEffState = damageEffect - 10;
                 }
             }
-        } else if (var_s4_2 == 2) {
+        } else if (damageEffect == 2) {
             for (i = 0; i < 2; i++) {
                 child =
                     (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
@@ -678,14 +683,14 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
                         child->headSkelAnime.jointTable[j] = this->headSkelAnime.jointTable[j];
                     }
 
-                    child->timers[0] = (s32)(Rand_ZeroFloat(20.0f) + 20.0f);
+                    child->timers[0] = Rand_ZeroFloat(20.0f) + 20.0f;
                 }
             }
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA_DEAD);
         }
     }
 
-    if (sp103 == 0) {
+    if (!disableATCollisions) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->lilyPadCollider.base);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->headCollider.base);
     }
@@ -697,13 +702,13 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
 void Boss05_LilyPad_Idle(Boss05* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 distToPlayer = sqrtf(this->dyna.actor.xyzDistToPlayerSq);
-    s16 var_a1;
+    s16 targetRotX;
 
     if ((distToPlayer < 50.0f) && (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        var_a1 = (s32)(distToPlayer * 80.0f);
-        var_a1 = CLAMP_MAX(var_a1, 0x7D0);
+        targetRotX = distToPlayer * 80.0f;
+        targetRotX = CLAMP_MAX(targetRotX, 0x7D0);
 
-        Math_ApproachS(&this->lilyPadRotX, var_a1, 0x14, 0x7D0);
+        Math_ApproachS(&this->lilyPadRotX, targetRotX, 0x14, 0x7D0);
         Math_ApproachS(&this->lilyPadRotY, this->dyna.actor.yawTowardsPlayer, 0x14, 0xFA0);
         if ((this->frameCounter % 16) == 0) {
             EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 500, 1000, 0);
@@ -717,8 +722,7 @@ void Boss05_FallingHead_Fall(Boss05* this, PlayState* play) {
     s32 i;
     Vec3f unusedPos;
     Vec3f bubblePos;
-    Boss05* temp_v0;
-    Player* player;
+    Boss05* walkingHead;
 
     Actor_MoveWithGravity(&this->dyna.actor);
     this->dyna.actor.world.pos.y -= 85.0f;
@@ -763,23 +767,24 @@ void Boss05_FallingHead_Fall(Boss05* this, PlayState* play) {
         Math_ApproachZeroF(&this->fallingHeadLilyPadLimbScale, 1.0f, 0.05f);
 
         if (this->fallingHeadLilyPadLimbScale == 0.0f) {
-            temp_v0 = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
-                                                  this->headPos.x, this->headPos.y, this->headPos.z, this->headRot.x,
-                                                  this->headRot.y, this->headRot.z, BIO_DEKU_BABA_TYPE_WALKING_HEAD);
+            walkingHead = (Boss05*)Actor_SpawnAsChild(
+                &play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->headPos.x, this->headPos.y,
+                this->headPos.z, this->headRot.x, this->headRot.y, this->headRot.z, BIO_DEKU_BABA_TYPE_WALKING_HEAD);
 
-            if (temp_v0 != NULL) {
-                player = GET_PLAYER(play);
+            if (walkingHead != NULL) {
+                Player* player = GET_PLAYER(play);
+
                 if (player->lockOnActor == &this->dyna.actor) {
-                    player->lockOnActor = &temp_v0->dyna.actor;
-                    play->actorCtx.targetCtx.fairyActor = &temp_v0->dyna.actor;
-                    play->actorCtx.targetCtx.lockOnActor = &temp_v0->dyna.actor;
+                    player->lockOnActor = &walkingHead->dyna.actor;
+                    play->actorCtx.targetCtx.fairyActor = &walkingHead->dyna.actor;
+                    play->actorCtx.targetCtx.lockOnActor = &walkingHead->dyna.actor;
                 }
 
                 for (i = 0; i < BIO_DEKU_BABA_HEAD_LIMB_MAX; i++) {
-                    temp_v0->headSkelAnime.jointTable[i] = this->headSkelAnime.jointTable[i];
+                    walkingHead->headSkelAnime.jointTable[i] = this->headSkelAnime.jointTable[i];
                 }
 
-                Actor_PlaySfx(&temp_v0->dyna.actor, NA_SE_EN_MIZUBABA_TRANSFORM);
+                Actor_PlaySfx(&walkingHead->dyna.actor, NA_SE_EN_MIZUBABA_TRANSFORM);
             }
             Actor_Kill(&this->dyna.actor);
         }
@@ -789,13 +794,13 @@ void Boss05_FallingHead_Fall(Boss05* this, PlayState* play) {
 void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
     s32 pad[2];
     u8 attackDealsDamage = false;
-    ColliderInfo* hitInfo;
+    ColliderInfo* acHitInfo;
 
     if ((this->damagedTimer == 0) &&
         (this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags & BUMP_HIT)) {
         this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags &= ~BUMP_HIT;
-        hitInfo = this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.acHitInfo;
-        if (hitInfo->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
+        acHitInfo = this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.acHitInfo;
+        if (acHitInfo->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
             this->knockbackMagnitude = -12.0f;
             this->knockbackAngle = this->dyna.actor.yawTowardsPlayer;
             this->damagedTimer = 6;
@@ -919,18 +924,18 @@ void Boss05_WalkingHead_SetupWalk(Boss05* this, PlayState* play) {
 }
 
 void Boss05_WalkingHead_Walk(Boss05* this, PlayState* play) {
-    f32 deltaX;
-    f32 deltaZ;
+    f32 diffX;
+    f32 diffZ;
 
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_WALK - SFX_FLAG);
     SkelAnime_Update(&this->headSkelAnime);
     Math_ApproachF(&this->dyna.actor.speed, 5.0f, 1.0f, 2.0f);
-    deltaX = this->walkTargetPos.x - this->dyna.actor.world.pos.x;
-    deltaZ = this->walkTargetPos.z - this->dyna.actor.world.pos.z;
-    Math_ApproachS(&this->dyna.actor.world.rot.y, Math_Atan2S(deltaX, deltaZ), 5, this->walkAngularVelocityY);
+    diffX = this->walkTargetPos.x - this->dyna.actor.world.pos.x;
+    diffZ = this->walkTargetPos.z - this->dyna.actor.world.pos.z;
+    Math_ApproachS(&this->dyna.actor.world.rot.y, Math_Atan2S(diffX, diffZ), 5, this->walkAngularVelocityY);
     Math_ApproachF(&this->walkAngularVelocityY, 2000.0f, 1.0f, 100.0f);
 
-    if ((this->timers[0] == 0) || ((SQ(deltaX) + SQ(deltaZ)) < 2500.0f)) {
+    if ((this->timers[0] == 0) || ((SQ(diffX) + SQ(diffZ)) < 2500.0f)) {
         Boss05_WalkingHead_SetupIdle(this, play);
     }
 

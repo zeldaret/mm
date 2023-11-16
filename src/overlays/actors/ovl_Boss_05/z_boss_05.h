@@ -53,7 +53,7 @@ typedef struct Boss05 {
                     u8 lilyPadWithHeadAttackState;
                     u8 fragmentState;
                 };
-    /* 0x15E */ s16 standingOnLilyPadWithHeadFrameCounter;
+    /* 0x15E */ s16 flipAttackFrameCounter;
     /* 0x160 */ s16 frameCounter;
     /* 0x162 */ s16 timers[3];
     /* 0x168 */ s16 forceDetachTimer;
