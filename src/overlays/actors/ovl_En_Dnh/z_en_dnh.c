@@ -110,7 +110,7 @@ s32 func_80A50E40(EnDnh* this, PlayState* play) {
     return 1;
 }
 
-s32 func_80A50EC0(EnDnh* this) {
+void func_80A50EC0(EnDnh* this) {
     if (DECR(this->blinkTimer) == 0) {
         this->eyeTexIndex++;
         if (this->eyeTexIndex >= ARRAY_COUNT(sEyeTextures)) {

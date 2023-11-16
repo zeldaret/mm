@@ -5443,7 +5443,7 @@ void Interface_StartMoonCrash(PlayState* play) {
     play->transitionType = TRANS_TYPE_FADE_WHITE;
 }
 
-void Interface_GetTimerDigits(OSTime time, s16* timerArr) {
+void Interface_GetTimerDigits(OSTime time, s16 timerArr[8]) {
     OSTime t = time;
 
     // 6 minutes
