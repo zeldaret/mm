@@ -1,11 +1,12 @@
 #include "ultra64.h"
 #include "PR/os_motor.h"
 #include "PR/controller.h"
+#include "alignment.h"
 
 #define BANK_ADDR 0x400
 #define MOTOR_ID 0x80
 
-OSPifRam __MotorDataBuf[MAXCONTROLLERS];
+OSPifRam __MotorDataBuf[MAXCONTROLLERS] ALIGNED(16);
 
 s32 __osPfsSelectBank(OSPfs* pfs, u8 bank);
 

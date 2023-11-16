@@ -114,6 +114,8 @@ wordReplace = {
     "func_8012405C": "Player_HasMirrorShieldEquipped",
     "func_80124088": "Player_IsHoldingMirrorShield",
     "func_8012697C": "Player_DrawGetItem",
+    "func_800B724C": "Player_SetCsAction",
+    "func_800B7298": "Player_SetCsActionWithHaltedActors",
     "Actor_SpawnWithParentAndCutscene": "Actor_SpawnAsChildAndCutscene",
     "Actor_SpawnWithParent": "Actor_SpawnAsChild",
     "Actor_IsLinkFacingActor": "Player_IsFacingActor",

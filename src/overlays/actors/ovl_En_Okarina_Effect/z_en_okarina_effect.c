@@ -48,7 +48,7 @@ void EnOkarinaEffect_Init(Actor* thisx, PlayState* play) {
 }
 
 void func_8096B104(EnOkarinaEffect* this, PlayState* play) {
-    this->unk144 = 0x50;
+    this->timer = 80;
     play->envCtx.precipitation[PRECIP_SOS_MAX] = 60;
     gLightningStrike.delayTimer = 501.0f;
     play->envCtx.lightningState = LIGHTNING_LAST;
@@ -57,9 +57,9 @@ void func_8096B104(EnOkarinaEffect* this, PlayState* play) {
 }
 
 void func_8096B174(EnOkarinaEffect* this, PlayState* play) {
-    DECR(this->unk144);
+    DECR(this->timer);
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-        (play->msgCtx.msgLength == 0) && !FrameAdvance_IsEnabled(&play->state) && (this->unk144 == 0)) {
+        (play->msgCtx.msgLength == 0) && !FrameAdvance_IsEnabled(&play->state) && (this->timer == 0)) {
         EnOkarinaEffect_SetupAction(this, func_8096B1FC);
     }
 }

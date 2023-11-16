@@ -231,30 +231,30 @@ void Boss03_UpdateSphereElement(s32 index, ColliderJntSph* collider, Vec3f* sphe
 
 /* Start of RNG section */
 
-static s32 sRandSeed0;
-static s32 sRandSeed1;
-static s32 sRandSeed2;
+s32 sGyorgRandSeed1;
+s32 sGyorgRandSeed2;
+s32 sGyorgRandSeed3;
 
-void Boss03_SeedRand(s32 seed0, s32 seed1, s32 seed2) {
-    sRandSeed0 = seed0;
-    sRandSeed1 = seed1;
-    sRandSeed2 = seed2;
+void Boss03_InitRand(s32 seedInit1, s32 seedInit2, s32 seedInit3) {
+    sGyorgRandSeed1 = seedInit1;
+    sGyorgRandSeed2 = seedInit2;
+    sGyorgRandSeed3 = seedInit3;
 }
 
 f32 Boss03_RandZeroOne(void) {
-    f32 rand;
-
     // Wichmann-Hill algorithm
-    sRandSeed0 = (sRandSeed0 * 171) % 30269;
-    sRandSeed1 = (sRandSeed1 * 172) % 30307;
-    sRandSeed2 = (sRandSeed2 * 170) % 30323;
+    f32 randFloat;
 
-    rand = (sRandSeed0 / 30269.0f) + (sRandSeed1 / 30307.0f) + (sRandSeed2 / 30323.0f);
-    while (rand >= 1.0f) {
-        rand -= 1.0f;
+    sGyorgRandSeed1 = (sGyorgRandSeed1 * 171) % 30269;
+    sGyorgRandSeed2 = (sGyorgRandSeed2 * 172) % 30307;
+    sGyorgRandSeed3 = (sGyorgRandSeed3 * 170) % 30323;
+
+    randFloat = (sGyorgRandSeed1 / 30269.0f) + (sGyorgRandSeed2 / 30307.0f) + (sGyorgRandSeed3 / 30323.0f);
+    while (randFloat >= 1.0f) {
+        randFloat -= 1.0f;
     }
 
-    return fabsf(rand);
+    return fabsf(randFloat);
 }
 
 /* End of RNG section */
@@ -483,7 +483,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
     this->actor.world.pos = sGyorgInitialPos;
 
     // Since Boss03_RandZeroOne is only used on this Init function, the resulting values end up being deterministic
-    Boss03_SeedRand(1, 29093, 9786);
+    Boss03_InitRand(1, 29093, 9786);
 
     for (i = 0; i < 5; i++) {
         f32 rand;
@@ -1149,7 +1149,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (player->actor.world.pos.y < 1350.0f) {
                 Cutscene_StartManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_WAIT);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1260,7 +1260,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
 
             if (this->csTimer == 5) {
                 // Rotates Player towards Gyorg
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_8);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_8);
             }
 
             this->subCamEye.x = player->actor.world.pos.x + 30.0f;
@@ -1371,7 +1371,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
 
                 func_80169AFC(play, this->subCamId, 0);
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 this->subCamId = SUB_CAM_ID_DONE;
 
                 func_809E344C(this, play);
@@ -1449,7 +1449,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Cutscene_StartManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_1);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_1);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1628,7 +1628,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 this->csState = 3;
                 Play_DisableMotionBlur();
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_INIT_OLD);
@@ -1662,7 +1662,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Cutscene_StartManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSACTION_1);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_1);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1723,7 +1723,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                         func_80169AFC(play, this->subCamId, 0);
                         this->subCamId = SUB_CAM_ID_DONE;
                         Cutscene_StopManual(play, &play->csCtx);
-                        func_800B7298(play, &this->actor, PLAYER_CSACTION_END);
+                        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
 
                         func_809E344C(this, play);
                         this->workTimer[WORK_TIMER_UNK1_A] = 50;

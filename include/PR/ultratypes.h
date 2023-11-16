@@ -5,8 +5,8 @@ typedef signed char            s8;
 typedef unsigned char          u8;
 typedef signed short int       s16;
 typedef unsigned short int     u16;
-typedef signed int             s32;
-typedef unsigned int           u32;
+typedef signed long            s32;
+typedef unsigned long          u32;
 typedef signed long long int   s64;
 typedef unsigned long long int u64;
 
@@ -22,10 +22,14 @@ typedef volatile s64 vs64;
 typedef float  f32;
 typedef double f64;
 
-typedef u32 size_t;
+#if defined(_MIPS_SZLONG) && (_MIPS_SZLONG == 64)
+typedef unsigned long size_t;
+#else
+typedef unsigned int  size_t;
+#endif
 
 #ifndef NULL
-#define NULL (void*)0
+#define NULL ((void*)0)
 #endif
 
 // TODO: move this somewhere else

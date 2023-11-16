@@ -44,7 +44,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     GfxPool* pool = &gGfxPools[gfxCtx->gfxPoolIdx % 2];
 
     gGfxMasterDL = &pool->master;
-    gSegments[0x0E] = gGfxMasterDL;
+    gSegments[0x0E] = (uintptr_t)gGfxMasterDL;
 
     pool->headMagic = GFXPOOL_HEAD_MAGIC;
     pool->tailMagic = GFXPOOL_TAIL_MAGIC;
@@ -62,7 +62,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     gfxCtx->debugBuffer = pool->debugBuffer;
 
     gfxCtx->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx->framebufferIndex % 2);
-    gSegments[0x0F] = gfxCtx->curFrameBuffer;
+    gSegments[0x0F] = (uintptr_t)gfxCtx->curFrameBuffer;
 
     gfxCtx->zbuffer = SysCfb_GetZBuffer();
 
@@ -95,7 +95,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
 uintptr_t Graph_FaultAddrConv(uintptr_t address, void* param) {
     uintptr_t addr = address;
     GameStateOverlay* gameStateOvl = &gGameStateOverlayTable[0];
-    size_t ramConv;
+    uintptr_t ramConv;
     void* ramStart;
     size_t diff;
     s32 i;
@@ -180,7 +180,7 @@ retry:
     task->dramStack = (u64*)gGfxSPTaskStack;
     task->dramStackSize = sizeof(gGfxSPTaskStack);
     task->outputBuff = gGfxSPTaskOutputBufferPtr;
-    task->outputBuffSize = gGfxSPTaskOutputBufferEnd;
+    task->outputBuffSize = (void*)gGfxSPTaskOutputBufferEnd;
     task->dataPtr = (u64*)gGfxMasterDL;
     task->dataSize = 0;
     task->yieldDataPtr = (u64*)gGfxSPTaskYieldBuffer;

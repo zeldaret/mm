@@ -99,7 +99,7 @@ static AnimationHeader* sAnimations[] = {
     &object_pr_Anim_003904,
 };
 
-u8 D_80A75C38[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP };
+u8 D_80A75C38[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE };
 
 s16 D_80A75C3C[] = {
     0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0,

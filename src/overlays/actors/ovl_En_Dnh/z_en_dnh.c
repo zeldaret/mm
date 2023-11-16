@@ -71,7 +71,7 @@ static TexturePtr sEyeTextures[] = {
 };
 
 s32 func_80A50D40(Actor* actor, PlayState* play) {
-    func_800B7298(play, actor, PLAYER_CSACTION_WAIT);
+    Player_SetCsActionWithHaltedActors(play, actor, PLAYER_CSACTION_WAIT);
     if (CHECK_EVENTINF(EVENTINF_35)) {
         play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 6);
     } else {
@@ -110,7 +110,7 @@ s32 func_80A50E40(EnDnh* this, PlayState* play) {
     return 1;
 }
 
-s32 func_80A50EC0(EnDnh* this) {
+void func_80A50EC0(EnDnh* this) {
     if (DECR(this->blinkTimer) == 0) {
         this->eyeTexIndex++;
         if (this->eyeTexIndex >= ARRAY_COUNT(sEyeTextures)) {

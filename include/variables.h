@@ -10,7 +10,6 @@ extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
 extern u8 D_80025D00[];
 
 // data
-extern OSPiHandle* gCartHandle;
 extern size_t gDmaMgrDmaBuffSize;
 extern vs32 gIrqMgrResetStatus;
 extern volatile OSTime sIrqMgrResetTime;
@@ -32,7 +31,6 @@ extern u8* sYaz0MaxPtr;
 extern void* gYaz0DecompressDstEnd;
 
 // extern UNK_TYPE4 D_8009CD10;
-extern u32 sRandFloat;
 // extern UNK_TYPE4 sArenaLockMsg;
 
 extern DmaEntry dmadata[1568];
@@ -1679,20 +1677,7 @@ extern SaveContext gSaveContext;
 // extern UNK_TYPE4 D_801F6B00;
 // extern UNK_TYPE4 D_801F6B04;
 // extern UNK_TYPE4 D_801F6B08;
-// extern UNK_TYPE1 D_801F6B0C;
-// extern UNK_TYPE1 D_801F6B0E;
-// extern UNK_TYPE1 D_801F6B10;
-// extern UNK_TYPE1 D_801F6B12;
-// extern UNK_TYPE1 D_801F6B14;
-// extern UNK_TYPE1 D_801F6B16;
-// extern UNK_TYPE1 D_801F6B18;
-// extern UNK_TYPE1 D_801F6B1A;
-// extern UNK_TYPE1 D_801F6B1C;
-// extern UNK_TYPE1 D_801F6B1E;
-// extern UNK_TYPE1 D_801F6B20;
-// extern UNK_TYPE1 D_801F6B22;
-// extern UNK_TYPE4 sCurCsCamera;
-// extern UNK_TYPE1 D_801F6B58;
+
 extern void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
 

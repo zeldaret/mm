@@ -916,8 +916,8 @@ void Interface_NewDay(PlayState* play, s32 day) {
     }
 
     // Loads day number from week_static for the three-day clock
-    DmaMgr_SendRequest0((u32)play->interfaceCtx.doActionSegment + 0x780,
-                        (u32)SEGMENT_ROM_START(week_static) + i * 0x510, 0x510);
+    DmaMgr_SendRequest0((void*)(play->interfaceCtx.doActionSegment + 0x780),
+                        SEGMENT_ROM_START_OFFSET(week_static, i * 0x510), 0x510);
 
     // i is used to store sceneId
     for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.permanentSceneFlags); i++) {
@@ -3121,7 +3121,7 @@ void Inventory_UnequipItem(s16 item) {
 s32 Inventory_ReplaceItem(PlayState* play, u8 oldItem, u8 newItem) {
     u8 i;
 
-    for (i = 0; i < 24; i++) {
+    for (i = 0; i < ITEM_NUM_SLOTS; i++) {
         if (gSaveContext.save.saveInfo.inventory.items[i] == oldItem) {
             gSaveContext.save.saveInfo.inventory.items[i] = newItem;
 
@@ -4344,6 +4344,7 @@ void Interface_DrawClock(PlayState* play) {
         CLOCK_TIME(10, 0), CLOCK_TIME(11, 0), CLOCK_TIME(12, 0), CLOCK_TIME(13, 0), CLOCK_TIME(14, 0),
         CLOCK_TIME(15, 0), CLOCK_TIME(16, 0), CLOCK_TIME(17, 0), CLOCK_TIME(18, 0), CLOCK_TIME(19, 0),
         CLOCK_TIME(20, 0), CLOCK_TIME(21, 0), CLOCK_TIME(22, 0), CLOCK_TIME(23, 0), CLOCK_TIME(24, 0) - 1,
+        CLOCK_TIME(0, 0),
     };
     static TexturePtr sThreeDayClockHourTextures[] = {
         gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
@@ -5440,7 +5441,7 @@ void Interface_StartMoonCrash(PlayState* play) {
     play->transitionType = TRANS_TYPE_FADE_WHITE;
 }
 
-void Interface_GetTimerDigits(OSTime time, s16* timerArr) {
+void Interface_GetTimerDigits(OSTime time, s16 timerArr[8]) {
     OSTime t = time;
 
     // 6 minutes
@@ -7121,7 +7122,8 @@ void Interface_Init(PlayState* play) {
 
     interfaceCtx->doActionSegment = THA_AllocTailAlign16(&play->state.tha, 0xC90);
     DmaMgr_SendRequest0(interfaceCtx->doActionSegment, SEGMENT_ROM_START(do_action_static), 0x300);
-    DmaMgr_SendRequest0(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START(do_action_static) + 0x480, 0x180);
+    DmaMgr_SendRequest0(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START_OFFSET(do_action_static, 0x480),
+                        0x180);
 
     Interface_NewDay(play, CURRENT_DAY);
 

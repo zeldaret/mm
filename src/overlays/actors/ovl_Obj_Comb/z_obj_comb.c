@@ -68,7 +68,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-s32 func_8098CE40(ObjComb* this, PlayState* play) {
+bool func_8098CE40(ObjComb* this, PlayState* play) {
     s32 phi_a2 = -1;
     s32 temp_v0 = (OBJCOMB_GET_1F(&this->actor) << 2) | 0xFF01;
 
@@ -495,7 +495,7 @@ void func_8098E0B8(ObjComb* this, PlayState* play) {
 
     if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.csId >= 0)) {
         if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
-            func_800B7298(play, &this->actor, PLAYER_CSACTION_4);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_4);
         }
     }
 }
@@ -529,7 +529,7 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
                 if (CutsceneManager_IsNext(this->actor.csId)) {
                     CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
                     if (this->actor.csId >= 0) {
-                        func_800B7298(play, &this->actor, PLAYER_CSACTION_1);
+                        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_1);
                     }
 
                     if (((OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor)) == 1) &&

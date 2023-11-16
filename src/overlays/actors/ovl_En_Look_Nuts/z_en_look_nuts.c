@@ -219,12 +219,14 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
                 this->waitTimer++;
                 this->headRotTarget.y *= -1.0f;
                 break;
+
             case 5:
                 this->headRotTarget.y = 0.0f;
                 randOffset = Rand_S16Offset(1, 2);
                 this->eventTimer = 0;
                 this->waitTimer += randOffset;
                 break;
+
             case 6:
                 if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
                     this->waitTimer = 10;
@@ -232,26 +234,33 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
                     this->eventTimer = 5;
                 }
                 break;
+
             case 7:
                 if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
                     this->headRotTarget.z = 4000.0f;
                     this->waitTimer++;
                 }
                 break;
+
             case 8:
                 this->waitTimer = 10;
                 this->eventTimer = 20;
                 this->headRotTarget.z = -8000.0f;
                 break;
+
             case 10:
                 Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                 this->waitTimer = 11;
                 break;
+
             case 11:
                 if ((fabsf(this->headRotation.x) < 30.0f) && (fabsf(this->headRotation.y) < 30.0f) &&
                     (fabsf(this->headRotation.z) < 30.0f)) {
                     this->waitTimer = 12;
                 }
+                break;
+
+            default:
                 break;
         }
         if (this->waitTimer == 12) {
@@ -359,7 +368,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
                     Audio_PlaySfx(NA_SE_SY_FOUND);
-                    func_800B7298(play, &this->actor, PLAYER_CSACTION_26);
+                    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_26);
                     D_80A6862C = 1;
                     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;
