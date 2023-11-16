@@ -470,7 +470,7 @@ void func_80AF1B68(EnTest7* this, PlayState* play) {
             this->flags &= ~OWL_WARP_FLAGS_DRAW_WINGS;
             player->actor.draw = NULL;
         }
-    } else if (this->timer >= 87) {
+    } else if (this->timer > 86) {
         EnTest7_SetupAction(this, EnTest7_WarpCsPart4);
         this->flags &= ~OWL_WARP_FLAGS_8;
         this->windCapsule.yaw -= 0x2EE0;

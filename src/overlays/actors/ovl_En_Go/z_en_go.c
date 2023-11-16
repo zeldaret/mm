@@ -552,9 +552,9 @@ void EnGo_InitSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], Vec3f pos) {
         effect->pos.y += 56.0f;
 
         // Generate a +-15 degree rotational velocity
-        effect->angularVelocity.x = (Rand_ZeroOne() - 0.5f) * (f32)0x1554;
-        effect->angularVelocity.y = (Rand_ZeroOne() - 0.5f) * (f32)0x1554;
-        effect->angularVelocity.z = (Rand_ZeroOne() - 0.5f) * (f32)0x1554;
+        effect->angularVelocity.x = (Rand_ZeroOne() - 0.5f) * 0x1554;
+        effect->angularVelocity.y = (Rand_ZeroOne() - 0.5f) * 0x1554;
+        effect->angularVelocity.z = (Rand_ZeroOne() - 0.5f) * 0x1554;
 
         // Generate a radially outward velocity for each of the effects
         velMagnitude = (Rand_ZeroOne() * 4.0f) + 6.0f;
