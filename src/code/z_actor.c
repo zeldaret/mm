@@ -1314,14 +1314,14 @@ f32 Actor_HeightDiff(Actor* actor1, Actor* actor2) {
 }
 
 /**
- * Sets the current and new inputs.
+ * Calculates and sets the control stick x/y values and writes these to input.
  */
-void func_800B6F20(PlayState* play, Input* input, f32 magnitude, s16 baseYaw) {
-    s16 relativeYaw = baseYaw - Camera_GetInputDirYaw(GET_ACTIVE_CAM(play));
+void Actor_SetControlStickData(PlayState* play, Input* input, f32 controlStickMagnitude, s16 controlStickAngle) {
+    s16 relativeAngle = controlStickAngle - Camera_GetInputDirYaw(GET_ACTIVE_CAM(play));
 
-    input->cur.stick_x = -Math_SinS(relativeYaw) * magnitude;
+    input->cur.stick_x = -Math_SinS(relativeAngle) * controlStickMagnitude;
     input->rel.stick_x = input->cur.stick_x;
-    input->cur.stick_y = Math_CosS(relativeYaw) * magnitude;
+    input->cur.stick_y = Math_CosS(relativeAngle) * controlStickMagnitude;
     input->rel.stick_y = input->cur.stick_y;
 }
 

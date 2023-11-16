@@ -770,10 +770,10 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags1 & PLAYER_STATE1_100000) {
-        play->actorCtx.unk268 = 1;
-        play->actorCtx.unk_26C.press.button = BTN_A;
+        play->actorCtx.isOverrideInputOn = true;
+        play->actorCtx.overrideInput.press.button = BTN_A;
     } else {
-        play->actorCtx.unk268 = 1;
+        play->actorCtx.isOverrideInputOn = true;
     }
 
     if (sFrameCounter == 25) {
@@ -785,7 +785,7 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {
             this->textId = 0x334B;
         }
     } else if (sFrameCounter == 50) {
-        play->actorCtx.unk268 = 0;
+        play->actorCtx.isOverrideInputOn = false;
         play->nextEntrance = ENTRANCE(ROMANI_RANCH, 1);
         gSaveContext.nextCutsceneIndex = 0;
         sFrameCounter = 0;
