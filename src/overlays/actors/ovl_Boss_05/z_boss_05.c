@@ -38,6 +38,13 @@ void Boss05_WalkingHead_SetupFreeze(Boss05* this, PlayState* play);
 void Boss05_WalkingHead_Stunned(Boss05* this, PlayState* play);
 void Boss05_Fragment_Move(Boss05* this, PlayState* play);
 
+typedef enum BioDekuBabaFragmentState {
+    /* 0 */ BIO_DEKU_BABA_FRAGMENT_STATE_SPAWNED,
+    /* 1 */ BIO_DEKU_BABA_FRAGMENT_STATE_UNDERWATER,
+    /* 2 */ BIO_DEKU_BABA_FRAGMENT_STATE_ABOVE_WATER,
+    /* 3 */ BIO_DEKU_BABA_FRAGMENT_STATE_FLYING_THROUGH_AIR
+} BioDekuBabaFragmentState;
+
 #include "assets/overlays/ovl_Boss_05/ovl_Boss_05.c"
 
 static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
@@ -132,9 +139,9 @@ static ColliderJntSphInit sHeadJntSphInit2 = {
     sHeadJntSphElementsInit2, // sJntSphElementsInit,
 };
 
-Color_RGBA8 D_809F1BEC = { 170, 255, 255, 255 };
-Color_RGBA8 D_809F1BF0 = { 200, 200, 255, 255 };
-Vec3f D_809F1BF4 = { 0.0f, -1.0f, 0.0f };
+static Color_RGBA8 sIcePrimColor = { 170, 255, 255, 255 };
+static Color_RGBA8 sIceEnvColor = { 200, 200, 255, 255 };
+static Vec3f sIceAccel = { 0.0f, -1.0f, 0.0f };
 
 static DamageTable sDamageTable1 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -231,8 +238,8 @@ void Boss05_WalkingHead_Thaw(Boss05* this, PlayState* play) {
         icePos.x = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].x + iceVelocity.x;
         icePos.y = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].y + iceVelocity.y;
         icePos.z = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].z + iceVelocity.z;
-        EffectSsEnIce_Spawn(play, &icePos, Rand_ZeroFloat(0.5f) + 0.7f, &iceVelocity, &D_809F1BF4, &D_809F1BEC,
-                            &D_809F1BF0, 30);
+        EffectSsEnIce_Spawn(play, &icePos, Rand_ZeroFloat(0.5f) + 0.7f, &iceVelocity, &sIceAccel, &sIcePrimColor,
+                            &sIceEnvColor, 30);
     }
 }
 
@@ -255,7 +262,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.targetMode = TARGET_MODE_3;
     this->dyna.actor.colChkInfo.mass = MASS_HEAVY;
     this->dyna.actor.colChkInfo.health = 2;
-    this->frameCounter = (s32)Rand_ZeroFloat(1000.0f);
+    this->frameCounter = Rand_ZeroFloat(1000.0f);
     this->lowerJawScaleXZ = 1.0f;
     this->dyna.actor.gravity = -0.3f;
 
@@ -339,13 +346,13 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
                            this->headJointTable, this->headMorphTable, BIO_DEKU_BABA_HEAD_LIMB_MAX);
 
         this->dyna.actor.gravity = 0.0f;
-        this->dyna.actor.world.rot.y = (s32)Rand_ZeroFloat(0x8000);
+        this->dyna.actor.world.rot.y = Rand_ZeroFloat(0x8000);
         this->dyna.actor.speed = Rand_ZeroFloat(3.0f) + 3.0f;
         this->dyna.actor.velocity.y = Rand_ZeroFloat(1.5f) + 1.5f;
 
         this->fragmentAngularVelocity.x = Rand_CenteredFloat(700.0f);
         this->fragmentAngularVelocity.y = Rand_CenteredFloat(1500.0f);
-        this->timers[0] = (s32)(Rand_ZeroFloat(30.0f) + 50.0f);
+        this->timers[0] = Rand_ZeroFloat(30.0f) + 50.0f;
 
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actionFunc = Boss05_Fragment_Move;
@@ -897,7 +904,7 @@ void Boss05_WalkingHead_Transform(Boss05* this, PlayState* play) {
 void Boss05_WalkingHead_SetupIdle(Boss05* this, PlayState* play) {
     this->actionFunc = Boss05_WalkingHead_Idle;
     Animation_MorphToLoop(&this->headSkelAnime, &gBioDekuBabaHeadIdleAnim, -10.0f);
-    this->timers[0] = (s32)(Rand_ZeroFloat(25.0f) + 25.0f);
+    this->timers[0] = Rand_ZeroFloat(25.0f) + 25.0f;
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
 }
 
@@ -917,7 +924,7 @@ void Boss05_WalkingHead_Idle(Boss05* this, PlayState* play) {
 void Boss05_WalkingHead_SetupWalk(Boss05* this, PlayState* play) {
     this->actionFunc = Boss05_WalkingHead_Walk;
     Animation_MorphToLoop(&this->headSkelAnime, &gBioDekuBabaHeadWalkAnim, 0.0f);
-    this->timers[0] = (s32)(Rand_ZeroFloat(80.0f) + 60.0f);
+    this->timers[0] = Rand_ZeroFloat(80.0f) + 60.0f;
     this->walkTargetPos.x = Rand_CenteredFloat(400.0f) + this->dyna.actor.world.pos.x;
     this->walkTargetPos.z = Rand_CenteredFloat(400.0f) + this->dyna.actor.world.pos.z;
     this->walkAngularVelocityY = 0.0f;
@@ -1060,17 +1067,17 @@ void Boss05_WalkingHead_Stunned(Boss05* this, PlayState* play) {
 void Boss05_Fragment_Move(Boss05* this, PlayState* play) {
     Actor_MoveWithGravity(&this->dyna.actor);
 
-    if (this->fragmentState == 0) {
+    if (this->fragmentState == BIO_DEKU_BABA_FRAGMENT_STATE_SPAWNED) {
         Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 50.0f, 40.0f,
                                 UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
         if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_WATER) {
-            this->fragmentState = 1;
+            this->fragmentState = BIO_DEKU_BABA_FRAGMENT_STATE_UNDERWATER;
         } else {
-            this->fragmentState = 2;
+            this->fragmentState = BIO_DEKU_BABA_FRAGMENT_STATE_ABOVE_WATER;
         }
     }
 
-    if (this->fragmentState == 1) {
+    if (this->fragmentState == BIO_DEKU_BABA_FRAGMENT_STATE_UNDERWATER) {
         Math_ApproachF(&this->dyna.actor.velocity.y, 1.0f, 1.0f, 0.1f);
         Math_ApproachZeroF(&this->dyna.actor.speed, 0.5f, 0.5f);
         this->dyna.actor.shape.rot.x += this->fragmentAngularVelocity.x;
@@ -1081,15 +1088,15 @@ void Boss05_Fragment_Move(Boss05* this, PlayState* play) {
         }
     } else {
         switch (this->fragmentState) {
-            case 2:
+            case BIO_DEKU_BABA_FRAGMENT_STATE_ABOVE_WATER:
                 this->dyna.actor.velocity.y = Rand_ZeroFloat(3.0f) + 3.0f;
                 this->dyna.actor.speed = Rand_CenteredFloat(5.0f) + 5.0f;
-                this->dyna.actor.world.rot.y = (s32)Rand_ZeroFloat(0x10000);
+                this->dyna.actor.world.rot.y = Rand_ZeroFloat(0x10000);
                 this->dyna.actor.gravity = -1.0f;
-                this->fragmentState = 3;
+                this->fragmentState = BIO_DEKU_BABA_FRAGMENT_STATE_FLYING_THROUGH_AIR;
                 break;
 
-            case 3:
+            case BIO_DEKU_BABA_FRAGMENT_STATE_FLYING_THROUGH_AIR:
                 Actor_MoveWithGravity(&this->dyna.actor);
 
                 if (this->fragmentPos.y < (this->dyna.actor.floorHeight - 30.0f)) {
@@ -1381,7 +1388,7 @@ s32 Boss05_OverrideLimbDraw_Fragment(PlayState* play, s32 limbIndex, Gfx** dList
 
     if (limbIndex != D_809F1CE8[this->dyna.actor.params - BIO_DEKU_BABA_TYPE_FRAGMENT_BASE]) {
         *dList = NULL;
-    } else if (this->fragmentState >= 2) {
+    } else if (this->fragmentState >= BIO_DEKU_BABA_FRAGMENT_STATE_ABOVE_WATER) {
         rot->x += this->frameCounter * 0x3000;
         rot->y += this->frameCounter * 0x1A00;
         rot->z += this->frameCounter * 0x2000;
