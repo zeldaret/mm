@@ -1,4 +1,5 @@
 #include "os_malloc.h"
+#include "alignment.h"
 #include "libc/stdbool.h"
 #include "libc/stdint.h"
 #include "libc/string.h"

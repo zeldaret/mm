@@ -1,4 +1,5 @@
 #include "global.h"
+#include "libc/string.h"
 
 static CutsceneCamera* sCurCsCamera;
 
