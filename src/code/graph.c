@@ -95,7 +95,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
 uintptr_t Graph_FaultAddrConv(uintptr_t address, void* param) {
     uintptr_t addr = address;
     GameStateOverlay* gameStateOvl = &gGameStateOverlayTable[0];
-    size_t ramConv;
+    uintptr_t ramConv;
     void* ramStart;
     size_t diff;
     s32 i;

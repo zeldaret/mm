@@ -63,7 +63,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-s32 func_80B9B6E0(ObjTaru* this, PlayState* play) {
+bool func_80B9B6E0(ObjTaru* this, PlayState* play) {
     s32 chestFlag = -1;
     s32 skulltulaParams = (OBJ_TSUBO_P001F(&this->dyna.actor) * 4) | 0xFF01;
 

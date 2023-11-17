@@ -602,13 +602,11 @@ typedef struct {
     /* 0x04 */ struct_80122D44_arg1_unk_04 unk_04[4];
 } struct_80122D44_arg1; // size >= 0x114
 
-typedef struct struct_80122744_arg1 {
-    /* 0x0 */ s8 unk_00;
-    /* 0x1 */ s8 unk_01;
-    /* 0x2 */ s8 unk_02;
-    /* 0x3 */ s8 unk_03;
-    /* 0x4 */ Vec3s* unk_04;
-} struct_80122744_arg1; // size = 0x8
+typedef struct PlayerOverrideInputEntry {
+    /* 0x0 */ s8 numPoints;
+    /* 0x1 */ s8 curPoint;
+    /* 0x4 */ Vec3s* targetPosList;
+} PlayerOverrideInputEntry; // size = 0x8
 
 typedef enum PlayerCsAction {
     /*   -1 */ PLAYER_CSACTION_NEG1 = -1, // Specific to Kafei, any negative number works
@@ -1320,9 +1318,9 @@ void PlayerCall_Draw(Actor* thisx, struct PlayState* play);
 
 f32 Player_GetHeight(Player* player);
 f32 Player_GetRunSpeedLimit(Player* player);
-s32 func_800B7118(Player* player);
-s32 func_800B7128(Player* player);
-s32 func_800B715C(struct PlayState* play);
+bool func_800B7118(Player* player);
+bool func_800B7128(Player* player);
+bool func_800B715C(struct PlayState* play);
 void Player_SetCameraHorseSetting(struct PlayState* play, Player* player);
 void Player_MountHorse(struct PlayState* play, Player* player, Actor* horse);
 s32 Player_SetCsAction(struct PlayState* play, Actor* csActor, u8 csAction);
@@ -1342,8 +1340,8 @@ void Player_PlaySfx(Player* player, u16 sfxId);
 // z_player_lib.c functions
 
 s32 func_801226E0(struct PlayState* play, s32 arg1);
-s32 func_80122744(struct PlayState* play, struct_80122744_arg1* arg1, u32 arg2, Vec3s* arg3);
-s32 func_80122760(struct PlayState* play, struct_80122744_arg1* arg1, f32 arg2);
+s32 Player_InitOverrideInput(struct PlayState* play, PlayerOverrideInputEntry* inputEntry, u32 numPoints, Vec3s* targetPosList);
+s32 Player_UpdateOverrideInput(struct PlayState* play, PlayerOverrideInputEntry* inputEntry, f32 distXZRange);
 void func_80122868(struct PlayState* play, Player* player);
 void func_801229A0(struct PlayState* play, Player* player);
 void func_801229EC(Actor* thisx, struct PlayState* play);
@@ -1354,19 +1352,19 @@ void func_80122D44(struct PlayState* play, struct_80122D44_arg1* arg1);
 u8 Player_MaskIdToItemId(s32 maskIdMinusOne);
 s32 Player_GetCurMaskItemId(struct PlayState* play);
 void func_80122F28(Player* player);
-s32 func_80122F9C(struct PlayState* play);
-s32 func_80122FCC(struct PlayState* play);
+bool func_80122F9C(struct PlayState* play);
+bool func_80122FCC(struct PlayState* play);
 void func_8012300C(struct PlayState* play, s32 arg1);
 void func_8012301C(Actor* thisx, struct PlayState* play2);
 void func_80123140(struct PlayState* play, Player* player);
-s32 Player_InBlockingCsMode(struct PlayState* play, Player* player);
-s32 Player_InCsMode(struct PlayState* play);
-s32 func_80123420(Player* player);
-s32 func_80123434(Player* player);
-s32 func_80123448(struct PlayState* play);
-s32 Player_IsGoronOrDeku(Player* player);
-s32 func_801234D4(struct PlayState* play);
-s32 func_80123590(struct PlayState* play, Actor* actor);
+bool Player_InBlockingCsMode(struct PlayState* play, Player* player);
+bool Player_InCsMode(struct PlayState* play);
+bool func_80123420(Player* player);
+bool func_80123434(Player* player);
+bool func_80123448(struct PlayState* play);
+bool Player_IsGoronOrDeku(Player* player);
+bool func_801234D4(struct PlayState* play);
+bool func_80123590(struct PlayState* play, Actor* actor);
 ItemId Player_GetItemOnButton(struct PlayState* play, Player* player, EquipSlot slot);
 PlayerItemAction func_80123810(struct PlayState* play);
 PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerItemAction itemAction);
@@ -1398,7 +1396,7 @@ PlayerBottle Player_GetBottleHeld(Player* Player);
 PlayerExplosive Player_ExplosiveFromIA(Player* player, PlayerItemAction itemAction);
 PlayerExplosive Player_GetExplosiveHeld(Player* player);
 PlayerSword Player_SwordFromIA(Player* player, PlayerItemAction itemAction);
-s32 func_801242B4(Player* player);
+bool func_801242B4(Player* player);
 s32 Player_GetEnvironmentalHazard(struct PlayState* play);
 void Player_UpdateBunnyEars(Player* player);
 void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2);

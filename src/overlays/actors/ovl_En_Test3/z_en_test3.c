@@ -265,16 +265,16 @@ static EnTest3_struct_D78 D_80A41854[] = {
 
 s32 D_80A41D20;
 s32 D_80A41D24;
-Input sEnTest3_Input;
-f32 D_80A41D40;
-s16 D_80A41D44;
+Input sKafeiControlInput;
+f32 sKafeiControlStickMagnitude;
+s16 sKafeiControlStickAngle;
 s32 D_80A41D48;
 Vec3f D_80A41D50;
 s32 D_80A41D5C;
 s32 D_80A41D60;
 s32 D_80A41D64;
 s32 D_80A41D68;
-Vec3f* D_80A41D6C;
+Vec3f* sKafeiCurBodyPartPos;
 
 s32 func_80A3E7E0(EnTest3* this, EnTest3ActionFunc actionFunc) {
     if (actionFunc == this->unk_D94) {
@@ -603,7 +603,7 @@ s32 func_80A3F384(EnTest3* this, PlayState* play) {
     return false;
 }
 
-s32 func_80A3F4A4(PlayState* play) {
+bool func_80A3F4A4(PlayState* play) {
     return (Player_GetMask(play) == PLAYER_MASK_NONE) || (Player_GetMask(play) == PLAYER_MASK_BUNNY) ||
            (Player_GetMask(play) == PLAYER_MASK_POSTMAN) || (Player_GetMask(play) == PLAYER_MASK_KEATON) ||
            (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK);
@@ -951,9 +951,9 @@ s32 func_80A40230(EnTest3* this, PlayState* play) {
     dy = this->player.actor.world.pos.z - this->player.actor.prevPos.z;
     this->player.linearVelocity = sqrtf(SQ(dx) + SQ(dy));
     this->player.linearVelocity *= 1.0f + (1.05f * fabsf(Math_SinS(this->player.floorPitch)));
-    D_80A41D40 = (this->player.linearVelocity * 10.0f) + 20.0f;
-    D_80A41D40 = CLAMP_MAX(D_80A41D40, 60.0f);
-    D_80A41D44 = this->player.actor.world.rot.y;
+    sKafeiControlStickMagnitude = (this->player.linearVelocity * 10.0f) + 20.0f;
+    sKafeiControlStickMagnitude = CLAMP_MAX(sKafeiControlStickMagnitude, 60.0f);
+    sKafeiControlStickAngle = this->player.actor.world.rot.y;
     this->player.actor.world.pos.x = this->player.actor.prevPos.x;
     this->player.actor.world.pos.z = this->player.actor.prevPos.z;
     if (!func_80A3F384(this, play)) {
@@ -1035,7 +1035,7 @@ void func_80A409D4(EnTest3* this, PlayState* play) {
         func_80A3F0B0(this, play);
         CutsceneManager_SetReturnCamera(CAM_ID_MAIN);
     } else {
-        sEnTest3_Input = *CONTROLLER1(&play->state);
+        sKafeiControlInput = *CONTROLLER1(&play->state);
     }
 }
 
@@ -1047,15 +1047,16 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnTest3* this = THIS;
 
-    sEnTest3_Input.rel.button = sEnTest3_Input.cur.button;
-    sEnTest3_Input.cur.button = 0;
-    sEnTest3_Input.rel.stick_x = 0;
-    sEnTest3_Input.rel.stick_y = 0;
+    sKafeiControlInput.rel.button = sKafeiControlInput.cur.button;
+    sKafeiControlInput.cur.button = 0;
+    sKafeiControlInput.rel.stick_x = 0;
+    sKafeiControlInput.rel.stick_y = 0;
 
     play->actorCtx.flags &= ~ACTORCTX_FLAG_7;
     this->player.actor.draw = EnTest3_Draw;
     D_80A41D48 = false;
     this->player.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_506) &&
         !((this->player.actor.category == ACTORCAT_PLAYER) &&
           ((play->actorCtx.flags & ACTORCTX_FLAG_5) || (play->actorCtx.flags & ACTORCTX_FLAG_4)))) {
@@ -1077,14 +1078,17 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
             this->unk_D84 = 0.0f;
         }
     } else {
-        D_80A41D40 = 0.0f;
-        D_80A41D44 = this->player.actor.shape.rot.y;
+        sKafeiControlStickMagnitude = 0.0f;
+        sKafeiControlStickAngle = this->player.actor.shape.rot.y;
         this->unk_D94(this, play);
-        sEnTest3_Input.press.button =
-            (sEnTest3_Input.rel.button ^ sEnTest3_Input.cur.button) & sEnTest3_Input.cur.button;
-        func_800B6F20(play, &sEnTest3_Input, D_80A41D40, D_80A41D44);
+        sKafeiControlInput.press.button =
+            (sKafeiControlInput.rel.button ^ sKafeiControlInput.cur.button) & sKafeiControlInput.cur.button;
+
+        Actor_SetControlStickData(play, &sKafeiControlInput, sKafeiControlStickMagnitude, sKafeiControlStickAngle);
     }
-    play->playerUpdate(&this->player, play, &sEnTest3_Input);
+
+    play->playerUpdate(&this->player, play, &sKafeiControlInput);
+
     if (D_80A41D48) {
         this->player.actor.world.pos.x = D_80A41D50.x;
         this->player.actor.world.pos.z = D_80A41D50.z;
@@ -1098,7 +1102,7 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     EnTest3* this = THIS;
 
     if (limbIndex == KAFEI_LIMB_ROOT) {
-        D_80A41D6C = &this->player.bodyPartsPos[-1];
+        sKafeiCurBodyPartPos = &this->player.bodyPartsPos[0] - 1;
         if (!(this->player.skelAnime.moveFlags & ANIM_FLAG_4) || (this->player.skelAnime.moveFlags & ANIM_FLAG_1)) {
             pos->x *= this->player.ageProperties->unk_08;
             pos->z *= this->player.ageProperties->unk_08;
@@ -1118,7 +1122,7 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         }
     } else {
         if (*dList != NULL) {
-            D_80A41D6C++;
+            sKafeiCurBodyPartPos++;
         }
         if (D_80A418C8) {
             *dList = NULL;
@@ -1153,13 +1157,13 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
     EnTest3* this = THIS;
 
     if (*dList2 != NULL) {
-        Matrix_MultZero(D_80A41D6C);
+        Matrix_MultZero(sKafeiCurBodyPartPos);
     }
     if (limbIndex == KAFEI_LIMB_LEFT_HAND) {
         MtxF curMtxF;
         Actor* leftHandActor;
 
-        Math_Vec3f_Copy(&this->player.leftHandWorld.pos, D_80A41D6C);
+        Math_Vec3f_Copy(&this->player.leftHandWorld.pos, sKafeiCurBodyPartPos);
         if (*dList1 != NULL) {
             func_80128640(play, &this->player, *dList1);
             if (this->player.stateFlags3 & PLAYER_STATE3_20000000) {

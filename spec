@@ -17,7 +17,7 @@ beginseg
     include "build/data/boot/rspboot.data.o"
     include "build/src/boot/idle.o"
     include "build/src/boot/viconfig.o"
-    include "build/data/boot/viconfig.data.o"
+    include "build/src/boot/carthandle.o"
     include "build/src/boot/z_std_dma.o"
     include "build/src/boot/yaz0.o"
     include "build/src/boot/irqmgr.o"
@@ -42,7 +42,7 @@ beginseg
     include "build/src/boot/O2/system_malloc.o"
     include "build/src/boot/O2/rand.o"
     include "build/src/boot/O2/__osMalloc.o"
-    include "build/src/libultra/libc/sprintf.o"
+    include "build/src/boot/O2/sprintf.o"
     include "build/src/boot/O2/printutils.o"
     include "build/src/boot/O2/sleep.o"
     include "build/asm/boot/setcause.text.o"
@@ -594,10 +594,7 @@ beginseg
     include "build/asm/code/code_8019AEC0.text.o" // handwritten
     include "build/src/audio/code_8019AF00.o"
     include "build/src/audio/voice_external.o"
-    include "build/data/code/voice_external.data.o"
     include "build/src/audio/voice_internal.o"
-    include "build/data/code/voice_internal.data.o"
-    include "build/data/code/voice_internal.bss.o"
     pad_text
     include "build/src/audio/sfx_params.o"
     include "build/src/audio/sfx.o"
@@ -2862,8 +2859,7 @@ beginseg
     name "ovl_En_Jso2"
     compress
     include "build/src/overlays/actors/ovl_En_Jso2/z_en_jso2.o"
-    include "build/data/ovl_En_Jso2/ovl_En_Jso2.data.o"
-    include "build/data/ovl_En_Jso2/ovl_En_Jso2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Jso2/ovl_En_Jso2_reloc.o"
 endseg
 
 beginseg
@@ -3752,8 +3748,7 @@ beginseg
     name "ovl_En_An"
     compress
     include "build/src/overlays/actors/ovl_En_An/z_en_an.o"
-    include "build/data/ovl_En_An/ovl_En_An.data.o"
-    include "build/data/ovl_En_An/ovl_En_An.reloc.o"
+    include "build/src/overlays/actors/ovl_En_An/ovl_En_An_reloc.o"
 endseg
 
 beginseg
@@ -4230,8 +4225,7 @@ beginseg
     name "ovl_En_Po_Composer"
     compress
     include "build/src/overlays/actors/ovl_En_Po_Composer/z_en_po_composer.o"
-    include "build/data/ovl_En_Po_Composer/ovl_En_Po_Composer.data.o"
-    include "build/data/ovl_En_Po_Composer/ovl_En_Po_Composer.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Po_Composer/ovl_En_Po_Composer_reloc.o"
 endseg
 
 beginseg

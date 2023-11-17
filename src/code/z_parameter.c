@@ -3,6 +3,7 @@
 #include "sys_cfb.h"
 #include "z64snap.h"
 #include "z64view.h"
+#include "z64voice.h"
 #include "archives/icon_item_static/icon_item_static_yar.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
@@ -2345,7 +2346,8 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
                     restoreHudVisibility = true;
                     sPictoState = PICTO_BOX_STATE_OFF;
-                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) || (func_801A5100() == 1)) {
+                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                           (AudioVoice_GetWord() == VOICE_WORD_ID_CHEESE)) {
                     if (!CHECK_EVENTINF(EVENTINF_41) ||
                         (CHECK_EVENTINF(EVENTINF_41) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
                         Audio_PlaySfx(NA_SE_SY_CAMERA_SHUTTER);
@@ -3121,7 +3123,7 @@ void Inventory_UnequipItem(s16 item) {
 s32 Inventory_ReplaceItem(PlayState* play, u8 oldItem, u8 newItem) {
     u8 i;
 
-    for (i = 0; i < 24; i++) {
+    for (i = 0; i < ITEM_NUM_SLOTS; i++) {
         if (gSaveContext.save.saveInfo.inventory.items[i] == oldItem) {
             gSaveContext.save.saveInfo.inventory.items[i] = newItem;
 
@@ -4344,6 +4346,7 @@ void Interface_DrawClock(PlayState* play) {
         CLOCK_TIME(10, 0), CLOCK_TIME(11, 0), CLOCK_TIME(12, 0), CLOCK_TIME(13, 0), CLOCK_TIME(14, 0),
         CLOCK_TIME(15, 0), CLOCK_TIME(16, 0), CLOCK_TIME(17, 0), CLOCK_TIME(18, 0), CLOCK_TIME(19, 0),
         CLOCK_TIME(20, 0), CLOCK_TIME(21, 0), CLOCK_TIME(22, 0), CLOCK_TIME(23, 0), CLOCK_TIME(24, 0) - 1,
+        CLOCK_TIME(0, 0),
     };
     static TexturePtr sThreeDayClockHourTextures[] = {
         gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
@@ -5440,7 +5443,7 @@ void Interface_StartMoonCrash(PlayState* play) {
     play->transitionType = TRANS_TYPE_FADE_WHITE;
 }
 
-void Interface_GetTimerDigits(OSTime time, s16* timerArr) {
+void Interface_GetTimerDigits(OSTime time, s16 timerArr[8]) {
     OSTime t = time;
 
     // 6 minutes
