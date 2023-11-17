@@ -18,9 +18,9 @@ void free(void* ptr) {
     __osFree(&malloc_arena, ptr);
 }
 
-void* calloc(u32 elements, size_t size) {
+void* calloc(size_t num, size_t size) {
     void* ptr;
-    size_t totalSize = elements * size;
+    size_t totalSize = num * size;
 
     ptr = __osMalloc(&malloc_arena, totalSize);
     if (ptr != NULL) {

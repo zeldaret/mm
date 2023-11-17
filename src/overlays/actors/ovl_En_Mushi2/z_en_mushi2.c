@@ -200,7 +200,7 @@ void func_80A68B6C(EnMushi2* this) {
     }
 }
 
-s32 func_80A68BA0(EnMushi2* this) {
+bool func_80A68BA0(EnMushi2* this) {
     return (D_80A6B994 > 3) && this->unk_34C == NULL;
 }
 

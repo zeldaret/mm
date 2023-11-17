@@ -165,7 +165,7 @@ Actor* func_8091D944(EnFish* this, PlayState* play) {
     return retActor;
 }
 
-s32 func_8091DA14(EnFish* this, PlayState* play) {
+bool func_8091DA14(EnFish* this, PlayState* play) {
     return (play->sceneId == SCENE_LABO) && func_8091D944(this, play);
 }
 

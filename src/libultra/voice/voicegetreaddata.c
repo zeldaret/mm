@@ -33,7 +33,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
 
             sHandleStatus = data[0] & 7;
             hd->status = sHandleStatus;
-            if ((sHandleStatus != 0) && (sHandleStatus != 7)) {
+            if ((sHandleStatus != VOICE_STATUS_READY) && (sHandleStatus != VOICE_STATUS_END)) {
                 return CONT_ERR_NOT_READY;
             }
             // fallthrough
@@ -88,7 +88,7 @@ s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
             }
 
             hd->status = data[34] & 7;
-            if ((sHandleStatus == 0) || (hd->status == 0)) {
+            if ((sHandleStatus == VOICE_STATUS_READY) || (hd->status == VOICE_STATUS_READY)) {
                 break;
             }
             // fallthrough

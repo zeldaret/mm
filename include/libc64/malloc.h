@@ -8,7 +8,7 @@ void* malloc(size_t size);
 void* malloc_r(size_t size);
 void* realloc(void* oldPtr, size_t newSize);
 void free(void* ptr);
-void* calloc(u32 elements, size_t size);
+void* calloc(size_t num, size_t size);
 void GetFreeArena(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated);
 s32 CheckArena(void);
 void MallocInit(void* start, size_t size);

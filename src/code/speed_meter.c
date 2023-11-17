@@ -213,9 +213,9 @@ void SpeedMeter_DrawAllocEntries(SpeedMeter* meter, GraphicsContext* gfxCtx, Gam
     TwoHeadArena* tha;
     s32 y;
     TwoHeadGfxArena* thga;
-    u32 zeldaFreeMax;
-    u32 zeldaFree;
-    u32 zeldaAlloc;
+    size_t zeldaFreeMax;
+    size_t zeldaFree;
+    size_t zeldaAlloc;
     s32 sysFreeMax;
     s32 sysFree;
     s32 sysAlloc;
@@ -233,7 +233,7 @@ void SpeedMeter_DrawAllocEntries(SpeedMeter* meter, GraphicsContext* gfxCtx, Gam
     }
 
     if (R_ENABLE_ARENA_DBG > 1) {
-        GetFreeArena((u32*)&sysFreeMax, (u32*)&sysFree, (u32*)&sysAlloc);
+        SystemArena_GetSizes((size_t*)&sysFreeMax, (size_t*)&sysFree, (size_t*)&sysAlloc);
         SpeedMeter_InitAllocEntry(&entry, sysFree + sysAlloc - state->tha.size, sysAlloc - state->tha.size,
                                   GPACK_RGBA5551(0, 0, 255, 1), GPACK_RGBA5551(255, 128, 128, 1), ulx, lrx, y, y);
         SpeedMeter_DrawAllocEntry(&entry, gfxCtx);

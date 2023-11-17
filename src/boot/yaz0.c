@@ -3,7 +3,7 @@
 #include "libc64/sprintf.h"
 #include "libc64/sleep.h"
 
-u8 sYaz0DataBuffer[0x400];
+u8 sYaz0DataBuffer[0x400] ALIGNED(16);
 u8* sYaz0CurDataEnd;
 uintptr_t sYaz0CurRomStart;
 u32 sYaz0CurSize;

@@ -23,15 +23,15 @@ void BgBreakwall_Init(Actor* thisx, PlayState* play);
 void BgBreakwall_Update(Actor* thisx, PlayState* play);
 
 void BgBreakwall_SetupAction(BgBreakwall* this, BgBreakwallActionFunc actionFunc);
-s32 func_808B736C(BgBreakwall* this, PlayState* play);
-s32 func_808B7380(BgBreakwall* this, PlayState* play);
-s32 func_808B73C4(BgBreakwall* this, PlayState* play);
-s32 func_808B73FC(BgBreakwall* this, PlayState* play);
-s32 func_808B7410(BgBreakwall* this, PlayState* play);
-s32 func_808B7460(BgBreakwall* this, PlayState* play);
-s32 func_808B74A8(BgBreakwall* this, PlayState* play);
-s32 func_808B74D8(BgBreakwall* this, PlayState* play);
-s32 func_808B751C(BgBreakwall* this, PlayState* play);
+bool func_808B736C(BgBreakwall* this, PlayState* play);
+bool func_808B7380(BgBreakwall* this, PlayState* play);
+bool func_808B73C4(BgBreakwall* this, PlayState* play);
+bool func_808B73FC(BgBreakwall* this, PlayState* play);
+bool func_808B7410(BgBreakwall* this, PlayState* play);
+bool func_808B7460(BgBreakwall* this, PlayState* play);
+bool func_808B74A8(BgBreakwall* this, PlayState* play);
+bool func_808B74D8(BgBreakwall* this, PlayState* play);
+bool func_808B751C(BgBreakwall* this, PlayState* play);
 void func_808B76CC(BgBreakwall* this, PlayState* play);
 void func_808B77D0(BgBreakwall* this, PlayState* play);
 void func_808B77E0(BgBreakwall* this, PlayState* play);
@@ -146,26 +146,26 @@ void BgBreakwall_SetupAction(BgBreakwall* this, BgBreakwallActionFunc actionFunc
     this->actionFunc = actionFunc;
 }
 
-s32 func_808B736C(BgBreakwall* this, PlayState* play) {
+bool func_808B736C(BgBreakwall* this, PlayState* play) {
     return true;
 }
 
-s32 func_808B7380(BgBreakwall* this, PlayState* play) {
+bool func_808B7380(BgBreakwall* this, PlayState* play) {
     if ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         return false;
     }
     return true;
 }
 
-s32 func_808B73C4(BgBreakwall* this, PlayState* play) {
+bool func_808B73C4(BgBreakwall* this, PlayState* play) {
     return CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE) || CHECK_WEEKEVENTREG(WEEKEVENTREG_21_01);
 }
 
-s32 func_808B73FC(BgBreakwall* this, PlayState* play) {
+bool func_808B73FC(BgBreakwall* this, PlayState* play) {
     return true;
 }
 
-s32 func_808B7410(BgBreakwall* this, PlayState* play) {
+bool func_808B7410(BgBreakwall* this, PlayState* play) {
     if (Flags_GetSwitch(play, this->switchFlag)) {
         this->dyna.actor.draw = NULL;
     }
@@ -173,28 +173,28 @@ s32 func_808B7410(BgBreakwall* this, PlayState* play) {
     return true;
 }
 
-s32 func_808B7460(BgBreakwall* this, PlayState* play) {
+bool func_808B7460(BgBreakwall* this, PlayState* play) {
     if (!Flags_GetSwitch(play, this->switchFlag)) {
         this->dyna.actor.scale.x = 0.1f;
     }
     return true;
 }
 
-s32 func_808B74A8(BgBreakwall* this, PlayState* play) {
+bool func_808B74A8(BgBreakwall* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         return false;
     }
     return true;
 }
 
-s32 func_808B74D8(BgBreakwall* this, PlayState* play) {
+bool func_808B74D8(BgBreakwall* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         return false;
     }
     return true;
 }
 
-s32 func_808B751C(BgBreakwall* this, PlayState* play) {
+bool func_808B751C(BgBreakwall* this, PlayState* play) {
     Actor_SetScale(&this->dyna.actor, 0.1f);
 
     if ((BGBREAKWALL_SWITCH_FLAG(&this->dyna.actor) != 0x7F) &&

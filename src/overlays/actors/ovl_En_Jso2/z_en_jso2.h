@@ -45,7 +45,7 @@ typedef struct EnJso2 {
     /* 0x0188 */ Vec3s jointTable[GARO_MASTER_LIMB_MAX];
     /* 0x0200 */ Vec3s morphTable[GARO_MASTER_LIMB_MAX];
     /* 0x0278 */ EnJso2ActionFunc actionFunc;
-    /* 0x027C */ struct_80122744_arg1 overrideInputEntry;
+    /* 0x027C */ PlayerOverrideInputEntry overrideInputEntry;
     /* 0x0284 */ s16 action;
     /* 0x0286 */ s16 circlingAngle;
     /* 0x0288 */ s16 circlingAngularVelocity;
