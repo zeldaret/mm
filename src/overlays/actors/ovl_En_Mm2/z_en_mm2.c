@@ -57,6 +57,9 @@ void EnMm2_Reading(EnMm2* this, PlayState* play) {
         case TEXT_STATE_CLOSING:
             this->actionFunc = EnMm2_WaitForRead;
             break;
+
+        default:
+            break;
     }
 }
 

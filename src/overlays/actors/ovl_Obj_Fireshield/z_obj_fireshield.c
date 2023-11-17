@@ -77,7 +77,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80A4CA90(ObjFireshield* this) {
-    if (this->actor.csId >= 0) {
+    if (this->actor.csId > CS_ID_NONE) {
         this->actionFunc = func_80A4CABC;
     } else {
         this->actionFunc = func_80A4CC54;

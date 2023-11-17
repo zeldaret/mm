@@ -113,7 +113,7 @@ void func_80C06CD8(ObjMuPict* this, PlayState* play) {
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 func_80C06B5C(this);
-                if (this->actor.csId >= 0) {
+                if (this->actor.csId > CS_ID_NONE) {
                     CutsceneManager_Stop(this->actor.csId);
                 }
             }
