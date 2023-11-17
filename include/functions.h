@@ -509,11 +509,6 @@ void GetItem_Draw(PlayState* play, s16 drawId);
 
 u16 QuestHint_GetTatlTextId(PlayState* play);
 
-void func_800F4A10(PlayState* play);
-void KaleidoSetup_Update(PlayState* play);
-void KaleidoSetup_Init(PlayState* play);
-void KaleidoSetup_Destroy(PlayState* play);
-
 void Font_LoadChar(PlayState* play, u16 codePointIndex, s32 offset);
 void Font_LoadCharNES(PlayState* play, u8 codePointIndex, s32 offset);
 void Font_LoadMessageBoxEndIcon(Font* font, u16 icon);
@@ -888,17 +883,6 @@ void SkinMatrix_SetYRotation(MtxF* mf, s16 a);
 void SkinMatrix_MulYRotation(MtxF* mf, s16 a);
 void SkinMatrix_SetZRotation(MtxF* mf, s16 a);
 
-uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param);
-void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
-void KaleidoManager_Init(PlayState* play);
-void KaleidoManager_Destroy(void);
-void* KaleidoManager_GetRamAddr(void* vram);
-void KaleidoScopeCall_LoadPlayer(void);
-void KaleidoScopeCall_Init(PlayState* play);
-void KaleidoScopeCall_Destroy(PlayState* play);
-void KaleidoScopeCall_Update(PlayState* play);
-void KaleidoScopeCall_Draw(PlayState* play);
 void Transition_Init(TransitionContext* transitionCtx);
 void Transition_Destroy(TransitionContext* transitionCtx);
 

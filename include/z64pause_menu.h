@@ -7,6 +7,7 @@
 #include "unk.h"
 
 struct OcarinaStaff;
+struct PlayState;
 
 typedef struct PauseContext {
     /* 0x000 */ View view;
@@ -106,5 +107,34 @@ typedef enum KaleidoMgrOverlayType {
     /* 1 */ KALEIDO_OVL_PLAYER_ACTOR,
     /* 2 */ KALEID_OVL_MAX
 } KaleidoMgrOverlayType;
+
+
+// z_kaleido_setup.c
+
+void func_800F4A10(struct PlayState* play);
+void KaleidoSetup_Update(struct PlayState* play);
+void KaleidoSetup_Init(struct PlayState* play);
+void KaleidoSetup_Destroy(struct PlayState* play);
+
+
+// z_kaleido_manager.c
+
+void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
+void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
+void KaleidoManager_Init(struct PlayState* play);
+void KaleidoManager_Destroy(void);
+void* KaleidoManager_GetRamAddr(void* vram);
+
+extern KaleidoMgrOverlay gKaleidoMgrOverlayTable[KALEID_OVL_MAX];
+extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
+
+
+// z_kaleido_scope_call.c
+
+void KaleidoScopeCall_LoadPlayer(void);
+void KaleidoScopeCall_Init(struct PlayState* play);
+void KaleidoScopeCall_Destroy(struct PlayState* play);
+void KaleidoScopeCall_Update(struct PlayState* play);
+void KaleidoScopeCall_Draw(struct PlayState* play);
 
 #endif

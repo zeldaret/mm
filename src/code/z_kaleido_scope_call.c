@@ -1,4 +1,6 @@
-#include "global.h"
+#include "z64pause_menu.h"
+
+//#include "global.h"
 #include "z64shrink_window.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
@@ -8,7 +10,7 @@ void (*sKaleidoScopeDrawFunc)(PlayState* play);
 extern void KaleidoScope_Update(PlayState* play);
 extern void KaleidoScope_Draw(PlayState* play);
 
-void KaleidoScopeCall_LoadPlayer() {
+void KaleidoScopeCall_LoadPlayer(void) {
     KaleidoMgrOverlay* playerActorOvl = &gKaleidoMgrOverlayTable[KALEIDO_OVL_PLAYER_ACTOR];
 
     if (gKaleidoMgrCurOvl != playerActorOvl) {

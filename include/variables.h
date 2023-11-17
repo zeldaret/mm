@@ -187,9 +187,6 @@ extern UNK_PTR D_801C5C50;
 // extern UNK_TYPE1 D_801C5C9C;
 extern UNK_PTR D_801C5CB0;
 
-extern KaleidoMgrOverlay gKaleidoMgrOverlayTable[2];
-// extern UNK_TYPE1 D_801D0B8C;
-extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
 // extern UNK_TYPE1 D_801D0C80;
 // extern UNK_TYPE1 D_801D0CB0;
 extern s32 gDbgCamEnabled;
@@ -1548,9 +1545,6 @@ extern SaveContext gSaveContext;
 // extern UNK_TYPE4 D_801F6B00;
 // extern UNK_TYPE4 D_801F6B04;
 // extern UNK_TYPE4 D_801F6B08;
-
-extern void (*sKaleidoScopeUpdateFunc)(PlayState* play);
-extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
 
 extern s32 gTransitionTileState;
 extern Color_RGBA8_u32 gVisMonoColor;
