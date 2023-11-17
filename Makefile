@@ -118,6 +118,7 @@ else
 endif
 
 CPP        := cpp
+ICONV      := iconv
 ELF2ROM    := tools/buildtools/elf2rom
 MKLDSCRIPT := tools/buildtools/mkldscript
 YAZ0       := tools/buildtools/yaz0
@@ -195,6 +196,9 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(BASEROM_FILES),build/$f.o) \
                  $(ARCHIVES_O)
 
+ICONV_C_FILES	:= src/code/z_message.c
+ICONV_O_FILES	:= $(foreach f,$(ICONV_C_FILES:.c=.o),build/$f)
+
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
 
 # Automatic dependency files
@@ -249,6 +253,9 @@ build/src/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAG
 build/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 build/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+
+$(ICONV_O_FILES): CC := $(CC)
+$(ICONV_O_FILES): CC_CHECK += -Wno-multichar -Wno-type-limits -Wno-overflow
 
 #### Main Targets ###
 
@@ -374,6 +381,13 @@ build/src/overlays/%_reloc.o: build/$(SPEC)
 build/src/%.o: src/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(OBJDUMP_CMD)
+	$(RM_MDEBUG)
+
+$(ICONV_O_FILES): $(ICONV_C_FILES)
+	$(CC_CHECK) $<
+	$(ICONV) -f UTF-8 -t SHIFT-JIS -o $(@:.o=_iconv.c) $<
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(@:.o=_iconv.c)
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 

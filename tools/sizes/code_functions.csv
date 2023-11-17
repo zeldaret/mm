@@ -2357,7 +2357,7 @@ asm/non_matchings/code/z_message/Message_HandleOcarina.s,Message_HandleOcarina,0
 asm/non_matchings/code/z_message/Message_DrawTextDefault.s,Message_DrawTextDefault,0x8014ADBC,0x654
 asm/non_matchings/code/z_message/Message_LoadItemIcon.s,Message_LoadItemIcon,0x8014C70C,0x142
 asm/non_matchings/code/z_message/Message_LoadChar.s,Message_LoadChar,0x8014CC14,0x28
-asm/non_matchings/code/z_message/func_8014CCB4.s,func_8014CCB4,0x8014CCB4,0x4F
+asm/non_matchings/code/z_message/Message_LoadRupeesJPN.s,Message_LoadRupeesJPN,0x8014CCB4,0x4F
 asm/non_matchings/code/z_message/Message_GetTimerDigits.s,Message_GetTimerDigits,0x8014CDF0,0x7B
 asm/non_matchings/code/z_message/Message_SetupLoadItemIcon.s,Message_SetupLoadItemIcon,0x8014CFDC,0xCA
 asm/non_matchings/code/z_message/Message_LoadTime.s,Message_LoadTime,0x8014D304,0xCA

@@ -2018,7 +2018,7 @@
     0x801D0250:("sOwlWarpTextLengthJPN","UNK_TYPE1","",0x1),
     0x801D0268:("D_801D0268","UNK_TYPE2","",0x2),
     0x801D027C:("D_801D027C","UNK_TYPE1","",0x1),
-    0x801D0284:("D_801D0284","UNK_TYPE1","",0x1),
+    0x801D0284:("sMaskCodeTextJPN","UNK_TYPE1","",0x1),
     0x801D028C:("D_801D028C","UNK_TYPE1","",0x1),
     0x801D02C0:("sOcarinaSongFlagsMap","UNK_TYPE1","",0x1),
     0x801D02D8:("sOcarinaEffectActorIds","UNK_TYPE1","",0x1),
