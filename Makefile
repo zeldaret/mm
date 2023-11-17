@@ -196,7 +196,7 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(BASEROM_FILES),build/$f.o) \
                  $(ARCHIVES_O)
 
-ICONV_C_FILES	:= src/code/z_message.c
+ICONV_C_FILES	:= src/code/z_message.c src/libultra/voice/voicecheckword.c
 ICONV_O_FILES	:= $(foreach f,$(ICONV_C_FILES:.c=.o),build/$f)
 
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
@@ -244,8 +244,6 @@ build/src/boot/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS
 build/src/boot/O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 build/src/libultra/%.o: CC := $(CC_OLD)
-# Needed at least until voice is decompiled
-build/src/libultra/voice/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
 build/src/code/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 build/src/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
@@ -254,6 +252,7 @@ build/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASF
 
 build/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
+src/libultra/voice/voicecheckword: CC := $(OLD_CC)
 $(ICONV_O_FILES): CC := $(CC)
 $(ICONV_O_FILES): CC_CHECK += -Wno-multichar -Wno-type-limits -Wno-overflow
 
@@ -384,10 +383,10 @@ build/src/%.o: src/%.c
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
-$(ICONV_O_FILES): $(ICONV_C_FILES)
+$(ICONV_O_FILES): build/src/%.o: src/%.c
 	$(CC_CHECK) $<
-	$(ICONV) -f UTF-8 -t SHIFT-JIS -o $(@:.o=_iconv.c) $<
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(@:.o=_iconv.c)
+	$(ICONV) -f UTF-8 -t SHIFT-JIS -o $(@:.o=.enc.c) $<
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(@:.o=.enc.c)
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 

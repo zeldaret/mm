@@ -2731,10 +2731,10 @@ void Message_Decode(PlayState* play) {
                 msgCtx->decodedBuffer.wchar[decodedBufPos] =
                     D_801D027C[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0x231)])];
                 decodedBufPos++;
-                Message_LoadChar(
-                    play,
-                    sMaskCodeTextJPN[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0x231)])],
-                    &charTexIndex, &spC0, decodedBufPos);
+                Message_LoadChar(play,
+                                 sMaskCodeTextJPN[(
+                                     (void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0x231)])],
+                                 &charTexIndex, &spC0, decodedBufPos);
                 decodedBufPos++;
                 msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x2000;
             } else if (curChar == 0x237) {
