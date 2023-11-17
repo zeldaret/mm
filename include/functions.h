@@ -73,8 +73,6 @@ void Sleep_Usec(u32 usec);
 void Sleep_Msec(u32 ms);
 void Sleep_Sec(u32 sec);
 
-f32 fmodf(f32 dividend, f32 divisor);
-
 // void EnItem00_SetObject(EnItem00* this, PlayState* play, f32* shadowOffset, f32* shadowScale);
 // void EnItem00_Init(Actor* thisx, PlayState* play);
 // void EnItem00_Destroy(Actor* thisx, PlayState* play);
