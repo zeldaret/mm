@@ -252,8 +252,10 @@ build/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASF
 
 build/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
-src/libultra/voice/voicecheckword: CC := $(OLD_CC)
+# TODO: Remove both of these when code no longer needs asm processor
+build/src/libultra/voice/voicecheckword.o: CC := $(OLD_CC)
 $(ICONV_O_FILES): CC := $(CC)
+
 $(ICONV_O_FILES): CC_CHECK += -Wno-multichar -Wno-type-limits -Wno-overflow
 
 #### Main Targets ###
