@@ -234,7 +234,7 @@ beginseg
     include "build/asm/boot/setwatchlo.text.o"
     include "build/src/boot/O2/fmodf.o"
     include "build/src/boot/O2/__osMemset.o"
-    include "build/src/boot/O2/__osStrcmp.o"
+    include "build/src/boot/libc/strcmp.o"
     include "build/src/boot/libc/strcpy.o"
     include "build/src/boot/libc/memmove.o"
     include "build/src/boot/build.o"

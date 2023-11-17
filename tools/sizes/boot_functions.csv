@@ -478,6 +478,6 @@ asm/non_matchings/boot/getwatchlo/__osGetWatchLo.s,__osGetWatchLo,0x80096810,0x4
 asm/non_matchings/boot/setwatchlo/__osSetWatchLo.s,__osSetWatchLo,0x80096820,0x4
 asm/non_matchings/boot/fmodf/fmodf.s,fmodf,0x80096830,0x14
 asm/non_matchings/boot/__osMemset/__osMemset.s,__osMemset,0x80096880,0xC
-asm/non_matchings/boot/__osStrcmp/__osStrcmp.s,__osStrcmp,0x800968B0,0x10
+asm/non_matchings/boot/strcmp/strcmp.s,strcmp,0x800968B0,0x10
 asm/non_matchings/boot/strcpy/strcpy.s,strcpy,0x800968F0,0x10
 asm/non_matchings/boot/memmove/memmove.s,memmove,0x80096930,0x24

@@ -74,10 +74,6 @@ void Sleep_Msec(u32 ms);
 void Sleep_Sec(u32 sec);
 
 f32 fmodf(f32 dividend, f32 divisor);
-void* __osMemset(void* ptr, s32 val, size_t size);
-s32 __osStrcmp(const char* str1, const char* str2);
-char* strcpy(char* dst, const char* src);
-void* memmove(void* dst, void* src, size_t size);
 
 // void EnItem00_SetObject(EnItem00* this, PlayState* play, f32* shadowOffset, f32* shadowScale);
 // void EnItem00_Init(Actor* thisx, PlayState* play);
