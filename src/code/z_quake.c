@@ -174,7 +174,7 @@ QuakeRequest* Quake_RequestImpl(Camera* camera, u32 type) {
     s16 index = Quake_GetFreeIndex();
     QuakeRequest* req = &sQuakeRequests[index];
 
-    __osMemset(req, 0, sizeof(QuakeRequest));
+    memset(req, 0, sizeof(QuakeRequest));
 
     req->camera = camera;
     req->camId = camera->camId;

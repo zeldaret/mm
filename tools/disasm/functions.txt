@@ -480,7 +480,7 @@
     0x80096810:("__osGetWatchLo",),
     0x80096820:("__osSetWatchLo",),
     0x80096830:("fmodf",),
-    0x80096880:("__osMemset",),
+    0x80096880:("memset",),
     0x800968B0:("strcmp",),
     0x800968F0:("strcpy",),
     0x80096930:("memmove",),

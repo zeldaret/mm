@@ -44,8 +44,8 @@ s32 CutsceneCamera_Init(Camera* camera, CutsceneCamera* csCamera) {
 
     sCurCsCamera = csCamera;
 
-    __osMemset(&csCamera->eyeInterp, 0, sizeof(CutsceneCameraInterp));
-    __osMemset(&csCamera->atInterp, 0, sizeof(CutsceneCameraInterp));
+    memset(&csCamera->eyeInterp, 0, sizeof(CutsceneCameraInterp));
+    memset(&csCamera->atInterp, 0, sizeof(CutsceneCameraInterp));
 
     csCamera->eyeInterp.type = csCamera->atInterp.type = CS_CAM_INTERP_OFF;
 

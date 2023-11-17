@@ -1265,7 +1265,7 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
     AdjLightSettings spA4[4];
 
     var_fs3 = 0.0f;
-    __osMemset(spA4, 0, sizeof(AdjLightSettings) * ARRAY_COUNT(spA4));
+    memset(spA4, 0, sizeof(AdjLightSettings) * ARRAY_COUNT(spA4));
     lightSettingsList = play->envCtx.lightSettingsList;
 
     if ((envCtx->lightSettingOverride != LIGHT_SETTING_OVERRIDE_NONE) &&
