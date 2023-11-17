@@ -1,7 +1,7 @@
 #ifndef LIBC64_QRAND_H
 #define LIBC64_QRAND_H
 
-#include "PR/ultratypes.h"
+#include "ultra64.h"
 
 //! These values are recommended by the algorithms book *Numerical Recipes in C. The Art of Scientific Computing*, 2nd
 //! Edition, 1992, ISBN 0-521-43108-5. (p. 284):
@@ -18,11 +18,6 @@ u32 Rand_Next_Variable(u32* rndNum);
 f32 Rand_ZeroOne_Variable(u32* rndNum);
 f32 Rand_Centered_Variable(u32* rndNum);
 
-typedef union HexFloat {
-    u32 hex;
-    f32 flt;
-} HexFloat;
-
-extern HexFloat gRandFloat;
+extern fu gRandFloat;
 
 #endif

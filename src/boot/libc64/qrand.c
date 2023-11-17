@@ -12,7 +12,7 @@ u32 sRandInt = 1;
  *
  * Orignal name: __qrand_itemp
  */
-HexFloat gRandFloat;
+fu gRandFloat;
 
 /**
  * Generates the next pseudo-random integer.
@@ -46,8 +46,8 @@ void Rand_Seed(u32 seed) {
  */
 f32 Rand_ZeroOne(void) {
     sRandInt = (sRandInt * RAND_MULTIPLIER) + RAND_INCREMENT;
-    gRandFloat.hex = ((sRandInt >> 9) | 0x3F800000);
-    return gRandFloat.flt - 1.0f;
+    gRandFloat.i = ((sRandInt >> 9) | 0x3F800000);
+    return gRandFloat.f - 1.0f;
 }
 
 /**
@@ -57,8 +57,8 @@ f32 Rand_ZeroOne(void) {
  */
 f32 Rand_Centered(void) {
     sRandInt = (sRandInt * RAND_MULTIPLIER) + RAND_INCREMENT;
-    gRandFloat.hex = ((sRandInt >> 9) | 0x3F800000);
-    return gRandFloat.flt - 1.5f;
+    gRandFloat.i = ((sRandInt >> 9) | 0x3F800000);
+    return gRandFloat.f - 1.5f;
 }
 
 //! All functions below are unused variants of the above four, that use a provided random number variable instead of the
@@ -99,8 +99,8 @@ u32 Rand_Next_Variable(u32* rndNum) {
 f32 Rand_ZeroOne_Variable(u32* rndNum) {
     u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
 
-    gRandFloat.hex = ((*rndNum = next) >> 9) | 0x3F800000;
-    return gRandFloat.flt - 1.0f;
+    gRandFloat.i = ((*rndNum = next) >> 9) | 0x3F800000;
+    return gRandFloat.f - 1.0f;
 }
 
 /**
@@ -113,6 +113,6 @@ f32 Rand_ZeroOne_Variable(u32* rndNum) {
 f32 Rand_Centered_Variable(u32* rndNum) {
     u32 next = (*rndNum * RAND_MULTIPLIER) + RAND_INCREMENT;
 
-    gRandFloat.hex = ((*rndNum = next) >> 9) | 0x3F800000;
-    return gRandFloat.flt - 1.5f;
+    gRandFloat.i = ((*rndNum = next) >> 9) | 0x3F800000;
+    return gRandFloat.f - 1.5f;
 }
