@@ -480,4 +480,4 @@ asm/non_matchings/boot/fmodf/fmodf.s,fmodf,0x80096830,0x14
 asm/non_matchings/boot/__osMemset/__osMemset.s,__osMemset,0x80096880,0xC
 asm/non_matchings/boot/__osStrcmp/__osStrcmp.s,__osStrcmp,0x800968B0,0x10
 asm/non_matchings/boot/__osStrcpy/__osStrcpy.s,__osStrcpy,0x800968F0,0x10
-asm/non_matchings/boot/__osMemcpy/__osMemcpy.s,__osMemcpy,0x80096930,0x24
+asm/non_matchings/boot/memmove/memmove.s,memmove,0x80096930,0x24

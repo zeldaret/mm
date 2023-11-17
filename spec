@@ -236,7 +236,7 @@ beginseg
     include "build/src/boot/O2/__osMemset.o"
     include "build/src/boot/O2/__osStrcmp.o"
     include "build/src/boot/O2/__osStrcpy.o"
-    include "build/src/boot/O2/__osMemcpy.o"
+    include "build/src/boot/libc/memmove.o"
     include "build/src/boot/build.o"
 endseg
 

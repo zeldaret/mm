@@ -1,8 +1,8 @@
 #include "os_malloc.h"
 #include "libc/stdbool.h"
 #include "libc/stdint.h"
+#include "libc/string.h"
 #include "macros.h"
-#include "functions.h"
 
 #define FILL_ALLOCBLOCK (1 << 0)
 #define FILL_FREEBLOCK (1 << 1)
@@ -372,7 +372,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
                 next2 = (void*)((uintptr_t)next + diff);
                 node->next = next2;
                 node->size = newSize;
-                __osMemcpy(next2, next, sizeof(ArenaNode));
+                memmove(next2, next, sizeof(ArenaNode));
             } else {
                 // Create a new pointer and manually copy the data from the old pointer to the new one
                 newPtr = __osMalloc(arena, newSize);
