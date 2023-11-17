@@ -10210,7 +10210,7 @@
     0x809F1C40:("Boss_05_InitVars","UNK_TYPE1","",0x1),
     0x809F1C60:("D_809F1C60","UNK_TYPE2","",0x2),
     0x809F1C8C:("D_809F1C8C","UNK_TYPE2","",0x2),
-    0x809F1CB8:("D_809F1CB8","s8","[12]",0xC),
+    0x809F1CB8:("sLimbIndexToLimbRotIndex","s8","[12]",0xC),
     0x809F1CC4:("sHeadOffset","Vec3f","",0xC),
     0x809F1CD0:("sHeadColliderOffset","Vec3f","",0xC),
     0x809F1CDC:("sHeadOffset","Vec3f","",0xC),

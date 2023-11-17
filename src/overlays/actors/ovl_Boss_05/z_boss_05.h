@@ -47,6 +47,18 @@ typedef enum BioDekuBabaLilyPadCollider {
     /* 2 */ BIO_DEKU_BABA_LILY_PAD_COLLIDER_MAX
 } BioDekuBabaLilyPadCollider;
 
+typedef enum BioDekuBabaLilyPadWithHeadLimbRotIndex {
+    /* -1 */ BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE = -1,
+    /*  0 */ BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_UPPER_STEM,
+    /*  1 */ BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_MIDDLE_STEM,
+    /*  2 */ BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LOWER_STEM,
+    /*  3 */ BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LEFT_UPPER_ARM,
+    /*  4 */ BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LEFT_LOWER_ARM,
+    /*  5 */ BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_UPPER_ARM,
+    /*  6 */ BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_LOWER_ARM,
+    /*  7 */ BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_MAX
+} BioDekuBabaLilyPadWithHeadLimbRotIndex;
+
 typedef struct Boss05 {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ union {
@@ -72,7 +84,7 @@ typedef struct Boss05 {
     /* 0x18C */ Vec3f bodyPartsPos[BIO_DEKU_BABA_BODYPART_MAX];
     /* 0x198 */ f32 fallingHeadLilyPadLimbScale;
     /* 0x19C */ s16 lilyPadWithHeadStemRotX;
-    /* 0x19E */ Vec3s lilyPadWithHeadLimbRot[7];
+    /* 0x19E */ Vec3s lilyPadWithHeadLimbRot[BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_MAX];
     /* 0x1C8 */ ColliderJntSph lilyPadCollider;
     /* 0x1E8 */ ColliderJntSphElement lilyPadColliderElements[BIO_DEKU_BABA_LILY_PAD_COLLIDER_MAX];
     /* 0x268 */ SkelAnime lilyPadSkelAnime;

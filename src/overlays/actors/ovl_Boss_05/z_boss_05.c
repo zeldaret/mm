@@ -139,9 +139,40 @@ static ColliderJntSphInit sHeadJntSphInit2 = {
     sHeadJntSphElementsInit2, // sJntSphElementsInit,
 };
 
-static Color_RGBA8 sIcePrimColor = { 170, 255, 255, 255 };
-static Color_RGBA8 sIceEnvColor = { 200, 200, 255, 255 };
-static Vec3f sIceAccel = { 0.0f, -1.0f, 0.0f };
+/**
+ * Spawns eight ice shards on the Bio Deku Baba's head that fly off in random directions.
+ */
+void Boss05_WalkingHead_Thaw(Boss05* this, PlayState* play) {
+    static Color_RGBA8 sIcePrimColor = { 170, 255, 255, 255 };
+    static Color_RGBA8 sIceEnvColor = { 200, 200, 255, 255 };
+    static Vec3f sIceAccel = { 0.0f, -1.0f, 0.0f };
+    Vec3f pos;
+    Vec3f velocity;
+    s32 i;
+
+    SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD], 30, NA_SE_EV_ICE_BROKEN);
+    for (i = 0; i < 8; i++) {
+        velocity.x = Rand_CenteredFloat(7.0f);
+        velocity.z = Rand_CenteredFloat(7.0f);
+        velocity.y = Rand_ZeroFloat(6.0f) + 4.0f;
+        pos.x = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].x + velocity.x;
+        pos.y = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].y + velocity.y;
+        pos.z = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].z + velocity.z;
+        EffectSsEnIce_Spawn(play, &pos, Rand_ZeroFloat(0.5f) + 0.7f, &velocity, &sIceAccel, &sIcePrimColor,
+                            &sIceEnvColor, 30);
+    }
+}
+
+/**
+ * Manually sets the position of a sphere collider to a specific position.
+ */
+void Boss05_SetColliderSphere(s32 index, ColliderJntSph* collider, Vec3f* sphereCenter) {
+    collider->elements[index].dim.worldSphere.center.x = sphereCenter->x;
+    collider->elements[index].dim.worldSphere.center.y = sphereCenter->y;
+    collider->elements[index].dim.worldSphere.center.z = sphereCenter->z;
+    collider->elements[index].dim.worldSphere.radius =
+        collider->elements[index].dim.modelSphere.radius * collider->elements[index].dim.scale;
+}
 
 static DamageTable sDamageTable1 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -224,35 +255,6 @@ ActorInit Boss_05_InitVars = {
     /**/ Boss05_Update,
     /**/ Boss05_Draw,
 };
-
-void Boss05_WalkingHead_Thaw(Boss05* this, PlayState* play) {
-    Vec3f icePos;
-    Vec3f iceVelocity;
-    s32 i;
-
-    SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD], 30, NA_SE_EV_ICE_BROKEN);
-    for (i = 0; i < 8; i++) {
-        iceVelocity.x = Rand_CenteredFloat(7.0f);
-        iceVelocity.z = Rand_CenteredFloat(7.0f);
-        iceVelocity.y = Rand_ZeroFloat(6.0f) + 4.0f;
-        icePos.x = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].x + iceVelocity.x;
-        icePos.y = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].y + iceVelocity.y;
-        icePos.z = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].z + iceVelocity.z;
-        EffectSsEnIce_Spawn(play, &icePos, Rand_ZeroFloat(0.5f) + 0.7f, &iceVelocity, &sIceAccel, &sIcePrimColor,
-                            &sIceEnvColor, 30);
-    }
-}
-
-/**
- * Manually sets the position of a sphere collider to a specific position.
- */
-void Boss05_SetColliderSphere(s32 index, ColliderJntSph* collider, Vec3f* sphereCenter) {
-    collider->elements[index].dim.worldSphere.center.x = sphereCenter->x;
-    collider->elements[index].dim.worldSphere.center.y = sphereCenter->y;
-    collider->elements[index].dim.worldSphere.center.z = sphereCenter->z;
-    collider->elements[index].dim.worldSphere.radius =
-        collider->elements[index].dim.modelSphere.radius * collider->elements[index].dim.scale;
-}
 
 void Boss05_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -429,15 +431,15 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
     s32 j;
     u8 disableATCollisions = false;
     Vec3s targetLimbRot[7];
-    s32 frequency1;
-    s32 shift1;
-    s32 amplitude1;
-    s32 frequency2;
-    s32 shift2;
-    s32 amplitude2;
-    s32 frequency3;
-    s32 shift3;
-    s32 amplitude3;
+    s32 frequencyX;
+    s32 shiftX;
+    s32 amplitudeX;
+    s32 frequencyY;
+    s32 shiftY;
+    s32 amplitudeY;
+    s32 frequencyZ;
+    s32 shiftZ;
+    s32 amplitudeZ;
     s32 limbRotMaxAngularVelocityFrac;
     s32 limbRotAngularVelocity;
     s16 rotAngularVelocity;
@@ -450,67 +452,68 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
     this->dyna.actor.hintId = TATL_HINT_ID_BIO_DEKU_BABA;
 
     if (this->lilyPadWithHeadLimbRotState == 0) {
-        frequency1 = 0x3E8;
-        shift1 = 0x3E80;
-        amplitude1 = 0x7D0;
+        frequencyX = 0x3E8;
+        shiftX = 0x3E80;
+        amplitudeX = 0x7D0;
 
-        frequency2 = 0x5DC;
-        shift2 = 0x1770;
-        amplitude2 = 0xBB8;
+        frequencyY = 0x5DC;
+        shiftY = 0x1770;
+        amplitudeY = 0xBB8;
 
-        frequency3 = 0x514;
-        shift3 = 0x5208;
-        amplitude3 = 0xDAC;
+        frequencyZ = 0x514;
+        shiftZ = 0x5208;
+        amplitudeZ = 0xDAC;
 
         limbRotMaxAngularVelocityFrac = 0xA;
         limbRotAngularVelocity = 0x300;
 
         if (this->damagedFlashTimer != 0) {
-            frequency1 = 0x1B58;
-            amplitude1 = 0x1770;
+            frequencyX = 0x1B58;
+            amplitudeX = 0x1770;
 
-            amplitude2 = 0x1770;
+            amplitudeY = 0x1770;
 
-            frequency3 = 0x1C84;
-            amplitude3 = 0x1964;
+            frequencyZ = 0x1C84;
+            amplitudeZ = 0x1964;
 
             limbRotMaxAngularVelocityFrac = 1;
             limbRotAngularVelocity = 0x1000;
         }
     } else if (this->lilyPadWithHeadLimbRotState == 3) {
-        frequency1 = 0x1B58;
-        shift1 = 0x3E80;
-        amplitude1 = 0x1388;
+        frequencyX = 0x1B58;
+        shiftX = 0x3E80;
+        amplitudeX = 0x1388;
 
-        frequency2 = 0x5DC;
-        shift2 = 0x2328;
-        amplitude2 = 0x1388;
+        frequencyY = 0x5DC;
+        shiftY = 0x2328;
+        amplitudeY = 0x1388;
 
-        frequency3 = 0x1C84;
-        shift3 = 0x5208;
-        amplitude3 = 0x157C;
+        frequencyZ = 0x1C84;
+        shiftZ = 0x5208;
+        amplitudeZ = 0x157C;
 
         limbRotMaxAngularVelocityFrac = 1;
         limbRotAngularVelocity = 0x1000;
     } else {
-        frequency1 = shift1 = amplitude1 = frequency2 = shift2 = amplitude2 = frequency3 = shift3 = amplitude3 =
+        frequencyX = shiftX = amplitudeX = frequencyY = shiftY = amplitudeY = frequencyZ = shiftZ = amplitudeZ =
             limbRotMaxAngularVelocityFrac = limbRotAngularVelocity = 0;
     }
 
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_MAX; i++) {
         if ((this->lilyPadWithHeadLimbRotState == 0) || (this->lilyPadWithHeadLimbRotState == 3)) {
-            if (i < 3) {
+            if (i <= BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LOWER_STEM) {
                 targetLimbRot[i].y = 0;
-                targetLimbRot[i].x = Math_SinS((this->frameCounter * frequency1) + (i * shift1)) * amplitude1;
+                targetLimbRot[i].x = Math_SinS((this->frameCounter * frequencyX) + (i * shiftX)) * amplitudeX;
             } else {
                 targetLimbRot[i].x = 0;
-                targetLimbRot[i].y = Math_SinS((this->frameCounter * frequency2) + (i * shift2)) * amplitude2;
+                targetLimbRot[i].y = Math_SinS((this->frameCounter * frequencyY) + (i * shiftY)) * amplitudeY;
             }
 
-            if ((i == 4) || (i == 6)) {
-                targetLimbRot[i].z = Math_SinS((this->frameCounter * frequency3) + (i * shift3)) * amplitude3 * 2.0f;
+            if ((i == BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LEFT_LOWER_ARM) ||
+                (i == BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_LOWER_ARM)) {
+                targetLimbRot[i].z = Math_SinS((this->frameCounter * frequencyZ) + (i * shiftZ)) * amplitudeZ * 2.0f;
             } else {
-                targetLimbRot[i].z = Math_SinS((this->frameCounter * frequency3) + (i * shift3)) * amplitude3;
+                targetLimbRot[i].z = Math_SinS((this->frameCounter * frequencyZ) + (i * shiftZ)) * amplitudeZ;
             }
 
             rotMaxAngularVelocityFrac = limbRotMaxAngularVelocityFrac;
@@ -1210,24 +1213,24 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s8 D_809F1CB8[] = {
-    -1, // BIO_DEKU_BABA_LILY_PAD_LIMB_NONE
-    -1, // BIO_DEKU_BABA_LILY_PAD_LIMB_ROOTS
-    0,  // BIO_DEKU_BABA_LILY_PAD_LIMB_UPPER_STEM
-    1,  // BIO_DEKU_BABA_LILY_PAD_LIMB_MIDDLE_STEM
-    2,  // BIO_DEKU_BABA_LILY_PAD_LIMB_LOWER_STEM
-    3,  // BIO_DEKU_BABA_LILY_PAD_LIMB_LEFT_UPPER_ARM
-    4,  // BIO_DEKU_BABA_LILY_PAD_LIMB_LEFT_LOWER_ARM
-    5,  // BIO_DEKU_BABA_LILY_PAD_LIMB_RIGHT_UPPER_ARM
-    6,  // BIO_DEKU_BABA_LILY_PAD_LIMB_RIGHT_LOWER_ARM
-    -1, // BIO_DEKU_BABA_LILY_PAD_LIMB_LEAF
-    -1, // BIO_DEKU_BABA_LILY_PAD_LIMB_MAX
+static s8 sLimbIndexToLimbRotIndex[] = {
+    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_NONE
+    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_ROOTS
+    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_UPPER_STEM,      // BIO_DEKU_BABA_LILY_PAD_LIMB_UPPER_STEM
+    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_MIDDLE_STEM,     // BIO_DEKU_BABA_LILY_PAD_LIMB_MIDDLE_STEM
+    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LOWER_STEM,      // BIO_DEKU_BABA_LILY_PAD_LIMB_LOWER_STEM
+    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LEFT_UPPER_ARM,  // BIO_DEKU_BABA_LILY_PAD_LIMB_LEFT_UPPER_ARM
+    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LEFT_LOWER_ARM,  // BIO_DEKU_BABA_LILY_PAD_LIMB_LEFT_LOWER_ARM
+    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_UPPER_ARM, // BIO_DEKU_BABA_LILY_PAD_LIMB_RIGHT_UPPER_ARM
+    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_LOWER_ARM, // BIO_DEKU_BABA_LILY_PAD_LIMB_RIGHT_LOWER_ARM
+    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_LEAF
+    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_MAX
 };
 
 s32 Boss05_OverrideLimbDraw_LilyPadWithHead(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                             Actor* thisx) {
     Boss05* this = THIS;
-    s8 temp_v1;
+    s8 limbRotIndex;
 
     if (limbIndex == KREG(32)) {
         if ((this->frameCounter % 4) == 0) {
@@ -1248,11 +1251,11 @@ s32 Boss05_OverrideLimbDraw_LilyPadWithHead(PlayState* play, s32 limbIndex, Gfx*
         rot->x += this->lilyPadWithHeadStemRotX;
     }
 
-    temp_v1 = D_809F1CB8[limbIndex];
-    if (temp_v1 >= 0) {
-        rot->x = rot->x + this->lilyPadWithHeadLimbRot[temp_v1].x;
-        rot->y = rot->y + this->lilyPadWithHeadLimbRot[temp_v1].y;
-        rot->z = rot->z + this->lilyPadWithHeadLimbRot[temp_v1].z;
+    limbRotIndex = sLimbIndexToLimbRotIndex[limbIndex];
+    if (limbRotIndex > BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE) {
+        rot->x = rot->x + this->lilyPadWithHeadLimbRot[limbRotIndex].x;
+        rot->y = rot->y + this->lilyPadWithHeadLimbRot[limbRotIndex].y;
+        rot->z = rot->z + this->lilyPadWithHeadLimbRot[limbRotIndex].z;
     }
 
     return false;
