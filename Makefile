@@ -385,7 +385,7 @@ build/src/%.o: src/%.c
 
 $(ICONV_O_FILES): build/src/%.o: src/%.c
 	$(CC_CHECK) $<
-	$(ICONV) -f UTF-8 -t SHIFT-JIS -o $(@:.o=.enc.c) $<
+	$(ICONV) -f utf-8 -t shift-jis -o $(@:.o=.enc.c) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(@:.o=.enc.c)
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
