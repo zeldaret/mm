@@ -7,6 +7,7 @@
 #include "z_en_horse.h"
 #include "z64horse.h"
 #include "z64rumble.h"
+#include "z64voice.h"
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "overlays/actors/ovl_Obj_Um/z_obj_um.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
@@ -4016,9 +4017,9 @@ void func_80886C00(EnHorse* this, PlayState* play) {
 
     if (((this->action == ENHORSE_ACTION_MOUNTED_WALK) || (this->action == ENHORSE_ACTION_MOUNTED_TROT) ||
          (this->action == ENHORSE_ACTION_MOUNTED_GALLOP)) &&
-        (CHECK_BTN_ALL(input->press.button, BTN_A) || (func_801A5100() == 5)) && (play->interfaceCtx.unk_212 == 8) &&
-        !(this->stateFlags & ENHORSE_BOOST) && !(this->stateFlags & ENHORSE_FLAG_8) &&
-        !(this->stateFlags & ENHORSE_FLAG_9)) {
+        (CHECK_BTN_ALL(input->press.button, BTN_A) || (AudioVoice_GetWord() == VOICE_WORD_ID_HIYA)) &&
+        (play->interfaceCtx.unk_212 == 8) && !(this->stateFlags & ENHORSE_BOOST) &&
+        !(this->stateFlags & ENHORSE_FLAG_8) && !(this->stateFlags & ENHORSE_FLAG_9)) {
         if (this->numBoosts > 0) {
             Rumble_Request(0.0f, 180, 20, 100);
             this->stateFlags |= ENHORSE_BOOST;

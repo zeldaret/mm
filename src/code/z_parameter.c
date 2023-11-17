@@ -3,6 +3,7 @@
 #include "sys_cfb.h"
 #include "z64snap.h"
 #include "z64view.h"
+#include "z64voice.h"
 #include "archives/icon_item_static/icon_item_static_yar.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
@@ -2345,7 +2346,8 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
                     restoreHudVisibility = true;
                     sPictoState = PICTO_BOX_STATE_OFF;
-                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) || (func_801A5100() == 1)) {
+                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                           (AudioVoice_GetWord() == VOICE_WORD_ID_CHEESE)) {
                     if (!CHECK_EVENTINF(EVENTINF_41) ||
                         (CHECK_EVENTINF(EVENTINF_41) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
                         Audio_PlaySfx(NA_SE_SY_CAMERA_SHUTTER);
