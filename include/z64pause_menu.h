@@ -9,6 +9,15 @@
 struct OcarinaStaff;
 struct PlayState;
 
+typedef enum PauseMenuPage {
+    /* 0 */ PAUSE_ITEM,
+    /* 1 */ PAUSE_MAP,
+    /* 2 */ PAUSE_QUEST,
+    /* 3 */ PAUSE_MASK,
+    /* 4 */ PAUSE_WORLD_MAP,
+    /* 5 */ PAUSE_PAGE_MAX
+} PauseMenuPage;
+
 typedef struct PauseContext {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
@@ -32,15 +41,15 @@ typedef struct PauseContext {
     /* 0x1B0 */ UNK_TYPE1 unk_1B0[0x20];
     /* 0x1D0 */ OSMesgQueue loadQueue;
     /* 0x1E8 */ OSMesg loadMsg;
-    /* 0x1EC */ u16 state;
-    /* 0x1EE */ u16 debugEditor;
+    /* 0x1EC */ u16 state; // PauseState enum
+    /* 0x1EE */ u16 debugEditor; // DebugEditor enum
     /* 0x1F0 */ u8 bombersNotebookOpen;
     /* 0x1F4 */ Vec3f eye;
-    /* 0x200 */ u16 mainState;
+    /* 0x200 */ u16 mainState; // PauseMainState enum
     /* 0x202 */ u16 nextPageMode; // (2 * prev pageIndex) + (scroll left ? 1 : 0)
-    /* 0x204 */ u16 pageIndex;
+    /* 0x204 */ u16 pageIndex; // PauseMenuPage enum
     /* 0x206 */ u16 switchPageTimer;
-    /* 0x208 */ u16 savePromptState;
+    /* 0x208 */ u16 savePromptState; // PauseSavePromptState enum
     /* 0x20C */ f32 unk_20C; // set to 936.0f, unused remnant from OoT
     /* 0x210 */ f32 itemPageRoll; // rotation (-z) of the item page into the screen
     /* 0x214 */ f32 mapPageRoll; // rotation (+x) of the map page into the screen
@@ -52,18 +61,18 @@ typedef struct PauseContext {
     /* 0x228 */ UNK_TYPE1 unk_228[0x8];
     /* 0x230 */ s32 stickAdjX;
     /* 0x234 */ s32 stickAdjY;
-    /* 0x238 */ s16 cursorPoint[5];
-    /* 0x242 */ s16 cursorXIndex[5];
-    /* 0x24C */ s16 cursorYIndex[5];
+    /* 0x238 */ s16 cursorPoint[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
+    /* 0x242 */ s16 cursorXIndex[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
+    /* 0x24C */ s16 cursorYIndex[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
     /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchInputTimer; // Used to introduce a delay before switching page when arriving on the "scroll left/right" positions while holding stick left/right.
     /* 0x25C */ u16 namedItem;
-    /* 0x25E */ u16 cursorItem[5];
-    /* 0x268 */ u16 cursorSlot[5];
+    /* 0x25E */ u16 cursorItem[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
+    /* 0x268 */ u16 cursorSlot[PAUSE_PAGE_MAX]; // indexed by PauseMenuPage enum
     /* 0x272 */ u16 equipTargetItem;
     /* 0x274 */ u16 equipTargetSlot;
-    /* 0x276 */ u16 equipTargetCBtn;
+    /* 0x276 */ u16 equipTargetCBtn; // PauseEquipCButton enum
     /* 0x278 */ s16 equipAnimX;
     /* 0x27A */ s16 equipAnimY;
     /* 0x27C */ s16 equipAnimAlpha;
@@ -92,6 +101,12 @@ typedef struct PauseContext {
     /* 0x2CA */ s16 unk_2CA; // Uses OwlWarpId enum for Owl Warp. Never set.
 } PauseContext; // size = 0x2D0
 
+typedef enum KaleidoMgrOverlayType {
+    /* 0 */ KALEIDO_OVL_KALEIDO_SCOPE,
+    /* 1 */ KALEIDO_OVL_PLAYER_ACTOR,
+    /* 2 */ KALEID_OVL_MAX
+} KaleidoMgrOverlayType;
+
 typedef struct KaleidoMgrOverlay {
     /* 0x00 */ void* loadedRamAddr;
     /* 0x04 */ uintptr_t vromStart;
@@ -101,12 +116,6 @@ typedef struct KaleidoMgrOverlay {
     /* 0x14 */ uintptr_t offset; // loadedRamAddr - vramStart
     /* 0x18 */ const char* name;
 } KaleidoMgrOverlay; // size = 0x1C
-
-typedef enum KaleidoMgrOverlayType {
-    /* 0 */ KALEIDO_OVL_KALEIDO_SCOPE,
-    /* 1 */ KALEIDO_OVL_PLAYER_ACTOR,
-    /* 2 */ KALEID_OVL_MAX
-} KaleidoMgrOverlayType;
 
 
 // z_kaleido_setup.c
