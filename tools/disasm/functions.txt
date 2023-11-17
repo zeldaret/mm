@@ -482,7 +482,7 @@
     0x80096830:("fmodf",),
     0x80096880:("__osMemset",),
     0x800968B0:("__osStrcmp",),
-    0x800968F0:("__osStrcpy",),
+    0x800968F0:("strcpy",),
     0x80096930:("memmove",),
     0x800A5AC0:("EnAObj_Init",),
     0x800A5B6C:("EnAObj_Destroy",),
