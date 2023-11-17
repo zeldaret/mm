@@ -69,41 +69,16 @@ static TexturePtr D_80B958AC[] = { object_zog_Tex_024750, object_zog_Tex_024F50,
 
 static TexturePtr D_80B958B8[] = { object_zog_Tex_025F50, object_zog_Tex_026750 };
 
-static AnimationHeader* D_80B958C0[] = {
+static AnimationHeader* sAnimations[] = {
     &object_zog_Anim_00FC0C, &object_zog_Anim_0106B0, &object_zog_Anim_0166F4, &object_zog_Anim_017170,
-    &object_zog_Anim_014B10, &object_zog_Anim_018600, &object_zog_Anim_01A06C,
+    &object_zog_Anim_014B10, &object_zog_Anim_018600, &object_zog_Anim_01A06C, &object_zog_Anim_00CA94,
+    &object_zog_Anim_00F110, &object_zog_Anim_01579C, &object_zog_Anim_015B80, &object_zog_Anim_00ECBC,
+    &object_zog_Anim_008EB8, &object_zog_Anim_0099A4, &object_zog_Anim_00931C, &object_zog_Anim_009EC4,
+    &object_zog_Anim_00B01C, &object_zog_Anim_00BF38, &object_zog_Anim_01A990, &object_zog_Anim_01AD58,
+    &object_zog_Anim_01B72C, &object_zog_Anim_01BC88, &object_zog_Anim_001000, &object_zog_Anim_001970,
+    &object_zog_Anim_002344, &object_zog_Anim_002894, &object_zog_Anim_0030E0, &object_zog_Anim_0037F8,
+    &object_zog_Anim_0041D0, &object_zog_Anim_004BDC, &object_zog_Anim_0055B4,
 };
-
-static AnimationHeader* D_80B958DC[] = { &object_zog_Anim_00CA94, &object_zog_Anim_00F110 };
-
-static AnimationHeader* D_80B958E4[] = { &object_zog_Anim_01579C, &object_zog_Anim_015B80, &object_zog_Anim_00ECBC };
-
-static AnimationHeader* D_80B958F0[] = { &object_zog_Anim_008EB8, &object_zog_Anim_0099A4 };
-
-static AnimationHeader* D_80B958F8[] = { &object_zog_Anim_00931C, &object_zog_Anim_009EC4, &object_zog_Anim_00B01C };
-
-static AnimationHeader* D_80B95904[] = {
-    &object_zog_Anim_00BF38, &object_zog_Anim_01A990, &object_zog_Anim_01AD58,
-    &object_zog_Anim_01B72C, &object_zog_Anim_01BC88,
-};
-
-static AnimationHeader* D_80B95918 = &object_zog_Anim_001000;
-
-static AnimationHeader* D_80B9591C = &object_zog_Anim_001970;
-
-static AnimationHeader* D_80B95920 = &object_zog_Anim_002344;
-
-static AnimationHeader* D_80B95924 = &object_zog_Anim_002894;
-
-static AnimationHeader* D_80B95928 = &object_zog_Anim_0030E0;
-
-static AnimationHeader* D_80B9592C = &object_zog_Anim_0037F8;
-
-static AnimationHeader* D_80B95930 = &object_zog_Anim_0041D0;
-
-static AnimationHeader* D_80B95934 = &object_zog_Anim_004BDC;
-
-static AnimationHeader* D_80B95938 = &object_zog_Anim_0055B4;
 
 static s16 D_80B9593C[] = { 0, 1, 2, 3 };
 
@@ -272,7 +247,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
         this->unk_31C = 2;
         this->unk_31E = 0;
 
-        Animation_PlayLoop(&this->skelAnime, D_80B958DC[0]);
+        Animation_PlayLoop(&this->skelAnime, sAnimations[7]);
         this->actor.textId = 0x1009;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_02)) {
             this->actor.textId = 0x103C;
@@ -296,7 +271,7 @@ void EnZog_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80B939C0(EnZog* this, s16 arg1, u8 arg2) {
-    Animation_Change(&this->skelAnime, D_80B958C0[arg1], 1.0f, 0.0f, Animation_GetLastFrame(D_80B958C0[arg1]), arg2,
+    Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[arg1]), arg2,
                      -5.0f);
     this->unk_304 = arg1;
 }
@@ -324,7 +299,7 @@ void func_80B93A48(EnZog* this, PlayState* play) {
         table = D_80B95974[this->unk_2FC];
 
         this->unk_304 = table[this->unk_302];
-        Animation_PlayOnce(&this->skelAnime, D_80B958C0[this->unk_304]);
+        Animation_PlayOnce(&this->skelAnime, sAnimations[this->unk_304]);
         SkelAnime_Update(&this->skelAnime);
     }
 }
@@ -407,13 +382,13 @@ s32 func_80B93EA0(EnZog* this, PlayState* play) {
         switch (this->cueId) {
             case 2:
             case 3:
-                Animation_PlayLoop(&this->skelAnime, *D_80B958F0);
+                Animation_PlayLoop(&this->skelAnime, sAnimations[12]);
                 this->unk_31C = 0;
                 this->unk_31E = 1;
                 break;
 
             case 4:
-                Animation_PlayLoop(&this->skelAnime, *D_80B958F8);
+                Animation_PlayLoop(&this->skelAnime, sAnimations[14]);
                 this->unk_31C = 2;
                 this->unk_31E = 1;
                 break;
@@ -421,38 +396,38 @@ s32 func_80B93EA0(EnZog* this, PlayState* play) {
             case 5:
                 switch (this->unk_304) {
                     case 16:
-                        Animation_PlayOnce(&this->skelAnime, *D_80B95904);
+                        Animation_PlayOnce(&this->skelAnime, sAnimations[17]);
                         this->unk_304 = 17;
                         this->unk_31C = 2;
                         this->unk_31E = 0;
                         break;
 
                     case 17:
-                        Animation_Change(&this->skelAnime, *D_80B958DC, 0.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
+                        Animation_Change(&this->skelAnime, sAnimations[7], 0.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
                         break;
                 }
                 break;
 
             case 6:
-                Animation_PlayLoop(&this->skelAnime, *D_80B958E4);
+                Animation_PlayLoop(&this->skelAnime, sAnimations[9]);
                 this->unk_31C = 1;
                 this->unk_31E = 1;
                 break;
 
             case 12:
-                Animation_PlayLoop(&this->skelAnime, D_80B95930);
+                Animation_PlayLoop(&this->skelAnime, sAnimations[28]);
                 break;
 
             case 13:
-                Animation_PlayLoop(&this->skelAnime, D_80B95938);
+                Animation_PlayLoop(&this->skelAnime, sAnimations[30]);
                 break;
 
             case 14:
-                Animation_PlayLoop(&this->skelAnime, D_80B95928);
+                Animation_PlayLoop(&this->skelAnime, sAnimations[26]);
                 break;
 
             case 15:
-                Animation_PlayLoop(&this->skelAnime, D_80B9591C);
+                Animation_PlayLoop(&this->skelAnime, sAnimations[23]);
                 break;
         }
         SkelAnime_Update(&this->skelAnime);
@@ -559,24 +534,24 @@ s32 func_80B93EA0(EnZog* this, PlayState* play) {
                     break;
 
                 case 11:
-                    Animation_PlayLoop(&this->skelAnime, D_80B95920);
+                    Animation_PlayLoop(&this->skelAnime, sAnimations[24]);
                     break;
 
                 case 12:
-                    Animation_PlayOnce(&this->skelAnime, D_80B9592C);
+                    Animation_PlayOnce(&this->skelAnime, sAnimations[27]);
                     break;
 
                 case 13:
-                    Animation_PlayOnce(&this->skelAnime, D_80B95934);
+                    Animation_PlayOnce(&this->skelAnime, sAnimations[29]);
                     break;
 
                 case 14:
                     this->unk_30A |= 2;
-                    Animation_PlayOnce(&this->skelAnime, D_80B95924);
+                    Animation_PlayOnce(&this->skelAnime, sAnimations[25]);
                     break;
 
                 case 15:
-                    Animation_PlayOnce(&this->skelAnime, D_80B95918);
+                    Animation_PlayOnce(&this->skelAnime, sAnimations[22]);
                     break;
             }
         }

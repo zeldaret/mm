@@ -3,6 +3,7 @@
 
 #include "PR/ultratypes.h"
 #include "PR/os_message.h"
+#include "color.h"
 #include "z64dma.h"
 #include "z64light.h"
 #include "z64math.h"

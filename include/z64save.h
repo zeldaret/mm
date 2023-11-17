@@ -34,16 +34,16 @@ typedef enum RespawnMode {
 #define SAVE_BUFFER_SIZE 0x4000
 
 typedef enum {
-    /* 0  */ MAGIC_STATE_IDLE, // Regular gameplay
-    /* 1  */ MAGIC_STATE_CONSUME_SETUP, // Sets the speed at which the magic border flashes
-    /* 2  */ MAGIC_STATE_CONSUME, // Consume magic until target is reached or no more magic is available
-    /* 3  */ MAGIC_STATE_METER_FLASH_1, // Flashes border
-    /* 4  */ MAGIC_STATE_METER_FLASH_2, // Flashes border and draws yellow magic to preview target consumption
-    /* 5  */ MAGIC_STATE_RESET, // Reset colors and return to idle
-    /* 6  */ MAGIC_STATE_METER_FLASH_3, // Flashes border with no additional behaviour
-    /* 7  */ MAGIC_STATE_CONSUME_LENS, // Magic slowly consumed by Lens of Truth
-    /* 8  */ MAGIC_STATE_STEP_CAPACITY, // Step `magicCapacity` to full capacity
-    /* 9  */ MAGIC_STATE_FILL, // Add magic until magicFillTarget is reached
+    /*  0 */ MAGIC_STATE_IDLE, // Regular gameplay
+    /*  1 */ MAGIC_STATE_CONSUME_SETUP, // Sets the speed at which the magic border flashes
+    /*  2 */ MAGIC_STATE_CONSUME, // Consume magic until target is reached or no more magic is available
+    /*  3 */ MAGIC_STATE_METER_FLASH_1, // Flashes border
+    /*  4 */ MAGIC_STATE_METER_FLASH_2, // Flashes border and draws yellow magic to preview target consumption
+    /*  5 */ MAGIC_STATE_RESET, // Reset colors and return to idle
+    /*  6 */ MAGIC_STATE_METER_FLASH_3, // Flashes border with no additional behaviour
+    /*  7 */ MAGIC_STATE_CONSUME_LENS, // Magic slowly consumed by Lens of Truth
+    /*  8 */ MAGIC_STATE_STEP_CAPACITY, // Step `magicCapacity` to full capacity
+    /*  9 */ MAGIC_STATE_FILL, // Add magic until magicFillTarget is reached
     /* 10 */ MAGIC_STATE_CONSUME_GORON_ZORA_SETUP,
     /* 11 */ MAGIC_STATE_CONSUME_GORON_ZORA, // Magic slowly consumed by Goron spiked rolling or Zora electric barrier.
     /* 12 */ MAGIC_STATE_CONSUME_GIANTS_MASK // Magic slowly consumed by Giant's Mask
@@ -1362,7 +1362,9 @@ typedef enum {
 #define WEEKEVENTREG_86_20 PACK_WEEKEVENTREG_FLAG(86, 0x20)
 #define WEEKEVENTREG_86_40 PACK_WEEKEVENTREG_FLAG(86, 0x40)
 #define WEEKEVENTREG_86_80 PACK_WEEKEVENTREG_FLAG(86, 0x80)
-#define WEEKEVENTREG_87_01 PACK_WEEKEVENTREG_FLAG(87, 0x01)
+
+// Currently talking to a cow using the voice recognition unit
+#define WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE PACK_WEEKEVENTREG_FLAG(87, 0x01)
 
 // Set by Anju
 #define WEEKEVENTREG_COUPLES_MASK_CUTSCENE_STARTED PACK_WEEKEVENTREG_FLAG(87, 0x02)

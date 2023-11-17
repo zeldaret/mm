@@ -261,6 +261,8 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
                     }
                     break;
             }
+
+            //! @bug: sp32 may be used uninitialized
             Matrix_RotateYS(sp32, MTXMODE_NEW);
             Matrix_MultVecZ(this->actor.speed, &this->actor.velocity);
             this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 12.0f;

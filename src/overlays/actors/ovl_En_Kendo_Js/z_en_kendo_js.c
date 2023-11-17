@@ -33,7 +33,7 @@ void func_80B276D8(EnKendoJs* this, PlayState* play);
 void func_80B27760(EnKendoJs* this);
 void func_80B27774(EnKendoJs* this, PlayState* play);
 void func_80B2783C(EnKendoJs* this, PlayState* play);
-s32 func_80B278C4(PlayState* play, Vec3f arg1);
+s32 EnKendoJs_MovePlayerToPos(PlayState* play, Vec3f targetPos);
 void func_80B279F0(EnKendoJs* this, PlayState* play, s32 arg2);
 void func_80B27A90(EnKendoJs* this, PlayState* play);
 
@@ -512,7 +512,7 @@ void func_80B27030(EnKendoJs* this, PlayState* play) {
 
     sp20.z += 200.0f;
 
-    if (func_80B278C4(play, sp20)) {
+    if (EnKendoJs_MovePlayerToPos(play, sp20)) {
         this->actor.flags |= ACTOR_FLAG_10000;
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
@@ -609,7 +609,7 @@ void func_80B2740C(EnKendoJs* this, PlayState* play) {
 
     sp18.z += 300.0f;
 
-    if (func_80B278C4(play, sp18)) {
+    if (EnKendoJs_MovePlayerToPos(play, sp18)) {
         this->unk_28C = 0;
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         this->actionFunc = func_80B274BC;
@@ -718,30 +718,30 @@ void func_80B27880(EnKendoJs* this, PlayState* play) {
     }
 }
 
-s32 func_80B278C4(PlayState* play, Vec3f arg1) {
+s32 EnKendoJs_MovePlayerToPos(PlayState* play, Vec3f targetPos) {
     Player* player = GET_PLAYER(play);
-    f32 temp_f0;
-    f32 sp28;
-    s16 sp22 = Math_Vec3f_Yaw(&player->actor.world.pos, &arg1);
+    f32 distXZ;
+    f32 controlStickMagnitude;
+    s16 controlStickAngle;
 
-    temp_f0 = Math_Vec3f_DistXZ(&player->actor.world.pos, &arg1);
+    controlStickAngle = Math_Vec3f_Yaw(&player->actor.world.pos, &targetPos);
+    distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &targetPos);
 
-    if (temp_f0 < 20.0f) {
-        sp28 = 10.0f;
-    } else if (temp_f0 < 40.0f) {
-        sp28 = 40.0f;
+    if (distXZ < 20.0f) {
+        controlStickMagnitude = 10.0f;
+    } else if (distXZ < 40.0f) {
+        controlStickMagnitude = 40.0f;
     } else {
-        sp28 = 80.0f;
+        controlStickMagnitude = 80.0f;
     }
 
-    play->actorCtx.unk268 = 1;
-    func_800B6F20(play, &play->actorCtx.unk_26C, sp28, sp22);
+    play->actorCtx.isOverrideInputOn = true;
+    Actor_SetControlStickData(play, &play->actorCtx.overrideInput, controlStickMagnitude, controlStickAngle);
 
-    if (temp_f0 < 20.0f) {
+    if (distXZ < 20.0f) {
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 void func_80B279AC(EnKendoJs* this, PlayState* play) {

@@ -68,7 +68,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-s32 func_8098CE40(ObjComb* this, PlayState* play) {
+bool func_8098CE40(ObjComb* this, PlayState* play) {
     s32 phi_a2 = -1;
     s32 temp_v0 = (OBJCOMB_GET_1F(&this->actor) << 2) | 0xFF01;
 
