@@ -1,11 +1,12 @@
 #include "libc64/sleep.h"
+#include "macros.h" // for ARRAY_COUNT
 
 void csleep(OSTime time) {
     OSMesgQueue mq;
     OSMesg msg[1];
     OSTimer timer;
 
-    osCreateMesgQueue(&mq, msg, sizeof(msg) / sizeof(*msg));
+    osCreateMesgQueue(&mq, msg, ARRAY_COUNT(msg));
     osSetTimer(&timer, time, 0, &mq, NULL);
     osRecvMesg(&mq, NULL, OS_MESG_BLOCK);
 }
