@@ -55,22 +55,35 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-s32 func_809592E0(EnMk* this, s16 index) {
-    AnimationHeader* sAnimations[] = {
-        &gMarineResearcherIdleAnim,        &gMarineResearcherHeadWaggleAnim, &gMarineResearcherYellAnim,
-        &gMarineResearcherShakeInFearAnim, &gMarineResearcherStrokeChinAnim,
+typedef enum MarineResearcherAnimation {
+    /* -1 */ MARINE_RESEARCHER_ANIM_NONE = -1,
+    /*  0 */ MARINE_RESEARCHER_ANIM_IDLE,
+    /*  1 */ MARINE_RESEARCHER_ANIM_HEAD_WAGGLE,
+    /*  2 */ MARINE_RESEARCHER_ANIM_YELL,
+    /*  3 */ MARINE_RESEARCHER_ANIM_SHAKE_IN_FEAR,
+    /*  4 */ MARINE_RESEARCHER_ANIM_STROKE_CHIN,
+    /*  5 */ MARINE_RESEARCHER_ANIM_MAX
+} MarineResearcherAnimation;
+
+s32 EnMk_ChangeAnim(EnMk* this, s16 animIndex) {
+    AnimationHeader* sAnimations[MARINE_RESEARCHER_ANIM_MAX] = {
+        &gMarineResearcherIdleAnim,        // MARINE_RESEARCHER_ANIM_IDLE
+        &gMarineResearcherHeadWaggleAnim,  // MARINE_RESEARCHER_ANIM_HEAD_WAGGLE
+        &gMarineResearcherYellAnim,        // MARINE_RESEARCHER_ANIM_YELL
+        &gMarineResearcherShakeInFearAnim, // MARINE_RESEARCHER_ANIM_SHAKE_IN_FEAR
+        &gMarineResearcherStrokeChinAnim,  // MARINE_RESEARCHER_ANIM_STROKE_CHIN
     };
 
-    if (index == this->unk_27C) {
+    if (animIndex == this->animIndex) {
         return false;
     }
 
-    if ((index < 0) || (index >= 5)) {
+    if ((animIndex <= MARINE_RESEARCHER_ANIM_NONE) || (animIndex >= MARINE_RESEARCHER_ANIM_MAX)) {
         return false;
     }
 
-    Animation_PlayLoop(&this->skelAnime, sAnimations[index]);
-    this->unk_27C = index;
+    Animation_PlayLoop(&this->skelAnime, sAnimations[animIndex]);
+    this->animIndex = animIndex;
     return true;
 }
 
@@ -85,8 +98,8 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gMarineResearcherSkel, &gMarineResearcherIdleAnim, this->jointTable,
                        this->morphTable, MARINE_RESEARCHER_LIMB_MAX);
 
-    this->unk_27C = -1;
-    func_809592E0(this, 0);
+    this->animIndex = MARINE_RESEARCHER_ANIM_NONE;
+    EnMk_ChangeAnim(this, MARINE_RESEARCHER_ANIM_IDLE);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -133,14 +146,15 @@ void func_8095954C(EnMk* this, PlayState* play) {
             case 3:
             case 4:
             case 5:
-                func_809592E0(this, play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
+                EnMk_ChangeAnim(this,
+                                play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
                 break;
 
             default:
                 break;
         }
     } else {
-        func_809592E0(this, 0);
+        EnMk_ChangeAnim(this, MARINE_RESEARCHER_ANIM_IDLE);
     }
 }
 

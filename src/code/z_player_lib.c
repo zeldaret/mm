@@ -96,29 +96,32 @@ s32 func_801226E0(PlayState* play, s32 arg1) {
     return arg1;
 }
 
-s32 func_80122744(PlayState* play, struct_80122744_arg1* arg1, u32 arg2, Vec3s* arg3) {
-    arg1->unk_00 = arg2;
-    arg1->unk_01 = 0;
-    arg1->unk_04 = arg3;
+s32 Player_InitOverrideInput(PlayState* play, PlayerOverrideInputEntry* inputEntry, u32 numPoints,
+                             Vec3s* targetPosList) {
+    inputEntry->numPoints = numPoints;
+    inputEntry->curPoint = 0;
+    inputEntry->targetPosList = targetPosList;
     return 1;
 }
 
-s32 func_80122760(PlayState* play, struct_80122744_arg1* arg1, f32 arg2) {
-    if (arg1->unk_01 < arg1->unk_00) {
+s32 Player_UpdateOverrideInput(PlayState* play, PlayerOverrideInputEntry* inputEntry, f32 distXZRange) {
+    if (inputEntry->curPoint < inputEntry->numPoints) {
         Player* player = GET_PLAYER(play);
-        Vec3f sp30;
+        Vec3f targetPos;
         s32 pad;
         s16 yaw;
         f32 distXZ;
 
-        Math_Vec3s_ToVec3f(&sp30, &arg1->unk_04[arg1->unk_01]);
-        yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &sp30);
-        func_800B6F20(play, &play->actorCtx.unk_26C, arg2, yaw);
-        play->actorCtx.unk268 = 1;
-        distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &sp30);
+        Math_Vec3s_ToVec3f(&targetPos, &inputEntry->targetPosList[inputEntry->curPoint]);
+        yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &targetPos);
 
-        if ((fabsf(player->actor.world.pos.y - sp30.y) < 50.0f) && (distXZ < arg2)) {
-            arg1->unk_01++;
+        Actor_SetControlStickData(play, &play->actorCtx.overrideInput, distXZRange, yaw);
+        play->actorCtx.isOverrideInputOn = true;
+
+        distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &targetPos);
+
+        if ((fabsf(player->actor.world.pos.y - targetPos.y) < 50.0f) && (distXZ < distXZRange)) {
+            inputEntry->curPoint++;
         }
 
         return false;
@@ -355,9 +358,9 @@ s32 Player_GetCurMaskItemId(PlayState* play) {
 
 void func_80122F28(Player* player) {
     if ((player->actor.category == ACTORCAT_PLAYER) &&
-        (!(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_200000 | PLAYER_STATE1_800000 |
-                                  PLAYER_STATE1_20000000))) &&
-        (!(player->stateFlags2 & PLAYER_STATE2_1))) {
+        !(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_200000 | PLAYER_STATE1_800000 |
+                                 PLAYER_STATE1_20000000)) &&
+        !(player->stateFlags2 & PLAYER_STATE2_1)) {
         if (player->doorType <= PLAYER_DOORTYPE_TALKING) {
             CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         } else {
@@ -366,13 +369,13 @@ void func_80122F28(Player* player) {
     }
 }
 
-s32 func_80122F9C(PlayState* play) {
+bool func_80122F9C(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->av1.actionVar1 == 2);
 }
 
-s32 func_80122FCC(PlayState* play) {
+bool func_80122FCC(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags2 & PLAYER_STATE2_80000) &&
@@ -494,29 +497,29 @@ void func_80123140(PlayState* play, Player* player) {
     Actor_SetScale(&player->actor, scale);
 }
 
-s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
+bool Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
            (player->csAction != PLAYER_CSACTION_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
-           (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
+           (player->stateFlags3 & PLAYER_STATE3_80) || play->actorCtx.isOverrideInputOn;
 }
 
-s32 Player_InCsMode(PlayState* play) {
+bool Player_InCsMode(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return Player_InBlockingCsMode(play, player) || (player->unk_AA5 == PLAYER_UNKAA5_5);
 }
 
-s32 func_80123420(Player* player) {
+bool func_80123420(Player* player) {
     return player->stateFlags3 & PLAYER_STATE3_80000000;
 }
 
-s32 func_80123434(Player* player) {
+bool func_80123434(Player* player) {
     return player->stateFlags1 & (PLAYER_STATE1_10000 | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
 }
 
 // Unused
-s32 func_80123448(PlayState* play) {
+bool func_80123448(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
@@ -525,11 +528,11 @@ s32 func_80123448(PlayState* play) {
 
 // TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
 // Hypothesis: this function checks if the current form would crouch when he tries to use the shield
-s32 Player_IsGoronOrDeku(Player* player) {
+bool Player_IsGoronOrDeku(Player* player) {
     return player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_DEKU;
 }
 
-s32 func_801234D4(PlayState* play) {
+bool func_801234D4(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags2 & PLAYER_STATE2_8) || (player->actor.speed != 0.0f) ||
@@ -539,7 +542,7 @@ s32 func_801234D4(PlayState* play) {
              (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)));
 }
 
-s32 func_80123590(PlayState* play, Actor* actor) {
+bool func_80123590(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
     if ((player->stateFlags1 & PLAYER_STATE1_800) && (player->heldActor == actor)) {
@@ -1356,7 +1359,7 @@ void func_80123E90(PlayState* play, Actor* actor) {
     Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_FOLLOWTARGET);
 }
 
-s32 func_80123F14(PlayState* play) {
+bool func_80123F14(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->stateFlags1 & PLAYER_STATE1_800000;
@@ -1368,7 +1371,7 @@ s32 func_80123F2C(PlayState* play, s32 ammo) {
     return 1;
 }
 
-s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange) {
+bool Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
     Vec3f diff;
     s32 pad;
@@ -1398,24 +1401,24 @@ void Player_RemoveMask(PlayState* play) {
     player->currentMask = PLAYER_MASK_NONE;
 }
 
-s32 Player_HasMirrorShieldEquipped(PlayState* play) {
+bool Player_HasMirrorShieldEquipped(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->transformation == PLAYER_FORM_HUMAN) && (player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD);
 }
 
-s32 Player_IsHoldingMirrorShield(PlayState* play) {
+bool Player_IsHoldingMirrorShield(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->transformation == PLAYER_FORM_HUMAN) && (player->rightHandType == PLAYER_MODELTYPE_RH_SHIELD) &&
            (player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD);
 }
 
-s32 Player_IsHoldingHookshot(Player* player) {
+bool Player_IsHoldingHookshot(Player* player) {
     return player->heldItemAction == PLAYER_IA_HOOKSHOT;
 }
 
-s32 func_801240DC(Player* player) {
+bool func_801240DC(Player* player) {
     return Player_IsHoldingHookshot(player) && (player->heldActor == NULL);
 }
 
@@ -1500,7 +1503,7 @@ PlayerSword Player_SwordFromIA(Player* player, PlayerItemAction itemAction) {
     return PLAYER_SWORD_NONE;
 }
 
-s32 func_801242B4(Player* player) {
+bool func_801242B4(Player* player) {
     return (player->stateFlags1 & PLAYER_STATE1_8000000) && (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER);
 }
 
@@ -2036,7 +2039,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
         // Note: The increment would not be done for the root limb, even if it had a non-NULL `dList`.
         //       So if the root limb had a non-NULL `dList` (which is not the case in vanilla),
         //       an out-of-bounds write to `bodyPartsPos` would occur.
-        sPlayerCurBodyPartPos = &player->bodyPartsPos[-1];
+        sPlayerCurBodyPartPos = &player->bodyPartsPos[0] - 1;
 
         if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
             if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_1)) {
@@ -2269,7 +2272,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                         }
                     }
                 } else if ((player->rightHandType == PLAYER_MODELTYPE_RH_OPEN) && (player->actor.speed > 2.0f) &&
-                           (!(player->stateFlags1 & PLAYER_STATE1_8000000))) {
+                           !(player->stateFlags1 & PLAYER_STATE1_8000000)) {
                     rightHandDLists = &gPlayerRightHandClosedDLs[D_801F59E0];
                     sPlayerRightHandType = PLAYER_MODELTYPE_RH_CLOSED;
                 } else {
@@ -2559,7 +2562,7 @@ void func_8012669C(PlayState* play, Player* player, Vec3f* arg2, Vec3f* arg3) {
 
     if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
         if (func_80126440(play, NULL, &player->meleeWeaponInfo[0], &sp3C, &sp30) &&
-            (player->transformation != PLAYER_FORM_GORON) && (!(player->stateFlags1 & PLAYER_STATE1_400000))) {
+            (player->transformation != PLAYER_FORM_GORON) && !(player->stateFlags1 & PLAYER_STATE1_400000)) {
             EffectBlure_AddVertex(Effect_GetByIndex(player->meleeWeaponEffectIndex[0]), &player->meleeWeaponInfo[0].tip,
                                   &player->meleeWeaponInfo[0].base);
         }

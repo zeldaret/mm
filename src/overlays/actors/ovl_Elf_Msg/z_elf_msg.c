@@ -100,7 +100,7 @@ s32 func_8092E1D0(ElfMsg* this) {
     }
 }
 
-s32 func_8092E1FC(ElfMsg* this) {
+bool func_8092E1FC(ElfMsg* this) {
     return (this->actor.xzDistToPlayer < (100.0f * this->actor.scale.x)) && (this->actor.playerHeightRel >= 0.0f) &&
            (this->actor.playerHeightRel < (100.0f * this->actor.scale.y));
 }

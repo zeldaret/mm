@@ -598,15 +598,14 @@ typedef struct {
     /* 0x04 */ struct_80122D44_arg1_unk_04 unk_04[4];
 } struct_80122D44_arg1; // size >= 0x114
 
-typedef struct struct_80122744_arg1 {
-    /* 0x0 */ s8 unk_00;
-    /* 0x1 */ s8 unk_01;
-    /* 0x2 */ s8 unk_02;
-    /* 0x3 */ s8 unk_03;
-    /* 0x4 */ Vec3s* unk_04;
-} struct_80122744_arg1; // size = 0x8
+typedef struct PlayerOverrideInputEntry {
+    /* 0x0 */ s8 numPoints;
+    /* 0x1 */ s8 curPoint;
+    /* 0x4 */ Vec3s* targetPosList;
+} PlayerOverrideInputEntry; // size = 0x8
 
 typedef enum PlayerCsAction {
+    /*   -1 */ PLAYER_CSACTION_NEG1 = -1, // Specific to Kafei, any negative number works
     /* 0x00 */ PLAYER_CSACTION_NONE,
     /* 0x01 */ PLAYER_CSACTION_1,
     /* 0x02 */ PLAYER_CSACTION_2,
@@ -1145,7 +1144,7 @@ typedef struct Player {
     /* 0x395 */ u8 prevCsAction; // PlayerCsAction enum
     /* 0x396 */ u8 cueId; // PlayerCueId enum
     /* 0x397 */ u8 unk_397; // PlayerDoorType enum
-    /* 0x398 */ Actor* csActor;
+    /* 0x398 */ Actor* csActor; // Actor involved in a `csAction`. Typically the actor that invoked the cutscene.
     /* 0x39C */ UNK_TYPE1 unk_39C[0x4];
     /* 0x3A0 */ Vec3f unk_3A0;
     /* 0x3AC */ Vec3f unk_3AC;

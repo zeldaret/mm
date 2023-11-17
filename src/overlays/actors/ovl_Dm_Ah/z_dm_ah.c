@@ -29,9 +29,9 @@ ActorInit Dm_Ah_InitVars = {
 
 typedef enum {
     /* -1 */ DMAH_ANIM_NONE = -1,
-    /* 0  */ DMAH_ANIM_0,
-    /* 1  */ DMAH_ANIM_1,
-    /* 2  */ DMAH_ANIM_MAX
+    /*  0 */ DMAH_ANIM_0,
+    /*  1 */ DMAH_ANIM_1,
+    /*  2 */ DMAH_ANIM_MAX
 } DmAhAnimation;
 
 static AnimationInfoS sAnimationInfo[DMAH_ANIM_MAX] = {

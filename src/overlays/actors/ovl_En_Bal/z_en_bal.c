@@ -573,7 +573,7 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
             } else {
                 this->idleAnimStage++;
             }
-        } else if ((this->idleAnimStage == TINGLE_IDLESTAGE_WAIT) && (Animation_OnFrame(&this->skelAnime, 20.0f))) {
+        } else if ((this->idleAnimStage == TINGLE_IDLESTAGE_WAIT) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
             this->forceEyesShut = true;
         }
     }
