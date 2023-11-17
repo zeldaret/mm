@@ -27,6 +27,8 @@
  * - HandleSchedule: Holds the actual logic of how to actually follow the schedule based on the processed output, called by FollowSchedule
  */
 
+struct PlayState;
+
 // Macro to convert the time format used in the save struct into the format used in Schedule
 #define SCHEDULE_CONVERT_TIME(time) ((s32)((time) - 0x10000 / 360 * 90))
 
@@ -258,6 +260,6 @@ typedef struct {
 
 typedef u8 ScheduleScript;
 
-s32 Schedule_RunScript(PlayState* play, ScheduleScript* script, ScheduleOutput* output);
+s32 Schedule_RunScript(struct PlayState* play, ScheduleScript* script, ScheduleOutput* output);
 
 #endif

@@ -176,7 +176,7 @@ def disassemble_unk_script(data_file, offset):
     script_len = calc_length(data_file, offset);
     script_len_num_digits = 0 if script_len == 1 else int(math.ceil(math.log(script_len - 1, 16)))
 
-    out = "static u8 sScheduleScript[] = {\n"
+    out = "static ScheduleScript sScheduleScript[] = {\n"
 
     # Keep trying to disassemble until it hits a terminator and no commands branch past it
     while any([branch >= off for branch in branch_targets]) or cmd not in [0x04, 0x05, 0x06, 0x09]:
