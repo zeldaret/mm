@@ -1,24 +1,26 @@
 #include "z64pause_menu.h"
 
+#include "z64.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-s16 sKaleidoSetupRightPageIndex[PAUSE_PAGE_MAX] = {
+s16 sKaleidoSetupRightPageIndex[PAUSE_PAGE_MAX - 1] = {
     PAUSE_MAP,   // PAUSE_ITEM
     PAUSE_QUEST, // PAUSE_MAP
     PAUSE_MASK,  // PAUSE_QUEST
     PAUSE_ITEM,  // PAUSE_MASK
 };
 
-f32 sKaleidoSetupRightPageEyeX[PAUSE_PAGE_MAX] = {
+f32 sKaleidoSetupRightPageEyeX[PAUSE_PAGE_MAX - 1] = {
     PAUSE_EYE_DIST * -PAUSE_MAP_X,   // PAUSE_ITEM
     PAUSE_EYE_DIST * -PAUSE_QUEST_X, // PAUSE_MAP
     PAUSE_EYE_DIST * -PAUSE_MASK_X,  // PAUSE_QUEST
     PAUSE_EYE_DIST * -PAUSE_ITEM_X,  // PAUSE_MASK
 };
 
-f32 sKaleidoSetupRightPageEyeZ[PAUSE_PAGE_MAX] = {
+f32 sKaleidoSetupRightPageEyeZ[PAUSE_PAGE_MAX - 1] = {
     PAUSE_EYE_DIST * -PAUSE_MAP_Z,   // PAUSE_ITEM
     PAUSE_EYE_DIST * -PAUSE_QUEST_Z, // PAUSE_MAP
     PAUSE_EYE_DIST * -PAUSE_MASK_Z,  // PAUSE_QUEST

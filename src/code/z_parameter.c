@@ -9,7 +9,6 @@
 #include "interface/do_action_static/do_action_static.h"
 #include "misc/story_static/story_static.h"
 
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "overlays/actors/ovl_En_Mm3/z_en_mm3.h"
 
 typedef enum {

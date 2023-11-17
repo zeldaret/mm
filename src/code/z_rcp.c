@@ -1,6 +1,5 @@
 #include "global.h"
 #include "sys_cfb.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 Gfx gSetupDLs[SETUPDL_MAX][6] = {
     {

@@ -2,6 +2,7 @@
 #define Z_KALEIDO_SCOPE_H
 
 #include "global.h"
+#include "z64pause_menu.h"
 
 #define PAUSE_ITEM_NONE 999
 
@@ -20,74 +21,6 @@
 
 #define PAUSE_EYE_DIST (64.0f)
 
-typedef enum PauseState {
-    /* 0x00 */ PAUSE_STATE_OFF,
-    /* 0x01 */ PAUSE_STATE_OPENING_0,
-    /* 0x02 */ PAUSE_STATE_OPENING_1,
-    /* 0x03 */ PAUSE_STATE_OPENING_2,
-    /* 0x04 */ PAUSE_STATE_OPENING_3,
-    /* 0x05 */ PAUSE_STATE_OPENING_4,
-    /* 0x06 */ PAUSE_STATE_MAIN, // Pause menu ready for player inputs.
-    /* 0x07 */ PAUSE_STATE_SAVEPROMPT,
-    /* 0x08 */ PAUSE_STATE_GAMEOVER_0,
-    /* 0x09 */ PAUSE_STATE_GAMEOVER_1,
-    /* 0x0A */ PAUSE_STATE_GAMEOVER_2,
-    /* 0x0B */ PAUSE_STATE_GAMEOVER_3,
-    /* 0x0C */ PAUSE_STATE_GAMEOVER_4,
-    /* 0x0D */ PAUSE_STATE_GAMEOVER_5,
-    /* 0x0E */ PAUSE_STATE_GAMEOVER_SAVE_PROMPT,
-    /* 0x0F */ PAUSE_STATE_GAMEOVER_7,
-    /* 0x10 */ PAUSE_STATE_GAMEOVER_8,
-    /* 0x11 */ PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT,
-    /* 0x12 */ PAUSE_STATE_GAMEOVER_10,
-    /* 0x13 */ PAUSE_STATE_OWLWARP_0,
-    /* 0x14 */ PAUSE_STATE_OWLWARP_1,
-    /* 0x15 */ PAUSE_STATE_OWLWARP_2,
-    /* 0x16 */ PAUSE_STATE_OWLWARP_3,
-    /* 0x17 */ PAUSE_STATE_OWLWARP_SELECT, // Selecting the destination
-    /* 0x18 */ PAUSE_STATE_OWLWARP_CONFIRM, // Confirming the choice given
-    /* 0x19 */ PAUSE_STATE_OWLWARP_6,
-    /* 0x1A */ PAUSE_STATE_UNPAUSE_SETUP, // Unpause
-    /* 0x1B */ PAUSE_STATE_UNPAUSE_CLOSE
-} PauseState;
-
-typedef enum PauseMainState {
-    /* 0x00 */ PAUSE_MAIN_STATE_IDLE, // Await input for the next action
-    /* 0x01 */ PAUSE_MAIN_STATE_SWITCHING_PAGE,
-    /* 0x02 */ PAUSE_MAIN_STATE_SONG_PLAYBACK,
-    /* 0x03 */ PAUSE_MAIN_STATE_EQUIP_ITEM,
-    /* 0x04 */ PAUSE_MAIN_STATE_SONG_PROMPT_INIT,
-    /* 0x05 */ PAUSE_MAIN_STATE_SONG_PROMPT,
-    /* 0x06 */ PAUSE_MAIN_STATE_SONG_PROMPT_DONE,
-    /* 0x07 */ PAUSE_MAIN_STATE_SONG_PROMPT_UNUSED,
-    /* 0x08 */ PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG, // Await input but the cursor is on a song
-    /* 0x09 */ PAUSE_MAIN_STATE_SONG_PLAYBACK_INIT,
-    /* 0x0F */ PAUSE_MAIN_STATE_EQUIP_MASK = 0xF,
-    /* 0x10 */ PAUSE_MAIN_STATE_BOMBERS_NOTEBOOK_OPEN,
-    /* 0x11 */ PAUSE_MAIN_STATE_UNK
-} PauseMainState;
-
-typedef enum PauseSavePromptState {
-    /* 0x00 */ PAUSE_SAVEPROMPT_STATE_APPEARING,
-    /* 0x01 */ PAUSE_SAVEPROMPT_STATE_1,
-    /* 0x02 */ PAUSE_SAVEPROMPT_STATE_RETURN_TO_MENU,
-    /* 0x03 */ PAUSE_SAVEPROMPT_STATE_3,
-    /* 0x04 */ PAUSE_SAVEPROMPT_STATE_4,
-    /* 0x05 */ PAUSE_SAVEPROMPT_STATE_5,
-    /* 0x06 */ PAUSE_SAVEPROMPT_STATE_6,
-    /* 0x07 */ PAUSE_SAVEPROMPT_STATE_7
-} PauseSavePromptState;
-
-#define IS_PAUSE_STATE_GAMEOVER \
-    ((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))
-
-#define IS_PAUSE_STATE_OWLWARP \
-    ((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6))
-
-#define IS_PAUSE_MAIN_STATE_SONG_PROMPT                            \
-    ((pauseCtx->mainState >= PAUSE_MAIN_STATE_SONG_PROMPT_INIT) && \
-     (pauseCtx->mainState <= PAUSE_MAIN_STATE_SONG_PROMPT_DONE))
-
 typedef enum PauseEquipCButton {
     /* 0 */ PAUSE_EQUIP_C_LEFT,
     /* 1 */ PAUSE_EQUIP_C_DOWN,
@@ -100,22 +33,6 @@ typedef enum EquipState {
     /* 2 */ EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT,
     /* 3 */ EQUIP_STATE_MOVE_TO_C_BTN
 } EquipState;
-
-typedef enum DebugEditor {
-    /* 0 */ DEBUG_EDITOR_NONE,
-    /* 1 */ DEBUG_EDITOR_INVENTORY_INIT,
-    /* 2 */ DEBUG_EDITOR_INVENTORY,
-    /* 3 */ DEBUG_EDITOR_EVENTS
-} DebugEditor;
-
-typedef enum PauseBgPreRenderState {
-    /* 0 */ PAUSE_BG_PRERENDER_OFF,
-    /* 1 */ PAUSE_BG_PRERENDER_SETUP, // The current frame is only drawn for the purpose of serving as the pause background.
-    /* 2 */ PAUSE_BG_PRERENDER_PROCESS, // The previous frame was PAUSE_BG_PRERENDER_DRAW, now apply prerender filters.
-    /* 3 */ PAUSE_BG_PRERENDER_READY, // The pause background is ready to be used.
-    /* 4 */ PAUSE_BG_PRERENDER_UNK4,
-    /* 5 */ PAUSE_BG_PRERENDER_MAX
-} PauseBgPreRenderState;
 
 typedef enum VtxPage {
     /* 0 */ VTX_PAGE_MASK,
@@ -144,8 +61,6 @@ typedef enum VtxPage {
 
 // === ITEM === //
 
-#define ITEM_GRID_ROWS 4
-#define ITEM_GRID_COLS 6
 #define ITEM_GRID_CELL_WIDTH 32
 #define ITEM_GRID_CELL_HEIGHT 32
 #define ITEM_GRID_QUAD_MARGIN 2
@@ -158,8 +73,6 @@ typedef enum VtxPage {
 #define ITEM_GRID_SELECTED_QUAD_WIDTH (ITEM_GRID_QUAD_WIDTH - (2 * ITEM_GRID_SELECTED_QUAD_MARGIN))
 #define ITEM_GRID_SELECTED_QUAD_HEIGHT (ITEM_GRID_QUAD_HEIGHT - (2 * ITEM_GRID_SELECTED_QUAD_MARGIN))
 #define ITEM_GRID_SELECTED_QUAD_TEX_SIZE 32 // both width and height
-
-#define ITEM_NUM_SLOTS (ITEM_GRID_ROWS * ITEM_GRID_COLS)
 
 typedef enum ItemPageQuad {
     // 0..59 are the 15 background textures
@@ -183,8 +96,6 @@ typedef enum ItemQuad {
 
 // === MASK === //
 
-#define MASK_GRID_ROWS 4
-#define MASK_GRID_COLS 6
 #define MASK_GRID_CELL_WIDTH 32
 #define MASK_GRID_CELL_HEIGHT 32
 #define MASK_GRID_QUAD_MARGIN 2
@@ -198,7 +109,6 @@ typedef enum ItemQuad {
 #define MASK_GRID_SELECTED_QUAD_HEIGHT (MASK_GRID_QUAD_HEIGHT - (2 * MASK_GRID_SELECTED_QUAD_MARGIN))
 #define MASK_GRID_SELECTED_QUAD_TEX_SIZE 32 // both width and height
 
-#define MASK_NUM_SLOTS (MASK_GRID_ROWS * MASK_GRID_COLS)
 
 typedef enum MaskPageQuad {
     // 0..59 are the 15 background textures

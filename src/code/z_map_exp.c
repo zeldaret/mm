@@ -1,5 +1,4 @@
 #include "global.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s16 sMinimapInitPosX = 0;
 s16 sMinimapInitPosZ = 0;

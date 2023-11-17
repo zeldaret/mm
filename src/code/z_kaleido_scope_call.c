@@ -1,8 +1,7 @@
 #include "z64pause_menu.h"
 
-//#include "global.h"
+#include "z64.h"
 #include "z64shrink_window.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 void (*sKaleidoScopeDrawFunc)(PlayState* play);

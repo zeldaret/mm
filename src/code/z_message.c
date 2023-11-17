@@ -4,7 +4,6 @@
 #include "z64view.h"
 #include "message_data_static.h"
 #include "interface/parameter_static/parameter_static.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 u8 D_801C6A70 = 0;
 s16 sOcarinaButtonIndexBufPos = 0;
