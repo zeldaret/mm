@@ -3,7 +3,7 @@
 void* memmove(void* dst, const void* src, size_t size) {
     unsigned char* _dst = dst;
     const unsigned char* _src = src;
-    register s32 rem;
+    register size_t rem;
 
     if (_dst == _src) {
         return dst;
