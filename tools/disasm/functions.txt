@@ -769,7 +769,7 @@
     0x800B82EC:("Target_GetAdjustedDistSq",),
     0x800B83BC:("Target_IsActorInRange",),
     0x800B83F8:("Target_OutsideLeashRange",),
-    0x800B84D0:("Actor_ProcessTalkRequest",),
+    0x800B84D0:("Actor_TalkOfferAccepted",),
     0x800B8500:("Actor_OfferTalkExchange",),
     0x800B85E0:("Actor_OfferTalkExchangeEquiCylinder",),
     0x800B8614:("Actor_OfferTalk",),

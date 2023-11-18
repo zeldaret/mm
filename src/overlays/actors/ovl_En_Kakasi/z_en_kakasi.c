@@ -327,7 +327,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.flags |= ACTOR_FLAG_10000;
             }
 
-            if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+            if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 this->unkState196 = 2;
                 this->picto.actor.flags &= ~ACTOR_FLAG_10000;
@@ -356,7 +356,7 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
         EnKakasi_SetupSongTeach(this, play);
         return;
     }
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->skelAnime.playSpeed = 1.0f;
         EnKakasi_SetupDialogue(this);
         return;
@@ -1111,7 +1111,7 @@ void EnKakasi_SetupIdleRisen(EnKakasi* this) {
 
 void EnKakasi_IdleRisen(EnKakasi* this, PlayState* play) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 1000, 0);
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->actionFunc = EnKakasi_RisenDialogue;
     } else {
         Actor_OfferTalk(&this->picto.actor, play, 70.0f);

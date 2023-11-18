@@ -545,7 +545,7 @@ void func_8082DAD4(Player* this) {
 s32 func_8082DAFC(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return CHECK_FLAG_ALL(player->actor.flags, ACTOR_FLAG_TALK_REQUESTED);
+    return CHECK_FLAG_ALL(player->actor.flags, ACTOR_FLAG_TALK);
 }
 
 void Player_Anim_PlayOnce(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
@@ -4382,8 +4382,7 @@ void Player_UseItem(PlayState* play, Player* this, ItemId item) {
         f32 sp54;
         PlayerExplosive explosiveType;
 
-        if (var_v1 ||
-            (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK_REQUESTED) && (itemAction != PLAYER_IA_NONE)) ||
+        if (var_v1 || (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK) && (itemAction != PLAYER_IA_NONE)) ||
             (itemAction == PLAYER_IA_OCARINA) ||
             ((itemAction > PLAYER_IA_BOTTLE_MIN) && itemAction < PLAYER_IA_MASK_MIN) ||
             ((itemAction == PLAYER_IA_PICTOGRAPH_BOX) && (this->talkActor != NULL) &&
@@ -6505,7 +6504,7 @@ s32 Player_ActionChange_1(Player* this, PlayState* play) {
             if (this->doorType <= PLAYER_DOORTYPE_TALKING) {
                 Player_TalkWithPlayer(play, doorActor);
                 if (doorActor->textId == 0x1821) {
-                    doorActor->flags |= ACTOR_FLAG_TALK_REQUESTED;
+                    doorActor->flags |= ACTOR_FLAG_TALK;
                 }
                 return true;
             }
@@ -7298,7 +7297,7 @@ void Player_StopCutscene(Player* this) {
 s32 Player_StartCsAction(PlayState* play, Player* this) {
     if (this->unk_AA5 == PLAYER_UNKAA5_4) {
         Player_StopCutscene(this);
-        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+        this->actor.flags &= ~ACTOR_FLAG_TALK;
         Player_SetAction(play, this, Player_Action_CsAction, 0);
 
         if (this->cv.haltActorsDuringCsAction) {
@@ -7513,7 +7512,7 @@ s32 Player_ActionChange_13(Player* this, PlayState* play) {
                         func_808388B8(play, this, this->itemAction - PLAYER_IA_MASK_FIERCE_DEITY);
                     }
                     gSaveContext.save.equippedMask = this->currentMask;
-                } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK_REQUESTED) ||
+                } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK) ||
                            (this->itemAction == PLAYER_IA_PICTOGRAPH_BOX) ||
                            ((this->itemAction != this->unk_B2B) &&
                             ((this->itemAction == PLAYER_IA_BOTTLE_BIG_POE) ||
@@ -7559,7 +7558,7 @@ s32 Player_ActionChange_13(Player* this, PlayState* play) {
                             this->csId = CS_ID_GLOBAL_TALK;
                         }
 
-                        talkActor->flags |= ACTOR_FLAG_TALK_REQUESTED;
+                        talkActor->flags |= ACTOR_FLAG_TALK;
                         this->actor.textId = 0;
                         this->lockOnActor = this->talkActor;
                     } else {
@@ -7568,7 +7567,7 @@ s32 Player_ActionChange_13(Player* this, PlayState* play) {
                         this->av1.actionVar1 = 1;
                         this->actor.textId = 0xFE;
                     }
-                    this->actor.flags |= ACTOR_FLAG_TALK_REQUESTED;
+                    this->actor.flags |= ACTOR_FLAG_TALK;
                     this->exchangeItemAction = this->itemAction;
                     if (this->av1.actionVar1 >= 0) {
                         Player_Anim_PlayOnce(play, this, D_8085D1F8[this->av1.actionVar1]);
@@ -11516,7 +11515,7 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
             } else if (this->stateFlags2 & PLAYER_STATE2_100) {
                 camMode = CAM_MODE_PUSHPULL;
             } else if (this->lockOnActor != NULL) {
-                if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK_REQUESTED)) {
+                if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK)) {
                     camMode = CAM_MODE_TALK;
                 } else if (this->stateFlags1 & PLAYER_STATE1_10000) {
                     if (this->stateFlags1 & PLAYER_STATE1_2000000) {
@@ -12235,7 +12234,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         }
 
         func_80832578(this, play);
-        if (this->actor.flags & ACTOR_FLAG_TALK_REQUESTED) {
+        if (this->actor.flags & ACTOR_FLAG_TALK) {
             this->talkActorDistance = 0.0f;
         } else {
             this->talkActor = NULL;
@@ -14358,7 +14357,7 @@ void Player_Action_17(Player* this, PlayState* play) {
         if (!Player_ActionChange_13(this, play)) {
             func_80836A98(this, D_8085BE84[PLAYER_ANIMGROUP_33][this->modelAnimType], play);
         }
-        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+        this->actor.flags &= ~ACTOR_FLAG_TALK;
         func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
     }
 }
@@ -15504,7 +15503,7 @@ void Player_Action_44(Player* this, PlayState* play) {
     func_8083249C(this);
     Player_UpdateUpperBody(this, play);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
-        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+        this->actor.flags &= ~ACTOR_FLAG_TALK;
         if (!CHECK_FLAG_ALL(this->talkActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)) {
             this->stateFlags2 &= ~PLAYER_STATE2_2000;
         }
@@ -17416,7 +17415,7 @@ void Player_Action_71(Player* this, PlayState* play) {
             this->getItemDrawIdPlusOne = GID_NONE + 1;
 
             if ((talkActor->textId != 0) && (talkActor->textId != 0xFFFF)) {
-                this->actor.flags |= ACTOR_FLAG_TALK_REQUESTED;
+                this->actor.flags |= ACTOR_FLAG_TALK;
             }
             Player_TalkWithPlayer(play, talkActor);
         } else {
@@ -17435,7 +17434,7 @@ void Player_Action_71(Player* this, PlayState* play) {
             } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
                 Player_StopCutscene(this);
                 this->getItemDrawIdPlusOne = GID_NONE + 1;
-                this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+                this->actor.flags &= ~ACTOR_FLAG_TALK;
                 func_80839E74(this, play);
                 this->unk_B5E = 0xA;
             }
@@ -20540,7 +20539,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
     func_808323C0(player, CS_ID_GLOBAL_TALK);
     if ((player->talkActor != NULL) || (actor == player->tatlActor) ||
         CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000)) {
-        actor->flags |= ACTOR_FLAG_TALK_REQUESTED;
+        actor->flags |= ACTOR_FLAG_TALK;
     }
 
     player->talkActor = actor;
@@ -20549,13 +20548,13 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
 
     if (actor->textId == 0xFFFF) {
         Player_SetCsActionWithHaltedActors(play, actor, PLAYER_CSACTION_1);
-        actor->flags |= ACTOR_FLAG_TALK_REQUESTED;
+        actor->flags |= ACTOR_FLAG_TALK;
         func_8082DE14(play, player);
     } else {
-        if (player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) {
+        if (player->actor.flags & ACTOR_FLAG_TALK) {
             player->actor.textId = 0;
         } else {
-            player->actor.flags |= ACTOR_FLAG_TALK_REQUESTED;
+            player->actor.flags |= ACTOR_FLAG_TALK;
             player->actor.textId = actor->textId;
         }
 
@@ -20597,7 +20596,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
     }
 
     if ((player->tatlActor == player->talkActor) && ((player->talkActor->textId & 0xFF00) != 0x200)) {
-        player->tatlActor->flags |= ACTOR_FLAG_TALK_REQUESTED;
+        player->tatlActor->flags |= ACTOR_FLAG_TALK;
     }
 }
 
@@ -20660,7 +20659,7 @@ PlayerItemAction func_8085B854(PlayState* play, Player* this, ItemId itemId) {
 s32 func_8085B930(PlayState* play, PlayerAnimationHeader* talkAnim, AnimationMode animMode) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->actor.flags & ACTOR_FLAG_TALK_REQUESTED)) {
+    if (!(player->actor.flags & ACTOR_FLAG_TALK)) {
         return false;
     }
 

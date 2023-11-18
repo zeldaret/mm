@@ -2820,7 +2820,7 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
         if (this->unk_1CC == 0) {
             this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 
-            if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                 D_8090CCF8 = D_809171CC;
                 this->unk_1CB = 1;
             } else {
@@ -4707,7 +4707,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 this->actor.textId = 0x4097;
             }
 
-            if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                 if (D_809171FC == 0) {
                     this->unk_154 = 1;
                     if (sLinkAge != 1) {
