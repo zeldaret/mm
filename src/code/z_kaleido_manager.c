@@ -10,7 +10,7 @@
             SEGMENT_END(ovl_##name), 0, #name,                                                       \
     }
 
-KaleidoMgrOverlay gKaleidoMgrOverlayTable[KALEID_OVL_MAX] = {
+KaleidoMgrOverlay gKaleidoMgrOverlayTable[KALEIDO_OVL_MAX] = {
     KALEIDO_OVERLAY(kaleido_scope),
     KALEIDO_OVERLAY(player_actor),
 };

@@ -189,7 +189,7 @@ typedef struct PauseContext {
 typedef enum KaleidoMgrOverlayType {
     /* 0 */ KALEIDO_OVL_KALEIDO_SCOPE,
     /* 1 */ KALEIDO_OVL_PLAYER_ACTOR,
-    /* 2 */ KALEID_OVL_MAX
+    /* 2 */ KALEIDO_OVL_MAX
 } KaleidoMgrOverlayType;
 
 typedef struct KaleidoMgrOverlay {
@@ -219,7 +219,7 @@ void KaleidoManager_Init(struct PlayState* play);
 void KaleidoManager_Destroy(void);
 void* KaleidoManager_GetRamAddr(void* vram);
 
-extern KaleidoMgrOverlay gKaleidoMgrOverlayTable[KALEID_OVL_MAX];
+extern KaleidoMgrOverlay gKaleidoMgrOverlayTable[KALEIDO_OVL_MAX];
 extern KaleidoMgrOverlay* gKaleidoMgrCurOvl;
 
 
