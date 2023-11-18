@@ -2332,14 +2332,14 @@ void Message_Decode(PlayState* play) {
                     msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + '０';
                     decodedBufPos++;
                     if (i == 1) {
-                        Font_LoadChar(play, 0x8E9E, charTexIndex);
+                        Font_LoadChar(play, '時', charTexIndex);
                         charTexIndex += FONT_CHAR_TEX_SIZE;
-                        msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x8E9E;
+                        msgCtx->decodedBuffer.wchar[decodedBufPos] = '時';
                         decodedBufPos++;
                     } else if (i == 3) {
-                        Font_LoadChar(play, 0x95AA, charTexIndex);
+                        Font_LoadChar(play, '分', charTexIndex);
                         charTexIndex += FONT_CHAR_TEX_SIZE;
-                        msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x95AA;
+                        msgCtx->decodedBuffer.wchar[decodedBufPos] = '分';
                     }
                 }
                 spC0 += 6 * (16.0f * msgCtx->textCharScale);
@@ -2466,9 +2466,9 @@ void Message_Decode(PlayState* play) {
                         decodedBufPos++;
                     }
                 }
-                Message_LoadChar(play, 0x906C, &charTexIndex, &spC0, decodedBufPos);
+                Message_LoadChar(play, '人', &charTexIndex, &spC0, decodedBufPos);
                 decodedBufPos++;
-                Message_LoadChar(play, 0x96DA, &charTexIndex, &spC0, decodedBufPos);
+                Message_LoadChar(play, '目', &charTexIndex, &spC0, decodedBufPos);
             } else if (curChar == 0x21D) {
                 digits[0] = digits[1] = 0;
                 digits[2] = Inventory_GetSkullTokenCount(play->sceneId);
@@ -2492,7 +2492,7 @@ void Message_Decode(PlayState* play) {
                         decodedBufPos++;
                     }
                 }
-                Message_LoadChar(play, 0x9543, &charTexIndex, &spC0, decodedBufPos);
+                Message_LoadChar(play, '匹', &charTexIndex, &spC0, decodedBufPos);
             } else if (curChar == 0x21E) {
                 digits[0] = 0;
                 digits[1] = gSaveContext.minigameScore;
@@ -2636,7 +2636,7 @@ void Message_Decode(PlayState* play) {
                         spC0 += 16.0f * msgCtx->textCharScale;
                     }
                 }
-                Message_LoadChar(play, 0x906C, &charTexIndex, &spC0, decodedBufPos);
+                Message_LoadChar(play, '人', &charTexIndex, &spC0, decodedBufPos);
             } else if (curChar == 0x22B) {
                 digits[0] = digits[1] = digits[2] = 0;
                 digits[3] = gSaveContext.minigameScore;
@@ -2667,7 +2667,7 @@ void Message_Decode(PlayState* play) {
                         spC0 += 16.0f * msgCtx->textCharScale;
                     }
                 }
-                Message_LoadChar(play, 0x94AD, &charTexIndex, &spC0, decodedBufPos);
+                Message_LoadChar(play, '発', &charTexIndex, &spC0, decodedBufPos);
             } else if ((curChar == 0x22C) || (curChar == 0x22D)) {
                 if (curChar == 0x22C) {
                     digits[0] = gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][0];
@@ -2757,13 +2757,13 @@ void Message_Decode(PlayState* play) {
                         decodedBufPos++;
                     }
                 }
-                Font_LoadChar(play, 0x8E9E, charTexIndex);
+                Font_LoadChar(play, '時', charTexIndex);
                 charTexIndex += FONT_CHAR_TEX_SIZE;
-                msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x8E9E;
+                msgCtx->decodedBuffer.wchar[decodedBufPos] = '時';
                 decodedBufPos++;
-                Font_LoadChar(play, 0x8AD4, charTexIndex);
+                Font_LoadChar(play, '間', charTexIndex);
                 charTexIndex += FONT_CHAR_TEX_SIZE;
-                msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x8E9E;
+                msgCtx->decodedBuffer.wchar[decodedBufPos] = '時';
                 spC0 += 2.0f * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x238) {
                 Message_LoadTime(play, curChar, &charTexIndex, &spC0, &decodedBufPos);
@@ -2862,14 +2862,14 @@ void Message_Decode(PlayState* play) {
                     msgCtx->decodedBuffer.wchar[decodedBufPos] = digits[i] + '０';
                     decodedBufPos++;
                     if (i == 1) {
-                        Font_LoadChar(play, 0x95AA, charTexIndex);
+                        Font_LoadChar(play, '分', charTexIndex);
                         charTexIndex += FONT_CHAR_TEX_SIZE;
-                        msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x95AA;
+                        msgCtx->decodedBuffer.wchar[decodedBufPos] = '分';
                         decodedBufPos++;
                     } else if (i == 3) {
-                        Font_LoadChar(play, 0x9562, charTexIndex);
+                        Font_LoadChar(play, '秒', charTexIndex);
                         charTexIndex += FONT_CHAR_TEX_SIZE;
-                        msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x9562;
+                        msgCtx->decodedBuffer.wchar[decodedBufPos] = '秒';
                     }
                 }
                 spC0 += 4.0f * (16.0f * msgCtx->textCharScale);
@@ -2903,7 +2903,7 @@ void Message_Decode(PlayState* play) {
                         spC0 += 16.0f * msgCtx->textCharScale;
                     }
                 }
-                Message_LoadChar(play, 0x9543, &charTexIndex, &spC0, decodedBufPos);
+                Message_LoadChar(play, '匹', &charTexIndex, &spC0, decodedBufPos);
             } else if ((curChar == 0x30D) || (curChar == 0x30E) || (curChar == 0x30F)) {
                 index = curChar - 0x30D;
 
@@ -2960,7 +2960,7 @@ void Message_Decode(PlayState* play) {
                         spC0 += 16.0f * msgCtx->textCharScale;
                     }
                 }
-                Message_LoadChar(play, 0x94AD, &charTexIndex, &spC0, decodedBufPos);
+                Message_LoadChar(play, '発', &charTexIndex, &spC0, decodedBufPos);
             } else if (curChar == 0x1F) {
                 decodedBufPos--;
                 for (i = 0; i < font->msgBuf.wchar[msgCtx->msgBufPos + 1]; i++) {
