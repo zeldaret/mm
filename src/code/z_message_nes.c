@@ -863,7 +863,6 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 }
                 charTexIndex += FONT_CHAR_TEX_SIZE;
 
-                //! @TODO: u8 character but > 0x255 cases
                 switch (character) {
                     case 0x8144:
                         msgCtx->textPosX += (s16)(8.0f * msgCtx->textCharScale);

@@ -3,23 +3,23 @@
 
 OSVoiceDictionary sVoiceDictionary = {
     {
-        // "アトナンジカン" - "atonanjikan" -  "How many hours"
-        { 0x8341, 0x8367, 0x8369, 0x8393, 0x8357, 0x834A, 0x8393 },
+        // "atonanjikan" -  "How many hours"
+        { 'ア', 'ト', 'ナ', 'ン', 'ジ', 'カ', 'ン' },
 
-        // "ハイチーズ" - "haichīzu" - "say cheese"
-        { 0x836E, 0x8343, 0x8360, 0x815B, 0x8359 },
+        // "haichizu" - "say cheese"
+        { 'ハ', 'イ', 'チ', 'ー', 'ズ' },
 
-        // "オキロー" - "okirō" - "wake up"
-        { 0x8349, 0x834C, 0x838D, 0x815B },
+        // "okiro" - "wake up"
+        { 'オ', 'キ', 'ロ', 'ー' },
 
-        // "オスワリ" - "osuwari" - "sit"
-        { 0x8349, 0x8358, 0x838F, 0x838A },
+        // "osuwari" - "sit"
+        { 'オ', 'ス', 'ワ', 'リ' },
 
-        // "ミルク" - "miruku" - "milk"
-        { 0x837E, 0x838B, 0x834E },
+        // "miruku" - "milk"
+        { 'ミ', 'ル', 'ク' },
 
-        // "ハイヤー" - "haiyā" - "hiya!"
-        { 0x836E, 0x8343, 0x8384, 0x815B },
+        // "haiya" - "hiya!"
+        { 'ハ', 'イ', 'ヤ', 'ー' },
     },
 
     VOICE_WORD_ID_MAX, // number of words

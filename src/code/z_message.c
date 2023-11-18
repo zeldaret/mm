@@ -2560,7 +2560,7 @@ void Message_Decode(PlayState* play) {
 
                 for (i = 0; i < 5; i++) {
                     msgCtx->unk12054[i] = 1;
-                    Message_LoadChar(play, 0x8250, &charTexIndex, &spC0, decodedBufPos);
+                    Message_LoadChar(play, '１', &charTexIndex, &spC0, decodedBufPos);
                     decodedBufPos++;
                 }
                 decodedBufPos--;
@@ -2593,9 +2593,9 @@ void Message_Decode(PlayState* play) {
 
                 for (i = 0; i < 3; i++) {
                     msgCtx->unk12054[i] = 1;
-                    Font_LoadChar(play, 0x8250, charTexIndex);
+                    Font_LoadChar(play, '１', charTexIndex);
                     charTexIndex += FONT_CHAR_TEX_SIZE;
-                    msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x8250;
+                    msgCtx->decodedBuffer.wchar[decodedBufPos] = '１';
                     spC0 += 16.0f * msgCtx->textCharScale;
                     decodedBufPos++;
                 }
@@ -2605,7 +2605,7 @@ void Message_Decode(PlayState* play) {
                     msgCtx->decodedBuffer.wchar[decodedBufPos] =
                         D_801D027C[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[i])];
                     decodedBufPos++;
-                    Message_LoadChar(play, i + 0x8250, &charTexIndex, &spC0, decodedBufPos);
+                    Message_LoadChar(play, i + '１', &charTexIndex, &spC0, decodedBufPos);
                     decodedBufPos++;
                 }
                 msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x2000;
@@ -2997,19 +2997,19 @@ void Message_Decode(PlayState* play) {
             } else if ((curChar != 0x20) && ((curChar < 0x2000) || (curChar >= 0x2009))) {
                 Font_LoadChar(play, curChar, charTexIndex);
                 charTexIndex += FONT_CHAR_TEX_SIZE;
-                if ((curChar == 0x8169) || (curChar == 0x8175)) {
+                if ((curChar == '（') || (curChar == '「')) {
                     spC0 += 10.0f * msgCtx->textCharScale;
-                } else if (curChar == 0x8145) {
+                } else if (curChar == '・') {
                     spC0 += (12.0f * msgCtx->textCharScale);
-                } else if ((curChar == 0x8148) || (curChar == 0x8149)) {
+                } else if ((curChar == '？') || (curChar == '！')) {
                     spC0 += 14.0f * msgCtx->textCharScale;
-                } else if (curChar == 0x8144) {
+                } else if (curChar == '．') {
                     spC0 += 8.0f * msgCtx->textCharScale;
-                } else if ((curChar == 0x816A) || (curChar == 0x8176)) {
+                } else if ((curChar == '）') || (curChar == '」')) {
                     spC0 += 10.0f * msgCtx->textCharScale;
-                } else if ((curChar == 0x8141) || (curChar == 0x8142) || (curChar == 0x8168)) {
+                } else if ((curChar == '、') || (curChar == '。') || (curChar == '”')) {
                     spC0 += 12.0f * msgCtx->textCharScale;
-                } else if (curChar == 0x8194) {
+                } else if (curChar == '＃') {
                     spC0 += 14.0f * msgCtx->textCharScale;
                 } else {
                     spC0 += 16.0f * msgCtx->textCharScale;
@@ -3580,7 +3580,7 @@ void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
     }
 
     for (j = 0, k = 0; j < 48; j++, k += FONT_CHAR_TEX_SIZE) {
-        Font_LoadChar(play, 0x8140, k);
+        Font_LoadChar(play, '　', k);
     };
 
     msgCtx->stateTimer = 3;
@@ -4192,7 +4192,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_TEXT_CONTINUING:
                 if (msgCtx->stateTimer == 1) {
                     for (i = 0, j = 0; i < 48; i++, j += FONT_CHAR_TEX_SIZE) {
-                        Font_LoadChar(play, 0x8140, j);
+                        Font_LoadChar(play, '　', j);
                     }
                     Message_DrawText(play, &gfx);
                 } else {

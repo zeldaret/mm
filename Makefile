@@ -196,7 +196,7 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(BASEROM_FILES),build/$f.o) \
                  $(ARCHIVES_O)
 
-ICONV_C_FILES	:= src/code/z_message.c src/libultra/voice/voicecheckword.c
+ICONV_C_FILES	:= src/libultra/voice/voicecheckword.c src/audio/voice_external.c src/code/z_message.c
 ICONV_O_FILES	:= $(foreach f,$(ICONV_C_FILES:.c=.o),build/$f)
 
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
@@ -252,8 +252,7 @@ build/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASF
 
 build/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
-# TODO: Remove both of these when code no longer needs asm processor
-build/src/libultra/voice/voicecheckword.o: CC := $(OLD_CC)
+# TODO: Remove when code and audio no longer needs asm processor
 $(ICONV_O_FILES): CC := $(CC)
 
 $(ICONV_O_FILES): CC_CHECK += -Wno-multichar -Wno-type-limits -Wno-overflow
