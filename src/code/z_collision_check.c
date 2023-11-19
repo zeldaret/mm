@@ -1251,7 +1251,6 @@ ColChkResetFunc sOCResetFuncs[] = {
 };
 
 TriNorm D_801EE6C8;
-static s32 sBssPad;
 TriNorm D_801EE700;
 
 /**
