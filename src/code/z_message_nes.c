@@ -489,7 +489,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 }
                 break;
 
-            case 0x20: // ` `
+            case 0x20: // ' '
                 msgCtx->textPosX += 6;
                 break;
 
