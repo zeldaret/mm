@@ -707,7 +707,7 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
 
     if (this->unk_19D == 4) {
         sp48 = Math_SmoothStepToF(&this->unk_1DC, this->unk_1E0, 0.8f, 16384.0f, 3640.0f);
-        this->unk_19E[0].y += (s16)this->unk_1DC;
+        this->unk_19E[0].y += TRUNCF_BINANG(this->unk_1DC);
         if (sp48 == 0.0f) {
             phi_v0_2 = this->unk_19E[0].y;
             if (phi_v0_2 > 0) {
@@ -888,7 +888,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         Math_SmoothStepToF(&this->unk_1DC, this->unk_1E0, 0.5f, 364.0f, 0.0f);
 
-        this->unk_19E[1].y += (s16)this->unk_1DC;
+        this->unk_19E[1].y += TRUNCF_BINANG(this->unk_1DC);
 
         if ((this->actor.world.pos.y - this->actor.home.pos.y) >= 4000.0f) {
             this->unk_216 = 0;

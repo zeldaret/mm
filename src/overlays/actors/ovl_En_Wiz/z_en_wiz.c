@@ -592,6 +592,7 @@ void EnWiz_SelectPlatform(EnWiz* this, PlayState* play) {
         curPlatformIndex = Rand_ZeroFloat(i);
         while ((this->curPlatformIndex == curPlatformIndex) || ((s16)i == curPlatformIndex)) {
             curPlatformIndex = Rand_ZeroFloat(i);
+            // FAKE:
             if (1) {}
         }
 

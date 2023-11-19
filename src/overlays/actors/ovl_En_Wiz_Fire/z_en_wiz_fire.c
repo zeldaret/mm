@@ -223,7 +223,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
             this->increaseLowestUsedIndexTimer = 10;
 
             Matrix_Push();
-            Matrix_RotateYS((s16)(s32)Rand_CenteredFloat(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
+            Matrix_RotateYS(TRUNCF_BINANG(Rand_CenteredFloat(0x100)) + this->actor.world.rot.y, MTXMODE_NEW);
             velocity.z = Rand_CenteredFloat(2.0f) + 8.0f;
             Matrix_MultVec3f(&velocity, &this->actor.velocity);
             Matrix_Pop();
@@ -519,38 +519,41 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
             }
 
             play->envCtx.adjLightSettings.fogNear =
-                (fogNear - (s16)play->envCtx.lightSettings.fogNear) * this->blendScaleFrac;
+                TRUNCF_BINANG((fogNear - play->envCtx.lightSettings.fogNear) * this->blendScaleFrac);
 
             play->envCtx.adjLightSettings.ambientColor[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.ambientColor[0]) * this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.ambientColor[0]) *
+                              this->blendScaleFrac);
             play->envCtx.adjLightSettings.ambientColor[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.ambientColor[1]) * this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.ambientColor[1]) *
+                              this->blendScaleFrac);
             play->envCtx.adjLightSettings.ambientColor[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.ambientColor[2]) * this->blendScaleFrac;
+                TRUNCF_BINANG(((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.ambientColor[2]) *
+                              this->blendScaleFrac);
 
             index++;
-            play->envCtx.adjLightSettings.light1Color[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.light1Color[0]) * this->blendScaleFrac;
-            play->envCtx.adjLightSettings.light1Color[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.light1Color[1]) * this->blendScaleFrac;
-            play->envCtx.adjLightSettings.light1Color[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.light1Color[2]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.light1Color[0] = TRUNCF_BINANG(
+                ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.light1Color[0]) * this->blendScaleFrac);
+            play->envCtx.adjLightSettings.light1Color[1] = TRUNCF_BINANG(
+                ((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.light1Color[1]) * this->blendScaleFrac);
+            play->envCtx.adjLightSettings.light1Color[2] = TRUNCF_BINANG(
+                ((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.light1Color[2]) * this->blendScaleFrac);
 
             index++;
-            play->envCtx.adjLightSettings.light2Color[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.light2Color[0]) * this->blendScaleFrac;
-            play->envCtx.adjLightSettings.light2Color[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.light2Color[1]) * this->blendScaleFrac;
-            play->envCtx.adjLightSettings.light2Color[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.light2Color[2]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.light2Color[0] = TRUNCF_BINANG(
+                ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.light2Color[0]) * this->blendScaleFrac);
+            play->envCtx.adjLightSettings.light2Color[1] = TRUNCF_BINANG(
+                ((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.light2Color[1]) * this->blendScaleFrac);
+            play->envCtx.adjLightSettings.light2Color[2] = TRUNCF_BINANG(
+                ((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.light2Color[2]) * this->blendScaleFrac);
 
             index++;
-            play->envCtx.adjLightSettings.fogColor[0] =
-                ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.fogColor[0]) * this->blendScaleFrac;
-            play->envCtx.adjLightSettings.fogColor[1] =
-                ((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.fogColor[1]) * this->blendScaleFrac;
-            play->envCtx.adjLightSettings.fogColor[2] =
-                ((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.fogColor[2]) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.fogColor[0] = TRUNCF_BINANG(
+                ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.fogColor[0]) * this->blendScaleFrac);
+            play->envCtx.adjLightSettings.fogColor[1] = TRUNCF_BINANG(
+                ((f32)lightSettingsColors[index].g - play->envCtx.lightSettings.fogColor[1]) * this->blendScaleFrac);
+            play->envCtx.adjLightSettings.fogColor[2] = TRUNCF_BINANG(
+                ((f32)lightSettingsColors[index].b - play->envCtx.lightSettings.fogColor[2]) * this->blendScaleFrac);
         }
     }
 

@@ -588,8 +588,8 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
 Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 pathIndexNone, s32* startPointIndex) {
     Path* path = NULL;
     s32 found = false;
-    s32 time = (((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60) +
-                ((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) / 60) * 60) /
+    s32 time = ((TRUNCF_BINANG(TIME_TO_MINUTES_F(gSaveContext.save.time)) % 60) +
+                (TRUNCF_BINANG(TIME_TO_MINUTES_F(gSaveContext.save.time)) / 60) * 60) /
                30;
     s32 day = CURRENT_DAY;
 

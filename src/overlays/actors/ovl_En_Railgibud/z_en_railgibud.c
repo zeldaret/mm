@@ -698,8 +698,8 @@ void EnRailgibud_SpawnDust(PlayState* play, Vec3f* basePos, f32 randomnessScale,
 
         dustVelocity.x *= 0.5f;
         dustVelocity.z *= 0.5f;
-        func_800B1210(play, &dustPos, &dustVelocity, &dustAccel, (s16)(Rand_ZeroOne() * dustScale * 0.2f) + dustScale,
-                      scaleStep);
+        func_800B1210(play, &dustPos, &dustVelocity, &dustAccel,
+                      TRUNCF_BINANG(Rand_ZeroOne() * dustScale * 0.2f) + dustScale, scaleStep);
     }
 }
 

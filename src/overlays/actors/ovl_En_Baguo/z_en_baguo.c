@@ -256,13 +256,13 @@ void EnBaguo_Roll(EnBaguo* this, PlayState* play) {
         Math_ApproachF(&this->currentRotation.x, this->targetRotation.x, 0.2f, 1000.0f);
         Math_ApproachF(&this->currentRotation.z, this->targetRotation.z, 0.2f, 1000.0f);
         Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 0.5f);
-        this->actor.world.rot.x += (s16)this->currentRotation.x;
+        this->actor.world.rot.x += TRUNCF_BINANG(this->currentRotation.x);
 
         if (this->currentRotation.z != 0.0f) {
             if (this->zRollDirection == NEJIRON_DIRECTION_RIGHT) {
-                this->actor.world.rot.z += (s16)this->currentRotation.z;
+                this->actor.world.rot.z += TRUNCF_BINANG(this->currentRotation.z);
             } else {
-                this->actor.world.rot.z -= (s16)this->currentRotation.z;
+                this->actor.world.rot.z -= TRUNCF_BINANG(this->currentRotation.z);
             }
         }
 
@@ -450,9 +450,9 @@ void EnBaguo_InitializeEffect(EnBaguo* this, Vec3f* pos, Vec3f* velocity, Vec3f*
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rot.x = (s16)(s32)Rand_CenteredFloat(0x7530);
-            effect->rot.y = (s16)(s32)Rand_CenteredFloat(0x7530);
-            effect->rot.z = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rot.x = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
+            effect->rot.y = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
+            effect->rot.z = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
             return;
         }
     }

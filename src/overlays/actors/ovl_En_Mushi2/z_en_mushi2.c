@@ -623,7 +623,7 @@ void func_80A69ADC(Actor* thisx) {
             } else {
                 this->unk_366 = ((s32)Rand_Next() > 0) ? 2000 : -2000;
             }
-            this->unk_366 += (s16)(((Rand_ZeroOne() * (1.0f - this->unk_358)) - 0.5f) * 0x400);
+            this->unk_366 += TRUNCF_BINANG(((Rand_ZeroOne() * (1.0f - this->unk_358)) - 0.5f) * 0x400);
         } else {
             this->unk_360 = 0.0f;
             this->unk_364 = -0x8000;
@@ -1032,7 +1032,7 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play) {
     this->actor.shape.rot.y += 0xC8;
     this->actor.speed += (Rand_ZeroOne() - 0.5f) * 0.16f;
     this->actor.speed *= 0.9f;
-    this->actor.world.rot.y += (s16)((Rand_ZeroOne() - 0.5f) * 2000.0f);
+    this->actor.world.rot.y += TRUNCF_BINANG((Rand_ZeroOne() - 0.5f) * 2000.0f);
     this->actor.gravity = -0.04f - (Rand_ZeroOne() * 0.02f);
     this->actor.velocity.y *= 0.95f;
     Actor_MoveWithGravity(&this->actor);

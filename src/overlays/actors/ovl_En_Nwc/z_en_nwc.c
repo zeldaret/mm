@@ -182,7 +182,7 @@ void EnNwc_ChangeState(EnNwc* this, s16 newState) {
         case NWC_STATE_TURNING:
             this->stateTimer = Rand_ZeroFloat(20.0f) + 15.0f;
             this->actionFunc = EnNwc_Turn;
-            this->fallingRotY = (s16)(s32)Rand_CenteredFloat(0x10000);
+            this->fallingRotY = TRUNCF_BINANG(Rand_CenteredFloat(0x10000));
             break;
 
         case NWC_STATE_HOPPING_FORWARD:
@@ -193,7 +193,7 @@ void EnNwc_ChangeState(EnNwc* this, s16 newState) {
         case NWC_STATE_FOLLOWING:
             this->actionFunc = EnNwc_Follow;
             this->transformTimer = 0;
-            this->randomRot = (s16)(s32)Rand_CenteredFloat(0x2710);
+            this->randomRot = TRUNCF_BINANG(Rand_CenteredFloat(0x2710));
             break;
 
         case NWC_STATE_RUNNING:
@@ -308,7 +308,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
     if ((this->grog->actor.home.rot.z >= 20) && // all 10 chicks have been found
         !(this->hasGrownUp & 1)) {
         this->transformTimer += 2;
-        if (this->transformTimer >= (s32)(s16)((this->actor.home.rot.z * 0x1E) + 0x1E)) {
+        if (this->transformTimer >= (s16)((this->actor.home.rot.z * 0x1E) + 0x1E)) {
             // it is our turn to transform
             this->hasGrownUp |= 1;
             this->grog->actor.home.rot.x += 2; // increment grog's adult tranformation counter
@@ -331,7 +331,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         }
 
     } else { // not too close: keep moving
-        this->randomRot += (s16)(s32)Rand_CenteredFloat(0x5DC);
+        this->randomRot += TRUNCF_BINANG(Rand_CenteredFloat(0x5DC));
         if (this->randomRot > 0x1388) {
             this->randomRot = 0x1388;
         } else if (this->randomRot < -0x1388) {

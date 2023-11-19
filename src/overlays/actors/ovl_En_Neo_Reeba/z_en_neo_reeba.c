@@ -720,8 +720,8 @@ s32 EnNeoReeba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     EnNeoReeba* this = THIS;
 
     if ((limbIndex == OBJECT_RB_LIMB_03) && (this->rotationSpeed != 0.0f)) {
-        rot->y += (s16)(this->rotationSpeed * Math_SinS(this->rotationAngle));
-        rot->z += (s16)(this->rotationSpeed * Math_CosS(this->rotationAngle));
+        rot->y += TRUNCF_BINANG(this->rotationSpeed * Math_SinS(this->rotationAngle));
+        rot->z += TRUNCF_BINANG(this->rotationSpeed * Math_CosS(this->rotationAngle));
     }
 
     return false;

@@ -178,7 +178,7 @@ s32 func_80BBAF5C(EnZos* this, PlayState* play) {
 
 s32 func_80BBAFFC(EnZos* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        switch ((s16)Rand_ZeroFloat(4.0f)) {
+        switch (TRUNCF_BINANG(Rand_ZeroFloat(4.0f))) {
             case 0:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT, ANIMMODE_ONCE);
                 break;

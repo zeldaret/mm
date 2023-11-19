@@ -1216,8 +1216,8 @@ void EnTest6_DrawThreeDayResetSoTCutscene(EnTest6* this, PlayState* play) {
     // The `& 0x3C` ensures the angle only updates once every 4 frames
     angle = (play->state.frames & 0x3C) * 1024;
     angle *= this->clockSpeed / 200.0f;
-    this->clockAngle += (s16)this->clockSpeed;
-    this->clockRingRotZ = (s16)((this->clockSpeed / 200.0f) * 256.0f);
+    this->clockAngle += TRUNCF_BINANG(this->clockSpeed);
+    this->clockRingRotZ = TRUNCF_BINANG((this->clockSpeed / 200.0f) * 256.0f);
 
     // Draw 2 clocks per loop
     for (i = 0; i < (SOTCS_RESET_NUM_CLOCKS / 2); i++) {
@@ -1281,7 +1281,7 @@ void EnTest6_DrawDoubleSoTCutscene(EnTest6* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     this->gfx = POLY_OPA_DISP;
-    this->clockAngle += (s16)this->clockSpeed;
+    this->clockAngle += TRUNCF_BINANG(this->clockSpeed);
     this->clockRingRotZ = this->clockAngle * 2;
 
     // The `& 0x3C` ensures the clock only turns once every 4 frames.

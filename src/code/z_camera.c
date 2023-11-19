@@ -699,7 +699,7 @@ s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecGeo* arg3, Actor*
 
         sp90.yaw = D_801B9E18[i] + arg3->yaw;
         rand = Rand_ZeroOne();
-        sp90.pitch = D_801B9E34[i] + (s16)(arg3->pitch * rand);
+        sp90.pitch = D_801B9E34[i] + TRUNCF_BINANG(arg3->pitch * rand);
 
         if (sp90.pitch > 0x36B0) { // 76.9 degrees
             sp90.pitch -= 0x3E80;  // -87.9 degrees
@@ -1771,7 +1771,8 @@ s16 Camera_CalcDefaultPitch(Camera* camera, s16 pitch, s16 flatSurfacePitchTarge
     s16 pitchTarget;
 
     // if slopePitchAdj is positive, then it is attenuated by a factor of Math_CosS(slopePitchAdj)
-    slopePitchAdjAttenuated = (slopePitchAdj > 0) ? (s16)(Math_CosS(slopePitchAdj) * slopePitchAdj) : slopePitchAdj;
+    slopePitchAdjAttenuated =
+        (slopePitchAdj > 0) ? TRUNCF_BINANG(Math_CosS(slopePitchAdj) * slopePitchAdj) : slopePitchAdj;
     pitchTarget = flatSurfacePitchTarget - slopePitchAdjAttenuated;
 
     if (ABS(pitchTarget) < pitchMag) {
@@ -1820,7 +1821,7 @@ s16 Camera_CalcDefaultYaw(Camera* camera, s16 yaw, s16 target, f32 attenuationYa
     attenuationSpeedRatio = Camera_QuadraticAttenuation(0.5f, camera->speedRatio);
 
     yawUpdRate = 1.0f / camera->yawUpdateRateInv;
-    return yaw + (s16)(yawDiffToTarget * attenuationYawDiffAdj * attenuationSpeedRatio * yawUpdRate);
+    return yaw + TRUNCF_BINANG(yawDiffToTarget * attenuationYawDiffAdj * attenuationSpeedRatio * yawUpdRate);
 }
 
 void Camera_CalcDefaultSwing(Camera* camera, VecGeo* arg1, VecGeo* arg2, f32 arg3, f32 arg4, SwingAnimation* swing2,
@@ -2233,14 +2234,14 @@ s32 Camera_Normal1(Camera* camera) {
         }
 
         if (!(roData->interfaceFlags & NORMAL1_FLAG_3) || !func_800CB924(camera)) {
-            spB4.yaw =
-                Camera_CalcDefaultYaw(camera, sp9C.yaw, (s16)(sp40->rot.y - (s16)(sp72 * sp6C)), roData->unk_14, spC0);
+            spB4.yaw = Camera_CalcDefaultYaw(camera, sp9C.yaw, (s16)(sp40->rot.y - TRUNCF_BINANG(sp72 * sp6C)),
+                                             roData->unk_14, spC0);
         }
 
         if (!(roData->interfaceFlags & NORMAL1_FLAG_3) || (camera->speedRatio < 0.01f)) {
-            spB4.pitch = Camera_CalcDefaultPitch(camera, sp9C.pitch,
-                                                 roData->unk_20 + (s16)((roData->unk_20 - sp74.pitch) * sp6C * 0.75f),
-                                                 rwData->unk_08);
+            spB4.pitch = Camera_CalcDefaultPitch(
+                camera, sp9C.pitch, roData->unk_20 + TRUNCF_BINANG((roData->unk_20 - sp74.pitch) * sp6C * 0.75f),
+                rwData->unk_08);
         }
     } else if (roData->interfaceFlags & NORMAL1_FLAG_1) {
         VecGeo sp64;
@@ -3773,14 +3774,14 @@ s32 Camera_Battle1(Camera* camera) {
     } else {
         sp104 = (1.0f - camera->speedRatio) * 0.05f;
         sp88 = (sp8A >= 0) ? CAM_DEG_TO_BINANG(spFC) : -CAM_DEG_TO_BINANG(spFC);
-        spBC.yaw = atToEyeNextDir.yaw - (s16)((sp88 - sp8A) * sp104);
+        spBC.yaw = atToEyeNextDir.yaw - TRUNCF_BINANG((sp88 - sp8A) * sp104);
     }
 
     if (!skipEyeAtCalc) {
         spF8 = atToTargetDir.pitch * roData->swingPitchAdj;
         var2 = swingPitchInitial + ((swingPitchFinal - swingPitchInitial) * distRatio);
-        sp8A = CAM_DEG_TO_BINANG(var2) - (s16)((spA4.pitch * (0.5f + (distRatio * (1.0f - 0.5f)))) + 0.5f);
-        sp8A += (s16)spF8;
+        sp8A = CAM_DEG_TO_BINANG(var2) - TRUNCF_BINANG((spA4.pitch * (0.5f + (distRatio * (1.0f - 0.5f)))) + 0.5f);
+        sp8A += TRUNCF_BINANG(spF8);
 
         if (sp8A < -0x2AA8) {
             sp8A = -0x2AA8;
@@ -4127,15 +4128,15 @@ s32 Camera_KeepOn1(Camera* camera) {
         sp104 = (1.0f - camera->speedRatio) * 0.05f;
         spF0 = (spF2 >= 0) ? CAM_DEG_TO_BINANG(spFC) : -CAM_DEG_TO_BINANG(spFC);
 
-        spE8.yaw = atToEyeNext.yaw - (s16)((spF0 - spF2) * sp104);
+        spE8.yaw = atToEyeNext.yaw - TRUNCF_BINANG((spF0 - spF2) * sp104);
     }
 
     if (!skipEyeAtCalc) {
         spF2 = CAM_DEG_TO_BINANG(F32_LERPIMP(roData->unk_14, roData->unk_18, sp74));
-        spF2 -= (s16)((spD0.pitch * (0.5f + (sp74 * 0.5f))) + 0.5f);
+        spF2 -= TRUNCF_BINANG((spD0.pitch * (0.5f + (sp74 * 0.5f))) + 0.5f);
 
         spF8 = spD8.pitch * roData->unk_1C;
-        spF2 += (s16)spF8;
+        spF2 += TRUNCF_BINANG(spF8);
 
         if (spF2 < -0x3200) {
             spF2 = -0x3200;
@@ -4346,7 +4347,7 @@ s32 Camera_KeepOn3(Camera* camera) {
         }
 
         swingAngle = LERPIMP(roData->unk_14, roData->unk_18, phi_f14);
-        sp98.pitch = CAM_DEG_TO_BINANG(swingAngle) + ((s16) - (spA0.pitch * roData->unk_1C));
+        sp98.pitch = CAM_DEG_TO_BINANG(swingAngle) + TRUNCF_BINANG(-(spA0.pitch * roData->unk_1C));
         swingAngle = LERPIMP(roData->unk_0C, roData->unk_10, phi_f14);
 
         phi_a3 = CAM_DEG_TO_BINANG(swingAngle);
@@ -4454,8 +4455,8 @@ s32 Camera_KeepOn3(Camera* camera) {
         at->z += (rwData->unk_10.z - at->z) / timer;
 
         sp98.r = (rwData->unk_00 * timer) + sp80.r + 1.0f;
-        sp98.yaw = sp80.yaw + (s16)(rwData->unk_04 * timer);
-        sp98.pitch = sp80.pitch + (s16)(rwData->unk_08 * timer);
+        sp98.yaw = sp80.yaw + TRUNCF_BINANG(rwData->unk_04 * timer);
+        sp98.pitch = sp80.pitch + TRUNCF_BINANG(rwData->unk_08 * timer);
         *eyeNext = OLib_AddVecGeoToVec3f(at, &sp98);
         *eye = *eyeNext;
         camera->fov = Camera_ScaledStepToCeilF(roData->unk_20, camera->fov, 0.5f, 0.1f);
@@ -4734,8 +4735,8 @@ s32 Camera_KeepOn4(Camera* camera) {
 
     if (rwData->timer != 0) {
         Camera_SetStateFlag(camera, CAM_STATE_DISABLE_MODE_CHANGE);
-        rwData->unk_10 += (s16)rwData->unk_00;
-        rwData->unk_12 += (s16)rwData->unk_04;
+        rwData->unk_10 += TRUNCF_BINANG(rwData->unk_00);
+        rwData->unk_12 += TRUNCF_BINANG(rwData->unk_04);
         rwData->timer--;
     } else {
         Camera_SetStateFlag(camera, CAM_STATE_10 | CAM_STATE_4);
@@ -6677,9 +6678,9 @@ s32 Camera_Special5(Camera* camera) {
             spA4 = BINANG_SUB(focalActorPosRot->rot.y, sp6C.yaw);
             sp74.r = roData->eyeDist;
             rand = Rand_ZeroOne();
-            sp74.yaw =
-                BINANG_ROT180(focalActorPosRot->rot.y) +
-                (s16)((spA4 < 0) ? -(s16)(0x1553 + (s16)(rand * 2730.0f)) : (s16)(0x1553 + (s16)(rand * 2730.0f)));
+            sp74.yaw = BINANG_ROT180(focalActorPosRot->rot.y) +
+                       (s16)((spA4 < 0) ? -TRUNCF_BINANG(0x1553 + TRUNCF_BINANG(rand * 2730.0f))
+                                        : TRUNCF_BINANG(0x1553 + TRUNCF_BINANG(rand * 2730.0f)));
             sp74.pitch = roData->pitch;
             *eyeNext = OLib_AddVecGeoToVec3f(&spA8.pos, &sp74);
             *eye = *eyeNext;
@@ -6884,8 +6885,8 @@ s32 Camera_Special9(Camera* camera) {
                 s16 camEyeSide;
                 s16 randFloat;
 
-                spB0.pitch = ((s16)(Rand_ZeroOne() * 0x280) + 0xBB8);
-                randFloat = ((s16)(Rand_ZeroOne() * 0x4CE) + 0x5DC);
+                spB0.pitch = TRUNCF_BINANG(Rand_ZeroOne() * 0x280) + 0xBB8;
+                randFloat = TRUNCF_BINANG(Rand_ZeroOne() * 0x4CE) + 0x5DC;
 
                 // The camera will either position itself either to the left or to the right
                 // of the door when it jumps behind it. It's effectively 50/50 percent chance

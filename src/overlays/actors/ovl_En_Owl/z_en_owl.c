@@ -1142,13 +1142,13 @@ s32 EnOwl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
         case 4:
             if (!(this->actionFlags & 8)) {
-                rot->y -= (s16)(this->unk_3D8 * 1.5f);
+                rot->y -= TRUNCF_BINANG(this->unk_3D8 * 1.5f);
             }
             break;
 
         case 5:
             if (!(this->actionFlags & 8)) {
-                rot->y += (s16)(this->unk_3D8 * 1.5f);
+                rot->y += TRUNCF_BINANG(this->unk_3D8 * 1.5f);
             }
             break;
 

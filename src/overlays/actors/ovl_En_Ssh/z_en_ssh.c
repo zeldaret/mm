@@ -310,7 +310,7 @@ void EnSsh_Turn(EnSsh* this, PlayState* play) {
     }
 
     if (DECR(this->spinTimer) != 0) {
-        this->actor.world.rot.y += (s16)(10000.0f * (this->spinTimer / 30.0f));
+        this->actor.world.rot.y += TRUNCF_BINANG(10000.0f * (this->spinTimer / 30.0f));
     } else if ((this->swayTimer == 0) && (this->stunTimer == 0)) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 4, 10000, 1);
     }

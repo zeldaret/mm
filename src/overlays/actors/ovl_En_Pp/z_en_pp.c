@@ -1462,9 +1462,9 @@ s32 EnPp_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
         }
 
         if (limbIndex == HIPLOOP_LIMB_MASK) {
-            rot->x += (s16)this->maskRot.x;
-            rot->y += (s16)this->maskRot.y;
-            rot->z += (s16)this->maskRot.z;
+            rot->x += TRUNCF_BINANG(this->maskRot.x);
+            rot->y += TRUNCF_BINANG(this->maskRot.y);
+            rot->z += TRUNCF_BINANG(this->maskRot.z);
             pos->x += this->maskPos.x;
             pos->y += this->maskPos.y;
             pos->z += this->maskPos.z;

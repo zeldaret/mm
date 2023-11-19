@@ -296,7 +296,7 @@ void func_80A76634(EnPrz* this, PlayState* play) {
     if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->unk_1E4)) < 0x100) {
         if (func_80A762C0(this, play) != 0) {
             this->unk_1E4 += 0x1500;
-            this->unk_1E4 += (s16)Rand_ZeroFloat(5000.0f);
+            this->unk_1E4 += TRUNCF_BINANG(Rand_ZeroFloat(5000.0f));
         } else if ((player->stateFlags1 & PLAYER_STATE1_8000000) && (player->actor.floorHeight < 30.0f)) {
             this->actionFunc = func_80A763E8;
         } else {
@@ -492,7 +492,7 @@ s32 func_80A76F70(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     EnPrz* this = THIS;
 
     if (limbIndex == 2) {
-        rot->y += (s16)this->unk_218 * -100;
+        rot->y += TRUNCF_BINANG(this->unk_218) * -100;
     }
     return false;
 }

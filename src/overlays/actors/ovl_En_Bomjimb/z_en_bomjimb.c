@@ -924,7 +924,7 @@ void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
         this->unk_2C2++;
         if (this->unk_2C2 > 2) {
             this->unk_2C2 = 0;
-            this->unk_2C4 = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->unk_2C4 = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
 

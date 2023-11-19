@@ -336,7 +336,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     // meaning that the IDs are just whatever their default values in sDogInfo are. As a result,
     // the blue dog, one beige dog, one white dog, one brown dog, and two gray dogs never bother
     // to do the random 1/20 check here, regardless of anything else.
-    if ((sDogInfo[this->index].textId > 0x353E) && (this->index == (s16)Rand_ZeroFloat(20.0f))) {
+    if ((sDogInfo[this->index].textId > 0x353E) && (this->index == TRUNCF_BINANG(Rand_ZeroFloat(20.0f)))) {
         this->extraTimeBeforeRaceStart = 5;
     } else {
         this->extraTimeBeforeRaceStart = 0;

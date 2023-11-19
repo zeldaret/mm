@@ -350,7 +350,7 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
                     Actor_Kill(&this->dyna.actor);
                 }
 
-                this->dyna.actor.shape.rot.x = -0x1F40 - (s16)(sp38 * 400.0f);
+                this->dyna.actor.shape.rot.x = -0x1F40 - TRUNCF_BINANG(sp38 * 400.0f);
             }
         }
     }

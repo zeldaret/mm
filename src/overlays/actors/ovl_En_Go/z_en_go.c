@@ -793,7 +793,7 @@ void EnGo_UpdateSnowballCollider(EnGo* this, PlayState* play) {
 
     this->colliderSphere.dim.worldSphere.center.x = worldPos.x;
     this->colliderSphere.dim.worldSphere.center.y = worldPos.y;
-    this->colliderSphere.dim.worldSphere.center.y += (s16)this->actor.shape.yOffset;
+    this->colliderSphere.dim.worldSphere.center.y += TRUNCF_BINANG(this->actor.shape.yOffset);
     this->colliderSphere.dim.worldSphere.center.z = worldPos.z;
 
     this->colliderSphere.dim.modelSphere.radius = 48;
@@ -826,7 +826,7 @@ void EnGo_UpdateRolledUpCollider(EnGo* this, PlayState* play) {
     Math_Vec3f_Copy(&worldPos, &this->actor.world.pos);
     this->colliderSphere.dim.worldSphere.center.x = worldPos.x;
     this->colliderSphere.dim.worldSphere.center.y = worldPos.y;
-    this->colliderSphere.dim.worldSphere.center.y += (s16)this->actor.shape.yOffset;
+    this->colliderSphere.dim.worldSphere.center.y += TRUNCF_BINANG(this->actor.shape.yOffset);
     this->colliderSphere.dim.worldSphere.center.z = worldPos.z;
     this->colliderSphere.dim.modelSphere.radius = 20;
     this->colliderSphere.dim.worldSphere.radius =
@@ -1339,7 +1339,7 @@ s32 EnGo_HandleGatekeeperPoundCutscene(EnGo* this, f32 initialVelocity, f32 maxD
         if (velocity > 0.0f) {
             // PHASE 1: Goron is rising
             rotAndDistortFactor = velocity / initialVelocity;
-            this->actor.shape.rot.x += (s16)(0x238C * rotAndDistortFactor);
+            this->actor.shape.rot.x += TRUNCF_BINANG(0x238C * rotAndDistortFactor);
             this->elapsedHangtime = 0;
         } else if ((s32)this->actor.velocity.y == 0) {
             if (maxHangtime >= this->elapsedHangtime) {
@@ -2309,7 +2309,7 @@ void EnGo_Snowball(EnGo* this, PlayState* play) {
         }
 
         this->actor.speed = 4.0f;
-        this->actor.shape.rot.x += (s16)(this->actor.speed * 546.0f);
+        this->actor.shape.rot.x += TRUNCF_BINANG(this->actor.speed * 546.0f);
         Actor_MoveWithGravity(&this->actor);
     }
 }
@@ -2528,8 +2528,8 @@ s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     }
 
     if ((this->actionFlags & ENGO_FLAG_STANDING) && (fidgetIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
     return false;
 }

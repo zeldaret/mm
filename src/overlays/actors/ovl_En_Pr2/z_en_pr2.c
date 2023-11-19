@@ -703,7 +703,7 @@ s32 func_80A758E8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == 2) {
-            rot->y += (s16)this->unk_1FC * -1;
+            rot->y += TRUNCF_BINANG(this->unk_1FC) * -1;
         }
     } else if ((limbIndex + 10) != this->unk_1E0) {
         *dList = NULL;
@@ -728,7 +728,7 @@ s32 func_80A759D8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == 2) {
-            rot->y += (s16)this->unk_1FC * -1;
+            rot->y += TRUNCF_BINANG(this->unk_1FC) * -1;
         }
     } else if ((limbIndex + 10) != this->unk_1E0) {
         *dList = NULL;

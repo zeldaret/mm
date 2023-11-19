@@ -893,8 +893,8 @@ s32 EnTrt2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
     if ((limbIndex == KOTAKE_LIMB_TORSO_LIMB) || (limbIndex == KOTAKE_LIMB_LEFT_HAND) ||
         (limbIndex == KOTAKE_LIMB_RIGHT_HAND)) {
-        rot->y += (s16)Math_SinS(this->unk_33C[limbIndex]) * 200;
-        rot->z += (s16)Math_CosS(this->unk_372[limbIndex]) * 200;
+        rot->y += TRUNCF_BINANG(Math_SinS(this->unk_33C[limbIndex])) * 200;
+        rot->z += TRUNCF_BINANG(Math_CosS(this->unk_372[limbIndex])) * 200;
     }
     return false;
 }
