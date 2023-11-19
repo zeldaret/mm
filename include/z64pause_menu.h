@@ -186,7 +186,7 @@ typedef struct PauseContext {
      ((pauseCtx)->mainState <= PAUSE_MAIN_STATE_SONG_PROMPT_DONE))
 
 #define IS_PAUSED(pauseCtx) \
-    (((pauseCtx)->state != PAUSE_STATE_OFF) || ((pauseCtx)->debugEditor != 0))
+    (((pauseCtx)->state != PAUSE_STATE_OFF) || ((pauseCtx)->debugEditor != DEBUG_EDITOR_NONE))
 
 
 typedef enum KaleidoMgrOverlayType {
