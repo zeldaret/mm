@@ -643,7 +643,7 @@ void func_80AD4A78(EnTrt2* this, PlayState* play) {
     sp34.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
     sp34.y = this->actor.world.pos.y;
     sp34.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
-    Actor_SpawnFloorDustRing(play, &this->actor, &sp34, 50.0f, 0, 2.0f, 0, 0, 0);
+    Actor_SpawnFloorDustRing(play, &this->actor, &sp34, 50.0f, 0, 2.0f, 0, 0, false);
 }
 
 s32 func_80AD4B08(PlayState* play) {

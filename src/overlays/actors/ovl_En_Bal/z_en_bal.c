@@ -384,7 +384,7 @@ void EnBal_Fall(EnBal* this, PlayState* play) {
         } else if (this->timer == 30) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_LAND);
             this->picto.actor.shape.rot = this->picto.actor.world.rot;
-            Actor_SpawnFloorDustRing(play, &this->picto.actor, &worldPos, 10.0f, 30, 5.0f, 0, 0, 0);
+            Actor_SpawnFloorDustRing(play, &this->picto.actor, &worldPos, 10.0f, 30, 5.0f, 0, 0, false);
             this->timer++;
         } else {
             if ((play->gameplayFrames % 2) != 0) {
