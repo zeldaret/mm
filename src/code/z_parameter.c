@@ -3905,7 +3905,7 @@ void Interface_DrawItemButtons(PlayState* play) {
                                            D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, 255,
                                            240, 0, interfaceCtx->cRightAlpha);
 
-    if (!IS_PAUSE_STATE_GAMEOVER) {
+    if (!IS_PAUSE_STATE_GAMEOVER(pauseCtx)) {
         if (IS_PAUSED(&play->pauseCtx)) {
             OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, 0x88, 0x11, 0x16, 0x16, 0x5B6, 0x5B6, 0xFF, 0x82, 0x3C,
                                                    interfaceCtx->startAlpha);

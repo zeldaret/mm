@@ -175,15 +175,15 @@ typedef struct PauseContext {
     /* 0x2CA */ s16 unk_2CA; // Uses OwlWarpId enum for Owl Warp. Never set.
 } PauseContext; // size = 0x2D0
 
-#define IS_PAUSE_STATE_GAMEOVER \
-    ((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))
+#define IS_PAUSE_STATE_GAMEOVER(pauseCtx) \
+    (((pauseCtx)->state >= PAUSE_STATE_GAMEOVER_0) && ((pauseCtx)->state <= PAUSE_STATE_GAMEOVER_10))
 
-#define IS_PAUSE_STATE_OWLWARP \
-    ((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6))
+#define IS_PAUSE_STATE_OWLWARP(pauseCtx) \
+    (((pauseCtx)->state >= PAUSE_STATE_OWLWARP_2) && ((pauseCtx)->state <= PAUSE_STATE_OWLWARP_6))
 
-#define IS_PAUSE_MAIN_STATE_SONG_PROMPT                            \
-    ((pauseCtx->mainState >= PAUSE_MAIN_STATE_SONG_PROMPT_INIT) && \
-     (pauseCtx->mainState <= PAUSE_MAIN_STATE_SONG_PROMPT_DONE))
+#define IS_PAUSE_MAIN_STATE_SONG_PROMPT(pauseCtx) \
+    (((pauseCtx)->mainState >= PAUSE_MAIN_STATE_SONG_PROMPT_INIT) && \
+     ((pauseCtx)->mainState <= PAUSE_MAIN_STATE_SONG_PROMPT_DONE))
 
 #define IS_PAUSED(pauseCtx) \
     (((pauseCtx)->state != PAUSE_STATE_OFF) || ((pauseCtx)->debugEditor != 0))
