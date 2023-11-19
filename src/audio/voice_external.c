@@ -6,10 +6,10 @@ OSVoiceDictionary sVoiceDictionary = {
         // "atonanjikan" -  "How many hours"
         { 'ア', 'ト', 'ナ', 'ン', 'ジ', 'カ', 'ン' },
 
-        // "haichizu" - "say cheese"
+        // "haichīzu" - "say cheese"
         { 'ハ', 'イ', 'チ', 'ー', 'ズ' },
 
-        // "okiro" - "wake up"
+        // "okirō" - "wake up"
         { 'オ', 'キ', 'ロ', 'ー' },
 
         // "osuwari" - "sit"
@@ -18,7 +18,7 @@ OSVoiceDictionary sVoiceDictionary = {
         // "miruku" - "milk"
         { 'ミ', 'ル', 'ク' },
 
-        // "haiya" - "hiya!"
+        // "haiyā" - "hiya!"
         { 'ハ', 'イ', 'ヤ', 'ー' },
     },
 

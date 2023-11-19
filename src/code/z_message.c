@@ -1455,17 +1455,17 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
 
             default:
                 switch (character) {
-                    case 0x8169:
-                    case 0x8175:
+                    case 0x8169: // '（'
+                    case 0x8175: // '「'
                         msgCtx->textPosX -= (s16)(6.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x8145:
+                    case 0x8145: // '・'
                         msgCtx->textPosX -= (s16)(3.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x8148:
-                    case 0x8149:
+                    case 0x8148: // '？'
+                    case 0x8149: // '！'
                         msgCtx->textPosX -= (s16)(2.0f * msgCtx->textCharScale);
                         break;
 
@@ -1493,26 +1493,26 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 }
                 charTexIndex += FONT_CHAR_TEX_SIZE;
                 switch (character) {
-                    case 0x8144:
+                    case 0x8144: // '．'
                         msgCtx->textPosX += (s16)(8.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x816A:
-                    case 0x8176:
+                    case 0x816A: // '）'
+                    case 0x8176: // '」'
                         msgCtx->textPosX += (s16)(10.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x8141:
-                    case 0x8142:
-                    case 0x8168:
+                    case 0x8141: // '、'
+                    case 0x8142: // '。'
+                    case 0x8168: // '”'
                         msgCtx->textPosX += (s16)(12.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x8194:
+                    case 0x8194: // '＃'
                         msgCtx->textPosX += (s16)(14.0f * msgCtx->textCharScale);
                         break;
 
-                    case 0x8145:
+                    case 0x8145: // '・'
                         msgCtx->textPosX += (s16)(15.0f * msgCtx->textCharScale);
                         break;
 
@@ -1904,9 +1904,9 @@ void Message_LoadRupeesJPN(PlayState* play, s16* decodedBufPos, s32* offset, f32
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 'ピ';
     t++;
-    Font_LoadChar(play, 0x815C, k); // 0x815C = ― in JISX0213
+    Font_LoadChar(play, '―', k);
     k += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.wchar[t] = 0x815C;
+    msgCtx->decodedBuffer.wchar[t] = '―';
 
     f += 16.0f * msgCtx->textCharScale * 3.0f;
     *decodedBufPos = t;

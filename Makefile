@@ -118,13 +118,13 @@ else
 endif
 
 CPP        := cpp
-ICONV      := iconv
 ELF2ROM    := tools/buildtools/elf2rom
 MKLDSCRIPT := tools/buildtools/mkldscript
 YAZ0       := tools/buildtools/yaz0
 ZAPD       := tools/ZAPD/ZAPD.out
 FADO       := tools/fado/fado.elf
 MAKEYAR    := tools/buildtools/makeyar
+SHIFTJIS_CONV := tools/shiftjis_conv.py
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
@@ -196,8 +196,8 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(BASEROM_FILES),build/$f.o) \
                  $(ARCHIVES_O)
 
-ICONV_C_FILES	:= src/libultra/voice/voicecheckword.c src/audio/voice_external.c src/code/z_message.c
-ICONV_O_FILES	:= $(foreach f,$(ICONV_C_FILES:.c=.o),build/$f)
+SHIFTJIS_C_FILES	:= src/libultra/voice/voicecheckword.c src/audio/voice_external.c src/code/z_message.c
+SHIFTJIS_O_FILES	:= $(foreach f,$(SHIFTJIS_C_FILES:.c=.o),build/$f)
 
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
 
@@ -252,10 +252,7 @@ build/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASF
 
 build/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
-# TODO: Remove when code and audio no longer needs asm processor
-$(ICONV_O_FILES): CC := $(CC)
-
-$(ICONV_O_FILES): CC_CHECK += -Wno-multichar -Wno-type-limits -Wno-overflow
+$(SHIFTJIS_O_FILES): CC_CHECK += -Wno-multichar -Wno-type-limits -Wno-overflow
 
 #### Main Targets ###
 
@@ -384,9 +381,9 @@ build/src/%.o: src/%.c
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
-$(ICONV_O_FILES): build/src/%.o: src/%.c
+$(SHIFTJIS_O_FILES): build/src/%.o: src/%.c
 	$(CC_CHECK) $<
-	$(ICONV) -f utf-8 -t shift-jis -o $(@:.o=.enc.c) $<
+	$(SHIFTJIS_CONV) $< $(@:.o=.enc.c)
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(@:.o=.enc.c)
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
