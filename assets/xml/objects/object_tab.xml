@@ -38,25 +38,25 @@
         <Texture Name="gBartenJacketTex" OutName="barten_jacket" Format="i8" Width="8" Height="8" Offset="0x79E8" />
         <Texture Name="gBartenFootTex" OutName="barten_foot" Format="rgba16" Width="16" Height="16" Offset="0x7A28" />
         <!-- <Blob Name="object_tab_Blob_007C28" Size="0x220" Offset="0x7C28" /> -->
-        <Limb Name="gBartenPelvisLimb" Type="Standard" EnumName="BARTEN_PELVIS_LIMB" Offset="0x7E48" />
-        <Limb Name="gBartenRightThighLimb" Type="Standard" EnumName="BARTEN_RIGHT_THIGH_LIMB" Offset="0x7E54" />
-        <Limb Name="gBartenRightLegLimb" Type="Standard" EnumName="BARTEN_RIGHT_LEG_LIMB" Offset="0x7E60" />
-        <Limb Name="gBartenRightFootLimb" Type="Standard" EnumName="BARTEN_RIGHT_FOOT_LIMB" Offset="0x7E6C" />
-        <Limb Name="gBartenLeftThighLimb" Type="Standard" EnumName="BARTEN_LEFT_THIGH_LIMB" Offset="0x7E78" />
-        <Limb Name="gBartenLeftLegLimb" Type="Standard" EnumName="BARTEN_LEFT_LEG_LIMB" Offset="0x7E84" />
-        <Limb Name="gBartenLeftFootLimb" Type="Standard" EnumName="BARTEN_LEFT_FOOT_LIMB" Offset="0x7E90" />
-        <Limb Name="gBartenChestLimb" Type="Standard" EnumName="BARTEN_CHEST_LIMB" Offset="0x7E9C" />
-        <Limb Name="gBartenHeadLimb" Type="Standard" EnumName="BARTEN_HEAD_LIMB" Offset="0x7EA8" />
-        <Limb Name="gBartenRightUpperArmLimb" Type="Standard" EnumName="BARTEN_RIGHT_UPPER_ARM_LIMB" Offset="0x7EB4" />
-        <Limb Name="gBartenRightLowerArmRootLimb" Type="Standard" EnumName="BARTEN_RIGHT_LOWER_ARM_ROOT_LIMB" Offset="0x7EC0" />
-        <Limb Name="gBartenRightLowerArmLimb" Type="Standard" EnumName="BARTEN_RIGHT_LOWER_ARM_LIMB" Offset="0x7ECC" />
-        <Limb Name="gBartenRightHandLimb" Type="Standard" EnumName="BARTEN_RIGHT_HAND_LIMB" Offset="0x7ED8" />
-        <Limb Name="gBartenLeftLowerArmRootLimb" Type="Standard" EnumName="BARTEN_LEFT_LOWER_ARM_ROOT_LIMB" Offset="0x7EE4" />
-        <Limb Name="gBartenLeftUpperArmLimb" Type="Standard" EnumName="BARTEN_LEFT_UPPER_ARM_LIMB" Offset="0x7EF0" />
-        <Limb Name="gBartenLeftLowerArmLimb" Type="Standard" EnumName="BARTEN_LEFT_LOWER_ARM_LIMB" Offset="0x7EFC" />
-        <Limb Name="gBartenLeftHandRootLimb" Type="Standard" EnumName="BARTEN_LEFT_HAND_ROOT_LIMB" Offset="0x7F08" />
-        <Limb Name="gBartenLeftBroomLimb" Type="Standard" EnumName="BARTEN_LEFT_BROOM_LIMB" Offset="0x7F14" />
-        <Limb Name="gBartenLeftHandLimb" Type="Standard" EnumName="BARTEN_LEFT_HAND_LIMB" Offset="0x7F20" />
+        <Limb Name="gBartenPelvisLimb" Type="Standard" EnumName="BARTEN_LIMB_PELVIS" Offset="0x7E48" />
+        <Limb Name="gBartenRightThighLimb" Type="Standard" EnumName="BARTEN_LIMB_RIGHT_THIGH" Offset="0x7E54" />
+        <Limb Name="gBartenRightLegLimb" Type="Standard" EnumName="BARTEN_LIMB_RIGHT_LEG" Offset="0x7E60" />
+        <Limb Name="gBartenRightFootLimb" Type="Standard" EnumName="BARTEN_LIMB_RIGHT_FOOT" Offset="0x7E6C" />
+        <Limb Name="gBartenLeftThighLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_THIGH" Offset="0x7E78" />
+        <Limb Name="gBartenLeftLegLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_LEG" Offset="0x7E84" />
+        <Limb Name="gBartenLeftFootLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_FOOT" Offset="0x7E90" />
+        <Limb Name="gBartenChestLimb" Type="Standard" EnumName="BARTEN_LIMB_CHEST" Offset="0x7E9C" />
+        <Limb Name="gBartenHeadLimb" Type="Standard" EnumName="BARTEN_LIMB_HEAD" Offset="0x7EA8" />
+        <Limb Name="gBartenRightUpperArmLimb" Type="Standard" EnumName="BARTEN_LIMB_RIGHT_UPPER_ARM" Offset="0x7EB4" />
+        <Limb Name="gBartenRightLowerArmRootLimb" Type="Standard" EnumName="BARTEN_LIMB_RIGHT_LOWER_ARM_ROOT" Offset="0x7EC0" />
+        <Limb Name="gBartenRightLowerArmLimb" Type="Standard" EnumName="BARTEN_LIMB_RIGHT_LOWER_ARM" Offset="0x7ECC" />
+        <Limb Name="gBartenRightHandLimb" Type="Standard" EnumName="BARTEN_LIMB_RIGHT_HAND" Offset="0x7ED8" />
+        <Limb Name="gBartenLeftLowerArmRootLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_LOWER_ARM_ROOT" Offset="0x7EE4" />
+        <Limb Name="gBartenLeftUpperArmLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_UPPER_ARM" Offset="0x7EF0" />
+        <Limb Name="gBartenLeftLowerArmLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_LOWER_ARM" Offset="0x7EFC" />
+        <Limb Name="gBartenLeftHandRootLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_HAND_ROOT" Offset="0x7F08" />
+        <Limb Name="gBartenLeftBroomLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_BROOM" Offset="0x7F14" />
+        <Limb Name="gBartenLeftHandLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_HAND" Offset="0x7F20" />
         <Skeleton Name="gBartenSkel" Type="Flex" LimbType="Standard" LimbNone="TAB_LIMB_NONE" LimbMax="TAB_LIMB_MAX" EnumName="BartenLimb" Offset="0x7F78" />
         <Animation Name="gBartenIdleBarCounterAnim" Offset="0x86AC" />
     </File>
