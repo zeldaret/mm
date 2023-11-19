@@ -6,21 +6,21 @@
 
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-s16 sKaleidoSetupRightPageIndex[PAUSE_PAGE_MAX - 1] = {
+s16 sKaleidoSetupRightPageIndex[] = {
     PAUSE_MAP,   // PAUSE_ITEM
     PAUSE_QUEST, // PAUSE_MAP
     PAUSE_MASK,  // PAUSE_QUEST
     PAUSE_ITEM,  // PAUSE_MASK
 };
 
-f32 sKaleidoSetupRightPageEyeX[PAUSE_PAGE_MAX - 1] = {
+f32 sKaleidoSetupRightPageEyeX[] = {
     PAUSE_EYE_DIST * -PAUSE_MAP_X,   // PAUSE_ITEM
     PAUSE_EYE_DIST * -PAUSE_QUEST_X, // PAUSE_MAP
     PAUSE_EYE_DIST * -PAUSE_MASK_X,  // PAUSE_QUEST
     PAUSE_EYE_DIST * -PAUSE_ITEM_X,  // PAUSE_MASK
 };
 
-f32 sKaleidoSetupRightPageEyeZ[PAUSE_PAGE_MAX - 1] = {
+f32 sKaleidoSetupRightPageEyeZ[] = {
     PAUSE_EYE_DIST * -PAUSE_MAP_Z,   // PAUSE_ITEM
     PAUSE_EYE_DIST * -PAUSE_QUEST_Z, // PAUSE_MAP
     PAUSE_EYE_DIST * -PAUSE_MASK_Z,  // PAUSE_QUEST
