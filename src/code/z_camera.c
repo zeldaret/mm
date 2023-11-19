@@ -6635,8 +6635,8 @@ s32 Camera_Special5(Camera* camera) {
             sp74.r = roData->eyeDist;
             rand = Rand_ZeroOne();
             sp74.yaw = BINANG_ROT180(focalActorPosRot->rot.y) +
-                       (s16)((spA4 < 0) ? -TRUNCF_BINANG(0x1553 + TRUNCF_BINANG(rand * 2730.0f))
-                                        : TRUNCF_BINANG(0x1553 + TRUNCF_BINANG(rand * 2730.0f)));
+                       (s16)((spA4 < 0) ? -(s16)(0x1553 + TRUNCF_BINANG(rand * 2730.0f))
+                                        : (s16)(0x1553 + TRUNCF_BINANG(rand * 2730.0f)));
             sp74.pitch = roData->pitch;
             *eyeNext = OLib_AddVecGeoToVec3f(&spA8.pos, &sp74);
             *eye = *eyeNext;
