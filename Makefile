@@ -196,7 +196,7 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(BASEROM_FILES),build/$f.o) \
                  $(ARCHIVES_O)
 
-SHIFTJIS_C_FILES	:= src/libultra/voice/voicecheckword.c src/audio/voice_external.c src/code/z_message.c
+SHIFTJIS_C_FILES	:= src/libultra/voice/voicecheckword.c src/audio/voice_external.c src/code/z_message.c src/code/z_message_nes.c
 SHIFTJIS_O_FILES	:= $(foreach f,$(SHIFTJIS_C_FILES:.c=.o),build/$f)
 
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
@@ -382,8 +382,8 @@ build/src/%.o: src/%.c
 	$(RM_MDEBUG)
 
 $(SHIFTJIS_O_FILES): build/src/%.o: src/%.c
-	$(CC_CHECK) $<
 	$(SHIFTJIS_CONV) $< $(@:.o=.enc.c)
+	$(CC_CHECK) $(@:.o=.enc.c)
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(@:.o=.enc.c)
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
