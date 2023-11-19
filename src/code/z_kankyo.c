@@ -1131,7 +1131,7 @@ void Environment_WipeRumbleRequests(void) {
 }
 
 void Environment_UpdateSkyboxRotY(PlayState* play) {
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+    if (!IS_PAUSED(&play->pauseCtx) &&
         ((play->skyboxId == SKYBOX_NORMAL_SKY) || (play->skyboxId == SKYBOX_3))) {
         play->skyboxCtx.rot.y -= R_TIME_SPEED * 1.0e-4f;
     }
