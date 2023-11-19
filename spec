@@ -593,10 +593,7 @@ beginseg
     include "build/asm/code/code_8019AEC0.text.o" // handwritten
     include "build/src/audio/code_8019AF00.o"
     include "build/src/audio/voice_external.o"
-    include "build/data/code/voice_external.data.o"
     include "build/src/audio/voice_internal.o"
-    include "build/data/code/voice_internal.data.o"
-    include "build/data/code/voice_internal.bss.o"
     pad_text
     include "build/src/audio/sfx_params.o"
     include "build/src/audio/sfx.o"

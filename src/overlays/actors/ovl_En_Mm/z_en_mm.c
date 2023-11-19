@@ -87,7 +87,7 @@ void EnMm_Init(Actor* thisx, PlayState* play) {
         func_80965BBC(this);
         return;
     }
-    if (this->actor.csId >= 0) {
+    if (this->actor.csId > CS_ID_NONE) {
         action = func_80965D3C;
     } else {
         action = func_80965DB4;

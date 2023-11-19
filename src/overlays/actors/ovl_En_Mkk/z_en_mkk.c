@@ -168,9 +168,9 @@ void EnMkk_Init(Actor* thisx, PlayState* play) {
     this->actor.params &= 1;
 
     if (this->actor.params == 1) {
-        this->actor.hintId = 0x3C;
+        this->actor.hintId = TATL_HINT_ID_WHITE_BOE;
     } else {
-        this->actor.hintId = 0x2C;
+        this->actor.hintId = TATL_HINT_ID_BLACK_BOE;
     }
 
     if ((paramsFF00 == 0) || (paramsFF00 == 255)) {
@@ -279,7 +279,7 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
     if (sp20) {
         this->unk_14B &= ~2;
         func_80A4E190(this);
-    } else if ((this->unk_149 == 0) && (!(player->stateFlags3 & PLAYER_STATE3_100)) &&
+    } else if ((this->unk_149 == 0) && !(player->stateFlags3 & PLAYER_STATE3_100) &&
                (Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
                Actor_IsFacingPlayer(&this->actor, 0x1800) && (this->actor.xzDistToPlayer < 120.0f) &&
                (fabsf(this->actor.playerHeightRel) < 100.0f)) {

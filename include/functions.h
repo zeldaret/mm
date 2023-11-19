@@ -1231,25 +1231,6 @@ u8 func_801A3950(u8 seqPlayerIndex, u8 resetChannelIO);
 u8 func_801A39F8(void);
 s32 func_801A46F8(void);
 
-void func_801A4EB0(void);
-// void func_801A4EB8(void);
-void func_801A4FD8(void);
-void func_801A5080(u16 arg0);
-u16 func_801A5100(void);
-void func_801A5118(void);
-UNK_TYPE func_801A51F0(UNK_TYPE arg0);
-// void func_801A5228(void);
-// void func_801A5390(void);
-// void func_801A53E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
-// void func_801A541C(void);
-// void func_801A5488(void);
-// void func_801A54C4(void);
-// void func_801A54D0(void);
-// void func_801A5680(void);
-// void func_801A5808(void);
-void AudioVoice_ResetData(void);
-// void func_801A5A1C(void);
-
 void AudioSfx_MuteBanks(u16 muteMask);
 void AudioSfx_LowerBgmVolume(u8 channelIndex);
 void AudioSfx_RestoreBgmVolume(u8 channelIndex);

@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ms.h"
-#include "objects/object_ms/object_ms.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -62,7 +61,7 @@ void EnMs_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(thisx, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBeanSalesmanSkel, &gBeanSalesmanEatingAnim, this->jointTable,
-                       this->morphTable, 9);
+                       this->morphTable, BEAN_SALESMAN_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
@@ -84,9 +83,9 @@ void EnMs_Wait(EnMs* this, PlayState* play) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     if (gSaveContext.save.saveInfo.inventory.items[SLOT_MAGIC_BEANS] == ITEM_NONE) {
-        this->actor.textId = 0x92E; // "[...] You're the first customer [...]"
+        this->actor.textId = 0x92E;
     } else {
-        this->actor.textId = 0x932; // "[...] So you liked my Magic Beans [...]"
+        this->actor.textId = 0x932;
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -120,10 +119,10 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
                         Message_CloseTextbox(play);
                         if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
                             Audio_PlaySfx(NA_SE_SY_ERROR);
-                            Message_ContinueTextbox(play, 0x935); // "[...] You don't have enough Rupees."
+                            Message_ContinueTextbox(play, 0x935);
                         } else if (AMMO(ITEM_MAGIC_BEANS) >= 20) {
                             Audio_PlaySfx(NA_SE_SY_ERROR);
-                            Message_ContinueTextbox(play, 0x937); // "[...] You can't carry anymore."
+                            Message_ContinueTextbox(play, 0x937);
                         } else {
                             Audio_PlaySfx_MessageDecide();
                             Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, 90.0f, 10.0f);
@@ -135,7 +134,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
                     case 1: // no
                     default:
                         Audio_PlaySfx_MessageCancel();
-                        Message_ContinueTextbox(play, 0x934); // "[...] Well, if your mood changes [...]"
+                        Message_ContinueTextbox(play, 0x934);
                         break;
                 }
             }
@@ -159,7 +158,7 @@ void EnMs_Sell(EnMs* this, PlayState* play) {
 
 void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        Message_ContinueTextbox(play, 0x936); // "You can plant 'em whenever you want [...]"
+        Message_ContinueTextbox(play, 0x936);
         this->actionFunc = EnMs_Talk;
     } else {
         Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,

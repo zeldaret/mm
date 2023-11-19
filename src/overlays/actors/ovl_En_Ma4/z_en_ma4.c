@@ -86,7 +86,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-static CollisionCheckInfoInit2 D_80AC00DC = { 0, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static TexturePtr sEyeTextures[] = {
     gRomaniEyeOpenTex, gRomaniEyeHalfTex, gRomaniEyeClosedTex, gRomaniEyeHappyTex, gRomaniEyeSadTex,
@@ -213,7 +213,7 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80AC00DC);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     Actor_SetScale(&this->actor, 0.01f);
