@@ -4889,7 +4889,7 @@
     0x8085C318:("D_8085C318","UNK_TYPE1","",0x1),
     0x8085C344:("D_8085C344","UNK_TYPE1","",0x1),
     0x8085C394:("D_8085C394","UNK_TYPE1","",0x1),
-    0x8085C3E4:("D_8085C3E4","f32","",0x4),
+    0x8085C3E4:("sPlayerWaterSpeedScale","f32","",0x4),
     0x8085C3E8:("D_8085C3E8","f32","",0x4),
     0x8085C3EC:("D_8085C3EC","UNK_TYPE2","",0x2),
     0x8085C3F4:("sGetItemTable","GetItemEntry","[0xB9]",0x456),

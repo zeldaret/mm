@@ -317,6 +317,13 @@ typedef enum PlayerDoorType {
     /*  5 */ PLAYER_DOORTYPE_PROXIMITY
 } PlayerDoorType;
 
+// Some player animations are played at this reduced speed, for reasons yet unclear.
+// Perhaps to compress animation data?
+// This is called "adjusted" for now.
+// z_en_horse also has many instances of this adjusted speed
+#define PLAYER_ANIM_ADJUSTED_SPEED (2.0f / 3.0f)
+#define PLAYER_ANIM_NORMAL_SPEED   (3.0f / 3.0f)
+
 typedef enum PlayerAnimType {
     /* 0 */ PLAYER_ANIMTYPE_DEFAULT, // DEFAULT
     /* 1 */ PLAYER_ANIMTYPE_1,
