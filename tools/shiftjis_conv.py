@@ -2,10 +2,11 @@
 import sys
 
 # Converts a file with UTF-8 Japanese glyphs in char literals,
-#  into one that uses u16 constants
+# into one that uses u16 constants
 
 # Follows the layout in the manual page for easier cross reference
 sjis_table = {
+    # Characters allowed to be registered with the Voice Recognition Unit
     "ー": 0x815B, "ぜ": 0x82BA, "へ": 0x82D6, "ァ": 0x8340, "ソ": 0x835C, "ペ": 0x8379,
     "ぁ": 0x829F, "そ": 0x82BB, "べ": 0x82D7, "ア": 0x8341, "ゾ": 0x835D, "ホ": 0x837A,
     "あ": 0x82A0, "ぞ": 0x82BC, "ぺ": 0x82D8, "ィ": 0x8342, "タ": 0x835E, "ボ": 0x837B,
@@ -36,7 +37,7 @@ sjis_table = {
     "せ": 0x82B9, "ぷ": 0x82D5, "ん": 0x82F1, "ゼ": 0x835B, "ヘ": 0x8377, "ヵ": 0x8395,
                                                            "ベ": 0x8378, "ヶ": 0x8396,
     
-    # Other chars not in original table
+    # Other characters
     "　": 0x8140, "！": 0x8149, "」": 0x8176, "間": 0x8AD4, "沼": 0x8FC0, "発": 0x94AD,
     "、": 0x8141, "―": 0x815C, "＃": 0x8194, "岸": 0x8ADD, "人": 0x906C, "匹": 0x9543,
     "。": 0x8142, "”": 0x8168, "０": 0x824F, "渓": 0x8C6B, "青": 0x90C2, "秒": 0x9562,
