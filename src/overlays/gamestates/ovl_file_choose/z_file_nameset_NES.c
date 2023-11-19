@@ -4,6 +4,7 @@
  * Description: Entering name on a new file, selecting options from the options menu
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_file_select.h"
 #include "z64rumble.h"
 #include "misc/title_static/title_static.h"
