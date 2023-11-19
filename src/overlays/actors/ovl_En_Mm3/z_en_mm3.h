@@ -2,6 +2,7 @@
 #define Z_EN_MM3_H
 
 #include "global.h"
+#include "objects/object_mm/object_mm.h"
 
 struct EnMm3;
 
@@ -19,8 +20,8 @@ typedef struct EnMm3 {
     /* 0x1D4 */ EnMm3ActionFunc actionFunc;
     /* 0x1D8 */ UNK_TYPE1 unk1D8[4];
     /* 0x1DC */ s32 unk_1DC;
-    /* 0x1E0 */ Vec3s jointTable[16];
-    /* 0x240 */ Vec3s morphTable[16];
+    /* 0x1E0 */ Vec3s jointTable[OBJECT_MM_LIMB_MAX];
+    /* 0x240 */ Vec3s morphTable[OBJECT_MM_LIMB_MAX];
     /* 0x2A0 */ Vec3s unk_2A0;
     /* 0x2A6 */ Vec3s unk_2A6;
     /* 0x2AC */ s16 unk_2AC;

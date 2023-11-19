@@ -248,24 +248,25 @@ void EnSyatekiMan_Destroy(Actor* thisx, PlayState* play) {
  * Moves the player to the destination through automated control stick movements.
  * This is used to move the player to the right place to play the shooting game.
  */
-s32 EnSyatekiMan_MovePlayerToPos(PlayState* play, Vec3f pos) {
+s32 EnSyatekiMan_MovePlayerToPos(PlayState* play, Vec3f targetPos) {
     Player* player = GET_PLAYER(play);
     f32 distXZ;
-    f32 magnitude;
-    s16 yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &pos);
+    f32 controlStickMagnitude;
+    s16 controlStickAngle;
 
-    distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &pos);
+    controlStickAngle = Math_Vec3f_Yaw(&player->actor.world.pos, &targetPos);
+    distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &targetPos);
 
     if (distXZ < 5.0f) {
-        magnitude = 10.0f;
+        controlStickMagnitude = 10.0f;
     } else if (distXZ < 30.0f) {
-        magnitude = 40.0f;
+        controlStickMagnitude = 40.0f;
     } else {
-        magnitude = 80.0f;
+        controlStickMagnitude = 80.0f;
     }
 
-    play->actorCtx.unk268 = 1;
-    func_800B6F20(play, &play->actorCtx.unk_26C, magnitude, yaw);
+    play->actorCtx.isOverrideInputOn = true;
+    Actor_SetControlStickData(play, &play->actorCtx.overrideInput, controlStickMagnitude, controlStickAngle);
 
     if (distXZ < 5.0f) {
         return true;

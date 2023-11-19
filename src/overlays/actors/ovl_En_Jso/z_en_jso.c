@@ -18,8 +18,8 @@ void EnJso_Destroy(Actor* thisx, PlayState* play);
 void EnJso_Update(Actor* thisx, PlayState* play);
 void EnJso_Draw(Actor* thisx, PlayState* play);
 
-void EnJso_SetupHandleIntroCutscene(EnJso* this);
-void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play);
+void EnJso_SetupIntroCutscene(EnJso* this);
+void EnJso_IntroCutscene(EnJso* this, PlayState* play);
 void EnJso_Reappear(EnJso* this, PlayState* play);
 void EnJso_SetupCirclePlayer(EnJso* this, PlayState* play);
 void EnJso_CirclePlayer(EnJso* this, PlayState* play);
@@ -46,8 +46,8 @@ void EnJso_FallDownAndTalk(EnJso* this, PlayState* play);
 void EnJso_TellHint(EnJso* this, PlayState* play);
 void EnJso_BurstIntoFlames(EnJso* this, PlayState* play);
 
-typedef enum {
-    /*  0 */ EN_JSO_ACTION_HANDLE_INTRO_CUTSCENE,
+typedef enum EnJsoAction {
+    /*  0 */ EN_JSO_ACTION_INTRO_CUTSCENE,
     /*  1 */ EN_JSO_ACTION_REAPPEAR,
     /*  2 */ EN_JSO_ACTION_CIRCLE_PLAYER,
     /*  3 */ EN_JSO_ACTION_GUARD,
@@ -65,30 +65,35 @@ typedef enum {
     /* 15 */ EN_JSO_ACTION_UNK_15 // Checked in EnJso_Update, but never actually used
 } EnJsoAction;
 
-typedef enum {
+typedef enum EnJsoIntroType {
     /* 0 */ EN_JSO_INTRO_SPIN_UP_FROM_GROUND,
     /* 1 */ EN_JSO_INTRO_JUMP_OUT_FROM_GROUND,
     /* 2 */ EN_JSO_INTRO_LAND_FROM_ABOVE,
     /* 3 */ EN_JSO_INTRO_SCALE_UP
 } EnJsoIntroType;
 
-typedef enum {
+typedef enum EnJsoIntroCsState {
     // Either the cutscene started (in which case, we'll transition to the next state on the next frame) or it's done.
     /* 0 */ EN_JSO_INTRO_CS_STATE_DONE_OR_STARTED,
+
     // Waits for the Garo to finish their intro animation and open the first textbox.
     /* 1 */ EN_JSO_INTRO_CS_STATE_WAITING_FOR_TEXTBOX_TO_APPEAR,
+
     // Waits for the player to press a button to continue on from the Garo's first textbox.
     /* 2 */ EN_JSO_INTRO_CS_STATE_WAITING_FOR_TEXTBOX_TO_CONTINUE,
+
     // Lifts the Garo's right arm such that, when they draw their sword, it's pointed at the player. Waits until the
     // player has finished reading all of the Garo's dialogue before continuing.
     /* 3 */ EN_JSO_INTRO_CS_STATE_RAISE_ARM_AND_DRAW_RIGHT_SWORD,
+
     // Waits 10 frames, then the Garo draws its left sword and continues to the next state.
     /* 4 */ EN_JSO_INTRO_CS_STATE_DRAW_LEFT_SWORD,
+
     // Waits 10 frames, then the Garo jumps back and the cutscene ends.
     /* 5 */ EN_JSO_INTRO_CS_STATE_ENDING
 } EnJsoIntroCsState;
 
-typedef enum {
+typedef enum EnJsoSwordState {
     /* 0 */ EN_JSO_SWORD_STATE_BOTH_DRAWN,
     /* 1 */ EN_JSO_SWORD_STATE_KNOCKED_OUT_OF_HANDS,
     /* 2 */ EN_JSO_SWORD_STATE_RIGHT_DRAWN,
@@ -102,7 +107,7 @@ static s32 sIsAttacking = false;
 // Seemingly a duplicate of the isPlayerLockedOn instance variable. Its purpose is unknown.
 static s32 sIsPlayerLockedOn = false;
 
-typedef enum {
+typedef enum EnJsoDamageEffect {
     /* 0x0 */ EN_JSO_DMGEFF_IMMUNE,        // Deals no damage and has no special effect
     /* 0x1 */ EN_JSO_DMGEFF_STUN,          // Deals no damage but stuns the Garo
     /* 0x2 */ EN_JSO_DMGEFF_FIRE,          // Damages and sets the Garo on fire
@@ -208,7 +213,7 @@ static u16 sTextIds[] = {
     0x1399,
 };
 
-typedef enum {
+typedef enum EnJsoAnimation {
     /*  0 */ EN_JSO_ANIM_APPEAR,
     /*  1 */ EN_JSO_ANIM_IDLE,
     /*  2 */ EN_JSO_ANIM_BOUNCE,
@@ -301,7 +306,7 @@ void EnJso_Init(Actor* thisx, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->hintType = EN_JSO_GET_HINT_TYPE(&this->actor);
     this->introCsType = this->hintType & EN_JSO_INTRO_SCALE_UP;
-    EnJso_SetupHandleIntroCutscene(this);
+    EnJso_SetupIntroCutscene(this);
 }
 
 void EnJso_Destroy(Actor* thisx, PlayState* play) {
@@ -338,14 +343,14 @@ void EnJso_ChangeAnim(EnJso* this, s32 animIndex) {
                      sAnimationModes[animIndex], morphFrames);
 }
 
-void EnJso_SetupHandleIntroCutscene(EnJso* this) {
+void EnJso_SetupIntroCutscene(EnJso* this) {
     EnEncount3* parent = (EnEncount3*)this->actor.parent;
 
     this->csId = parent->csId;
     this->swordState = EN_JSO_SWORD_STATE_NONE_DRAWN;
-    this->action = EN_JSO_ACTION_HANDLE_INTRO_CUTSCENE;
+    this->action = EN_JSO_ACTION_INTRO_CUTSCENE;
     this->actor.flags |= ACTOR_FLAG_100000;
-    this->actionFunc = EnJso_HandleIntroCutscene;
+    this->actionFunc = EnJso_IntroCutscene;
 }
 
 /**
@@ -353,13 +358,13 @@ void EnJso_SetupHandleIntroCutscene(EnJso* this) {
  * appear in one of four different ways, activating the ring of fire, etc. When the cutscene is over, the Garo will
  * jump back to start the fight.
  */
-void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
+void EnJso_IntroCutscene(EnJso* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
     s16 showTextbox;
     s16 diffToTargetRobeRightRot;
 
-    switch (this->introCsState) {
+    switch (this->cutsceneState) {
         case EN_JSO_INTRO_CS_STATE_DONE_OR_STARTED:
             if (!CutsceneManager_IsNext(this->csId)) {
                 CutsceneManager_Queue(this->csId);
@@ -412,8 +417,8 @@ void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
                     break;
             }
 
-            this->introCsTimer = 0;
-            this->introCsState++;
+            this->cutsceneTimer = 0;
+            this->cutsceneState++;
             break;
 
         case EN_JSO_INTRO_CS_STATE_WAITING_FOR_TEXTBOX_TO_APPEAR:
@@ -476,8 +481,8 @@ void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
                 Message_StartTextbox(play, sTextIds[this->textIndex], &this->actor);
                 this->textIndex++;
                 this->actor.shape.yOffset = 970.0f;
-                this->introCsTimer = 0;
-                this->introCsState++;
+                this->cutsceneTimer = 0;
+                this->cutsceneState++;
             }
             break;
 
@@ -493,9 +498,9 @@ void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 Message_ContinueTextbox(play, sTextIds[this->textIndex]);
-                this->introCsTimer = 0;
+                this->cutsceneTimer = 0;
                 this->textIndex++;
-                this->introCsState++;
+                this->cutsceneState++;
             }
             break;
 
@@ -531,8 +536,8 @@ void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 this->targetRightArmRot.x = this->targetRightArmRot.y = this->targetRightArmRot.z =
                     this->targetRobeRightRot.x = this->targetRobeRightRot.y = this->targetRobeRightRot.z = 0;
-                this->introCsTimer = 0;
-                this->introCsState++;
+                this->cutsceneTimer = 0;
+                this->cutsceneState++;
             }
             break;
 
@@ -543,9 +548,9 @@ void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
             this->subCamAtNext.x = player->actor.world.pos.x - 30.0f;
             this->subCamAtNext.y = player->actor.world.pos.y + 40.0f;
             this->subCamAtNext.z = player->actor.world.pos.z - 130.0f;
-            this->introCsTimer++;
+            this->cutsceneTimer++;
 
-            if (this->introCsTimer >= 10) {
+            if (this->cutsceneTimer >= 10) {
                 this->swordState = EN_JSO_SWORD_STATE_BOTH_DRAWN;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_ANSATSUSYA_SWORD);
                 if ((this->actor.parent != NULL) && (this->actor.parent->update != NULL)) {
@@ -558,8 +563,8 @@ void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
                 }
 
                 EnJso_ChangeAnim(this, EN_JSO_ANIM_IDLE);
-                this->introCsTimer = 0;
-                this->introCsState++;
+                this->cutsceneTimer = 0;
+                this->cutsceneState++;
             }
             break;
 
@@ -570,14 +575,14 @@ void EnJso_HandleIntroCutscene(EnJso* this, PlayState* play) {
             this->subCamAtNext.x = player->actor.world.pos.x - 30.0f;
             this->subCamAtNext.y = player->actor.world.pos.y + 40.0f;
             this->subCamAtNext.z = player->actor.world.pos.z - 130.0f;
-            this->introCsTimer++;
+            this->cutsceneTimer++;
 
-            if (this->introCsTimer >= 10) {
+            if (this->cutsceneTimer >= 10) {
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 CutsceneManager_Stop(this->csId);
                 this->rightArmRot.x = this->rightArmRot.y = this->rightArmRot.z = this->robeRightRot.x =
                     this->robeRightRot.y = this->robeRightRot.z = 0;
-                this->introCsState = EN_JSO_INTRO_CS_STATE_DONE_OR_STARTED;
+                this->cutsceneState = EN_JSO_INTRO_CS_STATE_DONE_OR_STARTED;
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->actor.flags &= ~ACTOR_FLAG_100000;
                 this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
@@ -683,7 +688,7 @@ void EnJso_SetupCirclePlayer(EnJso* this, PlayState* play) {
 
 /**
  * Makes the Garo bounce in a circle around the player, sometimes randomly switching the direction it's traveling, until
- * the attack wait timer reaches 0. Once it does, then the Garo will prepare to attack.
+ * the attack timer reaches 0. Once it does, then the Garo will prepare to attack.
  */
 void EnJso_CirclePlayer(EnJso* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
@@ -692,7 +697,8 @@ void EnJso_CirclePlayer(EnJso* this, PlayState* play) {
     s32 pad;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_ANSATSUSYA_MOVING - SFX_FLAG);
-    if ((this->action != EN_JSO_ACTION_REAPPEAR) && (this->action != EN_JSO_ACTION_HANDLE_INTRO_CUTSCENE) &&
+
+    if ((this->action != EN_JSO_ACTION_REAPPEAR) && (this->action != EN_JSO_ACTION_INTRO_CUTSCENE) &&
         (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) > 60.0f)) {
         EnJso_SetupReappear(this, play);
         return;
@@ -722,7 +728,7 @@ void EnJso_CirclePlayer(EnJso* this, PlayState* play) {
     //! @note: Since sIsPlayerLockedOn always mirrors the value of this->isPlayerLockedOn, the last part of this
     //! if-statement is always true and has no impact on the logic. In other words, the Garo doesn't care whether or not
     //! the player is locked on; it will attack regardless as long as the other conditions are met.
-    if ((this->attackWaitTimer == 0) && !sIsAttacking && (!sIsPlayerLockedOn || this->isPlayerLockedOn)) {
+    if ((this->attackTimer == 0) && !sIsAttacking && (!sIsPlayerLockedOn || this->isPlayerLockedOn)) {
         sIsAttacking = true;
         this->isAttacking = true;
         this->action = EN_JSO_ACTION_SPIN_BEFORE_ATTACK;
@@ -797,7 +803,7 @@ void EnJso_SpinBeforeAttack(EnJso* this, PlayState* play) {
 
 void EnJso_SetupDashAttack(EnJso* this) {
     this->action = EN_JSO_ACTION_DASH_ATTACK;
-    this->dashAttackTimer = 40;
+    this->attackMovementTimer = 40;
     this->bodyCollider.base.colType = COLTYPE_HIT2;
     this->bodyCollider.base.acFlags &= ~AC_HARD;
     this->actor.speed = 15.0f;
@@ -829,7 +835,7 @@ void EnJso_DashAttack(EnJso* this, PlayState* play) {
             knockbackVelocity.z = -10.0f;
             Matrix_MultVec3f(&knockbackVelocity, &this->knockbackVelocity);
             this->swordState = EN_JSO_SWORD_STATE_KNOCKED_OUT_OF_HANDS;
-            this->dashAttackTimer = 0;
+            this->attackMovementTimer = 0;
             this->disableBlure = true;
             AudioSfx_SetChannelIO(&this->actor.projectedPos, NA_SE_EN_ANSATSUSYA_DASH_2, 0);
             EnJso_SetupKnockedBack(this);
@@ -848,7 +854,7 @@ void EnJso_DashAttack(EnJso* this, PlayState* play) {
     yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     absYawDiff = ABS_ALT(yawDiff);
 
-    if ((this->dashAttackTimer == 0) || (this->actor.xzDistToPlayer < 100.0f) || (absYawDiff > 0x4300)) {
+    if ((this->attackMovementTimer == 0) || (this->actor.xzDistToPlayer < 100.0f) || (absYawDiff > 0x4300)) {
         AudioSfx_SetChannelIO(&this->actor.projectedPos, NA_SE_EN_ANSATSUSYA_DASH_2, 0);
         Math_ApproachZeroF(&this->actor.speed, 0.3f, 3.0f);
         EnJso_SetupSlash(this, play);
@@ -861,7 +867,7 @@ void EnJso_SetupSlash(EnJso* this, PlayState* play) {
     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f, 500,
                              10, true);
     Math_ApproachZeroF(&this->actor.speed, 0.3f, 3.0f);
-    this->swordHitSomething = false;
+    this->slashHitSomething = false;
     Actor_PlaySfx(&this->actor, NA_SE_IT_SWORD_SWING_HARD);
     this->actionFunc = EnJso_Slash;
 }
@@ -881,7 +887,7 @@ void EnJso_Slash(EnJso* this, PlayState* play) {
     }
 
     if ((this->rightSwordCollider.base.atFlags & AT_HIT) || (this->leftSwordCollider.base.atFlags & AT_HIT)) {
-        this->swordHitSomething = true;
+        this->slashHitSomething = true;
         this->rightSwordCollider.base.atFlags &= ~AT_HIT;
         this->leftSwordCollider.base.atFlags &= ~AT_HIT;
     }
@@ -913,7 +919,7 @@ void EnJso_Slash(EnJso* this, PlayState* play) {
 }
 
 void EnJso_SetupWaitAfterSlash(EnJso* this) {
-    if (this->swordHitSomething) {
+    if (this->slashHitSomething) {
         EnJso_ChangeAnim(this, EN_JSO_ANIM_SLASH_LOOP);
         this->timer = 20;
     } else {
@@ -931,10 +937,10 @@ void EnJso_SetupWaitAfterSlash(EnJso* this) {
  */
 void EnJso_WaitAfterSlash(EnJso* this, PlayState* play) {
     if (this->timer == 0) {
-        this->attackWaitTimer = Rand_S16Offset(30, 30);
+        this->attackTimer = Rand_S16Offset(30, 30);
         this->bodyCollider.base.colType = COLTYPE_NONE;
         this->bodyCollider.base.acFlags |= AC_HARD;
-        this->swordHitSomething = false;
+        this->slashHitSomething = false;
         sIsAttacking = false;
         this->isAttacking = false;
         EnJso_SetupCirclePlayer(this, play);
@@ -986,9 +992,12 @@ void EnJso_SetupStunned(EnJso* this) {
     AudioSfx_SetChannelIO(&this->actor.projectedPos, NA_SE_EN_ANSATSUSYA_DASH_2, 0);
     EnJso_ChangeAnim(this, EN_JSO_ANIM_DAMAGED);
 
-    // This assignment is immediately overriden below.
+    //! @note: This assignment is immediately overriden below. This is probably a leftover from EnJso2's version of this
+    //! function, where the Garo Master is stunned for longer if it's frozen. Garos just use the longer stun
+    //! unconditionally, resulting in this useless assignment here.
     this->timer = 30;
     this->actor.speed = 0.0f;
+
     if (((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
          (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) &&
         (this->drawDmgEffAlpha == 0)) {
@@ -1032,7 +1041,7 @@ void EnJso_SetupDamaged(EnJso* this, PlayState* play) {
 
     AudioSfx_SetChannelIO(&this->actor.projectedPos, NA_SE_EN_ANSATSUSYA_DASH_2, 0);
     EnJso_ChangeAnim(this, EN_JSO_ANIM_DAMAGED);
-    this->swordHitSomething = false;
+    this->slashHitSomething = false;
     this->actor.velocity.y = 10.0f;
     this->actor.speed = 0.0f;
     Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
@@ -1104,7 +1113,7 @@ void EnJso_JumpBack(EnJso* this, PlayState* play) {
         sIsAttacking = false;
         this->isAttacking = false;
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        this->attackWaitTimer = Rand_S16Offset(10, 10);
+        this->attackTimer = Rand_S16Offset(10, 10);
         EnJso_SetupCirclePlayer(this, play);
     }
 }
@@ -1449,8 +1458,8 @@ void EnJso_Update(Actor* thisx, PlayState* play) {
     }
 
     this->actionFunc(this, play);
-    DECR(this->dashAttackTimer);
-    DECR(this->attackWaitTimer);
+    DECR(this->attackMovementTimer);
+    DECR(this->attackTimer);
     DECR(this->timer);
     DECR(this->drawDmgEffAlpha);
 
@@ -1501,7 +1510,7 @@ void EnJso_Update(Actor* thisx, PlayState* play) {
         this->afterimageCount = 0;
     }
 
-    if ((this->action != EN_JSO_ACTION_HANDLE_INTRO_CUTSCENE) && (this->action != EN_JSO_ACTION_CIRCLE_PLAYER) &&
+    if ((this->action != EN_JSO_ACTION_INTRO_CUTSCENE) && (this->action != EN_JSO_ACTION_CIRCLE_PLAYER) &&
         (this->action != EN_JSO_ACTION_SPIN_BEFORE_ATTACK) && (this->action != EN_JSO_ACTION_DAMAGED) &&
         (this->action != EN_JSO_ACTION_JUMP_BACK)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -1510,14 +1519,14 @@ void EnJso_Update(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.x = this->actor.world.rot.x;
     Collider_UpdateCylinder(&this->actor, &this->bodyCollider);
 
-    if ((this->action != EN_JSO_ACTION_HANDLE_INTRO_CUTSCENE) && (this->action != EN_JSO_ACTION_REAPPEAR) &&
+    if ((this->action != EN_JSO_ACTION_INTRO_CUTSCENE) && (this->action != EN_JSO_ACTION_REAPPEAR) &&
         (this->action != EN_JSO_ACTION_DAMAGED) && (this->action != EN_JSO_ACTION_SPIN_BEFORE_ATTACK) &&
         (this->action != EN_JSO_ACTION_DEAD) && (this->action != EN_JSO_ACTION_FALL_DOWN_AND_TALK) &&
         (this->action != EN_JSO_ACTION_UNK_15)) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
 
-        if ((this->action == EN_JSO_ACTION_SLASH) && !this->swordHitSomething &&
+        if ((this->action == EN_JSO_ACTION_SLASH) && !this->slashHitSomething &&
             (this->swordState == EN_JSO_SWORD_STATE_BOTH_DRAWN)) {
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->rightSwordCollider.base);
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->leftSwordCollider.base);

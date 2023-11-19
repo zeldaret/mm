@@ -6,7 +6,6 @@
 
 #include "overlays/actors/ovl_Obj_Bean/z_obj_bean.h"
 #include "z_en_mushi2.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -200,7 +199,7 @@ void func_80A68B6C(EnMushi2* this) {
     }
 }
 
-s32 func_80A68BA0(EnMushi2* this) {
+bool func_80A68BA0(EnMushi2* this) {
     return (D_80A6B994 > 3) && this->unk_34C == NULL;
 }
 
@@ -755,7 +754,7 @@ void EnMushi2_Init(Actor* thisx, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_80A68F24(this);
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_0527A0, &gameplay_keep_Anim_05140C, this->jointTable,
-                   this->morphTable, 24);
+                   this->morphTable, BUG_LIMB_MAX);
     Animation_Change(&this->skelAnime, &gameplay_keep_Anim_05140C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, 0.0f);
     Collider_InitJntSph(play, &this->collider);
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);

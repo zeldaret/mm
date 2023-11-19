@@ -80,7 +80,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     EnMinifrog* this = THIS;
-    int i;
+    s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
@@ -107,6 +107,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     this->flags = 0;
     this->timer = 0;
 
+    //! FAKE:
     if (1) {}
 
     if (!EN_FROG_IS_RETURNED(&this->actor)) {

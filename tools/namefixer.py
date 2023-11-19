@@ -987,7 +987,7 @@ wordReplace = {
     "skelAnime.transitionStep": "skelAnime.morphRate",
     "skelAnime.animUpdate": "skelAnime.update",
     "skelAnime.flags": "skelAnime.moveFlags",
-    "skelAnime.prevFrameRot": "skelAnime.prevRot",
+    "skelAnime.prevFrameRot": "skelAnime.prevYaw",
     "skelAnime.prevFramePos": "skelAnime.prevTransl",
     "skelAnime.unk3E": "skelAnime.baseTransl",
     "actor.unk20": "actor.halfDaysBits",

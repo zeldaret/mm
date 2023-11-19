@@ -57,6 +57,9 @@ void EnMm2_Reading(EnMm2* this, PlayState* play) {
         case TEXT_STATE_CLOSING:
             this->actionFunc = EnMm2_WaitForRead;
             break;
+
+        default:
+            break;
     }
 }
 
@@ -68,7 +71,7 @@ void EnMm2_WaitForRead(EnMm2* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x277B, &this->actor);
         this->actionFunc = EnMm2_Reading;
-    } else if ((this->actor.xzDistToPlayer < 60.0f) && (Player_IsFacingActor(&this->actor, 0x3000, play))) {
+    } else if ((this->actor.xzDistToPlayer < 60.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
         Actor_OfferTalk(&this->actor, play, 110.0f);
     }
 }
