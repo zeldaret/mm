@@ -55,7 +55,7 @@ def sjis_process(buf, outfile):
         if skipTimer > 0:
             skipTimer -= 1
             continue
-        if char == "'" and buf[i+1] in sjis_table:
+        if char == "'" and buf[i+1] in sjis_table and buf[i+2] == "'":
             if sjis_table[buf[i+1]] == 0:
                 print("Error: Please map %s in %s" % (buf[i+1], sys.argv[0]))
                 exit(1)
