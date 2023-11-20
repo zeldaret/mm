@@ -520,8 +520,8 @@ void EnJso2_IntroCutscene(EnJso2* this, PlayState* play) {
                 Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeNext);
                 Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtNext);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
-                func_80122744(play, &this->overrideInputEntry, ARRAY_COUNT(sPlayerOverrideInputPosList),
-                              sPlayerOverrideInputPosList);
+                Player_InitOverrideInput(play, &this->overrideInputEntry, ARRAY_COUNT(sPlayerOverrideInputPosList),
+                                         sPlayerOverrideInputPosList);
                 this->cutsceneState++;
             }
             break;
@@ -541,7 +541,7 @@ void EnJso2_IntroCutscene(EnJso2* this, PlayState* play) {
             Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeNext);
             Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtNext);
 
-            if (func_80122760(play, &this->overrideInputEntry, 60.0f)) {
+            if (Player_UpdateOverrideInput(play, &this->overrideInputEntry, 60.0f)) {
                 Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_19);
                 this->cutsceneTimer = 10;
                 this->cutsceneState++;

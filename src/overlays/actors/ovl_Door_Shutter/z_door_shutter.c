@@ -619,7 +619,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
         if (this->slidingDoor.dyna.actor.velocity.y > 20.0f) {
             this->slidingDoor.dyna.actor.floorHeight = this->slidingDoor.dyna.actor.home.pos.y;
             Actor_SpawnFloorDustRing(play, &this->slidingDoor.dyna.actor, &this->slidingDoor.dyna.actor.world.pos,
-                                     45.0f, 10, 8.0f, 500, 10, 0);
+                                     45.0f, 10, 8.0f, 500, 10, false);
         }
         Actor_PlaySfx(&this->slidingDoor.dyna.actor, NA_SE_EV_BIGWALL_BOUND);
 

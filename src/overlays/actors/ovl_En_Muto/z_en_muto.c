@@ -5,7 +5,6 @@
  */
 
 #include "z_en_muto.h"
-#include "objects/object_toryo/object_toryo.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -16,13 +15,10 @@ void EnMuto_Destroy(Actor* thisx, PlayState* play);
 void EnMuto_Update(Actor* thisx, PlayState* play2);
 void EnMuto_Draw(Actor* thisx, PlayState* play);
 
-void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex);
-void EnMuto_SetHeadRotation(EnMuto* this);
 void EnMuto_SetupIdle(EnMuto* this);
 void EnMuto_Idle(EnMuto* this, PlayState* play);
 void EnMuto_SetupDialogue(EnMuto* this, PlayState* play);
 void EnMuto_InDialogue(EnMuto* this, PlayState* play);
-s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Muto_InitVars = {
     /**/ ACTOR_EN_MUTO,
@@ -64,7 +60,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_toryo_Skel_007150, &object_toryo_Anim_000E50, this->jointTable,
-                       this->morphTable, 17);
+                       this->morphTable, OBJECT_TORYO_LIMB_MAX);
 
     this->isInMayorsRoom = this->actor.params;
     if (!this->isInMayorsRoom) {
@@ -99,13 +95,28 @@ void EnMuto_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex) {
-    static AnimationHeader* sAnimations[] = { &object_toryo_Anim_000E50, &object_toryo_Anim_000E50 };
-    static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_ONCE };
+typedef enum EnMutoAnimation {
+    /* -1 */ ENMUTO_ANIM_NONE = -1,
+    /*  0 */ ENMUTO_ANIM_0,
+    /*  1 */ ENMUTO_ANIM_1,
+    /*  2 */ ENMUTO_ANIM_MAX
+} EnMutoAnimation;
 
+static AnimationHeader* sAnimations[ENMUTO_ANIM_MAX] = {
+    &object_toryo_Anim_000E50, // ENMUTO_ANIM_0
+    &object_toryo_Anim_000E50, // ENMUTO_ANIM_1
+};
+
+static u8 sAnimationModes[ENMUTO_ANIM_MAX] = {
+    ANIMMODE_LOOP, // ENMUTO_ANIM_0
+    ANIMMODE_ONCE, // ENMUTO_ANIM_1
+};
+
+void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex) {
     this->animIndex = animIndex;
-    this->frameIndex = Animation_GetLastFrame(&sAnimations[animIndex]->common);
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameIndex,
+    this->animEndFrame = Animation_GetLastFrame(&sAnimations[animIndex]->common);
+
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animEndFrame,
                      sAnimationModes[this->animIndex], -4.0f);
 }
 
@@ -144,7 +155,8 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
         }
     }
 
-    if (1) {} // Needed to match
+    //! FAKE:
+    if (1) {}
 
     if (!this->isInMayorsRoom && (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK)) {
         this->actor.textId = 0x2363;
@@ -221,10 +233,10 @@ void EnMuto_InDialogue(EnMuto* this, PlayState* play) {
             this->skelAnime.playSpeed = 1.0f;
         }
     } else {
-        f32 frameIndex = this->skelAnime.curFrame;
+        f32 curFrame = this->skelAnime.curFrame;
 
         this->yawTowardsTarget = Math_Vec3f_Yaw(&this->actor.world.pos, &this->targetActor->world.pos);
-        if (this->frameIndex <= frameIndex) {
+        if (curFrame >= this->animEndFrame) {
             this->skelAnime.playSpeed = 0.0f;
         }
     }
@@ -285,11 +297,11 @@ void EnMuto_Update(Actor* thisx, PlayState* play2) {
 s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMuto* this = THIS;
 
-    if (limbIndex == 1) {
+    if (limbIndex == OBJECT_TORYO_LIMB_01) {
         rot->x += this->waistRot.y;
     }
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_TORYO_LIMB_0F) {
         rot->x += this->headRot.y;
         rot->z += this->headRot.x;
     }

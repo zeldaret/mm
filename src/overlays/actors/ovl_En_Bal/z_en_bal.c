@@ -384,7 +384,7 @@ void EnBal_Fall(EnBal* this, PlayState* play) {
         } else if (this->timer == 30) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_LAND);
             this->picto.actor.shape.rot = this->picto.actor.world.rot;
-            Actor_SpawnFloorDustRing(play, &this->picto.actor, &worldPos, 10.0f, 30, 5.0f, 0, 0, 0);
+            Actor_SpawnFloorDustRing(play, &this->picto.actor, &worldPos, 10.0f, 30, 5.0f, 0, 0, false);
             this->timer++;
         } else {
             if ((play->gameplayFrames % 2) != 0) {
@@ -573,7 +573,7 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
             } else {
                 this->idleAnimStage++;
             }
-        } else if ((this->idleAnimStage == TINGLE_IDLESTAGE_WAIT) && (Animation_OnFrame(&this->skelAnime, 20.0f))) {
+        } else if ((this->idleAnimStage == TINGLE_IDLESTAGE_WAIT) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
             this->forceEyesShut = true;
         }
     }

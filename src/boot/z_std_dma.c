@@ -34,13 +34,13 @@ s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size) {
             ioMsg.dramAddr = ram;
             ioMsg.size = buffSize;
             ret = osEPiStartDma(gCartHandle, &ioMsg, 0);
-            if (ret) {
+            if (ret != 0) {
                 goto END;
             }
 
             osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
             size -= buffSize;
-            rom = rom + buffSize;
+            rom += buffSize;
             ram = (u8*)ram + buffSize;
         }
     }
@@ -50,7 +50,7 @@ s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size) {
     ioMsg.dramAddr = ram;
     ioMsg.size = size;
     ret = osEPiStartDma(gCartHandle, &ioMsg, 0);
-    if (ret) {
+    if (ret != 0) {
         goto END;
     }
 

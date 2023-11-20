@@ -63,7 +63,7 @@ Color_RGB8 D_809A4088[] = {
     { 0, 255, 255 },   { 255, 0, 255 },   { 0, 0, 0 },   { 255, 255, 255 },
 };
 
-s32 func_809A33E0(ObjPzlblock* this, PlayState* play, s16 arg2) {
+bool func_809A33E0(ObjPzlblock* this, PlayState* play, s16 arg2) {
     return !DynaPolyActor_ValidateMove(play, &this->dyna, 30, arg2, 1) ||
            !DynaPolyActor_ValidateMove(play, &this->dyna, 30, arg2, 28);
 }
@@ -94,7 +94,7 @@ s32 func_809A3448(ObjPzlblock* this) {
     return -1;
 }
 
-s32 func_809A34E0(ObjPzlblock* this, s32 arg1) {
+bool func_809A34E0(ObjPzlblock* this, s32 arg1) {
     s32 temp_v0 = OBJPZLBLOCK_GET_ROTZ(&this->dyna.actor);
 
     if (temp_v0 == 0) {
@@ -134,7 +134,7 @@ s32 func_809A34E0(ObjPzlblock* this, s32 arg1) {
     return false;
 }
 
-s32 func_809A35EC(ObjPzlblock* this, s32 arg1) {
+bool func_809A35EC(ObjPzlblock* this, s32 arg1) {
     s32 temp_v0 = OBJPZLBLOCK_GET_ROTZ(&this->dyna.actor);
     s32 temp_v1 = this->dyna.actor.home.rot.x & 0xF;
     s32 temp;

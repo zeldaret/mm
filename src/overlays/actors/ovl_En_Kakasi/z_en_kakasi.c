@@ -1028,7 +1028,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
 
         } else {
             Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->picto.actor.world.pos,
-                                     this->picto.actor.shape.shadowScale - 20.0f, 5, 4.0f, 200, 10, 1);
+                                     this->picto.actor.shape.shadowScale - 20.0f, 5, 4.0f, 200, 10, true);
             Actor_PlaySfx(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
     }
@@ -1092,7 +1092,7 @@ void EnKakasi_RisingOutOfGround(EnKakasi* this, PlayState* play) {
     if (this->picto.actor.shape.yOffset < -10.0f) {
         if ((play->gameplayFrames % 8) == 0) {
             Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->picto.actor.world.pos,
-                                     this->picto.actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
+                                     this->picto.actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, true);
             Actor_PlaySfx(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
         Math_ApproachF(&this->picto.actor.shape.yOffset, 0.0f, 0.5f, 200.0f);
