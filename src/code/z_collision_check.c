@@ -1,6 +1,8 @@
 #include "prevent_bss_reordering.h"
-#include "global.h"
 #include "z64collision_check.h"
+
+#include "global.h"
+#include "z64malloc.h"
 
 typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
 typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);

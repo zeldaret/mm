@@ -527,16 +527,6 @@ void LifeMeter_Draw(PlayState* play);
 void LifeMeter_UpdateSizeAndBeep(PlayState* play);
 u32 LifeMeter_IsCritical(void);
 
-void* ZeldaArena_Malloc(size_t size);
-void* ZeldaArena_MallocR(size_t size);
-void* ZeldaArena_Realloc(void* ptr, size_t newSize);
-void ZeldaArena_Free(void* ptr);
-void* ZeldaArena_Calloc(size_t num, size_t size);
-void ZeldaArena_GetSizes(size_t* outMaxFree, size_t* outFree, size_t* outAlloc);
-s32 ZeldaArena_Check(void);
-void ZeldaArena_Init(void* start, size_t size);
-void ZeldaArena_Cleanup(void);
-u8 ZeldaArena_IsInitialized(void);
 // void func_80102E40(void);
 // void func_80102E90(void);
 // void func_80102EA4(void);

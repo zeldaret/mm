@@ -4,6 +4,7 @@
 #include "PR/ultratypes.h"
 #include "z64math.h"
 
+struct Actor;
 struct PlayState;
 
 typedef struct {
@@ -56,7 +57,7 @@ s32 SkelCurve_Init(struct PlayState* play, SkelCurve* skelCurve, CurveSkeletonHe
 void SkelCurve_Destroy(struct PlayState* play, SkelCurve* skelCurve);
 void SkelCurve_SetAnim(SkelCurve* skelCurve, CurveAnimationHeader* animation, f32 arg2, f32 endFrame, f32 curFrame, f32 playSpeed);
 s32 SkelCurve_Update(struct PlayState* play, SkelCurve* skelCurve);
-void SkelCurve_Draw(Actor* actor, struct PlayState* play, SkelCurve* skelCurve, OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx);
+void SkelCurve_Draw(struct Actor* actor, struct PlayState* play, SkelCurve* skelCurve, OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, struct Actor* thisx);
 
 
 // ZAPD compatibility typedefs

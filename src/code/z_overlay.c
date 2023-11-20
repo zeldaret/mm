@@ -8,8 +8,7 @@
 
 #include "loadfragment.h"
 #include "z64lib.h"
-
-#include "functions.h" // zeldaarena stuffs
+#include "z64malloc.h"
 
 void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr) {
     void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);

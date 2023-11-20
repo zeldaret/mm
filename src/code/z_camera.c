@@ -45,6 +45,7 @@
 
 #include "global.h"
 #include "libc/string.h"
+#include "z64malloc.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
