@@ -239,6 +239,10 @@ void func_8012D40C(f32* param_1, f32* param_2, s16* param_3);
 extern Gfx gSetupDLs[SETUPDL_MAX][6];
 extern Gfx gEmptyDL[];
 
+
+extern GfxMasterList D_0E000000;
+
+
 #define WORK_DISP __gfxCtx->work.p
 #define POLY_OPA_DISP __gfxCtx->polyOpa.p
 #define POLY_XLU_DISP __gfxCtx->polyXlu.p

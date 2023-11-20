@@ -12,19 +12,19 @@
 #include "overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h"
 
-typedef enum {
+typedef enum TransitionTileState {
     /* 0 */ TRANS_TILE_OFF, // Inactive, do nothing
     /* 1 */ TRANS_TILE_SETUP, // Save the necessary buffers
     /* 2 */ TRANS_TILE_PROCESS, // Initialize the transition
     /* 3 */ TRANS_TILE_READY // The transition is ready, so will update and draw each frame
 } TransitionTileState;
 
-typedef struct {
+typedef struct TransitionTileVtxData {
     /* 0x0 */ f32 x;
     /* 0x4 */ f32 y;
 } TransitionTileVtxData; // size = 0x8
 
-typedef struct {
+typedef struct TransitionTile {
     /* 0x00 */ s32 cols;
     /* 0x04 */ s32 rows;
     /* 0x08 */ s32 frame;
@@ -41,7 +41,7 @@ typedef struct {
 
 #define TC_SET_PARAMS (1 << 7)
 
-typedef struct {
+typedef struct TransitionInit {
     /* 0x00 */ void* (*init)(void* transition);
     /* 0x04 */ void  (*destroy)(void* transition);
     /* 0x08 */ void  (*update)(void* transition, s32 updateRate);
@@ -53,7 +53,7 @@ typedef struct {
     /* 0x20 */ s32   (*isDone)(void* transition);
 } TransitionInit; // size = 0x24
 
-typedef struct {
+typedef struct TransitionOverlay {
     union {
         struct {
     /* 0x00 */ u32 count : 8;
@@ -76,8 +76,8 @@ typedef enum {
 
 #define TRANS_INSTANCE_TYPE_FADE_FLASH 3
 
-typedef struct {
-    /* 0x0 */ u8 type;
+typedef struct TransitionFade {
+    /* 0x0 */ u8 type; // TransitionFadeType enum
     /* 0x1 */ u8 isDone;
     /* 0x2 */ u8 direction;
     /* 0x4 */ Color_RGBA8_u32 color;
@@ -86,7 +86,7 @@ typedef struct {
 
 #define FBDEMO_CIRCLE_GET_MASK_TYPE(type) ((type) & 1)
 
-typedef struct {
+typedef struct TransitionCircle {
     /* 0x00 */ Color_RGBA8_u32 color;
     /* 0x04 */ f32 referenceRadius; // Reference for where to transition to
     /* 0x08 */ f32 stepValue; // How fast the Transition is 
@@ -106,7 +106,7 @@ typedef struct {
 #define TRANS_TRIGGER_START 20 // start transition (exiting an area)
 #define TRANS_TRIGGER_END -20 // transition is ending (arriving in a new area)
 
-typedef enum {
+typedef enum TransitionMode {
     /*  0 */ TRANS_MODE_OFF,
     /*  1 */ TRANS_MODE_SETUP,
     /*  2 */ TRANS_MODE_INSTANCE_INIT,
@@ -131,7 +131,7 @@ typedef enum {
 #define TRANS_TYPE_WIPE3 (1 << 6)
 #define TRANS_TYPE_SET_PARAMS (1 << 7)
 
-typedef enum {
+typedef enum TransitionType {
     /*  0 */ TRANS_TYPE_WIPE,
     /*  1 */ TRANS_TYPE_TRIFORCE,
     /*  2 */ TRANS_TYPE_FADE_BLACK,
@@ -191,7 +191,7 @@ typedef union TransitionInstance {
 #undef DEFINE_TRANSITION
 #undef DEFINE_TRANSITION_INTERNAL
 
-typedef struct {
+typedef struct TransitionContext {
     /* 0x000 */ s16 transitionType;
     /* 0x002 */ s8 fbdemoType;
     /* 0x003 */ UNK_TYPE1 unk_003[0x5];

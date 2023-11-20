@@ -1,7 +1,10 @@
-#include "global.h"
-#include "sys_cfb.h"
+#include "z64transition.h"
 
-typedef enum {
+#include "sys_cfb.h"
+#include "z64math.h"
+#include "variables.h" // for gCircleTex
+
+typedef enum TransitionCircleDirection {
     /* 0 */ TRANS_CIRCLE_DIR_IN,
     /* 1 */ TRANS_CIRCLE_DIR_OUT
 } TransitionCircleDirection;

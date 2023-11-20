@@ -503,7 +503,6 @@ s32 Actor_TrackNone(Vec3s* headRot, Vec3s* torsoRot);
 s32 Actor_TrackPoint(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* torsoRot);
 s32 Actor_TrackPlayerSetFocusHeight(PlayState* play, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, f32 focusHeight);
 s32 Actor_TrackPlayer(PlayState* play, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos);
-void SaveContext_Init(void);
 
 void GetItem_Draw(PlayState* play, s16 drawId);
 

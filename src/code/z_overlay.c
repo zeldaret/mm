@@ -12,8 +12,12 @@
  *  3 : internal overlay, so always loaded
  */
 
-#include "global.h"
+#include "z64transition.h"
+
 #include "loadfragment.h"
+#include "z64lib.h"
+
+#include "functions.h" // zeldaarena stuffs
 
 void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr) {
     void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);

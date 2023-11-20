@@ -537,11 +537,6 @@ D_0C000000 = 0x0C000000;
 
 D_0E000000 = 0x0E000000;
 
-// TODO the following are fake and are offsets into the structure at D_0E000000
-D_0E000140 = 0x0E000140;
-D_0E0001C8 = 0x0E0001C8;
-D_0E0002C8 = 0x0E0002C8;
-
 // segment 0x0F
 
 D_0F000000 = 0x0F000000;
