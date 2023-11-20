@@ -933,11 +933,6 @@ void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId);
 void Play_FillScreen(GameState* thisx, s16 fillScreenOn, u8 red, u8 green, u8 blue, u8 alpha);
 void Play_Init(GameState* thisx);
 
-void GameAlloc_Log(GameAlloc* this);
-void* GameAlloc_Malloc(GameAlloc* this, size_t size);
-void GameAlloc_Free(GameAlloc* this, void* data);
-void GameAlloc_Cleanup(GameAlloc* this);
-void GameAlloc_Init(GameAlloc* this);
 void Graph_FaultClient(void);
 void Graph_InitTHGA(TwoHeadGfxArena* arena, Gfx* buffer, s32 size);
 void Graph_SetNextGfxPool(GraphicsContext* gfxCtx);
