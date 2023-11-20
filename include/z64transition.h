@@ -2,7 +2,10 @@
 #define Z64TRANSITION_H
 
 #include "ultra64.h"
+
 #include "libc/stdint.h"
+#include "unk.h"
+
 #include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.h"
@@ -191,9 +194,9 @@ typedef union TransitionInstance {
 typedef struct {
     /* 0x000 */ s16 transitionType;
     /* 0x002 */ s8 fbdemoType;
-    /* 0x003 */ char unk_003[0x5];
+    /* 0x003 */ UNK_TYPE1 unk_003[0x5];
     /* 0x008 */ TransitionInstance instanceData;
-    /* 0x220 */ char unk_220[0x10];
+    /* 0x220 */ UNK_TYPE1 unk_220[0x10];
     /* 0x230 */ void* (*init)(void* transition);
     /* 0x234 */ void  (*destroy)(void* transition);
     /* 0x238 */ void  (*update)(void* transition, s32 updateRate);
@@ -203,7 +206,7 @@ typedef struct {
     /* 0x248 */ void  (*setColor)(void* transition, u32 color);
     /* 0x24C */ void  (*setEnvColor)(void* transition, u32 color);
     /* 0x250 */ s32   (*isDone)(void* transition);
-    /* 0x254 */ char unk_254[0x4];
+    /* 0x254 */ UNK_TYPE1 unk_254[0x4];
 } TransitionContext; // size = 0x258
 
 

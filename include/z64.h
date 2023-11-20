@@ -47,6 +47,7 @@
 #include "z64game.h"
 #include "z64interface.h"
 #include "z64item.h"
+#include "z64lib.h"
 #include "z64light.h"
 #include "z64map.h"
 #include "z64math.h"

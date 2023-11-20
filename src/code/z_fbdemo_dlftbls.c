@@ -1,3 +1,6 @@
+//#include "z64transition.h"
+
+#include "segment_symbols.h"
 #include "global.h"
 
 // InitVars and Linker symbol declarations (used in the table below)
