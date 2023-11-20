@@ -7194,15 +7194,15 @@ void Interface_Init(PlayState* play) {
         (play->sceneId != SCENE_LAST_GORON) && (play->sceneId != SCENE_LAST_ZORA) &&
         (play->sceneId != SCENE_LAST_LINK)) {
 
-        CLEAR_EVENTINF(EVENTINF_53); // Goht intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_54); // Odolwa intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_55); // Twinmold intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_56); // Gyorg intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_57); // Igos du Ikana intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_60); // Wart intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_61); // Majoras intro cutscene watched
-        CLEAR_EVENTINF(EVENTINF_62); //
-        CLEAR_EVENTINF(EVENTINF_63); // Gomess intro cutscene watched
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOHT);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_ODOLWA);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_TWINMOLD);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GYORG);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_IGOS_DU_IKANA);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_WART);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_MAJORA);
+        CLEAR_EVENTINF(EVENTINF_ENTR_CS_WATCHED_GOHT);
+        CLEAR_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOMESS);
     }
 
     sFinalHoursClockDigitsRed = sFinalHoursClockFrameEnvRed = sFinalHoursClockFrameEnvGreen =

@@ -602,7 +602,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         this->actor.draw = Boss02_Static_Draw;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->playerScale = 0.01f;
-        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_55) || (sBlueWarp != NULL)) {
+        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_TWINMOLD) || (sBlueWarp != NULL)) {
             this->unk_1D20 = 0;
             sTwinmoldMusicStartTimer = KREG(15) + 20;
         } else {
@@ -2230,7 +2230,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
                 sRedTwinmold->unk_0146[0] = sBlueTwinmold->unk_0146[0] = 60;
-                SET_EVENTINF(EVENTINF_55);
+                SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_TWINMOLD);
             }
             break;
 

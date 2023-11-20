@@ -934,7 +934,7 @@ void Boss01_Init(Actor* thisx, PlayState* play) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gOdolwaSkel, &gOdolwaReadyAnim, this->jointTable, this->morphTable,
                            ODOLWA_LIMB_MAX);
 
-        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_54)) {
+        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_ODOLWA)) {
             Boss01_SetupWait(this, play, ODOLWA_WAIT_READY);
             this->actor.gravity = -2.5f;
             sOdolwaMusicStartTimer = KREG(15) + 20;
@@ -1138,7 +1138,7 @@ void Boss01_IntroCutscene(Boss01* this, PlayState* play) {
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-                SET_EVENTINF(EVENTINF_54);
+                SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_ODOLWA);
             }
             break;
 
