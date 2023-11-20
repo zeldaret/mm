@@ -39,21 +39,27 @@ void Boss05_WalkingHead_Stunned(Boss05* this, PlayState* play);
 void Boss05_Fragment_Move(Boss05* this, PlayState* play);
 
 typedef enum BioDekuBabaDrawDmgEffState {
-    /*  0 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE,
-    /*  1 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FIRE_INIT,
-    /*  2 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FIRE_ACTIVE,
-    /* 10 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FROZEN_INIT = 10,
-    /* 11 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE,
-    /* 20 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT = 20,
-    /* 21 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE
+    /*  0 */ BIO_BABA_DRAW_DMGEFF_STATE_NONE,
+    /*  1 */ BIO_BABA_DRAW_DMGEFF_STATE_FIRE_INIT,
+    /*  2 */ BIO_BABA_DRAW_DMGEFF_STATE_FIRE_ACTIVE,
+    /* 10 */ BIO_BABA_DRAW_DMGEFF_STATE_FROZEN_INIT = 10,
+    /* 11 */ BIO_BABA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE,
+    /* 20 */ BIO_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT = 20,
+    /* 21 */ BIO_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE
 } BioDekuBabaDrawDmgEffState;
 
 typedef enum BioDekuBabaFragmentState {
-    /* 0 */ BIO_DEKU_BABA_FRAGMENT_STATE_SPAWNED,
-    /* 1 */ BIO_DEKU_BABA_FRAGMENT_STATE_UNDERWATER,
-    /* 2 */ BIO_DEKU_BABA_FRAGMENT_STATE_ABOVE_WATER,
-    /* 3 */ BIO_DEKU_BABA_FRAGMENT_STATE_FLYING_THROUGH_AIR
+    /* 0 */ BIO_BABA_FRAGMENT_STATE_SPAWNED,
+    /* 1 */ BIO_BABA_FRAGMENT_STATE_UNDERWATER,
+    /* 2 */ BIO_BABA_FRAGMENT_STATE_ABOVE_WATER,
+    /* 3 */ BIO_BABA_FRAGMENT_STATE_FLYING_THROUGH_AIR
 } BioDekuBabaFragmentState;
+
+typedef enum BioDekuBabaHeadHitReaction {
+    /*  0 */ BIO_BABA_HEAD_HIT_REACTION_NONE_OR_DAMAGED,
+    /*  2 */ BIO_BABA_HEAD_HIT_REACTION_DEATH = 2,
+    /* 10 */ BIO_BABA_HEAD_HIT_REACTION_DEATCH = 10
+} BioDekuBabaHeadHitReaction;
 
 #include "assets/overlays/ovl_Boss_05/ovl_Boss_05.c"
 
@@ -160,14 +166,14 @@ void Boss05_WalkingHead_Thaw(Boss05* this, PlayState* play) {
     Vec3f velocity;
     s32 i;
 
-    SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD], 30, NA_SE_EV_ICE_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[BIO_BABA_BODYPART_HEAD], 30, NA_SE_EV_ICE_BROKEN);
     for (i = 0; i < 8; i++) {
         velocity.x = Rand_CenteredFloat(7.0f);
         velocity.z = Rand_CenteredFloat(7.0f);
         velocity.y = Rand_ZeroFloat(6.0f) + 4.0f;
-        pos.x = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].x + velocity.x;
-        pos.y = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].y + velocity.y;
-        pos.z = this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].z + velocity.z;
+        pos.x = this->bodyPartsPos[BIO_BABA_BODYPART_HEAD].x + velocity.x;
+        pos.y = this->bodyPartsPos[BIO_BABA_BODYPART_HEAD].y + velocity.y;
+        pos.z = this->bodyPartsPos[BIO_BABA_BODYPART_HEAD].z + velocity.z;
         EffectSsEnIce_Spawn(play, &pos, Rand_ZeroFloat(0.5f) + 0.7f, &velocity, &sIceAccel, &sIcePrimColor,
                             &sIceEnvColor, 30);
     }
@@ -186,97 +192,97 @@ void Boss05_SetColliderSphere(s32 index, ColliderJntSph* collider, Vec3f* sphere
 
 typedef enum BioDekuBabaDamageEffect {
     // Named based on the fact that everything with this damage effect deals zero damage. If this effect is given to an
-    // attack that deals non-zero damage, it will behave exactly like BIO_DEKU_BABA_DMGEFF_DAMAGE.
-    /* 0x0 */ BIO_DEKU_BABA_DMGEFF_IMMUNE,
+    // attack that deals non-zero damage, it will behave exactly like BIO_BABA_DMGEFF_DAMAGE.
+    /* 0x0 */ BIO_BABA_DMGEFF_IMMUNE,
 
     // Deals no damage, but turns the Bio Deku Baba blue, stops all animations, and makes it wait for 40 frames.
-    /* 0x1 */ BIO_DEKU_BABA_DMGEFF_STUN,
+    /* 0x1 */ BIO_BABA_DMGEFF_STUN,
 
     // Deals damage and surrounds the Bio Deku Baba with fire.
-    /* 0x2 */ BIO_DEKU_BABA_DMGEFF_FIRE,
+    /* 0x2 */ BIO_BABA_DMGEFF_FIRE,
 
-    // Behaves exactly like BIO_DEKU_BABA_DMGEFF_STUN, but also surrounds it with ice and lasts for 80 frames.
-    /* 0x3 */ BIO_DEKU_BABA_DMGEFF_FREEZE,
+    // Behaves exactly like BIO_BABA_DMGEFF_STUN, but also surrounds it with ice and lasts for 80 frames.
+    /* 0x3 */ BIO_BABA_DMGEFF_FREEZE,
 
     // Deals damage and surrounds the Bio Deku Baba with yellow light orbs.
-    /* 0x4 */ BIO_DEKU_BABA_DMGEFF_LIGHT_ORB,
+    /* 0x4 */ BIO_BABA_DMGEFF_LIGHT_ORB,
 
-    // Behaves exactly like BIO_DEKU_BABA_DMGEFF_DAMAGE, so its purpose is unknown. Only used for the lily pad with head
+    // Behaves exactly like BIO_BABA_DMGEFF_DAMAGE, so its purpose is unknown. Only used for the lily pad with head
     // variant of the Bio Deku Baba.
-    /* 0xE */ BIO_DEKU_BABA_DMGEFF_SWORD = 0xE,
+    /* 0xE */ BIO_BABA_DMGEFF_SWORD = 0xE,
 
     // Deals damage and has no special effect.
-    /* 0xF */ BIO_DEKU_BABA_DMGEFF_DAMAGE
+    /* 0xF */ BIO_BABA_DMGEFF_DAMAGE
 } BioDekuBabaDamageEffect;
 
 static DamageTable sLilyPadWithHeadDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Deku Stick     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Horse trample  */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Explosives     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Zora boomerang */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Normal arrow   */ DMG_ENTRY(3, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Hookshot       */ DMG_ENTRY(3, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Goron punch    */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Sword          */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_SWORD),
-    /* Goron pound    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Fire arrow     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_FIRE),
-    /* Ice arrow      */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_FREEZE),
-    /* Light arrow    */ DMG_ENTRY(3, BIO_DEKU_BABA_DMGEFF_LIGHT_ORB),
-    /* Goron spikes   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Deku spin      */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Deku bubble    */ DMG_ENTRY(3, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Deku launch    */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Zora barrier   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Normal shield  */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Light ray      */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Thrown object  */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Zora punch     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Spin attack    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Sword beam     */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Normal Roll    */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Unblockable    */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Powder Keg     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Deku Nut       */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Deku Stick     */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Horse trample  */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Explosives     */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Zora boomerang */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Normal arrow   */ DMG_ENTRY(3, BIO_BABA_DMGEFF_DAMAGE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Hookshot       */ DMG_ENTRY(3, BIO_BABA_DMGEFF_IMMUNE),
+    /* Goron punch    */ DMG_ENTRY(2, BIO_BABA_DMGEFF_DAMAGE),
+    /* Sword          */ DMG_ENTRY(1, BIO_BABA_DMGEFF_SWORD),
+    /* Goron pound    */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Fire arrow     */ DMG_ENTRY(1, BIO_BABA_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(1, BIO_BABA_DMGEFF_FREEZE),
+    /* Light arrow    */ DMG_ENTRY(3, BIO_BABA_DMGEFF_LIGHT_ORB),
+    /* Goron spikes   */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Deku spin      */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Deku bubble    */ DMG_ENTRY(3, BIO_BABA_DMGEFF_DAMAGE),
+    /* Deku launch    */ DMG_ENTRY(2, BIO_BABA_DMGEFF_DAMAGE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Zora barrier   */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Normal shield  */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Light ray      */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Thrown object  */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Zora punch     */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Spin attack    */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Sword beam     */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Normal Roll    */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Unblockable    */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Powder Keg     */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
 };
 
 static DamageTable sWalkingHeadDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_STUN),
-    /* Deku Stick     */ DMG_ENTRY(3, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Horse trample  */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Explosives     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Zora boomerang */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Normal arrow   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Hookshot       */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_STUN),
-    /* Goron punch    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Sword          */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Goron pound    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Fire arrow     */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_FIRE),
-    /* Ice arrow      */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_FREEZE),
-    /* Light arrow    */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_LIGHT_ORB),
-    /* Goron spikes   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Deku spin      */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_STUN),
-    /* Deku bubble    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Deku launch    */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_STUN),
-    /* Zora barrier   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Normal shield  */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Light ray      */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Thrown object  */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Zora punch     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Spin attack    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
-    /* Sword beam     */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Normal Roll    */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_FIRE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Unblockable    */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
-    /* Powder Keg     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Deku Nut       */ DMG_ENTRY(0, BIO_BABA_DMGEFF_STUN),
+    /* Deku Stick     */ DMG_ENTRY(3, BIO_BABA_DMGEFF_DAMAGE),
+    /* Horse trample  */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Explosives     */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Zora boomerang */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Normal arrow   */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Hookshot       */ DMG_ENTRY(0, BIO_BABA_DMGEFF_STUN),
+    /* Goron punch    */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Sword          */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Goron pound    */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Fire arrow     */ DMG_ENTRY(2, BIO_BABA_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(2, BIO_BABA_DMGEFF_FREEZE),
+    /* Light arrow    */ DMG_ENTRY(2, BIO_BABA_DMGEFF_LIGHT_ORB),
+    /* Goron spikes   */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Deku spin      */ DMG_ENTRY(0, BIO_BABA_DMGEFF_STUN),
+    /* Deku bubble    */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Deku launch    */ DMG_ENTRY(2, BIO_BABA_DMGEFF_DAMAGE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, BIO_BABA_DMGEFF_STUN),
+    /* Zora barrier   */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Normal shield  */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Light ray      */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Thrown object  */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Zora punch     */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Spin attack    */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
+    /* Sword beam     */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Normal Roll    */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(1, BIO_BABA_DMGEFF_FIRE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Unblockable    */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, BIO_BABA_DMGEFF_IMMUNE),
+    /* Powder Keg     */ DMG_ENTRY(1, BIO_BABA_DMGEFF_DAMAGE),
 };
 
 ActorInit Boss_05_InitVars = {
@@ -305,8 +311,8 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->dyna.actor, 0.01f);
 
-    if ((this->dyna.actor.params == BIO_DEKU_BABA_LILY_PAD_WITH_HEAD) ||
-        (this->dyna.actor.params == BIO_DEKU_BABA_NO_LEAF_LILY_PAD_WITH_HEAD)) {
+    if ((this->dyna.actor.params == BIO_BABA_TYPE_LILY_PAD_WITH_HEAD) ||
+        (this->dyna.actor.params == BIO_BABA_TYPE_NO_LEAF_LILY_PAD_WITH_HEAD)) {
         if (this->dyna.actor.world.rot.z == 0) {
             this->dyna.actor.world.rot.z = 0;
         }
@@ -333,12 +339,12 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
                                   this->headColliderElements);
 
         if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
-            this->dyna.actor.params = BIO_DEKU_BABA_TYPE_LILY_PAD;
+            this->dyna.actor.params = BIO_BABA_TYPE_LILY_PAD;
             this->actionFunc = Boss05_LilyPad_Idle;
             this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         }
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_LILY_PAD) {
+    } else if (this->dyna.actor.params == BIO_BABA_TYPE_LILY_PAD) {
         this->actionFunc = Boss05_LilyPad_Idle;
 
         CollisionHeader_GetVirtual(&sBioBabaLilypadCol, &colHeader);
@@ -348,7 +354,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
                            this->lilyPadJointTable, this->lilyPadMorphTable, BIO_DEKU_BABA_LILY_PAD_LIMB_MAX);
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_FALLING_HEAD) {
+    } else if (this->dyna.actor.params == BIO_BABA_TYPE_FALLING_HEAD) {
         this->actionFunc = Boss05_FallingHead_Fall;
         this->fallingHeadLilyPadLimbScale = 1.0f;
 
@@ -365,7 +371,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 
         ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
         this->dyna.actor.colChkInfo.damageTable = &sLilyPadWithHeadDamageTable;
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
+    } else if (this->dyna.actor.params == BIO_BABA_TYPE_WALKING_HEAD) {
         Boss05_WalkingHead_SetupTransform(this, play);
         this->dyna.actor.colChkInfo.mass = 90;
 
@@ -378,7 +384,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
         this->dyna.actor.colChkInfo.damageTable = &sWalkingHeadDamageTable;
         this->dyna.actor.flags |= ACTOR_FLAG_10 | ACTOR_FLAG_20;
-    } else if (this->dyna.actor.params >= BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW) {
+    } else if (this->dyna.actor.params >= BIO_BABA_TYPE_FRAGMENT_LOWER_JAW) {
         SkelAnime_InitFlex(play, &this->headSkelAnime, &gBioDekuBabaHeadSkel, &gBioDekuBabaHeadChompAnim,
                            this->headJointTable, this->headMorphTable, BIO_DEKU_BABA_HEAD_LIMB_MAX);
 
@@ -399,9 +405,9 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 void Boss05_Destroy(Actor* thisx, PlayState* play) {
     Boss05* this = THIS;
 
-    if ((this->dyna.actor.params == BIO_DEKU_BABA_TYPE_LILY_PAD) ||
-        (this->dyna.actor.params == BIO_DEKU_BABA_LILY_PAD_WITH_HEAD) ||
-        (this->dyna.actor.params == BIO_DEKU_BABA_NO_LEAF_LILY_PAD_WITH_HEAD)) {
+    if ((this->dyna.actor.params == BIO_BABA_TYPE_LILY_PAD) ||
+        (this->dyna.actor.params == BIO_BABA_TYPE_LILY_PAD_WITH_HEAD) ||
+        (this->dyna.actor.params == BIO_BABA_TYPE_NO_LEAF_LILY_PAD_WITH_HEAD)) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -413,32 +419,32 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
         while (true) {
             if (this->lilyPadCollider.elements[i].info.bumperFlags & BUMP_HIT) {
                 switch (this->dyna.actor.colChkInfo.damageEffect) {
-                    case BIO_DEKU_BABA_DMGEFF_FIRE:
-                        return 11;
-                    case BIO_DEKU_BABA_DMGEFF_FREEZE:
-                        return 20;
-                    case BIO_DEKU_BABA_DMGEFF_LIGHT_ORB:
-                        return 30;
+                    case BIO_BABA_DMGEFF_FIRE:
+                        return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_FIRE_INIT;
+                    case BIO_BABA_DMGEFF_FREEZE:
+                        return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_FROZEN_INIT;
+                    case BIO_BABA_DMGEFF_LIGHT_ORB:
+                        return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT;
                     default:
-                        return 10;
+                        return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_NONE;
                 }
             }
 
             i++;
-            if (i == BIO_DEKU_BABA_LILY_PAD_COLLIDER_MAX) {
-                if (this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags & BUMP_HIT) {
+            if (i == BIO_BABA_LILY_PAD_COLLIDER_MAX) {
+                if (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags & BUMP_HIT) {
                     u8 damage = this->dyna.actor.colChkInfo.damage;
 
                     this->dyna.actor.colChkInfo.health -= damage;
                     if ((s8)this->dyna.actor.colChkInfo.health <= 0) {
                         Enemy_StartFinishingBlow(play, &this->dyna.actor);
-                        return 2;
+                        return BIO_BABA_HEAD_HIT_REACTION_DEATH;
                     } else {
                         Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
                         this->damagedFlashTimer = 15;
                         this->lilyPadWithHeadAttackState = 0;
                         this->timers[0] = 30;
-                        return 0;
+                        return BIO_BABA_HEAD_HIT_REACTION_NONE_OR_DAMAGED;
                     }
                 }
 
@@ -447,7 +453,7 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
         }
     }
 
-    return 0;
+    return BIO_BABA_HEAD_HIT_REACTION_NONE_OR_DAMAGED;
 }
 
 void Boss05_LilyPadWithHead_SetupMove(Boss05* this, PlayState* play) {
@@ -483,7 +489,7 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
     f32 diffY;
     f32 attackRange;
     Vec3f splashPos;
-    s32 damageEffect;
+    s32 hitReaction;
 
     this->dyna.actor.hintId = TATL_HINT_ID_BIO_DEKU_BABA;
 
@@ -535,9 +541,9 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
             limbRotMaxAngularVelocityFrac = limbRotAngularVelocity = 0;
     }
 
-    for (i = 0; i < BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_MAX; i++) {
+    for (i = 0; i < BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_MAX; i++) {
         if ((this->lilyPadWithHeadLimbRotState == 0) || (this->lilyPadWithHeadLimbRotState == 3)) {
-            if (i <= BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LOWER_STEM) {
+            if (i <= BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LOWER_STEM) {
                 targetLimbRot[i].y = 0;
                 targetLimbRot[i].x = Math_SinS((this->frameCounter * frequencyX) + (i * shiftX)) * amplitudeX;
             } else {
@@ -545,8 +551,8 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
                 targetLimbRot[i].y = Math_SinS((this->frameCounter * frequencyY) + (i * shiftY)) * amplitudeY;
             }
 
-            if ((i == BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LEFT_LOWER_ARM) ||
-                (i == BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_LOWER_ARM)) {
+            if ((i == BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LEFT_LOWER_ARM) ||
+                (i == BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_LOWER_ARM)) {
                 targetLimbRot[i].z = Math_SinS((this->frameCounter * frequencyZ) + (i * shiftZ)) * amplitudeZ * 2.0f;
             } else {
                 targetLimbRot[i].z = Math_SinS((this->frameCounter * frequencyZ) + (i * shiftZ)) * amplitudeZ;
@@ -678,23 +684,23 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
             break;
     }
 
-    damageEffect = Boss05_LilyPadWithHead_UpdateDamage(this, play);
-    if ((damageEffect != 0) || (this->forceDetachTimer == 1)) {
+    hitReaction = Boss05_LilyPadWithHead_UpdateDamage(this, play);
+    if ((hitReaction != BIO_BABA_HEAD_HIT_REACTION_NONE_OR_DAMAGED) || (this->forceDetachTimer == 1)) {
         Boss05* child;
 
-        this->dyna.actor.params = BIO_DEKU_BABA_TYPE_LILY_PAD;
+        this->dyna.actor.params = BIO_BABA_TYPE_LILY_PAD;
         this->actionFunc = Boss05_LilyPad_Idle;
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         if (this->forceDetachTimer != 0) {
-            damageEffect = 10;
+            hitReaction = BIO_BABA_HEAD_HIT_REACTION_DEATCH;
         }
 
-        if (damageEffect >= 10) {
+        if (hitReaction >= BIO_BABA_HEAD_HIT_REACTION_DEATCH) {
             child = (Boss05*)Actor_SpawnAsChild(
                 &play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->dyna.actor.world.pos.x,
                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, BIO_DEKU_BABA_TYPE_FALLING_HEAD);
+                this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, BIO_BABA_TYPE_FALLING_HEAD);
 
             if (child != NULL) {
                 Player* player2 = GET_PLAYER(play);
@@ -714,16 +720,15 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
                 }
 
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_DAMAGE);
-                if (damageEffect > 10) {
-                    child->drawDmgEffState = damageEffect - 10;
+                if (hitReaction > BIO_BABA_HEAD_HIT_REACTION_DEATCH) {
+                    child->drawDmgEffState = hitReaction - BIO_BABA_HEAD_HIT_REACTION_DEATCH;
                 }
             }
-        } else if (damageEffect == 2) {
+        } else if (hitReaction == BIO_BABA_HEAD_HIT_REACTION_DEATH) {
             for (i = 0; i < 2; i++) {
-                child =
-                    (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
-                                                this->headPos.x, this->headPos.y, this->headPos.z, this->headRot.x,
-                                                this->headRot.y, this->headRot.z, i + BIO_DEKU_BABA_TYPE_FRAGMENT_BASE);
+                child = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
+                                                    this->headPos.x, this->headPos.y, this->headPos.z, this->headRot.x,
+                                                    this->headRot.y, this->headRot.z, i + BIO_BABA_TYPE_FRAGMENT_BASE);
                 if (child != NULL) {
                     for (j = 0; j < BIO_DEKU_BABA_HEAD_LIMB_MAX; j++) {
                         child->headSkelAnime.jointTable[j] = this->headSkelAnime.jointTable[j];
@@ -815,7 +820,7 @@ void Boss05_FallingHead_Fall(Boss05* this, PlayState* play) {
         if (this->fallingHeadLilyPadLimbScale == 0.0f) {
             walkingHead = (Boss05*)Actor_SpawnAsChild(
                 &play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->headPos.x, this->headPos.y,
-                this->headPos.z, this->headRot.x, this->headRot.y, this->headRot.z, BIO_DEKU_BABA_TYPE_WALKING_HEAD);
+                this->headPos.z, this->headRot.x, this->headRot.y, this->headRot.z, BIO_BABA_TYPE_WALKING_HEAD);
 
             if (walkingHead != NULL) {
                 Player* player = GET_PLAYER(play);
@@ -843,9 +848,9 @@ void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
     ColliderInfo* acHitInfo;
 
     if ((this->damagedTimer == 0) &&
-        (this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags & BUMP_HIT)) {
-        this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags &= ~BUMP_HIT;
-        acHitInfo = this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.acHitInfo;
+        (this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags & BUMP_HIT)) {
+        this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags &= ~BUMP_HIT;
+        acHitInfo = this->headCollider.elements[BIO_BABA_HEAD_COLLIDER_HEAD].info.acHitInfo;
         if (acHitInfo->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
             this->knockbackMagnitude = -12.0f;
             this->knockbackAngle = this->dyna.actor.yawTowardsPlayer;
@@ -861,22 +866,22 @@ void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
 
         switch (this->dyna.actor.colChkInfo.damageEffect) {
-            case BIO_DEKU_BABA_DMGEFF_STUN:
+            case BIO_BABA_DMGEFF_STUN:
                 Boss05_WalkingHead_SetupStunned(this, play);
                 break;
 
-            case BIO_DEKU_BABA_DMGEFF_FIRE:
-                this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FIRE_INIT;
+            case BIO_BABA_DMGEFF_FIRE:
+                this->drawDmgEffState = BIO_BABA_DRAW_DMGEFF_STATE_FIRE_INIT;
                 attackDealsDamage = true;
                 break;
 
-            case BIO_DEKU_BABA_DMGEFF_FREEZE:
+            case BIO_BABA_DMGEFF_FREEZE:
                 Boss05_WalkingHead_SetupFreeze(this, play);
-                this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FROZEN_INIT;
+                this->drawDmgEffState = BIO_BABA_DRAW_DMGEFF_STATE_FROZEN_INIT;
                 break;
 
-            case BIO_DEKU_BABA_DMGEFF_LIGHT_ORB:
-                this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT;
+            case BIO_BABA_DMGEFF_LIGHT_ORB:
+                this->drawDmgEffState = BIO_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT;
                 attackDealsDamage = true;
                 break;
 
@@ -891,7 +896,7 @@ void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
             if ((this->actionFunc == Boss05_WalkingHead_Stunned) &&
                 (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) && (this->drawDmgEffTimer != 0)) {
                 Boss05_WalkingHead_Thaw(this, play);
-                this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE;
+                this->drawDmgEffState = BIO_BABA_DRAW_DMGEFF_STATE_NONE;
             }
 
             damage = this->dyna.actor.colChkInfo.damage;
@@ -1057,7 +1062,7 @@ void Boss05_WalkingHead_Damaged(Boss05* this, PlayState* play) {
                 fragment = (Boss05*)Actor_SpawnAsChild(
                     &play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->dyna.actor.world.pos.x,
                     this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                    this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, i + BIO_DEKU_BABA_TYPE_FRAGMENT_BASE);
+                    this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, i + BIO_BABA_TYPE_FRAGMENT_BASE);
 
                 if (fragment != NULL) {
                     for (j = 0; j < BIO_DEKU_BABA_HEAD_LIMB_MAX; j++) {
@@ -1106,17 +1111,17 @@ void Boss05_WalkingHead_Stunned(Boss05* this, PlayState* play) {
 void Boss05_Fragment_Move(Boss05* this, PlayState* play) {
     Actor_MoveWithGravity(&this->dyna.actor);
 
-    if (this->fragmentState == BIO_DEKU_BABA_FRAGMENT_STATE_SPAWNED) {
+    if (this->fragmentState == BIO_BABA_FRAGMENT_STATE_SPAWNED) {
         Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 50.0f, 40.0f,
                                 UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
         if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_WATER) {
-            this->fragmentState = BIO_DEKU_BABA_FRAGMENT_STATE_UNDERWATER;
+            this->fragmentState = BIO_BABA_FRAGMENT_STATE_UNDERWATER;
         } else {
-            this->fragmentState = BIO_DEKU_BABA_FRAGMENT_STATE_ABOVE_WATER;
+            this->fragmentState = BIO_BABA_FRAGMENT_STATE_ABOVE_WATER;
         }
     }
 
-    if (this->fragmentState == BIO_DEKU_BABA_FRAGMENT_STATE_UNDERWATER) {
+    if (this->fragmentState == BIO_BABA_FRAGMENT_STATE_UNDERWATER) {
         Math_ApproachF(&this->dyna.actor.velocity.y, 1.0f, 1.0f, 0.1f);
         Math_ApproachZeroF(&this->dyna.actor.speed, 0.5f, 0.5f);
         this->dyna.actor.shape.rot.x += this->fragmentAngularVelocity.x;
@@ -1127,15 +1132,15 @@ void Boss05_Fragment_Move(Boss05* this, PlayState* play) {
         }
     } else {
         switch (this->fragmentState) {
-            case BIO_DEKU_BABA_FRAGMENT_STATE_ABOVE_WATER:
+            case BIO_BABA_FRAGMENT_STATE_ABOVE_WATER:
                 this->dyna.actor.velocity.y = Rand_ZeroFloat(3.0f) + 3.0f;
                 this->dyna.actor.speed = Rand_CenteredFloat(5.0f) + 5.0f;
                 this->dyna.actor.world.rot.y = Rand_ZeroFloat(0x10000);
                 this->dyna.actor.gravity = -1.0f;
-                this->fragmentState = BIO_DEKU_BABA_FRAGMENT_STATE_FLYING_THROUGH_AIR;
+                this->fragmentState = BIO_BABA_FRAGMENT_STATE_FLYING_THROUGH_AIR;
                 break;
 
-            case BIO_DEKU_BABA_FRAGMENT_STATE_FLYING_THROUGH_AIR:
+            case BIO_BABA_FRAGMENT_STATE_FLYING_THROUGH_AIR:
                 Actor_MoveWithGravity(&this->dyna.actor);
 
                 if (this->fragmentPos.y < (this->dyna.actor.floorHeight - 30.0f)) {
@@ -1167,7 +1172,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
+    if (this->dyna.actor.params == BIO_BABA_TYPE_WALKING_HEAD) {
         Actor_MoveWithGravity(&this->dyna.actor);
         Matrix_RotateYS(this->knockbackAngle, MTXMODE_NEW);
         Matrix_MultVecZ(this->knockbackMagnitude, &this->knockbackVelocity);
@@ -1184,31 +1189,31 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
     }
 
     switch (this->drawDmgEffState) {
-        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE:
+        case BIO_BABA_DRAW_DMGEFF_STATE_NONE:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
             this->drawDmgEffTimer = 0;
             this->drawDmgEffAlpha = 0.0f;
             break;
 
-        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FIRE_INIT:
+        case BIO_BABA_DRAW_DMGEFF_STATE_FIRE_INIT:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
             this->drawDmgEffTimer = 80;
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffState++;
             this->drawDmgEffScale = 0.0f;
             // fallthrough
-        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FIRE_ACTIVE:
+        case BIO_BABA_DRAW_DMGEFF_STATE_FIRE_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffAlpha, 1.0f, 0.02f);
                 if (this->drawDmgEffAlpha == 0.0f) {
-                    this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE;
+                    this->drawDmgEffState = BIO_BABA_DRAW_DMGEFF_STATE_NONE;
                 }
             } else {
                 Math_ApproachF(&this->drawDmgEffScale, 1.0f, 0.1f, 0.5f);
             }
             break;
 
-        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FROZEN_INIT:
+        case BIO_BABA_DRAW_DMGEFF_STATE_FROZEN_INIT:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
             this->drawDmgEffTimer = 80;
             this->drawDmgEffAlpha = 1.0f;
@@ -1216,17 +1221,17 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = 0.0f;
             this->dmgEffFrozenSteamScale = 2.0f;
             // fallthrough
-        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE:
+        case BIO_BABA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Boss05_WalkingHead_Thaw(this, play);
-                this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE;
+                this->drawDmgEffState = BIO_BABA_DRAW_DMGEFF_STATE_NONE;
             } else {
                 Math_ApproachF(&this->drawDmgEffScale, 1.0f, 1.0f, 0.25f);
                 Math_ApproachF(&this->dmgEffFrozenSteamScale, 1.0f, 0.1f, 0.1f);
             }
             break;
 
-        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT:
+        case BIO_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
             this->drawDmgEffTimer = 80;
             this->drawDmgEffAlpha = 1.0f;
@@ -1234,12 +1239,12 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = 0.0f;
             break;
 
-        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE:
+        case BIO_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.03f);
 
                 if (this->drawDmgEffScale == 0.0f) {
-                    this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE;
+                    this->drawDmgEffState = BIO_BABA_DRAW_DMGEFF_STATE_NONE;
                     this->drawDmgEffAlpha = 0.0f;
                 }
             } else {
@@ -1250,17 +1255,17 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
 }
 
 static s8 sLimbIndexToLimbRotIndex[] = {
-    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_NONE
-    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_ROOTS
-    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_UPPER_STEM,      // BIO_DEKU_BABA_LILY_PAD_LIMB_UPPER_STEM
-    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_MIDDLE_STEM,     // BIO_DEKU_BABA_LILY_PAD_LIMB_MIDDLE_STEM
-    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LOWER_STEM,      // BIO_DEKU_BABA_LILY_PAD_LIMB_LOWER_STEM
-    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LEFT_UPPER_ARM,  // BIO_DEKU_BABA_LILY_PAD_LIMB_LEFT_UPPER_ARM
-    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LEFT_LOWER_ARM,  // BIO_DEKU_BABA_LILY_PAD_LIMB_LEFT_LOWER_ARM
-    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_UPPER_ARM, // BIO_DEKU_BABA_LILY_PAD_LIMB_RIGHT_UPPER_ARM
-    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_LOWER_ARM, // BIO_DEKU_BABA_LILY_PAD_LIMB_RIGHT_LOWER_ARM
-    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_LEAF
-    BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_MAX
+    BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_NONE
+    BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_ROOTS
+    BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_UPPER_STEM,      // BIO_DEKU_BABA_LILY_PAD_LIMB_UPPER_STEM
+    BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_MIDDLE_STEM,     // BIO_DEKU_BABA_LILY_PAD_LIMB_MIDDLE_STEM
+    BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LOWER_STEM,      // BIO_DEKU_BABA_LILY_PAD_LIMB_LOWER_STEM
+    BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LEFT_UPPER_ARM,  // BIO_DEKU_BABA_LILY_PAD_LIMB_LEFT_UPPER_ARM
+    BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_LEFT_LOWER_ARM,  // BIO_DEKU_BABA_LILY_PAD_LIMB_LEFT_LOWER_ARM
+    BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_UPPER_ARM, // BIO_DEKU_BABA_LILY_PAD_LIMB_RIGHT_UPPER_ARM
+    BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_LOWER_ARM, // BIO_DEKU_BABA_LILY_PAD_LIMB_RIGHT_LOWER_ARM
+    BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_LEAF
+    BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // BIO_DEKU_BABA_LILY_PAD_LIMB_MAX
 };
 
 s32 Boss05_OverrideLimbDraw_LilyPadWithHead(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
@@ -1278,7 +1283,7 @@ s32 Boss05_OverrideLimbDraw_LilyPadWithHead(PlayState* play, s32 limbIndex, Gfx*
         rot->z += KREG(35) * 0x100;
     }
 
-    if ((this->dyna.actor.params == BIO_DEKU_BABA_NO_LEAF_LILY_PAD_WITH_HEAD) &&
+    if ((this->dyna.actor.params == BIO_BABA_TYPE_NO_LEAF_LILY_PAD_WITH_HEAD) &&
         (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_LEAF)) {
         *dList = NULL;
     }
@@ -1288,7 +1293,7 @@ s32 Boss05_OverrideLimbDraw_LilyPadWithHead(PlayState* play, s32 limbIndex, Gfx*
     }
 
     limbRotIndex = sLimbIndexToLimbRotIndex[limbIndex];
-    if (limbRotIndex > BIO_DEKU_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE) {
+    if (limbRotIndex > BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE) {
         rot->x = rot->x + this->lilyPadWithHeadLimbRot[limbRotIndex].x;
         rot->y = rot->y + this->lilyPadWithHeadLimbRot[limbRotIndex].y;
         rot->z = rot->z + this->lilyPadWithHeadLimbRot[limbRotIndex].z;
@@ -1318,12 +1323,12 @@ void Boss05_PostLimbDraw_LilyPad(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 
     if (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_UPPER_STEM) {
         Matrix_MultZero(&upperStemPos);
-        Boss05_SetColliderSphere(BIO_DEKU_BABA_LILY_PAD_COLLIDER_UPPER_STEM, &this->lilyPadCollider, &upperStemPos);
+        Boss05_SetColliderSphere(BIO_BABA_LILY_PAD_COLLIDER_UPPER_STEM, &this->lilyPadCollider, &upperStemPos);
     }
 
     if (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_MIDDLE_STEM) {
         Matrix_MultVecY(-500.0f, &lowerStemPos);
-        Boss05_SetColliderSphere(BIO_DEKU_BABA_LILY_PAD_COLLIDER_MIDDLE_STEM, &this->lilyPadCollider, &lowerStemPos);
+        Boss05_SetColliderSphere(BIO_BABA_LILY_PAD_COLLIDER_MIDDLE_STEM, &this->lilyPadCollider, &lowerStemPos);
 
         if (this->actionFunc == Boss05_LilyPadWithHead_Move) {
             Matrix_MultVecY(1500.0f, &this->dyna.actor.focus.pos);
@@ -1344,16 +1349,16 @@ void Boss05_PostLimbDraw_Head(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 
     if (limbIndex == BIO_DEKU_BABA_HEAD_LIMB_BODY) {
         Matrix_MultVec3f(&sHeadColliderOffset, &sBioDekuBabaHeadColliderPos);
-        Boss05_SetColliderSphere(BIO_DEKU_BABA_HEAD_COLLIDER_HEAD, &this->headCollider, &sBioDekuBabaHeadColliderPos);
+        Boss05_SetColliderSphere(BIO_BABA_HEAD_COLLIDER_HEAD, &this->headCollider, &sBioDekuBabaHeadColliderPos);
 
-        if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
+        if (this->dyna.actor.params == BIO_BABA_TYPE_WALKING_HEAD) {
             Matrix_MultVec3f(&sHeadOffset, &this->dyna.actor.focus.pos);
         }
 
-        if (this->drawDmgEffState != BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE) {
-            Matrix_MultVec3f(&sHeadOffset, &this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD]);
+        if (this->drawDmgEffState != BIO_BABA_DRAW_DMGEFF_STATE_NONE) {
+            Matrix_MultVec3f(&sHeadOffset, &this->bodyPartsPos[BIO_BABA_BODYPART_HEAD]);
             if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) {
-                this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].y -= 15.0f;
+                this->bodyPartsPos[BIO_BABA_BODYPART_HEAD].y -= 15.0f;
             }
         }
     }
@@ -1405,29 +1410,29 @@ void Boss05_TransformLimbDraw_FallingHeadLilyPad(PlayState* play, s32 limbIndex,
 }
 
 BioDekuBabaHeadLimb D_809F1CE8[] = {
-    BIO_DEKU_BABA_HEAD_LIMB_LOWER_JAW,            // BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW
-    BIO_DEKU_BABA_HEAD_LIMB_UPPER_JAW,            // BIO_DEKU_BABA_TYPE_FRAGMENT_UPPER_JAW
-    BIO_DEKU_BABA_HEAD_LIMB_BODY,                 // BIO_DEKU_BABA_TYPE_FRAGMENT_BODY
-    BIO_DEKU_BABA_HEAD_LIMB_BACK_UPPER_LEG,       // BIO_DEKU_BABA_TYPE_FRAGMENT_BACK_UPPER_LEG
-    BIO_DEKU_BABA_HEAD_LIMB_BACK_LOWER_LEG,       // BIO_DEKU_BABA_TYPE_FRAGMENT_BACK_LOWER_LEG
-    BIO_DEKU_BABA_HEAD_LIMB_LEFT_UPPER_LEG,       // BIO_DEKU_BABA_TYPE_FRAGMENT_LEFT_UPPER_LEG
-    BIO_DEKU_BABA_HEAD_LIMB_LEFT_LOWER_LEG,       // BIO_DEKU_BABA_TYPE_FRAGMENT_LEFT_LOWER_LEG
-    BIO_DEKU_BABA_HEAD_LIMB_LEFT_LOWER_EYESTALK,  // BIO_DEKU_BABA_TYPE_FRAGMENT_LEFT_LOWER_EYESTALK
-    BIO_DEKU_BABA_HEAD_LIMB_LEFT_UPPER_EYESTALK,  // BIO_DEKU_BABA_TYPE_FRAGMENT_LEFT_UPPER_EYESTALK
-    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_LOWER_EYESTALK, // BIO_DEKU_BABA_TYPE_FRAGMENT_RIGHT_LOWER_EYESTALK
-    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_UPPER_EYESTALK, // BIO_DEKU_BABA_TYPE_FRAGMENT_RIGHT_UPPER_EYESTALK
-    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_UPPER_LEG,      // BIO_DEKU_BABA_TYPE_FRAGMENT_RIGHT_UPPER_LEG
-    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_LOWER_LEG,      // BIO_DEKU_BABA_TYPE_FRAGMENT_RIGHT_LOWER_LEG
-    BIO_DEKU_BABA_HEAD_LIMB_LEAVES,               // BIO_DEKU_BABA_TYPE_FRAGMENT_LEAVES
+    BIO_DEKU_BABA_HEAD_LIMB_LOWER_JAW,            // BIO_BABA_TYPE_FRAGMENT_LOWER_JAW
+    BIO_DEKU_BABA_HEAD_LIMB_UPPER_JAW,            // BIO_BABA_TYPE_FRAGMENT_UPPER_JAW
+    BIO_DEKU_BABA_HEAD_LIMB_BODY,                 // BIO_BABA_TYPE_FRAGMENT_BODY
+    BIO_DEKU_BABA_HEAD_LIMB_BACK_UPPER_LEG,       // BIO_BABA_TYPE_FRAGMENT_BACK_UPPER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_BACK_LOWER_LEG,       // BIO_BABA_TYPE_FRAGMENT_BACK_LOWER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_LEFT_UPPER_LEG,       // BIO_BABA_TYPE_FRAGMENT_LEFT_UPPER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_LEFT_LOWER_LEG,       // BIO_BABA_TYPE_FRAGMENT_LEFT_LOWER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_LEFT_LOWER_EYESTALK,  // BIO_BABA_TYPE_FRAGMENT_LEFT_LOWER_EYESTALK
+    BIO_DEKU_BABA_HEAD_LIMB_LEFT_UPPER_EYESTALK,  // BIO_BABA_TYPE_FRAGMENT_LEFT_UPPER_EYESTALK
+    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_LOWER_EYESTALK, // BIO_BABA_TYPE_FRAGMENT_RIGHT_LOWER_EYESTALK
+    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_UPPER_EYESTALK, // BIO_BABA_TYPE_FRAGMENT_RIGHT_UPPER_EYESTALK
+    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_UPPER_LEG,      // BIO_BABA_TYPE_FRAGMENT_RIGHT_UPPER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_RIGHT_LOWER_LEG,      // BIO_BABA_TYPE_FRAGMENT_RIGHT_LOWER_LEG
+    BIO_DEKU_BABA_HEAD_LIMB_LEAVES,               // BIO_BABA_TYPE_FRAGMENT_LEAVES
 };
 
 s32 Boss05_OverrideLimbDraw_Fragment(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                      Actor* thisx) {
     Boss05* this = THIS;
 
-    if (limbIndex != D_809F1CE8[this->dyna.actor.params - BIO_DEKU_BABA_TYPE_FRAGMENT_BASE]) {
+    if (limbIndex != D_809F1CE8[this->dyna.actor.params - BIO_BABA_TYPE_FRAGMENT_BASE]) {
         *dList = NULL;
-    } else if (this->fragmentState >= BIO_DEKU_BABA_FRAGMENT_STATE_ABOVE_WATER) {
+    } else if (this->fragmentState >= BIO_BABA_FRAGMENT_STATE_ABOVE_WATER) {
         rot->x += this->frameCounter * 0x3000;
         rot->y += this->frameCounter * 0x1A00;
         rot->z += this->frameCounter * 0x2000;
@@ -1438,7 +1443,7 @@ s32 Boss05_OverrideLimbDraw_Fragment(PlayState* play, s32 limbIndex, Gfx** dList
 void Boss05_PostLimbDraw_Fragment(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Boss05* this = THIS;
 
-    if (limbIndex != D_809F1CE8[this->dyna.actor.params - BIO_DEKU_BABA_TYPE_FRAGMENT_BASE]) {
+    if (limbIndex != D_809F1CE8[this->dyna.actor.params - BIO_BABA_TYPE_FRAGMENT_BASE]) {
         Matrix_MultZero(&this->fragmentPos);
     }
 }
@@ -1471,7 +1476,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         SkelAnime_DrawTransformFlexOpa(play, this->headSkelAnime.skeleton, this->headSkelAnime.jointTable,
                                        this->headSkelAnime.dListCount, Boss05_OverrideLimbDraw_Head,
                                        Boss05_PostLimbDraw_Head, Boss05_TransformLimbDraw_Head, &this->dyna.actor);
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_LILY_PAD) {
+    } else if (this->dyna.actor.params == BIO_BABA_TYPE_LILY_PAD) {
         Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                          MTXMODE_NEW);
         Matrix_RotateYS(this->lilyPadRotY, MTXMODE_APPLY);
@@ -1485,7 +1490,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         SkelAnime_DrawFlexOpa(play, this->lilyPadSkelAnime.skeleton, this->lilyPadSkelAnime.jointTable,
                               this->lilyPadSkelAnime.dListCount, Boss05_OverrideLimbDraw_LilyPad, NULL,
                               &this->dyna.actor);
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_FALLING_HEAD) {
+    } else if (this->dyna.actor.params == BIO_BABA_TYPE_FALLING_HEAD) {
         SkelAnime_DrawTransformFlexOpa(play, this->lilyPadSkelAnime.skeleton, this->lilyPadSkelAnime.jointTable,
                                        this->lilyPadSkelAnime.dListCount, Boss05_OverrideLimbDraw_FallingHeadLilyPad,
                                        Boss05_PostLimbDraw_LilyPad, Boss05_TransformLimbDraw_FallingHeadLilyPad,
@@ -1506,7 +1511,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         Actor_DrawDamageEffects(play, &this->dyna.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
                                 this->drawDmgEffScale, this->dmgEffFrozenSteamScale, this->drawDmgEffAlpha,
                                 this->drawDmgEffType);
-    } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
+    } else if (this->dyna.actor.params == BIO_BABA_TYPE_WALKING_HEAD) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));
 
         if ((this->damagedFlashTimer % 2) != 0) {
@@ -1520,7 +1525,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         Actor_DrawDamageEffects(play, &this->dyna.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
                                 this->drawDmgEffScale, this->dmgEffFrozenSteamScale, this->drawDmgEffAlpha,
                                 this->drawDmgEffType);
-    } else if (this->dyna.actor.params >= BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW) {
+    } else if (this->dyna.actor.params >= BIO_BABA_TYPE_FRAGMENT_LOWER_JAW) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));
 
         SkelAnime_DrawFlexOpa(play, this->headSkelAnime.skeleton, this->headSkelAnime.jointTable,
