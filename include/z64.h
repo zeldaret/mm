@@ -58,6 +58,7 @@
 #include "z64save.h"
 #include "z64scene.h"
 #include "z64schedule.h"
+#include "z64skin_matrix.h"
 #include "z64skin.h"
 #include "z64skybox.h"
 #include "z64sound_source.h"
