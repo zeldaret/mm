@@ -1091,7 +1091,7 @@ void EnJs_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_8096A9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnJs_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnJs* this = THIS;
 
@@ -1120,5 +1120,5 @@ void EnJs_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                          func_8096A9F4, &this->actor);
+                          EnJs_PostLimbDraw, &this->actor);
 }

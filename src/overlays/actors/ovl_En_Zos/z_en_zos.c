@@ -714,11 +714,11 @@ void EnZos_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 func_80BBC4E4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnZos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     return false;
 }
 
-void func_80BBC500(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnZos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BBC750 = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == EVAN_LIMB_HEAD) {
@@ -760,7 +760,7 @@ void EnZos_Draw(Actor* thisx, PlayState* play) {
     Matrix_Pop();
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80BBC4E4, func_80BBC500, &this->actor);
+                          EnZos_OverrideLimbDraw, EnZos_PostLimbDraw, &this->actor);
 
     if (this->unk_2B6 & 0x40) {
         POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
