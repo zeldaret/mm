@@ -206,4 +206,49 @@ typedef struct {
     /* 0x254 */ char unk_254[0x4];
 } TransitionContext; // size = 0x258
 
+
+// z_dbdemo_dlftbls.c
+
+void Transition_Init(TransitionContext* transitionCtx);
+void Transition_Destroy(TransitionContext* transitionCtx);
+
+// z_fbdemo.c
+
+void TransitionTile_Destroy(TransitionTile* this);
+TransitionTile* TransitionTile_Init(TransitionTile* this, s32 cols, s32 rows);
+void TransitionTile_Draw(TransitionTile* this, Gfx** gfxP);
+void TransitionTile_Update(TransitionTile* this);
+
+// z_fbdemo_fade.c
+
+void TransitionFade_Start(void* thisx);
+void* TransitionFade_Init(void* thisx);
+void TransitionFade_Destroy(void* thisx);
+void TransitionFade_Update(void* thisx, s32 updateRate);
+void TransitionFade_Draw(void* thisx, Gfx** gfxP);
+s32 TransitionFade_IsDone(void* thisx);
+void TransitionFade_SetColor(void* thisx, u32 color);
+void TransitionFade_SetType(void* thisx, s32 type);
+
+// z_fbdemo_circle.c
+
+void TransitionCircle_Start(void* thisx);
+void* TransitionCircle_Init(void* thisx);
+void TransitionCircle_Destroy(void* thisx);
+void TransitionCircle_Update(void* thisx);
+void TransitionCircle_SetColor(void* thisx, u32 color);
+void TransitionCircle_SetType(void* thisx, s32 type);
+void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt, f32 arg6);
+void TransitionCircle_Draw(void* thisx, Gfx** gfxp);
+s32 TransitionCircle_IsDone(void* thisx);
+
+// z_overlay.c
+
+void* TransitionOverlay_VramToRam(TransitionOverlay *overlayEntry, void* vramAddr);
+void TransitionOverlay_VramToRamArray(TransitionOverlay *overlayEntry, void** vramAddrs, s32 count);
+s32  TransitionOverlay_Load(TransitionOverlay *overlayEntry);
+s32  TransitionOverlay_Free(TransitionOverlay *overlayEntry);
+void TransitionOverlay_ClearLoadInfo(TransitionOverlay *overlayEntry);
+void TransitionOverlay_SetSegment(TransitionOverlay *overlayEntry, void* vramStart, void* vramEnd, uintptr_t vromStart, uintptr_t vromEnd);
+
 #endif
