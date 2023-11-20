@@ -12,6 +12,14 @@
 #include "overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h"
 
+typedef enum TransitionOverlayStatus {
+    /* -1 */ TRANSITION_OVERLAY_STATUS_FAILED = -1, // failed allocation or null reference
+    /*  0 */ TRANSITION_OVERLAY_STATUS_LOAD_FREE, // successfully loaded/freed overlay
+    /*  1 */ TRANSITION_OVERLAY_STATUS_ADD_REMOVAL, // successfully added/removed instance
+    /*  2 */ TRANSITION_OVERLAY_STATUS_LOADED_NO_INSTANCES, // overlay is loaded but has no instances (?) TODO: Figure out why this exists
+    /*  3 */ TRANSITION_OVERLAY_STATUS_INTERNAL // internal overlay, so always loaded
+} TransitionOverlayStatus;
+
 typedef enum TransitionTileState {
     /* 0 */ TRANS_TILE_OFF, // Inactive, do nothing
     /* 1 */ TRANS_TILE_SETUP, // Save the necessary buffers
@@ -235,22 +243,14 @@ void TransitionFade_SetType(void* thisx, s32 type);
 
 // z_fbdemo_circle.c
 
-void TransitionCircle_Start(void* thisx);
-void* TransitionCircle_Init(void* thisx);
-void TransitionCircle_Destroy(void* thisx);
-void TransitionCircle_Update(void* thisx);
-void TransitionCircle_SetColor(void* thisx, u32 color);
-void TransitionCircle_SetType(void* thisx, s32 type);
 void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt, f32 arg6);
-void TransitionCircle_Draw(void* thisx, Gfx** gfxp);
-s32 TransitionCircle_IsDone(void* thisx);
 
 // z_overlay.c
 
-void* TransitionOverlay_VramToRam(TransitionOverlay *overlayEntry, void* vramAddr);
+void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr);
 void TransitionOverlay_VramToRamArray(TransitionOverlay *overlayEntry, void** vramAddrs, s32 count);
-s32  TransitionOverlay_Load(TransitionOverlay *overlayEntry);
-s32  TransitionOverlay_Free(TransitionOverlay *overlayEntry);
+TransitionOverlayStatus TransitionOverlay_Load(TransitionOverlay *overlayEntry);
+TransitionOverlayStatus TransitionOverlay_Free(TransitionOverlay *overlayEntry);
 void TransitionOverlay_ClearLoadInfo(TransitionOverlay *overlayEntry);
 void TransitionOverlay_SetSegment(TransitionOverlay *overlayEntry, void* vramStart, void* vramEnd, uintptr_t vromStart, uintptr_t vromEnd);
 

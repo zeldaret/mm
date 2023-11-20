@@ -21,9 +21,17 @@ Gfx sTransCircleSetupDL[] = {
     gsSPEndDisplayList(),
 };
 
-//! @bug: TransitionCircle_Update should take an additional argument `s32 updateRate`
+void TransitionCircle_Start(void* thisx);
+void* TransitionCircle_Init(void* thisx);
+void TransitionCircle_Destroy(void* thisx);
+void TransitionCircle_Update(void* thisx, s32 updateRate);
+void TransitionCircle_SetColor(void* thisx, u32 color);
+void TransitionCircle_SetType(void* thisx, s32 type);
+void TransitionCircle_Draw(void* thisx, Gfx** gfxp);
+s32 TransitionCircle_IsDone(void* thisx);
+
 TransitionInit TransitionCircle_InitVars = {
-    TransitionCircle_Init,   TransitionCircle_Destroy, (void*)TransitionCircle_Update, TransitionCircle_Draw,
+    TransitionCircle_Init,   TransitionCircle_Destroy, TransitionCircle_Update, TransitionCircle_Draw,
     TransitionCircle_Start,  TransitionCircle_SetType, TransitionCircle_SetColor,      NULL,
     TransitionCircle_IsDone,
 };
@@ -59,8 +67,9 @@ void* TransitionCircle_Init(void* thisx) {
 void TransitionCircle_Destroy(void* thisx) {
 }
 
-void TransitionCircle_Update(void* thisx) {
+void TransitionCircle_Update(void* thisx, s32 updateRate) {
     TransitionCircle* this = (TransitionCircle*)thisx;
+    s32 unused = updateRate ? 0 : 0;
 
     this->isDone = Math_StepToF(&this->referenceRadius, this->targetRadius, this->stepValue);
 }
