@@ -84,8 +84,8 @@ const char* sFpuExceptions[] = {
     "Unimplemented operation", "Invalid operation", "Division by zero", "Overflow", "Underflow", "Inexact operation",
 };
 
-void Fault_SleepImpl(u32 duration) {
-    OSTime value = (duration * OS_CPU_COUNTER) / 1000ULL;
+void Fault_SleepImpl(u32 msec) {
+    OSTime value = (msec * OS_CPU_COUNTER) / 1000ULL;
 
     csleep(value);
 }

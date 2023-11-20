@@ -6,7 +6,7 @@
 void csleep(OSTime time);
 void nsleep(u32 nsec);
 void usleep(u32 usec);
-void msleep(u32 ms);
+void msleep(u32 msec);
 void sleep(u32 sec);
 
 #endif

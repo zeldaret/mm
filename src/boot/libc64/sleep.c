@@ -19,8 +19,8 @@ void usleep(u32 usec) {
     csleep(OS_USEC_TO_CYCLES(usec));
 }
 
-void msleep(u32 ms) {
-    csleep((ms * OS_CPU_COUNTER) / 1000ULL);
+void msleep(u32 msec) {
+    csleep((msec * OS_CPU_COUNTER) / 1000ULL);
 }
 
 void sleep(u32 sec) {
