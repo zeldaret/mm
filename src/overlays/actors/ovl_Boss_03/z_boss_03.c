@@ -517,7 +517,6 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
                        GYORG_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.2f);
 
-    // CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GYORG): intro cutscene already watched
     if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GYORG)) {
         this->actionFunc = func_809E344C;
         D_809E9842 = false;

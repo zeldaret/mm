@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "objects/object_boss_hakugin/object_boss_hakugin.h"
+#include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
 
 struct BossHakugin;
 
@@ -12,36 +13,41 @@ struct BossHakugin;
 
 typedef void (*BossHakuginActionFunc)(struct BossHakugin*, PlayState*);
 
-typedef enum GohtEffectType {
-    /* 0 */ GOHT_EFFECT_ROCK,
-    /* 1 */ GOHT_EFFECT_STALACTITE
-} GohtEffectType;
 
-typedef struct GohtEffect {
+typedef enum GohtRockType {
+    /* 0 */ GOHT_ROCK_TYPE_BOULDER,
+    /* 1 */ GOHT_ROCK_TYPE_STALACTITE
+} GohtRockType;
+
+typedef struct GohtRock {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;
     /* 0x18 */ s16 timer;
-    /* 0x1A */ s16 type;
+    /* 0x1A */ s16 type; // See GohtRockType
     /* 0x1C */ Vec3s rot;
     /* 0x24 */ f32 scale;
-} GohtEffect; // size = 0x28
+} GohtRock; // size = 0x28
 
-#define GOHT_EFFECT_COUNT 180
+#define GOHT_ROCK_COUNT 180
 
-typedef struct BossHakuginUnkStruct_2618 {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ Vec3s unk_0E;
+typedef struct GohtElectricBall {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ s16 alpha;
+    /* 0x0E */ Vec3s rot;
     /* 0x14 */ ColliderTris unk_14;
     /* 0x34 */ ColliderTrisElement unk_34;
-} BossHakuginUnkStruct_2618; // size = 0x90
+} GohtElectricBall; // size = 0x90
 
-typedef struct BossHakuginFhgFlashUnkStruct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ s16 unk_10;
+#define GOHT_ELECTRIC_BALL_COUNT 20
+
+typedef struct GohtMechanicalMalfunctionEffect {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ f32 scaleXY;
+    /* 0x10 */ s16 life;
     /* 0x12 */ s16 unk_12;
-} BossHakuginFhgFlashUnkStruct; // size = 0x14
+} GohtMechanicalMalfunctionEffect; // size = 0x14
+
+#define GOHT_MECHANICAL_MALFUNCTION_NUM_TYPES (FHGFLASH_SHOCK_GOHT_MAX - FHGFLASH_SHOCK_GOHT_2)
 
 typedef enum GohtBodyPart {
     /*  0 */ GOHT_BODYPART_PELVIS,
@@ -70,8 +76,8 @@ typedef struct BossHakugin {
     /* 0x018D */ u8 unk_018D;
     /* 0x018E */ u8 unk_018E;
     /* 0x018F */ u8 unk_018F;
-    /* 0x0190 */ u8 unk_0190; // boolean?
-    /* 0x0191 */ u8 unk_0191;
+    /* 0x0190 */ u8 blockMechanicalMalfunctionEffects; // boolean?
+    /* 0x0191 */ u8 mechanicalMalfunctionBodyPartIndex; // See GohtBodyPart
     /* 0x0192 */ u8 unk_0192;
     /* 0x0193 */ u8 unk_0193;
     /* 0x0194 */ u8 unk_0194;
@@ -120,9 +126,9 @@ typedef struct BossHakugin {
     /* 0x0964 */ ColliderCylinder unk_0964;
     /* 0x09B0 */ Actor* unk_09B0[8];
     /* 0x09D0 */ Actor* unk_09D0[10];
-    /* 0x09F8 */ GohtEffect effect[GOHT_EFFECT_COUNT];
-    /* 0x2618 */ BossHakuginUnkStruct_2618 unk_2618[20];
-    /* 0x3158 */ BossHakuginFhgFlashUnkStruct unk_3158[5][15];
+    /* 0x09F8 */ GohtRock rocks[GOHT_ROCK_COUNT];
+    /* 0x2618 */ GohtElectricBall electricBalls[GOHT_ELECTRIC_BALL_COUNT]; // A chain of electric balls used as an attack
+    /* 0x3158 */ GohtMechanicalMalfunctionEffect mechanicalMalfunctionEffects[GOHT_MECHANICAL_MALFUNCTION_NUM_TYPES][GOHT_BODYPART_MAX]; // Black smoke and electric zaps on body parts as damage accumulates 
     /* 0x3734 */ Vec3f unk_3734[10];
     /* 0x37AC */ Vec3f unk_37AC;
     /* 0x37B8 */ ColliderSphere unk_37B8;

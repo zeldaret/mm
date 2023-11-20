@@ -12,7 +12,6 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Hakurock/z_en_hakurock.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
-#include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -26,9 +25,9 @@
 void BossHakugin_Init(Actor* thisx, PlayState* play2);
 void BossHakugin_Destroy(Actor* thisx, PlayState* play);
 void BossHakugin_Update(Actor* thisx, PlayState* play);
-void func_80B0E548(Actor* thisx, PlayState* play2);
+void BossHakugin_UpdateDead(Actor* thisx, PlayState* play2);
 void BossHakugin_Draw(Actor* thisx, PlayState* play);
-void BossHakugin_DrawEffectsDead(Actor* thisx, PlayState* play);
+void BossHakugin_DrawDead(Actor* thisx, PlayState* play);
 
 void func_80B058C0(BossHakugin* this);
 void BossHakugin_SpawnBlueWarp(BossHakugin* this, PlayState* play);
@@ -454,9 +453,12 @@ static s8 sLimbToBodyParts[GOHT_LIMB_MAX] = {
     GOHT_BODYPART_BACK_LEFT_HOOF,        // GOHT_LIMB_BACK_LEFT_HOOF
 };
 
-s32 D_80B0EAB0[5] = {
-    GOHT_LIMB_BACK_LEFT_THIGH,      GOHT_LIMB_BACK_RIGHT_PASTERN,    GOHT_LIMB_JAW_ROOT,
-    GOHT_LIMB_FRONT_LEFT_LOWER_LEG, GOHT_LIMB_FRONT_RIGHT_UPPER_LEG,
+s32 D_80B0EAB0[GOHT_MECHANICAL_MALFUNCTION_NUM_TYPES] = {
+    GOHT_LIMB_BACK_LEFT_THIGH,       // FHGFLASH_SHOCK_GOHT_2
+    GOHT_LIMB_BACK_RIGHT_PASTERN,    // FHGFLASH_SHOCK_GOHT_3
+    GOHT_LIMB_JAW_ROOT,              // FHGFLASH_SHOCK_GOHT_4
+    GOHT_LIMB_FRONT_LEFT_LOWER_LEG,  // FHGFLASH_SHOCK_GOHT_5
+    GOHT_LIMB_FRONT_RIGHT_UPPER_LEG, // FHGFLASH_SHOCK_GOHT_6
 };
 
 static Color_RGBA8 sSparklePrimColor = { 250, 250, 250, 255 };
@@ -488,8 +490,9 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     }
 
     Collider_InitAndSetJntSph(play, &this->unk_0484, &this->actor, &sJntSphInit, this->unk_04A4);
-    for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
-        Collider_InitAndSetTris(play, &this->unk_2618[i].unk_14, &this->actor, &sTrisInit, &this->unk_2618[i].unk_34);
+    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
+        Collider_InitAndSetTris(play, &this->electricBalls[i].unk_14, &this->actor, &sTrisInit,
+                                &this->electricBalls[i].unk_34);
     }
 
     Collider_InitAndSetSphere(play, &this->unk_37B8, &this->actor, &sSphereInit);
@@ -521,8 +524,8 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
                                                0, 0, 0, EN_HAKUROCK_TYPE_UNK_2);
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->effect); i++) {
-        this->effect[i].timer = -1;
+    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
+        this->rocks[i].timer = -1;
     }
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -557,8 +560,8 @@ void BossHakugin_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyJntSph(play, &this->unk_0484);
     Collider_DestroyCylinder(play, &this->unk_0964);
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
-        Collider_DestroyTris(play, &this->unk_2618[i].unk_14);
+    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
+        Collider_DestroyTris(play, &this->electricBalls[i].unk_14);
     }
 
     Collider_DestroySphere(play, &this->unk_37B8);
@@ -693,14 +696,14 @@ void func_80B05D4C(BossHakugin* this) {
     s32 i;
     s16 var_t1 = 0;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
-        if (this->unk_2618[i].unk_0C == 255) {
-            lightPos = &this->unk_2618[i].unk_00;
+    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
+        if (this->electricBalls[i].alpha == 255) {
+            lightPos = &this->electricBalls[i].pos;
             var_t1 = 5000;
             break;
         }
     }
-    if (i == ARRAY_COUNT(this->unk_2618)) {
+    if (i == GOHT_ELECTRIC_BALL_COUNT) {
         if (this->unk_01C8 > 0.0f) {
             lightPos = &this->unk_0380;
             var_t1 = (this->unk_01C8 / 30.0f) * 5000.0f;
@@ -821,19 +824,19 @@ void func_80B0607C(BossHakugin* this, PlayState* play) {
     }
 }
 
-void func_80B06558(BossHakuginUnkStruct_2618* arg0) {
+void func_80B06558(GohtElectricBall* electricBall) {
     s32 i;
     Vec3f sp38[3];
 
-    Matrix_SetTranslateRotateYXZ(arg0->unk_00.x, arg0->unk_00.y, arg0->unk_00.z, &arg0->unk_0E);
+    Matrix_SetTranslateRotateYXZ(electricBall->pos.x, electricBall->pos.y, electricBall->pos.z, &electricBall->rot);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     for (i = 0; i < 3; i++) {
         Matrix_MultVec3f(&sTrisElementsInit[0].dim.vtx[i], &sp38[i]);
     }
-    Collider_SetTrisVertices(&arg0->unk_14, 0, &sp38[0], &sp38[1], &sp38[2]);
+    Collider_SetTrisVertices(&electricBall->unk_14, 0, &sp38[0], &sp38[1], &sp38[2]);
 }
 
-void func_80B06600(BossHakugin* this, Vec3f* arg1, PlayState* play) {
+void BossHakugin_AddElectricBalls(BossHakugin* this, Vec3f* arg1, PlayState* play) {
     s32 i;
     Player* player = GET_PLAYER(play);
     CollisionPoly* spD4;
@@ -843,7 +846,7 @@ void func_80B06600(BossHakugin* this, Vec3f* arg1, PlayState* play) {
     Vec3f spA4;
     Vec3f sp98;
     Vec3f sp8C;
-    BossHakuginUnkStruct_2618* effect;
+    GohtElectricBall* electricBall;
     s32 bgId;
 
     Math_Vec3f_Copy(&spC8, arg1);
@@ -853,65 +856,65 @@ void func_80B06600(BossHakugin* this, Vec3f* arg1, PlayState* play) {
     Actor_OffsetOfPointInActorCoords(&this->actor, &sp98, &spBC);
     Audio_PlaySfx_AtPos(&this->unk_0458, NA_SE_EN_COMMON_THUNDER_THR);
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
-        effect = &this->unk_2618[i];
+    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
+        electricBall = &this->electricBalls[i];
         Actor_OffsetOfPointInActorCoords(&this->actor, &sp8C, &spC8);
 
         if (sp98.z < sp8C.z) {
-            effect->unk_0E.y = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x13);
+            electricBall->rot.y = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x13);
         } else {
-            effect->unk_0E.y = Math_Vec3f_Yaw(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
+            electricBall->rot.y = Math_Vec3f_Yaw(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
         }
 
-        effect->unk_0E.x = Math_Vec3f_Pitch(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
-        effect->unk_0E.z = 0;
-        effect->unk_00.x = spC8.x + (80.0f * Math_CosS(effect->unk_0E.x) * Math_SinS(effect->unk_0E.y));
-        effect->unk_00.y = spC8.y - (80.0f * Math_SinS(effect->unk_0E.x));
-        effect->unk_00.z = spC8.z + (80.0f * Math_CosS(effect->unk_0E.x) * Math_CosS(effect->unk_0E.y));
-        spB0.x = (2.0f * effect->unk_00.x) - spC8.x;
-        spB0.y = (2.0f * effect->unk_00.y) - spC8.y;
-        spB0.z = (2.0f * effect->unk_00.z) - spC8.z;
+        electricBall->rot.x = Math_Vec3f_Pitch(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
+        electricBall->rot.z = 0;
+        electricBall->pos.x = spC8.x + (80.0f * Math_CosS(electricBall->rot.x) * Math_SinS(electricBall->rot.y));
+        electricBall->pos.y = spC8.y - (80.0f * Math_SinS(electricBall->rot.x));
+        electricBall->pos.z = spC8.z + (80.0f * Math_CosS(electricBall->rot.x) * Math_CosS(electricBall->rot.y));
+        spB0.x = (2.0f * electricBall->pos.x) - spC8.x;
+        spB0.y = (2.0f * electricBall->pos.y) - spC8.y;
+        spB0.z = (2.0f * electricBall->pos.z) - spC8.z;
 
         if (BgCheck_EntityLineTest1(&play->colCtx, &spC8, &spB0, &spA4, &spD4, false, true, false, true, &bgId)) {
-            effect->unk_0E.x -= 0x2000;
-            effect->unk_00.x = spC8.x + (80.0f * Math_CosS(effect->unk_0E.x) * Math_SinS(effect->unk_0E.y));
-            effect->unk_00.y = spC8.y - (80.0f * Math_SinS(effect->unk_0E.x));
-            effect->unk_00.z = spC8.z + (80.0f * Math_CosS(effect->unk_0E.x) * Math_CosS(effect->unk_0E.y));
-            spC8.x = (2.0f * effect->unk_00.x) - spC8.x;
-            spC8.y = (2.0f * effect->unk_00.y) - spC8.y;
-            spC8.z = (2.0f * effect->unk_00.z) - spC8.z;
+            electricBall->rot.x -= 0x2000;
+            electricBall->pos.x = spC8.x + (80.0f * Math_CosS(electricBall->rot.x) * Math_SinS(electricBall->rot.y));
+            electricBall->pos.y = spC8.y - (80.0f * Math_SinS(electricBall->rot.x));
+            electricBall->pos.z = spC8.z + (80.0f * Math_CosS(electricBall->rot.x) * Math_CosS(electricBall->rot.y));
+            spC8.x = (2.0f * electricBall->pos.x) - spC8.x;
+            spC8.y = (2.0f * electricBall->pos.y) - spC8.y;
+            spC8.z = (2.0f * electricBall->pos.z) - spC8.z;
         } else {
             Math_Vec3f_Copy(&spC8, &spB0);
         }
 
-        effect->unk_0C = 255 + 20 * (i + 1);
-        func_80B06558(effect);
-        effect->unk_0E.z = (s32)Rand_Next() >> 0x10;
+        electricBall->alpha = 255 + 20 * (i + 1);
+        func_80B06558(electricBall);
+        electricBall->rot.z = (s32)Rand_Next() >> 0x10;
     }
 }
 
 void func_80B0696C(BossHakugin* this, Vec3f* pos) {
     s32 i;
-    GohtEffect* effect;
+    GohtRock* rock;
 
-    for (i = 0; i < ARRAY_COUNT(this->effect); i++) {
-        effect = &this->effect[i];
-        if (effect->timer < 0) {
+    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
+        rock = &this->rocks[i];
+        if (rock->timer < 0) {
             VecGeo velocityGeo;
 
-            Math_Vec3f_Copy(&effect->pos, pos);
+            Math_Vec3f_Copy(&rock->pos, pos);
             velocityGeo.pitch = Rand_S16Offset(0x1000, 0x3000);
             velocityGeo.yaw = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x12) + 0x8000;
             velocityGeo.r = Rand_ZeroFloat(5.0f) + 7.0f;
-            effect->velocity.x = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_SinS(velocityGeo.yaw);
-            effect->velocity.y = velocityGeo.r * Math_SinS(velocityGeo.pitch);
-            effect->velocity.z = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_CosS(velocityGeo.yaw);
-            effect->pos.x = pos->x + (Rand_ZeroFloat(3.0f) * effect->velocity.x);
-            effect->pos.y = pos->y + (Rand_ZeroFloat(3.0f) * effect->velocity.y);
-            effect->pos.z = pos->z + (Rand_ZeroFloat(3.0f) * effect->velocity.z);
-            effect->scale = (Rand_ZeroFloat(6.0f) + 15.0f) * 0.0001f;
-            effect->timer = 40;
-            effect->type = GOHT_EFFECT_ROCK;
+            rock->velocity.x = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_SinS(velocityGeo.yaw);
+            rock->velocity.y = velocityGeo.r * Math_SinS(velocityGeo.pitch);
+            rock->velocity.z = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_CosS(velocityGeo.yaw);
+            rock->pos.x = pos->x + (Rand_ZeroFloat(3.0f) * rock->velocity.x);
+            rock->pos.y = pos->y + (Rand_ZeroFloat(3.0f) * rock->velocity.y);
+            rock->pos.z = pos->z + (Rand_ZeroFloat(3.0f) * rock->velocity.z);
+            rock->scale = (Rand_ZeroFloat(6.0f) + 15.0f) * 0.0001f;
+            rock->timer = 40;
+            rock->type = GOHT_ROCK_TYPE_BOULDER;
             break;
         }
     }
@@ -1004,30 +1007,31 @@ void func_80B06D38(BossHakugin* this, PlayState* play) {
     }
 }
 
-void func_80B06F48(BossHakugin* this, PlayState* play) {
-    BossHakuginFhgFlashUnkStruct* iter;
-    BossHakuginFhgFlashUnkStruct* iter2;
-    BossHakuginFhgFlashUnkStruct* iter3;
+void BossHakugin_AddMechanicalMalfunctionEffects(BossHakugin* this, PlayState* play) {
+    GohtMechanicalMalfunctionEffect* malfunctionEffect;
+    GohtMechanicalMalfunctionEffect* malfunctionEffect2;
+    GohtMechanicalMalfunctionEffect* malfunctionEffect3;
     Vec3f spA0;
-    s32 sp9C = this->unk_0191 + 3;
+    GohtBodyPart bodyPartIndex = this->mechanicalMalfunctionBodyPartIndex + 3;
     s32 var_s4;
-    s32 i;
+    s32 type;
     s32 j;
     s32 pad;
 
-    if (sp9C >= ARRAY_COUNT(this->unk_3158[0])) {
-        sp9C = 0;
+    if (bodyPartIndex >= GOHT_BODYPART_MAX) {
+        bodyPartIndex = 0;
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_3158); i++) {
-        if (((15 - (3 * i)) < this->actor.colChkInfo.health) || !(GOHT_LIMB_FLAG(D_80B0EAB0[i]) & this->unk_01B0)) {
+    for (type = 0; type < GOHT_MECHANICAL_MALFUNCTION_NUM_TYPES; type++) {
+        if (((15 - (3 * type)) < this->actor.colChkInfo.health) ||
+            !(GOHT_LIMB_FLAG(D_80B0EAB0[type]) & this->unk_01B0)) {
             break;
         }
 
-        iter3 = &this->unk_3158[i][sp9C];
-        iter2 = &this->unk_3158[i][this->unk_0191];
+        malfunctionEffect3 = &this->mechanicalMalfunctionEffects[type][bodyPartIndex];
+        malfunctionEffect2 = &this->mechanicalMalfunctionEffects[type][this->mechanicalMalfunctionBodyPartIndex];
 
-        Math_Vec3f_Diff(&iter3->unk_00, &iter2->unk_00, &spA0);
+        Math_Vec3f_Diff(&malfunctionEffect3->pos, &malfunctionEffect2->pos, &spA0);
 
         spA0.y -= 3.5f;
 
@@ -1042,27 +1046,29 @@ void func_80B06F48(BossHakugin* this, PlayState* play) {
         }
 
         for (j = 0; j < var_s4; j++) {
-            iter = &this->unk_3158[i][this->unk_0191 + j];
+            malfunctionEffect = &this->mechanicalMalfunctionEffects[type][this->mechanicalMalfunctionBodyPartIndex + j];
 
-            iter->unk_00.x = Rand_CenteredFloat(20.0f) + (iter2->unk_00.x + (spA0.x * j));
-            iter->unk_00.y = Rand_CenteredFloat(20.0f) + (iter2->unk_00.y + (spA0.y * j));
-            iter->unk_00.z = Rand_CenteredFloat(20.0f) + (iter2->unk_00.z + (spA0.z * j));
-            iter->unk_0C = 0.01f;
-            iter->unk_10 = 150;
-            iter->unk_12 = 5 - j;
+            malfunctionEffect->pos.x = Rand_CenteredFloat(20.0f) + (malfunctionEffect2->pos.x + (spA0.x * j));
+            malfunctionEffect->pos.y = Rand_CenteredFloat(20.0f) + (malfunctionEffect2->pos.y + (spA0.y * j));
+            malfunctionEffect->pos.z = Rand_CenteredFloat(20.0f) + (malfunctionEffect2->pos.z + (spA0.z * j));
+            malfunctionEffect->scaleXY = 0.01f;
+            malfunctionEffect->life = 150;
+            malfunctionEffect->unk_12 = 5 - j;
         }
 
         if ((play->gameplayFrames % 2) != 0) {
-            EffectSsFhgFlash_SpawnShock(play, &this->actor, &this->unk_3158[i][this->unk_0191].unk_00, 250,
-                                        i + FHGFLASH_SHOCK_GOHT_2);
+            EffectSsFhgFlash_SpawnShock(
+                play, &this->actor,
+                &this->mechanicalMalfunctionEffects[type][this->mechanicalMalfunctionBodyPartIndex].pos, 250,
+                FHGFLASH_SHOCK_GOHT_2 + type);
         }
     }
 
-    sp9C = this->unk_0191 - 3;
-    if (sp9C < 0) {
-        this->unk_0191 = 12;
+    bodyPartIndex = this->mechanicalMalfunctionBodyPartIndex - 3;
+    if (bodyPartIndex < 0) {
+        this->mechanicalMalfunctionBodyPartIndex = GOHT_BODYPART_MAX - 3;
     } else {
-        this->unk_0191 = sp9C;
+        this->mechanicalMalfunctionBodyPartIndex = bodyPartIndex;
     }
 }
 
@@ -1870,7 +1876,7 @@ void func_80B09C78(BossHakugin* this, PlayState* play) {
         return;
     }
 
-    if ((this->unk_2618[0].unk_0C == 0) && (this->unk_01C8 < 0.1f) && (temp_fv1 < 400.0f) &&
+    if ((this->electricBalls[0].alpha == 0) && (this->unk_01C8 < 0.1f) && (temp_fv1 < 400.0f) &&
         (this->unk_044C.z > 0.0f)) {
         func_80B09DFC(this);
         return;
@@ -1901,7 +1907,7 @@ void func_80B09E20(BossHakugin* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Audio_PlaySfx_AtPos(&this->unk_0458, NA_SE_EN_COMMON_THUNDER - SFX_FLAG);
     if (func_80B0728C(this)) {
-        func_80B06600(this, &this->unk_0380, play);
+        BossHakugin_AddElectricBalls(this, &this->unk_0380, play);
         func_80B09A94(this, play);
     }
 }
@@ -2148,8 +2154,8 @@ void BossHakugin_Dead(BossHakugin* this, PlayState* play) {
         Play_SetCameraAtEye(play, this->subCamId, &mainCam->at, &mainCam->eye);
         BossHakugin_SpawnBlueWarp(this, play);
         func_80B0DFA8(this);
-        this->actor.draw = BossHakugin_DrawEffectsDead;
-        this->actor.update = func_80B0E548;
+        this->actor.draw = BossHakugin_DrawDead;
+        this->actor.update = BossHakugin_UpdateDead;
     } else if (((this->unk_019C % 6) == 0) && (sp60 < 6)) {
         unkStruct = &D_80B0EB38[sp60];
         test = &this->unk_0484.elements[unkStruct->unk_00].dim.worldSphere.center;
@@ -2168,7 +2174,7 @@ void BossHakugin_Dead(BossHakugin* this, PlayState* play) {
         sp60 = (this->unk_019C + 3) / 6 - 1;
         if (sp60 < 4) {
             for (i = D_80B0EB24[sp60]; i < D_80B0EB24[sp60 + 1]; i++) {
-                this->effect[i].velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
+                this->rocks[i].velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
             }
         }
         if (sp60 < 6) {
@@ -2316,57 +2322,57 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
     return false;
 }
 
-void BossHakugin_UpdateEffects(BossHakugin* this) {
-    GohtEffect* effect;
+void BossHakugin_UpdateRocks(BossHakugin* this) {
+    GohtRock* rock;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->effect); i++) {
-        effect = &this->effect[i];
+    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
+        rock = &this->rocks[i];
 
-        if (effect->timer >= 0) {
-            effect->timer--;
-            effect->velocity.y += -1.0f;
-            Math_Vec3f_Sum(&effect->pos, &effect->velocity, &effect->pos);
-            if (effect->pos.y < -500.0f) {
-                effect->timer = -1;
+        if (rock->timer >= 0) {
+            rock->timer--;
+            rock->velocity.y += -1.0f;
+            Math_Vec3f_Sum(&rock->pos, &rock->velocity, &rock->pos);
+            if (rock->pos.y < -500.0f) {
+                rock->timer = -1;
             } else {
-                effect->rot.x += (s16)(0x700 + (Rand_Next() >> 0x17));
-                effect->rot.y += (s16)(0x900 + (Rand_Next() >> 0x17));
-                effect->rot.z += (s16)(0xB00 + (Rand_Next() >> 0x17));
+                rock->rot.x += (s16)(0x700 + (Rand_Next() >> 0x17));
+                rock->rot.y += (s16)(0x900 + (Rand_Next() >> 0x17));
+                rock->rot.z += (s16)(0xB00 + (Rand_Next() >> 0x17));
             }
         }
     }
 }
 
-void BossHakugin_UpdateEffectsDead(BossHakugin* this) {
-    GohtEffect* effect;
+void BossHakugin_UpdateRocksDead(BossHakugin* this) {
+    GohtRock* rock;
     s32 i;
 
     for (i = 0; i < 36; i++) {
-        effect = &this->effect[i];
-        Math_StepToF(&effect->pos.y, effect->velocity.x, effect->velocity.y);
-        if (effect->velocity.y > 0.0f) {
-            effect->velocity.y += 6.0f;
+        rock = &this->rocks[i];
+        Math_StepToF(&rock->pos.y, rock->velocity.x, rock->velocity.y);
+        if (rock->velocity.y > 0.0f) {
+            rock->velocity.y += 6.0f;
         }
     }
 }
 
-void func_80B0B3F4(BossHakugin* this) {
+void BossHakugin_UpdateMechanicalMalfunctionEffects(BossHakugin* this) {
     s32 i;
     s32 j;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_3158); i++) {
-        for (j = 0; j < ARRAY_COUNT(this->unk_3158[0]); j++) {
-            BossHakuginFhgFlashUnkStruct* effect = &this->unk_3158[i][j];
+    for (i = 0; i < ARRAY_COUNT(this->mechanicalMalfunctionEffects); i++) {
+        for (j = 0; j < ARRAY_COUNT(this->mechanicalMalfunctionEffects[0]); j++) {
+            GohtMechanicalMalfunctionEffect* malfunctionEffect = &this->mechanicalMalfunctionEffects[i][j];
 
-            if (effect->unk_10 > 0) {
-                effect->unk_12--;
-                effect->unk_00.y += 3.5f;
-                effect->unk_0C += 0.003f;
-                if (effect->unk_12 < 0) {
-                    effect->unk_10 -= 15;
-                    if (effect->unk_10 < 0) {
-                        effect->unk_10 = 0;
+            if (malfunctionEffect->life > 0) {
+                malfunctionEffect->unk_12--;
+                malfunctionEffect->pos.y += 3.5f;
+                malfunctionEffect->scaleXY += 0.003f;
+                if (malfunctionEffect->unk_12 < 0) {
+                    malfunctionEffect->life -= 15;
+                    if (malfunctionEffect->life < 0) {
+                        malfunctionEffect->life = 0;
                     }
                 }
             }
@@ -2374,30 +2380,30 @@ void func_80B0B3F4(BossHakugin* this) {
     }
 }
 
-void func_80B0B548(BossHakugin* this, PlayState* play) {
-    BossHakuginUnkStruct_2618* unk_str;
+void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
+    GohtElectricBall* electricBall;
     s16 rand;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
-        unk_str = &this->unk_2618[i];
+    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
+        electricBall = &this->electricBalls[i];
 
-        if (unk_str->unk_14.base.atFlags & AT_HIT) {
+        if (electricBall->unk_14.base.atFlags & AT_HIT) {
             Player* player = GET_PLAYER(play);
 
             this->unk_018C = 1;
             Player_PlaySfx(player, NA_SE_EN_COMMON_E_BALL_HIT);
-            unk_str->unk_14.base.atFlags &= ~AT_HIT;
+            electricBall->unk_14.base.atFlags &= ~AT_HIT;
         }
-        if (unk_str->unk_0C > 0) {
-            unk_str->unk_0C -= 20;
-            if (unk_str->unk_0C <= 0) {
-                unk_str->unk_0C = 0;
-            } else if (unk_str->unk_0C <= 255) {
+        if (electricBall->alpha > 0) {
+            electricBall->alpha -= 20;
+            if (electricBall->alpha <= 0) {
+                electricBall->alpha = 0;
+            } else if (electricBall->alpha <= 255) {
                 rand = (s32)Rand_Next() >> 0x10;
-                unk_str->unk_0E.z = rand;
-                if (unk_str->unk_0C > 60) {
-                    CollisionCheck_SetAT(play, &play->colChkCtx, &unk_str->unk_14.base);
+                electricBall->rot.z = rand;
+                if (electricBall->alpha > 60) {
+                    CollisionCheck_SetAT(play, &play->colChkCtx, &electricBall->unk_14.base);
                 }
             }
         }
@@ -2508,7 +2514,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     Vec3s sp70;
     Player* player = GET_PLAYER(play);
 
-    this->unk_0190 = false;
+    this->blockMechanicalMalfunctionEffects = false;
     DECR(this->unk_019A);
 
     if (this->actionFunc != BossHakugin_CutsceneStart) {
@@ -2529,13 +2535,13 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.z, sp70.z, 0x100);
 
     if (this->actionFunc == BossHakugin_Dead) {
-        BossHakugin_UpdateEffectsDead(this);
+        BossHakugin_UpdateRocksDead(this);
     } else {
-        BossHakugin_UpdateEffects(this);
+        BossHakugin_UpdateRocks(this);
     }
 
-    func_80B0B3F4(this);
-    func_80B0B548(this, play);
+    BossHakugin_UpdateMechanicalMalfunctionEffects(this);
+    BossHakugin_UpdateElectricBalls(this, play);
     func_80B0B660(this, play);
     func_80B05B04(this, play);
     func_80B05CBC(this, player);
@@ -2546,17 +2552,20 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     } else {
         this->unk_0484.base.atFlags &= ~AT_HIT;
     }
+
     if (this->unk_01A4 == 0) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_0484.base);
     } else {
         this->unk_0484.base.acFlags &= ~AC_HIT;
         this->unk_01A4--;
     }
+
     if (this->unk_0484.base.ocFlags1 & OC1_ON) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk_0484.base);
     } else {
         this->unk_0484.base.ocFlags1 &= ~OC1_HIT;
     }
+
     if (this->drawDmgEffAlpha > 0.0f) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
@@ -2618,7 +2627,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
 
 s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  Actor* thisx) {
-    static s32 D_80B0EB68 = 4;
+    static s32 D_80B0EB68 = GOHT_MECHANICAL_MALFUNCTION_NUM_TYPES - 1;
     static s32 D_80B0EB6C = GOHT_LIMB_FRONT_RIGHT_UPPER_LEG;
     BossHakugin* this = THIS;
 
@@ -2631,11 +2640,11 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
         }
     }
 
-    if (!this->unk_0190 && (limbIndex == D_80B0EB6C)) {
-        Matrix_MultZero(&this->unk_3158[D_80B0EB68][this->unk_0191].unk_00);
+    if (!this->blockMechanicalMalfunctionEffects && (limbIndex == D_80B0EB6C)) {
+        Matrix_MultZero(&this->mechanicalMalfunctionEffects[D_80B0EB68][this->mechanicalMalfunctionBodyPartIndex].pos);
         D_80B0EB68--;
         if (D_80B0EB68 < 0) {
-            D_80B0EB68 = 4;
+            D_80B0EB68 = GOHT_MECHANICAL_MALFUNCTION_NUM_TYPES - 1;
         }
         D_80B0EB6C = D_80B0EAB0[D_80B0EB68];
     }
@@ -2693,29 +2702,29 @@ void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     }
 }
 
-void BossHakugin_DrawEffects(BossHakugin* this, PlayState* play) {
-    GohtEffect* effect;
+void BossHakugin_DrawRocks(BossHakugin* this, PlayState* play) {
+    GohtRock* rock;
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPDisplayList(POLY_OPA_DISP++, gGohtRockMaterialDL);
-    for (i = 0; i < ARRAY_COUNT(this->effect); i++) {
-        effect = &this->effect[i];
-        if ((effect->timer >= 0) && (effect->type == GOHT_EFFECT_ROCK)) {
-            Matrix_SetTranslateRotateYXZ(effect->pos.x, effect->pos.y, effect->pos.z, &effect->rot);
-            Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
+    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
+        rock = &this->rocks[i];
+        if ((rock->timer >= 0) && (rock->type == GOHT_ROCK_TYPE_BOULDER)) {
+            Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rot);
+            Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gGohtRockModelDL);
         }
     }
 
     gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteMaterialDL);
-    for (i = 0; i < ARRAY_COUNT(this->effect); i++) {
-        effect = &this->effect[i];
-        if ((effect->timer >= 0) && (effect->type == GOHT_EFFECT_STALACTITE)) {
-            Matrix_SetTranslateRotateYXZ(effect->pos.x, effect->pos.y, effect->pos.z, &effect->rot);
-            Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
+    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
+        rock = &this->rocks[i];
+        if ((rock->timer >= 0) && (rock->type == GOHT_ROCK_TYPE_STALACTITE)) {
+            Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rot);
+            Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteModelDL);
         }
@@ -2724,8 +2733,8 @@ void BossHakugin_DrawEffects(BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80B0C570(BossHakugin* this, PlayState* play) {
-    BossHakuginFhgFlashUnkStruct* iter;
+void BossHakugin_DrawMechanicalMalfunctionEffects(BossHakugin* this, PlayState* play) {
+    GohtMechanicalMalfunctionEffect* malfunctionEffect;
     s32 i;
     s32 j;
     s16 camYaw;
@@ -2738,17 +2747,18 @@ void func_80B0C570(BossHakugin* this, PlayState* play) {
     camYaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000;
     gDPSetEnvColor(POLY_XLU_DISP++, 1, 1, 1, 128);
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_3158); i++) {
-        for (j = 0; j < ARRAY_COUNT(this->unk_3158[0]); j++) {
-            iter = &this->unk_3158[i][j];
-            if (iter->unk_10 > 0) {
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, iter->unk_10);
+    for (i = 0; i < ARRAY_COUNT(this->mechanicalMalfunctionEffects); i++) {
+        for (j = 0; j < ARRAY_COUNT(this->mechanicalMalfunctionEffects[0]); j++) {
+            malfunctionEffect = &this->mechanicalMalfunctionEffects[i][j];
+            if (malfunctionEffect->life > 0) {
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, malfunctionEffect->life);
                 gSPSegment(POLY_XLU_DISP++, 0x08,
-                           Gfx_TwoTexScroll(play->state.gfxCtx, 0, iter->unk_12 * 3, iter->unk_12 * 15, 32, 64, 1, 0, 0,
-                                            32, 32));
-                Matrix_Translate(iter->unk_00.x, iter->unk_00.y, iter->unk_00.z, MTXMODE_NEW);
+                           Gfx_TwoTexScroll(play->state.gfxCtx, 0, malfunctionEffect->unk_12 * 3,
+                                            malfunctionEffect->unk_12 * 15, 32, 64, 1, 0, 0, 32, 32));
+                Matrix_Translate(malfunctionEffect->pos.x, malfunctionEffect->pos.y, malfunctionEffect->pos.z,
+                                 MTXMODE_NEW);
                 Matrix_RotateYS(camYaw, MTXMODE_APPLY);
-                Matrix_Scale(iter->unk_0C, iter->unk_0C, 1.0f, MTXMODE_APPLY);
+                Matrix_Scale(malfunctionEffect->scaleXY, malfunctionEffect->scaleXY, 1.0f, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
@@ -2803,8 +2813,8 @@ void func_80B0C7B0(BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80B0CAF0(BossHakugin* this, PlayState* play) {
-    BossHakuginUnkStruct_2618* iter;
+void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play) {
+    GohtElectricBall* electricBall;
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -2814,14 +2824,15 @@ void func_80B0CAF0(BossHakugin* this, PlayState* play) {
     gDPSetEnvColor(POLY_XLU_DISP++, sGohtLightningColor.r, sGohtLightningColor.g, sGohtLightningColor.b, 0);
     gSPDisplayList(POLY_XLU_DISP++, gGohtLightningMaterialDL);
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
-        iter = &this->unk_2618[i];
+    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
+        electricBall = &this->electricBalls[i];
 
-        if ((iter->unk_0C > 0) && (iter->unk_0C <= 255)) {
-            Matrix_SetTranslateRotateYXZ(iter->unk_00.x, iter->unk_00.y, iter->unk_00.z, &iter->unk_0E);
+        if ((electricBall->alpha > 0) && (electricBall->alpha <= 255)) {
+            Matrix_SetTranslateRotateYXZ(electricBall->pos.x, electricBall->pos.y, electricBall->pos.z,
+                                         &electricBall->rot);
             Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, iter->unk_0C);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, electricBall->alpha);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gGohtLightningModelDL);
@@ -2930,24 +2941,24 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_0380, &this->unk_0458);
     SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_3734[0], &this->unk_0464);
 
-    if (!this->unk_0190) {
-        func_80B06F48(this, play);
+    if (!this->blockMechanicalMalfunctionEffects) {
+        BossHakugin_AddMechanicalMalfunctionEffects(this, play);
     }
-    this->unk_0190 = true;
+    this->blockMechanicalMalfunctionEffects = true;
 
     if (this->actor.colorFilterTimer != 0) {
         func_800AE5A0(play);
     }
 
     if (this->actionFunc == BossHakugin_Dead) {
-        BossHakugin_DrawEffectsDead(&this->actor, play);
+        BossHakugin_DrawDead(&this->actor, play);
     } else {
-        BossHakugin_DrawEffects(this, play);
+        BossHakugin_DrawRocks(this, play);
     }
 
-    func_80B0C570(this, play);
+    BossHakugin_DrawMechanicalMalfunctionEffects(this, play);
     func_80B0C7B0(this, play);
-    func_80B0CAF0(this, play);
+    BossHakugin_DrawElectricBalls(this, play);
     func_80B0CCD8(this, play);
 
     if (this->unk_0193 > 0) {
@@ -3129,10 +3140,10 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
 }
 
 void func_80B0D9CC(BossHakugin* this) {
-    s32 var_s3;
+    s32 i;
     Vec3f pos;
     s32 var_s1 = 15;
-    GohtEffect* effect = this->effect;
+    GohtRock* rock = this->rocks;
     s32 var_v1;
     s32 temp_a0;
     f32 spB4 = Math_SinS(this->actor.shape.rot.y) * 65.0f;
@@ -3145,71 +3156,71 @@ void func_80B0D9CC(BossHakugin* this) {
     f32 temp5;
     s32 pad;
 
-    for (var_s3 = 4; var_s3 > 0; var_s3--, var_s1 -= 4) {
+    for (i = 4; i > 0; i--, var_s1 -= 4) {
         temp4 = (30.0f / 13.0f) * spB4;
         temp5 = (30.0f / 13.0f) * spB0;
 
-        pos.x = this->actor.world.pos.x - (var_s3 * spB4) + temp4;
-        pos.y = this->actor.world.pos.y + (85.0f * (4 - var_s3)) + 20.0f;
-        pos.z = this->actor.world.pos.z - (var_s3 * spB0) + temp5;
+        pos.x = this->actor.world.pos.x - (i * spB4) + temp4;
+        pos.y = this->actor.world.pos.y + (85.0f * (4 - i)) + 20.0f;
+        pos.z = this->actor.world.pos.z - (i * spB0) + temp5;
 
-        effect->scale = ((var_s3 * 4.5f) + 22.0f) * 0.001f;
-        Math_Vec3f_Copy(&effect->pos, &pos);
+        rock->scale = ((i * 4.5f) + 22.0f) * 0.001f;
+        Math_Vec3f_Copy(&rock->pos, &pos);
 
         temp_a0 = var_s1 >> 1;
         if (temp_a0 == 0) {
             break;
         }
-        effect++;
+        rock++;
 
-        temp1 = var_s3 / (f32)temp_a0;
+        temp1 = i / (f32)temp_a0;
         temp2 = (spB0 + spB4) * temp1;
         temp3 = (spB0 - spB4) * temp1;
 
-        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, effect++) {
-            effect->pos.x = pos.x + temp2 * (temp_a0 - var_v1);
-            effect->pos.y = pos.y + var_s3 * spAC;
-            effect->pos.z = pos.z + temp3 * (temp_a0 - var_v1);
-            effect->scale = ((var_s3 * 4.5f) + 22.0f) * 0.001f;
+        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, rock++) {
+            rock->pos.x = pos.x + temp2 * (temp_a0 - var_v1);
+            rock->pos.y = pos.y + i * spAC;
+            rock->pos.z = pos.z + temp3 * (temp_a0 - var_v1);
+            rock->scale = ((i * 4.5f) + 22.0f) * 0.001f;
         }
 
         temp4 = (spB4 - spB0) * temp1;
         temp5 = (spB0 + spB4) * temp1;
 
-        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, effect++) {
-            effect->pos.x = pos.x + temp4 * (temp_a0 - var_v1);
-            effect->pos.y = pos.y - var_s3 * spAC;
-            effect->pos.z = pos.z + temp5 * (temp_a0 - var_v1);
-            effect->scale = ((var_s3 * 4.5f) + 22.0f) * 0.001f;
+        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, rock++) {
+            rock->pos.x = pos.x + temp4 * (temp_a0 - var_v1);
+            rock->pos.y = pos.y - i * spAC;
+            rock->pos.z = pos.z + temp5 * (temp_a0 - var_v1);
+            rock->scale = ((i * 4.5f) + 22.0f) * 0.001f;
         }
     }
 
-    for (var_s3 = 0; var_s3 < 36; var_s3++) {
-        effect = &this->effect[var_s3];
+    for (i = 0; i < 36; i++) {
+        rock = &this->rocks[i];
 
-        effect->scale += Rand_ZeroFloat(5.0f) * 0.001f;
-        effect->rot.x = (s32)Rand_Next() >> 0x10;
-        effect->rot.y = (s32)Rand_Next() >> 0x10;
-        effect->rot.z = (s32)Rand_Next() >> 0x10;
-        effect->velocity.x = effect->pos.y;
-        effect->velocity.y = 0.0f;
-        effect->pos.y += 850.0f;
+        rock->scale += Rand_ZeroFloat(5.0f) * 0.001f;
+        rock->rot.x = (s32)Rand_Next() >> 0x10;
+        rock->rot.y = (s32)Rand_Next() >> 0x10;
+        rock->rot.z = (s32)Rand_Next() >> 0x10;
+        rock->velocity.x = rock->pos.y;
+        rock->velocity.y = 0.0f;
+        rock->pos.y += 850.0f;
     }
 }
 
 void func_80B0DFA8(BossHakugin* this) {
     s32 i;
-    GohtEffect* effect;
+    GohtRock* rock;
     ColliderJntSphElement* element;
 
     for (i = 0; i < 36 / 2; i++) {
-        effect = &this->effect[i << 1];
+        rock = &this->rocks[i << 1];
         element = &this->unk_0484.elements[i];
 
-        element->dim.worldSphere.center.x = effect->pos.x;
-        element->dim.worldSphere.center.y = effect->pos.y;
-        element->dim.worldSphere.center.z = effect->pos.z;
-        element->dim.worldSphere.radius = effect->scale * 3000.0f;
+        element->dim.worldSphere.center.x = rock->pos.x;
+        element->dim.worldSphere.center.y = rock->pos.y;
+        element->dim.worldSphere.center.z = rock->pos.z;
+        element->dim.worldSphere.radius = rock->scale * 3000.0f;
         element->info.bumper.dmgFlags = 0xF3CFBBFF;
         element->info.bumperFlags &= ~BUMP_NO_HITMARK;
 
@@ -3223,7 +3234,7 @@ void func_80B0DFA8(BossHakugin* this) {
     this->unk_0484.base.colType = COLTYPE_HARD;
 }
 
-void func_80B0E548(Actor* thisx, PlayState* play2) {
+void BossHakugin_UpdateDead(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     BossHakugin* this = THIS;
 
@@ -3232,10 +3243,10 @@ void func_80B0E548(Actor* thisx, PlayState* play2) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk_0484.base);
 }
 
-void BossHakugin_DrawEffectsDead(Actor* thisx, PlayState* play) {
+void BossHakugin_DrawDead(Actor* thisx, PlayState* play) {
     BossHakugin* this = THIS;
     s32 i;
-    GohtEffect* effect;
+    GohtRock* rock;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -3243,10 +3254,10 @@ void BossHakugin_DrawEffectsDead(Actor* thisx, PlayState* play) {
     gSPDisplayList(POLY_OPA_DISP++, gGohtRockMaterialDL);
 
     for (i = 0; i < 36; i++) {
-        effect = &this->effect[i];
+        rock = &this->rocks[i];
 
-        Matrix_SetTranslateRotateYXZ(effect->pos.x, effect->pos.y, effect->pos.z, &effect->rot);
-        Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
+        Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rot);
+        Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gGohtRockModelDL);

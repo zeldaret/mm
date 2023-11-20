@@ -1582,18 +1582,18 @@ typedef enum {
 #define EVENTINF_50 0x50
 #define EVENTINF_51 0x51
 #define EVENTINF_52 0x52
+
+// Enabled when various boss intro cutscene has been watched
 #define EVENTINF_INTRO_CS_WATCHED_GOHT 0x53
 #define EVENTINF_INTRO_CS_WATCHED_ODOLWA 0x54
 #define EVENTINF_INTRO_CS_WATCHED_TWINMOLD 0x55
-
-// Enabled when Gyorg's intro cutscene has been watched
 #define EVENTINF_INTRO_CS_WATCHED_GYORG 0x56
-
 #define EVENTINF_INTRO_CS_WATCHED_IGOS_DU_IKANA 0x57
 #define EVENTINF_INTRO_CS_WATCHED_WART 0x60
 #define EVENTINF_INTRO_CS_WATCHED_MAJORA 0x61
 #define EVENTINF_ENTR_CS_WATCHED_GOHT 0x62
 #define EVENTINF_INTRO_CS_WATCHED_GOMESS 0x63
+
 #define EVENTINF_64 0x64
 #define EVENTINF_65 0x65
 #define EVENTINF_66 0x66

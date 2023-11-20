@@ -1,5 +1,5 @@
-#ifndef _Z64_EFFECT_SS_FHG_FLASH_H_
-#define _Z64_EFFECT_SS_FHG_FLASH_H_
+#ifndef Z64_EFFECT_SS_FHG_FLASH_H
+#define Z64_EFFECT_SS_FHG_FLASH_H
 
 #include "global.h"
 
@@ -27,7 +27,8 @@ typedef enum {
     /* 3 */ FHGFLASH_SHOCK_GOHT_3,
     /* 4 */ FHGFLASH_SHOCK_GOHT_4,
     /* 5 */ FHGFLASH_SHOCK_GOHT_5,
-    /* 6 */ FHGFLASH_SHOCK_GOHT_6
+    /* 6 */ FHGFLASH_SHOCK_GOHT_6,
+    /* 7 */ FHGFLASH_SHOCK_GOHT_MAX
 } FhgFlashLightningParam;
 
 typedef struct {

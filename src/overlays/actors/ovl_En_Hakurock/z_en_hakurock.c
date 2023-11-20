@@ -93,39 +93,39 @@ void EnHakurock_Destroy(Actor* thisx, PlayState* play) {
 void func_80B21BE0(BossHakugin* parent, Vec3f* pos, s32 arg2) {
     s32 i;
 
-    for (i = 0; i < GOHT_EFFECT_COUNT; i++) {
-        GohtEffect* gohtEffect = &parent->effect[i];
+    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
+        GohtRock* rock = &parent->rocks[i];
 
-        if (gohtEffect->timer < 0) {
+        if (rock->timer < 0) {
             VecGeo velocityGeo;
 
-            Math_Vec3f_Copy(&gohtEffect->pos, pos);
+            Math_Vec3f_Copy(&rock->pos, pos);
 
             velocityGeo.pitch = Rand_S16Offset(0x1000, 0x3000);
             velocityGeo.yaw = Rand_Next() >> 0x10;
             velocityGeo.r = Rand_ZeroFloat(5.0f) + 10.0f;
-            gohtEffect->velocity.x = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_SinS(velocityGeo.yaw);
-            gohtEffect->velocity.y = velocityGeo.r * Math_SinS(velocityGeo.pitch);
-            gohtEffect->velocity.z = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_CosS(velocityGeo.yaw);
+            rock->velocity.x = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_SinS(velocityGeo.yaw);
+            rock->velocity.y = velocityGeo.r * Math_SinS(velocityGeo.pitch);
+            rock->velocity.z = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_CosS(velocityGeo.yaw);
 
             if ((arg2 == 1) || (arg2 == 3)) {
-                gohtEffect->scale = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
-                gohtEffect->pos.x = pos->x + ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtEffect->velocity.x);
-                gohtEffect->pos.y = pos->y + ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->velocity.y);
-                gohtEffect->pos.z = pos->z + ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtEffect->velocity.z);
-                gohtEffect->type = GOHT_EFFECT_STALACTITE;
+                rock->scale = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
+                rock->pos.x = pos->x + ((Rand_ZeroFloat(2.0f) + 9.0f) * rock->velocity.x);
+                rock->pos.y = pos->y + ((Rand_ZeroFloat(2.0f) + 3.0f) * rock->velocity.y);
+                rock->pos.z = pos->z + ((Rand_ZeroFloat(2.0f) + 9.0f) * rock->velocity.z);
+                rock->type = GOHT_ROCK_TYPE_STALACTITE;
             } else {
-                gohtEffect->scale = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
-                gohtEffect->pos.x = pos->x + ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->velocity.x);
-                gohtEffect->pos.y = pos->y + ((Rand_ZeroFloat(3.0f) + 1.0f) * gohtEffect->velocity.y);
-                gohtEffect->pos.z = pos->z + ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtEffect->velocity.z);
-                gohtEffect->type = GOHT_EFFECT_ROCK;
+                rock->scale = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
+                rock->pos.x = pos->x + ((Rand_ZeroFloat(2.0f) + 3.0f) * rock->velocity.x);
+                rock->pos.y = pos->y + ((Rand_ZeroFloat(3.0f) + 1.0f) * rock->velocity.y);
+                rock->pos.z = pos->z + ((Rand_ZeroFloat(2.0f) + 3.0f) * rock->velocity.z);
+                rock->type = GOHT_ROCK_TYPE_BOULDER;
             }
 
-            gohtEffect->rot.x = (s32)Rand_Next() >> 0x10;
-            gohtEffect->rot.y = (s32)Rand_Next() >> 0x10;
-            gohtEffect->rot.z = (s32)Rand_Next() >> 0x10;
-            gohtEffect->timer = 40;
+            rock->rot.x = (s32)Rand_Next() >> 0x10;
+            rock->rot.y = (s32)Rand_Next() >> 0x10;
+            rock->rot.z = (s32)Rand_Next() >> 0x10;
+            rock->timer = 40;
             return;
         }
     }
