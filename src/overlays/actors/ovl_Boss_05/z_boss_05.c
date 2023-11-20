@@ -38,6 +38,16 @@ void Boss05_WalkingHead_SetupFreeze(Boss05* this, PlayState* play);
 void Boss05_WalkingHead_Stunned(Boss05* this, PlayState* play);
 void Boss05_Fragment_Move(Boss05* this, PlayState* play);
 
+typedef enum BioDekuBabaDrawDmgEffState {
+    /*  0 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE,
+    /*  1 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FIRE_INIT,
+    /*  2 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FIRE_ACTIVE,
+    /* 10 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FROZEN_INIT = 10,
+    /* 11 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE,
+    /* 20 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT = 20,
+    /* 21 */ BIO_DEKU_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE
+} BioDekuBabaDrawDmgEffState;
+
 typedef enum BioDekuBabaFragmentState {
     /* 0 */ BIO_DEKU_BABA_FRAGMENT_STATE_SPAWNED,
     /* 1 */ BIO_DEKU_BABA_FRAGMENT_STATE_UNDERWATER,
@@ -174,74 +184,99 @@ void Boss05_SetColliderSphere(s32 index, ColliderJntSph* collider, Vec3f* sphere
         collider->elements[index].dim.modelSphere.radius * collider->elements[index].dim.scale;
 }
 
-static DamageTable sDamageTable1 = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(1, 0xF),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
-    /* Normal arrow   */ DMG_ENTRY(3, 0xF),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(3, 0x0),
-    /* Goron punch    */ DMG_ENTRY(2, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0xE),
-    /* Goron pound    */ DMG_ENTRY(1, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(1, 0x3),
-    /* Light arrow    */ DMG_ENTRY(3, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(1, 0xF),
-    /* Deku bubble    */ DMG_ENTRY(3, 0xF),
-    /* Deku launch    */ DMG_ENTRY(2, 0xF),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(1, 0xF),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0xF),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(1, 0xF),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+typedef enum BioDekuBabaDamageEffect {
+    // Named based on the fact that everything with this damage effect deals zero damage. If this effect is given to an
+    // attack that deals non-zero damage, it will behave exactly like BIO_DEKU_BABA_DMGEFF_DAMAGE.
+    /* 0x0 */ BIO_DEKU_BABA_DMGEFF_IMMUNE,
+
+    // Deals no damage, but turns the Bio Deku Baba blue, stops all animations, and makes it wait for 40 frames.
+    /* 0x1 */ BIO_DEKU_BABA_DMGEFF_STUN,
+
+    // Deals damage and surrounds the Bio Deku Baba with fire.
+    /* 0x2 */ BIO_DEKU_BABA_DMGEFF_FIRE,
+
+    // Behaves exactly like BIO_DEKU_BABA_DMGEFF_STUN, but also surrounds it with ice and lasts for 80 frames.
+    /* 0x3 */ BIO_DEKU_BABA_DMGEFF_FREEZE,
+
+    // Deals damage and surrounds the Bio Deku Baba with yellow light orbs.
+    /* 0x4 */ BIO_DEKU_BABA_DMGEFF_LIGHT_ORB,
+
+    // Behaves exactly like BIO_DEKU_BABA_DMGEFF_DAMAGE, so its purpose is unknown. Only used for the lily pad with head
+    // variant of the Bio Deku Baba.
+    /* 0xE */ BIO_DEKU_BABA_DMGEFF_SWORD = 0xE,
+
+    // Deals damage and has no special effect.
+    /* 0xF */ BIO_DEKU_BABA_DMGEFF_DAMAGE
+} BioDekuBabaDamageEffect;
+
+static DamageTable sLilyPadWithHeadDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Deku Stick     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Horse trample  */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Explosives     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Zora boomerang */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Normal arrow   */ DMG_ENTRY(3, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Hookshot       */ DMG_ENTRY(3, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Goron punch    */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Sword          */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_SWORD),
+    /* Goron pound    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Fire arrow     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_FREEZE),
+    /* Light arrow    */ DMG_ENTRY(3, BIO_DEKU_BABA_DMGEFF_LIGHT_ORB),
+    /* Goron spikes   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Deku spin      */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Deku bubble    */ DMG_ENTRY(3, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Deku launch    */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Zora barrier   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Normal shield  */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Light ray      */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Thrown object  */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Zora punch     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Spin attack    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Sword beam     */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Normal Roll    */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Unblockable    */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Powder Keg     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
 };
 
-static DamageTable sDamageTable2 = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(3, 0xF),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
-    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0x1),
-    /* Goron punch    */ DMG_ENTRY(1, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0xF),
-    /* Goron pound    */ DMG_ENTRY(1, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(2, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(2, 0x3),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(0, 0x1),
-    /* Deku bubble    */ DMG_ENTRY(1, 0xF),
-    /* Deku launch    */ DMG_ENTRY(2, 0xF),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(1, 0xF),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0xF),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(1, 0xF),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(1, 0x2),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+static DamageTable sWalkingHeadDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_STUN),
+    /* Deku Stick     */ DMG_ENTRY(3, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Horse trample  */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Explosives     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Zora boomerang */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Normal arrow   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Hookshot       */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_STUN),
+    /* Goron punch    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Sword          */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Goron pound    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Fire arrow     */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_FREEZE),
+    /* Light arrow    */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_LIGHT_ORB),
+    /* Goron spikes   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Deku spin      */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_STUN),
+    /* Deku bubble    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Deku launch    */ DMG_ENTRY(2, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_STUN),
+    /* Zora barrier   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Normal shield  */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Light ray      */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Thrown object  */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Zora punch     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Spin attack    */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
+    /* Sword beam     */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Normal Roll    */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_FIRE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Unblockable    */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, BIO_DEKU_BABA_DMGEFF_IMMUNE),
+    /* Powder Keg     */ DMG_ENTRY(1, BIO_DEKU_BABA_DMGEFF_DAMAGE),
 };
 
 ActorInit Boss_05_InitVars = {
@@ -279,7 +314,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.shape.rot.z = 0;
         this->forceDetachTimer = this->dyna.actor.world.rot.z;
         this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
-        this->dyna.actor.colChkInfo.damageTable = &sDamageTable1;
+        this->dyna.actor.colChkInfo.damageTable = &sLilyPadWithHeadDamageTable;
 
         DynaPolyActor_Init(&this->dyna, 0);
         CollisionHeader_GetVirtual(&sBioBabaLilypadCol, &colHeader);
@@ -329,7 +364,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
                                   this->headColliderElements);
 
         ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-        this->dyna.actor.colChkInfo.damageTable = &sDamageTable1;
+        this->dyna.actor.colChkInfo.damageTable = &sLilyPadWithHeadDamageTable;
     } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_WALKING_HEAD) {
         Boss05_WalkingHead_SetupTransform(this, play);
         this->dyna.actor.colChkInfo.mass = 90;
@@ -341,7 +376,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
                                   this->headColliderElements);
 
         ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-        this->dyna.actor.colChkInfo.damageTable = &sDamageTable2;
+        this->dyna.actor.colChkInfo.damageTable = &sWalkingHeadDamageTable;
         this->dyna.actor.flags |= ACTOR_FLAG_10 | ACTOR_FLAG_20;
     } else if (this->dyna.actor.params >= BIO_DEKU_BABA_TYPE_FRAGMENT_LOWER_JAW) {
         SkelAnime_InitFlex(play, &this->headSkelAnime, &gBioDekuBabaHeadSkel, &gBioDekuBabaHeadChompAnim,
@@ -378,11 +413,11 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
         while (true) {
             if (this->lilyPadCollider.elements[i].info.bumperFlags & BUMP_HIT) {
                 switch (this->dyna.actor.colChkInfo.damageEffect) {
-                    case 2:
+                    case BIO_DEKU_BABA_DMGEFF_FIRE:
                         return 11;
-                    case 3:
+                    case BIO_DEKU_BABA_DMGEFF_FREEZE:
                         return 20;
-                    case 4:
+                    case BIO_DEKU_BABA_DMGEFF_LIGHT_ORB:
                         return 30;
                     default:
                         return 10;
@@ -393,6 +428,7 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
             if (i == BIO_DEKU_BABA_LILY_PAD_COLLIDER_MAX) {
                 if (this->headCollider.elements[BIO_DEKU_BABA_HEAD_COLLIDER_HEAD].info.bumperFlags & BUMP_HIT) {
                     u8 damage = this->dyna.actor.colChkInfo.damage;
+
                     this->dyna.actor.colChkInfo.health -= damage;
                     if ((s8)this->dyna.actor.colChkInfo.health <= 0) {
                         Enemy_StartFinishingBlow(play, &this->dyna.actor);
@@ -825,22 +861,22 @@ void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
 
         switch (this->dyna.actor.colChkInfo.damageEffect) {
-            case 1:
+            case BIO_DEKU_BABA_DMGEFF_STUN:
                 Boss05_WalkingHead_SetupStunned(this, play);
                 break;
 
-            case 2:
-                this->drawDmgEffState = 1;
+            case BIO_DEKU_BABA_DMGEFF_FIRE:
+                this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FIRE_INIT;
                 attackDealsDamage = true;
                 break;
 
-            case 3:
+            case BIO_DEKU_BABA_DMGEFF_FREEZE:
                 Boss05_WalkingHead_SetupFreeze(this, play);
-                this->drawDmgEffState = 10;
+                this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FROZEN_INIT;
                 break;
 
-            case 4:
-                this->drawDmgEffState = 20;
+            case BIO_DEKU_BABA_DMGEFF_LIGHT_ORB:
+                this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT;
                 attackDealsDamage = true;
                 break;
 
@@ -855,7 +891,7 @@ void Boss05_WalkingHead_UpdateDamage(Boss05* this, PlayState* play) {
             if ((this->actionFunc == Boss05_WalkingHead_Stunned) &&
                 (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) && (this->drawDmgEffTimer != 0)) {
                 Boss05_WalkingHead_Thaw(this, play);
-                this->drawDmgEffState = 0;
+                this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE;
             }
 
             damage = this->dyna.actor.colChkInfo.damage;
@@ -1148,31 +1184,31 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
     }
 
     switch (this->drawDmgEffState) {
-        case 0:
+        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
             this->drawDmgEffTimer = 0;
             this->drawDmgEffAlpha = 0.0f;
             break;
 
-        case 1:
+        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FIRE_INIT:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
             this->drawDmgEffTimer = 80;
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffState++;
             this->drawDmgEffScale = 0.0f;
             // fallthrough
-        case 2:
+        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FIRE_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffAlpha, 1.0f, 0.02f);
                 if (this->drawDmgEffAlpha == 0.0f) {
-                    this->drawDmgEffState = 0;
+                    this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE;
                 }
             } else {
                 Math_ApproachF(&this->drawDmgEffScale, 1.0f, 0.1f, 0.5f);
             }
             break;
 
-        case 10:
+        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FROZEN_INIT:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
             this->drawDmgEffTimer = 80;
             this->drawDmgEffAlpha = 1.0f;
@@ -1180,17 +1216,17 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = 0.0f;
             this->dmgEffFrozenSteamScale = 2.0f;
             // fallthrough
-        case 11:
+        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Boss05_WalkingHead_Thaw(this, play);
-                this->drawDmgEffState = 0;
+                this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE;
             } else {
                 Math_ApproachF(&this->drawDmgEffScale, 1.0f, 1.0f, 0.25f);
                 Math_ApproachF(&this->dmgEffFrozenSteamScale, 1.0f, 0.1f, 0.1f);
             }
             break;
 
-        case 20:
+        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT:
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
             this->drawDmgEffTimer = 80;
             this->drawDmgEffAlpha = 1.0f;
@@ -1198,12 +1234,12 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = 0.0f;
             break;
 
-        case 21:
+        case BIO_DEKU_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
                 Math_ApproachZeroF(&this->drawDmgEffScale, 1.0f, 0.03f);
 
                 if (this->drawDmgEffScale == 0.0f) {
-                    this->drawDmgEffState = 0;
+                    this->drawDmgEffState = BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE;
                     this->drawDmgEffAlpha = 0.0f;
                 }
             } else {
@@ -1314,7 +1350,7 @@ void Boss05_PostLimbDraw_Head(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
             Matrix_MultVec3f(&sHeadOffset, &this->dyna.actor.focus.pos);
         }
 
-        if (this->drawDmgEffState != 0) {
+        if (this->drawDmgEffState != BIO_DEKU_BABA_DRAW_DMGEFF_STATE_NONE) {
             Matrix_MultVec3f(&sHeadOffset, &this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD]);
             if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) {
                 this->bodyPartsPos[BIO_DEKU_BABA_BODYPART_HEAD].y -= 15.0f;
