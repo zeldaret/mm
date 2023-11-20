@@ -1044,14 +1044,14 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
             func_80998040(this, play);
         }
     } else {
-        s16 sp2E;
-        s16 sp2C;
+        s16 screenPosX;
+        s16 screenPosY;
 
         if ((this->actor.flags & ACTOR_FLAG_40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
             func_80999BC8(&this->actor, play);
-            Actor_GetScreenPos(play, &this->actor, &sp2E, &sp2C);
-            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > SCREEN_WIDTH) || (sp2C < 0) ||
-                (sp2C > SCREEN_HEIGHT)) {
+            Actor_GetScreenPos(play, &this->actor, &screenPosX, &screenPosY);
+            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (screenPosX < 0) || (screenPosX > SCREEN_WIDTH) ||
+                (screenPosY < 0) || (screenPosY > SCREEN_HEIGHT)) {
                 this->unk_216 = 0;
             } else if (this->quakeY > 0) {
                 Actor_RequestQuakeAndRumble(&this->actor, play, this->quakeY, this->quakeDuration);

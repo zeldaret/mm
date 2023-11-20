@@ -2090,14 +2090,14 @@ s32 func_800B886C(Actor* actor, PlayState* play) {
     return false;
 }
 
-void Actor_GetScreenPos(PlayState* play, Actor* actor, s16* x, s16* y) {
+void Actor_GetScreenPos(PlayState* play, Actor* actor, s16* posX, s16* posY) {
     Vec3f projectedPos;
     f32 invW;
 
     Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
 
-    *x = PROJECTED_TO_SCREEN_X(projectedPos, invW);
-    *y = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
+    *posX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+    *posY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
 }
 
 bool Actor_OnScreen(PlayState* play, Actor* actor) {
@@ -3493,12 +3493,13 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
 }
 
 bool Target_InTargetableScreenRegion(PlayState* play, Actor* actor) {
-    s16 x;
-    s16 y;
+    s16 screenPosX;
+    s16 screenPosY;
 
-    Actor_GetScreenPos(play, actor, &x, &y);
+    Actor_GetScreenPos(play, actor, &screenPosX, &screenPosY);
 
-    return (x > -20) && (x < gScreenWidth + 20) && (y > -160) && (y < gScreenHeight + 160);
+    return (screenPosX > -20) && (screenPosX < gScreenWidth + 20) && (screenPosY > -160) &&
+           (screenPosY < gScreenHeight + 160);
 }
 
 /**
