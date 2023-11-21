@@ -100,7 +100,7 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_809CD028(this, play);

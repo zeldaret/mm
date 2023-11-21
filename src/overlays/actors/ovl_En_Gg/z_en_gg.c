@@ -258,7 +258,7 @@ void func_80B35450(EnGg* this, PlayState* play) {
         func_80B359DC(this, play);
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
             Actor_DeactivateLens(play);
         }

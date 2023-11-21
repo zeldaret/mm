@@ -122,7 +122,7 @@ void EnCne01_UpdateModel(EnCne01* this, PlayState* play) {
 s32 EnCne01_TestIsTalking(EnCne01* this, PlayState* play) {
     s32 isTalking = false;
 
-    if (Actor_ProcessTalkRequest(&this->enHy.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->enHy.actor, &play->state)) {
         isTalking = true;
         this->enHy.textId = 0x10B9; // Invalid textId, produces empty textbox
         this->enHy.prevTrackTarget = this->enHy.trackTarget;

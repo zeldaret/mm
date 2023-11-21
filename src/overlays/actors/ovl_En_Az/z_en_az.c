@@ -1431,7 +1431,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
             }
         } else if (((this->unk_378 == 0) || (this->unk_378 == 1)) && (this->unk_374 & 0x20)) {
             if (this->unk_378 == 1) {
-                if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+                if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
                 } else if (Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer,
@@ -1459,7 +1459,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                         Math_SmoothStepToS(&this->unk_3D6, 0, 3, 0x71C, 0);
                     }
                 }
-                if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+                if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
                     if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {

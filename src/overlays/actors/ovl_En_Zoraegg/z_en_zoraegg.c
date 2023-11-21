@@ -338,7 +338,7 @@ void func_80B320E0(EnZoraegg* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         Flags_SetSwitch(play, ZORA_EGG_GET_SWITCH_FLAG(&this->actor));
         Actor_Kill(&this->actor);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B32094;
         Message_StartTextbox(play, 0x24B, &this->actor);
     } else {

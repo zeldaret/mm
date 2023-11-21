@@ -714,7 +714,7 @@ void func_80895424(EnTite* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->collider.base.acFlags |= AC_ON;
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
-            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 20.0f, 11, 4.0f, 0, 0, 0);
+            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 20.0f, 11, 4.0f, 0, 0, false);
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
 
