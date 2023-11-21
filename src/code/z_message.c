@@ -5208,7 +5208,7 @@ void Message_Update(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     Input* input = CONTROLLER1(&play->state);
-    s16 aveScreenPosY;
+    s16 avgScreenPosY;
     s16 screenPosX;
     u16 temp_v1_2;
     s16 playerScreenPosY;
@@ -5223,7 +5223,7 @@ void Message_Update(PlayState* play) {
     msgCtx->stickAdjX = input->rel.stick_x;
     msgCtx->stickAdjY = input->rel.stick_y;
 
-    aveScreenPosY = 0;
+    avgScreenPosY = 0;
 
     // If stickAdj is held, set a delay to allow the cursor to read the next input.
     // The first delay is given a longer time than all subsequent delays.
@@ -5312,9 +5312,9 @@ void Message_Update(PlayState* play) {
                     Actor_GetScreenPos(play, &GET_PLAYER(play)->actor, &screenPosX, &playerScreenPosY);
                     Actor_GetScreenPos(play, msgCtx->talkActor, &screenPosX, &actorScreenPosY);
                     if (playerScreenPosY >= actorScreenPosY) {
-                        aveScreenPosY = ((playerScreenPosY - actorScreenPosY) / 2) + actorScreenPosY;
+                        avgScreenPosY = ((playerScreenPosY - actorScreenPosY) / 2) + actorScreenPosY;
                     } else {
-                        aveScreenPosY = ((actorScreenPosY - playerScreenPosY) / 2) + playerScreenPosY;
+                        avgScreenPosY = ((actorScreenPosY - playerScreenPosY) / 2) + playerScreenPosY;
                     }
                 } else {
                     msgCtx->textboxX = msgCtx->textboxXTarget;
@@ -5326,13 +5326,13 @@ void Message_Update(PlayState* play) {
                 if ((u32)msgCtx->textBoxPos == 0) {
                     if ((play->sceneId == SCENE_UNSET_04) || (play->sceneId == SCENE_UNSET_05) ||
                         (play->sceneId == SCENE_UNSET_06)) {
-                        if (aveScreenPosY < 100) {
+                        if (avgScreenPosY < 100) {
                             msgCtx->textboxYTarget = sTextboxLowerYPositions[var_v1];
                         } else {
                             msgCtx->textboxYTarget = sTextboxUpperYPositions[var_v1];
                         }
                     } else {
-                        if (aveScreenPosY < 160) {
+                        if (avgScreenPosY < 160) {
                             msgCtx->textboxYTarget = sTextboxLowerYPositions[var_v1];
                         } else {
                             msgCtx->textboxYTarget = sTextboxUpperYPositions[var_v1];

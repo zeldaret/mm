@@ -123,7 +123,7 @@ void EnPart_Update(Actor* thisx, PlayState* play) {
 
     Actor_MoveWithGravity(&this->actor);
 
-    (*sActionFuncs[this->actionFuncIndex])(this, play);
+    sActionFuncs[this->actionFuncIndex](this, play);
 }
 
 void EnPart_Draw(Actor* thisx, PlayState* play) {
