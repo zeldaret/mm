@@ -447,7 +447,7 @@ s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         *dList = NULL;
     }
     if (limbIndex == SHIKASHI_LIMB_NONE) {
-        // Sets to itself
+        // Set to itself
         rot->x = rot->x;
         rot->y = rot->y;
         rot->z = rot->z;

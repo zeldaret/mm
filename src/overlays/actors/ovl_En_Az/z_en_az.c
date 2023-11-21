@@ -1973,7 +1973,7 @@ s32 func_80A98DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
         *dList = NULL;
     }
     if (limbIndex == BEAVER_OLDER_BROTHER_LIMB_NONE) {
-        // Sets to itself
+        // Set to itself
         rot->x = rot->x;
         rot->y = rot->y;
         rot->z = rot->z;

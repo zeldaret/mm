@@ -389,14 +389,12 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
     if (bandit->curRaceWaypoint == 0) {
         phi_f12 = sp64[1].x - sp64[0].x;
         phi_f14 = sp64[1].z - sp64[0].z;
+    } else if ((bandit->curRaceWaypoint + 1) == path->count) {
+        phi_f12 = sp64[path->count - 1].x - sp64[path->count - 2].x;
+        phi_f14 = sp64[path->count - 1].z - sp64[path->count - 2].z;
     } else {
-        if ((bandit->curRaceWaypoint + 1) == path->count) {
-            phi_f12 = sp64[path->count - 1].x - sp64[path->count - 2].x;
-            phi_f14 = sp64[path->count - 1].z - sp64[path->count - 2].z;
-        } else {
-            phi_f12 = sp64[bandit->curRaceWaypoint + 1].x - sp64[bandit->curRaceWaypoint - 1].x;
-            phi_f14 = sp64[bandit->curRaceWaypoint + 1].z - sp64[bandit->curRaceWaypoint - 1].z;
-        }
+        phi_f12 = sp64[bandit->curRaceWaypoint + 1].x - sp64[bandit->curRaceWaypoint - 1].x;
+        phi_f14 = sp64[bandit->curRaceWaypoint + 1].z - sp64[bandit->curRaceWaypoint - 1].z;
     }
 
     temp_a1 = Math_Atan2S(phi_f12, phi_f14);

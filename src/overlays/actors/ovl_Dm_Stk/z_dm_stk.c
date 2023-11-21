@@ -1166,7 +1166,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->fadeInState = SK_FADE_IN_STATE_NONE;
         this->fadeOutState = SK_FADE_OUT_STATE_NONE;
         this->fadeOutTimer = 0;
-        this->alpha = this->alpha; // Sets to itself
+        this->alpha = this->alpha; // Set to itself
         this->actor.targetArrowOffset = 1100.0f;
         this->cueId = 99;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
@@ -1824,7 +1824,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
             SkelAnime_Update(&this->skelAnime);
         }
 
-        this->alpha = this->alpha; // Sets to itself
+        this->alpha = this->alpha; // Set to itself
 
         this->actionFunc(this, play);
 
@@ -2099,7 +2099,7 @@ void DmStk_Draw(Actor* thisx, PlayState* play) {
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        this->alpha = this->alpha; // Sets to itself
+        this->alpha = this->alpha; // Set to itself
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         if (this->alpha < 255) {
