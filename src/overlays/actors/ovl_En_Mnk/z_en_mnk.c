@@ -768,7 +768,7 @@ void func_80AB64B8(EnMnk* this, PlayState* play) {
         Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 2, 0xBB8, 0xC8);
     }
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->picto.actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = func_80AB63CC;
         EnMnk_Monkey_ChangeAnim(this, 9, ANIMMODE_ONCE, -5.0f);
@@ -876,7 +876,7 @@ void EnMnk_Monkey_WaitToTalkAfterRun(EnMnk* this, PlayState* play) {
     this->picto.actor.shape.rot.y = this->picto.actor.yawTowardsPlayer;
     this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         Animation_PlayOnce(&this->skelAnime, &object_mnk_Anim_009CC0);
         this->actionFunc = EnMnk_Monkey_TalkAfterRun;
         this->flags &= ~MONKEY_FLAGS_4;
@@ -1057,7 +1057,7 @@ void EnMnk_Monkey_WaitToTalkAfterApproach(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     EnMnk_Monkey_MoveRelativeToPlayer(this, play);
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         if (MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDECHAMBER) {
             EnMnk_Monkey_SetAnim(this, 2);
         } else {
@@ -1451,7 +1451,7 @@ void EnMnk_MonkeyTiedUp_WaitUnused(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     SkelAnime_Update(&this->propSkelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->actionFunc = EnMnk_MonkeyTiedUp_TalkUnused;
         this->unk_3E0 = 0;
     } else if (EnMnk_PlayerIsInTalkRange(this, play)) {
@@ -1502,7 +1502,7 @@ void EnMnk_MonkeyTiedUp_WaitForInstrument(EnMnk* this, PlayState* play) {
         this->picto.actor.csId = this->csIdList[0];
         Message_StartTextbox(play, this->picto.actor.textId, NULL);
         CutsceneManager_Queue(this->picto.actor.csId);
-    } else if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->actionFunc = EnMnk_MonkeyTiedUp_TransitionAfterTalk;
         EnMnk_MonkeyTiedUp_SetAnim(this, MONKEY_TIEDUP_ANIM_KICKAROUND);
     } else if (EnMnk_PlayerIsInTalkRange(this, play)) {
@@ -1516,7 +1516,7 @@ void EnMnk_MonkeyTiedUp_TalkAfterCutRope(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     SkelAnime_Update(&this->propSkelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->actionFunc = EnMnk_MonkeyTiedUp_TransitionAfterTalk;
         this->picto.actor.flags &= ~ACTOR_FLAG_10000;
     } else {
@@ -1528,7 +1528,7 @@ void EnMnk_MonkeyTiedUp_WaitForCutRope(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     SkelAnime_Update(&this->propSkelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         if ((gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY) ||
             (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             EnMnk_MonkeyTiedUp_SetAnim(this, MONKEY_TIEDUP_ANIM_SHH);
@@ -1579,7 +1579,7 @@ void EnMnk_MonkeyTiedUp_Wait(EnMnk* this, PlayState* play) {
         this->picto.actor.csId = this->csIdList[2];
         play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         CutsceneManager_Queue(this->csIdList[2]);
-    } else if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
             if (this->picto.actor.textId == 0x8EC) {
                 EnMnk_MonkeyTiedUp_SetAnim(this, MONKEY_TIEDUP_ANIM_SHAKEHEAD);
@@ -1718,7 +1718,7 @@ void EnMnk_MonkeyHanging_WaitAfterDunk(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     SkelAnime_Update(&this->propSkelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->actionFunc = EnMnk_MonkeyHanging_Plead;
         CutsceneManager_Queue(this->picto.actor.csId);
         SET_WEEKEVENTREG(WEEKEVENTREG_83_08);
@@ -1788,7 +1788,7 @@ void EnMnk_MonkeyHanging_StruggleBeforeDunk(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     SkelAnime_Update(&this->propSkelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->actionFunc = EnMnk_MonkeyHanging_Plead;
         CutsceneManager_Queue(this->picto.actor.csId);
         SET_WEEKEVENTREG(WEEKEVENTREG_83_08);
@@ -1861,7 +1861,7 @@ void EnMnk_Monkey_SetupTalkBeforeGuideThroughWoods(EnMnk* this) {
 
 void EnMnk_Monkey_WaitToGuideThroughWoods(EnMnk* this, PlayState* play) {
     func_80AB5F6C(this);
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         EnMnk_Monkey_SetupTalkBeforeGuideThroughWoods(this);
     } else if (this->picto.actor.isLockedOn || (this->picto.actor.xzDistToPlayer < 100.0f)) {
         Actor_OfferTalk(&this->picto.actor, play, 120.0f);
@@ -1903,7 +1903,7 @@ void EnMnk_Monkey_WaitToTalkAfterSaved(EnMnk* this, PlayState* play) {
     this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->actionFunc = EnMnk_Monkey_TalkAfterSaved;
         EnMnk_Monkey_SetAnim(this, 7);
     } else if ((this->picto.actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->picto.actor, 0x3000, play)) {

@@ -321,6 +321,13 @@ typedef enum PlayerDoorType {
     /*  5 */ PLAYER_DOORTYPE_PROXIMITY
 } PlayerDoorType;
 
+// Some player animations are played at this reduced speed, for reasons yet unclear.
+// Perhaps to compress animation data?
+// This is called "adjusted" for now.
+// z_en_horse also has many instances of this adjusted speed
+#define PLAYER_ANIM_ADJUSTED_SPEED (2.0f / 3.0f)
+#define PLAYER_ANIM_NORMAL_SPEED   (3.0f / 3.0f)
+
 typedef enum PlayerAnimType {
     /* 0 */ PLAYER_ANIMTYPE_DEFAULT, // DEFAULT
     /* 1 */ PLAYER_ANIMTYPE_1,
@@ -332,50 +339,50 @@ typedef enum PlayerAnimType {
 } PlayerAnimType;
 
 typedef enum PlayerAnimGroup {
-    /*  0 */ PLAYER_ANIMGROUP_0, // STANDING_IDLE
-    /*  1 */ PLAYER_ANIMGROUP_1, // WALKING
-    /*  2 */ PLAYER_ANIMGROUP_2, // RUNNING
-    /*  3 */ PLAYER_ANIMGROUP_3,
-    /*  4 */ PLAYER_ANIMGROUP_4,
-    /*  5 */ PLAYER_ANIMGROUP_5, // Z-Targeting ?
-    /*  6 */ PLAYER_ANIMGROUP_6, // Start or finishing some animation
-    /*  7 */ PLAYER_ANIMGROUP_7, // DRAW_MELEE_WEAPON
-    /*  8 */ PLAYER_ANIMGROUP_8, // OPEN_DOOR_LEFT_FIERCE_DEITY
-    /*  9 */ PLAYER_ANIMGROUP_9, // OPEN_DOOR_LEFT_HUMAN
-    /* 10 */ PLAYER_ANIMGROUP_10, // OPEN_DOOR_RIGHT_FIERCE_DEITY
-    /* 11 */ PLAYER_ANIMGROUP_11, // OPEN_DOOR_RIGHT_HUMAN
-    /* 12 */ PLAYER_ANIMGROUP_12, // GRABBING
-    /* 13 */ PLAYER_ANIMGROUP_13, // FALLING/LANDING?
-    /* 14 */ PLAYER_ANIMGROUP_14, // landing from short distances?
-    /* 15 */ PLAYER_ANIMGROUP_15, // ROLLING
-    /* 16 */ PLAYER_ANIMGROUP_16, // BONK/BONKING
-    /* 17 */ PLAYER_ANIMGROUP_17,
-    /* 18 */ PLAYER_ANIMGROUP_18,
-    /* 19 */ PLAYER_ANIMGROUP_19, // START_SHIELDING
-    /* 20 */ PLAYER_ANIMGROUP_20, // SHIELDING
-    /* 21 */ PLAYER_ANIMGROUP_21, // STOP_SHIELDING/END_SHIELDING
-    /* 22 */ PLAYER_ANIMGROUP_22, // SLOW_SIDE_WALK?
-    /* 23 */ PLAYER_ANIMGROUP_23, // SIDE_WALK
-    /* 24 */ PLAYER_ANIMGROUP_24, // SIDE_WALK_RIGHT
-    /* 25 */ PLAYER_ANIMGROUP_25,
-    /* 26 */ PLAYER_ANIMGROUP_26,
-    /* 27 */ PLAYER_ANIMGROUP_27,
-    /* 28 */ PLAYER_ANIMGROUP_28, // THROWING
-    /* 29 */ PLAYER_ANIMGROUP_29, // PUT_DOWN_OBJECT?
-    /* 30 */ PLAYER_ANIMGROUP_30, // back walking slow?
-    /* 31 */ PLAYER_ANIMGROUP_31,
-    /* 32 */ PLAYER_ANIMGROUP_32,
-    /* 33 */ PLAYER_ANIMGROUP_33,
-    /* 34 */ PLAYER_ANIMGROUP_34, // PULLING_START
-    /* 35 */ PLAYER_ANIMGROUP_35, // PULLING
-    /* 36 */ PLAYER_ANIMGROUP_36, // PULLING_END
-    /* 37 */ PLAYER_ANIMGROUP_37, // climbing from a ledge?
-    /* 38 */ PLAYER_ANIMGROUP_38, // ledge
-    /* 39 */ PLAYER_ANIMGROUP_39, // ledge
-    /* 40 */ PLAYER_ANIMGROUP_40, // climbing from a ledge
-    /* 41 */ PLAYER_ANIMGROUP_41,
-    /* 42 */ PLAYER_ANIMGROUP_42,
-    /* 43 */ PLAYER_ANIMGROUP_43,
+    /*  0 */ PLAYER_ANIMGROUP_wait, // STANDING_IDLE
+    /*  1 */ PLAYER_ANIMGROUP_walk, // WALKING
+    /*  2 */ PLAYER_ANIMGROUP_run, // RUNNING
+    /*  3 */ PLAYER_ANIMGROUP_damage_run,
+    /*  4 */ PLAYER_ANIMGROUP_waitL,
+    /*  5 */ PLAYER_ANIMGROUP_waitR, // Z-Targeting ?
+    /*  6 */ PLAYER_ANIMGROUP_wait2waitR, // Start or finishing some animation
+    /*  7 */ PLAYER_ANIMGROUP_normal2fighter, // DRAW_MELEE_WEAPON
+    /*  8 */ PLAYER_ANIMGROUP_doorA_free, // OPEN_DOOR_LEFT_FIERCE_DEITY
+    /*  9 */ PLAYER_ANIMGROUP_doorA, // OPEN_DOOR_LEFT_HUMAN
+    /* 10 */ PLAYER_ANIMGROUP_doorB_free, // OPEN_DOOR_RIGHT_FIERCE_DEITY
+    /* 11 */ PLAYER_ANIMGROUP_doorB, // OPEN_DOOR_RIGHT_HUMAN
+    /* 12 */ PLAYER_ANIMGROUP_carryB, // GRABBING
+    /* 13 */ PLAYER_ANIMGROUP_landing, // FALLING/LANDING?
+    /* 14 */ PLAYER_ANIMGROUP_short_landing, // landing from short distances?
+    /* 15 */ PLAYER_ANIMGROUP_landing_roll, // ROLLING
+    /* 16 */ PLAYER_ANIMGROUP_hip_down, // BONK/BONKING
+    /* 17 */ PLAYER_ANIMGROUP_walk_endL,
+    /* 18 */ PLAYER_ANIMGROUP_walk_endR,
+    /* 19 */ PLAYER_ANIMGROUP_defense, // START_SHIELDING
+    /* 20 */ PLAYER_ANIMGROUP_defense_wait, // SHIELDING
+    /* 21 */ PLAYER_ANIMGROUP_defense_end, // STOP_SHIELDING/END_SHIELDING
+    /* 22 */ PLAYER_ANIMGROUP_side_walk, // SLOW_SIDE_WALK?
+    /* 23 */ PLAYER_ANIMGROUP_side_walkL, // SIDE_WALK
+    /* 24 */ PLAYER_ANIMGROUP_side_walkR, // SIDE_WALK_RIGHT
+    /* 25 */ PLAYER_ANIMGROUP_45_turn,
+    /* 26 */ PLAYER_ANIMGROUP_waitL2wait,
+    /* 27 */ PLAYER_ANIMGROUP_waitR2wait,
+    /* 28 */ PLAYER_ANIMGROUP_throw, // THROWING
+    /* 29 */ PLAYER_ANIMGROUP_put, // PUT_DOWN_OBJECT?
+    /* 30 */ PLAYER_ANIMGROUP_back_walk, // back walking slow?
+    /* 31 */ PLAYER_ANIMGROUP_check,
+    /* 32 */ PLAYER_ANIMGROUP_check_wait,
+    /* 33 */ PLAYER_ANIMGROUP_check_end,
+    /* 34 */ PLAYER_ANIMGROUP_pull_start, // PULLING_START
+    /* 35 */ PLAYER_ANIMGROUP_pulling, // PULLING
+    /* 36 */ PLAYER_ANIMGROUP_pull_end, // PULLING_END
+    /* 37 */ PLAYER_ANIMGROUP_fall_up, // climbing from a ledge?
+    /* 38 */ PLAYER_ANIMGROUP_jump_climb_hold, // ledge
+    /* 39 */ PLAYER_ANIMGROUP_jump_climb_wait, // ledge
+    /* 40 */ PLAYER_ANIMGROUP_jump_climb_up, // climbing from a ledge
+    /* 41 */ PLAYER_ANIMGROUP_down_slope_slip_end,
+    /* 42 */ PLAYER_ANIMGROUP_up_slope_slip_end,
+    /* 43 */ PLAYER_ANIMGROUP_nwait,
     /* 44 */ PLAYER_ANIMGROUP_MAX
 } PlayerAnimGroup;
 

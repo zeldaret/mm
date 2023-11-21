@@ -580,7 +580,7 @@ void EnAob01_BeforeRace_Idle(EnAob01* this, PlayState* play) {
                 this->stateFlags |= ENAOB01_FLAG_TALKING_TO_PLAYER_HOLDING_DOG;
                 this->actionFunc = EnAob01_BeforeRace_Talk;
             }
-        } else if (Actor_ProcessTalkRequest(&this->actor, &play->state) &&
+        } else if (Actor_TalkOfferAccepted(&this->actor, &play->state) &&
                    (this->stateFlags & ENAOB01_FLAG_PLAYER_CAN_TALK)) {
             this->stateFlags &= ~ENAOB01_FLAG_PLAYER_CAN_TALK;
             this->prevTrackTarget = this->trackTarget;
@@ -634,7 +634,7 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
     }
 
     if (this->stateFlags & ENAOB01_FLAG_TALKING_TO_PLAYER_HOLDING_DOG) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             func_80123E90(play, &this->actor);
             if (this->stateFlags & ENAOB01_FLAG_PLAYER_TOLD_TO_PICK_A_DOG) {
@@ -844,7 +844,7 @@ void EnAob01_Race_StartCutscene(EnAob01* this, PlayState* play) {
  * receive the same number of rupees they bet.
  */
 void EnAob01_AfterRace_GiveRaceResult(EnAob01* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80123E90(play, &this->actor);
         this->rupeesBet = gSaveContext.unk_3F5C;
@@ -951,7 +951,7 @@ void EnAob01_AfterRace_AfterGivingReward(EnAob01* this, PlayState* play) {
  * the player has won the 150 rupee reward.
  */
 void EnAob01_AfterRace_AskToPlayAgain(EnAob01* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->textId = 0x354C; // Want to play again?
         Message_ContinueTextbox(play, this->textId);
         this->actionFunc = EnAob01_BeforeRace_RespondToPlayAgainQuestion;

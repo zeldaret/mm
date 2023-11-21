@@ -503,7 +503,7 @@ s32 func_80BDEC2C(EnAl* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_4C2 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_4C2 &= ~0x1800;
         if (player->exchangeItemAction == PLAYER_IA_LETTER_MAMA) {
             this->unk_4C2 |= 0x800;

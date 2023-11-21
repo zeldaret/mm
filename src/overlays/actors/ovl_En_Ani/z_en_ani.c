@@ -182,7 +182,7 @@ void EnAni_Talk(EnAni* this, PlayState* play) {
 
 void EnAni_IdleInPain(EnAni* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnAni_Talk;
     } else {
         // telling you not to take his rupees you knocked from the tree

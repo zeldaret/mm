@@ -722,14 +722,14 @@ void EnOsn_Idle(EnOsn* this, PlayState* play) {
 
     if ((gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
         !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actionFunc = EnOsn_StartCutscene;
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) && (yaw < 0x4000) &&
                    (yaw > -0x4000)) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             this->actor.textId = 0xFFFF;
         }
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->textId = EnOsn_GetInitialText(this, play);
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnOsn_Talk;

@@ -183,7 +183,7 @@ void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
         EffectSsKirakira_SpawnSmall(play, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
     }
     Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_WALK);
-    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, 0);
+    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, false);
 }
 
 void func_808AFF9C(EnAm* this) {

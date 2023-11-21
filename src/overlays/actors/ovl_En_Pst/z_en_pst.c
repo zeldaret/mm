@@ -281,7 +281,7 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->stateFlags &= ~0x30;
         if (player->exchangeItemAction == PLAYER_IA_LETTER_TO_KAFEI) {
             this->stateFlags |= 0x10;

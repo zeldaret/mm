@@ -597,7 +597,7 @@ void func_80BD9938(EnPamera* this) {
 }
 
 void func_80BD994C(EnPamera* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
             func_80BD93CC(this, 0, 1);
             Message_StartTextbox(play, 0x15A8, &this->actor);
