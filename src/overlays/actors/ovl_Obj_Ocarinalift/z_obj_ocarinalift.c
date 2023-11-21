@@ -142,7 +142,7 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
                 this->timer = 10;
                 func_80AC9A68(this);
             } else {
-                temp_v1_2 = this->pathPoints + this->unk164;
+                temp_v1_2 = &this->pathPoints[this->unk164];
 
                 if (this->unk16C > 0) {
                     this->unk168 = 0;
@@ -150,8 +150,8 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
                     this->unk168 = this->unk164;
                 }
 
-                if (((this->pathPoints->x != temp_v1_2->x) || (this->pathPoints->y != temp_v1_2->y)) ||
-                    (this->pathPoints->z != temp_v1_2->z)) {
+                if (((this->pathPoints[0].x != temp_v1_2->x) || (this->pathPoints[0].y != temp_v1_2->y)) ||
+                    (this->pathPoints[0].z != temp_v1_2->z)) {
                     func_80AC99C0(this);
                     DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp34 = false;

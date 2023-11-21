@@ -107,9 +107,9 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
         phi_a1 = true;
         if (((this->unk_21C >= this->unk_218) && (this->unk_220 > 0)) ||
             ((this->unk_21C <= 0) && (this->unk_220 < 0))) {
-            temp_v1 = this->pathPoints + this->unk_218;
-            if (((this->pathPoints->x == temp_v1->x) && (this->pathPoints->y == temp_v1->y)) &&
-                (this->pathPoints->z == temp_v1->z)) {
+            temp_v1 = &this->pathPoints[this->unk_218];
+            if (((this->pathPoints[0].x == temp_v1->x) && (this->pathPoints[0].y == temp_v1->y)) &&
+                (this->pathPoints[0].z == temp_v1->z)) {
                 this->unk_21C = 0;
                 this->unk_220 = 1;
             } else {
