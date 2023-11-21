@@ -13,7 +13,7 @@ typedef s32 (*ObjSpinyrollColFunc)(CollisionContext*, f32*, CollisionPoly**, s32
 #define OBJSPINYROLL_GET_1C00(thisx) (((thisx)->params >> 0xA) & 7)
 #define OBJSPINYROLL_GET_C000(thisx) (((thisx)->params >> 0xE) & 3)
 
-#define OBJSPINYROLL_GET_7F_7F 0x7F
+#define OBJSPINYROLL_PATH_INDEX_NONE 0x7F
 #define OBJSPINYROLL_GET_C000_0 0
 #define OBJSPINYROLL_GET_C000_1 1
 

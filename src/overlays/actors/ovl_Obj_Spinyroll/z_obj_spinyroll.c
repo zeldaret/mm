@@ -475,7 +475,7 @@ void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
     Collider_InitTris(play, &this->collider);
     Collider_SetTris(play, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderElements);
 
-    if (OBJSPINYROLL_GET_PATH_INDEX(&this->dyna.actor) == OBJSPINYROLL_GET_7F_7F) {
+    if (OBJSPINYROLL_GET_PATH_INDEX(&this->dyna.actor) == OBJSPINYROLL_PATH_INDEX_NONE) {
         func_80A1E9C4(this);
         return;
     }

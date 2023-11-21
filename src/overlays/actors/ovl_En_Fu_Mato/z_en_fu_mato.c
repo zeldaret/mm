@@ -102,7 +102,7 @@ void EnFuMato_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.worldSphere.radius = 30;
     } else {
         this->collider.dim.worldSphere.radius = 17;
-        this->unk_2F8 = fu->unk_538;
+        this->unk_2F8 = fu->pathPoints;
         this->unk_2F4 = fu->unk_520;
         this->unk_2F0 = ENFUMATO_GET(&this->dyna.actor);
     }
