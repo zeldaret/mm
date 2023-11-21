@@ -433,9 +433,9 @@ typedef struct ActorContext {
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
     /* 0x250 */ void* absoluteSpace; // Space used to allocate actor overlays of alloc type ALLOCTYPE_ABSOLUTE
     /* 0x254 */ struct EnTorch2* elegyShells[5]; // PLAYER_FORM_MAX
-    /* 0x268 */ u8 unk268;
+    /* 0x268 */ u8 isOverrideInputOn;
     /* 0x269 */ UNK_TYPE1 pad269[0x3];
-    /* 0x26C */ Input unk_26C;
+    /* 0x26C */ Input overrideInput;
 } ActorContext; // size = 0x284
 
 typedef enum {
@@ -486,8 +486,10 @@ typedef enum {
 #define ACTOR_FLAG_40            (1 << 6)
 // hidden or revealed by Lens of Truth (depending on room lensMode)
 #define ACTOR_FLAG_REACT_TO_LENS (1 << 7)
-// Player has requested to talk to the actor; Player uses this flag differently than every other actor
-#define ACTOR_FLAG_TALK_REQUESTED (1 << 8)
+// Signals that player has accepted an offer to talk to an actor
+// Player will retain this flag until the player is finished talking
+// Actor will retain this flag until `Actor_TalkOfferAccepted` is called or manually turned off by the actor
+#define ACTOR_FLAG_TALK (1 << 8)
 // 
 #define ACTOR_FLAG_200           (1 << 9)
 // 

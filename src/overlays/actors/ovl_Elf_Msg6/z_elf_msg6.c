@@ -235,7 +235,7 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
 void ElfMsg6_Destroy(Actor* thisx, PlayState* play) {
 }
 
-s32 func_80BA1C00(ElfMsg6* this) {
+bool func_80BA1C00(ElfMsg6* this) {
     return (this->actor.xzDistToPlayer < (100.0f * this->actor.scale.x)) &&
            ((this->actor.playerHeightRel >= 0.0f) && (this->actor.playerHeightRel < (100.0f * this->actor.scale.y)));
 }
@@ -262,7 +262,7 @@ void func_80BA1CF8(ElfMsg6* this, PlayState* play) {
         return;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         switch (this->actor.textId) {
             case 0x224:
                 SET_WEEKEVENTREG(WEEKEVENTREG_79_10);
@@ -296,7 +296,7 @@ void func_80BA1E30(ElfMsg6* this, PlayState* play) {
         return;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         switch (this->actor.textId) {
             case 0x216:
                 SET_WEEKEVENTREG(WEEKEVENTREG_31_04);
@@ -351,7 +351,7 @@ void func_80BA2038(ElfMsg6* this, PlayState* play) {
 }
 
 void func_80BA2048(ElfMsg6* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnElf* sp20 = (EnElf*)GET_PLAYER(play)->tatlActor;
 
         sp20->unk_264 |= 0x20;
@@ -375,7 +375,7 @@ void func_80BA2048(ElfMsg6* this, PlayState* play) {
 }
 
 void func_80BA215C(ElfMsg6* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -386,7 +386,7 @@ void func_80BA215C(ElfMsg6* this, PlayState* play) {
 }
 
 void func_80BA21C4(ElfMsg6* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnElf* sp20 = (EnElf*)GET_PLAYER(play)->tatlActor;
 
         sp20->unk_264 |= 0x20;

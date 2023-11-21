@@ -1104,7 +1104,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
 
 void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play) {
     if (!EnSGoro_CheckLullaby(this, play) && !EnSGoro_CheckGKBehavior(this, play)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_ENGAGED;
             if (this->actionFlags & EN_S_GORO_ACTIONFLAG_EARSCOVERED) {
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_EYESOPEN;
@@ -1139,7 +1139,7 @@ void EnSGoro_WinterShrineGoron_Talk(EnSGoro* this, PlayState* play) {
 void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play) {
     if ((EN_S_GORO_GET_MAIN_TYPE(&this->actor) == EN_S_GORO_TYPE_SHRINE_SPRING_F) ||
         !EnSGoro_UpdateCheerAnimation(this, play)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_ENGAGED;
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
@@ -1173,7 +1173,7 @@ void EnSGoro_ShopGoron_Idle(EnSGoro* this, PlayState* play) {
     if (!(this->actionFlags & EN_S_GORO_ACTIONFLAG_ROLLEDUP)) {
         EnSGoro_UpdateToIdleAnimation(this);
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFlags |= EN_S_GORO_ACTIONFLAG_ENGAGED;
         this->textId = EnSGoro_BombshopGoron_NextTextId(this, play);
         if (this->actionFlags & EN_S_GORO_ACTIONFLAG_ROLLEDUP) {
@@ -1267,7 +1267,7 @@ void EnSGoro_ShopGoron_TakePayment(EnSGoro* this, PlayState* play) {
 }
 
 void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnSGoro_ShopGoron_Talk;
     } else {
@@ -1276,7 +1276,7 @@ void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play) {
 }
 
 void EnSGoro_Sleep(EnSGoro* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x23A, &this->actor);
         this->actionFunc = EnSGoro_SleepTalk;
     } else if (this->actor.isLockedOn) {

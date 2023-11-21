@@ -4,8 +4,12 @@
 #include "alignment.h"
 #include "PR/os.h"
 #include "z64actor.h"
+#include "z64interface.h"
+#include "z64item.h"
+#include "z64light.h"
 
 struct Player;
+struct PlayState;
 
 typedef enum PlayerShield {
     /* 0 */ PLAYER_SHIELD_NONE,
@@ -317,6 +321,13 @@ typedef enum PlayerDoorType {
     /*  5 */ PLAYER_DOORTYPE_PROXIMITY
 } PlayerDoorType;
 
+// Some player animations are played at this reduced speed, for reasons yet unclear.
+// Perhaps to compress animation data?
+// This is called "adjusted" for now.
+// z_en_horse also has many instances of this adjusted speed
+#define PLAYER_ANIM_ADJUSTED_SPEED (2.0f / 3.0f)
+#define PLAYER_ANIM_NORMAL_SPEED   (3.0f / 3.0f)
+
 typedef enum PlayerAnimType {
     /* 0 */ PLAYER_ANIMTYPE_DEFAULT, // DEFAULT
     /* 1 */ PLAYER_ANIMTYPE_1,
@@ -328,50 +339,50 @@ typedef enum PlayerAnimType {
 } PlayerAnimType;
 
 typedef enum PlayerAnimGroup {
-    /*  0 */ PLAYER_ANIMGROUP_0, // STANDING_IDLE
-    /*  1 */ PLAYER_ANIMGROUP_1, // WALKING
-    /*  2 */ PLAYER_ANIMGROUP_2, // RUNNING
-    /*  3 */ PLAYER_ANIMGROUP_3,
-    /*  4 */ PLAYER_ANIMGROUP_4,
-    /*  5 */ PLAYER_ANIMGROUP_5, // Z-Targeting ?
-    /*  6 */ PLAYER_ANIMGROUP_6, // Start or finishing some animation
-    /*  7 */ PLAYER_ANIMGROUP_7, // DRAW_MELEE_WEAPON
-    /*  8 */ PLAYER_ANIMGROUP_8, // OPEN_DOOR_LEFT_FIERCE_DEITY
-    /*  9 */ PLAYER_ANIMGROUP_9, // OPEN_DOOR_LEFT_HUMAN
-    /* 10 */ PLAYER_ANIMGROUP_10, // OPEN_DOOR_RIGHT_FIERCE_DEITY
-    /* 11 */ PLAYER_ANIMGROUP_11, // OPEN_DOOR_RIGHT_HUMAN
-    /* 12 */ PLAYER_ANIMGROUP_12, // GRABBING
-    /* 13 */ PLAYER_ANIMGROUP_13, // FALLING/LANDING?
-    /* 14 */ PLAYER_ANIMGROUP_14, // landing from short distances?
-    /* 15 */ PLAYER_ANIMGROUP_15, // ROLLING
-    /* 16 */ PLAYER_ANIMGROUP_16, // BONK/BONKING
-    /* 17 */ PLAYER_ANIMGROUP_17,
-    /* 18 */ PLAYER_ANIMGROUP_18,
-    /* 19 */ PLAYER_ANIMGROUP_19, // START_SHIELDING
-    /* 20 */ PLAYER_ANIMGROUP_20, // SHIELDING
-    /* 21 */ PLAYER_ANIMGROUP_21, // STOP_SHIELDING/END_SHIELDING
-    /* 22 */ PLAYER_ANIMGROUP_22, // SLOW_SIDE_WALK?
-    /* 23 */ PLAYER_ANIMGROUP_23, // SIDE_WALK
-    /* 24 */ PLAYER_ANIMGROUP_24, // SIDE_WALK_RIGHT
-    /* 25 */ PLAYER_ANIMGROUP_25,
-    /* 26 */ PLAYER_ANIMGROUP_26,
-    /* 27 */ PLAYER_ANIMGROUP_27,
-    /* 28 */ PLAYER_ANIMGROUP_28, // THROWING
-    /* 29 */ PLAYER_ANIMGROUP_29, // PUT_DOWN_OBJECT?
-    /* 30 */ PLAYER_ANIMGROUP_30, // back walking slow?
-    /* 31 */ PLAYER_ANIMGROUP_31,
-    /* 32 */ PLAYER_ANIMGROUP_32,
-    /* 33 */ PLAYER_ANIMGROUP_33,
-    /* 34 */ PLAYER_ANIMGROUP_34, // PULLING_START
-    /* 35 */ PLAYER_ANIMGROUP_35, // PULLING
-    /* 36 */ PLAYER_ANIMGROUP_36, // PULLING_END
-    /* 37 */ PLAYER_ANIMGROUP_37, // climbing from a ledge?
-    /* 38 */ PLAYER_ANIMGROUP_38, // ledge
-    /* 39 */ PLAYER_ANIMGROUP_39, // ledge
-    /* 40 */ PLAYER_ANIMGROUP_40, // climbing from a ledge
-    /* 41 */ PLAYER_ANIMGROUP_41,
-    /* 42 */ PLAYER_ANIMGROUP_42,
-    /* 43 */ PLAYER_ANIMGROUP_43,
+    /*  0 */ PLAYER_ANIMGROUP_wait, // STANDING_IDLE
+    /*  1 */ PLAYER_ANIMGROUP_walk, // WALKING
+    /*  2 */ PLAYER_ANIMGROUP_run, // RUNNING
+    /*  3 */ PLAYER_ANIMGROUP_damage_run,
+    /*  4 */ PLAYER_ANIMGROUP_waitL,
+    /*  5 */ PLAYER_ANIMGROUP_waitR, // Z-Targeting ?
+    /*  6 */ PLAYER_ANIMGROUP_wait2waitR, // Start or finishing some animation
+    /*  7 */ PLAYER_ANIMGROUP_normal2fighter, // DRAW_MELEE_WEAPON
+    /*  8 */ PLAYER_ANIMGROUP_doorA_free, // OPEN_DOOR_LEFT_FIERCE_DEITY
+    /*  9 */ PLAYER_ANIMGROUP_doorA, // OPEN_DOOR_LEFT_HUMAN
+    /* 10 */ PLAYER_ANIMGROUP_doorB_free, // OPEN_DOOR_RIGHT_FIERCE_DEITY
+    /* 11 */ PLAYER_ANIMGROUP_doorB, // OPEN_DOOR_RIGHT_HUMAN
+    /* 12 */ PLAYER_ANIMGROUP_carryB, // GRABBING
+    /* 13 */ PLAYER_ANIMGROUP_landing, // FALLING/LANDING?
+    /* 14 */ PLAYER_ANIMGROUP_short_landing, // landing from short distances?
+    /* 15 */ PLAYER_ANIMGROUP_landing_roll, // ROLLING
+    /* 16 */ PLAYER_ANIMGROUP_hip_down, // BONK/BONKING
+    /* 17 */ PLAYER_ANIMGROUP_walk_endL,
+    /* 18 */ PLAYER_ANIMGROUP_walk_endR,
+    /* 19 */ PLAYER_ANIMGROUP_defense, // START_SHIELDING
+    /* 20 */ PLAYER_ANIMGROUP_defense_wait, // SHIELDING
+    /* 21 */ PLAYER_ANIMGROUP_defense_end, // STOP_SHIELDING/END_SHIELDING
+    /* 22 */ PLAYER_ANIMGROUP_side_walk, // SLOW_SIDE_WALK?
+    /* 23 */ PLAYER_ANIMGROUP_side_walkL, // SIDE_WALK
+    /* 24 */ PLAYER_ANIMGROUP_side_walkR, // SIDE_WALK_RIGHT
+    /* 25 */ PLAYER_ANIMGROUP_45_turn,
+    /* 26 */ PLAYER_ANIMGROUP_waitL2wait,
+    /* 27 */ PLAYER_ANIMGROUP_waitR2wait,
+    /* 28 */ PLAYER_ANIMGROUP_throw, // THROWING
+    /* 29 */ PLAYER_ANIMGROUP_put, // PUT_DOWN_OBJECT?
+    /* 30 */ PLAYER_ANIMGROUP_back_walk, // back walking slow?
+    /* 31 */ PLAYER_ANIMGROUP_check,
+    /* 32 */ PLAYER_ANIMGROUP_check_wait,
+    /* 33 */ PLAYER_ANIMGROUP_check_end,
+    /* 34 */ PLAYER_ANIMGROUP_pull_start, // PULLING_START
+    /* 35 */ PLAYER_ANIMGROUP_pulling, // PULLING
+    /* 36 */ PLAYER_ANIMGROUP_pull_end, // PULLING_END
+    /* 37 */ PLAYER_ANIMGROUP_fall_up, // climbing from a ledge?
+    /* 38 */ PLAYER_ANIMGROUP_jump_climb_hold, // ledge
+    /* 39 */ PLAYER_ANIMGROUP_jump_climb_wait, // ledge
+    /* 40 */ PLAYER_ANIMGROUP_jump_climb_up, // climbing from a ledge
+    /* 41 */ PLAYER_ANIMGROUP_down_slope_slip_end,
+    /* 42 */ PLAYER_ANIMGROUP_up_slope_slip_end,
+    /* 43 */ PLAYER_ANIMGROUP_nwait,
     /* 44 */ PLAYER_ANIMGROUP_MAX
 } PlayerAnimGroup;
 
@@ -598,13 +609,11 @@ typedef struct {
     /* 0x04 */ struct_80122D44_arg1_unk_04 unk_04[4];
 } struct_80122D44_arg1; // size >= 0x114
 
-typedef struct struct_80122744_arg1 {
-    /* 0x0 */ s8 unk_00;
-    /* 0x1 */ s8 unk_01;
-    /* 0x2 */ s8 unk_02;
-    /* 0x3 */ s8 unk_03;
-    /* 0x4 */ Vec3s* unk_04;
-} struct_80122744_arg1; // size = 0x8
+typedef struct PlayerOverrideInputEntry {
+    /* 0x0 */ s8 numPoints;
+    /* 0x1 */ s8 curPoint;
+    /* 0x4 */ Vec3s* targetPosList;
+} PlayerOverrideInputEntry; // size = 0x8
 
 typedef enum PlayerCsAction {
     /*   -1 */ PLAYER_CSACTION_NEG1 = -1, // Specific to Kafei, any negative number works
@@ -1304,5 +1313,113 @@ typedef struct Player {
     /* 0xD6B */ u8 unk_D6B;
     /* 0xD6C */ Vec3f unk_D6C; // previous body part 0 position
 } Player; // size = 0xD78
+
+// z_player_call.c functions
+
+void PlayerCall_Init(Actor* thisx, struct PlayState* play);
+void PlayerCall_Destroy(Actor* thisx, struct PlayState* play);
+void PlayerCall_Update(Actor* thisx, struct PlayState* play);
+void PlayerCall_Draw(Actor* thisx, struct PlayState* play);
+
+// z_actor.c functions
+
+f32 Player_GetHeight(Player* player);
+f32 Player_GetRunSpeedLimit(Player* player);
+bool func_800B7118(Player* player);
+bool func_800B7128(Player* player);
+bool func_800B715C(struct PlayState* play);
+void Player_SetCameraHorseSetting(struct PlayState* play, Player* player);
+void Player_MountHorse(struct PlayState* play, Player* player, Actor* horse);
+s32 Player_SetCsAction(struct PlayState* play, Actor* csActor, u8 csAction);
+s32 Player_SetCsActionWithHaltedActors(struct PlayState* play, Actor* csActor, u8 csAction);
+
+s32 Player_IsFacingActor(Actor* actor, s16 maxAngleDiff, struct PlayState* play);
+
+PlayerItemAction Player_GetExchangeItemAction(struct PlayState* play);
+
+void func_800B8D10(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5, u32 arg6);
+void func_800B8D50(struct PlayState* play, Actor* actor, f32 arg2, s16 yaw, f32 arg4, u32 arg5);
+void func_800B8D98(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
+void func_800B8DD4(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5);
+void func_800B8E1C(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
+void Player_PlaySfx(Player* player, u16 sfxId);
+
+// z_player_lib.c functions
+
+s32 func_801226E0(struct PlayState* play, s32 arg1);
+s32 Player_InitOverrideInput(struct PlayState* play, PlayerOverrideInputEntry* inputEntry, u32 numPoints, Vec3s* targetPosList);
+s32 Player_UpdateOverrideInput(struct PlayState* play, PlayerOverrideInputEntry* inputEntry, f32 distXZRange);
+void func_80122868(struct PlayState* play, Player* player);
+void func_801229A0(struct PlayState* play, Player* player);
+void func_801229EC(Actor* thisx, struct PlayState* play);
+void func_801229FC(Player* player);
+void func_80122BA4(struct PlayState* play, struct_80122D44_arg1* arg1, s32 arg2, s32 alpha);
+void func_80122C20(struct PlayState* play, struct_80122D44_arg1* arg1);
+void func_80122D44(struct PlayState* play, struct_80122D44_arg1* arg1);
+u8 Player_MaskIdToItemId(s32 maskIdMinusOne);
+s32 Player_GetCurMaskItemId(struct PlayState* play);
+void func_80122F28(Player* player);
+bool func_80122F9C(struct PlayState* play);
+bool func_80122FCC(struct PlayState* play);
+void func_8012300C(struct PlayState* play, s32 arg1);
+void func_8012301C(Actor* thisx, struct PlayState* play2);
+void func_80123140(struct PlayState* play, Player* player);
+bool Player_InBlockingCsMode(struct PlayState* play, Player* player);
+bool Player_InCsMode(struct PlayState* play);
+bool func_80123420(Player* player);
+bool func_80123434(Player* player);
+bool func_80123448(struct PlayState* play);
+bool Player_IsGoronOrDeku(Player* player);
+bool func_801234D4(struct PlayState* play);
+bool func_80123590(struct PlayState* play, Actor* actor);
+ItemId Player_GetItemOnButton(struct PlayState* play, Player* player, EquipSlot slot);
+PlayerItemAction func_80123810(struct PlayState* play);
+PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerItemAction itemAction);
+void Player_SetModelsForHoldingShield(Player* player);
+void Player_SetModels(Player* player, PlayerModelGroup modelGroup);
+void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup);
+void func_80123C58(Player* player);
+void Player_SetEquipmentData(struct PlayState* play, Player* player);
+void Player_UpdateBottleHeld(struct PlayState* play, Player* player, ItemId itemId, PlayerItemAction itemAction);
+void Player_Untarget(Player* player);
+void func_80123DC0(Player* player);
+void func_80123E90(struct PlayState* play, Actor* actor);
+s32 func_80123F2C(struct PlayState* play, s32 ammo);
+bool Player_IsBurningStickInRange(struct PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange);
+u8 Player_GetStrength(void);
+u8 Player_GetMask(struct PlayState* play);
+void Player_RemoveMask(struct PlayState* play);
+bool Player_HasMirrorShieldEquipped(struct PlayState* play);
+bool Player_IsHoldingMirrorShield(struct PlayState* play);
+bool Player_IsHoldingHookshot(Player* player);
+bool func_801240DC(Player* player);
+PlayerBButtonSword Player_BButtonSwordFromIA(Player* player, PlayerItemAction itemAction);
+PlayerBButtonSword Player_GetHeldBButtonSword(Player* player);
+PlayerMeleeWeapon Player_MeleeWeaponFromIA(PlayerItemAction itemAction);
+PlayerMeleeWeapon Player_GetMeleeWeaponHeld(Player* player);
+s32 Player_IsHoldingTwoHandedWeapon(Player* player);
+PlayerBottle Player_BottleFromIA(Player* player, PlayerItemAction itemAction);
+PlayerBottle Player_GetBottleHeld(Player* Player);
+PlayerExplosive Player_ExplosiveFromIA(Player* player, PlayerItemAction itemAction);
+PlayerExplosive Player_GetExplosiveHeld(Player* player);
+PlayerSword Player_SwordFromIA(Player* player, PlayerItemAction itemAction);
+bool func_801242B4(Player* player);
+s32 Player_GetEnvironmentalHazard(struct PlayState* play);
+void Player_UpdateBunnyEars(Player* player);
+void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2);
+void Player_DrawImpl(struct PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod, PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor);
+void func_80125318(Vec3f* arg0, Vec3s* arg1);
+void Player_DrawZoraShield(struct PlayState* play, Player* player);
+void func_80125500(struct PlayState* play, Player* player, s32 limbIndex, Vec3f* pos, Vec3s* rot);
+s32 Player_OverrideLimbDrawGameplayDefault(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
+s32 Player_OverrideLimbDrawGameplayFirstPerson(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
+s32 Player_OverrideLimbDrawGameplayCrawling(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+s32 func_80126440(struct PlayState* play, ColliderQuad* collider, WeaponInfo* weaponInfo, Vec3f* newTip, Vec3f* newBase);
+void Player_DrawGetItem(struct PlayState* play, Player* player);
+void func_80126B8C(struct PlayState* play, Player* player);
+s32 func_80127438(struct PlayState* play, Player* player, s32 currentMask);
+s32 func_80128640(struct PlayState* play, Player* player, Gfx* dlist);
+void Player_SetFeetPos(struct PlayState* play, Player* player, s32 limbIndex);
+void Player_PostLimbDrawGameplay(struct PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
 
 #endif

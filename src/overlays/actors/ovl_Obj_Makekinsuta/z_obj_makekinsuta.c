@@ -14,7 +14,6 @@ void ObjMakekinsuta_Init(Actor* thisx, PlayState* play);
 void ObjMakekinsuta_Destroy(Actor* thisx, PlayState* play);
 void ObjMakekinsuta_Update(Actor* thisx, PlayState* play);
 
-s32 func_8099FA40(ObjMakekinsuta* this, PlayState* play);
 void func_8099FB64(Actor* thisx, PlayState* play);
 void func_8099FD7C(Actor* thisx, PlayState* play);
 
@@ -36,7 +35,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 1, ICHAIN_STOP),
 };
 
-s32 func_8099FA40(ObjMakekinsuta* this, PlayState* play) {
+bool func_8099FA40(ObjMakekinsuta* this, PlayState* play) {
     s32 chestFlag = -1;
     s32 skulltulaParams = (OBJMAKEKINSUTA_GET_1F(&this->actor) << 2) | 0xFF01;
 

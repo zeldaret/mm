@@ -7,6 +7,7 @@
 #include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #define FLAGS \
     (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000)
@@ -224,7 +225,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
     s32 itemId1;
     s16 itemId2 = 0;
 
-    for (; slotId < 24; slotId++) {
+    for (; slotId < ITEM_NUM_SLOTS; slotId++) {
         if ((gSaveContext.save.saveInfo.inventory.items[slotId] >= ITEM_BOTTLE) &&
             (gSaveContext.save.saveInfo.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
             isItemFound = true;

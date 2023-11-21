@@ -424,7 +424,7 @@ void func_80BA3230(ObjNozoki* this, PlayState* play) {
                 }
             }
 
-            if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+            if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
                 ObjNozoki_SetupAction(this, func_80BA3344);
             } else {
                 Actor_OfferTalk(&this->dyna.actor, play, 50.0f);

@@ -145,10 +145,10 @@ static EnTotoUnkStruct2 D_80BA50DC[] = {
     { 0x2B2C, 0x2B2D, 0x2B2E, { 0xFFF1, 0x0016, 0xFE74 } },
 };
 
-static Vec3s D_80BA510C[] = {
-    { 0xFF46, 0xFFF8, 0xFF40 },
-    { 0xFF21, 0xFFFD, 0xFF04 },
-    { 0xFF64, 0x0016, 0xFE7E },
+static Vec3s sPlayerOverrideInputPosList[] = {
+    { -186, -8, -192 },
+    { -223, -3, -252 },
+    { -156, 22, -386 },
 };
 
 static u16 sOcarinaActionWindFishPrompts[] = {
@@ -245,7 +245,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     func_80BA383C(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BA36C0(this, play, 1);
         if (play->sceneId != SCENE_SONCHONOIE) {
             Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor));
@@ -452,30 +452,31 @@ s32 func_80BA4204(EnToto* this, PlayState* play) {
 
 s32 func_80BA42BC(EnToto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u32 phi_s0 = 0;
-    Vec3s* end = &D_80BA510C[3];
+    u32 numPoints = 0;
+    Vec3s* endPosListPtr = &sPlayerOverrideInputPosList[ARRAY_COUNT(sPlayerOverrideInputPosList)];
 
     func_80BA3FB0(this, play);
     Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
+
     if (player->actor.world.pos.z > -310.0f) {
         if ((player->actor.world.pos.x > -150.0f) || (player->actor.world.pos.z > -172.0f)) {
-            phi_s0 = 3;
+            numPoints = ARRAY_COUNT(sPlayerOverrideInputPosList);
+        } else if (player->actor.world.pos.z > -232.0f) {
+            numPoints = ARRAY_COUNT(sPlayerOverrideInputPosList) - 1;
         } else {
-            if (player->actor.world.pos.z > -232.0f) {
-                phi_s0 = 2;
-            } else {
-                phi_s0 = 1;
-            }
+            numPoints = ARRAY_COUNT(sPlayerOverrideInputPosList) - 2;
         }
     }
-    func_80122744(play, &this->unk_2BC, phi_s0, end - phi_s0);
+
+    Player_InitOverrideInput(play, &this->overrideInputEntry, numPoints, &endPosListPtr[0 - numPoints]);
+
     this->spotlights = Actor_Spawn(&play->actorCtx, play, ACTOR_DM_CHAR07, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0xF02);
     return 0;
 }
 
 s32 func_80BA43F4(EnToto* this, PlayState* play) {
     func_80BA3C88(this);
-    if (func_80122760(play, &this->unk_2BC, 60.0f)) {
+    if (Player_UpdateOverrideInput(play, &this->overrideInputEntry, 60.0f)) {
         Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_19);
         return func_80BA4204(this, play);
     }
