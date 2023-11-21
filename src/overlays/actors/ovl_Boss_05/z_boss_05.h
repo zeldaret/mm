@@ -28,7 +28,8 @@ typedef enum BioDekuBabaType {
     /* 20 */ BIO_BABA_TYPE_FRAGMENT_RIGHT_UPPER_EYESTALK,
     /* 21 */ BIO_BABA_TYPE_FRAGMENT_RIGHT_UPPER_LEG,
     /* 22 */ BIO_BABA_TYPE_FRAGMENT_RIGHT_LOWER_LEG,
-    /* 23 */ BIO_BABA_TYPE_FRAGMENT_LEAVES
+    /* 23 */ BIO_BABA_TYPE_FRAGMENT_LEAVES,
+    /* 24 */ BIO_BABA_TYPE_MAX
 } BioDekuBabaType;
 
 typedef enum BioDekuBabaBodyPart {
@@ -58,6 +59,9 @@ typedef enum BioDekuBabaLilyPadWithHeadLimbRotIndex {
     /*  6 */ BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_RIGHT_LOWER_ARM,
     /*  7 */ BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_MAX
 } BioDekuBabaLilyPadWithHeadLimbRotIndex;
+
+#define BIO_BABA_GET_TYPE(thisx) ((thisx)->params)
+#define BIO_BABA_GET_FRAGMENT_INDEX(thisx) ((thisx)->params - BIO_BABA_TYPE_FRAGMENT_BASE)
 
 typedef struct Boss05 {
     /* 0x000 */ DynaPolyActor dyna;
