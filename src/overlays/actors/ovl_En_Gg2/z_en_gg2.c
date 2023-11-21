@@ -217,7 +217,7 @@ void func_80B3B120(EnGg2* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Math_SmoothStepToS(&this->actor.shape.rot.x, sp30.x, 4, 0x3E8, 1);
         this->actor.world.rot.x = -this->actor.shape.rot.x;
-        if (EnGg2_HasReachedPoint(this, this->path, this->unk_1DC) != 0) {
+        if (EnGg2_HasReachedPoint(this, this->path, this->unk_1DC)) {
             if (this->unk_1DC >= (this->path->count - 2)) {
                 this->actionFunc = func_80B3AE60;
                 this->actor.speed = 0.0f;
