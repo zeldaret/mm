@@ -152,12 +152,12 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 typedef enum PostboxAnimation {
-    /* 0 */ POSTBOX_ANIM_OPEN_SLOT,
+    /* 0 */ POSTBOX_ANIM_IDLE,
     /* 1 */ POSTBOX_ANIM_MAX
 } PostboxAnimation;
 
 static AnimationInfoS sAnimationInfo[POSTBOX_ANIM_MAX] = {
-    { &gPostboxOpenSlotAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // POSTBOX_ANIM_OPEN_SLOT
+    { &gPostboxIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // POSTBOX_ANIM_IDLE
 };
 
 void EnPst_UpdateCollision(EnPst* this, PlayState* play) {
@@ -428,7 +428,7 @@ void EnPst_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, POSTBOX_ANIM_OPEN_SLOT);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, POSTBOX_ANIM_IDLE);
     this->actor.targetMode = TARGET_MODE_0;
     Actor_SetScale(&this->actor, 0.02f);
     this->actionFunc = EnPst_FollowSchedule;
