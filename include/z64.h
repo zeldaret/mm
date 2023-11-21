@@ -21,6 +21,8 @@
 #include "sfx.h"
 #include "message_data_static.h"
 
+#include "main.h"
+
 #include "gfx.h"
 #include "gfxprint.h"
 #include "padutils.h"
