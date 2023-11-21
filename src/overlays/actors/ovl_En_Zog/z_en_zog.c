@@ -325,7 +325,7 @@ s32 func_80B93BE0(EnZog* this, PlayState* play) {
     s16 temp_v0;
     Vec3s* points;
 
-    if (this->path == 0) {
+    if (this->path == NULL) {
         return false;
     }
 

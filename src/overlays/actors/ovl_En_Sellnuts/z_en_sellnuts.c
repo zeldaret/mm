@@ -32,7 +32,7 @@ void func_80ADC6D0(EnSellnuts* this, PlayState* play);
 void func_80ADC7B4(EnSellnuts* this, PlayState* play);
 void func_80ADC8C4(EnSellnuts* this, PlayState* play);
 void func_80ADCA64(EnSellnuts* this, PlayState* play);
-s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2);
+s32 EnSellnuts_HasReachedPoint(EnSellnuts* this, Path* path, s32 pointIndex);
 f32 func_80ADCFE8(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3);
 
 static u16 D_80ADD910[] = { 0x0614, 0x060E, 0x0628 };
@@ -657,7 +657,7 @@ void func_80ADC37C(EnSellnuts* this, PlayState* play) {
         this->unk_342 = 0x1000;
         this->unk_344 += this->unk_364;
         this->actor.world.rot.x = -sp30.x;
-        if (func_80ADCE4C(this, this->path, this->unk_334) && (sp2C < 500.0f)) {
+        if (EnSellnuts_HasReachedPoint(this, this->path, this->unk_334) && (sp2C < 500.0f)) {
             if (this->unk_334 >= (this->path->count - 1)) {
                 CutsceneManager_Stop(this->csId);
                 this->actionFunc = func_80ADC580;
@@ -788,7 +788,7 @@ void func_80ADC8C4(EnSellnuts* this, PlayState* play) {
         this->unk_342 = 0x1000;
         this->unk_344 += 0x1C71;
         this->actor.world.rot.x = -sp30.x;
-        if (func_80ADCE4C(this, this->path, this->unk_334)) {
+        if (EnSellnuts_HasReachedPoint(this, this->path, this->unk_334)) {
             if (this->unk_334 >= (this->path->count - 1)) {
                 this->unk_34C = 22;
                 this->actor.gravity = -1.0f;
@@ -892,36 +892,38 @@ void func_80ADCD3C(EnSellnuts* this, PlayState* play) {
     }
 }
 
-s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2) {
+s32 EnSellnuts_HasReachedPoint(EnSellnuts* this, Path* path, s32 pointIndex) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 count = path->count;
-    s32 var = arg2;
-    s32 ret = false;
-    f32 pointX;
-    f32 pointY;
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
-    Vec3f sp30;
+    s32 index = pointIndex;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    Math_Vec3s_ToVec3f(&sp30, &points[var]);
-    if (var == 0) {
-        pointX = points[1].x - points[0].x;
-        pointY = points[1].z - points[0].z;
-    } else if ((u32)count == (u32)(var + 1)) {
-        pointX = points[count - 1].x - points[count - 2].x;
-        pointY = points[count - 1].z - points[count - 2].z;
+    Math_Vec3s_ToVec3f(&point, &points[index]);
+
+    if (index == 0) {
+        diffX = points[1].x - points[0].x;
+        diffZ = points[1].z - points[0].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 1].x - points[count - 2].x;
+        diffZ = points[count - 1].z - points[count - 2].z;
     } else {
-        pointX = points[var + 1].x - points[var - 1].x;
-        pointY = points[var + 1].z - points[var - 1].z;
+        diffX = points[index + 1].x - points[index - 1].x;
+        diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(pointX, pointY)), &sp44, &sp40, &sp3C);
-    if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        ret = true;
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
 
-    return ret;
+    return reached;
 }
 
 f32 func_80ADCFE8(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
