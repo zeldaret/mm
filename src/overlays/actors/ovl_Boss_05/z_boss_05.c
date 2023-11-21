@@ -470,10 +470,13 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
                 switch (this->dyna.actor.colChkInfo.damageEffect) {
                     case BIO_BABA_DMGEFF_FIRE:
                         return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_FIRE_INIT;
+
                     case BIO_BABA_DMGEFF_FREEZE:
                         return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_FROZEN_INIT;
+
                     case BIO_BABA_DMGEFF_LIGHT_ORB:
                         return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_LIGHT_ORB_INIT;
+
                     default:
                         return BIO_BABA_HEAD_HIT_REACTION_DEATCH + BIO_BABA_DRAW_DMGEFF_STATE_NONE;
                 }
@@ -539,7 +542,7 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 j;
     u8 disableATCollisions = false;
-    Vec3s targetLimbRot[7];
+    Vec3s targetLimbRot[BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_MAX];
     s32 frequencyX;
     s32 shiftX;
     s32 amplitudeX;
@@ -763,6 +766,9 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
                 this->lilyPadWithHeadAttackState = BIO_BABA_LILY_PAD_WITH_HEAD_ATTACK_STATE_IDLE;
                 this->timers[TIMER_CURRENT_ACTION] = 30;
             }
+            break;
+
+        default:
             break;
     }
 
@@ -1394,6 +1400,9 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
                 Math_ApproachF(&this->drawDmgEffScale, 1.0f, 0.5f, 0.5f);
             }
             break;
+
+        default:
+            break;
     }
 }
 
@@ -1552,7 +1561,7 @@ void Boss05_TransformLimbDraw_FallingHeadLilyPad(PlayState* play, s32 limbIndex,
     }
 }
 
-static BioDekuBabaHeadLimb sFragmentIndexToLimbIndex[] = {
+static BioDekuBabaHeadLimb sFragmentIndexToLimbIndex[BIO_BABA_TYPE_MAX - BIO_BABA_TYPE_FRAGMENT_BASE] = {
     BIO_DEKU_BABA_HEAD_LIMB_LOWER_JAW,            // BIO_BABA_TYPE_FRAGMENT_LOWER_JAW
     BIO_DEKU_BABA_HEAD_LIMB_UPPER_JAW,            // BIO_BABA_TYPE_FRAGMENT_UPPER_JAW
     BIO_DEKU_BABA_HEAD_LIMB_BODY,                 // BIO_BABA_TYPE_FRAGMENT_BODY
