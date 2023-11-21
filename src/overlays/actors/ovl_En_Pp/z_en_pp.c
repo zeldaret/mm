@@ -66,7 +66,7 @@ typedef enum {
     /* 2 */ EN_PP_MASK_DETACH_STATE_DIE
 } EnPpMaskDetachState;
 
-static s32 sCurrentfragmentIndex = 0;
+static s32 sCurrentFragmentIndex = 0;
 
 typedef enum {
     /* 0x0 */ EN_PP_DMGEFF_JUMP,                 // Forces the Hiploop to jump
@@ -259,8 +259,8 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
     }
 
     if (EN_PP_GET_TYPE(&this->actor) >= EN_PP_TYPE_FRAGMENT_BASE) {
-        this->fragmentIndex = sCurrentfragmentIndex;
-        sCurrentfragmentIndex++;
+        this->fragmentIndex = sCurrentFragmentIndex;
+        sCurrentFragmentIndex++;
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_SetScale(&this->actor, 0.03f);
         EnPp_Fragment_SetupMove(this);
