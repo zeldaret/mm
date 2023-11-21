@@ -501,7 +501,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     static s32 D_80867BC0;
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->knobDoor.dyna.actor, &play->state) &&
+    if (Actor_TalkOfferAccepted(&this->knobDoor.dyna.actor, &play->state) &&
         (this->knobDoor.dyna.actor.textId == 0x1821)) {
         D_80867BC0 = true;
     }

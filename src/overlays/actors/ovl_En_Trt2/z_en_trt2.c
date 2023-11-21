@@ -432,7 +432,7 @@ void func_80AD40AC(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD4110(EnTrt2* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_3A8 = 0x84C;
         Message_ContinueTextbox(play, this->unk_3A8);
         this->unk_3B2 = 10;
@@ -662,7 +662,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
     s32 sp24 = false;
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         sp24 = true;
         this->actor.speed = 0.0f;
         func_80AD349C(this);

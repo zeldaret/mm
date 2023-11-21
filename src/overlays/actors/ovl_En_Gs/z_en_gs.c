@@ -1030,7 +1030,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGs* this = THIS;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         this->collider.base.acFlags &= ~AC_HIT;

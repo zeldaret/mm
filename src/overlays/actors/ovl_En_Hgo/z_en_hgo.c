@@ -150,7 +150,7 @@ void EnHgo_SetupTalk(EnHgo* this) {
 }
 
 void EnHgo_Talk(EnHgo* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
             if (!(this->talkFlags & TALK_FLAG_HAS_SPOKEN_WITH_GIBDO_MASK)) {
                 this->talkFlags |= TALK_FLAG_HAS_SPOKEN_WITH_GIBDO_MASK;
