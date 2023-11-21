@@ -8,7 +8,7 @@ struct ObjDriftice;
 typedef void (*ObjDrifticeActionFunc)(struct ObjDriftice*, PlayState*);
 
 #define OBJDRIFTICE_GET_3(thisx) ((thisx)->params & 3)
-#define OBJDRIFTICE_GET_1FC(thisx) (((thisx)->params >> 2) & 0x7F)
+#define OBJDRIFTICE_GET_PATH_INDEX(thisx) (((thisx)->params >> 2) & 0x7F)
 #define OBJDRIFTICE_GET_E00(thisx) (((thisx)->params >> 9) & 7)
 #define OBJDRIFTICE_GET_1000(thisx) (((thisx)->params >> 0xC) & 1)
 #define OBJDRIFTICE_GET_ROT(thisx) ((thisx)->home.rot.x & 3)

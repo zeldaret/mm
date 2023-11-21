@@ -10,7 +10,7 @@ typedef void (*ObjBeanUnkFunc)(struct ObjBean*);
 
 #define OBJBEAN_GET_SWITCH_FLAG_1(thisx, offset) (((thisx)->params + (offset)) & 0x7F)
 #define OBJBEAN_GET_80(thisx) (((thisx)->params >> 7) & 1)
-#define OBJBEAN_GET_3F00(thisx) (((thisx)->params >> 8) & 0x3F)
+#define OBJBEAN_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0x3F)
 #define OBJBEAN_GET_SWITCH_FLAG_2(thisx, offset) ((((thisx)->params >> 7) + (offset)) & 0x7F)
 #define OBJBEAN_GET_C000(thisx) (((thisx)->params >> 0xE) & 3)
 

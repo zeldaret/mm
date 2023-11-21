@@ -213,7 +213,7 @@ void func_80937238(ObjBean* this) {
 }
 
 void func_80937268(ObjBean* this, PlayState* play) {
-    this->unk_1D8 = play->setupPathList[OBJBEAN_GET_3F00(&this->dyna.actor)].count - 1;
+    this->unk_1D8 = play->setupPathList[OBJBEAN_GET_PATH_INDEX(&this->dyna.actor)].count - 1;
     this->unk_1DA = 0;
     this->unk_1DC = 1;
 }
@@ -385,8 +385,8 @@ void ObjBean_Init(Actor* thisx, PlayState* play) {
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_ITEMACTION);
         func_80937DD8(this);
     } else {
-        s32 params2 = OBJBEAN_GET_3F00(&this->dyna.actor);
-        Path* path = &play->setupPathList[params2];
+        s32 pathIndex = OBJBEAN_GET_PATH_INDEX(&this->dyna.actor);
+        Path* path = &play->setupPathList[pathIndex];
 
         this->unk_1DE = OBJBEAN_GET_3(&this->dyna.actor);
         this->dyna.actor.world.rot.z = 0;

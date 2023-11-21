@@ -9,9 +9,11 @@ struct EnOwl;
 typedef void (*EnOwlActionFunc)(struct EnOwl*, PlayState*);
 typedef void (*EnOwlFunc)(struct EnOwl*);
 
-#define ENOWL_GET_F000(thisx) (((thisx)->params & 0xF000) >> 0xC)
+#define ENOWL_GET_PATH_INDEX(thisx) (((thisx)->params & 0xF000) >> 0xC)
 #define ENOWL_GET_TYPE(thisx) (((thisx)->params & 0xF80) >> 7)
 #define ENOWL_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
+
+#define ENOWL_PATH_INDEX_NONE 0xF
 
 typedef enum {
     /* 0x001 */ ENOWL_GET_TYPE_1 = 1,
@@ -44,7 +46,7 @@ typedef struct EnOwl {
     /* 0x3F0 */ f32 unk_3F0;
     /* 0x3F4 */ Path* path;
     /* 0x3F8 */ s32 unk_3F8;
-    /* 0x3FC */ s32 unk_3FC;
+    /* 0x3FC */ s32 pathIndex;
     /* 0x400 */ s16 csIdList[3];
     /* 0x406 */ s16 csIdIndex;
     /* 0x408 */ u8 unk_408;

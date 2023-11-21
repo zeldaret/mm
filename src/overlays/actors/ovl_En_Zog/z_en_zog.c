@@ -140,9 +140,9 @@ void func_80B93310(Actor* thisx, Lights* mapper, PlayState* play) {
 void func_80B93468(EnZog* this, PlayState* play) {
     Vec3s* points;
 
-    this->unk_2E8 = &play->setupPathList[ENZOG_GET_FC00(&this->actor)];
-    if (this->unk_2E8 != NULL) {
-        points = &((Vec3s*)Lib_SegmentedToVirtual(this->unk_2E8->points))[this->unk_2EC];
+    this->path = &play->setupPathList[ENZOG_GET_PATH_INDEX(&this->actor)];
+    if (this->path != NULL) {
+        points = &((Vec3s*)Lib_SegmentedToVirtual(this->path->points))[this->unk_2EC];
         points++;
 
         this->actor.world.pos.x = points[-1].x;
@@ -208,10 +208,10 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk_2EC = 0;
-    if (ENZOG_GET_FC00(&this->actor) != ENZOG_FC00_63) {
+    if (ENZOG_GET_PATH_INDEX(&this->actor) != ENZOG_FC00_63) {
         func_80B93468(this, play);
     } else {
-        this->unk_2E8 = NULL;
+        this->path = NULL;
     }
 
     this->unk_2FC = 0;
@@ -321,11 +321,11 @@ void func_80B93BA8(EnZog* this, s16 csIdIndex) {
 }
 
 s32 func_80B93BE0(EnZog* this, PlayState* play) {
-    Path* path = this->unk_2E8;
+    Path* path = this->path;
     s16 temp_v0;
     Vec3s* points;
 
-    if (this->unk_2E8 == 0) {
+    if (this->path == 0) {
         return false;
     }
 
@@ -343,7 +343,7 @@ s32 func_80B93BE0(EnZog* this, PlayState* play) {
     if (ABS_ALT(temp_v0 - this->actor.world.rot.y) > 0x4000) {
         this->unk_2EC++;
         func_80B93468(this, play);
-        if ((this->unk_2EC + 1) >= this->unk_2E8->count) {
+        if ((this->unk_2EC + 1) >= this->path->count) {
             this->unk_30A |= 1;
             return true;
         }

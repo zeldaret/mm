@@ -68,7 +68,7 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
     if (this->unk160 < 0.01f) {
         func_80AC9680(this);
     } else {
-        path = &play->setupPathList[OBJOCARINALIFT_GET_7F(&this->dyna.actor)];
+        path = &play->setupPathList[OBJOCARINALIFT_GET_PATH_INDEX(&this->dyna.actor)];
         this->unk168 = OBJOCARINALIFT_GET_1F(&this->dyna.actor);
         this->unk164 = path->count - 1;
         this->unk16C = 1;

@@ -8,7 +8,7 @@ struct ObjSpinyroll;
 typedef void (*ObjSpinyrollActionFunc)(struct ObjSpinyroll*, PlayState*);
 typedef s32 (*ObjSpinyrollColFunc)(CollisionContext*, f32*, CollisionPoly**, s32*, Vec3f*, struct ObjSpinyroll*);
 
-#define OBJSPINYROLL_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJSPINYROLL_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
 #define OBJSPINYROLL_GET_380(thisx) (((thisx)->params >> 7) & 7)
 #define OBJSPINYROLL_GET_1C00(thisx) (((thisx)->params >> 0xA) & 7)
 #define OBJSPINYROLL_GET_C000(thisx) (((thisx)->params >> 0xE) & 3)

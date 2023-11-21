@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define OBJOCARINALIFT_GET_C(thisx) (((thisx)->params >> 0xC) & 3)
-#define OBJOCARINALIFT_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJOCARINALIFT_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
 #define OBJOCARINALIFT_GET_1F(thisx) (((thisx)->params >> 7) & 0x1F)
 #define OBJOCARINALIFT_GET_SWITCH_FLAG(thisx) ((thisx)->home.rot.x & 0x7F)
 

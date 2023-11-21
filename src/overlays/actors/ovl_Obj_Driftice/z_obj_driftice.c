@@ -308,7 +308,7 @@ void ObjDriftice_Init(Actor* thisx, PlayState* play) {
     } else {
         this->dyna.actor.flags |= ACTOR_FLAG_10;
 
-        path = &play->setupPathList[OBJDRIFTICE_GET_1FC(&this->dyna.actor)];
+        path = &play->setupPathList[OBJDRIFTICE_GET_PATH_INDEX(&this->dyna.actor)];
         this->unk_164 = 0;
         this->unk_160 = path->count - 1;
         this->unk_168 = 1;
