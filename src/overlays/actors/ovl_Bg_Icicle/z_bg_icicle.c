@@ -77,7 +77,7 @@ void BgIcicle_Init(Actor* thisx, PlayState* play) {
     paramsHigh = (thisx->params >> 8) & 0xFF;
     paramsMid = (thisx->params >> 2) & 0x3F;
     this->unk_161 = (thisx->params >> 8) & 0xFF;
-    thisx->params = thisx->params & 3;
+    thisx->params &= 3;
 
     if (thisx->params == ICICLE_STALAGMITE_RANDOM_DROP || thisx->params == ICICLE_STALAGMITE_FIXED_DROP) {
         this->unk_160 = ((thisx->params == ICICLE_STALAGMITE_RANDOM_DROP) ? paramsHigh : paramsMid);

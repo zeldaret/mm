@@ -683,10 +683,10 @@ f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed) {
     f0 = Math3D_Vec3fMagnitude(&diff);
     if (speed < f0) {
         f2 = speed / f0;
-        f0 = f0 - speed;
-        start->x = start->x + f2 * diff.x;
-        start->y = start->y + f2 * diff.y;
-        start->z = start->z + f2 * diff.z;
+        f0 -= speed;
+        start->x += f2 * diff.x;
+        start->y += f2 * diff.y;
+        start->z += f2 * diff.z;
     } else {
         Math_Vec3f_Copy(start, target);
         f0 = 0.0f;

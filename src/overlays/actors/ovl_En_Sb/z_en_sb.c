@@ -167,10 +167,10 @@ void EnSb_SetupWaitOpen(EnSb* this) {
 }
 
 void EnSb_SetupLunge(EnSb* this) {
-    f32 frameCount = Animation_GetLastFrame(&object_sb_Anim_000124);
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_000124);
     f32 playbackSpeed = this->actor.depthInWater > 0.0f ? 1.0f : 0.0f;
 
-    Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0);
+    Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, endFrame, ANIMMODE_ONCE, 0);
     this->state = SHELLBLADE_LUNGE;
     this->actionFunc = EnSb_Lunge;
     Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
@@ -184,10 +184,10 @@ void EnSb_SetupBounce(EnSb* this) {
 }
 
 void EnSb_SetupIdle(EnSb* this, s32 changeSpeed) {
-    f32 frameCount = Animation_GetLastFrame(&object_sb_Anim_00004C);
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_00004C);
 
     if (this->state != SHELLBLADE_WAIT_CLOSED) {
-        Animation_Change(&this->skelAnime, &object_sb_Anim_00004C, 1.0f, 0, frameCount, ANIMMODE_ONCE, 0.0f);
+        Animation_Change(&this->skelAnime, &object_sb_Anim_00004C, 1.0f, 0, endFrame, ANIMMODE_ONCE, 0.0f);
     }
     this->state = SHELLBLADE_WAIT_CLOSED;
     if (changeSpeed) {
@@ -215,9 +215,10 @@ void EnSb_Idle(EnSb* this, PlayState* play) {
 }
 
 void EnSb_Open(EnSb* this, PlayState* play) {
-    f32 currentFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_000194);
 
-    if (Animation_GetLastFrame(&object_sb_Anim_000194) <= currentFrame) {
+    if (curFrame >= endFrame) {
         this->vulnerableTimer = 20;
         EnSb_SetupWaitOpen(this);
     } else {
@@ -280,11 +281,11 @@ void EnSb_Lunge(EnSb* this, PlayState* play) {
 
 void EnSb_Bounce(EnSb* this, PlayState* play) {
     s32 pad;
-    f32 currentFrame = currentFrame = this->skelAnime.curFrame;
-    f32 frameCount = frameCount = Animation_GetLastFrame(&object_sb_Anim_0000B4);
+    f32 curFrame = this->skelAnime.curFrame;
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_0000B4);
 
     Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
-    if (currentFrame == frameCount) {
+    if (curFrame == endFrame) {
         if (this->bounceCounter != 0) {
             this->bounceCounter--;
             this->attackTimer = 1;

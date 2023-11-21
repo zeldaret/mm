@@ -531,9 +531,9 @@ void func_80A287E8(EnBigpamet* this, PlayState* play) {
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
         if ((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0) {
-            this->actor.world.rot.y = this->actor.world.rot.y - 0x300;
+            this->actor.world.rot.y -= 0x300;
         } else {
-            this->actor.world.rot.y = this->actor.world.rot.y + 0x300;
+            this->actor.world.rot.y += 0x300;
         }
     }
 

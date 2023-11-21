@@ -836,8 +836,8 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     Collider_SetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, this->colliderJntSphElements);
 
     if (this->type == HORSE_TYPE_2) {
-        this->colliderCylinder1.dim.radius = this->colliderCylinder1.dim.radius * 0.8f;
-        this->colliderCylinder2.dim.radius = this->colliderCylinder2.dim.radius * 0.8f;
+        this->colliderCylinder1.dim.radius *= 0.8f;
+        this->colliderCylinder2.dim.radius *= 0.8f;
         this->colliderJntSph.elements[0].dim.modelSphere.radius *= 0.6f;
     } else if (this->type == HORSE_TYPE_DONKEY) {
         this->colliderCylinder1.dim.radius = 50;

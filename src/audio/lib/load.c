@@ -1726,7 +1726,7 @@ void AudioLoad_ProcessAsyncLoad(AudioAsyncLoad* asyncLoad, s32 resetStatus) {
 
     asyncLoad->bytesRemaining -= asyncLoad->chunkSize;
     asyncLoad->curDevAddr += asyncLoad->chunkSize;
-    asyncLoad->curRamAddr = asyncLoad->curRamAddr + asyncLoad->chunkSize;
+    asyncLoad->curRamAddr += asyncLoad->chunkSize;
 }
 
 void AudioLoad_AsyncDma(AudioAsyncLoad* asyncLoad, size_t size) {

@@ -400,7 +400,7 @@ void func_80B16244(BgHakuginSwitch* this, PlayState* play) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
     if ((BGHAKUGINSWITCH_GET_7(&this->dyna.actor) == BGHAKUGINSWITCH_GET_7_1) &&
         (this->dyna.actor.category != ACTORCAT_SWITCH)) {
-        func_800BC154(play, &play->actorCtx, &this->dyna.actor, 0);
+        func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_SWITCH);
     }
     this->actionFunc = func_80B162AC;
 }

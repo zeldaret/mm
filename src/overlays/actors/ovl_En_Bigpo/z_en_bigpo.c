@@ -1067,7 +1067,7 @@ void EnBigpo_FlameCircleCutscene(EnBigpo* this, PlayState* play) {
         if (magnitude > 0.0001f) {
             Math_Vec3f_Scale(&posDiff, 1.0f / magnitude);
         }
-        magnitude = magnitude / this->idleTimer;
+        magnitude /= this->idleTimer;
         this->actor.world.pos.x -= magnitude * posDiff.x;
         this->actor.world.pos.y -= magnitude * posDiff.y;
         this->actor.world.pos.z -= magnitude * posDiff.z;

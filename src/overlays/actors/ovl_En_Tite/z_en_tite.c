@@ -452,7 +452,7 @@ void func_80894638(EnTite* this, PlayState* play) {
         temp_v1 = (s32)(temp_v0 * (1.0f / 42.0f)) - 10;
     }
 
-    this->actor.shape.rot.y = this->actor.shape.rot.y + (temp_v1 * 2);
+    this->actor.shape.rot.y += temp_v1 * 2;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->skelAnime.playSpeed = temp_v1 * 0.01f;
     SkelAnime_Update(&this->skelAnime);

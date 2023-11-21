@@ -83,7 +83,7 @@ s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
     }
 
     dstEnd = dst + ((Yaz0Header*)src)->decSize;
-    src = src + sizeof(Yaz0Header);
+    src += sizeof(Yaz0Header);
 
     do {
         if (bitIdx == 0) {

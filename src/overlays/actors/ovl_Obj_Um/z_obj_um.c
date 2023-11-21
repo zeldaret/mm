@@ -433,7 +433,7 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
         phi_v1_2 = -0x190;
     }
 
-    bandit->actor.shape.rot.y = bandit->actor.shape.rot.y + phi_v1_2;
+    bandit->actor.shape.rot.y += phi_v1_2;
     return 0;
 }
 
@@ -1105,17 +1105,17 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
             if (fabsf(yawDiff) < 100.0f) {
                 this->dyna.actor.shape.rot.y = this->donkey->actor.shape.rot.y;
             } else if (yawDiff > 0) {
-                this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x64;
+                this->dyna.actor.shape.rot.y += 0x64;
                 yawDiff = 0x64;
             } else if (yawDiff < 0) {
-                this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x64;
+                this->dyna.actor.shape.rot.y -= 0x64;
                 yawDiff = -0x64;
             }
         } else if (yawDiff > 0) {
-            this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x190;
+            this->dyna.actor.shape.rot.y += 0x190;
             yawDiff = 0x190;
         } else if (yawDiff < 0) {
-            this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x190;
+            this->dyna.actor.shape.rot.y -= 0x190;
             yawDiff = -0x190;
         }
 

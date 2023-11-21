@@ -43,7 +43,7 @@ typedef struct EnRaf {
     /* 0x354 */ Vec3s chewLimbRot[CARNIVOROUS_LILY_PAD_LIMB_MAX];
     /* 0x39C */ s16 grabTarget;
     /* 0x39E */ u8 isCurrentlyInRidingMovingState;
-    /* 0x3A0 */ f32 endFrame;
+    /* 0x3A0 */ f32 animEndFrame;
     /* 0x3A4 */ f32 chewScale;
     /* 0x3A8 */ f32 bobOffset;
     /* 0x3AC */ f32 heightDiffFromPlayer;
