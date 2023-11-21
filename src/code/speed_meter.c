@@ -9,7 +9,7 @@
 #include "z64malloc.h"
 #include "z64view.h"
 
-#include "variables.h" // for gIrqMgrRetraceTime
+#include "variables.h"
 
 /**
  * How much time the RSP ran audio tasks for over the course of `gGraphUpdatePeriod`.

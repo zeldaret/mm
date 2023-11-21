@@ -1,8 +1,9 @@
 #include "z64light.h"
 
 #include "sys_cfb.h"
+#include "z64skin_matrix.h"
 #include "z64.h"
-#include "functions.h" // for SkinMatrix_Vec3fMtxFMultXYZ and Actor_GetProjectedPos
+#include "functions.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
 

@@ -6,7 +6,7 @@
 #include "z64actor.h"
 #include "z64game.h"
 #include "functions.h"
-#include "macros.h" // for SQ
+#include "macros.h"
 
 void* Lib_MemCpy(void* dest, void* src, size_t size) {
     bcopy(src, dest, size);

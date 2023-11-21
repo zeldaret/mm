@@ -2,7 +2,7 @@
 
 #include "sys_cfb.h"
 #include "z64math.h"
-#include "variables.h" // for gCircleTex
+#include "variables.h"
 
 typedef enum TransitionCircleDirection {
     /* 0 */ TRANS_CIRCLE_DIR_IN,
