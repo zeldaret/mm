@@ -3,7 +3,6 @@
 
 #include "libc/stdint.h"
 #include "PR/os_convert.h"
-#include "main.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
