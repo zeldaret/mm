@@ -8982,7 +8982,7 @@ s32 Player_ActionChange_3(Player* this, PlayState* play) {
 
                 this->currentYaw = this->actor.shape.rot.y = rideActor->actor.shape.rot.y;
 
-                Actor_MountHorse(play, this, &rideActor->actor);
+                Player_MountHorse(play, this, &rideActor->actor);
                 Player_Anim_PlayOnce(play, this, entry->anim);
                 Player_AnimReplace_Setup(
                     play, this, ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE | ANIM_FLAG_80);
@@ -16044,7 +16044,7 @@ void Player_Action_52(Player* this, PlayState* play) {
             s32 var_v0 = (this->mountSide < 0) ? 0 : 1;
 
             if (PlayerAnimation_OnFrame(&this->skelAnime, D_8085D6DC[var_v0][0])) {
-                Actor_SetCameraHorseSetting(play, this);
+                Player_SetCameraHorseSetting(play, this);
                 Player_PlaySfx(this, NA_SE_PL_CLIMB_CLIFF);
             } else if (PlayerAnimation_OnFrame(&this->skelAnime, D_8085D6DC[var_v0][1])) {
                 Player_PlaySfx(this, NA_SE_PL_SIT_ON_HORSE);
@@ -16055,7 +16055,7 @@ void Player_Action_52(Player* this, PlayState* play) {
             func_80841A50(play, this);
         }
 
-        Actor_SetCameraHorseSetting(play, this);
+        Player_SetCameraHorseSetting(play, this);
 
         this->skelAnime.prevTransl = D_8085D6E0;
 
