@@ -72,7 +72,7 @@ typedef struct Boss05 {
     /* 0x16A */ s16 damagedTimer;
     /* 0x16C */ s16 damagedFlashTimer;
     /* 0x170 */ Boss05ActionFunc actionFunc;
-    /* 0x174 */ u8 lilyPadWithHeadLimbRotState;
+    /* 0x174 */ u8 lilyPadWithHeadMovementState;
     /* 0x176 */ s16 lilyPadRotY;
     /* 0x178 */ s16 lilyPadRotX;
     /* 0x17A */ s16 drawDmgEffTimer;
