@@ -69,8 +69,8 @@ void func_808654C4(EnPart* this, PlayState* play) {
         this->unk146--;
         if (this->unk146 > 0) {
             this->actor.shape.rot.x += 0x3A98;
-            this->actor.shape.rot.y = this->actor.shape.rot.y; // Set to self
-            this->actor.shape.rot.z = this->actor.shape.rot.z; // Set to self
+            this->actor.shape.rot.y = this->actor.shape.rot.y; // Sets to itself
+            this->actor.shape.rot.z = this->actor.shape.rot.z; // Sets to itself
             if (BgCheck_SphVsFirstPoly(&play->colCtx, &this->actor.world.pos, 20.0f)) {
                 this->unk146 = 0;
             }

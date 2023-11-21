@@ -66,7 +66,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 
-u32 sTexturesDesegmented = false;
+static s32 sTexturesDesegmented = false;
 
 u16 D_80ADFB2C[PLAYER_FORM_MAX] = {
     0x76D, // PLAYER_FORM_FIERCE_DEITY

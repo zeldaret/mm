@@ -147,7 +147,7 @@ void DmChar02_Update(Actor* thisx, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    this->unk_2F0 = this->unk_2F0; // Set to self
+    this->unk_2F0 = this->unk_2F0; // Sets to itself
 
     this->actionFunc(this, play);
 

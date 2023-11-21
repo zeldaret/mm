@@ -31,7 +31,7 @@ void func_80B94E34(EnZog* this, PlayState* play);
 void func_80B95128(EnZog* this, PlayState* play);
 void func_80B95240(EnZog* this, PlayState* play);
 
-static u8 D_80B95E10;
+static u8 sTexturesDesegmented;
 
 ActorInit En_Zog_InitVars = {
     /**/ ACTOR_EN_ZOG,
@@ -158,7 +158,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     s32 i;
     s16 csId;
 
-    if (!D_80B95E10) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(D_80B958AC); i++) {
             D_80B958AC[i] = Lib_SegmentedToVirtual(D_80B958AC[i]);
         }
@@ -167,7 +167,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
             D_80B958B8[i] = Lib_SegmentedToVirtual(D_80B958B8[i]);
         }
 
-        D_80B95E10 = true;
+        sTexturesDesegmented = true;
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_80B93310, 24.0f);

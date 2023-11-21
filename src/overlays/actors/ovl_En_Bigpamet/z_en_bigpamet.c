@@ -130,7 +130,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_STOP),
 };
 
-s32 D_80A29778 = 0;
+static s32 sTexturesDesegmented = false;
 Vec3f D_80A2977C = { 0.0f, 1.0f, 0.0f };
 Color_RGBA8 D_80A29788 = { 250, 250, 250, 255 };
 Color_RGBA8 D_80A2978C = { 180, 180, 180, 255 };
@@ -151,11 +151,11 @@ void EnBigpamet_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    if (!D_80A29778) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(D_80A29754); i++) {
             D_80A29754[i] = Lib_SegmentedToVirtual(D_80A29754[i]);
         }
-        D_80A29778 = true;
+        sTexturesDesegmented = true;
     }
 
     this->actor.params = ENBIGPAMET_1;
