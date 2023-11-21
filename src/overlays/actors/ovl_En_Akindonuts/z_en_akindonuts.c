@@ -183,7 +183,7 @@ void func_80BECC7C(EnAkindonuts* this, PlayState* play) {
 }
 
 s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 sp58 = path->count;
     s32 idx = arg2;
     s32 sp50 = false;
@@ -194,17 +194,17 @@ s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
     f32 sp3C;
     Vec3f sp30;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[idx]);
+    Math_Vec3s_ToVec3f(&sp30, &points[idx]);
 
     if (idx == 0) {
-        phi_f12 = sp5C[1].x - sp5C[0].x;
-        phi_f14 = sp5C[1].z - sp5C[0].z;
+        phi_f12 = points[1].x - points[0].x;
+        phi_f14 = points[1].z - points[0].z;
     } else if (idx == (sp58 - 1)) {
-        phi_f12 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
-        phi_f14 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
+        phi_f12 = points[sp58 - 1].x - points[sp58 - 2].x;
+        phi_f14 = points[sp58 - 1].z - points[sp58 - 2].z;
     } else {
-        phi_f12 = sp5C[idx + 1].x - sp5C[idx - 1].x;
-        phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
+        phi_f12 = points[idx + 1].x - points[idx - 1].x;
+        phi_f14 = points[idx + 1].z - points[idx - 1].z;
     }
 
     func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
@@ -216,13 +216,13 @@ s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
 }
 
 f32 func_80BECEAC(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
-    Vec3s* temp;
+    Vec3s* points;
     Vec3f sp20;
     Vec3s* point;
 
     if (path != NULL) {
-        temp = Lib_SegmentedToVirtual(path->points);
-        point = &temp[arg1];
+        points = Lib_SegmentedToVirtual(path->points);
+        point = &points[arg1];
 
         sp20.x = point->x;
         sp20.y = point->y;
@@ -236,12 +236,12 @@ f32 func_80BECEAC(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
 }
 
 s16 func_80BECF6C(Path* path) {
-    Vec3s* sp34 = Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     Vec3f sp28;
     Vec3f sp1C;
 
-    Math_Vec3s_ToVec3f(&sp28, &sp34[0]);
-    Math_Vec3s_ToVec3f(&sp1C, &sp34[1]);
+    Math_Vec3s_ToVec3f(&sp28, &points[0]);
+    Math_Vec3s_ToVec3f(&sp1C, &points[1]);
 
     return Math_Vec3f_Yaw(&sp28, &sp1C);
 }

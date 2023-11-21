@@ -601,7 +601,7 @@ s16 EnSuttari_GetDistSqAndOrient(Path* path, s32 index, Vec3f* pos, f32* distSq)
 }
 
 s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 sp58 = path->count;
     s32 index = arg2;
     s32 ret = false;
@@ -612,16 +612,16 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
     f32 sp3C;
     Vec3f sp30;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[index]);
+    Math_Vec3s_ToVec3f(&sp30, &points[index]);
     if (index == 0) {
-        sp54 = sp5C[1].x - sp5C[0].x;
-        sp48 = sp5C[1].z - sp5C[0].z;
+        sp54 = points[1].x - points[0].x;
+        sp48 = points[1].z - points[0].z;
     } else if (index == sp58 - 1) {
-        sp54 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
-        sp48 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
+        sp54 = points[sp58 - 1].x - points[sp58 - 2].x;
+        sp48 = points[sp58 - 1].z - points[sp58 - 2].z;
     } else {
-        sp54 = sp5C[index + 1].x - sp5C[index - 1].x;
-        sp48 = sp5C[index + 1].z - sp5C[index - 1].z;
+        sp54 = points[index + 1].x - points[index - 1].x;
+        sp48 = points[index + 1].z - points[index - 1].z;
     }
     func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
@@ -631,7 +631,7 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
 }
 
 s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 sp58 = path->count;
     s32 index = arg2;
     s32 ret = false;
@@ -642,16 +642,16 @@ s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
     f32 sp3C;
     Vec3f sp30;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[index]);
+    Math_Vec3s_ToVec3f(&sp30, &points[index]);
     if (index == 0) {
-        sp54 = sp5C[0].x - sp5C[1].x;
-        sp48 = sp5C[0].z - sp5C[1].z;
+        sp54 = points[0].x - points[1].x;
+        sp48 = points[0].z - points[1].z;
     } else if (index == sp58 - 1) {
-        sp54 = sp5C[sp58 - 2].x - sp5C[sp58 - 1].x;
-        sp48 = sp5C[sp58 - 2].z - sp5C[sp58 - 1].z;
+        sp54 = points[sp58 - 2].x - points[sp58 - 1].x;
+        sp48 = points[sp58 - 2].z - points[sp58 - 1].z;
     } else {
-        sp54 = sp5C[index - 1].x - sp5C[index + 1].x;
-        sp48 = sp5C[index - 1].z - sp5C[index + 1].z;
+        sp54 = points[index - 1].x - points[index + 1].x;
+        sp48 = points[index - 1].z - points[index + 1].z;
     }
     func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {

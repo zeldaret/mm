@@ -36,7 +36,7 @@ typedef struct ObjBean {
     /* 0x1C8 */ f32 unk_1C8;
     /* 0x1CC */ f32 unk_1CC;
     /* 0x1D0 */ f32 unk_1D0;
-    /* 0x1D4 */ Vec3s* unk_1D4;
+    /* 0x1D4 */ Vec3s* pathPoints;
     /* 0x1D8 */ s16 unk_1D8;
     /* 0x1DA */ s16 unk_1DA;
     /* 0x1DC */ s16 unk_1DC;

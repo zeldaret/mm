@@ -116,7 +116,7 @@ void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
 }
 
 void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
-    Path* path = &play->setupPathList[ENJGAMETSN_GET_FF(&this->actor)];
+    Path* path = &play->setupPathList[ENJGAMETSN_GET_PATH_INDEX(&this->actor)];
     s32 i;
 
     if (path == NULL) {

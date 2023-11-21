@@ -100,12 +100,12 @@ static InitChainEntry sInitChain[] = {
 };
 
 s16 func_80BCABF0(Path* path) {
-    Vec3s* sp34 = Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     Vec3f sp28;
     Vec3f sp1C;
 
-    Math_Vec3s_ToVec3f(&sp28, &sp34[0]);
-    Math_Vec3s_ToVec3f(&sp1C, &sp34[1]);
+    Math_Vec3s_ToVec3f(&sp28, &points[0]);
+    Math_Vec3s_ToVec3f(&sp1C, &points[1]);
     return Math_Vec3f_Yaw(&sp28, &sp1C);
 }
 
@@ -630,7 +630,7 @@ void func_80BCC288(EnScopenuts* this, PlayState* play) {
 }
 
 s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 sp58 = path->count;
     s32 arg2 = arg2_;
     s32 sp50 = false;
@@ -641,17 +641,17 @@ s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_) {
     f32 sp3C;
     Vec3f sp30;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
+    Math_Vec3s_ToVec3f(&sp30, &points[arg2]);
 
     if (arg2 == 0) {
-        phi_f12 = sp5C[1].x - sp5C[0].x;
-        phi_f14 = sp5C[1].z - sp5C[0].z;
+        phi_f12 = points[1].x - points[0].x;
+        phi_f14 = points[1].z - points[0].z;
     } else if ((sp58 - 1) == arg2) {
-        phi_f12 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
-        phi_f14 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
+        phi_f12 = points[sp58 - 1].x - points[sp58 - 2].x;
+        phi_f14 = points[sp58 - 1].z - points[sp58 - 2].z;
     } else {
-        phi_f12 = sp5C[arg2 + 1].x - sp5C[arg2 - 1].x;
-        phi_f14 = sp5C[arg2 + 1].z - sp5C[arg2 - 1].z;
+        phi_f12 = points[arg2 + 1].x - points[arg2 - 1].x;
+        phi_f14 = points[arg2 + 1].z - points[arg2 - 1].z;
     }
 
     func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
@@ -663,15 +663,15 @@ s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_) {
 }
 
 f32 func_80BCC448(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
-    Vec3s* temp_v1;
+    Vec3s* points;
     Vec3f sp20;
 
     if (path != NULL) {
-        temp_v1 = Lib_SegmentedToVirtual(path->points);
-        temp_v1 = &temp_v1[arg1];
-        sp20.x = temp_v1[0].x;
-        sp20.y = temp_v1[0].y;
-        sp20.z = temp_v1[0].z;
+        points = Lib_SegmentedToVirtual(path->points);
+        points = &points[arg1];
+        sp20.x = points[0].x;
+        sp20.y = points[0].y;
+        sp20.z = points[0].z;
     }
 
     arg3->y = Math_Vec3f_Yaw(arg2, &sp20);

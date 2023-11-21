@@ -622,15 +622,15 @@ s16 func_80AD48F8(Path* path, s32 arg1, Vec3f* arg2, f32* arg3) {
 f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
     s32 pad;
     Vec3f sp20;
-    Vec3s* temp_v1;
+    Vec3s* points;
 
     if (path != NULL) {
-        temp_v1 = Lib_SegmentedToVirtual(path->points);
-        temp_v1 = &temp_v1[arg1];
+        points = Lib_SegmentedToVirtual(path->points);
+        points = &points[arg1];
 
-        sp20.x = temp_v1->x;
-        sp20.y = temp_v1->y;
-        sp20.z = temp_v1->z;
+        sp20.x = points->x;
+        sp20.y = points->y;
+        sp20.z = points->z;
     }
     arg3->y = Math_Vec3f_Yaw(arg2, &sp20);
     arg3->x = Math_Vec3f_Pitch(arg2, &sp20);

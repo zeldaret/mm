@@ -110,6 +110,7 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, TREASURE_CHEST_SHOP_GAL_LIMB_MAX);
     this->switchFlag = EN_TAKARAYA_GET_SWITCH_FLAG(thisx);
     thisx->params &= 0xFF;
+
     if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sEyesDownTextures); i++) {
             sEyesUpTextures[i] = Lib_SegmentedToVirtual(sEyesUpTextures[i]);
@@ -117,6 +118,7 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
         }
         sTexturesDesegmented = true;
     }
+
     this->eyeTexIndex = 2;
     if (gSaveContext.save.entrance == ENTRANCE(TREASURE_CHEST_SHOP, 1)) {
         Audio_StopSubBgm();

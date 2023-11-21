@@ -63,20 +63,38 @@ ActorInit En_Rail_Skb_InitVars = {
     /**/ EnRailSkb_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gStalchildWalkAnim, 0.96f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gStalchildAttackAnim, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f },
-    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &gStalchildCollapseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &gStalchildSitLaughAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gStalchildSitTapToesAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gStalchildSwingOnBranchAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },
-    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gStalchildSaluteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gStalchildIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+typedef enum EnRailSkbAnimation {
+    /* -1 */ ENRAILSKB_ANIM_NONE = -1,
+    /*  0 */ ENRAILSKB_ANIM_0,
+    /*  1 */ ENRAILSKB_ANIM_1,
+    /*  2 */ ENRAILSKB_ANIM_2,
+    /*  3 */ ENRAILSKB_ANIM_3,
+    /*  4 */ ENRAILSKB_ANIM_4,
+    /*  5 */ ENRAILSKB_ANIM_5,
+    /*  6 */ ENRAILSKB_ANIM_6,
+    /*  7 */ ENRAILSKB_ANIM_7,
+    /*  8 */ ENRAILSKB_ANIM_8,
+    /*  9 */ ENRAILSKB_ANIM_9,
+    /* 10 */ ENRAILSKB_ANIM_10,
+    /* 11 */ ENRAILSKB_ANIM_11,
+    /* 12 */ ENRAILSKB_ANIM_12,
+    /* 13 */ ENRAILSKB_ANIM_MAX
+} EnRailSkbAnimation;
+
+static AnimationInfo sAnimationInfo[ENRAILSKB_ANIM_MAX] = {
+    { &gStalchildWalkAnim, 0.96f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },         // ENRAILSKB_ANIM_0
+    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },       // ENRAILSKB_ANIM_1
+    { &gStalchildAttackAnim, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f },  // ENRAILSKB_ANIM_2
+    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },       // ENRAILSKB_ANIM_3
+    { &gStalchildCollapseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },      // ENRAILSKB_ANIM_4
+    { &gStalchildSitLaughAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },      // ENRAILSKB_ANIM_5
+    { &gStalchildSitTapToesAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },    // ENRAILSKB_ANIM_6
+    { &gStalchildSwingOnBranchAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, // ENRAILSKB_ANIM_7
+    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },       // ENRAILSKB_ANIM_8
+    { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },      // ENRAILSKB_ANIM_9
+    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },       // ENRAILSKB_ANIM_10
+    { &gStalchildSaluteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },        // ENRAILSKB_ANIM_11
+    { &gStalchildIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },          // ENRAILSKB_ANIM_12
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -156,11 +174,11 @@ static DamageTable sDamageTable = {
 
 void func_80B708C0(EnRailSkb* this, PlayState* play) {
     static s32 D_80B7348C = 0;
-    Path* path = &play->setupPathList[ENRAILSKB_GET_FF00(&this->actor)];
+    Path* path = &play->setupPathList[ENRAILSKB_GET_PATH_INDEX(&this->actor)];
     Vec3f sp70;
     s32 phi_a3;
 
-    this->unk_230 = Lib_SegmentedToVirtual(path->points);
+    this->pathPoints = Lib_SegmentedToVirtual(path->points);
     this->unk_2E0 = D_80B7348C;
     this->unk_2E8 = path->count;
 
@@ -175,9 +193,9 @@ void func_80B708C0(EnRailSkb* this, PlayState* play) {
         D_80B7348C = 0;
     }
 
-    this->actor.world.pos.x = this->unk_230[this->unk_2E0].x;
-    this->actor.world.pos.y = this->unk_230[this->unk_2E0].y;
-    this->actor.world.pos.z = this->unk_230[this->unk_2E0].z;
+    this->actor.world.pos.x = this->pathPoints[this->unk_2E0].x;
+    this->actor.world.pos.y = this->pathPoints[this->unk_2E0].y;
+    this->actor.world.pos.z = this->pathPoints[this->unk_2E0].z;
 
     if (this->unk_2E0 < (this->unk_2E8 - 1)) {
         phi_a3 = this->unk_2E0 + 1;
@@ -185,9 +203,9 @@ void func_80B708C0(EnRailSkb* this, PlayState* play) {
         phi_a3 = 0;
     }
 
-    sp70.x = this->unk_230[phi_a3].x;
-    sp70.y = this->unk_230[phi_a3].y;
-    sp70.z = this->unk_230[phi_a3].z;
+    sp70.x = this->pathPoints[phi_a3].x;
+    sp70.y = this->pathPoints[phi_a3].y;
+    sp70.z = this->pathPoints[phi_a3].z;
 
     this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &sp70);
 }
@@ -213,10 +231,10 @@ s32 func_80B70B04(EnRailSkb* this, Vec3f pos) {
     s32 i = 0;
     s32 j;
 
-    sp60.x = this->unk_230[0].z - pos.z;
-    sp60.z = this->unk_230[0].x - pos.x;
-    sp58.x = this->unk_230[1].z - pos.z;
-    sp58.z = this->unk_230[1].x - pos.x;
+    sp60.x = this->pathPoints[0].z - pos.z;
+    sp60.z = this->pathPoints[0].x - pos.x;
+    sp58.x = this->pathPoints[1].z - pos.z;
+    sp58.z = this->pathPoints[1].x - pos.x;
     j = 1;
     temp_s3 = func_80B70AB4(sp60, sp58);
 
@@ -229,10 +247,10 @@ s32 func_80B70B04(EnRailSkb* this, Vec3f pos) {
             j = 0;
         }
 
-        sp60.x = this->unk_230[i].z - pos.z;
-        sp60.z = this->unk_230[i].x - pos.x;
-        sp58.x = this->unk_230[j].z - pos.z;
-        sp58.z = this->unk_230[j].x - pos.x;
+        sp60.x = this->pathPoints[i].z - pos.z;
+        sp60.z = this->pathPoints[i].x - pos.x;
+        sp58.x = this->pathPoints[j].z - pos.z;
+        sp58.z = this->pathPoints[j].x - pos.x;
 
         if (func_80B70AB4(sp60, sp58) != temp_s3) {
             ret = false;
@@ -313,7 +331,7 @@ void EnRailSkb_Destroy(Actor* thisx, PlayState* play) {
 void func_80B70FA0(EnRailSkb* this) {
     this->unk_3F2 = 0;
     if (this->actionFunc != func_80B716A8) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_0);
     }
     this->actionFunc = func_80B70FF8;
 }
@@ -357,7 +375,7 @@ void func_80B7114C(EnRailSkb* this, PlayState* play) {
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_3);
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_402 |= 1;
             func_80B712FC(this);
@@ -381,7 +399,7 @@ void func_80B7123C(EnRailSkb* this, PlayState* play) {
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_3);
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_402 |= 1;
             func_80B712FC(this);
@@ -407,7 +425,7 @@ void func_80B71314(EnRailSkb* this, PlayState* play) {
 
 void func_80B71354(EnRailSkb* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_2);
     this->actionFunc = func_80B713A4;
 }
 
@@ -416,7 +434,7 @@ void func_80B713A4(EnRailSkb* this, PlayState* play) {
         if ((this->actor.xzDistToPlayer > 65.0f) || (Player_GetMask(play) == PLAYER_MASK_CAPTAIN)) {
             func_80B70FA0(this);
         } else {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_2);
         }
     }
 
@@ -457,7 +475,7 @@ void func_80B7151C(EnRailSkb* this) {
     this->actor.draw = EnRailSkb_Draw;
     this->actor.shape.shadowAlpha = 0;
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_1);
     this->actionFunc = func_80B715AC;
 }
 
@@ -480,7 +498,7 @@ void func_80B715AC(EnRailSkb* this, PlayState* play) {
 void func_80B71650(EnRailSkb* this) {
     this->unk_3FE = 0;
     if (this->actionFunc != func_80B70FF8) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_0);
     }
     this->actionFunc = func_80B716A8;
 }
@@ -497,7 +515,7 @@ void func_80B716A8(EnRailSkb* this, PlayState* play) {
             Message_StartTextbox(play, 0x13F5, &this->actor);
             this->unk_400 = 0x13F5;
         }
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 12);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_12);
         func_80B717C8(this);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && !(this->collider.base.acFlags & AC_HIT)) {
         Actor_OfferTalk(&this->actor, play, 100.0f);
@@ -559,7 +577,7 @@ void func_80B718C4(EnRailSkb* this, PlayState* play) {
 }
 
 void func_80B71910(EnRailSkb* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_0);
     this->actionFunc = func_80B71954;
 }
 
@@ -577,7 +595,7 @@ void func_80B71954(EnRailSkb* this, PlayState* play) {
 
 void func_80B71A08(EnRailSkb* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_2);
     this->actionFunc = func_80B71A58;
 }
 
@@ -586,7 +604,7 @@ void func_80B71A58(EnRailSkb* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_2);
         if (this->unk_2E8 < this->unk_22C->dyna.actor.colChkInfo.health) {
             this->unk_22C->dyna.actor.colChkInfo.health--;
         } else {
@@ -609,7 +627,7 @@ void func_80B71A58(EnRailSkb* this, PlayState* play) {
 
 void func_80B71B6C(EnRailSkb* this) {
     this->unk_3F2 = 10;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_0);
     this->actionFunc = func_80B71BB8;
 }
 
@@ -642,7 +660,7 @@ void func_80B71BB8(EnRailSkb* this, PlayState* play) {
 
     if ((sp34 < 50.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 9);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_9);
         this->actor.velocity.y = 10.0f;
 
         for (i = 0; i < 4; i++) {
@@ -675,7 +693,7 @@ void func_80B71DF0(EnRailSkb* this) {
         this->drawDmgEffTimer = 0;
     }
 
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 11);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_11);
     this->actionFunc = func_80B71EA8;
 }
 
@@ -806,9 +824,9 @@ void func_80B72190(EnRailSkb* this, PlayState* play) {
 
     if ((this->actionFunc != func_80B71EA8) && (this->actionFunc != func_80B71954) &&
         (this->actionFunc != func_80B71A58) && (this->actionFunc != func_80B71BB8)) {
-        sp38.x = this->unk_230[this->unk_2E0].x;
-        sp38.y = this->unk_230[this->unk_2E0].y;
-        sp38.z = this->unk_230[this->unk_2E0].z;
+        sp38.x = this->pathPoints[this->unk_2E0].x;
+        sp38.y = this->pathPoints[this->unk_2E0].y;
+        sp38.z = this->pathPoints[this->unk_2E0].z;
         sp32 = Math_Vec3f_Yaw(&this->actor.world.pos, &sp38);
 
         if (Math_Vec3f_DistXZ(&this->actor.world.pos, &sp38) > 100.0f) {
@@ -1001,7 +1019,7 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
                 this->drawDmgEffScale = 0.0f;
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_3);
                 this->unk_402 |= 1;
                 func_80B712FC(this);
                 break;
@@ -1027,7 +1045,7 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
                 this->drawDmgEffScale = 0.5f;
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_3);
                 func_80B71228(this);
                 break;
 
@@ -1046,7 +1064,7 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
             case 13:
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENRAILSKB_ANIM_3);
                 func_80B712FC(this);
                 break;
 

@@ -9,7 +9,7 @@ struct EnKendoJs;
 typedef void (*EnKendoJsActionFunc)(struct EnKendoJs*, PlayState*);
 
 #define ENKENDOJS_GET_FF(thisx) ((thisx)->params & 0xFF)
-#define ENKENDOJS_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define ENKENDOJS_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
 
 #define ENKENDOJS_FF_1 1
 
@@ -20,7 +20,7 @@ typedef struct EnKendoJs {
     /* 0x1D4 */ EnKendoJsActionFunc actionFunc;
     /* 0x1D8 */ Vec3s jointTable[OBJECT_JS_LIMB_MAX];
     /* 0x226 */ Vec3s morphTable[OBJECT_JS_LIMB_MAX];
-    /* 0x274 */ Vec3s* unk_274;
+    /* 0x274 */ Vec3s* pathPoints;
     /* 0x278 */ Vec3s unk_278;
     /* 0x27E */ Vec3s unk_27E;
     /* 0x284 */ s16 unk_284;

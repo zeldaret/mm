@@ -19,7 +19,7 @@ typedef struct ObjOcarinalift {
     /* 0x164 */ s32 unk164;
     /* 0x168 */ s32 unk168;
     /* 0x16C */ s32 unk16C;
-    /* 0x170 */ Vec3s* unk170;
+    /* 0x170 */ Vec3s* pathPoints;
     /* 0x174 */ s16 timer;
     /* 0x176 */ s16 cutsceneTimer;
 } ObjOcarinalift; // size = 0x178

@@ -263,12 +263,12 @@ f32 func_80B76540(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
     Vec3f sp20;
 
     if (path != NULL) {
-        Vec3s* temp_v1 = Lib_SegmentedToVirtual(path->points);
+        Vec3s* points = Lib_SegmentedToVirtual(path->points);
 
-        temp_v1 = &temp_v1[arg1];
-        sp20.x = temp_v1->x;
-        sp20.y = temp_v1->y;
-        sp20.z = temp_v1->z;
+        points = &points[arg1];
+        sp20.x = points->x;
+        sp20.y = points->y;
+        sp20.z = points->z;
     }
     arg3->y = Math_Vec3f_Yaw(arg2, &sp20);
     arg3->x = Math_Vec3f_Pitch(arg2, &sp20);
@@ -277,7 +277,7 @@ f32 func_80B76540(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
 }
 
 s32 func_80B76600(EnTruMt* this, Path* path, s32 arg2) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 sp58 = path->count;
     s32 idx = arg2;
     s32 sp50 = false;
@@ -288,17 +288,17 @@ s32 func_80B76600(EnTruMt* this, Path* path, s32 arg2) {
     f32 sp3C;
     Vec3f sp30;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[idx]);
+    Math_Vec3s_ToVec3f(&sp30, &points[idx]);
 
     if (idx == 0) {
-        phi_f12 = sp5C[1].x - sp5C[0].x;
-        phi_f14 = sp5C[1].z - sp5C[0].z;
+        phi_f12 = points[1].x - points[0].x;
+        phi_f14 = points[1].z - points[0].z;
     } else if (idx == (sp58 - 1)) {
-        phi_f12 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
-        phi_f14 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
+        phi_f12 = points[sp58 - 1].x - points[sp58 - 2].x;
+        phi_f14 = points[sp58 - 1].z - points[sp58 - 2].z;
     } else {
-        phi_f12 = sp5C[idx + 1].x - sp5C[idx - 1].x;
-        phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
+        phi_f12 = points[idx + 1].x - points[idx - 1].x;
+        phi_f14 = points[idx + 1].z - points[idx - 1].z;
     }
 
     func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);

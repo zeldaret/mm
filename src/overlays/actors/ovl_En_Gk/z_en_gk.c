@@ -390,7 +390,7 @@ void func_80B50B38(EnGk* this, PlayState* play) {
 }
 
 s32 func_80B50C78(EnGk* this, Path* path, s32 arg2_) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 sp58 = path->count;
     s32 arg2 = arg2_;
     s32 ret = false;
@@ -401,16 +401,16 @@ s32 func_80B50C78(EnGk* this, Path* path, s32 arg2_) {
     f32 sp3C;
     Vec3f sp30;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
+    Math_Vec3s_ToVec3f(&sp30, &points[arg2]);
     if (arg2 == 0) {
-        phi_f12 = sp5C[1].x - sp5C[0].x;
-        phi_f14 = sp5C[1].z - sp5C[0].z;
+        phi_f12 = points[1].x - points[0].x;
+        phi_f14 = points[1].z - points[0].z;
     } else if ((sp58 - 1) == arg2) {
-        phi_f12 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
-        phi_f14 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
+        phi_f12 = points[sp58 - 1].x - points[sp58 - 2].x;
+        phi_f14 = points[sp58 - 1].z - points[sp58 - 2].z;
     } else {
-        phi_f12 = sp5C[arg2 + 1].x - sp5C[arg2 - 1].x;
-        phi_f14 = sp5C[arg2 + 1].z - sp5C[arg2 - 1].z;
+        phi_f12 = points[arg2 + 1].x - points[arg2 - 1].x;
+        phi_f14 = points[arg2 + 1].z - points[arg2 - 1].z;
     }
 
     func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
