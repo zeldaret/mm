@@ -617,7 +617,7 @@ s32 EnHorse_Spawn(EnHorse* this, PlayState* play) {
     s32 pathCount;
     Vec3s* pathPoints;
 
-    if (pathIndex == -1) {
+    if (pathIndex == PATH_INDEX_NONE) {
         return false;
     }
 

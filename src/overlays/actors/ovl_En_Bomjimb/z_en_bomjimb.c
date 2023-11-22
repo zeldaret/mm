@@ -542,7 +542,7 @@ void func_80C01CD0(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    if (this->actor.draw == 0) {
+    if (this->actor.draw == NULL) {
         this->unk_2E4->shape.rot.z = -this->unk_2E4->shape.rot.z;
         this->unk_2E4->shape.rot.z *= 0.1f;
         if (fabsf(this->unk_2E4->shape.rot.z) < 100.0f) {

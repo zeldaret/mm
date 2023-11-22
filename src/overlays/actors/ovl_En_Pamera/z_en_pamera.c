@@ -105,20 +105,38 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &object_pamera_Anim_0005BC, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_pamera_Anim_008AE0, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_pamera_Anim_008E38, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_pamera_Anim_00A844, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_pamera_Anim_00B0C4, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_pamera_Anim_009870, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_pamera_Anim_009F54, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_pamera_Anim_00B5B0, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_pamera_Anim_00BCC4, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_pamera_Anim_00D9DC, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_pamera_Anim_00E16C, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_pamera_Anim_00C9F4, 1.0f, 0, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_pamera_Anim_00D0F0, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum PamelaAnimation {
+    /*  -1 */ PAMELA_ANIM_NONE = -1,
+    /* 0x0 */ PAMELA_ANIM_0,
+    /* 0x1 */ PAMELA_ANIM_1,
+    /* 0x2 */ PAMELA_ANIM_2,
+    /* 0x3 */ PAMELA_ANIM_3,
+    /* 0x4 */ PAMELA_ANIM_4,
+    /* 0x5 */ PAMELA_ANIM_5,
+    /* 0x6 */ PAMELA_ANIM_6,
+    /* 0x7 */ PAMELA_ANIM_7,
+    /* 0x8 */ PAMELA_ANIM_8,
+    /* 0x9 */ PAMELA_ANIM_9,
+    /* 0xA */ PAMELA_ANIM_10,
+    /* 0xB */ PAMELA_ANIM_11,
+    /* 0xC */ PAMELA_ANIM_12,
+    /* 0xD */ PAMELA_ANIM_MAX
+} PamelaAnimation;
+
+static AnimationInfo sAnimationInfo[PAMELA_ANIM_MAX] = {
+    { &object_pamera_Anim_0005BC, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f }, // PAMELA_ANIM_0
+    { &object_pamera_Anim_008AE0, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f }, // PAMELA_ANIM_1
+    { &object_pamera_Anim_008E38, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f }, // PAMELA_ANIM_2
+    { &object_pamera_Anim_00A844, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f }, // PAMELA_ANIM_3
+    { &object_pamera_Anim_00B0C4, 1.0f, 0, 0.0f, ANIMMODE_LOOP, -4.0f }, // PAMELA_ANIM_4
+    { &object_pamera_Anim_009870, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },  // PAMELA_ANIM_5
+    { &object_pamera_Anim_009F54, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },  // PAMELA_ANIM_6
+    { &object_pamera_Anim_00B5B0, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },  // PAMELA_ANIM_7
+    { &object_pamera_Anim_00BCC4, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },  // PAMELA_ANIM_8
+    { &object_pamera_Anim_00D9DC, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },  // PAMELA_ANIM_9
+    { &object_pamera_Anim_00E16C, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },  // PAMELA_ANIM_10
+    { &object_pamera_Anim_00C9F4, 1.0f, 0, 0.0f, ANIMMODE_ONCE, 0.0f },  // PAMELA_ANIM_11
+    { &object_pamera_Anim_00D0F0, 1.0f, 0, 0.0f, ANIMMODE_LOOP, 0.0f },  // PAMELA_ANIM_12
 };
 
 static Vec3f D_80BDA5F0 = { 1000.0f, 0.0f, 0.0f };
@@ -148,7 +166,7 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
     this->hideInisdeTimer = 0;
     this->unk_322 = 0;
     this->unk_324 = 0;
-    if ((this->actor.params & 0xF000) >> 0xC) {
+    if (PAMELA_GET_F000(&this->actor)) {
         func_80BD9840(this, play);
     } else {
         func_80BD8588(this, play);
@@ -195,7 +213,7 @@ s32 func_80BD84F0(EnPamera* this, PlayState* play) {
 }
 
 void func_80BD8588(EnPamera* this, PlayState* play) {
-    Path* path = &play->setupPathList[ENPAMERA_GET_PATH_INDEX(&this->actor)];
+    Path* path = &play->setupPathList[PAMELA_GET_PATH_INDEX(&this->actor)];
     Vec3f sp28;
 
     if (path == NULL) {
@@ -234,27 +252,27 @@ void EnPamera_Destroy(Actor* thisx, PlayState* play) {
 void func_80BD8700(EnPamera* this) {
     this->hideInisdeTimer = 0;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_0);
     this->actionFunc = func_80BD8758;
 }
 
 void func_80BD8758(EnPamera* this, PlayState* play) {
     if (this->hideInisdeTimer++ > 1800) {
-        if (CutsceneManager_IsNext(this->csIdList[0]) && (this->csIdList[0] != -1)) {
+        if (CutsceneManager_IsNext(this->csIdList[0]) && (this->csIdList[0] != CS_ID_NONE)) {
             CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
             Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[0])),
                                  &this->actor);
             this->actor.speed = 1.5f;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_1);
             this->actor.shape.rot.y = this->actor.home.rot.y;
             this->actor.world.rot.y = this->actor.home.rot.y;
             func_80BD9338(this, play);
             func_80BD8908(this);
-        } else if ((this->csIdList[0] != -1) && (this->actor.xzDistToPlayer < 1000.0f)) {
+        } else if ((this->csIdList[0] != CS_ID_NONE) && (this->actor.xzDistToPlayer < 1000.0f)) {
             CutsceneManager_Queue(this->csIdList[0]);
         } else {
             this->actor.speed = 1.5f;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_1);
             this->actor.shape.rot.y = this->actor.home.rot.y;
             this->actor.world.rot.y = this->actor.home.rot.y;
             func_80BD9338(this, play);
@@ -276,7 +294,7 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
 void func_80BD8908(EnPamera* this) {
     this->actor.draw = EnPamera_Draw;
     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_1);
     this->actionFunc = func_80BD8964;
 }
 
@@ -289,14 +307,14 @@ void func_80BD8964(EnPamera* this, PlayState* play) {
 
     if (Math_Vec3f_StepTo(&this->actor.world.pos, &vec, 1.0f) < 5.0f) {
         this->actor.speed = 1.5f;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_1);
         SET_WEEKEVENTREG(WEEKEVENTREG_59_01);
         func_80BD8B50(this);
     }
 }
 
 void func_80BD8A38(EnPamera* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_1);
     this->actionFunc = func_80BD8A7C;
 }
 
@@ -343,14 +361,14 @@ void func_80BD8B70(EnPamera* this, PlayState* play) {
 void func_80BD8CCC(EnPamera* this) {
     this->hideInisdeTimer = 0;
     this->actor.speed = 0.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_3);
     this->actionFunc = func_80BD8D1C;
 }
 
 void func_80BD8D1C(EnPamera* this, PlayState* play) {
     if (this->hideInisdeTimer++ > 200) {
         this->actor.speed = 1.5f;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_1);
         func_80BD8D80(this);
     }
 }
@@ -386,14 +404,14 @@ void func_80BD8DB0(EnPamera* this, PlayState* play) {
 
 void EnPamera_LookDownWell(EnPamera* this) {
     func_80BD93CC(this, 1, 1);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_4);
     this->actionFunc = func_80BD8F60;
 }
 
 void func_80BD8F60(EnPamera* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x3000, 0x1000);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_2);
         this->actor.speed = 3.0f;
         func_80BD93CC(this, 0, 0);
         func_80BD8D80(this);
@@ -410,7 +428,7 @@ void func_80BD8FF0(EnPamera* this) {
     pameraYaw = Math_Vec3f_Yaw(&pameraPos, &this->actor.world.pos);
     this->actor.shape.rot.y = pameraYaw;
     this->actor.world.rot.y = pameraYaw;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_3);
     this->actionFunc = func_80BD909C;
 }
 
@@ -420,19 +438,19 @@ void func_80BD909C(EnPamera* this, PlayState* play) {
 void func_80BD90AC(EnPamera* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Player_GetMask(play) != PLAYER_MASK_STONE && (this->actionFunc != func_80BD8758) &&
+    if ((Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actionFunc != func_80BD8758) &&
         (this->actionFunc != func_80BD8964) && (this->actionFunc != func_80BD8A7C) &&
         (this->actionFunc != func_80BD8F60) && ((this->actionFunc != func_80BD8B70) || (this->waypointIndex != 0)) &&
         ((this->actionFunc != func_80BD8DB0) || (this->actor.speed != 3.0f)) &&
         ((this->actor.xzDistToPlayer < 150.0f) ||
          ((this->actionFunc == func_80BD909C) &&
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
-        if ((CutsceneManager_IsNext(this->csIdList[1])) && ((this->csIdList[1] != -1))) {
+        if (CutsceneManager_IsNext(this->csIdList[1]) && (this->csIdList[1] != CS_ID_NONE)) {
             CutsceneManager_StartWithPlayerCs(this->csIdList[1], &this->actor);
             Camera_SetFocalActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[1])),
                                  &this->actor);
             EnPamera_LookDownWell(this);
-        } else if (this->csIdList[1] != -1) {
+        } else if (this->csIdList[1] != CS_ID_NONE) {
             CutsceneManager_Queue(this->csIdList[1]);
         } else {
             EnPamera_LookDownWell(this);
@@ -446,12 +464,12 @@ s32 func_80BD9234(EnPamera* this, PlayState* play) {
     while (actor != NULL) {
         if ((actor->id == ACTOR_EN_BOM) && (Math_Vec3f_DistXZ(&this->actor.world.pos, &actor->world.pos) < 500.0f) &&
             (((EnBom*)actor)->timer == 0)) {
-            return 1;
+            return true;
         } else {
             actor = actor->next;
         }
     }
-    return 0;
+    return false;
 }
 
 void func_80BD92D0(EnPamera* this, PlayState* play) {
@@ -459,7 +477,7 @@ void func_80BD92D0(EnPamera* this, PlayState* play) {
     s32 pathIndex = this->additionalPathIndex;
 
     path = &play->setupPathList[pathIndex];
-    if (pathIndex >= 0) {
+    if (pathIndex > PATH_INDEX_NONE) {
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
         this->waypointIndex = 0;
         this->pathCount = path->count;
@@ -586,7 +604,7 @@ void func_80BD9840(EnPamera* this, PlayState* play) {
 
 void func_80BD9904(EnPamera* this) {
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    this->actionFunc = &func_80BD9928;
+    this->actionFunc = func_80BD9928;
 }
 
 void func_80BD9928(EnPamera* this, PlayState* play) {
@@ -609,15 +627,13 @@ void func_80BD994C(EnPamera* this, PlayState* play) {
             func_80BD93CC(this, 1, 0);
             Message_StartTextbox(play, 0x158E, &this->actor);
             this->unk_324 = 0x158E;
+        } else if (!(this->unk_322 & 1)) {
+            this->unk_322 |= 1;
+            Message_StartTextbox(play, 0x1587, &this->actor);
+            this->unk_324 = 0x1587;
         } else {
-            if (!(this->unk_322 & 1)) {
-                this->unk_322 |= 1;
-                Message_StartTextbox(play, 0x1587, &this->actor);
-                this->unk_324 = 0x1587;
-            } else {
-                Message_StartTextbox(play, 0x158C, &this->actor);
-                this->unk_324 = 0x158C;
-            }
+            Message_StartTextbox(play, 0x158C, &this->actor);
+            this->unk_324 = 0x158C;
         }
         func_80BD9A9C(this);
     } else {
@@ -662,26 +678,34 @@ void func_80BD9B4C(EnPamera* this, PlayState* play) {
                 Message_StartTextbox(play, 0x1588, &this->actor);
                 this->unk_324 = 0x1588;
                 break;
+
             case 0x1588:
                 Message_StartTextbox(play, 0x1589, &this->actor);
                 this->unk_324 = 0x1589;
                 break;
+
             case 0x1589:
                 Message_StartTextbox(play, 0x158A, &this->actor);
                 this->unk_324 = 0x158A;
                 break;
+
             case 0x158A:
                 Message_StartTextbox(play, 0x158B, &this->actor);
                 this->unk_324 = 0x158B;
                 break;
+
             case 0x158C:
                 Message_StartTextbox(play, 0x158D, &this->actor);
                 this->unk_324 = 0x158D;
                 break;
+
             case 0x158E:
             case 0x15A8:
                 Message_CloseTextbox(play);
                 func_80BD9C70(this, play);
+                break;
+
+            default:
                 break;
         }
     }
@@ -706,6 +730,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
                 case 1:
                     func_80BD9E88(this);
                     break;
+
                 case 2:
                     if (this->actor.draw == NULL) {
                         this->actor.draw = EnPamera_Draw;
@@ -713,23 +738,30 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
                     }
                     func_80BD9EE0(this);
                     break;
+
                 case 3:
                     func_80BDA038(this);
                     break;
+
                 case 4:
                     func_80BDA0A0(this);
                     break;
+
                 case 5:
                     func_80BDA170(this);
                     break;
+
                 case 6:
                     func_80BDA288(this);
+                    break;
+
+                default:
                     break;
             }
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         this->setupFunc(this, play);
-        return 1;
+        return true;
     }
     if ((play->csCtx.state == CS_STATE_IDLE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20)) {
         if ((this->actionFunc != func_80BD994C) && (this->actionFunc != EnPamera_HandleDialogue)) {
@@ -739,7 +771,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
         }
     }
     this->cueId = 99;
-    return 0;
+    return false;
 }
 
 void func_80BD9E60(EnPamera* this) {
@@ -751,7 +783,7 @@ void func_80BD9E78(EnPamera* this, PlayState* play) {
 }
 
 void func_80BD9E88(EnPamera* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_0);
     this->unk_31E = 0;
     this->setupFunc = func_80BD9ED0;
 }
@@ -760,7 +792,7 @@ void func_80BD9ED0(EnPamera* this, PlayState* play) {
 }
 
 void func_80BD9EE0(EnPamera* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_5);
     func_80BD93CC(this, 1, 0);
     this->unk_31E = 1;
     this->setupFunc = func_80BD9F3C;
@@ -777,14 +809,14 @@ void func_80BD9F3C(EnPamera* this, PlayState* play) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;
             func_80BD93CC(this, 0, 0);
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_6);
         }
     }
 }
 
 void func_80BDA038(EnPamera* this) {
     func_80BD93CC(this, 0, 1);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 7);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_7);
     this->unk_31E = 0;
     this->setupFunc = func_80BDA090;
 }
@@ -794,7 +826,7 @@ void func_80BDA090(EnPamera* this, PlayState* play) {
 
 void func_80BDA0A0(EnPamera* this) {
     func_80BD93CC(this, 0, 1);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 8);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_8);
     this->unk_31E = 1;
     this->setupFunc = func_80BDA0FC;
 }
@@ -804,7 +836,7 @@ void func_80BDA0FC(EnPamera* this, PlayState* play) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;
             func_80BD93CC(this, 0, 0);
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_6);
         }
     }
 }
@@ -812,7 +844,7 @@ void func_80BDA0FC(EnPamera* this, PlayState* play) {
 void func_80BDA170(EnPamera* this) {
     this->unk_31E = 1;
     func_80BD93CC(this, 0, 1);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 9);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_9);
     this->setupFunc = func_80BDA1C8;
 }
 
@@ -825,7 +857,7 @@ void func_80BDA1C8(EnPamera* this, PlayState* play) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;
             func_80BD93CC(this, 0, 0);
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 10);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_10);
         }
     }
 }
@@ -833,7 +865,7 @@ void func_80BDA1C8(EnPamera* this, PlayState* play) {
 void func_80BDA288(EnPamera* this) {
     this->unk_31E = 1;
     func_80BD93CC(this, 0, 0);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 11);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_11);
     this->setupFunc = func_80BDA2E0;
 }
 
@@ -841,7 +873,7 @@ void func_80BDA2E0(EnPamera* this, PlayState* play) {
     if (this->unk_31E == 1) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 12);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, PAMELA_ANIM_12);
         }
     }
 }

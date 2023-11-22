@@ -346,8 +346,8 @@ void EnKakasi_SetupIdleStanding(EnKakasi* this) {
 
 void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
     u32 day = gSaveContext.save.day;
-    s16 x;
-    s16 y;
+    s16 screenPosX;
+    s16 screenPosY;
 
     // first talk to scarecrow dialogue
     this->picto.actor.textId = 0x1644;
@@ -362,9 +362,9 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
         return;
     }
     if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
-        Actor_GetScreenPos(play, &this->picto.actor, &x, &y);
-        if ((this->picto.actor.projectedPos.z > -20.0f) && (x > 0) && (x < SCREEN_WIDTH) && (y > 0) &&
-            (y < SCREEN_HEIGHT) && (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING)) {
+        Actor_GetScreenPos(play, &this->picto.actor, &screenPosX, &screenPosY);
+        if ((this->picto.actor.projectedPos.z > -20.0f) && (screenPosX > 0) && (screenPosX < SCREEN_WIDTH) &&
+            (screenPosY > 0) && (screenPosY < SCREEN_HEIGHT) && (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING)) {
             // faster shaking
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             this->skelAnime.playSpeed = 2.0f;

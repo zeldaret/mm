@@ -292,12 +292,12 @@ void EnOssan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnOssan_UpdateCursorPos(PlayState* play, EnOssan* this) {
-    s16 x;
-    s16 y;
+    s16 screenPosX;
+    s16 screenPosY;
 
-    Actor_GetScreenPos(play, &this->items[this->cursorIndex]->actor, &x, &y);
-    this->cursorPos.x = x;
-    this->cursorPos.y = y;
+    Actor_GetScreenPos(play, &this->items[this->cursorIndex]->actor, &screenPosX, &screenPosY);
+    this->cursorPos.x = screenPosX;
+    this->cursorPos.y = screenPosY;
 }
 
 void EnOssan_EndInteraction(PlayState* play, EnOssan* this) {
