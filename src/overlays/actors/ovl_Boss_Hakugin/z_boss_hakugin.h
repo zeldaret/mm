@@ -68,6 +68,30 @@ typedef enum GohtBodyPart {
     /* 15 */ GOHT_BODYPART_MAX
 } GohtBodyPart;
 
+typedef enum GohtColliderBodyPart {
+    /*  0 */ GOHT_COLLIDER_BODYPART_HEAD,
+    /*  1 */ GOHT_COLLIDER_BODYPART_THORAX,
+    /*  2 */ GOHT_COLLIDER_BODYPART_PELVIS,
+    /*  3 */ GOHT_COLLIDER_BODYPART_FRONT_RIGHT_UPPER_LEG,
+    /*  4 */ GOHT_COLLIDER_BODYPART_FRONT_RIGHT_LOWER_LEG,
+    /*  5 */ GOHT_COLLIDER_BODYPART_FRONT_RIGHT_HOOF,
+    /*  6 */ GOHT_COLLIDER_BODYPART_FRONT_LEFT_UPPER_LEG,
+    /*  7 */ GOHT_COLLIDER_BODYPART_FRONT_LEFT_LOWER_LEG,
+    /*  8 */ GOHT_COLLIDER_BODYPART_FRONT_LEFT_HOOF,
+    /*  9 */ GOHT_COLLIDER_BODYPART_BACK_RIGHT_THIGH,
+    /* 10 */ GOHT_COLLIDER_BODYPART_BACK_RIGHT_SHIN,
+    /* 11 */ GOHT_COLLIDER_BODYPART_BACK_RIGHT_PASTERN,
+    /* 12 */ GOHT_COLLIDER_BODYPART_BACK_RIGHT_HOOF,
+    /* 13 */ GOHT_COLLIDER_BODYPART_BACK_LEFT_THIGH,
+    /* 14 */ GOHT_COLLIDER_BODYPART_BACK_LEFT_SHIN,
+    /* 15 */ GOHT_COLLIDER_BODYPART_BACK_LEFT_PASTERN,
+    /* 16 */ GOHT_COLLIDER_BODYPART_BACK_LEFT_HOOF,
+    // TODO: Figure out which is which
+    /* 17 */ GOHT_COLLIDER_BODYPART_HORN1,
+    /* 18 */ GOHT_COLLIDER_BODYPART_HORN2,
+    /* 19 */ GOHT_COLLIDER_BODYPART_MAX
+} GohtColliderBodyPart;
+
 typedef struct BossHakugin {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
@@ -121,9 +145,9 @@ typedef struct BossHakugin {
     /* 0x0464 */ Vec3f unk_0464;
     /* 0x0470 */ LightNode* lightNode;
     /* 0x0474 */ LightInfo lightInfo;
-    /* 0x0484 */ ColliderJntSph unk_0484;
-    /* 0x04A4 */ ColliderJntSphElement unk_04A4[19];
-    /* 0x0964 */ ColliderCylinder unk_0964;
+    /* 0x0484 */ ColliderJntSph bodyCollider;
+    /* 0x04A4 */ ColliderJntSphElement bodyColliderElements[GOHT_COLLIDER_BODYPART_MAX];
+    /* 0x0964 */ ColliderCylinder iceCollider;
     /* 0x09B0 */ Actor* unk_09B0[8];
     /* 0x09D0 */ Actor* unk_09D0[10];
     /* 0x09F8 */ GohtRock rocks[GOHT_ROCK_COUNT];
