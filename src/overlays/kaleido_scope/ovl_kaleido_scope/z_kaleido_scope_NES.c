@@ -352,8 +352,8 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
 
     if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT) || CHECK_BTN_ALL(input->press.button, BTN_R)) {
         // Switch the page to the right regardless of where the cursor is
-        if (interfaceCtx->unk_212 == 6) {
-            func_8011552C(play, 0x15);
+        if (interfaceCtx->unk_212 == DO_ACTION_DECIDE) {
+            func_8011552C(play, DO_ACTION_INFO);
         }
         KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_RIGHT);
         return;
@@ -361,8 +361,8 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
 
     if (CHECK_BTN_ALL(input->cur.button, BTN_DLEFT) || CHECK_BTN_ALL(input->press.button, BTN_Z)) {
         // Switch the page to the left regardless of where the cursor is
-        if (interfaceCtx->unk_212 == 6) {
-            func_8011552C(play, 0x15);
+        if (interfaceCtx->unk_212 == DO_ACTION_DECIDE) {
+            func_8011552C(play, DO_ACTION_INFO);
         }
         KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_LEFT);
         return;

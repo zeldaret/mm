@@ -17,7 +17,7 @@ void EnRz_Update(Actor* thisx, PlayState* play);
 void EnRz_Draw(Actor* thisx, PlayState* play);
 
 void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
-void EnRz_ChangeAnim(PlayState*, EnRz*, s16 animIndex, u8 animMode, f32 morphFrames);
+void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f32 morphFrames);
 s32 EnRz_SetupPath(EnRz* this, PlayState* play);
 EnRz* EnRz_FindSister(EnRz* this, PlayState*);
 void func_80BFC058(EnRz* this, PlayState* play);
@@ -196,17 +196,26 @@ void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f32 morphFrames) {
     // N.B. both of these arrays must be the same length due to how the animations are chosen
     static AnimationHeader* sJudoAnimations[] = {
-        &gRosaSistersThinkingAnim, &gRosaSistersStandingAnim,   &gRosaSistersWalkingWhileThinkingAnim,
-        &gRosaSistersSittingAnim,  &gRosaSistersApplaudingAnim, &gRosaSistersOnKneesAnim,
-        &gRosaSistersDancingAnim,
+        &gRosaSistersThinkingAnim,             // EN_RZ_ANIM_THINKING
+        &gRosaSistersStandingAnim,             // EN_RZ_ANIM_STANDING
+        &gRosaSistersWalkingWhileThinkingAnim, // EN_RZ_ANIM_WALKING
+        &gRosaSistersSittingAnim,              // EN_RZ_ANIM_SITTING
+        &gRosaSistersApplaudingAnim,           // EN_RZ_ANIM_APPLAUDING
+        &gRosaSistersOnKneesAnim,              // EN_RZ_ANIM_ON_KNEES
+        &gRosaSistersDancingAnim,              // EN_RZ_ANIM_DANCE
     };
     static AnimationHeader* sMarillaAnimations[] = {
-        &gRosaSistersStandingAnim,   &gRosaSistersStandingAnim, &gRosaSistersWalkingAnim, &gRosaSistersSittingAnim,
-        &gRosaSistersApplaudingAnim, &gRosaSistersOnKneesAnim,  &gRosaSistersDancingAnim,
+        &gRosaSistersStandingAnim,   // EN_RZ_ANIM_THINKING
+        &gRosaSistersStandingAnim,   // EN_RZ_ANIM_STANDING
+        &gRosaSistersWalkingAnim,    // EN_RZ_ANIM_WALKING
+        &gRosaSistersSittingAnim,    // EN_RZ_ANIM_SITTING
+        &gRosaSistersApplaudingAnim, // EN_RZ_ANIM_APPLAUDING
+        &gRosaSistersOnKneesAnim,    // EN_RZ_ANIM_ON_KNEES
+        &gRosaSistersDancingAnim,    // EN_RZ_ANIM_DANCE
     };
     static PlayerAnimationHeader* sPlayerAnimations[] = {
-        &gPlayerAnim_link_normal_wait_free,
-        &gPlayerAnim_alink_dance_loop,
+        &gPlayerAnim_link_normal_wait_free, // EN_RZ_ANIM_LINK_NORMAL_WAIT_FREE
+        &gPlayerAnim_alink_dance_loop,      // EN_RZ_ANIM_LINK_DANCE
     };
     f32 endFrame;
     AnimationHeader** animationPtr;
@@ -239,11 +248,11 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
     }
 }
 
-void func_80BFB9E4(PlayState* play, EnRz* this, s16 animIndex) {
+void EnRz_ChangeAnimLoopMorph(PlayState* play, EnRz* this, s16 animIndex) {
     EnRz_ChangeAnim(play, this, animIndex, ANIMMODE_LOOP, -5.0f);
 }
 
-void func_80BFBA1C(PlayState* play, EnRz* this, s16 animIndex) {
+void EnRz_ChangeAnimLoop(PlayState* play, EnRz* this, s16 animIndex) {
     EnRz_ChangeAnim(play, this, animIndex, ANIMMODE_LOOP, 0.0f);
 }
 
@@ -373,19 +382,22 @@ s32 func_80BFBE70(EnRz* this, PlayState* play) {
             this->cueId = cueId;
             switch (this->cueId) {
                 case 1:
-                    func_80BFBA1C(play, this, EN_RZ_ANIM_STANDING);
+                    EnRz_ChangeAnimLoop(play, this, EN_RZ_ANIM_STANDING);
                     break;
 
                 case 2:
-                    func_80BFBA1C(play, this, EN_RZ_ANIM_ON_KNEES);
+                    EnRz_ChangeAnimLoop(play, this, EN_RZ_ANIM_ON_KNEES);
                     break;
 
                 case 3:
-                    func_80BFBA1C(play, this, EN_RZ_ANIM_APPLAUDING);
+                    EnRz_ChangeAnimLoop(play, this, EN_RZ_ANIM_APPLAUDING);
                     break;
 
                 case 4:
-                    func_80BFBA1C(play, this, EN_RZ_ANIM_LINK_DANCE);
+                    EnRz_ChangeAnimLoop(play, this, EN_RZ_ANIM_LINK_DANCE);
+                    break;
+
+                default:
                     break;
             }
         }
@@ -434,9 +446,9 @@ void func_80BFC078(EnRz* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80BFC3F8;
                 if (this->animIndex != EN_RZ_ANIM_LINK_DANCE) {
-                    func_80BFB9E4(play, this, EN_RZ_ANIM_DANCE);
+                    EnRz_ChangeAnimLoopMorph(play, this, EN_RZ_ANIM_DANCE);
                     if (this->sister != NULL) {
-                        func_80BFB9E4(play, this->sister, EN_RZ_ANIM_DANCE);
+                        EnRz_ChangeAnimLoopMorph(play, this->sister, EN_RZ_ANIM_DANCE);
                     }
                 }
                 break;
@@ -455,9 +467,9 @@ void func_80BFC19C(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
     if (!func_80BFBE70(this, play)) {
         this->actionFunc = func_80BFC3F8;
-        func_80BFBA1C(play, this, EN_RZ_ANIM_LINK_DANCE);
+        EnRz_ChangeAnimLoop(play, this, EN_RZ_ANIM_LINK_DANCE);
         if (this->sister != NULL) {
-            func_80BFBA1C(play, this->sister, EN_RZ_ANIM_LINK_DANCE);
+            EnRz_ChangeAnimLoop(play, this->sister, EN_RZ_ANIM_LINK_DANCE);
         }
     }
 }
@@ -601,12 +613,12 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
         this->timer--;
     } else {
         this->actionFunc = EnRz_Walk;
-        func_80BFB9E4(play, this, EN_RZ_ANIM_WALKING);
+        EnRz_ChangeAnimLoopMorph(play, this, EN_RZ_ANIM_WALKING);
     }
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
-        func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
+        EnRz_ChangeAnimLoopMorph(play, this, EN_RZ_ANIM_THINKING);
         this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {
@@ -618,7 +630,7 @@ void EnRz_StopToThink(EnRz* this, PlayState* play) {
     this->timer = 100;
     this->actionFunc = func_80BFC7E0;
     this->actor.speed = 0.0f;
-    func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
+    EnRz_ChangeAnimLoopMorph(play, this, EN_RZ_ANIM_THINKING);
 }
 
 void EnRz_Walk(EnRz* this, PlayState* play) {
@@ -641,7 +653,7 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
-        func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
+        EnRz_ChangeAnimLoopMorph(play, this, EN_RZ_ANIM_THINKING);
         this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {

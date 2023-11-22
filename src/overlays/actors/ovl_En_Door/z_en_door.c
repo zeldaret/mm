@@ -28,13 +28,13 @@ void EnDoor_Destroy(Actor* thisx, PlayState* play);
 void EnDoor_Update(Actor* thisx, PlayState* play);
 void EnDoor_Draw(Actor* thisx, PlayState* play);
 
-void func_80866B20(EnDoor*, PlayState*);
-void func_8086704C(EnDoor*, PlayState*);
-void func_80866F94(EnDoor*, PlayState*);
-void func_80867080(EnDoor*, PlayState*);
-void func_80867144(EnDoor*, PlayState*);
-void func_808670F0(EnDoor*, PlayState*);
-void func_80866A5C(EnDoor*, PlayState*);
+void func_80866B20(EnDoor* this, PlayState*);
+void func_8086704C(EnDoor* this, PlayState*);
+void func_80866F94(EnDoor* this, PlayState*);
+void func_80867080(EnDoor* this, PlayState*);
+void func_80867144(EnDoor* this, PlayState*);
+void func_808670F0(EnDoor* this, PlayState*);
+void func_80866A5C(EnDoor* this, PlayState*);
 
 u8 D_808675D0[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x12 - 0x04),

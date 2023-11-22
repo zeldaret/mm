@@ -16,7 +16,7 @@ void EnRsn_Destroy(Actor* thisx, PlayState* play);
 void EnRsn_Update(Actor* thisx, PlayState* play);
 void EnRsn_Draw(Actor* thisx, PlayState* play);
 
-void func_80C25D84(EnRsn* this, PlayState* play);
+void EnRsn_DoNothing(EnRsn* this, PlayState* play);
 
 ActorInit En_Rsn_InitVars = {
     /**/ ACTOR_EN_RSN,
@@ -30,14 +30,21 @@ ActorInit En_Rsn_InitVars = {
     /**/ EnRsn_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = { { &gBombShopkeeperSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };
+typedef enum RsnAnimation {
+    /* 0 */ RSN_ANIM_SWAY,
+    /* 1 */ RSN_ANIM_MAX
+} RsnAnimation;
+
+static AnimationInfo sAnimationInfo[RSN_ANIM_MAX] = {
+    { &gBombShopkeeperSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // RSN_ANIM_SWAY
+};
 
 void func_80C25D40(EnRsn* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
-    this->actionFunc = func_80C25D84;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, RSN_ANIM_SWAY);
+    this->actionFunc = EnRsn_DoNothing;
 }
 
-void func_80C25D84(EnRsn* this, PlayState* play) {
+void EnRsn_DoNothing(EnRsn* this, PlayState* play) {
 }
 
 void EnRsn_Init(Actor* thisx, PlayState* play) {
