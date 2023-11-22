@@ -535,7 +535,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
 
 void func_80BA0610(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         Message_StartTextbox(play, 0x120D, &this->actor);
         this->unk_304 = 3;
@@ -574,7 +574,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
         this->csIdIndex = 0;
         this->unk_2F4 |= 1;
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BA0374;
         func_80B9FA3C(this, play);
     } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_500)) {
@@ -653,7 +653,7 @@ void func_80BA0AD8(EnZob* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BA0A04;
         func_80BA08E8(this, play);
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&

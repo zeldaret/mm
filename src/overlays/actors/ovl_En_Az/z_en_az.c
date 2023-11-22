@@ -1348,8 +1348,8 @@ s32 func_80A973B4(EnAz* this, PlayState* play) {
 }
 
 void func_80A97410(EnAz* this, PlayState* play) {
-    s16 sp56;
-    s16 sp54;
+    s16 screenPosX;
+    s16 screenPosY;
     s32 temp_a0;
 
     if (this->unk_378 != 0) {
@@ -1431,7 +1431,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
             }
         } else if (((this->unk_378 == 0) || (this->unk_378 == 1)) && (this->unk_374 & 0x20)) {
             if (this->unk_378 == 1) {
-                if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+                if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
                 } else if (Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer,
@@ -1459,15 +1459,16 @@ void func_80A97410(EnAz* this, PlayState* play) {
                         Math_SmoothStepToS(&this->unk_3D6, 0, 3, 0x71C, 0);
                     }
                 }
-                if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+                if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
                     if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {
                         this->unk_378 = 9;
                     }
                 } else {
-                    Actor_GetScreenPos(play, &this->actor, &sp56, &sp54);
-                    if ((sp56 >= 0) && (sp56 <= SCREEN_WIDTH) && (sp54 >= 0) && (sp54 <= SCREEN_HEIGHT) &&
+                    Actor_GetScreenPos(play, &this->actor, &screenPosX, &screenPosY);
+                    if ((screenPosX >= 0) && (screenPosX <= SCREEN_WIDTH) && (screenPosY >= 0) &&
+                        (screenPosY <= SCREEN_HEIGHT) &&
                         Actor_OfferTalkExchange(&this->actor, play, 120.0f, 120.0f, PLAYER_IA_NONE)) {
                         this->unk_3D2 = func_80A97274(this, play);
                         if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {

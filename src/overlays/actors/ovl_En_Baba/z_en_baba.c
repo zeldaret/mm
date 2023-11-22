@@ -577,7 +577,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
 void EnBaba_Idle(EnBaba* this, PlayState* play) {
     if ((this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) || (this->bombShopkeeper != NULL) ||
         EnBaba_FindBombShopkeeper(this, play)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             EnBaba_HandleConversation(this, play);
             if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
@@ -655,7 +655,7 @@ void EnBaba_GiveBlastMask(EnBaba* this, PlayState* play) {
 }
 
 void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnBaba_HandleConversation(this, play);
         this->actionFunc = EnBaba_Talk;
     } else {
@@ -683,7 +683,7 @@ void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
     EnBaba_HandleSchedule(this, play);
 
     if (this->stateFlags & BOMB_SHOP_LADY_STATE_VISIBLE) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             Message_StartTextbox(play, 0x2A39, &this->actor); // "I'm sorry"
             this->actionFunc = EnBaba_FollowSchedule_Talk;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {

@@ -429,12 +429,10 @@ void EnMinislime_Idle(EnMinislime* this, PlayState* play) {
     if (this->idleTimer == 0) {
         if (this->actor.xzDistToPlayer < 300.0f) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+        } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
+            this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
         } else {
-            if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
-                this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
-            } else {
-                this->actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x13);
-            }
+            this->actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x13);
         }
         this->idleTimer = 20;
     }

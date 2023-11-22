@@ -29,8 +29,8 @@ void EnLiftNuts_StartConversation(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_HandleConversation(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_SetupMove(EnLiftNuts* this);
 void EnLiftNuts_Move(EnLiftNuts* this, PlayState* play);
-void EnLiftNuts_SetupMovePlayer(EnLiftNuts* this);
-void EnLiftNuts_MovePlayer(EnLiftNuts* this, PlayState* play);
+void EnLiftNuts_SetupMovePlayerToActor(EnLiftNuts* this);
+void EnLiftNuts_MovePlayerToActor(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_SetupStartGame(EnLiftNuts* this);
 void EnLiftNuts_StartGame(EnLiftNuts* this, PlayState* play);
 void EnLiftNuts_SetupStartGameImmediately(EnLiftNuts* this);
@@ -84,26 +84,27 @@ typedef enum {
     /* 19 */ ENLIFTNUTS_ANIM_MAX
 } EnLiftNutsAnimation;
 
-static AnimationInfo sAnimations[ENLIFTNUTS_ANIM_MAX] = {
-    { &gBusinessScrubStandingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gBusinessScrubWalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gBusinessScrubRiseUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &gBusinessScrubBurrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &gBusinessScrubExcitedStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gBusinessScrubExcitedLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gBusinessScrubExcitedEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gBusinessScrubTakeOffHatAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &gBusinessScrubFlyStartAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &gBusinessScrubFlyLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gBusinessScrubShockedStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -2.0f },
+static AnimationInfo sAnimationInfo[ENLIFTNUTS_ANIM_MAX] = {
+    { &gBusinessScrubStandingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },     // ENLIFTNUTS_ANIM_STANDING
+    { &gBusinessScrubWalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },         // ENLIFTNUTS_ANIM_WALK
+    { &gBusinessScrubRiseUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },       // ENLIFTNUTS_ANIM_RISE_UP
+    { &gBusinessScrubBurrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },       // ENLIFTNUTS_ANIM_BURROW_LONG
+    { &gBusinessScrubExcitedStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, // ENLIFTNUTS_ANIM_EXCITED_START
+    { &gBusinessScrubExcitedLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },  // ENLIFTNUTS_ANIM_EXCITED_LOOP
+    { &gBusinessScrubExcitedEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },   // ENLIFTNUTS_ANIM_EXCITED_END
+    { &gBusinessScrubTakeOffHatAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },   // ENLIFTNUTS_ANIM_TAKE_OFF_HAT
+    { &gBusinessScrubFlyStartAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },     // ENLIFTNUTS_ANIM_FLY_START
+    { &gBusinessScrubFlyLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },      // ENLIFTNUTS_ANIM_FLY_LOOP
+    { &gBusinessScrubShockedStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -2.0f }, // ENLIFTNUTS_ANIM_SHOCKED_START
+                                                                                 // ENLIFTNUTS_ANIM_SHOCKED_SHAKE_HEAD
     { &gBusinessScrubShockedShakeHeadAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gBusinessScrubShockedPoundAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &gBusinessScrubShockedEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gBusinessScrubThinkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gBusinessScrubBobAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gBusinessScrubJumpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &gBusinessScrubBurrowAnim, 1.0f, 4.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &gBusinessScrubBurrowAnim, 1.0f, 8.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gBusinessScrubShockedPoundAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f }, // ENLIFTNUTS_ANIM_SHOCKED_POUND
+    { &gBusinessScrubShockedEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },   // ENLIFTNUTS_ANIM_SHOCKED_END
+    { &gBusinessScrubThinkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },        // ENLIFTNUTS_ANIM_THINK
+    { &gBusinessScrubBobAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },          // ENLIFTNUTS_ANIM_BOB
+    { &gBusinessScrubJumpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },         // ENLIFTNUTS_ANIM_JUMP
+    { &gBusinessScrubBurrowAnim, 1.0f, 4.0f, 0.0f, ANIMMODE_ONCE, -4.0f },       // ENLIFTNUTS_ANIM_BURROW_HALF
+    { &gBusinessScrubBurrowAnim, 1.0f, 8.0f, 0.0f, ANIMMODE_ONCE, 0.0f },        // ENLIFTNUTS_ANIM_BURROW_SHORT
 };
 
 Gfx* sEyeTextures[] = { gBusinessScrubEyesDL, gBusinessScrubEyesWideDL, gBusinessScrubEyesSquintDL };
@@ -323,7 +324,7 @@ void EnLiftNuts_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnLiftNuts_SetupIdleHidden(EnLiftNuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BURROW_SHORT);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_BURROW_SHORT);
     this->actionFunc = EnLiftNuts_IdleHidden;
     this->timer = 0;
 }
@@ -338,9 +339,9 @@ void EnLiftNuts_IdleHidden(EnLiftNuts* this, PlayState* play) {
 
 void EnLiftNuts_SetupBurrow(EnLiftNuts* this) {
     if (this->actionFunc == EnLiftNuts_Idle) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BURROW_HALF);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_BURROW_HALF);
     } else {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BURROW_LONG);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_BURROW_LONG);
     }
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
@@ -359,7 +360,7 @@ void EnLiftNuts_SetupIdle(EnLiftNuts* this) {
     if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_STARTING)) {
         this->actionFunc = EnLiftNuts_Idle;
     } else {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_RISE_UP);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_RISE_UP);
         Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = EnLiftNuts_RiseUp;
     }
@@ -367,7 +368,7 @@ void EnLiftNuts_SetupIdle(EnLiftNuts* this) {
 
 void EnLiftNuts_RiseUp(EnLiftNuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BOB);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_BOB);
         this->actionFunc = EnLiftNuts_Idle;
     } else if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
         EnLiftNuts_SpawnDust(this, play);
@@ -382,7 +383,7 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
     } else if (this->actor.xzDistToPlayer > 120.0f) {
         EnLiftNuts_SetupBurrow(this);
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
             if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_NONE)) {
                 switch (CURRENT_DAY) {
@@ -441,12 +442,15 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
                             this->textId = 0x27E1;
                         }
                         break;
+
+                    default:
+                        break;
                 }
             } else if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK,
                                                 ENLIFTNUTS_MINIGAME_STATE_AFTER)) {
                 if (Flags_GetSwitch(play, 0x40)) {
                     Flags_UnsetSwitch(play, 0x40);
-                    Inventory_SaveDekuPlaygroundHighScore(4);
+                    Inventory_SaveDekuPlaygroundHighScore(TIMER_ID_MINIGAME_2);
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_1) &&
                         CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_2) && (CURRENT_DAY == 3)) {
                         this->timer = 0;
@@ -527,13 +531,13 @@ void EnLiftNuts_HandleConversationChoice(EnLiftNuts* this, PlayState* play) {
                         Rupees_ChangeBy(-10);
                     } else {
                         Audio_PlaySfx(NA_SE_SY_ERROR);
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_WALK);
                         Message_StartTextbox(play, 0x27E4, &this->actor);
                         this->textId = 0x27E4;
                     }
                 } else {
                     Audio_PlaySfx_MessageCancel();
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_WALK);
                     Message_StartTextbox(play, 0x27E3, &this->actor);
                     this->textId = 0x27E3;
                 }
@@ -586,7 +590,7 @@ void EnLiftNuts_HandleConversation5(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27E6:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_WALK);
                 switch (CURRENT_DAY) {
                     case 1:
                         Message_StartTextbox(play, 0x27E7, &this->actor);
@@ -622,7 +626,7 @@ void EnLiftNuts_HandleConversation5(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27EE:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_JUMP);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_JUMP);
                 Message_StartTextbox(play, 0x27EF, &this->actor);
                 this->textId = 0x27EF;
                 break;
@@ -639,7 +643,7 @@ void EnLiftNuts_HandleConversation5(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27F2:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_WALK);
                 Message_StartTextbox(play, 0x27F3, &this->actor);
                 this->textId = 0x27F3;
                 break;
@@ -675,7 +679,7 @@ void EnLiftNuts_SetupStartConversation(EnLiftNuts* this) {
         if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_NONE)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_JUMP);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_JUMP);
     }
     this->actionFunc = EnLiftNuts_StartConversation;
 }
@@ -683,9 +687,9 @@ void EnLiftNuts_SetupStartConversation(EnLiftNuts* this) {
 void EnLiftNuts_StartConversation(EnLiftNuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if ((this->textId == 0x27EE) || (this->textId == 0x27F4) || (this->textId == 0x27F5)) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_SHOCKED_START);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_SHOCKED_START);
         } else {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_STANDING);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_STANDING);
         }
         this->actionFunc = EnLiftNuts_HandleConversation;
     }
@@ -728,19 +732,19 @@ void EnLiftNuts_HandleConversation(EnLiftNuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         switch (this->textId) {
             case 0x27EE:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_SHOCKED_SHAKE_HEAD);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_SHOCKED_SHAKE_HEAD);
                 break;
 
             case 0x27EF:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_WALK);
                 break;
 
             case 0x27F4:
                 if (this->timer == 0) {
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_SHOCKED_SHAKE_HEAD);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_SHOCKED_SHAKE_HEAD);
                     this->timer++;
                 } else if (this->timer == 4) {
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_SHOCKED_POUND);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_SHOCKED_POUND);
                     this->timer = 0;
                 } else {
                     this->timer++;
@@ -756,7 +760,7 @@ void EnLiftNuts_HandleConversation(EnLiftNuts* this, PlayState* play) {
 
 void EnLiftNuts_SetupMove(EnLiftNuts* this) {
     this->actor.speed = 2.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_WALK);
     EnLiftNuts_Autotalk(this, ENLIFTNUTS_AUTOTALK_MODE_SET_ON);
     EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_SET, ENLIFTNUTS_MINIGAME_STATE_STARTING);
     this->actionFunc = EnLiftNuts_Move;
@@ -770,45 +774,45 @@ void EnLiftNuts_Move(EnLiftNuts* this, PlayState* play) {
     this->actor.world.pos.y += this->actor.gravity;
 
     if (dist == 0.0f) {
-        EnLiftNuts_SetupMovePlayer(this);
+        EnLiftNuts_SetupMovePlayerToActor(this);
     }
 }
 
-void EnLiftNuts_SetupMovePlayer(EnLiftNuts* this) {
-    this->actionFunc = EnLiftNuts_MovePlayer;
+void EnLiftNuts_SetupMovePlayerToActor(EnLiftNuts* this) {
+    this->actionFunc = EnLiftNuts_MovePlayerToActor;
 }
 
-void EnLiftNuts_MovePlayer(EnLiftNuts* this, PlayState* play) {
+void EnLiftNuts_MovePlayerToActor(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    f32 dist;
-    f32 magnitude;
-    s16 playerYaw;
+    f32 distXZ;
+    f32 controlStickMagnitude;
+    s16 controlStickAngle;
     s16 yaw;
     s16 yawDiff;
 
     yaw = this->actor.yawTowardsPlayer - 0x8000;
-    playerYaw = Math_Vec3f_Yaw(&player->actor.world.pos, &this->actor.home.pos);
-    yawDiff = playerYaw - yaw;
-    dist = Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos);
+    controlStickAngle = Math_Vec3f_Yaw(&player->actor.world.pos, &this->actor.home.pos);
+    yawDiff = controlStickAngle - yaw;
+    distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos);
 
-    if (this->actor.xzDistToPlayer < dist) {
+    if (this->actor.xzDistToPlayer < distXZ) {
         if (ABS_ALT(yawDiff) < 0x2000) {
-            playerYaw = (yawDiff > 0) ? (playerYaw + 0x2000) : (playerYaw - 0x2000);
+            controlStickAngle = (yawDiff > 0) ? (controlStickAngle + 0x2000) : (controlStickAngle - 0x2000);
         }
     }
 
-    if (dist < 5.0f) {
-        magnitude = 10.0f;
-    } else if (dist < 30.0f) {
-        magnitude = 40.0f;
+    if (distXZ < 5.0f) {
+        controlStickMagnitude = 10.0f;
+    } else if (distXZ < 30.0f) {
+        controlStickMagnitude = 40.0f;
     } else {
-        magnitude = 80.0f;
+        controlStickMagnitude = 80.0f;
     }
 
-    play->actorCtx.unk268 = true;
-    func_800B6F20(play, &play->actorCtx.unk_26C, magnitude, playerYaw);
+    play->actorCtx.isOverrideInputOn = true;
+    Actor_SetControlStickData(play, &play->actorCtx.overrideInput, controlStickMagnitude, controlStickAngle);
 
-    if (dist < 5.0f) {
+    if (distXZ < 5.0f) {
         EnLiftNuts_SetupIdle(this);
     }
 }
@@ -940,14 +944,14 @@ void EnLiftNuts_SetupResumeConversation(EnLiftNuts* this) {
  * Resumes the current conversation after giving player the reward for winning the minigame.
  */
 void EnLiftNuts_ResumeConversation(EnLiftNuts* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_1) &&
             CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_2) && (CURRENT_DAY == 3)) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_SHOCKED_END);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_SHOCKED_END);
             Message_StartTextbox(play, 0x27F5, &this->actor);
             this->textId = 0x27F5;
         } else if (EnLiftNuts_GetNumDaysWon() > 0) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_WALK);
             Message_StartTextbox(play, 0x27F0, &this->actor);
             this->textId = 0x27F0;
         } else {
@@ -983,7 +987,7 @@ void EnLiftNuts_SetupStartHiding(EnLiftNuts* this) {
         this->isFirstTimeHiding = true;
     }
     if (this->actionFunc == EnLiftNuts_IdleHidden) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BOB);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_BOB);
     }
     this->timer = 0;
     this->actionFunc = EnLiftNuts_StartHiding;
@@ -995,7 +999,7 @@ void EnLiftNuts_StartHiding(EnLiftNuts* this, PlayState* play) {
             Message_StartTextbox(play, 0x27F6, &this->actor);
             this->textId = 0x27F6;
         }
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BURROW_HALF);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_BURROW_HALF);
         this->actionFunc = EnLiftNuts_Hide;
     }
     this->timer++;

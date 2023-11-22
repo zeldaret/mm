@@ -131,7 +131,7 @@ void Message_ResetOcarinaButtonState(PlayState* play) {
     sOcarinaButtonCEnvB = 10;
 }
 
-s32 Message_ShouldAdvance(PlayState* play) {
+bool Message_ShouldAdvance(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     Input* controller = CONTROLLER1(&play->state);
 
@@ -150,7 +150,7 @@ s32 Message_ShouldAdvance(PlayState* play) {
     }
 }
 
-s32 Message_ShouldAdvanceSilent(PlayState* play) {
+bool Message_ShouldAdvanceSilent(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     Input* controller = CONTROLLER1(&play->state);
 
@@ -1921,7 +1921,7 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
  * every digit will be added 0x824F to get an actual S-JIS
  * printable character.
  */
-void Message_GetTimerDigits(OSTime time, s16* digits) {
+void Message_GetTimerDigits(OSTime time, s16 digits[8]) {
     OSTime t = time;
 
     // 6 minutes
@@ -2160,20 +2160,20 @@ void Message_Decode(PlayState* play) {
     u32 timeToMoonCrash;
     s16 var_v0;
     s16 numLines;
-    u8* fontBuf;
-    s16 digits[4];
+    s16 value;
+    s16 digits[5];
     s16 spD2;
     f32 timeInSeconds;
     s32 charTexIndex;
-    f32 var_fs0;
+    u8* fontBuf;
     f32 spC0;
     s16 index;
-    s16 value;
     s16 playerNameLen;
+    s16 spAC[8];
+    f32 var_fs0;
     s16 i;
-    u16 index2 = 0;
-    s16 spAC[4];
     u16 curChar;
+    u8 index2 = 0;
 
     msgCtx->textDelayTimer = 0;
     msgCtx->textDelay = msgCtx->textDelayTimer;
@@ -2212,7 +2212,7 @@ void Message_Decode(PlayState* play) {
                         }
                     }
                 } else {
-                    s32 requiredScopeTemp;
+                    s8 requiredScopeTemp;
 
                     if ((msgCtx->textBoxType != TEXTBOX_TYPE_3) && (msgCtx->textBoxType != TEXTBOX_TYPE_4)) {
                         if (numLines == 0) {
@@ -2289,7 +2289,7 @@ void Message_Decode(PlayState* play) {
                 Message_GetTimerDigits(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
 
                 loadChar = false;
-                for (i = 0; i < 5; i++) {
+                for (i = 0; i < ARRAY_COUNT(spAC) - 3; i++) {
                     if ((i == 1) || (spAC[i + 3] != 0)) {
                         loadChar = true;
                     }
@@ -2304,7 +2304,7 @@ void Message_Decode(PlayState* play) {
                 Message_GetTimerDigits(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
 
                 loadChar = false;
-                for (i = 0; i < 8; i++) {
+                for (i = 0; i < ARRAY_COUNT(spAC); i++) {
                     if ((i == 4) || ((i != 2) && (i != 5) && (spAC[i] != '\0'))) {
                         loadChar = true;
                     }
@@ -2722,7 +2722,7 @@ void Message_Decode(PlayState* play) {
                 }
                 func_8014CCB4(play, &decodedBufPos, &charTexIndex, &spC0);
             } else if (curChar == 0x22F) {
-                for (i = 0; i < 5; i++) {
+                for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.bomberCode); i++) {
                     digits[i] = gSaveContext.save.saveInfo.bomberCode[i];
                     Font_LoadChar(play, digits[i] + 0x824F, charTexIndex);
                     charTexIndex += FONT_CHAR_TEX_SIZE;
@@ -2827,7 +2827,7 @@ void Message_Decode(PlayState* play) {
                 }
 
                 loadChar = false;
-                for (i = 0; i < 8; i++) {
+                for (i = 0; i < ARRAY_COUNT(spAC); i++) {
                     if ((i == 4) || ((i != 2) && (i != 5) && (spAC[i] != '\0'))) {
                         loadChar = true;
                     }
@@ -5208,11 +5208,11 @@ void Message_Update(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     Input* input = CONTROLLER1(&play->state);
-    s16 averageY;
-    s16 sp50;
+    s16 avgScreenPosY;
+    s16 screenPosX;
     u16 temp_v1_2;
-    s16 sp4C;
-    s16 sp4A;
+    s16 playerScreenPosY;
+    s16 actorScreenPosY;
     s16 sp48;
     s32 sp44;
     s32 sp40;
@@ -5223,7 +5223,7 @@ void Message_Update(PlayState* play) {
     msgCtx->stickAdjX = input->rel.stick_x;
     msgCtx->stickAdjY = input->rel.stick_y;
 
-    averageY = 0;
+    avgScreenPosY = 0;
 
     // If stickAdj is held, set a delay to allow the cursor to read the next input.
     // The first delay is given a longer time than all subsequent delays.
@@ -5309,12 +5309,12 @@ void Message_Update(PlayState* play) {
             }
             if (temp) {
                 if (msgCtx->talkActor != NULL) {
-                    Actor_GetScreenPos(play, &GET_PLAYER(play)->actor, &sp50, &sp4C);
-                    Actor_GetScreenPos(play, msgCtx->talkActor, &sp50, &sp4A);
-                    if (sp4C >= sp4A) {
-                        averageY = ((sp4C - sp4A) / 2) + sp4A;
+                    Actor_GetScreenPos(play, &GET_PLAYER(play)->actor, &screenPosX, &playerScreenPosY);
+                    Actor_GetScreenPos(play, msgCtx->talkActor, &screenPosX, &actorScreenPosY);
+                    if (playerScreenPosY >= actorScreenPosY) {
+                        avgScreenPosY = ((playerScreenPosY - actorScreenPosY) / 2) + actorScreenPosY;
                     } else {
-                        averageY = ((sp4A - sp4C) / 2) + sp4C;
+                        avgScreenPosY = ((actorScreenPosY - playerScreenPosY) / 2) + playerScreenPosY;
                     }
                 } else {
                     msgCtx->textboxX = msgCtx->textboxXTarget;
@@ -5326,13 +5326,13 @@ void Message_Update(PlayState* play) {
                 if ((u32)msgCtx->textBoxPos == 0) {
                     if ((play->sceneId == SCENE_UNSET_04) || (play->sceneId == SCENE_UNSET_05) ||
                         (play->sceneId == SCENE_UNSET_06)) {
-                        if (averageY < 0x64) {
+                        if (avgScreenPosY < 100) {
                             msgCtx->textboxYTarget = sTextboxLowerYPositions[var_v1];
                         } else {
                             msgCtx->textboxYTarget = sTextboxUpperYPositions[var_v1];
                         }
                     } else {
-                        if (averageY < 0xA0) {
+                        if (avgScreenPosY < 160) {
                             msgCtx->textboxYTarget = sTextboxLowerYPositions[var_v1];
                         } else {
                             msgCtx->textboxYTarget = sTextboxUpperYPositions[var_v1];

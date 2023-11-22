@@ -233,7 +233,7 @@ void EnHg_ReactToHit(EnHg* this, PlayState* play) {
 
 void EnHg_HandleTatlDialog(EnHg* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             Message_StartTextbox(play, 0x24F, &this->actor);
         } else {
             Actor_OfferTalk(&this->actor, play, 80.0f);

@@ -539,7 +539,7 @@ void func_80BAB374(EnSuttari* this, PlayState* play) {
         sp38.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
         sp38.y = this->actor.world.pos.y;
         sp38.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
-        Actor_SpawnFloorDustRing(play, &this->actor, &sp38, 10.0f, 0, 2.0f, 0, 0, 0);
+        Actor_SpawnFloorDustRing(play, &this->actor, &sp38, 10.0f, 0, 2.0f, 0, 0, false);
     }
 }
 
@@ -1074,7 +1074,7 @@ void func_80BACA14(EnSuttari* this, PlayState* play) {
         }
     } else if ((player->transformation == PLAYER_FORM_HUMAN) &&
                (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) != EQUIP_VALUE_SWORD_NONE)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->unk3F2 = this->headRot.y;
             func_80BAAB78(this, play);
             this->actionFunc = func_80BADA9C;
@@ -1188,7 +1188,7 @@ void func_80BAD004(EnSuttari* this, PlayState* play) {
     }
     this->unk428 = scheduleOutput.result;
     func_80BAC2FC(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isLockedOn) {
@@ -1321,7 +1321,7 @@ void func_80BAD5F8(EnSuttari* this, PlayState* play) {
     }
     func_80BAB434(this);
     if ((this->flags1 & 0x20) && (this->unk430 == 0) && (scheduleOutput.result != 7)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             Message_StartTextbox(play, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
@@ -1358,7 +1358,7 @@ void func_80BAD7F8(EnSuttari* this, PlayState* play) {
             return;
         }
         if ((this->flags1 & 0x20) && (scheduleOutput.result != 9)) {
-            if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                 Message_StartTextbox(play, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;
             } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
@@ -1370,7 +1370,7 @@ void func_80BAD7F8(EnSuttari* this, PlayState* play) {
 }
 
 void func_80BADA08(EnSuttari* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80BAAB78(this, play);
         SET_WEEKEVENTREG(WEEKEVENTREG_81_04);
@@ -1475,7 +1475,7 @@ void func_80BADE14(EnSuttari* this, PlayState* play) {
 void func_80BADE8C(EnSuttari* this, PlayState* play) {
     this->unk3F2 = this->headRot.y;
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         Message_StartTextbox(play, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;

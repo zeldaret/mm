@@ -5,6 +5,7 @@
  */
 
 #include "z_en_gs.h"
+#include "z64voice.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "objects/object_gs/object_gs.h"
@@ -159,7 +160,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
     Math_Vec3f_Copy(&this->unk_1B0[0], &gOneVec3f);
     Math_Vec3f_Copy(&this->unk_1B0[1], &gOneVec3f);
     SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
-    func_801A5080(0);
+    AudioVoice_InitWord(VOICE_WORD_ID_HOURS);
     if (this->actor.params == ENGS_1) {
         Actor_SetScale(&this->actor, 0.15f);
         this->collider.dim.radius *= 1.5f;
@@ -946,7 +947,7 @@ void func_80999BC8(Actor* thisx, PlayState* play2) {
     EnGs* this = THIS;
     s32 pad;
 
-    if (this->actor.isLockedOn && !func_801A5100()) {
+    if (this->actor.isLockedOn && (AudioVoice_GetWord() == VOICE_WORD_ID_HOURS)) {
         this->unk_19D = 0;
         this->unk_19A |= 1;
         func_80999AC0(this);
@@ -1029,7 +1030,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGs* this = THIS;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         this->collider.base.acFlags &= ~AC_HIT;
@@ -1043,14 +1044,14 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
             func_80998040(this, play);
         }
     } else {
-        s16 sp2E;
-        s16 sp2C;
+        s16 screenPosX;
+        s16 screenPosY;
 
         if ((this->actor.flags & ACTOR_FLAG_40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
             func_80999BC8(&this->actor, play);
-            Actor_GetScreenPos(play, &this->actor, &sp2E, &sp2C);
-            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > SCREEN_WIDTH) || (sp2C < 0) ||
-                (sp2C > SCREEN_HEIGHT)) {
+            Actor_GetScreenPos(play, &this->actor, &screenPosX, &screenPosY);
+            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (screenPosX < 0) || (screenPosX > SCREEN_WIDTH) ||
+                (screenPosY < 0) || (screenPosY > SCREEN_HEIGHT)) {
                 this->unk_216 = 0;
             } else if (this->quakeY > 0) {
                 Actor_RequestQuakeAndRumble(&this->actor, play, this->quakeY, this->quakeDuration);

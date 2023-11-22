@@ -11,7 +11,7 @@ typedef void (*EnNiwActionFunc)(struct EnNiw*, PlayState*);
 typedef struct {
     /* 0x00 */ u8 isEnabled;
     /* 0x04 */ Vec3f pos;
-    /* 0x10 */ Vec3f vel;
+    /* 0x10 */ Vec3f velocity;
     /* 0x1C */ Vec3f accel;
     /* 0x28 */ s16 life;
     /* 0x2A */ s16 zRotStart;
@@ -61,7 +61,7 @@ typedef struct EnNiw {
     /* 0x296 */ s16 unkToggle296;
     /* 0x298 */ s16 unk298;
     /* 0x29C */ s16 isRunningRight;             // toggle (direction cucco is turning while running)
-    /* 0x29C */ u16 nextAnimIndex;
+    /* 0x29C */ s16 nextAnimIndex;
     /* 0x29E */ s16 unk29E;                     // three states 0/1/2
     /* 0x2A0 */ s16 isStormActive;              // we have a data value shared between all cucco, this shouldn't need to exist
     /* 0x2A2 */ s16 niwType;
