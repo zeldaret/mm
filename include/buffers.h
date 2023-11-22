@@ -1,10 +1,11 @@
 #ifndef BUFFERS_H
 #define BUFFERS_H
 
-#include "z64.h"
+#include "libc/assert.h"
+#include "gfx.h"
 #include "macros.h"
 #include "stack.h"
-#include "libc/assert.h"
+#include "z64save.h"
 
 typedef union {
     u16 framebufferHiRes[HIRES_BUFFER_HEIGHT][HIRES_BUFFER_WIDTH] ALIGNED(64);
