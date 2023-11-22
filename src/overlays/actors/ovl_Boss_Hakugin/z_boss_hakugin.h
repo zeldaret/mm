@@ -78,8 +78,8 @@ typedef struct BossHakugin {
     /* 0x018F */ u8 unk_018F;
     /* 0x0190 */ u8 blockMechanicalMalfunctionEffects; // boolean?
     /* 0x0191 */ u8 mechanicalMalfunctionBodyPartIndex; // See GohtBodyPart
-    /* 0x0192 */ u8 unk_0192;
-    /* 0x0193 */ u8 unk_0193;
+    /* 0x0192 */ u8 unk_0192; // See `GohtUnk192`
+    /* 0x0193 */ u8 iceAlpha;
     /* 0x0194 */ u8 unk_0194;
     /* 0x0194 */ u8 unk_0195;
     /* 0x0196 */ u8 drawDmgEffType;

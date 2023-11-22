@@ -40,8 +40,8 @@ void BossHakugin_EntranceCutscene(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupFrozenBeforeFight(BossHakugin* this);
 void BossHakugin_FrozenBeforeFight(BossHakugin* this, PlayState* play);
 void BossHakugin_IntroCutsceneDethaw(BossHakugin* this, PlayState* play);
-void BossHakugin_SetupIntroCutsceneWake(BossHakugin* this, PlayState* play);
-void BossHakugin_IntroCutsceneWake(BossHakugin* this, PlayState* play);
+void BossHakugin_SetupIntroCutsceneWakeUp(BossHakugin* this, PlayState* play);
+void BossHakugin_IntroCutsceneWakeUp(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupIntroCutsceneRun(BossHakugin* this, PlayState* play);
 void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play);
 void func_80B08C1C(BossHakugin* this);
@@ -62,6 +62,14 @@ void BossHakugin_SetupDeathCutscenePart2(BossHakugin* this);
 void BossHakugin_DeathCutscenePart2(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupDead(BossHakugin* this);
 void BossHakugin_Dead(BossHakugin* this, PlayState* play);
+
+typedef enum GohtUnk192 {
+    /* 0 */ GOHT_UNK192_0,
+    /* 1 */ GOHT_UNK192_1,
+    /* 2 */ GOHT_UNK192_2,
+    /* 3 */ GOHT_UNK192_3,
+    /* 4 */ GOHT_UNK192_4
+} GohtUnk192;
 
 ActorInit Boss_Hakugin_InitVars = {
     /**/ ACTOR_BOSS_HAKUGIN,
@@ -514,7 +522,8 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_09B0); i++) {
-        actorPtr = &this->unk_09B0[i]; // fake?
+        //! FAKE:
+        actorPtr = &this->unk_09B0[i];
         *actorPtr = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_HAKUROCK, 0.0f, 0.0f, 0.0f, 0, 0,
                                        0, EN_HAKUROCK_TYPE_BOULDER);
     }
@@ -537,14 +546,14 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
         this->actor.world.pos.x = 0.0f;
         func_80B08C1C(this);
     } else if (CHECK_EVENTINF(EVENTINF_ENTR_CS_WATCHED_GOHT)) {
-        this->unk_0193 = 255;
+        this->iceAlpha = 255;
         this->unk_01D4 = 2.7f;
         func_80B058C0(this);
         Animation_PlayOnce(&this->skelAnime, &gGohtThawAndBreakWallAnim);
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         BossHakugin_SetupFrozenBeforeFight(this);
     } else {
-        this->unk_0193 = 255;
+        this->iceAlpha = 255;
         this->unk_01D4 = 2.7f;
         func_80B058C0(this);
         BossHakugin_SetupCutsceneStart(this);
@@ -707,10 +716,10 @@ void func_80B05D4C(BossHakugin* this) {
         if (this->unk_01C8 > 0.0f) {
             lightPos = &this->unk_0380;
             var_t1 = (this->unk_01C8 / 30.0f) * 5000.0f;
-        } else if ((this->unk_0192 == 3) || (this->unk_0192 == 2)) {
+        } else if ((this->unk_0192 == GOHT_UNK192_3) || (this->unk_0192 == GOHT_UNK192_2)) {
             lightPos = &this->unk_3734[0];
             var_t1 = 5000;
-        } else if (this->unk_0192 == 4) {
+        } else if (this->unk_0192 == GOHT_UNK192_4) {
             lightPos = &this->unk_3734[this->unk_01AA];
             var_t1 = (10 - this->unk_01AA) * 500.0f;
         }
@@ -1404,17 +1413,17 @@ void BossHakugin_IntroCutsceneDethaw(BossHakugin* this, PlayState* play) {
 
     this->unk_01D4 -= 0.027f;
     temp_v1 = (s32)(this->unk_019C * 5.1f) + 50;
-    this->unk_0193 = CLAMP_MAX(temp_v1, 255);
+    this->iceAlpha = CLAMP_MAX(temp_v1, 255);
 
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
 
     if (this->unk_019C == 0) {
-        this->unk_0193 = 0;
-        BossHakugin_SetupIntroCutsceneWake(this, play);
+        this->iceAlpha = 0;
+        BossHakugin_SetupIntroCutsceneWakeUp(this, play);
     }
 }
 
-void BossHakugin_SetupIntroCutsceneWake(BossHakugin* this, PlayState* play) {
+void BossHakugin_SetupIntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
     static Vec3f sSubCamAt = { 894.0f, 176.0f, -1600.0f };
     static Vec3f sSubCamEye = { 972.0f, 176.0f, -1600.0f };
     Player* player = GET_PLAYER(play);
@@ -1432,10 +1441,10 @@ void BossHakugin_SetupIntroCutsceneWake(BossHakugin* this, PlayState* play) {
     player->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     player->currentYaw = player->actor.world.rot.y = player->actor.shape.rot.y;
     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_131);
-    this->actionFunc = BossHakugin_IntroCutsceneWake;
+    this->actionFunc = BossHakugin_IntroCutsceneWakeUp;
 }
 
-void BossHakugin_IntroCutsceneWake(BossHakugin* this, PlayState* play) {
+void BossHakugin_IntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
     static Vec3f sSubCamAt = { 377.0f, 140.0f, -1600.0f };
     static Vec3f sSubCamEye = { 282.0f, 108.0f, -1600.0f };
     s32 i;
@@ -1581,14 +1590,14 @@ void func_80B08CB8(BossHakugin* this, PlayState* play) {
     if (this->unk_01A4 == 0) {
         this->unk_0484.base.atFlags |= AT_ON;
     }
-    if (this->unk_0192 == 1) {
+    if (this->unk_0192 == GOHT_UNK192_1) {
         if (func_80B0728C(this)) {
             Math_Vec3f_Copy(&this->unk_3734[0], &this->unk_0380);
             this->unk_01B8 = this->actor.speed + 100.0f;
             this->unk_37AC.x = Math_CosS(0xA00) * Math_SinS(this->actor.shape.rot.y);
             this->unk_37AC.y = Math_SinS(0xA00);
             this->unk_37AC.z = Math_CosS(0xA00) * Math_CosS(this->actor.shape.rot.y);
-            this->unk_0192 = 2;
+            this->unk_0192 = GOHT_UNK192_2;
             this->unk_01C8 = 0.0f;
             Audio_PlaySfx_AtPos(&this->unk_0458, NA_SE_EN_COMMON_E_BALL_THR);
             this->unk_37B8.base.atFlags |= AT_ON;
@@ -1698,13 +1707,13 @@ void func_80B093C0(BossHakugin* this) {
     this->unk_01A6 = 0;
     this->unk_0195 = false;
     this->unk_01C8 = 0.0f;
-    if (this->unk_0192 == 1) {
+    if (this->unk_0192 == GOHT_UNK192_1) {
         Math_Vec3f_Copy(&this->unk_3734[0], &this->unk_0380);
         this->unk_01B8 = this->actor.speed + 100.0f;
         this->unk_37AC.x = Math_CosS(0xA00) * Math_SinS(this->actor.shape.rot.y);
         this->unk_37AC.y = Math_SinS(0xA00);
         this->unk_37AC.z = Math_CosS(0xA00) * Math_CosS(this->actor.shape.rot.y);
-        this->unk_0192 = 2;
+        this->unk_0192 = GOHT_UNK192_2;
         this->unk_01C8 = 0.0f;
         Audio_PlaySfx_AtPos(&this->unk_0458, NA_SE_EN_COMMON_E_BALL_THR);
         this->unk_37B8.base.atFlags |= AT_ON;
@@ -1984,8 +1993,8 @@ void BossHakugin_SetupDeathCutscenePart1(BossHakugin* this) {
     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
     this->actor.home.rot.y = this->actor.shape.rot.y;
     this->unk_019C = 18;
-    if ((this->unk_0192 == 2) || (this->unk_0192 == 3)) {
-        this->unk_0192 = 4;
+    if ((this->unk_0192 == GOHT_UNK192_2) || (this->unk_0192 == GOHT_UNK192_3)) {
+        this->unk_0192 = GOHT_UNK192_4;
         this->unk_01AA = 0;
     }
 
@@ -2107,9 +2116,9 @@ void BossHakugin_SetupDead(BossHakugin* this) {
 }
 
 typedef struct {
-    s32 unk_00;
-    u32 unk_04;
-} BossHakuginStruct_B0A8C4;
+    /* 0x0 */ s32 unk_00;
+    /* 0x4 */ u32 unk_04;
+} BossHakuginStruct_B0A8C4; // size = 0x4
 
 static s32 D_80B0EB24[5] = { 0, 15, 26, 33, 36 };
 
@@ -2292,10 +2301,11 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                       (this->unk_0484.elements[17].info.bumperFlags & BUMP_HIT) ||
                       (this->unk_0484.elements[18].info.bumperFlags & BUMP_HIT)))) {
                     func_80B093C0(this);
-                } else if ((this->unk_0192 == 0) && (this->unk_01AA == 0) && (this->actionFunc == func_80B08CB8) &&
+                } else if ((this->unk_0192 == GOHT_UNK192_0) && (this->unk_01AA == 0) &&
+                           (this->actionFunc == func_80B08CB8) &&
                            (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F)) {
                     this->unk_01A8 = 5;
-                    this->unk_0192 = 1;
+                    this->unk_0192 = GOHT_UNK192_1;
                 }
                 Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_DAMAGE_OLD);
             }
@@ -2427,11 +2437,11 @@ void func_80B0B660(BossHakugin* this, PlayState* play) {
 
     sp6C = &this->unk_3734[0];
 
-    if (this->unk_0192 == 2) {
+    if (this->unk_0192 == GOHT_UNK192_2) {
         if (Math_StepToF(&this->unk_01B8, 50.0f, 3.5f)) {
-            this->unk_0192 = 3;
+            this->unk_0192 = GOHT_UNK192_3;
         }
-    } else if (this->unk_0192 == 3) {
+    } else if (this->unk_0192 == GOHT_UNK192_3) {
         sp60 = BINANG_TO_RAD(Math3D_Vec3fDistSq(sp6C, &spA4->actor.world.pos) * (1.0f / SQ(120.0f)) * 32.0f);
         if (sp60 > M_PI / 4.0f) {
             sp60 = M_PI / 4.0f;
@@ -2440,7 +2450,7 @@ void func_80B0B660(BossHakugin* this, PlayState* play) {
         if (BossHakugin_Vec3fNormalize(&sp70)) {
             func_80B057A4(&this->unk_37AC, &sp70, sp60);
         }
-    } else if (this->unk_0192 != 4) {
+    } else if (this->unk_0192 != GOHT_UNK192_4) {
         return;
     }
 
@@ -2450,8 +2460,8 @@ void func_80B0B660(BossHakugin* this, PlayState* play) {
         this->unk_01AA++;
     }
 
-    if ((this->unk_0192 == 4) && (this->unk_01AA == 9)) {
-        this->unk_0192 = 0;
+    if ((this->unk_0192 == GOHT_UNK192_4) && (this->unk_01AA == 9)) {
+        this->unk_0192 = GOHT_UNK192_0;
         this->unk_01AA = 0;
     } else {
         var_s0 = &this->unk_3734[9];
@@ -2460,9 +2470,9 @@ void func_80B0B660(BossHakugin* this, PlayState* play) {
             var_s0--;
         }
         this->unk_0198 += (s16)(0x4000 + (Rand_Next() >> 0x12));
-        if (this->unk_0192 != 4) {
+        if (this->unk_0192 != GOHT_UNK192_4) {
             if (this->unk_37B8.base.atFlags & AT_HIT) {
-                this->unk_0192 = 4;
+                this->unk_0192 = GOHT_UNK192_4;
                 this->unk_01AA = 0;
                 this->unk_37B8.base.atFlags &= ~AT_HIT;
                 this->unk_37B8.base.atFlags &= ~AT_ON;
@@ -2483,8 +2493,8 @@ void func_80B0B660(BossHakugin* this, PlayState* play) {
                     var_s0_2 = (ABS_ALT(temp_v1) > 0x4000) ? 1 : 0LL;
                 }
 
-                if ((this->unk_0192 == 3) && (var_s0_2 || (spA0->normal.y >= 0x4000))) {
-                    this->unk_0192 = 4;
+                if ((this->unk_0192 == GOHT_UNK192_3) && (var_s0_2 || (spA0->normal.y >= 0x4000))) {
+                    this->unk_0192 = GOHT_UNK192_4;
                     this->unk_01AA = 0;
                     if (!sp58) {
                         Audio_PlaySfx_AtPos(&this->unk_0464, NA_SE_EN_COMMON_E_BALL_HIT);
@@ -2857,7 +2867,7 @@ void func_80B0CCD8(BossHakugin* this, PlayState* play2) {
     s32 alpha;
     Vec3f* pos;
 
-    if (this->unk_0192 == 4) {
+    if (this->unk_0192 == GOHT_UNK192_4) {
         i = 9;
         end = this->unk_01AA;
     } else if (this->unk_01AA != 0) {
@@ -2898,7 +2908,7 @@ void func_80B0CCD8(BossHakugin* this, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80B0CF24(BossHakugin* this, PlayState* play) {
+void BossHakugin_DrawIce(BossHakugin* this, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -2915,7 +2925,7 @@ void func_80B0CF24(BossHakugin* this, PlayState* play) {
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, play->gameplayFrames & 0xFF, 32, 16, 1, 0,
                                 (play->gameplayFrames * 2) & 0xFF, 64, 32)); // check
-    gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, this->unk_0193);
+    gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, this->iceAlpha);
     gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment3DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -2961,8 +2971,8 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     BossHakugin_DrawElectricBalls(this, play);
     func_80B0CCD8(this, play);
 
-    if (this->unk_0193 > 0) {
-        func_80B0CF24(this, play);
+    if (this->iceAlpha > 0) {
+        BossHakugin_DrawIce(this, play);
     }
 
     if (this->actionFunc != BossHakugin_Dead) {
