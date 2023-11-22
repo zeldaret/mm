@@ -42,7 +42,6 @@ u8 gSysCfbHiResEnabled;
 #include "z64vimode.h"
 
 extern u16 gFramebufferHiRes0[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];
-extern u16 gFramebufferHiRes1[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];
 
 void SysCfb_SetLoResMode(void) {
     gFramebuffers[1] = sCfbLoRes1;
@@ -93,7 +92,7 @@ void SysCfb_SetHiResMode(void) {
 }
 
 void SysCfb_Init(void) {
-    sCfbLoRes1 = gFramebuffer1;
+    sCfbLoRes1 = gLoBuffer.framebuffer;
     sCfbLoRes0 = gFramebuffer0;
     sCfbHiRes1 = gFramebufferHiRes1;
     sCfbHiRes0 = gFramebufferHiRes0;

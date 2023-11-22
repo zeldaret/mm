@@ -8,8 +8,7 @@
     0x80000314:("osVersion","UNK_TYPE","",0x4),
     0x80000318:("osMemSize","UNK_TYPE","",0x4),
     0x8000031C:("osAppNMIBuffer","s32","[0x10]",0x40),
-    0x80000500:("gFramebuffer1","u16","[SCREEN_HEIGHT][SCREEN_WIDTH]",0x25800),
-    0x80025D00:("gPreBootBuffer","u8","[]",0x1), # TODO size
+    0x80000500:("gLoBuffer","BufferLow","",0x7FB60),
     0x800969C0:("rspbootTextStart","u64","[]",0x160),
     0x80096B20:("D_80096B20","u8","",0x1),
     0x80096B24:("gViConfigUseDefault","vu8","",0x1),

@@ -194,7 +194,7 @@ void Skybox_Setup(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) 
     switch (skyboxId) {
         case SKYBOX_NORMAL_SKY:
             // Send a DMA request for the cloudy sky texture
-            skyboxCtx->staticSegments[0] = gPreBootBuffer;
+            skyboxCtx->staticSegments[0] = gLoBuffer.skyboxBuffer;
             size = SEGMENT_ROM_SIZE(d2_cloud_static);
             segment = (void*)ALIGN8((uintptr_t)skyboxCtx->staticSegments[0] + size);
             DmaMgr_SendRequest0(skyboxCtx->staticSegments[0], SEGMENT_ROM_START(d2_cloud_static), size);

@@ -5,9 +5,19 @@
 #include "macros.h"
 #include "stack.h"
 
-// pre-boot variables
-extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
-extern u8 gPreBootBuffer[];
+typedef union {
+    u16 framebufferHiRes[HIRES_BUFFER_HEIGHT][HIRES_BUFFER_WIDTH] ALIGNED(64);
+    struct {
+        u16 framebuffer[SCREEN_HEIGHT][SCREEN_WIDTH] ALIGNED(64);
+        u8 skyboxBuffer[0x5A360] ALIGNED(16);
+    };
+} BufferLow;
+
+// Equivalent to gLoBuffer.framebufferHiRes, but a different symbol is required to match
+extern u16 gFramebufferHiRes1[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];
+
+// at 0x80000500
+extern BufferLow gLoBuffer;
 
 
 extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
