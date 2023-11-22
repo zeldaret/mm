@@ -19,7 +19,7 @@ void EnRz_Draw(Actor* thisx, PlayState* play);
 void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
 void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f32 morphFrames);
 s32 EnRz_SetupPath(EnRz* this, PlayState* play);
-EnRz* EnRz_FindSister(EnRz* this, PlayState*);
+EnRz* EnRz_FindSister(EnRz* this, PlayState* play);
 void func_80BFC058(EnRz* this, PlayState* play);
 void func_80BFC078(EnRz* this, PlayState* play);
 void func_80BFC3F8(EnRz* this, PlayState* play);
