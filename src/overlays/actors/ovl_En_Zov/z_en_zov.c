@@ -484,16 +484,16 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((this->unk_320 & 1) && func_80BD15A4(this, play)) {
-        Actor_TrackPlayer(play, &this->picto.actor, &this->unk_2F0, &this->unk_2F6, this->picto.actor.focus.pos);
+        Actor_TrackPlayer(play, &this->picto.actor, &this->headRot, &this->torsoRot, this->picto.actor.focus.pos);
     } else {
         if ((this->unk_320 & 0x10) && (this->unk_322 == 0)) {
-            Math_SmoothStepToS(&this->unk_2F0.x, -0x1B58, 6, 0x1838, 0x64);
+            Math_SmoothStepToS(&this->headRot.x, -0x1B58, 6, 0x1838, 0x64);
         } else {
-            Math_SmoothStepToS(&this->unk_2F0.x, 0, 6, 0x1838, 0x64);
+            Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
         }
-        Math_SmoothStepToS(&this->unk_2F0.y, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_2F6.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_2F6.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 6, 0x1838, 0x64);
     }
 
     if (DECR(this->unk_2EE) == 0) {
@@ -521,14 +521,14 @@ s32 EnZov_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnZov* this = THIS;
 
     if (limbIndex == LULU_LIMB_HEAD) {
-        rot->x += this->unk_2F0.y;
+        rot->x += this->headRot.y;
         if ((this->unk_320 & 0x10) && (this->unk_322 == 0)) {
-            rot->z += this->unk_2F0.x;
+            rot->z += this->headRot.x;
         }
     }
 
     if (limbIndex == LULU_LIMB_TORSO) {
-        rot->x += this->unk_2F6.y;
+        rot->x += this->torsoRot.y;
     }
     return false;
 }

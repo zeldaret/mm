@@ -228,7 +228,7 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
                 break;
 
             case 6:
-                if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
+                if (fabsf(this->headRotTarget.y - this->headRot.y) < 10.0f) {
                     this->waitTimer = 10;
                     this->headRotTarget.x = 4000.0f;
                     this->eventTimer = 5;
@@ -236,7 +236,7 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
                 break;
 
             case 7:
-                if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
+                if (fabsf(this->headRotTarget.y - this->headRot.y) < 10.0f) {
                     this->headRotTarget.z = 4000.0f;
                     this->waitTimer++;
                 }
@@ -254,8 +254,8 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
                 break;
 
             case 11:
-                if ((fabsf(this->headRotation.x) < 30.0f) && (fabsf(this->headRotation.y) < 30.0f) &&
-                    (fabsf(this->headRotation.z) < 30.0f)) {
+                if ((fabsf(this->headRot.x) < 30.0f) && (fabsf(this->headRot.y) < 30.0f) &&
+                    (fabsf(this->headRot.z) < 30.0f)) {
                     this->waitTimer = 12;
                 }
                 break;
@@ -341,9 +341,9 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
         if ((this->state < 2) && (this->actor.xzDistToPlayer < 320.0f) && (this->actor.playerHeightRel < 80.0f)) {
             effectVelOffset = effectVecInitialize;
             Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
-            effectPos.x += Math_SinS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
+            effectPos.x += Math_SinS((this->actor.world.rot.y + (s16)this->headRot.y)) * 10.0f;
             effectPos.y += 30.0f;
-            effectPos.z += Math_CosS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
+            effectPos.z += Math_CosS((this->actor.world.rot.y + (s16)this->headRot.y)) * 10.0f;
             Matrix_Push();
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
             effectVelOffset.z = 20.0f;
@@ -378,9 +378,9 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                 }
             }
         }
-        Math_ApproachF(&this->headRotation.x, this->headRotTarget.x, 1.0f, 3000.0f);
-        Math_ApproachF(&this->headRotation.y, this->headRotTarget.y, 1.0f, 6000.0f);
-        Math_ApproachF(&this->headRotation.z, this->headRotTarget.z, 1.0f, 2000.0f);
+        Math_ApproachF(&this->headRot.x, this->headRotTarget.x, 1.0f, 3000.0f);
+        Math_ApproachF(&this->headRot.y, this->headRotTarget.y, 1.0f, 6000.0f);
+        Math_ApproachF(&this->headRot.z, this->headRotTarget.z, 1.0f, 2000.0f);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

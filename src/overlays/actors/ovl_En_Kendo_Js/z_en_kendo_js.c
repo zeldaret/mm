@@ -777,7 +777,7 @@ void EnKendoJs_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     SkelAnime_Update(&this->skelAnime);
-    Actor_TrackPlayer(play, &this->actor, &this->unk_278, &this->unk_27E, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     func_80B279AC(this, play);
     func_80B27880(this, play);
 }
@@ -786,7 +786,7 @@ s32 EnKendoJs_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     EnKendoJs* this = THIS;
 
     if (limbIndex == OBJECT_JS_LIMB_0C) {
-        rot->y -= this->unk_278.y;
+        rot->y -= this->headRot.y;
     }
     return false;
 }

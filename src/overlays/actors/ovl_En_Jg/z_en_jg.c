@@ -6,6 +6,7 @@
 
 #include "z_en_jg.h"
 #include "overlays/actors/ovl_En_S_Goro/z_en_s_goro.h"
+#include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
@@ -552,9 +553,10 @@ void EnJg_Freeze(EnJg* this, PlayState* play) {
         this->action = EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW;
         this->freezeTimer = 1000;
         this->skelAnime.curFrame = endFrame;
-        this->icePoly = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
-                                    this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
-                                    this->actor.world.rot.y, this->actor.world.rot.z, 0xFF50);
+        this->icePoly =
+            Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x, this->actor.world.pos.y,
+                        this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y,
+                        this->actor.world.rot.z, OBJICEPOLY_PARAMS(80, OBJICEPOLY_SWITCH_FLAG_NONE));
         this->animIndex = EN_JG_ANIM_FROZEN_LOOP;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnJg_FrozenIdle;
@@ -562,9 +564,10 @@ void EnJg_Freeze(EnJg* this, PlayState* play) {
         this->action = EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW;
         if (curFrame == endFrame) {
             this->freezeTimer = 1000;
-            this->icePoly = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
-                                        this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
-                                        this->actor.world.rot.y, this->actor.world.rot.z, 0xFF50);
+            this->icePoly =
+                Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x, this->actor.world.pos.y,
+                            this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y,
+                            this->actor.world.rot.z, OBJICEPOLY_PARAMS(80, OBJICEPOLY_SWITCH_FLAG_NONE));
             this->animIndex = EN_JG_ANIM_FROZEN_LOOP;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_FrozenIdle;
@@ -994,7 +997,7 @@ void EnJg_Update(Actor* thisx, PlayState* play) {
             EnJg_SpawnBreath(this, play);
         }
 
-        Actor_TrackPlayer(play, &this->actor, &this->unusedRotation1, &this->unusedRotation2, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     }
     this->actionFunc(this, play);
 }

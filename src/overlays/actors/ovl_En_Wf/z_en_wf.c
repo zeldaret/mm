@@ -294,9 +294,9 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
         temp_s0 = CLAMP(temp_s0, 1, 255);
         this->actor.shape.rot.z = 0;
         this->actor.world.rot.z = 0;
-        this->actor.child =
-            Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, temp_s0 | 0xFF00);
+        this->actor.child = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
+                                        this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
+                                        OBJICEPOLY_PARAMS_ALT(temp_s0, OBJICEPOLY_SWITCH_FLAG_NONE));
         if (this->actor.child != NULL) {
             Player* player = GET_PLAYER(play);
 

@@ -625,6 +625,9 @@ void func_808FB088(EnRr* this, PlayState* play) {
                 func_808FA344(this);
             }
             break;
+
+        default:
+            break;
     }
 }
 
@@ -938,9 +941,9 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     }
 
     Matrix_MultZero(&this->unk_228);
-    this->collider2.dim.pos.x = ((this->unk_228.x - spA4.x) * 0.85f) + spA4.x;
-    this->collider2.dim.pos.y = ((this->unk_228.y - spA4.y) * 0.85f) + spA4.y;
-    this->collider2.dim.pos.z = ((this->unk_228.z - spA4.z) * 0.85f) + spA4.z;
+    this->collider2.dim.pos.x = LERPIMP(spA4.x, this->unk_228.x, 0.85f);
+    this->collider2.dim.pos.y = LERPIMP(spA4.y, this->unk_228.y, 0.85f);
+    this->collider2.dim.pos.z = LERPIMP(spA4.z, this->unk_228.z, 0.85f);
 
     gSPDisplayList(POLY_OPA_DISP++, gLikeLikeDL);
 

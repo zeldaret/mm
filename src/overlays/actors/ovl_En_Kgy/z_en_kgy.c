@@ -1133,17 +1133,17 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
 void EnKgy_Update(Actor* thisx, PlayState* play) {
     EnKgy* this = THIS;
     s32 pad;
-    Vec3s sp30;
+    Vec3s torsoRot;
 
     this->actionFunc(this, play);
     if (this->animIndex == ENKGY_ANIM_2) {
-        sp30.z = 0;
-        sp30.y = 0;
-        sp30.x = 0;
-        Actor_TrackPlayer(play, &this->actor, &this->unk_2CC, &sp30, this->actor.focus.pos);
+        torsoRot.z = 0;
+        torsoRot.y = 0;
+        torsoRot.x = 0;
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &torsoRot, this->actor.focus.pos);
     } else {
-        Math_SmoothStepToS(&this->unk_2CC.x, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2CC.y, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 6200, 100);
     }
 }
 
@@ -1159,7 +1159,7 @@ s32 EnKgy_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     }
 
     if (limbIndex == OBJECT_KGY_LIMB_0B) {
-        rot->x += this->unk_2CC.y;
+        rot->x += this->headRot.y;
     }
 
     return false;

@@ -305,8 +305,8 @@ void EnRailgibud_WalkInCircles(EnRailgibud* this, PlayState* play) {
         EnRailgibud_SetupAttemptPlayerFreeze(this);
     }
 
-    Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
-    Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
+    Math_SmoothStepToS(&this->headRot.y, 0, 1, 0x64, 0);
+    Math_SmoothStepToS(&this->torsoRot.y, 0, 1, 0x64, 0);
 
     // If we're not supposed to walk forward, then stop here;
     // don't rotate the Gibdo or move it around.
@@ -343,7 +343,7 @@ void EnRailgibud_SetupAttemptPlayerFreeze(EnRailgibud* this) {
 
 void EnRailgibud_AttemptPlayerFreeze(EnRailgibud* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 rot = this->actor.shape.rot.y + this->headRotation.y + this->upperBodyRotation.y;
+    s16 rot = this->actor.shape.rot.y + this->headRot.y + this->torsoRot.y;
     s16 yaw = BINANG_SUB(this->actor.yawTowardsPlayer, rot);
 
     if (ABS_ALT(yaw) < 0x2008) {
@@ -376,8 +376,8 @@ void EnRailgibud_WalkToPlayer(EnRailgibud* this, PlayState* play) {
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xFA);
     this->actor.world.rot = this->actor.shape.rot;
-    Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x64, 0);
-    Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x64, 0);
+    Math_SmoothStepToS(&this->headRot.y, 0, 1, 0x64, 0);
+    Math_SmoothStepToS(&this->torsoRot.y, 0, 1, 0x64, 0);
 
     if (EnRailgibud_PlayerInRangeWithCorrectState(this, play) && Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         if ((this->grabWaitTimer == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
@@ -498,8 +498,8 @@ void EnRailgibud_GrabFail(EnRailgibud* this, PlayState* play) {
     }
 
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    Math_SmoothStepToS(&this->headRotation.y, 0, 1, 0x12C, 0);
-    Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 0x12C, 0);
+    Math_SmoothStepToS(&this->headRot.y, 0, 1, 0x12C, 0);
+    Math_SmoothStepToS(&this->torsoRot.y, 0, 1, 0x12C, 0);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         EnRailgibud_SetupTurnAwayAndShakeHead(this);
@@ -519,8 +519,7 @@ void EnRailgibud_TurnAwayAndShakeHead(EnRailgibud* this, PlayState* play) {
         EnRailgibud_SetupWalkToHome(this);
         this->playerStunWaitTimer = 0;
     } else {
-        this->headRotation.y =
-            Math_SinS(this->headShakeTimer * 4000) * (0x256F * ((60 - this->headShakeTimer) / 60.0f));
+        this->headRot.y = Math_SinS(this->headShakeTimer * 4000) * (0x256F * ((60 - this->headShakeTimer) / 60.0f));
         this->headShakeTimer++;
     }
 }
@@ -532,8 +531,8 @@ void EnRailgibud_SetupWalkToHome(EnRailgibud* this) {
 }
 
 void EnRailgibud_WalkToHome(EnRailgibud* this, PlayState* play) {
-    Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->headRot.y, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->torsoRot.y, 0, 1, 100, 0);
     if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 5.0f) {
         if (this->actor.speed > 0.2f) {
             this->actor.speed -= 0.2f;
@@ -645,8 +644,8 @@ void EnRailgibud_Dead(EnRailgibud* this, PlayState* play) {
             }
         }
     } else {
-        Math_SmoothStepToS(&this->headRotation.y, 0, 1, 250, 0);
-        Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 250, 0);
+        Math_SmoothStepToS(&this->headRot.y, 0, 1, 250, 0);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 1, 250, 0);
         this->deathTimer++;
     }
 
@@ -723,22 +722,22 @@ void EnRailgibud_UpdateWalkForwardState(EnRailgibud* this) {
 }
 
 void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, PlayState* play) {
-    s16 headAngle = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->upperBodyRotation.y;
+    s16 headAngle = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->torsoRot.y;
     s16 upperBodyAngle = CLAMP(headAngle, -500, 500);
 
-    headAngle -= this->headRotation.y;
+    headAngle -= this->headRot.y;
     headAngle = CLAMP(headAngle, -500, 500);
 
     if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
-        this->upperBodyRotation.y += ABS_ALT(upperBodyAngle);
-        this->headRotation.y += ABS_ALT(headAngle);
+        this->torsoRot.y += ABS_ALT(upperBodyAngle);
+        this->headRot.y += ABS_ALT(headAngle);
     } else {
-        this->upperBodyRotation.y -= ABS_ALT(upperBodyAngle);
-        this->headRotation.y -= ABS_ALT(headAngle);
+        this->torsoRot.y -= ABS_ALT(upperBodyAngle);
+        this->headRot.y -= ABS_ALT(headAngle);
     }
 
-    this->upperBodyRotation.y = CLAMP(this->upperBodyRotation.y, -0x495F, 0x495F);
-    this->headRotation.y = CLAMP(this->headRotation.y, -0x256F, 0x256F);
+    this->torsoRot.y = CLAMP(this->torsoRot.y, -0x495F, 0x495F);
+    this->headRot.y = CLAMP(this->headRot.y, -0x256F, 0x256F);
 }
 
 s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, PlayState* play) {
@@ -1042,9 +1041,9 @@ s32 EnRailgibud_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     EnRailgibud* this = THIS;
 
     if (limbIndex == GIBDO_LIMB_UPPER_BODY_ROOT) {
-        rot->y += this->upperBodyRotation.y;
+        rot->y += this->torsoRot.y;
     } else if (limbIndex == GIBDO_LIMB_HEAD_ROOT) {
-        rot->y += this->headRotation.y;
+        rot->y += this->headRot.y;
     }
 
     return false;
