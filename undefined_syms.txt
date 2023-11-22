@@ -124,8 +124,8 @@ D_A4800018 = 0xA4800018; // SI_STATUS_REG
 
 // sys_cfb buffers
 
-gFramebufferHiRes0 = _framebuffersSegmentStart;
 gFramebufferHiRes1 = gLoBuffer;
+gFramebufferHiRes0 = gHiBuffer;
 
 // Ucode symbols
 

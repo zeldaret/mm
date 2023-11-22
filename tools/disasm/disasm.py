@@ -2147,7 +2147,7 @@ for segment in files_spec:
             # Calculate the offset and size of this section relative to the section
             data_offset = off - segment[3][i][0]
             full_index = file_list.index(off)
-            if segment[0] == "code" and name == "framebuffers" and segment[3][i][2] == "bss":
+            if segment[0] == "code" and name == "framebuffer_hi" and segment[3][i][2] == "bss":
                 # This is the end of code, hardcode it
                 data_size = 0x80800000 - file_list[full_index]
             elif segment[0] == "boot" and name == "vimgr" and segment[3][i][2] == "bss":

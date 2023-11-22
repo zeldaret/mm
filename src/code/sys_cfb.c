@@ -41,8 +41,6 @@ u8 gSysCfbHiResEnabled;
 #include "system_malloc.h"
 #include "z64vimode.h"
 
-extern u16 gFramebufferHiRes0[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];
-
 void SysCfb_SetLoResMode(void) {
     gFramebuffers[1] = sCfbLoRes1;
     gFramebuffers[0] = sCfbLoRes0;
@@ -93,7 +91,7 @@ void SysCfb_SetHiResMode(void) {
 
 void SysCfb_Init(void) {
     sCfbLoRes1 = gLoBuffer.framebuffer;
-    sCfbLoRes0 = gFramebuffer0;
+    sCfbLoRes0 = gHiBuffer.framebuffer;
     sCfbHiRes1 = gFramebufferHiRes1;
     sCfbHiRes0 = gFramebufferHiRes0;
     SysCfb_SetLoResMode();

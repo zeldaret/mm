@@ -16,7 +16,6 @@ typedef union {
 // Equivalent to gLoBuffer.framebufferHiRes, but a different symbol is required to match
 extern u16 gFramebufferHiRes1[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];
 
-// at 0x80000500
 extern BufferLow gLoBuffer;
 
 
@@ -27,12 +26,19 @@ extern u8 gAudioHeap[0x138000];
 extern u8 gSystemHeap[];
 
 
-/**
- * The following variables are part of the `framebuffers` segment
- */
-extern u8 gPictoPhotoI8[PICTO_PHOTO_SIZE];
-extern u8 D_80784600[0x56200];
-extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
+typedef union {
+    u16 framebufferHiRes[HIRES_BUFFER_HEIGHT][HIRES_BUFFER_WIDTH] ALIGNED(64);
+    struct {
+        u8 pictoPhotoI8[PICTO_PHOTO_SIZE] ALIGNED(64);
+        u8 D_80784600[0x56200] ALIGNED(64);
+        u16 framebuffer[SCREEN_HEIGHT][SCREEN_WIDTH] ALIGNED(64);
+    };
+} BufferHigh;
+
+// Equivalent to gHiBuffer.framebufferHiRes, but a different symbol is required to match
+extern u16 gFramebufferHiRes0[HIRES_BUFFER_HEIGHT][HIRES_BUFFER_WIDTH];
+
+extern BufferHigh gHiBuffer;
 
 #ifndef FRAMEBUFFERS_START_ADDR
 /**
@@ -49,7 +55,7 @@ extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
  * buffers) up to the start of the `framebuffers` segmemt.
  * @see `Main`
  */
-#define FRAMEBUFFERS_START_ADDR (PHYS_TO_K0(0x800000) - sizeof(gFramebuffer0) - sizeof(D_80784600) - sizeof(gPictoPhotoI8))
+#define FRAMEBUFFERS_START_ADDR (PHYS_TO_K0(0x800000) - sizeof(BufferHigh))
 #endif
 
 

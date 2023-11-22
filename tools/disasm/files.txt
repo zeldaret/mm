@@ -752,7 +752,7 @@
             0x80208EA0 : "gfxbuffers",
             0x8024A4C0 : "buffer_audio_heap",
             0x803824C0 : "buffer_system_heap",
-            0x80780000 : "framebuffers",
+            0x80780000 : "framebuffer_hi",
         },
     ],
     ['ovl_title', 'baserom/', 'overlay', [], { 0x80800000 : "ovl_title" }],
