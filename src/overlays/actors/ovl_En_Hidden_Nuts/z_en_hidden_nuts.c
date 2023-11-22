@@ -355,12 +355,12 @@ void func_80BDBA28(EnHiddenNuts* this, PlayState* play) {
 void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
     s32 pad[3];
     f32 curFrame = this->skelAnime.curFrame;
-    WaterBox* sp54;
+    WaterBox* waterBox;
     f32 sp50;
     s16 sp4E = false;
     Vec3f sp40;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &waterBox) &&
         (this->actor.world.pos.y < sp50)) {
         this->actor.velocity.y = 0.0f;
         Math_Vec3f_Copy(&sp40, &this->actor.world.pos);

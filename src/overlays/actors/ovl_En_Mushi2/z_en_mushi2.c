@@ -128,14 +128,15 @@ s32 func_80A68860(EnMushi2* this, PlayState* play) {
     s32 sp40;
     CollisionPoly* sp3C;
     f32 temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp3C, &sp40, &this->actor, &this->actor.world.pos);
-    WaterBox* sp34;
+    WaterBox* waterBox;
     f32 sp30;
 
     if ((temp_f0 > (BGCHECK_Y_MIN + 1)) && ((this->actor.world.pos.y - 150.0f) < temp_f0)) {
         return true;
     }
 
-    return WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30, &sp34);
+    return WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30,
+                                  &waterBox);
 }
 
 s32 func_80A68910(EnMushi2* this, PlayState* play) {
@@ -528,7 +529,7 @@ void func_80A697C4(EnMushi2* this, PlayState* play) {
     s32 bgId = this->polyBgId;
 
     if (!(this->unk_30C & (0x10 | 0x4))) {
-        WaterBox* sp30;
+        WaterBox* waterBox;
         f32 sp2C;
 
         this->unk_30C &= ~(0x40 | 0x8 | 0x2);
@@ -537,7 +538,7 @@ void func_80A697C4(EnMushi2* this, PlayState* play) {
         }
 
         if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C,
-                                   &sp30)) {
+                                   &waterBox)) {
             this->actor.depthInWater = sp2C - this->actor.world.pos.y;
             if (this->actor.depthInWater >= 1.0f) {
                 this->unk_30C |= 0x20;
@@ -577,7 +578,7 @@ void func_80A697C4(EnMushi2* this, PlayState* play) {
 
 s32 func_80A699E4(EnMushi2* this, PlayState* play) {
     s32 pad;
-    WaterBox* sp40;
+    WaterBox* waterBox;
     f32 sp3C;
 
     if (this->unk_328.y < 0.0f) {
@@ -585,7 +586,7 @@ s32 func_80A699E4(EnMushi2* this, PlayState* play) {
         f32 y = (2.0f * this->unk_328.y) + this->actor.world.pos.y;
         f32 z = (2.0f * this->unk_328.z) + this->actor.world.pos.z;
 
-        if (WaterBox_GetSurface1_2(play, &play->colCtx, x, z, &sp3C, &sp40) && (y <= sp3C)) {
+        if (WaterBox_GetSurface1_2(play, &play->colCtx, x, z, &sp3C, &waterBox) && (y <= sp3C)) {
             return true;
         }
     }
