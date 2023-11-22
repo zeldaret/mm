@@ -486,7 +486,7 @@ void func_80B71650(EnRailSkb* this) {
 }
 
 void func_80B716A8(EnRailSkb* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_3FE = 1;
         func_80B71D8C(this, play, func_80B723F8);
         if (!func_80B7285C(this)) {

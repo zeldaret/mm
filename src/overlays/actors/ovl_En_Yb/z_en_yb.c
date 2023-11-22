@@ -261,7 +261,7 @@ void EnYb_Disappear(EnYb* this, PlayState* play) {
 
 void EnYb_SetupLeaving(EnYb* this, PlayState* play) {
     EnYb_UpdateAnimation(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnYb_Talk;
         // I am counting on you
@@ -327,7 +327,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
 
 void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play) {
     EnYb_UpdateAnimation(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnYb_Talk;
         // Spread my dance across the world
         Message_StartTextbox(play, 0x147C, &this->actor);
@@ -364,7 +364,7 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
         EnYb_ChangeCutscene(this, 0);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BFA2FC(play);
         this->actionFunc = EnYb_Talk;
         if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {

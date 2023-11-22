@@ -172,7 +172,7 @@ s32 func_80BD2BE8(EnAh* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_2D8 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_2D8, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         ret = true;
         this->unk_2D8 |= 8;
