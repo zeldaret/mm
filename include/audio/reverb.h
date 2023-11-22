@@ -94,4 +94,6 @@ typedef struct {
     /* 0x2A0 */ AdpcmLoop loop;
 } SynthesisReverb; // size = 0x2D0
 
+extern ReverbSettings* gReverbSettingsTable[];
+
 #endif
