@@ -104,7 +104,7 @@ typedef enum BioDekuBabaLilyPadWithHeadMovementState {
 
 #include "assets/overlays/ovl_Boss_05/ovl_Boss_05.c"
 
-// The limbs referenced here are not used. The spheres are positioned manually by Boss05_PostLimbDraw_LilyPad.
+// The limbs referenced here are not used. The spheres are positioned manually by Boss05_LilyPad_PostLimbDraw.
 static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
     {
         {
@@ -143,7 +143,7 @@ static ColliderJntSphInit sLilyPadJntSphInit = {
     sLilyPadJntSphElementsInit,
 };
 
-// The limb referenced here is not used. The sphere is positioned manually by Boss05_PostLimbDraw_Head.
+// The limb referenced here is not used. The sphere is positioned manually by Boss05_Head_PostLimbDraw.
 static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
     {
         {
@@ -171,7 +171,7 @@ static ColliderJntSphInit sHeadJntSphInit = {
     sHeadJntSphElementsInit,
 };
 
-// The limb referenced here is not used. The sphere is positioned manually by Boss05_PostLimbDraw_Head.
+// The limb referenced here is not used. The sphere is positioned manually by Boss05_Head_PostLimbDraw.
 static ColliderJntSphElementInit sWalkingHeadJntSphElementsInit[] = {
     {
         {
@@ -1420,7 +1420,7 @@ static s8 sLimbIndexToLimbRotIndex[] = {
     BIO_BABA_LILY_PAD_WITH_HEAD_LIMB_ROT_INDEX_NONE,            // Doesn't correspond to a real limb on the lily pad
 };
 
-s32 Boss05_OverrideLimbDraw_LilyPadWithHead(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 Boss05_LilyPadWithHead_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                             Actor* thisx) {
     Boss05* this = THIS;
     s8 limbRotIndex;
@@ -1454,7 +1454,7 @@ s32 Boss05_OverrideLimbDraw_LilyPadWithHead(PlayState* play, s32 limbIndex, Gfx*
     return false;
 }
 
-void Boss05_PostLimbDraw_LilyPad(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void Boss05_LilyPad_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sHeadOffset = { 0.0f, -1400.0f, 600.0f };
     Boss05* this = THIS;
     MtxF mf;
@@ -1488,13 +1488,13 @@ void Boss05_PostLimbDraw_LilyPad(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     }
 }
 
-s32 Boss05_OverrideLimbDraw_Head(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 Boss05_Head_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     return false;
 }
 
 Vec3f sBioDekuBabaHeadColliderPos;
 
-void Boss05_PostLimbDraw_Head(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void Boss05_Head_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sHeadColliderOffset = { 1600.0f, -300.0f, 0.0f };
     static Vec3f sHeadOffset = { 700.0f, 0.0f, 0.0f };
     Boss05* this = THIS;
@@ -1516,7 +1516,7 @@ void Boss05_PostLimbDraw_Head(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     }
 }
 
-void Boss05_TransformLimbDraw_Head(PlayState* play, s32 limbIndex, Actor* thisx) {
+void Boss05_Head_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     Boss05* this = THIS;
 
     if ((limbIndex == BIO_DEKU_BABA_HEAD_LIMB_LOWER_JAW) || (limbIndex == BIO_DEKU_BABA_HEAD_LIMB_UPPER_JAW)) {
@@ -1532,7 +1532,7 @@ void Boss05_TransformLimbDraw_Head(PlayState* play, s32 limbIndex, Actor* thisx)
     }
 }
 
-s32 Boss05_OverrideLimbDraw_LilyPad(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 Boss05_LilyPad_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     if ((limbIndex >= BIO_DEKU_BABA_LILY_PAD_LIMB_MIDDLE_STEM) &&
         (limbIndex <= BIO_DEKU_BABA_LILY_PAD_LIMB_RIGHT_LOWER_ARM)) {
         *dList = NULL;
@@ -1541,7 +1541,7 @@ s32 Boss05_OverrideLimbDraw_LilyPad(PlayState* play, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-s32 Boss05_OverrideLimbDraw_FallingHeadLilyPad(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 Boss05_FallingHeadLilyPad_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                                Actor* thisx) {
     if ((limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_ROOTS) || (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_UPPER_STEM) ||
         (limbIndex == BIO_DEKU_BABA_LILY_PAD_LIMB_LEAF)) {
@@ -1551,7 +1551,7 @@ s32 Boss05_OverrideLimbDraw_FallingHeadLilyPad(PlayState* play, s32 limbIndex, G
     return false;
 }
 
-void Boss05_TransformLimbDraw_FallingHeadLilyPad(PlayState* play, s32 limbIndex, Actor* thisx) {
+void Boss05_FallingHeadLilyPad_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     Boss05* this = THIS;
 
     if ((limbIndex >= BIO_DEKU_BABA_LILY_PAD_LIMB_MIDDLE_STEM) &&
@@ -1578,7 +1578,7 @@ static BioDekuBabaHeadLimb sFragmentIndexToLimbIndex[BIO_BABA_TYPE_MAX - BIO_BAB
     BIO_DEKU_BABA_HEAD_LIMB_LEAVES,               // BIO_BABA_TYPE_FRAGMENT_LEAVES
 };
 
-s32 Boss05_OverrideLimbDraw_Fragment(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 Boss05_Fragment_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                      Actor* thisx) {
     Boss05* this = THIS;
 
@@ -1593,7 +1593,7 @@ s32 Boss05_OverrideLimbDraw_Fragment(PlayState* play, s32 limbIndex, Gfx** dList
     return false;
 }
 
-void Boss05_PostLimbDraw_Fragment(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void Boss05_Fragment_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Boss05* this = THIS;
 
     if (limbIndex != sFragmentIndexToLimbIndex[BIO_BABA_GET_FRAGMENT_INDEX(&this->dyna.actor)]) {
@@ -1611,8 +1611,8 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
 
     if (this->actionFunc == Boss05_LilyPadWithHead_Move) {
         SkelAnime_DrawFlexOpa(play, this->lilyPadSkelAnime.skeleton, this->lilyPadSkelAnime.jointTable,
-                              this->lilyPadSkelAnime.dListCount, Boss05_OverrideLimbDraw_LilyPadWithHead,
-                              Boss05_PostLimbDraw_LilyPad, &this->dyna.actor);
+                              this->lilyPadSkelAnime.dListCount, Boss05_LilyPadWithHead_OverrideLimbDraw,
+                              Boss05_LilyPad_PostLimbDraw, &this->dyna.actor);
 
         if ((this->damagedFlashTimer % 2) != 0) {
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
@@ -1627,8 +1627,8 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));
 
         SkelAnime_DrawTransformFlexOpa(play, this->headSkelAnime.skeleton, this->headSkelAnime.jointTable,
-                                       this->headSkelAnime.dListCount, Boss05_OverrideLimbDraw_Head,
-                                       Boss05_PostLimbDraw_Head, Boss05_TransformLimbDraw_Head, &this->dyna.actor);
+                                       this->headSkelAnime.dListCount, Boss05_Head_OverrideLimbDraw,
+                                       Boss05_Head_PostLimbDraw, Boss05_Head_TransformLimbDraw, &this->dyna.actor);
     } else if (BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_LILY_PAD) {
         Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                          MTXMODE_NEW);
@@ -1641,12 +1641,12 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
 
         SkelAnime_DrawFlexOpa(play, this->lilyPadSkelAnime.skeleton, this->lilyPadSkelAnime.jointTable,
-                              this->lilyPadSkelAnime.dListCount, Boss05_OverrideLimbDraw_LilyPad, NULL,
+                              this->lilyPadSkelAnime.dListCount, Boss05_LilyPad_OverrideLimbDraw, NULL,
                               &this->dyna.actor);
     } else if (BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_FALLING_HEAD) {
         SkelAnime_DrawTransformFlexOpa(play, this->lilyPadSkelAnime.skeleton, this->lilyPadSkelAnime.jointTable,
-                                       this->lilyPadSkelAnime.dListCount, Boss05_OverrideLimbDraw_FallingHeadLilyPad,
-                                       Boss05_PostLimbDraw_LilyPad, Boss05_TransformLimbDraw_FallingHeadLilyPad,
+                                       this->lilyPadSkelAnime.dListCount, Boss05_FallingHeadLilyPad_OverrideLimbDraw,
+                                       Boss05_LilyPad_PostLimbDraw, Boss05_FallingHeadLilyPad_TransformLimbDraw,
                                        &this->dyna.actor);
 
         Matrix_Translate(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
@@ -1658,8 +1658,8 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));
 
         SkelAnime_DrawTransformFlexOpa(play, this->headSkelAnime.skeleton, this->headSkelAnime.jointTable,
-                                       this->headSkelAnime.dListCount, Boss05_OverrideLimbDraw_Head,
-                                       Boss05_PostLimbDraw_Head, Boss05_TransformLimbDraw_Head, &this->dyna.actor);
+                                       this->headSkelAnime.dListCount, Boss05_Head_OverrideLimbDraw,
+                                       Boss05_Head_PostLimbDraw, Boss05_Head_TransformLimbDraw, &this->dyna.actor);
 
         Actor_DrawDamageEffects(play, &this->dyna.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
                                 this->drawDmgEffScale, this->dmgEffFrozenSteamScale, this->drawDmgEffAlpha,
@@ -1672,8 +1672,8 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         }
 
         SkelAnime_DrawTransformFlexOpa(play, this->headSkelAnime.skeleton, this->headSkelAnime.jointTable,
-                                       this->headSkelAnime.dListCount, Boss05_OverrideLimbDraw_Head,
-                                       Boss05_PostLimbDraw_Head, Boss05_TransformLimbDraw_Head, &this->dyna.actor);
+                                       this->headSkelAnime.dListCount, Boss05_Head_OverrideLimbDraw,
+                                       Boss05_Head_PostLimbDraw, Boss05_Head_TransformLimbDraw, &this->dyna.actor);
 
         Actor_DrawDamageEffects(play, &this->dyna.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
                                 this->drawDmgEffScale, this->dmgEffFrozenSteamScale, this->drawDmgEffAlpha,
@@ -1682,8 +1682,8 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));
 
         SkelAnime_DrawFlexOpa(play, this->headSkelAnime.skeleton, this->headSkelAnime.jointTable,
-                              this->headSkelAnime.dListCount, Boss05_OverrideLimbDraw_Fragment,
-                              Boss05_PostLimbDraw_Fragment, &this->dyna.actor);
+                              this->headSkelAnime.dListCount, Boss05_Fragment_OverrideLimbDraw,
+                              Boss05_Fragment_PostLimbDraw, &this->dyna.actor);
     }
 
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
