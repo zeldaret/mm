@@ -55,13 +55,13 @@ typedef struct {
     /* 0xC */ s16 isBottledItem;
 } EnTalkGibudRequestedItem; // size = 0x10
 
-typedef enum {
+typedef enum EnTalkGibudRequestedItemState {
     /* 0 */ EN_TALK_GIBUD_REQUESTED_ITEM_MET,
     /* 1 */ EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO,
     /* 2 */ EN_TALK_GIBUD_REQUESTED_ITEM_NOT_MET
 } EnTalkGibudRequestedItemState;
 
-typedef enum {
+typedef enum EnTalkGibudRequestedItemIndex {
     /*  0 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BLUE_POTION,
     /*  1 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BEANS,
     /*  2 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_SPRING_WATER,
@@ -74,7 +74,7 @@ typedef enum {
     /*  9 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK
 } EnTalkGibudRequestedItemIndex;
 
-typedef enum {
+typedef enum EnTalkGibudAnimation {
     /*  0 */ EN_TALK_GIBUD_ANIM_GRAB_ATTACK,
     /*  1 */ EN_TALK_GIBUD_ANIM_GRAB_END,
     /*  2 */ EN_TALK_GIBUD_ANIM_GRAB_START,
@@ -91,12 +91,12 @@ typedef enum {
     /* 13 */ EN_TALK_GIBUD_ANIM_DANCE_CLAP
 } EnTalkGibudAnimation;
 
-typedef enum {
+typedef enum EnTalkGibudType {
     /* 0 */ EN_TALK_GIBUD_TYPE_GIBDO,
     /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD
 } EnTalkGibudType;
 
-typedef enum {
+typedef enum EnTalkGibudGrabState {
     /* 0 */ EN_TALK_GIBUD_GRAB_START,
     /* 1 */ EN_TALK_GIBUD_GRAB_ATTACK,
     /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE

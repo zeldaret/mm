@@ -51,29 +51,6 @@ void EnRailgibud_SinkIntoGround(EnRailgibud* this, PlayState* play);
 void EnRailgibud_Cutscene_Update(Actor* thisx, PlayState* play);
 
 typedef enum {
-    /*  0 */ EN_RAILGIBUD_ANIM_GRAB_ATTACK,
-    /*  1 */ EN_RAILGIBUD_ANIM_GRAB_END,
-    /*  2 */ EN_RAILGIBUD_ANIM_GRAB_START,
-    /*  3 */ EN_RAILGIBUD_ANIM_LOOK_BACK,
-    /*  4 */ EN_RAILGIBUD_ANIM_CROUCH_WIPING_TEARS,
-    /*  5 */ EN_RAILGIBUD_ANIM_CROUCH_CRYING,
-    /*  6 */ EN_RAILGIBUD_ANIM_DEATH,
-    /*  7 */ EN_RAILGIBUD_ANIM_DAMAGE,
-    /*  8 */ EN_RAILGIBUD_ANIM_CROUCH_END,
-    /*  9 */ EN_RAILGIBUD_ANIM_IDLE,
-    /* 10 */ EN_RAILGIBUD_ANIM_WALK,
-    /* 11 */ EN_RAILGIBUD_ANIM_DANCE_SQUAT,
-    /* 12 */ EN_RAILGIBUD_ANIM_DANCE_PIROUETTE,
-    /* 13 */ EN_RAILGIBUD_ANIM_DANCE_CLAP,
-    /* 14 */ EN_RAILGIBUD_ANIM_CROUCH_END_2,
-    /* 15 */ EN_RAILGIBUD_ANIM_SLUMP_START,
-    /* 16 */ EN_RAILGIBUD_ANIM_SLUMP_LOOP,
-    /* 17 */ EN_RAILGIBUD_ANIM_CONVULSION,
-    /* 18 */ EN_RAILGIBUD_ANIM_ARMS_UP_START,
-    /* 19 */ EN_RAILGIBUD_ANIM_ARMS_UP_LOOP
-} EnRailgibudAnimation;
-
-typedef enum {
     /* 0 */ EN_RAILGIBUD_TYPE_GIBDO,
     /* 1 */ EN_RAILGIBUD_TYPE_REDEAD
 } EnRailgibudType;
@@ -96,27 +73,51 @@ ActorInit En_Railgibud_InitVars = {
     /**/ EnRailgibud_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gGibdoRedeadGrabAttackAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 0.0f },
-    { &gGibdoRedeadGrabStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadWipingTearsAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadSobbingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadDeathAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadDamageAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadWalkAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -8.0f },
-    { &gGibdoRedeadSquattingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadPirouetteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadClappingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadStandUpAnim, 3.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -6.0f },
-    { &gGibdoRedeadSlumpStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadSlumpLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadConvulsionAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gGibdoRedeadArmsUpStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gGibdoRedeadArmsUpLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+typedef enum EnRailgibudAnimation {
+    /*  0 */ EN_RAILGIBUD_ANIM_GRAB_ATTACK,
+    /*  1 */ EN_RAILGIBUD_ANIM_GRAB_END,
+    /*  2 */ EN_RAILGIBUD_ANIM_GRAB_START,
+    /*  3 */ EN_RAILGIBUD_ANIM_LOOK_BACK,
+    /*  4 */ EN_RAILGIBUD_ANIM_CROUCH_WIPING_TEARS,
+    /*  5 */ EN_RAILGIBUD_ANIM_CROUCH_CRYING,
+    /*  6 */ EN_RAILGIBUD_ANIM_DEATH,
+    /*  7 */ EN_RAILGIBUD_ANIM_DAMAGE,
+    /*  8 */ EN_RAILGIBUD_ANIM_CROUCH_END,
+    /*  9 */ EN_RAILGIBUD_ANIM_IDLE,
+    /* 10 */ EN_RAILGIBUD_ANIM_WALK,
+    /* 11 */ EN_RAILGIBUD_ANIM_DANCE_SQUAT,
+    /* 12 */ EN_RAILGIBUD_ANIM_DANCE_PIROUETTE,
+    /* 13 */ EN_RAILGIBUD_ANIM_DANCE_CLAP,
+    /* 14 */ EN_RAILGIBUD_ANIM_CROUCH_END_2,
+    /* 15 */ EN_RAILGIBUD_ANIM_SLUMP_START,
+    /* 16 */ EN_RAILGIBUD_ANIM_SLUMP_LOOP,
+    /* 17 */ EN_RAILGIBUD_ANIM_CONVULSION,
+    /* 18 */ EN_RAILGIBUD_ANIM_ARMS_UP_START,
+    /* 19 */ EN_RAILGIBUD_ANIM_ARMS_UP_LOOP,
+    /* 20 */ EN_RAILGIBUD_ANIM_MAX
+} EnRailgibudAnimation;
+
+static AnimationInfo sAnimationInfo[EN_RAILGIBUD_ANIM_MAX] = {
+    { &gGibdoRedeadGrabAttackAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },    // EN_RAILGIBUD_ANIM_GRAB_ATTACK
+    { &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 0.0f }, // EN_RAILGIBUD_ANIM_GRAB_END
+    { &gGibdoRedeadGrabStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },     // EN_RAILGIBUD_ANIM_GRAB_START
+    { &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // EN_RAILGIBUD_ANIM_LOOK_BACK
+    { &gGibdoRedeadWipingTearsAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },   // EN_RAILGIBUD_ANIM_CROUCH_WIPING_TEARS
+    { &gGibdoRedeadSobbingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },       // EN_RAILGIBUD_ANIM_CROUCH_CRYING
+    { &gGibdoRedeadDeathAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },         // EN_RAILGIBUD_ANIM_DEATH
+    { &gGibdoRedeadDamageAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },        // EN_RAILGIBUD_ANIM_DAMAGE
+    { &gGibdoRedeadStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },       // EN_RAILGIBUD_ANIM_CROUCH_END
+    { &gGibdoRedeadIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },          // EN_RAILGIBUD_ANIM_IDLE
+    { &gGibdoRedeadWalkAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -8.0f },   // EN_RAILGIBUD_ANIM_WALK
+    { &gGibdoRedeadSquattingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // EN_RAILGIBUD_ANIM_DANCE_SQUAT
+    { &gGibdoRedeadPirouetteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },      // EN_RAILGIBUD_ANIM_DANCE_PIROUETTE
+    { &gGibdoRedeadClappingDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // EN_RAILGIBUD_ANIM_DANCE_CLAP
+    { &gGibdoRedeadStandUpAnim, 3.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -6.0f },        // EN_RAILGIBUD_ANIM_CROUCH_END_2
+    { &gGibdoRedeadSlumpStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },     // EN_RAILGIBUD_ANIM_SLUMP_START
+    { &gGibdoRedeadSlumpLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },      // EN_RAILGIBUD_ANIM_SLUMP_LOOP
+    { &gGibdoRedeadConvulsionAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },     // EN_RAILGIBUD_ANIM_CONVULSION
+    { &gGibdoRedeadArmsUpStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },    // EN_RAILGIBUD_ANIM_ARMS_UP_START
+    { &gGibdoRedeadArmsUpLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },     // EN_RAILGIBUD_ANIM_ARMS_UP_LOOP
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -139,7 +140,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 70, 0, { 0, 0, 0 } },
 };
 
-typedef enum {
+typedef enum EnRailgibudDamageEffect {
     /* 0x0 */ EN_RAILGIBUD_DMGEFF_NONE,       // Does not interact with the Gibdo/Redead at all
     /* 0x1 */ EN_RAILGIBUD_DMGEFF_STUN,       // Stuns without applying any effect
     /* 0x2 */ EN_RAILGIBUD_DMGEFF_FIRE_ARROW, // Damages, applies a fire effect, and changes a Gibdo into a Redead
@@ -193,29 +194,29 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_IMMOVABLE };
  * point along the path up to a maximum of nine additional Gibdos (not counting itself).
  */
 void EnRailgibud_SpawnOtherGibdosAndSetPositionAndRotation(EnRailgibud* this, PlayState* play) {
-    static s32 currentGibdoIndex = 0;
+    static s32 sCurrentGibdoIndex = 0;
     s32 nextPoint;
     Vec3f targetPos;
     Path* path = &play->setupPathList[ENRAILGIBUD_GET_PATH_INDEX(&this->actor)];
 
     this->points = Lib_SegmentedToVirtual(path->points);
-    this->currentPoint = currentGibdoIndex;
+    this->currentPoint = sCurrentGibdoIndex;
     this->pathCount = path->count;
 
     // This branch will only be taken for the first, "main" Gibdo. The subsequent
     // Gibdos created by Actor_SpawnAsChild will go through this function to set
     // their position and rotation, but they will not be able to spawn any more
-    // Gibdos themselves because currentGibdoIndex will be non-zero.
-    if (currentGibdoIndex == 0) {
+    // Gibdos themselves because sCurrentGibdoIndex will be non-zero.
+    if (sCurrentGibdoIndex == 0) {
         s32 i;
 
-        for (i = 1; i < this->pathCount && i < 10; i++) {
-            currentGibdoIndex++;
+        for (i = 1; (i < this->pathCount) && (i < 10); i++) {
+            sCurrentGibdoIndex++;
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_RAILGIBUD, 0.0f, 0.0f, 0.0f, 0, 0, 0,
                                this->actor.params);
         }
 
-        currentGibdoIndex = 0;
+        sCurrentGibdoIndex = 0;
     }
 
     this->actor.world.pos.x = this->points[this->currentPoint].x;
@@ -481,6 +482,9 @@ void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
             } else {
                 Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 1.0f, 400.0f, 0.0f);
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -843,6 +847,9 @@ void EnRailgibud_UpdateDamage(EnRailgibud* this, PlayState* play) {
                     EnRailgibud_SetupStunned(this);
                 }
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -989,6 +996,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
             case TEXT_STATE_CLOSING:
             case TEXT_STATE_3:
             case TEXT_STATE_CHOICE:
+            default:
                 break;
         }
     }
@@ -1238,6 +1246,9 @@ s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, PlayState* play) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_WEAKENED1);
                     }
                 }
+                break;
+
+            default:
                 break;
         }
 
