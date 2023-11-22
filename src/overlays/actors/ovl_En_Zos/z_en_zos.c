@@ -249,7 +249,7 @@ void func_80BBB15C(EnZos* this, PlayState* play) {
 }
 
 void func_80BBB2C4(EnZos* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x124F, &this->actor);
         this->actionFunc = func_80BBB8AC;
         this->actor.flags &= ~ACTOR_FLAG_10000;
@@ -475,7 +475,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
         case 0x123D:
         case 0x1242:
             EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
-            Actor_ProcessTalkRequest(&this->actor, &play->state);
+            Actor_TalkOfferAccepted(&this->actor, &play->state);
             Message_CloseTextbox(play);
             this->actionFunc = func_80BBBDE0;
             this->unk_2B6 |= 1;
@@ -497,7 +497,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 }
 
 void func_80BBBB84(EnZos* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             Message_StartTextbox(play, 0x1248, &this->actor);
@@ -521,7 +521,7 @@ void func_80BBBB84(EnZos* this, PlayState* play) {
 }
 
 void func_80BBBCBC(EnZos* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_ARMS_OUT, ANIMMODE_LOOP);
         Message_StartTextbox(play, 0x124D, &this->actor);
@@ -563,7 +563,7 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
         return;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BBB8AC;
         func_80BBB15C(this, play);
     } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
@@ -641,7 +641,7 @@ void func_80BBC14C(EnZos* this, PlayState* play) {
 
     func_80BBB0D4(this, play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BBC070;
         func_80BBBFBC(this, play);
     } else if (func_80BBAF5C(this, play)) {

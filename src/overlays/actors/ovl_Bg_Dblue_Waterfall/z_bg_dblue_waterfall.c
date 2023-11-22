@@ -270,12 +270,13 @@ void func_80B84348(BgDblueWaterfall* this, PlayState* play, f32 arg2, f32 arg3, 
 void func_80B84568(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
     CollisionPoly* sp40;
-    WaterBox* sp3C;
+    WaterBox* waterBox;
     s32 sp38;
     f32 sp34 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp40, &sp38, &this->actor, &this->actor.world.pos);
     f32 sp30;
 
-    if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30, &sp3C)) {
+    if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30,
+                               &waterBox)) {
         if (sp30 < sp34) {
             this->unk_198 = sp34;
         } else {

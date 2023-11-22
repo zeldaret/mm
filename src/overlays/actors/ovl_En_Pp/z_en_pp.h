@@ -75,7 +75,7 @@ typedef struct EnPp {
                 } actionVar;
     /* 0x2D4 */ s16 maskBounceAngularVelocity; // Controls the speed that the Hiploop rotates to face the player when an attack bounces off the mask.
     /* 0x2D6 */ s16 deadBodyPartsSpawnedCount;
-    /* 0x2D8 */ f32 endFrame;
+    /* 0x2D8 */ f32 animEndFrame;
     /* 0x2DC */ f32 chargeAndBounceSpeed;
     /* 0x2DC */ Vec3f ledgeCheckPos[3];
     /* 0x304 */ Vec3f wallCheckPos;

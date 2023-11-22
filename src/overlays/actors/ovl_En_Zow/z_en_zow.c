@@ -498,7 +498,7 @@ void func_80BDD570(EnZow* this, PlayState* play) {
 
 void func_80BDD634(EnZow* this, PlayState* play) {
     func_80BDD490(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BDD570;
         func_80BDD1E0(this, play);
     } else if (func_80BDD154(this, play)) {

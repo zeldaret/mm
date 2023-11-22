@@ -364,11 +364,11 @@ void func_8095E204(EnIshi* this, PlayState* play) {
 
 s32 func_8095E2B0(EnIshi* this, PlayState* play) {
     s32 pad;
-    WaterBox* sp30;
+    WaterBox* waterBox;
     f32 sp2C;
     s32 sp28;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &sp30,
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &waterBox,
                                 &sp28) &&
         (this->actor.world.pos.y < sp2C)) {
         return true;

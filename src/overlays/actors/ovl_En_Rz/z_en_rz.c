@@ -514,7 +514,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
     }
 
     if (!func_80BFBE70(this, play)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actionFunc = func_80BFC078;
 
             if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
@@ -565,7 +565,7 @@ void func_80BFC608(EnRz* this, PlayState* play) {
 void func_80BFC674(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC608;
         if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
             Message_StartTextbox(play, 0x2925, &this->actor);
@@ -604,7 +604,7 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
         func_80BFB9E4(play, this, EN_RZ_ANIM_WALKING);
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
         func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
         this->actor.speed = 0.0f;
@@ -639,7 +639,7 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
             break;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
         func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
         this->actor.speed = 0.0f;

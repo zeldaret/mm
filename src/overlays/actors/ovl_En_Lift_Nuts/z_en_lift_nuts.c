@@ -383,7 +383,7 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
     } else if (this->actor.xzDistToPlayer > 120.0f) {
         EnLiftNuts_SetupBurrow(this);
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
             if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_NONE)) {
                 switch (CURRENT_DAY) {
@@ -944,7 +944,7 @@ void EnLiftNuts_SetupResumeConversation(EnLiftNuts* this) {
  * Resumes the current conversation after giving player the reward for winning the minigame.
  */
 void EnLiftNuts_ResumeConversation(EnLiftNuts* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_1) &&
             CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_2) && (CURRENT_DAY == 3)) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENLIFTNUTS_ANIM_SHOCKED_END);

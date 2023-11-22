@@ -253,7 +253,7 @@ void func_809533A0(EnHs* this, PlayState* play) {
 }
 
 void func_8095345C(EnHs* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80953180;
         func_809533A0(this, play);
         if (this->stateFlags & 8) {

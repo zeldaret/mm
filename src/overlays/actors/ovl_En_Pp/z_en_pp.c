@@ -206,31 +206,6 @@ static Color_RGBA8 sDustPrimColor = { 60, 50, 20, 255 };
 
 static Color_RGBA8 sDustEnvColor = { 40, 30, 30, 255 };
 
-typedef enum {
-    /* 0 */ EN_PP_ANIM_IDLE,
-    /* 1 */ EN_PP_ANIM_WALK,
-    /* 2 */ EN_PP_ANIM_WIND_UP,
-    /* 3 */ EN_PP_ANIM_CHARGE,
-    /* 4 */ EN_PP_ANIM_ATTACK,
-    /* 5 */ EN_PP_ANIM_DAMAGE,
-    /* 6 */ EN_PP_ANIM_ROAR,
-    /* 7 */ EN_PP_ANIM_TURN_TO_FACE_PLAYER,
-    /* 8 */ EN_PP_ANIM_JUMP,
-    /* 9 */ EN_PP_ANIM_LAND
-} EnPpAnimation;
-
-static AnimationHeader* sAnimations[] = {
-    &gHiploopIdleAnim,   &gHiploopWalkAnim, &gHiploopWindUpAnim, &gHiploopChargeAnim, &gHiploopAttackAnim,
-    &gHiploopDamageAnim, &gHiploopRoarAnim, &gHiploopWalkAnim,   &gHiploopWindUpAnim, &gHiploopWalkAnim,
-};
-
-static u8 sAnimationModes[] = {
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
-};
-
-static s16 sLedgeCheckAngles[] = { 0x0000, 0x1000, 0xF000 };
-
 void EnPp_Init(Actor* thisx, PlayState* play) {
     EnPp* this = THIS;
     EffectBlureInit1 blureInit;
@@ -411,13 +386,53 @@ void EnPp_SpawnDust(EnPp* this, PlayState* play) {
     }
 }
 
+typedef enum {
+    /*  0 */ EN_PP_ANIM_IDLE,
+    /*  1 */ EN_PP_ANIM_WALK,
+    /*  2 */ EN_PP_ANIM_WIND_UP,
+    /*  3 */ EN_PP_ANIM_CHARGE,
+    /*  4 */ EN_PP_ANIM_ATTACK,
+    /*  5 */ EN_PP_ANIM_DAMAGE,
+    /*  6 */ EN_PP_ANIM_ROAR,
+    /*  7 */ EN_PP_ANIM_TURN_TO_FACE_PLAYER,
+    /*  8 */ EN_PP_ANIM_JUMP,
+    /*  9 */ EN_PP_ANIM_LAND,
+    /* 10 */ EN_PP_ANIM_MAX
+} EnPpAnimation;
+
+static AnimationHeader* sAnimations[EN_PP_ANIM_MAX] = {
+    &gHiploopIdleAnim,   // EN_PP_ANIM_IDLE
+    &gHiploopWalkAnim,   // EN_PP_ANIM_WALK
+    &gHiploopWindUpAnim, // EN_PP_ANIM_WIND_UP
+    &gHiploopChargeAnim, // EN_PP_ANIM_CHARGE
+    &gHiploopAttackAnim, // EN_PP_ANIM_ATTACK
+    &gHiploopDamageAnim, // EN_PP_ANIM_DAMAGE
+    &gHiploopRoarAnim,   // EN_PP_ANIM_ROAR
+    &gHiploopWalkAnim,   // EN_PP_ANIM_TURN_TO_FACE_PLAYER
+    &gHiploopWindUpAnim, // EN_PP_ANIM_JUMP
+    &gHiploopWalkAnim,   // EN_PP_ANIM_LAND
+};
+
+static u8 sAnimationModes[EN_PP_ANIM_MAX] = {
+    ANIMMODE_LOOP, // EN_PP_ANIM_IDLE
+    ANIMMODE_LOOP, // EN_PP_ANIM_WALK
+    ANIMMODE_ONCE, // EN_PP_ANIM_WIND_UP
+    ANIMMODE_LOOP, // EN_PP_ANIM_CHARGE
+    ANIMMODE_ONCE, // EN_PP_ANIM_ATTACK
+    ANIMMODE_LOOP, // EN_PP_ANIM_DAMAGE
+    ANIMMODE_LOOP, // EN_PP_ANIM_ROAR
+    ANIMMODE_LOOP, // EN_PP_ANIM_TURN_TO_FACE_PLAYER
+    ANIMMODE_ONCE, // EN_PP_ANIM_JUMP
+    ANIMMODE_ONCE, // EN_PP_ANIM_LAND
+};
+
 void EnPp_ChangeAnim(EnPp* this, s32 animIndex) {
     f32 morphFrames = -10.0f;
     f32 playSpeed;
     f32 startFrame;
 
     this->animIndex = animIndex;
-    this->endFrame = Animation_GetLastFrame(sAnimations[this->animIndex]);
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[this->animIndex]);
 
     if (this->animIndex >= EN_PP_ANIM_WIND_UP) {
         morphFrames = 0.0f;
@@ -430,10 +445,10 @@ void EnPp_ChangeAnim(EnPp* this, s32 animIndex) {
 
     startFrame = 0.0f;
     if (this->action == EN_PP_ACTION_BODY_PART_MOVE) {
-        startFrame = this->endFrame;
+        startFrame = this->animEndFrame;
     }
 
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, startFrame, this->endFrame,
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, startFrame, this->animEndFrame,
                      sAnimationModes[this->animIndex], morphFrames);
 }
 
@@ -477,6 +492,7 @@ void EnPp_PlaySfxForAnimation(EnPp* this) {
  * Checks to see if the Hiploop is about to walk off a ledge or into a wall.
  */
 s32 EnPp_CheckCollision(EnPp* this, PlayState* play) {
+    static s16 sLedgeCheckAngles[] = { 0x0000, 0x1000, 0xF000 };
     s16 angle;
     s32 i;
 
@@ -618,7 +634,7 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
     } else if (this->animIndex == EN_PP_ANIM_TURN_TO_FACE_PLAYER) {
         EnPp_ChangeAnim(this, EN_PP_ANIM_WIND_UP);
     } else if (this->animIndex == EN_PP_ANIM_WIND_UP) {
-        if (this->endFrame <= curFrame) {
+        if (curFrame >= this->animEndFrame) {
             this->chargeAndBounceSpeed = 14.0f;
             this->timer = 20;
             EnPp_ChangeAnim(this, EN_PP_ANIM_CHARGE);
@@ -686,7 +702,7 @@ void EnPp_Attack(EnPp* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     SkelAnime_Update(&this->skelAnime);
-    if (this->endFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         EnPp_SetupCharge(this);
     }
 }
@@ -773,7 +789,7 @@ void EnPp_Roar(EnPp* this, PlayState* play) {
         this->secondaryTimer = 3;
     }
 
-    if (!this->actionVar.hasDoneFirstRoar && (this->endFrame <= curFrame)) {
+    if (!this->actionVar.hasDoneFirstRoar && (curFrame >= this->animEndFrame)) {
         this->skelAnime.startFrame = 6.0f;
         this->actionVar.hasDoneFirstRoar = true;
     }
@@ -836,7 +852,7 @@ void EnPp_Jump(EnPp* this, PlayState* play) {
             this->actionVar.hasLandedFromJump = true;
             EnPp_ChangeAnim(this, EN_PP_ANIM_LAND);
         }
-    } else if (this->endFrame <= curFrame) {
+    } else if (curFrame >= this->animEndFrame) {
         EnPp_SetupIdle(this);
     }
 }

@@ -125,7 +125,8 @@ wordReplace = {
     "Actor_IsActorFacingActor": "Actor_ActorAIsFacingActorB",
     "Actor_IsActorFacedByActor": "Actor_ActorBIsFacingActorA",
     "Actor_MarkForDeath": "Actor_Kill",
-    "func_800B84D0": "Actor_ProcessTalkRequest",
+    "func_800B84D0": "Actor_TalkOfferAccepted",
+    "Actor_ProcessTalkRequest": "Actor_TalkOfferAccepted",
     "func_8017D668": "Math3D_PointDistToLine2D",
 
     "THGA_GetSize": "THGA_GetRemaining",
@@ -1295,7 +1296,8 @@ wordReplace = {
     "ACTOR_FLAG_1": "ACTOR_FLAG_TARGETABLE",
     "ACTOR_FLAG_4": "ACTOR_FLAG_UNFRIENDLY",
     "ACTOR_FLAG_8": "ACTOR_FLAG_FRIENDLY",
-    "ACTOR_FLAG_100": "ACTOR_FLAG_TALK_REQUESTED",
+    "ACTOR_FLAG_100": "ACTOR_FLAG_TALK",
+    "ACTOR_FLAG_TALK_REQUESTED": "ACTOR_FLAG_TALK",
     "ACTOR_FLAG_8000000": "ACTOR_FLAG_CANT_LOCK_ON",
 
     "EXCH_ITEM_MINUS1": "PLAYER_IA_MINUS1",

@@ -224,7 +224,7 @@ void func_8095A920(EnOwl* this, PlayState* play) {
 }
 
 s32 func_8095A978(EnOwl* this, PlayState* play, u16 textId, f32 targetDist, f32 arg4) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         return true;
     }
 
@@ -238,7 +238,7 @@ s32 func_8095A978(EnOwl* this, PlayState* play, u16 textId, f32 targetDist, f32 
 }
 
 s32 func_8095A9FC(EnOwl* this, PlayState* play, u16 textId) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         return true;
     }
 
@@ -506,7 +506,7 @@ void func_8095B480(EnOwl* this, PlayState* play) {
 
 void func_8095B574(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_8095BA84;
         Audio_PlayFanfare(NA_BGM_OWL);
         this->actionFlags |= 0x40;
@@ -735,7 +735,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
 
 void func_8095BE0C(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_8095BA84;
         Audio_PlayFanfare(NA_BGM_OWL);
         this->csIdIndex = 1;
@@ -889,7 +889,7 @@ s32 func_8095C510(EnOwl* this) {
 
 void func_8095C568(EnOwl* this) {
     if (this->actionFlags & 0x40) {
-        if ((this->csIdIndex < 0) || (this->csIdList[this->csIdIndex] < 0)) {
+        if ((this->csIdIndex < 0) || (this->csIdList[this->csIdIndex] <= CS_ID_NONE)) {
             this->actionFlags &= ~0x40;
         } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);

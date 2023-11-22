@@ -183,7 +183,7 @@ void func_80B3AE60(EnGg2* this, PlayState* play) {
 }
 
 void func_80B3AFB0(EnGg2* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2F0 = 1;
         this->actionFunc = func_80B3AE60;
     } else if ((this->actor.xzDistToPlayer < 100.0f) && (this->actor.xzDistToPlayer > 50.0f) &&
