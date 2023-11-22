@@ -4,6 +4,7 @@
 #include "z64.h"
 #include "macros.h"
 #include "stack.h"
+#include "libc/assert.h"
 
 typedef union {
     u16 framebufferHiRes[HIRES_BUFFER_HEIGHT][HIRES_BUFFER_WIDTH] ALIGNED(64);
@@ -56,6 +57,8 @@ extern BufferHigh gHiBuffer;
  * @see `Main`
  */
 #define FRAMEBUFFERS_START_ADDR (PHYS_TO_K0(0x800000) - sizeof(BufferHigh))
+
+static_assert(FRAMEBUFFERS_START_ADDR == 0x80780000, "The expected address of gHiBuffer shifted. Please update said address in buffers.h and in the spec file.");
 #endif
 
 
