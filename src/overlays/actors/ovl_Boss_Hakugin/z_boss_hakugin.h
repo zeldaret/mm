@@ -124,31 +124,31 @@ typedef struct BossHakugin {
     /* 0x01B8 */ f32 unk_01B8;
     /* 0x01BC */ f32 unk_01BC;
     /* 0x01C0 */ f32 unk_01C0;
-    /* 0x01C4 */ f32 unk_01C4;
+    /* 0x01C4 */ f32 targetSpeed;
     /* 0x01C8 */ f32 unk_01C8;
     /* 0x01CC */ f32 unk_01CC;
     /* 0x01D0 */ f32 unk_01D0;
-    /* 0x01D4 */ f32 unk_01D4;
+    /* 0x01D4 */ f32 iceScaleY;
     /* 0x01D8 */ UNK_TYPE1 unk_01D8[0x4]; // probably unused float
     /* 0x01DC */ f32 drawDmgEffScale;
     /* 0x01E0 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x01E4 */ f32 drawDmgEffAlpha;
     /* 0x01E8 */ Vec3s jointTable[GOHT_LIMB_MAX];
     /* 0x02AE */ Vec3s morphTable[GOHT_LIMB_MAX];
-    /* 0x0374 */ Vec3s unk_0374;
+    /* 0x0374 */ Vec3s headRot;
     /* 0x037A */ Vec3s unk_037A;
     /* 0x0380 */ Vec3f unk_0380;
     /* 0x038C */ Vec3f subCamEye;
     /* 0x0398 */ Vec3f bodyPartsPos[GOHT_BODYPART_MAX];
     /* 0x044C */ Vec3f unk_044C;
-    /* 0x0458 */ Vec3f unk_0458;
-    /* 0x0464 */ Vec3f unk_0464;
+    /* 0x0458 */ Vec3f sfxPos;
+    /* 0x0464 */ Vec3f electricBallSfxPos;
     /* 0x0470 */ LightNode* lightNode;
     /* 0x0474 */ LightInfo lightInfo;
     /* 0x0484 */ ColliderJntSph bodyCollider;
     /* 0x04A4 */ ColliderJntSphElement bodyColliderElements[GOHT_COLLIDER_BODYPART_MAX];
     /* 0x0964 */ ColliderCylinder iceCollider;
-    /* 0x09B0 */ Actor* unk_09B0[8];
+    /* 0x09B0 */ Actor* hakurockBoulders[8];
     /* 0x09D0 */ Actor* unk_09D0[10];
     /* 0x09F8 */ GohtRock rocks[GOHT_ROCK_COUNT];
     /* 0x2618 */ GohtElectricBall electricBalls[GOHT_ELECTRIC_BALL_COUNT]; // A chain of electric balls used as an attack
