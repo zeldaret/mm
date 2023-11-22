@@ -48,7 +48,7 @@ void func_80B08C1C(BossHakugin* this);
 void func_80B08CB8(BossHakugin* this, PlayState* play);
 void func_80B09178(BossHakugin* this);
 void func_80B091D8(BossHakugin* this, PlayState* play);
-void func_80B094E0(BossHakugin* this, PlayState* play);
+void BossHakugin_FallDown(BossHakugin* this, PlayState* play);
 void func_80B098BC(BossHakugin* this, PlayState* play);
 void func_80B09A94(BossHakugin* this, PlayState* play);
 void func_80B09C78(BossHakugin* this, PlayState* play);
@@ -976,11 +976,11 @@ void func_80B06C08(BossHakugin* this) {
     }
 }
 
-void func_80B06D38(BossHakugin* this, PlayState* play) {
+void BossHakugin_SpawnBomb(BossHakugin* this, PlayState* play) {
     EnBom* bomb;
     s16 temp_a1;
 
-    if ((this->actor.speed > 10.0f) && ((s32)this->actor.colChkInfo.health < 0xA) && (this->unk_018F == 0) &&
+    if ((this->actor.speed > 10.0f) && ((s32)this->actor.colChkInfo.health < 10) && (this->unk_018F == 0) &&
         (Rand_ZeroOne() < 0.35f)) {
         this->unk_018F = 4;
     } else {
@@ -1134,7 +1134,7 @@ void func_80B07450(BossHakugin* this, PlayState* play) {
         func_80B06B20(this, &pos);
     } else if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
         Math_Vec3f_Copy(&pos, &this->bodyPartsPos[sLimbToBodyParts[GOHT_LIMB_FRONT_RIGHT_HOOF]]);
-        func_80B06D38(this, play);
+        BossHakugin_SpawnBomb(this, play);
     } else if (Animation_OnFrame(&this->skelAnime, 11.0f)) {
         Math_Vec3f_Copy(&pos, &this->bodyPartsPos[sLimbToBodyParts[GOHT_LIMB_BACK_RIGHT_HOOF]]);
         func_80B06B20(this, &pos);
@@ -1703,7 +1703,7 @@ void func_80B091D8(BossHakugin* this, PlayState* play) {
     }
 }
 
-void func_80B093C0(BossHakugin* this) {
+void BossHakugin_SetupFallDown(BossHakugin* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGohtFallDownAnim, -3.0f);
     this->bodyCollider.base.atFlags &= ~AT_ON;
     this->bodyCollider.base.acFlags &= ~AC_HARD;
@@ -1723,10 +1723,10 @@ void func_80B093C0(BossHakugin* this) {
     }
     this->unk_019C = 60;
     this->actor.speed = 20.0f;
-    this->actionFunc = func_80B094E0;
+    this->actionFunc = BossHakugin_FallDown;
 }
 
-void func_80B094E0(BossHakugin* this, PlayState* play) {
+void BossHakugin_FallDown(BossHakugin* this, PlayState* play) {
     CollisionPoly* spBC;
     Vec3f spB0;
     Vec3f spA4;
@@ -2256,8 +2256,8 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
             return false;
         }
         func_80B07B88(this, play);
-        if (this->actionFunc == func_80B094E0) {
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 15);
+        if (this->actionFunc == BossHakugin_FallDown) {
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
             func_80B07BFC(this, play, i);
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
@@ -2289,7 +2289,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                 }
             }
             this->unk_01A4 = 15;
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 15);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
             this->unk_019A += 35;
             func_80B07BFC(this, play, i);
             this->actor.colChkInfo.damage = this->bodyCollider.elements[i].info.acHitInfo->toucher.damage;
@@ -2313,7 +2313,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                        BUMP_HIT) ||
                       (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HORN1].info.bumperFlags & BUMP_HIT) ||
                       (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HORN2].info.bumperFlags & BUMP_HIT)))) {
-                    func_80B093C0(this);
+                    BossHakugin_SetupFallDown(this);
                 } else if ((this->unk_0192 == GOHT_UNK192_0) && (this->unk_01AA == 0) &&
                            (this->actionFunc == func_80B08CB8) &&
                            (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F)) {
