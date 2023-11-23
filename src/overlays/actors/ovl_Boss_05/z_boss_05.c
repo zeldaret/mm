@@ -357,13 +357,14 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 
     if ((BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_LILY_PAD_WITH_HEAD) ||
         (BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_NO_LEAF_LILY_PAD_WITH_HEAD)) {
-        if (this->dyna.actor.world.rot.z == 0) {
-            // This assignment is redundant; the z-rotation already needs to be 0 to enter this block.
-            this->dyna.actor.world.rot.z = 0;
+        if (BIO_BABA_FORCE_DETACH_TIMER(&this->dyna.actor) == 0) {
+            // This assignment is redundant; the timer already needs to be 0 to enter this block.
+            BIO_BABA_FORCE_DETACH_TIMER(&this->dyna.actor) = 0;
         }
 
         this->dyna.actor.shape.rot.z = 0;
-        this->forceDetachTimer = BIO_BABA_GET_FORCE_DETACH_TIMER(&this->dyna.actor);
+        this->forceDetachTimer = BIO_BABA_FORCE_DETACH_TIMER(&this->dyna.actor);
+        // BIO_BABA_FORCE_DETACH_TIMER uses world.rot.z, so once we've stored the value, reset the rotation to 0 here.
         this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
         this->dyna.actor.colChkInfo.damageTable = &sLilyPadWithHeadDamageTable;
 
