@@ -1,10 +1,15 @@
-#include "global.h"
+#include "z64light.h"
+
 #include "sys_cfb.h"
+#include "z64skin_matrix.h"
+#include "z64.h"
+#include "functions.h"
+
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 LightsBuffer sLightsBuffer;
 
-void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, s32 type) {
+void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, LightType type) {
     info->type = type;
     info->params.point.x = x;
     info->params.point.y = y;
@@ -79,7 +84,7 @@ void Lights_Draw(Lights* lights, GraphicsContext* gfxCtx) {
 }
 
 Light* Lights_FindSlot(Lights* lights) {
-    if (lights->numLights >= 7) {
+    if (lights->numLights >= ARRAY_COUNT(lights->l.l)) {
         return NULL;
     }
     return &lights->l.l[lights->numLights++];
@@ -182,6 +187,9 @@ void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused) {
     }
 }
 
+typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
+typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct PlayState* play);
+
 /**
  * For every light in a provided list, try to find a free slot in the provided Lights group and bind
  * a light to it. Then apply color and positional/directional info for each light
@@ -240,13 +248,15 @@ LightNode* Lights_FindBufSlot(void) {
 }
 
 void Lights_FreeNode(LightNode* light) {
-    if (light != NULL) {
-        sLightsBuffer.numOccupied--;
-        light->info = NULL;
-        sLightsBuffer.searchIndex =
-            (light - sLightsBuffer.lights) /
-            (s32)sizeof(LightNode); //! @bug Due to pointer arithmetic, the division is unnecessary
+    if (light == NULL) {
+        return;
     }
+
+    sLightsBuffer.numOccupied--;
+    light->info = NULL;
+
+    //! @bug Due to pointer arithmetic, the division is unnecessary
+    sLightsBuffer.searchIndex = (light - sLightsBuffer.lights) / (s32)sizeof(LightNode);
 }
 
 void LightContext_Init(PlayState* play, LightContext* lightCtx) {
