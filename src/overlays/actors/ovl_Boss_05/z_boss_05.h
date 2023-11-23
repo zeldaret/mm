@@ -62,6 +62,7 @@ typedef enum BioDekuBabaLilyPadWithHeadLimbRotIndex {
 
 #define BIO_BABA_GET_TYPE(thisx) ((thisx)->params)
 #define BIO_BABA_GET_FRAGMENT_INDEX(thisx) ((thisx)->params - BIO_BABA_TYPE_FRAGMENT_BASE)
+#define BIO_BABA_GET_FORCE_DETACH_TIMER(thisx) ((thisx)->world.rot.z)
 
 typedef struct Boss05 {
     /* 0x000 */ DynaPolyActor dyna;
