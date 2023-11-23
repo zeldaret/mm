@@ -17,7 +17,8 @@ typedef enum EnNbAnimation {
     /*  2 */ EN_NB_ANIM_TALK_ONCE,
     /*  3 */ EN_NB_ANIM_TALK_LOOP,
     /*  4 */ EN_NB_ANIM_ANGRY,
-    /*  5 */ EN_NB_ANIM_RELIEVED
+    /*  5 */ EN_NB_ANIM_RELIEVED,
+    /*  6 */ EN_NB_ANIM_MAX
 } EnNbAnimation;
 
 typedef struct EnNb {

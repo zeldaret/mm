@@ -35,19 +35,19 @@ void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc) {
 void EnTest5_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnTest5* this = THIS;
-    WaterBox* water;
+    WaterBox* waterBox;
     f32 ySurface;
 
     // If not spawned above a water source, immediately despawn
     if (!WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
-                              &water)) {
+                              &waterBox)) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    Math_Vec3s_ToVec3f(&this->minPos, &water->minPos);
-    this->xLength = (f32)water->xLength;
-    this->zLength = (f32)water->zLength;
+    Math_Vec3s_ToVec3f(&this->minPos, &waterBox->minPos);
+    this->xLength = (f32)waterBox->xLength;
+    this->zLength = (f32)waterBox->zLength;
 
     EnTest5_SetupAction(this, EnTest5_HandleBottleAction);
 }

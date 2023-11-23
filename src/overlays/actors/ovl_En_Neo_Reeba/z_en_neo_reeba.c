@@ -203,16 +203,14 @@ void EnNeoReeba_ChooseAction(EnNeoReeba* this, PlayState* play) {
 
     if ((distToPlayer > 200.0f) || (fabsf(this->actor.playerHeightRel) > 100.0f)) {
         EnNeoReeba_SetupSink(this);
-    } else {
-        if (this->actionTimer == 0) {
-            if ((distToPlayer < 140.0f) && (fabsf(this->actor.playerHeightRel) < 100.0f)) {
-                this->targetPos = player->actor.world.pos;
-                this->targetPos.x += 10.0f * player->actor.speed * Math_SinS(player->actor.world.rot.y);
-                this->targetPos.z += 10.0f * player->actor.speed * Math_CosS(player->actor.world.rot.y);
-                EnNeoReeba_SetupMove(this);
-            } else {
-                EnNeoReeba_SetupReturnHome(this);
-            }
+    } else if (this->actionTimer == 0) {
+        if ((distToPlayer < 140.0f) && (fabsf(this->actor.playerHeightRel) < 100.0f)) {
+            this->targetPos = player->actor.world.pos;
+            this->targetPos.x += 10.0f * player->actor.speed * Math_SinS(player->actor.world.rot.y);
+            this->targetPos.z += 10.0f * player->actor.speed * Math_CosS(player->actor.world.rot.y);
+            EnNeoReeba_SetupMove(this);
+        } else {
+            EnNeoReeba_SetupReturnHome(this);
         }
     }
 
@@ -231,9 +229,9 @@ void EnNeoReeba_SetupSink(EnNeoReeba* this) {
 void EnNeoReeba_Sink(EnNeoReeba* this, PlayState* play) {
     if (Math_SmoothStepToF(&this->actor.shape.yOffset, -2000.0f, 0.5f, this->sinkRiseRate, 10.0f) == 0.0f) {
         EnNeoReeba_SetupWaitUnderground(this);
-    } else if (play->gameplayFrames % 4 == 0) {
+    } else if ((play->gameplayFrames % 4) == 0) {
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f,
-                                 500, 10, 1);
+                                 500, 10, true);
     }
 
     if (this->sinkRiseRate < 300.0f) {
@@ -257,7 +255,7 @@ void EnNeoReeba_RiseOutOfGround(EnNeoReeba* this, PlayState* play) {
         EnNeoReeba_SetupChooseAction(this);
     } else if (play->gameplayFrames % 4 == 0) {
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 8.0f,
-                                 500, 10, 1);
+                                 500, 10, true);
     }
 
     if (this->sinkRiseRate > 20.0f) {
@@ -280,7 +278,7 @@ void EnNeoReeba_Move(EnNeoReeba* this, PlayState* play) {
     f32 remainingDist = Math_Vec3f_StepToXZ(&this->actor.world.pos, &this->targetPos, this->actor.speed);
 
     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f, 0xFA,
-                             0xA, 1);
+                             10, true);
 
     if (remainingDist < 2.0f) {
         EnNeoReeba_SetupChooseAction(this);
@@ -432,7 +430,7 @@ void EnNeoReeba_DamageAnim(EnNeoReeba* this, PlayState* play) {
         }
 
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f,
-                                 250, 10, 1);
+                                 250, 10, true);
         this->actionTimer--;
     }
 }
@@ -516,6 +514,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, PlayState* play) {
                 case EN_NEO_REEBA_DMGEFF_ELECTRIC_STUN:
                 case EN_NEO_REEBA_DMGEFF_NONE:
                     return;
+
                 default:
                     if (this->stunTimer >= 2) {
                         EnNeoReeba_SpawnIce(this, play);
@@ -542,7 +541,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, PlayState* play) {
                 }
                 this->drawEffectAlpha = 1.0f;
                 this->drawEffectScale = 0.0f;
-                /* fallthrough */
+                // fallthrough
             case EN_NEO_REEBA_DMGEFF_NONE:
             case EN_NEO_REEBA_DMGEFF_SHATTER:
                 if ((this->actor.colChkInfo.damageEffect == EN_NEO_REEBA_DMGEFF_SHATTER) ||
@@ -570,13 +569,15 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, PlayState* play) {
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
                 EnNeoReeba_SetupStun(this);
                 break;
+
+            default:
+                break;
         }
-    } else {
-        if (((this->collider.base.ocFlags2 & OC2_HIT_PLAYER) || (this->collider.base.atFlags & AT_BOUNCED)) &&
-            (this->actionFunc == EnNeoReeba_Move)) {
-            EnNeoReeba_SetupBounce(this);
-        }
+    } else if (((this->collider.base.ocFlags2 & OC2_HIT_PLAYER) || (this->collider.base.atFlags & AT_BOUNCED)) &&
+               (this->actionFunc == EnNeoReeba_Move)) {
+        EnNeoReeba_SetupBounce(this);
     }
+
     if ((this->actionFunc != EnNeoReeba_WaitUnderground) && (this->actionFunc != EnNeoReeba_Sink) &&
         (this->actionFunc != EnNeoReeba_RiseOutOfGround) && (this->actionFunc != EnNeoReeba_DamageAnim) &&
         (this->actionFunc != EnNeoReeba_PlayDeathEffects)) {
@@ -663,9 +664,9 @@ void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play) {
     static Color_RGBA8 sIcePrimColor = { 170, 255, 255, 255 };
     static Color_RGBA8 sIceEnvColor = { 200, 200, 255, 255 };
     static Vec3f sIceAccel = { 0.0f, -1.0f, 0.0f };
-    Vec3f iceVel;
-    f32 xVel;
-    f32 zVel;
+    Vec3f iceVelocity;
+    f32 xVelocity;
+    f32 zVelocity;
     s32 i;
     s16 yaw;
     s32 j;
@@ -674,15 +675,15 @@ void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play) {
 
     for (i = 0; i < EN_NEO_REEBA_BODYPART_MAX; i++) {
         yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->bodyPartsPos[i]);
-        xVel = Math_SinS(yaw) * 3.0f;
-        zVel = Math_CosS(yaw) * 3.0f;
+        xVelocity = Math_SinS(yaw) * 3.0f;
+        zVelocity = Math_CosS(yaw) * 3.0f;
 
         for (j = 0; j < 4; j++) {
-            iceVel.x = (Rand_Centered() * 3.0f) + xVel;
-            iceVel.z = (Rand_Centered() * 3.0f) + zVel;
-            iceVel.y = (Rand_ZeroOne() * 6.0f) + 4.0f;
-            EffectSsEnIce_Spawn(play, &this->bodyPartsPos[i], 0.7f, &iceVel, &sIceAccel, &sIcePrimColor, &sIceEnvColor,
-                                30);
+            iceVelocity.x = (Rand_Centered() * 3.0f) + xVelocity;
+            iceVelocity.z = (Rand_Centered() * 3.0f) + zVelocity;
+            iceVelocity.y = (Rand_ZeroOne() * 6.0f) + 4.0f;
+            EffectSsEnIce_Spawn(play, &this->bodyPartsPos[i], 0.7f, &iceVelocity, &sIceAccel, &sIcePrimColor,
+                                &sIceEnvColor, 30);
         }
     }
 }

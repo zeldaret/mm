@@ -305,7 +305,7 @@ void EnRu_Update(Actor* thisx, PlayState* play) {
     EnRu_UpdateCollider(this, play);
 }
 
-s32 EnRu_OverrideLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+s32 EnRu_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                           Gfx** gfx) {
     EnRu* this = THIS;
 
@@ -330,7 +330,7 @@ s32 EnRu_OverrideLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     return false;
 }
 
-void EnRu_PostLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnRu_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnRu* this = THIS;
     Vec3f headFocus = { 800.0f, 0, 0 };
     Vec3f bodyPartPos = { 0, 0, 0 };
@@ -384,7 +384,7 @@ void EnRu_Draw(Actor* thisx, PlayState* play) {
 
     POLY_OPA_DISP =
         SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                           EnRu_OverrideLimbdraw, EnRu_PostLimbdraw, &this->actor, POLY_OPA_DISP);
+                           EnRu_OverrideLimbDraw, EnRu_PostLimbDraw, &this->actor, POLY_OPA_DISP);
 
     Matrix_RotateXS(0, MTXMODE_NEW);
 

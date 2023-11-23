@@ -21,6 +21,8 @@
 #include "sfx.h"
 #include "message_data_static.h"
 
+#include "main.h"
+
 #include "gfx.h"
 #include "gfxprint.h"
 #include "padutils.h"
@@ -47,6 +49,7 @@
 #include "z64game.h"
 #include "z64interface.h"
 #include "z64item.h"
+#include "z64lib.h"
 #include "z64light.h"
 #include "z64map.h"
 #include "z64math.h"
@@ -59,6 +62,7 @@
 #include "z64save.h"
 #include "z64scene.h"
 #include "z64schedule.h"
+#include "z64skin_matrix.h"
 #include "z64skin.h"
 #include "z64skybox.h"
 #include "z64sound_source.h"

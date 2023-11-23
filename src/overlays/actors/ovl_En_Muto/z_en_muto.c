@@ -162,7 +162,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
         this->actor.textId = 0x2363;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnMuto_SetupDialogue(this, play);
         return;
     }

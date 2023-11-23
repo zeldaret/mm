@@ -1,8 +1,15 @@
-#include "global.h"
-#include "sys_cfb.h"
+#include "prevent_bss_reordering.h"
 #include "z64speed_meter.h"
-#include "z64view.h"
+
+#include "gfx.h"
+#include "regs.h"
+#include "sys_cfb.h"
 #include "system_malloc.h"
+#include "z64game.h"
+#include "z64malloc.h"
+#include "z64view.h"
+
+#include "variables.h"
 
 /**
  * How much time the RSP ran audio tasks for over the course of `gGraphUpdatePeriod`.
