@@ -754,12 +754,12 @@ s32 EnFirefly_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 }
 
 void EnFirefly_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    static Color_RGBA8 fireAuraPrimColor = { 255, 255, 100, 255 };
-    static Color_RGBA8 fireAuraEnvColor = { 255, 50, 0, 0 };
-    static Color_RGBA8 iceAuraPrimColor = { 100, 200, 255, 255 };
-    static Color_RGBA8 iceAuraEnvColor = { 0, 0, 255, 0 };
-    static Vec3f auraVelocity = { 0.0f, 0.5f, 0.0f };
-    static Vec3f auraAccel = { 0.0f, 0.5f, 0.0f };
+    static Color_RGBA8 sFireAuraPrimColor = { 255, 255, 100, 255 };
+    static Color_RGBA8 sFireAuraEnvColor = { 255, 50, 0, 0 };
+    static Color_RGBA8 sIceAuraPrimColor = { 100, 200, 255, 255 };
+    static Color_RGBA8 sIceAuraEnvColor = { 0, 0, 255, 0 };
+    static Vec3f sAuraVelocity = { 0.0f, 0.5f, 0.0f };
+    static Vec3f sAuraAccel = { 0.0f, 0.5f, 0.0f };
     Vec3f auraPos;
     Color_RGBA8* auraPrimColor;
     Color_RGBA8* auraEnvColor;
@@ -795,14 +795,14 @@ void EnFirefly_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         }
 
         if (this->auraType == KEESE_AURA_FIRE) {
-            auraPrimColor = &fireAuraPrimColor;
-            auraEnvColor = &fireAuraEnvColor;
+            auraPrimColor = &sFireAuraPrimColor;
+            auraEnvColor = &sFireAuraEnvColor;
         } else {
-            auraPrimColor = &iceAuraPrimColor;
-            auraEnvColor = &iceAuraEnvColor;
+            auraPrimColor = &sIceAuraPrimColor;
+            auraEnvColor = &sIceAuraEnvColor;
         }
 
-        func_800B0F80(play, &auraPos, &auraVelocity, &auraAccel, auraPrimColor, auraEnvColor, 250, auraScaleStep,
+        func_800B0F80(play, &auraPos, &sAuraVelocity, &sAuraAccel, auraPrimColor, auraEnvColor, 250, auraScaleStep,
                       auraLife);
     }
 

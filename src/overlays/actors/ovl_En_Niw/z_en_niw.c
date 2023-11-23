@@ -13,7 +13,7 @@
 
 void EnNiw_Init(Actor* thisx, PlayState* play);
 void EnNiw_Destroy(Actor* thisx, PlayState* play);
-void EnNiw_Update(Actor* thisx, PlayState* play);
+void EnNiw_Update(Actor* thisx, PlayState* play2);
 void EnNiw_Draw(Actor* thisx, PlayState* play);
 void EnNiw_SetupIdle(EnNiw* this);
 void EnNiw_Idle(EnNiw* this, PlayState* play);
@@ -31,7 +31,7 @@ void EnNiw_UpdateFeather(EnNiw* this, PlayState* play);
 void EnNiw_DrawFeathers(EnNiw* this, PlayState* play);
 void EnNiw_CheckRage(EnNiw* this, PlayState* play);
 void EnNiw_AnimateWingHead(EnNiw* this, PlayState* play, s16 animationState);
-void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
+void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 scale);
 
 s16 sCuccoStormActive = false;
 
@@ -279,9 +279,9 @@ void EnNiw_SpawnAttackNiw(EnNiw* this, PlayState* play) {
         xView = play->view.at.x - play->view.eye.x;
         yView = play->view.at.y - play->view.eye.y;
         zView = play->view.at.z - play->view.eye.z;
-        newNiwPos.x = ((Rand_ZeroOne() - 0.5f) * xView) + play->view.eye.x;
-        newNiwPos.y = Rand_CenteredFloat(0.3f) + (play->view.eye.y + 50.0f + (yView * 0.5f));
-        newNiwPos.z = ((Rand_ZeroOne() - 0.5f) * zView) + play->view.eye.z;
+        newNiwPos.x = play->view.eye.x + ((Rand_ZeroOne() - 0.5f) * xView);
+        newNiwPos.y = play->view.eye.y + 50.0f + (yView * 0.5f) + Rand_CenteredFloat(0.3f);
+        newNiwPos.z = play->view.eye.z + ((Rand_ZeroOne() - 0.5f) * zView);
         attackNiw = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ATTACK_NIW, newNiwPos.x,
                                        newNiwPos.y, newNiwPos.z, 0, 0, 0, ATTACK_NIW_REGULAR);
 
@@ -310,7 +310,7 @@ void EnNiw_UpdateRunning(EnNiw* this, PlayState* play, s32 isStormCucco) {
         this->runningDirectionTimer = 5;
     }
 
-    if (this->isRunningRight == false) {
+    if (!this->isRunningRight) {
         runningDirection = runningAngles[isStormCucco];
     } else {
         runningDirection = -runningAngles[isStormCucco];
@@ -354,9 +354,9 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
             this->actor.speed = 0.0f;
             this->actionFunc = EnNiw_Held;
             return;
-        } else {
-            Actor_OfferCarry(&this->actor, play);
         }
+
+        Actor_OfferCarry(&this->actor, play);
     } else { // NIW_TYPE_UNK1 || NIW_TYPE_HELD
         this->unkIdleTimer2 = 10;
     }
@@ -568,15 +568,9 @@ void EnNiw_Swimming(EnNiw* this, PlayState* play) {
 }
 
 void EnNiw_Trigger(EnNiw* this, PlayState* play) {
-    s32 state;
-
-    // Possible Fake Match: the weird way this state is set
-    if (1) {
-        state = NIW_STATE_ANGRY1;
-    }
-
     this->cuccoStormTimer = 10;
-    this->niwState = this->nextAnimIndex = state; // NIW_ANIM_HEAD_PECKING
+    this->nextAnimIndex = NIW_ANIM_HEAD_PECKING;
+    this->niwState = NIW_STATE_ANGRY1;
     this->actionFunc = EnNiw_Upset;
 }
 
@@ -740,22 +734,20 @@ void EnNiw_CheckRage(EnNiw* this, PlayState* play) {
     }
 }
 
-void EnNiw_Update(Actor* thisx, PlayState* play) {
+void EnNiw_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnNiw* this = THIS;
-    s8 pad0;
-    s16 i;
     Player* player = GET_PLAYER(play);
-    s16 pad1;
+    s16 i;
     s16 featherCount;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f accel;
-    s32 pad2[10];
+    s32 pad[11];
     f32 featherScale;
     f32 viewAtToEyeNormY;
     f32 floorHeight;
     f32 dist = 20.0f;
-    s32 pad3;
 
     this->unusedCounter28C++;
 
@@ -773,9 +765,9 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
             featherCount = 4;
         }
         for (i = 0; i < featherCount; i++) {
-            pos.x = Rand_CenteredFloat(10.0f) + this->actor.world.pos.x;
-            pos.y = Rand_CenteredFloat(10.0f) + (this->actor.world.pos.y + this->unk308);
-            pos.z = Rand_CenteredFloat(10.0f) + this->actor.world.pos.z;
+            pos.x = this->actor.world.pos.x + Rand_CenteredFloat(10.0f);
+            pos.y = this->actor.world.pos.y + this->unk308 + Rand_CenteredFloat(10.0f);
+            pos.z = this->actor.world.pos.z + Rand_CenteredFloat(10.0f);
             featherScale = Rand_ZeroFloat(6.0f) + 6.0f;
 
             if ((this->unk29E == 2) && (this->unk308 != 0)) {
@@ -785,13 +777,13 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
             if (this->unk308 == 0) {
                 featherScale = Rand_ZeroFloat(2.0f) + 2.0f;
             }
-            vel.x = Rand_CenteredFloat(3.0f);
-            vel.y = Rand_ZeroFloat(2.0f) * 0.5f + 2.0f;
-            vel.z = Rand_CenteredFloat(3.0f);
+            velocity.x = Rand_CenteredFloat(3.0f);
+            velocity.y = Rand_ZeroFloat(2.0f) * 0.5f + 2.0f;
+            velocity.z = Rand_CenteredFloat(3.0f);
             accel.z = accel.x = 0.0f;
             accel.y = -0.15f;
 
-            EnNiw_SpawnFeather(this, &pos, &vel, &accel, featherScale);
+            EnNiw_SpawnFeather(this, &pos, &velocity, &accel, featherScale);
         }
         this->unk29E = 0;
     }
@@ -861,7 +853,7 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
         this->isStormActive = this->unusedCounter28C = this->unk292 = this->unk29E = this->unk298 = this->isRunningRight = this->nextAnimIndex = 0;
         // clang-format on
 
-        for (i = 0; i < 10; i++) {
+        for (i = 0; i < ARRAY_COUNT(this->targetLimbRots); i++) {
             this->targetLimbRots[i] = 0.0f;
         }
 
@@ -890,6 +882,7 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
     }
 
     EnNiw_CheckRage(this, play);
+
     if ((this->flutterSfxTimer == 0) && (this->niwState == NIW_STATE_HELD)) {
         this->flutterSfxTimer = 7;
         Actor_PlaySfx(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
@@ -908,8 +901,6 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
     if (!this->isStormActive && (this->niwType == NIW_TYPE_REGULAR)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-
-        if (play) {}
 
         if ((this->niwState != NIW_STATE_HELD) && (this->niwState != NIW_STATE_FALLING)) {
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -948,15 +939,15 @@ void EnNiw_Draw(Actor* thisx, PlayState* play) {
     EnNiw_DrawFeathers(this, play);
 }
 
-void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale) {
+void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 scale) {
     s16 i;
     EnNiwFeather* feather = &this->feathers[0];
 
     for (i = 0; i < ARRAY_COUNT(this->feathers); i++, feather++) {
-        if (feather->isEnabled == false) {
+        if (!feather->isEnabled) {
             feather->isEnabled = true;
             feather->pos = *pos;
-            feather->vel = *vel;
+            feather->velocity = *velocity;
             feather->accel = *accel;
             feather->timer = 0;
             feather->scale = scale / 1000.0f;
@@ -975,18 +966,18 @@ void EnNiw_UpdateFeather(EnNiw* this, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->feathers); i++, feather++) {
         if (feather->isEnabled) {
             feather->timer++;
-            feather->pos.x += feather->vel.x;
-            feather->pos.y += feather->vel.y;
-            feather->pos.z += feather->vel.z;
-            feather->vel.x += feather->accel.x;
-            feather->vel.y += feather->accel.y;
-            feather->vel.z += feather->accel.z;
+            feather->pos.x += feather->velocity.x;
+            feather->pos.y += feather->velocity.y;
+            feather->pos.z += feather->velocity.z;
+            feather->velocity.x += feather->accel.x;
+            feather->velocity.y += feather->accel.y;
+            feather->velocity.z += feather->accel.z;
             if (feather->isEnabled == true) {
                 feather->zRotStart++;
-                Math_ApproachF(&feather->vel.x, 0.0f, 1.0f, featherVelocityGoal);
-                Math_ApproachF(&feather->vel.z, 0.0f, 1.0f, featherVelocityGoal);
-                if (feather->vel.y < -0.5f) {
-                    feather->vel.y = -0.5f;
+                Math_ApproachF(&feather->velocity.x, 0.0f, 1.0f, featherVelocityGoal);
+                Math_ApproachF(&feather->velocity.z, 0.0f, 1.0f, featherVelocityGoal);
+                if (feather->velocity.y < -0.5f) {
+                    feather->velocity.y = -0.5f;
                 }
 
                 feather->zRot = Math_SinS(feather->zRotStart * 0xBB8) * M_PI * 0.2f;

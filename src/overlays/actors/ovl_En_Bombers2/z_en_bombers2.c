@@ -189,7 +189,7 @@ void func_80C04BA0(EnBombers2* this, PlayState* play) {
         this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS_HIDEOUT_GUARD);
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2B6 = this->actor.world.rot.y;
         SET_WEEKEVENTREG(WEEKEVENTREG_86_02);
         func_80C04D00(this);
@@ -442,7 +442,7 @@ void EnBombers2_Update(Actor* thisx, PlayState* play) {
     Math_Vec3f_Copy(&this->actor.world.pos, &sp34);
 }
 
-s32 func_80C056D4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnBombers2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBombers2* this = THIS;
 
     if (limbIndex == OBJECT_CS_LIMB_08) {
@@ -470,6 +470,6 @@ void EnBombers2_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sSetPrimColorDlPtr));
     Scene_SetRenderModeXlu(play, 0, 1);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80C056D4, NULL, &this->actor);
+                          EnBombers2_OverrideLimbDraw, NULL, &this->actor);
     CLOSE_DISPS(play->state.gfxCtx);
 }

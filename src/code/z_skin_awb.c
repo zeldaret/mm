@@ -1,5 +1,7 @@
-#include "global.h"
 #include "z64skin.h"
+
+#include "global.h"
+#include "z64malloc.h"
 
 void Skin_Setup(Skin* skin) {
     skin->skeletonHeader = NULL;

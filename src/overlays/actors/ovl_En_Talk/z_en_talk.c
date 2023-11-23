@@ -51,7 +51,7 @@ void func_80BDE058(EnTalk* this, PlayState* play) {
 }
 
 void func_80BDE090(EnTalk* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BDE058;
         return;
     }

@@ -216,7 +216,7 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
         this->actor.textId = sTextIds[this->unk_28C];
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80943BC0(this);
         return;
     }

@@ -154,11 +154,11 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, PlayState* play, s32* upcomingChe
 
     // Iterates through all possible checkpoints that are associated with this sceneExitIndex.
     do {
-        if ((Math3D_PointDistToLine2D(
+        if (Math3D_PointDistToLine2D(
                 actor->world.pos.x, actor->world.pos.z, (&sCheckpointPositions[checkpointIterator])[-1].x,
                 (&sCheckpointPositions[checkpointIterator])[-1].z, (&sCheckpointPositions[checkpointIterator])[1].x,
                 (&sCheckpointPositions[checkpointIterator])[1].z, &perpendicularPointX, &perpendicularPointZ,
-                &lineLenSq)) &&
+                &lineLenSq) &&
             (!hasSetCurrentCheckpointOnce || ((curentCheckpoint + 1) == checkpointIterator) ||
              (lineLenSq < minLineLengthSq))) {
             minLineLengthSq = lineLenSq;
@@ -313,23 +313,19 @@ void EnMttag_RaceStart(EnMttag* this, PlayState* play) {
 
             EnMttag_ShowFalseStartMessage(this, play);
             SET_EVENTINF(EVENTINF_13);
-        } else {
-            if (DECR(this->timer) == 60) {
-                Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
-                play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
-                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GORON_RACE | SEQ_FLAG_ASYNC);
-                play->envCtx.timeSeqState = TIMESEQ_REQUEST;
-                player->stateFlags1 &= ~PLAYER_STATE1_20;
-            } else if ((this->timer < 60) && (play->interfaceCtx.minigameState == MINIGAME_STATE_COUNTDOWN_GO)) {
-                this->timer = 0;
-                SET_EVENTINF(EVENTINF_10);
-                this->actionFunc = EnMttag_Race;
-            }
+        } else if (DECR(this->timer) == 60) {
+            Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
+            play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
+            SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GORON_RACE | SEQ_FLAG_ASYNC);
+            play->envCtx.timeSeqState = TIMESEQ_REQUEST;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
+        } else if ((this->timer < 60) && (play->interfaceCtx.minigameState == MINIGAME_STATE_COUNTDOWN_GO)) {
+            this->timer = 0;
+            SET_EVENTINF(EVENTINF_10);
+            this->actionFunc = EnMttag_Race;
         }
-    } else {
-        if (EnMttag_AreFourRaceGoronsPresent(this, play)) {
-            this->raceInitialized = true;
-        }
+    } else if (EnMttag_AreFourRaceGoronsPresent(this, play)) {
+        this->raceInitialized = true;
     }
 }
 
@@ -341,7 +337,7 @@ s32 EnMttag_IsAnyRaceGoronOverFinishLine(EnMttag* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->raceGorons); i++) {
-        if ((EnMttag_IsInFinishLine(&this->raceGorons[i]->actor.world.pos)) &&
+        if (EnMttag_IsInFinishLine(&this->raceGorons[i]->actor.world.pos) &&
             (this->raceGorons[i]->actor.update != NULL)) {
             isAnyRaceGoronOverFinishLine = true;
             break;
@@ -417,7 +413,7 @@ void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
 void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == TEXT_STATE_5 && Message_ShouldAdvance(play)) || talkState == TEXT_STATE_CLOSING)) {
+    if (((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) || (talkState == TEXT_STATE_CLOSING)) {
         if (this->shouldRestartRace) {
             play->nextEntrance = ENTRANCE(GORON_RACETRACK, 1);
 

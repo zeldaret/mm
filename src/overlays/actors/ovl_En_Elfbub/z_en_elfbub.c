@@ -62,6 +62,7 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 16.0f, ActorShadow_DrawCircle, 0.2f);
+    //! @bug: hint Id not correctly migrated from OoT `NAVI_ENEMY_SHABOM`
     this->actor.hintId = TATL_HINT_ID_IGOS_DU_IKANA;
     Actor_SetScale(&this->actor, 1.25f);
 

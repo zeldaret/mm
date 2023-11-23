@@ -1,10 +1,10 @@
-#include "global.h"
+#include "gamealloc.h"
+
 #include "libc64/malloc.h"
 
 void GameAlloc_Log(GameAlloc* this) {
-    GameAllocEntry* iter;
+    GameAllocEntry* iter = this->base.next;
 
-    iter = this->base.next;
     while (iter != &this->base) {
         iter = iter->next;
     }

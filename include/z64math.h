@@ -2,6 +2,7 @@
 #define Z64MATH_H
 
 #include "ultra64.h"
+#include "libc/math.h"
 
 #include "libc64/math64.h"
 

@@ -184,7 +184,8 @@ void func_80BE0664(EnTab* this) {
 s32 func_80BE06DC(EnTab* this, PlayState* play) {
     s32 ret = false;
 
-    if (((this->unk_2FC & 7) != SUBS_OFFER_MODE_NONE) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (((this->unk_2FC & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         ret = true;
         this->unk_320 = 0;

@@ -10,9 +10,11 @@
  * gets sucked into.
  */
 
-#include "global.h"
+#include "z64transition.h"
+
 #include "libc64/sleep.h"
 #include "libc64/malloc.h"
+#include "macros.h"
 
 Gfx sTransTileSetupDL[] = {
     gsDPPipeSync(),

@@ -1241,8 +1241,8 @@ void func_8088F214(EnElf* this, PlayState* play) {
 }
 
 void func_8088F5F4(EnElf* this, PlayState* play, s32 sparkleLife) {
-    static Vec3f sparkleVelocity = { 0.0f, -0.05f, 0.0f };
-    static Vec3f sparkleAccel = { 0.0f, -0.025f, 0.0f };
+    static Vec3f sSparkleVelocity = { 0.0f, -0.05f, 0.0f };
+    static Vec3f sSparkleAccel = { 0.0f, -0.025f, 0.0f };
     s32 pad;
     Vec3f sparklePos;
     Color_RGBA8 primColor;
@@ -1261,8 +1261,8 @@ void func_8088F5F4(EnElf* this, PlayState* play, s32 sparkleLife) {
         envColor.g = this->outerColor.g;
         envColor.b = this->outerColor.b;
 
-        EffectSsKirakira_SpawnDispersed(play, &sparklePos, &sparkleVelocity, &sparkleAccel, &primColor, &envColor, 1000,
-                                        sparkleLife);
+        EffectSsKirakira_SpawnDispersed(play, &sparklePos, &sSparkleVelocity, &sSparkleAccel, &primColor, &envColor,
+                                        1000, sparkleLife);
     }
 }
 
@@ -1473,7 +1473,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         thisx->flags |= ACTOR_FLAG_10000;
     }
 
-    if (Actor_ProcessTalkRequest(thisx, &play->state)) {
+    if (Actor_TalkOfferAccepted(thisx, &play->state)) {
         Audio_PlaySfx_AtPosWithReverb(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
         thisx->focus.pos = thisx->world.pos;
 
@@ -1487,7 +1487,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         thisx->update = func_8088FE64;
         func_8088C51C(this, 3);
         if (this->elfMsg != NULL) {
-            this->elfMsg->flags |= ACTOR_FLAG_TALK_REQUESTED;
+            this->elfMsg->flags |= ACTOR_FLAG_TALK;
             thisx->csId = this->elfMsg->csId;
             if (thisx->csId != CS_ID_NONE) {
                 func_8088FD04(this);
@@ -1550,7 +1550,7 @@ void EnElf_Update(Actor* thisx, PlayState* play) {
 
 s32 EnElf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                            Gfx** gfx) {
-    static Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
     s32 pad;
     EnElf* this = THIS;
     Vec3f sp34;
@@ -1563,7 +1563,7 @@ s32 EnElf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         }
         scale *= this->actor.scale.x * (1.0f / 0.008f);
 
-        Matrix_MultVec3f(&zeroVec, &sp34);
+        Matrix_MultVec3f(&sZeroVec, &sp34);
         Matrix_Translate(sp34.x, sp34.y, sp34.z, MTXMODE_NEW);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     }

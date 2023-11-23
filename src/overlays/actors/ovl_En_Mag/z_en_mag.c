@@ -423,6 +423,9 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                         this->state = MAG_STATE_POST_DISPLAY;
                     }
                     break;
+
+                default:
+                    break;
             }
 
             // Appear fully immediately if called during fade-in states.
@@ -676,7 +679,7 @@ void EnMag_DrawCharTexture(Gfx** gfxp, TexturePtr texture, s32 rectLeft, s32 rec
  * POLY_OPA_DISP, but is used by OVERLAY_DISP.
  */
 void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
-    static u8 pressStartFontIndices[] = {
+    static u8 sPressStartFontIndices[] = {
         0x19, 0x1B, 0x0E, 0x1C, 0x1C, 0x1C, 0x1D, 0x0A, 0x1B, 0x1D,
     }; // Indices into this->font.fontBuf
     static TexturePtr sAppearEffectMaskTextures[] = {
@@ -910,8 +913,8 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, sTextAlpha);
 
         rectLeft = PRESS_START_LEFT + 1;
-        for (i = 0; i < ARRAY_COUNT(pressStartFontIndices); i++) {
-            EnMag_DrawCharTexture(&gfx, font->fontBuf + pressStartFontIndices[i] * FONT_CHAR_TEX_SIZE, rectLeft,
+        for (i = 0; i < ARRAY_COUNT(sPressStartFontIndices); i++) {
+            EnMag_DrawCharTexture(&gfx, font->fontBuf + sPressStartFontIndices[i] * FONT_CHAR_TEX_SIZE, rectLeft,
                                   PRESS_START_TOP + 1);
 
             rectLeft += PRESS_START_CHAR_SPACING;
@@ -925,8 +928,8 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
         gDPSetPrimColor(gfx++, 0, 0, 255, 30, 30, sTextAlpha);
 
         rectLeft = PRESS_START_LEFT;
-        for (i = 0; i < ARRAY_COUNT(pressStartFontIndices); i++) {
-            EnMag_DrawCharTexture(&gfx, font->fontBuf + pressStartFontIndices[i] * FONT_CHAR_TEX_SIZE, rectLeft,
+        for (i = 0; i < ARRAY_COUNT(sPressStartFontIndices); i++) {
+            EnMag_DrawCharTexture(&gfx, font->fontBuf + sPressStartFontIndices[i] * FONT_CHAR_TEX_SIZE, rectLeft,
                                   PRESS_START_TOP);
             rectLeft += PRESS_START_CHAR_SPACING;
             if (i == 4) {
