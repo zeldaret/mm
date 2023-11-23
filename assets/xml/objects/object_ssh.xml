@@ -15,7 +15,6 @@
         <Texture Name="object_ssh_Tex_001D70" OutName="tex_001D70" Format="ci8" Width="8" Height="16" Offset="0x1D70" />
         <Texture Name="object_ssh_Tex_001DF0" OutName="tex_001DF0" Format="ci8" Width="32" Height="32" Offset="0x1DF0" />
         <Texture Name="object_ssh_Tex_0021F0" OutName="tex_0021F0" Format="ci8" Width="32" Height="32" Offset="0x21F0" />
-        <Blob Name="object_ssh_Blob_0025F0" Size="0x2870" Offset="0x25F0" />
         <DList Name="object_ssh_DL_004E60" Offset="0x4E60" />
         <DList Name="object_ssh_DL_005210" Offset="0x5210" />
         <DList Name="object_ssh_DL_0056A0" Offset="0x56A0" />

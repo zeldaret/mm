@@ -1519,7 +1519,6 @@ extern TriNorm D_801EF590;
 extern TriNorm D_801EF5C8;
 extern TriNorm D_801EF600;
 extern TriNorm D_801EF638;
-extern SaveContext gSaveContext;
 
 // extern UNK_TYPE1 D_801F4E20;
 // extern UNK_TYPE1 sBeatingHeartsDDPrim;
@@ -1532,7 +1531,7 @@ extern SaveContext gSaveContext;
 // extern UNK_TYPE1 D_801F4F66;
 // extern UNK_TYPE1 D_801F4F68;
 // extern UNK_TYPE1 D_801F4F6A;
-// extern LightsBuffer sLightsBuffer;
+
 // extern UNK_TYPE1 D_801F5130;
 // extern UNK_TYPE1 D_801F5270;
 // extern UNK_TYPE1 D_801F528E;
@@ -1652,7 +1651,6 @@ extern AudioCustomReverbFunction gAudioCustomReverbFunction;
 extern AudioCustomSynthFunction gAudioCustomSynthFunction;
 
 // other segments
-extern GfxMasterList D_0E000000;
 extern Mtx D_01000000;
 extern u16 D_0F000000[];
 

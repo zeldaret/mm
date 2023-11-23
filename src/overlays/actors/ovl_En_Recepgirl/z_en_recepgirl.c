@@ -100,7 +100,7 @@ void EnRecepgirl_Wait(EnRecepgirl* this, PlayState* play) {
         }
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnRecepgirl_SetupTalk(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         Actor_OfferTalk(&this->actor, play, 60.0f);

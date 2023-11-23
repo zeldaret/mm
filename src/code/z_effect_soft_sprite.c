@@ -1,5 +1,6 @@
 #include "global.h"
 #include "loadfragment.h"
+#include "z64malloc.h"
 
 EffectSsInfo sEffectSsInfo = { NULL, 0, 0 };
 

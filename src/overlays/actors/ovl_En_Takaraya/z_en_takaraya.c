@@ -16,10 +16,8 @@ void EnTakaraya_Destroy(Actor* thisx, PlayState* play);
 void EnTakaraya_Update(Actor* thisx, PlayState* play);
 void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 
-void EnTakaraya_Blink(EnTakaraya* this);
 void EnTakaraya_SetupWait(EnTakaraya* this);
 void EnTakaraya_Wait(EnTakaraya* this, PlayState* play);
-void EnTakaraya_SpawnWalls(EnTakaraya* this, PlayState* play);
 void EnTakaraya_SetupTalk(EnTakaraya* this);
 void EnTakaraya_Talk(EnTakaraya* this, PlayState* play);
 void func_80ADF2D4(EnTakaraya* this);
@@ -32,8 +30,6 @@ void func_80ADF6DC(EnTakaraya* this);
 void func_80ADF730(EnTakaraya* this, PlayState* play);
 void func_80ADF7B8(EnTakaraya* this);
 void func_80ADF7CC(EnTakaraya* this, PlayState* play);
-s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void EnTakaraya_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx);
 
 ActorInit En_Takaraya_InitVars = {
     /**/ ACTOR_EN_TAKARAYA,
@@ -175,7 +171,7 @@ void EnTakaraya_Wait(EnTakaraya* this, PlayState* play) {
             Animation_MorphToLoop(&this->skelAnime, &object_bg_Anim_009890, -4.0f);
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL) == 0) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00A280, -4.0f);
         }
@@ -354,7 +350,7 @@ void func_80ADF6DC(EnTakaraya* this) {
 
 void func_80ADF730(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80ADF7B8(this);
     } else {

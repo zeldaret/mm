@@ -159,7 +159,7 @@ void ElfMsg4_Update(Actor* thisx, PlayState* play) {
             return;
         }
 
-        if ((bgActor != NULL) && Actor_ProcessTalkRequest(bgActor, &play->state)) {
+        if ((bgActor != NULL) && Actor_TalkOfferAccepted(bgActor, &play->state)) {
             if (ELFMSG4_GET_SWITCH_FLAG(thisx) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG4_GET_SWITCH_FLAG(thisx));
             }

@@ -31,12 +31,10 @@ void func_808B057C(EnAm* this);
 void func_808B05C8(EnAm* this, PlayState* play);
 void func_808B0640(EnAm* this);
 void func_808B066C(EnAm* this, PlayState* play);
-void EnAm_TakeDamage(EnAm* this, PlayState* play);
 void func_808B07A8(EnAm* this, PlayState* play);
 void func_808B0820(EnAm* this);
 void func_808B0894(EnAm* this, PlayState* play);
 void func_808B0B4C(EnAm* this, PlayState* play);
-void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Am_InitVars = {
     /**/ ACTOR_EN_AM,
@@ -183,7 +181,7 @@ void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
         EffectSsKirakira_SpawnSmall(play, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
     }
     Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_WALK);
-    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, 0);
+    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, false);
 }
 
 void func_808AFF9C(EnAm* this) {

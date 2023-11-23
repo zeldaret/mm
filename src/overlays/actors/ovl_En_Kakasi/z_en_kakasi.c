@@ -327,7 +327,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.flags |= ACTOR_FLAG_10000;
             }
 
-            if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+            if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 this->unkState196 = 2;
                 this->picto.actor.flags &= ~ACTOR_FLAG_10000;
@@ -346,8 +346,8 @@ void EnKakasi_SetupIdleStanding(EnKakasi* this) {
 
 void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
     u32 day = gSaveContext.save.day;
-    s16 x;
-    s16 y;
+    s16 screenPosX;
+    s16 screenPosY;
 
     // first talk to scarecrow dialogue
     this->picto.actor.textId = 0x1644;
@@ -356,15 +356,15 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
         EnKakasi_SetupSongTeach(this, play);
         return;
     }
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->skelAnime.playSpeed = 1.0f;
         EnKakasi_SetupDialogue(this);
         return;
     }
     if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
-        Actor_GetScreenPos(play, &this->picto.actor, &x, &y);
-        if ((this->picto.actor.projectedPos.z > -20.0f) && (x > 0) && (x < SCREEN_WIDTH) && (y > 0) &&
-            (y < SCREEN_HEIGHT) && (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING)) {
+        Actor_GetScreenPos(play, &this->picto.actor, &screenPosX, &screenPosY);
+        if ((this->picto.actor.projectedPos.z > -20.0f) && (screenPosX > 0) && (screenPosX < SCREEN_WIDTH) &&
+            (screenPosY > 0) && (screenPosY < SCREEN_HEIGHT) && (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING)) {
             // faster shaking
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             this->skelAnime.playSpeed = 2.0f;
@@ -1028,7 +1028,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
 
         } else {
             Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->picto.actor.world.pos,
-                                     this->picto.actor.shape.shadowScale - 20.0f, 5, 4.0f, 200, 10, 1);
+                                     this->picto.actor.shape.shadowScale - 20.0f, 5, 4.0f, 200, 10, true);
             Actor_PlaySfx(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
     }
@@ -1092,7 +1092,7 @@ void EnKakasi_RisingOutOfGround(EnKakasi* this, PlayState* play) {
     if (this->picto.actor.shape.yOffset < -10.0f) {
         if ((play->gameplayFrames % 8) == 0) {
             Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->picto.actor.world.pos,
-                                     this->picto.actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
+                                     this->picto.actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, true);
             Actor_PlaySfx(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
         Math_ApproachF(&this->picto.actor.shape.yOffset, 0.0f, 0.5f, 200.0f);
@@ -1111,7 +1111,7 @@ void EnKakasi_SetupIdleRisen(EnKakasi* this) {
 
 void EnKakasi_IdleRisen(EnKakasi* this, PlayState* play) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 1000, 0);
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->actionFunc = EnKakasi_RisenDialogue;
     } else {
         Actor_OfferTalk(&this->picto.actor, play, 70.0f);

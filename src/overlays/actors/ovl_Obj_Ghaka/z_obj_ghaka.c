@@ -72,7 +72,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 yaw = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         func_80B3C29C(this);
     } else if ((this->dyna.actor.xzDistToPlayer < 100.0f) || this->dyna.actor.isLockedOn) {
         if ((yaw <= -0x5556) || (yaw >= 0x5556)) {
