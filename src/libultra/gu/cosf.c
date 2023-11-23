@@ -1,3 +1,4 @@
+#include "ultra64.h"
 #include "libc/math.h"
 #include "ultra64.h"
 #include "z64math.h"

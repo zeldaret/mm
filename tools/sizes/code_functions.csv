@@ -254,10 +254,10 @@ asm/non_matchings/code/z_actor/Player_GetRunSpeedLimit.s,Player_GetRunSpeedLimit
 asm/non_matchings/code/z_actor/func_800B7118.s,func_800B7118,0x800B7118,0x4
 asm/non_matchings/code/z_actor/func_800B7128.s,func_800B7128,0x800B7128,0xD
 asm/non_matchings/code/z_actor/func_800B715C.s,func_800B715C,0x800B715C,0x5
-asm/non_matchings/code/z_actor/Actor_SetCameraHorseSetting.s,Actor_SetCameraHorseSetting,0x800B7170,0x1B
-asm/non_matchings/code/z_actor/Actor_MountHorse.s,Actor_MountHorse,0x800B71DC,0x9
+asm/non_matchings/code/z_actor/Player_SetCameraHorseSetting.s,Player_SetCameraHorseSetting,0x800B7170,0x1B
+asm/non_matchings/code/z_actor/Player_MountHorse.s,Player_MountHorse,0x800B71DC,0x9
 asm/non_matchings/code/z_actor/func_800B7200.s,func_800B7200,0x800B7200,0xB
-asm/non_matchings/code/z_actor/Actor_SpawnHorse.s,Actor_SpawnHorse,0x800B722C,0x8
+asm/non_matchings/code/z_actor/Player_SpawnHorse.s,Player_SpawnHorse,0x800B722C,0x8
 asm/non_matchings/code/z_actor/Player_SetCsAction.s,Player_SetCsAction,0x800B724C,0x13
 asm/non_matchings/code/z_actor/Player_SetCsActionWithHaltedActors.s,Player_SetCsActionWithHaltedActors,0x800B7298,0x12
 asm/non_matchings/code/z_actor/func_800B72E0.s,func_800B72E0,0x800B72E0,0x6
@@ -283,7 +283,7 @@ asm/non_matchings/code/z_actor/Actor_GetWorldPosShapeRot.s,Actor_GetWorldPosShap
 asm/non_matchings/code/z_actor/Target_GetAdjustedDistSq.s,Target_GetAdjustedDistSq,0x800B82EC,0x34
 asm/non_matchings/code/z_actor/Target_IsActorInRange.s,Target_IsActorInRange,0x800B83BC,0xF
 asm/non_matchings/code/z_actor/Target_OutsideLeashRange.s,Target_OutsideLeashRange,0x800B83F8,0x36
-asm/non_matchings/code/z_actor/Actor_ProcessTalkRequest.s,Actor_ProcessTalkRequest,0x800B84D0,0xC
+asm/non_matchings/code/z_actor/Actor_TalkOfferAccepted.s,Actor_TalkOfferAccepted,0x800B84D0,0xC
 asm/non_matchings/code/z_actor/Actor_OfferTalkExchange.s,Actor_OfferTalkExchange,0x800B8500,0x38
 asm/non_matchings/code/z_actor/Actor_OfferTalkExchangeEquiCylinder.s,Actor_OfferTalkExchangeEquiCylinder,0x800B85E0,0xD
 asm/non_matchings/code/z_actor/Actor_OfferTalk.s,Actor_OfferTalk,0x800B8614,0xA

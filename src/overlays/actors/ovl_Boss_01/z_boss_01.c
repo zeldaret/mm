@@ -1953,17 +1953,17 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
 
     if (this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].info.bumperFlags & BUMP_HIT) {
         this->bodyInvincibilityTimer = 5;
-        if (this->damageTimer == 0) {
+        if (this->damagedTimer == 0) {
             ColliderInfo* acHitInfo = this->shieldCollider.elements[ODOLWA_SHIELD_COLLIDER_SHIELD].info.acHitInfo;
 
             if (acHitInfo->toucher.dmgFlags == DMG_SWORD_BEAM) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
                             this->actor.focus.pos.z, 0, 0, 3, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_BOUND);
-                this->damageTimer = 5;
+                this->damagedTimer = 5;
             }
         }
-    } else if (this->damageTimer == 0) {
+    } else if (this->damagedTimer == 0) {
         for (i = 0; i < ODOLWA_SWORD_COLLIDER_MAX; i++) {
             if (this->swordCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
                 this->swordCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
@@ -2014,7 +2014,7 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
                     case ODOLWA_DMGEFF_STUN:
                     stunned:
                         Boss01_SetupStunned(this, play);
-                        this->damageTimer = 15;
+                        this->damagedTimer = 15;
                         Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         this->canGuardOrEvade = false;
                         return;
@@ -2030,14 +2030,14 @@ void Boss01_UpdateDamage(Boss01* this, PlayState* play) {
                     //! @bug: unreachable code. If Odolwa's damage effect is ODOLWA_DMGEFF_STUN, we early-return out of
                     //! the function in the above switch statement.
                     Boss01_SetupStunned(this, play);
-                    this->damageTimer = 15;
+                    this->damagedTimer = 15;
                 } else if (this->actor.colChkInfo.damageEffect == ODOLWA_DMGEFF_DAZE) {
                     Boss01_SetupDazed(this, play);
                     Audio_PlaySfx_AtPos(&sOdolwaDamageSfxPos, NA_SE_EN_MIBOSS_DAMAGE_OLD);
-                    this->damageTimer = 15;
+                    this->damagedTimer = 15;
                 } else {
-                    this->damageFlashTimer = 15;
-                    this->damageTimer = 5;
+                    this->damagedFlashTimer = 15;
+                    this->damagedTimer = 5;
                     this->actor.colChkInfo.health -= damage;
                     if ((s8)this->actor.colChkInfo.health <= 0) {
                         Boss01_SetupDeathCutscene(this, play);
@@ -2382,8 +2382,8 @@ void Boss01_Update(Actor* thisx, PlayState* play2) {
             DECR(this->timers[i]);
         }
 
-        DECR(this->damageTimer);
-        DECR(this->damageFlashTimer);
+        DECR(this->damagedTimer);
+        DECR(this->damagedFlashTimer);
 
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actionFunc(this, play);
@@ -2896,7 +2896,7 @@ void Boss01_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    if (this->damageFlashTimer & 1) {
+    if ((this->damagedFlashTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
 
@@ -3252,16 +3252,16 @@ void Boss01_Bug_UpdateDamage(Boss01* this, PlayState* play) {
         this->bugACCollider.base.acFlags &= ~AC_HIT;
         acHitInfo = this->bugACCollider.info.acHitInfo;
 
-        if (this->damageTimer == 0) {
+        if (this->damagedTimer == 0) {
             Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
             if (acHitInfo->toucher.dmgFlags & 0x300000) {
-                this->damageTimer = 10;
+                this->damagedTimer = 10;
                 Matrix_MultVecZ(-10.0f, &additionalVelocity);
                 this->additionalVelocityX = additionalVelocity.x;
                 this->additionalVelocityZ = additionalVelocity.z;
             } else {
-                this->damageTimer = 15;
-                this->damageFlashTimer = 15;
+                this->damagedTimer = 15;
+                this->damagedFlashTimer = 15;
                 Matrix_MultVecZ(-20.0f, &additionalVelocity);
                 this->additionalVelocityX = additionalVelocity.x;
                 this->additionalVelocityZ = additionalVelocity.z;
@@ -3294,7 +3294,7 @@ void Boss01_Bug_UpdateDamage(Boss01* this, PlayState* play) {
         if ((distXZ < (KREG(49) + 210.0f)) && (distXZ > (KREG(49) + 190.0f))) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_MIZUBABA2_DAMAGE);
             Boss01_Bug_SetupDead(this, play);
-            this->damageFlashTimer = 15;
+            this->damagedFlashTimer = 15;
             this->bugDrawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
             this->actor.speed = 0.0f;
             this->actor.velocity.y = 5.0f;
@@ -3313,8 +3313,8 @@ void Boss01_Bug_Update(Actor* thisx, PlayState* play) {
         DECR(this->timers[i]);
     }
 
-    DECR(this->damageTimer);
-    DECR(this->damageFlashTimer);
+    DECR(this->damagedTimer);
+    DECR(this->damagedFlashTimer);
 
     this->actionFunc(this, play);
 
@@ -3366,7 +3366,7 @@ void Boss01_Bug_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    if (this->damageFlashTimer & 1) {
+    if ((this->damagedFlashTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
 

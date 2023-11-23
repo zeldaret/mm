@@ -291,7 +291,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_1D8 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_1D8 &= ~0x180;
         if (player->exchangeItemAction == PLAYER_IA_PICTOGRAPH_BOX) {
             this->unk_1D8 |= 0x80;

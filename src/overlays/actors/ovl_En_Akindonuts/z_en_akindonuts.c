@@ -1313,7 +1313,7 @@ void func_80BEEE10(EnAkindonuts* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 2000, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2DC(this, play);
         this->actionFunc = func_80BEEFA8;
     } else if (((this->actor.xzDistToPlayer < 100.0f) &&
@@ -1440,7 +1440,7 @@ void func_80BEF450(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEF4B8(EnAkindonuts* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2DC(this, play);
         this->actionFunc = func_80BEEFA8;
     } else {

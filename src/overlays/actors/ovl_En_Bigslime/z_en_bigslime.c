@@ -1965,7 +1965,7 @@ void EnBigslime_SetupMelt(EnBigslime* this) {
 }
 
 void EnBigslime_Melt(EnBigslime* this, PlayState* play) {
-    static Vec3f iceSmokeVelocity = { 0.0f, 2.0f, 0.0f };
+    static Vec3f sIceSmokeVelocity = { 0.0f, 2.0f, 0.0f };
     Vec3f iceSmokePos;
     Vtx* targetVtx;
     Vtx* dynamicVtx;
@@ -1978,7 +1978,7 @@ void EnBigslime_Melt(EnBigslime* this, PlayState* play) {
         iceSmokePos.x = (dynamicVtx->n.ob[0] * this->actor.scale.x) + this->actor.world.pos.x;
         iceSmokePos.y = (dynamicVtx->n.ob[1] * this->actor.scale.y) + this->actor.world.pos.y;
         iceSmokePos.z = (dynamicVtx->n.ob[2] * this->actor.scale.z) + this->actor.world.pos.z;
-        EffectSsIceSmoke_Spawn(play, &iceSmokePos, &iceSmokeVelocity, &gZeroVec3f, 600);
+        EffectSsIceSmoke_Spawn(play, &iceSmokePos, &sIceSmokeVelocity, &gZeroVec3f, 600);
     }
 
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
@@ -2418,9 +2418,9 @@ void EnBigslime_GekkoDespawn(EnBigslime* this, PlayState* play) {
 }
 
 void EnBigslime_SetupFrogSpawn(EnBigslime* this, PlayState* play) {
-    static Color_RGBA8 dustPrimColor = { 250, 250, 250, 255 };
-    static Color_RGBA8 dustEnvColor = { 180, 180, 180, 255 };
-    static Vec3f hahenAccel = { 0.0f, -0.5f, 0.0f };
+    static Color_RGBA8 sDustPrimColor = { 250, 250, 250, 255 };
+    static Color_RGBA8 sDustEnvColor = { 180, 180, 180, 255 };
+    static Vec3f sHahenAccel = { 0.0f, -0.5f, 0.0f };
     Camera* subCam = Play_GetCamera(play, this->subCamId);
     Vec3f* worldPos;
     Vec3f dustPos;
@@ -2442,13 +2442,13 @@ void EnBigslime_SetupFrogSpawn(EnBigslime* this, PlayState* play) {
     SoundSource_PlaySfxAtFixedWorldPos(play, worldPos, 40, NA_SE_EN_NPC_APPEAR);
 
     // dust cloud where the red frog appears
-    func_800B0DE0(play, &dustPos, &gZeroVec3f, &gZeroVec3f, &dustPrimColor, &dustEnvColor, 500, 50);
+    func_800B0DE0(play, &dustPos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 50);
 
     for (i = 0; i < 25; i++) {
         hahenVel.x = Rand_CenteredFloat(5.0f);
         hahenVel.y = Rand_ZeroFloat(3.0f) + 4.0f;
         hahenVel.z = Rand_CenteredFloat(5.0f);
-        EffectSsHahen_Spawn(play, worldPos, &hahenVel, &hahenAccel, 0, Rand_S16Offset(12, 3), HAHEN_OBJECT_DEFAULT, 10,
+        EffectSsHahen_Spawn(play, worldPos, &hahenVel, &sHahenAccel, 0, Rand_S16Offset(12, 3), HAHEN_OBJECT_DEFAULT, 10,
                             0);
     }
 
@@ -3083,24 +3083,24 @@ void EnBigslime_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 }
 
 void EnBigslime_DrawGekko(Actor* thisx, PlayState* play) {
-    static Color_RGBA8 gekkoDamageColor = { 255, 0, 0, 0 };
-    static Color_RGBA8 gekkoStunColor = { 0, 0, 255, 0 };
+    static Color_RGBA8 sGekkoDamageColor = { 255, 0, 0, 0 };
+    static Color_RGBA8 sGekkoStunColor = { 0, 0, 255, 0 };
     Vec3f gekkoPos;
     EnBigslime* this = THIS;
     s32 pad;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->actionFunc == EnBigslime_DamageGekko) {
-        func_800AE434(play, &gekkoDamageColor, this->damageSpinTimer, 20);
+        func_800AE434(play, &sGekkoDamageColor, this->damageSpinTimer, 20);
     } else if ((this->actionFunc == EnBigslime_CutsceneDefeat) || (this->actionFunc == EnBigslime_GekkoDespawn)) {
-        func_800AE434(play, &gekkoDamageColor, 20, 20);
+        func_800AE434(play, &sGekkoDamageColor, 20, 20);
     } else if (this->actionFunc == EnBigslime_StunGekko) {
         if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
-            func_800AE434(play, &gekkoDamageColor, this->stunTimer, 80);
+            func_800AE434(play, &sGekkoDamageColor, this->stunTimer, 80);
         } else if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL) {
-            func_800AE434(play, &gekkoStunColor, this->stunTimer, 40);
+            func_800AE434(play, &sGekkoStunColor, this->stunTimer, 40);
         } else {
-            func_800AE434(play, &gekkoStunColor, this->stunTimer, 40);
+            func_800AE434(play, &sGekkoStunColor, this->stunTimer, 40);
         }
     }
 

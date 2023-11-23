@@ -499,11 +499,11 @@ s32 func_8093F6F8(EnGoroiwa* this, PlayState* play) {
     }
 
     if (this->unk_1CA == 0) {
-        WaterBox* sp44;
+        WaterBox* waterBox;
         f32 sp40;
 
         if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp40,
-                                   &sp44)) {
+                                   &waterBox)) {
             if ((this->actor.world.pos.y + this->unk_1DC) <= sp40) {
                 this->unk_1E5 |= 0x20;
                 if (sp40 < (this->unk_1DC + sp78)) {

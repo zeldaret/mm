@@ -1,4 +1,8 @@
-#include "global.h"
+#include "z64skin_matrix.h"
+
+#include "gfx.h"
+#include "macros.h"
+#include "z64math.h"
 
 MtxF sMtxFClear = { {
     { 1.0f, 0.0f, 0.0f, 0.0f },
