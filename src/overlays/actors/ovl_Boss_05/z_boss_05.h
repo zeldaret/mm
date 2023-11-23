@@ -81,7 +81,7 @@ typedef struct Boss05 {
     /* 0x178 */ s16 lilyPadRotX;
     /* 0x17A */ s16 drawDmgEffTimer;
     /* 0x17C */ f32 drawDmgEffScale;
-    /* 0x180 */ f32 dmgEffFrozenSteamScale;
+    /* 0x180 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x184 */ f32 drawDmgEffAlpha;
     /* 0x188 */ u8 drawDmgEffState;
     /* 0x189 */ u8 drawDmgEffType;

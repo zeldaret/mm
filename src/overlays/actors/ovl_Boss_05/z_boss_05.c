@@ -491,13 +491,13 @@ s32 Boss05_LilyPadWithHead_UpdateDamage(Boss05* this, PlayState* play) {
                     if ((s8)this->dyna.actor.colChkInfo.health <= 0) {
                         Enemy_StartFinishingBlow(play, &this->dyna.actor);
                         return BIO_BABA_HEAD_HIT_REACTION_DEAD;
-                    } else {
-                        Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
-                        this->damagedFlashTimer = 15;
-                        this->lilyPadWithHeadAttackState = BIO_BABA_LILY_PAD_WITH_HEAD_ATTACK_STATE_IDLE;
-                        this->timers[TIMER_CURRENT_ACTION] = 30;
-                        return BIO_BABA_HEAD_HIT_REACTION_NONE_OR_DAMAGED;
                     }
+
+                    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
+                    this->damagedFlashTimer = 15;
+                    this->lilyPadWithHeadAttackState = BIO_BABA_LILY_PAD_WITH_HEAD_ATTACK_STATE_IDLE;
+                    this->timers[TIMER_CURRENT_ACTION] = 30;
+                    return BIO_BABA_HEAD_HIT_REACTION_NONE_OR_DAMAGED;
                 }
 
                 break;
@@ -817,7 +817,7 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
             for (i = 0; i < 2; i++) {
                 child = (Boss05*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05,
                                                     this->headPos.x, this->headPos.y, this->headPos.z, this->headRot.x,
-                                                    this->headRot.y, this->headRot.z, i + BIO_BABA_TYPE_FRAGMENT_BASE);
+                                                    this->headRot.y, this->headRot.z, BIO_BABA_TYPE_FRAGMENT_BASE + i);
 
                 if (child != NULL) {
                     for (j = 0; j < BIO_DEKU_BABA_HEAD_LIMB_MAX; j++) {
@@ -1029,7 +1029,7 @@ s32 Boss05_WalkingHead_IsLookingAtPlayer(Boss05* this, PlayState* play) {
  * player is not too far above or below the Bio Deku Baba. If all of these conditions are met, it will setup the Bio
  * Deku Baba to play its spotted animation and start charging towards the player.
  */
-void Boss05_WalkingHead_CheckIfPlayerWasSpotted(Boss05* this, PlayState* play) {
+void Boss05_WalkingHead_TrySpottingPlayer(Boss05* this, PlayState* play) {
     if (Boss05_WalkingHead_IsLookingAtPlayer(this, play) && (this->dyna.actor.xyzDistToPlayerSq <= SQ(200.0f)) &&
         (fabsf(this->dyna.actor.playerHeightRel) < 70.0f)) {
         Boss05_WalkingHead_SetupSpottedPlayer(this, play);
@@ -1078,7 +1078,7 @@ void Boss05_WalkingHead_Idle(Boss05* this, PlayState* play) {
         Boss05_WalkingHead_SetupWalk(this, play);
     }
 
-    Boss05_WalkingHead_CheckIfPlayerWasSpotted(this, play);
+    Boss05_WalkingHead_TrySpottingPlayer(this, play);
 }
 
 void Boss05_WalkingHead_SetupWalk(Boss05* this, PlayState* play) {
@@ -1110,7 +1110,7 @@ void Boss05_WalkingHead_Walk(Boss05* this, PlayState* play) {
         Boss05_WalkingHead_SetupIdle(this, play);
     }
 
-    Boss05_WalkingHead_CheckIfPlayerWasSpotted(this, play);
+    Boss05_WalkingHead_TrySpottingPlayer(this, play);
 }
 
 void Boss05_WalkingHead_SetupSpottedPlayer(Boss05* this, PlayState* play) {
@@ -1200,7 +1200,7 @@ void Boss05_WalkingHead_Damaged(Boss05* this, PlayState* play) {
                 fragment = (Boss05*)Actor_SpawnAsChild(
                     &play->actorCtx, &this->dyna.actor, play, ACTOR_BOSS_05, this->dyna.actor.world.pos.x,
                     this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                    this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, i + BIO_BABA_TYPE_FRAGMENT_BASE);
+                    this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, BIO_BABA_TYPE_FRAGMENT_BASE + i);
 
                 if (fragment != NULL) {
                     for (j = 0; j < BIO_DEKU_BABA_HEAD_LIMB_MAX; j++) {
@@ -1368,7 +1368,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffAlpha = 1.0f;
             this->drawDmgEffState++;
             this->drawDmgEffScale = 0.0f;
-            this->dmgEffFrozenSteamScale = 2.0f;
+            this->drawDmgEffFrozenSteamScale = 2.0f;
             // fallthrough
         case BIO_BABA_DRAW_DMGEFF_STATE_FROZEN_ACTIVE:
             if (this->drawDmgEffTimer == 0) {
@@ -1376,7 +1376,7 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffState = BIO_BABA_DRAW_DMGEFF_STATE_NONE;
             } else {
                 Math_ApproachF(&this->drawDmgEffScale, 1.0f, 1.0f, 0.25f);
-                Math_ApproachF(&this->dmgEffFrozenSteamScale, 1.0f, 0.1f, 0.1f);
+                Math_ApproachF(&this->drawDmgEffFrozenSteamScale, 1.0f, 0.1f, 0.1f);
             }
             break;
 
@@ -1661,8 +1661,8 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
                                        this->headSkelAnime.dListCount, Boss05_Head_OverrideLimbDraw,
                                        Boss05_Head_PostLimbDraw, Boss05_Head_TransformLimbDraw, &this->dyna.actor);
 
-        Actor_DrawDamageEffects(play, &this->dyna.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
-                                this->drawDmgEffScale, this->dmgEffFrozenSteamScale, this->drawDmgEffAlpha,
+        Actor_DrawDamageEffects(play, &this->dyna.actor, this->bodyPartsPos, BIO_BABA_BODYPART_MAX,
+                                this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
                                 this->drawDmgEffType);
     } else if (BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_WALKING_HEAD) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));
@@ -1675,8 +1675,8 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
                                        this->headSkelAnime.dListCount, Boss05_Head_OverrideLimbDraw,
                                        Boss05_Head_PostLimbDraw, Boss05_Head_TransformLimbDraw, &this->dyna.actor);
 
-        Actor_DrawDamageEffects(play, &this->dyna.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
-                                this->drawDmgEffScale, this->dmgEffFrozenSteamScale, this->drawDmgEffAlpha,
+        Actor_DrawDamageEffects(play, &this->dyna.actor, this->bodyPartsPos, BIO_BABA_BODYPART_MAX,
+                                this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
                                 this->drawDmgEffType);
     } else if (BIO_BABA_GET_TYPE(&this->dyna.actor) >= BIO_BABA_TYPE_FRAGMENT_LOWER_JAW) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gBioDekuBabaHeadEyeFlashTexAnim));

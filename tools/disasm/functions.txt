@@ -9389,7 +9389,7 @@
     0x809EFAB4:("Boss05_FallingHead_Fall",),
     0x809EFE50:("Boss05_WalkingHead_UpdateDamage",),
     0x809F0014:("Boss05_WalkingHead_IsLookingAtPlayer",),
-    0x809F0058:("Boss05_WalkingHead_CheckIfPlayerWasSpotted",),
+    0x809F0058:("Boss05_WalkingHead_TrySpottingPlayer",),
     0x809F00CC:("Boss05_WalkingHead_SetupTransform",),
     0x809F010C:("Boss05_WalkingHead_Transform",),
     0x809F01CC:("Boss05_WalkingHead_SetupIdle",),
