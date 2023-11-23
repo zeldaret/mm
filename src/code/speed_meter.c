@@ -1,4 +1,4 @@
-#include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h"
 #include "z64speed_meter.h"
 
 #include "gfx.h"
