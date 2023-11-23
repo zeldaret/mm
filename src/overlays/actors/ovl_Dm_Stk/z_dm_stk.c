@@ -1885,7 +1885,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 DmStk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 DmStk_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     DmStk* this = THIS;
 
     if (limbIndex == SKULL_KID_LIMB_RIGHT_HAND) {
@@ -1919,7 +1919,7 @@ s32 DmStk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void DmStk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     s32 pad;
     s32 pad2;
     DmStk* this = THIS;
@@ -2080,10 +2080,10 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
     }
 }
 
-void DmStk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void DmStk_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     DmStk* this = THIS;
 
-    DmStk_PostLimbDraw2(play, limbIndex, dList, rot, &this->actor, NULL);
+    DmStk_PostLimbDraw(play, limbIndex, dList, rot, &this->actor, NULL);
 }
 
 void DmStk_Draw(Actor* thisx, PlayState* play) {
@@ -2111,7 +2111,7 @@ void DmStk_Draw(Actor* thisx, PlayState* play) {
 
             POLY_XLU_DISP =
                 SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                   this->skelAnime.dListCount, NULL, DmStk_PostLimbDraw2, &this->actor, POLY_XLU_DISP);
+                                   this->skelAnime.dListCount, NULL, DmStk_PostLimbDraw, &this->actor, POLY_XLU_DISP);
         } else {
             Scene_SetRenderModeXlu(play, 0, 1);
 
@@ -2119,7 +2119,8 @@ void DmStk_Draw(Actor* thisx, PlayState* play) {
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
 
             SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                  this->skelAnime.dListCount, DmStk_OverrideLimbDraw, DmStk_PostLimbDraw, &this->actor);
+                                  this->skelAnime.dListCount, DmStk_OverrideLimbDrawOpa, DmStk_PostLimbDrawOpa,
+                                  &this->actor);
         }
 
         CLOSE_DISPS(play->state.gfxCtx);

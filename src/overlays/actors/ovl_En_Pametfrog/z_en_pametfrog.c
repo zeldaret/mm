@@ -949,8 +949,8 @@ void EnPametfrog_DefeatSnapper(EnPametfrog* this, PlayState* play) {
 
 void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, PlayState* play) {
     static Vec3f sAccel = { 0.0f, -0.5f, 0.0f };
-    static Color_RGBA8 primColor = { 250, 250, 250, 255 };
-    static Color_RGBA8 envColor = { 180, 180, 180, 255 };
+    static Color_RGBA8 sPrimColor = { 250, 250, 250, 255 };
+    static Color_RGBA8 sEnvColor = { 180, 180, 180, 255 };
     s16 yaw = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)));
     Vec3f vec1;
     Vec3f velocity;
@@ -962,7 +962,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, PlayState* play) {
     vec1.y = this->actor.world.pos.y + 25.0f;
     vec1.z = (Math_CosS(yaw) * 20.0f) + this->actor.world.pos.z;
     this->collider.base.ocFlags1 &= ~OC1_ON;
-    func_800B0DE0(play, &vec1, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 800, 50);
+    func_800B0DE0(play, &vec1, &gZeroVec3f, &gZeroVec3f, &sPrimColor, &sEnvColor, 800, 50);
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_NPC_APPEAR);
     Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
 

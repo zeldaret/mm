@@ -736,7 +736,7 @@ void EnZob_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 func_80BA0F64(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnZob_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnZob* this = THIS;
 
     if (limbIndex == 9) {
@@ -746,7 +746,7 @@ s32 func_80BA0F64(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-void func_80BA0FAC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnZob_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnZob* this = THIS;
 
     if (limbIndex == 9) {
@@ -766,7 +766,7 @@ void EnZob_Draw(Actor* thisx, PlayState* play) {
     }
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80BA0F64, func_80BA0FAC, &this->actor);
+                          EnZob_OverrideLimbDraw, EnZob_PostLimbDraw, &this->actor);
 
     if (this->unk_2F4 & 0x20) {
         POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
