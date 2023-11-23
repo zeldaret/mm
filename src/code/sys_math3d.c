@@ -1,4 +1,5 @@
 #include "prevent_bss_reordering.h"
+
 // clang-format off
 // Partial structs taken from "prevent_bss_reordering.h"
 struct Dummy200 { int x; };
