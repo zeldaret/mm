@@ -331,7 +331,7 @@ void EnSyatekiWf_Run(EnSyatekiWf* this, PlayState* play) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 10.0f, 3, 2.0f, 0, 0, 0);
+            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 10.0f, 3, 2.0f, 0, 0, false);
         }
     }
 }

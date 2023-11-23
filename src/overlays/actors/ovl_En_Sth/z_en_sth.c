@@ -243,7 +243,7 @@ void EnSth_HandlePanicConversation(EnSth* this, PlayState* play) {
 void EnSth_PanicIdle(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnSth_GetInitialPanicText(this, play);
         this->actionFunc = EnSth_HandlePanicConversation;
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
@@ -277,7 +277,7 @@ void EnSth_PostOceanspiderhouseReward(EnSth* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnSth_HandleOceansideSpiderHouseConversation;
 
@@ -430,7 +430,7 @@ void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) 
 void EnSth_OceansideSpiderHouseIdle(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnSth_GetInitialOceansideSpiderHouseText(this, play);
         this->actionFunc = EnSth_HandleOceansideSpiderHouseConversation;
     } else if (EnSth_CanSpeakToPlayer(this, play)) {
@@ -451,7 +451,7 @@ void EnSth_HandleMoonLookingConversation(EnSth* this, PlayState* play) {
 void EnSth_MoonLookingIdle(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnSth_HandleMoonLookingConversation;
     } else if (EnSth_CanSpeakToPlayer(this, play) || this->actor.isLockedOn) {
         if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= CLOCK_TIME(18, 0))) {
@@ -505,7 +505,7 @@ void EnSth_GetInitialSwampSpiderHouseText(EnSth* this, PlayState* play) {
 void EnSth_TalkAfterSwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnSth_HandleSwampSpiderHouseConversation;
         SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
         Message_StartTextbox(play, 0x918, &this->actor); // I've had enough of this, going home
@@ -588,7 +588,7 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
 void EnSth_SwampSpiderHouseIdle(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnSth_GetInitialSwampSpiderHouseText(this, play);
         this->actionFunc = EnSth_HandleSwampSpiderHouseConversation;
     } else if (EnSth_CanSpeakToPlayer(this, play)) {

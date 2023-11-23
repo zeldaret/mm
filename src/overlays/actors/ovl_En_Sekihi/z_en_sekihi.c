@@ -159,7 +159,7 @@ void func_80A44F40(EnSekihi* this, PlayState* play) {
 }
 
 void func_80A450B0(EnSekihi* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         this->actionFunc = func_80A44F40;
     } else if ((this->dyna.actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->dyna.actor, 0x2600, play)) {
         Actor_OfferTalk(&this->dyna.actor, play, 120.0f);

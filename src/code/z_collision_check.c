@@ -1,7 +1,9 @@
 #include "prevent_bss_reordering.h"
 #include "z64collision_check.h"
 
+#include "z64actor.h"
 #include "z64effect.h"
+#include "z64malloc.h"
 #include "global.h"
 
 typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
@@ -1049,10 +1051,10 @@ s32 Collider_ResetSphereOC(PlayState* play, Collider* collider) {
  * Initializes an OcLine to default values
  */
 s32 Collider_InitLine(PlayState* play, OcLine* line) {
-    static Vec3f defaultLinePoint = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sDefaultLinePoint = { 0.0f, 0.0f, 0.0f };
 
-    Math_Vec3f_Copy(&line->line.a, &defaultLinePoint);
-    Math_Vec3f_Copy(&line->line.b, &defaultLinePoint);
+    Math_Vec3f_Copy(&line->line.a, &sDefaultLinePoint);
+    Math_Vec3f_Copy(&line->line.b, &sDefaultLinePoint);
     return 1;
 }
 

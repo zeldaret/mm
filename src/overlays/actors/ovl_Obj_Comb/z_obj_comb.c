@@ -528,7 +528,7 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
             if (this->unk_1B5 == 1) {
                 if (CutsceneManager_IsNext(this->actor.csId)) {
                     CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
-                    if (this->actor.csId >= 0) {
+                    if (this->actor.csId > CS_ID_NONE) {
                         Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_1);
                     }
 

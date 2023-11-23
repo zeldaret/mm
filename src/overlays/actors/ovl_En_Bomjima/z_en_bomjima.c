@@ -442,7 +442,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
         this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_JIM);
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2DC = this->actor.yawTowardsPlayer;
         func_80C00234(this);
         return;
@@ -561,7 +561,7 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
         this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_JIM);
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2DC = this->actor.yawTowardsPlayer;
         func_80C00234(this);
         return;
@@ -944,7 +944,7 @@ void func_80C00168(EnBomjima* this, PlayState* play) {
         this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_JIM);
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2DC = this->actor.yawTowardsPlayer;
         func_80C00234(this);
     } else {

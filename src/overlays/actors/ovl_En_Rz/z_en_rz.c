@@ -223,12 +223,12 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
             endFrame = Animation_GetLastFrame(sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)]);
             if (animMode == ANIMMODE_LOOP) {
                 PlayerAnimation_Change(play, &this->skelAnime,
-                                       sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)], 2.0f / 3.0f, 0.0f,
-                                       endFrame, ANIMMODE_LOOP, morphFrames);
+                                       sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
+                                       PLAYER_ANIM_ADJUSTED_SPEED, 0.0f, endFrame, ANIMMODE_LOOP, morphFrames);
             } else {
                 PlayerAnimation_Change(play, &this->skelAnime,
-                                       sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)], 2.0f / 3.0f, 0.0f,
-                                       endFrame, ANIMMODE_LOOP, morphFrames);
+                                       sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
+                                       PLAYER_ANIM_ADJUSTED_SPEED, 0.0f, endFrame, ANIMMODE_LOOP, morphFrames);
             }
         } else {
             Animation_Change(&this->skelAnime, animationPtr[animIndex], 1.0f, 0.0f,
@@ -514,7 +514,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
     }
 
     if (!func_80BFBE70(this, play)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actionFunc = func_80BFC078;
 
             if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
@@ -565,7 +565,7 @@ void func_80BFC608(EnRz* this, PlayState* play) {
 void func_80BFC674(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC608;
         if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
             Message_StartTextbox(play, 0x2925, &this->actor);
@@ -604,7 +604,7 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
         func_80BFB9E4(play, this, EN_RZ_ANIM_WALKING);
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
         func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
         this->actor.speed = 0.0f;
@@ -639,7 +639,7 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
             break;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC728;
         func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
         this->actor.speed = 0.0f;

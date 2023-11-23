@@ -44,11 +44,6 @@
 // Assets for other actors
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
-void PlayerCall_Init(Actor* thisx, PlayState* play);
-void PlayerCall_Destroy(Actor* thisx, PlayState* play);
-void PlayerCall_Update(Actor* thisx, PlayState* play);
-void PlayerCall_Draw(Actor* thisx, PlayState* play);
-
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f unk_0C;
@@ -358,9 +353,9 @@ s32 Player_GetCurMaskItemId(PlayState* play) {
 
 void func_80122F28(Player* player) {
     if ((player->actor.category == ACTORCAT_PLAYER) &&
-        (!(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_200000 | PLAYER_STATE1_800000 |
-                                  PLAYER_STATE1_20000000))) &&
-        (!(player->stateFlags2 & PLAYER_STATE2_1))) {
+        !(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_200000 | PLAYER_STATE1_800000 |
+                                 PLAYER_STATE1_20000000)) &&
+        !(player->stateFlags2 & PLAYER_STATE2_1)) {
         if (player->doorType <= PLAYER_DOORTYPE_TALKING) {
             CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         } else {
@@ -2272,7 +2267,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                         }
                     }
                 } else if ((player->rightHandType == PLAYER_MODELTYPE_RH_OPEN) && (player->actor.speed > 2.0f) &&
-                           (!(player->stateFlags1 & PLAYER_STATE1_8000000))) {
+                           !(player->stateFlags1 & PLAYER_STATE1_8000000)) {
                     rightHandDLists = &gPlayerRightHandClosedDLs[D_801F59E0];
                     sPlayerRightHandType = PLAYER_MODELTYPE_RH_CLOSED;
                 } else {
@@ -2562,7 +2557,7 @@ void func_8012669C(PlayState* play, Player* player, Vec3f* arg2, Vec3f* arg3) {
 
     if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
         if (func_80126440(play, NULL, &player->meleeWeaponInfo[0], &sp3C, &sp30) &&
-            (player->transformation != PLAYER_FORM_GORON) && (!(player->stateFlags1 & PLAYER_STATE1_400000))) {
+            (player->transformation != PLAYER_FORM_GORON) && !(player->stateFlags1 & PLAYER_STATE1_400000)) {
             EffectBlure_AddVertex(Effect_GetByIndex(player->meleeWeaponEffectIndex[0]), &player->meleeWeaponInfo[0].tip,
                                   &player->meleeWeaponInfo[0].base);
         }
@@ -2861,8 +2856,8 @@ void Player_DrawCouplesMask(PlayState* play, Player* player) {
 }
 
 void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
-    static Vec3f bubbleVelocity = { 0.0f, 0.0f, 0.0f };
-    static Vec3f bubbleAccel = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sBubbleVelocity = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sBubbleAccel = { 0.0f, 0.0f, 0.0f };
     Gfx* gfx;
     s32 i;
 
@@ -2902,8 +2897,8 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
             s16 phi_s0 = speedXZ * 2000.0f;
             f32 temp_f20;
 
-            bubbleVelocity.y = speedXZ * 0.4f;
-            bubbleAccel.y = -0.3f;
+            sBubbleVelocity.y = speedXZ * 0.4f;
+            sBubbleAccel.y = -0.3f;
 
             if (phi_s0 > 0x3E80) {
                 phi_s0 = 0x3E80;
@@ -2913,10 +2908,10 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
             temp_f20 = speedXZ * 0.2f;
             temp_f20 = CLAMP_MAX(temp_f20, 4.0f);
 
-            bubbleVelocity.x = -Math_SinS(phi_s0) * temp_f20;
-            bubbleVelocity.z = -Math_CosS(phi_s0) * temp_f20;
+            sBubbleVelocity.x = -Math_SinS(phi_s0) * temp_f20;
+            sBubbleVelocity.z = -Math_CosS(phi_s0) * temp_f20;
 
-            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &bubbleVelocity, &bubbleAccel, 20, 20, 3, 0);
+            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &sBubbleVelocity, &sBubbleAccel, 20, 20, 3, 0);
             D_801F59C8[i] -= 400;
         }
     }
