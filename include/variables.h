@@ -242,7 +242,6 @@ extern f32 gSfxDefaultFreqAndVolScale;
 extern s8 gSfxDefaultReverb;
 extern u8 gAudioSpecId;
 extern u8 gAudioHeapResetState;
-extern ReverbSettings* gReverbSettingsTable[10];
 extern AudioSpec gAudioSpecs[21];
 
 // rodata
