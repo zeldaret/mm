@@ -1678,6 +1678,8 @@ void Sram_SetFlashPagesOwlSave(SramContext* sramCtx, s32 curPage, s32 numPages);
 void Sram_StartWriteToFlashOwlSave(SramContext* sramCtx);
 void Sram_UpdateWriteToFlashOwlSave(SramContext* sramCtx);
 
+void SaveContext_Init(void);
+
 extern u32 gSramSlotOffsets[];
 extern u8 gAmmoItems[];
 extern s32 gFlashSaveStartPages[];
@@ -1685,5 +1687,7 @@ extern s32 gFlashSaveNumPages[];
 extern s32 gFlashSpecialSaveNumPages[];
 extern s32 gFlashOwlSaveStartPages[];
 extern s32 gFlashOwlSaveNumPages[];
+
+extern SaveContext gSaveContext;
 
 #endif

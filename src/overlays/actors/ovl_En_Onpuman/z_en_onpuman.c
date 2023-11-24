@@ -123,6 +123,9 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
                     this->unk_2A0->home.rot.x = 0;
                 }
                 break;
+
+            default:
+                break;
         }
     }
     if (this->unk_2A4 & 1) {
@@ -151,7 +154,7 @@ void func_80B121D8(EnOnpuman* this, PlayState* play) {
         this->actionFunc = func_80B1202C;
         Message_StartTextbox(play, 0x8D4, NULL);
         this->unk_2A0 = func_80B11F44(play);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B1217C;
     } else {
         yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;

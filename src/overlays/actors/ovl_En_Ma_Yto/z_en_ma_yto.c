@@ -431,7 +431,7 @@ void EnMaYto_DefaultWait(EnMaYto* this, PlayState* play) {
         EnMaYto_ChangeAnim(this, CREMIA_ANIM_11);
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnMaYto_DefaultStartDialogue(this, play);
         EnMaYto_SetupDefaultDialogueHandler(this);
     } else if (ABS_ALT(direction) < 0x1555) {
@@ -543,13 +543,13 @@ void EnMaYto_SetupDinnerWait(EnMaYto* this) {
 void EnMaYto_DinnerWait(EnMaYto* this, PlayState* play) {
     s16 direction = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnMaYto_DinnerStartDialogue(this, play);
         EnMaYto_SetupDinnerDialogueHandler(this);
     } else {
         Actor* child = this->actor.child;
 
-        if ((child != NULL) && Actor_ProcessTalkRequest(child, &play->state)) {
+        if ((child != NULL) && Actor_TalkOfferAccepted(child, &play->state)) {
             Actor_ChangeFocus(&this->actor, play, &this->actor);
             EnMaYto_DinnerStartDialogue(this, play);
             EnMaYto_SetupDinnerDialogueHandler(this);
@@ -740,13 +740,13 @@ void EnMaYto_BarnWait(EnMaYto* this, PlayState* play) {
     s16 direction = this->actor.shape.rot.y + 0x471C;
 
     direction -= this->actor.yawTowardsPlayer;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnMaYto_BarnStartDialogue(this, play);
         EnMaYto_SetupBarnDialogueHandler(this);
     } else {
         Actor* child = this->actor.child;
 
-        if ((child != NULL) && Actor_ProcessTalkRequest(child, &play->state)) {
+        if ((child != NULL) && Actor_TalkOfferAccepted(child, &play->state)) {
             Actor_ChangeFocus(&this->actor, play, &this->actor);
             EnMaYto_BarnStartDialogue(this, play);
             EnMaYto_SetupBarnDialogueHandler(this);
@@ -922,7 +922,7 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
 void EnMaYto_AfterMilkRunInit(EnMaYto* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_10000;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
 
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
@@ -1013,7 +1013,7 @@ void EnMaYto_SetupPostMilkRunExplainReward(EnMaYto* this) {
 }
 
 void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->unk310 == 1) {
             // Romani's mask explanation
             EnMaYto_SetFaceExpression(this, 0, 1);

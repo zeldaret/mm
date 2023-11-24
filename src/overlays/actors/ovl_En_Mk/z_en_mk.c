@@ -204,7 +204,7 @@ void func_80959774(EnMk* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 3, 0x400, 0x80);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80959624(this, play);
         this->actionFunc = func_809596A0;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
@@ -376,7 +376,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
 }
 
 void func_80959C94(EnMk* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80959A24;
         this->unk_27A &= ~2;
         Message_StartTextbox(play, 0xFB3, &this->actor);
@@ -436,7 +436,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
             this->actor.csId = this->csIdList[1];
         }
         CutsceneManager_Queue(this->actor.csId);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80959844(this, play);
         this->actionFunc = func_80959A24;
         this->unk_27A |= 1;

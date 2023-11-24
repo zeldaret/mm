@@ -127,15 +127,20 @@ void func_8093E68C(EnOkarinaTag* this, PlayState* play) {
                     case 0:
                         Flags_SetSwitch(play, this->switchFlag);
                         break;
+
                     case 1:
                         Flags_UnsetSwitch(play, this->switchFlag);
                         break;
+
                     case 2:
                         if (Flags_GetSwitch(play, this->switchFlag)) {
                             Flags_UnsetSwitch(play, this->switchFlag);
                         } else {
                             Flags_SetSwitch(play, this->switchFlag);
                         }
+                        break;
+
+                    default:
                         break;
                 }
             }

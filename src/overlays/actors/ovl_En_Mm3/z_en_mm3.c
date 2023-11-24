@@ -139,7 +139,7 @@ void func_80A6F270(EnMm3* this) {
 }
 
 void func_80A6F2C8(EnMm3* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x278A, &this->actor);
         this->unk_2B4 = 0x278A;
         func_80A6F9C8(this);
@@ -418,7 +418,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
         gSaveContext.postmanTimerStopOsTime = osGetTime();
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         AudioSfx_MuteBanks(0);
         Audio_SetMainBgmVolume(0x7F, 5);
         Message_StartTextbox(play, 0x2791, &this->actor);
@@ -464,7 +464,7 @@ void func_80A6FED8(EnMm3* this) {
 void func_80A6FEEC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         Message_StartTextbox(play, 0x2794, &this->actor);
         this->unk_2B4 = 0x2794;

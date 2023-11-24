@@ -82,7 +82,7 @@ void EnKujiya_SetupWait(EnKujiya* this) {
 }
 
 void EnKujiya_Wait(EnKujiya* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time < CLOCK_TIME(18, 0))) {
             if (EnKujiya_CheckBoughtTicket()) {
                 Message_StartTextbox(play, 0x2B61, &this->actor);

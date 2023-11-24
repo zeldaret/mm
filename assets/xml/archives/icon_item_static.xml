@@ -47,8 +47,8 @@
         <Texture Name="gItemIconEmptyBottle2Tex" OutName="empty_bottle_2_icon" Format="rgba32" Width="32" Height="32" Offset="0x27000" />
 
         <!-- Trade Quest icons -->
-        <Texture Name="gItemIconLandDeedTex" OutName="land_deed_icon" Format="rgba32" Width="32" Height="32" Offset="0x29000" />
         <Texture Name="gItemIconMoonsTearTex" OutName="moons_tear_icon" Format="rgba32" Width="32" Height="32" Offset="0x28000" />
+        <Texture Name="gItemIconLandDeedTex" OutName="land_deed_icon" Format="rgba32" Width="32" Height="32" Offset="0x29000" />
         <Texture Name="gItemIconSwampDeedTex" OutName="swamp_deed_icon" Format="rgba32" Width="32" Height="32" Offset="0x2A000" />
         <Texture Name="gItemIconMountainDeedTex" OutName="mountain_deed_icon" Format="rgba32" Width="32" Height="32" Offset="0x2B000" />
         <Texture Name="gItemIconOceanDeedTex" OutName="ocean_deed_icon" Format="rgba32" Width="32" Height="32" Offset="0x2C000" />
