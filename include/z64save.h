@@ -451,11 +451,12 @@ typedef enum {
 #define LINK_AGE_IN_YEARS (!LINK_IS_ADULT ? YEARS_CHILD : YEARS_ADULT)
 
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
+#define CURRENT_TIME ((void)0, gSaveContext.save.time)
 
 // The day begins at CLOCK_TIME(6, 0) so it must be offset.
 #define TIME_UNTIL_MOON_CRASH \
-    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)))
-#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)))
+    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(CURRENT_TIME - CLOCK_TIME(6, 0)))
+#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(CURRENT_TIME - CLOCK_TIME(6, 0)))
 
 #define GET_PLAYER_FORM ((void)0, gSaveContext.save.playerForm)
 
@@ -1581,7 +1582,7 @@ typedef enum {
 #define EVENTINF_47 0x47
 #define EVENTINF_50 0x50
 #define EVENTINF_51 0x51
-#define EVENTINF_52 0x52
+#define EVENTINF_HAS_DAYTIME_TRANSITION_CS 0x52
 #define EVENTINF_53 0x53
 #define EVENTINF_54 0x54
 #define EVENTINF_55 0x55
