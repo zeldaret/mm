@@ -32,7 +32,7 @@ typedef struct EnLookNuts {
     /* 0x222 */ s16 isPlayerDetected;
     /* 0x224 */ s16 waitTimer; // Timer for how long the deku guard will take a break for
     /* 0x226 */ s16 spawnIndex;
-    /* 0x228 */ UNK_TYPE4 pad228; // Unused necessary padding
+    /* 0x228 */ UNK_TYPE1 pad228[0x4];
     /* 0x22C */ Vec3f headRot;
     /* 0x238 */ Vec3f headRotTarget; // Target value for head rotation
     /* 0x244 */ ColliderCylinder collider;
