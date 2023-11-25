@@ -21,10 +21,8 @@ void EnOssan_Update(Actor* thisx, PlayState* play);
 void EnOssan_CuriosityShopMan_Draw(Actor* thisx, PlayState* play);
 void EnOssan_PartTimer_Draw(Actor* thisx, PlayState* play);
 
-void EnOssan_CuriosityShopMan_Init(EnOssan* this, PlayState* play);
 u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, PlayState* play);
 
-void EnOssan_PartTimer_Init(EnOssan* this, PlayState* play);
 u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play);
 
 void EnOssan_InitShop(EnOssan* this, PlayState* play);
