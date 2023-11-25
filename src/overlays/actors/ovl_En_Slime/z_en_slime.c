@@ -1215,7 +1215,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
 
     } else {
         Scene_SetRenderModeXlu(play, 1, 2);
-        gSPSegment(POLY_XLU_DISP++, 9, sEyeTextures[this->eyeTexIndex]);
+        gSPSegment(POLY_XLU_DISP++, 0x09, sEyeTextures[this->eyeTexIndex]);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gChuchuEyesDL);
     }
