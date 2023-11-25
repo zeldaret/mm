@@ -86,8 +86,8 @@ void AudioHeap_DiscardFont(s32 fontId) {
             }
 
             AudioPlayback_NoteDisable(note);
-            AudioPlayback_AudioListRemove(&note->listItem);
-            AudioScript_AudioListPushBack(&gAudioCtx.noteFreeLists.disabled, &note->listItem);
+            AudioList_Remove(&note->listItem);
+            AudioList_PushBack(&gAudioCtx.noteFreeLists.disabled, &note->listItem);
         }
     }
 }
@@ -1034,7 +1034,7 @@ void AudioHeap_Init(void) {
     // Initialize notes
     gAudioCtx.notes = AudioHeap_AllocZeroed(&gAudioCtx.miscPool, gAudioCtx.numNotes * sizeof(Note));
     AudioPlayback_NoteInitAll();
-    AudioPlayback_InitNoteFreeList();
+    AudioList_InitNoteFreeList();
     gAudioCtx.sampleStateList =
         AudioHeap_AllocZeroed(&gAudioCtx.miscPool, gAudioCtx.audioBufferParameters.updatesPerFrame *
                                                        gAudioCtx.numNotes * sizeof(NoteSampleState));

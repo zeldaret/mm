@@ -990,8 +990,6 @@ void SysFlashrom_WriteDataSync(void* addr, u32 pageNum, u32 pageCount);
 
 s32 func_80185F90(u32 arg0);
 
-Acmd* AudioSynth_Update(Acmd* abiCmdStart, s32* numAbiCmds, s16* aiBufStart, s32 numSamplesPerFrame);
-
 AudioTask* AudioThread_Update(void);
 void AudioThread_QueueCmdF32(u32 opArgs, f32 data);
 void AudioThread_QueueCmdS32(u32 opArgs, s32 data);
@@ -1009,35 +1007,6 @@ void AudioThread_InitMesgQueues(void);
 
 void Audio_InvalDCache(void* buf, size_t size);
 void Audio_WritebackDCache(void* buf, size_t size);
-
-void AudioPlayback_NoteDisable(Note* note);
-void AudioPlayback_ProcessNotes(void);
-TunedSample* AudioPlayback_GetInstrumentTunedSample(Instrument* instrument, s32 semitone);
-Instrument* AudioPlayback_GetInstrumentInner(s32 fontId, s32 instId);
-Drum* AudioPlayback_GetDrum(s32 fontId, s32 drumId);
-SoundEffect* AudioPlayback_GetSoundEffect(s32 fontId, s32 sfxId);
-s32 AudioPlayback_SetFontInstrument(s32 instrumentType, s32 fontId, s32 index, void* value);
-void AudioPlayback_SeqLayerNoteDecay(SequenceLayer* layer);
-void AudioPlayback_SeqLayerNoteRelease(SequenceLayer* layer);
-void AudioPlayback_InitSyntheticWave(Note* note, SequenceLayer* layer);
-void AudioPlayback_InitNoteLists(NotePool* pool);
-void AudioPlayback_InitNoteFreeList(void);
-void AudioPlayback_NotePoolClear(NotePool* pool);
-void AudioPlayback_NotePoolFill(NotePool* pool, s32 count);
-void AudioPlayback_AudioListRemove(AudioListItem* item);
-Note* AudioPlayback_AllocNote(SequenceLayer* layer);
-void AudioPlayback_NoteInitAll(void);
-
-void AudioScript_SequenceChannelDisable(SequenceChannel* channel);
-void AudioScript_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);
-void AudioScript_SequencePlayerDisable(SequencePlayer* seqPlayer);
-void AudioScript_AudioListPushBack(AudioListItem* list, AudioListItem* item);
-void* AudioScript_AudioListPopBack(AudioListItem* list);
-void AudioScript_ProcessSequences(s32 arg0);
-void AudioScript_SkipForwardSequence(SequencePlayer* seqPlayer);
-void AudioScript_ResetSequencePlayer(SequencePlayer* seqPlayer);
-void AudioScript_InitSequencePlayerChannels(s32 seqPlayerIndex);
-void AudioScript_InitSequencePlayers(void);
 
 void func_8019AE40(s32 param_1, s32 param_2, u32 param_3, s32 param_4);
 void func_8019AEC0(UNK_PTR param_1, UNK_PTR param_2);

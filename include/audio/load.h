@@ -1,15 +1,13 @@
 #ifndef AUDIO_LOAD_H
 #define AUDIO_LOAD_H
 
-#include "audio/soundfont.h"
+#include "soundfont.h"
+#include "PR/os.h"
+#include "PR/os_message.h"
 #include "PR/ultratypes.h"
 #include "libc/stddef.h"
 #include "libc/stdint.h"
-#include "PR/os_message.h"
 #include "unk.h"
-#include "PR/os.h"
-
-struct Sample;
 
 typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
 
@@ -89,7 +87,7 @@ typedef struct {
     /* 0x14 */ s32 status;
     /* 0x18 */ size_t bytesRemaining;
     /* 0x1C */ s8* isDone; // TODO: rename in OoT and sync up here. This is an external status while (s32 status) is an internal status
-    /* 0x20 */ struct Sample sample;
+    /* 0x20 */ Sample sample;
     /* 0x30 */ OSMesgQueue msgqueue;
     /* 0x48 */ OSMesg msg;
     /* 0x4C */ OSIoMesg ioMesg;
@@ -107,7 +105,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u32 endAndMediumKey;
-    /* 0x04 */ struct Sample* sample;
+    /* 0x04 */ Sample* sample;
     /* 0x08 */ u8* ramAddr;
     /* 0x0C */ u32 encodedInfo;
     /* 0x10 */ s32 isFree;
