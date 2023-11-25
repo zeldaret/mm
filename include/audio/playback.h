@@ -1,10 +1,10 @@
 #ifndef AUDIO_PLAYBACK_H
 #define AUDIO_PLAYBACK_H
 
-#include "PR/ultratypes.h"
 #include "synthesis.h"
 #include "effects.h"
 #include "list.h"
+#include "PR/ultratypes.h"
 #include "unk.h"
 
 struct SequenceLayer;

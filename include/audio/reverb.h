@@ -1,8 +1,8 @@
 #ifndef AUDIO_REVERB_H
 #define AUDIO_REVERB_H
 
-#include "PR/ultratypes.h"
 #include "soundfont.h"
+#include "PR/ultratypes.h"
 
 #define REVERB_INDEX_NONE -1
 
