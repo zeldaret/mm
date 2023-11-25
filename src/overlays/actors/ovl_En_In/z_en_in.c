@@ -348,7 +348,7 @@ void func_808F395C(EnIn* this, PlayState* play) {
     if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_END) {
         this->actionFunc = func_808F5A94;
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = func_808F5A34;
         this->unk48C = 1;
@@ -400,7 +400,7 @@ void func_808F39DC(EnIn* this, PlayState* play) {
 }
 
 void func_808F3AD4(EnIn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
@@ -424,7 +424,7 @@ void func_808F3B40(EnIn* this, PlayState* play) {
 }
 
 void func_808F3BD4(EnIn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
@@ -448,7 +448,7 @@ void func_808F3C40(EnIn* this, PlayState* play) {
 }
 
 void func_808F3CD4(EnIn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
@@ -1352,7 +1352,7 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         *arg3 = 1;
         return 0;
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         *arg3 = 1;
         return 1;
     }

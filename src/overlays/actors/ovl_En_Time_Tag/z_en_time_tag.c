@@ -154,7 +154,7 @@ void EnTimeTag_SoaringEngraving_SubsequentInteraction(EnTimeTag* this, PlayState
 }
 
 void EnTimeTag_SoaringEngraving_Wait(EnTimeTag* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->actor.textId == 0) {
             this->actionFunc = EnTimeTag_SoaringEngraving_StartCutscene;
         } else {
@@ -255,7 +255,7 @@ void EnTimeTag_Diary_Cutscene(EnTimeTag* this, PlayState* play) {
 }
 
 void EnTimeTag_Diary_Wait(EnTimeTag* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             if (TIMETAG_DIARY_GET_TYPE(&this->actor) == TIMETAG_DIARY_LULU) {
                 Message_StartTextbox(play, 0x101C, &this->actor);

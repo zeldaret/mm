@@ -270,12 +270,12 @@ void func_8088A894(EnArrow* this, PlayState* play) {
 }
 
 void func_8088AA98(EnArrow* this, PlayState* play) {
-    WaterBox* sp54;
+    WaterBox* waterBox;
     f32 sp50 = this->actor.world.pos.y;
     Vec3f sp44;
     f32 temp_f0;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &waterBox) &&
         (this->actor.world.pos.y < sp50) && !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         this->actor.bgCheckFlags |= BGCHECKFLAG_WATER;
 

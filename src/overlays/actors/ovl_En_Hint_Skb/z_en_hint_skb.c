@@ -411,7 +411,7 @@ void func_80C2075C(EnHintSkb* this) {
 }
 
 void func_80C2077C(EnHintSkb* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_3E0 = 1;
         if (this->unk_3DC == 0) {
             this->unk_3DC = 1;

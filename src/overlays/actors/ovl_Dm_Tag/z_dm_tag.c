@@ -211,7 +211,7 @@ s32 func_80C2291C(DmTag* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_18C & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_18C |= 8;
         SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->msgEventScript = func_80C22880(this, play);

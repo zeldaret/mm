@@ -958,7 +958,7 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, PlayState* play) {
 
 void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
     if ((this->textId == 0) && (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->isInvincible = true;
             Message_StartTextbox(play, 0x13B2, &this->actor);
             this->textId = 0x13B2;

@@ -196,22 +196,22 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animInd
 }
 
 s32 EnAttackNiw_IsOnScreen(EnAttackNiw* this, PlayState* play) {
-    s16 posX;
-    s16 posY;
+    s16 screenPosX;
+    s16 screenPosY;
 
     Actor_SetFocus(&this->actor, this->targetHeight);
-    Actor_GetScreenPos(play, &this->actor, &posX, &posY);
+    Actor_GetScreenPos(play, &this->actor, &screenPosX, &screenPosY);
 
-    if ((this->actor.projectedPos.z < -20.0f) || (posX < 0) || (posX > SCREEN_WIDTH) || (posY < 0) ||
-        (posY > SCREEN_HEIGHT)) {
+    if ((this->actor.projectedPos.z < -20.0f) || (screenPosX < 0) || (screenPosX > SCREEN_WIDTH) || (screenPosY < 0) ||
+        (screenPosY > SCREEN_HEIGHT)) {
         return false;
     }
     return true;
 }
 
 void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
-    s16 posX;
-    s16 posY;
+    s16 screenPosX;
+    s16 screenPosY;
     Vec3f viewOffset;
     Vec3f flightTarget;
     s32 pad;
@@ -237,7 +237,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
     Math_ApproachF(&this->rotStep, 5000.0f, 1.0f, 100.0f);
 
     Actor_SetFocus(&this->actor, this->targetHeight);
-    Actor_GetScreenPos(play, &this->actor, &posX, &posY);
+    Actor_GetScreenPos(play, &this->actor, &screenPosX, &screenPosY);
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->targetRotY = this->actor.yawTowardsPlayer;

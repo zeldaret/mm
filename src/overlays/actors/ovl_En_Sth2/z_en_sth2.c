@@ -40,7 +40,7 @@ void EnSth2_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     this->unused = 0;
 
-    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
         this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
     } else {
         Actor_Kill(&this->actor);
@@ -92,10 +92,10 @@ s32 EnSth2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 void EnSth2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f focusOffset = { 700.0f, 400.0f, 0.0f };
+    static Vec3f sFocusOffset = { 700.0f, 400.0f, 0.0f };
 
     if (limbIndex == STH_LIMB_HEAD) {
-        Matrix_MultVec3f(&focusOffset, &thisx->focus.pos);
+        Matrix_MultVec3f(&sFocusOffset, &thisx->focus.pos);
 
         OPEN_DISPS(play->state.gfxCtx);
 

@@ -295,7 +295,7 @@ void func_80BCB4DC(EnScopenuts* this, PlayState* play) {
 void func_80BCB52C(EnScopenuts* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 2000, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_33C = func_80BCAF0C(this);
         Message_StartTextbox(play, this->unk_33C, &this->actor);
         this->actionFunc = func_80BCB6D0;
@@ -376,7 +376,7 @@ void func_80BCB90C(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCB980(EnScopenuts* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_33C = 0x1637;
         this->unk_328 |= 1;
         Message_StartTextbox(play, this->unk_33C, &this->actor);
@@ -707,7 +707,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             Actor_Kill(&this->actor);
-        } else if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+        } else if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
             this->path =
                 SubS_GetPathByIndex(play, ENSCOPENUTS_GET_PATH_INDEX(&this->actor), ENSCOPENUTS_PATH_INDEX_NONE);
             this->actor.draw = NULL;

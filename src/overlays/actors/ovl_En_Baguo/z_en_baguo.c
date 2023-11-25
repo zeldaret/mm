@@ -176,7 +176,7 @@ void EnBaguo_EmergeFromUnderground(EnBaguo* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((play->gameplayFrames % 8) == 0) {
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10,
-                                 8.0f, 500, 10, 1);
+                                 8.0f, 500, 10, true);
     }
     Math_ApproachF(&this->actor.shape.shadowScale, 50.0f, 0.3f, 5.0f);
     Math_ApproachF(&this->actor.shape.yOffset, 2700.0f, 100.0f, 500.0f);
@@ -205,7 +205,7 @@ void EnBaguo_Idle(EnBaguo* this, PlayState* play) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 300, 1000);
                 if ((play->gameplayFrames % 8) == 0) {
                     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos,
-                                             this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
+                                             this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, true);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_VOICE);
                 }
             }
@@ -281,7 +281,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((play->gameplayFrames % 8) == 0) {
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10,
-                                 8.0f, 500, 10, 1);
+                                 8.0f, 500, 10, true);
     }
 
     Math_ApproachF(&this->actor.shape.yOffset, -3000.0f, 100.0f, 500.0f);

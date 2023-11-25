@@ -29,7 +29,6 @@ void EnNwc_Turn(EnNwc* this, PlayState* play);
 void EnNwc_CheckForBreman(EnNwc* this, PlayState* play);
 
 void EnNwc_DrawAdultBody(Actor* thisx, PlayState* play);
-s32 EnNwc_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 EnHs* EnNwc_FindGrog(PlayState* play);
 
 typedef enum EnNwcState {
@@ -52,10 +51,6 @@ ActorInit En_Nwc_InitVars = {
     /**/ EnNwc_Update,
     /**/ EnNwc_Draw,
 };
-
-Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
-
-Color_RGBA8 sEnvColor = { 80, 80, 80, 255 };
 
 void EnNwc_Init(Actor* thisx, PlayState* play) {
     s32 niwObjectSlot;
@@ -94,9 +89,11 @@ void EnNwc_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnNwc_SpawnDust(EnNwc* this, PlayState* play) {
+    static Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
+    static Color_RGBA8 sEnvColor = { 80, 80, 80, 255 };
     Vec3f pos;
     Vec3f vec5;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f accel;
     s16 yaw;
     s16 pitch;
@@ -110,17 +107,17 @@ void EnNwc_SpawnDust(EnNwc* this, PlayState* play) {
     vec5.z = this->actor.world.pos.z - 5.0f * Math_CosS(yaw) * Math_CosS(pitch);
 
     for (i = 0; i < 5; i++) {
-        vel.x = Rand_CenteredFloat(4.0f);
-        vel.y = Rand_CenteredFloat(4.0f);
-        vel.z = Rand_CenteredFloat(4.0f);
-        accel.x = -vel.x * 0.1f;
-        accel.y = -vel.y * 0.1f;
-        accel.z = -vel.z * 0.1f;
-        pos.x = vec5.x + vel.x;
-        pos.y = vec5.y + vel.y;
-        pos.z = vec5.z + vel.z;
+        velocity.x = Rand_CenteredFloat(4.0f);
+        velocity.y = Rand_CenteredFloat(4.0f);
+        velocity.z = Rand_CenteredFloat(4.0f);
+        accel.x = -velocity.x * 0.1f;
+        accel.y = -velocity.y * 0.1f;
+        accel.z = -velocity.z * 0.1f;
+        pos.x = vec5.x + velocity.x;
+        pos.y = vec5.y + velocity.y;
+        pos.z = vec5.z + velocity.z;
 
-        func_800B0F80(play, &pos, &vel, &accel, &sPrimColor, &sEnvColor, 300, 30, 10);
+        func_800B0F80(play, &pos, &velocity, &accel, &sPrimColor, &sEnvColor, 300, 30, 10);
     }
 }
 
@@ -467,6 +464,7 @@ void EnNwc_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
+
     if (this->hasGrownUp & 1) {
         this->actor.objectSlot = this->niwObjectSlot;
         this->actor.draw = EnNwc_DrawAdultBody;

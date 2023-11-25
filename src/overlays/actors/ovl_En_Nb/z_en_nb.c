@@ -141,15 +141,6 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // EN_NB_ANIM_0
-    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_1
-    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // EN_NB_ANIM_TALK_ONCE
-    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_TALK_LOOP
-    { &gNbAngryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // EN_NB_ANIM_ANGRY
-    { &gNbRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // EN_NB_ANIM_RELIEVED
-};
-
 Actor* EnNb_FindActor(EnNb* this, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* thisx;
     Actor* actor = NULL;
@@ -181,25 +172,34 @@ void EnNb_UpdateSkelAnime(EnNb* this) {
     SkelAnime_Update(&this->skelAnime);
 }
 
+static AnimationInfoS sAnimationInfo[EN_NB_ANIM_MAX] = {
+    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // EN_NB_ANIM_0
+    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_1
+    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // EN_NB_ANIM_TALK_ONCE
+    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_TALK_LOOP
+    { &gNbAngryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // EN_NB_ANIM_ANGRY
+    { &gNbRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // EN_NB_ANIM_RELIEVED
+};
+
 s32 EnNb_ChangeAnim(EnNb* this, EnNbAnimation animIndex) {
-    s32 shouldChange = false;
-    s32 didAnimationChange = false;
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
     if ((animIndex == EN_NB_ANIM_0) || (animIndex == EN_NB_ANIM_1)) {
         if ((this->animIndex != EN_NB_ANIM_0) && (this->animIndex != EN_NB_ANIM_1)) {
-            shouldChange = true;
+            changeAnim = true;
         }
     } else if (animIndex != this->animIndex) {
-        shouldChange = true;
+        changeAnim = true;
     }
 
-    if (shouldChange) {
+    if (changeAnim) {
         this->animIndex = animIndex;
-        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
-    return didAnimationChange;
+    return didAnimChange;
 }
 
 void func_80BBFF24(EnNb* this, PlayState* play) {
@@ -301,6 +301,9 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
             this->behaviour++;
             ret = true;
             break;
+
+        default:
+            break;
     }
 
     return ret;
@@ -333,14 +336,11 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
 
             if (this->storyTimer == 20) {
                 if (CHECK_EVENTINF(EVENTINF_42)) {
-                    // play->interfaceCtx.storyType = STORY_TYPE_MASK_FESTIVAL;
-                    play->interfaceCtx.storyType = 0;
+                    play->interfaceCtx.storyType = STORY_TYPE_MASK_FESTIVAL;
                 } else {
-                    // play->interfaceCtx.storyType = STORY_TYPE_GIANTS_LEAVING;
-                    play->interfaceCtx.storyType = 1;
+                    play->interfaceCtx.storyType = STORY_TYPE_GIANTS_LEAVING;
                 }
-                // play->interfaceCtx.storyState = STORY_STATE_FADE_IN;
-                play->interfaceCtx.storyState = 6;
+                play->interfaceCtx.storyState = STORY_STATE_FADE_IN;
                 R_STORY_FILL_SCREEN_ALPHA = 255;
             }
 
@@ -350,15 +350,13 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             break;
 
         case ENNB_BEHAVIOUR_3:
-            // play->interfaceCtx.storyState = STORY_STATE_SETUP_IDLE;
-            play->interfaceCtx.storyState = 4;
+            play->interfaceCtx.storyState = STORY_STATE_SETUP_IDLE;
             this->behaviour++;
             ret = true;
             break;
 
         case ENNB_BEHAVIOUR_4:
-            // play->interfaceCtx.storyState = STORY_STATE_FADE_OUT;
-            play->interfaceCtx.storyState = 5;
+            play->interfaceCtx.storyState = STORY_STATE_FADE_OUT;
             this->behaviour++;
             // fallthrough
         case ENNB_BEHAVIOUR_5:
@@ -376,6 +374,9 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             play->transitionType = TRANS_TYPE_FADE_BLACK;
             gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
             SET_EVENTINF(EVENTINF_43);
+            break;
+
+        default:
             break;
     }
 
@@ -401,7 +402,7 @@ s32 func_80BC04FC(EnNb* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->stateFlags |= EN_NB_FLAG_20;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->behaviour = ENNB_BEHAVIOUR_0;
@@ -527,8 +528,8 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
                     EnNb_ChangeAnim(this, EN_NB_ANIM_TALK_LOOP);
                     break;
 
-                case 0x2904: // "You want to hear the carnival of time story? ..."
-                case 0x290B: // "You want to hear the four giants story? ..."
+                case 0x2904:
+                case 0x290B:
                     this->unk_18C = func_80BC08E0;
                     this->unk_284 = 0;
                     break;
@@ -538,7 +539,7 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
                     this->unk_284 = 0;
                     break;
 
-                case 0x28CB: // "I told you I already ate!"
+                case 0x28CB:
                     EnNb_ChangeAnim(this, EN_NB_ANIM_ANGRY);
                     break;
 
@@ -549,6 +550,9 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
                 case 0x290D:
                 case 0x2912:
                     EnNb_ChangeAnim(this, EN_NB_ANIM_TALK_LOOP);
+                    break;
+
+                default:
                     break;
             }
         }
@@ -601,10 +605,6 @@ s32 EnNb_ProcessScheduleOutput(EnNb* this, PlayState* play, ScheduleOutput* sche
     this->unk_274 = 40.0f;
 
     switch (scheduleOutput->result) {
-        default:
-            success = false;
-            break;
-
         case EN_NB_SCH_1:
         case EN_NB_SCH_3:
         case EN_NB_SCH_4:
@@ -613,6 +613,10 @@ s32 EnNb_ProcessScheduleOutput(EnNb* this, PlayState* play, ScheduleOutput* sche
 
         case EN_NB_SCH_2:
             success = func_80BC0B98(this, play, scheduleOutput);
+            break;
+
+        default:
+            success = false;
             break;
     }
     return success;
@@ -706,7 +710,7 @@ void EnNb_Destroy(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    play->interfaceCtx.storyState = 3;
+    play->interfaceCtx.storyState = STORY_STATE_DESTROY;
 }
 
 void EnNb_Update(Actor* thisx, PlayState* play) {

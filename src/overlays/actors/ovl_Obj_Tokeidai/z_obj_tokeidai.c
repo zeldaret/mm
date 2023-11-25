@@ -700,7 +700,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
         this->clockTime += 3;
         this->actor.draw = ObjTokeidai_Clock_Draw;
     } else {
-        if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
+        if (!(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) &&
             (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD) &&
             (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
             this->actor.draw = NULL;
@@ -733,7 +733,7 @@ void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, PlayState* play) {
             this->clockTime += 3;
             this->actor.draw = ObjTokeidai_ExteriorGear_Draw;
         } else {
-            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
+            if (!(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) &&
                 (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_EXTERIOR_GEAR_TERMINA_FIELD) &&
                 (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
                 this->actor.draw = NULL;

@@ -148,7 +148,6 @@ static InitChainEntry sInitChain[] = {
 
 // clang-format off
 // PoSisters have their own flags variable for cross function behavior detection
-#define POE_SISTERS_FLAG_CLEAR                 (0)
 #define POE_SISTERS_FLAG_CHECK_AC              (1 << 0)
 #define POE_SISTERS_FLAG_UPDATE_SHAPE_ROT      (1 << 1)
 #define POE_SISTERS_FLAG_CHECK_Z_TARGET        (1 << 2) // Meg doesnt go invisible if you ztarget her for too long
@@ -230,12 +229,10 @@ void EnPoSisters_UpdateDeathFlameSwirl(EnPoSisters* this, s32 deathTimerParam, V
 
     for (i = 0; i < this->fireCount; i++) {
         firePos = &this->firePos[i];
-        firePos->x = Math_SinS(this->actor.shape.rot.y + (this->deathTimer * 0x800) + (i * 0x2000)) *
-                         (SQ(deathTimerParamF) * 0.1f) +
-                     pos->x;
-        firePos->z = Math_CosS(this->actor.shape.rot.y + (this->deathTimer * 0x800) + (i * 0x2000)) *
-                         (SQ(deathTimerParamF) * 0.1f) +
-                     pos->z;
+        firePos->x = pos->x + Math_SinS(this->actor.shape.rot.y + (this->deathTimer * 0x800) + (i * 0x2000)) *
+                                  (SQ(deathTimerParamF) * 0.1f);
+        firePos->z = pos->z + Math_CosS(this->actor.shape.rot.y + (this->deathTimer * 0x800) + (i * 0x2000)) *
+                                  (SQ(deathTimerParamF) * 0.1f);
         firePos->y = pos->y + deathTimerParamF;
     }
 }
@@ -257,8 +254,8 @@ void EnPoSisters_MatchPlayerXZ(EnPoSisters* this, PlayState* play) {
         dist = this->actor.parent->xzDistToPlayer;
     }
 
-    this->actor.world.pos.x = (Math_SinS(BINANG_ROT180(this->actor.shape.rot.y)) * dist) + player->actor.world.pos.x;
-    this->actor.world.pos.z = (Math_CosS(BINANG_ROT180(this->actor.shape.rot.y)) * dist) + player->actor.world.pos.z;
+    this->actor.world.pos.x = player->actor.world.pos.x + (Math_SinS(BINANG_ROT180(this->actor.shape.rot.y)) * dist);
+    this->actor.world.pos.z = player->actor.world.pos.z + (Math_CosS(BINANG_ROT180(this->actor.shape.rot.y)) * dist);
 }
 
 void EnPoSisters_MatchPlayerY(EnPoSisters* this, PlayState* play) {
@@ -663,7 +660,7 @@ void EnPoSisters_SetupDeathStage1(EnPoSisters* this) {
     this->actor.world.pos.y += 42.0f;
     this->actor.shape.yOffset = -6000.0f;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    this->poSisterFlags = POE_SISTERS_FLAG_CLEAR;
+    this->poSisterFlags = 0;
     this->actionFunc = EnPoSisters_DeathStage1;
 }
 

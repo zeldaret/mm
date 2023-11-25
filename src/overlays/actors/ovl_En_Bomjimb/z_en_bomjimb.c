@@ -542,7 +542,7 @@ void func_80C01CD0(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    if (this->actor.draw == 0) {
+    if (this->actor.draw == NULL) {
         this->unk_2E4->shape.rot.z = -this->unk_2E4->shape.rot.z;
         this->unk_2E4->shape.rot.z *= 0.1f;
         if (fabsf(this->unk_2E4->shape.rot.z) < 100.0f) {
@@ -571,7 +571,7 @@ void func_80C0201C(EnBomjimb* this, PlayState* play) {
         }
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2CA = 10;
         this->actionFunc = func_80C02A14;
     } else {

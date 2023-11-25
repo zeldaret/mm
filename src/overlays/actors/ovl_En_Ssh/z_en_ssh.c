@@ -721,7 +721,7 @@ void func_809756D0(EnSsh* this, PlayState* play) {
 }
 
 void EnSsh_Idle(EnSsh* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnSsh_Talk;
         func_809756D0(this, play);
         return;

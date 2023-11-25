@@ -8,7 +8,6 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_ph/object_ph.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
@@ -180,7 +179,7 @@ void EnPeehat_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_Init(play, &this->skelAnime, &object_ph_Skel_001C80, &object_ph_Anim_0009C4, this->jointTable,
-                   this->morphTable, 24);
+                   this->morphTable, OBJECT_PH_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 27.0f);
     this->unk_2B0 = 0;
     Math_Vec3f_Copy(&this->actor.focus.pos, &this->actor.world.pos);
@@ -382,12 +381,14 @@ void func_80897910(EnPeehat* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 3.0f, 0.25f);
     Math_StepToF(&this->actor.world.pos.y, this->actor.floorHeight + 80.0f, 3.0f);
     SkelAnime_Update(&this->skelAnime);
+
     if (!gSaveContext.save.isNight && (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 1200.0f)) {
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1000);
         this->actor.shape.rot.y += (s16)(this->unk_2AD * 450);
     } else {
         func_80898124(this);
     }
+
     Math_ScaledStepToS(&this->unk_2B2, 4000, 500);
     this->unk_2B4 += this->unk_2B2;
     Math_StepToF(&this->unk_2C4, 0.075f, 0.005f);
@@ -472,11 +473,12 @@ void func_80897D48(EnPeehat* this, PlayState* play) {
     Math_StepToF(&this->actor.shape.yOffset, -1000.0f, 50.0f);
     Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 50);
+
     if (SkelAnime_Update(&this->skelAnime)) {
         func_80897498(this);
         this->actor.world.pos.y = this->actor.floorHeight;
         Actor_PlaySfx(&this->actor, NA_SE_EN_PIHAT_LAND);
-    } else if (this->actor.floorHeight < this->actor.world.pos.y) {
+    } else if (this->actor.world.pos.y > this->actor.floorHeight) {
         Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.floorHeight, 0.3f, 3.5f, 0.25f);
         if ((this->actor.world.pos.y - this->actor.floorHeight) < 60.0f) {
             Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
@@ -794,16 +796,15 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderTris.base);
         if (thisx->params == 0) {
             Vec3f sp74;
-            CollisionPoly* sp70;
-            s32 sp6C;
+            CollisionPoly* poly = NULL;
+            s32 bgId;
             s32 i;
 
-            sp70 = NULL;
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
 
             for (i = 1; i >= 0; i--) {
-                if (BgCheck_EntityLineTest1(&play->colCtx, &thisx->world.pos, &this->unk_2D4[i], &sp74, &sp70, true,
-                                            true, false, true, &sp6C)) {
+                if (BgCheck_EntityLineTest1(&play->colCtx, &thisx->world.pos, &this->unk_2D4[i], &sp74, &poly, true,
+                                            true, false, true, &bgId)) {
                     func_800BBFB0(play, &sp74, 0.0f, 1, 300, 150, 1);
                     func_80897258(play, this, &sp74, 0.0f, 1.5f);
                 }
@@ -837,10 +838,11 @@ s32 EnPeehat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
     EnPeehat* this = THIS;
     s32 pad;
 
-    if (limbIndex == 4) {
+    if (limbIndex == OBJECT_PH_LIMB_04) {
         rot->x = -this->unk_2B4;
-    } else if ((limbIndex == 3) ||
-               ((limbIndex == 23) && ((this->actionFunc == func_80898594) || (this->actionFunc == func_80897520)))) {
+    } else if ((limbIndex == OBJECT_PH_LIMB_03) ||
+               ((limbIndex == OBJECT_PH_LIMB_17) &&
+                ((this->actionFunc == func_80898594) || (this->actionFunc == func_80897520)))) {
         OPEN_DISPS(play->state.gfxCtx);
         Gfx* gfx = POLY_OPA_DISP;
 
@@ -912,10 +914,10 @@ void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVecX(4000.0f, &this->bodyPartsPos[bodyPartIndex + 1]);
     }
 
-    if (limbIndex == 4) {
+    if (limbIndex == OBJECT_PH_LIMB_04) {
         Matrix_MultVecZ(5500.0f, &this->unk_2D4[0]);
         Matrix_MultVecZ(-5500.0f, &this->unk_2D4[1]);
-    } else if ((limbIndex == 3) && (thisx->params == 0)) {
+    } else if ((limbIndex == OBJECT_PH_LIMB_03) && (thisx->params == 0)) {
         Vec3f* vec = &D_80899570[0];
         Vec3f* bodyPartPosPtr = &this->bodyPartsPos[PEEHAT_BODYPART_12];
 

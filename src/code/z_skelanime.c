@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64malloc.h"
 
 #define ANIM_INTERP 1
 

@@ -824,7 +824,7 @@ void func_80BF547C(EnRg* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 func_80BF5588(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnRg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnRg* this = THIS;
     s32 fidgetIndex;
 
@@ -865,7 +865,7 @@ void EnRg_Draw(Actor* thisx, PlayState* play) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BF59F8[this->unk_31E]));
 
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              func_80BF5588, NULL, &this->actor);
+                              EnRg_OverrideLimbDraw, NULL, &this->actor);
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else {

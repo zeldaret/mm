@@ -826,11 +826,11 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
  */
 s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, SubSOfferMode mode) {
     s32 canAccept = false;
-    s16 x;
-    s16 y;
+    s16 screenPosX;
+    s16 screenPosY;
     f32 xzDistToPlayerTemp;
 
-    Actor_GetScreenPos(play, actor, &x, &y);
+    Actor_GetScreenPos(play, actor, &screenPosX, &screenPosY);
 
     switch (mode) {
         case SUBS_OFFER_MODE_GET_ITEM:
@@ -847,7 +847,8 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
 
         case SUBS_OFFER_MODE_ONSCREEN:
             //! @bug: Both x and y conditionals are always true, || should be an &&
-            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
+            if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
+                ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT))) {
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
@@ -864,8 +865,9 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
 
         case SUBS_OFFER_MODE_AUTO_TARGETED:
             //! @bug: Both x and y conditionals are always true, || should be an &&
-            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
-                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isLockedOn) {
+            if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
+                ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT)) && (fabsf(actor->playerHeightRel) <= yRange) &&
+                (actor->xzDistToPlayer <= xzRange) && actor->isLockedOn) {
                 actor->flags |= ACTOR_FLAG_10000;
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
@@ -873,8 +875,9 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
 
         case SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN:
             //! @bug: Both x and y conditionals are always true, || should be an &&
-            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
-                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
+            if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
+                ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT)) && (fabsf(actor->playerHeightRel) <= yRange) &&
+                (actor->xzDistToPlayer <= xzRange)) {
                 actor->flags |= ACTOR_FLAG_10000;
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }

@@ -309,7 +309,7 @@ s32 func_80A23D08(ObjIceblock* this, PlayState* play) {
     };
     s32 pad3;
     ObjIceBlockUnkStruct2* ptr;
-    WaterBox* spC4;
+    WaterBox* waterBox;
     s32 i;
     s32 spBC;
     s32 spB8;
@@ -349,7 +349,7 @@ s32 func_80A23D08(ObjIceblock* this, PlayState* play) {
             }
         }
 
-        if (WaterBox_GetSurface1_2(play, &play->colCtx, spA4.x, spA4.z, &ptr->unk_0C, &spC4)) {
+        if (WaterBox_GetSurface1_2(play, &play->colCtx, spA4.x, spA4.z, &ptr->unk_0C, &waterBox)) {
             if (phi_f20 < ptr->unk_0C) {
                 spB8 = i;
                 phi_f20 = ptr->unk_0C;

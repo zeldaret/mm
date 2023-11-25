@@ -386,7 +386,7 @@ void func_80B0FEBC(EnGb2* this, PlayState* play) {
         this->unk_288 = 10;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B0FFA8;
     } else if ((this->actor.xzDistToPlayer < 300.0f) || this->actor.isLockedOn) {
@@ -552,7 +552,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10584(EnGb2* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = func_80B10634;
@@ -655,7 +655,7 @@ void func_80B10924(EnGb2* this, PlayState* play) {
 }
 
 void func_80B109DC(EnGb2* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B10634;
     } else {
@@ -710,7 +710,7 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
 
     if (func_80B0FA48(this, play)) {
         this->unk_26C &= ~0x20;
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state) && (this->unk_26C & 0x40)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state) && (this->unk_26C & 0x40)) {
             if ((this->unk_26E == 0x14EE) || (this->unk_26E == 0x14F4)) {
                 this->unk_26C |= 2;
             }
@@ -724,7 +724,7 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
         }
     } else {
         this->unk_26C &= ~0x40;
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state) && (this->unk_26C & 0x20)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state) && (this->unk_26C & 0x20)) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             Message_StartTextbox(play, this->unk_26E, &this->actor);
             if (this->unk_26E == 0x14EB) {
@@ -801,7 +801,7 @@ void func_80B10E98(EnGb2* this, PlayState* play) {
 }
 
 void func_80B11048(EnGb2* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B10DAC;

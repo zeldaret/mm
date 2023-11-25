@@ -184,13 +184,13 @@ s32 EnBigokuta_ValidatePictograph(PlayState* play, Actor* thisx) {
 }
 
 s32 EnBigokuta_IsInWater(EnBigokuta* this, PlayState* play) {
-    WaterBox* box;
+    WaterBox* waterBox;
     s32 bgId;
 
     this->picto.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->picto.actor.floorPoly, &bgId,
                                                                 &this->picto.actor, &this->picto.actor.world.pos);
     if (!WaterBox_GetSurface1_2(play, &play->colCtx, this->picto.actor.world.pos.x, this->picto.actor.world.pos.z,
-                                &this->picto.actor.home.pos.y, &box) ||
+                                &this->picto.actor.home.pos.y, &waterBox) ||
         (this->picto.actor.home.pos.y <= this->picto.actor.floorHeight)) {
         return false;
     } else {

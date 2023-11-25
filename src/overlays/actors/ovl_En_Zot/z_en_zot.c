@@ -399,7 +399,7 @@ void func_80B97194(EnZot* this, PlayState* play) {
 }
 
 void func_80B97240(EnZot* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B97194;
         func_80B97110(this, play);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
@@ -514,7 +514,7 @@ void func_80B973BC(EnZot* this, PlayState* play) {
 
 void func_80B975F8(EnZot* this, PlayState* play) {
     func_80B96D4C(this);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B973BC;
     } else {
         Actor_OfferTalkExchange(&this->actor, play, 10000.0f, 1000.0f, PLAYER_IA_NONE);
@@ -549,7 +549,7 @@ void func_80B97708(EnZot* this, PlayState* play) {
     func_80B96D4C(this);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x400, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B9765C;
         func_80B972E8(this, play);
         return;
@@ -699,7 +699,7 @@ void func_80B97A44(EnZot* this, PlayState* play) {
 void func_80B97B5C(EnZot* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x400, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B97A44;
         func_80B9787C(this, play);
     } else if (func_80B96DF0(this, play)) {
@@ -728,7 +728,7 @@ void func_80B97C40(EnZot* this, PlayState* play) {
 }
 
 void func_80B97CC8(EnZot* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B97C40;
         Message_StartTextbox(play, 0x128B, &this->actor);
     } else if (Player_IsFacingActor(&this->actor, 0x3000, play) && (this->actor.xzDistToPlayer < 100.0f)) {
@@ -805,7 +805,7 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
 void func_80B97FD0(EnZot* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B97E4C;
         func_80B97BF8(this, play);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_08)) {
@@ -928,7 +928,7 @@ void func_80B98348(EnZot* this, PlayState* play) {
 
 void func_80B9849C(EnZot* this, PlayState* play) {
     func_80B98348(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->unk_2D4 == 2) {
             Message_StartTextbox(play, 0x12AD, &this->actor);
         } else {
@@ -1069,7 +1069,7 @@ void func_80B98728(EnZot* this, PlayState* play) {
 
 void func_80B98998(EnZot* this, PlayState* play) {
     this->unk_2F2 &= ~8;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B98728;
         func_80B98178(this, play);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
@@ -1130,7 +1130,7 @@ void func_80B98AD0(EnZot* this, PlayState* play) {
 }
 
 void func_80B98BF4(EnZot* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_20)) {
             Message_StartTextbox(play, 0x12B7, &this->actor);
@@ -1151,7 +1151,7 @@ void func_80B98CA8(EnZot* this, PlayState* play) {
         this->actionFunc = func_80B98BF4;
         this->actor.flags |= ACTOR_FLAG_10000;
         Actor_OfferTalk(&this->actor, play, 120.0f);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B98AD0;
         func_80B98A4C(this, play);
     } else {
@@ -1248,7 +1248,7 @@ void func_80B98F94(EnZot* this, PlayState* play) {
 void func_80B990A4(EnZot* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x400, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B98F94;
         func_80B98E10(this, play);
     } else if (Player_IsFacingActor(&this->actor, 0x3000, play) && (this->actor.xzDistToPlayer < 100.0f)) {
@@ -1296,7 +1296,7 @@ void func_80B991E4(EnZot* this, PlayState* play) {
 }
 
 void func_80B992C0(EnZot* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B991E4;
         func_80B99160(this, play);
         this->actor.speed = 0.0f;

@@ -2489,7 +2489,7 @@ void FileSelect_InitContext(GameState* thisx) {
     envCtx->lightConfig = 0;
     envCtx->changeLightNextConfig = 0;
     envCtx->lightSetting = 0;
-    envCtx->skyboxConfig = 2;
+    envCtx->skyboxConfig = SKYBOX_CONFIG_2;
     envCtx->skyboxDisabled = 0;
     envCtx->skyboxBlend = 0;
     envCtx->glareAlpha = 0.0f;
