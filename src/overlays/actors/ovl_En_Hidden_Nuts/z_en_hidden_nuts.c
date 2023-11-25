@@ -5,6 +5,7 @@
  */
 
 #include "z_en_hidden_nuts.h"
+#include "z64voice.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_2000000)
@@ -131,7 +132,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
 
     this->path = SubS_GetPathByIndex(play, this->pathIndex, ENHIDDENNUTS_PATH_INDEX_NONE_ALT);
     this->csId = this->actor.csId;
-    func_801A5080(2);
+    AudioVoice_InitWord(VOICE_WORD_ID_WAKE_UP);
     func_80BDB268(this);
 }
 
@@ -183,7 +184,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
         this->unk_20A = false;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BDB580(this);
         return;
     }
@@ -213,7 +214,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
         if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA)) {
             play->msgCtx.ocarinaMode = OCARINA_MODE_END;
             func_80BDB788(this);
-        } else if (func_801A5100() == 2) {
+        } else if (AudioVoice_GetWord() == VOICE_WORD_ID_WAKE_UP) {
             func_80BDB788(this);
         } else {
             Actor_OfferTalk(&this->actor, play, BREG(13) + 100.0f);
@@ -354,12 +355,12 @@ void func_80BDBA28(EnHiddenNuts* this, PlayState* play) {
 void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
     s32 pad[3];
     f32 curFrame = this->skelAnime.curFrame;
-    WaterBox* sp54;
+    WaterBox* waterBox;
     f32 sp50;
     s16 sp4E = false;
     Vec3f sp40;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &waterBox) &&
         (this->actor.world.pos.y < sp50)) {
         this->actor.velocity.y = 0.0f;
         Math_Vec3f_Copy(&sp40, &this->actor.world.pos);

@@ -356,7 +356,7 @@ s32 func_80A52D44(EnDnq* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_37C & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_380 = func_80A52CF8(this, play);
         this->actionFunc = func_80A52FB8;

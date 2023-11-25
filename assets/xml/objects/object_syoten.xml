@@ -1,7 +1,8 @@
 ﻿<Root>
     <File Name="object_syoten" Segment="6">
-        <!-- <Blob Name="object_syoten_Blob_000000" Size="0x23C" Offset="0x0" /> -->
-        <Blob Name="object_syoten_Blob_00023C" Size="0x214" Offset="0x23C" />
+        <Blob Name="object_syoten_Blob_000000" Size="0x23C" Offset="0x0" />
+        <Blob Name="object_syoten_Blob_00023C" Size="0x14" Offset="0x23C" />
+
         <DList Name="object_syoten_DL_000450" Offset="0x450" />
         <DList Name="object_syoten_DL_000518" Offset="0x518" />
         <DList Name="object_syoten_DL_0005E0" Offset="0x5E0" />
@@ -13,8 +14,10 @@
         <Texture Name="object_syoten_Tex_000A90" OutName="tex_000A90" Format="i8" Width="32" Height="32" Offset="0xA90" />
         <Texture Name="object_syoten_Tex_000E90" OutName="tex_000E90" Format="i8" Width="32" Height="32" Offset="0xE90" />
         <TextureAnimation Name="object_syoten_Matanimheader_001298" Offset="0x1298" />
+
         <!-- <Blob Name="object_syoten_Blob_0012A0" Size="0x88" Offset="0x12A0" /> -->
-        <Blob Name="object_syoten_Blob_001328" Size="0x48" Offset="0x1328" />
+        <Blob Name="object_syoten_Blob_001328" Size="0x8" Offset="0x1328" />
+
         <DList Name="object_syoten_DL_001370" Offset="0x1370" />
         <TextureAnimation Name="object_syoten_Matanimheader_001448" Offset="0x1448" />
         <DList Name="object_syoten_DL_001730" Offset="0x1730" />

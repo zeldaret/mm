@@ -163,7 +163,7 @@ void func_80BE87FC(EnBaisen* this) {
 }
 
 void func_80BE887C(EnBaisen* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BE895C(this, play);
     } else {
         if (this->paramCopy != 0) {

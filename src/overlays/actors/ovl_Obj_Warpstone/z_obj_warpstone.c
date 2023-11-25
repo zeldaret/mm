@@ -149,7 +149,7 @@ void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
                 Message_CloseTextbox(play);
             }
         }
-    } else if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         this->isTalking = true;
     } else if (!this->actionFunc(this, play)) {
         Actor_OfferTalkNearColChkInfoCylinder(&this->dyna.actor, play);

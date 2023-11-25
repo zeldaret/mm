@@ -891,7 +891,7 @@ void EnGo_UpdateCollider(EnGo* this, PlayState* play) {
  */
 s32 EnGo_UpdateTalking(EnGo* this, PlayState* play) {
     if (((this->actionFlags & SUBS_OFFER_MODE_MASK) == SUBS_OFFER_MODE_NONE) ||
-        !Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        !Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         return false;
     }
 

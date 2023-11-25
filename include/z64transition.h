@@ -2,26 +2,37 @@
 #define Z64TRANSITION_H
 
 #include "ultra64.h"
+
 #include "libc/stdint.h"
+#include "unk.h"
+
 #include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h"
 
-typedef enum {
+typedef enum TransitionOverlayStatus {
+    /* -1 */ TRANSITION_OVERLAY_STATUS_FAILED = -1, // failed allocation or null reference
+    /*  0 */ TRANSITION_OVERLAY_STATUS_LOAD_FREE, // successfully loaded/freed overlay
+    /*  1 */ TRANSITION_OVERLAY_STATUS_ADD_REMOVAL, // successfully added/removed instance
+    /*  2 */ TRANSITION_OVERLAY_STATUS_LOADED_NO_INSTANCES, // overlay is loaded but has no instances (?) TODO: Figure out why this exists
+    /*  3 */ TRANSITION_OVERLAY_STATUS_INTERNAL // internal overlay, so always loaded
+} TransitionOverlayStatus;
+
+typedef enum TransitionTileState {
     /* 0 */ TRANS_TILE_OFF, // Inactive, do nothing
     /* 1 */ TRANS_TILE_SETUP, // Save the necessary buffers
     /* 2 */ TRANS_TILE_PROCESS, // Initialize the transition
     /* 3 */ TRANS_TILE_READY // The transition is ready, so will update and draw each frame
 } TransitionTileState;
 
-typedef struct {
+typedef struct TransitionTileVtxData {
     /* 0x0 */ f32 x;
     /* 0x4 */ f32 y;
 } TransitionTileVtxData; // size = 0x8
 
-typedef struct {
+typedef struct TransitionTile {
     /* 0x00 */ s32 cols;
     /* 0x04 */ s32 rows;
     /* 0x08 */ s32 frame;
@@ -38,7 +49,7 @@ typedef struct {
 
 #define TC_SET_PARAMS (1 << 7)
 
-typedef struct {
+typedef struct TransitionInit {
     /* 0x00 */ void* (*init)(void* transition);
     /* 0x04 */ void  (*destroy)(void* transition);
     /* 0x08 */ void  (*update)(void* transition, s32 updateRate);
@@ -50,7 +61,7 @@ typedef struct {
     /* 0x20 */ s32   (*isDone)(void* transition);
 } TransitionInit; // size = 0x24
 
-typedef struct {
+typedef struct TransitionOverlay {
     union {
         struct {
     /* 0x00 */ u32 count : 8;
@@ -73,8 +84,8 @@ typedef enum {
 
 #define TRANS_INSTANCE_TYPE_FADE_FLASH 3
 
-typedef struct {
-    /* 0x0 */ u8 type;
+typedef struct TransitionFade {
+    /* 0x0 */ u8 type; // TransitionFadeType enum
     /* 0x1 */ u8 isDone;
     /* 0x2 */ u8 direction;
     /* 0x4 */ Color_RGBA8_u32 color;
@@ -83,7 +94,7 @@ typedef struct {
 
 #define FBDEMO_CIRCLE_GET_MASK_TYPE(type) ((type) & 1)
 
-typedef struct {
+typedef struct TransitionCircle {
     /* 0x00 */ Color_RGBA8_u32 color;
     /* 0x04 */ f32 referenceRadius; // Reference for where to transition to
     /* 0x08 */ f32 stepValue; // How fast the Transition is 
@@ -103,7 +114,7 @@ typedef struct {
 #define TRANS_TRIGGER_START 20 // start transition (exiting an area)
 #define TRANS_TRIGGER_END -20 // transition is ending (arriving in a new area)
 
-typedef enum {
+typedef enum TransitionMode {
     /*  0 */ TRANS_MODE_OFF,
     /*  1 */ TRANS_MODE_SETUP,
     /*  2 */ TRANS_MODE_INSTANCE_INIT,
@@ -128,7 +139,7 @@ typedef enum {
 #define TRANS_TYPE_WIPE3 (1 << 6)
 #define TRANS_TYPE_SET_PARAMS (1 << 7)
 
-typedef enum {
+typedef enum TransitionType {
     /*  0 */ TRANS_TYPE_WIPE,
     /*  1 */ TRANS_TYPE_TRIFORCE,
     /*  2 */ TRANS_TYPE_FADE_BLACK,
@@ -188,12 +199,12 @@ typedef union TransitionInstance {
 #undef DEFINE_TRANSITION
 #undef DEFINE_TRANSITION_INTERNAL
 
-typedef struct {
+typedef struct TransitionContext {
     /* 0x000 */ s16 transitionType;
     /* 0x002 */ s8 fbdemoType;
-    /* 0x003 */ char unk_003[0x5];
+    /* 0x003 */ UNK_TYPE1 unk_003[0x5];
     /* 0x008 */ TransitionInstance instanceData;
-    /* 0x220 */ char unk_220[0x10];
+    /* 0x220 */ UNK_TYPE1 unk_220[0x10];
     /* 0x230 */ void* (*init)(void* transition);
     /* 0x234 */ void  (*destroy)(void* transition);
     /* 0x238 */ void  (*update)(void* transition, s32 updateRate);
@@ -203,7 +214,44 @@ typedef struct {
     /* 0x248 */ void  (*setColor)(void* transition, u32 color);
     /* 0x24C */ void  (*setEnvColor)(void* transition, u32 color);
     /* 0x250 */ s32   (*isDone)(void* transition);
-    /* 0x254 */ char unk_254[0x4];
+    /* 0x254 */ UNK_TYPE1 unk_254[0x4];
 } TransitionContext; // size = 0x258
+
+
+// z_dbdemo_dlftbls.c
+
+void Transition_Init(TransitionContext* transitionCtx);
+void Transition_Destroy(TransitionContext* transitionCtx);
+
+// z_fbdemo.c
+
+void TransitionTile_Destroy(TransitionTile* this);
+TransitionTile* TransitionTile_Init(TransitionTile* this, s32 cols, s32 rows);
+void TransitionTile_Draw(TransitionTile* this, Gfx** gfxP);
+void TransitionTile_Update(TransitionTile* this);
+
+// z_fbdemo_fade.c
+
+void TransitionFade_Start(void* thisx);
+void* TransitionFade_Init(void* thisx);
+void TransitionFade_Destroy(void* thisx);
+void TransitionFade_Update(void* thisx, s32 updateRate);
+void TransitionFade_Draw(void* thisx, Gfx** gfxP);
+s32 TransitionFade_IsDone(void* thisx);
+void TransitionFade_SetColor(void* thisx, u32 color);
+void TransitionFade_SetType(void* thisx, s32 type);
+
+// z_fbdemo_circle.c
+
+void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt, f32 arg6);
+
+// z_overlay.c
+
+void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr);
+void TransitionOverlay_VramToRamArray(TransitionOverlay *overlayEntry, void** vramAddrs, s32 count);
+TransitionOverlayStatus TransitionOverlay_Load(TransitionOverlay *overlayEntry);
+TransitionOverlayStatus TransitionOverlay_Free(TransitionOverlay *overlayEntry);
+void TransitionOverlay_ClearLoadInfo(TransitionOverlay *overlayEntry);
+void TransitionOverlay_SetSegment(TransitionOverlay *overlayEntry, void* vramStart, void* vramEnd, uintptr_t vromStart, uintptr_t vromEnd);
 
 #endif

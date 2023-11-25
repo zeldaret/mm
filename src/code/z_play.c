@@ -2,6 +2,7 @@
 #include "z64.h"
 #include "regs.h"
 #include "functions.h"
+#include "z64malloc.h"
 #include "z64vismono.h"
 #include "z64visfbuf.h"
 
@@ -1512,7 +1513,7 @@ void Play_Main(GameState* thisx) {
     CutsceneManager_ClearWaiting();
 }
 
-s32 Play_InCsMode(PlayState* this) {
+bool Play_InCsMode(PlayState* this) {
     return (this->csCtx.state != CS_STATE_IDLE) || Player_InCsMode(this);
 }
 

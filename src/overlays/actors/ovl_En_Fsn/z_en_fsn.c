@@ -123,7 +123,7 @@ static Vec3f sShopItemPositions[3] = {
     { 31.0f, 35.0f, -95.0f },
 };
 
-s32 EnFsn_TestItemSelected(PlayState* play) {
+bool EnFsn_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
@@ -223,7 +223,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
 void EnFsn_HandleSetupResumeInteraction(EnFsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play) &&
         (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED)) {
-        Actor_ProcessTalkRequest(&this->actor, &play->state);
+        Actor_TalkOfferAccepted(&this->actor, &play->state);
         Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         if (ENFSN_IS_SHOP(&this->actor)) {
             this->actor.textId = 0;
@@ -409,7 +409,7 @@ void EnFsn_EndInteraction(EnFsn* this, PlayState* play) {
         CutsceneManager_Stop(this->csId);
         this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
     }
-    Actor_ProcessTalkRequest(&this->actor, &play->state);
+    Actor_TalkOfferAccepted(&this->actor, &play->state);
     play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
@@ -443,14 +443,14 @@ s32 EnFsn_TestCancelOption(EnFsn* this, PlayState* play, Input* input) {
 }
 
 void EnFsn_UpdateCursorPos(EnFsn* this, PlayState* play) {
-    s16 x;
-    s16 y;
+    s16 screenPosX;
+    s16 screenPosY;
     f32 xOffset = 0.0f;
     f32 yOffset = 17.0f;
 
-    Actor_GetScreenPos(play, &this->items[this->cursorIndex]->actor, &x, &y);
-    this->cursorPos.x = x + xOffset;
-    this->cursorPos.y = y + yOffset;
+    Actor_GetScreenPos(play, &this->items[this->cursorIndex]->actor, &screenPosX, &screenPosY);
+    this->cursorPos.x = screenPosX + xOffset;
+    this->cursorPos.y = screenPosY + yOffset;
     this->cursorPos.z = 1.2f;
 }
 
@@ -759,7 +759,7 @@ void EnFsn_Idle(EnFsn* this, PlayState* play) {
         return;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -946,7 +946,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_SetupDeterminePrice(EnFsn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.textId = 0xFF;
         Message_StartTextbox(play, this->actor.textId, &this->actor);
         this->actionFunc = EnFsn_DeterminePrice;
@@ -1066,7 +1066,7 @@ void EnFsn_SetupResumeInteraction(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_ResumeInteraction(EnFsn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (ENFSN_IS_SHOP(&this->actor)) {
             if (!this->isSelling) {
                 this->csId = this->lookToShopkeeperBuyingCsId;
@@ -1420,7 +1420,7 @@ void EnFsn_SetupEndInteractionImmediately(EnFsn* this, PlayState* play) {
 }
 
 void EnFsn_IdleBackroom(EnFsn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->textId = 0;
         EnFsn_HandleConversationBackroom(this, play);
         this->actionFunc = EnFsn_ConverseBackroom;

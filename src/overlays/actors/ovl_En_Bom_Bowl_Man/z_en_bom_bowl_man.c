@@ -580,7 +580,7 @@ void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C5AA4(EnBomBowlMan* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->unk_2F6 == ENBOMBOWLMAN_F0_0) {
             this->actionFunc = func_809C4DA4;
         } else {

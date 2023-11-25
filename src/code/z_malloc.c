@@ -1,4 +1,5 @@
-#include "global.h"
+#include "z64malloc.h"
+
 #include "os_malloc.h"
 
 Arena sZeldaArena;
@@ -24,16 +25,16 @@ void ZeldaArena_Free(void* ptr) {
     __osFree(&sZeldaArena, ptr);
 }
 
-void* ZeldaArena_Calloc(u32 num, size_t size) {
-    void* ret;
-    u32 n = num * size;
+void* ZeldaArena_Calloc(size_t num, size_t size) {
+    void* ptr;
+    size_t totalSize = num * size;
 
-    ret = __osMalloc(&sZeldaArena, n);
-    if (ret != NULL) {
-        bzero(ret, n);
+    ptr = __osMalloc(&sZeldaArena, totalSize);
+    if (ptr != NULL) {
+        bzero(ptr, totalSize);
     }
 
-    return ret;
+    return ptr;
 }
 
 void ZeldaArena_GetSizes(size_t* outMaxFree, size_t* outFree, size_t* outAlloc) {

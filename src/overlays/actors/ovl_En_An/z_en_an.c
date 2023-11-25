@@ -1746,7 +1746,8 @@ s32* EnAn_GetMsgEventScript(EnAn* this, PlayState* play) {
 s32 EnAn_CheckTalk(EnAn* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->stateFlags & SUBS_OFFER_MODE_MASK) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_3C4 = 0;
         this->msgEventState = 0;

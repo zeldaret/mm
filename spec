@@ -594,10 +594,7 @@ beginseg
     include "build/asm/code/code_8019AEC0.text.o" // handwritten
     include "build/src/audio/code_8019AF00.o"
     include "build/src/audio/voice_external.o"
-    include "build/data/code/voice_external.data.o"
     include "build/src/audio/voice_internal.o"
-    include "build/data/code/voice_internal.data.o"
-    include "build/data/code/voice_internal.bss.o"
     pad_text
     include "build/src/audio/sfx_params.o"
     include "build/src/audio/sfx.o"
@@ -2319,9 +2316,7 @@ beginseg
     name "ovl_Boss_05"
     compress
     include "build/src/overlays/actors/ovl_Boss_05/z_boss_05.o"
-    include "build/data/ovl_Boss_05/ovl_Boss_05.data.o"
-    include "build/data/ovl_Boss_05/ovl_Boss_05.bss.o"
-    include "build/data/ovl_Boss_05/ovl_Boss_05.reloc.o"
+    include "build/src/overlays/actors/ovl_Boss_05/ovl_Boss_05_reloc.o"
 endseg
 
 beginseg

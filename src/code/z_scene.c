@@ -452,7 +452,7 @@ void Scene_CommandExitList(PlayState* play, SceneCmd* cmd) {
 void Scene_Command09(PlayState* play, SceneCmd* cmd) {
 }
 
-// SceneTableEntry Header Command 0x15: Sound Settings=
+// SceneTableEntry Header Command 0x15: Sound Settings
 void Scene_CommandSoundSettings(PlayState* play, SceneCmd* cmd) {
     play->sequenceCtx.seqId = cmd->soundSettings.seqId;
     play->sequenceCtx.ambienceId = cmd->soundSettings.ambienceId;
@@ -468,7 +468,7 @@ void Scene_CommandEchoSetting(PlayState* play, SceneCmd* cmd) {
     play->roomCtx.curRoom.echo = cmd->echoSettings.echo;
 }
 
-// SceneTableEntry Header Command 0x18: Alternate Header List=
+// SceneTableEntry Header Command 0x18: Alternate Header List
 void Scene_CommandAltHeaderList(PlayState* play, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;

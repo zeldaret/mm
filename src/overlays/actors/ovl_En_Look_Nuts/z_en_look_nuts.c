@@ -219,12 +219,14 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
                 this->waitTimer++;
                 this->headRotTarget.y *= -1.0f;
                 break;
+
             case 5:
                 this->headRotTarget.y = 0.0f;
                 randOffset = Rand_S16Offset(1, 2);
                 this->eventTimer = 0;
                 this->waitTimer += randOffset;
                 break;
+
             case 6:
                 if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
                     this->waitTimer = 10;
@@ -232,26 +234,33 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
                     this->eventTimer = 5;
                 }
                 break;
+
             case 7:
                 if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
                     this->headRotTarget.z = 4000.0f;
                     this->waitTimer++;
                 }
                 break;
+
             case 8:
                 this->waitTimer = 10;
                 this->eventTimer = 20;
                 this->headRotTarget.z = -8000.0f;
                 break;
+
             case 10:
                 Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                 this->waitTimer = 11;
                 break;
+
             case 11:
                 if ((fabsf(this->headRotation.x) < 30.0f) && (fabsf(this->headRotation.y) < 30.0f) &&
                     (fabsf(this->headRotation.z) < 30.0f)) {
                     this->waitTimer = 12;
                 }
+                break;
+
+            default:
                 break;
         }
         if (this->waitTimer == 12) {
@@ -304,7 +313,7 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
     }
 }
 
-static Vec3f effectVecInitialize = { 0.0f, 0.0f, 0.0f };
+static Vec3f sEffectVecInitialize = { 0.0f, 0.0f, 0.0f };
 
 void EnLookNuts_Update(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -330,7 +339,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     if (D_80A6862C == 0) {
         if ((this->state < 2) && (this->actor.xzDistToPlayer < 320.0f) && (this->actor.playerHeightRel < 80.0f)) {
-            effectVelOffset = effectVecInitialize;
+            effectVelOffset = sEffectVecInitialize;
             Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
             effectPos.x += Math_SinS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
             effectPos.y += 30.0f;

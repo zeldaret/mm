@@ -230,7 +230,7 @@ s32 func_8092CAD0(EnDns* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_2C6 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_2C6 &= ~0x10;
         if (ENDNS_GET_4000(&this->actor)) {
