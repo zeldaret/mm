@@ -1222,7 +1222,7 @@ void DmStk_StartTelescopeCutscene(DmStk* this, PlayState* play) {
     if (gSaveContext.save.day < 3) {
         csId = dayOneAndTwoCsId;
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED) ||
-               ((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
+               ((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0)))) {
         csId = finalHoursCsId;
     } else {
         csId = dayThreeCsId;
@@ -1871,10 +1871,9 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
             (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
             (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
             (play->csCtx.state == CS_STATE_IDLE)) {
-            gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
+            gSaveContext.save.time = CURRENT_TIME + (u16)R_TIME_SPEED;
             if (R_TIME_SPEED != 0) {
-                gSaveContext.save.time =
-                    ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
+                gSaveContext.save.time = CURRENT_TIME + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
             }
         }
     }

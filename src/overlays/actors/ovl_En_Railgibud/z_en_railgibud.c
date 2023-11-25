@@ -256,7 +256,7 @@ void EnRailgibud_Init(Actor* thisx, PlayState* play) {
 
     EnRailgibud_SpawnOtherGibdosAndSetPositionAndRotation(this, play);
     this->playerStunWaitTimer = 0;
-    this->timeInitialized = gSaveContext.save.time;
+    this->timeInitialized = CURRENT_TIME;
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     this->type = EN_RAILGIBUD_TYPE_GIBDO;
     this->textId = 0;

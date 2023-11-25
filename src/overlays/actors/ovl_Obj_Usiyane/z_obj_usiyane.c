@@ -58,7 +58,7 @@ s32 func_80C07CD0(void) {
     }
 
     if (CURRENT_DAY == 1) {
-        s32 time = gSaveContext.save.time;
+        s32 time = CURRENT_TIME;
         s32 i;
 
         if ((time < CLOCK_TIME(2, 30)) || (time >= CLOCK_TIME(6, 0))) {

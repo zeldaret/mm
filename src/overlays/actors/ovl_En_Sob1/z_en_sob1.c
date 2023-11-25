@@ -188,7 +188,7 @@ u16 EnSob1_GetTalkOption(EnSob1* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->shopType == BOMB_SHOP) {
-        if ((gSaveContext.save.day == 1) && (gSaveContext.save.time >= CLOCK_TIME(6, 0))) {
+        if ((gSaveContext.save.day == 1) && (CURRENT_TIME >= CLOCK_TIME(6, 0))) {
             return 0x648;
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
             return 0x649;

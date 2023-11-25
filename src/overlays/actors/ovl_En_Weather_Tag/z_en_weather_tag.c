@@ -456,7 +456,7 @@ void func_809674C8(EnWeatherTag* this, PlayState* play) {
 
     if (Actor_WorldDistXZToActor(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(&this->actor)) {
         if (CURRENT_DAY == 2) {
-            if ((gSaveContext.save.time >= CLOCK_TIME(7, 0)) && (gSaveContext.save.time < CLOCK_TIME(17, 30)) &&
+            if ((CURRENT_TIME >= CLOCK_TIME(7, 0)) && (CURRENT_TIME < CLOCK_TIME(17, 30)) &&
                 (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
 
                 gWeatherMode = WEATHER_MODE_RAIN;
@@ -493,10 +493,9 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
         (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
         (play->csCtx.state == CS_STATE_IDLE)) {
 
-        gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
+        gSaveContext.save.time = CURRENT_TIME + (u16)R_TIME_SPEED;
         if (R_TIME_SPEED != 0) {
-            gSaveContext.save.time =
-                ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
+            gSaveContext.save.time = CURRENT_TIME + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
         }
     }
 }

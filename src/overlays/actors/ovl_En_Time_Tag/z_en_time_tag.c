@@ -323,8 +323,8 @@ void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play) {
         return;
     }
 
-    hour = TIME_TO_HOURS_F(gSaveContext.save.time);
-    minute = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
+    hour = TIME_TO_HOURS_F(CURRENT_TIME);
+    minute = (s32)TIME_TO_MINUTES_F(CURRENT_TIME) % 60;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {

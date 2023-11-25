@@ -423,8 +423,7 @@ void FileSelect_CopyConfirm(GameState* thisx) {
         this->configMode = CM_RETURN_TO_COPY_DEST;
         Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
     } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
-        dayTime = gSaveContext.save.time;
-        gSaveContext.save.time = dayTime;
+        gSaveContext.save.time = dayTime = CURRENT_TIME;
         this->nameAlpha[this->copyDestFileIndex] = 0;
         this->fileInfoAlpha[this->copyDestFileIndex] = this->nameAlpha[this->copyDestFileIndex];
         this->nextTitleLabel = FS_TITLE_COPY_COMPLETE;

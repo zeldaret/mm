@@ -2316,7 +2316,7 @@ void Message_Decode(PlayState* play) {
                 decodedBufPos--;
             } else if (curChar == 0x20A) {
                 digits[0] = 0;
-                timeInSeconds = TIME_TO_MINUTES_F(gSaveContext.save.time);
+                timeInSeconds = TIME_TO_MINUTES_F(CURRENT_TIME);
                 digits[1] = timeInSeconds / 60.0f;
                 while (digits[1] >= 10) {
                     digits[0]++;
@@ -5908,7 +5908,7 @@ void Message_Update(PlayState* play) {
         case MSGMODE_NEW_CYCLE_0:
             play->state.unk_A3 = 1;
             sp44 = gSaveContext.save.cutsceneIndex;
-            sp3E = gSaveContext.save.time;
+            sp3E = CURRENT_TIME;
             sp40 = gSaveContext.save.day;
 
             Sram_SaveEndOfCycle(play);

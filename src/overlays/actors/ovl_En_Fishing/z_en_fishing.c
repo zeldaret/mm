@@ -3061,11 +3061,11 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             }
 
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
-                if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= 0xC01B)) {
+                if ((CURRENT_TIME >= CLOCK_TIME(18, 0)) && (CURRENT_TIME <= (CLOCK_TIME(18, 1) - 0x12))) {
                     this->unk_150 = 7;
                     this->unk_172[3] = Rand_ZeroFloat(150.0f) + 200.0f;
                 }
-                if ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= 0x3AC5)) {
+                if ((CURRENT_TIME >= CLOCK_TIME(5, 30)) && (CURRENT_TIME <= (CLOCK_TIME(5, 31) - 0x13))) {
                     this->unk_150 = 7;
                     this->unk_172[3] = Rand_ZeroFloat(150.0f) + 200.0f;
                 }
@@ -3308,9 +3308,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 multiplier = 1.0f;
             }
 
-            if ((gSaveContext.save.time >= 0xB555) && (gSaveContext.save.time <= 0xCAAA)) {
+            if ((CURRENT_TIME >= CLOCK_TIME(17, 0)) && (CURRENT_TIME <= CLOCK_TIME(19, 0))) {
                 multiplier *= 1.75f;
-            } else if ((gSaveContext.save.time >= 0x3555) && (gSaveContext.save.time <= 0x4AAA)) {
+            } else if ((CURRENT_TIME >= CLOCK_TIME(5, 0)) && (CURRENT_TIME <= CLOCK_TIME(7, 0))) {
                 multiplier *= 1.5f;
             } else if (D_809171CA != 0) {
                 multiplier *= 1.5f;
