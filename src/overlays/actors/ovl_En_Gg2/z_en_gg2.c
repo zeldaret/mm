@@ -479,7 +479,8 @@ void EnGg2_Update(Actor* thisx, PlayState* play) {
     func_80B3ADD8(this);
 }
 
-s32 func_80B3BD44(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+s32 EnGg2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                           Gfx** gfx) {
     EnGg2* this = THIS;
 
     if ((this->animIndex != ENGG2_ANIM_5) && (this->animIndex != ENGG2_ANIM_7)) {
@@ -494,7 +495,7 @@ s32 func_80B3BD44(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-void func_80B3BDC0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnGg2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnGg2* this = THIS;
 
     if (limbIndex == OBJECT_GG_LIMB_04) {
@@ -514,7 +515,7 @@ void EnGg2_Draw(Actor* thisx, PlayState* play) {
 
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               func_80B3BD44, func_80B3BDC0, &this->actor, POLY_XLU_DISP);
+                               EnGg2_OverrideLimbDraw, EnGg2_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

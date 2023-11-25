@@ -1,13 +1,19 @@
-#include "global.h"
+#include "z64transition.h"
+
+#include "libc/stdbool.h"
+#include "gfx.h"
+#include "regs.h"
+#include "z64math.h"
+#include "z64save.h"
 
 #define THIS ((TransitionFade*)thisx)
 
-typedef enum {
+typedef enum TransitionFadeDirection {
     /* 0 */ TRANS_FADE_DIR_IN,
     /* 1 */ TRANS_FADE_DIR_OUT
 } TransitionFadeDirection;
 
-typedef enum {
+typedef enum TransitionFadeType {
     /* 0 */ TRANS_FADE_TYPE_NONE,
     /* 1 */ TRANS_FADE_TYPE_ONE_WAY,
     /* 2 */ TRANS_FADE_TYPE_FLASH

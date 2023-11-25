@@ -2856,8 +2856,8 @@ void Player_DrawCouplesMask(PlayState* play, Player* player) {
 }
 
 void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
-    static Vec3f bubbleVelocity = { 0.0f, 0.0f, 0.0f };
-    static Vec3f bubbleAccel = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sBubbleVelocity = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sBubbleAccel = { 0.0f, 0.0f, 0.0f };
     Gfx* gfx;
     s32 i;
 
@@ -2897,8 +2897,8 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
             s16 phi_s0 = speedXZ * 2000.0f;
             f32 temp_f20;
 
-            bubbleVelocity.y = speedXZ * 0.4f;
-            bubbleAccel.y = -0.3f;
+            sBubbleVelocity.y = speedXZ * 0.4f;
+            sBubbleAccel.y = -0.3f;
 
             if (phi_s0 > 0x3E80) {
                 phi_s0 = 0x3E80;
@@ -2908,10 +2908,10 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
             temp_f20 = speedXZ * 0.2f;
             temp_f20 = CLAMP_MAX(temp_f20, 4.0f);
 
-            bubbleVelocity.x = -Math_SinS(phi_s0) * temp_f20;
-            bubbleVelocity.z = -Math_CosS(phi_s0) * temp_f20;
+            sBubbleVelocity.x = -Math_SinS(phi_s0) * temp_f20;
+            sBubbleVelocity.z = -Math_CosS(phi_s0) * temp_f20;
 
-            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &bubbleVelocity, &bubbleAccel, 20, 20, 3, 0);
+            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &sBubbleVelocity, &sBubbleAccel, 20, 20, 3, 0);
             D_801F59C8[i] -= 400;
         }
     }

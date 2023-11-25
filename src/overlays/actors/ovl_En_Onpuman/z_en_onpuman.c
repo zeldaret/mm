@@ -123,6 +123,9 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
                     this->unk_2A0->home.rot.x = 0;
                 }
                 break;
+
+            default:
+                break;
         }
     }
     if (this->unk_2A4 & 1) {

@@ -1,6 +1,8 @@
 #include "global.h"
 #include "sys_cfb.h"
 #include "z64bombers_notebook.h"
+#include "z64malloc.h"
+
 #include "interface/schedule_static/schedule_static.h"
 #include "archives/schedule_dma_static/schedule_dma_static_yar.h"
 

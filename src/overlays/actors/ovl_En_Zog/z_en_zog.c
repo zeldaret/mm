@@ -971,7 +971,7 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-void EnZog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnZog_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B959B8 = { 0.0f, 0.0f, 0.0f };
     EnZog* this = THIS;
 
@@ -994,7 +994,7 @@ void EnZog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     }
 }
 
-void func_80B95598(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnZog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Vec3f D_80B959C4 = { 0.0f, 0.0f, 0.0f };
     EnZog* this = THIS;
 
@@ -1039,7 +1039,7 @@ void EnZog_Draw(Actor* thisx, PlayState* play) {
         POLY_XLU_DISP = &gfx[3];
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               NULL, func_80B95598, &this->actor, POLY_XLU_DISP);
+                               NULL, EnZog_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     } else {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Scene_SetRenderModeXlu(play, 0, 1);
@@ -1052,7 +1052,7 @@ void EnZog_Draw(Actor* thisx, PlayState* play) {
 
         POLY_OPA_DISP = &gfx[3];
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              NULL, EnZog_PostLimbDraw, &this->actor);
+                              NULL, EnZog_PostLimbDrawOpa, &this->actor);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

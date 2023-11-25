@@ -4,11 +4,13 @@
  */
 
 #include "z64actor.h"
+
 #include "prevent_bss_reordering.h"
 #include "fault.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
 #include "z64horse.h"
+#include "z64malloc.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 

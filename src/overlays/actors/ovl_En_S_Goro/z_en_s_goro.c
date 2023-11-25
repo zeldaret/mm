@@ -189,15 +189,6 @@ static TexturePtr sEyeTextures[] = {
     gGoronEyeClosed2Tex,
 };
 
-u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play);
-u16 EnSGoro_BombshopGoron_NextTextId(EnSGoro* this, PlayState* play);
-
-s32 EnSGoro_FindGoronElder(EnSGoro* this, PlayState* play);
-s32 EnSGoro_FindGoronChild(EnSGoro* this, PlayState* play);
-s32 EnSGoro_CheckLullaby(EnSGoro* this, PlayState* play);
-s32 EnSGoro_CheckGKBehavior(EnSGoro* this, PlayState* play);
-
-void EnSGoro_SetupAction(EnSGoro* this, PlayState* play);
 void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play);
 void EnSGoro_WinterShrineGoron_Talk(EnSGoro* this, PlayState* play);
 void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play);
@@ -209,23 +200,6 @@ void EnSGoro_ShopGoron_TakePayment(EnSGoro* this, PlayState* play);
 void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play);
 void EnSGoro_Sleep(EnSGoro* this, PlayState* play);
 void EnSGoro_SleepTalk(EnSGoro* this, PlayState* play);
-
-s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play);
-s32 EnSGoro_UpdateRotationToPlayer(EnSGoro* this, PlayState* play);
-s32 EnSGoro_UpdateAttentionTarget(EnSGoro* this, PlayState* play);
-void EnSGoro_UpdateToHandtapAnimation(EnSGoro* this);
-void EnSGoro_UpdateSleepyAnimation(EnSGoro* this);
-void EnSGoro_UpdateToIdleAnimation(EnSGoro* this);
-void EnSGoro_UpdateEyes(EnSGoro* this);
-void EnSGoro_UpdateActorFocus(EnSGoro* this);
-void EnSGoro_UpdateSleeping(EnSGoro* this, PlayState* play);
-void EnSGoro_UpdateCollider(EnSGoro* this, PlayState* play);
-
-s32 EnSGoro_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRot, s32 overrideRot);
-s32 EnSGoro_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void EnSGoro_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx);
-void EnSGoro_DrawUnrolled(EnSGoro* this, PlayState* play);
-void EnSGoro_DrawRolledUp(EnSGoro* this, PlayState* play);
 
 /**
  * Dialogue tree for EnSGoro when use in Goron Shrine context. Returns ID of next message to display.

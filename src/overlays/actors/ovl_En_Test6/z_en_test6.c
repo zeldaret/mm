@@ -5,9 +5,12 @@
  */
 
 #include "z_en_test6.h"
-#include "z64quake.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+
 #include "z64cutscene_commands.h"
+#include "z64malloc.h"
+#include "z64quake.h"
+
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_2000000)
 

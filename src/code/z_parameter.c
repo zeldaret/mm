@@ -1,9 +1,11 @@
 #include "global.h"
 #include "PR/gs2dex.h"
 #include "sys_cfb.h"
+#include "z64malloc.h"
 #include "z64snap.h"
 #include "z64view.h"
 #include "z64voice.h"
+
 #include "archives/icon_item_static/icon_item_static_yar.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
