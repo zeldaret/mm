@@ -18,7 +18,7 @@ typedef enum EnSlimeType {
     /* 1 */ EN_SLIME_TYPE_GREEN,
     /* 2 */ EN_SLIME_TYPE_YELLOW,
     /* 3 */ EN_SLIME_TYPE_RED,
-    /* 3 */ EN_SLIME_TYPE_MAX
+    /* 4 */ EN_SLIME_TYPE_MAX
 } EnSlimeType;
 
 typedef enum EnSlimeBodyPart {
