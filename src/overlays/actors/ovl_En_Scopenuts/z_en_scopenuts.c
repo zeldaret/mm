@@ -707,7 +707,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             Actor_Kill(&this->actor);
-        } else if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+        } else if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
             this->path =
                 SubS_GetPathByIndex(play, ENSCOPENUTS_GET_PATH_INDEX(&this->actor), ENSCOPENUTS_PATH_INDEX_NONE);
             this->actor.draw = NULL;

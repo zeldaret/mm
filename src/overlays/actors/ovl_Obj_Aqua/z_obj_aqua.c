@@ -247,7 +247,7 @@ void ObjAqua_Update(Actor* thisx, PlayState* play) {
         this->counter--;
     }
     this->actionFunc(this, play);
-    if (this->actor.update) {
+    if (this->actor.update != NULL) {
         if (this->actionFunc == func_80ACBC8C) {
             Math_Vec3f_StepTo(&this->actor.scale, &D_80ACC308, 0.00006f);
         } else if (this->actionFunc == func_80ACBD48) {
