@@ -11,13 +11,13 @@
 // If the list holds notes, 'pool' points back to the pool where it lives.
 // Otherwise, that member is NULL.
 typedef struct AudioListItem {
-    /* 0x00 */ struct AudioListItem* prev;
-    /* 0x04 */ struct AudioListItem* next;
+    /* 0x0 */ struct AudioListItem* prev;
+    /* 0x4 */ struct AudioListItem* next;
     union {
-        /* 0x08 */ void* value; // either Note* or SequenceLayer*
-        /* 0x08 */ s32 count;
-               } u;
-    /* 0x0C */ struct NotePool* pool;
+        /* 0x8 */ void* value; // either Note* or SequenceLayer*
+        /* 0x8 */ s32 count;
+    } u;
+    /* 0xC */ struct NotePool* pool;
 } AudioListItem; // size = 0x10
 
 typedef struct NotePool {

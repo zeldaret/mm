@@ -19,7 +19,7 @@ typedef enum ReverbDataType {
     /* 9 */ REVERB_DATA_TYPE_9 // Reverb Unk
 } ReverbDataType;
 
-typedef struct {
+typedef struct ReverbSettings {
     /* 0x00 */ u8 downsampleRate;
     /* 0x02 */ u16 delayNumSamples;
     /* 0x04 */ u16 decayRatio; // determines how fast reverb dissipates
@@ -39,7 +39,7 @@ typedef struct {
  * By storing the sample in a ring buffer, the time it takes to loop
  * around back to the same sample acts as a delay, leading to an echo effect.
  */
-typedef struct {
+typedef struct ReverbBufferEntry {
     /* 0x00 */ s16 numSamplesAfterDownsampling; // never read
     /* 0x02 */ s16 numSamples; // never read
     /* 0x04 */ s16* toDownsampleLeft;
@@ -52,7 +52,7 @@ typedef struct {
     /* 0x18 */ u16 saveResampleNumSamples;
 } ReverbBufferEntry; // size = 0x1C
 
-typedef struct {
+typedef struct SynthesisReverb {
     /* 0x000 */ u8 resampleFlags;
     /* 0x001 */ u8 useReverb;
     /* 0x002 */ u8 framesToIgnore;

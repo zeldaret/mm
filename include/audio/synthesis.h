@@ -19,7 +19,7 @@
 // Must be the same amount of samples as copied by aDuplicate() (audio microcode)
 #define WAVE_SAMPLE_COUNT 64
 
-typedef struct {
+typedef struct NoteSynthesisBuffers {
     /* 0x000 */ s16 adpcmState[16];
     /* 0x020 */ s16 finalResampleState[16];
     /* 0x040 */ s16 filterState[32];
@@ -29,7 +29,7 @@ typedef struct {
     /* 0x1E0 */ s16 surroundEffectState[128];
 } NoteSynthesisBuffers; // size = 0x2E0
 
-typedef struct {
+typedef struct NoteSynthesisState {
     /* 0x00 */ u8 atLoopPoint : 1;
     /* 0x00 */ u8 stopLoop : 1;
     /* 0x01 */ u8 sampleDmaIndex;

@@ -27,7 +27,7 @@ struct TunedSample;
 #define MUTE_FLAGS_STOP_NOTES (1 << 6) // prevent further notes from playing
 #define MUTE_FLAGS_STOP_SCRIPT (1 << 7) // stop processing sequence/channel scripts
 
-typedef struct {
+typedef struct SeqScriptState {
     /* 0x00 */ u8* pc; // program counter
     /* 0x04 */ u8* stack[4];
     /* 0x14 */ u8 remLoopIters[4]; // remaining loop iterations
@@ -35,12 +35,11 @@ typedef struct {
     /* 0x19 */ s8 value;
 } SeqScriptState; // size = 0x1C
 
-typedef enum {
+typedef enum SeqPlayerState {
     /* 0 */ SEQPLAYER_STATE_0,
     /* 1 */ SEQPLAYER_STATE_FADE_IN,
     /* 2 */ SEQPLAYER_STATE_FADE_OUT
 } SeqPlayerState;
-
 
 // Also known as a Group, according to debug strings.
 typedef struct SequencePlayer {
@@ -224,7 +223,7 @@ void AudioScript_ResetSequencePlayer(SequencePlayer* seqPlayer);
 void AudioScript_InitSequencePlayerChannels(s32 seqPlayerIndex);
 void AudioScript_InitSequencePlayers(void);
 
-typedef enum {
+typedef enum AudioCustomFunctions {
     /* 0x00 */ AUDIO_CUSTOM_FUNCTION_SEQ_0,
     /* 0x01 */ AUDIO_CUSTOM_FUNCTION_SEQ_1,
     /* 0x02 */ AUDIO_CUSTOM_FUNCTION_SEQ_2,

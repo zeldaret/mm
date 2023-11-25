@@ -15,11 +15,11 @@ struct SoundEffect;
 
 #define AUDIO_ERROR(fontId, id, err) (((fontId << 8) + id) + (err << 24))
 
-typedef enum {
-    /*  0x1 */ AUDIO_ERROR_NO_INST = 1,
-    /*  0x3 */ AUDIO_ERROR_INVALID_INST_ID = 3,
-    /*  0x4 */ AUDIO_ERROR_INVALID_DRUM_SFX_ID,
-    /*  0x5 */ AUDIO_ERROR_NO_DRUM_SFX,
+typedef enum AudioError {
+    /* 0x01 */ AUDIO_ERROR_NO_INST = 1,
+    /* 0x03 */ AUDIO_ERROR_INVALID_INST_ID = 3,
+    /* 0x04 */ AUDIO_ERROR_INVALID_DRUM_SFX_ID,
+    /* 0x05 */ AUDIO_ERROR_NO_DRUM_SFX,
     /* 0x10 */ AUDIO_ERROR_FONT_NOT_LOADED = 0x10
 } AudioError;
 
@@ -35,7 +35,7 @@ typedef union {
     /* 0x0 */ u8 asByte;
 } StereoData; // size = 0x1
 
-typedef struct {
+typedef struct NoteAttributes {
     /* 0x00 */ u8 targetReverbVol;
     /* 0x01 */ u8 gain; // Increases volume by a multiplicative scaling factor. Represented as a UQ4.4 number
     /* 0x02 */ u8 pan;
@@ -49,13 +49,13 @@ typedef struct {
     /* 0x14 */ s16* filterBuf;
 } NoteAttributes; // size = 0x18
 
-typedef enum {
+typedef enum NotePlaybackStatus {
     /* 0 */ PLAYBACK_STATUS_0,
     /* 1 */ PLAYBACK_STATUS_1,
     /* 2 */ PLAYBACK_STATUS_2
 } NotePlaybackStatus;
 
-typedef struct {
+typedef struct NotePlaybackState {
     /* 0x00 */ u8 priority;
     /* 0x01 */ u8 waveId;
     /* 0x02 */ u8 harmonicIndex; // the harmonic index for the synthetic wave contained in gWaveSamples (also matches the base 2 logarithm of the harmonic order)
@@ -78,7 +78,7 @@ typedef struct {
     /* 0x88 */ UNK_TYPE1 unk_BC[0x1C]; 
 } NotePlaybackState; // size = 0xA4
 
-typedef struct {
+typedef struct NoteSampleState {
     struct {
         /* 0x00 */ volatile u8 enabled : 1;
         /* 0x00 */ u8 needsInit : 1;

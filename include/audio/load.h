@@ -11,7 +11,7 @@
 
 typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
 
-typedef enum {
+typedef enum SampleBankTableType {
     /* 0 */ SEQUENCE_TABLE,
     /* 1 */ FONT_TABLE,
     /* 2 */ SAMPLE_TABLE
@@ -35,7 +35,7 @@ typedef struct {
     /* 0x10 */ AudioTableEntry entries[1]; // (dynamic size)
 } AudioTable; // size >= 0x20
 
-typedef enum {
+typedef enum AudioLoadStatus {
     /* 0 */ LOAD_STATUS_NOT_LOADED,
     /* 1 */ LOAD_STATUS_IN_PROGRESS,
     /* 2 */ LOAD_STATUS_COMPLETE,
@@ -44,14 +44,14 @@ typedef enum {
     /* 5 */ LOAD_STATUS_PERMANENT
 } AudioLoadStatus;
 
-typedef enum {
+typedef enum AudioCacheType {
     /* 0 */ CACHE_TEMPORARY,
     /* 1 */ CACHE_PERSISTENT,
     /* 2 */ CACHE_EITHER,
     /* 3 */ CACHE_PERMANENT
 } AudioCacheType;
 
-typedef enum {
+typedef enum AudioCacheLoadType {
     /* 0 */ CACHE_LOAD_PERMANENT,
     /* 1 */ CACHE_LOAD_PERSISTENT,
     /* 2 */ CACHE_LOAD_TEMPORARY,
