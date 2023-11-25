@@ -1012,7 +1012,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
             return;
         }
     } else if (play->sceneId == SCENE_BACKTOWN) {
-        if ((CURRENT_TIME >= CLOCK_TIME(0, 20)) && (CURRENT_TIME < CLOCK_TIME(6, 00))) {
+        if ((CURRENT_TIME >= CLOCK_TIME(0, 20)) && (CURRENT_TIME < CLOCK_TIME(6, 0))) {
             Actor_Kill(&this->actor);
         }
 

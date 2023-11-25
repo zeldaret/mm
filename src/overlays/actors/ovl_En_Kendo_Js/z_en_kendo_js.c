@@ -120,7 +120,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_js_Skel_006990, &object_js_Anim_000F4C, this->jointTable,
                        this->morphTable, OBJECT_JS_LIMB_MAX);
 
-    if ((CURRENT_DAY == 3) && !((CURRENT_TIME <= CLOCK_TIME(23, 0)) && (CURRENT_TIME >= CLOCK_TIME(6, 0)))) {
+    if ((CURRENT_DAY == 3) && ((CURRENT_TIME > CLOCK_TIME(23, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0)))) {
         if (ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.home.pos.x, this->actor.home.pos.y,
                         this->actor.home.pos.z - 10.0f, this->actor.home.rot.x, this->actor.home.rot.y,

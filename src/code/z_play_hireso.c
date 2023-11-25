@@ -698,7 +698,7 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
     s32 tensDigit;
     s32 hours;
 
-    time = (CURRENT_TIME - CLOCK_TIME(6, 0));
+    time = CURRENT_TIME - CLOCK_TIME(6, 0);
     if (CURRENT_DAY == 0) {
         time = 0;
     }
