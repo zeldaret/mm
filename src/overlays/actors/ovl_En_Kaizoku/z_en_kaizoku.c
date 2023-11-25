@@ -2024,7 +2024,7 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        Matrix_RotateYS(this->picto.actor.shape.rot.y + this->unk_2F4, 0);
+        Matrix_RotateYS(this->picto.actor.shape.rot.y + this->unk_2F4, MTXMODE_NEW);
         Matrix_MultVecZ(this->unk_2F0, &sp34);
         this->picto.actor.world.pos.x += this->unk_3C4.x + sp34.x;
         this->picto.actor.world.pos.z += this->unk_3C4.z + sp34.z;

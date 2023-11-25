@@ -71,8 +71,10 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
             }
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 120.0f;
+
             //! FAKE:
             if (1) {}
+
             this->unk_15E--;
         }
     } else if (this->unk_15E == 0) {
@@ -90,6 +92,7 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
         this->unk_15E = 0x64;
         this->unk_160 = true;
     }
+
     if (sp28 || (this->unk_15C & 7)) {
         if (this->unk_15C & 1) {
             var_fv1 = 1.0f;
@@ -103,6 +106,7 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
     } else {
         this->unk_15C = 0;
     }
+
     if (this->unk_160) {
         if (this->dyna.actor.csId == CS_ID_NONE) {
             this->unk_160 = false;

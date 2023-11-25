@@ -1261,7 +1261,7 @@ void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         if ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer > 18)) {
             if (this->actor.scale.x != 0.0f) {
                 Matrix_Scale(0.014f / this->actor.scale.x, 0.014f / this->actor.scale.x, 0.014f / this->actor.scale.x,
-                             1);
+                             MTXMODE_APPLY);
             }
         }
         Matrix_Get(&this->drawMtxF);

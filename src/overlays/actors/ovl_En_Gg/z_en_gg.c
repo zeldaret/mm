@@ -515,23 +515,19 @@ void func_80B35B44(EnGgStruct* ptr, PlayState* play) {
 void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
     s32 sp74;
     s32 phi_s7;
-    f32 temp_f22;
-    f32 temp_f24;
-    f32 temp_f26;
-    f32 temp_f20;
     s32 i;
-    s32 temp = 10;
+    s32 ten = 10;
 
     if (ptr->unk_48 != 0) {
-        sp74 = ptr->unk_40 % temp;
+        sp74 = ptr->unk_40 % ten;
         ptr->unk_40 = sp74;
-        phi_s7 = 0x46;
+        phi_s7 = 70;
     } else if (ptr->animIndex == ENGG_ANIM_13) {
         sp74 = ptr->unk_40;
-        phi_s7 = 0x46;
+        phi_s7 = 70;
     } else {
         phi_s7 = ptr->unk_40 - ptr->unk_44;
-        sp74 = ptr->unk_40 % temp;
+        sp74 = ptr->unk_40 % ten;
     }
 
     if (phi_s7 <= 0) {
@@ -542,15 +538,12 @@ void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
 
     Matrix_Push();
 
-    for (i = sp74; i < phi_s7; i += temp) {
-        temp_f20 = i * 0.14f;
-        temp_f22 = ptr->unk_00.x + (ptr->unk_18.x * temp_f20) + (0.5f * ptr->unk_24.x * temp_f20 * temp_f20);
-        temp_f24 = ptr->unk_00.y - Math_SinS((i * 0x27FFB) / 70);
-        temp_f26 = ptr->unk_00.z + (ptr->unk_18.z * temp_f20) + (0.5f * ptr->unk_24.z * temp_f20 * temp_f20);
-        temp_f20 = Rand_ZeroOne() * 0.003f;
-
-        //! FAKE:
-        if (1) {}
+    for (i = sp74; i < phi_s7; i += ten) {
+        f32 temp = i * 0.14f;
+        f32 temp_f22 = ptr->unk_00.x + (ptr->unk_18.x * temp) + (0.5f * ptr->unk_24.x * temp * temp);
+        f32 temp_f24 = ptr->unk_00.y - Math_SinS((i * 0x27FFB) / 70);
+        f32 temp_f26 = ptr->unk_00.z + (ptr->unk_18.z * temp) + (0.5f * ptr->unk_24.z * temp * temp);
+        f32 temp_f20 = Rand_ZeroOne() * 0.003f;
 
         Matrix_Translate(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
         Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
@@ -569,12 +562,12 @@ void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
 
     Matrix_Push();
 
-    for (i = sp74; i < phi_s7; i += temp) {
-        temp_f20 = i * 0.14f;
-        temp_f22 = ptr->unk_0C.x + ((ptr->unk_18.x * temp_f20) + (0.5f * ptr->unk_24.x * temp_f20 * temp_f20));
-        temp_f24 = ptr->unk_0C.y - Math_SinS((i * 0x27FFB) / 70);
-        temp_f26 = ptr->unk_0C.z + (ptr->unk_18.z * temp_f20) + (0.5f * ptr->unk_24.z * temp_f20 * temp_f20);
-        temp_f20 = Rand_ZeroOne() * 0.003f;
+    for (i = sp74; i < phi_s7; i += ten) {
+        f32 temp = i * 0.14f;
+        f32 temp_f22 = ptr->unk_0C.x + ((ptr->unk_18.x * temp) + (0.5f * ptr->unk_24.x * temp * temp));
+        f32 temp_f24 = ptr->unk_0C.y - Math_SinS((i * 0x27FFB) / 70);
+        f32 temp_f26 = ptr->unk_0C.z + (ptr->unk_18.z * temp) + (0.5f * ptr->unk_24.z * temp * temp);
+        f32 temp_f20 = Rand_ZeroOne() * 0.003f;
 
         Matrix_Translate(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
         Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
