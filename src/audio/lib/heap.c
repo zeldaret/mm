@@ -1,5 +1,6 @@
 #include "global.h"
 #include "audio/effects.h"
+#include "audio/heap.h"
 
 void* AudioHeap_SearchRegularCaches(s32 tableType, s32 cache, s32 id);
 void AudioHeap_InitSampleCaches(size_t persistentSampleCacheSize, size_t temporarySampleCacheSize);

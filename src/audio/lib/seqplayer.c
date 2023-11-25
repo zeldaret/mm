@@ -14,6 +14,7 @@
  *     Otherwise, each set of instructions has its own command interpreter
  */
 #include "global.h"
+#include "audio/seqplayer.h"
 
 #define PROCESS_SCRIPT_END -1
 

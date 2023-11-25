@@ -7,16 +7,17 @@
 #include "libc/stddef.h"
 #include "unk.h"
 
-#include "audio/effects.h"
 #include "audio/heap.h"
 #include "audio/list.h"
 #include "audio/load.h"
-#include "audio/playback.h"
 #include "audio/reverb.h"
 #include "audio/seqplayer.h"
-#include "audio/soundfont.h"
-#include "audio/synthesis.h"
 #include "sequence.h"
+
+struct Note;
+struct NoteSampleState;
+struct SoundFont;
+struct Sample;
 
 typedef enum {
     /* 0 */ AUDIO_HEAP_RESET_STATE_NONE,
@@ -138,10 +139,10 @@ typedef struct {
     /* 0x0004 */ u16 unk_4;
     /* 0x0006 */ char unk_0006[0xA];
     /* 0x0010 */ s16* adpcmCodeBook;
-    /* 0x0014 */ NoteSampleState* sampleStateList;
+    /* 0x0014 */ struct NoteSampleState* sampleStateList;
     /* 0x0018 */ SynthesisReverb synthesisReverbs[4];
     /* 0x0B58 */ char unk_0B58[0x30];
-    /* 0x0B88 */ Sample* usedSamples[128];
+    /* 0x0B88 */ struct Sample* usedSamples[128];
     /* 0x0D88 */ AudioPreloadReq preloadSampleStack[128];
     /* 0x1788 */ s32 numUsedSamples;
     /* 0x178C */ s32 preloadSampleStackTop;
@@ -179,7 +180,7 @@ typedef struct {
     /* 0x285C */ char unk_285C[0x4];
     /* 0x2860 */ u8* sequenceFontTable;
     /* 0x2864 */ u16 numSequences;
-    /* 0x2868 */ SoundFont* soundFontList;
+    /* 0x2868 */ struct SoundFont* soundFontList;
     /* 0x286C */ AudioBufferParameters audioBufferParameters;
     /* 0x2994 */ f32 unk_2870;
     /* 0x2898 */ s32 sampleDmaBufSize1;
@@ -236,7 +237,7 @@ typedef struct {
     /* 0x4450 */ f32* adsrDecayTable; // A table on the audio heap that stores decay rates used for ADSR
     /* 0x4454 */ u8* audioHeap;
     /* 0x4458 */ size_t audioHeapSize;
-    /* 0x445C */ Note* notes;
+    /* 0x445C */ struct Note* notes;
     /* 0x4460 */ SequencePlayer seqPlayers[5];
     /* 0x4B40 */ SequenceLayer sequenceLayers[80];
     /* 0x7840 */ SequenceChannel sequenceChannelNone;

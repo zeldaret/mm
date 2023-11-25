@@ -17,7 +17,7 @@ typedef enum SampleBankTableType {
     /* 2 */ SAMPLE_TABLE
 } SampleBankTableType;
 
-typedef struct {
+typedef struct AudioTableEntry {
     /* 0x0 */ uintptr_t romAddr;
     /* 0x4 */ size_t size;
     /* 0x8 */ s8 medium;
@@ -27,7 +27,7 @@ typedef struct {
     /* 0xE */ s16 shortData3;
 } AudioTableEntry; // size = 0x10
 
-typedef struct {
+typedef struct AudioTable {
     /* 0x00 */ s16 numEntries;
     /* 0x02 */ s16 unkMediumParam;
     /* 0x04 */ uintptr_t romAddr;
@@ -59,7 +59,7 @@ typedef enum AudioCacheLoadType {
     /* 4 */ CACHE_LOAD_EITHER_NOSYNC
 } AudioCacheLoadType;
 
-typedef struct {
+typedef struct AudioAsyncLoad {
     /* 0x00 */ s8 status;
     /* 0x01 */ s8 delay;
     /* 0x02 */ s8 medium;
@@ -76,7 +76,7 @@ typedef struct {
     /* 0x40 */ OSIoMesg ioMesg;
 } AudioAsyncLoad; // size = 0x58
 
-typedef struct {
+typedef struct AudioSlowLoad {
     /* 0x00 */ u8 medium;
     /* 0x01 */ u8 seqOrFontId;
     /* 0x02 */ u16 instId;
@@ -93,7 +93,7 @@ typedef struct {
     /* 0x4C */ OSIoMesg ioMesg;
 } AudioSlowLoad; // size = 0x64
 
-typedef struct {
+typedef struct SampleDma {
     /* 0x0 */ u8* ramAddr;
     /* 0x4 */ uintptr_t devAddr;
     /* 0x8 */ u16 sizeUnused;
@@ -103,7 +103,7 @@ typedef struct {
     /* 0xE */ u8 ttl;        // Time To Live: duration after which the DMA can be discarded
 } SampleDma; // size = 0x10
 
-typedef struct {
+typedef struct AudioPreloadReq {
     /* 0x00 */ u32 endAndMediumKey;
     /* 0x04 */ Sample* sample;
     /* 0x08 */ u8* ramAddr;
