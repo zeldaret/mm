@@ -153,28 +153,6 @@ static Color_RGBA8 sBubblePrimColor = { 255, 255, 255, 255 };
 static Color_RGBA8 sBubbleEnvColor = { 150, 150, 150, 0 };
 static Vec3f sBubbleAccel = { 0.0f, -0.8f, 0.0f };
 
-static Color_RGBA8 sPrimColors[] = {
-    { 255, 255, 255, 255 }, // EN_SLIME_TYPE_BLUE
-    { 255, 255, 0, 255 },   // EN_SLIME_TYPE_GREEN
-    { 255, 255, 200, 255 }, // EN_SLIME_TYPE_YELLOW
-    { 225, 200, 255, 255 }, // EN_SLIME_TYPE_RED
-};
-
-static Color_RGBA8 sEnvColors[] = {
-    { 140, 255, 195, 255 }, // EN_SLIME_TYPE_BLUE
-    { 50, 255, 0, 255 },    // EN_SLIME_TYPE_GREEN
-    { 255, 180, 0, 255 },   // EN_SLIME_TYPE_YELLOW
-    { 255, 50, 155, 255 },  // EN_SLIME_TYPE_RED
-};
-
-static Vec3f sBodyPartPosOffsets[EN_SLIME_BODYPART_MAX] = {
-    { 2000.0f, 2000.0f, 0.0f },     // EN_SLIME_BODYPART_0
-    { -1500.0f, 2500.0f, -500.0f }, // EN_SLIME_BODYPART_1
-    { -500.0f, 1000.0f, 2500.0f },  // EN_SLIME_BODYPART_2
-    { 0.0f, 4000.0f, 0.0f },        // EN_SLIME_BODYPART_3
-    { 0.0f, 2000.0f, -2000.0f },    // EN_SLIME_BODYPART_4
-};
-
 AnimatedMaterial* sSlimeTexAnim;
 
 void EnSlime_Init(Actor* thisx, PlayState* play) {
@@ -1164,6 +1142,28 @@ void EnSlime_Update(Actor* thisx, PlayState* play) {
     }
 }
 
+static Color_RGBA8 sPrimColors[EN_SLIME_TYPE_MAX] = {
+    { 255, 255, 255, 255 }, // EN_SLIME_TYPE_BLUE
+    { 255, 255, 0, 255 },   // EN_SLIME_TYPE_GREEN
+    { 255, 255, 200, 255 }, // EN_SLIME_TYPE_YELLOW
+    { 225, 200, 255, 255 }, // EN_SLIME_TYPE_RED
+};
+
+static Color_RGBA8 sEnvColors[EN_SLIME_TYPE_MAX] = {
+    { 140, 255, 195, 255 }, // EN_SLIME_TYPE_BLUE
+    { 50, 255, 0, 255 },    // EN_SLIME_TYPE_GREEN
+    { 255, 180, 0, 255 },   // EN_SLIME_TYPE_YELLOW
+    { 255, 50, 155, 255 },  // EN_SLIME_TYPE_RED
+};
+
+static Vec3f sBodyPartPosOffsets[EN_SLIME_BODYPART_MAX] = {
+    { 2000.0f, 2000.0f, 0.0f },     // EN_SLIME_BODYPART_0
+    { -1500.0f, 2500.0f, -500.0f }, // EN_SLIME_BODYPART_1
+    { -500.0f, 1000.0f, 2500.0f },  // EN_SLIME_BODYPART_2
+    { 0.0f, 4000.0f, 0.0f },        // EN_SLIME_BODYPART_3
+    { 0.0f, 2000.0f, -2000.0f },    // EN_SLIME_BODYPART_4
+};
+
 void EnSlime_Draw(Actor* thisx, PlayState* play) {
     s32 i;
     EnSlime* this = THIS;
@@ -1208,14 +1208,14 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
         // Ice block is not active
         Scene_SetRenderModeXlu(play, 0, 1);
 
-        gSPSegment(POLY_OPA_DISP++, 9, (u32)sEyeTextures[this->eyeTexIndex]);
+        gSPSegment(POLY_OPA_DISP++, 0x09, sEyeTextures[this->eyeTexIndex]);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 30, 70, 255);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gChuchuEyesDL);
 
     } else {
         Scene_SetRenderModeXlu(play, 1, 2);
-        gSPSegment(POLY_XLU_DISP++, 9, (u32)sEyeTextures[this->eyeTexIndex]);
+        gSPSegment(POLY_XLU_DISP++, 9, sEyeTextures[this->eyeTexIndex]);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gChuchuEyesDL);
     }
@@ -1241,7 +1241,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
                          this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(0.03f, 0.03f, 0.03f, MTXMODE_APPLY);
 
-        gSPSegment(POLY_OPA_DISP++, 8, (u32)this->itemDropTex);
+        gSPSegment(POLY_OPA_DISP++, 0x08, this->itemDropTex);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
     }

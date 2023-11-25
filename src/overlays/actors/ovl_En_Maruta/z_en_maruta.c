@@ -664,23 +664,23 @@ void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4) {
 }
 
 void func_80B382E4(PlayState* play, Vec3f arg1) {
-    Vec3f sp84 = arg1;
-    Vec3f sp78;
-    Vec3f sp6C;
-    Color_RGBA8 sp68 = { 170, 130, 90, 255 };
-    Color_RGBA8 sp64 = { 100, 60, 20, 255 };
+    Vec3f pos = arg1;
+    Vec3f velocity;
+    Vec3f accel;
+    Color_RGBA8 primColor = { 170, 130, 90, 255 };
+    Color_RGBA8 envColor = { 100, 60, 20, 255 };
     s32 i;
 
-    sp6C.y = 0.0f;
-    sp84.y += 15.0f;
+    accel.y = 0.0f;
+    pos.y += 15.0f;
 
     for (i = 0; i < 10; i++) {
-        sp78.x = Rand_Centered() * 10.0f;
-        sp78.y = 2.0f * Rand_ZeroOne();
-        sp78.z = Rand_Centered() * 10.0f;
-        sp6C.x = -0.2f * sp78.x;
-        sp6C.z = -0.2f * sp78.z;
-        func_800B0EB0(play, &sp84, &sp78, &sp6C, &sp68, &sp64, 60, 20, 10);
+        velocity.x = Rand_Centered() * 10.0f;
+        velocity.y = 2.0f * Rand_ZeroOne();
+        velocity.z = Rand_Centered() * 10.0f;
+        accel.x = -0.2f * velocity.x;
+        accel.z = -0.2f * velocity.z;
+        func_800B0EB0(play, &pos, &velocity, &accel, &primColor, &envColor, 60, 20, 10);
     }
 }
 

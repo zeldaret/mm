@@ -2,6 +2,7 @@
 #define Z_EN_SB_H
 
 #include "global.h"
+#include "objects/object_sb/object_sb.h"
 
 struct EnSb;
 
@@ -18,8 +19,8 @@ typedef enum {
 typedef struct EnSb {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[9];
-    /* 0x1BE */ Vec3s morphTable[9];
+    /* 0x188 */ Vec3s jointTable[OBJECT_SB_LIMB_MAX];
+    /* 0x1BE */ Vec3s morphTable[OBJECT_SB_LIMB_MAX];
     /* 0x1F4 */ EnSbActionFunc actionFunc;
     /* 0x1F8 */ ColliderCylinder collider;
     /* 0x244 */ s16 fireCount;

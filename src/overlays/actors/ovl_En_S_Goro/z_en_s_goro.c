@@ -72,28 +72,6 @@ void EnSGoro_Destroy(Actor* thisx, PlayState* play);
 void EnSGoro_Update(Actor* thisx, PlayState* play);
 void EnSGoro_Draw(Actor* thisx, PlayState* play);
 
-typedef enum EnSGoroEyeTexture {
-    /* 0x0 */ EN_S_GORO_EYETEX_OPEN,
-    /* 0x1 */ EN_S_GORO_EYETEX_HALF,
-    /* 0x2 */ EN_S_GORO_EYETEX_CLOSED,
-    /* 0x3 */ EN_S_GORO_EYETEX_CLOSED2
-} EnSGoroEyeTexture;
-
-typedef enum EnSGoroAnimation {
-    /* 0x0 */ EN_S_GORO_ANIM_IDLE_LIEDOWN_A,
-    /* 0x1 */ EN_S_GORO_ANIM_IDLE_LIEDOWN_B,
-    /* 0x2 */ EN_S_GORO_ANIM_UNROLL_A,
-    /* 0x3 */ EN_S_GORO_ANIM_UNROLL_B,
-    /* 0x4 */ EN_S_GORO_ANIM_ROLLUP,
-    /* 0x5 */ EN_S_GORO_ANIM_SHIVER_A,
-    /* 0x6 */ EN_S_GORO_ANIM_SHIVER_B,
-    /* 0xB */ EN_S_GORO_ANIM_COVEREARS = 11,
-    /* 0xC */ EN_S_GORO_ANIM_TAISOU_CHEER,
-    /* 0xD */ EN_S_GORO_ANIM_STAND_HANDTAP,
-    /* 0xE */ EN_S_GORO_ANIM_SLEEPY,
-    /* 0xF */ EN_S_GORO_ANIM_IDLE_STAND
-} EnSGoroAnimation;
-
 ActorInit En_S_Goro_InitVars = {
     /**/ ACTOR_EN_S_GORO,
     /**/ ACTORCAT_NPC,
@@ -163,26 +141,54 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gGoronAthleticsDoubleArmSideBendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gGoronAthleticsShakeLimbsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gGoronAthleticsSingleArmSideBendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gGoronAthleticsHamstringStretchStandingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gGoronCoverEarsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gGoronAthleticsCheerAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gGoronStandingHandTappingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gGoronSleepyAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gGoronStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
+typedef enum EnSGoroAnimation {
+    /*  0x0 */ EN_S_GORO_ANIM_IDLE_LIEDOWN_A,
+    /*  0x1 */ EN_S_GORO_ANIM_IDLE_LIEDOWN_B,
+    /*  0x2 */ EN_S_GORO_ANIM_UNROLL_A,
+    /*  0x3 */ EN_S_GORO_ANIM_UNROLL_B,
+    /*  0x4 */ EN_S_GORO_ANIM_ROLLUP,
+    /*  0x5 */ EN_S_GORO_ANIM_SHIVER_A,
+    /*  0x6 */ EN_S_GORO_ANIM_SHIVER_B,
+    /*  0x7 */ EN_S_GORO_ANIM_7,
+    /*  0x7 */ EN_S_GORO_ANIM_8,
+    /*  0x7 */ EN_S_GORO_ANIM_9,
+    /*  0x7 */ EN_S_GORO_ANIM_10,
+    /*  0xB */ EN_S_GORO_ANIM_COVEREARS,
+    /*  0xC */ EN_S_GORO_ANIM_TAISOU_CHEER,
+    /*  0xD */ EN_S_GORO_ANIM_STAND_HANDTAP,
+    /*  0xE */ EN_S_GORO_ANIM_SLEEPY,
+    /*  0xF */ EN_S_GORO_ANIM_IDLE_STAND,
+    /* 0x10 */ EN_S_GORO_ANIM_MAX
+} EnSGoroAnimation;
+
+static AnimationInfoS sAnimationInfo[EN_S_GORO_ANIM_MAX] = {
+    { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                     // EN_S_GORO_ANIM_IDLE_LIEDOWN_A
+    { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },                    // EN_S_GORO_ANIM_IDLE_LIEDOWN_B
+    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },                            // EN_S_GORO_ANIM_UNROLL_A
+    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, -4 },                           // EN_S_GORO_ANIM_UNROLL_B
+    { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, -4 },                          // EN_S_GORO_ANIM_ROLLUP
+    { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                            // EN_S_GORO_ANIM_SHIVER_A
+    { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },                           // EN_S_GORO_ANIM_SHIVER_B
+    { &gGoronAthleticsDoubleArmSideBendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // EN_S_GORO_ANIM_7
+    { &gGoronAthleticsShakeLimbsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // EN_S_GORO_ANIM_8
+    { &gGoronAthleticsSingleArmSideBendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // EN_S_GORO_ANIM_9
+    { &gGoronAthleticsHamstringStretchStandingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // EN_S_GORO_ANIM_10
+    { &gGoronCoverEarsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                         // EN_S_GORO_ANIM_COVEREARS
+    { &gGoronAthleticsCheerAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },                   // EN_S_GORO_ANIM_TAISOU_CHEER
+    { &gGoronStandingHandTappingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },              // EN_S_GORO_ANIM_STAND_HANDTAP
+    { &gGoronSleepyAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },                           // EN_S_GORO_ANIM_SLEEPY
+    { &gGoronStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },                     // EN_S_GORO_ANIM_IDLE_STAND
 };
 
-static TexturePtr sEyeTextures[] = {
+typedef enum EnSGoroEyeTexture {
+    /* 0x0 */ EN_S_GORO_EYETEX_OPEN,
+    /* 0x1 */ EN_S_GORO_EYETEX_HALF,
+    /* 0x2 */ EN_S_GORO_EYETEX_CLOSED,
+    /* 0x3 */ EN_S_GORO_EYETEX_CLOSED2,
+    /* 0x4 */ EN_S_GORO_EYETEX_MAX
+} EnSGoroEyeTexture;
+
+static TexturePtr sEyeTextures[EN_S_GORO_EYETEX_MAX] = {
     gGoronEyeOpenTex,
     gGoronEyeHalfTex,
     gGoronEyeClosedTex,
@@ -758,22 +764,22 @@ void EnSGoro_UpdateSleeping(EnSGoro* this, PlayState* play) {
 }
 
 s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
-    if (this->animInfoIndex == EN_S_GORO_ANIM_IDLE_STAND) {
+    if (this->animIndex == EN_S_GORO_ANIM_IDLE_STAND) {
         if (((EnJg*)this->otherGoron)->flags & 1) {
             this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_TAISOU);
             if (this->objectSlot > OBJECT_SLOT_NONE) {
                 gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
-                this->animInfoIndex = EN_S_GORO_ANIM_TAISOU_CHEER;
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+                this->animIndex = EN_S_GORO_ANIM_TAISOU_CHEER;
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
                 return true;
             }
         }
-    } else if ((this->animInfoIndex == EN_S_GORO_ANIM_TAISOU_CHEER) && !(((EnJg*)this->otherGoron)->flags & 1)) {
+    } else if ((this->animIndex == EN_S_GORO_ANIM_TAISOU_CHEER) && !(((EnJg*)this->otherGoron)->flags & 1)) {
         this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
         if (this->objectSlot > OBJECT_SLOT_NONE) {
             gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
-            this->animInfoIndex = EN_S_GORO_ANIM_IDLE_STAND;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+            this->animIndex = EN_S_GORO_ANIM_IDLE_STAND;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->skelAnime.curFrame = this->skelAnime.endFrame;
             return true;
         }
@@ -787,8 +793,8 @@ s32 EnSGoro_CheckLullaby(EnSGoro* this, PlayState* play) {
 
     if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT)) {
         if (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) {
-            this->animInfoIndex = EN_S_GORO_ANIM_ROLLUP;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+            this->animIndex = EN_S_GORO_ANIM_ROLLUP;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
 
             actorType = EN_S_GORO_GET_MAIN_TYPE(&this->actor);
             this->snorePhase = 0x400 << (actorType + 1);
@@ -819,8 +825,8 @@ s32 EnSGoro_CheckGKBehavior(EnSGoro* this, PlayState* play) {
         ((((EnGk*)this->otherGoron)->unk_1E4 & 0x80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON))) {
 
         this->actionFlags |= EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED;
-        this->animInfoIndex = EN_S_GORO_ANIM_ROLLUP;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+        this->animIndex = EN_S_GORO_ANIM_ROLLUP;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
 
         actorType = EN_S_GORO_GET_MAIN_TYPE(&this->actor);
         this->snorePhase = 0x400 << (actorType + 1);
@@ -843,37 +849,37 @@ s32 EnSGoro_CheckGKBehavior(EnSGoro* this, PlayState* play) {
 
 void EnSGoro_UpdateToHandtapAnimation(EnSGoro* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animInfoIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if ((this->animInfoIndex != EN_S_GORO_ANIM_STAND_HANDTAP) && (curFrame == lastFrame)) {
-        this->animInfoIndex = EN_S_GORO_ANIM_STAND_HANDTAP;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+    if ((this->animIndex != EN_S_GORO_ANIM_STAND_HANDTAP) && (curFrame == endFrame)) {
+        this->animIndex = EN_S_GORO_ANIM_STAND_HANDTAP;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
     }
 }
 
 void EnSGoro_UpdateSleepyAnimation(EnSGoro* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animInfoIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
-        if (curFrame == lastFrame) {
-            this->animInfoIndex = EN_S_GORO_ANIM_SLEEPY;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+    if (this->animIndex != EN_S_GORO_ANIM_SLEEPY) {
+        if (curFrame == endFrame) {
+            this->animIndex = EN_S_GORO_ANIM_SLEEPY;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
-    } else if (curFrame == lastFrame) {
+    } else if (curFrame == endFrame) {
         this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_TIRED;
-        this->animInfoIndex = EN_S_GORO_ANIM_IDLE_STAND;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+        this->animIndex = EN_S_GORO_ANIM_IDLE_STAND;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
     }
 }
 
 void EnSGoro_UpdateToIdleAnimation(EnSGoro* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animInfoIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if ((this->animInfoIndex != EN_S_GORO_ANIM_IDLE_STAND) && (curFrame == lastFrame)) {
-        this->animInfoIndex = EN_S_GORO_ANIM_IDLE_STAND;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+    if ((this->animIndex != EN_S_GORO_ANIM_IDLE_STAND) && (curFrame == endFrame)) {
+        this->animIndex = EN_S_GORO_ANIM_IDLE_STAND;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
     }
 }
 
@@ -1003,18 +1009,18 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED;
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_EYESOPEN;
-                this->animInfoIndex = EN_S_GORO_ANIM_SHIVER_A;
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+                this->animIndex = EN_S_GORO_ANIM_SHIVER_A;
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             } else {
                 this->eyeTexIndex = EN_S_GORO_EYETEX_CLOSED2;
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_EARSCOVERED;
-                this->animInfoIndex = EN_S_GORO_ANIM_COVEREARS;
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+                this->animIndex = EN_S_GORO_ANIM_COVEREARS;
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             }
         } else {
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_EYESOPEN;
-            this->animInfoIndex = EN_S_GORO_ANIM_IDLE_STAND;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+            this->animIndex = EN_S_GORO_ANIM_IDLE_STAND;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
 
         this->scaleFactor = 0.01f;
@@ -1152,8 +1158,8 @@ void EnSGoro_ShopGoron_Idle(EnSGoro* this, PlayState* play) {
         this->textId = EnSGoro_BombshopGoron_NextTextId(this, play);
         if (this->actionFlags & EN_S_GORO_ACTIONFLAG_ROLLEDUP) {
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_ROLLEDUP;
-            this->animInfoIndex = EN_S_GORO_ANIM_UNROLL_A;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+            this->animIndex = EN_S_GORO_ANIM_UNROLL_A;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnSGoro_ShopGoron_FinishUnroll;
         } else {
             Message_StartTextbox(play, this->textId, &this->actor);
@@ -1168,11 +1174,11 @@ void EnSGoro_ShopGoron_Idle(EnSGoro* this, PlayState* play) {
 
 void EnSGoro_ShopGoron_FinishUnroll(EnSGoro* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animInfoIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if ((this->animInfoIndex == EN_S_GORO_ANIM_UNROLL_A) && (curFrame == lastFrame)) {
-        this->animInfoIndex = EN_S_GORO_ANIM_IDLE_STAND;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
+    if ((this->animIndex == EN_S_GORO_ANIM_UNROLL_A) && (curFrame == endFrame)) {
+        this->animIndex = EN_S_GORO_ANIM_IDLE_STAND;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnSGoro_ShopGoron_Talk;
     }
@@ -1305,7 +1311,7 @@ void EnSGoro_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
     SkelAnime_Update(&this->skelAnime);
-    if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
+    if (this->animIndex != EN_S_GORO_ANIM_SLEEPY) {
         EnSGoro_UpdateAttentionTarget(this, play);
     }
     EnSGoro_UpdateEyes(this);
@@ -1357,7 +1363,7 @@ void EnSGoro_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
     switch (limbIndex) {
         case GORON_LIMB_HEAD:
-            if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
+            if (this->animIndex != EN_S_GORO_ANIM_SLEEPY) {
                 if (this->actionFlags & EN_S_GORO_ACTIONFLAG_FACEPLAYER) {
                     overrideRot = true;
                 } else {
@@ -1384,7 +1390,7 @@ void EnSGoro_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
             break;
 
         case GORON_LIMB_BODY:
-            if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
+            if (this->animIndex != EN_S_GORO_ANIM_SLEEPY) {
                 if (this->actionFlags & EN_S_GORO_ACTIONFLAG_FACEPLAYER) {
                     overrideRot = true;
                 } else {

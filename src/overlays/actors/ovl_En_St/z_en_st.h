@@ -2,6 +2,7 @@
 #define Z_EN_ST_H
 
 #include "global.h"
+#include "objects/object_st/object_st.h"
 
 struct EnSt;
 
@@ -59,8 +60,8 @@ typedef struct EnSt {
     /* 0x34C */ f32 unk_34C;
     /* 0x350 */ UNK_TYPE1 unk_350[0x8];
     /* 0x358 */ Vec3f bodyPartsPos[ENST_BODYPART_MAX];
-    /* 0x3E8 */ Vec3s jointTable[30];
-    /* 0x49C */ Vec3s morphTable[30];
+    /* 0x3E8 */ Vec3s jointTable[OBJECT_ST_LIMB_MAX];
+    /* 0x49C */ Vec3s morphTable[OBJECT_ST_LIMB_MAX];
 } EnSt; // size = 0x550
 
 #endif // Z_EN_ST_H

@@ -98,13 +98,14 @@ ActorInit En_Syateki_Man_InitVars = {
     /**/ EnSyatekiMan_Draw,
 };
 
-typedef enum {
+typedef enum ShootingGalleryManAnimation {
     /* 0 */ SG_MAN_ANIM_HANDS_ON_TABLE,
     /* 1 */ SG_MAN_ANIM_HEAD_SCRATCH_LOOP,
-    /* 2 */ SG_MAN_ANIM_HEAD_SCRATCH_END
+    /* 2 */ SG_MAN_ANIM_HEAD_SCRATCH_END,
+    /* 3 */ SG_MAN_ANIM_MAX
 } ShootingGalleryManAnimation;
 
-static AnimationInfo sAnimationInfo[] = {
+static AnimationInfo sAnimationInfo[SG_MAN_ANIM_MAX] = {
     { &gBurlyGuyHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },    // SG_MAN_ANIM_HANDS_ON_TABLE
     { &gBurlyGuyHeadScratchLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // SG_MAN_ANIM_HEAD_SCRATCH_LOOP
     { &gBurlyGuyHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // SG_MAN_ANIM_HEAD_SCRATCH_END

@@ -61,21 +61,28 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-typedef enum {
-    /* 0 */ STH_ANIM_SIGNALLING,   // default, waving arms at you from telescope, OOT: cured happy animation
-    /* 1 */ STH_ANIM_BENDING_DOWN, // default anim of cured spider house, but never seen before wait overrides it
-    /* 2 */ STH_ANIM_TALK,
-    /* 3 */ STH_ANIM_WAIT,
-    /* 4 */ STH_ANIM_LOOK_UP,     // South Clock Town, looking at moon
-    /* 5 */ STH_ANIM_LOOK_AROUND, // checking out Oceanside Spider House
-    /* 6 */ STH_ANIM_PLEAD,       // wants to buy Oceanside Spider House
-    /* 7 */ STH_ANIM_PANIC,       // after buying Oceanside Spider House, can be found at bottom of slide,
-    /* 8 */ STH_ANIM_START        // set in init, not an actual index to the array
+typedef enum EnSthAnimation {
+    /* -1 */ STH_ANIM_NONE = -1,
+    /*  0 */ STH_ANIM_SIGNALLING,   // default, waving arms at you from telescope, OOT: cured happy animation
+    /*  1 */ STH_ANIM_BENDING_DOWN, // default anim of cured spider house, but never seen before wait overrides it
+    /*  2 */ STH_ANIM_TALK,
+    /*  3 */ STH_ANIM_WAIT,
+    /*  4 */ STH_ANIM_LOOK_UP,     // South Clock Town, looking at moon
+    /*  5 */ STH_ANIM_LOOK_AROUND, // checking out Oceanside Spider House
+    /*  6 */ STH_ANIM_PLEAD,       // wants to buy Oceanside Spider House
+    /*  7 */ STH_ANIM_PANIC,       // after buying Oceanside Spider House, can be found at bottom of slide,
+    /*  8 */ STH_ANIM_MAX          // set in init, not an actual index to the array
 } EnSthAnimation;
 
-static AnimationHeader* sAnimationInfo[] = {
-    &gEnSthSignalAnim, &gEnSthBendDownAnim,   &gEnSthTalkWithHandUpAnim, &gEnSthWaitAnim,
-    &gEnSthLookUpAnim, &gEnSthLookAroundAnim, &gEnSthPleadAnim,          &gEnSthPanicAnim,
+static AnimationHeader* sAnimations[STH_ANIM_MAX] = {
+    &gEnSthSignalAnim,         // STH_ANIM_SIGNALLING
+    &gEnSthBendDownAnim,       // STH_ANIM_BENDING_DOWN
+    &gEnSthTalkWithHandUpAnim, // STH_ANIM_TALK
+    &gEnSthWaitAnim,           // STH_ANIM_WAIT
+    &gEnSthLookUpAnim,         // STH_ANIM_LOOK_UP
+    &gEnSthLookAroundAnim,     // STH_ANIM_LOOK_AROUND
+    &gEnSthPleadAnim,          // STH_ANIM_PLEAD
+    &gEnSthPanicAnim,          // STH_ANIM_PANIC
 };
 
 // three slightly different variants of "Only a little time left, oh goddess please save me"
@@ -125,7 +132,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
 
     this->sthFlags = 0; // clear
-    this->animIndex = STH_ANIM_START;
+    this->animIndex = STH_ANIM_MAX;
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
@@ -212,9 +219,9 @@ s32 EnSth_CanSpeakToPlayer(EnSth* this, PlayState* play) {
 }
 
 void EnSth_ChangeAnim(EnSth* this, s16 animIndex) {
-    if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimationInfo)) && (animIndex != this->animIndex)) {
-        Animation_Change(&this->skelAnime, sAnimationInfo[animIndex], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimationInfo[animIndex]), ANIMMODE_LOOP, -5.0f);
+    if ((animIndex > STH_ANIM_NONE) && (animIndex < STH_ANIM_MAX) && (animIndex != this->animIndex)) {
+        Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[animIndex]), ANIMMODE_LOOP, -5.0f);
         this->animIndex = animIndex;
     }
 }

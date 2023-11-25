@@ -2,6 +2,7 @@
 #define Z_EN_SSH_H
 
 #include "global.h"
+#include "objects/object_ssh/object_ssh.h"
 #include "overlays/actors/ovl_En_Si/z_en_si.h"
 #include "overlays/actors/ovl_En_Sth/z_en_sth.h"
 
@@ -15,23 +16,13 @@ typedef void (*EnSshActionFunc)(struct EnSsh*, PlayState*);
 #define SSH_STATE_SPIN (1 << 4)
 #define SSH_STATE_FATHER (1 << 5)
 
-typedef enum {
-    /* 0x0 */ SSH_ANIM_UNK0, // Unused animation. Possibly being knocked back?
-    /* 0x1 */ SSH_ANIM_UP,
-    /* 0x2 */ SSH_ANIM_WAIT,
-    /* 0x3 */ SSH_ANIM_LAND,
-    /* 0x4 */ SSH_ANIM_DROP,
-    /* 0x5 */ SSH_ANIM_UNK5, // Slower version of ANIM_DROP
-    /* 0x6 */ SSH_ANIM_UNK6  // Faster repeating version of ANIM_UNK0
-} EnSshAnimation;
-
 #define ENSSH_IS_CHILD(thisx) ((thisx)->params & 0xF)
 
 typedef struct EnSsh {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[30];
-    /* 0x23C */ Vec3s morphTable[30];
+    /* 0x188 */ Vec3s jointTable[OBJECT_SSH_LIMB_MAX];
+    /* 0x23C */ Vec3s morphTable[OBJECT_SSH_LIMB_MAX];
     /* 0x2F0 */ EnSshActionFunc actionFunc;
     /* 0x2F4 */ ColliderCylinder collider1[6];
     /* 0x4BC */ ColliderJntSph collider2;

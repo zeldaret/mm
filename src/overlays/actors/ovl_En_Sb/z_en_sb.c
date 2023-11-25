@@ -5,7 +5,6 @@
  */
 
 #include "z_en_sb.h"
-#include "objects/object_sb/object_sb.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
@@ -113,7 +112,7 @@ void EnSb_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = 10;
     this->actor.colChkInfo.health = 2;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_sb_Skel_002BF0, &object_sb_Anim_000194, this->jointTable,
-                       this->morphTable, 9);
+                       this->morphTable, OBJECT_SB_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
     this->isDead = false;
@@ -167,10 +166,10 @@ void EnSb_SetupWaitOpen(EnSb* this) {
 }
 
 void EnSb_SetupLunge(EnSb* this) {
-    f32 frameCount = Animation_GetLastFrame(&object_sb_Anim_000124);
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_000124);
     f32 playbackSpeed = this->actor.depthInWater > 0.0f ? 1.0f : 0.0f;
 
-    Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0);
+    Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, endFrame, ANIMMODE_ONCE, 0);
     this->state = SHELLBLADE_LUNGE;
     this->actionFunc = EnSb_Lunge;
     Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
@@ -184,10 +183,10 @@ void EnSb_SetupBounce(EnSb* this) {
 }
 
 void EnSb_SetupIdle(EnSb* this, s32 changeSpeed) {
-    f32 frameCount = Animation_GetLastFrame(&object_sb_Anim_00004C);
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_00004C);
 
     if (this->state != SHELLBLADE_WAIT_CLOSED) {
-        Animation_Change(&this->skelAnime, &object_sb_Anim_00004C, 1.0f, 0, frameCount, ANIMMODE_ONCE, 0.0f);
+        Animation_Change(&this->skelAnime, &object_sb_Anim_00004C, 1.0f, 0, endFrame, ANIMMODE_ONCE, 0.0f);
     }
     this->state = SHELLBLADE_WAIT_CLOSED;
     if (changeSpeed) {
@@ -215,9 +214,10 @@ void EnSb_Idle(EnSb* this, PlayState* play) {
 }
 
 void EnSb_Open(EnSb* this, PlayState* play) {
-    f32 currentFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_000194);
 
-    if (Animation_GetLastFrame(&object_sb_Anim_000194) <= currentFrame) {
+    if (curFrame >= endFrame) {
         this->vulnerableTimer = 20;
         EnSb_SetupWaitOpen(this);
     } else {
@@ -280,11 +280,11 @@ void EnSb_Lunge(EnSb* this, PlayState* play) {
 
 void EnSb_Bounce(EnSb* this, PlayState* play) {
     s32 pad;
-    f32 currentFrame = currentFrame = this->skelAnime.curFrame;
-    f32 frameCount = frameCount = Animation_GetLastFrame(&object_sb_Anim_0000B4);
+    f32 curFrame = this->skelAnime.curFrame;
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_0000B4);
 
     Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
-    if (currentFrame == frameCount) {
+    if (curFrame == endFrame) {
         if (this->bounceCounter != 0) {
             this->bounceCounter--;
             this->attackTimer = 1;
@@ -393,11 +393,11 @@ void EnSb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     EnSb* this = THIS;
 
     if (this->isDrawn) {
-        if (limbIndex < 7) {
+        if (limbIndex <= OBJECT_SB_LIMB_06) {
             partParams = (this->actor.depthInWater > 0) ? ENPART_PARAMS(ENPART_TYPE_4) : ENPART_PARAMS(ENPART_TYPE_1);
             Actor_SpawnBodyParts(thisx, play, partParams, dList);
         }
-        if (limbIndex == 6) {
+        if (limbIndex == OBJECT_SB_LIMB_06) {
             this->isDrawn = false;
             this->actor.draw = NULL;
         }

@@ -535,10 +535,10 @@ void func_8088B6B0(EnArrow* this, PlayState* play) {
 }
 
 void EnArrow_Update(Actor* thisx, PlayState* play) {
-    static Vec3f D_8088C2CC = { 0.0f, 0.5f, 0.0f };
-    static Vec3f D_8088C2D8 = { 0.0f, 0.5f, 0.0f };
-    static Color_RGBA8 D_8088C2E4 = { 255, 255, 100, 255 };
-    static Color_RGBA8 D_8088C2E8 = { 255, 50, 0, 0 };
+    static Vec3f sVelocity = { 0.0f, 0.5f, 0.0f };
+    static Vec3f sAccel = { 0.0f, 0.5f, 0.0f };
+    static Color_RGBA8 sPrimColor = { 255, 255, 100, 255 };
+    static Color_RGBA8 sEnvColor = { 255, 50, 0, 0 };
     s32 pad;
     EnArrow* this = THIS;
     Player* player = GET_PLAYER(play);
@@ -562,7 +562,7 @@ void EnArrow_Update(Actor* thisx, PlayState* play) {
                                this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
         }
     } else if (this->actor.params == ARROW_TYPE_NORMAL_LIT) {
-        func_800B0EB0(play, &this->unk_234, &D_8088C2CC, &D_8088C2D8, &D_8088C2E4, &D_8088C2E8, 100, 0, 8);
+        func_800B0EB0(play, &this->unk_234, &sVelocity, &sAccel, &sPrimColor, &sEnvColor, 100, 0, 8);
     }
 
     Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.prevPos);

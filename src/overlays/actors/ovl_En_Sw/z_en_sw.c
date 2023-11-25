@@ -6,7 +6,6 @@
 
 #include "z_en_sw.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_st/object_st.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
@@ -135,16 +134,25 @@ static DamageTable sDamageTable2 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, 0 },
-    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, -4 },
-    { &object_st_Anim_0055A8, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
-    { &object_st_Anim_005B98, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
+typedef enum EnSwAnimation {
+    /* -1 */ ENSW_ANIM_NONE = -1,
+    /*  0 */ ENSW_ANIM_0,
+    /*  1 */ ENSW_ANIM_1,
+    /*  2 */ ENSW_ANIM_2,
+    /*  3 */ ENSW_ANIM_3,
+    /*  4 */ ENSW_ANIM_MAX
+} EnSwAnimation;
+
+static AnimationInfoS sAnimationInfo[ENSW_ANIM_MAX] = {
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, 0 },  // ENSW_ANIM_0
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, -4 }, // ENSW_ANIM_1
+    { &object_st_Anim_0055A8, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 }, // ENSW_ANIM_2
+    { &object_st_Anim_005B98, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 }, // ENSW_ANIM_3
 };
 
 void func_808D8940(EnSw* this, PlayState* play) {
-    static Color_RGBA8 D_808DBAA4 = { 170, 130, 90, 255 };
-    static Color_RGBA8 D_808DBAA8 = { 100, 60, 20, 0 };
+    static Color_RGBA8 sPrimColor = { 170, 130, 90, 255 };
+    static Color_RGBA8 sEnvColor = { 100, 60, 20, 0 };
     s32 i;
     Vec3f spB8;
     Vec3f spAC;
@@ -168,7 +176,7 @@ void func_808D8940(EnSw* this, PlayState* play) {
         Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, temp_s0, &sp94, &spB8);
         spA0.x = this->actor.world.pos.x + (2.0f * spB8.x);
         spA0.z = this->actor.world.pos.z + (2.0f * spB8.z);
-        func_800B0EB0(play, &spA0, &spB8, &spAC, &D_808DBAA4, &D_808DBAA8, 60, 30, temp_f4);
+        func_800B0EB0(play, &spA0, &spB8, &spAC, &sPrimColor, &sEnvColor, 60, 30, temp_f4);
     }
 }
 
@@ -676,7 +684,7 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
             Enemy_StartFinishingBlow(play, &this->actor);
             this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             if (!ENSW_GET_3(&this->actor)) {
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 3);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSW_ANIM_3);
             }
 
             switch (this->actor.colChkInfo.damageEffect) {
@@ -1137,8 +1145,9 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
     if (!func_808D9968(this, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-        SkelAnime_Init(play, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable, 30);
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
+        SkelAnime_Init(play, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable,
+                       OBJECT_ST_LIMB_MAX);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSW_ANIM_0);
         this->skelAnime.playSpeed = 4.0f;
 
         Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
@@ -1242,43 +1251,43 @@ s32 EnSw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     if (ENSW_GET_3(&this->actor)) {
         switch (limbIndex) {
-            case 23:
+            case OBJECT_ST_LIMB_17:
                 *dList = object_st_DL_004788;
                 break;
 
-            case 8:
+            case OBJECT_ST_LIMB_08:
                 *dList = object_st_DL_0046F0;
                 break;
 
-            case 14:
+            case OBJECT_ST_LIMB_0E:
                 *dList = object_st_DL_004658;
                 break;
 
-            case 11:
+            case OBJECT_ST_LIMB_0B:
                 *dList = object_st_DL_0045C0;
                 break;
 
-            case 26:
+            case OBJECT_ST_LIMB_1A:
                 *dList = object_st_DL_004820;
                 break;
 
-            case 20:
+            case OBJECT_ST_LIMB_14:
                 *dList = object_st_DL_0048B8;
                 break;
 
-            case 17:
+            case OBJECT_ST_LIMB_11:
                 *dList = object_st_DL_004950;
                 break;
 
-            case 29:
+            case OBJECT_ST_LIMB_1D:
                 *dList = object_st_DL_0049E8;
                 break;
 
-            case 5:
+            case OBJECT_ST_LIMB_05:
                 *dList = object_st_DL_003FB0;
                 break;
 
-            case 4:
+            case OBJECT_ST_LIMB_04:
                 *dList = object_st_DL_0043D8;
                 break;
 

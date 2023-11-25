@@ -6,7 +6,6 @@
 
 #include "z_en_scopenuts.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_dnt/object_dnt.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -64,30 +63,58 @@ static ColliderCylinderInitType1 sCylinderInit = {
     { 27, 32, 0, { 0, 0, 0 } },
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gBusinessScrubStandingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBusinessScrubWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBusinessScrubRiseUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gBusinessScrubJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gBusinessScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gBusinessScrubExcitedStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gBusinessScrubExcitedLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBusinessScrubExcitedEndAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBusinessScrubTakeOffHatAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gBusinessScrubFlyStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gBusinessScrubFlyLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBusinessScrubShockedStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gBusinessScrubShockedShakeHeadAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBusinessScrubShockedPoundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBusinessScrubShockedEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gBusinessScrubThinkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBusinessScrubBobAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gBusinessScrubBurrowAnim, 1.0f, 8, -1, ANIMMODE_ONCE, 0 },
-    { &gBusinessScrubBurrowAnim, 1.0f, 4, -1, ANIMMODE_ONCE, -4 },
-    { &gBusinessScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gBusinessScrubFlyLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBusinessScrubTakeOffHatAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gBusinessScrubFlyEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+typedef enum EnScopenutsAnimation {
+    /* -1 */ ENSCOPENUTS_ANIM_NONE = -1,
+    /*  0 */ ENSCOPENUTS_ANIM_0,
+    /*  1 */ ENSCOPENUTS_ANIM_1,
+    /*  2 */ ENSCOPENUTS_ANIM_2,
+    /*  3 */ ENSCOPENUTS_ANIM_3,
+    /*  4 */ ENSCOPENUTS_ANIM_4,
+    /*  5 */ ENSCOPENUTS_ANIM_5,
+    /*  6 */ ENSCOPENUTS_ANIM_6,
+    /*  7 */ ENSCOPENUTS_ANIM_7,
+    /*  8 */ ENSCOPENUTS_ANIM_8,
+    /*  9 */ ENSCOPENUTS_ANIM_9,
+    /* 10 */ ENSCOPENUTS_ANIM_10,
+    /* 11 */ ENSCOPENUTS_ANIM_11,
+    /* 12 */ ENSCOPENUTS_ANIM_12,
+    /* 13 */ ENSCOPENUTS_ANIM_13,
+    /* 14 */ ENSCOPENUTS_ANIM_14,
+    /* 15 */ ENSCOPENUTS_ANIM_15,
+    /* 16 */ ENSCOPENUTS_ANIM_16,
+    /* 17 */ ENSCOPENUTS_ANIM_17,
+    /* 18 */ ENSCOPENUTS_ANIM_18,
+    /* 19 */ ENSCOPENUTS_ANIM_19,
+    /* 20 */ ENSCOPENUTS_ANIM_20,
+    /* 21 */ ENSCOPENUTS_ANIM_21,
+    /* 22 */ ENSCOPENUTS_ANIM_22,
+    /* 23 */ ENSCOPENUTS_ANIM_MAX
+} EnScopenutsAnimation;
+
+static AnimationInfoS sAnimationInfo[ENSCOPENUTS_ANIM_MAX] = {
+    { &gBusinessScrubStandingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         // ENSCOPENUTS_ANIM_0
+    { &gBusinessScrubWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // ENSCOPENUTS_ANIM_1
+    { &gBusinessScrubRiseUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENSCOPENUTS_ANIM_2
+    { &gBusinessScrubJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // ENSCOPENUTS_ANIM_3
+    { &gBusinessScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENSCOPENUTS_ANIM_4
+    { &gBusinessScrubExcitedStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENSCOPENUTS_ANIM_5
+    { &gBusinessScrubExcitedLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENSCOPENUTS_ANIM_6
+    { &gBusinessScrubExcitedEndAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },       // ENSCOPENUTS_ANIM_7
+    { &gBusinessScrubTakeOffHatAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },       // ENSCOPENUTS_ANIM_8
+    { &gBusinessScrubFlyStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // ENSCOPENUTS_ANIM_9
+    { &gBusinessScrubFlyLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // ENSCOPENUTS_ANIM_10
+    { &gBusinessScrubShockedStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENSCOPENUTS_ANIM_11
+    { &gBusinessScrubShockedShakeHeadAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENSCOPENUTS_ANIM_12
+    { &gBusinessScrubShockedPoundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENSCOPENUTS_ANIM_13
+    { &gBusinessScrubShockedEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },       // ENSCOPENUTS_ANIM_14
+    { &gBusinessScrubThinkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // ENSCOPENUTS_ANIM_15
+    { &gBusinessScrubBobAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },             // ENSCOPENUTS_ANIM_16
+    { &gBusinessScrubBurrowAnim, 1.0f, 8, -1, ANIMMODE_ONCE, 0 },           // ENSCOPENUTS_ANIM_17
+    { &gBusinessScrubBurrowAnim, 1.0f, 4, -1, ANIMMODE_ONCE, -4 },          // ENSCOPENUTS_ANIM_18
+    { &gBusinessScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENSCOPENUTS_ANIM_19
+    { &gBusinessScrubFlyLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // ENSCOPENUTS_ANIM_20
+    { &gBusinessScrubTakeOffHatAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // ENSCOPENUTS_ANIM_21
+    { &gBusinessScrubFlyEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENSCOPENUTS_ANIM_22
 };
 
 Gfx* D_80BCCCDC[] = { gKakeraLeafMiddleDL, gKakeraLeafTipDL };
@@ -175,18 +202,24 @@ s16 func_80BCAF0C(EnScopenuts* this) {
                 return 0x1638;
             }
             return 0x162F;
+
         case 0x162F:
             return 0x1630;
+
         case 0x1630:
             return 0x1631;
+
         case 0x1631:
             this->unk_358 = 150;
             return 0x1632;
+
         case 0x1633:
             this->unk_358 = 100;
             return 0x1634;
+
+        default:
+            return 0;
     }
-    return 0;
 }
 
 void func_80BCAFA8(EnScopenuts* this, PlayState* play) {
@@ -196,8 +229,8 @@ void func_80BCAFA8(EnScopenuts* this, PlayState* play) {
     if ((screenPos.x >= 130.0f) && (screenPos.x < (SCREEN_WIDTH - 130.0f)) && (screenPos.y >= 90.0f)) {
         if (screenPos.y < (SCREEN_HEIGHT - 90.0f)) {
             this->actor.draw = EnScopenuts_Draw;
-            this->unk_348 = 10;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 10);
+            this->animIndex = ENSCOPENUTS_ANIM_10;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_10);
             this->actionFunc = func_80BCB078;
         }
     }
@@ -245,8 +278,8 @@ void func_80BCB1C8(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCB230(EnScopenuts* this, PlayState* play) {
-    s16 sp26 = this->skelAnime.curFrame;
-    s16 sp24 = Animation_GetLastFrame(sAnimationInfo[this->unk_348].animation);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
 
@@ -254,33 +287,33 @@ void func_80BCB230(EnScopenuts* this, PlayState* play) {
         ((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80BCB4DC;
-        this->unk_348 = 3;
+        this->animIndex = ENSCOPENUTS_ANIM_3;
         this->collider.dim.height = 64;
         func_80BCAC40(this, play);
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 3);
-    } else if (sp26 == sp24) {
-        if ((this->unk_348 == 4) || (this->unk_348 == 18)) {
-            this->unk_348 = 17;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_3);
+    } else if (curFrame == endFrame) {
+        if ((this->animIndex == ENSCOPENUTS_ANIM_4) || (this->animIndex == ENSCOPENUTS_ANIM_18)) {
+            this->animIndex = ENSCOPENUTS_ANIM_17;
             this->collider.dim.height = 0;
             Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 17);
-        } else if (this->unk_348 == 2) {
-            this->unk_348 = 16;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_17);
+        } else if (this->animIndex == ENSCOPENUTS_ANIM_2) {
+            this->animIndex = ENSCOPENUTS_ANIM_16;
             this->collider.dim.height = 32;
             Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 16);
-        } else if (this->unk_348 == 17) {
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_16);
+        } else if (this->animIndex == ENSCOPENUTS_ANIM_17) {
             if (DECR(this->unk_34E) == 0) {
                 this->unk_34E = Rand_ZeroOne() * 10.0f;
-                this->unk_348 = 2;
+                this->animIndex = ENSCOPENUTS_ANIM_2;
                 this->collider.dim.height = 32;
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 2);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_2);
             }
-        } else if ((this->unk_348 == 16) && (DECR(this->unk_34E) == 0)) {
+        } else if ((this->animIndex == ENSCOPENUTS_ANIM_16) && (DECR(this->unk_34E) == 0)) {
             this->unk_34E = Rand_S16Offset(40, 40);
-            this->unk_348 = 18;
+            this->animIndex = ENSCOPENUTS_ANIM_18;
             this->collider.dim.height = 32;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 18);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_18);
         }
     }
 }
@@ -288,7 +321,7 @@ void func_80BCB230(EnScopenuts* this, PlayState* play) {
 void func_80BCB4DC(EnScopenuts* this, PlayState* play) {
     if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
         this->actionFunc = func_80BCB52C;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_0);
     }
 }
 
@@ -305,8 +338,8 @@ void func_80BCB52C(EnScopenuts* this, PlayState* play) {
         Actor_OfferTalk(&this->actor, play, 100.0f);
     } else if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
                !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
-        this->unk_348 = 4;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 4);
+        this->animIndex = ENSCOPENUTS_ANIM_4;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_4);
         this->actionFunc = func_80BCB230;
     }
 }
@@ -322,8 +355,8 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                 play->msgCtx.stateTimer = 4;
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->unk_328 &= ~4;
-                this->unk_348 = 8;
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 8);
+                this->animIndex = ENSCOPENUTS_ANIM_8;
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_8);
                 this->actionFunc = func_80BCBA00;
             } else {
                 this->unk_33C = func_80BCAF0C(this);
@@ -347,6 +380,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                         this->actionFunc = func_80BCB90C;
                     }
                     break;
+
                 case 1:
                     Audio_PlaySfx_MessageCancel();
                     if (this->unk_358 == 150) {
@@ -356,6 +390,9 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                         this->unk_328 |= 1;
                     }
                     Message_StartTextbox(play, this->unk_33C, &this->actor);
+                    break;
+
+                default:
                     break;
             }
         }
@@ -387,10 +424,10 @@ void func_80BCB980(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCBA00(EnScopenuts* this, PlayState* play) {
-    s16 sp26 = this->skelAnime.curFrame;
-    s16 sp24 = Animation_GetLastFrame(sAnimationInfo[this->unk_348].animation);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    switch (sp26) {
+    switch (curFrame) {
         case 10:
             this->unk_35A = 1;
             this->unk_35C = 0.1f;
@@ -445,6 +482,9 @@ void func_80BCBA00(EnScopenuts* this, PlayState* play) {
         case 24:
             this->unk_360 = 1.0f;
             break;
+
+        default:
+            break;
     }
 
     if (this->unk_36C == 0) {
@@ -460,10 +500,10 @@ void func_80BCBA00(EnScopenuts* this, PlayState* play) {
         }
     }
 
-    if (sp26 == sp24) {
+    if (curFrame == endFrame) {
         this->unk_35A = 3;
-        this->unk_348 = 19;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 19);
+        this->animIndex = ENSCOPENUTS_ANIM_19;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_19);
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
         this->unk_328 &= ~2;
         this->unk_34E = 50;
@@ -497,12 +537,12 @@ void func_80BCBC60(EnScopenuts* this, PlayState* play) {
 
 void func_80BCBD28(EnScopenuts* this, PlayState* play) {
     Vec3f sp44;
-    s16 sp42 = this->skelAnime.curFrame;
-    s16 sp40 = Animation_GetLastFrame(sAnimationInfo[this->unk_348].animation);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
     Vec3s sp38;
 
     func_80BCC448(this->path, this->unk_334, &this->actor.world.pos, &sp38);
-    if (sp42 == sp40) {
+    if (curFrame == endFrame) {
         Math_SmoothStepToS(&this->unk_34C, 0x1C71, 3, 0x100, 0);
         this->unk_340 += this->unk_34C;
         this->actor.shape.yOffset = 1500.0f;
@@ -526,8 +566,8 @@ void func_80BCBD28(EnScopenuts* this, PlayState* play) {
 
     if ((this->actor.home.pos.y + 22.5f) < this->actor.world.pos.y) {
         this->unk_368 = 0.3f;
-        this->unk_348 = 9;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 9);
+        this->animIndex = ENSCOPENUTS_ANIM_9;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_9);
         Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         func_80BCAC40(this, play);
         this->actionFunc = func_80BCBF0C;
@@ -546,8 +586,8 @@ void func_80BCBF0C(EnScopenuts* this, PlayState* play) {
 
     if ((this->actor.home.pos.y + 50.0f) < this->actor.world.pos.y) {
         Math_ApproachF(&this->actor.velocity.y, 0.0f, 0.2f, 1.0f);
-        this->unk_348 = 10;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 10);
+        this->animIndex = ENSCOPENUTS_ANIM_10;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_10);
         this->unk_328 |= 2;
         this->unk_36E = 0;
         this->actionFunc = func_80BCBFFC;
@@ -692,7 +732,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBusinessScrubSkel, &gBusinessScrubStandingAnim, this->jointTable,
-                       this->morphTable, 28);
+                       this->morphTable, BUSINESS_SCRUB_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
@@ -728,9 +768,9 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
                 this->csId = this->actor.csId;
                 this->unk_33C = 0;
                 this->unk_358 = 150;
-                this->unk_348 = 4;
+                this->animIndex = ENSCOPENUTS_ANIM_4;
                 this->unk_35A = 0;
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 4);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_4);
                 this->actionFunc = func_80BCB230;
             }
         } else {
@@ -765,34 +805,44 @@ void EnScopenuts_Update(Actor* thisx, PlayState* play) {
 s32 EnScopenuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnScopenuts* this = THIS;
 
-    if (((this->unk_348 == 4) && (this->unk_35A == 0)) || ((this->unk_348 == 8) && (this->unk_35A == 0)) ||
-        (this->unk_348 == 18) || (this->unk_348 == 2) || (this->unk_348 == 3) || (this->unk_348 == 17) ||
-        (this->unk_348 == 16)) {
-        if ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27) || (limbIndex == 23) || (limbIndex == 24) ||
-            (limbIndex == 15)) {
+    if (((this->animIndex == ENSCOPENUTS_ANIM_4) && (this->unk_35A == 0)) ||
+        ((this->animIndex == ENSCOPENUTS_ANIM_8) && (this->unk_35A == 0)) || (this->animIndex == ENSCOPENUTS_ANIM_18) ||
+        (this->animIndex == ENSCOPENUTS_ANIM_2) || (this->animIndex == ENSCOPENUTS_ANIM_3) ||
+        (this->animIndex == ENSCOPENUTS_ANIM_17) || (this->animIndex == ENSCOPENUTS_ANIM_16)) {
+        if ((limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_BAG) || (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_HAND_BAG) ||
+            (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_ARM_BAG) || (limbIndex == BUSINESS_SCRUB_LIMB_SCALP) ||
+            (limbIndex == BUSINESS_SCRUB_LIMB_HAIR) || (limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_HAT)) {
             *dList = NULL;
         }
-    } else if ((this->unk_348 == 8) || (this->unk_348 == 19)) {
+    } else if ((this->animIndex == ENSCOPENUTS_ANIM_8) || (this->animIndex == ENSCOPENUTS_ANIM_19)) {
         switch (this->unk_35A) {
             case 1:
-                if ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27) || (limbIndex == 25)) {
+                if ((limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_BAG) ||
+                    (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_HAND_BAG) ||
+                    (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_ARM_BAG) || (limbIndex == BUSINESS_SCRUB_LIMB_HAT)) {
                     *dList = NULL;
                 }
                 break;
 
             case 2:
             case 3:
-                if ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27) || (limbIndex == 15) ||
-                    (limbIndex == 25)) {
+                if ((limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_BAG) ||
+                    (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_HAND_BAG) ||
+                    (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_ARM_BAG) ||
+                    (limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_HAT) || (limbIndex == BUSINESS_SCRUB_LIMB_HAT)) {
                     *dList = NULL;
                 }
                 break;
+
+            default:
+                break;
         }
-    } else if (((this->unk_348 == 9) || (this->unk_348 == 10)) && ((limbIndex == 15) || (limbIndex == 25))) {
+    } else if (((this->animIndex == ENSCOPENUTS_ANIM_9) || (this->animIndex == ENSCOPENUTS_ANIM_10)) &&
+               ((limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_HAT) || (limbIndex == BUSINESS_SCRUB_LIMB_HAT))) {
         *dList = NULL;
     }
 
-    if (limbIndex == 26) {
+    if (limbIndex == BUSINESS_SCRUB_LIMB_EYES) {
         if ((this->unk_33C == 0x162F) || (this->unk_33C == 0x1630)) {
             *dList = gBusinessScrubEyesSquintDL;
         } else {
@@ -809,15 +859,18 @@ void EnScopenuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 void EnScopenuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnScopenuts* this = THIS;
 
-    if (((this->unk_35A == 1) || (this->unk_35A == 2)) && ((limbIndex == 23) || (limbIndex == 24))) {
+    if (((this->unk_35A == 1) || (this->unk_35A == 2)) &&
+        ((limbIndex == BUSINESS_SCRUB_LIMB_SCALP) || (limbIndex == BUSINESS_SCRUB_LIMB_HAIR))) {
         Matrix_Scale(this->unk_35C, this->unk_360, this->unk_364, MTXMODE_APPLY);
     }
 
-    if ((this->unk_348 == 9) && ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27))) {
+    if ((this->animIndex == ENSCOPENUTS_ANIM_9) &&
+        ((limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_BAG) || (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_HAND_BAG) ||
+         (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_ARM_BAG))) {
         Matrix_Scale(this->unk_368, this->unk_368, this->unk_368, MTXMODE_APPLY);
     }
 
-    if (limbIndex == 24) {
+    if (limbIndex == BUSINESS_SCRUB_LIMB_HAIR) {
         Matrix_RotateYS(this->unk_340, MTXMODE_APPLY);
     }
 }

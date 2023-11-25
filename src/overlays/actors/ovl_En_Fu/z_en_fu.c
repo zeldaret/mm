@@ -127,7 +127,6 @@ void func_809616E0(EnFu* this, PlayState* play) {
     f32 temp_f22;
     s16 atan;
     s16 spA0 = false;
-    Vec3f sp94;
 
     if ((GET_PLAYER_FORM == PLAYER_FORM_DEKU) && (CURRENT_DAY == 3)) {
         spA0 = true;
@@ -146,18 +145,19 @@ void func_809616E0(EnFu* this, PlayState* play) {
         }
 
         if (this->unk_546 == 1) {
-            Vec3f sp88 = { 0.0f, 0.0f, 0.0f };
-            Vec3f sp7C = { 0.0f, 0.2f, 0.0f };
-            Color_RGBA8 sp78 = { 255, 255, 255, 255 };
-            Color_RGBA8 sp74 = { 198, 198, 198, 255 };
+            Vec3f pos;
+            Vec3f velocity = { 0.0f, 0.0f, 0.0f };
+            Vec3f accel = { 0.0f, 0.2f, 0.0f };
+            Color_RGBA8 primColor = { 255, 255, 255, 255 };
+            Color_RGBA8 envColor = { 198, 198, 198, 255 };
 
-            sp94.x = this->unk_538[i].x;
-            sp94.y = this->unk_538[i].y;
-            sp94.z = this->unk_538[i].z;
-            func_800B0EB0(play, &sp94, &sp88, &sp7C, &sp78, &sp74, 100, 150, 10);
-            sp94.x -= 0.1f * temp_f20;
-            sp94.z -= 0.1f * temp_f22;
-            func_800B3030(play, &sp94, &sp88, &sp7C, 100, 0, 3);
+            pos.x = this->unk_538[i].x;
+            pos.y = this->unk_538[i].y;
+            pos.z = this->unk_538[i].z;
+            func_800B0EB0(play, &pos, &velocity, &accel, &primColor, &envColor, 100, 150, 10);
+            pos.x -= 0.1f * temp_f20;
+            pos.z -= 0.1f * temp_f22;
+            func_800B3030(play, &pos, &velocity, &accel, 100, 0, 3);
         }
     }
 }
