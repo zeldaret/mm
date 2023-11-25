@@ -1005,7 +1005,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
 void func_80BAC6E8(EnSuttari* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_boj_Skel_00C240, &object_boj_Anim_00071C, this->jointTable,
-                       this->morphTable, 16);
+                       this->morphTable, OBJECT_BOJ_LIMB_MAX);
     this->actor.draw = EnSuttari_Draw;
     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     if (play->sceneId == SCENE_IKANA) {
