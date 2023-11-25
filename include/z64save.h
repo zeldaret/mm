@@ -485,6 +485,7 @@ typedef enum {
 #define CHECK_QUEST_ITEM(item) (GET_SAVE_INVENTORY_QUEST_ITEMS & gBitFlags[item])
 #define SET_QUEST_ITEM(item) (gSaveContext.save.saveInfo.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS | gBitFlags[item]))
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.save.saveInfo.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
+#define TOGGLE_QUEST_ITEM(item) (gSaveContext.save.saveInfo.inventory.questItems ^= (gBitFlags[item]))
 
 #define GET_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) >> QUEST_HEART_PIECE_COUNT)
 #define EQ_MAX_QUEST_HEART_PIECE_COUNT ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) == (4 << QUEST_HEART_PIECE_COUNT))

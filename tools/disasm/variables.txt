@@ -1095,7 +1095,7 @@
     0x801BFAB8:("magicBorderColors","UNK_TYPE1","",0x1),
     0x801BFAC4:("magicBorderIndices","UNK_TYPE1","",0x1),
     0x801BFACC:("magicBorderColorTimerIndex","UNK_TYPE1","",0x1),
-    0x801BFAD4:("cUpLabelTextures","UNK_TYPE1","",0x1),
+    0x801BFAD4:("sCUpLabelTextures","UNK_TYPE1","",0x1),
     0x801BFAF4:("D_801BFAF4","UNK_TYPE4","",0x8),
     0x801BFAFC:("D_801BFAFC","UNK_TYPE4","",0x4),
     0x801BFB04:("D_801BFB04","UNK_TYPE1","",0x1),
