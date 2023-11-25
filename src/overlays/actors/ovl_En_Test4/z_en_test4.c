@@ -36,20 +36,6 @@ ActorInit En_Test4_InitVars = {
 
 static s32 sIsLoaded = false;
 
-// "Night of ..."
-static s16 sNightOfTextIds2[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
-// "Dawn of ..." (Note: first two message are the same)
-static s16 sDawnOfTextIds2[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
-// "Night of ..."
-static s16 sNightOfTextIds[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
-// "Dawn of ..." (Note: first two message are the same)
-static s16 sDawnOfTextIds[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
-
-static u16 sDayNightTransitionTimes[THREEDAY_DAYTIME_MAX] = {
-    CLOCK_TIME(6, 0),  // THREEDAY_DAYTIME_NIGHT
-    CLOCK_TIME(18, 0), // THREEDAY_DAYTIME_DAY
-};
-
 static s16 sCsIdList[THREEDAY_DAYTIME_MAX];
 static s16 sCurCsId;
 
@@ -59,15 +45,20 @@ static s16 sCurCsId;
  * Only differs from `EnTest4_HandleDayNightSwap` with an extra telescope check when turning day without a cutscene.
  */
 void EnTest4_HandleDayNightSwapFromInit(EnTest4* this, PlayState* play) {
+    // "Night of ..."
+    static s16 sNightOfTextIds[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
+    // "Dawn of ..." (Note: first two message are the same)
+    static s16 sDawnOfTextIds[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
+
     if (this->daytimeIndex != THREEDAY_DAYTIME_NIGHT) {
         // Previously day, turning night
-        Message_DisplaySceneTitleCard(play, sNightOfTextIds2[CURRENT_DAY - 1]);
+        Message_DisplaySceneTitleCard(play, sNightOfTextIds[CURRENT_DAY - 1]);
     } else if ((sCsIdList[this->daytimeIndex] <= CS_ID_NONE) || (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
         // Previously night, turning day, without a cutscene
         if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
             Sram_IncrementDay();
             gSaveContext.save.time = CLOCK_TIME(6, 0);
-            Message_DisplaySceneTitleCard(play, sDawnOfTextIds2[CURRENT_DAY - 1]);
+            Message_DisplaySceneTitleCard(play, sDawnOfTextIds[CURRENT_DAY - 1]);
         } else {
             this->daytimeIndex = THREEDAY_DAYTIME_NIGHT;
             gSaveContext.save.time += CLOCK_TIME_MINUTE;
@@ -115,6 +106,11 @@ void EnTest4_HandleDayNightSwapFromInit(EnTest4* this, PlayState* play) {
  * This does not handle DayTelop transitions.
  */
 void EnTest4_HandleDayNightSwap(EnTest4* this, PlayState* play) {
+    // "Night of ..."
+    static s16 sNightOfTextIds[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
+    // "Dawn of ..." (Note: first two message are the same)
+    static s16 sDawnOfTextIds[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
+
     if (this->daytimeIndex != THREEDAY_DAYTIME_NIGHT) {
         // Previously day, turning night
         Message_DisplaySceneTitleCard(play, sNightOfTextIds[CURRENT_DAY - 1]);
@@ -408,6 +404,10 @@ void EnTest4_Destroy(Actor* thisx, PlayState* play) {
  * 2) The play bells sfx event, which contains screen shrinking and the clocktown day 3 midnight cutscene trigger
  */
 void EnTest4_HandleEvents(EnTest4* this, PlayState* play) {
+    static u16 sDayNightTransitionTimes[THREEDAY_DAYTIME_MAX] = {
+        CLOCK_TIME(6, 0),  // THREEDAY_DAYTIME_NIGHT
+        CLOCK_TIME(18, 0), // THREEDAY_DAYTIME_DAY
+    };
     Player* player = GET_PLAYER(play);
 
     if ((play->transitionMode == TRANS_MODE_OFF) && !Play_InCsMode(play) && (play->numSetupActors <= 0) &&
