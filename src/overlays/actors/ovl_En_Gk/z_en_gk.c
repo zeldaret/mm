@@ -681,7 +681,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
             return;
         }
 
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->unk_1E4 |= 4;
             this->unk_31C = func_80B50410(this, play);
             Message_StartTextbox(play, this->unk_31C, &this->actor);
@@ -895,7 +895,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
     }
 
     if (!func_80B50854(this, play)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_24_80);
             this->actionFunc = func_80B51698;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
@@ -954,7 +954,7 @@ void func_80B5227C(EnGk* this, PlayState* play) {
 }
 
 void func_80B52340(EnGk* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_1E4 |= 4;
         if (CHECK_EVENTINF(EVENTINF_11)) {
             this->unk_31C = 0xE90;
@@ -1026,7 +1026,7 @@ void func_80B5253C(EnGk* this, PlayState* play) {
 }
 
 void func_80B525E0(EnGk* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_31C = 0xE92;
         Message_StartTextbox(play, this->unk_31C, &this->actor);
         this->actionFunc = func_80B52430;

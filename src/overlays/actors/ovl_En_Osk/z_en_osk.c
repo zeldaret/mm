@@ -6,7 +6,6 @@
 
 #include "z_en_osk.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_ikn_demo/object_ikn_demo.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -34,29 +33,86 @@ ActorInit En_Osk_InitVars = {
     /**/ EnOsk_Draw,
 };
 
-AnimationHeader* D_80BF6FA0[] = {
-    &object_ikn_demo_Anim_003CAC, &object_ikn_demo_Anim_004208, &object_ikn_demo_Anim_004514,
-    &object_ikn_demo_Anim_004A58, &object_ikn_demo_Anim_0065D8,
+typedef enum OskType0Animation {
+    /* 0 */ OSK_TYPE0_ANIM_0,
+    /* 1 */ OSK_TYPE0_ANIM_1,
+    /* 2 */ OSK_TYPE0_ANIM_2,
+    /* 3 */ OSK_TYPE0_ANIM_3,
+    /* 4 */ OSK_TYPE0_ANIM_4,
+    /* 5 */ OSK_TYPE0_ANIM_MAX
+} OskType0Animation;
+
+AnimationHeader* sAnimationsType0[OSK_TYPE0_ANIM_MAX] = {
+    &object_ikn_demo_Anim_003CAC, // OSK_TYPE0_ANIM_0
+    &object_ikn_demo_Anim_004208, // OSK_TYPE0_ANIM_1
+    &object_ikn_demo_Anim_004514, // OSK_TYPE0_ANIM_2
+    &object_ikn_demo_Anim_004A58, // OSK_TYPE0_ANIM_3
+    &object_ikn_demo_Anim_0065D8, // OSK_TYPE0_ANIM_4
 };
 
-AnimationHeader* D_80BF6FB4[] = {
-    &object_ikn_demo_Anim_0067B8, &object_ikn_demo_Anim_0083F4, &object_ikn_demo_Anim_0081A8,
-    &object_ikn_demo_Anim_008AF4, &object_ikn_demo_Anim_008724, &object_ikn_demo_Anim_008F1C,
-    &object_ikn_demo_Anim_008CEC, &object_ikn_demo_Anim_009254, &object_ikn_demo_Anim_009044,
-    &object_ikn_demo_Anim_0098E4, &object_ikn_demo_Anim_009CC8, &object_ikn_demo_Anim_009A44,
+typedef enum OskType1Animation {
+    /*  0 */ OSK_TYPE1_ANIM_0,
+    /*  1 */ OSK_TYPE1_ANIM_1,
+    /*  2 */ OSK_TYPE1_ANIM_2,
+    /*  3 */ OSK_TYPE1_ANIM_3,
+    /*  4 */ OSK_TYPE1_ANIM_4,
+    /*  5 */ OSK_TYPE1_ANIM_5,
+    /*  6 */ OSK_TYPE1_ANIM_6,
+    /*  7 */ OSK_TYPE1_ANIM_7,
+    /*  8 */ OSK_TYPE1_ANIM_8,
+    /*  9 */ OSK_TYPE1_ANIM_9,
+    /* 10 */ OSK_TYPE1_ANIM_10,
+    /* 11 */ OSK_TYPE1_ANIM_11,
+    /* 12 */ OSK_TYPE1_ANIM_MAX
+} OskType1Animation;
+
+AnimationHeader* sAnimationsType1[OSK_TYPE1_ANIM_MAX] = {
+    &object_ikn_demo_Anim_0067B8, // OSK_TYPE1_ANIM_0
+    &object_ikn_demo_Anim_0083F4, // OSK_TYPE1_ANIM_1
+    &object_ikn_demo_Anim_0081A8, // OSK_TYPE1_ANIM_2
+    &object_ikn_demo_Anim_008AF4, // OSK_TYPE1_ANIM_3
+    &object_ikn_demo_Anim_008724, // OSK_TYPE1_ANIM_4
+    &object_ikn_demo_Anim_008F1C, // OSK_TYPE1_ANIM_5
+    &object_ikn_demo_Anim_008CEC, // OSK_TYPE1_ANIM_6
+    &object_ikn_demo_Anim_009254, // OSK_TYPE1_ANIM_7
+    &object_ikn_demo_Anim_009044, // OSK_TYPE1_ANIM_8
+    &object_ikn_demo_Anim_0098E4, // OSK_TYPE1_ANIM_9
+    &object_ikn_demo_Anim_009CC8, // OSK_TYPE1_ANIM_10
+    &object_ikn_demo_Anim_009A44, // OSK_TYPE1_ANIM_11
 };
 
-AnimationHeader* D_80BF6FE4[] = {
-    &object_ikn_demo_Anim_009EA8, &object_ikn_demo_Anim_00B8C0, &object_ikn_demo_Anim_00B704,
-    &object_ikn_demo_Anim_00BDB4, &object_ikn_demo_Anim_00B9E4, &object_ikn_demo_Anim_00C154,
-    &object_ikn_demo_Anim_00BF04, &object_ikn_demo_Anim_00CA74, &object_ikn_demo_Anim_00C804,
-    &object_ikn_demo_Anim_00D044, &object_ikn_demo_Anim_00CD28, &object_ikn_demo_Anim_00C59C,
-    &object_ikn_demo_Anim_00C2C4,
+typedef enum OskType2Animation {
+    /*  0 */ OSK_TYPE2_ANIM_0,
+    /*  1 */ OSK_TYPE2_ANIM_1,
+    /*  2 */ OSK_TYPE2_ANIM_2,
+    /*  3 */ OSK_TYPE2_ANIM_3,
+    /*  4 */ OSK_TYPE2_ANIM_4,
+    /*  5 */ OSK_TYPE2_ANIM_5,
+    /*  6 */ OSK_TYPE2_ANIM_6,
+    /*  7 */ OSK_TYPE2_ANIM_7,
+    /*  8 */ OSK_TYPE2_ANIM_8,
+    /*  9 */ OSK_TYPE2_ANIM_9,
+    /* 10 */ OSK_TYPE2_ANIM_10,
+    /* 11 */ OSK_TYPE2_ANIM_11,
+    /* 12 */ OSK_TYPE2_ANIM_12,
+    /* 13 */ OSK_TYPE2_ANIM_MAX
+} OskType2Animation;
+
+AnimationHeader* sAnimationsType2[OSK_TYPE2_ANIM_MAX] = {
+    &object_ikn_demo_Anim_009EA8, // OSK_TYPE2_ANIM_0
+    &object_ikn_demo_Anim_00B8C0, // OSK_TYPE2_ANIM_1
+    &object_ikn_demo_Anim_00B704, // OSK_TYPE2_ANIM_2
+    &object_ikn_demo_Anim_00BDB4, // OSK_TYPE2_ANIM_3
+    &object_ikn_demo_Anim_00B9E4, // OSK_TYPE2_ANIM_4
+    &object_ikn_demo_Anim_00C154, // OSK_TYPE2_ANIM_5
+    &object_ikn_demo_Anim_00BF04, // OSK_TYPE2_ANIM_6
+    &object_ikn_demo_Anim_00CA74, // OSK_TYPE2_ANIM_7
+    &object_ikn_demo_Anim_00C804, // OSK_TYPE2_ANIM_8
+    &object_ikn_demo_Anim_00D044, // OSK_TYPE2_ANIM_9
+    &object_ikn_demo_Anim_00CD28, // OSK_TYPE2_ANIM_10
+    &object_ikn_demo_Anim_00C59C, // OSK_TYPE2_ANIM_11
+    &object_ikn_demo_Anim_00C2C4, // OSK_TYPE2_ANIM_12
 };
-
-Vec3f D_80BF7018 = { 0.0f, 0.5f, 0.0f };
-
-Vec3f D_80BF7024 = { 0.0f, 0.0f, 0.0f };
 
 void EnOsk_Init(Actor* thisx, PlayState* play) {
     EnOsk* this = THIS;
@@ -65,36 +121,36 @@ void EnOsk_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
 
     this->actionFunc = func_80BF5F60;
-    this->unk_254 = -1;
+    this->animIndex = -1;
     this->cueId = -1;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
-    switch (ENOSK_GET_F(&this->actor)) {
-        case ENOSK_1:
+    switch (ENOSK_GET_TYPE(&this->actor)) {
+        case ENOSK_TYPE_1:
             SkelAnime_InitFlex(play, &this->skelAnime, &object_ikn_demo_Skel_007B48, &object_ikn_demo_Anim_006808,
-                               this->jointTable, this->morphTable, 7);
+                               this->jointTable, this->morphTable, OBJECT_IKN_DEMO_2_LIMB_MAX);
             Animation_PlayLoop(&this->skelAnime, &object_ikn_demo_Anim_006808);
             this->actionFunc = func_80BF656C;
             this->cueType = CS_CMD_ACTOR_CUE_528;
             break;
 
-        case ENOSK_2:
+        case ENOSK_TYPE_2:
             SkelAnime_InitFlex(play, &this->skelAnime, &object_ikn_demo_Skel_00B490, &object_ikn_demo_Anim_009F00,
-                               this->jointTable, this->morphTable, 7);
+                               this->jointTable, this->morphTable, OBJECT_IKN_DEMO_3_LIMB_MAX);
             Animation_PlayLoop(&this->skelAnime, &object_ikn_demo_Anim_006808);
             this->actionFunc = func_80BF6A20;
             this->cueType = CS_CMD_ACTOR_CUE_529;
             break;
 
-        default:
+        default: // ENOSK_TYPE_0
             Actor_SetScale(&this->actor, 0.017f);
             SkelAnime_InitFlex(play, &this->skelAnime, &object_ikn_demo_Skel_0038F0, &object_ikn_demo_Anim_0000B8,
-                               this->jointTable, this->morphTable, 17);
+                               this->jointTable, this->morphTable, OBJECT_IKN_DEMO_1_LIMB_MAX);
             Animation_PlayLoop(&this->skelAnime, &object_ikn_demo_Anim_0000B8);
             this->actionFunc = func_80BF61EC;
             this->cueType = CS_CMD_ACTOR_CUE_530;
             this->actor.home.rot.z = 0;
-            this->unk_25C = 0.0f;
+            this->animSfxFrame = 0.0f;
             break;
     }
 }
@@ -102,20 +158,21 @@ void EnOsk_Init(Actor* thisx, PlayState* play) {
 void EnOsk_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80BF5E00(EnOsk* this, AnimationHeader** animations, s16 index, f32 morphFrame) {
-    if (index == this->unk_254) {
+void EnOsk_ChangeAnimLoop(EnOsk* this, AnimationHeader** animations, s16 animIndex, f32 morphFrame) {
+    if (this->animIndex == animIndex) {
         return;
     }
-    Animation_MorphToLoop(&this->skelAnime, animations[index], morphFrame);
-    this->unk_254 = index;
+    Animation_MorphToLoop(&this->skelAnime, animations[animIndex], morphFrame);
+    this->animIndex = animIndex;
 }
 
-void func_80BF5E68(EnOsk* this, AnimationHeader** animations, s16 index, f32 playSpeed) {
-    Animation_MorphToPlayOnce(&this->skelAnime, animations[index], playSpeed);
-    this->unk_254 = index;
+void EnOsk_ChangeAnimOnce(EnOsk* this, AnimationHeader** animations, s16 animIndex, f32 playSpeed) {
+    Animation_MorphToPlayOnce(&this->skelAnime, animations[animIndex], playSpeed);
+    this->animIndex = animIndex;
 }
 
 void func_80BF5EBC(EnOsk* this, PlayState* play) {
+    static Vec3f D_80BF7018 = { 0.0f, 0.5f, 0.0f };
     Vec3f sp2C;
 
     sp2C.x = Rand_CenteredFloat(30.0f) + this->actor.world.pos.x;
@@ -140,28 +197,31 @@ void func_80BF5F70(EnOsk* this) {
             break;
 
         case 2:
-            func_80BF5E00(this, D_80BF6FA0, 3, -5.0f);
+            EnOsk_ChangeAnimLoop(this, sAnimationsType0, OSK_TYPE0_ANIM_3, -5.0f);
             break;
 
         case 3:
-            func_80BF5E00(this, D_80BF6FA0, 2, -5.0f);
+            EnOsk_ChangeAnimLoop(this, sAnimationsType0, OSK_TYPE0_ANIM_2, -5.0f);
             break;
 
         case 4:
-            func_80BF5E00(this, D_80BF6FA0, 1, -5.0f);
+            EnOsk_ChangeAnimLoop(this, sAnimationsType0, OSK_TYPE0_ANIM_1, -5.0f);
             break;
 
         case 5:
-            func_80BF5E00(this, D_80BF6FA0, 0, -5.0f);
+            EnOsk_ChangeAnimLoop(this, sAnimationsType0, OSK_TYPE0_ANIM_0, -5.0f);
             break;
 
         case 6:
-            func_80BF5E00(this, D_80BF6FA0, 1, -5.0f);
+            EnOsk_ChangeAnimLoop(this, sAnimationsType0, OSK_TYPE0_ANIM_1, -5.0f);
             break;
 
         case 7:
-            func_80BF5E00(this, D_80BF6FA0, 4, -5.0f);
+            EnOsk_ChangeAnimLoop(this, sAnimationsType0, OSK_TYPE0_ANIM_4, -5.0f);
             this->actor.home.rot.z = 1;
+            break;
+
+        default:
             break;
     }
 }
@@ -174,28 +234,31 @@ void func_80BF609C(EnOsk* this, PlayState* play) {
             }
         } else {
             if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
-                this->unk_25C = Rand_ZeroFloat(3.0f);
+                this->animSfxFrame = Rand_ZeroFloat(3.0f);
             }
 
-            switch (this->unk_254) {
-                case 0:
-                    if (Animation_OnFrame(&this->skelAnime, this->unk_25C) ||
-                        Animation_OnFrame(&this->skelAnime, this->unk_25C + 8.0f)) {
+            switch (this->animIndex) {
+                case OSK_TYPE0_ANIM_0:
+                    if (Animation_OnFrame(&this->skelAnime, this->animSfxFrame) ||
+                        Animation_OnFrame(&this->skelAnime, this->animSfxFrame + 8.0f)) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_TALK);
                     }
                     break;
 
-                case 1:
-                    if (Animation_OnFrame(&this->skelAnime, this->unk_25C)) {
+                case OSK_TYPE0_ANIM_1:
+                    if (Animation_OnFrame(&this->skelAnime, this->animSfxFrame)) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_TALK);
                     }
                     break;
 
-                case 2:
-                    if (Animation_OnFrame(&this->skelAnime, this->unk_25C) ||
-                        Animation_OnFrame(&this->skelAnime, this->unk_25C + 6.0f)) {
+                case OSK_TYPE0_ANIM_2:
+                    if (Animation_OnFrame(&this->skelAnime, this->animSfxFrame) ||
+                        Animation_OnFrame(&this->skelAnime, this->animSfxFrame + 6.0f)) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_BOSU_TALK);
                     }
+                    break;
+
+                default:
                     break;
             }
         }
@@ -240,65 +303,71 @@ void func_80BF6314(EnOsk* this) {
             break;
 
         case 2:
-            func_80BF5E00(this, D_80BF6FB4, 9, -5.0f);
+            EnOsk_ChangeAnimLoop(this, sAnimationsType1, OSK_TYPE1_ANIM_9, -5.0f);
             Actor_SetScale(&this->actor, 0.0f);
             break;
 
         case 3:
-            func_80BF5E68(this, D_80BF6FB4, 2, -5.0f);
+            EnOsk_ChangeAnimOnce(this, sAnimationsType1, OSK_TYPE1_ANIM_2, -5.0f);
             break;
 
         case 4:
-            func_80BF5E68(this, D_80BF6FB4, 4, 0);
+            EnOsk_ChangeAnimOnce(this, sAnimationsType1, OSK_TYPE1_ANIM_4, 0);
             break;
 
         case 5:
-            func_80BF5E68(this, D_80BF6FB4, 8, -5.0f);
+            EnOsk_ChangeAnimOnce(this, sAnimationsType1, OSK_TYPE1_ANIM_8, -5.0f);
             break;
 
         case 6:
-            func_80BF5E68(this, D_80BF6FB4, 11, -5.0f);
+            EnOsk_ChangeAnimOnce(this, sAnimationsType1, OSK_TYPE1_ANIM_11, -5.0f);
             break;
 
         case 7:
-            func_80BF5E68(this, D_80BF6FB4, 6, -5.0f);
+            EnOsk_ChangeAnimOnce(this, sAnimationsType1, OSK_TYPE1_ANIM_6, -5.0f);
             break;
 
         case 8:
-            func_80BF5E00(this, D_80BF6FB4, 0, -5.0f);
+            EnOsk_ChangeAnimLoop(this, sAnimationsType1, OSK_TYPE1_ANIM_0, -5.0f);
             break;
 
         case 9:
-            func_80BF5E00(this, D_80BF6FB4, 0, -5.0f);
+            EnOsk_ChangeAnimLoop(this, sAnimationsType1, OSK_TYPE1_ANIM_0, -5.0f);
+            break;
+
+        default:
             break;
     }
 }
 
 void func_80BF6478(EnOsk* this) {
     if (this->actor.draw != NULL) {
-        switch (this->unk_254) {
-            case 1:
+        switch (this->animIndex) {
+            case OSK_TYPE1_ANIM_1:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
                     Animation_OnFrame(&this->skelAnime, 11.0f)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
-            case 3:
+            case OSK_TYPE1_ANIM_3:
                 if (Animation_OnFrame(&this->skelAnime, 11.0f)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
-            case 4:
+            case OSK_TYPE1_ANIM_4:
                 if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
-            case 10:
-            case 11:
+            case OSK_TYPE1_ANIM_10:
+            case OSK_TYPE1_ANIM_11:
                 Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_YASE_LAUGH_K - SFX_FLAG);
+                break;
+
+            default:
                 break;
         }
     }
@@ -306,25 +375,28 @@ void func_80BF6478(EnOsk* this) {
 
 void func_80BF656C(EnOsk* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        switch (this->unk_254) {
-            case 2:
-                func_80BF5E00(this, D_80BF6FB4, 1, 0.0f);
+        switch (this->animIndex) {
+            case OSK_TYPE1_ANIM_2:
+                EnOsk_ChangeAnimLoop(this, sAnimationsType1, OSK_TYPE1_ANIM_1, 0.0f);
                 break;
 
-            case 4:
-                func_80BF5E00(this, D_80BF6FB4, 3, 0.0f);
+            case OSK_TYPE1_ANIM_4:
+                EnOsk_ChangeAnimLoop(this, sAnimationsType1, OSK_TYPE1_ANIM_3, 0.0f);
                 break;
 
-            case 8:
-                func_80BF5E00(this, D_80BF6FB4, 7, -5.0f);
+            case OSK_TYPE1_ANIM_8:
+                EnOsk_ChangeAnimLoop(this, sAnimationsType1, OSK_TYPE1_ANIM_7, -5.0f);
                 break;
 
-            case 11:
-                func_80BF5E00(this, D_80BF6FB4, 10, -5.0f);
+            case OSK_TYPE1_ANIM_11:
+                EnOsk_ChangeAnimLoop(this, sAnimationsType1, OSK_TYPE1_ANIM_10, -5.0f);
                 break;
 
-            case 6:
-                func_80BF5E00(this, D_80BF6FB4, 5, -5.0f);
+            case OSK_TYPE1_ANIM_6:
+                EnOsk_ChangeAnimLoop(this, sAnimationsType1, OSK_TYPE1_ANIM_5, -5.0f);
+                break;
+
+            default:
                 break;
         }
     }
@@ -340,13 +412,13 @@ void func_80BF656C(EnOsk* this, PlayState* play) {
         this->actor.draw = NULL;
     }
 
-    if ((this->cueId == 2) && (this->actor.scale.x < 13.0f * 0.001f)) {
+    if ((this->cueId == 2) && (this->actor.scale.x < (13.0f * 0.001f))) {
         this->actor.scale.x += 0.65f * 0.001f;
         Actor_SetScale(&this->actor, this->actor.scale.x);
     }
 
     if (this->cueId == 9) {
-        if (this->actor.scale.x > 0.65f * 0.001f) {
+        if (this->actor.scale.x > (0.65f * 0.001f)) {
             this->actor.scale.x -= 0.65f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
@@ -369,69 +441,75 @@ void func_80BF67A8(EnOsk* this) {
             break;
 
         case 2:
-            func_80BF5E68(this, D_80BF6FE4, 2, -5.0f);
+            EnOsk_ChangeAnimOnce(this, sAnimationsType2, OSK_TYPE2_ANIM_2, -5.0f);
             break;
 
         case 3:
-            func_80BF5E68(this, D_80BF6FE4, 8, -5.0f);
+            EnOsk_ChangeAnimOnce(this, sAnimationsType2, OSK_TYPE2_ANIM_8, -5.0f);
             break;
 
         case 4:
-            func_80BF5E68(this, D_80BF6FE4, 4, -5.0f);
+            EnOsk_ChangeAnimOnce(this, sAnimationsType2, OSK_TYPE2_ANIM_4, -5.0f);
             break;
 
         case 5:
-            func_80BF5E68(this, D_80BF6FE4, 6, -5.0f);
+            EnOsk_ChangeAnimOnce(this, sAnimationsType2, OSK_TYPE2_ANIM_6, -5.0f);
             break;
 
         case 6:
-            func_80BF5E68(this, D_80BF6FE4, 10, -5.0f);
+            EnOsk_ChangeAnimOnce(this, sAnimationsType2, OSK_TYPE2_ANIM_10, -5.0f);
             break;
 
         case 7:
         case 8:
-            func_80BF5E00(this, D_80BF6FE4, 0, -5.0f);
+            EnOsk_ChangeAnimLoop(this, sAnimationsType2, OSK_TYPE2_ANIM_0, -5.0f);
             break;
 
         case 9:
-            func_80BF5E68(this, D_80BF6FE4, 12, -5.0f);
+            EnOsk_ChangeAnimOnce(this, sAnimationsType2, OSK_TYPE2_ANIM_12, -5.0f);
+            break;
+
+        default:
             break;
     }
 }
 
 void func_80BF68E0(EnOsk* this) {
     if (this->actor.draw != NULL) {
-        switch (this->unk_254) {
-            case 1:
-            case 7:
+        switch (this->animIndex) {
+            case OSK_TYPE2_ANIM_1:
+            case OSK_TYPE2_ANIM_7:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
                     Animation_OnFrame(&this->skelAnime, 11.0f)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
-            case 2:
+            case OSK_TYPE2_ANIM_2:
                 if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
-            case 4:
+            case OSK_TYPE2_ANIM_4:
                 if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
-            case 5:
+            case OSK_TYPE2_ANIM_5:
                 if (Animation_OnFrame(&this->skelAnime, 6.0f) || Animation_OnFrame(&this->skelAnime, 11.0f)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
 
-            case 8:
+            case OSK_TYPE2_ANIM_8:
                 if (Animation_OnFrame(&this->skelAnime, 13.0f)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -439,29 +517,32 @@ void func_80BF68E0(EnOsk* this) {
 
 void func_80BF6A20(EnOsk* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        switch (this->unk_254) {
-            case 2:
-                func_80BF5E00(this, D_80BF6FE4, 1, -5.0f);
+        switch (this->animIndex) {
+            case OSK_TYPE2_ANIM_2:
+                EnOsk_ChangeAnimLoop(this, sAnimationsType2, OSK_TYPE2_ANIM_1, -5.0f);
                 break;
 
-            case 8:
-                func_80BF5E00(this, D_80BF6FE4, 7, -5.0f);
+            case OSK_TYPE2_ANIM_8:
+                EnOsk_ChangeAnimLoop(this, sAnimationsType2, OSK_TYPE2_ANIM_7, -5.0f);
                 break;
 
-            case 4:
-                func_80BF5E00(this, D_80BF6FE4, 3, -5.0f);
+            case OSK_TYPE2_ANIM_4:
+                EnOsk_ChangeAnimLoop(this, sAnimationsType2, OSK_TYPE2_ANIM_3, -5.0f);
                 break;
 
-            case 6:
-                func_80BF5E00(this, D_80BF6FE4, 5, -5.0f);
+            case OSK_TYPE2_ANIM_6:
+                EnOsk_ChangeAnimLoop(this, sAnimationsType2, OSK_TYPE2_ANIM_5, -5.0f);
                 break;
 
-            case 10:
-                func_80BF5E00(this, D_80BF6FE4, 9, -5.0f);
+            case OSK_TYPE2_ANIM_10:
+                EnOsk_ChangeAnimLoop(this, sAnimationsType2, OSK_TYPE2_ANIM_9, -5.0f);
                 break;
 
-            case 12:
-                func_80BF5E00(this, D_80BF6FE4, 11, -5.0f);
+            case OSK_TYPE2_ANIM_12:
+                EnOsk_ChangeAnimLoop(this, sAnimationsType2, OSK_TYPE2_ANIM_11, -5.0f);
+                break;
+
+            default:
                 break;
         }
     }
@@ -495,10 +576,14 @@ void EnOsk_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-void func_80BF6C54(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnOsk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f D_80BF7024 = { 0.0f, 0.0f, 0.0f };
     EnOsk* this = THIS;
 
     if (limbIndex == 1) {
+        // OBJECT_IKN_DEMO_1_LIMB_01
+        // OBJECT_IKN_DEMO_2_LIMB_01
+        // OBJECT_IKN_DEMO_3_LIMB_01
         Matrix_MultVec3f(&D_80BF7024, &this->actor.focus.pos);
     }
 }
@@ -517,7 +602,7 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_PrimColor(play->state.gfxCtx, 0x80, 255, 255, 255, 255));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                          func_80BF6C54, &this->actor);
+                          EnOsk_PostLimbDraw, &this->actor);
 
     {
         s16 sp62;
@@ -530,7 +615,7 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
         sp60 = -Math_Vec3f_Pitch(&sp54, &this->actor.focus.pos);
 
         sp80.x = -(15.0f * (Math_SinS(sp62)) * Math_CosS(sp60));
-        sp80.y = -(Math_SinS(sp60) * 15.0f);
+        sp80.y = -(15.0f * Math_SinS(sp60));
         sp80.z = -(15.0f * (Math_CosS(sp62)) * Math_CosS(sp60));
 
         Matrix_Translate(this->actor.focus.pos.x + sp80.x, this->actor.focus.pos.y + sp80.y,

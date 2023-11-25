@@ -780,7 +780,7 @@ void EnTalkGibud_SetupPassiveIdle(EnTalkGibud* this) {
  * Gibdo will not attempt to attack the player and can be spoken to.
  */
 void EnTalkGibud_PassiveIdle(EnTalkGibud* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->isTalking = true;
         Message_StartTextbox(play, 0x1388, &this->actor);
         this->textId = 0x1388;

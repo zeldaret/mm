@@ -402,7 +402,7 @@ s32 func_80BC04FC(EnNb* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->stateFlags |= EN_NB_FLAG_20;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->behaviour = ENNB_BEHAVIOUR_0;

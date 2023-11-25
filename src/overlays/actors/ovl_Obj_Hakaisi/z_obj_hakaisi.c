@@ -164,7 +164,7 @@ void func_80B1444C(ObjHakaisi* this) {
 void func_80B14460(ObjHakaisi* this, PlayState* play) {
     s16 sp26 = BINANG_SUB(this->dyna.actor.shape.rot.y, this->dyna.actor.yawTowardsPlayer);
 
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         func_80B14510(this);
     } else if (this->dyna.actor.textId != 0) {
         if (ABS_ALT(sp26) < 0x2000) {

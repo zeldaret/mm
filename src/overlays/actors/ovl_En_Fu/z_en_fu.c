@@ -400,7 +400,7 @@ void func_80962340(EnFu* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->unk_54A == 2) {
             if (this->unk_552 == 0x287D) {
                 if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
@@ -919,7 +919,7 @@ void func_80963610(EnFu* this) {
 void func_80963630(EnFu* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_20) && (CURRENT_DAY == 3) &&
             (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_40)) {

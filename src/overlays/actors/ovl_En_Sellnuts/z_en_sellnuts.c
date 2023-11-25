@@ -340,7 +340,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (Player_GetExchangeItemAction(play) == PLAYER_IA_MOONS_TEAR) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
@@ -488,7 +488,7 @@ void func_80ADBBEC(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADBC60(EnSellnuts* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->unk_340, &this->actor);
         this->actionFunc = func_80ADB0D8;
     } else {
@@ -697,7 +697,7 @@ void func_80ADC580(EnSellnuts* this, PlayState* play) {
 void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         player->linearVelocity = 0.0f;
         this->actor.flags &= ~ACTOR_FLAG_10000;
         Message_StartTextbox(play, this->unk_340, &this->actor);

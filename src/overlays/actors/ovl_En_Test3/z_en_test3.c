@@ -5,6 +5,9 @@
  */
 
 #include "z_en_test3.h"
+
+#include "z64malloc.h"
+
 #include "objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -653,7 +656,7 @@ s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
 }
 
 s32 func_80A3F73C(EnTest3* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->player.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->player.actor, &play->state)) {
         func_80A3E7E0(this, func_80A4084C);
         this->player.lockOnActor = &GET_PLAYER(play)->actor;
         this->player.stateFlags2 &= ~PLAYER_STATE2_40000;
@@ -1016,7 +1019,7 @@ void func_80A4084C(EnTest3* this, PlayState* play) {
 }
 
 void func_80A40908(EnTest3* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->player.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->player.actor, &play->state)) {
         func_80A3E7E0(this, func_80A4084C);
         this->player.lockOnActor = &GET_PLAYER(play)->actor;
         SET_WEEKEVENTREG(WEEKEVENTREG_51_08);

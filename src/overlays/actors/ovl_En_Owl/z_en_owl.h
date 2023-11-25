@@ -14,6 +14,7 @@ typedef void (*EnOwlFunc)(struct EnOwl*);
 #define ENOWL_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 #define ENOWL_PATH_INDEX_NONE 0xF
+#define ENOWL_SWITCH_FLAG_NONE 0x7F
 
 typedef enum {
     /* 0x001 */ ENOWL_GET_TYPE_1 = 1,
@@ -32,7 +33,7 @@ typedef struct EnOwl {
     /* 0x2D0 */ SkelAnime skelAnimePerching;
     /* 0x314 */ Vec3s jointTablePerching[OWL_PERCHING_LIMB_MAX];
     /* 0x374 */ Vec3s morphTablePerching[OWL_PERCHING_LIMB_MAX];
-    /* 0x3D4 */ SkelAnime* skelAnime3;
+    /* 0x3D4 */ SkelAnime* curSkelAnime; // Points to the currently active SkelAnime
     /* 0x3D8 */ s16 unk_3D8;
     /* 0x3DA */ s16 unk_3DA;
     /* 0x3DC */ s16 unk_3DC;

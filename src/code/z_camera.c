@@ -45,6 +45,7 @@
 
 #include "global.h"
 #include "libc/string.h"
+#include "z64malloc.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
@@ -1313,8 +1314,8 @@ s32 Camera_CalcAtForScreen(Camera* camera, VecGeo* eyeAtDir, f32 yOffset, f32* f
     s32 pad;
     f32 clampedDeltaY;
     f32 clampedAbsScreenY;
-    s16 absScreenY;
-    s16 screenY;
+    s16 absScreenPosY;
+    s16 screenPosY;
     PosRot* focalActorPosRot = &camera->focalActorPosRot;
     f32 focalActorHeight = Camera_GetFocalActorHeight(camera);
 
@@ -1322,21 +1323,21 @@ s32 Camera_CalcAtForScreen(Camera* camera, VecGeo* eyeAtDir, f32 yOffset, f32* f
     focalActorAtOffsetTarget.x = 0.0f;
     focalActorAtOffsetTarget.z = 0.0f;
 
-    Actor_GetScreenPos(camera->play, camera->focalActor, &absScreenY, &screenY);
-    screenY -= SCREEN_HEIGHT / 2;
-    absScreenY = ABS(screenY);
+    Actor_GetScreenPos(camera->play, camera->focalActor, &absScreenPosY, &screenPosY);
+    screenPosY -= SCREEN_HEIGHT / 2;
+    absScreenPosY = ABS(screenPosY);
 
     // result unused
-    clampedAbsScreenY = OLib_ClampMaxDist(absScreenY / (f32)(SCREEN_HEIGHT / 2), 1.0f);
+    clampedAbsScreenY = OLib_ClampMaxDist(absScreenPosY / (f32)(SCREEN_HEIGHT / 2), 1.0f);
 
     deltaY = focalActorPosRot->pos.y - *focalActorPosY;
     clampedDeltaY = OLib_ClampMaxDist(deltaY, deltaYMax);
 
-    if (absScreenY > (SCREEN_HEIGHT / 4)) {
-        absScreenY = SCREEN_HEIGHT / 4;
+    if (absScreenPosY > (SCREEN_HEIGHT / 4)) {
+        absScreenPosY = SCREEN_HEIGHT / 4;
     }
 
-    clampedAbsScreenY = OLib_ClampMaxDist(absScreenY / (f32)(SCREEN_HEIGHT / 4), 1.0f);
+    clampedAbsScreenY = OLib_ClampMaxDist(absScreenPosY / (f32)(SCREEN_HEIGHT / 4), 1.0f);
 
     focalActorAtOffsetTarget.y -= clampedDeltaY * clampedAbsScreenY * clampedAbsScreenY;
     Camera_ScaledStepToCeilVec3f(&focalActorAtOffsetTarget, &camera->focalActorAtOffset, camera->xzOffsetUpdateRate,
@@ -3785,8 +3786,8 @@ s32 Camera_Battle1(Camera* camera) {
                 rwData->unk_1A &= ~0x10;
             } else if (!camera->play->envCtx.skyboxDisabled || (roData->interfaceFlags & BATTLE1_FLAG_0)) {
                 if (func_800CBC84(camera, at, &spC4, 0) != 0) {
-                    s16 screenX;
-                    s16 screenY;
+                    s16 screenPosX;
+                    s16 screenPosY;
 
                     rwData->unk_1A |= 0x1000;
                     spF8 = OLib_Vec3fDist(at, &focalActorFocus->pos);
@@ -3796,10 +3797,10 @@ s32 Camera_Battle1(Camera* camera) {
 
                     spF4 = OLib_Vec3fDist(at, &spC4.pos);
                     spF8 += (rwData->unk_1A & 0x10) ? 40.0f : 0.0f;
-                    Actor_GetScreenPos(camera->play, camera->focalActor, &screenX, &screenY);
+                    Actor_GetScreenPos(camera->play, camera->focalActor, &screenPosX, &screenPosY);
 
-                    if ((spF4 < spF8) ||
-                        ((screenX >= 0) && (screenX <= SCREEN_WIDTH) && (screenY >= 0) && (screenY <= SCREEN_HEIGHT))) {
+                    if ((spF4 < spF8) || ((screenPosX >= 0) && (screenPosX <= SCREEN_WIDTH) && (screenPosY >= 0) &&
+                                          (screenPosY <= SCREEN_HEIGHT))) {
                         rwData->unk_1A |= 0x10;
                         spB4.yaw = spA4.yaw + 0x8000;
                         spB4.pitch = -spA4.pitch;
@@ -4140,18 +4141,18 @@ s32 Camera_KeepOn1(Camera* camera) {
                 rwData->unk_18 &= ~0x10;
             } else if (!camera->play->envCtx.skyboxDisabled || (roData->interfaceFlags & KEEPON1_FLAG_0)) {
                 if (func_800CBC84(camera, at, &sp7C, 0) != 0) {
-                    s16 screenX;
-                    s16 screenY;
+                    s16 screenPosX;
+                    s16 screenPosY;
 
                     rwData->unk_18 |= 0x1000;
                     spF8 = OLib_Vec3fDist(at, &focalActorFocus->pos);
                     spF4 = OLib_Vec3fDist(at, &sp7C.pos);
                     spF8 += (rwData->unk_18 & 0x10) ? 40 : 0.0f;
 
-                    Actor_GetScreenPos(camera->play, camera->focalActor, &screenX, &screenY);
+                    Actor_GetScreenPos(camera->play, camera->focalActor, &screenPosX, &screenPosY);
 
-                    if ((spF4 < spF8) ||
-                        ((screenX >= 0) && (screenX <= SCREEN_WIDTH) && (screenY >= 0) && (screenY <= SCREEN_HEIGHT))) {
+                    if ((spF4 < spF8) || ((screenPosX >= 0) && (screenPosX <= SCREEN_WIDTH) && (screenPosY >= 0) &&
+                                          (screenPosY <= SCREEN_HEIGHT))) {
                         rwData->unk_18 |= 0x10;
                         spE0.yaw = (s16)(spD0.yaw + 0x8000);
                         spE0.pitch = -spD0.pitch;
@@ -5642,8 +5643,8 @@ s32 Camera_Demo1(Camera* camera) {
     PosRot* targetPosRot = &camera->targetPosRot;
     f32 temp_f0;
     Actor* sp98[1];
-    s16 screenX;
-    s16 screenY;
+    s16 screenPosX;
+    s16 screenPosY;
     s32 phi_v0;
     VecGeo sp88;
     PosRot sp74;
@@ -5671,10 +5672,11 @@ s32 Camera_Demo1(Camera* camera) {
         camera->animState++;
     }
 
-    Actor_GetScreenPos(camera->play, camera->target, &screenX, &screenY);
+    Actor_GetScreenPos(camera->play, camera->target, &screenPosX, &screenPosY);
 
     temp_f0 = rwData->unk_0C.r;
-    if ((screenX > 20) && (screenX < (SCREEN_WIDTH - 20)) && (screenY > 40) && (screenY < (SCREEN_HEIGHT - 40))) {
+    if ((screenPosX > 20) && (screenPosX < (SCREEN_WIDTH - 20)) && (screenPosY > 40) &&
+        (screenPosY < (SCREEN_HEIGHT - 40))) {
         if (temp_f0 < 700.0f) {
             phi_v0 = 0;
         } else {

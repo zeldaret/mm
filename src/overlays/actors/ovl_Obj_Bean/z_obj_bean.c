@@ -547,7 +547,7 @@ void func_80937FB0(ObjBean* this) {
 void func_80937FC8(ObjBean* this, PlayState* play) {
     this->unk_1E8(this);
 
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         if (Player_GetExchangeItemAction(play) == PLAYER_IA_MAGIC_BEANS) {
             func_809383B4(this);
             Flags_SetSwitch(play, OBJBEAN_GET_SWITCH_FLAG_2(&this->dyna.actor, 0));

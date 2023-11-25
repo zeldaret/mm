@@ -1,9 +1,11 @@
 #include "global.h"
 #include "PR/gs2dex.h"
 #include "sys_cfb.h"
+#include "z64malloc.h"
 #include "z64snap.h"
 #include "z64view.h"
 #include "z64voice.h"
+
 #include "archives/icon_item_static/icon_item_static_yar.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
@@ -4403,7 +4405,8 @@ void Interface_DrawClock(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if ((R_TIME_SPEED != 0) &&
-        ((msgCtx->msgMode == MSGMODE_NONE) || ((play->actorCtx.flags & ACTORCTX_FLAG_1) && !Play_InCsMode(play)) ||
+        ((msgCtx->msgMode == MSGMODE_NONE) ||
+         ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) && !Play_InCsMode(play)) ||
          (msgCtx->msgMode == MSGMODE_NONE) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
          (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) &&
         !FrameAdvance_IsEnabled(&play->state) && !Environment_IsTimeStopped() && (gSaveContext.save.day <= 3)) {
@@ -4426,7 +4429,7 @@ void Interface_DrawClock(PlayState* play) {
                     sClockAlphaTimer1 = 0;
                 }
             } else {
-                if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+                if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
                     sThreeDayClockAlpha = 255;
                 } else {
                     sThreeDayClockAlpha = interfaceCtx->bAlpha;
@@ -4435,7 +4438,7 @@ void Interface_DrawClock(PlayState* play) {
                 sClockAlphaTimer1 = 0;
             }
         } else {
-            if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+            if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
                 sThreeDayClockAlpha = 255;
             } else {
                 sThreeDayClockAlpha = interfaceCtx->bAlpha;
@@ -5430,7 +5433,7 @@ void Interface_DrawPerfectLetters(PlayState* play) {
 }
 
 void Interface_StartMoonCrash(PlayState* play) {
-    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
         SEQCMD_DISABLE_PLAY_SEQUENCES(false);
     }
 

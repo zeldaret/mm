@@ -160,7 +160,7 @@ void func_80C13B74(EnJgameTsn* this) {
 void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->actor.flags & ACTOR_FLAG_10000) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] > SECONDS_TO_TIMER(0)) {
@@ -215,7 +215,7 @@ void func_80C13E6C(EnJgameTsn* this) {
 }
 
 void func_80C13E90(EnJgameTsn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         if (((gSaveContext.save.time > CLOCK_TIME(4, 0)) && (gSaveContext.save.time < CLOCK_TIME(7, 0))) ||
             ((gSaveContext.save.time > CLOCK_TIME(16, 0)) && (gSaveContext.save.time < CLOCK_TIME(19, 0)))) {
@@ -407,7 +407,7 @@ void func_80C145FC(EnJgameTsn* this) {
 }
 
 void func_80C14610(EnJgameTsn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x10A4, &this->actor);
         this->unk_300 = 0x10A4;
         func_80C14030(this);

@@ -1407,7 +1407,8 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-s32 func_8089DC4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+s32 EnDinofos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                               Gfx** gfx) {
     EnDinofos* this = THIS;
 
     if (limbIndex == DINOLFOS_LIMB_HEAD) {
@@ -1445,7 +1446,7 @@ static s8 sLimbToBodyParts[DINOLFOS_LIMB_MAX] = {
     BODYPART_NONE,                    // DINOLFOS_LIMB_KNIFE
 };
 
-void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnDinofos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnDinofos* this = THIS;
     Vec3f sp80;
     Vec3f sp74;
@@ -1511,7 +1512,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
         Scene_SetRenderModeXlu(play, 0, 1);
         POLY_OPA_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               func_8089DC4C, func_8089DC84, &this->actor, POLY_OPA_DISP);
+                               EnDinofos_OverrideLimbDraw, EnDinofos_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         func_800B8118(&this->actor, play, 0);
@@ -1522,7 +1523,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
         Scene_SetRenderModeXlu(play, 1, 2);
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               func_8089DC4C, func_8089DC84, &this->actor, POLY_XLU_DISP);
+                               EnDinofos_OverrideLimbDraw, EnDinofos_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
 
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, DINOFOS_BODYPART_MAX, this->drawDmgEffScale,

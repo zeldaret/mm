@@ -48,12 +48,16 @@ void func_80865390(EnPart* this, PlayState* play) {
             this->actor.gravity = -0.6f - (Rand_ZeroOne() * 0.5f);
             this->unk14C = 0.15f;
             break;
+
         case ENPART_TYPE_15:
             this->actor.world.rot.y = this->actor.parent->shape.rot.y + 0x8000;
             this->unk146 = 100;
             this->actor.velocity.y = 7.0f;
             this->actor.speed = 2.0f;
             this->actor.gravity = -1.0f;
+            break;
+
+        default:
             break;
     }
 }
@@ -88,6 +92,7 @@ void func_808654C4(EnPart* this, PlayState* play) {
                               1);
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 10, NA_SE_EN_EXTINCT);
                 break;
+
             case ENPART_TYPE_4:
                 for (i = 7; i >= 0; i--) {
                     effectPos.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
@@ -99,6 +104,9 @@ void func_808654C4(EnPart* this, PlayState* play) {
                     EffectSsDtBubble_SpawnColorProfile(play, &effectPos, &effectVelocity, &gZeroVec3f, effectScale, 25,
                                                        DTBUBBLE_COLOR_PROFILE_RED, true);
                 }
+                break;
+
+            default:
                 break;
         }
         Actor_Kill(&this->actor);
@@ -114,7 +122,8 @@ void EnPart_Update(Actor* thisx, PlayState* play) {
     EnPart* this = THIS;
 
     Actor_MoveWithGravity(&this->actor);
-    (*sActionFuncs[this->actionFuncIndex])(this, play);
+
+    sActionFuncs[this->actionFuncIndex](this, play);
 }
 
 void EnPart_Draw(Actor* thisx, PlayState* play) {

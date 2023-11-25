@@ -507,7 +507,7 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
         this->timer++;
     }
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->forceEyesShut = false;
         this->eyeTexIndex = TINGLE_EYETEX_OPEN;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TINGLE)) {
@@ -1036,7 +1036,7 @@ void EnBal_SetupThankYou(EnBal* this) {
 void EnBal_ThankYou(EnBal* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TWIST);
         this->forceEyesShut = false;

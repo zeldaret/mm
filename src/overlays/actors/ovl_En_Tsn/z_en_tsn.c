@@ -271,7 +271,7 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE0304(EnTsn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80AE0010;
         this->unk_220 |= 1;
         if (this->actor.textId == 0) {
@@ -437,7 +437,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                             this->unk_220 &= ~2;
                             this->actor.focus.pos = this->actor.world.pos;
                             CutsceneManager_Stop(this->actor.csId);
-                            this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+                            this->actor.flags &= ~ACTOR_FLAG_TALK;
                             REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
                         } else {
                             Message_ContinueTextbox(play, 0x10A8);
@@ -461,7 +461,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                     case 0x10A8:
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         func_80AE0698(this, play);
-                        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK;
                         this->actionFunc = func_80AE04C4;
                         break;
 
@@ -501,7 +501,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
 
                     case 0x10A9:
                         func_80AE0698(this, play);
-                        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK;
                         this->actionFunc = func_80AE04C4;
                         break;
                 }
@@ -533,7 +533,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE0C88(EnTsn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80AE0704;
         if ((this->actor.textId == 0x108A) || (this->actor.textId == 0x1091)) {
             this->unk_220 |= 4;
@@ -553,7 +553,7 @@ void func_80AE0D10(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE0D78(EnTsn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80AE0D10;
         this->unk_220 |= 4;
     } else if (this->actor.isLockedOn) {

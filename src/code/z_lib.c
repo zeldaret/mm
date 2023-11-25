@@ -1,4 +1,12 @@
-#include "global.h"
+#include "z64lib.h"
+
+#include "main.h"
+#include "ichain.h"
+#include "sfx.h"
+#include "z64actor.h"
+#include "z64game.h"
+#include "functions.h"
+#include "macros.h"
 
 void* Lib_MemCpy(void* dest, void* src, size_t size) {
     bcopy(src, dest, size);
@@ -11,7 +19,7 @@ void* Lib_MemSet(void* buffer, s32 value, size_t size) {
     s32 i;
 
     if (value == 0) {
-        bzero(buffer, (u32)size);
+        bzero(buffer, size);
 
         return buffer;
     }

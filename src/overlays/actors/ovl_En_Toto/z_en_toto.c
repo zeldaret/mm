@@ -245,7 +245,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     func_80BA383C(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BA36C0(this, play, 1);
         if (play->sceneId != SCENE_SONCHONOIE) {
             Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor));

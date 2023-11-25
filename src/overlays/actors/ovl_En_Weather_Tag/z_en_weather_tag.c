@@ -359,7 +359,7 @@ void func_80966FEC(EnWeatherTag* this, PlayState* play) {
         gSkyboxNumStars = numStars;
     }
 
-    if ((play->sceneId == SCENE_KAIZOKU) && (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+    if ((play->sceneId == SCENE_KAIZOKU) && (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
         EnWeatherTag_SetupAction(this, func_80967060);
     }
 }
@@ -459,7 +459,7 @@ void func_809674C8(EnWeatherTag* this, PlayState* play) {
             if ((gSaveContext.save.time >= CLOCK_TIME(7, 0)) && (gSaveContext.save.time < CLOCK_TIME(17, 30)) &&
                 (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
 
-                gWeatherMode = WEATHER_MODE_1;
+                gWeatherMode = WEATHER_MODE_RAIN;
                 Environment_PlayStormNatureAmbience(play);
                 play->envCtx.precipitation[PRECIP_SOS_MAX] = 32;
                 EnWeatherTag_SetupAction(this, func_80967608);
@@ -488,7 +488,7 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
     EnWeatherTag* this = THIS;
 
     this->actionFunc(this, play);
-    if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
+    if ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
         (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
         (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
         (play->csCtx.state == CS_STATE_IDLE)) {
