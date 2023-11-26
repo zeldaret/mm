@@ -541,7 +541,7 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationI
         endFrame = Animation_GetLastFrame(&animationInfo->animation->common);
     }
     startFrame = animationInfo->startFrame;
-    if (startFrame >= endFrame || startFrame < 0) {
+    if ((startFrame >= endFrame) || (startFrame < 0)) {
         return false;
     }
     if (animationInfo->playSpeed < 0.0f) {

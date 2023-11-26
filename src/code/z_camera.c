@@ -2476,9 +2476,7 @@ s32 Camera_Normal3(Camera* camera) {
         sp62 = BINANG_SUB(focalActorPosRot->rot.y, BINANG_ROT180(sp68.yaw));
         sp78 = OLib_Vec3fToVecGeo(&camera->unk_0F0);
         phi_v1_2 = focalActorPosRot->rot.y - sp78.yaw;
-        if (phi_v1_2 < 0) {
-            phi_v1_2 *= -1;
-        }
+        phi_v1_2 = ABS_ALT(phi_v1_2);
 
         if (phi_v1_2 < 0x555A) {
             temp_f2 = 1.0f;

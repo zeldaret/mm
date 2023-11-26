@@ -879,11 +879,7 @@ void EnSlime_IceBlock(EnSlime* this, PlayState* play) {
         }
     } else {
         this->actor.colorFilterTimer = 10;
-        if ((this->iceBlockTimer - 5) < 0) {
-            this->iceBlockTimer = 0;
-        } else {
-            this->iceBlockTimer -= 5;
-        }
+        this->iceBlockTimer = CLAMP_MIN(this->iceBlockTimer - 5, 0);
     }
 }
 

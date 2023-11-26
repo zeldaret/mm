@@ -21,11 +21,11 @@ void _Litob(_Pft* args, u8 type) {
         numMap = ldigs;
     }
 
-    base = (type == 'o') ? 8 : ((type != 'x' && type != 'X') ? 10 : 16);
+    base = (type == 'o') ? 8 : (((type != 'x') && (type != 'X')) ? 10 : 16);
     idx = BUFF_LEN;
     num = args->v.ll;
 
-    if ((type == 'd' || type == 'i') && args->v.ll < 0) {
+    if ((type == 'd' || type == 'i') && (args->v.ll < 0)) {
         num = -num;
     }
 
@@ -49,7 +49,7 @@ void _Litob(_Pft* args, u8 type) {
         args->nz0 = args->prec - args->n1;
     }
 
-    if ((args->prec < 0) && (args->flags & (FLAGS_ZERO | FLAGS_MINUS)) == FLAGS_ZERO) {
+    if ((args->prec < 0) && ((args->flags & (FLAGS_ZERO | FLAGS_MINUS)) == FLAGS_ZERO)) {
         idx = args->width - args->n0 - args->nz0 - args->n1;
         if (idx > 0) {
             args->nz0 += idx;
