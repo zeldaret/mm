@@ -1138,7 +1138,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
         } else if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 0)) {
-            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+            if (!(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
                 Actor_Kill(&this->actor);
             }
 
@@ -1177,8 +1177,8 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
-        play->envCtx.skyboxConfig = 15;
-        play->envCtx.changeSkyboxNextConfig = 15;
+        play->envCtx.skyboxConfig = SKYBOX_CONFIG_15;
+        play->envCtx.changeSkyboxNextConfig = SKYBOX_CONFIG_15;
     }
 }
 
@@ -1680,7 +1680,7 @@ void DmStk_HandleCutscene(DmStk* this, PlayState* play) {
                 this->alpha = 0;
                 this->fadeOutState = SK_FADE_OUT_STATE_NONE;
                 SET_WEEKEVENTREG(WEEKEVENTREG_12_04);
-                if (!(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+                if (!(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
                     Actor_Kill(&this->actor);
                 } else {
                     this->shouldDraw = false;
@@ -1867,7 +1867,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
 
         // This code is responsible for making in-game time pass while using the telescope in the Astral Observatory.
         // Skull Kid is always loaded in the scene, even if he isn't visible, hence why time always passes.
-        if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
+        if ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
             (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
             (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
             (play->csCtx.state == CS_STATE_IDLE)) {
@@ -1880,8 +1880,8 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
-        play->envCtx.skyboxConfig = 15;
-        play->envCtx.changeSkyboxNextConfig = 15;
+        play->envCtx.skyboxConfig = SKYBOX_CONFIG_15;
+        play->envCtx.changeSkyboxNextConfig = SKYBOX_CONFIG_15;
     }
 }
 
