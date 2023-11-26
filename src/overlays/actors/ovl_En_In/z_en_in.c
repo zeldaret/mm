@@ -631,13 +631,13 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
         if (gSaveContext.save.saveInfo.playerData.rupees >= fee) {
             Rupees_ChangeBy(-fee);
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_57_01)) {
-                if (arg4 != 0) {
+                if (arg4) {
                     Actor_ContinueText(play, &this->actor, 0x3474);
                 } else {
                     func_808F4108(this, play, 0x3474);
                 }
             } else {
-                if (arg4 != 0) {
+                if (arg4) {
                     Actor_ContinueText(play, &this->actor, 0x3475);
                 } else {
                     func_808F4108(this, play, 0x3475);
@@ -645,7 +645,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
             }
         } else {
             Audio_PlaySfx(NA_SE_SY_ERROR);
-            if (arg4 != 0) {
+            if (arg4) {
                 Actor_ContinueText(play, &this->actor, 0x3473);
             } else {
                 func_808F4108(this, play, 0x3473);
@@ -1248,7 +1248,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x349B:
                     if (msgCtx->choiceIndex == 0) {
-                        func_808F4270(play, this, arg2, msgCtx, 1);
+                        func_808F4270(play, this, arg2, msgCtx, true);
                         ret = false;
                     } else {
                         Audio_PlaySfx_MessageCancel();
@@ -1283,7 +1283,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
 
                 case 0x3471:
-                    func_808F4270(play, this, arg2, msgCtx, 0);
+                    func_808F4270(play, this, arg2, msgCtx, false);
                     ret = false;
                     break;
 

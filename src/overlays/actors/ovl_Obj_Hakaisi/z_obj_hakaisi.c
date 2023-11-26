@@ -233,7 +233,7 @@ void func_80B14648(ObjHakaisi* this, PlayState* play) {
         if ((this->unk_19E > 20) && (this->dyna.actor.colChkInfo.health <= 20)) {
             func_80B14A24(this, play, this->unk_160[this->unk_194]);
             func_80B14A24(this, play, this->unk_160[this->unk_194]);
-            func_80B14F4C(this, play, 0);
+            func_80B14F4C(this, play, false);
             func_80B14B6C(this, play, this->unk_160[this->unk_194], 40);
             this->unk_194 = 1;
         } else if ((this->unk_19E > 10) && (this->dyna.actor.colChkInfo.health <= 10)) {
@@ -327,7 +327,7 @@ void func_80B14CF8(PlayState* play, Vec3f vec, s16 arg2, s16 arg3, s32 arg4) {
 }
 
 void func_80B14F4C(ObjHakaisi* this, PlayState* play, s32 arg2) {
-    if (arg2 == 0) {
+    if (!arg2) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_HAKAISI, this->dyna.actor.world.pos.x,
                     this->dyna.actor.world.pos.y + 55.0f, this->dyna.actor.world.pos.z - 10.0f,
                     this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 4);

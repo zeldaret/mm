@@ -86,7 +86,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 6, 44, 0, { 0, 0, 0 } },
 };
 
-u8 D_80A5EAEC = 1;
+u8 D_80A5EAEC = true;
 s16 D_80A5EAF0 = 0;
 Vec3s D_80A5EAF4 = { 0, 0, 0 };
 Vec3s D_80A5EAFC = { 0, 0, 0 };
@@ -866,8 +866,8 @@ void EnKusa2_Init(Actor* thisx, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_20;
         func_800BC154(play, &play->actorCtx, &this->actor, 1);
         this->unk_1BE = 0;
-        if (D_80A5EAEC != 0) {
-            D_80A5EAEC = 0;
+        if (D_80A5EAEC) {
+            D_80A5EAEC = false;
             D_80A60900 = play->gameplayFrames;
             func_80A5CAD4(&D_80A5F1C0);
             D_80A60B08 = Rand_Next() >> 0x10;

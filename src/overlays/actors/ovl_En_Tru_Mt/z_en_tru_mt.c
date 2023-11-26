@@ -477,7 +477,7 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
 
     *arg2 = sp7C;
 
-    if (arg4 != 0) {
+    if (arg4) {
         sp68.x += arg0;
         sp68.y += arg1;
         Math_SmoothStepToS(&arg3->x, sp68.x, 4, 0x1FFE, 1);
@@ -511,9 +511,9 @@ void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 
     if (limbIndex == KOUME_LIMB_HEAD) {
         if (this->unk_328 & 0x10) {
-            phi_v0 = 1;
+            phi_v0 = true;
         } else {
-            phi_v0 = 0;
+            phi_v0 = false;
         }
         func_80B76ED4(this->unk_348, this->unk_34A, &this->unk_33C, &this->unk_336, phi_v0);
         Matrix_Translate(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);

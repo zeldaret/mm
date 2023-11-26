@@ -470,7 +470,7 @@ void func_808BE294(EnDekunuts* this, s32 arg1) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gDekuScrubDamageAnim, -3.0f);
     if (this->actor.params == ENDEKUNUTS_GET_FF00_0) {
         this->actor.speed = 10.0f;
-        if (arg1 != 0) {
+        if (arg1) {
             func_800BE504(&this->actor, &this->collider);
         }
     }
@@ -511,7 +511,7 @@ void func_808BE3FC(EnDekunuts* this, PlayState* play) {
         if (this->actor.params == ENDEKUNUTS_GET_FF00_1) {
             func_808BDCF0(this);
         } else if (this->actor.colChkInfo.health == 0) {
-            func_808BE294(this, 0);
+            func_808BE294(this, false);
         } else {
             this->actor.world.rot.y = this->actor.shape.rot.y;
             func_808BDF60(this);
@@ -618,7 +618,7 @@ void func_808BE73C(EnDekunuts* this, PlayState* play) {
                     this->drawDmgEffScale = 0.55f;
                 }
 
-                func_808BE294(this, 1);
+                func_808BE294(this, true);
             } else if (this->actor.params == ENDEKUNUTS_GET_FF00_0) {
                 func_808BDE7C(this);
             }
@@ -632,7 +632,7 @@ void func_808BE73C(EnDekunuts* this, PlayState* play) {
         } else if (this->actor.colChkInfo.health != 0) {
             this->actor.colChkInfo.health = 0;
             Enemy_StartFinishingBlow(play, &this->actor);
-            func_808BE294(this, 0);
+            func_808BE294(this, false);
         }
     }
 }

@@ -2774,7 +2774,7 @@ void func_80903C60(EnFishing* this, u8 arg1) {
         temp = 2.0f * this->unk_1A4;
     }
 
-    if (arg1 == 0) {
+    if (!arg1) {
         if (temp >= 50) {
             sfxId = NA_SE_EV_DIVE_INTO_WATER;
         } else if (temp >= 40) {
@@ -3418,7 +3418,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 s16 phi_v0;
 
                 if (func_809033F0(this, play, false)) {
-                    func_80903C60(this, 0);
+                    func_80903C60(this, false);
                 }
 
                 this->unk_150 = 5;
@@ -3787,7 +3787,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 this->unk_194 = 5000.0f;
 
                 if (this->actor.world.pos.y <= WATER_SURFACE_Y(play)) {
-                    func_80903C60(this, 1);
+                    func_80903C60(this, true);
                     func_809033F0(this, play, true);
                 }
                 goto case_6;
@@ -4071,7 +4071,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         if ((this->unk_150 != -1) && (this->unk_150 != -2) && (this->unk_150 != -25)) {
             if ((this->actor.world.pos.y > WATER_SURFACE_Y(play)) && (this->actor.prevPos.y <= WATER_SURFACE_Y(play))) {
                 func_809033F0(this, play, true);
-                func_80903C60(this, 1);
+                func_80903C60(this, true);
                 this->unk_17C = this->actor.velocity.y;
                 this->actor.velocity.y = 0.0f;
                 this->unk_162 = (s16)(s32)Rand_CenteredFloat(0x8000);
@@ -4083,7 +4083,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 this->actor.world.rot.x = -0xFA0;
                 func_809033F0(this, play, true);
                 this->unk_1CA = 20;
-                func_80903C60(this, 0);
+                func_80903C60(this, false);
             }
         }
 

@@ -9800,7 +9800,7 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
 
     Math_ScaledStepToS(&this->unk_B70, var_a1, 0x190);
     if ((this->modelAnimType == PLAYER_ANIMTYPE_3) || ((this->unk_B70 == 0) && (this->unk_AB8 <= 0.0f))) {
-        if (arg1 == 0) {
+        if (!arg1) {
             PlayerAnimation_LoadToJoint(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_walk][this->modelAnimType],
                                         this->unk_B38);
         } else {
@@ -9828,7 +9828,7 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
         climbAnim = &gPlayerAnim_link_normal_climb_up;
     }
 
-    if (arg1 == 0) {
+    if (!arg1) {
         PlayerAnimation_BlendToJoint(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_walk][this->modelAnimType],
                                      this->unk_B38, climbAnim, this->unk_B38, var_fv1, this->blendTableBuffer);
     } else {
@@ -9860,7 +9860,7 @@ void func_8083F57C(Player* this, PlayState* play) {
         if (temp_fv0 < 0.0f) {
             var_fs0 = 1.0f;
             func_8083EA44(this, (REG(35) / 1000.0f) + ((REG(36) / 1000.0f) * this->linearVelocity));
-            func_8083F358(this, 0, play);
+            func_8083F358(this, false, play);
         } else {
             var_fs0 = (REG(37) / 1000.0f) * temp_fv0;
             if (var_fs0 < 1.0f) {
@@ -9869,7 +9869,7 @@ void func_8083F57C(Player* this, PlayState* play) {
                 var_fs0 = 1.0f;
                 func_8083EA44(this, (REG(39) / 100.0f) + ((REG(38) / 1000.0f) * temp_fv0));
             }
-            func_8083F358(this, 1, play);
+            func_8083F358(this, true, play);
             PlayerAnimation_LoadToJoint(play, &this->skelAnime, func_8082EEE0(this), this->unk_B38 * (20.0f / 29.0f));
         }
     }

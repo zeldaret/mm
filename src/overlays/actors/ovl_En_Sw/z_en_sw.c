@@ -284,18 +284,19 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
 }
 
-s32 func_808D91C4(EnSw* this, CollisionPoly* arg1) {
+s32 func_808D91C4(EnSw* this, CollisionPoly* floorPoly) {
     f32 sp4C;
     f32 temp_f12;
     f32 temp_f0;
     Vec3f sp38;
     Vec3f sp2C;
 
-    this->actor.floorPoly = arg1;
-    if (arg1 != 0) {
-        sp38.x = COLPOLY_GET_NORMAL(arg1->normal.x);
-        sp38.y = COLPOLY_GET_NORMAL(arg1->normal.y);
-        sp38.z = COLPOLY_GET_NORMAL(arg1->normal.z);
+    this->actor.floorPoly = floorPoly;
+
+    if (floorPoly != NULL) {
+        sp38.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
+        sp38.y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
+        sp38.z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
     } else {
         return false;
     }
@@ -628,7 +629,7 @@ void func_808D9F08(EnSw* this) {
 }
 
 void func_808D9F78(EnSw* this, PlayState* play, s32 arg2) {
-    if (arg2 != 0) {
+    if (arg2) {
         func_800BC154(play, &play->actorCtx, &this->actor, 5);
     }
     Actor_SetScale(&this->actor, 0.02f);
@@ -1103,7 +1104,7 @@ void func_808DB2E0(EnSw* this, PlayState* play) {
     f32 temp_f2;
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        func_808D9F78(this, play, 0);
+        func_808D9F78(this, play, false);
         temp_f2 = fabsf(this->actor.velocity.y) * 0.6f;
         this->actor.velocity.x *= 0.5f;
         this->actor.velocity.y = temp_f2;
@@ -1160,7 +1161,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
         switch (ENSW_GET_3(&this->actor)) {
             case 0:
-                func_808D9F78(this, play, 1);
+                func_808D9F78(this, play, true);
                 this->actionFunc = func_808DA350;
                 break;
 
@@ -1168,11 +1169,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_10;
 
-                if (this->actor.world.rot.z < 0) {
-                    this->unk_460 = -thisx->world.rot.z;
-                } else {
-                    this->unk_460 = thisx->world.rot.z;
-                }
+                this->unk_460 = ABS_ALT(thisx->world.rot.z);
 
                 if (this->actor.world.rot.z >= 0) {
                     this->unk_410 |= 8;
@@ -1189,17 +1186,13 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_10;
 
-                if (this->actor.world.rot.z < 0) {
-                    this->unk_460 = -thisx->world.rot.z;
-                } else {
-                    this->unk_460 = thisx->world.rot.z;
-                }
+                this->unk_460 = ABS_ALT(thisx->world.rot.z);
 
                 if (this->actor.world.rot.z >= 0) {
                     this->unk_410 |= 8;
                 }
 
-                func_808D9F78(this, play, 1);
+                func_808D9F78(this, play, true);
                 if (this->path != NULL) {
                     this->unk_49C = 1;
                     func_808D9F08(this);
