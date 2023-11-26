@@ -132,7 +132,7 @@ f32 Math_FAtanContFracF(f32 x) {
     sq = SQ(x);
     conv = 0.0f;
     z = 8.0f;
-    for (i = 8; i > 0; i--) {
+    for (i = 8; i != 0; i--) {
         conv = SQ(z) * sq / (2.0f * z + 1.0f + conv);
         z -= 1.0f;
     }
