@@ -1577,7 +1577,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     }
 
                     gSaveContext.save.saveInfo.checksum = 0;
-                    // FAKE: [sp64 + 0]?
+                    //! FAKE: [sp64 + 0]?
                     gSaveContext.save.saveInfo.checksum = Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64 + 0]);
 
                     for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.newf); sp7A++) {

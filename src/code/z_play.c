@@ -1302,7 +1302,7 @@ void Play_DrawMain(PlayState* this) {
                 Lights_Draw(lights, gfxCtx);
 
                 if (1) {
-                    u32 roomDrawFlags = ((1) ? 1 : 0) | (((void)0, 1) ? 2 : 0); // FAKE:
+                    u32 roomDrawFlags = ((1) ? 1 : 0) | (((void)0, 1) ? 2 : 0); //! FAKE:
 
                     Scene_Draw(this);
                     if (this->roomCtx.unk78) {

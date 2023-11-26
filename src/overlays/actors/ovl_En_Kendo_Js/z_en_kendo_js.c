@@ -146,7 +146,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
     this->actor.child = NULL;
-    this->unk_28A = 0;
+    this->unk_28A = false;
     this->unk_28C = 0;
     this->unk_28E = 0;
     this->unk_286 = 0;
@@ -208,8 +208,8 @@ void func_80B2654C(EnKendoJs* this, PlayState* play) {
             Message_StartTextbox(play, sp2E, &this->actor);
             this->unk_288 = sp2E;
         } else {
-            if (this->unk_28A == 0) {
-                this->unk_28A = 1;
+            if (!this->unk_28A) {
+                this->unk_28A = true;
                 phi_v0 = 0;
             } else {
                 phi_v0 = 1;

@@ -334,6 +334,7 @@ s32 func_80C10E98(PlayState* play) {
     if (AMMO(ITEM_BOMB) >= 5) {
         spB0 = 1;
         dropItem00Ids[1] = ITEM00_BOMBS_B;
+        //! FAKE:
         if (1) {}
     } else {
         spB0 = 0;
@@ -362,7 +363,10 @@ s32 func_80C10E98(PlayState* play) {
     }
 
     i = sp5C - phi_s0_2;
+
+    //! FAKE:
     if (i) {}
+
     sp5C = phi_s0_2 * 50;
     sp98 -= sp5C;
 

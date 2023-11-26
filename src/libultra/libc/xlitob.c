@@ -25,7 +25,7 @@ void _Litob(_Pft* args, u8 type) {
     idx = BUFF_LEN;
     num = args->v.ll;
 
-    if ((type == 'd' || type == 'i') && (args->v.ll < 0)) {
+    if (((type == 'd') || (type == 'i')) && (args->v.ll < 0)) {
         num = -num;
     }
 

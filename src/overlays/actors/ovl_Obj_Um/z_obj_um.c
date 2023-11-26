@@ -433,7 +433,7 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
         phi_v1_2 = -0x190;
     }
 
-    bandit->actor.shape.rot.y = bandit->actor.shape.rot.y + phi_v1_2;
+    bandit->actor.shape.rot.y += phi_v1_2;
     return 0;
 }
 

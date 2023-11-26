@@ -227,7 +227,10 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
             thisx->parent->child = thisx;
             thisx->child->child = thisx->parent;
             thisx->parent->parent = thisx->child;
+
+            //! FAKE:
             if (1) {}
+
             Actor_SetScale(thisx, 0.02f);
         }
 

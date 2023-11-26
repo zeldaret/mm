@@ -375,6 +375,7 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
 
 void func_80AECE0C(EnTk* this, PlayState* play) {
     if (this->unk_3CC != 0) {
+        //! FAKE:
         if (1) {}
         func_80AECE60(this, play);
     }

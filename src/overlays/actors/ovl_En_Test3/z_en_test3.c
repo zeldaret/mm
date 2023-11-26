@@ -836,7 +836,8 @@ s32 func_80A3FF10(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
         this->player.actor.home.rot.y = -0x2AAB;
         this->player.actor.shape.rot.y = -0x2AAB;
         this->player.currentYaw = -0x2AAB;
-        if (1) {} // macro?
+        //! FAKE:
+        if (1) {}
         return true;
     } else {
         func_80A3F15C(this, play, arg2);

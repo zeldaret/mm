@@ -848,6 +848,7 @@ s32 func_80996594(EnSkb* this, PlayState* play) {
     j = 1;
     temp_s2 = func_80996544(sp60, sp58);
 
+    //! FAKE:
     if (1) {}
 
     do {

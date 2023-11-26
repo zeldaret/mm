@@ -208,6 +208,7 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
                 func_80AE615C(this, 1);
             }
             if (temp == 0x9C5) {
+                //! FAKE:
                 if (1) {}
                 this->unk_1D8 |= 8;
                 func_80AE615C(this, 1);
