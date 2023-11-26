@@ -2986,7 +2986,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     ActorListEntry* actorEntry;
     Actor* actor;
     s32 actorFlags;
-    s32 i;
+    s32 category;
 
     if (play->unk_18844) {
         actorFlags = ACTOR_FLAG_200000;
@@ -3001,7 +3001,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     sp58 = POLY_XLU_DISP;
     POLY_XLU_DISP = &sp58[1];
 
-    for (i = 0, actorEntry = actorCtx->actorLists; i < ACTORCAT_MAX; i++, actorEntry++) {
+    for (category = 0, actorEntry = actorCtx->actorLists; category < ACTORCAT_MAX; category++, actorEntry++) {
         actor = actorEntry->first;
 
         while (actor != NULL) {
