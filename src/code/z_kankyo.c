@@ -23,7 +23,7 @@ typedef struct {
 struct LightningStrike;
 
 u8 D_801F4E30;
-u8 D_801F4E31;
+u8 sInitSkyboxConfig;
 u8 gCustomLensFlare1On;
 Vec3f gCustomLensFlare1Pos;
 f32 D_801F4E44;
@@ -156,7 +156,17 @@ TimeBasedLightEntry sTimeBasedLightConfigs[][7] = {
     },
 };
 
-TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
+typedef struct {
+    /* 0x0 */ u16 startTime;
+    /* 0x2 */ u16 endTime;
+    /* 0x4 */ u8 skybox1Index;
+    /* 0x5 */ u8 skybox2Index;
+    /* 0x6 */ u8 color1Index;
+    /* 0x7 */ u8 color2Index;
+} TimeBasedSkyboxEntry; // size = 0x8
+
+TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[SKYBOX_CONFIG_MAX][9] = {
+    // SKYBOX_CONFIG_0
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 3, 3 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 3, 4 },
@@ -168,6 +178,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 2, 3 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 3, 3 },
     },
+    // SKYBOX_CONFIG_1
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 7, 7 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 7, 8 },
@@ -179,6 +190,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 6, 7 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 7, 7 },
     },
+    // SKYBOX_CONFIG_2
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 11, 11 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 11, 52 },
@@ -190,6 +202,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 10, 11 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 11, 11 },
     },
+    // SKYBOX_CONFIG_3
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 15, 15 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 15, 16 },
@@ -201,6 +214,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 14, 15 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 15, 15 },
     },
+    // SKYBOX_CONFIG_4
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 19, 19 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 19, 20 },
@@ -212,6 +226,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 0, 18, 19 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 19, 19 },
     },
+    // SKYBOX_CONFIG_5
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 23, 23 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 23, 52 },
@@ -223,6 +238,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 22, 23 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 23, 23 },
     },
+    // SKYBOX_CONFIG_6
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 27, 27 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 27, 28 },
@@ -234,6 +250,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 26, 27 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 27, 27 },
     },
+    // SKYBOX_CONFIG_7
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 31, 31 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 31, 32 },
@@ -245,6 +262,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 0, 30, 31 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 31, 31 },
     },
+    // SKYBOX_CONFIG_8
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 35, 35 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 35, 52 },
@@ -256,6 +274,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 34, 35 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 35, 35 },
     },
+    // SKYBOX_CONFIG_9
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 39, 39 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 39, 40 },
@@ -267,6 +286,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 38, 39 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 39, 39 },
     },
+    // SKYBOX_CONFIG_10
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 43, 43 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 43, 44 },
@@ -278,6 +298,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 0, 42, 43 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 43, 43 },
     },
+    // SKYBOX_CONFIG_11
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 47, 47 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 47, 52 },
@@ -289,6 +310,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 46, 47 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 47, 47 },
     },
+    // SKYBOX_CONFIG_12
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 51, 51 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 51, 48 },
@@ -300,6 +322,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 50, 51 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 51, 51 },
     },
+    // SKYBOX_CONFIG_13
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 55, 55 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 55, 52 },
@@ -311,6 +334,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 54, 54 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 55, 55 },
     },
+    // SKYBOX_CONFIG_14
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 59, 59 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 59, 56 },
@@ -322,6 +346,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 58, 58 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 59, 59 },
     },
+    // SKYBOX_CONFIG_15
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 63, 63 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 63, 60 },
@@ -333,6 +358,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 62, 62 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 63, 63 },
     },
+    // SKYBOX_CONFIG_16
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 67, 67 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 67, 64 },
@@ -344,6 +370,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 66, 66 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 67, 67 },
     },
+    // SKYBOX_CONFIG_17
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 1, 1 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 0, 1, 1 },
@@ -355,6 +382,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 1, 1 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 1, 1 },
     },
+    // SKYBOX_CONFIG_18
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 71, 71 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 71, 72 },
@@ -366,6 +394,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 70, 71 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 71, 71 },
     },
+    // SKYBOX_CONFIG_19
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 75, 75 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 75, 76 },
@@ -377,6 +406,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 74, 75 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 75, 75 },
     },
+    // SKYBOX_CONFIG_20
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 79, 79 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 79, 52 },
@@ -388,6 +418,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 78, 79 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 79, 79 },
     },
+    // SKYBOX_CONFIG_21
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 83, 83 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 83, 84 },
@@ -399,6 +430,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 82, 83 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 83, 83 },
     },
+    // SKYBOX_CONFIG_22
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 87, 87 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 87, 88 },
@@ -410,6 +442,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 86, 87 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 87, 87 },
     },
+    // SKYBOX_CONFIG_23
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 91, 91 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 91, 52 },
@@ -421,6 +454,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 90, 91 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 91, 91 },
     },
+    // SKYBOX_CONFIG_24
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 11, 11 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 0, 11, 11 },
@@ -432,6 +466,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 11, 11 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 11, 11 },
     },
+    // SKYBOX_CONFIG_25
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 95, 95 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 95, 96 },
@@ -443,6 +478,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 0, 0, 94, 95 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 0, 0, 95, 95 },
     },
+    // SKYBOX_CONFIG_26
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 1, 1, 99, 99 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 1, 1, 99, 100 },
@@ -454,6 +490,7 @@ TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
         { CLOCK_TIME(18, 0), CLOCK_TIME(19, 0), 1, 1, 98, 99 },
         { CLOCK_TIME(19, 0), CLOCK_TIME(24, 0) - 1, 1, 1, 99, 99 },
     },
+    // SKYBOX_CONFIG_27
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 103, 103 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 103, 52 },
@@ -528,7 +565,7 @@ s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
 void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     PlayState* play = play2;
     f32 temp_ft4;
-    u8 var_a0;
+    u8 dayOffset;
     s16 i;
 
     CREG(1) = 0;
@@ -664,46 +701,46 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
     play->envCtx.precipitation[PRECIP_SOS_MAX] = 0;
 
-    D_801F4E31 = envCtx->skyboxConfig;
+    sInitSkyboxConfig = envCtx->skyboxConfig;
 
-    var_a0 = 0;
+    dayOffset = 0;
     if (((void)0, gSaveContext.save.day) != 0) {
-        var_a0 = ((void)0, gSaveContext.save.day) - 1;
+        dayOffset = ((void)0, gSaveContext.save.day) - 1;
     }
-    envCtx->skyboxConfig = var_a0 + (D_801F4E31 * 3);
+    envCtx->skyboxConfig = dayOffset + (sInitSkyboxConfig * 3);
     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 
-    if (D_801F4E31 == 4) {
-        envCtx->skyboxConfig = 0xE;
+    if (sInitSkyboxConfig == SKYBOX_CONFIG_4) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_14;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 5) {
-        envCtx->skyboxConfig = 0x10;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_5) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_16;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 6) {
-        envCtx->skyboxConfig = 0x11;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_6) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_17;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 7) {
-        envCtx->skyboxConfig = var_a0 + 0x12;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_7) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_18 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 8) {
-        envCtx->skyboxConfig = var_a0 + 0x15;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_8) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_21 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 9) {
-        envCtx->skyboxConfig = 0x18;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_9) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_24;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 0xA) {
-        envCtx->skyboxConfig = var_a0 + 0x19;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_10) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_25 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     }
 
-    if (var_a0 >= 3) {
-        envCtx->skyboxConfig = 0xD;
-        envCtx->changeSkyboxNextConfig = 0xD;
+    if (dayOffset >= 3) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_13;
+        envCtx->changeSkyboxNextConfig = SKYBOX_CONFIG_13;
     }
 
-    if (envCtx->skyboxConfig >= 0x1C) {
-        envCtx->skyboxConfig = 0;
-        envCtx->changeSkyboxNextConfig = 0;
+    if (envCtx->skyboxConfig >= SKYBOX_CONFIG_MAX) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_0;
+        envCtx->changeSkyboxNextConfig = SKYBOX_CONFIG_0;
     }
 
     D_801F4E74 = 0.0f;
@@ -737,7 +774,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
         play->envCtx.precipitation[PRECIP_SNOW_CUR] = 0;
         play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
 
-        if (gWeatherMode == WEATHER_MODE_1) {
+        if (gWeatherMode == WEATHER_MODE_RAIN) {
             if (((u32)CURRENT_DAY == 2) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(17, 30))) {
                 if (Environment_GetStormState(play) != STORM_STATE_OFF) {
@@ -970,8 +1007,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
     u8 skyboxBlend = 0;
     f32 colorWeight = 0.0f;
 
-    if (envCtx->skyboxConfig >= 0x1C) {
-        envCtx->skyboxConfig = 0;
+    if (envCtx->skyboxConfig >= SKYBOX_CONFIG_MAX) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_0;
     }
 
     if ((skyboxId == SKYBOX_NORMAL_SKY) || ((skyboxId == SKYBOX_3) && (D_801F4E74 < 1.0f))) {
@@ -1219,7 +1256,7 @@ void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
             lightSettings[temp_v1_2 + temp_v1].blendRateAndFogNear - lightSettings[temp_v1].blendRateAndFogNear;
     }
 
-    if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == WEATHER_MODE_1)) {
+    if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == WEATHER_MODE_RAIN)) {
         adjLightSettings->ambientColor[0] = -50;
         adjLightSettings->ambientColor[1] = -100;
         adjLightSettings->ambientColor[2] = -100;
@@ -2448,7 +2485,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
     //! FAKE:
     if (!gSaveContext.sceneLayer) {}
 
-    if ((play->csCtx.state == 0) && !(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+    if ((play->csCtx.state == 0) && !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
         switch (play->envCtx.timeSeqState) {
             case TIMESEQ_DAY_BGM:
                 break;
@@ -3074,7 +3111,7 @@ void Environment_SetupSkyboxStars(PlayState* play) {
             phi_f0 = 0.0f;
         }
 
-        phi_f0 = (play->envCtx.skyboxConfig == 0x18) ? 1.0f : phi_f0;
+        phi_f0 = (play->envCtx.skyboxConfig == SKYBOX_CONFIG_24) ? 1.0f : phi_f0;
 
         D_801F4F28 = phi_f0;
         sEnvSkyboxNumStars = gSkyboxNumStars;
@@ -3486,47 +3523,47 @@ void Environment_JumpForwardInTime(void) {
     }
 }
 
-void func_800FEAF4(EnvironmentContext* envCtx) {
-    u8 phi_v1 = 0;
+void Environment_NewDay(EnvironmentContext* envCtx) {
+    u8 dayOffset = 0;
 
     if (((void)0, gSaveContext.save.day) != 0) {
-        phi_v1 = ((void)0, gSaveContext.save.day) - 1;
+        dayOffset = ((void)0, gSaveContext.save.day) - 1;
     }
 
-    envCtx->skyboxConfig = phi_v1 + (D_801F4E31 * 3);
+    envCtx->skyboxConfig = dayOffset + (sInitSkyboxConfig * 3);
     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 
-    if (D_801F4E31 == 4) {
-        envCtx->skyboxConfig = 0xE;
+    if (sInitSkyboxConfig == SKYBOX_CONFIG_4) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_14;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 5) {
-        envCtx->skyboxConfig = 0x10;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_5) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_16;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 6) {
-        envCtx->skyboxConfig = 0x11;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_6) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_17;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 7) {
-        envCtx->skyboxConfig = phi_v1 + 0x12;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_7) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_18 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 8) {
-        envCtx->skyboxConfig = phi_v1 + 0x15;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_8) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_21 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 9) {
-        envCtx->skyboxConfig = 0x18;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_9) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_24;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
-    } else if (D_801F4E31 == 0xA) {
-        envCtx->skyboxConfig = phi_v1 + 0x19;
+    } else if (sInitSkyboxConfig == SKYBOX_CONFIG_10) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_25 + dayOffset;
         envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     }
 
-    if (phi_v1 >= 3) {
-        envCtx->skyboxConfig = 0xD;
-        envCtx->changeSkyboxNextConfig = 0xD;
+    if (dayOffset >= 3) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_13;
+        envCtx->changeSkyboxNextConfig = SKYBOX_CONFIG_13;
     }
 
-    if (envCtx->skyboxConfig >= 0x1C) {
-        envCtx->skyboxConfig = 0;
-        envCtx->changeSkyboxNextConfig = 0;
+    if (envCtx->skyboxConfig >= SKYBOX_CONFIG_MAX) {
+        envCtx->skyboxConfig = SKYBOX_CONFIG_0;
+        envCtx->changeSkyboxNextConfig = SKYBOX_CONFIG_0;
     }
 
     switch (((void)0, gSaveContext.save.day)) {

@@ -5,10 +5,6 @@
 #include "segment_symbols.h"
 #include "macros.h"
 
-// pre-boot variables
-extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
-extern u8 D_80025D00[];
-
 // data
 extern size_t gDmaMgrDmaBuffSize;
 extern vs32 gIrqMgrResetStatus;
@@ -242,7 +238,6 @@ extern f32 gSfxDefaultFreqAndVolScale;
 extern s8 gSfxDefaultReverb;
 extern u8 gAudioSpecId;
 extern u8 gAudioHeapResetState;
-extern ReverbSettings* gReverbSettingsTable[10];
 extern AudioSpec gAudioSpecs[21];
 
 // rodata

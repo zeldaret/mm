@@ -306,7 +306,7 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
                            OBJECT_CROW_LIMB_MAX);
         ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);

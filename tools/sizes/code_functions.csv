@@ -1300,7 +1300,7 @@ asm/non_matchings/code/z_kankyo/func_800FE9B4.s,func_800FE9B4,0x800FE9B4,0x27
 asm/non_matchings/code/z_kankyo/func_800FEA50.s,func_800FEA50,0x800FEA50,0x18
 asm/non_matchings/code/z_kankyo/func_800FEAB0.s,func_800FEAB0,0x800FEAB0,0x4
 asm/non_matchings/code/z_kankyo/Environment_JumpForwardInTime.s,Environment_JumpForwardInTime,0x800FEAC0,0xD
-asm/non_matchings/code/z_kankyo/func_800FEAF4.s,func_800FEAF4,0x800FEAF4,0x67
+asm/non_matchings/code/z_kankyo/Environment_NewDay.s,Environment_NewDay,0x800FEAF4,0x67
 asm/non_matchings/code/z_lib/Lib_MemCpy.s,Lib_MemCpy,0x800FEC90,0xC
 asm/non_matchings/code/z_lib/Lib_MemSet.s,Lib_MemSet,0x800FECC0,0x21
 asm/non_matchings/code/z_lib/Math_CosS.s,Math_CosS,0x800FED44,0x10

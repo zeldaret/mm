@@ -283,7 +283,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 this->actor.draw = NULL;
                 this->actionFunc = EnFall_MoonsTear_Fall;
                 Actor_SetScale(&this->actor, 0.02f);
-                if (!(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+                if (!(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
                     Actor_Kill(&this->actor);
                 }
                 moon = EnFall_MoonsTear_GetTerminaFieldMoon(play);

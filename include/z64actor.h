@@ -289,7 +289,7 @@ typedef enum {
 } ActorType;
 
 #define ACTORCTX_FLAG_0 (1 << 0)
-#define ACTORCTX_FLAG_1 (1 << 1)
+#define ACTORCTX_FLAG_TELESCOPE_ON (1 << 1)
 #define ACTORCTX_FLAG_PICTO_BOX_ON (1 << 2)
 #define ACTORCTX_FLAG_3 (1 << 3)
 #define ACTORCTX_FLAG_4 (1 << 4)
