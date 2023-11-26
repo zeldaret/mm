@@ -57,7 +57,6 @@ Actor* D_801ED920; // 2 funcs. 1 out of z_actor
 #define ACTOR_AUDIO_FLAG_SEQ_ALL (ACTOR_AUDIO_FLAG_SEQ_MUSIC_BOX_HOUSE | ACTOR_AUDIO_FLAG_SEQ_KAMARO_DANCE)
 #define ACTOR_AUDIO_FLAG_ALL (ACTOR_AUDIO_FLAG_SFX_ALL | ACTOR_AUDIO_FLAG_SEQ_ALL)
 
-// Internal forward declarations
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx);
 Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, PlayState* play);
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play);
@@ -69,17 +68,17 @@ Actor* Actor_RemoveFromCategory(PlayState* play, ActorContext* actorCtx, Actor* 
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorLists[0];
     Actor* actor;
-    s32 i;
+    s32 category;
 
     FaultDrawer_SetCharPad(-2, 0);
     FaultDrawer_Printf("actor\n", gMaxActorId);
     FaultDrawer_Printf("No. Actor   Name Part SegName\n");
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
-        actor = actorList[i].first;
+    for (category = 0; category < ACTORCAT_MAX; category++) {
+        actor = actorList[category].first;
 
         while (actor != NULL) {
-            FaultDrawer_Printf("%3d %08x %04x %3d %s\n", i, actor, actor->id, actor->category, "");
+            FaultDrawer_Printf("%3d %08x %04x %3d %s\n", category, actor, actor->id, actor->category, "");
             actor = actor->next;
         }
     }
@@ -2604,11 +2603,11 @@ u32 sCategoryFreezeMasks[ACTORCAT_MAX] = {
 };
 
 void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
-    s32 i;
+    s32 category;
     Actor* actor;
     Player* player = GET_PLAYER(play);
     u32* categoryFreezeMaskP;
-    s32 cat;
+    s32 newCategory;
     Actor* next;
     ActorListEntry* entry;
     UpdateActor_Params params;
@@ -2642,8 +2641,8 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         params.talkActor = NULL;
     }
 
-    for (i = 0, entry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists);
-         entry++, categoryFreezeMaskP++, i++) {
+    for (category = 0, entry = actorCtx->actorLists; category < ACTORCAT_MAX;
+         entry++, categoryFreezeMaskP++, category++) {
         params.canFreezeCategory = *categoryFreezeMaskP & player->stateFlags1;
         params.actor = entry->first;
 
@@ -2651,28 +2650,29 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
             params.actor = Actor_UpdateActor(&params);
         }
 
-        if (i == ACTORCAT_BG) {
+        if (category == ACTORCAT_BG) {
             DynaPoly_UpdateContext(play, &play->colCtx.dyna);
         }
     }
 
-    for (i = 0, entry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists); entry++, i++) {
-        if (entry->unk_08 != 0) {
+    for (category = 0, entry = actorCtx->actorLists; category < ACTORCAT_MAX; entry++, category++) {
+        if (entry->categoryChanged) {
             actor = entry->first;
 
             while (actor != NULL) {
-                if (i == actor->category) {
+                if (category == actor->category) {
                     actor = actor->next;
-                } else {
-                    next = actor->next;
-                    cat = actor->category;
-                    actor->category = i;
-                    Actor_RemoveFromCategory(play, actorCtx, actor);
-                    Actor_AddToCategory(actorCtx, actor, cat);
-                    actor = next;
+                    continue;
                 }
+
+                next = actor->next;
+                newCategory = actor->category;
+                actor->category = category;
+                Actor_RemoveFromCategory(play, actorCtx, actor);
+                Actor_AddToCategory(actorCtx, actor, newCategory);
+                actor = next;
             }
-            entry->unk_08 = 0;
+            entry->categoryChanged = false;
         }
     }
 
@@ -3001,7 +3001,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     sp58 = POLY_XLU_DISP;
     POLY_XLU_DISP = &sp58[1];
 
-    for (i = 0, actorEntry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists); i++, actorEntry++) {
+    for (i = 0, actorEntry = actorCtx->actorLists; i < ACTORCAT_MAX; i++, actorEntry++) {
         actor = actorEntry->first;
 
         while (actor != NULL) {
@@ -3075,10 +3075,10 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
  */
 void Actor_KillAllWithMissingObject(PlayState* play, ActorContext* actorCtx) {
     Actor* actor;
-    s32 i;
+    s32 category;
 
-    for (i = 0; i != ARRAY_COUNT(actorCtx->actorLists); i++) {
-        actor = actorCtx->actorLists[i].first;
+    for (category = 0; category < ACTORCAT_MAX; category++) {
+        actor = actorCtx->actorLists[category].first;
 
         while (actor != NULL) {
             if (!Object_IsLoaded(&play->objectCtx, actor->objectSlot)) {
@@ -3095,10 +3095,10 @@ void Actor_KillAllWithMissingObject(PlayState* play, ActorContext* actorCtx) {
  */
 void func_800BA798(PlayState* play, ActorContext* actorCtx) {
     Actor* actor;
-    s32 i;
+    s32 category;
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
-        actor = actorCtx->actorLists[i].first;
+    for (category = 0; category < ACTORCAT_MAX; category++) {
+        actor = actorCtx->actorLists[category].first;
 
         while (actor != NULL) {
             if ((actor->room >= 0) && (actor->room != play->roomCtx.curRoom.num) &&
@@ -3127,10 +3127,10 @@ void func_800BA798(PlayState* play, ActorContext* actorCtx) {
  * Kill every actor which does not have the current halfDayBit enabled
  */
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx) {
-    s32 i;
+    s32 category;
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
-        Actor* actor = actorCtx->actorLists[i].first;
+    for (category = 0; category < ACTORCAT_MAX; category++) {
+        Actor* actor = actorCtx->actorLists[category].first;
 
         while (actor != NULL) {
             if (!(actor->halfDaysBits & actorCtx->halfDaysBit)) {
@@ -3154,17 +3154,17 @@ void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx) {
 }
 
 void Actor_CleanupContext(ActorContext* actorCtx, PlayState* play) {
-    s32 i;
+    s32 category;
 
     Fault_RemoveClient(&sActorFaultClient);
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
-        if (i != ACTORCAT_PLAYER) {
-            Actor* actor = actorCtx->actorLists[i].first;
+    for (category = 0; category < ACTORCAT_MAX; category++) {
+        if (category != ACTORCAT_PLAYER) {
+            Actor* actor = actorCtx->actorLists[category].first;
 
             while (actor != NULL) {
                 Actor_Delete(actorCtx, actor, play);
-                actor = actorCtx->actorLists[i].first;
+                actor = actorCtx->actorLists[category].first;
             }
         }
     }
@@ -3797,8 +3797,8 @@ void func_800BBFB0(PlayState* play, Vec3f* position, f32 arg2, s32 arg3, s16 arg
     }
 }
 
-void func_800BC154(PlayState* play, ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
-    actorCtx->actorLists[actor->category].unk_08 = 1;
+void Actor_ChangeCategory(PlayState* play, ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
+    actorCtx->actorLists[actor->category].categoryChanged = true;
     actor->category = actorCategory;
 }
 
@@ -4663,7 +4663,7 @@ Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCa
     Actor* actor = play->actorCtx.actorLists[actorCategory].first;
 
     while (actor != NULL) {
-        if (actor == inActor || ((actorId != -1) && (actorId != actor->id))) {
+        if ((actor == inActor) || ((actorId != -1) && (actorId != actor->id))) {
             actor = actor->next;
             continue;
         }

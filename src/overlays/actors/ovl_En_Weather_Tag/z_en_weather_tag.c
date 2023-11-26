@@ -91,7 +91,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             break;
 
         case WEATHERTAG_TYPE_UNK5:
-            func_800BC154(play, &play->actorCtx, &this->actor, 7);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
             play->skyboxId = SKYBOX_3;
             play->envCtx.lightConfig = 5;
             play->envCtx.changeLightNextConfig = 5;

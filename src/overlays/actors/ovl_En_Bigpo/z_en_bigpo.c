@@ -748,7 +748,7 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
     this->actor.shape.rot.x = -0x8000;
     this->actor.velocity.y = 0.0f;
     this->actor.world.pos.y -= 15.0f;
-    func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
     this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY); // targetable OFF, enemy music OFF
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_PLAYER_400;
     this->actionFunc = EnBigpo_LanternFalling;
@@ -895,7 +895,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
                     Math_Vec3f_Copy(&this->fires[fireIndex].pos, &randomFirePo->actor.world.pos);
                     randomFirePo->actor.parent = (Actor*)this;
                     randomFirePo->actor.update = EnBigpo_UpdateFire;
-                    func_800BC154(play, &play->actorCtx, &randomFirePo->actor, ACTORCAT_PROP);
+                    Actor_ChangeCategory(play, &play->actorCtx, &randomFirePo->actor, ACTORCAT_PROP);
                     randomFirePo->unk20C = fireIndex;
                     randomFirePo->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                     // make invisible by size: 0

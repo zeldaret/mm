@@ -525,8 +525,8 @@ s32 func_80A3F09C(EnTest3* this, PlayState* play) {
 }
 
 void func_80A3F0B0(EnTest3* this, PlayState* play) {
-    func_800BC154(play, &play->actorCtx, &this->unk_D90->actor, 2);
-    func_800BC154(play, &play->actorCtx, &this->player.actor, 4);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->unk_D90->actor, ACTORCAT_PLAYER);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->player.actor, ACTORCAT_NPC);
     this->unk_D90->stateFlags1 &= ~PLAYER_STATE1_20;
 }
 
@@ -669,8 +669,8 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             play->actorCtx.flags &= ~ACTORCTX_FLAG_4;
             this->player.stateFlags2 &= ~PLAYER_STATE2_40000;
             this->unk_D90->stateFlags1 |= PLAYER_STATE1_20;
-            func_800BC154(play, &play->actorCtx, &this->unk_D90->actor, 4);
-            func_800BC154(play, &play->actorCtx, &this->player.actor, 2);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->unk_D90->actor, ACTORCAT_NPC);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->player.actor, ACTORCAT_PLAYER);
             CutsceneManager_SetReturnCamera(this->subCamId);
             play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_WAIT);
         }
