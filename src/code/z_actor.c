@@ -2655,16 +2655,19 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         }
     }
 
+    // Relocate actors to a different actorList if it has changed categories.
     for (category = 0, entry = actorCtx->actorLists; category < ACTORCAT_MAX; entry++, category++) {
         if (entry->categoryChanged) {
             actor = entry->first;
 
             while (actor != NULL) {
-                if (category == actor->category) {
+                if (actor->category == category) {
+                    // The actor category matches the list category. No action needed.
                     actor = actor->next;
                     continue;
                 }
 
+                // The actor category does not match the list category and needs to be moved.
                 next = actor->next;
                 newCategory = actor->category;
                 actor->category = category;
