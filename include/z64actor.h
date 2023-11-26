@@ -382,7 +382,7 @@ typedef struct ActorContextSceneFlags {
 typedef struct ActorListEntry {
     /* 0x0 */ s32 length; // number of actors loaded of this type
     /* 0x4 */ Actor* first; // pointer to first actor of this type
-    /* 0x8 */ s32 categoryChanged; // an actor has changed categories and needs to be moved to a different list
+    /* 0x8 */ s32 categoryChanged; // at least one actor has changed categories and needs to be moved to a different list
 } ActorListEntry; // size = 0xC
 
 typedef enum {
