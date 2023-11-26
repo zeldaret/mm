@@ -419,7 +419,7 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
     f32 lightRayMaxScale;
     u8 i;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f accel;
 
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -441,12 +441,12 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
                         sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
                     Matrix_RotateYF(Rand_ZeroFloat(M_PI * 2), MTXMODE_NEW);
                     Matrix_RotateXFApply(Rand_ZeroFloat(M_PI * 2));
-                    Matrix_MultVecZ(lightRayMaxScale, &vel);
-                    accel.x = vel.x * -0.03f;
-                    accel.y = vel.y * -0.03f;
-                    accel.z = vel.z * -0.03f;
+                    Matrix_MultVecZ(lightRayMaxScale, &velocity);
+                    accel.x = velocity.x * -0.03f;
+                    accel.y = velocity.y * -0.03f;
+                    accel.z = velocity.z * -0.03f;
                     EnClearTag_CreateIsolatedLightRayEffect(
-                        this, &pos, &vel, &accel,
+                        this, &pos, &velocity, &accel,
                         sLightRayScale[thisx->params] + Rand_ZeroFloat(sLightRayScale[thisx->params] * 0.5f),
                         sLightRayMaxScaleTarget[thisx->params], this->actor.world.rot.z, Rand_ZeroFloat(10.0f) + 20.0f);
                 }
@@ -490,17 +490,17 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
                 if (thisx->params != CLEAR_TAG_POP) {
                     pos.y = this->actor.world.pos.y;
                     for (i = 0; i < 18; i++) {
-                        vel.x = sinf(i * (33.0f / 40.0f)) * i * .5f;
-                        vel.z = cosf(i * (33.0f / 40.0f)) * i * .5f;
-                        vel.y = Rand_ZeroFloat(8.0f) + 7.0f;
+                        velocity.x = sinf(i * (33.0f / 40.0f)) * i * .5f;
+                        velocity.z = cosf(i * (33.0f / 40.0f)) * i * .5f;
+                        velocity.y = Rand_ZeroFloat(8.0f) + 7.0f;
 
-                        vel.x += Rand_CenteredFloat(0.5f);
-                        vel.z += Rand_CenteredFloat(0.5f);
+                        velocity.x += Rand_CenteredFloat(0.5f);
+                        velocity.z += Rand_CenteredFloat(0.5f);
 
                         accel.x = 0.0f;
                         accel.y = -1.0f;
                         accel.z = 0.0f;
-                        EnClearTag_CreateDebrisEffect(this, &pos, &vel, &accel,
+                        EnClearTag_CreateDebrisEffect(this, &pos, &velocity, &accel,
                                                       sDebrisScale[thisx->params] +
                                                           Rand_ZeroFloat(sDebrisScale[thisx->params]),
                                                       this->actor.floorHeight);
@@ -514,11 +514,11 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
                 lightRayMaxScale = sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
                 Matrix_RotateYF(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
                 Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
-                Matrix_MultVecZ(lightRayMaxScale, &vel);
-                accel.x = vel.x * -0.03f;
-                accel.y = vel.y * -0.03f;
-                accel.z = vel.z * -0.03f;
-                EnClearTag_CreateLightRayEffect(this, &pos, &vel, &accel,
+                Matrix_MultVecZ(lightRayMaxScale, &velocity);
+                accel.x = velocity.x * -0.03f;
+                accel.y = velocity.y * -0.03f;
+                accel.z = velocity.z * -0.03f;
+                EnClearTag_CreateLightRayEffect(this, &pos, &velocity, &accel,
                                                 sLightRayScale[thisx->params] +
                                                     Rand_ZeroFloat(sLightRayScale[thisx->params] * 0.5f),
                                                 sLightRayMaxScaleTarget[thisx->params], Rand_ZeroFloat(10.0f) + 20.0f);

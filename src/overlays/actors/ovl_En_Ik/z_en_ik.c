@@ -839,8 +839,8 @@ void EnIk_UpdateArmor(EnIk* this, PlayState* play) {
         ikEffect = &this->effects[i];
 
         if (ikEffect->enabled) {
-            Math_Vec3f_Sum(&ikEffect->pos, &ikEffect->vel, &ikEffect->pos);
-            ikEffect->vel.y += -1.5f;
+            Math_Vec3f_Sum(&ikEffect->pos, &ikEffect->velocity, &ikEffect->pos);
+            ikEffect->velocity.y += -1.5f;
             if (ikEffect->pos.y < this->actor.floorHeight) {
                 ikEffect->enabled = false;
                 ikEffect->pos.y = this->actor.floorHeight;
@@ -1031,9 +1031,9 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             ikEffect->enabled = true;
             sp76 =
                 sIronKnuckleArmorMarkings[armorBodyPart].unk04 + (((s32)Rand_Next() >> 0x13) + this->actor.shape.rot.y);
-            ikEffect->vel.x = Math_SinS(sp76) * 5.0f;
-            ikEffect->vel.y = 6.0f;
-            ikEffect->vel.z = Math_CosS(sp76) * 5.0f;
+            ikEffect->velocity.x = Math_SinS(sp76) * 5.0f;
+            ikEffect->velocity.y = 6.0f;
+            ikEffect->velocity.z = Math_CosS(sp76) * 5.0f;
             ikEffect->dList = *dList;
         }
         if (limbIndex == IRON_KNUCKLE_LIMB_WAIST) {

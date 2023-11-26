@@ -19,7 +19,7 @@ typedef enum {
 typedef struct {
     /* 0x00 */ Gfx* dList;
     /* 0x04 */ Vec3f pos;
-    /* 0x10 */ Vec3f vel;
+    /* 0x10 */ Vec3f velocity;
     /* 0x1C */ Vec3s rot;
     /* 0x24 */ s32 enabled;
 } IronKnuckleEffect; // size = 0x28

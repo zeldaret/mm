@@ -436,7 +436,7 @@ void EnGo_DrawSteam(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
  * @param maxFrames Maximum number of frames the effect will last. Actual lifetime will be 1/3 * maxFrames -> maxFrames
  * @param parentEffectType Type of the parent effect, determines which of the possible dust effects correspond
  */
-void EnGo_InitDust(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f accel, Vec3f vel, f32 scale,
+void EnGo_InitDust(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f accel, Vec3f velocity, f32 scale,
                    f32 deltaScale, s32 maxFrames, EnGoEffectType parentEffectType) {
     s32 i;
 
@@ -451,7 +451,7 @@ void EnGo_InitDust(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f 
         effect->alphaNumer = effect->alphaDenom;
         effect->pos = pos;
         effect->accel = accel;
-        effect->velocity = vel;
+        effect->velocity = velocity;
         effect->scaleXY = scale;
         effect->scaleXYDelta = deltaScale;
         break;

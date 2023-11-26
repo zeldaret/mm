@@ -47,7 +47,7 @@ typedef enum {
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
-    /* 0x0C */ Vec3f vel;
+    /* 0x0C */ Vec3f velocity;
     /* 0x18 */ Vec3f accel;
     /* 0x24 */ u8 type;
     /* 0x25 */ u8 timer;
@@ -458,7 +458,7 @@ void EnFishing_SpawnRipple(Vec3f* projectedPos, FishingEffect* effect, Vec3f* po
         if (effect->type == FS_EFF_NONE) {
             effect->type = FS_EFF_RIPPLE;
             effect->pos = *pos;
-            effect->vel = sZeroVec;
+            effect->velocity = sZeroVec;
             effect->accel = sZeroVec;
             effect->unk_30 = arg3 * 0.0025f;
             effect->unk_34 = arg4 * 0.0025f;
@@ -480,7 +480,7 @@ void EnFishing_SpawnRipple(Vec3f* projectedPos, FishingEffect* effect, Vec3f* po
     }
 }
 
-void EnFishing_SpawnDustSplash(Vec3f* projectedPos, FishingEffect* effect, Vec3f* pos, Vec3f* vel, f32 scale) {
+void EnFishing_SpawnDustSplash(Vec3f* projectedPos, FishingEffect* effect, Vec3f* pos, Vec3f* velocity, f32 scale) {
     s16 i;
     Vec3f accel = { 0.0f, -1.0f, 0.0f };
 
@@ -493,7 +493,7 @@ void EnFishing_SpawnDustSplash(Vec3f* projectedPos, FishingEffect* effect, Vec3f
             (effect->type == FS_EFF_RAIN_RIPPLE) || (effect->type == FS_EFF_RAIN_SPLASH)) {
             effect->type = FS_EFF_DUST_SPLASH;
             effect->pos = *pos;
-            effect->vel = *vel;
+            effect->velocity = *velocity;
             effect->accel = accel;
             effect->alpha = 100 + Rand_ZeroFloat(100.0f);
             effect->unk_30 = scale;
@@ -516,7 +516,7 @@ void EnFishing_SpawnWaterDust(Vec3f* projectedPos, FishingEffect* effect, Vec3f*
         if (effect->type == FS_EFF_NONE) {
             effect->type = FS_EFF_WATER_DUST;
             effect->pos = *pos;
-            effect->vel = sZeroVec;
+            effect->velocity = sZeroVec;
             effect->accel = accel;
             effect->alpha = 255;
             effect->timer = Rand_ZeroFloat(100.0f);
@@ -531,7 +531,7 @@ void EnFishing_SpawnWaterDust(Vec3f* projectedPos, FishingEffect* effect, Vec3f*
 
 void EnFishing_SpawnBubble(Vec3f* projectedPos, FishingEffect* effect, Vec3f* pos, f32 scale, u8 arg4) {
     s16 i;
-    Vec3f vel = { 0.0f, 1.0f, 0.0f };
+    Vec3f velocity = { 0.0f, 1.0f, 0.0f };
 
     if ((projectedPos != NULL) && ((projectedPos->z > 500.0f) || (projectedPos->z < 0.0f))) {
         return;
@@ -541,7 +541,7 @@ void EnFishing_SpawnBubble(Vec3f* projectedPos, FishingEffect* effect, Vec3f* po
         if (effect->type == FS_EFF_NONE) {
             effect->type = FS_EFF_BUBBLE;
             effect->pos = *pos;
-            effect->vel = vel;
+            effect->velocity = velocity;
             effect->accel = sZeroVec;
             effect->timer = Rand_ZeroFloat(100.0f);
             effect->unk_30 = scale;
@@ -573,7 +573,7 @@ void EnFishing_SpawnRainDrop(FishingEffect* effect, Vec3f* pos, Vec3f* rot) {
             effect->unk_3C = rot->z;
             Matrix_RotateYF(rot->y, MTXMODE_NEW);
             Matrix_RotateXFApply(rot->x);
-            Matrix_MultVec3f(&velSrc, &effect->vel);
+            Matrix_MultVec3f(&velSrc, &effect->velocity);
             break;
         }
 
@@ -1002,10 +1002,10 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
     for (i = 0; i < EFFECT_COUNT; i++) {
         if (effect->type) {
             effect->timer++;
-            effect->pos.x += effect->vel.x;
-            effect->pos.y += effect->vel.y;
-            effect->pos.z += effect->vel.z;
-            effect->vel.y += effect->accel.y;
+            effect->pos.x += effect->velocity.x;
+            effect->pos.y += effect->velocity.y;
+            effect->pos.z += effect->velocity.z;
+            effect->velocity.y += effect->accel.y;
 
             if (effect->type == FS_EFF_RIPPLE) {
                 Math_ApproachF(&effect->unk_30, effect->unk_34, 0.2f, effect->unk_38);
@@ -1030,7 +1030,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
 
                 if (effect->pos.y > (WATER_SURFACE_Y(play) - 5.0f)) {
                     effect->accel.y = 0.0f;
-                    effect->vel.y = 0.0f;
+                    effect->velocity.y = 0.0f;
                     effect->alpha -= 5;
                 }
 
@@ -1054,8 +1054,8 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
                     }
                 }
             } else if (effect->type == FS_EFF_DUST_SPLASH) {
-                if (effect->vel.y < -20.0f) {
-                    effect->vel.y = -20.0f;
+                if (effect->velocity.y < -20.0f) {
+                    effect->velocity.y = -20.0f;
                     effect->accel.y = 0.0f;
                 }
 
@@ -1081,14 +1081,14 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
                         effect->timer = 0;
                         if (Rand_ZeroOne() < 0.75f) {
                             effect->type = FS_EFF_RAIN_RIPPLE;
-                            effect->vel = sZeroVec;
+                            effect->velocity = sZeroVec;
                             effect->unk_30 = 30 * 0.001f;
                         } else {
                             effect->type = FS_EFF_NONE;
                         }
                     }
 
-                    effect->vel = sZeroVec;
+                    effect->velocity = sZeroVec;
                 }
             } else if (effect->type >= FS_EFF_RAIN_RIPPLE) {
                 effect->unk_30 += (KREG(18) + 30) * 0.001f;
@@ -1609,7 +1609,7 @@ void EnFishing_DrawLureHook(PlayState* play, Vec3f* pos, Vec3f* refPos, u8 hookI
 
             effect->type = FS_EFF_OWNER_HAT;
             effect->unk_2C = 0;
-            effect->vel = sZeroVec;
+            effect->velocity = sZeroVec;
             effect->accel = sZeroVec;
         }
 
@@ -2621,7 +2621,7 @@ s32 func_809033F0(EnFishing* this, PlayState* play, u8 ignorePosCheck) {
     s16 count;
     f32 scale;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     f32 speedXZ;
     f32 angle;
 
@@ -2644,16 +2644,16 @@ s32 func_809033F0(EnFishing* this, PlayState* play, u8 ignorePosCheck) {
         speedXZ = (Rand_ZeroFloat(1.5f) + 0.5f) * scale;
         angle = Rand_ZeroFloat(6.28f);
 
-        vel.x = sinf(angle) * speedXZ;
-        vel.z = cosf(angle) * speedXZ;
-        vel.y = (Rand_ZeroFloat(3.0f) + 3.0f) * scale;
+        velocity.x = sinf(angle) * speedXZ;
+        velocity.z = cosf(angle) * speedXZ;
+        velocity.y = (Rand_ZeroFloat(3.0f) + 3.0f) * scale;
 
         pos = this->actor.world.pos;
-        pos.x += vel.x * 3.0f;
+        pos.x += velocity.x * 3.0f;
         pos.y = WATER_SURFACE_Y(play);
-        pos.z += vel.z * 3.0f;
+        pos.z += velocity.z * 3.0f;
 
-        EnFishing_SpawnDustSplash(&this->actor.projectedPos, play->specialEffects, &pos, &vel,
+        EnFishing_SpawnDustSplash(&this->actor.projectedPos, play->specialEffects, &pos, &velocity,
                                   (Rand_ZeroFloat(0.02f) + 0.025f) * scale);
     }
 
@@ -2672,7 +2672,7 @@ void func_809036BC(EnFishing* this, PlayState* play) {
     s16 i;
     f32 scale;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     f32 speedXZ;
     f32 angle;
 
@@ -2691,16 +2691,16 @@ void func_809036BC(EnFishing* this, PlayState* play) {
         speedXZ = (Rand_ZeroFloat(1.5f) + 0.5f) * scale;
         angle = Rand_ZeroFloat(6.28f);
 
-        vel.x = sinf(angle) * speedXZ;
-        vel.z = cosf(angle) * speedXZ;
-        vel.y = Rand_ZeroFloat(2.0f) + 2.0f;
+        velocity.x = sinf(angle) * speedXZ;
+        velocity.z = cosf(angle) * speedXZ;
+        velocity.y = Rand_ZeroFloat(2.0f) + 2.0f;
 
         pos = this->actor.world.pos;
-        pos.x += (vel.x * 3.0f);
-        pos.y += (vel.y * 3.0f);
-        pos.z += (vel.z * 3.0f);
+        pos.x += (velocity.x * 3.0f);
+        pos.y += (velocity.y * 3.0f);
+        pos.z += (velocity.z * 3.0f);
 
-        EnFishing_SpawnDustSplash(&this->actor.projectedPos, play->specialEffects, &pos, &vel,
+        EnFishing_SpawnDustSplash(&this->actor.projectedPos, play->specialEffects, &pos, &velocity,
                                   (Rand_ZeroFloat(0.02f) + 0.025f) * scale);
     }
 }
@@ -5505,22 +5505,23 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
         for (i = 0; i < 10; i++) {
             Vec3f pos;
-            Vec3f vel;
+            Vec3f velocity;
             f32 speedXZ;
             f32 angle;
 
             speedXZ = Rand_ZeroFloat(1.5f) + 1.5f;
             angle = Rand_ZeroFloat(6.28f);
 
-            vel.x = sinf(angle) * speedXZ;
-            vel.z = cosf(angle) * speedXZ;
-            vel.y = Rand_ZeroFloat(3.0f) + 2.0f;
+            velocity.x = sinf(angle) * speedXZ;
+            velocity.z = cosf(angle) * speedXZ;
+            velocity.y = Rand_ZeroFloat(3.0f) + 2.0f;
 
             pos = player->actor.world.pos;
-            pos.x += 2.0f * vel.x;
+            pos.x += 2.0f * velocity.x;
             pos.y = WATER_SURFACE_Y(play);
-            pos.z += 2.0f * vel.z;
-            EnFishing_SpawnDustSplash(NULL, play->specialEffects, &pos, &vel, Rand_ZeroFloat(0.01f) + 0.020000001f);
+            pos.z += 2.0f * velocity.z;
+            EnFishing_SpawnDustSplash(NULL, play->specialEffects, &pos, &velocity,
+                                      Rand_ZeroFloat(0.01f) + 0.020000001f);
         }
     }
 

@@ -99,9 +99,9 @@ Gfx* D_80BD52E0[] = {
 void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
     s32 i;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f posOffset;
-    Vec3f velOffset;
+    Vec3f velocityOffset;
     f32 offsetPosX;
     f32 offsetPosY;
     s16 scale;
@@ -126,12 +126,12 @@ void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
         posOffset.y = offsetPosY;
         posOffset.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
-        velOffset.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (offsetPosX * (4.0f / 75.0f));
-        velOffset.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
-        velOffset.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
+        velocityOffset.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (offsetPosX * (4.0f / 75.0f));
+        velocityOffset.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
+        velocityOffset.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
 
         Matrix_MultVec3f(&posOffset, &pos);
-        Matrix_MultVec3f(&velOffset, &vel);
+        Matrix_MultVec3f(&velocityOffset, &velocity);
 
         pos.x += this->dyna.actor.world.pos.x;
         pos.y += this->dyna.actor.world.pos.y;
@@ -165,7 +165,7 @@ void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
             gravity = -450;
         }
 
-        EffectSsKakera_Spawn(play, &pos, &vel, &pos, gravity, phi_s0, 30, 0, 0, scale, phi_t0, 0, 50, -1,
+        EffectSsKakera_Spawn(play, &pos, &velocity, &pos, gravity, phi_s0, 30, 0, 0, scale, phi_t0, 0, 50, -1,
                              OBJECT_IKANA_OBJ, object_ikana_obj_DL_000288);
     }
 
@@ -175,7 +175,7 @@ void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
 void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
     s32 i;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     f32 temp_fs0;
     f32 temp_fs1;
     f32 temp_fs3;
@@ -200,9 +200,9 @@ void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
         pos.y = this->dyna.actor.world.pos.y;
         pos.z = (temp_fs1 * temp_fs3) + this->dyna.actor.world.pos.z;
 
-        vel.x = ((Rand_ZeroOne() - 0.5f) * 3.0f * temp_fs0) + ((temp_fs0 * temp_fs3) * (1.0f / 30.0f));
-        vel.y = (Rand_ZeroOne() * 18.0f) + 4.0f;
-        vel.z = ((Rand_ZeroOne() - 0.5f) * 3.0f * temp_fs1) + ((temp_fs1 * temp_fs3) * (1.0f / 30.0f));
+        velocity.x = ((Rand_ZeroOne() - 0.5f) * 3.0f * temp_fs0) + ((temp_fs0 * temp_fs3) * (1.0f / 30.0f));
+        velocity.y = (Rand_ZeroOne() * 18.0f) + 4.0f;
+        velocity.z = ((Rand_ZeroOne() - 0.5f) * 3.0f * temp_fs1) + ((temp_fs1 * temp_fs3) * (1.0f / 30.0f));
 
         scale = (Rand_Next() & 3) + (i >> 1) + 6;
 
@@ -221,7 +221,7 @@ void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
             gravity = -400;
         }
 
-        EffectSsKakera_Spawn(play, &pos, &vel, &pos, gravity, phi_v0, 30, 0, 0, scale, phi_v1, 0, 50, -1,
+        EffectSsKakera_Spawn(play, &pos, &velocity, &pos, gravity, phi_v0, 30, 0, 0, scale, phi_v1, 0, 50, -1,
                              OBJECT_IKANA_OBJ, object_ikana_obj_DL_000288);
 
         if ((i & 3) == 0) {

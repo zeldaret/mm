@@ -90,7 +90,7 @@ void EnTuboTrap_SpawnEffectsOnLand(EnTuboTrap* this, PlayState* play) {
     f32 sin;
     f32 cos;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     s32 arg5;
     s16 var;
     s32 i;
@@ -103,9 +103,9 @@ void EnTuboTrap_SpawnEffectsOnLand(EnTuboTrap* this, PlayState* play) {
         pos.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
         pos.z = cos * 8.0f;
 
-        vel.x = pos.x * 0.23f;
-        vel.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
-        vel.z = pos.z * 0.23f;
+        velocity.x = pos.x * 0.23f;
+        velocity.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
+        velocity.z = pos.z * 0.23f;
 
         pos.x += actorPos->x;
         pos.y += actorPos->y;
@@ -119,8 +119,9 @@ void EnTuboTrap_SpawnEffectsOnLand(EnTuboTrap* this, PlayState* play) {
         } else {
             arg5 = 0x20;
         }
-        EffectSsKakera_Spawn(play, &pos, &vel, actorPos, -0xF0, arg5, 0x14, 0, 0, ((Rand_ZeroOne() * 85.0f) + 15.0f), 0,
-                             0, 0x3C, -1, GAMEPLAY_DANGEON_KEEP, gameplay_dangeon_keep_DL_018090);
+        EffectSsKakera_Spawn(play, &pos, &velocity, actorPos, -0xF0, arg5, 0x14, 0, 0,
+                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x3C, -1, GAMEPLAY_DANGEON_KEEP,
+                             gameplay_dangeon_keep_DL_018090);
     }
 
     func_800BBFB0(play, actorPos, 30.0f, 4, 0x14, 0x32, 0);
@@ -131,7 +132,7 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, PlayState* play) {
     f32 sin;
     f32 cos;
     Vec3f pos;
-    Vec3f vel;
+    Vec3f velocity;
     s16 var;
     s32 arg5;
     s32 i;
@@ -149,9 +150,9 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, PlayState* play) {
         pos.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
         pos.z = cos * 8.0f;
 
-        vel.x = pos.x * 0.20f;
-        vel.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
-        vel.z = pos.z * 0.20f;
+        velocity.x = pos.x * 0.20f;
+        velocity.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
+        velocity.z = pos.z * 0.20f;
 
         pos.x += actorPos->x;
         pos.y += actorPos->y;
@@ -164,8 +165,9 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, PlayState* play) {
             arg5 = 32;
         }
 
-        EffectSsKakera_Spawn(play, &pos, &vel, actorPos, -0xAA, arg5, 0x32, 5, 0, ((Rand_ZeroOne() * 85.0f) + 15.0f), 0,
-                             0, 0x46, -1, GAMEPLAY_DANGEON_KEEP, gameplay_dangeon_keep_DL_018090);
+        EffectSsKakera_Spawn(play, &pos, &velocity, actorPos, -0xAA, arg5, 0x32, 5, 0,
+                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x46, -1, GAMEPLAY_DANGEON_KEEP,
+                             gameplay_dangeon_keep_DL_018090);
     }
 }
 

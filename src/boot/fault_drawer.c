@@ -94,11 +94,11 @@ void FaultDrawer_DrawRecImpl(s32 xStart, s32 yStart, s32 xEnd, s32 yEnd, u16 col
     s32 ySize = yEnd - yStart + 1;
 
     if ((xDiff > 0) && (yDiff > 0)) {
-        if (xDiff < xSize) {
+        if (xSize > xDiff) {
             xSize = xDiff;
         }
 
-        if (yDiff < ySize) {
+        if (ySize > yDiff) {
             ySize = yDiff;
         }
 

@@ -12,13 +12,13 @@ void AudioPlayback_InitSampleState(Note* note, NoteSampleState* sampleState, Not
     u64 pad;
     u8 strongLeft;
     u8 strongRight;
-    f32 vel;
+    f32 velocity;
     u8 pan;
     u8 targetReverbVol;
     StereoData stereoData;
     s32 stereoHeadsetEffects = note->playbackState.stereoHeadsetEffects;
 
-    vel = subAttrs->velocity;
+    velocity = subAttrs->velocity;
     pan = subAttrs->pan;
     targetReverbVol = subAttrs->targetReverbVol;
     stereoData = subAttrs->stereoData;
@@ -101,11 +101,11 @@ void AudioPlayback_InitSampleState(Note* note, NoteSampleState* sampleState, Not
         volRight = gDefaultPanVolume[0x7F - pan];
     }
 
-    vel = 0.0f > vel ? 0.0f : vel;
-    vel = 1.0f < vel ? 1.0f : vel;
+    velocity = 0.0f > velocity ? 0.0f : velocity;
+    velocity = 1.0f < velocity ? 1.0f : velocity;
 
-    sampleState->targetVolLeft = (s32)((vel * volLeft) * (0x1000 - 0.001f));
-    sampleState->targetVolRight = (s32)((vel * volRight) * (0x1000 - 0.001f));
+    sampleState->targetVolLeft = (s32)((velocity * volLeft) * (0x1000 - 0.001f));
+    sampleState->targetVolRight = (s32)((velocity * volRight) * (0x1000 - 0.001f));
 
     sampleState->gain = subAttrs->gain;
     sampleState->filter = subAttrs->filter;
