@@ -218,25 +218,23 @@ s32 func_80B76368(EnTruMt* this, PlayState* play) {
 }
 
 s32 func_80B763C4(EnTruMt* this, PlayState* play) {
-    Actor* foundActor;
-    Actor* actor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, actor, ACTORCAT_NPC, ACTOR_EN_TRU_MT);
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_NPC, ACTOR_EN_TRU_MT);
 
-        if (foundActor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((EnTruMt*)foundActor != this) {
+        if ((EnTruMt*)actorIter != this) {
             return true;
         }
 
-        foundActor = foundActor->next;
-        if (foundActor == NULL) {
+        if (actorIter->next == NULL) {
             break;
         }
-        actor = foundActor;
+        actorIter = actorIter->next;
     };
 
     return false;

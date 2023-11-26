@@ -48,25 +48,27 @@ ActorInit Bg_Ingate_InitVars = {
  * @return Actor*
  */
 Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* foundActor = NULL;
-    Actor* tempActor;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCat, actorId);
 
-        if ((foundActor == NULL) || (((this != (BgIngate*)foundActor)) && (foundActor->update != NULL))) {
+        if (actorIter == NULL) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if (tempActor == NULL) {
-            foundActor = NULL;
+        if ((this != (BgIngate*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = tempActor;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 void func_80953B40(BgIngate* this) {

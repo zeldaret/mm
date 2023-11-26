@@ -123,24 +123,27 @@ TexturePtr D_80BE1B24[] = {
 };
 
 EnGm* func_80BE04E0(EnTab* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* foundActor = NULL;
-    Actor* tempActor;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
-        if ((foundActor == NULL) || (((EnTab*)foundActor != this) && (foundActor->update != NULL))) {
+        actorIter = SubS_FindActor(play, actorIter, actorCat, actorId);
+
+        if (actorIter == NULL) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if (tempActor == NULL) {
-            foundActor = NULL;
+        if (((EnTab*)actorIter != this) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = tempActor;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     };
 
-    return (EnGm*)foundActor;
+    return (EnGm*)actorIter;
 }
 
 void func_80BE0590(EnTab* this) {

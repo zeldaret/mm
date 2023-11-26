@@ -116,8 +116,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
     f32 minDist = 0.0f;
 
     do {
-        doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
-        door = (EnDoor*)doorIter;
+        door = (EnDoor*)SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         dist = Actor_WorldDistXYZToActor(actor, &door->knobDoor.dyna.actor);
         if (!isSetup || (dist < minDist)) {
             nearestDoor = door;
@@ -127,6 +126,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
         doorIter = door->knobDoor.dyna.actor.next;
     } while (doorIter != NULL);
 
+    //! FAKE:
     if (1) {}
 
     return nearestDoor;

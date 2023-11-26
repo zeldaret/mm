@@ -51,38 +51,39 @@ void TGSw_ActionDecider(TGSw* this, PlayState* play) {
 }
 
 void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
-    Actor* actor = NULL;
+    Actor* actorIter = NULL;
 
+    // FAKE:
     if (1) {}
 
     do {
-        actor = SubS_FindActor(play, actor, ACTORCAT_ENEMY, ACTOR_EN_SW);
-        if (actor == NULL) {
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_ENEMY, ACTOR_EN_SW);
+        if (actorIter == NULL) {
             break;
         }
-        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actor->params & 0xFC) >> 2) & 0xFF)) {
-            actor->parent = &this->actor;
-            actor->speed = ABS_ALT(this->actor.world.rot.x);
+        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actorIter->params & 0xFC) >> 2) & 0xFF)) {
+            actorIter->parent = &this->actor;
+            actorIter->speed = ABS_ALT(this->actor.world.rot.x);
             break;
         }
-        actor = actor->next;
-    } while (actor != NULL);
+        actorIter = actorIter->next;
+    } while (actorIter != NULL);
 
-    actor = NULL;
+    actorIter = NULL;
 
     do {
-        actor = SubS_FindActor(play, actor, ACTORCAT_NPC, ACTOR_EN_SW);
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_NPC, ACTOR_EN_SW);
 
-        if (actor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
-        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actor->params & 0xFC) >> 2) & 0xFF)) {
-            actor->parent = &this->actor;
-            actor->speed = ABS_ALT(this->actor.world.rot.x);
+        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actorIter->params & 0xFC) >> 2) & 0xFF)) {
+            actorIter->parent = &this->actor;
+            actorIter->speed = ABS_ALT(this->actor.world.rot.x);
             break;
         }
-        actor = actor->next;
-    } while (actor != NULL);
+        actorIter = actorIter->next;
+    } while (actorIter != NULL);
 
     Actor_Kill(&this->actor);
 }

@@ -827,56 +827,56 @@ s32 EnAn_InitObjectSlots(EnAn* this, PlayState* play) {
 }
 
 Actor* EnAn_FindActor(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
-    Actor* foundActor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCategory, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if (foundActor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((this != (EnAn*)foundActor) && (foundActor->update != NULL)) {
+        if ((this != (EnAn*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
 
-        if (foundActor->next == NULL) {
-            foundActor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
 
-        foundActor = foundActor->next;
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 // Name after ENAN_8000
 Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
-    Actor* foundActor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCategory, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
-        if (foundActor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((this != (EnAn*)foundActor) && (foundActor->update != NULL)) {
-            if (!ENAN_GET_8000(foundActor)) {
+        if ((this != (EnAn*)actorIter) && (actorIter->update != NULL)) {
+            if (!ENAN_GET_8000(actorIter)) {
                 break;
             }
         }
 
-        if (foundActor->next == NULL) {
-            foundActor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
 
-        foundActor = foundActor->next;
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 EnDoor* EnAn_FindDoor(PlayState* play, AnjuScheduleResult scheduleOutputResult) {

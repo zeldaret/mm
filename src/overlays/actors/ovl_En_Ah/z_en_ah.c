@@ -115,26 +115,28 @@ TexturePtr D_80BD3F14[] = {
     object_ah_Tex_006D70, object_ah_Tex_007570, object_ah_Tex_007D70, object_ah_Tex_007570, object_ah_Tex_008570,
 };
 
-Actor* func_80BD2A30(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* tempActor;
-    Actor* foundActor = NULL;
+Actor* EnAh_FindActor(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCat, actorId);
 
-        if ((foundActor == NULL) || (((EnAh*)foundActor != this) && (foundActor->update != NULL))) {
+        if (actorIter == NULL) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if (tempActor == NULL) {
-            foundActor = NULL;
+        if ((this != (EnAh*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = tempActor;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 void EnAh_UpdateSkelAnime(EnAh* this) {
@@ -389,7 +391,7 @@ s32* func_80BD3294(EnAh* this, PlayState* play) {
 s32 func_80BD3320(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
     s32 pad;
     s32 ret = false;
-    Actor* temp_v0 = func_80BD2A30(this, play, actorCat, actorId);
+    Actor* temp_v0 = EnAh_FindActor(this, play, actorCat, actorId);
 
     if (temp_v0 != NULL) {
         this->actor.child = temp_v0;
@@ -533,7 +535,7 @@ void func_80BD3768(EnAh* this, PlayState* play) {
 void EnAh_Init(Actor* thisx, PlayState* play) {
     EnAh* this = THIS;
 
-    if (func_80BD2A30(this, play, ACTORCAT_NPC, ACTOR_EN_AH)) {
+    if (EnAh_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AH)) {
         Actor_Kill(&this->actor);
         return;
     }

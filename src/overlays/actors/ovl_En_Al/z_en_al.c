@@ -150,29 +150,27 @@ Gfx* D_80BE007C[] = {
     gMadameAromaShawlRightLowerMiddleDL, gMadameAromaShawlRightLowerDL,
 };
 
-Actor* func_80BDE1A0(EnAl* this, PlayState* play, u8 arg0, s16 arg1) {
-    Actor* foundActor = NULL;
-    Actor* temp;
+Actor* EnAl_FindActor(EnAl* this, PlayState* play, u8 actorCat, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, arg0, arg1);
+        actorIter = SubS_FindActor(play, actorIter, actorCat, actorId);
 
-        if (foundActor == NULL) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((this != (EnAl*)foundActor) && (foundActor->update != NULL)) {
+        if ((this != (EnAl*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
 
-        temp = foundActor->next;
-        if (temp == NULL) {
-            foundActor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
-        foundActor = temp;
+        actorIter = actorIter->next;
     }
-    return foundActor;
+    return actorIter;
 }
 
 void EnAl_UpdateSkelAnime(EnAl* this) {
@@ -217,7 +215,7 @@ Actor* func_80BDE384(EnAl* this, PlayState* play) {
     switch (this->unk_35C) {
         case 2:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80)) {
-                actor = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_PM);
+                actor = EnAl_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_PM);
             } else {
                 actor = &GET_PLAYER(play)->actor;
             }
@@ -378,8 +376,8 @@ s32 func_80BDE7FC(EnAl* this, PlayState* play) {
 
 s32 func_80BDE92C(EnAl* this, PlayState* play) {
     s32 pad[2];
-    Actor* sp1C = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
-    Actor* temp_v0 = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
+    Actor* sp1C = EnAl_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
+    Actor* temp_v0 = EnAl_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
 
     if ((sp1C == NULL) || (sp1C->update == NULL) || (temp_v0 == NULL) || (temp_v0->update == NULL)) {
         this->unk_4E6++;
@@ -598,8 +596,8 @@ void func_80BDEFE4(EnAl* this, PlayState* play) {
 s32 func_80BDF064(EnAl* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 sp22 = play->msgCtx.currentTextId;
-    Actor* sp1C = func_80BDE1A0(this, play, 4, 0xA4);
-    Actor* temp_v0 = func_80BDE1A0(this, play, 4, 0x234);
+    Actor* sp1C = EnAl_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
+    Actor* temp_v0 = EnAl_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
 
     if (player->stateFlags1 & PLAYER_STATE1_40) {
         this->unk_4C2 |= 0x400;
@@ -666,8 +664,8 @@ s32 func_80BDF064(EnAl* this, PlayState* play) {
 
 s32 func_80BDF244(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
-    Actor* sp20 = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
-    Actor* temp_v0 = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
+    Actor* sp20 = EnAl_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_GM);
+    Actor* temp_v0 = EnAl_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
 
     if ((sp20 != NULL) && (sp20->update != NULL) && (temp_v0 != NULL) && (temp_v0->update != NULL)) {
         EnAl_ChangeAnim(this, ENAL_ANIM_0);

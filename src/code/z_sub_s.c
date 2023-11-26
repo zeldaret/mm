@@ -25,7 +25,7 @@ EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
         actor = SubS_FindActor(play, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)actor;
 
-        if (actor == NULL) {
+        if (door == NULL) {
             break;
         }
 

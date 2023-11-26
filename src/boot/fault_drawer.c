@@ -219,7 +219,7 @@ void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count) {
     for (; count != 0; count--, str++) {
         if (sFaultDrawerInstance->escCode) {
             sFaultDrawerInstance->escCode = false;
-            if (*str >= '1' && *str <= '9') {
+            if ((*str >= '1') && (*str <= '9')) {
                 FaultDrawer_SetForeColor(sFaultDrawerInstance->printColors[*str - '0']);
             }
         } else {

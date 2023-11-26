@@ -200,24 +200,22 @@ s32 DmGm_UpdateAttention(DmGm* this, PlayState* play) {
 }
 
 Actor* DmGm_FindAnjusMotherActor(PlayState* play) {
-    Actor* tempActor;
-    Actor* foundActor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, ACTORCAT_NPC, ACTOR_DM_AH);
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_NPC, ACTOR_DM_AH);
 
-        if ((foundActor == NULL) || (foundActor->update != NULL)) {
+        if ((actorIter == NULL) || (actorIter->update != NULL)) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if ((tempActor == NULL) || false) {
-            foundActor = NULL;
+        if ((actorIter->next == NULL) || false) {
+            actorIter = NULL;
             break;
         }
-        foundActor = tempActor;
+        actorIter = actorIter->next;
     }
-    return foundActor;
+    return actorIter;
 }
 
 void DmGm_WaitForObject(DmGm* this, PlayState* play) {

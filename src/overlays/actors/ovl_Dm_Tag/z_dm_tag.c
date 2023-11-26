@@ -46,23 +46,27 @@ s32 D_80C22C30[] = {
     0x10000000,
 };
 
-Actor* func_80C22350(DmTag* this, PlayState* play, u8 actorCat, s16 actorId) {
-    Actor* foundActor = NULL;
+Actor* DmTag_FindActor(DmTag* this, PlayState* play, u8 actorCat, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCat, actorId);
 
-        if ((foundActor == NULL) || (((this != (DmTag*)foundActor)) && (foundActor->update != NULL))) {
+        if (actorIter == NULL) {
             break;
         }
 
-        if (foundActor->next == NULL) {
-            foundActor = NULL;
+        if ((this != (DmTag*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
-        foundActor = foundActor->next;
+
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
+            break;
+        }
+        actorIter = actorIter->next;
     }
-    return foundActor;
+    return actorIter;
 }
 
 s32 func_80C22400(DmTag* this, s16 csId) {
@@ -98,8 +102,8 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
     s16 csId = this->actor.csId;
     s32 ret = false;
 
-    sp30 = func_80C22350(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
-    sp2C = func_80C22350(this, play, ACTORCAT_NPC, ACTOR_EN_AH);
+    sp30 = DmTag_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
+    sp2C = DmTag_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AH);
 
     switch (this->unk_1A4) {
         case 0:

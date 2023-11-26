@@ -108,25 +108,23 @@ s32 func_80C1D6E0(DmAh* this, PlayState* play) {
     return true;
 }
 
-Actor* func_80C1D78C(PlayState* play) {
-    Actor* tempActor;
-    Actor* foundActor = NULL;
+Actor* DmAh_FindAnjuActor(PlayState* play) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(play, foundActor, ACTORCAT_NPC, ACTOR_DM_AN);
+        actorIter = SubS_FindActor(play, actorIter, ACTORCAT_NPC, ACTOR_DM_AN);
 
-        if ((foundActor == NULL) || (foundActor->update != NULL)) {
+        if ((actorIter == NULL) || (actorIter->update != NULL)) {
             break;
         }
 
-        tempActor = foundActor->next;
-        if ((tempActor == NULL) || false) {
-            foundActor = NULL;
+        if ((actorIter->next == NULL) || false) {
+            actorIter = NULL;
             break;
         }
-        foundActor = tempActor;
+        actorIter = actorIter->next;
     }
-    return foundActor;
+    return actorIter;
 }
 
 void DmAh_HandleCutscene(DmAh* this, PlayState* play) {
@@ -172,7 +170,7 @@ void DmAh_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_27C |= 1;
     if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
-        this->unk_280 = func_80C1D78C(play);
+        this->unk_280 = DmAh_FindAnjuActor(play);
         DmAh_ChangeAnim(this, DMAH_ANIM_1);
         this->actionFunc = DmAh_DoNothing;
     } else {

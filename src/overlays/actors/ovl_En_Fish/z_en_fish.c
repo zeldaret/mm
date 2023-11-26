@@ -146,20 +146,20 @@ Actor* func_8091D944(EnFish* this, PlayState* play) {
     f32 distSq;
     Actor* retActor = NULL;
     f32 minDistSq = FLT_MAX;
-    Actor* foundActor = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
+    Actor* actorIter = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
-    while (foundActor != NULL) {
-        if ((foundActor->id == ACTOR_EN_FISH) && (foundActor->params == ENFISH_2) &&
-            (foundActor->room == this->actor.room)) {
-            distSq = Math3D_Vec3fDistSq(&foundActor->world.pos, &this->actor.world.pos);
+    while (actorIter != NULL) {
+        if ((actorIter->id == ACTOR_EN_FISH) && (actorIter->params == ENFISH_2) &&
+            (actorIter->room == this->actor.room)) {
+            distSq = Math3D_Vec3fDistSq(&actorIter->world.pos, &this->actor.world.pos);
             if (retActor == NULL) {
-                retActor = foundActor;
+                retActor = actorIter;
                 minDistSq = distSq;
             } else if (distSq < minDistSq) {
                 minDistSq = distSq;
             }
         }
-        foundActor = foundActor->next;
+        actorIter = actorIter->next;
     }
 
     return retActor;

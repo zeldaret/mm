@@ -242,30 +242,28 @@ static AnimationInfoS sAnimationInfo[ENGM_ANIM_MAX] = {
     { &object_in2_Anim_00B990, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENGM_ANIM_12
 };
 
-Actor* func_8094DEE0(EnGm* this, PlayState* play, u8 arg2, s16 arg3) {
-    Actor* foundActor = NULL;
-    Actor* actor;
+Actor* EnGm_FindActor(EnGm* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* actorIter = NULL;
 
     while (true) {
-        actor = SubS_FindActor(play, foundActor, arg2, arg3);
-        foundActor = actor;
-        if (actor == NULL) {
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
+
+        if (actorIter == NULL) {
             break;
         }
 
-        if ((this != (EnGm*)foundActor) && (foundActor->update != NULL)) {
+        if ((this != (EnGm*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
 
-        actor = actor->next;
-        if (actor == NULL) {
-            foundActor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
-        foundActor = actor;
+        actorIter = actorIter->next;
     }
 
-    return foundActor;
+    return actorIter;
 }
 
 EnDoor* func_8094DF90(PlayState* play, s32 arg1) {
@@ -605,8 +603,8 @@ s32 func_8094EA34(EnGm* this, PlayState* play) {
     Actor* al;
     Actor* toto;
 
-    al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
-    toto = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
+    al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
+    toto = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
     if ((al == NULL) || (al->update == NULL) || (toto == NULL) || (toto->update == NULL)) {
         this->unk_3E0++;
         return true;
@@ -808,7 +806,7 @@ Actor* func_8094F074(EnGm* this, PlayState* play) {
 
     switch (this->unk_258) {
         case 1:
-            actor = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_RECEPGIRL);
+            actor = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_RECEPGIRL);
             break;
 
         case 2:
@@ -816,7 +814,7 @@ Actor* func_8094F074(EnGm* this, PlayState* play) {
             break;
 
         case 3:
-            actor = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TAB);
+            actor = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TAB);
             break;
 
         default:
@@ -913,8 +911,8 @@ s32 func_8094F4EC(EnGm* this, PlayState* play) {
 s32 func_8094F53C(EnGm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 sp32 = play->msgCtx.currentTextId;
-    Actor* al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
-    Actor* toto = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
+    Actor* al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
+    Actor* toto = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
 
     if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400)) {
         this->unk_3A4 |= 0x400;
@@ -998,7 +996,7 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
     return false;
 }
 
-s32 func_8094F7D0(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 arg3, s16 arg4) {
+s32 func_8094F7D0(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 actorCategory, s16 actorId) {
     u8 pathIndex = ENGM_GET_PATH_INDEX(&this->actor);
     Vec3s* sp48;
     Vec3f sp3C;
@@ -1008,7 +1006,7 @@ s32 func_8094F7D0(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput, u
     s32 ret = false;
 
     this->timePath = NULL;
-    actor = func_8094DEE0(this, play, arg3, arg4);
+    actor = EnGm_FindActor(this, play, actorCategory, actorId);
 
     if (D_80951A0C[scheduleOutput->result] >= 0) {
         this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80951A0C[scheduleOutput->result]);
@@ -1158,7 +1156,7 @@ s32 func_8094FE10(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
     Actor* al;
 
-    al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
+    al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_TOTO) && (al != NULL) &&
         (al->update != NULL)) {
         EnGm_ChangeAnim(this, play, ENGM_ANIM_11);
@@ -1437,8 +1435,8 @@ s32 func_80950690(EnGm* this, PlayState* play) {
 
     switch (this->unk_258) {
         case 2:
-            al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
-            toto = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
+            al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
+            toto = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
             if ((al != NULL) && (al->update != NULL) && (toto != NULL) && (toto->update != NULL) &&
                 !(player->stateFlags1 & PLAYER_STATE1_40)) {
                 if (DECR(this->unk_3B8) == 0) {
@@ -1638,7 +1636,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
 
     if (func_8010BF58(&this->actor, play, this->unk_264, this->unk_3E4, &this->unk_25C)) {
         SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-        al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
+        al = EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
         if ((this->unk_258 == 2) && (al != NULL) && (al->update != NULL)) {
             this->unk_268 = al;
             this->unk_3B8 = Rand_S16Offset(60, 60);
@@ -1696,7 +1694,7 @@ void func_80950F2C(EnGm* this, PlayState* play) {
 void EnGm_Init(Actor* thisx, PlayState* play) {
     EnGm* this = THIS;
 
-    if (func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_GM)) {
+    if (EnGm_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_GM)) {
         Actor_Kill(&this->actor);
         return;
     }
