@@ -380,9 +380,9 @@ void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2) {
     }
 }
 
-void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play) {
+void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2) {
+    PlayState* play = play2;
     Actor* thisx = &this->actor;
-    s32 i;
     s16 rot;
     s32 phi_s0;
     Vec3f pos;
@@ -392,6 +392,7 @@ void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play) {
     f32 temp_f20;
     f32 cos;
     f32 sin;
+    s32 i;
 
     for (i = 0, rot = 0; i < 13; i++, rot += 0x4E20) {
         randf = Rand_ZeroOne();
