@@ -5604,7 +5604,7 @@ void Message_Update(PlayState* play) {
                         Message_CloseTextbox(play);
                     }
                 } else if ((msgCtx->textboxEndType != TEXTBOX_ENDTYPE_10) ||
-                           (pauseCtx->state != PAUSE_STATE_OWLWARP_CONFIRM)) {
+                           (pauseCtx->state != PAUSE_STATE_OWL_WARP_CONFIRM)) {
                     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) &&
                         (play->msgCtx.ocarinaMode == OCARINA_MODE_1B)) {
                         if (Message_ShouldAdvance(play)) {
@@ -5676,7 +5676,7 @@ void Message_Update(PlayState* play) {
                             pauseCtx->unk_2C8 = pauseCtx->pageIndex;
                             pauseCtx->unk_2CA = pauseCtx->cursorPoint[4];
                             pauseCtx->pageIndex = PAUSE_ITEM;
-                            pauseCtx->state = PAUSE_STATE_OWLWARP_0;
+                            pauseCtx->state = PAUSE_STATE_OWL_WARP_0;
                             func_800F4A10(play);
                             pauseCtx->pageIndex = PAUSE_MAP;
                             sLastPlayedSong = 0xFF;

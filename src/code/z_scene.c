@@ -18,6 +18,7 @@ s32 Object_SpawnPersistent(ObjectContext* objectCtx, s16 id) {
     objectCtx->slots[objectCtx->numEntries].id = id;
     size = gObjectTable[id].vromEnd - gObjectTable[id].vromStart;
 
+    //! FAKE:
     if (1) {}
 
     if (size != 0) {

@@ -388,12 +388,11 @@ u8 sBitFlags8[] = {
 u16 D_801F6AF0;
 u8 D_801F6AF2;
 
-void Sram_ActivateOwl(u8 owlId) {
-    gSaveContext.save.saveInfo.playerData.owlActivationFlags =
-        ((void)0, gSaveContext.save.saveInfo.playerData.owlActivationFlags) | (u16)gBitFlags[owlId];
+void Sram_ActivateOwl(u8 owlWarpId) {
+    SET_OWL_STATUE_ACTIVATED(owlWarpId);
 
-    if (gSaveContext.save.saveInfo.playerData.unk_20 == 0xFF) {
-        gSaveContext.save.saveInfo.playerData.unk_20 = owlId;
+    if (gSaveContext.save.saveInfo.playerData.owlWarpId == OWL_WARP_NONE) {
+        gSaveContext.save.saveInfo.playerData.owlWarpId = owlWarpId;
     }
 }
 
@@ -780,8 +779,8 @@ SavePlayerData sSaveDefaultPlayerData = {
     false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
-    0xFF,                                               // unk_20
-    0x0000,                                             // owlActivationFlags
+    OWL_WARP_NONE,                                      // owlWarpId
+    0,                                                  // owlActivationFlags
     0xFF,                                               // unk_24
     SCENE_SPOT00,                                       // savedSceneId
 };
@@ -956,7 +955,7 @@ SavePlayerData sSaveDebugPlayerData = {
     false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
-    0xFF,                                               // unk_20
+    OWL_WARP_NONE,                                      // owlWarpId
     0,                                                  // owlActivationFlags
     0xFF,                                               // unk_24
     SCENE_SPOT00,                                       // savedSceneId
@@ -1208,12 +1207,17 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
     gSaveContext.jinxTimer = 0;
 }
 
-u16 D_801C6A58[] = {
-    ENTRANCE(GREAT_BAY_COAST, 11), ENTRANCE(ZORA_CAPE, 6),
-    ENTRANCE(SNOWHEAD, 3),         ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),
-    ENTRANCE(SOUTH_CLOCK_TOWN, 9), ENTRANCE(MILK_ROAD, 4),
-    ENTRANCE(WOODFALL, 4),         ENTRANCE(SOUTHERN_SWAMP_POISONED, 10),
-    ENTRANCE(IKANA_CANYON, 4),     ENTRANCE(STONE_TOWER, 3),
+static u16 sOwlWarpEntrances[OWL_WARP_MAX - 1] = {
+    ENTRANCE(GREAT_BAY_COAST, 11),         // OWL_WARP_GREAT_BAY_COAST
+    ENTRANCE(ZORA_CAPE, 6),                // OWL_WARP_ZORA_CAPE
+    ENTRANCE(SNOWHEAD, 3),                 // OWL_WARP_SNOWHEAD
+    ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),  // OWL_WARP_MOUNTAIN_VILLAGE
+    ENTRANCE(SOUTH_CLOCK_TOWN, 9),         // OWL_WARP_CLOCK_TOWN
+    ENTRANCE(MILK_ROAD, 4),                // OWL_WARP_MILK_ROAD
+    ENTRANCE(WOODFALL, 4),                 // OWL_WARP_WOODFALL
+    ENTRANCE(SOUTHERN_SWAMP_POISONED, 10), // OWL_WARP_SOUTHERN_SWAMP
+    ENTRANCE(IKANA_CANYON, 4),             // OWL_WARP_IKANA_CANYON
+    ENTRANCE(STONE_TOWER, 3),              // OWL_WARP_STONE_TOWER
 };
 
 void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
@@ -1288,7 +1292,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         }
     } else {
-        gSaveContext.save.entrance = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
+        gSaveContext.save.entrance = sOwlWarpEntrances[(void)0, gSaveContext.save.owlWarpId];
         if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
             CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
