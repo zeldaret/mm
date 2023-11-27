@@ -146,7 +146,7 @@ Actor* EnNb_FindActor(EnNb* this, PlayState* play, u8 actorCategory, s16 actorId
 
     while (true) {
         actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
-        
+
         if (actorIter == NULL) {
             break;
         }

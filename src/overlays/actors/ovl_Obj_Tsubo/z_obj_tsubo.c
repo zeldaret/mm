@@ -206,7 +206,7 @@ void ObjTsubo_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjTsubo_Destroy(Actor* thisx, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
+    PlayState* play = play2;
     ObjTsubo* this = (ObjTsubo*)thisx;
 
     Collider_DestroyCylinder(play, &this->cylinderCollider);
@@ -292,7 +292,7 @@ void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play) {
 }
 
 void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
+    PlayState* play = play2;
     s16 rot;
     s32 i;
     s32 phi_s0;
@@ -336,7 +336,7 @@ void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
 }
 
 void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
+    PlayState* play = play2;
     s32 pad;
     s16 rot;
     s32 i;
@@ -380,8 +380,8 @@ void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2) {
     }
 }
 
-void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
+void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play) {
+    Actor* thisx = &this->actor;
     s32 i;
     s16 rot;
     s32 phi_s0;
@@ -396,27 +396,32 @@ void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2) {
     for (i = 0, rot = 0; i < 13; i++, rot += 0x4E20) {
         randf = Rand_ZeroOne();
         temp_f20 = (1.0f - SQ(randf)) * 4.8f + 3.2f;
-        if (this) {}
         sin = Math_SinS(rot);
         cos = Math_CosS(rot);
+
         pos.x = sin * temp_f20;
         pos.y = (Rand_ZeroOne() * 15.0f) + 2.0f;
         pos.z = cos * temp_f20;
+
         velocity.x = pos.x * 0.4f;
         velocity.y = (Rand_ZeroOne() * 4.0f) + 4.0f;
         velocity.z = pos.z * 0.4f;
+
         Math_Vec3f_Sum(&pos, &this->actor.world.pos, &pos);
+
         if (Rand_ZeroOne() < 0.2f) {
             phi_s0 = 0x40;
         } else {
             phi_s0 = 0x20;
         }
+
         EffectSsKakera_Spawn(play, &pos, &velocity, &this->actor.world.pos, -170, phi_s0, 50, 3, 0,
                              (Rand_ZeroOne() * 105.0f) + 10.0f, 0, 0, 70, -1, typeData->objectId, typeData->shardDL);
     }
+
     for (i = 0; i < 7; i++) {
-        EffectSsBubble_Spawn(play, &this->actor.world.pos, 20.0f, 30.0f, 40.0f, (Rand_ZeroOne() * 0.06f) + 0.09f);
-        EffectSsBubble_Spawn(play, &this->actor.world.pos, 10.0f, 10.0f, 10.0f, (Rand_ZeroOne() * 0.08f) + 0.09f);
+        EffectSsBubble_Spawn(play, &thisx->world.pos, 20.0f, 30.0f, 40.0f, (Rand_ZeroOne() * 0.06f) + 0.09f);
+        EffectSsBubble_Spawn(play, &thisx->world.pos, 10.0f, 10.0f, 10.0f, (Rand_ZeroOne() * 0.08f) + 0.09f);
     }
 }
 
@@ -692,7 +697,7 @@ void ObjTsubo_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjTsubo_Draw(Actor* thisx, PlayState* play2) {
-    PlayState* play = (PlayState*)play2;
+    PlayState* play = play2;
 
     Gfx_DrawDListOpa(play, sPotTypeData[OBJ_TSUBO_GET_TYPE(thisx)].modelDL);
 }

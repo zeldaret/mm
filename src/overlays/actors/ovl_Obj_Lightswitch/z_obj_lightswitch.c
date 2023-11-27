@@ -97,12 +97,12 @@ void ObjLightswitch_InitCollider(ObjLightswitch* this, PlayState* play) {
 }
 
 void ObjLightswitch_UpdateSwitchFlags(ObjLightswitch* this, PlayState* play, s32 set) {
-    if (this) {}
+    Actor* thisx = &this->actor;
 
     if (set) {
-        Flags_SetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(&this->actor));
+        Flags_SetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(thisx));
     } else {
-        Flags_UnsetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(&this->actor));
+        Flags_UnsetSwitch(play, LIGHTSWITCH_GET_SWITCH_FLAG(thisx));
     }
 }
 
