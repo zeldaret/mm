@@ -850,7 +850,7 @@
     0x800BBCEC:("Actor_SpawnBodyParts",),
     0x800BBDAC:("Actor_SpawnFloorDustRing",),
     0x800BBFB0:("func_800BBFB0",),
-    0x800BC154:("func_800BC154",),
+    0x800BC154:("Actor_ChangeCategory",),
     0x800BC188:("Actor_GetArrowDmgFlags",),
     0x800BC1B4:("func_800BC1B4",),
     0x800BC270:("func_800BC270",),
