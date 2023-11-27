@@ -2362,7 +2362,7 @@ typedef enum SfxPauseMenu {
     /* 1 */ SFX_PAUSE_MENU_OPEN
 } SfxPauseMenu;
 
-typedef enum {
+typedef enum SfxBankType {
     /* 0 */ BANK_PLAYER,
     /* 1 */ BANK_ITEM,
     /* 2 */ BANK_ENV,
@@ -2372,7 +2372,7 @@ typedef enum {
     /* 6 */ BANK_VOICE
 } SfxBankType;
 
-typedef enum {
+typedef enum SfxState {
     /* 0 */ SFX_STATE_EMPTY,
     /* 1 */ SFX_STATE_QUEUED,
     /* 2 */ SFX_STATE_READY,

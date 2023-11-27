@@ -3,7 +3,7 @@
 
 #include "PR/ultratypes.h"
 
-typedef enum {
+typedef enum OcarinaSongId {
     /*  0 */ OCARINA_SONG_SONATA,
     /*  1 */ OCARINA_SONG_GORON_LULLABY,
     /*  2 */ OCARINA_SONG_NEW_WAVE,
@@ -32,7 +32,7 @@ typedef enum {
     /* 24 */ OCARINA_SONG_SCARECROW_LONG = OCARINA_SONG_MAX // anything larger than 24 is considered the long scarecrow's song
 } OcarinaSongId;
 
-typedef enum {
+typedef enum OcarinaSongActionId {
     /* 0x00 */ OCARINA_ACTION_0, // acts like free play but never set
     /* 0x01 */ OCARINA_ACTION_FREE_PLAY,
     /* 0x02 */ OCARINA_ACTION_DEMONSTRATE_SONATA, // Song demonstrated/previewed by another actor/teacher
@@ -117,7 +117,7 @@ typedef enum {
     /* 0x51 */ OCARINA_ACTION_TIMED_PROMPT_STORMS
 } OcarinaSongActionId;
 
-typedef enum {
+typedef enum OcarinaMode {
     /* 0x00 */ OCARINA_MODE_NONE,
     /* 0x01 */ OCARINA_MODE_ACTIVE,
     /* 0x02 */ OCARINA_MODE_WARP,
@@ -163,7 +163,7 @@ typedef enum {
     /* 0x2A */ OCARINA_MODE_PLAYED_FULL_EVAN_SONG
 } OcarinaMode;
 
-typedef enum {
+typedef enum OcarinaButtonIndex {
     /*  0 */ OCARINA_BTN_A,
     /*  1 */ OCARINA_BTN_C_DOWN,
     /*  2 */ OCARINA_BTN_C_RIGHT,
@@ -175,7 +175,7 @@ typedef enum {
 
 // Uses scientific pitch notation relative to middle C
 // https://en.wikipedia.org/wiki/Scientific_pitch_notation
-typedef enum {
+typedef enum OcarinaPitch {
     /* 0x0 */ OCARINA_PITCH_C4,
     /* 0x1 */ OCARINA_PITCH_DFLAT4,
     /* 0x2 */ OCARINA_PITCH_D4,
@@ -192,11 +192,10 @@ typedef enum {
     /* 0xD */ OCARINA_PITCH_DFLAT5,
     /* 0xE */ OCARINA_PITCH_D5,
     /* 0xF */ OCARINA_PITCH_EFLAT5,
-    /* -1  */ OCARINA_PITCH_NONE = 0xFF
+    /*  -1 */ OCARINA_PITCH_NONE = 0xFF
 } OcarinaPitch;
 
-// Mainly set by func_80152CAC in z_message.c
-typedef enum {
+typedef enum OcarinaInstrumentId {
     /*  0 */ OCARINA_INSTRUMENT_OFF,
     /*  1 */ OCARINA_INSTRUMENT_DEFAULT,
     /*  2 */ OCARINA_INSTRUMENT_FEMALE_VOICE,
@@ -216,14 +215,14 @@ typedef enum {
     /* 16 */ OCARINA_INSTRUMENT_AMPLIFIED_GUITAR // Related to WEEKEVENTREG_41_20
 } OcarinaInstrumentId;
 
-typedef enum {
-    /*  0  */ OCARINA_RECORD_OFF,
-    /*  1  */ OCARINA_RECORD_SCARECROW_LONG,
-    /*  2  */ OCARINA_RECORD_SCARECROW_SPAWN,
+typedef enum OcarinaRecordingState {
+    /*  0 */ OCARINA_RECORD_OFF,
+    /*  1 */ OCARINA_RECORD_SCARECROW_LONG,
+    /*  2 */ OCARINA_RECORD_SCARECROW_SPAWN,
     /* -1 */ OCARINA_RECORD_REJECTED = 0xFF
 } OcarinaRecordingState;
 
-typedef enum {
+typedef enum OcarinaError {
     /*    0 */ OCARINA_ERROR_NONE,
     /*    1 */ OCARINA_ERROR_1,
     /*    2 */ OCARINA_ERROR_2,

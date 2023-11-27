@@ -140,7 +140,7 @@
 
 #define SEQ_FLAG_ASYNC 0x8000
 
-typedef enum {
+typedef enum SequencePlayerId {
     /*    0 */ SEQ_PLAYER_BGM_MAIN,
     /*    1 */ SEQ_PLAYER_FANFARE,
     /*    2 */ SEQ_PLAYER_SFX,
@@ -150,25 +150,25 @@ typedef enum {
     /* 0xFF */ SEQ_PLAYER_INVALID = 0xFF
 } SequencePlayerId;
 
-typedef enum {
+typedef enum SequenceMode {
     /* 0 */ SEQ_MODE_DEFAULT,
     /* 1 */ SEQ_MODE_ENEMY,
     /* 2 */ SEQ_MODE_STILL, // Not moving or first-person view
     /* 3 */ SEQ_MODE_IGNORE
 } SequenceMode;
 
-typedef enum {
-    /* 0x0 */ CHANNEL_IO_PORT_0,
-    /* 0x1 */ CHANNEL_IO_PORT_1,
-    /* 0x2 */ CHANNEL_IO_PORT_2,
-    /* 0x3 */ CHANNEL_IO_PORT_3,
-    /* 0x4 */ CHANNEL_IO_PORT_4,
-    /* 0x5 */ CHANNEL_IO_PORT_5,
-    /* 0x6 */ CHANNEL_IO_PORT_6,
-    /* 0x7 */ CHANNEL_IO_PORT_7
+typedef enum ChannelIOPort {
+    /* 0 */ CHANNEL_IO_PORT_0,
+    /* 1 */ CHANNEL_IO_PORT_1,
+    /* 2 */ CHANNEL_IO_PORT_2,
+    /* 3 */ CHANNEL_IO_PORT_3,
+    /* 4 */ CHANNEL_IO_PORT_4,
+    /* 5 */ CHANNEL_IO_PORT_5,
+    /* 6 */ CHANNEL_IO_PORT_6,
+    /* 7 */ CHANNEL_IO_PORT_7
 } ChannelIOPort;
 
-typedef enum {
+typedef enum VolumeScaleIndex {
     /* 0 */ VOL_SCALE_INDEX_BGM_MAIN,
     /* 1 */ VOL_SCALE_INDEX_FANFARE,
     /* 2 */ VOL_SCALE_INDEX_SFX,
@@ -176,7 +176,7 @@ typedef enum {
     /* 4 */ VOL_SCALE_INDEX_MAX
 } VolumeScaleIndex; // May be worth using SequencePlayerId instead
 
-typedef enum {
+typedef enum AmbienceChannelIndex {
     /* 0x0 */ AMBIENCE_CHANNEL_STREAM_0,
     /* 0x1 */ AMBIENCE_CHANNEL_CRITTER_0,
     /* 0x2 */ AMBIENCE_CHANNEL_CRITTER_1,
@@ -192,7 +192,7 @@ typedef enum {
     /* 0xF */ AMBIENCE_CHANNEL_LIGHTNING
 } AmbienceChannelIndex; // seqPlayerIndex = SEQ_PLAYER_AMBIENCE
 
-typedef enum {
+typedef enum AmbienceId {
     /* 0x00 */ AMBIENCE_ID_00,
     /* 0x01 */ AMBIENCE_ID_01,
     /* 0x02 */ AMBIENCE_ID_02,
@@ -216,14 +216,14 @@ typedef enum {
     /* 0xFF */ AMBIENCE_ID_DISABLED = 0xFF
 } AmbienceId; // seqPlayerIndex = SEQ_PLAYER_AMBIENCE
 
-typedef enum {
-    /* 0x00 */ AMBIENCE_STREAM_0,
-    /* 0x01 */ AMBIENCE_STREAM_1,
-    /* 0x02 */ AMBIENCE_STREAM_2,
-    /* 0x03 */ AMBIENCE_STREAM_3
+typedef enum AmbienceStreamId {
+    /* 0 */ AMBIENCE_STREAM_0,
+    /* 1 */ AMBIENCE_STREAM_1,
+    /* 2 */ AMBIENCE_STREAM_2,
+    /* 3 */ AMBIENCE_STREAM_3
 } AmbienceStreamId;
 
-typedef enum {
+typedef enum AmbienceCritterId {
     /* 0x00 */ AMBIENCE_CRITTER_00,
     /* 0x01 */ AMBIENCE_CRITTER_01,
     /* 0x02 */ AMBIENCE_CRITTER_02,
