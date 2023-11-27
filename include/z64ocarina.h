@@ -285,6 +285,6 @@ void AudioOcarina_TerminaWallGenerateNotes(void);
 void AudioOcarina_PlayLongScarecrowSong(void);
 
 extern u8* gScarecrowSpawnSongPtr;
-extern OcarinaSongButtons gOcarinaSongButtons[24];
+extern OcarinaSongButtons gOcarinaSongButtons[OCARINA_SONG_MAX];
 
 #endif
