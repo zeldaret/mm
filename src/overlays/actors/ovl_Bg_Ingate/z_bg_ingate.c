@@ -16,7 +16,7 @@ void BgIngate_Destroy(Actor* thisx, PlayState* play);
 void BgIngate_Update(Actor* thisx, PlayState* play);
 void BgIngate_Draw(Actor* thisx, PlayState* play);
 
-Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCat, s16 actorId);
+Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCategory, s16 actorId);
 s32 func_80953BEC(BgIngate* this);
 void func_80953B40(BgIngate* this);
 void func_80953F8C(BgIngate* this, PlayState* play);
@@ -43,15 +43,15 @@ ActorInit Bg_Ingate_InitVars = {
  *
  * @param this
  * @param play
- * @param actorCat - Category of Actor
+ * @param actorCategory - Category of Actor
  * @param actorId - ID of actor to search for
  * @return Actor*
  */
-Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCat, s16 actorId) {
+Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* actorIter = NULL;
 
     while (true) {
-        actorIter = SubS_FindActor(play, actorIter, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
         if (actorIter == NULL) {
             break;

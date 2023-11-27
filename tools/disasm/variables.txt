@@ -11598,7 +11598,7 @@
     0x80A58524:("D_80A58524","f32","",0x4),
     0x80A58528:("D_80A58528","f32","",0x4),
     0x80A5AF90:("En_Water_Effect_InitVars","UNK_TYPE1","",0x1),
-    0x80A5AFB0:("D_80A5AFB0","UNK_TYPE4","",0x4),
+    0x80A5AFB0:("sZeroVec","UNK_TYPE4","",0x4),
     0x80A5AFBC:("D_80A5AFBC","UNK_TYPE4","",0x4),
     0x80A5AFD0:("D_80A5AFD0","f32","",0x4),
     0x80A5AFD4:("D_80A5AFD4","f32","",0x4),

@@ -61,10 +61,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-Vec3f D_80AE11BC = { 0.0f, 0.0f, 0.0f };
-
-TexturePtr D_80AE11C8[] = { object_tsn_Tex_0073B8, object_tsn_Tex_0085B8 };
-
 EnTsn* func_80ADFCA0(PlayState* play) {
     Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
@@ -614,14 +610,15 @@ s32 EnTsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void EnTsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnTsn* this = THIS;
-    Vec3f sp18 = D_80AE11BC;
+    Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == 15) {
-        Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
+        Matrix_MultVec3f(&zeroVec, &this->actor.focus.pos);
     }
 }
 
 void EnTsn_Draw(Actor* thisx, PlayState* play) {
+    static TexturePtr D_80AE11C8[] = { object_tsn_Tex_0073B8, object_tsn_Tex_0085B8 };
     s32 pad;
     EnTsn* this = THIS;
 

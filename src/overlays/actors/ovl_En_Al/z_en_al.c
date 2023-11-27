@@ -150,11 +150,11 @@ Gfx* D_80BE007C[] = {
     gMadameAromaShawlRightLowerMiddleDL, gMadameAromaShawlRightLowerDL,
 };
 
-Actor* EnAl_FindActor(EnAl* this, PlayState* play, u8 actorCat, s16 actorId) {
+Actor* EnAl_FindActor(EnAl* this, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* actorIter = NULL;
 
     while (true) {
-        actorIter = SubS_FindActor(play, actorIter, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
         if (actorIter == NULL) {
             break;

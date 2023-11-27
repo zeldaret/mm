@@ -46,11 +46,11 @@ s32 D_80C22C30[] = {
     0x10000000,
 };
 
-Actor* DmTag_FindActor(DmTag* this, PlayState* play, u8 actorCat, s16 actorId) {
+Actor* DmTag_FindActor(DmTag* this, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* actorIter = NULL;
 
     while (true) {
-        actorIter = SubS_FindActor(play, actorIter, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
         if (actorIter == NULL) {
             break;

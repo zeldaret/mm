@@ -115,11 +115,11 @@ TexturePtr D_80BD3F14[] = {
     object_ah_Tex_006D70, object_ah_Tex_007570, object_ah_Tex_007D70, object_ah_Tex_007570, object_ah_Tex_008570,
 };
 
-Actor* EnAh_FindActor(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
+Actor* EnAh_FindActor(EnAh* this, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* actorIter = NULL;
 
     while (true) {
-        actorIter = SubS_FindActor(play, actorIter, actorCat, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
         if (actorIter == NULL) {
             break;
@@ -388,10 +388,10 @@ s32* func_80BD3294(EnAh* this, PlayState* play) {
     return NULL;
 }
 
-s32 func_80BD3320(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
+s32 func_80BD3320(EnAh* this, PlayState* play, u8 actorCategory, s16 actorId) {
     s32 pad;
     s32 ret = false;
-    Actor* temp_v0 = EnAh_FindActor(this, play, actorCat, actorId);
+    Actor* temp_v0 = EnAh_FindActor(this, play, actorCategory, actorId);
 
     if (temp_v0 != NULL) {
         this->actor.child = temp_v0;

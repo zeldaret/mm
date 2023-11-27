@@ -260,6 +260,7 @@ Actor* EnGm_FindActor(EnGm* this, PlayState* play, u8 actorCategory, s16 actorId
             actorIter = NULL;
             break;
         }
+
         actorIter = actorIter->next;
     }
 

@@ -142,29 +142,28 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 Actor* EnNb_FindActor(EnNb* this, PlayState* play, u8 actorCategory, s16 actorId) {
-    Actor* thisx;
-    Actor* actor = NULL;
+    Actor* actorIter = NULL;
 
     while (true) {
-        actor = SubS_FindActor(play, actor, actorCategory, actorId);
-        if (actor == NULL) {
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
+        
+        if (actorIter == NULL) {
             break;
         }
 
-        thisx = &this->actor;
-        if ((actor != thisx) && (actor->update != NULL)) {
+        if ((this != (EnNb*)actorIter) && (actorIter->update != NULL)) {
             break;
         }
 
-        if (actor->next == NULL) {
-            actor = NULL;
+        if (actorIter->next == NULL) {
+            actorIter = NULL;
             break;
         }
 
-        actor = actor->next;
+        actorIter = actorIter->next;
     }
 
-    return actor;
+    return actorIter;
 }
 
 void EnNb_UpdateSkelAnime(EnNb* this) {

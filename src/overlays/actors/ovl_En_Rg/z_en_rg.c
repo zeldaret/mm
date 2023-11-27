@@ -546,25 +546,24 @@ void func_80BF4964(EnRg* this) {
 
 void func_80BF4AB8(EnRg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Actor* phi_s0;
+    Actor* actorIter = NULL;
 
-    phi_s0 = NULL;
     if (!(this->unk_310 & 0x800)) {
         if (this->unk_320 == 0) {
             do {
-                phi_s0 = SubS_FindActor(play, phi_s0, 6, ACTOR_OBJ_TSUBO);
-                if (phi_s0 != NULL) {
-                    if (func_80BF4220(this, play, phi_s0) && (phi_s0->update != NULL)) {
-                        this->unk_18C = phi_s0;
+                actorIter = SubS_FindActor(play, actorIter, ACTORCAT_PROP, ACTOR_OBJ_TSUBO);
+                if (actorIter != NULL) {
+                    if (func_80BF4220(this, play, actorIter) && (actorIter->update != NULL)) {
+                        this->unk_18C = actorIter;
                         this->unk_310 |= 0x800;
                         break;
                     }
-                    phi_s0 = phi_s0->next;
+                    actorIter = actorIter->next;
                 }
-            } while (phi_s0 != NULL);
+            } while (actorIter != NULL);
         }
 
-        if ((phi_s0 == NULL) && (D_80BF5C10 == 0) && (this->unk_326 == 0) &&
+        if ((actorIter == NULL) && (D_80BF5C10 == 0) && (this->unk_326 == 0) &&
             (player->stateFlags3 & PLAYER_STATE3_80000) && (player->invincibilityTimer == 0) &&
             func_80BF4220(this, play, &player->actor)) {
             this->unk_18C = &player->actor;
