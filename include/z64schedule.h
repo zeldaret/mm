@@ -32,7 +32,7 @@
 
 #define SCHEDULE_TIME(hour, minute) SCHEDULE_CONVERT_TIME((((hour)*60.0f) + (minute)) * (0x10000 / 60 / 24.0f))
 
-#define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(gSaveContext.save.time)
+#define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(CURRENT_TIME)
 
 typedef enum ScheduleCommandId {
     /* 0x00 */ SCHEDULE_CMD_ID_CHECK_FLAG_S,         // Checks if a weekEventReg flag is set and branches if so, short range branch

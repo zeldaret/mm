@@ -2,8 +2,12 @@
  * MathF library
  * Contains tangent function, wrappers for a number of the handwritten functions in fp, and a suite of arctangents
  */
-#include "global.h"
-#include "fixed_point.h"
+
+#include "libc64/math64.h"
+
+#include "libc64/fixed_point.h"
+#include "libc/stdbool.h"
+#include "libc/math.h"
 
 s32 gUseAtanContFrac;
 
@@ -49,7 +53,7 @@ f32 Math_FAtanTaylorQF(f32 x) {
     };
 
     f32 poly = x;
-    f32 sq = SQ(x);
+    f32 sq = x * x;
     f32 exp = x * sq;
     const f32* c = coeffs;
     f32 term;
@@ -129,11 +133,11 @@ f32 Math_FAtanContFracF(f32 x) {
     }
 
     // Builds the continued fraction from the innermost fraction out
-    sq = SQ(x);
+    sq = x * x;
     conv = 0.0f;
     z = 8.0f;
-    for (i = 8; i != 0; i--) {
-        conv = SQ(z) * sq / (2.0f * z + 1.0f + conv);
+    for (i = 8; i > 0; i--) {
+        conv = (z * z) * sq / (2.0f * z + 1.0f + conv);
         z -= 1.0f;
     }
     conv = x / (1.0f + conv);
@@ -183,7 +187,7 @@ f32 Math_FAtan2F(f32 y, f32 x) {
 }
 
 f32 Math_FAsinF(f32 x) {
-    return Math_FAtan2F(x, sqrtf(1.0f - SQ(x)));
+    return Math_FAtan2F(x, sqrtf(1.0f - (x * x)));
 }
 
 f32 Math_FAcosF(f32 x) {

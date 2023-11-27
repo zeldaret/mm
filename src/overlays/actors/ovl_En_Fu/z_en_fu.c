@@ -134,13 +134,13 @@ void func_809616E0(EnFu* this, PlayState* play) {
     this->unk_54C = 0;
 
     for (i = 0; i < this->unk_520; i++) {
-        temp_f20 = this->actor.world.pos.x - this->unk_538[i].x;
-        temp_f22 = this->actor.world.pos.z - this->unk_538[i].z;
+        temp_f20 = this->actor.world.pos.x - this->pathPoints[i].x;
+        temp_f22 = this->actor.world.pos.z - this->pathPoints[i].z;
         atan = Math_Atan2S_XY(temp_f22, temp_f20);
 
         if (!spA0 || ((i % 2) != 0)) {
-            Actor_Spawn(&play->actorCtx, play, this->unk_544, this->unk_538[i].x, this->unk_538[i].y,
-                        this->unk_538[i].z, 0, atan, 0, i);
+            Actor_Spawn(&play->actorCtx, play, this->unk_544, this->pathPoints[i].x, this->pathPoints[i].y,
+                        this->pathPoints[i].z, 0, atan, 0, i);
             this->unk_54C++;
         }
 
@@ -151,9 +151,9 @@ void func_809616E0(EnFu* this, PlayState* play) {
             Color_RGBA8 primColor = { 255, 255, 255, 255 };
             Color_RGBA8 envColor = { 198, 198, 198, 255 };
 
-            pos.x = this->unk_538[i].x;
-            pos.y = this->unk_538[i].y;
-            pos.z = this->unk_538[i].z;
+            pos.x = this->pathPoints[i].x;
+            pos.y = this->pathPoints[i].y;
+            pos.z = this->pathPoints[i].z;
             func_800B0EB0(play, &pos, &velocity, &accel, &primColor, &envColor, 100, 150, 10);
             pos.x -= 0.1f * temp_f20;
             pos.z -= 0.1f * temp_f22;
@@ -164,7 +164,7 @@ void func_809616E0(EnFu* this, PlayState* play) {
 
 void func_809619D0(EnFu* this, PlayState* play) {
     s32 i;
-    Path* path = &play->setupPathList[ENFU_GET_FF00(&this->actor)];
+    Path* path = &play->setupPathList[ENFU_GET_PATH_INDEX(&this->actor)];
 
     switch (CURRENT_DAY) {
         case 1:
@@ -193,7 +193,7 @@ void func_809619D0(EnFu* this, PlayState* play) {
     }
 
     this->unk_520 = path->count;
-    this->unk_538 = Lib_SegmentedToVirtual(path->points);
+    this->pathPoints = Lib_SegmentedToVirtual(path->points);
     func_809616E0(this, play);
 }
 

@@ -265,7 +265,7 @@ void EnBigpo_RotateSpawnCutsceneFires(EnBigpo* this) {
 void EnBigpo_UpdateSpin(EnBigpo* this) {
     s16 oldYaw = this->actor.shape.rot.y;
 
-    this->actor.shape.rot.y += this->rotVelocity;
+    this->actor.shape.rot.y += this->angularVelocity;
     if ((oldYaw < 0) && (this->actor.shape.rot.y > 0)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_PO_ROLL); // spinning sfx during spin attack
     }
@@ -364,7 +364,7 @@ void EnBigpo_SpawnCutsceneStage2(EnBigpo* this, PlayState* play) {
  * stage 3: switch to fires rotating
  */
 void EnBigpo_SpawnCutsceneStage3(EnBigpo* this) {
-    this->rotVelocity = 0x1000;
+    this->angularVelocity = 0x1000;
     this->actionFunc = EnBigpo_SpawnCutsceneStage4;
     this->fireRadius = 200.0f;
     this->actor.velocity.y = 0.0f;
@@ -377,10 +377,10 @@ void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, PlayState* play) {
     s32 i;
 
     if (Math_StepToF(&this->fireRadius, 30.0f, 5.0f)) {
-        this->rotVelocity += 0x80;
+        this->angularVelocity += 0x80;
         this->actor.velocity.y += 0.25f;
     }
-    this->actor.shape.rot.y += this->rotVelocity;
+    this->actor.shape.rot.y += this->angularVelocity;
     EnBigpo_RotateSpawnCutsceneFires(this);
 
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
@@ -415,11 +415,11 @@ void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, PlayState* play) {
     s32 alphaPlus; // color alpha + 10
 
     SkelAnime_Update(&this->skelAnime);
-    this->actor.shape.rot.y += this->rotVelocity;
+    this->actor.shape.rot.y += this->angularVelocity;
     alphaPlus = this->mainColor.a + 10; // decrease transparency
     EnBigpo_RotateSpawnCutsceneFires(this);
     if (alphaPlus >= 90) {
-        this->rotVelocity -= 0x80;
+        this->angularVelocity -= 0x80;
         this->actor.velocity.y -= 0.25f;
         if (alphaPlus >= 180) {
             Math_ScaledStepToS(&this->actor.world.rot.y, 0, 0x180);
@@ -486,7 +486,7 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
 void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
-    this->rotVelocity = 0x2000;
+    this->angularVelocity = 0x2000;
     this->idleTimer = 32;
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.speed = 0.0f;
@@ -496,9 +496,9 @@ void EnBigpo_SetupWarpOut(EnBigpo* this) {
 
 void EnBigpo_WarpingOut(EnBigpo* this, PlayState* play) {
     DECR(this->idleTimer);
-    this->actor.shape.rot.y += this->rotVelocity;
+    this->actor.shape.rot.y += this->angularVelocity;
     if (this->idleTimer < 16) {
-        Math_ScaledStepToS(&this->rotVelocity, 0, 0x200);
+        Math_ScaledStepToS(&this->angularVelocity, 0, 0x200);
     }
     this->mainColor.a = this->idleTimer * (255.0f / 32.0f);
     if (this->idleTimer == 0) {
@@ -514,7 +514,7 @@ void EnBigpo_SetupWarpIn(EnBigpo* this, PlayState* play) {
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     Animation_PlayLoop(&this->skelAnime, &gBigPoeAwakenStretchAnim);
-    this->rotVelocity = 0x2000;
+    this->angularVelocity = 0x2000;
     this->actor.world.pos.x = (Math_SinS(randomYaw) * distance) + player->actor.world.pos.x;
     this->actor.world.pos.z = (Math_CosS(randomYaw) * distance) + player->actor.world.pos.z;
     this->actionFunc = EnBigpo_WarpingIn;
@@ -522,10 +522,10 @@ void EnBigpo_SetupWarpIn(EnBigpo* this, PlayState* play) {
 
 void EnBigpo_WarpingIn(EnBigpo* this, PlayState* play) {
     this->idleTimer++;
-    this->actor.shape.rot.y -= this->rotVelocity;
+    this->actor.shape.rot.y -= this->angularVelocity;
     if (this->idleTimer >= 16) {
         // after 16th frame, start slowing rotation
-        Math_ScaledStepToS(&this->rotVelocity, 0, 0x200);
+        Math_ScaledStepToS(&this->angularVelocity, 0, 0x200);
     }
 
     this->mainColor.a = this->idleTimer * (255.0f / 32.0f);
@@ -585,16 +585,16 @@ void EnBigpo_SetupSpinUp(EnBigpo* this) {
     this->collider.base.acFlags |= AC_HARD;
     this->collider.info.bumper.dmgFlags &= ~0x8000;
     this->collider.base.atFlags |= AT_ON;
-    this->rotVelocity = 0x800;
+    this->angularVelocity = 0x800;
     this->actionFunc = EnBigpo_SpinningUp;
     this->actor.speed = 0.0f;
 }
 
 void EnBigpo_SpinningUp(EnBigpo* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    this->rotVelocity += 0x200;
+    this->angularVelocity += 0x200;
     EnBigpo_UpdateSpin(this);
-    if (this->rotVelocity >= 0x3C00) {
+    if (this->angularVelocity >= 0x3C00) {
         EnBigpo_SetupSpinAttack(this);
     }
 }
@@ -636,7 +636,7 @@ void EnBigpo_SpinningDown(EnBigpo* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToF(&this->actor.world.pos.y, player->actor.world.pos.y + 100.0f, 0.3f, 5.0f, 1.0f);
     Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
-    if (Math_ScaledStepToS(&this->rotVelocity, 0, 0x200)) {
+    if (Math_ScaledStepToS(&this->angularVelocity, 0, 0x200)) {
         // spin down complete, re-allow hittable
         this->collider.base.colType = COLTYPE_HIT3;
         this->collider.base.acFlags &= ~AC_HARD;
@@ -748,7 +748,7 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, PlayState* play) {
     this->actor.shape.rot.x = -0x8000;
     this->actor.velocity.y = 0.0f;
     this->actor.world.pos.y -= 15.0f;
-    func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
     this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY); // targetable OFF, enemy music OFF
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_PLAYER_400;
     this->actionFunc = EnBigpo_LanternFalling;
@@ -895,7 +895,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
                     Math_Vec3f_Copy(&this->fires[fireIndex].pos, &randomFirePo->actor.world.pos);
                     randomFirePo->actor.parent = (Actor*)this;
                     randomFirePo->actor.update = EnBigpo_UpdateFire;
-                    func_800BC154(play, &play->actorCtx, &randomFirePo->actor, ACTORCAT_PROP);
+                    Actor_ChangeCategory(play, &play->actorCtx, &randomFirePo->actor, ACTORCAT_PROP);
                     randomFirePo->unk20C = fireIndex;
                     randomFirePo->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                     // make invisible by size: 0
@@ -1067,7 +1067,7 @@ void EnBigpo_FlameCircleCutscene(EnBigpo* this, PlayState* play) {
         if (magnitude > 0.0001f) {
             Math_Vec3f_Scale(&posDiff, 1.0f / magnitude);
         }
-        magnitude = magnitude / this->idleTimer;
+        magnitude /= this->idleTimer;
         this->actor.world.pos.x -= magnitude * posDiff.x;
         this->actor.world.pos.y -= magnitude * posDiff.y;
         this->actor.world.pos.z -= magnitude * posDiff.z;

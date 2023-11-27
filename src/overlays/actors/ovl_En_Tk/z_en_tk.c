@@ -538,11 +538,11 @@ void func_80AED544(EnTk* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_10)) {
         Message_StartTextbox(play, 0x13FE, &this->actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_31_10);
-    } else if (gSaveContext.save.time < CLOCK_TIME(9, 0)) {
+    } else if (CURRENT_TIME < CLOCK_TIME(9, 0)) {
         Message_StartTextbox(play, 0x13FF, &this->actor);
-    } else if (gSaveContext.save.time < CLOCK_TIME(12, 0)) {
+    } else if (CURRENT_TIME < CLOCK_TIME(12, 0)) {
         Message_StartTextbox(play, 0x1400, &this->actor);
-    } else if (gSaveContext.save.time < CLOCK_TIME(15, 0)) {
+    } else if (CURRENT_TIME < CLOCK_TIME(15, 0)) {
         Message_StartTextbox(play, 0x1401, &this->actor);
     } else {
         Message_StartTextbox(play, 0x1402, &this->actor);

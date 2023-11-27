@@ -1098,7 +1098,7 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == 0xC3) {
             msgCtx->unk11F18 = 0;
             msgCtx->choiceNum = 3;
-            msgCtx->unk11FF8 = msgCtx->unk11FF8 + 0x16;
+            msgCtx->unk11FF8 += 0x16;
         } else if (curChar == 0xC4) {
             Message_GetTimerDigitsNES(((void)0, gSaveContext.timerCurTimes[curChar - 0xC4]), spA8);
 
@@ -1130,14 +1130,14 @@ void Message_DecodeNES(PlayState* play) {
             decodedBufPos--;
         } else if (curChar == 0xCA) {
             digits[0] = 0;
-            digits[1] = TIME_TO_MINUTES_F(gSaveContext.save.time) / 60.0f;
+            digits[1] = TIME_TO_MINUTES_F(CURRENT_TIME) / 60.0f;
             while (digits[1] >= 10) {
                 digits[0]++;
                 digits[1] -= 10;
             }
 
             digits[2] = 0;
-            digits[3] = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
+            digits[3] = (s32)TIME_TO_MINUTES_F(CURRENT_TIME) % 60;
             while (digits[3] >= 10) {
                 digits[2]++;
                 digits[3] -= 10;

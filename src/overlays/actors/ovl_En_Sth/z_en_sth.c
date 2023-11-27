@@ -461,7 +461,7 @@ void EnSth_MoonLookingIdle(EnSth* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnSth_HandleMoonLookingConversation;
     } else if (EnSth_CanSpeakToPlayer(this, play) || this->actor.isLockedOn) {
-        if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= CLOCK_TIME(18, 0))) {
+        if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= CLOCK_TIME(18, 0))) {
             this->actor.textId = 0x1130; // Huh? The Moon...
         } else {
             this->actor.textId = 0x1131; // (The Moon) gotten bigger again

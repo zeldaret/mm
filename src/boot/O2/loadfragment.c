@@ -11,7 +11,7 @@
  */
 
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "loadfragment.h"
 
 s32 gLoadLogSeverity = 2;
@@ -186,7 +186,7 @@ void* Fragment_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, void* vra
 
     if (gLoadLogSeverity >= 3) {}
 
-    allocatedRamAddr = SystemArena_MallocR(size);
+    allocatedRamAddr = malloc_r(size);
     end = (uintptr_t)allocatedRamAddr + size;
 
     if (gLoadLogSeverity >= 3) {}
@@ -202,7 +202,7 @@ void* Fragment_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, void* vra
 
     allocatedBytes = ovlRelocs->bssSize + size;
 
-    allocatedRamAddr = SystemArena_Realloc(allocatedRamAddr, allocatedBytes);
+    allocatedRamAddr = realloc(allocatedRamAddr, allocatedBytes);
 
     if (gLoadLogSeverity >= 3) {}
 

@@ -182,47 +182,48 @@ void func_80BECC7C(EnAkindonuts* this, PlayState* play) {
     }
 }
 
-s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
-    s32 sp58 = path->count;
-    s32 idx = arg2;
-    s32 sp50 = false;
-    f32 phi_f12;
-    f32 phi_f14;
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
-    Vec3f sp30;
+s32 EnAkindonuts_HasReachedPoint(EnAkindonuts* this, Path* path, s32 pointIndex) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 count = path->count;
+    s32 index = pointIndex;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[idx]);
+    Math_Vec3s_ToVec3f(&point, &points[index]);
 
-    if (idx == 0) {
-        phi_f12 = sp5C[1].x - sp5C[0].x;
-        phi_f14 = sp5C[1].z - sp5C[0].z;
-    } else if (idx == (sp58 - 1)) {
-        phi_f12 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
-        phi_f14 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
+    if (index == 0) {
+        diffX = points[1].x - points[0].x;
+        diffZ = points[1].z - points[0].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 1].x - points[count - 2].x;
+        diffZ = points[count - 1].z - points[count - 2].z;
     } else {
-        phi_f12 = sp5C[idx + 1].x - sp5C[idx - 1].x;
-        phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
+        diffX = points[index + 1].x - points[index - 1].x;
+        diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
-    if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        sp50 = true;
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
 
-    return sp50;
+    return reached;
 }
 
 f32 func_80BECEAC(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
-    Vec3s* temp;
+    Vec3s* points;
     Vec3f sp20;
     Vec3s* point;
 
     if (path != NULL) {
-        temp = Lib_SegmentedToVirtual(path->points);
-        point = &temp[arg1];
+        points = Lib_SegmentedToVirtual(path->points);
+        point = &points[arg1];
 
         sp20.x = point->x;
         sp20.y = point->y;
@@ -236,12 +237,12 @@ f32 func_80BECEAC(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
 }
 
 s16 func_80BECF6C(Path* path) {
-    Vec3s* sp34 = Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     Vec3f sp28;
     Vec3f sp1C;
 
-    Math_Vec3s_ToVec3f(&sp28, &sp34[0]);
-    Math_Vec3s_ToVec3f(&sp1C, &sp34[1]);
+    Math_Vec3s_ToVec3f(&sp28, &points[0]);
+    Math_Vec3s_ToVec3f(&sp1C, &points[1]);
 
     return Math_Vec3f_Yaw(&sp28, &sp1C);
 }
@@ -1639,7 +1640,7 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
         this->unk_352 += this->unk_362;
         this->actor.world.rot.x = -sp38.x;
 
-        if (func_80BECD10(this, this->path, this->unk_334) && (sp34 < 10.0f)) {
+        if (EnAkindonuts_HasReachedPoint(this, this->path, this->unk_334) && (sp34 < 10.0f)) {
             if (this->unk_334 >= (this->path->count - 1)) {
                 CutsceneManager_Stop(this->csId);
                 this->actionFunc = func_80BEFD74;

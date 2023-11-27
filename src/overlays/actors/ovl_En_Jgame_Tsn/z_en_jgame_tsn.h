@@ -8,7 +8,7 @@ struct EnJgameTsn;
 
 typedef void (*EnJgameTsnActionFunc)(struct EnJgameTsn*, PlayState*);
 
-#define ENJGAMETSN_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENJGAMETSN_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
 typedef struct {
     /* 0x00 */ Vec3s* points;
