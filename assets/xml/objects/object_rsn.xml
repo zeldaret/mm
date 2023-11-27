@@ -1,6 +1,6 @@
 ﻿<Root>
     <!-- Object for Bomb Shopkeeper-->
-    <File Name="object_rs" Segment="6">
+    <File Name="object_rsn" Segment="6">
         <!-- Bomb -->
         <DList Name="gBombShopkeeperBombDL" Offset="0x970" />
         <Texture Name="gBombShopkeeperBombFuseTex" OutName="bomb_shopkeeper_bomb_fuse" Format="i8" Width="32" Height="32" Offset="0xC08" />
@@ -37,10 +37,10 @@
         <Texture Name="gBombShopkeeperWristBandTex" OutName="bomb_shopkeeper_wrist_band" Format="ci8" Width="32" Height="32" Offset="0x69D8" />
 
         <!-- Animations -->
-        <Animation Name="gBombShopkeeperSwayAnim" Offset="0x788C" />
-        <Animation Name="gBombShopkeeperSitAtCounterStartAnim" Offset="0x8268" />
-        <Animation Name="gBombShopkeeperSitAtCounterLoopAnim" Offset="0x87BC" />
-        <Animation Name="gBombShopkeeperWalkAnim" Offset="0x9120" />
+        <Animation Name="gBombShopkeeperSwayAnim" Offset="0x788C" /> <!-- Original name is "rsn_ending" -->
+        <Animation Name="gBombShopkeeperSitAtCounterStartAnim" Offset="0x8268" /> <!-- Original name is "rsn_suwaru" -->
+        <Animation Name="gBombShopkeeperSitAtCounterLoopAnim" Offset="0x87BC" /> <!-- Original name is "rsn_wait" -->
+        <Animation Name="gBombShopkeeperWalkAnim" Offset="0x9120" /> <!-- Original name is "rsn_walk" -->
 
         <!-- Skeleton -->
         <Limb Name="gBombShopkeeperPelvisLimb" Type="Standard" EnumName="BOMB_SHOPKEEPER_LIMB_PELVIS" Offset="0x9130" />

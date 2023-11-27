@@ -4,8 +4,8 @@
     <File Name="object_ru2" Segment="6">
         <!-- Adult Ruto Animations -->
         <!-- gAdultRutoCrossingArmsAnim: Used in OoT when the sages seal ganon in the Evil Realm. -->
-        <Animation Name="gAdultRutoCrossingArmsAnim" Offset="0x04CC"/>
-        <Animation Name="gAdultRutoIdleAnim" Offset="0xDE8"/>
+        <Animation Name="gAdultRutoCrossingArmsAnim" Offset="0x04CC"/> <!-- Original name is "km_luto" -->
+        <Animation Name="gAdultRutoIdleAnim" Offset="0xDE8"/> <!-- Original name is "ru2_matsu" -->
 
         <!-- Adult Ruto Palettes -->
         <Texture Name="gAdultRutoTLUT1" OutName="adult_ruto_tlut_1" Format="rgba16" Width="144" Height="1" Offset="0xE00"/>
@@ -86,13 +86,13 @@
         <Skeleton Name="gAdultRutoSkel" Type="Flex" LimbType="Standard" LimbNone="RU2_LIMB_NONE" LimbMax="RU2_LIMB_MAX" EnumName="Ru2Limb" Offset="0xC700" />
 
         <!-- (More) Adult Ruto Animations -->
-        <Animation Name="gAdultRutoRaisingArmsUpAnim" Offset="0xD3DC"/>
+        <Animation Name="gAdultRutoRaisingArmsUpAnim" Offset="0xD3DC"/> <!-- Original name is "ruto_banzai" -->
         <!-- HeadTurnDownLeft is intro to gAdultRutoLookingDownLeftAnim, used in OoT Credits scene -->
         <!--   Looking down at Nabooru with the other sages on Death Mountain after the party -->
-        <Animation Name="gAdultRutoHeadTurnDownLeftAnim" Offset="0xDCAC"/>
-        <Animation Name="gAdultRutoIdleHandsOnHipsAnim" Offset="0xE630"/>
-        <Animation Name="gAdultRutoLookingDownLeftAnim" Offset="0xF03C"/>
-        <Animation Name="gAdultRutoSwimmingUpAnim" Offset="0xF8B8"/>
+        <Animation Name="gAdultRutoHeadTurnDownLeftAnim" Offset="0xDCAC"/> <!-- Original name is "ruto_end_furimuki" -->
+        <Animation Name="gAdultRutoIdleHandsOnHipsAnim" Offset="0xE630"/> <!-- Original name is "ruto_end_wait" -->
+        <Animation Name="gAdultRutoLookingDownLeftAnim" Offset="0xF03C"/> <!-- Original name is "ruto_furimuki_wait" -->
+        <Animation Name="gAdultRutoSwimmingUpAnim" Offset="0xF8B8"/> <!-- Original name is "ruto_swim_up" -->
 
     </File>
 </Root>

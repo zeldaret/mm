@@ -6291,11 +6291,11 @@ beginseg
 endseg
 
 beginseg
-    name "object_rs"
+    name "object_rsn"
     compress
     romalign 0x1000
     number 6
-    include "build/assets/objects/object_rs/object_rs.o"
+    include "build/assets/objects/object_rsn/object_rsn.o"
 endseg
 
 beginseg

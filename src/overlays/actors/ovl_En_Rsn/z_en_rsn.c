@@ -5,7 +5,7 @@
  */
 
 #include "z_en_rsn.h"
-#include "objects/object_rs/object_rs.h"
+#include "objects/object_rsn/object_rsn.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -22,7 +22,7 @@ ActorInit En_Rsn_InitVars = {
     /**/ ACTOR_EN_RSN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
-    /**/ OBJECT_RS,
+    /**/ OBJECT_RSN,
     /**/ sizeof(EnRsn),
     /**/ EnRsn_Init,
     /**/ EnRsn_Destroy,
