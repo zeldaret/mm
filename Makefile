@@ -207,6 +207,8 @@ $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN
 # directory flags
 build/src/boot/O2/%.o: OPTFLAGS := -O2
 
+build/src/boot/libc64/%.o: OPTFLAGS := -O2
+
 build/src/libultra/os/%.o: OPTFLAGS := -O1
 build/src/libultra/voice/%.o: OPTFLAGS := -O2
 build/src/libultra/io/%.o: OPTFLAGS := -O2

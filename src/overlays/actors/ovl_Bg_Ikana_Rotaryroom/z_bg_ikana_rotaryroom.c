@@ -598,8 +598,8 @@ void func_80B81234(BgIkanaRotaryroom* this, PlayState* play) {
             sp64 &= Math_ScaledStepToS(&player->actor.shape.rot.y, ptr->unk_40.y, 2000);
             sp64 &= Math_ScaledStepToS(&player->actor.shape.rot.z, ptr->unk_40.z, 2000);
 
-            ptr->unk_48 = ptr->unk_48 - 2.1f;
-            ptr->unk_48 = ptr->unk_48 * 0.98f;
+            ptr->unk_48 -= 2.1f;
+            ptr->unk_48 *= 0.98f;
             if (ptr->unk_48 < -30.0f) {
                 ptr->unk_48 = -30.0f;
             }

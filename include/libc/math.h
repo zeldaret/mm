@@ -1,8 +1,6 @@
 #ifndef LIBC_MATH_H
 #define LIBC_MATH_H
 
-#include "PR/ultratypes.h"
-
 #define M_PI 3.14159265358979323846f
 #define M_SQRT2 1.41421356237309504880f
 #define M_SQRT1_2 0.70710678118654752440f	/* 1/sqrt(2) */

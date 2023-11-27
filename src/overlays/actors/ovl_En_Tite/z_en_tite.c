@@ -132,7 +132,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
-static s32 D_80896B60 = 0;
+static s32 sTexturesDesegmented = false;
 static Vec3f D_80896B64 = { 0.0f, 0.3f, 0.0f };
 
 void EnTite_Init(Actor* thisx, PlayState* play) {
@@ -151,13 +151,13 @@ void EnTite_Init(Actor* thisx, PlayState* play) {
     this->updBgCheckInfoFlags =
         UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10;
 
-    if (!D_80896B60) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(D_80896B24); i++) {
             for (j = 0; j < ARRAY_COUNT(D_80896B24[0]); j++) {
                 D_80896B24[i][j] = Lib_SegmentedToVirtual(D_80896B24[i][j]);
             }
         }
-        D_80896B60 = true;
+        sTexturesDesegmented = true;
     }
 
     if (this->actor.params == ENTITE_MINUS_3) {
@@ -452,7 +452,7 @@ void func_80894638(EnTite* this, PlayState* play) {
         temp_v1 = (s32)(temp_v0 * (1.0f / 42.0f)) - 10;
     }
 
-    this->actor.shape.rot.y = this->actor.shape.rot.y + (temp_v1 * 2);
+    this->actor.shape.rot.y += temp_v1 * 2;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->skelAnime.playSpeed = temp_v1 * 0.01f;
     SkelAnime_Update(&this->skelAnime);

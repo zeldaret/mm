@@ -314,7 +314,7 @@ void EnHorse_RotateToPoint(EnHorse* this, PlayState* play, Vec3f* pos, s16 turnY
 
 void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
     s32 spA4;
-    Vec3s* spA0;
+    Vec3s* pathPoints;
     f32 phi_f12;
     f32 phi_f14;
     Vec3f sp8C;
@@ -331,18 +331,18 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
     Vec3f sp50;
 
     spA4 = path->count;
-    spA0 = Lib_SegmentedToVirtual(path->points);
-    Math_Vec3s_ToVec3f(&sp8C, &spA0[this->curRaceWaypoint]);
+    pathPoints = Lib_SegmentedToVirtual(path->points);
+    Math_Vec3s_ToVec3f(&sp8C, &pathPoints[this->curRaceWaypoint]);
 
     if (this->curRaceWaypoint == 0) {
-        phi_f12 = spA0[1].x - spA0[0].x;
-        phi_f14 = spA0[1].z - spA0[0].z;
+        phi_f12 = pathPoints[1].x - pathPoints[0].x;
+        phi_f14 = pathPoints[1].z - pathPoints[0].z;
     } else if ((this->curRaceWaypoint + 1) == path->count) {
-        phi_f12 = spA0[path->count - 1].x - spA0[path->count - 2].x;
-        phi_f14 = spA0[path->count - 1].z - spA0[path->count - 2].z;
+        phi_f12 = pathPoints[path->count - 1].x - pathPoints[path->count - 2].x;
+        phi_f14 = pathPoints[path->count - 1].z - pathPoints[path->count - 2].z;
     } else {
-        phi_f12 = spA0[this->curRaceWaypoint + 1].x - spA0[this->curRaceWaypoint - 1].x;
-        phi_f14 = spA0[this->curRaceWaypoint + 1].z - spA0[this->curRaceWaypoint - 1].z;
+        phi_f12 = pathPoints[this->curRaceWaypoint + 1].x - pathPoints[this->curRaceWaypoint - 1].x;
+        phi_f14 = pathPoints[this->curRaceWaypoint + 1].z - pathPoints[this->curRaceWaypoint - 1].z;
     }
 
     func_8017B7F8(&sp8C, Math_Atan2S(phi_f12, phi_f14), &sp7C, &sp78, &sp74);
@@ -352,13 +352,13 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
         if (this->curRaceWaypoint >= spA4) {
             this->curRaceWaypoint = spA4 - 1;
         }
-        Math_Vec3s_ToVec3f(&sp8C, &spA0[this->curRaceWaypoint]);
+        Math_Vec3s_ToVec3f(&sp8C, &pathPoints[this->curRaceWaypoint]);
     }
 
     if (this->curRaceWaypoint == 0) {
-        Math_Vec3s_ToVec3f(&sp80, &spA0[1]);
+        Math_Vec3s_ToVec3f(&sp80, &pathPoints[1]);
     } else {
-        Math_Vec3s_ToVec3f(&sp80, &spA0[this->curRaceWaypoint - 1]);
+        Math_Vec3s_ToVec3f(&sp80, &pathPoints[this->curRaceWaypoint - 1]);
     }
 
     func_8017D7C0(this->actor.world.pos.x, this->actor.world.pos.z, sp80.x, sp80.z, sp8C.x, sp8C.z, &sp70);
@@ -398,12 +398,12 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
 
     sp64 = 1.0e+38;
     sp60 = sp68 + 5;
-    if (path->count < sp60) {
+    if (sp60 > path->count) {
         sp60 = path->count;
     }
 
     for (i = sp68; i < sp60; i++) {
-        Math_Vec3s_ToVec3f(&sp50, &spA0[i]);
+        Math_Vec3s_ToVec3f(&sp50, &pathPoints[i]);
         temp_f0 = Math3D_Distance(&this->actor.world.pos, &sp50);
         if (temp_f0 < sp64) {
             sp64 = temp_f0;
@@ -411,7 +411,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
         }
     }
 
-    this->unk_398 = spA0[this->curRaceWaypoint].y * 0.01f;
+    this->unk_398 = pathPoints[this->curRaceWaypoint].y * 0.01f;
     if ((this->unk_1EC & 0x100) && !(this->stateFlags & ENHORSE_JUMPING) &&
         ((this->colliderCylinder1.base.acFlags & AC_HIT) || (this->colliderCylinder2.base.acFlags & AC_HIT) ||
          (this->unk_58C > 0))) {
@@ -836,8 +836,8 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     Collider_SetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, this->colliderJntSphElements);
 
     if (this->type == HORSE_TYPE_2) {
-        this->colliderCylinder1.dim.radius = this->colliderCylinder1.dim.radius * 0.8f;
-        this->colliderCylinder2.dim.radius = this->colliderCylinder2.dim.radius * 0.8f;
+        this->colliderCylinder1.dim.radius *= 0.8f;
+        this->colliderCylinder2.dim.radius *= 0.8f;
         this->colliderJntSph.elements[0].dim.modelSphere.radius *= 0.6f;
     } else if (this->type == HORSE_TYPE_DONKEY) {
         this->colliderCylinder1.dim.radius = 50;

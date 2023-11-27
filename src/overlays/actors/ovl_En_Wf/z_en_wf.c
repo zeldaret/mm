@@ -259,7 +259,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
-static s32 D_809942D8 = 0;
+static s32 sTexturesDesegmented = false;
 
 void EnWf_Init(Actor* thisx, PlayState* play) {
     EnWf* this = THIS;
@@ -339,14 +339,14 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
         func_80992FD4(this);
     }
 
-    func_800BC154(play, &play->actorCtx, &this->actor, 5);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
 
-    if (D_809942D8 == 0) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sNormalEyeTextures); i++) {
             sNormalEyeTextures[i] = Lib_SegmentedToVirtual(sNormalEyeTextures[i]);
             sWhiteEyeTextures[i] = Lib_SegmentedToVirtual(sWhiteEyeTextures[i]);
         }
-        D_809942D8 = 1;
+        sTexturesDesegmented = true;
     }
     this->unk_2A2 = Rand_ZeroFloat(96.0f);
 }
@@ -1529,11 +1529,7 @@ void EnWf_Update(Actor* thisx, PlayState* play) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.375f;
-            if (this->drawDmgEffScale > 0.75f) {
-                this->drawDmgEffScale = 0.75f;
-            } else {
-                this->drawDmgEffScale = this->drawDmgEffScale;
-            }
+            this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.75f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
             Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
