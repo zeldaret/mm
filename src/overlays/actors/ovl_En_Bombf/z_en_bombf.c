@@ -116,7 +116,7 @@ void EnBombf_Init(Actor* thisx, PlayState* play2) {
         this->timer = 140;
         this->unk_1FE = 15;
         thisx->gravity = -1.5f;
-        func_800BC154(play, &play->actorCtx, thisx, ACTORCAT_EXPLOSIVES);
+        Actor_ChangeCategory(play, &play->actorCtx, thisx, ACTORCAT_EXPLOSIVES);
         thisx->colChkInfo.mass = 200;
         thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
         EnBombf_SetupAction(this, func_808AEE3C);

@@ -273,9 +273,9 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_FREEZE_TIME:
             if (!gSaveContext.save.isNight) {
-                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)R_TIME_SPEED;
+                gSaveContext.save.time = CURRENT_TIME - (u16)R_TIME_SPEED;
             } else {
-                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)(2 * R_TIME_SPEED);
+                gSaveContext.save.time = CURRENT_TIME - (u16)(2 * R_TIME_SPEED);
             }
             break;
 
@@ -364,9 +364,8 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
                 D_801BB15C = csCtx->curFrame;
 
                 if (R_TIME_SPEED != 0) {
-                    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
-                    gSaveContext.save.time =
-                        ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
+                    gSaveContext.save.time = CURRENT_TIME + (u16)R_TIME_SPEED;
+                    gSaveContext.save.time = CURRENT_TIME + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
                 }
             }
             break;

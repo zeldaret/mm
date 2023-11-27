@@ -552,7 +552,7 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
 
     this->timer = 5;
     if (this->grabTarget == CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE) {
-        func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_ENEMY);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_ENEMY);
         this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
     }
 
@@ -566,7 +566,7 @@ void EnRaf_PostDetonation(EnRaf* this, PlayState* play) {
     if (this->timer == 0) {
         this->collider.dim.radius = 50;
         this->collider.dim.height = 10;
-        func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_PROP);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_PROP);
         this->dyna.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
         EnRaf_SetupDormant(this);
     } else if (this->grabTarget == CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE) {

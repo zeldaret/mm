@@ -1143,7 +1143,7 @@ void func_8089D018(EnDinofos* this, PlayState* play) {
         s32 temp_v0 = this->unk_288 - 10;
 
         if (this->actor.category == ACTORCAT_ENEMY) {
-            func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
             func_8089ABF4(this, play);
         }
 

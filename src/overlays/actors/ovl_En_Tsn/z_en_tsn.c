@@ -121,7 +121,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
     }
 
     if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_1) {
-        func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     }
 }
 

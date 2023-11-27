@@ -266,7 +266,7 @@ void ObjDora_UpdateCollision(ObjDora* this, PlayState* play) {
     u16 time;
 
     if (this->colliderTris.base.acFlags & AC_HIT) {
-        time = gSaveContext.save.time;
+        time = CURRENT_TIME;
         this->colliderTris.base.acFlags &= ~AC_HIT;
         this->collisionCooldownTimer = 5;
 

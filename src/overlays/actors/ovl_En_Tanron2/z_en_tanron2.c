@@ -128,7 +128,7 @@ void EnTanron2_Init(Actor* thisx, PlayState* play) {
 
     if (this->actor.params == 100) {
         this->actor.update = func_80BB7B90;
-        func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
         return;
     }
 
