@@ -1051,7 +1051,7 @@ void EnRd_SetupDead(EnRd* this) {
 
 void EnRd_Dead(EnRd* this, PlayState* play) {
     if (this->actor.category != ACTORCAT_PROP) {
-        func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     }
 
     Math_SmoothStepToS(&this->headYRotation, 0, 1, 2000, 0);

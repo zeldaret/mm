@@ -7227,7 +7227,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
     };
 
     if ((CURRENT_DAY == 3) && (CutsceneManager_GetCurrentCsId() == -1)) {
-        time = gSaveContext.save.time;
+        time = CURRENT_TIME;
         timeSpeedOffset = gSaveContext.save.timeSpeedOffset;
 
         // Large earthquake created

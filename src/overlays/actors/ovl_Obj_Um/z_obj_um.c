@@ -701,8 +701,8 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         } else {
             // Waiting for player
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || (gSaveContext.save.time >= CLOCK_TIME(19, 0)) ||
-                (gSaveContext.save.time <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) ||
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || (CURRENT_TIME >= CLOCK_TIME(19, 0)) ||
+                (CURRENT_TIME <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
                 Actor_Kill(&this->dyna.actor);
                 return;
@@ -999,11 +999,11 @@ void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     this->flags |= OBJ_UM_FLAG_WAITING;
-    if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= CLOCK_TIME(19, 0))) {
+    if ((CURRENT_TIME > CLOCK_TIME(18, 0)) && (CURRENT_TIME <= CLOCK_TIME(19, 0))) {
         if (!(player->stateFlags1 & PLAYER_STATE1_800000)) {
             func_80B7984C(play, this, 0, &this->unk_2B4);
         }
-    } else if (!func_80B79A24(this->unk_2B4) && (gSaveContext.save.time > CLOCK_TIME(19, 0))) {
+    } else if (!func_80B79A24(this->unk_2B4) && (CURRENT_TIME > CLOCK_TIME(19, 0))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_34_80);
         ObjUm_SetupAction(this, ObjUm_RanchWaitPathFinished);
     }
@@ -1163,7 +1163,7 @@ void ObjUm_RanchStartCs(ObjUm* this, PlayState* play) {
 
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        this->lastTime = gSaveContext.save.time;
+        this->lastTime = CURRENT_TIME;
         ObjUm_SetupAction(this, func_80B7A0E0);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);
@@ -1189,7 +1189,7 @@ void func_80B7A070(ObjUm* this, PlayState* play) {
 
 void func_80B7A0E0(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
         ObjUm_SetupAction(this, func_80B7A070);
     }
@@ -1231,11 +1231,11 @@ void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, PlayState* play) {
 
 void func_80B7A240(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
 
-    this->lastTime = gSaveContext.save.time;
+    this->lastTime = CURRENT_TIME;
     ObjUm_PreMilkRunDialogueHandler(this, play);
 }
 
@@ -1253,11 +1253,11 @@ void func_80B7A2AC(ObjUm* this, PlayState* play) {
             break;
 
         default:
-            if (gSaveContext.save.time == this->lastTime) {
+            if (CURRENT_TIME == this->lastTime) {
                 ObjUm_SetupAction(this, func_80B7A240);
             }
 
-            this->lastTime = gSaveContext.save.time;
+            this->lastTime = CURRENT_TIME;
             Actor_MoveWithGravity(&this->dyna.actor);
             ObjUm_PreMilkRunDialogueHandler(this, play);
             break;
@@ -1267,7 +1267,7 @@ void func_80B7A2AC(ObjUm* this, PlayState* play) {
 void func_80B7A394(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0004;
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
@@ -1281,7 +1281,7 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, PlayState* play) {
     player->stateFlags1 |= PLAYER_STATE1_20;
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        this->lastTime = gSaveContext.save.time;
+        this->lastTime = CURRENT_TIME;
         ObjUm_SetupAction(this, func_80B7A394);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);
@@ -1492,11 +1492,11 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
 
 void func_80B7AB78(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7ABE4);
     }
 
-    this->lastTime = gSaveContext.save.time;
+    this->lastTime = CURRENT_TIME;
     func_80B7A860(this, play);
 }
 
@@ -1510,11 +1510,11 @@ void func_80B7ABE4(ObjUm* this, PlayState* play) {
             break;
 
         default:
-            if (gSaveContext.save.time == this->lastTime) {
+            if (CURRENT_TIME == this->lastTime) {
                 ObjUm_SetupAction(this, func_80B7AB78);
             }
 
-            this->lastTime = gSaveContext.save.time;
+            this->lastTime = CURRENT_TIME;
             Actor_MoveWithGravity(&this->dyna.actor);
             func_80B7A860(this, play);
             break;
@@ -1531,7 +1531,7 @@ void ObjUm_StartCs(ObjUm* this, PlayState* play) {
 
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        this->lastTime = gSaveContext.save.time;
+        this->lastTime = CURRENT_TIME;
         ObjUm_SetupAction(this, func_80B7ABE4);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);

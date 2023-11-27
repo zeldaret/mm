@@ -75,7 +75,7 @@ f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* at, ColliderInfo* atInfo
     if (ac->actor->colChkInfo.damageTable != NULL) {
         dmgFlags = atInfo->toucher.dmgFlags;
 
-        for (i = 0; i != ARRAY_COUNT(ac->actor->colChkInfo.damageTable->attack); i++) {
+        for (i = 0; i < ARRAY_COUNT(ac->actor->colChkInfo.damageTable->attack); i++) {
             if (dmgFlags == 1) {
                 break;
             }

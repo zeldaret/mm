@@ -189,8 +189,8 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.save.time >= CLOCK_TIME(6, 0)) &&
-        (gSaveContext.save.time < CLOCK_TIME(21, 30))) {
+    if ((play->sceneId == SCENE_MILK_BAR) && (CURRENT_TIME >= CLOCK_TIME(6, 0)) &&
+        (CURRENT_TIME < CLOCK_TIME(21, 30))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -257,7 +257,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
     }
 
     if (((play->sceneId == SCENE_MILK_BAR) &&
-         !((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= (CLOCK_TIME(22, 13) + 7)))) ||
+         !((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= (CLOCK_TIME(22, 13) + 7)))) ||
         ((play->sceneId != SCENE_MILK_BAR) && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
