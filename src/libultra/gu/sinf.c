@@ -1,7 +1,5 @@
 #include "ultra64.h"
 #include "libc/math.h"
-#include "ultra64.h"
-#include "z64math.h"
 
 #pragma weak sinf = __sinf
 
@@ -47,7 +45,7 @@ f32 __sinf(f32 x) {
         // |x| > 2^{-12}: for x smaller in magnitude than this, sin(x) - x is too small for a float to register the
         // error
         if (xpt >= 230) {
-            xSq = SQ(dx);
+            xSq = dx * dx;
             polyApprox = ((P[4].d * xSq + P[3].d) * xSq + P[2].d) * xSq + P[1].d;
 
             result = dx + (dx * xSq) * polyApprox;
@@ -67,7 +65,7 @@ f32 __sinf(f32 x) {
         dx -= dn * pihi.d;
         dx -= dn * pilo.d;
 
-        xSq = SQ(dx);
+        xSq = dx * dx;
         polyApprox = ((P[4].d * xSq + P[3].d) * xSq + P[2].d) * xSq + P[1].d;
         result = dx + (dx * xSq) * polyApprox; // Actual Maclaurin polynomial for sin(x)
 
