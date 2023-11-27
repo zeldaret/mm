@@ -1,7 +1,7 @@
 #ifndef Z64OCARINA_H
 #define Z64OCARINA_H
 
-#include "ultra64.h"
+#include "PR/ultratypes.h"
 
 typedef enum {
     /*  0 */ OCARINA_SONG_SONATA,
@@ -267,5 +267,25 @@ typedef struct OcarinaStaff {
     /* 0x1 */ u8 state;   // original name: "status"
     /* 0x2 */ u8 pos;     // original name: "locate"
 } OcarinaStaff; // size = 0x3
+
+void AudioOcarina_SetSongStartingPos(void);
+void AudioOcarina_StartAtSongStartingPos(u32 ocarinaFlags);
+void AudioOcarina_StartForSongCheck(u32 ocarinaFlags, u8 ocarinaStaffPlayingPosStart);
+void AudioOcarina_StartWithSongNoteLengths(u32 ocarinaFlags);
+void AudioOcarina_StartDefault(u32 ocarinaFlags);
+u8 func_8019B5AC(void);
+void AudioOcarina_ResetAndReadInput(void);
+void AudioOcarina_SetOcarinaDisableTimer(u8 unused, u8 timer);
+void AudioOcarina_SetInstrument(u8 ocarinaInstrumentId);
+void AudioOcarina_SetPlaybackSong(s8 songIndexPlusOne, u8 playbackState);
+void AudioOcarina_SetRecordingState(u8 recordingState);
+OcarinaStaff* AudioOcarina_GetRecordingStaff(void);
+OcarinaStaff* AudioOcarina_GetPlayingStaff(void);
+OcarinaStaff* AudioOcarina_GetPlaybackStaff(void);
+void AudioOcarina_TerminaWallGenerateNotes(void);
+void AudioOcarina_PlayLongScarecrowSong(void);
+
+extern u8* gScarecrowSpawnSongPtr;
+extern OcarinaSongButtons gOcarinaSongButtons[24];
 
 #endif
