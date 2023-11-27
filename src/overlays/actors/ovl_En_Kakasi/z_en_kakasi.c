@@ -315,8 +315,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((gSaveContext.respawnFlag != -4) && (gSaveContext.respawnFlag != -8)) {
-        if ((gSaveContext.save.time != CLOCK_TIME(6, 0)) && (gSaveContext.save.time != CLOCK_TIME(18, 0)) &&
-            !CHECK_EVENTINF(EVENTINF_17)) {
+        if ((CURRENT_TIME != CLOCK_TIME(6, 0)) && (CURRENT_TIME != CLOCK_TIME(18, 0)) && !CHECK_EVENTINF(EVENTINF_17)) {
 
             if (this->picto.actor.textId == 0) {
                 // dialogue after skipped time 'did you feel that? went by in an instant'
@@ -954,7 +953,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                                     PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(&play->state);
 
-                if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
+                if ((CURRENT_TIME > CLOCK_TIME(18, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0))) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
                     gSaveContext.respawnFlag = -4;
                     SET_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);

@@ -55,7 +55,7 @@ void func_80973CD8(ObjRoomtimer* this, PlayState* play) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, this->actor.params);
     }
 
-    func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     this->actionFunc = func_80973D3C;
 }
 

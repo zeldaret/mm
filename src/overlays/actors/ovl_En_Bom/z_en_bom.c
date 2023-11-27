@@ -290,7 +290,7 @@ void EnBom_Move(EnBom* this, PlayState* play) {
                 if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                     this->actor.velocity.y = 0.0f;
                 } else {
-                    this->actor.velocity.y = this->actor.velocity.y * sp58->z;
+                    this->actor.velocity.y *= sp58->z;
                 }
                 this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
             }

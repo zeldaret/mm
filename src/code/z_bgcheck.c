@@ -1,7 +1,6 @@
-#include "prevent_bss_reordering.h"
-#include "global.h"
 #include "fault.h"
-#include "fixed_point.h"
+#include "libc64/fixed_point.h"
+#include "libc64/sprintf.h"
 #include "vt.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 

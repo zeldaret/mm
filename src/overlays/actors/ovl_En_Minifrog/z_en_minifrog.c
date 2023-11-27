@@ -72,7 +72,7 @@ static u16 sIsFrogReturnedFlags[] = {
     WEEKEVENTREG_33_02, // FROG_WHITE
 };
 
-static s32 sIsInitialized = false;
+static s32 sTexturesDesegmented = false;
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -800, ICHAIN_STOP),
@@ -89,11 +89,11 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    if (!sIsInitialized) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
             sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
-        sIsInitialized = true;
+        sTexturesDesegmented = true;
     }
 
     this->frogIndex = (this->actor.params & 0xF);

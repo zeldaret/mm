@@ -224,15 +224,23 @@ typedef enum {
     /* 16 */ RACEDOG_ANIM_MAX
 } RacedogAnimation;
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },        { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
-    { &gDogLyingDownAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },  { &gDogLyingDownLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &gDogLyingDownAnim, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },  { &gDogLyingDownAnim, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
-    { &gDogLyingDownAnim, 1.0f, 54, 54, ANIMMODE_ONCE, -6 }, { &gDogWalkAnim, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
-    { &gDogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        { &gDogLongJumpAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDogJumpAttackAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },  { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
+static AnimationInfoS sAnimationInfo[RACEDOG_ANIM_MAX] = {
+    { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },           // RACEDOG_ANIM_IDLE
+    { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },          // RACEDOG_ANIM_WALK_1
+    { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // RACEDOG_ANIM_RUN
+    { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },          // RACEDOG_ANIM_BARK
+    { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },           // RACEDOG_ANIM_SIT_DOWN_ONCE
+    { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },   // RACEDOG_ANIM_SIT_DOWN
+    { &gDogLyingDownAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },     // RACEDOG_ANIM_LYING_DOWN_START_1
+    { &gDogLyingDownLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 }, // RACEDOG_ANIM_LYING_DOWN_LOOP
+    { &gDogLyingDownAnim, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },     // RACEDOG_ANIM_LYING_DOWN_START_2
+    { &gDogLyingDownAnim, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },    // RACEDOG_ANIM_LYING_DOWN_START_3
+    { &gDogLyingDownAnim, 1.0f, 54, 54, ANIMMODE_ONCE, -6 },    // RACEDOG_ANIM_LYING_DOWN_START_4
+    { &gDogWalkAnim, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },         // RACEDOG_ANIM_WALK_BACKWARDS
+    { &gDogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // RACEDOG_ANIM_JUMP
+    { &gDogLongJumpAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },       // RACEDOG_ANIM_LONG_JUMP
+    { &gDogJumpAttackAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },     // RACEDOG_ANIM_JUMP_ATTACK
+    { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },           // RACEDOG_ANIM_SWIM
 };
 
 static InitChainEntry sInitChain[] = {
@@ -240,17 +248,17 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnRacedog_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
-    f32 frameCount;
+    f32 endFrame;
 
     animationInfo += animIndex;
     if (animationInfo->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(animationInfo->animation);
+        endFrame = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        frameCount = animationInfo->frameCount;
+        endFrame = animationInfo->frameCount;
     }
 
     Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed + (BREG(88) * 0.1f),
-                     animationInfo->startFrame, frameCount, animationInfo->mode, animationInfo->morphFrames);
+                     animationInfo->startFrame, endFrame, animationInfo->mode, animationInfo->morphFrames);
 }
 
 void EnRacedog_UpdateCollision(EnRacedog* this, PlayState* play) {

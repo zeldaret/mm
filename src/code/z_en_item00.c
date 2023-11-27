@@ -329,7 +329,7 @@ void func_800A640C(EnItem00* this, PlayState* play) {
     if ((this->actor.params <= ITEM00_RUPEE_RED) ||
         ((this->actor.params == ITEM00_RECOVERY_HEART) && (this->unk152 < 0)) ||
         (this->actor.params == ITEM00_HEART_PIECE) || (this->actor.params == ITEM00_HEART_CONTAINER)) {
-        this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
+        this->actor.shape.rot.y += 0x3C0;
     } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_DEKU_NUTS_10) &&
                (this->actor.params < ITEM00_BOMBS_0)) {
         if (this->unk152 == -1) {
@@ -343,7 +343,7 @@ void func_800A640C(EnItem00* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.world.rot.x, 0, 2, 2500, 500);
     } else if ((this->actor.params == ITEM00_MAP) || (this->actor.params == ITEM00_COMPASS)) {
         this->unk152 = -1;
-        this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
+        this->actor.shape.rot.y += 0x3C0;
     }
 
     if ((this->actor.params == ITEM00_HEART_PIECE) || (this->actor.params == ITEM00_HEART_CONTAINER)) {
@@ -381,7 +381,7 @@ void func_800A6650(EnItem00* this, PlayState* play) {
     Vec3f pos;
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
-        this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
+        this->actor.shape.rot.y += 0x3C0;
     }
 
     if ((play->gameplayFrames & 1) != 0) {
@@ -395,7 +395,7 @@ void func_800A6650(EnItem00* this, PlayState* play) {
         if (this->actor.velocity.y > -2.0f) {
             this->actionFunc = func_800A640C;
         } else {
-            this->actor.velocity.y = this->actor.velocity.y * -0.8f;
+            this->actor.velocity.y *= -0.8f;
             this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         }
     }
@@ -1430,7 +1430,7 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
                             spawnedActor->actor.world.rot.y = Rand_ZeroOne() * 40000.0f;
                             Actor_SetScale(&spawnedActor->actor, 0.0f);
                             spawnedActor->actionFunc = func_800A6780;
-                            spawnedActor->actor.flags = spawnedActor->actor.flags | ACTOR_FLAG_10;
+                            spawnedActor->actor.flags |= ACTOR_FLAG_10;
                             if ((spawnedActor->actor.params != ITEM00_SMALL_KEY) &&
                                 (spawnedActor->actor.params != ITEM00_HEART_PIECE) &&
                                 (spawnedActor->actor.params != ITEM00_HEART_CONTAINER)) {

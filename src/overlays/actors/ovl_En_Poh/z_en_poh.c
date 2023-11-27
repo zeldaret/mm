@@ -576,7 +576,7 @@ void func_80B2DC50(EnPoh* this, PlayState* play) {
     this->actor.shape.yOffset = 1500.0f;
     this->actor.world.pos.y -= 15.0f;
     this->actor.shape.rot.x = -0x8000;
-    func_800BC154(play, &play->actorCtx, &this->actor, 8);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
     this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
     this->actionFunc = func_80B2DD2C;
 }

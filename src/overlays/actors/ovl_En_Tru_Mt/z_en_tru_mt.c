@@ -263,12 +263,12 @@ f32 func_80B76540(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
     Vec3f sp20;
 
     if (path != NULL) {
-        Vec3s* temp_v1 = Lib_SegmentedToVirtual(path->points);
+        Vec3s* points = Lib_SegmentedToVirtual(path->points);
 
-        temp_v1 = &temp_v1[arg1];
-        sp20.x = temp_v1->x;
-        sp20.y = temp_v1->y;
-        sp20.z = temp_v1->z;
+        points = &points[arg1];
+        sp20.x = points->x;
+        sp20.y = points->y;
+        sp20.z = points->z;
     }
     arg3->y = Math_Vec3f_Yaw(arg2, &sp20);
     arg3->x = Math_Vec3f_Pitch(arg2, &sp20);
@@ -276,37 +276,38 @@ f32 func_80B76540(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
     return sp20.y - arg2->y;
 }
 
-s32 func_80B76600(EnTruMt* this, Path* path, s32 arg2) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
-    s32 sp58 = path->count;
-    s32 idx = arg2;
-    s32 sp50 = false;
-    f32 phi_f12;
-    f32 phi_f14;
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
-    Vec3f sp30;
+s32 EnTruMt_HasReachedPoint(EnTruMt* this, Path* path, s32 pointIndex) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 count = path->count;
+    s32 index = pointIndex;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[idx]);
+    Math_Vec3s_ToVec3f(&point, &points[index]);
 
-    if (idx == 0) {
-        phi_f12 = sp5C[1].x - sp5C[0].x;
-        phi_f14 = sp5C[1].z - sp5C[0].z;
-    } else if (idx == (sp58 - 1)) {
-        phi_f12 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
-        phi_f14 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
+    if (index == 0) {
+        diffX = points[1].x - points[0].x;
+        diffZ = points[1].z - points[0].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 1].x - points[count - 2].x;
+        diffZ = points[count - 1].z - points[count - 2].z;
     } else {
-        phi_f12 = sp5C[idx + 1].x - sp5C[idx - 1].x;
-        phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
+        diffX = points[index + 1].x - points[index - 1].x;
+        diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
-    if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        sp50 = true;
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
 
-    return sp50;
+    return reached;
 }
 
 void func_80B7679C(EnTruMt* this, PlayState* play) {
@@ -375,7 +376,7 @@ void func_80B76A64(EnTruMt* this, PlayState* play) {
         this->actor.shape.rot.z = CLAMP(this->actor.world.rot.y, -0x1770, 0x1770);
         this->actor.world.rot.z = this->actor.shape.rot.z;
 
-        if (func_80B76600(this, this->path, this->unk_36C)) {
+        if (EnTruMt_HasReachedPoint(this, this->path, this->unk_36C)) {
             if (this->unk_36C >= (this->path->count - 1)) {
                 this->actionFunc = func_80B76C38;
                 this->actor.speed = 0.0f;

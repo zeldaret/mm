@@ -629,7 +629,7 @@ void func_808D9F08(EnSw* this) {
 
 void func_808D9F78(EnSw* this, PlayState* play, s32 arg2) {
     if (arg2 != 0) {
-        func_800BC154(play, &play->actorCtx, &this->actor, 5);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
     }
     Actor_SetScale(&this->actor, 0.02f);
     func_808D9DA0(this);
@@ -1061,7 +1061,7 @@ void func_808DB100(EnSw* this, PlayState* play) {
         this->unk_456 = 0;
         this->unk_454 = 0;
         this->skelAnime.curFrame = 0.0f;
-        func_800BC154(play, &play->actorCtx, &this->actor, 4);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
         this->actionFunc = func_808DB25C;
         return;
     }
@@ -1113,7 +1113,7 @@ void func_808DB2E0(EnSw* this, PlayState* play) {
         if ((s32)temp_f2 != 0) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALTURA_BOUND);
         } else {
-            func_800BC154(play, &play->actorCtx, &this->actor, 5);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
             Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
             this->unk_410 &= ~(0x10 | 0x1);
             this->actionFunc = func_808DB100;

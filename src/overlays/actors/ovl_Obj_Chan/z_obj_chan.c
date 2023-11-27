@@ -223,9 +223,9 @@ void ObjChan_ChandelierAction(ObjChan* this, PlayState* play) {
     if (this->unk1D0 > 0.0f) {
         this->unk1D4 += 0x190;
         if (this->unk1D0 <= 400.0f) {
-            this->unk1D0 = this->unk1D0 * 0.99f;
+            this->unk1D0 *= 0.99f;
         } else {
-            this->unk1D0 = this->unk1D0 - 1.0f;
+            this->unk1D0 -= 1.0f;
         }
         if (this->unk1D0 < 0.0f) {
             this->unk1D4 = 0;

@@ -231,8 +231,8 @@ void EnSuttari_TriggerTransition(PlayState* play, u16 entrance) {
 }
 
 void EnSuttari_AdvanceTime(void) {
-    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
-    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
+    gSaveContext.save.time = CURRENT_TIME + (u16)R_TIME_SPEED;
+    gSaveContext.save.time = CURRENT_TIME + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
 }
 
 s32 func_80BAA904(EnSuttari* this, PlayState* play) {
@@ -600,64 +600,72 @@ s16 EnSuttari_GetDistSqAndOrient(Path* path, s32 index, Vec3f* pos, f32* distSq)
     return RAD_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
-s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
-    s32 sp58 = path->count;
-    s32 index = arg2;
-    s32 ret = false;
-    f32 sp54;
-    f32 sp48;
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
-    Vec3f sp30;
+s32 EnSuttari_HasReachedPointForward(EnSuttari* this, Path* path, s32 pointIndex) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 count = path->count;
+    s32 index = pointIndex;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[index]);
+    Math_Vec3s_ToVec3f(&point, &points[index]);
+
     if (index == 0) {
-        sp54 = sp5C[1].x - sp5C[0].x;
-        sp48 = sp5C[1].z - sp5C[0].z;
-    } else if (index == sp58 - 1) {
-        sp54 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
-        sp48 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
+        diffX = points[1].x - points[0].x;
+        diffZ = points[1].z - points[0].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 1].x - points[count - 2].x;
+        diffZ = points[count - 1].z - points[count - 2].z;
     } else {
-        sp54 = sp5C[index + 1].x - sp5C[index - 1].x;
-        sp48 = sp5C[index + 1].z - sp5C[index - 1].z;
+        diffX = points[index + 1].x - points[index - 1].x;
+        diffZ = points[index + 1].z - points[index - 1].z;
     }
-    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(sp54, sp48)), &sp44, &sp40, &sp3C);
-    if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        ret = true;
+
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
-    return ret;
+
+    return reached;
 }
 
-s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
-    s32 sp58 = path->count;
-    s32 index = arg2;
-    s32 ret = false;
-    f32 sp54;
-    f32 sp48;
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
-    Vec3f sp30;
+s32 EnSuttari_HasReachedPointReverse(EnSuttari* this, Path* path, s32 pointIndex) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 count = path->count;
+    s32 index = pointIndex;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[index]);
+    Math_Vec3s_ToVec3f(&point, &points[index]);
+
     if (index == 0) {
-        sp54 = sp5C[0].x - sp5C[1].x;
-        sp48 = sp5C[0].z - sp5C[1].z;
-    } else if (index == sp58 - 1) {
-        sp54 = sp5C[sp58 - 2].x - sp5C[sp58 - 1].x;
-        sp48 = sp5C[sp58 - 2].z - sp5C[sp58 - 1].z;
+        diffX = points[0].x - points[1].x;
+        diffZ = points[0].z - points[1].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 2].x - points[count - 1].x;
+        diffZ = points[count - 2].z - points[count - 1].z;
     } else {
-        sp54 = sp5C[index - 1].x - sp5C[index + 1].x;
-        sp48 = sp5C[index - 1].z - sp5C[index + 1].z;
+        diffX = points[index - 1].x - points[index + 1].x;
+        diffZ = points[index - 1].z - points[index + 1].z;
     }
-    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(sp54, sp48)), &sp44, &sp40, &sp3C);
-    if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        ret = true;
+
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
-    return ret;
+
+    return reached;
 }
 
 void func_80BABA90(EnSuttari* this, s32 arg1, u8 arg2) {
@@ -675,7 +683,7 @@ void func_80BABA90(EnSuttari* this, s32 arg1, u8 arg2) {
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, target, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        if (func_80BAB758(this, this->paths[arg1], this->unk1F4[arg1])) {
+        if (EnSuttari_HasReachedPointForward(this, this->paths[arg1], this->unk1F4[arg1])) {
             if (this->unk1F4[arg1] >= (this->paths[arg1]->count - 1)) {
                 if (arg2 == 0) {
                     this->unk1F4[arg1] = 0;
@@ -700,7 +708,7 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, target, 1, 0xBB8, 0);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        if (func_80BAB8F4(this, this->paths[arg1], this->unk1F4[arg1])) {
+        if (EnSuttari_HasReachedPointReverse(this, this->paths[arg1], this->unk1F4[arg1])) {
             if (this->unk1F4[arg1] <= 0) {
                 this->unk1F4[arg1] = -0x63;
             } else {
@@ -1002,7 +1010,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
             this->flags1 |= 0x80;
             this->actionFunc = func_80BACA14;
             return;
-        } else if ((gSaveContext.save.day == 3) && (gSaveContext.save.time <= CLOCK_TIME(19, 0)) &&
+        } else if ((gSaveContext.save.day == 3) && (CURRENT_TIME <= CLOCK_TIME(19, 0)) &&
                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_61_08) &&
                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) &&
                    CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
@@ -1012,7 +1020,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
             return;
         }
     } else if (play->sceneId == SCENE_BACKTOWN) {
-        if ((gSaveContext.save.time >= CLOCK_TIME(0, 20)) && (gSaveContext.save.time < CLOCK_TIME(6, 00))) {
+        if ((CURRENT_TIME >= CLOCK_TIME(0, 20)) && (CURRENT_TIME < CLOCK_TIME(6, 0))) {
             Actor_Kill(&this->actor);
         }
 

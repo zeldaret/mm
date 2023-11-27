@@ -81,7 +81,7 @@ void func_80A33BB4(ObjToudai* this, PlayState* play) {
 
 u8 func_80A342F4(s16 arg0) {
     u8 var_v1 = 0;
-    s16 minutes = TIME_TO_MINUTES_F(gSaveContext.save.time);
+    s16 minutes = TIME_TO_MINUTES_F(CURRENT_TIME);
     s32 hours = minutes / 60;
 
     if (hours >= 17) {

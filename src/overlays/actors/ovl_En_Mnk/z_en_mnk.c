@@ -274,7 +274,7 @@ void EnMnk_MonkeyTiedUp_Init(Actor* thisx, PlayState* play) {
 void EnMnk_MonkeyHanging_Init(Actor* thisx, PlayState* play) {
     EnMnk* this = THIS;
 
-    func_800BC154(play, &play->actorCtx, &this->picto.actor, ACTORCAT_PROP);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->picto.actor, ACTORCAT_PROP);
     this->actionFunc = EnMnk_MonkeyHanging_StruggleBeforeDunk;
     this->picto.actor.textId = 0x8E8;
     SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyHangingRopeSkel, &gMonkeyHangingStruggleAnim,

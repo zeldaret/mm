@@ -220,7 +220,7 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     this->rootCornerPos = sZeroVec;
     this->rotAxis = sUnitVecX;
     this->rotAngle = 0;
-    this->rotVelocity = 0;
+    this->angularVelocity = 0;
     this->indexLastRootCornerPos = -1;
     this->hasNewRootCornerPos = false;
     this->numBounces = 0;
@@ -261,7 +261,7 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
 
             // Vertical cuts initialize the right half, spawn the left half.
             this->boardFragments = OBJKENDOKANBAN_RIGHT_HALF;
-            this->rotVelocity = 0x71C; // 10 degrees
+            this->angularVelocity = 0x71C; // 10 degrees
             this->actor.velocity = sVelocityRightHalf;
             this->centerPoint = sCenterPointRightHalf;
 
@@ -276,7 +276,7 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
         } else {
             // Horizontal cuts initialize the bottom half, spawn the top half.
             this->boardFragments = OBJKENDOKANBAN_BOTTOM_HALF;
-            this->rotVelocity = -0x71C; // -10 degrees
+            this->angularVelocity = -0x71C; // -10 degrees
             this->actor.velocity = sVelocityBottomHalf;
             this->centerPoint = sCenterPointBottomHalf;
 
@@ -290,7 +290,7 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
         }
     } else if (this->boardFragments == OBJKENDOKANBAN_LEFT_HALF) {
         // Initialize the newly spawned left half
-        this->rotVelocity = 0x71C; // 10 degrees
+        this->angularVelocity = 0x71C; // 10 degrees
         this->actor.velocity = sVelocityLeftHalf;
         this->centerPoint = sCenterPointLeftHalf;
 
@@ -300,7 +300,7 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
         this->cornerPoints[3] = sPointBL;
     } else if (this->boardFragments == OBJKENDOKANBAN_TOP_HALF) {
         // Initialize the newly spawned top half
-        this->rotVelocity = 0x71C; // 10 degrees
+        this->angularVelocity = 0x71C; // 10 degrees
         this->actor.velocity = sVelocityTopHalf;
         this->centerPoint = sCenterPointTopHalf;
 
@@ -317,7 +317,7 @@ void ObjKendoKanban_SetupTumble(ObjKendoKanban* this, PlayState* play) {
 void ObjKendoKanban_Tumble(ObjKendoKanban* this, PlayState* play) {
     this->actor.velocity.y += this->actor.gravity;
     Actor_UpdatePos(&this->actor);
-    this->rotAngle += this->rotVelocity;
+    this->rotAngle += this->angularVelocity;
     ObjKendoKanban_HandlePhysics(this, play);
     if (this->actor.world.pos.y < -200.0f) {
         this->actor.world.pos.y = -200.0f;
@@ -351,9 +351,9 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
     vecCenterOut.z -= this->centerPos.z;
     verticalScalar = (this->rotAxis.x * vecCenterOut.z) + (this->rotAxis.z * -vecCenterOut.x);
     if (verticalScalar < 0.0f) {
-        this->rotVelocity += 0x64;
+        this->angularVelocity += 0x64;
     } else {
-        this->rotVelocity -= 0x64;
+        this->angularVelocity -= 0x64;
     }
 
     // Find the lowest point
@@ -396,7 +396,7 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
                 deltaRotAngle -= 0x4000;   // 90 degrees
             }
             this->rotAngle -= deltaRotAngle;
-            this->rotVelocity = 0;
+            this->angularVelocity = 0;
             ObjKendoKanban_SetupSettled(this);
             return;
         }
@@ -417,16 +417,16 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
             // Adjust and (potentially) reverse rotation depending on the current
             // facing of the board and the direction in which it is rotating.
             if (verticalScalar > 0.0f) {
-                if (this->rotVelocity > 0) {
-                    this->rotVelocity *= 1.2f;
+                if (this->angularVelocity > 0) {
+                    this->angularVelocity *= 1.2f;
                 } else {
-                    this->rotVelocity *= -0.6f;
+                    this->angularVelocity *= -0.6f;
                 }
             } else {
-                if (this->rotVelocity < 0) {
-                    this->rotVelocity *= 1.2f;
+                if (this->angularVelocity < 0) {
+                    this->angularVelocity *= 1.2f;
                 } else {
-                    this->rotVelocity *= -0.6f;
+                    this->angularVelocity *= -0.6f;
                 }
             }
         }

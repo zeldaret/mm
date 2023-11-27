@@ -71,7 +71,7 @@ static TexturePtr sSilverEyeTextures[HONOTRAP_EYE_MAX] = {
     gEyeSwitchSilverClosedTex,
 };
 
-static s32 sIsFirstInitEye = true;
+static s32 sTexturesNotDesegmented = true;
 
 ActorInit En_Honotrap_InitVars = {
     /**/ ACTOR_EN_HONOTRAP,
@@ -187,8 +187,8 @@ void EnHonotrap_InitEye(EnHonotrap* this, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.1f);
 
-    if (sIsFirstInitEye) {
-        sIsFirstInitEye = false;
+    if (sTexturesNotDesegmented) {
+        sTexturesNotDesegmented = false;
         for (k = 0; k < HONOTRAP_EYE_MAX; k++) {
             sSilverEyeTextures[k] = Lib_SegmentedToVirtual(sSilverEyeTextures[k]);
         }

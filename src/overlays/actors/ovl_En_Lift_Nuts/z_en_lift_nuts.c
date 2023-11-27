@@ -388,8 +388,7 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
             if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_NONE)) {
                 switch (CURRENT_DAY) {
                     case 1:
-                        if ((gSaveContext.save.time > CLOCK_TIME(23, 30)) ||
-                            (gSaveContext.save.time <= CLOCK_TIME(6, 0))) {
+                        if ((CURRENT_TIME > CLOCK_TIME(23, 30)) || (CURRENT_TIME <= CLOCK_TIME(6, 0))) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
                         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_1)) {
@@ -402,8 +401,7 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
                         break;
 
                     case 2:
-                        if ((gSaveContext.save.time > CLOCK_TIME(23, 30)) ||
-                            (gSaveContext.save.time <= CLOCK_TIME(6, 0))) {
+                        if ((CURRENT_TIME > CLOCK_TIME(23, 30)) || (CURRENT_TIME <= CLOCK_TIME(6, 0))) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
                         } else {
@@ -424,8 +422,7 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
                         break;
 
                     case 3:
-                        if ((gSaveContext.save.time > CLOCK_TIME(23, 30)) ||
-                            (gSaveContext.save.time <= CLOCK_TIME(6, 0))) {
+                        if ((CURRENT_TIME > CLOCK_TIME(23, 30)) || (CURRENT_TIME <= CLOCK_TIME(6, 0))) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
                         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_3)) {

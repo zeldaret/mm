@@ -141,11 +141,11 @@ void EnRr_Init(Actor* thisx, PlayState* play) {
         this->actor.scale.y = 0.022499999f;
         this->actor.scale.x = 0.028499998f;
         this->actor.scale.z = 0.028499998f;
-        this->collider1.dim.radius = this->collider1.dim.radius * 1.5f;
-        this->collider1.dim.height = this->collider1.dim.height * 1.5f;
-        this->collider2.dim.radius = this->collider2.dim.radius * 1.5f;
-        this->collider2.dim.height = this->collider2.dim.height * 1.5f;
-        this->collider2.dim.yShift = this->collider2.dim.yShift * 1.5f;
+        this->collider1.dim.radius *= 1.5f;
+        this->collider1.dim.height *= 1.5f;
+        this->collider2.dim.radius *= 1.5f;
+        this->collider2.dim.height *= 1.5f;
+        this->collider2.dim.yShift *= 1.5f;
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider2);

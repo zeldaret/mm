@@ -864,7 +864,7 @@ void EnKusa2_Init(Actor* thisx, PlayState* play) {
         this->actor.update = func_80A5E604;
         this->actor.draw = NULL;
         this->actor.flags |= ACTOR_FLAG_20;
-        func_800BC154(play, &play->actorCtx, &this->actor, 1);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_BG);
         this->unk_1BE = 0;
         if (D_80A5EAEC != 0) {
             D_80A5EAEC = 0;

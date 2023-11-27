@@ -514,7 +514,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    temp_v0 = gSaveContext.save.time;
+    temp_v0 = CURRENT_TIME;
     if (temp_v0 > CLOCK_TIME(12, 0)) {
         temp_v0 = (DAY_LENGTH - 1) - temp_v0;
     }

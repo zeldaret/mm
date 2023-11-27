@@ -87,13 +87,13 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_8095A510(EnOwl* this, PlayState* play) {
-    this->unk_3FC = ENOWL_GET_F000(&this->actor);
-    if (this->unk_3FC == 15) {
-        this->unk_3FC = -1;
+    this->pathIndex = ENOWL_GET_PATH_INDEX(&this->actor);
+    if (this->pathIndex == ENOWL_PATH_INDEX_NONE) {
+        this->pathIndex = PATH_INDEX_NONE;
         this->path = NULL;
     } else {
         this->unk_3F8 = 0;
-        this->path = &play->setupPathList[this->unk_3FC];
+        this->path = &play->setupPathList[this->pathIndex];
     }
 }
 

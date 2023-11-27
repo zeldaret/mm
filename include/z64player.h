@@ -1059,22 +1059,23 @@ typedef enum PlayerCueId {
 #define PLAYER_GET_INITMODE(thisx) (((thisx)->params & 0xF00) >> 8)
 
 typedef enum PlayerInitMode {
-    /* 0x0 */ PLAYER_INITMODE_0,
-    /* 0x1 */ PLAYER_INITMODE_1, // Spawning after pulling/putting-back Master sword // OoT leftover
-    /* 0x2 */ PLAYER_INITMODE_2,
-    /* 0x3 */ PLAYER_INITMODE_3,
-    /* 0x4 */ PLAYER_INITMODE_4,
-    /* 0x5 */ PLAYER_INITMODE_5,
-    /* 0x6 */ PLAYER_INITMODE_6,
-    /* 0x7 */ PLAYER_INITMODE_7,
-    /* 0x8 */ PLAYER_INITMODE_8,
-    /* 0x9 */ PLAYER_INITMODE_9,
-    /* 0xA */ PLAYER_INITMODE_A,
-    /* 0xB */ PLAYER_INITMODE_B,
-    /* 0xC */ PLAYER_INITMODE_TELESCOPE,
-    /* 0xD */ PLAYER_INITMODE_D,
-    /* 0xE */ PLAYER_INITMODE_E,
-    /* 0xF */ PLAYER_INITMODE_F
+    /*  0x0 */ PLAYER_INITMODE_0,
+    /*  0x1 */ PLAYER_INITMODE_1, // Spawning after pulling/putting-back Master sword // OoT leftover
+    /*  0x2 */ PLAYER_INITMODE_2,
+    /*  0x3 */ PLAYER_INITMODE_3,
+    /*  0x4 */ PLAYER_INITMODE_4,
+    /*  0x5 */ PLAYER_INITMODE_5,
+    /*  0x6 */ PLAYER_INITMODE_6,
+    /*  0x7 */ PLAYER_INITMODE_7,
+    /*  0x8 */ PLAYER_INITMODE_8,
+    /*  0x9 */ PLAYER_INITMODE_9,
+    /*  0xA */ PLAYER_INITMODE_A,
+    /*  0xB */ PLAYER_INITMODE_B,
+    /*  0xC */ PLAYER_INITMODE_TELESCOPE,
+    /*  0xD */ PLAYER_INITMODE_D,
+    /*  0xE */ PLAYER_INITMODE_E,
+    /*  0xF */ PLAYER_INITMODE_F,
+    /* 0x10 */ PLAYER_INITMODE_MAX // Must not exceed 0x10 as `PLAYER_GET_INITMODE` is limited to a nibble in player params
 } PlayerInitMode;
 
 #define PLAYER_PARAMS(startBgCamIndex, initMode) ((startBgCamIndex & 0xFF) | ((initMode & 0xF) << 8))
