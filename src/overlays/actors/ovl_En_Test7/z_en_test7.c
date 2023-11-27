@@ -134,7 +134,7 @@ void EnTest7_AddFeather(OwlWarpFeather* feather, Vec3f* pos, s32 isPosYRand) {
     }
 }
 
-void EnTest7_RequestFeather(OwlWarpFeather* feathers, Vec3f* pos, s32 isPosYRand) {
+void EnTest7_AddAndChooseFeather(OwlWarpFeather* feathers, Vec3f* pos, s32 isPosYRand) {
     static s32 sFeatherIndex = 0;
     s32 i;
     s32 featherAdded = false;
@@ -453,7 +453,7 @@ void EnTest7_WarpCsPart1(EnTest7* this, PlayState* play) {
     }
 }
 
-void func_80AF1B68(EnTest7* this, PlayState* play) {
+void EnTest7_UpdateGrowingWindCapsule(EnTest7* this, PlayState* play) {
     this->flags |= OWL_WARP_FLAGS_DRAW_WIND_CAPSULE;
 
     if (this->windCapsule.unk_04 < 11.0f) {
@@ -487,7 +487,7 @@ void EnTest7_WarpCsPart2(EnTest7* this, PlayState* play) {
     }
 
     if (this->skeletonInfo.frameCtrl.unk_10 > 60.0f) {
-        func_80AF1B68(this, play);
+        EnTest7_UpdateGrowingWindCapsule(this, play);
     }
 
     if ((this->skeletonInfo.frameCtrl.unk_10 > 20.0f) && !(this->flags & OWL_WARP_FLAGS_40)) {
@@ -510,7 +510,7 @@ void EnTest7_WarpCsPart2(EnTest7* this, PlayState* play) {
             featherPos.y = LERPIMP_ALT(this->actor.world.pos.y, subCam->eye.y, randLerp);
             featherPos.z = LERPIMP_ALT(this->actor.world.pos.z, subCam->eye.z, randLerp);
 
-            EnTest7_RequestFeather(this->feathers, &featherPos, true);
+            EnTest7_AddAndChooseFeather(this->feathers, &featherPos, true);
             this->flags |= OWL_WARP_FLAGS_8;
         }
     } else {
@@ -523,7 +523,7 @@ void EnTest7_WarpCsPart3(EnTest7* this, PlayState* play) {
     Camera* subCam;
     f32 randLerp;
 
-    func_80AF1B68(this, play);
+    EnTest7_UpdateGrowingWindCapsule(this, play);
 
     if (Rand_ZeroOne() < 0.3f) {
         subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
@@ -533,11 +533,11 @@ void EnTest7_WarpCsPart3(EnTest7* this, PlayState* play) {
         featherPos.y = LERPIMP_ALT(this->actor.world.pos.y, subCam->eye.y, randLerp);
         featherPos.z = LERPIMP_ALT(this->actor.world.pos.z, subCam->eye.z, randLerp);
 
-        EnTest7_RequestFeather(this->feathers, &featherPos, true);
+        EnTest7_AddAndChooseFeather(this->feathers, &featherPos, true);
     }
 
     Math_Vec3f_Copy(&featherPos, &this->actor.world.pos);
-    EnTest7_RequestFeather(this->feathers, &featherPos, true);
+    EnTest7_AddAndChooseFeather(this->feathers, &featherPos, true);
     this->unk_18FC[1].y += 0x2EE0;
 }
 
@@ -560,7 +560,7 @@ void EnTest7_WarpCsPart4(EnTest7* this, PlayState* play) {
         this->flags &= ~OWL_WARP_FLAGS_10;
     }
     Math_Vec3f_Copy(&featherPos, &this->actor.world.pos);
-    EnTest7_RequestFeather(this->feathers, &featherPos, true);
+    EnTest7_AddAndChooseFeather(this->feathers, &featherPos, true);
 }
 
 void EnTest7_WarpCsPart5(EnTest7* this, PlayState* play) {
@@ -652,7 +652,7 @@ void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play) {
     Math_Vec3f_Copy(&featherPos, &this->actor.world.pos);
 
     if (Rand_ZeroOne() < 0.1f) {
-        EnTest7_RequestFeather(this->feathers, &featherPos, true);
+        EnTest7_AddAndChooseFeather(this->feathers, &featherPos, true);
     }
 
     this->windCapsule.yaw -= 0x2EE0;
@@ -905,8 +905,8 @@ void EnTest7_ArriveCsPart2(EnTest7* this, PlayState* play) {
 
     featherPos = this->actor.world.pos;
 
-    EnTest7_RequestFeather(this->feathers, &featherPos, true);
-    EnTest7_RequestFeather(this->feathers, &featherPos, true);
+    EnTest7_AddAndChooseFeather(this->feathers, &featherPos, true);
+    EnTest7_AddAndChooseFeather(this->feathers, &featherPos, true);
 
     this->windCapsule.unk_04 = 70 - this->timer;
     if (this->timer > 70) {
@@ -960,7 +960,7 @@ s32 func_80AF31D0(PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gf
 
     if ((*dList != NULL) && (Rand_ZeroOne() < 0.03f)) {
         Matrix_MultVec3f(&gZeroVec3f, &featherPos);
-        EnTest7_RequestFeather(this->feathers, &featherPos, false);
+        EnTest7_AddAndChooseFeather(this->feathers, &featherPos, false);
     }
     return true;
 }
