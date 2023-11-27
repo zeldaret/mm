@@ -65,14 +65,6 @@ void MtxConv_L2F(MtxF* mtx, Mtx* mf);
 
 s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
 
-s32 PrintUtils_VPrintf(PrintCallback* pfn, const char* fmt, va_list args);
-s32 PrintUtils_Printf(PrintCallback* pfn, const char* fmt, ...);
-void Sleep_Cycles(OSTime time);
-void Sleep_Nsec(u32 nsec);
-void Sleep_Usec(u32 usec);
-void Sleep_Msec(u32 ms);
-void Sleep_Sec(u32 sec);
-
 f32 fmodf(f32 dividend, f32 divisor);
 void* __osMemset(void* ptr, s32 val, size_t size);
 s32 __osStrcmp(const char* str1, const char* str2);
