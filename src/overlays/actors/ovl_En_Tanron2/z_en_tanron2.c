@@ -223,7 +223,7 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
         this->actor.world.pos.x += this->actor.velocity.x;
         this->actor.world.pos.y += this->actor.velocity.y;
         this->actor.world.pos.z += this->actor.velocity.z;
-        this->actor.velocity.y = this->actor.velocity.y - 2.0f;
+        this->actor.velocity.y -= 2.0f;
 
         if (this->actor.world.pos.y <= this->actor.floorHeight) {
             this->actor.world.pos.y = this->actor.floorHeight;
@@ -316,7 +316,7 @@ void func_80BB6F78(EnTanron2* this, PlayState* play) {
         case 1:
             if (this->unk_14E == 0) {
                 this->actor.world.pos.y += this->actor.velocity.y;
-                this->actor.velocity.y = this->actor.velocity.y - 2.0f;
+                this->actor.velocity.y -= 2.0f;
 
                 if (this->actor.world.pos.y <= this->actor.floorHeight) {
                     this->actor.world.pos.y = this->actor.floorHeight;

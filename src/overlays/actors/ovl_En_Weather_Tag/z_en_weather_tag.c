@@ -58,7 +58,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
     EnWeatherTag* this = THIS;
     s32 pad;
     Path* path;
-    s32 pathID;
+    s32 pathIndex;
 
     // flag: is targetable. Should do nothing as not set by default above
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -100,8 +100,8 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             break;
 
         case WEATHERTAG_TYPE_WATERMURK:
-            pathID = WEATHER_TAG_PATHID(&this->actor);
-            path = &play->setupPathList[pathID];
+            pathIndex = WEATHER_TAG_GET_PATH_INDEX(&this->actor);
+            path = &play->setupPathList[pathIndex];
             this->pathPoints = Lib_SegmentedToVirtual(path->points);
             this->pathCount = path->count;
             EnWeatherTag_SetupAction(this, func_809672DC);

@@ -186,7 +186,7 @@ typedef enum {
 #define DYNA_INTERACT_ACTOR_ON_SWITCH (1 << 3) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_SWITCH
 #define DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH (1 << 4) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH
 
-typedef struct {
+typedef struct DynaPolyActor {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 bgId;
     /* 0x148 */ f32 pushForce;

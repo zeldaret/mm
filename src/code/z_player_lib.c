@@ -3177,7 +3177,7 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
         if (play->actorCtx.flags & ACTORCTX_FLAG_3) {
             phi_s1->unk_0C.y = CLAMP(phi_s1->unk_0C.y, -0.8f, 0.8f);
         } else {
-            phi_s1->unk_0C.y = phi_s1->unk_0C.y;
+            phi_s1->unk_0C.y = phi_s1->unk_0C.y; // Set to itself
             f20 = Math_SinS(arg1->unk_1A);
             phi_s1->unk_0C.y += (((f22 * Math_CosS(arg1->unk_1A)) + (f24 * f20)) * 0.2f);
             phi_s1->unk_0C.y = CLAMP(phi_s1->unk_0C.y, -2.0f, 4.0f);

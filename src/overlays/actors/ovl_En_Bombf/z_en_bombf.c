@@ -389,7 +389,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
             }
 
             if ((this->timer == 3) || (this->timer == 30) || (this->timer == 50) || (this->timer == 70)) {
-                this->unk_1FE = this->unk_1FE >> 1;
+                this->unk_1FE >>= 1;
             }
 
             if ((this->timer < 100) && (this->timer & (this->unk_1FE + 1))) {

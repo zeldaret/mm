@@ -130,7 +130,7 @@ s32 EnSsh_CreateBlureEffect(PlayState* play) {
     s32 i;
     s32 blureIdx;
 
-    for (i = 0; i < ARRAY_COUNT(blureInit.p1StartColor); i++) {
+    for (i = 0; i < EFFECT_BLURE_COLOR_COUNT; i++) {
         blureInit.p1StartColor[i] = sP1StartColor[i];
         blureInit.p2StartColor[i] = sP2StartColor[i];
         blureInit.p1EndColor[i] = sP1EndColor[i];
@@ -140,7 +140,7 @@ s32 EnSsh_CreateBlureEffect(PlayState* play) {
     blureInit.unkFlag = false;
     blureInit.calcMode = 3;
 
-    Effect_Add(play, &blureIdx, 1, 0, 0, &blureInit);
+    Effect_Add(play, &blureIdx, EFFECT_BLURE1, 0, 0, &blureInit);
     return blureIdx;
 }
 
