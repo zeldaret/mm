@@ -124,8 +124,19 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EffectBlureInit2 sBlureInit = {
-    0, 0, 0, { 250, 0, 0, 250 }, { 200, 0, 0, 130 }, { 150, 0, 0, 100 }, { 100, 0, 0, 50 }, 16,
-    0, 0, 0, { 0, 0, 0, 0 },     { 0, 0, 0, 0 },
+    0,
+    0,
+    0,
+    { 250, 0, 0, 250 },
+    { 200, 0, 0, 130 },
+    { 150, 0, 0, 100 },
+    { 100, 0, 0, 50 },
+    16,
+    0,
+    EFF_BLURE_DRAW_MODE_SIMPLE,
+    0,
+    { 0, 0, 0, 0 },
+    { 0, 0, 0, 0 },
 };
 
 static s32 sTexturesDesegmented = false;

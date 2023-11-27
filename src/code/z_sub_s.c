@@ -569,7 +569,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
     if (index == 0) {
         diffX = points[1].x - points[0].x;
         diffZ = points[1].z - points[0].z;
-    } else if (index == count - 1) {
+    } else if (index == (count - 1)) {
         diffX = points[count - 1].x - points[count - 2].x;
         diffZ = points[count - 1].z - points[count - 2].z;
     } else {
@@ -578,6 +578,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
     }
 
     Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+
     if (((px * actor->world.pos.x) + (pz * actor->world.pos.z) + d) > 0.0f) {
         reached = true;
     }

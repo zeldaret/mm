@@ -4,17 +4,17 @@
 #include "global.h"
 #include "objects/object_raf/object_raf.h"
 
-#define EN_RAF_GET_TYPE(thisx) (((thisx)->params >> 12) & 0xF)
-#define EN_RAF_GET_REVIVE_TIMER(thisx) (((thisx)->params >> 7) & 0x1F)
-#define EN_RAF_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
+#define CARNIVOROUS_LILY_GET_TYPE(thisx) (((thisx)->params >> 12) & 0xF)
+#define CARNIVOROUS_LILY_GET_REVIVE_TIMER(thisx) (((thisx)->params >> 7) & 0x1F)
+#define CARNIVOROUS_LILY_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
-#define EN_RAF_SWITCH_FLAG_NONE 0x7F
+#define CARNIVOROUS_LILY_SWITCH_FLAG_NONE 0x7F
 
-typedef enum {
-    /* 0 */ EN_RAF_TYPE_NORMAL,
-    /* 1 */ EN_RAF_TYPE_DORMANT,              // Spawns without trap, so it can't eat bombs/player
-    /* 2 */ EN_RAF_TYPE_NO_WATER_INTERACTIONS // Won't produce ripples, and effects won't produce splashes
-} EnRafType;
+typedef enum CarnivorousLilyType {
+    /* 0 */ CARNIVOROUS_LILY_TYPE_NORMAL,
+    /* 1 */ CARNIVOROUS_LILY_TYPE_DORMANT,              // Spawns without trap, so it can't eat bombs/player
+    /* 2 */ CARNIVOROUS_LILY_TYPE_NO_WATER_INTERACTIONS // Won't produce ripples, and effects won't produce splashes
+} CarnivorousLilyType;
 
 struct EnRaf;
 
@@ -28,9 +28,9 @@ typedef struct {
     /* 0x28 */ Vec3s rot;
     /* 0x30 */ f32 scale;
     /* 0x34 */ s16 timer;
-} EnRafEffect; // size = 0x38
+} CarnivorousLilyEffect; // size = 0x38
 
-#define EN_RAF_EFFECT_COUNT 31
+#define CARNIVOROUS_LILY_EFFECT_COUNT 31
 
 typedef struct EnRaf {
     /* 0x000 */ DynaPolyActor dyna;
@@ -43,7 +43,7 @@ typedef struct EnRaf {
     /* 0x354 */ Vec3s chewLimbRot[CARNIVOROUS_LILY_PAD_LIMB_MAX];
     /* 0x39C */ s16 grabTarget;
     /* 0x39E */ u8 isCurrentlyInRidingMovingState;
-    /* 0x3A0 */ f32 endFrame;
+    /* 0x3A0 */ f32 animEndFrame;
     /* 0x3A4 */ f32 chewScale;
     /* 0x3A8 */ f32 bobOffset;
     /* 0x3AC */ f32 heightDiffFromPlayer;
@@ -63,7 +63,7 @@ typedef struct EnRaf {
     /* 0x3CC */ s16 petalClearPixelSecondPassIndex;
     /* 0x3CE */ s16 teethClearPixelSecondPassIndex;
     /* 0x3D0 */ ColliderCylinder collider;
-    /* 0x41C */ EnRafEffect effects[EN_RAF_EFFECT_COUNT];
+    /* 0x41C */ CarnivorousLilyEffect effects[CARNIVOROUS_LILY_EFFECT_COUNT];
 } EnRaf; // size = 0xAE4
 
 #endif // Z_EN_RAF_H

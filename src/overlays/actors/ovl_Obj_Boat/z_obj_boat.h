@@ -20,7 +20,7 @@ typedef struct ObjBoat {
     /* 0x160 */ s16 angle; // Angle used to set rotations
     /* 0x162 */ UNK_TYPE1 pad_162;
     /* 0x163 */ u8 maxPointIndex; // point at the other end from 0
-    /* 0x164 */ Vec3s* points;
+    /* 0x164 */ Vec3s* pathPoints;
 } ObjBoat; // size = 0x168
 
 #endif // Z_OBJ_BOAT_H

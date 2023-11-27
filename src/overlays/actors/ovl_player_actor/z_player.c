@@ -4,6 +4,7 @@
  * Description: Player
  */
 
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64horse.h"
 #include "z64malloc.h"
@@ -6742,7 +6743,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
 
     // Tiny fall, won't damage player
     if (fallDistance > 200) {
-        fallDistance = fallDistance * 2;
+        fallDistance *= 2;
         fallDistance = CLAMP_MAX(fallDistance, 255);
 
         Player_RequestRumble(play, this, fallDistance, fallDistance * 0.1f, fallDistance, SQ(0));
@@ -7913,14 +7914,14 @@ void func_80839CD8(Player* this, PlayState* play) {
         if (var_fv0 < 0.0f) {
             var_fv0 = -var_fv0 * 1.375f;
         }
-        var_fv0 = var_fv0 / 11.0f;
+        var_fv0 /= 11.0f;
     } else {
         anim = D_8085BE84[PLAYER_ANIMGROUP_walk_endR][this->modelAnimType];
         var_fv0 = 26.0f - var_fv0;
         if (var_fv0 < 0.0f) {
             var_fv0 = -var_fv0 * 2;
         }
-        var_fv0 = var_fv0 / 12.0f;
+        var_fv0 /= 12.0f;
     }
 
     PlayerAnimation_Change(play, &this->skelAnime, anim, PLAYER_ANIM_NORMAL_SPEED, 0.0f, Animation_GetLastFrame(anim),
@@ -10633,8 +10634,19 @@ PlayerInitModeFunc sPlayerInitModeFuncs[PLAYER_INITMODE_MAX] = {
 
 // sBlureInit
 EffectBlureInit2 D_8085D30C = {
-    0, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 4,
-    0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
+    0,
+    EFFECT_BLURE_ELEMENT_FLAG_8,
+    0,
+    { 255, 255, 255, 255 },
+    { 255, 255, 255, 64 },
+    { 255, 255, 255, 0 },
+    { 255, 255, 255, 0 },
+    4,
+    0,
+    EFF_BLURE_DRAW_MODE_SMOOTH,
+    0,
+    { 0, 0, 0, 0 },
+    { 0, 0, 0, 0 },
 };
 
 // sTireMarkInit ?
@@ -12325,7 +12337,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
                 this->cylinder.dim.yShift = 0;
                 this->cylinder.dim.height = this->shieldCylinder.dim.height;
             } else {
-                this->cylinder.dim.height = this->cylinder.dim.height * 0.8f;
+                this->cylinder.dim.height *= 0.8f;
             }
         }
 
@@ -12893,7 +12905,7 @@ void func_808477D0(PlayState* play, Player* this, Input* input, f32 arg3) {
         var_fv0 = 0.5f;
     }
 
-    var_fv0 = var_fv0 * arg3;
+    var_fv0 *= arg3;
     var_fv0 = CLAMP(var_fv0, 1.0f, 2.5f);
     this->skelAnime.playSpeed = var_fv0;
 
@@ -18249,7 +18261,7 @@ void Player_Action_92(Player* this, PlayState* play) {
         var_fv0 = this->actor.world.pos.y - this->actor.floorHeight;
         var_fv0 = CLAMP_MAX(var_fv0, 20.0f);
 
-        this->actor.world.pos.y = this->actor.world.pos.y - var_fv0;
+        this->actor.world.pos.y -= var_fv0;
         this->actor.shape.rot.x = 0;
         this->linearVelocity = 1.0f;
         this->actor.velocity.y = 0.0f;
@@ -18564,7 +18576,7 @@ void Player_Action_94(Player* this, PlayState* play) {
             temp_a0 = this->actor.shape.rot.y - var_a1;
             if (ABS_ALT(temp_a0) > 0x4000) {
                 this->linearVelocity = -this->linearVelocity;
-                var_a1 = var_a1 + 0x8000;
+                var_a1 += 0x8000;
             }
             this->currentYaw = var_a1;
         }

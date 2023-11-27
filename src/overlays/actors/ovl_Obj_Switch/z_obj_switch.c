@@ -69,7 +69,7 @@ static TexturePtr sEyeSwitchTextures[][4] = {
     { gEyeSwitchSilverOpenTex, gEyeSwitchSilverHalfTex, gEyeSwitchSilverClosedTex, gEyeSwitchSilverClosedTex },
 };
 
-static s32 sIsSegmentTableInit = false;
+static s32 sTexturesDesegmented = false;
 
 ActorInit Obj_Switch_InitVars = {
     /**/ ACTOR_OBJ_SWITCH,
@@ -397,11 +397,11 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.flags |= 0x80;
     }
     if (type == OBJSWITCH_TYPE_EYE) {
-        if (!sIsSegmentTableInit) {
+        if (!sTexturesDesegmented) {
             s32 i;
             s32 j;
 
-            sIsSegmentTableInit = true;
+            sTexturesDesegmented = true;
 
             for (i = 0; i < ARRAY_COUNT(sEyeSwitchTextures); i++) {
                 for (j = 0; j < ARRAY_COUNT(*sEyeSwitchTextures); j++) {

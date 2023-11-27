@@ -154,7 +154,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_BEAMOS, ICHAIN_STOP),
 };
 
-s32 D_808CD5B8 = false;
+static s32 sTexturesDesegmented = false;
 
 Color_RGBA8 D_808CD5BC = { 0, 0, 255, 0 };
 
@@ -181,11 +181,11 @@ void EnVm_Init(Actor* thisx, PlayState* play) {
     thisx->params &= 0xFF;
     this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
 
-    if (!D_808CD5B8) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(D_808CD58C); i++) {
             D_808CD58C[i] = Lib_SegmentedToVirtual(D_808CD58C[i]);
         }
-        D_808CD5B8 = true;
+        sTexturesDesegmented = true;
     }
     func_808CC420(this);
 }

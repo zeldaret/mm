@@ -346,8 +346,8 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
                 }
             }
             if (this->unk_374 & 1) {
-                SubS_CopyPointFromPathList(play->setupPathList, BEAVER_GET_PARAM_FF(thisx),
-                                           play->setupPathList[BEAVER_GET_PARAM_FF(thisx)].count - 1, &D_80A99E80);
+                SubS_CopyPointFromPathList(play->setupPathList, BEAVER_GET_PATH_INDEX(thisx),
+                                           play->setupPathList[BEAVER_GET_PATH_INDEX(thisx)].count - 1, &D_80A99E80);
             }
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                 if (this->unk_374 & 2) {
@@ -622,7 +622,7 @@ void func_80A95DA0(EnAz* this, PlayState* play) {
     ActorPathing* sp40 = &this->unk_300;
 
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, sp40, play->setupPathList,
-                           BEAVER_GET_PARAM_FF(&this->actor), 0, 0, 1, 1);
+                           BEAVER_GET_PATH_INDEX(&this->actor), 0, 0, 1, 1);
     this->unk_36C = 4.0f;
     this->actor.speed = 4.0f;
     this->actor.gravity = 0.0f;
@@ -1614,7 +1614,7 @@ void func_80A97E48(EnAz* this, PlayState* play) {
 
 void func_80A97EAC(EnAz* this, PlayState* play) {
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, &this->unk_300, play->setupPathList,
-                           BEAVER_GET_PARAM_FF(&this->actor), 0, 0, 1, 0);
+                           BEAVER_GET_PATH_INDEX(&this->actor), 0, 0, 1, 0);
     this->unk_36C = 8.0f;
     this->actor.speed = 8.0f;
     this->actor.gravity = 0.0f;
@@ -1972,6 +1972,7 @@ s32 EnAz_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
         *dList = NULL;
     }
     if (limbIndex == BEAVER_OLDER_BROTHER_LIMB_NONE) {
+        // Set to itself
         rot->x = rot->x;
         rot->y = rot->y;
         rot->z = rot->z;

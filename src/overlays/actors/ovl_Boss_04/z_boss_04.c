@@ -572,7 +572,7 @@ void func_809ED45C(Boss04* this, PlayState* play) {
         this->collider1.elements[0].info.bumperFlags &= ~BUMP_HIT;
         Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DAMAGE);
         damage = this->actor.colChkInfo.damage;
-        this->actor.colChkInfo.health = this->actor.colChkInfo.health - damage;
+        this->actor.colChkInfo.health -= damage;
         if ((s8)this->actor.colChkInfo.health <= 0) {
             func_809ED224(this);
             this->unk_1FE = 100;
