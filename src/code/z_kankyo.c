@@ -3226,16 +3226,16 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
 
             // temp_f4 = Rand_ZeroOne_Variable(&randInt);
             randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
-            gRandFloat = (randInt >> 9) | 0x3F800000;
-            temp = *((f32*)&gRandFloat);
+            gRandFloat.i = (randInt >> 9) | 0x3F800000;
+            temp = gRandFloat.f;
             temp_f4 = temp - 1.0f;
 
             // temp_f20 = Rand_ZeroOne_Variable(&randInt);
             randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
-            gRandFloat = (randInt >> 9) | 0x3F800000;
-            temp_f20 = ((*((f32*)&gRandFloat) - 1.0f) + temp_f4) * 0.5f;
+            gRandFloat.i = (randInt >> 9) | 0x3F800000;
+            temp_f20 = ((gRandFloat.f - 1.0f) + temp_f4) * 0.5f;
 
-            // randInt = Rand_Next_Variable(&randInt);
+            // Rand_Next_Variable(&randInt);
             randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
 
             // Set random position
@@ -3245,8 +3245,8 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
 
             // temp_f2 = Rand_ZeroOne_Variable(&randInt);
             randInt = (randInt * RAND_MULTIPLIER) + RAND_INCREMENT;
-            gRandFloat = ((randInt >> 9) | 0x3F800000);
-            temp_f2 = *((f32*)&gRandFloat) - 1.0f;
+            gRandFloat.i = ((randInt >> 9) | 0x3F800000);
+            temp_f2 = gRandFloat.f - 1.0f;
 
             // Set random width
             imgWidth = (u32)((SQ(temp_f2) * 8.0f) + 2.0f);

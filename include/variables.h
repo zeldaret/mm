@@ -17,7 +17,6 @@ extern s32 sIrqMgrRetraceCount;
 // extern UNK_TYPE1 sGfxPrintRainbowData;
 // extern UNK_TYPE1 sGfxPrintFontData;
 // extern UNK_TYPE4 D_80097524;
-// extern u32 sRandInt;
 
 extern u8 sYaz0DataBuffer[0x400];
 extern u8* sYaz0CurDataEnd;
