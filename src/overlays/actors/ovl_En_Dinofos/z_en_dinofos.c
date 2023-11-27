@@ -259,7 +259,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnDinofos_Init(Actor* thisx, PlayState* play) {
-    static s32 D_8089E364 = 0;
+    static s32 sTexturesDesegmented = false;
     static EffectBlureInit2 D_8089E368 = {
         0, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 8,
         0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
@@ -277,11 +277,11 @@ void EnDinofos_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gDinolfosSkel, &gDinolfosIdleAnim, this->jointTable, this->morphTable,
                        DINOLFOS_LIMB_MAX);
 
-    if (D_8089E364 == 0) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
             sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
-        D_8089E364 = 1;
+        sTexturesDesegmented = true;
     }
 
     this->unk_288 = 255;

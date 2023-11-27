@@ -447,10 +447,12 @@ s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         *dList = NULL;
     }
     if (limbIndex == SHIKASHI_LIMB_NONE) {
+        // Set to itself
         rot->x = rot->x;
         rot->y = rot->y;
         rot->z = rot->z;
     }
+
     switch (limbIndex) {
         case SHIKASHI_LIMB_TORSO:
             rot->x += this->torsoXRotStep;

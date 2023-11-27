@@ -1098,7 +1098,7 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == 0xC3) {
             msgCtx->unk11F18 = 0;
             msgCtx->choiceNum = 3;
-            msgCtx->unk11FF8 = msgCtx->unk11FF8 + 0x16;
+            msgCtx->unk11FF8 += 0x16;
         } else if (curChar == 0xC4) {
             Message_GetTimerDigitsNES(((void)0, gSaveContext.timerCurTimes[curChar - 0xC4]), spA8);
 
