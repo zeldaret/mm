@@ -594,7 +594,7 @@ void Message_DecodeCredits(PlayState* play) {
                 }
             } else if (curChar == 0x1F) {
                 digits[0] = 0;
-                timeInSeconds = TIME_TO_MINUTES_F(gSaveContext.save.time);
+                timeInSeconds = TIME_TO_MINUTES_F(CURRENT_TIME);
 
                 digits[1] = timeInSeconds / 60.0f;
                 while (digits[1] >= 10) {

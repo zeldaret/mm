@@ -2316,7 +2316,7 @@ void Message_Decode(PlayState* play) {
                 decodedBufPos--;
             } else if (curChar == 0x20A) {
                 digits[0] = 0;
-                timeInSeconds = TIME_TO_MINUTES_F(gSaveContext.save.time);
+                timeInSeconds = TIME_TO_MINUTES_F(CURRENT_TIME);
                 digits[1] = timeInSeconds / 60.0f;
                 while (digits[1] >= 10) {
                     digits[0]++;
@@ -5604,7 +5604,7 @@ void Message_Update(PlayState* play) {
                         Message_CloseTextbox(play);
                     }
                 } else if ((msgCtx->textboxEndType != TEXTBOX_ENDTYPE_10) ||
-                           (pauseCtx->state != PAUSE_STATE_OWLWARP_CONFIRM)) {
+                           (pauseCtx->state != PAUSE_STATE_OWL_WARP_CONFIRM)) {
                     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) &&
                         (play->msgCtx.ocarinaMode == OCARINA_MODE_1B)) {
                         if (Message_ShouldAdvance(play)) {
@@ -5676,7 +5676,7 @@ void Message_Update(PlayState* play) {
                             pauseCtx->unk_2C8 = pauseCtx->pageIndex;
                             pauseCtx->unk_2CA = pauseCtx->cursorPoint[4];
                             pauseCtx->pageIndex = PAUSE_ITEM;
-                            pauseCtx->state = PAUSE_STATE_OWLWARP_0;
+                            pauseCtx->state = PAUSE_STATE_OWL_WARP_0;
                             func_800F4A10(play);
                             pauseCtx->pageIndex = PAUSE_MAP;
                             sLastPlayedSong = 0xFF;
@@ -5725,7 +5725,7 @@ void Message_Update(PlayState* play) {
             }
 
             if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6) &&
-                (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+                (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
                 Message_StartTextbox(play, 0x5E6, NULL);
                 break;
             }
@@ -5888,7 +5888,7 @@ void Message_Update(PlayState* play) {
             msgCtx->textboxColorAlphaCurrent -= XREG(70);
             if (msgCtx->textboxColorAlphaCurrent <= 0) {
                 if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6) &&
-                    (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+                    (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
                     Message_StartTextbox(play, 0x5E6, NULL);
                     Interface_SetHudVisibility(HUD_VISIBILITY_NONE_ALT);
                 } else {
@@ -5908,7 +5908,7 @@ void Message_Update(PlayState* play) {
         case MSGMODE_NEW_CYCLE_0:
             play->state.unk_A3 = 1;
             sp44 = gSaveContext.save.cutsceneIndex;
-            sp3E = gSaveContext.save.time;
+            sp3E = CURRENT_TIME;
             sp40 = gSaveContext.save.day;
 
             Sram_SaveEndOfCycle(play);

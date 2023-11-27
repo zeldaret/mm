@@ -656,7 +656,7 @@ void func_809336C0(EnFz* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_BD7 = 0;
     this->unk_BCA = 60;
-    func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xA0);
     this->actionFunc = func_80933760;
 }

@@ -209,6 +209,7 @@ build/src/boot/O2/%.o: OPTFLAGS := -O2
 
 build/src/boot/libc/%.o: OPTFLAGS := -O2
 build/src/boot/libm/%.o: OPTFLAGS := -O2
+build/src/boot/libc64/%.o: OPTFLAGS := -O2
 
 build/src/libultra/os/%.o: OPTFLAGS := -O1
 build/src/libultra/voice/%.o: OPTFLAGS := -O2

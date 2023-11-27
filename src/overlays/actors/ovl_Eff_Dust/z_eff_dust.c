@@ -6,7 +6,7 @@
 
 #include "z_eff_dust.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -99,7 +99,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            SystemArena_Free(this);
+            free(this);
             break;
     }
     this->life = 10;
