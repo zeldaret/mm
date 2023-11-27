@@ -1,4 +1,7 @@
+#include "z64effect_ss.h"
+
 #include "global.h"
+
 #include "overlays/effects/ovl_Effect_En_Ice_Block/z_eff_en_ice_block.h"
 #include "overlays/effects/ovl_Effect_Ss_Blast/z_eff_ss_blast.h"
 #include "overlays/effects/ovl_Effect_Ss_Bomb2/z_eff_ss_bomb2.h"
@@ -177,7 +180,7 @@ void func_800B13D8(Vec3f* srcPos, f32 randScale, Vec3f* newPos, Vec3f* velocity,
     s16 randAngle;
     f32 rand = Rand_ZeroOne() * randScale;
 
-    randAngle = (Rand_ZeroOne() * 65536.0f);
+    randAngle = Rand_ZeroOne() * 0x10000;
 
     *newPos = *srcPos;
 
@@ -235,13 +238,13 @@ void EffectSsKirakira_SpawnDispersed(PlayState* play, Vec3f* pos, Vec3f* velocit
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);
-    initParams.velocity.y = ((Rand_ZeroOne() * initParams.velocity.y) + initParams.velocity.y) * 0.5f;
+    initParams.velocity.y = ((Rand_ZeroOne() * initParams.velocity.y) + initParams.velocity.y) / 2.0f;
     Math_Vec3f_Copy(&initParams.accel, accel);
-    initParams.accel.y = ((Rand_ZeroOne() * initParams.accel.y) + initParams.accel.y) * 0.5f;
+    initParams.accel.y = ((Rand_ZeroOne() * initParams.accel.y) + initParams.accel.y) / 2.0f;
     initParams.life = life;
     initParams.updateMode = 0;
     initParams.rotSpeed = 0x1518;
-    initParams.yaw = Rand_ZeroOne() * 16384.0f;
+    initParams.yaw = Rand_ZeroOne() * 0x4000;
     initParams.scale = scale;
     initParams.primColor = *primColor;
     initParams.envColor = *envColor;
@@ -260,7 +263,7 @@ void EffectSsKirakira_SpawnFocused(PlayState* play, Vec3f* pos, Vec3f* velocity,
     initParams.life = life;
     initParams.updateMode = 1;
     initParams.rotSpeed = 0x1518;
-    initParams.yaw = Rand_ZeroOne() * 16384.0f;
+    initParams.yaw = Rand_ZeroOne() * 0x4000;
     initParams.scale = scale;
     Color_RGBA8_Copy(&initParams.primColor, primColor);
     Color_RGBA8_Copy(&initParams.envColor, envColor);

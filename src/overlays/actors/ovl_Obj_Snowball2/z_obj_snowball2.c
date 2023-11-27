@@ -531,7 +531,7 @@ void func_80B3A498(ObjSnowball2* this) {
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.home.pos.y = this->actor.world.pos.y + this->actor.depthInWater;
     this->actor.home.pos.z = this->actor.world.pos.z;
-    this->actor.world.pos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
+    this->actor.world.pos.y += this->actor.shape.yOffset * this->actor.scale.y;
     this->actor.shape.yOffset = 0.0f;
     this->actor.speed = 0.0f;
     this->actionFunc = func_80B3A500;

@@ -691,7 +691,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     envCtx->lightBlendRateOverride = LIGHT_BLENDRATE_OVERRIDE_NONE;
 
     R_TIME_SPEED = envCtx->sceneTimeSpeed = 0;
-    R_TIME_SPEED = R_TIME_SPEED;
+    R_TIME_SPEED = R_TIME_SPEED; // Set to itself
     R_ENV_DISABLE_DBG = false;
 
     CREG(64) = 0;

@@ -41,7 +41,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjDanpeilift_UpdatePosition(ObjDanpeilift* this, s32 index) {
-    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->points[index]);
+    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->pathPoints[index]);
 }
 
 void ObjDanpeilift_Init(Actor* thisx, PlayState* play) {
@@ -72,7 +72,7 @@ void ObjDanpeilift_Init(Actor* thisx, PlayState* play) {
         this->curPoint = OBJDANPEILIFT_GET_STARTING_POINT(thisx);
         this->endPoint = path->count - 1;
         this->direction = 1;
-        this->points = Lib_SegmentedToVirtual(path->points);
+        this->pathPoints = Lib_SegmentedToVirtual(path->points);
         ObjDanpeilift_UpdatePosition(this, this->curPoint);
         this->actionFunc = ObjDanpeilift_Move;
     }
@@ -96,7 +96,7 @@ void ObjDanpeilift_Move(ObjDanpeilift* this, PlayState* play) {
     s32 isPosUpdated;
     Vec3s* endPoint;
 
-    Math_Vec3s_ToVec3f(&nextPoint, this->points + this->curPoint + this->direction);
+    Math_Vec3s_ToVec3f(&nextPoint, this->pathPoints + this->curPoint + this->direction);
     Math_Vec3f_Diff(&nextPoint, &thisx->world.pos, &thisx->velocity);
     speed = Math3D_Vec3fMagnitude(&thisx->velocity);
     if ((speed < (this->speed * 8.0f)) && (this->speed > 2.0f)) {
@@ -125,10 +125,10 @@ void ObjDanpeilift_Move(ObjDanpeilift* this, PlayState* play) {
                 this->waitTimer = 10;
                 this->actionFunc = ObjDanpeilift_Wait;
             } else {
-                endPoint = &this->points[this->endPoint];
+                endPoint = &this->pathPoints[this->endPoint];
                 this->curPoint = this->direction > 0 ? 0 : this->endPoint;
-                if ((this->points[0].x != endPoint->x) || (this->points[0].y != endPoint->y) ||
-                    (this->points[0].z != endPoint->z)) {
+                if ((this->pathPoints[0].x != endPoint->x) || (this->pathPoints[0].y != endPoint->y) ||
+                    (this->pathPoints[0].z != endPoint->z)) {
                     this->actionFunc = ObjDanpeilift_Teleport;
                     DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     isPosUpdated = false;

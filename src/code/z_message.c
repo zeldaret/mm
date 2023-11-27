@@ -2284,7 +2284,7 @@ void Message_Decode(PlayState* play) {
             } else if (curChar == 0x203) {
                 msgCtx->unk11F18 = 1;
                 msgCtx->choiceNum = 3;
-                msgCtx->unk11FF8 = msgCtx->unk11FF8 + 0x16;
+                msgCtx->unk11FF8 += 0x16;
             } else if (curChar == 0x204) {
                 Message_GetTimerDigits(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
 

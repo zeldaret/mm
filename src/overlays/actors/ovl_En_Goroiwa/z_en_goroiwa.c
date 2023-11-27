@@ -189,17 +189,17 @@ void func_8093EB58(EnGoroiwa* this, PlayState* play) {
 
 f32 func_8093EB74(EnGoroiwa* this, PlayState* play) {
     s32 i;
-    Path* path = &play->setupPathList[ENGOROIWA_GET_FF(&this->actor)];
+    Path* path = &play->setupPathList[ENGOROIWA_GET_PATH_INDEX(&this->actor)];
     s32 temp_s4 = path->count;
     f32 temp_f20 = 0.0f;
     Vec3f sp54;
     Vec3f sp48;
 
-    Math_Vec3s_ToVec3f(&sp48, &this->unk_1D0[0]);
+    Math_Vec3s_ToVec3f(&sp48, &this->pathPoints[0]);
 
     for (i = 1; i < temp_s4; i++) {
         Math_Vec3f_Copy(&sp54, &sp48);
-        Math_Vec3s_ToVec3f(&sp48, &this->unk_1D0[i]);
+        Math_Vec3s_ToVec3f(&sp48, &this->pathPoints[i]);
         temp_f20 += Math3D_Distance(&sp54, &sp48);
     }
 
@@ -207,7 +207,7 @@ f32 func_8093EB74(EnGoroiwa* this, PlayState* play) {
 }
 
 void func_8093EC50(EnGoroiwa* this) {
-    Vec3s* var = &this->unk_1D0[this->unk_1D8];
+    Vec3s* var = &this->pathPoints[this->unk_1D8];
     Vec3f sp18;
 
     sp18.x = var->x;
@@ -255,21 +255,21 @@ void func_8093EDB0(EnGoroiwa* this) {
 }
 
 void func_8093EDD8(EnGoroiwa* this, PlayState* play) {
-    this->unk_1D4 = play->setupPathList[ENGOROIWA_GET_FF(&this->actor)].count - 1;
+    this->unk_1D4 = play->setupPathList[ENGOROIWA_GET_PATH_INDEX(&this->actor)].count - 1;
     this->unk_1D6 = 0;
     this->unk_1D8 = 1;
     this->unk_1DA = 1;
 }
 
 void func_8093EE18(EnGoroiwa* this, PlayState* play) {
-    this->unk_1D4 = play->setupPathList[ENGOROIWA_GET_FF(&this->actor)].count - 1;
+    this->unk_1D4 = play->setupPathList[ENGOROIWA_GET_PATH_INDEX(&this->actor)].count - 1;
     this->unk_1D6 = this->actor.home.rot.y;
     this->unk_1D8 = this->unk_1D6 + 1;
     this->unk_1DA = 1;
 }
 
 void func_8093EE64(EnGoroiwa* this, s32 arg1) {
-    Vec3s* temp_v0 = &this->unk_1D0[arg1];
+    Vec3s* temp_v0 = &this->pathPoints[arg1];
 
     this->actor.world.pos.x = temp_v0->x;
     this->actor.world.pos.y = temp_v0->y;
@@ -283,8 +283,8 @@ void func_8093EEBC(EnGoroiwa* this) {
 }
 
 s32 func_8093EEDC(EnGoroiwa* this) {
-    Vec3s* temp_v1 = &this->unk_1D0[this->unk_1D8];
-    Vec3s* temp_v0 = &this->unk_1D0[this->unk_1D6];
+    Vec3s* temp_v1 = &this->pathPoints[this->unk_1D8];
+    Vec3s* temp_v0 = &this->pathPoints[this->unk_1D6];
 
     if ((temp_v1->x == temp_v0->x) && (temp_v1->z == temp_v0->z)) {
         if (temp_v0->y < temp_v1->y) {
@@ -360,7 +360,7 @@ s32 func_8093F34C(EnGoroiwa* this) {
 
     Math_StepToF(&this->actor.speed, D_80942DFC[this->unk_1E4], 0.3f);
     Actor_UpdateVelocityWithGravity(&this->actor);
-    temp_v0 = &this->unk_1D0[this->unk_1D8];
+    temp_v0 = &this->pathPoints[this->unk_1D8];
     this->actor.velocity.y *= 0.97f;
     x = temp_v0->x;
     z = temp_v0->z;
@@ -387,7 +387,7 @@ s32 func_8093F498(EnGoroiwa* this) {
     s32 pad;
     f32 temp_f0;
     Vec3f sp2C;
-    Vec3s* temp_v0 = &this->unk_1D0[this->unk_1D8];
+    Vec3s* temp_v0 = &this->pathPoints[this->unk_1D8];
 
     sp2C.x = temp_v0->x;
     sp2C.y = temp_v0->y;
@@ -415,7 +415,7 @@ s32 func_8093F498(EnGoroiwa* this) {
 
 s32 func_8093F5EC(EnGoroiwa* this) {
     s32 pad;
-    Vec3s* sp18 = &this->unk_1D0[this->unk_1D8];
+    Vec3s* sp18 = &this->pathPoints[this->unk_1D8];
 
     if (this->actor.velocity.y < 0.0f) {
         this->actor.velocity.y = 0.0f;
@@ -436,7 +436,7 @@ s32 func_8093F5EC(EnGoroiwa* this) {
 
 s32 func_8093F6F8(EnGoroiwa* this, PlayState* play) {
     f32 temp_f14;
-    Vec3s* sp80 = &this->unk_1D0[this->unk_1D8];
+    Vec3s* sp80 = &this->pathPoints[this->unk_1D8];
     f32 sp7C = sp80->y;
     f32 sp78;
     f32 temp_f2;
@@ -948,11 +948,11 @@ void func_80941274(EnGoroiwa* this, PlayState* play) {
 }
 
 void EnGoroiwa_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
     EnGoroiwa* this = THIS;
     f32 temp_f0;
-    s32 params = ENGOROIWA_GET_FF(&this->actor);
-    s32 sp28 = params * 8;
-    Path* sp2C = &play->setupPathList[params];
+    s32 pathIndex = ENGOROIWA_GET_PATH_INDEX(&this->actor);
+    Path* path = &play->setupPathList[pathIndex];
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.world.rot.x = 0;
@@ -965,17 +965,17 @@ void EnGoroiwa_Init(Actor* thisx, PlayState* play) {
     func_8093E91C(this);
     func_8093E9B0(this, play);
 
-    if (sp28 == 0x7F8) {
+    if (pathIndex == ENGOROIWA_PATH_INDEX_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    if (sp2C->count < 2) {
+    if (path->count < 2) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    if ((this->actor.home.rot.y >= (sp2C->count - 1)) && (this->actor.home.rot.y < 0)) {
+    if ((this->actor.home.rot.y >= (path->count - 1)) && (this->actor.home.rot.y < 0)) {
         this->actor.home.rot.y = 0;
     }
 
@@ -984,7 +984,7 @@ void EnGoroiwa_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.shadowAlpha = 200;
     func_8093EB58(this, play);
 
-    this->unk_1D0 = Lib_SegmentedToVirtual(sp2C->points);
+    this->pathPoints = Lib_SegmentedToVirtual(path->points);
 
     func_8093EE18(this, play);
     func_8093EE64(this, this->actor.home.rot.y);
@@ -1007,7 +1007,7 @@ void EnGoroiwa_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    Effect_Add(play, &this->unk_248, 4, 0, 0, &D_80942E8C);
+    Effect_Add(play, &this->unk_248, EFFECT_TIRE_MARK, 0, 0, &D_80942E8C);
     func_809419D0(this);
 }
 

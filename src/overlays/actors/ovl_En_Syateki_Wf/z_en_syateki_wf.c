@@ -311,7 +311,7 @@ void EnSyatekiWf_Run(EnSyatekiWf* this, PlayState* play) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
             if (distToTarget < 50.0f) {
                 if (this->actor.speed > 3.0f) {
-                    this->actor.speed = this->actor.speed - 0.5f;
+                    this->actor.speed -= 0.5f;
                 } else {
                     this->actor.speed = this->actor.speed;
                 }
