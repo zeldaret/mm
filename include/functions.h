@@ -65,14 +65,6 @@ void MtxConv_L2F(MtxF* mtx, Mtx* mf);
 
 s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
 
-s32 PrintUtils_VPrintf(PrintCallback* pfn, const char* fmt, va_list args);
-s32 PrintUtils_Printf(PrintCallback* pfn, const char* fmt, ...);
-void Sleep_Cycles(OSTime time);
-void Sleep_Nsec(u32 nsec);
-void Sleep_Usec(u32 usec);
-void Sleep_Msec(u32 ms);
-void Sleep_Sec(u32 sec);
-
 f32 fmodf(f32 dividend, f32 divisor);
 void* __osMemset(void* ptr, s32 val, size_t size);
 s32 __osStrcmp(const char* str1, const char* str2);
@@ -247,7 +239,7 @@ s16 func_800BBC20(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3);
 void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 partParams, Gfx** dList);
 void Actor_SpawnFloorDustRing(PlayState* play, Actor* actor, Vec3f* posXZ, f32 radius, s32 countMinusOne, f32 randAccelWeight, s16 scale, s16 scaleStep, u8 useLighting);
 void func_800BBFB0(PlayState* play, Vec3f* position, f32 arg2, s32 arg3, s16 arg4, s16 scaleStep, u8 arg6);
-void func_800BC154(PlayState* play, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
+void Actor_ChangeCategory(PlayState* play, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 u32 Actor_GetArrowDmgFlags(s32 params);
 Actor* func_800BC270(PlayState* play, Actor* actor, f32 distance, u32 dmgFlags);
 Actor* func_800BC444(PlayState* play, Actor* actor, f32 distance);

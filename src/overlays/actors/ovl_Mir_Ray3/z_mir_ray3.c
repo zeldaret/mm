@@ -367,7 +367,7 @@ void MirRay3_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (MIRRAY3_GET_F(&this->actor) == MIRRAY3_F_1) {
-            time = gSaveContext.save.time;
+            time = CURRENT_TIME;
 
             if (time > CLOCK_TIME(12, 0)) {
                 time = (DAY_LENGTH - 1) - time;

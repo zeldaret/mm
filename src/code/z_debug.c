@@ -1,5 +1,5 @@
 #include "regs.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "macros.h"
 
 RegEditor* gRegEditor;
@@ -7,7 +7,7 @@ RegEditor* gRegEditor;
 void Regs_Init(void) {
     s32 i;
 
-    gRegEditor = SystemArena_Malloc(sizeof(RegEditor));
+    gRegEditor = malloc(sizeof(RegEditor));
     if (1) {}
     gRegEditor->regPage = 0;
     gRegEditor->regGroup = 0;

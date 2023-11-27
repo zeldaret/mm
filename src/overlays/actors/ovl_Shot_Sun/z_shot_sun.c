@@ -178,8 +178,8 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
         return;
     }
 
-    if ((this->actor.xzDistToPlayer > 120.0f) || (gSaveContext.save.time < CLOCK_TIME(6, 30)) ||
-        (gSaveContext.save.time >= CLOCK_TIME(7, 30))) {
+    if ((this->actor.xzDistToPlayer > 120.0f) || (CURRENT_TIME < CLOCK_TIME(6, 30)) ||
+        (CURRENT_TIME >= CLOCK_TIME(7, 30))) {
         return;
     }
 
