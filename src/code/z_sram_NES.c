@@ -388,12 +388,11 @@ u8 sBitFlags8[] = {
 u16 D_801F6AF0;
 u8 D_801F6AF2;
 
-void Sram_ActivateOwl(u8 owlId) {
-    gSaveContext.save.saveInfo.playerData.owlActivationFlags =
-        ((void)0, gSaveContext.save.saveInfo.playerData.owlActivationFlags) | (u16)gBitFlags[owlId];
+void Sram_ActivateOwl(u8 owlWarpId) {
+    SET_OWL_STATUE_ACTIVATED(owlWarpId);
 
-    if (gSaveContext.save.saveInfo.playerData.unk_20 == 0xFF) {
-        gSaveContext.save.saveInfo.playerData.unk_20 = owlId;
+    if (gSaveContext.save.saveInfo.playerData.owlWarpId == OWL_WARP_NONE) {
+        gSaveContext.save.saveInfo.playerData.owlWarpId = owlWarpId;
     }
 }
 
@@ -780,8 +779,8 @@ SavePlayerData sSaveDefaultPlayerData = {
     false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
-    0xFF,                                               // unk_20
-    0x0000,                                             // owlActivationFlags
+    OWL_WARP_NONE,                                      // owlWarpId
+    0,                                                  // owlActivationFlags
     0xFF,                                               // unk_24
     SCENE_SPOT00,                                       // savedSceneId
 };
@@ -956,7 +955,7 @@ SavePlayerData sSaveDebugPlayerData = {
     false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
-    0xFF,                                               // unk_20
+    OWL_WARP_NONE,                                      // owlWarpId
     0,                                                  // owlActivationFlags
     0xFF,                                               // unk_24
     SCENE_SPOT00,                                       // savedSceneId
@@ -1208,12 +1207,17 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
     gSaveContext.jinxTimer = 0;
 }
 
-u16 D_801C6A58[] = {
-    ENTRANCE(GREAT_BAY_COAST, 11), ENTRANCE(ZORA_CAPE, 6),
-    ENTRANCE(SNOWHEAD, 3),         ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),
-    ENTRANCE(SOUTH_CLOCK_TOWN, 9), ENTRANCE(MILK_ROAD, 4),
-    ENTRANCE(WOODFALL, 4),         ENTRANCE(SOUTHERN_SWAMP_POISONED, 10),
-    ENTRANCE(IKANA_CANYON, 4),     ENTRANCE(STONE_TOWER, 3),
+static u16 sOwlWarpEntrances[OWL_WARP_MAX - 1] = {
+    ENTRANCE(GREAT_BAY_COAST, 11),         // OWL_WARP_GREAT_BAY_COAST
+    ENTRANCE(ZORA_CAPE, 6),                // OWL_WARP_ZORA_CAPE
+    ENTRANCE(SNOWHEAD, 3),                 // OWL_WARP_SNOWHEAD
+    ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),  // OWL_WARP_MOUNTAIN_VILLAGE
+    ENTRANCE(SOUTH_CLOCK_TOWN, 9),         // OWL_WARP_CLOCK_TOWN
+    ENTRANCE(MILK_ROAD, 4),                // OWL_WARP_MILK_ROAD
+    ENTRANCE(WOODFALL, 4),                 // OWL_WARP_WOODFALL
+    ENTRANCE(SOUTHERN_SWAMP_POISONED, 10), // OWL_WARP_SOUTHERN_SWAMP
+    ENTRANCE(IKANA_CANYON, 4),             // OWL_WARP_IKANA_CANYON
+    ENTRANCE(STONE_TOWER, 3),              // OWL_WARP_STONE_TOWER
 };
 
 void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
@@ -1288,7 +1292,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         }
     } else {
-        gSaveContext.save.entrance = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
+        gSaveContext.save.entrance = sOwlWarpEntrances[(void)0, gSaveContext.save.owlWarpId];
         if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
             CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
@@ -1309,7 +1313,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.saveInfo.scarecrowSpawnSong,
                        sizeof(gSaveContext.save.saveInfo.scarecrowSpawnSong));
 
-            for (i = 0; i != ARRAY_COUNT(gSaveContext.save.saveInfo.scarecrowSpawnSong); i++) {}
+            for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.scarecrowSpawnSong); i++) {}
         }
 
         fileNum = gSaveContext.fileNum;
@@ -1389,7 +1393,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
     u16 maskCount;
 
     if (gSaveContext.flashSaveAvailable) {
-        D_801F6AF0 = gSaveContext.save.time;
+        D_801F6AF0 = CURRENT_TIME;
         D_801F6AF2 = gSaveContext.flashSaveAvailable;
         sp64 = 0;
 
@@ -1482,7 +1486,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     fileSelect->health[sp76] = gSaveContext.save.saveInfo.playerData.health;
                     fileSelect->defenseHearts[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
                     fileSelect->questItems[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
-                    fileSelect->time[sp76] = gSaveContext.save.time;
+                    fileSelect->time[sp76] = CURRENT_TIME;
                     fileSelect->day[sp76] = gSaveContext.save.day;
                     fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                     fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1596,7 +1600,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         fileSelect->health[sp76] = gSaveContext.save.saveInfo.playerData.health;
                         fileSelect->defenseHearts[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
                         fileSelect->questItems[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
-                        fileSelect->time[sp76] = gSaveContext.save.time;
+                        fileSelect->time[sp76] = CURRENT_TIME;
                         fileSelect->day[sp76] = gSaveContext.save.day;
                         fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                         fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1713,7 +1717,7 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
             fileSelect->defenseHearts[fileSelect->copyDestFileIndex + 2] =
                 gSaveContext.save.saveInfo.inventory.defenseHearts;
             fileSelect->questItems[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.inventory.questItems;
-            fileSelect->time[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.time;
+            fileSelect->time[fileSelect->copyDestFileIndex + 2] = CURRENT_TIME;
             fileSelect->day[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.day;
             fileSelect->isOwlSave[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.isOwlSave;
             fileSelect->rupees[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1754,7 +1758,7 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         fileSelect->health[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.health;
         fileSelect->defenseHearts[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.inventory.defenseHearts;
         fileSelect->questItems[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.inventory.questItems;
-        fileSelect->time[fileSelect->copyDestFileIndex] = gSaveContext.save.time;
+        fileSelect->time[fileSelect->copyDestFileIndex] = CURRENT_TIME;
         fileSelect->day[fileSelect->copyDestFileIndex] = gSaveContext.save.day;
         fileSelect->isOwlSave[fileSelect->copyDestFileIndex] = gSaveContext.save.isOwlSave;
         fileSelect->rupees[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1818,7 +1822,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         fileSelect->health[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.health;
         fileSelect->defenseHearts[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.inventory.defenseHearts;
         fileSelect->questItems[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.inventory.questItems;
-        fileSelect->time[fileSelect->buttonIndex] = gSaveContext.save.time;
+        fileSelect->time[fileSelect->buttonIndex] = CURRENT_TIME;
         fileSelect->day[fileSelect->buttonIndex] = gSaveContext.save.day;
         fileSelect->isOwlSave[fileSelect->buttonIndex] = gSaveContext.save.isOwlSave;
         fileSelect->rupees[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.rupees;
@@ -1890,7 +1894,7 @@ void Sram_SaveSpecialEnterClockTown(PlayState* play) {
 void Sram_SaveSpecialNewDay(PlayState* play) {
     s32 cutsceneIndex = gSaveContext.save.cutsceneIndex;
     s32 day;
-    u16 time = gSaveContext.save.time;
+    u16 time = CURRENT_TIME;
 
     day = gSaveContext.save.day;
 

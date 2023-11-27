@@ -388,7 +388,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
             this->dyna.actor.params = BIO_BABA_TYPE_LILY_PAD;
             this->actionFunc = Boss05_LilyPad_Idle;
             this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-            func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         }
     } else if (BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_LILY_PAD) {
         this->actionFunc = Boss05_LilyPad_Idle;
@@ -399,7 +399,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         SkelAnime_InitFlex(play, &this->lilyPadSkelAnime, &gBioDekuBabaLilyPadSkel, &gBioDekuBabaLilyPadIdleAnim,
                            this->lilyPadJointTable, this->lilyPadMorphTable, BIO_DEKU_BABA_LILY_PAD_LIMB_MAX);
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
     } else if (BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_FALLING_HEAD) {
         this->actionFunc = Boss05_FallingHead_Fall;
         this->fallingHeadLilyPadLimbScale = 1.0f;
@@ -781,7 +781,7 @@ void Boss05_LilyPadWithHead_Move(Boss05* this, PlayState* play) {
         this->dyna.actor.params = BIO_BABA_TYPE_LILY_PAD;
         this->actionFunc = Boss05_LilyPad_Idle;
         this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         if (this->forceDetachTimer != 0) {
             hitReaction = BIO_BABA_HEAD_HIT_REACTION_DEATCH;
         }

@@ -1406,7 +1406,7 @@ void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
 }
 
 void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
-    u8 talkState = talkState = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
     PlayerItemAction itemAction;
 

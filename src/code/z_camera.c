@@ -2041,10 +2041,10 @@ s32 Camera_Normal1(Camera* camera) {
     spD8.y -= focalActorHeight + roData->unk_00;
     spC4 = Camera_Vec3fMagnitude(&spD8);
 
-    if ((roData->unk_04 + roData->unk_08) < spC4) {
+    if (spC4 > (roData->unk_04 + roData->unk_08)) {
         spC4 = 1.0f;
     } else {
-        spC4 = spC4 / (roData->unk_04 + roData->unk_08);
+        spC4 /= roData->unk_04 + roData->unk_08;
     }
 
     spD0 = 0.2f;
@@ -7227,7 +7227,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
     };
 
     if ((CURRENT_DAY == 3) && (CutsceneManager_GetCurrentCsId() == -1)) {
-        time = gSaveContext.save.time;
+        time = CURRENT_TIME;
         timeSpeedOffset = gSaveContext.save.timeSpeedOffset;
 
         // Large earthquake created

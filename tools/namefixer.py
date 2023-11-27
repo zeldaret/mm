@@ -149,6 +149,7 @@ wordReplace = {
     "Actor_MarkForDeath": "Actor_Kill",
     "func_800B84D0": "Actor_TalkOfferAccepted",
     "Actor_ProcessTalkRequest": "Actor_TalkOfferAccepted",
+    "func_800BC154": "Actor_ChangeCategory",
     "func_8017D668": "Math3D_PointDistToLine2D",
 
     "THGA_GetSize": "THGA_GetRemaining",

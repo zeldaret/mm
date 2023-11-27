@@ -252,8 +252,19 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EffectBlureInit2 sBlureInit = {
-    0, 8, 0, { 255, 255, 150, 200 }, { 255, 255, 255, 64 }, { 255, 255, 150, 0 }, { 255, 255, 255, 0 }, 8,
-    0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
+    0,
+    EFFECT_BLURE_ELEMENT_FLAG_8,
+    0,
+    { 255, 255, 150, 200 },
+    { 255, 255, 255, 64 },
+    { 255, 255, 150, 0 },
+    { 255, 255, 255, 0 },
+    8,
+    0,
+    EFF_BLURE_DRAW_MODE_SMOOTH,
+    0,
+    { 0, 0, 0, 0 },
+    { 0, 0, 0, 0 },
 };
 
 void EnIk_Init(Actor* thisx, PlayState* play) {
@@ -916,11 +927,7 @@ void EnIk_Update(Actor* thisx, PlayState* play2) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.325f;
-            if ((this->drawDmgEffAlpha + 1.0f) * 0.325f > 0.65f) {
-                this->drawDmgEffScale = 0.65f;
-            } else {
-                this->drawDmgEffScale = this->drawDmgEffScale;
-            }
+            this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.65f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.65f, 0.01625f)) {
             Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }

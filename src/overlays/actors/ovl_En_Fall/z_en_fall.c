@@ -80,7 +80,7 @@ ActorInit En_Fall_InitVars = {
  * it also moves the moon closer to the ground depending on the current time.
  */
 void EnFall_Moon_AdjustScaleAndPosition(EnFall* this, PlayState* play) {
-    u16 currentTime = gSaveContext.save.time;
+    u16 currentTime = CURRENT_TIME;
     u16 dayStartTime = this->dayStartTime;
     f32 finalDayRelativeHeight;
 
@@ -504,7 +504,7 @@ void EnFall_Moon_PerformDefaultActions(EnFall* this, PlayState* play) {
         currentDay = CURRENT_DAY;
         if ((u16)this->currentDay != (u32)currentDay) {
             this->currentDay = currentDay;
-            this->dayStartTime = gSaveContext.save.time;
+            this->dayStartTime = CURRENT_TIME;
         }
         EnFall_Moon_AdjustScaleAndPosition(this, play);
     }

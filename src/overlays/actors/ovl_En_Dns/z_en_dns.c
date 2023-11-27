@@ -308,7 +308,7 @@ s32 func_8092CCEC(EnDns* this, PlayState* play) {
 
 s32 func_8092CE38(EnDns* this) {
     static s32 D_8092DE00[] = { EN_DNS_ANIM_DANCE, EN_DNS_ANIM_DANCE, EN_DNS_ANIM_FLIP };
-    s16 rotVelocity;
+    s16 angularVelocity;
     s32 pad;
     Vec3f sp2C;
     s32 ret = false;
@@ -333,10 +333,10 @@ s32 func_8092CE38(EnDns* this) {
                 this->actor.shape.rot.y = this->actor.world.rot.y;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_JUMP);
             } else if (this->skelAnime.curFrame < 13.0f) {
-                rotVelocity = this->skelAnime.curFrame;
+                angularVelocity = this->skelAnime.curFrame;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                rotVelocity *= 0x9D8;
-                this->actor.shape.rot.y += rotVelocity;
+                angularVelocity *= 0x9D8;
+                this->actor.shape.rot.y += angularVelocity;
                 this->unk_2E4 -= -(40.0f / 13.0f);
             }
         } else {

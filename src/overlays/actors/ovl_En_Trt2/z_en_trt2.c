@@ -16,7 +16,7 @@ void EnTrt2_Destroy(Actor* thisx, PlayState* play);
 void EnTrt2_Update(Actor* thisx, PlayState* play);
 
 void func_80AD46F8(EnTrt2* this);
-s32 func_80AD475C(EnTrt2* this, Path* path, s32 arg2);
+s32 EnTrt2_HasReachedPoint(EnTrt2* this, Path* path, s32 pointIndex);
 s16 func_80AD48F8(Path* path, s32 arg1, Vec3f* arg2, f32* arg3);
 f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 void func_80AD4A78(EnTrt2* this, PlayState* play);
@@ -170,7 +170,7 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 1000, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        if (func_80AD475C(this, this->path, this->unk_1E4)) {
+        if (EnTrt2_HasReachedPoint(this, this->path, this->unk_1E4)) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
                 this->unk_1E4 = 0;
             } else {
@@ -261,7 +261,7 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Math_SmoothStepToS(&this->actor.shape.rot.x, sp30.x, 4, 1000, 1);
         this->actor.world.rot.x = -this->actor.shape.rot.x;
-        if (func_80AD475C(this, this->path, this->unk_1E4)) {
+        if (EnTrt2_HasReachedPoint(this, this->path, this->unk_1E4)) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
                 CutsceneManager_Stop(this->csId);
                 this->unk_3D9 = 2;
@@ -565,40 +565,38 @@ void func_80AD46F8(EnTrt2* this) {
     }
 }
 
-s32 func_80AD475C(EnTrt2* this, Path* path, s32 arg2) {
-    Vec3s* points;
-    s32 count;
-    f32 phi_f12;
-    s32 ret;
-    f32 phi_f14;
-    s32 arg = arg2;
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
-    Vec3f sp30;
+s32 EnTrt2_HasReachedPoint(EnTrt2* this, Path* path, s32 pointIndex) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 count = path->count;
+    s32 index = pointIndex;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    points = Lib_SegmentedToVirtual(path->points);
-    count = path->count;
-    ret = false;
-    Math_Vec3s_ToVec3f(&sp30, &points[arg]);
+    Math_Vec3s_ToVec3f(&point, &points[index]);
 
-    if (arg == 0) {
-        phi_f12 = points[1].x - points[0].x;
-        phi_f14 = points[1].z - points[0].z;
-    } else if ((count - 1) == arg) {
-        phi_f12 = points[count - 1].x - points[count - 2].x;
-        phi_f14 = points[count - 1].z - points[count - 2].z;
+    if (index == 0) {
+        diffX = points[1].x - points[0].x;
+        diffZ = points[1].z - points[0].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 1].x - points[count - 2].x;
+        diffZ = points[count - 1].z - points[count - 2].z;
     } else {
-        phi_f12 = points[arg + 1].x - points[arg - 1].x;
-        phi_f14 = points[arg + 1].z - points[arg - 1].z;
+        diffX = points[index + 1].x - points[index - 1].x;
+        diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
-    if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        ret = true;
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
-    return ret;
+
+    return reached;
 }
 
 s16 func_80AD48F8(Path* path, s32 arg1, Vec3f* arg2, f32* arg3) {
@@ -622,15 +620,15 @@ s16 func_80AD48F8(Path* path, s32 arg1, Vec3f* arg2, f32* arg3) {
 f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
     s32 pad;
     Vec3f sp20;
-    Vec3s* temp_v1;
+    Vec3s* points;
 
     if (path != NULL) {
-        temp_v1 = Lib_SegmentedToVirtual(path->points);
-        temp_v1 = &temp_v1[arg1];
+        points = Lib_SegmentedToVirtual(path->points);
+        points = &points[arg1];
 
-        sp20.x = temp_v1->x;
-        sp20.y = temp_v1->y;
-        sp20.z = temp_v1->z;
+        sp20.x = points->x;
+        sp20.y = points->y;
+        sp20.z = points->z;
     }
     arg3->y = Math_Vec3f_Yaw(arg2, &sp20);
     arg3->x = Math_Vec3f_Pitch(arg2, &sp20);

@@ -730,7 +730,7 @@ void func_8091EFE8(Actor* thisx, PlayState* play) {
     temp_v0_2 = BINANG_SUB(this->unk_268, this->actor.shape.rot.x);
     temp_v0_2 = ABS_ALT(temp_v0_2);
 
-    temp_v0_2 = temp_v0_2 / 11;
+    temp_v0_2 /= 11;
     if (temp_v0_2 > 800) {
         temp_v0_2 = 800;
     } else if (temp_v0_2 < 100) {

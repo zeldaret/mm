@@ -525,7 +525,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
             (gSaveContext.save.entrance != ENTRANCE(NORTH_CLOCK_TOWN, 7)) &&
             (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != BOMB_SHOP_LADY_PATH_INDEX_NONE)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_40) ||
-                (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
+                ((CURRENT_TIME >= CLOCK_TIME(0, 20)) && (CURRENT_TIME < CLOCK_TIME(6, 0)))) {
                 Actor_Kill(&this->actor);
                 return;
             }

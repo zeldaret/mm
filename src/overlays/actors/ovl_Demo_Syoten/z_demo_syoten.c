@@ -141,10 +141,10 @@ void func_80C16760(DemoSyoten* this, PlayState* play) {
     Vec3f sp2C;
 
     this->unk_3EC = 0;
-    if (DEMOSYOTEN_GET_7E00(&this->actor) != DEMOSYOTEN_7E00_3F) {
-        this->unk_3E8 = &play->setupPathList[DEMOSYOTEN_GET_7E00(&this->actor)];
-        if (this->unk_3E8 != NULL) {
-            points = Lib_SegmentedToVirtual(this->unk_3E8->points);
+    if (DEMOSYOTEN_GET_PATH_INDEX(&this->actor) != DEMOSYOTEN_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[DEMOSYOTEN_GET_PATH_INDEX(&this->actor)];
+        if (this->path != NULL) {
+            points = Lib_SegmentedToVirtual(this->path->points);
             Math_Vec3s_ToVec3f(&this->actor.world.pos, &points[0]);
             this->unk_3EC++;
             points++;
@@ -153,13 +153,13 @@ void func_80C16760(DemoSyoten* this, PlayState* play) {
             this->actor.world.rot.x = Math_Vec3f_Pitch(&this->actor.world.pos, &sp2C);
         }
     } else {
-        this->unk_3E8 = NULL;
+        this->path = NULL;
     }
 }
 
 s32 func_80C16818(DemoSyoten* this) {
     s32 pad;
-    Path* path = this->unk_3E8;
+    Path* path = this->path;
     Vec3s* points;
     Vec3f sp28;
 
@@ -167,7 +167,7 @@ s32 func_80C16818(DemoSyoten* this) {
         return true;
     }
 
-    points = Lib_SegmentedToVirtual(this->unk_3E8->points);
+    points = Lib_SegmentedToVirtual(this->path->points);
     points += this->unk_3EC;
     Math_Vec3s_ToVec3f(&sp28, points);
     this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &sp28);
@@ -181,14 +181,14 @@ s32 func_80C16818(DemoSyoten* this) {
 
 void func_80C168D0(DemoSyoten* this, PlayState* play) {
     s32 pad;
-    Path* path = this->unk_3E8;
+    Path* path = this->path;
     Vec3s* points;
     Vec3f worldPos;
     Vec3f projectedPos;
     f32 invW;
 
     if (path != NULL) {
-        points = Lib_SegmentedToVirtual(this->unk_3E8->points);
+        points = Lib_SegmentedToVirtual(this->path->points);
         points += this->unk_3EC;
         Math_Vec3s_ToVec3f(&worldPos, points);
         Actor_GetProjectedPos(play, &worldPos, &projectedPos, &invW);
@@ -247,6 +247,9 @@ void func_80C16A74(DemoSyoten* this, PlayState* play) {
 
                 case 4:
                     this->actor.draw = NULL;
+                    break;
+
+                default:
                     break;
             }
         }
@@ -315,7 +318,7 @@ void func_80C16BD4(DemoSyoten* this, PlayState* play) {
             case 4:
                 this->actor.speed =
                     play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->rot.z * 0.005493164f;
-                if (this->unk_3EC < this->unk_3E8->count) {
+                if (this->unk_3EC < this->path->count) {
                     if (func_80C16818(this)) {
                         this->unk_3EC++;
                     }
