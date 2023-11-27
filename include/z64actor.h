@@ -289,7 +289,7 @@ typedef enum {
 } ActorType;
 
 #define ACTORCTX_FLAG_0 (1 << 0)
-#define ACTORCTX_FLAG_1 (1 << 1)
+#define ACTORCTX_FLAG_TELESCOPE_ON (1 << 1)
 #define ACTORCTX_FLAG_PICTO_BOX_ON (1 << 2)
 #define ACTORCTX_FLAG_3 (1 << 3)
 #define ACTORCTX_FLAG_4 (1 << 4)
@@ -382,7 +382,7 @@ typedef struct ActorContextSceneFlags {
 typedef struct ActorListEntry {
     /* 0x0 */ s32 length; // number of actors loaded of this type
     /* 0x4 */ Actor* first; // pointer to first actor of this type
-    /* 0x8 */ s32 unk_08;
+    /* 0x8 */ s32 categoryChanged; // at least one actor has changed categories and needs to be moved to a different list
 } ActorListEntry; // size = 0xC
 
 typedef enum {

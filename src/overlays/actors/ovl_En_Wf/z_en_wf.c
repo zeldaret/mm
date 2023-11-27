@@ -339,7 +339,7 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
         func_80992FD4(this);
     }
 
-    func_800BC154(play, &play->actorCtx, &this->actor, 5);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
 
     if (D_809942D8 == 0) {
         for (i = 0; i < ARRAY_COUNT(sNormalEyeTextures); i++) {

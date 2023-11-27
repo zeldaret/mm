@@ -1,6 +1,7 @@
 #include "global.h"
 #include "fault.h"
-#include "fixed_point.h"
+#include "libc64/fixed_point.h"
+#include "libc64/sprintf.h"
 #include "vt.h"
 
 #define DYNA_RAYCAST_FLOORS 1

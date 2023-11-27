@@ -4,7 +4,7 @@
 #include "gfx.h"
 #include "regs.h"
 #include "sys_cfb.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "z64game.h"
 #include "z64malloc.h"
 #include "z64view.h"
@@ -240,7 +240,7 @@ void SpeedMeter_DrawAllocEntries(SpeedMeter* meter, GraphicsContext* gfxCtx, Gam
     }
 
     if (R_ENABLE_ARENA_DBG > 1) {
-        SystemArena_GetSizes((size_t*)&sysFreeMax, (size_t*)&sysFree, (size_t*)&sysAlloc);
+        GetFreeArena((size_t*)&sysFreeMax, (size_t*)&sysFree, (size_t*)&sysAlloc);
         SpeedMeter_InitAllocEntry(&entry, sysFree + sysAlloc - state->tha.size, sysAlloc - state->tha.size,
                                   GPACK_RGBA5551(0, 0, 255, 1), GPACK_RGBA5551(255, 128, 128, 1), ulx, lrx, y, y);
         SpeedMeter_DrawAllocEntry(&entry, gfxCtx);

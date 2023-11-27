@@ -116,7 +116,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     this->actor.csId = this->csIdList[0];
 
     // between midnight and morning start spawned
-    if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_TIME < CLOCK_TIME(6, 0)) {
         this->alpha = 255;
     } else { // else (night 6pm to midnight): wait to appear
         this->alpha = 0;
@@ -392,7 +392,7 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
 }
 
 void EnYb_WaitForMidnight(EnYb* this, PlayState* play) {
-    if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_TIME < CLOCK_TIME(6, 0)) {
         EnYb_UpdateAnimation(this, play);
         this->alpha += 5;
         if (this->alpha > 250) {

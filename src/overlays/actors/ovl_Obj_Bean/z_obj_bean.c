@@ -382,7 +382,7 @@ void ObjBean_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        func_800BC154(play, &play->actorCtx, &this->dyna.actor, 7);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_ITEMACTION);
         func_80937DD8(this);
     } else {
         s32 params2 = OBJBEAN_GET_3F00(&this->dyna.actor);

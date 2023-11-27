@@ -39,6 +39,8 @@
 #define ROM_FILE_UNSET \
     { 0 }
 
+DECLARE_SEGMENT(framebuffer_lo)
+
 DECLARE_SEGMENT(boot)
 DECLARE_ROM_SEGMENT(boot)
 
@@ -77,6 +79,8 @@ DECLARE_ROM_SEGMENT(staff_message_data_static)
 DECLARE_SEGMENT(code)
 DECLARE_ROM_SEGMENT(code)
 DECLARE_BSS_SEGMENT(code)
+
+DECLARE_SEGMENT(system_heap)
 
 DECLARE_OVERLAY_SEGMENT(kaleido_scope)
 DECLARE_OVERLAY_SEGMENT(player_actor)

@@ -1129,14 +1129,14 @@ void Message_DecodeNES(PlayState* play) {
             decodedBufPos--;
         } else if (curChar == 0xCA) {
             digits[0] = 0;
-            digits[1] = TIME_TO_MINUTES_F(gSaveContext.save.time) / 60.0f;
+            digits[1] = TIME_TO_MINUTES_F(CURRENT_TIME) / 60.0f;
             while (digits[1] >= 10) {
                 digits[0]++;
                 digits[1] -= 10;
             }
 
             digits[2] = 0;
-            digits[3] = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
+            digits[3] = (s32)TIME_TO_MINUTES_F(CURRENT_TIME) % 60;
             while (digits[3] >= 10) {
                 digits[2]++;
                 digits[3] -= 10;
