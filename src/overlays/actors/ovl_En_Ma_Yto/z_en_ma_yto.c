@@ -234,7 +234,7 @@ s32 EnMaYto_CheckValidSpawn(EnMaYto* this, PlayState* play) {
             } else if (((this->actor.params & 0x0F00) >> 8) == 0) {
                 return false;
             }
-            if ((gSaveContext.save.time >= CLOCK_TIME(20, 0)) && (CURRENT_DAY == 3)) {
+            if ((CURRENT_TIME >= CLOCK_TIME(20, 0)) && (CURRENT_DAY == 3)) {
                 return false;
             }
             break;
