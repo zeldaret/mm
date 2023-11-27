@@ -199,7 +199,7 @@ void EnRailgibud_SpawnOtherGibdosAndSetPositionAndRotation(EnRailgibud* this, Pl
     Vec3f targetPos;
     Path* path = &play->setupPathList[ENRAILGIBUD_GET_PATH_INDEX(&this->actor)];
 
-    this->points = Lib_SegmentedToVirtual(path->points);
+    this->pathPoints = Lib_SegmentedToVirtual(path->points);
     this->currentPoint = sCurrentGibdoIndex;
     this->pathCount = path->count;
 
@@ -219,18 +219,18 @@ void EnRailgibud_SpawnOtherGibdosAndSetPositionAndRotation(EnRailgibud* this, Pl
         sCurrentGibdoIndex = 0;
     }
 
-    this->actor.world.pos.x = this->points[this->currentPoint].x;
-    this->actor.world.pos.y = this->points[this->currentPoint].y;
-    this->actor.world.pos.z = this->points[this->currentPoint].z;
+    this->actor.world.pos.x = this->pathPoints[this->currentPoint].x;
+    this->actor.world.pos.y = this->pathPoints[this->currentPoint].y;
+    this->actor.world.pos.z = this->pathPoints[this->currentPoint].z;
     if (this->currentPoint < (this->pathCount - 1)) {
         nextPoint = this->currentPoint + 1;
     } else {
         nextPoint = 0;
     }
 
-    targetPos.x = this->points[nextPoint].x;
-    targetPos.y = this->points[nextPoint].y;
-    targetPos.z = this->points[nextPoint].z;
+    targetPos.x = this->pathPoints[nextPoint].x;
+    targetPos.y = this->pathPoints[nextPoint].y;
+    targetPos.z = this->pathPoints[nextPoint].z;
     this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &targetPos);
 
     this->actor.home = this->actor.world;
@@ -257,7 +257,7 @@ void EnRailgibud_Init(Actor* thisx, PlayState* play) {
 
     EnRailgibud_SpawnOtherGibdosAndSetPositionAndRotation(this, play);
     this->playerStunWaitTimer = 0;
-    this->timeInitialized = gSaveContext.save.time;
+    this->timeInitialized = CURRENT_TIME;
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     this->type = EN_RAILGIBUD_TYPE_GIBDO;
     this->textId = 0;
@@ -297,9 +297,9 @@ void EnRailgibud_WalkInCircles(EnRailgibud* this, PlayState* play) {
     s32 pad;
     s16 yRotation;
 
-    targetPos.x = this->points[this->currentPoint].x;
-    targetPos.y = this->points[this->currentPoint].y;
-    targetPos.z = this->points[this->currentPoint].z;
+    targetPos.x = this->pathPoints[this->currentPoint].x;
+    targetPos.y = this->pathPoints[this->currentPoint].y;
+    targetPos.z = this->pathPoints[this->currentPoint].z;
 
     if ((this->actor.xzDistToPlayer <= 100.0f) && func_800B715C(play) && (Player_GetMask(play) != PLAYER_MASK_GIBDO)) {
         this->actor.home = this->actor.world;
@@ -312,8 +312,7 @@ void EnRailgibud_WalkInCircles(EnRailgibud* this, PlayState* play) {
     // If we're not supposed to walk forward, then stop here;
     // don't rotate the Gibdo or move it around.
     if (this->actor.parent == NULL) {
-        if (this->shouldWalkForward) {
-        } else {
+        if (!this->shouldWalkForward) {
             return;
         }
     } else {

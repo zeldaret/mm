@@ -2107,7 +2107,7 @@ void Boss01_SetupDeathCutscene(Boss01* this, PlayState* play) {
     this->cutsceneState = ODOLWA_DEATH_CS_STATE_STARTED;
     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
     sMothSwarm->unk_144 = 250;
-    func_800BC154(play, &play->actorCtx, &sMothSwarm->actor, ACTORCAT_BOSS);
+    Actor_ChangeCategory(play, &play->actorCtx, &sMothSwarm->actor, ACTORCAT_BOSS);
 }
 
 /**

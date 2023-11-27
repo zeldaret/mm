@@ -58,7 +58,7 @@ s32 func_80C07CD0(void) {
     }
 
     if (CURRENT_DAY == 1) {
-        s32 time = gSaveContext.save.time;
+        s32 time = CURRENT_TIME;
         s32 i;
 
         if ((time < CLOCK_TIME(2, 30)) || (time >= CLOCK_TIME(6, 0))) {
@@ -111,7 +111,7 @@ void func_80C07F30(ObjUsiyane* this, PlayState* play) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_168[0]); i++) {
         for (j = 0; j < ARRAY_COUNT(this->unk_168); j++) {
-            if (i != ARRAY_COUNT(this->unk_168[0]) - 1) {
+            if (i != (ARRAY_COUNT(this->unk_168[0]) - 1)) {
                 func_80C07DFC(&this->unk_710[i], &D_80C08660[i].rot, &this->unk_710[i + 1], &D_80C08660[i + 1].rot, j,
                               10, &this->unk_168[j][i].unk_00, &this->unk_168[j][i].unk_18);
             } else {

@@ -123,10 +123,10 @@ s32 EnRuppecrow_UpdateCollision(EnRuppecrow* this, PlayState* play) {
     return true;
 }
 
-s32 EnRuppecrow_ReachedPointClockwise(EnRuppecrow* this, Path* path, s32 pointIndex) {
+s32 EnRuppecrow_HasReachedPointClockwise(EnRuppecrow* this, Path* path, s32 pointIndex) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
-    s32 pathCount = path->count;
-    s32 currentPoint = pointIndex;
+    s32 count = path->count;
+    s32 index = pointIndex;
     s32 reached = false;
     f32 diffX;
     f32 diffZ;
@@ -135,31 +135,32 @@ s32 EnRuppecrow_ReachedPointClockwise(EnRuppecrow* this, Path* path, s32 pointIn
     f32 d;
     Vec3f point;
 
-    Math_Vec3s_ToVec3f(&point, &points[currentPoint]);
+    Math_Vec3s_ToVec3f(&point, &points[index]);
 
-    if (currentPoint == 0) {
+    if (index == 0) {
         diffX = points[1].x - points[0].x;
         diffZ = points[1].z - points[0].z;
-    } else if (currentPoint == (pathCount - 1)) {
-        diffX = points[pathCount - 1].x - points[pathCount - 2].x;
-        diffZ = points[pathCount - 1].z - points[pathCount - 2].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 1].x - points[count - 2].x;
+        diffZ = points[count - 1].z - points[count - 2].z;
     } else {
-        diffX = points[currentPoint + 1].x - points[currentPoint - 1].x;
-        diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
+        diffX = points[index + 1].x - points[index - 1].x;
+        diffZ = points[index + 1].z - points[index - 1].z;
     }
 
     func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
-    if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }
 
     return reached;
 }
 
-s32 EnRuppecrow_ReachedPointCounterClockwise(EnRuppecrow* this, Path* path, s32 pointIndex) {
+s32 EnRuppecrow_HasReachedPointCounterClockwise(EnRuppecrow* this, Path* path, s32 pointIndex) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
-    s32 pathCount = path->count;
-    s32 currentPoint = pointIndex;
+    s32 count = path->count;
+    s32 index = pointIndex;
     s32 reached = false;
     f32 diffX;
     f32 diffZ;
@@ -168,21 +169,22 @@ s32 EnRuppecrow_ReachedPointCounterClockwise(EnRuppecrow* this, Path* path, s32 
     f32 d;
     Vec3f point;
 
-    Math_Vec3s_ToVec3f(&point, &points[currentPoint]);
+    Math_Vec3s_ToVec3f(&point, &points[index]);
 
-    if (currentPoint == 0) {
+    if (index == 0) {
         diffX = points[0].x - points[1].x;
         diffZ = points[0].z - points[1].z;
-    } else if (currentPoint == (pathCount - 1)) {
-        diffX = points[pathCount - 2].x - points[pathCount - 1].x;
-        diffZ = points[pathCount - 2].z - points[pathCount - 1].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 2].x - points[count - 1].x;
+        diffZ = points[count - 2].z - points[count - 1].z;
     } else {
-        diffX = points[currentPoint - 1].x - points[currentPoint + 1].x;
-        diffZ = points[currentPoint - 1].z - points[currentPoint + 1].z;
+        diffX = points[index - 1].x - points[index + 1].x;
+        diffZ = points[index - 1].z - points[index + 1].z;
     }
 
     func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
-    if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }
 
@@ -323,7 +325,7 @@ void EnRuppecrow_UpdatePosition(EnRuppecrow* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.x, -nextPointDirection.x, 0x4, 0x3E8, 0x1);
 
     if (this->isGoingCounterClockwise & 1) {
-        if (EnRuppecrow_ReachedPointCounterClockwise(this, this->path, this->currentPoint)) {
+        if (EnRuppecrow_HasReachedPointCounterClockwise(this, this->path, this->currentPoint)) {
             if (this->currentPoint <= 0) {
                 this->currentPoint = this->path->count - 1;
             } else {
@@ -335,7 +337,7 @@ void EnRuppecrow_UpdatePosition(EnRuppecrow* this, PlayState* play) {
                 EnRuppecrow_SpawnRupee(this, play);
             }
         }
-    } else if (EnRuppecrow_ReachedPointClockwise(this, this->path, this->currentPoint)) {
+    } else if (EnRuppecrow_HasReachedPointClockwise(this, this->path, this->currentPoint)) {
         if (this->currentPoint >= this->path->count - 1) {
             this->currentPoint = 0;
         } else {

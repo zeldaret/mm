@@ -352,7 +352,7 @@ s32 func_80B781DC(ObjUm* this, EnHorse* bandit1, EnHorse* bandit2, PlayState* pl
 
 // ObjUm_Bandit_UpdatePosition?
 s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit) {
-    Path* sp6C = &play->setupPathList[this->pathIndex];
+    Path* path = &play->setupPathList[this->pathIndex];
     s32 sp68;
     Vec3s* sp64;
     f32 phi_f12;
@@ -365,8 +365,8 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
     f32 sp3C;
     f32 phi_f14;
 
-    sp68 = sp6C->count;
-    sp64 = Lib_SegmentedToVirtual(sp6C->points);
+    sp68 = path->count;
+    sp64 = Lib_SegmentedToVirtual(path->points);
 
     if (sp68 == 0) {
         return 0;
@@ -389,14 +389,12 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
     if (bandit->curRaceWaypoint == 0) {
         phi_f12 = sp64[1].x - sp64[0].x;
         phi_f14 = sp64[1].z - sp64[0].z;
+    } else if ((bandit->curRaceWaypoint + 1) == path->count) {
+        phi_f12 = sp64[path->count - 1].x - sp64[path->count - 2].x;
+        phi_f14 = sp64[path->count - 1].z - sp64[path->count - 2].z;
     } else {
-        if ((bandit->curRaceWaypoint + 1) == sp6C->count) {
-            phi_f12 = sp64[sp6C->count - 1].x - sp64[sp6C->count - 2].x;
-            phi_f14 = sp64[sp6C->count - 1].z - sp64[sp6C->count - 2].z;
-        } else {
-            phi_f12 = sp64[bandit->curRaceWaypoint + 1].x - sp64[bandit->curRaceWaypoint - 1].x;
-            phi_f14 = sp64[bandit->curRaceWaypoint + 1].z - sp64[bandit->curRaceWaypoint - 1].z;
-        }
+        phi_f12 = sp64[bandit->curRaceWaypoint + 1].x - sp64[bandit->curRaceWaypoint - 1].x;
+        phi_f14 = sp64[bandit->curRaceWaypoint + 1].z - sp64[bandit->curRaceWaypoint - 1].z;
     }
 
     temp_a1 = Math_Atan2S(phi_f12, phi_f14);
@@ -433,7 +431,7 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
         phi_v1_2 = -0x190;
     }
 
-    bandit->actor.shape.rot.y = bandit->actor.shape.rot.y + phi_v1_2;
+    bandit->actor.shape.rot.y += phi_v1_2;
     return 0;
 }
 
@@ -701,8 +699,8 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         } else {
             // Waiting for player
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || (gSaveContext.save.time >= CLOCK_TIME(19, 0)) ||
-                (gSaveContext.save.time <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) ||
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || (CURRENT_TIME >= CLOCK_TIME(19, 0)) ||
+                (CURRENT_TIME <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
                 Actor_Kill(&this->dyna.actor);
                 return;
@@ -999,11 +997,11 @@ void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     this->flags |= OBJ_UM_FLAG_WAITING;
-    if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= CLOCK_TIME(19, 0))) {
+    if ((CURRENT_TIME > CLOCK_TIME(18, 0)) && (CURRENT_TIME <= CLOCK_TIME(19, 0))) {
         if (!(player->stateFlags1 & PLAYER_STATE1_800000)) {
             func_80B7984C(play, this, 0, &this->unk_2B4);
         }
-    } else if (!func_80B79A24(this->unk_2B4) && (gSaveContext.save.time > CLOCK_TIME(19, 0))) {
+    } else if (!func_80B79A24(this->unk_2B4) && (CURRENT_TIME > CLOCK_TIME(19, 0))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_34_80);
         ObjUm_SetupAction(this, ObjUm_RanchWaitPathFinished);
     }
@@ -1105,17 +1103,17 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
             if (fabsf(yawDiff) < 100.0f) {
                 this->dyna.actor.shape.rot.y = this->donkey->actor.shape.rot.y;
             } else if (yawDiff > 0) {
-                this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x64;
+                this->dyna.actor.shape.rot.y += 0x64;
                 yawDiff = 0x64;
             } else if (yawDiff < 0) {
-                this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x64;
+                this->dyna.actor.shape.rot.y -= 0x64;
                 yawDiff = -0x64;
             }
         } else if (yawDiff > 0) {
-            this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x190;
+            this->dyna.actor.shape.rot.y += 0x190;
             yawDiff = 0x190;
         } else if (yawDiff < 0) {
-            this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x190;
+            this->dyna.actor.shape.rot.y -= 0x190;
             yawDiff = -0x190;
         }
 
@@ -1163,7 +1161,7 @@ void ObjUm_RanchStartCs(ObjUm* this, PlayState* play) {
 
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        this->lastTime = gSaveContext.save.time;
+        this->lastTime = CURRENT_TIME;
         ObjUm_SetupAction(this, func_80B7A0E0);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);
@@ -1189,7 +1187,7 @@ void func_80B7A070(ObjUm* this, PlayState* play) {
 
 void func_80B7A0E0(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
         ObjUm_SetupAction(this, func_80B7A070);
     }
@@ -1231,11 +1229,11 @@ void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, PlayState* play) {
 
 void func_80B7A240(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
 
-    this->lastTime = gSaveContext.save.time;
+    this->lastTime = CURRENT_TIME;
     ObjUm_PreMilkRunDialogueHandler(this, play);
 }
 
@@ -1253,11 +1251,11 @@ void func_80B7A2AC(ObjUm* this, PlayState* play) {
             break;
 
         default:
-            if (gSaveContext.save.time == this->lastTime) {
+            if (CURRENT_TIME == this->lastTime) {
                 ObjUm_SetupAction(this, func_80B7A240);
             }
 
-            this->lastTime = gSaveContext.save.time;
+            this->lastTime = CURRENT_TIME;
             Actor_MoveWithGravity(&this->dyna.actor);
             ObjUm_PreMilkRunDialogueHandler(this, play);
             break;
@@ -1267,7 +1265,7 @@ void func_80B7A2AC(ObjUm* this, PlayState* play) {
 void func_80B7A394(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0004;
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
@@ -1281,7 +1279,7 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, PlayState* play) {
     player->stateFlags1 |= PLAYER_STATE1_20;
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        this->lastTime = gSaveContext.save.time;
+        this->lastTime = CURRENT_TIME;
         ObjUm_SetupAction(this, func_80B7A394);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);
@@ -1492,11 +1490,11 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
 
 void func_80B7AB78(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7ABE4);
     }
 
-    this->lastTime = gSaveContext.save.time;
+    this->lastTime = CURRENT_TIME;
     func_80B7A860(this, play);
 }
 
@@ -1510,11 +1508,11 @@ void func_80B7ABE4(ObjUm* this, PlayState* play) {
             break;
 
         default:
-            if (gSaveContext.save.time == this->lastTime) {
+            if (CURRENT_TIME == this->lastTime) {
                 ObjUm_SetupAction(this, func_80B7AB78);
             }
 
-            this->lastTime = gSaveContext.save.time;
+            this->lastTime = CURRENT_TIME;
             Actor_MoveWithGravity(&this->dyna.actor);
             func_80B7A860(this, play);
             break;
@@ -1531,7 +1529,7 @@ void ObjUm_StartCs(ObjUm* this, PlayState* play) {
 
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        this->lastTime = gSaveContext.save.time;
+        this->lastTime = CURRENT_TIME;
         ObjUm_SetupAction(this, func_80B7ABE4);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);

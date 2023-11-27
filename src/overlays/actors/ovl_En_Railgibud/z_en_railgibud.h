@@ -39,7 +39,7 @@ typedef struct EnRailgibud {
     /* 0x1D8 */ Vec3f bodyPartsPos[ENRAILGIBUD_BODYPART_MAX];
     /* 0x28C */ s32 bodyPartIndex;
     /* 0x290 */ UNK_TYPE1 unk290[0x4];
-    /* 0x294 */ Vec3s* points;
+    /* 0x294 */ Vec3s* pathPoints;
     /* 0x298 */ s32 currentPoint;
     /* 0x29C */ s32 pathCount;
     /* 0x2A0 */ f32 drawDmgEffAlpha;

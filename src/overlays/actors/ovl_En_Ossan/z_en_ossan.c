@@ -208,7 +208,7 @@ void EnOssan_CheckValidSpawn(EnOssan* this) {
     switch (gSaveContext.save.day) {
         case 1:
         case 2:
-            if ((gSaveContext.save.time <= CLOCK_TIME(21, 30)) && (gSaveContext.save.time > CLOCK_TIME(6, 00))) {
+            if ((CURRENT_TIME <= CLOCK_TIME(21, 30)) && (CURRENT_TIME > CLOCK_TIME(6, 0))) {
                 if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
                     Actor_Kill(&this->actor);
                 }
@@ -221,7 +221,7 @@ void EnOssan_CheckValidSpawn(EnOssan* this) {
             if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
                 Actor_Kill(&this->actor);
             }
-            if ((gSaveContext.save.time > CLOCK_TIME(22, 00)) || (gSaveContext.save.time < CLOCK_TIME(6, 00))) {
+            if ((CURRENT_TIME > CLOCK_TIME(22, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0))) {
                 if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
                     Actor_Kill(&this->actor);
                 }

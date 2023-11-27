@@ -116,7 +116,7 @@ void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
 }
 
 void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
-    Path* path = &play->setupPathList[ENJGAMETSN_GET_FF(&this->actor)];
+    Path* path = &play->setupPathList[ENJGAMETSN_GET_PATH_INDEX(&this->actor)];
     s32 i;
 
     if (path == NULL) {
@@ -176,8 +176,8 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
                 Message_StartTextbox(play, 0x10A3, &this->actor);
                 this->unk_300 = 0x10A3;
             }
-        } else if (((gSaveContext.save.time > CLOCK_TIME(4, 0)) && (gSaveContext.save.time < CLOCK_TIME(7, 0))) ||
-                   ((gSaveContext.save.time > CLOCK_TIME(16, 0)) && (gSaveContext.save.time < CLOCK_TIME(19, 0)))) {
+        } else if (((CURRENT_TIME > CLOCK_TIME(4, 0)) && (CURRENT_TIME < CLOCK_TIME(7, 0))) ||
+                   ((CURRENT_TIME > CLOCK_TIME(16, 0)) && (CURRENT_TIME < CLOCK_TIME(19, 0)))) {
             Message_StartTextbox(play, 0x1094, &this->actor);
             this->unk_300 = 0x1094;
         } else if (this->unk_2F8 == 0) {
@@ -217,8 +217,8 @@ void func_80C13E6C(EnJgameTsn* this) {
 void func_80C13E90(EnJgameTsn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        if (((gSaveContext.save.time > CLOCK_TIME(4, 0)) && (gSaveContext.save.time < CLOCK_TIME(7, 0))) ||
-            ((gSaveContext.save.time > CLOCK_TIME(16, 0)) && (gSaveContext.save.time < CLOCK_TIME(19, 0)))) {
+        if (((CURRENT_TIME > CLOCK_TIME(4, 0)) && (CURRENT_TIME < CLOCK_TIME(7, 0))) ||
+            ((CURRENT_TIME > CLOCK_TIME(16, 0)) && (CURRENT_TIME < CLOCK_TIME(19, 0)))) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENJGAMETSN_ANIM_2);
             Message_StartTextbox(play, 0x1094, &this->actor);
             this->unk_300 = 0x1094;

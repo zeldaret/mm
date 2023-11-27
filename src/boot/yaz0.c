@@ -1,5 +1,7 @@
 #include "global.h"
 #include "fault.h"
+#include "libc64/sprintf.h"
+#include "libc64/sleep.h"
 
 u8 sYaz0DataBuffer[0x400] ALIGNED(16);
 u8* sYaz0CurDataEnd;
@@ -83,7 +85,7 @@ s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
     }
 
     dstEnd = dst + ((Yaz0Header*)src)->decSize;
-    src = src + sizeof(Yaz0Header);
+    src += sizeof(Yaz0Header);
 
     do {
         if (bitIdx == 0) {
@@ -131,7 +133,7 @@ void Yaz0_Decompress(uintptr_t romStart, void* dst, size_t size) {
 
     if (sYaz0CurDataEnd != NULL) {
         while (sYaz0CurDataEnd != NULL) {
-            Sleep_Usec(10);
+            usleep(10);
         }
     }
 
