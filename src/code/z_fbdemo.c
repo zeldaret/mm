@@ -15,6 +15,7 @@
 #include "libc64/sleep.h"
 #include "libc64/malloc.h"
 #include "macros.h"
+#include "z64math.h"
 
 Gfx sTransTileSetupDL[] = {
     gsDPPipeSync(),

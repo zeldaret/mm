@@ -43,7 +43,7 @@
 #include "fault_internal.h"
 #include "fault.h"
 
-#include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h"
 #include "libc64/sprintf.h"
 #include "libc64/sleep.h"
 #include "vt.h"
