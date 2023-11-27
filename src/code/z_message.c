@@ -5725,7 +5725,7 @@ void Message_Update(PlayState* play) {
             }
 
             if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6) &&
-                (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+                (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
                 Message_StartTextbox(play, 0x5E6, NULL);
                 break;
             }
@@ -5888,7 +5888,7 @@ void Message_Update(PlayState* play) {
             msgCtx->textboxColorAlphaCurrent -= XREG(70);
             if (msgCtx->textboxColorAlphaCurrent <= 0) {
                 if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6) &&
-                    (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+                    (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
                     Message_StartTextbox(play, 0x5E6, NULL);
                     Interface_SetHudVisibility(HUD_VISIBILITY_NONE_ALT);
                 } else {

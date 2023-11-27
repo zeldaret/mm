@@ -18,6 +18,28 @@ simpleReplace = {
 # explanation in replace_single below)
 wordReplace = {
     # Functions
+    "SystemArena_Malloc": "malloc",
+    "SystemArena_MallocR": "malloc_r",
+    "SystemArena_Realloc": "realloc",
+    "SystemArena_Free": "free",
+    "SystemArena_Calloc": "calloc",
+    "SystemArena_GetSizes": "GetFreeArena",
+    "SystemArena_CheckArena": "CheckArena",
+    "SystemArena_Init": "MallocInit",
+    "SystemArena_Cleanup": "MallocCleanup",
+    "SystemArena_IsInitialized": "MallocIsInitialized",
+
+    "proutSprintf": "proutPrintf",
+
+    "PrintUtils_VPrintf": "vaprintf",
+    "PrintUtils_Printf": "aprintf",
+
+    "Sleep_Cycles": "csleep",
+    "Sleep_Nsec": "nsleep",
+    "Sleep_Usec": "usleep",
+    "Sleep_Msec": "msleep",
+    "Sleep_Sec": "sleep",
+
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "Math_Acot2F": "Math_Atan2F_XY",
     "atan_flip": "Math_Atan2F_XY",
@@ -1291,6 +1313,7 @@ wordReplace = {
     "RADF_TO_DEGF": "RAD_TO_DEG",
     "DEGF_TO_RADF": "DEG_TO_RAD",
 
+    "ACTORCTX_FLAG_1": "ACTORCTX_FLAG_TELESCOPE_ON",
     "ACTORCTX_FLAG_2": "ACTORCTX_FLAG_PICTO_BOX_ON",
 
     "ACTOR_FLAG_1": "ACTOR_FLAG_TARGETABLE",
