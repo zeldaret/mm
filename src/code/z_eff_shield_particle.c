@@ -1,3 +1,6 @@
+#include "z64eff_shield_particle.h"
+#include "z64effect.h"
+
 #include "global.h"
 #include "vt.h"
 
@@ -175,7 +178,7 @@ void EffectShieldParticle_Draw(void* thisx, GraphicsContext* gfxCtx) {
             MtxF sp104;
             MtxF spC4;
             MtxF sp84;
-            f32 temp1 = (elem->endX + elem->startX) * 0.5f;
+            f32 temp1 = (elem->endX + elem->startX) / 2.0f;
             f32 temp2 = elem->endX - elem->startX;
             f32 temp3 = (temp2 * (1.0f / 64.0f)) / 0.02f;
 

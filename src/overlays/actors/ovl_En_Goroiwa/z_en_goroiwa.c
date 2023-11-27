@@ -1007,7 +1007,7 @@ void EnGoroiwa_Init(Actor* thisx, PlayState* play) {
         }
     }
 
-    Effect_Add(play, &this->unk_248, 4, 0, 0, &D_80942E8C);
+    Effect_Add(play, &this->unk_248, EFFECT_TIRE_MARK, 0, 0, &D_80942E8C);
     func_809419D0(this);
 }
 

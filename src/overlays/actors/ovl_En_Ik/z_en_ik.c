@@ -252,8 +252,19 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EffectBlureInit2 sBlureInit = {
-    0, 8, 0, { 255, 255, 150, 200 }, { 255, 255, 255, 64 }, { 255, 255, 150, 0 }, { 255, 255, 255, 0 }, 8,
-    0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
+    0,
+    EFFECT_BLURE_ELEMENT_FLAG_8,
+    0,
+    { 255, 255, 150, 200 },
+    { 255, 255, 255, 64 },
+    { 255, 255, 150, 0 },
+    { 255, 255, 255, 0 },
+    8,
+    0,
+    EFF_BLURE_DRAW_MODE_SMOOTH,
+    0,
+    { 0, 0, 0, 0 },
+    { 0, 0, 0, 0 },
 };
 
 void EnIk_Init(Actor* thisx, PlayState* play) {
