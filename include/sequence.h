@@ -339,11 +339,6 @@ typedef struct {
     /* 0x1 */ u8 priority;
 } SeqRequest; // size = 0x02
 
-extern SeqRequest sSeqRequests[][5];
-extern u8 sNumSeqRequests[5];
-extern u32 sAudioSeqCmds[0xB0];
-extern ActiveSequence gActiveSeqs[];
-
 // functions in sequence.c
 
 void AudioSeq_StartSequence(u8 seqPlayerIndex, u8 seqId, u8 seqArgs, u16 fadeInDuration);
@@ -411,5 +406,10 @@ void Audio_UpdateEnemyBgmVolume(f32 dist);
 u8 func_801A3950(u8 seqPlayerIndex, u8 resetChannelIO);
 u8 func_801A39F8(void);
 s32 func_801A46F8(void);
+
+extern SeqRequest sSeqRequests[][5];
+extern u8 sNumSeqRequests[5];
+extern u32 sAudioSeqCmds[0xB0];
+extern ActiveSequence gActiveSeqs[];
 
 #endif
