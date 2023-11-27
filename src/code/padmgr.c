@@ -34,6 +34,7 @@
 #include "global.h"
 #include "PR/controller.h"
 #include "PR/os_motor.h"
+#include "libc64/sprintf.h"
 #include "fault.h"
 #include "z64voice.h"
 

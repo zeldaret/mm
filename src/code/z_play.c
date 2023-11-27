@@ -248,7 +248,7 @@ void Play_TriggerPictoPhoto(void) {
 
 void Play_TakePictoPhoto(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
-    Play_ConvertRgba16ToIntensityImage(gPictoPhotoI8, prerender->fbufSave, SCREEN_WIDTH, PICTO_PHOTO_TOPLEFT_X,
+    Play_ConvertRgba16ToIntensityImage(gHiBuffer.pictoPhotoI8, prerender->fbufSave, SCREEN_WIDTH, PICTO_PHOTO_TOPLEFT_X,
                                        PICTO_PHOTO_TOPLEFT_Y, (PICTO_PHOTO_TOPLEFT_X + PICTO_PHOTO_WIDTH) - 1,
                                        (PICTO_PHOTO_TOPLEFT_Y + PICTO_PHOTO_HEIGHT) - 1, 8);
 }
@@ -2262,10 +2262,10 @@ void Play_Init(GameState* thisx) {
     PreRender_SetValues(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, NULL, NULL);
 
     this->unk_18E64 = gWorkBuffer;
-    this->pictoPhotoI8 = gPictoPhotoI8;
-    this->unk_18E68 = D_80784600;
-    this->unk_18E58 = D_80784600;
-    this->unk_18E60 = D_80784600;
+    this->pictoPhotoI8 = gHiBuffer.pictoPhotoI8;
+    this->unk_18E68 = gHiBuffer.D_80784600;
+    this->unk_18E58 = gHiBuffer.D_80784600;
+    this->unk_18E60 = gHiBuffer.D_80784600;
     gTransitionTileState = TRANS_TILE_OFF;
     this->transitionMode = TRANS_MODE_OFF;
     D_801D0D54 = false;
