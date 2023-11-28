@@ -260,7 +260,7 @@ void EnKakasi_CheckPlayerPosition(EnKakasi* this, PlayState* play) {
         player->actor.world.pos.z = -190.0f;
     }
 
-    Math_SmoothStepToS(&player->actor.shape.rot.y, (this->picto.actor.yawTowardsPlayer + 0x8000), 5, 1000, 0);
+    Math_SmoothStepToS(&player->actor.shape.rot.y, (this->picto.actor.yawTowardsPlayer + 0x8000), 5, 0x3E8, 0);
 }
 
 /*
@@ -403,7 +403,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
     u32 day = gSaveContext.save.day;
     f32 curFrame = this->skelAnime.curFrame;
 
-    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 2000, 0);
+    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 0x7D0, 0);
     // if first dialogue
     if ((this->picto.actor.textId != 0x1644) && (curFrame >= this->animEndFrame) &&
         (this->animIndex == ENKAKASI_ANIM_SLOWROLL)) {
@@ -599,7 +599,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
     Vec3f tempVec;
 
     EnKakasi_CheckPlayerPosition(this, play);
-    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 3000, 0);
+    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 0xBB8, 0);
     if (this->unkState1A8 == 0) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -684,8 +684,8 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
     Vec3f vec3fCopy;
 
-    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 3000, 0);
-    Math_SmoothStepToS(&player->actor.shape.rot.y, this->picto.actor.yawTowardsPlayer + 0x8000, 5, 1000, 0);
+    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&player->actor.shape.rot.y, this->picto.actor.yawTowardsPlayer + 0x8000, 5, 0x3E8, 0);
 
     if (this->unk190 == 0) {
         Message_CloseTextbox(play);
@@ -837,7 +837,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
     Player* player;
 
     EnKakasi_CheckPlayerPosition(this, play);
-    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 3000, 0);
+    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 0xBB8, 0);
     this->unk22C.y = this->picto.actor.home.pos.y + 50.0f;
 
     this->subCamEyeNext.x = D_80971E38[this->unk190].x;
@@ -945,7 +945,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
         case 14:
             // goes off once for some camera changes,
             // otherwise it's the end when camera is back to normal and Player is confused
-            Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 1000, 0);
+            Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 0x3E8, 0);
             if (this->unk204 == 0) {
                 player = GET_PLAYER(play);
 
@@ -1109,7 +1109,7 @@ void EnKakasi_SetupIdleRisen(EnKakasi* this) {
 }
 
 void EnKakasi_IdleRisen(EnKakasi* this, PlayState* play) {
-    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 1000, 0);
+    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 0x3E8, 0);
     if (Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         this->actionFunc = EnKakasi_RisenDialogue;
     } else {
@@ -1118,7 +1118,7 @@ void EnKakasi_IdleRisen(EnKakasi* this, PlayState* play) {
 }
 
 void EnKakasi_RisenDialogue(EnKakasi* this, PlayState* play) {
-    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 1000, 0);
+    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 0x3E8, 0);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);

@@ -47,8 +47,8 @@ typedef struct EnTalkGibud {
     /* 0x2A4 */ Vec3s jointTable[GIBDO_LIMB_MAX];
     /* 0x340 */ Vec3s morphTable[GIBDO_LIMB_MAX];
     /* 0x3DC */ s16 textId;
-    /* 0x3DE */ Vec3s headRotation;
-    /* 0x3E4 */ Vec3s upperBodyRotation;
+    /* 0x3DE */ Vec3s headRot;
+    /* 0x3E4 */ Vec3s torsoRot;
     /* 0x3EA */ union {
                     s16 playerStunWaitTimer; // Cannot stun the player if this is non-zero
                     s16 grabDamageTimer;

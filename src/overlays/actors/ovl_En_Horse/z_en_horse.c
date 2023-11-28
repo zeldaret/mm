@@ -4018,7 +4018,7 @@ void func_80886C00(EnHorse* this, PlayState* play) {
     if (((this->action == ENHORSE_ACTION_MOUNTED_WALK) || (this->action == ENHORSE_ACTION_MOUNTED_TROT) ||
          (this->action == ENHORSE_ACTION_MOUNTED_GALLOP)) &&
         (CHECK_BTN_ALL(input->press.button, BTN_A) || (AudioVoice_GetWord() == VOICE_WORD_ID_HIYA)) &&
-        (play->interfaceCtx.unk_212 == 8) && !(this->stateFlags & ENHORSE_BOOST) &&
+        (play->interfaceCtx.unk_212 == DO_ACTION_FASTER) && !(this->stateFlags & ENHORSE_BOOST) &&
         !(this->stateFlags & ENHORSE_FLAG_8) && !(this->stateFlags & ENHORSE_FLAG_9)) {
         if (this->numBoosts > 0) {
             Rumble_Request(0.0f, 180, 20, 100);

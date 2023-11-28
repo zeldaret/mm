@@ -39,9 +39,9 @@ void ObjHariko_Init(Actor* thisx, PlayState* play) {
     ObjHariko* this = THIS;
 
     Actor_SetScale(&this->actor, 0.1f);
-    this->headRotation.x = 0;
-    this->headRotation.y = 0;
-    this->headRotation.z = 0;
+    this->headRot.x = 0;
+    this->headRot.y = 0;
+    this->headRot.z = 0;
     this->headOffset = 0;
     this->bobbleStep = 0.0f;
     ObjHariko_SetupWait(this);
@@ -65,8 +65,8 @@ void ObjHariko_SetupBobHead(ObjHariko* this) {
 
 void ObjHariko_BobHead(ObjHariko* this, PlayState* play) {
     this->headOffset += 0x1555;
-    this->headRotation.x = Math_SinS(this->headOffset) * this->bobbleStep;
-    this->headRotation.y = Math_CosS(this->headOffset) * this->bobbleStep;
+    this->headRot.x = Math_SinS(this->headOffset) * this->bobbleStep;
+    this->headRot.y = Math_CosS(this->headOffset) * this->bobbleStep;
     Math_SmoothStepToF(&this->bobbleStep, 0, 0.5f, 18.0f, 18.0f);
     if (this->bobbleStep < 182.0f) {
         ObjHariko_SetupWait(this);
@@ -94,8 +94,8 @@ void ObjHariko_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     Matrix_Push();
-    Matrix_RotateXS(this->headRotation.x, MTXMODE_APPLY);
-    Matrix_RotateYS(this->headRotation.y, MTXMODE_APPLY);
+    Matrix_RotateXS(this->headRot.x, MTXMODE_APPLY);
+    Matrix_RotateYS(this->headRot.y, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gHarikoBodyDL);

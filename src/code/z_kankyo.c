@@ -2477,9 +2477,9 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
     s32 pad;
 
     //! FAKE:
-    if (!gSaveContext.sceneLayer) {}
+    if (gSaveContext.sceneLayer) {}
 
-    if ((play->csCtx.state == 0) && !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
         switch (play->envCtx.timeSeqState) {
             case TIMESEQ_DAY_BGM:
                 break;
@@ -2539,7 +2539,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
 
     if ((play->envCtx.timeSeqState != TIMESEQ_REQUEST) && (((void)0, gSaveContext.save.day) == 3) &&
         (CURRENT_TIME < CLOCK_TIME(6, 0)) && !func_800FE5D0(play) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
-        (play->transitionMode == TRANS_MODE_OFF) && (play->csCtx.state == 0) &&
+        (play->transitionMode == TRANS_MODE_OFF) && (play->csCtx.state == CS_STATE_IDLE) &&
         ((play->sceneId != SCENE_00KEIKOKU) || (((void)0, gSaveContext.sceneLayer) != 1)) &&
         (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
         (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS) &&
