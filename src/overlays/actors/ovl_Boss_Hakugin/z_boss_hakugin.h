@@ -104,7 +104,7 @@ typedef struct BossHakugin {
     /* 0x0191 */ u8 mechanicalMalfunctionBodyPartIndex; // See GohtBodyPart
     /* 0x0192 */ u8 unk_0192; // See `GohtUnk192`
     /* 0x0193 */ u8 iceAlpha;
-    /* 0x0194 */ u8 unk_0194;
+    /* 0x0194 */ u8 hasAppliedGoronSpikeBoost;
     /* 0x0194 */ u8 unk_0195;
     /* 0x0196 */ u8 drawDmgEffType;
     /* 0x0198 */ s16 unk_0198;

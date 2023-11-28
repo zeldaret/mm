@@ -667,36 +667,30 @@ void BossHakugin_RequestQuakeAndRumble(BossHakugin* this, PlayState* play, s16 s
     }
 }
 
-void func_80B05B04(BossHakugin* this, PlayState* play) {
-    Vec3f sp34;
-    s32 var_v0;
-    f32 sp2C;
+void BossHakugin_SpawnIceSparkle(BossHakugin* this, PlayState* play) {
+    Vec3f pos;
 
     if (((this->actionFunc == BossHakugin_FrozenBeforeFight) || (this->actionFunc == BossHakugin_EntranceCutscene)) &&
         (Rand_ZeroOne() < 0.1f)) {
-        sp2C = Rand_ZeroOne();
-        var_v0 = (Rand_ZeroOne() < 0.5f) ? -1 : 1;
-        sp34.x = (var_v0 * (15.0f + (sp2C * 15.0f)) * 4.0f) + this->actor.world.pos.x;
+        pos.x =
+            ((15.0f + (Rand_ZeroOne() * 15.0f)) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1) * 4.0f) + this->actor.world.pos.x;
+        pos.y = ((10.0f + (Rand_ZeroOne() * 90.0f)) * 2.7f) + this->actor.world.pos.y;
+        pos.z =
+            ((15.0f + (Rand_ZeroOne() * 15.0f)) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1) * 4.0f) + this->actor.world.pos.z;
 
-        sp34.y = (((Rand_ZeroOne() * 90.0f) + 10.0f) * 2.7f) + this->actor.world.pos.y;
-
-        sp2C = Rand_ZeroOne();
-        var_v0 = (Rand_ZeroOne() < 0.5f) ? -1 : 1;
-        sp34.z = (var_v0 * (15.0f + (sp2C * 15.0f)) * 4.0f) + this->actor.world.pos.z;
-
-        EffectSsKirakira_SpawnDispersed(play, &sp34, &gZeroVec3f, &gZeroVec3f, &sSparklePrimColor, &sSparkleEnvColor,
+        EffectSsKirakira_SpawnDispersed(play, &pos, &gZeroVec3f, &gZeroVec3f, &sSparklePrimColor, &sSparkleEnvColor,
                                         2000, 5);
     }
 }
 
-void func_80B05CBC(BossHakugin* this, Player* player) {
-    if (!this->unk_0194 && (player->stateFlags3 & PLAYER_STATE3_80000) &&
+void BossHakugin_ApplyGoronSpikeBoost(BossHakugin* this, Player* player) {
+    if (!this->hasAppliedGoronSpikeBoost && (player->stateFlags3 & PLAYER_STATE3_80000) &&
         !(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (player->actor.velocity.y > 5.0f)) {
         player->actor.velocity.y *= 1.3f;
         player->linearVelocity *= 1.3f;
-        this->unk_0194 = true;
+        this->hasAppliedGoronSpikeBoost = true;
     } else if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        this->unk_0194 = false;
+        this->hasAppliedGoronSpikeBoost = false;
     }
 }
 
@@ -2566,8 +2560,8 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     BossHakugin_UpdateMechanicalMalfunctionEffects(this);
     BossHakugin_UpdateElectricBalls(this, play);
     func_80B0B660(this, play);
-    func_80B05B04(this, play);
-    func_80B05CBC(this, player);
+    BossHakugin_SpawnIceSparkle(this, play);
+    BossHakugin_ApplyGoronSpikeBoost(this, player);
     func_80B05D4C(this);
 
     if ((this->bodyCollider.base.atFlags & AT_ON) && (this->actor.colorFilterTimer == 0)) {
