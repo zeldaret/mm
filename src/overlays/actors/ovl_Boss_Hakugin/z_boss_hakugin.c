@@ -498,9 +498,9 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     }
 
     Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sJntSphInit, this->bodyColliderElements);
-    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
-        Collider_InitAndSetTris(play, &this->electricBalls[i].unk_14, &this->actor, &sTrisInit,
-                                &this->electricBalls[i].unk_34);
+    for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
+        Collider_InitAndSetTris(play, &this->lightningSegments[i].unk_14, &this->actor, &sTrisInit,
+                                &this->lightningSegments[i].unk_34);
     }
 
     Collider_InitAndSetSphere(play, &this->unk_37B8, &this->actor, &sSphereInit);
@@ -569,8 +569,8 @@ void BossHakugin_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyJntSph(play, &this->bodyCollider);
     Collider_DestroyCylinder(play, &this->iceCollider);
 
-    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
-        Collider_DestroyTris(play, &this->electricBalls[i].unk_14);
+    for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
+        Collider_DestroyTris(play, &this->lightningSegments[i].unk_14);
     }
 
     Collider_DestroySphere(play, &this->unk_37B8);
@@ -699,14 +699,14 @@ void func_80B05D4C(BossHakugin* this) {
     s32 i;
     s16 var_t1 = 0;
 
-    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
-        if (this->electricBalls[i].alpha == 255) {
-            lightPos = &this->electricBalls[i].pos;
+    for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
+        if (this->lightningSegments[i].alpha == 255) {
+            lightPos = &this->lightningSegments[i].pos;
             var_t1 = 5000;
             break;
         }
     }
-    if (i == GOHT_ELECTRIC_BALL_COUNT) {
+    if (i == GOHT_LIGHTNING_SEGMENT_COUNT) {
         if (this->unk_01C8 > 0.0f) {
             lightPos = &this->unk_0380;
             var_t1 = (this->unk_01C8 / 30.0f) * 5000.0f;
@@ -827,19 +827,20 @@ void func_80B0607C(BossHakugin* this, PlayState* play) {
     }
 }
 
-void func_80B06558(GohtElectricBall* electricBall) {
+void func_80B06558(GohtLightningSegment* lightningSegment) {
     s32 i;
     Vec3f sp38[3];
 
-    Matrix_SetTranslateRotateYXZ(electricBall->pos.x, electricBall->pos.y, electricBall->pos.z, &electricBall->rot);
+    Matrix_SetTranslateRotateYXZ(lightningSegment->pos.x, lightningSegment->pos.y, lightningSegment->pos.z,
+                                 &lightningSegment->rot);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     for (i = 0; i < 3; i++) {
         Matrix_MultVec3f(&sTrisElementsInit[0].dim.vtx[i], &sp38[i]);
     }
-    Collider_SetTrisVertices(&electricBall->unk_14, 0, &sp38[0], &sp38[1], &sp38[2]);
+    Collider_SetTrisVertices(&lightningSegment->unk_14, 0, &sp38[0], &sp38[1], &sp38[2]);
 }
 
-void BossHakugin_AddElectricBalls(BossHakugin* this, Vec3f* arg1, PlayState* play) {
+void BossHakugin_AddLightningSegment(BossHakugin* this, Vec3f* arg1, PlayState* play) {
     s32 i;
     Player* player = GET_PLAYER(play);
     CollisionPoly* spD4;
@@ -849,7 +850,7 @@ void BossHakugin_AddElectricBalls(BossHakugin* this, Vec3f* arg1, PlayState* pla
     Vec3f spA4;
     Vec3f sp98;
     Vec3f sp8C;
-    GohtElectricBall* electricBall;
+    GohtLightningSegment* lightningSegment;
     s32 bgId;
 
     Math_Vec3f_Copy(&spC8, arg1);
@@ -859,40 +860,44 @@ void BossHakugin_AddElectricBalls(BossHakugin* this, Vec3f* arg1, PlayState* pla
     Actor_OffsetOfPointInActorCoords(&this->actor, &sp98, &spBC);
     Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_THUNDER_THR);
 
-    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
-        electricBall = &this->electricBalls[i];
+    for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
+        lightningSegment = &this->lightningSegments[i];
         Actor_OffsetOfPointInActorCoords(&this->actor, &sp8C, &spC8);
 
         if (sp98.z < sp8C.z) {
-            electricBall->rot.y = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x13);
+            lightningSegment->rot.y = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x13);
         } else {
-            electricBall->rot.y = Math_Vec3f_Yaw(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
+            lightningSegment->rot.y = Math_Vec3f_Yaw(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
         }
 
-        electricBall->rot.x = Math_Vec3f_Pitch(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
-        electricBall->rot.z = 0;
-        electricBall->pos.x = spC8.x + (80.0f * Math_CosS(electricBall->rot.x) * Math_SinS(electricBall->rot.y));
-        electricBall->pos.y = spC8.y - (80.0f * Math_SinS(electricBall->rot.x));
-        electricBall->pos.z = spC8.z + (80.0f * Math_CosS(electricBall->rot.x) * Math_CosS(electricBall->rot.y));
-        spB0.x = (2.0f * electricBall->pos.x) - spC8.x;
-        spB0.y = (2.0f * electricBall->pos.y) - spC8.y;
-        spB0.z = (2.0f * electricBall->pos.z) - spC8.z;
+        lightningSegment->rot.x = Math_Vec3f_Pitch(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
+        lightningSegment->rot.z = 0;
+        lightningSegment->pos.x =
+            spC8.x + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_SinS(lightningSegment->rot.y));
+        lightningSegment->pos.y = spC8.y - (80.0f * Math_SinS(lightningSegment->rot.x));
+        lightningSegment->pos.z =
+            spC8.z + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_CosS(lightningSegment->rot.y));
+        spB0.x = (2.0f * lightningSegment->pos.x) - spC8.x;
+        spB0.y = (2.0f * lightningSegment->pos.y) - spC8.y;
+        spB0.z = (2.0f * lightningSegment->pos.z) - spC8.z;
 
         if (BgCheck_EntityLineTest1(&play->colCtx, &spC8, &spB0, &spA4, &spD4, false, true, false, true, &bgId)) {
-            electricBall->rot.x -= 0x2000;
-            electricBall->pos.x = spC8.x + (80.0f * Math_CosS(electricBall->rot.x) * Math_SinS(electricBall->rot.y));
-            electricBall->pos.y = spC8.y - (80.0f * Math_SinS(electricBall->rot.x));
-            electricBall->pos.z = spC8.z + (80.0f * Math_CosS(electricBall->rot.x) * Math_CosS(electricBall->rot.y));
-            spC8.x = (2.0f * electricBall->pos.x) - spC8.x;
-            spC8.y = (2.0f * electricBall->pos.y) - spC8.y;
-            spC8.z = (2.0f * electricBall->pos.z) - spC8.z;
+            lightningSegment->rot.x -= 0x2000;
+            lightningSegment->pos.x =
+                spC8.x + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_SinS(lightningSegment->rot.y));
+            lightningSegment->pos.y = spC8.y - (80.0f * Math_SinS(lightningSegment->rot.x));
+            lightningSegment->pos.z =
+                spC8.z + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_CosS(lightningSegment->rot.y));
+            spC8.x = (2.0f * lightningSegment->pos.x) - spC8.x;
+            spC8.y = (2.0f * lightningSegment->pos.y) - spC8.y;
+            spC8.z = (2.0f * lightningSegment->pos.z) - spC8.z;
         } else {
             Math_Vec3f_Copy(&spC8, &spB0);
         }
 
-        electricBall->alpha = 255 + 20 * (i + 1);
-        func_80B06558(electricBall);
-        electricBall->rot.z = (s32)Rand_Next() >> 0x10;
+        lightningSegment->alpha = 255 + 20 * (i + 1);
+        func_80B06558(lightningSegment);
+        lightningSegment->rot.z = (s32)Rand_Next() >> 0x10;
     }
 }
 
@@ -1884,7 +1889,7 @@ void func_80B09C78(BossHakugin* this, PlayState* play) {
         return;
     }
 
-    if ((this->electricBalls[0].alpha == 0) && (this->unk_01C8 < 0.1f) && (temp_fv1 < 400.0f) &&
+    if ((this->lightningSegments[0].alpha == 0) && (this->unk_01C8 < 0.1f) && (temp_fv1 < 400.0f) &&
         (this->unk_044C.z > 0.0f)) {
         func_80B09DFC(this);
         return;
@@ -1915,7 +1920,7 @@ void func_80B09E20(BossHakugin* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_THUNDER - SFX_FLAG);
     if (func_80B0728C(this)) {
-        BossHakugin_AddElectricBalls(this, &this->unk_0380, play);
+        BossHakugin_AddLightningSegment(this, &this->unk_0380, play);
         func_80B09A94(this, play);
     }
 }
@@ -2400,37 +2405,37 @@ void BossHakugin_UpdateMechanicalMalfunctionEffects(BossHakugin* this) {
     }
 }
 
-void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
-    GohtElectricBall* electricBall;
+void BossHakugin_UpdateLightningSegments(BossHakugin* this, PlayState* play) {
+    GohtLightningSegment* lightningSegment;
     s16 rand;
     s32 i;
 
-    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
-        electricBall = &this->electricBalls[i];
+    for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
+        lightningSegment = &this->lightningSegments[i];
 
-        if (electricBall->unk_14.base.atFlags & AT_HIT) {
+        if (lightningSegment->unk_14.base.atFlags & AT_HIT) {
             Player* player = GET_PLAYER(play);
 
             this->unk_018C = 1;
             Player_PlaySfx(player, NA_SE_EN_COMMON_E_BALL_HIT);
-            electricBall->unk_14.base.atFlags &= ~AT_HIT;
+            lightningSegment->unk_14.base.atFlags &= ~AT_HIT;
         }
-        if (electricBall->alpha > 0) {
-            electricBall->alpha -= 20;
-            if (electricBall->alpha <= 0) {
-                electricBall->alpha = 0;
-            } else if (electricBall->alpha <= 255) {
+        if (lightningSegment->alpha > 0) {
+            lightningSegment->alpha -= 20;
+            if (lightningSegment->alpha <= 0) {
+                lightningSegment->alpha = 0;
+            } else if (lightningSegment->alpha <= 255) {
                 rand = (s32)Rand_Next() >> 0x10;
-                electricBall->rot.z = rand;
-                if (electricBall->alpha > 60) {
-                    CollisionCheck_SetAT(play, &play->colChkCtx, &electricBall->unk_14.base);
+                lightningSegment->rot.z = rand;
+                if (lightningSegment->alpha > 60) {
+                    CollisionCheck_SetAT(play, &play->colChkCtx, &lightningSegment->unk_14.base);
                 }
             }
         }
     }
 }
 
-void func_80B0B660(BossHakugin* this, PlayState* play) {
+void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
     Player* spA4 = GET_PLAYER(play);
     CollisionPoly* spA0 = NULL;
     Vec3f sp94;
@@ -2561,8 +2566,8 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     }
 
     BossHakugin_UpdateMechanicalMalfunctionEffects(this);
+    BossHakugin_UpdateLightningSegments(this, play);
     BossHakugin_UpdateElectricBalls(this, play);
-    func_80B0B660(this, play);
     BossHakugin_SpawnIceSparkle(this, play);
     BossHakugin_ApplyGoronSpikeBoost(this, player);
     func_80B05D4C(this);
@@ -2833,8 +2838,8 @@ void func_80B0C7B0(BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play) {
-    GohtElectricBall* electricBall;
+void BossHakugin_DrawLightningSegments(BossHakugin* this, PlayState* play) {
+    GohtLightningSegment* lightningSegment;
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -2844,15 +2849,15 @@ void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play) {
     gDPSetEnvColor(POLY_XLU_DISP++, sGohtLightningColor.r, sGohtLightningColor.g, sGohtLightningColor.b, 0);
     gSPDisplayList(POLY_XLU_DISP++, gGohtLightningMaterialDL);
 
-    for (i = 0; i < GOHT_ELECTRIC_BALL_COUNT; i++) {
-        electricBall = &this->electricBalls[i];
+    for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
+        lightningSegment = &this->lightningSegments[i];
 
-        if ((electricBall->alpha > 0) && (electricBall->alpha <= 255)) {
-            Matrix_SetTranslateRotateYXZ(electricBall->pos.x, electricBall->pos.y, electricBall->pos.z,
-                                         &electricBall->rot);
+        if ((lightningSegment->alpha > 0) && (lightningSegment->alpha <= 255)) {
+            Matrix_SetTranslateRotateYXZ(lightningSegment->pos.x, lightningSegment->pos.y, lightningSegment->pos.z,
+                                         &lightningSegment->rot);
             Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, electricBall->alpha);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, lightningSegment->alpha);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gGohtLightningModelDL);
@@ -2867,7 +2872,7 @@ void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80B0CCD8(BossHakugin* this, PlayState* play2) {
+void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play2) {
     s32 pad[4];
     PlayState* play = play2;
     s32 end;
@@ -2979,8 +2984,8 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
 
     BossHakugin_DrawMechanicalMalfunctionEffects(this, play);
     func_80B0C7B0(this, play);
+    BossHakugin_DrawLightningSegments(this, play);
     BossHakugin_DrawElectricBalls(this, play);
-    func_80B0CCD8(this, play);
 
     if (this->iceAlpha > 0) {
         BossHakugin_DrawIce(this, play);
