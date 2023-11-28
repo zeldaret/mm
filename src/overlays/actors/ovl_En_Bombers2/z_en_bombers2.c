@@ -380,8 +380,8 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
 }
 
 void EnBombers2_Update(Actor* thisx, PlayState* play) {
+    s32 pad;
     EnBombers2* this = (EnBombers2*)thisx;
-    f32 temp_f4;
     Vec3f sp34;
     s32 yawDiffAbs;
 
