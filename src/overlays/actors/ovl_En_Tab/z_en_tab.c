@@ -67,15 +67,15 @@ s32 D_80BE1A0C[] = {
 };
 
 ActorInit En_Tab_InitVars = {
-    ACTOR_EN_TAB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TAB,
-    sizeof(EnTab),
-    EnTab_Init,
-    EnTab_Destroy,
-    EnTab_Update,
-    EnTab_Draw,
+    /**/ ACTOR_EN_TAB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TAB,
+    /**/ sizeof(EnTab),
+    /**/ EnTab_Init,
+    /**/ EnTab_Destroy,
+    /**/ EnTab_Update,
+    /**/ EnTab_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -101,8 +101,8 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 AnimationInfoS D_80BE1AD0[] = {
-    { &gBartenIdleAnim, 1.0f, 0, -1, 0, 0 },
-    { &gBartenIdleBarCounterAnim, 1.0f, 0, -1, 0, 0 },
+    { &gBartenIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBartenIdleBarCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 Vec3f D_80BE1AF0 = { -28.0f, -8.0f, -195.0f };
@@ -509,7 +509,7 @@ void EnTab_Init(Actor* thisx, PlayState* play) {
     EnTab* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gBartenSkel, NULL, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBartenSkel, NULL, this->jointTable, this->morphTable, BARTEN_LIMB_MAX);
     this->unk_32C = -1;
     func_80BE05BC(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);

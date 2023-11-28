@@ -57,7 +57,7 @@
         <Limb Name="gBartenLeftHandRootLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_HAND_ROOT" Offset="0x7F08" />
         <Limb Name="gBartenLeftBroomLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_BROOM" Offset="0x7F14" />
         <Limb Name="gBartenLeftHandLimb" Type="Standard" EnumName="BARTEN_LIMB_LEFT_HAND" Offset="0x7F20" />
-        <Skeleton Name="gBartenSkel" Type="Flex" LimbType="Standard" LimbNone="TAB_LIMB_NONE" LimbMax="TAB_LIMB_MAX" EnumName="BartenLimb" Offset="0x7F78" />
+        <Skeleton Name="gBartenSkel" Type="Flex" LimbType="Standard" LimbNone="BARTEN_LIMB_NONE" LimbMax="BARTEN_LIMB_MAX" EnumName="BartenLimb" Offset="0x7F78" />
         <Animation Name="gBartenIdleBarCounterAnim" Offset="0x86AC" />
     </File>
 </Root>
