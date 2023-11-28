@@ -17,4 +17,6 @@ float fabsf(float f);
 double sqrt(double d);
 #pragma intrinsic(sqrt)
 
+float fmodf(float dividend, float divisor);
+
 #endif

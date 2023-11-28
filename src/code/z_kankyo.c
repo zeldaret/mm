@@ -65,6 +65,7 @@ Gfx* sSkyboxStarsDList;
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+#include "libc/string.h"
 
 // Data
 f32 sSandstormLerpScale = 0.0f;
@@ -1298,7 +1299,7 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
     AdjLightSettings spA4[4];
 
     var_fs3 = 0.0f;
-    __osMemset(spA4, 0, sizeof(AdjLightSettings) * ARRAY_COUNT(spA4));
+    memset(spA4, 0, sizeof(AdjLightSettings) * ARRAY_COUNT(spA4));
     lightSettingsList = play->envCtx.lightSettingsList;
 
     if ((envCtx->lightSettingOverride != LIGHT_SETTING_OVERRIDE_NONE) &&
