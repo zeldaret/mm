@@ -15972,7 +15972,7 @@
     0x80BF5960:("D_80BF5960","UNK_TYPE1","",0x1),
     0x80BF596C:("D_80BF596C","UNK_TYPE1","",0x1),
     0x80BF59F0:("D_80BF59F0","EffectTireMarkInit","",0x8),
-    0x80BF59F8:("D_80BF59F8","UNK_TYPE1","",0x1),
+    0x80BF59F8:("sEyeTextures","UNK_TYPE1","",0x1),
     0x80BF5A10:("D_80BF5A10","f32","",0x4),
     0x80BF5A14:("D_80BF5A14","f32","",0x4),
     0x80BF5A18:("D_80BF5A18","f32","",0x4),

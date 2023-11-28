@@ -247,14 +247,14 @@ void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
         SubS_TrackPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
                         &this->upperBodyRot, &sTrackOptions);
     } else {
-        Math_SmoothStepToS(&this->trackTarget.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->trackTarget.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->trackTarget.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->trackTarget.y, 0, 4, 0x3E8, 1);
 
-        Math_SmoothStepToS(&this->headRot.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->headRot.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->headRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->headRot.y, 0, 4, 0x3E8, 1);
 
-        Math_SmoothStepToS(&this->upperBodyRot.x, 0, 4, 1000, 1);
-        Math_SmoothStepToS(&this->upperBodyRot.y, 0, 4, 1000, 1);
+        Math_SmoothStepToS(&this->upperBodyRot.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->upperBodyRot.y, 0, 4, 0x3E8, 1);
     }
 
     EnZo_Blink(this, 3);

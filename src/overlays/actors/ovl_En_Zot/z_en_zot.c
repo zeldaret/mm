@@ -299,7 +299,7 @@ s32 func_80B96E5C(EnZot* this) {
     temp_f12 = points->x - this->actor.world.pos.x;
     temp_f14 = points->z - this->actor.world.pos.z;
     this->actor.world.rot.y = Math_Atan2S(temp_f12, temp_f14);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 2000, 200);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x7D0, 0xC8);
     phi_f2 = SQ(this->actor.speed) * SQ(3.0f);
 
     if (this->unk_2D4 == 0) {
@@ -332,7 +332,7 @@ s32 func_80B96FB0(EnZot* this) {
     temp_f12 = points->x - this->actor.world.pos.x;
     temp_f14 = points->z - this->actor.world.pos.z;
     this->actor.world.rot.y = Math_Atan2S(temp_f12, temp_f14);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 2000, 200);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x7D0, 0xC8);
 
     if ((SQ(temp_f12) + SQ(temp_f14)) < SQ(10.0f)) {
         if (this->unk_2F2 & 0x20) {
@@ -913,15 +913,15 @@ void func_80B98348(EnZot* this, PlayState* play) {
         this->unk_2F2 &= ~8;
     } else {
         this->unk_2F2 |= 8;
-        Math_SmoothStepToS(&this->headRot.x, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->torsoRot.x, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 6, 0x1838, 0x64);
         y = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         if (y > 0) {
-            Math_SmoothStepToS(&this->headRot.y, 0x3000, 6, 6200, 100);
-            Math_SmoothStepToS(&this->torsoRot.y, 0x1000, 6, 6200, 100);
+            Math_SmoothStepToS(&this->headRot.y, 0x3000, 6, 0x1838, 0x64);
+            Math_SmoothStepToS(&this->torsoRot.y, 0x1000, 6, 0x1838, 0x64);
         } else {
-            Math_SmoothStepToS(&this->headRot.y, -0x3000, 6, 6200, 100);
-            Math_SmoothStepToS(&this->torsoRot.y, -0x1000, 6, 6200, 100);
+            Math_SmoothStepToS(&this->headRot.y, -0x3000, 6, 0x1838, 0x64);
+            Math_SmoothStepToS(&this->torsoRot.y, -0x1000, 6, 0x1838, 0x64);
         }
     }
 }
@@ -1332,10 +1332,10 @@ void EnZot_Update(Actor* thisx, PlayState* play) {
         if (!(this->unk_2F2 & 4) && func_80B96DF0(this, play)) {
             Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
         } else {
-            Math_SmoothStepToS(&this->headRot.x, 0, 6, 6200, 100);
-            Math_SmoothStepToS(&this->headRot.y, 0, 6, 6200, 100);
-            Math_SmoothStepToS(&this->torsoRot.x, 0, 6, 6200, 100);
-            Math_SmoothStepToS(&this->torsoRot.y, 0, 6, 6200, 100);
+            Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+            Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
+            Math_SmoothStepToS(&this->torsoRot.x, 0, 6, 0x1838, 0x64);
+            Math_SmoothStepToS(&this->torsoRot.y, 0, 6, 0x1838, 0x64);
         }
     }
 

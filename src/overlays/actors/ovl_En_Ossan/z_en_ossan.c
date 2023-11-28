@@ -238,11 +238,11 @@ void EnOssan_RotateHead(EnOssan* this, PlayState* play) {
 
     if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
         if (player->transformation == PLAYER_FORM_ZORA) {
-            Math_SmoothStepToS(&this->partTimerHeadRot.y, this->headRot.y, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, this->headRot.y, 3, 0x7D0, 0);
         } else if (this->flags & LOOKED_AT_PLAYER) {
-            Math_SmoothStepToS(&this->partTimerHeadRot.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, 0x1F40, 3, 0x7D0, 0);
         } else {
-            Math_SmoothStepToS(&this->partTimerHeadRot.y, this->headRot.y, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, this->headRot.y, 3, 0x7D0, 0);
             if (ABS_ALT(this->partTimerHeadRot.y - this->headRot.y) < 16) {
                 this->flags |= LOOKED_AT_PLAYER;
             }
@@ -385,7 +385,7 @@ void EnOssan_Idle(EnOssan* this, PlayState* play) {
             Actor_OfferTalk(&this->actor, play, 100.0f);
         }
         if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
-            Math_SmoothStepToS(&this->partTimerHeadRot.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, 0x1F40, 3, 0x7D0, 0);
         }
     }
 }
@@ -670,7 +670,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
             }
         }
         if ((this->actor.params == ENOSSAN_PART_TIME_WORKER) && (player->transformation != PLAYER_FORM_ZORA)) {
-            Math_SmoothStepToS(&this->partTimerHeadRot.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, 0x1F40, 3, 0x7D0, 0);
         }
     }
 }

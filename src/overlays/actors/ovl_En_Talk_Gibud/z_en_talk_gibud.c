@@ -474,7 +474,7 @@ void EnTalkGibud_SetupTurnAwayAndShakeHead(EnTalkGibud* this) {
 }
 
 void EnTalkGibud_TurnAwayAndShakeHead(EnTalkGibud* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 5, 3500, 200);
+    Math_SmoothStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 5, 0xDAC, 0xC8);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->headShakeTimer > 60) {
         EnTalkGibud_SetupWalkToHome(this);
@@ -492,8 +492,8 @@ void EnTalkGibud_SetupWalkToHome(EnTalkGibud* this) {
 }
 
 void EnTalkGibud_WalkToHome(EnTalkGibud* this, PlayState* play) {
-    Math_SmoothStepToS(&this->headRot.y, 0, 1, 100, 0);
-    Math_SmoothStepToS(&this->torsoRot.y, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->headRot.y, 0, 1, 0x64, 0);
+    Math_SmoothStepToS(&this->torsoRot.y, 0, 1, 0x64, 0);
     if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 5.0f) {
         if (this->actor.speed > 0.2f) {
             this->actor.speed -= 0.2f;
@@ -501,14 +501,14 @@ void EnTalkGibud_WalkToHome(EnTalkGibud* this, PlayState* play) {
             this->actor.speed = 0.0f;
         }
 
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 200, 10);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 0xC8, 0xA);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (this->actor.world.rot.y == this->actor.home.rot.y) {
             EnTalkGibud_SetupIdle(this);
         }
     } else {
         Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos),
-                           450);
+                           0x1C2);
         this->actor.world.rot = this->actor.shape.rot;
     }
     if (EnTalkGibud_PlayerInRangeWithCorrectState(this, play)) {
@@ -595,8 +595,8 @@ void EnTalkGibud_Dead(EnTalkGibud* this, PlayState* play) {
     if (this->deathTimer > 300) {
         EnTalkGibud_SetupRevive(this);
     } else {
-        Math_SmoothStepToS(&this->headRot.y, 0, 1, 250, 0);
-        Math_SmoothStepToS(&this->torsoRot.y, 0, 1, 250, 0);
+        Math_SmoothStepToS(&this->headRot.y, 0, 1, 0xFA, 0);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 1, 0xFA, 0);
         this->deathTimer++;
     }
 
@@ -789,8 +789,8 @@ void EnTalkGibud_PassiveIdle(EnTalkGibud* this, PlayState* play) {
         Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
         Actor_OfferTalk(&this->actor, play, 100.0f);
     } else {
-        Math_SmoothStepToS(&this->headRot.y, 0, 1, 100, 0);
-        Math_SmoothStepToS(&this->torsoRot.y, 0, 1, 100, 0);
+        Math_SmoothStepToS(&this->headRot.y, 0, 1, 0x64, 0);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 1, 0x64, 0);
     }
 }
 
@@ -954,7 +954,7 @@ void EnTalkGibud_CheckForGibdoMask(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, PlayState* play) {
-    s16 headAngle = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->torsoRot.y;
+    s16 headAngle = this->actor.yawTowardsPlayer - this->actor.shape.rot.y - this->torsoRot.y;
     s16 upperBodyAngle = CLAMP(headAngle, -500, 500);
 
     headAngle -= this->headRot.y;

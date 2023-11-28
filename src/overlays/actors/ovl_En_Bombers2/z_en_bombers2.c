@@ -423,7 +423,7 @@ void EnBombers2_Update(Actor* thisx, PlayState* play) {
     }
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
     if (this->unk_2AC == 0) {
-        this->actor.world.pos.x = (Math_SinS((this->actor.world.rot.y + 0x8000)) * 26.0f) + sp34.x;
+        this->actor.world.pos.x = (Math_SinS(this->actor.world.rot.y + 0x8000) * 26.0f) + sp34.x;
         temp_f4 = Math_CosS(this->actor.world.rot.y + 0x8000) * 26.0f;
         this->actor.world.pos.z = temp_f4 + sp34.z;
         this->collider.dim.radius = 35;

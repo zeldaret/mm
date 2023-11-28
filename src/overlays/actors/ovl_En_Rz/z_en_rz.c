@@ -295,7 +295,7 @@ EnRzPathStatus EnRz_GetPathStatus(EnRz* this) {
     diffX = curPoint->x - this->actor.world.pos.x;
     diffZ = curPoint->z - this->actor.world.pos.z;
     this->actor.world.rot.y = Math_Atan2S(diffX, diffZ);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x07D0, 0xC8);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x7D0, 0xC8);
 
     if ((SQ(diffX) + SQ(diffZ)) < SQ(10.0f)) {
         if (this->stateFlags & EN_RZ_STATE_1) {
