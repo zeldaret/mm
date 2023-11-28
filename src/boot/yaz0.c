@@ -127,7 +127,7 @@ s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
 
 void Yaz0_Decompress(uintptr_t romStart, void* dst, size_t size) {
     s32 status;
-    u32 pad;
+    s32 pad;
     char sp80[0x50];
     char sp30[0x50];
 

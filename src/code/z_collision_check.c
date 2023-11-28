@@ -2942,7 +2942,7 @@ s32 CollisionCheck_GetMassType(u8 mass) {
  */
 void CollisionCheck_SetOCvsOC(PlayState* play, Collider* left, ColliderInfo* leftInfo, Vec3f* leftPos, Collider* right,
                               ColliderInfo* rightInfo, Vec3f* rightPos, f32 overlap) {
-    f32 pad;
+    s32 pad;
     f32 leftDispRatio;
     f32 rightDispRatio;
     f32 xzDist;

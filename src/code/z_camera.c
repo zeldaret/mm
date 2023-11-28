@@ -1075,7 +1075,7 @@ Vec3f Camera_CalcUpVec(s16 pitch, s16 yaw, s16 roll) {
     Vec3f rollMtxRow1;
     Vec3f rollMtxRow2;
     Vec3f rollMtxRow3;
-    f32 pad;
+    s32 pad;
 
     // Axis to roll around
     u.x = cosP * sinY;
@@ -1391,7 +1391,7 @@ s32 Camera_CalcAtForNormal1(Camera* camera, VecGeo* arg1, f32 yOffset, f32 forwa
  */
 s32 Camera_CalcAtForParallel(Camera* camera, VecGeo* arg1, f32 yOffset, f32 xzOffsetMax, f32* focalActorPosY,
                              s16 flags) {
-    f32 pad;
+    s32 pad;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
     f32 fovHeight;
@@ -3296,7 +3296,7 @@ s32 Camera_Jump3(Camera* camera) {
     f32 phi_f2_2;
     f32 temp_f0;
     f32 temp1;
-    f32 pad;
+    s32 pad;
     Jump3ReadOnlyData* roData = &camera->paramData.jump3.roData;
     Jump3ReadWriteData* rwData = &camera->paramData.jump3.rwData;
     f32 focalActorHeight = Camera_GetFocalActorHeight(camera);

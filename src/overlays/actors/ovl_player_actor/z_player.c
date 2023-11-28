@@ -19104,7 +19104,7 @@ void Player_Action_96(Player* this, PlayState* play) {
                 }
 
                 if (spB8 != 0.0f) {
-                    f32 pad;
+                    s32 pad;
                     f32 sp54 = spB8 - 0.3f;
 
                     sp54 = CLAMP_MIN(sp54, 0.0f);

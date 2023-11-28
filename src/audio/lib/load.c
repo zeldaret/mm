@@ -1072,7 +1072,7 @@ void* AudioLoad_AsyncLoadInner(s32 tableType, s32 id, s32 nChunks, s32 retData, 
     s32 loadStatus;
     SoundFont* soundFont;
     u32 realId = AudioLoad_GetRealTableIndex(tableType, id);
-    u32 pad;
+    s32 pad;
 
     switch (tableType) {
         case SEQUENCE_TABLE:
@@ -1637,7 +1637,7 @@ void AudioLoad_ProcessAsyncLoadUnkMedium(AudioAsyncLoad* asyncLoad, s32 resetSta
 void AudioLoad_FinishAsyncLoad(AudioAsyncLoad* asyncLoad) {
     u32 retMsg = asyncLoad->retMsg;
     u32 fontId;
-    u32 pad;
+    s32 pad;
     OSMesg doneMsg;
     u32 sampleBankId1;
     u32 sampleBankId2;
