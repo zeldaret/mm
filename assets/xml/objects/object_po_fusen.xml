@@ -2,7 +2,7 @@
     <!-- Assets for Poe Balloon archery target in Romani Ranch. -->
     <File Name="object_po_fusen" Segment="6">
         <!-- Empty: PoFusen is animated directly from its code. -->
-        <Animation Name="gPoeBalloonEmptyAnim" Offset="0x40" />
+        <Animation Name="gPoeBalloonEmptyAnim" Offset="0x40" /> <!-- Original name is "bal_kihon" -->
 
         <DList Name="gPoeBalloonChainAndLanternDL" Offset="0x8C0" />
         <DList Name="gPoeBalloonLeftHandDL" Offset="0xAF8" />

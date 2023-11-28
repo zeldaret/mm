@@ -65,12 +65,6 @@ void MtxConv_L2F(MtxF* mtx, Mtx* mf);
 
 s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
 
-f32 fmodf(f32 dividend, f32 divisor);
-void* __osMemset(void* ptr, s32 val, size_t size);
-s32 __osStrcmp(const char* str1, const char* str2);
-char* __osStrcpy(char* dst, const char* src);
-void* __osMemcpy(void* dst, void* src, size_t size);
-
 // void EnItem00_SetObject(EnItem00* this, PlayState* play, f32* shadowOffset, f32* shadowScale);
 // void EnItem00_Init(Actor* thisx, PlayState* play);
 // void EnItem00_Destroy(Actor* thisx, PlayState* play);
