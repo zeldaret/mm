@@ -1,4 +1,4 @@
-#include "prevent_bss_reordering.h"
+//#include "prevent_bss_reordering.h"
 #include "z64.h"
 #include "regs.h"
 #include "functions.h"
