@@ -6955,7 +6955,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, PlayState
     s16 curUID;
     s16 j;
 
-    __osMemset(camera, 0, sizeof(Camera));
+    memset(camera, 0, sizeof(Camera));
 
     camera->play = sCamPlayState = play;
     curUID = sCameraNextUID;
@@ -7228,7 +7228,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
         0x1FC, // 8 Large Earthquakes between CLOCK_TIME(4, 30) to CLOCK_TIME(6, 00)
     };
 
-    if ((CURRENT_DAY == 3) && (CutsceneManager_GetCurrentCsId() == -1)) {
+    if ((CURRENT_DAY == 3) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
         time = CURRENT_TIME;
         timeSpeedOffset = gSaveContext.save.timeSpeedOffset;
 

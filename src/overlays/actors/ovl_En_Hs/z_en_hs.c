@@ -294,15 +294,15 @@ void EnHs_Update(Actor* thisx, PlayState* play) {
 
     if (this->stateFlags & 4) {
         Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unusedRot.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unusedRot.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 6, 0x1838, 0x64);
     } else if (this->stateFlags & 1) {
-        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->unusedRot, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     } else {
         Math_SmoothStepToS(&this->headRot.x, 0x3200, 6, 0x1838, 0x64);
         Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unusedRot.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unusedRot.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 6, 0x1838, 0x64);
     }
 }
 

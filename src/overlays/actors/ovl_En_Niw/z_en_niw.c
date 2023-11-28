@@ -15,22 +15,18 @@ void EnNiw_Init(Actor* thisx, PlayState* play);
 void EnNiw_Destroy(Actor* thisx, PlayState* play);
 void EnNiw_Update(Actor* thisx, PlayState* play2);
 void EnNiw_Draw(Actor* thisx, PlayState* play);
+
 void EnNiw_SetupIdle(EnNiw* this);
 void EnNiw_Idle(EnNiw* this, PlayState* play);
 void EnNiw_Thrown(EnNiw* this, PlayState* play);
 void EnNiw_SetupRunAway(EnNiw* this);
 void EnNiw_RunAway(EnNiw* this, PlayState* play);
-void EnNiw_Swimming(EnNiw* this, PlayState* play);
-void EnNiw_Trigger(EnNiw* this, PlayState* play);
 void EnNiw_Upset(EnNiw* this, PlayState* play);
 void EnNiw_SetupCuccoStorm(EnNiw* this, PlayState* play);
 void EnNiw_CuccoStorm(EnNiw* this, PlayState* play);
-void EnNiw_SpawnAttackNiw(EnNiw* this, PlayState* play);
 void EnNiw_Held(EnNiw* this, PlayState* play);
 void EnNiw_UpdateFeather(EnNiw* this, PlayState* play);
 void EnNiw_DrawFeathers(EnNiw* this, PlayState* play);
-void EnNiw_CheckRage(EnNiw* this, PlayState* play);
-void EnNiw_AnimateWingHead(EnNiw* this, PlayState* play, s16 animationState);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 scale);
 
 s16 sCuccoStormActive = false;

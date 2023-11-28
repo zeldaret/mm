@@ -79,7 +79,7 @@ ActorInit En_Sob1_InitVars = {
 static s16 sObjectIds[][3] = {
     { OBJECT_ZO, OBJECT_ID_MAX, OBJECT_MASTERZOORA },
     { OBJECT_OF1D_MAP, OBJECT_ID_MAX, OBJECT_MASTERGOLON },
-    { OBJECT_RS, OBJECT_ID_MAX, OBJECT_ID_MAX },
+    { OBJECT_RSN, OBJECT_ID_MAX, OBJECT_ID_MAX },
     { OBJECT_OF1D_MAP, OBJECT_ID_MAX, OBJECT_MASTERGOLON },
 };
 
@@ -743,7 +743,7 @@ void EnSob1_EndWalk(EnSob1* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y,
                        EnSob1_GetDistSqAndOrient(this->path, this->waypoint - 1, &this->actor.world.pos, &distSq), 4,
-                       1000, 1);
+                       0x3E8, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Math_ApproachF(&this->actor.speed, 0.5f, 0.2f, 1.0f);
     if (distSq < 12.0f) {
@@ -783,7 +783,7 @@ void EnSob1_Walk(EnSob1* this, PlayState* play) {
     if (this->path != NULL) {
         Math_SmoothStepToS(&this->actor.world.rot.y,
                            EnSob1_GetDistSqAndOrient(this->path, this->waypoint, &this->actor.world.pos, &distSq), 4,
-                           1000, 1);
+                           0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.speed = 2.0f;
         if (distSq < SQ(5.0f)) {

@@ -342,8 +342,8 @@ void func_8093F198(PlayState* play, Vec3f* arg1, f32 arg2) {
     temp_lo = 0x10000 / temp_f16;
 
     for (i = 0, phi_s0 = 0; i < temp_f16; i++, phi_s0 += temp_lo) {
-        sp74.x = (Math_SinS((s32)(Rand_ZeroOne() * temp_lo) + phi_s0) * temp_f20) + arg1->x;
-        sp74.z = (Math_CosS((s32)(Rand_ZeroOne() * temp_lo) + phi_s0) * temp_f20) + arg1->z;
+        sp74.x = arg1->x + (Math_SinS((s32)(Rand_ZeroOne() * temp_lo) + phi_s0) * temp_f20);
+        sp74.z = arg1->z + (Math_CosS((s32)(Rand_ZeroOne() * temp_lo) + phi_s0) * temp_f20);
         EffectSsGSplash_Spawn(play, &sp74, NULL, NULL, 0, 0x15E);
     }
 

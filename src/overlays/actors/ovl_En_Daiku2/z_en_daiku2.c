@@ -249,7 +249,7 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
     s32 pad[2];
     s16 temp_v0;
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0x0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
     if (sp98 != 2) {
         if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
             this->unk_28A = 5;
@@ -332,7 +332,7 @@ void func_80BE6B40(EnDaiku2* this, PlayState* play) {
 }
 
 void func_80BE6BC0(EnDaiku2* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0x0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         s32 day = gSaveContext.save.day - 1;
 
@@ -413,7 +413,7 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
         return;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0x0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
     if (curFrame >= this->animEndFrame) {
         this->unk_274 = 1;
     }
