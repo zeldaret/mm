@@ -8,8 +8,8 @@
         <Animation Name="gAdultRutoIdleAnim" Offset="0xDE8"/> <!-- Original name is "ru2_matsu" -->
 
         <!-- Adult Ruto Palettes -->
-        <Texture Name="gAdultRutoTLUT1" OutName="adult_ruto_tlut_1" Format="rgba16" Width="144" Height="1" Offset="0xE00"/>
-        <Texture Name="gAdultRutoTLUT2" OutName="adult_ruto_tlut_2" Format="rgba16" Width="16" Height="16" Offset="0x43C0"/>
+        <Texture Name="gAdultRuto1TLUT" OutName="adult_ruto_1_tlut" Format="rgba16" Width="144" Height="1" Offset="0xE00"/>
+        <Texture Name="gAdultRuto2TLUT" OutName="adult_ruto_2_tlut" Format="rgba16" Width="16" Height="16" Offset="0x43C0"/>
 
         <!-- Adult Ruto Eye Textures -->
         <Texture Name="gAdultRutoEyeOpenTex" OutName="adult_ruto_eye_open" Format="rgba16" Width="32" Height="32" Offset="0xF20"/>
