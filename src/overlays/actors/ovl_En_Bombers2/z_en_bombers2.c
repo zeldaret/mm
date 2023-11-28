@@ -119,7 +119,7 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) || (gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2))) {
         this->actor.world.pos.x += Math_SinS(this->actor.home.rot.y + 0xC100) * 50.0f;
         cos = Math_CosS(this->actor.home.rot.y + 0xC100) * 50.0f;
-        this->unk_2AC = 1;
+        this->unk_2AC = true;
         this->actor.world.pos.z += cos;
     }
     this->csId = this->actor.csId;
@@ -146,7 +146,7 @@ void EnBombers2_ChangeAnim(EnBombers2* this, s32 animIndex, f32 playSpeed) {
 }
 
 void func_80C04B40(EnBombers2* this) {
-    if (this->unk_2AC == 0) {
+    if (!this->unk_2AC) {
         EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_4, 1.0f);
     } else {
         EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_0, 1.0f);
@@ -180,7 +180,7 @@ void func_80C04BA0(EnBombers2* this, PlayState* play) {
         default:
             break;
     }
-    if (this->unk_2AC != 0) {
+    if (this->unk_2AC) {
         this->textIdIndex = 7;
     }
     this->actor.textId = sTextIds[this->textIdIndex];
@@ -208,7 +208,7 @@ void func_80C04D00(EnBombers2* this) {
     }
 
     this->unk_2A8 = 0;
-    if (this->unk_2AC != 0) {
+    if (this->unk_2AC) {
         EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_6, 1.0f);
     }
     this->unk_2C0 = 1;
@@ -219,7 +219,7 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
 
-    if ((this->unk_2AC == 0) && (curFrame >= this->lastAnimFrame)) {
+    if (!this->unk_2AC && (curFrame >= this->lastAnimFrame)) {
         if (!(this->unk_2A8 & 1)) {
             EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_1, 1.0f);
         } else {
@@ -367,7 +367,7 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
                 this->unk_2C0 = 1;
                 SET_WEEKEVENTREG(WEEKEVENTREG_73_80);
                 CutsceneManager_Stop(this->csId);
-                this->unk_2AC = 1;
+                this->unk_2AC = true;
                 this->actor.textId = sTextIds[this->textIdIndex];
                 Message_StartTextbox(play, this->actor.textId, &this->actor);
                 this->actionFunc = func_80C04D8C;
@@ -422,10 +422,9 @@ void EnBombers2_Update(Actor* thisx, PlayState* play) {
         }
     }
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-    if (this->unk_2AC == 0) {
-        this->actor.world.pos.x = (Math_SinS(this->actor.world.rot.y + 0x8000) * 26.0f) + sp34.x;
-        temp_f4 = Math_CosS(this->actor.world.rot.y + 0x8000) * 26.0f;
-        this->actor.world.pos.z = temp_f4 + sp34.z;
+    if (!this->unk_2AC) {
+        this->actor.world.pos.x = sp34.x + Math_SinS(this->actor.world.rot.y + 0x8000) * 26.0f;
+        this->actor.world.pos.z = sp34.z + Math_CosS(this->actor.world.rot.y + 0x8000) * 26.0f;
         this->collider.dim.radius = 35;
         this->collider.dim.height = 30;
     } else {
@@ -434,7 +433,7 @@ void EnBombers2_Update(Actor* thisx, PlayState* play) {
     }
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    if (this->unk_2AC == 0) {
+    if (!this->unk_2AC) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
                                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
                                     UPDBGCHECKINFO_FLAG_10);
