@@ -16,14 +16,7 @@ void EnNb_Destroy(Actor* thisx, PlayState* play);
 void EnNb_Update(Actor* thisx, PlayState* play);
 void EnNb_Draw(Actor* thisx, PlayState* play);
 
-void EnNb_FollowSchedule(EnNb* this, PlayState* play);
 void func_80BC0EAC(EnNb* this, PlayState* play);
-
-void func_80BC08E0(EnNb* this, PlayState* play);
-void func_80BC0978(EnNb* this, PlayState* play);
-
-s32 func_80BC00AC(Actor* thisx, PlayState* play);
-s32 func_80BC01DC(Actor* thisx, PlayState* play);
 
 #define EN_NB_FLAG_NONE (0)
 #define EN_NB_FLAG_8 (1 << 3)

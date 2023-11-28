@@ -983,7 +983,7 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
         Vec3f sp5C;
 
         if (this->actor.params == 0) {
-            Math_SmoothStepToS(&this->actor.world.rot.x, this->unk_348, 1, this->unk_34C + 200, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.x, this->unk_348, 1, this->unk_34C + 0xC8, 0);
             if (this->actionFunc != func_80B297FC) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_34A, 1, 0xBB8, 0);
             }

@@ -294,9 +294,9 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
         temp_s0 = CLAMP(temp_s0, 1, 255);
         this->actor.shape.rot.z = 0;
         this->actor.world.rot.z = 0;
-        this->actor.child =
-            Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, temp_s0 | 0xFF00);
+        this->actor.child = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
+                                        this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
+                                        OBJICEPOLY_PARAMS_ALT(temp_s0, OBJICEPOLY_SWITCH_FLAG_NONE));
         if (this->actor.child != NULL) {
             Player* player = GET_PLAYER(play);
 
@@ -607,7 +607,7 @@ void func_80991280(EnWf* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if (this->unk_298 != 0) {
-        temp_v0 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->unk_29E;
+        temp_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y - this->unk_29E;
         if (ABS_ALT(temp_v0) > 0x2000) {
             this->unk_298--;
             return;
@@ -658,7 +658,7 @@ void func_8099149C(EnWf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!func_8099408C(play, this)) {
-        Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 500);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x1F4);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (Actor_OtherIsTargeted(play, &this->actor)) {
             sp2C = 150.0f;
@@ -776,7 +776,8 @@ void func_809919F4(EnWf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 temp_v0;
 
-    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_29A, 2500);
+    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_29A, 0x9C4);
+
     if (!func_8099408C(play, this) && !func_80990948(play, this, false)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         sp26 = BINANG_ROT180(player->actor.shape.rot.y + this->unk_29A);
@@ -998,7 +999,7 @@ void func_809924EC(EnWf* this, PlayState* play) {
         this->actor.speed += 0.05f;
     }
 
-    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3000);
+    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xBB8);
     if (SkelAnime_Update(&this->skelAnime)) {
         sp26 = this->actor.wallYaw - this->actor.shape.rot.y;
 
@@ -1037,7 +1038,7 @@ void func_809926D0(EnWf* this) {
 }
 
 void func_80992784(EnWf* this, PlayState* play) {
-    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2500);
+    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x9C4);
     if (SkelAnime_Update(&this->skelAnime) &&
         (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH))) {
         this->actor.shape.rot.x = 0;
@@ -1120,7 +1121,7 @@ void func_80992B8C(EnWf* this, PlayState* play) {
     s32 sp2C;
     Player* player = GET_PLAYER(play);
 
-    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_29A, 2000);
+    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_29A, 0x7D0);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         sp2C = BINANG_SUB((this->actor.wallYaw - this->actor.yawTowardsPlayer), this->unk_29A);
         if (ABS_ALT(sp2C) > 0x2EE0) {
@@ -1351,7 +1352,7 @@ void func_8099357C(EnWf* this, PlayState* play) {
                 }
             }
 
-            Math_SmoothStepToS(&this->actor.shape.rot.y, sp2E, 10, 0x800, 16);
+            Math_SmoothStepToS(&this->actor.shape.rot.y, sp2E, 10, 0x800, 0x10);
             this->actor.world.rot.y = this->actor.shape.rot.y;
 
             if (Actor_WorldDistXZToActor(&this->actor, this->actor.child) < (this->unk_2A4 + 10.0f)) {
@@ -1363,7 +1364,7 @@ void func_8099357C(EnWf* this, PlayState* play) {
         }
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), 10,
-                           0x800, 16);
+                           0x800, 0x10);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 40.0f) {
             func_809910F0(this);
@@ -1380,9 +1381,9 @@ void func_80993738(EnWf* this, PlayState* play) {
         this->unk_29E = Math_SinS(this->unk_298 * 4200) * 8920.0f;
     } else if ((this->actionFunc == func_80991C80) || (this->actionFunc == func_8099357C) ||
                (this->actionFunc == func_80991040) || (this->actionFunc == func_80991174)) {
-        Math_ScaledStepToS(&this->unk_29E, 0, 1000);
+        Math_ScaledStepToS(&this->unk_29E, 0, 0x3E8);
     } else if (this->actionFunc != func_809923E4) {
-        Math_ScaledStepToS(&this->unk_29E, this->actor.yawTowardsPlayer - this->actor.shape.rot.y, 1000);
+        Math_ScaledStepToS(&this->unk_29E, this->actor.yawTowardsPlayer - this->actor.shape.rot.y, 0x3E8);
         this->unk_29E = CLAMP(this->unk_29E, -0x3127, 0x3127);
     }
 }
@@ -1497,8 +1498,8 @@ void EnWf_Update(Actor* thisx, PlayState* play) {
     if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
     } else {
-        Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 600);
-        Math_ScaledStepToS(&this->actor.shape.rot.z, 0, 600);
+        Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 0x258);
+        Math_ScaledStepToS(&this->actor.shape.rot.z, 0, 0x258);
     }
 
     if (this->actionFunc != func_80990F50) {
@@ -1616,7 +1617,7 @@ s32 func_8099408C(PlayState* play, EnWf* this) {
     s16 temp_v1;
 
     if (temp_v0 != NULL) {
-        temp_v1 = (Actor_WorldYawTowardActor(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_29E;
+        temp_v1 = Actor_WorldYawTowardActor(&this->actor, temp_v0) - this->actor.shape.rot.y - this->unk_29E;
         if (ABS_ALT(temp_v1) < 0x3000) {
             if (Rand_ZeroOne() < 0.5f) {
                 func_8099223C(this);

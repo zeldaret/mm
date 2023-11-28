@@ -1548,7 +1548,7 @@ void EnFishing_DrawLureHook(PlayState* play, Vec3f* pos, Vec3f* refPos, u8 hookI
 
     Matrix_Push();
 
-    if ((D_8090CD14 == 3) && ((pos->y > WATER_SURFACE_Y(play)) || (D_8090CD0C && (hookIndex != 0)))) {
+    if ((D_8090CD14 == 3) && ((pos->y > WATER_SURFACE_Y(play)) || (D_8090CD0C && ((u32)hookIndex != 0)))) {
         offsetY = 0.0f;
     } else if (pos->y < WATER_SURFACE_Y(play)) {
         offsetY = -1.0f;

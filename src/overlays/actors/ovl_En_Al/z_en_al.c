@@ -15,7 +15,6 @@ void EnAl_Destroy(Actor* thisx, PlayState* play);
 void EnAl_Update(Actor* thisx, PlayState* play);
 void EnAl_Draw(Actor* thisx, PlayState* play);
 
-void func_80BDF5E8(EnAl* this, PlayState* play);
 void func_80BDF6C4(EnAl* this, PlayState* play);
 
 static u8 D_80BDFC70[] = {

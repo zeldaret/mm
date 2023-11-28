@@ -338,8 +338,8 @@ void func_80A5BDB0(EnKusa2* this, PlayState* play) {
     sp50.y = this->actor.world.pos.y + this->actor.depthInWater;
 
     for (phi_s0 = 0, i = 0; i < 4; i++, phi_s0 += 0x4000) {
-        sp50.x = (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f) + this->actor.world.pos.x;
-        sp50.z = (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f) + this->actor.world.pos.z;
+        sp50.x = this->actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f);
+        sp50.z = this->actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f);
         EffectSsGSplash_Spawn(play, &sp50, NULL, NULL, 0, 190);
     }
 
@@ -577,7 +577,7 @@ void func_80A5C70C(EnKusa2UnkBssSubStruct* arg0) {
 }
 
 void func_80A5C718(EnKusa2UnkBssSubStruct* arg0) {
-    Math_ScaledStepToS(&arg0->unk_20, arg0->unk_22, 1200);
+    Math_ScaledStepToS(&arg0->unk_20, arg0->unk_22, 0x4B0);
 
     if ((arg0->unk_1C > 0.0f) && (Rand_ZeroOne() < 0.05f)) {
         arg0->unk_1C = -arg0->unk_1C;

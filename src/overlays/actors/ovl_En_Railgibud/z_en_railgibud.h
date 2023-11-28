@@ -46,8 +46,8 @@ typedef struct EnRailgibud {
     /* 0x2A4 */ f32 drawDmgEffScale;
     /* 0x2A8 */ Vec3s jointTable[GIBDO_LIMB_MAX];
     /* 0x344 */ Vec3s morphTable[GIBDO_LIMB_MAX];
-    /* 0x3E0 */ Vec3s headRotation;
-    /* 0x3E6 */ Vec3s upperBodyRotation;
+    /* 0x3E0 */ Vec3s headRot;
+    /* 0x3E6 */ Vec3s torsoRot;
     /* 0x3EC */ s16 shouldWalkForward; // Only used by the "main" Gibdo
     /* 0x3EE */ s16 shouldWalkForwardNextFrame; // Only used by the "main" Gibdo
     /* 0x3F0 */ union {

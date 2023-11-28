@@ -51,7 +51,7 @@ typedef struct EnOssan {
     /* 0x2C2 */ s16 cutsceneState;
     /* 0x2C4 */ u16 textId;
     /* 0x2C6 */ Vec3s headRot;
-    /* 0x2CC */ Vec3s unk2CC; // Set but never used
+    /* 0x2CC */ Vec3s torsoRot; // Set but never used
     /* 0x2D2 */ s16 fidgetTableY[ENOSSAN_LIMB_MAX];
     /* 0x2F8 */ s16 fidgetTableZ[ENOSSAN_LIMB_MAX];
     /* 0x31E */ Vec3s jointTable[ENOSSAN_LIMB_MAX];

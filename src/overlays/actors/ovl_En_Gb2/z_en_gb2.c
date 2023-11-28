@@ -993,7 +993,7 @@ void EnGb2_Update(Actor* thisx, PlayState* play) {
     if (!(this->unk_26C & 0x100)) {
         func_80B0F5E0(this, play);
     }
-    Actor_TrackPlayer(play, &this->actor, &this->unk_270, &this->unk_276, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
 }
 
 s32 EnGb2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
@@ -1001,7 +1001,7 @@ s32 EnGb2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnGb2* this = THIS;
 
     if (limbIndex == OBJECT_PS_LIMB_07) {
-        Matrix_RotateYS(this->unk_270.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->headRot.y, MTXMODE_APPLY);
     }
 
     if (limbIndex == OBJECT_PS_LIMB_01) {

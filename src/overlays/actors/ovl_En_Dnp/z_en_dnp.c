@@ -212,7 +212,7 @@ s32 func_80B3CDA4(EnDnp* this, PlayState* play) {
 
     temp_s0 = CLAMP(temp_s0, -0x3FFC, 0x3FFC);
 
-    Math_SmoothStepToS(&this->unk_332, temp_s0, 3, 0x2AA8, 0x1);
+    Math_SmoothStepToS(&this->unk_332, temp_s0, 3, 0x2AA8, 1);
     sp30 = player->actor.world.pos;
     sp30.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     sp3C = this->actor.world.pos;
@@ -222,7 +222,7 @@ s32 func_80B3CDA4(EnDnp* this, PlayState* play) {
     //! FAKE
     if (1) {}
 
-    Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 0x1);
+    Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 1);
 
     return 1;
 }

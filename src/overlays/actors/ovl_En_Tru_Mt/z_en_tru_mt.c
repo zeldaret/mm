@@ -313,7 +313,7 @@ void func_80B7679C(EnTruMt* this, PlayState* play) {
     Vec3f sp40;
     Vec3f sp34;
 
-    Math_SmoothStepToS(&this->unk_34A, (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - 0x4000, 4, 0x38E0, 1);
+    Math_SmoothStepToS(&this->unk_34A, this->actor.yawTowardsPlayer - this->actor.shape.rot.y - 0x4000, 4, 0x38E0, 1);
     this->unk_34A = CLAMP(this->unk_34A, -0x38E0, 0x38E0);
 
     sp40 = player->actor.world.pos;

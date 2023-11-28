@@ -27,7 +27,7 @@ ActorInit Oceff_Wipe_InitVars = {
     /**/ OceffWipe_Draw,
 };
 
-UNK_TYPE4 D_80977200;
+static s32 sBssPad;
 
 void OceffWipe_Init(Actor* thisx, PlayState* play) {
     OceffWipe* this = THIS;

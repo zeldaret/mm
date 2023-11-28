@@ -302,7 +302,7 @@ void func_80BA3BFC(EnToto* this, PlayState* play) {
 }
 
 void func_80BA3C88(EnToto* this) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 800);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 0x320);
 }
 
 void func_80BA3CC4(EnToto* this, PlayState* play) {
