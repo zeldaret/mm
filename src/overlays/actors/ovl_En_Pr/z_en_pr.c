@@ -366,7 +366,7 @@ void func_80A32B20(EnPr* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->actor.speed = BREG(57) + 3.0f;
-    Math_SmoothStepToS(&this->unk_22C, this->actor.yawTowardsPlayer, BREG(49) + 1, BREG(50) + 1000, BREG(51));
+    Math_SmoothStepToS(&this->unk_22C, this->actor.yawTowardsPlayer, 1 + BREG(49), 0x3E8 + BREG(50), BREG(51));
     this->unk_2B8 = D_80A338C0[GET_PLAYER_FORM] + player->actor.world.pos.y;
     func_80A324E0(this, play);
 
@@ -402,7 +402,7 @@ void func_80A32D28(EnPr* this, PlayState* play) {
         this->actor.speed = 1.0f;
         func_80A32854(this);
     } else {
-        Math_SmoothStepToS(&this->unk_22C, this->actor.yawTowardsPlayer, BREG(49) + 1, BREG(50) + 1000, BREG(51));
+        Math_SmoothStepToS(&this->unk_22C, this->actor.yawTowardsPlayer, 1 + BREG(49), 0x3E8 + BREG(50), BREG(51));
         func_80A325E4(this);
         this->unk_2B8 = D_80A338C0[GET_PLAYER_FORM] + player->actor.world.pos.y;
         func_80A324E0(this, play);
@@ -552,9 +552,9 @@ void EnPr_Update(Actor* thisx, PlayState* play) {
         pitch = Math_Vec3f_Pitch(&this->actor.world.pos, &sp50) * 0.3f;
 
         if (fabsf(this->actor.world.pos.y - this->unk_2B8) > 8.0f) {
-            Math_SmoothStepToS(&this->actor.world.rot.x, pitch, 1, BREG(48) + 500, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.x, pitch, 1, 0x1F4 + BREG(48), 0);
         } else {
-            Math_SmoothStepToS(&this->actor.world.rot.x, 0, 1, BREG(52) + 500, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.x, 0, 1, 0x1F4 + BREG(52), 0);
         }
     }
 

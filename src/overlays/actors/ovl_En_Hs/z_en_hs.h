@@ -27,7 +27,7 @@ typedef struct EnHs {
     /* 0x1D4 */ Vec3s jointTable[OBJECT_HS_LIMB_MAX];
     /* 0x234 */ Vec3s morphTable[OBJECT_HS_LIMB_MAX];
     /* 0x294 */ Vec3s headRot;
-    /* 0x29A */ Vec3s unusedRot; // probably not chest, as chest is same limb as lower body
+    /* 0x29A */ Vec3s torsoRot; // Set but unused
     /* 0x2A0 */ u16 stateFlags;
     /* 0x2A2 */ s16 stateTimer; // reused for different actionFunc
     /* 0x2A4 */ Vec3f nwcPos[20]; // actual chick position are even values, odd values seem to be extra values for smoother chain

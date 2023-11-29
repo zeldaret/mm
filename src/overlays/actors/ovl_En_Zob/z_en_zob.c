@@ -727,12 +727,12 @@ void EnZob_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_2F4 & 1) {
-        Actor_TrackPlayer(play, &this->actor, &this->unk_2F6, &this->unk_2FC, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     } else {
-        Math_SmoothStepToS(&this->unk_2F6.x, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2F6.y, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2FC.x, 0, 6, 6200, 100);
-        Math_SmoothStepToS(&this->unk_2FC.y, 0, 6, 6200, 100);
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 6, 0x1838, 0x64);
     }
 }
 
@@ -740,8 +740,8 @@ s32 EnZob_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnZob* this = THIS;
 
     if (limbIndex == 9) {
-        rot->x += this->unk_2F6.y;
-        rot->y += this->unk_2F6.x;
+        rot->x += this->headRot.y;
+        rot->y += this->headRot.x;
     }
     return false;
 }

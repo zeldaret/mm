@@ -203,7 +203,7 @@ void func_80937160(ObjBean* this) {
     this->dyna.actor.scale.x = this->dyna.actor.scale.z = Math_SinS(this->unk_1AE) * 0.10700001f;
     Math_StepToF(&this->unk_1CC, 0.0f, 0.1f);
     Math_StepToF(&this->unk_1D0, 0.0f, 0.1f);
-    Math_ScaledStepToS(&this->dyna.actor.shape.rot.y, this->dyna.actor.home.rot.y, 100);
+    Math_ScaledStepToS(&this->dyna.actor.shape.rot.y, this->dyna.actor.home.rot.y, 0x64);
 }
 
 void func_80937238(ObjBean* this) {
