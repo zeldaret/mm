@@ -10119,8 +10119,8 @@ s32 func_808401F4(PlayState* play, Player* this) {
                         spC8.x = temp_a0->x + (spB0.x * var_fv1);
                         spC8.y = temp_a0->y + (spB0.y * var_fv1);
                         spC8.z = temp_a0->z + (spB0.z * var_fv1);
-                        if (BgCheck_EntityLineTest2(&play->colCtx, &spC8, temp_a0, &pos, &poly, 1, 0, 0, 1, &bgId,
-                                                    &this->actor)) {
+                        if (BgCheck_EntityLineTest2(&play->colCtx, &spC8, temp_a0, &pos, &poly, true, false, false,
+                                                    true, &bgId, &this->actor)) {
                             if (!SurfaceType_IsIgnoredByEntities(&play->colCtx, poly, bgId) &&
                                 (SurfaceType_GetFloorType(&play->colCtx, poly, bgId) != FLOOR_TYPE_6) &&
                                 !func_800B90AC(play, &this->actor, poly, bgId, &pos)) {
@@ -15704,7 +15704,8 @@ void Player_Action_47(Player* this, PlayState* play) {
             sp4C.x = this->actor.world.pos.x;
             sp4C.z = this->actor.world.pos.z;
             sp4C.y = sp64.y;
-            if (!BgCheck_EntityLineTest2(&play->colCtx, &sp4C, &sp64, &sp40, &poly, 1, 0, 0, 1, &bgId, &this->actor)) {
+            if (!BgCheck_EntityLineTest2(&play->colCtx, &sp4C, &sp64, &sp40, &poly, true, false, false, true, &bgId,
+                                         &this->actor)) {
                 func_808479F4(play, this, -2.0f);
                 return;
             }

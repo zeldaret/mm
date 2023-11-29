@@ -315,7 +315,7 @@ void func_80BFE67C(EnBomjima* this, PlayState* play) {
     Vec3f sp60;
     Vec3f sp54;
     CollisionPoly* sp50;
-    s32 sp4C;
+    s32 bgId;
 
     this->unk_2DC = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A4);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 0x1388, 0);
@@ -330,7 +330,7 @@ void func_80BFE67C(EnBomjima* this, PlayState* play) {
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp54)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp54, &sp6C,
-                                                               &sp50, true, false, false, true, &sp4C)) {
+                                                               &sp50, true, false, false, true, &bgId)) {
                     EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_2A4, &sp54);
                     this->unk_2BE = Rand_S16Offset(30, 50);
@@ -353,7 +353,7 @@ void func_80BFE67C(EnBomjima* this, PlayState* play) {
                 sp60.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
 
                 if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp60, &sp6C, &sp50, true, false,
-                                            false, true, &sp4C)) {
+                                            false, true, &bgId)) {
                     this->unk_2C0 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_19, 1.0f);

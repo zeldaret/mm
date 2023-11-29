@@ -33,12 +33,12 @@ static InitChainEntry sInitChain[] = {
 void BgLotus_Init(Actor* thisx, PlayState* play) {
     BgLotus* this = THIS;
     s32 pad;
-    s32 sp2C;
+    s32 bgId;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gLilyPadCol);
-    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp2C,
+    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &bgId,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);
     this->unk168 = 0x60;
     this->dyna.actor.world.rot.y = (s32)Rand_Next() >> 0x10;

@@ -322,7 +322,7 @@ void func_80B9E8D4(MirRay3* this, PlayState* play, MirRay3Struct* ptr) {
     {
         CollisionPoly* spC4;
 
-        if (!BgCheck_AnyLineTest1(&play->colCtx, &sp140, &sp134, &sp128, &spC4, 1)) {
+        if (!BgCheck_AnyLineTest1(&play->colCtx, &sp140, &sp134, &sp128, &spC4, true)) {
             Math_Vec3f_Copy(&sp128, &sp134);
         }
 

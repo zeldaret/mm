@@ -217,7 +217,7 @@ void func_80A76070(EnPrz* this, s16 arg1, PlayState* play) {
 s32 func_80A762C0(EnPrz* this, PlayState* play) {
     CollisionPoly* sp54;
     Vec3f sp48;
-    s32 sp44;
+    s32 bgId;
     Vec3f sp38;
 
     Math_Vec3f_Copy(&sp38, &this->actor.world.pos);
@@ -226,7 +226,7 @@ s32 func_80A762C0(EnPrz* this, PlayState* play) {
     sp38.z += Math_CosS(this->actor.world.rot.y) * 40.0f;
 
     if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp38, &sp48, &sp54, true, false, false, true,
-                                &sp44)) {
+                                &bgId)) {
         return true;
     }
     return false;

@@ -253,15 +253,15 @@ void func_80A5B954(MtxF* matrix, f32 arg1) {
 
 s32 func_80A5BA58(EnKusa2* this, PlayState* play) {
     Vec3f sp24;
-    s32 sp20;
+    s32 bgId;
 
     sp24.x = this->actor.world.pos.x;
     sp24.y = this->actor.world.pos.y + 30.0f;
     sp24.z = this->actor.world.pos.z;
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp20, &this->actor, &sp24);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp24);
     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
-        this->actor.floorBgId = sp20;
+        this->actor.floorBgId = bgId;
         this->actor.world.pos.y = this->actor.floorHeight;
         Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
         return true;
@@ -1017,7 +1017,7 @@ void func_80A5D964(EnKusa2* this) {
 void func_80A5D9C8(EnKusa2* this, PlayState* play) {
     s32 pad;
     Vec3f sp30;
-    s32 sp2C;
+    s32 bgId;
 
     D_80A5EAF4.x += 11000;
     D_80A5EAF4.y += 17000;
@@ -1062,7 +1062,7 @@ void func_80A5D9C8(EnKusa2* this, PlayState* play) {
         }
 
         this->actor.floorHeight =
-            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &sp30);
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp30);
     }
 }
 

@@ -294,7 +294,7 @@
  * FORMAT
  *   Capital U is Unused
  *   ttttssss eeeerrgg bbUUUUUU
- *   size = 0x0C
+ *   size = 0xC
  */
 #define CS_TRANSITION_GENERAL(type, startFrame, endFrame, red, green, blue) \
     { CMD_HH(type, startFrame) }, { CMD_HBB(endFrame, red, green) }, { CMD_BBBB(blue, 0, 0, 0) }
@@ -461,7 +461,7 @@
  * FORMAT
  *   Capital U is Unused
  *   ppppssss eeeeUUUU UUUUUUUU
- *   size = 0x0C
+ *   size = 0xC
  */
 #define CS_FADE_OUT_SEQ(seqPlayer, startFrame, endFrame) \
     { CMD_HH(seqPlayer, startFrame) }, { CMD_HH(endFrame, 0) }, { CMD_W(0) }

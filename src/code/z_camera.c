@@ -553,8 +553,8 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CameraCollision* to, s32 arg3) {
     toPoint.y = to->pos.y + fromToNorm.y;
     toPoint.z = to->pos.z + fromToNorm.z;
 
-    if (!BgCheck_CameraLineTest1(colCtx, from, &toPoint, &toNewPos, &to->poly, (arg3 & 1) ? 0 : 1, 1,
-                                 (arg3 & 2) ? 0 : 1, -1, &floorBgId)) {
+    if (!BgCheck_CameraLineTest1(colCtx, from, &toPoint, &toNewPos, &to->poly, (arg3 & 1) ? false : true, true,
+                                 (arg3 & 2) ? false : true, -1, &floorBgId)) {
         toNewPos = to->pos;
         toNewPos.y += 5.0f;
 
@@ -613,7 +613,8 @@ s32 Camera_BgCheckInfo(Camera* camera, Vec3f* from, CameraCollision* to) {
     Vec3f toNewPos;
     Vec3f fromToNorm;
 
-    if (BgCheck_CameraLineTest1(&camera->play->colCtx, from, &to->pos, &toNewPos, &to->poly, 1, 1, 1, -1, &to->bgId)) {
+    if (BgCheck_CameraLineTest1(&camera->play->colCtx, from, &to->pos, &toNewPos, &to->poly, true, true, true, -1,
+                                &to->bgId)) {
         floorPoly = to->poly;
         to->norm.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
         to->norm.y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
@@ -660,7 +661,7 @@ s32 Camera_CheckOOB(Camera* camera, Vec3f* from, Vec3f* to) {
     CollisionContext* colCtx = &camera->play->colCtx;
 
     poly = NULL;
-    if ((BgCheck_CameraLineTest1(colCtx, from, to, &intersect, &poly, 1, 1, 1, 0, &bgId)) &&
+    if (BgCheck_CameraLineTest1(colCtx, from, to, &intersect, &poly, true, true, true, 0, &bgId) &&
         (CollisionPoly_GetPointDistanceFromPlane(poly, from) < 0.0f)) {
         return true;
     }

@@ -67,7 +67,7 @@ s32 func_80B6FB30(BgKin2Shelf* this, PlayState* play) {
     Vec3f sp64;
     Vec3f sp58;
     CollisionPoly* sp54;
-    s32 sp50;
+    s32 bgId;
 
     if (this->unk_164 & 2) {
         spA2 = 0x4000;
@@ -94,7 +94,7 @@ s32 func_80B6FB30(BgKin2Shelf* this, PlayState* play) {
     Matrix_MultVec3f(&sp94, &sp7C);
     Matrix_MultVec3f(&sp88, &sp70);
 
-    return BgCheck_EntityLineTest3(&play->colCtx, &sp7C, &sp70, &sp64, &sp54, true, false, false, true, &sp50,
+    return BgCheck_EntityLineTest3(&play->colCtx, &sp7C, &sp70, &sp64, &sp54, true, false, false, true, &bgId,
                                    &this->dyna.actor, 0.0f);
 }
 
@@ -109,7 +109,7 @@ s32 func_80B6FCA4(BgKin2Shelf* this, PlayState* play) {
     Vec3f sp60;
     Vec3f sp54;
     CollisionPoly* sp50;
-    s32 sp4C;
+    s32 bgId;
 
     if (this->unk_164 & 1) {
         sp9E = 0;
@@ -136,7 +136,7 @@ s32 func_80B6FCA4(BgKin2Shelf* this, PlayState* play) {
     Matrix_MultVec3f(&sp90, &sp78);
     Matrix_MultVec3f(&sp84, &sp6C);
 
-    return BgCheck_EntityLineTest3(&play->colCtx, &sp78, &sp6C, &sp60, &sp50, true, false, false, true, &sp4C,
+    return BgCheck_EntityLineTest3(&play->colCtx, &sp78, &sp6C, &sp60, &sp50, true, false, false, true, &bgId,
                                    &this->dyna.actor, 0.0f);
 }
 

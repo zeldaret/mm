@@ -2768,12 +2768,13 @@ void DynaPoly_EnableFloorCollision(PlayState* play, DynaCollisionContext* dyna, 
 void DynaPoly_DeleteBgActor(PlayState* play, DynaCollisionContext* dyna, s32 bgId) {
     DynaPolyActor* actor;
 
-    if (DynaPoly_IsBgIdBgActor(bgId) == false) {
+    if (!DynaPoly_IsBgIdBgActor(bgId)) {
         return;
     }
-    actor = DynaPoly_GetActor(&play->colCtx, bgId);
-    if (actor != NULL) {
 
+    actor = DynaPoly_GetActor(&play->colCtx, bgId);
+
+    if (actor != NULL) {
         actor->bgId = BGACTOR_NEG_ONE;
         dyna->bgActors[bgId].actor = NULL;
         dyna->bgActorFlags[bgId] |= BGACTOR_1;

@@ -150,7 +150,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     CollisionPoly* spC0;
     Vec3f spB4;
     Vec3f spA8;
-    s32 spA4;
+    s32 bgId;
     f32 phi_f20;
     f32 phi_f24;
     Vec3f sp90;
@@ -181,7 +181,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
         spA8.x = D_809EE1F8[i].x + this->actor.world.pos.x;
         spA8.z = D_809EE1F8[i].z + this->actor.world.pos.z;
         if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &spA8, &spB4, &spC0, true, false, false,
-                                    true, &spA4)) {
+                                    true, &bgId)) {
             if (i == 0) {
                 this->unk_6D8 = spB4.x;
             } else if (i == 1) {

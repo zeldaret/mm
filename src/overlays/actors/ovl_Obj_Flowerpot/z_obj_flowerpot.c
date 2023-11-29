@@ -549,13 +549,13 @@ void func_80A1CC0C(ObjFlowerpot* this, PlayState* play) {
         func_80A1C5E8(this, play);
     } else {
         Vec3f sp30;
-        s32 sp2C;
+        s32 bgId;
 
         sp30.x = this->actor.world.pos.x;
         sp30.y = this->actor.world.pos.y + 20.0f;
         sp30.z = this->actor.world.pos.z;
         this->actor.floorHeight =
-            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &sp30);
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp30);
     }
 }
 

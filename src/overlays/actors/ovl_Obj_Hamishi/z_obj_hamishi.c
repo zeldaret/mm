@@ -136,14 +136,14 @@ void func_809A10F4(ObjHamishi* this, PlayState* play) {
 void func_809A13A0(ObjHamishi* this, PlayState* play) {
     s32 pad;
     Vec3f sp28;
-    s32 sp24;
+    s32 bgId;
 
     sp28.x = this->actor.world.pos.x;
     sp28.y = this->actor.world.pos.y + 30.0f;
     sp28.z = this->actor.world.pos.z;
 
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp24, &this->actor, &sp28);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp28);
 }
 
 s32 func_809A1408(ObjHamishi* this, PlayState* play) {

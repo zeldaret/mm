@@ -163,14 +163,14 @@ s32 func_8093951C(ObjBombiwa* this, PlayState* play) {
 void func_80939594(ObjBombiwa* this, PlayState* play) {
     s32 pad;
     Vec3f sp28;
-    s32 sp24;
+    s32 bgId;
 
     sp28.x = this->actor.world.pos.x;
     sp28.y = this->actor.world.pos.y + 30.0f;
     sp28.z = this->actor.world.pos.z;
 
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp24, &this->actor, &sp28);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp28);
 }
 
 void ObjBombiwa_Init(Actor* thisx, PlayState* play) {
@@ -406,7 +406,7 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play) {
     Vec3f sp9C;
     ObjBombiwaStruct* ptr;
     CollisionPoly* sp94;
-    s32 sp90;
+    s32 bgId;
     f32 temp_f0;
     s16 phi_s1;
 
@@ -429,7 +429,7 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play) {
         sp9C.y = ptr->unk_04.y + 30.0f;
         sp9C.z = ptr->unk_04.z;
 
-        temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp94, &sp90, &this->actor, &sp9C);
+        temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp94, &bgId, &this->actor, &sp9C);
         if ((temp_f0 <= (BGCHECK_Y_MIN + 10.0f)) || ((ptr->unk_04.y - (200.0f * ptr->unk_00)) < temp_f0)) {
             this->unk_200++;
             ptr->unk_1A = 1;

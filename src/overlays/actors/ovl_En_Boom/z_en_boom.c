@@ -226,21 +226,21 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     }
 
     if (DECR(this->unk_1CC) != 0) {
-        s32 sp5C;
+        s32 bgId;
         Vec3f sp50;
         s32 pad;
 
         sp74 = BgCheck_EntityLineTest1(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos, &sp50,
-                                       &this->actor.wallPoly, true, true, true, true, &sp5C);
-        if (sp74 != 0) {
-            if (func_800B90AC(play, &this->actor, this->actor.wallPoly, sp5C, &sp50)) {
-                sp74 = 0;
+                                       &this->actor.wallPoly, true, true, true, true, &bgId);
+        if (sp74) {
+            if (func_800B90AC(play, &this->actor, this->actor.wallPoly, bgId, &sp50)) {
+                sp74 = false;
             } else {
                 CollisionCheck_SpawnShieldParticlesMetal(play, &sp50);
             }
         }
 
-        if (sp74 != 0) {
+        if (sp74) {
             this->actor.world.rot.x = -this->actor.world.rot.x;
             this->actor.world.rot.y += 0x8000;
             this->moveTo = &player->actor;

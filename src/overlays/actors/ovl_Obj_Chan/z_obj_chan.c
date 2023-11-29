@@ -161,15 +161,16 @@ void ObjChan_InitChandelier(ObjChan* this, PlayState* play) {
     Vec3f childPos;
     Vec3s childRot;
     CollisionPoly* sp94;
-    s32 sp90;
+    s32 bgId;
     Vec3f sp84;
 
     Math_Vec3f_Copy(&this->unk1C0, &thisx->world.pos);
 
     Math_Vec3f_Copy(&sp84, &thisx->world.pos);
     sp84.y += 1600.0f;
+
     if (BgCheck_EntityLineTest1(&play->colCtx, &thisx->world.pos, &sp84, &this->unk1C0, &sp94, false, false, true, true,
-                                &sp90)) {
+                                &bgId)) {
         this->unk1CC = thisx->world.pos.y - this->unk1C0.y;
     } else {
         Actor_Kill(thisx);

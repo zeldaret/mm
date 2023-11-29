@@ -328,7 +328,7 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
     Vec3f sp60;
     Vec3f sp54;
     Vec3f sp48;
-    s32 sp44;
+    s32 bgId;
 
     if (func_80C012FC(this, play) || func_80C013B4(this) || func_80C013F0(this, play)) {
         return;
@@ -343,7 +343,7 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp48)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp48, &sp60,
-                                                               &colPoly, true, false, false, true, &sp44)) {
+                                                               &colPoly, true, false, false, true, &bgId)) {
                     EnBomjimb_ChangeAnim(this, ENBOMJIMB_ANIM_5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_294, &sp48);
                     this->unk_2B0 = Rand_S16Offset(30, 50);
@@ -363,7 +363,7 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
                 sp54.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp54.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
                 if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, true, false,
-                                            false, true, &sp44)) {
+                                            false, true, &bgId)) {
                     this->unk_2AE = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         EnBomjimb_ChangeAnim(this, ENBOMJIMB_ANIM_20, 1.0f);
@@ -594,8 +594,8 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
     Vec3f sp74;
     CollisionPoly* sp70;
     Vec3f sp64;
-    s32 sp60;
-    s32 sp5C = this->actor.floorBgId;
+    s32 bgId;
+    s32 floorBgId = this->actor.floorBgId;
     CollisionPoly* sp58 = this->actor.floorPoly;
     Player* player = GET_PLAYER(play);
     s32 sp50 = false;
@@ -627,7 +627,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
     sp74.z += Math_CosS(this->actor.world.rot.y) * 50.0f;
 
     if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, true, false, false, true,
-                                &sp60)) {
+                                &bgId)) {
         s16 temp = BINANG_SUB((this->actor.world.rot.y - this->actor.yawTowardsPlayer), 0x8000);
         this->unk_2D6 = temp;
 
@@ -656,7 +656,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
 
     this->actor.world.rot.y = this->unk_2D6 + this->unk_2D4;
 
-    if (SurfaceType_GetSceneExitIndex(&play->colCtx, sp58, sp5C) != 0) {
+    if (SurfaceType_GetSceneExitIndex(&play->colCtx, sp58, floorBgId) != 0) {
         s16 temp = BINANG_SUB(this->actor.world.rot.y, this->actor.yawTowardsPlayer - 0x8000);
 
         if (temp < 0) {

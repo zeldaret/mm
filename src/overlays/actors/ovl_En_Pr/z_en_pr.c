@@ -215,11 +215,11 @@ void EnPr_ChangeAnim(EnPr* this, s32 animIndex) {
 s32 func_80A324E0(EnPr* this, PlayState* play) {
     CollisionPoly* sp54;
     Vec3f sp48;
-    s32 sp44;
+    s32 bgId;
     WaterBox* waterBox;
 
     if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &this->unk_2E0, &sp48, &sp54, 1, 0, 0, 1,
-                                &sp44)) {
+                                &bgId)) {
         return 1;
     }
 

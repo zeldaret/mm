@@ -278,7 +278,7 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
     Vec3f sp54;
     f32 x;
     f32 z;
-    s32 sp48;
+    s32 bgId;
     s16 abs;
 
     switch (this->unk_2A0) {
@@ -291,7 +291,7 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp60)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp60, &sp6C,
-                                                               &colPoly, true, false, false, true, &sp48)) {
+                                                               &colPoly, true, false, false, true, &bgId)) {
                     EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_2, 1.0f);
                     Math_Vec3f_Copy(&this->unk_294, &sp60);
                     this->unk_2AA = Rand_S16Offset(30, 50);
@@ -312,7 +312,7 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
                 sp54.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
 
                 if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp54, &sp6C, &colPoly, true, false,
-                                            false, true, &sp48)) {
+                                            false, true, &bgId)) {
                     this->unk_2A8 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_16, 1.0f);

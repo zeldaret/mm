@@ -125,9 +125,9 @@ void func_80A68808(EnMushi2* this) {
 
 s32 func_80A68860(EnMushi2* this, PlayState* play) {
     s32 pad;
-    s32 sp40;
+    s32 bgId;
     CollisionPoly* sp3C;
-    f32 temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp3C, &sp40, &this->actor, &this->actor.world.pos);
+    f32 temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp3C, &bgId, &this->actor, &this->actor.world.pos);
     WaterBox* waterBox;
     f32 sp30;
 
