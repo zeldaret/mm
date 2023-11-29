@@ -825,7 +825,7 @@ void func_80991C04(EnWf* this) {
 void func_80991C80(EnWf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 sp30;
-    s32 sp2C;
+    s32 onAnimFirstFrame;
     s16 sp2A;
 
     sp2A = BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y);
@@ -842,15 +842,16 @@ void func_80991C80(EnWf* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
     }
 
-    sp2C = Animation_OnFrame(&this->skelAnime, 15.0f);
-    if (((sp2C != 0) && !Actor_IsTargeted(play, &this->actor) &&
+    onAnimFirstFrame = Animation_OnFrame(&this->skelAnime, 15.0f);
+
+    if ((onAnimFirstFrame && !Actor_IsTargeted(play, &this->actor) &&
          (!Actor_IsFacingPlayer(&this->actor, 0x2000) || (this->actor.xzDistToPlayer >= 100.0f))) ||
         SkelAnime_Update(&this->skelAnime)) {
-        if ((sp2C == 0) && (this->unk_2A0 != 0)) {
+        if (!onAnimFirstFrame && (this->unk_2A0 != 0)) {
             this->actor.shape.rot.y += (s16)(0xCCC * (1.5f + ((this->unk_2A0 - 4) * 0.4f)));
             func_80990C6C(this, play, 1);
             this->unk_2A0--;
-        } else if (!Actor_IsFacingPlayer(&this->actor, 0x1554) && (sp2C == 0)) {
+        } else if (!Actor_IsFacingPlayer(&this->actor, 0x1554) && !onAnimFirstFrame) {
             func_80991200(this);
             this->unk_2A0 = (s32)Rand_ZeroFloat(5.0f) + 5;
             if (sp30 >= 0x32C9) {

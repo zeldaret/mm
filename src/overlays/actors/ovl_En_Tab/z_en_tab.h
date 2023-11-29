@@ -14,7 +14,7 @@ typedef struct EnTab {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnTabActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ u8 unk_1D8;
+    /* 0x1D8 */ u8 scheduleResult;
     /* 0x1DC */ s32 unk_1DC;
     /* 0x1E0 */ Actor* unk_1E0;
     /* 0x1E4 */ EnGm* unk_1E4;

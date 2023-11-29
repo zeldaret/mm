@@ -339,7 +339,7 @@ s32 func_80A3E7E0(EnTest3* this, EnTest3ActionFunc actionFunc) {
     } else {
         this->unk_D94 = actionFunc;
         this->unk_D8A = 0;
-        this->unk_D88 = 0;
+        this->scheduleResult = 0;
         return true;
     }
 }
@@ -697,7 +697,8 @@ s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
         &D_80A41854[0], &D_80A41854[1], &D_80A41854[11], &D_80A41854[12], &D_80A41854[19],
     };
 
-    if (((func_80A3F15C(this, play, arg2) || (this->unk_D88 >= 8)) && ((arg2->unk_1_4 == 1) || (arg2->unk_1_4 == 2))) ||
+    if (((func_80A3F15C(this, play, arg2) || (this->scheduleResult >= 8)) &&
+         ((arg2->unk_1_4 == 1) || (arg2->unk_1_4 == 2))) ||
         (arg2->unk_1_4 == 4)) {
         if (arg2->unk_1_4 == 4) {
             this->player.actor.home.rot.y = 0x7FFF;
@@ -731,9 +732,9 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_WAIT);
         }
         Actor_OfferTalkNearColChkInfoCylinder(&this->player.actor, play);
-        if (this->unk_D88 == 3) {
+        if (this->scheduleResult == 3) {
             func_80A3F534(this, play);
-        } else if (this->unk_D88 == 5) {
+        } else if (this->scheduleResult == 5) {
             func_80A3F5A4(this, play);
         }
         this->player.actor.textId = this->unk_D78->textId;
@@ -803,7 +804,7 @@ s32 func_80A3FA58(EnTest3* this, PlayState* play) {
         this->unk_D8A++;
         if (this->unk_D8A == 0) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_51_04);
-            this->unk_D88 = 0;
+            this->scheduleResult = 0;
         }
     }
     return false;
@@ -930,7 +931,7 @@ s32 func_80A40098(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
 
     func_80A3F15C(this, play, arg2);
     this->unk_D7C = SubS_GetAdditionalPath(play, KAFEI_GET_PATH_INDEX(&this->player.actor), ABS_ALT(arg2->unk_1_0) - 1);
-    if ((this->unk_D88 < 7) && (this->unk_D88 != 0) && (this->unk_D80 >= 0)) {
+    if ((this->scheduleResult < 7) && (this->scheduleResult != 0) && (this->unk_D80 >= 0)) {
         startTime = now;
     } else {
         startTime = scheduleOutput->time0;
@@ -984,10 +985,10 @@ s32 func_80A40230(EnTest3* this, PlayState* play) {
     this->unk_D98 = gZeroVec3f;
     if (SubS_TimePathing_Update(this->unk_D7C, &this->unk_DA4, &this->unk_DB4, this->unk_DAC, this->unk_DA8,
                                 &this->unk_DB0, knots, &this->unk_D98, this->unk_D80)) {
-        if (this->unk_D88 == 0x14) {
+        if (this->scheduleResult == 0x14) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_58_80);
             this->player.actor.draw = NULL;
-        } else if (this->unk_D88 == 9) {
+        } else if (this->scheduleResult == 9) {
             D_80A41D64 = 2;
         }
         ret = true;
@@ -1027,12 +1028,12 @@ void func_80A40678(EnTest3* this, PlayState* play) {
     struct_80A41828* sp3C;
     ScheduleOutput scheduleOutput;
 
-    this->unk_D80 = ((this->unk_D88 == 20) || (this->unk_D88 == 10) || (this->unk_D88 == 9)) ? 3
-                    : Play_InCsMode(play)                                                    ? 0
+    this->unk_D80 = ((this->scheduleResult == 20) || (this->scheduleResult == 10) || (this->scheduleResult == 9)) ? 3
+                    : Play_InCsMode(play)                                                                         ? 0
                                           : R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (Schedule_RunScript(play, sScheduleScript, &scheduleOutput)) {
-        if (this->unk_D88 != scheduleOutput.result) {
+        if (this->scheduleResult != scheduleOutput.result) {
             sp3C = &D_80A41828[scheduleOutput.result];
             func_80A3F114(this, play);
             if (sp3C->unk_0 != 4) {
@@ -1050,8 +1051,8 @@ void func_80A40678(EnTest3* this, PlayState* play) {
     } else {
         scheduleOutput.result = 0;
     }
-    this->unk_D88 = scheduleOutput.result;
-    sp3C = &D_80A41828[this->unk_D88];
+    this->scheduleResult = scheduleOutput.result;
+    sp3C = &D_80A41828[this->scheduleResult];
     D_80A417E8[sp3C->unk_0].unk_4(this, play);
 }
 
@@ -1128,7 +1129,7 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
     } else if (this->player.actor.category == ACTORCAT_PLAYER) {
         func_80A409D4(this, play);
     } else if (play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_NONE)) {
-        if (this->unk_D88 >= 7) {
+        if (this->scheduleResult >= 7) {
             Vec3f worldPos;
 
             Math_Vec3f_Copy(&worldPos, &this->player.actor.world.pos);

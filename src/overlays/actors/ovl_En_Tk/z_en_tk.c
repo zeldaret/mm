@@ -168,10 +168,10 @@ void func_80AEC460(EnTk* this) {
 }
 
 f32 func_80AEC524(f32 animCurFrame) {
-    f32 temp_f0;
+    f32 lerp;
     f32 ret;
-    s32 temp_a0;
-    s32 temp_a1;
+    s32 index2;
+    s32 index1;
 
     while ((animCurFrame >= ARRAY_COUNT(D_80AEF8F0)) || (animCurFrame < 0.0f)) {
         if (animCurFrame >= ARRAY_COUNT(D_80AEF8F0)) {
@@ -181,31 +181,31 @@ f32 func_80AEC524(f32 animCurFrame) {
         }
     }
 
-    // temp_f0 always becomes 0
-    temp_a1 = animCurFrame;
-    temp_a0 = temp_a1 + 1;
-    temp_f0 = animCurFrame - temp_a1;
+    // lerp always becomes 0
+    index1 = animCurFrame;
+    index2 = index1 + 1;
+    lerp = animCurFrame - index1;
 
-    if (animCurFrame != temp_a1) {
-        if (temp_a0 >= ARRAY_COUNT(D_80AEF8F0)) {
-            temp_a0 -= ARRAY_COUNT(D_80AEF8F0);
-            ret = (((D_80AEF8F0[temp_a0] + D_80AEF8F0[ARRAY_COUNT(D_80AEF8F0) - 1]) - D_80AEF8F0[temp_a1]) * temp_f0) +
-                  D_80AEF8F0[temp_a1];
+    if (index1 != animCurFrame) {
+        if (index2 >= ARRAY_COUNT(D_80AEF8F0)) {
+            index2 -= ARRAY_COUNT(D_80AEF8F0);
+            ret = LERPIMP_ALT(D_80AEF8F0[index1], D_80AEF8F0[index2] + D_80AEF8F0[ARRAY_COUNT(D_80AEF8F0) - 1], lerp);
         } else {
-            ret = ((D_80AEF8F0[temp_a0] - D_80AEF8F0[temp_a1]) * temp_f0) + D_80AEF8F0[temp_a1];
+            ret = LERPIMP_ALT(D_80AEF8F0[index1], D_80AEF8F0[index2], lerp);
         }
     } else {
-        ret = D_80AEF8F0[temp_a1];
+        ret = D_80AEF8F0[index1];
     }
     return ret;
 }
 
 void func_80AEC658(SkelAnime* skelAnime, f32 animCurFrame, f32 arg2, f32* arg3, f32* arg4) {
-    static f32 D_80AEF9B4[] = { 0.95f, 0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-                                0.0f,  0.0f,  1.0f,  1.25f, 1.48f, 1.68f, 1.77f, 1.88f, 1.88f, 1.84f,
-                                1.77f, 1.62f, 1.43f, 1.22f, 0.93f, 0.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-                                0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.96f, 1.23f, 1.5f,
-                                1.66f, 1.79f, 1.88f, 1.89f, 1.88f, 1.81f, 1.67f, 1.46f, 1.24f };
+    static f32 D_80AEF9B4[] = {
+        0.95f, 0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        1.25f, 1.48f, 1.68f, 1.77f, 1.88f, 1.88f, 1.84f, 1.77f, 1.62f, 1.43f, 1.22f, 0.93f, 0.0f,
+        0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.96f, 1.23f,
+        1.5f,  1.66f, 1.79f, 1.88f, 1.89f, 1.88f, 1.81f, 1.67f, 1.46f, 1.24f,
+    };
 
     *arg3 = D_80AEF9B4[(s32)skelAnime->curFrame] * 0.5f * skelAnime->playSpeed * arg2;
     *arg4 = (func_80AEC524(skelAnime->curFrame) - func_80AEC524(animCurFrame)) * arg2;
@@ -317,7 +317,7 @@ void func_80AECA90(EnTk* this, PlayState* play) {
 
 void func_80AECB0C(EnTk* this, PlayState* play) {
     this->actor.speed = 0.0f;
-    this->unk_3CC = 0xFF;
+    this->scheduleResult = 0xFF;
     this->unk_2DC = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, ENTK_ANIM_0, &this->animIndex);
     this->actionFunc = func_80AECB6C;
@@ -329,8 +329,8 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
     s32 temp3;
     f32 sp48;
     f32 sp44;
-    ScheduleOutput sp34;
-    u8 temp4;
+    ScheduleOutput scheduleOutput;
+    u8 scheduleResult;
 
     this->actor.textId = 0;
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
@@ -363,25 +363,25 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
     this->unk_2DC -= temp3;
     this->unk_2E0 += R_TIME_SPEED;
 
-    if (Schedule_RunScript(play, D_80AEF800, &sp34)) {
-        if ((this->unk_3CC != sp34.result) && !func_80AED354(this, play, &sp34)) {
+    if (Schedule_RunScript(play, D_80AEF800, &scheduleOutput)) {
+        if ((this->scheduleResult != scheduleOutput.result) && !func_80AED354(this, play, &scheduleOutput)) {
             return;
         }
-        temp4 = sp34.result;
+        scheduleResult = scheduleOutput.result;
     } else {
-        sp34.result = 0;
-        temp4 = sp34.result;
+        scheduleOutput.result = 0;
+        scheduleResult = scheduleOutput.result;
     }
 
-    if (!temp4 && (this->unk_3CC != 0)) {
+    if (!scheduleResult && (this->scheduleResult != 0)) {
         this->actor.draw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-    } else if (temp4 && (this->unk_3CC == 0)) {
+    } else if (scheduleResult && (this->scheduleResult == 0)) {
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.draw = EnTk_Draw;
     }
 
-    this->unk_3CC = sp34.result;
+    this->scheduleResult = scheduleOutput.result;
     func_80AECE0C(this, play);
 
     if (this->unk_3CE & 8) {
@@ -391,7 +391,7 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
 }
 
 void func_80AECE0C(EnTk* this, PlayState* play) {
-    if (this->unk_3CC != 0) {
+    if (this->scheduleResult != 0) {
         if (1) {}
         func_80AECE60(this, play);
     }
@@ -530,7 +530,7 @@ s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         return false;
     }
 
-    if ((this->unk_3CC <= 0) && (this->unk_3CC != 0) && (this->timePathTimeSpeed >= 0)) {
+    if ((this->scheduleResult <= 0) && (this->scheduleResult != 0) && (this->timePathTimeSpeed >= 0)) {
         phi_a1 = sp1E;
     } else {
         phi_a1 = scheduleOutput->time0;

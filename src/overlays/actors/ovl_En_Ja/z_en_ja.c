@@ -309,31 +309,31 @@ s32 func_80BC213C(EnJa* this, PlayState* play) {
 }
 
 void func_80BC2150(EnJa* this, PlayState* play) {
-    if ((this->unk_1D8.unk_00 == 1) || (this->unk_1D8.unk_00 == 2)) {
+    if ((this->unk_1D8.scheduleResult == 1) || (this->unk_1D8.scheduleResult == 2)) {
         func_80BC213C(this, play);
     }
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 4, 0x1554);
 }
 
 void func_80BC21A8(EnJa* this, PlayState* play) {
-    ScheduleOutput sp18;
+    ScheduleOutput scheduleOutput;
 
     this->unk_35C = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
-    if (!Schedule_RunScript(play, D_80BC35F0, &sp18) ||
-        ((this->unk_1D8.unk_00 != sp18.result) && !func_80BC20D0(this, play, &sp18))) {
+    if (!Schedule_RunScript(play, D_80BC35F0, &scheduleOutput) ||
+        ((this->unk_1D8.scheduleResult != scheduleOutput.result) && !func_80BC20D0(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        sp18.result = 0;
+        scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
-    this->unk_1D8.unk_00 = sp18.result;
+    this->unk_1D8.scheduleResult = scheduleOutput.result;
     func_80BC2150(this, play);
 }
 
 s32* func_80BC2274(EnJa* this, PlayState* play) {
-    switch (this->unk_1D8.unk_00) {
+    switch (this->unk_1D8.scheduleResult) {
         case 1:
             if (ENJA_GET_3(&this->actor) == 0) {
                 return D_80BC360C;
@@ -378,7 +378,7 @@ void EnJa_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = 0.0f;
     SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     this->unk_340 |= 0x10;
-    this->unk_1D8.unk_00 = 0;
+    this->unk_1D8.scheduleResult = 0;
     this->unk_368 = NULL;
     this->actionFunc = func_80BC21A8;
 }
@@ -398,7 +398,7 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->unk_1D8.unk_00 != 0) {
+    if (this->unk_1D8.scheduleResult != 0) {
         EnJa_UpdateSkelAnime(this);
         func_80BC1A68(this);
         func_80BC1D70(this, play);
@@ -407,14 +407,14 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
         height = this->collider.dim.height + 10;
         SubS_Offer(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_340 & SUBS_OFFER_MODE_MASK);
 
-        if (this->unk_1D8.unk_00 != 2) {
+        if (this->unk_1D8.scheduleResult != 2) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         }
         func_80BC1984(this, play);
     }
 
-    if (this->unk_1D8.unk_00 == 1) {
+    if (this->unk_1D8.scheduleResult == 1) {
         func_80BC32D8(this, play);
     }
 }
@@ -455,7 +455,7 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (this->unk_1D8.unk_00 == 1) {
+    if (this->unk_1D8.scheduleResult == 1) {
         if ((limbIndex == OBJECT_BOJ_LIMB_0B) &&
             (((this->skelAnime.curFrame >= 0.0f) && (this->skelAnime.curFrame <= 6.0f)) ||
              ((this->skelAnime.curFrame >= 35.0f) && (this->skelAnime.curFrame <= 47.0f)))) {
@@ -617,7 +617,7 @@ void EnJa_Draw(Actor* thisx, PlayState* play) {
         phi_t2 = 1;
     }
 
-    if (this->unk_1D8.unk_00 != 0) {
+    if (this->unk_1D8.scheduleResult != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
@@ -638,7 +638,7 @@ void EnJa_Draw(Actor* thisx, PlayState* play) {
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (this->unk_1D8.unk_00 == 1) {
+    if (this->unk_1D8.scheduleResult == 1) {
         func_80BC3594(this, play);
     }
 }

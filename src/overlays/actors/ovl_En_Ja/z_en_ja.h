@@ -11,15 +11,15 @@ typedef void (*EnJaActionFunc)(struct EnJa*, PlayState*);
 #define ENJA_GET_3(thisx) (((thisx)->params & 3) & 0xFF)
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
+    /* 0x0 */ Vec3f unk_00;
+    /* 0xC */ s16 unk_0C;
+    /* 0xE */ s16 unk_0E;
 } EnJaStruct; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ Player* player;
+    /* 0x0 */ u8 scheduleResult;
+    /* 0x4 */ s32 unk_04;
+    /* 0x8 */ Player* player;
 } EnJaStruct2; // size = 0x10
 
 typedef struct EnJa {

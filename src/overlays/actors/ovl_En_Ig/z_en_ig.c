@@ -908,21 +908,21 @@ void func_80BF2A50(EnIg* this, PlayState* play) {
 }
 
 void func_80BF2AF8(EnIg* this, PlayState* play) {
-    ScheduleOutput sp20;
+    ScheduleOutput scheduleOutput;
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
-    if (!Schedule_RunScript(play, D_80BF3260, &sp20) ||
-        ((this->scheduleResult != sp20.result) && !func_80BF2368(this, play, &sp20))) {
+    if (!Schedule_RunScript(play, D_80BF3260, &scheduleOutput) ||
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BF2368(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        sp20.result = 0;
+        scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->unk_2A8 = func_80BF146C(this, play);
-    this->scheduleResult = sp20.result;
+    this->scheduleResult = scheduleOutput.result;
     func_80BF2A50(this, play);
 }
 

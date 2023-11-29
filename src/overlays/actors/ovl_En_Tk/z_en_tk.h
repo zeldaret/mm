@@ -53,7 +53,7 @@ typedef struct EnTk {
     /* 0x36C */ s32 unk_36C;
     /* 0x370 */ UNK_TYPE1 unk370[0x58];
     /* 0x3C8 */ Path* timePath;
-    /* 0x3CC */ u8 unk_3CC;
+    /* 0x3CC */ u8 scheduleResult;
     /* 0x3CE */ u16 unk_3CE;
     /* 0x3D0 */ s32 timePathTimeSpeed;
     /* 0x3D4 */ Vec3f timePathTargetPos;

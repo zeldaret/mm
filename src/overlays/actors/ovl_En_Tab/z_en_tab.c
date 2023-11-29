@@ -200,7 +200,7 @@ s32 func_80BE06DC(EnTab* this, PlayState* play) {
 Actor* func_80BE0778(EnTab* this, PlayState* play) {
     Actor* actor;
 
-    if (this->unk_1D8 == 1) {
+    if (this->scheduleResult == 1) {
         actor = this->actor.child;
     } else {
         actor = &GET_PLAYER(play)->actor;
@@ -338,7 +338,7 @@ s32* func_80BE0E04(EnTab* this, PlayState* play) {
         return D_80BE1984;
     }
 
-    switch (this->unk_1D8) {
+    switch (this->scheduleResult) {
         case 2:
             this->unk_328 = func_80BE0D38;
             if (Player_GetMask(play) != PLAYER_MASK_ROMANI) {
@@ -425,7 +425,7 @@ s32 func_80BE10BC(EnTab* this, PlayState* play) {
     f32 dist;
     Actor* tempActor;
 
-    switch (this->unk_1D8) {
+    switch (this->scheduleResult) {
         case 1:
             if ((player->stateFlags1 & PLAYER_STATE1_40) && !(play->msgCtx.currentTextId <= 0x2B00) &&
                 (play->msgCtx.currentTextId < 0x2B08)) {
@@ -463,27 +463,27 @@ s32 func_80BE10BC(EnTab* this, PlayState* play) {
 }
 
 void func_80BE1224(EnTab* this, PlayState* play) {
-    if ((this->unk_1D8 == 1) || (this->unk_1D8 == 2)) {
+    if ((this->scheduleResult == 1) || (this->scheduleResult == 2)) {
         func_80BE10BC(this, play);
     }
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
 }
 
 void func_80BE127C(EnTab* this, PlayState* play) {
-    ScheduleOutput sp18;
+    ScheduleOutput scheduleOutput;
 
     this->unk_31A = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
-    if (!Schedule_RunScript(play, D_80BE18D0, &sp18) ||
-        ((this->unk_1D8 != sp18.result) && !func_80BE1060(this, play, &sp18))) {
+    if (!Schedule_RunScript(play, D_80BE18D0, &scheduleOutput) ||
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BE1060(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        sp18.result = 0;
+        scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
-    this->unk_1D8 = sp18.result;
+    this->scheduleResult = scheduleOutput.result;
     func_80BE1224(this, play);
 }
 
@@ -517,7 +517,7 @@ void EnTab_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->unk_1D8 = 0;
+    this->scheduleResult = 0;
     this->unk_328 = NULL;
     this->unk_2FC = 0;
     this->unk_2FC |= 0x40;
@@ -542,7 +542,7 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->unk_1D8 != 0) {
+    if (this->scheduleResult != 0) {
         func_80BE0590(this);
         func_80BE0664(this);
         func_80BE09A8(this, play);
@@ -613,7 +613,7 @@ void EnTab_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnTab_Draw(Actor* thisx, PlayState* play) {
     EnTab* this = THIS;
 
-    if (this->unk_1D8 != 0) {
+    if (this->scheduleResult != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

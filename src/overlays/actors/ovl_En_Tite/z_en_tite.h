@@ -8,7 +8,7 @@ struct EnTite;
 
 typedef void (*EnTiteActionFunc)(struct EnTite*, PlayState*);
 
-typedef enum {
+typedef enum EnTiteParam {
     /* -4 */ ENTITE_MINUS_4 = -4,
     /* -3 */ ENTITE_MINUS_3,
     /* -2 */ ENTITE_MINUS_2,

@@ -22,7 +22,7 @@ typedef struct EnTest3 {
     /* 0xD7C */ Path* unk_D7C;
     /* 0xD80 */ s32 unk_D80;
     /* 0xD84 */ f32 unk_D84;
-    /* 0xD88 */ s8 unk_D88;
+    /* 0xD88 */ s8 scheduleResult;
     /* 0xD89 */ u8 unk_D89;
     /* 0xD8A */ s16 unk_D8A;
     /* 0xD8C */ u8 unk_D8C;

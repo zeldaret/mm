@@ -226,7 +226,7 @@ void func_80BD2C6C(EnAh* this) {
 Actor* func_80BD2DA0(EnAh* this, PlayState* play) {
     Actor* actor;
 
-    if (this->unk_1DC == 3) {
+    if (this->scheduleResult == 3) {
         actor = this->actor.child;
     } else {
         actor = &GET_PLAYER(play)->actor;
@@ -293,7 +293,7 @@ void func_80BD2FD0(EnAh* this, PlayState* play) {
 }
 
 s32 func_80BD30C0(EnAh* this, PlayState* play) {
-    switch (this->unk_1DC) {
+    switch (this->scheduleResult) {
         case 1:
             EnAh_ChangeAnim(this, ENAH_ANIM_0);
             break;
@@ -369,7 +369,7 @@ s32* func_80BD3294(EnAh* this, PlayState* play) {
         return D_80BD3E08;
     }
 
-    switch (this->unk_1DC) {
+    switch (this->scheduleResult) {
         case 1:
             if (gSaveContext.save.day == 2) {
                 return D_80BD3DF0;
@@ -470,7 +470,7 @@ s32 func_80BD3548(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80BD35BC(EnAh* this, PlayState* play) {
     s16 temp;
 
-    switch (this->unk_1DC) {
+    switch (this->scheduleResult) {
         default:
             return false;
 
@@ -486,25 +486,25 @@ s32 func_80BD35BC(EnAh* this, PlayState* play) {
 }
 
 void func_80BD3658(EnAh* this, PlayState* play) {
-    if ((this->unk_1DC == 1) || (this->unk_1DC == 2) || (this->unk_1DC == 3)) {
+    if ((this->scheduleResult == 1) || (this->scheduleResult == 2) || (this->scheduleResult == 3)) {
         func_80BD35BC(this, play);
     }
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
 }
 
 void func_80BD36B8(EnAh* this, PlayState* play) {
-    ScheduleOutput sp18;
+    ScheduleOutput scheduleOutput;
 
-    if (!Schedule_RunScript(play, D_80BD3DB0, &sp18) ||
-        ((this->unk_1DC != sp18.result) && !func_80BD3548(this, play, &sp18))) {
+    if (!Schedule_RunScript(play, D_80BD3DB0, &scheduleOutput) ||
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BD3548(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        sp18.result = 0;
+        scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
-    this->unk_1DC = sp18.result;
+    this->scheduleResult = scheduleOutput.result;
     func_80BD3658(this, play);
 }
 
@@ -520,7 +520,7 @@ void func_80BD3768(EnAh* this, PlayState* play) {
         this->unk_2F4 = 20;
         this->unk_1E0 = 0;
         this->actionFunc = func_80BD36B8;
-    } else if (this->unk_1DC != 2) {
+    } else if (this->scheduleResult != 2) {
         if (this->unk_1E4 != NULL) {
             Math_Vec3f_Copy(&sp40, &this->unk_1E4->world.pos);
             Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
@@ -546,7 +546,7 @@ void EnAh_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->actor, 0.01f);
-    this->unk_1DC = 0;
+    this->scheduleResult = 0;
     this->unk_2D8 = 0;
 
     this->actionFunc = func_80BD36B8;
@@ -568,7 +568,7 @@ void EnAh_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->unk_1DC != 0) {
+    if (this->scheduleResult != 0) {
         func_80BD3198(this, play);
         EnAh_UpdateSkelAnime(this);
         func_80BD2C6C(this);
@@ -638,7 +638,7 @@ void EnAh_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnAh_Draw(Actor* thisx, PlayState* play) {
     EnAh* this = THIS;
 
-    if (this->unk_1DC != 0) {
+    if (this->scheduleResult != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

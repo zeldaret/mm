@@ -213,7 +213,7 @@ void func_80BDE318(EnAl* this, PlayState* play) {
 Actor* func_80BDE384(EnAl* this, PlayState* play) {
     Actor* actor;
 
-    switch (this->unk_35C) {
+    switch (this->scheduleResult) {
         case 2:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80)) {
                 actor = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_PM);
@@ -452,12 +452,12 @@ s32 func_80BDEA14(EnAl* this, PlayState* play) {
 s32* func_80BDEABC(EnAl* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->unk_35C == 3) {
+    if (this->scheduleResult == 3) {
         this->unk_4EC = func_80BDE92C;
         return D_80BDFD14;
     }
 
-    switch (this->unk_35C) {
+    switch (this->scheduleResult) {
         case 1:
             if (player->transformation == PLAYER_FORM_DEKU) {
                 return D_80BDFDD0;
@@ -762,7 +762,7 @@ void func_80BDF568(EnAl* this, PlayState* play) {
 }
 
 void func_80BDF578(EnAl* this, PlayState* play) {
-    switch (this->unk_35C) {
+    switch (this->scheduleResult) {
         case 1:
         case 3:
             func_80BDF568(this, play);
@@ -780,19 +780,19 @@ void func_80BDF578(EnAl* this, PlayState* play) {
 }
 
 void func_80BDF5E8(EnAl* this, PlayState* play) {
-    ScheduleOutput sp20;
+    ScheduleOutput scheduleOutput;
 
     this->unk_4E0 = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
-    if (!Schedule_RunScript(play, D_80BDFC70, &sp20) ||
-        ((this->unk_35C != sp20.result) && !func_80BDF390(this, play, &sp20))) {
+    if (!Schedule_RunScript(play, D_80BDFC70, &scheduleOutput) ||
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BDF390(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        sp20.result = 0;
+        scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
-    this->unk_35C = sp20.result;
+    this->scheduleResult = scheduleOutput.result;
     this->unk_368 = func_80BDE384(this, play);
     func_80BDF578(this, play);
 }
@@ -822,7 +822,7 @@ void EnAl_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->unk_310, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
-    this->unk_35C = 0;
+    this->scheduleResult = 0;
     this->actionFunc = func_80BDF5E8;
 
     this->actionFunc(this, play);
@@ -843,7 +843,7 @@ void EnAl_Update(Actor* thisx, PlayState* play) {
 
     func_80BDF064(this, play);
 
-    if (this->unk_35C != 0) {
+    if (this->scheduleResult != 0) {
         EnAl_UpdateSkelAnime(this);
         func_80BDEE5C(this);
         SubS_Offer(&this->actor, play, this->unk_4D4, 30.0f, this->unk_4F0, this->unk_4C2 & SUBS_OFFER_MODE_MASK);
@@ -943,7 +943,7 @@ void EnAl_Draw(Actor* thisx, PlayState* play) {
     EnAl* this = THIS;
     s32 i;
 
-    if (this->unk_35C != 0) {
+    if (this->scheduleResult != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

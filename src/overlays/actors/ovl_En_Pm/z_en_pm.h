@@ -25,7 +25,7 @@ typedef struct EnPm {
     /* 0x24C */ s32 timePathWaypointTime;
     /* 0x250 */ s32 timePathWaypoint;
     /* 0x254 */ s32 timePathElapsedTime;
-    /* 0x258 */ u8 unk_258;
+    /* 0x258 */ u8 scheduleResult;
     /* 0x25C */ UNK_TYPE* unk_25C;
     /* 0x260 */ s8 unk_260;
     /* 0x264 */ s32 unk_264;
