@@ -337,7 +337,7 @@ typedef struct {
 typedef struct {
     /* 0x0 */ u8 seqId;
     /* 0x1 */ u8 priority;
-} SeqRequest; // size = 0x02
+} SeqRequest; // size = 0x2
 
 // functions in sequence.c
 
