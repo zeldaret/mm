@@ -259,9 +259,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
-static s32 sTexturesDesegmented = false;
-
 void EnWf_Init(Actor* thisx, PlayState* play) {
+    static s32 sTexturesDesegmented = false;
     EnWf* this = THIS;
     s32 i;
     s32 temp_s0;
@@ -395,16 +394,13 @@ void EnWf_Blink(EnWf* this) {
 
 s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
     Player* player = GET_PLAYER(play);
-    s32 sp38;
-    s32 pad;
-    s32 pad2;
+    s32 sp38 = ABS_ALT(BINANG_SUB(this->actor.wallYaw, this->actor.shape.rot.y));
+    s32 pad[2];
     s16 sp2E;
     Actor* actor;
 
-    sp38 = ABS_ALT(BINANG_SUB(this->actor.wallYaw, this->actor.shape.rot.y));
-
-    if (((this->unk_295 == 0) ||
-         ((this->unk_295 == 1) && (this->actor.child != NULL) && (this->actor.child->update != NULL))) &&
+    if ((!this->unk_295 ||
+         ((this->unk_295 == true) && (this->actor.child != NULL) && (this->actor.child->update != NULL))) &&
         (this->actor.xzDistToPlayer > 160.0f) &&
         (this->unk_2A8 < Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos))) {
         func_80993524(this);
@@ -467,11 +463,11 @@ s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
 }
 
 void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
-    static Vec3f D_809942DC = { 0.0f, 0.1f, 0.0f };
+    static Vec3f sAccel = { 0.0f, 0.1f, 0.0f };
     static Color_RGBA8 D_809942E8 = { 185, 140, 70, 255 };
     static Color_RGBA8 D_809942EC = { 255, 255, 255, 255 };
     s32 i;
-    Vec3f sp88;
+    Vec3f pos;
     FloorType floorType;
     Color_RGBA8* phi_s1;
     s16 phi_s6;
@@ -490,10 +486,10 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
             }
 
             for (i = 0; i < arg2; i++) {
-                sp88.x = Rand_CenteredFloat(50.0f) + this->actor.world.pos.x;
-                sp88.y = Rand_ZeroFloat(5.0f) + this->actor.world.pos.y;
-                sp88.z = Rand_CenteredFloat(50.0f) + this->actor.world.pos.z;
-                func_800B0F18(play, &sp88, &gZeroVec3f, &D_809942DC, phi_s1, phi_s1, phi_s6, 5,
+                pos.x = Rand_CenteredFloat(50.0f) + this->actor.world.pos.x;
+                pos.y = Rand_ZeroFloat(5.0f) + this->actor.world.pos.y;
+                pos.z = Rand_CenteredFloat(50.0f) + this->actor.world.pos.z;
+                func_800B0F18(play, &pos, &gZeroVec3f, &sAccel, phi_s1, phi_s1, phi_s6, 5,
                               Rand_ZeroFloat(5.0f) + 14.0f);
             }
         }
@@ -744,6 +740,7 @@ void func_8099177C(EnWf* this, PlayState* play) {
 
         this->skelAnime.playSpeed = -phi_f2;
         SkelAnime_Update(&this->skelAnime);
+
         if (Actor_IsFacingPlayer(&this->actor, 0x1555)) {
             if (Rand_ZeroOne() > 0.8f) {
                 func_80991948(this);
@@ -832,6 +829,7 @@ void func_80991C80(EnWf* this, PlayState* play) {
     sp30 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
 
     this->actor.speed = 0.0f;
+
     if (((this->skelAnime.curFrame >= 9.0f) && (this->skelAnime.curFrame < 13.0f)) ||
         ((this->skelAnime.curFrame >= 17.0f) && (this->skelAnime.curFrame < 20.0f))) {
         if (!(this->collider1.base.atFlags & AT_ON)) {
@@ -843,6 +841,7 @@ void func_80991C80(EnWf* this, PlayState* play) {
     }
 
     sp2C = Animation_OnFrame(&this->skelAnime, 15.0f);
+
     if (((sp2C != 0) && !Actor_IsTargeted(play, &this->actor) &&
          (!Actor_IsFacingPlayer(&this->actor, 0x2000) || (this->actor.xzDistToPlayer >= 100.0f))) ||
         SkelAnime_Update(&this->skelAnime)) {
@@ -999,6 +998,7 @@ void func_809924EC(EnWf* this, PlayState* play) {
     }
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xBB8);
+
     if (SkelAnime_Update(&this->skelAnime)) {
         sp26 = this->actor.wallYaw - this->actor.shape.rot.y;
 
@@ -1100,15 +1100,17 @@ void func_80992A74(EnWf* this, PlayState* play) {
     Animation_MorphToLoop(&this->skelAnime, &gWolfosRunAnim, -4.0f);
     player = GET_PLAYER(play);
     temp_f0 = Math_SinS((player->actor.shape.rot.y + this->unk_29A) - this->actor.yawTowardsPlayer);
+
     if (temp_f0 > 0.0f) {
-        this->unk_29A = 16000;
+        this->unk_29A = 0x3E80;
     } else if (temp_f0 < 0.0f) {
-        this->unk_29A = -16000;
+        this->unk_29A = -0x3E80;
     } else if (Rand_ZeroOne() > 0.5f) {
-        this->unk_29A = 16000;
+        this->unk_29A = 0x3E80;
     } else {
-        this->unk_29A = -16000;
+        this->unk_29A = -0x3E80;
     }
+
     this->actor.speed = 6.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_2A0 = (s32)Rand_ZeroFloat(10.0f) + 5;
@@ -1182,7 +1184,7 @@ void func_80992E0C(EnWf* this, PlayState* play) {
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->unk_295 != 0) {
+        if (this->unk_295) {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x70);
         } else {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x60);
@@ -1250,28 +1252,26 @@ void func_80993194(EnWf* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     func_80990E4C(this, play);
+
     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
         if (func_80990EAC(this)) {
             func_80990ED4(this);
+        } else if (this->actor.child->xzDistToPlayer < (80.0f + this->unk_2A4)) {
+            func_80993350(this);
         } else {
-            if (this->actor.child->xzDistToPlayer < (80.0f + this->unk_2A4)) {
-                func_80993350(this);
+            sp36 = Actor_WorldYawTowardActor(this->actor.child, &this->actor);
+            sp34 = Math_SmoothStepToS(&sp36, BINANG_ROT180(this->actor.child->yawTowardsPlayer), 10, this->unk_29C, 16);
+            this->actor.world.pos.x = (Math_SinS(sp36) * this->unk_2A4) + this->actor.child->world.pos.x;
+            this->actor.world.pos.z = (Math_CosS(sp36) * this->unk_2A4) + this->actor.child->world.pos.z;
+            if (sp34 < -0x800) {
+                sp32 = sp36 - 0x4000;
+            } else if (sp34 > 0x800) {
+                sp32 = sp36 + 0x4000;
             } else {
-                sp36 = Actor_WorldYawTowardActor(this->actor.child, &this->actor);
-                sp34 = Math_SmoothStepToS(&sp36, BINANG_ROT180(this->actor.child->yawTowardsPlayer), 10, this->unk_29C,
-                                          16);
-                this->actor.world.pos.x = (Math_SinS(sp36) * this->unk_2A4) + this->actor.child->world.pos.x;
-                this->actor.world.pos.z = (Math_CosS(sp36) * this->unk_2A4) + this->actor.child->world.pos.z;
-                if (sp34 < -0x800) {
-                    sp32 = sp36 - 0x4000;
-                } else if (sp34 > 0x800) {
-                    sp32 = sp36 + 0x4000;
-                } else {
-                    sp32 = sp36 + 0x8000;
-                    func_80992FD4(this);
-                }
-                Math_ScaledStepToS(&this->actor.shape.rot.y, sp32, 0x800);
+                sp32 = sp36 + 0x8000;
+                func_80992FD4(this);
             }
+            Math_ScaledStepToS(&this->actor.shape.rot.y, sp32, 0x800);
         }
     } else {
         func_80990ED4(this);
@@ -1295,6 +1295,7 @@ void func_809933A0(EnWf* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     func_80990E4C(this, play);
+
     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
         if (func_80990EAC(this)) {
             func_80990ED4(this);
@@ -1317,6 +1318,7 @@ void func_809933A0(EnWf* this, PlayState* play) {
     } else {
         func_80990ED4(this);
     }
+
     if (this->unk_2A2 == 0) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
     }
@@ -1334,7 +1336,8 @@ void func_8099357C(EnWf* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     func_80990E4C(this, play);
-    if (this->unk_295 != 0) {
+
+    if (this->unk_295) {
         if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
             sp2E = Actor_WorldYawTowardActor(&this->actor, this->actor.child);
             if (func_80990EAC(this)) {
@@ -1461,6 +1464,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
                 }
 
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
+
                 if (this->actor.colChkInfo.health == 0) {
                     func_80992D6C(this);
                 } else {

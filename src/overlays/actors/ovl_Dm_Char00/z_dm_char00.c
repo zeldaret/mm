@@ -1066,12 +1066,13 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
 
     Gfx_SetupDL27_Xlu(play->state.gfxCtx);
 
-    do {
-        phi_a0 = (this->unk_262 * 50) & 511;
-        if (phi_a0 >= 256) {
-            phi_a0 = 511 - phi_a0;
-        }
-    } while (0);
+    //! FAKE:
+    if (1) {}
+
+    phi_a0 = (this->unk_262 * 50) & 511;
+    if (phi_a0 >= 256) {
+        phi_a0 = 511 - phi_a0;
+    }
 
     gSPSegment(POLY_XLU_DISP++, 0x08, &gfx[0]);
 

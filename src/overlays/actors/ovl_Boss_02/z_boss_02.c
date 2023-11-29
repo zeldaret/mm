@@ -1129,11 +1129,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                 damage = this->actor.colChkInfo.damage;
 
                 if (otherTwinmold->unk_0144 < 20) {
-                    do {
-                        do {
-                            this->actor.colChkInfo.health -= damage;
-                        } while (0);
-                    } while (0);
+                    this->actor.colChkInfo.health -= damage;
 
                     if ((s8)this->actor.colChkInfo.health <= 0) {
                         Actor_Kill(this->actor.child);

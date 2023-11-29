@@ -75,8 +75,8 @@ void EnWarpUzu_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-static Vec3f D_80A664FC = { 0.0f, 53.0f, -29.0f };
 void func_80A66208(EnWarpUzu* this, PlayState* play) {
+    static Vec3f D_80A664FC = { 0.0f, 53.0f, -29.0f };
     Vec3f sp24;
 
     this->actor.textId = 0;
@@ -88,26 +88,19 @@ void func_80A66208(EnWarpUzu* this, PlayState* play) {
 }
 
 void func_80A66278(EnWarpUzu* this, PlayState* play) {
-    Player* player;
-    s16 temp_v0;
-    s16 phi_a0;
-    s16 phi_v1;
+    Player* player = GET_PLAYER(play);
 
-    do {
-        player = GET_PLAYER(play);
-        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-            func_80A66384(this, play);
-        } else {
-            phi_a0 = ABS((s16)(Actor_WorldYawTowardActor(&this->actor, &player->actor) - this->actor.shape.rot.y));
-            temp_v0 = player->actor.shape.rot.y - this->actor.shape.rot.y;
-            phi_v1 = ABS(temp_v0);
-            if (phi_a0 >= 0x2AAB) {
-                if (phi_v1 < 0x238E) {
-                    Actor_OfferTalk(&this->actor, play, 70.0f);
-                }
-            }
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        func_80A66384(this, play);
+    } else {
+        s16 phi_a0 = ABS((s16)(Actor_WorldYawTowardActor(&this->actor, &player->actor) - this->actor.shape.rot.y));
+        s16 temp_v0 = player->actor.shape.rot.y - this->actor.shape.rot.y;
+        s16 phi_v1 = ABS(temp_v0);
+
+        if ((phi_a0 >= 0x2AAB) && (phi_v1 < 0x238E)) {
+            Actor_OfferTalk(&this->actor, play, 70.0f);
         }
-    } while (0);
+    }
 }
 
 void func_80A66384(EnWarpUzu* this, PlayState* play) {
