@@ -2403,16 +2403,6 @@ typedef struct {
     /* 0x2C */ u8 token;
 } SfxBankEntry; // size = 0x30
 
-/*
- * SfxId:
- *
- * & 03FF    0000000111111111    index
- * & 0400    0000010000000000    unused flag
- * & 0800    0000100000000000    SFX_FLAG
- * & 0C00    0000110000000000    Flag Mask
- * & F000    1111000000000000    observed in audio code
- */
-
 #define SFX_BANK_SHIFT(sfxId)   (((sfxId) >> 12) & 0xFF)
 
 #define SFX_BANK_MASK(sfxId)    ((sfxId) & 0xF000)
