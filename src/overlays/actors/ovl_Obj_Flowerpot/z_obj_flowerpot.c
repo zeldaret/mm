@@ -303,8 +303,8 @@ void func_80A1BD80(ObjFlowerpot* this, PlayState* play) {
     spBC.y = this->actor.world.pos.y + this->actor.depthInWater;
 
     for (phi_s1 = 0, i = 0; i < 4; i++, phi_s1 += 0x4000) {
-        spBC.x = (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s1) * 15.0f) + this->actor.world.pos.x;
-        spBC.z = (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s1) * 15.0f) + this->actor.world.pos.z;
+        spBC.x = this->actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s1) * 15.0f);
+        spBC.z = this->actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s1) * 15.0f);
         EffectSsGSplash_Spawn(play, &spBC, NULL, NULL, 0, 200);
     }
 

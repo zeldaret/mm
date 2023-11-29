@@ -4,19 +4,19 @@
     <!-- Assets for the composer brothers Flat and Sharp -->
     <File Name="object_po_composer" Segment="6">
         <!-- Animations -->
-        <Animation Name="gPoeComposerAttackAnim" Offset="0x20C" />
-        <Animation Name="gPoeComposerRaiseArmsAnim" Offset="0x570" />
-        <Animation Name="gPoeComposerBeginPlayAnim" Offset="0xA58" />
-        <Animation Name="gPoeComposerPlayAnim" Offset="0x1420" />
-        <Animation Name="gPoeComposerFleeAnim" Offset="0x15B8" />
-        <Animation Name="gPoeComposerIdleAnim" Offset="0x188C" />
-        <Animation Name="gPoeComposerArmsRaisedAnim" Offset="0x1F44" />
-        <Animation Name="gPoeComposerLowerArmsAnim" Offset="0x23E8" />
-        <Animation Name="gPoeComposerLookDownAnim" Offset="0x2AE0" />
-        <Animation Name="gPoeComposerBeginRollAnim" Offset="0x3024" />
-        <Animation Name="gPoeComposerRollAnim" Offset="0x334C" />
-        <Animation Name="gPoeComposerAppearDisappearAnim" Offset="0x3954" />
-        <Animation Name="gPoeComposerStillAnim" Offset="0x3DB0" />
+        <Animation Name="gPoeComposerAttackAnim" Offset="0x20C" /> <!-- Original name is "pom_atack" -->
+        <Animation Name="gPoeComposerRaiseArmsAnim" Offset="0x570" /> <!-- Original name is "pom_damage" -->
+        <Animation Name="gPoeComposerBeginPlayAnim" Offset="0xA58" /> <!-- Original name is "pom_ensou" -->
+        <Animation Name="gPoeComposerPlayAnim" Offset="0x1420" /> <!-- Original name is "pom_ensou_loop" -->
+        <Animation Name="gPoeComposerFleeAnim" Offset="0x15B8" /> <!-- Original name is "pom_escape" -->
+        <Animation Name="gPoeComposerIdleAnim" Offset="0x188C" /> <!-- Original name is "pom_fly" -->
+        <Animation Name="gPoeComposerArmsRaisedAnim" Offset="0x1F44" /> <!-- Original name is "pom_ikari" -->
+        <Animation Name="gPoeComposerLowerArmsAnim" Offset="0x23E8" /> <!-- Original name is "pom_katari" -->
+        <Animation Name="gPoeComposerLookDownAnim" Offset="0x2AE0" /> <!-- Original name is "pom_katari_loop" -->
+        <Animation Name="gPoeComposerBeginRollAnim" Offset="0x3024" /> <!-- Original name is "pom_kurusimu" -->
+        <Animation Name="gPoeComposerRollAnim" Offset="0x334C" /> <!-- Original name is "pom_kurusimu_loop" -->
+        <Animation Name="gPoeComposerAppearDisappearAnim" Offset="0x3954" /> <!-- Original name is "pom_start" -->
+        <Animation Name="gPoeComposerStillAnim" Offset="0x3DB0" /> <!-- Original name is "pom_wait" -->
 
         <!-- Texture -->
         <Texture Name="gPoeComposerSoulTex" OutName="composer_soul" Format="i8" Width="32" Height="64" Offset="0x3DC0" />

@@ -958,7 +958,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
 
     if (thisx->params == 200) {
         this->unk_150 = 100;
-        func_800BC154(play, &play->actorCtx, thisx, ACTORCAT_PROP);
+        Actor_ChangeCategory(play, &play->actorCtx, thisx, ACTORCAT_PROP);
         thisx->targetMode = TARGET_MODE_0;
         thisx->flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);

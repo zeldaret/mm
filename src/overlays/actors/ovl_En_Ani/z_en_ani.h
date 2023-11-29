@@ -18,7 +18,7 @@ typedef struct EnAni {
     /* 0x220 */ Vec3s jointTable[ANI_LIMB_MAX];
     /* 0x280 */ Vec3s morphTable[ANI_LIMB_MAX];
     /* 0x2E0 */ Vec3s headRot;
-    /* 0x2E6 */ Vec3s chestRot; // unused 
+    /* 0x2E6 */ Vec3s torsoRot; // unused 
     /* 0x2EC */ u16 stateFlags;
     /* 0x2EE */ s16 unk2EE; // assigned to zero in init, never used after
     /* 0x2F0 */ s16 treeReachTimer;

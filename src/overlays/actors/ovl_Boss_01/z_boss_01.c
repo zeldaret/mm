@@ -996,7 +996,7 @@ void Boss01_IntroCutscene(Boss01* this, PlayState* play) {
 
     switch (this->cutsceneState) {
         case ODOLWA_INTRO_CS_STATE_WAITING_FOR_PLAYER_OR_DONE:
-            if ((CutsceneManager_GetCurrentCsId() != -1) || !(player->actor.world.pos.z < 590.0f)) {
+            if ((CutsceneManager_GetCurrentCsId() != CS_ID_NONE) || !(player->actor.world.pos.z < 590.0f)) {
                 break;
             }
 
@@ -1184,7 +1184,7 @@ void Boss01_SummonBugsCutscene(Boss01* this, PlayState* play) {
 
     switch (this->cutsceneState) {
         case ODOLWA_BUG_SUMMONING_CS_STATE_STARTED:
-            if (CutsceneManager_GetCurrentCsId() != -1) {
+            if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
             }
 
@@ -2107,7 +2107,7 @@ void Boss01_SetupDeathCutscene(Boss01* this, PlayState* play) {
     this->cutsceneState = ODOLWA_DEATH_CS_STATE_STARTED;
     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
     sMothSwarm->unk_144 = 250;
-    func_800BC154(play, &play->actorCtx, &sMothSwarm->actor, ACTORCAT_BOSS);
+    Actor_ChangeCategory(play, &play->actorCtx, &sMothSwarm->actor, ACTORCAT_BOSS);
 }
 
 /**
@@ -2130,7 +2130,7 @@ void Boss01_DeathCutscene(Boss01* this, PlayState* play) {
 
     switch (this->cutsceneState) {
         case ODOLWA_DEATH_CS_STATE_STARTED:
-            if (CutsceneManager_GetCurrentCsId() != -1) {
+            if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
             }
 

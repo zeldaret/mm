@@ -65,6 +65,7 @@ Gfx* sSkyboxStarsDList;
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+#include "libc/string.h"
 
 // Data
 f32 sSandstormLerpScale = 0.0f;
@@ -690,7 +691,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     envCtx->lightBlendRateOverride = LIGHT_BLENDRATE_OVERRIDE_NONE;
 
     R_TIME_SPEED = envCtx->sceneTimeSpeed = 0;
-    R_TIME_SPEED = R_TIME_SPEED;
+    R_TIME_SPEED = R_TIME_SPEED; // Set to itself
     R_ENV_DISABLE_DBG = false;
 
     CREG(64) = 0;
@@ -1298,7 +1299,7 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
     AdjLightSettings spA4[4];
 
     var_fs3 = 0.0f;
-    __osMemset(spA4, 0, sizeof(AdjLightSettings) * ARRAY_COUNT(spA4));
+    memset(spA4, 0, sizeof(AdjLightSettings) * ARRAY_COUNT(spA4));
     lightSettingsList = play->envCtx.lightSettingsList;
 
     if ((envCtx->lightSettingOverride != LIGHT_SETTING_OVERRIDE_NONE) &&
@@ -2476,9 +2477,9 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
     s32 pad;
 
     //! FAKE:
-    if (!gSaveContext.sceneLayer) {}
+    if (gSaveContext.sceneLayer) {}
 
-    if ((play->csCtx.state == 0) && !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
         switch (play->envCtx.timeSeqState) {
             case TIMESEQ_DAY_BGM:
                 break;
@@ -2538,7 +2539,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
 
     if ((play->envCtx.timeSeqState != TIMESEQ_REQUEST) && (((void)0, gSaveContext.save.day) == 3) &&
         (CURRENT_TIME < CLOCK_TIME(6, 0)) && !func_800FE5D0(play) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
-        (play->transitionMode == TRANS_MODE_OFF) && (play->csCtx.state == 0) &&
+        (play->transitionMode == TRANS_MODE_OFF) && (play->csCtx.state == CS_STATE_IDLE) &&
         ((play->sceneId != SCENE_00KEIKOKU) || (((void)0, gSaveContext.sceneLayer) != 1)) &&
         (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
         (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS) &&

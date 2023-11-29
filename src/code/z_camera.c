@@ -2041,10 +2041,10 @@ s32 Camera_Normal1(Camera* camera) {
     spD8.y -= focalActorHeight + roData->unk_00;
     spC4 = Camera_Vec3fMagnitude(&spD8);
 
-    if ((roData->unk_04 + roData->unk_08) < spC4) {
+    if (spC4 > (roData->unk_04 + roData->unk_08)) {
         spC4 = 1.0f;
     } else {
-        spC4 = spC4 / (roData->unk_04 + roData->unk_08);
+        spC4 /= roData->unk_04 + roData->unk_08;
     }
 
     spD0 = 0.2f;
@@ -6955,7 +6955,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, PlayState
     s16 curUID;
     s16 j;
 
-    __osMemset(camera, 0, sizeof(Camera));
+    memset(camera, 0, sizeof(Camera));
 
     camera->play = sCamPlayState = play;
     curUID = sCameraNextUID;
@@ -7228,7 +7228,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
         0x1FC, // 8 Large Earthquakes between CLOCK_TIME(4, 30) to CLOCK_TIME(6, 00)
     };
 
-    if ((CURRENT_DAY == 3) && (CutsceneManager_GetCurrentCsId() == -1)) {
+    if ((CURRENT_DAY == 3) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
         time = CURRENT_TIME;
         timeSpeedOffset = gSaveContext.save.timeSpeedOffset;
 

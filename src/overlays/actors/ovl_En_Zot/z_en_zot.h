@@ -19,8 +19,8 @@ typedef struct EnZot {
     /* 0x188 */ ColliderCylinder collider;
     /* 0x1D4 */ Vec3s jointTable[20];
     /* 0x24C */ Vec3s morphTable[20];
-    /* 0x2C4 */ Vec3s unk_2C4;
-    /* 0x2CA */ Vec3s unk_2CA;
+    /* 0x2C4 */ Vec3s headRot;
+    /* 0x2CA */ Vec3s torsoRot;
     /* 0x2D0 */ Path* path;
     /* 0x2D4 */ s32 unk_2D4;
     /* 0x2D8 */ Actor* unk_2D8[5];

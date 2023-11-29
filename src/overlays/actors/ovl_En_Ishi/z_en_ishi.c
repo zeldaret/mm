@@ -623,8 +623,8 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
             sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
 
             for (phi_s0 = 0, i = 0; i < 11; i++, phi_s0 += 0x1746) {
-                sp58.x = (Math_SinS((s32)(Rand_ZeroOne() * 2000.0f) + phi_s0) * 50.0f) + this->actor.world.pos.x;
-                sp58.z = (Math_CosS((s32)(Rand_ZeroOne() * 2000.0f) + phi_s0) * 50.0f) + this->actor.world.pos.z;
+                sp58.x = this->actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * 2000.0f) + phi_s0) * 50.0f);
+                sp58.z = this->actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * 2000.0f) + phi_s0) * 50.0f);
                 EffectSsGSplash_Spawn(play, &sp58, NULL, NULL, 0, 350);
             }
 

@@ -136,9 +136,9 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) {
-        Path* path = &play->setupPathList[ENKENDOJS_GET_FF00(&this->actor)];
+        Path* path = &play->setupPathList[ENKENDOJS_GET_PATH_INDEX(&this->actor)];
 
-        this->unk_274 = Lib_SegmentedToVirtual(path->points);
+        this->pathPoints = Lib_SegmentedToVirtual(path->points);
     }
 
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -749,9 +749,9 @@ void func_80B279AC(EnKendoJs* this, PlayState* play) {
 }
 
 void func_80B279F0(EnKendoJs* this, PlayState* play, s32 arg2) {
-    f32 x = this->unk_274[arg2].x;
-    f32 y = this->unk_274[arg2].y;
-    f32 z = this->unk_274[arg2].z;
+    f32 x = this->pathPoints[arg2].x;
+    f32 y = this->pathPoints[arg2].y;
+    f32 z = this->pathPoints[arg2].z;
 
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MARUTA, x, y, z, 0, 0, 0, 0);
     this->unk_28C++;
@@ -776,7 +776,7 @@ void EnKendoJs_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     SkelAnime_Update(&this->skelAnime);
-    Actor_TrackPlayer(play, &this->actor, &this->unk_278, &this->unk_27E, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     func_80B279AC(this, play);
     func_80B27880(this, play);
 }
@@ -785,7 +785,7 @@ s32 EnKendoJs_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     EnKendoJs* this = THIS;
 
     if (limbIndex == OBJECT_JS_LIMB_0C) {
-        rot->y -= this->unk_278.y;
+        rot->y -= this->headRot.y;
     }
     return false;
 }

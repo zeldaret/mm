@@ -290,7 +290,7 @@ void ObjVspinyroll_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.height = 240;
     }
 
-    if (OBJVSPINYROLL_GET_7F(&this->dyna.actor) == OBJVSPINYROLL_7F_7F) {
+    if (OBJVSPINYROLL_GET_PATH_INDEX(&this->dyna.actor) == OBJVSPINYROLL_PATH_INDEX_NONE) {
         func_80A3CEC4(this);
         return;
     }
@@ -299,7 +299,7 @@ void ObjVspinyroll_Init(Actor* thisx, PlayState* play) {
     func_80A3C7E8(this);
     this->unk_394 = D_80A3D458[OBJVSPINYROLL_GET_380(thisx)];
 
-    path = &play->setupPathList[OBJVSPINYROLL_GET_7F(&this->dyna.actor)];
+    path = &play->setupPathList[OBJVSPINYROLL_GET_PATH_INDEX(&this->dyna.actor)];
     points = Lib_SegmentedToVirtual(path->points);
     point1 = &points[0];
     point2 = &points[1];

@@ -116,7 +116,7 @@ void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
 }
 
 void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
-    Path* path = &play->setupPathList[ENJGAMETSN_GET_FF(&this->actor)];
+    Path* path = &play->setupPathList[ENJGAMETSN_GET_PATH_INDEX(&this->actor)];
     s32 i;
 
     if (path == NULL) {
@@ -601,7 +601,7 @@ void func_80C14D14(EnJgameTsn* this, PlayState* play) {
 }
 
 void func_80C14D58(EnJgameTsn* this, PlayState* play) {
-    Actor_TrackPlayer(play, &this->actor, &this->unk_2EC, &this->unk_2F2, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
 
     if (DECR(this->unk_2FA) == 0) {
         this->unk_2FA = Rand_S16Offset(60, 60);
@@ -626,13 +626,13 @@ void EnJgameTsn_Update(Actor* thisx, PlayState* play) {
 
 s32 EnJgamesTsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnJgameTsn* this = THIS;
-    s16 temp_v0 = this->unk_2EC.x >> 1;
+    s16 temp_v0 = this->headRot.x >> 1;
 
     if (limbIndex == OBJECT_TSN_LIMB_0F) {
-        rot->x += this->unk_2EC.y;
+        rot->x += this->headRot.y;
         rot->z += temp_v0;
     } else if (limbIndex == OBJECT_TSN_LIMB_08) {
-        rot->x += this->unk_2F2.y;
+        rot->x += this->torsoRot.y;
         rot->z += temp_v0;
     }
     return false;

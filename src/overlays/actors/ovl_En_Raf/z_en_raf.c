@@ -35,38 +35,29 @@ void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* acc
 void EnRaf_UpdateEffects(EnRaf* this, PlayState* play);
 void EnRaf_DrawEffects(EnRaf* this, PlayState* play);
 
-typedef enum {
-    /* 0 */ EN_RAF_ANIM_IDLE,
-    /* 1 */ EN_RAF_ANIM_CLOSE,
-    /* 2 */ EN_RAF_ANIM_CHEW,
-    /* 3 */ EN_RAF_ANIM_SPIT,
-    /* 4 */ EN_RAF_ANIM_CONVULSE,
-    /* 5 */ EN_RAF_ANIM_DEATH
-} EnRafAnimation;
+typedef enum CarnivorousLilyAction {
+    /* 0 */ CARNIVOROUS_LILY_ACTION_IDLE,
+    /* 1 */ CARNIVOROUS_LILY_ACTION_GRAB,
+    /* 2 */ CARNIVOROUS_LILY_ACTION_CHEW,
+    /* 3 */ CARNIVOROUS_LILY_ACTION_THROW,
+    /* 4 */ CARNIVOROUS_LILY_ACTION_EXPLODE,
+    /* 5 */ CARNIVOROUS_LILY_ACTION_CONVULSE,
+    /* 6 */ CARNIVOROUS_LILY_ACTION_DISSOLVE,
+    /* 7 */ CARNIVOROUS_LILY_ACTION_DORMANT
+} CarnivorousLilyAction;
 
-typedef enum {
-    /* 0 */ EN_RAF_ACTION_IDLE,
-    /* 1 */ EN_RAF_ACTION_GRAB,
-    /* 2 */ EN_RAF_ACTION_CHEW,
-    /* 3 */ EN_RAF_ACTION_THROW,
-    /* 4 */ EN_RAF_ACTION_EXPLODE,
-    /* 5 */ EN_RAF_ACTION_CONVULSE,
-    /* 6 */ EN_RAF_ACTION_DISSOLVE,
-    /* 7 */ EN_RAF_ACTION_DORMANT
-} EnRafAction;
+typedef enum CarnivorousLilyGrabTarget {
+    /* 0 */ CARNIVOROUS_LILY_GRAB_TARGET_PLAYER,
+    /* 1 */ CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE,
+    /* 2 */ CARNIVOROUS_LILY_GRAB_TARGET_GORON_PLAYER
+} CarnivorousLilyGrabTarget;
 
-typedef enum {
-    /* 0 */ EN_RAF_GRAB_TARGET_PLAYER,
-    /* 1 */ EN_RAF_GRAB_TARGET_EXPLOSIVE,
-    /* 2 */ EN_RAF_GRAB_TARGET_GORON_PLAYER
-} EnRafGrabTarget;
-
-typedef enum {
-    /* 0 */ EN_RAF_PETAL_SCALE_TYPE_DEAD,
-    /* 1 */ EN_RAF_PETAL_SCALE_TYPE_GRAB,
-    /* 2 */ EN_RAF_PETAL_SCALE_TYPE_CHEW,
-    /* 3 */ EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW
-} EnRafPetalScaleType;
+typedef enum CarnivorousLilyPetalScaleType {
+    /* 0 */ CARNIVOROUS_LILY_PETAL_SCALE_TYPE_DEAD,
+    /* 1 */ CARNIVOROUS_LILY_PETAL_SCALE_TYPE_GRAB,
+    /* 2 */ CARNIVOROUS_LILY_PETAL_SCALE_TYPE_CHEW,
+    /* 3 */ CARNIVOROUS_LILY_PETAL_SCALE_TYPE_IDLE_OR_THROW
+} CarnivorousLilyPetalScaleType;
 
 ActorInit En_Raf_InitVars = {
     /**/ ACTOR_EN_RAF,
@@ -222,10 +213,10 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
 
     this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
     this->dyna.actor.colChkInfo.health = BREG(1) + 2;
-    this->mainType = EN_RAF_GET_TYPE(&this->dyna.actor);
-    this->reviveTimer = EN_RAF_GET_REVIVE_TIMER(&this->dyna.actor);
-    this->switchFlag = EN_RAF_GET_SWITCH_FLAG(&this->dyna.actor);
-    if (this->switchFlag == EN_RAF_SWITCH_FLAG_NONE) {
+    this->mainType = CARNIVOROUS_LILY_GET_TYPE(&this->dyna.actor);
+    this->reviveTimer = CARNIVOROUS_LILY_GET_REVIVE_TIMER(&this->dyna.actor);
+    this->switchFlag = CARNIVOROUS_LILY_GET_SWITCH_FLAG(&this->dyna.actor);
+    if (this->switchFlag == CARNIVOROUS_LILY_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
 
@@ -235,9 +226,9 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
         this->reviveTimer = 30;
     }
 
-    if (((this->switchFlag > SWITCH_FLAG_NONE) || (this->mainType == EN_RAF_TYPE_DORMANT) ||
+    if (((this->switchFlag > SWITCH_FLAG_NONE) || (this->mainType == CARNIVOROUS_LILY_TYPE_DORMANT) ||
          CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) &&
-        (Flags_GetSwitch(play, this->switchFlag) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
+        (Flags_GetSwitch(play, this->switchFlag) || (this->mainType == CARNIVOROUS_LILY_TYPE_DORMANT))) {
         s32 i;
 
         for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT;
@@ -261,25 +252,46 @@ void EnRaf_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
+typedef enum CarnivorousLilyAnimation {
+    /* 0 */ CARNIVOROUS_LILY_ANIM_IDLE,
+    /* 1 */ CARNIVOROUS_LILY_ANIM_CLOSE,
+    /* 2 */ CARNIVOROUS_LILY_ANIM_CHEW,
+    /* 3 */ CARNIVOROUS_LILY_ANIM_SPIT,
+    /* 4 */ CARNIVOROUS_LILY_ANIM_CONVULSE,
+    /* 5 */ CARNIVOROUS_LILY_ANIM_DEATH,
+    /* 6 */ CARNIVOROUS_LILY_ANIM_MAX
+} CarnivorousLilyAnimation;
+
+static AnimationHeader* sAnimations[CARNIVOROUS_LILY_ANIM_MAX] = {
+    &gCarnivorousLilyPadSpitAnim,     // CARNIVOROUS_LILY_ANIM_IDLE
+    &gCarnivorousLilyPadCloseAnim,    // CARNIVOROUS_LILY_ANIM_CLOSE
+    &gCarnivorousLilyPadChewAnim,     // CARNIVOROUS_LILY_ANIM_CHEW
+    &gCarnivorousLilyPadSpitAnim,     // CARNIVOROUS_LILY_ANIM_SPIT
+    &gCarnivorousLilyPadConvulseAnim, // CARNIVOROUS_LILY_ANIM_CONVULSE
+    &gCarnivorousLilyPadDeathAnim,    // CARNIVOROUS_LILY_ANIM_DEATH
+};
+
+static u8 sAnimationModes[CARNIVOROUS_LILY_ANIM_MAX] = {
+    ANIMMODE_ONCE, // CARNIVOROUS_LILY_ANIM_IDLE
+    ANIMMODE_ONCE, // CARNIVOROUS_LILY_ANIM_CLOSE
+    ANIMMODE_LOOP, // CARNIVOROUS_LILY_ANIM_CHEW
+    ANIMMODE_ONCE, // CARNIVOROUS_LILY_ANIM_SPIT
+    ANIMMODE_LOOP, // CARNIVOROUS_LILY_ANIM_CONVULSE
+    ANIMMODE_ONCE, // CARNIVOROUS_LILY_ANIM_DEATH
+};
+
 void EnRaf_ChangeAnim(EnRaf* this, s32 animIndex) {
-    static AnimationHeader* sAnimations[] = {
-        &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadCloseAnim,    &gCarnivorousLilyPadChewAnim,
-        &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadConvulseAnim, &gCarnivorousLilyPadDeathAnim,
-    };
-    static u8 sAnimationModes[] = {
-        ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
-    };
     f32 startFrame = 0.0f;
     f32 playSpeed = 1.0f;
 
-    this->endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
-    if (animIndex == EN_RAF_ANIM_IDLE) {
-        startFrame = this->endFrame;
-    } else if (animIndex == EN_RAF_ANIM_CLOSE) {
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    if (animIndex == CARNIVOROUS_LILY_ANIM_IDLE) {
+        startFrame = this->animEndFrame;
+    } else if (animIndex == CARNIVOROUS_LILY_ANIM_CLOSE) {
         playSpeed = 2.0f;
     }
 
-    Animation_Change(&this->skelAnime, sAnimations[animIndex], playSpeed, startFrame, this->endFrame,
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], playSpeed, startFrame, this->animEndFrame,
                      sAnimationModes[animIndex], -4.0f);
 }
 
@@ -287,14 +299,14 @@ void EnRaf_SetupIdle(EnRaf* this) {
     Vec3f targetLimbScale = { 1.0f, 1.0f, 1.0f };
     s32 i;
 
-    EnRaf_ChangeAnim(this, EN_RAF_ANIM_IDLE);
+    EnRaf_ChangeAnim(this, CARNIVOROUS_LILY_ANIM_IDLE);
 
     for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT; i++) {
         Math_Vec3f_Copy(&this->targetLimbScale[i], &targetLimbScale);
     }
 
-    this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW;
-    this->action = EN_RAF_ACTION_IDLE;
+    this->petalScaleType = CARNIVOROUS_LILY_PETAL_SCALE_TYPE_IDLE_OR_THROW;
+    this->action = CARNIVOROUS_LILY_ACTION_IDLE;
     this->actionFunc = EnRaf_Idle;
 }
 
@@ -314,10 +326,10 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
              DynaPolyActor_IsPlayerOnTop(&this->dyna) && !(player->stateFlags1 & PLAYER_STATE1_8000000) &&
              play->grabPlayer(play, player))) {
             player->actor.parent = &this->dyna.actor;
-            this->grabTarget = EN_RAF_GRAB_TARGET_PLAYER;
+            this->grabTarget = CARNIVOROUS_LILY_GRAB_TARGET_PLAYER;
 
             if (player->transformation == PLAYER_FORM_GORON) {
-                this->grabTarget = EN_RAF_GRAB_TARGET_GORON_PLAYER;
+                this->grabTarget = CARNIVOROUS_LILY_GRAB_TARGET_GORON_PLAYER;
             } else {
                 player->av2.actionVar2 = 50;
             }
@@ -345,7 +357,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
             if ((fabsf(xDiff) < 80.0f) && (fabsf(yDiff) < 30.0f) && (fabsf(zDiff) < 80.0f) &&
                 (explosive->update != NULL) && (explosive->velocity.y != 0.0f)) {
                 Actor_Kill(explosive);
-                this->grabTarget = EN_RAF_GRAB_TARGET_EXPLOSIVE;
+                this->grabTarget = CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE;
                 this->collider.dim.radius = 30;
                 this->collider.dim.height = 90;
                 this->collider.dim.yShift = -10;
@@ -359,10 +371,10 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
 }
 
 void EnRaf_SetupGrab(EnRaf* this) {
-    EnRaf_ChangeAnim(this, EN_RAF_ANIM_CLOSE);
-    this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_GRAB;
+    EnRaf_ChangeAnim(this, CARNIVOROUS_LILY_ANIM_CLOSE);
+    this->petalScaleType = CARNIVOROUS_LILY_PETAL_SCALE_TYPE_GRAB;
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
-    this->action = EN_RAF_ACTION_GRAB;
+    this->action = CARNIVOROUS_LILY_ACTION_GRAB;
     this->actionFunc = EnRaf_Grab;
 }
 
@@ -373,14 +385,14 @@ void EnRaf_Grab(EnRaf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
 
-    if ((this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & PLAYER_STATE2_80) &&
+    if ((this->grabTarget != CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & PLAYER_STATE2_80) &&
         (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.z, this->dyna.actor.world.pos.z, 0.3f, 10.0f);
     }
 
-    if (this->endFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         EnRaf_SetupChew(this);
     }
 }
@@ -388,7 +400,7 @@ void EnRaf_Grab(EnRaf* this, PlayState* play) {
 void EnRaf_SetupChew(EnRaf* this) {
     s32 i;
 
-    EnRaf_ChangeAnim(this, EN_RAF_ANIM_CHEW);
+    EnRaf_ChangeAnim(this, CARNIVOROUS_LILY_ANIM_CHEW);
     this->chewCount = 0;
     for (i = 0; i < ARRAY_COUNT(this->chewLimbRot); i++) {
         this->chewLimbRot[i].x = Rand_S16Offset(8, 8) << 8;
@@ -396,8 +408,8 @@ void EnRaf_SetupChew(EnRaf* this) {
         this->chewLimbRot[i].z = Rand_S16Offset(8, 8) << 8;
     }
 
-    this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_CHEW;
-    this->action = EN_RAF_ACTION_CHEW;
+    this->petalScaleType = CARNIVOROUS_LILY_PETAL_SCALE_TYPE_CHEW;
+    this->action = CARNIVOROUS_LILY_ACTION_CHEW;
     this->actionFunc = EnRaf_Chew;
 }
 
@@ -415,21 +427,21 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
     targetChewScale = (BREG(51) / 100.0f) + 0.2f;
     Math_ApproachF(&this->chewScale, targetChewScale, 0.2f, 0.03f);
 
-    if ((player->stateFlags2 & PLAYER_STATE2_80) && (this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) &&
+    if ((player->stateFlags2 & PLAYER_STATE2_80) && (this->grabTarget != CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE) &&
         (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.z, this->dyna.actor.world.pos.z, 0.3f, 10.0f);
     }
 
-    if (this->endFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         if (BREG(52) == 0) {
             this->chewCount++;
         }
 
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_EAT);
         switch (this->grabTarget) {
-            case EN_RAF_GRAB_TARGET_PLAYER:
+            case CARNIVOROUS_LILY_GRAB_TARGET_PLAYER:
                 play->damagePlayer(play, -2);
 
                 //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
@@ -444,7 +456,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
                 }
                 break;
 
-            case EN_RAF_GRAB_TARGET_EXPLOSIVE:
+            case CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE:
                 Actor_ApplyDamage(&this->dyna.actor);
                 if (this->chewCount > (BREG(54) + 4)) {
                     EnRaf_Explode(this, play);
@@ -452,12 +464,15 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
                 }
                 break;
 
-            case EN_RAF_GRAB_TARGET_GORON_PLAYER:
+            case CARNIVOROUS_LILY_GRAB_TARGET_GORON_PLAYER:
                 if (this->chewCount > (BREG(54) + 4)) {
                     player->actor.parent = NULL;
                     player->av2.actionVar2 = 1000;
                     EnRaf_Explode(this, play);
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -466,10 +481,10 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
 void EnRaf_SetupThrow(EnRaf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    EnRaf_ChangeAnim(this, EN_RAF_ANIM_SPIT);
+    EnRaf_ChangeAnim(this, CARNIVOROUS_LILY_ANIM_SPIT);
     player->actor.freezeTimer = 10;
-    this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW;
-    this->action = EN_RAF_ACTION_THROW;
+    this->petalScaleType = CARNIVOROUS_LILY_PETAL_SCALE_TYPE_IDLE_OR_THROW;
+    this->action = CARNIVOROUS_LILY_ACTION_THROW;
     this->actionFunc = EnRaf_Throw;
 }
 
@@ -490,9 +505,9 @@ void EnRaf_Throw(EnRaf* this, PlayState* play) {
         player->actor.freezeTimer = 10;
     }
 
-    if (this->endFrame <= curFrame) {
-        this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW;
-        this->action = EN_RAF_ACTION_IDLE;
+    if (curFrame >= this->animEndFrame) {
+        this->petalScaleType = CARNIVOROUS_LILY_PETAL_SCALE_TYPE_IDLE_OR_THROW;
+        this->action = CARNIVOROUS_LILY_ACTION_IDLE;
         this->timer = 20;
         this->actionFunc = EnRaf_Idle;
     }
@@ -508,7 +523,7 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     s32 i;
     s32 pad;
 
-    this->action = EN_RAF_ACTION_EXPLODE;
+    this->action = CARNIVOROUS_LILY_ACTION_EXPLODE;
     Math_Vec3f_Copy(&explosionPos, &this->dyna.actor.world.pos);
     explosionPos.y += 10.0f;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, explosionPos.x, explosionPos.y, explosionPos.z, 0, 0, 0,
@@ -519,7 +534,7 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
         Flags_SetSwitch(play, this->switchFlag);
     }
 
-    this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_DEAD;
+    this->petalScaleType = CARNIVOROUS_LILY_PETAL_SCALE_TYPE_DEAD;
     for (i = 0; i < BREG(57) + 30; i++) {
         accel.x = (Rand_ZeroOne() - 0.5f) * 0.5f;
         accel.y = -0.3f;
@@ -536,8 +551,8 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     }
 
     this->timer = 5;
-    if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
-        func_800BC154(play, &play->actorCtx, &this->dyna.actor, 5);
+    if (this->grabTarget == CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE) {
+        Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_ENEMY);
         this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
     }
 
@@ -551,10 +566,10 @@ void EnRaf_PostDetonation(EnRaf* this, PlayState* play) {
     if (this->timer == 0) {
         this->collider.dim.radius = 50;
         this->collider.dim.height = 10;
-        func_800BC154(play, &play->actorCtx, &this->dyna.actor, 6);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_PROP);
         this->dyna.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
         EnRaf_SetupDormant(this);
-    } else if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
+    } else if (this->grabTarget == CARNIVOROUS_LILY_GRAB_TARGET_EXPLOSIVE) {
         this->collider.dim.radius = 80;
         this->collider.dim.height = 50;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
@@ -562,9 +577,9 @@ void EnRaf_PostDetonation(EnRaf* this, PlayState* play) {
 }
 
 void EnRaf_SetupConvulse(EnRaf* this) {
-    EnRaf_ChangeAnim(this, EN_RAF_ANIM_CONVULSE);
+    EnRaf_ChangeAnim(this, CARNIVOROUS_LILY_ANIM_CONVULSE);
     this->chewCount = 0;
-    this->action = EN_RAF_ACTION_CONVULSE;
+    this->action = CARNIVOROUS_LILY_ACTION_CONVULSE;
     this->actionFunc = EnRaf_Convulse;
 }
 
@@ -576,7 +591,7 @@ void EnRaf_SetupConvulse(EnRaf* this) {
 void EnRaf_Convulse(EnRaf* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    if (this->endFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         this->chewCount++;
         if (this->chewCount > (BREG(2) + 2)) {
             if (this->switchFlag > SWITCH_FLAG_NONE) {
@@ -589,8 +604,8 @@ void EnRaf_Convulse(EnRaf* this, PlayState* play) {
 }
 
 void EnRaf_SetupDissolve(EnRaf* this) {
-    EnRaf_ChangeAnim(this, EN_RAF_ANIM_DEATH);
-    this->action = EN_RAF_ACTION_DISSOLVE;
+    EnRaf_ChangeAnim(this, CARNIVOROUS_LILY_ANIM_DEATH);
+    this->action = CARNIVOROUS_LILY_ACTION_DISSOLVE;
     this->dissolveTimer = 0;
     this->actionFunc = EnRaf_Dissolve;
 }
@@ -604,7 +619,7 @@ void EnRaf_Dissolve(EnRaf* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
     s32 i;
 
-    if (this->endFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         this->dissolveTimer++;
         if (this->dissolveTimer < (BREG(3) + 105)) {
             for (i = 0; i < (BREG(4) + 5); i++) {
@@ -651,10 +666,10 @@ void EnRaf_Dissolve(EnRaf* this, PlayState* play) {
 }
 
 void EnRaf_SetupDormant(EnRaf* this) {
-    if (this->action == EN_RAF_ACTION_EXPLODE) {
+    if (this->action == CARNIVOROUS_LILY_ACTION_EXPLODE) {
         this->timer = 90;
     } else {
-        this->action = EN_RAF_ACTION_DORMANT;
+        this->action = CARNIVOROUS_LILY_ACTION_DORMANT;
     }
 
     this->actionFunc = EnRaf_Dormant;
@@ -669,23 +684,23 @@ void EnRaf_Dormant(EnRaf* this, PlayState* play) {
     s32 i;
 
     if (this->timer == 0) {
-        this->action = EN_RAF_ACTION_DORMANT;
+        this->action = CARNIVOROUS_LILY_ACTION_DORMANT;
     }
 
     if (this->reviveTimer >= 0) {
         DECR(this->reviveTimer);
 
         if (this->reviveTimer == 0) {
-            EnRaf_ChangeAnim(this, EN_RAF_ANIM_SPIT);
+            EnRaf_ChangeAnim(this, CARNIVOROUS_LILY_ANIM_SPIT);
 
             for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT;
                  i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT; i++) {
                 Math_Vec3f_Copy(&this->targetLimbScale[i], &targetLimbScale);
             }
 
-            this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW;
-            this->action = EN_RAF_ACTION_IDLE;
-            this->reviveTimer = EN_RAF_GET_REVIVE_TIMER(&this->dyna.actor);
+            this->petalScaleType = CARNIVOROUS_LILY_PETAL_SCALE_TYPE_IDLE_OR_THROW;
+            this->action = CARNIVOROUS_LILY_ACTION_IDLE;
+            this->reviveTimer = CARNIVOROUS_LILY_GET_REVIVE_TIMER(&this->dyna.actor);
             this->reviveTimer += 30;
             this->actionFunc = EnRaf_Idle;
         }
@@ -705,8 +720,8 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
     DECR(this->timer);
     this->actionFunc(this, play);
 
-    if ((this->action == EN_RAF_ACTION_IDLE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
-        this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_DEAD;
+    if ((this->action == CARNIVOROUS_LILY_ACTION_IDLE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
+        this->petalScaleType = CARNIVOROUS_LILY_PETAL_SCALE_TYPE_DEAD;
         EnRaf_SetupConvulse(this);
         return;
     }
@@ -723,7 +738,8 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
 
     this->bobPhase += 3000.0f;
     this->bobOffset = 2.0f * Math_SinS(this->bobPhase);
-    if (this->mainType != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
+
+    if (this->mainType != CARNIVOROUS_LILY_TYPE_NO_WATER_INTERACTIONS) {
         ySurface = BREG(60) + (this->dyna.actor.world.pos.y - 60.0f);
         if (WaterBox_GetSurface1(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
                                  &ySurface, &waterBox)) {
@@ -731,7 +747,7 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
             Math_ApproachF(&this->dyna.actor.world.pos.y, this->heightDiffFromPlayer + ySurface, 0.5f, 40.0f);
             if (this->rippleTimer == 0) {
                 this->rippleTimer = 30;
-                if (this->petalScaleType == EN_RAF_PETAL_SCALE_TYPE_CHEW) {
+                if (this->petalScaleType == CARNIVOROUS_LILY_PETAL_SCALE_TYPE_CHEW) {
                     this->rippleTimer = 10;
                 }
 
@@ -746,12 +762,13 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
     }
 
     Math_ApproachZeroF(&this->heightDiffFromPlayer, 0.3f, 2.0f);
-    if (this->action == EN_RAF_ACTION_EXPLODE) {
+
+    if (this->action == CARNIVOROUS_LILY_ACTION_EXPLODE) {
         EnRaf_UpdateEffects(this, play);
     }
 
     for (i = 0; i < ARRAY_COUNT(this->limbScale); i++) {
-        if (this->action < EN_RAF_ACTION_EXPLODE) {
+        if (this->action < CARNIVOROUS_LILY_ACTION_EXPLODE) {
             Math_ApproachF(&this->limbScale[i].x, this->targetLimbScale[i].x, 0.4f, 0.5f);
             Math_ApproachF(&this->limbScale[i].y, this->targetLimbScale[i].y, 0.4f, 0.5f);
             Math_ApproachF(&this->limbScale[i].z, this->targetLimbScale[i].z, 0.4f, 0.5f);
@@ -763,7 +780,7 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
     }
 
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-    if (this->action < EN_RAF_ACTION_EXPLODE) {
+    if (this->action < CARNIVOROUS_LILY_ACTION_EXPLODE) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
@@ -798,7 +815,7 @@ void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
     s32 i;
 
     switch (this->petalScaleType) {
-        case EN_RAF_PETAL_SCALE_TYPE_GRAB:
+        case CARNIVOROUS_LILY_PETAL_SCALE_TYPE_GRAB:
             if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
@@ -820,7 +837,7 @@ void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
             }
             break;
 
-        case EN_RAF_PETAL_SCALE_TYPE_CHEW:
+        case CARNIVOROUS_LILY_PETAL_SCALE_TYPE_CHEW:
             if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
@@ -844,7 +861,7 @@ void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
             }
             break;
 
-        case EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW:
+        case CARNIVOROUS_LILY_PETAL_SCALE_TYPE_IDLE_OR_THROW:
             if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
@@ -865,6 +882,9 @@ void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
                 }
             }
             break;
+
+        default:
+            break;
     }
 
     Matrix_Scale(this->limbScale[limbIndex].x, this->limbScale[limbIndex].y, this->limbScale[limbIndex].z,
@@ -879,14 +899,14 @@ void EnRaf_Draw(Actor* thisx, PlayState* play) {
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, NULL, EnRaf_TransformLimbDraw, &this->dyna.actor);
 
-    if (this->action == EN_RAF_ACTION_EXPLODE) {
+    if (this->action == CARNIVOROUS_LILY_ACTION_EXPLODE) {
         EnRaf_DrawEffects(this, play);
     }
 }
 
 void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 scale, s16 timer) {
     s16 i;
-    EnRafEffect* effect = this->effects;
+    CarnivorousLilyEffect* effect = this->effects;
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (!effect->isEnabled) {
@@ -906,7 +926,7 @@ void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* acc
 
 void EnRaf_UpdateEffects(EnRaf* this, PlayState* play) {
     s32 i;
-    EnRafEffect* effect = this->effects;
+    CarnivorousLilyEffect* effect = this->effects;
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isEnabled) {
@@ -920,7 +940,7 @@ void EnRaf_UpdateEffects(EnRaf* this, PlayState* play) {
             effect->velocity.y += effect->accel.y;
             effect->velocity.z += effect->accel.z;
 
-            if (this->mainType != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
+            if (this->mainType != CARNIVOROUS_LILY_TYPE_NO_WATER_INTERACTIONS) {
                 if (effect->pos.y < (this->dyna.actor.world.pos.y - 10.0f)) {
                     EffectSsGSplash_Spawn(play, &effect->pos, NULL, NULL, 0, effect->scale * 200000.0f);
                     SoundSource_PlaySfxAtFixedWorldPos(play, &effect->pos, 50, NA_SE_EV_BOMB_DROP_WATER);
@@ -944,7 +964,7 @@ void EnRaf_UpdateEffects(EnRaf* this, PlayState* play) {
 
 void EnRaf_DrawEffects(EnRaf* this, PlayState* play) {
     s16 i;
-    EnRafEffect* effect = this->effects;
+    CarnivorousLilyEffect* effect = this->effects;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);

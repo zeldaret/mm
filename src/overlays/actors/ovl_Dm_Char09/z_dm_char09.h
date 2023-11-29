@@ -26,7 +26,7 @@ typedef struct DmChar09 {
     /* 0x218 */ s32 unk_218;
     /* 0x21C */ s32 unk_21C;
     /* 0x220 */ s32 unk_220;
-    /* 0x224 */ Vec3s* unk_224;
+    /* 0x224 */ Vec3s* pathPoints;
     /* 0x228 */ s16 unk_228;
     /* 0x22A */ s16 unk_22A;
     /* 0x22C */ UNK_TYPE1 pad22C[2];
