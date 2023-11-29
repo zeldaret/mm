@@ -4,8 +4,8 @@
 #include "global.h"
 
 typedef struct {
-    /* 0x00 */ Vec3f pos;
-    /* 0x0C */ s16 yaw;
+    /* 0x0 */ Vec3f pos;
+    /* 0xC */ s16 yaw;
 } EffectSsStickInitParams; // size = 0x10
 
 #endif

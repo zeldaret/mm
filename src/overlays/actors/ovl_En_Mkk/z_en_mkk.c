@@ -68,10 +68,10 @@ static ColliderSphereInit sSphereInit = {
 };
 
 typedef struct EnMkkDlists {
-    /* 0x00 */ Gfx* unk0;
-    /* 0x04 */ Gfx* unk4;
-    /* 0x08 */ Gfx* unk8;
-    /* 0x0C */ Gfx* unkC;
+    /* 0x0 */ Gfx* unk0;
+    /* 0x4 */ Gfx* unk4;
+    /* 0x8 */ Gfx* unk8;
+    /* 0xC */ Gfx* unkC;
 } EnMkkDlists; // size = 0x10
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 10 };

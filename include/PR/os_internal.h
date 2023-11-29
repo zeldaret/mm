@@ -7,8 +7,8 @@
 #include "os_internal_rsp.h"
 
 typedef struct __osHwInt {
-    /* 0x00 */ s32 (*handler)(void);
-    /* 0x04 */ void* stackEnd;
-} __osHwInt; // size = 0x08
+    /* 0x0 */ s32 (*handler)(void);
+    /* 0x4 */ void* stackEnd;
+} __osHwInt; // size = 0x8
 
 #endif

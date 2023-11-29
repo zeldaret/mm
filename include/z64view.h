@@ -9,10 +9,10 @@
 struct GraphicsContext;
 
 typedef struct Viewport {
-    /* 0x00 */ s32 topY;    // uly (upper left y)
-    /* 0x04 */ s32 bottomY; // lry (lower right y)
-    /* 0x08 */ s32 leftX;   // ulx (upper left x)
-    /* 0x0C */ s32 rightX;  // lrx (lower right x)
+    /* 0x0 */ s32 topY;    // uly (upper left y)
+    /* 0x4 */ s32 bottomY; // lry (lower right y)
+    /* 0x8 */ s32 leftX;   // ulx (upper left x)
+    /* 0xC */ s32 rightX;  // lrx (lower right x)
 } Viewport; // size = 0x10
 
 typedef struct View {

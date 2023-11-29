@@ -2413,7 +2413,7 @@ typedef struct {
 typedef struct {
     /* 0x0 */ u32 priority; // lower is more prioritized
     /* 0x4 */ u8 entryIndex;
-} ActiveSfx; // size = 0x08
+} ActiveSfx; // size = 0x8
 
 // SfxParams bit-packing
 

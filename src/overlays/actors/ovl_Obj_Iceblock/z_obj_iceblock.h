@@ -12,18 +12,18 @@ typedef void (*ObjIceblockExtendedDrawFunc)(struct ObjIceblock*, PlayState*);
 #define ICEBLOCK_GET_ICEBERG(thisx) ((thisx)->params & 1)
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
+    /* 0x0 */ s16 unk_00;
+    /* 0x2 */ s16 unk_02;
+    /* 0x4 */ f32 unk_04;
+    /* 0x8 */ f32 unk_08;
+    /* 0xC */ f32 unk_0C;
 } ObjIceBlockUnkStruct; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ CollisionPoly* unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ f32 unk_0C;
+    /* 0x0 */ CollisionPoly* unk_00;
+    /* 0x4 */ f32 unk_04;
+    /* 0x8 */ s32 unk_08;
+    /* 0xC */ f32 unk_0C;
 } ObjIceBlockUnkStruct2; // size = 0x10
 
 typedef struct {

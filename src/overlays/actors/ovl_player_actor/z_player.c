@@ -455,11 +455,11 @@ typedef struct FallImpactInfo {
 } FallImpactInfo; // size = 0x6
 
 typedef struct AttackAnimInfo {
-    /* 0x00 */ PlayerAnimationHeader* unk_0;
-    /* 0x04 */ PlayerAnimationHeader* unk_4;
-    /* 0x08 */ PlayerAnimationHeader* unk_8;
-    /* 0x0C */ u8 unk_C;
-    /* 0x0D */ u8 unk_D;
+    /* 0x0 */ PlayerAnimationHeader* unk_0;
+    /* 0x4 */ PlayerAnimationHeader* unk_4;
+    /* 0x8 */ PlayerAnimationHeader* unk_8;
+    /* 0xC */ u8 unk_C;
+    /* 0xD */ u8 unk_D;
 } AttackAnimInfo; // size = 0x10
 
 typedef struct MeleeWeaponDamageInfo {

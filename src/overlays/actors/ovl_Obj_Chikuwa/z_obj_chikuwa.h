@@ -6,9 +6,9 @@
 struct ObjChikuwa;
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ u8 unk_0E;
+    /* 0x0 */ Vec3f unk_00;
+    /* 0xC */ s16 unk_0C;
+    /* 0xE */ u8 unk_0E;
 } ObjChikuwaStruct; // size = 0x10
 
 typedef struct {
