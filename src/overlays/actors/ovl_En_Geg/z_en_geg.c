@@ -784,7 +784,7 @@ void func_80BB2E00(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB2F7C(EnGeg* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_4E4), 4, 1000, 1);
+    Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_4E4), 4, 0x3E8, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
     if ((this->actor.xzDistToPlayer < 150.0f) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
@@ -877,7 +877,7 @@ void func_80BB3318(EnGeg* this, PlayState* play) {
     if (this->unk_4D8 < 2) {
         sp46 = Math_Vec3f_Yaw(&this->actor.world.pos, &D_80BB4044[this->unk_4D8]);
         sp40 = Math_Vec3f_DistXZ(&this->actor.world.pos, &D_80BB4044[this->unk_4D8]);
-        Math_SmoothStepToS(&this->actor.world.rot.y, sp46, 4, 1000, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y, sp46, 4, 0x3E8, 1);
         if (sp40 < 20.0f) {
             this->unk_4D8++;
         }

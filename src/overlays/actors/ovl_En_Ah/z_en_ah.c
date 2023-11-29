@@ -16,7 +16,6 @@ void EnAh_Destroy(Actor* thisx, PlayState* play);
 void EnAh_Update(Actor* thisx, PlayState* play);
 void EnAh_Draw(Actor* thisx, PlayState* play);
 
-void func_80BD36B8(EnAh* this, PlayState* play);
 void func_80BD3768(EnAh* this, PlayState* play);
 
 static u8 D_80BD3DB0[] = {

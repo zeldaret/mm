@@ -381,8 +381,8 @@ void EnCow_Update(Actor* thisx, PlayState* play2) {
         targetX = targetY = 0;
     }
 
-    Math_SmoothStepToS(&this->headTilt.x, targetX, 10, 200, 10);
-    Math_SmoothStepToS(&this->headTilt.y, targetY, 10, 200, 10);
+    Math_SmoothStepToS(&this->headTilt.x, targetX, 10, 0xC8, 0xA);
+    Math_SmoothStepToS(&this->headTilt.y, targetY, 10, 0xC8, 0xA);
 }
 
 void EnCow_UpdateTail(Actor* thisx, PlayState* play) {

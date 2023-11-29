@@ -268,7 +268,7 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
-    Math_SmoothStepToS(&this->unk_290, this->unk_2D4, 1, 5000, 0);
+    Math_SmoothStepToS(&this->unk_290, this->unk_2D4, 1, 0x1388, 0);
 
     if (this->unk_2B8 == 0) {
         Player* player = GET_PLAYER(play);
@@ -537,7 +537,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_18, 1.0f);
         }
     } else {
-        Math_SmoothStepToS(&this->actor.world.rot.y, yaw, 1, 2000, 10);
+        Math_SmoothStepToS(&this->actor.world.rot.y, yaw, 1, 0x7D0, 0xA);
         Math_ApproachF(&this->actor.world.pos.x, this->unk_2A0.x, 0.5f, 6.0f);
         Math_ApproachF(&this->actor.world.pos.z, this->unk_2A0.z, 0.5f, 6.0f);
         if ((sqrtf(SQ(this->actor.world.pos.x - this->unk_2A0.x) + SQ(this->actor.world.pos.z - this->unk_2A0.z)) <

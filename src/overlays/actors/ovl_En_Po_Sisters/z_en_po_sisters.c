@@ -680,12 +680,12 @@ void EnPoSisters_DeathStage1(EnPoSisters* this, PlayState* play) {
         this->firePos[end] = this->firePos[end - 1];
     }
 
-    this->firePos[0].x = (Math_SinS((this->actor.shape.rot.y + (this->deathTimer * 0x3000)) - 0x4000) *
-                          (3000.0f * this->actor.scale.x)) +
-                         this->actor.world.pos.x;
-    this->firePos[0].z = (Math_CosS((this->actor.shape.rot.y + (this->deathTimer * 0x3000)) - 0x4000) *
-                          (3000.0f * this->actor.scale.x)) +
-                         this->actor.world.pos.z;
+    this->firePos[0].x =
+        this->actor.world.pos.x +
+        (Math_SinS((this->actor.shape.rot.y + (this->deathTimer * 0x3000)) - 0x4000) * (3000.0f * this->actor.scale.x));
+    this->firePos[0].z =
+        this->actor.world.pos.z +
+        (Math_CosS((this->actor.shape.rot.y + (this->deathTimer * 0x3000)) - 0x4000) * (3000.0f * this->actor.scale.x));
 
     if (this->deathTimer < 8) {
         this->firePos[0].y = this->firePos[1].y - 9.0f;

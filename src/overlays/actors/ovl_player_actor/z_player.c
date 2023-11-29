@@ -8816,7 +8816,7 @@ void func_8083C6E8(Player* this, PlayState* play) {
     }
 
     if (sPlayerFloorType == FLOOR_TYPE_11) {
-        Math_SmoothStepToS(&this->actor.focus.rot.x, -20000, 10, 4000, 800);
+        Math_SmoothStepToS(&this->actor.focus.rot.x, -0x4E20, 10, 0xFA0, 0x320);
     } else {
         s16 sp46 = 0;
         f32 yIntersect;
@@ -8826,17 +8826,17 @@ void func_8083C6E8(Player* this, PlayState* play) {
         yIntersect = func_80835D2C(play, this, &D_8085D218, &pos);
         if (yIntersect > BGCHECK_Y_MIN) {
             temp_v0 = Math_Atan2S_XY(40.0f, this->actor.world.pos.y - yIntersect);
-            sp46 = CLAMP(temp_v0, -4000, 4000);
+            sp46 = CLAMP(temp_v0, -0xFA0, 0xFA0);
         }
         this->actor.focus.rot.y = this->actor.shape.rot.y;
-        Math_SmoothStepToS(&this->actor.focus.rot.x, sp46, 14, 4000, 30);
+        Math_SmoothStepToS(&this->actor.focus.rot.x, sp46, 14, 0xFA0, 30);
     }
 
     func_80832754(this, func_800B7128(this) || func_8082EF20(this));
 }
 
 void func_8083C85C(Player* this) {
-    Math_ScaledStepToS(&this->upperLimbRot.x, D_80862B3C * -500.0f, 900);
+    Math_ScaledStepToS(&this->upperLimbRot.x, D_80862B3C * -500.0f, 0x384);
     this->headLimbRot.x = (-(f32)this->upperLimbRot.x * 0.5f);
     this->unk_AA6 |= 0x48;
 }
@@ -12851,7 +12851,7 @@ void func_8084748C(Player* this, f32* speed, f32 speedTarget, s16 yawTarget) {
     }
 
     Math_AsymStepToF(speed, speedTarget * 0.8f, incrStep, (fabsf(*speed) * 0.02f) + 0.05f);
-    Math_ScaledStepToS(&this->currentYaw, yawTarget, 1600); // 1 ESS turn, also one frame of first-person rotation
+    Math_ScaledStepToS(&this->currentYaw, yawTarget, 0x640); // 1 ESS turn, also one frame of first-person rotation
 }
 
 void func_808475B4(Player* this) {

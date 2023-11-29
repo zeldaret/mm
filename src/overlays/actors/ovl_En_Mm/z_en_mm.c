@@ -193,7 +193,7 @@ void func_8096611C(EnMm* this, PlayState* play) {
     } else {
         Math_Vec3f_ToVec3s(&this->actor.home.rot, &this->actor.parent->world.pos);
     }
-    Math_ScaledStepToS(&this->unk_190, 0, 2000);
+    Math_ScaledStepToS(&this->unk_190, 0, 0x7D0);
 }
 
 void EnMm_Update(Actor* thisx, PlayState* play) {

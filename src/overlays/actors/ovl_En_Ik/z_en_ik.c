@@ -487,8 +487,8 @@ void EnIk_VerticalAttack(EnIk* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_IRONNACK_SWING_AXE);
 
         } else if (Animation_OnFrame(&this->skelAnime, 21.0f)) {
-            particlePos.x = (Math_SinS((this->actor.shape.rot.y + 0x6A4)) * 70.0f) + this->actor.world.pos.x;
-            particlePos.z = (Math_CosS((this->actor.shape.rot.y + 0x6A4)) * 70.0f) + this->actor.world.pos.z;
+            particlePos.x = this->actor.world.pos.x + (Math_SinS(this->actor.shape.rot.y + 0x6A4) * 70.0f);
+            particlePos.z = this->actor.world.pos.z + (Math_CosS(this->actor.shape.rot.y + 0x6A4) * 70.0f);
             particlePos.y = this->actor.world.pos.y;
             Actor_PlaySfx(&this->actor, NA_SE_EN_IRONNACK_HIT_GND);
             Camera_AddQuake(GET_ACTIVE_CAM(play), 2, 25, 5);
@@ -750,9 +750,9 @@ void EnIk_PlayCutscene(EnIk* this, PlayState* play) {
         if (this->actor.csId != CS_ID_NONE) {
             CutsceneManager_StartWithPlayerCsAndSetFlag(this->actor.csId, &this->actor);
             this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
-            subCamEye.x = (Math_SinS((this->actor.shape.rot.y - 0x2000)) * 120.0f) + this->actor.focus.pos.x;
+            subCamEye.x = this->actor.focus.pos.x + (Math_SinS(this->actor.shape.rot.y - 0x2000) * 120.0f);
             subCamEye.y = this->actor.focus.pos.y + 20.0f;
-            subCamEye.z = (Math_CosS((this->actor.shape.rot.y - 0x2000)) * 120.0f) + this->actor.focus.pos.z;
+            subCamEye.z = this->actor.focus.pos.z + (Math_CosS(this->actor.shape.rot.y - 0x2000) * 120.0f);
             Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
         }
         if (this->actor.colChkInfo.health != 0) {

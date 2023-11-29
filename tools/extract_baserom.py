@@ -821,7 +821,7 @@ FILE_NAMES = [
     'object_bg',
     'object_bombiwa',
     'object_hintnuts',
-    'object_rs',
+    'object_rsn',
     'object_gla',
     'object_geldb',
     'object_dog',

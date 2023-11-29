@@ -318,7 +318,7 @@ void func_80894024(EnTite* this, PlayState* play) {
         func_8089408C(this, play);
     } else {
         func_80893B70(this);
-        Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1000);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x3E8);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 }
@@ -411,7 +411,7 @@ void func_80894454(EnTite* this, PlayState* play) {
             func_80893A9C(this, play);
         }
     } else {
-        Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1500);
+        Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x5DC);
         func_80893B70(this);
     }
 }
@@ -518,7 +518,7 @@ void func_80894910(EnTite* this, PlayState* play) {
          (func_80893ADC(this) && (this->actor.depthInWater > 0.0f))) &&
         (this->actor.velocity.y <= 0.0f)) {
         this->actor.speed = 0.0f;
-        Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4000);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xFA0);
         this->actor.world.rot.y = this->actor.shape.rot.y;
 
         if (func_80893ADC(this)) {
@@ -537,7 +537,7 @@ void func_80894910(EnTite* this, PlayState* play) {
             func_8089484C(this);
         }
     } else {
-        Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1000);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x3E8);
     }
 }
 
@@ -701,7 +701,7 @@ void func_808952EC(EnTite* this) {
 }
 
 void func_80895424(EnTite* this, PlayState* play) {
-    Math_ScaledStepToS(&this->actor.shape.rot.z, -0x8000, 4000);
+    Math_ScaledStepToS(&this->actor.shape.rot.z, -0x8000, 0xFA0);
     if (this->unk_2B8 != 0) {
         this->unk_2B8--;
     } else {
@@ -738,7 +738,7 @@ void func_808955E4(EnTite* this) {
 }
 
 void func_80895640(EnTite* this, PlayState* play) {
-    Math_ScaledStepToS(&this->actor.shape.rot.z, 0, 4000);
+    Math_ScaledStepToS(&this->actor.shape.rot.z, 0, 0xFA0);
     SkelAnime_Update(&this->skelAnime);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->collider.base.acFlags |= AC_ON;
@@ -1073,9 +1073,9 @@ void EnTite_Update(Actor* thisx, PlayState* play) {
                 this->actor.shape.rot.z = BINANG_ROT180(this->actor.shape.rot.z);
             }
         } else {
-            Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 1000);
+            Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 0x3E8);
             if (this->unk_2B9 == 0) {
-                Math_ScaledStepToS(&this->actor.shape.rot.z, 0, 1000);
+                Math_ScaledStepToS(&this->actor.shape.rot.z, 0, 0x3E8);
                 if (this->actor.shape.yOffset > 0.0f) {
                     this->actor.shape.yOffset -= 400.0f;
                 }

@@ -56,7 +56,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 50, 0, { 0, 0, 0 } },
 };
 
-s32 D_80A6862C = 0;
+s32 D_80A6862C = false;
 
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(1, 0xF),
@@ -160,7 +160,7 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
-    if (D_80A6862C != 0) {
+    if (D_80A6862C) {
         Math_ApproachZeroF(&this->actor.speed, 0.3f, 1.0f);
         return;
     }
@@ -208,7 +208,7 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     Math_ApproachZeroF(&this->actor.speed, 0.3f, 1.0f);
-    if (!Play_InCsMode(play) && (D_80A6862C == 0) && (this->eventTimer == 0)) {
+    if (!Play_InCsMode(play) && !D_80A6862C && (this->eventTimer == 0)) {
         this->eventTimer = 10;
         switch (this->waitTimer) {
             case 0:
@@ -228,7 +228,7 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
                 break;
 
             case 6:
-                if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
+                if (fabsf(this->headRotTarget.y - this->headRot.y) < 10.0f) {
                     this->waitTimer = 10;
                     this->headRotTarget.x = 4000.0f;
                     this->eventTimer = 5;
@@ -236,7 +236,7 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
                 break;
 
             case 7:
-                if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
+                if (fabsf(this->headRotTarget.y - this->headRot.y) < 10.0f) {
                     this->headRotTarget.z = 4000.0f;
                     this->waitTimer++;
                 }
@@ -254,8 +254,8 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
                 break;
 
             case 11:
-                if ((fabsf(this->headRotation.x) < 30.0f) && (fabsf(this->headRotation.y) < 30.0f) &&
-                    (fabsf(this->headRotation.z) < 30.0f)) {
+                if ((fabsf(this->headRot.x) < 30.0f) && (fabsf(this->headRot.y) < 30.0f) &&
+                    (fabsf(this->headRot.z) < 30.0f)) {
                     this->waitTimer = 12;
                 }
                 break;
@@ -313,14 +313,9 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
     }
 }
 
-static Vec3f sEffectVecInitialize = { 0.0f, 0.0f, 0.0f };
-
 void EnLookNuts_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnLookNuts* this = THIS;
-    Vec3f effectVelOffset;
-    Vec3f effectPos;
-    Vec3f effectVel;
 
     if (this->blinkTimer == 0) {
         this->eyeState++;
@@ -337,17 +332,20 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
         this->eventTimer--;
     }
     Actor_MoveWithGravity(&this->actor);
-    if (D_80A6862C == 0) {
+    if (!D_80A6862C) {
         if ((this->state < 2) && (this->actor.xzDistToPlayer < 320.0f) && (this->actor.playerHeightRel < 80.0f)) {
-            effectVelOffset = sEffectVecInitialize;
+            Vec3f effectVelocityOffset = { 0.0f, 0.0f, 0.0f };
+            Vec3f effectPos;
+            Vec3f effectVelocity;
+
             Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
-            effectPos.x += Math_SinS((this->actor.world.rot.y + TRUNCF_BINANG(this->headRotation.y))) * 10.0f;
+            effectPos.x += Math_SinS(this->actor.world.rot.y + TRUNCF_BINANG(this->headRot.y)) * 10.0f;
             effectPos.y += 30.0f;
-            effectPos.z += Math_CosS((this->actor.world.rot.y + TRUNCF_BINANG(this->headRotation.y))) * 10.0f;
+            effectPos.z += Math_CosS(this->actor.world.rot.y + TRUNCF_BINANG(this->headRot.y)) * 10.0f;
             Matrix_Push();
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-            effectVelOffset.z = 20.0f;
-            Matrix_MultVec3f(&effectVelOffset, &effectVel);
+            effectVelocityOffset.z = 20.0f;
+            Matrix_MultVec3f(&effectVelocityOffset, &effectVelocity);
             Matrix_Pop();
             if (!this->isPlayerDetected) {
                 s16 effectFlags = SOLDERSRCHBALL_INVISIBLE;
@@ -356,8 +354,8 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     effectFlags = 0;
                 }
                 if (Player_GetMask(play) != PLAYER_MASK_STONE) {
-                    EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->isPlayerDetected,
-                                                 effectFlags);
+                    EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVelocity, &gZeroVec3f, 50,
+                                                 &this->isPlayerDetected, effectFlags);
                 }
             }
 
@@ -369,7 +367,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
                     Audio_PlaySfx(NA_SE_SY_FOUND);
                     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_26);
-                    D_80A6862C = 1;
+                    D_80A6862C = true;
                     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;
                     EnLookNuts_DetectedPlayer(this, play);
@@ -378,9 +376,9 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                 }
             }
         }
-        Math_ApproachF(&this->headRotation.x, this->headRotTarget.x, 1.0f, 3000.0f);
-        Math_ApproachF(&this->headRotation.y, this->headRotTarget.y, 1.0f, 6000.0f);
-        Math_ApproachF(&this->headRotation.z, this->headRotTarget.z, 1.0f, 2000.0f);
+        Math_ApproachF(&this->headRot.x, this->headRotTarget.x, 1.0f, 3000.0f);
+        Math_ApproachF(&this->headRot.y, this->headRotTarget.y, 1.0f, 6000.0f);
+        Math_ApproachF(&this->headRot.z, this->headRotTarget.z, 1.0f, 2000.0f);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

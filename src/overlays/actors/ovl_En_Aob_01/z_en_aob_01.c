@@ -604,7 +604,7 @@ void EnAob01_BeforeRace_Idle(EnAob01* this, PlayState* play) {
 void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 1);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
 
     //! @bug: This block of code acts as a failsafe for when the player triggered this conversation by
     //! bumping into the racetrack owner while holding the dog and, at the same time, threw or dropped
@@ -971,7 +971,7 @@ void EnAob01_AfterRace_AskToPlayAgain(EnAob01* this, PlayState* play) {
 void EnAob01_AfterRace_Talk(EnAob01* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 1);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
 
     if (this->stateFlags & ENAOB01_FLAG_LAUGH) {
         if (!EnAob01_ProcessLaughAnim(this)) {

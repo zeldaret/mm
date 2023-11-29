@@ -15,8 +15,6 @@ void EnRu_Destroy(Actor* thisx, PlayState* play);
 void EnRu_Update(Actor* thisx, PlayState* play);
 void EnRu_Draw(Actor* thisx, PlayState* play);
 
-void EnRu_DoNothing(EnRu* this, PlayState* play);
-
 ActorInit En_Ru_InitVars = {
     /**/ ACTOR_EN_RU,
     /**/ ACTORCAT_NPC,
@@ -86,15 +84,28 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gAdultRutoIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gAdultRutoIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoRaisingArmsUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoCrossingArmsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoLookingDownLeftAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoIdleHandsOnHipsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoHeadTurnDownLeftAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoSwimmingUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+typedef enum AdultRutoAnimation {
+    /* -1 */ ADULT_RUTO_ANIM_NONE = -1,
+    /*  0 */ ADULT_RUTO_ANIM_IDLE,
+    /*  1 */ ADULT_RUTO_ANIM_IDLE_MORPH,
+    /*  2 */ ADULT_RUTO_ANIM_RAISING_ARMS_UP,
+    /*  3 */ ADULT_RUTO_ANIM_CROSSING_ARMS,
+    /*  4 */ ADULT_RUTO_ANIM_LOOKING_DOWN_LEFT,
+    /*  5 */ ADULT_RUTO_ANIM_HANDS_ON_HIPS,
+    /*  6 */ ADULT_RUTO_ANIM_TURN_DOWN_LEFT,
+    /*  7 */ ADULT_RUTO_ANIM_SWIMMING_UP,
+    /*  8 */ ADULT_RUTO_ANIM_MAX
+} AdultRutoAnimation;
+
+static AnimationInfoS sAnimationInfo[ADULT_RUTO_ANIM_MAX] = {
+    { &gAdultRutoIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },              // ADULT_RUTO_ANIM_IDLE
+    { &gAdultRutoIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },             // ADULT_RUTO_ANIM_IDLE_MORPH
+    { &gAdultRutoRaisingArmsUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // ADULT_RUTO_ANIM_RAISING_ARMS_UP
+    { &gAdultRutoCrossingArmsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // ADULT_RUTO_ANIM_CROSSING_ARMS
+    { &gAdultRutoLookingDownLeftAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // ADULT_RUTO_ANIM_LOOKING_DOWN_LEFT
+    { &gAdultRutoIdleHandsOnHipsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // ADULT_RUTO_ANIM_HANDS_ON_HIPS
+    { &gAdultRutoHeadTurnDownLeftAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ADULT_RUTO_ANIM_TURN_DOWN_LEFT
+    { &gAdultRutoSwimmingUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },       // ADULT_RUTO_ANIM_SWIMMING_UP
 };
 
 static s8 sLimbToBodyParts[RU2_LIMB_MAX] = {
@@ -159,28 +170,24 @@ static u8 sShadowSizes[RU_BODYPART_MAX] = {
     0, // RU_BODYPART_14
 };
 
-static TrackOptionsSet sTrackOptions = {
-    { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }, { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }
-};
-
 s32 EnRu_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
-    s16 lastFrame;
-    s32 ret = false;
+    s16 endFrame;
+    s32 didAnimChange = false;
 
-    if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimationInfo))) {
-        lastFrame = sAnimationInfo[animIndex].frameCount;
+    if ((animIndex > ADULT_RUTO_ANIM_NONE) && (animIndex < ADULT_RUTO_ANIM_MAX)) {
+        endFrame = sAnimationInfo[animIndex].frameCount;
 
-        ret = true;
-        if (lastFrame < 0) {
-            lastFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
+        didAnimChange = true;
+        if (endFrame < 0) {
+            endFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
 
         Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
-                         sAnimationInfo[animIndex].startFrame, lastFrame, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].startFrame, endFrame, sAnimationInfo[animIndex].mode,
                          sAnimationInfo[animIndex].morphFrames);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 // En_Zo has a copy of this function
@@ -241,6 +248,10 @@ void EnRu_UpdateCollider(EnRu* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
+static TrackOptionsSet sTrackOptions = {
+    { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }, { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }
+};
+
 void EnRu_UpdateModel(EnRu* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -279,7 +290,7 @@ void EnRu_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gAdultRutoSkel, NULL, this->jointTable, this->morphTable, RU2_LIMB_MAX);
-    EnRu_ChangeAnim(&this->skelAnime, 0);
+    EnRu_ChangeAnim(&this->skelAnime, ADULT_RUTO_ANIM_IDLE);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -300,6 +311,7 @@ void EnRu_Update(Actor* thisx, PlayState* play) {
     EnRu* this = THIS;
 
     this->actionFunc(this, play);
+
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnRu_UpdateModel(this, play);
     EnRu_UpdateCollider(this, play);

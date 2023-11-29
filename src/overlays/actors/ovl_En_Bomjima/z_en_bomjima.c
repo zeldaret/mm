@@ -318,7 +318,7 @@ void func_80BFE67C(EnBomjima* this, PlayState* play) {
     s32 sp4C;
 
     this->unk_2DC = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A4);
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 5000, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 0x1388, 0);
 
     switch (this->unk_2A2) {
         case 0:
@@ -342,7 +342,7 @@ void func_80BFE67C(EnBomjima* this, PlayState* play) {
         case 1:
             if (curFrame >= 0.0f) {
                 this->unk_2DC = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A4);
-                Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 10, 2000, 20);
+                Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 10, 0x7D0, 0x14);
             }
 
             abs2 = BINANG_SUB(this->actor.world.rot.y, this->unk_2DC);
@@ -510,7 +510,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
             break;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 5000, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 0x1388, 0);
 }
 
 void func_80BFEFF0(EnBomjima* this) {
@@ -567,7 +567,7 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
         return;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 5000, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 0x1388, 0);
 
     if ((curFrame >= this->animEndFrame) && (this->unk_2BC < 5)) {
         this->unk_2BC++;
@@ -824,7 +824,7 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
         this->unk_2DC = -10000;
     }
 
-    Math_SmoothStepToS(&this->unk_290, this->unk_2DC, 1, 5000, 0);
+    Math_SmoothStepToS(&this->unk_290, this->unk_2DC, 1, 0x1388, 0);
     if (D_80C009F0 >= 104) {
         D_80C009F0 = 0;
         Message_CloseTextbox(play);
@@ -848,7 +848,7 @@ void func_80BFFD48(EnBomjima* this, PlayState* play) {
     s32 pad[2];
 
     this->unk_2DC = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A4);
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 5000, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 0x1388, 0);
     Math_ApproachF(&this->actor.world.pos.x, this->unk_2A4.x, 0.3f, 4.0f);
     Math_ApproachF(&this->actor.world.pos.z, this->unk_2A4.z, 0.3f, 4.0f);
     if (sqrtf(SQ(this->actor.world.pos.x - this->unk_2A4.x) + SQ(this->actor.world.pos.z - this->unk_2A4.z)) < 4.0f) {
@@ -860,7 +860,7 @@ void func_80BFFD48(EnBomjima* this, PlayState* play) {
 }
 
 void func_80BFFE48(EnBomjima* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 5000, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 0x1388, 0);
     Math_ApproachF(&this->actor.world.pos.x, this->unk_2A4.x, 0.3f, 4.0f);
     Math_ApproachF(&this->actor.world.pos.z, this->unk_2A4.z, 0.3f, 4.0f);
 
@@ -871,7 +871,7 @@ void func_80BFFE48(EnBomjima* this, PlayState* play) {
             func_80BFE65C(this);
             this->actionFunc = func_80BFFF54;
         } else {
-            Math_SmoothStepToS(&this->unk_290, 10000, 1, 5000, 0);
+            Math_SmoothStepToS(&this->unk_290, 10000, 1, 0x1388, 0);
             if (D_80C009F0 >= 103) {
                 this->unk_2DC = 0;
                 EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_15, 1.0f);
@@ -885,7 +885,7 @@ void func_80BFFE48(EnBomjima* this, PlayState* play) {
 void func_80BFFF54(EnBomjima* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    Math_SmoothStepToS(&this->unk_290, this->unk_2DC, 1, 5000, 0);
+    Math_SmoothStepToS(&this->unk_290, this->unk_2DC, 1, 0x1388, 0);
 
     if ((D_80C009F4 != 0) && (this->unk_2C2 == 0)) {
         this->unk_2C2 = Rand_S16Offset(5, 5);
@@ -964,7 +964,7 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 5000, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 1, 0x1388, 0);
     if (((this->action == EN_BOMJIMA_ACTION_0) || (this->unk_2C8 == 10) || (this->unk_2C8 == 11) ||
          (this->unk_2CA == 1)) &&
         (curFrame >= this->animEndFrame)) {
@@ -1097,9 +1097,9 @@ void EnBomjima_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, 20.0f);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Math_SmoothStepToS(&this->unk_28A, this->unk_290, 1, 5000, 0);
-    Math_SmoothStepToS(&this->unk_288, this->unk_28E, 1, 1000, 0);
-    Math_SmoothStepToS(&this->unk_294, this->unk_29A, 1, 1000, 0);
+    Math_SmoothStepToS(&this->unk_28A, this->unk_290, 1, 0x1388, 0);
+    Math_SmoothStepToS(&this->unk_288, this->unk_28E, 1, 0x3E8, 0);
+    Math_SmoothStepToS(&this->unk_294, this->unk_29A, 1, 0x3E8, 0);
 
     if (this->unk_2E2 == 0) {
         this->unk_2E0++;

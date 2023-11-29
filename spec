@@ -237,11 +237,11 @@ beginseg
     include "build/src/libultra/os/sethwinterrupt.o"
     include "build/asm/boot/getwatchlo.text.o"
     include "build/asm/boot/setwatchlo.text.o"
-    include "build/src/boot/O2/fmodf.o"
-    include "build/src/boot/O2/__osMemset.o"
-    include "build/src/boot/O2/__osStrcmp.o"
-    include "build/src/boot/O2/__osStrcpy.o"
-    include "build/src/boot/O2/__osMemcpy.o"
+    include "build/src/boot/libm/fmodf.o"
+    include "build/src/boot/libc/memset.o"
+    include "build/src/boot/libc/strcmp.o"
+    include "build/src/boot/libc/strcpy.o"
+    include "build/src/boot/libc/memmove.o"
     include "build/src/boot/build.o"
 endseg
 
@@ -6313,11 +6313,11 @@ beginseg
 endseg
 
 beginseg
-    name "object_rs"
+    name "object_rsn"
     compress
     romalign 0x1000
     number 6
-    include "build/assets/objects/object_rs/object_rs.o"
+    include "build/assets/objects/object_rsn/object_rsn.o"
 endseg
 
 beginseg
