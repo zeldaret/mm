@@ -51,7 +51,7 @@ void ObjTokeiTurret_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTownTurretPlatformCol);
         }
     } else {
-        this->dyna.actor.uncullZoneDownward = this->dyna.actor.uncullZoneScale = 1300.0;
+        this->dyna.actor.uncullZoneDownward = this->dyna.actor.uncullZoneScale = 1300.0f;
     }
 }
 

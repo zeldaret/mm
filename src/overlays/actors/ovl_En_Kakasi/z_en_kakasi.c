@@ -1044,7 +1044,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
 }
 
 void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
-    this->picto.actor.shape.yOffset = -7000.0;
+    this->picto.actor.shape.yOffset = -7000.0f;
     this->picto.actor.draw = NULL;
     this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->unkState196 = 5;
