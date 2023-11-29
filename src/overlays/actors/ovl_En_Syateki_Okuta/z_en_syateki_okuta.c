@@ -288,7 +288,7 @@ void EnSyatekiOkuta_SetupDie(EnSyatekiOkuta* this) {
  * make it do nothing until the Shooting Gallery Man tells it to appear again.
  */
 void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
-    static Vec3f sBubbleAccel = { 0.0f, -0.5, 0.0f };
+    static Vec3f sBubbleAccel = { 0.0f, -0.5f, 0.0f };
     static Color_RGBA8 sBubblePrimColor = { 255, 255, 255, 255 };
     static Color_RGBA8 sBubbleEnvColor = { 150, 150, 150, 0 };
     Vec3f velocity;

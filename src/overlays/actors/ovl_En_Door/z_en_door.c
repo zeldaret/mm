@@ -636,7 +636,7 @@ void func_80867144(EnDoor* this, PlayState* play) {
             if (this->knobDoor.skelAnime.playSpeed < 1.5f) {
                 numEffects = (s32)(Rand_ZeroOne() * 30.0f) + 50;
                 for (i = 0; i < numEffects; i++) {
-                    EffectSsBubble_Spawn(play, &this->knobDoor.dyna.actor.world.pos, 60.0, 100.0f, 50.0f, 0.15f);
+                    EffectSsBubble_Spawn(play, &this->knobDoor.dyna.actor.world.pos, 60.0f, 100.0f, 50.0f, 0.15f);
                 }
             }
         } else if (Animation_OnFrame(&this->knobDoor.skelAnime, sAnimCloseFrames[this->knobDoor.animIndex])) {

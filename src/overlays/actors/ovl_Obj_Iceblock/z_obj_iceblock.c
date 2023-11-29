@@ -1222,7 +1222,7 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
 }
 
 void func_80A260E8(ObjIceblock* this) {
-    static f32 D_80A26FC0[] = { 14.0, -14.0, 14.0, -14.0 };
+    static f32 D_80A26FC0[] = { 14.0f, -14.0f, 14.0f, -14.0f };
 
     this->unk_260 = D_80A26FC0[this->unk_26C];
     this->unk_25C = 0.0f;

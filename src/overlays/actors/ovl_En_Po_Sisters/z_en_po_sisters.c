@@ -1236,7 +1236,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
 
     if (this->actionFunc == EnPoSisters_DeathStage2) {
         alpha = ((-this->deathTimer * 255) + 0x1FE0) / 32;
-        scale = (7 / 1.2500 * 0.001f);
+        scale = (7 / 1.25f * 0.001f);
     } else {
         alpha = 0;
         scale = this->actor.scale.x * 0.5f;

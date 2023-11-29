@@ -51,26 +51,26 @@ s32 func_80996594(EnSkb* this, PlayState* play);
 void func_80996BEC(EnSkb* this, PlayState* play);
 
 static AnimationInfo sAnimationInfo[] = {
-    { &gStalchildWalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &gStalchildWalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &gStalchildAttackAnim, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f },
-    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
-    { &gStalchildCollapseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
-    { &gStalchildSitLaughAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
-    { &gStalchildSitTapToesAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
-    { &gStalchildSwingOnBranchAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gStalchildCollapseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gStalchildSitLaughAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gStalchildSitTapToesAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gStalchildSwingOnBranchAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
     { &gStalchildStandUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },
     { &gStalchildStaggerAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gStalchildSaluteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
-    { &gStalchildIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &gStalchildSaluteAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gStalchildIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
 };
 
 static Vec3f D_80997468[] = {
-    { -534.0f, 80.0, -1277.0f },
-    { 113.0f, 80.0, -1359.0f },
-    { 100.0f, 80.0, -770.0f },
-    { -334.0f, 80.0, -720.0f },
+    { -534.0f, 80.0f, -1277.0f },
+    { 113.0f, 80.0f, -1359.0f },
+    { 100.0f, 80.0f, -770.0f },
+    { -334.0f, 80.0f, -720.0f },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -1005,7 +1005,7 @@ void func_80996AD0(EnSkb* this, PlayState* play) {
 void func_80996BEC(EnSkb* this, PlayState* play) {
     static Color_RGBA8 D_80997550 = { 170, 255, 255, 255 };
     static Color_RGBA8 D_80997554 = { 200, 200, 255, 255 };
-    static Vec3f D_80997558 = { 0.0f, -1.0, 0.0f };
+    static Vec3f D_80997558 = { 0.0f, -1.0f, 0.0f };
     Vec3f sp84;
     s32 i;
     s16 yaw;

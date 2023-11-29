@@ -1424,7 +1424,7 @@ void EnFsn_IdleBackroom(EnFsn* this, PlayState* play) {
         this->textId = 0;
         EnFsn_HandleConversationBackroom(this, play);
         this->actionFunc = EnFsn_ConverseBackroom;
-    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isLockedOn) {
+    } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }

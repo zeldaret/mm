@@ -209,7 +209,7 @@ void EnSb_SetupIdle(EnSb* this, s32 changeSpeed) {
 
 void EnSb_Idle(EnSb* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x7D0, 0);
-    if (this->actor.xzDistToPlayer <= 240.0f && this->actor.xzDistToPlayer > 0.0f) {
+    if ((this->actor.xzDistToPlayer <= 240.0f) && (this->actor.xzDistToPlayer > 0.0f)) {
         EnSb_SetupOpen(this);
     }
 }
@@ -223,7 +223,7 @@ void EnSb_Open(EnSb* this, PlayState* play) {
         EnSb_SetupWaitOpen(this);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x7D0, 0);
-        if (this->actor.xzDistToPlayer > 240.0f || this->actor.xzDistToPlayer <= 40.0f) {
+        if ((this->actor.xzDistToPlayer > 240.0f) || (this->actor.xzDistToPlayer <= 40.0f)) {
             this->vulnerableTimer = 0;
             EnSb_SetupWaitClosed(this);
         }
@@ -233,7 +233,7 @@ void EnSb_Open(EnSb* this, PlayState* play) {
 void EnSb_WaitOpen(EnSb* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x7D0, 0);
-    if (this->actor.xzDistToPlayer > 240.0f || this->actor.xzDistToPlayer <= 40.0f) {
+    if ((this->actor.xzDistToPlayer > 240.0f) || (this->actor.xzDistToPlayer <= 40.0f)) {
         this->vulnerableTimer = 0;
         EnSb_SetupWaitClosed(this);
     }

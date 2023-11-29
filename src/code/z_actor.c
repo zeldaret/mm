@@ -4020,7 +4020,7 @@ typedef struct {
 } DoorLockInfo; // size = 0x1C
 
 DoorLockInfo sDoorLocksInfo[DOORLOCK_MAX] = {
-    /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0, 1.0f, 0.0f, gDoorChainDL, gDoorLockDL },
+    /* DOORLOCK_NORMAL */ { 0.54f, 6000.0f, 5000.0f, 1.0f, 0.0f, gDoorChainDL, gDoorLockDL },
     /* DOORLOCK_BOSS */ { 0.644f, 12000.0f, 8000.0f, 1.0f, 0.0f, gBossDoorChainDL, gBossDoorLockDL },
     /* DOORLOCK_2 */ { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f, gDoorChainDL, gDoorLockDL },
 };
@@ -4965,7 +4965,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                 for (bodyPartIndex = 0; bodyPartIndex < bodyPartsCount; bodyPartIndex++, bodyPartsPos++) {
                     alpha = bodyPartIndex & 3;
                     alpha = effectAlphaScaled - 30.0f * alpha;
-                    if (effectAlphaScaled < 30.0f * (bodyPartIndex & 3)) {
+                    if (effectAlphaScaled < (30.0f * (bodyPartIndex & 3))) {
                         alpha = 0.0f;
                     }
                     if (alpha > 255.0f) {

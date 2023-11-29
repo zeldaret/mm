@@ -65,7 +65,7 @@ static s16 sObjectIds[] = {
  * axes by using this table.
  */
 static f32 oscillationTable[] = {
-    -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0, -0.7, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0, -0.7,
+    -1.0f, -1.0f, -1.0f, -0.7f, 0.0f, 0.7f, 1.0f, 0.7f, 0.0f, -0.7f, -1.0f, -0.7f, 0.0f, 0.7f, 1.0f, 0.7f, 0.0f, -0.7f,
 };
 
 void ObjEtcetera_Init(Actor* thisx, PlayState* play) {

@@ -293,7 +293,7 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
     Actor_UpdatePos(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
-    if (this->actor.xzDistToPlayer < 100.0f && !(this->stateFlags & ANI_STATE_CLIMBING)) {
+    if ((this->actor.xzDistToPlayer < 100.0f) && !(this->stateFlags & ANI_STATE_CLIMBING)) {
         Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
         this->torsoRot.x = this->torsoRot.y = this->torsoRot.z = 0;
     } else {

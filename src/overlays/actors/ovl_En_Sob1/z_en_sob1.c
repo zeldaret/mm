@@ -540,8 +540,8 @@ void EnSob1_EndingInteraction(EnSob1* this, PlayState* play) {
 void EnSob1_SetupWalk(EnSob1* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.world.pos.x >= 0.0f && player->actor.world.pos.x <= 390.0f) &&
-        (player->actor.world.pos.z >= 72.0f && player->actor.world.pos.z <= 365.0f)) {
+    if ((player->actor.world.pos.x >= 0.0f) && (player->actor.world.pos.x <= 390.0f) &&
+        (player->actor.world.pos.z >= 72.0f) && (player->actor.world.pos.z <= 365.0f)) {
         EnSob1_SetupAction(this, EnSob1_Walk);
     }
 }

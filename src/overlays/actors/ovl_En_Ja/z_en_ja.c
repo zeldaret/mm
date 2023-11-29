@@ -432,7 +432,7 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     static Vec3f D_80BC3774 = { -87.0f, 444.0f, -49.0f };
     static Vec3f D_80BC3780 = { 600.0f, 0.0f, 0.0f };
     static Vec3f D_80BC378C = { 400.0f, 0.0f, -400.0f };
-    static Vec3f D_80BC3798 = { 400.0, 0.0f, 400.0f };
+    static Vec3f D_80BC3798 = { 400.0f, 0.0f, 400.0f };
     static Vec3s D_80BC37A4 = { 0x7770, -0x4BC, -0x251C };
     s32 pad;
     EnJa* this = THIS;

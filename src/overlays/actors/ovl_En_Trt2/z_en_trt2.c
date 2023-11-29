@@ -717,7 +717,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD4DB4(EnTrt2* this, PlayState* play) {
-    static Vec3f D_80AD5904 = { 0.0f, 50.0f, 0.0 };
+    static Vec3f D_80AD5904 = { 0.0f, 50.0f, 0.0f };
 
     this->actor.flags &= ~ACTOR_FLAG_10;
     Actor_SetObjectDependency(play, &this->actor);

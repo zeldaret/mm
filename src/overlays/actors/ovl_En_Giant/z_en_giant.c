@@ -352,7 +352,7 @@ void EnGiant_ChangeAnimBasedOnCueId(EnGiant* this) {
 void EnGiant_UpdateAlpha(EnGiant* this) {
     switch (this->cueId) {
         case GIANT_CUEID_FALLING_OVER:
-            if (this->skelAnime.curFrame >= 90.0f && this->alpha > 0) {
+            if ((this->skelAnime.curFrame >= 90.0f) && (this->alpha > 0)) {
                 this->alpha -= 12;
             }
             break;

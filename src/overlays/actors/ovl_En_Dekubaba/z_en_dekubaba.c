@@ -344,7 +344,7 @@ void EnDekubaba_Wait(EnDekubaba* this, PlayState* play) {
     this->actor.world.pos.y = this->actor.home.pos.y + 14.0f * this->size;
 
     if ((this->timer == 0) && (this->actor.xzDistToPlayer < (200.0f * this->size)) &&
-        (fabsf(this->actor.playerHeightRel) < 30.0f * this->size)) {
+        (fabsf(this->actor.playerHeightRel) < (30.0f * this->size))) {
         EnDekubaba_SetupGrow(this);
     }
 }
