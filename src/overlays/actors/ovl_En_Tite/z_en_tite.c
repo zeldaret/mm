@@ -6,7 +6,6 @@
 
 #include "z_en_tite.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_tite/object_tite.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
 
@@ -142,7 +141,7 @@ void EnTite_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_Init(play, &this->skelAnime, &object_tite_Skel_003A20, &object_tite_Anim_0012E4, this->jointTable,
-                   this->morphTable, 25);
+                   this->morphTable, OBJECT_TITE_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     Actor_SetFocus(&this->actor, 20.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -1188,7 +1187,7 @@ void EnTite_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
             Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts2[limbIndex]]);
         }
 
-        if (limbIndex == 24) {
+        if (limbIndex == OBJECT_TITE_LIMB_18) {
             this->unk_2BA = -1;
         }
     } else if (sLimbToBodyParts2[limbIndex] != BODYPART_NONE) {

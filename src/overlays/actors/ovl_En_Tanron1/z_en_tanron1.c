@@ -116,7 +116,7 @@ void EnTanron1_Update(Actor* thisx, PlayState* play) {
                     }
 
                     temp.x = this->unk_14C.x - temp_a0->world.pos.x;
-                    temp.y = (this->unk_14C.y - temp_a0->world.pos.y) + 70.0f;
+                    temp.y = this->unk_14C.y - temp_a0->world.pos.y + 70.0f;
                     temp.z = this->unk_14C.z - temp_a0->world.pos.z;
 
                     if (sqrtf(SQXYZ(temp)) < phi_f18) {
@@ -146,6 +146,9 @@ void EnTanron1_Update(Actor* thisx, PlayState* play) {
                 }
             }
             this->unk_144 = 1;
+            break;
+
+        default:
             break;
     }
 

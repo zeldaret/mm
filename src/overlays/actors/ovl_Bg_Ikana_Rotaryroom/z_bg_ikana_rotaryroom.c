@@ -793,7 +793,7 @@ void func_80B819F0(Actor* thisx, PlayState* play) {
 
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        if (this->dyna.actor.csId >= 0) {
+        if (this->dyna.actor.csId > CS_ID_NONE) {
             Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
         }
         func_80B81A64(this);

@@ -2,6 +2,7 @@
 #define Z_EN_TK_H
 
 #include "global.h"
+#include "objects/object_tk/object_tk.h"
 
 struct EnTk;
 
@@ -17,8 +18,8 @@ typedef struct EnTk {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnTkActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ Vec3s jointTable[18];
-    /* 0x244 */ Vec3s morphTable[18];
+    /* 0x1D8 */ Vec3s jointTable[OBJECT_TK_LIMB_MAX];
+    /* 0x244 */ Vec3s morphTable[OBJECT_TK_LIMB_MAX];
     /* 0x2B0 */ s8 unk_2B0;
     /* 0x2B1 */ s8 switchFlag;
     /* 0x2B4 */ Vec3f unk_2B4;
@@ -30,7 +31,7 @@ typedef struct EnTk {
     /* 0x2CA */ u16 unk_2CA;
     /* 0x2CC */ s16 unk_2CC;
     /* 0x2D0 */ s32 unk_2D0;
-    /* 0x2D4 */ s32 unk_2D4;
+    /* 0x2D4 */ s32 animIndex;
     /* 0x2D8 */ f32 unk_2D8;
     /* 0x2DC */ f32 unk_2DC;
     /* 0x2E0 */ s32 unk_2E0;
@@ -47,7 +48,7 @@ typedef struct EnTk {
     /* 0x318 */ s16 unk_318;
     /* 0x31A */ s16 unk_31A;
     /* 0x31C */ s16 unk_31C;
-    /* 0x320 */ f32 unk_320;
+    /* 0x320 */ f32 animCurFrame;
     /* 0x324 */ Vec3f unk_324[6];
     /* 0x36C */ s32 unk_36C;
     /* 0x370 */ UNK_TYPE1 unk370[0x58];

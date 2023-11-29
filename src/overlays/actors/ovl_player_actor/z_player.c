@@ -746,9 +746,6 @@ void Player_RequestRumble(PlayState* play, Player* this, s32 sourceIntensity, s3
     }
 }
 
-// TODO: less dumb name
-#define SFX_VOICE_BANK_SIZE 0x20
-
 PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
     {
         // ceilingCheckHeight

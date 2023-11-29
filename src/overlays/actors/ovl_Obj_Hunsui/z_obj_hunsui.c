@@ -585,9 +585,9 @@ void func_80B9D714(ObjHunsui* this, PlayState* play) {
             csId = this->dyna.actor.csId;
 
             if (this->unk_16E == 0) {
-                if ((csId >= 0) && !CutsceneManager_IsNext(csId)) {
+                if ((csId > CS_ID_NONE) && !CutsceneManager_IsNext(csId)) {
                     CutsceneManager_Queue(csId);
-                } else if (csId >= 0) {
+                } else if (csId > CS_ID_NONE) {
                     CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
                     this->unk_16E = -1;
                 } else {

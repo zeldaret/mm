@@ -117,9 +117,6 @@ static ColliderCylinderInit sCylinderInit2 = {
     { 22, 42, -21, { 0, 0, 0 } },
 };
 
-Color_RGBA8 D_80BB81E8 = { 255, 255, 255, 255 };
-Color_RGBA8 D_80BB81EC = { 255, 100, 100, 255 };
-
 void EnTanron2_Init(Actor* thisx, PlayState* play) {
     EnTanron2* this = THIS;
 
@@ -355,24 +352,26 @@ void func_80BB6F78(EnTanron2* this, PlayState* play) {
 }
 
 void func_80BB71C8(EnTanron2* this, PlayState* play) {
+    static Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
+    static Color_RGBA8 sEnvColor = { 255, 100, 100, 255 };
     s32 i;
-    Vec3f spA8;
-    Vec3f sp9C;
-    Vec3f sp90;
+    Vec3f velocity;
+    Vec3f accel;
+    Vec3f pos;
 
     for (i = 0; i < 15; i++) {
-        Matrix_RotateYF(Rand_ZeroFloat(6.2831855f), MTXMODE_NEW);
-        Matrix_RotateXFApply(Rand_ZeroFloat(6.2831855f));
-        Matrix_MultVecZ(Rand_ZeroFloat(10.0f) + 5.0f, &spA8);
-        sp90.x = this->actor.world.pos.x + spA8.x;
-        sp90.y = this->actor.world.pos.y + spA8.y;
-        sp90.z = this->actor.world.pos.z + spA8.z;
+        Matrix_RotateYF(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
+        Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
+        Matrix_MultVecZ(Rand_ZeroFloat(10.0f) + 5.0f, &velocity);
+        pos.x = this->actor.world.pos.x + velocity.x;
+        pos.y = this->actor.world.pos.y + velocity.y;
+        pos.z = this->actor.world.pos.z + velocity.z;
 
-        sp9C.x = spA8.x * -0.03f;
-        sp9C.y = spA8.y * -0.03f;
-        sp9C.z = spA8.z * -0.03f;
+        accel.x = velocity.x * -0.03f;
+        accel.y = velocity.y * -0.03f;
+        accel.z = velocity.z * -0.03f;
 
-        EffectSsDtBubble_SpawnCustomColor(play, &sp90, &spA8, &sp9C, &D_80BB81E8, &D_80BB81EC,
+        EffectSsDtBubble_SpawnCustomColor(play, &pos, &velocity, &accel, &sPrimColor, &sEnvColor,
                                           Rand_ZeroFloat(100.0f) + 200.0f, Rand_ZeroFloat(5.0f) + 15.0f, false);
     }
 }
@@ -418,8 +417,7 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
     ColliderInfo* acHitInfo;
     s32 pad;
     Player* player = GET_PLAYER(play);
-    s32 pad2;
-    s32 pad3;
+    s32 pad2[2];
     u8 damage;
 
     if (this->unk_154 == 0) {

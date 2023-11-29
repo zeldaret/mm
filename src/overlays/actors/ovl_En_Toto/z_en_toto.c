@@ -5,7 +5,6 @@
  */
 
 #include "z_en_toto.h"
-#include "objects/object_zm/object_zm.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -126,8 +125,20 @@ static EnTotoText D_80BA5074[] = {
     { 4, 0, 0x2AE4 },
 };
 
-static AnimationHeader* D_80BA5078[] = { &object_zm_Anim_0028B8, &object_zm_Anim_00B894, &object_zm_Anim_002F20,
-                                         &object_zm_Anim_00BC08 };
+typedef enum EnTotoAnimation {
+    /* 0 */ ENTOTO_ANIM_0,
+    /* 1 */ ENTOTO_ANIM_1,
+    /* 2 */ ENTOTO_ANIM_2,
+    /* 3 */ ENTOTO_ANIM_3,
+    /* 4 */ ENTOTO_ANIM_MAX
+} EnTotoAnimation;
+
+static AnimationHeader* sAnimations[ENTOTO_ANIM_MAX] = {
+    &object_zm_Anim_0028B8, // ENTOTO_ANIM_0
+    &object_zm_Anim_00B894, // ENTOTO_ANIM_1
+    &object_zm_Anim_002F20, // ENTOTO_ANIM_2
+    &object_zm_Anim_00BC08, // ENTOTO_ANIM_3
+};
 
 static EnTotoText D_80BA5088[] = {
     { 5, 0, 0 },  { 6, 20, 0 }, { 7, 0, 0 },  { 8, 9, 0 },  { 9, 10, 0 }, { 1, 0, 0 },  { 10, 0, 0 },
@@ -179,7 +190,7 @@ static EnTotoActionFunc D_80BA51B8[] = {
 };
 
 void func_80BA36C0(EnToto* this, PlayState* play, s32 index) {
-    this->unk2B7 = 0;
+    this->unk2B7 = false;
     this->actionFuncIndex = index;
     D_80BA501C[this->actionFuncIndex](this, play);
 }
@@ -198,7 +209,7 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
     this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_zm_Skel_00A978,
                        ((play->sceneId == SCENE_SONCHONOIE) ? &object_zm_Anim_003AA8 : &object_zm_Anim_00C880),
-                       this->jointTable, this->morphTable, 18);
+                       this->jointTable, this->morphTable, OBJECT_ZM_LIMB_MAX);
     func_80BA36C0(this, play, 0);
     this->actor.shape.rot.x = 0;
 }
@@ -213,22 +224,22 @@ void func_80BA383C(EnToto* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) && (this->actionFuncIndex == 1) &&
         (this->skelAnime.animation != &object_zm_Anim_000C80)) {
         if ((play->msgCtx.currentTextId != 0x2A98) && (play->msgCtx.currentTextId != 0x2A99)) {
-            if ((this->unk2B4 & 1) || (Rand_ZeroOne() > 0.5f)) {
-                this->unk2B4 = (this->unk2B4 + 1) & 3;
+            if ((this->animIndex & 1) || (Rand_ZeroOne() > 0.5f)) {
+                this->animIndex = (this->animIndex + 1) & 3;
             }
         }
-        Animation_PlayOnce(&this->skelAnime, D_80BA5078[this->unk2B4]);
+        Animation_PlayOnce(&this->skelAnime, sAnimations[this->animIndex]);
     }
     func_800BBB74(&this->blinkInfo, 20, 80, 3);
 }
 
 void func_80BA3930(EnToto* this, PlayState* play) {
-    AnimationHeader* animationHeader = &object_zm_Anim_00C880;
+    AnimationHeader* anim = &object_zm_Anim_00C880;
 
     if (play->sceneId == SCENE_SONCHONOIE) {
-        animationHeader = &object_zm_Anim_003AA8;
+        anim = &object_zm_Anim_003AA8;
     }
-    Animation_MorphToLoop(&this->skelAnime, animationHeader, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, anim, -4.0f);
 }
 
 s32 func_80BA397C(EnToto* this, s16 arg1) {
@@ -292,7 +303,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
 void func_80BA3BFC(EnToto* this, PlayState* play) {
     if (play->sceneId == SCENE_SONCHONOIE) {
         Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_000C80, -4.0f);
-        this->unk2B4 = 0;
+        this->animIndex = ENTOTO_ANIM_0;
     } else {
         if (this->text->unk0 == 4) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
@@ -327,12 +338,12 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
     Player* player;
 
     func_80BA383C(this, play);
-    if (this->unk2B7 == 0) {
+    if (!this->unk2B7) {
         if (!func_80BA4C44(this, play)) {
             return;
         }
         if ((this->text->unk1 != 0) && ENTOTO_WEEK_EVENT_FLAGS) {
-            this->unk2B7 = 1;
+            this->unk2B7 = true;
             return;
         }
     } else {
@@ -670,9 +681,8 @@ s32 func_80BA4C0C(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA4C44(EnToto* this, PlayState* play) {
-    s32 ret;
+    s32 ret = D_80BA5174[this->text->unk0](this, play);
 
-    ret = D_80BA5174[this->text->unk0](this, play);
     if (ret != 0) {
         this->text += ret;
         return func_80BA4C0C(this, play);

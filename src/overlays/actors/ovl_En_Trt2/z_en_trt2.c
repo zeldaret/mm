@@ -26,30 +26,31 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play);
 void func_80AD5234(EnTrt2* this, PlayState* play);
 void func_80AD56E8(Actor* thisx, PlayState* play);
 
-typedef enum {
-    /* 0 */ TRT2_ANIM_IDLE,
-    /* 1 */ TRT2_ANIM_HALF_AWAKE,
-    /* 2 */ TRT2_ANIM_SLEEPING,
-    /* 3 */ TRT2_ANIM_WAKE_UP,
-    /* 4 */ TRT2_ANIM_SURPRISED,
-    /* 5 */ TRT2_ANIM_HANDS_ON_COUNTER,
-    /* 6 */ TRT2_ANIM_HOVER,
-    /* 7 */ TRT2_ANIM_FLY_LOOK_AROUND,
-    /* 8 */ TRT2_ANIM_FLY_DOWN,
-    /* 9 */ TRT2_ANIM_FLY
+typedef enum Trt2Animation {
+    /*  0 */ TRT2_ANIM_IDLE,
+    /*  1 */ TRT2_ANIM_HALF_AWAKE,
+    /*  2 */ TRT2_ANIM_SLEEPING,
+    /*  3 */ TRT2_ANIM_WAKE_UP,
+    /*  4 */ TRT2_ANIM_SURPRISED,
+    /*  5 */ TRT2_ANIM_HANDS_ON_COUNTER,
+    /*  6 */ TRT2_ANIM_HOVER,
+    /*  7 */ TRT2_ANIM_FLY_LOOK_AROUND,
+    /*  8 */ TRT2_ANIM_FLY_DOWN,
+    /*  9 */ TRT2_ANIM_FLY,
+    /* 10 */ TRT2_ANIM_MAX
 } Trt2Animation;
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeWakeUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeHandsOnCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+static AnimationInfoS sAnimationInfo[TRT2_ANIM_MAX] = {
+    { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // TRT2_ANIM_IDLE
+    { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // TRT2_ANIM_HALF_AWAKE
+    { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },       // TRT2_ANIM_SLEEPING
+    { &gKotakeWakeUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // TRT2_ANIM_WAKE_UP
+    { &gKotakeSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // TRT2_ANIM_SURPRISED
+    { &gKotakeHandsOnCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // TRT2_ANIM_HANDS_ON_COUNTER
+    { &gKotakeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // TRT2_ANIM_HOVER
+    { &gKotakeFlyLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // TRT2_ANIM_FLY_LOOK_AROUND
+    { &gKotakeFlyDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // TRT2_ANIM_FLY_DOWN
+    { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // TRT2_ANIM_FLY
 };
 
 ActorInit En_Trt2_InitVars = {

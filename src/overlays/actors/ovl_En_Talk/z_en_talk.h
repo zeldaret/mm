@@ -4,6 +4,7 @@
 #include "global.h"
 
 #define ENTALK_GET_TEXT_ID(thisx) (((thisx)->params & 0x3F) + 0x1C00)
+#define ENTALK_GET_TARGET_MODE(thisx) (((thisx)->home.rot.x) - 1)
 
 struct EnTalk;
 

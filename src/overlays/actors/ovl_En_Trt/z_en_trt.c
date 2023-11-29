@@ -64,30 +64,31 @@ void EnTrt_Blink(EnTrt* this);
 void EnTrt_OpenEyes2(EnTrt* this);
 void EnTrt_NodOff(EnTrt* this);
 
-typedef enum {
-    /* 0 */ TRT_ANIM_IDLE,
-    /* 1 */ TRT_ANIM_HALF_AWAKE,
-    /* 2 */ TRT_ANIM_SLEEPING,
-    /* 3 */ TRT_ANIM_WAKE_UP,
-    /* 4 */ TRT_ANIM_SURPRISED,
-    /* 5 */ TRT_ANIM_HANDS_ON_COUNTER,
-    /* 6 */ TRT_ANIM_HOVER,
-    /* 7 */ TRT_ANIM_FLY_LOOK_AROUND,
-    /* 8 */ TRT_ANIM_FLY_DOWN,
-    /* 9 */ TRT_ANIM_FLY
+typedef enum TrtAnimation {
+    /*  0 */ TRT_ANIM_IDLE,
+    /*  1 */ TRT_ANIM_HALF_AWAKE,
+    /*  2 */ TRT_ANIM_SLEEPING,
+    /*  3 */ TRT_ANIM_WAKE_UP,
+    /*  4 */ TRT_ANIM_SURPRISED,
+    /*  5 */ TRT_ANIM_HANDS_ON_COUNTER,
+    /*  6 */ TRT_ANIM_HOVER,
+    /*  7 */ TRT_ANIM_FLY_LOOK_AROUND,
+    /*  8 */ TRT_ANIM_FLY_DOWN,
+    /*  9 */ TRT_ANIM_FLY,
+    /* 10 */ TRT_ANIM_MAX
 } TrtAnimation;
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeWakeUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKotakeHandsOnCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+static AnimationInfoS sAnimationInfo[TRT_ANIM_MAX] = {
+    { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // TRT_ANIM_IDLE
+    { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // TRT_ANIM_HALF_AWAKE
+    { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },       // TRT_ANIM_SLEEPING
+    { &gKotakeWakeUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // TRT_ANIM_WAKE_UP
+    { &gKotakeSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // TRT_ANIM_SURPRISED
+    { &gKotakeHandsOnCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // TRT_ANIM_HANDS_ON_COUNTER
+    { &gKotakeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // TRT_ANIM_HOVER
+    { &gKotakeFlyLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // TRT_ANIM_FLY_LOOK_AROUND
+    { &gKotakeFlyDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // TRT_ANIM_FLY_DOWN
+    { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // TRT_ANIM_FLY
 };
 
 ActorInit En_Trt_InitVars = {
@@ -111,16 +112,18 @@ static ShopItem sShop[] = {
 };
 
 void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
-    f32 frameCount;
+    f32 endFrame;
 
     animationInfo += animIndex;
+
     if (animationInfo->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(animationInfo->animation);
+        endFrame = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        frameCount = animationInfo->frameCount;
+        endFrame = animationInfo->frameCount;
     }
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
-                     frameCount, animationInfo->mode, animationInfo->morphFrames);
+
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
 }
 
 bool EnTrt_TestItemSelected(PlayState* play) {
@@ -861,8 +864,8 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
         this->blinkFunc = EnTrt_EyesClosed;
         this->timer = 45;
         this->actionFunc = EnTrt_BeginInteraction;
-    } else if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= -25.0f) &&
-               (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
+    } else if ((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= -25.0f) &&
+               (player->actor.world.pos.z >= -19.0f) && (player->actor.world.pos.z <= 30.0f)) {
         Actor_OfferTalk(&this->actor, play, 200.0f);
     }
     if (DECR(this->timer) == 0) {
@@ -878,7 +881,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
 
 void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
-    s16 animLastFrame = Animation_GetLastFrame(&gKotakeWakeUpAnim) / (s16)this->skelAnime.playSpeed;
+    s16 endFrame = Animation_GetLastFrame(&gKotakeWakeUpAnim) / (s16)this->skelAnime.playSpeed;
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (CutsceneManager_IsNext(this->csId)) {
@@ -889,7 +892,7 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (this->animIndex != TRT_ANIM_HANDS_ON_COUNTER) {
-            if (curFrame == animLastFrame) {
+            if (curFrame == endFrame) {
                 EnTrt_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT_ANIM_WAKE_UP);
                 this->animIndex = TRT_ANIM_WAKE_UP;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;

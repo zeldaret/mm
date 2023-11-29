@@ -241,7 +241,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                     if (groupSize == 0) {
                         if ((type == OBJ_SYOKUDAI_TYPE_NO_SWITCH) && (switchFlag == OBJ_SYOKUDAI_SWITCH_FLAG_NONE)) {
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
-                        } else if (thisx->csId >= 0) {
+                        } else if (thisx->csId > CS_ID_NONE) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
                             Flags_SetSwitch(play, switchFlag);

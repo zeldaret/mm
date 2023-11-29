@@ -704,11 +704,14 @@ void AudioPlayback_NotePoolClear(NotePool* pool) {
                 source = &pool->active;
                 dest = &gAudioCtx.noteFreeLists.active;
                 break;
+
+            default:
+                break;
         }
 
-        for (;;) {
+        while (true) {
             cur = source->next;
-            if (cur == source || cur == NULL) {
+            if ((cur == source) || (cur == NULL)) {
                 break;
             }
             AudioPlayback_AudioListRemove(cur);

@@ -108,9 +108,9 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
             s16 csId = this->dyna.actor.csId;
 
             if (this->openTimer == 0) {
-                if ((csId >= 0) && !CutsceneManager_IsNext(csId)) {
+                if ((csId > CS_ID_NONE) && !CutsceneManager_IsNext(csId)) {
                     CutsceneManager_Queue(csId);
-                } else if (csId >= 0) {
+                } else if (csId > CS_ID_NONE) {
                     CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
                     this->openTimer = -1;
                 } else {

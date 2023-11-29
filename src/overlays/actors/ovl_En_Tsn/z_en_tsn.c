@@ -101,6 +101,9 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
                 this->actor.textId = 0x108A;
             }
             break;
+
+        default:
+            break;
     }
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
@@ -504,8 +507,14 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                         this->actor.flags &= ~ACTOR_FLAG_TALK;
                         this->actionFunc = func_80AE04C4;
                         break;
+
+                    default:
+                        break;
                 }
             }
+            break;
+
+        default:
             break;
     }
 
@@ -603,12 +612,12 @@ s32 EnTsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnTsn* this = THIS;
     s16 shifted = this->headRot.x >> 1;
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_TSN_LIMB_0F) {
         rot->x += this->headRot.y;
         rot->z += shifted;
     }
 
-    if (limbIndex == 8) {
+    if (limbIndex == OBJECT_TSN_LIMB_08) {
         rot->x += this->torsoRot.y;
         rot->z += shifted;
     }
@@ -619,7 +628,7 @@ void EnTsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     EnTsn* this = THIS;
     Vec3f sp18 = D_80AE11BC;
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_TSN_LIMB_0F) {
         Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
     }
 }

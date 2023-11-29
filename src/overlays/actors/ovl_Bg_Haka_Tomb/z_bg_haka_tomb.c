@@ -67,7 +67,7 @@ s32 func_80BD6638(s16* csId, s16* csIdList, s32 numCutscenes) {
     s32 i;
 
     *csId = CutsceneManager_GetCurrentCsId();
-    if (*csId >= 0) {
+    if (*csId > CS_ID_NONE) {
         for (i = 0; i < numCutscenes; i++) {
             if (*csId == csIdList[i]) {
                 retVal = true;

@@ -21,28 +21,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play);
 s32 func_80A87880(Actor* thisx, PlayState* play);
 s32 func_80A87B48(Actor* thisx, PlayState* play);
 s32 func_80A87DC0(Actor* thisx, PlayState* play);
-void func_80A87FD0(EnTru* this, PlayState* play);
 void func_80A881E0(EnTru* this, PlayState* play);
-
-typedef enum {
-    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN,
-    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN_MORPH,
-    /* 0x02 */ KOUME_ANIM_TRY_GET_UP,
-    /* 0x03 */ KOUME_ANIM_INJURED_RAISE_HEAD,
-    /* 0x04 */ KOUME_ANIM_INJURED_TALK,
-    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP,
-    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP_MORPH,
-    /* 0x07 */ KOUME_ANIM_TAKE,
-    /* 0x08 */ KOUME_ANIM_SHAKE, // Unused
-    /* 0x09 */ KOUME_ANIM_DRINK,
-    /* 0x0A */ KOUME_ANIM_FINISHED_DRINKING,
-    /* 0x0B */ KOUME_ANIM_HEALED,
-    /* 0x0C */ KOUME_ANIM_HOVER1,
-    /* 0x0D */ KOUME_ANIM_TAKE_OFF,
-    /* 0x0E */ KOUME_ANIM_FLY,
-    /* 0x0F */ KOUME_ANIM_HOVER2,
-    /* 0x10 */ KOUME_ANIM_MAX
-} KoumeAnimation;
 
 static UNK_TYPE D_80A88910[] = {
     0x0E08520C,
@@ -131,29 +110,44 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 20, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeInjuredRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeInjuredTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeShakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeDrinkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeFinishedDrinkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeHealedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeTakeOffAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-};
+typedef enum KoumeAnimation {
+    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN,
+    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN_MORPH,
+    /* 0x02 */ KOUME_ANIM_TRY_GET_UP,
+    /* 0x03 */ KOUME_ANIM_INJURED_RAISE_HEAD,
+    /* 0x04 */ KOUME_ANIM_INJURED_TALK,
+    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP,
+    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP_MORPH,
+    /* 0x07 */ KOUME_ANIM_TAKE,
+    /* 0x08 */ KOUME_ANIM_SHAKE, // Unused
+    /* 0x09 */ KOUME_ANIM_DRINK,
+    /* 0x0A */ KOUME_ANIM_FINISHED_DRINKING,
+    /* 0x0B */ KOUME_ANIM_HEALED,
+    /* 0x0C */ KOUME_ANIM_HOVER1,
+    /* 0x0D */ KOUME_ANIM_TAKE_OFF,
+    /* 0x0E */ KOUME_ANIM_FLY,
+    /* 0x0F */ KOUME_ANIM_HOVER2,
+    /* 0x10 */ KOUME_ANIM_MAX
+} KoumeAnimation;
 
-static Vec3f D_80A8B3D8 = { 0.0f, 24.0f, 16.0f };
-static Vec3f D_80A8B3E4 = { 0.0f, -3.0f, 3.0f };
-static Vec3f D_80A8B3F0 = { 0.0f, 0.5f, 0.0f };
-static Vec3f D_80A8B3FC = { 3000.0f, -800.0f, 0.0f };
+static AnimationInfoS sAnimationInfo[KOUME_ANIM_MAX] = {
+    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // KOUME_ANIM_INJURED_LYING_DOWN
+    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // KOUME_ANIM_INJURED_LYING_DOWN_MORPH
+    { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },         // KOUME_ANIM_TRY_GET_UP
+    { &gKoumeInjuredRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // KOUME_ANIM_INJURED_RAISE_HEAD
+    { &gKoumeInjuredTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },      // KOUME_ANIM_INJURED_TALK
+    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // KOUME_ANIM_INJURED_HEAD_UP
+    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // KOUME_ANIM_INJURED_HEAD_UP_MORPH
+    { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },              // KOUME_ANIM_TAKE
+    { &gKoumeShakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // KOUME_ANIM_SHAKE
+    { &gKoumeDrinkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },            // KOUME_ANIM_DRINK
+    { &gKoumeFinishedDrinkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // KOUME_ANIM_FINISHED_DRINKING
+    { &gKoumeHealedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },           // KOUME_ANIM_HEALED
+    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // KOUME_ANIM_HOVER1
+    { &gKoumeTakeOffAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },          // KOUME_ANIM_TAKE_OFF
+    { &gKoumeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // KOUME_ANIM_FLY
+    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // KOUME_ANIM_HOVER2
+};
 
 void func_80A85620(EnTruUnkStruct* arg0, Vec3f* arg1, f32 arg2, f32 arg3, f32 arg4) {
     s16 i;
@@ -398,6 +392,9 @@ s32 func_80A86460(EnTru* this) {
 }
 
 s32 func_80A86674(EnTru* this) {
+    static Vec3f D_80A8B3D8 = { 0.0f, 24.0f, 16.0f };
+    static Vec3f D_80A8B3E4 = { 0.0f, -3.0f, 3.0f };
+    static Vec3f D_80A8B3F0 = { 0.0f, 0.5f, 0.0f };
     s32 pad;
     Vec3f sp40;
     Vec3f sp34;
@@ -1185,6 +1182,7 @@ void EnTru_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnTru_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    static Vec3f D_80A8B3FC = { 3000.0f, -800.0f, 0.0f };
     s32 pad;
     EnTru* this = THIS;
 

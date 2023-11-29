@@ -39,20 +39,20 @@ ActorInit En_Test2_InitVars = {
     /**/ NULL,
 };
 
-static EnTest2ModelInfo sModelInfo[] = {
-    { object_dekucity_ana_obj_DL_000040, NULL, NULL },
-    { object_sichitai_obj_DL_001820, NULL, NULL },
-    { object_yukimura_obj_DL_0008C0, NULL, NULL },
-    { object_hakugin_obj_DL_0016D8, NULL, object_hakugin_obj_Matanimheader_0017A8 },
-    { object_hakugin_obj_DL_002018, NULL, object_hakugin_obj_Matanimheader_0020E8 },
-    { object_hakugin_obj_DL_005268, NULL, object_hakugin_obj_Matanimheader_005338 },
-    { object_meganeana_obj_DL_000110, object_meganeana_obj_DL_000080, NULL },
-    { object_haka_obj_DL_000F70, NULL, NULL },
-    { object_haka_obj_DL_001200, NULL, NULL },
-    { object_hakugin_obj_DL_004928, NULL, object_hakugin_obj_Matanimheader_0049F8 },
-    { object_hakugin_obj_DL_002978, NULL, object_hakugin_obj_Matanimheader_002A58 },
-    { object_hakugin_obj_DL_000D38, NULL, object_hakugin_obj_Matanimheader_000E48 },
-    { object_hakugin_obj_DL_0035A8, NULL, object_hakugin_obj_Matanimheader_003888 },
+static EnTest2ModelInfo sModelInfo[EN_TEST2_TYPE_MAX] = {
+    { object_dekucity_ana_obj_DL_000040, NULL, NULL },                               // EN_TEST2_TYPE_0
+    { object_sichitai_obj_DL_001820, NULL, NULL },                                   // EN_TEST2_TYPE_1
+    { object_yukimura_obj_DL_0008C0, NULL, NULL },                                   // EN_TEST2_TYPE_2
+    { object_hakugin_obj_DL_0016D8, NULL, object_hakugin_obj_Matanimheader_0017A8 }, // EN_TEST2_TYPE_3
+    { object_hakugin_obj_DL_002018, NULL, object_hakugin_obj_Matanimheader_0020E8 }, // EN_TEST2_TYPE_4
+    { object_hakugin_obj_DL_005268, NULL, object_hakugin_obj_Matanimheader_005338 }, // EN_TEST2_TYPE_5
+    { object_meganeana_obj_DL_000110, object_meganeana_obj_DL_000080, NULL },        // EN_TEST2_TYPE_6
+    { object_haka_obj_DL_000F70, NULL, NULL },                                       // EN_TEST2_TYPE_7
+    { object_haka_obj_DL_001200, NULL, NULL },                                       // EN_TEST2_TYPE_8
+    { object_hakugin_obj_DL_004928, NULL, object_hakugin_obj_Matanimheader_0049F8 }, // EN_TEST2_TYPE_9
+    { object_hakugin_obj_DL_002978, NULL, object_hakugin_obj_Matanimheader_002A58 }, // EN_TEST2_TYPE_10
+    { object_hakugin_obj_DL_000D38, NULL, object_hakugin_obj_Matanimheader_000E48 }, // EN_TEST2_TYPE_11
+    { object_hakugin_obj_DL_0035A8, NULL, object_hakugin_obj_Matanimheader_003888 }, // EN_TEST2_TYPE_12
 };
 
 static InitChainEntry sInitChain[] = {
@@ -62,17 +62,27 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 2500, ICHAIN_STOP),
 };
 
-static s16 sObjectIds[] = {
-    OBJECT_DEKUCITY_ANA_OBJ, OBJECT_SICHITAI_OBJ,  OBJECT_YUKIMURA_OBJ, OBJECT_HAKUGIN_OBJ, OBJECT_HAKUGIN_OBJ,
-    OBJECT_HAKUGIN_OBJ,      OBJECT_MEGANEANA_OBJ, OBJECT_HAKA_OBJ,     OBJECT_HAKA_OBJ,    OBJECT_HAKUGIN_OBJ,
-    OBJECT_HAKUGIN_OBJ,      OBJECT_HAKUGIN_OBJ,   OBJECT_HAKUGIN_OBJ,
+static s16 sObjectIds[EN_TEST2_TYPE_MAX] = {
+    OBJECT_DEKUCITY_ANA_OBJ, // EN_TEST2_TYPE_0
+    OBJECT_SICHITAI_OBJ,     // EN_TEST2_TYPE_1
+    OBJECT_YUKIMURA_OBJ,     // EN_TEST2_TYPE_2
+    OBJECT_HAKUGIN_OBJ,      // EN_TEST2_TYPE_3
+    OBJECT_HAKUGIN_OBJ,      // EN_TEST2_TYPE_4
+    OBJECT_HAKUGIN_OBJ,      // EN_TEST2_TYPE_5
+    OBJECT_MEGANEANA_OBJ,    // EN_TEST2_TYPE_6
+    OBJECT_HAKA_OBJ,         // EN_TEST2_TYPE_7
+    OBJECT_HAKA_OBJ,         // EN_TEST2_TYPE_8
+    OBJECT_HAKUGIN_OBJ,      // EN_TEST2_TYPE_9
+    OBJECT_HAKUGIN_OBJ,      // EN_TEST2_TYPE_10
+    OBJECT_HAKUGIN_OBJ,      // EN_TEST2_TYPE_11
+    OBJECT_HAKUGIN_OBJ,      // EN_TEST2_TYPE_12
 };
 
 void EnTest2_Init(Actor* thisx, PlayState* play) {
     EnTest2* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if ((this->actor.params == EN_TEST2_PARAM_B) || (this->actor.params == EN_TEST2_PARAM_C)) {
+    if ((ENTEST2_GET_TYPE(&this->actor) == EN_TEST2_TYPE_11) || (ENTEST2_GET_TYPE(&this->actor) == EN_TEST2_TYPE_12)) {
         this->actor.flags |= ACTOR_FLAG_20;
     }
 }
@@ -83,19 +93,22 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
     EnTest2ModelInfo* modelInfo;
     EnTest2* this = THIS;
 
-    objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[this->actor.params]);
+    objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[ENTEST2_GET_TYPE(&this->actor)]);
     if (objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
+
     if (Object_IsLoaded(&play->objectCtx, objectSlot)) {
-        modelInfo = &sModelInfo[this->actor.params];
+        modelInfo = &sModelInfo[ENTEST2_GET_TYPE(&this->actor)];
         this->actor.objectSlot = objectSlot;
         this->actor.draw = EnTest2_Draw;
+
         if (modelInfo->animMat != NULL) {
             Actor_SetObjectDependency(play, &this->actor);
             this->animMat = Lib_SegmentedToVirtual(modelInfo->animMat);
         }
+
         if (play->roomCtx.curRoom.lensMode != LENS_MODE_HIDE_ACTORS) {
             this->actor.update = EnTest2_UpdateForLens;
         } else {
@@ -117,11 +130,12 @@ void EnTest2_UpdateForLens(Actor* thisx, PlayState* play) {
 void EnTest2_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnTest2* this = THIS;
-    Gfx* dList = sModelInfo[this->actor.params].dList2;
+    Gfx* dList = sModelInfo[ENTEST2_GET_TYPE(&this->actor)].dList2;
 
     if (this->animMat != NULL) {
         AnimatedMat_Draw(play, this->animMat);
     }
+
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -131,13 +145,13 @@ void EnTest2_Draw(Actor* thisx, PlayState* play) {
         if (dList != NULL) {
             gSPDisplayList(POLY_XLU_DISP++, dList);
         }
-        gSPDisplayList(POLY_XLU_DISP++, sModelInfo[this->actor.params].dList1);
+        gSPDisplayList(POLY_XLU_DISP++, sModelInfo[ENTEST2_GET_TYPE(&this->actor)].dList1);
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else {
         if (dList != NULL) {
             Gfx_DrawDListXlu(play, dList);
         }
-        Gfx_DrawDListOpa(play, sModelInfo[this->actor.params].dList1);
+        Gfx_DrawDListOpa(play, sModelInfo[ENTEST2_GET_TYPE(&this->actor)].dList1);
     }
 }
