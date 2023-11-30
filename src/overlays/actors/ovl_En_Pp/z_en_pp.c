@@ -34,8 +34,8 @@ void EnPp_Damaged(EnPp* this, PlayState* play);
 void EnPp_SetupDead(EnPp* this, PlayState* play);
 void EnPp_Dead(EnPp* this, PlayState* play);
 void EnPp_Mask_Detach(EnPp* this, PlayState* play);
-void EnPp_BodyPart_SetupMove(EnPp* this);
-void EnPp_BodyPart_Move(EnPp* this, PlayState* play);
+void EnPp_Fragment_SetupMove(EnPp* this);
+void EnPp_Fragment_Move(EnPp* this, PlayState* play);
 
 typedef enum {
     /* 0 */ EN_PP_COLLISION_RESULT_OK,
@@ -66,7 +66,7 @@ typedef enum {
     /* 2 */ EN_PP_MASK_DETACH_STATE_DIE
 } EnPpMaskDetachState;
 
-static s32 sCurrentDeadBodyPartIndex = 0;
+static s32 sCurrentFragmentIndex = 0;
 
 typedef enum {
     /* 0x0 */ EN_PP_DMGEFF_JUMP,                 // Forces the Hiploop to jump
@@ -206,31 +206,6 @@ static Color_RGBA8 sDustPrimColor = { 60, 50, 20, 255 };
 
 static Color_RGBA8 sDustEnvColor = { 40, 30, 30, 255 };
 
-typedef enum {
-    /* 0 */ EN_PP_ANIM_IDLE,
-    /* 1 */ EN_PP_ANIM_WALK,
-    /* 2 */ EN_PP_ANIM_WIND_UP,
-    /* 3 */ EN_PP_ANIM_CHARGE,
-    /* 4 */ EN_PP_ANIM_ATTACK,
-    /* 5 */ EN_PP_ANIM_DAMAGE,
-    /* 6 */ EN_PP_ANIM_ROAR,
-    /* 7 */ EN_PP_ANIM_TURN_TO_FACE_PLAYER,
-    /* 8 */ EN_PP_ANIM_JUMP,
-    /* 9 */ EN_PP_ANIM_LAND
-} EnPpAnimation;
-
-static AnimationHeader* sAnimations[] = {
-    &gHiploopIdleAnim,   &gHiploopWalkAnim, &gHiploopWindUpAnim, &gHiploopChargeAnim, &gHiploopAttackAnim,
-    &gHiploopDamageAnim, &gHiploopRoarAnim, &gHiploopWalkAnim,   &gHiploopWindUpAnim, &gHiploopWalkAnim,
-};
-
-static u8 sAnimationModes[] = {
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
-};
-
-static s16 sLedgeCheckAngles[] = { 0x0000, 0x1000, 0xF000 };
-
 void EnPp_Init(Actor* thisx, PlayState* play) {
     EnPp* this = THIS;
     EffectBlureInit1 blureInit;
@@ -258,12 +233,12 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
         this->actor.params = EN_PP_TYPE_MASKED;
     }
 
-    if (EN_PP_GET_TYPE(&this->actor) >= EN_PP_TYPE_BODY_PART_BASE) {
-        this->deadBodyPartIndex = sCurrentDeadBodyPartIndex;
-        sCurrentDeadBodyPartIndex++;
+    if (EN_PP_GET_TYPE(&this->actor) >= EN_PP_TYPE_FRAGMENT_BASE) {
+        this->fragmentIndex = sCurrentFragmentIndex;
+        sCurrentFragmentIndex++;
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_SetScale(&this->actor, 0.03f);
-        EnPp_BodyPart_SetupMove(this);
+        EnPp_Fragment_SetupMove(this);
     } else {
         Collider_InitAndSetJntSph(play, &this->maskCollider, &this->actor, &sMaskColliderJntSphInit,
                                   this->maskColliderElements);
@@ -272,7 +247,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
 
         this->bodyCollider.elements[0].dim.scale = 1.0f;
         if (EN_PP_GET_TYPE(&this->actor) > EN_PP_TYPE_MASKED) {
-            this->actor.hintId = 0x25;
+            this->actor.hintId = TATL_HINT_ID_HIPLOOP;
             this->maskColliderElements[0].info.toucherFlags &= ~TOUCH_ON;
             this->maskColliderElements[0].info.bumperFlags &= ~BUMP_ON;
             this->maskColliderElements[0].info.ocElemFlags &= ~OCELEM_ON;
@@ -286,7 +261,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
             this->bodyCollider.elements[0].dim.modelSphere.center.x = 400;
             this->bodyCollider.elements[0].dim.modelSphere.center.y = -400;
         } else {
-            this->actor.hintId = 0x26;
+            this->actor.hintId = TATL_HINT_ID_MASKED_HIPLOOP;
             this->maskCollider.elements[0].dim.modelSphere.radius = 10;
             this->maskCollider.elements[0].dim.scale = 1.0f;
             this->maskCollider.elements[0].dim.modelSphere.center.x = 1000;
@@ -329,7 +304,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
 void EnPp_Destroy(Actor* thisx, PlayState* play) {
     EnPp* this = THIS;
 
-    if (EN_PP_GET_TYPE(&this->actor) < EN_PP_TYPE_BODY_PART_BASE) {
+    if (EN_PP_GET_TYPE(&this->actor) < EN_PP_TYPE_FRAGMENT_BASE) {
         Collider_DestroyJntSph(play, &this->maskCollider);
         Collider_DestroyJntSph(play, &this->bodyCollider);
         Collider_DestroyQuad(play, &this->hornCollider);
@@ -411,13 +386,53 @@ void EnPp_SpawnDust(EnPp* this, PlayState* play) {
     }
 }
 
+typedef enum {
+    /*  0 */ EN_PP_ANIM_IDLE,
+    /*  1 */ EN_PP_ANIM_WALK,
+    /*  2 */ EN_PP_ANIM_WIND_UP,
+    /*  3 */ EN_PP_ANIM_CHARGE,
+    /*  4 */ EN_PP_ANIM_ATTACK,
+    /*  5 */ EN_PP_ANIM_DAMAGE,
+    /*  6 */ EN_PP_ANIM_ROAR,
+    /*  7 */ EN_PP_ANIM_TURN_TO_FACE_PLAYER,
+    /*  8 */ EN_PP_ANIM_JUMP,
+    /*  9 */ EN_PP_ANIM_LAND,
+    /* 10 */ EN_PP_ANIM_MAX
+} EnPpAnimation;
+
+static AnimationHeader* sAnimations[EN_PP_ANIM_MAX] = {
+    &gHiploopIdleAnim,   // EN_PP_ANIM_IDLE
+    &gHiploopWalkAnim,   // EN_PP_ANIM_WALK
+    &gHiploopWindUpAnim, // EN_PP_ANIM_WIND_UP
+    &gHiploopChargeAnim, // EN_PP_ANIM_CHARGE
+    &gHiploopAttackAnim, // EN_PP_ANIM_ATTACK
+    &gHiploopDamageAnim, // EN_PP_ANIM_DAMAGE
+    &gHiploopRoarAnim,   // EN_PP_ANIM_ROAR
+    &gHiploopWalkAnim,   // EN_PP_ANIM_TURN_TO_FACE_PLAYER
+    &gHiploopWindUpAnim, // EN_PP_ANIM_JUMP
+    &gHiploopWalkAnim,   // EN_PP_ANIM_LAND
+};
+
+static u8 sAnimationModes[EN_PP_ANIM_MAX] = {
+    ANIMMODE_LOOP, // EN_PP_ANIM_IDLE
+    ANIMMODE_LOOP, // EN_PP_ANIM_WALK
+    ANIMMODE_ONCE, // EN_PP_ANIM_WIND_UP
+    ANIMMODE_LOOP, // EN_PP_ANIM_CHARGE
+    ANIMMODE_ONCE, // EN_PP_ANIM_ATTACK
+    ANIMMODE_LOOP, // EN_PP_ANIM_DAMAGE
+    ANIMMODE_LOOP, // EN_PP_ANIM_ROAR
+    ANIMMODE_LOOP, // EN_PP_ANIM_TURN_TO_FACE_PLAYER
+    ANIMMODE_ONCE, // EN_PP_ANIM_JUMP
+    ANIMMODE_ONCE, // EN_PP_ANIM_LAND
+};
+
 void EnPp_ChangeAnim(EnPp* this, s32 animIndex) {
     f32 morphFrames = -10.0f;
     f32 playSpeed;
     f32 startFrame;
 
     this->animIndex = animIndex;
-    this->endFrame = Animation_GetLastFrame(sAnimations[this->animIndex]);
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[this->animIndex]);
 
     if (this->animIndex >= EN_PP_ANIM_WIND_UP) {
         morphFrames = 0.0f;
@@ -430,10 +445,10 @@ void EnPp_ChangeAnim(EnPp* this, s32 animIndex) {
 
     startFrame = 0.0f;
     if (this->action == EN_PP_ACTION_BODY_PART_MOVE) {
-        startFrame = this->endFrame;
+        startFrame = this->animEndFrame;
     }
 
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, startFrame, this->endFrame,
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, startFrame, this->animEndFrame,
                      sAnimationModes[this->animIndex], morphFrames);
 }
 
@@ -477,6 +492,7 @@ void EnPp_PlaySfxForAnimation(EnPp* this) {
  * Checks to see if the Hiploop is about to walk off a ledge or into a wall.
  */
 s32 EnPp_CheckCollision(EnPp* this, PlayState* play) {
+    static s16 sLedgeCheckAngles[] = { 0x0000, 0x1000, 0xF000 };
     s16 angle;
     s32 i;
 
@@ -618,7 +634,7 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
     } else if (this->animIndex == EN_PP_ANIM_TURN_TO_FACE_PLAYER) {
         EnPp_ChangeAnim(this, EN_PP_ANIM_WIND_UP);
     } else if (this->animIndex == EN_PP_ANIM_WIND_UP) {
-        if (this->endFrame <= curFrame) {
+        if (curFrame >= this->animEndFrame) {
             this->chargeAndBounceSpeed = 14.0f;
             this->timer = 20;
             EnPp_ChangeAnim(this, EN_PP_ANIM_CHARGE);
@@ -647,7 +663,7 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
             return;
         }
 
-        if (!(this->maskCollider.base.atFlags & AT_BOUNCED) && (!(this->bodyCollider.base.atFlags & AT_BOUNCED))) {
+        if (!(this->maskCollider.base.atFlags & AT_BOUNCED) && !(this->bodyCollider.base.atFlags & AT_BOUNCED)) {
             if ((this->maskCollider.base.atFlags & AT_HIT) || (this->bodyCollider.base.atFlags & AT_HIT)) {
                 EnPp_SetupAttack(this);
                 return;
@@ -686,7 +702,7 @@ void EnPp_Attack(EnPp* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     SkelAnime_Update(&this->skelAnime);
-    if (this->endFrame <= curFrame) {
+    if (curFrame >= this->animEndFrame) {
         EnPp_SetupCharge(this);
     }
 }
@@ -773,7 +789,7 @@ void EnPp_Roar(EnPp* this, PlayState* play) {
         this->secondaryTimer = 3;
     }
 
-    if (!this->actionVar.hasDoneFirstRoar && (this->endFrame <= curFrame)) {
+    if (!this->actionVar.hasDoneFirstRoar && (curFrame >= this->animEndFrame)) {
         this->skelAnime.startFrame = 6.0f;
         this->actionVar.hasDoneFirstRoar = true;
     }
@@ -836,7 +852,7 @@ void EnPp_Jump(EnPp* this, PlayState* play) {
             this->actionVar.hasLandedFromJump = true;
             EnPp_ChangeAnim(this, EN_PP_ANIM_LAND);
         }
-    } else if (this->endFrame <= curFrame) {
+    } else if (curFrame >= this->animEndFrame) {
         EnPp_SetupIdle(this);
     }
 }
@@ -1159,26 +1175,26 @@ void EnPp_Mask_Detach(EnPp* this, PlayState* play) {
     }
 }
 
-void EnPp_BodyPart_SetupMove(EnPp* this) {
+void EnPp_Fragment_SetupMove(EnPp* this) {
     EnPp_ChangeAnim(this, EN_PP_ANIM_DAMAGE);
     this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 13.0f;
     this->actor.gravity = -2.0f;
     this->timer = Rand_S16Offset(30, 30);
-    this->deadBodyPartAngularVelocity.x = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
-    this->deadBodyPartAngularVelocity.z = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
-    if (EN_PP_GET_TYPE(&this->actor) != EN_PP_TYPE_BODY_PART_BODY) {
+    this->fragmentAngularVelocity.x = (this->fragmentIndex * 0x2E) + 0xFF00;
+    this->fragmentAngularVelocity.z = (this->fragmentIndex * 0x2E) + 0xFF00;
+    if (EN_PP_GET_TYPE(&this->actor) != EN_PP_TYPE_FRAGMENT_BODY) {
         this->actor.speed = Rand_ZeroFloat(4.0f) + 4.0f;
-        this->actor.world.rot.y = ((s32)Rand_CenteredFloat(223.0f) + 0x1999) * this->deadBodyPartIndex;
+        this->actor.world.rot.y = ((s32)Rand_CenteredFloat(223.0f) + 0x1999) * this->fragmentIndex;
     }
 
     this->action = EN_PP_ACTION_BODY_PART_MOVE;
-    this->actionFunc = EnPp_BodyPart_Move;
+    this->actionFunc = EnPp_Fragment_Move;
 }
 
 /**
- * Makes the body part fly through the air. If it touches water, it will make a splash.
+ * Makes the fragment fly through the air. If it touches water, it will make a splash.
  */
-void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
+void EnPp_Fragment_Move(EnPp* this, PlayState* play) {
     s32 pad;
     Vec3f splashPos;
     WaterBox* waterBox;
@@ -1186,26 +1202,29 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
     s32 i;
 
     SkelAnime_Update(&this->skelAnime);
-    if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_BODY_PART_BODY) {
-        this->deadBodyPartCount = EN_PP_DEAD_BODYPART_MAX;
-        for (i = 0; i < EN_PP_DEAD_BODYPART_MAX; i++) {
-            Math_Vec3f_Copy(&this->deadBodyPartsPos[i], &this->deadBodyPartPos);
-            this->deadBodyPartsPos[i].x += Math_SinS(0xCCC * i) * 15.0f;
-            this->deadBodyPartsPos[i].y += -5.0f;
-            this->deadBodyPartsPos[i].z += Math_CosS(0xCCC * i) * 15.0f;
+
+    // Updates the positions of the blue flames for this fragment. The body fragment has 10 flames, while all other
+    // fragments only have a single flame.
+    if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_FRAGMENT_BODY) {
+        this->fragmentFlameCount = ARRAY_COUNT(this->fragmentFlamesPos);
+        for (i = 0; i < ARRAY_COUNT(this->fragmentFlamesPos); i++) {
+            Math_Vec3f_Copy(&this->fragmentFlamesPos[i], &this->fragmentPos);
+            this->fragmentFlamesPos[i].x += Math_SinS(0xCCC * i) * 15.0f;
+            this->fragmentFlamesPos[i].y += -5.0f;
+            this->fragmentFlamesPos[i].z += Math_CosS(0xCCC * i) * 15.0f;
         }
     } else {
-        Math_Vec3f_Copy(&this->deadBodyPartsPos[0], &this->deadBodyPartPos);
-        this->deadBodyPartCount = 1;
-        this->actor.shape.rot.x += this->deadBodyPartAngularVelocity.x;
-        this->actor.shape.rot.z += this->deadBodyPartAngularVelocity.z;
+        Math_Vec3f_Copy(&this->fragmentFlamesPos[0], &this->fragmentPos);
+        this->fragmentFlameCount = 1;
+        this->actor.shape.rot.x += this->fragmentAngularVelocity.x;
+        this->actor.shape.rot.z += this->fragmentAngularVelocity.z;
     }
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
                              &waterBox) &&
         (this->actor.world.pos.y < (waterSurface + 5.0f))) {
         this->timer = 0;
-        if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_BODY_PART_BODY) {
+        if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_FRAGMENT_BODY) {
             for (i = 0; i < 6; i++) {
                 Math_Vec3f_Copy(&splashPos, &this->actor.world.pos);
                 splashPos.x += Rand_CenteredFloat(10 + (5 * i));
@@ -1469,7 +1488,7 @@ s32 EnPp_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
             pos->y += this->maskPos.y;
             pos->z += this->maskPos.z;
         }
-    } else if ((limbIndex + EN_PP_TYPE_BODY_PART_BASE) != EN_PP_GET_TYPE(&this->actor)) {
+    } else if ((limbIndex + EN_PP_TYPE_FRAGMENT_BASE) != EN_PP_GET_TYPE(&this->actor)) {
         *dList = NULL;
     }
 
@@ -1522,9 +1541,9 @@ void EnPp_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             }
         }
     } else {
-        if ((EN_PP_GET_TYPE(&this->actor) >= EN_PP_TYPE_BODY_PART_BASE) &&
-            ((limbIndex + EN_PP_TYPE_BODY_PART_BASE) == EN_PP_GET_TYPE(&this->actor))) {
-            Matrix_MultVec3f(&gZeroVec3f, &this->deadBodyPartPos);
+        if ((EN_PP_GET_TYPE(&this->actor) >= EN_PP_TYPE_FRAGMENT_BASE) &&
+            ((limbIndex + EN_PP_TYPE_FRAGMENT_BASE) == EN_PP_GET_TYPE(&this->actor))) {
+            Matrix_MultVec3f(&gZeroVec3f, &this->fragmentPos);
         }
     }
 
@@ -1545,15 +1564,16 @@ void EnPp_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                 this->bodyPartIndex = 0;
             }
 
-            if ((this->action == EN_PP_ACTION_SPAWN_BODY_PARTS) && (this->deadBodyPartsSpawnedCount < 6) &&
+            if ((this->action == EN_PP_ACTION_SPAWN_BODY_PARTS) && (this->fragmentsSpawnedCount < 6) &&
                 ((limbIndex == HIPLOOP_LIMB_BODY) || (limbIndex == HIPLOOP_LIMB_FRONT_LEFT_LOWER_LEG) ||
                  (limbIndex == HIPLOOP_LIMB_FRONT_RIGHT_LOWER_LEG) || (limbIndex == HIPLOOP_LIMB_LEFT_WING_MIDDLE) ||
                  (limbIndex == HIPLOOP_LIMB_RIGHT_WING_MIDDLE) || (limbIndex == HIPLOOP_LIMB_CENTER_WING_MIDDLE))) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_PP, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y,
-                            this->actor.world.rot.z, limbIndex + 7);
-                this->deadBodyPartsSpawnedCount++;
-                if (this->deadBodyPartsSpawnedCount >= 6) {
+                            this->actor.world.rot.z, limbIndex + EN_PP_TYPE_FRAGMENT_BASE);
+
+                this->fragmentsSpawnedCount++;
+                if (this->fragmentsSpawnedCount >= 6) {
                     this->action = EN_PP_ACTION_DONE_SPAWNING_BODY_PARTS;
                 }
             }
@@ -1573,14 +1593,14 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnPp_OverrideLimbDraw, EnPp_PostLimbDraw, &this->actor);
 
-    if (this->deadBodyPartCount != 0) {
+    if (this->fragmentFlameCount != 0) {
         scale = 0.4f;
-        if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_BODY_PART_BODY) {
+        if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_FRAGMENT_BODY) {
             scale = 0.6f;
         }
 
-        Actor_DrawDamageEffects(play, &this->actor, this->deadBodyPartsPos, this->deadBodyPartCount, scale, scale, 1.0f,
-                                ACTOR_DRAW_DMGEFF_BLUE_FIRE);
+        Actor_DrawDamageEffects(play, &this->actor, this->fragmentFlamesPos, this->fragmentFlameCount, scale, scale,
+                                1.0f, ACTOR_DRAW_DMGEFF_BLUE_FIRE);
     }
 
     if (this->drawDmgEffTimer != 0) {

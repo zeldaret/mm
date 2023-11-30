@@ -349,7 +349,7 @@ typedef struct {
     /* 0x10 */ UNK_TYPE1 pad10[0x4];
 } Room; // size = 0x14
 
-typedef struct {
+typedef struct RoomContext {
     /* 0x00 */ Room curRoom;
     /* 0x14 */ Room prevRoom;
     /* 0x28 */ void* roomMemPages[2]; // In a scene with transitions, roomMemory is split between two pages that toggle each transition. This is one continuous range, as the second page allocates from the end
@@ -560,7 +560,7 @@ typedef union {
 } SceneCmd; // size = 0x8
 
 // Sets cursor point options on the world map
-typedef enum {
+typedef enum RegionId {
     /*  -1 */ REGION_NONE = -1,
     /* 0x0 */ REGION_GREAT_BAY,
     /* 0x1 */ REGION_ZORA_HALL,
@@ -577,23 +577,24 @@ typedef enum {
 } RegionId;
 
 // Sets warp points for owl statues
-typedef enum {
-    /* 0x0 */ OWL_WARP_GREAT_BAY_COAST,
-    /* 0x1 */ OWL_WARP_ZORA_CAPE,
-    /* 0x2 */ OWL_WARP_SNOWHEAD,
-    /* 0x3 */ OWL_WARP_MOUNTAIN_VILLAGE,
-    /* 0x4 */ OWL_WARP_CLOCK_TOWN,
-    /* 0x5 */ OWL_WARP_MILK_ROAD,
-    /* 0x6 */ OWL_WARP_WOODFALL,
-    /* 0x7 */ OWL_WARP_SOUTHERN_SWAMP,
-    /* 0x8 */ OWL_WARP_IKANA_CANYON,
-    /* 0x9 */ OWL_WARP_STONE_TOWER,
-    /* 0xA */ OWL_WARP_ENTRANCE, // Special index for warping to the entrance of a scene
-    /* 0xB */ OWL_WARP_MAX
+typedef enum OwlWarpId {
+    /*  0x0 */ OWL_WARP_GREAT_BAY_COAST,
+    /*  0x1 */ OWL_WARP_ZORA_CAPE,
+    /*  0x2 */ OWL_WARP_SNOWHEAD,
+    /*  0x3 */ OWL_WARP_MOUNTAIN_VILLAGE,
+    /*  0x4 */ OWL_WARP_CLOCK_TOWN,
+    /*  0x5 */ OWL_WARP_MILK_ROAD,
+    /*  0x6 */ OWL_WARP_WOODFALL,
+    /*  0x7 */ OWL_WARP_SOUTHERN_SWAMP,
+    /*  0x8 */ OWL_WARP_IKANA_CANYON,
+    /*  0x9 */ OWL_WARP_STONE_TOWER,
+    /*  0xA */ OWL_WARP_ENTRANCE, // Special index for warping to the entrance of a scene
+    /*  0xB */ OWL_WARP_MAX,
+    /* 0xFF */ OWL_WARP_NONE = 0xFF
 } OwlWarpId;
 
 // Sets cloud visibility on the world map
-typedef enum {
+typedef enum TingleMapId {
     /* 0 */ TINGLE_MAP_CLOCK_TOWN,
     /* 1 */ TINGLE_MAP_WOODFALL,
     /* 2 */ TINGLE_MAP_SNOWHEAD,

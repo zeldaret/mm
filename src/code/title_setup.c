@@ -24,7 +24,7 @@ void Setup_SetRegs(void) {
     XREG(77) = 0x3C;
     XREG(78) = 0x2F;
     XREG(79) = 0x62;
-    R_PAUSE_OWLWARP_ALPHA = 0;
+    R_PAUSE_OWL_WARP_ALPHA = 0;
     XREG(88) = 0x56;
     XREG(89) = 0x258;
     XREG(90) = 0x1C2;

@@ -176,7 +176,7 @@ void EnBaguo_EmergeFromUnderground(EnBaguo* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((play->gameplayFrames % 8) == 0) {
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10,
-                                 8.0f, 500, 10, 1);
+                                 8.0f, 500, 10, true);
     }
     Math_ApproachF(&this->actor.shape.shadowScale, 50.0f, 0.3f, 5.0f);
     Math_ApproachF(&this->actor.shape.yOffset, 2700.0f, 100.0f, 500.0f);
@@ -195,17 +195,17 @@ void EnBaguo_Idle(EnBaguo* this, PlayState* play) {
     if (this->timer != 0) {
         // Depending on how the last roll ended, this actor may be "sitting" on
         // something other than its legs. This slowly corrects that.
-        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 10, 100, 1000);
-        Math_SmoothStepToS(&this->actor.world.rot.z, 0, 10, 100, 1000);
+        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 10, 0x64, 0x3E8);
+        Math_SmoothStepToS(&this->actor.world.rot.z, 0, 10, 0x64, 0x3E8);
 
         // If this actor isn't mostly facing the player, do a discrete turn towards
         // them. It takes 8 frames to turn, and we must wait 8 frames to do another.
         if ((this->timer & 8) != 0) {
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) > 200.0f) {
-                Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 300, 1000);
+                Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 0x12C, 0x3E8);
                 if ((play->gameplayFrames % 8) == 0) {
                     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos,
-                                             this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
+                                             this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, true);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_VOICE);
                 }
             }
@@ -281,7 +281,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((play->gameplayFrames % 8) == 0) {
         Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10,
-                                 8.0f, 500, 10, 1);
+                                 8.0f, 500, 10, true);
     }
 
     Math_ApproachF(&this->actor.shape.yOffset, -3000.0f, 100.0f, 500.0f);

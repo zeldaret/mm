@@ -281,7 +281,7 @@ void func_80B3415C(EnKbt* this) {
 void func_80B34314(EnKbt* this, PlayState* play) {
     func_80B34078(this);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B34598;
         Actor_ChangeFocus(&this->actor, play, this->unk_278);
         this->unk_278->textId = this->actor.textId;

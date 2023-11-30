@@ -7,6 +7,7 @@
 #include "z_en_horse.h"
 #include "z64horse.h"
 #include "z64rumble.h"
+#include "z64voice.h"
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "overlays/actors/ovl_Obj_Um/z_obj_um.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
@@ -313,7 +314,7 @@ void EnHorse_RotateToPoint(EnHorse* this, PlayState* play, Vec3f* pos, s16 turnY
 
 void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
     s32 spA4;
-    Vec3s* spA0;
+    Vec3s* pathPoints;
     f32 phi_f12;
     f32 phi_f14;
     Vec3f sp8C;
@@ -330,18 +331,18 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
     Vec3f sp50;
 
     spA4 = path->count;
-    spA0 = Lib_SegmentedToVirtual(path->points);
-    Math_Vec3s_ToVec3f(&sp8C, &spA0[this->curRaceWaypoint]);
+    pathPoints = Lib_SegmentedToVirtual(path->points);
+    Math_Vec3s_ToVec3f(&sp8C, &pathPoints[this->curRaceWaypoint]);
 
     if (this->curRaceWaypoint == 0) {
-        phi_f12 = spA0[1].x - spA0[0].x;
-        phi_f14 = spA0[1].z - spA0[0].z;
+        phi_f12 = pathPoints[1].x - pathPoints[0].x;
+        phi_f14 = pathPoints[1].z - pathPoints[0].z;
     } else if ((this->curRaceWaypoint + 1) == path->count) {
-        phi_f12 = spA0[path->count - 1].x - spA0[path->count - 2].x;
-        phi_f14 = spA0[path->count - 1].z - spA0[path->count - 2].z;
+        phi_f12 = pathPoints[path->count - 1].x - pathPoints[path->count - 2].x;
+        phi_f14 = pathPoints[path->count - 1].z - pathPoints[path->count - 2].z;
     } else {
-        phi_f12 = spA0[this->curRaceWaypoint + 1].x - spA0[this->curRaceWaypoint - 1].x;
-        phi_f14 = spA0[this->curRaceWaypoint + 1].z - spA0[this->curRaceWaypoint - 1].z;
+        phi_f12 = pathPoints[this->curRaceWaypoint + 1].x - pathPoints[this->curRaceWaypoint - 1].x;
+        phi_f14 = pathPoints[this->curRaceWaypoint + 1].z - pathPoints[this->curRaceWaypoint - 1].z;
     }
 
     func_8017B7F8(&sp8C, Math_Atan2S(phi_f12, phi_f14), &sp7C, &sp78, &sp74);
@@ -351,13 +352,13 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
         if (this->curRaceWaypoint >= spA4) {
             this->curRaceWaypoint = spA4 - 1;
         }
-        Math_Vec3s_ToVec3f(&sp8C, &spA0[this->curRaceWaypoint]);
+        Math_Vec3s_ToVec3f(&sp8C, &pathPoints[this->curRaceWaypoint]);
     }
 
     if (this->curRaceWaypoint == 0) {
-        Math_Vec3s_ToVec3f(&sp80, &spA0[1]);
+        Math_Vec3s_ToVec3f(&sp80, &pathPoints[1]);
     } else {
-        Math_Vec3s_ToVec3f(&sp80, &spA0[this->curRaceWaypoint - 1]);
+        Math_Vec3s_ToVec3f(&sp80, &pathPoints[this->curRaceWaypoint - 1]);
     }
 
     func_8017D7C0(this->actor.world.pos.x, this->actor.world.pos.z, sp80.x, sp80.z, sp8C.x, sp8C.z, &sp70);
@@ -397,12 +398,12 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
 
     sp64 = 1.0e+38;
     sp60 = sp68 + 5;
-    if (path->count < sp60) {
+    if (sp60 > path->count) {
         sp60 = path->count;
     }
 
     for (i = sp68; i < sp60; i++) {
-        Math_Vec3s_ToVec3f(&sp50, &spA0[i]);
+        Math_Vec3s_ToVec3f(&sp50, &pathPoints[i]);
         temp_f0 = Math3D_Distance(&this->actor.world.pos, &sp50);
         if (temp_f0 < sp64) {
             sp64 = temp_f0;
@@ -410,7 +411,7 @@ void func_8087B7C0(EnHorse* this, PlayState* play, Path* path) {
         }
     }
 
-    this->unk_398 = spA0[this->curRaceWaypoint].y * 0.01f;
+    this->unk_398 = pathPoints[this->curRaceWaypoint].y * 0.01f;
     if ((this->unk_1EC & 0x100) && !(this->stateFlags & ENHORSE_JUMPING) &&
         ((this->colliderCylinder1.base.acFlags & AC_HIT) || (this->colliderCylinder2.base.acFlags & AC_HIT) ||
          (this->unk_58C > 0))) {
@@ -616,7 +617,7 @@ s32 EnHorse_Spawn(EnHorse* this, PlayState* play) {
     s32 pathCount;
     Vec3s* pathPoints;
 
-    if (pathIndex == -1) {
+    if (pathIndex == PATH_INDEX_NONE) {
         return false;
     }
 
@@ -690,7 +691,7 @@ s32 EnHorse_PlayerCanMove(EnHorse* this, PlayState* play) {
     if ((player->stateFlags1 & PLAYER_STATE1_1) || (func_800B7128(GET_PLAYER(play)) == true) ||
         (player->stateFlags1 & PLAYER_STATE1_100000) ||
         (((this->stateFlags & ENHORSE_FLAG_19) || (this->stateFlags & ENHORSE_FLAG_29)) && !this->inRace) ||
-        (this->action == ENHORSE_ACTION_HBA) || (player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
+        (this->action == ENHORSE_ACTION_HBA) || (player->actor.flags & ACTOR_FLAG_TALK) ||
         (play->csCtx.state != CS_STATE_IDLE) || (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) ||
         (player->stateFlags1 & PLAYER_STATE1_20) || (player->csAction != PLAYER_CSACTION_NONE)) {
         return false;
@@ -835,8 +836,8 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     Collider_SetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, this->colliderJntSphElements);
 
     if (this->type == HORSE_TYPE_2) {
-        this->colliderCylinder1.dim.radius = this->colliderCylinder1.dim.radius * 0.8f;
-        this->colliderCylinder2.dim.radius = this->colliderCylinder2.dim.radius * 0.8f;
+        this->colliderCylinder1.dim.radius *= 0.8f;
+        this->colliderCylinder2.dim.radius *= 0.8f;
         this->colliderJntSph.elements[0].dim.modelSphere.radius *= 0.6f;
     } else if (this->type == HORSE_TYPE_DONKEY) {
         this->colliderCylinder1.dim.radius = 50;
@@ -1431,7 +1432,7 @@ void EnHorse_JumpLanding(EnHorse* this, PlayState* play) {
     this->animIndex = ENHORSE_ANIM_GALLOP;
     Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
     jointTable = this->skin.skelAnime.jointTable;
-    y = jointTable->y;
+    y = jointTable[LIMB_ROOT_POS].y;
     this->riderPos.y += y * 0.01f * this->unk_528 * 0.01f;
     this->postDrawFunc = NULL;
 }
@@ -1661,7 +1662,7 @@ void EnHorse_Reverse(EnHorse* this, PlayState* play) {
         } else if (stickMag < 10.0f) {
             stickAngle = -0x7FFF;
         }
-    } else if ((player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) || (play->csCtx.state != CS_STATE_IDLE) ||
+    } else if ((player->actor.flags & ACTOR_FLAG_TALK) || (play->csCtx.state != CS_STATE_IDLE) ||
                (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) || (player->stateFlags1 & PLAYER_STATE1_20)) {
         EnHorse_StartMountedIdleResetAnim(this);
         this->actor.speed = 0.0f;
@@ -1720,7 +1721,7 @@ void EnHorse_StartLowJump(EnHorse* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
 
     jointTable = this->skin.skelAnime.jointTable;
-    y = jointTable->y;
+    y = jointTable[LIMB_ROOT_POS].y;
     this->riderPos.y -= ((y * 0.01f) * this->unk_528) * 0.01f;
 
     if (this->type == HORSE_TYPE_2) {
@@ -1774,7 +1775,7 @@ void EnHorse_LowJump(EnHorse* this, PlayState* play) {
         }
     } else {
         jointTable = this->skin.skelAnime.jointTable;
-        temp_f0 = jointTable->y;
+        temp_f0 = jointTable[LIMB_ROOT_POS].y;
 
         this->actor.world.pos.y = this->jumpStartY + (temp_f0 * 0.01f * this->unk_528 * 0.01f);
     }
@@ -1817,7 +1818,7 @@ void EnHorse_StartHighJump(EnHorse* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
 
     jointTable = this->skin.skelAnime.jointTable;
-    y = jointTable->y;
+    y = jointTable[LIMB_ROOT_POS].y;
     this->riderPos.y -= ((y * 0.01f) * this->unk_528) * 0.01f;
 
     this->stateFlags |= ENHORSE_CALC_RIDER_POS;
@@ -1872,7 +1873,7 @@ void EnHorse_HighJump(EnHorse* this, PlayState* play) {
         }
     } else {
         jointTable = this->skin.skelAnime.jointTable;
-        temp_f0 = jointTable->y;
+        temp_f0 = jointTable[LIMB_ROOT_POS].y;
         this->actor.world.pos.y = this->jumpStartY + (temp_f0 * 0.01f * this->unk_528 * 0.01f);
     }
 
@@ -2333,7 +2334,7 @@ void func_80881398(EnHorse* this, PlayState* play) {
         }
     } else {
         jointTable = this->skin.skelAnime.jointTable;
-        y = jointTable->y;
+        y = jointTable[LIMB_ROOT_POS].y;
         this->actor.world.pos.y = this->jumpStartY + (y * 0.01f * this->unk_528 * 0.01f);
     }
 
@@ -2362,7 +2363,7 @@ void func_8088159C(EnHorse* this, PlayState* play) {
     this->animIndex = ENHORSE_ANIM_GALLOP;
     Animation_PlayOnce(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animIndex]);
     jointTable = this->skin.skelAnime.jointTable;
-    y = jointTable->y;
+    y = jointTable[LIMB_ROOT_POS].y;
     this->riderPos.y += y * 0.01f * this->unk_528 * 0.01f;
     this->postDrawFunc = NULL;
 }
@@ -2550,7 +2551,7 @@ void EnHorse_CsPlayHighJumpAnim(EnHorse* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
 
     jointTable = this->skin.skelAnime.jointTable;
-    y = jointTable->y;
+    y = jointTable[LIMB_ROOT_POS].y;
     this->riderPos.y -= y * 0.01f * this->unk_528 * 0.01f;
 
     this->stateFlags |= ENHORSE_ANIM_HIGH_JUMP;
@@ -2595,7 +2596,7 @@ void EnHorse_CsJump(EnHorse* this, PlayState* play, CsCmdActorCue* cue) {
         }
     } else {
         jointTable = this->skin.skelAnime.jointTable;
-        y = jointTable->y;
+        y = jointTable[LIMB_ROOT_POS].y;
 
         this->actor.world.pos.y = this->jumpStartY + (y * 0.01f * this->unk_528 * 0.01f);
     }
@@ -2620,7 +2621,7 @@ void EnHorse_CsJump(EnHorse* this, PlayState* play, CsCmdActorCue* cue) {
                                    sPlaybackSpeeds[6]);
 
         jointTable = this->skin.skelAnime.jointTable;
-        y = jointTable->y;
+        y = jointTable[LIMB_ROOT_POS].y;
         this->riderPos.y += y * 0.01f * this->unk_528 * 0.01f;
 
         this->postDrawFunc = NULL;
@@ -4016,9 +4017,9 @@ void func_80886C00(EnHorse* this, PlayState* play) {
 
     if (((this->action == ENHORSE_ACTION_MOUNTED_WALK) || (this->action == ENHORSE_ACTION_MOUNTED_TROT) ||
          (this->action == ENHORSE_ACTION_MOUNTED_GALLOP)) &&
-        (CHECK_BTN_ALL(input->press.button, BTN_A) || (func_801A5100() == 5)) && (play->interfaceCtx.unk_212 == 8) &&
-        !(this->stateFlags & ENHORSE_BOOST) && !(this->stateFlags & ENHORSE_FLAG_8) &&
-        !(this->stateFlags & ENHORSE_FLAG_9)) {
+        (CHECK_BTN_ALL(input->press.button, BTN_A) || (AudioVoice_GetWord() == VOICE_WORD_ID_HIYA)) &&
+        (play->interfaceCtx.unk_212 == DO_ACTION_FASTER) && !(this->stateFlags & ENHORSE_BOOST) &&
+        !(this->stateFlags & ENHORSE_FLAG_8) && !(this->stateFlags & ENHORSE_FLAG_9)) {
         if (this->numBoosts > 0) {
             Rumble_Request(0.0f, 180, 20, 100);
             this->stateFlags |= ENHORSE_BOOST;
@@ -4230,7 +4231,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
     this->stateFlags &= ~ENHORSE_OBSTACLE;
     this->unk_3EC = thisx->world.rot.y;
     if ((this->animIndex == ENHORSE_ANIM_STOPPING) || (this->animIndex == ENHORSE_ANIM_REARING)) {
-        this->skin.skelAnime.jointTable[0].y += 0x154;
+        this->skin.skelAnime.jointTable[LIMB_ROOT_POS].y += 0x154;
     }
 
     this->curFrame = this->skin.skelAnime.curFrame;
@@ -4264,7 +4265,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
                 this->rider->actor.shape.rot.y = thisx->shape.rot.y;
             } else if (this->action == ENHORSE_ACTION_6) {
                 EnIn* in = this->rider;
-                s16 jnt = in->jointTable[0].y;
+                s16 jnt = in->jointTable[LIMB_ROOT_POS].y;
 
                 in->actor.world.pos.x = this->riderPos.x;
                 in->actor.world.pos.y = this->riderPos.y - (jnt * 0.01f * this->unk_528 * 0.01f);
@@ -4711,9 +4712,9 @@ void EnHorse_Draw(Actor* thisx, PlayState* play) {
             }
         } else {
             if (this->stateFlags & ENHORSE_JUMPING) {
-                this->skin.skelAnime.jointTable->x = 0;
-                this->skin.skelAnime.jointTable->y = 0;
-                this->skin.skelAnime.jointTable->z = 0;
+                this->skin.skelAnime.jointTable[LIMB_ROOT_POS].x = 0;
+                this->skin.skelAnime.jointTable[LIMB_ROOT_POS].y = 0;
+                this->skin.skelAnime.jointTable[LIMB_ROOT_POS].z = 0;
             }
             SkelAnime_DrawFlexOpa(play, this->skin.skelAnime.skeleton, this->skin.skelAnime.jointTable,
                                   this->skin.skelAnime.dListCount, func_80888D18, NULL, &this->actor);

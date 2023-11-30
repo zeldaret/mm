@@ -18,6 +18,28 @@ simpleReplace = {
 # explanation in replace_single below)
 wordReplace = {
     # Functions
+    "SystemArena_Malloc": "malloc",
+    "SystemArena_MallocR": "malloc_r",
+    "SystemArena_Realloc": "realloc",
+    "SystemArena_Free": "free",
+    "SystemArena_Calloc": "calloc",
+    "SystemArena_GetSizes": "GetFreeArena",
+    "SystemArena_CheckArena": "CheckArena",
+    "SystemArena_Init": "MallocInit",
+    "SystemArena_Cleanup": "MallocCleanup",
+    "SystemArena_IsInitialized": "MallocIsInitialized",
+
+    "proutSprintf": "proutPrintf",
+
+    "PrintUtils_VPrintf": "vaprintf",
+    "PrintUtils_Printf": "aprintf",
+
+    "Sleep_Cycles": "csleep",
+    "Sleep_Nsec": "nsleep",
+    "Sleep_Usec": "usleep",
+    "Sleep_Msec": "msleep",
+    "Sleep_Sec": "sleep",
+
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "Math_Acot2F": "Math_Atan2F_XY",
     "atan_flip": "Math_Atan2F_XY",
@@ -125,7 +147,9 @@ wordReplace = {
     "Actor_IsActorFacingActor": "Actor_ActorAIsFacingActorB",
     "Actor_IsActorFacedByActor": "Actor_ActorBIsFacingActorA",
     "Actor_MarkForDeath": "Actor_Kill",
-    "func_800B84D0": "Actor_ProcessTalkRequest",
+    "func_800B84D0": "Actor_TalkOfferAccepted",
+    "Actor_ProcessTalkRequest": "Actor_TalkOfferAccepted",
+    "func_800BC154": "Actor_ChangeCategory",
     "func_8017D668": "Math3D_PointDistToLine2D",
 
     "THGA_GetSize": "THGA_GetRemaining",
@@ -987,7 +1011,7 @@ wordReplace = {
     "skelAnime.transitionStep": "skelAnime.morphRate",
     "skelAnime.animUpdate": "skelAnime.update",
     "skelAnime.flags": "skelAnime.moveFlags",
-    "skelAnime.prevFrameRot": "skelAnime.prevRot",
+    "skelAnime.prevFrameRot": "skelAnime.prevYaw",
     "skelAnime.prevFramePos": "skelAnime.prevTransl",
     "skelAnime.unk3E": "skelAnime.baseTransl",
     "actor.unk20": "actor.halfDaysBits",
@@ -1290,12 +1314,14 @@ wordReplace = {
     "RADF_TO_DEGF": "RAD_TO_DEG",
     "DEGF_TO_RADF": "DEG_TO_RAD",
 
+    "ACTORCTX_FLAG_1": "ACTORCTX_FLAG_TELESCOPE_ON",
     "ACTORCTX_FLAG_2": "ACTORCTX_FLAG_PICTO_BOX_ON",
 
     "ACTOR_FLAG_1": "ACTOR_FLAG_TARGETABLE",
     "ACTOR_FLAG_4": "ACTOR_FLAG_UNFRIENDLY",
     "ACTOR_FLAG_8": "ACTOR_FLAG_FRIENDLY",
-    "ACTOR_FLAG_100": "ACTOR_FLAG_TALK_REQUESTED",
+    "ACTOR_FLAG_100": "ACTOR_FLAG_TALK",
+    "ACTOR_FLAG_TALK_REQUESTED": "ACTOR_FLAG_TALK",
     "ACTOR_FLAG_8000000": "ACTOR_FLAG_CANT_LOCK_ON",
 
     "EXCH_ITEM_MINUS1": "PLAYER_IA_MINUS1",

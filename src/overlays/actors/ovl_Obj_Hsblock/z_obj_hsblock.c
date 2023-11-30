@@ -6,6 +6,7 @@
 
 #include "z_obj_hsblock.h"
 #include "objects/object_d_hsblock/object_d_hsblock.h"
+#include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
 #define FLAGS 0x00000000
 
@@ -60,7 +61,8 @@ void func_8093DEAC(ObjHsblock* this, PlayState* play) {
     if (OBJHSBLOCK_GET_5(&this->dyna.actor) != 0) {
         Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_ICE_POLY, this->dyna.actor.world.pos.x,
                            this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.world.rot.x,
-                           this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z, 0xFF64);
+                           this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
+                           OBJICEPOLY_PARAMS(100, OBJICEPOLY_SWITCH_FLAG_NONE));
     }
 }
 

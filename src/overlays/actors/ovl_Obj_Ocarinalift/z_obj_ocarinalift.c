@@ -50,7 +50,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80AC94C0(ObjOcarinalift* this, s32 arg1) {
-    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->unk170[arg1]);
+    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->pathPoints[arg1]);
 }
 
 void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
@@ -68,11 +68,11 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
     if (this->unk160 < 0.01f) {
         func_80AC9680(this);
     } else {
-        path = &play->setupPathList[OBJOCARINALIFT_GET_7F(&this->dyna.actor)];
+        path = &play->setupPathList[OBJOCARINALIFT_GET_PATH_INDEX(&this->dyna.actor)];
         this->unk168 = OBJOCARINALIFT_GET_1F(&this->dyna.actor);
         this->unk164 = path->count - 1;
         this->unk16C = 1;
-        this->unk170 = Lib_SegmentedToVirtual(path->points);
+        this->pathPoints = Lib_SegmentedToVirtual(path->points);
         func_80AC94C0(this, this->unk168);
         if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAM_1) &&
             Flags_GetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor))) {
@@ -113,7 +113,7 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
     Vec3s* temp_v1_2;
 
     Actor_PlaySfx_Flagged(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
-    Math_Vec3s_ToVec3f(&sp48, this->unk170 + this->unk168 + this->unk16C);
+    Math_Vec3s_ToVec3f(&sp48, this->pathPoints + this->unk168 + this->unk16C);
     Math_Vec3f_Diff(&sp48, &thisx->world.pos, &thisx->velocity);
     magnitude = Math3D_Vec3fMagnitude(&thisx->velocity);
 
@@ -142,7 +142,7 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
                 this->timer = 10;
                 func_80AC9A68(this);
             } else {
-                temp_v1_2 = this->unk170 + this->unk164;
+                temp_v1_2 = &this->pathPoints[this->unk164];
 
                 if (this->unk16C > 0) {
                     this->unk168 = 0;
@@ -150,8 +150,8 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
                     this->unk168 = this->unk164;
                 }
 
-                if (((this->unk170->x != temp_v1_2->x) || (this->unk170->y != temp_v1_2->y)) ||
-                    (this->unk170->z != temp_v1_2->z)) {
+                if (((this->pathPoints[0].x != temp_v1_2->x) || (this->pathPoints[0].y != temp_v1_2->y)) ||
+                    (this->pathPoints[0].z != temp_v1_2->z)) {
                     func_80AC99C0(this);
                     DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp34 = false;

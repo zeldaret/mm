@@ -55,22 +55,35 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-s32 func_809592E0(EnMk* this, s16 index) {
-    AnimationHeader* sAnimations[] = {
-        &gMarineResearcherIdleAnim,        &gMarineResearcherHeadWaggleAnim, &gMarineResearcherYellAnim,
-        &gMarineResearcherShakeInFearAnim, &gMarineResearcherStrokeChinAnim,
+typedef enum MarineResearcherAnimation {
+    /* -1 */ MARINE_RESEARCHER_ANIM_NONE = -1,
+    /*  0 */ MARINE_RESEARCHER_ANIM_IDLE,
+    /*  1 */ MARINE_RESEARCHER_ANIM_HEAD_WAGGLE,
+    /*  2 */ MARINE_RESEARCHER_ANIM_YELL,
+    /*  3 */ MARINE_RESEARCHER_ANIM_SHAKE_IN_FEAR,
+    /*  4 */ MARINE_RESEARCHER_ANIM_STROKE_CHIN,
+    /*  5 */ MARINE_RESEARCHER_ANIM_MAX
+} MarineResearcherAnimation;
+
+s32 EnMk_ChangeAnim(EnMk* this, s16 animIndex) {
+    AnimationHeader* sAnimations[MARINE_RESEARCHER_ANIM_MAX] = {
+        &gMarineResearcherIdleAnim,        // MARINE_RESEARCHER_ANIM_IDLE
+        &gMarineResearcherHeadWaggleAnim,  // MARINE_RESEARCHER_ANIM_HEAD_WAGGLE
+        &gMarineResearcherYellAnim,        // MARINE_RESEARCHER_ANIM_YELL
+        &gMarineResearcherShakeInFearAnim, // MARINE_RESEARCHER_ANIM_SHAKE_IN_FEAR
+        &gMarineResearcherStrokeChinAnim,  // MARINE_RESEARCHER_ANIM_STROKE_CHIN
     };
 
-    if (index == this->unk_27C) {
+    if (animIndex == this->animIndex) {
         return false;
     }
 
-    if ((index < 0) || (index >= 5)) {
+    if ((animIndex <= MARINE_RESEARCHER_ANIM_NONE) || (animIndex >= MARINE_RESEARCHER_ANIM_MAX)) {
         return false;
     }
 
-    Animation_PlayLoop(&this->skelAnime, sAnimations[index]);
-    this->unk_27C = index;
+    Animation_PlayLoop(&this->skelAnime, sAnimations[animIndex]);
+    this->animIndex = animIndex;
     return true;
 }
 
@@ -85,8 +98,8 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gMarineResearcherSkel, &gMarineResearcherIdleAnim, this->jointTable,
                        this->morphTable, MARINE_RESEARCHER_LIMB_MAX);
 
-    this->unk_27C = -1;
-    func_809592E0(this, 0);
+    this->animIndex = MARINE_RESEARCHER_ANIM_NONE;
+    EnMk_ChangeAnim(this, MARINE_RESEARCHER_ANIM_IDLE);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -133,14 +146,15 @@ void func_8095954C(EnMk* this, PlayState* play) {
             case 3:
             case 4:
             case 5:
-                func_809592E0(this, play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
+                EnMk_ChangeAnim(this,
+                                play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
                 break;
 
             default:
                 break;
         }
     } else {
-        func_809592E0(this, 0);
+        EnMk_ChangeAnim(this, MARINE_RESEARCHER_ANIM_IDLE);
     }
 }
 
@@ -190,7 +204,7 @@ void func_80959774(EnMk* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 3, 0x400, 0x80);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80959624(this, play);
         this->actionFunc = func_809596A0;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
@@ -362,7 +376,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
 }
 
 void func_80959C94(EnMk* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80959A24;
         this->unk_27A &= ~2;
         Message_StartTextbox(play, 0xFB3, &this->actor);
@@ -422,7 +436,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
             this->actor.csId = this->csIdList[1];
         }
         CutsceneManager_Queue(this->actor.csId);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80959844(this, play);
         this->actionFunc = func_80959A24;
         this->unk_27A |= 1;
@@ -443,7 +457,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
 void EnMk_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnMk* this = THIS;
-    Vec3s sp38;
+    Vec3s torsoRot;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -453,10 +467,10 @@ void EnMk_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->unk_27A & 1) && !Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_127)) {
-        Actor_TrackPlayer(play, &this->actor, &this->unk_270, &sp38, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &torsoRot, this->actor.focus.pos);
     } else {
-        Math_SmoothStepToS(&this->unk_270.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_270.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
     }
 }
 
@@ -464,8 +478,8 @@ s32 EnMk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     EnMk* this = THIS;
 
     if (limbIndex == MARINE_RESEARCHER_LIMB_HEAD) {
-        rot->y -= this->unk_270.y;
-        rot->z += this->unk_270.x;
+        rot->y -= this->headRot.y;
+        rot->z += this->headRot.x;
     }
     return false;
 }

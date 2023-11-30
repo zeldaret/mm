@@ -184,7 +184,7 @@ void func_80954BE8(EnKanban* this, PlayState* play) {
         if (this->msgTimer == 0) {
             yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
             if (ABS_ALT(yaw) < 0x2800) {
-                if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+                if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
                     this->msgFlag = true;
                 } else {
                     Actor_OfferTalk(&this->actor, play, 68.0f);
@@ -998,7 +998,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
 
     if ((this->actor.projectedPos.z <= 400.0f) && (this->actor.projectedPos.z > 0.0f) &&
         (this->actor.floorHeight > -3000.0f) && ((this->bounceX != 0) || (this->bounceZ != 0))) {
-        u16 dayTime = gSaveContext.save.time;
+        u16 dayTime = CURRENT_TIME;
         f32 shadowAlpha;
 
         if (dayTime >= CLOCK_TIME(12, 0)) {

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64malloc.h"
 
 #define ANIM_INTERP 1
 
@@ -100,11 +101,11 @@ void SkelAnime_DrawLod(PlayState* play, void** skeleton, Vec3s* jointTable, Over
     Matrix_Push();
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
-    pos.x = jointTable[0].x;
-    pos.y = jointTable[0].y;
-    pos.z = jointTable[0].z;
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
 
-    rot = jointTable[1];
+    rot = jointTable[LIMB_ROOT_ROT];
     dList = rootLimb->dLists[lod];
 
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &dList, &pos, &rot, actor)) {
@@ -219,11 +220,11 @@ void SkelAnime_DrawFlexLod(PlayState* play, void** skeleton, Vec3s* jointTable, 
     Matrix_Push();
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
-    pos.x = jointTable[0].x;
-    pos.y = jointTable[0].y;
-    pos.z = jointTable[0].z;
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
 
-    rot = jointTable[1];
+    rot = jointTable[LIMB_ROOT_ROT];
 
     newDList = limbDList = rootLimb->dLists[lod];
 
@@ -326,11 +327,11 @@ void SkelAnime_DrawOpa(PlayState* play, void** skeleton, Vec3s* jointTable, Over
     Matrix_Push();
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
 
-    pos.x = jointTable[0].x;
-    pos.y = jointTable[0].y;
-    pos.z = jointTable[0].z;
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
 
-    rot = jointTable[1];
+    rot = jointTable[LIMB_ROOT_ROT];
     dList = rootLimb->dList;
 
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &dList, &pos, &rot, actor)) {
@@ -439,10 +440,10 @@ void SkelAnime_DrawFlexOpa(PlayState* play, void** skeleton, Vec3s* jointTable, 
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
 
-    pos.x = jointTable[0].x;
-    pos.y = jointTable[0].y;
-    pos.z = jointTable[0].z;
-    rot = jointTable[1];
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
+    rot = jointTable[LIMB_ROOT_ROT];
 
     newDList = limbDList = rootLimb->dList;
 
@@ -575,10 +576,10 @@ void SkelAnime_DrawTransformFlexOpa(PlayState* play, void** skeleton, Vec3s* joi
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
 
-    pos.x = jointTable[0].x;
-    pos.y = jointTable[0].y;
-    pos.z = jointTable[0].z;
-    rot = jointTable[1];
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
+    rot = jointTable[LIMB_ROOT_ROT];
 
     newDList = limbDList = rootLimb->dList;
 
@@ -722,11 +723,11 @@ Gfx* SkelAnime_Draw(PlayState* play, void** skeleton, Vec3s* jointTable, Overrid
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
 
-    pos.x = jointTable[0].x;
-    pos.y = jointTable[0].y;
-    pos.z = jointTable[0].z;
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
 
-    rot = jointTable[1];
+    rot = jointTable[LIMB_ROOT_ROT];
 
     dList = rootLimb->dList;
 
@@ -838,11 +839,11 @@ Gfx* SkelAnime_DrawFlex(PlayState* play, void** skeleton, Vec3s* jointTable, s32
 
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
 
-    pos.x = jointTable[0].x;
-    pos.y = jointTable[0].y;
-    pos.z = jointTable[0].z;
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
 
-    rot = jointTable[1];
+    rot = jointTable[LIMB_ROOT_ROT];
 
     newDList = limbDList = rootLimb->dList;
 
@@ -1236,7 +1237,7 @@ void SkelAnime_InitPlayer(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHea
         skelAnime->morphTable = (void*)ALIGN16((uintptr_t)morphTableBuffer);
     }
 
-    PlayerAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
+    PlayerAnimation_Change(play, skelAnime, animation, PLAYER_ANIM_NORMAL_SPEED, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
 }
 
 /**
@@ -1386,8 +1387,8 @@ void PlayerAnimation_Change(PlayState* play, SkelAnime* skelAnime, PlayerAnimati
  * Immediately changes to a Player animation that plays once at the default speed.
  */
 void PlayerAnimation_PlayOnce(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation) {
-    PlayerAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, Animation_GetLastFrame(&animation->common),
-                           ANIMMODE_ONCE, 0.0f);
+    PlayerAnimation_Change(play, skelAnime, animation, PLAYER_ANIM_NORMAL_SPEED, 0.0f,
+                           Animation_GetLastFrame(&animation->common), ANIMMODE_ONCE, 0.0f);
 }
 
 /**
@@ -1403,8 +1404,8 @@ void PlayerAnimation_PlayOnceSetSpeed(PlayState* play, SkelAnime* skelAnime, Pla
  * Immediately changes to a Player animation that loops at the default speed.
  */
 void PlayerAnimation_PlayLoop(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation) {
-    PlayerAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, Animation_GetLastFrame(&animation->common),
-                           ANIMMODE_LOOP, 0.0f);
+    PlayerAnimation_Change(play, skelAnime, animation, PLAYER_ANIM_NORMAL_SPEED, 0.0f,
+                           Animation_GetLastFrame(&animation->common), ANIMMODE_LOOP, 0.0f);
 }
 
 /**
@@ -1564,7 +1565,6 @@ void SkelAnime_InitFlex(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeade
 
     if (jointTable == NULL) {
         skelAnime->jointTable = ZeldaArena_Malloc(sizeof(*skelAnime->jointTable) * skelAnime->limbCount);
-
         skelAnime->morphTable = ZeldaArena_Malloc(sizeof(*skelAnime->morphTable) * skelAnime->limbCount);
     } else {
         skelAnime->jointTable = jointTable;
@@ -1932,29 +1932,30 @@ void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle) {
         diff->x = 0.0f;
     } else {
         // `angle` rotation around y axis.
-        x = skelAnime->jointTable->x - skelAnime->prevTransl.x;
-        z = skelAnime->jointTable->z - skelAnime->prevTransl.z;
+        x = skelAnime->jointTable[LIMB_ROOT_POS].x - skelAnime->prevTransl.x;
+        z = skelAnime->jointTable[LIMB_ROOT_POS].z - skelAnime->prevTransl.z;
         sin = Math_SinS(angle);
         cos = Math_CosS(angle);
         diff->x = x * cos + z * sin;
         diff->z = z * cos - x * sin;
     }
 
-    skelAnime->prevTransl.x = skelAnime->jointTable->x;
-    skelAnime->jointTable->x = skelAnime->baseTransl.x;
-    skelAnime->prevTransl.z = skelAnime->jointTable->z;
-    skelAnime->jointTable->z = skelAnime->baseTransl.z;
+    skelAnime->prevTransl.x = skelAnime->jointTable[LIMB_ROOT_POS].x;
+    skelAnime->jointTable[LIMB_ROOT_POS].x = skelAnime->baseTransl.x;
+    skelAnime->prevTransl.z = skelAnime->jointTable[LIMB_ROOT_POS].z;
+    skelAnime->jointTable[LIMB_ROOT_POS].z = skelAnime->baseTransl.z;
+
     if (skelAnime->moveFlags & ANIM_FLAG_UPDATE_Y) {
         if (skelAnime->moveFlags & ANIM_FLAG_NOMOVE) {
             diff->y = 0.0f;
         } else {
-            diff->y = skelAnime->jointTable->y - skelAnime->prevTransl.y;
+            diff->y = skelAnime->jointTable[LIMB_ROOT_POS].y - skelAnime->prevTransl.y;
         }
-        skelAnime->prevTransl.y = skelAnime->jointTable->y;
-        skelAnime->jointTable->y = skelAnime->baseTransl.y;
+        skelAnime->prevTransl.y = skelAnime->jointTable[LIMB_ROOT_POS].y;
+        skelAnime->jointTable[LIMB_ROOT_POS].y = skelAnime->baseTransl.y;
     } else {
         diff->y = 0.0f;
-        skelAnime->prevTransl.y = skelAnime->jointTable->y;
+        skelAnime->prevTransl.y = skelAnime->jointTable[LIMB_ROOT_POS].y;
     }
     skelAnime->moveFlags &= ~ANIM_FLAG_NOMOVE;
 }

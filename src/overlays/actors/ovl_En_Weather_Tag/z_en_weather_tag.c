@@ -58,7 +58,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
     EnWeatherTag* this = THIS;
     s32 pad;
     Path* path;
-    s32 pathID;
+    s32 pathIndex;
 
     // flag: is targetable. Should do nothing as not set by default above
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -91,7 +91,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             break;
 
         case WEATHERTAG_TYPE_UNK5:
-            func_800BC154(play, &play->actorCtx, &this->actor, 7);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ITEMACTION);
             play->skyboxId = SKYBOX_3;
             play->envCtx.lightConfig = 5;
             play->envCtx.changeLightNextConfig = 5;
@@ -100,8 +100,8 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             break;
 
         case WEATHERTAG_TYPE_WATERMURK:
-            pathID = WEATHER_TAG_PATHID(&this->actor);
-            path = &play->setupPathList[pathID];
+            pathIndex = WEATHER_TAG_GET_PATH_INDEX(&this->actor);
+            path = &play->setupPathList[pathIndex];
             this->pathPoints = Lib_SegmentedToVirtual(path->points);
             this->pathCount = path->count;
             EnWeatherTag_SetupAction(this, func_809672DC);
@@ -359,7 +359,7 @@ void func_80966FEC(EnWeatherTag* this, PlayState* play) {
         gSkyboxNumStars = numStars;
     }
 
-    if ((play->sceneId == SCENE_KAIZOKU) && (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+    if ((play->sceneId == SCENE_KAIZOKU) && (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
         EnWeatherTag_SetupAction(this, func_80967060);
     }
 }
@@ -456,10 +456,10 @@ void func_809674C8(EnWeatherTag* this, PlayState* play) {
 
     if (Actor_WorldDistXZToActor(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(&this->actor)) {
         if (CURRENT_DAY == 2) {
-            if ((gSaveContext.save.time >= CLOCK_TIME(7, 0)) && (gSaveContext.save.time < CLOCK_TIME(17, 30)) &&
+            if ((CURRENT_TIME >= CLOCK_TIME(7, 0)) && (CURRENT_TIME < CLOCK_TIME(17, 30)) &&
                 (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
 
-                gWeatherMode = WEATHER_MODE_1;
+                gWeatherMode = WEATHER_MODE_RAIN;
                 Environment_PlayStormNatureAmbience(play);
                 play->envCtx.precipitation[PRECIP_SOS_MAX] = 32;
                 EnWeatherTag_SetupAction(this, func_80967608);
@@ -488,15 +488,14 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
     EnWeatherTag* this = THIS;
 
     this->actionFunc(this, play);
-    if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
+    if ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
         (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
         (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
         (play->csCtx.state == CS_STATE_IDLE)) {
 
-        gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
+        gSaveContext.save.time = CURRENT_TIME + (u16)R_TIME_SPEED;
         if (R_TIME_SPEED != 0) {
-            gSaveContext.save.time =
-                ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
+            gSaveContext.save.time = CURRENT_TIME + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
         }
     }
 }

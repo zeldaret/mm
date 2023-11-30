@@ -760,7 +760,7 @@ objectId_names = {
     0x129: "OBJECT_BG",
     0x12A: "OBJECT_BOMBIWA",
     0x12B: "OBJECT_HINTNUTS",
-    0x12C: "OBJECT_RS",
+    0x12C: "OBJECT_RSN",
     0x12D: "OBJECT_UNSET_12D",
     0x12E: "OBJECT_GLA",
     0x12F: "OBJECT_UNSET_12F",

@@ -29,8 +29,8 @@ typedef struct EnGg {
     /* 0x144 */ ColliderCylinder collider;
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnGgActionFunc actionFunc;
-    /* 0x1D8 */ Vec3s unk_1D8;
-    /* 0x1DE */ Vec3s unk_1DE;
+    /* 0x1D8 */ Vec3s headRot;
+    /* 0x1DE */ Vec3s torsoRot;
     /* 0x1E4 */ Vec3s jointTable[OBJECT_GG_LIMB_MAX];
     /* 0x25C */ Vec3s morphTable[OBJECT_GG_LIMB_MAX];
     /* 0x2D4 */ UNK_TYPE1 unk_2D4[0x6];

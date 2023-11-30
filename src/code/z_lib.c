@@ -1,4 +1,12 @@
-#include "global.h"
+#include "z64lib.h"
+
+#include "main.h"
+#include "ichain.h"
+#include "sfx.h"
+#include "z64actor.h"
+#include "z64game.h"
+#include "functions.h"
+#include "macros.h"
 
 void* Lib_MemCpy(void* dest, void* src, size_t size) {
     bcopy(src, dest, size);
@@ -11,7 +19,7 @@ void* Lib_MemSet(void* buffer, s32 value, size_t size) {
     s32 i;
 
     if (value == 0) {
-        bzero(buffer, (u32)size);
+        bzero(buffer, size);
 
         return buffer;
     }
@@ -683,10 +691,10 @@ f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed) {
     f0 = Math3D_Vec3fMagnitude(&diff);
     if (speed < f0) {
         f2 = speed / f0;
-        f0 = f0 - speed;
-        start->x = start->x + f2 * diff.x;
-        start->y = start->y + f2 * diff.y;
-        start->z = start->z + f2 * diff.z;
+        f0 -= speed;
+        start->x += f2 * diff.x;
+        start->y += f2 * diff.y;
+        start->z += f2 * diff.z;
     } else {
         Math_Vec3f_Copy(start, target);
         f0 = 0.0f;
