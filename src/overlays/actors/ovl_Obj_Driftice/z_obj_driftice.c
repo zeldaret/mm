@@ -51,8 +51,7 @@ static ObjDrifticeScaleConsts sScaleConsts[] = {
     { 2.0f, 350.0f, 250.0f },
 };
 
-// these are the actor scales?
-static f32 sdriftSpeeds[] = { 1.5f, 3.0f, 4.5f, 6.0f, 7.5f, 9.0f, 10.5f, 0.0f };
+static f32 sDriftSpeeds[] = { 1.5f, 3.0f, 4.5f, 6.0f, 7.5f, 9.0f, 10.5f, 0.0f };
 
 // Coefficients to multiply the different types of motion contributions when summed to overal motion
 static f32 sDynamicsCoefficients[][4] = {
@@ -351,7 +350,7 @@ void ObjDriftice_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.uncullZoneScale = scaleConsts->uncullZoneScale;
     this->dyna.actor.uncullZoneDownward = scaleConsts->uncullZoneDownward;
     this->inverseScale = 1.0f / this->dyna.actor.scale.x;
-    this->driftSpeed = sdriftSpeeds[OBJDRIFTICE_GET_DRIFT_SPEED_INDEX(&this->dyna.actor)];
+    this->driftSpeed = sDriftSpeeds[OBJDRIFTICE_GET_DRIFT_SPEED_INDEX(&this->dyna.actor)];
 
     floatInPlace = false;
     if (this->driftSpeed < 0.01f) {
