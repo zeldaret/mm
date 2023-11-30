@@ -21,17 +21,17 @@ typedef enum {
 } ObjDrifticeDynamicsMode;
 
 typedef struct {
-    /* 0x00 */ s16 reseedTimer; // when timer reaches 0 some variable in this struct are rerolled by rng
+    /* 0x00 */ s16 reseedTimer; // when timer reaches 0 some variables in this struct are rerolled by rng
     /* 0x02 */ s16 currentArg;
     /* 0x04 */ s16 argRateOfChange;
     /* 0x08 */ f32 currentMagnitude; 
     /* 0x0C */ f32 maxMagnitude;
-    /* 0x10 */ f32 magnitudeRateOfChange; // how much to step currentMagnitude per frame (calculated fresh each frame)
+    /* 0x10 */ f32 magnitudeRateOfChange; 
 } ObjDrifticeOscillationState; // size = 0x14
 
 typedef struct {
     /* 0x00 */ s16 precessionAngle;
-    /* 0x02 */ s16 precessionAngleRateOfChange; // between 0 (player not standing) and some max value (player stood and fully tipped)
+    /* 0x02 */ s16 precessionAngleRateOfChange;
     /* 0x04 */ s16 tiltMagnitude2;
     /* 0x06 */ s16 tiltMagnitude2RateOfChange;
     /* 0x08 */ f32 impactFromPlayer; // Between 0.02 and 1.0. Incremented/Decremented while player is on/off platform.
@@ -48,8 +48,8 @@ typedef struct {
 } ObjDrifticeGenericPrecessionDynamics; // size = 0x48
 
 typedef struct {
-    /* 0x00 */ ObjDrifticeOscillationState playerRelatedYOffsetOscillationState; // playerRelatedYOffsetOscillationState
-    /* 0x14 */ ObjDrifticeOscillationState genericYOffsetOscillationState[3]; // genericYOffsetOscillationState
+    /* 0x00 */ ObjDrifticeOscillationState playerRelatedYOffsetOscillationState;
+    /* 0x14 */ ObjDrifticeOscillationState genericYOffsetOscillationState[3];
     /* 0x50 */ ObjDrifticePlayerRelatedPrecessionDynamics playerRelatedPrecessionDynamics;
     /* 0x84 */ ObjDrifticeGenericPrecessionDynamics genericPrecessionDynamics;
 } ObjDrifticeDynamics; // size = 0xCC
