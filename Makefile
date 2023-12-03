@@ -382,7 +382,7 @@ build/src/%.o: src/%.c
 	$(RM_MDEBUG)
 
 $(SHIFTJIS_O_FILES): build/src/%.o: src/%.c
-	$(SHIFTJIS_CONV) $< $(@:.o=.enc.c)
+	$(SHIFTJIS_CONV) -o $(@:.o=.enc.c) $<
 	$(CC_CHECK) $(@:.o=.enc.c)
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $(@:.o=.enc.c)
 	$(OBJDUMP_CMD)
