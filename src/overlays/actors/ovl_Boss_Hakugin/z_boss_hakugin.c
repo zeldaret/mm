@@ -50,10 +50,10 @@ void BossHakugin_SetupCharge(BossHakugin* this);
 void BossHakugin_Charge(BossHakugin* this, PlayState* play);
 void BossHakugin_FallDown(BossHakugin* this, PlayState* play);
 void BossHakugin_Throw(BossHakugin* this, PlayState* play);
-void func_80B09A94(BossHakugin* this, PlayState* play);
-void func_80B09C78(BossHakugin* this, PlayState* play);
-void func_80B09DFC(BossHakugin* this);
-void func_80B09E20(BossHakugin* this, PlayState* play);
+void BossHakugin_SetupChargeLightning(BossHakugin* this, PlayState* play);
+void BossHakugin_ChargeLightning(BossHakugin* this, PlayState* play);
+void BossHakugin_SetupShootLightning(BossHakugin* this);
+void BossHakugin_ShootLightning(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupCutsceneStart(BossHakugin* this);
 void BossHakugin_CutsceneStart(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupDeathCutscenePart1(BossHakugin* this);
@@ -461,7 +461,7 @@ static s8 sLimbToBodyParts[GOHT_LIMB_MAX] = {
     GOHT_BODYPART_BACK_LEFT_HOOF,        // GOHT_LIMB_BACK_LEFT_HOOF
 };
 
-s32 D_80B0EAB0[GOHT_MECHANICAL_MALFUNCTION_NUM_TYPES] = {
+s32 D_80B0EAB0[GOHT_MALFUNCTION_NUM_TYPES] = {
     GOHT_LIMB_BACK_LEFT_THIGH,       // FHGFLASH_SHOCK_GOHT_2
     GOHT_LIMB_BACK_RIGHT_PASTERN,    // FHGFLASH_SHOCK_GOHT_3
     GOHT_LIMB_JAW_ROOT,              // FHGFLASH_SHOCK_GOHT_4
@@ -1017,12 +1017,12 @@ void BossHakugin_SpawnBomb(BossHakugin* this, PlayState* play) {
     }
 }
 
-void BossHakugin_AddMechanicalMalfunctionEffects(BossHakugin* this, PlayState* play) {
-    GohtMechanicalMalfunctionEffect* malfunctionEffect;
-    GohtMechanicalMalfunctionEffect* malfunctionEffect2;
-    GohtMechanicalMalfunctionEffect* malfunctionEffect3;
+void BossHakugin_AddMalfunctionEffects(BossHakugin* this, PlayState* play) {
+    GohtMalfunctionEffect* malfunctionEffect;
+    GohtMalfunctionEffect* malfunctionEffect2;
+    GohtMalfunctionEffect* malfunctionEffect3;
     Vec3f spA0;
-    GohtBodyPart bodyPartIndex = this->mechanicalMalfunctionBodyPartIndex + 3;
+    GohtBodyPart bodyPartIndex = this->malfunctionBodyPartIndex + 3;
     s32 var_s4;
     s32 type;
     s32 j;
@@ -1032,14 +1032,14 @@ void BossHakugin_AddMechanicalMalfunctionEffects(BossHakugin* this, PlayState* p
         bodyPartIndex = 0;
     }
 
-    for (type = 0; type < GOHT_MECHANICAL_MALFUNCTION_NUM_TYPES; type++) {
+    for (type = 0; type < GOHT_MALFUNCTION_NUM_TYPES; type++) {
         if (((15 - (3 * type)) < this->actor.colChkInfo.health) ||
             !(GOHT_LIMB_FLAG(D_80B0EAB0[type]) & this->unk_01B0)) {
             break;
         }
 
-        malfunctionEffect3 = &this->mechanicalMalfunctionEffects[type][bodyPartIndex];
-        malfunctionEffect2 = &this->mechanicalMalfunctionEffects[type][this->mechanicalMalfunctionBodyPartIndex];
+        malfunctionEffect3 = &this->malfunctionEffects[type][bodyPartIndex];
+        malfunctionEffect2 = &this->malfunctionEffects[type][this->malfunctionBodyPartIndex];
 
         Math_Vec3f_Diff(&malfunctionEffect3->pos, &malfunctionEffect2->pos, &spA0);
 
@@ -1056,7 +1056,7 @@ void BossHakugin_AddMechanicalMalfunctionEffects(BossHakugin* this, PlayState* p
         }
 
         for (j = 0; j < var_s4; j++) {
-            malfunctionEffect = &this->mechanicalMalfunctionEffects[type][this->mechanicalMalfunctionBodyPartIndex + j];
+            malfunctionEffect = &this->malfunctionEffects[type][this->malfunctionBodyPartIndex + j];
 
             malfunctionEffect->pos.x = Rand_CenteredFloat(20.0f) + (malfunctionEffect2->pos.x + (spA0.x * j));
             malfunctionEffect->pos.y = Rand_CenteredFloat(20.0f) + (malfunctionEffect2->pos.y + (spA0.y * j));
@@ -1067,18 +1067,17 @@ void BossHakugin_AddMechanicalMalfunctionEffects(BossHakugin* this, PlayState* p
         }
 
         if ((play->gameplayFrames % 2) != 0) {
-            EffectSsFhgFlash_SpawnShock(
-                play, &this->actor,
-                &this->mechanicalMalfunctionEffects[type][this->mechanicalMalfunctionBodyPartIndex].pos, 250,
-                FHGFLASH_SHOCK_GOHT_2 + type);
+            EffectSsFhgFlash_SpawnShock(play, &this->actor,
+                                        &this->malfunctionEffects[type][this->malfunctionBodyPartIndex].pos, 250,
+                                        FHGFLASH_SHOCK_GOHT_2 + type);
         }
     }
 
-    bodyPartIndex = this->mechanicalMalfunctionBodyPartIndex - 3;
+    bodyPartIndex = this->malfunctionBodyPartIndex - 3;
     if (bodyPartIndex < 0) {
-        this->mechanicalMalfunctionBodyPartIndex = GOHT_BODYPART_MAX - 3;
+        this->malfunctionBodyPartIndex = GOHT_BODYPART_MAX - 3;
     } else {
-        this->mechanicalMalfunctionBodyPartIndex = bodyPartIndex;
+        this->malfunctionBodyPartIndex = bodyPartIndex;
     }
 }
 
@@ -1362,7 +1361,7 @@ void BossHakugin_FrozenBeforeFight(BossHakugin* this, PlayState* play) {
     this->unk_01A4 = 20;
 }
 
-void BossHakugin_SetupIntroCutsceneDethaw(BossHakugin* this) {
+void BossHakugin_SetupIntroCutsceneThaw(BossHakugin* this) {
     this->unk_019C = 100;
     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
     Play_EnableMotionBlur(140);
@@ -1610,7 +1609,7 @@ void BossHakugin_Run(BossHakugin* this, PlayState* play) {
         Math_ScaledStepToS(&this->unk_01A6, 0, 0x100);
     }
     if (func_80B0791C(this, play)) {
-        func_80B09A94(this, play);
+        BossHakugin_SetupChargeLightning(this, play);
     } else {
         if (this->unk_019A > 55) {
             this->unk_019A = 0;
@@ -1830,11 +1829,11 @@ void BossHakugin_Throw(BossHakugin* this, PlayState* play) {
     }
 }
 
-void func_80B09A94(BossHakugin* this, PlayState* play) {
+void BossHakugin_SetupChargeLightning(BossHakugin* this, PlayState* play) {
     f32 var_fv1;
     s16 atan;
 
-    if (this->actionFunc != func_80B09E20) {
+    if (this->actionFunc != BossHakugin_ShootLightning) {
         Animation_MorphToPlayOnce(&this->skelAnime, &gGohtStationaryAnim, -5.0f);
         this->actor.speed = 0.0f;
         atan = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x);
@@ -1873,16 +1872,14 @@ void func_80B09A94(BossHakugin* this, PlayState* play) {
     this->unk_01A6 = 0x700;
     this->unk_019C = 150;
     this->unk_01CC = -100.0f;
-    this->actionFunc = func_80B09C78;
+    this->actionFunc = BossHakugin_ChargeLightning;
 }
 
-void func_80B09C78(BossHakugin* this, PlayState* play) {
+void BossHakugin_ChargeLightning(BossHakugin* this, PlayState* play) {
     f32 temp_fv1;
-    f32 sp1C;
 
     SkelAnime_Update(&this->skelAnime);
     temp_fv1 = fabsf(this->unk_044C.x);
-    sp1C = temp_fv1;
     Math_StepToF(&this->unk_01C8, 0.0f, 6.0f);
     if ((this->unk_044C.z < 0.0f) || (this->actor.xzDistToPlayer < 750.0f) || (this->unk_018C == 1)) {
         BossHakugin_SetupRun(this);
@@ -1891,7 +1888,7 @@ void func_80B09C78(BossHakugin* this, PlayState* play) {
 
     if ((this->lightningSegments[0].alpha == 0) && (this->unk_01C8 < 0.1f) && (temp_fv1 < 400.0f) &&
         (this->unk_044C.z > 0.0f)) {
-        func_80B09DFC(this);
+        BossHakugin_SetupShootLightning(this);
         return;
     }
 
@@ -1910,18 +1907,18 @@ void func_80B09C78(BossHakugin* this, PlayState* play) {
     }
 }
 
-void func_80B09DFC(BossHakugin* this) {
+void BossHakugin_SetupShootLightning(BossHakugin* this) {
     this->unk_01A8 = 5;
     this->unk_01C8 = 0.0f;
-    this->actionFunc = func_80B09E20;
+    this->actionFunc = BossHakugin_ShootLightning;
 }
 
-void func_80B09E20(BossHakugin* this, PlayState* play) {
+void BossHakugin_ShootLightning(BossHakugin* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_THUNDER - SFX_FLAG);
     if (func_80B0728C(this)) {
         BossHakugin_AddLightningSegment(this, &this->unk_0380, play);
-        func_80B09A94(this, play);
+        BossHakugin_SetupChargeLightning(this, play);
     }
 }
 
@@ -1942,7 +1939,7 @@ void BossHakugin_CutsceneStart(BossHakugin* this, PlayState* play) {
         if (this->actor.colChkInfo.health == 0) {
             BossHakugin_SetupDeathCutscenePart1(this);
         } else if (this->unk_019C == 1) {
-            BossHakugin_SetupIntroCutsceneDethaw(this);
+            BossHakugin_SetupIntroCutsceneThaw(this);
         } else {
             BossHakugin_SetupEntranceCutscene(this, play);
         }
@@ -2277,8 +2274,8 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_LIGHT_ORB) ||
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_BLUE_LIGHT_ORB) ||
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_C)) &&
-            ((this->actionFunc == BossHakugin_Run) || (this->actionFunc == func_80B09E20) ||
-             (this->actionFunc == func_80B09C78) || (this->actionFunc == BossHakugin_Charge))) {
+            ((this->actionFunc == BossHakugin_Run) || (this->actionFunc == BossHakugin_ShootLightning) ||
+             (this->actionFunc == BossHakugin_ChargeLightning) || (this->actionFunc == BossHakugin_Charge))) {
             Player* player = GET_PLAYER(play);
 
             if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F) {
@@ -2382,13 +2379,13 @@ void BossHakugin_UpdateRocksDead(BossHakugin* this) {
     }
 }
 
-void BossHakugin_UpdateMechanicalMalfunctionEffects(BossHakugin* this) {
+void BossHakugin_UpdateMalfunctionEffects(BossHakugin* this) {
     s32 i;
     s32 j;
 
-    for (i = 0; i < ARRAY_COUNT(this->mechanicalMalfunctionEffects); i++) {
-        for (j = 0; j < ARRAY_COUNT(this->mechanicalMalfunctionEffects[0]); j++) {
-            GohtMechanicalMalfunctionEffect* malfunctionEffect = &this->mechanicalMalfunctionEffects[i][j];
+    for (i = 0; i < ARRAY_COUNT(this->malfunctionEffects); i++) {
+        for (j = 0; j < ARRAY_COUNT(this->malfunctionEffects[0]); j++) {
+            GohtMalfunctionEffect* malfunctionEffect = &this->malfunctionEffects[i][j];
 
             if (malfunctionEffect->life > 0) {
                 malfunctionEffect->unk_12--;
@@ -2539,7 +2536,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     Vec3s sp70;
     Player* player = GET_PLAYER(play);
 
-    this->blockMechanicalMalfunctionEffects = false;
+    this->blockMalfunctionEffects = false;
     DECR(this->unk_019A);
 
     if (this->actionFunc != BossHakugin_CutsceneStart) {
@@ -2565,7 +2562,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
         BossHakugin_UpdateRocks(this);
     }
 
-    BossHakugin_UpdateMechanicalMalfunctionEffects(this);
+    BossHakugin_UpdateMalfunctionEffects(this);
     BossHakugin_UpdateLightningSegments(this, play);
     BossHakugin_UpdateElectricBalls(this, play);
     BossHakugin_SpawnIceSparkle(this, play);
@@ -2652,7 +2649,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
 
 s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  Actor* thisx) {
-    static s32 D_80B0EB68 = GOHT_MECHANICAL_MALFUNCTION_NUM_TYPES - 1;
+    static s32 D_80B0EB68 = GOHT_MALFUNCTION_NUM_TYPES - 1;
     static s32 D_80B0EB6C = GOHT_LIMB_FRONT_RIGHT_UPPER_LEG;
     BossHakugin* this = THIS;
 
@@ -2665,11 +2662,11 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
         }
     }
 
-    if (!this->blockMechanicalMalfunctionEffects && (limbIndex == D_80B0EB6C)) {
-        Matrix_MultZero(&this->mechanicalMalfunctionEffects[D_80B0EB68][this->mechanicalMalfunctionBodyPartIndex].pos);
+    if (!this->blockMalfunctionEffects && (limbIndex == D_80B0EB6C)) {
+        Matrix_MultZero(&this->malfunctionEffects[D_80B0EB68][this->malfunctionBodyPartIndex].pos);
         D_80B0EB68--;
         if (D_80B0EB68 < 0) {
-            D_80B0EB68 = GOHT_MECHANICAL_MALFUNCTION_NUM_TYPES - 1;
+            D_80B0EB68 = GOHT_MALFUNCTION_NUM_TYPES - 1;
         }
         D_80B0EB6C = D_80B0EAB0[D_80B0EB68];
     }
@@ -2758,8 +2755,8 @@ void BossHakugin_DrawRocks(BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void BossHakugin_DrawMechanicalMalfunctionEffects(BossHakugin* this, PlayState* play) {
-    GohtMechanicalMalfunctionEffect* malfunctionEffect;
+void BossHakugin_DrawMalfunctionEffects(BossHakugin* this, PlayState* play) {
+    GohtMalfunctionEffect* malfunctionEffect;
     s32 i;
     s32 j;
     s16 camYaw;
@@ -2772,9 +2769,9 @@ void BossHakugin_DrawMechanicalMalfunctionEffects(BossHakugin* this, PlayState* 
     camYaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000;
     gDPSetEnvColor(POLY_XLU_DISP++, 1, 1, 1, 128);
 
-    for (i = 0; i < ARRAY_COUNT(this->mechanicalMalfunctionEffects); i++) {
-        for (j = 0; j < ARRAY_COUNT(this->mechanicalMalfunctionEffects[0]); j++) {
-            malfunctionEffect = &this->mechanicalMalfunctionEffects[i][j];
+    for (i = 0; i < ARRAY_COUNT(this->malfunctionEffects); i++) {
+        for (j = 0; j < ARRAY_COUNT(this->malfunctionEffects[0]); j++) {
+            malfunctionEffect = &this->malfunctionEffects[i][j];
             if (malfunctionEffect->life > 0) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, malfunctionEffect->life);
                 gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -2794,7 +2791,7 @@ void BossHakugin_DrawMechanicalMalfunctionEffects(BossHakugin* this, PlayState* 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80B0C7B0(BossHakugin* this, PlayState* play) {
+void BossHakugin_DrawChargingLightning(BossHakugin* this, PlayState* play) {
     s32 pad;
     s32 i;
 
@@ -2967,10 +2964,10 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_0380, &this->sfxPos);
     SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_3734[0], &this->electricBallSfxPos);
 
-    if (!this->blockMechanicalMalfunctionEffects) {
-        BossHakugin_AddMechanicalMalfunctionEffects(this, play);
+    if (!this->blockMalfunctionEffects) {
+        BossHakugin_AddMalfunctionEffects(this, play);
     }
-    this->blockMechanicalMalfunctionEffects = true;
+    this->blockMalfunctionEffects = true;
 
     if (this->actor.colorFilterTimer != 0) {
         func_800AE5A0(play);
@@ -2982,8 +2979,8 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
         BossHakugin_DrawRocks(this, play);
     }
 
-    BossHakugin_DrawMechanicalMalfunctionEffects(this, play);
-    func_80B0C7B0(this, play);
+    BossHakugin_DrawMalfunctionEffects(this, play);
+    BossHakugin_DrawChargingLightning(this, play);
     BossHakugin_DrawLightningSegments(this, play);
     BossHakugin_DrawElectricBalls(this, play);
 
