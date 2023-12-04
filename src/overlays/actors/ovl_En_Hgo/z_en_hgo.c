@@ -23,9 +23,6 @@ void EnHgo_Talk(EnHgo* this, PlayState* play);
 void EnHgo_SetupDialogueHandler(EnHgo* this);
 void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play);
 void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play);
-s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play);
-s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx);
 
 #define TALK_FLAG_NONE 0
 #define TALK_FLAG_HAS_SPOKEN_WITH_HUMAN (1 << 0)
@@ -283,7 +280,7 @@ void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play) {
     }
 }
 
-s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
+s32 EnHgo_HandleCutscene(EnHgo* this, PlayState* play) {
     s32 cueChannel;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_486)) {
@@ -389,7 +386,7 @@ void EnHgo_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
-    if (EnHgo_HandleCsAction(this, play)) {
+    if (EnHgo_HandleCutscene(this, play)) {
         Actor_TrackNone(&this->headRot, &this->torsoRot);
     } else if (this->actionFunc != EnHgo_DoNothing) {
         if (this->actionFunc != EnHgo_UpdateCollision) {
@@ -433,7 +430,7 @@ void EnHgo_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
+                          EnHgo_OverrideLimbDraw, EnHgo_PostLimbDraw, &this->actor);
     Matrix_Put(&this->mf);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gPamelasFatherHumanEyebrowsDL);

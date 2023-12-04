@@ -24,10 +24,8 @@ void EnHg_ChasePlayerWait(EnHg* this, PlayState* play);
 void EnHg_SetupReactToHit(EnHg* this);
 void EnHg_ReactToHit(EnHg* this, PlayState* play);
 void EnHg_PlayCutscene(EnHg* this, PlayState* play);
-void EnHg_SetupCsAction(EnHg* this);
-void EnHg_HandleCsAction(EnHg* this, PlayState* play);
-s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+void EnHg_SetupHandleCutscene(EnHg* this);
+void EnHg_HandleCutscene(EnHg* this, PlayState* play);
 
 typedef enum {
     /* 0 */ HG_CS_FIRST_ENCOUNTER,
@@ -259,7 +257,7 @@ void EnHg_UpdateCollision(EnHg* this, PlayState* play) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         if ((this->actionFunc != EnHg_ReactToHit) && (this->actionFunc != EnHg_PlayCutscene) &&
-            (this->actionFunc != EnHg_HandleCsAction)) {
+            (this->actionFunc != EnHg_HandleCutscene)) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
     }
@@ -272,7 +270,7 @@ void EnHg_SetupCutscene(EnHg* this) {
 void EnHg_PlayCutscene(EnHg* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
         CutsceneManager_Start(this->csIdList[this->csIdIndex], &this->actor);
-        EnHg_SetupCsAction(this);
+        EnHg_SetupHandleCutscene(this);
     } else {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -281,13 +279,13 @@ void EnHg_PlayCutscene(EnHg* this, PlayState* play) {
     }
 }
 
-void EnHg_SetupCsAction(EnHg* this) {
+void EnHg_SetupHandleCutscene(EnHg* this) {
     this->csIdList[3] = 99;
     this->csIdList[2] = 0;
-    this->actionFunc = EnHg_HandleCsAction;
+    this->actionFunc = EnHg_HandleCutscene;
 }
 
-void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
+void EnHg_HandleCutscene(EnHg* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_484)) {
         s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_484);
 
@@ -411,7 +409,7 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
 
     } else {
         if ((this->actor.xzDistToPlayer < 60.0f) && (fabsf(this->actor.playerHeightRel) < 40.0f)) {
-            if ((this->actionFunc != EnHg_PlayCutscene) && (this->actionFunc != EnHg_HandleCsAction)) {
+            if ((this->actionFunc != EnHg_PlayCutscene) && (this->actionFunc != EnHg_HandleCutscene)) {
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_61_02)) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_61_02);
                     this->csIdIndex = HG_CS_FIRST_ENCOUNTER;

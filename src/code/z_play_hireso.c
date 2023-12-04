@@ -1,6 +1,8 @@
 #include "global.h"
 #include "sys_cfb.h"
 #include "z64bombers_notebook.h"
+#include "z64malloc.h"
+
 #include "interface/schedule_static/schedule_static.h"
 #include "archives/schedule_dma_static/schedule_dma_static_yar.h"
 
@@ -696,13 +698,12 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
     s32 tensDigit;
     s32 hours;
 
-    time = (((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
+    time = CURRENT_TIME - CLOCK_TIME(6, 0);
     if (CURRENT_DAY == 0) {
         time = 0;
     }
     timeOfDayRectLeft = sBombersNotebookDayRectRectLeft[CURRENT_DAY] + (time / CLOCK_TIME(0, 10));
-    if ((CURRENT_DAY_CLAMP_MIN_1 == 1) ||
-        ((CURRENT_DAY_CLAMP_MIN_1 == 2) && (((void)0, gSaveContext.save.time) < CLOCK_TIME(12, 0)))) {
+    if ((CURRENT_DAY_CLAMP_MIN_1 == 1) || ((CURRENT_DAY_CLAMP_MIN_1 == 2) && (CURRENT_TIME < CLOCK_TIME(12, 0)))) {
         timeOfDayRectLeft -= 32;
         lineRectLeft = timeOfDayRectLeft + 32;
     } else if ((CURRENT_DAY_CLAMP_MIN_1 == 2) && (time >= (CLOCK_TIME(17, 0) - CLOCK_TIME(6, 0))) &&
@@ -770,7 +771,7 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
     gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
 
     tensDigit = 0;
-    onesDigit = ((void)0, gSaveContext.save.time) / CLOCK_TIME_HOUR;
+    onesDigit = CURRENT_TIME / CLOCK_TIME_HOUR;
     if (CURRENT_DAY == 0) {
         onesDigit = 6;
     }
@@ -807,7 +808,7 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
     if (CURRENT_DAY == 0) {
         onesDigit = TIME_TO_MINUTES_ALT_F((CLOCK_TIME_F(6, 0) - (hours * CLOCK_TIME_HOUR_F)));
     } else {
-        onesDigit = TIME_TO_MINUTES_ALT_F(((void)0, gSaveContext.save.time) - (hours * CLOCK_TIME_HOUR_F));
+        onesDigit = TIME_TO_MINUTES_ALT_F(CURRENT_TIME - (hours * CLOCK_TIME_HOUR_F));
     }
     do {
         if (onesDigit >= 10) {

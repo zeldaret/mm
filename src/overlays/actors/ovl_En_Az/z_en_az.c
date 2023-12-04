@@ -25,8 +25,8 @@ void EnAz_Draw(Actor* thisx, PlayState* play2);
 
 void func_80A982E0(PlayState* play, ActorPathing* actorPathing);
 void func_80A98414(EnAz* this, PlayState* play);
-s32 func_80A98DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void func_80A98E48(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+s32 EnAz_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+void EnAz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_80A98EFC(EnAz* this, PlayState* play, u16 textId, s32 animIndex, s32 brotherAnimIndex);
 void func_80A98F94(struct_80A98F94* yData, f32 frame, f32* yInterp);
 
@@ -346,8 +346,8 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
                 }
             }
             if (this->unk_374 & 1) {
-                SubS_CopyPointFromPathList(play->setupPathList, BEAVER_GET_PARAM_FF(thisx),
-                                           play->setupPathList[BEAVER_GET_PARAM_FF(thisx)].count - 1, &D_80A99E80);
+                SubS_CopyPointFromPathList(play->setupPathList, BEAVER_GET_PATH_INDEX(thisx),
+                                           play->setupPathList[BEAVER_GET_PATH_INDEX(thisx)].count - 1, &D_80A99E80);
             }
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                 if (this->unk_374 & 2) {
@@ -622,7 +622,7 @@ void func_80A95DA0(EnAz* this, PlayState* play) {
     ActorPathing* sp40 = &this->unk_300;
 
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, sp40, play->setupPathList,
-                           BEAVER_GET_PARAM_FF(&this->actor), 0, 0, 1, 1);
+                           BEAVER_GET_PATH_INDEX(&this->actor), 0, 0, 1, 1);
     this->unk_36C = 4.0f;
     this->actor.speed = 4.0f;
     this->actor.gravity = 0.0f;
@@ -1348,8 +1348,8 @@ s32 func_80A973B4(EnAz* this, PlayState* play) {
 }
 
 void func_80A97410(EnAz* this, PlayState* play) {
-    s16 sp56;
-    s16 sp54;
+    s16 screenPosX;
+    s16 screenPosY;
     s32 temp_a0;
 
     if (this->unk_378 != 0) {
@@ -1466,8 +1466,9 @@ void func_80A97410(EnAz* this, PlayState* play) {
                         this->unk_378 = 9;
                     }
                 } else {
-                    Actor_GetScreenPos(play, &this->actor, &sp56, &sp54);
-                    if ((sp56 >= 0) && (sp56 <= SCREEN_WIDTH) && (sp54 >= 0) && (sp54 <= SCREEN_HEIGHT) &&
+                    Actor_GetScreenPos(play, &this->actor, &screenPosX, &screenPosY);
+                    if ((screenPosX >= 0) && (screenPosX <= SCREEN_WIDTH) && (screenPosY >= 0) &&
+                        (screenPosY <= SCREEN_HEIGHT) &&
                         Actor_OfferTalkExchange(&this->actor, play, 120.0f, 120.0f, PLAYER_IA_NONE)) {
                         this->unk_3D2 = func_80A97274(this, play);
                         if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {
@@ -1613,7 +1614,7 @@ void func_80A97E48(EnAz* this, PlayState* play) {
 
 void func_80A97EAC(EnAz* this, PlayState* play) {
     SubS_ActorPathing_Init(play, &this->actor.world.pos, &this->actor, &this->unk_300, play->setupPathList,
-                           BEAVER_GET_PARAM_FF(&this->actor), 0, 0, 1, 0);
+                           BEAVER_GET_PATH_INDEX(&this->actor), 0, 0, 1, 0);
     this->unk_36C = 8.0f;
     this->actor.speed = 8.0f;
     this->actor.gravity = 0.0f;
@@ -1895,14 +1896,14 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
 
     if (this->unk_374 & 2) {
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              func_80A98DA4, func_80A98E48, &this->actor);
+                              EnAz_OverrideLimbDraw, EnAz_PostLimbDraw, &this->actor);
     } else {
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sYoungerBrotherEyeTextures[this->unk_37E]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sYoungerBrotherBeltTextures[this->unk_380]));
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              func_80A98DA4, func_80A98E48, &this->actor);
+                              EnAz_OverrideLimbDraw, EnAz_PostLimbDraw, &this->actor);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -1966,13 +1967,14 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 func_80A98DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnAz_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnAz* this = THIS;
 
     if ((limbIndex == BEAVER_OLDER_BROTHER_LIMB_NONE) && ((play->gameplayFrames % 2) != 0)) {
         *dList = NULL;
     }
     if (limbIndex == BEAVER_OLDER_BROTHER_LIMB_NONE) {
+        // Set to itself
         rot->x = rot->x;
         rot->y = rot->y;
         rot->z = rot->z;
@@ -1989,7 +1991,7 @@ s32 func_80A98DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-void func_80A98E48(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnAz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80A99410 = { 700.0f, 0.0f, 0.0f };
     static Vec3f D_80A9941C = { -500.0f, 0.0f, 0.0f };
     static Vec3f D_80A99428 = { -1200.0f, 0.0f, 1000.0f };

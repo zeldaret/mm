@@ -65,8 +65,7 @@ void EnKujiya_Init(Actor* thisx, PlayState* play) {
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
 
-    if (EnKujiya_CheckBoughtTicket() && (gSaveContext.save.time >= CLOCK_TIME(6, 0)) &&
-        (gSaveContext.save.time < CLOCK_TIME(18, 0))) {
+    if (EnKujiya_CheckBoughtTicket() && (CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME < CLOCK_TIME(18, 0))) {
         this->actor.shape.rot.y = 0;
     } else {
         this->actor.shape.rot.y = 0x7555;
@@ -83,7 +82,7 @@ void EnKujiya_SetupWait(EnKujiya* this) {
 
 void EnKujiya_Wait(EnKujiya* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time < CLOCK_TIME(18, 0))) {
+        if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME < CLOCK_TIME(18, 0))) {
             if (EnKujiya_CheckBoughtTicket()) {
                 Message_StartTextbox(play, 0x2B61, &this->actor);
                 this->textId = 0x2B61; // Come back tomorrow
@@ -100,8 +99,7 @@ void EnKujiya_Wait(EnKujiya* this, PlayState* play) {
         }
 
         EnKujiya_SetupTalk(this);
-    } else if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) && EnKujiya_CheckBoughtTicket() &&
-               (this->actor.shape.rot.y == 0)) {
+    } else if ((CURRENT_TIME >= CLOCK_TIME(18, 0)) && EnKujiya_CheckBoughtTicket() && (this->actor.shape.rot.y == 0)) {
         EnKujiya_SetupTurnToOpen(this);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
         Actor_OfferTalk(&this->actor, play, 100.0f);

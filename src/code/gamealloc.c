@@ -1,17 +1,17 @@
-#include "global.h"
-#include "system_malloc.h"
+#include "gamealloc.h"
+
+#include "libc64/malloc.h"
 
 void GameAlloc_Log(GameAlloc* this) {
-    GameAllocEntry* iter;
+    GameAllocEntry* iter = this->base.next;
 
-    iter = this->base.next;
     while (iter != &this->base) {
         iter = iter->next;
     }
 }
 
 void* GameAlloc_Malloc(GameAlloc* this, size_t size) {
-    GameAllocEntry* ptr = SystemArena_Malloc(size + sizeof(GameAllocEntry));
+    GameAllocEntry* ptr = malloc(size + sizeof(GameAllocEntry));
 
     if (ptr != NULL) {
         ptr->size = size;
@@ -34,7 +34,7 @@ void GameAlloc_Free(GameAlloc* this, void* data) {
         ptr->prev->next = ptr->next;
         ptr->next->prev = ptr->prev;
         this->head = this->base.prev;
-        SystemArena_Free(ptr);
+        free(ptr);
     }
 }
 
@@ -45,7 +45,7 @@ void GameAlloc_Cleanup(GameAlloc* this) {
     while (&this->base != next) {
         cur = next;
         next = next->next;
-        SystemArena_Free(cur);
+        free(cur);
     }
 
     this->head = &this->base;

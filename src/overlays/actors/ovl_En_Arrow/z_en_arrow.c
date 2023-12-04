@@ -60,20 +60,64 @@ static InitChainEntry sInitChain[] = {
 
 void EnArrow_Init(Actor* thisx, PlayState* play) {
     static EffectBlureInit2 D_8088C234 = {
-        0, 4, 0, { 0, 255, 200, 255 },   { 0, 255, 255, 255 }, { 0, 255, 200, 0 }, { 0, 255, 255, 0 }, 16,
-        0, 1, 0, { 255, 255, 170, 255 }, { 0, 150, 0, 0 },
+        0,
+        EFFECT_BLURE_ELEMENT_FLAG_4,
+        0,
+        { 0, 255, 200, 255 },
+        { 0, 255, 255, 255 },
+        { 0, 255, 200, 0 },
+        { 0, 255, 255, 0 },
+        16,
+        0,
+        EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS,
+        0,
+        { 255, 255, 170, 255 },
+        { 0, 150, 0, 0 },
     };
     static EffectBlureInit2 D_8088C258 = {
-        0, 4, 0, { 0, 255, 200, 255 }, { 0, 255, 255, 255 }, { 0, 255, 200, 0 }, { 0, 255, 255, 0 }, 16,
-        0, 1, 0, { 255, 200, 0, 255 }, { 255, 0, 0, 0 },
+        0,
+        EFFECT_BLURE_ELEMENT_FLAG_4,
+        0,
+        { 0, 255, 200, 255 },
+        { 0, 255, 255, 255 },
+        { 0, 255, 200, 0 },
+        { 0, 255, 255, 0 },
+        16,
+        0,
+        EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS,
+        0,
+        { 255, 200, 0, 255 },
+        { 255, 0, 0, 0 },
     };
     static EffectBlureInit2 D_8088C27C = {
-        0, 4, 0, { 0, 255, 200, 255 },   { 0, 255, 255, 255 }, { 0, 255, 200, 0 }, { 0, 255, 255, 0 }, 16,
-        0, 1, 0, { 170, 255, 255, 255 }, { 0, 0x64, 255, 0 },
+        0,
+        EFFECT_BLURE_ELEMENT_FLAG_4,
+        0,
+        { 0, 255, 200, 255 },
+        { 0, 255, 255, 255 },
+        { 0, 255, 200, 0 },
+        { 0, 255, 255, 0 },
+        16,
+        0,
+        EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS,
+        0,
+        { 170, 255, 255, 255 },
+        { 0, 0x64, 255, 0 },
     };
     static EffectBlureInit2 D_8088C2A0 = {
-        0, 4, 0, { 0, 255, 200, 255 },   { 0, 255, 255, 255 }, { 0, 255, 200, 0 }, { 0, 255, 255, 0 }, 16,
-        0, 1, 0, { 255, 255, 170, 255 }, { 255, 255, 0, 0 },
+        0,
+        EFFECT_BLURE_ELEMENT_FLAG_4,
+        0,
+        { 0, 255, 200, 255 },
+        { 0, 255, 255, 255 },
+        { 0, 255, 200, 0 },
+        { 0, 255, 255, 0 },
+        16,
+        0,
+        EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS,
+        0,
+        { 255, 255, 170, 255 },
+        { 255, 255, 0, 0 },
     };
     EnArrow* this = THIS;
 
@@ -270,12 +314,12 @@ void func_8088A894(EnArrow* this, PlayState* play) {
 }
 
 void func_8088AA98(EnArrow* this, PlayState* play) {
-    WaterBox* sp54;
+    WaterBox* waterBox;
     f32 sp50 = this->actor.world.pos.y;
     Vec3f sp44;
     f32 temp_f0;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &waterBox) &&
         (this->actor.world.pos.y < sp50) && !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         this->actor.bgCheckFlags |= BGCHECKFLAG_WATER;
 

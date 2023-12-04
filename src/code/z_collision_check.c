@@ -1,6 +1,10 @@
 #include "prevent_bss_reordering.h"
-#include "global.h"
 #include "z64collision_check.h"
+
+#include "z64actor.h"
+#include "z64effect.h"
+#include "z64malloc.h"
+#include "global.h"
 
 typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
 typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
@@ -73,7 +77,7 @@ f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* at, ColliderInfo* atInfo
     if (ac->actor->colChkInfo.damageTable != NULL) {
         dmgFlags = atInfo->toucher.dmgFlags;
 
-        for (i = 0; i != ARRAY_COUNT(ac->actor->colChkInfo.damageTable->attack); i++) {
+        for (i = 0; i < ARRAY_COUNT(ac->actor->colChkInfo.damageTable->attack); i++) {
             if (dmgFlags == 1) {
                 break;
             }
@@ -1047,10 +1051,10 @@ s32 Collider_ResetSphereOC(PlayState* play, Collider* collider) {
  * Initializes an OcLine to default values
  */
 s32 Collider_InitLine(PlayState* play, OcLine* line) {
-    static Vec3f defaultLinePoint = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sDefaultLinePoint = { 0.0f, 0.0f, 0.0f };
 
-    Math_Vec3f_Copy(&line->line.a, &defaultLinePoint);
-    Math_Vec3f_Copy(&line->line.b, &defaultLinePoint);
+    Math_Vec3f_Copy(&line->line.a, &sDefaultLinePoint);
+    Math_Vec3f_Copy(&line->line.b, &sDefaultLinePoint);
     return 1;
 }
 

@@ -4,15 +4,20 @@
 
 beginseg
     name "makerom"
-    address 0x8007F000
     include "build/asm/makerom/rom_header.o"
     include "build/asm/makerom/ipl3.o"
     include "build/asm/makerom/entry.o"
 endseg
 
 beginseg
+    name "framebuffer_lo"
+    address 0x80000500
+    flags NOLOAD
+    include "build/src/buffers/framebuffer_lo.o"
+endseg
+
+beginseg
     name "boot"
-    address 0x80080060
     include "build/src/boot/boot_main.o"
     include "build/data/boot/rspboot.data.o"
     include "build/src/boot/idle.o"
@@ -36,15 +41,15 @@ beginseg
     include "build/src/boot/O2/debug.o"
     include "build/src/boot/O2/system_heap.o"
     include "build/src/boot/O2/padsetup.o"
-    include "build/src/boot/O2/math64.o"
-    include "build/asm/boot/fp.text.o"
+    include "build/src/boot/libc64/math64.o"
+    include "build/asm/boot/fp.text.o" // Part of libc64
     include "build/data/boot/fp.data.o"
-    include "build/src/boot/O2/system_malloc.o"
-    include "build/src/boot/O2/rand.o"
-    include "build/src/boot/O2/__osMalloc.o"
-    include "build/src/boot/O2/sprintf.o"
-    include "build/src/boot/O2/printutils.o"
-    include "build/src/boot/O2/sleep.o"
+    include "build/src/boot/libc64/malloc.o"
+    include "build/src/boot/libc64/qrand.o"
+    include "build/src/boot/libc64/__osMalloc.o"
+    include "build/src/boot/libc64/sprintf.o"
+    include "build/src/boot/libc64/aprintf.o"
+    include "build/src/boot/libc64/sleep.o"
     include "build/asm/boot/setcause.text.o"
     include "build/src/libultra/os/sendmesg.o"
     include "build/src/libultra/io/pfsfreeblocks.o"
@@ -232,11 +237,11 @@ beginseg
     include "build/src/libultra/os/sethwinterrupt.o"
     include "build/asm/boot/getwatchlo.text.o"
     include "build/asm/boot/setwatchlo.text.o"
-    include "build/src/boot/O2/fmodf.o"
-    include "build/src/boot/O2/__osMemset.o"
-    include "build/src/boot/O2/__osStrcmp.o"
-    include "build/src/boot/O2/__osStrcpy.o"
-    include "build/src/boot/O2/__osMemcpy.o"
+    include "build/src/boot/libm/fmodf.o"
+    include "build/src/boot/libc/memset.o"
+    include "build/src/boot/libc/strcmp.o"
+    include "build/src/boot/libc/strcpy.o"
+    include "build/src/boot/libc/memmove.o"
     include "build/src/boot/build.o"
 endseg
 
@@ -612,13 +617,30 @@ beginseg
     include "build/data/code/njpgdspMain.rodata.o"
 endseg
 
+// The game expects all the segments after the `code` segment and before the first overlay to be `NOLOAD` ones
+
 beginseg
     name "buffers"
     flags NOLOAD
     include "build/src/buffers/gfxyield.o"
     include "build/src/buffers/gfxstack.o"
     include "build/src/buffers/gfxpools.o"
-    include "build/data/code/buffers.bss.o"
+    include "build/src/buffers/audio_heap.o"
+endseg
+
+beginseg
+    name "system_heap"
+    flags NOLOAD
+    // This segment is just a dummy that is used to know where the other buffers (non framebuffers) end
+    include "build/src/buffers/system_heap.o"
+endseg
+
+beginseg
+    name "framebuffer_hi"
+    flags NOLOAD
+    // This has to be fixed location in VRAM. See the FRAMEBUFFERS_START_ADDR define on `buffers.h` for a more in-depth explanation
+    address 0x80780000
+    include "build/src/buffers/framebuffer_hi.o"
 endseg
 
 beginseg
@@ -2316,9 +2338,7 @@ beginseg
     name "ovl_Boss_05"
     compress
     include "build/src/overlays/actors/ovl_Boss_05/z_boss_05.o"
-    include "build/data/ovl_Boss_05/ovl_Boss_05.data.o"
-    include "build/data/ovl_Boss_05/ovl_Boss_05.bss.o"
-    include "build/data/ovl_Boss_05/ovl_Boss_05.reloc.o"
+    include "build/src/overlays/actors/ovl_Boss_05/ovl_Boss_05_reloc.o"
 endseg
 
 beginseg
@@ -6292,11 +6312,11 @@ beginseg
 endseg
 
 beginseg
-    name "object_rs"
+    name "object_rsn"
     compress
     romalign 0x1000
     number 6
-    include "build/assets/objects/object_rs/object_rs.o"
+    include "build/assets/objects/object_rsn/object_rsn.o"
 endseg
 
 beginseg

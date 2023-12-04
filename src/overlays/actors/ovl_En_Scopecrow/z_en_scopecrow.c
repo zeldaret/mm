@@ -169,35 +169,38 @@ void func_80BCD2BC(EnScopecrow* this, PlayState* play) {
                                   this->actor.csId, this->actor.halfDaysBits, NULL);
 }
 
-s32 func_80BCD334(EnScopecrow* this, Path* path, s32 pointIndex) {
+s32 EnScopecrow_HasReachedPoint(EnScopecrow* this, Path* path, s32 pointIndex) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
-    s32 sp58 = path->count;
+    s32 count = path->count;
     s32 index = pointIndex;
-    s32 ret = false;
-    f32 phi_fa0;
-    f32 phi_fa1;
-    Vec3f sp3C;
-    Vec3f sp30;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    Math_Vec3s_ToVec3f(&sp30, &points[index]);
+    Math_Vec3s_ToVec3f(&point, &points[index]);
 
     if (index == 0) {
-        phi_fa0 = points[1].x - points[0].x;
-        phi_fa1 = points[1].z - points[0].z;
-    } else if ((sp58 - 1) == index) {
-        phi_fa0 = points[sp58 - 1].x - points[sp58 - 2].x;
-        phi_fa1 = points[sp58 - 1].z - points[sp58 - 2].z;
+        diffX = points[1].x - points[0].x;
+        diffZ = points[1].z - points[0].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 1].x - points[count - 2].x;
+        diffZ = points[count - 1].z - points[count - 2].z;
     } else {
-        phi_fa0 = points[index + 1].x - points[index - 1].x;
-        phi_fa1 = points[index + 1].z - points[index - 1].z;
+        diffX = points[index + 1].x - points[index - 1].x;
+        diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_fa0, phi_fa1)), &sp3C.z, &sp3C.y, &sp3C.x);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
-    if (((this->actor.world.pos.x * sp3C.z) + (sp3C.y * this->actor.world.pos.z) + sp3C.x) > 0.0f) {
-        ret = true;
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
-    return ret;
+
+    return reached;
 }
 
 f32 func_80BCD4D0(Path* path, s32 count, Vec3f* arg2, Vec3s* arg3) {
@@ -244,7 +247,7 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Math_SmoothStepToS(&this->actor.world.rot.x, -sp30.x, 4, 0x3E8, 1);
 
-        if (func_80BCD334(this, this->path, this->unk_1FC)) {
+        if (EnScopecrow_HasReachedPoint(this, this->path, this->unk_1FC)) {
             if ((this->unk_1FC == this->unk_262) && func_80BCD1AC(this->unk_260)) {
                 func_80BCD2BC(this, play);
             }
@@ -306,7 +309,7 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
                            OBJECT_CROW_LIMB_MAX);
         ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);

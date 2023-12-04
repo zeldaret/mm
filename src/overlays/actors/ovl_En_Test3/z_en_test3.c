@@ -5,6 +5,9 @@
  */
 
 #include "z_en_test3.h"
+
+#include "z64malloc.h"
+
 #include "objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -234,8 +237,19 @@ static PlayerAgeProperties sAgeProperties = {
 };
 
 static EffectBlureInit2 sBlureInit = {
-    0, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 4,
-    0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
+    0,
+    EFFECT_BLURE_ELEMENT_FLAG_8,
+    0,
+    { 255, 255, 255, 255 },
+    { 255, 255, 255, 64 },
+    { 255, 255, 255, 0 },
+    { 255, 255, 255, 0 },
+    4,
+    0,
+    EFF_BLURE_DRAW_MODE_SMOOTH,
+    0,
+    { 0, 0, 0, 0 },
+    { 0, 0, 0, 0 },
 };
 
 static EffectTireMarkInit sTireMarkInit = {
@@ -522,8 +536,8 @@ s32 func_80A3F09C(EnTest3* this, PlayState* play) {
 }
 
 void func_80A3F0B0(EnTest3* this, PlayState* play) {
-    func_800BC154(play, &play->actorCtx, &this->unk_D90->actor, 2);
-    func_800BC154(play, &play->actorCtx, &this->player.actor, 4);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->unk_D90->actor, ACTORCAT_PLAYER);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->player.actor, ACTORCAT_NPC);
     this->unk_D90->stateFlags1 &= ~PLAYER_STATE1_20;
 }
 
@@ -666,8 +680,8 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             play->actorCtx.flags &= ~ACTORCTX_FLAG_4;
             this->player.stateFlags2 &= ~PLAYER_STATE2_40000;
             this->unk_D90->stateFlags1 |= PLAYER_STATE1_20;
-            func_800BC154(play, &play->actorCtx, &this->unk_D90->actor, 4);
-            func_800BC154(play, &play->actorCtx, &this->player.actor, 2);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->unk_D90->actor, ACTORCAT_NPC);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->player.actor, ACTORCAT_PLAYER);
             CutsceneManager_SetReturnCamera(this->subCamId);
             play->tryPlayerCsAction(play, &this->player, PLAYER_CSACTION_WAIT);
         }
@@ -782,8 +796,8 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
     } else if ((D_80A41D20 == 2) && func_80A3E9DC(this, play)) {
         CutsceneManager_SetReturnCamera(CAM_ID_MAIN);
         Environment_StartTime();
-        if (((void)0, gSaveContext.save.time) > CLOCK_TIME(6, 0)) {
-            Environment_SetTimeJump(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
+        if (CURRENT_TIME > CLOCK_TIME(6, 0)) {
+            Environment_SetTimeJump(TIME_TO_MINUTES_ALT_F(fabsf((s16)-CURRENT_TIME)));
         }
         if (play->actorCtx.flags & ACTORCTX_FLAG_6) {
             SET_WEEKEVENTREG(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT);
