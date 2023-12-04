@@ -97,13 +97,12 @@ void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this) {
         s32 pad;
         Vec3f* bodyPartPos;
         BossHakugin* goht = (BossHakugin*)this->actor;
-        s32 gohtIndex = goht->mechanicalMalfunctionBodyPartIndex - 3;
+        s32 gohtIndex = goht->malfunctionBodyPartIndex - 3;
 
         if (gohtIndex < 0) {
-            bodyPartPos =
-                &goht->mechanicalMalfunctionEffects[this->rParams - FHGFLASH_SHOCK_GOHT_2][GOHT_BODYPART_MAX - 3].pos;
+            bodyPartPos = &goht->malfunctionEffects[this->rParams - FHGFLASH_SHOCK_GOHT_2][GOHT_BODYPART_MAX - 3].pos;
         } else {
-            bodyPartPos = &goht->mechanicalMalfunctionEffects[this->rParams - FHGFLASH_SHOCK_GOHT_2][gohtIndex].pos;
+            bodyPartPos = &goht->malfunctionEffects[this->rParams - FHGFLASH_SHOCK_GOHT_2][gohtIndex].pos;
         }
 
         this->pos.x = Rand_CenteredFloat(70.0f) + bodyPartPos->x;

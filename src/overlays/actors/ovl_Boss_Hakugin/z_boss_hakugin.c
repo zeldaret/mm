@@ -530,7 +530,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_09D0); i++) {
         this->unk_09D0[i] = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_HAKUROCK, 0.0f, 0.0f, 0.0f,
-                                               0, 0, 0, EN_HAKUROCK_TYPE_UNK_2);
+                                               0, 0, 0, EN_HAKUROCK_TYPE_FALLING_STALACTITE);
     }
 
     for (i = 0; i < GOHT_ROCK_COUNT; i++) {
@@ -928,16 +928,16 @@ void func_80B0696C(BossHakugin* this, Vec3f* pos) {
     }
 }
 
-void func_80B06B20(BossHakugin* this, Vec3f* arg1) {
+void BossHakugin_SpawnBoulder(BossHakugin* this, Vec3f* pos) {
     Actor* boulder;
     s32 i;
 
-    if (((this->unk_044C.z < -200.0f) && (this->actor.speed > 10.0f) && (this->unk_018D == 0) &&
+    if (((this->unk_044C.z < -200.0f) && (this->actor.speed > 10.0f) && (this->preventBoulderSpawnCount == 0) &&
          (Rand_ZeroOne() < 0.4f))) {
-        this->unk_018D = 4;
+        this->preventBoulderSpawnCount = 4;
     } else {
-        if (this->unk_018D > 0) {
-            this->unk_018D--;
+        if (this->preventBoulderSpawnCount > 0) {
+            this->preventBoulderSpawnCount--;
         }
         return;
     }
@@ -945,31 +945,32 @@ void func_80B06B20(BossHakugin* this, Vec3f* arg1) {
     for (i = 0; i < ARRAY_COUNT(this->hakurockBoulders); i++) {
         boulder = this->hakurockBoulders[i];
 
-        if (boulder->params == EN_HAKUROCK_TYPE_UNK_0) {
-            Math_Vec3f_Copy(&boulder->world.pos, arg1);
+        if (boulder->params == EN_HAKUROCK_TYPE_NONE) {
+            Math_Vec3f_Copy(&boulder->world.pos, pos);
             boulder->params = EN_HAKUROCK_TYPE_BOULDER;
             break;
         }
     }
 }
 
-void func_80B06C08(BossHakugin* this) {
+void BossHakugin_SpawnStalactite(BossHakugin* this) {
+    Actor* stalactite;
     s32 i;
 
-    if ((this->unk_018E == 0) && (this->actor.colChkInfo.health < 0x14) && (Rand_ZeroOne() < 0.35f)) {
-        this->unk_018E = 4;
+    if ((this->preventStalactiteSpawnCount == 0) && (this->actor.colChkInfo.health < 20) && (Rand_ZeroOne() < 0.35f)) {
+        this->preventStalactiteSpawnCount = 4;
     } else {
-        if (this->unk_018E > 0) {
-            this->unk_018E--;
+        if (this->preventStalactiteSpawnCount > 0) {
+            this->preventStalactiteSpawnCount--;
         }
         return;
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_09D0); i++) {
-        Actor* tmp = this->unk_09D0[i];
+        stalactite = this->unk_09D0[i];
 
-        if (tmp->params == EN_HAKUROCK_TYPE_UNK_0) {
-            tmp->params = EN_HAKUROCK_TYPE_UNK_2;
+        if (stalactite->params == EN_HAKUROCK_TYPE_NONE) {
+            stalactite->params = EN_HAKUROCK_TYPE_FALLING_STALACTITE;
             return;
         }
     }
@@ -979,12 +980,12 @@ void BossHakugin_SpawnBomb(BossHakugin* this, PlayState* play) {
     EnBom* bomb;
     s16 temp_a1;
 
-    if ((this->actor.speed > 10.0f) && ((s32)this->actor.colChkInfo.health < 10) && (this->unk_018F == 0) &&
-        (Rand_ZeroOne() < 0.35f)) {
-        this->unk_018F = 4;
+    if ((this->actor.speed > 10.0f) && ((s32)this->actor.colChkInfo.health < 10) &&
+        (this->preventBombSpawnCount == 0) && (Rand_ZeroOne() < 0.35f)) {
+        this->preventBombSpawnCount = 4;
     } else {
-        if (this->unk_018F > 0) {
-            this->unk_018F--;
+        if (this->preventBombSpawnCount > 0) {
+            this->preventBombSpawnCount--;
         }
         return;
     }
@@ -1126,16 +1127,16 @@ void func_80B07450(BossHakugin* this, PlayState* play) {
             BossHakugin_RequestQuakeAndRumble(this, play, 17000, 6.5f * quakeVerticalMag, 10);
         }
 
-        func_80B06C08(this);
+        BossHakugin_SpawnStalactite(this);
     } else if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
         Math_Vec3f_Copy(&pos, &this->bodyPartsPos[sLimbToBodyParts[GOHT_LIMB_BACK_LEFT_HOOF]]);
-        func_80B06B20(this, &pos);
+        BossHakugin_SpawnBoulder(this, &pos);
     } else if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
         Math_Vec3f_Copy(&pos, &this->bodyPartsPos[sLimbToBodyParts[GOHT_LIMB_FRONT_RIGHT_HOOF]]);
         BossHakugin_SpawnBomb(this, play);
     } else if (Animation_OnFrame(&this->skelAnime, 11.0f)) {
         Math_Vec3f_Copy(&pos, &this->bodyPartsPos[sLimbToBodyParts[GOHT_LIMB_BACK_RIGHT_HOOF]]);
-        func_80B06B20(this, &pos);
+        BossHakugin_SpawnBoulder(this, &pos);
     } else {
         return;
     }
@@ -1486,7 +1487,7 @@ void BossHakugin_IntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
         if (Animation_OnFrame(&this->skelAnime, 90.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
             for (i = 6; i < ARRAY_COUNT(this->unk_09D0); i++) {
-                this->unk_09D0[i]->params = EN_HAKUROCK_TYPE_UNK_0;
+                this->unk_09D0[i]->params = EN_HAKUROCK_TYPE_NONE;
             }
         }
 
@@ -1532,7 +1533,7 @@ void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 25.0f, 0.5f);
     this->skelAnime.playSpeed = (this->actor.speed / 32.0f) + 0.5f;
     func_80B07450(this, play);
-    this->unk_018D = 10;
+    this->preventBoulderSpawnCount = 10;
     SkelAnime_Update(&this->skelAnime);
     this->unk_019C++;
     if (this->unk_019C < 8) {
@@ -1559,7 +1560,7 @@ void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
         if (this->unk_019C == 42) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_WALL);
             for (i = 0; i < 6; i++) {
-                this->unk_09D0[i]->params = EN_HAKUROCK_TYPE_UNK_0;
+                this->unk_09D0[i]->params = EN_HAKUROCK_TYPE_NONE;
             }
         }
     }
@@ -1893,7 +1894,7 @@ void BossHakugin_ChargeLightning(BossHakugin* this, PlayState* play) {
     }
 
     if ((temp_fv1 > 400.0f) && ((play->gameplayFrames & 0xF) == 0xF)) {
-        func_80B06C08(this);
+        BossHakugin_SpawnStalactite(this);
         return;
     }
 
@@ -2015,9 +2016,9 @@ void BossHakugin_DeathCutscenePart1(BossHakugin* this, PlayState* play) {
 
     Math_StepToF(&this->actor.speed, 15.0f, 2.0f);
     SkelAnime_Update(&this->skelAnime);
-    this->unk_018D = 10;
-    this->unk_018E = 10;
-    this->unk_018F = 10;
+    this->preventBoulderSpawnCount = 10;
+    this->preventStalactiteSpawnCount = 10;
+    this->preventBombSpawnCount = 10;
     func_80B07450(this, play);
     Math_SmoothStepToS(&this->actor.home.rot.y, this->unk_01A0, 5, 0x800, 0x100);
     this->unk_019C--;
@@ -2083,9 +2084,9 @@ void BossHakugin_DeathCutscenePart2(BossHakugin* this, PlayState* play) {
 
     Math_Vec3f_StepTo(&this->subCamEye, &eyeTarget, 25.0f);
     Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &this->subCamEye);
-    this->unk_018D = 10;
-    this->unk_018E = 10;
-    this->unk_018F = 10;
+    this->preventBoulderSpawnCount = 10;
+    this->preventStalactiteSpawnCount = 10;
+    this->preventBombSpawnCount = 10;
     func_80B07450(this, play);
 
     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_019E, 0x300) &&

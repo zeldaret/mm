@@ -97,9 +97,9 @@ typedef struct BossHakugin {
     /* 0x0144 */ SkelAnime skelAnime;
     /* 0x0188 */ BossHakuginActionFunc actionFunc;
     /* 0x018C */ u8 unk_018C;
-    /* 0x018D */ u8 unk_018D;
-    /* 0x018E */ u8 unk_018E;
-    /* 0x018F */ u8 unk_018F;
+    /* 0x018D */ u8 preventBoulderSpawnCount;
+    /* 0x018E */ u8 preventStalactiteSpawnCount;
+    /* 0x018F */ u8 preventBombSpawnCount;
     /* 0x0190 */ u8 blockMalfunctionEffects; // boolean?
     /* 0x0191 */ u8 malfunctionBodyPartIndex; // See GohtBodyPart
     /* 0x0192 */ u8 unk_0192; // See `GohtUnk192`
