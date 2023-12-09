@@ -625,7 +625,7 @@ void func_80B058C0(BossHakugin* this) {
     Actor* last;
     Actor* now = this->unk_09D0[i++];
 
-    now->params = EN_HAKUROCK_TYPE_FENCE_PILLAR;
+    now->params = EN_HAKUROCK_TYPE_LARGE_STALACTITE;
     now->world.pos.x = -500.0f;
     now->world.pos.y = this->actor.world.pos.y;
     now->world.pos.z = -3800.0f / 3.0f;
@@ -635,7 +635,7 @@ void func_80B058C0(BossHakugin* this) {
         last = now;
         now = this->unk_09D0[i++];
 
-        now->params = EN_HAKUROCK_TYPE_FENCE_PILLAR;
+        now->params = EN_HAKUROCK_TYPE_LARGE_STALACTITE;
         now->world.pos.x = last->world.pos.x;
         now->world.pos.y = this->actor.world.pos.y;
         now->world.pos.z = last->world.pos.z - 133.333333f; // 4000 / 3
@@ -646,7 +646,7 @@ void func_80B058C0(BossHakugin* this) {
         last = (i < 8) ? this->unk_09D0[i - 6] : this->unk_09D0[i - 4];
         now = this->unk_09D0[i++];
 
-        now->params = EN_HAKUROCK_TYPE_FENCE_PILLAR;
+        now->params = EN_HAKUROCK_TYPE_LARGE_STALACTITE;
         now->world.pos.x = this->actor.world.pos.x;
         now->world.pos.y = this->actor.world.pos.y;
         now->world.pos.z = last->world.pos.z;

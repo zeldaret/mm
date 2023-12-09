@@ -17,8 +17,8 @@ void EnHakurock_Init(Actor* thisx, PlayState* play);
 void EnHakurock_Destroy(Actor* thisx, PlayState* play);
 void EnHakurock_Update(Actor* thisx, PlayState* play);
 
-void func_80B21BE0(BossHakugin* parent, Vec3f* pos, s32 arg2);
-void func_80B21EA4(EnHakurock* this, s32 arg1);
+void EnHakurock_AddEffect(BossHakugin* parent, Vec3f* pos, s32 type);
+void EnHakurock_SpawnEffect(EnHakurock* this, s32 type);
 void EnHakurock_SetupWaitForSignal(EnHakurock* this);
 void EnHakurock_WaitForSignal(EnHakurock* this, PlayState* play);
 void EnHakurock_Boulder_SetupMove(EnHakurock* this);
@@ -27,10 +27,17 @@ void EnHakurock_Stalactite_SetupFall(EnHakurock* this, PlayState* play);
 void EnHakurock_Stalactite_Fall(EnHakurock* this, PlayState* play);
 void EnHakurock_Stalactite_SetupStuckInGround(EnHakurock* this);
 void EnHakurock_Stalactite_StuckInGround(EnHakurock* this, PlayState* play);
-void func_80B226AC(EnHakurock* this);
-void func_80B22750(EnHakurock* this, PlayState* play);
+void EnHakurock_LargeStalactite_SetupWait(EnHakurock* this);
+void EnHakurock_LargeStalactite_Wait(EnHakurock* this, PlayState* play);
 void EnHakurock_DrawBoulder(Actor* thisx, PlayState* play);
 void EnHakurock_DrawStalactite(Actor* thisx, PlayState* play);
+
+typedef enum EnHakurockEffectType {
+    /* 0 */ EN_HAKUROCK_EFFECT_TYPE_0,
+    /* 1 */ EN_HAKUROCK_EFFECT_TYPE_1,
+    /* 2 */ EN_HAKUROCK_EFFECT_TYPE_2,
+    /* 3 */ EN_HAKUROCK_EFFECT_TYPE_3
+} EnHakurockEffectType;
 
 ActorInit En_Hakurock_InitVars = {
     /**/ ACTOR_EN_HAKUROCK,
@@ -90,7 +97,7 @@ void EnHakurock_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80B21BE0(BossHakugin* parent, Vec3f* pos, s32 arg2) {
+void EnHakurock_AddEffect(BossHakugin* parent, Vec3f* pos, s32 type) {
     s32 i;
 
     for (i = 0; i < GOHT_ROCK_COUNT; i++) {
@@ -108,7 +115,7 @@ void func_80B21BE0(BossHakugin* parent, Vec3f* pos, s32 arg2) {
             rock->velocity.y = velocityGeo.r * Math_SinS(velocityGeo.pitch);
             rock->velocity.z = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_CosS(velocityGeo.yaw);
 
-            if ((arg2 == 1) || (arg2 == 3)) {
+            if ((type == EN_HAKUROCK_EFFECT_TYPE_1) || (type == EN_HAKUROCK_EFFECT_TYPE_3)) {
                 rock->scale = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
                 rock->pos.x = pos->x + ((Rand_ZeroFloat(2.0f) + 9.0f) * rock->velocity.x);
                 rock->pos.y = pos->y + ((Rand_ZeroFloat(2.0f) + 3.0f) * rock->velocity.y);
@@ -131,25 +138,25 @@ void func_80B21BE0(BossHakugin* parent, Vec3f* pos, s32 arg2) {
     }
 }
 
-void func_80B21EA4(EnHakurock* this, s32 arg1) {
+void EnHakurock_SpawnEffect(EnHakurock* this, s32 type) {
     Vec3f pos;
     s32 i;
     s32 j;
     f32 offset;
     s32 count;
 
-    if (arg1 == 0) {
+    if (type == EN_HAKUROCK_EFFECT_TYPE_0) {
         for (i = 0; i < 20; i++) {
-            func_80B21BE0((BossHakugin*)this->actor.parent, &this->actor.world.pos, arg1);
+            EnHakurock_AddEffect((BossHakugin*)this->actor.parent, &this->actor.world.pos, type);
         }
-    } else if (arg1 == 2) {
+    } else if (type == EN_HAKUROCK_EFFECT_TYPE_2) {
         for (i = 0; i < 10; i++) {
-            func_80B21BE0((BossHakugin*)this->actor.parent, &this->actor.world.pos, arg1);
+            EnHakurock_AddEffect((BossHakugin*)this->actor.parent, &this->actor.world.pos, type);
         }
     } else {
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
         offset = this->actor.scale.x * 600.0f;
-        if (arg1 == 1) {
+        if (type == EN_HAKUROCK_EFFECT_TYPE_1) {
             pos.y -= offset;
             i = 0;
         } else {
@@ -159,7 +166,7 @@ void func_80B21EA4(EnHakurock* this, s32 arg1) {
         for (; i < 3; i++) {
             count = (i * 5) + 5;
             for (j = 0; j < count; j++) {
-                func_80B21BE0((BossHakugin*)this->actor.parent, &pos, arg1);
+                EnHakurock_AddEffect((BossHakugin*)this->actor.parent, &pos, type);
             }
 
             pos.y += offset;
@@ -181,8 +188,8 @@ void EnHakurock_WaitForSignal(EnHakurock* this, PlayState* play) {
         EnHakurock_Boulder_SetupMove(this);
     } else if (this->actor.params == EN_HAKUROCK_TYPE_FALLING_STALACTITE) {
         EnHakurock_Stalactite_SetupFall(this, play);
-    } else if (this->actor.params == EN_HAKUROCK_TYPE_FENCE_PILLAR) {
-        func_80B226AC(this);
+    } else if (this->actor.params == EN_HAKUROCK_TYPE_LARGE_STALACTITE) {
+        EnHakurock_LargeStalactite_SetupWait(this);
     }
 }
 
@@ -216,7 +223,7 @@ void EnHakurock_Boulder_Move(EnHakurock* this, PlayState* play) {
     if ((this->collider.base.atFlags & AT_HIT) || ((this->timer == 0) && (this->collider.base.ocFlags1 & OC1_HIT)) ||
         ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_ROCK_BROKEN);
-        func_80B21EA4(this, 0);
+        EnHakurock_SpawnEffect(this, EN_HAKUROCK_EFFECT_TYPE_0);
         EnHakurock_SetupWaitForSignal(this);
     }
 }
@@ -246,10 +253,10 @@ void EnHakurock_Stalactite_SetupFall(EnHakurock* this, PlayState* play) {
 
 void EnHakurock_Stalactite_Fall(EnHakurock* this, PlayState* play) {
     if ((this->collider.base.ocFlags1 & OC1_HIT) && (this->collider.base.oc == this->actor.parent)) {
-        func_80B21EA4(this, 1);
+        EnHakurock_SpawnEffect(this, EN_HAKUROCK_EFFECT_TYPE_1);
         EnHakurock_SetupWaitForSignal(this);
     } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        func_80B21EA4(this, 2);
+        EnHakurock_SpawnEffect(this, EN_HAKUROCK_EFFECT_TYPE_2);
         Actor_PlaySfx(&this->actor, NA_SE_EV_OBJECT_STICK);
         EnHakurock_Stalactite_SetupStuckInGround(this);
     }
@@ -279,7 +286,7 @@ void EnHakurock_Stalactite_StuckInGround(EnHakurock* this, PlayState* play) {
         if ((this->collider.base.oc == this->actor.parent) ||
             ((this->collider.base.oc->id == ACTOR_EN_HAKUROCK) &&
              (this->collider.base.oc->params == EN_HAKUROCK_TYPE_FALLING_STALACTITE))) {
-            func_80B21EA4(this, 3);
+            EnHakurock_SpawnEffect(this, EN_HAKUROCK_EFFECT_TYPE_3);
             EnHakurock_SetupWaitForSignal(this);
         } else if ((&player->actor == this->collider.base.oc) &&
                    (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) &&
@@ -297,7 +304,7 @@ void EnHakurock_Stalactite_StuckInGround(EnHakurock* this, PlayState* play) {
     }
 }
 
-void func_80B226AC(EnHakurock* this) {
+void EnHakurock_LargeStalactite_SetupWait(EnHakurock* this) {
     f32 shiftFactor;
 
     this->actor.draw = EnHakurock_DrawStalactite;
@@ -309,12 +316,12 @@ void func_80B226AC(EnHakurock* this) {
     this->timer = 0;
     this->actor.shape.shadowScale = 0.0f;
     this->collider.dim.height = this->collider.dim.yShift * -2;
-    this->actionFunc = func_80B22750;
+    this->actionFunc = EnHakurock_LargeStalactite_Wait;
 }
 
-void func_80B22750(EnHakurock* this, PlayState* play) {
+void EnHakurock_LargeStalactite_Wait(EnHakurock* this, PlayState* play) {
     if (this->actor.params == EN_HAKUROCK_TYPE_NONE) {
-        func_80B21EA4(this, 3);
+        EnHakurock_SpawnEffect(this, EN_HAKUROCK_EFFECT_TYPE_3);
         EnHakurock_SetupWaitForSignal(this);
     }
 }
@@ -339,7 +346,7 @@ void EnHakurock_Update(Actor* thisx, PlayState* play) {
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
     } else if ((thisx->params == EN_HAKUROCK_TYPE_STUCK_STALACTITE) ||
-               (thisx->params == EN_HAKUROCK_TYPE_FENCE_PILLAR)) {
+               (thisx->params == EN_HAKUROCK_TYPE_LARGE_STALACTITE)) {
         Collider_UpdateCylinder(thisx, &this->collider);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

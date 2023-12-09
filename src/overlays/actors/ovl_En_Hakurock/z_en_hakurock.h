@@ -12,7 +12,7 @@ typedef enum {
     /* 0x1 */ EN_HAKUROCK_TYPE_BOULDER,
     /* 0x2 */ EN_HAKUROCK_TYPE_FALLING_STALACTITE,
     /* 0x3 */ EN_HAKUROCK_TYPE_STUCK_STALACTITE,
-    /* 0x4 */ EN_HAKUROCK_TYPE_FENCE_PILLAR
+    /* 0x4 */ EN_HAKUROCK_TYPE_LARGE_STALACTITE
 } EnHakurockType;
 
 typedef struct EnHakurock {
