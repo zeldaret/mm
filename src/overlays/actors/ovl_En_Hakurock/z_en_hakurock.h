@@ -5,6 +5,8 @@
 
 struct EnHakurock;
 
+#define EN_HAKUROCK_GET_TYPE(thisx) ((thisx)->params)
+
 typedef void (*EnHakurockActionFunc)(struct EnHakurock*, PlayState*);
 
 typedef enum {

@@ -945,7 +945,7 @@ void BossHakugin_SpawnBoulder(BossHakugin* this, Vec3f* pos) {
     for (i = 0; i < ARRAY_COUNT(this->hakurockBoulders); i++) {
         boulder = this->hakurockBoulders[i];
 
-        if (boulder->params == EN_HAKUROCK_TYPE_NONE) {
+        if (EN_HAKUROCK_GET_TYPE(boulder) == EN_HAKUROCK_TYPE_NONE) {
             Math_Vec3f_Copy(&boulder->world.pos, pos);
             boulder->params = EN_HAKUROCK_TYPE_BOULDER;
             break;
@@ -969,7 +969,7 @@ void BossHakugin_SpawnStalactite(BossHakugin* this) {
     for (i = 0; i < ARRAY_COUNT(this->unk_09D0); i++) {
         stalactite = this->unk_09D0[i];
 
-        if (stalactite->params == EN_HAKUROCK_TYPE_NONE) {
+        if (EN_HAKUROCK_GET_TYPE(stalactite) == EN_HAKUROCK_TYPE_NONE) {
             stalactite->params = EN_HAKUROCK_TYPE_FALLING_STALACTITE;
             return;
         }
