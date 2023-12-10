@@ -69,7 +69,7 @@ s32 DmaMgr_DmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
 DmaEntry* DmaMgr_FindDmaEntry(uintptr_t vrom) {
     DmaEntry* curr;
 
-    for (curr = dmadata; curr->vromEnd != 0; curr++) {
+    for (curr = gDmaDataTable; curr->vromEnd != 0; curr++) {
         if (vrom < curr->vromStart) {
             continue;
         }
@@ -105,7 +105,7 @@ s32 DmaMgr_FindDmaIndex(uintptr_t vrom) {
     DmaEntry* entry = DmaMgr_FindDmaEntry(vrom);
 
     if (entry != NULL) {
-        return entry - dmadata;
+        return entry - gDmaDataTable;
     }
 
     return -1;
@@ -131,7 +131,7 @@ void DmaMgr_ProcessMsg(DmaRequest* req) {
     index = DmaMgr_FindDmaIndex(vrom);
 
     if ((index >= 0) && (index < sNumDmaEntries)) {
-        dmaEntry = &dmadata[index];
+        dmaEntry = &gDmaDataTable[index];
         if (dmaEntry->romEnd == 0) {
             if (dmaEntry->vromEnd < (vrom + size)) {
                 Fault_AddHungupAndCrash("../z_std_dma.c", 499);
@@ -217,10 +217,10 @@ s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size) {
 }
 
 void DmaMgr_Start(void) {
-    DmaMgr_DmaRomToRam(SEGMENT_ROM_START(dmadata), dmadata, SEGMENT_ROM_SIZE(dmadata));
+    DmaMgr_DmaRomToRam(SEGMENT_ROM_START(dmadata), gDmaDataTable, SEGMENT_ROM_SIZE(dmadata));
 
     {
-        DmaEntry* iter = dmadata;
+        DmaEntry* iter = gDmaDataTable;
         u32 idx = 0;
 
         while (iter->vromEnd != 0) {

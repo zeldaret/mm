@@ -21,4 +21,6 @@ typedef struct {
     /* 0xC */ uintptr_t romEnd;
 } DmaEntry; // size = 0x10
 
+extern DmaEntry gDmaDataTable[];
+
 #endif
