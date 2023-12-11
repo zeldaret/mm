@@ -71,7 +71,7 @@ void Check_ClearRGBA16(u16* buffer) {
  * Draw error message textures directly to a screen buffer at the end of normal RDRAM
  */
 void Check_DrawExpansionPakErrorMessage(void) {
-    DmaMgr_SendRequest0(CHECK_ERRMSG_STATIC_SEGMENT, SEGMENT_ROM_START(memerrmsg), SEGMENT_SIZE(memerrmsg));
+    DmaMgr_RequestSync(CHECK_ERRMSG_STATIC_SEGMENT, SEGMENT_ROM_START(memerrmsg), SEGMENT_SIZE(memerrmsg));
     Check_ClearRGBA16((u16*)FAULT_FB_ADDRESS);
     Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 96, 71, MEMERRMSG_WIDTH, MEMERRMSG_HEIGHT, CHECK_ERRMSG_STATIC_SEGMENT);
     Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 96, 127, MEMERRMSG_WIDTH, MEMERRMSG_HEIGHT,
@@ -85,7 +85,7 @@ void Check_DrawExpansionPakErrorMessage(void) {
  * Draw error message texture directly to a screen buffer at the end of normal RDRAM
  */
 void Check_DrawRegionLockErrorMessage(void) {
-    DmaMgr_SendRequest0(CHECK_ERRMSG_STATIC_SEGMENT, SEGMENT_ROM_START(locerrmsg), SEGMENT_SIZE(locerrmsg));
+    DmaMgr_RequestSync(CHECK_ERRMSG_STATIC_SEGMENT, SEGMENT_ROM_START(locerrmsg), SEGMENT_SIZE(locerrmsg));
     Check_ClearRGBA16((u16*)FAULT_FB_ADDRESS);
     Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 56, 112, LOCERRMSG_WIDTH, LOCERRMSG_HEIGHT,
                         CHECK_ERRMSG_STATIC_SEGMENT);

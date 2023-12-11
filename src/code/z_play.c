@@ -1554,7 +1554,7 @@ void* Play_LoadFile(PlayState* this, RomFile* entry) {
     size_t size = entry->vromEnd - entry->vromStart;
     void* allocp = THA_AllocTailAlign16(&this->state.tha, size);
 
-    DmaMgr_SendRequest0(allocp, entry->vromStart, size);
+    DmaMgr_RequestSync(allocp, entry->vromStart, size);
 
     return allocp;
 }

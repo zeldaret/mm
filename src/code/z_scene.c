@@ -22,7 +22,7 @@ s32 Object_SpawnPersistent(ObjectContext* objectCtx, s16 id) {
     if (1) {}
 
     if (size != 0) {
-        DmaMgr_SendRequest0(objectCtx->slots[objectCtx->numEntries].segment, gObjectTable[id].vromStart, size);
+        DmaMgr_RequestSync(objectCtx->slots[objectCtx->numEntries].segment, gObjectTable[id].vromStart, size);
     }
 
     if (objectCtx->numEntries < ARRAY_COUNT(objectCtx->slots) - 1) {
@@ -87,7 +87,7 @@ void Object_UpdateEntries(ObjectContext* objectCtx) {
                     entry->id = 0;
                 } else {
                     osCreateMesgQueue(&entry->loadQueue, &entry->loadMsg, 1);
-                    DmaMgr_SendRequestImpl(&entry->dmaReq, entry->segment, objectFile->vromStart, size, 0,
+                    DmaMgr_SendRequest(&entry->dmaReq, entry->segment, objectFile->vromStart, size, 0,
                                            &entry->loadQueue, NULL);
                 }
             } else if (!osRecvMesg(&entry->loadQueue, NULL, OS_MESG_NOBLOCK)) {
@@ -132,7 +132,7 @@ void Object_LoadAll(ObjectContext* objectCtx) {
             continue;
         }
 
-        DmaMgr_SendRequest0(objectCtx->slots[i].segment, gObjectTable[id].vromStart, vromSize);
+        DmaMgr_RequestSync(objectCtx->slots[i].segment, gObjectTable[id].vromStart, vromSize);
     }
 }
 
@@ -372,7 +372,7 @@ void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
 
     if (size != 0) {
         play->roomCtx.unk74 = THA_AllocTailAlign16(&play->state.tha, size);
-        DmaMgr_SendRequest0(play->roomCtx.unk74, vromStart, size);
+        DmaMgr_RequestSync(play->roomCtx.unk74, vromStart, size);
     }
 }
 

@@ -2877,7 +2877,7 @@ void KaleidoScope_Update(PlayState* play) {
             if (func_8010A0A4(play)) {
                 size_t size = SEGMENT_ROM_SIZE(icon_item_dungeon_static);
 
-                DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_dungeon_static), size);
+                DmaMgr_RequestSync(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_dungeon_static), size);
                 iconItemLangSegment =
                     func_801068FC(play, (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size), size);
                 sInDungeonScene = true;
@@ -2886,13 +2886,13 @@ void KaleidoScope_Update(PlayState* play) {
 
                 sInDungeonScene = false;
                 size = SEGMENT_ROM_SIZE(icon_item_field_static);
-                DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_field_static), size);
+                DmaMgr_RequestSync(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_field_static), size);
                 iconItemLangSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size);
             }
 
             pauseCtx->iconItemLangSegment = iconItemLangSegment;
             size2 = SEGMENT_ROM_SIZE(icon_item_jpn_static);
-            DmaMgr_SendRequest0(pauseCtx->iconItemLangSegment, SEGMENT_ROM_START(icon_item_jpn_static), size2);
+            DmaMgr_RequestSync(pauseCtx->iconItemLangSegment, SEGMENT_ROM_START(icon_item_jpn_static), size2);
 
             pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemLangSegment + size2);
             func_8011552C(play, DO_ACTION_INFO);
@@ -2903,7 +2903,7 @@ void KaleidoScope_Update(PlayState* play) {
             }
 
             pauseCtx->iconItemVtxSegment = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
-            DmaMgr_SendRequest0(pauseCtx->iconItemVtxSegment, SEGMENT_ROM_START(icon_item_vtx_static),
+            DmaMgr_RequestSync(pauseCtx->iconItemVtxSegment, SEGMENT_ROM_START(icon_item_vtx_static),
                                 SEGMENT_ROM_SIZE(icon_item_vtx_static));
 
             pauseCtx->unk_2B6 = 255;
@@ -3195,10 +3195,10 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
             size2 = SEGMENT_ROM_SIZE(icon_item_gameover_static);
-            DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_gameover_static), size2);
+            DmaMgr_RequestSync(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_gameover_static), size2);
 
             pauseCtx->iconItemLangSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size2);
-            DmaMgr_SendRequest0(pauseCtx->iconItemLangSegment, SEGMENT_ROM_START(icon_item_jpn_static),
+            DmaMgr_RequestSync(pauseCtx->iconItemLangSegment, SEGMENT_ROM_START(icon_item_jpn_static),
                                 SEGMENT_ROM_SIZE(icon_item_jpn_static));
 
             gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
@@ -3440,11 +3440,11 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + size0);
             sInDungeonScene = false;
             size1 = SEGMENT_ROM_SIZE(icon_item_field_static);
-            DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_field_static), size1);
+            DmaMgr_RequestSync(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_field_static), size1);
 
             pauseCtx->iconItemLangSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size1);
             size2 = SEGMENT_ROM_SIZE(icon_item_jpn_static);
-            DmaMgr_SendRequest0(pauseCtx->iconItemLangSegment, SEGMENT_ROM_START(icon_item_jpn_static), size2);
+            DmaMgr_RequestSync(pauseCtx->iconItemLangSegment, SEGMENT_ROM_START(icon_item_jpn_static), size2);
 
             pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemLangSegment + size2);
             func_8011552C(play, DO_ACTION_WARP);
@@ -3452,7 +3452,7 @@ void KaleidoScope_Update(PlayState* play) {
             Kaleido_LoadMapNameStatic(pauseCtx->nameSegment, worldMapCursorPoint);
 
             pauseCtx->iconItemVtxSegment = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
-            DmaMgr_SendRequest0(pauseCtx->iconItemVtxSegment, SEGMENT_ROM_START(icon_item_vtx_static),
+            DmaMgr_RequestSync(pauseCtx->iconItemVtxSegment, SEGMENT_ROM_START(icon_item_vtx_static),
                                 SEGMENT_ROM_SIZE(icon_item_vtx_static));
 
             pauseCtx->state = PAUSE_STATE_OWL_WARP_3;

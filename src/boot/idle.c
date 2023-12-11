@@ -73,7 +73,7 @@ void Main_Init(void) {
     prevSize = gDmaMgrDmaBuffSize;
     gDmaMgrDmaBuffSize = 0;
 
-    DmaMgr_SendRequestImpl(&dmaReq, SEGMENT_START(code), SEGMENT_ROM_START(code), SEGMENT_ROM_SIZE_ALT(code), 0, &mq,
+    DmaMgr_SendRequest(&dmaReq, SEGMENT_START(code), SEGMENT_ROM_START(code), SEGMENT_ROM_SIZE_ALT(code), 0, &mq,
                            NULL);
     Main_InitScreen();
     Main_InitMemory();
@@ -87,10 +87,10 @@ void Main_Init(void) {
 void Main_ThreadEntry(void* arg) {
     StackCheck_Init(&sIrqMgrStackInfo, sIrqMgrStack, STACK_TOP(sIrqMgrStack), 0, 0x100, "irqmgr");
     IrqMgr_Init(&gIrqMgr, STACK_TOP(sIrqMgrStack), Z_PRIORITY_IRQMGR, 1);
-    DmaMgr_Start();
+    DmaMgr_Init();
     Main_Init();
     Main(arg);
-    DmaMgr_Stop();
+    DmaMgr_Destroy();
 }
 
 void Idle_InitVideo(void) {

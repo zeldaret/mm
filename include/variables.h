@@ -6,12 +6,6 @@
 #include "macros.h"
 
 // data
-extern size_t gDmaMgrDmaBuffSize;
-extern vs32 gIrqMgrResetStatus;
-extern volatile OSTime sIrqMgrResetTime;
-extern volatile OSTime gIrqMgrRetraceTime;
-extern s32 sIrqMgrRetraceCount;
-
 // extern UNK_TYPE1 sGfxPrintFontTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowData;

@@ -7316,7 +7316,7 @@ void func_80838830(Player* this, s16 objectId) {
     if (objectId != OBJECT_UNSET_0) {
         this->giObjectLoading = true;
         osCreateMesgQueue(&this->giObjectLoadQueue, &this->giObjectLoadMsg, 1);
-        DmaMgr_SendRequestImpl(&this->giObjectDmaRequest, this->giObjectSegment, gObjectTable[objectId].vromStart,
+        DmaMgr_SendRequest(&this->giObjectDmaRequest, this->giObjectSegment, gObjectTable[objectId].vromStart,
                                gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
                                &this->giObjectLoadQueue, NULL);
     }
