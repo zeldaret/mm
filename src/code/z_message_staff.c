@@ -628,9 +628,9 @@ void Message_DecodeCredits(PlayState* play) {
                 Message_LoadItemIcon(play, font->msgBuf.schar[msgCtx->msgBufPos + 1], msgCtx->textboxY + 10);
             } else if (curChar == 0x15) {
                 DmaMgr_RequestSync(msgCtx->textboxSegment + 0x1000,
-                                    (uintptr_t)SEGMENT_ROM_START(message_texture_static) + 0x900, 0x900);
+                                   (uintptr_t)SEGMENT_ROM_START(message_texture_static) + 0x900, 0x900);
                 DmaMgr_RequestSync(msgCtx->textboxSegment + 0x1900,
-                                    (uintptr_t)SEGMENT_ROM_START(message_texture_static) + 0x900, 0x900);
+                                   (uintptr_t)SEGMENT_ROM_START(message_texture_static) + 0x900, 0x900);
                 msgCtx->msgBufPos += 3;
                 msgCtx->unk12012 = msgCtx->textboxY + 8;
                 numLines = 2;

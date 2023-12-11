@@ -73,8 +73,7 @@ void Main_Init(void) {
     prevSize = gDmaMgrDmaBuffSize;
     gDmaMgrDmaBuffSize = 0;
 
-    DmaMgr_SendRequest(&dmaReq, SEGMENT_START(code), SEGMENT_ROM_START(code), SEGMENT_ROM_SIZE_ALT(code), 0, &mq,
-                           NULL);
+    DmaMgr_SendRequest(&dmaReq, SEGMENT_START(code), SEGMENT_ROM_START(code), SEGMENT_ROM_SIZE_ALT(code), 0, &mq, NULL);
     Main_InitScreen();
     Main_InitMemory();
     osRecvMesg(&mq, NULL, OS_MESG_BLOCK);

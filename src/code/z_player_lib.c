@@ -201,8 +201,8 @@ void func_801229FC(Player* player) {
 
         osCreateMesgQueue(&player->maskObjectLoadQueue, &player->maskObjectLoadMsg, 1);
         DmaMgr_SendRequest(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[objectId].vromStart,
-                               gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
-                               &player->maskObjectLoadQueue, NULL);
+                           gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
+                           &player->maskObjectLoadQueue, NULL);
         player->maskObjectLoadState++;
     } else if (player->maskObjectLoadState == 2) {
         if (osRecvMesg(&player->maskObjectLoadQueue, NULL, OS_MESG_NOBLOCK) == 0) {

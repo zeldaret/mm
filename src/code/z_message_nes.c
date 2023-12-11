@@ -1086,7 +1086,7 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == 0xC1) {
             DmaMgr_RequestSync(msgCtx->textboxSegment + 0x1000, SEGMENT_ROM_START(message_texture_static), 0x900);
             DmaMgr_RequestSync(msgCtx->textboxSegment + 0x1900, SEGMENT_ROM_START(message_texture_static) + 0x900,
-                                0x900);
+                               0x900);
             numLines = 2;
             spC6 = 2;
             msgCtx->unk12012 = msgCtx->textboxY + 8;

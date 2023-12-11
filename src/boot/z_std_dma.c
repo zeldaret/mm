@@ -176,7 +176,7 @@ void DmaMgr_ThreadEntry(void* arg) {
 }
 
 s32 DmaMgr_SendRequest(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused,
-                           OSMesgQueue* queue, OSMesg msg) {
+                       OSMesgQueue* queue, OSMesg msg) {
     if (gIrqMgrResetStatus >= 2) {
         return -2;
     }
@@ -205,7 +205,7 @@ s32 DmaMgr_RequestSync(void* vramStart, uintptr_t vromStart, size_t size) {
     if (ret == -1) {
         return ret;
     }
-        
+
     osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
 
     return 0;

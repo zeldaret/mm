@@ -2904,7 +2904,7 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItemVtxSegment = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
             DmaMgr_RequestSync(pauseCtx->iconItemVtxSegment, SEGMENT_ROM_START(icon_item_vtx_static),
-                                SEGMENT_ROM_SIZE(icon_item_vtx_static));
+                               SEGMENT_ROM_SIZE(icon_item_vtx_static));
 
             pauseCtx->unk_2B6 = 255;
             pauseCtx->unk_2B7 = 255;
@@ -3199,7 +3199,7 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItemLangSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size2);
             DmaMgr_RequestSync(pauseCtx->iconItemLangSegment, SEGMENT_ROM_START(icon_item_jpn_static),
-                                SEGMENT_ROM_SIZE(icon_item_jpn_static));
+                               SEGMENT_ROM_SIZE(icon_item_jpn_static));
 
             gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
 
@@ -3453,7 +3453,7 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItemVtxSegment = (void*)ALIGN16((uintptr_t)pauseCtx->nameSegment + 0xA00);
             DmaMgr_RequestSync(pauseCtx->iconItemVtxSegment, SEGMENT_ROM_START(icon_item_vtx_static),
-                                SEGMENT_ROM_SIZE(icon_item_vtx_static));
+                               SEGMENT_ROM_SIZE(icon_item_vtx_static));
 
             pauseCtx->state = PAUSE_STATE_OWL_WARP_3;
             sGameOverRectPosY = 98;

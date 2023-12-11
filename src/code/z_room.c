@@ -561,7 +561,7 @@ s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
 
         osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, ARRAY_COUNT(roomCtx->loadMsg));
         DmaMgr_SendRequest(&roomCtx->dmaRequest, roomCtx->activeRoomVram, play->roomList[index].vromStart, size, 0,
-                               &roomCtx->loadQueue, NULL);
+                           &roomCtx->loadQueue, NULL);
         roomCtx->activeMemPage ^= 1;
 
         return 1;

@@ -9,14 +9,13 @@ void Font_LoadCharNES(PlayState* play, u8 codePointIndex, s32 offset) {
     Font* font = &msgCtx->font;
 
     DmaMgr_RequestSync(&font->charBuf[font->unk_11D88][offset],
-                        SEGMENT_ROM_START_OFFSET(nes_font_static, (codePointIndex - ' ') * FONT_CHAR_TEX_SIZE),
-                        FONT_CHAR_TEX_SIZE);
+                       SEGMENT_ROM_START_OFFSET(nes_font_static, (codePointIndex - ' ') * FONT_CHAR_TEX_SIZE),
+                       FONT_CHAR_TEX_SIZE);
 }
 
 void Font_LoadMessageBoxEndIcon(Font* font, u16 icon) {
-    DmaMgr_RequestSync(&font->iconBuf,
-                        SEGMENT_ROM_START_OFFSET(message_static, 5 * 0x1000 + icon * FONT_CHAR_TEX_SIZE),
-                        FONT_CHAR_TEX_SIZE);
+    DmaMgr_RequestSync(&font->iconBuf, SEGMENT_ROM_START_OFFSET(message_static, 5 * 0x1000 + icon * FONT_CHAR_TEX_SIZE),
+                       FONT_CHAR_TEX_SIZE);
 }
 
 static u8 sFontOrdering[] = {

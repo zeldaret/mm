@@ -88,7 +88,7 @@ void Object_UpdateEntries(ObjectContext* objectCtx) {
                 } else {
                     osCreateMesgQueue(&entry->loadQueue, &entry->loadMsg, 1);
                     DmaMgr_SendRequest(&entry->dmaReq, entry->segment, objectFile->vromStart, size, 0,
-                                           &entry->loadQueue, NULL);
+                                       &entry->loadQueue, NULL);
                 }
             } else if (!osRecvMesg(&entry->loadQueue, NULL, OS_MESG_NOBLOCK)) {
                 entry->id = id;
