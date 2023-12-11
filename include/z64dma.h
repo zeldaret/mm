@@ -28,6 +28,7 @@ extern DmaEntry gDmaDataTable[];
 extern size_t gDmaMgrDmaBuffSize;
 
 s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size);
+s32 DmaMgr_TranslateVromToRom(uintptr_t vrom);
 s32 DmaMgr_AudioDmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction);
 const char* func_800809F4(uintptr_t vrom);
 s32 DmaMgr_SendRequest(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE unused, OSMesgQueue* queue, void* msg);

@@ -85,7 +85,7 @@ DmaEntry* DmaMgr_FindDmaEntry(uintptr_t vrom) {
     return NULL;
 }
 
-u32 DmaMgr_TranslateVromToRom(uintptr_t vrom) {
+s32 DmaMgr_TranslateVromToRom(uintptr_t vrom) {
     DmaEntry* entry = DmaMgr_FindDmaEntry(vrom);
 
     if (entry != NULL) {
