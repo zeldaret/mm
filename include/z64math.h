@@ -43,6 +43,11 @@ typedef struct {
 } Vec3i; // size = 0xC
 
 typedef struct {
+    /* 0x0 */ s16 distance;
+    /* 0x4 */ s16 angle;
+} VecPolarS; // size = 0x8
+
+typedef struct {
     /* 0x0 */ f32 distance;
     /* 0x4 */ s16 angle;
 } VecPolar; // size = 0x8
