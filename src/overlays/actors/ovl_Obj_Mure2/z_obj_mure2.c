@@ -154,9 +154,9 @@ void ObjMure2_SpawnChildren(ObjMure2* this, PlayState* play) {
         }
         if (((this->spawnFlags >> i) & 1) == 0) {
             pos = &spawnPos[i];
-            this->actors[i] = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, sActorIds[childType], pos->x, pos->y,
-                                                            pos->z, this->actor.world.rot.x, 0, this->actor.world.rot.z,
-                                                            childParams, this->actor.csId, this->actor.halfDaysBits, NULL);
+            this->actors[i] = Actor_SpawnAsChildAndCutscene(
+                &play->actorCtx, play, sActorIds[childType], pos->x, pos->y, pos->z, this->actor.world.rot.x, 0,
+                this->actor.world.rot.z, childParams, this->actor.csId, this->actor.halfDaysBits, NULL);
             if (this->actors[i] != NULL) {
                 this->actors[i]->room = this->actor.room;
             }
@@ -234,7 +234,7 @@ void ObjMure2_SetupWaitForPlayerOutOfRange(ObjMure2* this) {
 
 void ObjMure2_WaitForPlayerOutOfRange(ObjMure2* this, PlayState* play) {
     ObjMure2_ClearChildrenList(this);
-    
+
     if ((sDeactivationRangesSq[OBJMURE2_GET_CHILD_TYPE(&this->actor)] * this->rangeMultiplier) <=
         Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
