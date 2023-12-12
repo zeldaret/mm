@@ -17,14 +17,13 @@ static void write_dmadata_table(FILE *fout)
     int i;
 
     for (i = 0; i < g_segmentsCount; i++) {
-        if(g_segments[i].flags & FLAG_NOLOAD) {
+        // Don't emit dma entry for segments set with NOLOAD
+        if (g_segments[i].flags & FLAG_NOLOAD) {
             continue;
         }
 
-        int nameLen = strlen(g_segments[i].name);
-
-        if ((nameLen > 4) && (strcmp(g_segments[i].name + nameLen - 4, "syms") == 0)) {
-            // If segment name ends with "syms" unset it in the dma table
+        if (g_segments[i].flags & FLAG_SYMS) {
+            // For segments set with SYMS, unset in the dma table
             fprintf(fout, "DEFINE_DMA_ENTRY_UNSET(%s, \"%s\")\n", g_segments[i].name, g_segments[i].name);
         } else {
             fprintf(fout, "DEFINE_DMA_ENTRY(%s, \"%s\")\n", g_segments[i].name, g_segments[i].name);
