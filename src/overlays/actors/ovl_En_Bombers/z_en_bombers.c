@@ -545,7 +545,7 @@ void EnBombers_Update(Actor* thisx, PlayState* play) {
         this->unk_2B8++;
         if (this->unk_2B8 >= 3) {
             this->unk_2B8 = 0;
-            this->unk_2BA = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->unk_2BA = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
 

@@ -284,7 +284,7 @@ void func_808A54B0(EnSt* this, PlayState* play) {
 
 s32 func_808A576C(EnSt* this) {
     s32 i;
-    s16 phi_s2 = (s16)((s16)(Rand_ZeroOne() * 1000.0f) % 12) * 0x1555;
+    s16 phi_s2 = (s16)(TRUNCF_BINANG(Rand_ZeroOne() * 1000.0f) % 12) * 0x1555;
 
     for (i = 0; i < ENST_BODYPART_MAX; i++, phi_s2 += 0x1555) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {

@@ -321,7 +321,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
         this->eyeState++;
         if (this->eyeState >= 3) {
             this->eyeState = 0;
-            this->blinkTimer = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->blinkTimer = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
     this->actionFunc(this, play);
@@ -339,9 +339,9 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
             Vec3f effectVelocity;
 
             Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
-            effectPos.x += Math_SinS(this->actor.world.rot.y + (s16)this->headRot.y) * 10.0f;
+            effectPos.x += Math_SinS(this->actor.world.rot.y + TRUNCF_BINANG(this->headRot.y)) * 10.0f;
             effectPos.y += 30.0f;
-            effectPos.z += Math_CosS(this->actor.world.rot.y + (s16)this->headRot.y) * 10.0f;
+            effectPos.z += Math_CosS(this->actor.world.rot.y + TRUNCF_BINANG(this->headRot.y)) * 10.0f;
             Matrix_Push();
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
             effectVelocityOffset.z = 20.0f;

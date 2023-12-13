@@ -529,13 +529,13 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
                             sp44.x = (Rand_ZeroOne() - 0.5f) * (2.0f * phi_f2);
                             sp44.y = D_80AAAAB8;
                             sp44.z = (Rand_ZeroOne() * D_80AAAAC4) + phi_f2;
-                            temp = (s16)spBC + D_80AAAACC;
+                            temp = TRUNCF_BINANG(spBC) + D_80AAAACC;
                             EffectSsGSplash_Spawn(play, &sp44, NULL, NULL, 0, temp);
                         } else {
                             sp44.x = -phi_f2 - (Rand_ZeroOne() * D_80AAAAC4);
                             sp44.y = D_80AAAAB8;
                             sp44.z = (Rand_ZeroOne() - 0.5f) * (2.0f * phi_f2);
-                            temp = (s16)spBC + D_80AAAACC;
+                            temp = TRUNCF_BINANG(spBC) + D_80AAAACC;
                             EffectSsGSplash_Spawn(play, &sp44, NULL, NULL, 0, temp);
                         }
                     }

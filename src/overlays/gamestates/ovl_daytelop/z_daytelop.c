@@ -92,7 +92,7 @@ void DayTelop_Update(DayTelopState* this, GameState* thisx) {
     }
 
     if (this->fadeInState == DAYTELOP_HOURSTEXT_FADEIN) {
-        this->alpha += (s16)(ABS_ALT(this->alpha - 0xFF) / D_80815FF0);
+        this->alpha += (s16)(ABS_ALT(this->alpha - 255) / D_80815FF0);
 
         D_80815FF0--;
         if (D_80815FF0 == 0) {

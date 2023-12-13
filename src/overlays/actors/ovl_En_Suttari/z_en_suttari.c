@@ -1591,8 +1591,8 @@ s32 EnSuttari_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         Matrix_RotateZS(-this->torsoRot.x, MTXMODE_APPLY);
     }
     if ((limbIndex == OBJECT_BOJ_LIMB_08) || (limbIndex == OBJECT_BOJ_LIMB_09) || (limbIndex == OBJECT_BOJ_LIMB_0C)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
     return false;
 }

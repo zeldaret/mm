@@ -1357,9 +1357,9 @@ void func_80B887AC(EnKaizoku* this, PlayState* play) {
     if (!func_80B85858(this, play) && !func_80B85A00(this, play, false)) {
         temp_v0 = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
         if (temp_v0 > 0) {
-            var_a2 = (s16)(temp_v0 * 0.25f) + 0x7D0;
+            var_a2 = TRUNCF_BINANG(temp_v0 * 0.25f) + 0x7D0;
         } else {
-            var_a2 = (s16)(temp_v0 * 0.25f) - 0x7D0;
+            var_a2 = TRUNCF_BINANG(temp_v0 * 0.25f) - 0x7D0;
         }
         this->picto.actor.shape.rot.y += var_a2;
         this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;

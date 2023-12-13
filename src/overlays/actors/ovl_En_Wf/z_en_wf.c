@@ -847,7 +847,7 @@ void func_80991C80(EnWf* this, PlayState* play) {
          (!Actor_IsFacingPlayer(&this->actor, 0x2000) || (this->actor.xzDistToPlayer >= 100.0f))) ||
         SkelAnime_Update(&this->skelAnime)) {
         if ((sp2C == 0) && (this->unk_2A0 != 0)) {
-            this->actor.shape.rot.y += (s16)(0xCCC * (1.5f + ((this->unk_2A0 - 4) * 0.4f)));
+            this->actor.shape.rot.y += TRUNCF_BINANG(0xCCC * (1.5f + ((this->unk_2A0 - 4) * 0.4f)));
             func_80990C6C(this, play, 1);
             this->unk_2A0--;
         } else if (!Actor_IsFacingPlayer(&this->actor, 0x1554) && (sp2C == 0)) {

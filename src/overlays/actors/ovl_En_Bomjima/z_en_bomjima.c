@@ -488,7 +488,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
                 EffectSsHitmark_SpawnFixedScale(play, 0, &sp40);
                 this->unk_2BC++;
 
-                if (((s16)Rand_ZeroFloat(2.0f) + 3) < this->unk_2BC) {
+                if ((TRUNCF_BINANG(Rand_ZeroFloat(2.0f)) + 3) < this->unk_2BC) {
                     EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_5, 1.0f);
                     this->unk_29A = 0;
                     Math_Vec3f_Copy(&this->unk_2A4, &this->actor.home.pos);
@@ -1105,7 +1105,7 @@ void EnBomjima_Update(Actor* thisx, PlayState* play) {
         this->unk_2E0++;
         if (this->unk_2E0 >= 3) {
             this->unk_2E0 = 0;
-            this->unk_2E2 = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->unk_2E2 = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
 
