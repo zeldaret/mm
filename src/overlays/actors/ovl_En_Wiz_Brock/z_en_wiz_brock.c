@@ -113,7 +113,7 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play) {
     } else {
         Scene_SetRenderModeXlu(play, 1, 2);
         gDPPipeSync(POLY_XLU_DISP++);
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s16)this->alpha);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, TRUNCF_BINANG(this->alpha));
         Gfx_DrawDListXlu(play, gWizrobePlatformDL);
     }
 
@@ -126,9 +126,9 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
         if (this->platformType == EN_WIZ_BROCK_PLATFORM_TYPE_FIRE) {
-            gDPSetEnvColor(POLY_XLU_DISP++, 255, 00, 100, (s16)this->alpha);
+            gDPSetEnvColor(POLY_XLU_DISP++, 255, 00, 100, TRUNCF_BINANG(this->alpha));
         } else {
-            gDPSetEnvColor(POLY_XLU_DISP++, 50, 00, 255, (s16)this->alpha);
+            gDPSetEnvColor(POLY_XLU_DISP++, 50, 00, 255, TRUNCF_BINANG(this->alpha));
         }
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

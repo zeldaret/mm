@@ -4601,7 +4601,7 @@ void Interface_DrawClock(PlayState* play) {
                 }
 
                 timeInSeconds = TIME_TO_SECONDS_F(CURRENT_TIME);
-                timeInSeconds -= ((s16)(timeInSeconds / 3600.0f)) * 3600.0f;
+                timeInSeconds -= TRUNCF_BINANG(timeInSeconds / 3600.0f) * 3600.0f;
 
                 Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
