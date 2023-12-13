@@ -281,7 +281,7 @@ void EnBom_Move(EnBom* this, PlayState* play) {
                 temp = BINANG_ROT180(temp);
             }
             Math_ScaledStepToS(&this->actor.shape.rot.y, temp, this->actor.speed * 100.0f);
-            this->unk_1FA += (s16)(this->actor.speed * 800.0f);
+            this->unk_1FA += TRUNCF_BINANG(this->actor.speed * 800.0f);
         }
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
@@ -320,7 +320,7 @@ void EnBom_WaitForRelease(EnBom* this, PlayState* play) {
             gSaveContext.powderKegTimer = this->timer;
         }
     }
-    Math_ScaledStepToS(&this->unk_1FA, 0, 2000);
+    Math_ScaledStepToS(&this->unk_1FA, 0, 0x7D0);
 }
 
 void EnBom_Explode(EnBom* this, PlayState* play) {

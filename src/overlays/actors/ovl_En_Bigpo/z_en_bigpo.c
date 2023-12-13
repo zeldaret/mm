@@ -1435,7 +1435,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
         fireRadius = 500;
     } else {
         Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-        fireRadius = (s16)(thisx->scale.x * 500.0f * 100.0f);
+        fireRadius = TRUNCF_BINANG(thisx->scale.x * 500.0f * 100.0f);
     }
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (play->gameplayFrames * -20) % 512, 0x20,

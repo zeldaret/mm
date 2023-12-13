@@ -21,8 +21,8 @@ typedef struct EnZob {
     /* 0x218 */ Vec3s morphTable[24];
     /* 0x2A8 */ ColliderCylinder collider;
     /* 0x2F4 */ u16 unk_2F4;
-    /* 0x2F6 */ Vec3s unk_2F6;
-    /* 0x2FC */ Vec3s unk_2FC;
+    /* 0x2F6 */ Vec3s headRot;
+    /* 0x2FC */ Vec3s torsoRot;
     /* 0x302 */ s16 unk_302;
     /* 0x304 */ u16 unk_304;
     /* 0x306 */ s16 csIdList[4];

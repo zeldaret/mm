@@ -27,7 +27,7 @@ typedef struct EnRuppecrow {
     /* 0x144 */ EnItem00* rupees[ENRUPPECROW_RUPEE_COUNT];
     /* 0x194 */ SkelAnime skelAnime;
     /* 0x1D8 */ EnRuppecrowActionFunc actionFunc;
-    /* 0x1DC */ UNK_TYPE4 unk_1DC; // unused
+    /* 0x1DC */ UNK_TYPE1 unk_1DC[0x4];
     /* 0x1E0 */ Vec3s jointTable[OBJECT_CROW_LIMB_MAX];
     /* 0x216 */ Vec3s morphTable[OBJECT_CROW_LIMB_MAX];
     /* 0x24C */ Path* path;
@@ -38,7 +38,7 @@ typedef struct EnRuppecrow {
     /* 0x2B8 */ f32 speedModifier;
     /* 0x2BC */ s16 rupeeIndex;
     /* 0x2BE */ s16 yOffset;
-    /* 0x2C0 */ UNK_TYPE4 unk_2C0; // unused
+    /* 0x2C0 */ UNK_TYPE1 unk_2C0[0x4];
     /* 0x2C4 */ u8 currentEffect; 
     /* 0x2C8 */ f32 unk_2C8; // set but not used
     /* 0x2CC */ f32 unk_2CC; // set but not used

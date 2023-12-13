@@ -570,7 +570,7 @@ void func_808FAE50(EnRr* this, PlayState* play) {
 void func_808FAF94(EnRr* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 10, 500, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 10, 0x1F4, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if ((this->unk_1E6 == 0) && !(player->stateFlags2 & PLAYER_STATE2_80) &&
         (Player_GetMask(play) != PLAYER_MASK_STONE) &&
@@ -582,7 +582,7 @@ void func_808FAF94(EnRr* this, PlayState* play) {
 }
 
 void func_808FB088(EnRr* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 10, 500, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 10, 0x1F4, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Player_GetMask(play) == PLAYER_MASK_STONE) {
         func_808FA344(this);
@@ -624,6 +624,9 @@ void func_808FB088(EnRr* this, PlayState* play) {
             if (this->unk_1E6 == 0) {
                 func_808FA344(this);
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -741,7 +744,7 @@ void func_808FB680(EnRr* this, PlayState* play) {
     if (this->unk_1E6 == 0) {
         this->actionFunc = func_808FAF94;
     } else {
-        Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 10, 1000, 0);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 10, 0x3E8, 0);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (this->actor.speed == 0.0f) {
             func_808FA238(this, 2.0f);
@@ -854,8 +857,8 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
 
         for (i = 0; i < ARRAY_COUNT(this->unk_324); i++) {
             ptr = &this->unk_324[i];
-            Math_SmoothStepToS(&ptr->unk_1A.x, ptr->unk_14, 5, this->unk_210 * 1000.0f, 0);
-            Math_SmoothStepToS(&ptr->unk_1A.z, ptr->unk_18, 5, this->unk_210 * 1000.0f, 0);
+            Math_SmoothStepToS(&ptr->unk_1A.x, ptr->unk_14, 5, this->unk_210 * 0x3E8, 0);
+            Math_SmoothStepToS(&ptr->unk_1A.z, ptr->unk_18, 5, this->unk_210 * 0x3E8, 0);
             Math_StepToF(&ptr->unk_08, ptr->unk_0C, this->unk_210 * 0.2f);
             Math_StepToF(&ptr->unk_00, ptr->unk_04, this->unk_210 * 300.0f);
         }
@@ -938,9 +941,9 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     }
 
     Matrix_MultZero(&this->unk_228);
-    this->collider2.dim.pos.x = ((this->unk_228.x - spA4.x) * 0.85f) + spA4.x;
-    this->collider2.dim.pos.y = ((this->unk_228.y - spA4.y) * 0.85f) + spA4.y;
-    this->collider2.dim.pos.z = ((this->unk_228.z - spA4.z) * 0.85f) + spA4.z;
+    this->collider2.dim.pos.x = LERPIMP(spA4.x, this->unk_228.x, 0.85f);
+    this->collider2.dim.pos.y = LERPIMP(spA4.y, this->unk_228.y, 0.85f);
+    this->collider2.dim.pos.z = LERPIMP(spA4.z, this->unk_228.z, 0.85f);
 
     gSPDisplayList(POLY_OPA_DISP++, gLikeLikeDL);
 

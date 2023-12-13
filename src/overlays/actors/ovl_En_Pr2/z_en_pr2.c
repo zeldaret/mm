@@ -239,9 +239,9 @@ void func_80A7436C(EnPr2* this, s16 arg1) {
 
     if (fabsf(this->actor.world.pos.y - this->unk_21C.y) > 10.0f) {
         Math_SmoothStepToS(&this->actor.world.rot.x, Math_Vec3f_Pitch(&this->actor.world.pos, &this->unk_21C) * 0.3f,
-                           20, 5000, 500);
+                           20, 0x1388, 0x1F4);
     } else {
-        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 20, 5000, 500);
+        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 20, 0x1388, 0x1F4);
     }
 
     if (fabsf(this->actor.world.rot.y - arg1) < 30.0f) {
@@ -250,7 +250,7 @@ void func_80A7436C(EnPr2* this, s16 arg1) {
         Math_ApproachF(&this->unk_1FC, sp2E, 0.5f, 3000.0f);
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, arg1, 1, 2000, 300);
+    Math_SmoothStepToS(&this->actor.world.rot.y, arg1, 1, 0x7D0, 300);
 }
 
 void EnPr2_ChangeAnim(EnPr2* this, s32 animIndex) {
@@ -298,9 +298,9 @@ void func_80A745FC(EnPr2* this, PlayState* play) {
 
     if (fabsf(this->actor.world.pos.y - this->unk_21C.y) > 10.0f) {
         Math_SmoothStepToS(&this->actor.world.rot.x, Math_Vec3f_Pitch(&this->actor.world.pos, &this->unk_21C) * 0.3f,
-                           20, 5000, 500);
+                           20, 0x1388, 0x1F4);
     } else {
-        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 20, 5000, 500);
+        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 20, 0x1388, 0x1F4);
     }
 
     x = this->actor.world.pos.x - this->unk_21C.x;
@@ -424,7 +424,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
                             this->unk_1F0 += 0x2000;
                         }
                     } else {
-                        Math_SmoothStepToS(&this->unk_1F0, 0, 1, 1000, 100);
+                        Math_SmoothStepToS(&this->unk_1F0, 0, 1, 0x3E8, 0x64);
                         this->unk_1F2 = 0;
                     }
                 }
@@ -583,9 +583,9 @@ void func_80A75310(EnPr2* this, PlayState* play) {
         Vec3f sp64;
 
         temp = false;
-        Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 5, 10000, 1000);
-        Math_SmoothStepToS(&this->actor.shape.rot.z, this->unk_1E4, 5, 10000, 1000);
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_1E6, 5, 10000, 1000);
+        Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 5, 0x2710, 0x3E8);
+        Math_SmoothStepToS(&this->actor.shape.rot.z, this->unk_1E4, 5, 0x2710, 0x3E8);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_1E6, 5, 0x2710, 0x3E8);
 
         if ((Rand_ZeroOne() < 0.3f) && !this->unk_1D6) {
             this->unk_1D6 = true;
@@ -716,7 +716,7 @@ s32 EnPr2_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
-            rot->y += (s16)this->unk_1FC * -1;
+            rot->y += TRUNCF_BINANG(this->unk_1FC) * -1;
         }
     } else if ((limbIndex + 10) != this->unk_1E0) {
         *dList = NULL;
@@ -742,7 +742,7 @@ s32 EnPr2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
-            rot->y += (s16)this->unk_1FC * -1;
+            rot->y += TRUNCF_BINANG(this->unk_1FC) * -1;
         }
     } else if ((limbIndex + 10) != this->unk_1E0) {
         *dList = NULL;

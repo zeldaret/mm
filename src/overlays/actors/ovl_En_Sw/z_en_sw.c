@@ -756,7 +756,7 @@ void func_808DA3F4(EnSw* this, PlayState* play) {
 
     if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         temp_f16 = this->skelAnime.endFrame - this->skelAnime.curFrame;
-        temp_s1 = (s16)(80.0f * temp_f16);
+        temp_s1 = TRUNCF_BINANG(80.0f * temp_f16);
         Math_Vec3f_Copy(&sp38, &this->unk_374);
         func_808D9894(this, &sp38);
 

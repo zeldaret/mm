@@ -352,8 +352,8 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
 
     if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT) || CHECK_BTN_ALL(input->press.button, BTN_R)) {
         // Switch the page to the right regardless of where the cursor is
-        if (interfaceCtx->unk_212 == 6) {
-            func_8011552C(play, 0x15);
+        if (interfaceCtx->unk_212 == DO_ACTION_DECIDE) {
+            func_8011552C(play, DO_ACTION_INFO);
         }
         KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_RIGHT);
         return;
@@ -361,8 +361,8 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
 
     if (CHECK_BTN_ALL(input->cur.button, BTN_DLEFT) || CHECK_BTN_ALL(input->press.button, BTN_Z)) {
         // Switch the page to the left regardless of where the cursor is
-        if (interfaceCtx->unk_212 == 6) {
-            func_8011552C(play, 0x15);
+        if (interfaceCtx->unk_212 == DO_ACTION_DECIDE) {
+            func_8011552C(play, DO_ACTION_INFO);
         }
         KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_LEFT);
         return;
@@ -1446,11 +1446,11 @@ void KaleidoScope_UpdateSwitchPage(PlayState* play, Input* input) {
         pauseCtx->eye.z += sPageSwitchEyeDz[pauseCtx->nextPageMode] * 2.0f;
 
         if (pauseCtx->switchPageTimer < 32) {
-            sPauseCursorLeftX -= (s16)(sPauseCursorLeftMoveOffsetX / 4);
-            sPauseCursorRightX -= (s16)(sPauseCursorRightMoveOffsetX / 4);
+            sPauseCursorLeftX -= TRUNCF_BINANG(sPauseCursorLeftMoveOffsetX / 4);
+            sPauseCursorRightX -= TRUNCF_BINANG(sPauseCursorRightMoveOffsetX / 4);
         } else {
-            sPauseCursorLeftX += (s16)(sPauseCursorLeftMoveOffsetX / 4);
-            sPauseCursorRightX += (s16)(sPauseCursorRightMoveOffsetX / 4);
+            sPauseCursorLeftX += TRUNCF_BINANG(sPauseCursorLeftMoveOffsetX / 4);
+            sPauseCursorRightX += TRUNCF_BINANG(sPauseCursorRightMoveOffsetX / 4);
         }
 
         pauseCtx->switchPageTimer += 8;
@@ -2917,8 +2917,8 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->itemPageRoll = pauseCtx->mapPageRoll = pauseCtx->questPageRoll = pauseCtx->maskPageRoll -= 40.0f;
 
             interfaceCtx->startAlpha += 63;
-            sPauseCursorLeftX += (s16)(sPauseCursorLeftMoveOffsetX / 4);
-            sPauseCursorRightX += (s16)(sPauseCursorRightMoveOffsetX / 4);
+            sPauseCursorLeftX += TRUNCF_BINANG(sPauseCursorLeftMoveOffsetX / 4);
+            sPauseCursorRightX += TRUNCF_BINANG(sPauseCursorRightMoveOffsetX / 4);
             pauseCtx->alpha += 31;
             if (pauseCtx->itemPageRoll == 0) {
                 interfaceCtx->startAlpha = 255;
@@ -3044,8 +3044,8 @@ void KaleidoScope_Update(PlayState* play) {
             switch (pauseCtx->savePromptState) {
                 case PAUSE_SAVEPROMPT_STATE_APPEARING:
                     pauseCtx->roll -= 78.5f;
-                    sPauseCursorLeftX -= (s16)(sPauseCursorLeftMoveOffsetX / 4);
-                    sPauseCursorRightX -= (s16)(sPauseCursorRightMoveOffsetX / 4);
+                    sPauseCursorLeftX -= TRUNCF_BINANG(sPauseCursorLeftMoveOffsetX / 4);
+                    sPauseCursorRightX -= TRUNCF_BINANG(sPauseCursorRightMoveOffsetX / 4);
                     if (pauseCtx->roll <= -628.0f) {
                         pauseCtx->roll = -628.0f;
                         pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_1;
@@ -3109,8 +3109,8 @@ void KaleidoScope_Update(PlayState* play) {
                             pauseCtx->maskPageRoll += 40.0f;
                         pauseCtx->roll += 40.0f;
                         pauseCtx->infoPanelOffsetY -= 10;
-                        sPauseCursorLeftX -= (s16)(sPauseCursorLeftMoveOffsetX / 4);
-                        sPauseCursorRightX -= (s16)(sPauseCursorRightMoveOffsetX / 4);
+                        sPauseCursorLeftX -= TRUNCF_BINANG(sPauseCursorLeftMoveOffsetX / 4);
+                        sPauseCursorRightX -= TRUNCF_BINANG(sPauseCursorRightMoveOffsetX / 4);
                         pauseCtx->alpha -= 63;
                         if (pauseCtx->roll == (D_8082B90C + 160.0f)) {
                             pauseCtx->alpha = 0;
@@ -3128,8 +3128,8 @@ void KaleidoScope_Update(PlayState* play) {
 
                 case PAUSE_SAVEPROMPT_STATE_RETURN_TO_MENU:
                     pauseCtx->roll += 78.5f;
-                    sPauseCursorLeftX += (s16)(sPauseCursorLeftMoveOffsetX / 4);
-                    sPauseCursorRightX += (s16)(sPauseCursorRightMoveOffsetX / 4);
+                    sPauseCursorLeftX += TRUNCF_BINANG(sPauseCursorLeftMoveOffsetX / 4);
+                    sPauseCursorRightX += TRUNCF_BINANG(sPauseCursorRightMoveOffsetX / 4);
 
                     if (pauseCtx->roll >= -314.0f) {
                         pauseCtx->state = PAUSE_STATE_MAIN;
@@ -3295,8 +3295,8 @@ void KaleidoScope_Update(PlayState* play) {
                 pauseCtx->roll;
             interfaceCtx->startAlpha += 63;
             sGameOverRectPosY -= 3;
-            sPauseCursorLeftX += (s16)(sPauseCursorLeftMoveOffsetX / 4);
-            sPauseCursorRightX += (s16)(sPauseCursorRightMoveOffsetX / 4);
+            sPauseCursorLeftX += TRUNCF_BINANG(sPauseCursorLeftMoveOffsetX / 4);
+            sPauseCursorRightX += TRUNCF_BINANG(sPauseCursorRightMoveOffsetX / 4);
             pauseCtx->alpha += 31;
             if (pauseCtx->roll < -628.0f) {
                 pauseCtx->roll = -628.0f;
@@ -3466,8 +3466,8 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->mapPageRoll -= 40.0f;
             interfaceCtx->startAlpha += 63;
             sGameOverRectPosY -= 3;
-            sPauseCursorLeftX += (s16)(sPauseCursorLeftMoveOffsetX / 4);
-            sPauseCursorRightX += (s16)(sPauseCursorRightMoveOffsetX / 4);
+            sPauseCursorLeftX += TRUNCF_BINANG(sPauseCursorLeftMoveOffsetX / 4);
+            sPauseCursorRightX += TRUNCF_BINANG(sPauseCursorRightMoveOffsetX / 4);
             pauseCtx->alpha += 31;
 
             if (pauseCtx->mapPageRoll == 0) {
@@ -3540,8 +3540,8 @@ void KaleidoScope_Update(PlayState* play) {
                 pauseCtx->infoPanelOffsetY -= 10;
                 pauseCtx->mapPageRoll += 40.0f;
                 interfaceCtx->startAlpha -= 63;
-                sPauseCursorLeftX -= (s16)(sPauseCursorLeftMoveOffsetX / 4);
-                sPauseCursorRightX -= (s16)(sPauseCursorRightMoveOffsetX / 4);
+                sPauseCursorLeftX -= TRUNCF_BINANG(sPauseCursorLeftMoveOffsetX / 4);
+                sPauseCursorRightX -= TRUNCF_BINANG(sPauseCursorRightMoveOffsetX / 4);
                 pauseCtx->alpha -= 63;
                 if (pauseCtx->mapPageRoll == 160.0f) {
                     pauseCtx->alpha = 0;
@@ -3564,8 +3564,8 @@ void KaleidoScope_Update(PlayState* play) {
                 pauseCtx->itemPageRoll = pauseCtx->mapPageRoll = pauseCtx->questPageRoll = pauseCtx->maskPageRoll +=
                     40.0f;
                 interfaceCtx->startAlpha -= 63;
-                sPauseCursorLeftX -= (s16)(sPauseCursorLeftMoveOffsetX / 4);
-                sPauseCursorRightX -= (s16)(sPauseCursorRightMoveOffsetX / 4);
+                sPauseCursorLeftX -= TRUNCF_BINANG(sPauseCursorLeftMoveOffsetX / 4);
+                sPauseCursorRightX -= TRUNCF_BINANG(sPauseCursorRightMoveOffsetX / 4);
                 pauseCtx->alpha -= 63;
                 if (pauseCtx->itemPageRoll == 160.0f) {
                     pauseCtx->alpha = 0;

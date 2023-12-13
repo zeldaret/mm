@@ -1911,9 +1911,10 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         Vec3s sp80;
         s32 i;
         f32 sp70[] = { 2000.0f, 0.0f, -2000.0f };
+        s32 pad;
 
-        //! FAKE
-        if (!i) {}
+        //! FAKE:
+        if (i) {}
 
         sp80.x = 0;
         sp80.z = 0;
@@ -1948,22 +1949,22 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             }
             Matrix_Pop();
 
-            if (mtx_s3 != NULL) {
-                if (play) {}
-                gSPMatrix(POLY_OPA_DISP++, mtx_s3, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-                if (spFC[this->potsLife[i]] != NULL) {
-                    s32 pad;
-
-                    gSPDisplayList(POLY_OPA_DISP++, spFC[this->potsLife[i]]);
-
-                    if (spE4[this->potsLife[i]] != NULL) {
-                        gSPDisplayList(POLY_OPA_DISP++, spE4[this->potsLife[i]]);
-                    }
-                }
-            } else {
+            if (mtx_s3 == NULL) {
                 //! @bug skips CLOSE_DISPS
                 return;
+            }
+
+            //! FAKE:
+            if (play) {}
+
+            gSPMatrix(POLY_OPA_DISP++, mtx_s3, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            if (spFC[this->potsLife[i]] != NULL) {
+                gSPDisplayList(POLY_OPA_DISP++, spFC[this->potsLife[i]]);
+
+                if (spE4[this->potsLife[i]] != NULL) {
+                    gSPDisplayList(POLY_OPA_DISP++, spE4[this->potsLife[i]]);
+                }
             }
         }
 

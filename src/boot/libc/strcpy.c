@@ -1,6 +1,6 @@
-#include "global.h"
+#include "libc/string.h"
 
-char* __osStrcpy(char* dst, const char* src) {
+char* strcpy(char* dst, const char* src) {
     char* _dst = dst;
 
     while (*src != '\0') {

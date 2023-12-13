@@ -1311,7 +1311,7 @@ void func_80BEEDC0(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEEE10(EnAkindonuts* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 2000, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
@@ -1569,7 +1569,7 @@ void func_80BEF83C(EnAkindonuts* this, PlayState* play) {
         this->actor.shape.yOffset = 1500.0f;
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_368, 3, 2000, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_368, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (DECR(this->unk_33A) == 0) {
@@ -1630,9 +1630,9 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
         }
 
         if (ENAKINDONUTS_GET_3(&this->actor) == ENAKINDONUTS_3_1) {
-            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 1000, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 0x3E8, 0);
         } else {
-            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 300, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 0x12C, 0);
         }
 
         this->actor.shape.rot.y = this->actor.world.rot.y;
