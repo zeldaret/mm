@@ -1166,7 +1166,7 @@ void EnJso_SetupFallDownAndTalk(EnJso* this, PlayState* play) {
     this->textIndex = 2;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
-    func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
     this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_100000;
     this->action = EN_JSO_ACTION_FALL_DOWN_AND_TALK;

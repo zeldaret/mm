@@ -88,7 +88,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, PlayState* play) {
     s32 yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     EnGinkoMan_SwitchAnimation(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (HS_GET_BANK_RUPEES() == 0) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
             Message_StartTextbox(play, 0x44C, &this->actor);
@@ -565,7 +565,7 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
 
 // separate function to handle bank rewards... called while the player is receiving the award
 void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08) && (this->curTextId == 0x45B)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_10_08);
             Message_StartTextbox(play, 0x47A, &this->actor);
@@ -646,9 +646,9 @@ void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, PlayState* play) {
 void EnGinkoMan_FacePlayer(EnGinkoMan* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (this->skelAnime.animation != &object_boj_Anim_004A7C) {
-        Actor_TrackPlayer(play, &this->actor, &this->limb15Rot, &this->limb8Rot, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     } else {
-        Actor_TrackNone(&this->limb15Rot, &this->limb8Rot);
+        Actor_TrackNone(&this->headRot, &this->torsoRot);
     }
 }
 
@@ -670,12 +670,12 @@ s32 EnGinkoMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 
     if (limbIndex == OBJECT_BOJ_LIMB_0F) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateXS(this->limb15Rot.y, MTXMODE_APPLY);
-        Matrix_RotateZS(this->limb15Rot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headRot.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     } else if (limbIndex == OBJECT_BOJ_LIMB_08) {
-        Matrix_RotateXS(-this->limb8Rot.y, MTXMODE_APPLY);
-        Matrix_RotateZS(-this->limb8Rot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(-this->torsoRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->torsoRot.x, MTXMODE_APPLY);
     }
 
     return false;

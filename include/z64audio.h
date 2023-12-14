@@ -11,6 +11,7 @@
 #include "audio/effects.h"
 #include "audio/heap.h"
 #include "audio/load.h"
+#include "audio/reverb.h"
 #include "audio/soundfont.h"
 #include "sequence.h"
 
@@ -77,24 +78,9 @@ typedef enum {
 
 #define AUDIO_RELOCATED_ADDRESS_START K0BASE
 
-#define REVERB_INDEX_NONE -1
-
 // To be used with AudioThread_CountAndReleaseNotes()
 #define AUDIO_NOTE_RELEASE (1 << 0)
 #define AUDIO_NOTE_SAMPLE_NOTES (1 << 1)
-
-typedef enum {
-    /* 0 */ REVERB_DATA_TYPE_SETTINGS, // Reverb Settings (Init)
-    /* 1 */ REVERB_DATA_TYPE_DELAY, // Reverb Delay (numSamples)
-    /* 2 */ REVERB_DATA_TYPE_DECAY, // Reverb Decay Ratio
-    /* 3 */ REVERB_DATA_TYPE_SUB_VOLUME, // Reverb Sub-Volume
-    /* 4 */ REVERB_DATA_TYPE_VOLUME, // Reverb Volume
-    /* 5 */ REVERB_DATA_TYPE_LEAK_RIGHT, // Reverb Leak Right Channel
-    /* 6 */ REVERB_DATA_TYPE_LEAK_LEFT, // Reverb Leak Left Channel
-    /* 7 */ REVERB_DATA_TYPE_FILTER_LEFT, // Reverb Left Filter
-    /* 8 */ REVERB_DATA_TYPE_FILTER_RIGHT, // Reverb Right Filter
-    /* 9 */ REVERB_DATA_TYPE_9 // Reverb Unk
-} ReverbDataType;
 
 typedef enum {
     /*  0x1 */ AUDIO_ERROR_NO_INST = 1,
@@ -142,66 +128,6 @@ typedef struct NotePool {
     /* 0x20 */ AudioListItem releasing;
     /* 0x30 */ AudioListItem active;
 } NotePool; // size = 0x40
-
-/**
- * Stores an entry of decompressed samples in a reverb ring buffer.
- * By storing the sample in a ring buffer, the time it takes to loop
- * around back to the same sample acts as a delay, leading to an echo effect.
- */
-typedef struct {
-    /* 0x00 */ s16 numSamplesAfterDownsampling; // never read
-    /* 0x02 */ s16 numSamples; // never read
-    /* 0x04 */ s16* toDownsampleLeft;
-    /* 0x08 */ s16* toDownsampleRight; // data pointed to by left and right are adjacent in memory
-    /* 0x0C */ s32 startPos; // start pos in ring buffer
-    /* 0x10 */ s16 size; // first length in ring buffer (from startPos, at most until end)
-    /* 0x12 */ s16 wrappedSize; // second length in ring buffer (from pos 0)
-    /* 0x14 */ u16 loadResamplePitch;
-    /* 0x16 */ u16 saveResamplePitch;
-    /* 0x18 */ u16 saveResampleNumSamples;
-} ReverbBufferEntry; // size = 0x1C
-
-typedef struct {
-    /* 0x000 */ u8 resampleFlags;
-    /* 0x001 */ u8 useReverb;
-    /* 0x002 */ u8 framesToIgnore;
-    /* 0x003 */ u8 curFrame;
-    /* 0x004 */ u8 downsampleRate;
-    /* 0x005 */ s8 mixReverbIndex; // mix in reverb from this index. set to 0xFF to not mix any
-    /* 0x006 */ u16 delayNumSamples; // number of samples between echos
-    /* 0x008 */ s16 mixReverbStrength; // the gain/amount to mix in reverb from mixReverbIndex
-    /* 0x00A */ s16 volume;
-    /* 0x00C */ u16 decayRatio; // determines how fast reverb dissipate
-    /* 0x00E */ u16 downsamplePitch;
-    /* 0x010 */ s16 leakRtl;
-    /* 0x012 */ s16 leakLtr;
-    /* 0x014 */ u16 subDelay; // number of samples between sub echos
-    /* 0x016 */ s16 subVolume; // strength of the sub echos
-    /* 0x018 */ u8 resampleEffectOn;
-    /* 0x019 */ s8 resampleEffectExtraSamples;
-    /* 0x01A */ u16 resampleEffectLoadUnk;
-    /* 0x01C */ u16 resampleEffectSaveUnk;
-    /* 0x01E */ u8 delayNumSamplesAfterDownsampling;
-    /* 0x020 */ s32 nextReverbBufPos;
-    /* 0x024 */ s32 delayNumSamplesUnk; // May be bufSizePerChan
-    /* 0x028 */ s16* leftReverbBuf;
-    /* 0x02C */ s16* rightReverbBuf;
-    /* 0x030 */ s16* leftLoadResampleBuf;
-    /* 0x034 */ s16* rightLoadResampleBuf;
-    /* 0x038 */ s16* leftSaveResampleBuf;
-    /* 0x03C */ s16* rightSaveResampleBuf;
-    /* 0x040 */ ReverbBufferEntry bufEntry[2][5];
-    /* 0x158 */ ReverbBufferEntry subBufEntry[2][5];
-    /* 0x270 */ s16* filterLeft;
-    /* 0x274 */ s16* filterRight;
-    /* 0x278 */ s16* filterLeftInit;
-    /* 0x27C */ s16* filterRightInit;
-    /* 0x280 */ s16* filterLeftState;
-    /* 0x284 */ s16* filterRightState;
-    /* 0x288 */ TunedSample tunedSample;
-    /* 0x290 */ Sample sample;
-    /* 0x2A0 */ AdpcmLoop loop;
-} SynthesisReverb; // size = 0x2D0
 
 typedef struct {
     /* 0x00 */ u8* pc; // program counter
@@ -514,21 +440,6 @@ typedef struct Note {
     /* 0xD8 */ NoteSampleState sampleState;
 } Note; // size = 0xF8
 
-typedef struct {
-    /* 0x00 */ u8 downsampleRate;
-    /* 0x02 */ u16 delayNumSamples;
-    /* 0x04 */ u16 decayRatio; // determines how fast reverb dissipates
-    /* 0x06 */ u16 subDelay;
-    /* 0x08 */ u16 subVolume;
-    /* 0x0A */ u16 volume;
-    /* 0x0C */ u16 leakRtl;
-    /* 0x0E */ u16 leakLtr;
-    /* 0x10 */ s8 mixReverbIndex;
-    /* 0x12 */ u16 mixReverbStrength;
-    /* 0x14 */ s16 lowPassFilterCutoffLeft;
-    /* 0x16 */ s16 lowPassFilterCutoffRight;
-} ReverbSettings; // size = 0x18
-
 /**
  * The high-level audio specifications requested when initializing or resetting the audio pool.
  * Most often resets during scene transitions, but will highly depend on game play.
@@ -750,185 +661,6 @@ typedef struct {
     /* 0x18 */ u8 combFilterSize;
     /* 0x1A */ u16 combFilterGain;
 } NoteSubAttributes; // size = 0x1A
-
-typedef struct {
-    /* 0x00 */ f32 volCur;
-    /* 0x04 */ f32 volTarget;
-    /* 0x08 */ f32 volStep;
-    /* 0x0C */ f32 freqScaleCur;
-    /* 0x10 */ f32 freqScaleTarget;
-    /* 0x14 */ f32 freqScaleStep;
-    /* 0x18 */ u16 volTimer;
-    /* 0x1A */ u16 freqScaleTimer;
-} ActiveSequenceChannelData; // size = 0x1C
-
-typedef struct {
-    /* 0x000 */ ActiveSequenceChannelData channelData[SEQ_NUM_CHANNELS];
-    /* 0x1C0 */ f32 volCur;
-    /* 0x1C4 */ f32 volTarget;
-    /* 0x1C8 */ f32 volStep;
-    /* 0x1CC */ u32 tempoCmd;
-    /* 0x1D0 */ f32 tempoCur;
-    /* 0x1D4 */ f32 tempoTarget;
-    /* 0x1D8 */ f32 tempoStep;
-    /* 0x1DC */ u32 setupCmd[8]; // setup commands
-    /* 0x1FC */ u32 startAsyncSeqCmd; // temporarily stores the seqCmd used in SEQCMD_PLAY_SEQUENCE, to be called again once the font is reloaded in
-    /* 0x200 */ u16 volTimer;
-    /* 0x202 */ u16 tempoOriginal;
-    /* 0x204 */ u16 tempoTimer;
-    /* 0x206 */ u16 freqScaleChannelFlags;
-    /* 0x208 */ u16 volChannelFlags;
-    /* 0x20A */ u16 seqId;
-    /* 0x20C */ u16 prevSeqId; // last seqId played on a player
-    /* 0x20E */ u16 channelPortMask;
-    /* 0x210 */ u8 isWaitingForFonts;
-    /* 0x211 */ u8 fontId;
-    /* 0x212 */ u8 volScales[VOL_SCALE_INDEX_MAX];
-    /* 0x216 */ u8 volFadeTimer;
-    /* 0x217 */ u8 fadeVolUpdate;
-    /* 0x218 */ u8 setupCmdTimer;
-    /* 0x219 */ u8 setupCmdNum; // number of setup commands
-    /* 0x21A */ u8 setupFadeTimer;
-    /* 0x21B */ u8 isSeqPlayerInit;
-} ActiveSequence; // size = 0x21C
-
-typedef struct {
-    /* 0x0 */ u8 seqId;
-    /* 0x1 */ u8 priority;
-} SeqRequest; // size = 0x02
-
-typedef enum {
-    /* 0 */ BANK_PLAYER,
-    /* 1 */ BANK_ITEM,
-    /* 2 */ BANK_ENV,
-    /* 3 */ BANK_ENEMY,
-    /* 4 */ BANK_SYSTEM,
-    /* 5 */ BANK_OCARINA,
-    /* 6 */ BANK_VOICE
-} SfxBankType;
-
-typedef enum {
-    /* 0 */ SFX_STATE_EMPTY,
-    /* 1 */ SFX_STATE_QUEUED,
-    /* 2 */ SFX_STATE_READY,
-    /* 3 */ SFX_STATE_PLAYING_REFRESH,
-    /* 4 */ SFX_STATE_PLAYING,
-    /* 5 */ SFX_STATE_PLAYING_ONE_FRAME
-} SfxState;
-
-typedef struct {
-    /* 0x00 */ f32* posX;
-    /* 0x04 */ f32* posY;
-    /* 0x08 */ f32* posZ;
-    /* 0x0C */ f32* freqScale;
-    /* 0x10 */ f32* volume;
-    /* 0x14 */ s8* reverbAdd;
-    /* 0x18 */ f32 dist;
-    /* 0x1C */ u32 priority; // lower is more prioritized
-    /* 0x20 */ u16 sfxParams;
-    /* 0x22 */ u16 sfxId;
-    /* 0x25 */ u8 sfxFlags;
-    /* 0x24 */ u8 sfxImportance;
-    /* 0x26 */ u8 state; // uses SfxState enum
-    /* 0x27 */ u8 freshness;
-    /* 0x28 */ u8 prev;
-    /* 0x29 */ u8 next;
-    /* 0x2A */ u8 channelIndex;
-    /* 0x2B */ u8 randFreq;
-    /* 0x2C */ u8 token;
-} SfxBankEntry; // size = 0x30
-
-/*
- * SfxId:
- *
- * & 03FF    0000000111111111    index
- * & 0400    0000010000000000    unused flag
- * & 0800    0000100000000000    SFX_FLAG
- * & 0C00    0000110000000000    Flag Mask
- * & F000    1111000000000000    observed in audio code
- */
-
-#define SFX_BANK_SHIFT(sfxId)   (((sfxId) >> 12) & 0xFF)
-
-#define SFX_BANK_MASK(sfxId)    ((sfxId) & 0xF000)
-
-#define SFX_INDEX(sfxId)    ((sfxId) & 0x3FF)
-#define SFX_BANK(sfxId)     SFX_BANK_SHIFT(SFX_BANK_MASK(sfxId))
-
-typedef struct {
-    /* 0x0 */ u32 priority; // lower is more prioritized
-    /* 0x4 */ u8 entryIndex;
-} ActiveSfx; // size = 0x08
-
-// SfxParams bit-packing
-
-// Slows the decay of volume with distance (a 3-bit number ranging from 0-7)
-#define SFX_PARAM_DIST_RANGE_SHIFT 0
-#define SFX_PARAM_DIST_RANGE_MASK_UPPER (4 << SFX_PARAM_DIST_RANGE_SHIFT)
-#define SFX_PARAM_DIST_RANGE_MASK (7 << SFX_PARAM_DIST_RANGE_SHIFT)
-
-// Lower SEQ_PLAYER_BGM_MAIN and SEQ_PLAYER_BGM_SUB while the sfx is playing
-#define SFX_FLAG_LOWER_VOLUME_BGM (1 << 3)
-
-// Sfx priority is not raised with distance (making it more likely to be ejected)
-#define SFX_FLAG_PRIORITY_NO_DIST (1 << 4)
-
-// If a new sfx is requested at both the same position with the same importance,
-// Block that new sfx from replacing the current sfx
-// Note: Only 1 sfx can be played at a specific position at once
-#define SFX_FLAG_BLOCK_EQUAL_IMPORTANCE (1 << 5)
-
-// Applies increasingly random offsets to frequency (a 2-bit number ranging from 0-3)
-#define SFX_PARAM_RAND_FREQ_RAISE_SHIFT 6
-#define SFX_PARAM_RAND_FREQ_RAISE_MASK (3 << SFX_PARAM_RAND_FREQ_RAISE_SHIFT)
-
-// Sets a flag to ioPort 5
-#define SFX_FLAG_8 (1 << 8)
-
-// Use lowpass filter on surround sound
-#define SFX_FLAG_SURROUND_LOWPASS_FILTER (1 << 9)
-
-// Unused remnant of OoT
-#define SFX_FLAG_BEHIND_SCREEN_Z_INDEX_SHIFT 10
-#define SFX_FLAG_BEHIND_SCREEN_Z_INDEX (1 << SFX_FLAG_BEHIND_SCREEN_Z_INDEX_SHIFT)
-
-// Randomly scale base frequency each frame through mutiplicative offset
-#define SFX_PARAM_RAND_FREQ_SCALE (1 << 11)
-
-// Sfx reverb is not raised with distance
-#define SFX_FLAG_REVERB_NO_DIST (1 << 12)
-
-// Sfx volume is not lowered with distance
-#define SFX_FLAG_VOLUME_NO_DIST (1 << 13)
-
-// SFX_FLAG_VIBRATO 
-// Randomly lower base frequency each frame through additive offset
-#define SFX_PARAM_RAND_FREQ_LOWER (1 << 14)
-
-// Sfx frequency is not raised with distance
-#define SFX_FLAG_FREQ_NO_DIST (1 << 15)
-
-// Force the sfx to reset from the beginning when requested again
-#define SFX_FLAG2_FORCE_RESET (1 << 0)
-
-// Unused
-#define SFX_FLAG2_UNUSED2 (1 << 2)
-#define SFX_FLAG2_UNUSED4 (1 << 4)
-
-// Do not use highpass filter on surround sound
-#define SFX_FLAG2_SURROUND_NO_HIGHPASS_FILTER (1 << 5)
-
-// Unused
-#define SFX_FLAG2_UNUSED6 (1 << 6)
-
-// Apply a low-pass filter with a lowPassCutoff of 4
-#define SFX_FLAG2_APPLY_LOWPASS_FILTER (1 << 7)
-
-typedef struct {
-    /* 0x0 */ u8 importance;
-    /* 0x1 */ u8 flags;
-    /* 0x2 */ u16 params;
-} SfxParams; // size = 0x4
 
 typedef void (*AudioCustomUpdateFunction)(void);
 typedef u32 (*AudioCustomSeqFunction)(s8 value, SequenceChannel* channel);

@@ -124,10 +124,8 @@ D_A4800018 = 0xA4800018; // SI_STATUS_REG
 
 // sys_cfb buffers
 
-gFramebuffer1 = 0x80000500;
-gFramebufferHiRes0 = 0x80780000;
-gFramebufferHiRes1 = 0x80000500;
-D_80025D00 = 0x80025D00;
+gFramebufferHiRes1 = gLoBuffer;
+gFramebufferHiRes0 = gHiBuffer;
 
 // Ucode symbols
 
@@ -195,21 +193,6 @@ D_060005C4 = 0x060005C4;
 
 D_06000A20 = 0x06000A20;
 D_06000040 = 0x06000040;
-
-// ovl_Boss_05
-
-D_060006A4 = 0x060006A4;
-D_06000A5C = 0x06000A5C;
-D_06000ABC = 0x06000ABC;
-D_060024E0 = 0x060024E0;
-D_06002F0C = 0x06002F0C;
-D_06003448 = 0x06003448;
-D_06006240 = 0x06006240;
-D_06006378 = 0x06006378;
-D_06006484 = 0x06006484;
-D_06006E50 = 0x06006E50;
-D_06007488 = 0x06007488;
-D_06007908 = 0x06007908;
 
 // ovl_Boss_07
 
@@ -536,11 +519,6 @@ D_0C000000 = 0x0C000000;
 // segment 0x0E
 
 D_0E000000 = 0x0E000000;
-
-// TODO the following are fake and are offsets into the structure at D_0E000000
-D_0E000140 = 0x0E000140;
-D_0E0001C8 = 0x0E0001C8;
-D_0E0002C8 = 0x0E0002C8;
 
 // segment 0x0F
 

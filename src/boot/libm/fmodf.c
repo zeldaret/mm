@@ -1,7 +1,7 @@
-#include "global.h"
+#include "libc/math.h"
 
-f32 fmodf(f32 dividend, f32 divisor) {
-    s32 quotient;
+float fmodf(float dividend, float divisor) {
+    int quotient;
 
     if (divisor == 0.0f) {
         return 0.0f;

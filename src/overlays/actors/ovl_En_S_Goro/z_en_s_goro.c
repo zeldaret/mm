@@ -189,15 +189,6 @@ static TexturePtr sEyeTextures[] = {
     gGoronEyeClosed2Tex,
 };
 
-u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play);
-u16 EnSGoro_BombshopGoron_NextTextId(EnSGoro* this, PlayState* play);
-
-s32 EnSGoro_FindGoronElder(EnSGoro* this, PlayState* play);
-s32 EnSGoro_FindGoronChild(EnSGoro* this, PlayState* play);
-s32 EnSGoro_CheckLullaby(EnSGoro* this, PlayState* play);
-s32 EnSGoro_CheckGKBehavior(EnSGoro* this, PlayState* play);
-
-void EnSGoro_SetupAction(EnSGoro* this, PlayState* play);
 void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play);
 void EnSGoro_WinterShrineGoron_Talk(EnSGoro* this, PlayState* play);
 void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play);
@@ -209,23 +200,6 @@ void EnSGoro_ShopGoron_TakePayment(EnSGoro* this, PlayState* play);
 void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play);
 void EnSGoro_Sleep(EnSGoro* this, PlayState* play);
 void EnSGoro_SleepTalk(EnSGoro* this, PlayState* play);
-
-s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play);
-s32 EnSGoro_UpdateRotationToPlayer(EnSGoro* this, PlayState* play);
-s32 EnSGoro_UpdateAttentionTarget(EnSGoro* this, PlayState* play);
-void EnSGoro_UpdateToHandtapAnimation(EnSGoro* this);
-void EnSGoro_UpdateSleepyAnimation(EnSGoro* this);
-void EnSGoro_UpdateToIdleAnimation(EnSGoro* this);
-void EnSGoro_UpdateEyes(EnSGoro* this);
-void EnSGoro_UpdateActorFocus(EnSGoro* this);
-void EnSGoro_UpdateSleeping(EnSGoro* this, PlayState* play);
-void EnSGoro_UpdateCollider(EnSGoro* this, PlayState* play);
-
-s32 EnSGoro_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRot, s32 overrideRot);
-s32 EnSGoro_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void EnSGoro_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx);
-void EnSGoro_DrawUnrolled(EnSGoro* this, PlayState* play);
-void EnSGoro_DrawRolledUp(EnSGoro* this, PlayState* play);
 
 /**
  * Dialogue tree for EnSGoro when use in Goron Shrine context. Returns ID of next message to display.
@@ -1104,7 +1078,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
 
 void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play) {
     if (!EnSGoro_CheckLullaby(this, play) && !EnSGoro_CheckGKBehavior(this, play)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_ENGAGED;
             if (this->actionFlags & EN_S_GORO_ACTIONFLAG_EARSCOVERED) {
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_EYESOPEN;
@@ -1139,7 +1113,7 @@ void EnSGoro_WinterShrineGoron_Talk(EnSGoro* this, PlayState* play) {
 void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play) {
     if ((EN_S_GORO_GET_MAIN_TYPE(&this->actor) == EN_S_GORO_TYPE_SHRINE_SPRING_F) ||
         !EnSGoro_UpdateCheerAnimation(this, play)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actionFlags |= EN_S_GORO_ACTIONFLAG_ENGAGED;
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
@@ -1173,7 +1147,7 @@ void EnSGoro_ShopGoron_Idle(EnSGoro* this, PlayState* play) {
     if (!(this->actionFlags & EN_S_GORO_ACTIONFLAG_ROLLEDUP)) {
         EnSGoro_UpdateToIdleAnimation(this);
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFlags |= EN_S_GORO_ACTIONFLAG_ENGAGED;
         this->textId = EnSGoro_BombshopGoron_NextTextId(this, play);
         if (this->actionFlags & EN_S_GORO_ACTIONFLAG_ROLLEDUP) {
@@ -1267,7 +1241,7 @@ void EnSGoro_ShopGoron_TakePayment(EnSGoro* this, PlayState* play) {
 }
 
 void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnSGoro_ShopGoron_Talk;
     } else {
@@ -1276,7 +1250,7 @@ void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play) {
 }
 
 void EnSGoro_Sleep(EnSGoro* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x23A, &this->actor);
         this->actionFunc = EnSGoro_SleepTalk;
     } else if (this->actor.isLockedOn) {

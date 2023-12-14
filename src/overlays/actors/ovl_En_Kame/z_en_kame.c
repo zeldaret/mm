@@ -714,7 +714,7 @@ void EnKame_Dead(EnKame* this, PlayState* play) {
         }
 
         this->actor.shape.rot.x += Rand_S16Offset(0x700, 0x1400);
-        this->actor.shape.rot.y += (s16)Rand_ZeroFloat(5120.0f);
+        this->actor.shape.rot.y += TRUNCF_BINANG(Rand_ZeroFloat(0x1400));
         this->actor.shape.rot.z += Rand_S16Offset(0x700, 0x1400);
     }
 }
@@ -887,11 +887,7 @@ void EnKame_Update(Actor* thisx, PlayState* play) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.3f;
-            if (this->drawDmgEffScale > 0.6f) {
-                this->drawDmgEffScale = 0.6f;
-            } else {
-                this->drawDmgEffScale = this->drawDmgEffScale;
-            }
+            this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.6f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.6f, 15.0f * 0.001f)) {
             Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }

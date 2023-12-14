@@ -157,14 +157,14 @@ void EnTrt_UpdateCollider(EnTrt* this, PlayState* play) {
 }
 
 void EnTrt_UpdateCursorPos(PlayState* play, EnTrt* this) {
-    s16 x;
-    s16 y;
+    s16 screenPosX;
+    s16 screenPosY;
     f32 xOffset = 0.0f;
     f32 yOffset = 17.0f;
 
-    Actor_GetScreenPos(play, &this->items[this->cursorIndex]->actor, &x, &y);
-    this->cursorPos.x = x + xOffset;
-    this->cursorPos.y = y + yOffset;
+    Actor_GetScreenPos(play, &this->items[this->cursorIndex]->actor, &screenPosX, &screenPosY);
+    this->cursorPos.x = screenPosX + xOffset;
+    this->cursorPos.y = screenPosY + yOffset;
     this->cursorPos.z = 1.2f;
 }
 
@@ -216,7 +216,7 @@ void EnTrt_EndInteraction(PlayState* play, EnTrt* this) {
         CutsceneManager_Stop(this->csId);
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
-    Actor_ProcessTalkRequest(&this->actor, &play->state);
+    Actor_TalkOfferAccepted(&this->actor, &play->state);
     play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
     play->msgCtx.stateTimer = 4;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
@@ -800,7 +800,7 @@ void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
     if (Player_GetMask(play) == PLAYER_MASK_SCENTS) {
         this->textId = 0x890;
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (player->transformation == PLAYER_FORM_HUMAN) {
             this->flags |= ENTRT_TALKED;
         }
@@ -844,7 +844,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
     } else {
         this->textId = 0x850;
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -878,7 +878,7 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
 
 void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
-    s16 animLastFrame = Animation_GetLastFrame(&gKotakeWakeUpAnim) / (s16)this->skelAnime.playSpeed;
+    s16 animLastFrame = Animation_GetLastFrame(&gKotakeWakeUpAnim) / TRUNCF_BINANG(this->skelAnime.playSpeed);
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (CutsceneManager_IsNext(this->csId)) {
@@ -1033,7 +1033,7 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
             CutsceneManager_Queue(this->csId);
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         switch (this->textId) {
             case 0x889:
                 this->textId = 0x88A;
@@ -1072,7 +1072,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->textId, &this->actor);
     } else {
         if ((player->actor.world.pos.x >= -50.0f) && (player->actor.world.pos.x <= 50.0f) &&
@@ -1406,7 +1406,7 @@ void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
 }
 
 void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
-    u8 talkState = talkState = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
     PlayerItemAction itemAction;
 

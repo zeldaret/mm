@@ -309,7 +309,7 @@ void EnDnk_Update(Actor* thisx, PlayState* play) {
     func_80A52134(this, play);
 }
 
-s32 func_80A51A78(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnDnk_OverrideLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
 
     this->unk_260[limbIndex] = *dList;
@@ -317,7 +317,7 @@ s32 func_80A51A78(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-void func_80A51AA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDnk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
     Vec3f sp50 = gZeroVec3f;
@@ -379,13 +379,13 @@ void func_80A51CB8(EnDnk* this, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A5245C[this->unk_2A0]));
     gDPPipeSync(POLY_OPA_DISP++);
 
-    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51A78, func_80A51AA4,
-                      &this->actor);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDnk_OverrideLimbDraw2,
+                      EnDnk_PostLimbDraw2, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 func_80A51D78(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnDnk_OverrideLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
 
     this->unk_260[limbIndex] = *dList;
@@ -393,7 +393,7 @@ s32 func_80A51D78(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-void func_80A51DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDnk_PostLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
     Vec3f sp50 = gZeroVec3f;
@@ -445,8 +445,8 @@ void func_80A51DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
 
 void func_80A51FC0(EnDnk* this, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51D78, func_80A51DA4,
-                      &this->actor);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDnk_OverrideLimbDraw1,
+                      EnDnk_PostLimbDraw1, &this->actor);
 }
 
 void func_80A52018(Actor* thisx, PlayState* play) {

@@ -130,7 +130,7 @@ void EffectSsEnIce_UpdateFlying(PlayState* play, u32 index, EffectSs* this) {
     s16 rand;
 
     if ((this->actor != NULL) && (this->actor->update != NULL)) {
-        if ((this->life >= 9) && (this->actor->colorFilterTimer != 0) && (!(this->actor->colorFilterParams & 0xC000))) {
+        if ((this->life >= 9) && (this->actor->colorFilterTimer != 0) && !(this->actor->colorFilterParams & 0xC000)) {
             Math_Vec3f_Sum(&this->actor->world.pos, &this->vec, &this->pos);
             this->life++;
         } else if (this->life == 9) {

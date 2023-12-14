@@ -23,7 +23,7 @@ void func_80B3B120(EnGg2* this, PlayState* play);
 void func_80B3B21C(EnGg2* this, PlayState* play);
 void func_80B3B294(EnGg2* this, PlayState* play);
 void func_80B3B5D4(EnGg2* this, PlayState* play);
-s32 func_80B3B648(EnGg2* this, Path* path, s32 arg2_);
+s32 EnGg2_HasReachedPoint(EnGg2* this, Path* path, s32 pointIndex);
 f32 func_80B3B7E4(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
 ActorInit En_Gg2_InitVars = {
@@ -183,7 +183,7 @@ void func_80B3AE60(EnGg2* this, PlayState* play) {
 }
 
 void func_80B3AFB0(EnGg2* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2F0 = 1;
         this->actionFunc = func_80B3AE60;
     } else if ((this->actor.xzDistToPlayer < 100.0f) && (this->actor.xzDistToPlayer > 50.0f) &&
@@ -217,7 +217,7 @@ void func_80B3B120(EnGg2* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Math_SmoothStepToS(&this->actor.shape.rot.x, sp30.x, 4, 0x3E8, 1);
         this->actor.world.rot.x = -this->actor.shape.rot.x;
-        if (func_80B3B648(this, this->path, this->unk_1DC) != 0) {
+        if (EnGg2_HasReachedPoint(this, this->path, this->unk_1DC)) {
             if (this->unk_1DC >= (this->path->count - 2)) {
                 this->actionFunc = func_80B3AE60;
                 this->actor.speed = 0.0f;
@@ -262,7 +262,7 @@ void func_80B3B294(EnGg2* this, PlayState* play) {
             Math_SmoothStepToS(&this->actor.shape.rot.x, sp30.x, 4, 0x3E8, 1);
             this->actor.world.rot.x = -this->actor.shape.rot.x;
 
-            if (func_80B3B648(this, this->path, this->unk_1DC)) {
+            if (EnGg2_HasReachedPoint(this, this->path, this->unk_1DC)) {
                 if (this->unk_1DC < (this->path->count - 1)) {
                     this->unk_1DC++;
                 } else {
@@ -313,37 +313,38 @@ void func_80B3B5D4(EnGg2* this, PlayState* play) {
     }
 }
 
-s32 func_80B3B648(EnGg2* this, Path* path, s32 arg2_) {
+s32 EnGg2_HasReachedPoint(EnGg2* this, Path* path, s32 pointIndex) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
-    s32 sp58 = path->count;
-    s32 arg2 = arg2_;
-    s32 ret = false;
-    f32 phi_f12;
-    f32 phi_f14;
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
-    Vec3f sp30;
+    s32 count = path->count;
+    s32 index = pointIndex;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    Math_Vec3s_ToVec3f(&sp30, &points[arg2]);
+    Math_Vec3s_ToVec3f(&point, &points[index]);
 
-    if (arg2 == 0) {
-        phi_f12 = points[1].x - points[0].x;
-        phi_f14 = points[1].z - points[0].z;
-    } else if ((sp58 - 1) == arg2) {
-        phi_f12 = points[sp58 - 1].x - points[sp58 - 2].x;
-        phi_f14 = points[sp58 - 1].z - points[sp58 - 2].z;
+    if (index == 0) {
+        diffX = points[1].x - points[0].x;
+        diffZ = points[1].z - points[0].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 1].x - points[count - 2].x;
+        diffZ = points[count - 1].z - points[count - 2].z;
     } else {
-        phi_f12 = points[arg2 + 1].x - points[arg2 - 1].x;
-        phi_f14 = points[arg2 + 1].z - points[arg2 - 1].z;
+        diffX = points[index + 1].x - points[index - 1].x;
+        diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
-    if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        ret = true;
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
-    return ret;
+
+    return reached;
 }
 
 f32 func_80B3B7E4(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
@@ -467,7 +468,7 @@ void EnGg2_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithoutGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
     func_80B3B8A4(this);
-    Actor_TrackPlayer(play, &this->actor, &this->unk_1E0, &this->unk_1E6, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
 
     if ((this->animIndex == ENGG2_ANIM_5) || (this->animIndex == ENGG2_ANIM_7)) {
         Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_SHARP_FLOAT - SFX_FLAG);
@@ -479,7 +480,8 @@ void EnGg2_Update(Actor* thisx, PlayState* play) {
     func_80B3ADD8(this);
 }
 
-s32 func_80B3BD44(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+s32 EnGg2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                           Gfx** gfx) {
     EnGg2* this = THIS;
 
     if ((this->animIndex != ENGG2_ANIM_5) && (this->animIndex != ENGG2_ANIM_7)) {
@@ -494,7 +496,7 @@ s32 func_80B3BD44(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-void func_80B3BDC0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnGg2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnGg2* this = THIS;
 
     if (limbIndex == OBJECT_GG_LIMB_04) {
@@ -514,7 +516,7 @@ void EnGg2_Draw(Actor* thisx, PlayState* play) {
 
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               func_80B3BD44, func_80B3BDC0, &this->actor, POLY_XLU_DISP);
+                               EnGg2_OverrideLimbDraw, EnGg2_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

@@ -13,8 +13,8 @@
         <Texture Name="gQuestIconDungeonMapTex" OutName="dungeon_map_icon" Format="rgba32" Width="24" Height="24" Offset="0x4800" />
         <!-- Identical to gQuestIconGoldSkulltulaTex -->
         <Texture Name="gQuestIconGoldSkulltula2Tex" OutName="gold_skulltula_2_icon" Format="rgba32" Width="24" Height="24" Offset="0x5100" />
-        <Texture Name="gQuestIconSmallMagicJarTex" OutName="small_magic_jar_icon" Format="rgba32" Width="24" Height="24" Offset="0x6300" />
         <Texture Name="gQuestIconSmallKeyTex" OutName="small_key_icon" Format="rgba32" Width="24" Height="24" Offset="0x5A00" />
+        <Texture Name="gQuestIconSmallMagicJarTex" OutName="small_magic_jar_icon" Format="rgba32" Width="24" Height="24" Offset="0x6300" />
         <Texture Name="gQuestIconBigMagicJarTex" OutName="big_magic_jar_icon" Format="rgba32" Width="24" Height="24" Offset="0x6C00" />
         <Texture Name="gQuestIconLinkHumanFaceTex" OutName="link_human_face_icon" Format="rgba16" Width="16" Height="16" Offset="0x7500"/>
     </File>

@@ -6,7 +6,6 @@
 
 #include "z_en_rg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_oF1d_map/object_oF1d_map.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
@@ -17,7 +16,6 @@ void EnRg_Destroy(Actor* thisx, PlayState* play);
 void EnRg_Update(Actor* thisx, PlayState* play);
 void EnRg_Draw(Actor* thisx, PlayState* play);
 
-void func_80BF4EBC(EnRg* this, PlayState* play);
 void func_80BF4FC4(EnRg* this, PlayState* play);
 
 s32 D_80BF5C10;
@@ -118,9 +116,16 @@ s32 D_80BF57E4[][4] = {
     { 56, 34, 44, 41 }, { 60, 38, 50, 45 }, { 67, 42, 55, 49 }, { 74, 47, 61, 54 },
 };
 
-AnimationInfoS D_80BF5914[] = {
-    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+typedef enum EnRgAnimation {
+    /* -1 */ RG_ANIM_NONE = -1,
+    /*  0 */ RG_ANIM_0,
+    /*  1 */ RG_ANIM_1,
+    /*  2 */ RG_ANIM_MAX
+} EnRgAnimation;
+
+static AnimationInfoS sAnimationInfo[RG_ANIM_MAX] = {
+    { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },  // RG_ANIM_0
+    { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, 0 }, // RG_ANIM_1
 };
 
 static TexturePtr sDustTextures[] = {
@@ -139,62 +144,45 @@ Color_RGBA8 D_80BF5960[] = {
     { 0, 0, 0, 0 },
 };
 
-Vec3f D_80BF596C[] = {
-    { -2473.0f, 39.0f, 7318.0f },  { -2223.0f, 142.0f, 7184.0f }, { -2281.0f, 41.0f, 7718.0f },
-    { -2136.0f, 96.0f, 7840.0f },  { -2432.0f, 6.0f, 7857.0f },   { -2412.0f, 139.0f, 6872.0f },
-    { -2719.0f, 39.0f, 7110.0f },  { -2289.0f, 67.0f, 7463.0f },  { -2820.0f, 85.0f, 6605.0f },
-    { -2088.0f, 160.0f, 7584.0f }, { -2503.0f, 1.0f, 7643.0f },
-};
-
-EffectTireMarkInit D_80BF59F0 = {
-    0,
-    62,
-    { 0, 0, 15, 100 },
-};
-
-TexturePtr D_80BF59F8[] = {
-    gGoronEyeOpenTex, gGoronEyeHalfTex, gGoronEyeClosedTex, gGoronEyeHalfTex, gGoronEyeClosed2Tex,
-};
-
-void func_80BF3920(EnRgStruct* ptr, PlayState* play) {
+void func_80BF3920(EnRgStruct* ptr, PlayState* play2) {
+    PlayState* play = play2;
     f32 temp_f20;
     u8 phi_fp = false;
     s32 i;
-    s32 idx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 32; i++, ptr++) {
-        if ((ptr->unk_00 >= 4) && (ptr->unk_00 < 7)) {
-            if (!phi_fp) {
-                POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
-                gSPDisplayList(POLY_XLU_DISP++, gGoronDustMaterialDL);
-                phi_fp = true;
-            }
-
-            Matrix_Push();
-
-            if (play) {}
-            temp_f20 = (f32)ptr->unk_02 / ptr->unk_01;
-
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80BF5954[ptr->unk_00 - 4].r, D_80BF5954[ptr->unk_00 - 4].g,
-                            D_80BF5954[ptr->unk_00 - 4].b, (u8)(temp_f20 * 255.0f));
-            gDPSetEnvColor(POLY_XLU_DISP++, D_80BF5960[ptr->unk_00 - 4].r, D_80BF5960[ptr->unk_00 - 4].g,
-                           D_80BF5960[ptr->unk_00 - 4].b, 0);
-
-            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
-            Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            idx = temp_f20 * 7.0f;
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[idx]));
-            gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
-
-            Matrix_Pop();
+        if ((ptr->unk_00 < 4) || (ptr->unk_00 >= 7)) {
+            continue;
         }
+
+        if (!phi_fp) {
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
+            gSPDisplayList(POLY_XLU_DISP++, gGoronDustMaterialDL);
+            phi_fp = true;
+        }
+
+        Matrix_Push();
+
+        temp_f20 = (f32)ptr->unk_02 / ptr->unk_01;
+
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80BF5954[ptr->unk_00 - 4].r, D_80BF5954[ptr->unk_00 - 4].g,
+                        D_80BF5954[ptr->unk_00 - 4].b, (u8)(temp_f20 * 255.0f));
+        gDPSetEnvColor(POLY_XLU_DISP++, D_80BF5960[ptr->unk_00 - 4].r, D_80BF5960[ptr->unk_00 - 4].g,
+                       D_80BF5960[ptr->unk_00 - 4].b, 0);
+
+        Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+        Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[(s32)(temp_f20 * 7.0f)]));
+        gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
+
+        Matrix_Pop();
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -277,13 +265,13 @@ s32 func_80BF3F14(EnRg* this, PlayState* play) {
     return false;
 }
 
-void func_80BF3FF8(EnRg* this) {
-    this->skelAnime.playSpeed = this->unk_314;
+void EnRg_UpdateSkelAnime(EnRg* this) {
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
 s32 func_80BF4024(EnRg* this, PlayState* play) {
-    if ((play->csCtx.state == CS_STATE_IDLE) && (this->unk_334 == 1)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && (this->animIndex == RG_ANIM_1)) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
         }
@@ -296,15 +284,15 @@ s32 func_80BF4024(EnRg* this, PlayState* play) {
     return false;
 }
 
-s32 func_80BF409C(EnRg* this, s32 arg1) {
-    s32 ret = false;
+s32 EnRg_ChangeAnim(EnRg* this, s32 animIndex) {
+    s32 didAnimChange = false;
 
-    if (arg1 != this->unk_334) {
-        this->unk_334 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80BF5914, arg1);
-        this->unk_314 = this->skelAnime.playSpeed;
+    if (this->animIndex != animIndex) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
-    return ret;
+    return didAnimChange;
 }
 
 void func_80BF40F4(EnRg* this) {
@@ -354,12 +342,12 @@ s32 func_80BF42BC(EnRg* this, f32 arg1) {
     sp24 = 5460.0f * sp2C;
 
     this->actor.scale.x = 0.01f - (Math_SinS(sp24) * 0.01f);
-    this->actor.scale.y = (Math_SinS(sp24) * 0.01f) + 0.01f;
-    this->actor.scale.z = (Math_SinS(sp24) * 0.01f) + 0.01f;
+    this->actor.scale.y = 0.01f + (Math_SinS(sp24) * 0.01f);
+    this->actor.scale.z = 0.01f + (Math_SinS(sp24) * 0.01f);
 
     this->actor.shape.yOffset = this->actor.scale.y * 100.0f * 14.0f;
     if (!(this->unk_310 & 0x1000)) {
-        this->actor.shape.rot.x += (s16)(13650.0f * sp2C);
+        this->actor.shape.rot.x += TRUNCF_BINANG(0x3552 * sp2C);
     }
 
     this->actor.world.rot.x = this->actor.shape.rot.x;
@@ -396,12 +384,12 @@ s32 func_80BF43FC(EnRg* this) {
 }
 
 s32 func_80BF4560(EnRg* this, PlayState* play) {
-    s32 temp_v0 = SurfaceType_GetSceneExitIndex(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    s32 sceneExitIndex = SurfaceType_GetSceneExitIndex(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-    if ((temp_v0 < 4) || (temp_v0 >= 19)) {
-        temp_v0 = -1;
+    if ((sceneExitIndex < 4) || (sceneExitIndex >= 19)) {
+        sceneExitIndex = -1;
     }
-    return temp_v0;
+    return sceneExitIndex;
 }
 
 s32 func_80BF45B4(EnRg* this) {
@@ -447,7 +435,7 @@ s32 func_80BF45B4(EnRg* this) {
         this->unk_310 &= ~0x800;
         this->unk_310 &= ~0x40;
         if ((this->unk_18C != NULL) && (this->unk_18C->id == ACTOR_PLAYER)) {
-            D_80BF5C10 = 0;
+            D_80BF5C10 = false;
         }
         this->unk_18C = NULL;
         this->unk_324 = 0;
@@ -483,7 +471,7 @@ s32 func_80BF47AC(EnRg* this, PlayState* play) {
     } else if (this->numCheckpointsAheadOfPlayer == -1) {
         phi_f0 = phi_f2 * 1.6f;
     } else {
-        phi_f0 = 2.0f * phi_f2;
+        phi_f0 = phi_f2 * 2.0f;
     }
 
     if (phi_f0 > 0.0f) {
@@ -564,16 +552,15 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
             } while (phi_s0 != NULL);
         }
 
-        if ((phi_s0 == NULL) && (D_80BF5C10 == 0) && (this->unk_326 == 0) &&
-            (player->stateFlags3 & PLAYER_STATE3_80000) && (player->invincibilityTimer == 0) &&
-            func_80BF4220(this, play, &player->actor)) {
+        if ((phi_s0 == NULL) && !D_80BF5C10 && (this->unk_326 == 0) && (player->stateFlags3 & PLAYER_STATE3_80000) &&
+            (player->invincibilityTimer == 0) && func_80BF4220(this, play, &player->actor)) {
             this->unk_18C = &player->actor;
             this->unk_310 |= 0x800;
-            D_80BF5C10 = 1;
+            D_80BF5C10 = true;
         }
     } else if ((this->unk_18C != NULL) && !func_80BF4220(this, play, this->unk_18C)) {
         if (this->unk_18C->id == ACTOR_PLAYER) {
-            D_80BF5C10 = 0;
+            D_80BF5C10 = false;
         }
         this->unk_18C = NULL;
         this->unk_310 &= ~0x800;
@@ -603,7 +590,7 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
                 }
 
                 if ((this->unk_18C != NULL) && (this->unk_18C->id == ACTOR_PLAYER)) {
-                    D_80BF5C10 = 0;
+                    D_80BF5C10 = false;
                 }
             }
         }
@@ -613,9 +600,20 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
     }
 }
 
-s32 func_80BF4D64(Vec3f* arg0) {
-    return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, arg0->x, arg0->z);
+/**
+ * Returns true if the specified position is in the finish line.
+ * The range extends a little bit beyond the finish line's in-game visual.
+ */
+s32 EnRg_IsInFinishLine(Vec3f* pos) {
+    return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
 }
+
+Vec3f D_80BF596C[] = {
+    { -2473.0f, 39.0f, 7318.0f },  { -2223.0f, 142.0f, 7184.0f }, { -2281.0f, 41.0f, 7718.0f },
+    { -2136.0f, 96.0f, 7840.0f },  { -2432.0f, 6.0f, 7857.0f },   { -2412.0f, 139.0f, 6872.0f },
+    { -2719.0f, 39.0f, 7110.0f },  { -2289.0f, 67.0f, 7463.0f },  { -2820.0f, 85.0f, 6605.0f },
+    { -2088.0f, 160.0f, 7584.0f }, { -2503.0f, 1.0f, 7643.0f },
+};
 
 s32 func_80BF4DA8(EnRg* this) {
     s32 pad[4];
@@ -639,7 +637,7 @@ s32 func_80BF4DA8(EnRg* this) {
             this->unk_310 &= ~0x800;
 
             if ((this->unk_18C != NULL) && (this->unk_18C->id == ACTOR_PLAYER)) {
-                D_80BF5C10 = 0;
+                D_80BF5C10 = false;
             }
 
             this->unk_18C = NULL;
@@ -661,7 +659,7 @@ void func_80BF4EBC(EnRg* this, PlayState* play) {
         }
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02)) {
         if (DECR(this->unk_318) == 0) {
-            func_80BF409C(this, 1);
+            EnRg_ChangeAnim(this, RG_ANIM_1);
             this->unk_310 &= ~8;
             this->unk_310 &= ~0x10;
             this->unk_310 |= 0x100;
@@ -689,7 +687,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play) {
                 }
             }
         } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !(this->unk_310 & 0x1000) &&
-                   func_80BF4D64(&this->actor.world.pos)) {
+                   EnRg_IsInFinishLine(&this->actor.world.pos)) {
             this->unk_310 |= 0x1000;
         }
 
@@ -722,6 +720,12 @@ void func_80BF4FC4(EnRg* this, PlayState* play) {
     }
 }
 
+EffectTireMarkInit D_80BF59F0 = {
+    0,
+    62,
+    { 0, 0, 15, 100 },
+};
+
 void EnRg_Init(Actor* thisx, PlayState* play) {
     EnRg* this = THIS;
 
@@ -730,8 +734,8 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
 
-        this->unk_334 = -1;
-        func_80BF409C(this, 0);
+        this->animIndex = RG_ANIM_NONE;
+        EnRg_ChangeAnim(this, RG_ANIM_0);
         this->skelAnime.curFrame = this->skelAnime.endFrame;
 
         Collider_InitAndSetSphere(play, &this->collider2, &this->actor, &sSphereInit);
@@ -786,7 +790,7 @@ void EnRg_Update(Actor* thisx, PlayState* play) {
 
     if (!(this->unk_310 & 0x10)) {
         func_80BF40F4(this);
-        func_80BF3FF8(this);
+        EnRg_UpdateSkelAnime(this);
         func_80BF4024(this, play);
     }
 
@@ -824,20 +828,20 @@ void func_80BF547C(EnRg* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 func_80BF5588(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnRg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnRg* this = THIS;
     s32 fidgetIndex;
 
     switch (limbIndex) {
-        case 10:
+        case GORON_LIMB_BODY:
             fidgetIndex = 0;
             break;
 
-        case 11:
+        case GORON_LIMB_LEFT_UPPER_ARM:
             fidgetIndex = 1;
             break;
 
-        case 14:
+        case GORON_LIMB_RIGHT_UPPER_ARM:
             fidgetIndex = 2;
             break;
 
@@ -847,12 +851,16 @@ s32 func_80BF5588(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     }
 
     if ((this->unk_310 & 8) && (fidgetIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
 
     return false;
 }
+
+static TexturePtr sEyeTextures[] = {
+    gGoronEyeOpenTex, gGoronEyeHalfTex, gGoronEyeClosedTex, gGoronEyeHalfTex, gGoronEyeClosed2Tex,
+};
 
 void EnRg_Draw(Actor* thisx, PlayState* play) {
     EnRg* this = THIS;
@@ -862,10 +870,10 @@ void EnRg_Draw(Actor* thisx, PlayState* play) {
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BF59F8[this->unk_31E]));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk_31E]));
 
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              func_80BF5588, NULL, &this->actor);
+                              EnRg_OverrideLimbDraw, NULL, &this->actor);
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else {

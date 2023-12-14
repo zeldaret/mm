@@ -5,10 +5,6 @@
 #include "segment_symbols.h"
 #include "macros.h"
 
-// pre-boot variables
-extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
-extern u8 D_80025D00[];
-
 // data
 extern size_t gDmaMgrDmaBuffSize;
 extern vs32 gIrqMgrResetStatus;
@@ -21,7 +17,6 @@ extern s32 sIrqMgrRetraceCount;
 // extern UNK_TYPE1 sGfxPrintRainbowData;
 // extern UNK_TYPE1 sGfxPrintFontData;
 // extern UNK_TYPE4 D_80097524;
-// extern u32 sRandInt;
 
 extern u8 sYaz0DataBuffer[0x400];
 extern u8* sYaz0CurDataEnd;
@@ -40,45 +35,6 @@ extern u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern u8 sDropTableAmounts[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern s32 D_801AE194[32];
 extern u8 D_801AE214[32];
-// extern UNK_TYPE4 D_801AE240;
-// extern UNK_TYPE4 D_801AE250;
-extern UNK_PTR D_801AE260[3];
-// extern UNK_TYPE4 D_801AE27C;
-// extern UNK_TYPE4 D_801AE28C;
-// extern UNK_TYPE4 D_801AE29C;
-// extern UNK_TYPE4 D_801AE2AC;
-// extern UNK_TYPE4 D_801AE2BC;
-// extern UNK_TYPE4 D_801AE2CC;
-// extern UNK_TYPE4 D_801AE2DC;
-// extern EffectSsInfo sEffectSsInfo;
-// extern UNK_TYPE1 D_801AE3B0;
-// extern UNK_TYPE1 D_801AE3B4;
-// extern UNK_TYPE4 D_801AE3B8;
-// extern UNK_TYPE4 D_801AE3BC;
-// extern UNK_TYPE1 D_801AE3C0;
-// extern UNK_TYPE1 D_801AE3C4;
-// extern UNK_TYPE1 D_801AE3C8;
-// extern UNK_TYPE1 D_801AE3CC;
-// extern UNK_TYPE4 D_801AE3D0;
-// extern UNK_TYPE4 D_801AE3D4;
-// extern UNK_TYPE4 D_801AE3D8;
-// extern UNK_TYPE4 D_801AE3DC;
-// extern UNK_TYPE4 D_801AE3E0;
-// extern UNK_TYPE4 D_801AE3EC;
-// extern UNK_TYPE1 D_801AE3F8;
-// extern UNK_TYPE4 D_801AE3FC;
-// extern UNK_TYPE4 D_801AE404;
-// extern UNK_TYPE1 D_801AE47C;
-// extern UNK_TYPE1 D_801AE480;
-// extern UNK_TYPE1 D_801AE484;
-// extern UNK_TYPE1 D_801AE485;
-// extern UNK_TYPE1 D_801AE486;
-// extern UNK_TYPE1 D_801AE488;
-// extern UNK_TYPE1 D_801AE489;
-// extern UNK_TYPE1 D_801AE48A;
-// extern UNK_TYPE1 D_801AE48C;
-// extern UNK_TYPE1 D_801AE490;
-extern EffectSsOverlay gParticleOverlayTable[39];
 
 // extern s32 sEntryIndex;
 // extern u32 sCurrentBit;
@@ -227,22 +183,9 @@ extern f32 gStereoPanVolume[];
 extern f32 gDefaultPanVolume[];
 extern s32 gAudioCtxInitalized;
 extern u8 D_801D6200[0x400];
-extern u8 gIsLargeSfxBank[7];
-extern u8 D_801D6608[7];
-extern u8 gChannelsPerBank[4][7];
-extern u8 gUsedChannelsPerBank[4][7];
-extern f32 gSfxVolume;
-extern u8* gScarecrowSpawnSongPtr;
-extern OcarinaSongButtons gOcarinaSongButtons[24];
-extern SfxParams* gSfxParams[7];
-extern SfxBankEntry* gSfxBanks[7];
-extern u8 gSfxChannelLayout;
-extern Vec3f gSfxDefaultPos;
-extern f32 gSfxDefaultFreqAndVolScale;
-extern s8 gSfxDefaultReverb;
+
 extern u8 gAudioSpecId;
 extern u8 gAudioHeapResetState;
-extern ReverbSettings* gReverbSettingsTable[10];
 extern AudioSpec gAudioSpecs[21];
 
 // rodata
@@ -1480,47 +1423,6 @@ extern u8 gSampleBankTable[];
 // bss
 // extern UNK_TYPE1 D_801ED894;
 
-extern Vec3f D_801EDE00;
-extern Vec3f D_801EDE10;
-extern Vec3f D_801EDE20;
-extern Vec3f D_801EDE30;
-extern TriNorm D_801EDE40;
-extern TriNorm D_801EDE78;
-extern LineSegment D_801EDEB0;
-extern TriNorm D_801EDEC8;
-extern TriNorm D_801EDF00;
-extern Vec3f D_801EDF38;
-extern Vec3f D_801EDF48;
-extern TriNorm D_801EDF58;
-extern TriNorm D_801EDF90;
-extern LineSegment D_801EDFC8;
-extern Vec3f D_801EDFE0;
-extern Vec3f D_801EDFF0;
-extern TriNorm D_801EE000;
-extern TriNorm D_801EE038;
-extern TriNorm D_801EE070[2];
-extern Vec3f D_801EE0D8;
-extern TriNorm D_801EE0E8[2];
-extern TriNorm D_801EE150;
-extern TriNorm D_801EE188;
-extern Vec3f D_801EE1C0;
-extern Vec3f D_801EE1D0;
-extern Vec3f D_801EE1E0;
-extern Vec3f D_801EE1F0;
-// extern UNK_TYPE1 D_801EE1F4;
-// extern UNK_TYPE1 D_801EE1F8;
-extern EffectSparkInit D_801EE200;
-extern TriNorm D_801EE6C8;
-extern TriNorm D_801EE700;
-extern EffectSparkInit D_801EE738;
-extern EffectSparkInit D_801EEC00;
-extern EffectSparkInit D_801EF0C8;
-extern TriNorm D_801EF590;
-extern TriNorm D_801EF5C8;
-extern TriNorm D_801EF600;
-extern TriNorm D_801EF638;
-extern SaveContext gSaveContext;
-
 // extern UNK_TYPE1 D_801F4E20;
 // extern UNK_TYPE1 sBeatingHeartsDDPrim;
 // extern UNK_TYPE1 sBeatingHeartsDDEnv;
@@ -1532,7 +1434,7 @@ extern SaveContext gSaveContext;
 // extern UNK_TYPE1 D_801F4F66;
 // extern UNK_TYPE1 D_801F4F68;
 // extern UNK_TYPE1 D_801F4F6A;
-// extern LightsBuffer sLightsBuffer;
+
 // extern UNK_TYPE1 D_801F5130;
 // extern UNK_TYPE1 D_801F5270;
 // extern UNK_TYPE1 D_801F528E;
@@ -1637,11 +1539,6 @@ extern MtxF* sCurrentMatrix;
 
 extern s32 D_801FD120;
 
-extern ActiveSfx gActiveSfx[7][3];
-extern SeqRequest sSeqRequests[][5];
-extern u8 sNumSeqRequests[5];
-extern u32 sAudioSeqCmds[0xB0];
-extern ActiveSequence gActiveSeqs[];
 extern u8 sResetAudioHeapTimer;
 extern u16 sResetAudioHeapFadeReverbVolume;
 extern u16 sResetAudioHeapFadeReverbVolumeStep;
@@ -1652,7 +1549,6 @@ extern AudioCustomReverbFunction gAudioCustomReverbFunction;
 extern AudioCustomSynthFunction gAudioCustomSynthFunction;
 
 // other segments
-extern GfxMasterList D_0E000000;
 extern Mtx D_01000000;
 extern u16 D_0F000000[];
 

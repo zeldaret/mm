@@ -14,10 +14,10 @@ typedef struct EnMk {
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ Vec3s jointTable[MARINE_RESEARCHER_LIMB_MAX];
     /* 0x222 */ Vec3s morphTable[MARINE_RESEARCHER_LIMB_MAX];
-    /* 0x270 */ Vec3s unk_270;
+    /* 0x270 */ Vec3s headRot;
     /* 0x276 */ s16 csIdList[2];
     /* 0x27A */ u16 unk_27A;
-    /* 0x27C */ s16 unk_27C;
+    /* 0x27C */ s16 animIndex;
     /* 0x280 */ EnMkActionFunc actionFunc;
 } EnMk; // size = 0x284
 

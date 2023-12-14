@@ -10,7 +10,7 @@ typedef void (*EnBombalActionFunc)(struct EnBombal*, PlayState*);
 typedef struct EnBombalEffect {
     /* 0x00 */ u8 isEnabled;
     /* 0x04 */ Vec3f pos;
-    /* 0x10 */ UNK_TYPE4 unk10;
+    /* 0x10 */ UNK_TYPE1 unk10[0x4];
     /* 0x14 */ s16 alpha;
     /* 0x16 */ s16 alphaFadeDelay;
     /* 0x18 */ Vec3f velocity;

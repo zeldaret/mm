@@ -355,7 +355,7 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
         this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS);
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_2A4 = this->actor.yawTowardsPlayer;
         this->collider.dim.radius = 20;
         this->collider.dim.height = 60;
@@ -500,7 +500,7 @@ void func_80C042F8(EnBombers* this) {
 
 void func_80C04354(EnBombers* this, PlayState* play) {
     Math_SmoothStepToS(&this->unk_288, this->unk_28E, 1, 0x3E8, 0);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_28E = 0;
         this->actionFunc = func_80C043C8;
     } else {
@@ -545,7 +545,7 @@ void EnBombers_Update(Actor* thisx, PlayState* play) {
         this->unk_2B8++;
         if (this->unk_2B8 >= 3) {
             this->unk_2B8 = 0;
-            this->unk_2BA = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->unk_2BA = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
 

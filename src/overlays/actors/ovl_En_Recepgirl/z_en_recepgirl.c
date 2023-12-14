@@ -5,7 +5,6 @@
  */
 
 #include "z_en_recepgirl.h"
-#include "objects/object_bg/object_bg.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -33,8 +32,12 @@ ActorInit En_Recepgirl_InitVars = {
     /**/ EnRecepgirl_Draw,
 };
 
-static TexturePtr sEyeTextures[] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0,
-                                     object_bg_Tex_00FCF0 };
+static TexturePtr sEyeTextures[] = {
+    object_bg_Tex_00F8F0,
+    object_bg_Tex_00FCF0,
+    object_bg_Tex_0100F0,
+    object_bg_Tex_00FCF0,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
@@ -50,7 +53,7 @@ void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_bg_Skel_011B60, &object_bg_Anim_009890, this->jointTable,
-                       this->morphTable, 24);
+                       this->morphTable, OBJECT_BG_2_LIMB_MAX);
 
     if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
@@ -92,7 +95,7 @@ void EnRecepgirl_SetupWait(EnRecepgirl* this) {
 }
 
 void EnRecepgirl_Wait(EnRecepgirl* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) != 0) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &object_bg_Anim_00A280) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
         } else {
@@ -100,7 +103,7 @@ void EnRecepgirl_Wait(EnRecepgirl* this, PlayState* play) {
         }
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnRecepgirl_SetupTalk(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         Actor_OfferTalk(&this->actor, play, 60.0f);
@@ -175,17 +178,17 @@ void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
 void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnRecepgirl* this = THIS;
-    Vec3s sp30;
+    Vec3s torsoRot;
 
     this->actionFunc(this, play);
-    Actor_TrackPlayer(play, &this->actor, &this->headRot, &sp30, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &torsoRot, this->actor.focus.pos);
     EnRecepgirl_UpdateEyes(this);
 }
 
 s32 EnRecepgirl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnRecepgirl* this = THIS;
 
-    if (limbIndex == 5) {
+    if (limbIndex == OBJECT_BG_2_LIMB_05) {
         rot->x += this->headRot.y;
     }
     return false;
@@ -194,7 +197,7 @@ s32 EnRecepgirl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 void EnRecepgirl_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnRecepgirl* this = THIS;
 
-    if (limbIndex == 5) {
+    if (limbIndex == OBJECT_BG_2_LIMB_05) {
         Matrix_RotateYS(0x400 - this->headRot.x, MTXMODE_APPLY);
         Matrix_MultVecX(500.0f, &this->actor.focus.pos);
     }

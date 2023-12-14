@@ -537,11 +537,7 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffFrozenSteamScale = (this->drawDmgEffAlpha + 1.0f) * 0.25f;
-            if (this->drawDmgEffFrozenSteamScale > 0.5f) {
-                this->drawDmgEffFrozenSteamScale = 0.5f;
-            } else {
-                this->drawDmgEffFrozenSteamScale = this->drawDmgEffFrozenSteamScale;
-            }
+            this->drawDmgEffFrozenSteamScale = CLAMP_MAX(this->drawDmgEffFrozenSteamScale, 0.5f);
         } else if (!Math_StepToF(&this->drawDmgEffScale, 0.5f, 0.5f * 0.025f)) {
             Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
@@ -553,9 +549,9 @@ s32 EnCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
     if (this->actor.colChkInfo.health != 0) {
         if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {
-            rot->y += (s16)(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PI / 4)));
+            rot->y += TRUNCF_BINANG(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PI / 4)));
         } else if (limbIndex == OBJECT_CROW_LIMB_TAIL) {
-            rot->y += (s16)(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
+            rot->y += TRUNCF_BINANG(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
         }
     }
     return false;

@@ -48,7 +48,7 @@ typedef struct EnBigpo {
     /* 0x204 */ u8 storePrevBgm;
     /* 0x206 */ s16 idleTimer; // frame counter
     /* 0x208 */ s16 unk208; // facing rotY?
-    /* 0x20A */ s16 rotVelocity;
+    /* 0x20A */ s16 angularVelocity;
     /* 0x20C */ s16 unk20C; // is this counting the number of frames the player is ztargeting them?
     /* 0x20E */ s16 subCamId;
     /* 0x210 */ s16 switchFlag;
