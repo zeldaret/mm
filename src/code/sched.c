@@ -47,7 +47,7 @@ void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo) {
     if (sched->shouldUpdateVi) {
         sched->shouldUpdateVi = false;
 
-        if (gIrqMgrResetStatus == 0) {
+        if (gIrqMgrResetStatus == IRQ_RESET_STATUS_IDLE) {
             ViConfig_UpdateVi(false);
         }
     }

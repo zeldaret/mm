@@ -181,7 +181,7 @@ void DmaMgr_ThreadEntry(void* a0) {
 
 s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused,
                            OSMesgQueue* queue, OSMesg msg) {
-    if (gIrqMgrResetStatus >= 2) {
+    if (gIrqMgrResetStatus >= IRQ_RESET_STATUS_NMI) {
         return -2;
     }
 

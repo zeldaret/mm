@@ -1067,7 +1067,7 @@ void Play_Update(PlayState* this) {
         }
     } else if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
                CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
-               CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
+               CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != IRQ_RESET_STATUS_IDLE)) {
         sBombersNotebookOpen = false;
         this->pauseCtx.bombersNotebookOpen = false;
         sBombersNotebook.loadState = BOMBERS_NOTEBOOK_LOAD_STATE_NONE;
