@@ -2064,7 +2064,7 @@
     0x8010C0C0:("Nmi_Init",),
     0x8010C164:("Nmi_SetPrenmiStart",),
     0x8010C19C:("Nmi_GetPrenmiHasStarted",),
-    0x8010C1B0:("MsgEvent_SendNullTask",),
+    0x8010C1B0:("Sched_FlushTaskQueue",),
     0x8010C230:("OLib_Vec3fDist",),
     0x8010C274:("OLib_Vec3fDistOutDiff",),
     0x8010C2D0:("OLib_Vec3fDistXZ",),

@@ -1578,7 +1578,7 @@ asm/non_matchings/code/z_msgevent/func_8010BF58.s,func_8010BF58,0x8010BF58,0x5A
 asm/non_matchings/code/z_nmi_buff/Nmi_Init.s,Nmi_Init,0x8010C0C0,0x29
 asm/non_matchings/code/z_nmi_buff/Nmi_SetPrenmiStart.s,Nmi_SetPrenmiStart,0x8010C164,0xE
 asm/non_matchings/code/z_nmi_buff/Nmi_GetPrenmiHasStarted.s,Nmi_GetPrenmiHasStarted,0x8010C19C,0x5
-asm/non_matchings/code/z_nmi_buff/MsgEvent_SendNullTask.s,MsgEvent_SendNullTask,0x8010C1B0,0x20
+asm/non_matchings/code/z_nmi_buff/Sched_FlushTaskQueue.s,Sched_FlushTaskQueue,0x8010C1B0,0x20
 asm/non_matchings/code/z_olib/OLib_Vec3fDist.s,OLib_Vec3fDist,0x8010C230,0x11
 asm/non_matchings/code/z_olib/OLib_Vec3fDistOutDiff.s,OLib_Vec3fDistOutDiff,0x8010C274,0x17
 asm/non_matchings/code/z_olib/OLib_Vec3fDistXZ.s,OLib_Vec3fDistXZ,0x8010C2D0,0xD

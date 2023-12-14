@@ -223,7 +223,7 @@ s32 Jpeg_Decode(void* data, void* zbuffer, void* work, u32 workSize) {
     }
 
     osCreateMesgQueue(&jpegCtx.mq, &jpegCtx.msg, 1);
-    MsgEvent_SendNullTask();
+    Sched_FlushTaskQueue();
 
     jpegCtx.workBuf = workBuff;
 
