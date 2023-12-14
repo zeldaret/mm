@@ -526,7 +526,6 @@ s32 func_8010BF58(Actor* actor, PlayState* play, void* param_3, UNK_PTR param_4,
 void Nmi_Init(void);
 void Nmi_SetPrenmiStart(void);
 // s32 Nmi_GetPrenmiHasStarted(void);
-void Sched_FlushTaskQueue(void);
 f32 OLib_Vec3fDist(Vec3f* a, Vec3f* b);
 f32 OLib_Vec3fDistOutDiff(Vec3f* a, Vec3f* b, Vec3f* dest);
 f32 OLib_Vec3fDistXZ(Vec3f* a, Vec3f* b);
@@ -649,29 +648,6 @@ void Graph_ThreadEntry(void* arg);
 Gfx* Graph_GfxPlusOne(Gfx* gfx);
 Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst);
 void* Graph_DlistAlloc(Gfx** gfx, size_t size);
-
-void Sched_SwapFramebuffer(CfbInfo* cfbInfo);
-void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo);
-void Sched_HandleReset(SchedContext* sched);
-void Sched_HandleStop(SchedContext* sched);
-void Sched_HandleAudioCancel(SchedContext* sched);
-void Sched_HandleGfxCancel(SchedContext* sched);
-void Sched_QueueTask(SchedContext* sched, OSScTask* task);
-void Sched_Yield(SchedContext* sched);
-s32 Sched_Schedule(SchedContext* sched, OSScTask** spTask, OSScTask** dpTask, s32 state);
-void Sched_TaskUpdateFramebuffer(SchedContext* sched, OSScTask* task);
-void Sched_NotifyDone(SchedContext* sched, OSScTask* task);
-void Sched_RunTask(SchedContext* sched, OSScTask* spTask, OSScTask* dpTask);
-void Sched_HandleEntry(SchedContext* sched);
-void Sched_HandleRetrace(SchedContext* sched);
-void Sched_HandleRSPDone(SchedContext* sched);
-void Sched_HandleRDPDone(SchedContext* sched);
-void Sched_SendEntryMsg(SchedContext* sched);
-void Sched_SendAudioCancelMsg(SchedContext* sched);
-void Sched_SendGfxCancelMsg(SchedContext* sched);
-void Sched_FaultClient(void* param1, void* param2);
-void Sched_ThreadEntry(void* arg);
-void Sched_Init(SchedContext* sched, void* stack, OSPri pri, u8 viModeType, UNK_TYPE arg4, IrqMgr* irqMgr);
 
 void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY, f32 translateZ);
 void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);

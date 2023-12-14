@@ -1,4 +1,7 @@
-#include "global.h"
+#include "scheduler.h"
+
+#include "macros.h"
+#include "main.h"
 
 /**
  * Blocks the current thread until all queued scheduler tasks have completed.
@@ -18,8 +21,8 @@ void Sched_FlushTaskQueue(void) {
     osCreateMesgQueue(task.msgQ, msg, ARRAY_COUNT(msg));
 
     // Send it to and wake up the scheduler
-    osSendMesg(&gSchedContext.cmdQ, (OSMesg)&task, OS_MESG_BLOCK);
-    Sched_SendEntryMsg(&gSchedContext);
+    osSendMesg(&gScheduler.cmdQueue, (OSMesg)&task, OS_MESG_BLOCK);
+    Sched_SendNotifyMsg(&gScheduler);
 
     // Wait until the task has been processed, indicating that no task is
     // running and the task queue is now empty.

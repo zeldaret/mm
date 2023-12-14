@@ -189,9 +189,9 @@ void IrqMgr_HandleRetrace(IrqMgr* irqMgr) {
 }
 
 void IrqMgr_ThreadEntry(void* arg) {
-    u32 msg = 0;
+    s32 msg = 0;
     IrqMgr* irqMgr = (IrqMgr*)arg;
-    u32 exit = false;
+    s32 exit = false;
 
     while (!exit) {
         osRecvMesg(&irqMgr->queue, (OSMesg*)&msg, OS_MESG_BLOCK);

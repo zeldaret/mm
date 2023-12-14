@@ -9,7 +9,7 @@
 
 typedef struct {
     /* 0x000 */ IrqMgr* irqMgr;
-    /* 0x004 */ SchedContext* sched;
+    /* 0x004 */ Scheduler* sched;
     /* 0x008 */ OSScTask audioTask;
     /* 0x060 */ AudioTask* rspTask;
     /* 0x064 */ OSMesgQueue interruptQueue;
@@ -24,6 +24,6 @@ typedef struct {
 
 void AudioMgr_StopAllSfxExceptSystem(void);
 void AudioMgr_Unlock(AudioMgr* audioMgr);
-void AudioMgr_Init(AudioMgr* audioMgr, void* stack, OSPri pri, OSId id, SchedContext* sched, IrqMgr* irqMgr);
+void AudioMgr_Init(AudioMgr* audioMgr, void* stack, OSPri pri, OSId id, Scheduler* sched, IrqMgr* irqMgr);
 
 #endif
