@@ -73,7 +73,8 @@ void Main_Init(void) {
     prevSize = gDmaMgrDmaBuffSize;
     gDmaMgrDmaBuffSize = 0;
 
-    DmaMgr_SendRequest(&dmaReq, SEGMENT_START(code), SEGMENT_ROM_START(code), SEGMENT_ROM_SIZE_ALT(code), 0, &mq, NULL);
+    DmaMgr_RequestAsync(&dmaReq, SEGMENT_START(code), SEGMENT_ROM_START(code), SEGMENT_ROM_SIZE_ALT(code), 0, &mq,
+                        NULL);
     Main_InitScreen();
     Main_InitMemory();
     osRecvMesg(&mq, NULL, OS_MESG_BLOCK);
@@ -89,7 +90,7 @@ void Main_ThreadEntry(void* arg) {
     DmaMgr_Init();
     Main_Init();
     Main(arg);
-    DmaMgr_Destroy();
+    DmaMgr_Stop();
 }
 
 void Idle_InitVideo(void) {

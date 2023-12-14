@@ -1084,8 +1084,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
             envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE1_START;
             size = sNormalSkyFiles[skybox1Index].file.vromEnd - sNormalSkyFiles[skybox1Index].file.vromStart;
             osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
-            DmaMgr_SendRequest(&envCtx->dmaRequest, skyboxCtx->staticSegments[0],
-                               sNormalSkyFiles[skybox1Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            DmaMgr_RequestAsync(&envCtx->dmaRequest, skyboxCtx->staticSegments[0],
+                                sNormalSkyFiles[skybox1Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
             envCtx->skybox1Index = skybox1Index;
         }
 
@@ -1093,8 +1093,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
             envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE2_START;
             size = sNormalSkyFiles[skybox2Index].file.vromEnd - sNormalSkyFiles[skybox2Index].file.vromStart;
             osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
-            DmaMgr_SendRequest(&envCtx->dmaRequest, skyboxCtx->staticSegments[1],
-                               sNormalSkyFiles[skybox2Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            DmaMgr_RequestAsync(&envCtx->dmaRequest, skyboxCtx->staticSegments[1],
+                                sNormalSkyFiles[skybox2Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
             envCtx->skybox2Index = skybox2Index;
         }
 

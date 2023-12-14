@@ -1,5 +1,5 @@
 /**
- * Matching dmadata layout for US
+ * Matching dmadata layout for US 1.0
  *
  * DEFINE_DMA_ENTRY should be used for normal dmadata entries
  *    - Argument 1: Name of the segment

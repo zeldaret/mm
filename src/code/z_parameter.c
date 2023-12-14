@@ -6586,8 +6586,8 @@ void Interface_LoadStory(PlayState* play, s32 osMesgFlag) {
                 break;
             }
             osCreateMesgQueue(&interfaceCtx->storyMsgQueue, &interfaceCtx->storyMsgBuf, 1);
-            DmaMgr_SendRequest(&interfaceCtx->dmaRequest, interfaceCtx->storySegment, interfaceCtx->storyAddr,
-                               interfaceCtx->storySize, 0, &interfaceCtx->storyMsgQueue, NULL);
+            DmaMgr_RequestAsync(&interfaceCtx->dmaRequest, interfaceCtx->storySegment, interfaceCtx->storyAddr,
+                                interfaceCtx->storySize, 0, &interfaceCtx->storyMsgQueue, NULL);
             interfaceCtx->storyDmaStatus = STORY_DMA_LOADING;
             // fallthrough
         case STORY_DMA_LOADING:
