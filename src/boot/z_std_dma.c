@@ -4,6 +4,7 @@
 #include "fault.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "yaz0.h"
 #include "z64dma.h"
 #include "z64thread.h"
 

@@ -18,10 +18,7 @@ s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromS
 s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size);
 void DmaMgr_Start(void);
 void DmaMgr_Stop(void);
-void* Yaz0_FirstDMA(void);
-void* Yaz0_NextDMA(void* curSrcPos);
-s32 Yaz0_DecompressImpl(u8* src, u8* dst);
-void Yaz0_Decompress(uintptr_t romStart, void* dst, size_t size);
+
 void IrqMgr_AddClient(IrqMgr* irqmgr, IrqMgrClient* client, OSMesgQueue* msgQueue);
 void IrqMgr_RemoveClient(IrqMgr* irqmgr, IrqMgrClient* remove);
 void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg);
