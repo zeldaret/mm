@@ -231,7 +231,7 @@ typedef struct {
     /* 0x4368 */ u8 sampleFontLoadStatus[0x30];
     /* 0x4398 */ u8 fontLoadStatus[0x30];
     /* 0x43C8 */ u8 seqLoadStatus[0x80];
-    /* 0x4448 */ volatile u8 resetStatus;
+    /* 0x4448 */ vu8 resetStatus;
     /* 0x4449 */ u8 specId;
     /* 0x444C */ s32 audioResetFadeOutFramesLeft;
     /* 0x4450 */ f32* adsrDecayTable; // A table on the audio heap that stores decay rates used for ADSR

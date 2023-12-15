@@ -80,7 +80,7 @@ typedef struct NotePlaybackState {
 
 typedef struct NoteSampleState {
     struct {
-        /* 0x00 */ volatile u8 enabled : 1;
+        /* 0x00 */ vu8 enabled : 1;
         /* 0x00 */ u8 needsInit : 1;
         /* 0x00 */ u8 finished : 1;
         /* 0x00 */ u8 unused : 1;
@@ -106,10 +106,10 @@ typedef struct NoteSampleState {
     /* 0x0A */ u16 targetVolRight;
     /* 0x0C */ u16 frequencyFixedPoint;
     /* 0x0E */ u16 combFilterGain;
-        union {
-    /* 0x10 */ TunedSample* tunedSample;
-    /* 0x10 */ s16* waveSampleAddr; // used for synthetic waves
-        };
+    union {
+        /* 0x10 */ TunedSample* tunedSample;
+        /* 0x10 */ s16* waveSampleAddr; // used for synthetic waves
+    };
     /* 0x14 */ s16* filter;
     /* 0x18 */ UNK_TYPE1 unk_18;
     /* 0x19 */ u8 surroundEffectIndex;
