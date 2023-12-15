@@ -325,7 +325,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
 
         case ENNB_BEHAVIOUR_2:
             // Slowly increase alpha to fill the screen with a black rectangle
-            R_PLAY_FILL_SCREEN_ALPHA = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
+            R_PLAY_FILL_SCREEN_ALPHA = TRUNCF_BINANG(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
 
             if (this->storyTimer == 20) {
                 if (CHECK_EVENTINF(EVENTINF_42)) {

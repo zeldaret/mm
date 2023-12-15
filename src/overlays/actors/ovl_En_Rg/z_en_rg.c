@@ -347,7 +347,7 @@ s32 func_80BF42BC(EnRg* this, f32 arg1) {
 
     this->actor.shape.yOffset = this->actor.scale.y * 100.0f * 14.0f;
     if (!(this->unk_310 & 0x1000)) {
-        this->actor.shape.rot.x += (s16)(13650.0f * sp2C);
+        this->actor.shape.rot.x += TRUNCF_BINANG(0x3552 * sp2C);
     }
 
     this->actor.world.rot.x = this->actor.shape.rot.x;
@@ -851,8 +851,8 @@ s32 EnRg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     }
 
     if ((this->unk_310 & 8) && (fidgetIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
 
     return false;

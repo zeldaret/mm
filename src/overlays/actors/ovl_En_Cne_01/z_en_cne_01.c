@@ -280,8 +280,8 @@ s32 EnCne01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
     if ((limbIndex == CNE_LIMB_TORSO) || (limbIndex == CNE_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == CNE_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)(Math_SinS(this->enHy.fidgetTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->enHy.fidgetTableZ[limbIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->enHy.fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->enHy.fidgetTableZ[limbIndex]) * 200.0f);
     }
 
     return false;

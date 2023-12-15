@@ -418,7 +418,7 @@ void EnBombers2_Update(Actor* thisx, PlayState* play) {
         this->eyeIndex += 1;
         if (this->eyeIndex >= 3) {
             this->eyeIndex = 0;
-            this->unk_2BE = (s16)Rand_ZeroFloat(60.0f) + 0x14;
+            this->unk_2BE = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 0x14;
         }
     }
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);

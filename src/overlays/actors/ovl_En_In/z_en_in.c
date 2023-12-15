@@ -1693,8 +1693,8 @@ s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     }
 
     if ((limbIndex == OBJECT_IN_LIMB_09) || (limbIndex == OBJECT_IN_LIMB_0A) || (limbIndex == OBJECT_IN_LIMB_0D)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
 
     if (this->unk4AC & 0x40) {

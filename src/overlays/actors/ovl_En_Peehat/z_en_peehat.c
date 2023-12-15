@@ -774,7 +774,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
     }
 
     Collider_UpdateCylinder(thisx, &this->colliderCylinder);
-    this->colliderCylinder.dim.pos.y += (s16)(thisx->shape.yOffset * thisx->scale.y);
+    this->colliderCylinder.dim.pos.y += TRUNCF_BINANG(thisx->shape.yOffset * thisx->scale.y);
     if (this->colliderCylinder.base.ocFlags1 & OC1_ON) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
     }

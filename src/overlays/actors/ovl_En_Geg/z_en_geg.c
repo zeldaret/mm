@@ -240,7 +240,7 @@ void func_80BB178C(EnGeg* this, PlayState* play) {
     if (this->unk_230 & 1) {
         this->colliderSphere.dim.worldSphere.center.x = sp34.x;
         this->colliderSphere.dim.worldSphere.center.y = sp34.y;
-        this->colliderSphere.dim.worldSphere.center.y += (s16)this->actor.shape.yOffset;
+        this->colliderSphere.dim.worldSphere.center.y += TRUNCF_BINANG(this->actor.shape.yOffset);
         this->colliderSphere.dim.worldSphere.center.z = sp34.z;
         this->colliderSphere.dim.modelSphere.radius = 20;
         this->colliderSphere.dim.worldSphere.radius =

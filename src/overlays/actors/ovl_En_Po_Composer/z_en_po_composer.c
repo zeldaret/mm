@@ -735,9 +735,9 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
     Matrix_Put(&play->billboardMtxF);
     Matrix_MultVecZ(15.0f, &lightOffset);
     lightPos = this->lanternCollider.elements[0].dim.worldSphere.center;
-    lightPos.x += (s16)lightOffset.x;
-    lightPos.y += (s16)lightOffset.y;
-    lightPos.z += (s16)lightOffset.z;
+    lightPos.x += TRUNCF_BINANG(lightOffset.x);
+    lightPos.y += TRUNCF_BINANG(lightOffset.y);
+    lightPos.z += TRUNCF_BINANG(lightOffset.z);
 
     Lights_PointGlowSetInfo(&this->lightInfo, lightPos.x, lightPos.y, lightPos.z, this->envColor.r, this->envColor.g,
                             this->envColor.b, this->envColor.a * (200.0f / 255.0f));

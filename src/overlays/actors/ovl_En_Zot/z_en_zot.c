@@ -1376,8 +1376,8 @@ s32 EnZot_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
     if (((this->unk_2F0 == 8) || (this->unk_2F0 == 9)) &&
         ((limbIndex == 8) || (limbIndex == 10) || (limbIndex == 13))) {
-        rot->y += (s16)(Math_SinS(play->state.frames * ((limbIndex * 50) + 0x814)) * 200.0f);
-        rot->z += (s16)(Math_CosS(play->state.frames * ((limbIndex * 50) + 0x940)) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(play->state.frames * ((limbIndex * 50) + 0x814)) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(play->state.frames * ((limbIndex * 50) + 0x940)) * 200.0f);
     }
     return false;
 }
