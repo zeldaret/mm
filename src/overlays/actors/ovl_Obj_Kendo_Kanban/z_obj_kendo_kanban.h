@@ -24,7 +24,7 @@ typedef struct ObjKendoKanban {
     /* 0x2FC */ s32 indexLastRootCornerPos;
     /* 0x300 */ s16 hasNewRootCornerPos;
     /* 0x302 */ s16 rotAngle;
-    /* 0x304 */ s16 rotVelocity;
+    /* 0x304 */ s16 angularVelocity;
     /* 0x306 */ UNK_TYPE1 pad306[2];
     /* 0x308 */ s16 numBounces;
     /* 0x30A */ s16 unk_30A;

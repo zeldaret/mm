@@ -130,7 +130,7 @@ void EnBoom_Init(Actor* thisx, PlayState* play) {
     sp30.unkFlag = 0;
     sp30.calcMode = 0;
 
-    Effect_Add(play, &this->effectIndex, 1, 0, 0, &sp30);
+    Effect_Add(play, &this->effectIndex, EFFECT_BLURE1, 0, 0, &sp30);
 
     Collider_InitQuad(play, &this->collider);
     Collider_SetQuad(play, &this->collider, &this->actor, &sQuadInit);
@@ -203,7 +203,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                 }
 
                 Math_ScaledStepToS(&this->actor.world.rot.y, sp72,
-                                   (this->unk_1CF > 0) ? 1000 : (s16)(ABS_ALT(sp70) * sp64));
+                                   (this->unk_1CF > 0) ? 0x3E8 : TRUNCF_BINANG(ABS_ALT(sp70) * sp64));
             }
 
             Math_ScaledStepToS(&this->actor.world.rot.x, sp6E, ABS_ALT(sp6C) * sp64);

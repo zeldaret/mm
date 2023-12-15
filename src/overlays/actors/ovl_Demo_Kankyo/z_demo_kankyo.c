@@ -122,11 +122,11 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, PlayState* play) {
                     // This block is also init code and only runs once
                     if (i < 32) {
                         if (Rand_ZeroOne() < 0.5f) {
-                            this->effects[i].LostWoodsSkyFishSpeedXZ = (s16)(Rand_ZeroOne() * 200.0f) + 200;
+                            this->effects[i].LostWoodsSkyFishSpeedXZ = TRUNCF_BINANG(Rand_ZeroOne() * 200.0f) + 200;
                         } else {
-                            this->effects[i].LostWoodsSkyFishSpeedXZ = -200 - (s16)(Rand_ZeroOne() * 200.0f);
+                            this->effects[i].LostWoodsSkyFishSpeedXZ = -200 - TRUNCF_BINANG(Rand_ZeroOne() * 200.0f);
                         }
-                        this->effects[i].LostWoodsSkyFishPosOffsetMax = (s16)(Rand_ZeroOne() * 50.0f) + 15;
+                        this->effects[i].LostWoodsSkyFishPosOffsetMax = TRUNCF_BINANG(Rand_ZeroOne() * 50.0f) + 15;
                         this->effects[i].LostWoodsSkyFishSpeedY = ((Rand_ZeroOne() * 10.0f) + 10.0f) * 0.01f;
 
                         // Only the 31st particle matters as sLostWoodsSkyFishParticleNum will be overwritten

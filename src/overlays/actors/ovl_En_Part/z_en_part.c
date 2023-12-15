@@ -43,7 +43,7 @@ void func_80865390(EnPart* this, PlayState* play) {
     switch (this->actor.params) {
         case ENPART_TYPE_1:
         case ENPART_TYPE_4:
-            this->unk146 += (s16)(Rand_ZeroOne() * 17.0f) + 5;
+            this->unk146 += TRUNCF_BINANG(Rand_ZeroOne() * 17.0f) + 5;
             this->actor.velocity.y = Rand_ZeroOne() * 5.0f + 4.0f;
             this->actor.gravity = -0.6f - (Rand_ZeroOne() * 0.5f);
             this->unk14C = 0.15f;
@@ -73,8 +73,8 @@ void func_808654C4(EnPart* this, PlayState* play) {
         this->unk146--;
         if (this->unk146 > 0) {
             this->actor.shape.rot.x += 0x3A98;
-            this->actor.shape.rot.y = this->actor.shape.rot.y;
-            this->actor.shape.rot.z = this->actor.shape.rot.z;
+            this->actor.shape.rot.y = this->actor.shape.rot.y; // Set to itself
+            this->actor.shape.rot.z = this->actor.shape.rot.z; // Set to itself
             if (BgCheck_SphVsFirstPoly(&play->colCtx, &this->actor.world.pos, 20.0f)) {
                 this->unk146 = 0;
             }

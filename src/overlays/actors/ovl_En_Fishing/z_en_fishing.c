@@ -958,7 +958,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
 
     if (thisx->params == 200) {
         this->unk_150 = 100;
-        func_800BC154(play, &play->actorCtx, thisx, ACTORCAT_PROP);
+        Actor_ChangeCategory(play, &play->actorCtx, thisx, ACTORCAT_PROP);
         thisx->targetMode = TARGET_MODE_0;
         thisx->flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
@@ -3061,11 +3061,11 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             }
 
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
-                if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= 0xC01B)) {
+                if ((CURRENT_TIME >= CLOCK_TIME(18, 0)) && (CURRENT_TIME <= (CLOCK_TIME(18, 1) - 0x12))) {
                     this->unk_150 = 7;
                     this->unk_172[3] = Rand_ZeroFloat(150.0f) + 200.0f;
                 }
-                if ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= 0x3AC5)) {
+                if ((CURRENT_TIME >= CLOCK_TIME(5, 30)) && (CURRENT_TIME <= (CLOCK_TIME(5, 31) - 0x13))) {
                     this->unk_150 = 7;
                     this->unk_172[3] = Rand_ZeroFloat(150.0f) + 200.0f;
                 }
@@ -3308,9 +3308,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 multiplier = 1.0f;
             }
 
-            if ((gSaveContext.save.time >= 0xB555) && (gSaveContext.save.time <= 0xCAAA)) {
+            if ((CURRENT_TIME >= CLOCK_TIME(17, 0)) && (CURRENT_TIME <= CLOCK_TIME(19, 0))) {
                 multiplier *= 1.75f;
-            } else if ((gSaveContext.save.time >= 0x3555) && (gSaveContext.save.time <= 0x4AAA)) {
+            } else if ((CURRENT_TIME >= CLOCK_TIME(5, 0)) && (CURRENT_TIME <= CLOCK_TIME(7, 0))) {
                 multiplier *= 1.5f;
             } else if (D_809171CA != 0) {
                 multiplier *= 1.5f;
@@ -3365,7 +3365,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             this->unk_149 = 6;
             sp134 = 2;
 
-            if (((s16)player->actor.world.pos.x + D_80917268) & 1) {
+            if ((TRUNCF_BINANG(player->actor.world.pos.x) + D_80917268) & 1) {
                 sp10C.x = 30.0f;
             } else {
                 sp10C.x = -30.0f;
@@ -3874,7 +3874,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                                         D_809171D2 = D_80917206;
                                         Actor_Kill(&this->actor);
                                     } else if ((this->unk_148 == 0) && (D_809171D0 == 0) &&
-                                               ((s16)this->unk_1A4 < (s16)D_8090CCF0)) {
+                                               (TRUNCF_BINANG(this->unk_1A4) < TRUNCF_BINANG(D_8090CCF0))) {
                                         this->unk_1CD = 1;
                                         this->unk_172[0] = 0x3C;
                                         Message_StartTextbox(play, 0x4098, NULL);
@@ -4074,7 +4074,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 func_80903C60(this, 1);
                 this->unk_17C = this->actor.velocity.y;
                 this->actor.velocity.y = 0.0f;
-                this->unk_162 = (s16)(s32)Rand_CenteredFloat(0x8000);
+                this->unk_162 = TRUNCF_BINANG(Rand_CenteredFloat(0x8000));
             } else if ((this->actor.world.pos.y < WATER_SURFACE_Y(play)) &&
                        (this->actor.prevPos.y >= WATER_SURFACE_Y(play))) {
                 if (this->unk_17C < -5.0f) {
@@ -4135,10 +4135,10 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     if (Rand_ZeroOne() < 0.5f) {
                         this->unk_15E = 0;
                     } else {
-                        this->unk_15E = (s16)(s32)Rand_CenteredFloat(0x20) + 0x8000;
+                        this->unk_15E = TRUNCF_BINANG(Rand_CenteredFloat(0x20)) + 0x8000;
                     }
 
-                    this->unk_160 = (s16)(s32)Rand_CenteredFloat(0x4000);
+                    this->unk_160 = TRUNCF_BINANG(Rand_CenteredFloat(0x4000));
                     this->unk_188 = 1.0f;
                     this->unk_18C = 5000.0f;
                     this->unk_194 = 5000.0f;
@@ -4842,7 +4842,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                                 this->unk_154 = 20;
                             } else if (D_809171D0 == 0) {
                                 D_8090CCF8 = D_8090CCF0;
-                                if ((s16)D_809171CC < (s16)D_8090CCF0) {
+                                if (TRUNCF_BINANG(D_809171CC) < TRUNCF_BINANG(D_8090CCF0)) {
                                     if (D_809171D2 == 2) {
                                         this->actor.textId = 0x40B0;
                                     } else {
@@ -4924,11 +4924,11 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                         f32 temp;
 
                         HIGH_SCORE(HS_FISHING) &= 0xFFFFFF00;
-                        HIGH_SCORE(HS_FISHING) |= ((s16)D_809171CC & 0x7F);
+                        HIGH_SCORE(HS_FISHING) |= (TRUNCF_BINANG(D_809171CC) & 0x7F);
                         temp = (HIGH_SCORE(HS_FISHING) & 0x7F000000) >> 0x18;
                         if (temp < D_809171CC) {
                             HIGH_SCORE(HS_FISHING) &= 0xFFFFFF;
-                            HIGH_SCORE(HS_FISHING) |= ((s16)D_809171CC & 0x7F) << 0x18;
+                            HIGH_SCORE(HS_FISHING) |= (TRUNCF_BINANG(D_809171CC) & 0x7F) << 0x18;
 
                             if (D_809171D2 == 2) {
                                 HIGH_SCORE(HS_FISHING) |= 0x80000000;
@@ -4942,7 +4942,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                         }
                     } else {
                         HIGH_SCORE(HS_FISHING) &= 0xFFFFFF;
-                        HIGH_SCORE(HS_FISHING) |= ((s16)D_809171CC & 0x7F) << 0x18;
+                        HIGH_SCORE(HS_FISHING) |= (TRUNCF_BINANG(D_809171CC) & 0x7F) << 0x18;
 
                         if (D_809171D2 == 2) {
                             HIGH_SCORE(HS_FISHING) |= 0x80000000;

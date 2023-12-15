@@ -364,7 +364,7 @@ asm/non_matchings/code/z_actor/func_800BBC20.s,func_800BBC20,0x800BBC20,0x33
 asm/non_matchings/code/z_actor/Actor_SpawnBodyParts.s,Actor_SpawnBodyParts,0x800BBCEC,0x30
 asm/non_matchings/code/z_actor/Actor_SpawnFloorDustRing.s,Actor_SpawnFloorDustRing,0x800BBDAC,0x81
 asm/non_matchings/code/z_actor/func_800BBFB0.s,func_800BBFB0,0x800BBFB0,0x69
-asm/non_matchings/code/z_actor/func_800BC154.s,func_800BC154,0x800BC154,0xD
+asm/non_matchings/code/z_actor/Actor_ChangeCategory.s,Actor_ChangeCategory,0x800BC154,0xD
 asm/non_matchings/code/z_actor/Actor_GetArrowDmgFlags.s,Actor_GetArrowDmgFlags,0x800BC188,0xB
 asm/non_matchings/code/z_actor/func_800BC1B4.s,func_800BC1B4,0x800BC1B4,0x2F
 asm/non_matchings/code/z_actor/func_800BC270.s,func_800BC270,0x800BC270,0x75

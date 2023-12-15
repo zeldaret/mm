@@ -87,13 +87,13 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_8095A510(EnOwl* this, PlayState* play) {
-    this->unk_3FC = ENOWL_GET_F000(&this->actor);
-    if (this->unk_3FC == 15) {
-        this->unk_3FC = -1;
+    this->pathIndex = ENOWL_GET_PATH_INDEX(&this->actor);
+    if (this->pathIndex == ENOWL_PATH_INDEX_NONE) {
+        this->pathIndex = PATH_INDEX_NONE;
         this->path = NULL;
     } else {
         this->unk_3F8 = 0;
-        this->path = &play->setupPathList[this->unk_3FC];
+        this->path = &play->setupPathList[this->pathIndex];
     }
 }
 
@@ -1145,13 +1145,13 @@ s32 EnOwl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
         case OWL_FLYING_LIMB_RIGHT_EYEBROW: // OWL_PERCHING_LIMB_RIGHT_EYEBROW
             if (!(this->actionFlags & 8)) {
-                rot->y -= (s16)(this->unk_3D8 * 1.5f);
+                rot->y -= TRUNCF_BINANG(this->unk_3D8 * 1.5f);
             }
             break;
 
         case OWL_FLYING_LIMB_LEFT_EYEBROW: // OWL_PERCHING_LIMB_LEFT_EYEBROW
             if (!(this->actionFlags & 8)) {
-                rot->y += (s16)(this->unk_3D8 * 1.5f);
+                rot->y += TRUNCF_BINANG(this->unk_3D8 * 1.5f);
             }
             break;
 

@@ -214,8 +214,8 @@ void ObjKibako_WaterBreak(ObjKibako* this, PlayState* play) {
 
     pos.y = worldPos->y + this->actor.depthInWater;
     for (angle = 0, i = 0; i < 5; i++, angle += 0x3333) {
-        pos.x = (Math_SinS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f) + worldPos->x;
-        pos.z = (Math_CosS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f) + worldPos->z;
+        pos.x = worldPos->x + (Math_SinS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f);
+        pos.z = worldPos->z + (Math_CosS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f);
         EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 350);
     }
     pos.x = worldPos->x;

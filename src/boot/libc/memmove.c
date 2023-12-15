@@ -1,9 +1,9 @@
-#include "global.h"
+#include "libc/string.h"
 
-void* __osMemcpy(void* dst, void* src, size_t size) {
-    u8* _dst = dst;
-    u8* _src = src;
-    register s32 rem;
+void* memmove(void* dst, const void* src, size_t size) {
+    unsigned char* _dst = dst;
+    const unsigned char* _src = src;
+    register size_t rem;
 
     if (_dst == _src) {
         return dst;

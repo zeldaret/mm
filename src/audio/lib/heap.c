@@ -1401,8 +1401,8 @@ void AudioHeap_ChangeStorage(StorageChange* change, Sample* sample) {
         uintptr_t startAddr = change->oldAddr;
         uintptr_t endAddr = change->oldAddr + change->size;
 
-        if (startAddr <= (uintptr_t)sample->sampleAddr && (uintptr_t)sample->sampleAddr < endAddr) {
-            sample->sampleAddr = sample->sampleAddr - startAddr + change->newAddr;
+        if (((uintptr_t)sample->sampleAddr >= startAddr) && ((uintptr_t)sample->sampleAddr < endAddr)) {
+            sample->sampleAddr += -startAddr + change->newAddr;
             if (D_801FD120 == 0) {
                 sample->medium = change->newMedium;
             } else {

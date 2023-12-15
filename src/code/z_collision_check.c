@@ -1,7 +1,9 @@
 #include "z64collision_check.h"
 
-#include "global.h"
+#include "z64actor.h"
+#include "z64effect.h"
 #include "z64malloc.h"
+#include "global.h"
 
 typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
 typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
@@ -54,7 +56,7 @@ f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* at, ColliderInfo* atInfo
     if (ac->actor->colChkInfo.damageTable != NULL) {
         dmgFlags = atInfo->toucher.dmgFlags;
 
-        for (i = 0; i != ARRAY_COUNT(ac->actor->colChkInfo.damageTable->attack); i++) {
+        for (i = 0; i < ARRAY_COUNT(ac->actor->colChkInfo.damageTable->attack); i++) {
             if (dmgFlags == 1) {
                 break;
             }

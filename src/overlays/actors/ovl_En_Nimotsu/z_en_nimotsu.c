@@ -16,8 +16,6 @@ void EnNimotsu_Destroy(Actor* thisx, PlayState* play);
 void EnNimotsu_Update(Actor* thisx, PlayState* play);
 void EnNimotsu_Draw(Actor* thisx, PlayState* play);
 
-void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play);
-
 ActorInit En_Nimotsu_InitVars = {
     /**/ ACTOR_EN_NIMOTSU,
     /**/ ACTORCAT_PROP,

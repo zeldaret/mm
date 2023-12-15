@@ -284,7 +284,7 @@ void func_80122D44(PlayState* play, struct_80122D44_arg1* arg1) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    for (i = 0; i != ARRAY_COUNT(arg1->unk_04); i++) {
+    for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++) {
         if ((phi_s2->alpha != 0) && (phi_s2->alpha != 255)) {
             temp_s3 = &D_801BFDD0[phi_s2->unk_00 - 1];
             Matrix_Put(&phi_s2->mf);
@@ -1895,8 +1895,8 @@ void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
     }
 
     *arg1 = CLAMP(*arg1, -arg4, arg4);
-    *arg0 += (s16)*arg1;
-    if (((arg2 - *arg0) * (s16)*arg1) < 0) {
+    *arg0 += TRUNCF_BINANG(*arg1);
+    if (((arg2 - *arg0) * TRUNCF_BINANG(*arg1)) < 0) {
         *arg0 = arg2;
     }
 }
@@ -2168,7 +2168,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
             rotX = player->upperLimbRot.x;
             if ((player->transformation == PLAYER_FORM_DEKU) && (player->stateFlags3 & PLAYER_STATE3_40)) {
                 if (player->heldActor != NULL) {
-                    rotX += (s16)(((EnArrow*)(player->heldActor))->bubble.unk_144 * -470.0f);
+                    rotX += TRUNCF_BINANG(((EnArrow*)(player->heldActor))->bubble.unk_144 * -470.0f);
                 }
             }
 
@@ -3177,7 +3177,7 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
         if (play->actorCtx.flags & ACTORCTX_FLAG_3) {
             phi_s1->unk_0C.y = CLAMP(phi_s1->unk_0C.y, -0.8f, 0.8f);
         } else {
-            phi_s1->unk_0C.y = phi_s1->unk_0C.y;
+            phi_s1->unk_0C.y = phi_s1->unk_0C.y; // Set to itself
             f20 = Math_SinS(arg1->unk_1A);
             phi_s1->unk_0C.y += (((f22 * Math_CosS(arg1->unk_1A)) + (f24 * f20)) * 0.2f);
             phi_s1->unk_0C.y = CLAMP(phi_s1->unk_0C.y, -2.0f, 4.0f);

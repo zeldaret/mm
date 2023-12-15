@@ -7,7 +7,7 @@
  *     These are for specific fragment overlays with the .ovl file extension
  */
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "loadfragment.h"
 
 s32 gOverlayLogSeverity = 2;
@@ -167,7 +167,7 @@ size_t Overlay_Load(uintptr_t vromStart, uintptr_t vromEnd, void* ramStart, void
 }
 
 void* Overlay_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, void* vramStart, void* vramEnd) {
-    void* allocatedRamAddr = SystemArena_MallocR((uintptr_t)vramEnd - (uintptr_t)vramStart);
+    void* allocatedRamAddr = malloc_r((uintptr_t)vramEnd - (uintptr_t)vramStart);
 
     if (allocatedRamAddr != NULL) {
         Overlay_Load(vromStart, vromEnd, vramStart, vramEnd, allocatedRamAddr);

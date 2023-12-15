@@ -985,8 +985,9 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
     gSPSegment(POLY_XLU_DISP++, 0x0A, Matrix_NewMtx(play->state.gfxCtx));
     Matrix_Push();
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100,
-                                0x100, 1, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100, 0x100));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -(TRUNCF_BINANG(2.0f * this->unk_1AC) & 0x1FF),
+                                0x100, 0x100, 1, sp94 & 0xFF, -(TRUNCF_BINANG(2.0f * this->unk_1AC) & 0x1FF), 0x100,
+                                0x100));
 
     Matrix_Translate(0.0f, this->unk_1A4 * 230.0f, 0.0f, MTXMODE_APPLY);
     Matrix_Scale(((this->unk_1C6 * sp90) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C6 * sp90) / 100.0f) + 1.0f,
@@ -1003,8 +1004,8 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
 
         sp94 *= 2;
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100, 1,
-                                    sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100));
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -(TRUNCF_BINANG(this->unk_1AC) & 0x1FF), 0x100,
+                                    0x100, 1, sp94 & 0xFF, -(TRUNCF_BINANG(this->unk_1AC) & 0x1FF), 0x100, 0x100));
 
         Matrix_Translate(0.0f, this->unk_1A8 * 60.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(((this->unk_1C8 * sp8C) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C8 * sp8C) / 100.0f) + 1.0f,

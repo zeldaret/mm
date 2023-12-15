@@ -135,13 +135,13 @@ void func_809616E0(EnFu* this, PlayState* play) {
     this->unk_54C = 0;
 
     for (i = 0; i < this->unk_520; i++) {
-        temp_f20 = this->actor.world.pos.x - this->unk_538[i].x;
-        temp_f22 = this->actor.world.pos.z - this->unk_538[i].z;
+        temp_f20 = this->actor.world.pos.x - this->pathPoints[i].x;
+        temp_f22 = this->actor.world.pos.z - this->pathPoints[i].z;
         atan = Math_Atan2S_XY(temp_f22, temp_f20);
 
         if (!spA0 || ((i % 2) != 0)) {
-            Actor_Spawn(&play->actorCtx, play, this->unk_544, this->unk_538[i].x, this->unk_538[i].y,
-                        this->unk_538[i].z, 0, atan, 0, i);
+            Actor_Spawn(&play->actorCtx, play, this->unk_544, this->pathPoints[i].x, this->pathPoints[i].y,
+                        this->pathPoints[i].z, 0, atan, 0, i);
             this->unk_54C++;
         }
 
@@ -151,9 +151,9 @@ void func_809616E0(EnFu* this, PlayState* play) {
             Color_RGBA8 sp78 = { 255, 255, 255, 255 };
             Color_RGBA8 sp74 = { 198, 198, 198, 255 };
 
-            sp94.x = this->unk_538[i].x;
-            sp94.y = this->unk_538[i].y;
-            sp94.z = this->unk_538[i].z;
+            sp94.x = this->pathPoints[i].x;
+            sp94.y = this->pathPoints[i].y;
+            sp94.z = this->pathPoints[i].z;
             func_800B0EB0(play, &sp94, &sp88, &sp7C, &sp78, &sp74, 100, 150, 10);
             sp94.x -= 0.1f * temp_f20;
             sp94.z -= 0.1f * temp_f22;
@@ -164,7 +164,7 @@ void func_809616E0(EnFu* this, PlayState* play) {
 
 void func_809619D0(EnFu* this, PlayState* play) {
     s32 i;
-    Path* path = &play->setupPathList[ENFU_GET_FF00(&this->actor)];
+    Path* path = &play->setupPathList[ENFU_GET_PATH_INDEX(&this->actor)];
 
     switch (CURRENT_DAY) {
         case 1:
@@ -193,7 +193,7 @@ void func_809619D0(EnFu* this, PlayState* play) {
     }
 
     this->unk_520 = path->count;
-    this->unk_538 = Lib_SegmentedToVirtual(path->points);
+    this->pathPoints = Lib_SegmentedToVirtual(path->points);
     func_809616E0(this, play);
 }
 
@@ -328,13 +328,13 @@ void func_80961F38(PlayState* play, Vec3f* arg1, s16* arg2, s16 arg3, s16 arg4, 
     sp40 = Math_Vec3f_Yaw(arg1, &sp34) - arg3;
 
     if (arg5 < ABS_ALT(sp40)) {
-        Math_SmoothStepToS(&arg2[0], 0, 6, 6200, 100);
-        Math_SmoothStepToS(&arg2[1], 0, 6, 6200, 100);
+        Math_SmoothStepToS(&arg2[0], 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&arg2[1], 0, 6, 0x1838, 0x64);
     } else {
         sp42 = Math_Vec3f_Pitch(arg1, &sp34);
 
-        Math_SmoothStepToS(&arg2[0], sp42, 6, 6200, 100);
-        Math_SmoothStepToS(&arg2[1], sp40, 6, 6200, 100);
+        Math_SmoothStepToS(&arg2[0], sp42, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&arg2[1], sp40, 6, 0x1838, 0x64);
     }
 
     if (arg4 < ABS_ALT(arg2[1])) {
@@ -345,7 +345,7 @@ void func_80961F38(PlayState* play, Vec3f* arg1, s16* arg2, s16 arg3, s16 arg4, 
         }
     }
 
-    Math_SmoothStepToS(&arg2[2], 0, 6, 2000, 100);
+    Math_SmoothStepToS(&arg2[2], 0, 6, 0x7D0, 0x64);
 }
 
 void func_8096209C(EnFu* this, PlayState* play) {
@@ -354,9 +354,9 @@ void func_8096209C(EnFu* this, PlayState* play) {
     if (this->unk_53C & 1) {
         func_80961F38(play, &this->unk_508, this->unk_524, this->actor.shape.rot.y, 0x38E3, 0x6AAA);
     } else {
-        Math_SmoothStepToS(&this->unk_524[0], 0, 6, 6000, 100);
-        Math_SmoothStepToS(&this->unk_524[1], 0, 6, 6000, 100);
-        Math_SmoothStepToS(&this->unk_524[2], 0, 6, 6000, 100);
+        Math_SmoothStepToS(&this->unk_524[0], 0, 6, 0x1770, 0x64);
+        Math_SmoothStepToS(&this->unk_524[1], 0, 6, 0x1770, 0x64);
+        Math_SmoothStepToS(&this->unk_524[2], 0, 6, 0x1770, 0x64);
     }
 
     if (this->unk_53C & 2) {
@@ -364,9 +364,9 @@ void func_8096209C(EnFu* this, PlayState* play) {
 
         func_80961F38(play, &this->unk_514, this->unk_52A, rotY, 0x38E3, 0x5555);
     } else {
-        Math_SmoothStepToS(&this->unk_52A[0], 0, 6, 6000, 100);
-        Math_SmoothStepToS(&this->unk_52A[1], 0, 6, 6000, 100);
-        Math_SmoothStepToS(&this->unk_52A[2], 0, 6, 6000, 100);
+        Math_SmoothStepToS(&this->unk_52A[0], 0, 6, 0x1770, 0x64);
+        Math_SmoothStepToS(&this->unk_52A[1], 0, 6, 0x1770, 0x64);
+        Math_SmoothStepToS(&this->unk_52A[2], 0, 6, 0x1770, 0x64);
     }
 
     if ((this->unk_53C & 1) && (this->unk_53C & 2)) {
@@ -440,7 +440,7 @@ void func_80962340(EnFu* this, PlayState* play) {
     } else {
         Actor_OfferTalk(&this->actor, play, 100.0f);
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 0x64);
 }
 
 void func_80962588(EnFu* this, PlayState* play) {
@@ -1238,7 +1238,7 @@ void func_809640D8(EnFu* this, PlayState* play) {
 }
 
 void func_8096413C(EnFu* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.yawTowardsPlayer, 0x4000), 5, 1000, 100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.yawTowardsPlayer, 0x4000), 5, 0x3E8, 0x64);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 

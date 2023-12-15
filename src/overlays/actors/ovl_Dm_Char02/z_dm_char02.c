@@ -146,8 +146,11 @@ void DmChar02_Update(Actor* thisx, PlayState* play) {
     DmChar02* this = THIS;
 
     SkelAnime_Update(&this->skelAnime);
-    this->unk_2F0 = this->unk_2F0;
+
+    this->unk_2F0 = this->unk_2F0; // Set to itself
+
     this->actionFunc(this, play);
+
     if (!Actor_HasParent(&this->actor, play)) {
         Actor_OfferGetItem(&this->actor, play, GI_OCARINA_OF_TIME, 30.0f, 80.0f);
     } else {

@@ -48,13 +48,13 @@ typedef enum {
     /* 0x10 */ PAUSE_STATE_GAMEOVER_8,
     /* 0x11 */ PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT,
     /* 0x12 */ PAUSE_STATE_GAMEOVER_10,
-    /* 0x13 */ PAUSE_STATE_OWLWARP_0,
-    /* 0x14 */ PAUSE_STATE_OWLWARP_1,
-    /* 0x15 */ PAUSE_STATE_OWLWARP_2,
-    /* 0x16 */ PAUSE_STATE_OWLWARP_3,
-    /* 0x17 */ PAUSE_STATE_OWLWARP_SELECT, // Selecting the destination
-    /* 0x18 */ PAUSE_STATE_OWLWARP_CONFIRM, // Confirming the choice given
-    /* 0x19 */ PAUSE_STATE_OWLWARP_6,
+    /* 0x13 */ PAUSE_STATE_OWL_WARP_0,
+    /* 0x14 */ PAUSE_STATE_OWL_WARP_1,
+    /* 0x15 */ PAUSE_STATE_OWL_WARP_2,
+    /* 0x16 */ PAUSE_STATE_OWL_WARP_3,
+    /* 0x17 */ PAUSE_STATE_OWL_WARP_SELECT, // Selecting the destination
+    /* 0x18 */ PAUSE_STATE_OWL_WARP_CONFIRM, // Confirming the choice given
+    /* 0x19 */ PAUSE_STATE_OWL_WARP_6,
     /* 0x1A */ PAUSE_STATE_UNPAUSE_SETUP, // Unpause
     /* 0x1B */ PAUSE_STATE_UNPAUSE_CLOSE
 } PauseState;
@@ -89,8 +89,8 @@ typedef enum {
 #define IS_PAUSE_STATE_GAMEOVER \
     ((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))
 
-#define IS_PAUSE_STATE_OWLWARP \
-    ((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6))
+#define IS_PAUSE_STATE_OWL_WARP \
+    ((pauseCtx->state >= PAUSE_STATE_OWL_WARP_2) && (pauseCtx->state <= PAUSE_STATE_OWL_WARP_6))
 
 #define IS_PAUSE_MAIN_STATE_SONG_PROMPT                            \
     ((pauseCtx->mainState >= PAUSE_MAIN_STATE_SONG_PROMPT_INIT) && \

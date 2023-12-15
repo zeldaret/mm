@@ -552,9 +552,9 @@ void EnGo_InitSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], Vec3f pos) {
         effect->pos.y += 56.0f;
 
         // Generate a +-15 degree rotational velocity
-        effect->rotVelocity.x = (Rand_ZeroOne() - 0.5f) * (f32)0x1554;
-        effect->rotVelocity.y = (Rand_ZeroOne() - 0.5f) * (f32)0x1554;
-        effect->rotVelocity.z = (Rand_ZeroOne() - 0.5f) * (f32)0x1554;
+        effect->angularVelocity.x = (Rand_ZeroOne() - 0.5f) * 0x1554;
+        effect->angularVelocity.y = (Rand_ZeroOne() - 0.5f) * 0x1554;
+        effect->angularVelocity.z = (Rand_ZeroOne() - 0.5f) * 0x1554;
 
         // Generate a radially outward velocity for each of the effects
         velMagnitude = (Rand_ZeroOne() * 4.0f) + 6.0f;
@@ -632,9 +632,9 @@ void EnGo_UpdateSnow(EnGoEffect* effect, f32 dustConversionHeight) {
         Math_StepToF(&effect->velocity.z, z, (sREG(14) + 40) * 0.01f);
     }
 
-    effect->rotAngle.x += effect->rotVelocity.x;
-    effect->rotAngle.y += effect->rotVelocity.y;
-    effect->rotAngle.z += effect->rotVelocity.z;
+    effect->rot.x += effect->angularVelocity.x;
+    effect->rot.y += effect->angularVelocity.y;
+    effect->rot.z += effect->angularVelocity.z;
 }
 
 /**
@@ -667,9 +667,9 @@ void EnGo_DrawSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], PlayState* play, G
         Matrix_Push();
         Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
         Matrix_Scale(0.08f, 0.08f, 0.08f, MTXMODE_APPLY);
-        Matrix_RotateZS(effect->rotAngle.z, MTXMODE_APPLY);
-        Matrix_RotateXS(effect->rotAngle.x, MTXMODE_APPLY);
-        Matrix_RotateYS(effect->rotAngle.y, MTXMODE_APPLY);
+        Matrix_RotateZS(effect->rot.z, MTXMODE_APPLY);
+        Matrix_RotateXS(effect->rot.x, MTXMODE_APPLY);
+        Matrix_RotateYS(effect->rot.y, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, model);
@@ -793,7 +793,7 @@ void EnGo_UpdateSnowballCollider(EnGo* this, PlayState* play) {
 
     this->colliderSphere.dim.worldSphere.center.x = worldPos.x;
     this->colliderSphere.dim.worldSphere.center.y = worldPos.y;
-    this->colliderSphere.dim.worldSphere.center.y += (s16)this->actor.shape.yOffset;
+    this->colliderSphere.dim.worldSphere.center.y += TRUNCF_BINANG(this->actor.shape.yOffset);
     this->colliderSphere.dim.worldSphere.center.z = worldPos.z;
 
     this->colliderSphere.dim.modelSphere.radius = 48;
@@ -826,7 +826,7 @@ void EnGo_UpdateRolledUpCollider(EnGo* this, PlayState* play) {
     Math_Vec3f_Copy(&worldPos, &this->actor.world.pos);
     this->colliderSphere.dim.worldSphere.center.x = worldPos.x;
     this->colliderSphere.dim.worldSphere.center.y = worldPos.y;
-    this->colliderSphere.dim.worldSphere.center.y += (s16)this->actor.shape.yOffset;
+    this->colliderSphere.dim.worldSphere.center.y += TRUNCF_BINANG(this->actor.shape.yOffset);
     this->colliderSphere.dim.worldSphere.center.z = worldPos.z;
     this->colliderSphere.dim.modelSphere.radius = 20;
     this->colliderSphere.dim.worldSphere.radius =
@@ -1339,7 +1339,7 @@ s32 EnGo_HandleGatekeeperPoundCutscene(EnGo* this, f32 initialVelocity, f32 maxD
         if (velocity > 0.0f) {
             // PHASE 1: Goron is rising
             rotAndDistortFactor = velocity / initialVelocity;
-            this->actor.shape.rot.x += (s16)(0x238C * rotAndDistortFactor);
+            this->actor.shape.rot.x += TRUNCF_BINANG(0x238C * rotAndDistortFactor);
             this->elapsedHangtime = 0;
         } else if ((s32)this->actor.velocity.y == 0) {
             if (maxHangtime >= this->elapsedHangtime) {
@@ -2309,7 +2309,7 @@ void EnGo_Snowball(EnGo* this, PlayState* play) {
         }
 
         this->actor.speed = 4.0f;
-        this->actor.shape.rot.x += (s16)(this->actor.speed * 546.0f);
+        this->actor.shape.rot.x += TRUNCF_BINANG(this->actor.speed * 546.0f);
         Actor_MoveWithGravity(&this->actor);
     }
 }
@@ -2528,8 +2528,8 @@ s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     }
 
     if ((this->actionFlags & ENGO_FLAG_STANDING) && (fidgetIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
     return false;
 }

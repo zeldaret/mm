@@ -689,7 +689,7 @@ void func_80B86804(EnKaizoku* this, PlayState* play) {
 void func_80B868B8(EnKaizoku* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 4000, 1);
+    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0xFA0, 1);
     this->subCamEye.x = Math_SinS(this->picto.actor.yawTowardsPlayer) * 155.0f + this->picto.actor.world.pos.x;
     this->subCamEye.y = this->picto.actor.world.pos.y + 10.0f;
     this->subCamEye.z = Math_CosS(this->picto.actor.yawTowardsPlayer) * 115.0f + this->picto.actor.world.pos.z;
@@ -1357,9 +1357,9 @@ void func_80B887AC(EnKaizoku* this, PlayState* play) {
     if (!func_80B85858(this, play) && !func_80B85A00(this, play, false)) {
         temp_v0 = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
         if (temp_v0 > 0) {
-            var_a2 = (s16)(temp_v0 * 0.25f) + 0x7D0;
+            var_a2 = TRUNCF_BINANG(temp_v0 * 0.25f) + 0x7D0;
         } else {
-            var_a2 = (s16)(temp_v0 * 0.25f) - 0x7D0;
+            var_a2 = TRUNCF_BINANG(temp_v0 * 0.25f) - 0x7D0;
         }
         this->picto.actor.shape.rot.y += var_a2;
         this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
@@ -1485,7 +1485,7 @@ void func_80B88D6C(EnKaizoku* this, PlayState* play) {
             if (this->picto.actor.speed < -8.0f) {
                 this->picto.actor.speed = -8.0f;
             }
-        } else if (Math_SinS((sp2A - this->picto.actor.shape.rot.y)) < 0.0f) {
+        } else if (Math_SinS(sp2A - this->picto.actor.shape.rot.y) < 0.0f) {
             this->picto.actor.speed += 0.25f;
             if (this->picto.actor.speed > 8.0f) {
                 this->picto.actor.speed = 8.0f;
@@ -1645,7 +1645,7 @@ void func_80B893CC(EnKaizoku* this, PlayState* play) {
 void func_80B894C0(EnKaizoku* this, PlayState* play) {
     s16 temp_v0;
 
-    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 4500, 0);
+    Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0x1194, 0);
     if (!func_80B85858(this, play) && !func_80B85A00(this, play, false) && (this->unk_3C4.x < 1.0f) &&
         (this->unk_3C4.z < 1.0f)) {
         temp_v0 = this->picto.actor.wallYaw - this->picto.actor.shape.rot.y;

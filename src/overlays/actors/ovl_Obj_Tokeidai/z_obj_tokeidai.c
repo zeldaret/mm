@@ -38,9 +38,9 @@
 
 #define GET_CURRENT_CLOCK_HOUR(this) ((s32)TIME_TO_HOURS_F((this)->clockTime))
 #define GET_CURRENT_CLOCK_MINUTE(this) ((s32)((this)->clockTime * (360 * 2.0f / 0x10000)) % 30)
-#define GET_CLOCK_FACE_ROTATION(currentClockHour) ((s16)(currentClockHour * (0x10000 / 24.0f)))
+#define GET_CLOCK_FACE_ROTATION(currentClockHour) (TRUNCF_BINANG(currentClockHour * (0x10000 / 24.0f)))
 #define GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentClockMinute) \
-    ((s16)(currentClockMinute * (0x10000 * 12.0f / 360)))
+    (TRUNCF_BINANG(currentClockMinute * (0x10000 * 12.0f / 360)))
 
 void ObjTokeidai_Init(Actor* thisx, PlayState* play);
 void ObjTokeidai_Destroy(Actor* thisx, PlayState* play);
@@ -124,7 +124,7 @@ void ObjTokeidai_ExteriorGear_Init(ObjTokeidai* this, PlayState* play) {
     if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) ||
         ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
-    } else if (((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
+    } else if (((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
         this->actionFunc = ObjTokeidai_ExteriorGear_OpenedIdle;
         this->actor.world.pos.y += this->actor.scale.y * 1900.0f;
         this->actor.shape.yOffset = 1500.0f;
@@ -141,7 +141,7 @@ void ObjTokeidai_TowerClock_Init(ObjTokeidai* this, PlayState* play) {
     if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) ||
         ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
-    } else if (((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
+    } else if (((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
         this->actor.world.pos.y += (this->actor.scale.y * 5191.0f) - 50.0f;
         this->actor.world.pos.x += Math_SinS(this->actor.world.rot.y) * this->actor.scale.z * 1791.0f;
         this->actor.world.pos.z += -Math_CosS(this->actor.world.rot.y) * this->actor.scale.z * 1791.0f;
@@ -192,7 +192,7 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, PlayState* play) {
                 this->actor.child->home.rot.x = 0x12C;
             }
         }
-    } else if (((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
+    } else if (((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
         this->spotlightIntensity = 0;
         this->actor.world.pos.y += this->actor.scale.y * -2160.0f;
         this->actor.world.pos.x += Math_SinS(this->actor.world.rot.y) * this->actor.scale.z * 5400.0f;
@@ -214,7 +214,7 @@ void ObjTokeidai_Init(Actor* thisx, PlayState* play) {
     this->xRotation = 0;
     this->yTranslation = 0;
     this->clockFaceZTranslation = 0;
-    this->clockTime = gSaveContext.save.time;
+    this->clockTime = CURRENT_TIME;
     this->actor.home.rot.x = 0;
 
     switch (OBJ_TOKEIDAI_TYPE(&this->actor)) {
@@ -615,7 +615,7 @@ void ObjTokeidai_DoNothing(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, PlayState* play) {
-    if ((((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) ||
+    if ((((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) ||
         CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED)) {
         this->actor.draw = ObjTokeidai_Draw;
     } else {
@@ -627,7 +627,7 @@ s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, PlayState* play) {
     if (gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         return false;
     }
-    if ((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
+    if ((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) {
         ObjTokeidai_SetupTowerOpening(this);
         return true;
     }
@@ -688,7 +688,7 @@ void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
-    if ((CURRENT_DAY == 3) && (this->clockHour < 6) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
+    if ((CURRENT_DAY == 3) && (this->clockHour < 6) && (CURRENT_TIME < CLOCK_TIME(6, 0))) {
         this->actor.draw = ObjTokeidai_Clock_Draw;
         ObjTokeidai_SetupTowerOpening(this);
         SET_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED);
@@ -705,21 +705,21 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
             (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
             this->actor.draw = NULL;
         }
-        this->clockTime = gSaveContext.save.time;
+        this->clockTime = CURRENT_TIME;
         if (this->actor.home.rot.x != 0) {
             ObjTokeidai_Clock_Init(this);
             this->actor.home.rot.x = 0;
         }
     }
 
-    if ((CURRENT_DAY != 3) || (gSaveContext.save.time >= CLOCK_TIME(6, 0))) {
+    if ((CURRENT_DAY != 3) || (CURRENT_TIME >= CLOCK_TIME(6, 0))) {
         ObjTokeidai_RotateOnMinuteChange(this, true);
     }
     ObjTokeidai_RotateOnHourChange(this, play);
 }
 
 void ObjTokeidai_WallClock_Idle(ObjTokeidai* this, PlayState* play) {
-    this->clockTime = gSaveContext.save.time;
+    this->clockTime = CURRENT_TIME;
     ObjTokeidai_RotateOnMinuteChange(this, true);
     ObjTokeidai_RotateOnHourChange(this, play);
 }
@@ -738,7 +738,7 @@ void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, PlayState* play) {
                 (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
                 this->actor.draw = NULL;
             }
-            this->clockTime = gSaveContext.save.time;
+            this->clockTime = CURRENT_TIME;
             if (this->actor.home.rot.x != 0) {
                 ObjTokeidai_SetupClockOrExteriorGear(this);
                 this->actor.home.rot.x = 0;

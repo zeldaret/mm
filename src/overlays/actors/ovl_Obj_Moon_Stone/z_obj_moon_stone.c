@@ -111,7 +111,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play) {
                         this->actor.world.pos.z, 0, 0, 0, -1);
         }
     }
-    if (this->actor.draw) {
+    if (this->actor.draw != NULL) {
         if (Actor_HasParent(&this->actor, play)) {
             this->actor.parent = NULL;
             this->actor.draw = NULL;

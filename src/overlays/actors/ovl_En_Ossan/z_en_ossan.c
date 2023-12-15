@@ -21,10 +21,8 @@ void EnOssan_Update(Actor* thisx, PlayState* play);
 void EnOssan_CuriosityShopMan_Draw(Actor* thisx, PlayState* play);
 void EnOssan_PartTimer_Draw(Actor* thisx, PlayState* play);
 
-void EnOssan_CuriosityShopMan_Init(EnOssan* this, PlayState* play);
 u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, PlayState* play);
 
-void EnOssan_PartTimer_Init(EnOssan* this, PlayState* play);
 u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play);
 
 void EnOssan_InitShop(EnOssan* this, PlayState* play);
@@ -210,7 +208,7 @@ void EnOssan_CheckValidSpawn(EnOssan* this) {
     switch (gSaveContext.save.day) {
         case 1:
         case 2:
-            if ((gSaveContext.save.time <= CLOCK_TIME(21, 30)) && (gSaveContext.save.time > CLOCK_TIME(6, 00))) {
+            if ((CURRENT_TIME <= CLOCK_TIME(21, 30)) && (CURRENT_TIME > CLOCK_TIME(6, 0))) {
                 if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
                     Actor_Kill(&this->actor);
                 }
@@ -223,7 +221,7 @@ void EnOssan_CheckValidSpawn(EnOssan* this) {
             if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
                 Actor_Kill(&this->actor);
             }
-            if ((gSaveContext.save.time > CLOCK_TIME(22, 00)) || (gSaveContext.save.time < CLOCK_TIME(6, 00))) {
+            if ((CURRENT_TIME > CLOCK_TIME(22, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0))) {
                 if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
                     Actor_Kill(&this->actor);
                 }
@@ -240,11 +238,11 @@ void EnOssan_RotateHead(EnOssan* this, PlayState* play) {
 
     if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
         if (player->transformation == PLAYER_FORM_ZORA) {
-            Math_SmoothStepToS(&this->partTimerHeadRot.y, this->headRot.y, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, this->headRot.y, 3, 0x7D0, 0);
         } else if (this->flags & LOOKED_AT_PLAYER) {
-            Math_SmoothStepToS(&this->partTimerHeadRot.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, 0x1F40, 3, 0x7D0, 0);
         } else {
-            Math_SmoothStepToS(&this->partTimerHeadRot.y, this->headRot.y, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, this->headRot.y, 3, 0x7D0, 0);
             if (ABS_ALT(this->partTimerHeadRot.y - this->headRot.y) < 16) {
                 this->flags |= LOOKED_AT_PLAYER;
             }
@@ -387,7 +385,7 @@ void EnOssan_Idle(EnOssan* this, PlayState* play) {
             Actor_OfferTalk(&this->actor, play, 100.0f);
         }
         if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
-            Math_SmoothStepToS(&this->partTimerHeadRot.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, 0x1F40, 3, 0x7D0, 0);
         }
     }
 }
@@ -672,7 +670,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
             }
         }
         if ((this->actor.params == ENOSSAN_PART_TIME_WORKER) && (player->transformation != PLAYER_FORM_ZORA)) {
-            Math_SmoothStepToS(&this->partTimerHeadRot.y, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->partTimerHeadRot.y, 0x1F40, 3, 0x7D0, 0);
         }
     }
 }
@@ -1600,7 +1598,7 @@ void EnOssan_Update(Actor* thisx, PlayState* play) {
         EnOssan_UpdateItemSelectedProperty(this);
         EnOssan_UpdateStickDirectionPromptAnim(this);
         EnOssan_UpdateCursorAnim(this);
-        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->unk2CC, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
         this->actionFunc(this, play);
         Actor_SetFocus(&this->actor, 90.0f);
         SkelAnime_Update(&this->skelAnime);
@@ -1747,8 +1745,8 @@ void EnOssan_CuriosityShopMan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx**
 
     if ((limbIndex == FSN_LIMB_PELVIS) || (limbIndex == FSN_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == FSN_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)Math_SinS(this->fidgetTableY[limbIndex]) * 200;
-        rot->z += (s16)Math_CosS(this->fidgetTableZ[limbIndex]) * 200;
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[limbIndex])) * 200;
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[limbIndex])) * 200;
     }
 }
 

@@ -16,7 +16,7 @@ OSTime sGraphPrevUpdateEndTime;
 #include "buffers.h"
 #include "idle.h"
 #include "sys_cfb.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "z64speed_meter.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
@@ -341,13 +341,12 @@ void Graph_ThreadEntry(void* arg) {
     u32 size;
     s32 pad[2];
 
-    gZBufferLoRes = SystemArena_Malloc(sizeof(*gZBufferLoRes) + sizeof(*gWorkBufferLoRes) + 64 - 1);
+    gZBufferLoRes = malloc(sizeof(*gZBufferLoRes) + sizeof(*gWorkBufferLoRes) + 64 - 1);
     gZBufferLoRes = (void*)ALIGN64((u32)gZBufferLoRes);
 
     gWorkBufferLoRes = (void*)((u8*)gZBufferLoRes + sizeof(*gZBufferLoRes));
 
-    gGfxSPTaskOutputBufferHiRes = gGfxSPTaskOutputBufferLoRes =
-        SystemArena_Malloc(sizeof(*gGfxSPTaskOutputBufferLoRes));
+    gGfxSPTaskOutputBufferHiRes = gGfxSPTaskOutputBufferLoRes = malloc(sizeof(*gGfxSPTaskOutputBufferLoRes));
 
     gGfxSPTaskOutputBufferEndLoRes = (u8*)gGfxSPTaskOutputBufferLoRes + sizeof(*gGfxSPTaskOutputBufferLoRes);
     gGfxSPTaskOutputBufferEndHiRes = (u8*)gGfxSPTaskOutputBufferHiRes + sizeof(*gGfxSPTaskOutputBufferHiRes);
@@ -365,7 +364,7 @@ void Graph_ThreadEntry(void* arg) {
 
         func_800809F4(ovl->vromStart);
 
-        gameState = SystemArena_Malloc(size);
+        gameState = malloc(size);
 
         bzero(gameState, size);
         GameState_Init(gameState, ovl->init, &gfxCtx);
@@ -379,7 +378,7 @@ void Graph_ThreadEntry(void* arg) {
         if (size) {}
 
         GameState_Destroy(gameState);
-        SystemArena_Free(gameState);
+        free(gameState);
 
         Overlay_FreeGameState(ovl);
     }

@@ -1457,16 +1457,16 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 switch (character) {
                     case 0x8169:
                     case 0x8175:
-                        msgCtx->textPosX -= (s16)(6.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX -= TRUNCF_BINANG(6.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x8145:
-                        msgCtx->textPosX -= (s16)(3.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX -= TRUNCF_BINANG(3.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x8148:
                     case 0x8149:
-                        msgCtx->textPosX -= (s16)(2.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX -= TRUNCF_BINANG(2.0f * msgCtx->textCharScale);
                         break;
 
                     default:
@@ -1494,34 +1494,34 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 charTexIndex += FONT_CHAR_TEX_SIZE;
                 switch (character) {
                     case 0x8144:
-                        msgCtx->textPosX += (s16)(8.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX += TRUNCF_BINANG(8.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x816A:
                     case 0x8176:
-                        msgCtx->textPosX += (s16)(10.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX += TRUNCF_BINANG(10.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x8141:
                     case 0x8142:
                     case 0x8168:
-                        msgCtx->textPosX += (s16)(12.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX += TRUNCF_BINANG(12.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x8194:
-                        msgCtx->textPosX += (s16)(14.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX += TRUNCF_BINANG(14.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x8145:
-                        msgCtx->textPosX += (s16)(15.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX += TRUNCF_BINANG(15.0f * msgCtx->textCharScale);
                         break;
 
                     default:
                         if ((msgCtx->msgMode >= MSGMODE_SCENE_TITLE_CARD_FADE_IN_BACKGROUND) &&
                             (msgCtx->msgMode <= MSGMODE_SCENE_TITLE_CARD_FADE_OUT_BACKGROUND)) {
-                            msgCtx->textPosX += (s16)((16.0f * msgCtx->textCharScale) - 1.0f);
+                            msgCtx->textPosX += TRUNCF_BINANG((16.0f * msgCtx->textCharScale) - 1.0f);
                         } else {
-                            msgCtx->textPosX += (s16)(16.0f * msgCtx->textCharScale);
+                            msgCtx->textPosX += TRUNCF_BINANG(16.0f * msgCtx->textCharScale);
                         }
                         break;
                 }
@@ -2200,7 +2200,7 @@ void Message_Decode(PlayState* play) {
                 msgCtx->unk11FFA = msgCtx->textboxY + 6;
                 msgCtx->unk11F1A[spD2] = 0;
                 if (msgCtx->unk11F18 == 0) {
-                    msgCtx->unk11F1A[spD2] = (s16)((msgCtx->textCharScale * 16.0f * 16.0f) - spC0) / 2;
+                    msgCtx->unk11F1A[spD2] = TRUNCF_BINANG((msgCtx->textCharScale * 16.0f * 16.0f) - spC0) / 2;
                 }
                 spC0 = 0.0f;
                 if (curChar == 0xB) {
@@ -2284,7 +2284,7 @@ void Message_Decode(PlayState* play) {
             } else if (curChar == 0x203) {
                 msgCtx->unk11F18 = 1;
                 msgCtx->choiceNum = 3;
-                msgCtx->unk11FF8 = msgCtx->unk11FF8 + 0x16;
+                msgCtx->unk11FF8 += 0x16;
             } else if (curChar == 0x204) {
                 Message_GetTimerDigits(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
 
@@ -2316,7 +2316,7 @@ void Message_Decode(PlayState* play) {
                 decodedBufPos--;
             } else if (curChar == 0x20A) {
                 digits[0] = 0;
-                timeInSeconds = TIME_TO_MINUTES_F(gSaveContext.save.time);
+                timeInSeconds = TIME_TO_MINUTES_F(CURRENT_TIME);
                 digits[1] = timeInSeconds / 60.0f;
                 while (digits[1] >= 10) {
                     digits[0]++;
@@ -5604,7 +5604,7 @@ void Message_Update(PlayState* play) {
                         Message_CloseTextbox(play);
                     }
                 } else if ((msgCtx->textboxEndType != TEXTBOX_ENDTYPE_10) ||
-                           (pauseCtx->state != PAUSE_STATE_OWLWARP_CONFIRM)) {
+                           (pauseCtx->state != PAUSE_STATE_OWL_WARP_CONFIRM)) {
                     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) &&
                         (play->msgCtx.ocarinaMode == OCARINA_MODE_1B)) {
                         if (Message_ShouldAdvance(play)) {
@@ -5676,7 +5676,7 @@ void Message_Update(PlayState* play) {
                             pauseCtx->unk_2C8 = pauseCtx->pageIndex;
                             pauseCtx->unk_2CA = pauseCtx->cursorPoint[4];
                             pauseCtx->pageIndex = PAUSE_ITEM;
-                            pauseCtx->state = PAUSE_STATE_OWLWARP_0;
+                            pauseCtx->state = PAUSE_STATE_OWL_WARP_0;
                             func_800F4A10(play);
                             pauseCtx->pageIndex = PAUSE_MAP;
                             sLastPlayedSong = 0xFF;
@@ -5908,7 +5908,7 @@ void Message_Update(PlayState* play) {
         case MSGMODE_NEW_CYCLE_0:
             play->state.unk_A3 = 1;
             sp44 = gSaveContext.save.cutsceneIndex;
-            sp3E = gSaveContext.save.time;
+            sp3E = CURRENT_TIME;
             sp40 = gSaveContext.save.day;
 
             Sram_SaveEndOfCycle(play);
