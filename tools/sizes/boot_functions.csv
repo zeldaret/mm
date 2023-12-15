@@ -20,7 +20,7 @@ asm/non_matchings/boot/z_std_dma/DmaMgr_ThreadEntry.s,DmaMgr_ThreadEntry,0x80080
 asm/non_matchings/boot/z_std_dma/DmaMgr_RequestAsync.s,DmaMgr_RequestAsync,0x80080C04,0x23
 asm/non_matchings/boot/z_std_dma/DmaMgr_RequestSync.s,DmaMgr_RequestSync,0x80080C90,0x1F
 asm/non_matchings/boot/z_std_dma/DmaMgr_Init.s,DmaMgr_Init,0x80080D0C,0x3D
-asm/non_matchings/boot/z_std_dma/DmaMgr_Destory.s,DmaMgr_Destory,0x80080E00,0xC
+asm/non_matchings/boot/z_std_dma/DmaMgr_Stop.s,DmaMgr_Stop,0x80080E00,0xC
 asm/non_matchings/boot/yaz0/Yaz0_FirstDMA.s,Yaz0_FirstDMA,0x80080E30,0x28
 asm/non_matchings/boot/yaz0/Yaz0_NextDMA.s,Yaz0_NextDMA,0x80080ED0,0x48
 asm/non_matchings/boot/yaz0/Yaz0_DecompressImpl.s,Yaz0_DecompressImpl,0x80080FF0,0x62

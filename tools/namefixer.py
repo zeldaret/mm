@@ -987,7 +987,7 @@ wordReplace = {
 
     "Game_SetFramerateDivisor": "GameState_SetFramerateDivisor",
     
-    "DmaMgr_SendRequestImpl": "DmaMgr_SendRequest",
+    "DmaMgr_SendRequestImpl": "DmaMgr_RequestAsync",
     "DmaMgr_SendRequest0": "DmaMgr_RequestSync",
 
     # Structs
