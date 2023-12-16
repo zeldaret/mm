@@ -38,7 +38,6 @@ void GameState_SetFramerateDivisor(GameState* gameState, s32 divisor) {
 void GameState_SetFBFilter(Gfx** gfxP, void* zbuffer) {
     Gfx* gfx = *gfxP;
 
-
     if ((R_FB_FILTER_TYPE >= FB_FILTER_CVG_RGB) && (R_FB_FILTER_TYPE <= FB_FILTER_CVG_RGB_FOG)) {
         // Visualize coverage
         sGameVisCvg.vis.type = FB_FILTER_TO_CVG_TYPE(R_FB_FILTER_TYPE);

@@ -32,7 +32,6 @@ Gfx sCoverageOnlyDL[] = {
     gsSPBranchList(D_0E000000.fillRect),
 };
 
-
 /**
  * Draws fog + coverage * RGB of pixels
  *
