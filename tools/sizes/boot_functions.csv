@@ -63,7 +63,7 @@ asm/non_matchings/boot/fault/Fault_FillScreenRed.s,Fault_FillScreenRed,0x8008212
 asm/non_matchings/boot/fault/Fault_DrawCornerRec.s,Fault_DrawCornerRec,0x80082180,0x15
 asm/non_matchings/boot/fault/Fault_PrintFReg.s,Fault_PrintFReg,0x800821D4,0x2B
 asm/non_matchings/boot/fault/Fault_LogFReg.s,Fault_LogFReg,0x80082280,0x2C
-asm/non_matchings/boot/fault/Fault_PrintFPCR.s,Fault_PrintFPCR,0x80082330,0x29
+asm/non_matchings/boot/fault/Fault_PrintFPCSR.s,Fault_PrintFPCSR,0x80082330,0x29
 asm/non_matchings/boot/fault/Fault_LogFPCSR.s,Fault_LogFPCSR,0x800823D4,0x26
 asm/non_matchings/boot/fault/Fault_PrintThreadContext.s,Fault_PrintThreadContext,0x8008246C,0xD4
 asm/non_matchings/boot/fault/osSyncPrintfThreadContext.s,osSyncPrintfThreadContext,0x800827BC,0xBF
@@ -78,7 +78,7 @@ asm/non_matchings/boot/fault/Fault_LogStackTrace.s,Fault_LogStackTrace,0x800832D
 asm/non_matchings/boot/fault/Fault_ResumeThread.s,Fault_ResumeThread,0x80083450,0x1F
 asm/non_matchings/boot/fault/Fault_DisplayFrameBuffer.s,Fault_DisplayFrameBuffer,0x800834CC,0x30
 asm/non_matchings/boot/fault/Fault_ProcessClients.s,Fault_ProcessClients,0x8008358C,0x39
-asm/non_matchings/boot/fault/Fault_SetOptionsFromController3.s,Fault_SetOptionsFromController3,0x80083670,0x5D
+asm/non_matchings/boot/fault/Fault_SetOptions.s,Fault_SetOptions,0x80083670,0x5D
 asm/non_matchings/boot/fault/Fault_UpdatePad.s,Fault_UpdatePad,0x800837E4,0x11
 asm/non_matchings/boot/fault/Fault_ThreadEntry.s,Fault_ThreadEntry,0x80083828,0xD2
 asm/non_matchings/boot/fault/Fault_SetFrameBuffer.s,Fault_SetFrameBuffer,0x80083B70,0x15
