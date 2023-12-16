@@ -2,7 +2,7 @@
 #include "regs.h"
 #include "functions.h"
 #include "z64malloc.h"
-#include "z64vismono.h"
+#include "z64vis.h"
 #include "z64visfbuf.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -11,7 +11,7 @@ Input D_801F6C18;
 TransitionTile sTransitionTile;
 s32 gTransitionTileState;
 VisMono sPlayVisMono;
-Color_RGBA8_u32 gVisMonoColor;
+Color_RGBA8_u32 gPlayVisMonoColor;
 VisFbuf sPlayVisFbuf;
 VisFbuf* sPlayVisFbufInstance;
 BombersNotebook sBombersNotebook;
@@ -1231,8 +1231,8 @@ void Play_DrawMain(PlayState* this) {
 
             TransitionFade_Draw(&this->unk_18E48, &sp218);
 
-            if (gVisMonoColor.a != 0) {
-                sPlayVisMono.primColor.rgba = gVisMonoColor.rgba;
+            if (gPlayVisMonoColor.a != 0) {
+                sPlayVisMono.vis.primColor.rgba = gPlayVisMonoColor.rgba;
                 VisMono_Draw(&sPlayVisMono, &sp218);
             }
 
@@ -2300,7 +2300,7 @@ void Play_Init(GameState* thisx) {
     TransitionFade_Start(&this->unk_18E48);
     VisMono_Init(&sPlayVisMono);
 
-    gVisMonoColor.a = 0;
+    gPlayVisMonoColor.a = 0;
     sPlayVisFbufInstance = &sPlayVisFbuf;
     VisFbuf_Init(sPlayVisFbufInstance);
     sPlayVisFbufInstance->lodProportion = 0.0f;

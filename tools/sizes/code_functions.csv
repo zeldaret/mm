@@ -2289,9 +2289,9 @@ asm/non_matchings/code/z_vismono/VisMono_DesaturateTLUT.s,VisMono_DesaturateTLUT
 asm/non_matchings/code/z_vismono/VisMono_DesaturateDList.s,VisMono_DesaturateDList,0x80141C34,0x8B
 asm/non_matchings/code/z_vismono/VisMono_Draw.s,VisMono_Draw,0x80141E60,0x7B
 asm/non_matchings/code/z_vismono/VisMono_DrawOld.s,VisMono_DrawOld,0x8014204C,0x1D
-asm/non_matchings/code/z_viszbuf/VisZbuf_Init.s,VisZbuf_Init,0x801420C0,0xD
-asm/non_matchings/code/z_viszbuf/VisZbuf_Destroy.s,VisZbuf_Destroy,0x801420F4,0x3
-asm/non_matchings/code/z_viszbuf/VisZbuf_Draw.s,VisZbuf_Draw,0x80142100,0xD0
+asm/non_matchings/code/z_viszbuf/VisZBuf_Init.s,VisZBuf_Init,0x801420C0,0xD
+asm/non_matchings/code/z_viszbuf/VisZBuf_Destroy.s,VisZBuf_Destroy,0x801420F4,0x3
+asm/non_matchings/code/z_viszbuf/VisZBuf_Draw.s,VisZBuf_Draw,0x80142100,0xD0
 asm/non_matchings/code/z_vr_box/func_80142440.s,func_80142440,0x80142440,0x342
 asm/non_matchings/code/z_vr_box/func_80143148.s,func_80143148,0x80143148,0x28
 asm/non_matchings/code/z_vr_box/Skybox_Setup.s,Skybox_Setup,0x801431E8,0x4F

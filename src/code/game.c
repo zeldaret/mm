@@ -7,9 +7,7 @@
 #include "z64rumble.h"
 #include "z64speed_meter.h"
 #include "z64vimode.h"
-#include "z64viscvg.h"
-#include "z64vismono.h"
-#include "z64viszbuf.h"
+#include "z64vis.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "debug.h"
 
@@ -20,7 +18,7 @@ f32 gFramerateDivisorThird = 1.0f / 3.0f;
 
 SpeedMeter sGameSpeedMeter;
 VisCvg sGameVisCvg;
-VisZbuf sGameVisZbuf;
+VisZBuf sGameVisZBuf;
 VisMono sGameVisMono;
 ViMode sGameViMode;
 
@@ -40,34 +38,38 @@ void GameState_SetFramerateDivisor(GameState* gameState, s32 divisor) {
 void GameState_SetFBFilter(Gfx** gfxP, void* zbuffer) {
     Gfx* gfx = *gfxP;
 
-    if ((R_FB_FILTER_TYPE > 0) && (R_FB_FILTER_TYPE < 5)) {
-        sGameVisCvg.type = R_FB_FILTER_TYPE;
-        sGameVisCvg.color.r = R_FB_FILTER_PRIM_COLOR(0);
-        sGameVisCvg.color.g = R_FB_FILTER_PRIM_COLOR(1);
-        sGameVisCvg.color.b = R_FB_FILTER_PRIM_COLOR(2);
-        sGameVisCvg.color.a = R_FB_FILTER_A;
+
+    if ((R_FB_FILTER_TYPE >= FB_FILTER_CVG_RGB) && (R_FB_FILTER_TYPE <= FB_FILTER_CVG_RGB_FOG)) {
+        // Visualize coverage
+        sGameVisCvg.vis.type = FB_FILTER_TO_CVG_TYPE(R_FB_FILTER_TYPE);
+        sGameVisCvg.vis.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+        sGameVisCvg.vis.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+        sGameVisCvg.vis.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+        sGameVisCvg.vis.primColor.a = R_FB_FILTER_A;
         VisCvg_Draw(&sGameVisCvg, &gfx);
-    } else if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
-        sGameVisZbuf.useRgba = (R_FB_FILTER_TYPE == 6);
-        sGameVisZbuf.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
-        sGameVisZbuf.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
-        sGameVisZbuf.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
-        sGameVisZbuf.primColor.a = R_FB_FILTER_A;
-        sGameVisZbuf.envColor.r = R_FB_FILTER_ENV_COLOR(0);
-        sGameVisZbuf.envColor.g = R_FB_FILTER_ENV_COLOR(1);
-        sGameVisZbuf.envColor.b = R_FB_FILTER_ENV_COLOR(2);
-        sGameVisZbuf.envColor.a = R_FB_FILTER_A;
-        VisZbuf_Draw(&sGameVisZbuf, &gfx, zbuffer);
-    } else if (R_FB_FILTER_TYPE == 7) {
-        sGameVisMono.unk_00 = 0;
-        sGameVisMono.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
-        sGameVisMono.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
-        sGameVisMono.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
-        sGameVisMono.primColor.a = R_FB_FILTER_A;
-        sGameVisMono.envColor.r = R_FB_FILTER_ENV_COLOR(0);
-        sGameVisMono.envColor.g = R_FB_FILTER_ENV_COLOR(1);
-        sGameVisMono.envColor.b = R_FB_FILTER_ENV_COLOR(2);
-        sGameVisMono.envColor.a = R_FB_FILTER_A;
+    } else if ((R_FB_FILTER_TYPE == FB_FILTER_ZBUF_IA) || (R_FB_FILTER_TYPE == FB_FILTER_ZBUF_RGBA)) {
+        // Visualize z-buffer
+        sGameVisZBuf.vis.type = (R_FB_FILTER_TYPE == FB_FILTER_ZBUF_RGBA);
+        sGameVisZBuf.vis.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+        sGameVisZBuf.vis.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+        sGameVisZBuf.vis.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+        sGameVisZBuf.vis.primColor.a = R_FB_FILTER_A;
+        sGameVisZBuf.vis.envColor.r = R_FB_FILTER_ENV_COLOR(0);
+        sGameVisZBuf.vis.envColor.g = R_FB_FILTER_ENV_COLOR(1);
+        sGameVisZBuf.vis.envColor.b = R_FB_FILTER_ENV_COLOR(2);
+        sGameVisZBuf.vis.envColor.a = R_FB_FILTER_A;
+        VisZBuf_Draw(&sGameVisZBuf, &gfx, zbuffer);
+    } else if (R_FB_FILTER_TYPE == FB_FILTER_MONO) {
+        // Monochrome filter
+        sGameVisMono.vis.type = 0;
+        sGameVisMono.vis.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+        sGameVisMono.vis.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+        sGameVisMono.vis.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+        sGameVisMono.vis.primColor.a = R_FB_FILTER_A;
+        sGameVisMono.vis.envColor.r = R_FB_FILTER_ENV_COLOR(0);
+        sGameVisMono.vis.envColor.g = R_FB_FILTER_ENV_COLOR(1);
+        sGameVisMono.vis.envColor.b = R_FB_FILTER_ENV_COLOR(2);
+        sGameVisMono.vis.envColor.a = R_FB_FILTER_A;
         VisMono_Draw(&sGameVisMono, &gfx);
     }
 
@@ -222,7 +224,7 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     init(gameState);
 
     VisCvg_Init(&sGameVisCvg);
-    VisZbuf_Init(&sGameVisZbuf);
+    VisZBuf_Init(&sGameVisZBuf);
     VisMono_Init(&sGameVisMono);
     ViMode_Init(&sGameViMode);
     SpeedMeter_Init(&sGameSpeedMeter);
@@ -243,7 +245,7 @@ void GameState_Destroy(GameState* gameState) {
     Rumble_Destroy();
     SpeedMeter_Destroy(&sGameSpeedMeter);
     VisCvg_Destroy(&sGameVisCvg);
-    VisZbuf_Destroy(&sGameVisZbuf);
+    VisZBuf_Destroy(&sGameVisZBuf);
     VisMono_Destroy(&sGameVisMono);
     ViMode_Destroy(&sGameViMode);
     THA_Destroy(&gameState->tha);
