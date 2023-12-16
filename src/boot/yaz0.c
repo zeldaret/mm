@@ -64,6 +64,15 @@ void* Yaz0_NextDMA(u8* curSrcPos) {
     return dst;
 }
 
+#define YAZ0_MAGIC 0x59617A30 // 'Yaz0'
+
+typedef struct {
+    /* 0x0 */ u32 magic;
+    /* 0x4 */ u32 decSize;
+    /* 0x8 */ u32 compInfoOffset;   // only used in mio0
+    /* 0xC */ u32 uncompDataOffset; // only used in mio0
+} Yaz0Header; // size = 0x10
+
 s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
     u32 bitIndex = 0;
     u8* dstEnd;
@@ -122,7 +131,7 @@ s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
 
 void Yaz0_Decompress(uintptr_t romStart, void* dst, size_t size) {
     s32 status;
-    u32 pad;
+    s32 pad;
     char exp1[80];
     char exp2[80];
 

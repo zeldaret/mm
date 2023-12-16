@@ -135,7 +135,7 @@ void Lights_BindPoint(Lights* lights, LightParams* params, PlayState* play) {
     f32 radiusF = params->point.radius;
     Vec3f posF;
     Vec3f adjustedPos;
-    u32 pad;
+    s32 pad;
 
     if (radiusF > 0) {
         posF.x = params->point.x;

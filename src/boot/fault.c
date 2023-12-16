@@ -927,7 +927,7 @@ void Fault_ProcessClients(void) {
 void Fault_SetOptions(void) {
     static u32 faultCustomOptions;
     Input* input3 = &sFaultInstance->inputs[3];
-    u32 pad;
+    s32 pad;
     uintptr_t pc;
     uintptr_t ra;
     uintptr_t sp;
@@ -970,7 +970,7 @@ void Fault_UpdatePad(void) {
 
 void Fault_ThreadEntry(void* arg) {
     OSMesg msg;
-    u32 pad;
+    s32 pad;
     OSThread* faultedThread;
 
     // Direct OS event messages to the fault event queue
