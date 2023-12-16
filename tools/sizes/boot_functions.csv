@@ -113,7 +113,7 @@ asm/non_matchings/boot/loadfragment2/Overlay_Relocate.s,Overlay_Relocate,0x80084
 asm/non_matchings/boot/loadfragment2/Overlay_Load.s,Overlay_Load,0x8008501C,0x2B
 asm/non_matchings/boot/loadfragment2/Overlay_AllocateAndLoad.s,Overlay_AllocateAndLoad,0x800850C8,0x1A
 asm/non_matchings/boot/padutils/PadUtils_Init.s,PadUtils_Init,0x80085130,0x8
-asm/non_matchings/boot/padutils/func_80085150.s,func_80085150,0x80085150,0x2
+asm/non_matchings/boot/padutils/PadUtils_Destroy.s,PadUtils_Destroy,0x80085150,0x2
 asm/non_matchings/boot/padutils/PadUtils_ResetPressRel.s,PadUtils_ResetPressRel,0x80085158,0x3
 asm/non_matchings/boot/padutils/PadUtils_CheckCurExact.s,PadUtils_CheckCurExact,0x80085164,0x6
 asm/non_matchings/boot/padutils/PadUtils_CheckCur.s,PadUtils_CheckCur,0x8008517C,0x7

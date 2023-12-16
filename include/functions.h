@@ -40,7 +40,7 @@ void RcpUtils_PrintRegisterStatus(void);
 void RcpUtils_Reset(void);
 
 void PadUtils_Init(Input* input);
-void func_80085150(void);
+void PadUtils_Destroy(void);
 void PadUtils_ResetPressRel(Input* input);
 u32 PadUtils_CheckCurExact(Input* input, u16 value);
 u32 PadUtils_CheckCur(Input* input, u16 key);
