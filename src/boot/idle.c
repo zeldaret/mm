@@ -50,7 +50,7 @@ void Main_InitScreen(void) {
 }
 
 void Main_InitMemory(void) {
-    void* memStart = (void*)0x80000400;
+    void* memStart = (void*)BOOT_ADDRESS_ULTRA;
     void* memEnd = OS_PHYSICAL_TO_K0(osMemSize);
 
     Main_ClearMemory(memStart, SEGMENT_START(framebuffer_lo));
