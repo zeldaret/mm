@@ -578,7 +578,7 @@ beginseg
     include "build/src/code/sys_slowly.o"
     include "build/src/code/sys_flashrom.o"
     include "build/asm/code/code_80185F90.text.o" // handwritten
-    include "build/src/libultra/flash/osFlash.o"
+    include "build/src/code/osFlash.o"
     pad_text
     pad_text
     pad_text
