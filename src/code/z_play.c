@@ -1105,23 +1105,23 @@ void Play_PostWorldDraw(PlayState* this) {
 
     // Shrink the whole screen display (at the end of First and Second Day by default)
     if (gSaveContext.screenScaleFlag) {
-        Gfx* nextOpa;
-        Gfx* opa;
+        Gfx* gfx;
+        Gfx* gfxHead;
         GraphicsContext* gfxCtx = this->state.gfxCtx;
 
         sPlayVisFbufInstance->scale = gSaveContext.screenScale / 1000.0f;
 
         OPEN_DISPS(gfxCtx);
 
-        opa = POLY_OPA_DISP;
-        nextOpa = Graph_GfxPlusOne(opa);
-        gSPDisplayList(OVERLAY_DISP++, nextOpa);
+        gfxHead = POLY_OPA_DISP;
+        gfx = Graph_GfxPlusOne(gfxHead);
+        gSPDisplayList(OVERLAY_DISP++, gfx);
 
-        VisFbuf_Draw(sPlayVisFbufInstance, &nextOpa, this->unk_18E60);
+        VisFbuf_Draw(sPlayVisFbufInstance, &gfx, this->unk_18E60);
 
-        gSPEndDisplayList(nextOpa++);
-        Graph_BranchDlist(opa, nextOpa);
-        POLY_OPA_DISP = nextOpa;
+        gSPEndDisplayList(gfx++);
+        Graph_BranchDlist(gfxHead, gfx);
+        POLY_OPA_DISP = gfx;
 
         CLOSE_DISPS(gfxCtx);
     }

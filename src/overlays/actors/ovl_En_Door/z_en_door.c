@@ -656,9 +656,7 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
     EnDoor* this = THIS;
 
     if (limbIndex == DOOR_LIMB_4) {
-        Gfx** dl = D_808679A4[this->knobDoor.dlIndex];
-        s16 temp;
-        s32 dlIndex;
+        Gfx** dListTable = D_808679A4[this->knobDoor.dlIndex];
 
         transitionEntry = NULL;
 
@@ -668,19 +666,19 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
         rot->z += this->knobDoor.dyna.actor.world.rot.y;
         if ((this->doorType == ENDOOR_TYPE_7) || (play->roomCtx.prevRoom.num >= 0) ||
             (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {
-            s32 pad;
-
-            temp =
+            s16 temp =
                 (this->knobDoor.dyna.actor.shape.rot.y + this->knobDoor.skelAnime.jointTable[DOOR_LIMB_3].z + rot->z) -
                 Math_Vec3f_Yaw(&play->view.eye, &this->knobDoor.dyna.actor.world.pos);
-            *dList = (ABS_ALT(temp) < 0x4000) ? dl[0] : dl[1];
+
+            *dList = (ABS_ALT(temp) < 0x4000) ? dListTable[0] : dListTable[1];
 
         } else {
-            dlIndex = 0;
+            s32 index = 0;
+
             if (transitionEntry->sides[0].room != this->knobDoor.dyna.actor.room) {
-                dlIndex = 1;
+                index = 1;
             }
-            *dList = dl[dlIndex];
+            *dList = dListTable[index];
         }
     }
     return false;

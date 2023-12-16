@@ -644,7 +644,7 @@ void EnPoComposer_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
     EnPoComposer* this = THIS;
     s32 pad;
-    Gfx* dl;
+    Gfx* gfx;
     Color_RGBA8* clothingColor;
     Color_RGBA8* var_t0;
     Vec3f lightOffset;
@@ -706,29 +706,29 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
 
         if (this->lightColor.a == 255) {
             Scene_SetRenderModeXlu(play, 0, 1);
-            dl = POLY_OPA_DISP;
+            gfx = POLY_OPA_DISP;
         } else {
             Scene_SetRenderModeXlu(play, 1, 2);
-            dl = POLY_XLU_DISP;
+            gfx = POLY_XLU_DISP;
         }
 
-        gDPPipeSync(&dl[0]);
-        gDPSetEnvColor(&dl[1], this->envColor.r, this->envColor.g, this->envColor.b, this->lightColor.a);
+        gDPPipeSync(&gfx[0]);
+        gDPSetEnvColor(&gfx[1], this->envColor.r, this->envColor.g, this->envColor.b, this->lightColor.a);
 
         Matrix_Put(&this->lanternMtxF);
-        gSPMatrix(&dl[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(&gfx[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(&dl[3], gPoeComposerLanternBaseDL);
-        gSPDisplayList(&dl[4], gPoeComposerLanternGlassDL);
+        gSPDisplayList(&gfx[3], gPoeComposerLanternBaseDL);
+        gSPDisplayList(&gfx[4], gPoeComposerLanternGlassDL);
 
-        gDPPipeSync(&dl[5]);
-        gDPSetEnvColor(&dl[6], clothingColor->r, clothingColor->g, clothingColor->b, this->lightColor.a);
-        gSPDisplayList(&dl[7], gPoeComposerLanternTopDL);
+        gDPPipeSync(&gfx[5]);
+        gDPSetEnvColor(&gfx[6], clothingColor->r, clothingColor->g, clothingColor->b, this->lightColor.a);
+        gSPDisplayList(&gfx[7], gPoeComposerLanternTopDL);
 
         if (this->lightColor.a == 255) {
-            POLY_OPA_DISP = &dl[8];
+            POLY_OPA_DISP = &gfx[8];
         } else {
-            POLY_XLU_DISP = &dl[8];
+            POLY_XLU_DISP = &gfx[8];
         }
     }
 

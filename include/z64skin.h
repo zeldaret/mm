@@ -45,7 +45,7 @@ typedef struct {
     /* 0x0 */ u16 totalVtxCount; // total vertex count for all modif entries
     /* 0x2 */ u16 limbModifCount; // count of limbModifCount
     /* 0x4 */ SkinLimbModif* limbModifications;
-    /* 0x8 */ Gfx* dlist;
+    /* 0x8 */ Gfx* dList;
 } SkinAnimatedLimbData; // size = 0xC
 
 // ZAPD compatibility typedefs

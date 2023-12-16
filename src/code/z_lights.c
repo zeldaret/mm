@@ -415,21 +415,21 @@ void Lights_GlowCheck(PlayState* play) {
 }
 
 void Lights_DrawGlow(PlayState* play) {
-    Gfx* dl;
+    Gfx* gfx;
     LightPoint* params;
     LightNode* light = play->lightCtx.listHead;
 
     if (light != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        dl = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
+        gfx = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
-        gDPSetDither(dl++, G_CD_NOISE);
+        gDPSetDither(gfx++, G_CD_NOISE);
 
-        gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
+        gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
 
-        gSPDisplayList(dl++, gameplay_keep_DL_029CB0);
+        gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
 
         do {
             if (light->info->type == LIGHT_POINT_GLOW) {
@@ -437,21 +437,21 @@ void Lights_DrawGlow(PlayState* play) {
                 if (params->drawGlow) {
                     f32 scale = SQ((f32)params->radius) * 2e-6f;
 
-                    gDPSetPrimColor(dl++, 0, 0, params->color[0], params->color[1], params->color[2], 50);
+                    gDPSetPrimColor(gfx++, 0, 0, params->color[0], params->color[1], params->color[2], 50);
 
                     Matrix_Translate(params->x, params->y, params->z, MTXMODE_NEW);
                     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-                    gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(dl++, gameplay_keep_DL_029CF0);
+                    gSPDisplayList(gfx++, gameplay_keep_DL_029CF0);
                 }
             }
 
             light = light->next;
         } while (light != NULL);
 
-        POLY_XLU_DISP = dl;
+        POLY_XLU_DISP = gfx;
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
