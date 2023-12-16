@@ -71,7 +71,7 @@ typedef struct {
     /* 0x4 */ u32 decSize;
     /* 0x8 */ u32 compInfoOffset;   // only used in mio0
     /* 0xC */ u32 uncompDataOffset; // only used in mio0
-} Yaz0Header; // size = 0x10
+} Yaz0Header;                       // size = 0x10
 
 s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
     u32 bitIndex = 0;

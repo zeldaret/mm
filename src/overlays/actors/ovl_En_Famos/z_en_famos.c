@@ -841,8 +841,7 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
             Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rot);
             Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
 
-            gSPMatrix(&gfx[3 + i * 2], Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(&gfx[3 + i * 2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPDisplayList(&gfx[4 + i * 2], &gameplay_keep_DL_06AB30); // greenish brown rock DL
         }
