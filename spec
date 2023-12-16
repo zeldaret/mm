@@ -85,8 +85,8 @@ beginseg
     include "build/asm/boot/setsr.text.o"
     include "build/asm/boot/writebackdcache.text.o"
     include "build/src/libultra/os/initialize.o"
-    include "build/src/libultra/os/threadsave.o"
-    pad_text
+    include "build/src/libultra/debug/kdebugserver.o"
+    pad_text // These pads are from src/libultra/os/parameters.o
     pad_text
     pad_text
     pad_text
