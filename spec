@@ -125,7 +125,7 @@ beginseg
     include "build/src/libultra/os/getmemsize.o"
     include "build/src/libultra/io/pfssearchfile.o"
     include "build/src/libultra/os/seteventmesg.o"
-    include "build/src/libultra/gu/sqrtf.o"
+    include "build/asm/boot/sqrtf.text.o"
     include "build/src/libultra/os/afterprenmi.o"
     include "build/src/libultra/io/contquery.o"
     include "build/src/libultra/gu/lookathil.o"
