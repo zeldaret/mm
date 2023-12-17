@@ -71,7 +71,7 @@ static s16 sActorIds[OBJMURE2_CHILDTYPE_MAX] = {
 };
 
 static VecPolarS sScatteredBushSpawnInfo[OBJ_MURE2_CHILD_MAX] = {
-    { 40, 0x0666 }, { 40, 0x2CCC }, { 40, 0x5999 }, { 40, -0x799A }, { 20, -0x4000 }, { 80, 0x1333 },
+    { 40, 0x0666 }, { 40, 0x2CCC }, { 40, 0x5999 },  { 40, -0x799A }, { 20, -0x4000 }, { 80, 0x1333 },
     { 80, 0x4000 }, { 80, 0x6CCC }, { 80, -0x6CCD }, { 80, -0x5334 }, { 80, -0x399A }, { 60, -0x2000 },
 };
 
@@ -109,7 +109,7 @@ void ObjMure2_GetRocksSpawnPos(Vec3f pos[OBJ_MURE2_CHILD_MAX], ObjMure2* this) {
 void ObjMure2_GetChildParams(s16* childParams, ObjMure2* this) {
     Mure2ChildType childType = OBJ_MURE2_GET_CHILD_TYPE(&this->actor);
     s32 temp_a2 = OBJ_MURE2_GET_CHILD_UPPER_PARAMS(&this->actor);
-    
+
     if (childType == OBJMURE2_CHILDTYPE_ROCK_RING) {
         *childParams = temp_a2 << 4;
     } else {
