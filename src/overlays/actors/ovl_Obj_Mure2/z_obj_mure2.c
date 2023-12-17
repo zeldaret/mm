@@ -10,17 +10,16 @@
 
 #define THIS ((ObjMure2*)thisx)
 
-#define OBJ_MURE2_GET_CHILD_TYPE(thisx) ((thisx)->params & 3)
-
 #define OBJ_MURE2_CHILD_COUNT_BUSH_RING 9
 #define OBJ_MURE2_CHILD_COUNT_BUSH_SCATTERED 12
 #define OBJ_MURE2_CHILD_COUNT_ROCK_RING 8
 
 typedef enum Mure2ChildType {
-    OBJMURE2_CHILDTYPE_BUSH_RING,
-    OBJMURE2_CHILDTYPE_BUSH_SCATTERED,
-    OBJMURE2_CHILDTYPE_ROCK_RING
-} Mre2ChildType;
+    /* 0 */ OBJMURE2_CHILDTYPE_BUSH_RING,
+    /* 1 */ OBJMURE2_CHILDTYPE_BUSH_SCATTERED,
+    /* 2 */ OBJMURE2_CHILDTYPE_ROCK_RING,
+    /* 3 */ OBJMURE2_CHILDTYPE_MAX
+} Mure2ChildType;
 
 void ObjMure2_Init(Actor* thisx, PlayState* play);
 void ObjMure2_Update(Actor* thisx, PlayState* play);
@@ -35,10 +34,6 @@ void ObjMure2_SetupWaitForPlayerInRange(ObjMure2* this);
 void ObjMure2_SetupWaitForPlayerOutOfRange(ObjMure2* this);
 void ObjMure2_GetChildParams(s16*, ObjMure2*);
 
-void ObjMure2_GetBushCircleSpawnPos(Vec3f pos[12], ObjMure2* this);
-void ObjMure2_GetBushScatteredPos(Vec3f pos[12], ObjMure2* this);
-void ObjMure2_GetRocksSpawnPos(Vec3f pos[12], ObjMure2* this);
-
 ActorInit Obj_Mure2_InitVars = {
     /**/ ACTOR_OBJ_MURE2,
     /**/ ACTORCAT_PROP,
@@ -51,50 +46,36 @@ ActorInit Obj_Mure2_InitVars = {
     /**/ NULL,
 };
 
-static f32 sActivationRangesSq[] = {
+static f32 sActivationRangesSq[OBJMURE2_CHILDTYPE_MAX] = {
     SQ(1600.0f), // OBJMURE2_CHILDTYPE_BUSH_RING
     SQ(1600.0f), // OBJMURE2_CHILDTYPE_BUSH_SCATTERED
     SQ(1600.0f), // OBJMURE2_CHILDTYPE_ROCK_RING
 };
 
-static f32 sDeactivationRangesSq[] = {
+static f32 sDeactivationRangesSq[OBJMURE2_CHILDTYPE_MAX] = {
     SQ(1705.0f), // OBJMURE2_CHILDTYPE_BUSH_RING
     SQ(1705.0f), // OBJMURE2_CHILDTYPE_BUSH_SCATTERED
     SQ(1705.0f), // OBJMURE2_CHILDTYPE_ROCK_RING
 };
 
-static s16 sChildCounts[] = {
+static s16 sChildCounts[OBJMURE2_CHILDTYPE_MAX] = {
     OBJ_MURE2_CHILD_COUNT_BUSH_RING,      // OBJMURE2_CHILDTYPE_BUSH_RING
     OBJ_MURE2_CHILD_COUNT_BUSH_SCATTERED, // OBJMURE2_CHILDTYPE_BUSH_SCATTERED
     OBJ_MURE2_CHILD_COUNT_ROCK_RING,      // OBJMURE2_CHILDTYPE_ROCK_RING
 };
 
-static s16 sActorIds[] = {
-    ACTOR_EN_KUSA,
-    ACTOR_EN_KUSA,
-    ACTOR_EN_ISHI,
+static s16 sActorIds[OBJMURE2_CHILDTYPE_MAX] = {
+    ACTOR_EN_KUSA, // OBJMURE2_CHILDTYPE_BUSH_RING
+    ACTOR_EN_KUSA, // OBJMURE2_CHILDTYPE_BUSH_SCATTERED
+    ACTOR_EN_ISHI, // OBJMURE2_CHILDTYPE_ROCK_RING
 };
 
-static VecPolarS sScatteredBushSpawnInfo[] = {
-    { 40, 0x0666 }, { 40, 0x2CCC }, { 40, 0x5999 }, { 40, 0x8666 }, { 20, 0xC000 }, { 80, 0x1333 },
-    { 80, 0x4000 }, { 80, 0x6CCC }, { 80, 0x9333 }, { 80, 0xACCC }, { 80, 0xC666 }, { 60, 0xE000 },
+static VecPolarS sScatteredBushSpawnInfo[OBJ_MURE2_CHILD_MAX] = {
+    { 40, 0x0666 }, { 40, 0x2CCC }, { 40, 0x5999 }, { 40, -0x799A }, { 20, -0x4000 }, { 80, 0x1333 },
+    { 80, 0x4000 }, { 80, 0x6CCC }, { 80, -0x6CCD }, { 80, -0x5334 }, { 80, -0x399A }, { 60, -0x2000 },
 };
 
-typedef void (*ObjMure2SpawnPosFunc)(Vec3f[12], ObjMure2*);
-static ObjMure2SpawnPosFunc sSpawnPosFuncs[] = {
-    ObjMure2_GetBushCircleSpawnPos, // OBJMURE2_CHILDTYPE_BUSH_RING
-    ObjMure2_GetBushScatteredPos,   // OBJMURE2_CHILDTYPE_BUSH_SCATTERED
-    ObjMure2_GetRocksSpawnPos,      // OBJMURE2_CHILDTYPE_ROCK_RING
-};
-
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 2100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
-};
-
-void ObjMure2_GetBushCircleSpawnPos(Vec3f pos[12], ObjMure2* this) {
+void ObjMure2_GetBushCircleSpawnPos(Vec3f pos[OBJ_MURE2_CHILD_MAX], ObjMure2* this) {
     s32 i;
 
     Math_Vec3f_Copy(&pos[0], &this->actor.world.pos);
@@ -105,7 +86,7 @@ void ObjMure2_GetBushCircleSpawnPos(Vec3f pos[12], ObjMure2* this) {
     }
 }
 
-void ObjMure2_GetBushScatteredPos(Vec3f pos[12], ObjMure2* this) {
+void ObjMure2_GetBushScatteredPos(Vec3f pos[OBJ_MURE2_CHILD_MAX], ObjMure2* this) {
     s32 i;
 
     for (i = 0; i < sChildCounts[OBJ_MURE2_GET_CHILD_TYPE(&this->actor)]; i++) {
@@ -115,7 +96,7 @@ void ObjMure2_GetBushScatteredPos(Vec3f pos[12], ObjMure2* this) {
     }
 }
 
-void ObjMure2_GetRocksSpawnPos(Vec3f pos[12], ObjMure2* this) {
+void ObjMure2_GetRocksSpawnPos(Vec3f pos[OBJ_MURE2_CHILD_MAX], ObjMure2* this) {
     s32 i;
 
     for (i = 0; i < sChildCounts[OBJ_MURE2_GET_CHILD_TYPE(&this->actor)]; i++) {
@@ -126,25 +107,30 @@ void ObjMure2_GetRocksSpawnPos(Vec3f pos[12], ObjMure2* this) {
 }
 
 void ObjMure2_GetChildParams(s16* childParams, ObjMure2* this) {
-    s32 childType;
-    s32 temp_a2;
-
-    childType = OBJ_MURE2_GET_CHILD_TYPE(&this->actor);
-    temp_a2 = (this->actor.params >> 8) & 0x1F;
+    Mure2ChildType childType = OBJ_MURE2_GET_CHILD_TYPE(&this->actor);
+    s32 temp_a2 = OBJ_MURE2_GET_CHILD_UPPER_PARAMS(&this->actor);
+    
     if (childType == OBJMURE2_CHILDTYPE_ROCK_RING) {
         *childParams = temp_a2 << 4;
-        return;
+    } else {
+        *childParams = temp_a2 << 8;
     }
-    *childParams = temp_a2 << 8;
 }
+
+typedef void (*ObjMure2SpawnPosFunc)(Vec3f[OBJ_MURE2_CHILD_MAX], ObjMure2*);
+static ObjMure2SpawnPosFunc sSpawnPosFuncs[OBJMURE2_CHILDTYPE_MAX] = {
+    ObjMure2_GetBushCircleSpawnPos, // OBJMURE2_CHILDTYPE_BUSH_RING
+    ObjMure2_GetBushScatteredPos,   // OBJMURE2_CHILDTYPE_BUSH_SCATTERED
+    ObjMure2_GetRocksSpawnPos,      // OBJMURE2_CHILDTYPE_ROCK_RING
+};
+
 void ObjMure2_SpawnChildren(ObjMure2* this, PlayState* play) {
     Vec3f* pos;
-    s32 childType;
-    Vec3f spawnPos[12];
+    Mure2ChildType childType = OBJ_MURE2_GET_CHILD_TYPE(&this->actor);
+    Vec3f spawnPos[OBJ_MURE2_CHILD_MAX];
     s16 childParams;
     s32 i;
 
-    childType = OBJ_MURE2_GET_CHILD_TYPE(&this->actor);
     sSpawnPosFuncs[childType](spawnPos, this);
     ObjMure2_GetChildParams(&childParams, this);
     for (i = 0; i < sChildCounts[childType]; i++) {
@@ -196,11 +182,17 @@ void ObjMure2_ClearChildrenList(ObjMure2* this) {
     }
 }
 
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(uncullZoneForward, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 2100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
+};
+
 void ObjMure2_Init(Actor* thisx, PlayState* play) {
     ObjMure2* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         this->actor.uncullZoneForward += 1200.0f;
     }
     func_809613B0(this);
@@ -245,7 +237,7 @@ void ObjMure2_WaitForPlayerOutOfRange(ObjMure2* this, PlayState* play) {
 void ObjMure2_Update(Actor* thisx, PlayState* play) {
     ObjMure2* this = THIS;
 
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         this->rangeMultiplier = 1.0f;
     } else {
         this->rangeMultiplier = 4.0f;
