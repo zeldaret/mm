@@ -15,7 +15,7 @@ from typing import List
 
 # clang-format, clang-tidy and clang-apply-replacements default version
 # This specific version is used when available, for more consistency between contributors
-CLANG_VER =""
+CLANG_VER = 14
 
 # Clang-Format options (see .clang-format for rules applied)
 FORMAT_OPTS = "-i -style=file"
@@ -50,7 +50,7 @@ def get_tidy_version(tidy_executable: str):
     return int(match.group(1))
 
 
-CLANG_FORMAT = get_clang_executable([f"clang-format{CLANG_VER}"])
+CLANG_FORMAT = get_clang_executable([f"clang-format-{CLANG_VER}"])
 if CLANG_FORMAT is None:
     sys.exit(f"Error: clang-format-{CLANG_VER} not found")
 
