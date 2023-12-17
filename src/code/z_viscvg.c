@@ -52,8 +52,8 @@ void VisCvg_Init(VisCvg* this) {
 void VisCvg_Destroy(VisCvg* this) {
 }
 
-void VisCvg_Draw(VisCvg* this, Gfx** gfxp) {
-    Gfx* gfx = *gfxp;
+void VisCvg_Draw(VisCvg* this, Gfx** gfxP) {
+    Gfx* gfx = *gfxP;
 
     gDPPipeSync(gfx++);
     gDPSetPrimDepth(gfx++, -1, -1);
@@ -87,5 +87,5 @@ void VisCvg_Draw(VisCvg* this, Gfx** gfxp) {
     }
 
     gDPPipeSync(gfx++);
-    *gfxp = gfx;
+    *gfxP = gfx;
 }

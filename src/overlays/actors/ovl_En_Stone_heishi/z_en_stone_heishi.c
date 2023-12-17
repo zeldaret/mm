@@ -465,7 +465,7 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnStoneheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                                   Gfx** gfxp) {
+                                   Gfx** gfxP) {
     EnStoneheishi* this = THIS;
 
     if (limbIndex == SOLDIER_LIMB_HEAD) {
@@ -477,13 +477,13 @@ s32 EnStoneheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
     return false;
 }
 
-void EnStoneheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfxp) {
+void EnStoneheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfxP) {
     static Vec3f sLeftHandPos = { 0.0f, 0.0f, 0.0f };
     EnStoneheishi* this = THIS;
     Gfx* gfx;
 
     if ((limbIndex == SOLDIER_LIMB_LEFT_HAND) && (this->bottleDisplay != EN_STONE_BOTTLE_NONE)) {
-        gfx = Gfx_SetupDL71(*gfxp);
+        gfx = Gfx_SetupDL71(*gfxP);
 
         sLeftHandPos.x = 320.0f;
         sLeftHandPos.y = 210.0f;
@@ -510,7 +510,7 @@ void EnStoneheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
         gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, gSoldierBottleDL);
 
-        *gfxp = gfx++;
+        *gfxP = gfx++;
     }
 }
 

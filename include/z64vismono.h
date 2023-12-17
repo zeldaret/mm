@@ -15,6 +15,6 @@ typedef struct VisMono {
 
 void VisMono_Init(VisMono* this);
 void VisMono_Destroy(VisMono* this);
-void VisMono_Draw(VisMono* this, Gfx** gfxp);
+void VisMono_Draw(VisMono* this, Gfx** gfxP);
 
 #endif

@@ -98,6 +98,6 @@ void View_Apply(View* view, s32 mask);
 s32 View_ApplyOrthoToOverlay(View* view);
 s32 View_ApplyPerspectiveToOverlay(View* view);
 s32 View_UpdateViewingMatrix(View* view);
-s32 View_ApplyTo(View* view, Gfx** gfxp);
+s32 View_ApplyTo(View* view, Gfx** gfxP);
 
 #endif

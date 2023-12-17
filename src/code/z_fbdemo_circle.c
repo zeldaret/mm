@@ -27,7 +27,7 @@ void TransitionCircle_Destroy(void* thisx);
 void TransitionCircle_Update(void* thisx, s32 updateRate);
 void TransitionCircle_SetColor(void* thisx, u32 color);
 void TransitionCircle_SetType(void* thisx, s32 type);
-void TransitionCircle_Draw(void* thisx, Gfx** gfxp);
+void TransitionCircle_Draw(void* thisx, Gfx** gfxP);
 s32 TransitionCircle_IsDone(void* thisx);
 
 TransitionInit TransitionCircle_InitVars = {
@@ -92,9 +92,9 @@ void TransitionCircle_SetType(void* thisx, s32 type) {
     }
 }
 
-void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt,
+void TransitionCircle_LoadAndSetTexture(Gfx** gfxP, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt,
                                         f32 arg6) {
-    Gfx* gfx = *gfxp;
+    Gfx* gfx = *gfxP;
     s32 xh = gCfbWidth;
     s32 yh = gCfbHeight;
     s32 width = 1 << masks;
@@ -131,11 +131,11 @@ void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt,
                         dtdy);
     gDPPipeSync(gfx++);
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
-void TransitionCircle_Draw(void* thisx, Gfx** gfxp) {
-    Gfx* gfx = *gfxp;
+void TransitionCircle_Draw(void* thisx, Gfx** gfxP) {
+    Gfx* gfx = *gfxP;
     TransitionCircle* this = (TransitionCircle*)thisx;
 
     gDPPipeSync(gfx++);
@@ -152,7 +152,7 @@ void TransitionCircle_Draw(void* thisx, Gfx** gfxp) {
                                        this->referenceRadius);
     gDPPipeSync(gfx++);
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 s32 TransitionCircle_IsDone(void* thisx) {

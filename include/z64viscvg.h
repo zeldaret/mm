@@ -13,6 +13,6 @@ typedef struct VisCvg {
 
 void VisCvg_Init(VisCvg* this);
 void VisCvg_Destroy(VisCvg* this);
-void VisCvg_Draw(VisCvg* this, Gfx** gfxp);
+void VisCvg_Draw(VisCvg* this, Gfx** gfxP);
 
 #endif

@@ -455,15 +455,15 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
 /**
  * Draws an i8 texture.
  *
- * @param[in,out] gfxp      Pointer to current displaylist.
+ * @param[in,out] gfxP      Pointer to current displaylist.
  * @param[in]     texture   Texture to draw.
  * @param[in]     texWidth  Width of the texture.
  * @param[in]     texHeight Height of the texture.
  * @param[in]     rectLeft  X coordinate of the top-left of the draw position.
  * @param[in]     rectTop   Y coordinate of the top-left of the draw position.
  */
-void EnMag_DrawTextureI8(Gfx** gfxp, TexturePtr texture, s16 texWidth, s16 texHeight, s16 rectLeft, s16 rectTop) {
-    Gfx* gfx = *gfxp;
+void EnMag_DrawTextureI8(Gfx** gfxP, TexturePtr texture, s16 texWidth, s16 texHeight, s16 rectLeft, s16 rectTop) {
+    Gfx* gfx = *gfxP;
 
     gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_I, G_IM_SIZ_8b, texWidth, texHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -471,21 +471,21 @@ void EnMag_DrawTextureI8(Gfx** gfxp, TexturePtr texture, s16 texWidth, s16 texHe
     gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + texWidth) << 2, (rectTop + texHeight) << 2,
                         G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 /**
  * Draws an ia8 texture.
  *
- * @param[in,out] gfxp      Pointer to current displaylist.
+ * @param[in,out] gfxP      Pointer to current displaylist.
  * @param[in]     texture   Texture to draw.
  * @param[in]     texWidth  Width of the texture.
  * @param[in]     texHeight Height of the texture.
  * @param[in]     rectLeft  X coordinate of the top-left of the draw position.
  * @param[in]     rectTop   Y coordinate of the top-left of the draw position.
  */
-void EnMag_DrawTextureIA8(Gfx** gfxp, TexturePtr texture, s16 texWidth, s16 texHeight, s16 rectLeft, s16 rectTop) {
-    Gfx* gfx = *gfxp;
+void EnMag_DrawTextureIA8(Gfx** gfxP, TexturePtr texture, s16 texWidth, s16 texHeight, s16 rectLeft, s16 rectTop) {
+    Gfx* gfx = *gfxP;
 
     gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, texWidth, texHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -493,13 +493,13 @@ void EnMag_DrawTextureIA8(Gfx** gfxp, TexturePtr texture, s16 texWidth, s16 texH
     gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + texWidth) << 2, (rectTop + texHeight) << 2,
                         G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 /**
  * Draws an i8 effect texture, masking it with an i4 mask, with shifting
  *
- * @param[in,out] gfxp         Pointer to current displaylist.
+ * @param[in,out] gfxP         Pointer to current displaylist.
  * @param[in]     maskTex      Texture with which to mask, i4.
  * @param[in]     effectTex    Effect texture to draw, i8.
  * @param[in]     maskWidth    Width of masking texture.
@@ -513,10 +513,10 @@ void EnMag_DrawTextureIA8(Gfx** gfxp, TexturePtr texture, s16 texWidth, s16 texH
  * @param[in]     index        Index into the scrolling arrays to use for gDPSetTileSize.
  * @param[in]     this         Pointer to EnMag instance.
  */
-void EnMag_DrawEffectTextures(Gfx** gfxp, TexturePtr maskTex, TexturePtr effectTex, s16 maskWidth, s16 maskHeight,
+void EnMag_DrawEffectTextures(Gfx** gfxP, TexturePtr maskTex, TexturePtr effectTex, s16 maskWidth, s16 maskHeight,
                               s16 effectWidth, s16 effectHeight, s16 rectLeft, s16 rectTop, u16 shifts, u16 shiftt,
                               u16 index, EnMag* this) {
-    Gfx* gfx = *gfxp;
+    Gfx* gfx = *gfxP;
 
     gDPLoadMultiBlock_4b(gfx++, maskTex, 0x0000, G_TX_RENDERTILE, G_IM_FMT_I, maskWidth, maskHeight, 0,
                          G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -531,22 +531,22 @@ void EnMag_DrawEffectTextures(Gfx** gfxp, TexturePtr maskTex, TexturePtr effectT
     gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + maskWidth) << 2, (rectTop + maskHeight) << 2,
                         G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 /**
  * Draws an rgba32 texture. Because these are so large, this will draw the texture in horizontal stripes, each narrow
  * enough that that part of the texture will fit into TMEM's 4kB.
  *
- * @param[in,out] gfxp    Pointer to current displaylist.
+ * @param[in,out] gfxP    Pointer to current displaylist.
  * @param[in]     centerX X coordinate of the center of the draw position.
  * @param[in]     centerY Y coordinate of the center of the draw position.
  * @param[in]     source  Texture to draw.
  * @param[in]     width   Width of the texture.
  * @param[in]     height  Height of the texture.
  */
-void EnMag_DrawImageRGBA32(Gfx** gfxp, s16 centerX, s16 centerY, TexturePtr source, u32 width, u32 height) {
-    Gfx* gfx = *gfxp;
+void EnMag_DrawImageRGBA32(Gfx** gfxP, s16 centerX, s16 centerY, TexturePtr source, u32 width, u32 height) {
+    Gfx* gfx = *gfxP;
     uintptr_t curTexture;
     s32 textureCount;
     u32 rectLeft;
@@ -601,19 +601,19 @@ void EnMag_DrawImageRGBA32(Gfx** gfxp, s16 centerX, s16 centerY, TexturePtr sour
         }
     }
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 /**
  * Draws one character, expected to be a 16 by 16 i4 texture. It will draw shrunk to 10 by 10.
  *
- * @param[in,out] gfxp     Pointer to current displaylist.
+ * @param[in,out] gfxP     Pointer to current displaylist.
  * @param[in]     texture  Texture to draw.
  * @param[in]     rectLeft X coordinate of the top-left of the draw position.
  * @param[in]     rectTop  Y coordinate of the top-left of the draw position.
  */
-void EnMag_DrawCharTexture(Gfx** gfxp, TexturePtr texture, s32 rectLeft, s32 rectTop) {
-    Gfx* gfx = *gfxp;
+void EnMag_DrawCharTexture(Gfx** gfxP, TexturePtr texture, s32 rectLeft, s32 rectTop) {
+    Gfx* gfx = *gfxP;
 
     gDPLoadTextureBlock_4b(gfx++, texture, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -623,7 +623,7 @@ void EnMag_DrawCharTexture(Gfx** gfxp, TexturePtr texture, s32 rectLeft, s32 rec
     gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + 10) << 2, (rectTop + 10) << 2, G_TX_RENDERTILE,
                         0, 0, 1625, 1625);
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 #define EFFECT_MASK_TEX_WIDTH 64
@@ -675,10 +675,10 @@ void EnMag_DrawCharTexture(Gfx** gfxp, TexturePtr texture, s32 rectLeft, s32 rec
 #define PRESS_START_SPACE 5        // Extra space between the words
 
 /**
- * Loads title, PRESS START text, etc. graphics to gfxp, which is made to live on
+ * Loads title, PRESS START text, etc. graphics to gfxP, which is made to live on
  * POLY_OPA_DISP, but is used by OVERLAY_DISP.
  */
-void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
+void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxP) {
     static u8 sPressStartFontIndices[] = {
         0x19, 0x1B, 0x0E, 0x1C, 0x1C, 0x1C, 0x1D, 0x0A, 0x1B, 0x1D,
     }; // Indices into this->font.fontBuf
@@ -701,7 +701,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
     s32 pad;
     EnMag* this = THIS;
     Font* font = &this->font;
-    Gfx* gfx = *gfxp;
+    Gfx* gfx = *gfxP;
     u16 i;
     u16 j;
     u16 k;
@@ -949,7 +949,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
         }
     }
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 /**
