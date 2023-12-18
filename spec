@@ -427,7 +427,8 @@ endseg
 beginseg
     name "staff_message_data_static"
     romalign 0x1000
-    include "build/baserom/staff_message_data_static.o"
+    include "build/assets/text/staff_message_data_static.o"
+    number 7
 endseg
 
 beginseg

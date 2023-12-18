@@ -15,4 +15,10 @@ typedef struct MessageTableEntry {
 #include "assets/text/message_data.h"
 #undef DEFINE_MESSAGE
 
+#define DEFINE_MESSAGE(textId, typePos, msg) \
+    extern const char _message_##textId##_staff[];
+
+#include "assets/text/staff_message_data.h"
+#undef DEFINE_MESSAGE
+
 #endif

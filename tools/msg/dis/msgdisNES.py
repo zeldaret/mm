@@ -24,6 +24,23 @@ class MessageHeaderNES:
         f'    unk12070: 0x{self.unk12070:0X},\n' 
         f'    unk12074: 0x{self.unk12074:0X}')
 
+    def macro(self):
+        unk11F08 = struct.pack(">H", self.unk11F08)
+        itemId = struct.pack(">B", self.itemId)
+        nextTextId = struct.pack(">H", self.nextTextId)
+        unk1206C = struct.pack(">H", self.unk1206C)
+        unk12070 = struct.pack(">H", self.unk12070)
+        unk12074 = struct.pack(">H", self.unk12074)
+        return (
+            f'"\\x{unk11F08[0]:02X}\\x{unk11F08[1]:02X}" '
+            f'"\\x{itemId[0]:02X}" '
+            f'"\\x{nextTextId[0]:02X}\\x{nextTextId[1]:02X}" '
+            f'"\\x{unk1206C[0]:02X}\\x{unk1206C[1]:02X}" '
+            f'"\\x{unk12070[0]:02X}\\x{unk12070[1]:02X}" '
+            f'"\\x{unk12074[0]:02X}\\x{unk12074[1]:02X}" '
+        )
+
+
 class MessageNES:
     def __init__(self, id, typePos, addr, hdr, text):
         self.id = id
@@ -43,14 +60,12 @@ class MessageNES:
 
     def macro(self):
         self.decode()
-        macro = f"DEFINE_MESSAGE(0x{self.id:04X}, "
-        macro += f"{self.typePos}, "
-        macro += '"'
-        for byte in self.hdr.prop:
-            macro += f'\\x{byte:02X}'
-        macro += '"\n'
-        macro += f"{self.decodedText}\n)\n"
-        return macro
+        return ( 
+                f"DEFINE_MESSAGE(0x{self.id:04X}, "
+                f"{self.typePos}, "
+                f"{self.hdr.macro()}\n"
+                f"{self.decodedText}\n)\n"
+        )
 
     def decode(self):
         if self.decodedText == "":
@@ -64,26 +79,33 @@ class MessageNES:
                 if char >= 0x20 and char <= 0xAF: # Regular Characters
                     if not prevText or prevNewline:
                         self.decodedText += '"'
-                    if chr(char) == '"':
+
+                    if char == 0x22: # Need to escape "
                         self.decodedText += "\\"
                     self.decodedText += chr(char)
+
                     prevText = True
                     prevNewline = False
                 elif char >= 0xB0 and char <= 0xBB: # Texture Characters (buttons)
                     if not prevText or prevNewline:
                         self.decodedText += '"'
+
                     self.decodedText += f'[{char:02X}]'
+
                     prevText = True
                     prevNewline = False
-                elif char == 0x11: # New line??
+                elif char == 0x11: # New line
                     if not prevText:
                         self.decodedText += '"'
+
                     self.decodedText += f'\\n"\n'
+
                     prevText = False
                     prevNewline = True
                 else: # Control Codes
                     if prevText and not prevNewline:
                         self.decodedText += '" '
+
                     prevText = False
                     prevNewline = False
                     if char >= 0 and char <= 0x8: # Colors

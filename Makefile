@@ -175,7 +175,7 @@ ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell fi
 ## Assets binaries (PNGs, JPGs, etc)
 ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c" -not -path "assets/text")
 # Prevents building C files that will be #include'd
-ASSET_BIN_DIRS_C_FILES := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/code*" -not -path "assets/overlays*")
+ASSET_BIN_DIRS_C_FILES := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/code*" -not -path "assets/overlays*" -not -path "assets/text")
 
 ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
 ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f) \
@@ -318,7 +318,8 @@ setup:
 
 assets:
 	python3 extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
-	python3 tools/msgdis/msgdisNES.py assets/text/message_data.h
+	python3 tools/msg/dis/msgdisNES.py assets/text/message_data.h
+	python3 tools/msg/dis/msgdisStaff.py assets/text/staff_message_data.h
 
 ## Assembly generation
 disasm:
@@ -368,10 +369,14 @@ build/data/%.o: data/%.s
 	$(AS) $(ASFLAGS) $< -o $@
 
 build/assets/text/message_data.enc.h: assets/text/message_data.h
-	python3 tools/msgdis/msgencNES.py $< $@
+	python3 tools/msg/enc/msgencNES.py $< $@
+
+build/assets/text/staff_message_data.enc.h: assets/text/staff_message_data.h
+	python3 tools/msg/enc/msgencStaff.py $< $@
 
 build/assets/text/message_data_static.o: build/assets/text/message_data.enc.h
-build/src/code/z_message_PAL.o: build/assets/text/message_data.enc.h
+build/assets/text/staff_message_data_static.o: build/assets/text/staff_message_data.enc.h
+build/src/code/z_message.o: build/assets/text/message_data.enc.h build/assets/text/staff_message_data.enc.h
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<
