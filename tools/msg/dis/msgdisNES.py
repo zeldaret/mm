@@ -68,6 +68,20 @@ class MessageNES:
         )
 
     def decode(self):
+        ButtonMap = {
+            0xB0: '[A]',
+            0xB1: '[B]',
+            0xB2: '[C]',
+            0xB3: '[L]',
+            0xB4: '[R]',
+            0xB5: '[Z]',
+            0xB6: '[C-Up]',
+            0xB7: '[C-Down]',
+            0xB8: '[C-Left]',
+            0xB9: '[C-Right]',
+            0xBA: '▼',
+            0xBB: '[Control-Pad]'
+        }
         if self.decodedText == "":
             prevText = False
             prevNewline = False
@@ -90,7 +104,7 @@ class MessageNES:
                     if not prevText or prevNewline:
                         self.decodedText += '"'
 
-                    self.decodedText += f'[{char:02X}]'
+                    self.decodedText += f'{ButtonMap[char]}'
 
                     prevText = True
                     prevNewline = False
@@ -264,11 +278,7 @@ class MessageNES:
                         print(f"Error Unknown [\\x{char:02X}] command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}] '
 
-def main():
-    parser = argparse.ArgumentParser(description="Extract message_data_static text")
-    parser.add_argument("output", help="path to place extracted text")
-    args = parser.parse_args()
-
+def main(outfile):
     msgTable = parseTable(0x1210D8) # Location of NES message table in baserom/code
 
     buf = []
@@ -300,10 +310,19 @@ def main():
 
         i = (i + 3) & ~0x3
 
-    with open(args.output, "w") as f:
+    if outfile is None:
         for msg in messages:
-            f.write(msg.macro())
-            f.write("\n")
+            sys.stdout.write(msg.macro())
+            sys.stdout.write("\n")
+    else:
+        with open(outfile, "w") as f:
+            for msg in messages:
+                f.write(msg.macro())
+                f.write("\n")
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description="Extract message_data_static text")
+    parser.add_argument('-o', '--outfile', help='output file to write to. None for stdout')
+    args = parser.parse_args()
+
+    main(args.outfile)

@@ -9,18 +9,18 @@ import sys
 CHARMAP = {
     '\n' : 0x11,
 
-    '[B0]' : 0xB0,
-    '[B1]' : 0xB1,
-    '[B2]' : 0xB2,
-    '[B3]' : 0xB3,
-    '[B4]' : 0xB4,
-    '[B5]' : 0xB5,
-    '[B6]' : 0xB6,
-    '[B7]' : 0xB7,
-    '[B8]' : 0xB8,
-    '[B9]' : 0xB9,
-    '[BA]' : 0xBA,
-    '[BB]' : 0xBB,
+    '[A]' : 0xB0,
+    '[B]' : 0xB1,
+    '[C]' : 0xB2,
+    '[L]' : 0xB3,
+    '[R]' : 0xB4,
+    '[Z]' : 0xB5,
+    '[C-Up]' : 0xB6,
+    '[C-Down]' : 0xB7,
+    '[C-Left]' : 0xB8,
+    '[C-Right]' : 0xB9,
+    '▼' : 0xBA,
+    '[Control-Pad]' : 0xBB,
 }
 
 def convert_charmap():
@@ -62,23 +62,27 @@ def convert_text(text, charmap):
 
     return text
 
-def main():
-    parser = argparse.ArgumentParser(description="Encode message_data_static text headers")
-    parser.add_argument("input", help="path to file to be encoded")
-    parser.add_argument("output", help="encoded file")
-    args = parser.parse_args()
-
+def main(infile, outfile):
     charmap = convert_charmap()
 
     text = ""
-    with open(args.input, "r") as infile:
-        text = infile.read()
+    with open(infile, "r") as f:
+        text = f.read()
 
     text = remove_comments(text)
     text = convert_text(text, charmap)
 
-    with open(args.output, "w", encoding="raw_unicode_escape") as outfile:
-        outfile.write(text)
+    if outfile is None:
+        sys.stdout.reconfigure(encoding='raw_unicode_escape')
+        sys.stdout.write(text)
+    else:
+        with open(outfile, "w", encoding="raw_unicode_escape") as f:
+            f.write(text)
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Encode message_data_static text headers")
+    parser.add_argument("infile", help="path to file to be encoded")
+    parser.add_argument("-o", "--outfile", help="encoded file. None for stdout")
+    args = parser.parse_args()
+
+    main(args.infile, args.outfile)

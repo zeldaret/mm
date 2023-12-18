@@ -191,11 +191,7 @@ class MessageCredits:
                         print(f"Error Unknown [\\x{char:02X}] command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}]'
 
-def main():
-    parser = argparse.ArgumentParser(description="Extract staff_message_data_static text")
-    parser.add_argument("output", help="path to place extracted text")
-    args = parser.parse_args()
-    
+def main(outfile):
     msgTable = parseTable(0x12A048) # Location of Staff message table in baserom/code
 
     buf = []
@@ -222,10 +218,19 @@ def main():
 
         i = (i + 3) & ~0x3
 
-    with open(args.output, "w") as f:
+    if outfile is None:
         for msg in messages:
-            f.write(msg.macro())
-            f.write("\n")
+            sys.stdout.write(msg.macro())
+            sys.stdout.write("\n")
+    else:
+        with open(outfile, "w") as f:
+            for msg in messages:
+                f.write(msg.macro())
+                f.write("\n")
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description="Extract staff_message_data_static text")
+    parser.add_argument('-o', '--outfile', help='output file to write to. None for stdout')
+    args = parser.parse_args()
+
+    main(args.outfile)

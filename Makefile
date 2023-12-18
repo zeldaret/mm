@@ -318,8 +318,8 @@ setup:
 
 assets:
 	python3 extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
-	python3 tools/msg/dis/msgdisNES.py assets/text/message_data.h
-	python3 tools/msg/dis/msgdisStaff.py assets/text/staff_message_data.h
+	python3 tools/msg/dis/msgdisNES.py -o assets/text/message_data.h
+	python3 tools/msg/dis/msgdisStaff.py -o assets/text/staff_message_data.h
 
 ## Assembly generation
 disasm:
@@ -369,10 +369,10 @@ build/data/%.o: data/%.s
 	$(AS) $(ASFLAGS) $< -o $@
 
 build/assets/text/message_data.enc.h: assets/text/message_data.h
-	python3 tools/msg/enc/msgencNES.py $< $@
+	python3 tools/msg/enc/msgencNES.py -o $@ $<
 
 build/assets/text/staff_message_data.enc.h: assets/text/staff_message_data.h
-	python3 tools/msg/enc/msgencStaff.py $< $@
+	python3 tools/msg/enc/msgencStaff.py -o $@ $<
 
 build/assets/text/message_data_static.o: build/assets/text/message_data.enc.h
 build/assets/text/staff_message_data_static.o: build/assets/text/staff_message_data.enc.h

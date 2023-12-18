@@ -49,23 +49,27 @@ def convert_text(text, charmap):
 
     return text
 
-def main():
-    parser = argparse.ArgumentParser(description="Encode message_data_static text headers")
-    parser.add_argument("input", help="path to file to be encoded")
-    parser.add_argument("output", help="encoded file")
-    args = parser.parse_args()
-
+def main(infile, outfile):
     charmap = convert_charmap()
 
     text = ""
-    with open(args.input, "r") as infile:
-        text = infile.read()
+    with open(infile, "r") as f:
+        text = f.read()
 
     text = remove_comments(text)
     text = convert_text(text, charmap)
 
-    with open(args.output, "w", encoding="raw_unicode_escape") as outfile:
-        outfile.write(text)
+    if outfile is None:
+        sys.stdout.reconfigure(encoding="raw_unicode_escape")
+        sys.stdout.write(text)
+    else:
+        with open(outfile, "w", encoding="raw_unicode_escape") as f:
+            f.write(text)
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Encode staff_message_data_static text headers")
+    parser.add_argument("infile", help="path to file to be encoded")
+    parser.add_argument("-o", "--outfile", help="encoded file. None for stdout")
+    args = parser.parse_args()
+
+    main(args.infile, args.outfile)
