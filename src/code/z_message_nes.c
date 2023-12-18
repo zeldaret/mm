@@ -18,7 +18,7 @@ f32 sNESFontWidths[160] = {
 void Message_FindMessageNES(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font;
-    MessageTableEntry* msgEntry = msgCtx->messageEntryTableNes;
+    MessageTableEntry* msgEntry = msgCtx->messageTableNES;
     const char* segment = msgEntry->segment;
     const char* foundSegment;
     const char* nextSegment;
@@ -35,7 +35,7 @@ void Message_FindMessageNES(PlayState* play, u16 textId) {
         msgEntry++;
     }
 
-    msgEntry = msgCtx->messageEntryTableNes;
+    msgEntry = msgCtx->messageTableNES;
     foundSegment = msgEntry->segment;
     msgEntry++;
     nextSegment = msgEntry->segment;

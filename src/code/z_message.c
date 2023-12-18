@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64horse.h"
 #include "z64shrink_window.h"
@@ -48,9 +49,23 @@ u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX] = {
 #undef DEFINE_PERSON
 #undef DEFINE_EVENT
 
-// TODO: Scripts
-// Include message tables D_801C6B98 and D_801CFB08
-#include "src/code/z_message_tables.inc.c"
+#define DEFINE_MESSAGE(textId, typePos, msg) { textId, typePos, _message_##textId },
+
+MessageTableEntry sMessageTableNES[] = {
+#include "assets/text/message_data.h"
+    { 0xFFFF, 0, NULL },
+};
+
+#undef DEFINE_MESSAGE
+
+#define DEFINE_MESSAGE(textId, typePos, msg) { textId, typePos, _message_##textId##_staff },
+
+MessageTableEntry sMessageTableCredits[] = {
+#include "assets/text/staff_message_data.h"
+    { 0xFFFF, 0, NULL },
+};
+
+#undef DEFINE_MESSAGE
 
 s16 D_801CFC78[TEXTBOX_TYPE_MAX] = {
     0,  //  TEXTBOX_TYPE_0
@@ -782,7 +797,7 @@ void Message_GrowTextbox(PlayState* play) {
 void Message_FindMessage(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font;
-    MessageTableEntry* msgEntry = msgCtx->messageEntryTable;
+    MessageTableEntry* msgEntry = msgCtx->messageTable;
     const char* segment = msgEntry->segment;
     const char* foundSegment;
     const char* nextSegment;
@@ -799,7 +814,7 @@ void Message_FindMessage(PlayState* play, u16 textId) {
         msgEntry++;
     }
 
-    msgEntry = msgCtx->messageEntryTable;
+    msgEntry = msgCtx->messageTable;
     foundSegment = msgEntry->segment;
     msgEntry++;
     nextSegment = msgEntry->segment;
@@ -5989,8 +6004,8 @@ void Message_Update(PlayState* play) {
 }
 
 void Message_SetTables(PlayState* play) {
-    play->msgCtx.messageEntryTableNes = D_801C6B98;
-    play->msgCtx.messageTableStaff = D_801CFB08;
+    play->msgCtx.messageTableNES = sMessageTableNES;
+    play->msgCtx.messageTableCredits = sMessageTableCredits;
 }
 
 void Message_Init(PlayState* play) {

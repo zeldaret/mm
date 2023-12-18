@@ -4,7 +4,7 @@
 void Message_FindCreditsMessage(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font;
-    MessageTableEntry* msgEntry = msgCtx->messageTableStaff;
+    MessageTableEntry* msgEntry = msgCtx->messageTableCredits;
     const char* segment = msgEntry->segment;
     const char* foundSegment;
     const char* nextSegment;

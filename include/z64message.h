@@ -284,10 +284,10 @@ typedef struct MessageContext {
     /* 0x12074 */ s32 unk12074;
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees;
-    /* 0x12080 */ struct MessageTableEntry* messageEntryTable;
-    /* 0x12084 */ struct MessageTableEntry* messageEntryTableNes;
+    /* 0x12080 */ struct MessageTableEntry* messageTable;
+    /* 0x12084 */ struct MessageTableEntry* messageTableNES;
     /* 0x12088 */ UNK_TYPE1 unk12088[0x4];
-    /* 0x1208C */ struct MessageTableEntry* messageTableStaff;
+    /* 0x1208C */ struct MessageTableEntry* messageTableCredits;
     /* 0x12090 */ s16 textIsCredits;
     /* 0x12092 */ s16 messageHasSetSfx;
     /* 0x12094 */ u8 textboxSkipped;
