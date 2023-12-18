@@ -49,7 +49,7 @@ class MessageNES:
         for byte in self.hdr.prop:
             macro += f'\\x{byte:02X}'
         macro += '"\n'
-        macro += f"{self.decodedText}\n)"
+        macro += f"{self.decodedText}\n)\n"
         return macro
 
     def decode(self):
