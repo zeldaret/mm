@@ -173,12 +173,13 @@ SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 
 ## Assets binaries (PNGs, JPGs, etc)
-ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c")
+ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c" -not -path "assets/text")
 # Prevents building C files that will be #include'd
 ASSET_BIN_DIRS_C_FILES := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/code*" -not -path "assets/overlays*")
 
 ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
-ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
+ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f) \
+                   $(foreach f,$(wildcard assets/text/*.c),build/$(f:.c=.o))
 
 TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
 TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
@@ -202,7 +203,7 @@ OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' 
 DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 
 # create build directories
-$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS) $(ASSET_BIN_DIRS_C_FILES),build/$(dir)))
+$(shell mkdir -p build/baserom build/assets/text $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS) $(ASSET_BIN_DIRS_C_FILES),build/$(dir)))
 
 # directory flags
 build/src/boot/O2/%.o: OPTFLAGS := -O2
@@ -317,6 +318,7 @@ setup:
 
 assets:
 	python3 extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
+	python3 tools/msgdis/msgdisNES.py assets/text/message_data.h
 
 ## Assembly generation
 disasm:
@@ -364,6 +366,12 @@ build/baserom/%.o: baserom/%
 
 build/data/%.o: data/%.s
 	$(AS) $(ASFLAGS) $< -o $@
+
+build/assets/text/message_data.enc.h: assets/text/message_data.h
+	python3 tools/msgdis/msgencNES.py $< $@
+
+build/assets/text/message_data_static.o: build/assets/text/message_data.enc.h
+build/src/code/z_message_PAL.o: build/assets/text/message_data.enc.h
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<

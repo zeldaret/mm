@@ -420,7 +420,8 @@ endseg
 beginseg
     name "message_data_static"
     romalign 0x1000
-    include "build/baserom/message_data_static.o"
+    include "build/assets/text/message_data_static.o"
+    number 8
 endseg
 
 beginseg

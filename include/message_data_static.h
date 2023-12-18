@@ -9,4 +9,10 @@ typedef struct MessageTableEntry {
     /* 0x4 */ const char* segment;
 } MessageTableEntry; // size = 0x8;
 
+#define DEFINE_MESSAGE(textId, typePos, msg) \
+    extern const char _message_##textId[];
+
+#include "assets/text/message_data.h"
+#undef DEFINE_MESSAGE
+
 #endif
