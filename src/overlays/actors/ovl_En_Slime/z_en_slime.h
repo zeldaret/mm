@@ -39,7 +39,7 @@ typedef struct EnSlime {
     /* 0x14E */ s16 idleRotY;
     /* 0x150 */ s16 reviveRotY;
     /* 0x152 */ s16 reviveTime;
-    /* 0x154 */ union { 
+    /* 0x154 */ union {
                     Vec3f iceBlockSnapPos;
                     Vec3f wobbleRot;
                 };
