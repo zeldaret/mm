@@ -4,8 +4,6 @@ import argparse
 import sys
 import struct
 
-from msgdisTable import parseTable
-
 class MessageHeaderNES:
     def __init__(self, unk11F08, itemId, nextTextId, unk1206C, unk12070, unk12074):
         self.unk11F08 = unk11F08
@@ -277,6 +275,19 @@ class MessageNES:
                     else: # Other control codes
                         print(f"Error Unknown [\\x{char:02X}] command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}] '
+
+def parseTable(start):
+    table = {}
+    with open("baserom/code","rb") as f:
+        f.seek(start)
+        buf = f.read(8)
+        textId, typePos, segment = struct.unpack(">HBxI", buf)
+        while segment != 0:
+            table[segment] = (textId, typePos, segment)
+            buf = f.read(8)
+            textId, typePos, segment = struct.unpack(">HBxI", buf)
+
+    return table
 
 def main(outfile):
     msgTable = parseTable(0x1210D8) # Location of NES message table in baserom/code

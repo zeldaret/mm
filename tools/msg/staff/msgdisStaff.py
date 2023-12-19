@@ -4,8 +4,6 @@ import argparse
 import sys
 import struct
 
-from msgdisTable import parseTable
-
 class MessageCredits:
     COLORS = {
         0: "DEFAULT",
@@ -190,6 +188,19 @@ class MessageCredits:
                     else: # Other control codes
                         print(f"Error Unknown [\\x{char:02X}] command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}]'
+
+def parseTable(start):
+    table = {}
+    with open("baserom/code","rb") as f:
+        f.seek(start)
+        buf = f.read(8)
+        textId, typePos, segment = struct.unpack(">HBxI", buf)
+        while segment != 0:
+            table[segment] = (textId, typePos, segment)
+            buf = f.read(8)
+            textId, typePos, segment = struct.unpack(">HBxI", buf)
+
+    return table
 
 def main(outfile):
     msgTable = parseTable(0x12A048) # Location of Staff message table in baserom/code

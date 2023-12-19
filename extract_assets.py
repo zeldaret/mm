@@ -111,7 +111,7 @@ def main():
     signal.signal(signal.SIGINT, SignalHandler)
 
     extractedAssetsTracker = manager.dict()
-    if os.path.exists(EXTRACTED_ASSETS_NAMEFILE) and not args.force:
+    if not args.force and os.path.exists(EXTRACTED_ASSETS_NAMEFILE):
         with open(EXTRACTED_ASSETS_NAMEFILE, encoding='utf-8') as f:
             extractedAssetsTracker.update(json.load(f, object_hook=manager.dict))
 
@@ -128,6 +128,20 @@ def main():
             del extractedAssetsTracker[fullPath]
         ExtractFunc(fullPath)
     else:
+        extract_text_path = "assets/text/message_data.h"
+        extract_staff_text_path = "assets/text/staff_message_data.h"
+
+        # Only extract text if the header does not already exist, or if --force was passed
+        if args.force or not os.path.isfile(extract_text_path):
+            from tools.msg.nes import msgdisNES
+            print("Extracting message_data")
+            msgdisNES.main(extract_text_path)
+
+        if args.force or not os.path.isfile(extract_staff_text_path):
+            print("Extracting staff_message_data")
+            from tools.msg.staff import msgdisStaff
+            msgdisStaff.main(extract_staff_text_path)
+
         xmlFiles = []
         for currentPath, _, files in os.walk(os.path.join("assets", "xml")):
             for file in files:
