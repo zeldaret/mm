@@ -19,12 +19,12 @@ class MessageCredits:
     }
 
     HIGHSCORES = {
-        0: "HS_HORSE_ARCHERY",
-        1: "HS_POE_POINTS",
-        2: "HS_LARGEST_FISH",
-        3: "HS_HORSE_RACE",
-        4: "HS_MARATHON",
-        6: "HS_DAMPE_RACE"
+        0: "HS_BANK_RUPEES",
+        1: "HS_UNK_1",
+        2: "HS_FISHING",
+        3: "HS_BOAT_ARCHERY",
+        4: "HS_HORSE_BACK_BALLOON",
+        6: "HS_SHOOTING_GALLERY"
 
     }
 

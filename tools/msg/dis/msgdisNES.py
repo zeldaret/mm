@@ -154,20 +154,20 @@ class MessageNES:
                     elif char == 0x15: # ???
                         self.decodedText += f'CMD_15 '
                     elif char == 0x16: # Player Name
-                        self.decodedText += f'CMD_PLAYERNAME '
+                        self.decodedText += f'CMD_NAME '
                     elif char == 0x17: # Quick Text Enable
                         self.decodedText += f'CMD_QUICKTEXT_ENABLE '
                     elif char == 0x18: # Quick Text Disable
                         self.decodedText += f'CMD_QUICKTEXT_DISABLE '
                     elif char == 0x19: # ??
-                        self.decodedText += f'CMD_19 '
+                        self.decodedText += f'CMD_EVENT '
                     elif char == 0x1A: # ??
-                        self.decodedText += f'CMD_1A '
+                        self.decodedText += f'CMD_PERSISTENT '
                     elif char == 0x1B: # State Timer
                         #time = struct.unpack(">H", self.text[i:i+2])[0]
                         #i += 2
                         #self.decodedText += f'[\\x{char:02X}({time})] '
-                        self.decodedText += f'CMD_1B("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
+                        self.decodedText += f'CMD_BOX_BREAK_DELAYED("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
                         i += 2
                     elif char == 0x1C: # State Timer
                         # time = struct.unpack(">H", self.text[i:i+2])[0]
@@ -184,8 +184,8 @@ class MessageNES:
                     elif char == 0x1E: # Play Sound
                         # sound = struct.unpack(">H", self.text[i:i+2])[0]
                         # i += 2
-                        # self.decodedText += f'CMD_SOUND(0x{sound:04X}) '
-                        self.decodedText += f'CMD_SOUND("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
+                        # self.decodedText += f'CMD_SFX(0x{sound:04X}) '
+                        self.decodedText += f'CMD_SFX("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
                         i += 2
                     elif char == 0x1F: # Delay Timer
                         # time = struct.unpack(">H", self.text[i:i+2])[0]
@@ -250,7 +250,7 @@ class MessageNES:
                     elif char == 0xDF: # Actual Bomber's Code
                         self.decodedText += f'CMD_DF '
                     elif char == 0xE0: # End Conversation
-                        self.decodedText += f'CMD_END_CONVERSATION '
+                        self.decodedText += f'CMD_E0 '
                     elif char >= 0xE1 and char <= 0xE6: # Single Spider Mask Order
                         self.decodedText += f'CMD_{char:02X} '
                     elif char == 0xE7: # Hours to moon crash

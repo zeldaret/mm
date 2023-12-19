@@ -114,12 +114,12 @@
  * enum should be used.
  */
 
-#define HS_HORSE_ARCHERY "\x00"
-#define HS_POE_POINTS    "\x01"
-#define HS_LARGEST_FISH  "\x02"
-#define HS_HORSE_RACE    "\x03"
-#define HS_MARATHON      "\x04"
-#define HS_DAMPE_RACE    "\x06"
+#define HS_BANK_RUPEES        "\x00"
+#define HS_UNK_1              "\x01"
+#define HS_FISHING            "\x02"
+#define HS_BOAT_ARCHERY       "\x03"
+#define HS_HORSE_BACK_BALLOON "\x04"
+#define HS_SHOOTING_GALLERY   "\x06"
 
 /*
  * Color values as strings
