@@ -402,19 +402,22 @@ endseg
 beginseg
     name "message_static"
     romalign 0x1000
-    include "build/baserom/message_static.o"
+    include "build/assets/interface/message_static/message_static.o"
+    number 7
 endseg
 
 beginseg
     name "message_texture_static"
     romalign 0x1000
-    include "build/baserom/message_texture_static.o"
+    include "build/assets/interface/message_texture_static/message_texture_static.o"
+    number 9
 endseg
 
 beginseg
     name "nes_font_static"
     romalign 0x1000
-    include "build/baserom/nes_font_static.o"
+    include "build/assets/interface/nes_font_static/nes_font_static.o"
+    number 10
 endseg
 
 beginseg

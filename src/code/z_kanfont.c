@@ -14,8 +14,7 @@ void Font_LoadCharNES(PlayState* play, u8 codePointIndex, s32 offset) {
 }
 
 void Font_LoadMessageBoxEndIcon(Font* font, u16 icon) {
-    DmaMgr_SendRequest0(&font->iconBuf,
-                        SEGMENT_ROM_START_OFFSET(message_static, 5 * 0x1000 + icon * FONT_CHAR_TEX_SIZE),
+    DmaMgr_SendRequest0(&font->iconBuf, SEGMENT_ROM_START_OFFSET(message_static, 0x5000 + icon * FONT_CHAR_TEX_SIZE),
                         FONT_CHAR_TEX_SIZE);
 }
 
