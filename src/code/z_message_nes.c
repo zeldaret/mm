@@ -346,28 +346,58 @@ void Message_GetTimerDigitsNES(OSTime time, s16* digits) {
 }
 
 Color_RGB16 D_801D07DC[] = {
-    { 255, 120, 0 },  { 70, 255, 80 },   { 80, 110, 255 },  { 255, 255, 30 },
-    { 90, 180, 255 }, { 210, 100, 255 }, { 170, 170, 170 }, { 255, 130, 30 },
+    { 255, 120, 0 },   // MESSAGE_COLOR_RED
+    { 70, 255, 80 },   // MESSAGE_COLOR_GREEN
+    { 80, 110, 255 },  // MESSAGE_COLOR_BLUE
+    { 255, 255, 30 },  // MESSAGE_COLOR_YELLOW
+    { 90, 180, 255 },  // MESSAGE_COLOR_LIGHTBLUE
+    { 210, 100, 255 }, // MESSAGE_COLOR_PINK
+    { 170, 170, 170 }, // MESSAGE_COLOR_SILVER
+    { 255, 130, 30 },  // MESSAGE_COLOR_ORANGE
 };
 
 Color_RGB16 D_801D080C[] = {
-    { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
-    { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
+    { 255, 60, 60 },   // MESSAGE_COLOR_RED
+    { 70, 255, 80 },   // MESSAGE_COLOR_GREEN
+    { 80, 90, 255 },   // MESSAGE_COLOR_BLUE
+    { 255, 255, 50 },  // MESSAGE_COLOR_YELLOW
+    { 80, 150, 255 },  // MESSAGE_COLOR_LIGHTBLUE
+    { 255, 150, 180 }, // MESSAGE_COLOR_PINK
+    { 170, 170, 170 }, // MESSAGE_COLOR_SILVER
+    { 255, 130, 30 },  // MESSAGE_COLOR_ORANGE
 };
 
 Color_RGB16 D_801D083C[] = {
-    { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
-    { 80, 150, 255 }, { 255, 150, 180 }, { 180, 180, 200 }, { 255, 130, 30 },
+    { 255, 60, 60 },   // MESSAGE_COLOR_RED
+    { 70, 255, 80 },   // MESSAGE_COLOR_GREEN
+    { 80, 90, 255 },   // MESSAGE_COLOR_BLUE
+    { 255, 255, 50 },  // MESSAGE_COLOR_YELLOW
+    { 80, 150, 255 },  // MESSAGE_COLOR_LIGHTBLUE
+    { 255, 150, 180 }, // MESSAGE_COLOR_PINK
+    { 180, 180, 200 }, // MESSAGE_COLOR_SILVER
+    { 255, 130, 30 },  // MESSAGE_COLOR_ORANGE
 };
 
 Color_RGB16 D_801D086C[] = {
-    { 195, 0, 0 },    { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
-    { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
+    { 195, 0, 0 },     // MESSAGE_COLOR_RED
+    { 70, 255, 80 },   // MESSAGE_COLOR_GREEN
+    { 80, 90, 255 },   // MESSAGE_COLOR_BLUE
+    { 255, 255, 50 },  // MESSAGE_COLOR_YELLOW
+    { 80, 150, 255 },  // MESSAGE_COLOR_LIGHTBLUE
+    { 255, 150, 180 }, // MESSAGE_COLOR_PINK
+    { 170, 170, 170 }, // MESSAGE_COLOR_SILVER
+    { 255, 130, 30 },  // MESSAGE_COLOR_ORANGE
 };
 
 Color_RGB16 D_801D089C[] = {
-    { 255, 60, 60 },  { 110, 170, 255 }, { 80, 90, 255 },   { 255, 255, 50 },
-    { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
+    { 255, 60, 60 },   // MESSAGE_COLOR_RED
+    { 110, 170, 255 }, // MESSAGE_COLOR_GREEN
+    { 80, 90, 255 },   // MESSAGE_COLOR_BLUE
+    { 255, 255, 50 },  // MESSAGE_COLOR_YELLOW
+    { 80, 150, 255 },  // MESSAGE_COLOR_LIGHTBLUE
+    { 255, 150, 180 }, // MESSAGE_COLOR_PINK
+    { 170, 170, 170 }, // MESSAGE_COLOR_SILVER
+    { 255, 130, 30 },  // MESSAGE_COLOR_ORANGE
 };
 
 u8 D_801D08CC[] = {
@@ -412,7 +442,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
         character = msgCtx->decodedBuffer.schar[i];
 
         switch (character) {
-            case MESSAGE_COLOR_0:
+            case MESSAGE_COLOR_DEFAULT:
                 if (play->pauseCtx.bombersNotebookOpen || (msgCtx->textBoxType == TEXTBOX_TYPE_D)) {
                     msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 0;
                 } else if (msgCtx->textBoxType == TEXTBOX_TYPE_5) {
@@ -426,16 +456,16 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 }
                 break;
 
-            case MESSAGE_COLOR_1:
-            case MESSAGE_COLOR_2:
-            case MESSAGE_COLOR_3:
-            case MESSAGE_COLOR_4:
-            case MESSAGE_COLOR_5:
-            case MESSAGE_COLOR_6:
-            case MESSAGE_COLOR_7:
-            case MESSAGE_COLOR_8:
+            case MESSAGE_COLOR_RED:
+            case MESSAGE_COLOR_GREEN:
+            case MESSAGE_COLOR_BLUE:
+            case MESSAGE_COLOR_YELLOW:
+            case MESSAGE_COLOR_LIGHTBLUE:
+            case MESSAGE_COLOR_PINK:
+            case MESSAGE_COLOR_SILVER:
+            case MESSAGE_COLOR_ORANGE:
                 if ((msgCtx->msgMode >= MSGMODE_NEW_CYCLE_0) && (msgCtx->msgMode <= MSGMODE_OWL_SAVE_2) &&
-                    (character == MESSAGE_COLOR_2)) {
+                    (character == MESSAGE_COLOR_GREEN)) {
                     msgCtx->textDrawPos = msgCtx->decodedTextLen;
                     if (msgCtx->unk120D6) {
                         msgCtx->unk120D4 += 25;
@@ -728,7 +758,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 }
                 break;
 
-            case MESSAGE_CC:
+            case MESSAGE_BANK_INPUT:
                 msgCtx->textboxEndType = TEXTBOX_ENDTYPE_60;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
@@ -736,7 +766,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 }
                 break;
 
-            case MESSAGE_D0:
+            case MESSAGE_DOGGY_RACETRACK_BET_INPUT:
                 msgCtx->textboxEndType = TEXTBOX_ENDTYPE_61;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
@@ -744,7 +774,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 }
                 break;
 
-            case MESSAGE_D1:
+            case MESSAGE_BOMBER_CODE_INPUT:
                 msgCtx->textboxEndType = TEXTBOX_ENDTYPE_62;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
@@ -931,10 +961,10 @@ char sTimeSpeedTextENG[][4] = {
 };
 
 u8 sMaskCodeColorCmdENG[] = {
-    MESSAGE_COLOR_1,
-    MESSAGE_COLOR_3,
-    MESSAGE_COLOR_4,
-    MESSAGE_COLOR_2,
+    MESSAGE_COLOR_RED,
+    MESSAGE_COLOR_BLUE,
+    MESSAGE_COLOR_YELLOW,
+    MESSAGE_COLOR_GREEN,
 };
 
 #define RED_STR "RED"
@@ -1198,7 +1228,7 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             decodedBufPos--;
-        } else if (curChar == MESSAGE_CC) {
+        } else if (curChar == MESSAGE_BANK_INPUT) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
             msgCtx->unk120C0 = decodedBufPos;
@@ -1400,7 +1430,7 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             decodedBufPos--;
-        } else if (curChar == MESSAGE_D0) {
+        } else if (curChar == MESSAGE_DOGGY_RACETRACK_BET_INPUT) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
             msgCtx->unk120C0 = decodedBufPos;
@@ -1413,7 +1443,7 @@ void Message_DecodeNES(PlayState* play) {
                 decodedBufPos++;
             }
             Message_LoadPluralRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4);
-        } else if (curChar == MESSAGE_D1) {
+        } else if (curChar == MESSAGE_BOMBER_CODE_INPUT) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
             msgCtx->unk120C0 = decodedBufPos;
@@ -1463,15 +1493,15 @@ void Message_DecodeNES(PlayState* play) {
                 decodedBufPos++;
             }
             decodedBufPos--;
-        } else if (curChar == MESSAGE_D6) {
-            for (i = 0; i < 6; i++) {
+        } else if (curChar == MESSAGE_SPIDER_HOUSE_MASK_CODE) {
+            for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.spiderHouseMaskOrder); i++) {
                 msgCtx->decodedBuffer.schar[decodedBufPos] =
                     sMaskCodeColorCmdENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[i])];
                 decodedBufPos++;
                 Message_LoadCharNES(play, i + '1', &charTexIndex, &spA4, decodedBufPos);
                 decodedBufPos++;
             }
-            msgCtx->decodedBuffer.schar[decodedBufPos] = MESSAGE_COLOR_0;
+            msgCtx->decodedBuffer.schar[decodedBufPos] = MESSAGE_COLOR_DEFAULT;
         } else if ((curChar >= MESSAGE_STRAY_FAIRIES_LEFT_WOODFALL) &&
                    (curChar <= MESSAGE_STRAY_FAIRIES_LEFT_STONE_TOWER)) {
             digits[0] = digits[1] = 0;
@@ -1582,7 +1612,7 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             Message_LoadPluralRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4);
-        } else if (curChar == MESSAGE_DF) {
+        } else if (curChar == MESSAGE_BOMBER_CODE) {
             for (i = 0; i < 5; i++) {
                 digits[i] = gSaveContext.save.saveInfo.bomberCode[i];
                 Font_LoadCharNES(play, digits[i] + '0', charTexIndex);
@@ -1593,9 +1623,9 @@ void Message_DecodeNES(PlayState* play) {
             }
             decodedBufPos--;
         } else if ((curChar >= MESSAGE_SPIDER_HOUSE_MASK_CODE_1) && (curChar <= MESSAGE_SPIDER_HOUSE_MASK_CODE_6)) {
-            msgCtx->decodedBuffer.schar[decodedBufPos++] =
-                sMaskCodeColorCmdENG[((void)0, gSaveContext.save.saveInfo
-                                         .spiderHouseMaskOrder[(s16)(curChar - MESSAGE_SPIDER_HOUSE_MASK_CODE_1)])];
+            msgCtx->decodedBuffer.schar[decodedBufPos++] = sMaskCodeColorCmdENG[(
+                (void)0,
+                gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - MESSAGE_SPIDER_HOUSE_MASK_CODE_1)])];
             index = sMaskCodeTextLengthENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(
                                                          s16)(curChar - MESSAGE_SPIDER_HOUSE_MASK_CODE_1)])];
             for (playerNameLen = 0; playerNameLen < index; playerNameLen++, decodedBufPos++) {

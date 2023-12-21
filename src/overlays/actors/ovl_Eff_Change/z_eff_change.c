@@ -32,7 +32,7 @@ ActorInit Eff_Change_InitVars = {
 
 static u8 D_80A4C920[] = {
     // prim r g b   env r g b
-    255, 255, 170, 0,   100, 0,   // COLOR_0
+    255, 255, 170, 0,   100, 0,   // COLOR_DEFAULT
     255, 255, 170, 200, 0,   0,   // COLOR_1
     170, 255, 255, 0,   100, 255, // COLOR_2
     255, 255, 170, 200, 150, 0,   // COLOR_3

@@ -115,8 +115,24 @@ class MessageNES:
 
                     prevText = False
                     prevNewline = False
-                    if char >= 0 and char <= 0x8:
-                        self.decodedText += f'CMD_COLOR_{char} '
+                    if char == 0x0:
+                        self.decodedText += f'CMD_COLOR_DEFAULT '
+                    elif char == 0x1:
+                        self.decodedText += f'CMD_COLOR_RED '
+                    elif char == 0x2:
+                        self.decodedText += f'CMD_COLOR_GREEN '
+                    elif char == 0x3:
+                        self.decodedText += f'CMD_COLOR_BLUE '
+                    elif char == 0x4:
+                        self.decodedText += f'CMD_COLOR_YELLOW '
+                    elif char == 0x5:
+                        self.decodedText += f'CMD_COLOR_LIGHTBLUE '
+                    elif char == 0x6:
+                        self.decodedText += f'CMD_COLOR_PINK '
+                    elif char == 0x7:
+                        self.decodedText += f'CMD_COLOR_SILVER '
+                    elif char == 0x8:
+                        self.decodedText += f'CMD_COLOR_ORANGE '
                     elif char == 0x9:
                         print(f"Error [\\x{char:02X}] is not a valid command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}] '
@@ -199,7 +215,7 @@ class MessageNES:
                     elif char == 0xCB:
                         self.decodedText += f'CMD_CHEST_FLAGS '
                     elif char == 0xCC:
-                        self.decodedText += f'CMD_CC '
+                        self.decodedText += f'CMD_BANK_INPUT '
                     elif char == 0xCD:
                         self.decodedText += f'CMD_CD '
                     elif char == 0xCE:
@@ -207,9 +223,9 @@ class MessageNES:
                     elif char == 0xCF:
                         self.decodedText += f'CMD_TIME_UNTIL_MOON_CRASH '
                     elif char == 0xD0:
-                        self.decodedText += f'CMD_D0 '
+                        self.decodedText += f'CMD_DOGGY_RACETRACK_BET_INPUT '
                     elif char == 0xD1:
-                        self.decodedText += f'CMD_D1 '
+                        self.decodedText += f'CMD_BOMBER_CODE_INPUT '
                     elif char == 0xD2:
                         self.decodedText += f'CMD_D2 '
                     elif char == 0xD3:
@@ -219,7 +235,7 @@ class MessageNES:
                     elif char == 0xD5:
                         self.decodedText += f'CMD_LOTTERY_CODE_INPUT '
                     elif char == 0xD6:
-                        self.decodedText += f'CMD_D6 '
+                        self.decodedText += f'CMD_SPIDER_HOUSE_MASK_CODE '
                     elif char == 0xD7:
                         self.decodedText += f'CMD_STRAY_FAIRIES_LEFT_WOODFALL '
                     elif char == 0xD8:
@@ -237,7 +253,7 @@ class MessageNES:
                     elif char == 0xDE:
                         self.decodedText += f'CMD_HELD_ITEM_PRICE '
                     elif char == 0xDF:
-                        self.decodedText += f'CMD_DF '
+                        self.decodedText += f'CMD_BOMBER_CODE '
                     elif char == 0xE0:
                         self.decodedText += f'CMD_E0 '
                     elif char >= 0xE1 and char <= 0xE6:
