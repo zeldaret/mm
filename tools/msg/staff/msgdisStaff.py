@@ -64,126 +64,101 @@ class MessageCredits:
                     if not prevText:
                         self.decodedText += '"'
 
-                    if char == 0x22: # Need to escape "
-                        self.decodedText += "\\"
-                    self.decodedText += chr(char)
+                    if char == 0x22: # Handle escaping "
+                        self.decodedText += '\\"'
+                    else:
+                        self.decodedText += chr(char)
 
                     prevText = True
                     prevNewline = False
-                elif char == 0x1: # New line??
-                    if not prevText:
+                elif char == 0x1: # New line
+                    if not prevText or prevNewline:
                         self.decodedText += '"'
 
                     self.decodedText += f'\\n"\n'
 
                     prevText = False
                     prevNewline = True
-                else: # Control Codes
+                else: # Control Codes (see message_data_fmt_staff.h)
                     if prevText:
                         self.decodedText += '" '
 
                     prevText = False
                     prevNewline = False
 
-                    if char == 0x2: # End
+                    if char == 0x2:
                         continue
-                    elif char == 0x3: # None
+                    elif char == 0x3:
                         print(f"Error [\\x{char:02X}] is not a valid command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}]'
-                    elif char == 0x4: # Box Break
+                    elif char == 0x4:
                         self.decodedText += f'\nCMD_BOX_BREAK\n'
-                    elif char == 0x5: # Color
+                    elif char == 0x5:
                         color = self.text[i]
                         i += 1
                         self.decodedText += f'CMD_COLOR({MessageCredits.COLORS[color]}) '
-                    elif char == 0x6: # Shift
-                        # shift = self.text[i]
-                        # i += 1
-                        # self.decodedText += f'CMD_SHIFT({shift}) '
+                    elif char == 0x6:
                         self.decodedText += f'CMD_SHIFT("\\x{self.text[i]:02X}") '
                         i += 1
-                    elif char == 0x7: # Next Text Id
-                        # nextId = struct.unpack(">H", self.text[i:i+2])[0]
-                        # i += 2
-                        # self.decodedText += f'CMD_TEXTID({nextId}) '
+                    elif char == 0x7:
                         self.decodedText += f'CMD_TEXTID("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
                         i += 2
-                    elif char == 0x8: # Quick Text Enable
+                    elif char == 0x8:
                         self.decodedText += f'CMD_QUICKTEXT_ENABLE '
-                    elif char == 0x9: # Quick Text Disable
+                    elif char == 0x9:
                         self.decodedText += f'CMD_QUICKTEXT_DISABLE '
-                    elif char == 0xA: # Persistent
+                    elif char == 0xA:
                         self.decodedText += f'CMD_PERSISTENT '
-                    elif char == 0xB: # Event
+                    elif char == 0xB:
                         self.decodedText += f'CMD_EVENT '
-                    elif char == 0xC: # Box Break Delayed
-                        # timer = self.text[i]
-                        # i += 1
-                        # self.decodedText += f'CMD_BOX_BREAK_DELAY({timer}) '
+                    elif char == 0xC:
                         self.decodedText += f'CMD_BOX_BREAK_DELAY("\\x{self.text[i]:02X}") '
                         i += 1
-                    elif char == 0xD: # Await Input
+                    elif char == 0xD:
                         self.decodedText += f'CMD_WAIT_INPUT '
-                    elif char == 0xE: # Fade
-                        # timer = self.text[i]
-                        # i += 1
-                        # self.decodedText += f'CMD_FADE({timer}) '
+                    elif char == 0xE:
                         self.decodedText += f'CMD_FADE("\\x{self.text[i]:02X}") '
                         i += 1
-                    elif char == 0xF: # Player Name
+                    elif char == 0xF:
                         self.decodedText += f'CMD_PLAYERNAME '
-                    elif char == 0x10: # Ocarina
+                    elif char == 0x10:
                         self.decodedText += f'CMD_OCARINA '
-                    elif char == 0x11: # Fade 2
-                        # timer = struct.unpack(">H", self.text[i:i+2])[0]
-                        # i += 2
-                        # self.decodedText += f'CMD_FADE2({timer}) '
+                    elif char == 0x11:
                         self.decodedText += f'CMD_FADE2("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
                         i += 2
-                    elif char == 0x12: # Sound
-                        # sound = struct.unpack(">H", self.text[i:i+2])[0]
-                        # i += 2
-                        # self.decodedText += f'CMD_SOUND(0x{sound:04X}) '
+                    elif char == 0x12:
                         self.decodedText += f'CMD_SOUND("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
                         i += 2
-                    elif char == 0x13: # Item Icon
-                        # itemIcon = self.text[i]
-                        # i += 1
-                        # self.decodedText += f'CMD_ITEM_ICON(0x{itemIcon:02X}) '
+                    elif char == 0x13:
                         self.decodedText += f'CMD_ITEM_ICON("\\x{self.text[i]:02X}") '
                         i += 1
-                    elif char == 0x14: # Delay
-                        # delay = self.text[i]
-                        # i += 1
-                        # self.decodedText += f'CMD_DELAY({delay}) '
-                        self.decodedText += f'CMD_DELAY("\\x{self.text[i]:02X}") '
+                    elif char == 0x14:
+                        self.decodedText += f'CMD_TEXT_SPEED("\\x{self.text[i]:02X}") '
                         i += 1
-                    elif char == 0x15: # Background
-                        arg0, arg1, arg2 = struct.unpack(">BBB")
+                    elif char == 0x15:
+                        self.decodedText += f'CMD_BACKGROUND("\\x{self.text[i]:02X}, \\x{self.text[i + 1]:02X}, \\x{self.text[i + 2]:02X})'
                         i += 3
-                        self.decodedText += f'CMD_BACKGROUND("\\x{arg0:02X}, \\x{arg1:02X}, \\x{arg2:02X})'
-                    elif char == 0x16: # Marathon Time
+                    elif char == 0x16:
                         self.decodedText += f'CMD_MARATHONTIME '
-                    elif char == 0x17: # Race Time
+                    elif char == 0x17:
                         self.decodedText += f'CMD_RACETIME '
-                    elif char == 0x18: # Points
+                    elif char == 0x18:
                         self.decodedText += f'CMD_POINTS '
-                    elif char == 0x19: # Nothing
+                    elif char == 0x19:
                         print(f"Error [\\x{char:02X}] is not a valid command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}]'
-                    elif char == 0x1A: # Unskippable
+                    elif char == 0x1A:
                         self.decodedText += f'CMD_UNSKIPPABLE '
-                    elif char == 0x1B: # Two Choice
+                    elif char == 0x1B:
                         self.decodedText += f'CMD_TWO_CHOICE '
-                    elif char == 0x1C: # Three Choice
+                    elif char == 0x1C:
                         self.decodedText += f'CMD_THREE_CHOICE '
-                    elif char == 0x1D: # Another minigame score
+                    elif char == 0x1D:
                         self.decodedText += f'CMD_FISH_INFO '
-                    elif char == 0x1E: # HighScore
-                        hsType = self.text[i]
+                    elif char == 0x1E:
+                        self.decodedText += f'CMD_HIGHSCORE({MessageCredits.HIGHSCORES[self.text[i]]}) '
                         i += 1
-                        self.decodedText += f'CMD_HIGHSCORE({MessageCredits.HIGHSCORES[hsType]}) '
-                    elif char == 0x1F: # Time
+                    elif char == 0x1F:
                         self.decodedText += f'CMD_TIME '
                     else: # Other control codes
                         print(f"Error Unknown [\\x{char:02X}] command", file=sys.stderr)

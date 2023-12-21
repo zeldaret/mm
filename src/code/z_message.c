@@ -2153,15 +2153,13 @@ void Message_LoadOwlWarpText(PlayState* play, s32* offset, f32* arg2, s16* decod
     *arg2 = sp3C;
 }
 
-// Counterpart to NES D_801D08D8
-u16 D_801D0268[][3] = {
+u16 sTimeSpeedTextJPN[][3] = {
     { 0x82CD, 0x82E2, 0x82A2 },
     { 0x82D3, 0x82C2, 0x82A4 },
     { 0x82A8, 0x82BB, 0x82A2 },
 };
 
-// Counterpart to NES D_801D08E4
-u16 D_801D027C[] = { 0x2001, 0x2003, 0x2004, 0x2002 };
+u16 sMaskCodeColorCmdJPN[] = { 0x2001, 0x2003, 0x2004, 0x2002 };
 
 // Counterpart to NES sMaskCodeTextENG
 u16 D_801D0284[] = { 0x90D4, 0x90C2, 0x89A9, 0x97CE };
@@ -2593,8 +2591,8 @@ void Message_Decode(PlayState* play) {
                 }
 
                 for (i = 0; i < 3; i++, decodedBufPos++) {
-                    msgCtx->decodedBuffer.wchar[decodedBufPos] = D_801D0268[index][i];
-                    Font_LoadChar(play, D_801D0268[index][i], charTexIndex);
+                    msgCtx->decodedBuffer.wchar[decodedBufPos] = sTimeSpeedTextJPN[index][i];
+                    Font_LoadChar(play, sTimeSpeedTextJPN[index][i], charTexIndex);
                     charTexIndex += FONT_CHAR_TEX_SIZE;
                 }
                 decodedBufPos--;
@@ -2622,7 +2620,7 @@ void Message_Decode(PlayState* play) {
             } else if (curChar == 0x226) {
                 for (i = 0; i < 6; i++) {
                     msgCtx->decodedBuffer.wchar[decodedBufPos] =
-                        D_801D027C[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[i])];
+                        sMaskCodeColorCmdJPN[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[i])];
                     decodedBufPos++;
                     Message_LoadChar(play, i + 0x8250, &charTexIndex, &spC0, decodedBufPos);
                     decodedBufPos++;
@@ -2748,7 +2746,7 @@ void Message_Decode(PlayState* play) {
                 decodedBufPos--;
             } else if ((curChar >= 0x231) && (curChar < 0x237)) {
                 msgCtx->decodedBuffer.wchar[decodedBufPos] =
-                    D_801D027C[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0x231)])];
+                    sMaskCodeColorCmdJPN[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0x231)])];
                 decodedBufPos++;
                 Message_LoadChar(
                     play,
@@ -5358,7 +5356,7 @@ void Message_Update(PlayState* play) {
                 } else if (msgCtx->textBoxPos == 2) {
                     msgCtx->textboxYTarget = sTextboxMidYPositions[var_v1];
                 } else if (msgCtx->textBoxPos == 7) {
-                    msgCtx->textboxYTarget = 0x9E;
+                    msgCtx->textboxYTarget = 158;
                 } else {
                     msgCtx->textboxYTarget = sTextboxLowerYPositions[var_v1];
                 }
@@ -5367,12 +5365,12 @@ void Message_Update(PlayState* play) {
 
                 if ((gSaveContext.options.language == LANGUAGE_JPN) && !msgCtx->textIsCredits) {
                     msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 7);
-                    msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 0x19);
-                    msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 0x2B);
+                    msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 25);
+                    msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 43);
                 } else {
-                    msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 0x14);
-                    msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 0x20);
-                    msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 0x2C);
+                    msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 20);
+                    msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 32);
+                    msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 44);
                 }
 
                 if ((msgCtx->textBoxType == TEXTBOX_TYPE_4) || (msgCtx->textBoxType == TEXTBOX_TYPE_5)) {

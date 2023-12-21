@@ -88,191 +88,184 @@ class MessageNES:
             while i < textLen:
                 char = self.text[i]
                 i += 1
-                if char >= 0x20 and char <= 0xAF: # Regular Characters
+                if char >= 0x20 and char <= 0xBB: # Characters
                     if not prevText or prevNewline:
                         self.decodedText += '"'
 
-                    if char == 0x22: # Need to escape "
-                        self.decodedText += "\\"
-                    self.decodedText += chr(char)
-
-                    prevText = True
-                    prevNewline = False
-                elif char >= 0xB0 and char <= 0xBB: # Texture Characters (buttons)
-                    if not prevText or prevNewline:
-                        self.decodedText += '"'
-
-                    self.decodedText += f'{ButtonMap[char]}'
+                    if char == 0x22: # Handle escaping "
+                        self.decodedText += '\\"'
+                    elif char >= 0xB0: # Button characters
+                        self.decodedText += f'{ButtonMap[char]}'
+                    else:
+                        self.decodedText += chr(char)
 
                     prevText = True
                     prevNewline = False
                 elif char == 0x11: # New line
-                    if not prevText:
+                    if not prevText or prevNewline:
                         self.decodedText += '"'
 
                     self.decodedText += f'\\n"\n'
 
                     prevText = False
                     prevNewline = True
-                else: # Control Codes
+                else: # Control Codes (see message_data_fmt_nes.h)
                     if prevText and not prevNewline:
                         self.decodedText += '" '
 
                     prevText = False
                     prevNewline = False
-                    if char >= 0 and char <= 0x8: # Colors
+                    if char >= 0 and char <= 0x8:
                         self.decodedText += f'CMD_COLOR_{char} '
-                    elif char == 0x9: # Nothing
+                    elif char == 0x9:
                         print(f"Error [\\x{char:02X}] is not a valid command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}] '
-                    elif char == 0xA: # ??
+                    elif char == 0xA:
                         self.decodedText += f'CMD_0A '
-                    elif char == 0xB: # Boat Archery High Score
-                        self.decodedText += f'CMD_0B '
-                    elif char == 0xC: # Stray Fairies
-                        self.decodedText += f'CMD_0C '
-                    elif char == 0xD: # Skull Count
-                        self.decodedText += f'CMD_0D '
-                    elif char == 0xE: # Minigame score 2 digits
+                    elif char == 0xB:
+                        self.decodedText += f'CMD_HS_BOAT_ARCHERY '
+                    elif char == 0xC:
+                        self.decodedText += f'CMD_STRAY_FAIRIES '
+                    elif char == 0xD:
+                        self.decodedText += f'CMD_TOKENS '
+                    elif char == 0xE:
                         self.decodedText += f'CMD_0E '
-                    elif char == 0xF: # Minigame score 4 digits
+                    elif char == 0xF:
                         self.decodedText += f'CMD_0F '
-                    elif char == 0x10: # New box
+                    elif char == 0x10:
                         self.decodedText += f'\nCMD_BOX_BREAK\n'
-                    elif char == 0x12: # New box??
+                    elif char == 0x12:
                         self.decodedText += f'\nCMD_BOX_BREAK2\n'
-                    elif char == 0x13: # Like 0x15
+                    elif char == 0x13:
                         self.decodedText += f'CMD_13 '
                     elif char == 0x14:
-                        # shift = self.text[i]
-                        # i += 1
-                        # self.decodedText += f'CMD_SHIFT(\\x{shift}) '
                         self.decodedText += f'CMD_SHIFT("\\x{self.text[i]}") '
                         i += 1
-                    elif char == 0x15: # ???
+                    elif char == 0x15:
                         self.decodedText += f'CMD_15 '
-                    elif char == 0x16: # Player Name
+                    elif char == 0x16:
                         self.decodedText += f'CMD_NAME '
-                    elif char == 0x17: # Quick Text Enable
+                    elif char == 0x17:
                         self.decodedText += f'CMD_QUICKTEXT_ENABLE '
-                    elif char == 0x18: # Quick Text Disable
+                    elif char == 0x18:
                         self.decodedText += f'CMD_QUICKTEXT_DISABLE '
-                    elif char == 0x19: # ??
+                    elif char == 0x19:
                         self.decodedText += f'CMD_EVENT '
-                    elif char == 0x1A: # ??
+                    elif char == 0x1A:
                         self.decodedText += f'CMD_PERSISTENT '
-                    elif char == 0x1B: # State Timer
-                        #time = struct.unpack(">H", self.text[i:i+2])[0]
-                        #i += 2
-                        #self.decodedText += f'[\\x{char:02X}({time})] '
+                    elif char == 0x1B:
                         self.decodedText += f'CMD_BOX_BREAK_DELAYED("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
                         i += 2
-                    elif char == 0x1C: # State Timer
-                        # time = struct.unpack(">H", self.text[i:i+2])[0]
-                        # i += 2
-                        # self.decodedText += f'[\\x{char:02X}({time})] '
-                        self.decodedText += f'CMD_1C("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
+                    elif char == 0x1C:
+                        self.decodedText += f'CMD_FADE("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
                         i += 2
-                    elif char == 0x1D: # State Timer
-                        # time = struct.unpack(">H", self.text[i:i+2])[0]
-                        # i += 2
-                        # self.decodedText += f'[\\x{char:02X}({time})] '
+                    elif char == 0x1D:
                         self.decodedText += f'CMD_1D("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
                         i += 2
-                    elif char == 0x1E: # Play Sound
-                        # sound = struct.unpack(">H", self.text[i:i+2])[0]
-                        # i += 2
-                        # self.decodedText += f'CMD_SFX(0x{sound:04X}) '
+                    elif char == 0x1E:
                         self.decodedText += f'CMD_SFX("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
                         i += 2
-                    elif char == 0x1F: # Delay Timer
-                        # time = struct.unpack(">H", self.text[i:i+2])[0]
-                        # i += 2
-                        # self.decodedText += f'[\\x{char:02X}({time})] '
-                        self.decodedText += f'CMD_1F("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
+                    elif char == 0x1F:
+                        self.decodedText += f'CMD_DELAY("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
                         i += 2
-                    elif char >= 0xBC and char <= 0xBE: # Nothing
+                    elif char >= 0xBC and char <= 0xBE:
                         print(f"Error [\\x{char:02X}] is not a valid command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}]'
-                    elif char == 0xBF: # End Text Id
+                    elif char == 0xBF:
                         continue # Don't add the end Ctrl code
-                    elif char == 0xC0: # Nothing
+                    elif char == 0xC0:
                         print(f"Error [\\x{char:02X}] is not a valid command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}] '
-                    elif char == 0xC1: # Background?
+                    elif char == 0xC1:
                         self.decodedText += f'CMD_BACKGROUND '
-                    elif char == 0xC2: # 2 Choices
+                    elif char == 0xC2:
                         self.decodedText += f'CMD_TWO_CHOICE '
-                    elif char == 0xC3: # 3 Choices
+                    elif char == 0xC3:
                         self.decodedText += f'CMD_THREE_CHOICE '
-                    elif char == 0xC4: # Timer 1
-                        self.decodedText += f'CMD_C4 '
-                    elif char >= 0xC5 and char <= 0xC9: # Timer 2
-                        self.decodedText += f'CMD_{char:02X} '
-                    elif char == 0xCA: # Time
-                        self.decodedText += f'CMD_CA '
-                    elif char == 0xCB: # Flags_GetAllTreasure
-                        self.decodedText += f'CMD_CB '
-                    elif char == 0xCC: # Rupees 1
+                    elif char == 0xC4:
+                        self.decodedText += f'CMD_TIMER_POSTMAN '
+                    elif char == 0xC5:
+                        self.decodedText += f'CMD_TIMER_MINIGAME_1 '
+                    elif char == 0xC6:
+                        self.decodedText += f'CMD_TIMER_2 '
+                    elif char == 0xC7:
+                        self.decodedText += f'CMD_TIMER_MOON_CRASH '
+                    elif char == 0xC8:
+                        self.decodedText += f'CMD_TIMER_MINIGAME_2 '
+                    elif char == 0xC9:
+                        self.decodedText += f'CMD_TIMER_TIMER_ENV_HAZARD '
+                    elif char == 0xCA:
+                        self.decodedText += f'CMD_TIME '
+                    elif char == 0xCB:
+                        self.decodedText += f'CMD_CHEST_FLAGS '
+                    elif char == 0xCC:
                         self.decodedText += f'CMD_CC '
-                    elif char == 0xCD: # Rupees 2
+                    elif char == 0xCD:
                         self.decodedText += f'CMD_CD '
-                    elif char == 0xCE: # Rupees 3
+                    elif char == 0xCE:
                         self.decodedText += f'CMD_CE '
-                    elif char == 0xCF: # Time Until Moon Crash
-                        self.decodedText += f'CMD_CF '
-                    elif char == 0xD0: # Rupees 4
+                    elif char == 0xCF:
+                        self.decodedText += f'CMD_TIME_UNTIL_MOON_CRASH '
+                    elif char == 0xD0:
                         self.decodedText += f'CMD_D0 '
-                    elif char == 0xD1: # Bombers code?
+                    elif char == 0xD1:
                         self.decodedText += f'CMD_D1 '
-                    elif char == 0xD2: # ???
+                    elif char == 0xD2:
                         self.decodedText += f'CMD_D2 '
-                    elif char == 0xD3: # Time Speed
-                        self.decodedText += f'CMD_D3 '
-                    elif char == 0xD4: # Owl Warp
-                        self.decodedText += f'CMD_D4 '
-                    elif char == 0xD5: # Bombers code 2?
-                        self.decodedText += f'CMD_D5 '
-                    elif char == 0xD6: # Spider Mask Order
+                    elif char == 0xD3:
+                        self.decodedText += f'CMD_TIME_SPEED '
+                    elif char == 0xD4:
+                        self.decodedText += f'CMD_OWL_WARP '
+                    elif char == 0xD5:
+                        self.decodedText += f'CMD_LOTTERY_CODE_INPUT '
+                    elif char == 0xD6:
                         self.decodedText += f'CMD_D6 '
-                    elif char >= 0xD7 and char <= 0xDA: # Stray Fairies left
-                        self.decodedText += f'CMD_{char:02X} '
-                    elif char == 0xDB: # Minigame points
+                    elif char == 0xD7:
+                        self.decodedText += f'CMD_STRAY_FAIRIES_LEFT_WOODFALL '
+                    elif char == 0xD8:
+                        self.decodedText += f'CMD_STRAY_FAIRIES_LEFT_SNOWHEAD '
+                    elif char == 0xD9:
+                        self.decodedText += f'CMD_STRAY_FAIRIES_LEFT_GREAT_BAY '
+                    elif char == 0xDA:
+                        self.decodedText += f'CMD_STRAY_FAIRIES_LEFT_STONE_TOWER '
+                    elif char == 0xDB:
                         self.decodedText += f'CMD_DB '
-                    elif char == 0xDC: # Lottery Code
-                        self.decodedText += f'CMD_DC '
-                    elif char == 0xDD: # Lottery Code Guess
-                        self.decodedText += f'CMD_DD '
-                    elif char == 0xDE: # Item Price
-                        self.decodedText += f'CMD_DE '
-                    elif char == 0xDF: # Actual Bomber's Code
+                    elif char == 0xDC:
+                        self.decodedText += f'CMD_LOTTERY_CODE '
+                    elif char == 0xDD:
+                        self.decodedText += f'CMD_LOTTERY_CODE_GUESS '
+                    elif char == 0xDE:
+                        self.decodedText += f'CMD_HELD_ITEM_PRICE '
+                    elif char == 0xDF:
                         self.decodedText += f'CMD_DF '
-                    elif char == 0xE0: # End Conversation
+                    elif char == 0xE0:
                         self.decodedText += f'CMD_E0 '
-                    elif char >= 0xE1 and char <= 0xE6: # Single Spider Mask Order
-                        self.decodedText += f'CMD_{char:02X} '
-                    elif char == 0xE7: # Hours to moon crash
-                        self.decodedText += f'CMD_E7 '
-                    elif char == 0xE8: # Time to New Day
-                        self.decodedText += f'CMD_E8 '
-                    elif char >= 0xE9 and char <= 0xEF: # Nothing
+                    elif char >= 0xE1 and char <= 0xE6:
+                        self.decodedText += f'CMD_SPIDER_HOUSE_MASK_CODE_{char - 0xE1 + 1} '
+                    elif char == 0xE7:
+                        self.decodedText += f'CMD_HOURS_UNTIL_MOON_CRASH '
+                    elif char == 0xE8:
+                        self.decodedText += f'CMD_TIME_UNTIL_NEW_DAY '
+                    elif char >= 0xE9 and char <= 0xEF:
                         print(f"Error [\\x{char:02X}] is not a valid command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}] '
-                    elif char >= 0xF0 and char <= 0xF2: # High Score points 10s
+                    elif char >= 0xF0 and char <= 0xF2:
                         self.decodedText += f'CMD_{char:02X} '
-                    elif char >= 0xF3 and char <= 0xF5: # High Score points 60s
+                    elif char >= 0xF3 and char <= 0xF5:
                         self.decodedText += f'CMD_{char:02X} '
-                    elif char == 0xF6: # Town Shooting Gallery High Score
-                        self.decodedText += f'CMD_F6 '
-                    elif char == 0xF7: # High Score points timers
-                        self.decodedText += f'CMD_F7 '
-                    elif char == 0xF8: # High Score points 10s
-                        self.decodedText += f'CMD_F8 '
-                    elif char >= 0xF9 and char <= 0xFC: # High Score timers
-                        self.decodedText += f'CMD_{char:02X} '
-                    elif char >= 0xFD and char <= 0xFF: # Deku Playground Name
-                        self.decodedText += f'CMD_{char:02X} '
-                    else: # Other control codes
+                    elif char == 0xF6:
+                        self.decodedText += f'CMD_HS_TOWN_SHOOTING_GALLERY '
+                    elif char == 0xF7:
+                        self.decodedText += f'CMD_HS_UNK_1 '
+                    elif char == 0xF8:
+                        self.decodedText += f'CMD_HS_UNK_3_LOWER '
+                    elif char == 0xF9:
+                        self.decodedText += f'CMD_HS_HORSE_BACK_BALLOON '
+                    elif char >= 0xFA and char <= 0xFC:
+                        self.decodedText += f'CMD_HS_DEKU_PLAYGROUND_DAY_{char - 0xFA + 1} '
+                    elif char >= 0xFD and char <= 0xFF:
+                        self.decodedText += f'CMD_DEKU_PLAYGROUND_NAME_DAY_{char - 0xFD + 1} '
+                    else:
                         print(f"Error Unknown [\\x{char:02X}] command", file=sys.stderr)
                         self.decodedText += f'[\\x{char:02X}] '
 

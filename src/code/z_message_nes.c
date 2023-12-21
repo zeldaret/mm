@@ -191,7 +191,7 @@ void Message_LoadTimeNES(PlayState* play, u8 curChar, s32* offset, f32* arg3, s1
     f32 timeLeftInMinutes;
     s16 i;
 
-    if (curChar == MESSAGE_CF) {
+    if (curChar == MESSAGE_TIME_UNTIL_MOON_CRASH) {
         timeLeft = TIME_UNTIL_MOON_CRASH;
     } else {
         timeLeft = TIME_UNTIL_NEW_DAY;
@@ -579,7 +579,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 *gfxP = gfx;
                 return;
 
-            case MESSAGE_1C:
+            case MESSAGE_FADE:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     if (msgCtx->unk11F0C == 3) {
@@ -625,7 +625,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 i += 2;
                 break;
 
-            case MESSAGE_1F:
+            case MESSAGE_DELAY:
                 if (((i + 1) == msgCtx->textDrawPos) && (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING)) {
                     msgCtx->msgMode = MSGMODE_9;
                     stateTimerHi = msgCtx->decodedBuffer.schar[i + 1] << 8;
@@ -706,9 +706,9 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->stateTimer = 4;
                     Font_LoadMessageBoxEndIcon(font, 2);
                     if (msgCtx->unk120D8 != 3) {
-                        msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 0xE);
-                        msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 0x1A);
-                        msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 0x26);
+                        msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 14);
+                        msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 26);
+                        msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 38);
                     }
                 }
                 break;
@@ -721,9 +721,9 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->stateTimer = 4;
                     Font_LoadMessageBoxEndIcon(font, 2);
                     if (msgCtx->unk120D8 != 3) {
-                        msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 0xE);
-                        msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 0x1A);
-                        msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 0x26);
+                        msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 14);
+                        msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 26);
+                        msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 38);
                     }
                 }
                 break;
@@ -761,7 +761,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 }
                 break;
 
-            case MESSAGE_D5:
+            case MESSAGE_LOTTERY_CODE_INPUT:
                 msgCtx->textboxEndType = TEXTBOX_ENDTYPE_63;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
@@ -924,17 +924,17 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
     *gfxP = gfx;
 }
 
-char D_801D08D8[][4] = {
+char sTimeSpeedTextENG[][4] = {
     "Fast",
     "----",
     "Slow",
 };
 
-u8 D_801D08E4[] = {
-    0x01,
-    0x03,
-    0x04,
-    0x02,
+u8 sMaskCodeColorCmdENG[] = {
+    MESSAGE_COLOR_1,
+    MESSAGE_COLOR_3,
+    MESSAGE_COLOR_4,
+    MESSAGE_COLOR_2,
 };
 
 #define RED_STR "RED"
@@ -992,7 +992,7 @@ void Message_DecodeNES(PlayState* play) {
         msgCtx->decodedBuffer.schar[decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos];
 
         if ((curChar == MESSAGE_BOX_BREAK) || (curChar == MESSAGE_BOX_BREAK2) ||
-            (curChar == MESSAGE_BOX_BREAK_DELAYED) || (curChar == MESSAGE_1C) || (curChar == MESSAGE_1D) ||
+            (curChar == MESSAGE_BOX_BREAK_DELAYED) || (curChar == MESSAGE_FADE) || (curChar == MESSAGE_1D) ||
             (curChar == MESSAGE_EVENT) || (curChar == MESSAGE_E0) || (curChar == MESSAGE_END) ||
             (curChar == MESSAGE_15) || (curChar == MESSAGE_PERSISTENT)) {
             msgCtx->msgMode = MSGMODE_TEXT_DISPLAYING;
@@ -1034,7 +1034,7 @@ void Message_DecodeNES(PlayState* play) {
             {
                 s8 requiredScopeTemp;
 
-                if ((curChar == MESSAGE_BOX_BREAK_DELAYED) || (curChar == MESSAGE_1C) || (curChar == MESSAGE_1D)) {
+                if ((curChar == MESSAGE_BOX_BREAK_DELAYED) || (curChar == MESSAGE_FADE) || (curChar == MESSAGE_1D)) {
                     //! FAKE: & 0xFFFF to fix regalloc
                     msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[(msgCtx->msgBufPos & 0xFFFF) + 1];
                     msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos + 2];
@@ -1104,9 +1104,9 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == MESSAGE_THREE_CHOICE) {
             msgCtx->unk11F18 = 0;
             msgCtx->choiceNum = 3;
-            msgCtx->unk11FF8 += 0x16;
-        } else if (curChar == MESSAGE_C4) {
-            Message_GetTimerDigitsNES(((void)0, gSaveContext.timerCurTimes[curChar - MESSAGE_C4]), spA8);
+            msgCtx->unk11FF8 += 22;
+        } else if (curChar == MESSAGE_TIMER_POSTMAN) {
+            Message_GetTimerDigitsNES(((void)0, gSaveContext.timerCurTimes[curChar - MESSAGE_TIMER_POSTMAN]), spA8);
 
             loadChar = false;
             for (i = 0; i < 5; i++) {
@@ -1119,9 +1119,10 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             decodedBufPos--;
-        } else if ((curChar == MESSAGE_C5) || (curChar == MESSAGE_C6) || (curChar == MESSAGE_C7) ||
-                   (curChar == MESSAGE_C8) || (curChar == MESSAGE_C9)) {
-            Message_GetTimerDigitsNES(((void)0, gSaveContext.timerCurTimes[curChar - MESSAGE_C4]), spA8);
+        } else if ((curChar == MESSAGE_TIMER_MINIGAME_1) || (curChar == MESSAGE_TIMER_2) ||
+                   (curChar == MESSAGE_TIMER_MOON_CRASH) || (curChar == MESSAGE_TIMER_MINIGAME_2) ||
+                   (curChar == MESSAGE_TIMER_ENV_HAZARD)) {
+            Message_GetTimerDigitsNES(((void)0, gSaveContext.timerCurTimes[curChar - MESSAGE_TIMER_POSTMAN]), spA8);
 
             loadChar = false;
             for (i = 0; i < 8; i++) {
@@ -1134,7 +1135,7 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             decodedBufPos--;
-        } else if (curChar == MESSAGE_CA) {
+        } else if (curChar == MESSAGE_TIME) {
             digits[0] = 0;
             digits[1] = TIME_TO_MINUTES_F(CURRENT_TIME) / 60.0f;
             while (digits[1] >= 10) {
@@ -1166,7 +1167,7 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             spA4 += 6 * (16.0f * msgCtx->textCharScale);
-        } else if (curChar == MESSAGE_CB) {
+        } else if (curChar == MESSAGE_CHEST_FLAGS) {
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = Flags_GetAllTreasure(play);
 
@@ -1264,9 +1265,9 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             Message_LoadRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4, msgCtx->bankRupees);
-        } else if (curChar == MESSAGE_CF) {
+        } else if (curChar == MESSAGE_TIME_UNTIL_MOON_CRASH) {
             Message_LoadTimeNES(play, curChar, &charTexIndex, &spA4, &decodedBufPos);
-        } else if (curChar == MESSAGE_0C) {
+        } else if (curChar == MESSAGE_STRAY_FAIRIES) {
             digits[0] = digits[1] = 0;
             digits[2] = gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
 
@@ -1310,7 +1311,7 @@ void Message_DecodeNES(PlayState* play) {
                 decodedBufPos++;
                 Message_LoadCharNES(play, 'h', &charTexIndex, &spA4, decodedBufPos);
             }
-        } else if (curChar == MESSAGE_0D) {
+        } else if (curChar == MESSAGE_TOKENS) {
             digits[0] = digits[1] = 0;
             digits[2] = Inventory_GetSkullTokenCount(play->sceneId);
 
@@ -1426,7 +1427,7 @@ void Message_DecodeNES(PlayState* play) {
                 decodedBufPos++;
             }
             decodedBufPos--;
-        } else if (curChar == MESSAGE_D3) {
+        } else if (curChar == MESSAGE_TIME_SPEED) {
             if (((void)0, gSaveContext.save.timeSpeedOffset) == 18) {
                 index = 0;
             } else if (((void)0, gSaveContext.save.timeSpeedOffset) == 0) {
@@ -1436,16 +1437,16 @@ void Message_DecodeNES(PlayState* play) {
             }
 
             for (i = 0; i < 4; i++, decodedBufPos++) {
-                msgCtx->decodedBuffer.schar[decodedBufPos] = D_801D08D8[index][i];
-                Font_LoadCharNES(play, D_801D08D8[index][i], charTexIndex);
+                msgCtx->decodedBuffer.schar[decodedBufPos] = sTimeSpeedTextENG[index][i];
+                Font_LoadCharNES(play, sTimeSpeedTextENG[index][i], charTexIndex);
                 charTexIndex += FONT_CHAR_TEX_SIZE;
             }
             decodedBufPos--;
             spA4 += 3.0f * (16.0f * msgCtx->textCharScale);
             msgCtx->choiceIndex = index;
-        } else if (curChar == MESSAGE_D4) {
+        } else if (curChar == MESSAGE_OWL_WARP) {
             Message_LoadOwlWarpTextNES(play, &charTexIndex, &spA4, &decodedBufPos);
-        } else if (curChar == MESSAGE_D5) {
+        } else if (curChar == MESSAGE_LOTTERY_CODE_INPUT) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
             msgCtx->unk120C0 = decodedBufPos;
@@ -1465,16 +1466,18 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == MESSAGE_D6) {
             for (i = 0; i < 6; i++) {
                 msgCtx->decodedBuffer.schar[decodedBufPos] =
-                    D_801D08E4[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[i])];
+                    sMaskCodeColorCmdENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[i])];
                 decodedBufPos++;
                 Message_LoadCharNES(play, i + '1', &charTexIndex, &spA4, decodedBufPos);
                 decodedBufPos++;
             }
-            msgCtx->decodedBuffer.schar[decodedBufPos] = 0;
-        } else if ((curChar >= MESSAGE_D7) && (curChar <= MESSAGE_DA)) {
+            msgCtx->decodedBuffer.schar[decodedBufPos] = MESSAGE_COLOR_0;
+        } else if ((curChar >= MESSAGE_STRAY_FAIRIES_LEFT_WOODFALL) &&
+                   (curChar <= MESSAGE_STRAY_FAIRIES_LEFT_STONE_TOWER)) {
             digits[0] = digits[1] = 0;
             digits[2] =
-                STRAY_FAIRY_SCATTERED_TOTAL - gSaveContext.save.saveInfo.inventory.strayFairies[curChar - MESSAGE_D7];
+                STRAY_FAIRY_SCATTERED_TOTAL -
+                gSaveContext.save.saveInfo.inventory.strayFairies[curChar - MESSAGE_STRAY_FAIRIES_LEFT_WOODFALL];
 
             while (digits[2] >= 100) {
                 digits[0]++;
@@ -1529,8 +1532,8 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             decodedBufPos--;
-        } else if ((curChar == MESSAGE_DC) || (curChar == MESSAGE_DD)) {
-            if (curChar == MESSAGE_DC) {
+        } else if ((curChar == MESSAGE_LOTTERY_CODE) || (curChar == MESSAGE_LOTTERY_CODE_GUESS)) {
+            if (curChar == MESSAGE_LOTTERY_CODE) {
                 digits[0] = gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][0];
                 digits[1] = gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][1];
                 digits[2] = gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][2];
@@ -1548,7 +1551,7 @@ void Message_DecodeNES(PlayState* play) {
                 spA4 += 16.0f * msgCtx->textCharScale;
             }
             decodedBufPos--;
-        } else if (curChar == MESSAGE_DE) {
+        } else if (curChar == MESSAGE_HELD_ITEM_PRICE) {
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = gItemPrices[GET_CUR_FORM_BTN_ITEM(player->heldItemButton)];
 
@@ -1589,21 +1592,22 @@ void Message_DecodeNES(PlayState* play) {
                 spA4 += 16.0f * msgCtx->textCharScale;
             }
             decodedBufPos--;
-        } else if ((curChar >= MESSAGE_E1) && (curChar <= MESSAGE_E6)) {
+        } else if ((curChar >= MESSAGE_SPIDER_HOUSE_MASK_CODE_1) && (curChar <= MESSAGE_SPIDER_HOUSE_MASK_CODE_6)) {
             msgCtx->decodedBuffer.schar[decodedBufPos++] =
-                D_801D08E4[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - MESSAGE_E1)])];
-            index = sMaskCodeTextLengthENG[(
-                (void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - MESSAGE_E1)])];
+                sMaskCodeColorCmdENG[((void)0, gSaveContext.save.saveInfo
+                                         .spiderHouseMaskOrder[(s16)(curChar - MESSAGE_SPIDER_HOUSE_MASK_CODE_1)])];
+            index = sMaskCodeTextLengthENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(
+                                                         s16)(curChar - MESSAGE_SPIDER_HOUSE_MASK_CODE_1)])];
             for (playerNameLen = 0; playerNameLen < index; playerNameLen++, decodedBufPos++) {
                 Message_LoadCharNES(
                     play,
-                    sMaskCodeTextENG[((void)0, gSaveContext.save.saveInfo
-                                                   .spiderHouseMaskOrder[(s16)(curChar - MESSAGE_E1)])][playerNameLen],
+                    sMaskCodeTextENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(
+                                                   s16)(curChar - MESSAGE_SPIDER_HOUSE_MASK_CODE_1)])][playerNameLen],
                     &charTexIndex, &spA4, decodedBufPos);
             }
 
             msgCtx->decodedBuffer.schar[decodedBufPos] = 0;
-        } else if (curChar == MESSAGE_E7) {
+        } else if (curChar == MESSAGE_HOURS_UNTIL_MOON_CRASH) {
             timeToMoonCrash = TIME_UNTIL_MOON_CRASH;
             digits[0] = 0;
             digits[1] = TIME_TO_HOURS_F_ALT(timeToMoonCrash);
@@ -1636,12 +1640,11 @@ void Message_DecodeNES(PlayState* play) {
                 decodedBufPos++;
                 Message_LoadCharNES(play, 's', &charTexIndex, &spA4, decodedBufPos);
             }
-        } else if (curChar == MESSAGE_E8) {
+        } else if (curChar == MESSAGE_TIME_UNTIL_NEW_DAY) {
             Message_LoadTimeNES(play, curChar, &charTexIndex, &spA4, &decodedBufPos);
-
         } else if ((curChar == MESSAGE_F0) || (curChar == MESSAGE_F1) || (curChar == MESSAGE_F2) ||
-                   (curChar == MESSAGE_F8)) {
-            if (curChar == MESSAGE_F8) {
+                   (curChar == MESSAGE_HS_UNK_3_LOWER)) {
+            if (curChar == MESSAGE_HS_UNK_3_LOWER) {
                 value = (s32)HS_GET_HIGH_SCORE_3_LOWER();
             } else {
                 value = HIGH_SCORE(curChar - MESSAGE_F0);
@@ -1683,16 +1686,19 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             decodedBufPos--;
-        } else if ((curChar == MESSAGE_F7) || (curChar == MESSAGE_F9) || (curChar == MESSAGE_FA) ||
-                   (curChar == MESSAGE_FB) || (curChar == MESSAGE_FC)) {
+        } else if ((curChar == MESSAGE_HS_UNK_1) || (curChar == MESSAGE_HS_HORSE_BACK_BALLOON) ||
+                   (curChar == MESSAGE_HS_DEKU_PLAYGROUND_DAY_1) || (curChar == MESSAGE_HS_DEKU_PLAYGROUND_DAY_2) ||
+                   (curChar == MESSAGE_HS_DEKU_PLAYGROUND_DAY_3)) {
             var_fs0 = 8.0f;
-            if (curChar == MESSAGE_F7) {
+            if (curChar == MESSAGE_HS_UNK_1) {
                 Message_GetTimerDigitsNES(GET_HIGH_SCORE(HS_UNK_1), spA8);
-            } else if (curChar == MESSAGE_F9) {
+            } else if (curChar == MESSAGE_HS_HORSE_BACK_BALLOON) {
                 Message_GetTimerDigitsNES(GET_HIGH_SCORE(HS_HORSE_BACK_BALLOON), spA8);
             } else {
                 Message_GetTimerDigitsNES(
-                    ((void)0, gSaveContext.save.saveInfo.dekuPlaygroundHighScores[curChar - MESSAGE_FA]), spA8);
+                    ((void)0,
+                     gSaveContext.save.saveInfo.dekuPlaygroundHighScores[curChar - MESSAGE_HS_DEKU_PLAYGROUND_DAY_1]),
+                    spA8);
             }
 
             loadChar = false;
@@ -1746,7 +1752,7 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             spA4 += 4.0f * (16.0f * msgCtx->textCharScale);
-        } else if (curChar == MESSAGE_F6) {
+        } else if (curChar == MESSAGE_HS_TOWN_SHOOTING_GALLERY) {
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = HS_GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE();
 
@@ -1777,8 +1783,9 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             decodedBufPos--;
-        } else if ((curChar == MESSAGE_FD) || (curChar == MESSAGE_FE) || (curChar == MESSAGE_FF)) {
-            index = curChar - MESSAGE_FD;
+        } else if ((curChar == MESSAGE_DEKU_PLAYGROUND_NAME_DAY_1) || (curChar == MESSAGE_DEKU_PLAYGROUND_NAME_DAY_2) ||
+                   (curChar == MESSAGE_DEKU_PLAYGROUND_NAME_DAY_3)) {
+            index = curChar - MESSAGE_DEKU_PLAYGROUND_NAME_DAY_1;
             for (playerNameLen = 8; playerNameLen > 0; playerNameLen--) {
                 if (((void)0,
                      gSaveContext.save.saveInfo.inventory.dekuPlaygroundPlayerName[index][playerNameLen - 1]) != 0x3E) {
@@ -1801,7 +1808,7 @@ void Message_DecodeNES(PlayState* play) {
             }
             decodedBufPos += playerNameLen - 1;
             spA4 += playerNameLen * (16.0f * msgCtx->textCharScale);
-        } else if (curChar == MESSAGE_0B) {
+        } else if (curChar == MESSAGE_HS_BOAT_ARCHERY) {
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = HS_GET_BOAT_ARCHERY_HIGH_SCORE();
 
@@ -1853,8 +1860,8 @@ void Message_DecodeNES(PlayState* play) {
                    (curChar == MESSAGE_PERSISTENT)) {
             // pass
         } else if (curChar == MESSAGE_0A) {
-            decodedBufPos++;
-        } else if (curChar == MESSAGE_1C) {
+            decodedBufPos++; // Next decoded char is a 0
+        } else if (curChar == MESSAGE_FADE) {
             msgCtx->textFade = true;
             msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[++msgCtx->msgBufPos] & 0xFF;
             msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[++msgCtx->msgBufPos] & 0xFF;
@@ -1869,7 +1876,7 @@ void Message_DecodeNES(PlayState* play) {
                 sfxHi |= msgCtx->decodedBuffer.schar[decodedBufPos];
                 Audio_PlaySfx(sfxHi);
             }
-        } else if (curChar == MESSAGE_1F) {
+        } else if (curChar == MESSAGE_DELAY) {
             msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[++msgCtx->msgBufPos];
             msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[++msgCtx->msgBufPos];
         } else if ((curChar != ' ') && (curChar >= 9)) {
