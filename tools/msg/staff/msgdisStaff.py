@@ -23,7 +23,6 @@ class MessageCredits:
         3: "HS_BOAT_ARCHERY",
         4: "HS_HORSE_BACK_BALLOON",
         6: "HS_SHOOTING_GALLERY"
-
     }
 
     def __init__(self, id, typePos, addr, text):
@@ -177,8 +176,11 @@ def parseTable(start):
 
     return table
 
+STAFF_MESSAGE_TABLE_ADDR = 0x12A048 # Location of Staff message table in baserom/code
+STAFF_SEGMENT_ADDR = 0x07000000
+
 def main(outfile):
-    msgTable = parseTable(0x12A048) # Location of Staff message table in baserom/code
+    msgTable = parseTable(STAFF_MESSAGE_TABLE_ADDR)
 
     buf = []
     with open("baserom/staff_message_data_static", "rb") as f:
@@ -188,7 +190,7 @@ def main(outfile):
     i = 0
     messages = []
     while i < bufLen:
-        addr = 0x07000000 + i
+        addr = STAFF_SEGMENT_ADDR + i
 
         start = i
         while i < bufLen and buf[i] != 0x2:
@@ -202,7 +204,7 @@ def main(outfile):
         msg = MessageCredits(id, typePos, segment, buf[start:i])
         messages.append(msg)
 
-        i = (i + 3) & ~0x3
+        i = (i + 3) & ~0x3 # Next message starts on a 0x4 byte boundary
 
     if outfile is None:
         for msg in messages:

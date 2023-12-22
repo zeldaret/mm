@@ -120,7 +120,7 @@ def main():
 
     asset_path = args.single
     if asset_path is not None:
-        if "text" in asset_path:
+        if "text/" in asset_path:
             from tools.msg.nes import msgdisNES
             print("Extracting message_data")
             msgdisNES.main(extract_text_path)

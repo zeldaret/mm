@@ -40,6 +40,21 @@ class MessageHeaderNES:
 
 
 class MessageNES:
+    BUTTONMAP = {
+        0xB0: '[A]',
+        0xB1: '[B]',
+        0xB2: '[C]',
+        0xB3: '[L]',
+        0xB4: '[R]',
+        0xB5: '[Z]',
+        0xB6: '[C-Up]',
+        0xB7: '[C-Down]',
+        0xB8: '[C-Left]',
+        0xB9: '[C-Right]',
+        0xBA: '▼',
+        0xBB: '[Control-Pad]'
+    }
+
     def __init__(self, id, typePos, addr, hdr, text):
         self.id = id
         self.typePos = typePos
@@ -66,20 +81,6 @@ class MessageNES:
         )
 
     def decode(self):
-        ButtonMap = {
-            0xB0: '[A]',
-            0xB1: '[B]',
-            0xB2: '[C]',
-            0xB3: '[L]',
-            0xB4: '[R]',
-            0xB5: '[Z]',
-            0xB6: '[C-Up]',
-            0xB7: '[C-Down]',
-            0xB8: '[C-Left]',
-            0xB9: '[C-Right]',
-            0xBA: '▼',
-            0xBB: '[Control-Pad]'
-        }
         if self.decodedText == "":
             prevText = False
             prevNewline = False
@@ -95,7 +96,7 @@ class MessageNES:
                     if char == 0x22: # Handle escaping "
                         self.decodedText += '\\"'
                     elif char >= 0xB0: # Button characters
-                        self.decodedText += f'{ButtonMap[char]}'
+                        self.decodedText += f'{MessageNES.BUTTONMAP[char]}'
                     else:
                         self.decodedText += chr(char)
 
@@ -298,8 +299,11 @@ def parseTable(start):
 
     return table
 
+NES_MESSAGE_TABLE_ADDR = 0x1210D8 # Location of NES message table in baserom/code
+NES_SEGMENT_ADDR = 0x08000000
+
 def main(outfile):
-    msgTable = parseTable(0x1210D8) # Location of NES message table in baserom/code
+    msgTable = parseTable(NES_MESSAGE_TABLE_ADDR)
 
     buf = []
     with open("baserom/message_data_static", "rb") as f:
@@ -308,8 +312,8 @@ def main(outfile):
     bufLen = len(buf)
     i = 0
     messages = []
-    while i < bufLen:
-        addr = 0x08000000 + i
+    while i + 12 < bufLen: # Next message must be able to fill a header + 1 at minimum
+        addr = NES_SEGMENT_ADDR + i
 
         unk11F08, itemId, nextTextId, unk1206C, unk12070, unk12074 = struct.unpack(">HBHHHH", buf[i:i+11])
         i += 11
@@ -328,7 +332,7 @@ def main(outfile):
 
         messages.append(msg)
 
-        i = (i + 3) & ~0x3
+        i = (i + 3) & ~0x3 # Next message starts on a 0x4 byte boundary
 
     if outfile is None:
         for msg in messages:
