@@ -14,21 +14,21 @@ struct BossHakugin;
 typedef void (*BossHakuginActionFunc)(struct BossHakugin*, PlayState*);
 
 
-typedef enum GohtRockType {
-    /* 0 */ GOHT_ROCK_TYPE_BOULDER,
-    /* 1 */ GOHT_ROCK_TYPE_STALACTITE
-} GohtRockType;
+typedef enum GohtRockEffectType {
+    /* 0 */ GOHT_ROCK_EFFECT_TYPE_BOULDER,
+    /* 1 */ GOHT_ROCK_EFFECT_TYPE_STALACTITE
+} GohtRockEffectType;
 
-typedef struct GohtRock {
+typedef struct GohtRockEffect {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;
     /* 0x18 */ s16 timer;
-    /* 0x1A */ s16 type; // See GohtRockType
+    /* 0x1A */ s16 type; // See GohtRockEffectType
     /* 0x1C */ Vec3s rot;
     /* 0x24 */ f32 scale;
-} GohtRock; // size = 0x28
+} GohtRockEffect; // size = 0x28
 
-#define GOHT_ROCK_COUNT 180
+#define GOHT_ROCK_EFFECT_COUNT 180
 
 typedef struct GohtLightningSegment {
     /* 0x00 */ Vec3f pos;
@@ -148,9 +148,9 @@ typedef struct BossHakugin {
     /* 0x0484 */ ColliderJntSph bodyCollider;
     /* 0x04A4 */ ColliderJntSphElement bodyColliderElements[GOHT_COLLIDER_BODYPART_MAX];
     /* 0x0964 */ ColliderCylinder iceCollider;
-    /* 0x09B0 */ Actor* hakurockBoulders[8];
-    /* 0x09D0 */ Actor* unk_09D0[10];
-    /* 0x09F8 */ GohtRock rocks[GOHT_ROCK_COUNT];
+    /* 0x09B0 */ Actor* boulders[8];
+    /* 0x09D0 */ Actor* stalactites[10];
+    /* 0x09F8 */ GohtRockEffect rockEffects[GOHT_ROCK_EFFECT_COUNT];
     /* 0x2618 */ GohtLightningSegment lightningSegments[GOHT_LIGHTNING_SEGMENT_COUNT]; // A chain of lightning used as an attack
     /* 0x3158 */ GohtMalfunctionEffect malfunctionEffects[GOHT_MALFUNCTION_NUM_TYPES][GOHT_BODYPART_MAX]; // Black smoke and electric zaps on body parts as damage accumulates 
     /* 0x3734 */ Vec3f unk_3734[10];

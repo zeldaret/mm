@@ -521,20 +521,20 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->hakurockBoulders); i++) {
+    for (i = 0; i < ARRAY_COUNT(this->boulders); i++) {
         //! FAKE:
-        actorPtr = &this->hakurockBoulders[i];
+        actorPtr = &this->boulders[i];
         *actorPtr = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_HAKUROCK, 0.0f, 0.0f, 0.0f, 0, 0,
                                        0, EN_HAKUROCK_TYPE_BOULDER);
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_09D0); i++) {
-        this->unk_09D0[i] = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_HAKUROCK, 0.0f, 0.0f, 0.0f,
-                                               0, 0, 0, EN_HAKUROCK_TYPE_FALLING_STALACTITE);
+    for (i = 0; i < ARRAY_COUNT(this->stalactites); i++) {
+        this->stalactites[i] = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_HAKUROCK, 0.0f, 0.0f,
+                                                  0.0f, 0, 0, 0, EN_HAKUROCK_TYPE_FALLING_STALACTITE);
     }
 
-    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
-        this->rocks[i].timer = -1;
+    for (i = 0; i < GOHT_ROCK_EFFECT_COUNT; i++) {
+        this->rockEffects[i].timer = -1;
     }
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -623,7 +623,7 @@ void func_80B057A4(Vec3f* arg0, Vec3f* arg1, f32 arg2) {
 void func_80B058C0(BossHakugin* this) {
     s32 i = 0;
     Actor* last;
-    Actor* now = this->unk_09D0[i++];
+    Actor* now = this->stalactites[i++];
 
     now->params = EN_HAKUROCK_TYPE_LARGE_STALACTITE;
     now->world.pos.x = -500.0f;
@@ -633,7 +633,7 @@ void func_80B058C0(BossHakugin* this) {
 
     while (i < 6) {
         last = now;
-        now = this->unk_09D0[i++];
+        now = this->stalactites[i++];
 
         now->params = EN_HAKUROCK_TYPE_LARGE_STALACTITE;
         now->world.pos.x = last->world.pos.x;
@@ -642,9 +642,9 @@ void func_80B058C0(BossHakugin* this) {
         now->shape.rot.y = last->shape.rot.y;
     }
 
-    while (i < ARRAY_COUNT(this->unk_09D0)) {
-        last = (i < 8) ? this->unk_09D0[i - 6] : this->unk_09D0[i - 4];
-        now = this->unk_09D0[i++];
+    while (i < ARRAY_COUNT(this->stalactites)) {
+        last = (i < 8) ? this->stalactites[i - 6] : this->stalactites[i - 4];
+        now = this->stalactites[i++];
 
         now->params = EN_HAKUROCK_TYPE_LARGE_STALACTITE;
         now->world.pos.x = this->actor.world.pos.x;
@@ -903,26 +903,26 @@ void BossHakugin_AddLightningSegment(BossHakugin* this, Vec3f* arg1, PlayState* 
 
 void func_80B0696C(BossHakugin* this, Vec3f* pos) {
     s32 i;
-    GohtRock* rock;
+    GohtRockEffect* rockEffect;
 
-    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
-        rock = &this->rocks[i];
-        if (rock->timer < 0) {
+    for (i = 0; i < GOHT_ROCK_EFFECT_COUNT; i++) {
+        rockEffect = &this->rockEffects[i];
+        if (rockEffect->timer < 0) {
             VecGeo velocityGeo;
 
-            Math_Vec3f_Copy(&rock->pos, pos);
+            Math_Vec3f_Copy(&rockEffect->pos, pos);
             velocityGeo.pitch = Rand_S16Offset(0x1000, 0x3000);
             velocityGeo.yaw = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x12) + 0x8000;
             velocityGeo.r = Rand_ZeroFloat(5.0f) + 7.0f;
-            rock->velocity.x = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_SinS(velocityGeo.yaw);
-            rock->velocity.y = velocityGeo.r * Math_SinS(velocityGeo.pitch);
-            rock->velocity.z = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_CosS(velocityGeo.yaw);
-            rock->pos.x = pos->x + (Rand_ZeroFloat(3.0f) * rock->velocity.x);
-            rock->pos.y = pos->y + (Rand_ZeroFloat(3.0f) * rock->velocity.y);
-            rock->pos.z = pos->z + (Rand_ZeroFloat(3.0f) * rock->velocity.z);
-            rock->scale = (Rand_ZeroFloat(6.0f) + 15.0f) * 0.0001f;
-            rock->timer = 40;
-            rock->type = GOHT_ROCK_TYPE_BOULDER;
+            rockEffect->velocity.x = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_SinS(velocityGeo.yaw);
+            rockEffect->velocity.y = velocityGeo.r * Math_SinS(velocityGeo.pitch);
+            rockEffect->velocity.z = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_CosS(velocityGeo.yaw);
+            rockEffect->pos.x = pos->x + (Rand_ZeroFloat(3.0f) * rockEffect->velocity.x);
+            rockEffect->pos.y = pos->y + (Rand_ZeroFloat(3.0f) * rockEffect->velocity.y);
+            rockEffect->pos.z = pos->z + (Rand_ZeroFloat(3.0f) * rockEffect->velocity.z);
+            rockEffect->scale = (Rand_ZeroFloat(6.0f) + 15.0f) * 0.0001f;
+            rockEffect->timer = 40;
+            rockEffect->type = GOHT_ROCK_EFFECT_TYPE_BOULDER;
             break;
         }
     }
@@ -942,8 +942,8 @@ void BossHakugin_SpawnBoulder(BossHakugin* this, Vec3f* pos) {
         return;
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->hakurockBoulders); i++) {
-        boulder = this->hakurockBoulders[i];
+    for (i = 0; i < ARRAY_COUNT(this->boulders); i++) {
+        boulder = this->boulders[i];
 
         if (EN_HAKUROCK_GET_TYPE(boulder) == EN_HAKUROCK_TYPE_NONE) {
             Math_Vec3f_Copy(&boulder->world.pos, pos);
@@ -966,8 +966,8 @@ void BossHakugin_SpawnStalactite(BossHakugin* this) {
         return;
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_09D0); i++) {
-        stalactite = this->unk_09D0[i];
+    for (i = 0; i < ARRAY_COUNT(this->stalactites); i++) {
+        stalactite = this->stalactites[i];
 
         if (EN_HAKUROCK_GET_TYPE(stalactite) == EN_HAKUROCK_TYPE_NONE) {
             stalactite->params = EN_HAKUROCK_TYPE_FALLING_STALACTITE;
@@ -1486,8 +1486,8 @@ void BossHakugin_IntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
 
         if (Animation_OnFrame(&this->skelAnime, 90.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
-            for (i = 6; i < ARRAY_COUNT(this->unk_09D0); i++) {
-                this->unk_09D0[i]->params = EN_HAKUROCK_TYPE_NONE;
+            for (i = 6; i < ARRAY_COUNT(this->stalactites); i++) {
+                this->stalactites[i]->params = EN_HAKUROCK_TYPE_NONE;
             }
         }
 
@@ -1560,7 +1560,7 @@ void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
         if (this->unk_019C == 42) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_WALL);
             for (i = 0; i < 6; i++) {
-                this->unk_09D0[i]->params = EN_HAKUROCK_TYPE_NONE;
+                this->stalactites[i]->params = EN_HAKUROCK_TYPE_NONE;
             }
         }
     }
@@ -2190,7 +2190,7 @@ void BossHakugin_Dead(BossHakugin* this, PlayState* play) {
         sp60 = (this->unk_019C + 3) / 6 - 1;
         if (sp60 < 4) {
             for (i = D_80B0EB24[sp60]; i < D_80B0EB24[sp60 + 1]; i++) {
-                this->rocks[i].velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
+                this->rockEffects[i].velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
             }
         }
         if (sp60 < 6) {
@@ -2346,36 +2346,36 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
 }
 
 void BossHakugin_UpdateRocks(BossHakugin* this) {
-    GohtRock* rock;
+    GohtRockEffect* rockEffect;
     s32 i;
 
-    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
-        rock = &this->rocks[i];
+    for (i = 0; i < GOHT_ROCK_EFFECT_COUNT; i++) {
+        rockEffect = &this->rockEffects[i];
 
-        if (rock->timer >= 0) {
-            rock->timer--;
-            rock->velocity.y += -1.0f;
-            Math_Vec3f_Sum(&rock->pos, &rock->velocity, &rock->pos);
-            if (rock->pos.y < -500.0f) {
-                rock->timer = -1;
+        if (rockEffect->timer >= 0) {
+            rockEffect->timer--;
+            rockEffect->velocity.y += -1.0f;
+            Math_Vec3f_Sum(&rockEffect->pos, &rockEffect->velocity, &rockEffect->pos);
+            if (rockEffect->pos.y < -500.0f) {
+                rockEffect->timer = -1;
             } else {
-                rock->rot.x += (s16)(0x700 + (Rand_Next() >> 0x17));
-                rock->rot.y += (s16)(0x900 + (Rand_Next() >> 0x17));
-                rock->rot.z += (s16)(0xB00 + (Rand_Next() >> 0x17));
+                rockEffect->rot.x += (s16)(0x700 + (Rand_Next() >> 0x17));
+                rockEffect->rot.y += (s16)(0x900 + (Rand_Next() >> 0x17));
+                rockEffect->rot.z += (s16)(0xB00 + (Rand_Next() >> 0x17));
             }
         }
     }
 }
 
 void BossHakugin_UpdateRocksDead(BossHakugin* this) {
-    GohtRock* rock;
+    GohtRockEffect* rockEffect;
     s32 i;
 
     for (i = 0; i < 36; i++) {
-        rock = &this->rocks[i];
-        Math_StepToF(&rock->pos.y, rock->velocity.x, rock->velocity.y);
-        if (rock->velocity.y > 0.0f) {
-            rock->velocity.y += 6.0f;
+        rockEffect = &this->rockEffects[i];
+        Math_StepToF(&rockEffect->pos.y, rockEffect->velocity.x, rockEffect->velocity.y);
+        if (rockEffect->velocity.y > 0.0f) {
+            rockEffect->velocity.y += 6.0f;
         }
     }
 }
@@ -2726,28 +2726,28 @@ void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void BossHakugin_DrawRocks(BossHakugin* this, PlayState* play) {
-    GohtRock* rock;
+    GohtRockEffect* rockEffect;
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPDisplayList(POLY_OPA_DISP++, gGohtRockMaterialDL);
-    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
-        rock = &this->rocks[i];
-        if ((rock->timer >= 0) && (rock->type == GOHT_ROCK_TYPE_BOULDER)) {
-            Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rot);
-            Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
+    for (i = 0; i < GOHT_ROCK_EFFECT_COUNT; i++) {
+        rockEffect = &this->rockEffects[i];
+        if ((rockEffect->timer >= 0) && (rockEffect->type == GOHT_ROCK_EFFECT_TYPE_BOULDER)) {
+            Matrix_SetTranslateRotateYXZ(rockEffect->pos.x, rockEffect->pos.y, rockEffect->pos.z, &rockEffect->rot);
+            Matrix_Scale(rockEffect->scale, rockEffect->scale, rockEffect->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gGohtRockModelDL);
         }
     }
 
     gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteMaterialDL);
-    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
-        rock = &this->rocks[i];
-        if ((rock->timer >= 0) && (rock->type == GOHT_ROCK_TYPE_STALACTITE)) {
-            Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rot);
-            Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
+    for (i = 0; i < GOHT_ROCK_EFFECT_COUNT; i++) {
+        rockEffect = &this->rockEffects[i];
+        if ((rockEffect->timer >= 0) && (rockEffect->type == GOHT_ROCK_EFFECT_TYPE_STALACTITE)) {
+            Matrix_SetTranslateRotateYXZ(rockEffect->pos.x, rockEffect->pos.y, rockEffect->pos.z, &rockEffect->rot);
+            Matrix_Scale(rockEffect->scale, rockEffect->scale, rockEffect->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteModelDL);
         }
@@ -3167,7 +3167,7 @@ void func_80B0D9CC(BossHakugin* this) {
     s32 i;
     Vec3f pos;
     s32 var_s1 = 15;
-    GohtRock* rock = this->rocks;
+    GohtRockEffect* rockEffect = this->rockEffects;
     s32 var_v1;
     s32 temp_a0;
     f32 spB4 = Math_SinS(this->actor.shape.rot.y) * 65.0f;
@@ -3188,63 +3188,63 @@ void func_80B0D9CC(BossHakugin* this) {
         pos.y = this->actor.world.pos.y + (85.0f * (4 - i)) + 20.0f;
         pos.z = this->actor.world.pos.z - (i * spB0) + temp5;
 
-        rock->scale = ((i * 4.5f) + 22.0f) * 0.001f;
-        Math_Vec3f_Copy(&rock->pos, &pos);
+        rockEffect->scale = ((i * 4.5f) + 22.0f) * 0.001f;
+        Math_Vec3f_Copy(&rockEffect->pos, &pos);
 
         temp_a0 = var_s1 >> 1;
         if (temp_a0 == 0) {
             break;
         }
-        rock++;
+        rockEffect++;
 
         temp1 = i / (f32)temp_a0;
         temp2 = (spB0 + spB4) * temp1;
         temp3 = (spB0 - spB4) * temp1;
 
-        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, rock++) {
-            rock->pos.x = pos.x + temp2 * (temp_a0 - var_v1);
-            rock->pos.y = pos.y + i * spAC;
-            rock->pos.z = pos.z + temp3 * (temp_a0 - var_v1);
-            rock->scale = ((i * 4.5f) + 22.0f) * 0.001f;
+        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, rockEffect++) {
+            rockEffect->pos.x = pos.x + temp2 * (temp_a0 - var_v1);
+            rockEffect->pos.y = pos.y + i * spAC;
+            rockEffect->pos.z = pos.z + temp3 * (temp_a0 - var_v1);
+            rockEffect->scale = ((i * 4.5f) + 22.0f) * 0.001f;
         }
 
         temp4 = (spB4 - spB0) * temp1;
         temp5 = (spB0 + spB4) * temp1;
 
-        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, rock++) {
-            rock->pos.x = pos.x + temp4 * (temp_a0 - var_v1);
-            rock->pos.y = pos.y - i * spAC;
-            rock->pos.z = pos.z + temp5 * (temp_a0 - var_v1);
-            rock->scale = ((i * 4.5f) + 22.0f) * 0.001f;
+        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, rockEffect++) {
+            rockEffect->pos.x = pos.x + temp4 * (temp_a0 - var_v1);
+            rockEffect->pos.y = pos.y - i * spAC;
+            rockEffect->pos.z = pos.z + temp5 * (temp_a0 - var_v1);
+            rockEffect->scale = ((i * 4.5f) + 22.0f) * 0.001f;
         }
     }
 
     for (i = 0; i < 36; i++) {
-        rock = &this->rocks[i];
+        rockEffect = &this->rockEffects[i];
 
-        rock->scale += Rand_ZeroFloat(5.0f) * 0.001f;
-        rock->rot.x = (s32)Rand_Next() >> 0x10;
-        rock->rot.y = (s32)Rand_Next() >> 0x10;
-        rock->rot.z = (s32)Rand_Next() >> 0x10;
-        rock->velocity.x = rock->pos.y;
-        rock->velocity.y = 0.0f;
-        rock->pos.y += 850.0f;
+        rockEffect->scale += Rand_ZeroFloat(5.0f) * 0.001f;
+        rockEffect->rot.x = (s32)Rand_Next() >> 0x10;
+        rockEffect->rot.y = (s32)Rand_Next() >> 0x10;
+        rockEffect->rot.z = (s32)Rand_Next() >> 0x10;
+        rockEffect->velocity.x = rockEffect->pos.y;
+        rockEffect->velocity.y = 0.0f;
+        rockEffect->pos.y += 850.0f;
     }
 }
 
 void func_80B0DFA8(BossHakugin* this) {
     s32 i;
-    GohtRock* rock;
+    GohtRockEffect* rockEffect;
     ColliderJntSphElement* element;
 
     for (i = 0; i < 36 / 2; i++) {
-        rock = &this->rocks[i << 1];
+        rockEffect = &this->rockEffects[i << 1];
         element = &this->bodyCollider.elements[i];
 
-        element->dim.worldSphere.center.x = rock->pos.x;
-        element->dim.worldSphere.center.y = rock->pos.y;
-        element->dim.worldSphere.center.z = rock->pos.z;
-        element->dim.worldSphere.radius = rock->scale * 3000.0f;
+        element->dim.worldSphere.center.x = rockEffect->pos.x;
+        element->dim.worldSphere.center.y = rockEffect->pos.y;
+        element->dim.worldSphere.center.z = rockEffect->pos.z;
+        element->dim.worldSphere.radius = rockEffect->scale * 3000.0f;
         element->info.bumper.dmgFlags = 0xF3CFBBFF;
         element->info.bumperFlags &= ~BUMP_NO_HITMARK;
 
@@ -3270,7 +3270,7 @@ void BossHakugin_UpdateDead(Actor* thisx, PlayState* play2) {
 void BossHakugin_DrawDead(Actor* thisx, PlayState* play) {
     BossHakugin* this = THIS;
     s32 i;
-    GohtRock* rock;
+    GohtRockEffect* rockEffect;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -3278,10 +3278,10 @@ void BossHakugin_DrawDead(Actor* thisx, PlayState* play) {
     gSPDisplayList(POLY_OPA_DISP++, gGohtRockMaterialDL);
 
     for (i = 0; i < 36; i++) {
-        rock = &this->rocks[i];
+        rockEffect = &this->rockEffects[i];
 
-        Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rot);
-        Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
+        Matrix_SetTranslateRotateYXZ(rockEffect->pos.x, rockEffect->pos.y, rockEffect->pos.z, &rockEffect->rot);
+        Matrix_Scale(rockEffect->scale, rockEffect->scale, rockEffect->scale, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gGohtRockModelDL);

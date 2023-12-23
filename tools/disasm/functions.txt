@@ -13236,7 +13236,7 @@
     0x80B21344:("EnPp_Draw",),
     0x80B21B00:("EnHakurock_Init",),
     0x80B21BB4:("EnHakurock_Destroy",),
-    0x80B21BE0:("EnHakurock_AddEffect",),
+    0x80B21BE0:("EnHakurock_AddRockEffect",),
     0x80B21EA4:("EnHakurock_SpawnEffect",),
     0x80B21FFC:("EnHakurock_SetupWaitForSignal",),
     0x80B22040:("EnHakurock_WaitForSignal",),

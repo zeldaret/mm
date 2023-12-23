@@ -1,7 +1,26 @@
 /*
  * File: z_en_hakurock.c
  * Overlay: En_Hakurock
- * Description: Goht Debris
+ * Description: Interactive rocks in Goht's fight
+ *
+ * This actor is responsible for most of the various rocks that the player and/or Goht can interact with. It can be
+ * divided into three main subtypes:
+ * - Boulder: These are the large rocks that Goht can kick up while it's running. These boulders fly through the air and
+ *   damage the player when they collide with them.
+ * - Stalactite: These are the stalactites that fall from the ceiling during the Goht fight. As it falls through the
+ *   air, it can be destroyed if it touches Goht. Once it lands and gets stuck in the ground, it can stop the player's
+ *   Goron Roll if they run into it, and it can be destroyed by Goht or other falling stalactites.
+ * - LargeStalactite: These are the stalactites that keep the player confined to a small part of the boss room when they
+ *   first enter it. Goht destroys these stalactites as part of its intro cutscene after it's been thawed, allowing the
+ *   player to access the rest of the room.
+ *
+ * This actor heavily assumes that it will only be spawned by Goht's (BossHakugin) actor, so it won't act correctly if
+ * spawned directly within the scene or by any other actor. When this actor is visibly destroyed, it's not actually
+ * killed; its params are set to a specific value, and it's placed into a waiting state until BossHakugin updates its
+ * params again to reuse the instance. Additionally, the rock effects that appear when this actor is destroyed are
+ * spawned by directly writing values to the parent actor's instance without ever checking its ID or if this actor even
+ * has a parent; it just assumes its parent is a BossHakugin instance and tries to update its rock effects array
+ * accordingly.
  */
 
 #include "z_en_hakurock.h"
@@ -17,7 +36,7 @@ void EnHakurock_Init(Actor* thisx, PlayState* play);
 void EnHakurock_Destroy(Actor* thisx, PlayState* play);
 void EnHakurock_Update(Actor* thisx, PlayState* play);
 
-void EnHakurock_AddEffect(BossHakugin* parent, Vec3f* pos, s32 type);
+void EnHakurock_AddRockEffect(BossHakugin* parent, Vec3f* pos, s32 type);
 void EnHakurock_SpawnEffect(EnHakurock* this, s32 type);
 void EnHakurock_SetupWaitForSignal(EnHakurock* this);
 void EnHakurock_WaitForSignal(EnHakurock* this, PlayState* play);
@@ -97,48 +116,57 @@ void EnHakurock_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnHakurock_AddEffect(BossHakugin* parent, Vec3f* pos, s32 type) {
+/**
+ * Adds a single effect of the given type to the BossHakugin's rock effect array. This is more of an "internal" function
+ * only intended to be called by EnHakurock_SpawnEffect, which calls this function numerous times (and, sometimes, with
+ * a variety of different positions) to create a more complex-looking effect.
+ */
+void EnHakurock_AddRockEffect(BossHakugin* parent, Vec3f* pos, s32 type) {
     s32 i;
 
-    for (i = 0; i < GOHT_ROCK_COUNT; i++) {
-        GohtRock* rock = &parent->rocks[i];
+    for (i = 0; i < GOHT_ROCK_EFFECT_COUNT; i++) {
+        GohtRockEffect* rockEffect = &parent->rockEffects[i];
 
-        if (rock->timer < 0) {
+        if (rockEffect->timer < 0) {
             VecGeo velocityGeo;
 
-            Math_Vec3f_Copy(&rock->pos, pos);
+            Math_Vec3f_Copy(&rockEffect->pos, pos);
 
             velocityGeo.pitch = Rand_S16Offset(0x1000, 0x3000);
             velocityGeo.yaw = Rand_Next() >> 0x10;
             velocityGeo.r = Rand_ZeroFloat(5.0f) + 10.0f;
-            rock->velocity.x = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_SinS(velocityGeo.yaw);
-            rock->velocity.y = velocityGeo.r * Math_SinS(velocityGeo.pitch);
-            rock->velocity.z = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_CosS(velocityGeo.yaw);
+            rockEffect->velocity.x = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_SinS(velocityGeo.yaw);
+            rockEffect->velocity.y = velocityGeo.r * Math_SinS(velocityGeo.pitch);
+            rockEffect->velocity.z = velocityGeo.r * Math_CosS(velocityGeo.pitch) * Math_CosS(velocityGeo.yaw);
 
             if ((type == EN_HAKUROCK_EFFECT_TYPE_FALLING_STALACTITE_DESTROYED) ||
                 (type == EN_HAKUROCK_EFFECT_TYPE_STALACTITE_DESTROYED)) {
-                rock->scale = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
-                rock->pos.x = pos->x + ((Rand_ZeroFloat(2.0f) + 9.0f) * rock->velocity.x);
-                rock->pos.y = pos->y + ((Rand_ZeroFloat(2.0f) + 3.0f) * rock->velocity.y);
-                rock->pos.z = pos->z + ((Rand_ZeroFloat(2.0f) + 9.0f) * rock->velocity.z);
-                rock->type = GOHT_ROCK_TYPE_STALACTITE;
+                rockEffect->scale = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
+                rockEffect->pos.x = pos->x + ((Rand_ZeroFloat(2.0f) + 9.0f) * rockEffect->velocity.x);
+                rockEffect->pos.y = pos->y + ((Rand_ZeroFloat(2.0f) + 3.0f) * rockEffect->velocity.y);
+                rockEffect->pos.z = pos->z + ((Rand_ZeroFloat(2.0f) + 9.0f) * rockEffect->velocity.z);
+                rockEffect->type = GOHT_ROCK_EFFECT_TYPE_STALACTITE;
             } else {
-                rock->scale = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
-                rock->pos.x = pos->x + ((Rand_ZeroFloat(2.0f) + 3.0f) * rock->velocity.x);
-                rock->pos.y = pos->y + ((Rand_ZeroFloat(3.0f) + 1.0f) * rock->velocity.y);
-                rock->pos.z = pos->z + ((Rand_ZeroFloat(2.0f) + 3.0f) * rock->velocity.z);
-                rock->type = GOHT_ROCK_TYPE_BOULDER;
+                rockEffect->scale = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
+                rockEffect->pos.x = pos->x + ((Rand_ZeroFloat(2.0f) + 3.0f) * rockEffect->velocity.x);
+                rockEffect->pos.y = pos->y + ((Rand_ZeroFloat(3.0f) + 1.0f) * rockEffect->velocity.y);
+                rockEffect->pos.z = pos->z + ((Rand_ZeroFloat(2.0f) + 3.0f) * rockEffect->velocity.z);
+                rockEffect->type = GOHT_ROCK_EFFECT_TYPE_BOULDER;
             }
 
-            rock->rot.x = (s32)Rand_Next() >> 0x10;
-            rock->rot.y = (s32)Rand_Next() >> 0x10;
-            rock->rot.z = (s32)Rand_Next() >> 0x10;
-            rock->timer = 40;
+            rockEffect->rot.x = (s32)Rand_Next() >> 0x10;
+            rockEffect->rot.y = (s32)Rand_Next() >> 0x10;
+            rockEffect->rot.z = (s32)Rand_Next() >> 0x10;
+            rockEffect->timer = 40;
             return;
         }
     }
 }
 
+/**
+ * This function spawns various effects depending on what type is supplied. It assumes that the parent is a BossHakugin
+ * instance and calls EnHakurock_AddRockEffect multiple times to create effects with numerous rocks.
+ */
 void EnHakurock_SpawnEffect(EnHakurock* this, s32 type) {
     Vec3f pos;
     s32 i;
@@ -148,11 +176,11 @@ void EnHakurock_SpawnEffect(EnHakurock* this, s32 type) {
 
     if (type == EN_HAKUROCK_EFFECT_TYPE_BOULDER_DESTROYED) {
         for (i = 0; i < 20; i++) {
-            EnHakurock_AddEffect((BossHakugin*)this->actor.parent, &this->actor.world.pos, type);
+            EnHakurock_AddRockEffect((BossHakugin*)this->actor.parent, &this->actor.world.pos, type);
         }
     } else if (type == EN_HAKUROCK_EFFECT_TYPE_STALACTITE_STUCK) {
         for (i = 0; i < 10; i++) {
-            EnHakurock_AddEffect((BossHakugin*)this->actor.parent, &this->actor.world.pos, type);
+            EnHakurock_AddRockEffect((BossHakugin*)this->actor.parent, &this->actor.world.pos, type);
         }
     } else {
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
@@ -167,7 +195,7 @@ void EnHakurock_SpawnEffect(EnHakurock* this, s32 type) {
         for (; i < 3; i++) {
             count = (i * 5) + 5;
             for (j = 0; j < count; j++) {
-                EnHakurock_AddEffect((BossHakugin*)this->actor.parent, &pos, type);
+                EnHakurock_AddRockEffect((BossHakugin*)this->actor.parent, &pos, type);
             }
 
             pos.y += offset;
@@ -184,6 +212,12 @@ void EnHakurock_SetupWaitForSignal(EnHakurock* this) {
     this->actionFunc = EnHakurock_WaitForSignal;
 }
 
+/**
+ * Waits and does nothing until its params are changed, after which it will setup the appropriate action function for
+ * its new type. When an instance of this actor is visibly destroyed, it is put into this state to wait for BossHakugin
+ * to signal that its instance should be reused. If an instance of this actor is spawned by anything other than Goht, it
+ * will end up stuck in this state forever once it's destroyed.
+ */
 void EnHakurock_WaitForSignal(EnHakurock* this, PlayState* play) {
     if (EN_HAKUROCK_GET_TYPE(&this->actor) == EN_HAKUROCK_TYPE_BOULDER) {
         EnHakurock_Boulder_SetupMove(this);
@@ -212,6 +246,9 @@ void EnHakurock_Boulder_SetupMove(EnHakurock* this) {
     this->actionFunc = EnHakurock_Boulder_Move;
 }
 
+/**
+ * Flies through the air while spinning until it hits something, then it breaks apart into a bunch of small rocks.
+ */
 void EnHakurock_Boulder_Move(EnHakurock* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
@@ -252,6 +289,11 @@ void EnHakurock_Stalactite_SetupFall(EnHakurock* this, PlayState* play) {
     this->actionFunc = EnHakurock_Stalactite_Fall;
 }
 
+/**
+ * Falls straight down until it hits either Goht or the ground. If it hits Goht, it will break apart into a bunch of
+ * stalactite-shaped fragments. If it hits the ground, it will kick up some rocks and start transitioning to being stuck
+ * in the ground.
+ */
 void EnHakurock_Stalactite_Fall(EnHakurock* this, PlayState* play) {
     if ((this->collider.base.ocFlags1 & OC1_HIT) && (this->collider.base.oc == this->actor.parent)) {
         EnHakurock_SpawnEffect(this, EN_HAKUROCK_EFFECT_TYPE_FALLING_STALACTITE_DESTROYED);
@@ -271,6 +313,12 @@ void EnHakurock_Stalactite_SetupStuckInGround(EnHakurock* this) {
     this->actionFunc = EnHakurock_Stalactite_StuckInGround;
 }
 
+/**
+ * Shakes vertically for 10 frames to make it look like it's settling into the ground. If it's struck by Goht or a
+ * falling stalactite, it will break apart into a bunch of stalactite-shaped fragments. If the player runs into it while
+ * Goron Rolling, it will stop their roll and bounce them back. If the stalactite gets too far from the player and is
+ * "behind" the camera, it will disappear and allow Goht to reuse this instance for another stalactite.
+ */
 void EnHakurock_Stalactite_StuckInGround(EnHakurock* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -320,6 +368,10 @@ void EnHakurock_LargeStalactite_SetupWait(EnHakurock* this) {
     this->actionFunc = EnHakurock_LargeStalactite_Wait;
 }
 
+/**
+ * Waits until Goht changes its type as part of its intro cutscene. Once its type changes, the stalactite will break
+ * apart into a bunch of stalactite-shaped fragments.
+ */
 void EnHakurock_LargeStalactite_Wait(EnHakurock* this, PlayState* play) {
     if (EN_HAKUROCK_GET_TYPE(&this->actor) == EN_HAKUROCK_TYPE_NONE) {
         EnHakurock_SpawnEffect(this, EN_HAKUROCK_EFFECT_TYPE_STALACTITE_DESTROYED);
