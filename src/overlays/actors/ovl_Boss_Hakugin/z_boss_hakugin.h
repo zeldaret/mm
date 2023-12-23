@@ -115,7 +115,7 @@ typedef struct BossHakugin {
     /* 0x01A2 */ s16 unk_01A2;
     /* 0x01A4 */ s16 unk_01A4;
     /* 0x01A6 */ s16 unk_01A6;
-    /* 0x01A8 */ s16 unk_01A8; // Counter of some kind?
+    /* 0x01A8 */ s16 chargeUpTimer;
     /* 0x01AA */ s16 unk_01AA;
     /* 0x01AC */ s16 subCamId;
     /* 0x01AE */ s16 unk_01AE;
@@ -153,9 +153,9 @@ typedef struct BossHakugin {
     /* 0x09F8 */ GohtRockEffect rockEffects[GOHT_ROCK_EFFECT_COUNT];
     /* 0x2618 */ GohtLightningSegment lightningSegments[GOHT_LIGHTNING_SEGMENT_COUNT]; // A chain of lightning used as an attack
     /* 0x3158 */ GohtMalfunctionEffect malfunctionEffects[GOHT_MALFUNCTION_NUM_TYPES][GOHT_BODYPART_MAX]; // Black smoke and electric zaps on body parts as damage accumulates 
-    /* 0x3734 */ Vec3f unk_3734[10];
+    /* 0x3734 */ Vec3f electricBallPos[10];
     /* 0x37AC */ Vec3f unk_37AC;
-    /* 0x37B8 */ ColliderSphere unk_37B8;
+    /* 0x37B8 */ ColliderSphere electricBallCollider;
 } BossHakugin; // size = 0x3810
 
 #endif // Z_BOSS_HAKUGIN_H

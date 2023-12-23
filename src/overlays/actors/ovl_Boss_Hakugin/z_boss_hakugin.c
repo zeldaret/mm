@@ -503,8 +503,8 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
                                 &this->lightningSegments[i].unk_34);
     }
 
-    Collider_InitAndSetSphere(play, &this->unk_37B8, &this->actor, &sSphereInit);
-    this->unk_37B8.dim.worldSphere.radius = 40;
+    Collider_InitAndSetSphere(play, &this->electricBallCollider, &this->actor, &sSphereInit);
+    this->electricBallCollider.dim.worldSphere.radius = 40;
     Collider_InitAndSetCylinder(play, &this->iceCollider, &this->actor, &sCylinderInit);
     this->iceCollider.dim.pos.x = this->actor.world.pos.x - 50.0f;
     this->iceCollider.dim.pos.y = this->actor.world.pos.y;
@@ -573,7 +573,7 @@ void BossHakugin_Destroy(Actor* thisx, PlayState* play) {
         Collider_DestroyTris(play, &this->lightningSegments[i].unk_14);
     }
 
-    Collider_DestroySphere(play, &this->unk_37B8);
+    Collider_DestroySphere(play, &this->electricBallCollider);
     AudioSfx_StopByPos(&this->sfxPos);
     AudioSfx_StopByPos(&this->electricBallSfxPos);
 }
@@ -717,10 +717,10 @@ void func_80B05D4C(BossHakugin* this) {
             lightPos = &this->unk_0380;
             var_t1 = (this->unk_01C8 / 30.0f) * 5000.0f;
         } else if ((this->unk_0192 == GOHT_UNK192_3) || (this->unk_0192 == GOHT_UNK192_2)) {
-            lightPos = &this->unk_3734[0];
+            lightPos = &this->electricBallPos[0];
             var_t1 = 5000;
         } else if (this->unk_0192 == GOHT_UNK192_4) {
-            lightPos = &this->unk_3734[this->unk_01AA];
+            lightPos = &this->electricBallPos[this->unk_01AA];
             var_t1 = (10 - this->unk_01AA) * 500.0f;
         }
     }
@@ -1088,13 +1088,14 @@ void BossHakugin_AddMalfunctionEffects(BossHakugin* this, PlayState* play) {
     }
 }
 
-s32 func_80B0728C(BossHakugin* this) {
+// TODO: improve this name a bit
+s32 BossHakugin_ChargeUpAttack(BossHakugin* this) {
     s16 rand = (Rand_Next() >> 0x12) + 0x4000;
 
     this->unk_0198 += rand;
-    if (this->unk_01A8 == 5) {
+    if (this->chargeUpTimer == 5) {
         if (Math_SmoothStepToS(&this->unk_01A6, -0x900, 4, 0x200, 0x80) == 0) {
-            this->unk_01A8--;
+            this->chargeUpTimer--;
         }
 
         this->unk_01C8 = (this->unk_01A6 + 0x480) * -0.026041666f; // 30 / 0x480
@@ -1109,8 +1110,8 @@ s32 func_80B0728C(BossHakugin* this) {
             this->unk_01CC = -200.0f;
         }
 
-    } else if (this->unk_01A8 > 0) {
-        this->unk_01A8--;
+    } else if (this->chargeUpTimer > 0) {
+        this->chargeUpTimer--;
     } else if (Math_ScaledStepToS(&this->unk_01A6, 0x700, 0x380)) {
         this->unk_01D0 = (0x700 - this->unk_01A6) / 4096.0f * 0.62f;
         return true;
@@ -1601,8 +1602,8 @@ void BossHakugin_Run(BossHakugin* this, PlayState* play) {
         this->bodyCollider.base.atFlags |= AT_ON;
     }
     if (this->unk_0192 == GOHT_UNK192_1) {
-        if (func_80B0728C(this)) {
-            Math_Vec3f_Copy(&this->unk_3734[0], &this->unk_0380);
+        if (BossHakugin_ChargeUpAttack(this)) {
+            Math_Vec3f_Copy(&this->electricBallPos[0], &this->unk_0380);
             this->unk_01B8 = this->actor.speed + 100.0f;
             this->unk_37AC.x = Math_CosS(0xA00) * Math_SinS(this->actor.shape.rot.y);
             this->unk_37AC.y = Math_SinS(0xA00);
@@ -1610,7 +1611,7 @@ void BossHakugin_Run(BossHakugin* this, PlayState* play) {
             this->unk_0192 = GOHT_UNK192_2;
             this->unk_01C8 = 0.0f;
             Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_E_BALL_THR);
-            this->unk_37B8.base.atFlags |= AT_ON;
+            this->electricBallCollider.base.atFlags |= AT_ON;
         }
     } else {
         Math_ScaledStepToS(&this->unk_01A6, 0, 0x100);
@@ -1718,7 +1719,7 @@ void BossHakugin_SetupFallDown(BossHakugin* this) {
     this->unk_0195 = false;
     this->unk_01C8 = 0.0f;
     if (this->unk_0192 == GOHT_UNK192_1) {
-        Math_Vec3f_Copy(&this->unk_3734[0], &this->unk_0380);
+        Math_Vec3f_Copy(&this->electricBallPos[0], &this->unk_0380);
         this->unk_01B8 = this->actor.speed + 100.0f;
         this->unk_37AC.x = Math_CosS(0xA00) * Math_SinS(this->actor.shape.rot.y);
         this->unk_37AC.y = Math_SinS(0xA00);
@@ -1726,7 +1727,7 @@ void BossHakugin_SetupFallDown(BossHakugin* this) {
         this->unk_0192 = GOHT_UNK192_2;
         this->unk_01C8 = 0.0f;
         Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_E_BALL_THR);
-        this->unk_37B8.base.atFlags |= AT_ON;
+        this->electricBallCollider.base.atFlags |= AT_ON;
     }
     this->unk_019C = 60;
     this->actor.speed = 20.0f;
@@ -1915,7 +1916,7 @@ void BossHakugin_ChargeLightning(BossHakugin* this, PlayState* play) {
 }
 
 void BossHakugin_SetupShootLightning(BossHakugin* this) {
-    this->unk_01A8 = 5;
+    this->chargeUpTimer = 5;
     this->unk_01C8 = 0.0f;
     this->actionFunc = BossHakugin_ShootLightning;
 }
@@ -1923,7 +1924,7 @@ void BossHakugin_SetupShootLightning(BossHakugin* this) {
 void BossHakugin_ShootLightning(BossHakugin* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_THUNDER - SFX_FLAG);
-    if (func_80B0728C(this)) {
+    if (BossHakugin_ChargeUpAttack(this)) {
         BossHakugin_AddLightningSegment(this, &this->unk_0380, play);
         BossHakugin_SetupChargeLightning(this, play);
     }
@@ -2323,7 +2324,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                 } else if ((this->unk_0192 == GOHT_UNK192_0) && (this->unk_01AA == 0) &&
                            (this->actionFunc == BossHakugin_Run) &&
                            (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F)) {
-                    this->unk_01A8 = 5;
+                    this->chargeUpTimer = 5;
                     this->unk_0192 = GOHT_UNK192_1;
                 }
                 Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_DAMAGE_OLD);
@@ -2454,7 +2455,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
     s32 sp58 = false;
     s16 temp_v1;
 
-    sp6C = &this->unk_3734[0];
+    sp6C = &this->electricBallPos[0];
 
     if (this->unk_0192 == GOHT_UNK192_2) {
         if (Math_StepToF(&this->unk_01B8, 50.0f, 3.5f)) {
@@ -2483,18 +2484,18 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
         this->unk_0192 = GOHT_UNK192_0;
         this->unk_01AA = 0;
     } else {
-        var_s0 = &this->unk_3734[9];
+        var_s0 = &this->electricBallPos[9];
         while (var_s0 != sp6C) {
             Math_Vec3f_Copy(var_s0, var_s0 - 1);
             var_s0--;
         }
         this->unk_0198 += (s16)(0x4000 + (Rand_Next() >> 0x12));
         if (this->unk_0192 != GOHT_UNK192_4) {
-            if (this->unk_37B8.base.atFlags & AT_HIT) {
+            if (this->electricBallCollider.base.atFlags & AT_HIT) {
                 this->unk_0192 = GOHT_UNK192_4;
                 this->unk_01AA = 0;
-                this->unk_37B8.base.atFlags &= ~AT_HIT;
-                this->unk_37B8.base.atFlags &= ~AT_ON;
+                this->electricBallCollider.base.atFlags &= ~AT_HIT;
+                this->electricBallCollider.base.atFlags &= ~AT_ON;
                 sp58 = true;
                 Audio_PlaySfx_AtPos(&this->electricBallSfxPos, NA_SE_EN_COMMON_E_BALL_HIT);
             }
@@ -2529,10 +2530,10 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
                 Math_Vec3f_Copy(sp6C, &sp88);
             }
 
-            this->unk_37B8.dim.worldSphere.center.x = sp6C->x;
-            this->unk_37B8.dim.worldSphere.center.y = sp6C->y;
-            this->unk_37B8.dim.worldSphere.center.z = sp6C->z;
-            CollisionCheck_SetAT(play, &play->colChkCtx, &this->unk_37B8.base);
+            this->electricBallCollider.dim.worldSphere.center.x = sp6C->x;
+            this->electricBallCollider.dim.worldSphere.center.y = sp6C->y;
+            this->electricBallCollider.dim.worldSphere.center.z = sp6C->z;
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->electricBallCollider.base);
         }
     }
 }
@@ -2909,7 +2910,7 @@ void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play2) {
     gSPDisplayList(POLY_XLU_DISP++, gGohtLightOrbMaterialDL);
 
     for (; i >= end; i--) {
-        pos = &this->unk_3734[i];
+        pos = &this->electricBallPos[i];
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, alpha);
         Matrix_Translate(pos->x, pos->y, pos->z, MTXMODE_NEW);
@@ -2969,7 +2970,7 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_0380, &this->sfxPos);
-    SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_3734[0], &this->electricBallSfxPos);
+    SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->electricBallPos[0], &this->electricBallSfxPos);
 
     if (!this->blockMalfunctionEffects) {
         BossHakugin_AddMalfunctionEffects(this, play);

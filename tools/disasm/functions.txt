@@ -12925,7 +12925,7 @@
     0x80B06C08:("BossHakugin_SpawnStalactite",),
     0x80B06D38:("BossHakugin_SpawnBomb",),
     0x80B06F48:("BossHakugin_AddMalfunctionEffects",),
-    0x80B0728C:("func_80B0728C",),
+    0x80B0728C:("BossHakugin_ChargeUpAttack",),
     0x80B07450:("func_80B07450",),
     0x80B07700:("func_80B07700",),
     0x80B0791C:("func_80B0791C",),
