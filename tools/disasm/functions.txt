@@ -12911,7 +12911,7 @@
     0x80B05690:("BossHakugin_Destroy",),
     0x80B0573C:("BossHakugin_Vec3fNormalize",),
     0x80B057A4:("func_80B057A4",),
-    0x80B058C0:("func_80B058C0",),
+    0x80B058C0:("BossHakugin_SpawnLargeStalactiteWalls",),
     0x80B05A64:("BossHakugin_RequestQuakeAndRumble",),
     0x80B05B04:("BossHakugin_SpawnIceSparkle",),
     0x80B05CBC:("BossHakugin_ApplyGoronSpikeBoost",),

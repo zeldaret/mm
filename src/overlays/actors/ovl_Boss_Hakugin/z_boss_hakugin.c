@@ -29,7 +29,7 @@ void BossHakugin_UpdateDead(Actor* thisx, PlayState* play2);
 void BossHakugin_Draw(Actor* thisx, PlayState* play);
 void BossHakugin_DrawDead(Actor* thisx, PlayState* play);
 
-void func_80B058C0(BossHakugin* this);
+void BossHakugin_SpawnLargeStalactiteWalls(BossHakugin* this);
 void BossHakugin_SpawnBlueWarp(BossHakugin* this, PlayState* play);
 void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
 void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
@@ -548,14 +548,14 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     } else if (CHECK_EVENTINF(EVENTINF_ENTR_CS_WATCHED_GOHT)) {
         this->iceAlpha = 255;
         this->iceScaleY = 2.7f;
-        func_80B058C0(this);
+        BossHakugin_SpawnLargeStalactiteWalls(this);
         Animation_PlayOnce(&this->skelAnime, &gGohtThawAndBreakWallAnim);
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         BossHakugin_SetupFrozenBeforeFight(this);
     } else {
         this->iceAlpha = 255;
         this->iceScaleY = 2.7f;
-        func_80B058C0(this);
+        BossHakugin_SpawnLargeStalactiteWalls(this);
         BossHakugin_SetupCutsceneStart(this);
     }
 }
@@ -620,7 +620,11 @@ void func_80B057A4(Vec3f* arg0, Vec3f* arg1, f32 arg2) {
     }
 }
 
-void func_80B058C0(BossHakugin* this) {
+/**
+ * Sets up the walls made of large stalactites that confine the player to the part of the boss room near the door; these
+ * are the stalactites that are destroyed when Goht is thawed.
+ */
+void BossHakugin_SpawnLargeStalactiteWalls(BossHakugin* this) {
     s32 i = 0;
     Actor* last;
     Actor* now = this->stalactites[i++];
@@ -631,6 +635,7 @@ void func_80B058C0(BossHakugin* this) {
     now->world.pos.z = -3800.0f / 3.0f;
     now->shape.rot.y = this->actor.shape.rot.y + 0x4000;
 
+    // Spawns the six large stalactites in front of Goht
     while (i < 6) {
         last = now;
         now = this->stalactites[i++];
@@ -642,6 +647,7 @@ void func_80B058C0(BossHakugin* this) {
         now->shape.rot.y = last->shape.rot.y;
     }
 
+    // Spawns the four large stalactites to the left and right of Goht's ice block
     while (i < ARRAY_COUNT(this->stalactites)) {
         last = (i < 8) ? this->stalactites[i - 6] : this->stalactites[i - 4];
         now = this->stalactites[i++];
