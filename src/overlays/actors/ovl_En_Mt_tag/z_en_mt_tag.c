@@ -413,7 +413,7 @@ void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
 void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) || (talkState == TEXT_STATE_CLOSING)) {
+    if (((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) || (talkState == TEXT_STATE_CLOSING)) {
         if (this->shouldRestartRace) {
             play->nextEntrance = ENTRANCE(GORON_RACETRACK, 1);
 

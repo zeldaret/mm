@@ -495,7 +495,7 @@ void EnJso_IntroCutscene(EnJso* this, PlayState* play) {
             this->subCamAtNext.z = player->actor.world.pos.z;
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
 
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 Message_ContinueTextbox(play, sTextIds[this->textIndex]);
                 this->cutsceneTimer = 0;
@@ -507,7 +507,7 @@ void EnJso_IntroCutscene(EnJso* this, PlayState* play) {
         case EN_JSO_INTRO_CS_STATE_RAISE_ARM_AND_DRAW_RIGHT_SWORD:
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
 
-            if (Message_GetState(&play->msgCtx) == TEXT_STATE_10) {
+            if (Message_GetState(&play->msgCtx) == TEXT_STATE_AWAITING_NEXT) {
                 this->targetRobeRightRot.x = -0x2710;
                 this->targetRobeRightRot.z = -0x2710;
             }
@@ -532,7 +532,7 @@ void EnJso_IntroCutscene(EnJso* this, PlayState* play) {
             this->subCamAtNext.y = player->actor.world.pos.y + 30.0f;
             this->subCamAtNext.z = player->actor.world.pos.z - 40.0f;
 
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->targetRightArmRot.x = this->targetRightArmRot.y = this->targetRightArmRot.z =
                     this->targetRobeRightRot.x = this->targetRobeRightRot.y = this->targetRobeRightRot.z = 0;
@@ -1218,7 +1218,7 @@ void EnJso_TellHint(EnJso* this, PlayState* play) {
         return;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         if (this->textIndex == 2) {
             u16 textId = 0x139C; // Hint about using Elegy to climb Stone Tower
@@ -1310,7 +1310,7 @@ void EnJso_BurstIntoFlames(EnJso* this, PlayState* play) {
     s32 i;
 
     player->actor.freezeTimer = 3;
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Player* player2 = GET_PLAYER(play);
 
         Message_CloseTextbox(play);

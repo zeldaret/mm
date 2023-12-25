@@ -829,7 +829,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
         player->actor.freezeTimer = 3;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         if ((this->unk_2CA == 8) && (gSaveContext.save.saveInfo.bombersCaughtNum >= 5)) {
             func_80C02CA4(this, play);
@@ -848,7 +848,7 @@ void func_80C02BCC(EnBomjimb* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0x1388, 0);
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
-        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
             Message_CloseTextbox(play);
             this->unk_2C0 = 1;
             player->stateFlags1 &= ~PLAYER_STATE1_10000000;

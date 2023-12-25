@@ -443,7 +443,7 @@ void func_80C208D0(EnHintSkb* this, PlayState* play) {
     this->unk_3DE = 0;
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             if ((play->gameplayFrames % 2) != 0) {
                 this->unk_3DE = 1;
             }
@@ -453,7 +453,7 @@ void func_80C208D0(EnHintSkb* this, PlayState* play) {
             func_80C20B88(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             func_80C20C24(this, play);
             break;
 
@@ -464,7 +464,7 @@ void func_80C208D0(EnHintSkb* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
         default:
             break;

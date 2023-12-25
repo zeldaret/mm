@@ -278,7 +278,7 @@ void func_80943BDC(EnDaiku* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         func_80943820(this);
     }

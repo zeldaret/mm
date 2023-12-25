@@ -296,7 +296,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_2BC == 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((this->unk_2BC == 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Player* player = GET_PLAYER(play);
         s32 pad;
         s32 sp28 = false;
@@ -472,7 +472,7 @@ void func_809C5524(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C5598(EnBomBowlMan* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         if ((this->actor.textId == 0x72F) || (this->actor.textId == 0x730)) {
             this->actor.textId = 0x731;

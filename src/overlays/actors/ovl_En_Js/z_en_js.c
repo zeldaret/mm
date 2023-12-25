@@ -544,7 +544,7 @@ void func_80969748(EnJs* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_PAUSE_MENU) {
         itemAction = func_80123810(play);
 
         if (itemAction != PLAYER_IA_NONE) {
@@ -600,7 +600,7 @@ void func_80969898(EnJs* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x220C:
@@ -704,7 +704,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_PAUSE_MENU) {
         itemAction = func_80123810(play);
 
         if (itemAction != PLAYER_IA_NONE) {
@@ -763,7 +763,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                 }
             }
             break;
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x221B:
@@ -992,7 +992,7 @@ void func_8096A38C(EnJs* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x2202:

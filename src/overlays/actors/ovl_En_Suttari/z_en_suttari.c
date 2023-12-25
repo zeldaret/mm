@@ -1208,7 +1208,7 @@ void func_80BAD004(EnSuttari* this, PlayState* play) {
 void func_80BAD130(EnSuttari* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_EVENT) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         if (this->flags1 & 8) {
@@ -1239,7 +1239,7 @@ void func_80BAD230(EnSuttari* this, PlayState* play) {
 }
 
 void func_80BAD2B4(EnSuttari* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x2A30) {
             CutsceneManager_Stop(this->csIdList[0]);
             CutsceneManager_Queue(this->csIdList[1]);
@@ -1265,7 +1265,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
     } else {
         this->flags1 &= ~0x8000;
         func_80BABA90(this, 1, 1);
-        if ((this->flags1 & 0x4000) && (talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        if ((this->flags1 & 0x4000) && (talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
             this->flags2 &= ~0x10;
             player->stateFlags1 &= ~PLAYER_STATE1_10000000;
             this->flags1 &= ~0x4000;
@@ -1400,7 +1400,7 @@ void func_80BADA9C(EnSuttari* this, PlayState* play) {
         this->animIndex = 1;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
     }
-    if (talkstate == TEXT_STATE_5) {
+    if (talkstate == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             if (this->flags1 & 0x400) {
                 if (this->textId == 0x29EE) {

@@ -141,7 +141,7 @@ void func_80A44F40(EnSekihi* this, PlayState* play) {
                 break;
             }
             break;
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1018:

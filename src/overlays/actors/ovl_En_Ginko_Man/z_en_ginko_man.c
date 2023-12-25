@@ -508,7 +508,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play) {
             EnGinkoMan_WaitForDialogueInput(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnGinkoMan_DepositDialogue(this, play);
             break;
 
@@ -519,7 +519,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_14:
+        case TEXT_STATE_INPUT_RUPEES:
             EnGinkoMan_WaitForRupeeCount(this, play);
             break;
 

@@ -701,7 +701,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if ((play->msgCtx.currentTextId == 0x10DD) && (this->unk_374 & 0x8000)) {
                 if (SubS_StartCutscene(&brother->actor, brother->csIdList[0], CS_ID_GLOBAL_TALK,
@@ -1212,9 +1212,9 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
         default:
             break;
     }
@@ -1515,7 +1515,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
             break;
 
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -1548,7 +1548,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                         break;
                 }
             }
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
         default:
             break;

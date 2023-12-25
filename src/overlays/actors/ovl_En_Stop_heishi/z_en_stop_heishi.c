@@ -518,7 +518,7 @@ void func_80AE854C(EnStopheishi* this, PlayState* play) {
 void func_80AE85C4(EnStopheishi* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     EnStopheishi_UpdateHeadNormal(this, play);
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_27E != 0) {
             this->actor.textId = this->unk_27E;
             Message_ContinueTextbox(play, this->actor.textId);

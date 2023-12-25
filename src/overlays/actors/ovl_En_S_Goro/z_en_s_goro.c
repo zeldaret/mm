@@ -1127,7 +1127,7 @@ void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play) {
 }
 
 void EnSGoro_SpringShrineGoron_Talk(EnSGoro* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->actionFlags & EN_S_GORO_ACTIONFLAG_LASTMESSAGE) {
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
             this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_ENGAGED;

@@ -51,7 +51,7 @@ typedef enum TextBoxType {
 #define TEXTBOX_ENDTYPE_FADE_STAGES_3    0x57
 
 #define TEXTBOX_ENDTYPE_INPUT_BANK    0x60
-#define TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET    0x61
+#define TEXTBOX_ENDTYPE_INPUT_DOGGY_RACETRACK_BET    0x61
 #define TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE    0x62
 #define TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE    0x63
 #define TEXTBOX_ENDTYPE_64    0x64
@@ -154,23 +154,23 @@ u16 Text_GetFaceReaction(struct PlayState* play, FaceReactionSet reactionSet);
 
 typedef enum TextState {
     /*  0 */ TEXT_STATE_NONE,
-    /*  1 */ TEXT_STATE_1,
+    /*  1 */ TEXT_STATE_NEXT,
     /*  2 */ TEXT_STATE_CLOSING,
-    /*  3 */ TEXT_STATE_3,
+    /*  3 */ TEXT_STATE_FADING,
     /*  4 */ TEXT_STATE_CHOICE,
-    /*  5 */ TEXT_STATE_5,
+    /*  5 */ TEXT_STATE_EVENT,
     /*  6 */ TEXT_STATE_DONE,
-    /*  7 */ TEXT_STATE_7,
+    /*  7 */ TEXT_STATE_SONG_DEMO_DONE,
     /*  8 */ TEXT_STATE_8,
     /*  9 */ TEXT_STATE_9,
-    /* 10 */ TEXT_STATE_10,
+    /* 10 */ TEXT_STATE_AWAITING_NEXT,
     /* 11 */ TEXT_STATE_11,
     /* 12 */ TEXT_STATE_12,
     /* 13 */ TEXT_STATE_13,
-    /* 14 */ TEXT_STATE_14,
-    /* 15 */ TEXT_STATE_15,
-    /* 16 */ TEXT_STATE_16,
-    /* 17 */ TEXT_STATE_17,
+    /* 14 */ TEXT_STATE_INPUT_RUPEES,
+    /* 15 */ TEXT_STATE_INPUT_BOMBER_CODE,
+    /* 16 */ TEXT_STATE_PAUSE_MENU,
+    /* 17 */ TEXT_STATE_INPUT_LOTTERY_CODE,
     /* 18 */ TEXT_STATE_18
 } TextState;
 

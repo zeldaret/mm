@@ -150,7 +150,8 @@ bool Message_ShouldAdvance(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     Input* controller = CONTROLLER1(&play->state);
 
-    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) ||
+        (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
         if (CHECK_BTN_ALL(controller->press.button, BTN_A)) {
             Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
         }
@@ -169,7 +170,8 @@ bool Message_ShouldAdvanceSilent(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     Input* controller = CONTROLLER1(&play->state);
 
-    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) ||
+        (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
         return CHECK_BTN_ALL(controller->press.button, BTN_A);
     } else {
         return CHECK_BTN_ALL(controller->press.button, BTN_A) || CHECK_BTN_ALL(controller->press.button, BTN_B) ||
@@ -1046,11 +1048,11 @@ Color_RGB16 D_801CFE74[] = {
     { 255, 120, 0 },  { 70, 255, 80 },   { 80, 110, 255 },  { 255, 255, 30 },
     { 90, 180, 255 }, { 210, 100, 255 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
-Color_RGB16 D_801CFEA4[] = {
+Color_RGB16 sColorsNormalJPN[] = {
     { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
-Color_RGB16 D_801CFED4[] = {
+Color_RGB16 sColorsButtonsJPN[] = {
     { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 180, 180, 200 }, { 255, 130, 30 },
 };
@@ -1058,12 +1060,12 @@ Color_RGB16 D_801CFF04[] = {
     { 195, 0, 0 },    { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
-Color_RGB16 D_801CFF34[] = {
+Color_RGB16 sColorsBombersNotebookJPN[] = {
     { 255, 60, 60 },  { 110, 170, 255 }, { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 
-u8 D_801CFF64[] = { 2, 1, 3, 6, 6, 6, 3, 3, 3, 3, 1, 6 };
+static u8 sButtonColorIndicesJPN[] = { 2, 1, 3, 6, 6, 6, 3, 3, 3, 3, 1, 6 };
 
 #define MESSAGE_ITEM_NONE 9999
 
@@ -1076,9 +1078,9 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
     u16 character;
     s16 sp130;
-    s16 sp12E;
-    s16 sp12C;
-    s16 sp12A;
+    s16 prevR;
+    s16 prevG;
+    s16 prevC;
     u16 lookAheadCharacter;
 
     play->msgCtx.textPosX = play->msgCtx.unk11F1A[0] + play->msgCtx.unk11FF8;
@@ -1150,9 +1152,9 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                         msgCtx->textColorB = D_801CFE74[(s16)(character - 0x2001)].b + msgCtx->unk120D4;
                     }
                 } else if (play->pauseCtx.bombersNotebookOpen) {
-                    msgCtx->textColorR = D_801CFF34[(s16)(character - 0x2001)].r;
-                    msgCtx->textColorG = D_801CFF34[(s16)(character - 0x2001)].g;
-                    msgCtx->textColorB = D_801CFF34[(s16)(character - 0x2001)].b;
+                    msgCtx->textColorR = sColorsBombersNotebookJPN[(s16)(character - 0x2001)].r;
+                    msgCtx->textColorG = sColorsBombersNotebookJPN[(s16)(character - 0x2001)].g;
+                    msgCtx->textColorB = sColorsBombersNotebookJPN[(s16)(character - 0x2001)].b;
                 } else if (msgCtx->textBoxType == TEXTBOX_TYPE_1) {
                     msgCtx->textColorR = D_801CFE74[(s16)(character - 0x2001)].r;
                     msgCtx->textColorG = D_801CFE74[(s16)(character - 0x2001)].g;
@@ -1162,9 +1164,9 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                     msgCtx->textColorG = D_801CFF04[(s16)(character - 0x2001)].g;
                     msgCtx->textColorB = D_801CFF04[(s16)(character - 0x2001)].b;
                 } else {
-                    msgCtx->textColorR = D_801CFEA4[(s16)(character - 0x2001)].r;
-                    msgCtx->textColorG = D_801CFEA4[(s16)(character - 0x2001)].g;
-                    msgCtx->textColorB = D_801CFEA4[(s16)(character - 0x2001)].b;
+                    msgCtx->textColorR = sColorsNormalJPN[(s16)(character - 0x2001)].r;
+                    msgCtx->textColorG = sColorsNormalJPN[(s16)(character - 0x2001)].g;
+                    msgCtx->textColorB = sColorsNormalJPN[(s16)(character - 0x2001)].b;
                 }
 
                 if ((i + 1) == msgCtx->textDrawPos) {
@@ -1381,7 +1383,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 break;
 
             case 0x220:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_INPUT_DOGGY_RACETRACK_BET;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
@@ -1493,16 +1495,16 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 }
 
                 if ((character >= 0x839F) && (character < 0x83AB)) {
-                    sp12E = msgCtx->textColorR;
-                    sp12C = msgCtx->textColorG;
-                    sp12A = msgCtx->textColorB;
-                    msgCtx->textColorR = D_801CFED4[(s16)D_801CFF64[character - 0x839F]].r;
-                    msgCtx->textColorG = D_801CFED4[(s16)D_801CFF64[character - 0x839F]].g;
-                    msgCtx->textColorB = D_801CFED4[(s16)D_801CFF64[character - 0x839F]].b;
+                    prevR = msgCtx->textColorR;
+                    prevG = msgCtx->textColorG;
+                    prevC = msgCtx->textColorB;
+                    msgCtx->textColorR = sColorsButtonsJPN[(s16)sButtonColorIndicesJPN[character - 0x839F]].r;
+                    msgCtx->textColorG = sColorsButtonsJPN[(s16)sButtonColorIndicesJPN[character - 0x839F]].g;
+                    msgCtx->textColorB = sColorsButtonsJPN[(s16)sButtonColorIndicesJPN[character - 0x839F]].b;
                     Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
-                    msgCtx->textColorR = sp12E;
-                    msgCtx->textColorG = sp12C;
-                    msgCtx->textColorB = sp12A;
+                    msgCtx->textColorR = prevR;
+                    msgCtx->textColorG = prevG;
+                    msgCtx->textColorB = prevC;
                 } else {
                     Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                 }
@@ -3623,30 +3625,33 @@ u8 Message_GetState(MessageContext* msgCtx) {
 
     if (msgCtx->msgMode == MSGMODE_TEXT_DONE) {
         if (msgCtx->nextTextId != 0xFFFF) {
-            return TEXT_STATE_1;
+            return TEXT_STATE_NEXT;
         }
 
-        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
+        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) ||
+            (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
             return TEXT_STATE_CHOICE;
         }
         if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT2) ||
             (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PERSISTENT)) {
-            return TEXT_STATE_5;
+            return TEXT_STATE_EVENT;
         }
         if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PAUSE_MENU) {
-            return TEXT_STATE_16;
+            return TEXT_STATE_PAUSE_MENU;
         }
-        if ((msgCtx->textboxEndType >= TEXTBOX_ENDTYPE_FADE_NORMAL) && (msgCtx->textboxEndType <= TEXTBOX_ENDTYPE_FADE_STAGES_3)) {
-            return TEXT_STATE_3;
+        if ((msgCtx->textboxEndType >= TEXTBOX_ENDTYPE_FADE_NORMAL) &&
+            (msgCtx->textboxEndType <= TEXTBOX_ENDTYPE_FADE_STAGES_3)) {
+            return TEXT_STATE_FADING;
         }
-        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BANK) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET)) {
-            return TEXT_STATE_14;
+        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BANK) ||
+            (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_DOGGY_RACETRACK_BET)) {
+            return TEXT_STATE_INPUT_RUPEES;
         }
         if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE) {
-            return TEXT_STATE_15;
+            return TEXT_STATE_INPUT_BOMBER_CODE;
         }
         if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE) {
-            return TEXT_STATE_17;
+            return TEXT_STATE_INPUT_LOTTERY_CODE;
         }
         if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_12) {
             return TEXT_STATE_18;
@@ -3655,10 +3660,10 @@ u8 Message_GetState(MessageContext* msgCtx) {
     }
 
     if (msgCtx->msgMode == MSGMODE_TEXT_AWAIT_NEXT) {
-        return TEXT_STATE_10;
+        return TEXT_STATE_AWAITING_NEXT;
     }
     if (msgCtx->msgMode == MSGMODE_SONG_DEMONSTRATION_DONE) {
-        return TEXT_STATE_7;
+        return TEXT_STATE_SONG_DEMO_DONE;
     }
     if ((msgCtx->ocarinaMode == OCARINA_MODE_EVENT) || (msgCtx->msgMode == MSGMODE_37)) {
         return TEXT_STATE_8;
@@ -3680,7 +3685,7 @@ u8 Message_GetState(MessageContext* msgCtx) {
         return TEXT_STATE_CLOSING;
     }
 
-    return TEXT_STATE_3;
+    return TEXT_STATE_FADING;
 }
 
 void Message_DrawTextBox(PlayState* play, Gfx** gfxP) {
@@ -4987,7 +4992,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         func_80148D64(play);
                         break;
 
-                    case TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET:
+                    case TEXTBOX_ENDTYPE_INPUT_DOGGY_RACETRACK_BET:
                         temp_v0_33 = msgCtx->unk120BE;
                         temp = msgCtx->unk11FFA + (msgCtx->unk11FFC * temp_v0_33);
                         func_80148558(play, &gfx,
@@ -5061,7 +5066,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
 
                     case TEXTBOX_ENDTYPE_EVENT:
                     case TEXTBOX_ENDTYPE_INPUT_BANK:
-                    case TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET:
+                    case TEXTBOX_ENDTYPE_INPUT_DOGGY_RACETRACK_BET:
                     default:
                         Message_DrawTextboxIcon(play, &gfx, 158,
                                                 (s16)(D_801D03A8[msgCtx->textBoxType] + msgCtx->textboxYTarget));
@@ -5480,7 +5485,8 @@ void Message_Update(PlayState* play) {
             break;
 
         case MSGMODE_TEXT_DONE:
-            if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_NORMAL) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_SKIPPABLE)) {
+            if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_NORMAL) ||
+                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_SKIPPABLE)) {
                 msgCtx->stateTimer--;
                 if ((msgCtx->stateTimer == 0) ||
                     ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_SKIPPABLE) && Message_ShouldAdvance(play))) {
@@ -5496,8 +5502,10 @@ void Message_Update(PlayState* play) {
                     }
                 }
             } else {
-                if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PERSISTENT) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT) ||
-                    (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT2) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PAUSE_MENU)) {
+                if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PERSISTENT) ||
+                    (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT) ||
+                    (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT2) ||
+                    (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PAUSE_MENU)) {
                     return;
                 }
 
@@ -5631,7 +5639,7 @@ void Message_Update(PlayState* play) {
                             Message_CloseTextbox(play);
                         }
                     } else if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BANK) ||
-                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET) ||
+                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_DOGGY_RACETRACK_BET) ||
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) ||
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE) ||
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_NORMAL) ||

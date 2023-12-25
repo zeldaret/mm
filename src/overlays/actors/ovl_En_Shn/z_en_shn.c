@@ -182,8 +182,8 @@ void func_80AE6488(EnShn* this, PlayState* play) {
     this->unk_2D4 = CLAMP(this->unk_2D4, 0.0f, 80.0f);
     Matrix_Translate(this->unk_2D4, 0.0f, 0.0f, MTXMODE_APPLY);
     if ((&this->actor == player->talkActor) &&
-        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId >= 0x201)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3)) {
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId >= 0x201)) && (talkState == TEXT_STATE_FADING) &&
+        (this->prevTalkState == TEXT_STATE_FADING)) {
         if (play->state.frames % 2 == 0) {
             if (this->unk_2D0 != 0.0f) {
                 this->unk_2D0 = 0.0f;

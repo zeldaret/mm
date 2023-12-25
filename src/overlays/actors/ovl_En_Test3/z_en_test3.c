@@ -387,7 +387,7 @@ s32 func_80A3EAC4(EnTest3* this, PlayState* play) {
 }
 
 s32 func_80A3EAF8(EnTest3* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_D78->textId == 0x145F) {
             CutsceneManager_Stop(this->csId);
             this->csId = CS_ID_GLOBAL_TALK;

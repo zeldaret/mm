@@ -218,9 +218,9 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
         case POSTBOX_BEHAVIOUR_WAIT_FOR_ITEM:
             switch (Message_GetState(&play->msgCtx)) {
                 case TEXT_STATE_CHOICE:
-                case TEXT_STATE_5:
+                case TEXT_STATE_EVENT:
                     if (Message_ShouldAdvance(play)) {
-                        case TEXT_STATE_16:
+                        case TEXT_STATE_PAUSE_MENU:
                             itemAction = func_80123810(play);
                             scriptBranch = 0;
                             if ((itemAction == PLAYER_IA_LETTER_TO_KAFEI) || (itemAction == PLAYER_IA_LETTER_MAMA)) {

@@ -191,7 +191,7 @@ void EnKujiya_Talk(EnKujiya* this, PlayState* play) {
             EnKujiya_HandlePlayerChoice(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnKujiya_ChooseNextDialogue(this, play);
             break;
 
@@ -201,7 +201,7 @@ void EnKujiya_Talk(EnKujiya* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_17:
+        case TEXT_STATE_INPUT_LOTTERY_CODE:
             if (Message_ShouldAdvance(play)) {
                 Inventory_SaveLotteryCodeGuess(play);
                 Message_StartTextbox(play, 0x2B60, &this->actor);

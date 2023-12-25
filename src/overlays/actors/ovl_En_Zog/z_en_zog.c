@@ -586,7 +586,7 @@ void func_80B943EC(EnZog* this, PlayState* play) {
 }
 
 void func_80B94470(EnZog* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x103C)) {
             Message_CloseTextbox(play);
             this->actionFunc = func_80B9451C;
@@ -655,7 +655,7 @@ void func_80B946FC(EnZog* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1008:
@@ -801,7 +801,7 @@ void func_80B94D0C(EnZog* this, PlayState* play) {
         this->unk_31E = 0;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->unk_320 = 5;
         switch (play->msgCtx.currentTextId) {
             case 0x1004:

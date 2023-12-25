@@ -197,7 +197,7 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
             break;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x107F:
             case 0x1081:
@@ -317,7 +317,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
     PlayerItemAction itemAction;
     Player* player = GET_PLAYER(play);
 
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_PAUSE_MENU) {
         itemAction = func_80123810(play);
 
         if (itemAction != PLAYER_IA_NONE) {
@@ -389,7 +389,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
         case TEXT_STATE_CLOSING:
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x106E:
@@ -545,7 +545,7 @@ void func_80AE0C88(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE0D10(EnTsn* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         this->actionFunc = func_80AE0D78;
         CutsceneManager_Stop(this->actor.csId);

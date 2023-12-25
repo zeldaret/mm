@@ -321,7 +321,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 // dialogue after skipped time 'did you feel that? went by in an instant'
                 this->picto.actor.textId = 0x1653;
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_01);
-                this->talkState = TEXT_STATE_5;
+                this->talkState = TEXT_STATE_EVENT;
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->picto.actor.flags |= ACTOR_FLAG_10000;
             }
@@ -393,7 +393,7 @@ void EnKakasi_SetupDialogue(EnKakasi* this) {
         EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
     }
 
-    this->talkState = TEXT_STATE_5;
+    this->talkState = TEXT_STATE_EVENT;
     this->unkState196 = 1;
     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
     this->actionFunc = EnKakasi_RegularDialogue;
@@ -430,7 +430,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
 
     if ((this->talkState == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
-        if (this->talkState == TEXT_STATE_5) {
+        if (this->talkState == TEXT_STATE_EVENT) {
             // bad song input
             if ((this->unkState196 == 2) && (this->picto.actor.textId == 0x1647)) {
                 Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_END);
@@ -524,7 +524,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 return;
             }
         } else {
-            this->talkState = TEXT_STATE_5;
+            this->talkState = TEXT_STATE_EVENT;
 
             if (play->msgCtx.choiceIndex == 1) {
                 Audio_PlaySfx_MessageDecide();
@@ -573,7 +573,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, PlayState* play) {
  * before actually teaching
  */
 void EnKakasi_OcarinaRemark(EnKakasi* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_DisplayOcarinaStaff(play, OCARINA_ACTION_SCARECROW_SPAWN_RECORDING);
         this->unkState1A8 = 0;
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
@@ -640,7 +640,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
             this->subCamId = SUB_CAM_ID_DONE;
             this->picto.actor.textId = 0x1647;
             this->unkState1A8 = 2;
-            this->talkState = TEXT_STATE_5;
+            this->talkState = TEXT_STATE_EVENT;
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
             this->actionFunc = EnKakasi_RegularDialogue;
 
@@ -672,7 +672,7 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     this->unkCounter1A4 = 0;
     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
     this->subCamId = SUB_CAM_ID_DONE;
-    this->talkState = TEXT_STATE_5;
+    this->talkState = TEXT_STATE_EVENT;
     this->unkState1A8 = 1;
     this->actionFunc = EnKakasi_PostSongLearnDialogue;
     this->subCamFov = 0.0f;
@@ -751,7 +751,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
 
         Message_CloseTextbox(play);
 
-        if (this->talkState == TEXT_STATE_5) {
+        if (this->talkState == TEXT_STATE_EVENT) {
             this->unk190++;
             if (this->unk190 > 5) {
                 this->unk190 = 5;
@@ -783,7 +783,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
             }
 
         } else {
-            this->talkState = TEXT_STATE_5;
+            this->talkState = TEXT_STATE_EVENT;
             if (play->msgCtx.choiceIndex == 1) {
                 Audio_PlaySfx_MessageDecide();
                 this->picto.actor.textId = 0x164A;
@@ -1120,7 +1120,7 @@ void EnKakasi_IdleRisen(EnKakasi* this, PlayState* play) {
 void EnKakasi_RisenDialogue(EnKakasi* this, PlayState* play) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 0x3E8, 0);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         EnKakasi_SetupIdleRisen(this);
     }

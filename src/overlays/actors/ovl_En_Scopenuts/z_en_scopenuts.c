@@ -314,7 +314,7 @@ void func_80BCB52C(EnScopenuts* this, PlayState* play) {
 void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == TEXT_STATE_5) {
+    if (talkState == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_328 & 1) {
                 this->unk_328 &= ~1;

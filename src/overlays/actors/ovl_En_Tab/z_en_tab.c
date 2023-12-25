@@ -268,8 +268,8 @@ void func_80BE0A98(EnTab* this, PlayState* play) {
     Matrix_Translate(this->unk_308, 0.0f, 0.0f, MTXMODE_APPLY);
 
     if ((&this->actor == player->talkActor) &&
-        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3)) {
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_FADING) &&
+        (this->prevTalkState == TEXT_STATE_FADING)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_304 != 0.0f) {
                 this->unk_304 = 0.0f;

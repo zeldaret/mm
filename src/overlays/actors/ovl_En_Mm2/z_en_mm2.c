@@ -47,7 +47,7 @@ void EnMm2_Destroy(Actor* thisx, PlayState* play) {
  */
 void EnMm2_Reading(EnMm2* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->actionFunc = EnMm2_WaitForRead;

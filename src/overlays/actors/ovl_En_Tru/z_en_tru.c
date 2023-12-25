@@ -830,12 +830,12 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (!Message_ShouldAdvance(play)) {
                 break;
             }
         // Fallthrough
-        case TEXT_STATE_16:
+        case TEXT_STATE_PAUSE_MENU:
             itemAction = func_80123810(play);
 
             if ((itemAction == PLAYER_IA_BOTTLE_POTION_RED) || (itemAction == PLAYER_IA_BOTTLE_POTION_BLUE)) {

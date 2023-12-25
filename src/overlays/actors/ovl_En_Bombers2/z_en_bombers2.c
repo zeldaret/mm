@@ -168,13 +168,13 @@ void func_80C04BA0(EnBombers2* this, PlayState* play) {
         case PLAYER_FORM_GORON:
         case PLAYER_FORM_ZORA:
             this->textIdIndex = 1;
-            this->talkState = TEXT_STATE_5;
+            this->talkState = TEXT_STATE_EVENT;
             break;
 
         case PLAYER_FORM_DEKU:
         case PLAYER_FORM_HUMAN:
             this->textIdIndex = 2;
-            this->talkState = TEXT_STATE_5;
+            this->talkState = TEXT_STATE_EVENT;
             break;
 
         default:
@@ -242,7 +242,7 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
             break;
     }
     if ((this->talkState == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
-        if (this->talkState == TEXT_STATE_15) {
+        if (this->talkState == TEXT_STATE_INPUT_BOMBER_CODE) {
             s32 i;
             s32 correctDigits;
 
@@ -263,7 +263,7 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                 this->actor.textId = sTextIds[this->textIdIndex];
                 Message_ContinueTextbox(play, this->actor.textId);
                 Actor_PlaySfx(&this->actor, NA_SE_SY_PIECE_OF_HEART);
-                this->talkState = TEXT_STATE_5;
+                this->talkState = TEXT_STATE_EVENT;
                 return;
             }
         }
@@ -288,7 +288,7 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                     this->textIdIndex = 3;
                     this->actor.textId = sTextIds[this->textIdIndex];
                     Message_ContinueTextbox(play, this->actor.textId);
-                    this->talkState = TEXT_STATE_15;
+                    this->talkState = TEXT_STATE_INPUT_BOMBER_CODE;
                     break;
 
                 case 3:
@@ -299,14 +299,14 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                     Actor_PlaySfx(&this->actor, NA_SE_SY_ERROR);
                     this->actor.textId = sTextIds[this->textIdIndex];
                     Message_ContinueTextbox(play, this->actor.textId);
-                    this->talkState = TEXT_STATE_5;
+                    this->talkState = TEXT_STATE_EVENT;
                     break;
 
                 case 4:
                     this->textIdIndex = 5;
                     this->actor.textId = sTextIds[this->textIdIndex];
                     Message_ContinueTextbox(play, this->actor.textId);
-                    this->talkState = TEXT_STATE_5;
+                    this->talkState = TEXT_STATE_EVENT;
                     break;
 
                 case 6:
@@ -360,7 +360,7 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
             this->actor.speed = 0.0f;
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) < 100.0f) {
                 Message_CloseTextbox(play);
-                this->talkState = TEXT_STATE_5;
+                this->talkState = TEXT_STATE_EVENT;
                 this->textIdIndex = 7;
                 EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_6, 1.0f);
                 this->unk_2A8 = 0;

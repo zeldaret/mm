@@ -1052,7 +1052,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
         // a textbox that is expected to be closed by the user is still open.
         endFrame = csCtx->curFrame;
         talkState = Message_GetState(&play->msgCtx);
-        if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_7) &&
+        if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_SONG_DEMO_DONE) &&
             (talkState != TEXT_STATE_8)) {
             csCtx->curFrame--;
 
@@ -1096,7 +1096,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                 }
             }
 
-            if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_DisplayOcarinaStaff(play, cmd->textId);
             }
         }

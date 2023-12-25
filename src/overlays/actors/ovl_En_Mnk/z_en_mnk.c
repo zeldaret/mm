@@ -692,7 +692,7 @@ void func_80AB61E8(EnMnk* this, PlayState* play) {
     this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 2, 0xBB8, 0xC8);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x7D9:
                 Message_ContinueTextbox(play, 0x7DA);
@@ -724,7 +724,7 @@ void func_80AB6304(EnMnk* this, PlayState* play) {
     this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 2, 0xBB8, 0xC8);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->flags |= MONKEY_FLAGS_4;
     }
 
@@ -740,7 +740,7 @@ void func_80AB6304(EnMnk* this, PlayState* play) {
 void func_80AB63CC(EnMnk* this, PlayState* play) {
     s32 pad;
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->flags |= MONKEY_FLAGS_4;
     }
 
@@ -855,7 +855,7 @@ void EnMnk_Monkey_WaitToRunAndWaitAtEachPoint(EnMnk* this, PlayState* play) {
 }
 
 void EnMnk_Monkey_TalkAfterRun(EnMnk* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->flags |= MONKEY_FLAGS_4;
         Message_CloseTextbox(play);
     }
@@ -967,7 +967,7 @@ void EnMnk_Monkey_TalkAfterApproach(EnMnk* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x7D0:
@@ -1311,7 +1311,7 @@ void EnMnk_MonkeyTiedUp_ReactToWrongInstrument(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     SkelAnime_Update(&this->propSkelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x8D4:
             case 0x8DA:
@@ -1376,7 +1376,7 @@ void EnMnk_MonkeyTiedUp_TransitionAfterTalk(EnMnk* this, PlayState* play) {
         }
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x8CA:
                 EnMnk_MonkeyTiedUp_SetAnim(this, MONKEY_TIEDUP_ANIM_SHAKEHEAD);
@@ -1613,7 +1613,7 @@ void EnMnk_MonkeyHanging_WaitForTextboxAfterDunk(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     SkelAnime_Update(&this->propSkelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->flags & MONKEY_FLAGS_800) {
             this->flags &= ~MONKEY_FLAGS_800;
             CutsceneManager_Stop(this->picto.actor.csId);
@@ -1684,7 +1684,7 @@ void EnMnk_MonkeyHanging_Plead(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     SkelAnime_Update(&this->propSkelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x8E8:
                 Message_ContinueTextbox(play, 0x8E9);
@@ -1874,7 +1874,7 @@ void EnMnk_Monkey_WaitToGuideThroughWoods(EnMnk* this, PlayState* play) {
 void EnMnk_Monkey_TalkAfterSaved(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x8E5:
                 Message_ContinueTextbox(play, 0x8E6);

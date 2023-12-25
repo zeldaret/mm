@@ -419,7 +419,7 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     PlayerItemAction itemAction;
 
-    if (talkState == TEXT_STATE_16) {
+    if (talkState == TEXT_STATE_PAUSE_MENU) {
         itemAction = func_80123810(play);
 
         if (itemAction > PLAYER_IA_NONE) {
@@ -439,7 +439,7 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
             Message_ContinueTextbox(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         }
-    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->unk_340 == D_80ADD910[this->unk_33A]) {
             this->unk_340 = D_80ADD938[this->unk_33A];
             Message_ContinueTextbox(play, this->unk_340);
@@ -469,7 +469,7 @@ void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 6);
     }
 
-    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80ADBBEC;
@@ -515,7 +515,7 @@ void func_80ADBD64(EnSellnuts* this, PlayState* play) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     }
 
-    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_338 &= ~2;
@@ -557,7 +557,7 @@ void func_80ADBE80(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADBFA0(EnSellnuts* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         if (this->unk_34C == 0) {
@@ -720,7 +720,7 @@ void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
 void func_80ADC6D0(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         if (player->transformation == PLAYER_FORM_DEKU) {
@@ -750,7 +750,7 @@ void func_80ADC7B4(EnSellnuts* this, PlayState* play) {
             }
             CutsceneManager_Queue(this->csId);
         }
-    } else if ((this->unk_366 == 1) && (talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    } else if ((this->unk_366 == 1) && (talkState == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_366 = 0;

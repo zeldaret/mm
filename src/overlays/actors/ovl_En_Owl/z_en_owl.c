@@ -345,14 +345,14 @@ void func_8095AD54(EnOwl* this, PlayState* play) {
 }
 
 void func_8095AE00(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_ContinueTextbox(play, 0x7D2);
         this->actionFunc = func_8095AD54;
     }
 }
 
 void func_8095AE60(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_ContinueTextbox(play, 0x7D1);
         this->actionFunc = func_8095AE00;
     }
@@ -368,7 +368,7 @@ void func_8095AEC0(EnOwl* this, PlayState* play) {
 
 void func_8095AF2C(EnOwl* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 if (play->msgCtx.currentTextId == 0xBFE) {
                     func_8095ACEC(this);
@@ -663,7 +663,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEA:

@@ -226,7 +226,7 @@ void EnTakaraya_Talk(EnTakaraya* this, PlayState* play) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
             EnTakaraya_SetupWait(this);
         }
-    } else if ((talkState == TEXT_STATE_1) && (this->actor.textId != 0x778)) {
+    } else if ((talkState == TEXT_STATE_NEXT) && (this->actor.textId != 0x778)) {
         if (Message_ShouldAdvance(play)) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
         }
@@ -368,7 +368,7 @@ void func_80ADF7B8(EnTakaraya* this) {
 void func_80ADF7CC(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->actor.textId == 0x77A) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                 Message_CloseTextbox(play);

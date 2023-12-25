@@ -386,7 +386,7 @@ void EnMaYts_SetupDialogueHandler(EnMaYts* this) {
 
 void EnMaYts_DialogueHandler(EnMaYts* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5: // End message block
+        case TEXT_STATE_EVENT: // End message block
             EnMaYts_ChooseNextDialogue(this, play);
             break;
 
@@ -397,9 +397,9 @@ void EnMaYts_DialogueHandler(EnMaYts* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
         case TEXT_STATE_CHOICE:
         default:
             break;
