@@ -162,18 +162,18 @@
 #define CMD_SFX(x) STR(CTRL_SFX) ARG(x) // 2
 #define CMD_DELAY(x) STR(CTRL_DELAY) ARG(x) // 2
 // while control characters, button images are handled in the charmap conversion
-#define CMD_BTN_A STR(CTRL_BTN_A)
-#define CMD_BTN_B STR(CTRL_BTN_B)
-#define CMD_BTN_C STR(CTRL_BTN_C)
-#define CMD_BTN_L STR(CTRL_BTN_L)
-#define CMD_BTN_R STR(CTRL_BTN_R)
-#define CMD_BTN_Z STR(CTRL_BTN_Z)
-#define CMD_BTN_CUP STR(CTRL_BTN_CUP)
-#define CMD_BTN_CDOWN STR(CTRL_BTN_CDOWN)
-#define CMD_BTN_CLEFT STR(CTRL_BTN_CLEFT)
-#define CMD_BTN_CRIGHT STR(CTRL_BTN_CRIGHT)
-#define CMD_Z_TARGET STR(CTRL_Z_TARGET)
-#define CMD_CONTROL_PAD STR(CTRL_CONTROL_PAD)
+#define CMD_BTN_A STR(CTRL_BTN_A) // "[A]"
+#define CMD_BTN_B STR(CTRL_BTN_B) // "[B]"
+#define CMD_BTN_C STR(CTRL_BTN_C) // "[C]"
+#define CMD_BTN_L STR(CTRL_BTN_L) // "[L]"
+#define CMD_BTN_R STR(CTRL_BTN_R) // "[R]"
+#define CMD_BTN_Z STR(CTRL_BTN_Z) // "[Z]"
+#define CMD_BTN_CUP STR(CTRL_BTN_CUP) // "[C-Up]"
+#define CMD_BTN_CDOWN STR(CTRL_BTN_CDOWN) // "[C-Down]"
+#define CMD_BTN_CLEFT STR(CTRL_BTN_CLEFT) // "[C-Left]"
+#define CMD_BTN_CRIGHT STR(CTRL_BTN_CRIGHT) // "[C-Right]"
+#define CMD_Z_TARGET STR(CTRL_Z_TARGET) // "▼"
+#define CMD_CONTROL_PAD STR(CTRL_CONTROL_PAD) // "[Control-Pad]"
 #define CMD_END STR(CTRL_END)
 #define CMD_BACKGROUND STR(CTRL_BACKGROUND)
 #define CMD_TWO_CHOICE STR(CTRL_TWO_CHOICE)
