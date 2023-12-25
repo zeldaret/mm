@@ -527,7 +527,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
             case MESSAGE_NEWLINE:
                 msgCtx->textPosY += msgCtx->unk11FFC;
                 // fallthrough
-            case MESSAGE_13:
+            case MESSAGE_CARRIAGE_RETURN:
                 sp130++;
 
                 msgCtx->textPosX = msgCtx->unk11F1A[sp130] + msgCtx->unk11FF8;
@@ -1876,7 +1876,7 @@ void Message_DecodeNES(PlayState* play) {
                 spA4 += 6.0f;
             }
             msgCtx->msgBufPos++;
-        } else if ((curChar == MESSAGE_13) || (curChar == MESSAGE_NEWLINE)) {
+        } else if ((curChar == MESSAGE_CARRIAGE_RETURN) || (curChar == MESSAGE_NEWLINE)) {
             msgCtx->unk11F1A[spC6] = 0;
             if (msgCtx->unk11F18 != 0) {
                 msgCtx->unk11F1A[spC6] = ((msgCtx->textCharScale * 16.0f * 16.0f) - spA4) * 0.5f;

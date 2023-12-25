@@ -123,7 +123,7 @@ class MessageNES:
             0x0F: ("CMD_POINTS_THOUSANDS", self.decode_cmd_no_arg),
             0x10: ("CMD_BOX_BREAK", self.decode_cmd_box_break),
             0x12: ("CMD_BOX_BREAK2", self.decode_cmd_box_break),
-            0x13: ("CMD_13", self.decode_cmd_no_arg),
+            0x13: ("CMD_CARRIAGE_RETURN", self.decode_cmd_no_arg),
             0x14: ("CMD_SHIFT", self.decode_cmd_1byte),
             0x15: ("CMD_CONTINUE", self.decode_cmd_no_arg),
             0x16: ("CMD_NAME", self.decode_cmd_no_arg),
