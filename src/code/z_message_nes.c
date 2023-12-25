@@ -665,7 +665,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 i += 2;
                 break;
 
-            case MESSAGE_0A:
+            case MESSAGE_TEXT_SPEED:
                 i++;
                 character = msgCtx->decodedBuffer.schar[i];
                 switch (character) {
@@ -1385,7 +1385,7 @@ void Message_DecodeNES(PlayState* play) {
                 decodedBufPos++;
                 Message_LoadCharNES(play, 'h', &charTexIndex, &spA4, decodedBufPos);
             }
-        } else if (curChar == MESSAGE_0E) {
+        } else if (curChar == MESSAGE_POINTS_TENS) {
             digits[0] = 0;
             digits[1] = gSaveContext.minigameScore;
 
@@ -1402,7 +1402,7 @@ void Message_DecodeNES(PlayState* play) {
             }
 
             decodedBufPos--;
-        } else if (curChar == MESSAGE_0F) {
+        } else if (curChar == MESSAGE_POINTS_THOUSANDS) {
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = gSaveContext.minigameScore;
 
@@ -1531,7 +1531,7 @@ void Message_DecodeNES(PlayState* play) {
                     spA4 += 16.0f * msgCtx->textCharScale;
                 }
             }
-        } else if (curChar == MESSAGE_DB) {
+        } else if (curChar == MESSAGE_POINTS_BOAT_ARCHERY) {
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = gSaveContext.minigameScore;
 
@@ -1672,14 +1672,14 @@ void Message_DecodeNES(PlayState* play) {
             }
         } else if (curChar == MESSAGE_TIME_UNTIL_NEW_DAY) {
             Message_LoadTimeNES(play, curChar, &charTexIndex, &spA4, &decodedBufPos);
-        } else if ((curChar == MESSAGE_F0) || (curChar == MESSAGE_F1) || (curChar == MESSAGE_F2) ||
+        } else if ((curChar == MESSAGE_HS_POINTS_BANK_RUPEES) || (curChar == MESSAGE_HS_POINTS_UNK_1) || (curChar == MESSAGE_HS_POINTS_FISHING) ||
                    (curChar == MESSAGE_HS_UNK_3_LOWER)) {
             if (curChar == MESSAGE_HS_UNK_3_LOWER) {
                 value = (s32)HS_GET_HIGH_SCORE_3_LOWER();
             } else {
-                value = HIGH_SCORE(curChar - MESSAGE_F0);
+                value = HIGH_SCORE(curChar - MESSAGE_HS_POINTS_BANK_RUPEES);
             }
-            if (curChar == MESSAGE_F2) {
+            if (curChar == MESSAGE_HS_POINTS_FISHING) {
                 if (LINK_AGE_IN_YEARS == YEARS_CHILD) {
                     value &= 0x7F;
                 } else {
@@ -1747,8 +1747,8 @@ void Message_DecodeNES(PlayState* play) {
             }
             spA4 += var_fs0 * (16.0f * msgCtx->textCharScale);
             decodedBufPos--;
-        } else if ((curChar == MESSAGE_F3) || (curChar == MESSAGE_F4) || (curChar == MESSAGE_F5)) {
-            value = HIGH_SCORE(curChar - MESSAGE_F3 + HS_BOAT_ARCHERY);
+        } else if ((curChar == MESSAGE_HS_TIMER_BOAT_ARCHERY) || (curChar == MESSAGE_HS_TIMER_HORSE_BACK_BALLOON) || (curChar == MESSAGE_HS_TIMER_LOTTERY_GUESS)) {
+            value = HIGH_SCORE(curChar - MESSAGE_HS_TIMER_BOAT_ARCHERY + HS_BOAT_ARCHERY);
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = value;
 
@@ -1889,7 +1889,7 @@ void Message_DecodeNES(PlayState* play) {
         } else if ((curChar == MESSAGE_QUICKTEXT_ENABLE) || (curChar == MESSAGE_QUICKTEXT_DISABLE) ||
                    (curChar == MESSAGE_PERSISTENT)) {
             // pass
-        } else if (curChar == MESSAGE_0A) {
+        } else if (curChar == MESSAGE_TEXT_SPEED) {
             decodedBufPos++; // Next decoded char is a 0
         } else if (curChar == MESSAGE_FADE) {
             msgCtx->textFade = true;
