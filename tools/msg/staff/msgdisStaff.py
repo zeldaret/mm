@@ -5,33 +5,13 @@ import sys
 import struct
 
 class MessageCredits:
-    COLORS = {
-        0: "DEFAULT",
-        1: "RED",
-        2: "ADJUSTABLE",
-        3: "BLUE",
-        4: "LIGHTBLUE",
-        5: "PURPLE",
-        6: "YELLOW",
-        7: "BLACK"
-    }
-
-    HIGHSCORES = {
-        0: "HS_BANK_RUPEES",
-        1: "HS_UNK_1",
-        2: "HS_FISHING",
-        3: "HS_BOAT_ARCHERY",
-        4: "HS_HORSE_BACK_BALLOON",
-        6: "HS_SHOOTING_GALLERY"
-    }
-
     def __init__(self, id, typePos, addr, text):
         self.id = id
         self.typePos = typePos
         self.addr = addr
-        # Has no header
         self.text = text
         self.decodedText = ""
+        self.decodePos = 0
 
     def __str__(self):
         return (f' Message 0x{self.id:04X}:\n'
@@ -48,16 +28,102 @@ class MessageCredits:
                 f"{self.decodedText}\n)\n"
         )
 
+    def decode_cmd_no_arg(self, cmd):
+        return f'{cmd} '
+
+    def decode_cmd_end(self, cmd):
+        # Don't do anything for the end command
+        return ''
+
+    def decode_cmd_box_break(self, cmd):
+        return f'\n{cmd}\n'
+
+    def decode_cmd_1byte(self, cmd):
+        arg = self.text[self.decodePos]
+        self.decodePos += 1
+        return f'{cmd}("\\x{arg:02X}") '
+
+    def decode_cmd_2byte(self, cmd):
+        arg1 = self.text[self.decodePos]
+        arg2 = self.text[self.decodePos + 1]
+        self.decodePos += 2
+        return f'{cmd}("\\x{arg1:02X}\\x{arg2:02X}") '
+
+    def decode_cmd_color(self, cmd):
+        COLORS = {
+            0: "DEFAULT",
+            1: "RED",
+            2: "ADJUSTABLE",
+            3: "BLUE",
+            4: "LIGHTBLUE",
+            5: "PURPLE",
+            6: "YELLOW",
+            7: "BLACK"
+        }
+        color = self.text[self.decodePos]
+        self.decodePos += 1
+        return f'{cmd}({COLORS[color]}) '
+
+    def decode_cmd_background(self, cmd):
+        arg1 = self.text[self.decodePos]
+        arg2 = self.text[self.decodePos + 1]
+        arg3 = self.text[self.decodePos + 2]
+        self.decodePos += 3
+        return f'{cmd}("\\x{arg1:02X}","\\x{arg2:02X}","\\x{arg3:02X}") '
+
+    def decode_cmd_highscore(self, cmd):
+        HIGHSCORES = {
+            0: "HS_BANK_RUPEES",
+            1: "HS_UNK_1",
+            2: "HS_FISHING",
+            3: "HS_BOAT_ARCHERY",
+            4: "HS_HORSE_BACK_BALLOON",
+            6: "HS_SHOOTING_GALLERY"
+        }
+        highscore = self.text[self.decodePos]
+        self.decodePos += 1
+        return f'{cmd}({HIGHSCORES[highscore]}) '
 
     def decode(self):
+        CMDMAP = {
+            0x00: ("CMD_COLOR_DEFAULT", self.decode_cmd_no_arg),
+            0x02: ("CMD_END", self.decode_cmd_end),
+            0x04: ("CMD_BOX_BREAK", self.decode_cmd_box_break),
+            0x05: ("CMD_COLOR", self.decode_cmd_color),
+            0X06: ("CMD_SHIFT", self.decode_cmd_1byte),
+            0x07: ("CMD_TEXTID", self.decode_cmd_2byte),
+            0x08: ("CMD_QUICKTEXT_ENABLE", self.decode_cmd_no_arg),
+            0x09: ("CMD_QUICKTEXT_DISABLE", self.decode_cmd_no_arg),
+            0x0A: ("CMD_PERSISTENT", self.decode_cmd_no_arg),
+            0x0B: ("CMD_EVENT", self.decode_cmd_no_arg),
+            0x0C: ("CMD_BOX_BREAK_DELAY", self.decode_cmd_1byte),
+            0x0D: ("CMD_WAIT_INPUT", self.decode_cmd_no_arg),
+            0x0E: ("CMD_FADE", self.decode_cmd_1byte),
+            0x0F: ("CMD_NAME", self.decode_cmd_no_arg),
+            0x10: ("CMD_OCARINA", self.decode_cmd_no_arg),
+            0x11: ("CMD_FADE2", self.decode_cmd_2byte),
+            0x12: ("CMD_SFX", self.decode_cmd_2byte),
+            0x13: ("CMD_ITEM_ICON", self.decode_cmd_1byte),
+            0x14: ("CMD_TEXT_SPEED", self.decode_cmd_1byte),
+            0x15: ("CMD_BACKGROUND", self.decode_cmd_background),
+            0x16: ("CMD_MARATHONTIME", self.decode_cmd_no_arg),
+            0x17: ("CMD_RACETIME", self.decode_cmd_no_arg),
+            0x18: ("CMD_POINTS", self.decode_cmd_no_arg),
+            0x1A: ("CMD_UNSKIPPABLE", self.decode_cmd_no_arg),
+            0x1B: ("CMD_TWO_CHOICE", self.decode_cmd_no_arg),
+            0x1C: ("CMD_THREE_CHOICE", self.decode_cmd_no_arg),
+            0x1D: ("CMD_FISH_INFO", self.decode_cmd_no_arg),
+            0x1E: ("CMD_HIGHSCORE", self.decode_cmd_highscore),
+            0x1F: ("CMD_TIME", self.decode_cmd_no_arg),
+        }
         if self.decodedText == "":
             prevText = False
             prevNewline = False
-            i = 0
+            self.decodePos = 0
             textLen = len(self.text)
-            while i < textLen:
-                char = self.text[i]
-                i += 1
+            while self.decodePos < textLen:
+                char = self.text[self.decodePos]
+                self.decodePos += 1
 
                 if char >= 0x20 and char <= 0xAF: # Regular Characters
                     if not prevText:
@@ -82,86 +148,11 @@ class MessageCredits:
                     if prevText:
                         self.decodedText += '" '
 
+                    cmd, decoder = CMDMAP[char]
+                    self.decodedText += decoder(cmd)
+
                     prevText = False
                     prevNewline = False
-
-                    if char == 0x2:
-                        continue
-                    elif char == 0x3:
-                        print(f"Error [\\x{char:02X}] is not a valid command", file=sys.stderr)
-                        self.decodedText += f'[\\x{char:02X}]'
-                    elif char == 0x4:
-                        self.decodedText += f'\nCMD_BOX_BREAK\n'
-                    elif char == 0x5:
-                        color = self.text[i]
-                        i += 1
-                        self.decodedText += f'CMD_COLOR({MessageCredits.COLORS[color]}) '
-                    elif char == 0x6:
-                        self.decodedText += f'CMD_SHIFT("\\x{self.text[i]:02X}") '
-                        i += 1
-                    elif char == 0x7:
-                        self.decodedText += f'CMD_TEXTID("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
-                        i += 2
-                    elif char == 0x8:
-                        self.decodedText += f'CMD_QUICKTEXT_ENABLE '
-                    elif char == 0x9:
-                        self.decodedText += f'CMD_QUICKTEXT_DISABLE '
-                    elif char == 0xA:
-                        self.decodedText += f'CMD_PERSISTENT '
-                    elif char == 0xB:
-                        self.decodedText += f'CMD_EVENT '
-                    elif char == 0xC:
-                        self.decodedText += f'CMD_BOX_BREAK_DELAY("\\x{self.text[i]:02X}") '
-                        i += 1
-                    elif char == 0xD:
-                        self.decodedText += f'CMD_WAIT_INPUT '
-                    elif char == 0xE:
-                        self.decodedText += f'CMD_FADE("\\x{self.text[i]:02X}") '
-                        i += 1
-                    elif char == 0xF:
-                        self.decodedText += f'CMD_PLAYERNAME '
-                    elif char == 0x10:
-                        self.decodedText += f'CMD_OCARINA '
-                    elif char == 0x11:
-                        self.decodedText += f'CMD_FADE2("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
-                        i += 2
-                    elif char == 0x12:
-                        self.decodedText += f'CMD_SOUND("\\x{self.text[i]:02X}\\x{self.text[i+1]:02X}") '
-                        i += 2
-                    elif char == 0x13:
-                        self.decodedText += f'CMD_ITEM_ICON("\\x{self.text[i]:02X}") '
-                        i += 1
-                    elif char == 0x14:
-                        self.decodedText += f'CMD_TEXT_SPEED("\\x{self.text[i]:02X}") '
-                        i += 1
-                    elif char == 0x15:
-                        self.decodedText += f'CMD_BACKGROUND("\\x{self.text[i]:02X}, \\x{self.text[i + 1]:02X}, \\x{self.text[i + 2]:02X})'
-                        i += 3
-                    elif char == 0x16:
-                        self.decodedText += f'CMD_MARATHONTIME '
-                    elif char == 0x17:
-                        self.decodedText += f'CMD_RACETIME '
-                    elif char == 0x18:
-                        self.decodedText += f'CMD_POINTS '
-                    elif char == 0x19:
-                        print(f"Error [\\x{char:02X}] is not a valid command", file=sys.stderr)
-                        self.decodedText += f'[\\x{char:02X}]'
-                    elif char == 0x1A:
-                        self.decodedText += f'CMD_UNSKIPPABLE '
-                    elif char == 0x1B:
-                        self.decodedText += f'CMD_TWO_CHOICE '
-                    elif char == 0x1C:
-                        self.decodedText += f'CMD_THREE_CHOICE '
-                    elif char == 0x1D:
-                        self.decodedText += f'CMD_FISH_INFO '
-                    elif char == 0x1E:
-                        self.decodedText += f'CMD_HIGHSCORE({MessageCredits.HIGHSCORES[self.text[i]]}) '
-                        i += 1
-                    elif char == 0x1F:
-                        self.decodedText += f'CMD_TIME '
-                    else: # Other control codes
-                        print(f"Error Unknown [\\x{char:02X}] command", file=sys.stderr)
-                        self.decodedText += f'[\\x{char:02X}]'
 
 def parseTable(start):
     table = {}
