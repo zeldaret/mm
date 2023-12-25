@@ -163,7 +163,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
             case MESSAGE_FADE2:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_50;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_FADE_NORMAL;
                     msgCtx->stateTimer = msgCtx->decodedBuffer.schar[++i] << 8;
                     msgCtx->stateTimer |= msgCtx->decodedBuffer.schar[++i];
                 }
@@ -277,7 +277,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
             case MESSAGE_FADE:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_50;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_FADE_NORMAL;
                     msgCtx->stateTimer = msgCtx->decodedBuffer.schar[++i];
                     Font_LoadMessageBoxEndIcon(font, 1);
                     if (play->csCtx.state == CS_STATE_IDLE) {

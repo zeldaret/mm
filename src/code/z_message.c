@@ -1252,9 +1252,9 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     if (msgCtx->unk11F0C == 3) {
-                        msgCtx->textboxEndType = TEXTBOX_ENDTYPE_55;
+                        msgCtx->textboxEndType = TEXTBOX_ENDTYPE_FADE_STAGES_1;
                     } else {
-                        msgCtx->textboxEndType = TEXTBOX_ENDTYPE_50;
+                        msgCtx->textboxEndType = TEXTBOX_ENDTYPE_FADE_NORMAL;
                     }
                     msgCtx->stateTimer = msgCtx->decodedBuffer.wchar[++i];
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
@@ -1399,7 +1399,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
             case 0x222:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_41;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_PAUSE_MENU;
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 0);
                     Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                 }
@@ -1461,7 +1461,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
             case 0x230:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_42;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_EVENT2;
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
                     Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                 }
@@ -3629,14 +3629,14 @@ u8 Message_GetState(MessageContext* msgCtx) {
         if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
             return TEXT_STATE_CHOICE;
         }
-        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_42) ||
+        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT2) ||
             (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PERSISTENT)) {
             return TEXT_STATE_5;
         }
-        if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_41) {
+        if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PAUSE_MENU) {
             return TEXT_STATE_16;
         }
-        if ((msgCtx->textboxEndType >= TEXTBOX_ENDTYPE_50) && (msgCtx->textboxEndType <= TEXTBOX_ENDTYPE_57)) {
+        if ((msgCtx->textboxEndType >= TEXTBOX_ENDTYPE_FADE_NORMAL) && (msgCtx->textboxEndType <= TEXTBOX_ENDTYPE_FADE_STAGES_3)) {
             return TEXT_STATE_3;
         }
         if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BANK) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET)) {
@@ -5050,12 +5050,12 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         break;
 
                     case TEXTBOX_ENDTYPE_PERSISTENT:
-                    case TEXTBOX_ENDTYPE_41:
-                    case TEXTBOX_ENDTYPE_50:
+                    case TEXTBOX_ENDTYPE_PAUSE_MENU:
+                    case TEXTBOX_ENDTYPE_FADE_NORMAL:
                     case TEXTBOX_ENDTYPE_FADE_SKIPPABLE:
-                    case TEXTBOX_ENDTYPE_55:
-                    case TEXTBOX_ENDTYPE_56:
-                    case TEXTBOX_ENDTYPE_57:
+                    case TEXTBOX_ENDTYPE_FADE_STAGES_1:
+                    case TEXTBOX_ENDTYPE_FADE_STAGES_2:
+                    case TEXTBOX_ENDTYPE_FADE_STAGES_3:
                     case TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE:
                         break;
 
@@ -5067,7 +5067,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                                                 (s16)(D_801D03A8[msgCtx->textBoxType] + msgCtx->textboxYTarget));
                         break;
 
-                    case TEXTBOX_ENDTYPE_42:
+                    case TEXTBOX_ENDTYPE_EVENT2:
                         Message_DrawTextboxIcon(play, &gfx, 158,
                                                 (s16)(D_801D03A8[msgCtx->textBoxType] + msgCtx->textboxYTarget));
                         break;
@@ -5480,7 +5480,7 @@ void Message_Update(PlayState* play) {
             break;
 
         case MSGMODE_TEXT_DONE:
-            if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_50) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_SKIPPABLE)) {
+            if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_NORMAL) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_SKIPPABLE)) {
                 msgCtx->stateTimer--;
                 if ((msgCtx->stateTimer == 0) ||
                     ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_SKIPPABLE) && Message_ShouldAdvance(play))) {
@@ -5497,27 +5497,27 @@ void Message_Update(PlayState* play) {
                 }
             } else {
                 if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PERSISTENT) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT) ||
-                    (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_42) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_41)) {
+                    (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT2) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PAUSE_MENU)) {
                     return;
                 }
 
                 switch (msgCtx->textboxEndType) {
-                    case TEXTBOX_ENDTYPE_55:
+                    case TEXTBOX_ENDTYPE_FADE_STAGES_1:
                         msgCtx->textColorAlpha += 20;
                         if (msgCtx->textColorAlpha >= 255) {
                             msgCtx->textColorAlpha = 255;
-                            msgCtx->textboxEndType = TEXTBOX_ENDTYPE_56;
+                            msgCtx->textboxEndType = TEXTBOX_ENDTYPE_FADE_STAGES_2;
                         }
                         break;
 
-                    case TEXTBOX_ENDTYPE_56:
+                    case TEXTBOX_ENDTYPE_FADE_STAGES_2:
                         msgCtx->stateTimer--;
                         if (msgCtx->stateTimer == 0) {
-                            msgCtx->textboxEndType = TEXTBOX_ENDTYPE_57;
+                            msgCtx->textboxEndType = TEXTBOX_ENDTYPE_FADE_STAGES_3;
                         }
                         break;
 
-                    case TEXTBOX_ENDTYPE_57:
+                    case TEXTBOX_ENDTYPE_FADE_STAGES_3:
                         msgCtx->textColorAlpha -= 20;
                         if (msgCtx->textColorAlpha <= 0) {
                             msgCtx->textColorAlpha = 0;
@@ -5634,14 +5634,14 @@ void Message_Update(PlayState* play) {
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET) ||
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) ||
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE) ||
-                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_50) ||
+                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_NORMAL) ||
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_SKIPPABLE) ||
-                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_55) ||
-                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_56) ||
-                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_57) ||
+                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_STAGES_1) ||
+                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_STAGES_2) ||
+                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_STAGES_3) ||
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE)) {
                         //! FAKE: debug?
-                        if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_50) {}
+                        if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_NORMAL) {}
                     } else if (pauseCtx->itemDescriptionOn) {
                         if ((input->rel.stick_x != 0) || (input->rel.stick_y != 0) ||
                             CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B) ||
@@ -6020,7 +6020,7 @@ void Message_Init(PlayState* play) {
     msgCtx->textboxEndType = TEXTBOX_ENDTYPE_DEFAULT;
     msgCtx->choiceIndex = 0;
     msgCtx->ocarinaAction = msgCtx->textUnskippable = 0;
-    msgCtx->textColorAlpha = 0xFF;
+    msgCtx->textColorAlpha = 255;
 
     View_Init(&msgCtx->view, play->state.gfxCtx);
 

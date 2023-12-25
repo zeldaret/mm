@@ -967,7 +967,7 @@ void Play_UpdateMain(PlayState* this) {
             if ((gSaveContext.gameMode == GAMEMODE_NORMAL) &&
                 (((this->msgCtx.msgMode == MSGMODE_NONE)) ||
                  ((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == MSGMODE_TEXT_DONE) &&
-                  (this->msgCtx.textboxEndType == TEXTBOX_ENDTYPE_41)) ||
+                  (this->msgCtx.textboxEndType == TEXTBOX_ENDTYPE_PAUSE_MENU)) ||
                  ((this->msgCtx.currentTextId >= 0x100) && (this->msgCtx.currentTextId <= 0x200))) &&
                 (this->gameOverCtx.state == GAMEOVER_INACTIVE)) {
                 KaleidoSetup_Update(this);

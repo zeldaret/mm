@@ -582,7 +582,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                             if ((msgCtx->decodedBuffer.schar[j] != MESSAGE_QUICKTEXT_DISABLE) &&
                                 (msgCtx->decodedBuffer.schar[j] != MESSAGE_PERSISTENT) &&
                                 (msgCtx->decodedBuffer.schar[j] != MESSAGE_EVENT) &&
-                                (msgCtx->decodedBuffer.schar[j] != MESSAGE_E0) &&
+                                (msgCtx->decodedBuffer.schar[j] != MESSAGE_EVENT2) &&
                                 (msgCtx->decodedBuffer.schar[j] != MESSAGE_BOX_BREAK) &&
                                 (msgCtx->decodedBuffer.schar[j] != MESSAGE_BOX_BREAK2)) {
                                 j++;
@@ -613,9 +613,9 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     if (msgCtx->unk11F0C == 3) {
-                        msgCtx->textboxEndType = TEXTBOX_ENDTYPE_55;
+                        msgCtx->textboxEndType = TEXTBOX_ENDTYPE_FADE_STAGES_1;
                     } else {
-                        msgCtx->textboxEndType = TEXTBOX_ENDTYPE_50;
+                        msgCtx->textboxEndType = TEXTBOX_ENDTYPE_FADE_NORMAL;
                     }
                     stateTimerHi = msgCtx->decodedBuffer.schar[++i] << 8;
                     stateTimerHi |= msgCtx->decodedBuffer.schar[++i];
@@ -782,10 +782,10 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 }
                 break;
 
-            case MESSAGE_D2:
+            case MESSAGE_PAUSE_MENU:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_41;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_PAUSE_MENU;
                     Font_LoadMessageBoxEndIcon(font, 0);
                     Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                 }
@@ -845,10 +845,10 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 *gfxP = gfx;
                 return;
 
-            case MESSAGE_E0:
+            case MESSAGE_EVENT2:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_42;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_EVENT2;
                     Font_LoadMessageBoxEndIcon(font, 1);
                     Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                 }
@@ -1023,7 +1023,7 @@ void Message_DecodeNES(PlayState* play) {
 
         if ((curChar == MESSAGE_BOX_BREAK) || (curChar == MESSAGE_BOX_BREAK2) ||
             (curChar == MESSAGE_BOX_BREAK_DELAYED) || (curChar == MESSAGE_FADE) || (curChar == MESSAGE_FADE_SKIPPABLE) ||
-            (curChar == MESSAGE_EVENT) || (curChar == MESSAGE_E0) || (curChar == MESSAGE_END) ||
+            (curChar == MESSAGE_EVENT) || (curChar == MESSAGE_EVENT2) || (curChar == MESSAGE_END) ||
             (curChar == MESSAGE_CONTINUE) || (curChar == MESSAGE_PERSISTENT)) {
             msgCtx->msgMode = MSGMODE_TEXT_DISPLAYING;
             msgCtx->textDrawPos = 1;
