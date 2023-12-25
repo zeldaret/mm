@@ -628,7 +628,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 *gfxP = gfx;
                 return;
 
-            case MESSAGE_1D:
+            case MESSAGE_FADE_SKIPPABLE:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     msgCtx->textboxEndType = TEXTBOX_ENDTYPE_52;
@@ -1022,7 +1022,7 @@ void Message_DecodeNES(PlayState* play) {
         msgCtx->decodedBuffer.schar[decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos];
 
         if ((curChar == MESSAGE_BOX_BREAK) || (curChar == MESSAGE_BOX_BREAK2) ||
-            (curChar == MESSAGE_BOX_BREAK_DELAYED) || (curChar == MESSAGE_FADE) || (curChar == MESSAGE_1D) ||
+            (curChar == MESSAGE_BOX_BREAK_DELAYED) || (curChar == MESSAGE_FADE) || (curChar == MESSAGE_FADE_SKIPPABLE) ||
             (curChar == MESSAGE_EVENT) || (curChar == MESSAGE_E0) || (curChar == MESSAGE_END) ||
             (curChar == MESSAGE_15) || (curChar == MESSAGE_PERSISTENT)) {
             msgCtx->msgMode = MSGMODE_TEXT_DISPLAYING;
@@ -1064,7 +1064,7 @@ void Message_DecodeNES(PlayState* play) {
             {
                 s8 requiredScopeTemp;
 
-                if ((curChar == MESSAGE_BOX_BREAK_DELAYED) || (curChar == MESSAGE_FADE) || (curChar == MESSAGE_1D)) {
+                if ((curChar == MESSAGE_BOX_BREAK_DELAYED) || (curChar == MESSAGE_FADE) || (curChar == MESSAGE_FADE_SKIPPABLE)) {
                     //! FAKE: & 0xFFFF to fix regalloc
                     msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[(msgCtx->msgBufPos & 0xFFFF) + 1];
                     msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos + 2];

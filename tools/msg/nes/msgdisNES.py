@@ -133,7 +133,7 @@ class MessageNES:
             0x1A: ("CMD_PERSISTENT", self.decode_cmd_no_arg),
             0x1B: ("CMD_BOX_BREAK_DELAYED", self.decode_cmd_2byte),
             0x1C: ("CMD_FADE", self.decode_cmd_2byte),
-            0x1D: ("CMD_1D", self.decode_cmd_2byte),
+            0x1D: ("CMD_FADE_SKIPPABLE", self.decode_cmd_2byte),
             0x1E: ("CMD_SFX", self.decode_cmd_2byte),
             0x1F: ("CMD_DELAY", self.decode_cmd_2byte),
             0xBF: ("CMD_END", self.decode_cmd_end),
