@@ -1747,8 +1747,8 @@ void Message_DecodeNES(PlayState* play) {
             }
             spA4 += var_fs0 * (16.0f * msgCtx->textCharScale);
             decodedBufPos--;
-        } else if ((curChar == MESSAGE_HS_TIMER_BOAT_ARCHERY) || (curChar == MESSAGE_HS_TIMER_HORSE_BACK_BALLOON) || (curChar == MESSAGE_HS_TIMER_LOTTERY_GUESS)) {
-            value = HIGH_SCORE(curChar - MESSAGE_HS_TIMER_BOAT_ARCHERY + HS_BOAT_ARCHERY);
+        } else if ((curChar == MESSAGE_HS_TIME_BOAT_ARCHERY) || (curChar == MESSAGE_HS_TIME_HORSE_BACK_BALLOON) || (curChar == MESSAGE_HS_TIME_LOTTERY_GUESS)) {
+            value = HIGH_SCORE(curChar - MESSAGE_HS_TIME_BOAT_ARCHERY + HS_BOAT_ARCHERY);
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = value;
 
