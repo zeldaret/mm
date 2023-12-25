@@ -150,7 +150,7 @@ bool Message_ShouldAdvance(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     Input* controller = CONTROLLER1(&play->state);
 
-    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
         if (CHECK_BTN_ALL(controller->press.button, BTN_A)) {
             Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
         }
@@ -169,7 +169,7 @@ bool Message_ShouldAdvanceSilent(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     Input* controller = CONTROLLER1(&play->state);
 
-    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
         return CHECK_BTN_ALL(controller->press.button, BTN_A);
     } else {
         return CHECK_BTN_ALL(controller->press.button, BTN_A) || CHECK_BTN_ALL(controller->press.button, BTN_B) ||
@@ -183,7 +183,7 @@ void Message_CloseTextbox(PlayState* play) {
     if (play->msgCtx.msgLength != 0) {
         msgCtx->stateTimer = 2;
         msgCtx->msgMode = MSGMODE_TEXT_CLOSING;
-        msgCtx->textboxEndType = TEXTBOX_ENDTYPE_00;
+        msgCtx->textboxEndType = TEXTBOX_ENDTYPE_DEFAULT;
         Audio_PlaySfx(NA_SE_NONE);
     }
 }
@@ -567,9 +567,9 @@ void func_80148D64(PlayState* play) {
         sAnalogStickHeld = false;
     }
 
-    msgCtx->bankRupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->unk120C0] - '0') * 100;
-    msgCtx->bankRupeesSelected += (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 1] - '0') * 10;
-    msgCtx->bankRupeesSelected += msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 2] - '0';
+    msgCtx->rupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->unk120C0] - '0') * 100;
+    msgCtx->rupeesSelected += (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 1] - '0') * 10;
+    msgCtx->rupeesSelected += msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 2] - '0';
 }
 
 void func_80149048(PlayState* play) {
@@ -593,7 +593,7 @@ void func_80149048(PlayState* play) {
         Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
     }
 
-    msgCtx->bankRupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->unk120C0] - '0') * 10;
+    msgCtx->rupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->unk120C0] - '0') * 10;
 }
 
 void func_801491DC(PlayState* play) {
@@ -1268,7 +1268,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
             case 0x112:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_52;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_FADE_SKIPPABLE;
                     msgCtx->stateTimer = msgCtx->decodedBuffer.wchar[++i];
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
                     if (play->csCtx.state == CS_STATE_IDLE) {
@@ -1353,7 +1353,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 break;
 
             case 0x202:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_10;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_TWO_CHOICE;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->choiceTextId = msgCtx->currentTextId;
@@ -1363,7 +1363,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 break;
 
             case 0x203:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_11;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_THREE_CHOICE;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->choiceTextId = msgCtx->currentTextId;
@@ -1373,7 +1373,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 break;
 
             case 0x20C:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_60;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_INPUT_BANK;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
@@ -1381,7 +1381,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 break;
 
             case 0x220:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_61;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
@@ -1389,7 +1389,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 break;
 
             case 0x221:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_62;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
@@ -1406,7 +1406,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 break;
 
             case 0x225:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_63;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
@@ -1422,7 +1422,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                         return;
                     }
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_00) {
+                    if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_DEFAULT) {
                         Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                         if (character == 0x500) {
                             Font_LoadMessageBoxEndIcon(font, 1);
@@ -1443,7 +1443,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Audio_PlaySfx(NA_SE_NONE);
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_30;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_PERSISTENT;
                 }
                 *gfxP = gfx;
                 return;
@@ -1451,7 +1451,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
             case 0x103:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_40;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_EVENT;
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 0);
                     Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                 }
@@ -2396,7 +2396,7 @@ void Message_Decode(PlayState* play) {
                 msgCtx->unk120BE = spD2;
                 msgCtx->unk120C0 = decodedBufPos;
                 msgCtx->unk120C2 = 2;
-                msgCtx->bankRupeesSelected = 0;
+                msgCtx->rupeesSelected = 0;
                 msgCtx->unk120C4 = charTexIndex;
                 digits[0] = digits[1] = digits[2] = 0;
 
@@ -2407,7 +2407,7 @@ void Message_Decode(PlayState* play) {
                 func_8014CCB4(play, &decodedBufPos, &charTexIndex, &spC0);
             } else if (curChar == 0x20D) {
                 digits[0] = digits[1] = 0;
-                digits[2] = msgCtx->bankRupeesSelected;
+                digits[2] = msgCtx->rupeesSelected;
 
                 while (digits[2] >= 100) {
                     digits[0]++;
@@ -2432,7 +2432,7 @@ void Message_Decode(PlayState* play) {
                 func_8014CCB4(play, &decodedBufPos, &charTexIndex, &spC0);
             } else if (curChar == 0x20E) {
                 digits[0] = digits[1] = digits[2] = 0;
-                digits[3] = msgCtx->bankRupees;
+                digits[3] = msgCtx->rupeesTotal;
 
                 while (digits[3] >= 1000) {
                     digits[0]++;
@@ -2559,7 +2559,7 @@ void Message_Decode(PlayState* play) {
                 msgCtx->unk120BE = spD2;
                 msgCtx->unk120C0 = decodedBufPos;
                 msgCtx->unk120C2 = 0;
-                msgCtx->bankRupeesSelected = 0;
+                msgCtx->rupeesSelected = 0;
                 msgCtx->unk120C4 = charTexIndex;
                 digits[0] = digits[1] = digits[2] = 0;
                 for (i = 0; i < 2; i++) {
@@ -2572,7 +2572,7 @@ void Message_Decode(PlayState* play) {
                 msgCtx->unk120BE = spD2;
                 msgCtx->unk120C0 = decodedBufPos;
                 msgCtx->unk120C2 = 0;
-                msgCtx->bankRupeesSelected = 0;
+                msgCtx->rupeesSelected = 0;
                 msgCtx->unk120C4 = charTexIndex;
 
                 for (i = 0; i < 5; i++) {
@@ -2605,7 +2605,7 @@ void Message_Decode(PlayState* play) {
                 msgCtx->unk120BE = spD2;
                 msgCtx->unk120C0 = decodedBufPos;
                 msgCtx->unk120C2 = 0;
-                msgCtx->bankRupeesSelected = 0;
+                msgCtx->rupeesSelected = 0;
                 msgCtx->unk120C4 = charTexIndex;
 
                 for (i = 0; i < 3; i++) {
@@ -3195,7 +3195,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
 
     msgCtx->choiceNum = 0;
     msgCtx->textUnskippable = false;
-    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_00;
+    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_DEFAULT;
     msgCtx->textDrawPos = 0;
     msgCtx->msgBufPos = 0;
     msgCtx->decodedTextLen = 0;
@@ -3288,7 +3288,7 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
     }
     msgCtx->choiceNum = 0;
     msgCtx->textUnskippable = false;
-    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_00;
+    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_DEFAULT;
     msgCtx->textDrawPos = 0;
     msgCtx->msgBufPos = 0;
     msgCtx->decodedTextLen = 0;
@@ -3626,11 +3626,11 @@ u8 Message_GetState(MessageContext* msgCtx) {
             return TEXT_STATE_1;
         }
 
-        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
+        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
             return TEXT_STATE_CHOICE;
         }
-        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_40) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_42) ||
-            (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_30)) {
+        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_42) ||
+            (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PERSISTENT)) {
             return TEXT_STATE_5;
         }
         if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_41) {
@@ -3639,13 +3639,13 @@ u8 Message_GetState(MessageContext* msgCtx) {
         if ((msgCtx->textboxEndType >= TEXTBOX_ENDTYPE_50) && (msgCtx->textboxEndType <= TEXTBOX_ENDTYPE_57)) {
             return TEXT_STATE_3;
         }
-        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_60) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_61)) {
+        if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BANK) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET)) {
             return TEXT_STATE_14;
         }
-        if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_62) {
+        if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE) {
             return TEXT_STATE_15;
         }
-        if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_63) {
+        if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE) {
             return TEXT_STATE_17;
         }
         if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_12) {
@@ -4977,7 +4977,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
 
             case MSGMODE_TEXT_DONE:
                 switch (msgCtx->textboxEndType) {
-                    case TEXTBOX_ENDTYPE_60:
+                    case TEXTBOX_ENDTYPE_INPUT_BANK:
                         temp_v0_33 = msgCtx->unk120BE;
                         temp = msgCtx->unk11FFA + (msgCtx->unk11FFC * temp_v0_33);
                         func_80147F18(play, &gfx,
@@ -4987,7 +4987,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         func_80148D64(play);
                         break;
 
-                    case TEXTBOX_ENDTYPE_61:
+                    case TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET:
                         temp_v0_33 = msgCtx->unk120BE;
                         temp = msgCtx->unk11FFA + (msgCtx->unk11FFC * temp_v0_33);
                         func_80148558(play, &gfx,
@@ -4996,7 +4996,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         func_80149048(play);
                         break;
 
-                    case TEXTBOX_ENDTYPE_62:
+                    case TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE:
                         temp_v0_33 = msgCtx->unk120BE;
                         temp = msgCtx->unk11FFA + (msgCtx->unk11FFC * temp_v0_33);
                         func_80147F18(play, &gfx,
@@ -5006,7 +5006,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         func_801491DC(play);
                         break;
 
-                    case TEXTBOX_ENDTYPE_63:
+                    case TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE:
                         temp_v0_33 = msgCtx->unk120BE;
                         temp = msgCtx->unk11FFA + (msgCtx->unk11FFC * temp_v0_33);
                         func_80147F18(play, &gfx,
@@ -5037,11 +5037,11 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                 Message_DrawText(play, &gfx);
 
                 switch (msgCtx->textboxEndType) {
-                    case TEXTBOX_ENDTYPE_10:
+                    case TEXTBOX_ENDTYPE_TWO_CHOICE:
                         func_80148CBC(play, &gfx, 1);
                         break;
 
-                    case TEXTBOX_ENDTYPE_11:
+                    case TEXTBOX_ENDTYPE_THREE_CHOICE:
                         func_80148CBC(play, &gfx, 2);
                         break;
 
@@ -5049,19 +5049,19 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         func_80148CBC(play, &gfx, 1);
                         break;
 
-                    case TEXTBOX_ENDTYPE_30:
+                    case TEXTBOX_ENDTYPE_PERSISTENT:
                     case TEXTBOX_ENDTYPE_41:
                     case TEXTBOX_ENDTYPE_50:
-                    case TEXTBOX_ENDTYPE_52:
+                    case TEXTBOX_ENDTYPE_FADE_SKIPPABLE:
                     case TEXTBOX_ENDTYPE_55:
                     case TEXTBOX_ENDTYPE_56:
                     case TEXTBOX_ENDTYPE_57:
-                    case TEXTBOX_ENDTYPE_62:
+                    case TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE:
                         break;
 
-                    case TEXTBOX_ENDTYPE_40:
-                    case TEXTBOX_ENDTYPE_60:
-                    case TEXTBOX_ENDTYPE_61:
+                    case TEXTBOX_ENDTYPE_EVENT:
+                    case TEXTBOX_ENDTYPE_INPUT_BANK:
+                    case TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET:
                     default:
                         Message_DrawTextboxIcon(play, &gfx, 158,
                                                 (s16)(D_801D03A8[msgCtx->textBoxType] + msgCtx->textboxYTarget));
@@ -5480,10 +5480,10 @@ void Message_Update(PlayState* play) {
             break;
 
         case MSGMODE_TEXT_DONE:
-            if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_50) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_52)) {
+            if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_50) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_SKIPPABLE)) {
                 msgCtx->stateTimer--;
                 if ((msgCtx->stateTimer == 0) ||
-                    ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_52) && Message_ShouldAdvance(play))) {
+                    ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_SKIPPABLE) && Message_ShouldAdvance(play))) {
                     if (msgCtx->nextTextId != 0xFFFF) {
                         Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
                         Message_ContinueTextbox(play, msgCtx->nextTextId);
@@ -5496,7 +5496,7 @@ void Message_Update(PlayState* play) {
                     }
                 }
             } else {
-                if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_30) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_40) ||
+                if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PERSISTENT) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_EVENT) ||
                     (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_42) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_41)) {
                     return;
                 }
@@ -5538,11 +5538,11 @@ void Message_Update(PlayState* play) {
                         }
                         break;
 
-                    case TEXTBOX_ENDTYPE_10:
+                    case TEXTBOX_ENDTYPE_TWO_CHOICE:
                         Message_HandleChoiceSelection(play, 1);
                         break;
 
-                    case TEXTBOX_ENDTYPE_11:
+                    case TEXTBOX_ENDTYPE_THREE_CHOICE:
                         Message_HandleChoiceSelection(play, 2);
                         break;
 
@@ -5554,7 +5554,7 @@ void Message_Update(PlayState* play) {
                         break;
                 }
 
-                if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) &&
+                if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) &&
                     (play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE)) {
                     if (Message_ShouldAdvance(play)) {
                         if (msgCtx->choiceIndex == 0) {
@@ -5564,7 +5564,7 @@ void Message_Update(PlayState* play) {
                         }
                         Message_CloseTextbox(play);
                     }
-                } else if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) &&
+                } else if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) &&
                            (play->msgCtx.ocarinaMode == OCARINA_MODE_PROCESS_SOT)) {
                     if (Message_ShouldAdvance(play)) {
                         if (msgCtx->choiceIndex == 0) {
@@ -5579,7 +5579,7 @@ void Message_Update(PlayState* play) {
                             Message_CloseTextbox(play);
                         }
                     }
-                } else if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) &&
+                } else if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) &&
                            (play->msgCtx.ocarinaMode == OCARINA_MODE_PROCESS_INVERTED_TIME)) {
                     if (Message_ShouldAdvance(play)) {
                         if (msgCtx->choiceIndex == 0) {
@@ -5598,7 +5598,7 @@ void Message_Update(PlayState* play) {
                             Message_CloseTextbox(play);
                         }
                     }
-                } else if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) &&
+                } else if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) &&
                            (play->msgCtx.ocarinaMode == OCARINA_MODE_PROCESS_DOUBLE_TIME)) {
                     if (Message_ShouldAdvance(play)) {
                         if (msgCtx->choiceIndex == 0) {
@@ -5616,9 +5616,9 @@ void Message_Update(PlayState* play) {
                         }
                         Message_CloseTextbox(play);
                     }
-                } else if ((msgCtx->textboxEndType != TEXTBOX_ENDTYPE_10) ||
+                } else if ((msgCtx->textboxEndType != TEXTBOX_ENDTYPE_TWO_CHOICE) ||
                            (pauseCtx->state != PAUSE_STATE_OWL_WARP_CONFIRM)) {
-                    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) &&
+                    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) &&
                         (play->msgCtx.ocarinaMode == OCARINA_MODE_1B)) {
                         if (Message_ShouldAdvance(play)) {
                             if (msgCtx->choiceIndex == 0) {
@@ -5630,16 +5630,16 @@ void Message_Update(PlayState* play) {
                             }
                             Message_CloseTextbox(play);
                         }
-                    } else if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_60) ||
-                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_61) ||
-                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) ||
-                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11) ||
+                    } else if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BANK) ||
+                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET) ||
+                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) ||
+                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE) ||
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_50) ||
-                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_52) ||
+                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_FADE_SKIPPABLE) ||
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_55) ||
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_56) ||
                                (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_57) ||
-                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_62)) {
+                               (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE)) {
                         //! FAKE: debug?
                         if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_50) {}
                     } else if (pauseCtx->itemDescriptionOn) {
@@ -5761,11 +5761,11 @@ void Message_Update(PlayState* play) {
                 pauseCtx->itemDescriptionOn = false;
             }
 
-            if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_30) {
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_00;
+            if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_PERSISTENT) {
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_DEFAULT;
                 play->msgCtx.ocarinaMode = OCARINA_MODE_WARP;
             } else {
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_00;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_DEFAULT;
             }
 
             if (EQ_MAX_QUEST_HEART_PIECE_COUNT) {
@@ -6017,7 +6017,7 @@ void Message_Init(PlayState* play) {
     msgCtx->msgMode = MSGMODE_NONE;
     msgCtx->msgLength = 0;
     msgCtx->currentTextId = 0;
-    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_00;
+    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_DEFAULT;
     msgCtx->choiceIndex = 0;
     msgCtx->ocarinaAction = msgCtx->textUnskippable = 0;
     msgCtx->textColorAlpha = 0xFF;

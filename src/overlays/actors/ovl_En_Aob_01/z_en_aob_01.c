@@ -440,7 +440,7 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
             }
 
             gSaveContext.unk_3F5C = this->rupeesBet;
-            play->msgCtx.bankRupees = this->rupeesBet;
+            play->msgCtx.rupeesTotal = this->rupeesBet;
             this->textId = 0x3529; // Is that bet okay?
             break;
 
@@ -681,7 +681,7 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
         }
     } else if ((talkState == TEXT_STATE_14) && Message_ShouldAdvance(play)) {
         this->stateFlags &= ~ENAOB01_FLAG_LAUGH;
-        this->rupeesBet = play->msgCtx.bankRupeesSelected;
+        this->rupeesBet = play->msgCtx.rupeesSelected;
         EnAob01_BeforeRace_HandleConversation(this, play);
     }
 }
@@ -854,7 +854,7 @@ void EnAob01_AfterRace_GiveRaceResult(EnAob01* this, PlayState* play) {
                 this->stateFlags |= ENAOB01_FLAG_SURPRISE;
                 this->rupeesBet *= 3;
                 Rupees_ChangeBy(this->rupeesBet);
-                play->msgCtx.bankRupees = this->rupeesBet;
+                play->msgCtx.rupeesTotal = this->rupeesBet;
                 break;
 
             case 2:
@@ -862,7 +862,7 @@ void EnAob01_AfterRace_GiveRaceResult(EnAob01* this, PlayState* play) {
                 this->stateFlags |= ENAOB01_FLAG_SURPRISE;
                 this->rupeesBet *= 2;
                 Rupees_ChangeBy(this->rupeesBet);
-                play->msgCtx.bankRupees = this->rupeesBet;
+                play->msgCtx.rupeesTotal = this->rupeesBet;
                 break;
 
             case 3:

@@ -631,7 +631,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
             case MESSAGE_FADE_SKIPPABLE:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_52;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_FADE_SKIPPABLE;
                     stateTimerHi = msgCtx->decodedBuffer.schar[++i] << 8;
                     stateTimerHi |= msgCtx->decodedBuffer.schar[++i];
                     msgCtx->stateTimer = stateTimerHi;
@@ -729,7 +729,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 break;
 
             case MESSAGE_TWO_CHOICE:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_10;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_TWO_CHOICE;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->choiceTextId = msgCtx->currentTextId;
@@ -744,7 +744,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 break;
 
             case MESSAGE_THREE_CHOICE:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_11;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_THREE_CHOICE;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->choiceTextId = msgCtx->currentTextId;
@@ -758,24 +758,24 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 }
                 break;
 
-            case MESSAGE_BANK_INPUT:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_60;
+            case MESSAGE_INPUT_BANK:
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_INPUT_BANK;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Font_LoadMessageBoxEndIcon(font, 1);
                 }
                 break;
 
-            case MESSAGE_DOGGY_RACETRACK_BET_INPUT:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_61;
+            case MESSAGE_INPUT_DOGGY_RACETRACK_BET:
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Font_LoadMessageBoxEndIcon(font, 1);
                 }
                 break;
 
-            case MESSAGE_BOMBER_CODE_INPUT:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_62;
+            case MESSAGE_INPUT_BOMBER_CODE:
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Font_LoadMessageBoxEndIcon(font, 1);
@@ -791,15 +791,15 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 }
                 break;
 
-            case MESSAGE_LOTTERY_CODE_INPUT:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_63;
+            case MESSAGE_INPUT_LOTTERY_CODE:
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Font_LoadMessageBoxEndIcon(font, 1);
                 }
                 break;
 
-            case MESSAGE_15:
+            case MESSAGE_CONTINUE:
             case MESSAGE_END:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     if (msgCtx->textBoxType == TEXTBOX_TYPE_3) {
@@ -809,7 +809,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     }
 
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_00) {
+                    if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_DEFAULT) {
                         Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                         if (character == MESSAGE_END) {
                             Font_LoadMessageBoxEndIcon(font, 1);
@@ -830,7 +830,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Audio_PlaySfx(NA_SE_NONE);
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_30;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_PERSISTENT;
                 }
                 *gfxP = gfx;
                 return;
@@ -838,7 +838,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
             case MESSAGE_EVENT:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_40;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_EVENT;
                     Font_LoadMessageBoxEndIcon(font, 0);
                     Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                 }
@@ -923,13 +923,13 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                         break;
 
                     default:
-                        if (((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_62) && (i >= msgCtx->unk120C0) &&
+                        if (((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE) && (i >= msgCtx->unk120C0) &&
                              ((msgCtx->unk120C0 + 4) >= i)) ||
-                            ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_63) && (i >= msgCtx->unk120C0) &&
+                            ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE) && (i >= msgCtx->unk120C0) &&
                              ((msgCtx->unk120C0 + 2) >= i)) ||
-                            ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_60) && (i >= msgCtx->unk120C0) &&
+                            ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BANK) && (i >= msgCtx->unk120C0) &&
                              ((msgCtx->unk120C0 + 2) >= i)) ||
-                            ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_61) && (i >= msgCtx->unk120C0) &&
+                            ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET) && (i >= msgCtx->unk120C0) &&
                              ((msgCtx->unk120C0 + 1) >= i))) {
                             msgCtx->textPosX += (s32)(16.0f * msgCtx->textCharScale);
                         } else {
@@ -1024,7 +1024,7 @@ void Message_DecodeNES(PlayState* play) {
         if ((curChar == MESSAGE_BOX_BREAK) || (curChar == MESSAGE_BOX_BREAK2) ||
             (curChar == MESSAGE_BOX_BREAK_DELAYED) || (curChar == MESSAGE_FADE) || (curChar == MESSAGE_FADE_SKIPPABLE) ||
             (curChar == MESSAGE_EVENT) || (curChar == MESSAGE_E0) || (curChar == MESSAGE_END) ||
-            (curChar == MESSAGE_15) || (curChar == MESSAGE_PERSISTENT)) {
+            (curChar == MESSAGE_CONTINUE) || (curChar == MESSAGE_PERSISTENT)) {
             msgCtx->msgMode = MSGMODE_TEXT_DISPLAYING;
             msgCtx->textDrawPos = 1;
             if (msgCtx->textBoxType == TEXTBOX_TYPE_3) {
@@ -1228,12 +1228,12 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             decodedBufPos--;
-        } else if (curChar == MESSAGE_BANK_INPUT) {
+        } else if (curChar == MESSAGE_INPUT_BANK) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
             msgCtx->unk120C0 = decodedBufPos;
             msgCtx->unk120C2 = 2;
-            msgCtx->bankRupeesSelected = 0;
+            msgCtx->rupeesSelected = 0;
             msgCtx->unk120C4 = charTexIndex;
             digits[0] = digits[1] = digits[2] = 0;
 
@@ -1242,9 +1242,9 @@ void Message_DecodeNES(PlayState* play) {
                 decodedBufPos++;
             }
             Message_LoadLocalizedRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4);
-        } else if (curChar == MESSAGE_CD) {
+        } else if (curChar == MESSAGE_RUPEES_SELECTED) {
             digits[0] = digits[1] = 0;
-            digits[2] = msgCtx->bankRupeesSelected;
+            digits[2] = msgCtx->rupeesSelected;
 
             while (digits[2] >= 100) {
                 digits[0]++;
@@ -1266,10 +1266,10 @@ void Message_DecodeNES(PlayState* play) {
                     decodedBufPos++;
                 }
             }
-            Message_LoadRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4, msgCtx->bankRupeesSelected);
-        } else if (curChar == MESSAGE_CE) {
+            Message_LoadRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4, msgCtx->rupeesSelected);
+        } else if (curChar == MESSAGE_RUPEES_TOTAL) {
             digits[0] = digits[1] = digits[2] = 0;
-            digits[3] = msgCtx->bankRupees;
+            digits[3] = msgCtx->rupeesTotal;
 
             while (digits[3] >= 1000) {
                 digits[0]++;
@@ -1294,7 +1294,7 @@ void Message_DecodeNES(PlayState* play) {
                     decodedBufPos++;
                 }
             }
-            Message_LoadRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4, msgCtx->bankRupees);
+            Message_LoadRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4, msgCtx->rupeesTotal);
         } else if (curChar == MESSAGE_TIME_UNTIL_MOON_CRASH) {
             Message_LoadTimeNES(play, curChar, &charTexIndex, &spA4, &decodedBufPos);
         } else if (curChar == MESSAGE_STRAY_FAIRIES) {
@@ -1430,12 +1430,12 @@ void Message_DecodeNES(PlayState* play) {
                 }
             }
             decodedBufPos--;
-        } else if (curChar == MESSAGE_DOGGY_RACETRACK_BET_INPUT) {
+        } else if (curChar == MESSAGE_INPUT_DOGGY_RACETRACK_BET) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
             msgCtx->unk120C0 = decodedBufPos;
             msgCtx->unk120C2 = 0;
-            msgCtx->bankRupeesSelected = 0;
+            msgCtx->rupeesSelected = 0;
             msgCtx->unk120C4 = charTexIndex;
             digits[0] = digits[1] = digits[2] = 0;
             for (i = 0; i < 2; i++) {
@@ -1443,12 +1443,12 @@ void Message_DecodeNES(PlayState* play) {
                 decodedBufPos++;
             }
             Message_LoadPluralRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4);
-        } else if (curChar == MESSAGE_BOMBER_CODE_INPUT) {
+        } else if (curChar == MESSAGE_INPUT_BOMBER_CODE) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
             msgCtx->unk120C0 = decodedBufPos;
             msgCtx->unk120C2 = 0;
-            msgCtx->bankRupeesSelected = 0;
+            msgCtx->rupeesSelected = 0;
             msgCtx->unk120C4 = charTexIndex;
 
             for (i = 0; i < 5; i++) {
@@ -1476,12 +1476,12 @@ void Message_DecodeNES(PlayState* play) {
             msgCtx->choiceIndex = index;
         } else if (curChar == MESSAGE_OWL_WARP) {
             Message_LoadOwlWarpTextNES(play, &charTexIndex, &spA4, &decodedBufPos);
-        } else if (curChar == MESSAGE_LOTTERY_CODE_INPUT) {
+        } else if (curChar == MESSAGE_INPUT_LOTTERY_CODE) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
             msgCtx->unk120C0 = decodedBufPos;
             msgCtx->unk120C2 = 0;
-            msgCtx->bankRupeesSelected = 0;
+            msgCtx->rupeesSelected = 0;
             msgCtx->unk120C4 = charTexIndex;
 
             for (i = 0; i < 3; i++) {
@@ -1890,8 +1890,8 @@ void Message_DecodeNES(PlayState* play) {
                    (curChar == MESSAGE_PERSISTENT)) {
             // pass
         } else if (curChar == MESSAGE_TEXT_SPEED) {
-            decodedBufPos++; // Next decoded char is a 0
-        } else if (curChar == MESSAGE_FADE) {
+            decodedBufPos++; // Next decoded char is 0
+        } else if (curChar == MESSAGE_FADE) { // This cannot be reached
             msgCtx->textFade = true;
             msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[++msgCtx->msgBufPos] & 0xFF;
             msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[++msgCtx->msgBufPos] & 0xFF;

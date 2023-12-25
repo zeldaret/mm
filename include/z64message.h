@@ -30,30 +30,30 @@ typedef enum TextBoxType {
     /* 0x10 */ TEXTBOX_TYPE_MAX
 } TextBoxType;
 
-#define TEXTBOX_ENDTYPE_00    0x00
+#define TEXTBOX_ENDTYPE_DEFAULT    0x00
 
-#define TEXTBOX_ENDTYPE_10    0x10
-#define TEXTBOX_ENDTYPE_11    0x11
+#define TEXTBOX_ENDTYPE_TWO_CHOICE    0x10
+#define TEXTBOX_ENDTYPE_THREE_CHOICE    0x11
 #define TEXTBOX_ENDTYPE_12    0x12
 
-#define TEXTBOX_ENDTYPE_20    0x20
+#define TEXTBOX_ENDTYPE_NEXT    0x20
 
-#define TEXTBOX_ENDTYPE_30    0x30
+#define TEXTBOX_ENDTYPE_PERSISTENT    0x30
 
-#define TEXTBOX_ENDTYPE_40    0x40
+#define TEXTBOX_ENDTYPE_EVENT    0x40
 #define TEXTBOX_ENDTYPE_41    0x41
 #define TEXTBOX_ENDTYPE_42    0x42
 
 #define TEXTBOX_ENDTYPE_50    0x50
-#define TEXTBOX_ENDTYPE_52    0x52
+#define TEXTBOX_ENDTYPE_FADE_SKIPPABLE    0x52
 #define TEXTBOX_ENDTYPE_55    0x55
 #define TEXTBOX_ENDTYPE_56    0x56
 #define TEXTBOX_ENDTYPE_57    0x57
 
-#define TEXTBOX_ENDTYPE_60    0x60
-#define TEXTBOX_ENDTYPE_61    0x61
-#define TEXTBOX_ENDTYPE_62    0x62
-#define TEXTBOX_ENDTYPE_63    0x63
+#define TEXTBOX_ENDTYPE_INPUT_BANK    0x60
+#define TEXTBOX_ENDTYPE_DOGGY_RACETRACK_BET    0x61
+#define TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE    0x62
+#define TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE    0x63
 #define TEXTBOX_ENDTYPE_64    0x64
 
 typedef enum MessageMode {
@@ -282,8 +282,8 @@ typedef struct MessageContext {
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ s32 unk12070;
     /* 0x12074 */ s32 unk12074;
-    /* 0x12078 */ s32 bankRupeesSelected;
-    /* 0x1207C */ s32 bankRupees;
+    /* 0x12078 */ s32 rupeesSelected; // Used for bank and doggy racetrack bet
+    /* 0x1207C */ s32 rupeesTotal; // Used for bank and doggy racetrack bet
     /* 0x12080 */ struct MessageTableEntry* messageTable;
     /* 0x12084 */ struct MessageTableEntry* messageTableNES;
     /* 0x12088 */ UNK_TYPE1 unk12088[0x4];

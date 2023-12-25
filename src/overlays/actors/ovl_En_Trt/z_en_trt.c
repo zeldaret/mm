@@ -126,7 +126,7 @@ void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 a
 bool EnTrt_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_TWO_CHOICE) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_THREE_CHOICE)) {
         return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
     }
     return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||

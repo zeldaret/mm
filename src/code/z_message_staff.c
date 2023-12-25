@@ -105,7 +105,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                 break;
 
             case MESSAGE_TEXTID:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_20;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_NEXT;
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Audio_PlaySfx(NA_SE_NONE);
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
@@ -233,7 +233,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                 break;
 
             case MESSAGE_TWO_CHOICE:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_10;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_TWO_CHOICE;
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->choiceTextId = msgCtx->currentTextId;
                     msgCtx->stateTimer = 4;
@@ -243,7 +243,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                 break;
 
             case MESSAGE_THREE_CHOICE:
-                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_11;
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_THREE_CHOICE;
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->choiceTextId = msgCtx->currentTextId;
                     msgCtx->stateTimer = 4;
@@ -255,7 +255,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
             case MESSAGE_END:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_00) {
+                    if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_DEFAULT) {
                         Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                         Font_LoadMessageBoxEndIcon(font, 1);
                         if (play->csCtx.state == CS_STATE_IDLE) {
@@ -291,7 +291,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     Audio_PlaySfx(NA_SE_NONE);
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_30;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_PERSISTENT;
                 }
                 *gfxP = gfx;
                 return;
@@ -299,7 +299,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
             case MESSAGE_EVENT:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
-                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_40;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_EVENT;
                     Font_LoadMessageBoxEndIcon(font, 0);
                     Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                 }
