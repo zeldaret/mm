@@ -2359,7 +2359,7 @@ asm/non_matchings/code/z_message/Message_LoadItemIcon.s,Message_LoadItemIcon,0x8
 asm/non_matchings/code/z_message/Message_LoadChar.s,Message_LoadChar,0x8014CC14,0x28
 asm/non_matchings/code/z_message/func_8014CCB4.s,func_8014CCB4,0x8014CCB4,0x4F
 asm/non_matchings/code/z_message/Message_GetTimerDigits.s,Message_GetTimerDigits,0x8014CDF0,0x7B
-asm/non_matchings/code/z_message/Message_SetupLoadItemIcon.s,Message_SetupLoadItemIcon,0x8014CFDC,0xCA
+asm/non_matchings/code/z_message/Message_DecodeHeader.s,Message_DecodeHeader,0x8014CFDC,0xCA
 asm/non_matchings/code/z_message/Message_LoadTime.s,Message_LoadTime,0x8014D304,0xCA
 asm/non_matchings/code/z_message/Message_LoadOwlWarpText.s,Message_LoadOwlWarpText,0x8014D62C,0x62
 asm/non_matchings/code/z_message/Message_Decode.s,Message_Decode,0x8014D7B4,0xCB4

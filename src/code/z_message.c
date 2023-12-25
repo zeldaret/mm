@@ -1967,7 +1967,7 @@ void Message_GetTimerDigits(OSTime time, s16 digits[8]) {
     digits[7] = t;
 }
 
-void Message_SetupLoadItemIcon(PlayState* play) {
+void Message_DecodeHeader(PlayState* play) {
     Font* font;
     MessageContext* msgCtx = &play->msgCtx;
 
@@ -2199,7 +2199,7 @@ void Message_Decode(PlayState* play) {
         numLines = 0;
         decodedBufPos = 0;
         charTexIndex = 0;
-        Message_SetupLoadItemIcon(play);
+        Message_DecodeHeader(play);
 
         while (true) {
             curChar = msgCtx->decodedBuffer.wchar[decodedBufPos] = font->msgBuf.wchar[msgCtx->msgBufPos];

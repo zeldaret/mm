@@ -326,7 +326,7 @@ void Message_DrawTextChar(struct PlayState* play, TexturePtr texture, Gfx** gfxP
 void Message_DrawItemIcon(struct PlayState* play, Gfx** gfxP);
 void Message_HandleOcarina(struct PlayState* play);
 void Message_LoadItemIcon(struct PlayState* play, u16 itemId, s16 arg2);
-void Message_SetupLoadItemIcon(struct PlayState* play);
+void Message_DecodeHeader(struct PlayState* play);
 void func_801514B0(struct PlayState* play, u16 arg1, u8 arg2);
 void Message_StartTextbox(struct PlayState* play, u16 textId, Actor* actor);
 void Message_ContinueTextbox(struct PlayState* play, u16 textId);

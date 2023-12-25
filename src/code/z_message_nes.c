@@ -1015,7 +1015,7 @@ void Message_DecodeNES(PlayState* play) {
     msgCtx->textFade = false;
     spA4 = 0.0f;
     font->unk_11D88 = (font->unk_11D88 ^ 1) & 1;
-    Message_SetupLoadItemIcon(play);
+    Message_DecodeHeader(play);
 
     while (true) {
         curChar = font->msgBuf.schar[msgCtx->msgBufPos];

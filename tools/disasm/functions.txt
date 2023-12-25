@@ -2845,7 +2845,7 @@
     0x8014CC14:("Message_LoadChar",),
     0x8014CCB4:("func_8014CCB4",),
     0x8014CDF0:("Message_GetTimerDigits",),
-    0x8014CFDC:("Message_SetupLoadItemIcon",),
+    0x8014CFDC:("Message_DecodeHeader",),
     0x8014D304:("Message_LoadTime",),
     0x8014D62C:("Message_LoadOwlWarpText",),
     0x8014D7B4:("Message_Decode",),
