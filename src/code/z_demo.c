@@ -1052,8 +1052,8 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
         // a textbox that is expected to be closed by the user is still open.
         endFrame = csCtx->curFrame;
         talkState = Message_GetState(&play->msgCtx);
-        if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_SONG_DEMO_DONE) &&
-            (talkState != TEXT_STATE_8)) {
+        if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) &&
+            (talkState != TEXT_STATE_SONG_DEMO_DONE) && (talkState != TEXT_STATE_8)) {
             csCtx->curFrame--;
 
             if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {

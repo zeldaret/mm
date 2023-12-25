@@ -233,8 +233,9 @@ void func_80BC1E40(EnJa* this, PlayState* play) {
     s32 talkState = Message_GetState(&play->msgCtx);
     f32 phi_f0;
 
-    if (((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_FADING) &&
-        (this->prevTalkState == TEXT_STATE_FADING) && (&this->actor == player->talkActor)) {
+    if (((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) &&
+        (talkState == TEXT_STATE_FADING) && (this->prevTalkState == TEXT_STATE_FADING) &&
+        (&this->actor == player->talkActor)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_348 != 0.0f) {
                 this->unk_348 = 0.0f;

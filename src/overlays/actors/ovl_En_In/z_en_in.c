@@ -1620,8 +1620,8 @@ void func_808F6334(EnIn* this, PlayState* play) {
 
     Matrix_Translate(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
     if ((&this->actor == player->talkActor) &&
-        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_FADING) &&
-        (this->prevTalkState == TEXT_STATE_FADING)) {
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) &&
+        (talkState == TEXT_STATE_FADING) && (this->prevTalkState == TEXT_STATE_FADING)) {
         if (!(play->state.frames & 1)) {
             this->unk4C0 = (this->unk4C0 != 0.0f) ? 0.0f : 1.0f;
         }
