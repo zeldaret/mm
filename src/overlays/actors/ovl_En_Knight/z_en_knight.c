@@ -1094,7 +1094,7 @@ void func_809B4308(EnKnight* this, PlayState* play) {
         this->unk440.z = player->actor.world.pos.z + sp38.z;
         dx = this->unk440.x - this->actor.world.pos.x;
         dz = this->unk440.z - this->actor.world.pos.z;
-        sp34 = Math_FAtan2F(dz, dx);
+        sp34 = Math_Atan2S_XY(dz, dx);
     } else {
         sp34 = this->unk172;
     }
@@ -1178,7 +1178,7 @@ void func_809B4880(EnKnight* this, PlayState* play) {
             Math_ApproachF(&this->actor.speed, 5.0f, 1.0f, 1.0f);
             dx = this->unk440.x - this->actor.world.pos.x;
             dz = this->unk440.z - this->actor.world.pos.z;
-            Math_ApproachS(&this->actor.world.rot.y, Math_FAtan2F(dz, dx), 5, 0xA00);
+            Math_ApproachS(&this->actor.world.rot.y, Math_Atan2S_XY(dz, dx), 5, 0xA00);
             if (Animation_OnFrame(&this->unk194, 0.0f) || Animation_OnFrame(&this->unk194, 5.0f)) {
                 Actor_PlaySfx(&this->actor, this->unk6B4);
             }
@@ -1648,7 +1648,7 @@ void func_809B5ED0(EnKnight* this, PlayState* play) {
     } else {
         f32 dx = D_809BEFE0->actor.focus.pos.x - this->actor.world.pos.x;
         f32 dz = D_809BEFE0->actor.focus.pos.z - this->actor.world.pos.z;
-        s16 temp_v1 = Math_FAtan2F(dz, dx) - this->actor.shape.rot.y;
+        s16 temp_v1 = Math_Atan2S_XY(dz, dx) - this->actor.shape.rot.y;
 
         if (temp_v1 > 0x3800) {
             this->unk186 = 0x3800;
@@ -1687,7 +1687,7 @@ void func_809B601C(EnKnight* this, PlayState* play) {
             if (this->unk14A[0] < 0x28 && this->unk14A[0] >= 0x10) {
                 dx = var_t0->actor.focus.pos.x - this->actor.world.pos.x;
                 dz = var_t0->actor.focus.pos.z - this->actor.world.pos.z;
-                temp_v1_2 = Math_FAtan2F(dz, dx) - this->actor.shape.rot.y;
+                temp_v1_2 = Math_Atan2S_XY(dz, dx) - this->actor.shape.rot.y;
 
                 if (temp_v1_2 > 0x3800) {
                     this->unk186 = 0x3800;
@@ -1965,7 +1965,7 @@ void func_809B6D94(EnKnight* this, PlayState* play) {
                 D_809BEFDC = NULL;
                 this->actor.flags |= 1;
                 player->lockOnActor = &this->actor;
-                play->actorCtx.targetCtx.arrowPointedActor = &this->actor;
+                play->actorCtx.targetCtx.fairyActor = &this->actor;
                 play->actorCtx.targetCtx.lockOnActor = &this->actor;
             }
             if (this->unk14A[0] == 0xF) {
@@ -2135,7 +2135,7 @@ void func_809B71DC(EnKnight* this, PlayState* play) {
     }
 
     if (this->unk_68A != 0) {
-        ShrinkWindow_SetLetterboxTarget(27);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
         Play_SetCameraAtEye(play, this->unk_68A, &this->unk698, &this->unk68C);
         Play_SetCameraFov(play, this->unk_68A, this->unk6B0);
     }
@@ -2392,7 +2392,7 @@ void func_809B7950(EnKnight* this, PlayState* play) {
     }
 
     if (this->unk_68A != 0) {
-        ShrinkWindow_SetLetterboxTarget(27);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
         Play_SetCameraAtEye(play, this->unk_68A, &this->unk698, &this->unk68C);
         Play_SetCameraFov(play, this->unk_68A, this->unk6B0);
     }
@@ -2745,7 +2745,7 @@ void func_809B8458(EnKnight* this, PlayState* play) {
     }
 
     if (this->unk_68A != 0) {
-        ShrinkWindow_SetLetterboxTarget(27);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
         temp_fv1 = Math_SinS(this->unk146 * 0x6000) * 0.5f * sp64;
 
         sp50.x = this->unk68C.x;
@@ -2955,7 +2955,7 @@ void func_809BA0CC(EnKnight* this, PlayState* play) {
             this->unk14A[0] = 0x14;
             D_809BEFD0->actor.flags &= ~1;
             player->lockOnActor = &this->actor;
-            play->actorCtx.targetCtx.arrowPointedActor = &this->actor;
+            play->actorCtx.targetCtx.fairyActor = &this->actor;
             play->actorCtx.targetCtx.lockOnActor = &this->actor;
             Math_Vec3f_Copy(&this->actor.world.pos, &D_809BEFD0->actor.world.pos);
             Math_Vec3s_Copy(&this->actor.world.rot, &D_809BEFD0->actor.world.rot);
@@ -3210,7 +3210,7 @@ void EnKnight_Update(Actor* thisx, PlayState* play) {
     sp70 = KREG(93) + ((sp78->actor.world.pos.y + 34.0f) - this->actor.focus.pos.y);
     sp6C = sp78->actor.world.pos.z - this->actor.focus.pos.z;
 
-    this->unk172 = Math_FAtan2F(sp6C, sp74);
+    this->unk172 = Math_Atan2S_XY(sp6C, sp74);
     this->unk170 = Math_Atan2S(-sp70, sqrtf(SQ(sp74) + SQ(sp6C)));
 
     this->unk146++;
