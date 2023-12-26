@@ -23,31 +23,23 @@ class MessageCredits:
     def macro(self):
         self.decode()
         return (
-                f"DEFINE_MESSAGE(0x{self.id:04X}, "
-                f"0x{self.typePos:02X}, \n"
+                f"DEFINE_MESSAGE(0x{self.id:04X}, 0x{self.typePos:02X},\n"
                 f"{self.decodedText}\n)\n"
         )
 
-    def decode_cmd_no_arg(self, cmd):
-        return f'{cmd} '
+    def decode_cmd_arg_none(self, cmd):
+        return f'{cmd}'
 
-    def decode_cmd_end(self, cmd):
-        # Don't do anything for the end command
-        return ''
-
-    def decode_cmd_box_break(self, cmd):
-        return f'\n{cmd}\n'
-
-    def decode_cmd_1byte(self, cmd):
+    def decode_cmd_arg_1byte(self, cmd):
         arg = self.text[self.decodePos]
         self.decodePos += 1
-        return f'{cmd}("\\x{arg:02X}") '
+        return f'{cmd}("\\x{arg:02X}")'
 
-    def decode_cmd_2byte(self, cmd):
+    def decode_cmd_arg_2byte(self, cmd):
         arg1 = self.text[self.decodePos]
         arg2 = self.text[self.decodePos + 1]
         self.decodePos += 2
-        return f'{cmd}("\\x{arg1:02X}\\x{arg2:02X}") '
+        return f'{cmd}("\\x{arg1:02X}\\x{arg2:02X}")'
 
     def decode_cmd_color(self, cmd):
         COLORS = {
@@ -69,7 +61,7 @@ class MessageCredits:
         arg2 = self.text[self.decodePos + 1]
         arg3 = self.text[self.decodePos + 2]
         self.decodePos += 3
-        return f'{cmd}("\\x{arg1:02X}","\\x{arg2:02X}","\\x{arg3:02X}") '
+        return f'{cmd}("\\x{arg1:02X}","\\x{arg2:02X}","\\x{arg3:02X}")'
 
     def decode_cmd_highscore(self, cmd):
         HIGHSCORES = {
@@ -82,77 +74,101 @@ class MessageCredits:
         }
         highscore = self.text[self.decodePos]
         self.decodePos += 1
-        return f'{cmd}({HIGHSCORES[highscore]}) '
+        return f'{cmd}({HIGHSCORES[highscore]})'
 
     def decode(self):
         CMDMAP = {
-            0x00: ("CMD_COLOR_DEFAULT", self.decode_cmd_no_arg),
-            0x02: ("CMD_END", self.decode_cmd_end),
-            0x04: ("CMD_BOX_BREAK", self.decode_cmd_box_break),
+            0x00: ("CMD_COLOR_DEFAULT", self.decode_cmd_arg_none),
+            0x04: ("CMD_BOX_BREAK", self.decode_cmd_arg_none),
             0x05: ("CMD_COLOR", self.decode_cmd_color),
-            0X06: ("CMD_SHIFT", self.decode_cmd_1byte),
-            0x07: ("CMD_TEXTID", self.decode_cmd_2byte),
-            0x08: ("CMD_QUICKTEXT_ENABLE", self.decode_cmd_no_arg),
-            0x09: ("CMD_QUICKTEXT_DISABLE", self.decode_cmd_no_arg),
-            0x0A: ("CMD_PERSISTENT", self.decode_cmd_no_arg),
-            0x0B: ("CMD_EVENT", self.decode_cmd_no_arg),
-            0x0C: ("CMD_BOX_BREAK_DELAY", self.decode_cmd_1byte),
-            0x0D: ("CMD_WAIT_INPUT", self.decode_cmd_no_arg),
-            0x0E: ("CMD_FADE", self.decode_cmd_1byte),
-            0x0F: ("CMD_NAME", self.decode_cmd_no_arg),
-            0x10: ("CMD_OCARINA", self.decode_cmd_no_arg),
-            0x11: ("CMD_FADE2", self.decode_cmd_2byte),
-            0x12: ("CMD_SFX", self.decode_cmd_2byte),
-            0x13: ("CMD_ITEM_ICON", self.decode_cmd_1byte),
-            0x14: ("CMD_TEXT_SPEED", self.decode_cmd_1byte),
+            0X06: ("CMD_SHIFT", self.decode_cmd_arg_1byte),
+            0x07: ("CMD_TEXTID", self.decode_cmd_arg_2byte),
+            0x08: ("CMD_QUICKTEXT_ENABLE", self.decode_cmd_arg_none),
+            0x09: ("CMD_QUICKTEXT_DISABLE", self.decode_cmd_arg_none),
+            0x0A: ("CMD_PERSISTENT", self.decode_cmd_arg_none),
+            0x0B: ("CMD_EVENT", self.decode_cmd_arg_none),
+            0x0C: ("CMD_BOX_BREAK_DELAY", self.decode_cmd_arg_2byte),
+            0x0D: ("CMD_WAIT_INPUT", self.decode_cmd_arg_none),
+            0x0E: ("CMD_FADE", self.decode_cmd_arg_1byte),
+            0x0F: ("CMD_NAME", self.decode_cmd_arg_none),
+            0x10: ("CMD_OCARINA", self.decode_cmd_arg_none),
+            0x11: ("CMD_FADE2", self.decode_cmd_arg_2byte),
+            0x12: ("CMD_SFX", self.decode_cmd_arg_2byte),
+            0x13: ("CMD_ITEM_ICON", self.decode_cmd_arg_1byte),
+            0x14: ("CMD_TEXT_SPEED", self.decode_cmd_arg_1byte),
             0x15: ("CMD_BACKGROUND", self.decode_cmd_background),
-            0x16: ("CMD_MARATHONTIME", self.decode_cmd_no_arg),
-            0x17: ("CMD_RACETIME", self.decode_cmd_no_arg),
-            0x18: ("CMD_POINTS", self.decode_cmd_no_arg),
-            0x1A: ("CMD_UNSKIPPABLE", self.decode_cmd_no_arg),
-            0x1B: ("CMD_TWO_CHOICE", self.decode_cmd_no_arg),
-            0x1C: ("CMD_THREE_CHOICE", self.decode_cmd_no_arg),
-            0x1D: ("CMD_FISH_INFO", self.decode_cmd_no_arg),
+            0x16: ("CMD_MARATHONTIME", self.decode_cmd_arg_none),
+            0x17: ("CMD_RACETIME", self.decode_cmd_arg_none),
+            0x18: ("CMD_POINTS", self.decode_cmd_arg_none),
+            0x1A: ("CMD_UNSKIPPABLE", self.decode_cmd_arg_none),
+            0x1B: ("CMD_TWO_CHOICE", self.decode_cmd_arg_none),
+            0x1C: ("CMD_THREE_CHOICE", self.decode_cmd_arg_none),
+            0x1D: ("CMD_FISH_INFO", self.decode_cmd_arg_none),
             0x1E: ("CMD_HIGHSCORE", self.decode_cmd_highscore),
-            0x1F: ("CMD_TIME", self.decode_cmd_no_arg),
+            0x1F: ("CMD_TIME", self.decode_cmd_arg_none),
         }
-        if self.decodedText == "":
-            prevText = False
-            prevNewline = False
-            self.decodePos = 0
-            textLen = len(self.text)
-            while self.decodePos < textLen:
-                char = self.text[self.decodePos]
-                self.decodePos += 1
+        if self.decodedText != "":
+            return
 
-                if char >= 0x20 and char <= 0xAF: # Regular Characters
-                    if not prevText:
-                        self.decodedText += '"'
+        prevText = False
+        prevNewline = True
+        prevCmd = False
+        self.decodePos = 0
+        textLen = len(self.text)
+        while self.decodePos < textLen:
+            char = self.text[self.decodePos]
+            self.decodePos += 1
 
-                    if char == 0x22: # Handle escaping "
-                        self.decodedText += '\\"'
-                    else:
-                        self.decodedText += chr(char)
+            if char >= 0x20 and char <= 0xAF: # Regular Characters
+                if prevCmd:
+                    self.decodedText += ' "'
+                elif prevNewline:
+                    self.decodedText += '"'
 
-                    prevText = True
-                    prevNewline = False
-                elif char == 0x1: # New line
-                    if not prevText or prevNewline:
-                        self.decodedText += '"'
+                if char == 0x22: # Handle escaping "
+                    self.decodedText += '\\"'
+                else:
+                    self.decodedText += chr(char)
 
-                    self.decodedText += f'\\n"\n'
+                prevText = True
+                prevNewline = False
+                prevCmd = False
+            elif char == 0x1: # New line
+                if prevCmd:
+                    self.decodedText += ' "'
+                elif prevNewline:
+                    self.decodedText += '"'
 
-                    prevText = False
-                    prevNewline = True
-                else: # Control Codes (see message_data_fmt_staff.h)
-                    if prevText:
-                        self.decodedText += '" '
+                self.decodedText += f'\\n"\n'
 
-                    cmd, decoder = CMDMAP[char]
-                    self.decodedText += decoder(cmd)
+                prevText = False
+                prevNewline = True
+                prevCmd = False
+            elif char == 0x04 or char == 0x0C: # Box Breaks add automatic newlines
+                if prevText:
+                    self.decodedText += '"'
 
-                    prevText = False
-                    prevNewline = False
+                cmd, decoder = CMDMAP[char]
+                self.decodedText += f'\n{decoder(cmd)}\n'
+
+                prevText = False
+                prevNewline = True
+                prevCmd = False
+            elif char == 0x02: # End command, do nothing
+                if prevText:
+                    self.decodedText += '"'
+            else: # Control Codes (see message_data_fmt_staff.h)
+                if prevText:
+                    self.decodedText += '" '
+                elif prevCmd:
+                    self.decodedText += ' '
+
+                cmd, decoder = CMDMAP[char]
+                self.decodedText += decoder(cmd)
+
+                prevText = False
+                prevNewline = False
+                prevCmd = True
 
 def parseTable(start):
     table = {}
