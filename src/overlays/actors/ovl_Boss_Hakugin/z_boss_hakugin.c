@@ -771,66 +771,71 @@ void BossHakugin_SpawnBlueWarp(BossHakugin* this, PlayState* play) {
 }
 
 void func_80B0607C(BossHakugin* this, PlayState* play) {
-    CollisionPoly* sp8C = NULL;
-    CollisionPoly* sp88 = NULL;
+    CollisionPoly* rightWallPoly = NULL;
+    CollisionPoly* leftWallPoly = NULL;
     s32 bgId;
     s16 sp82;
     s16 sp80;
     s16 var_v0;
-    Vec3f sp70;
-    Vec3f sp64;
-    Vec3f sp58;
-    Vec3f sp4C;
+    Vec3f rightWallResultPos;
+    Vec3f leftWallResultPos;
+    Vec3f posA;
+    Vec3f posB;
     f32 sp48;
 
-    sp58.x = this->actor.world.pos.x + (Math_SinS(this->unk_01A0) * (5.0f * this->actor.speed));
-    sp58.y = this->actor.world.pos.y + 450.0f;
-    sp58.z = this->actor.world.pos.z + (Math_CosS(this->unk_01A0) * (5.0f * this->actor.speed));
+    posA.x = this->actor.world.pos.x + (Math_SinS(this->unk_01A0) * (5.0f * this->actor.speed));
+    posA.y = this->actor.world.pos.y + 450.0f;
+    posA.z = this->actor.world.pos.z + (Math_CosS(this->unk_01A0) * (5.0f * this->actor.speed));
 
-    sp4C.x = sp58.x - Math_CosS(this->unk_01A0) * 1000.0f;
-    sp4C.y = sp58.y;
-    sp4C.z = sp58.z + (Math_SinS(this->unk_01A0) * 1000.0f);
+    posB.x = posA.x - Math_CosS(this->unk_01A0) * 1000.0f;
+    posB.y = posA.y;
+    posB.z = posA.z + (Math_SinS(this->unk_01A0) * 1000.0f);
 
-    if (BgCheck_EntityLineTest1(&play->colCtx, &sp58, &sp4C, &sp70, &sp8C, true, true, false, true, &bgId)) {
-        sp82 = Math_Atan2S_XY(COLPOLY_GET_NORMAL(sp8C->normal.z), COLPOLY_GET_NORMAL(sp8C->normal.x)) - this->unk_01A0;
-        this->unk_01BC = Math_Vec3f_DistXZ(&sp58, &sp70);
+    if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &rightWallResultPos, &rightWallPoly, true, true, false,
+                                true, &bgId)) {
+        sp82 =
+            Math_Atan2S_XY(COLPOLY_GET_NORMAL(rightWallPoly->normal.z), COLPOLY_GET_NORMAL(rightWallPoly->normal.x)) -
+            this->unk_01A0;
+        this->distToRightWall = Math_Vec3f_DistXZ(&posA, &rightWallResultPos);
     } else {
         sp82 = 0;
-        this->unk_01BC = 30000.0f;
+        this->distToRightWall = 30000.0f;
     }
 
-    sp4C.x = (2.0f * sp58.x) - sp4C.x;
-    sp4C.z = (2.0f * sp58.z) - sp4C.z;
+    posB.x = (2.0f * posA.x) - posB.x;
+    posB.z = (2.0f * posA.z) - posB.z;
 
-    if (BgCheck_EntityLineTest1(&play->colCtx, &sp58, &sp4C, &sp64, &sp88, true, true, false, true, &bgId)) {
-        sp80 = Math_Atan2S_XY(COLPOLY_GET_NORMAL(sp88->normal.z), COLPOLY_GET_NORMAL(sp88->normal.x)) - this->unk_01A0;
-        this->unk_01C0 = Math_Vec3f_DistXZ(&sp58, &sp64);
+    if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &leftWallResultPos, &leftWallPoly, true, true, false, true,
+                                &bgId)) {
+        sp80 = Math_Atan2S_XY(COLPOLY_GET_NORMAL(leftWallPoly->normal.z), COLPOLY_GET_NORMAL(leftWallPoly->normal.x)) -
+               this->unk_01A0;
+        this->distToLeftWall = Math_Vec3f_DistXZ(&posA, &leftWallResultPos);
     } else {
         sp80 = 0;
-        this->unk_01C0 = 30000.0f;
+        this->distToLeftWall = 30000.0f;
     }
 
     if (this->direction == GOHT_DIRECTION_CLOCKWISE) {
-        this->unk_01C0 -= 50.0f;
+        this->distToLeftWall -= 50.0f;
     } else {
-        this->unk_01BC -= 50.0f;
+        this->distToRightWall -= 50.0f;
     }
 
-    if (this->unk_01BC <= 89.100006f) {
+    if (this->distToRightWall <= 89.100006f) {
         sp48 = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? 89.100006f : 139.1f;
-        this->actor.world.pos.x =
-            (sp70.x + (sp48 * Math_CosS(this->unk_01A0))) - (Math_SinS(this->unk_01A0) * (5.0f * this->actor.speed));
-        this->actor.world.pos.z =
-            (sp70.z - (sp48 * Math_SinS(this->unk_01A0))) - (Math_CosS(this->unk_01A0) * (5.0f * this->actor.speed));
-    } else if (this->unk_01C0 <= 89.100006f) {
+        this->actor.world.pos.x = (rightWallResultPos.x + (sp48 * Math_CosS(this->unk_01A0))) -
+                                  (Math_SinS(this->unk_01A0) * (5.0f * this->actor.speed));
+        this->actor.world.pos.z = (rightWallResultPos.z - (sp48 * Math_SinS(this->unk_01A0))) -
+                                  (Math_CosS(this->unk_01A0) * (5.0f * this->actor.speed));
+    } else if (this->distToLeftWall <= 89.100006f) {
         sp48 = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? 139.1f : 89.100006f;
-        this->actor.world.pos.x =
-            (sp64.x - (sp48 * Math_CosS(this->unk_01A0))) - (Math_SinS(this->unk_01A0) * (5.0f * this->actor.speed));
-        this->actor.world.pos.z =
-            (sp64.z + (sp48 * Math_SinS(this->unk_01A0))) - (Math_CosS(this->unk_01A0) * (5.0f * this->actor.speed));
+        this->actor.world.pos.x = (leftWallResultPos.x - (sp48 * Math_CosS(this->unk_01A0))) -
+                                  (Math_SinS(this->unk_01A0) * (5.0f * this->actor.speed));
+        this->actor.world.pos.z = (leftWallResultPos.z + (sp48 * Math_SinS(this->unk_01A0))) -
+                                  (Math_CosS(this->unk_01A0) * (5.0f * this->actor.speed));
     }
 
-    if ((this->unk_01C0 < 30000.0f) && (this->unk_01BC < 30000.0f)) {
+    if ((this->distToLeftWall < 30000.0f) && (this->distToRightWall < 30000.0f)) {
         var_v0 = (s16)(sp82 + sp80) >> 1;
         if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (var_v0 < 0)) ||
             ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) && (var_v0 > 0))) {
@@ -1655,9 +1660,9 @@ void BossHakugin_Run(BossHakugin* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
         func_80B07450(this, play);
 
-        if ((this->unk_01BC < (this->unk_01C0 * 0.5f)) || (this->unk_01BC < 89.100006f)) {
+        if ((this->distToRightWall < (this->distToLeftWall * 0.5f)) || (this->distToRightWall < 89.100006f)) {
             this->unk_019E = (Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f;
-        } else if ((this->unk_01C0 < (this->unk_01BC * 0.5f)) || (this->unk_01C0 < 89.100006f)) {
+        } else if ((this->distToLeftWall < (this->distToRightWall * 0.5f)) || (this->distToLeftWall < 89.100006f)) {
             this->unk_019E = -((Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f);
         } else if ((this->unk_01A2 == this->unk_019E) && (Rand_ZeroOne() < 0.005f)) {
             if (this->unk_019E > 0) {
@@ -1695,11 +1700,11 @@ void BossHakugin_Charge(BossHakugin* this, PlayState* play) {
     if ((this->unk_044C.z < 0.0f) || (this->bodyCollider.base.atFlags & AT_HIT)) {
         BossHakugin_SetupRun(this);
     } else {
-        if ((this->unk_01C0 < 89.100006f) || (this->unk_01BC < 89.100006f)) {
+        if ((this->distToLeftWall < 89.100006f) || (this->distToRightWall < 89.100006f)) {
             this->unk_019E = this->unk_01A0;
         } else {
-            if (((this->unk_044C.x > 0.0f) && (this->unk_044C.x < this->unk_01C0)) ||
-                ((this->unk_044C.x <= 0.0f) && (-this->unk_044C.x < this->unk_01BC))) {
+            if (((this->unk_044C.x > 0.0f) && (this->unk_044C.x < this->distToLeftWall)) ||
+                ((this->unk_044C.x <= 0.0f) && (-this->unk_044C.x < this->distToRightWall))) {
                 var_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
                 var_v0 = CLAMP(var_v0, -0x3000, 0x3000);
                 this->unk_019E = this->actor.shape.rot.y + var_v0;
@@ -2113,10 +2118,10 @@ void BossHakugin_DeathCutscenePart2(BossHakugin* this, PlayState* play) {
     func_80B07450(this, play);
 
     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_019E, 0x300) &&
-        ((this->unk_01BC <= 189.00002f) || (this->unk_01C0 <= 189.00002f))) {
+        ((this->distToRightWall <= 189.00002f) || (this->distToLeftWall <= 189.00002f))) {
         BossHakugin_SetupDead(this);
-    } else if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (this->unk_01BC <= 189.00002f)) ||
-               ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) && (this->unk_01C0 <= 189.00002f))) {
+    } else if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (this->distToRightWall <= 189.00002f)) ||
+               ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) && (this->distToLeftWall <= 189.00002f))) {
         var_v0 = ABS_ALT(this->unk_019E);
         if (var_v0 < 0x2000) {
             this->actor.world.pos.z = -1389.0f;

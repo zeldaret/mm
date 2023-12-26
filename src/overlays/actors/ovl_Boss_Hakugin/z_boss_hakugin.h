@@ -122,8 +122,8 @@ typedef struct BossHakugin {
     /* 0x01B0 */ u32 unk_01B0;
     /* 0x01B4 */ s32 direction;
     /* 0x01B8 */ f32 electricBallSpeed;
-    /* 0x01BC */ f32 unk_01BC;
-    /* 0x01C0 */ f32 unk_01C0;
+    /* 0x01BC */ f32 distToRightWall;
+    /* 0x01C0 */ f32 distToLeftWall;
     /* 0x01C4 */ f32 targetSpeed;
     /* 0x01C8 */ f32 chargingLightOrbScale; // TODO: bad, but descriptive
     /* 0x01CC */ f32 chargingLightningTranslateZ; // TODO: bad, but descriptive
