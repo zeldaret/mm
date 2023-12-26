@@ -1750,10 +1750,10 @@ void BossHakugin_SetupFallDown(BossHakugin* this) {
 
 void BossHakugin_FallDown(BossHakugin* this, PlayState* play) {
     CollisionPoly* spBC;
-    Vec3f spB0;
-    Vec3f spA4;
+    Vec3f velocity;
+    Vec3f pos;
     s32 i;
-    s32 sp9C;
+    s32 bgId;
 
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
 
@@ -1764,24 +1764,23 @@ void BossHakugin_FallDown(BossHakugin* this, PlayState* play) {
         }
 
         if (this->actor.speed > 5.0f) {
-            for (i = 0; i < 2; i++) {
-                s16 temp1 = this->actor.shape.rot.y + (u32)(0xF000 * i - 0x7800); // TODO: seems fake
-                s16 temp2;
+            for (i = -1; i < 2; i += 2) {
+                s16 temp1 = this->actor.shape.rot.y + (i * 0x7800);
                 f32 temp_fs1;
 
-                spB0.x = 2.0f * Math_SinS(temp1);
-                spB0.y = 1.0f;
-                spB0.z = 2.0f * Math_CosS(temp1);
+                velocity.x = 2.0f * Math_SinS(temp1);
+                velocity.y = 1.0f;
+                velocity.z = 2.0f * Math_CosS(temp1);
 
-                temp2 = this->actor.shape.rot.y + (u32)(0x8000 * i - 0x4000);
+                temp1 = this->actor.shape.rot.y + (i * 0x4000);
                 temp_fs1 = Rand_ZeroFloat(190.0f);
-                spA4.x = this->actor.world.pos.x + (80.0f * Math_SinS(temp2)) +
-                         (Math_SinS(this->actor.shape.rot.y) * temp_fs1);
-                spA4.z = this->actor.world.pos.z + (80.0f * Math_CosS(temp2)) +
-                         (Math_CosS(this->actor.shape.rot.y) * temp_fs1);
-                spA4.y = this->actor.world.pos.y + 300.0f;
-                spA4.y = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &spBC, &sp9C, &this->actor, &spA4) + 10.0f;
-                func_800B12F0(play, &spA4, &spB0, &gZeroVec3f, Rand_S16Offset(750, 100), 10, 30);
+                pos.x = this->actor.world.pos.x + (80.0f * Math_SinS(temp1)) +
+                        (Math_SinS(this->actor.shape.rot.y) * temp_fs1);
+                pos.z = this->actor.world.pos.z + (80.0f * Math_CosS(temp1)) +
+                        (Math_CosS(this->actor.shape.rot.y) * temp_fs1);
+                pos.y = this->actor.world.pos.y + 300.0f;
+                pos.y = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &spBC, &bgId, &this->actor, &pos) + 10.0f;
+                func_800B12F0(play, &pos, &velocity, &gZeroVec3f, Rand_S16Offset(750, 100), 10, 30);
             }
         }
     }
@@ -1978,7 +1977,7 @@ void BossHakugin_CutsceneStart(BossHakugin* this, PlayState* play) {
 }
 
 void BossHakugin_SetupDeathCutscenePart1(BossHakugin* this) {
-    f32 temp_fv0_2;
+    f32 direction;
 
     Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.3f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
@@ -1997,23 +1996,23 @@ void BossHakugin_SetupDeathCutscenePart1(BossHakugin* this) {
         this->unk_019E -= 0x4000;
     }
 
-    temp_fv0_2 = this->direction;
+    direction = this->direction;
     if ((this->unk_019E > 0x6000) || (this->unk_019E < -0x6000)) {
-        this->subCamEye.x = temp_fv0_2 * -1200.0f;
-        this->subCamEye.y = (temp_fv0_2 * 80.0f) + -240.0f + 60.0f;
+        this->subCamEye.x = direction * -1200.0f;
+        this->subCamEye.y = (direction * 80.0f) + -240.0f + 60.0f;
         this->subCamEye.z = 1200.0f;
     } else if ((this->unk_019E < 0x2000) && (this->unk_019E > -0x2000)) {
-        this->subCamEye.x = temp_fv0_2 * 1200.0f;
+        this->subCamEye.x = direction * 1200.0f;
         this->subCamEye.y = 60.0f;
         this->subCamEye.z = -1200.0f;
     } else if (this->unk_019E >= 0x2000) {
         this->subCamEye.x = -1200.0f;
-        this->subCamEye.y = (80.0f * temp_fv0_2) + -80.0f + 60.0f;
-        this->subCamEye.z = temp_fv0_2 * -1200.0f;
+        this->subCamEye.y = (80.0f * direction) + -80.0f + 60.0f;
+        this->subCamEye.z = direction * -1200.0f;
     } else {
         this->subCamEye.x = 1200.0f;
-        this->subCamEye.y = (-160.0f * temp_fv0_2) + -160.0f + 60.0f;
-        this->subCamEye.z = temp_fv0_2 * 1200.0f;
+        this->subCamEye.y = (-160.0f * direction) + -160.0f + 60.0f;
+        this->subCamEye.z = direction * 1200.0f;
     }
 
     this->chargingLightOrbScale = 0.0f;
@@ -2178,7 +2177,6 @@ void BossHakugin_Dead(BossHakugin* this, PlayState* play) {
     Vec3f eyeTarget;
     s16 temp_s0;
     s32 sp60;
-    s32 i;
     BossHakuginStruct_B0A8C4* unkStruct;
 
     SkelAnime_Update(&this->skelAnime);
@@ -2205,9 +2203,11 @@ void BossHakugin_Dead(BossHakugin* this, PlayState* play) {
         test = &this->bodyCollider.elements[unkStruct->colliderIndex].dim.worldSphere.center;
         bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, test->x, test->y, test->z,
                                    BOMB_EXPLOSIVE_TYPE_POWDER_KEG, 0, 0, BOMB_TYPE_BODY);
+
         if (bomb != NULL) {
             bomb->timer = 0;
         }
+
         this->unk_01B0 &= ~unkStruct->unk_04;
         if (sp60 == 5) {
             SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CLEAR_BOSS | SEQ_FLAG_ASYNC);
@@ -2215,12 +2215,15 @@ void BossHakugin_Dead(BossHakugin* this, PlayState* play) {
     }
 
     if (((this->unk_019C + 3) % 6) == 0) {
+        s32 i;
+
         sp60 = (this->unk_019C + 3) / 6 - 1;
         if (sp60 < 4) {
             for (i = D_80B0EB24[sp60]; i < D_80B0EB24[sp60 + 1]; i++) {
                 this->rockEffects[i].velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
             }
         }
+
         if (sp60 < 6) {
             if (sp60 & 1) {
                 Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_LAST1_DEMO_WALL);
@@ -2228,8 +2231,6 @@ void BossHakugin_Dead(BossHakugin* this, PlayState* play) {
                 Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_LAST1_DEMO_BREAK);
             }
         }
-        //! FAKE:
-        if (1) {}
     }
 
     this->unk_019C++;
