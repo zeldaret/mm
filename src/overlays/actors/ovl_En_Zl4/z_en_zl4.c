@@ -18,10 +18,10 @@ void EnZl4_Draw(Actor* thisx, PlayState* play);
 
 void func_809A1BB0(SkelAnime*, AnimationInfo*, u16);
 void func_809A1D0C(EnZl4* this, PlayState* play);
-void func_809A1DBC(PlayState *play, s32 limbIndex, Actor *thisx);
-s32 func_809A1D60(PlayState *play, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx);
-Gfx* func_809A1DD0(GraphicsContext *, u32);
-Gfx* func_809A1E28(GraphicsContext *, u32);
+void func_809A1DBC(PlayState* play, s32 limbIndex, Actor* thisx);
+s32 func_809A1D60(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+Gfx* func_809A1DD0(GraphicsContext*, u32);
+Gfx* func_809A1E28(GraphicsContext*, u32);
 
 ActorInit En_Zl4_InitVars = {
     /**/ ACTOR_EN_ZL4,
@@ -42,17 +42,17 @@ void func_809A1BB0(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex)
     f32 endFrame;
 
     animInfo += animIndex;
-    
+
     if (animInfo->frameCount < 0.0f) {
         endFrame = Animation_GetLastFrame(animInfo->animation);
     } else {
         endFrame = animInfo->frameCount;
     }
-    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame, animInfo->mode, animInfo->morphFrames);
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
-
-void EnZl4_Init(Actor *thisx, PlayState *play) {
+void EnZl4_Init(Actor* thisx, PlayState* play) {
     EnZl4* this = THIS;
 
     this->unk2E0 = 0;
@@ -65,14 +65,14 @@ void EnZl4_Init(Actor *thisx, PlayState *play) {
     this->actionFunc = func_809A1D0C;
 }
 
-void EnZl4_Destroy(Actor *thisx, PlayState *play) {
+void EnZl4_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_809A1D0C(EnZl4 *this, PlayState *play) {
+void func_809A1D0C(EnZl4* this, PlayState* play) {
 }
 
-void EnZl4_Update(Actor *thisx, PlayState *play) {
-    EnZl4 *this = THIS;
+void EnZl4_Update(Actor* thisx, PlayState* play) {
+    EnZl4* this = THIS;
 
     SkelAnime_Update(&this->unk144);
     this->unk2F0 = this->unk2F0;
@@ -88,7 +88,7 @@ s32 func_809A1D60(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 void func_809A1DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx) {
 }
 
-void func_809A1DBC(PlayState *play, s32 limbIndex, Actor *thisx) {
+void func_809A1DBC(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 Gfx* func_809A1DD0(GraphicsContext* gfxCtx, u32 alpha) {
@@ -112,17 +112,18 @@ Gfx* func_809A1E28(GraphicsContext* gfxCtx, u32 alpha) {
     return gfxHead;
 }
 
-void EnZl4_Draw(Actor *thisx, PlayState *play) {
-    EnZl4 *this = THIS;
+void EnZl4_Draw(Actor* thisx, PlayState* play) {
+    EnZl4* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->unk2F0 < 0xFFU) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, func_809A1DD0(play->state.gfxCtx, this->unk2F0));
-        
+
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x0C, func_809A1E28(play->state.gfxCtx, this->unk2F0));
     }
-    SkelAnime_DrawTransformFlexOpa(play, this->unk144.skeleton, this->unk144.jointTable, this->unk144.dListCount, func_809A1D60, func_809A1DA4, func_809A1DBC, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(play, this->unk144.skeleton, this->unk144.jointTable, this->unk144.dListCount,
+                                   func_809A1D60, func_809A1DA4, func_809A1DBC, &this->actor);
     CLOSE_DISPS(play->state.gfxCtx);
 }
