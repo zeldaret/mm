@@ -9,7 +9,7 @@ typedef void (*EnZl4ActionFunc)(struct EnZl4*, PlayState*);
 
 typedef struct EnZl4 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ SkelAnime unk144;
+    /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ char pad188[0x108];
     /* 0x290 */ EnZl4ActionFunc actionFunc;
     /* 0x294 */ char pad294[0x4C];
