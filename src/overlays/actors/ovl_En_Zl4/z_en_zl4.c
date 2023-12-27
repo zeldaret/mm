@@ -38,7 +38,7 @@ ActorInit En_Zl4_InitVars = {
 static AnimationInfo D_809A1F80 = { &gSkullKidTPoseAnim, 1.0f, 0.0f, -1.0f, 0, 0.0f };
 static Vec3f D_809A1F98 = { 0.0f, 0.0f, 0.0f };
 
-void func_809A1BB0(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
+void EnZl4_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
     f32 endFrame;
 
     animInfo += animIndex;
