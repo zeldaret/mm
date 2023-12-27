@@ -8665,7 +8665,7 @@
     0x809A15A0:("ObjHamishi_Destroy",),
     0x809A15CC:("ObjHamishi_Update",),
     0x809A17BC:("ObjHamishi_Draw",),
-    0x809A1BB0:("func_809A1BB0",),
+    0x809A1BB0:("EnZl4_ChangeAnim",),
     0x809A1C4C:("EnZl4_Init",),
     0x809A1CFC:("EnZl4_Destroy",),
     0x809A1D0C:("func_809A1D0C",),
