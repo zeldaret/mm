@@ -15,7 +15,7 @@ typedef struct EnZl4 {
     /* 0x294 */ char pad294[0x4C];
     /* 0x2E0 */ s16 unk2E0;
     /* 0x2E2 */ char pad2E2[0xE];
-    /* 0x2F0 */ s32 unk2F0;
+    /* 0x2F0 */ s32 envColorAlpha;
 } EnZl4; /* size = 0x2F4 */
 
 #endif // Z_EN_ZL4_H
