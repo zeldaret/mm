@@ -123,7 +123,8 @@ void EnZl4_Draw(Actor* thisx, PlayState* play) {
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x0C, func_809A1E28(play->state.gfxCtx, this->envColorAlpha));
     }
-    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                                   func_809A1D60, func_809A1DA4, func_809A1DBC, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, func_809A1D60, func_809A1DA4, func_809A1DBC,
+                                   &this->actor);
     CLOSE_DISPS(play->state.gfxCtx);
 }
