@@ -114,7 +114,7 @@ typedef struct BossHakugin {
     /* 0x01A0 */ s16 unk_01A0;
     /* 0x01A2 */ s16 unk_01A2;
     /* 0x01A4 */ s16 disableCollidersTimer; // TODO: might be able to improve this one
-    /* 0x01A6 */ s16 unk_01A6;
+    /* 0x01A6 */ s16 frontHalfRotZ;
     /* 0x01A8 */ s16 chargeUpTimer;
     /* 0x01AA */ s16 electricBallCount;
     /* 0x01AC */ s16 subCamId;
@@ -137,7 +137,7 @@ typedef struct BossHakugin {
     /* 0x02AE */ Vec3s morphTable[GOHT_LIMB_MAX];
     /* 0x0374 */ Vec3s headRot;
     /* 0x037A */ Vec3s unk_037A; // subcam rotation I think?
-    /* 0x0380 */ Vec3f unk_0380;
+    /* 0x0380 */ Vec3f chargingLightningPos; // TODO: might be used for a few other things, look into this one further
     /* 0x038C */ Vec3f subCamEye;
     /* 0x0398 */ Vec3f bodyPartsPos[GOHT_BODYPART_MAX];
     /* 0x044C */ Vec3f unk_044C;
@@ -154,7 +154,7 @@ typedef struct BossHakugin {
     /* 0x2618 */ GohtLightningSegment lightningSegments[GOHT_LIGHTNING_SEGMENT_COUNT]; // A chain of lightning used as an attack
     /* 0x3158 */ GohtMalfunctionEffect malfunctionEffects[GOHT_MALFUNCTION_NUM_TYPES][GOHT_BODYPART_MAX]; // Black smoke and electric zaps on body parts as damage accumulates 
     /* 0x3734 */ Vec3f electricBallPos[10];
-    /* 0x37AC */ Vec3f unk_37AC;
+    /* 0x37AC */ Vec3f electricBallRot;
     /* 0x37B8 */ ColliderSphere electricBallCollider;
 } BossHakugin; // size = 0x3810
 
