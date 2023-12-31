@@ -7,7 +7,7 @@
 #include "z_en_nnh.h"
 #include "objects/object_nnh/object_nnh.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnNnh*)thisx)
 
@@ -22,15 +22,15 @@ void EnNnh_SetupDialogue(EnNnh* this);
 void EnNnh_Dialogue(EnNnh* this, PlayState* play);
 
 ActorInit En_Nnh_InitVars = {
-    ACTOR_EN_NNH,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_NNH,
-    sizeof(EnNnh),
-    (ActorFunc)EnNnh_Init,
-    (ActorFunc)EnNnh_Destroy,
-    (ActorFunc)EnNnh_Update,
-    (ActorFunc)EnNnh_Draw,
+    /**/ ACTOR_EN_NNH,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_NNH,
+    /**/ sizeof(EnNnh),
+    /**/ EnNnh_Init,
+    /**/ EnNnh_Destroy,
+    /**/ EnNnh_Update,
+    /**/ EnNnh_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -59,7 +59,7 @@ void EnNnh_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
     EnNnh_SetupWaitForDialogue(this);
@@ -76,11 +76,11 @@ void EnNnh_SetupWaitForDialogue(EnNnh* this) {
 }
 
 void EnNnh_WaitForDialogue(EnNnh* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x228, &this->actor);
         EnNnh_SetupDialogue(this);
     } else {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -104,10 +104,11 @@ void EnNnh_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnNnh_Draw(Actor* thisx, PlayState* play) {
-    GraphicsContext* gfxCtx = play->state.gfxCtx;
-    s32 pad;
+    OPEN_DISPS(play->state.gfxCtx);
 
-    Gfx_SetupDL25_Opa(gfxCtx);
-    gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfxCtx->polyOpa.p++, gButlerSonMainBodyDL);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gButlerSonMainBodyDL);
+
+    CLOSE_DISPS(play->state.gfxCtx);
 }

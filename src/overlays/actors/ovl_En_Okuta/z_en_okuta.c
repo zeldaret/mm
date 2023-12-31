@@ -6,7 +6,7 @@
 
 #include "z_en_okuta.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnOkuta*)thisx)
 
@@ -29,15 +29,15 @@ void func_8086F694(EnOkuta* this, PlayState* play);
 
 #if 0
 ActorInit En_Okuta_InitVars = {
-    ACTOR_EN_OKUTA,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_OKUTA,
-    sizeof(EnOkuta),
-    (ActorFunc)EnOkuta_Init,
-    (ActorFunc)EnOkuta_Destroy,
-    (ActorFunc)EnOkuta_Update,
-    (ActorFunc)EnOkuta_Draw,
+    /**/ ACTOR_EN_OKUTA,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_OKUTA,
+    /**/ sizeof(EnOkuta),
+    /**/ EnOkuta_Init,
+    /**/ EnOkuta_Destroy,
+    /**/ EnOkuta_Update,
+    /**/ EnOkuta_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

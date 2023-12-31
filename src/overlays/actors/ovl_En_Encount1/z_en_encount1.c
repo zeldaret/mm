@@ -19,15 +19,15 @@ void EnEncount1_Update(Actor* thisx, PlayState* play);
 void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play);
 
 ActorInit En_Encount1_InitVars = {
-    ACTOR_EN_ENCOUNT1,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnEncount1),
-    (ActorFunc)EnEncount1_Init,
-    (ActorFunc)NULL,
-    (ActorFunc)EnEncount1_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_ENCOUNT1,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnEncount1),
+    /**/ EnEncount1_Init,
+    /**/ NULL,
+    /**/ EnEncount1_Update,
+    /**/ NULL,
 };
 
 static s16 sActorIds[] = {
@@ -38,10 +38,10 @@ static s16 sActorIds[] = {
 };
 
 static s16 sActorParams[] = {
-    EN_GRASSHOPPER_PARAMS(EN_GRASSHOPPER_TYPE_GROWS_WHEN_SPAWNED), // EN_ENCOUNT1_GRASSHOPPER
-    WALLMASTER_PARAMS(WALLMASTER_TYPE_TIMER_ONLY, 0, false),       // EN_ENCOUNT1_WALLMASTER
-    ENPR2_PARAMS(1, 0),                                            // EN_ENCOUNT1_SKULLFISH
-    ENPR2_PARAMS(3, 0)                                             // EN_ENCOUNT1_SKULLFISH_2
+    DRAGONFLY_PARAMS(DRAGONFLY_TYPE_GROWS_WHEN_SPAWNED),     // EN_ENCOUNT1_GRASSHOPPER
+    WALLMASTER_PARAMS(WALLMASTER_TYPE_TIMER_ONLY, 0, false), // EN_ENCOUNT1_WALLMASTER
+    ENPR2_PARAMS(1, 0),                                      // EN_ENCOUNT1_SKULLFISH
+    ENPR2_PARAMS(3, 0)                                       // EN_ENCOUNT1_SKULLFISH_2
 };
 
 void EnEncount1_Init(Actor* thisx, PlayState* play) {
@@ -71,7 +71,7 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
         this->spawnTotalMax = -1;
         this->spawnDistanceMax = -1.0f;
     }
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnEncount1_SpawnActor;
 }
 
@@ -141,6 +141,9 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
             if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, 0, &spawnPos)) {
                 Actor_Kill(&this->actor);
             }
+            break;
+
+        default:
             break;
     }
 

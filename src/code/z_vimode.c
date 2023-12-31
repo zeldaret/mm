@@ -1,5 +1,7 @@
 #include "global.h"
-#include "ultra64/viint.h"
+#include "debug.h"
+#include "z64vimode.h"
+#include "PR/viint.h"
 
 typedef struct {
     /* 0x00 */ u32 burst;
@@ -142,7 +144,7 @@ void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 ant
         viMode->fldRegs[0].vBurst = ptr->vBurst;
         viMode->fldRegs[1].vBurst = ptr->vBurst;
     } else {
-        __assert("../z_vimode.c", 216);
+        _dbg_hungup("../z_vimode.c", 216);
     }
 
     viMode->comRegs.hStart += (leftAdjust << 16) + (s16)rightAdjust;
@@ -153,14 +155,14 @@ void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 ant
         viMode->comRegs.vSync++;
         if (tvType == OS_TV_MPAL) {
             viMode->comRegs.hSync += HSYNC(1, 4);
-            viMode->comRegs.leap += LEAP((u16)-4, (u16)-2);
+            viMode->comRegs.leap += LEAP(-4, -2);
         }
     } else {
-        viMode->fldRegs[0].vStart += START((u16)-3, (u16)-2);
+        viMode->fldRegs[0].vStart += START(-3, -2);
         if (tvType == OS_TV_MPAL) {
-            viMode->fldRegs[0].vBurst += BURST((u8)-2, (u8)-1, 12, -1);
+            viMode->fldRegs[0].vBurst += BURST(-2, -1, 12, -1);
         } else if (tvType == OS_TV_PAL) {
-            viMode->fldRegs[1].vBurst += BURST((u8)-2, (u8)-1, 2, 0);
+            viMode->fldRegs[1].vBurst += BURST(-2, -1, 2, 0);
         }
     }
 

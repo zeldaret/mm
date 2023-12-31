@@ -9,7 +9,7 @@
 
 #include "z_en_ds2n.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnDs2n*)thisx)
 
@@ -21,34 +21,35 @@ void EnDs2n_Draw(Actor* thisx, PlayState* play);
 void EnDs2n_Idle(EnDs2n* this, PlayState* play);
 
 ActorInit En_Ds2n_InitVars = {
-    ACTOR_EN_DS2N,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DS2N,
-    sizeof(EnDs2n),
-    (ActorFunc)EnDs2n_Init,
-    (ActorFunc)EnDs2n_Destroy,
-    (ActorFunc)EnDs2n_Update,
-    (ActorFunc)EnDs2n_Draw,
+    /**/ ACTOR_EN_DS2N,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DS2N,
+    /**/ sizeof(EnDs2n),
+    /**/ EnDs2n_Init,
+    /**/ EnDs2n_Destroy,
+    /**/ EnDs2n_Update,
+    /**/ EnDs2n_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum {
+    /* 0 */ ENDS2N_ANIM_IDLE,
+    /* 1 */ ENDS2N_ANIM_MAX
+} EnDs2nAnimation;
+
+static AnimationInfo sAnimationInfo[ENDS2N_ANIM_MAX] = {
+    { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENDS2N_ANIM_IDLE
 };
-
-static Vec3f sZeroVec = { 0, 0, 0 };
-
-static TexturePtr sEyeTextures[] = { gDs2nEyeOpenTex, gDs2nEyeHalfTex, gDs2nEyeClosedTex };
 
 void EnDs2n_SetupIdle(EnDs2n* this) {
     this->blinkTimer = 20;
     this->blinkState = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENDS2N_ANIM_IDLE);
     this->actionFunc = EnDs2n_Idle;
 }
 
 void EnDs2n_Idle(EnDs2n* this, PlayState* play) {
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, DS2N_LIMB_MAX);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, DS2N_LIMB_MAX);
 }
 
 void EnDs2n_UpdateEyes(EnDs2n* this) {
@@ -70,7 +71,7 @@ void EnDs2n_Init(Actor* thisx, PlayState* play) {
     EnDs2n* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gDs2nSkeleton, &gDs2nIdleAnim, NULL, NULL, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDs2nSkel, &gDs2nIdleAnim, NULL, NULL, 0);
     EnDs2n_SetupIdle(this);
 }
 
@@ -87,7 +88,7 @@ void EnDs2n_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
 
-    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->chestRot, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     EnDs2n_UpdateEyes(this);
 }
 
@@ -103,18 +104,20 @@ s32 EnDs2n_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
 void EnDs2n_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDs2n* this = THIS;
-    Vec3f focusOffset = sZeroVec;
+    Vec3f focusOffset = { 0.0f, 0.0f, 0.0f };
 
     if ((limbIndex == DS2N_LIMB_HIPS) || (limbIndex == DS2N_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == DS2N_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)Math_SinS(this->limbRotTableY[limbIndex]) * 0xC8;
-        rot->z += (s16)Math_CosS(this->limbRotTableZ[limbIndex]) * 0xC8;
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[limbIndex])) * 200;
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[limbIndex])) * 200;
     }
 
     if (limbIndex == DS2N_LIMB_HEAD) {
         Matrix_MultVec3f(&focusOffset, &thisx->focus.pos);
     }
 }
+
+static TexturePtr sEyeTextures[] = { gDs2nEyeOpenTex, gDs2nEyeHalfTex, gDs2nEyeClosedTex };
 
 void EnDs2n_Draw(Actor* thisx, PlayState* play) {
     EnDs2n* this = THIS;

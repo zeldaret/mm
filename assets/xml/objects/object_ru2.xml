@@ -4,12 +4,12 @@
     <File Name="object_ru2" Segment="6">
         <!-- Adult Ruto Animations -->
         <!-- gAdultRutoCrossingArmsAnim: Used in OoT when the sages seal ganon in the Evil Realm. -->
-        <Animation Name="gAdultRutoCrossingArmsAnim" Offset="0x04CC"/>
-        <Animation Name="gAdultRutoIdleAnim" Offset="0xDE8"/>
+        <Animation Name="gAdultRutoCrossingArmsAnim" Offset="0x04CC"/> <!-- Original name is "km_luto" -->
+        <Animation Name="gAdultRutoIdleAnim" Offset="0xDE8"/> <!-- Original name is "ru2_matsu" -->
 
         <!-- Adult Ruto Palettes -->
-        <Texture Name="gAdultRutoTLUT1" OutName="adult_ruto_tlut_1" Format="rgba16" Width="144" Height="1" Offset="0xE00"/>
-        <Texture Name="gAdultRutoTLUT2" OutName="adult_ruto_tlut_2" Format="rgba16" Width="16" Height="16" Offset="0x43C0"/>
+        <Texture Name="gAdultRuto1TLUT" OutName="adult_ruto_1_tlut" Format="rgba16" Width="144" Height="1" Offset="0xE00"/>
+        <Texture Name="gAdultRuto2TLUT" OutName="adult_ruto_2_tlut" Format="rgba16" Width="16" Height="16" Offset="0x43C0"/>
 
         <!-- Adult Ruto Eye Textures -->
         <Texture Name="gAdultRutoEyeOpenTex" OutName="adult_ruto_eye_open" Format="rgba16" Width="32" Height="32" Offset="0xF20"/>
@@ -17,7 +17,7 @@
         <Texture Name="gAdultRutoEyeClosedTex" OutName="adult_ruto_eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x2AE0"/>
 
         <!-- Adult Ruto Textures -->
-        <Texture Name="gAdultRutoSkinGradient" OutName="adult_ruto_skin_gradient" Format="ci8" Width="8" Height="8" Offset="0x1720" TlutOffset="0xE00"/>
+        <Texture Name="gAdultRutoSkinGradientTex" OutName="adult_ruto_skin_gradient" Format="ci8" Width="8" Height="8" Offset="0x1720" TlutOffset="0xE00"/>
         <Texture Name="gAdultRutoEar1Tex" OutName="adult_ruto_ear_1" Format="ci8" Width="16" Height="16" Offset="0x1760" TlutOffset="0xE00"/>
         <Texture Name="gAdultRutoHeadGradientTex" OutName="adult_ruto_head_gradient" Format="ci8" Width="16" Height="16" Offset="0x1860" TlutOffset="0xE00"/>
         <Texture Name="gAdultRutoHeadHoleTex" OutName="adult_ruto_head_hole" Format="ci8" Width="8" Height="8" Offset="0x1960" TlutOffset="0xE00"/>
@@ -74,25 +74,25 @@
         <Limb Name="gAdultRutoLeftUpperArmLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_UPPER_ARM" Offset="0xC618"/>
         <Limb Name="gAdultRutoLeftUpperWingLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_UPPER_WING" Offset="0xC624"/>
         <Limb Name="gAdultRutoLeftLowerWingLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_LOWER_WING" Offset="0xC630"/>
-        <Limb Name="gAdultRutoLeftForearmLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_FORARM" Offset="0xC63C"/>
+        <Limb Name="gAdultRutoLeftForearmLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_FOREARM" Offset="0xC63C"/>
         <Limb Name="gAdultRutoLeftHandLimb" LimbType="Standard" EnumName="RU2_LIMB_LEFT_HAND" Offset="0xC648"/>
         <Limb Name="gAdultRutoRightUpperArmLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_UPPER_ARM" Offset="0xC654"/>
         <Limb Name="gAdultRutoRightUpperWingLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_UPPER_WING" Offset="0xC660"/>
         <Limb Name="gAdultRutoRightLowerWingLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_LOWER_WING" Offset="0xC66C"/>
-        <Limb Name="gAdultRutoRightForearmLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_FORARM" Offset="0xC678"/>
+        <Limb Name="gAdultRutoRightForearmLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_FOREARM" Offset="0xC678"/>
         <Limb Name="gAdultRutoRightHandLimb" LimbType="Standard" EnumName="RU2_LIMB_RIGHT_HAND" Offset="0xC684"/>
         <Limb Name="gAdultRutoHeadLimb" LimbType="Standard" EnumName="RU2_LIMB_HEAD" Offset="0xC690"/>
         <Limb Name="gAdultRutoWaistLimb" LimbType="Standard" EnumName="RU2_LIMB_WAIST" Offset="0xC69C"/>
         <Skeleton Name="gAdultRutoSkel" Type="Flex" LimbType="Standard" LimbNone="RU2_LIMB_NONE" LimbMax="RU2_LIMB_MAX" EnumName="Ru2Limb" Offset="0xC700" />
 
         <!-- (More) Adult Ruto Animations -->
-        <Animation Name="gAdultRutoRaisingArmsUpAnim" Offset="0xD3DC"/>
+        <Animation Name="gAdultRutoRaisingArmsUpAnim" Offset="0xD3DC"/> <!-- Original name is "ruto_banzai" -->
         <!-- HeadTurnDownLeft is intro to gAdultRutoLookingDownLeftAnim, used in OoT Credits scene -->
         <!--   Looking down at Nabooru with the other sages on Death Mountain after the party -->
-        <Animation Name="gAdultRutoHeadTurnDownLeftAnim" Offset="0xDCAC"/>
-        <Animation Name="gAdultRutoIdleHandsOnHipsAnim" Offset="0xE630"/>
-        <Animation Name="gAdultRutoLookingDownLeftAnim" Offset="0xF03C"/>
-        <Animation Name="gAdultRutoSwimmingUpAnim" Offset="0xF8B8"/>
+        <Animation Name="gAdultRutoHeadTurnDownLeftAnim" Offset="0xDCAC"/> <!-- Original name is "ruto_end_furimuki" -->
+        <Animation Name="gAdultRutoIdleHandsOnHipsAnim" Offset="0xE630"/> <!-- Original name is "ruto_end_wait" -->
+        <Animation Name="gAdultRutoLookingDownLeftAnim" Offset="0xF03C"/> <!-- Original name is "ruto_furimuki_wait" -->
+        <Animation Name="gAdultRutoSwimmingUpAnim" Offset="0xF8B8"/> <!-- Original name is "ruto_swim_up" -->
 
     </File>
 </Root>

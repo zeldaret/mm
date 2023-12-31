@@ -5,9 +5,10 @@
  */
 
 #include "z_en_sw.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_st/object_st.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnSw*)thisx)
 
@@ -29,15 +30,15 @@ void func_808DB25C(EnSw* this, PlayState* play);
 void func_808DB2E0(EnSw* this, PlayState* play);
 
 ActorInit En_Sw_InitVars = {
-    ACTOR_EN_SW,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ST,
-    sizeof(EnSw),
-    (ActorFunc)EnSw_Init,
-    (ActorFunc)EnSw_Destroy,
-    (ActorFunc)EnSw_Update,
-    (ActorFunc)EnSw_Draw,
+    /**/ ACTOR_EN_SW,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ST,
+    /**/ sizeof(EnSw),
+    /**/ EnSw_Init,
+    /**/ EnSw_Destroy,
+    /**/ EnSw_Update,
+    /**/ EnSw_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -172,10 +173,10 @@ void func_808D8940(EnSw* this, PlayState* play) {
 }
 
 s32 func_808D8B58(EnSw* this) {
-    s16 phi_s2 = (s16)((s16)(Rand_ZeroOne() * 1000.0f) % ARRAY_COUNT(this->unk_464)) * 0x1555;
+    s16 phi_s2 = (s16)(TRUNCF_BINANG(Rand_ZeroOne() * 1000.0f) % ENSW_BODYPART_MAX) * 0x1555;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_464); i++, phi_s2 += 0x1555) {
+    for (i = 0; i < ENSW_BODYPART_MAX; i++, phi_s2 += 0x1555) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             this->unk_464[i] = (Rand_ZeroOne() * 16.0f) + 8.0f;
         } else {
@@ -185,41 +186,41 @@ s32 func_808D8B58(EnSw* this) {
         this->drawDmgEffFrozenSteamScales[i] = 0.45000002f;
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_BLUE_FIRE) ||
             (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
-            this->unk_380[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
+            this->bodyPartsPos[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
         } else {
-            this->unk_380[i].y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
+            this->bodyPartsPos[i].y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
         }
-        this->unk_380[i].x = Math_SinS(phi_s2) * 10.0f;
-        this->unk_380[i].z = Math_CosS(phi_s2) * 10.0f;
+        this->bodyPartsPos[i].x = Math_SinS(phi_s2) * 10.0f;
+        this->bodyPartsPos[i].z = Math_CosS(phi_s2) * 10.0f;
     }
     this->unk_462 = 1;
     return 0;
 }
 
-s32 func_808D8D60(EnSw* this, PlayState* play, s32 arg2) {
-    s32 ret = false;
+s32 func_808D8D60(EnSw* this, PlayState* play, s32 bodyPartIndex) {
+    s32 ret = 0;
     u8 drawDmgEffType;
-    Vec3f limbPos[1];
+    Vec3f bodyPartsPos[1];
     f32 drawDmgEffAlpha;
 
-    if (arg2 < this->unk_462) {
-        if (this->unk_464[arg2] != 0) {
-            drawDmgEffAlpha = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
+    if (bodyPartIndex < this->unk_462) {
+        if (this->unk_464[bodyPartIndex] != 0) {
+            drawDmgEffAlpha = (f32)this->unk_464[bodyPartIndex] / this->unk_47C[bodyPartIndex];
             drawDmgEffType = this->drawDmgEffType;
-            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[arg2], 0.3f, 0.3f, 0.5f);
-            Math_Vec3f_Copy(&limbPos[0], &this->actor.world.pos);
-            limbPos[0].x += this->unk_380[arg2].x;
-            limbPos[0].y += this->unk_380[arg2].y;
-            limbPos[0].z += this->unk_380[arg2].z;
+            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[bodyPartIndex], 0.3f, 0.3f, 0.5f);
+            Math_Vec3f_Copy(&bodyPartsPos[0], &this->actor.world.pos);
+            bodyPartsPos[0].x += this->bodyPartsPos[bodyPartIndex].x;
+            bodyPartsPos[0].y += this->bodyPartsPos[bodyPartIndex].y;
+            bodyPartsPos[0].z += this->bodyPartsPos[bodyPartIndex].z;
             if (drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
-                if ((this->unk_47C[arg2] - this->unk_464[arg2]) < 20) {
+                if ((this->unk_47C[bodyPartIndex] - this->unk_464[bodyPartIndex]) < 20) {
                     drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                 }
                 drawDmgEffAlpha = 1.0f;
             }
-            Actor_DrawDamageEffects(play, &this->actor, limbPos, ARRAY_COUNT(limbPos), 0.3f,
-                                    this->drawDmgEffFrozenSteamScales[arg2], drawDmgEffAlpha, drawDmgEffType);
-            ret = true;
+            Actor_DrawDamageEffects(play, &this->actor, bodyPartsPos, ARRAY_COUNT(bodyPartsPos), 0.3f,
+                                    this->drawDmgEffFrozenSteamScales[bodyPartIndex], drawDmgEffAlpha, drawDmgEffType);
+            ret = 1;
         }
     }
     return ret;
@@ -229,14 +230,14 @@ void func_808D8ED0(EnSw* this, PlayState* play) {
     Vec3f sp54;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_380); i++) {
+    for (i = 0; i < ENSW_BODYPART_MAX; i++) {
         Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
-        sp54.x += this->unk_380[i].x;
-        sp54.y += this->unk_380[i].y;
-        sp54.z += this->unk_380[i].z;
-        Math_Vec3f_Copy(&this->unk_380[i], &sp54);
+        sp54.x += this->bodyPartsPos[i].x;
+        sp54.y += this->bodyPartsPos[i].y;
+        sp54.z += this->bodyPartsPos[i].z;
+        Math_Vec3f_Copy(&this->bodyPartsPos[i], &sp54);
     }
-    Actor_SpawnIceEffects(play, &this->actor, this->unk_380, ARRAY_COUNT(this->unk_380), 3, 0.1f, 0.3f);
+    Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENSW_BODYPART_MAX, 3, 0.1f, 0.3f);
 }
 
 void func_808D8FC4(EnSw* this, PlayState* play) {
@@ -628,7 +629,7 @@ void func_808D9F08(EnSw* this) {
 
 void func_808D9F78(EnSw* this, PlayState* play, s32 arg2) {
     if (arg2 != 0) {
-        func_800BC154(play, &play->actorCtx, &this->actor, 5);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
     }
     Actor_SetScale(&this->actor, 0.02f);
     func_808D9DA0(this);
@@ -661,7 +662,7 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
 
         if (this->actor.colChkInfo.damageEffect == 4) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
 
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
@@ -673,7 +674,7 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
         } else if (!func_808D90C4(this)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             if (!ENSW_GET_3(&this->actor)) {
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 3);
             }
@@ -755,7 +756,7 @@ void func_808DA3F4(EnSw* this, PlayState* play) {
 
     if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         temp_f16 = this->skelAnime.endFrame - this->skelAnime.curFrame;
-        temp_s1 = (s16)(80.0f * temp_f16);
+        temp_s1 = TRUNCF_BINANG(80.0f * temp_f16);
         Math_Vec3f_Copy(&sp38, &this->unk_374);
         func_808D9894(this, &sp38);
 
@@ -1034,7 +1035,7 @@ void func_808DAEB4(EnSw* this, PlayState* play) {
                 sp5C.z += this->unk_368.z * 10.0f;
                 if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_SI, sp5C.x, sp5C.y, sp5C.z, 0, 0,
                                        0, this->actor.params) != NULL) {
-                    play_sound(NA_SE_SY_KINSTA_MARK_APPEAR);
+                    Audio_PlaySfx(NA_SE_SY_KINSTA_MARK_APPEAR);
                 }
                 Actor_Kill(&this->actor);
             }
@@ -1060,7 +1061,7 @@ void func_808DB100(EnSw* this, PlayState* play) {
         this->unk_456 = 0;
         this->unk_454 = 0;
         this->skelAnime.curFrame = 0.0f;
-        func_800BC154(play, &play->actorCtx, &this->actor, 4);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_NPC);
         this->actionFunc = func_808DB25C;
         return;
     }
@@ -1112,7 +1113,7 @@ void func_808DB2E0(EnSw* this, PlayState* play) {
         if ((s32)temp_f2 != 0) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALTURA_BOUND);
         } else {
-            func_800BC154(play, &play->actorCtx, &this->actor, 5);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
             Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
             this->unk_410 &= ~(0x10 | 0x1);
             this->actionFunc = func_808DB100;
@@ -1164,7 +1165,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
                 break;
 
             case 1:
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_10;
 
                 if (this->actor.world.rot.z < 0) {
@@ -1185,7 +1186,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
             case 2:
             case 3:
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_10;
 
                 if (this->actor.world.rot.z < 0) {
@@ -1280,6 +1281,9 @@ s32 EnSw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
             case 4:
                 *dList = object_st_DL_0043D8;
                 break;
+
+            default:
+                break;
         }
     }
     return false;
@@ -1287,7 +1291,7 @@ s32 EnSw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnSw_Draw(Actor* thisx, PlayState* play) {
     EnSw* this = THIS;
-    s32 i;
+    s32 bodyPartIndex;
     s32 count;
 
     if (this->unk_410 & 4) {
@@ -1300,8 +1304,8 @@ void EnSw_Draw(Actor* thisx, PlayState* play) {
                           &this->actor);
     }
 
-    for (i = 0, count = 0; i < ARRAY_COUNT(this->unk_464); i++) {
-        count += func_808D8D60(this, play, i);
+    for (bodyPartIndex = 0, count = 0; bodyPartIndex < ENSW_BODYPART_MAX; bodyPartIndex++) {
+        count += func_808D8D60(this, play, bodyPartIndex);
     }
 
     if (count != 0) {

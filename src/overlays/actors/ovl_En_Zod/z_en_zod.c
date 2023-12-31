@@ -6,7 +6,7 @@
 
 #include "z_en_zod.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZod*)thisx)
 
@@ -45,16 +45,16 @@ typedef enum {
     /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM
 } EnZodInstrument;
 
-const ActorInit En_Zod_InitVars = {
-    ACTOR_EN_ZOD,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZOD,
-    sizeof(EnZod),
-    (ActorFunc)EnZod_Init,
-    (ActorFunc)EnZod_Destroy,
-    (ActorFunc)EnZod_Update,
-    (ActorFunc)EnZod_Draw,
+ActorInit En_Zod_InitVars = {
+    /**/ ACTOR_EN_ZOD,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZOD,
+    /**/ sizeof(EnZod),
+    /**/ EnZod_Init,
+    /**/ EnZod_Destroy,
+    /**/ EnZod_Update,
+    /**/ EnZod_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -124,7 +124,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
             }
 
             this->actionFunc = func_80BAFB84;
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
                 break;
             }
@@ -154,7 +154,7 @@ void EnZod_Destroy(Actor* thisx, PlayState* play) {
 void EnZod_HandleRoomConversation(EnZod* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_ZORA) {
         textId = 0x1227;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_08)) {
             textId = 0x1229;
@@ -226,7 +226,7 @@ void EnZod_UpdateInstruments(EnZod* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->cymbalRots); i++) {
         this->cymbalRots[i] += this->cymbalRotVels[i];
-        this->cymbalRotVels[i] -= (s16)(this->cymbalRots[i] * 0.1f);
+        this->cymbalRotVels[i] -= TRUNCF_BINANG(this->cymbalRots[i] * 0.1f);
 
         if (ABS_ALT(this->cymbalRotVels[i]) > 100) {
             this->cymbalRotVels[i] *= 0.9f;
@@ -315,12 +315,12 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x121F)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_ContinueTextbox(play, 0x1220);
                         break;
 
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0x1223);
                         break;
                 }
@@ -376,24 +376,24 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
 
     EnZod_UpdateAnimation(this);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnZod_HandleRoomConversation(this, play);
         this->actionFunc = func_80BAF7CC;
     } else if (EnZod_PlayerIsFacingTijo(this, play)) {
-        func_800B8614(&this->actor, play, 210.0f);
+        Actor_OfferTalk(&this->actor, play, 210.0f);
     }
 
     seqPos.x = this->actor.projectedPos.x;
     seqPos.y = this->actor.projectedPos.y;
     seqPos.z = this->actor.projectedPos.z;
 
-    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
+    Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
 }
 
 void func_80BAFA44(EnZod* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1253;
         } else {
@@ -432,11 +432,11 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
 void func_80BAFB84(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BAFA44(this, play);
         this->actionFunc = func_80BAFADC;
     } else if (EnZod_PlayerIsFacingTijo(this, play)) {
-        func_800B8614(&this->actor, play, 210.0f);
+        Actor_OfferTalk(&this->actor, play, 210.0f);
     }
 }
 
@@ -480,7 +480,7 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
-        func_800B7298(play, NULL, 0x44);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_68);
         Message_StartTextbox(play, 0x103A, &this->actor);
         this->actionFunc = EnZod_SetupRehearse;
     } else {
@@ -622,7 +622,7 @@ void EnZod_DrawDrums(EnZod* this, PlayState* play) {
 }
 
 void EnZod_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr sTijoEyesTextures[] = { &gTijoEyesOpen, &gTijoEyesHalfOpen, &gTijoEyesClosed };
+    static TexturePtr sTijoEyesTextures[] = { &gTijoEyesOpenTex, &gTijoEyesHalfOpenTex, &gTijoEyesClosedTex };
     EnZod* this = THIS;
     Gfx* gfx;
 

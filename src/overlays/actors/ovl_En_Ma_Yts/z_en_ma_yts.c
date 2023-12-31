@@ -6,7 +6,7 @@
 
 #include "z_en_ma_yts.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnMaYts*)thisx)
 
@@ -30,15 +30,15 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
 void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play);
 
 ActorInit En_Ma_Yts_InitVars = {
-    ACTOR_EN_MA_YTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MA1,
-    sizeof(EnMaYts),
-    (ActorFunc)EnMaYts_Init,
-    (ActorFunc)EnMaYts_Destroy,
-    (ActorFunc)EnMaYts_Update,
-    (ActorFunc)EnMaYts_Draw,
+    /**/ ACTOR_EN_MA_YTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MA1,
+    /**/ sizeof(EnMaYts),
+    /**/ EnMaYts_Init,
+    /**/ EnMaYts_Destroy,
+    /**/ EnMaYts_Update,
+    /**/ EnMaYts_Draw,
 };
 
 void EnMaYts_UpdateEyes(EnMaYts* this) {
@@ -77,29 +77,56 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-static AnimationSpeedInfo sAnimationInfo[] = {
-    { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
-    { &gRomaniSingStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gRomaniSingStartAnim, 1.0f, ANIMMODE_ONCE, -6.0f },
-    { &gRomaniSingLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gRomaniSingLoopAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
-    { &gRomaniRunAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gRomaniRunAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
-    { &gRomaniWalkAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gRomaniWalkAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
-    { &gRomaniLookAroundAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gRomaniLookAroundAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
-    { &gRomaniShootBowAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gRomaniShootBowAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
-    { &gRomaniSittingAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gRomaniSittingAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
-    { &gRomaniSittingHeadShakeAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gRomaniSittingHeadShakeAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
-    { &gRomaniSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gRomaniSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
-    { &gRomaniTurnAroundAndFlickHairAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gRomaniTurnAroundAndFlickHairAnim, 1.0f, ANIMMODE_ONCE, -6.0f },
+typedef enum EnMaYtsAnimation {
+    /* -1 */ ENMATYS_ANIM_NONE = -1,
+    /*  0 */ ENMATYS_ANIM_0,
+    /*  1 */ ENMATYS_ANIM_1,
+    /*  2 */ ENMATYS_ANIM_2,
+    /*  3 */ ENMATYS_ANIM_3,
+    /*  4 */ ENMATYS_ANIM_4,
+    /*  5 */ ENMATYS_ANIM_5,
+    /*  6 */ ENMATYS_ANIM_6,
+    /*  7 */ ENMATYS_ANIM_7,
+    /*  8 */ ENMATYS_ANIM_8,
+    /*  9 */ ENMATYS_ANIM_9,
+    /* 10 */ ENMATYS_ANIM_10,
+    /* 11 */ ENMATYS_ANIM_11,
+    /* 12 */ ENMATYS_ANIM_12,
+    /* 13 */ ENMATYS_ANIM_13,
+    /* 14 */ ENMATYS_ANIM_14,
+    /* 15 */ ENMATYS_ANIM_15,
+    /* 16 */ ENMATYS_ANIM_16,
+    /* 17 */ ENMATYS_ANIM_17,
+    /* 18 */ ENMATYS_ANIM_18,
+    /* 19 */ ENMATYS_ANIM_19,
+    /* 20 */ ENMATYS_ANIM_20,
+    /* 21 */ ENMATYS_ANIM_21,
+    /* 22 */ ENMATYS_ANIM_MAX
+} EnMaYtsAnimation;
+
+static AnimationSpeedInfo sAnimationSpeedInfo[ENMATYS_ANIM_MAX] = {
+    { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                    // ENMATYS_ANIM_0
+    { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, -6.0f },                   // ENMATYS_ANIM_1
+    { &gRomaniSingStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },               // ENMATYS_ANIM_2
+    { &gRomaniSingStartAnim, 1.0f, ANIMMODE_ONCE, -6.0f },              // ENMATYS_ANIM_3
+    { &gRomaniSingLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                // ENMATYS_ANIM_4
+    { &gRomaniSingLoopAnim, 1.0f, ANIMMODE_LOOP, -6.0f },               // ENMATYS_ANIM_5
+    { &gRomaniRunAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                     // ENMATYS_ANIM_6
+    { &gRomaniRunAnim, 1.0f, ANIMMODE_LOOP, -6.0f },                    // ENMATYS_ANIM_7
+    { &gRomaniWalkAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                    // ENMATYS_ANIM_8
+    { &gRomaniWalkAnim, 1.0f, ANIMMODE_LOOP, -6.0f },                   // ENMATYS_ANIM_9
+    { &gRomaniLookAroundAnim, 1.0f, ANIMMODE_LOOP, 0.0f },              // ENMATYS_ANIM_10
+    { &gRomaniLookAroundAnim, 1.0f, ANIMMODE_LOOP, -6.0f },             // ENMATYS_ANIM_11
+    { &gRomaniShootBowAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                // ENMATYS_ANIM_12
+    { &gRomaniShootBowAnim, 1.0f, ANIMMODE_LOOP, -6.0f },               // ENMATYS_ANIM_13
+    { &gRomaniSittingAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                 // ENMATYS_ANIM_14
+    { &gRomaniSittingAnim, 1.0f, ANIMMODE_LOOP, -6.0f },                // ENMATYS_ANIM_15
+    { &gRomaniSittingHeadShakeAnim, 1.0f, ANIMMODE_LOOP, 0.0f },        // ENMATYS_ANIM_16
+    { &gRomaniSittingHeadShakeAnim, 1.0f, ANIMMODE_LOOP, -6.0f },       // ENMATYS_ANIM_17
+    { &gRomaniSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, 0.0f },         // ENMATYS_ANIM_18
+    { &gRomaniSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, -6.0f },        // ENMATYS_ANIM_19
+    { &gRomaniTurnAroundAndFlickHairAnim, 1.0f, ANIMMODE_ONCE, 0.0f },  // ENMATYS_ANIM_20
+    { &gRomaniTurnAroundAndFlickHairAnim, 1.0f, ANIMMODE_ONCE, -6.0f }, // ENMATYS_ANIM_21
 };
 
 static TexturePtr sMouthTextures[] = {
@@ -114,9 +141,9 @@ static TexturePtr sEyeTextures[] = {
 };
 
 void EnMaYts_ChangeAnim(EnMaYts* this, s32 animIndex) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
-                     sAnimationInfo[animIndex].morphFrames);
+    Animation_Change(&this->skelAnime, sAnimationSpeedInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationSpeedInfo[animIndex].animation),
+                     sAnimationSpeedInfo[animIndex].mode, sAnimationSpeedInfo[animIndex].morphFrames);
 }
 
 void func_80B8D12C(EnMaYts* this, PlayState* play) {
@@ -137,33 +164,33 @@ void func_80B8D12C(EnMaYts* this, PlayState* play) {
 void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
     switch (this->type) {
         case MA_YTS_TYPE_BARN:
-            this->actor.targetMode = 0;
-            EnMaYts_ChangeAnim(this, 0);
+            this->actor.targetMode = TARGET_MODE_0;
+            EnMaYts_ChangeAnim(this, ENMATYS_ANIM_0);
             break;
 
         case MA_YTS_TYPE_SITTING:
-            this->actor.targetMode = 6;
+            this->actor.targetMode = TARGET_MODE_6;
             // Day 1 or "Winning" the alien invasion
             if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
-                EnMaYts_ChangeAnim(this, 14);
+                EnMaYts_ChangeAnim(this, ENMATYS_ANIM_14);
             } else {
-                EnMaYts_ChangeAnim(this, 18);
+                EnMaYts_ChangeAnim(this, ENMATYS_ANIM_18);
             }
             break;
 
         case MA_YTS_TYPE_SLEEPING:
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
             this->actor.draw = EnMaYts_DrawSleeping;
-            EnMaYts_ChangeAnim(this, 0);
+            EnMaYts_ChangeAnim(this, ENMATYS_ANIM_0);
             break;
 
         case MA_YTS_TYPE_ENDCREDITS:
-            this->actor.targetMode = 0;
-            EnMaYts_ChangeAnim(this, 0);
+            this->actor.targetMode = TARGET_MODE_0;
+            EnMaYts_ChangeAnim(this, ENMATYS_ANIM_0);
             break;
 
         default:
-            EnMaYts_ChangeAnim(this, 0);
+            EnMaYts_ChangeAnim(this, ENMATYS_ANIM_0);
             break;
     }
 }
@@ -198,7 +225,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
             // Failing the alien invasion
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 return false;
-            } else if ((gSaveContext.save.time >= CLOCK_TIME(20, 0)) && (CURRENT_DAY == 3)) {
+            } else if ((CURRENT_TIME >= CLOCK_TIME(20, 0)) && (CURRENT_DAY == 3)) {
                 return false;
             }
             break;
@@ -301,8 +328,8 @@ void EnMaYts_SetupStartDialogue(EnMaYts* this) {
 void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (!(gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_80)) {
                 // Saying to non-human Link: "Cremia went to town."
                 SET_WEEKEVENTREG(WEEKEVENTREG_65_80);
@@ -349,7 +376,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
         }
         EnMaYts_SetupDialogueHandler(this);
     } else if (ABS_ALT(sp26) < 0x4000) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -374,6 +401,7 @@ void EnMaYts_DialogueHandler(EnMaYts* this, PlayState* play) {
         case TEXT_STATE_CLOSING:
         case TEXT_STATE_3:
         case TEXT_STATE_CHOICE:
+        default:
             break;
     }
 }
@@ -385,6 +413,7 @@ void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
 }
 
 static u16 sCueId = 99;
+
 void EnMaYts_EndCreditsHandler(EnMaYts* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_120)) {
         s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_120);
@@ -396,22 +425,22 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, PlayState* play) {
                 switch (play->csCtx.actorCues[cueChannel]->id) {
                     case 1:
                         this->hasBow = true;
-                        EnMaYts_ChangeAnim(this, 0);
+                        EnMaYts_ChangeAnim(this, ENMATYS_ANIM_0);
                         break;
 
                     case 2:
                         this->hasBow = false;
-                        EnMaYts_ChangeAnim(this, 2);
+                        EnMaYts_ChangeAnim(this, ENMATYS_ANIM_2);
                         break;
 
                     case 3:
                         this->hasBow = true;
-                        EnMaYts_ChangeAnim(this, 12);
+                        EnMaYts_ChangeAnim(this, ENMATYS_ANIM_12);
                         break;
 
                     case 4:
                         this->hasBow = true;
-                        EnMaYts_ChangeAnim(this, 20);
+                        EnMaYts_ChangeAnim(this, ENMATYS_ANIM_20);
                         break;
 
                     default:
@@ -424,7 +453,7 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, PlayState* play) {
         if ((sCueId == 2) && (this->endCreditsFlag == 0) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->endCreditsFlag++;
-            EnMaYts_ChangeAnim(this, 5);
+            EnMaYts_ChangeAnim(this, ENMATYS_ANIM_5);
         }
     } else {
         sCueId = 99;
@@ -551,8 +580,8 @@ void EnMaYts_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_K0(sMouthTextures[this->mouthTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(sEyeTextures[this->eyeTexIndex]));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMaYts_OverrideLimbDraw, EnMaYts_PostLimbDraw, &this->actor);

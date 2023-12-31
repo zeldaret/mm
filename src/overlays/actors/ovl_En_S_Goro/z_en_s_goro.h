@@ -5,7 +5,7 @@
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 
 #define EN_S_GORO_GET_MAIN_TYPE(thisx) ((thisx)->params & 0xF)
-#define EN_S_GORO_SCENEFLAG_INDEX(thisx) (((thisx)->params & 0x7F0) >> 4)
+#define EN_S_GORO_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x7F0) >> 4)
 
 struct EnSGoro;
 
@@ -23,7 +23,7 @@ typedef struct EnSGoro {
     /* 0x1EC */ s16 eyeTexIndex;
     /* 0x1EE */ s16 eyeTimer;
     /* 0x1F0 */ s16 loseAttentionTimer;
-    /* 0x1F4 */ s32 loadedObjIndex;
+    /* 0x1F4 */ s32 objectSlot;
     /* 0x1F8 */ Vec3s jointTable[GORON_LIMB_MAX];
     /* 0x264 */ Vec3s morphTable[GORON_LIMB_MAX];
     /* 0x2D0 */ f32 scaleFactor;

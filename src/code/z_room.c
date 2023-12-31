@@ -1,4 +1,6 @@
 #include "global.h"
+#include "PR/gs2dex.h"
+#include "debug.h"
 
 void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3) {
 }
@@ -330,7 +332,7 @@ void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
             {
                 Vec3f quakeOffset;
 
-                Camera_GetQuakeOffset(&quakeOffset, activeCam);
+                quakeOffset = Camera_GetQuakeOffset(activeCam);
 
                 Prerender_DrawBackground2D(
                     &gfx, roomShape->source, roomShape->tlut, roomShape->width, roomShape->height, roomShape->fmt,
@@ -380,7 +382,7 @@ RoomShapeImageMultiBgEntry* Room_GetImageMultiBgEntry(RoomShapeImageMulti* roomS
         bgEntry++;
     }
 
-    __assert("../z_room.c", 849);
+    _dbg_hungup("../z_room.c", 849);
 
     return NULL;
 }
@@ -429,7 +431,8 @@ void Room_DrawImageMulti(PlayState* play, Room* room, u32 flags) {
             {
                 Vec3f quakeOffset;
 
-                Camera_GetQuakeOffset(&quakeOffset, activeCam);
+                quakeOffset = Camera_GetQuakeOffset(activeCam);
+
                 Prerender_DrawBackground2D(&gfx, bgEntry->source, bgEntry->tlut, bgEntry->width, bgEntry->height,
                                            bgEntry->fmt, bgEntry->siz, bgEntry->tlutMode, bgEntry->tlutCount,
                                            (quakeOffset.x + quakeOffset.z) * 1.2f + quakeOffset.y * 0.6f,
@@ -461,7 +464,7 @@ void Room_DrawImage(PlayState* play, Room* room, u32 flags) {
     } else if (roomShape->amountType == ROOM_SHAPE_IMAGE_AMOUNT_MULTI) {
         Room_DrawImageMulti(play, room, flags);
     } else {
-        __assert("../z_room.c", 965);
+        _dbg_hungup("../z_room.c", 965);
     }
 }
 
@@ -514,9 +517,9 @@ size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
         }
     }
 
-    roomCtx->roomMemPages[0] = THA_AllocTailAlign16(&play->state.heap, maxRoomSize);
+    roomCtx->roomMemPages[0] = THA_AllocTailAlign16(&play->state.tha, maxRoomSize);
     if (roomCtx->roomMemPages[0] == NULL) {
-        __assert("../z_room.c", 1078);
+        _dbg_hungup("../z_room.c", 1078);
     }
     roomCtx->roomMemPages[1] = (void*)((uintptr_t)roomCtx->roomMemPages[0] + maxRoomSize);
     roomCtx->activeMemPage = 0;
@@ -572,19 +575,19 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
         if (osRecvMesg(&roomCtx->loadQueue, NULL, OS_MESG_NOBLOCK) == 0) {
             roomCtx->status = 0;
             roomCtx->curRoom.segment = roomCtx->activeRoomVram;
-            gSegments[3] = VIRTUAL_TO_PHYSICAL(roomCtx->activeRoomVram);
+            gSegments[3] = OS_K0_TO_PHYSICAL(roomCtx->activeRoomVram);
 
             Scene_ExecuteCommands(play, roomCtx->curRoom.segment);
             func_80123140(play, GET_PLAYER(play));
             Actor_SpawnTransitionActors(play, &play->actorCtx);
 
             if (((play->sceneId != SCENE_IKANA) || (roomCtx->curRoom.num != 1)) && (play->sceneId != SCENE_IKNINSIDE)) {
-                play->envCtx.lightSettingOverride = 0xFF;
-                play->envCtx.unk_E0 = 0;
+                play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
+                play->envCtx.lightBlendOverride = LIGHT_BLEND_OVERRIDE_NONE;
             }
             func_800FEAB0();
-            if (!func_800FE4B8(play)) {
-                func_800FD858(play);
+            if (Environment_GetStormState(play) == STORM_STATE_OFF) {
+                Environment_StopStormNatureAmbience(play);
             }
         } else {
             return 0;
@@ -603,7 +606,7 @@ RoomDrawHandler sRoomDrawHandlers[] = {
 
 void Room_Draw(PlayState* play, Room* room, u32 flags) {
     if (room->segment != NULL) {
-        gSegments[3] = VIRTUAL_TO_PHYSICAL(room->segment);
+        gSegments[3] = OS_K0_TO_PHYSICAL(room->segment);
         sRoomDrawHandlers[room->roomShape->base.type](play, room, flags);
     }
     return;
@@ -618,5 +621,5 @@ void func_8012EBF8(PlayState* play, RoomContext* roomCtx) {
         Map_InitRoomData(play, roomCtx->curRoom.num);
         Minimap_SavePlayerRoomInitInfo(play);
     }
-    func_801A3CD8(play->roomCtx.curRoom.echo);
+    Audio_SetEnvReverb(play->roomCtx.curRoom.echo);
 }

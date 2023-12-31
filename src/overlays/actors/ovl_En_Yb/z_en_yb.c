@@ -7,7 +7,7 @@
 #include "z_en_yb.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnYb*)thisx)
 
@@ -33,15 +33,15 @@ void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f3
 s32 EnYb_CanTalk(EnYb* this, PlayState* play);
 
 ActorInit En_Yb_InitVars = {
-    ACTOR_EN_YB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_YB,
-    sizeof(EnYb),
-    (ActorFunc)EnYb_Init,
-    (ActorFunc)EnYb_Destroy,
-    (ActorFunc)EnYb_Update,
-    (ActorFunc)EnYb_Draw,
+    /**/ ACTOR_EN_YB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_YB,
+    /**/ sizeof(EnYb),
+    /**/ EnYb_Init,
+    /**/ EnYb_Destroy,
+    /**/ EnYb_Update,
+    /**/ EnYb_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -87,9 +87,10 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, EnYb_ActorShadowFunc, 20.0f);
 
-    // @bug this alignment is because of player animations, but should be using ALIGN16
-    SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200, (uintptr_t)this->jointTable & ~0xF,
-                       (uintptr_t)this->morphTable & ~0xF, YB_LIMB_MAX);
+    //! @bug this alignment is because of player animations, but should be using ALIGN16
+    SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkel, &object_yb_Anim_000200,
+                       (void*)((uintptr_t)this->jointTable & ~0xF), (void*)((uintptr_t)this->morphTable & ~0xF),
+                       YB_LIMB_MAX);
 
     Animation_PlayLoop(&this->skelAnime, &object_yb_Anim_000200);
 
@@ -115,12 +116,12 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     this->actor.csId = this->csIdList[0];
 
     // between midnight and morning start spawned
-    if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_TIME < CLOCK_TIME(6, 0)) {
         this->alpha = 255;
     } else { // else (night 6pm to midnight): wait to appear
         this->alpha = 0;
         this->actionFunc = EnYb_WaitForMidnight;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     }
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_04)) {
@@ -234,7 +235,7 @@ void EnYb_ChangeCutscene(EnYb* this, s16 csIdIndex) {
  * Sets a flag that enables the Kamaro dancing proximity music at night.
  */
 void EnYb_EnableProximityMusic(EnYb* this) {
-    func_800B9084(&this->actor);
+    Actor_PlaySeq_FlaggedKamaroDance(&this->actor);
 }
 
 void EnYb_Disappear(EnYb* this, PlayState* play) {
@@ -260,14 +261,14 @@ void EnYb_Disappear(EnYb* this, PlayState* play) {
 
 void EnYb_SetupLeaving(EnYb* this, PlayState* play) {
     EnYb_UpdateAnimation(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnYb_Talk;
         // I am counting on you
         Message_StartTextbox(play, 0x147D, &this->actor);
         func_80BFA2FC(play);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -279,7 +280,7 @@ void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnYb_SetupLeaving;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
     }
@@ -326,13 +327,13 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
 
 void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play) {
     EnYb_UpdateAnimation(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnYb_Talk;
         // Spread my dance across the world
         Message_StartTextbox(play, 0x147C, &this->actor);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -347,7 +348,7 @@ void EnYb_TeachingDance(EnYb* this, PlayState* play) {
         EnYb_FinishTeachingCutscene(this);
         this->actionFunc = EnYb_TeachingDanceFinish;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -358,12 +359,12 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
 
     EnYb_UpdateAnimation(this, play);
     if ((this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.playerHeightRel) < 50.0f) &&
-        (play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
-        (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
+        (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
         EnYb_ChangeCutscene(this, 0);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BFA2FC(play);
         this->actionFunc = EnYb_Talk;
         if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
@@ -374,7 +375,7 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
             Message_StartTextbox(play, 0x147B, &this->actor);
         }
     } else if (EnYb_CanTalk(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 
     if (this->playerOcarinaOut & 1) {
@@ -391,12 +392,12 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
 }
 
 void EnYb_WaitForMidnight(EnYb* this, PlayState* play) {
-    if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_TIME < CLOCK_TIME(6, 0)) {
         EnYb_UpdateAnimation(this, play);
         this->alpha += 5;
         if (this->alpha > 250) {
             this->alpha = 255;
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnYb_Idle;
         }
         EnYb_EnableProximityMusic(this);
@@ -407,11 +408,11 @@ void EnYb_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnYb* this = THIS;
 
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_1)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TARGETABLE)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_1)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TARGETABLE)) {
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }

@@ -22,22 +22,22 @@ void ArrowLight_Fly(ArrowLight* this, PlayState* play);
 #include "overlays/ovl_Arrow_Light/ovl_Arrow_Light.c"
 
 ActorInit Arrow_Light_InitVars = {
-    ACTOR_ARROW_LIGHT,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ArrowLight),
-    (ActorFunc)ArrowLight_Init,
-    (ActorFunc)ArrowLight_Destroy,
-    (ActorFunc)ArrowLight_Update,
-    (ActorFunc)ArrowLight_Draw,
+    /**/ ACTOR_ARROW_LIGHT,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ArrowLight),
+    /**/ ArrowLight_Init,
+    /**/ ArrowLight_Destroy,
+    /**/ ArrowLight_Update,
+    /**/ ArrowLight_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
-static s32 sUnused;
+static s32 sBssPad;
 
 void ArrowLight_SetupAction(ArrowLight* this, ArrowLightActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -75,7 +75,7 @@ void ArrowLight_Charge(ArrowLight* this, PlayState* play) {
     this->actor.world.pos = arrow->actor.world.pos;
     this->actor.shape.rot = arrow->actor.shape.rot;
 
-    func_800B9010(&this->actor, NA_SE_PL_ARROW_CHARGE_LIGHT - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_ARROW_CHARGE_LIGHT - SFX_FLAG);
     if (arrow->actor.parent == NULL) {
         this->firedPos = this->actor.world.pos;
         this->radius = 10;
@@ -172,7 +172,7 @@ void ArrowLight_Fly(ArrowLight* this, PlayState* play) {
 void ArrowLight_Update(Actor* thisx, PlayState* play) {
     ArrowLight* this = THIS;
 
-    if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
+    if ((play->msgCtx.msgMode == MSGMODE_E) || (play->msgCtx.msgMode == MSGMODE_SONG_PLAYED)) {
         Actor_Kill(&this->actor);
         return;
     }

@@ -46,15 +46,15 @@ void func_80A26B74(ObjIceblock* this, PlayState* play);
 void func_80A26BF8(ObjIceblock* this, PlayState* play);
 
 ActorInit Obj_Iceblock_InitVars = {
-    ACTOR_OBJ_ICEBLOCK,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_ICE_BLOCK,
-    sizeof(ObjIceblock),
-    (ActorFunc)ObjIceblock_Init,
-    (ActorFunc)ObjIceblock_Destroy,
-    (ActorFunc)ObjIceblock_Update,
-    (ActorFunc)ObjIceblock_Draw,
+    /**/ ACTOR_OBJ_ICEBLOCK,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_ICE_BLOCK,
+    /**/ sizeof(ObjIceblock),
+    /**/ ObjIceblock_Init,
+    /**/ ObjIceblock_Destroy,
+    /**/ ObjIceblock_Update,
+    /**/ ObjIceblock_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -243,8 +243,8 @@ void func_80A23938(ObjIceblock* this) {
     Actor* thisx = &this->dyna.actor;
 
     if (this->unk_1B0 & 0x80) {
-        Math_ScaledStepToS(&thisx->shape.rot.x, 0, 400);
-        Math_ScaledStepToS(&thisx->shape.rot.z, 0, 400);
+        Math_ScaledStepToS(&thisx->shape.rot.x, 0, 0x190);
+        Math_ScaledStepToS(&thisx->shape.rot.z, 0, 0x190);
     } else {
         ObjIceBlockUnkStruct4* ptr = &this->unk_27C;
         f32 phi_f0;
@@ -258,13 +258,13 @@ void func_80A23938(ObjIceblock* this) {
         }
 
         Math_StepToF(&ptr->unk_1C, phi_f0, 0.04f);
-        ptr->unk_22 += (s16)(ptr->unk_20 * -0.02f);
+        ptr->unk_22 += TRUNCF_BINANG(ptr->unk_20 * -0.02f);
         ptr->unk_22 = func_80A23090(ptr->unk_22, 50, 800);
         ptr->unk_20 += ptr->unk_22;
 
         temp = ptr->unk_16 - ptr->unk_14;
 
-        ptr->unk_18 += (s16)(temp * -0.04f * thisx->xzDistToPlayer * thisx->scale.x * (1.0f / 600.0f));
+        ptr->unk_18 += TRUNCF_BINANG(temp * -0.04f * thisx->xzDistToPlayer * thisx->scale.x * (1.0f / 600.0f));
         ptr->unk_18 = func_80A23090(ptr->unk_18, 50, 800);
         ptr->unk_16 += ptr->unk_18;
 
@@ -309,7 +309,7 @@ s32 func_80A23D08(ObjIceblock* this, PlayState* play) {
     };
     s32 pad3;
     ObjIceBlockUnkStruct2* ptr;
-    WaterBox* spC4;
+    WaterBox* waterBox;
     s32 i;
     s32 spBC;
     s32 spB8;
@@ -349,7 +349,7 @@ s32 func_80A23D08(ObjIceblock* this, PlayState* play) {
             }
         }
 
-        if (WaterBox_GetSurface1_2(play, &play->colCtx, spA4.x, spA4.z, &ptr->unk_0C, &spC4)) {
+        if (WaterBox_GetSurface1_2(play, &play->colCtx, spA4.x, spA4.z, &ptr->unk_0C, &waterBox)) {
             if (phi_f20 < ptr->unk_0C) {
                 spB8 = i;
                 phi_f20 = ptr->unk_0C;
@@ -694,8 +694,8 @@ void func_80A24BDC(ObjIceblock* this, PlayState* play, f32 arg2, f32 arg3, s32 a
 
         for (i = 0, phi_s0 = 0; i < arg4; i++, phi_s0 += temp_f22) {
             temp_f20 = ((Rand_ZeroOne() * 5.0f) + 40.0f) * arg2;
-            sp88.x = (Math_SinS((s32)(Rand_ZeroOne() * temp_f22) + phi_s0) * temp_f20) + this->dyna.actor.world.pos.x;
-            sp88.z = (Math_CosS((s32)(Rand_ZeroOne() * temp_f22) + phi_s0) * temp_f20) + this->dyna.actor.world.pos.z;
+            sp88.x = this->dyna.actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * temp_f22) + phi_s0) * temp_f20);
+            sp88.z = this->dyna.actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * temp_f22) + phi_s0) * temp_f20);
             EffectSsGSplash_Spawn(play, &sp88, NULL, NULL, 0, ((Rand_ZeroOne() * 60.0f) + 320.0f) * arg3);
         }
     }
@@ -1181,7 +1181,7 @@ void func_80A25E50(ObjIceblock* this, PlayState* play) {
         func_80A2541C(this, play);
         func_80A25CF4(this);
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
     }
 }
 
@@ -1209,7 +1209,7 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
         func_80A23370(this, sp2C);
         func_80A260E8(this);
         sp30 = false;
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
+        Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
         this->unk_1B0 |= 1;
     }
 
@@ -1255,7 +1255,7 @@ void func_80A26144(ObjIceblock* this, PlayState* play) {
 
     if ((this->unk_1B0 & 1) && (isBool || sp28 || (this->dyna.actor.xzDistToPlayer > 400.0f))) {
         this->unk_1B0 &= ~1;
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
+        Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_END);
     }
 
     if (isBool) {
@@ -1267,7 +1267,7 @@ void func_80A26144(ObjIceblock* this, PlayState* play) {
         func_80A23B88(this);
         func_80A25FA0(this);
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
     }
 
     func_80A24DD0(this, play);
@@ -1454,7 +1454,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         this->unk_1B0 &= ~0x100;
         if (this->unk_1B0 & 1) {
             this->unk_1B0 &= ~1;
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
+            Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_END);
         }
         func_80A266C4(this);
     }

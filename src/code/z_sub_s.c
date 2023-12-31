@@ -121,10 +121,10 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     gSPSegment(gfx++, 0x0D, mtx);
     Matrix_Push();
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
-    pos.x = jointTable->x;
-    pos.y = jointTable->y;
-    pos.z = jointTable->z;
-    rot = jointTable[1];
+    pos.x = jointTable[LIMB_ROOT_POS].x;
+    pos.y = jointTable[LIMB_ROOT_POS].y;
+    pos.z = jointTable[LIMB_ROOT_POS].z;
+    rot = jointTable[LIMB_ROOT_ROT];
     newDlist = rootLimb->dList;
     limbDList = rootLimb->dList;
 
@@ -209,8 +209,8 @@ s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRo
     return true;
 }
 
-void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
-    *flags = (*flags & ~unsetBits) | setBits;
+void SubS_SetOfferMode(u16* flags, u16 offerMode, u16 mask) {
+    *flags = (*flags & ~mask) | offerMode;
 }
 
 /**
@@ -569,7 +569,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
     if (index == 0) {
         diffX = points[1].x - points[0].x;
         diffZ = points[1].z - points[0].z;
-    } else if (index == count - 1) {
+    } else if (index == (count - 1)) {
         diffX = points[count - 1].x - points[count - 2].x;
         diffZ = points[count - 1].z - points[count - 2].z;
     } else {
@@ -578,6 +578,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
     }
 
     func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+
     if (((px * actor->world.pos.x) + (pz * actor->world.pos.z) + d) > 0.0f) {
         reached = true;
     }
@@ -588,9 +589,9 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
 Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 pathIndexNone, s32* startPointIndex) {
     Path* path = NULL;
     s32 found = false;
-    s32 time = (((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60) +
-                ((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) / 60) * 60) /
-               30;
+    s16 time1 = TRUNCF_BINANG(TIME_TO_MINUTES_F(CURRENT_TIME));
+    s16 time2 = TRUNCF_BINANG(TIME_TO_MINUTES_F(CURRENT_TIME));
+    s32 time = ((time1 % 60) + (time2 / 60) * 60) / 30;
     s32 day = CURRENT_DAY;
 
     if (pathIndex == pathIndexNone) {
@@ -815,60 +816,71 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
     return true;
 }
 
-//! TODO: Needs docs with func_800B8500
-s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 type) {
-    s32 ret = false;
-    s16 x;
-    s16 y;
+/**
+ * Attempt to extend different offers to the player based on different checks
+ * and on the provided mode (see SubSOfferMode).
+ *
+ * The offer types are either GetItem (see Actor_OfferGetItem) or TalkExchange (see Actor_OfferTalkExchange),
+ * with more check variants provided for TalkExchange offers.
+ *
+ * @return `true` if offer was extended and the player can accept it
+ */
+s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, SubSOfferMode mode) {
+    s32 canAccept = false;
+    s16 screenPosX;
+    s16 screenPosY;
     f32 xzDistToPlayerTemp;
 
-    Actor_GetScreenPos(play, actor, &x, &y);
+    Actor_GetScreenPos(play, actor, &screenPosX, &screenPosY);
 
-    switch (type) {
-        case 1:
+    switch (mode) {
+        case SUBS_OFFER_MODE_GET_ITEM:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
-            ret = Actor_OfferGetItem(actor, play, itemId, xzRange, yRange);
+            canAccept = Actor_OfferGetItem(actor, play, itemId, xzRange, yRange);
             break;
 
-        case 2:
+        case SUBS_OFFER_MODE_NEARBY:
             if ((fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
-        case 3:
+        case SUBS_OFFER_MODE_ONSCREEN:
             //! @bug: Both x and y conditionals are always true, || should be an &&
-            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+            if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
+                ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT))) {
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
-        case 4:
+        case SUBS_OFFER_MODE_AUTO:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
             xzDistToPlayerTemp = actor->xzDistToPlayer;
             actor->xzDistToPlayer = 0.0f;
             actor->flags |= ACTOR_FLAG_10000;
-            ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+            canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             actor->xzDistToPlayer = xzDistToPlayerTemp;
             break;
 
-        case 5:
+        case SUBS_OFFER_MODE_AUTO_TARGETED:
             //! @bug: Both x and y conditionals are always true, || should be an &&
-            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
-                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
+            if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
+                ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT)) && (fabsf(actor->playerHeightRel) <= yRange) &&
+                (actor->xzDistToPlayer <= xzRange) && actor->isLockedOn) {
                 actor->flags |= ACTOR_FLAG_10000;
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
-        case 6:
+        case SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN:
             //! @bug: Both x and y conditionals are always true, || should be an &&
-            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
-                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
+            if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
+                ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT)) && (fabsf(actor->playerHeightRel) <= yRange) &&
+                (actor->xzDistToPlayer <= xzRange)) {
                 actor->flags |= ACTOR_FLAG_10000;
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
@@ -876,7 +888,7 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
             break;
     }
 
-    return ret;
+    return canAccept;
 }
 
 const u8 sShadowMaps[4][12][12] = {
@@ -966,7 +978,7 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
     s32 startRow;
 
     for (i = 0; i < bodyPartsNum; i++) {
-        if (parentBodyParts[i] >= 0) {
+        if (parentBodyParts[i] > BODYPART_NONE) {
             parentBodyPart = parentBodyParts[i];
             bodyPartPos = &bodyPartsPos[i];
 
@@ -1161,12 +1173,12 @@ s16 SubS_GetDistSqAndOrientPath(Path* path, s32 pointIndex, Vec3f* pos, f32* dis
     return Math_Atan2S(diffX, diffZ);
 }
 
-s8 SubS_IsObjectLoaded(s8 index, PlayState* play) {
-    return !Object_IsLoaded(&play->objectCtx, index) ? false : true;
+s8 SubS_IsObjectLoaded(s8 objectSlot, PlayState* play) {
+    return !Object_IsLoaded(&play->objectCtx, objectSlot) ? false : true;
 }
 
-s8 SubS_GetObjectIndex(s16 id, PlayState* play) {
-    return Object_GetIndex(&play->objectCtx, id);
+s8 SubS_GetObjectSlot(s16 objectId, PlayState* play) {
+    return Object_GetSlot(&play->objectCtx, objectId);
 }
 
 /**
@@ -1186,13 +1198,24 @@ Actor* SubS_FindActor(PlayState* play, Actor* actorListStart, u8 actorCategory, 
     return actor;
 }
 
-s32 SubS_FillLimbRotTables(PlayState* play, s16* limbRotTableY, s16* limbRotTableZ, s32 numLimbs) {
-    s32 i;
+/**
+ * Fills two tables with rotation angles that can be used to simulate idle animations.
+ *
+ * The rotation angles are dependent on the current frame, so should be updated regularly, generally every frame.
+ *
+ * This is done for the desired limb by taking either the `sin` of the yTable value or the `cos` of the zTable value,
+ * multiplying by some scale factor (generally 200), and adding that to the already existing rotation.
+ *
+ * Note: With the common scale factor of 200, this effect is practically unnoticeable if the current animation already
+ * has motion involved.
+ */
+s32 SubS_UpdateFidgetTables(PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen) {
     u32 frames = play->gameplayFrames;
+    s32 i;
 
-    for (i = 0; i < numLimbs; i++) {
-        limbRotTableY[i] = (i * 50 + 0x814) * frames;
-        limbRotTableZ[i] = (i * 50 + 0x940) * frames;
+    for (i = 0; i < tableLen; i++) {
+        fidgetTableY[i] = (i * 50 + 0x814) * frames;
+        fidgetTableZ[i] = (i * 50 + 0x940) * frames;
     }
 
     return true;
@@ -1493,10 +1516,10 @@ s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePoi
 
 /**
  * Finds the first actor instance of a specified Id and category verified with a custom callback.
- * The callback should return `true` when the actor is succesfully verified.
+ * The callback should return `true` when the actor is successfully verified.
  */
 Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId,
-                            void* verifyData, VerifyActor verifyActor) {
+                            void* verifyData, VerifyFindActorFunc verifyActorFunc) {
     Actor* actorIter = actorListStart;
 
     if (actorListStart == NULL) {
@@ -1506,36 +1529,40 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
     while ((actorIter != NULL) &&
            ((actorId != actorIter->id) ||
             ((actorId == actorIter->id) &&
-             ((verifyActor == NULL) || ((verifyActor != NULL) && !verifyActor(play, actor, actorIter, verifyData)))))) {
+             ((verifyActorFunc == NULL) ||
+              ((verifyActorFunc != NULL) && !verifyActorFunc(play, actor, actorIter, verifyData)))))) {
         actorIter = actorIter->next;
     }
 
     return actorIter;
 }
 
-//! TODO: Needs docs with func_800B8500
-s32 func_8013E748(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
-                  func_8013E748_VerifyFunc verifyFunc) {
-    s32 ret = false;
+/**
+ * Will extend a TalkExchange offer to the player if the actor is verified with a custom callback.
+ * The callback should return `true` when the actor is successfully verified.
+ */
+s32 SubS_OfferTalkExchangeCustom(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction,
+                                 void* data, VerifyTalkExchangeActorFunc verifyActorFunc) {
+    s32 canAccept = false;
 
-    if ((verifyFunc == NULL) || ((verifyFunc != NULL) && verifyFunc(play, actor, data))) {
-        ret = func_800B8500(actor, play, xzRange, yRange, exchangeItemId);
+    if ((verifyActorFunc == NULL) || ((verifyActorFunc != NULL) && verifyActorFunc(play, actor, data))) {
+        canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, exchangeItemAction);
     }
-    return ret;
+    return canAccept;
 }
 
 s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) {
     Player* player = GET_PLAYER(play);
-    Vec3s* yawTols = (Vec3s*)data;
+    Vec3s* yawRanges = (Vec3s*)data;
     s16 playerYaw = ABS(BINANG_SUB(Actor_WorldYawTowardActor(&player->actor, actor), player->actor.shape.rot.y));
     s16 actorYaw = ABS(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
     s32 areFacing = false;
-    s32 actorYawTol = ABS(yawTols->y);
-    s32 playerYawTol;
+    s32 actorYawRange = ABS(yawRanges->y);
+    s32 playerYawRange;
 
-    if (actorYaw < (s16)actorYawTol) {
-        playerYawTol = ABS(yawTols->x);
-        if (playerYaw < (s16)playerYawTol) {
+    if (actorYaw < (s16)actorYawRange) {
+        playerYawRange = ABS(yawRanges->x);
+        if (playerYaw < (s16)playerYawRange) {
             areFacing = true;
         }
     }
@@ -1543,14 +1570,14 @@ s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) 
     return areFacing;
 }
 
-//! TODO: Needs docs with func_800B8500
-s32 func_8013E8F8(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
-                  s16 actorYawTol) {
-    Vec3s yawTols;
+s32 SubS_OfferTalkExchangeFacing(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction,
+                                 s16 playerYawRange, s16 actorYawRange) {
+    Vec3s yawRanges;
 
-    yawTols.x = playerYawTol;
-    yawTols.y = actorYawTol;
-    return func_8013E748(actor, play, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
+    yawRanges.x = playerYawRange;
+    yawRanges.y = actorYawRange;
+    return SubS_OfferTalkExchangeCustom(actor, play, xzRange, yRange, exchangeItemAction, &yawRanges,
+                                        SubS_ActorAndPlayerFaceEachOther);
 }
 
 /**

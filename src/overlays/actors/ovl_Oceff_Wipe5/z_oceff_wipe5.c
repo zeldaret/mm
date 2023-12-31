@@ -16,18 +16,18 @@ void OceffWipe5_Update(Actor* thisx, PlayState* play);
 void OceffWipe5_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Oceff_Wipe5_InitVars = {
-    ACTOR_OCEFF_WIPE5,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(OceffWipe5),
-    (ActorFunc)OceffWipe5_Init,
-    (ActorFunc)OceffWipe5_Destroy,
-    (ActorFunc)OceffWipe5_Update,
-    (ActorFunc)OceffWipe5_Draw,
+    /**/ ACTOR_OCEFF_WIPE5,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(OceffWipe5),
+    /**/ OceffWipe5_Init,
+    /**/ OceffWipe5_Destroy,
+    /**/ OceffWipe5_Update,
+    /**/ OceffWipe5_Draw,
 };
 
-UNK_TYPE4 D_80BC9260;
+static s32 sBssPad;
 
 void OceffWipe5_Init(Actor* thisx, PlayState* play) {
     OceffWipe5* this = THIS;
@@ -41,7 +41,7 @@ void OceffWipe5_Destroy(Actor* thisx, PlayState* play) {
     OceffWipe5* this = THIS;
 
     Magic_Reset(play);
-    play->msgCtx.unk120B0 = 0;
+    play->msgCtx.ocarinaSongEffectActive = false;
 }
 
 void OceffWipe5_Update(Actor* thisx, PlayState* play) {
@@ -88,7 +88,7 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
         colorIndex = 0;
     }
 
-    Camera_GetQuakeOffset(&quakeOffset, activeCam);
+    quakeOffset = Camera_GetQuakeOffset(activeCam);
 
     if (this->counter < 32) {
         z = Math_SinS(this->counter << 9) * phi_fv1;

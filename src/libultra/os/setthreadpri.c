@@ -1,24 +1,22 @@
-#include "global.h"
+#include "ultra64.h"
 
-void osSetThreadPri(OSThread* t, OSPri p) {
-    register u32 saveMask;
+void osSetThreadPri(OSThread* thread, OSPri p) {
+    register u32 saveMask = __osDisableInt();
 
-    saveMask = __osDisableInt();
-
-    if (t == NULL) {
-        t = __osRunningThread;
+    if (thread == NULL) {
+        thread = __osRunningThread;
     }
 
-    if (t->priority != p) {
-        t->priority = p;
+    if (thread->priority != p) {
+        thread->priority = p;
 
-        if (t != __osRunningThread && t->state != 1) {
-            __osDequeueThread(t->queue, t);
-            __osEnqueueThread(t->queue, t);
+        if (thread != __osRunningThread && thread->state != OS_STATE_STOPPED) {
+            __osDequeueThread(thread->queue, thread);
+            __osEnqueueThread(thread->queue, thread);
         }
 
         if (__osRunningThread->priority < __osRunQueue->priority) {
-            __osRunningThread->state = 2;
+            __osRunningThread->state = OS_STATE_RUNNABLE;
             __osEnqueueAndYield(&__osRunQueue);
         }
     }

@@ -5,6 +5,8 @@
 #define REGS_H
 
 #include "ultra64.h"
+#include "unk.h"
+
 
 #define REG_GROUPS 29 // number of REG groups, i.e. REG, SREG, OREG, etc.
 #define REG_PAGES 6
@@ -59,6 +61,7 @@ extern RegEditor* gRegEditor;
 
 /* TODO: There are still a few OoT defines here that need confirmation */
 
+#define R_ENV_DISABLE_DBG                 REG(9)
 #define R_TIME_SPEED                      REG(15)
 #define R_RUN_SPEED_LIMIT                 REG(45)
 
@@ -141,10 +144,13 @@ extern RegEditor* gRegEditor;
 #define R_PAUSE_DBG_MAP_CLOUD_Y             XREG(53)
 #define R_MOON_CRASH_TIMER_Y                XREG(80)
 #define R_MOON_CRASH_TIMER_X                XREG(81)
-#define R_PAUSE_OWLWARP_ALPHA               XREG(87)
+#define R_PAUSE_OWL_WARP_ALPHA              XREG(87)
 #define R_STORY_FILL_SCREEN_ALPHA           XREG(91)
 #define R_REVERSE_FLOOR_INDEX               XREG(94)
 #define R_MINIMAP_DISABLED                  XREG(95)
+
+#define R_ENV_LIGHT1_DIR(i)               cREG(3 + (i))
+#define R_ENV_LIGHT2_DIR(i)               cREG(6 + (i))
 
 #define R_TRANS_FADE_FLASH_ALPHA_STEP     iREG(50) // Set to a negative number to start the flash
 #define R_ROOM_CULL_DEBUG_MODE            iREG(86)

@@ -20,15 +20,15 @@ void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc);
 void func_808A2918(EnBoom* this, PlayState* play);
 
 ActorInit En_Boom_InitVars = {
-    ACTOR_EN_BOOM,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnBoom),
-    (ActorFunc)EnBoom_Init,
-    (ActorFunc)EnBoom_Destroy,
-    (ActorFunc)EnBoom_Update,
-    (ActorFunc)EnBoom_Draw,
+    /**/ ACTOR_EN_BOOM,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnBoom),
+    /**/ EnBoom_Init,
+    /**/ EnBoom_Destroy,
+    /**/ EnBoom_Update,
+    /**/ EnBoom_Draw,
 };
 
 static ColliderQuadInit sQuadInit = {
@@ -52,7 +52,7 @@ static ColliderQuadInit sQuadInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(targetMode, 5, ICHAIN_CONTINUE),
+    ICHAIN_S8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_STOP),
 };
 
@@ -61,11 +61,11 @@ void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc) {
 }
 
 void func_808A24DC(EnBoom* this, PlayState* play) {
-    WaterBox* sp54;
+    WaterBox* waterBox;
     f32 sp50 = this->actor.world.pos.y;
     u16 sp4E = this->actor.bgCheckFlags & BGCHECKFLAG_WATER;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &waterBox) &&
         (this->actor.world.pos.y < sp50)) {
         Vec3f sp40;
 
@@ -130,7 +130,7 @@ void EnBoom_Init(Actor* thisx, PlayState* play) {
     sp30.unkFlag = 0;
     sp30.calcMode = 0;
 
-    Effect_Add(play, &this->effectIndex, 1, 0, 0, &sp30);
+    Effect_Add(play, &this->effectIndex, EFFECT_BLURE1, 0, 0, &sp30);
 
     Collider_InitQuad(play, &this->collider);
     Collider_SetQuad(play, &this->collider, &this->actor, &sQuadInit);
@@ -203,7 +203,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                 }
 
                 Math_ScaledStepToS(&this->actor.world.rot.y, sp72,
-                                   (this->unk_1CF > 0) ? 1000 : (s16)(ABS_ALT(sp70) * sp64));
+                                   (this->unk_1CF > 0) ? 0x3E8 : TRUNCF_BINANG(ABS_ALT(sp70) * sp64));
             }
 
             Math_ScaledStepToS(&this->actor.world.rot.x, sp6E, ABS_ALT(sp6C) * sp64);
@@ -213,7 +213,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     Actor_SetSpeeds(&this->actor, 12.0f);
     Actor_MoveWithGravity(&this->actor);
     func_808A24DC(this, play);
-    func_800B9010(&this->actor, NA_SE_IT_BOOMERANG_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_IT_BOOMERANG_FLY - SFX_FLAG);
 
     if ((this->collider.base.atFlags & AT_HIT) && (((this->collider.base.at->id == ACTOR_EN_ITEM00) &&
                                                     (this->collider.base.at->params != ITEM00_HEART_CONTAINER) &&

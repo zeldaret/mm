@@ -21,15 +21,15 @@ void ArmsHook_Wait(ArmsHook* this, PlayState* play);
 void ArmsHook_Shoot(ArmsHook* this, PlayState* play);
 
 ActorInit Arms_Hook_InitVars = {
-    ACTOR_ARMS_HOOK,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ArmsHook),
-    (ActorFunc)ArmsHook_Init,
-    (ActorFunc)ArmsHook_Destroy,
-    (ActorFunc)ArmsHook_Update,
-    (ActorFunc)ArmsHook_Draw,
+    /**/ ACTOR_ARMS_HOOK,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ArmsHook),
+    /**/ ArmsHook_Init,
+    /**/ ArmsHook_Destroy,
+    /**/ ArmsHook_Update,
+    /**/ ArmsHook_Draw,
 };
 
 static ColliderQuadInit D_808C1BC0 = {
@@ -109,7 +109,7 @@ s32 ArmsHook_CheckForCancel(ArmsHook* this) {
     Player* player = (Player*)this->actor.parent;
 
     if (Player_IsHoldingHookshot(player)) {
-        if ((player->itemAction != player->heldItemAction) || (player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
+        if ((player->itemAction != player->heldItemAction) || (player->actor.flags & ACTOR_FLAG_TALK) ||
             (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_4000000))) {
             this->timer = 0;
             ArmsHook_DetachHookFromActor(this);
@@ -135,7 +135,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
         return;
     }
 
-    func_800B8F98(&player->actor, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
     ArmsHook_CheckForCancel(this);
 
     if ((this->timer != 0) && (this->collider.base.atFlags & AT_HIT) &&
@@ -151,7 +151,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
             }
         }
         this->timer = 0;
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_CRE);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_CRE);
 
         return;
     }
@@ -260,10 +260,10 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
                     ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
                 }
                 func_808C1154(this);
-                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);
+                Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);
             } else {
                 CollisionCheck_SpawnShieldParticlesMetal(play, &this->actor.world.pos);
-                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
+                Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
             }
         } else if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
                                  BTN_A | BTN_B | BTN_R | BTN_CUP | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN)) {
@@ -327,7 +327,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play) {
         f0 = sqrtf(SQ(sp68.y) + sp48);
         Matrix_Scale(0.015f, 0.015f, f0 * 0.01f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0008D0);
+        gSPDisplayList(POLY_OPA_DISP++, gHookshotChainDL);
         func_801229A0(play, player);
 
         CLOSE_DISPS(play->state.gfxCtx);

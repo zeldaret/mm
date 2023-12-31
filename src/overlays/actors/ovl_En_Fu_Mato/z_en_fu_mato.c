@@ -28,15 +28,15 @@ void func_80ACEFC4(EnFuMato* this);
 void func_80ACEFD8(EnFuMato* this, PlayState* play);
 
 ActorInit En_Fu_Mato_InitVars = {
-    ACTOR_EN_FU_MATO,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_FU_MATO,
-    sizeof(EnFuMato),
-    (ActorFunc)EnFuMato_Init,
-    (ActorFunc)EnFuMato_Destroy,
-    (ActorFunc)EnFuMato_Update,
-    (ActorFunc)EnFuMato_Draw,
+    /**/ ACTOR_EN_FU_MATO,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_FU_MATO,
+    /**/ sizeof(EnFuMato),
+    /**/ EnFuMato_Init,
+    /**/ EnFuMato_Destroy,
+    /**/ EnFuMato_Update,
+    /**/ EnFuMato_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -102,7 +102,7 @@ void EnFuMato_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.worldSphere.radius = 30;
     } else {
         this->collider.dim.worldSphere.radius = 17;
-        this->unk_2F8 = fu->unk_538;
+        this->unk_2F8 = fu->pathPoints;
         this->unk_2F4 = fu->unk_520;
         this->unk_2F0 = ENFUMATO_GET(&this->dyna.actor);
     }
@@ -312,11 +312,7 @@ void func_80ACECFC(EnFuMato* this, PlayState* play) {
         ptr->unk_24.z += ptr->unk_2A.z;
 
         if ((this->unk_302 == 2) && (ptr->unk_30 == 1) && (ptr->unk_00.y < (this->dyna.actor.floorHeight + 10.0f))) {
-            if (ptr->unk_0C.y < 0.0f) {
-                ptr->unk_0C.y = -ptr->unk_0C.y;
-            } else {
-                ptr->unk_0C.y = ptr->unk_0C.y;
-            }
+            ptr->unk_0C.y = ABS_ALT(ptr->unk_0C.y);
             ptr->unk_0C.y *= 0.5f;
             ptr->unk_0C.x *= (Rand_Centered() * 1.5f) + 2.0f;
             ptr->unk_0C.z *= (Rand_Centered() * 1.5f) + 2.0f;
@@ -373,7 +369,7 @@ s32 func_80ACF04C(EnFuMato* this, PlayState* play) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
 
         fu->unk_548++;
-        if ((fu->unk_542 == 2) || (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
+        if ((fu->unk_542 == 2) || (GET_PLAYER_FORM == PLAYER_FORM_DEKU)) {
             fu->unk_546 = 1;
             func_80ACE680(this);
         } else {

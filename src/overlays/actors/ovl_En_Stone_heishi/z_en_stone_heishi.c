@@ -6,7 +6,7 @@
 
 #include "z_en_stone_heishi.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_REACT_TO_LENS)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnStoneheishi*)thisx)
 
@@ -28,15 +28,15 @@ void EnStoneheishi_GiveItemReward(EnStoneheishi* this, PlayState* play);
 void EnStoneheishi_SetupDrinkBottleProcess(EnStoneheishi* this);
 
 ActorInit En_Stone_heishi_InitVars = {
-    ACTOR_EN_STONE_HEISHI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SDN,
-    sizeof(EnStoneheishi),
-    (ActorFunc)EnStoneheishi_Init,
-    (ActorFunc)EnStoneheishi_Destroy,
-    (ActorFunc)EnStoneheishi_Update,
-    (ActorFunc)EnStoneheishi_Draw,
+    /**/ ACTOR_EN_STONE_HEISHI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnStoneheishi),
+    /**/ EnStoneheishi_Init,
+    /**/ EnStoneheishi_Destroy,
+    /**/ EnStoneheishi_Update,
+    /**/ EnStoneheishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -62,8 +62,8 @@ static ColliderCylinderInit sCylinderInit = {
 static u16 sEnStoneHeishiTextIds[] = { 0x1473, 0x1474, 0x1475, 0x1476, 0x1477, 0x1478, 0x1479, 0x147A, 0x1472 };
 
 static AnimationHeader* sAnimations[] = {
-    &gSoldierStandHandOnHip, &gSoldierDrink, &gSoldierCheerWithSpear, &gSoldierWave,
-    &gSoldierSitAndReach,    &gSoldierDrink, &gSoldierStandUp,
+    &gSoldierStandHandOnHipAnim, &gSoldierDrinkAnim, &gSoldierCheerWithSpearAnim, &gSoldierWaveAnim,
+    &gSoldierSitAndReachAnim,    &gSoldierDrinkAnim, &gSoldierStandUpAnim,
 };
 
 static u8 sAnimationModes[] = {
@@ -107,11 +107,11 @@ void EnStoneheishi_Init(Actor* thisx, PlayState* play) {
     EnStoneheishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWave, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWaveAnim, this->jointTable, this->morphTable,
                        SOLDIER_LIMB_MAX);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -180,7 +180,7 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 yawDiff;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BC9660(this);
         return;
     }
@@ -197,7 +197,7 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
     yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));
 
     if ((yawDiff <= 0x18F0) && !(player->stateFlags1 & PLAYER_STATE1_800000)) {
-        func_800B8614(&this->actor, play, 70.0f);
+        Actor_OfferTalk(&this->actor, play, 70.0f);
     }
 }
 
@@ -328,7 +328,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
 
                 play->msgCtx.msgLength = 0;
                 player->actor.textId = 0;
-                player->exchangeItemId = PLAYER_IA_NONE;
+                player->exchangeItemAction = PLAYER_IA_NONE;
                 this->bottleDisplay = EN_STONE_BOTTLE_RED_POTION;
 
                 if (this->playerGivesBluePotion) {
@@ -397,8 +397,8 @@ void func_80BC9D28(EnStoneheishi* this, PlayState* play) {
         this->textIdIndex++;
         this->actor.textId = sEnStoneHeishiTextIds[this->textIdIndex];
         SET_WEEKEVENTREG(WEEKEVENTREG_41_40);
-        Actor_ProcessTalkRequest(&this->actor, &play->state);
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
+        Actor_TalkOfferAccepted(&this->actor, &play->state);
+        Actor_OfferTalkExchange(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_80BC9E50;
     } else if (INV_CONTENT(ITEM_MASK_STONE) == ITEM_MASK_STONE) {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
@@ -410,13 +410,13 @@ void func_80BC9D28(EnStoneheishi* this, PlayState* play) {
 void func_80BC9E50(EnStoneheishi* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_STONE_MASK);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_SHIRO);
         this->action = EN_STONE_ACTION_1;
         this->actionFunc = func_80BC9680;
     } else {
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

@@ -1,6 +1,12 @@
-#include "global.h"
+#include "z64save.h"
 
-SaveContext gSaveContext;
+#include "alignment.h"
+#include "sequence.h"
+#include "libc/stdbool.h"
+#include "z64environment.h"
+#include "z64transition.h"
+
+SaveContext gSaveContext ALIGNED(16);
 
 void SaveContext_Init(void) {
     bzero(&gSaveContext, sizeof(SaveContext));
@@ -12,13 +18,13 @@ void SaveContext_Init(void) {
     gSaveContext.nextCutsceneIndex = 0xFFEF;
     gSaveContext.cutsceneTrigger = 0;
     gSaveContext.chamberCutsceneNum = 0;
-    gSaveContext.nextDayTime = 0xFFFF;
+    gSaveContext.nextDayTime = NEXT_TIME_NONE;
     gSaveContext.skyboxTime = 0;
     gSaveContext.dogIsLost = true;
     gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
     gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
 
-    gSaveContext.options.language = 1;
+    gSaveContext.options.language = LANGUAGE_ENG;
     gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
     gSaveContext.options.zTargetSetting = 0;
 }

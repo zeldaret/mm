@@ -6,6 +6,7 @@
 
 #include "z_obj_switch.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -69,18 +70,18 @@ static TexturePtr sEyeSwitchTextures[][4] = {
     { gEyeSwitchSilverOpenTex, gEyeSwitchSilverHalfTex, gEyeSwitchSilverClosedTex, gEyeSwitchSilverClosedTex },
 };
 
-static s32 sIsSegmentTableInit = false;
+static s32 sTexturesDesegmented = false;
 
 ActorInit Obj_Switch_InitVars = {
-    ACTOR_OBJ_SWITCH,
-    ACTORCAT_SWITCH,
-    FLAGS,
-    GAMEPLAY_DANGEON_KEEP,
-    sizeof(ObjSwitch),
-    (ActorFunc)ObjSwitch_Init,
-    (ActorFunc)ObjSwitch_Destroy,
-    (ActorFunc)ObjSwitch_Update,
-    (ActorFunc)ObjSwitch_Draw,
+    /**/ ACTOR_OBJ_SWITCH,
+    /**/ ACTORCAT_SWITCH,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_DANGEON_KEEP,
+    /**/ sizeof(ObjSwitch),
+    /**/ ObjSwitch_Init,
+    /**/ ObjSwitch_Destroy,
+    /**/ ObjSwitch_Update,
+    /**/ ObjSwitch_Draw,
 };
 
 static f32 sHeights[] = { 10.0f, 10.0f, 0.0f, 30.0f, 30.0f, 15.0f };
@@ -232,7 +233,9 @@ void ObjSwitch_InitTrisCollider(ObjSwitch* this, PlayState* play, ColliderTrisIn
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
+        //! FAKE:
         if (this) {}
+
         for (j = 0; j < ARRAY_COUNT(vtx); j++) {
             Matrix_MultVec3f(&init->elements[i].dim.vtx[j], &vtx[j]);
         }
@@ -245,18 +248,18 @@ Actor* ObjSwitch_SpawnIce(ObjSwitch* this, PlayState* play) {
     return Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_ICE_POLY,
                               this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 25.0f,
                               this->dyna.actor.world.pos.z, this->dyna.actor.world.rot.x, this->dyna.actor.world.rot.y,
-                              this->dyna.actor.world.rot.z, 0xFF32);
+                              this->dyna.actor.world.rot.z, OBJICEPOLY_PARAMS(50, OBJICEPOLY_SWITCH_FLAG_NONE));
 }
 
 void ObjSwitch_SetSwitchFlagState(ObjSwitch* this, PlayState* play, s32 setFlag) {
     if (setFlag) {
-        s32 flag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
+        s32 switchFlag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
 
-        Flags_SetSwitch(play, flag);
+        Flags_SetSwitch(play, switchFlag);
     } else {
-        s32 flag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
+        s32 switchFlag = OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor);
 
-        Flags_UnsetSwitch(play, flag);
+        Flags_UnsetSwitch(play, switchFlag);
     }
 }
 
@@ -381,7 +384,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         ObjSwitch_InitJntSphCollider(this, play, &sJntSphInit);
     }
     if (type == OBJSWITCH_TYPE_CRYSTAL_TARGETABLE) {
-        this->dyna.actor.targetMode = 4;
+        this->dyna.actor.targetMode = TARGET_MODE_4;
         this->dyna.actor.flags |= 1;
     }
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -397,11 +400,11 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.flags |= 0x80;
     }
     if (type == OBJSWITCH_TYPE_EYE) {
-        if (!sIsSegmentTableInit) {
+        if (!sTexturesDesegmented) {
             s32 i;
             s32 j;
 
-            sIsSegmentTableInit = true;
+            sTexturesDesegmented = true;
 
             for (i = 0; i < ARRAY_COUNT(sEyeSwitchTextures); i++) {
                 for (j = 0; j < ARRAY_COUNT(*sEyeSwitchTextures); j++) {

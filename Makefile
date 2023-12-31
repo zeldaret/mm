@@ -23,6 +23,8 @@ FULL_DISASM ?= 0
 RUN_CC_CHECK ?= 1
 # Dump build object files
 OBJDUMP_BUILD ?= 0
+# Force asm processor to run on every file
+ASM_PROC_FORCE ?= 0
 # Number of threads to disassmble, extract, and compress with
 N_THREADS ?= $(shell nproc)
 
@@ -92,6 +94,10 @@ ASM_PROC   := python3 tools/asm-processor/build.py
 
 ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
 
+ifneq ($(ASM_PROC_FORCE), 0)
+	ASM_PROC_FLAGS += --force
+endif
+
 IINC       := -Iinclude -Isrc -Iassets -Ibuild -I.
 
 ifeq ($(KEEP_MDEBUG),0)
@@ -102,7 +108,7 @@ endif
 
 # Check code syntax with host compiler
 ifneq ($(RUN_CC_CHECK),0)
-  CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label -Wno-sign-compare -Wno-tautological-compare
+  CHECK_WARNINGS := -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-unused-but-set-variable -Wno-unused-label -Wno-sign-compare -Wno-tautological-compare
   CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
   ifneq ($(WERROR), 0)
     CC_CHECK += -Werror
@@ -117,6 +123,7 @@ MKLDSCRIPT := tools/buildtools/mkldscript
 YAZ0       := tools/buildtools/yaz0
 ZAPD       := tools/ZAPD/ZAPD.out
 FADO       := tools/fado/fado.elf
+MAKEYAR    := tools/buildtools/makeyar
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
@@ -166,14 +173,12 @@ SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 
 ## Assets binaries (PNGs, JPGs, etc)
-ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
+ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c")
 # Prevents building C files that will be #include'd
 ASSET_BIN_DIRS_C_FILES := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/code*" -not -path "assets/overlays*")
 
-ASSET_FILES_XML := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.xml))
 ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
-ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_XML:.xml=.c),$f) \
-				   $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
+ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
 
 TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
 TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
@@ -184,9 +189,11 @@ C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard 
 S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
                  $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
 BASEROM_FILES := $(shell grep -F "build/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
+ARCHIVES_O    := $(shell grep -F ".yar.o" spec | sed 's/.*include "// ; s/\.o\".*/.o/')
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(C_FILES:.c=.o),build/$f) \
-                 $(foreach f,$(BASEROM_FILES),build/$f.o)
+                 $(foreach f,$(BASEROM_FILES),build/$f.o) \
+                 $(ARCHIVES_O)
 
 OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' )
 
@@ -195,11 +202,14 @@ OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' 
 DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 
 # create build directories
-$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
+$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS) $(ASSET_BIN_DIRS_C_FILES),build/$(dir)))
 
 # directory flags
-build/src/boot_O2/%.o: OPTFLAGS := -O2
-build/src/boot_O2_g3/%.o: OPTFLAGS := -O2 -g3
+build/src/boot/O2/%.o: OPTFLAGS := -O2
+
+build/src/boot/libc/%.o: OPTFLAGS := -O2
+build/src/boot/libm/%.o: OPTFLAGS := -O2
+build/src/boot/libc64/%.o: OPTFLAGS := -O2
 
 build/src/libultra/os/%.o: OPTFLAGS := -O1
 build/src/libultra/voice/%.o: OPTFLAGS := -O2
@@ -216,8 +226,8 @@ build/assets/%.o: OPTFLAGS := -O1
 build/assets/%.o: ASM_PROC_FLAGS := 
 
 # file flags
-build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
-build/src/boot_O2_g3/fault_drawer.o: CFLAGS += -trapuv
+build/src/boot/fault.o: CFLAGS += -trapuv
+build/src/boot/fault_drawer.o: CFLAGS += -trapuv
 
 build/src/code/jpegutils.o: OPTFLAGS := -O2
 build/src/code/jpegdecoder.o: OPTFLAGS := -O2
@@ -230,8 +240,8 @@ build/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
 build/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
 # cc & asm-processor
-build/src/boot_O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
-build/src/boot_O2_g3/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot/O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 build/src/libultra/%.o: CC := $(CC_OLD)
 # Needed at least until voice is decompiled
@@ -303,9 +313,10 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
+	python3 tools/decompress_yars.py
 
 assets:
-	python3 extract_assets.py -j $(N_THREADS)
+	python3 extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
 
 ## Assembly generation
 disasm:
@@ -343,6 +354,10 @@ build/assets/%.o: assets/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(OBJCOPY_BIN)
 	$(RM_MDEBUG)
+
+build/%.yar.o: build/%.o
+	$(MAKEYAR) $< $(@:.yar.o=.yar.bin) $(@:.yar.o=.symbols.o)
+	$(OBJCOPY) -I binary -O elf32-big $(@:.yar.o=.yar.bin) $@
 
 build/baserom/%.o: baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
@@ -392,3 +407,6 @@ build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
 
 -include $(DEP_FILES)
+
+# Print target for debugging
+print-% : ; $(info $* is a $(flavor $*) variable set to [$($*)]) @true

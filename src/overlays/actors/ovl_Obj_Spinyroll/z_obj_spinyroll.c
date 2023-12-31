@@ -29,15 +29,15 @@ void func_80A1ECC0(ObjSpinyroll* this);
 void func_80A1ECD4(ObjSpinyroll* this, PlayState* play);
 
 ActorInit Obj_Spinyroll_InitVars = {
-    ACTOR_OBJ_SPINYROLL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_SPINYROLL,
-    sizeof(ObjSpinyroll),
-    (ActorFunc)ObjSpinyroll_Init,
-    (ActorFunc)ObjSpinyroll_Destroy,
-    (ActorFunc)ObjSpinyroll_Update,
-    (ActorFunc)ObjSpinyroll_Draw,
+    /**/ ACTOR_OBJ_SPINYROLL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_SPINYROLL,
+    /**/ sizeof(ObjSpinyroll),
+    /**/ ObjSpinyroll_Init,
+    /**/ ObjSpinyroll_Destroy,
+    /**/ ObjSpinyroll_Update,
+    /**/ ObjSpinyroll_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[] = {
@@ -475,7 +475,7 @@ void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
     Collider_InitTris(play, &this->collider);
     Collider_SetTris(play, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderElements);
 
-    if (OBJSPINYROLL_GET_7F(&this->dyna.actor) == OBJSPINYROLL_GET_7F_7F) {
+    if (OBJSPINYROLL_GET_PATH_INDEX(&this->dyna.actor) == OBJSPINYROLL_PATH_INDEX_NONE) {
         func_80A1E9C4(this);
         return;
     }
@@ -484,7 +484,7 @@ void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
     func_80A1DFA0(this);
     this->unk_4A4 = D_80A1F1C4[OBJSPINYROLL_GET_380(thisx)];
 
-    path = &play->setupPathList[OBJSPINYROLL_GET_7F(&this->dyna.actor)];
+    path = &play->setupPathList[OBJSPINYROLL_GET_PATH_INDEX(&this->dyna.actor)];
     points = Lib_SegmentedToVirtual(path->points);
 
     sp34 = &points[0];

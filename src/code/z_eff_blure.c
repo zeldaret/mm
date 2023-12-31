@@ -1,10 +1,19 @@
+#include "z64eff_blure.h"
+
+#include "libc/stdbool.h"
+#include "gfx.h"
+#include "macros.h"
+#include "sys_matrix.h"
+#include "z64effect_ss.h"
 #include "global.h"
+
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 void EffectBlure_AddVertex(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
     EffectBlureElement* elem;
-    s32 numElements;
+    s32 pad;
 
+    //! FAKE
     if (this) {}
     if (this) {}
 
@@ -16,7 +25,7 @@ void EffectBlure_AddVertex(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
         elem = &this->elements[this->numElements];
         elem->state = 1;
 
-        if (!(this->flags & 2)) {
+        if (!(this->flags & EFFECT_BLURE_FLAG_2)) {
             elem->p1.x = p1->x;
             elem->p1.y = p1->y;
             elem->p1.z = p1->z;
@@ -35,16 +44,16 @@ void EffectBlure_AddVertex(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
             Vec3f sp44;
             Vec3f sp38;
 
-            sp16C.x = ((f32)(elem - 1)->p2.x + (f32)(elem - 1)->p1.x) * 0.5f;
-            sp16C.y = ((f32)(elem - 1)->p2.y + (f32)(elem - 1)->p1.y) * 0.5f;
-            sp16C.z = ((f32)(elem - 1)->p2.z + (f32)(elem - 1)->p1.z) * 0.5f;
-            sp160.x = (p1->x + p2->x) * 0.5f;
-            sp160.y = (p1->y + p2->y) * 0.5f;
-            sp160.z = (p1->z + p2->z) * 0.5f;
+            sp16C.x = ((f32)(elem - 1)->p2.x + (f32)(elem - 1)->p1.x) / 2.0f;
+            sp16C.y = ((f32)(elem - 1)->p2.y + (f32)(elem - 1)->p1.y) / 2.0f;
+            sp16C.z = ((f32)(elem - 1)->p2.z + (f32)(elem - 1)->p1.z) / 2.0f;
+            sp160.x = (p1->x + p2->x) / 2.0f;
+            sp160.y = (p1->y + p2->y) / 2.0f;
+            sp160.z = (p1->z + p2->z) / 2.0f;
 
             Math_Vec3f_Diff(&sp160, &sp16C, &sp154);
             scale = Math3D_Vec3fMagnitude(&sp154);
-            if (!(fabsf(scale) < 0.008f)) {
+            if (!IS_ZERO(scale)) {
                 scale = 1.0f / scale;
                 Math_Vec3f_Scale(&sp154, scale);
 
@@ -72,15 +81,14 @@ void EffectBlure_AddVertex(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
 
 void EffectBlure_AddSpace(EffectBlure* this) {
     EffectBlureElement* elem;
-    s32 numElements;
+    s32 pad;
 
     if (this != NULL) {
-        numElements = this->numElements;
-        if (numElements >= ARRAY_COUNT(this->elements)) {
+        if (this->numElements >= ARRAY_COUNT(this->elements)) {
             return;
         }
 
-        elem = &this->elements[numElements];
+        elem = &this->elements[this->numElements];
         elem->state = 0;
         elem->timer = 1;
 
@@ -118,7 +126,7 @@ void EffectBlure_Init1(void* thisx, void* initParamsx) {
 
         EffectBlure_InitElements(this);
 
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < EFFECT_BLURE_COLOR_COUNT; i++) {
             this->p1StartColor[i] = initParams->p1StartColor[i];
             this->p2StartColor[i] = initParams->p2StartColor[i];
             this->p1EndColor[i] = initParams->p1EndColor[i];
@@ -131,7 +139,7 @@ void EffectBlure_Init1(void* thisx, void* initParamsx) {
         this->flags = 0;
         this->addAngleChange = 0;
         this->addAngle = 0;
-        this->drawMode = 0;
+        this->drawMode = EFF_BLURE_DRAW_MODE_SIMPLE;
         this->altPrimColor.r = 0;
         this->altPrimColor.g = 0;
         this->altPrimColor.b = 0;
@@ -153,7 +161,7 @@ void EffectBlure_Init2(void* thisx, void* initParamsx) {
 
         EffectBlure_InitElements(this);
 
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < EFFECT_BLURE_COLOR_COUNT; i++) {
             this->p1StartColor[i] = initParams->p1StartColor[i];
             this->p2StartColor[i] = initParams->p2StartColor[i];
             this->p1EndColor[i] = initParams->p1EndColor[i];
@@ -270,8 +278,8 @@ void EffectBlure_UpdateFlags(EffectBlureElement* elem) {
     f32 sp2C;
 
     if (((elem - 1)->state == 0) || ((elem + 1)->state == 0)) {
-        elem->flags &= ~3;
-        elem->flags |= 2;
+        elem->flags &= ~(EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2);
+        elem->flags |= EFFECT_BLURE_ELEMENT_FLAG_2;
     } else {
         Math_Vec3s_DiffToVec3f(&sp64, &elem->p1, &prev->p1);
         Math_Vec3s_DiffToVec3f(&sp58, &elem->p2, &prev->p2);
@@ -280,14 +288,14 @@ void EffectBlure_UpdateFlags(EffectBlureElement* elem) {
 
         if (Math3D_AngleBetweenVectors(&sp64, &sp4C, &sp34) || Math3D_AngleBetweenVectors(&sp58, &sp40, &sp30) ||
             Math3D_AngleBetweenVectors(&sp4C, &sp40, &sp2C)) {
-            elem->flags &= ~3;
+            elem->flags &= ~(EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2);
             elem->flags |= 0;
         } else if ((sp34 <= -0.5f) || (sp30 <= -0.5f) || (sp2C <= 0.7071f)) {
-            elem->flags &= ~3;
+            elem->flags &= ~(EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2);
             elem->flags |= 0;
         } else {
-            elem->flags &= ~3;
-            elem->flags |= 1;
+            elem->flags &= ~(EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2);
+            elem->flags |= EFFECT_BLURE_ELEMENT_FLAG_1;
         }
     }
 }
@@ -337,7 +345,8 @@ void EffectBlure_GetComputedValues(EffectBlure* this, s32 index, f32 ratio, Vec3
 
             vec1->x = (sp30.x * 0.5f * mode4Param * ratio) + elem->p1.x;
             vec1->y = (sp30.y * 0.5f * mode4Param * ratio) + elem->p1.y;
-            if (1) {} // Necessary to match
+            //! FAKE
+            if (1) {}
             vec1->z = (sp30.z * 0.5f * mode4Param * ratio) + elem->p1.z;
 
             vec2->x = -(sp30.x * 0.5f * mode4Param * ratio) + elem->p2.x;
@@ -356,7 +365,7 @@ void EffectBlure_GetComputedValues(EffectBlure* this, s32 index, f32 ratio, Vec3
             break;
     }
 
-    if (this->flags & 0x10) {
+    if (this->flags & EFFECT_BLURE_FLAG_10) {
         color1->r = color1->g = color1->b = color1->a = 255;
         color2->r = color2->g = color2->b = color2->a = 255;
     } else {
@@ -511,7 +520,7 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
     Math_Vec3s_ToVec3f(&sp18C, &sp1EC);
     Math_Vec3s_ToVec3f(&sp180, &sp1E4);
 
-    if ((elem->flags & 3) == 2) {
+    if ((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == EFFECT_BLURE_ELEMENT_FLAG_2) {
         Math_Vec3f_Diff(&sp18C, &sp1CC, &sp1B4);
         Math_Vec3f_Diff(&sp180, &sp1C0, &sp1A8);
     } else {
@@ -529,7 +538,8 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
     Math_Vec3f_Scale(&sp1B4, 0.5f);
     Math_Vec3f_Scale(&sp1A8, 0.5f);
 
-    if (((elem + 1)->flags & 3) == 2) {
+    if (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) ==
+        EFFECT_BLURE_ELEMENT_FLAG_2) {
         Math_Vec3f_Diff(&sp18C, &sp1CC, &sp174);
         Math_Vec3f_Diff(&sp180, &sp1C0, &sp168);
     } else {
@@ -651,15 +661,15 @@ void EffectBlure_DrawSmooth(EffectBlure* this2, GraphicsContext* gfxCtx) {
         return;
     }
 
-    this->elements[0].flags &= ~3;
-    this->elements[0].flags |= 2;
+    this->elements[0].flags &= ~(EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2);
+    this->elements[0].flags |= EFFECT_BLURE_ELEMENT_FLAG_2;
 
     for (elem = &this->elements[1]; elem < this->elements + this->numElements - 1; elem++) {
         EffectBlure_UpdateFlags(elem);
     }
 
-    this->elements[this->numElements - 1].flags &= ~3;
-    this->elements[this->numElements - 1].flags |= 2;
+    this->elements[this->numElements - 1].flags &= ~(EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2);
+    this->elements[this->numElements - 1].flags |= EFFECT_BLURE_ELEMENT_FLAG_2;
 
     EffectBlure_SetupSmooth(this, gfxCtx);
     SkinMatrix_SetTranslate(&spDC, this->elements[0].p2.x, this->elements[0].p2.y, this->elements[0].p2.z);
@@ -677,10 +687,18 @@ void EffectBlure_DrawSmooth(EffectBlure* this2, GraphicsContext* gfxCtx) {
         if ((elem->state == 0) || ((elem + 1)->state == 0)) {
             continue;
         }
-        if ((((elem->flags & 3) == 0) && (((elem + 1)->flags & 3) == 0)) ||
-            (((elem->flags & 3) == 2) && (((elem + 1)->flags & 3) == 0)) ||
-            (((elem->flags & 3) == 0) && (((elem + 1)->flags & 3) == 2)) ||
-            (((elem->flags & 3) == 2) && (((elem + 1)->flags & 3) == 2))) {
+        if ((((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0) &&
+             (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0)) ||
+            (((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) ==
+              EFFECT_BLURE_ELEMENT_FLAG_2) &&
+             (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0)) ||
+            (((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) == 0) &&
+             (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) ==
+              EFFECT_BLURE_ELEMENT_FLAG_2)) ||
+            (((elem->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) ==
+              EFFECT_BLURE_ELEMENT_FLAG_2) &&
+             (((elem + 1)->flags & (EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2)) ==
+              EFFECT_BLURE_ELEMENT_FLAG_2))) {
             EffectBlure_DrawElemNoInterpolation(this, elem, i, gfxCtx);
         } else {
             EffectBlure_DrawElemHermiteInterpolation(this, elem, i, gfxCtx);
@@ -723,12 +741,13 @@ void EffectBlure_SetupSimpleAlt(GraphicsContext* gfxCtx, EffectBlure* this, Vtx*
     CLOSE_DISPS(gfxCtx);
 }
 
-void (*sSetupHandlers[])(GraphicsContext* gfxCtx, EffectBlure* this, Vtx* vtx) = {
-    EffectBlure_SetupSimple,
-    EffectBlure_SetupSimpleAlt,
-};
+typedef void (*SetupHandler)(GraphicsContext* gfxCtx, EffectBlure* this, Vtx* vtx);
 
-s32 D_801AE268 = 0; // unused
+SetupHandler sSetupHandlers[EFF_BLURE_DRAW_MODE_MAX] = {
+    EffectBlure_SetupSimple,    // EFF_BLURE_DRAW_MODE_SIMPLE
+    EffectBlure_SetupSimpleAlt, // EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS
+    NULL,                       // EFF_BLURE_DRAW_MODE_SMOOTH
+};
 
 void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, Vtx* vtx) {
     Mtx* mtx;
@@ -754,7 +773,7 @@ void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, 
         j = 0;
 
         for (i = 0; i < this->numElements - 1; i++, j += 4) {
-            if (this->drawMode == 1) {
+            if (this->drawMode == EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS) {
                 alphaRatio = (f32)this->elements[i].timer / (f32)this->elemDuration;
                 gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, this->altPrimColor.r, this->altPrimColor.g,
                                 this->altPrimColor.b, this->altPrimColor.a * (1.0f - alphaRatio));
@@ -764,7 +783,7 @@ void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, 
             gSPVertex(POLY_XLU_DISP++, &vtx[j], 4, 0);
             gSP2Triangles(POLY_XLU_DISP++, 0, 1, 3, 0, 0, 3, 2, 0);
 
-            if (!(this->flags & 4)) {
+            if (!(this->flags & EFFECT_BLURE_FLAG_4)) {
                 continue;
             }
 
@@ -833,7 +852,7 @@ void EffectBlure_DrawSimple(EffectBlure* this2, GraphicsContext* gfxCtx) {
     Color_RGBA8 sp60;
 
     if (this->numElements >= 2) {
-        vtxCount = this->numElements * 4;
+        vtxCount = this->numElements * ARRAY_COUNT(D_801AE26C);
 
         vtx = GRAPH_ALLOC(gfxCtx, vtxCount * sizeof(Vtx));
         if (vtx == NULL) {
@@ -841,14 +860,14 @@ void EffectBlure_DrawSimple(EffectBlure* this2, GraphicsContext* gfxCtx) {
         }
 
         vtxIter = vtx;
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < ARRAY_COUNT(D_801AE26C); i++) {
             vtxIter->v = D_801AE26C[i];
             vtxIter++;
         }
 
         if (this->numElements >= 2) {
             for (elem = this->elements; elem < this->elements + this->numElements - 2; elem++) {
-                for (i = 0; i < 4; i++) {
+                for (i = 0; i < ARRAY_COUNT(D_801AE2AC); i++) {
                     vtxIter->v = D_801AE2AC[i];
                     vtxIter++;
                 }
@@ -1019,7 +1038,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
                     }
                 }
             }
-        } else if (this->drawMode < 2) {
+        } else if (this->drawMode <= EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS) {
             EffectBlure_DrawSimple(this, gfxCtx);
         } else {
             EffectBlure_DrawSmooth(this, gfxCtx);

@@ -22,15 +22,15 @@ void func_8096611C(EnMm* this, PlayState* play);
 void EnMm_SetupAction(EnMm* this, EnMmActionFunc actionFunc);
 
 ActorInit En_Mm_InitVars = {
-    ACTOR_EN_MM,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnMm),
-    (ActorFunc)EnMm_Init,
-    (ActorFunc)EnMm_Destroy,
-    (ActorFunc)EnMm_Update,
-    (ActorFunc)EnMm_Draw,
+    /**/ ACTOR_EN_MM,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnMm),
+    /**/ EnMm_Init,
+    /**/ EnMm_Destroy,
+    /**/ EnMm_Update,
+    /**/ EnMm_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -87,7 +87,7 @@ void EnMm_Init(Actor* thisx, PlayState* play) {
         func_80965BBC(this);
         return;
     }
-    if (this->actor.csId >= 0) {
+    if (this->actor.csId > CS_ID_NONE) {
         action = func_80965D3C;
     } else {
         action = func_80965DB4;
@@ -161,7 +161,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
                     direction = BINANG_ROT180(direction);
                 }
                 Math_ScaledStepToS(&this->actor.shape.rot.y, direction, this->actor.speed * 100.0f);
-                this->unk_190 += (s16)(this->actor.speed * 800.0f);
+                this->unk_190 += TRUNCF_BINANG(this->actor.speed * 800.0f);
             }
 
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
@@ -193,7 +193,7 @@ void func_8096611C(EnMm* this, PlayState* play) {
     } else {
         Math_Vec3f_ToVec3s(&this->actor.home.rot, &this->actor.parent->world.pos);
     }
-    Math_ScaledStepToS(&this->unk_190, 0, 2000);
+    Math_ScaledStepToS(&this->unk_190, 0, 0x7D0);
 }
 
 void EnMm_Update(Actor* thisx, PlayState* play) {

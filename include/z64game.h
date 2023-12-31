@@ -1,15 +1,30 @@
-#ifndef Z64_GAME_H
-#define Z64_GAME_H
+#ifndef Z64GAME_H
+#define Z64GAME_H
 
 #include "ultra64.h"
+
 #include "libc/stdbool.h"
 #include "libc/stdint.h"
-#include "io/controller.h"
-#include "tha.h"
+#include "gamealloc.h"
 #include "padmgr.h"
+#include "padutils.h"
+#include "tha.h"
+#include "unk.h"
 
 struct GraphicsContext;
 struct GameState;
+
+
+#define DEFINE_GAMESTATE_INTERNAL(typeName, enumName) enumName,
+#define DEFINE_GAMESTATE(typeName, enumName, name) DEFINE_GAMESTATE_INTERNAL(typeName, enumName)
+
+typedef enum GameStateId {
+#include "tables/gamestate_table.h"
+    /* 0x07 */ GAMESTATE_ID_MAX
+} GameStateId;
+
+#undef DEFINE_GAMESTATE
+#undef DEFINE_GAMESTATE_INTERNAL
 
 
 typedef void (*GameStateFunc)(struct GameState* gameState);
@@ -29,18 +44,6 @@ typedef struct {
     /* 0x2C */ size_t        instanceSize;
 } GameStateOverlay; // size = 0x30
 
-typedef struct GameAllocEntry {
-    /* 0x0 */ struct GameAllocEntry* next;
-    /* 0x4 */ struct GameAllocEntry* prev;
-    /* 0x8 */ size_t size;
-    /* 0xC */ u32 unk_0C;
-} GameAllocEntry; // size = 0x10
-
-typedef struct GameAlloc {
-    /* 0x00 */ GameAllocEntry base;
-    /* 0x10 */ GameAllocEntry* head;
-} GameAlloc; // size = 0x14
-
 typedef struct GameState {
     /* 0x00 */ struct GraphicsContext* gfxCtx;
     /* 0x04 */ GameStateFunc main;
@@ -48,7 +51,7 @@ typedef struct GameState {
     /* 0x0C */ GameStateFunc init; // Usually the current game state's init, though after stopping, the graph thread will look here to determine the next game state to load.
     /* 0x10 */ size_t size;
     /* 0x14 */ Input input[MAXCONTROLLERS];
-    /* 0x74 */ TwoHeadArena heap;
+    /* 0x74 */ TwoHeadArena tha;
     /* 0x84 */ GameAlloc alloc;
     /* 0x98 */ UNK_TYPE1 pad98[0x3];
     /* 0x9B */ u8 running; // If 0, switch to next game state
@@ -59,16 +62,16 @@ typedef struct GameState {
 } GameState; // size = 0xA4
 
 
-void Game_UpdateFramerateVariables(s32 divisor);
-void Game_SetFramerateDivisor(GameState* gameState, s32 divisor);
-void GameState_SetFBFilter(Gfx** gfx, void* zbuffer);
-void Game_Nop80173534(GameState* gameState);
+void GameState_UpdateFramerateDivisors(s32 divisor);
+void GameState_SetFramerateDivisor(GameState* gameState, s32 divisor);
+void GameState_SetFBFilter(Gfx** gfxP, void* zbuffer);
+void GameState_Noop(GameState* gameState);
 void GameState_Draw(GameState* gameState, struct GraphicsContext* gfxCtx);
 void GameState_SetFrameBuffer(struct GraphicsContext* gfxCtx);
-void func_801736DC(struct GraphicsContext* gfxCtx);
-void Game_UpdateInput(GameState* gameState);
-void Game_Update(GameState* gameState);
-void Game_IncrementFrameCount(GameState* gameState);
+void GameState_DrawEnd(struct GraphicsContext* gfxCtx);
+void GameState_GetInput(GameState* gameState);
+void GameState_Update(GameState* gameState);
+void GameState_IncrementFrameCount(GameState* gameState);
 void GameState_InitArena(GameState* gameState, size_t size);
 void GameState_Realloc(GameState* gameState, size_t size);
 void GameState_Init(GameState* gameState, GameStateFunc init, struct GraphicsContext* gfxCtx);
@@ -84,6 +87,15 @@ extern f32 gFramerateDivisorF;
 extern f32 gFramerateDivisorHalf;
 extern f32 gFramerateDivisorThird;
 
+
+extern GameStateOverlay gGameStateOverlayTable[GAMESTATE_ID_MAX];
+extern GameStateId gGraphNumGameStates;
+
+
+#define CONTROLLER1(gameState) (&(gameState)->input[0])
+#define CONTROLLER2(gameState) (&(gameState)->input[1])
+#define CONTROLLER3(gameState) (&(gameState)->input[2])
+#define CONTROLLER4(gameState) (&(gameState)->input[3])
 
 #define STOP_GAMESTATE(curState)     \
     do {                             \

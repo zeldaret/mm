@@ -8,7 +8,7 @@ struct BgLastBwall;
 
 typedef void (*BgLastBwallActionFunc)(struct BgLastBwall*, PlayState*);
 
-#define BGLASTBWALL_GET_SWITCHFLAGS(thisx) ((thisx)->params & 0x7F)
+#define BGLASTBWALL_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define BGLASTBWALL_GET_TYPE(thisx) (((thisx)->params >> 0xC) & 0xF)
 
 typedef enum {

@@ -20,15 +20,15 @@ void ObjKibako2_Idle(ObjKibako2* this, PlayState* play);
 void ObjKibako2_Kill(ObjKibako2* this, PlayState* play);
 
 ActorInit Obj_Kibako2_InitVars = {
-    ACTOR_OBJ_KIBAKO2,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KIBAKO2,
-    sizeof(ObjKibako2),
-    (ActorFunc)ObjKibako2_Init,
-    (ActorFunc)ObjKibako2_Destroy,
-    (ActorFunc)ObjKibako2_Update,
-    (ActorFunc)ObjKibako2_Draw,
+    /**/ ACTOR_OBJ_KIBAKO2,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_KIBAKO2,
+    /**/ sizeof(ObjKibako2),
+    /**/ ObjKibako2_Init,
+    /**/ ObjKibako2_Destroy,
+    /**/ ObjKibako2_Update,
+    /**/ ObjKibako2_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -58,7 +58,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, PlayState* play) {
+bool ObjKibako2_ContainsSkulltula(ObjKibako2* this, PlayState* play) {
     s32 actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
     s32 flag = -1;
 

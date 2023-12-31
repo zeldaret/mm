@@ -6,10 +6,9 @@
 
 #include "z_en_in.h"
 #include "z64horse.h"
-#include "objects/object_in/object_in.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnIn*)thisx)
 
@@ -24,15 +23,15 @@ void func_808F5A34(EnIn* this, PlayState* play);
 s32 func_808F5994(EnIn* this, PlayState* play, Vec3f* arg2, s16 arg3);
 
 ActorInit En_In_InitVars = {
-    ACTOR_EN_IN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_IN,
-    sizeof(EnIn),
-    (ActorFunc)EnIn_Init,
-    (ActorFunc)EnIn_Destroy,
-    (ActorFunc)EnIn_Update,
-    (ActorFunc)EnIn_Draw,
+    /**/ ACTOR_EN_IN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_IN,
+    /**/ sizeof(EnIn),
+    /**/ EnIn_Init,
+    /**/ EnIn_Destroy,
+    /**/ EnIn_Update,
+    /**/ EnIn_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -119,25 +118,25 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in_Anim_014F8C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_in_Anim_014F8C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in_Anim_000CB0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in_Anim_0003B4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in_Anim_001BE0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in_Anim_015918, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in_Anim_01C0B0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_in_Anim_01C0B0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in_Anim_01A140, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_in_Anim_01A140, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in_Anim_01B904, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_in_Anim_01B904, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in_Anim_01B3C4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_in_Anim_01B3C4, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_in_Anim_01B3C4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in_Anim_019EB4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+static AnimationInfoS sAnimationInfo[ENIN_ANIM_MAX] = {
+    { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENIN_ANIM_0
+    { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIN_ANIM_1
+    { &object_in_Anim_014F8C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENIN_ANIM_2
+    { &object_in_Anim_014F8C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIN_ANIM_3
+    { &object_in_Anim_000CB0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIN_ANIM_4
+    { &object_in_Anim_0003B4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIN_ANIM_5
+    { &object_in_Anim_001BE0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIN_ANIM_6
+    { &object_in_Anim_015918, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIN_ANIM_7
+    { &object_in_Anim_01C0B0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENIN_ANIM_8
+    { &object_in_Anim_01C0B0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIN_ANIM_9
+    { &object_in_Anim_01A140, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENIN_ANIM_10
+    { &object_in_Anim_01A140, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIN_ANIM_11
+    { &object_in_Anim_01B904, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENIN_ANIM_12
+    { &object_in_Anim_01B904, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIN_ANIM_13
+    { &object_in_Anim_01B3C4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENIN_ANIM_14
+    { &object_in_Anim_01B3C4, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENIN_ANIM_15
+    { &object_in_Anim_01B3C4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIN_ANIM_16
+    { &object_in_Anim_019EB4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENIN_ANIM_17
 };
 
 static TrackOptionsSet sTrackOptions = {
@@ -148,20 +147,20 @@ static TrackOptionsSet sTrackOptions = {
 };
 
 s32 EnIn_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
-    s16 frameCount;
-    s32 ret = false;
+    s16 endFrame;
+    s32 didAnimChange = false;
 
-    if ((animIndex >= 0) && (animIndex < 18)) {
-        ret = true;
-        frameCount = sAnimationInfo[animIndex].frameCount;
-        if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
+    if ((animIndex > ENIN_ANIM_NONE) && (animIndex < ENIN_ANIM_MAX)) {
+        didAnimChange = true;
+        endFrame = sAnimationInfo[animIndex].frameCount;
+        if (endFrame < 0) {
+            endFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
         Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
-                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].startFrame, endFrame, sAnimationInfo[animIndex].mode,
                          sAnimationInfo[animIndex].morphFrames);
     }
-    return ret;
+    return didAnimChange;
 }
 
 s32 func_808F3178(EnIn* this, PlayState* play) {
@@ -223,7 +222,7 @@ s32 func_808F3334(EnIn* this, PlayState* play) {
 
 s32 func_808F33B8(void) {
     s32 ret = (((gSaveContext.save.day == 1) &&
-                ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= CLOCK_TIME(6, 0)))) ||
+                ((CURRENT_TIME >= CLOCK_TIME(5, 30)) && (CURRENT_TIME <= CLOCK_TIME(6, 0)))) ||
                (gSaveContext.save.day >= 2)) &&
               !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM);
 
@@ -253,7 +252,7 @@ void func_808F3414(EnIn* this, PlayState* play) {
     }
     func_808F322C(this, 3);
     func_808F3178(this, play);
-    SubS_FillLimbRotTables(play, this->unk376, this->unk39E, ARRAY_COUNT(this->unk376));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, OBJECT_IN_LIMB_MAX);
 }
 
 void func_808F35AC(EnIn* this, PlayState* play) {
@@ -299,28 +298,37 @@ void func_808F3690(EnIn* this, PlayState* play) {
 }
 
 void func_808F374C(EnIn* this, PlayState* play) {
-    AnimationHeader* sAnimations[] = {
-        &object_in_Anim_015E38, &object_in_Anim_016A60, &object_in_Anim_0177AC, &object_in_Anim_016484,
-        &object_in_Anim_0170DC, &object_in_Anim_018240, &object_in_Anim_0187C8, &object_in_Anim_0198A8,
+    AnimationHeader* sAnimations[ENIN_ANIM2_MAX] = {
+        &object_in_Anim_015E38, // ENIN_ANIM2_0
+        &object_in_Anim_016A60, // ENIN_ANIM2_1
+        &object_in_Anim_0177AC, // ENIN_ANIM2_2
+        &object_in_Anim_016484, // ENIN_ANIM2_3
+        &object_in_Anim_0170DC, // ENIN_ANIM2_4
+        &object_in_Anim_018240, // ENIN_ANIM2_5
+        &object_in_Anim_0187C8, // ENIN_ANIM2_6
+        &object_in_Anim_0198A8, // ENIN_ANIM2_7
     };
 
-    if (this->skelAnime.animation == &object_in_Anim_016484 || this->skelAnime.animation == &object_in_Anim_0170DC) {
+    if ((this->skelAnime.animation == &object_in_Anim_016484) ||
+        (this->skelAnime.animation == &object_in_Anim_0170DC)) {
         if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
-            func_8019F88C(&this->actor.projectedPos, NA_SE_VO_IN_LASH_0, 2);
+            Audio_PlaySfx_Randomized(&this->actor.projectedPos, NA_SE_VO_IN_LASH_0, 2);
             if (Rand_ZeroOne() < 0.3f) {
-                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_INGO_HORSE_NEIGH);
+                Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_INGO_HORSE_NEIGH);
             }
-            Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_LASH);
+            Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_LASH);
         }
     }
-    if (this->skelAnime.animation == &object_in_Anim_0198A8 && Animation_OnFrame(&this->skelAnime, 20.0f)) {
+
+    if ((this->skelAnime.animation == &object_in_Anim_0198A8) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_VO_IN_CRY_0);
     }
+
     if (SkelAnime_Update(&this->skelAnime)) {
-        this->unk488 %= ARRAY_COUNT(sAnimations);
-        this->unk486 = this->unk488;
-        Animation_Change(&this->skelAnime, sAnimations[this->unk488], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimations[this->unk488]), ANIMMODE_ONCE, -10.0f);
+        this->animIndex2 %= ENIN_ANIM2_MAX;
+        this->unk486 = this->animIndex2;
+        Animation_Change(&this->skelAnime, sAnimations[this->animIndex2], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[this->animIndex2]), ANIMMODE_ONCE, -10.0f);
     }
 }
 
@@ -340,12 +348,12 @@ void func_808F395C(EnIn* this, PlayState* play) {
     if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_END) {
         this->actionFunc = func_808F5A94;
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = func_808F5A34;
         this->unk48C = 1;
     } else {
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
     }
 }
 
@@ -392,12 +400,12 @@ void func_808F39DC(EnIn* this, PlayState* play) {
 }
 
 void func_808F3AD4(EnIn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -408,7 +416,7 @@ void func_808F3B40(EnIn* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actor.flags |= ACTOR_FLAG_10000;
         this->actionFunc = func_808F3AD4;
-        textId = gSaveContext.save.day != 3 ? 0x3481 : 0x34A4;
+        textId = (gSaveContext.save.day != 3) ? 0x3481 : 0x34A4;
         this->actor.textId = textId;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
@@ -416,12 +424,12 @@ void func_808F3B40(EnIn* this, PlayState* play) {
 }
 
 void func_808F3BD4(EnIn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -440,12 +448,12 @@ void func_808F3C40(EnIn* this, PlayState* play) {
 }
 
 void func_808F3CD4(EnIn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -479,10 +487,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
 
     switch (arg2) {
         case 0:
-            if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x345C;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            } else if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x3460;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_15_08)) {
                 textId = 0x3458;
@@ -500,10 +507,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
             break;
 
         case 3:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x3485;
-            } else if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                       (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            } else if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x3484;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_04)) {
                 textId = 0x346D;
@@ -513,10 +519,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
             break;
 
         case 4:
-            if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x348A;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            } else if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x348B;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_01)) {
                 textId = 0x3486;
@@ -536,10 +541,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
             break;
 
         case 7:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x34A8;
-            } else if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                       (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            } else if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x34A7;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_04)) {
                 textId = 0x3495;
@@ -597,7 +601,7 @@ s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx)
     Actor* thisx = &this->actor;
 
     if (msgCtx->choiceIndex == 0) {
-        func_8019F208();
+        Audio_PlaySfx_MessageDecide();
         if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
             Rupees_ChangeBy(-play->msgCtx.unk1206C);
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_57_01)) {
@@ -608,11 +612,11 @@ s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx)
                 Actor_ContinueText(play, thisx, 0x3475);
             }
         } else {
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             Actor_ContinueText(play, thisx, 0x3473);
         }
     } else {
-        func_8019F230();
+        Audio_PlaySfx_MessageCancel();
         Actor_ContinueText(play, thisx, 0x3472);
     }
     return 0;
@@ -623,7 +627,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
     s32 fee = (play->msgCtx.unk1206C != 0xFFFF) ? play->msgCtx.unk1206C : 10;
 
     if (msgCtx->choiceIndex == 0) {
-        func_8019F208();
+        Audio_PlaySfx_MessageDecide();
         if (gSaveContext.save.saveInfo.playerData.rupees >= fee) {
             Rupees_ChangeBy(-fee);
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_57_01)) {
@@ -640,7 +644,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
                 }
             }
         } else {
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             if (arg4 != 0) {
                 Actor_ContinueText(play, &this->actor, 0x3473);
             } else {
@@ -648,7 +652,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
             }
         }
     } else {
-        func_8019F230();
+        Audio_PlaySfx_MessageCancel();
         Actor_ContinueText(play, &this->actor, 0x3472);
     }
     return 0;
@@ -792,7 +796,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x3466:
                     if (msgCtx->choiceIndex == 0) {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
                             if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
@@ -804,12 +808,12 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                                 ret = false;
                             }
                         } else {
-                            play_sound(NA_SE_SY_ERROR);
+                            Audio_PlaySfx(NA_SE_SY_ERROR);
                             Actor_ContinueText(play, &this->actor, 0x3468);
                             ret = false;
                         }
                     } else {
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Actor_ContinueText(play, &this->actor, 0x3467);
                         ret = false;
                     }
@@ -875,7 +879,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x3475:
                     SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_START);
-                    func_800FD750(NA_BGM_HORSE);
+                    Environment_ForcePlaySequence(NA_BGM_HORSE);
                     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
                     play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
                     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -887,7 +891,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         func_808F4150(play, this, arg2, msgCtx);
                         ret = false;
                     } else {
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                         func_808F4108(this, play, 0x3479);
                         ret = false;
@@ -963,6 +967,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         ret = false;
                     }
                     break;
+
                 case 0x347E:
                     func_808F35D8(this, play);
                     if (Inventory_HasEmptyBottle()) {
@@ -1094,7 +1099,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x3490:
                     if (msgCtx->choiceIndex == 0) {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
                             if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
@@ -1106,12 +1111,12 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                                 ret = false;
                             }
                         } else {
-                            play_sound(NA_SE_SY_ERROR);
+                            Audio_PlaySfx(NA_SE_SY_ERROR);
                             Actor_ContinueText(play, &this->actor, 0x3468);
                             ret = false;
                         }
                     } else {
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Actor_ContinueText(play, &this->actor, 0x3491);
                         ret = false;
                     }
@@ -1171,7 +1176,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x3475:
                     SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_START);
-                    func_800FD750(NA_BGM_HORSE);
+                    Environment_ForcePlaySequence(NA_BGM_HORSE);
                     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
                     play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
                     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1246,7 +1251,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         func_808F4270(play, this, arg2, msgCtx, 1);
                         ret = false;
                     } else {
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Actor_ContinueText(play, &this->actor, 0x349C);
                         ret = false;
                     }
@@ -1333,7 +1338,6 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
 s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
     s16 rotDiff;
     s16 yawDiff;
-    Player* player;
 
     if (*arg3 == 4) {
         return 0;
@@ -1348,14 +1352,13 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         *arg3 = 1;
         return 0;
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         *arg3 = 1;
         return 1;
     }
     if (*arg3 == 1) {
-        s32 requiredScopeTemp;
+        Player* player = GET_PLAYER(play);
 
-        player = GET_PLAYER(play);
         func_808F5994(this, play, &player->actor.world.pos, 0xC80);
     } else {
         rotDiff = this->actor.home.rot.y - this->actor.world.rot.y;
@@ -1381,14 +1384,14 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
     if (yawDiff >= 0x4300) {
         return 0;
     }
-    if (this->actor.xyzDistToPlayerSq > SQ(160.0f) && !this->actor.isTargeted) {
+    if (this->actor.xyzDistToPlayerSq > SQ(160.0f) && !this->actor.isLockedOn) {
         return 0;
     }
     if (this->actor.xyzDistToPlayerSq <= SQ(80.0f)) {
-        if (func_800B8614(&this->actor, play, 80.0f)) {
+        if (Actor_OfferTalk(&this->actor, play, 80.0f)) {
             this->actor.textId = func_808F3DD4(play, this, arg2);
         }
-    } else if (func_800B863C(&this->actor, play)) {
+    } else if (Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play)) {
         this->actor.textId = func_808F3DD4(play, this, arg2);
     }
     return 0;
@@ -1437,7 +1440,7 @@ void func_808F5A94(EnIn* this, PlayState* play) {
 
 void func_808F5B58(EnIn* this, PlayState* play) {
     if (Horse_IsActive(play, &play->actorCtx)) {
-        if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
+        if (((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER) && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
             CHECK_WEEKEVENTREG(WEEKEVENTREG_56_08)) {
             if (gSaveContext.save.day == 3) {
                 func_808F5728(play, this, 6, &this->unk48C);
@@ -1445,8 +1448,8 @@ void func_808F5B58(EnIn* this, PlayState* play) {
                 func_808F5728(play, this, 2, &this->unk48C);
             }
         }
-    } else if (Player_GetMask(play) != PLAYER_MASK_CIRCUS_LEADER ||
-               (Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40))) {
+    } else if ((Player_GetMask(play) != PLAYER_MASK_CIRCUS_LEADER) ||
+               ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER) && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40))) {
         if (gSaveContext.save.day == 3) {
             func_808F5728(play, this, 4, &this->unk48C);
         } else {
@@ -1459,7 +1462,7 @@ void func_808F5C98(EnIn* this, PlayState* play) {
     if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_END) {
         this->actionFunc = func_808F5B58;
     }
-    if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
+    if (((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER) && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
         CHECK_WEEKEVENTREG(WEEKEVENTREG_56_08)) {
         if (gSaveContext.save.day != 3) {
             func_808F5728(play, this, 2, &this->unk48C);
@@ -1491,7 +1494,8 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_in_Skel_014EA8, NULL, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_in_Skel_014EA8, NULL, this->jointTable, this->morphTable,
+                       OBJECT_IN_LIMB_MAX);
     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_0);
     Collider_InitCylinder(play, &this->colliderCylinder);
     Collider_SetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -1506,7 +1510,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
     }
     if ((type == ENIN_HORSE_RIDER_YELLOW_SHIRT) || (type == ENIN_HORSE_RIDER_BLUE_SHIRT)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-        this->unk488 = 1;
+        this->animIndex2 = ENIN_ANIM2_1;
         Animation_Change(&this->skelAnime, &object_in_Anim_016A60, 1.0f, 0.0f,
                          Animation_GetLastFrame(&object_in_Anim_016A60), ANIMMODE_ONCE, 0.0f);
         Actor_SetScale(&this->actor, 0.01f);
@@ -1630,41 +1634,41 @@ void func_808F6334(EnIn* this, PlayState* play) {
 s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnIn* this = THIS;
     s32 pad;
-    Gfx* sp50[] = {
-        NULL,
-        NULL,
-        object_in_DL_0149A8,
-        object_in_DL_014AE0,
-        object_in_DL_014C30,
-        object_in_DL_0145D8,
-        object_in_DL_014710,
-        object_in_DL_014860,
-        object_in_DL_014420,
-        object_in_DL_012A78,
-        object_in_DL_013DE0,
-        object_in_DL_013F10,
-        object_in_DL_014040,
-        object_in_DL_0137A0,
-        object_in_DL_0138D0,
-        object_in_DL_013A00,
-        object_in_DL_012DF8,
-        object_in_DL_013670,
-        object_in_DL_013540,
-        object_in_DL_013440,
+    Gfx* sp50[OBJECT_IN_LIMB_MAX] = {
+        NULL,                // OBJECT_IN_LIMB_NONE
+        NULL,                // OBJECT_IN_LIMB_01
+        object_in_DL_0149A8, // OBJECT_IN_LIMB_02
+        object_in_DL_014AE0, // OBJECT_IN_LIMB_03
+        object_in_DL_014C30, // OBJECT_IN_LIMB_04
+        object_in_DL_0145D8, // OBJECT_IN_LIMB_05
+        object_in_DL_014710, // OBJECT_IN_LIMB_06
+        object_in_DL_014860, // OBJECT_IN_LIMB_07
+        object_in_DL_014420, // OBJECT_IN_LIMB_08
+        object_in_DL_012A78, // OBJECT_IN_LIMB_09
+        object_in_DL_013DE0, // OBJECT_IN_LIMB_0A
+        object_in_DL_013F10, // OBJECT_IN_LIMB_0B
+        object_in_DL_014040, // OBJECT_IN_LIMB_0C
+        object_in_DL_0137A0, // OBJECT_IN_LIMB_0D
+        object_in_DL_0138D0, // OBJECT_IN_LIMB_0E
+        object_in_DL_013A00, // OBJECT_IN_LIMB_0F
+        object_in_DL_012DF8, // OBJECT_IN_LIMB_10
+        object_in_DL_013670, // OBJECT_IN_LIMB_11
+        object_in_DL_013540, // OBJECT_IN_LIMB_12
+        object_in_DL_013440, // OBJECT_IN_LIMB_13
     };
 
-    if ((this->unk23C != 0) && (limbIndex != 16)) {
+    if ((this->unk23C != 0) && (limbIndex != OBJECT_IN_LIMB_10)) {
         if (sp50[limbIndex] != NULL) {
             *dList = sp50[limbIndex];
         }
     }
-    if ((this->unk4AC & 4) && (limbIndex == 16)) {
+    if ((this->unk4AC & 4) && (limbIndex == OBJECT_IN_LIMB_10)) {
         *dList = object_in_DL_01C528;
     }
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (limbIndex == 16) {
+    if (limbIndex == OBJECT_IN_LIMB_10) {
         TexturePtr sp38[] = { object_in_Tex_0035E0, object_in_Tex_004820, object_in_Tex_004C20, object_in_Tex_0043E0 };
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp38[this->unk482]));
@@ -1675,31 +1679,34 @@ s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    if (limbIndex == 16) {
+    if (limbIndex == OBJECT_IN_LIMB_10) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
         Matrix_RotateZS(-this->headRot.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         func_808F6334(this, play);
     }
-    if (limbIndex == 9) {
+
+    if (limbIndex == OBJECT_IN_LIMB_09) {
         Matrix_RotateYS(this->torsoRot.y, MTXMODE_APPLY);
         Matrix_RotateXS(this->torsoRot.x, MTXMODE_APPLY);
     }
-    if ((limbIndex == 9) || (limbIndex == 10) || (limbIndex == 13)) {
-        rot->y += (s16)(Math_SinS(this->unk376[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->unk39E[limbIndex]) * 200.0f);
+
+    if ((limbIndex == OBJECT_IN_LIMB_09) || (limbIndex == OBJECT_IN_LIMB_0A) || (limbIndex == OBJECT_IN_LIMB_0D)) {
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
+
     if (this->unk4AC & 0x40) {
-        if (limbIndex == 18) {
+        if (limbIndex == OBJECT_IN_LIMB_12) {
             rot->x = 0x1F40;
             rot->y = -0x3E8;
             rot->z = 0x1D4C;
-        } else if (limbIndex == 17) {
+        } else if (limbIndex == OBJECT_IN_LIMB_11) {
             rot->x = -0x1F40;
             rot->y = 0x3E8;
             rot->z = 0x1D4C;
-        } else if (limbIndex == 19) {
+        } else if (limbIndex == OBJECT_IN_LIMB_13) {
             rot->x = 0;
             rot->y = 0x7FFF;
             rot->z = -0x2328;
@@ -1713,26 +1720,26 @@ void EnIn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     Vec3f sp50 = { 1600.0f, 0.0f, 0.0f };
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 16) {
+    if (limbIndex == OBJECT_IN_LIMB_10) {
         Matrix_MultVec3f(&sp50, &this->unk4B4);
         Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk4B4);
     }
     if (this->unk23D == 0) {
         Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
-        if (limbIndex == 4) {
+        if (limbIndex == OBJECT_IN_LIMB_04) {
             Matrix_MultVec3f(&sp44, &this->unk248);
         }
-        if (limbIndex == 7) {
+        if (limbIndex == OBJECT_IN_LIMB_07) {
             Matrix_MultVec3f(&sp44, &this->unk254);
         }
         if (this->unk23C == 0) {
             if (!(this->unk4AC & 8)) {
                 OPEN_DISPS(play->state.gfxCtx);
 
-                if (limbIndex == 12) {
+                if (limbIndex == OBJECT_IN_LIMB_0C) {
                     gSPDisplayList(POLY_OPA_DISP++, object_in_DL_007A70);
                 }
-                if (limbIndex == 15) {
+                if (limbIndex == OBJECT_IN_LIMB_0F) {
                     gSPDisplayList(POLY_OPA_DISP++, object_in_DL_007C48);
                 }
 
@@ -1743,7 +1750,7 @@ void EnIn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     if (this->unk4AC & 0x20) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        if (limbIndex == 12) {
+        if (limbIndex == OBJECT_IN_LIMB_0C) {
             gSPDisplayList(POLY_OPA_DISP++, object_in_DL_007C48);
         }
 

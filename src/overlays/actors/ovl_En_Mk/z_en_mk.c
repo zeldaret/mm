@@ -6,7 +6,7 @@
 
 #include "z_en_mk.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnMk*)thisx)
 
@@ -24,15 +24,15 @@ void func_80959D28(EnMk* this, PlayState* play);
 void func_80959E18(EnMk* this, PlayState* play);
 
 ActorInit En_Mk_InitVars = {
-    ACTOR_EN_MK,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MK,
-    sizeof(EnMk),
-    (ActorFunc)EnMk_Init,
-    (ActorFunc)EnMk_Destroy,
-    (ActorFunc)EnMk_Update,
-    (ActorFunc)EnMk_Draw,
+    /**/ ACTOR_EN_MK,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MK,
+    /**/ sizeof(EnMk),
+    /**/ EnMk_Init,
+    /**/ EnMk_Destroy,
+    /**/ EnMk_Update,
+    /**/ EnMk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -55,22 +55,35 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-s32 func_809592E0(EnMk* this, s16 index) {
-    AnimationHeader* sAnimations[] = {
-        &object_mk_Anim_001C38, &object_mk_Anim_000438, &object_mk_Anim_0007D8,
-        &object_mk_Anim_0010F4, &object_mk_Anim_001964,
+typedef enum MarineResearcherAnimation {
+    /* -1 */ MARINE_RESEARCHER_ANIM_NONE = -1,
+    /*  0 */ MARINE_RESEARCHER_ANIM_IDLE,
+    /*  1 */ MARINE_RESEARCHER_ANIM_HEAD_WAGGLE,
+    /*  2 */ MARINE_RESEARCHER_ANIM_YELL,
+    /*  3 */ MARINE_RESEARCHER_ANIM_SHAKE_IN_FEAR,
+    /*  4 */ MARINE_RESEARCHER_ANIM_STROKE_CHIN,
+    /*  5 */ MARINE_RESEARCHER_ANIM_MAX
+} MarineResearcherAnimation;
+
+s32 EnMk_ChangeAnim(EnMk* this, s16 animIndex) {
+    AnimationHeader* sAnimations[MARINE_RESEARCHER_ANIM_MAX] = {
+        &gMarineResearcherIdleAnim,        // MARINE_RESEARCHER_ANIM_IDLE
+        &gMarineResearcherHeadWaggleAnim,  // MARINE_RESEARCHER_ANIM_HEAD_WAGGLE
+        &gMarineResearcherYellAnim,        // MARINE_RESEARCHER_ANIM_YELL
+        &gMarineResearcherShakeInFearAnim, // MARINE_RESEARCHER_ANIM_SHAKE_IN_FEAR
+        &gMarineResearcherStrokeChinAnim,  // MARINE_RESEARCHER_ANIM_STROKE_CHIN
     };
 
-    if (index == this->unk_27C) {
+    if (animIndex == this->animIndex) {
         return false;
     }
 
-    if ((index < 0) || (index >= 5)) {
+    if ((animIndex <= MARINE_RESEARCHER_ANIM_NONE) || (animIndex >= MARINE_RESEARCHER_ANIM_MAX)) {
         return false;
     }
 
-    Animation_PlayLoop(&this->skelAnime, sAnimations[index]);
-    this->unk_27C = index;
+    Animation_PlayLoop(&this->skelAnime, sAnimations[animIndex]);
+    this->animIndex = animIndex;
     return true;
 }
 
@@ -82,11 +95,11 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
     this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -1.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_mk_Skel_006CA0, &object_mk_Anim_001C38, this->jointTable,
-                       this->morphTable, OBJECT_MK_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMarineResearcherSkel, &gMarineResearcherIdleAnim, this->jointTable,
+                       this->morphTable, MARINE_RESEARCHER_LIMB_MAX);
 
-    this->unk_27C = -1;
-    func_809592E0(this, 0);
+    this->animIndex = MARINE_RESEARCHER_ANIM_NONE;
+    EnMk_ChangeAnim(this, MARINE_RESEARCHER_ANIM_IDLE);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -95,7 +108,7 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = func_80959E18;
     this->unk_27A = 0;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
 
     if (func_80959524(play) < 7) {
         this->unk_27A |= 2;
@@ -133,18 +146,22 @@ void func_8095954C(EnMk* this, PlayState* play) {
             case 3:
             case 4:
             case 5:
-                func_809592E0(this, play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
+                EnMk_ChangeAnim(this,
+                                play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
+                break;
+
+            default:
                 break;
         }
     } else {
-        func_809592E0(this, 0);
+        EnMk_ChangeAnim(this, MARINE_RESEARCHER_ANIM_IDLE);
     }
 }
 
 void func_80959624(EnMk* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (this->unk_27A & 4) {
             textId = 0xFB9;
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
@@ -187,11 +204,11 @@ void func_80959774(EnMk* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 3, 0x400, 0x80);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80959624(this, play);
         this->actionFunc = func_809596A0;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 130.0f);
+        Actor_OfferTalk(&this->actor, play, 130.0f);
     }
 
     func_8095954C(this, play);
@@ -209,7 +226,7 @@ void func_80959844(EnMk* this, PlayState* play) {
     } else if (func_80959524(play) >= 7) {
         textId = 0xFB3;
     } else {
-        switch (gSaveContext.save.playerForm) {
+        switch (GET_PLAYER_FORM) {
             case PLAYER_FORM_DEKU:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_10)) {
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
@@ -359,13 +376,13 @@ void func_80959A24(EnMk* this, PlayState* play) {
 }
 
 void func_80959C94(EnMk* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80959A24;
         this->unk_27A &= ~2;
         Message_StartTextbox(play, 0xFB3, &this->actor);
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 350.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 350.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -409,9 +426,9 @@ void func_80959E18(EnMk* this, PlayState* play) {
     }
 
     if (func_800B8718(&this->actor, &play->state)) {
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = func_80959D28;
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             this->actor.csId = this->csIdList[0];
             SET_WEEKEVENTREG(WEEKEVENTREG_20_40);
             Item_Give(play, ITEM_SONG_NOVA);
@@ -419,7 +436,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
             this->actor.csId = this->csIdList[1];
         }
         CutsceneManager_Queue(this->actor.csId);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80959844(this, play);
         this->actionFunc = func_80959A24;
         this->unk_27A |= 1;
@@ -427,7 +444,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
         this->actionFunc = func_80959C94;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && (ABS_ALT(sp22) <= 0x4300)) {
         this->unk_27A |= 1;
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
             func_800B874C(&this->actor, play, 200.0f, 100.0f);
         }
@@ -440,7 +457,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
 void EnMk_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnMk* this = THIS;
-    Vec3s sp38;
+    Vec3s torsoRot;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -450,19 +467,19 @@ void EnMk_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->unk_27A & 1) && !Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_127)) {
-        Actor_TrackPlayer(play, &this->actor, &this->unk_270, &sp38, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &torsoRot, this->actor.focus.pos);
     } else {
-        Math_SmoothStepToS(&this->unk_270.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_270.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
     }
 }
 
 s32 EnMk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMk* this = THIS;
 
-    if (limbIndex == OBJECT_MK_LIMB_0B) {
-        rot->y -= this->unk_270.y;
-        rot->z += this->unk_270.x;
+    if (limbIndex == MARINE_RESEARCHER_LIMB_HEAD) {
+        rot->y -= this->headRot.y;
+        rot->z += this->headRot.x;
     }
     return false;
 }
@@ -472,7 +489,7 @@ Vec3f D_8095A2A0 = { 1000.0f, -100.0f, 0.0f };
 void EnMk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMk* this = THIS;
 
-    if (limbIndex == OBJECT_MK_LIMB_0B) {
+    if (limbIndex == MARINE_RESEARCHER_LIMB_HEAD) {
         Matrix_MultVec3f(&D_8095A2A0, &this->actor.focus.pos);
     }
 }

@@ -6,8 +6,9 @@
 
 #include "z_en_ssh.h"
 #include "objects/object_ssh/object_ssh.h"
+#include "objects/object_st/object_st.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnSsh*)thisx)
 
@@ -26,15 +27,15 @@ void EnSsh_Start(EnSsh* this, PlayState* play);
 extern AnimationHeader D_06000304;
 
 ActorInit En_Ssh_InitVars = {
-    ACTOR_EN_SSH,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SSH,
-    sizeof(EnSsh),
-    (ActorFunc)EnSsh_Init,
-    (ActorFunc)EnSsh_Destroy,
-    (ActorFunc)EnSsh_Update,
-    (ActorFunc)EnSsh_Draw,
+    /**/ ACTOR_EN_SSH,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SSH,
+    /**/ sizeof(EnSsh),
+    /**/ EnSsh_Init,
+    /**/ EnSsh_Destroy,
+    /**/ EnSsh_Update,
+    /**/ EnSsh_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
@@ -129,7 +130,7 @@ s32 EnSsh_CreateBlureEffect(PlayState* play) {
     s32 i;
     s32 blureIdx;
 
-    for (i = 0; i < ARRAY_COUNT(blureInit.p1StartColor); i++) {
+    for (i = 0; i < EFFECT_BLURE_COLOR_COUNT; i++) {
         blureInit.p1StartColor[i] = sP1StartColor[i];
         blureInit.p2StartColor[i] = sP2StartColor[i];
         blureInit.p1EndColor[i] = sP1EndColor[i];
@@ -139,7 +140,7 @@ s32 EnSsh_CreateBlureEffect(PlayState* play) {
     blureInit.unkFlag = false;
     blureInit.calcMode = 3;
 
-    Effect_Add(play, &blureIdx, 1, 0, 0, &blureInit);
+    Effect_Add(play, &blureIdx, EFFECT_BLURE1, 0, 0, &blureInit);
     return blureIdx;
 }
 
@@ -286,7 +287,7 @@ s32 EnSsh_Damaged(EnSsh* this) {
     }
 
     if (DECR(this->stunTimer) != 0) {
-        Math_SmoothStepToS(&this->maxTurnRate, 10000, 10, 1000, 1);
+        Math_SmoothStepToS(&this->maxTurnRate, 0x2710, 10, 0x3E8, 1);
         return false;
     }
 
@@ -309,9 +310,9 @@ void EnSsh_Turn(EnSsh* this, PlayState* play) {
     }
 
     if (DECR(this->spinTimer) != 0) {
-        this->actor.world.rot.y += (s16)(10000.0f * (this->spinTimer / 30.0f));
+        this->actor.world.rot.y += TRUNCF_BINANG(0x2710 * (this->spinTimer / 30.0f));
     } else if ((this->swayTimer == 0) && (this->stunTimer == 0)) {
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 4, 10000, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 4, 0x2710, 1);
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
@@ -325,9 +326,9 @@ void EnSsh_Stunned(EnSsh* this, PlayState* play) {
 
     if (this->stunTimer < 30) {
         if (this->stunTimer & 1) {
-            this->actor.shape.rot.y += 2000;
+            this->actor.shape.rot.y += 0x7D0;
         } else {
-            this->actor.shape.rot.y -= 2000;
+            this->actor.shape.rot.y -= 0x7D0;
         }
     }
 }
@@ -627,13 +628,15 @@ void EnSsh_SetColliders(EnSsh* this, PlayState* play) {
 }
 
 void EnSsh_Init(Actor* thisx, PlayState* play) {
-    // @bug - this symbol no longer exists, reads from a random place in object_ssh_Tex_000190 instead
-    f32 frameCount = Animation_GetLastFrame(&D_06000304);
+    //! @bug: object_st_Anim_000304 is similar if not idential to object_ssh_Anim_001494.
+    //! They also shared the same offset into their respective object files in OoT.
+    //! However since object_ssh is the one loaded, this ends up reading garbage data from within object_ssh_Tex_000190.
+    f32 frameCount = Animation_GetLastFrame(&object_st_Anim_000304);
     s32 pad;
     EnSsh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_ssh_Skel_006470, NULL, this->jointTable, this->morphtable, 30);
+    SkelAnime_Init(play, &this->skelAnime, &object_ssh_Skel_006470, NULL, this->jointTable, this->morphTable, 30);
     Animation_Change(&this->skelAnime, &object_ssh_Anim_001494, 1.0f, 0.0f, frameCount, ANIMMODE_LOOP_INTERP, 0.0f);
     this->blureIdx = EnSsh_CreateBlureEffect(play);
     EnSsh_InitColliders(this, play);
@@ -718,7 +721,7 @@ void func_809756D0(EnSsh* this, PlayState* play) {
 }
 
 void EnSsh_Idle(EnSsh* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnSsh_Talk;
         func_809756D0(this, play);
         return;
@@ -747,7 +750,7 @@ void EnSsh_Idle(EnSsh* this, PlayState* play) {
 
     if ((this->unkTimer == 0) && (this->animTimer == 0) && (this->actor.xzDistToPlayer < 100.0f) &&
         Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -928,7 +931,7 @@ void EnSsh_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80976178[this->blinkState]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_K0(D_80976178[this->blinkState]));
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSsh_OverrideLimbDraw,
                       EnSsh_PostLimbDraw, &this->actor);

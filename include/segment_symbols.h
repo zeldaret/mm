@@ -24,13 +24,22 @@
 #define SEGMENT_END(segment) (_ ## segment ## SegmentEnd)
 #define SEGMENT_SIZE(segment) ((uintptr_t)SEGMENT_END(segment) - (uintptr_t)SEGMENT_START(segment))
 
-#define SEGMENT_ROM_START(segment) (_ ## segment ## SegmentRomStart)
-#define SEGMENT_ROM_END(segment) (_ ## segment ## SegmentRomEnd)
-#define SEGMENT_ROM_SIZE(segment) ((uintptr_t)SEGMENT_ROM_END(segment) - (uintptr_t)SEGMENT_ROM_START(segment))
+#define SEGMENT_ROM_START(segment) ((uintptr_t) _ ## segment ## SegmentRomStart)
+#define SEGMENT_ROM_START_OFFSET(segment, offset) ((uintptr_t) (( _ ## segment ## SegmentRomStart ) + (offset)))
+#define SEGMENT_ROM_END(segment) ((uintptr_t) _ ## segment ## SegmentRomEnd)
+#define SEGMENT_ROM_SIZE(segment) (SEGMENT_ROM_END(segment) - SEGMENT_ROM_START(segment))
+#define SEGMENT_ROM_SIZE_ALT(segment) ((size_t)( _ ## segment ## SegmentRomEnd - _ ## segment ## SegmentRomStart ))
 
 #define SEGMENT_BSS_START(segment) (_ ## segment ## SegmentBssStart)
 #define SEGMENT_BSS_END(segment) (_ ## segment ## SegmentBssEnd)
 #define SEGMENT_BSS_SIZE(segment) ((uintptr_t)SEGMENT_BSS_END(segment) - (uintptr_t)SEGMENT_BSS_START(segment))
+
+#define ROM_FILE(name) \
+    { (uintptr_t)SEGMENT_ROM_START(name), (uintptr_t)SEGMENT_ROM_END(name) }
+#define ROM_FILE_UNSET \
+    { 0 }
+
+DECLARE_SEGMENT(framebuffer_lo)
 
 DECLARE_SEGMENT(boot)
 DECLARE_ROM_SEGMENT(boot)
@@ -52,12 +61,12 @@ DECLARE_ROM_SEGMENT(map_i_static)
 DECLARE_ROM_SEGMENT(map_grand_static)
 DECLARE_ROM_SEGMENT(item_name_static)
 DECLARE_ROM_SEGMENT(map_name_static)
-DECLARE_ROM_SEGMENT(icon_item_static_test)
-DECLARE_ROM_SEGMENT(icon_item_static_old)
-DECLARE_ROM_SEGMENT(icon_item_24_static_test)
-DECLARE_ROM_SEGMENT(icon_item_24_static_old)
-DECLARE_ROM_SEGMENT(schedule_dma_static_test)
-DECLARE_ROM_SEGMENT(schedule_dma_static_old)
+DECLARE_ROM_SEGMENT(icon_item_static_yar)
+DECLARE_ROM_SEGMENT(icon_item_static_syms)
+DECLARE_ROM_SEGMENT(icon_item_24_static_yar)
+DECLARE_ROM_SEGMENT(icon_item_24_static_syms)
+DECLARE_ROM_SEGMENT(schedule_dma_static_yar)
+DECLARE_ROM_SEGMENT(schedule_dma_static_syms)
 DECLARE_ROM_SEGMENT(schedule_static)
 DECLARE_ROM_SEGMENT(story_static)
 DECLARE_ROM_SEGMENT(do_action_static)
@@ -71,11 +80,8 @@ DECLARE_SEGMENT(code)
 DECLARE_ROM_SEGMENT(code)
 DECLARE_BSS_SEGMENT(code)
 
-DECLARE_OVERLAY_SEGMENT(title)
-DECLARE_OVERLAY_SEGMENT(select)
-DECLARE_OVERLAY_SEGMENT(opening)
-DECLARE_OVERLAY_SEGMENT(file_choose)
-DECLARE_OVERLAY_SEGMENT(daytelop)
+DECLARE_SEGMENT(system_heap)
+
 DECLARE_OVERLAY_SEGMENT(kaleido_scope)
 DECLARE_OVERLAY_SEGMENT(player_actor)
 

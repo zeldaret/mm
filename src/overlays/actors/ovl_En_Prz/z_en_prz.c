@@ -5,10 +5,9 @@
  */
 
 #include "z_en_prz.h"
-#include "objects/object_pr/object_pr.h"
 #include "overlays/actors/ovl_En_Pr/z_en_pr.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPrz*)thisx)
 
@@ -60,7 +59,13 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-f32 D_80A771E0[] = { 40.0f, 40.0f, 40.0f, 30.0f, 30.0f };
+f32 D_80A771E0[PLAYER_FORM_MAX] = {
+    40.0f, // PLAYER_FORM_FIERCE_DEITY
+    40.0f, // PLAYER_FORM_GORON
+    40.0f, // PLAYER_FORM_ZORA
+    30.0f, // PLAYER_FORM_DEKU
+    30.0f, // PLAYER_FORM_HUMAN
+};
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -83,22 +88,16 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 ActorInit En_Prz_InitVars = {
-    ACTOR_EN_PRZ,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_PR,
-    sizeof(EnPrz),
-    (ActorFunc)EnPrz_Init,
-    (ActorFunc)EnPrz_Destroy,
-    (ActorFunc)EnPrz_Update,
-    (ActorFunc)EnPrz_Draw,
+    /**/ ACTOR_EN_PRZ,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_PR,
+    /**/ sizeof(EnPrz),
+    /**/ EnPrz_Init,
+    /**/ EnPrz_Destroy,
+    /**/ EnPrz_Update,
+    /**/ EnPrz_Draw,
 };
-
-AnimationHeader* D_80A77240[] = { &object_pr_Anim_004340, &object_pr_Anim_004274 };
-
-u8 D_80A77248[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
-
-Vec3f D_80A7724C = { 0.0f, 0.0f, 0.0f };
 
 void EnPrz_Init(Actor* thisx, PlayState* play) {
     EnPrz* this = THIS;
@@ -108,19 +107,19 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->unk_1E8 = 255;
     this->actor.hintId = TATL_HINT_ID_SKULLFISH;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.health = 1;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &object_pr_Skel_004188, &object_pr_Anim_004340, this->jointTable,
-                       this->morphTable, 5);
+                       this->morphTable, OBJECT_PR_2_LIMB_MAX);
 
     this->unk_1E6 = ENPRZ_GET(&this->actor);
     this->actor.shape.yOffset = 500.0f;
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Math_Vec3f_Copy(&this->unk_1D8, &this->actor.world.pos);
@@ -135,18 +134,34 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 void EnPrz_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80A75F18(EnPrz* this, s32 arg1) {
-    this->unk_204 = arg1;
-    Animation_Change(&this->skelAnime, D_80A77240[arg1], 1.0f, 0.0f, Animation_GetLastFrame(D_80A77240[arg1]),
-                     D_80A77248[arg1], -2.0f);
+typedef enum EnPrzAnimation {
+    /* 0 */ ENPRZ_ANIM_0,
+    /* 1 */ ENPRZ_ANIM_1,
+    /* 2 */ ENPRZ_ANIM_MAX
+} EnPrzAnimation;
+
+static AnimationHeader* sAnimations[ENPRZ_ANIM_MAX] = {
+    &object_pr_Anim_004340, // ENPRZ_ANIM_0
+    &object_pr_Anim_004274, // ENPRZ_ANIM_1
+};
+
+static u8 sAnimationModes[ENPRZ_ANIM_MAX] = {
+    ANIMMODE_LOOP, // ENPRZ_ANIM_0
+    ANIMMODE_LOOP, // ENPRZ_ANIM_1
+};
+
+void EnPrz_ChangeAnim(EnPrz* this, s32 animIndex) {
+    this->animIndex = animIndex;
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimations[animIndex]), sAnimationModes[animIndex], -2.0f);
 }
 
 s32 func_80A75FA4(EnPrz* this, PlayState* play) {
-    WaterBox* sp2C;
+    WaterBox* waterBox;
     f32 temp_f0;
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_210,
-                             &sp2C)) {
+                             &waterBox)) {
         temp_f0 = BREG(10) + (this->unk_210 - 10.0f);
         if (temp_f0 < this->actor.world.pos.y) {
             this->unk_1D8.y = temp_f0;
@@ -219,7 +234,7 @@ s32 func_80A762C0(EnPrz* this, PlayState* play) {
 
 void func_80A76388(EnPrz* this) {
     this->actor.speed = Rand_CenteredFloat(1.0f) + 4.0f;
-    func_80A75F18(this, 0);
+    EnPrz_ChangeAnim(this, ENPRZ_ANIM_0);
     this->unk_1EA = 1;
     this->actionFunc = func_80A763E8;
 }
@@ -265,6 +280,7 @@ void func_80A763E8(EnPrz* this, PlayState* play) {
         Math_Vec3f_Copy(&this->unk_1D8, &sp3C->world.pos);
     }
 
+    //! FAKE:
     if (1) {}
 
     if ((Rand_ZeroOne() < 0.1f) && (this->unk_1C8 == 0)) {
@@ -290,7 +306,7 @@ void func_80A76634(EnPrz* this, PlayState* play) {
     if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->unk_1E4)) < 0x100) {
         if (func_80A762C0(this, play) != 0) {
             this->unk_1E4 += 0x1500;
-            this->unk_1E4 += (s16)Rand_ZeroFloat(5000.0f);
+            this->unk_1E4 += TRUNCF_BINANG(Rand_ZeroFloat(5000.0f));
         } else if ((player->stateFlags1 & PLAYER_STATE1_8000000) && (player->actor.floorHeight < 30.0f)) {
             this->actionFunc = func_80A763E8;
         } else {
@@ -316,7 +332,7 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
     s32 pad[2];
 
     if (func_80A762C0(this, play)) {
-        func_80A75F18(this, 0);
+        EnPrz_ChangeAnim(this, ENPRZ_ANIM_0);
         this->actor.speed = Rand_CenteredFloat(1.0f) + 4.0f;
         func_80A76604(this, play);
         return;
@@ -333,13 +349,13 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
     }
 
     if ((this->actor.xzDistToPlayer < 200.0f) && (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 80.0f)) {
-        if (this->unk_204 != 1) {
-            func_80A75F18(this, 1);
+        if (this->animIndex != ENPRZ_ANIM_1) {
+            EnPrz_ChangeAnim(this, ENPRZ_ANIM_1);
         }
         this->skelAnime.playSpeed = 1.0f;
     } else {
-        if (this->unk_204 != 0) {
-            func_80A75F18(this, 0);
+        if (this->animIndex != ENPRZ_ANIM_0) {
+            EnPrz_ChangeAnim(this, ENPRZ_ANIM_0);
         }
         this->skelAnime.playSpeed = 2.0f;
     }
@@ -361,7 +377,7 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
 void func_80A76A1C(EnPrz* this) {
     this->unk_1E8 = 0;
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);
 
@@ -378,13 +394,13 @@ void func_80A76A1C(EnPrz* this) {
 
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 30);
     this->unk_1EE = 50;
-    func_80A75F18(this, 0);
+    EnPrz_ChangeAnim(this, ENPRZ_ANIM_0);
     this->unk_1EA = 7;
     this->actionFunc = func_80A76B14;
 }
 
 void func_80A76B14(EnPrz* this, PlayState* play) {
-    WaterBox* sp7C;
+    WaterBox* waterBox;
     s32 i;
     Vec3f sp6C;
     s32 phi_s0 = false;
@@ -394,7 +410,7 @@ void func_80A76B14(EnPrz* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_1FE, 5, 0x2710, 0x3E8);
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_210,
-                             &sp7C)) {
+                             &waterBox)) {
         if ((this->unk_210 - 15.0f) <= this->actor.world.pos.y) {
             phi_s0 = true;
         } else {
@@ -482,22 +498,22 @@ void EnPrz_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 func_80A76F70(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnPrz_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnPrz* this = THIS;
 
-    if (limbIndex == 2) {
-        rot->y += (s16)this->unk_218 * -100;
+    if (limbIndex == OBJECT_PR_2_LIMB_02) {
+        rot->y += TRUNCF_BINANG(this->unk_218) * -100;
     }
     return false;
 }
 
-void func_80A76FCC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    Vec3f sp1C = D_80A7724C;
+void EnPrz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
     EnPrz* this = THIS;
 
-    if (limbIndex == 2) {
+    if (limbIndex == OBJECT_PR_2_LIMB_02) {
         Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_MultVec3f(&sp1C, &this->unk_1CC);
+        Matrix_MultVec3f(&sZeroVec, &this->unk_1CC);
     }
 }
 
@@ -515,7 +531,7 @@ void EnPrz_Draw(Actor* thisx, PlayState* play) {
 
         Scene_SetRenderModeXlu(play, 0, 1);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              func_80A76F70, func_80A76FCC, &this->actor);
+                              EnPrz_OverrideLimbDraw, EnPrz_PostLimbDraw, &this->actor);
     } else {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_1EC);

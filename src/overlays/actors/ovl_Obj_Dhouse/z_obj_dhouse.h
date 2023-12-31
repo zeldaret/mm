@@ -7,7 +7,7 @@ struct ObjDhouse;
 
 typedef void (*ObjDhouseActionFunc)(struct ObjDhouse*, PlayState*);
 
-#define OBJDHOUSE_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJDHOUSE_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;

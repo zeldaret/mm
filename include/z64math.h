@@ -2,6 +2,9 @@
 #define Z64MATH_H
 
 #include "ultra64.h"
+#include "libc/math.h"
+
+#include "libc64/math64.h"
 
 #define VEC_SET(V,X,Y,Z) V.x=X;V.y=Y;V.z=Z
 
@@ -40,6 +43,11 @@ typedef struct {
 } Vec3i; // size = 0xC
 
 typedef struct {
+    /* 0x0 */ f32 distance;
+    /* 0x4 */ s16 angle;
+} VecPolar; // size = 0x8
+
+typedef struct {
     /* 0x0 */ Vec3s center;
     /* 0x6 */ s16   radius;
 } Sphere16; // size = 0x8
@@ -49,8 +57,8 @@ typedef struct {
     /* 0xC */ f32   radius;
 } Spheref; // size = 0x10
 
-/* 
-The plane paramaters are of form `ax + by + cz + d = 0` 
+/*
+The plane paramaters are of form `ax + by + cz + d = 0`
 where `(a,b,c)` is the plane's normal vector and d is the originDist
  */
 typedef struct {
@@ -114,8 +122,22 @@ typedef enum {
     /* 2 */ OLIB_DIFF // Sub `a` and `b` to dest
 } OlibVec3fDiff;
 
+typedef float MtxF_t[4][4];
+typedef union {
+    MtxF_t mf;
+    struct {
+        float xx, yx, zx, wx,
+              xy, yy, zy, wy,
+              xz, yz, zz, wz,
+              xw, yw, zw, ww;
+    };
+} MtxF; // size = 0x40
+
 #define LERPIMP(v0, v1, t) ((v0) + (((v1) - (v0)) * (t)))
+#define LERPIMP_ALT(v0, v1, t) (((v1) - (v0)) * (t) + (v0))
+#define S16_LERP(v0, v1, t) ((s16)(((v1) - (v0)) * (t)) + (v0))
 #define F32_LERP(v0, v1, t) ((1.0f - (t)) * (f32)(v0) + (t) * (f32)(v1))
+#define F32_LERP_ALT(v0, v1, t) ((f32)(v0) * (1.0f - (t)) + (t) * (f32)(v1))
 #define F32_LERPIMP(v0, v1, t) ((f32)(v0) + (((f32)(v1) - (f32)(v0)) * (t)))
 #define F32_LERPIMPINV(v0, v1, t) ((f32)(v0) + (((f32)(v1) - (f32)(v0)) / (t)))
 #define BINANG_LERPIMP(v0, v1, t) ((v0) + (s16)(BINANG_SUB((v1), (v0)) * (t)))
@@ -219,20 +241,6 @@ f32 Math_SinF(f32 rad);
 f32 Math_CosF(f32 rad);
 f32 Rand_ZeroFloat(f32 scale);
 f32 Rand_CenteredFloat(f32 scale);
-
-f32 Math_FTanF(f32 x);
-f32 Math_FFloorF(f32 x);
-f32 Math_FCeilF(f32 x);
-f32 Math_FRoundF(f32 x);
-f32 Math_FTruncF(f32 x);
-f32 Math_FNearbyIntF(f32 x);
-f32 Math_FAtanTaylorQF(f32 x);
-f32 Math_FAtanTaylorF(f32 x);
-f32 Math_FAtanContFracF(f32 x);
-f32 Math_FAtanF(f32 x);
-f32 Math_FAtan2F(f32 y, f32 x);
-f32 Math_FAsinF(f32 x);
-f32 Math_FAcosF(f32 x);
 
 s16 Math_Atan2S(f32 y, f32 x);
 f32 Math_Atan2F(f32 y, f32 x);

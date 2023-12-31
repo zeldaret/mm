@@ -23,15 +23,15 @@ void func_8088B630(EnArrow* this, PlayState* play);
 void func_8088B6B0(EnArrow* this, PlayState* play);
 
 ActorInit En_Arrow_InitVars = {
-    ACTOR_EN_ARROW,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnArrow),
-    (ActorFunc)EnArrow_Init,
-    (ActorFunc)EnArrow_Destroy,
-    (ActorFunc)EnArrow_Update,
-    (ActorFunc)EnArrow_Draw,
+    /**/ ACTOR_EN_ARROW,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnArrow),
+    /**/ EnArrow_Init,
+    /**/ EnArrow_Destroy,
+    /**/ EnArrow_Update,
+    /**/ EnArrow_Draw,
 };
 
 static ColliderQuadInit sQuadInit = {
@@ -60,20 +60,64 @@ static InitChainEntry sInitChain[] = {
 
 void EnArrow_Init(Actor* thisx, PlayState* play) {
     static EffectBlureInit2 D_8088C234 = {
-        0, 4, 0, { 0, 255, 200, 255 },   { 0, 255, 255, 255 }, { 0, 255, 200, 0 }, { 0, 255, 255, 0 }, 16,
-        0, 1, 0, { 255, 255, 170, 255 }, { 0, 150, 0, 0 },
+        0,
+        EFFECT_BLURE_ELEMENT_FLAG_4,
+        0,
+        { 0, 255, 200, 255 },
+        { 0, 255, 255, 255 },
+        { 0, 255, 200, 0 },
+        { 0, 255, 255, 0 },
+        16,
+        0,
+        EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS,
+        0,
+        { 255, 255, 170, 255 },
+        { 0, 150, 0, 0 },
     };
     static EffectBlureInit2 D_8088C258 = {
-        0, 4, 0, { 0, 255, 200, 255 }, { 0, 255, 255, 255 }, { 0, 255, 200, 0 }, { 0, 255, 255, 0 }, 16,
-        0, 1, 0, { 255, 200, 0, 255 }, { 255, 0, 0, 0 },
+        0,
+        EFFECT_BLURE_ELEMENT_FLAG_4,
+        0,
+        { 0, 255, 200, 255 },
+        { 0, 255, 255, 255 },
+        { 0, 255, 200, 0 },
+        { 0, 255, 255, 0 },
+        16,
+        0,
+        EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS,
+        0,
+        { 255, 200, 0, 255 },
+        { 255, 0, 0, 0 },
     };
     static EffectBlureInit2 D_8088C27C = {
-        0, 4, 0, { 0, 255, 200, 255 },   { 0, 255, 255, 255 }, { 0, 255, 200, 0 }, { 0, 255, 255, 0 }, 16,
-        0, 1, 0, { 170, 255, 255, 255 }, { 0, 0x64, 255, 0 },
+        0,
+        EFFECT_BLURE_ELEMENT_FLAG_4,
+        0,
+        { 0, 255, 200, 255 },
+        { 0, 255, 255, 255 },
+        { 0, 255, 200, 0 },
+        { 0, 255, 255, 0 },
+        16,
+        0,
+        EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS,
+        0,
+        { 170, 255, 255, 255 },
+        { 0, 0x64, 255, 0 },
     };
     static EffectBlureInit2 D_8088C2A0 = {
-        0, 4, 0, { 0, 255, 200, 255 },   { 0, 255, 255, 255 }, { 0, 255, 200, 0 }, { 0, 255, 255, 0 }, 16,
-        0, 1, 0, { 255, 255, 170, 255 }, { 255, 255, 0, 0 },
+        0,
+        EFFECT_BLURE_ELEMENT_FLAG_4,
+        0,
+        { 0, 255, 200, 255 },
+        { 0, 255, 255, 255 },
+        { 0, 255, 200, 0 },
+        { 0, 255, 255, 0 },
+        16,
+        0,
+        EFF_BLURE_DRAW_MODE_SIMPLE_ALT_COLORS,
+        0,
+        { 255, 255, 170, 255 },
+        { 255, 255, 0, 0 },
     };
     EnArrow* this = THIS;
 
@@ -85,7 +129,7 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
 
     if (ARROW_IS_ARROW(this->actor.params)) {
         SkelAnime_Init(play, &this->arrow.skelAnime, &gameplay_keep_Skel_014560, &gameplay_keep_Anim_0128BC,
-                       this->arrow.jointTable, this->arrow.jointTable, 5);
+                       this->arrow.jointTable, this->arrow.jointTable, ARROW_LIMB_MAX);
         if (this->actor.params < ARROW_TYPE_FIRE) {
             if (this->actor.params == ARROW_TYPE_NORMAL_HORSE) {
                 D_8088C234.elemDuration = 4;
@@ -155,7 +199,7 @@ void func_8088A594(EnArrow* this, PlayState* play) {
     if (this->actor.parent != NULL) {
         if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
             if (Math_SmoothStepToF(&this->bubble.unk_144, 16.0f, 0.07f, 1.8f, 0.0f) > 0.5f) {
-                func_800B9010(&this->actor, NA_SE_PL_DEKUNUTS_BUBLE_BREATH - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_DEKUNUTS_BUBLE_BREATH - SFX_FLAG);
                 return;
             }
 
@@ -192,6 +236,9 @@ void func_8088A594(EnArrow* this, PlayState* play) {
 
             case ARROW_TYPE_DEKU_BUBBLE:
                 Player_PlaySfx(player, NA_SE_PL_DEKUNUTS_FIRE);
+                break;
+
+            default:
                 break;
         }
 
@@ -267,12 +314,12 @@ void func_8088A894(EnArrow* this, PlayState* play) {
 }
 
 void func_8088AA98(EnArrow* this, PlayState* play) {
-    WaterBox* sp54;
+    WaterBox* waterBox;
     f32 sp50 = this->actor.world.pos.y;
     Vec3f sp44;
     f32 temp_f0;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &waterBox) &&
         (this->actor.world.pos.y < sp50) && !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         this->actor.bgCheckFlags |= BGCHECKFLAG_WATER;
 
@@ -336,7 +383,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 (this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((this->collider.base.at != NULL) && (this->collider.base.at->id != ACTOR_OBJ_SYOKUDAI)) {
                     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
-                    this->actor.world.rot.y += BINANG_ROT180((s16)(s32)Rand_CenteredFloat(0x1F40));
+                    this->actor.world.rot.y += BINANG_ROT180(TRUNCF_BINANG(Rand_CenteredFloat(0x1F40)));
                     this->actor.velocity.y = -this->actor.velocity.y;
                     this->bubble.unk_149 = -1;
                     return;
@@ -438,18 +485,18 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             if (Math_StepToF(&this->bubble.unk_144, 1.0f, 0.4f)) {
                 this->unk_260 = 0;
             } else {
-                this->bubble.unk_14A += (s16)(this->bubble.unk_144 * (500.0f + Rand_ZeroFloat(1400.0f)));
-                this->actor.world.rot.x += (s16)(500.0f * Math_SinS(this->bubble.unk_14A));
+                this->bubble.unk_14A += TRUNCF_BINANG(this->bubble.unk_144 * (500.0f + Rand_ZeroFloat(1400.0f)));
+                this->actor.world.rot.x += TRUNCF_BINANG(500.0f * Math_SinS(this->bubble.unk_14A));
                 this->actor.shape.rot.x = this->actor.world.rot.x;
 
-                this->bubble.unk_14C += (s16)(this->bubble.unk_144 * (500.0f + Rand_ZeroFloat(1400.0f)));
-                this->actor.world.rot.y += (s16)(500.0f * Math_SinS(this->bubble.unk_14C));
+                this->bubble.unk_14C += TRUNCF_BINANG(this->bubble.unk_144 * (500.0f + Rand_ZeroFloat(1400.0f)));
+                this->actor.world.rot.y += TRUNCF_BINANG(500.0f * Math_SinS(this->bubble.unk_14C));
 
                 this->actor.shape.rot.y = this->actor.world.rot.y;
 
                 func_8088A514(this);
             }
-            func_800B9010(&this->actor, NA_SE_IT_DEKUNUTS_BUBLE_SHOT_LEVEL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_IT_DEKUNUTS_BUBLE_SHOT_LEVEL - SFX_FLAG);
         } else if (this->unk_260 < 7) {
             this->actor.gravity = -0.4f;
         }

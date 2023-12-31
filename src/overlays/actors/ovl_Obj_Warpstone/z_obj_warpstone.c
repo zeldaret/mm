@@ -8,7 +8,7 @@
 #include "objects/object_sek/object_sek.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((ObjWarpstone*)thisx)
 
@@ -23,15 +23,15 @@ s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, PlayState* play);
 
 ActorInit Obj_Warpstone_InitVars = {
-    ACTOR_OBJ_WARPSTONE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_SEK,
-    sizeof(ObjWarpstone),
-    (ActorFunc)ObjWarpstone_Init,
-    (ActorFunc)ObjWarpstone_Destroy,
-    (ActorFunc)ObjWarpstone_Update,
-    (ActorFunc)ObjWarpstone_Draw,
+    /**/ ACTOR_OBJ_WARPSTONE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_SEK,
+    /**/ sizeof(ObjWarpstone),
+    /**/ ObjWarpstone_Init,
+    /**/ ObjWarpstone_Destroy,
+    /**/ ObjWarpstone_Update,
+    /**/ ObjWarpstone_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -55,7 +55,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_1, ICHAIN_STOP),
 };
 
 static Gfx* sOwlStatueDLs[] = { gOwlStatueClosedDL, gOwlStatueOpenedDL };
@@ -71,7 +71,7 @@ void ObjWarpstone_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     Actor_SetFocus(&this->dyna.actor, 40.0f);
 
-    if (!OBJ_WARPSTONE_IS_ACTIVATED(OBJ_WARPSTONE_GET_ID(&this->dyna.actor))) {
+    if (!GET_OWL_STATUE_ACTIVATED(OBJ_WARPSTONE_GET_OWL_WARP_ID(&this->dyna.actor))) {
         ObjWarpstone_SetupAction(this, ObjWarpstone_ClosedIdle);
     } else {
         ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
@@ -110,7 +110,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play) {
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play) {
     if (this->openingCSTimer++ >= OBJ_WARPSTONE_TIMER_ACTIVATE_THRESHOLD) {
         CutsceneManager_Stop(this->dyna.actor.csId);
-        Sram_ActivateOwl(OBJ_WARPSTONE_GET_ID(&this->dyna.actor));
+        Sram_ActivateOwl(OBJ_WARPSTONE_GET_OWL_WARP_ID(&this->dyna.actor));
         ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
     } else if (this->openingCSTimer < OBJ_WARPSTONE_TIMER_OPEN_THRESHOLD) {
         Math_StepToF(&this->dyna.actor.velocity.x, 0.01f, 0.001f);
@@ -140,19 +140,19 @@ void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
             this->isTalking = false;
         } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
             if (play->msgCtx.choiceIndex != 0) {
-                func_8019F208();
-                play->msgCtx.msgMode = 0x4D;
+                Audio_PlaySfx_MessageDecide();
+                play->msgCtx.msgMode = MSGMODE_OWL_SAVE_0;
                 play->msgCtx.unk120D6 = 0;
                 play->msgCtx.unk120D4 = 0;
-                gSaveContext.save.owlSaveLocation = OBJ_WARPSTONE_GET_ID(&this->dyna.actor);
+                gSaveContext.save.owlWarpId = OBJ_WARPSTONE_GET_OWL_WARP_ID(&this->dyna.actor);
             } else {
                 Message_CloseTextbox(play);
             }
         }
-    } else if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         this->isTalking = true;
     } else if (!this->actionFunc(this, play)) {
-        func_800B863C(&this->dyna.actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->dyna.actor, play);
     }
 
     Collider_ResetCylinderAC(play, &this->collider.base);

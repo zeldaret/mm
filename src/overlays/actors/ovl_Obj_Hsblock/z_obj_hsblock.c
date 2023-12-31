@@ -6,6 +6,7 @@
 
 #include "z_obj_hsblock.h"
 #include "objects/object_d_hsblock/object_d_hsblock.h"
+#include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
 #define FLAGS 0x00000000
 
@@ -24,15 +25,15 @@ void func_8093E0E8(ObjHsblock* this);
 void func_8093E10C(ObjHsblock* this, PlayState* play);
 
 ActorInit Obj_Hsblock_InitVars = {
-    ACTOR_OBJ_HSBLOCK,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_D_HSBLOCK,
-    sizeof(ObjHsblock),
-    (ActorFunc)ObjHsblock_Init,
-    (ActorFunc)ObjHsblock_Destroy,
-    (ActorFunc)ObjHsblock_Update,
-    (ActorFunc)ObjHsblock_Draw,
+    /**/ ACTOR_OBJ_HSBLOCK,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_D_HSBLOCK,
+    /**/ sizeof(ObjHsblock),
+    /**/ ObjHsblock_Init,
+    /**/ ObjHsblock_Destroy,
+    /**/ ObjHsblock_Update,
+    /**/ ObjHsblock_Draw,
 };
 
 static f32 sFocusHeights[] = { 85.0f, 85.0f, 0.0f };
@@ -60,7 +61,8 @@ void func_8093DEAC(ObjHsblock* this, PlayState* play) {
     if (OBJHSBLOCK_GET_5(&this->dyna.actor) != 0) {
         Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_ICE_POLY, this->dyna.actor.world.pos.x,
                            this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.world.rot.x,
-                           this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z, 0xFF64);
+                           this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
+                           OBJICEPOLY_PARAMS(100, OBJICEPOLY_SWITCH_FLAG_NONE));
     }
 }
 
@@ -78,7 +80,7 @@ void ObjHsblock_Init(Actor* thisx, PlayState* play) {
             func_8093E03C(this);
             break;
         case 1:
-            if (Flags_GetSwitch(play, OBJHSBLOCK_GET_SWITCH(thisx))) {
+            if (Flags_GetSwitch(play, OBJHSBLOCK_GET_SWITCH_FLAG(thisx))) {
                 func_8093E03C(this);
             } else {
                 func_8093E05C(this);
@@ -106,7 +108,7 @@ void func_8093E05C(ObjHsblock* this) {
 }
 
 void func_8093E0A0(ObjHsblock* this, PlayState* play) {
-    if (Flags_GetSwitch(play, OBJHSBLOCK_GET_SWITCH(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJHSBLOCK_GET_SWITCH_FLAG(&this->dyna.actor))) {
         func_8093E0E8(this);
     }
 }

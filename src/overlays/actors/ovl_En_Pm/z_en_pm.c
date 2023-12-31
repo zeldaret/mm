@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/object_mm/object_mm.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnPm*)thisx)
 
@@ -473,15 +473,15 @@ static UNK_TYPE D_80AFB764[] = {
 };
 
 ActorInit En_Pm_InitVars = {
-    ACTOR_EN_PM,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MM,
-    sizeof(EnPm),
-    (ActorFunc)EnPm_Init,
-    (ActorFunc)EnPm_Destroy,
-    (ActorFunc)EnPm_Update,
-    (ActorFunc)EnPm_Draw,
+    /**/ ACTOR_EN_PM,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MM,
+    /**/ sizeof(EnPm),
+    /**/ EnPm_Init,
+    /**/ EnPm_Destroy,
+    /**/ EnPm_Update,
+    /**/ EnPm_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -567,28 +567,28 @@ s32 func_80AF7BAC(EnPm* this) {
     switch (this->unk_38C) {
         case 0:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_01)) {
-                D_801F4E78 = gSaveContext.save.time;
+                D_801F4E78 = CURRENT_TIME;
                 this->unk_38C++;
             }
             break;
 
         case 1:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08)) {
-                D_801F4E78 = gSaveContext.save.time;
+                D_801F4E78 = CURRENT_TIME;
                 this->unk_38C++;
             }
             break;
 
         case 2:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40)) {
-                D_801F4E78 = 0;
+                D_801F4E78 = CLOCK_TIME(0, 0);
                 this->unk_38C++;
             }
             break;
 
         case 3:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
-                D_801F4E78 = gSaveContext.save.time;
+                D_801F4E78 = CURRENT_TIME;
                 this->unk_38C++;
             }
             break;
@@ -843,7 +843,7 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 1:
         case 3:
         case 5:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08) && (this->unk_378 == 3)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_LISTENED_ANJU_POSTMAN_CONVERSATION) && (this->unk_378 == 3)) {
                 CutsceneManager_Stop(csId);
             } else {
                 Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
@@ -999,8 +999,9 @@ UNK_TYPE* func_80AF8540(EnPm* this, PlayState* play) {
 s32 func_80AF86F0(EnPm* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_356 & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        SubS_UpdateFlags(&this->unk_356, 0, 7);
+    if (((this->unk_356 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_398 = 0;
         this->unk_378 = 0;
         this->unk_37C = NULL;
@@ -1075,7 +1076,7 @@ void func_80AF898C(EnPm* this) {
     this->unk_372 = CLAMP(this->unk_372, -0x1FFE, 0x1FFE);
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
     if (this->unk_268->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_268)->bodyPartsPos[7].y + 3.0f;
+        sp40.y = ((Player*)this->unk_268)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_268->focus.pos);
     }
@@ -1264,7 +1265,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
             this->unk_36C = scheduleOutput->time1 - scheduleOutput->time0;
             this->unk_36E = sp56 - scheduleOutput->time0;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
                 this->unk_356 |= 0x800;
             }
@@ -1343,7 +1344,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 break;
 
             default:
-                SubS_UpdateFlags(&this->unk_356, 3, 7);
+                SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 func_80AF7E98(this, 0);
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
                     this->unk_356 |= 0x800;
@@ -1440,7 +1441,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_ROOM_CARTAIN);
                 Flags_SetSwitch(play, 0);
                 this->unk_36C = 20;
-                SubS_UpdateFlags(&this->unk_356, 3, 7);
+                SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 func_80AF7E98(this, 3);
                 break;
 
@@ -1470,7 +1471,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 if (scheduleOutput->result == 29) {
                     this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
                 }
-                SubS_UpdateFlags(&this->unk_356, 3, 7);
+                SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->unk_356 |= 0x9000;
                 func_80AF7E98(this, 3);
                 break;
@@ -1499,8 +1500,8 @@ s32 func_80AF992C(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80AFB8EC);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80AFB8F8);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    SubS_UpdateFlags(&this->unk_356, 3, 7);
-    this->actor.targetMode = 6;
+    SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -1.0f;
     this->unk_368 = 80.0f;
     if (scheduleOutput->result == 14) {
@@ -1517,7 +1518,7 @@ s32 func_80AF9A0C(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80AF8ED4(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_AN)) {
-        SubS_UpdateFlags(&this->unk_356, 3, 7);
+        SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_356 |= 0x20;
         this->unk_356 |= 0x9000;
         if (this->unk_258 != 0) {
@@ -1535,7 +1536,7 @@ s32 func_80AF9AB0(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80AF8ED4(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_TEST3)) {
-        SubS_UpdateFlags(&this->unk_356, 3, 7);
+        SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_356 |= 0x20;
         this->unk_356 |= 0x9000;
         if (this->unk_258 != 0) {
@@ -1553,7 +1554,7 @@ s32 func_80AF9B54(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80AF8ED4(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_AL)) {
-        SubS_UpdateFlags(&this->unk_356, 3, 7);
+        SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_356 |= 0x9000;
         this->unk_356 |= 0x20;
         if (this->unk_258 != 0) {
@@ -1570,8 +1571,8 @@ s32 func_80AF9B54(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
-    this->actor.flags |= ACTOR_FLAG_1;
-    this->actor.targetMode = 0;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk_394 = PLAYER_IA_NONE;
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
@@ -1710,9 +1711,9 @@ s32 func_80AF9D04(EnPm* this, PlayState* play) {
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if (((f32)this->unk_36E / this->unk_36C) <= 0.9f) {
-                door->unk_1A7 = this->unk_260;
+                door->openTimer = this->unk_260;
             } else {
-                door->unk_1A7 = 0;
+                door->openTimer = 0;
             }
         }
         this->unk_36E = CLAMP(this->unk_36E, 0, this->unk_36C);
@@ -1799,7 +1800,7 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
 
     switch (this->unk_258) {
         case 28:
-            if (gSaveContext.save.time >= CLOCK_TIME(1, 39)) {
+            if (CURRENT_TIME >= CLOCK_TIME(1, 39)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_89_08);
             }
 
@@ -1854,9 +1855,9 @@ s32 func_80AFA334(EnPm* this, PlayState* play) {
         case 24:
             temp_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
             if (ABS_ALT(temp_v0) < 0x4000) {
-                SubS_UpdateFlags(&this->unk_356, 3, 7);
+                SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             } else {
-                SubS_UpdateFlags(&this->unk_356, 0, 7);
+                SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
             }
             break;
 
@@ -1989,25 +1990,25 @@ void func_80AFA4D0(EnPm* this, PlayState* play) {
     static u8* D_80AFB900[] = {
         D_80AFAD80, D_80AFB30C, D_80AFB3C0, D_80AFB3FC, D_80AFB41C,
     };
-    u16 time = gSaveContext.save.time;
+    u16 time = CURRENT_TIME;
     u16 sp3C = 0;
     ScheduleOutput sp2C;
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (this->unk_38C != 0) {
-        time = gSaveContext.save.time - D_801F4E78;
-        sp3C = gSaveContext.save.time;
+        time = CURRENT_TIME - D_801F4E78;
+        sp3C = CURRENT_TIME;
         gSaveContext.save.time = time;
     }
 
     if (!Schedule_RunScript(play, D_80AFB900[this->unk_38C], &sp2C) ||
         ((this->unk_258 != sp2C.result) && !func_80AF9BF8(this, play, &sp2C))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         sp2C.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 
     this->unk_258 = sp2C.result;
@@ -2024,7 +2025,7 @@ void func_80AFA5FC(EnPm* this, PlayState* play) {
     Vec3f sp2C;
 
     if (func_8010BF58(&this->actor, play, this->unk_25C, this->unk_37C, &this->unk_264)) {
-        SubS_UpdateFlags(&this->unk_356, 3, 7);
+        SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_356 &= ~0x20;
         this->unk_356 |= 0x200;
         this->actor.child = NULL;
@@ -2093,7 +2094,7 @@ void EnPm_Update(Actor* thisx, PlayState* play) {
             func_80AF8DD4(this, play);
             func_80AF7E6C(this);
             func_80AF8AC8(this);
-            func_8013C964(&this->actor, play, this->unk_368, 30.0f, this->unk_394, this->unk_356 & 7);
+            SubS_Offer(&this->actor, play, this->unk_368, 30.0f, this->unk_394, this->unk_356 & SUBS_OFFER_MODE_MASK);
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
             func_80AF7F68(this, play);

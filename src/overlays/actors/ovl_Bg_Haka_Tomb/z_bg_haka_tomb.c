@@ -24,15 +24,15 @@ void BgHakaTomb_SetupDoNothing(BgHakaTomb* this);
 void BgHakaTomb_DoNothing(BgHakaTomb* this, PlayState* play);
 
 ActorInit Bg_Haka_Tomb_InitVars = {
-    ACTOR_BG_HAKA_TOMB,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HAKA_OBJ,
-    sizeof(BgHakaTomb),
-    (ActorFunc)BgHakaTomb_Init,
-    (ActorFunc)BgHakaTomb_Destroy,
-    (ActorFunc)BgHakaTomb_Update,
-    (ActorFunc)BgHakaTomb_Draw,
+    /**/ ACTOR_BG_HAKA_TOMB,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HAKA_OBJ,
+    /**/ sizeof(BgHakaTomb),
+    /**/ BgHakaTomb_Init,
+    /**/ BgHakaTomb_Destroy,
+    /**/ BgHakaTomb_Update,
+    /**/ BgHakaTomb_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -83,16 +83,16 @@ void func_80BD66AC(BgHakaTomb* this, PlayState* play) {
     s16 csId;
 
     if (Flags_GetClear(play, this->dyna.actor.room)) {
-        this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
     }
     if (!func_80BD6638(&csId, this->csIdList, ARRAY_COUNT(this->csIdList)) && (csId <= CS_ID_NONE) &&
         Flags_GetClear(play, this->dyna.actor.room)) {
-        this->dyna.actor.flags |= ACTOR_FLAG_1;
-        if (this->dyna.actor.isTargeted) {
+        this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
+        if (this->dyna.actor.isLockedOn) {
             func_80BD6754(this);
         }
     } else {
-        this->dyna.actor.flags &= ~ACTOR_FLAG_1;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     }
 }
 

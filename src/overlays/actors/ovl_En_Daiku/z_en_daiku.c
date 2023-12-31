@@ -5,9 +5,8 @@
  */
 
 #include "z_en_daiku.h"
-#include "objects/object_daiku/object_daiku.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDaiku*)thisx)
 
@@ -22,15 +21,15 @@ void func_80943BDC(EnDaiku* this, PlayState* play);
 void func_809438F8(EnDaiku* this, PlayState* play);
 
 ActorInit En_Daiku_InitVars = {
-    ACTOR_EN_DAIKU,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DAIKU,
-    sizeof(EnDaiku),
-    (ActorFunc)EnDaiku_Init,
-    (ActorFunc)EnDaiku_Destroy,
-    (ActorFunc)EnDaiku_Update,
-    (ActorFunc)EnDaiku_Draw,
+    /**/ ACTOR_EN_DAIKU,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DAIKU,
+    /**/ sizeof(EnDaiku),
+    /**/ EnDaiku_Init,
+    /**/ EnDaiku_Destroy,
+    /**/ EnDaiku_Update,
+    /**/ EnDaiku_Draw,
 };
 
 static u16 sTextIds[] = {
@@ -57,15 +56,42 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* sAnimations[] = {
-    &object_daiku_Anim_002FA0, &object_daiku_Anim_00ACD0, &object_daiku_Anim_00C92C,
-    &object_daiku_Anim_000C44, &object_daiku_Anim_00C234, &object_daiku_Anim_000600,
-    &object_daiku_Anim_001114, &object_daiku_Anim_00B690, &object_daiku_Anim_00BEAC,
+typedef enum {
+    /* -1 */ ENDAIKU_ANIM_NONE = -1,
+    /*  0 */ ENDAIKU_ANIM_0,
+    /*  1 */ ENDAIKU_ANIM_1,
+    /*  2 */ ENDAIKU_ANIM_2,
+    /*  3 */ ENDAIKU_ANIM_3,
+    /*  4 */ ENDAIKU_ANIM_4,
+    /*  5 */ ENDAIKU_ANIM_5,
+    /*  6 */ ENDAIKU_ANIM_6,
+    /*  7 */ ENDAIKU_ANIM_7,
+    /*  8 */ ENDAIKU_ANIM_8,
+    /*  9 */ ENDAIKU_ANIM_MAX
+} EnDaiAnimation;
+
+static AnimationHeader* sAnimations[ENDAIKU_ANIM_MAX] = {
+    &object_daiku_Anim_002FA0, // ENDAIKU_ANIM_0
+    &object_daiku_Anim_00ACD0, // ENDAIKU_ANIM_1
+    &object_daiku_Anim_00C92C, // ENDAIKU_ANIM_2
+    &object_daiku_Anim_000C44, // ENDAIKU_ANIM_3
+    &object_daiku_Anim_00C234, // ENDAIKU_ANIM_4
+    &object_daiku_Anim_000600, // ENDAIKU_ANIM_5
+    &object_daiku_Anim_001114, // ENDAIKU_ANIM_6
+    &object_daiku_Anim_00B690, // ENDAIKU_ANIM_7
+    &object_daiku_Anim_00BEAC, // ENDAIKU_ANIM_8
 };
 
-static u8 sAnimationModes[] = {
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
+static u8 sAnimationModes[ENDAIKU_ANIM_MAX] = {
+    ANIMMODE_LOOP, // ENDAIKU_ANIM_0
+    ANIMMODE_LOOP, // ENDAIKU_ANIM_1
+    ANIMMODE_LOOP, // ENDAIKU_ANIM_2
+    ANIMMODE_LOOP, // ENDAIKU_ANIM_3
+    ANIMMODE_ONCE, // ENDAIKU_ANIM_4
+    ANIMMODE_LOOP, // ENDAIKU_ANIM_5
+    ANIMMODE_LOOP, // ENDAIKU_ANIM_6
+    ANIMMODE_ONCE, // ENDAIKU_ANIM_7
+    ANIMMODE_ONCE, // ENDAIKU_ANIM_8
 };
 
 void EnDaiku_Init(Actor* thisx, PlayState* play) {
@@ -73,7 +99,7 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_278 = ENDAIKU_GET_FF(&this->actor);
     if (this->unk_278 == ENDAIKU_PARAM_FF_3) {
@@ -105,17 +131,20 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
 
         case ENDAIKU_PARAM_FF_1:
             SkelAnime_InitFlex(play, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_002FA0,
-                               this->jointTable, this->morphTable, 17);
+                               this->jointTable, this->morphTable, OBJECT_DAIKU_LIMB_MAX);
             break;
 
         case ENDAIKU_PARAM_FF_2:
             SkelAnime_InitFlex(play, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_00B690,
-                               this->jointTable, this->morphTable, 17);
+                               this->jointTable, this->morphTable, OBJECT_DAIKU_LIMB_MAX);
             break;
 
         case ENDAIKU_PARAM_FF_3:
             SkelAnime_InitFlex(play, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_001114,
-                               this->jointTable, this->morphTable, 17);
+                               this->jointTable, this->morphTable, OBJECT_DAIKU_LIMB_MAX);
+            break;
+
+        default:
             break;
     }
 
@@ -128,9 +157,10 @@ void EnDaiku_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_8094373C(EnDaiku* this, s32 arg1) {
-    this->unk_284 = Animation_GetLastFrame(sAnimations[arg1]);
-    Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, this->unk_284, sAnimationModes[arg1], -4.0f);
+void EnDaiku_ChangeAnim(EnDaiku* this, s32 animIndex) {
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->animEndFrame,
+                     sAnimationModes[animIndex], -4.0f);
 }
 
 void func_809437C8(EnDaiku* this) {
@@ -147,15 +177,18 @@ void func_80943820(EnDaiku* this) {
     switch (this->unk_278) {
         case 0:
         case 1:
-            func_8094373C(this, 0);
+            EnDaiku_ChangeAnim(this, ENDAIKU_ANIM_0);
             break;
 
         case 2:
-            func_8094373C(this, 7);
+            EnDaiku_ChangeAnim(this, ENDAIKU_ANIM_7);
             break;
 
         case 3:
-            func_8094373C(this, 6);
+            EnDaiku_ChangeAnim(this, ENDAIKU_ANIM_6);
+            break;
+
+        default:
             break;
     }
 
@@ -167,7 +200,7 @@ void func_80943820(EnDaiku* this) {
 }
 
 void func_809438F8(EnDaiku* this, PlayState* play) {
-    f32 currentFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
     s32 pad;
     s32 day = gSaveContext.save.day - 1;
     s32 pad2;
@@ -183,16 +216,16 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
         this->actor.textId = sTextIds[this->unk_28C];
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80943BC0(this);
         return;
     }
 
-    if ((this->unk_278 == ENDAIKU_PARAM_FF_2) && (this->unk_284 <= currentFrame)) {
+    if ((this->unk_278 == ENDAIKU_PARAM_FF_2) && (curFrame >= this->animEndFrame)) {
         if (Rand_ZeroOne() < 0.5f) {
-            func_8094373C(this, 7);
+            EnDaiku_ChangeAnim(this, ENDAIKU_ANIM_7);
         } else {
-            func_8094373C(this, 8);
+            EnDaiku_ChangeAnim(this, ENDAIKU_ANIM_8);
         }
     }
 
@@ -224,7 +257,7 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
 
         this->unk_280 = this->actor.yawTowardsPlayer;
         if ((this->unk_278 == ENDAIKU_PARAM_FF_1) || (this->unk_278 == ENDAIKU_PARAM_FF_2) || (angle <= 0x2890)) {
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferTalk(&this->actor, play, 100.0f);
         }
     }
 }
@@ -235,13 +268,13 @@ void func_80943BC0(EnDaiku* this) {
 }
 
 void func_80943BDC(EnDaiku* this, PlayState* play) {
-    f32 currentFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
 
-    if ((this->unk_278 == ENDAIKU_PARAM_FF_2) && (this->unk_284 <= currentFrame)) {
+    if ((this->unk_278 == ENDAIKU_PARAM_FF_2) && (curFrame >= this->animEndFrame)) {
         if (Rand_ZeroOne() < 0.5f) {
-            func_8094373C(this, 7);
+            EnDaiku_ChangeAnim(this, ENDAIKU_ANIM_7);
         } else {
-            func_8094373C(this, 8);
+            EnDaiku_ChangeAnim(this, ENDAIKU_ANIM_8);
         }
     }
 
@@ -291,7 +324,7 @@ void EnDaiku_Update(Actor* thisx, PlayState* play) {
 s32 EnDaiku_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDaiku* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_DAIKU_LIMB_0F) {
         rot->x += this->unk_260;
         rot->z += this->unk_25E;
     }
@@ -310,11 +343,11 @@ void EnDaiku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_DAIKU_LIMB_0F) {
         gSPDisplayList(POLY_OPA_DISP++, D_809440D4[this->unk_278]);
     }
 
-    if ((this->unk_278 == ENDAIKU_PARAM_FF_3) && (limbIndex == 8)) {
+    if ((this->unk_278 == ENDAIKU_PARAM_FF_3) && (limbIndex == OBJECT_DAIKU_LIMB_08)) {
         gSPDisplayList(POLY_OPA_DISP++, object_daiku_DL_008EC8);
     }
 

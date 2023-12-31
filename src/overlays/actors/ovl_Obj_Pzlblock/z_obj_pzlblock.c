@@ -26,22 +26,22 @@ void func_809A3E58(Actor* thisx, PlayState* play);
 void func_809A3F0C(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Pzlblock_InitVars = {
-    ACTOR_OBJ_PZLBLOCK,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjPzlblock),
-    (ActorFunc)ObjPzlblock_Init,
-    (ActorFunc)ObjPzlblock_Destroy,
-    (ActorFunc)ObjPzlblock_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_PZLBLOCK,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjPzlblock),
+    /**/ ObjPzlblock_Init,
+    /**/ ObjPzlblock_Destroy,
+    /**/ ObjPzlblock_Update,
+    /**/ NULL,
 };
 
 s16 D_809A4050[] = { 1, -1, 0, 0 };
 s16 D_809A4058[] = { 0, 0, 1, -1 };
 
 typedef struct {
-    /* 0x0 */ s16 unk_00;
+    /* 0x0 */ s16 objectId;
     /* 0x4 */ CollisionHeader* unk_04;
     /* 0x8 */ Gfx* unk_08;
 } ObjPzlblockStruct; // size = 0xC
@@ -63,7 +63,7 @@ Color_RGB8 D_809A4088[] = {
     { 0, 255, 255 },   { 255, 0, 255 },   { 0, 0, 0 },   { 255, 255, 255 },
 };
 
-s32 func_809A33E0(ObjPzlblock* this, PlayState* play, s16 arg2) {
+bool func_809A33E0(ObjPzlblock* this, PlayState* play, s16 arg2) {
     return !DynaPolyActor_ValidateMove(play, &this->dyna, 30, arg2, 1) ||
            !DynaPolyActor_ValidateMove(play, &this->dyna, 30, arg2, 28);
 }
@@ -94,7 +94,7 @@ s32 func_809A3448(ObjPzlblock* this) {
     return -1;
 }
 
-s32 func_809A34E0(ObjPzlblock* this, s32 arg1) {
+bool func_809A34E0(ObjPzlblock* this, s32 arg1) {
     s32 temp_v0 = OBJPZLBLOCK_GET_ROTZ(&this->dyna.actor);
 
     if (temp_v0 == 0) {
@@ -134,7 +134,7 @@ s32 func_809A34E0(ObjPzlblock* this, s32 arg1) {
     return false;
 }
 
-s32 func_809A35EC(ObjPzlblock* this, s32 arg1) {
+bool func_809A35EC(ObjPzlblock* this, s32 arg1) {
     s32 temp_v0 = OBJPZLBLOCK_GET_ROTZ(&this->dyna.actor);
     s32 temp_v1 = this->dyna.actor.home.rot.x & 0xF;
     s32 temp;
@@ -207,11 +207,11 @@ void ObjPzlblock_Init(Actor* thisx, PlayState* play) {
 
     DynaPolyActor_Init(&this->dyna, 0);
 
-    this->unk_17A = Object_GetIndex(&play->objectCtx, sp24->unk_00);
+    this->objectSlot = Object_GetSlot(&play->objectCtx, sp24->objectId);
 
     if (sp28 == 0) {
         func_809A3D1C(this);
-    } else if (Flags_GetSwitch(play, OBJPZLBLOCK_GET_7F(&this->dyna.actor))) {
+    } else if (Flags_GetSwitch(play, OBJPZLBLOCK_GET_SWITCH_FLAG(&this->dyna.actor))) {
         if (sp2C == 0) {
             this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (sp28 * 60);
             func_809A3D1C(this);
@@ -295,7 +295,7 @@ void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
             }
         } else {
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-            Flags_SetSwitch(play, OBJPZLBLOCK_GET_7F(&this->dyna.actor));
+            Flags_SetSwitch(play, OBJPZLBLOCK_GET_SWITCH_FLAG(&this->dyna.actor));
             sp20 = 1;
         }
 
@@ -307,7 +307,7 @@ void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
             func_809A3D1C(this);
         }
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 }
 
@@ -330,10 +330,10 @@ void ObjPzlblock_Update(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
     Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
-    if (Object_IsLoaded(&play->objectCtx, this->unk_17A)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         ObjPzlblockStruct* sp2C = &D_809A4060[OBJPZLBLOCK_GET_1000(&this->dyna.actor)];
 
-        this->dyna.actor.objBankIndex = this->unk_17A;
+        this->dyna.actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->dyna.actor);
         DynaPolyActor_LoadMesh(play, &this->dyna, sp2C->unk_04);
         this->dyna.actor.update = func_809A3E58;

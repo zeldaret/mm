@@ -19,15 +19,15 @@ void ObjYasi_Update(Actor* thisx, PlayState* play);
 void ObjYasi_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Yasi_InitVars = {
-    ACTOR_OBJ_YASI,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_OBJ_YASI,
-    sizeof(ObjYasi),
-    (ActorFunc)ObjYasi_Init,
-    (ActorFunc)ObjYasi_Destroy,
-    (ActorFunc)ObjYasi_Update,
-    (ActorFunc)ObjYasi_Draw,
+    /**/ ACTOR_OBJ_YASI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_OBJ_YASI,
+    /**/ sizeof(ObjYasi),
+    /**/ ObjYasi_Init,
+    /**/ ObjYasi_Destroy,
+    /**/ ObjYasi_Update,
+    /**/ ObjYasi_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -69,17 +69,17 @@ void ObjYasi_Update(Actor* thisx, PlayState* play) {
                 dropPos.x = this->dyna.actor.world.pos.x;
                 dropPos.y = this->dyna.actor.world.pos.y + 280.0f;
                 dropPos.z = this->dyna.actor.world.pos.z;
-                Item_DropCollectible(play, &dropPos, ITEM00_NUTS_1);
+                Item_DropCollectible(play, &dropPos, ITEM00_DEKU_NUTS_1);
             }
         }
         this->dyna.actor.home.rot.y = GET_PLAYER(play)->actor.shape.rot.y;
         this->dyna.actor.home.rot.x = 400;
         this->dyna.actor.home.rot.z = 0;
     }
-    temp = (s16)(this->dyna.actor.shape.rot.x * 0.1f);
+    temp = TRUNCF_BINANG(this->dyna.actor.shape.rot.x * 0.1f);
     this->dyna.actor.home.rot.x -= temp;
     this->dyna.actor.shape.rot.x +=
-        BINANG_SUB(this->dyna.actor.home.rot.x, (s16)(this->dyna.actor.shape.rot.x * 0.08f));
+        BINANG_SUB(this->dyna.actor.home.rot.x, TRUNCF_BINANG(this->dyna.actor.shape.rot.x * 0.08f));
 }
 
 void ObjYasi_Draw(Actor* thisx, PlayState* play) {

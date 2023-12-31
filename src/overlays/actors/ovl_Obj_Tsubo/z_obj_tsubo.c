@@ -20,11 +20,11 @@ void ObjTsubo_Update(Actor* thisx, PlayState* play);
 void ObjTsubo_Draw(Actor* thisx, PlayState* play2);
 
 void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play);
-void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play);
+void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play);
 void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2);
-void ObjTsubo_RacePotBreak2(ObjTsubo* this, PlayState* play2);
+void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2);
 void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2);
-void ObjTsubo_RacePotBreak3(ObjTsubo* this, PlayState* play2);
+void ObjTsubo_MagicPotBreak3(ObjTsubo* this, PlayState* play2);
 void func_80928914(ObjTsubo* this);
 void func_80928928(ObjTsubo* this, PlayState* play);
 void func_809289B4(ObjTsubo* this);
@@ -42,19 +42,19 @@ s16 D_80929508 = 0;
 s16 D_8092950C = 0;
 
 ActorInit Obj_Tsubo_InitVars = {
-    ACTOR_OBJ_TSUBO,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjTsubo),
-    (ActorFunc)ObjTsubo_Init,
-    (ActorFunc)ObjTsubo_Destroy,
-    (ActorFunc)ObjTsubo_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_TSUBO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjTsubo),
+    /**/ ObjTsubo_Init,
+    /**/ ObjTsubo_Destroy,
+    /**/ ObjTsubo_Update,
+    /**/ NULL,
 };
 
 typedef struct {
-    /* 0x00 */ s16 objId;
+    /* 0x00 */ s16 objectId;
     /* 0x04 */ f32 scale;
     /* 0x08 */ Gfx* modelDL;
     /* 0x0C */ Gfx* shardDL;
@@ -68,10 +68,9 @@ typedef struct {
 ObjTsuboData sPotTypeData[4] = {
     { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
       ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
-    { OBJECT_RACETSUBO, 0.29549998f, object_racetsubo_DL_000278, object_racetsubo_DL_001610, 18, 45,
-      ObjTsubo_RacePotBreak1, ObjTsubo_RacePotBreak2, ObjTsubo_RacePotBreak3 },
-    { OBJECT_TSUBO, 0.197f, object_tsubo_DL_0017C0, object_tsubo_DL_001960, 12, 32, ObjTsubo_PotBreak1,
-      ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
+    { OBJECT_RACETSUBO, 0.29549998f, gMagicPotDL, gMagicPotShardDL, 18, 45, ObjTsubo_MagicPotBreak1,
+      ObjTsubo_MagicPotBreak2, ObjTsubo_MagicPotBreak3 },
+    { OBJECT_TSUBO, 0.197f, gPotDL, gPotShardDL, 12, 32, ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
     { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
       ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
 };
@@ -102,7 +101,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-s32 func_809275C0(ObjTsubo* this, PlayState* play) {
+bool func_809275C0(ObjTsubo* this, PlayState* play) {
     s32 chestFlag = -1;
     s32 skulltulaParams = (OBJ_TSUBO_P001F(&this->actor) << 2) | 0xFF01;
 
@@ -160,7 +159,7 @@ void func_80927818(ObjTsubo* this, PlayState* play, s32 arg2) {
     }
 }
 
-s32 ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, PlayState* play) {
+bool ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, PlayState* play) {
     return (play->sceneId != SCENE_HAKUGIN_BS) && (play->sceneId != SCENE_INISIE_BS);
 }
 
@@ -187,8 +186,8 @@ void ObjTsubo_Init(Actor* thisx, PlayState* play) {
     this->cylinderCollider.dim.radius = sPotTypeData[type].radius;
     this->cylinderCollider.dim.height = sPotTypeData[type].height;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->objBankIndex = Object_GetIndex(&play->objectCtx, sPotTypeData[type].objId);
-    if (this->objBankIndex < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, sPotTypeData[type].objectId);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -247,13 +246,13 @@ void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play) {
         }
         scale = Rand_ZeroOne() * 110.0f + 15.0f;
         EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -260, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
-                             typeData->objId, typeData->shardDL);
+                             typeData->objectId, typeData->shardDL);
     }
     func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 20, 50, true);
     func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 10, 80, true);
 }
 
-void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play) {
+void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play) {
     s16 rot;
     s32 phi_s0;
     s32 i;
@@ -286,7 +285,7 @@ void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play) {
         }
         scale = Rand_ZeroOne() * 160.0f + 15.0f;
         EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -340, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
-                             typeData->objId, typeData->shardDL);
+                             typeData->objectId, typeData->shardDL);
     }
     func_800BBFB0(play, &this->actor.world.pos, 50.0f, 2, 40, 50, true);
     func_800BBFB0(play, &this->actor.world.pos, 50.0f, 2, 20, 80, true);
@@ -308,8 +307,8 @@ void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
     pos.y = worldPos->y + this->actor.depthInWater;
 
     for (rot = 0, i = 0; i < 5; i++, rot += 0x10000 / 5) {
-        pos.x = Math_SinS((s32)(Rand_ZeroOne() * 6000) + rot) * 15.0f + worldPos->x;
-        pos.z = Math_CosS((s32)(Rand_ZeroOne() * 6000) + rot) * 15.0f + worldPos->z;
+        pos.x = worldPos->x + Math_SinS((s32)(Rand_ZeroOne() * 6000) + rot) * 15.0f;
+        pos.z = worldPos->z + Math_CosS((s32)(Rand_ZeroOne() * 6000) + rot) * 15.0f;
         EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 350);
     }
     pos.x = worldPos->x;
@@ -331,12 +330,12 @@ void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
             phi_s0 = 0x20;
         }
         scale = Rand_ZeroOne() * 105.0f + 10.0f;
-        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1, typeData->objId,
-                             typeData->shardDL);
+        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1,
+                             typeData->objectId, typeData->shardDL);
     }
 }
 
-void ObjTsubo_RacePotBreak2(ObjTsubo* this, PlayState* play2) {
+void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2) {
     PlayState* play = (PlayState*)play2;
     s32 pad;
     s16 rot;
@@ -353,8 +352,8 @@ void ObjTsubo_RacePotBreak2(ObjTsubo* this, PlayState* play2) {
     pos.y = this->actor.world.pos.y + this->actor.depthInWater;
 
     for (rot = 0, i = 0; i < 5; i++, rot += 0x10000 / 5) {
-        pos.x = Math_SinS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f + worldPos->x;
-        pos.z = Math_CosS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f + worldPos->z;
+        pos.x = worldPos->x + Math_SinS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f;
+        pos.z = worldPos->z + Math_CosS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f;
         EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 350);
     }
     pos.x = worldPos->x;
@@ -376,8 +375,8 @@ void ObjTsubo_RacePotBreak2(ObjTsubo* this, PlayState* play2) {
             phi_s0 = 0xA0;
         }
         scale = (Rand_ZeroOne() * 150.0f) + 10.0f;
-        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1, typeData->objId,
-                             typeData->shardDL);
+        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1,
+                             typeData->objectId, typeData->shardDL);
     }
 }
 
@@ -413,7 +412,7 @@ void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2) {
             phi_s0 = 0x20;
         }
         EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -170, phi_s0, 50, 3, 0,
-                             (Rand_ZeroOne() * 105.0f) + 10.0f, 0, 0, 70, -1, typeData->objId, typeData->shardDL);
+                             (Rand_ZeroOne() * 105.0f) + 10.0f, 0, 0, 70, -1, typeData->objectId, typeData->shardDL);
     }
     for (i = 0; i < 7; i++) {
         EffectSsBubble_Spawn(play, &this->actor.world.pos, 20.0f, 30.0f, 40.0f, (Rand_ZeroOne() * 0.06f) + 0.09f);
@@ -421,7 +420,7 @@ void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2) {
     }
 }
 
-void ObjTsubo_RacePotBreak3(ObjTsubo* this, PlayState* play2) {
+void ObjTsubo_MagicPotBreak3(ObjTsubo* this, PlayState* play2) {
 }
 
 void func_80928914(ObjTsubo* this) {
@@ -431,8 +430,8 @@ void func_80928914(ObjTsubo* this) {
 void func_80928928(ObjTsubo* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
-    if (Object_IsLoaded(&play->objectCtx, this->objBankIndex)) {
-        this->actor.objBankIndex = this->objBankIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         func_809289B4(this);
     }
 }

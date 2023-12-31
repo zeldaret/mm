@@ -23,15 +23,15 @@ void func_80A60D10(BgSpoutFire* this, PlayState* play);
 void func_80A60E08(BgSpoutFire* this, PlayState* play);
 
 ActorInit Bg_Spout_Fire_InitVars = {
-    ACTOR_BG_SPOUT_FIRE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_FWALL,
-    sizeof(BgSpoutFire),
-    (ActorFunc)BgSpoutFire_Init,
-    (ActorFunc)BgSpoutFire_Destroy,
-    (ActorFunc)BgSpoutFire_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_SPOUT_FIRE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_FWALL,
+    /**/ sizeof(BgSpoutFire),
+    /**/ BgSpoutFire_Init,
+    /**/ BgSpoutFire_Destroy,
+    /**/ BgSpoutFire_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -74,6 +74,7 @@ void BgSpoutFire_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->collider.dim.pos.y = this->actor.world.pos.y;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
+
     if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sFlameTextures); i++) {
             sFlameTextures[i] = Lib_SegmentedToVirtual(sFlameTextures[i]);
@@ -179,7 +180,7 @@ void BgSpoutFire_Update(Actor* thisx, PlayState* play) {
         func_80A60E08(this, play);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-        func_800B9010(&this->actor, NA_SE_EV_FIRE_PLATE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FIRE_PLATE - SFX_FLAG);
     }
 }
 

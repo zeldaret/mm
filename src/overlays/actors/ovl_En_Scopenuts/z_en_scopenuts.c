@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_dnt/object_dnt.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnScopenuts*)thisx)
 
@@ -30,19 +30,19 @@ void func_80BCBD28(EnScopenuts* this, PlayState* play);
 void func_80BCBF0C(EnScopenuts* this, PlayState* play);
 void func_80BCBFFC(EnScopenuts* this, PlayState* play);
 void func_80BCC288(EnScopenuts* this, PlayState* play);
-s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_);
+s32 EnScopenuts_HasReachedPoint(EnScopenuts* this, Path* path, s32 pointIndex);
 f32 func_80BCC448(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
 ActorInit En_Scopenuts_InitVars = {
-    ACTOR_EN_SCOPENUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNT,
-    sizeof(EnScopenuts),
-    (ActorFunc)EnScopenuts_Init,
-    (ActorFunc)EnScopenuts_Destroy,
-    (ActorFunc)EnScopenuts_Update,
-    (ActorFunc)EnScopenuts_Draw,
+    /**/ ACTOR_EN_SCOPENUTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNT,
+    /**/ sizeof(EnScopenuts),
+    /**/ EnScopenuts_Init,
+    /**/ EnScopenuts_Destroy,
+    /**/ EnScopenuts_Update,
+    /**/ EnScopenuts_Draw,
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {
@@ -65,47 +65,47 @@ static ColliderCylinderInitType1 sCylinderInit = {
 };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &object_dnt_Anim_005488, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnt_Anim_00B0B4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnt_Anim_004AA0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnt_Anim_004E38, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnt_Anim_0029E8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnt_Anim_005CA8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnt_Anim_0038CC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnt_Anim_003CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnt_Anim_0012F4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnt_Anim_004700, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnt_Anim_003438, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnt_Anim_001E2C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnt_Anim_000994, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnt_Anim_002268, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnt_Anim_002F08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnt_Anim_00577C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnt_Anim_0029E8, 1.0f, 8, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnt_Anim_0029E8, 1.0f, 4, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnt_Anim_0029E8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnt_Anim_0012F4, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnt_Anim_002670, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubStandingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBusinessScrubWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBusinessScrubRiseUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubExcitedStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubExcitedLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBusinessScrubExcitedEndAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBusinessScrubTakeOffHatAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubFlyStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubFlyLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBusinessScrubShockedStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubShockedShakeHeadAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBusinessScrubShockedPoundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBusinessScrubShockedEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubThinkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBusinessScrubBobAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gBusinessScrubBurrowAnim, 1.0f, 8, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubBurrowAnim, 1.0f, 4, -1, ANIMMODE_ONCE, -4 },
+    { &gBusinessScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubFlyLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBusinessScrubTakeOffHatAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gBusinessScrubFlyEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-Gfx* D_80BCCCDC[] = { gKakeraLeafMiddle, gKakeraLeafTip };
+Gfx* D_80BCCCDC[] = { gKakeraLeafMiddleDL, gKakeraLeafTipDL };
 
 Vec3f D_80BCCCE4 = { 0.0f, -0.5f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
 s16 func_80BCABF0(Path* path) {
-    Vec3s* sp34 = Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     Vec3f sp28;
     Vec3f sp1C;
 
-    Math_Vec3s_ToVec3f(&sp28, &sp34[0]);
-    Math_Vec3s_ToVec3f(&sp1C, &sp34[1]);
+    Math_Vec3s_ToVec3f(&sp28, &points[0]);
+    Math_Vec3s_ToVec3f(&sp1C, &points[1]);
     return Math_Vec3f_Yaw(&sp28, &sp1C);
 }
 
@@ -211,12 +211,12 @@ void func_80BCB078(EnScopenuts* this, PlayState* play) {
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
-        Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 10, 300, 0);
+        Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 10, 0x12C, 0);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->unk_33E = 0x1000;
         this->unk_340 += 0x1C71;
         this->actor.world.rot.x = -sp30.x;
-        if (func_80BCC2AC(this, this->path, this->unk_334)) {
+        if (EnScopenuts_HasReachedPoint(this, this->path, this->unk_334)) {
             if (this->unk_334 >= (this->path->count - 1)) {
                 this->actionFunc = func_80BCB1C8;
                 this->actor.speed = 0.0f;
@@ -293,16 +293,16 @@ void func_80BCB4DC(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCB52C(EnScopenuts* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 2000, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_33C = func_80BCAF0C(this);
         Message_StartTextbox(play, this->unk_33C, &this->actor);
         this->actionFunc = func_80BCB6D0;
     } else if (((this->actor.xzDistToPlayer < 100.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
-               this->actor.isTargeted) {
-        func_800B8614(&this->actor, play, 100.0f);
+               this->actor.isLockedOn) {
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     } else if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
                !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         this->unk_348 = 4;
@@ -318,9 +318,9 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_328 & 1) {
                 this->unk_328 &= ~1;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->unk_328 &= ~4;
                 this->unk_348 = 8;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 8);
@@ -335,20 +335,20 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_358) {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1636;
                         this->unk_328 |= 1;
                         Message_StartTextbox(play, this->unk_33C, &this->actor);
                     } else {
-                        func_8019F208();
-                        play->msgCtx.msgMode = 0x43;
+                        Audio_PlaySfx_MessageDecide();
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         Rupees_ChangeBy(-this->unk_358);
                         this->actionFunc = func_80BCB90C;
                     }
                     break;
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     if (this->unk_358 == 150) {
                         this->unk_33C = 0x1633;
                     } else {
@@ -360,7 +360,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
             }
         }
     } else if (talkState == TEXT_STATE_DONE) {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_80BCB980;
     }
 }
@@ -376,13 +376,13 @@ void func_80BCB90C(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCB980(EnScopenuts* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_33C = 0x1637;
         this->unk_328 |= 1;
         Message_StartTextbox(play, this->unk_33C, &this->actor);
         this->actionFunc = func_80BCB6D0;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -508,7 +508,7 @@ void func_80BCBD28(EnScopenuts* this, PlayState* play) {
         this->actor.shape.yOffset = 1500.0f;
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_372, 3, 2000, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_372, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (DECR(this->unk_34E) == 0) {
@@ -569,9 +569,9 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
         }
 
         if (this->unk_334 < 6) {
-            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 300, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 0x12C, 0);
         } else {
-            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 1500, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 0x5DC, 0);
         }
 
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -579,7 +579,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
         this->unk_340 += this->unk_34C;
         this->actor.world.rot.x = -sp38.x;
 
-        if (func_80BCC2AC(this, this->path, this->unk_334)) {
+        if (EnScopenuts_HasReachedPoint(this, this->path, this->unk_334)) {
             sp32 = 1;
         }
 
@@ -629,49 +629,50 @@ void func_80BCC288(EnScopenuts* this, PlayState* play) {
     Actor_Kill(&this->actor);
 }
 
-s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_) {
-    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
-    s32 sp58 = path->count;
-    s32 arg2 = arg2_;
-    s32 sp50 = false;
-    f32 phi_f12;
-    f32 phi_f14;
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
-    Vec3f sp30;
+s32 EnScopenuts_HasReachedPoint(EnScopenuts* this, Path* path, s32 pointIndex) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 count = path->count;
+    s32 index = pointIndex;
+    s32 reached = false;
+    f32 diffX;
+    f32 diffZ;
+    f32 px;
+    f32 pz;
+    f32 d;
+    Vec3f point;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
+    Math_Vec3s_ToVec3f(&point, &points[index]);
 
-    if (arg2 == 0) {
-        phi_f12 = sp5C[1].x - sp5C[0].x;
-        phi_f14 = sp5C[1].z - sp5C[0].z;
-    } else if ((sp58 - 1) == arg2) {
-        phi_f12 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
-        phi_f14 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
+    if (index == 0) {
+        diffX = points[1].x - points[0].x;
+        diffZ = points[1].z - points[0].z;
+    } else if (index == (count - 1)) {
+        diffX = points[count - 1].x - points[count - 2].x;
+        diffZ = points[count - 1].z - points[count - 2].z;
     } else {
-        phi_f12 = sp5C[arg2 + 1].x - sp5C[arg2 - 1].x;
-        phi_f14 = sp5C[arg2 + 1].z - sp5C[arg2 - 1].z;
+        diffX = points[index + 1].x - points[index - 1].x;
+        diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
-    if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
-        sp50 = true;
+    if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
+        reached = true;
     }
-    return sp50;
+
+    return reached;
 }
 
 f32 func_80BCC448(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
-    Vec3s* temp_v1;
+    Vec3s* points;
     Vec3f sp20;
 
     if (path != NULL) {
-        temp_v1 = Lib_SegmentedToVirtual(path->points);
-        temp_v1 = &temp_v1[arg1];
-        sp20.x = temp_v1[0].x;
-        sp20.y = temp_v1[0].y;
-        sp20.z = temp_v1[0].z;
+        points = Lib_SegmentedToVirtual(path->points);
+        points = &points[arg1];
+        sp20.x = points[0].x;
+        sp20.y = points[0].y;
+        sp20.z = points[0].z;
     }
 
     arg3->y = Math_Vec3f_Yaw(arg2, &sp20);
@@ -685,13 +686,13 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     EnScopenuts* this = THIS;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40) &&
-        (gSaveContext.save.saveInfo.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
+        (gSaveContext.save.saveInfo.inventory.items[ITEM_OCARINA_OF_TIME] == ITEM_NONE)) {
         Actor_Kill(&this->actor);
         return;
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dnt_Skel_00AC70, &object_dnt_Anim_005488, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBusinessScrubSkel, &gBusinessScrubStandingAnim, this->jointTable,
                        this->morphTable, 28);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
@@ -707,7 +708,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             Actor_Kill(&this->actor);
-        } else if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+        } else if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
             this->path =
                 SubS_GetPathByIndex(play, ENSCOPENUTS_GET_PATH_INDEX(&this->actor), ENSCOPENUTS_PATH_INDEX_NONE);
             this->actor.draw = NULL;
@@ -757,7 +758,7 @@ void EnScopenuts_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_328 & 8) {
-        func_800B9010(&this->actor, NA_SE_EN_AKINDO_FLY - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_AKINDO_FLY - SFX_FLAG);
     }
     func_80BCAE78(this, play);
 }
@@ -794,9 +795,9 @@ s32 EnScopenuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 
     if (limbIndex == 26) {
         if ((this->unk_33C == 0x162F) || (this->unk_33C == 0x1630)) {
-            *dList = object_dnt_DL_001420;
+            *dList = gBusinessScrubEyesSquintDL;
         } else {
-            *dList = object_dnt_DL_008290;
+            *dList = gBusinessScrubEyesDL;
         }
     }
 

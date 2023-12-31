@@ -6,7 +6,7 @@
 
 #include "z_en_bubble.h"
 
-#define FLAGS (ACTOR_FLAG_1)
+#define FLAGS (ACTOR_FLAG_TARGETABLE)
 
 #define THIS ((EnBubble*)thisx)
 
@@ -20,15 +20,15 @@ void EnBubble_Pop(EnBubble* this, PlayState* play);
 void EnBubble_Regrow(EnBubble* this, PlayState* play);
 
 ActorInit En_Bubble_InitVars = {
-    ACTOR_EN_BUBBLE,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BUBBLE,
-    sizeof(EnBubble),
-    (ActorFunc)EnBubble_Init,
-    (ActorFunc)EnBubble_Destroy,
-    (ActorFunc)EnBubble_Update,
-    (ActorFunc)EnBubble_Draw,
+    /**/ ACTOR_EN_BUBBLE,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BUBBLE,
+    /**/ sizeof(EnBubble),
+    /**/ EnBubble_Init,
+    /**/ EnBubble_Destroy,
+    /**/ EnBubble_Update,
+    /**/ EnBubble_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -77,7 +77,7 @@ void EnBubble_SetDimensions(EnBubble* this, f32 dim) {
     f32 z;
     f32 norm;
 
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 1.0f);
     this->actor.shape.yOffset = 16.0f;
     this->modelRotSpeed = 16.0f;
@@ -144,7 +144,7 @@ s32 EnBubble_Explosion(EnBubble* this, PlayState* play) {
                                           &sEffectEnvColor, Rand_S16Offset(100, 50), 25, 0);
     }
     Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0x50);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     return Rand_S16Offset(90, 60);
 }
 
@@ -238,7 +238,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->bounceDirection = bounceDirection;
         bounceCount = this->bounceCount;
         this->bounceCount = ++bounceCount;
-        if (bounceCount > (s16)(Rand_ZeroOne() * 10.0f)) {
+        if (bounceCount > TRUNCF_BINANG(Rand_ZeroOne() * 10.0f)) {
             this->bounceCount = 0;
         }
         bounceSpeed = (this->bounceCount == 0) ? 3.6000001f : 3.0f;
@@ -257,7 +257,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
         this->bounceDirection = bounceDirection;
         bounceCount = this->bounceCount;
         this->bounceCount = ++bounceCount;
-        if (bounceCount > (s16)(Rand_ZeroOne() * 10.0f)) {
+        if (bounceCount > TRUNCF_BINANG(Rand_ZeroOne() * 10.0f)) {
             this->bounceCount = 0;
         }
         bounceSpeed = (this->bounceCount == 0) ? 3.6000001f : 3.0f;
@@ -333,7 +333,8 @@ void EnBubble_Init(Actor* thisx, PlayState* play) {
     Collider_InitJntSph(play, &this->colliderSphere);
     Collider_SetJntSph(play, &this->colliderSphere, &this->actor, &sJntSphInit, this->colliderElements);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(9), &sColChkInfoInit);
-    this->actor.hintId = 0x16;
+    //! @bug: hint Id not correctly migrated from OoT `NAVI_ENEMY_SHABOM`
+    this->actor.hintId = TATL_HINT_ID_IGOS_DU_IKANA;
     this->bounceDirection.x = Rand_ZeroOne();
     this->bounceDirection.y = Rand_ZeroOne();
     this->bounceDirection.z = Rand_ZeroOne();

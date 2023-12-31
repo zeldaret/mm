@@ -1,4 +1,5 @@
 #include "global.h"
+#include "buffers.h"
 
 u32 D_801C5E30[] = { 0, 0x2000, 0x4000, 0x6000, 0x8000, 0xC000 };
 
@@ -193,7 +194,7 @@ void Skybox_Setup(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) 
     switch (skyboxId) {
         case SKYBOX_NORMAL_SKY:
             // Send a DMA request for the cloudy sky texture
-            skyboxCtx->staticSegments[0] = &D_80025D00;
+            skyboxCtx->staticSegments[0] = gLoBuffer.skyboxBuffer;
             size = SEGMENT_ROM_SIZE(d2_cloud_static);
             segment = (void*)ALIGN8((uintptr_t)skyboxCtx->staticSegments[0] + size);
             DmaMgr_SendRequest0(skyboxCtx->staticSegments[0], SEGMENT_ROM_START(d2_cloud_static), size);
@@ -294,15 +295,15 @@ void Skybox_Init(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) {
     Skybox_Setup(gameState, skyboxCtx, skyboxId);
 
     if (skyboxId != SKYBOX_NONE) {
-        skyboxCtx->dListBuf = THA_AllocTailAlign16(&gameState->heap, 0x3840);
+        skyboxCtx->dListBuf = THA_AllocTailAlign16(&gameState->tha, 0x3840);
 
         if (skyboxId == SKYBOX_CUTSCENE_MAP) {
             // Allocate enough space for the vertices for a 6 sided skybox (cube)
-            skyboxCtx->roomVtx = THA_AllocTailAlign16(&gameState->heap, sizeof(Vtx) * 32 * 6);
+            skyboxCtx->roomVtx = THA_AllocTailAlign16(&gameState->tha, sizeof(Vtx) * 32 * 6);
             func_80143148(skyboxCtx, 6);
         } else {
             // Allocate enough space for the vertices for a 5 sided skybox (bottom is missing)
-            skyboxCtx->roomVtx = THA_AllocTailAlign16(&gameState->heap, sizeof(Vtx) * 32 * 5);
+            skyboxCtx->roomVtx = THA_AllocTailAlign16(&gameState->tha, sizeof(Vtx) * 32 * 5);
             func_80143148(skyboxCtx, 5);
         }
     }

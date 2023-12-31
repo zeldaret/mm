@@ -17,15 +17,15 @@ void EnScopecoin_Update(Actor* thisx, PlayState* play);
 void EnScopecoin_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Scopecoin_InitVars = {
-    ACTOR_EN_SCOPECOIN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnScopecoin),
-    (ActorFunc)EnScopecoin_Init,
-    (ActorFunc)EnScopecoin_Destroy,
-    (ActorFunc)EnScopecoin_Update,
-    (ActorFunc)EnScopecoin_Draw,
+    /**/ ACTOR_EN_SCOPECOIN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnScopecoin),
+    /**/ EnScopecoin_Init,
+    /**/ EnScopecoin_Destroy,
+    /**/ EnScopecoin_Update,
+    /**/ EnScopecoin_Draw,
 };
 
 void EnScopecoin_Spin(EnScopecoin* this, PlayState* play) {
@@ -50,7 +50,7 @@ void EnScopecoin_Init(Actor* thisx, PlayState* play) {
         this->rupeeIndex = 0;
     }
 
-    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
         if ((this->rupeeIndex == 2) || (this->rupeeIndex == 6)) {
             if (Flags_GetCollectible(play, OBJMUPICT_GET_RUPEE_FLAG(&this->actor))) {
                 Actor_Kill(&this->actor);

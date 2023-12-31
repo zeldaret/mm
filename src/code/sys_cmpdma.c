@@ -1,5 +1,5 @@
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 
 typedef struct {
     /* 0x0 */ union {
@@ -43,9 +43,9 @@ void func_80178AC0(u16* src, void* dst, size_t size) {
     }
 }
 
-void CmpDma_GetFileInfo(u8* segmentRom, s32 id, uintptr_t* outFileRom, size_t* size, s32* flag) {
-    u32 dataStart;
-    u32 refOff;
+void CmpDma_GetFileInfo(uintptr_t segmentRom, s32 id, uintptr_t* outFileRom, size_t* size, s32* flag) {
+    uintptr_t dataStart;
+    uintptr_t refOff;
 
     DmaMgr_DmaRomToRam(segmentRom, &sDmaBuffer.dataStart, sizeof(sDmaBuffer.dataStart));
 
@@ -53,12 +53,12 @@ void CmpDma_GetFileInfo(u8* segmentRom, s32 id, uintptr_t* outFileRom, size_t* s
     refOff = id * sizeof(u32);
 
     // if id is >= idMax
-    if (refOff > (dataStart - 4)) {
+    if (refOff > (dataStart - sizeof(u32))) {
         *outFileRom = segmentRom;
         *size = 0;
     } else if (refOff == 0) {
         // get offset start of next file, i.e. size of first file
-        DmaMgr_DmaRomToRam(segmentRom + 4, &sDmaBuffer.dataSize, sizeof(sDmaBuffer.dataSize));
+        DmaMgr_DmaRomToRam(segmentRom + sizeof(u32), &sDmaBuffer.dataSize, sizeof(sDmaBuffer.dataSize));
         *outFileRom = segmentRom + dataStart;
         *size = sDmaBuffer.dataSize;
     } else {
@@ -83,11 +83,11 @@ void CmpDma_LoadFileImpl(uintptr_t segmentRom, s32 id, void* dst, size_t size) {
 
     CmpDma_GetFileInfo(segmentRom, id, &romStart, &compressedSize, &flag);
     if (flag & 1) {
-        void* tempBuf = SystemArena_Malloc(0x1000);
+        void* tempBuf = malloc(0x1000);
 
         CmpDma_Decompress(romStart, compressedSize, tempBuf);
         func_80178AC0(tempBuf, dst, size);
-        SystemArena_Free(tempBuf);
+        free(tempBuf);
     } else {
         CmpDma_Decompress(romStart, compressedSize, dst);
     }

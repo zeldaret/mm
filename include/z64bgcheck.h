@@ -223,6 +223,8 @@ typedef enum ConveyorSpeed {
     /* 4 */ CONVEYOR_SPEED_MAX
 } ConveyorSpeed;
 
+#define CONVEYOR_DIRECTION_TO_BINANG(conveyorDirection) ((conveyorDirection) * (0x10000 / 64))
+
 typedef struct {
     /* 0x0 */ u32 data[2];
 
@@ -333,7 +335,7 @@ typedef struct {
     /* 0x1414 */ s32 vtxListMax;
 } DynaCollisionContext; // size = 0x1418
 
-typedef struct {
+typedef struct CollisionContext {
     /* 0x0000 */ CollisionHeader* colHeader; // scene's static collision
     /* 0x0004 */ Vec3f minBounds;            // minimum coordinates of collision bounding box
     /* 0x0010 */ Vec3f maxBounds;            // maximum coordinates of collision bounding box

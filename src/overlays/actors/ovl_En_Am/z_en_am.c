@@ -7,8 +7,9 @@
 #include "z_en_am.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_4 | ACTOR_FLAG_1)
+#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnAm*)thisx)
 
@@ -30,23 +31,21 @@ void func_808B057C(EnAm* this);
 void func_808B05C8(EnAm* this, PlayState* play);
 void func_808B0640(EnAm* this);
 void func_808B066C(EnAm* this, PlayState* play);
-void EnAm_TakeDamage(EnAm* this, PlayState* play);
 void func_808B07A8(EnAm* this, PlayState* play);
 void func_808B0820(EnAm* this);
 void func_808B0894(EnAm* this, PlayState* play);
 void func_808B0B4C(EnAm* this, PlayState* play);
-void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Am_InitVars = {
-    ACTOR_EN_AM,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_AM,
-    sizeof(EnAm),
-    (ActorFunc)EnAm_Init,
-    (ActorFunc)EnAm_Destroy,
-    (ActorFunc)EnAm_Update,
-    (ActorFunc)EnAm_Draw,
+    /**/ ACTOR_EN_AM,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_AM,
+    /**/ sizeof(EnAm),
+    /**/ EnAm_Init,
+    /**/ EnAm_Destroy,
+    /**/ EnAm_Update,
+    /**/ EnAm_Draw,
 };
 
 static ColliderCylinderInit sEnemyCylinderInit = {
@@ -145,23 +144,6 @@ static Color_RGBA8 D_808B1120 = { 150, 150, 150, 255 };
 
 static Color_RGBA8 D_808B1124 = { 100, 100, 100, 150 };
 
-static Vec3f D_808B1128[] = {
-    { 4700.0f, -500.0f, 1800.0f }, { 4700.0f, -500.0f, -1800.0f }, { 2000.0f, -1500.0f, 0.0f },
-    { 2000.0f, 0.0f, -1500.0f },   { 2000.0f, 0.0f, 1500.0f },
-};
-
-static Vec3f D_808B1164[] = {
-    { 0.0f, -3000.0f, 0.0f },
-    { 700.0f, -800.0f, 0.0f },
-};
-
-static Vec3f D_808B117C[] = {
-    { 800.0f, 1000.0f, -1000.0f },
-    { 800.0f, 1000.0f, 1000.0f },
-    { 800.0f, -1000.0f, 1000.0f },
-    { 800.0f, -1000.0f, -1000.0f },
-};
-
 void EnAm_Init(Actor* thisx, PlayState* play) {
     EnAm* this = THIS;
 
@@ -199,13 +181,13 @@ void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
         EffectSsKirakira_SpawnSmall(play, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
     }
     Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_WALK);
-    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, 0);
+    Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 4.0f, 3, 8.0f, 300, 15, false);
 }
 
 void func_808AFF9C(EnAm* this) {
-    f32 lastFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
+    f32 endFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
 
-    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, lastFrame, lastFrame, ANIMMODE_LOOP, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, endFrame, endFrame, ANIMMODE_LOOP, 0.0f);
     this->enemyCollider.info.bumper.dmgFlags = 0x80000088;
     this->interactCollider.info.bumper.dmgFlags = 0x77CFFF77;
     if (this->actor.colChkInfo.health != 0) {
@@ -225,7 +207,7 @@ void EnAm_RemoveEnemyTexture(EnAm* this, PlayState* play) {
         this->textureBlend -= 10;
     } else {
         this->textureBlend = 0;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->unkFlag = 0;
     }
 }
@@ -246,7 +228,7 @@ void EnAm_ApplyEnemyTexture(EnAm* this, PlayState* play) {
 
     if (this->textureBlend + 20 >= 255) {
         this->textureBlend = 255;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->enemyCollider.info.bumper.dmgFlags = 0x81C2C788;
         this->interactCollider.info.bumper.dmgFlags = 0x760D3877;
         this->enemyCollider.base.atFlags |= AT_ON;
@@ -379,8 +361,9 @@ void func_808B066C(EnAm* this, PlayState* play) {
 }
 
 void EnAm_TakeDamage(EnAm* this, PlayState* play) {
-    Animation_Change(&this->skelAnime, &gArmosTakeDamageAnim, 1.0f, 4.0f,
-                     Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6, ANIMMODE_ONCE, 0.0f);
+    f32 endFrame = Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6;
+
+    Animation_Change(&this->skelAnime, &gArmosTakeDamageAnim, 1.0f, 4.0f, endFrame, ANIMMODE_ONCE, 0.0f);
     func_800BE504(&this->actor, &this->enemyCollider);
     this->actor.speed = 6.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA,
@@ -483,7 +466,7 @@ s32 EnAm_UpdateDamage(EnAm* this, PlayState* play) {
             this->drawDmgEffAlpha = 4.0f;
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->enemyCollider.info.bumper.hitPos.x,
                         this->enemyCollider.info.bumper.hitPos.y, this->enemyCollider.info.bumper.hitPos.z, 0, 0, 0,
-                        CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         EnAm_TakeDamage(this, play);
         return true;
@@ -530,6 +513,26 @@ void EnAm_Update(Actor* thisx, PlayState* play) {
     this->drawDmgEffScale = (this->drawDmgEffScale > 0.7f) ? 0.7f : this->drawDmgEffScale;
 }
 
+static Vec3f D_808B1128[] = {
+    { 4700.0f, -500.0f, 1800.0f },  // ENAM_BODYPART_0
+    { 4700.0f, -500.0f, -1800.0f }, // ENAM_BODYPART_1
+    { 2000.0f, -1500.0f, 0.0f },    // ENAM_BODYPART_2
+    { 2000.0f, 0.0f, -1500.0f },    // ENAM_BODYPART_3
+    { 2000.0f, 0.0f, 1500.0f },     // ENAM_BODYPART_4
+};
+
+static Vec3f D_808B1164[] = {
+    { 0.0f, -3000.0f, 0.0f },  // ENAM_BODYPART_5, ENAM_BODYPART_7
+    { 700.0f, -800.0f, 0.0f }, // ENAM_BODYPART_6, ENAM_BODYPART_8
+};
+
+static Vec3f D_808B117C[] = {
+    { 800.0f, 1000.0f, -1000.0f },  // ENAM_BODYPART_9
+    { 800.0f, 1000.0f, 1000.0f },   // ENAM_BODYPART_10
+    { 800.0f, -1000.0f, 1000.0f },  // ENAM_BODYPART_11
+    { 800.0f, -1000.0f, -1000.0f }, // ENAM_BODYPART_12
+};
+
 void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 i;
     s32 phi_s3;
@@ -539,18 +542,19 @@ void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     phi_s2 = 0;
     phi_s1 = 0;
-    if (limbIndex == 4) {
-        phi_s2 = &this->limbPos[0];
+    if (limbIndex == OBJECT_AM_LIMB_04) {
+        phi_s2 = &this->bodyPartsPos[ENAM_BODYPART_0];
         phi_s1 = D_808B1128;
-        phi_s3 = 5;
-    } else if (limbIndex == 13) {
-        phi_s2 = &this->limbPos[9];
+        phi_s3 = ARRAY_COUNT(D_808B1128);
+    } else if (limbIndex == OBJECT_AM_LIMB_0D) {
+        phi_s2 = &this->bodyPartsPos[ENAM_BODYPART_9];
         phi_s1 = D_808B117C;
-        phi_s3 = 4;
-    } else if ((limbIndex == 7) || (limbIndex == 10)) {
-        phi_s2 = (limbIndex == 7) ? &this->limbPos[5] : &this->limbPos[7];
+        phi_s3 = ARRAY_COUNT(D_808B117C);
+    } else if ((limbIndex == OBJECT_AM_LIMB_07) || (limbIndex == OBJECT_AM_LIMB_0A)) {
+        phi_s2 = (limbIndex == OBJECT_AM_LIMB_07) ? &this->bodyPartsPos[ENAM_BODYPART_5]
+                                                  : &this->bodyPartsPos[ENAM_BODYPART_7];
         phi_s1 = D_808B1164;
-        phi_s3 = 2;
+        phi_s3 = ARRAY_COUNT(D_808B1164);
     } else {
         phi_s3 = 0;
     }
@@ -571,7 +575,7 @@ void EnAm_Draw(Actor* thisx, PlayState* play) {
     POLY_OPA_DISP = &gfx[2];
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnAm_PostLimbDraw,
                       &this->actor);
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale, 0.0f,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ENAM_BODYPART_MAX, this->drawDmgEffScale, 0.0f,
                             this->drawDmgEffAlpha, ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
     CLOSE_DISPS(play->state.gfxCtx);

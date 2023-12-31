@@ -2,15 +2,25 @@
 #define Z_EN_OT_H
 
 #include "global.h"
+#include "objects/object_ot/object_ot.h"
 
 struct EnOt;
 
 typedef void (*EnOtActionFunc)(struct EnOt*, PlayState*);
 
-#define ENOT_GET_7F(thisx) ((thisx)->params & 0x7F)
-#define ENOT_GET_3F80(thisx) (((thisx)->params >> 7) & 0x7F)
-#define ENOT_GET_3FFF(thisx) ((thisx)->params & 0x3FFF)
-#define ENOT_GET_C000(thisx) (((thisx)->params >> 0xE) & 3)
+#define SEAHORSE_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
+#define SEAHORSE_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 7) & 0x7F)
+#define SEAHORSE_GET_TYPE(thisx) (((thisx)->params >> 0xE) & 3)
+
+#define SEAHORSE_PARAMS(type, pathIndex, switchFlag) (((pathIndex) & 0x7F) | (((switchFlag) & 0x7F) << 7) | (((type) & 3) << 0xE))
+#define SEAHORSE_PARAMS_PARTNER(thisx, type) (((thisx)->params & 0x3FFF) | (((type) & 3) << 0xE))
+
+typedef enum SeahorseType {
+    /* 0 */ SEAHORSE_TYPE_0,
+    /* 1 */ SEAHORSE_TYPE_1,
+    /* 2 */ SEAHORSE_TYPE_2,
+    /* 3 */ SEAHORSE_TYPE_3
+} SeahorseType;
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
@@ -33,16 +43,16 @@ typedef struct EnOt {
     /* 0x144 */ EnOtActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ Vec3s jointTable[19];
-    /* 0x24A */ Vec3s morphTable[19];
+    /* 0x1D8 */ Vec3s jointTable[OBJECT_OT_LIMB_MAX];
+    /* 0x24A */ Vec3s morphTable[OBJECT_OT_LIMB_MAX];
     /* 0x2BC */ s32 animIndex;
     /* 0x2C0 */ ActorPathing actorPath;
     /* 0x32C */ u16 unk_32C;
     /* 0x330 */ Vec3f unk_330;
-    /* 0x33C */ s32 unk_33C;
+    /* 0x33C */ s32 type;
     /* 0x340 */ s32 unk_340;
     /* 0x344 */ s16 unk_344;
-    /* 0x346 */ s16 unk_346;
+    /* 0x346 */ s16 pathIndex;
     /* 0x348 */ Vec3f unk_348;
     /* 0x354 */ s16 unk_354;
     /* 0x356 */ s16 csIdList[4];

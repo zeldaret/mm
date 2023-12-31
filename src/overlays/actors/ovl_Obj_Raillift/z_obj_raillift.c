@@ -29,15 +29,15 @@ void ObjRaillift_Wait(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Move(ObjRaillift* this, PlayState* play);
 
 ActorInit Obj_Raillift_InitVars = {
-    ACTOR_OBJ_RAILLIFT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_RAILLIFT,
-    sizeof(ObjRaillift),
-    (ActorFunc)ObjRaillift_Init,
-    (ActorFunc)ObjRaillift_Destroy,
-    (ActorFunc)ObjRaillift_Update,
-    (ActorFunc)ObjRaillift_Draw,
+    /**/ ACTOR_OBJ_RAILLIFT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_RAILLIFT,
+    /**/ sizeof(ObjRaillift),
+    /**/ ObjRaillift_Init,
+    /**/ ObjRaillift_Destroy,
+    /**/ ObjRaillift_Update,
+    /**/ ObjRaillift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -50,7 +50,7 @@ static InitChainEntry sInitChain[] = {
 static CollisionHeader* sColHeaders[] = { &object_raillift_Colheader_004FF8, &object_raillift_Colheader_0048D0 };
 
 void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 index) {
-    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->points[index]);
+    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->pathPoints[index]);
 }
 
 void ObjRaillift_Init(Actor* thisx, PlayState* play) {
@@ -90,9 +90,9 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
         this->curPoint = OBJRAILLIFT_GET_STARTING_POINT(thisx);
         this->endPoint = path->count - 1;
         this->direction = 1;
-        this->points = Lib_SegmentedToVirtual(path->points);
+        this->pathPoints = Lib_SegmentedToVirtual(path->points);
         ObjRaillift_UpdatePosition(this, this->curPoint);
-        if (OBJRAILLIFT_HAS_FLAG(thisx) && !Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(thisx))) {
+        if (OBJRAILLIFT_HAS_FLAG(thisx) && !Flags_GetSwitch(play, OBJRAILLIFT_GET_SWITCH_FLAG(thisx))) {
             this->actionFunc = ObjRaillift_Idle;
         } else {
             this->actionFunc = ObjRaillift_Move;
@@ -120,17 +120,17 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
     Vec3s* endPoint;
 
     if (OBJRAILLIFT_HAS_FLAG(thisx)) {
-        if (!Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(thisx))) {
+        if (!Flags_GetSwitch(play, OBJRAILLIFT_GET_SWITCH_FLAG(thisx))) {
             this->actionFunc = ObjRaillift_Idle;
             return;
         }
 
         if (OBJRAILLIFT_GET_TYPE(thisx) == DEKU_FLOWER_PLATFORM) {
-            func_800B9010(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
         }
     }
 
-    Math_Vec3s_ToVec3f(&nextPoint, this->points + this->curPoint + this->direction);
+    Math_Vec3s_ToVec3f(&nextPoint, this->pathPoints + this->curPoint + this->direction);
     Math_Vec3f_Diff(&nextPoint, &thisx->world.pos, &thisx->velocity);
     speed = Math3D_Vec3fMagnitude(&thisx->velocity);
     if ((speed < (this->speed * 8.0f)) && (this->speed > 2.0f)) {
@@ -159,10 +159,10 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
                 this->waitTimer = 10;
                 this->actionFunc = ObjRaillift_Wait;
             } else {
-                endPoint = &this->points[this->endPoint];
+                endPoint = &this->pathPoints[this->endPoint];
                 this->curPoint = this->direction > 0 ? 0 : this->endPoint;
-                if ((this->points[0].x != endPoint->x) || (this->points[0].y != endPoint->y) ||
-                    (this->points[0].z != endPoint->z)) {
+                if ((this->pathPoints[0].x != endPoint->x) || (this->pathPoints[0].y != endPoint->y) ||
+                    (this->pathPoints[0].z != endPoint->z)) {
                     this->actionFunc = ObjRaillift_Teleport;
                     DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     isPosUpdated = false;
@@ -196,7 +196,7 @@ void ObjRaillift_Wait(ObjRaillift* this, PlayState* play) {
 }
 
 void ObjRaillift_Idle(ObjRaillift* this, PlayState* play) {
-    if (Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJRAILLIFT_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->dyna.actor.speed = 0.0f;
         CutsceneManager_Queue(this->dyna.actor.csId);
         this->actionFunc = ObjRaillift_StartCutscene;
@@ -215,8 +215,6 @@ void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play) {
 
 void ObjRaillift_Update(Actor* thisx, PlayState* play) {
     ObjRaillift* this = THIS;
-    f32 target;
-    f32 step;
 
     this->actionFunc(this, play);
     Actor_SetFocus(thisx, 10.0f);
@@ -227,7 +225,8 @@ void ObjRaillift_Update(Actor* thisx, PlayState* play) {
         }
     }
     if (OBJRAILLIFT_REACT_TO_PLAYER_ON_TOP(thisx)) {
-        s32 requiredScopeTemp;
+        f32 target;
+        f32 step;
 
         this->isPlayerOnTopPrev = this->isPlayerOnTop;
         this->isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna) ? true : false;

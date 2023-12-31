@@ -8,7 +8,7 @@
 #include "z64quake.h"
 #include "z64rumble.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BossHakugin*)thisx)
 
@@ -35,15 +35,15 @@ void func_80B0A8C4(BossHakugin* this, PlayState* play);
 
 #if 0
 ActorInit Boss_Hakugin_InitVars = {
-    ACTOR_BOSS_HAKUGIN,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS_HAKUGIN,
-    sizeof(BossHakugin),
-    (ActorFunc)BossHakugin_Init,
-    (ActorFunc)BossHakugin_Destroy,
-    (ActorFunc)BossHakugin_Update,
-    (ActorFunc)BossHakugin_Draw,
+    /**/ ACTOR_BOSS_HAKUGIN,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS_HAKUGIN,
+    /**/ sizeof(BossHakugin),
+    /**/ BossHakugin_Init,
+    /**/ BossHakugin_Destroy,
+    /**/ BossHakugin_Update,
+    /**/ BossHakugin_Draw,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[19] = {
@@ -203,7 +203,7 @@ static CollisionCheckInfoInit D_80B0EA80 = { 30, 80, 100, MASS_IMMOVABLE };
 static InitChainEntry D_80B0EAD8[] = {
     ICHAIN_S8(hintId, 27, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 27, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 5, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 

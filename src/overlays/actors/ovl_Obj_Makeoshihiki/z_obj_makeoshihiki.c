@@ -14,21 +14,21 @@ void ObjMakeoshihiki_Init(Actor* thisx, PlayState* play);
 void ObjMakeoshihiki_Update(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Makeoshihiki_InitVars = {
-    ACTOR_OBJ_MAKEOSHIHIKI,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjMakeoshihiki),
-    (ActorFunc)ObjMakeoshihiki_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)ObjMakeoshihiki_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_MAKEOSHIHIKI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjMakeoshihiki),
+    /**/ ObjMakeoshihiki_Init,
+    /**/ Actor_Noop,
+    /**/ ObjMakeoshihiki_Update,
+    /**/ NULL,
 };
 
 s32 ObjMakeoshihiki_GetChildSpawnPointIndex(ObjMakeoshihiki* this, PlayState* play) {
     s32 pad;
-    s32 pathIndexOffset1 = Flags_GetSwitch(play, OBJMAKEOSHIHIKI_GET_SWITCHFLAG_1(&this->actor)) ? 1 : 0;
-    s32 pathIndexOffset2 = Flags_GetSwitch(play, OBJMAKEOSHIHIKI_GET_SWITCHFLAG_2(&this->actor)) ? 2 : 0;
+    s32 pathIndexOffset1 = Flags_GetSwitch(play, OBJMAKEOSHIHIKI_GET_SWITCH_FLAG_1(&this->actor)) ? 1 : 0;
+    s32 pathIndexOffset2 = Flags_GetSwitch(play, OBJMAKEOSHIHIKI_GET_SWITCH_FLAG_2(&this->actor)) ? 2 : 0;
 
     return pathIndexOffset1 + pathIndexOffset2;
 }
@@ -39,8 +39,8 @@ void ObjMakeoshihiki_SetSwitchFlags(ObjMakeoshihiki* this, PlayState* play, s32 
     s32 switchFlag1;
     s32 switchFlag2;
 
-    switchFlag2 = OBJMAKEOSHIHIKI_GET_SWITCHFLAG_2(&this->actor);
-    switchFlag1 = OBJMAKEOSHIHIKI_GET_SWITCHFLAG_1(&this->actor);
+    switchFlag2 = OBJMAKEOSHIHIKI_GET_SWITCH_FLAG_2(&this->actor);
+    switchFlag1 = OBJMAKEOSHIHIKI_GET_SWITCH_FLAG_1(&this->actor);
 
     if (pathIndex & 2) {
         Flags_SetSwitch(play, switchFlag2);

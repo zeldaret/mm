@@ -9,9 +9,10 @@ struct EnLookNuts;
 typedef void (*EnLookNutsActionFunc)(struct EnLookNuts*, PlayState*);
 
 #define LOOKNUTS_GET_SPAWN_INDEX(thisx) (((thisx)->params >> 0xC) & 0xF)
-#define LOOKNUTS_GET_SCENE_FLAG(thisx) ((thisx)->params & 0x7F)
+#define LOOKNUTS_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define LOOKNUTS_GET_PATH_INDEX(thisx) (((thisx)->params >> 0x7) & 0x1F)
 
+#define LOOKNUTS_SWITCH_FLAG_NONE 0x7F
 #define LOOKNUTS_PATH_INDEX_NONE 0x1F
 
 typedef struct EnLookNuts {
@@ -31,8 +32,8 @@ typedef struct EnLookNuts {
     /* 0x222 */ s16 isPlayerDetected;
     /* 0x224 */ s16 waitTimer; // Timer for how long the deku guard will take a break for
     /* 0x226 */ s16 spawnIndex;
-    /* 0x228 */ UNK_TYPE4 pad228; // Unused necessary padding
-    /* 0x22C */ Vec3f headRotation;
+    /* 0x228 */ UNK_TYPE1 pad228[0x4];
+    /* 0x22C */ Vec3f headRot;
     /* 0x238 */ Vec3f headRotTarget; // Target value for head rotation
     /* 0x244 */ ColliderCylinder collider;
 } EnLookNuts; // size = 0x290

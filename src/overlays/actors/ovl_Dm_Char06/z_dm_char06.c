@@ -16,18 +16,18 @@ void DmChar06_Update(Actor* thisx, PlayState* play);
 void DmChar06_Draw(Actor* thisx, PlayState* play);
 
 void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc);
-void func_80AAE6F0(DmChar06* this, PlayState* play);
+void DmChar06_HandleCutscene(DmChar06* this, PlayState* play);
 
 ActorInit Dm_Char06_InitVars = {
-    ACTOR_DM_CHAR06,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_YUKIYAMA,
-    sizeof(DmChar06),
-    (ActorFunc)DmChar06_Init,
-    (ActorFunc)DmChar06_Destroy,
-    (ActorFunc)DmChar06_Update,
-    (ActorFunc)DmChar06_Draw,
+    /**/ ACTOR_DM_CHAR06,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_YUKIYAMA,
+    /**/ sizeof(DmChar06),
+    /**/ DmChar06_Init,
+    /**/ DmChar06_Destroy,
+    /**/ DmChar06_Update,
+    /**/ DmChar06_Draw,
 };
 
 void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc) {
@@ -40,13 +40,13 @@ void DmChar06_Init(Actor* thisx, PlayState* play) {
     SET_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE);
     Actor_SetScale(&this->actor, 1.0f);
     this->alpha = 255;
-    DmChar06_SetupAction(this, func_80AAE6F0);
+    DmChar06_SetupAction(this, DmChar06_HandleCutscene);
 }
 
 void DmChar06_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80AAE6F0(DmChar06* this, PlayState* play) {
+void DmChar06_HandleCutscene(DmChar06* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_463)) {
         s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_463);
 

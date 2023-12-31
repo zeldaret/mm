@@ -2,13 +2,14 @@
 #define Z_EN_FU_H
 
 #include "global.h"
+#include "objects/object_mu/object_mu.h"
 #include "overlays/actors/ovl_Bg_Fu_Mizu/z_bg_fu_mizu.h"
 
 struct EnFu;
 
 typedef void (*EnFuActionFunc)(struct EnFu*, PlayState*);
 
-#define ENFU_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
+#define ENFU_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -27,8 +28,8 @@ typedef struct EnFu {
     /* 0x144 */ ColliderCylinder collider;
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnFuActionFunc actionFunc;
-    /* 0x1D8 */ Vec3s jointTable[21];
-    /* 0x256 */ Vec3s morphTable[21];
+    /* 0x1D8 */ Vec3s jointTable[HONEY_AND_DARLING_LIMB_MAX];
+    /* 0x256 */ Vec3s morphTable[HONEY_AND_DARLING_LIMB_MAX];
     /* 0x2D4 */ BgFuMizu* unk_2D4;
     /* 0x2D8 */ EnFuUnkStruct unk_2D8[10];
     /* 0x508 */ Vec3f unk_508;
@@ -37,7 +38,7 @@ typedef struct EnFu {
     /* 0x524 */ s16 unk_524[3];
     /* 0x52A */ s16 unk_52A[3];
     /* 0x530 */ UNK_TYPE1 unk530[0x8];
-    /* 0x538 */ Vec3s* unk_538;
+    /* 0x538 */ Vec3s* pathPoints;
     /* 0x53C */ s16 unk_53C;
     /* 0x53E */ s16 unk_53E;
     /* 0x540 */ s16 unk_540;

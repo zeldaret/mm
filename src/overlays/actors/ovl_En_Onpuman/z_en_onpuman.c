@@ -6,7 +6,7 @@
 
 #include "z_en_onpuman.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnOnpuman*)thisx)
 
@@ -17,15 +17,15 @@ void EnOnpuman_Update(Actor* thisx, PlayState* play);
 void func_80B121D8(EnOnpuman* this, PlayState* play);
 
 ActorInit En_Onpuman_InitVars = {
-    ACTOR_EN_ONPUMAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnOnpuman),
-    (ActorFunc)EnOnpuman_Init,
-    (ActorFunc)EnOnpuman_Destroy,
-    (ActorFunc)EnOnpuman_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_ONPUMAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnOnpuman),
+    /**/ EnOnpuman_Init,
+    /**/ EnOnpuman_Destroy,
+    /**/ EnOnpuman_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -56,7 +56,7 @@ void EnOnpuman_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->unk_2A4 = 0;
     this->unk_2A0 = NULL;
     this->actionFunc = func_80B121D8;
@@ -84,14 +84,14 @@ Actor* func_80B11F44(PlayState* play) {
 }
 
 void func_80B11F78(EnOnpuman* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode == 4) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
         this->actionFunc = func_80B121D8;
         if (this->actor.csId != CS_ID_NONE) {
             CutsceneManager_Stop(this->actor.csId);
         }
-    } else if (play->msgCtx.ocarinaMode == 3) {
-        play_sound(NA_SE_SY_CORRECT_CHIME);
-        play->msgCtx.ocarinaMode = 4;
+    } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
+        Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         if (this->actor.csId != CS_ID_NONE) {
             CutsceneManager_Stop(this->actor.csId);
         }
@@ -102,7 +102,7 @@ void func_80B11F78(EnOnpuman* this, PlayState* play) {
 void func_80B1202C(EnOnpuman* this, PlayState* play2) {
     PlayState* play = play2;
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && (Message_ShouldAdvance(play))) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x8D4:
                 this->unk_2A4 |= 1;
@@ -118,10 +118,13 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
 
             case 0x8D6:
                 this->actionFunc = func_80B11F78;
-                func_80152434(play, 0x3A);
+                Message_DisplayOcarinaStaff(play, OCARINA_ACTION_3A);
                 if (this->unk_2A0 != NULL) {
                     this->unk_2A0->home.rot.x = 0;
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -138,7 +141,7 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
 }
 
 void func_80B1217C(EnOnpuman* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && (Message_ShouldAdvance(play))) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = func_80B121D8;
         Message_CloseTextbox(play);
     }
@@ -151,14 +154,14 @@ void func_80B121D8(EnOnpuman* this, PlayState* play) {
         this->actionFunc = func_80B1202C;
         Message_StartTextbox(play, 0x8D4, NULL);
         this->unk_2A0 = func_80B11F44(play);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B1217C;
     } else {
         yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         if (this->actor.xzDistToPlayer < 200.0f) {
             if (ABS_ALT(yaw) <= 0x4300) {
                 this->actor.textId = 0x8D3;
-                func_800B8614(&this->actor, play, 100.0f);
+                Actor_OfferTalk(&this->actor, play, 100.0f);
                 func_800B874C(&this->actor, play, 100.0f, 100.0f);
             }
         }

@@ -6,9 +6,8 @@
 
 #include "z_en_gm.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
-#include "objects/object_in2/object_in2.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnGm*)thisx)
 
@@ -156,15 +155,15 @@ static s32 D_80951C2C[] = { 0x0E295A2D, 0x000A0C10 };
 static s32 D_80951C34[] = { 0x0E29622D, 0x000A0C10 };
 
 ActorInit En_Gm_InitVars = {
-    ACTOR_EN_GM,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_IN2,
-    sizeof(EnGm),
-    (ActorFunc)EnGm_Init,
-    (ActorFunc)EnGm_Destroy,
-    (ActorFunc)EnGm_Update,
-    (ActorFunc)EnGm_Draw,
+    /**/ ACTOR_EN_GM,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_IN2,
+    /**/ sizeof(EnGm),
+    /**/ EnGm_Init,
+    /**/ EnGm_Destroy,
+    /**/ EnGm_Update,
+    /**/ EnGm_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -209,20 +208,38 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &object_in2_Anim_009CDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_in2_Anim_009CDC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in2_Anim_00A5E0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_in2_Anim_00A70C, 1.0f, 0, 1, ANIMMODE_LOOP, 0 },
-    { &object_in2_Anim_008090, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_in2_Anim_00898C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_in2_Anim_009450, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_in2_Anim_00AD18, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_in2_Anim_00AD18, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in2_Anim_00B8B0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_in2_Anim_00BA80, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in2_Anim_00C03C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_in2_Anim_00B990, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+typedef enum {
+    /*  -1 */ ENGM_ANIM_NONE = -1,
+    /* 0x0 */ ENGM_ANIM_0,
+    /* 0x1 */ ENGM_ANIM_1,
+    /* 0x2 */ ENGM_ANIM_2,
+    /* 0x3 */ ENGM_ANIM_3,
+    /* 0x4 */ ENGM_ANIM_4,
+    /* 0x5 */ ENGM_ANIM_5,
+    /* 0x6 */ ENGM_ANIM_6,
+    /* 0x7 */ ENGM_ANIM_7,
+    /* 0x8 */ ENGM_ANIM_8,
+    /* 0x9 */ ENGM_ANIM_9,
+    /* 0xA */ ENGM_ANIM_10,
+    /* 0xB */ ENGM_ANIM_11,
+    /* 0xC */ ENGM_ANIM_12,
+    /* 0xD */ ENGM_ANIM_MAX
+} EnGmAnimation;
+
+static AnimationInfoS sAnimationInfo[ENGM_ANIM_MAX] = {
+    { &object_in2_Anim_009CDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENGM_ANIM_0
+    { &object_in2_Anim_009CDC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENGM_ANIM_1
+    { &object_in2_Anim_00A5E0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENGM_ANIM_2
+    { &object_in2_Anim_00A70C, 1.0f, 0, 1, ANIMMODE_LOOP, 0 },   // ENGM_ANIM_3
+    { &object_in2_Anim_008090, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENGM_ANIM_4
+    { &object_in2_Anim_00898C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENGM_ANIM_5
+    { &object_in2_Anim_009450, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENGM_ANIM_6
+    { &object_in2_Anim_00AD18, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENGM_ANIM_7
+    { &object_in2_Anim_00AD18, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENGM_ANIM_8
+    { &object_in2_Anim_00B8B0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENGM_ANIM_9
+    { &object_in2_Anim_00BA80, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENGM_ANIM_10
+    { &object_in2_Anim_00C03C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENGM_ANIM_11
+    { &object_in2_Anim_00B990, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENGM_ANIM_12
 };
 
 Actor* func_8094DEE0(EnGm* this, PlayState* play, u8 arg2, s16 arg3) {
@@ -286,43 +303,43 @@ EnDoor* func_8094DF90(PlayState* play, s32 arg1) {
     return SubS_FindDoor(play, phi_a1);
 }
 
-s32 func_8094DFF8(EnGm* this, PlayState* play) {
-    s32 ret = false;
+s32 EnGm_UpdateSkelAnime(EnGm* this, PlayState* play) {
+    s32 isAnimFinished = false;
 
-    if (this->unk_262 < 0) {
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         return false;
     }
 
-    if (this->unk_262 >= 0) {
-        this->skelAnime.playSpeed = this->unk_3A8;
-        ret = SkelAnime_Update(&this->skelAnime);
+    if (this->objectSlot > OBJECT_SLOT_NONE) {
+        this->skelAnime.playSpeed = this->animPlaySpeed;
+        isAnimFinished = SkelAnime_Update(&this->skelAnime);
     }
 
-    return ret;
+    return isAnimFinished;
 }
 
-s32 func_8094E054(EnGm* this, PlayState* play, s32 arg2) {
-    s8 tmp = this->unk_262;
-    s32 phi_v1 = false;
-    s32 ret = false;
+s32 EnGm_ChangeAnim(EnGm* this, PlayState* play, s32 animIndex) {
+    s8 tmp = this->objectSlot;
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
-    if ((arg2 == 0) || (arg2 == 1)) {
-        if ((this->unk_3E8 != 0) && (this->unk_3E8 != 1)) {
-            phi_v1 = true;
+    if ((animIndex == ENGM_ANIM_0) || (animIndex == ENGM_ANIM_1)) {
+        if ((this->animIndex != ENGM_ANIM_0) && (this->animIndex != ENGM_ANIM_1)) {
+            changeAnim = true;
         }
-    } else if (arg2 != this->unk_3E8) {
-        phi_v1 = true;
+    } else if (this->animIndex != animIndex) {
+        changeAnim = true;
     }
 
-    if (phi_v1) {
+    if (changeAnim) {
         if (tmp >= 0) {
-            this->unk_3E8 = arg2;
-            ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
-            this->unk_3A8 = this->skelAnime.playSpeed;
+            this->animIndex = animIndex;
+            didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+            this->animPlaySpeed = this->skelAnime.playSpeed;
         }
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 s32 func_8094E0F8(EnGm* this, PlayState* play) {
@@ -330,7 +347,7 @@ s32 func_8094E0F8(EnGm* this, PlayState* play) {
 
     if ((this->unk_260 != play->roomCtx.curRoom.num) && (play->roomCtx.status == 0)) {
         this->unk_260 = play->roomCtx.curRoom.num;
-        this->unk_262 = SubS_GetObjectIndex(OBJECT_IN2, play);
+        this->objectSlot = SubS_GetObjectSlot(OBJECT_IN2, play);
         this->actor.draw = NULL;
         this->unk_3FC = 1;
     }
@@ -339,7 +356,7 @@ s32 func_8094E0F8(EnGm* this, PlayState* play) {
         return false;
     }
 
-    if ((this->unk_262 < 0) || !SubS_IsObjectLoaded(this->unk_262, play)) {
+    if ((this->objectSlot <= OBJECT_SLOT_NONE) || !SubS_IsObjectLoaded(this->objectSlot, play)) {
         ret = true;
     } else {
         this->actor.draw = EnGm_Draw;
@@ -486,6 +503,9 @@ s32 func_8094E52C(EnGm* this, PlayState* play) {
             this->unk_3E0++;
             ret = true;
             break;
+
+        default:
+            break;
     }
 
     return ret;
@@ -502,7 +522,7 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
     switch (this->unk_3E0) {
         case 0:
             Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
-            func_8094E054(this, play, 2);
+            EnGm_ChangeAnim(this, play, ENGM_ANIM_2);
             this->unk_3E2 = 0;
             this->unk_3E0++;
             break;
@@ -558,6 +578,7 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
             this->unk_3E2 = 0;
             this->unk_3E0++;
             break;
+
         case 9:
             sp48 = this->actor.world.rot.y;
             this->unk_3E2++;
@@ -565,12 +586,15 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
                 Math_ApproachS(&this->actor.shape.rot.y, sp48, 3, 0x2AA8);
                 this->unk_3A4 &= ~0x20;
             } else {
-                func_8094E054(this, play, 1);
+                EnGm_ChangeAnim(this, play, ENGM_ANIM_1);
                 this->actor.shape.rot.y = sp48;
                 this->unk_3E0++;
                 this->unk_3E2 = 0;
                 ret = true;
             }
+            break;
+
+        default:
             break;
     }
     return ret;
@@ -639,7 +663,7 @@ s32 func_8094EB1C(EnGm* this, PlayState* play) {
                 break;
             }
             Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
-            func_8094E054(this, play, 2);
+            EnGm_ChangeAnim(this, play, ENGM_ANIM_2);
             this->unk_3E2 = 0;
             this->unk_3E0++;
 
@@ -669,7 +693,7 @@ s32 func_8094EB1C(EnGm* this, PlayState* play) {
                 Math_ApproachS(&this->actor.shape.rot.y, oldYaw, 3, 0x2AA8);
                 this->unk_3A4 &= ~0x20;
             } else {
-                func_8094E054(this, play, 1);
+                EnGm_ChangeAnim(this, play, ENGM_ANIM_1);
                 this->actor.shape.rot.y = oldYaw;
                 this->unk_3E2 = 0;
                 this->unk_3E0++;
@@ -732,28 +756,27 @@ s32* func_8094EDBC(EnGm* this, PlayState* play) {
 s32 func_8094EE84(EnGm* this, PlayState* play) {
     s32 ret = false;
 
-    if (this->unk_3A4 & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            SubS_UpdateFlags(&this->unk_3A4, 0, 7);
-            this->unk_3E0 = 0;
-            this->unk_3E4 = NULL;
-            this->actor.child = this->unk_268;
-            this->unk_264 = func_8094EDBC(this, play);
+    if (((this->unk_3A4 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        this->unk_3E0 = 0;
+        this->unk_3E4 = NULL;
+        this->actor.child = this->unk_268;
+        this->unk_264 = func_8094EDBC(this, play);
 
-            if ((this->unk_258 == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) &&
-                !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
-                this->unk_3A4 |= 0x20;
-            } else if ((this->unk_258 != 1) && (this->unk_258 != 5) && (this->unk_258 != 7)) {
-                this->unk_3A4 |= 0x20;
-            }
-
-            if ((this->unk_258 == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_01)) {
-                this->unk_3A4 &= ~0x20;
-            }
-
-            this->actionFunc = func_80950DB8;
-            ret = true;
+        if ((this->unk_258 == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) &&
+            !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
+            this->unk_3A4 |= 0x20;
+        } else if ((this->unk_258 != 1) && (this->unk_258 != 5) && (this->unk_258 != 7)) {
+            this->unk_3A4 |= 0x20;
         }
+
+        if ((this->unk_258 == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_01)) {
+            this->unk_3A4 &= ~0x20;
+        }
+
+        this->actionFunc = func_80950DB8;
+        ret = true;
     }
     return ret;
 }
@@ -764,7 +787,7 @@ s32 func_8094EFC4(EnGm* this, PlayState* play) {
     if (play->csCtx.state != CS_STATE_IDLE) {
         if (this->unk_3F8 == 0) {
             if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.sceneLayer == 2)) {
-                func_8094E054(this, play, 0);
+                EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
                 this->unk_258 = 255;
             }
             this->cueId = 255;
@@ -822,7 +845,7 @@ void func_8094F0E0(EnGm* this) {
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
 
     if (this->unk_268->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_268)->bodyPartsPos[7].y + 3.0f;
+        sp40.y = ((Player*)this->unk_268)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_268->focus.pos);
     }
@@ -880,9 +903,9 @@ void func_8094F3D0(EnGm* this, PlayState* play) {
 }
 
 s32 func_8094F4EC(EnGm* this, PlayState* play) {
-    if ((this->unk_258 != 6) && (this->unk_3E8 == 12)) {
+    if ((this->unk_258 != 6) && (this->animIndex == ENGM_ANIM_12)) {
         this->unk_3A4 &= ~0x2000;
-        func_8094E054(this, play, 8);
+        EnGm_ChangeAnim(this, play, ENGM_ANIM_8);
     }
     return true;
 }
@@ -898,30 +921,30 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
         if (this->unk_3A6 != sp32) {
             switch (sp32) {
                 case 0x2B13:
-                    func_8094E054(this, play, 2);
+                    EnGm_ChangeAnim(this, play, ENGM_ANIM_2);
                     break;
 
                 case 0x2B14:
                 case 0x2B18:
-                    func_8094E054(this, play, 0);
+                    EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
                     break;
 
                 case 0x2B16:
-                    func_8094E054(this, play, 1);
+                    EnGm_ChangeAnim(this, play, ENGM_ANIM_1);
                     break;
 
                 case 0x2B15:
-                    func_8094E054(this, play, 5);
+                    EnGm_ChangeAnim(this, play, ENGM_ANIM_5);
                     break;
 
                 case 0x2B17:
-                    func_8094E054(this, play, 6);
+                    EnGm_ChangeAnim(this, play, ENGM_ANIM_6);
                     break;
 
                 default:
-                    if ((this->unk_3E8 == 7) || (this->unk_3E8 == 8)) {
+                    if ((this->animIndex == ENGM_ANIM_7) || (this->animIndex == ENGM_ANIM_8)) {
                         this->unk_3A4 |= 0x2000;
-                        func_8094E054(this, play, 12);
+                        EnGm_ChangeAnim(this, play, ENGM_ANIM_12);
                     }
                     break;
             }
@@ -941,6 +964,9 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
                     if ((toto != NULL) && (toto->update != NULL)) {
                         this->unk_268 = toto;
                     }
+                    break;
+
+                default:
                     break;
             }
 
@@ -964,7 +990,7 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
         this->unk_18C(this, play);
     }
 
-    if ((this->unk_3E8 == 6) && !(play->actorCtx.flags & ACTORCTX_FLAG_5) &&
+    if ((this->animIndex == ENGM_ANIM_6) && !(play->actorCtx.flags & ACTORCTX_FLAG_5) &&
         Animation_OnFrame(&this->skelAnime, 20.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_HANKO);
     }
@@ -1037,10 +1063,10 @@ s32 func_8094F904(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
             this->unk_3B8 = scheduleOutput->time1 - scheduleOutput->time0;
             this->unk_3BA = sp56 - scheduleOutput->time0;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->unk_3A4 |= 0x100;
             this->unk_3A4 |= 0x200;
-            func_8094E054(this, play, 7);
+            EnGm_ChangeAnim(this, play, ENGM_ANIM_7);
             this->actor.gravity = 0.0f;
             ret = true;
         }
@@ -1085,10 +1111,10 @@ s32 func_8094FAC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
         this->unk_3A4 &= ~0x8;
         this->unk_3A4 &= ~0x10;
-        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
-        func_8094E054(this, play, 7);
+        EnGm_ChangeAnim(this, play, ENGM_ANIM_7);
         this->actor.gravity = -1.0f;
         ret = true;
     }
@@ -1102,10 +1128,10 @@ s32 func_8094FCC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_TAB)) {
         if (this->unk_258 == 0) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_80951D90);
-            SubS_UpdateFlags(&this->unk_3A4, 3, 7);
-            func_8094E054(this, play, 0);
+            SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+            EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
         } else {
-            func_8094E054(this, play, 9);
+            EnGm_ChangeAnim(this, play, ENGM_ANIM_9);
             this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_3A4 |= 0x100;
@@ -1119,8 +1145,8 @@ s32 func_8094FD88(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_RECEPGIRL)) {
-        func_8094E054(this, play, 11);
-        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+        EnGm_ChangeAnim(this, play, ENGM_ANIM_11);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
         ret = true;
@@ -1135,8 +1161,8 @@ s32 func_8094FE10(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_TOTO) && (al != NULL) &&
         (al->update != NULL)) {
-        func_8094E054(this, play, 11);
-        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+        EnGm_ChangeAnim(this, play, ENGM_ANIM_11);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_268 = al;
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_20)) {
             this->unk_3C8 = 2;
@@ -1173,15 +1199,15 @@ s32 func_8094FF04(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp3C, &sp30);
         if (this->unk_258 == 0) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_80951D9C);
-            SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+            SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             this->unk_3C8 = 4;
             this->unk_3CA = 4;
             this->unk_3CC = 8;
-            func_8094E054(this, play, 0);
+            EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
             func_8094E278(play);
         } else {
             Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
-            func_8094E054(this, play, 9);
+            EnGm_ChangeAnim(this, play, ENGM_ANIM_9);
             this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_400 = 0;
@@ -1200,10 +1226,10 @@ s32 func_80950088(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80951DA8);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DB4);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+    SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_3A4 |= (0x2000 | 0x100);
     this->unk_3A4 |= 0x200;
-    func_8094E054(this, play, 12);
+    EnGm_ChangeAnim(this, play, ENGM_ANIM_12);
     return true;
 }
 
@@ -1215,10 +1241,10 @@ s32 func_80950120(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80951DBC);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DC8);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+    SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_3A4 |= (0x800 | 0x100);
     this->unk_3A4 |= 0x200;
-    func_8094E054(this, play, 4);
+    EnGm_ChangeAnim(this, play, ENGM_ANIM_4);
     return true;
 }
 
@@ -1230,24 +1256,24 @@ s32 func_809501B8(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80951DD0);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DDC);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    this->actor.targetMode = 6;
-    SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+    this->actor.targetMode = TARGET_MODE_6;
+    SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_3A4 |= (0x1000 | 0x100);
     this->unk_3A4 |= 0x200;
     this->unk_3C8 = 3;
     this->unk_3CA = 3;
     this->unk_3CC = 8;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->unk_3B4 = 60.0f;
-    func_8094E054(this, play, 10);
+    EnGm_ChangeAnim(this, play, ENGM_ANIM_10);
     return true;
 }
 
 s32 func_80950280(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 phi_v1;
 
-    this->actor.flags |= ACTOR_FLAG_1;
-    this->actor.targetMode = 0;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk_3A4 = 0;
     this->unk_3C8 = 0;
     this->unk_3CA = 0;
@@ -1335,11 +1361,11 @@ s32 func_80950388(EnGm* this, PlayState* play) {
 s32 func_809503F8(EnGm* this, PlayState* play) {
     s32 pad;
 
-    if (this->unk_3E8 == 9) {
+    if (this->animIndex == ENGM_ANIM_9) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-            SubS_UpdateFlags(&this->unk_3A4, 3, 7);
-            func_8094E054(this, play, 0);
+            SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+            EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
         } else {
             AnimationContext_SetMoveActor(play, &this->actor, &this->skelAnime, 1.0f);
         }
@@ -1349,7 +1375,8 @@ s32 func_809503F8(EnGm* this, PlayState* play) {
 
 s32 func_80950490(EnGm* this, PlayState* play) {
     static s32 D_80951DE4[] = {
-        1, 5, 5, 1, 6, 5, 1, 5, 6, 1, 5, 6,
+        ENGM_ANIM_1, ENGM_ANIM_5, ENGM_ANIM_5, ENGM_ANIM_1, ENGM_ANIM_6, ENGM_ANIM_5,
+        ENGM_ANIM_1, ENGM_ANIM_5, ENGM_ANIM_6, ENGM_ANIM_1, ENGM_ANIM_5, ENGM_ANIM_6,
     };
     s32 pad;
 
@@ -1359,32 +1386,32 @@ s32 func_80950490(EnGm* this, PlayState* play) {
             this->unk_3CA = 1;
             this->unk_3CC = 8;
             this->unk_400 = 1;
-            func_8094E054(this, play, 3);
+            EnGm_ChangeAnim(this, play, ENGM_ANIM_3);
         }
         return false;
     }
 
     this->unk_400 = 0;
 
-    switch (this->unk_3E8) {
-        case 9:
+    switch (this->animIndex) {
+        case ENGM_ANIM_9:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-                SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+                SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->unk_3C8 = 4;
                 this->unk_3CA = 4;
                 this->unk_3CC = 8;
-                func_8094E054(this, play, 0);
+                EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
                 func_8094E278(play);
             } else {
                 AnimationContext_SetMoveActor(play, &this->actor, &this->skelAnime, 1.0f);
             }
             break;
 
-        case 5:
-        case 6:
+        case ENGM_ANIM_5:
+        case ENGM_ANIM_6:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                func_8094E054(this, play, D_80951DE4[this->unk_3F4]);
+                EnGm_ChangeAnim(this, play, D_80951DE4[this->unk_3F4]);
                 this->unk_3F4++;
                 this->unk_3F4 %= 12;
                 this->unk_3DE = Rand_S16Offset(30, 30);
@@ -1393,7 +1420,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
 
         default:
             if (DECR(this->unk_3DE) == 0) {
-                func_8094E054(this, play, D_80951DE4[this->unk_3F4]);
+                EnGm_ChangeAnim(this, play, D_80951DE4[this->unk_3F4]);
                 this->unk_3F4++;
                 this->unk_3F4 %= 12;
                 this->unk_3DE = Rand_S16Offset(30, 30);
@@ -1434,10 +1461,11 @@ s32 func_80950690(EnGm* this, PlayState* play) {
             break;
 
         case 8:
+        default:
             break;
     }
 
-    SubS_FillLimbRotTables(play, this->unk_3D8, this->unk_3D2, ARRAY_COUNT(this->unk_3D8));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGM_FIDGET_TABLE_LEN);
 
     return false;
 }
@@ -1452,9 +1480,9 @@ s32 func_80950804(EnGm* this, PlayState* play) {
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if ((this->unk_3BA / (f32)this->unk_3B8) <= 0.9f) {
-                door->unk_1A7 = this->unk_261;
+                door->openTimer = this->unk_261;
             } else {
-                door->unk_1A7 = 0;
+                door->openTimer = 0;
             }
         }
 
@@ -1575,6 +1603,9 @@ void func_80950C24(EnGm* this, PlayState* play) {
         case 30:
             func_8095097C(this, play);
             break;
+
+        default:
+            break;
     }
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
@@ -1588,11 +1619,11 @@ void func_80950CDC(EnGm* this, PlayState* play) {
     if (!Schedule_RunScript(play, D_80951820, &sp20) ||
         ((this->unk_258 != sp20.result) && !func_80950280(this, play, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         sp20.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->unk_258 = sp20.result;
     this->unk_268 = func_8094F074(this, play);
@@ -1606,7 +1637,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
     Actor* al;
 
     if (func_8010BF58(&this->actor, play, this->unk_264, this->unk_3E4, &this->unk_25C)) {
-        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
         if ((this->unk_258 == 2) && (al != NULL) && (al->update != NULL)) {
             this->unk_268 = al;
@@ -1626,11 +1657,11 @@ void func_80950DB8(EnGm* this, PlayState* play) {
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&sp34, &sp40), 4, 0x2AA8);
         }
     }
-    SubS_FillLimbRotTables(play, this->unk_3D8, this->unk_3D2, ARRAY_COUNT(this->unk_3D8));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGM_FIDGET_TABLE_LEN);
 }
 
 void func_80950F2C(EnGm* this, PlayState* play) {
-    s32 sp50[] = { 0, 0, 3, 2 };
+    s32 csAnimIndex[] = { ENGM_ANIM_0, ENGM_ANIM_0, ENGM_ANIM_3, ENGM_ANIM_2 };
     Player* player = GET_PLAYER(play);
     s32 pad;
     Vec3f sp3C;
@@ -1645,7 +1676,7 @@ void func_80950F2C(EnGm* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
             }
             this->cueId = cueId;
-            func_8094E054(this, play, sp50[cueId]);
+            EnGm_ChangeAnim(this, play, csAnimIndex[cueId]);
         }
 
         if ((this->cueId == 3) && (this->unk_268 != NULL) && (this->unk_268->update != NULL)) {
@@ -1671,9 +1702,10 @@ void EnGm_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 22.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_in2_Skel_0078B0, NULL, this->jointTable, this->morphTable, 20);
-    this->unk_3E8 = -1;
-    func_8094E054(this, play, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_in2_Skel_0078B0, NULL, this->jointTable, this->morphTable,
+                       OBJECT_IN2_LIMB_MAX);
+    this->animIndex = ENGM_ANIM_NONE;
+    EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
     Collider_InitAndSetSphere(play, &this->colliderSphere, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
@@ -1699,7 +1731,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
     if (!func_8094E0F8(this, play)) {
         if (!func_8094EE84(this, play) && func_8094EFC4(this, play)) {
             func_80950F2C(this, play);
-            func_8094DFF8(this, play);
+            EnGm_UpdateSkelAnime(this, play);
             func_8094E2D0(this);
             return;
         }
@@ -1709,10 +1741,10 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
         func_8094F53C(this, play);
 
         if (this->unk_258 != 0) {
-            func_8094DFF8(this, play);
+            EnGm_UpdateSkelAnime(this, play);
             func_8094E2D0(this);
             func_8094F2E8(this);
-            func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_IA_NONE, this->unk_3A4 & 7);
+            SubS_Offer(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_IA_NONE, this->unk_3A4 & SUBS_OFFER_MODE_MASK);
             if ((this->unk_258 != 3) && (this->unk_258 != 5) && (this->unk_258 != 8)) {
                 Actor_MoveWithGravity(&this->actor);
                 Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
@@ -1725,33 +1757,33 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
 s32 EnGm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnGm* this = THIS;
-    s32 phi_v0;
+    s32 fidgetIndex;
 
-    if (limbIndex == 16) {
+    if (limbIndex == OBJECT_IN2_LIMB_10) {
         func_8094F3D0(this, play);
     }
 
     switch (limbIndex) {
-        case 9:
-            phi_v0 = 0;
+        case OBJECT_IN2_LIMB_09:
+            fidgetIndex = 0;
             break;
 
-        case 10:
-            phi_v0 = 1;
+        case OBJECT_IN2_LIMB_0A:
+            fidgetIndex = 1;
             break;
 
-        case 13:
-            phi_v0 = 2;
+        case OBJECT_IN2_LIMB_0D:
+            fidgetIndex = 2;
             break;
 
         default:
-            phi_v0 = 9;
+            fidgetIndex = 9;
             break;
     }
 
-    if ((this->unk_3A4 & 0x2000) && (phi_v0 < 9)) {
-        rot->y += (s16)(Math_SinS(this->unk_3D8[phi_v0]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->unk_3D2[phi_v0]) * 200.0f);
+    if ((this->unk_3A4 & 0x2000) && (fidgetIndex < 9)) {
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
 
     return false;
@@ -1764,20 +1796,20 @@ void EnGm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     Vec3f sp30;
     s32 pad2;
 
-    if ((CutsceneManager_GetCurrentCsId() == CS_ID_NONE) && (limbIndex == 16)) {
+    if ((CutsceneManager_GetCurrentCsId() == CS_ID_NONE) && (limbIndex == OBJECT_IN2_LIMB_10)) {
         Matrix_MultVec3f(&D_80951E24, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if ((limbIndex == 15) && (this->unk_3A4 & 0x800)) {
+    if ((limbIndex == OBJECT_IN2_LIMB_0F) && (this->unk_3A4 & 0x800)) {
         gSPDisplayList(POLY_OPA_DISP++, object_in2_DL_007528);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    if (limbIndex == 9) {
+    if (limbIndex == OBJECT_IN2_LIMB_09) {
         Matrix_MultVec3f(&gZeroVec3f, &sp30);
         Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp30);
     }
@@ -1800,7 +1832,7 @@ void EnGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         overrideRot = false;
     }
 
-    if (limbIndex == 16) {
+    if (limbIndex == OBJECT_IN2_LIMB_10) {
         SubS_UpdateLimb(BINANG_ADD(this->unk_3BC + this->unk_3C0, 0x4000),
                         BINANG_ADD(this->unk_3BE + this->unk_3C2 + this->actor.shape.rot.y, 0x4000), &this->unk_290,
                         &this->unk_2A8, stepRot, overrideRot);
@@ -1811,7 +1843,7 @@ void EnGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         Matrix_RotateXS(this->unk_2A8.x, MTXMODE_APPLY);
         Matrix_RotateZS(this->unk_2A8.z, MTXMODE_APPLY);
         Matrix_Push();
-    } else if (limbIndex == 9) {
+    } else if (limbIndex == OBJECT_IN2_LIMB_09) {
         SubS_UpdateLimb(BINANG_ADD(this->unk_3C0, 0x4000), BINANG_ADD(this->unk_3C2 + this->actor.shape.rot.y, 0x4000),
                         &this->unk_29C, &this->unk_2AE, stepRot, overrideRot);
         Matrix_Pop();
@@ -1825,11 +1857,13 @@ void EnGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void EnGm_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr D_80951E30[] = { object_in2_Tex_0054A8, object_in2_Tex_005028, object_in2_Tex_006828,
-                                       object_in2_Tex_005028, object_in2_Tex_005CE8, object_in2_Tex_006C68 };
+    static TexturePtr D_80951E30[] = {
+        object_in2_Tex_0054A8, object_in2_Tex_005028, object_in2_Tex_006828,
+        object_in2_Tex_005028, object_in2_Tex_005CE8, object_in2_Tex_006C68,
+    };
     EnGm* this = THIS;
 
-    if ((this->unk_258 != 0) && (this->unk_262 >= 0)) {
+    if ((this->unk_258 != 0) && (this->objectSlot > OBJECT_SLOT_NONE)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

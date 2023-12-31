@@ -27,15 +27,15 @@ void func_80B6DEA8(BgHakaCurtain* this, PlayState* play);
 void func_80B6DE80(BgHakaCurtain* this);
 
 ActorInit Bg_Haka_Curtain_InitVars = {
-    ACTOR_BG_HAKA_CURTAIN,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HAKA_OBJ,
-    sizeof(BgHakaCurtain),
-    (ActorFunc)BgHakaCurtain_Init,
-    (ActorFunc)BgHakaCurtain_Destroy,
-    (ActorFunc)BgHakaCurtain_Update,
-    (ActorFunc)BgHakaCurtain_Draw,
+    /**/ ACTOR_BG_HAKA_CURTAIN,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HAKA_OBJ,
+    /**/ sizeof(BgHakaCurtain),
+    /**/ BgHakaCurtain_Init,
+    /**/ BgHakaCurtain_Destroy,
+    /**/ BgHakaCurtain_Update,
+    /**/ BgHakaCurtain_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -110,7 +110,7 @@ void func_80B6DD9C(BgHakaCurtain* this, PlayState* play) {
         func_80B6DE80(this);
         return;
     }
-    func_800B9010(&this->dyna.actor, NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
 }
 
 void func_80B6DE80(BgHakaCurtain* this) {

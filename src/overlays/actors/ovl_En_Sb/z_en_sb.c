@@ -6,8 +6,9 @@
 
 #include "z_en_sb.h"
 #include "objects/object_sb/object_sb.h"
+#include "overlays/actors/ovl_En_Part/z_en_part.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnSb*)thisx)
 
@@ -26,15 +27,15 @@ void EnSb_Bounce(EnSb* this, PlayState* play);
 void EnSb_ReturnToIdle(EnSb* this, PlayState* play);
 
 ActorInit En_Sb_InitVars = {
-    ACTOR_EN_SB,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_SB,
-    sizeof(EnSb),
-    (ActorFunc)EnSb_Init,
-    (ActorFunc)EnSb_Destroy,
-    (ActorFunc)EnSb_Update,
-    (ActorFunc)EnSb_Draw,
+    /**/ ACTOR_EN_SB,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_SB,
+    /**/ sizeof(EnSb),
+    /**/ EnSb_Init,
+    /**/ EnSb_Destroy,
+    /**/ EnSb_Update,
+    /**/ EnSb_Draw,
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {
@@ -93,7 +94,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_SHELLBLADE, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -166,10 +167,10 @@ void EnSb_SetupWaitOpen(EnSb* this) {
 }
 
 void EnSb_SetupLunge(EnSb* this) {
-    f32 frameCount = Animation_GetLastFrame(&object_sb_Anim_000124);
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_000124);
     f32 playbackSpeed = this->actor.depthInWater > 0.0f ? 1.0f : 0.0f;
 
-    Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0);
+    Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, endFrame, ANIMMODE_ONCE, 0);
     this->state = SHELLBLADE_LUNGE;
     this->actionFunc = EnSb_Lunge;
     Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
@@ -183,10 +184,10 @@ void EnSb_SetupBounce(EnSb* this) {
 }
 
 void EnSb_SetupIdle(EnSb* this, s32 changeSpeed) {
-    f32 frameCount = Animation_GetLastFrame(&object_sb_Anim_00004C);
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_00004C);
 
     if (this->state != SHELLBLADE_WAIT_CLOSED) {
-        Animation_Change(&this->skelAnime, &object_sb_Anim_00004C, 1.0f, 0, frameCount, ANIMMODE_ONCE, 0.0f);
+        Animation_Change(&this->skelAnime, &object_sb_Anim_00004C, 1.0f, 0, endFrame, ANIMMODE_ONCE, 0.0f);
     }
     this->state = SHELLBLADE_WAIT_CLOSED;
     if (changeSpeed) {
@@ -214,9 +215,10 @@ void EnSb_Idle(EnSb* this, PlayState* play) {
 }
 
 void EnSb_Open(EnSb* this, PlayState* play) {
-    f32 currentFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_000194);
 
-    if (Animation_GetLastFrame(&object_sb_Anim_000194) <= currentFrame) {
+    if (curFrame >= endFrame) {
         this->vulnerableTimer = 20;
         EnSb_SetupWaitOpen(this);
     } else {
@@ -279,11 +281,11 @@ void EnSb_Lunge(EnSb* this, PlayState* play) {
 
 void EnSb_Bounce(EnSb* this, PlayState* play) {
     s32 pad;
-    f32 currentFrame = currentFrame = this->skelAnime.curFrame;
-    f32 frameCount = frameCount = Animation_GetLastFrame(&object_sb_Anim_0000B4);
+    f32 curFrame = this->skelAnime.curFrame;
+    f32 endFrame = Animation_GetLastFrame(&object_sb_Anim_0000B4);
 
     Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
-    if (currentFrame == frameCount) {
+    if (curFrame == endFrame) {
         if (this->bounceCounter != 0) {
             this->bounceCounter--;
             this->attackTimer = 1;
@@ -388,13 +390,13 @@ void EnSb_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnSb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    s8 phi_a2;
+    s8 partParams;
     EnSb* this = THIS;
 
     if (this->isDrawn) {
         if (limbIndex < 7) {
-            phi_a2 = (this->actor.depthInWater > 0) ? 4 : 1;
-            Actor_SpawnBodyParts(thisx, play, phi_a2, dList);
+            partParams = (this->actor.depthInWater > 0) ? ENPART_PARAMS(ENPART_TYPE_4) : ENPART_PARAMS(ENPART_TYPE_1);
+            Actor_SpawnBodyParts(thisx, play, partParams, dList);
         }
         if (limbIndex == 6) {
             this->isDrawn = false;

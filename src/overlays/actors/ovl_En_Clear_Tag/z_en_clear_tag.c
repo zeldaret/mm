@@ -7,7 +7,7 @@
 #include "z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnClearTag*)thisx)
 
@@ -32,15 +32,15 @@ void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play);
 void EnClearTag_DrawEffects(Actor* thisx, PlayState* play);
 
 ActorInit En_Clear_Tag_InitVars = {
-    ACTOR_EN_CLEAR_TAG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnClearTag),
-    (ActorFunc)EnClearTag_Init,
-    (ActorFunc)EnClearTag_Destroy,
-    (ActorFunc)EnClearTag_Update,
-    (ActorFunc)EnClearTag_Draw,
+    /**/ ACTOR_EN_CLEAR_TAG,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnClearTag),
+    /**/ EnClearTag_Init,
+    /**/ EnClearTag_Destroy,
+    /**/ EnClearTag_Update,
+    /**/ EnClearTag_Draw,
 };
 
 static Vec3f sZeroVector = { 0.0f, 0.0f, 0.0f };
@@ -422,7 +422,7 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
     Vec3f vel;
     Vec3f accel;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (thisx->params >= 0) {
         this->activeTimer = 70;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
@@ -435,7 +435,7 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
 
         if (thisx->params != CLEAR_TAG_SPLASH) {
             // Initialize isolated light ray effect
-            if (thisx->params == CLEAR_TAG_SMALL_LIGHT_RAYS || thisx->params == CLEAR_TAG_LARGE_LIGHT_RAYS) {
+            if ((thisx->params == CLEAR_TAG_SMALL_LIGHT_RAYS) || (thisx->params == CLEAR_TAG_LARGE_LIGHT_RAYS)) {
                 for (i = 0; i < 54; i++) {
                     lightRayMaxScale =
                         sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
@@ -560,7 +560,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_4);
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             this->subCamEye.x = mainCam->eye.x;
             this->subCamEye.y = mainCam->eye.y;
@@ -570,7 +570,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
             this->subCamAt.z = mainCam->at.z;
             Message_StartTextbox(play, 0xF, NULL);
             this->cameraState = 2;
-            func_8019FDC8(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
+            Audio_PlaySfx_AtPosWithReverb(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
         case 2:
             if (player->actor.world.pos.z > 0.0f) {
                 player->actor.world.pos.z = 290.0f;
@@ -586,7 +586,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                 mainCam->at = this->subCamAt;
                 func_80169AFC(play, this->subCamId, 0);
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 this->cameraState = 0;
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->activeTimer = 20;

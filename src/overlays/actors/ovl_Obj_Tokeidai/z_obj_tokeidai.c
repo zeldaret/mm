@@ -38,9 +38,9 @@
 
 #define GET_CURRENT_CLOCK_HOUR(this) ((s32)TIME_TO_HOURS_F((this)->clockTime))
 #define GET_CURRENT_CLOCK_MINUTE(this) ((s32)((this)->clockTime * (360 * 2.0f / 0x10000)) % 30)
-#define GET_CLOCK_FACE_ROTATION(currentClockHour) ((s16)(currentClockHour * (0x10000 / 24.0f)))
+#define GET_CLOCK_FACE_ROTATION(currentClockHour) (TRUNCF_BINANG(currentClockHour * (0x10000 / 24.0f)))
 #define GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentClockMinute) \
-    ((s16)(currentClockMinute * (0x10000 * 12.0f / 360)))
+    (TRUNCF_BINANG(currentClockMinute * (0x10000 * 12.0f / 360)))
 
 void ObjTokeidai_Init(Actor* thisx, PlayState* play);
 void ObjTokeidai_Destroy(Actor* thisx, PlayState* play);
@@ -63,15 +63,15 @@ void ObjTokeidai_Counterweight_Draw(Actor* thisx, PlayState* play);
 void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Tokeidai_InitVars = {
-    ACTOR_OBJ_TOKEIDAI,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_OBJ_TOKEIDAI,
-    sizeof(ObjTokeidai),
-    (ActorFunc)ObjTokeidai_Init,
-    (ActorFunc)ObjTokeidai_Destroy,
-    (ActorFunc)ObjTokeidai_Update,
-    (ActorFunc)ObjTokeidai_Draw,
+    /**/ ACTOR_OBJ_TOKEIDAI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_OBJ_TOKEIDAI,
+    /**/ sizeof(ObjTokeidai),
+    /**/ ObjTokeidai_Init,
+    /**/ ObjTokeidai_Destroy,
+    /**/ ObjTokeidai_Update,
+    /**/ ObjTokeidai_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -99,7 +99,7 @@ void ObjTokeidai_SetupClockOrExteriorGear(ObjTokeidai* this) {
 
     this->clockMinute = currentClockMinute;
     this->minuteRingOrExteriorGearRotation = GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentClockMinute);
-    this->minuteRingOrExteriorGearRotationalVelocity = 0x3C;
+    this->minuteRingOrExteriorGearAngularVelocity = 0x3C;
     this->minuteRingOrExteriorGearRotationTimer = 0;
 }
 
@@ -110,9 +110,9 @@ void ObjTokeidai_Clock_Init(ObjTokeidai* this) {
     currentClockHour = GET_CURRENT_CLOCK_HOUR(this);
     this->clockHour = currentClockHour;
     this->clockFaceRotation = GET_CLOCK_FACE_ROTATION(currentClockHour);
-    this->clockFaceRotationalVelocity = 0;
+    this->clockFaceAngularVelocity = 0;
     this->clockFaceRotationTimer = 0;
-    this->sunMoonPanelRotationalVelocity = 0;
+    this->sunMoonPanelAngularVelocity = 0;
     this->sunMoonPanelRotation = ObjTokeidai_GetTargetSunMoonPanelRotation();
 }
 
@@ -124,11 +124,11 @@ void ObjTokeidai_ExteriorGear_Init(ObjTokeidai* this, PlayState* play) {
     if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) ||
         ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
-    } else if (((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
+    } else if (((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
         this->actionFunc = ObjTokeidai_ExteriorGear_OpenedIdle;
         this->actor.world.pos.y += this->actor.scale.y * 1900.0f;
         this->actor.shape.yOffset = 1500.0f;
-        SET_WEEKEVENTREG(WEEKEVENTREG_08_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED);
     } else {
         this->actionFunc = ObjTokeidai_ExteriorGear_Idle;
     }
@@ -141,7 +141,7 @@ void ObjTokeidai_TowerClock_Init(ObjTokeidai* this, PlayState* play) {
     if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) ||
         ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
-    } else if (((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
+    } else if (((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
         this->actor.world.pos.y += (this->actor.scale.y * 5191.0f) - 50.0f;
         this->actor.world.pos.x += Math_SinS(this->actor.world.rot.y) * this->actor.scale.z * 1791.0f;
         this->actor.world.pos.z += -Math_CosS(this->actor.world.rot.y) * this->actor.scale.z * 1791.0f;
@@ -192,7 +192,7 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, PlayState* play) {
                 this->actor.child->home.rot.x = 0x12C;
             }
         }
-    } else if (((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
+    } else if (((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) {
         this->spotlightIntensity = 0;
         this->actor.world.pos.y += this->actor.scale.y * -2160.0f;
         this->actor.world.pos.x += Math_SinS(this->actor.world.rot.y) * this->actor.scale.z * 5400.0f;
@@ -214,7 +214,7 @@ void ObjTokeidai_Init(Actor* thisx, PlayState* play) {
     this->xRotation = 0;
     this->yTranslation = 0;
     this->clockFaceZTranslation = 0;
-    this->clockTime = gSaveContext.save.time;
+    this->clockTime = CURRENT_TIME;
     this->actor.home.rot.x = 0;
 
     switch (OBJ_TOKEIDAI_TYPE(&this->actor)) {
@@ -294,8 +294,8 @@ void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSfx) {
         if (this->minuteRingOrExteriorGearRotationTimer > 8) {
             // This actually performs the rotation to the next minute
             // for the minute ring or exterior gear.
-            this->minuteRingOrExteriorGearRotationalVelocity += 0x3C;
-            this->minuteRingOrExteriorGearRotation += this->minuteRingOrExteriorGearRotationalVelocity;
+            this->minuteRingOrExteriorGearAngularVelocity += 0x3C;
+            this->minuteRingOrExteriorGearRotation += this->minuteRingOrExteriorGearAngularVelocity;
         } else {
             // This makes the minute ring or exterior gear wiggle in place for a bit
             // before rotating to the next position.
@@ -314,7 +314,7 @@ void ObjTokeidai_RotateOnMinuteChange(ObjTokeidai* this, s32 playSfx) {
              this->minuteRingOrExteriorGearRotation > GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentClockMinute))) {
             this->minuteRingOrExteriorGearRotation = GET_MINUTE_RING_OR_EXTERIOR_GEAR_ROTATION(currentClockMinute);
             this->clockMinute = currentClockMinute;
-            this->minuteRingOrExteriorGearRotationalVelocity = 0x5A;
+            this->minuteRingOrExteriorGearAngularVelocity = 0x5A;
             this->minuteRingOrExteriorGearRotationTimer = 0;
         }
     }
@@ -347,9 +347,9 @@ void ObjTokeidai_ExteriorGear_OpenedIdle(ObjTokeidai* this, PlayState* play) {
  * tower's clock slide off the tower and spin through the air when the moon crashes.
  */
 void ObjTokeidai_TowerClock_Fall(ObjTokeidai* this, PlayState* play) {
-    this->actor.shape.rot.x += this->fallingClockFaceRotationalVelocity;
-    if (this->fallingClockFaceRotationalVelocity > 0xA0) {
-        this->fallingClockFaceRotationalVelocity -= 5;
+    this->actor.shape.rot.x += this->fallingClockFaceAngularVelocity;
+    if (this->fallingClockFaceAngularVelocity > 0xA0) {
+        this->fallingClockFaceAngularVelocity -= 5;
     }
 
     this->actor.world.pos.z += 4.0f;
@@ -377,15 +377,15 @@ void ObjTokeidai_TowerClock_SlideOff(ObjTokeidai* this, PlayState* play) {
 
     if (this->aerialClockFaceSpeed < 0x80) {
         thisx->shape.rot.x = this->slidingClockFaceAngle - 0x4000;
-        this->fallingClockFaceRotationalVelocity = 0x28;
+        this->fallingClockFaceAngularVelocity = 0x28;
     } else {
         if (thisx->shape.rot.x < -0x1000) {
-            thisx->shape.rot.x += this->fallingClockFaceRotationalVelocity;
-            if (this->fallingClockFaceRotationalVelocity < 0x1E0) {
-                this->fallingClockFaceRotationalVelocity += 0xA;
+            thisx->shape.rot.x += this->fallingClockFaceAngularVelocity;
+            if (this->fallingClockFaceAngularVelocity < 0x1E0) {
+                this->fallingClockFaceAngularVelocity += 0xA;
             }
         } else {
-            thisx->shape.rot.x += this->fallingClockFaceRotationalVelocity;
+            thisx->shape.rot.x += this->fallingClockFaceAngularVelocity;
             this->actionFunc = ObjTokeidai_TowerClock_Fall;
             thisx->terminalVelocity = -7.5f;
             thisx->gravity = -0.75f;
@@ -444,7 +444,7 @@ void ObjTokeidai_TerminaFieldWalls_Idle(ObjTokeidai* this, PlayState* play) {
 void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_132) &&
         (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_132)]->id == 5)) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_08_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED);
         if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) ||
             ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0))) {
             Audio_SetCutsceneFlag(false);
@@ -496,9 +496,9 @@ void ObjTokeidai_TowerOpening_Wait(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_TowerOpening_DropCounterweight(ObjTokeidai* this, PlayState* play) {
-    this->xRotation += this->counterweightRotationalVelocity;
+    this->xRotation += this->counterweightAngularVelocity;
     if (this->xRotation < 0x4000) {
-        this->counterweightRotationalVelocity += this->counterweightRotationalAcceleration;
+        this->counterweightAngularVelocity += this->counterweightRotationalAcceleration;
         return;
     }
 
@@ -522,14 +522,14 @@ void ObjTokeidai_TowerOpening_DropCounterweight(ObjTokeidai* this, PlayState* pl
     }
     this->boundCount++;
 
-    if (this->counterweightRotationalVelocity > 0x190) {
+    if (this->counterweightAngularVelocity > 0x190) {
         // This condition is met for the first bound, causing the counterweight
         // to rebound upwards quickly.
-        this->counterweightRotationalVelocity = -0xC8;
-    } else if (this->counterweightRotationalVelocity > 0x32) {
+        this->counterweightAngularVelocity = -0xC8;
+    } else if (this->counterweightAngularVelocity > 0x32) {
         // This condition is met for the second bound, causing the counterweight
         // to rebound upwards slowly.
-        this->counterweightRotationalVelocity = -(this->counterweightRotationalVelocity >> 1);
+        this->counterweightAngularVelocity = -(this->counterweightAngularVelocity >> 1);
     } else {
         // This condition is met for the third bound, causing the counterweight
         // to stop moving.
@@ -561,7 +561,7 @@ void ObjTokeidai_TowerOpening_FinishRaise(ObjTokeidai* this, PlayState* play) {
         }
         this->yTranslation = 3400;
         this->actionFunc = ObjTokeidai_TowerOpening_DropCounterweight;
-        this->counterweightRotationalVelocity = 0;
+        this->counterweightAngularVelocity = 0;
         this->counterweightRotationalAcceleration = 0xA;
         this->boundCount = 0;
     }
@@ -575,7 +575,7 @@ void ObjTokeidai_TowerOpening_RaiseTower(ObjTokeidai* this, PlayState* play) {
         this->yTranslation += 25;
         if ((type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_CLOCK_TOWN) ||
             (type == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD)) {
-            func_800B9010(&this->actor, NA_SE_EV_CLOCK_TOWER_UP - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_CLOCK_TOWER_UP - SFX_FLAG);
         }
     } else {
         type = OBJ_TOKEIDAI_TYPE(&this->actor);
@@ -593,7 +593,7 @@ void ObjTokeidai_TowerOpening_RaiseTower(ObjTokeidai* this, PlayState* play) {
 void ObjTokeidai_TowerOpening_Start(ObjTokeidai* this, PlayState* play) {
     if ((Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_132) &&
          (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_132)]->id == 4)) ||
-        CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED)) {
         this->actionFunc = ObjTokeidai_TowerOpening_RaiseTower;
     }
 }
@@ -604,7 +604,7 @@ void ObjTokeidai_TowerOpening_Start(ObjTokeidai* this, PlayState* play) {
  */
 void ObjTokeidai_SetupTowerOpening(ObjTokeidai* this) {
     this->actionFunc = ObjTokeidai_TowerOpening_Start;
-    this->clockFaceRotationalVelocity = 0;
+    this->clockFaceAngularVelocity = 0;
     this->clockFaceRotationTimer = 0;
     this->yTranslation = 0;
     this->xRotation = 0;
@@ -615,8 +615,8 @@ void ObjTokeidai_DoNothing(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, PlayState* play) {
-    if ((((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) ||
-        CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
+    if ((((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) ||
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED)) {
         this->actor.draw = ObjTokeidai_Draw;
     } else {
         this->actor.draw = NULL;
@@ -627,7 +627,7 @@ s32 ObjTokeidai_IsPostFirstCycleFinalHours(ObjTokeidai* this, PlayState* play) {
     if (gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         return false;
     }
-    if ((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
+    if ((CURRENT_DAY == 3) && (CURRENT_TIME < CLOCK_TIME(6, 0))) {
         ObjTokeidai_SetupTowerOpening(this);
         return true;
     }
@@ -641,8 +641,8 @@ void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, PlayState* play) {
         if (this->clockFaceRotationTimer > 12) {
             // This actually performs the rotation to the next hour
             // for the clock face.
-            this->clockFaceRotationalVelocity += 0xA;
-            this->clockFaceRotation += this->clockFaceRotationalVelocity;
+            this->clockFaceAngularVelocity += 0xA;
+            this->clockFaceRotation += this->clockFaceAngularVelocity;
         } else {
             // This makes the clock face wiggle in place for a bit
             // before rotating to the next position.
@@ -660,7 +660,7 @@ void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, PlayState* play) {
             ((currentClockHour != 12) && (this->clockFaceRotation > GET_CLOCK_FACE_ROTATION(currentClockHour)))) {
             this->clockFaceRotation = GET_CLOCK_FACE_ROTATION(currentClockHour);
             this->clockHour = currentClockHour;
-            this->clockFaceRotationalVelocity = 0;
+            this->clockFaceAngularVelocity = 0;
             this->clockFaceRotationTimer = 0;
         }
     }
@@ -669,29 +669,29 @@ void ObjTokeidai_RotateOnHourChange(ObjTokeidai* this, PlayState* play) {
     // just changed), rotate it until it matches the target.
     if (this->sunMoonPanelRotation != ObjTokeidai_GetTargetSunMoonPanelRotation()) {
         if (this->clockHour == 6) {
-            this->sunMoonPanelRotationalVelocity += 0x222;
-            this->sunMoonPanelRotation += this->sunMoonPanelRotationalVelocity;
+            this->sunMoonPanelAngularVelocity += 0x222;
+            this->sunMoonPanelRotation += this->sunMoonPanelAngularVelocity;
             if (this->sunMoonPanelRotation > 0x10000) {
                 this->sunMoonPanelRotation = ObjTokeidai_GetTargetSunMoonPanelRotation();
-                this->sunMoonPanelRotationalVelocity = 0;
+                this->sunMoonPanelAngularVelocity = 0;
             }
         }
         if (this->clockHour == 18) {
-            this->sunMoonPanelRotationalVelocity += 0x222;
-            this->sunMoonPanelRotation += this->sunMoonPanelRotationalVelocity;
+            this->sunMoonPanelAngularVelocity += 0x222;
+            this->sunMoonPanelRotation += this->sunMoonPanelAngularVelocity;
             if (this->sunMoonPanelRotation > 0x8000) {
                 this->sunMoonPanelRotation = ObjTokeidai_GetTargetSunMoonPanelRotation();
-                this->sunMoonPanelRotationalVelocity = 0;
+                this->sunMoonPanelAngularVelocity = 0;
             }
         }
     }
 }
 
 void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
-    if ((CURRENT_DAY == 3) && (this->clockHour < 6) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
+    if ((CURRENT_DAY == 3) && (this->clockHour < 6) && (CURRENT_TIME < CLOCK_TIME(6, 0))) {
         this->actor.draw = ObjTokeidai_Clock_Draw;
         ObjTokeidai_SetupTowerOpening(this);
-        SET_WEEKEVENTREG(WEEKEVENTREG_08_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED);
         return;
     }
 
@@ -700,26 +700,26 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
         this->clockTime += 3;
         this->actor.draw = ObjTokeidai_Clock_Draw;
     } else {
-        if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
+        if (!(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) &&
             (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD) &&
             (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
             this->actor.draw = NULL;
         }
-        this->clockTime = gSaveContext.save.time;
+        this->clockTime = CURRENT_TIME;
         if (this->actor.home.rot.x != 0) {
             ObjTokeidai_Clock_Init(this);
             this->actor.home.rot.x = 0;
         }
     }
 
-    if ((CURRENT_DAY != 3) || (gSaveContext.save.time >= CLOCK_TIME(6, 0))) {
+    if ((CURRENT_DAY != 3) || (CURRENT_TIME >= CLOCK_TIME(6, 0))) {
         ObjTokeidai_RotateOnMinuteChange(this, true);
     }
     ObjTokeidai_RotateOnHourChange(this, play);
 }
 
 void ObjTokeidai_WallClock_Idle(ObjTokeidai* this, PlayState* play) {
-    this->clockTime = gSaveContext.save.time;
+    this->clockTime = CURRENT_TIME;
     ObjTokeidai_RotateOnMinuteChange(this, true);
     ObjTokeidai_RotateOnHourChange(this, play);
 }
@@ -733,12 +733,12 @@ void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, PlayState* play) {
             this->clockTime += 3;
             this->actor.draw = ObjTokeidai_ExteriorGear_Draw;
         } else {
-            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
+            if (!(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) &&
                 (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_EXTERIOR_GEAR_TERMINA_FIELD) &&
                 (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
                 this->actor.draw = NULL;
             }
-            this->clockTime = gSaveContext.save.time;
+            this->clockTime = CURRENT_TIME;
             if (this->actor.home.rot.x != 0) {
                 ObjTokeidai_SetupClockOrExteriorGear(this);
                 this->actor.home.rot.x = 0;
@@ -835,9 +835,9 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     if (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_WALL_CLOCK ||
         OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_SMALL_WALL_CLOCK) {
-        gSPDisplayList(POLY_OPA_DISP++, gWallClockClockFace);
+        gSPDisplayList(POLY_OPA_DISP++, gWallClockClockFaceDL);
     } else {
-        gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockFace);
+        gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockFaceDL);
     }
 
     Matrix_Translate(0.0f, -1112.0f, -19.6f, MTXMODE_APPLY);

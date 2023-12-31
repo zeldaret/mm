@@ -1,5 +1,6 @@
-#include "global.h"
-#include "os_malloc.h"
+#include "z64malloc.h"
+
+#include "libc64/os_malloc.h"
 
 Arena sZeldaArena;
 
@@ -24,23 +25,23 @@ void ZeldaArena_Free(void* ptr) {
     __osFree(&sZeldaArena, ptr);
 }
 
-void* ZeldaArena_Calloc(u32 num, size_t size) {
-    void* ret;
-    u32 n = num * size;
+void* ZeldaArena_Calloc(size_t num, size_t size) {
+    void* ptr;
+    size_t totalSize = num * size;
 
-    ret = __osMalloc(&sZeldaArena, n);
-    if (ret != NULL) {
-        bzero(ret, n);
+    ptr = __osMalloc(&sZeldaArena, totalSize);
+    if (ptr != NULL) {
+        bzero(ptr, totalSize);
     }
 
-    return ret;
+    return ptr;
 }
 
 void ZeldaArena_GetSizes(size_t* outMaxFree, size_t* outFree, size_t* outAlloc) {
     __osGetSizes(&sZeldaArena, outMaxFree, outFree, outAlloc);
 }
 
-s32 ZeldaArena_Check() {
+s32 ZeldaArena_Check(void) {
     return __osCheckArena(&sZeldaArena);
 }
 
@@ -48,10 +49,10 @@ void ZeldaArena_Init(void* start, size_t size) {
     __osMallocInit(&sZeldaArena, start, size);
 }
 
-void ZeldaArena_Cleanup() {
+void ZeldaArena_Cleanup(void) {
     __osMallocCleanup(&sZeldaArena);
 }
 
-u8 ZeldaArena_IsInitialized() {
+u8 ZeldaArena_IsInitialized(void) {
     return __osMallocIsInitalized(&sZeldaArena);
 }

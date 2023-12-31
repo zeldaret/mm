@@ -1,7 +1,7 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64horse.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 void Sram_SyncWriteToFlash(SramContext* sramCtx, s32 curPage, s32 numPages);
 void func_80147314(SramContext* sramCtx, s32 fileNum);
@@ -87,9 +87,9 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     /*  9 */ 0,
     /* 10 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_10_08),
     /* 11 */ 0,
-    /* 12 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_12_10),
+    /* 12 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE),
     /* 13 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_OCEANSIDE_WALLET_UPGRADE),
-    /* 14 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_14_80),
+    /* 14 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_DEKU_PLAYGROUND_HEART_PIECE),
     /* 15 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_15_20),
     /* 16 */ 0,
     /* 17 */ 0,
@@ -98,7 +98,8 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     /* 20 */ 0,
     /* 21 */ 0,
     /* 22 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_22_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_22_80),
-    /* 23 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_80),
+    /* 23 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_80),
     /* 24 */ PERSISTENT_WEEKEVENTREG_ALT(WEEKEVENTREG_24_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_24_80),
     /* 25 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_25_01),
     /* 26 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_26_40),
@@ -112,14 +113,18 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_31_01) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_31_02) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_31_04) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_31_20),
     /* 32 */
-    PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_32_01) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_32_02) |
-        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_32_04),
+    PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_32_01) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_HEART_PIECE) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_HEART_PIECE),
     /* 33 */ 0,
     /* 34 */ 0,
     /* 35 */
-    PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_35_01) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_35_02) |
-        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_35_04) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_35_08) |
-        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_35_10) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_35_20) |
+    PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_TINGLE_MAP_BOUGHT_CLOCK_TOWN) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_TINGLE_MAP_BOUGHT_WOODFALL) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_TINGLE_MAP_BOUGHT_SNOWHEAD) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_TINGLE_MAP_BOUGHT_ROMANI_RANCH) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_TINGLE_MAP_BOUGHT_GREAT_BAY) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_TINGLE_MAP_BOUGHT_STONE_TOWER) |
         PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_35_80),
     /* 36 */ 0,
     /* 37 */ 0,
@@ -146,7 +151,8 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     /* 58 */ 0,
     /* 59 */
     PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_59_04) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_59_08) |
-        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_59_10) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_59_20),
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_QUIVER_UPGRADE) |
+        PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_QUIVER_UPGRADE),
     /* 60 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_60_10),
     /* 61 */ 0,
     /* 62 */ 0,
@@ -265,31 +271,31 @@ u32 gSramSlotOffsets[] = {
     OOT_SLOT_OFFSET(5),
 };
 
-u8 gAmmoItems[] = {
-    ITEM_NONE,        // SLOT_OCARINA
-    ITEM_BOW,         // SLOT_BOW
-    ITEM_NONE,        // SLOT_ARROW_FIRE
-    ITEM_NONE,        // SLOT_ARROW_ICE
-    ITEM_NONE,        // SLOT_ARROW_LIGHT
-    ITEM_NONE,        // SLOT_TRADE_DEED
-    ITEM_BOMB,        // SLOT_BOMB
-    ITEM_BOMBCHU,     // SLOT_BOMBCHU
-    ITEM_STICK,       // SLOT_STICK
-    ITEM_NUT,         // SLOT_NUT
-    ITEM_MAGIC_BEANS, // SLOT_MAGIC_BEANS
-    ITEM_NONE,        // SLOT_TRADE_KEY_MAMA
-    ITEM_POWDER_KEG,  // SLOT_POWDER_KEG
-    ITEM_PICTO_BOX,   // SLOT_PICTO_BOX
-    ITEM_NONE,        // SLOT_LENS
-    ITEM_NONE,        // SLOT_HOOKSHOT
-    ITEM_NONE,        // SLOT_SWORD_GREAT_FAIRY
-    ITEM_NONE,        // SLOT_TRADE_COUPLE
-    ITEM_NONE,        // SLOT_BOTTLE_1
-    ITEM_NONE,        // SLOT_BOTTLE_2
-    ITEM_NONE,        // SLOT_BOTTLE_3
-    ITEM_NONE,        // SLOT_BOTTLE_4
-    ITEM_NONE,        // SLOT_BOTTLE_5
-    ITEM_NONE,        // SLOT_BOTTLE_6
+u8 gAmmoItems[ITEM_NUM_SLOTS] = {
+    ITEM_NONE,           // SLOT_OCARINA
+    ITEM_BOW,            // SLOT_BOW
+    ITEM_NONE,           // SLOT_ARROW_FIRE
+    ITEM_NONE,           // SLOT_ARROW_ICE
+    ITEM_NONE,           // SLOT_ARROW_LIGHT
+    ITEM_NONE,           // SLOT_TRADE_DEED
+    ITEM_BOMB,           // SLOT_BOMB
+    ITEM_BOMBCHU,        // SLOT_BOMBCHU
+    ITEM_DEKU_STICK,     // SLOT_DEKU_STICK
+    ITEM_DEKU_NUT,       // SLOT_DEKU_NUT
+    ITEM_MAGIC_BEANS,    // SLOT_MAGIC_BEANS
+    ITEM_NONE,           // SLOT_TRADE_KEY_MAMA
+    ITEM_POWDER_KEG,     // SLOT_POWDER_KEG
+    ITEM_PICTOGRAPH_BOX, // SLOT_PICTOGRAPH_BOX
+    ITEM_NONE,           // SLOT_LENS_OF_TRUTH
+    ITEM_NONE,           // SLOT_HOOKSHOT
+    ITEM_NONE,           // SLOT_SWORD_GREAT_FAIRY
+    ITEM_NONE,           // SLOT_TRADE_COUPLE
+    ITEM_NONE,           // SLOT_BOTTLE_1
+    ITEM_NONE,           // SLOT_BOTTLE_2
+    ITEM_NONE,           // SLOT_BOTTLE_3
+    ITEM_NONE,           // SLOT_BOTTLE_4
+    ITEM_NONE,           // SLOT_BOTTLE_5
+    ITEM_NONE,           // SLOT_BOTTLE_6
 };
 
 // Stores flash start page number
@@ -382,21 +388,20 @@ u8 sBitFlags8[] = {
 u16 D_801F6AF0;
 u8 D_801F6AF2;
 
-void Sram_ActivateOwl(u8 owlId) {
-    gSaveContext.save.saveInfo.playerData.owlActivationFlags =
-        ((void)0, gSaveContext.save.saveInfo.playerData.owlActivationFlags) | (u16)gBitFlags[owlId];
+void Sram_ActivateOwl(u8 owlWarpId) {
+    SET_OWL_STATUE_ACTIVATED(owlWarpId);
 
-    if (gSaveContext.save.saveInfo.playerData.unk_20 == 0xFF) {
-        gSaveContext.save.saveInfo.playerData.unk_20 = owlId;
+    if (gSaveContext.save.saveInfo.playerData.owlWarpId == OWL_WARP_NONE) {
+        gSaveContext.save.saveInfo.playerData.owlWarpId = owlWarpId;
     }
 }
 
 void Sram_ClearHighscores(void) {
-    gSaveContext.save.saveInfo.unk_EC4 = (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF) | 0x130000;
-    gSaveContext.save.saveInfo.unk_EC4 = (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF0000) | 0xA;
-    gSaveContext.save.saveInfo.horseBackBalloonHighScore = SECONDS_TO_TIMER(60);
-    SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(39);
-    SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(10);
+    HS_SET_BOAT_ARCHERY_HIGH_SCORE(19);
+    HS_SET_HIGH_SCORE_3_LOWER(10);
+    HS_SET_HORSE_BACK_BALLOON_TIME(SECONDS_TO_TIMER(60));
+    HS_SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(39);
+    HS_SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(10);
 
     gSaveContext.save.saveInfo.dekuPlaygroundHighScores[0] = SECONDS_TO_TIMER(75);
     gSaveContext.save.saveInfo.dekuPlaygroundHighScores[1] = SECONDS_TO_TIMER(75);
@@ -425,7 +430,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     u8 item;
 
     gSaveContext.save.timeSpeedOffset = 0;
-    gSaveContext.save.daysElapsed = 0;
+    gSaveContext.save.eventDayCount = 0;
     gSaveContext.save.day = 0;
     gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
 
@@ -489,44 +494,44 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         gSaveContext.eventInf[i] = 0;
     }
 
-    CLEAR_EVENTINF(EVENTINF_70);
-    CLEAR_EVENTINF(EVENTINF_71);
-    CLEAR_EVENTINF(EVENTINF_72);
-    CLEAR_EVENTINF(EVENTINF_73);
-    CLEAR_EVENTINF(EVENTINF_74);
+    CLEAR_EVENTINF(EVENTINF_THREEDAYRESET_LOST_RUPEES);
+    CLEAR_EVENTINF(EVENTINF_THREEDAYRESET_LOST_BOMB_AMMO);
+    CLEAR_EVENTINF(EVENTINF_THREEDAYRESET_LOST_NUT_AMMO);
+    CLEAR_EVENTINF(EVENTINF_THREEDAYRESET_LOST_STICK_AMMO);
+    CLEAR_EVENTINF(EVENTINF_THREEDAYRESET_LOST_ARROW_AMMO);
 
     if (gSaveContext.save.saveInfo.playerData.rupees != 0) {
-        SET_EVENTINF(EVENTINF_70);
+        SET_EVENTINF(EVENTINF_THREEDAYRESET_LOST_RUPEES);
     }
 
     if (INV_CONTENT(ITEM_BOMB) == ITEM_BOMB) {
         item = INV_CONTENT(ITEM_BOMB);
         if (AMMO(item) != 0) {
-            SET_EVENTINF(EVENTINF_71);
+            SET_EVENTINF(EVENTINF_THREEDAYRESET_LOST_BOMB_AMMO);
         }
     }
-    if (INV_CONTENT(ITEM_NUT) == ITEM_NUT) {
-        item = INV_CONTENT(ITEM_NUT);
+    if (INV_CONTENT(ITEM_DEKU_NUT) == ITEM_DEKU_NUT) {
+        item = INV_CONTENT(ITEM_DEKU_NUT);
         if (AMMO(item) != 0) {
-            SET_EVENTINF(EVENTINF_72);
+            SET_EVENTINF(EVENTINF_THREEDAYRESET_LOST_NUT_AMMO);
         }
     }
-    if (INV_CONTENT(ITEM_STICK) == ITEM_STICK) {
-        item = INV_CONTENT(ITEM_STICK);
+    if (INV_CONTENT(ITEM_DEKU_STICK) == ITEM_DEKU_STICK) {
+        item = INV_CONTENT(ITEM_DEKU_STICK);
         if (AMMO(item) != 0) {
-            SET_EVENTINF(EVENTINF_73);
+            SET_EVENTINF(EVENTINF_THREEDAYRESET_LOST_STICK_AMMO);
         }
     }
     if (INV_CONTENT(ITEM_BOW) == ITEM_BOW) {
         item = INV_CONTENT(ITEM_BOW);
         if (AMMO(item) != 0) {
-            SET_EVENTINF(EVENTINF_74);
+            SET_EVENTINF(EVENTINF_THREEDAYRESET_LOST_ARROW_AMMO);
         }
     }
 
-    for (i = 0; i < ARRAY_COUNT(gAmmoItems); i++) {
+    for (i = 0; i < ITEM_NUM_SLOTS; i++) {
         if (gAmmoItems[i] != ITEM_NONE) {
-            if ((gSaveContext.save.saveInfo.inventory.items[i] != ITEM_NONE) && (i != SLOT_PICTO_BOX)) {
+            if ((gSaveContext.save.saveInfo.inventory.items[i] != ITEM_NONE) && (i != SLOT_PICTOGRAPH_BOX)) {
                 item = gSaveContext.save.saveInfo.inventory.items[i];
                 AMMO(item) = 0;
             }
@@ -606,7 +611,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     Inventory_DeleteItem(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
 
     for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
-        if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_OF_MEMORIES) {
+        if ((GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOONS_TEAR) && (GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_OF_MEMORIES)) {
             SET_CUR_FORM_BTN_ITEM(j, ITEM_NONE);
             Interface_LoadItemIconImpl(play, j);
         }
@@ -633,7 +638,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     }
 
     gSaveContext.save.saveInfo.playerData.rupees = 0;
-    gSaveContext.save.saveInfo.unk_F41 = 0;
+    gSaveContext.save.saveInfo.scarecrowSpawnSongSet = false;
     gSaveContext.powderKegTimer = 0;
     gSaveContext.unk_1014 = 0;
     gSaveContext.jinxTimer = 0;
@@ -645,7 +650,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
 void Sram_IncrementDay(void) {
     if (CURRENT_DAY <= 3) {
         gSaveContext.save.day++;
-        gSaveContext.save.daysElapsed++;
+        gSaveContext.save.eventDayCount++;
     }
 
     gSaveContext.save.saveInfo.bombersCaughtNum = 0;
@@ -774,8 +779,8 @@ SavePlayerData sSaveDefaultPlayerData = {
     false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
-    0xFF,                                               // unk_20
-    0x0000,                                             // owlActivationFlags
+    OWL_WARP_NONE,                                      // owlWarpId
+    0,                                                  // owlActivationFlags
     0xFF,                                               // unk_24
     SCENE_SPOT00,                                       // savedSceneId
 };
@@ -799,16 +804,91 @@ ItemEquips sSaveDefaultItemEquips = {
 Inventory sSaveDefaultInventory = {
     // items
     {
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, // SLOT_OCARINA
+        ITEM_NONE, // SLOT_BOW
+        ITEM_NONE, // SLOT_ARROW_FIRE
+        ITEM_NONE, // SLOT_ARROW_ICE
+        ITEM_NONE, // SLOT_ARROW_LIGHT
+        ITEM_NONE, // SLOT_TRADE_DEED
+        ITEM_NONE, // SLOT_BOMB
+        ITEM_NONE, // SLOT_BOMBCHU
+        ITEM_NONE, // SLOT_DEKU_STICK
+        ITEM_NONE, // SLOT_DEKU_NUT
+        ITEM_NONE, // SLOT_MAGIC_BEANS
+        ITEM_NONE, // SLOT_TRADE_KEY_MAMA
+        ITEM_NONE, // SLOT_POWDER_KEG
+        ITEM_NONE, // SLOT_PICTOGRAPH_BOX
+        ITEM_NONE, // SLOT_LENS_OF_TRUTH
+        ITEM_NONE, // SLOT_HOOKSHOT
+        ITEM_NONE, // SLOT_SWORD_GREAT_FAIRY
+        ITEM_NONE, // SLOT_TRADE_COUPLE
+        ITEM_NONE, // SLOT_BOTTLE_1
+        ITEM_NONE, // SLOT_BOTTLE_2
+        ITEM_NONE, // SLOT_BOTTLE_3
+        ITEM_NONE, // SLOT_BOTTLE_4
+        ITEM_NONE, // SLOT_BOTTLE_5
+        ITEM_NONE, // SLOT_BOTTLE_6
+        ITEM_NONE, // SLOT_MASK_POSTMAN
+        ITEM_NONE, // SLOT_MASK_ALL_NIGHT
+        ITEM_NONE, // SLOT_MASK_BLAST
+        ITEM_NONE, // SLOT_MASK_STONE
+        ITEM_NONE, // SLOT_MASK_GREAT_FAIRY
+        ITEM_NONE, // SLOT_MASK_DEKU
+        ITEM_NONE, // SLOT_MASK_KEATON
+        ITEM_NONE, // SLOT_MASK_BREMEN
+        ITEM_NONE, // SLOT_MASK_BUNNY
+        ITEM_NONE, // SLOT_MASK_DON_GERO
+        ITEM_NONE, // SLOT_MASK_SCENTS
+        ITEM_NONE, // SLOT_MASK_GORON
+        ITEM_NONE, // SLOT_MASK_ROMANI
+        ITEM_NONE, // SLOT_MASK_CIRCUS_LEADER
+        ITEM_NONE, // SLOT_MASK_KAFEIS_MASK
+        ITEM_NONE, // SLOT_MASK_COUPLE
+        ITEM_NONE, // SLOT_MASK_TRUTH
+        ITEM_NONE, // SLOT_MASK_ZORA
+        ITEM_NONE, // SLOT_MASK_KAMARO
+        ITEM_NONE, // SLOT_MASK_GIBDO
+        ITEM_NONE, // SLOT_MASK_GARO
+        ITEM_NONE, // SLOT_MASK_CAPTAIN
+        ITEM_NONE, // SLOT_MASK_GIANT
+        ITEM_NONE, // SLOT_MASK_FIERCE_DEITY
     },
     // ammo
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    {
+        0, // SLOT_OCARINA
+        0, // SLOT_BOW
+        0, // SLOT_ARROW_FIRE
+        0, // SLOT_ARROW_ICE
+        0, // SLOT_ARROW_LIGHT
+        0, // SLOT_TRADE_DEED
+        0, // SLOT_BOMB
+        0, // SLOT_BOMBCHU
+        0, // SLOT_DEKU_STICK
+        0, // SLOT_DEKU_NUT
+        0, // SLOT_MAGIC_BEANS
+        0, // SLOT_TRADE_KEY_MAMA
+        0, // SLOT_POWDER_KEG
+        0, // SLOT_PICTOGRAPH_BOX
+        0, // SLOT_LENS_OF_TRUTH
+        0, // SLOT_HOOKSHOT
+        0, // SLOT_SWORD_GREAT_FAIRY
+        0, // SLOT_TRADE_COUPLE
+        0, // SLOT_BOTTLE_1
+        0, // SLOT_BOTTLE_2
+        0, // SLOT_BOTTLE_3
+        0, // SLOT_BOTTLE_4
+        0, // SLOT_BOTTLE_5
+        0, // SLOT_BOTTLE_6
+    },
     // upgrades
-    0x120000,
+    (0 << 0) |      // UPG_QUIVER
+        (0 << 3) |  // UPG_BOMB_BAG
+        (0 << 6) |  // UPG_STRENGTH
+        (0 << 9) |  // UPG_SCALE
+        (0 << 12) | // UPG_WALLET
+        (0 << 14) | // UPG_BULLET_BAG
+        (1 << 17) | // UPG_DEKU_STICKS
+        (1 << 20),  // UPG_DEKU_NUTS
     // questItems
     0,
     // dungeonItems
@@ -838,7 +918,7 @@ u16 sSaveDefaultChecksum = 0;
  */
 void Sram_InitNewSave(void) {
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
-    gSaveContext.save.daysElapsed = 0;
+    gSaveContext.save.eventDayCount = 0;
     gSaveContext.save.day = 0;
     gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
     Sram_ResetSave();
@@ -875,7 +955,7 @@ SavePlayerData sSaveDebugPlayerData = {
     false,                                              // isDoubleMagicAcquired
     0,                                                  // doubleDefense
     0,                                                  // unk_1F
-    0xFF,                                               // unk_20
+    OWL_WARP_NONE,                                      // owlWarpId
     0,                                                  // owlActivationFlags
     0xFF,                                               // unk_24
     SCENE_SPOT00,                                       // savedSceneId
@@ -883,10 +963,10 @@ SavePlayerData sSaveDebugPlayerData = {
 
 ItemEquips sSaveDebugItemEquips = {
     {
-        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_POTION_RED, ITEM_OCARINA },
-        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_MASK_GORON, ITEM_OCARINA },
-        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_MASK_ZORA, ITEM_OCARINA },
-        { ITEM_NUT, ITEM_NUT, ITEM_MASK_DEKU, ITEM_OCARINA },
+        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_POTION_RED, ITEM_OCARINA_OF_TIME },
+        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_MASK_GORON, ITEM_OCARINA_OF_TIME },
+        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_MASK_ZORA, ITEM_OCARINA_OF_TIME },
+        { ITEM_DEKU_NUT, ITEM_DEKU_NUT, ITEM_MASK_DEKU, ITEM_OCARINA_OF_TIME },
     },
     {
         { SLOT_OCARINA, SLOT_BOW, SLOT_BOTTLE_2, SLOT_OCARINA },
@@ -900,59 +980,91 @@ ItemEquips sSaveDebugItemEquips = {
 Inventory sSaveDebugInventory = {
     // items
     {
-        ITEM_OCARINA,
-        ITEM_BOW,
-        ITEM_ARROW_FIRE,
-        ITEM_ARROW_ICE,
-        ITEM_ARROW_LIGHT,
-        ITEM_MOON_TEAR,
-        ITEM_BOMB,
-        ITEM_BOMBCHU,
-        ITEM_STICK,
-        ITEM_NUT,
-        ITEM_MAGIC_BEANS,
-        ITEM_ROOM_KEY,
-        ITEM_POWDER_KEG,
-        ITEM_PICTO_BOX,
-        ITEM_LENS,
-        ITEM_HOOKSHOT,
-        ITEM_SWORD_GREAT_FAIRY,
-        ITEM_LETTER_TO_KAFEI,
-        ITEM_BOTTLE,
-        ITEM_POTION_RED,
-        ITEM_POTION_GREEN,
-        ITEM_POTION_BLUE,
-        ITEM_NONE,
-        ITEM_NONE,
-        ITEM_MASK_POSTMAN,
-        ITEM_MASK_ALL_NIGHT,
-        ITEM_MASK_BLAST,
-        ITEM_MASK_STONE,
-        ITEM_MASK_GREAT_FAIRY,
-        ITEM_MASK_DEKU,
-        ITEM_MASK_KEATON,
-        ITEM_MASK_BREMEN,
-        ITEM_MASK_BUNNY,
-        ITEM_MASK_DON_GERO,
-        ITEM_MASK_SCENTS,
-        ITEM_MASK_GORON,
-        ITEM_MASK_ROMANI,
-        ITEM_MASK_CIRCUS_LEADER,
-        ITEM_MASK_KAFEIS_MASK,
-        ITEM_MASK_COUPLE,
-        ITEM_MASK_TRUTH,
-        ITEM_MASK_ZORA,
-        ITEM_MASK_KAMARO,
-        ITEM_MASK_GIBDO,
-        ITEM_MASK_GARO,
-        ITEM_MASK_CAPTAIN,
-        ITEM_MASK_GIANT,
-        ITEM_MASK_FIERCE_DEITY,
+        ITEM_OCARINA_OF_TIME,    // SLOT_OCARINA
+        ITEM_BOW,                // SLOT_BOW
+        ITEM_ARROW_FIRE,         // SLOT_ARROW_FIRE
+        ITEM_ARROW_ICE,          // SLOT_ARROW_ICE
+        ITEM_ARROW_LIGHT,        // SLOT_ARROW_LIGHT
+        ITEM_MOONS_TEAR,         // SLOT_TRADE_DEED
+        ITEM_BOMB,               // SLOT_BOMB
+        ITEM_BOMBCHU,            // SLOT_BOMBCHU
+        ITEM_DEKU_STICK,         // SLOT_DEKU_STICK
+        ITEM_DEKU_NUT,           // SLOT_DEKU_NUT
+        ITEM_MAGIC_BEANS,        // SLOT_MAGIC_BEANS
+        ITEM_ROOM_KEY,           // SLOT_TRADE_KEY_MAMA
+        ITEM_POWDER_KEG,         // SLOT_POWDER_KEG
+        ITEM_PICTOGRAPH_BOX,     // SLOT_PICTOGRAPH_BOX
+        ITEM_LENS_OF_TRUTH,      // SLOT_LENS_OF_TRUTH
+        ITEM_HOOKSHOT,           // SLOT_HOOKSHOT
+        ITEM_SWORD_GREAT_FAIRY,  // SLOT_SWORD_GREAT_FAIRY
+        ITEM_LETTER_TO_KAFEI,    // SLOT_TRADE_COUPLE
+        ITEM_BOTTLE,             // SLOT_BOTTLE_1
+        ITEM_POTION_RED,         // SLOT_BOTTLE_2
+        ITEM_POTION_GREEN,       // SLOT_BOTTLE_3
+        ITEM_POTION_BLUE,        // SLOT_BOTTLE_4
+        ITEM_NONE,               // SLOT_BOTTLE_5
+        ITEM_NONE,               // SLOT_BOTTLE_6
+        ITEM_MASK_POSTMAN,       // SLOT_MASK_POSTMAN
+        ITEM_MASK_ALL_NIGHT,     // SLOT_MASK_ALL_NIGHT
+        ITEM_MASK_BLAST,         // SLOT_MASK_BLAST
+        ITEM_MASK_STONE,         // SLOT_MASK_STONE
+        ITEM_MASK_GREAT_FAIRY,   // SLOT_MASK_GREAT_FAIRY
+        ITEM_MASK_DEKU,          // SLOT_MASK_DEKU
+        ITEM_MASK_KEATON,        // SLOT_MASK_KEATON
+        ITEM_MASK_BREMEN,        // SLOT_MASK_BREMEN
+        ITEM_MASK_BUNNY,         // SLOT_MASK_BUNNY
+        ITEM_MASK_DON_GERO,      // SLOT_MASK_DON_GERO
+        ITEM_MASK_SCENTS,        // SLOT_MASK_SCENTS
+        ITEM_MASK_GORON,         // SLOT_MASK_GORON
+        ITEM_MASK_ROMANI,        // SLOT_MASK_ROMANI
+        ITEM_MASK_CIRCUS_LEADER, // SLOT_MASK_CIRCUS_LEADER
+        ITEM_MASK_KAFEIS_MASK,   // SLOT_MASK_KAFEIS_MASK
+        ITEM_MASK_COUPLE,        // SLOT_MASK_COUPLE
+        ITEM_MASK_TRUTH,         // SLOT_MASK_TRUTH
+        ITEM_MASK_ZORA,          // SLOT_MASK_ZORA
+        ITEM_MASK_KAMARO,        // SLOT_MASK_KAMARO
+        ITEM_MASK_GIBDO,         // SLOT_MASK_GIBDO
+        ITEM_MASK_GARO,          // SLOT_MASK_GARO
+        ITEM_MASK_CAPTAIN,       // SLOT_MASK_CAPTAIN
+        ITEM_MASK_GIANT,         // SLOT_MASK_GIANT
+        ITEM_MASK_FIERCE_DEITY,  // SLOT_MASK_FIERCE_DEITY
     },
     // ammo
-    { 1, 30, 1, 1, 1, 1, 30, 30, 30, 30, 1, 1, 1, 1, 30, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+    {
+        1,  // SLOT_OCARINA
+        30, // SLOT_BOW
+        1,  // SLOT_ARROW_FIRE
+        1,  // SLOT_ARROW_ICE
+        1,  // SLOT_ARROW_LIGHT
+        1,  // SLOT_TRADE_DEED
+        30, // SLOT_BOMB
+        30, // SLOT_BOMBCHU
+        30, // SLOT_DEKU_STICK
+        30, // SLOT_DEKU_NUT
+        1,  // SLOT_MAGIC_BEANS
+        1,  // SLOT_TRADE_KEY_MAMA
+        1,  // SLOT_POWDER_KEG
+        1,  // SLOT_PICTOGRAPH_BOX
+        30, // SLOT_LENS_OF_TRUTH
+        1,  // SLOT_HOOKSHOT
+        1,  // SLOT_SWORD_GREAT_FAIRY
+        1,  // SLOT_TRADE_COUPLE
+        1,  // SLOT_BOTTLE_1
+        1,  // SLOT_BOTTLE_2
+        1,  // SLOT_BOTTLE_3
+        1,  // SLOT_BOTTLE_4
+        0,  // SLOT_BOTTLE_5
+        0,  // SLOT_BOTTLE_6
+    },
     // upgrades
-    0x120009,
+    (1 << 0) |      // UPG_QUIVER
+        (1 << 3) |  // UPG_BOMB_BAG
+        (0 << 6) |  // UPG_STRENGTH
+        (0 << 9) |  // UPG_SCALE
+        (0 << 12) | // UPG_WALLET
+        (0 << 14) | // UPG_BULLET_BAG
+        (1 << 17) | // UPG_DEKU_STICKS
+        (1 << 20),  // UPG_DEKU_NUTS
     // questItems
     (1 << QUEST_SONG_SONATA) | (1 << QUEST_SONG_LULLABY) | (1 << QUEST_SONG_BOSSA_NOVA) | (1 << QUEST_SONG_ELEGY) |
         (1 << QUEST_SONG_OATH) | (1 << QUEST_SONG_TIME) | (1 << QUEST_SONG_HEALING) | (1 << QUEST_SONG_EPONA) |
@@ -990,12 +1102,20 @@ Inventory sSaveDebugInventory = {
 
 u16 sSaveDebugChecksum = 0;
 
-u8 D_801C6A48[] = {
-    ITEM_MASK_FIERCE_DEITY, ITEM_MASK_GORON, ITEM_MASK_ZORA, ITEM_MASK_DEKU, ITEM_MASK_FIERCE_DEITY,
+u8 D_801C6A48[PLAYER_FORM_MAX] = {
+    ITEM_MASK_FIERCE_DEITY, // PLAYER_FORM_FIERCE_DEITY
+    ITEM_MASK_GORON,        // PLAYER_FORM_GORON
+    ITEM_MASK_ZORA,         // PLAYER_FORM_ZORA
+    ITEM_MASK_DEKU,         // PLAYER_FORM_DEKU
+    ITEM_MASK_FIERCE_DEITY, // PLAYER_FORM_HUMAN
 };
 
-u8 D_801C6A50[] = {
-    SLOT_MASK_FIERCE_DEITY, SLOT_MASK_GORON, SLOT_MASK_ZORA, SLOT_MASK_DEKU, SLOT_MASK_FIERCE_DEITY,
+u8 D_801C6A50[PLAYER_FORM_MAX] = {
+    SLOT_MASK_FIERCE_DEITY, // PLAYER_FORM_FIERCE_DEITY
+    SLOT_MASK_GORON,        // PLAYER_FORM_GORON
+    SLOT_MASK_ZORA,         // PLAYER_FORM_ZORA
+    SLOT_MASK_DEKU,         // PLAYER_FORM_DEKU
+    SLOT_MASK_FIERCE_DEITY, // PLAYER_FORM_HUMAN
 };
 
 /**
@@ -1087,12 +1207,17 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
     gSaveContext.jinxTimer = 0;
 }
 
-u16 D_801C6A58[] = {
-    ENTRANCE(GREAT_BAY_COAST, 11), ENTRANCE(ZORA_CAPE, 6),
-    ENTRANCE(SNOWHEAD, 3),         ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),
-    ENTRANCE(SOUTH_CLOCK_TOWN, 9), ENTRANCE(MILK_ROAD, 4),
-    ENTRANCE(WOODFALL, 4),         ENTRANCE(SOUTHERN_SWAMP_POISONED, 10),
-    ENTRANCE(IKANA_CANYON, 4),     ENTRANCE(STONE_TOWER, 3),
+static u16 sOwlWarpEntrances[OWL_WARP_MAX - 1] = {
+    ENTRANCE(GREAT_BAY_COAST, 11),         // OWL_WARP_GREAT_BAY_COAST
+    ENTRANCE(ZORA_CAPE, 6),                // OWL_WARP_ZORA_CAPE
+    ENTRANCE(SNOWHEAD, 3),                 // OWL_WARP_SNOWHEAD
+    ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),  // OWL_WARP_MOUNTAIN_VILLAGE
+    ENTRANCE(SOUTH_CLOCK_TOWN, 9),         // OWL_WARP_CLOCK_TOWN
+    ENTRANCE(MILK_ROAD, 4),                // OWL_WARP_MILK_ROAD
+    ENTRANCE(WOODFALL, 4),                 // OWL_WARP_WOODFALL
+    ENTRANCE(SOUTHERN_SWAMP_POISONED, 10), // OWL_WARP_SOUTHERN_SWAMP
+    ENTRANCE(IKANA_CANYON, 4),             // OWL_WARP_IKANA_CANYON
+    ENTRANCE(STONE_TOWER, 3),              // OWL_WARP_STONE_TOWER
 };
 
 void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
@@ -1167,7 +1292,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         }
     } else {
-        gSaveContext.save.entrance = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
+        gSaveContext.save.entrance = sOwlWarpEntrances[(void)0, gSaveContext.save.owlWarpId];
         if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
             CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
@@ -1184,11 +1309,11 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             gSaveContext.cycleSceneFlags[i].collectible = gSaveContext.save.saveInfo.permanentSceneFlags[i].collectible;
         }
 
-        if (gSaveContext.save.saveInfo.unk_F41) {
+        if (gSaveContext.save.saveInfo.scarecrowSpawnSongSet) {
             Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.saveInfo.scarecrowSpawnSong,
                        sizeof(gSaveContext.save.saveInfo.scarecrowSpawnSong));
 
-            for (i = 0; i != ARRAY_COUNT(gSaveContext.save.saveInfo.scarecrowSpawnSong); i++) {}
+            for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.scarecrowSpawnSong); i++) {}
         }
 
         fileNum = gSaveContext.fileNum;
@@ -1255,21 +1380,20 @@ void func_80145698(SramContext* sramCtx) {
 }
 
 // Verifies save and use backup if corrupted?
-#ifdef NON_EQUIVALENT
 void func_801457CC(GameState* gameState, SramContext* sramCtx) {
     FileSelectState* fileSelect = (FileSelectState*)gameState;
     u16 sp7A;
-    u16 oldCheckSum; // s2
+    u16 oldCheckSum;
     u16 sp76;
-    u16 sp64; // sp74?
+    u16 sp64;
     u16 phi_s2;
-    u16 phi_s7;
+    u16 pad;
     u16 sp6E;
-    u16 newCheckSum; // v0
-    u16 phi_a0;      // maskCount
+    u16 newCheckSum;
+    u16 maskCount;
 
     if (gSaveContext.flashSaveAvailable) {
-        D_801F6AF0 = gSaveContext.save.time;
+        D_801F6AF0 = CURRENT_TIME;
         D_801F6AF2 = gSaveContext.flashSaveAvailable;
         sp64 = 0;
 
@@ -1304,23 +1428,23 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
 
                     // test checksum of main save
-                    oldCheckSum = gSaveContext.save.saveInfo.checksum;
+                    phi_s2 = gSaveContext.save.saveInfo.checksum;
                     gSaveContext.save.saveInfo.checksum = 0;
                     newCheckSum = Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64]);
-                    gSaveContext.save.saveInfo.checksum = oldCheckSum;
+                    gSaveContext.save.saveInfo.checksum = phi_s2;
 
-                    if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (oldCheckSum != newCheckSum)) {
+                    if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (newCheckSum != phi_s2)) {
                         // checksum didnt match, try backup save
                         sp6E = 1;
 
                         if ((gSaveContext.save.saveInfo.playerData.newf[0] == 'Z') &&
-                            (gSaveContext.save.saveInfo.playerData.newf[1] == 'E')) {
-                            phi_s2 = false;
-                        }
-
-                        // phi_s2 = false;
+                            (gSaveContext.save.saveInfo.playerData.newf[1] == 'E') &&
+                            (gSaveContext.save.saveInfo.playerData.newf[2] == 'L') &&
+                            (gSaveContext.save.saveInfo.playerData.newf[3] == 'D') &&
+                            (gSaveContext.save.saveInfo.playerData.newf[4] == 'A')) {}
 
                         // read backup save from flash
+                        phi_s2 = false;
                         if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
                                                  gFlashSaveNumPages[sp64 + 1]) != 0) {
                             // backup save didn't work
@@ -1333,9 +1457,8 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         oldCheckSum = gSaveContext.save.saveInfo.checksum;
                         gSaveContext.save.saveInfo.checksum = 0;
 
-                        //! FAKE: (s32)sp64
                         if (phi_s2 || CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) ||
-                            (oldCheckSum != Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[(s32)sp64]))) {
+                            (oldCheckSum != Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64]))) {
                             // backup save didn't work
                             bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
                             Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
@@ -1345,9 +1468,8 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                 }
 
                 gSaveContext.save.saveInfo.checksum = 0;
-                // FAKE: Needed?
-                gSaveContext.save.saveInfo.checksum =
-                    Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64 & 0xFFFFFFFF]);
+                //! FAKE: [sp64 + 0]?
+                gSaveContext.save.saveInfo.checksum = Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64 + 0]);
 
                 for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.newf); sp7A++) {
                     fileSelect->newf[sp76][sp7A] = gSaveContext.save.saveInfo.playerData.newf[sp7A];
@@ -1364,20 +1486,20 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     fileSelect->health[sp76] = gSaveContext.save.saveInfo.playerData.health;
                     fileSelect->defenseHearts[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
                     fileSelect->questItems[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
-                    fileSelect->time[sp76] = gSaveContext.save.time;
+                    fileSelect->time[sp76] = CURRENT_TIME;
                     fileSelect->day[sp76] = gSaveContext.save.day;
                     fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                     fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
                     fileSelect->walletUpgrades[sp76] = CUR_UPG_VALUE(UPG_WALLET);
 
-                    for (sp7A = 0, phi_a0 = 0; sp7A < 24; sp7A++) {
-                        if (gSaveContext.save.saveInfo.inventory.items[sp7A + 24] != 0xFF) {
-                            phi_a0++;
+                    for (sp7A = 0, maskCount = 0; sp7A < MASK_NUM_SLOTS; sp7A++) {
+                        if (gSaveContext.save.saveInfo.inventory.items[sp7A + ITEM_NUM_SLOTS] == ITEM_NONE) {
+                            continue;
                         }
+                        maskCount++;
                     }
-                    fileSelect->maskCount[sp76] = phi_a0;
-                    fileSelect->heartPieceCount[sp76] =
-                        ((gSaveContext.save.saveInfo.inventory.questItems & 0xF0000000) >> 0x1C);
+                    fileSelect->maskCount[sp76] = maskCount;
+                    fileSelect->heartPieceCount[sp76] = GET_QUEST_HEART_PIECE_COUNT;
                 }
 
                 if (sp6E == 1) {
@@ -1386,20 +1508,20 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64], gFlashSpecialSaveNumPages[sp64]);
                 } else if (!sp6E) {
                     // main save
-                    phi_s7 = gSaveContext.save.saveInfo.checksum;
+                    oldCheckSum = gSaveContext.save.saveInfo.checksum;
 
                     if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
                                              gFlashSaveNumPages[sp64 + 1]) != 0) {
-                        oldCheckSum = 1;
+                        phi_s2 = 1;
                     } else {
                         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
-                        oldCheckSum = gSaveContext.save.saveInfo.checksum;
+                        phi_s2 = gSaveContext.save.saveInfo.checksum;
                         gSaveContext.save.saveInfo.checksum = 0;
                         sp7A = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
                     }
 
-                    if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (oldCheckSum != sp7A) ||
-                        (oldCheckSum != phi_s7)) {
+                    if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (sp7A != phi_s2) ||
+                        (oldCheckSum != phi_s2)) {
                         SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64], gFlashSaveNumPages[sp64]);
                         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
                         Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
@@ -1419,24 +1541,26 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
                     } else {
                         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
-                        oldCheckSum = gSaveContext.save.saveInfo.checksum;
+                        phi_s2 = gSaveContext.save.saveInfo.checksum;
 
                         // test checksum of main save
                         gSaveContext.save.saveInfo.checksum = 0;
                         newCheckSum = Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64]);
-                        gSaveContext.save.saveInfo.checksum = oldCheckSum;
+                        gSaveContext.save.saveInfo.checksum = phi_s2;
 
-                        if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (oldCheckSum != newCheckSum)) {
+                        if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (newCheckSum != phi_s2)) {
                             // checksum didnt match, try backup save
                             sp6E = 1;
                             if ((gSaveContext.save.saveInfo.playerData.newf[0] == 'Z') &&
-                                (gSaveContext.save.saveInfo.playerData.newf[1] == 'E')) {
-                                phi_s2 = false;
-                            }
+                                (gSaveContext.save.saveInfo.playerData.newf[1] == 'E') &&
+                                (gSaveContext.save.saveInfo.playerData.newf[2] == 'L') &&
+                                (gSaveContext.save.saveInfo.playerData.newf[3] == 'D') &&
+                                (gSaveContext.save.saveInfo.playerData.newf[4] == 'A')) {}
 
+                            phi_s2 = false;
                             // read backup save from flash
                             if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
-                                                     gFlashSaveNumPages[sp64 + 1])) {
+                                                     gFlashSaveNumPages[sp64 + 1]) != 0) {
                                 // backup save didn't work
                                 phi_s2 = true;
                             }
@@ -1457,9 +1581,8 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     }
 
                     gSaveContext.save.saveInfo.checksum = 0;
-                    // FAKE: Needed?
-                    gSaveContext.save.saveInfo.checksum =
-                        Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64 & 0xFFFFFFFF]);
+                    // FAKE: [sp64 + 0]?
+                    gSaveContext.save.saveInfo.checksum = Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64 + 0]);
 
                     for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.newf); sp7A++) {
                         fileSelect->newf[sp76][sp7A] = gSaveContext.save.saveInfo.playerData.newf[sp7A];
@@ -1469,27 +1592,28 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         fileSelect->threeDayResetCount[sp76] = gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
                         for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); sp7A++) {
-                            fileSelect->fileNames[sp76][sp7A] = gSaveContext.save.saveInfo.playerData.playerName[sp7A];
+                            fileSelect->fileNames[sp76][sp7A] =
+                                (u32)gSaveContext.save.saveInfo.playerData.playerName[sp7A];
                         }
 
                         fileSelect->healthCapacity[sp76] = gSaveContext.save.saveInfo.playerData.healthCapacity;
                         fileSelect->health[sp76] = gSaveContext.save.saveInfo.playerData.health;
                         fileSelect->defenseHearts[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
                         fileSelect->questItems[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
-                        fileSelect->time[sp76] = gSaveContext.save.time;
+                        fileSelect->time[sp76] = CURRENT_TIME;
                         fileSelect->day[sp76] = gSaveContext.save.day;
                         fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                         fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
                         fileSelect->walletUpgrades[sp76] = CUR_UPG_VALUE(UPG_WALLET);
 
-                        for (sp7A = 0, phi_a0 = 0; sp7A < 24; sp7A++) {
-                            if (gSaveContext.save.saveInfo.inventory.items[sp7A + 24] != 0xFF) {
-                                phi_a0++;
+                        for (sp7A = 0, maskCount = 0; sp7A < MASK_NUM_SLOTS; sp7A++) {
+                            if (gSaveContext.save.saveInfo.inventory.items[sp7A + ITEM_NUM_SLOTS] == ITEM_NONE) {
+                                continue;
                             }
+                            maskCount++;
                         }
-                        fileSelect->maskCount[sp76] = phi_a0;
-                        fileSelect->heartPieceCount[sp76] =
-                            ((gSaveContext.save.saveInfo.inventory.questItems & 0xF0000000) >> 0x1C);
+                        fileSelect->maskCount[sp76] = maskCount;
+                        fileSelect->heartPieceCount[sp76] = GET_QUEST_HEART_PIECE_COUNT;
                     }
 
                     if (sp6E == 1) {
@@ -1498,20 +1622,20 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64 + 1], gFlashSaveNumPages[sp64 + 1]);
                     } else if (!sp6E) {
                         // main save
-                        phi_s7 = gSaveContext.save.saveInfo.checksum;
+                        oldCheckSum = gSaveContext.save.saveInfo.checksum;
 
                         if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
-                                                 gFlashSaveNumPages[sp64 + 1])) {
-                            oldCheckSum = 1;
+                                                 gFlashSaveNumPages[sp64 + 1]) != 0) {
+                            phi_s2 = 1;
                         } else {
                             Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
-                            oldCheckSum = gSaveContext.save.saveInfo.checksum;
+                            phi_s2 = gSaveContext.save.saveInfo.checksum;
                             gSaveContext.save.saveInfo.checksum = 0;
                             sp7A = Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64]);
                         }
 
-                        if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (oldCheckSum != sp7A) ||
-                            (oldCheckSum != phi_s7)) {
+                        if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (sp7A != phi_s2) ||
+                            (oldCheckSum != phi_s2)) {
                             SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64],
                                                  gFlashSaveNumPages[sp64]);
                             Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
@@ -1529,7 +1653,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
             } else {
                 if (phi_s2) {
                     gSaveContext.options.optionId = 0xA51D;
-                    gSaveContext.options.language = 1;
+                    gSaveContext.options.language = LANGUAGE_ENG;
                     gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
                     gSaveContext.options.languageSetting = 0;
                     gSaveContext.options.zTargetSetting = 0;
@@ -1537,13 +1661,13 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     Lib_MemCpy(&gSaveContext.options, sramCtx->saveBuf, sizeof(SaveOptions));
                     if (gSaveContext.options.optionId != 0xA51D) {
                         gSaveContext.options.optionId = 0xA51D;
-                        gSaveContext.options.language = 1;
+                        gSaveContext.options.language = LANGUAGE_ENG;
                         gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
                         gSaveContext.options.languageSetting = 0;
                         gSaveContext.options.zTargetSetting = 0;
                     }
                 }
-                func_801A3D98(gSaveContext.options.audioSetting);
+                Audio_SetFileSelectSettings(gSaveContext.options.audioSetting);
             }
         }
 
@@ -1551,11 +1675,8 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
         gSaveContext.flashSaveAvailable = D_801F6AF2;
     }
 
-    gSaveContext.options.language = 1;
+    gSaveContext.options.language = LANGUAGE_ENG;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
-#endif
 
 void Sram_EraseSave(FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum) {
     FileSelectState* fileSelect = fileSelect2;
@@ -1574,8 +1695,6 @@ void Sram_EraseSave(FileSelectState* fileSelect2, SramContext* sramCtx, s32 file
     gSaveContext.flashSaveAvailable = D_801F6AF2;
 }
 
-#ifdef NON_MATCHING
-// v0/v1
 void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     FileSelectState* fileSelect = fileSelect2;
     u16 i;
@@ -1598,14 +1717,14 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
             fileSelect->defenseHearts[fileSelect->copyDestFileIndex + 2] =
                 gSaveContext.save.saveInfo.inventory.defenseHearts;
             fileSelect->questItems[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.inventory.questItems;
-            fileSelect->time[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.time;
+            fileSelect->time[fileSelect->copyDestFileIndex + 2] = CURRENT_TIME;
             fileSelect->day[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.day;
             fileSelect->isOwlSave[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.isOwlSave;
             fileSelect->rupees[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.playerData.rupees;
             fileSelect->walletUpgrades[fileSelect->copyDestFileIndex + 2] = CUR_UPG_VALUE(UPG_WALLET);
 
-            for (i = 0, maskCount = 0; i < 24; i++) {
-                if (gSaveContext.save.saveInfo.inventory.items[i + 24] != ITEM_NONE) {
+            for (i = 0, maskCount = 0; i < MASK_NUM_SLOTS; i++) {
+                if (gSaveContext.save.saveInfo.inventory.items[i + ITEM_NUM_SLOTS] != ITEM_NONE) {
                     maskCount++;
                 }
             }
@@ -1617,13 +1736,11 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         // clear buffer
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         // read to buffer
-        SysFlashrom_ReadData(&sramCtx->saveBuf[0], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2],
-                             gFlashSaveNumPages[fileSelect->selectedFileIndex * 2]);
-        if (1) {}
+        if (SysFlashrom_ReadData(&sramCtx->saveBuf[0], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2],
+                                 gFlashSaveNumPages[fileSelect->selectedFileIndex * 2])) {}
 
-        SysFlashrom_ReadData(&sramCtx->saveBuf[0x2000], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2 + 1],
-                             gFlashSaveNumPages[fileSelect->selectedFileIndex * 2 + 1]);
-        if (1) {}
+        if (SysFlashrom_ReadData(&sramCtx->saveBuf[0x2000], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2 + 1],
+                                 gFlashSaveNumPages[fileSelect->selectedFileIndex * 2 + 1])) {}
 
         // copy buffer to save context
         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
@@ -1641,14 +1758,14 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         fileSelect->health[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.health;
         fileSelect->defenseHearts[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.inventory.defenseHearts;
         fileSelect->questItems[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.inventory.questItems;
-        fileSelect->time[fileSelect->copyDestFileIndex] = gSaveContext.save.time;
+        fileSelect->time[fileSelect->copyDestFileIndex] = CURRENT_TIME;
         fileSelect->day[fileSelect->copyDestFileIndex] = gSaveContext.save.day;
         fileSelect->isOwlSave[fileSelect->copyDestFileIndex] = gSaveContext.save.isOwlSave;
         fileSelect->rupees[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.rupees;
         fileSelect->walletUpgrades[fileSelect->copyDestFileIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
-        for (i = 0, maskCount = 0; i < 24; i++) {
-            if (gSaveContext.save.saveInfo.inventory.items[i + 24] != ITEM_NONE) {
+        for (i = 0, maskCount = 0; i < MASK_NUM_SLOTS; i++) {
+            if (gSaveContext.save.saveInfo.inventory.items[i + ITEM_NUM_SLOTS] != ITEM_NONE) {
                 maskCount++;
             }
         }
@@ -1660,9 +1777,6 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     gSaveContext.save.time = D_801F6AF0;
     gSaveContext.flashSaveAvailable = D_801F6AF2;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_CopySave.s")
-#endif
 
 void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     s32 phi_v0;
@@ -1708,14 +1822,14 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         fileSelect->health[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.health;
         fileSelect->defenseHearts[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.inventory.defenseHearts;
         fileSelect->questItems[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.inventory.questItems;
-        fileSelect->time[fileSelect->buttonIndex] = gSaveContext.save.time;
+        fileSelect->time[fileSelect->buttonIndex] = CURRENT_TIME;
         fileSelect->day[fileSelect->buttonIndex] = gSaveContext.save.day;
         fileSelect->isOwlSave[fileSelect->buttonIndex] = gSaveContext.save.isOwlSave;
         fileSelect->rupees[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.rupees;
         fileSelect->walletUpgrades[fileSelect->buttonIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
-        for (i = 0, maskCount = 0; i < 24; i++) {
-            if (gSaveContext.save.saveInfo.inventory.items[i + 24] != ITEM_NONE) {
+        for (i = 0, maskCount = 0; i < MASK_NUM_SLOTS; i++) {
+            if (gSaveContext.save.saveInfo.inventory.items[i + ITEM_NUM_SLOTS] != ITEM_NONE) {
                 maskCount++;
             }
         }
@@ -1733,8 +1847,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
  */
 void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx) {
     if (gSaveContext.flashSaveAvailable) {
-        // TODO: macros for languages
-        gSaveContext.options.language = 1;
+        gSaveContext.options.language = LANGUAGE_ENG;
         Lib_MemCpy(sramCtx->saveBuf, &gSaveContext.options, sizeof(SaveOptions));
     }
 }
@@ -1742,12 +1855,12 @@ void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx) {
 void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
     if (gSaveContext.save.entrance) {} // Required to match
 
-    func_801A3D98(gSaveContext.options.audioSetting);
+    Audio_SetFileSelectSettings(gSaveContext.options.audioSetting);
 }
 
 void Sram_Alloc(GameState* gameState, SramContext* sramCtx) {
     if (gSaveContext.flashSaveAvailable) {
-        sramCtx->saveBuf = THA_AllocTailAlign16(&gameState->heap, SAVE_BUFFER_SIZE);
+        sramCtx->saveBuf = THA_AllocTailAlign16(&gameState->tha, SAVE_BUFFER_SIZE);
         sramCtx->status = 0;
     }
 }
@@ -1781,7 +1894,7 @@ void Sram_SaveSpecialEnterClockTown(PlayState* play) {
 void Sram_SaveSpecialNewDay(PlayState* play) {
     s32 cutsceneIndex = gSaveContext.save.cutsceneIndex;
     s32 day;
-    u16 time = gSaveContext.save.time;
+    u16 time = CURRENT_TIME;
 
     day = gSaveContext.save.day;
 

@@ -2,13 +2,14 @@
 #define Z_EN_GB2_H
 
 #include "global.h"
+#include "objects/object_ps/object_ps.h"
 
 struct EnGb2;
 
 typedef void (*EnGb2ActionFunc)(struct EnGb2*, PlayState*);
 
 #define ENGB2_GET_7(thisx) ((thisx)->params & 7)
-#define ENGB2_GET_7F8(thisx) (((thisx)->params & 0x7F8) >> 3)
+#define ENGB2_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x7F8) >> 3)
 
 typedef enum {
     /* 0 */ ENGB2_7_0,
@@ -19,15 +20,15 @@ typedef enum {
 typedef struct EnGb2 {
     /* 0x0000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[12];
-    /* 0x1D0 */ Vec3s morphTable[12];
+    /* 0x188 */ Vec3s jointTable[OBJECT_PS_LIMB_MAX];
+    /* 0x1D0 */ Vec3s morphTable[OBJECT_PS_LIMB_MAX];
     /* 0x218 */ EnGb2ActionFunc actionFunc;
     /* 0x21C */ ColliderCylinder collider;
     /* 0x268 */ Actor* unk_268;
     /* 0x26C */ u16 unk_26C;
     /* 0x26E */ u16 unk_26E;
-    /* 0x270 */ Vec3s unk_270;
-    /* 0x276 */ Vec3s unk_276;
+    /* 0x270 */ Vec3s headRot;
+    /* 0x276 */ Vec3s torsoRot;
     /* 0x27C */ s16 unk_27C;
     /* 0x27E */ s16 unk_27E;
     /* 0x280 */ s16 unk_280;

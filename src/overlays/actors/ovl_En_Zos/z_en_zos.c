@@ -6,7 +6,7 @@
 
 #include "z_en_zos.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_2000000)
 
 #define THIS ((EnZos*)thisx)
 
@@ -51,15 +51,15 @@ typedef enum {
 } EnZosAnimation;
 
 ActorInit En_Zos_InitVars = {
-    ACTOR_EN_ZOS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZOS,
-    sizeof(EnZos),
-    (ActorFunc)EnZos_Init,
-    (ActorFunc)EnZos_Destroy,
-    (ActorFunc)EnZos_Update,
-    (ActorFunc)EnZos_Draw,
+    /**/ ACTOR_EN_ZOS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZOS,
+    /**/ sizeof(EnZos),
+    /**/ EnZos_Init,
+    /**/ EnZos_Destroy,
+    /**/ EnZos_Update,
+    /**/ EnZos_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -138,7 +138,7 @@ static AnimationHeader* sAnimations[] = {
     &gEvanLeanOnKeyboardAnim,        // EN_ZOS_ANIM_LEAN_ON_KEYBOARD
     &gEvanLeanOnKeyboardAndSighAnim, // EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH
     &gEvanHandsOnHipsAnim,           // EN_ZOS_ANIM_HANDS_ON_HIPS
-    &gEeanTalkFootTapAnim,           // EN_ZOS_ANIM_TALK_FOOT_TAP
+    &gEvanTalkFootTapAnim,           // EN_ZOS_ANIM_TALK_FOOT_TAP
     &gEvanTalkLookDownAnim,          // EN_ZOS_ANIM_TALK_LOOK_DOWN
     &gEvanTalkArmsOutAnim,           // EN_ZOS_ANIM_TALK_ARMS_OUT
     &gEvanTalkHandsOnHipsAnim,       // EN_ZOS_ANIM_TALK_HANDS_ON_HIPS
@@ -178,7 +178,7 @@ s32 func_80BBAF5C(EnZos* this, PlayState* play) {
 
 s32 func_80BBAFFC(EnZos* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        switch ((s16)Rand_ZeroFloat(4.0f)) {
+        switch (TRUNCF_BINANG(Rand_ZeroFloat(4.0f))) {
             case 0:
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT, ANIMMODE_ONCE);
                 break;
@@ -214,7 +214,7 @@ void func_80BBB0D4(EnZos* this, PlayState* play) {
 void func_80BBB15C(EnZos* this, PlayState* play) {
     s32 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (this->unk_2B6 & 8) {
             textId = 0x1235;
             EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
@@ -249,12 +249,12 @@ void func_80BBB15C(EnZos* this, PlayState* play) {
 }
 
 void func_80BBB2C4(EnZos* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x124F, &this->actor);
         this->actionFunc = func_80BBB8AC;
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -266,7 +266,7 @@ void func_80BBB354(EnZos* this, PlayState* play) {
         this->actionFunc = func_80BBB2C4;
         SET_WEEKEVENTREG(WEEKEVENTREG_39_20);
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_20)) {
             getItemId = GI_RUPEE_PURPLE;
@@ -420,7 +420,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
     switch (play->msgCtx.currentTextId) {
         case 0x1237:
-            player->exchangeItemId = PLAYER_IA_NONE;
+            player->exchangeItemAction = PLAYER_IA_NONE;
             // fallthrough
         case 0x1238:
         case 0x123A:
@@ -439,7 +439,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
         case 0x1232:
         case 0x1241:
-            player->exchangeItemId = PLAYER_IA_NONE;
+            player->exchangeItemAction = PLAYER_IA_NONE;
             // fallthrough
         case 0x1239:
         case 0x1246:
@@ -475,7 +475,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
         case 0x123D:
         case 0x1242:
             EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
-            Actor_ProcessTalkRequest(&this->actor, &play->state);
+            Actor_TalkOfferAccepted(&this->actor, &play->state);
             Message_CloseTextbox(play);
             this->actionFunc = func_80BBBDE0;
             this->unk_2B6 |= 1;
@@ -497,9 +497,9 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 }
 
 void func_80BBBB84(EnZos* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             Message_StartTextbox(play, 0x1248, &this->actor);
             this->actionFunc = func_80BBB8AC;
             EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
@@ -516,18 +516,18 @@ void func_80BBBB84(EnZos* this, PlayState* play) {
             this->unk_2B6 |= 0x10;
         }
     } else {
-        func_800B8614(&this->actor, play, 300.0f);
+        Actor_OfferTalk(&this->actor, play, 300.0f);
     }
 }
 
 void func_80BBBCBC(EnZos* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_ARMS_OUT, ANIMMODE_LOOP);
         Message_StartTextbox(play, 0x124D, &this->actor);
         this->actionFunc = func_80BBB574;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -536,13 +536,13 @@ void func_80BBBD5C(EnZos* this, PlayState* play) {
     if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
         this->actionFunc = func_80BBBCBC;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
 void func_80BBBDE0(EnZos* this, PlayState* play) {
     Actor* thisx = &this->actor;
-    Vec3f sp28;
+    Vec3f seqPos;
 
     if (this->unk_2B6 & 1) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x1000, 0x200);
@@ -555,21 +555,21 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
 
     func_80BBB0D4(this, play);
 
-    if (play->msgCtx.ocarinaMode == 0x2A) {
-        play->msgCtx.ocarinaMode = 4;
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_FULL_EVAN_SONG) {
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = func_80BBBB84;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
         return;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BBB8AC;
         func_80BBB15C(this, play);
     } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
         this->actionFunc = func_80BBBD5C;
     } else if (func_80BBAF5C(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 
     if (!Actor_IsFacingPlayer(&this->actor, 0x4000) && (this->actor.xzDistToPlayer < 100.0f)) {
@@ -578,16 +578,16 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_10);
     }
 
-    sp28.x = this->actor.projectedPos.x;
-    sp28.y = this->actor.projectedPos.y;
-    sp28.z = this->actor.projectedPos.z;
-    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_PIANO_PLAY, 1000.0f);
+    seqPos.x = this->actor.projectedPos.x;
+    seqPos.y = this->actor.projectedPos.y;
+    seqPos.z = this->actor.projectedPos.z;
+    Audio_PlaySequenceAtPos(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_PIANO_PLAY, 1000.0f);
 }
 
 void func_80BBBFBC(EnZos* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x125B;
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_80)) {
@@ -641,11 +641,11 @@ void func_80BBC14C(EnZos* this, PlayState* play) {
 
     func_80BBB0D4(this, play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BBC070;
         func_80BBBFBC(this, play);
     } else if (func_80BBAF5C(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -714,11 +714,11 @@ void EnZos_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 func_80BBC4E4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnZos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     return false;
 }
 
-void func_80BBC500(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnZos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BBC750 = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == EVAN_LIMB_HEAD) {
@@ -760,7 +760,7 @@ void EnZos_Draw(Actor* thisx, PlayState* play) {
     Matrix_Pop();
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80BBC4E4, func_80BBC500, &this->actor);
+                          EnZos_OverrideLimbDraw, EnZos_PostLimbDraw, &this->actor);
 
     if (this->unk_2B6 & 0x40) {
         POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);

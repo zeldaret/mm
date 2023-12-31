@@ -9,10 +9,10 @@
 #include "overlays/actors/ovl_En_Fu_Kago/z_en_fu_kago.h"
 #include "overlays/actors/ovl_Bg_Fu_Kaiten/z_bg_fu_kaiten.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/object_mu/object_mu.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnFu*)thisx)
 
@@ -40,7 +40,7 @@ void func_80963540(EnFu* this);
 void func_80963560(EnFu* this, PlayState* play);
 void func_80963610(EnFu* this);
 void func_80963630(EnFu* this, PlayState* play);
-s32 func_80963810(PlayState* play, Vec3f pos);
+s32 EnFu_MovePlayerToPos(PlayState* play, Vec3f targetPos);
 s32 func_809638F8(PlayState* play);
 void func_809639D0(EnFu* this, PlayState* play);
 void func_80963DE4(EnFu* this, PlayState* play);
@@ -56,15 +56,15 @@ void func_809647EC(PlayState* play, EnFuUnkStruct* ptr, s32 len);
 void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len);
 
 ActorInit En_Fu_InitVars = {
-    ACTOR_EN_FU,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MU,
-    sizeof(EnFu),
-    (ActorFunc)EnFu_Init,
-    (ActorFunc)EnFu_Destroy,
-    (ActorFunc)EnFu_Update,
-    (ActorFunc)EnFu_Draw,
+    /**/ ACTOR_EN_FU,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MU,
+    /**/ sizeof(EnFu),
+    /**/ EnFu_Init,
+    /**/ EnFu_Destroy,
+    /**/ EnFu_Update,
+    /**/ EnFu_Draw,
 };
 
 static s32 D_80964B00[] = { 300, 100, 100 };
@@ -73,13 +73,31 @@ static Vec3f D_80964B0C = { 0.0f, 60.0f, -8.0f };
 static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
-static AnimationInfo sAnimationInfo[] = {
+typedef enum {
+    /* 0 */ HONEY_DARLING_ANIM_IDLE,
+    /* 1 */ HONEY_DARLING_ANIM_CUP_CHEEKS,
+    /* 2 */ HONEY_DARLING_ANIM_HUG,
+    /* 3 */ HONEY_DARLING_ANIM_GAME_DANCE,
+    /* 4 */ HONEY_DARLING_ANIM_HOLD_HANDS_MORPH,
+    /* 5 */ HONEY_DARLING_ANIM_HOLD_HANDS,
+    /* 6 */ HONEY_DARLING_ANIM_SURPRISE,
+    /* 7 */ HONEY_DARLING_ANIM_MAX
+} HoneyAndDarlingAnimation;
+
+static AnimationInfo sAnimationInfo[HONEY_DARLING_ANIM_MAX] = {
+    // HONEY_DARLING_ANIM_IDLE
     { &gHoneyAndDarlingIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    // HONEY_DARLING_ANIM_CUP_CHEEKS
     { &gHoneyAndDarlingCupCheeksLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    // HONEY_DARLING_ANIM_HUG
     { &gHoneyAndDarlingHugLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    // HONEY_DARLING_ANIM_GAME_DANCE
     { &gHoneyAndDarlingGameDanceLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    // HONEY_DARLING_ANIM_HOLD_HANDS_MORPH
     { &gHoneyAndDarlingHoldHandsLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    // HONEY_DARLING_ANIM_HOLD_HANDS
     { &gHoneyAndDarlingHoldHandsLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    // HONEY_DARLING_ANIM_SURPRISE
     { &gHoneyAndDarlingSurpiseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
@@ -111,19 +129,19 @@ void func_809616E0(EnFu* this, PlayState* play) {
     s16 spA0 = false;
     Vec3f sp94;
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && (CURRENT_DAY == 3)) {
+    if ((GET_PLAYER_FORM == PLAYER_FORM_DEKU) && (CURRENT_DAY == 3)) {
         spA0 = true;
     }
     this->unk_54C = 0;
 
     for (i = 0; i < this->unk_520; i++) {
-        temp_f20 = this->actor.world.pos.x - this->unk_538[i].x;
-        temp_f22 = this->actor.world.pos.z - this->unk_538[i].z;
+        temp_f20 = this->actor.world.pos.x - this->pathPoints[i].x;
+        temp_f22 = this->actor.world.pos.z - this->pathPoints[i].z;
         atan = Math_Atan2S_XY(temp_f22, temp_f20);
 
         if (!spA0 || ((i % 2) != 0)) {
-            Actor_Spawn(&play->actorCtx, play, this->unk_544, this->unk_538[i].x, this->unk_538[i].y,
-                        this->unk_538[i].z, 0, atan, 0, i);
+            Actor_Spawn(&play->actorCtx, play, this->unk_544, this->pathPoints[i].x, this->pathPoints[i].y,
+                        this->pathPoints[i].z, 0, atan, 0, i);
             this->unk_54C++;
         }
 
@@ -133,9 +151,9 @@ void func_809616E0(EnFu* this, PlayState* play) {
             Color_RGBA8 sp78 = { 255, 255, 255, 255 };
             Color_RGBA8 sp74 = { 198, 198, 198, 255 };
 
-            sp94.x = this->unk_538[i].x;
-            sp94.y = this->unk_538[i].y;
-            sp94.z = this->unk_538[i].z;
+            sp94.x = this->pathPoints[i].x;
+            sp94.y = this->pathPoints[i].y;
+            sp94.z = this->pathPoints[i].z;
             func_800B0EB0(play, &sp94, &sp88, &sp7C, &sp78, &sp74, 100, 150, 10);
             sp94.x -= 0.1f * temp_f20;
             sp94.z -= 0.1f * temp_f22;
@@ -146,7 +164,7 @@ void func_809616E0(EnFu* this, PlayState* play) {
 
 void func_809619D0(EnFu* this, PlayState* play) {
     s32 i;
-    Path* path = &play->setupPathList[ENFU_GET_FF00(&this->actor)];
+    Path* path = &play->setupPathList[ENFU_GET_PATH_INDEX(&this->actor)];
 
     switch (CURRENT_DAY) {
         case 1:
@@ -175,7 +193,7 @@ void func_809619D0(EnFu* this, PlayState* play) {
     }
 
     this->unk_520 = path->count;
-    this->unk_538 = Lib_SegmentedToVirtual(path->points);
+    this->pathPoints = Lib_SegmentedToVirtual(path->points);
     func_809616E0(this, play);
 }
 
@@ -200,7 +218,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         Actor_SetScale(&this->actor, 0.01f);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.gravity = -0.2f;
         this->actor.shape.rot.y += 0x4000;
         this->actor.world.rot = this->actor.shape.rot;
@@ -213,7 +231,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
         this->unk_54E = 0;
         this->unk_550 = 0;
         func_809622FC(this);
-        this->actor.targetMode = 6;
+        this->actor.targetMode = TARGET_MODE_6;
         func_809619D0(this, play);
         if (CURRENT_DAY == 2) {
             Vec3f sp40 = this->actor.child->home.pos;
@@ -310,13 +328,13 @@ void func_80961F38(PlayState* play, Vec3f* arg1, s16* arg2, s16 arg3, s16 arg4, 
     sp40 = Math_Vec3f_Yaw(arg1, &sp34) - arg3;
 
     if (arg5 < ABS_ALT(sp40)) {
-        Math_SmoothStepToS(&arg2[0], 0, 6, 6200, 100);
-        Math_SmoothStepToS(&arg2[1], 0, 6, 6200, 100);
+        Math_SmoothStepToS(&arg2[0], 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&arg2[1], 0, 6, 0x1838, 0x64);
     } else {
         sp42 = Math_Vec3f_Pitch(arg1, &sp34);
 
-        Math_SmoothStepToS(&arg2[0], sp42, 6, 6200, 100);
-        Math_SmoothStepToS(&arg2[1], sp40, 6, 6200, 100);
+        Math_SmoothStepToS(&arg2[0], sp42, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&arg2[1], sp40, 6, 0x1838, 0x64);
     }
 
     if (arg4 < ABS_ALT(arg2[1])) {
@@ -327,7 +345,7 @@ void func_80961F38(PlayState* play, Vec3f* arg1, s16* arg2, s16 arg3, s16 arg4, 
         }
     }
 
-    Math_SmoothStepToS(&arg2[2], 0, 6, 2000, 100);
+    Math_SmoothStepToS(&arg2[2], 0, 6, 0x7D0, 0x64);
 }
 
 void func_8096209C(EnFu* this, PlayState* play) {
@@ -336,9 +354,9 @@ void func_8096209C(EnFu* this, PlayState* play) {
     if (this->unk_53C & 1) {
         func_80961F38(play, &this->unk_508, this->unk_524, this->actor.shape.rot.y, 0x38E3, 0x6AAA);
     } else {
-        Math_SmoothStepToS(&this->unk_524[0], 0, 6, 6000, 100);
-        Math_SmoothStepToS(&this->unk_524[1], 0, 6, 6000, 100);
-        Math_SmoothStepToS(&this->unk_524[2], 0, 6, 6000, 100);
+        Math_SmoothStepToS(&this->unk_524[0], 0, 6, 0x1770, 0x64);
+        Math_SmoothStepToS(&this->unk_524[1], 0, 6, 0x1770, 0x64);
+        Math_SmoothStepToS(&this->unk_524[2], 0, 6, 0x1770, 0x64);
     }
 
     if (this->unk_53C & 2) {
@@ -346,9 +364,9 @@ void func_8096209C(EnFu* this, PlayState* play) {
 
         func_80961F38(play, &this->unk_514, this->unk_52A, rotY, 0x38E3, 0x5555);
     } else {
-        Math_SmoothStepToS(&this->unk_52A[0], 0, 6, 6000, 100);
-        Math_SmoothStepToS(&this->unk_52A[1], 0, 6, 6000, 100);
-        Math_SmoothStepToS(&this->unk_52A[2], 0, 6, 6000, 100);
+        Math_SmoothStepToS(&this->unk_52A[0], 0, 6, 0x1770, 0x64);
+        Math_SmoothStepToS(&this->unk_52A[1], 0, 6, 0x1770, 0x64);
+        Math_SmoothStepToS(&this->unk_52A[2], 0, 6, 0x1770, 0x64);
     }
 
     if ((this->unk_53C & 1) && (this->unk_53C & 2)) {
@@ -371,7 +389,7 @@ void func_8096209C(EnFu* this, PlayState* play) {
 }
 
 void func_809622FC(EnFu* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_CUP_CHEEKS);
     this->actionFunc = func_80962340;
 }
 
@@ -382,10 +400,10 @@ void func_80962340(EnFu* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->unk_54A == 2) {
             if (this->unk_552 == 0x287D) {
-                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+                if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                     Message_StartTextbox(play, 0x287E, &this->actor);
                     this->unk_552 = 0x287E;
                 } else if ((CURRENT_DAY == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10) &&
@@ -418,11 +436,11 @@ void func_80962340(EnFu* this, PlayState* play) {
         }
         func_809628BC(this);
     } else if (this->unk_54A == 2) {
-        func_800B8614(&this->actor, play, 500.0f);
+        Actor_OfferTalk(&this->actor, play, 500.0f);
     } else {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 0x64);
 }
 
 void func_80962588(EnFu* this, PlayState* play) {
@@ -432,16 +450,16 @@ void func_80962588(EnFu* this, PlayState* play) {
 
     if (play->msgCtx.choiceIndex == 0) {
         if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             Rupees_ChangeBy(-10);
             func_80963DE4(this, play);
         } else {
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             Message_StartTextbox(play, 0x2873, &this->actor);
             this->unk_552 = 0x2873;
         }
     } else {
-        func_8019F230();
+        Audio_PlaySfx_MessageCancel();
         Message_StartTextbox(play, 0x2872, &this->actor);
         this->unk_552 = 0x2872;
     }
@@ -538,7 +556,7 @@ void func_80962660(EnFu* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_53C = 0;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_GAME_DANCE);
                 Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
@@ -617,6 +635,9 @@ void func_809628D0(EnFu* this, PlayState* play) {
                 }
             }
             break;
+
+        default:
+            break;
     }
 
     if (talkState != TEXT_STATE_3) {
@@ -644,7 +665,7 @@ void func_80962A10(EnFu* this, PlayState* play) {
         return;
     }
 
-    play_sound(NA_SE_SY_FOUND);
+    Audio_PlaySfx(NA_SE_SY_FOUND);
     player->stateFlags1 &= ~PLAYER_STATE1_20;
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 60);
     if (this->unk_546 == 1) {
@@ -653,7 +674,7 @@ void func_80962A10(EnFu* this, PlayState* play) {
         this->unk_546 = 1;
     }
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
+    if ((GET_PLAYER_FORM == PLAYER_FORM_DEKU) && gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
         Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
     }
 
@@ -680,7 +701,7 @@ void func_80962BCC(EnFu* this, PlayState* play) {
         return;
     }
 
-    play_sound(NA_SE_SY_FOUND);
+    Audio_PlaySfx(NA_SE_SY_FOUND);
     player->stateFlags1 &= ~PLAYER_STATE1_20;
     player->stateFlags3 |= PLAYER_STATE3_400000;
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 60);
@@ -711,7 +732,7 @@ void func_80962D60(EnFu* this, PlayState* play) {
         return;
     }
 
-    play_sound(NA_SE_SY_FOUND);
+    Audio_PlaySfx(NA_SE_SY_FOUND);
     player->stateFlags1 &= ~PLAYER_STATE1_20;
     player->stateFlags3 |= PLAYER_STATE3_400000;
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 60);
@@ -737,7 +758,7 @@ void func_80962EBC(EnFu* this, PlayState* play) {
 
 void func_80962F10(EnFu* this) {
     this->unk_548 = 0;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     SET_WEEKEVENTREG(WEEKEVENTREG_08_01);
     this->actionFunc = func_80962F4C;
 }
@@ -748,7 +769,7 @@ void func_80962F4C(EnFu* this, PlayState* play) {
 
     switch (this->unk_542) {
         case 0:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
                 player->stateFlags3 |= PLAYER_STATE3_400;
             }
             break;
@@ -759,6 +780,9 @@ void func_80962F4C(EnFu* this, PlayState* play) {
 
         case 2:
             play->unk_1887D = 30;
+            break;
+
+        default:
             break;
     }
 
@@ -815,13 +839,13 @@ void func_80963258(EnFu* this) {
 
 void func_8096326C(EnFu* this, PlayState* play) {
     func_80963FF8(this, play);
-    if (func_80963810(play, this->actor.world.pos)) {
+    if (EnFu_MovePlayerToPos(play, this->actor.world.pos)) {
         func_809622FC(this);
     }
 }
 
 void func_809632D0(EnFu* this) {
-    if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
         Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     }
 
@@ -833,7 +857,7 @@ void func_809632D0(EnFu* this) {
         mizu->unk_160 = 0;
     }
 
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80963350;
 }
 
@@ -865,7 +889,7 @@ void func_80963350(EnFu* this, PlayState* play) {
         D_80964C24 = 0;
         fuKaiten->bounce = 0;
         func_80963F88(this, play);
-        play->actorCtx.unk268 = 1;
+        play->actorCtx.isOverrideInputOn = true;
         func_80963258(this);
     }
 }
@@ -895,9 +919,9 @@ void func_80963610(EnFu* this) {
 void func_80963630(EnFu* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_20) && (CURRENT_DAY == 3) &&
-            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+            (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_40)) {
                 Message_StartTextbox(play, 0x2884, &this->actor);
                 this->unk_552 = 0x2884;
@@ -918,7 +942,7 @@ void func_80963630(EnFu* this, PlayState* play) {
         this->actor.child->freezeTimer = 0;
         func_809628BC(this);
 
-        if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
             switch (CURRENT_DAY) {
                 case 1:
                     SET_WEEKEVENTREG(WEEKEVENTREG_22_10);
@@ -931,36 +955,39 @@ void func_80963630(EnFu* this, PlayState* play) {
                 case 3:
                     SET_WEEKEVENTREG(WEEKEVENTREG_22_40);
                     break;
+
+                default:
+                    break;
             }
         }
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     } else {
         this->actor.child->freezeTimer = 10;
-        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
     }
 }
 
-s32 func_80963810(PlayState* play, Vec3f pos) {
+s32 EnFu_MovePlayerToPos(PlayState* play, Vec3f targetPos) {
     Player* player = GET_PLAYER(play);
-    f32 sp28;
-    f32 phi_f0;
-    s16 sp22;
+    f32 distXZ;
+    f32 controlStickMagnitude;
+    s16 controlStickAngle;
 
-    sp22 = Math_Vec3f_Yaw(&player->actor.world.pos, &pos);
-    sp28 = Math_Vec3f_DistXZ(&player->actor.world.pos, &pos);
+    controlStickAngle = Math_Vec3f_Yaw(&player->actor.world.pos, &targetPos);
+    distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &targetPos);
 
-    if (sp28 < 80.0f) {
-        phi_f0 = 10.0f;
-    } else if (sp28 < 90.0f) {
-        phi_f0 = 40.0f;
+    if (distXZ < 80.0f) {
+        controlStickMagnitude = 10.0f;
+    } else if (distXZ < 90.0f) {
+        controlStickMagnitude = 40.0f;
     } else {
-        phi_f0 = 80.0f;
+        controlStickMagnitude = 80.0f;
     }
 
-    play->actorCtx.unk268 = 1;
-    func_800B6F20(play, &play->actorCtx.unk_26C, phi_f0, sp22);
+    play->actorCtx.isOverrideInputOn = true;
+    Actor_SetControlStickData(play, &play->actorCtx.overrideInput, controlStickMagnitude, controlStickAngle);
 
-    if (sp28 < 80.0f) {
+    if (distXZ < 80.0f) {
         return true;
     }
     return false;
@@ -969,46 +996,46 @@ s32 func_80963810(PlayState* play, Vec3f pos) {
 s32 func_809638F8(PlayState* play) {
     s32 ret = true;
 
-    if (play->envCtx.lightSettings.diffuseColor1[0] > 25) {
-        play->envCtx.lightSettings.diffuseColor1[0] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[0] > 25) {
+        play->envCtx.adjLightSettings.light1Color[0] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.diffuseColor1[0] = 0;
+        play->envCtx.adjLightSettings.light1Color[0] = 0;
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[1] > 25) {
-        play->envCtx.lightSettings.diffuseColor1[1] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[1] > 25) {
+        play->envCtx.adjLightSettings.light1Color[1] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.diffuseColor1[1] = 0;
+        play->envCtx.adjLightSettings.light1Color[1] = 0;
     }
 
-    if (play->envCtx.lightSettings.diffuseColor1[2] > 25) {
-        play->envCtx.lightSettings.diffuseColor1[2] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[2] > 25) {
+        play->envCtx.adjLightSettings.light1Color[2] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.diffuseColor1[2] = 0;
+        play->envCtx.adjLightSettings.light1Color[2] = 0;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[0] > 25) {
-        play->envCtx.lightSettings.ambientColor[0] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[0] > 25) {
+        play->envCtx.adjLightSettings.ambientColor[0] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.ambientColor[0] = 0;
+        play->envCtx.adjLightSettings.ambientColor[0] = 0;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[1] > 25) {
-        play->envCtx.lightSettings.ambientColor[1] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[1] > 25) {
+        play->envCtx.adjLightSettings.ambientColor[1] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.ambientColor[1] = 0;
+        play->envCtx.adjLightSettings.ambientColor[1] = 0;
     }
 
-    if (play->envCtx.lightSettings.ambientColor[2] > 25) {
-        play->envCtx.lightSettings.ambientColor[2] -= 25;
+    if (play->envCtx.adjLightSettings.ambientColor[2] > 25) {
+        play->envCtx.adjLightSettings.ambientColor[2] -= 25;
         ret = false;
     } else {
-        play->envCtx.lightSettings.ambientColor[2] = 0;
+        play->envCtx.adjLightSettings.ambientColor[2] = 0;
     }
     return ret;
 }
@@ -1016,7 +1043,7 @@ s32 func_809638F8(PlayState* play) {
 void func_809639D0(EnFu* this, PlayState* play) {
     switch (CURRENT_DAY) {
         case 1:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
                 if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
                     Message_StartTextbox(play, 0x2853, &this->actor);
                     this->unk_552 = 0x2853;
@@ -1038,7 +1065,7 @@ void func_809639D0(EnFu* this, PlayState* play) {
             break;
 
         case 2:
-            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
                 Message_StartTextbox(play, 0x286F, &this->actor);
                 this->unk_552 = 0x286F;
             } else if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
@@ -1067,8 +1094,8 @@ void func_809639D0(EnFu* this, PlayState* play) {
             break;
 
         case 3:
-            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
+                if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                     func_80963EAC(this, play);
                 } else {
                     Message_StartTextbox(play, 0x2841, &this->actor);
@@ -1112,13 +1139,16 @@ void func_809639D0(EnFu* this, PlayState* play) {
                 this->unk_552 = 0x286D;
             }
             break;
+
+        default:
+            break;
     }
 }
 
 void func_80963DE4(EnFu* this, PlayState* play) {
     switch (this->unk_542) {
         case 0:
-            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
                 Message_StartTextbox(play, 0x2875, &this->actor);
                 this->unk_552 = 0x2875;
             } else {
@@ -1135,6 +1165,9 @@ void func_80963DE4(EnFu* this, PlayState* play) {
         case 2:
             Message_StartTextbox(play, 0x287B, &this->actor);
             this->unk_552 = 0x287B;
+            break;
+
+        default:
             break;
     }
 }
@@ -1176,10 +1209,10 @@ void func_80963FF8(EnFu* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags1 & PLAYER_STATE1_100000) {
-        play->actorCtx.unk268 = 1;
-        play->actorCtx.unk_26C.press.button = BTN_A;
+        play->actorCtx.isOverrideInputOn = true;
+        play->actorCtx.overrideInput.press.button = BTN_A;
     } else {
-        play->actorCtx.unk268 = 1;
+        play->actorCtx.isOverrideInputOn = true;
     }
 }
 
@@ -1205,7 +1238,7 @@ void func_809640D8(EnFu* this, PlayState* play) {
 }
 
 void func_8096413C(EnFu* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.yawTowardsPlayer, 0x4000), 5, 1000, 100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.yawTowardsPlayer, 0x4000), 5, 0x3E8, 0x64);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
@@ -1215,7 +1248,7 @@ void func_80964190(EnFu* this, PlayState* play) {
             case 0x2842:
             case 0x2844:
             case 0x2848:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_CUP_CHEEKS);
                 break;
 
             case 0x2840:
@@ -1241,21 +1274,24 @@ void func_80964190(EnFu* this, PlayState* play) {
             case 0x286B:
             case 0x286D:
             case 0x2871:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_HOLD_HANDS_MORPH);
                 break;
 
             case 0x2860:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_HOLD_HANDS);
                 break;
 
             case 0x285F:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_SURPRISE);
                 break;
 
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_HUG);
+                break;
+
+            default:
                 break;
         }
     }
@@ -1348,13 +1384,13 @@ void EnFu_Update(Actor* thisx, PlayState* play) {
 s32 EnFu_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFu* this = THIS;
 
-    if (limbIndex == 9) {
+    if (limbIndex == HONEY_AND_DARLING_LIMB_MAN_HEAD) {
         Matrix_Translate(1600.0f, 300.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->unk_524[1], MTXMODE_APPLY);
         Matrix_RotateZS(this->unk_524[0], MTXMODE_APPLY);
         Matrix_RotateYS(this->unk_524[2], MTXMODE_APPLY);
         Matrix_Translate(-1600.0f, -300.0f, 0.0f, MTXMODE_APPLY);
-    } else if (limbIndex == 20) {
+    } else if (limbIndex == HONEY_AND_DARLING_LIMB_WOMAN_HEAD) {
         Matrix_Translate(1800.0f, 200.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->unk_52A[1], MTXMODE_APPLY);
         Matrix_RotateZS(this->unk_52A[0], MTXMODE_APPLY);
@@ -1369,9 +1405,9 @@ void EnFu_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     static Vec3f D_80964C34 = { -3500.0f, 0.0f, 0.0f };
     EnFu* this = THIS;
 
-    if (limbIndex == 9) {
+    if (limbIndex == HONEY_AND_DARLING_LIMB_MAN_HEAD) {
         Matrix_MultVec3f(&D_80964C28, &this->unk_508);
-    } else if (limbIndex == 20) {
+    } else if (limbIndex == HONEY_AND_DARLING_LIMB_WOMAN_HEAD) {
         Matrix_MultVec3f(&D_80964C34, &this->unk_514);
     }
 }
