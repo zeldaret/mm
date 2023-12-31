@@ -34,8 +34,8 @@ typedef struct GohtLightningSegment {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ s16 alpha;
     /* 0x0E */ Vec3s rot;
-    /* 0x14 */ ColliderTris unk_14;
-    /* 0x34 */ ColliderTrisElement unk_34;
+    /* 0x14 */ ColliderTris collider;
+    /* 0x34 */ ColliderTrisElement colliderElements[1];
 } GohtLightningSegment; // size = 0x90
 
 #define GOHT_LIGHTNING_SEGMENT_COUNT 20
@@ -102,14 +102,17 @@ typedef struct BossHakugin {
     /* 0x018F */ u8 preventBombSpawnCount;
     /* 0x0190 */ u8 blockMalfunctionEffects; // boolean?
     /* 0x0191 */ u8 malfunctionBodyPartIndex; // See GohtBodyPart
-    /* 0x0192 */ u8 unk_0192; // See `GohtUnk192`
+    /* 0x0192 */ u8 electricBallState; // See `GohtElectricBallState`
     /* 0x0193 */ u8 iceAlpha;
     /* 0x0194 */ u8 hasAppliedGoronSpikeBoost;
     /* 0x0195 */ u8 finishedFallingDown;
     /* 0x0196 */ u8 drawDmgEffType;
     /* 0x0198 */ s16 lightOrbRotZ; // TODO: this name is bad!
     /* 0x019A */ s16 damagedSpeedUpCounter; // TODO: maybe there's a better name for this? It's weird
-    /* 0x019C */ s16 unk_019C; // seems to mostly be a generic timer, BossHakugin_CutsceneStart uses it for something else though
+    /* 0x019C */ union {
+                    s16 nextCutsceneType;
+                    s16 timer;
+                 };
     /* 0x019E */ s16 unk_019E;
     /* 0x01A0 */ s16 unk_01A0;
     /* 0x01A2 */ s16 unk_01A2;
@@ -136,11 +139,11 @@ typedef struct BossHakugin {
     /* 0x01E8 */ Vec3s jointTable[GOHT_LIMB_MAX];
     /* 0x02AE */ Vec3s morphTable[GOHT_LIMB_MAX];
     /* 0x0374 */ Vec3s headRot;
-    /* 0x037A */ Vec3s unk_037A; // subcam rotation I think?
+    /* 0x037A */ Vec3s subCamRot; // TODO: Ask engineer about this lol
     /* 0x0380 */ Vec3f chargingLightningPos; // TODO: might be used for a few other things, look into this one further
     /* 0x038C */ Vec3f subCamEye;
     /* 0x0398 */ Vec3f bodyPartsPos[GOHT_BODYPART_MAX];
-    /* 0x044C */ Vec3f unk_044C;
+    /* 0x044C */ Vec3f transformedPlayerPos;
     /* 0x0458 */ Vec3f sfxPos;
     /* 0x0464 */ Vec3f electricBallSfxPos;
     /* 0x0470 */ LightNode* lightNode;
