@@ -122,7 +122,7 @@ typedef struct BossHakugin {
     /* 0x01AA */ s16 electricBallCount;
     /* 0x01AC */ s16 subCamId;
     /* 0x01AE */ s16 deathCutsceneRandomHeadRot; // TODO: bad, but descriptive
-    /* 0x01B0 */ u32 unk_01B0;
+    /* 0x01B0 */ u32 limbDrawFlags;
     /* 0x01B4 */ s32 direction;
     /* 0x01B8 */ f32 electricBallSpeed;
     /* 0x01BC */ f32 distToRightWall;

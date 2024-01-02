@@ -20,7 +20,7 @@
 
 #define THIS ((BossHakugin*)thisx)
 
-#define GOHT_LIMB_FLAG(limbIndex) (1 << ((limbIndex)-1))
+#define GOHT_LIMB_DRAW_FLAG(limbIndex) (1 << ((limbIndex)-1))
 
 void BossHakugin_Init(Actor* thisx, PlayState* play2);
 void BossHakugin_Destroy(Actor* thisx, PlayState* play);
@@ -559,7 +559,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_01A0 = this->actor.shape.rot.y;
-    this->unk_01B0 = 0xFFFFFFFF;
+    this->limbDrawFlags = 0xFFFFFFFF;
 
     if (CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOHT)) {
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_BOSS | SEQ_FLAG_ASYNC);
@@ -1068,7 +1068,7 @@ void BossHakugin_AddMalfunctionEffects(BossHakugin* this, PlayState* play) {
 
     for (type = 0; type < GOHT_MALFUNCTION_NUM_TYPES; type++) {
         if (((15 - (3 * type)) < this->actor.colChkInfo.health) ||
-            !(GOHT_LIMB_FLAG(D_80B0EAB0[type]) & this->unk_01B0)) {
+            !(GOHT_LIMB_DRAW_FLAG(D_80B0EAB0[type]) & this->limbDrawFlags)) {
             break;
         }
 
@@ -2163,28 +2163,28 @@ void BossHakugin_SetupDead(BossHakugin* this) {
 
 typedef struct {
     /* 0x0 */ s32 colliderIndex;
-    /* 0x4 */ u32 unk_04;
+    /* 0x4 */ u32 limbHideFlags;
 } BossHakuginStruct_B0A8C4; // size = 0x4
 
 static s32 D_80B0EB24[5] = { 0, 15, 26, 33, 36 };
 
 static BossHakuginStruct_B0A8C4 D_80B0EB38[] = {
-    { GOHT_COLLIDER_BODYPART_HEAD, GOHT_LIMB_FLAG(GOHT_LIMB_HEAD) | GOHT_LIMB_FLAG(GOHT_LIMB_JAW) },
-    { GOHT_COLLIDER_BODYPART_FRONT_RIGHT_LOWER_LEG, GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_RIGHT_UPPER_LEG) |
-                                                        GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_RIGHT_LOWER_LEG) |
-                                                        GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_RIGHT_HOOF) },
-    { GOHT_COLLIDER_BODYPART_FRONT_LEFT_LOWER_LEG, GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_LEFT_UPPER_LEG) |
-                                                       GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_LEFT_LOWER_LEG) |
-                                                       GOHT_LIMB_FLAG(GOHT_LIMB_FRONT_LEFT_HOOF) },
-    { GOHT_COLLIDER_BODYPART_BACK_LEFT_SHIN, GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_SHIN) |
-                                                 GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_PASTERN) |
-                                                 GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_HOOF) },
-    { GOHT_COLLIDER_BODYPART_BACK_RIGHT_SHIN, GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_SHIN) |
-                                                  GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_PASTERN) |
-                                                  GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_HOOF) },
-    { GOHT_COLLIDER_BODYPART_THORAX, GOHT_LIMB_FLAG(GOHT_LIMB_PELVIS) | GOHT_LIMB_FLAG(GOHT_LIMB_THORAX) |
-                                         GOHT_LIMB_FLAG(GOHT_LIMB_BACK_RIGHT_THIGH) |
-                                         GOHT_LIMB_FLAG(GOHT_LIMB_BACK_LEFT_THIGH) },
+    { GOHT_COLLIDER_BODYPART_HEAD, GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_HEAD) | GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_JAW) },
+    { GOHT_COLLIDER_BODYPART_FRONT_RIGHT_LOWER_LEG, GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_FRONT_RIGHT_UPPER_LEG) |
+                                                        GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_FRONT_RIGHT_LOWER_LEG) |
+                                                        GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_FRONT_RIGHT_HOOF) },
+    { GOHT_COLLIDER_BODYPART_FRONT_LEFT_LOWER_LEG, GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_FRONT_LEFT_UPPER_LEG) |
+                                                       GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_FRONT_LEFT_LOWER_LEG) |
+                                                       GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_FRONT_LEFT_HOOF) },
+    { GOHT_COLLIDER_BODYPART_BACK_LEFT_SHIN, GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_BACK_LEFT_SHIN) |
+                                                 GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_BACK_LEFT_PASTERN) |
+                                                 GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_BACK_LEFT_HOOF) },
+    { GOHT_COLLIDER_BODYPART_BACK_RIGHT_SHIN, GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_BACK_RIGHT_SHIN) |
+                                                  GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_BACK_RIGHT_PASTERN) |
+                                                  GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_BACK_RIGHT_HOOF) },
+    { GOHT_COLLIDER_BODYPART_THORAX, GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_PELVIS) | GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_THORAX) |
+                                         GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_BACK_RIGHT_THIGH) |
+                                         GOHT_LIMB_DRAW_FLAG(GOHT_LIMB_BACK_LEFT_THIGH) },
 };
 
 void BossHakugin_Dead(BossHakugin* this, PlayState* play) {
@@ -2225,7 +2225,7 @@ void BossHakugin_Dead(BossHakugin* this, PlayState* play) {
             bomb->timer = 0;
         }
 
-        this->unk_01B0 &= ~unkStruct->unk_04;
+        this->limbDrawFlags &= ~unkStruct->limbHideFlags;
         if (sp60 == 5) {
             SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CLEAR_BOSS | SEQ_FLAG_ASYNC);
         }
@@ -2711,7 +2711,7 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
         if (limbIndex == GOHT_LIMB_ROOT) {
             pos->y -= this->actor.shape.yOffset;
         }
-        if (!(this->unk_01B0 & GOHT_LIMB_FLAG(limbIndex))) {
+        if (!(this->limbDrawFlags & GOHT_LIMB_DRAW_FLAG(limbIndex))) {
             *dList = NULL;
         }
     }
