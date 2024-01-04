@@ -30,7 +30,7 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play);
 void BossHakugin_DrawDead(Actor* thisx, PlayState* play);
 
 void BossHakugin_SpawnLargeStalactiteWalls(BossHakugin* this);
-void BossHakugin_SpawnBlueWarp(BossHakugin* this, PlayState* play);
+void BossHakugin_SpawnBlueWarpAndHeartContainer(BossHakugin* this, PlayState* play);
 void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
 void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
 void func_80B0D9CC(BossHakugin* this);
@@ -541,7 +541,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     this->direction = GOHT_DIRECTION_COUNTERCLOCKWISE;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
-        BossHakugin_SpawnBlueWarp(this, play);
+        BossHakugin_SpawnBlueWarpAndHeartContainer(this, play);
         Actor_Kill(&this->actor);
         return;
     }
@@ -647,7 +647,7 @@ void func_80B057A4(Vec3f* arg0, Vec3f* arg1, f32 arg2) {
 
 /**
  * Sets up the walls made of large stalactites that confine the player to the part of the boss room near the door; these
- * are the stalactites that are destroyed when Goht is thawed.
+ * are the stalactites that are destroyed when Goht is thawed just before the fight begins.
  */
 void BossHakugin_SpawnLargeStalactiteWalls(BossHakugin* this) {
     s32 i = 0;
@@ -698,6 +698,10 @@ void BossHakugin_RequestQuakeAndRumble(BossHakugin* this, PlayState* play, s16 s
     }
 }
 
+/**
+ * When Goht is frozen before the fight starts, this function has a 10% chance of spawning a single sparkle effect in a
+ * random position somewhere around the ice.
+ */
 void BossHakugin_SpawnIceSparkle(BossHakugin* this, PlayState* play) {
     Vec3f pos;
 
@@ -714,6 +718,11 @@ void BossHakugin_SpawnIceSparkle(BossHakugin* this, PlayState* play) {
     }
 }
 
+/**
+ * Boosts the player's y-velocity and linear velocity whenever they jump off a ramp while Goron rolling with spikes.
+ * This makes the player's jump go much higher, and the increase to the linear velocity was seemingly done to make the
+ * player's speed in the air more closely match their speed on the ground. This boost is only applied once per jump.
+ */
 void BossHakugin_ApplyGoronSpikeBoost(BossHakugin* this, Player* player) {
     if (!this->hasAppliedGoronSpikeBoost && (player->stateFlags3 & PLAYER_STATE3_80000) &&
         !(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (player->actor.velocity.y > 5.0f)) {
@@ -725,36 +734,54 @@ void BossHakugin_ApplyGoronSpikeBoost(BossHakugin* this, Player* player) {
     }
 }
 
-void func_80B05D4C(BossHakugin* this) {
+/**
+ * Updates the position and radius of a single dynamic light. Since there's only one light, all of Goht's various
+ * effects have to share it, so the following list is used to determine priority; if an effect higher up the list is
+ * using the light, effects lower down the list will not be able to use it. In practice, it is uncommon for effects to
+ * overlap such that this priority list actually matters:
+ * - If an electric ball is active, the light will be attached to it. Since the electric ball is made up of multiple
+ *   light orbs of different opacities, the light will be attached to the most-opaque light orb.
+ * - If Goht is charging up a lightning or electric ball attack, then the light will be attached to the charging effect
+ *   in front of Goht's head.
+ * - If Goht is shooting lightning, then the light will be attached to the last lightning segment in the list that has
+ *   an alpha of 255. This results in the light following the lightning down from Goht's head.
+ */
+void BossHakugin_UpdateLight(BossHakugin* this) {
     Vec3f* lightPos = &this->actor.world.pos;
     s32 i;
-    s16 var_t1 = 0;
+    s16 radius = 0;
 
     for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
         if (this->lightningSegments[i].alpha == 255) {
             lightPos = &this->lightningSegments[i].pos;
-            var_t1 = 5000;
+            radius = 5000;
             break;
         }
     }
+
     if (i == GOHT_LIGHTNING_SEGMENT_COUNT) {
         if (this->chargingLightOrbScale > 0.0f) {
             lightPos = &this->chargingLightningPos;
-            var_t1 = (this->chargingLightOrbScale / 30.0f) * 5000.0f;
+            radius = (this->chargingLightOrbScale / 30.0f) * 5000.0f;
         } else if ((this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FLY_TOWARDS_PLAYER) ||
                    (this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FLY_FORWARD)) {
             lightPos = &this->electricBallPos[0];
-            var_t1 = 5000;
+            radius = 5000;
         } else if (this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FADE_OUT) {
             lightPos = &this->electricBallPos[this->electricBallCount];
-            var_t1 = (10 - this->electricBallCount) * 500.0f;
+            radius = (ARRAY_COUNT(this->electricBallPos) - this->electricBallCount) * 500.0f;
         }
     }
+
     Lights_PointNoGlowSetInfo(&this->lightInfo, lightPos->x, lightPos->y, lightPos->z, sLightColor.r, sLightColor.g,
-                              sLightColor.b, var_t1);
+                              sLightColor.b, radius);
 }
 
-void BossHakugin_SpawnBlueWarp(BossHakugin* this, PlayState* play) {
+/**
+ * Spawns the blue warp at one of four predetermined locations based on Goht's x and z-coordinates, then spawns the
+ * heart container offset from the blue warp.
+ */
+void BossHakugin_SpawnBlueWarpAndHeartContainer(BossHakugin* this, PlayState* play) {
     s16 atan = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x);
     Vec3f warpPos;
     Vec3f heartPos;
@@ -2217,7 +2244,7 @@ void BossHakugin_Dead(BossHakugin* this, PlayState* play) {
         Play_DisableMotionBlur();
         CutsceneManager_Stop(this->actor.csId);
         Play_SetCameraAtEye(play, this->subCamId, &mainCam->at, &mainCam->eye);
-        BossHakugin_SpawnBlueWarp(this, play);
+        BossHakugin_SpawnBlueWarpAndHeartContainer(this, play);
         func_80B0DFA8(this);
         this->actor.draw = BossHakugin_DrawDead;
         this->actor.update = BossHakugin_UpdateDead;
@@ -2521,7 +2548,9 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
         if (sp60 > M_PI / 4.0f) {
             sp60 = M_PI / 4.0f;
         }
+
         Math_Vec3f_Diff(&player->actor.world.pos, sp6C, &sp70);
+
         if (BossHakugin_Vec3fNormalize(&sp70)) {
             func_80B057A4(&this->electricBallRot, &sp70, sp60);
         }
@@ -2634,7 +2663,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     BossHakugin_UpdateElectricBalls(this, play);
     BossHakugin_SpawnIceSparkle(this, play);
     BossHakugin_ApplyGoronSpikeBoost(this, player);
-    func_80B05D4C(this);
+    BossHakugin_UpdateLight(this);
 
     if ((this->bodyCollider.base.atFlags & AT_ON) && (this->actor.colorFilterTimer == 0)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->bodyCollider.base);
