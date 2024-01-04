@@ -103,7 +103,7 @@ ActorInit Boss_Hakugin_InitVars = {
     /**/ BossHakugin_Draw,
 };
 
-static ColliderJntSphElementInit sJntSphElementsInit[19] = {
+static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX] = {
     {
         {
             ELEMTYPE_UNK2,
@@ -400,19 +400,19 @@ typedef enum GohtDamageEffect {
     /* 0x2 */ GOHT_DMGEFF_FIRE = 2,
     /* 0x3 */ GOHT_DMGEFF_FREEZE,
     /* 0x4 */ GOHT_DMGEFF_LIGHT_ORB,
-    /* 0xC */ GOHT_DMGEFF_C = 0xC,
+    /* 0xC */ GOHT_DMGEFF_EXPLOSIVE = 0xC,
     /* 0xD */ GOHT_DMGEFF_BLUE_LIGHT_ORB,
-    /* 0xE */ GOHT_DMGEFF_E,
-    /* 0xF */ GOHT_DMGEFF_F
+    /* 0xE */ GOHT_DMGEFF_ARROW,
+    /* 0xF */ GOHT_DMGEFF_GORON_SPIKES
 } GohtDamageEffect;
 
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
     /* Deku Stick     */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
     /* Horse trample  */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* Explosives     */ DMG_ENTRY(1, GOHT_DMGEFF_C),
+    /* Explosives     */ DMG_ENTRY(1, GOHT_DMGEFF_EXPLOSIVE),
     /* Zora boomerang */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
-    /* Normal arrow   */ DMG_ENTRY(1, GOHT_DMGEFF_E),
+    /* Normal arrow   */ DMG_ENTRY(1, GOHT_DMGEFF_ARROW),
     /* UNK_DMG_0x06   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
     /* Hookshot       */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
     /* Goron punch    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
@@ -421,7 +421,7 @@ static DamageTable sDamageTable = {
     /* Fire arrow     */ DMG_ENTRY(1, GOHT_DMGEFF_FIRE),
     /* Ice arrow      */ DMG_ENTRY(1, GOHT_DMGEFF_FREEZE),
     /* Light arrow    */ DMG_ENTRY(1, GOHT_DMGEFF_LIGHT_ORB),
-    /* Goron spikes   */ DMG_ENTRY(1, GOHT_DMGEFF_F),
+    /* Goron spikes   */ DMG_ENTRY(1, GOHT_DMGEFF_GORON_SPIKES),
     /* Deku spin      */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
     /* Deku bubble    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
     /* Deku launch    */ DMG_ENTRY(1, GOHT_DMGEFF_NONE),
@@ -438,12 +438,16 @@ static DamageTable sDamageTable = {
     /* UNK_DMG_0x1C   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
     /* Unblockable    */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
     /* UNK_DMG_0x1E   */ DMG_ENTRY(0, GOHT_DMGEFF_NONE),
-    /* Powder Keg     */ DMG_ENTRY(1, GOHT_DMGEFF_C),
+    /* Powder Keg     */ DMG_ENTRY(1, GOHT_DMGEFF_EXPLOSIVE),
 };
 
 static CollisionCheckInfoInit sColChkInfoInit = { 30, 80, 100, MASS_IMMOVABLE };
 
-TexturePtr D_80B0EA88 = gGohtMetalPlateWithCirclePatternTex;
+/**
+ * For whatever reason, the chin of the "face" on Goht's head relies on the actor to put the texture in segment 0x08 to
+ * render properly. Since the texture never changes, the reason for doing it like this is unclear.
+ */
+TexturePtr sChinTexture = gGohtMetalPlateWithCirclePatternTex;
 
 static s8 sLimbToBodyParts[GOHT_LIMB_MAX] = {
     BODYPART_NONE,                       // GOHT_LIMB_NONE
@@ -492,13 +496,13 @@ s32 D_80B0EAB0[GOHT_MALFUNCTION_NUM_TYPES] = {
 static Color_RGBA8 sSparklePrimColor = { 250, 250, 250, 255 };
 static Color_RGBA8 sSparkleEnvColor = { 180, 180, 180, 255 };
 
-Color_RGB8 sGohtLightColor = { 0, 150, 255 }; // For lights and light orbs
-Color_RGB8 sGohtLightningColor = { 0, 255, 255 };
+static Color_RGB8 sLightColor = { 0, 150, 255 }; // For lights and light orbs
+static Color_RGB8 sLightningColor = { 0, 255, 255 };
 
 void BossHakugin_Init(Actor* thisx, PlayState* play2) {
-    static s32 sTextureDesegmented = false;
+    static s32 sTexturesDesegmented = false;
     static InitChainEntry sInitChain[] = {
-        ICHAIN_S8(hintId, 27, ICHAIN_CONTINUE),
+        ICHAIN_S8(hintId, TATL_HINT_ID_GOHT, ICHAIN_CONTINUE),
         ICHAIN_VEC3F_DIV1000(scale, 27, ICHAIN_CONTINUE),
         ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
         ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
@@ -512,9 +516,10 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGohtSkel, &gGohtRunAnim, this->jointTable, this->morphTable,
                        GOHT_LIMB_MAX);
-    if (!sTextureDesegmented) {
-        sTextureDesegmented = true;
-        D_80B0EA88 = Lib_SegmentedToVirtual(D_80B0EA88);
+
+    if (!sTexturesDesegmented) {
+        sTexturesDesegmented = true;
+        sChinTexture = Lib_SegmentedToVirtual(sChinTexture);
     }
 
     Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->actor, &sJntSphInit, this->bodyColliderElements);
@@ -745,8 +750,8 @@ void func_80B05D4C(BossHakugin* this) {
             var_t1 = (10 - this->electricBallCount) * 500.0f;
         }
     }
-    Lights_PointNoGlowSetInfo(&this->lightInfo, lightPos->x, lightPos->y, lightPos->z, sGohtLightColor.r,
-                              sGohtLightColor.g, sGohtLightColor.b, var_t1);
+    Lights_PointNoGlowSetInfo(&this->lightInfo, lightPos->x, lightPos->y, lightPos->z, sLightColor.r, sLightColor.g,
+                              sLightColor.b, var_t1);
 }
 
 void BossHakugin_SpawnBlueWarp(BossHakugin* this, PlayState* play) {
@@ -2292,15 +2297,18 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                 break;
             }
         }
+
         if (i == GOHT_COLLIDER_BODYPART_MAX) {
             return false;
         }
+
         // DMG_DEKU_NUT | DMG_DEKU_STICK | DMG_ZORA_BOOMERANG | DMG_NORMAL_ARROW | DMG_HOOKSHOT | DMG_ICE_ARROW
         // | DMG_LIGHT_ARROW | DMG_DEKU_SPIN | DMG_DEKU_BUBBLE | DMG_DEKU_LAUNCH | DMG_ZORA_BARRIER
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
             (this->bodyCollider.elements[i].info.acHitInfo->toucher.dmgFlags & 0x000DB0B3)) {
             return false;
         }
+
         func_80B07B88(this, play);
 
         if (this->actionFunc == BossHakugin_FallDown) {
@@ -2318,18 +2326,18 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
             return true;
         }
 
-        if (((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F) ||
-             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_E) ||
+        if (((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_GORON_SPIKES) ||
+             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_ARROW) ||
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_FIRE) ||
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_FREEZE) ||
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_LIGHT_ORB) ||
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_BLUE_LIGHT_ORB) ||
-             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_C)) &&
+             (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_EXPLOSIVE)) &&
             ((this->actionFunc == BossHakugin_Run) || (this->actionFunc == BossHakugin_ShootLightning) ||
              (this->actionFunc == BossHakugin_ChargeLightning) || (this->actionFunc == BossHakugin_Charge))) {
             Player* player = GET_PLAYER(play);
 
-            if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F) {
+            if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_GORON_SPIKES) {
                 player->pushedSpeed = 15.0f;
                 if ((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y) > 0) {
                     player->pushedYaw = this->actor.shape.rot.y + 0x4000;
@@ -2337,18 +2345,20 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                     player->pushedYaw = this->actor.shape.rot.y - 0x4000;
                 }
             }
+
             this->disableCollidersTimer = 15;
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
             this->damagedSpeedUpCounter += 35;
             BossHakugin_UpdateDrawDmgEffect(this, play, i);
             this->actor.colChkInfo.damage = this->bodyCollider.elements[i].info.acHitInfo->toucher.damage;
+
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_DEAD_OLD);
                 BossHakugin_SetupCutsceneStart(this);
             } else {
-                if ((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_C) ||
-                    ((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F) &&
+                if ((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_EXPLOSIVE) ||
+                    ((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_GORON_SPIKES) &&
                      (this->actionFunc != BossHakugin_Charge) &&
                      ((this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HEAD].info.bumperFlags & BUMP_HIT) ||
                       (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_THORAX].info.bumperFlags & BUMP_HIT) ||
@@ -2366,12 +2376,14 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                     BossHakugin_SetupFallDown(this);
                 } else if ((this->electricBallState == GOHT_ELECTRIC_BALL_STATE_NONE) &&
                            (this->electricBallCount == 0) && (this->actionFunc == BossHakugin_Run) &&
-                           (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_F)) {
+                           (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_GORON_SPIKES)) {
                     this->chargeUpTimer = 5;
                     this->electricBallState = GOHT_ELECTRIC_BALL_STATE_CHARGE;
                 }
+
                 Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_DAMAGE_OLD);
             }
+
             return true;
         } else {
             s32 j;
@@ -2857,7 +2869,7 @@ void BossHakugin_DrawChargingLightning(BossHakugin* this, PlayState* play) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     if (this->chargingLightOrbScale > 0.0f) {
-        gDPSetEnvColor(POLY_XLU_DISP++, sGohtLightningColor.r, sGohtLightningColor.g, sGohtLightningColor.b, 0);
+        gDPSetEnvColor(POLY_XLU_DISP++, sLightningColor.r, sLightningColor.g, sLightningColor.b, 0);
         gSPDisplayList(POLY_XLU_DISP++, gGohtLightningMaterialDL);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
 
@@ -2880,7 +2892,7 @@ void BossHakugin_DrawChargingLightning(BossHakugin* this, PlayState* play) {
         }
 
         gDPPipeSync(POLY_XLU_DISP++);
-        gDPSetEnvColor(POLY_XLU_DISP++, sGohtLightColor.r, sGohtLightColor.g, sGohtLightColor.b, 0);
+        gDPSetEnvColor(POLY_XLU_DISP++, sLightColor.r, sLightColor.g, sLightColor.b, 0);
         Matrix_Translate(this->chargingLightningPos.x, this->chargingLightningPos.y, this->chargingLightningPos.z,
                          MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
@@ -2903,7 +2915,7 @@ void BossHakugin_DrawLightningSegments(BossHakugin* this, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gDPSetEnvColor(POLY_XLU_DISP++, sGohtLightningColor.r, sGohtLightningColor.g, sGohtLightningColor.b, 0);
+    gDPSetEnvColor(POLY_XLU_DISP++, sLightningColor.r, sLightningColor.g, sLightningColor.b, 0);
     gSPDisplayList(POLY_XLU_DISP++, gGohtLightningMaterialDL);
 
     for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
@@ -2955,7 +2967,7 @@ void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    gDPSetEnvColor(POLY_XLU_DISP++, sGohtLightColor.r, sGohtLightColor.g, sGohtLightColor.b, 0);
+    gDPSetEnvColor(POLY_XLU_DISP++, sLightColor.r, sLightColor.g, sLightColor.b, 0);
 
     rotZ = this->lightOrbRotZ;
 
@@ -3012,7 +3024,7 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, D_80B0EA88);
+    gSPSegment(POLY_OPA_DISP++, 0x08, sChinTexture);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           BossHakugin_OverrideLimbDraw, BossHakugin_PostLimbDraw, &this->actor);
 
