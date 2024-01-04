@@ -558,7 +558,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     }
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->unk_01A0 = this->actor.shape.rot.y;
+    this->baseRotY = this->actor.shape.rot.y;
     this->limbDrawFlags = 0xFFFFFFFF;
 
     if (CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOHT)) {
@@ -776,8 +776,8 @@ void BossHakugin_SpawnBlueWarp(BossHakugin* this, PlayState* play) {
     }
 
     sp50 = this->direction * 300.0f;
-    sin = Math_SinS(this->unk_019E);
-    cos = Math_CosS(this->unk_019E);
+    sin = Math_SinS(this->targetRotY);
+    cos = Math_CosS(this->targetRotY);
     heartPos.x = ((100.0f * sin) + warpPos.x) + (sp50 * cos);
     heartPos.z = ((100.0f * cos) + warpPos.z) - (sp50 * sin);
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, warpPos.x, warpPos.y, warpPos.z, 0, 0, 0,
@@ -799,19 +799,19 @@ void func_80B0607C(BossHakugin* this, PlayState* play) {
     Vec3f posB;
     f32 sp48;
 
-    posA.x = this->actor.world.pos.x + (Math_SinS(this->unk_01A0) * (5.0f * this->actor.speed));
+    posA.x = this->actor.world.pos.x + (Math_SinS(this->baseRotY) * (5.0f * this->actor.speed));
     posA.y = this->actor.world.pos.y + 450.0f;
-    posA.z = this->actor.world.pos.z + (Math_CosS(this->unk_01A0) * (5.0f * this->actor.speed));
+    posA.z = this->actor.world.pos.z + (Math_CosS(this->baseRotY) * (5.0f * this->actor.speed));
 
-    posB.x = posA.x - Math_CosS(this->unk_01A0) * 1000.0f;
+    posB.x = posA.x - Math_CosS(this->baseRotY) * 1000.0f;
     posB.y = posA.y;
-    posB.z = posA.z + (Math_SinS(this->unk_01A0) * 1000.0f);
+    posB.z = posA.z + (Math_SinS(this->baseRotY) * 1000.0f);
 
     if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &rightWallResultPos, &rightWallPoly, true, true, false,
                                 true, &bgId)) {
         sp82 =
             Math_Atan2S_XY(COLPOLY_GET_NORMAL(rightWallPoly->normal.z), COLPOLY_GET_NORMAL(rightWallPoly->normal.x)) -
-            this->unk_01A0;
+            this->baseRotY;
         this->distToRightWall = Math_Vec3f_DistXZ(&posA, &rightWallResultPos);
     } else {
         sp82 = 0;
@@ -824,7 +824,7 @@ void func_80B0607C(BossHakugin* this, PlayState* play) {
     if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &leftWallResultPos, &leftWallPoly, true, true, false, true,
                                 &bgId)) {
         sp80 = Math_Atan2S_XY(COLPOLY_GET_NORMAL(leftWallPoly->normal.z), COLPOLY_GET_NORMAL(leftWallPoly->normal.x)) -
-               this->unk_01A0;
+               this->baseRotY;
         this->distToLeftWall = Math_Vec3f_DistXZ(&posA, &leftWallResultPos);
     } else {
         sp80 = 0;
@@ -839,23 +839,23 @@ void func_80B0607C(BossHakugin* this, PlayState* play) {
 
     if (this->distToRightWall <= 89.100006f) {
         sp48 = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? 89.100006f : 139.1f;
-        this->actor.world.pos.x = (rightWallResultPos.x + (sp48 * Math_CosS(this->unk_01A0))) -
-                                  (Math_SinS(this->unk_01A0) * (5.0f * this->actor.speed));
-        this->actor.world.pos.z = (rightWallResultPos.z - (sp48 * Math_SinS(this->unk_01A0))) -
-                                  (Math_CosS(this->unk_01A0) * (5.0f * this->actor.speed));
+        this->actor.world.pos.x = (rightWallResultPos.x + (sp48 * Math_CosS(this->baseRotY))) -
+                                  (Math_SinS(this->baseRotY) * (5.0f * this->actor.speed));
+        this->actor.world.pos.z = (rightWallResultPos.z - (sp48 * Math_SinS(this->baseRotY))) -
+                                  (Math_CosS(this->baseRotY) * (5.0f * this->actor.speed));
     } else if (this->distToLeftWall <= 89.100006f) {
         sp48 = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? 139.1f : 89.100006f;
-        this->actor.world.pos.x = (leftWallResultPos.x - (sp48 * Math_CosS(this->unk_01A0))) -
-                                  (Math_SinS(this->unk_01A0) * (5.0f * this->actor.speed));
-        this->actor.world.pos.z = (leftWallResultPos.z + (sp48 * Math_SinS(this->unk_01A0))) -
-                                  (Math_CosS(this->unk_01A0) * (5.0f * this->actor.speed));
+        this->actor.world.pos.x = (leftWallResultPos.x - (sp48 * Math_CosS(this->baseRotY))) -
+                                  (Math_SinS(this->baseRotY) * (5.0f * this->actor.speed));
+        this->actor.world.pos.z = (leftWallResultPos.z + (sp48 * Math_SinS(this->baseRotY))) -
+                                  (Math_CosS(this->baseRotY) * (5.0f * this->actor.speed));
     }
 
     if ((this->distToLeftWall < 30000.0f) && (this->distToRightWall < 30000.0f)) {
         var_v0 = (s16)(sp82 + sp80) >> 1;
         if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (var_v0 < 0)) ||
             ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) && (var_v0 > 0))) {
-            this->unk_01A0 += var_v0;
+            this->baseRotY += var_v0;
         }
     }
 }
@@ -1223,7 +1223,7 @@ s32 func_80B0791C(BossHakugin* this, PlayState* play) {
     if (this->transformedPlayerPos.z > 0.0f) {
         return false;
     }
-    var_v1 = this->unk_01A0 - Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
+    var_v1 = this->baseRotY - Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
     var_v0_2 = ABS_ALT(var_v1);
 
     if (var_v0_2 < 0x4000) {
@@ -1614,9 +1614,9 @@ void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
 
 void BossHakugin_SetupRun(BossHakugin* this) {
     Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -5.0f);
-    this->unk_01A2 = 0;
+    this->runOffsetRot = 0;
     this->chargingLightOrbScale = 0.0f;
-    this->unk_019E = Rand_CenteredFloat(3072.0f);
+    this->targetRotY = Rand_CenteredFloat(3072.0f);
     this->timer = 40;
     this->targetSpeed = 16.0f;
     this->actionFunc = BossHakugin_Run;
@@ -1677,19 +1677,19 @@ void BossHakugin_Run(BossHakugin* this, PlayState* play) {
         func_80B07450(this, play);
 
         if ((this->distToRightWall < (this->distToLeftWall * 0.5f)) || (this->distToRightWall < 89.100006f)) {
-            this->unk_019E = (Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f;
+            this->targetRotY = (Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f;
         } else if ((this->distToLeftWall < (this->distToRightWall * 0.5f)) || (this->distToLeftWall < 89.100006f)) {
-            this->unk_019E = -((Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f);
-        } else if ((this->unk_01A2 == this->unk_019E) && (Rand_ZeroOne() < 0.005f)) {
-            if (this->unk_019E > 0) {
-                this->unk_019E = -((Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f);
+            this->targetRotY = -((Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f);
+        } else if ((this->runOffsetRot == this->targetRotY) && (Rand_ZeroOne() < 0.005f)) {
+            if (this->targetRotY > 0) {
+                this->targetRotY = -((Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f);
             } else {
-                this->unk_019E = ((Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f);
+                this->targetRotY = ((Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f);
             }
         }
 
-        Math_SmoothStepToS(&this->unk_01A2, this->unk_019E, 5, 0x800, 0x10);
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_01A0 + this->unk_01A2, 5, 0x800, 0x10);
+        Math_SmoothStepToS(&this->runOffsetRot, this->targetRotY, 5, 0x800, 0x10);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->baseRotY + this->runOffsetRot, 5, 0x800, 0x10);
 
         yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1717,26 +1717,26 @@ void BossHakugin_Charge(BossHakugin* this, PlayState* play) {
         BossHakugin_SetupRun(this);
     } else {
         if ((this->distToLeftWall < 89.100006f) || (this->distToRightWall < 89.100006f)) {
-            this->unk_019E = this->unk_01A0;
+            this->targetRotY = this->baseRotY;
         } else {
             if (((this->transformedPlayerPos.x > 0.0f) && (this->transformedPlayerPos.x < this->distToLeftWall)) ||
                 ((this->transformedPlayerPos.x <= 0.0f) && (-this->transformedPlayerPos.x < this->distToRightWall))) {
                 var_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
                 var_v0 = CLAMP(var_v0, -0x3000, 0x3000);
-                this->unk_019E = this->actor.shape.rot.y + var_v0;
+                this->targetRotY = this->actor.shape.rot.y + var_v0;
             } else {
-                this->unk_019E =
+                this->targetRotY =
                     ((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y) >> 1) + this->actor.shape.rot.y;
             }
         }
 
-        var_v0 = this->unk_019E - this->unk_01A0;
+        var_v0 = this->targetRotY - this->baseRotY;
         if (var_v0 > 0x1800) {
-            this->unk_019E = this->unk_01A0 + 0x1800;
+            this->targetRotY = this->baseRotY + 0x1800;
         } else if (var_v0 < -0x1800) {
-            this->unk_019E = this->unk_01A0 - 0x1800;
+            this->targetRotY = this->baseRotY - 0x1800;
         }
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_019E, 5, 0x800, 0x100);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->targetRotY, 5, 0x800, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 }
@@ -1801,7 +1801,7 @@ void BossHakugin_FallDown(BossHakugin* this, PlayState* play) {
         }
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_01A0, 5, 0x800, 0x10);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->baseRotY, 5, 0x800, 0x10);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (this->actor.speed < 0.1f) {
@@ -1839,7 +1839,7 @@ void BossHakugin_Throw(BossHakugin* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     Math_StepToF(&this->actor.speed, 0.0f, 2.0f);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_01A0, 5, 0x800, 0x100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->baseRotY, 5, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (this->timer < 10) {
@@ -1863,9 +1863,9 @@ void BossHakugin_Throw(BossHakugin* this, PlayState* play) {
         player->actor.shape.rot.x = -this->headRot.z + 0x8FC0;
 
         sp2C = Math_CosS(sp32);
-        player->actor.world.pos.x = this->actor.focus.pos.x - (Math_SinS(this->unk_01A0) * (20.0f * sp2C));
+        player->actor.world.pos.x = this->actor.focus.pos.x - (Math_SinS(this->baseRotY) * (20.0f * sp2C));
         player->actor.world.pos.y = this->actor.focus.pos.y - (Math_SinS(sp32) * 20.0f);
-        player->actor.world.pos.z = this->actor.focus.pos.z - (Math_CosS(this->unk_01A0) * (20.0f * sp2C));
+        player->actor.world.pos.z = this->actor.focus.pos.z - (Math_CosS(this->baseRotY) * (20.0f * sp2C));
     }
 }
 
@@ -1903,7 +1903,7 @@ void BossHakugin_SetupChargeLightning(BossHakugin* this, PlayState* play) {
             var_fv1 = 1.0f;
         }
 
-        this->unk_01A0 = this->actor.shape.rot.y + (this->direction * 0x6000);
+        this->baseRotY = this->actor.shape.rot.y + (this->direction * 0x6000);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->actor.world.pos.x += var_fv1 * 300.0f * Math_CosS(this->actor.shape.rot.y);
         this->actor.world.pos.z -= var_fv1 * 300.0f * Math_SinS(this->actor.shape.rot.y);
@@ -1946,7 +1946,7 @@ void BossHakugin_ChargeLightning(BossHakugin* this, PlayState* play) {
         this->timer--;
     } else {
         this->direction = -this->direction;
-        this->unk_01A0 = this->actor.shape.rot.y;
+        this->baseRotY = this->actor.shape.rot.y;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         BossHakugin_SetupRun(this);
     }
@@ -2000,29 +2000,29 @@ void BossHakugin_SetupDeathCutscenePart1(BossHakugin* this) {
     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
 
     if ((this->actor.world.pos.z >= 0.0f) && (this->actor.world.pos.x >= 0.0f)) {
-        this->unk_019E = -0x4000;
+        this->targetRotY = -0x4000;
     } else if ((this->actor.world.pos.z >= 0.0f) && (this->actor.world.pos.x < 0.0f)) {
-        this->unk_019E = -0x8000;
+        this->targetRotY = -0x8000;
     } else if ((this->actor.world.pos.x >= 0.0f) && (this->actor.world.pos.z < 0.0f)) {
-        this->unk_019E = 0;
+        this->targetRotY = 0;
     } else {
-        this->unk_019E = 0x4000;
+        this->targetRotY = 0x4000;
     }
 
     if (this->direction == GOHT_DIRECTION_CLOCKWISE) {
-        this->unk_019E -= 0x4000;
+        this->targetRotY -= 0x4000;
     }
 
     direction = this->direction;
-    if ((this->unk_019E > 0x6000) || (this->unk_019E < -0x6000)) {
+    if ((this->targetRotY > 0x6000) || (this->targetRotY < -0x6000)) {
         this->subCamEye.x = direction * -1200.0f;
         this->subCamEye.y = (direction * 80.0f) + -240.0f + 60.0f;
         this->subCamEye.z = 1200.0f;
-    } else if ((this->unk_019E < 0x2000) && (this->unk_019E > -0x2000)) {
+    } else if ((this->targetRotY < 0x2000) && (this->targetRotY > -0x2000)) {
         this->subCamEye.x = direction * 1200.0f;
         this->subCamEye.y = 60.0f;
         this->subCamEye.z = -1200.0f;
-    } else if (this->unk_019E >= 0x2000) {
+    } else if (this->targetRotY >= 0x2000) {
         this->subCamEye.x = -1200.0f;
         this->subCamEye.y = (80.0f * direction) + -80.0f + 60.0f;
         this->subCamEye.z = direction * -1200.0f;
@@ -2035,7 +2035,7 @@ void BossHakugin_SetupDeathCutscenePart1(BossHakugin* this) {
     this->chargingLightOrbScale = 0.0f;
     this->frontHalfRotZ = 0;
     Play_EnableMotionBlur(140);
-    this->unk_01A2 = Rand_S16Offset(0x800, 0x800) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1);
+    this->runOffsetRot = Rand_S16Offset(0x800, 0x800) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1);
     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
     this->actor.home.rot.y = this->actor.shape.rot.y;
     this->timer = 18;
@@ -2065,15 +2065,15 @@ void BossHakugin_DeathCutscenePart1(BossHakugin* this, PlayState* play) {
     this->preventStalactiteSpawnCount = 10;
     this->preventBombSpawnCount = 10;
     func_80B07450(this, play);
-    Math_SmoothStepToS(&this->actor.home.rot.y, this->unk_01A0, 5, 0x800, 0x100);
+    Math_SmoothStepToS(&this->actor.home.rot.y, this->baseRotY, 5, 0x800, 0x100);
     this->timer--;
-    this->actor.shape.rot.y = (s32)(Math_SinF(this->timer * (M_PI / 18.0f)) * this->unk_01A2) + this->actor.home.rot.y;
+    this->actor.shape.rot.y = (s32)(Math_SinF(this->timer * (M_PI / 18.0f)) * this->runOffsetRot) + this->actor.home.rot.y;
 
     if (this->timer == 0) {
-        if (this->unk_01A2 > 0) {
-            this->unk_01A2 = -Rand_S16Offset(0x800, 0x800);
+        if (this->runOffsetRot > 0) {
+            this->runOffsetRot = -Rand_S16Offset(0x800, 0x800);
         } else {
-            this->unk_01A2 = Rand_S16Offset(0x800, 0x800);
+            this->runOffsetRot = Rand_S16Offset(0x800, 0x800);
         }
         this->timer = 18;
         this->deathCutsceneRandomHeadRot = Rand_ZeroFloat(6144.0f);
@@ -2081,14 +2081,14 @@ void BossHakugin_DeathCutscenePart1(BossHakugin* this, PlayState* play) {
 
     this->headRot.z = (8192.0f * Math_SinS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PI / 9));
     this->headRot.y = (8192.0f * Math_CosS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PI / 9));
-    this->actor.shape.rot.z = Math_SinF(this->timer * (M_PI / 18)) * -(this->unk_01A2 * 0.3f);
+    this->actor.shape.rot.z = Math_SinF(this->timer * (M_PI / 18)) * -(this->runOffsetRot * 0.3f);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     subCamAt.x = (Math_SinS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.x;
     subCamAt.y = this->actor.world.pos.y + 200.0f;
     subCamAt.z = (Math_CosS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.z;
     Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &this->subCamEye);
 
-    if (this->unk_019E == this->unk_01A0) {
+    if (this->targetRotY == this->baseRotY) {
         absPosX = fabsf(this->actor.world.pos.x);
         absPosZ = fabsf(this->actor.world.pos.z);
         absRotY = ABS_ALT(this->actor.shape.rot.y);
@@ -2102,9 +2102,9 @@ void BossHakugin_DeathCutscenePart1(BossHakugin* this, PlayState* play) {
 
 void BossHakugin_SetupDeathCutscenePart2(BossHakugin* this) {
     if (this->direction == GOHT_DIRECTION_CLOCKWISE) {
-        this->unk_019E -= 0x4000;
+        this->targetRotY -= 0x4000;
     } else {
-        this->unk_019E += 0x4000;
+        this->targetRotY += 0x4000;
     }
 
     this->actor.speed = 15.0f;
@@ -2133,17 +2133,17 @@ void BossHakugin_DeathCutscenePart2(BossHakugin* this, PlayState* play) {
     this->preventBombSpawnCount = 10;
     func_80B07450(this, play);
 
-    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->unk_019E, 0x300) &&
+    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->targetRotY, 0x300) &&
         ((this->distToRightWall <= 189.00002f) || (this->distToLeftWall <= 189.00002f))) {
         BossHakugin_SetupDead(this);
     } else if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (this->distToRightWall <= 189.00002f)) ||
                ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) && (this->distToLeftWall <= 189.00002f))) {
-        var_v0 = ABS_ALT(this->unk_019E);
+        var_v0 = ABS_ALT(this->targetRotY);
         if (var_v0 < 0x2000) {
             this->actor.world.pos.z = -1389.0f;
         } else if (var_v0 > 0x6000) {
             this->actor.world.pos.z = 1389.0f;
-        } else if (this->unk_019E > 0) {
+        } else if (this->targetRotY > 0) {
             this->actor.world.pos.x = -1389.0f;
         } else {
             this->actor.world.pos.x = 1389.0f;

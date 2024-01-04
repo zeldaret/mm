@@ -113,9 +113,9 @@ typedef struct BossHakugin {
                     s16 nextCutsceneType;
                     s16 timer;
                  };
-    /* 0x019E */ s16 unk_019E;
-    /* 0x01A0 */ s16 unk_01A0;
-    /* 0x01A2 */ s16 unk_01A2;
+    /* 0x019E */ s16 targetRotY;
+    /* 0x01A0 */ s16 baseRotY;
+    /* 0x01A2 */ s16 runOffsetRot;
     /* 0x01A4 */ s16 disableCollidersTimer; // TODO: might be able to improve this one
     /* 0x01A6 */ s16 frontHalfRotZ;
     /* 0x01A8 */ s16 chargeUpTimer;
