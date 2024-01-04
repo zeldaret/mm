@@ -2067,7 +2067,8 @@ void BossHakugin_DeathCutscenePart1(BossHakugin* this, PlayState* play) {
     func_80B07450(this, play);
     Math_SmoothStepToS(&this->actor.home.rot.y, this->baseRotY, 5, 0x800, 0x100);
     this->timer--;
-    this->actor.shape.rot.y = (s32)(Math_SinF(this->timer * (M_PI / 18.0f)) * this->runOffsetRot) + this->actor.home.rot.y;
+    this->actor.shape.rot.y =
+        (s32)(Math_SinF(this->timer * (M_PI / 18.0f)) * this->runOffsetRot) + this->actor.home.rot.y;
 
     if (this->timer == 0) {
         if (this->runOffsetRot > 0) {
@@ -2360,8 +2361,8 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                        BUMP_HIT) ||
                       (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_BACK_LEFT_THIGH].info.bumperFlags &
                        BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HORN1].info.bumperFlags & BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HORN2].info.bumperFlags & BUMP_HIT)))) {
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_RIGHT_HORN].info.bumperFlags & BUMP_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_LEFT_HORN].info.bumperFlags & BUMP_HIT)))) {
                     BossHakugin_SetupFallDown(this);
                 } else if ((this->electricBallState == GOHT_ELECTRIC_BALL_STATE_NONE) &&
                            (this->electricBallCount == 0) && (this->actionFunc == BossHakugin_Run) &&
