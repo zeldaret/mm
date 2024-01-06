@@ -785,7 +785,7 @@ void BossHakugin_SpawnBlueWarpAndHeartContainer(BossHakugin* this, PlayState* pl
     s16 atan = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x);
     Vec3f warpPos;
     Vec3f heartPos;
-    f32 sp50;
+    f32 offset;
     f32 sin;
     f32 cos;
 
@@ -807,26 +807,26 @@ void BossHakugin_SpawnBlueWarpAndHeartContainer(BossHakugin* this, PlayState* pl
         warpPos.z = 1400.0f;
     }
 
-    sp50 = this->direction * 300.0f;
+    offset = this->direction * 300.0f;
     sin = Math_SinS(this->targetRotY);
     cos = Math_CosS(this->targetRotY);
-    heartPos.x = ((100.0f * sin) + warpPos.x) + (sp50 * cos);
-    heartPos.z = ((100.0f * cos) + warpPos.z) - (sp50 * sin);
+    heartPos.x = ((100.0f * sin) + warpPos.x) + (offset * cos);
+    heartPos.z = ((100.0f * cos) + warpPos.z) - (offset * sin);
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, warpPos.x, warpPos.y, warpPos.z, 0, 0, 0,
                        ENDOORWARP1_FF_1);
     Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, heartPos.x, warpPos.y, heartPos.z, 0, 0, 0,
                 BHEART_PARAM_NORMAL);
 }
 
-void func_80B0607C(BossHakugin* this, PlayState* play) {
+void BossHakugin_UpdateBaseRot(BossHakugin* this, PlayState* play) {
     CollisionPoly* rightWallPoly = NULL;
     CollisionPoly* leftWallPoly = NULL;
     s32 bgId;
     s16 sp82;
     s16 sp80;
     s16 var_v0;
-    Vec3f rightWallResultPos;
-    Vec3f leftWallResultPos;
+    Vec3f rightWallPos;
+    Vec3f leftWallPos;
     Vec3f posA;
     Vec3f posB;
     f32 sp48;
@@ -839,12 +839,12 @@ void func_80B0607C(BossHakugin* this, PlayState* play) {
     posB.y = posA.y;
     posB.z = posA.z + (Math_SinS(this->baseRotY) * 1000.0f);
 
-    if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &rightWallResultPos, &rightWallPoly, true, true, false,
-                                true, &bgId)) {
+    if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &rightWallPos, &rightWallPoly, true, true, false, true,
+                                &bgId)) {
         sp82 =
             Math_Atan2S_XY(COLPOLY_GET_NORMAL(rightWallPoly->normal.z), COLPOLY_GET_NORMAL(rightWallPoly->normal.x)) -
             this->baseRotY;
-        this->distToRightWall = Math_Vec3f_DistXZ(&posA, &rightWallResultPos);
+        this->distToRightWall = Math_Vec3f_DistXZ(&posA, &rightWallPos);
     } else {
         sp82 = 0;
         this->distToRightWall = 30000.0f;
@@ -853,11 +853,11 @@ void func_80B0607C(BossHakugin* this, PlayState* play) {
     posB.x = (2.0f * posA.x) - posB.x;
     posB.z = (2.0f * posA.z) - posB.z;
 
-    if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &leftWallResultPos, &leftWallPoly, true, true, false, true,
+    if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &leftWallPos, &leftWallPoly, true, true, false, true,
                                 &bgId)) {
         sp80 = Math_Atan2S_XY(COLPOLY_GET_NORMAL(leftWallPoly->normal.z), COLPOLY_GET_NORMAL(leftWallPoly->normal.x)) -
                this->baseRotY;
-        this->distToLeftWall = Math_Vec3f_DistXZ(&posA, &leftWallResultPos);
+        this->distToLeftWall = Math_Vec3f_DistXZ(&posA, &leftWallPos);
     } else {
         sp80 = 0;
         this->distToLeftWall = 30000.0f;
@@ -869,17 +869,17 @@ void func_80B0607C(BossHakugin* this, PlayState* play) {
         this->distToRightWall -= 50.0f;
     }
 
-    if (this->distToRightWall <= 89.100006f) {
-        sp48 = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? 89.100006f : 139.1f;
-        this->actor.world.pos.x = (rightWallResultPos.x + (sp48 * Math_CosS(this->baseRotY))) -
+    if (this->distToRightWall <= (89100.0f * 0.001f)) {
+        sp48 = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? (89100.0f * 0.001f) : (139100.0f * 0.001f);
+        this->actor.world.pos.x = (rightWallPos.x + (sp48 * Math_CosS(this->baseRotY))) -
                                   (Math_SinS(this->baseRotY) * (5.0f * this->actor.speed));
-        this->actor.world.pos.z = (rightWallResultPos.z - (sp48 * Math_SinS(this->baseRotY))) -
+        this->actor.world.pos.z = (rightWallPos.z - (sp48 * Math_SinS(this->baseRotY))) -
                                   (Math_CosS(this->baseRotY) * (5.0f * this->actor.speed));
-    } else if (this->distToLeftWall <= 89.100006f) {
-        sp48 = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? 139.1f : 89.100006f;
-        this->actor.world.pos.x = (leftWallResultPos.x - (sp48 * Math_CosS(this->baseRotY))) -
+    } else if (this->distToLeftWall <= (89100.0f * 0.001f)) {
+        sp48 = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? (139100.0f * 0.001f) : (89100.0f * 0.001f);
+        this->actor.world.pos.x = (leftWallPos.x - (sp48 * Math_CosS(this->baseRotY))) -
                                   (Math_SinS(this->baseRotY) * (5.0f * this->actor.speed));
-        this->actor.world.pos.z = (leftWallResultPos.z + (sp48 * Math_SinS(this->baseRotY))) -
+        this->actor.world.pos.z = (leftWallPos.z + (sp48 * Math_SinS(this->baseRotY))) -
                                   (Math_CosS(this->baseRotY) * (5.0f * this->actor.speed));
     }
 
@@ -1708,9 +1708,10 @@ void BossHakugin_Run(BossHakugin* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
         func_80B07450(this, play);
 
-        if ((this->distToRightWall < (this->distToLeftWall * 0.5f)) || (this->distToRightWall < 89.100006f)) {
+        if ((this->distToRightWall < (this->distToLeftWall * 0.5f)) || (this->distToRightWall < (89100.0f * 0.001f))) {
             this->targetRotY = (Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f;
-        } else if ((this->distToLeftWall < (this->distToRightWall * 0.5f)) || (this->distToLeftWall < 89.100006f)) {
+        } else if ((this->distToLeftWall < (this->distToRightWall * 0.5f)) ||
+                   (this->distToLeftWall < (89100.0f * 0.001f))) {
             this->targetRotY = -((Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f);
         } else if ((this->runOffsetRot == this->targetRotY) && (Rand_ZeroOne() < 0.005f)) {
             if (this->targetRotY > 0) {
@@ -1748,7 +1749,7 @@ void BossHakugin_Charge(BossHakugin* this, PlayState* play) {
     if ((this->transformedPlayerPos.z < 0.0f) || (this->bodyCollider.base.atFlags & AT_HIT)) {
         BossHakugin_SetupRun(this);
     } else {
-        if ((this->distToLeftWall < 89.100006f) || (this->distToRightWall < 89.100006f)) {
+        if ((this->distToLeftWall < (89100.0f * 0.001f)) || (this->distToRightWall < (89100.0f * 0.001f))) {
             this->targetRotY = this->baseRotY;
         } else {
             if (((this->transformedPlayerPos.x > 0.0f) && (this->transformedPlayerPos.x < this->distToLeftWall)) ||
@@ -2641,11 +2642,11 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    func_80B0607C(this, play);
+    BossHakugin_UpdateBaseRot(this, play);
     Actor_OffsetOfPointInActorCoords(&this->actor, &this->transformedPlayerPos, &player->actor.world.pos);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 450.0f, 89.100006f, 0.0f,
+    Actor_UpdateBgCheckInfo(play, &this->actor, 450.0f, (89100.0f * 0.001f), 0.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
                                 UPDBGCHECKINFO_FLAG_10);
     func_800BE3D0(&this->actor, this->actor.shape.rot.y, &sp70);
