@@ -28,25 +28,7 @@ typedef enum {
     /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM
 } PostboxBehaviour;
 
-static ScheduleScript D_80B2C200[] = {
-#include "build/src/overlays/actors/ovl_En_Pst/D_80B2C200.schedule.inc"
-};
-
-static ScheduleScript D_80B2C20C[] = {
-#include "build/src/overlays/actors/ovl_En_Pst/D_80B2C20C.schedule.inc"
-};
-
-static ScheduleScript D_80B2C218[] = {
-#include "build/src/overlays/actors/ovl_En_Pst/D_80B2C218.schedule.inc"
-};
-
-static ScheduleScript D_80B2C224[] = {
-#include "build/src/overlays/actors/ovl_En_Pst/D_80B2C224.schedule.inc"
-};
-
-static ScheduleScript D_80B2C230[] = {
-#include "build/src/overlays/actors/ovl_En_Pst/D_80B2C230.schedule.inc"
-};
+#include "build/src/overlays/actors/ovl_En_Pst/scheduleScripts.schl.inc"
 
 s32 D_80B2C23C[] = {
     0x0E27840C, 0x0E00FF2B, 0x00000031, 0x00392800, 0x0A122C27, 0xA40C2F00, 0x000C1012,

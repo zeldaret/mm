@@ -118,6 +118,7 @@ class TokenType(enum.Enum):
     ARGS = "(args)"
     NOT = "not"
     LABEL = "label"
+    IDENTIFIER = ""
 
 @dataclasses.dataclass
 class TokenProperties:
@@ -178,6 +179,7 @@ tokenPropertiesDict: dict[TokenType, TokenProperties] = {
     TokenType.ARGS:                 TokenProperties(isExtraToken=True),
     TokenType.NOT:                  TokenProperties(isExtraToken=True),
     TokenType.LABEL:                TokenProperties(isExtraToken=True),
+    TokenType.IDENTIFIER:           TokenProperties(isExtraToken=True),
 }
 
 tokenLiterals: dict[str, TokenType] = {x.value: x for x in TokenType}
@@ -356,6 +358,7 @@ def tokenize(contents: str, filename: str) -> TokenIterator:
         elif char.isspace():
             columnNumber += 1
         else:
+            isIdentifier = False
             # Look for tokens
             if (reMatch := regex_label.match(contents, pos=i)) is not None:
                 literal = reMatch["label"]
@@ -363,6 +366,7 @@ def tokenize(contents: str, filename: str) -> TokenIterator:
             elif (reMatch := regex_identifier.match(contents, pos=i)) is not None:
                 literal = reMatch["identifier"]
                 tokenType = tokenLiterals.get(literal)
+                isIdentifier = True
             elif (reMatch := regex_individualTokens.match(contents, pos=i)) is not None:
                 literal = reMatch["individual"]
                 tokenType = tokenLiterals.get(literal)
@@ -370,7 +374,11 @@ def tokenize(contents: str, filename: str) -> TokenIterator:
                 fatalError(f"Unrecognized token found (starts with '{char}')", filename, lineNumber, columnNumber, i=i, char=char)
 
             if tokenType is None:
-                fatalError(f"Unrecognized token '{literal}' found", filename, lineNumber, columnNumber, i=i, char=char)
+                if isIdentifier:
+                    # Non recognized token, let say it is a generic identifier
+                    tokenType = TokenType.IDENTIFIER
+                else:
+                    fatalError(f"Unrecognized token '{literal}' found", filename, lineNumber, columnNumber, i=i, char=char)
             tokens.append(Token(tokenType, literal, filename, lineNumber, columnNumber))
 
             # Calculate how long the found token is
@@ -525,11 +533,62 @@ def makeTree(tokens: TokenIterator, inputPath: str, *, depth: int=0) -> list[Exp
             foundElse = False
             exprs.append(currentExpr)
 
+        elif token.tokenType == TokenType.IDENTIFIER:
+            fatalError(f"Invalid syntax, unknown identifier found inside script's body", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
+
         else:
-            fatalError(f"This code should be unreachable.\n Tell me dear user, is this a vanilla bug on the compiler?\n Or are you trying to implement new features and you forgot to add a check somewhere?\n Remember to enable the debug prints, they may help you either way.\n ", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
+            fatalError(f"This code should be unreachable.\n Tell me dear user, is this a vanilla bug on the compiler?\n Or are you trying to implement new features and you forgot to add a check somewhere?\n You can try to ping me, I probably won't remember how this whole thing worked,\n but we can have a laugh together.\n Remember to enable the debug prints, they may help you either way (pass `-d`).\n ", inputPath, token.lineNumber, token.columnNumber, i=i, depth=depth, token=token, currentExpr=currentExpr, foundElse=foundElse)
         i += 1
 
     return exprs
+
+
+@dataclasses.dataclass
+class ScriptFunction:
+    name: Token
+    tree: list[Expression]
+
+    def toStr(self) -> str:
+        ret = f"{self.name.tokenLiteral} {{\n"
+        for expr in self.tree:
+            ret += expr.toStr(1)
+        ret += f"}}"
+        return ret
+
+    def __str__(self) -> str:
+        return self.toStr()
+
+
+# Parses the token list into a list of script functions
+def makeScriptFunctions(tokens: TokenIterator, inputPath: str) -> list[ScriptFunction]:
+    funcs: list[ScriptFunction] = []
+
+    name: Token|None = None
+
+    i = 0
+    while (token := tokens.get()) is not None:
+        if token.tokenType == TokenType.IDENTIFIER:
+            if name is not None:
+                fatalError(f"Invalid syntax, script name followed by script name", inputPath, token.lineNumber, token.columnNumber, i=i, token=token)
+            name = token
+
+        elif token.tokenType == TokenType.BRACE_OPEN:
+            if name is None:
+                fatalError(f"Invalid syntax, missing script name", inputPath, token.lineNumber, token.columnNumber, i=i, token=token)
+
+            tree = makeTree(tokens, inputPath)
+            if len(tree) == 0:
+                fatalError(f"Invalid syntax, no commands found inside script's body", inputPath, token.lineNumber, token.columnNumber, i=i, token=token)
+
+            funcs.append(ScriptFunction(name, tree))
+            name = None
+
+            # makeTree consumes the trailing BRACE_OPEN, so there's no need to consume it here
+        else:
+            fatalError(f"Invalid syntax, `{token.tokenLiteral}` found outside of script's body", inputPath, token.lineNumber, token.columnNumber, i=i, token=token)
+        i += 1
+
+    return funcs
 
 
 def normalizeTreeImpl(tree: list[Expression], postLabel: Expression, depth: int, autoLabelName: str) -> tuple[list[Expression], bool]:
@@ -623,7 +682,7 @@ class LabeledExpression:
     # The branch target can be either a str (label) or None (no branch target)
     branchTarget: str|None = None
 
-    def __str__(self) -> str:
+    def toStr(self) -> str:
         ret = f"/* {self.index:03} */ {self.labelName:<24}: {self.token.tokenLiteral}"
         if self.canChange:
             ret += "*"
@@ -632,6 +691,27 @@ class LabeledExpression:
         if self.branchTarget is not None:
             ret += f" -> {self.branchTarget}"
         return ret
+
+    def __str__(self) -> str:
+        return self.toStr()
+
+@dataclasses.dataclass
+class LabeledScriptFunction:
+    name: Token
+    labeledList: list[LabeledExpression]
+
+    def toStr(self) -> str:
+        ret = ""
+
+        ret = f"{self.name.tokenLiteral} {{\n"
+        for expr in self.labeledList:
+            ret += f"{expr.toStr()}\n"
+        ret += f"}}"
+        return ret
+
+    def __str__(self) -> str:
+        return self.toStr()
+
 
 # Takes a tree and linearizes it, preserving the control flow by using labels (user-defined or autogenerated)
 def convertTreeIntoLabeledList(tree: list[Expression], index: int = 0) -> tuple[list[LabeledExpression], int]:
@@ -782,8 +862,8 @@ def getTargetOffset(labeledExpr: LabeledExpression, labeledList: list[LabeledExp
     fatalError(f"Command '{labeledExpr.token.tokenLiteral}' requested label '{labeledExpr.branchTarget}', but it was not found", labeledExpr.token.filename, labeledExpr.token.lineNumber, labeledExpr.token.columnNumber)
 
 # Generate a string containing all the macros based on the labeled expression
-def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: int) -> str:
-    result: list[str] = [f"    /* Generated by {__prog_name__} version {__version__} */"]
+def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: int) -> list[str]:
+    result: list[str] = []
 
     # Precompute the offsets of each expression
     offsetList: list[int] = []
@@ -838,9 +918,7 @@ def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: 
 
         result.append(currentMacro)
 
-    result.append("")
-
-    return "\n".join(result)
+    return result
 
 
 def main():
@@ -886,42 +964,65 @@ def main():
 
     tokens = tokenize(preprocessed, str(inputPath))
     if printTokens:
+        print("print tokens:")
         for token in tokens.tokens:
             print(token)
+        print()
 
-    tree = makeTree(tokens, str(inputPath))
+    scriptFuncs = makeScriptFunctions(tokens, str(inputPath))
+
     if printRawTree:
-        for expr in tree:
-            print(expr)
+        print("print raw tree:")
+        for func in scriptFuncs:
+            print(func)
+        print()
 
     assert tokens.remainingTokens() == 0, tokens.remainingTokens()
 
-    tree = normalizeTree(tree)
+    for func in scriptFuncs:
+        func.tree = normalizeTree(func.tree)
+
     if printTree:
-        for expr in tree:
-            print(expr)
+        print("print tree:")
+        for func in scriptFuncs:
+            print(func)
+        print()
 
-    labeledList, _ = convertTreeIntoLabeledList(tree)
+    labeledFuncs: list[LabeledScriptFunction] = []
+    for func in scriptFuncs:
+        labeledList, _ = convertTreeIntoLabeledList(func.tree)
+        labeledFunc = LabeledScriptFunction(func.name, labeledList)
+        labeledFuncs.append(labeledFunc)
+
     if printLabeleds:
-        for labeled in labeledList:
-            print(labeled)
+        print("print labeleds:")
+        for labeledFunc in labeledFuncs:
+            print(labeledFunc)
         print()
 
-    keepGoing = True
-    while keepGoing:
-        labeledList, keepGoing = removeGenerics(labeledList)
+    for labeledFunc in labeledFuncs:
+        keepGoing = True
+        while keepGoing:
+            labeledFunc.labeledList, keepGoing = removeGenerics(labeledFunc.labeledList)
+
     if printLabeledsPost:
-        for labeled in labeledList:
-            print(labeled)
+        print("print labeleds post:")
+        for labeledFunc in labeledFuncs:
+            print(labeledFunc)
         print()
 
-    output = emitLabeledListMacros(labeledList, debuggingLevel)
+    output: list[str] = [f"/* Generated by {__prog_name__} version {__version__} */", ""]
+    for labeledFunc in labeledFuncs:
+        output.append(f"static ScheduleScript {labeledFunc.name.tokenLiteral}[] = {{")
+        output += emitLabeledListMacros(labeledFunc.labeledList, debuggingLevel)
+        output.append(f"}};")
+        output.append(f"")
 
     if outputPath is None:
-        print(output)
+        print("\n".join(output))
     else:
         outputPath.parent.mkdir(parents=True, exist_ok=True)
-        outputPath.write_text(output)
+        outputPath.write_text("\n".join(output))
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,0 @@
-if_time_range (9, 31, 9, 35) {
-    return_l (POSTBOX_SCH_CHECKED_BY_POSTMAN)
-} else {
-    return_l (POSTBOX_SCH_AVAILABLE)
-}
