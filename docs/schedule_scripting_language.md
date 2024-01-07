@@ -146,7 +146,7 @@ An extracted schedule script is just an array of raw data. A macroified version
 looks like this:
 
 ```c
-static u8 D_80BD3DB0[] = {
+static ScheduleScript D_80BD3DB0[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x21 - 0x04),
     /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x0B - 0x08),
     /* 0x08 */ SCHEDULE_CMD_RET_VAL_L(1),
@@ -179,46 +179,52 @@ better represent the control flow. The above script can be written as the
 following:
 
 ```c
-if_scene (SCENE_YADOYA) {
-    if_day (3) {
-        return_l (1)
-    } else if_day (2) {
-        if_time_range (21, 0, 23, 0) {
-            return_l (3)
-        } else if_week_event_reg (WEEKEVENTREG_HAD_MIDNIGHT_MEETING) {
-            return_none
-        } else {
+D_80BD3DB0 {
+    if_scene (SCENE_YADOYA) {
+        if_day (3) {
             return_l (1)
+        } else if_day (2) {
+            if_time_range (21, 0, 23, 0) {
+                return_l (3)
+            } else if_week_event_reg (WEEKEVENTREG_HAD_MIDNIGHT_MEETING) {
+                return_none
+            } else {
+                return_l (1)
+            }
+        } else {
+            return_none
         }
-    } else {
-        return_none
-    }
-} else if_scene (SCENE_OMOYA) {
-    if_day (3) {
-        if_time_range (18, 0, 6, 0) {
-            return_time (18, 0, 6, 0, 2)
+    } else if_scene (SCENE_OMOYA) {
+        if_day (3) {
+            if_time_range (18, 0, 6, 0) {
+                return_time (18, 0, 6, 0, 2)
+            } else {
+                return_none
+            }
         } else {
             return_none
         }
     } else {
         return_none
     }
-} else {
-    return_none
 }
 ```
 
 ## Syntax
 
-The syntax is very simple, it consists in a sucession of commands. Some commands
-require arguments (by using parentheses) and some (conditional checks) can have
-bodies with subcommands and an optional `else` with its corresponding body with
-subcommands.
+The syntax is simple, it consists on the name of the schedule script followed
+by a sucession of commands. Some commands require arguments (by using
+parentheses) and some (conditional checks) can have bodies with subcommands and
+an optional `else` with its corresponding body with subcommands.
 
 Like in C, both whitespace and newlines are not part of the language and they
 get ignored during compilation. At the same time, this language accepts both C
 and C++ styles of comments, known as block comments (`/**/`) and line comments
 (`//`).
+
+Each top-level schedule script consists on its name, followed by a list of
+commands delimited by braces  (`{` and `}`). A schedule script must always have
+at least one command on its body.
 
 A command's body is delimited by braces (`{` and `}`). A body must follow either
 a [conditional check](#conditional-checks) command or an `else`, meaning
@@ -228,8 +234,8 @@ conditional check command.
 
 Even if this language's syntax is inspired by C, there are a few key differences:
 
-- Commands are not separated by semicolons (`;`). Instead just a whitespace is
-  used as separation.
+- Commands are not separated by semicolons (`;`). Instead whitespace is used as
+  separation.
 - Instead of having a single `if` conditional of which its parameters should
   evaluate to non-zero, this language uses
   [conditional checks](#conditional-checks). These are commands that receive
@@ -237,15 +243,19 @@ Even if this language's syntax is inspired by C, there are a few key differences
   command itself evaluated to true. This commands may be followed by an `else`,
   which has its own body.
 - There's no concept of functions, variables, loops, scopes, etc.
+  - Each schedule script could be seen as a function itself, but said script
+    can't "call" another scripts.
 
 ## Compiling
 
-Compiling a high level schedule script should produce a series of macros that
-can be `#include`d by a C preprocessor, like in the following example:
+Compiling a high level schedule script should produce an array for each script
+in the file. Each array should contain a series of macros that can be
+`#include`d by a C preprocessor, like in the following example:
 
-File: `build/src/overlays/actors/ovl_En_Ah/scheduleScript.schl.inc`
+File: `build/src/overlays/actors/ovl_En_Ah/scheduleScripts.schl.inc`
 
 ```c
+static ScheduleScript D_80BD3DB0[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x21 - 0x04),
     /* 0x04 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x0B - 0x08),
     /* 0x08 */ SCHEDULE_CMD_RET_VAL_L(1),
@@ -263,21 +273,21 @@ File: `build/src/overlays/actors/ovl_En_Ah/scheduleScript.schl.inc`
     /* 0x30 */ SCHEDULE_CMD_RET_TIME(18, 0, 6, 0, 2),
     /* 0x36 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x37 */ SCHEDULE_CMD_RET_NONE(),
+};
 ```
 
 In the actor's C code:
 
 ```c
-static ScheduleScript D_80BD3DB0[] = {
-#include "build/src/overlays/actors/ovl_En_Ah/scheduleScript.schl.inc"
-};
+#include "build/src/overlays/actors/ovl_En_Ah/scheduleScripts.schl.inc"
 ```
 
 ## Commands
 
 Commands are the fundamental (and almost only) building block of this language.
-A schedule script must always have at least one command. It's undefined
-behaviour if the script's control flow doesn't always lead to a return command.
+A schedule script file must always contain at least one script, and a schedule
+script must always have at least one command. It's undefined behaviour if the
+script's control flow doesn't always lead to a return command.
 
 To see how the command arguments work, please see the
 [corresponding section](#command-arguments).
@@ -751,7 +761,14 @@ A label must always be followed by another command that isn't another label.
 This section presents the formal grammar for the Schedule scripting language.
 
 ```yac
-<scriptFile>            : <cmdList>
+<scriptFile>            : <functionList>
+                        ;
+
+<functionList>          : <functionScript>
+                        | <functionList> <functionScript>
+                        ;
+
+<functionScript>        : IDENTIFIER '{' <cmdList> '}'
                         ;
 
 <cmdList>               : <labeledCmd>
