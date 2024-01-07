@@ -1,0 +1,25 @@
+D_80BDFC70 {
+    if_day (3) {
+        if_time_range (18, 0, 6, 0) {
+            return_time (18, 0, 6, 0, 2)
+        } else {
+            return_none
+        }
+    } else {
+        if_time_range (8, 0, 10, 0) {
+            return_l (1)
+        } else if_time_range (10, 0, 10, 55) {
+            return_time (10, 0, 10, 55, 1)
+        } else if_time_range (10, 55, 11, 45) {
+            if_day (2) {
+                return_time (10, 55, 11, 45, 1)
+            } else {
+                return_time (10, 55, 11, 45, 3)
+            }
+        } else if_time_range (11, 45, 20, 0) {
+            return_time (11, 45, 20, 0, 1)
+        } else {
+            return_none
+        }
+    }
+}

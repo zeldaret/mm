@@ -1,0 +1,29 @@
+D_80BD3DB0 {
+    if_scene (SCENE_YADOYA) {
+        if_day (3) {
+            return_l (1)
+        } else if_day (2) {
+            if_time_range (21, 0, 23, 0) {
+                return_l (3)
+            } else if_week_event_reg (WEEKEVENTREG_HAD_MIDNIGHT_MEETING) {
+                return_none
+            } else {
+                return_l (1)
+            }
+        } else {
+            return_none
+        }
+    } else if_scene (SCENE_OMOYA) {
+        if_day (3) {
+            if_time_range (18, 0, 6, 0) {
+                return_time (18, 0, 6, 0, 2)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}

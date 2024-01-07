@@ -1,6 +1,0 @@
-if_day (3) {
-    if_since_time (18, 0) {
-        return_none
-    }
-}
-return_s (20)

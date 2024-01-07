@@ -1,0 +1,121 @@
+D_80951820 {
+    if_day (1) {
+        if_scene (SCENE_YADOYA) {
+            if_time_range (6, 0, 9, 0) {
+                return_time (6, 0, 9, 0, 6)
+            } else if_time_range (9, 0, 9, 10) {
+                return_time (9, 0, 9, 10, 24)
+            } else if_time_range (9, 10, 9, 15) {
+                return_time (9, 10, 9, 15, 15)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_TOWN) {
+            if_time_range (9, 10, 9, 15) {
+                return_time (9, 10, 9, 15, 9)
+            } else if_time_range (9, 15, 10, 0) {
+                return_time (9, 15, 10, 0, 21)
+            } else if_time_range (10, 0, 10, 5) {
+                return_time (10, 0, 10, 5, 10)
+            } else if_time_range (12, 15, 12, 20) {
+                return_time (12, 15, 12, 20, 11)
+            } else if_time_range (12, 20, 12, 50) {
+                return_time (12, 20, 12, 50, 22)
+            } else if_time_range (12, 50, 12, 55) {
+                return_time (12, 50, 12, 55, 12)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_SONCHONOIE) {
+            if_time_range (10, 0, 10, 5) {
+                return_time (10, 0, 10, 5, 16)
+            } else if_time_range (10, 5, 10, 10) {
+                return_time (10, 5, 10, 10, 25)
+            } else if_time_range (10, 10, 10, 30) {
+                return_time (10, 10, 10, 30, 1)
+            } else if_time_range (10, 30, 10, 40) {
+                return_time (10, 30, 10, 40, 26)
+            } else if_time_range (10, 40, 10, 45) {
+                return_time (10, 40, 10, 45, 18)
+            } else if_time_range (10, 45, 10, 55) {
+                return_time (10, 45, 10, 55, 27)
+            } else if_time_range (10, 55, 11, 45) {
+                return_time (10, 55, 11, 45, 2)
+            } else if_time_range (11, 45, 11, 55) {
+                return_time (11, 45, 11, 55, 28)
+            } else if_time_range (11, 55, 12, 0) {
+                return_time (11, 55, 12, 0, 19)
+            } else if_time_range (12, 0, 12, 15) {
+                return_time (12, 0, 12, 15, 29)
+            } else if_time_range (12, 15, 12, 20) {
+                return_time (12, 15, 12, 20, 17)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_MILK_BAR) {
+            if_time_range (12, 55, 13, 0) {
+                return_time (12, 55, 13, 0, 20)
+            } else if_time_range (13, 0, 13, 25) {
+                return_time (13, 0, 13, 25, 30)
+            } else if_time_range (13, 25, 21, 5) {
+                return_time (13, 25, 21, 5, 3)
+            } else if_time_range (21, 55, 5, 5) {
+                return_time (21, 55, 5, 5, 5)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else if_day (2) {
+        if_week_event_reg (WEEKEVENTREG_50_01) {
+            if_scene (SCENE_YADOYA) {
+                if_time_range (6, 0, 18, 0) {
+                    return_time (6, 0, 18, 0, 7)
+                } else if_time_range (18, 0, 6, 0) {
+                    return_time (0, 0, 0, 0, 8)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_YADOYA) {
+            if_time_range (6, 0, 18, 0) {
+                return_time (6, 0, 18, 0, 7)
+            } else if_time_range (18, 0, 21, 0) {
+                return_time (18, 0, 21, 0, 6)
+            } else if_time_range (21, 0, 21, 10) {
+                return_time (21, 0, 21, 10, 24)
+            } else if_time_range (21, 10, 21, 15) {
+                return_time (21, 10, 21, 15, 15)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_TOWN) {
+            if_time_range (21, 10, 21, 15) {
+                return_time (21, 10, 21, 15, 13)
+            } else if_time_range (21, 15, 21, 25) {
+                return_time (21, 15, 21, 25, 23)
+            } else if_time_range (21, 25, 21, 30) {
+                return_time (21, 25, 21, 30, 14)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_MILK_BAR) {
+            if_time_range (21, 30, 21, 45) {
+                return_time (21, 30, 21, 45, 20)
+            } else if_time_range (21, 45, 22, 10) {
+                return_time (21, 45, 22, 10, 30)
+            } else if_time_range (22, 10, 6, 0) {
+                return_time (22, 10, 6, 0, 5)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}

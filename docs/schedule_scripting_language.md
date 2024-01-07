@@ -243,7 +243,7 @@ Even if this language's syntax is inspired by C, there are a few key differences
 Compiling a high level schedule script should produce a series of macros that
 can be `#include`d by a C preprocessor, like in the following example:
 
-File: `build/src/overlays/actors/ovl_En_Ah/scheduleScript.schedule.inc`
+File: `build/src/overlays/actors/ovl_En_Ah/scheduleScript.schl.inc`
 
 ```c
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x21 - 0x04),
@@ -269,7 +269,7 @@ In the actor's C code:
 
 ```c
 static ScheduleScript D_80BD3DB0[] = {
-#include "build/src/overlays/actors/ovl_En_Ah/scheduleScript.schedule.inc"
+#include "build/src/overlays/actors/ovl_En_Ah/scheduleScript.schl.inc"
 };
 ```
 

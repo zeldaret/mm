@@ -1,5 +1,0 @@
-not if_time_range (22, 0, 5, 0) {
-    return_s (10)
-} else {
-    return_none
-}

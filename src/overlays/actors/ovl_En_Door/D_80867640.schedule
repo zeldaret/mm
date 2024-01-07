@@ -1,5 +1,0 @@
-if_time_range (21, 0, 22, 0) {
-    return_s (11)
-} else {
-    return_none
-}

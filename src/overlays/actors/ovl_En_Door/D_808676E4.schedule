@@ -1,5 +1,0 @@
-not if_misc (SCHEDULE_CHECK_MISC_ROOM_KEY) {
-    return_s (22)
-} else {
-    return_none
-}

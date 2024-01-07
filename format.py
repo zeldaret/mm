@@ -181,7 +181,7 @@ def main():
     else:
         files = glob.glob("src/**/*.c", recursive=True)
         extra_files = glob.glob("assets/**/*.xml", recursive=True)
-        extra_files += glob.glob("src/**/*.schedule", recursive=True)
+        extra_files += glob.glob("src/**/*.schl", recursive=True)
 
     format_files(files, extra_files, nb_jobs)
 

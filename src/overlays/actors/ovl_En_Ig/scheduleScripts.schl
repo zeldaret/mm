@@ -1,0 +1,51 @@
+D_80BF3260 {
+    if_day (1) {
+        if_scene (SCENE_TOWN) {
+            if_time_range (15, 25, 15, 45) {
+                return_time (15, 25, 15, 45, 10)
+            } else if_time_range (15, 45, 15, 50) {
+                return_time (15, 45, 15, 50, 5)
+            } else if_week_event_reg (WEEKEVENTREG_RECEIVED_ROOM_KEY) {
+                if_time_range (16, 50, 16, 55) {
+                    return_time (16, 50, 16, 55, 6)
+                } else if_time_range (16, 55, 17, 15) {
+                    return_time (16, 55, 17, 15, 11)
+                } else if_time_range (17, 15, 18, 0) {
+                    return_time (17, 15, 6, 0, 2)
+                } else if_time_range (18, 0, 6, 0) {
+                    return_time (18, 0, 6, 0, 4)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_YADOYA) {
+            if_time_range (15, 45, 15, 50) {
+                return_time (15, 45, 15, 50, 7)
+            } else if_time_range (15, 50, 16, 10) {
+                return_time (15, 50, 16, 10, 12)
+            } else if_time_range (16, 10, 16, 30) {
+                return_time (16, 10, 16, 30, 3)
+            } else if_week_event_reg (WEEKEVENTREG_RECEIVED_ROOM_KEY) {
+                if_time_range (16, 30, 16, 50) {
+                    return_time (16, 30, 16, 50, 14)
+                } else if_time_range (16, 50, 16, 55) {
+                    return_time (16, 50, 16, 55, 9)
+                } else {
+                    return_none
+                }
+            } else if_time_range (16, 30, 16, 50) {
+                return_time (16, 30, 16, 50, 13)
+            } else if_time_range (16, 50, 16, 55) {
+                return_time (16, 50, 16, 55, 8)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}

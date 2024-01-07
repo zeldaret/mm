@@ -18,9 +18,7 @@ void EnAh_Draw(Actor* thisx, PlayState* play);
 
 void func_80BD3768(EnAh* this, PlayState* play);
 
-static ScheduleScript D_80BD3DB0[] = {
-#include "build/src/overlays/actors/ovl_En_Ah/scheduleScript.schedule.inc"
-};
+#include "build/src/overlays/actors/ovl_En_Ah/scheduleScripts.schl.inc"
 
 s32 D_80BD3DE8[] = { 0x0E28FF0C, 0x10000000 };
 

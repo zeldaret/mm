@@ -19,9 +19,7 @@ void EnGm_Draw(Actor* thisx, PlayState* play);
 void func_80950CDC(EnGm* this, PlayState* play);
 void func_80950DB8(EnGm* this, PlayState* play);
 
-static ScheduleScript D_80951820[] = {
-#include "build/src/overlays/actors/ovl_En_Gm/scheduleScript.schedule.inc"
-};
+#include "build/src/overlays/actors/ovl_En_Gm/scheduleScripts.schl.inc"
 
 static s32 D_80951A0C[] = {
     -1, 1, 4, 1, -1, 1, -1, -1, -1, 0, 2, 3, 5, 6, 8, 1, 0, 8, 3, 6, 0, 1, 4, 7, 0, 1, 2, 4, 5, 7, 1,

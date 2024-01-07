@@ -158,9 +158,7 @@ typedef enum AnjuScheduleResult {
     /* 64 */ ANJU_SCH_MAX
 } AnjuScheduleResult;
 
-static ScheduleScript sScheduleScript[] = {
-#include "build/src/overlays/actors/ovl_En_An/sScheduleScript.schedule.inc"
-};
+#include "build/src/overlays/actors/ovl_En_An/scheduleScripts.schl.inc"
 
 static s32 sSearchTimePathLimit[ANJU_SCH_MAX] = {
     -1, // ANJU_SCH_NONE

@@ -1,0 +1,482 @@
+D_80AFAD80 {
+    if_day (1) {
+        if_time_range (9, 0, 12, 0) {
+            label_0x117:
+            if_scene (SCENE_ICHIBA) {
+                if_time_range (9, 0, 9, 3) {
+                    return_time (9, 0, 9, 3, 1)
+                } else if_time_range (9, 3, 9, 17) {
+                    return_time (9, 3, 9, 17, 38)
+                } else if_time_range (11, 43, 11, 57) {
+                    return_time (11, 43, 11, 57, 52)
+                } else if_time_range (11, 57, 12, 0) {
+                    return_time (11, 57, 12, 0, 2)
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_CLOCKTOWER) {
+                if_time_range (9, 3, 9, 17) {
+                    return_time (9, 3, 9, 17, 39)
+                } else if_time_range (9, 17, 9, 31) {
+                    return_time (9, 17, 9, 31, 40)
+                } else if_time_range (9, 31, 9, 35) {
+                    return_time (9, 31, 9, 35, 3)
+                } else if_time_range (9, 35, 9, 49) {
+                    return_time (9, 35, 9, 49, 41)
+                } else if_time_range (10, 57, 11, 11) {
+                    return_time (10, 57, 11, 11, 47)
+                } else if_time_range (11, 11, 11, 25) {
+                    return_time (11, 11, 11, 25, 48)
+                } else if_time_range (11, 25, 11, 29) {
+                    return_time (11, 25, 11, 29, 7)
+                } else if_time_range (11, 29, 11, 43) {
+                    return_time (11, 29, 11, 43, 50)
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_BACKTOWN) {
+                if_time_range (9, 49, 10, 3) {
+                    return_time (9, 49, 10, 3, 42)
+                } else if_time_range (10, 3, 10, 7) {
+                    return_time (10, 3, 10, 7, 4)
+                } else if_time_range (10, 7, 10, 21) {
+                    return_time (10, 7, 10, 21, 43)
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_TOWN) {
+                if_time_range (10, 21, 10, 35) {
+                    return_time (10, 21, 10, 35, 44)
+                } else if_time_range (10, 35, 10, 39) {
+                    return_time (10, 35, 10, 39, 5)
+                } else if_time_range (10, 39, 10, 53) {
+                    return_time (10, 39, 10, 53, 45)
+                } else if_time_range (10, 53, 10, 57) {
+                    return_time (10, 53, 10, 57, 6)
+                } else if_time_range (10, 57, 11, 11) {
+                    return_time (10, 57, 11, 11, 46)
+                } else if_time_range (11, 11, 11, 25) {
+                    return_time (11, 11, 11, 25, 49)
+                } else if_time_range (11, 25, 11, 29) {
+                    return_time (11, 25, 11, 29, 7)
+                } else if_time_range (11, 29, 11, 43) {
+                    return_time (11, 29, 11, 43, 51)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else if_time_range (12, 0, 13, 1) {
+            if_scene (SCENE_POSTHOUSE) {
+                return_time (12, 0, 13, 1, 9)
+            } else {
+                return_none
+            }
+        } else if_time_range (13, 1, 15, 0) {
+            if_scene (SCENE_ICHIBA) {
+                if_time_range (13, 1, 13, 4) {
+                    return_time (13, 1, 13, 4, 1)
+                } else if_time_range (13, 4, 13, 21) {
+                    return_time (13, 4, 13, 21, 53)
+                } else if_time_range (14, 48, 14, 56) {
+                    return_time (14, 48, 14, 56, 62)
+                } else if_time_range (14, 56, 15, 0) {
+                    return_time (14, 56, 15, 0, 2)
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_CLOCKTOWER) {
+                if_time_range (13, 4, 13, 21) {
+                    return_time (13, 4, 13, 21, 54)
+                } else if_time_range (13, 21, 13, 39) {
+                    return_time (13, 21, 13, 39, 55)
+                } else if_time_range (14, 38, 14, 48) {
+                    return_time (14, 38, 14, 48, 60)
+                } else if_time_range (14, 48, 14, 56) {
+                    return_time (14, 48, 14, 56, 61)
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_TOWN) {
+                if_time_range (13, 39, 13, 56) {
+                    return_time (13, 39, 13, 56, 56)
+                } else if_time_range (13, 56, 14, 0) {
+                    return_time (13, 56, 14, 0, 10)
+                } else if_time_range (14, 26, 14, 30) {
+                    return_time (14, 26, 14, 30, 11)
+                } else if_time_range (14, 30, 14, 38) {
+                    return_time (14, 30, 14, 38, 59)
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_YADOYA) {
+                if_time_range (13, 56, 14, 0) {
+                    return_time (13, 56, 14, 0, 12)
+                } else if_time_range (14, 0, 14, 8) {
+                    return_time (14, 0, 14, 8, 57)
+                } else if_time_range (14, 8, 14, 18) {
+                    return_time (14, 8, 14, 18, 16)
+                } else if_time_range (14, 18, 14, 26) {
+                    return_time (14, 18, 14, 26, 58)
+                } else if_time_range (14, 26, 14, 30) {
+                    return_time (14, 26, 14, 30, 13)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else if_time_range (15, 0, 0, 5) {
+            if_scene (SCENE_POSTHOUSE) {
+                return_time (15, 0, 0, 5, 8)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else if_day (2) {
+        if_week_event_reg (WEEKEVENTREG_28_08) {
+            if_time_range (9, 0, 12, 0) {
+                branch (label_0x117)
+            } else if_time_range (12, 0, 13, 1) {
+                if_scene (SCENE_POSTHOUSE) {
+                    return_time (12, 0, 13, 1, 21)
+                } else {
+                    return_none
+                }
+            } else if_time_range (13, 1, 17, 0) {
+                label_0x315:
+                if_scene (SCENE_ICHIBA) {
+                    if_time_range (13, 1, 13, 4) {
+                        return_time (13, 1, 13, 4, 1)
+                    } else if_time_range (13, 4, 13, 15) {
+                        return_time (13, 4, 13, 15, 63)
+                    } else if_time_range (16, 35, 16, 57) {
+                        return_time (16, 35, 16, 57, 73)
+                    } else if_time_range (16, 57, 17, 0) {
+                        return_time (16, 57, 17, 0, 2)
+                    } else {
+                        return_none
+                    }
+                } else if_scene (SCENE_CLOCKTOWER) {
+                    if_time_range (13, 4, 13, 15) {
+                        return_time (13, 4, 13, 15, 64)
+                    } else if_time_range (13, 15, 13, 30) {
+                        return_time (13, 15, 13, 30, 65)
+                    } else if_time_range (13, 52, 14, 45) {
+                        return_time (13, 52, 14, 45, 67)
+                    } else if_time_range (16, 15, 16, 35) {
+                        return_time (16, 15, 16, 35, 72)
+                    } else {
+                        return_none
+                    }
+                } else if_scene (SCENE_TOWN) {
+                    if_time_range (13, 30, 13, 52) {
+                        return_time (13, 30, 13, 52, 66)
+                    } else if_time_range (13, 52, 14, 50) {
+                        return_time (13, 52, 14, 50, 68)
+                    } else {
+                        return_none
+                    }
+                } else if_scene (SCENE_ALLEY) {
+                    if_time_range (14, 45, 15, 5) {
+                        return_time (14, 45, 15, 5, 70)
+                    } else if_day (2) {
+                        if_time_range (15, 5, 15, 20) {
+                            return_time (15, 5, 15, 20, 23)
+                        } else if_time_range (15, 20, 15, 25) {
+                            return_time (15, 20, 15, 25, 80)
+                        } else if_time_range (15, 25, 15, 40) {
+                            return_time (15, 25, 15, 40, 17)
+                        } else if_time_range (15, 40, 16, 15) {
+                            return_time (15, 40, 16, 15, 81)
+                        } else {
+                            return_none
+                        }
+                    } else if_time_range (15, 5, 15, 20) {
+                        return_time (15, 5, 15, 20, 23)
+                    } else if_time_range (15, 20, 15, 50) {
+                        return_time (15, 20, 15, 50, 25)
+                    } else if_time_range (15, 50, 16, 15) {
+                        return_time (15, 50, 16, 15, 71)
+                    } else {
+                        return_l (0)
+                    }
+                } else {
+                    return_none
+                }
+            } else if_time_range (17, 0, 0, 5) {
+                if_scene (SCENE_POSTHOUSE) {
+                    return_time (17, 0, 0, 5, 8)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else if_time_range (9, 0, 12, 0) {
+            branch (label_0x117)
+        } else if_time_range (12, 0, 13, 1) {
+            if_scene (SCENE_POSTHOUSE) {
+                return_time (12, 0, 13, 1, 20)
+            } else {
+                return_none
+            }
+        } else if_time_range (13, 1, 15, 0) {
+            if_scene (SCENE_POSTHOUSE) {
+                return_l (14)
+            } else {
+                return_none
+            }
+        } else if_time_range (0, 0, 2, 0) {
+            if_scene (SCENE_ICHIBA) {
+                if_time_range (0, 0, 0, 4) {
+                    return_time (0, 0, 0, 4, 1)
+                } else if_time_range (0, 4, 0, 31) {
+                    return_time (0, 4, 0, 31, 74)
+                } else if_time_range (1, 29, 1, 56) {
+                    return_time (1, 29, 1, 56, 79)
+                } else if_time_range (1, 56, 2, 0) {
+                    return_time (1, 56, 2, 0, 2)
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_CLOCKTOWER) {
+                if_time_range (0, 4, 0, 31) {
+                    return_time (0, 4, 0, 31, 75)
+                } else if_time_range (0, 31, 0, 58) {
+                    return_time (0, 31, 0, 58, 76)
+                } else if_time_range (0, 58, 1, 2) {
+                    return_time (0, 58, 1, 2, 18)
+                } else if_time_range (1, 2, 1, 29) {
+                    return_time (1, 2, 1, 29, 77)
+                } else if_time_range (1, 29, 1, 56) {
+                    return_time (1, 29, 1, 56, 78)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else if_day (3) {
+        if_week_event_reg (WEEKEVENTREG_28_08) {
+            if_time_range (9, 0, 12, 0) {
+                branch (label_0x117)
+            } else if_time_range (12, 0, 13, 1) {
+                if_scene (SCENE_POSTHOUSE) {
+                    return_l (20)
+                } else {
+                    return_none
+                }
+            } else if_time_range (13, 1, 15, 0) {
+                branch (label_0x446)
+            } else if_time_range (18, 0, 6, 0) {
+                if_scene (SCENE_POSTHOUSE) {
+                    return_l (24)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else if_week_event_reg (WEEKEVENTREG_28_10) {
+            if_time_range (9, 0, 12, 0) {
+                branch (label_0x117)
+            } else if_time_range (12, 0, 13, 1) {
+                if_scene (SCENE_POSTHOUSE) {
+                    return_time (12, 0, 13, 1, 21)
+                } else {
+                    return_none
+                }
+            } else if_time_range (13, 1, 17, 0) {
+                branch (label_0x315)
+            } else if_time_range (18, 0, 6, 0) {
+                if_scene (SCENE_POSTHOUSE) {
+                    return_l (24)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else if_time_range (9, 0, 12, 0) {
+            branch (label_0x117)
+        } else if_time_range (12, 0, 13, 1) {
+            if_scene (SCENE_POSTHOUSE) {
+                return_l (22)
+            } else {
+                return_none
+            }
+        } else if_time_range (13, 1, 15, 0) {
+            label_0x446:
+            if_scene (SCENE_ICHIBA) {
+                if_time_range (13, 0, 13, 1) {
+                    return_time (13, 0, 13, 1, 1)
+                } else if_time_range (13, 5, 13, 15) {
+                    return_time (13, 5, 13, 15, 38)
+                } else if_time_range (14, 45, 14, 55) {
+                    return_time (14, 45, 14, 55, 52)
+                } else if_time_range (14, 55, 15, 0) {
+                    return_time (14, 55, 15, 0, 2)
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_CLOCKTOWER) {
+                if_time_range (13, 5, 13, 15) {
+                    return_time (13, 5, 13, 15, 39)
+                } else if_time_range (13, 15, 13, 25) {
+                    return_time (13, 15, 13, 25, 40)
+                } else if_time_range (13, 25, 13, 35) {
+                    return_time (13, 25, 13, 35, 41)
+                } else if_time_range (14, 15, 14, 25) {
+                    return_time (14, 15, 14, 25, 47)
+                } else if_time_range (14, 25, 14, 35) {
+                    return_time (14, 25, 14, 35, 48)
+                } else if_time_range (14, 35, 14, 45) {
+                    return_time (14, 35, 14, 45, 50)
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_BACKTOWN) {
+                if_time_range (13, 35, 13, 45) {
+                    return_time (13, 35, 13, 45, 42)
+                } else if_time_range (13, 45, 13, 55) {
+                    return_time (13, 45, 13, 55, 43)
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_TOWN) {
+                if_time_range (13, 55, 14, 5) {
+                    return_time (13, 55, 14, 5, 44)
+                } else if_time_range (14, 5, 14, 15) {
+                    return_time (14, 5, 14, 15, 45)
+                } else if_time_range (14, 15, 14, 25) {
+                    return_time (14, 15, 14, 25, 46)
+                } else if_time_range (14, 25, 14, 35) {
+                    return_time (14, 25, 14, 35, 49)
+                } else if_time_range (14, 35, 14, 45) {
+                    return_time (14, 35, 14, 45, 51)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else if_time_range (18, 0, 6, 0) {
+            if_scene (SCENE_POSTHOUSE) {
+                return_l (24)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}
+
+D_80AFB30C {
+    if_scene (SCENE_POSTHOUSE) {
+        if_time_range (0, 0, 0, 10) {
+            return_time (0, 0, 0, 10, 82)
+        } else if_time_range (0, 10, 0, 13) {
+            return_l (27)
+        } else if_time_range (0, 13, 0, 23) {
+            return_time (0, 13, 0, 23, 83)
+        } else if_time_range (0, 23, 0, 26) {
+            return_time (0, 23, 0, 26, 32)
+        } else {
+            return_none
+        }
+    } else if_scene (SCENE_ICHIBA) {
+        if_time_range (0, 23, 0, 26) {
+            return_time (0, 23, 0, 26, 33)
+        } else if_time_range (0, 26, 0, 36) {
+            return_time (0, 26, 0, 36, 84)
+        } else {
+            return_none
+        }
+    } else if_scene (SCENE_CLOCKTOWER) {
+        if_time_range (0, 26, 0, 36) {
+            return_time (0, 26, 0, 36, 85)
+        } else if_time_range (0, 36, 0, 46) {
+            return_time (0, 36, 0, 46, 86)
+        } else {
+            return_none
+        }
+    } else if_scene (SCENE_TOWN) {
+        if_time_range (0, 46, 0, 56) {
+            return_time (0, 46, 0, 56, 87)
+        } else if_time_range (0, 56, 0, 59) {
+            return_time (0, 56, 0, 59, 34)
+        } else {
+            return_none
+        }
+    } else if_scene (SCENE_MILK_BAR) {
+        if_time_range (0, 56, 0, 59) {
+            return_time (0, 56, 0, 59, 36)
+        } else if_time_range (0, 59, 1, 9) {
+            return_time (0, 59, 1, 9, 88)
+        } else if_time_range (1, 9, 1, 40) {
+            return_time (1, 9, 1, 40, 28)
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}
+
+D_80AFB3C0 {
+    if_scene (SCENE_TOWN) {
+        if_time_range (0, 10, 0, 13) {
+            return_time (0, 10, 0, 13, 35)
+        } else if_time_range (0, 13, 0, 23) {
+            return_time (0, 13, 0, 23, 90)
+        } else {
+            return_none
+        }
+    } else if_scene (SCENE_MILK_BAR) {
+        if_time_range (0, 0, 0, 10) {
+            return_time (0, 0, 0, 10, 89)
+        } else if_time_range (0, 10, 0, 13) {
+            return_time (0, 10, 0, 13, 37)
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}
+
+D_80AFB3FC {
+    if_scene (SCENE_TOWN) {
+        if_time_range (18, 0, 6, 0) {
+            return_time (18, 0, 6, 0, 29)
+        } else if_time_range (5, 0, 5, 10) {
+            return_time (5, 0, 5, 10, 91)
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}
+
+D_80AFB41C {
+    if_scene (SCENE_TOWN) {
+        if_time_range (0, 0, 0, 10) {
+            return_time (0, 0, 0, 10, 91)
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# SPDX-FileCopyrightText: © 2023 ZeldaRET
+# SPDX-FileCopyrightText: © 2023-2024 ZeldaRET
 # SPDX-License-Identifier: MIT
 
 #
@@ -8,11 +8,18 @@
 #
 # For a reference about the language see https://github.com/zeldaret/mm/blob/main/docs/schedule_scripting_language.md
 #
+#
+# Version history:
+#
+# 1.0.0:
+#
+# * Initial release
+#
 
 # TODO: Check for repeated labels
 # TODO: think on a catchy name for the schedule language and the compiler
 # TODO: Warning/Error for control flows that do not led to a return. Maybe consider inserting return_none on those cases
-# TODO: consider adding optimization options
+# TODO: consider adding optimization passes/options
 # TODO: consider adding and/or operators
 
 from __future__ import annotations
@@ -924,7 +931,7 @@ def emitLabeledListMacros(labeledList: list[LabeledExpression], debuggingLevel: 
 def main():
     parser = argparse.ArgumentParser(description="Compiler for the high level schedule language", prog=__prog_name__)
 
-    parser.add_argument("input", help="Schedule script path", type=Path)
+    parser.add_argument("input", help="schl (schedule language) file path", type=Path)
     parser.add_argument("-o", "--output", help="Output path. Will print to stdout if omitted", type=Path)
     parser.add_argument("-g", type=int, nargs="?", const=1, default=0, dest="debuggingLevel", metavar="level", help="Emit debugging information on the generated macros. Level 0 means no debugging information. -g is like -g1. Default is -g0")
 

@@ -39,7 +39,7 @@ graphs/
 tools/**/*dSYM/
 tools/decomp-permuter/
 tools/mips_to_c/
-*.schedule.inc
+*.schl.inc
 
 # Assets
 *.png

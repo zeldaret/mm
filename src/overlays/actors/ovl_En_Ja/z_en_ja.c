@@ -21,9 +21,7 @@ void func_80BC2EA4(EnJa* this);
 void func_80BC32D8(EnJa* this, PlayState* play);
 void func_80BC3594(EnJa* this, PlayState* play);
 
-static ScheduleScript D_80BC35F0[] = {
-#include "build/src/overlays/actors/ovl_En_Ja/scheduleScript.schedule.inc"
-};
+#include "build/src/overlays/actors/ovl_En_Ja/scheduleScripts.schl.inc"
 
 s32 D_80BC360C[] = {
     0x0E29370C, 0x170E2938, 0x0C180E29, 0x390C170E, 0x293A0C09, 0x0000180E, 0x293B0C09, 0x00001000,

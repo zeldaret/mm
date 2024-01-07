@@ -1,9 +1,0 @@
-if_scene (SCENE_TOWN) {
-    if_time_range (0, 0, 0, 10) {
-        return_time (0, 0, 0, 10, 91)
-    } else {
-        return_none
-    }
-} else {
-    return_none
-}

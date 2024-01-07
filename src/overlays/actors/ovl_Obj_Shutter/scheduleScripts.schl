@@ -1,0 +1,7 @@
+sScheduleScript {
+    if_time_range (10, 0, 20, 0) {
+        return_l (1)
+    } else {
+        return_l (2)
+    }
+}

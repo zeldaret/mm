@@ -62,9 +62,7 @@ void func_80AEF5F4(Actor* thisx, PlayState* play);
 
 static s32 D_80AF0050;
 
-static ScheduleScript D_80AEF800[] = {
-#include "build/src/overlays/actors/ovl_En_Tk/scheduleScript.schedule.inc"
-};
+#include "build/src/overlays/actors/ovl_En_Tk/scheduleScripts.schl.inc"
 
 ActorInit En_Tk_InitVars = {
     /**/ ACTOR_EN_TK,

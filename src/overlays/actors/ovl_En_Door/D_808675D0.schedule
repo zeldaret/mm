@@ -1,8 +1,0 @@
-if_day (3) {
-    not if_time_range (6, 0, 23, 0) {
-        not if_time_range (0, 0, 6, 0) {
-            return_s (7)
-        }
-    }
-}
-return_none

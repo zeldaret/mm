@@ -1,0 +1,133 @@
+sScheduleScript {
+    if_day (1) {
+        if_scene (SCENE_ALLEY) {
+            if_time_range (6, 50, 7, 20) {
+                return_time (6, 50, 7, 20, 15)
+            } else if_before_time (7, 30) {
+                return_none
+            } else if_week_event_reg (WEEKEVENTREG_51_04) {
+                return_s (10)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_CLOCKTOWER) {
+            if_time_range (6, 0, 6, 30) {
+                return_time (6, 0, 6, 30, 13)
+            } else if_time_range (6, 30, 6, 35) {
+                return_s (1)
+            } else if_time_range (6, 35, 6, 50) {
+                return_time (6, 35, 6, 50, 14)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else if_day (2) {
+        if_week_event_reg (WEEKEVENTREG_51_02) {
+            if_scene (SCENE_ALLEY) {
+                if_before_time (13, 0) {
+                    branch (label_0x050)
+                } else if_time_range (15, 5, 15, 25) {
+                    return_time (15, 5, 15, 25, 16)
+                } else if_time_range (15, 25, 15, 40) {
+                    return_s (1)
+                } else if_time_range (15, 40, 16, 0) {
+                    return_time (15, 40, 16, 0, 17)
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_AYASHIISHOP) {
+                if_time_range (15, 55, 16, 10) {
+                    return_time (15, 55, 16, 10, 12)
+                } else if_time_range (16, 10, 22, 10) {
+                    return_s (3)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else {
+            branch (label_0x050)
+
+        label_0x050:
+            if_week_event_reg (WEEKEVENTREG_51_04) {
+                return_l (10)
+            } else {
+                return_none
+            }
+        }
+    } else if_day (3) {
+        if_week_event_reg (WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) {
+        label_0x12C:
+            if_scene (SCENE_AYASHIISHOP) {
+                if_week_event_reg (WEEKEVENTREG_51_08) {
+                    return_s (4)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        } else {
+            if_week_event_reg (WEEKEVENTREG_SAKON_DEAD) {
+                branch (label_0x12C)
+            } else if_scene (SCENE_SECOM) {
+                return_s (7)
+            } else if_week_event_reg (WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT) {
+                if_scene (SCENE_IKANA) {
+                    if_week_event_reg (WEEKEVENTREG_90_02) {
+                        return_none
+                    } else {
+                        return_s (9)
+                    }
+                } else if_scene (SCENE_TOWN) {
+                    if_time_range (4, 0, 4, 10) {
+                        return_time (4, 0, 4, 10, 11)
+                    } else {
+                        return_none
+                    }
+                } else if_scene (SCENE_YADOYA) {
+                    if_time_range (4, 10, 4, 30) {
+                        return_time (4, 10, 4, 30, 18)
+                    } else if_week_event_reg (WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES) {
+                        if_time_range (4, 30, 6, 0) {
+                            return_s (8)
+                        } else {
+                            return_none
+                        }
+                    } else if_time_range (4, 30, 4, 45) {
+                        return_time (4, 30, 4, 45, 19)
+                    } else if_time_range (4, 45, 6, 0) {
+                        return_s (6)
+                    } else {
+                        return_none
+                    }
+                } else {
+                    return_none
+                }
+            } else if_scene (SCENE_IKANA) {
+                not if_week_event_reg (WEEKEVENTREG_51_08) {
+                    return_s (5)
+                } else if_week_event_reg (WEEKEVENTREG_61_08) {
+                    return_s (5)
+                } else if_week_event_reg (WEEKEVENTREG_51_10) {
+                    if_time_range (19, 0, 19, 10) {
+                        return_time (19, 0, 19, 10, 20)
+                    } else {
+                        return_none
+                    }
+                } else if_before_time (19, 0) {
+                    return_s (5)
+                } else {
+                    return_none
+                }
+            } else {
+                return_none
+            }
+        }
+    } else {
+        return_none
+    }
+}

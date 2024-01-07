@@ -1,0 +1,65 @@
+D_80BAE820 {
+    if_day (2) {
+        if_week_event_reg (WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) {
+            return_none
+        } else if_scene (SCENE_ICHIBA) {
+            if_time_range (0, 0, 0, 25) {
+                return_time (0, 0, 0, 25, 13)
+            } else if_time_range (0, 25, 0, 30) {
+                return_time (0, 25, 0, 30, 6)
+            } else if_time_range (1, 15, 1, 20) {
+                return_time (1, 15, 1, 20, 7)
+            } else if_time_range (1, 20, 1, 45) {
+                return_time (1, 20, 1, 45, 14)
+            } else {
+                return_none
+            }
+        } else if_scene (SCENE_AYASHIISHOP) {
+            if_time_range (0, 25, 0, 30) {
+                return_time (0, 25, 0, 30, 8)
+            } else if_time_range (0, 30, 0, 45) {
+                return_time (0, 30, 0, 45, 10)
+            } else if_time_range (0, 45, 1, 0) {
+                return_time (0, 45, 1, 0, 2)
+            } else if_time_range (1, 0, 1, 15) {
+                return_time (1, 0, 1, 15, 11)
+            } else if_time_range (1, 15, 1, 20) {
+                return_time (1, 15, 1, 20, 9)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else if_day (1) {
+        if_scene (SCENE_BACKTOWN) {
+            if_time_range (18, 0, 0, 20) {
+                return_time (18, 0, 0, 20, 3)
+            } else if_time_range (0, 20, 0, 30) {
+                return_time (0, 20, 0, 30, 15)
+            } else if_since_time (0, 30) {
+                return_l (4)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else if_day (3) {
+        if_scene (SCENE_IKANA) {
+            if_time_range (18, 0, 19, 0) {
+                return_time (18, 0, 19, 0, 12)
+            } else if_time_range (19, 0, 19, 25) {
+                return_l (5)
+            } else if_time_range (19, 25, 0, 0) {
+                return_time (19, 25, 0, 0, 1)
+            } else {
+                return_none
+            }
+        } else {
+            return_none
+        }
+    } else {
+        return_none
+    }
+}

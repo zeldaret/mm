@@ -20,25 +20,7 @@ void EnPm_Draw(Actor* thisx, PlayState* play);
 void func_80AFA4D0(EnPm* this, PlayState* play);
 void func_80AFA5FC(EnPm* this, PlayState* play);
 
-static ScheduleScript D_80AFAD80[] = {
-#include "build/src/overlays/actors/ovl_En_Pm/D_80AFAD80.schedule.inc"
-};
-
-static ScheduleScript D_80AFB30C[] = {
-#include "build/src/overlays/actors/ovl_En_Pm/D_80AFB30C.schedule.inc"
-};
-
-static ScheduleScript D_80AFB3C0[] = {
-#include "build/src/overlays/actors/ovl_En_Pm/D_80AFB3C0.schedule.inc"
-};
-
-static ScheduleScript D_80AFB3FC[] = {
-#include "build/src/overlays/actors/ovl_En_Pm/D_80AFB3FC.schedule.inc"
-};
-
-static ScheduleScript D_80AFB41C[] = {
-#include "build/src/overlays/actors/ovl_En_Pm/D_80AFB41C.schedule.inc"
-};
+#include "build/src/overlays/actors/ovl_En_Pm/scheduleScripts.schl.inc"
 
 static s32 D_80AFB430[] = {
     -1, 0, 4, 1,  0,  0, 1, 4,  -1, -1, 15, 5, 0, 3, -1, -1, 1, 2, 11, 3, -1, -1, -1, 0, 0, 0, 0, 0, 1,  12, -1,

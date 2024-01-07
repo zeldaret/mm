@@ -20,9 +20,7 @@ void EnTab_Draw(Actor* thisx, PlayState* play);
 void func_80BE127C(EnTab* this, PlayState* play);
 void func_80BE1348(EnTab* this, PlayState* play);
 
-static ScheduleScript D_80BE18D0[] = {
-#include "build/src/overlays/actors/ovl_En_Tab/scheduleScript.schedule.inc"
-};
+#include "build/src/overlays/actors/ovl_En_Tab/scheduleScripts.schl.inc"
 
 s32 D_80BE1914[] = {
     0x003A0200, 0x080E2AF9, 0x0C113A02, 0x100E2AFA, 0x0C150900, 0x000E2AFB,

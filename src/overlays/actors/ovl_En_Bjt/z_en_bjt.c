@@ -29,9 +29,7 @@ typedef enum {
     /* 1 */ TOILET_HAND_SCH_AVAILABLE
 } ToiletHandScheduleResult;
 
-static ScheduleScript sScheduleScript[] = {
-#include "build/src/overlays/actors/ovl_En_Bjt/scheduleScript.schedule.inc"
-};
+#include "build/src/overlays/actors/ovl_En_Bjt/scheduleScripts.schl.inc"
 
 static u8 sMsgEventScript[] = {
     0x0E, 0x29, 0x48, 0x0C, 0x0E, 0x00, 0xFF, 0x2B, 0x00, 0x00, 0x00, 0x52, 0x00, 0x5F, 0x2C, 0x29, 0x4A, 0x0C, 0x2F,

@@ -1,5 +1,0 @@
-if_since_time (22, 0) {
-    return_s (15)
-} else {
-    return_none
-}
