@@ -15,7 +15,7 @@ typedef struct ObjMure2 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ObjMure2ActionFunc actionFunc;
     /* 0x148 */ Actor* actors[OBJ_MURE2_CHILD_MAX];
-    /* 0x178*/  u16 spawnFlags;
+    /* 0x178 */ u16 spawnFlags;
     /* 0x17C */ f32 rangeMultiplier;
 } ObjMure2; // size = 0x180
 
