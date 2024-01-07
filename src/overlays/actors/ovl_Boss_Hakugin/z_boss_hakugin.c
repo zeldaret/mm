@@ -818,19 +818,32 @@ void BossHakugin_SpawnBlueWarpAndHeartContainer(BossHakugin* this, PlayState* pl
                 BHEART_PARAM_NORMAL);
 }
 
+/**
+ * This function updates Goht's base y-rotation to make sure it turns to follow the curves in its arena. It also moves
+ * Goht away from the sides of the room if it strays too close to them.
+ *
+ * Goht's "base" rotation is one component of its final rotation, and it is specifically the component that perfectly
+ * follows the walls of the room; while running along the arena's straightaways, the base rotation is exactly parallel
+ * to the two side walls. This function uses the angles of the normals of the left and right wall polygons to determine
+ * how much Goht should turn to keep following the walls.
+ */
 void BossHakugin_UpdateBaseRot(BossHakugin* this, PlayState* play) {
     CollisionPoly* rightWallPoly = NULL;
     CollisionPoly* leftWallPoly = NULL;
     s32 bgId;
-    s16 sp82;
-    s16 sp80;
-    s16 var_v0;
+    s16 rightWallYawDiff;
+    s16 leftWallYawDiff;
+    s16 averagedYawDiff;
     Vec3f rightWallPos;
     Vec3f leftWallPos;
     Vec3f posA;
     Vec3f posB;
-    f32 sp48;
+    f32 offsetFromWall;
 
+    // The initial point of our line is slightly above and slightly in front of Goht. The point is slightly above Goht's
+    // position because, near the floor of the arena, the walls are sloped, so elevating the check ensures it looks at
+    // the flat upper walls instead. The point is placed a variable distance in front of Goht depending on its speed so
+    // that it will turn sooner when it's running faster.
     posA.x = this->actor.world.pos.x + (Math_SinS(this->baseRotY) * (5.0f * this->actor.speed));
     posA.y = this->actor.world.pos.y + 450.0f;
     posA.z = this->actor.world.pos.z + (Math_CosS(this->baseRotY) * (5.0f * this->actor.speed));
@@ -841,12 +854,13 @@ void BossHakugin_UpdateBaseRot(BossHakugin* this, PlayState* play) {
 
     if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &rightWallPos, &rightWallPoly, true, true, false, true,
                                 &bgId)) {
-        sp82 =
+        rightWallYawDiff =
             Math_Atan2S_XY(COLPOLY_GET_NORMAL(rightWallPoly->normal.z), COLPOLY_GET_NORMAL(rightWallPoly->normal.x)) -
             this->baseRotY;
         this->distToRightWall = Math_Vec3f_DistXZ(&posA, &rightWallPos);
     } else {
-        sp82 = 0;
+        // There is no wall close enough to Goht's right. In practice, this will never happen inside its boss arena.
+        rightWallYawDiff = 0;
         this->distToRightWall = 30000.0f;
     }
 
@@ -855,11 +869,13 @@ void BossHakugin_UpdateBaseRot(BossHakugin* this, PlayState* play) {
 
     if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &leftWallPos, &leftWallPoly, true, true, false, true,
                                 &bgId)) {
-        sp80 = Math_Atan2S_XY(COLPOLY_GET_NORMAL(leftWallPoly->normal.z), COLPOLY_GET_NORMAL(leftWallPoly->normal.x)) -
-               this->baseRotY;
+        leftWallYawDiff =
+            Math_Atan2S_XY(COLPOLY_GET_NORMAL(leftWallPoly->normal.z), COLPOLY_GET_NORMAL(leftWallPoly->normal.x)) -
+            this->baseRotY;
         this->distToLeftWall = Math_Vec3f_DistXZ(&posA, &leftWallPos);
     } else {
-        sp80 = 0;
+        // There is no wall close enough to Goht's left. In practice, this will never happen inside its boss arena.
+        leftWallYawDiff = 0;
         this->distToLeftWall = 30000.0f;
     }
 
@@ -870,24 +886,29 @@ void BossHakugin_UpdateBaseRot(BossHakugin* this, PlayState* play) {
     }
 
     if (this->distToRightWall <= (89100.0f * 0.001f)) {
-        sp48 = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? (89100.0f * 0.001f) : (139100.0f * 0.001f);
-        this->actor.world.pos.x = (rightWallPos.x + (sp48 * Math_CosS(this->baseRotY))) -
+        offsetFromWall = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? (89100.0f * 0.001f) : (139100.0f * 0.001f);
+        this->actor.world.pos.x = (rightWallPos.x + (offsetFromWall * Math_CosS(this->baseRotY))) -
                                   (Math_SinS(this->baseRotY) * (5.0f * this->actor.speed));
-        this->actor.world.pos.z = (rightWallPos.z - (sp48 * Math_SinS(this->baseRotY))) -
+        this->actor.world.pos.z = (rightWallPos.z - (offsetFromWall * Math_SinS(this->baseRotY))) -
                                   (Math_CosS(this->baseRotY) * (5.0f * this->actor.speed));
     } else if (this->distToLeftWall <= (89100.0f * 0.001f)) {
-        sp48 = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? (139100.0f * 0.001f) : (89100.0f * 0.001f);
-        this->actor.world.pos.x = (leftWallPos.x - (sp48 * Math_CosS(this->baseRotY))) -
+        offsetFromWall = (this->direction == GOHT_DIRECTION_CLOCKWISE) ? (139100.0f * 0.001f) : (89100.0f * 0.001f);
+        this->actor.world.pos.x = (leftWallPos.x - (offsetFromWall * Math_CosS(this->baseRotY))) -
                                   (Math_SinS(this->baseRotY) * (5.0f * this->actor.speed));
-        this->actor.world.pos.z = (leftWallPos.z + (sp48 * Math_SinS(this->baseRotY))) -
+        this->actor.world.pos.z = (leftWallPos.z + (offsetFromWall * Math_SinS(this->baseRotY))) -
                                   (Math_CosS(this->baseRotY) * (5.0f * this->actor.speed));
     }
 
     if ((this->distToLeftWall < 30000.0f) && (this->distToRightWall < 30000.0f)) {
-        var_v0 = (s16)(sp82 + sp80) >> 1;
-        if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (var_v0 < 0)) ||
-            ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) && (var_v0 > 0))) {
-            this->baseRotY += var_v0;
+        // If Goht is running along a straightaway (in other words, if the walls to its side are parallel), then the
+        // angles of the walls' normal vectors have the same absolute value; one is positive while the other is
+        // negative. As a result, the differences between these two angles and Goht's base rotation will cancel out. If
+        // Goht approaches a turn, however, this will not be the case, so the average difference is used to keep Goht
+        // parallel to the walls at this point in the turn.
+        averagedYawDiff = (s16)(rightWallYawDiff + leftWallYawDiff) >> 1;
+        if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (averagedYawDiff < 0)) ||
+            ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) && (averagedYawDiff > 0))) {
+            this->baseRotY += averagedYawDiff;
         }
     }
 }
