@@ -27,7 +27,8 @@ OBJDUMP_BUILD ?= 0
 ASM_PROC_FORCE ?= 0
 # Number of threads to disassmble, extract, and compress with
 N_THREADS ?= $(shell nproc)
-
+#MIPS toolchain
+MIPS_BINUTILS_PREFIX ?= mips-linux-gnu-
 #### Setup ####
 
 # Ensure the map file being created using English localization
@@ -62,10 +63,6 @@ else
     CPPFLAGS += -xc++
   endif
 endif
-
-#### Tools ####
-
-MIPS_BINUTILS_PREFIX := mips-linux-gnu-
 
 #### Tools ####
 ifneq ($(shell type $(MIPS_BINUTILS_PREFIX)ld >/dev/null 2>/dev/null; echo $$?), 0)
