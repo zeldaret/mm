@@ -913,17 +913,19 @@ void BossHakugin_UpdateBaseRot(BossHakugin* this, PlayState* play) {
     }
 }
 
-void func_80B06558(GohtLightningSegment* lightningSegment) {
+void BossHakugin_SetLightningSegmentColliderVertices(GohtLightningSegment* lightningSegment) {
     s32 i;
-    Vec3f sp38[3];
+    Vec3f vertices[3];
 
     Matrix_SetTranslateRotateYXZ(lightningSegment->pos.x, lightningSegment->pos.y, lightningSegment->pos.z,
                                  &lightningSegment->rot);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-    for (i = 0; i < 3; i++) {
-        Matrix_MultVec3f(&sTrisElementsInit[0].dim.vtx[i], &sp38[i]);
+
+    for (i = 0; i < ARRAY_COUNT(vertices); i++) {
+        Matrix_MultVec3f(&sTrisElementsInit[0].dim.vtx[i], &vertices[i]);
     }
-    Collider_SetTrisVertices(&lightningSegment->collider, 0, &sp38[0], &sp38[1], &sp38[2]);
+
+    Collider_SetTrisVertices(&lightningSegment->collider, 0, &vertices[0], &vertices[1], &vertices[2]);
 }
 
 void BossHakugin_AddLightningSegment(BossHakugin* this, Vec3f* arg1, PlayState* play) {
@@ -982,7 +984,7 @@ void BossHakugin_AddLightningSegment(BossHakugin* this, Vec3f* arg1, PlayState* 
         }
 
         lightningSegment->alpha = 255 + 20 * (i + 1);
-        func_80B06558(lightningSegment);
+        BossHakugin_SetLightningSegmentColliderVertices(lightningSegment);
         lightningSegment->rot.z = (s32)Rand_Next() >> 0x10;
     }
 }
