@@ -204,7 +204,7 @@ void func_80959774(EnMk* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 3, 0x400, 0x80);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80959624(this, play);
         this->actionFunc = func_809596A0;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
@@ -376,7 +376,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
 }
 
 void func_80959C94(EnMk* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80959A24;
         this->unk_27A &= ~2;
         Message_StartTextbox(play, 0xFB3, &this->actor);
@@ -436,7 +436,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
             this->actor.csId = this->csIdList[1];
         }
         CutsceneManager_Queue(this->actor.csId);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80959844(this, play);
         this->actionFunc = func_80959A24;
         this->unk_27A |= 1;
@@ -457,7 +457,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
 void EnMk_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnMk* this = THIS;
-    Vec3s sp38;
+    Vec3s torsoRot;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -467,10 +467,10 @@ void EnMk_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->unk_27A & 1) && !Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_127)) {
-        Actor_TrackPlayer(play, &this->actor, &this->unk_270, &sp38, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &torsoRot, this->actor.focus.pos);
     } else {
-        Math_SmoothStepToS(&this->unk_270.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_270.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
     }
 }
 
@@ -478,8 +478,8 @@ s32 EnMk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     EnMk* this = THIS;
 
     if (limbIndex == MARINE_RESEARCHER_LIMB_HEAD) {
-        rot->y -= this->unk_270.y;
-        rot->z += this->unk_270.x;
+        rot->y -= this->headRot.y;
+        rot->z += this->headRot.x;
     }
     return false;
 }

@@ -508,7 +508,7 @@ void FileSelect_DrawNameEntry(GameState* thisx) {
                             if (validName) {
                                 Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
                                 gSaveContext.fileNum = this->buttonIndex;
-                                time = ((void)0, gSaveContext.save.time);
+                                time = CURRENT_TIME;
                                 Sram_InitSave(this, sramCtx);
                                 gSaveContext.save.time = time;
 

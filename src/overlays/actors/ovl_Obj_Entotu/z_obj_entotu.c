@@ -32,7 +32,7 @@ ActorInit Obj_Entotu_InitVars = {
 
 s32 func_80A34700(s16 minutes) {
     s32 ret = 0;
-    s16 time = TIME_TO_MINUTES_F(gSaveContext.save.time);
+    s16 time = TIME_TO_MINUTES_F(CURRENT_TIME);
     s32 hours = time / 60;
     s32 currMinutes = time % 60;
 

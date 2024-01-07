@@ -226,7 +226,7 @@ void EnZod_UpdateInstruments(EnZod* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->cymbalRots); i++) {
         this->cymbalRots[i] += this->cymbalRotVels[i];
-        this->cymbalRotVels[i] -= (s16)(this->cymbalRots[i] * 0.1f);
+        this->cymbalRotVels[i] -= TRUNCF_BINANG(this->cymbalRots[i] * 0.1f);
 
         if (ABS_ALT(this->cymbalRotVels[i]) > 100) {
             this->cymbalRotVels[i] *= 0.9f;
@@ -376,7 +376,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
 
     EnZod_UpdateAnimation(this);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnZod_HandleRoomConversation(this, play);
         this->actionFunc = func_80BAF7CC;
     } else if (EnZod_PlayerIsFacingTijo(this, play)) {
@@ -432,7 +432,7 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
 void func_80BAFB84(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BAFA44(this, play);
         this->actionFunc = func_80BAFADC;
     } else if (EnZod_PlayerIsFacingTijo(this, play)) {

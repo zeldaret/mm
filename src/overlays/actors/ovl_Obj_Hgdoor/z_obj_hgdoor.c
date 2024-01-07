@@ -20,8 +20,8 @@ void ObjHgdoor_SetupIdle(ObjHgdoor* this);
 void ObjHgdoor_Idle(ObjHgdoor* this, PlayState* play);
 void ObjHgdoor_SetupCutscene(ObjHgdoor* this);
 void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play);
-void ObjHgdoor_SetupCsAction(ObjHgdoor* this);
-void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play);
+void ObjHgdoor_SetupHandleCutscene(ObjHgdoor* this);
+void ObjHgdoor_HandleCutscene(ObjHgdoor* this, PlayState* play);
 void ObjHgdoor_SetupStopCs(ObjHgdoor* this);
 void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play);
 s32 ObjHgdoor_Rotate(ObjHgdoor* this, PlayState* play);
@@ -110,8 +110,8 @@ void ObjHgdoor_SetupCutscene(ObjHgdoor* this) {
 void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->csId)) {
         CutsceneManager_Start(this->csId, &this->dyna.actor);
-        ObjHgdoor_SetupCsAction(this);
-        ObjHgdoor_SetupCsAction((ObjHgdoor*)this->dyna.actor.child);
+        ObjHgdoor_SetupHandleCutscene(this);
+        ObjHgdoor_SetupHandleCutscene((ObjHgdoor*)this->dyna.actor.child);
     } else {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -120,12 +120,12 @@ void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play) {
     }
 }
 
-void ObjHgdoor_SetupCsAction(ObjHgdoor* this) {
+void ObjHgdoor_SetupHandleCutscene(ObjHgdoor* this) {
     this->cueId = 99;
-    this->actionFunc = ObjHgdoor_HandleCsAction;
+    this->actionFunc = ObjHgdoor_HandleCutscene;
 }
 
-void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play) {
+void ObjHgdoor_HandleCutscene(ObjHgdoor* this, PlayState* play) {
     s32 cueChannel;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_483)) {

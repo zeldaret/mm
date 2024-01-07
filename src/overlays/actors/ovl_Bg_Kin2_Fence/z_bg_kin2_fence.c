@@ -99,26 +99,6 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-static Vec3f eyeSparkleSpawnPositions[][2] = {
-    { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
-
-    { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
-
-    { { 103.0f, 139.0f, 50.0f }, { 125.0f, 139.0f, 50.0f } },
-
-    { { 193.0f, 139.0f, 50.0f }, { 215.0f, 139.0f, 50.0f } },
-};
-
-static Color_RGBA8 primColor = { 255, 255, 255, 0 };
-static Color_RGBA8 envColor = { 0, 128, 128, 0 };
-
-static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
-};
-
 s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     s32 i;
 
@@ -130,7 +110,16 @@ s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     return -1;
 }
 
+static Vec3f sEyeSparkleSpawnPositions[][2] = {
+    { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
+    { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
+    { { 103.0f, 139.0f, 50.0f }, { 125.0f, 139.0f, 50.0f } },
+    { { 193.0f, 139.0f, 50.0f }, { 215.0f, 139.0f, 50.0f } },
+};
+
 void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, PlayState* play, s32 mask) {
+    static Color_RGBA8 sPrimColor = { 255, 255, 255, 0 };
+    static Color_RGBA8 sEnvColor = { 0, 128, 128, 0 };
     s32 i;
     Vec3f sp58;
     s32 pad[2];
@@ -139,10 +128,17 @@ void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, PlayState* play, s32 mask) 
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < 2; i++) {
-        Matrix_MultVec3f(&eyeSparkleSpawnPositions[mask][i], &sp58);
-        EffectSsKirakira_SpawnDispersed(play, &sp58, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 6000, -10);
+        Matrix_MultVec3f(&sEyeSparkleSpawnPositions[mask][i], &sp58);
+        EffectSsKirakira_SpawnDispersed(play, &sp58, &gZeroVec3f, &gZeroVec3f, &sPrimColor, &sEnvColor, 6000, -10);
     }
 }
+
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 
 void BgKin2Fence_Init(Actor* thisx, PlayState* play) {
     BgKin2Fence* this = THIS;

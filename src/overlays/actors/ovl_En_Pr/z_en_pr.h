@@ -2,6 +2,7 @@
 #define Z_EN_PR_H
 
 #include "global.h"
+#include "objects/object_pr/object_pr.h"
 
 struct EnPr;
 
@@ -29,8 +30,8 @@ typedef enum EnPrBodyPart {
 typedef struct EnPr {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[10];
-    /* 0x1C4 */ Vec3s morphTable[10];
+    /* 0x188 */ Vec3s jointTable[OBJECT_PR_1_LIMB_MAX];
+    /* 0x1C4 */ Vec3s morphTable[OBJECT_PR_1_LIMB_MAX];
     /* 0x200 */ EnPrActionFunc actionFunc;
     /* 0x204 */ u8 unk_204;
     /* 0x206 */ s16 unk_206;
@@ -43,7 +44,7 @@ typedef struct EnPr {
     /* 0x214 */ s16 unk_214;
     /* 0x216 */ s16 unk_216;
     /* 0x218 */ UNK_TYPE1 unk218[4];
-    /* 0x21C */ s32 unk_21C;
+    /* 0x21C */ s32 animIndex;
     /* 0x220 */ UNK_TYPE1 unk220[0x8];
     /* 0x228 */ s32 bodyPartsCount;
     /* 0x22C */ s16 unk_22C;

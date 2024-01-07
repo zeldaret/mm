@@ -31,7 +31,7 @@ void func_80B94E34(EnZog* this, PlayState* play);
 void func_80B95128(EnZog* this, PlayState* play);
 void func_80B95240(EnZog* this, PlayState* play);
 
-static u8 D_80B95E10;
+static u8 sTexturesDesegmented;
 
 ActorInit En_Zog_InitVars = {
     /**/ ACTOR_EN_ZOG,
@@ -140,9 +140,9 @@ void func_80B93310(Actor* thisx, Lights* mapper, PlayState* play) {
 void func_80B93468(EnZog* this, PlayState* play) {
     Vec3s* points;
 
-    this->unk_2E8 = &play->setupPathList[ENZOG_GET_FC00(&this->actor)];
-    if (this->unk_2E8 != NULL) {
-        points = &((Vec3s*)Lib_SegmentedToVirtual(this->unk_2E8->points))[this->unk_2EC];
+    this->path = &play->setupPathList[ENZOG_GET_PATH_INDEX(&this->actor)];
+    if (this->path != NULL) {
+        points = &((Vec3s*)Lib_SegmentedToVirtual(this->path->points))[this->unk_2EC];
         points++;
 
         this->actor.world.pos.x = points[-1].x;
@@ -158,7 +158,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     s32 i;
     s16 csId;
 
-    if (!D_80B95E10) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(D_80B958AC); i++) {
             D_80B958AC[i] = Lib_SegmentedToVirtual(D_80B958AC[i]);
         }
@@ -167,7 +167,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
             D_80B958B8[i] = Lib_SegmentedToVirtual(D_80B958B8[i]);
         }
 
-        D_80B95E10 = true;
+        sTexturesDesegmented = true;
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_80B93310, 24.0f);
@@ -208,10 +208,10 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk_2EC = 0;
-    if (ENZOG_GET_FC00(&this->actor) != ENZOG_FC00_63) {
+    if (ENZOG_GET_PATH_INDEX(&this->actor) != ENZOG_FC00_63) {
         func_80B93468(this, play);
     } else {
-        this->unk_2E8 = NULL;
+        this->path = NULL;
     }
 
     this->unk_2FC = 0;
@@ -321,11 +321,11 @@ void func_80B93BA8(EnZog* this, s16 csIdIndex) {
 }
 
 s32 func_80B93BE0(EnZog* this, PlayState* play) {
-    Path* path = this->unk_2E8;
+    Path* path = this->path;
     s16 temp_v0;
     Vec3s* points;
 
-    if (this->unk_2E8 == 0) {
+    if (this->path == NULL) {
         return false;
     }
 
@@ -343,7 +343,7 @@ s32 func_80B93BE0(EnZog* this, PlayState* play) {
     if (ABS_ALT(temp_v0 - this->actor.world.rot.y) > 0x4000) {
         this->unk_2EC++;
         func_80B93468(this, play);
-        if ((this->unk_2EC + 1) >= this->unk_2E8->count) {
+        if ((this->unk_2EC + 1) >= this->path->count) {
             this->unk_30A |= 1;
             return true;
         }
@@ -599,7 +599,7 @@ void func_80B94470(EnZog* this, PlayState* play) {
 }
 
 void func_80B9451C(EnZog* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B94470;
     } else if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (this->actor.xzDistToPlayer < 120.0f)) {
@@ -687,7 +687,7 @@ void func_80B946FC(EnZog* this, PlayState* play) {
 }
 
 void func_80B948A8(EnZog* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B946FC;
     } else if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (this->actor.xzDistToPlayer < 120.0f)) {
@@ -834,14 +834,14 @@ void func_80B94E34(EnZog* this, PlayState* play) {
         this->actor.speed = 0.0f;
     } else {
         if (this->actor.speed > 0.1f) {
-            WaterBox* sp44;
+            WaterBox* waterBox;
             Vec3f sp38;
 
             Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80B959AC, &sp38);
             sp38.x += Rand_CenteredFloat(30.0f);
             sp38.y += 20.0f;
             sp38.z += Rand_CenteredFloat(30.0f);
-            if (WaterBox_GetSurface1(play, &play->colCtx, sp38.x, sp38.z, &sp38.y, &sp44) &&
+            if (WaterBox_GetSurface1(play, &play->colCtx, sp38.x, sp38.z, &sp38.y, &waterBox) &&
                 (this->actor.world.pos.y < sp38.y)) {
                 EffectSsGSplash_Spawn(play, &sp38, NULL, NULL, 1,
                                       Rand_ZeroFloat(this->actor.speed * 40.0f) + (this->actor.speed * 60.0f));
@@ -863,7 +863,7 @@ void func_80B94E34(EnZog* this, PlayState* play) {
         this->unk_324--;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B94D0C;
         this->actor.speed = 0.0f;
         this->unk_300 = 2;
@@ -892,7 +892,7 @@ void func_80B95128(EnZog* this, PlayState* play) {
     func_80B93D2C(this, play);
     func_80B93BE0(this, play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B94D0C;
         this->unk_300 = 2;
         this->actor.speed = 0.0f;
@@ -971,7 +971,7 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-void EnZog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnZog_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B959B8 = { 0.0f, 0.0f, 0.0f };
     EnZog* this = THIS;
 
@@ -994,7 +994,7 @@ void EnZog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     }
 }
 
-void func_80B95598(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnZog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Vec3f D_80B959C4 = { 0.0f, 0.0f, 0.0f };
     EnZog* this = THIS;
 
@@ -1039,7 +1039,7 @@ void EnZog_Draw(Actor* thisx, PlayState* play) {
         POLY_XLU_DISP = &gfx[3];
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               NULL, func_80B95598, &this->actor, POLY_XLU_DISP);
+                               NULL, EnZog_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     } else {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Scene_SetRenderModeXlu(play, 0, 1);
@@ -1052,7 +1052,7 @@ void EnZog_Draw(Actor* thisx, PlayState* play) {
 
         POLY_OPA_DISP = &gfx[3];
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              NULL, EnZog_PostLimbDraw, &this->actor);
+                              NULL, EnZog_PostLimbDrawOpa, &this->actor);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

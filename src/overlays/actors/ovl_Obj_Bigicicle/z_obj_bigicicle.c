@@ -116,14 +116,14 @@ void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
     sp30 = sp28 * (1.0f / 60.0f);
 
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
-    this->collider1.dim.radius = this->collider1.dim.radius * sp30;
-    this->collider1.dim.height = this->collider1.dim.height * sp30;
-    this->collider1.dim.yShift = this->collider1.dim.yShift * sp30;
+    this->collider1.dim.radius *= sp30;
+    this->collider1.dim.height *= sp30;
+    this->collider1.dim.yShift *= sp30;
 
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
-    this->collider2.dim.radius = this->collider2.dim.radius * sp30;
-    this->collider2.dim.height = this->collider2.dim.height * sp30;
-    this->collider2.dim.yShift = this->collider2.dim.yShift * sp30;
+    this->collider2.dim.radius *= sp30;
+    this->collider2.dim.height *= sp30;
+    this->collider2.dim.yShift *= sp30;
 
     if (Flags_GetSwitch(play, OBJBIGICLE_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
@@ -205,8 +205,8 @@ void func_80AE9090(ObjBigicicle* this, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_10;
             this->actor.shape.yOffset = 2100.0f;
             this->actor.world.pos.y -= temp_f0;
-            this->collider1.dim.yShift += (s16)temp_f0;
-            this->collider2.dim.yShift += (s16)temp_f0;
+            this->collider1.dim.yShift += TRUNCF_BINANG(temp_f0);
+            this->collider2.dim.yShift += TRUNCF_BINANG(temp_f0);
             this->actionFunc = func_80AE9258;
         } else {
             this->unk_14A = 50;

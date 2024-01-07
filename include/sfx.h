@@ -1,6 +1,7 @@
 #ifndef SFX_H
 #define SFX_H
 
+#include "PR/ultratypes.h"
 #include "z64math.h"
 
 /**
@@ -2361,6 +2362,153 @@ typedef enum SfxPauseMenu {
     /* 1 */ SFX_PAUSE_MENU_OPEN
 } SfxPauseMenu;
 
+typedef enum SfxBankType {
+    /* 0 */ BANK_PLAYER,
+    /* 1 */ BANK_ITEM,
+    /* 2 */ BANK_ENV,
+    /* 3 */ BANK_ENEMY,
+    /* 4 */ BANK_SYSTEM,
+    /* 5 */ BANK_OCARINA,
+    /* 6 */ BANK_VOICE
+} SfxBankType;
+
+typedef enum SfxState {
+    /* 0 */ SFX_STATE_EMPTY,
+    /* 1 */ SFX_STATE_QUEUED,
+    /* 2 */ SFX_STATE_READY,
+    /* 3 */ SFX_STATE_PLAYING_REFRESH,
+    /* 4 */ SFX_STATE_PLAYING,
+    /* 5 */ SFX_STATE_PLAYING_ONE_FRAME
+} SfxState;
+
+typedef struct {
+    /* 0x00 */ f32* posX;
+    /* 0x04 */ f32* posY;
+    /* 0x08 */ f32* posZ;
+    /* 0x0C */ f32* freqScale;
+    /* 0x10 */ f32* volume;
+    /* 0x14 */ s8* reverbAdd;
+    /* 0x18 */ f32 dist;
+    /* 0x1C */ u32 priority; // lower is more prioritized
+    /* 0x20 */ u16 sfxParams;
+    /* 0x22 */ u16 sfxId;
+    /* 0x25 */ u8 sfxFlags;
+    /* 0x24 */ u8 sfxImportance;
+    /* 0x26 */ u8 state; // uses SfxState enum
+    /* 0x27 */ u8 freshness;
+    /* 0x28 */ u8 prev;
+    /* 0x29 */ u8 next;
+    /* 0x2A */ u8 channelIndex;
+    /* 0x2B */ u8 randFreq;
+    /* 0x2C */ u8 token;
+} SfxBankEntry; // size = 0x30
+
+#define SFX_BANK_SHIFT(sfxId)   (((sfxId) >> 12) & 0xFF)
+
+#define SFX_BANK_MASK(sfxId)    ((sfxId) & 0xF000)
+
+#define SFX_INDEX(sfxId)    ((sfxId) & 0x3FF)
+#define SFX_BANK(sfxId)     SFX_BANK_SHIFT(SFX_BANK_MASK(sfxId))
+
+typedef struct {
+    /* 0x0 */ u32 priority; // lower is more prioritized
+    /* 0x4 */ u8 entryIndex;
+} ActiveSfx; // size = 0x08
+
+// SfxParams bit-packing
+
+// Slows the decay of volume with distance (a 3-bit number ranging from 0-7)
+#define SFX_PARAM_DIST_RANGE_SHIFT 0
+#define SFX_PARAM_DIST_RANGE_MASK_UPPER (4 << SFX_PARAM_DIST_RANGE_SHIFT)
+#define SFX_PARAM_DIST_RANGE_MASK (7 << SFX_PARAM_DIST_RANGE_SHIFT)
+
+// Lower SEQ_PLAYER_BGM_MAIN and SEQ_PLAYER_BGM_SUB while the sfx is playing
+#define SFX_FLAG_LOWER_VOLUME_BGM (1 << 3)
+
+// Sfx priority is not raised with distance (making it more likely to be ejected)
+#define SFX_FLAG_PRIORITY_NO_DIST (1 << 4)
+
+// If a new sfx is requested at both the same position with the same importance,
+// Block that new sfx from replacing the current sfx
+// Note: Only 1 sfx can be played at a specific position at once
+#define SFX_FLAG_BLOCK_EQUAL_IMPORTANCE (1 << 5)
+
+// Applies increasingly random offsets to frequency (a 2-bit number ranging from 0-3)
+#define SFX_PARAM_RAND_FREQ_RAISE_SHIFT 6
+#define SFX_PARAM_RAND_FREQ_RAISE_MASK (3 << SFX_PARAM_RAND_FREQ_RAISE_SHIFT)
+
+// Sets a flag to ioPort 5
+#define SFX_FLAG_8 (1 << 8)
+
+// Use lowpass filter on surround sound
+#define SFX_FLAG_SURROUND_LOWPASS_FILTER (1 << 9)
+
+// Unused remnant of OoT
+#define SFX_FLAG_BEHIND_SCREEN_Z_INDEX_SHIFT 10
+#define SFX_FLAG_BEHIND_SCREEN_Z_INDEX (1 << SFX_FLAG_BEHIND_SCREEN_Z_INDEX_SHIFT)
+
+// Randomly scale base frequency each frame through mutiplicative offset
+#define SFX_PARAM_RAND_FREQ_SCALE (1 << 11)
+
+// Sfx reverb is not raised with distance
+#define SFX_FLAG_REVERB_NO_DIST (1 << 12)
+
+// Sfx volume is not lowered with distance
+#define SFX_FLAG_VOLUME_NO_DIST (1 << 13)
+
+// SFX_FLAG_VIBRATO 
+// Randomly lower base frequency each frame through additive offset
+#define SFX_PARAM_RAND_FREQ_LOWER (1 << 14)
+
+// Sfx frequency is not raised with distance
+#define SFX_FLAG_FREQ_NO_DIST (1 << 15)
+
+// Force the sfx to reset from the beginning when requested again
+#define SFX_FLAG2_FORCE_RESET (1 << 0)
+
+// Unused
+#define SFX_FLAG2_UNUSED2 (1 << 2)
+#define SFX_FLAG2_UNUSED4 (1 << 4)
+
+// Do not use highpass filter on surround sound
+#define SFX_FLAG2_SURROUND_NO_HIGHPASS_FILTER (1 << 5)
+
+// Unused
+#define SFX_FLAG2_UNUSED6 (1 << 6)
+
+// Apply a low-pass filter with a lowPassCutoff of 4
+#define SFX_FLAG2_APPLY_LOWPASS_FILTER (1 << 7)
+
+typedef struct {
+    /* 0x0 */ u8 importance;
+    /* 0x1 */ u8 flags;
+    /* 0x2 */ u16 params;
+} SfxParams; // size = 0x4
+
+// functions in sfx.c
+
+void AudioSfx_MuteBanks(u16 muteMask);
+void AudioSfx_LowerBgmVolume(u8 channelIndex);
+void AudioSfx_RestoreBgmVolume(u8 channelIndex);
+void AudioSfx_PlaySfx(u16 sfxId, Vec3f* pos, u8 token, f32* freqScale, f32* volume, s8* reverbAdd);
+void AudioSfx_ProcessRequest(void);
+void AudioSfx_StopByBank(u8 bankId);
+void AudioSfx_StopByPosAndBank(u8 bankId, Vec3f* pos);
+void AudioSfx_StopByPos(Vec3f* pos);
+void AudioSfx_StopByPosAndId(Vec3f* pos, u16 sfxId);
+void AudioSfx_StopByTokenAndId(u8 token, u16 sfxId);
+void AudioSfx_StopById(u32 sfxId);
+void AudioSfx_ProcessRequests(void);
+void AudioSfx_ProcessActiveSfx(void);
+u8 AudioSfx_IsPlaying(u32 sfxId);
+void AudioSfx_Reset(void);
+
+// functions in code_8019AF00.c
+
+void AudioSfx_SetProperties(u8 bankId, u8 entryIndex, u8 channelIndex);
+void AudioSfx_LowerSfxSettingsReverb(Vec3f* pos, s8 isReverbLowered);
+void AudioSfx_SetChannelIO(Vec3f* pos, u16 sfxId, u8 ioData);
+
 // Various wrappers to AudioSfx_PlaySfx
 void Audio_PlaySfx(u16 sfxId);
 void Audio_PlaySfx_2(u16 sfxId);
@@ -2395,5 +2543,19 @@ void Audio_SetSfxUnderwaterReverb(s8 isUnderwaterReverbActivated);
 void Audio_SetSfxTimerLerpInterval(s8 timerLerpRange1, s8 timerLerpRange2);
 void Audio_SetSfxVolumeTransition(f32* volume, f32 volumeTarget, u16 duration);
 void Audio_SetSfxReverbIndexExceptOcarinaBank(u8 reverbIndex);
+
+extern ActiveSfx gActiveSfx[7][3];
+
+extern u8 gIsLargeSfxBank[7];
+extern u8 D_801D6608[7];
+extern u8 gChannelsPerBank[4][7];
+extern u8 gUsedChannelsPerBank[4][7];
+extern f32 gSfxVolume;
+extern SfxParams* gSfxParams[7];
+extern SfxBankEntry* gSfxBanks[7];
+extern u8 gSfxChannelLayout;
+extern Vec3f gSfxDefaultPos;
+extern f32 gSfxDefaultFreqAndVolScale;
+extern s8 gSfxDefaultReverb;
 
 #endif

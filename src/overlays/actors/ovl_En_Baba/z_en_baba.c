@@ -517,7 +517,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
             (gSaveContext.save.entrance != ENTRANCE(NORTH_CLOCK_TOWN, 7)) &&
             (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != BOMB_SHOP_LADY_PATH_INDEX_NONE)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_40) ||
-                (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
+                ((CURRENT_TIME >= CLOCK_TIME(0, 20)) && (CURRENT_TIME < CLOCK_TIME(6, 0)))) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -569,7 +569,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
 void EnBaba_Idle(EnBaba* this, PlayState* play) {
     if ((this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) || (this->bombShopkeeper != NULL) ||
         EnBaba_FindBombShopkeeper(this, play)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             EnBaba_HandleConversation(this, play);
             if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
@@ -647,7 +647,7 @@ void EnBaba_GiveBlastMask(EnBaba* this, PlayState* play) {
 }
 
 void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnBaba_HandleConversation(this, play);
         this->actionFunc = EnBaba_Talk;
     } else {
@@ -675,7 +675,7 @@ void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
     EnBaba_HandleSchedule(this, play);
 
     if (this->stateFlags & BOMB_SHOP_LADY_STATE_VISIBLE) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             Message_StartTextbox(play, 0x2A39, &this->actor); // "I'm sorry"
             this->actionFunc = EnBaba_FollowSchedule_Talk;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
@@ -777,8 +777,8 @@ s32 EnBaba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
     if ((limbIndex == BBA_LIMB_UPPER_ROOT) || (limbIndex == BBA_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == BBA_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
 
     if (((this->animIndex == BOMB_SHOP_LADY_ANIM_IDLE) || (this->animIndex == BOMB_SHOP_LADY_ANIM_KNOCKED_OVER) ||

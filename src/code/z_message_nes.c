@@ -825,16 +825,16 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 switch (character) {
                     case 0x8169:
                     case 0x8175:
-                        msgCtx->textPosX -= (s16)(6.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX -= TRUNCF_BINANG(6.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x8145:
-                        msgCtx->textPosX -= (s16)(3.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX -= TRUNCF_BINANG(3.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x8148:
                     case 0x8149:
-                        msgCtx->textPosX -= (s16)(2.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX -= TRUNCF_BINANG(2.0f * msgCtx->textCharScale);
                         break;
 
                     default:
@@ -866,26 +866,26 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 //! @TODO: u8 character but > 0x255 cases
                 switch (character) {
                     case 0x8144:
-                        msgCtx->textPosX += (s16)(8.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX += TRUNCF_BINANG(8.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x816A:
                     case 0x8176:
-                        msgCtx->textPosX += (s16)(10.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX += TRUNCF_BINANG(10.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x8141:
                     case 0x8142:
                     case 0x8168:
-                        msgCtx->textPosX += (s16)(12.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX += TRUNCF_BINANG(12.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x8194:
-                        msgCtx->textPosX += (s16)(14.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX += TRUNCF_BINANG(14.0f * msgCtx->textCharScale);
                         break;
 
                     case 0x8145:
-                        msgCtx->textPosX += (s16)(15.0f * msgCtx->textCharScale);
+                        msgCtx->textPosX += TRUNCF_BINANG(15.0f * msgCtx->textCharScale);
                         break;
 
                     default:
@@ -998,7 +998,7 @@ void Message_DecodeNES(PlayState* play) {
             }
             msgCtx->unk11F1A[spC6] = 0;
             if (msgCtx->unk11F18 != 0) {
-                msgCtx->unk11F1A[spC6] = (s16)((msgCtx->textCharScale * 16.0f * 16.0f) - spA4) / 2;
+                msgCtx->unk11F1A[spC6] = TRUNCF_BINANG((msgCtx->textCharScale * 16.0f * 16.0f) - spA4) / 2;
             }
 
             spA4 = 0.0f;
@@ -1098,7 +1098,7 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == 0xC3) {
             msgCtx->unk11F18 = 0;
             msgCtx->choiceNum = 3;
-            msgCtx->unk11FF8 = msgCtx->unk11FF8 + 0x16;
+            msgCtx->unk11FF8 += 0x16;
         } else if (curChar == 0xC4) {
             Message_GetTimerDigitsNES(((void)0, gSaveContext.timerCurTimes[curChar - 0xC4]), spA8);
 
@@ -1130,14 +1130,14 @@ void Message_DecodeNES(PlayState* play) {
             decodedBufPos--;
         } else if (curChar == 0xCA) {
             digits[0] = 0;
-            digits[1] = TIME_TO_MINUTES_F(gSaveContext.save.time) / 60.0f;
+            digits[1] = TIME_TO_MINUTES_F(CURRENT_TIME) / 60.0f;
             while (digits[1] >= 10) {
                 digits[0]++;
                 digits[1] -= 10;
             }
 
             digits[2] = 0;
-            digits[3] = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
+            digits[3] = (s32)TIME_TO_MINUTES_F(CURRENT_TIME) % 60;
             while (digits[3] >= 10) {
                 digits[2]++;
                 digits[3] -= 10;

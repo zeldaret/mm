@@ -5,9 +5,12 @@
  */
 
 #include "z_en_test6.h"
-#include "z64quake.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+
 #include "z64cutscene_commands.h"
+#include "z64malloc.h"
+#include "z64quake.h"
+
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_2000000)
 
@@ -819,7 +822,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
 
         case 1:
             EnTest6_DisableMotionBlur();
-            if (CHECK_EVENTINF(EVENTINF_52)) {
+            if (CHECK_EVENTINF(EVENTINF_HAS_DAYTIME_TRANSITION_CS)) {
                 this->cueId = SOTCS_CUEID_DOUBLE_END;
             }
             break;
@@ -1085,7 +1088,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
                 play->transitionType = TRANS_TYPE_FADE_BLACK;
-                if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
+                if ((CURRENT_TIME > CLOCK_TIME(18, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
                     SET_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
                 } else {
@@ -1159,7 +1162,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
                 return;
 
             case SOTCS_CUEID_DOUBLE_END:
-                if (gSaveContext.save.time > CLOCK_TIME(12, 0)) {
+                if (CURRENT_TIME > CLOCK_TIME(12, 0)) {
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, ((void)0, gSaveContext.save.entrance),
                                         player->unk_3CE, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0,
                                         player->unk_3CC);
@@ -1216,8 +1219,8 @@ void EnTest6_DrawThreeDayResetSoTCutscene(EnTest6* this, PlayState* play) {
     // The `& 0x3C` ensures the angle only updates once every 4 frames
     angle = (play->state.frames & 0x3C) * 1024;
     angle *= this->clockSpeed / 200.0f;
-    this->clockAngle += (s16)this->clockSpeed;
-    this->clockRingRotZ = (s16)((this->clockSpeed / 200.0f) * 256.0f);
+    this->clockAngle += TRUNCF_BINANG(this->clockSpeed);
+    this->clockRingRotZ = TRUNCF_BINANG((this->clockSpeed / 200.0f) * 256.0f);
 
     // Draw 2 clocks per loop
     for (i = 0; i < (SOTCS_RESET_NUM_CLOCKS / 2); i++) {
@@ -1281,7 +1284,7 @@ void EnTest6_DrawDoubleSoTCutscene(EnTest6* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     this->gfx = POLY_OPA_DISP;
-    this->clockAngle += (s16)this->clockSpeed;
+    this->clockAngle += TRUNCF_BINANG(this->clockSpeed);
     this->clockRingRotZ = this->clockAngle * 2;
 
     // The `& 0x3C` ensures the clock only turns once every 4 frames.

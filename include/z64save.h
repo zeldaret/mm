@@ -275,7 +275,7 @@ typedef struct SavePlayerData {
     /* 0x1D */ u8 isDoubleMagicAcquired;              // "magic_ability"
     /* 0x1E */ u8 doubleDefense;                      // "life_ability"
     /* 0x1F */ u8 unk_1F;                             // "ocarina_round"
-    /* 0x20 */ u8 unk_20;                             // "first_memory"
+    /* 0x20 */ u8 owlWarpId; // See `OwlWarpId`, "first_memory"
     /* 0x22 */ u16 owlActivationFlags;                // "memory_warp_point"
     /* 0x24 */ u8 unk_24;                             // "last_warp_pt"
     /* 0x26 */ s16 savedSceneId;                      // "scene_data_ID"
@@ -324,7 +324,7 @@ typedef struct Save {
     /* 0x07 */ u8 linkAge;                              // "link_age"
     /* 0x08 */ s32 cutsceneIndex;                       // "day_time"
     /* 0x0C */ u16 time;                                // "zelda_time"
-    /* 0x0E */ u16 owlSaveLocation;
+    /* 0x0E */ u16 owlWarpId; // See `OwlWarpId` enum
     /* 0x10 */ s32 isNight;                             // "asahiru_fg"
     /* 0x14 */ s32 timeSpeedOffset;                     // "change_zelda_time"
     /* 0x18 */ s32 day;                                 // "totalday"
@@ -451,13 +451,17 @@ typedef enum {
 #define LINK_AGE_IN_YEARS (!LINK_IS_ADULT ? YEARS_CHILD : YEARS_ADULT)
 
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
+#define CURRENT_TIME ((void)0, gSaveContext.save.time)
 
 // The day begins at CLOCK_TIME(6, 0) so it must be offset.
 #define TIME_UNTIL_MOON_CRASH \
-    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)))
-#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)))
+    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(CURRENT_TIME - CLOCK_TIME(6, 0)))
+#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(CURRENT_TIME - CLOCK_TIME(6, 0)))
 
 #define GET_PLAYER_FORM ((void)0, gSaveContext.save.playerForm)
+
+#define GET_OWL_STATUE_ACTIVATED(owlWarpId) (((void)0, gSaveContext.save.saveInfo.playerData.owlActivationFlags) & (u16)gBitFlags[(owlWarpId)])
+#define SET_OWL_STATUE_ACTIVATED(owlWarpId) (gSaveContext.save.saveInfo.playerData.owlActivationFlags = (((void)0, gSaveContext.save.saveInfo.playerData.owlActivationFlags) | (u16)gBitFlags[(owlWarpId)]))
 
 #define SLOT(item) gItemSlots[item]
 #define AMMO(item) gSaveContext.save.saveInfo.inventory.ammo[SLOT(item)]
@@ -1581,7 +1585,7 @@ typedef enum {
 #define EVENTINF_47 0x47
 #define EVENTINF_50 0x50
 #define EVENTINF_51 0x51
-#define EVENTINF_52 0x52
+#define EVENTINF_HAS_DAYTIME_TRANSITION_CS 0x52
 #define EVENTINF_53 0x53
 #define EVENTINF_54 0x54
 #define EVENTINF_55 0x55
@@ -1652,7 +1656,7 @@ typedef enum {
 #define STRAY_FAIRY_TOTAL 25 // total number of stray fairies, including those already in the Great Fairy Fountain
 #define STRAY_FAIRY_SCATTERED_TOTAL 15 // original number of stray fairies in one dungeon area
 
-void Sram_ActivateOwl(u8 owlId);
+void Sram_ActivateOwl(u8 owlWarpId);
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void);
 void Sram_SaveEndOfCycle(struct PlayState* play);
 void Sram_IncrementDay(void);
@@ -1678,6 +1682,8 @@ void Sram_SetFlashPagesOwlSave(SramContext* sramCtx, s32 curPage, s32 numPages);
 void Sram_StartWriteToFlashOwlSave(SramContext* sramCtx);
 void Sram_UpdateWriteToFlashOwlSave(SramContext* sramCtx);
 
+void SaveContext_Init(void);
+
 extern u32 gSramSlotOffsets[];
 extern u8 gAmmoItems[];
 extern s32 gFlashSaveStartPages[];
@@ -1685,5 +1691,7 @@ extern s32 gFlashSaveNumPages[];
 extern s32 gFlashSpecialSaveNumPages[];
 extern s32 gFlashOwlSaveStartPages[];
 extern s32 gFlashOwlSaveNumPages[];
+
+extern SaveContext gSaveContext;
 
 #endif

@@ -16,7 +16,6 @@ void EnAh_Destroy(Actor* thisx, PlayState* play);
 void EnAh_Update(Actor* thisx, PlayState* play);
 void EnAh_Draw(Actor* thisx, PlayState* play);
 
-void func_80BD36B8(EnAh* this, PlayState* play);
 void func_80BD3768(EnAh* this, PlayState* play);
 
 static ScheduleScript D_80BD3DB0[] = {
@@ -156,7 +155,7 @@ s32 func_80BD2BE8(EnAh* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_2D8 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_2D8, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         ret = true;
         this->unk_2D8 |= 8;

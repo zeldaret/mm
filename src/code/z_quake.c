@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "libc/string.h"
 #include "z64quake.h"
 #include "z64view.h"
 
@@ -174,7 +175,7 @@ QuakeRequest* Quake_RequestImpl(Camera* camera, u32 type) {
     s16 index = Quake_GetFreeIndex();
     QuakeRequest* req = &sQuakeRequests[index];
 
-    __osMemset(req, 0, sizeof(QuakeRequest));
+    memset(req, 0, sizeof(QuakeRequest));
 
     req->camera = camera;
     req->camId = camera->camId;
@@ -183,7 +184,7 @@ QuakeRequest* Quake_RequestImpl(Camera* camera, u32 type) {
 
     // Add a unique random identifier to the upper bits of the index
     // The `~3` assumes there are only 4 requests
-    req->index = index + ((s16)(Rand_ZeroOne() * 0x10000) & ~3);
+    req->index = index + (TRUNCF_BINANG(Rand_ZeroOne() * 0x10000) & ~3);
 
     sQuakeRequestCount++;
 

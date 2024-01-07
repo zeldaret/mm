@@ -121,7 +121,7 @@ void func_80BC1984(EnJa* this, PlayState* play) {
     s32 pad[2];
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    this->collider.dim.height = (s16)fabsf(this->actor.focus.pos.y - this->actor.world.pos.y) + 5;
+    this->collider.dim.height = TRUNCF_BINANG(fabsf(this->actor.focus.pos.y - this->actor.world.pos.y)) + 5;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
@@ -129,7 +129,7 @@ s32 func_80BC19FC(EnJa* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_340 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80BC22F4;
         ret = true;

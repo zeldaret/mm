@@ -251,7 +251,7 @@ void EnCow_CheckForEmptyBottle(EnCow* this, PlayState* play) {
 }
 
 void EnCow_Talk(EnCow* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->actor.textId == 0x32C8) { // Text to give milk after playing Epona's Song.
             this->actionFunc = EnCow_CheckForEmptyBottle;
         } else if (this->actor.textId == 0x32C9) { // Text to give milk.
@@ -381,8 +381,8 @@ void EnCow_Update(Actor* thisx, PlayState* play2) {
         targetX = targetY = 0;
     }
 
-    Math_SmoothStepToS(&this->headTilt.x, targetX, 10, 200, 10);
-    Math_SmoothStepToS(&this->headTilt.y, targetY, 10, 200, 10);
+    Math_SmoothStepToS(&this->headTilt.x, targetX, 10, 0xC8, 0xA);
+    Math_SmoothStepToS(&this->headTilt.y, targetY, 10, 0xC8, 0xA);
 }
 
 void EnCow_UpdateTail(Actor* thisx, PlayState* play) {

@@ -307,8 +307,8 @@ void ObjGrassCarry_Fall(ObjGrassCarry* this, PlayState* play) {
         pos.y = this->actor.world.pos.y + this->actor.depthInWater;
 
         for (angle = 0, i = 0; i < 4; i++, angle += 0x4000) {
-            pos.x = (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + angle) * 15.0f) + this->actor.world.pos.x;
-            pos.z = (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + angle) * 15.0f) + this->actor.world.pos.z;
+            pos.x = this->actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + angle) * 15.0f);
+            pos.z = this->actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + angle) * 15.0f);
             EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 190);
         }
 

@@ -199,7 +199,7 @@ void func_80BB5318(EnTanron1* this, PlayState* play) {
     Vec3f* spB4 = NULL;
     f32 spB0;
     Vec3f spA4;
-    WaterBox* spA0;
+    WaterBox* waterBox;
     f32 sp9C;
     CollisionPoly* sp98;
     Actor* temp_v0;
@@ -340,7 +340,7 @@ void func_80BB5318(EnTanron1* this, PlayState* play) {
                             }
                             ptr->unk_3C = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp98, &ptr->unk_00);
                             sp9C = ptr->unk_00.y;
-                            WaterBox_GetSurface1(play, &play->colCtx, ptr->unk_00.x, ptr->unk_00.z, &sp9C, &spA0);
+                            WaterBox_GetSurface1(play, &play->colCtx, ptr->unk_00.x, ptr->unk_00.z, &sp9C, &waterBox);
                             if ((sp9C < ptr->unk_00.y) && (ptr->unk_3C < sp9C)) {
                                 ptr->unk_3C = sp9C;
                             }

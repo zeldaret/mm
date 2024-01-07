@@ -14,7 +14,7 @@ typedef void (*EnEncount2ActionFunc)(struct EnEncount2*, PlayState*);
 typedef struct EnEncount2Effect{
    /* 0x00 */ u8 isEnabled;
    /* 0x04 */ Vec3f pos;
-   /* 0x10 */ UNK_TYPE4 unk10;
+   /* 0x10 */ UNK_TYPE1 unk10[0x4];
    /* 0x14 */ s16 alpha;
    /* 0x16 */ s16 alphaFadeDelay; // frame count before alpha fade starts
    /* 0x18 */ Vec3f velocity;

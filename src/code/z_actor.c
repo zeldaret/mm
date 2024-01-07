@@ -4,11 +4,13 @@
  */
 
 #include "z64actor.h"
+
 #include "prevent_bss_reordering.h"
 #include "fault.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
 #include "z64horse.h"
+#include "z64malloc.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 
@@ -55,7 +57,6 @@ Actor* D_801ED920; // 2 funcs. 1 out of z_actor
 #define ACTOR_AUDIO_FLAG_SEQ_ALL (ACTOR_AUDIO_FLAG_SEQ_MUSIC_BOX_HOUSE | ACTOR_AUDIO_FLAG_SEQ_KAMARO_DANCE)
 #define ACTOR_AUDIO_FLAG_ALL (ACTOR_AUDIO_FLAG_SFX_ALL | ACTOR_AUDIO_FLAG_SEQ_ALL)
 
-// Internal forward declarations
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx);
 Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, PlayState* play);
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play);
@@ -67,17 +68,17 @@ Actor* Actor_RemoveFromCategory(PlayState* play, ActorContext* actorCtx, Actor* 
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorLists[0];
     Actor* actor;
-    s32 i;
+    s32 category;
 
     FaultDrawer_SetCharPad(-2, 0);
     FaultDrawer_Printf("actor\n", gMaxActorId);
     FaultDrawer_Printf("No. Actor   Name Part SegName\n");
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
-        actor = actorList[i].first;
+    for (category = 0; category < ACTORCAT_MAX; category++) {
+        actor = actorList[category].first;
 
         while (actor != NULL) {
-            FaultDrawer_Printf("%3d %08x %04x %3d %s\n", i, actor, actor->id, actor->category, "");
+            FaultDrawer_Printf("%3d %08x %04x %3d %s\n", category, actor, actor->id, actor->category, "");
             actor = actor->next;
         }
     }
@@ -1377,7 +1378,7 @@ bool func_800B715C(PlayState* play) {
     return player->stateFlags2 & PLAYER_STATE2_8;
 }
 
-void Actor_SetCameraHorseSetting(PlayState* play, Player* player) {
+void Player_SetCameraHorseSetting(PlayState* play, Player* player) {
     if ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_4) && (player->actor.id == ACTOR_PLAYER)) {
         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
@@ -1387,7 +1388,7 @@ void Actor_SetCameraHorseSetting(PlayState* play, Player* player) {
     }
 }
 
-void Actor_MountHorse(PlayState* play, Player* player, Actor* horse) {
+void Player_MountHorse(PlayState* play, Player* player, Actor* horse) {
     player->rideActor = horse;
     player->stateFlags1 |= PLAYER_STATE1_800000;
     horse->child = &player->actor;
@@ -1398,7 +1399,7 @@ bool func_800B7200(Player* player) {
            (player->csAction != PLAYER_CSACTION_NONE);
 }
 
-void Actor_SpawnHorse(PlayState* play, Player* player) {
+void Player_SpawnHorse(PlayState* play, Player* player) {
     Horse_Spawn(play, player);
 }
 
@@ -1934,9 +1935,16 @@ s16 D_801AED48[] = {
         HALFDAYBIT_DAY4_NIGHT,
 };
 
-s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
-    if (actor->flags & ACTOR_FLAG_TALK_REQUESTED) {
-        actor->flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+/**
+ * When a given talk offer is accepted, Player will set `ACTOR_FLAG_TALK` for that actor.
+ * This function serves to acknowledge that the offer was accepted by Player, and notifies the actor
+ * that it should proceed with its own internal processes for handling dialogue.
+ *
+ * @return  true if the talk offer was accepted, false otherwise
+ */
+s32 Actor_TalkOfferAccepted(Actor* actor, GameState* gameState) {
+    if (actor->flags & ACTOR_FLAG_TALK) {
+        actor->flags &= ~ACTOR_FLAG_TALK;
         return true;
     }
 
@@ -1973,8 +1981,7 @@ s32 Actor_OfferTalkExchange(Actor* actor, PlayState* play, f32 xzRange, f32 yRan
                             PlayerItemAction exchangeItemAction) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
-        ((exchangeItemAction > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
+    if ((player->actor.flags & ACTOR_FLAG_TALK) || ((exchangeItemAction > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
         (!actor->isLockedOn &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || (actor->xzDistToPlayer > player->talkActorDistance) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -2016,7 +2023,7 @@ s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, PlayState* play) {
 
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
-        actor->flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+        actor->flags &= ~ACTOR_FLAG_TALK;
         return true;
     }
 
@@ -2033,7 +2040,7 @@ s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
 
     talkActor = player->talkActor;
 
-    if ((player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) && (talkActor != NULL)) {
+    if ((player->actor.flags & ACTOR_FLAG_TALK) && (talkActor != NULL)) {
         player->talkActor = actor2;
         player->lockOnActor = actor2;
         return true;
@@ -2090,14 +2097,14 @@ s32 func_800B886C(Actor* actor, PlayState* play) {
     return false;
 }
 
-void Actor_GetScreenPos(PlayState* play, Actor* actor, s16* x, s16* y) {
+void Actor_GetScreenPos(PlayState* play, Actor* actor, s16* posX, s16* posY) {
     Vec3f projectedPos;
     f32 invW;
 
     Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
 
-    *x = PROJECTED_TO_SCREEN_X(projectedPos, invW);
-    *y = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
+    *posX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+    *posY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
 }
 
 bool Actor_OnScreen(PlayState* play, Actor* actor) {
@@ -2394,7 +2401,7 @@ void Actor_DeactivateLens(PlayState* play) {
 void Actor_InitHalfDaysBit(ActorContext* actorCtx) {
     s32 halfDayCount = CURRENT_DAY * 2;
 
-    if ((gSaveContext.save.time < CLOCK_TIME(6, 0)) || (gSaveContext.save.time > CLOCK_TIME(18, 0))) {
+    if ((CURRENT_TIME < CLOCK_TIME(6, 0)) || (CURRENT_TIME > CLOCK_TIME(18, 0))) {
         halfDayCount++;
     }
 
@@ -2439,7 +2446,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     Target_Init(&actorCtx->targetCtx, actorCtx->actorLists[ACTORCAT_PLAYER].first, play);
     Actor_InitHalfDaysBit(actorCtx);
     Fault_AddClient(&sActorFaultClient, (void*)Actor_PrintLists, actorCtx, NULL);
-    Actor_SpawnHorse(play, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
+    Player_SpawnHorse(play, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
 }
 
 /**
@@ -2596,11 +2603,11 @@ u32 sCategoryFreezeMasks[ACTORCAT_MAX] = {
 };
 
 void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
-    s32 i;
+    s32 category;
     Actor* actor;
     Player* player = GET_PLAYER(play);
     u32* categoryFreezeMaskP;
-    s32 cat;
+    s32 newCategory;
     Actor* next;
     ActorListEntry* entry;
     UpdateActor_Params params;
@@ -2634,8 +2641,8 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         params.talkActor = NULL;
     }
 
-    for (i = 0, entry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists);
-         entry++, categoryFreezeMaskP++, i++) {
+    for (category = 0, entry = actorCtx->actorLists; category < ACTORCAT_MAX;
+         entry++, categoryFreezeMaskP++, category++) {
         params.canFreezeCategory = *categoryFreezeMaskP & player->stateFlags1;
         params.actor = entry->first;
 
@@ -2643,28 +2650,32 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
             params.actor = Actor_UpdateActor(&params);
         }
 
-        if (i == ACTORCAT_BG) {
+        if (category == ACTORCAT_BG) {
             DynaPoly_UpdateContext(play, &play->colCtx.dyna);
         }
     }
 
-    for (i = 0, entry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists); entry++, i++) {
-        if (entry->unk_08 != 0) {
+    // Move actors to a different actorList if it has changed categories.
+    for (category = 0, entry = actorCtx->actorLists; category < ACTORCAT_MAX; entry++, category++) {
+        if (entry->categoryChanged) {
             actor = entry->first;
 
             while (actor != NULL) {
-                if (i == actor->category) {
+                if (actor->category == category) {
+                    // The actor category matches the list category. No change needed.
                     actor = actor->next;
-                } else {
-                    next = actor->next;
-                    cat = actor->category;
-                    actor->category = i;
-                    Actor_RemoveFromCategory(play, actorCtx, actor);
-                    Actor_AddToCategory(actorCtx, actor, cat);
-                    actor = next;
+                    continue;
                 }
+
+                // The actor category does not match the list category and needs to be moved.
+                next = actor->next;
+                newCategory = actor->category;
+                actor->category = category;
+                Actor_RemoveFromCategory(play, actorCtx, actor);
+                Actor_AddToCategory(actorCtx, actor, newCategory);
+                actor = next;
             }
-            entry->unk_08 = 0;
+            entry->categoryChanged = false;
         }
     }
 
@@ -2978,7 +2989,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     ActorListEntry* actorEntry;
     Actor* actor;
     s32 actorFlags;
-    s32 i;
+    s32 category;
 
     if (play->unk_18844) {
         actorFlags = ACTOR_FLAG_200000;
@@ -2993,7 +3004,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     sp58 = POLY_XLU_DISP;
     POLY_XLU_DISP = &sp58[1];
 
-    for (i = 0, actorEntry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists); i++, actorEntry++) {
+    for (category = 0, actorEntry = actorCtx->actorLists; category < ACTORCAT_MAX; category++, actorEntry++) {
         actor = actorEntry->first;
 
         while (actor != NULL) {
@@ -3067,10 +3078,10 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
  */
 void Actor_KillAllWithMissingObject(PlayState* play, ActorContext* actorCtx) {
     Actor* actor;
-    s32 i;
+    s32 category;
 
-    for (i = 0; i != ARRAY_COUNT(actorCtx->actorLists); i++) {
-        actor = actorCtx->actorLists[i].first;
+    for (category = 0; category < ACTORCAT_MAX; category++) {
+        actor = actorCtx->actorLists[category].first;
 
         while (actor != NULL) {
             if (!Object_IsLoaded(&play->objectCtx, actor->objectSlot)) {
@@ -3087,10 +3098,10 @@ void Actor_KillAllWithMissingObject(PlayState* play, ActorContext* actorCtx) {
  */
 void func_800BA798(PlayState* play, ActorContext* actorCtx) {
     Actor* actor;
-    s32 i;
+    s32 category;
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
-        actor = actorCtx->actorLists[i].first;
+    for (category = 0; category < ACTORCAT_MAX; category++) {
+        actor = actorCtx->actorLists[category].first;
 
         while (actor != NULL) {
             if ((actor->room >= 0) && (actor->room != play->roomCtx.curRoom.num) &&
@@ -3119,10 +3130,10 @@ void func_800BA798(PlayState* play, ActorContext* actorCtx) {
  * Kill every actor which does not have the current halfDayBit enabled
  */
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx) {
-    s32 i;
+    s32 category;
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
-        Actor* actor = actorCtx->actorLists[i].first;
+    for (category = 0; category < ACTORCAT_MAX; category++) {
+        Actor* actor = actorCtx->actorLists[category].first;
 
         while (actor != NULL) {
             if (!(actor->halfDaysBits & actorCtx->halfDaysBit)) {
@@ -3146,17 +3157,17 @@ void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx) {
 }
 
 void Actor_CleanupContext(ActorContext* actorCtx, PlayState* play) {
-    s32 i;
+    s32 category;
 
     Fault_RemoveClient(&sActorFaultClient);
 
-    for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
-        if (i != ACTORCAT_PLAYER) {
-            Actor* actor = actorCtx->actorLists[i].first;
+    for (category = 0; category < ACTORCAT_MAX; category++) {
+        if (category != ACTORCAT_PLAYER) {
+            Actor* actor = actorCtx->actorLists[category].first;
 
             while (actor != NULL) {
                 Actor_Delete(actorCtx, actor, play);
-                actor = actorCtx->actorLists[i].first;
+                actor = actorCtx->actorLists[category].first;
             }
         }
     }
@@ -3493,12 +3504,13 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
 }
 
 bool Target_InTargetableScreenRegion(PlayState* play, Actor* actor) {
-    s16 x;
-    s16 y;
+    s16 screenPosX;
+    s16 screenPosY;
 
-    Actor_GetScreenPos(play, actor, &x, &y);
+    Actor_GetScreenPos(play, actor, &screenPosX, &screenPosY);
 
-    return (x > -20) && (x < gScreenWidth + 20) && (y > -160) && (y < gScreenHeight + 160);
+    return (screenPosX > -20) && (screenPosX < gScreenWidth + 20) && (screenPosY > -160) &&
+           (screenPosY < gScreenHeight + 160);
 }
 
 /**
@@ -3788,8 +3800,8 @@ void func_800BBFB0(PlayState* play, Vec3f* position, f32 arg2, s32 arg3, s16 arg
     }
 }
 
-void func_800BC154(PlayState* play, ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
-    actorCtx->actorLists[actor->category].unk_08 = 1;
+void Actor_ChangeCategory(PlayState* play, ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
+    actorCtx->actorLists[actor->category].categoryChanged = true;
     actor->category = actorCategory;
 }
 
@@ -4260,7 +4272,7 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
  */
 s32 Npc_UpdateTalking(PlayState* play, Actor* actor, s16* talkState, f32 interactRange, NpcGetTextIdFunc getTextId,
                       NpcUpdateTalkStateFunc updateTalkState) {
-    if (Actor_ProcessTalkRequest(actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(actor, &play->state)) {
         *talkState = NPC_TALK_STATE_TALKING;
         return true;
     }
@@ -4378,7 +4390,7 @@ void Npc_TrackPointWithLimits(Actor* actor, NpcInteractInfo* interactInfo, s16 m
     }
 
     temp = CLAMP(pitchTowardsTarget, minHeadPitch, (s16)(u16)maxHeadPitch);
-    Math_SmoothStepToS(&interactInfo->headRot.x, temp, 6, 2000, 1);
+    Math_SmoothStepToS(&interactInfo->headRot.x, temp, 6, 0x7D0, 1);
 
     torsoPitch = pitchTowardsTarget - interactInfo->headRot.x;
 
@@ -4654,7 +4666,7 @@ Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCa
     Actor* actor = play->actorCtx.actorLists[actorCategory].first;
 
     while (actor != NULL) {
-        if (actor == inActor || ((actorId != -1) && (actorId != actor->id))) {
+        if ((actor == inActor) || ((actorId != -1) && (actorId != actor->id))) {
             actor = actor->next;
             continue;
         }

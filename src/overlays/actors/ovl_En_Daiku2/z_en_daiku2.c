@@ -249,7 +249,7 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
     s32 pad[2];
     s16 temp_v0;
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0x0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
     if (sp98 != 2) {
         if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
             this->unk_28A = 5;
@@ -261,7 +261,7 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
 
     this->actor.textId = sTextIds[this->unk_28A];
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BE6B40(this, play);
         return;
     }
@@ -332,7 +332,7 @@ void func_80BE6B40(EnDaiku2* this, PlayState* play) {
 }
 
 void func_80BE6BC0(EnDaiku2* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0x0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         s32 day = gSaveContext.save.day - 1;
 
@@ -374,7 +374,7 @@ void func_80BE6D40(EnDaiku2* this, PlayState* play) {
     s32 pad[3];
     s16 sp3A = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_268);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BE6BC0;
         return;
     }
@@ -408,12 +408,12 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
     Vec3f sp40;
     s16 var;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BE6BC0;
         return;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0x0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
     if (curFrame >= this->animEndFrame) {
         this->unk_274 = 1;
     }

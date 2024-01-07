@@ -364,7 +364,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
     f32 zDiff;
 
     SkelAnime_Update(&this->skelAnime);
-    if ((this->currentAnim == SOLDIER_ANIM_5) && (((s16)this->skelAnime.curFrame % 2) != 0)) {
+    if ((this->currentAnim == SOLDIER_ANIM_5) && ((TRUNCF_BINANG(this->skelAnime.curFrame) % 2) != 0)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_SOLDIER_WALK);
     }
     if (gSaveContext.save.day != 3) {
@@ -496,7 +496,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     yawDiffAbs = ABS_ALT(yawDiff);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->skelAnime.playSpeed = 1.0f;
         func_80AE854C(this, play);
     } else if (yawDiffAbs < 0x4BB9) {

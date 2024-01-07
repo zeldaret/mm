@@ -225,7 +225,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
             // Failing the alien invasion
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 return false;
-            } else if ((gSaveContext.save.time >= CLOCK_TIME(20, 0)) && (CURRENT_DAY == 3)) {
+            } else if ((CURRENT_TIME >= CLOCK_TIME(20, 0)) && (CURRENT_DAY == 3)) {
                 return false;
             }
             break;
@@ -328,7 +328,7 @@ void EnMaYts_SetupStartDialogue(EnMaYts* this) {
 void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_80)) {
                 // Saying to non-human Link: "Cremia went to town."

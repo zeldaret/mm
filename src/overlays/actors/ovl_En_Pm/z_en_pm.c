@@ -226,14 +226,14 @@ s32 func_80AF7BAC(EnPm* this) {
     switch (this->unk_38C) {
         case 0:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_01)) {
-                D_801F4E78 = gSaveContext.save.time;
+                D_801F4E78 = CURRENT_TIME;
                 this->unk_38C++;
             }
             break;
 
         case 1:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08)) {
-                D_801F4E78 = gSaveContext.save.time;
+                D_801F4E78 = CURRENT_TIME;
                 this->unk_38C++;
             }
             break;
@@ -247,7 +247,7 @@ s32 func_80AF7BAC(EnPm* this) {
 
         case 3:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
-                D_801F4E78 = gSaveContext.save.time;
+                D_801F4E78 = CURRENT_TIME;
                 this->unk_38C++;
             }
             break;
@@ -659,7 +659,7 @@ s32 func_80AF86F0(EnPm* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_356 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_398 = 0;
         this->unk_378 = 0;
@@ -1459,7 +1459,7 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
 
     switch (this->unk_258) {
         case 28:
-            if (gSaveContext.save.time >= CLOCK_TIME(1, 39)) {
+            if (CURRENT_TIME >= CLOCK_TIME(1, 39)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_89_08);
             }
 
@@ -1649,14 +1649,14 @@ void func_80AFA4D0(EnPm* this, PlayState* play) {
     static ScheduleScript* D_80AFB900[] = {
         D_80AFAD80, D_80AFB30C, D_80AFB3C0, D_80AFB3FC, D_80AFB41C,
     };
-    u16 time = gSaveContext.save.time;
+    u16 time = CURRENT_TIME;
     u16 sp3C = 0;
     ScheduleOutput sp2C;
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (this->unk_38C != 0) {
-        time = gSaveContext.save.time - D_801F4E78;
-        sp3C = gSaveContext.save.time;
+        time = CURRENT_TIME - D_801F4E78;
+        sp3C = CURRENT_TIME;
         gSaveContext.save.time = time;
     }
 

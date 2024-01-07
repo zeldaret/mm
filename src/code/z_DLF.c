@@ -1,5 +1,5 @@
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "loadfragment.h"
 
 void Overlay_LoadGameState(GameStateOverlay* overlayEntry) {
@@ -89,7 +89,7 @@ void Overlay_FreeGameState(GameStateOverlay* overlayEntry) {
                                                                                (uintptr_t)overlayEntry->loadedRamAddr))
                                                           : NULL);
 
-            SystemArena_Free(overlayEntry->loadedRamAddr);
+            free(overlayEntry->loadedRamAddr);
             overlayEntry->loadedRamAddr = NULL;
         }
     }

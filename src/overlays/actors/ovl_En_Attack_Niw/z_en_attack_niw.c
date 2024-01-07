@@ -196,22 +196,22 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animInd
 }
 
 s32 EnAttackNiw_IsOnScreen(EnAttackNiw* this, PlayState* play) {
-    s16 posX;
-    s16 posY;
+    s16 screenPosX;
+    s16 screenPosY;
 
     Actor_SetFocus(&this->actor, this->targetHeight);
-    Actor_GetScreenPos(play, &this->actor, &posX, &posY);
+    Actor_GetScreenPos(play, &this->actor, &screenPosX, &screenPosY);
 
-    if ((this->actor.projectedPos.z < -20.0f) || (posX < 0) || (posX > SCREEN_WIDTH) || (posY < 0) ||
-        (posY > SCREEN_HEIGHT)) {
+    if ((this->actor.projectedPos.z < -20.0f) || (screenPosX < 0) || (screenPosX > SCREEN_WIDTH) || (screenPosY < 0) ||
+        (screenPosY > SCREEN_HEIGHT)) {
         return false;
     }
     return true;
 }
 
 void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
-    s16 posX;
-    s16 posY;
+    s16 screenPosX;
+    s16 screenPosY;
     Vec3f viewOffset;
     Vec3f flightTarget;
     s32 pad;
@@ -237,7 +237,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
     Math_ApproachF(&this->rotStep, 5000.0f, 1.0f, 100.0f);
 
     Actor_SetFocus(&this->actor, this->targetHeight);
-    Actor_GetScreenPos(play, &this->actor, &posX, &posY);
+    Actor_GetScreenPos(play, &this->actor, &screenPosX, &screenPosY);
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->targetRotY = this->actor.yawTowardsPlayer;
@@ -425,23 +425,23 @@ s32 EnAttackNiw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     EnAttackNiw* this = THIS;
 
     if (limbIndex == NIW_LIMB_UPPER_BODY) {
-        rot->y += (s16)this->upperBodyRotY;
+        rot->y += TRUNCF_BINANG(this->upperBodyRotY);
     }
 
     if (limbIndex == NIW_LIMB_HEAD) {
-        rot->z += (s16)this->headRotZ;
+        rot->z += TRUNCF_BINANG(this->headRotZ);
     }
 
     if (limbIndex == NIW_LIMB_RIGHT_WING_ROOT) {
-        rot->x += (s16)this->rightWingRotX;
-        rot->y += (s16)this->rightWingRotY;
-        rot->z += (s16)this->rightWingRotZ;
+        rot->x += TRUNCF_BINANG(this->rightWingRotX);
+        rot->y += TRUNCF_BINANG(this->rightWingRotY);
+        rot->z += TRUNCF_BINANG(this->rightWingRotZ);
     }
 
     if (limbIndex == NIW_LIMB_LEFT_WING_ROOT) {
-        rot->x += (s16)this->leftWingRotX;
-        rot->y += (s16)this->leftWingRotY;
-        rot->z += (s16)this->leftWingRotZ;
+        rot->x += TRUNCF_BINANG(this->leftWingRotX);
+        rot->y += TRUNCF_BINANG(this->leftWingRotY);
+        rot->z += TRUNCF_BINANG(this->leftWingRotZ);
     }
     return false;
 }

@@ -155,7 +155,7 @@ void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     yawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.home.rot.y));
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80ABB540(this);
         return;
     }
@@ -332,7 +332,7 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
         this->eyeState++;
         if (this->eyeState >= 3) {
             this->eyeState = 0;
-            this->blinkTimer = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->blinkTimer = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
     if ((this->animIndex == GUARD_NUTS_ANIM_WALK) &&

@@ -120,8 +120,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_js_Skel_006990, &object_js_Anim_000F4C, this->jointTable,
                        this->morphTable, OBJECT_JS_LIMB_MAX);
 
-    if ((CURRENT_DAY == 3) &&
-        !((gSaveContext.save.time <= CLOCK_TIME(23, 0)) && (gSaveContext.save.time >= CLOCK_TIME(6, 0)))) {
+    if ((CURRENT_DAY == 3) && ((CURRENT_TIME > CLOCK_TIME(23, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0)))) {
         if (ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.home.pos.x, this->actor.home.pos.y,
                         this->actor.home.pos.z - 10.0f, this->actor.home.rot.x, this->actor.home.rot.y,
@@ -137,9 +136,9 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) {
-        Path* path = &play->setupPathList[ENKENDOJS_GET_FF00(&this->actor)];
+        Path* path = &play->setupPathList[ENKENDOJS_GET_PATH_INDEX(&this->actor)];
 
-        this->unk_274 = Lib_SegmentedToVirtual(path->points);
+        this->pathPoints = Lib_SegmentedToVirtual(path->points);
     }
 
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
@@ -168,7 +167,7 @@ void func_80B2654C(EnKendoJs* this, PlayState* play) {
     s32 phi_v0;
     s32 sp30;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (CURRENT_DAY != 0) {
             sp30 = CURRENT_DAY - 1;
         } else {
@@ -514,7 +513,7 @@ void func_80B27030(EnKendoJs* this, PlayState* play) {
 
     if (EnKendoJs_MovePlayerToPos(play, sp20)) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             player->stateFlags1 &= ~PLAYER_STATE1_20;
             func_80B279F0(this, play, 0);
@@ -686,7 +685,7 @@ void func_80B27760(EnKendoJs* this) {
 void func_80B27774(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_20)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_63_20);
             Message_StartTextbox(play, 0x272F, &this->actor);
@@ -750,9 +749,9 @@ void func_80B279AC(EnKendoJs* this, PlayState* play) {
 }
 
 void func_80B279F0(EnKendoJs* this, PlayState* play, s32 arg2) {
-    f32 x = this->unk_274[arg2].x;
-    f32 y = this->unk_274[arg2].y;
-    f32 z = this->unk_274[arg2].z;
+    f32 x = this->pathPoints[arg2].x;
+    f32 y = this->pathPoints[arg2].y;
+    f32 z = this->pathPoints[arg2].z;
 
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MARUTA, x, y, z, 0, 0, 0, 0);
     this->unk_28C++;
@@ -777,7 +776,7 @@ void EnKendoJs_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     SkelAnime_Update(&this->skelAnime);
-    Actor_TrackPlayer(play, &this->actor, &this->unk_278, &this->unk_27E, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     func_80B279AC(this, play);
     func_80B27880(this, play);
 }
@@ -786,7 +785,7 @@ s32 EnKendoJs_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     EnKendoJs* this = THIS;
 
     if (limbIndex == OBJECT_JS_LIMB_0C) {
-        rot->y -= this->unk_278.y;
+        rot->y -= this->headRot.y;
     }
     return false;
 }

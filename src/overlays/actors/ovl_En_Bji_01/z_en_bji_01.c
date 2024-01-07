@@ -100,7 +100,7 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_809CD028(this, play);
@@ -447,10 +447,12 @@ s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         *dList = NULL;
     }
     if (limbIndex == SHIKASHI_LIMB_NONE) {
+        // Set to itself
         rot->x = rot->x;
         rot->y = rot->y;
         rot->z = rot->z;
     }
+
     switch (limbIndex) {
         case SHIKASHI_LIMB_TORSO:
             rot->x += this->torsoXRotStep;

@@ -20,7 +20,7 @@ typedef struct EnWeatherTag {
 } EnWeatherTag; // size = 0x15C
 
 #define WEATHER_TAG_TYPE(thisx) ((thisx)->params & 0xF)
-#define WEATHER_TAG_PATHID(thisx) (((thisx)->params >> 4) & 0xF)
+#define WEATHER_TAG_GET_PATH_INDEX(thisx) (((thisx)->params >> 4) & 0xF)
 #define WEATHER_TAG_RANGE100(thisx) ((u8)(((thisx)->params >> 8) & 0xFF) * 100.0f)
 #define WEATHER_TAG_GET_SKYBOX_NUM_STARS(thisx) ((u8)(((thisx)->params >> 8) & 0xFF) * 100)
 
