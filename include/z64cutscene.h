@@ -601,7 +601,7 @@ typedef struct {
 
 // ZAPD compatibility typedefs
 // TODO: Remove when ZAPD adds support for them
-typedef CutsceneScriptEntry CutsceneEntry;
+//typedef CutsceneScriptEntry CutsceneEntry;
 
 typedef struct {
     /* 0x00 */ u8 scriptListCount;
@@ -631,13 +631,13 @@ typedef struct {
     /* 0x0C */ s16 hudVisibility; 
     /* 0x0E */ u8 endCam;
     /* 0x0F */ u8 letterboxSize;
-} ActorCutscene; // size = 0x10
-// TODO: rename `ActorCutscene` to `CutsceneEntry` once ZAPD uses `CutsceneScriptEntry`
-// typedef CutsceneEntry ActorCutscene;
+} CutsceneEntry; // size = 0x10
+// TODO: rename `CutsceneEntry` to `CutsceneEntry` once ZAPD uses `CutsceneScriptEntry`
+ //typedef CutsceneEntry CutsceneEntry;
 
 typedef enum {
     /*   -1 */ CS_ID_NONE = -1,
-    // CsId's 0 - 119 are sceneLayer-specific and index `ActorCutscene`
+    // CsId's 0 - 119 are sceneLayer-specific and index `CutsceneEntry`
     /* 0x78 */ CS_ID_GLOBAL_78 = 120,
     /* 0x79 */ CS_ID_GLOBAL_79,
     /* 0x7A */ CS_ID_GLOBAL_7A,
@@ -827,7 +827,7 @@ s32 Cutscene_GetCueChannel(struct PlayState* play, u16 cueType);
 s32 Cutscene_IsCueInChannel(struct PlayState* play, u16 cueType);
 u8 Cutscene_IsPlaying(struct PlayState* play);
 
-void CutsceneManager_Init(struct PlayState* play, ActorCutscene* cutsceneList, s16 numEntries);
+void CutsceneManager_Init(struct PlayState* play, CutsceneEntry* cutsceneList, s16 numEntries);
 void CutsceneManager_StoreCamera(Camera* camera);
 void CutsceneManager_ClearWaiting(void);
 s16 CutsceneManager_Update(void);
@@ -838,7 +838,7 @@ s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor);
 s16 CutsceneManager_Start(s16 csId, Actor* actor);
 s16 CutsceneManager_Stop(s16 csId);
 s16 CutsceneManager_GetCurrentCsId(void);
-ActorCutscene* CutsceneManager_GetCutsceneEntry(s16 csId);
+CutsceneEntry* CutsceneManager_GetCutsceneEntry(s16 csId);
 s16 CutsceneManager_GetAdditionalCsId(s16 csId);
 s16 CutsceneManager_GetLength(s16 csId);
 s16 CutsceneManager_GetCutsceneScriptIndex(s16 csId);
