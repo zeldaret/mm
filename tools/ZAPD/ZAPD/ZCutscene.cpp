@@ -323,7 +323,7 @@ CutsceneCommand* ZCutscene::GetCommandMM(uint32_t id, offset_t currentPtr) const
 		return new CutsceneMMCommand_Text(rawData, currentPtr);
 
 	case CutsceneMM_CommandType::CS_CMD_CAMERA_SPLINE:
-		return new CutsceneMMCommand_Camera(rawData, currentPtr);
+		return new CutsceneMMCommand_Spline(rawData, currentPtr);
 
 	case CutsceneMM_CommandType::CS_CMD_TRANSITION_GENERAL:
 		return new CutsceneMMCommand_TransitionGeneral(rawData, currentPtr);
