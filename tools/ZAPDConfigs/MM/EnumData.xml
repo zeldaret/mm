@@ -480,6 +480,26 @@
         <Item Key="cueid_90" ID="PLAYER_CUEID_90" Index="90"/>
         <Item Key="cueid_91" ID="PLAYER_CUEID_91" Index="91"/>
     </Enum>
+	<Enum Games="MM" Key="csSplineInterpType" ID="CutsceneCamInterpType">
+        <!-- https://github.com/zeldaret/mm/blob/5607eec18bae68e4cd38ef6d1fa69d7f1d84bfc8/include/z64cutscene.h#L740-L751 -->
+        <Item Key="none" ID="CS_CAM_INTERP_NONE" Index="0"/>
+        <Item Key="set" ID="CS_CAM_INTERP_SET" Index="1"/>
+        <Item Key="linear" ID="CS_CAM_INTERP_LINEAR" Index="2"/>
+		<Item Key="scale" ID="CS_CAM_INTERP_SCALE" Index="3"/>
+		<Item Key="cubic" ID="CS_CAM_INTERP_MP_CUBIC" Index="4"/>
+		<Item Key="quad" ID="CS_CAM_INTERP_MP_QUAD" Index="5"/>
+		<Item Key="geo" ID="CS_CAM_INTERP_GEO" Index="6"/>
+		<Item Key="off" ID="CS_CAM_INTERP_OFF" Index="7"/>
+	</Enum>
+	<Enum Games="MM" Key="csSplineRelTo" ID="CutsceneCamRelativeTo ">
+		<!-- https://github.com/zeldaret/mm/blob/5607eec18bae68e4cd38ef6d1fa69d7f1d84bfc8/include/z64cutscene.h#L754C14-L754-L760 -->
+		<Item Key="rel0" ID="CS_CAM_REL_0" Index="0"/>
+		<Item Key="rel1" ID="CS_CAM_REL_1" Index="1"/>
+		<Item Key="rel2" ID="CS_CAM_REL_2" Index="2"/>
+		<Item Key="rel3" ID="CS_CAM_REL_3" Index="3"/>
+		<Item Key="rel4" ID="CS_CAM_REL_4" Index="4"/>
+		<Item Key="rel5" ID="CS_CAM_REL_5" Index="5"/>
+	</Enum>
     <Enum Games="OoTMqDbg" Key="ocarinaSongActionId" ID="OcarinaSongActionId">
         <!-- https://github.com/zeldaret/mm/blob/2dc405b6af0cc700b7f3086aabb424bbdf98822d/include/z64ocarina.h#L35-L118 -->
         <Item Key="action_0" ID="OCARINA_ACTION_0" Index="0"/>

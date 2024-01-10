@@ -599,10 +599,6 @@ typedef struct {
     /* 0x7 */ u8 spawnFlags; // See `CS_SPAWN_FLAG_`
 } CutsceneScriptEntry; // size = 0x8
 
-// ZAPD compatibility typedefs
-// TODO: Remove when ZAPD adds support for them
-//typedef CutsceneScriptEntry CutsceneEntry;
-
 typedef struct {
     /* 0x00 */ u8 scriptListCount;
     /* 0x04 */ CutsceneData* script;
@@ -632,8 +628,6 @@ typedef struct {
     /* 0x0E */ u8 endCam;
     /* 0x0F */ u8 letterboxSize;
 } CutsceneEntry; // size = 0x10
-// TODO: rename `CutsceneEntry` to `CutsceneEntry` once ZAPD uses `CutsceneScriptEntry`
- //typedef CutsceneEntry CutsceneEntry;
 
 typedef enum {
     /*   -1 */ CS_ID_NONE = -1,
@@ -759,7 +753,6 @@ typedef enum CutsceneCamRelativeTo {
     /* 4 */ CS_CAM_REL_4,
     /* 5 */ CS_CAM_REL_5
 } CutsceneCamRelativeTo;
-
 
 // Roll and Fov Data
 typedef struct CsCmdCamMisc {
