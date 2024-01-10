@@ -1080,7 +1080,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
     s16 sp130;
     s16 prevR;
     s16 prevG;
-    s16 prevC;
+    s16 prevB;
     u16 lookAheadCharacter;
 
     play->msgCtx.textPosX = play->msgCtx.unk11F1A[0] + play->msgCtx.unk11FF8;
@@ -1497,14 +1497,14 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 if ((character >= 0x839F) && (character < 0x83AB)) {
                     prevR = msgCtx->textColorR;
                     prevG = msgCtx->textColorG;
-                    prevC = msgCtx->textColorB;
+                    prevB = msgCtx->textColorB;
                     msgCtx->textColorR = sColorsButtonsJPN[(s16)sButtonColorIndicesJPN[character - 0x839F]].r;
                     msgCtx->textColorG = sColorsButtonsJPN[(s16)sButtonColorIndicesJPN[character - 0x839F]].g;
                     msgCtx->textColorB = sColorsButtonsJPN[(s16)sButtonColorIndicesJPN[character - 0x839F]].b;
                     Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                     msgCtx->textColorR = prevR;
                     msgCtx->textColorG = prevG;
-                    msgCtx->textColorB = prevC;
+                    msgCtx->textColorB = prevB;
                 } else {
                     Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                 }

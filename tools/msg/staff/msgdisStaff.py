@@ -176,7 +176,7 @@ def parseTable(start):
         f.seek(start)
         buf = f.read(8)
         textId, typePos, segment = struct.unpack(">HBxI", buf)
-        while segment != 0:
+        while textId != 0xFFFF:
             table[segment] = (textId, typePos, segment)
             buf = f.read(8)
             textId, typePos, segment = struct.unpack(">HBxI", buf)

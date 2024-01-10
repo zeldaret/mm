@@ -427,7 +427,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
     s16 sp130;
     s16 prevR;
     s16 prevG;
-    s16 prevC;
+    s16 prevB;
 
     msgCtx->textPosX = msgCtx->unk11F1A[0] + msgCtx->unk11FF8;
     msgCtx->textPosY = msgCtx->unk11FFA;
@@ -891,14 +891,14 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 if ((character >= MESSAGE_BTN_A) && (character <= MESSAGE_CONTROL_PAD)) {
                     prevR = msgCtx->textColorR;
                     prevG = msgCtx->textColorG;
-                    prevC = msgCtx->textColorB;
+                    prevB = msgCtx->textColorB;
                     msgCtx->textColorR = sColorsButtonsNES[(s16)sButtonColorIndicesNES[character - MESSAGE_BTN_A]].r;
                     msgCtx->textColorG = sColorsButtonsNES[(s16)sButtonColorIndicesNES[character - MESSAGE_BTN_A]].g;
                     msgCtx->textColorB = sColorsButtonsNES[(s16)sButtonColorIndicesNES[character - MESSAGE_BTN_A]].b;
                     Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                     msgCtx->textColorR = prevR;
                     msgCtx->textColorG = prevG;
-                    msgCtx->textColorB = prevC;
+                    msgCtx->textColorB = prevB;
                 } else if (msgCtx->msgMode >= MSGMODE_OWL_SAVE_0) {
                     if ((i < (msgCtx->decodedTextLen - 6)) || (i >= (msgCtx->decodedTextLen - 4))) {
                         Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
