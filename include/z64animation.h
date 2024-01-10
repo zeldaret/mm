@@ -374,4 +374,8 @@ void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle);
 s32 Animation_OnFrame(SkelAnime* skelAnime, f32 frame);
 void SkelAnime_Free(SkelAnime* skelAnime, struct PlayState* play);
 
+// ZAPD compatibility typedefs
+// TODO: Remove when ZAPD adds support for them
+typedef PlayerAnimationHeader LinkAnimationHeader;
+
 #endif
