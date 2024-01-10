@@ -247,6 +247,12 @@ void GameConfig::ConfigFunc_EnumData(const tinyxml2::XMLElement& element)
 
 			else if (enumKey == "endSfx")
 				enumData.endSfx[itemIndex] = itemID;
+
+			else if (enumKey == "csSplineInterpType")
+				enumData.interpType[itemIndex] = itemID;
+
+			else if (enumKey == "csSplineRelTo")
+				enumData.relTo[itemIndex] = itemID;
 		}
 	}
 }

@@ -137,14 +137,14 @@ CutsceneSubCommandEntry_SplineCamPoint::CutsceneSubCommandEntry_SplineCamPoint(c
 	posY = BitConverter::ToUInt16BE(rawData, rawDataIndex + 6);
 	posZ = BitConverter::ToUInt16BE(rawData, rawDataIndex + 8);
 	relTo = BitConverter::ToUInt16BE(rawData, rawDataIndex + 10);
-	printf("%s\n", GetBodySourceCode().c_str());
-
 }
-/*#define CS_CAM_POINT(interpType, weight, duration, posX, posY, posZ, relativeTo) \
-    { CMD_BBH(interpType, weight, duration) }, { CMD_HH(posX, posY) }, { CMD_HH(posZ, relativeTo) }*/
+
 std::string CutsceneSubCommandEntry_SplineCamPoint::GetBodySourceCode() const
 {
-	return StringHelper::Sprintf("CS_CAM_POINT(0x%02X, 0x%02X, 0x%04X, 0x%04X, 0x%04X, 0x%04X, 0x%04X)", interpType, weight, duration, posX, posY, posZ, relTo);
+	const auto interpTypeMap = &Globals::Instance->cfg.enumData.interpType;
+	const auto relToMap = &Globals::Instance->cfg.enumData.relTo;
+
+	return StringHelper::Sprintf("CS_CAM_POINT(%s, 0x%02X, 0x%04X, 0x%04X, 0x%04X, 0x%04X, %s)", interpTypeMap->at(interpType).c_str(), weight, duration, posX, posY, posZ, relToMap->at(relTo).c_str());
 }
 
 size_t CutsceneSubCommandEntry_SplineCamPoint::GetRawSize() const
@@ -160,11 +160,7 @@ CutsceneSubCommandEntry_SplineMiscPoint::CutsceneSubCommandEntry_SplineMiscPoint
 	roll = BitConverter::ToUInt16BE(rawData, rawDataIndex + 2);
 	fov = BitConverter::ToUInt16BE(rawData, rawDataIndex + 4);
 	unused1 = BitConverter::ToUInt16BE(rawData, rawDataIndex + 6);
-	printf("%s\n", GetBodySourceCode().c_str());
 }
-
-/*#define CS_CAM_MISC(unused0, roll, fov, unused1) \
-    { CMD_HH(unused0, roll) }, { CMD_HH(fov, unused1) }*/
 
 std::string CutsceneSubCommandEntry_SplineMiscPoint::GetBodySourceCode() const
 {
@@ -208,7 +204,7 @@ CutsceneSubCommandEntry_SplineFooter::CutsceneSubCommandEntry_SplineFooter(const
 		             firstHalfWord, secondHalfWord));
 	}
 }
-/*#define CS_CAM_END() */
+
 std::string CutsceneSubCommandEntry_SplineFooter::GetBodySourceCode() const
 {
 	return "CS_CAM_END()";
@@ -273,10 +269,9 @@ std::string CutsceneMMCommand_Spline::GetCommandMacro() const
 
 size_t CutsceneMMCommand_Spline::GetCommandSize() const
 {
-	// 8 Bytes once for the spline command, 8 Bytes per spline the header, two grops of size 12, 1 group of size 8, 4 bytes for the footer.
+	// 8 Bytes once for the spline command, 8 Bytes per spline the header, two groups of size 12, 1 group of size 8, 4 bytes for the footer.
 	return 8 + (8 * numHeaders) + ((totalCommands * 2) * 0xC) + (totalCommands * 8) + 4;
 }
-
 
 /**** TRANSITION GENERAL ****/
 
