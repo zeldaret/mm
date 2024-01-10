@@ -928,59 +928,66 @@ void BossHakugin_SetLightningSegmentColliderVertices(GohtLightningSegment* light
     Collider_SetTrisVertices(&lightningSegment->collider, 0, &vertices[0], &vertices[1], &vertices[2]);
 }
 
-void BossHakugin_AddLightningSegment(BossHakugin* this, Vec3f* arg1, PlayState* play) {
+/**
+ * Initializes the lightning segments that Goht shoots at the player. Each segment is initially rotated to point towards
+ * the player, but a random offset is added to the rotation so that the lightning doesn't travel in a perfectly straight
+ * line. The end result is a chain of lightning segments that generally travels towards the player, but does so in an
+ * unpredictable way.
+ */
+void BossHakugin_AddLightningSegments(BossHakugin* this, Vec3f* startPos, PlayState* play) {
     s32 i;
     Player* player = GET_PLAYER(play);
-    CollisionPoly* spD4;
-    Vec3f spC8;
-    Vec3f spBC;
-    Vec3f spB0;
-    Vec3f spA4;
-    Vec3f sp98;
-    Vec3f sp8C;
+    CollisionPoly* poly;
+    Vec3f rootPos;
+    Vec3f targetPos;
+    Vec3f nextRootPos;
+    Vec3f resultPos;
+    Vec3f transformedTargetPos;
+    Vec3f transformedRootPos;
     GohtLightningSegment* lightningSegment;
     s32 bgId;
 
-    Math_Vec3f_Copy(&spC8, arg1);
-    spBC.x = player->actor.world.pos.x - (Math_SinS(this->actor.shape.rot.y) * 50.0f);
-    spBC.y = player->actor.world.pos.y + 40.0f;
-    spBC.z = player->actor.world.pos.z - (Math_CosS(this->actor.shape.rot.y) * 50.0f);
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp98, &spBC);
+    Math_Vec3f_Copy(&rootPos, startPos);
+    targetPos.x = player->actor.world.pos.x - (Math_SinS(this->actor.shape.rot.y) * 50.0f);
+    targetPos.y = player->actor.world.pos.y + 40.0f;
+    targetPos.z = player->actor.world.pos.z - (Math_CosS(this->actor.shape.rot.y) * 50.0f);
+    Actor_OffsetOfPointInActorCoords(&this->actor, &transformedTargetPos, &targetPos);
     Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_THUNDER_THR);
 
     for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
         lightningSegment = &this->lightningSegments[i];
-        Actor_OffsetOfPointInActorCoords(&this->actor, &sp8C, &spC8);
+        Actor_OffsetOfPointInActorCoords(&this->actor, &transformedRootPos, &rootPos);
 
-        if (sp98.z < sp8C.z) {
+        if (transformedTargetPos.z < transformedRootPos.z) {
             lightningSegment->rot.y = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x13);
         } else {
-            lightningSegment->rot.y = Math_Vec3f_Yaw(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
+            lightningSegment->rot.y = Math_Vec3f_Yaw(&rootPos, &targetPos) + ((s32)Rand_Next() >> 0x13);
         }
 
-        lightningSegment->rot.x = Math_Vec3f_Pitch(&spC8, &spBC) + ((s32)Rand_Next() >> 0x13);
+        lightningSegment->rot.x = Math_Vec3f_Pitch(&rootPos, &targetPos) + ((s32)Rand_Next() >> 0x13);
         lightningSegment->rot.z = 0;
         lightningSegment->pos.x =
-            spC8.x + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_SinS(lightningSegment->rot.y));
-        lightningSegment->pos.y = spC8.y - (80.0f * Math_SinS(lightningSegment->rot.x));
+            rootPos.x + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_SinS(lightningSegment->rot.y));
+        lightningSegment->pos.y = rootPos.y - (80.0f * Math_SinS(lightningSegment->rot.x));
         lightningSegment->pos.z =
-            spC8.z + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_CosS(lightningSegment->rot.y));
-        spB0.x = (2.0f * lightningSegment->pos.x) - spC8.x;
-        spB0.y = (2.0f * lightningSegment->pos.y) - spC8.y;
-        spB0.z = (2.0f * lightningSegment->pos.z) - spC8.z;
+            rootPos.z + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_CosS(lightningSegment->rot.y));
+        nextRootPos.x = (2.0f * lightningSegment->pos.x) - rootPos.x;
+        nextRootPos.y = (2.0f * lightningSegment->pos.y) - rootPos.y;
+        nextRootPos.z = (2.0f * lightningSegment->pos.z) - rootPos.z;
 
-        if (BgCheck_EntityLineTest1(&play->colCtx, &spC8, &spB0, &spA4, &spD4, false, true, false, true, &bgId)) {
+        if (BgCheck_EntityLineTest1(&play->colCtx, &rootPos, &nextRootPos, &resultPos, &poly, false, true, false, true,
+                                    &bgId)) {
             lightningSegment->rot.x -= 0x2000;
             lightningSegment->pos.x =
-                spC8.x + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_SinS(lightningSegment->rot.y));
-            lightningSegment->pos.y = spC8.y - (80.0f * Math_SinS(lightningSegment->rot.x));
+                rootPos.x + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_SinS(lightningSegment->rot.y));
+            lightningSegment->pos.y = rootPos.y - (80.0f * Math_SinS(lightningSegment->rot.x));
             lightningSegment->pos.z =
-                spC8.z + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_CosS(lightningSegment->rot.y));
-            spC8.x = (2.0f * lightningSegment->pos.x) - spC8.x;
-            spC8.y = (2.0f * lightningSegment->pos.y) - spC8.y;
-            spC8.z = (2.0f * lightningSegment->pos.z) - spC8.z;
+                rootPos.z + (80.0f * Math_CosS(lightningSegment->rot.x) * Math_CosS(lightningSegment->rot.y));
+            rootPos.x = (2.0f * lightningSegment->pos.x) - rootPos.x;
+            rootPos.y = (2.0f * lightningSegment->pos.y) - rootPos.y;
+            rootPos.z = (2.0f * lightningSegment->pos.z) - rootPos.z;
         } else {
-            Math_Vec3f_Copy(&spC8, &spB0);
+            Math_Vec3f_Copy(&rootPos, &nextRootPos);
         }
 
         lightningSegment->alpha = 255 + 20 * (i + 1);
@@ -2018,7 +2025,7 @@ void BossHakugin_ShootLightning(BossHakugin* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_THUNDER - SFX_FLAG);
     if (BossHakugin_ChargeUpAttack(this)) {
-        BossHakugin_AddLightningSegment(this, &this->chargingLightningPos, play);
+        BossHakugin_AddLightningSegments(this, &this->chargingLightningPos, play);
         BossHakugin_SetupChargeLightning(this, play);
     }
 }

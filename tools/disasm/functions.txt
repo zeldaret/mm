@@ -12919,7 +12919,7 @@
     0x80B05EE0:("BossHakugin_SpawnBlueWarpAndHeartContainer",),
     0x80B0607C:("BossHakugin_UpdateBaseRot",),
     0x80B06558:("BossHakugin_SetLightningSegmentColliderVertices",),
-    0x80B06600:("BossHakugin_AddLightningSegment",),
+    0x80B06600:("BossHakugin_AddLightningSegments",),
     0x80B0696C:("func_80B0696C",),
     0x80B06B20:("BossHakugin_SpawnBoulder",),
     0x80B06C08:("BossHakugin_SpawnStalactite",),
