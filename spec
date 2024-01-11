@@ -8859,21 +8859,21 @@ beginseg
     name "d2_fine_static"
     compress
     romalign 0x1000
-    include "build/baserom/d2_fine_static.o"
+    include "build/assets/misc/skyboxes/d2_fine_static.o"
 endseg
 
 beginseg
     name "d2_cloud_static"
     compress
     romalign 0x1000
-    include "build/baserom/d2_cloud_static.o"
+    include "build/assets/misc/skyboxes/d2_cloud_static.o"
 endseg
 
 beginseg
     name "d2_fine_pal_static"
     compress
     romalign 0x1000
-    include "build/baserom/d2_fine_pal_static.o"
+    include "build/assets/misc/skyboxes/d2_fine_pal_static.o"
 endseg
 
 beginseg
