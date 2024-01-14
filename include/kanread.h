@@ -21,7 +21,6 @@
  *
  * @remark Original name: "LeoGetKadr"
  */
-
 s32 Kanji_OffsetFromShiftJIS(s32 sjis);
 
 #endif
