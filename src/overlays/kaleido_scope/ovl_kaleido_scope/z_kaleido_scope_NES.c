@@ -5,6 +5,7 @@
  */
 
 #include "z_kaleido_scope.h"
+#include "z64skybox.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 
@@ -3599,7 +3600,7 @@ void KaleidoScope_Update(PlayState* play) {
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             MsgEvent_SendNullTask();
-            func_80143324(play, &play->skyboxCtx, play->skyboxId);
+            Skybox_Reload(play, &play->skyboxCtx, play->skyboxId);
 
             if ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId == 0xFF)) {
                 func_80115844(play, DO_ACTION_STOP);
