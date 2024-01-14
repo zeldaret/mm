@@ -2977,7 +2977,7 @@ asm/non_matchings/code/sys_flashrom/SysFlashrom_WriteDataAsync.s,SysFlashrom_Wri
 asm/non_matchings/code/sys_flashrom/SysFlashrom_IsBusy.s,SysFlashrom_IsBusy,0x80185EC4,0x10
 asm/non_matchings/code/sys_flashrom/SysFlashrom_AwaitResult.s,SysFlashrom_AwaitResult,0x80185F04,0x18
 asm/non_matchings/code/sys_flashrom/SysFlashrom_WriteDataSync.s,SysFlashrom_WriteDataSync,0x80185F64,0xB
-asm/non_matchings/code/code_80185F90/func_80185F90.s,func_80185F90,0x80185F90,0x26
+asm/non_matchings/code/kanread/Kanji_OffsetFromShiftJIS.s,Kanji_OffsetFromShiftJIS,0x80185F90,0x26
 asm/non_matchings/code/osFlash/func_80186A70.s,func_80186A70,0x80186A70,0x12
 asm/non_matchings/code/osFlash/func_80186AB8.s,func_80186AB8,0x80186AB8,0x1C
 asm/non_matchings/code/osFlash/func_80186B28.s,func_80186B28,0x80186B28,0x2

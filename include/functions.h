@@ -835,7 +835,7 @@ s32 SysFlashrom_IsBusy(void);
 s32 SysFlashrom_AwaitResult(void);
 void SysFlashrom_WriteDataSync(void* addr, u32 pageNum, u32 pageCount);
 
-s32 func_80185F90(u32 arg0);
+s32 Kanji_OffsetFromShiftJIS(s32 sjis);
 
 Acmd* AudioSynth_Update(Acmd* abiCmdStart, s32* numAbiCmds, s16* aiBufStart, s32 numSamplesPerFrame);
 
