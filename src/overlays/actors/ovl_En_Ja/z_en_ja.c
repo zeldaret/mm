@@ -129,7 +129,7 @@ void func_80BC1984(EnJa* this, PlayState* play) {
     s32 pad[2];
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    this->collider.dim.height = (s16)fabsf(this->actor.focus.pos.y - this->actor.world.pos.y) + 5;
+    this->collider.dim.height = TRUNCF_BINANG(fabsf(this->actor.focus.pos.y - this->actor.world.pos.y)) + 5;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 

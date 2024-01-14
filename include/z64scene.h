@@ -312,9 +312,6 @@ typedef union {
     RoomShapeCullable cullable;
 } RoomShape; // "Ground Shape"
 
-// TODO: update ZAPD
-#define SCENE_CMD_MESH SCENE_CMD_ROOM_SHAPE
-
 // TODO: Check which ones don't exist
 typedef enum {
     /* 0 */ ROOM_BEHAVIOR_TYPE1_0,
@@ -468,10 +465,6 @@ typedef struct {
     /* 0x4 */ void* params;
 } AnimatedMaterial; // size = 0x8
 
-// TODO: ZAPD
-typedef RoomShapeCullableEntry PolygonDlist2;
-typedef RoomShapeCullable PolygonType2;
-
 #define OBJECT_SLOT_NONE -1
 
 typedef struct {
@@ -521,8 +514,6 @@ typedef struct {
     /* 0x2 */ s16 count;
     /* 0x4 */ Vec3s* actorCsCamFuncData; // s16 data grouped in threes
 } ActorCsCamInfo; // size = 0x8
-
-typedef ActorCsCamInfo CsCameraEntry; // TODO: Remove once ZAPD updates its structs
 
 typedef union {
     /* Command: N/A  */ SCmdBase              base;
@@ -898,9 +889,6 @@ typedef enum {
 #define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO(compassIconCount, compassIconInfo) \
     { SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO, compassIconCount, CMD_PTR(compassIconInfo) }
 
- // TODO: ZAPD Capatability
-#define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED
-#define SCENE_CMD_CUTSCENE_LIST SCENE_CMD_CUTSCENE_SCRIPT_LIST
 
 s32 Object_SpawnPersistent(ObjectContext* objectCtx, s16 id);
 void Object_InitContext(struct GameState* gameState, ObjectContext* objectCtx);

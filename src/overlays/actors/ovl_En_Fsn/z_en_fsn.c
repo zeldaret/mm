@@ -1510,7 +1510,7 @@ void EnFsn_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENFSN_LIMB_MAX);
     EnFsn_Blink(this);
     if (ENFSN_IS_SHOP(&this->actor) && EnFsn_HasItemsToSell()) {
@@ -1657,8 +1657,8 @@ s32 EnFsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
                 break;
         }
         if (fidgetIndex < 9) {
-            rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
-            rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
+            rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+            rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
         }
     }
     if (limbIndex == FSN_LIMB_TOUPEE) {

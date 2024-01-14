@@ -1004,7 +1004,7 @@ void func_80C12D00(EnThiefbird* this) {
             }
 
             ptr->unk_20 = Math_SinS(ptr->unk_1C * 0x7D0) * 0x2000;
-            ptr->unk_1E += (s16)(0x666 * fabsf(Math_SinS(ptr->unk_1C * 0xBB8)) * phi_f20);
+            ptr->unk_1E += TRUNCF_BINANG(0x666 * fabsf(Math_SinS(ptr->unk_1C * 0xBB8)) * phi_f20);
         }
     }
 }

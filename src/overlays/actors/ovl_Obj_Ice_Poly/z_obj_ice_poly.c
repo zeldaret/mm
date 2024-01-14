@@ -82,7 +82,7 @@ void ObjIcePoly_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     this->switchFlag = OBJICEPOLY_GET_SWITCH_FLAG(thisx);
-    thisx->params &= 0xFF;
+    thisx->params = OBJICEPOLY_GET_SCALE(thisx);
     thisx->uncullZoneForward = 5600.0f;
 
     Actor_SetScale(thisx, thisx->params * 0.01f);

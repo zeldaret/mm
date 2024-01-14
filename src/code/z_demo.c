@@ -1645,7 +1645,7 @@ void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 cueC
 
     VEC3F_LERPIMPDST(&actor->world.pos, &startPos, &endPos, lerp);
 
-    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 1000, 1);
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 0x3E8, 1);
     actor->shape.rot.y = actor->world.rot.y;
 }
 
@@ -1670,7 +1670,7 @@ void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 cu
     actor->world.pos.x = startPos.x + (endPos.x - startPos.x) * lerp;
     actor->world.pos.z = startPos.z + (endPos.z - startPos.z) * lerp;
 
-    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 1000, 1);
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 0x3E8, 1);
     actor->shape.rot.y = actor->world.rot.y;
 }
 

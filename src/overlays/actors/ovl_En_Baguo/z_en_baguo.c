@@ -195,14 +195,14 @@ void EnBaguo_Idle(EnBaguo* this, PlayState* play) {
     if (this->timer != 0) {
         // Depending on how the last roll ended, this actor may be "sitting" on
         // something other than its legs. This slowly corrects that.
-        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 10, 100, 1000);
-        Math_SmoothStepToS(&this->actor.world.rot.z, 0, 10, 100, 1000);
+        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 10, 0x64, 0x3E8);
+        Math_SmoothStepToS(&this->actor.world.rot.z, 0, 10, 0x64, 0x3E8);
 
         // If this actor isn't mostly facing the player, do a discrete turn towards
         // them. It takes 8 frames to turn, and we must wait 8 frames to do another.
         if ((this->timer & 8) != 0) {
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) > 200.0f) {
-                Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 300, 1000);
+                Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 0x12C, 0x3E8);
                 if ((play->gameplayFrames % 8) == 0) {
                     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos,
                                              this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, true);
@@ -256,13 +256,13 @@ void EnBaguo_Roll(EnBaguo* this, PlayState* play) {
         Math_ApproachF(&this->currentRotation.x, this->targetRotation.x, 0.2f, 1000.0f);
         Math_ApproachF(&this->currentRotation.z, this->targetRotation.z, 0.2f, 1000.0f);
         Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 0.5f);
-        this->actor.world.rot.x += (s16)this->currentRotation.x;
+        this->actor.world.rot.x += TRUNCF_BINANG(this->currentRotation.x);
 
         if (this->currentRotation.z != 0.0f) {
             if (this->zRollDirection == NEJIRON_DIRECTION_RIGHT) {
-                this->actor.world.rot.z += (s16)this->currentRotation.z;
+                this->actor.world.rot.z += TRUNCF_BINANG(this->currentRotation.z);
             } else {
-                this->actor.world.rot.z -= (s16)this->currentRotation.z;
+                this->actor.world.rot.z -= TRUNCF_BINANG(this->currentRotation.z);
             }
         }
 
@@ -450,9 +450,9 @@ void EnBaguo_InitializeEffect(EnBaguo* this, Vec3f* pos, Vec3f* velocity, Vec3f*
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rot.x = (s16)(s32)Rand_CenteredFloat(0x7530);
-            effect->rot.y = (s16)(s32)Rand_CenteredFloat(0x7530);
-            effect->rot.z = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rot.x = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
+            effect->rot.y = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
+            effect->rot.z = TRUNCF_BINANG(Rand_CenteredFloat(0x7530));
             return;
         }
     }

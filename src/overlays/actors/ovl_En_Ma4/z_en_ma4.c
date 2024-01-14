@@ -686,7 +686,7 @@ void EnMa4_DialogueHandler(EnMa4* this, PlayState* play) {
     }
 
     if (this->type != MA4_TYPE_ALIENS_WON) {
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 2000, 1000);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x7D0, 0x3E8);
     }
 }
 
@@ -809,7 +809,7 @@ void EnMa4_SetupBeginEponasSongCs(EnMa4* this) {
     this->actionFunc = EnMa4_BeginEponasSongCs;
 }
 
-// Epona's Song cutscene is an ActorCutscene
+// Epona's Song cutscene is an CutsceneEntry
 void EnMa4_BeginEponasSongCs(EnMa4* this, PlayState* play) {
     s16 csId = this->actor.csId;
 

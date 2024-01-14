@@ -6,12 +6,6 @@
 #include "macros.h"
 
 // data
-extern size_t gDmaMgrDmaBuffSize;
-extern vs32 gIrqMgrResetStatus;
-extern volatile OSTime sIrqMgrResetTime;
-extern volatile OSTime gIrqMgrRetraceTime;
-extern s32 sIrqMgrRetraceCount;
-
 // extern UNK_TYPE1 sGfxPrintFontTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowData;
@@ -27,8 +21,6 @@ extern void* gYaz0DecompressDstEnd;
 
 // extern UNK_TYPE4 D_8009CD10;
 // extern UNK_TYPE4 sArenaLockMsg;
-
-extern DmaEntry dmadata[1568];
 // extern UNK_TYPE1 D_80186028;
 
 extern u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
@@ -180,19 +172,7 @@ extern f32 gStereoPanVolume[];
 extern f32 gDefaultPanVolume[];
 extern s32 gAudioCtxInitalized;
 extern u8 D_801D6200[0x400];
-extern u8 gIsLargeSfxBank[7];
-extern u8 D_801D6608[7];
-extern u8 gChannelsPerBank[4][7];
-extern u8 gUsedChannelsPerBank[4][7];
-extern f32 gSfxVolume;
-extern u8* gScarecrowSpawnSongPtr;
-extern OcarinaSongButtons gOcarinaSongButtons[24];
-extern SfxParams* gSfxParams[7];
-extern SfxBankEntry* gSfxBanks[7];
-extern u8 gSfxChannelLayout;
-extern Vec3f gSfxDefaultPos;
-extern f32 gSfxDefaultFreqAndVolScale;
-extern s8 gSfxDefaultReverb;
+
 extern u8 gAudioSpecId;
 extern u8 gAudioHeapResetState;
 extern AudioSpec gAudioSpecs[21];
@@ -1545,11 +1525,6 @@ extern MtxF* sCurrentMatrix;
 
 extern s32 D_801FD120;
 
-extern ActiveSfx gActiveSfx[7][3];
-extern SeqRequest sSeqRequests[][5];
-extern u8 sNumSeqRequests[5];
-extern u32 sAudioSeqCmds[0xB0];
-extern ActiveSequence gActiveSeqs[];
 extern u8 sResetAudioHeapTimer;
 extern u16 sResetAudioHeapFadeReverbVolume;
 extern u16 sResetAudioHeapFadeReverbVolumeStep;

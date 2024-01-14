@@ -507,7 +507,7 @@ void EnBomChu_Update(Actor* thisx, PlayState* play) {
 
     if (this->isMoving) {
         this->visualJitter =
-            (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS((((s32)(Rand_ZeroOne() * 0x200) + 0x3000) * this->timer));
+            (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS(((s32)(Rand_ZeroOne() * 0x200) + 0x3000) * this->timer);
         EnBomChu_ActorCoordsToWorld(this, &sBlureP1Offset, &blureP1);
 
         EnBomChu_ActorCoordsToWorld(this, &sBlureP2LeftOffset, &blureP2);

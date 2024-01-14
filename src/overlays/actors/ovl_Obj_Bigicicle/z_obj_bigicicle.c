@@ -205,8 +205,8 @@ void func_80AE9090(ObjBigicicle* this, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_10;
             this->actor.shape.yOffset = 2100.0f;
             this->actor.world.pos.y -= temp_f0;
-            this->collider1.dim.yShift += (s16)temp_f0;
-            this->collider2.dim.yShift += (s16)temp_f0;
+            this->collider1.dim.yShift += TRUNCF_BINANG(temp_f0);
+            this->collider2.dim.yShift += TRUNCF_BINANG(temp_f0);
             this->actionFunc = func_80AE9258;
         } else {
             this->unk_14A = 50;

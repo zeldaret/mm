@@ -944,13 +944,13 @@ void SkelAnime_InterpFrameTable(s32 limbCount, Vec3s* dst, Vec3s* start, Vec3s* 
         for (i = 0; i < limbCount; i++, dst++, start++, target++) {
             base = start->x;
             diff = target->x - base;
-            dst->x = (s16)(diff * weight) + base;
+            dst->x = TRUNCF_BINANG(diff * weight) + base;
             base = start->y;
             diff = target->y - base;
-            dst->y = (s16)(diff * weight) + base;
+            dst->y = TRUNCF_BINANG(diff * weight) + base;
             base = start->z;
             diff = target->z - base;
-            dst->z = (s16)(diff * weight) + base;
+            dst->z = TRUNCF_BINANG(diff * weight) + base;
         }
     } else {
         for (i = 0; i < limbCount; i++, dst++, target++) {
@@ -1011,7 +1011,7 @@ void AnimationContext_SetLoadFrame(PlayState* play, PlayerAnimationHeader* anima
         s32 pad;
 
         osCreateMesgQueue(&entry->data.load.msgQueue, entry->data.load.msg, ARRAY_COUNT(entry->data.load.msg));
-        DmaMgr_SendRequestImpl(
+        DmaMgr_RequestAsync(
             &entry->data.load.req, frameTable,
             LINK_ANIMETION_OFFSET(playerAnimHeader->linkAnimSegment, (sizeof(Vec3s) * limbCount + sizeof(s16)) * frame),
             sizeof(Vec3s) * limbCount + sizeof(s16), 0, &entry->data.load.msgQueue, NULL);

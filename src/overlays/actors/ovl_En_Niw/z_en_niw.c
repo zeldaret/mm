@@ -15,22 +15,18 @@ void EnNiw_Init(Actor* thisx, PlayState* play);
 void EnNiw_Destroy(Actor* thisx, PlayState* play);
 void EnNiw_Update(Actor* thisx, PlayState* play2);
 void EnNiw_Draw(Actor* thisx, PlayState* play);
+
 void EnNiw_SetupIdle(EnNiw* this);
 void EnNiw_Idle(EnNiw* this, PlayState* play);
 void EnNiw_Thrown(EnNiw* this, PlayState* play);
 void EnNiw_SetupRunAway(EnNiw* this);
 void EnNiw_RunAway(EnNiw* this, PlayState* play);
-void EnNiw_Swimming(EnNiw* this, PlayState* play);
-void EnNiw_Trigger(EnNiw* this, PlayState* play);
 void EnNiw_Upset(EnNiw* this, PlayState* play);
 void EnNiw_SetupCuccoStorm(EnNiw* this, PlayState* play);
 void EnNiw_CuccoStorm(EnNiw* this, PlayState* play);
-void EnNiw_SpawnAttackNiw(EnNiw* this, PlayState* play);
 void EnNiw_Held(EnNiw* this, PlayState* play);
 void EnNiw_UpdateFeather(EnNiw* this, PlayState* play);
 void EnNiw_DrawFeathers(EnNiw* this, PlayState* play);
-void EnNiw_CheckRage(EnNiw* this, PlayState* play);
-void EnNiw_AnimateWingHead(EnNiw* this, PlayState* play, s16 animationState);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 scale);
 
 s16 sCuccoStormActive = false;
@@ -438,9 +434,9 @@ void EnNiw_Held(EnNiw* this, PlayState* play) {
         this->heldTimer = (s32)(Rand_ZeroFloat(1.0f) * 10.0f) + 10;
     }
 
-    this->actor.shape.rot.x = (s16)(s32)Rand_CenteredFloat(0x1388) + this->actor.world.rot.x;
-    this->actor.shape.rot.y = (s16)(s32)Rand_CenteredFloat(0x1388) + this->actor.world.rot.y;
-    this->actor.shape.rot.z = (s16)(s32)Rand_CenteredFloat(0x1388) + this->actor.world.rot.z;
+    this->actor.shape.rot.x = TRUNCF_BINANG(Rand_CenteredFloat(0x1388)) + this->actor.world.rot.x;
+    this->actor.shape.rot.y = TRUNCF_BINANG(Rand_CenteredFloat(0x1388)) + this->actor.world.rot.y;
+    this->actor.shape.rot.z = TRUNCF_BINANG(Rand_CenteredFloat(0x1388)) + this->actor.world.rot.z;
     if (this->niwType == NIW_TYPE_REGULAR) {
         if (Actor_HasNoParent(&this->actor, play)) {
             this->actor.shape.rot.z = 0;
@@ -912,20 +908,20 @@ s32 EnNiw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnNiw* this = THIS;
 
     if (limbIndex == NIW_LIMB_UPPER_BODY) {
-        rot->y += (s16)this->upperBodyRotY;
+        rot->y += TRUNCF_BINANG(this->upperBodyRotY);
     }
     if (limbIndex == NIW_LIMB_HEAD) {
-        rot->y += (s16)this->headRotY;
+        rot->y += TRUNCF_BINANG(this->headRotY);
     }
     if (limbIndex == NIW_LIMB_RIGHT_WING_ROOT) {
-        rot->x += (s16)this->rightWingRotX;
-        rot->y += (s16)this->rightWingRotY;
-        rot->z += (s16)this->rightWingRotZ;
+        rot->x += TRUNCF_BINANG(this->rightWingRotX);
+        rot->y += TRUNCF_BINANG(this->rightWingRotY);
+        rot->z += TRUNCF_BINANG(this->rightWingRotZ);
     }
     if (limbIndex == NIW_LIMB_LEFT_WING_ROOT) {
-        rot->x += (s16)this->leftWingRotX;
-        rot->y += (s16)this->leftWingRotY;
-        rot->z += (s16)this->leftWingRotZ;
+        rot->x += TRUNCF_BINANG(this->leftWingRotX);
+        rot->y += TRUNCF_BINANG(this->leftWingRotY);
+        rot->z += TRUNCF_BINANG(this->leftWingRotZ);
     }
     return false;
 }

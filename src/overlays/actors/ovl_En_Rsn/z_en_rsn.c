@@ -16,7 +16,7 @@ void EnRsn_Destroy(Actor* thisx, PlayState* play);
 void EnRsn_Update(Actor* thisx, PlayState* play);
 void EnRsn_Draw(Actor* thisx, PlayState* play);
 
-void func_80C25D84(EnRsn* this, PlayState* play);
+void EnRsn_DoNothing(EnRsn* this, PlayState* play);
 
 ActorInit En_Rsn_InitVars = {
     /**/ ACTOR_EN_RSN,
@@ -30,14 +30,21 @@ ActorInit En_Rsn_InitVars = {
     /**/ EnRsn_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = { { &gBombShopkeeperSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };
+typedef enum RsnAnimation {
+    /* 0 */ RSN_ANIM_SWAY,
+    /* 1 */ RSN_ANIM_MAX
+} RsnAnimation;
+
+static AnimationInfo sAnimationInfo[RSN_ANIM_MAX] = {
+    { &gBombShopkeeperSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // RSN_ANIM_SWAY
+};
 
 void func_80C25D40(EnRsn* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
-    this->actionFunc = func_80C25D84;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, RSN_ANIM_SWAY);
+    this->actionFunc = EnRsn_DoNothing;
 }
 
-void func_80C25D84(EnRsn* this, PlayState* play) {
+void EnRsn_DoNothing(EnRsn* this, PlayState* play) {
 }
 
 void EnRsn_Init(Actor* thisx, PlayState* play) {
@@ -61,14 +68,14 @@ void EnRsn_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
-    Actor_TrackPlayer(play, &this->actor, &this->unk1D8, &this->unk1DE, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
 }
 
 s32 EnRsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnRsn* this = THIS;
 
     if (limbIndex == BOMB_SHOPKEEPER_LIMB_RIGHT_HAND) {
-        Matrix_RotateXS(this->unk1D8.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
     }
     return false;
 }

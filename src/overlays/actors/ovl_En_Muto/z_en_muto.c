@@ -135,17 +135,17 @@ void EnMuto_SetHeadRotation(EnMuto* this) {
 }
 
 void EnMuto_SetupIdle(EnMuto* this) {
-    EnMuto_ChangeAnim(this, 0);
+    EnMuto_ChangeAnim(this, ENMUTO_ANIM_0);
     this->isInDialogue = false;
     this->actionFunc = EnMuto_Idle;
 }
 
 void EnMuto_Idle(EnMuto* this, PlayState* play) {
-    Player* player;
     this->actor.textId = sTextIds[this->textIdIndex];
 
     if (!this->isInMayorsRoom) {
-        player = GET_PLAYER(play);
+        Player* player = GET_PLAYER(play);
+
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_08)) {
                 this->actor.textId = 0x62C;
@@ -154,9 +154,6 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
             }
         }
     }
-
-    //! FAKE:
-    if (1) {}
 
     if (!this->isInMayorsRoom && (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK)) {
         this->actor.textId = 0x2363;

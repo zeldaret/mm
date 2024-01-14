@@ -333,14 +333,14 @@ void func_800A640C(EnItem00* this, PlayState* play) {
     } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_DEKU_NUTS_10) &&
                (this->actor.params < ITEM00_BOMBS_0)) {
         if (this->unk152 == -1) {
-            if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x - 0x4000, 2, 3000, 1500)) {
+            if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x - 0x4000, 2, 0xBB8, 0x5DC)) {
                 this->unk152 = -2;
             }
-        } else if (!Math_SmoothStepToS(&this->actor.shape.rot.x, -0x4000 - this->actor.world.rot.x, 2, 3000, 1500)) {
+        } else if (!Math_SmoothStepToS(&this->actor.shape.rot.x, -0x4000 - this->actor.world.rot.x, 2, 0xBB8, 0x5DC)) {
             this->unk152 = -1;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 2, 2500, 500);
+        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 2, 0x9C4, 0x1F4);
     } else if ((this->actor.params == ITEM00_MAP) || (this->actor.params == ITEM00_COMPASS)) {
         this->unk152 = -1;
         this->actor.shape.rot.y += 0x3C0;
@@ -415,7 +415,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
             if (this->actor.velocity.y < -1.5f) {
                 this->actor.velocity.y = -1.5f;
             }
-            this->actor.home.rot.z += (s16)((this->actor.velocity.y + 3.0f) * 1000.0f);
+            this->actor.home.rot.z += TRUNCF_BINANG((this->actor.velocity.y + 3.0f) * 1000.0f);
             this->actor.world.pos.x +=
                 (Math_CosS(this->actor.yawTowardsPlayer) * (-3.0f * Math_CosS(this->actor.home.rot.z)));
             this->actor.world.pos.z +=

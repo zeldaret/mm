@@ -23,4 +23,9 @@ typedef struct {
     /* 0x278 */ OSTime lastFrameTime;
 } IrqMgr; // size = 0x280
 
+extern vs32 gIrqMgrResetStatus;
+extern volatile OSTime sIrqMgrResetTime;
+extern volatile OSTime gIrqMgrRetraceTime;
+extern s32 sIrqMgrRetraceCount;
+
 #endif

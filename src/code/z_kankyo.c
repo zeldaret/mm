@@ -1085,8 +1085,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
             envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE1_START;
             size = sNormalSkyFiles[skybox1Index].file.vromEnd - sNormalSkyFiles[skybox1Index].file.vromStart;
             osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
-            DmaMgr_SendRequestImpl(&envCtx->dmaRequest, skyboxCtx->staticSegments[0],
-                                   sNormalSkyFiles[skybox1Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            DmaMgr_RequestAsync(&envCtx->dmaRequest, skyboxCtx->staticSegments[0],
+                                sNormalSkyFiles[skybox1Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
             envCtx->skybox1Index = skybox1Index;
         }
 
@@ -1094,8 +1094,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
             envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE2_START;
             size = sNormalSkyFiles[skybox2Index].file.vromEnd - sNormalSkyFiles[skybox2Index].file.vromStart;
             osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
-            DmaMgr_SendRequestImpl(&envCtx->dmaRequest, skyboxCtx->staticSegments[1],
-                                   sNormalSkyFiles[skybox2Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            DmaMgr_RequestAsync(&envCtx->dmaRequest, skyboxCtx->staticSegments[1],
+                                sNormalSkyFiles[skybox2Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
             envCtx->skybox2Index = skybox2Index;
         }
 
@@ -2477,9 +2477,9 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
     s32 pad;
 
     //! FAKE:
-    if (!gSaveContext.sceneLayer) {}
+    if (gSaveContext.sceneLayer) {}
 
-    if ((play->csCtx.state == 0) && !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && !(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON)) {
         switch (play->envCtx.timeSeqState) {
             case TIMESEQ_DAY_BGM:
                 break;
@@ -2539,7 +2539,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
 
     if ((play->envCtx.timeSeqState != TIMESEQ_REQUEST) && (((void)0, gSaveContext.save.day) == 3) &&
         (CURRENT_TIME < CLOCK_TIME(6, 0)) && !func_800FE5D0(play) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
-        (play->transitionMode == TRANS_MODE_OFF) && (play->csCtx.state == 0) &&
+        (play->transitionMode == TRANS_MODE_OFF) && (play->csCtx.state == CS_STATE_IDLE) &&
         ((play->sceneId != SCENE_00KEIKOKU) || (((void)0, gSaveContext.sceneLayer) != 1)) &&
         (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
         (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS) &&

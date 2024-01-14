@@ -200,9 +200,9 @@ void func_801229FC(Player* player) {
         s16 objectId = sMaskObjectIds[(u8)player->maskId - 1];
 
         osCreateMesgQueue(&player->maskObjectLoadQueue, &player->maskObjectLoadMsg, 1);
-        DmaMgr_SendRequestImpl(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[objectId].vromStart,
-                               gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
-                               &player->maskObjectLoadQueue, NULL);
+        DmaMgr_RequestAsync(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[objectId].vromStart,
+                            gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
+                            &player->maskObjectLoadQueue, NULL);
         player->maskObjectLoadState++;
     } else if (player->maskObjectLoadState == 2) {
         if (osRecvMesg(&player->maskObjectLoadQueue, NULL, OS_MESG_NOBLOCK) == 0) {
@@ -1895,8 +1895,8 @@ void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
     }
 
     *arg1 = CLAMP(*arg1, -arg4, arg4);
-    *arg0 += (s16)*arg1;
-    if (((arg2 - *arg0) * (s16)*arg1) < 0) {
+    *arg0 += TRUNCF_BINANG(*arg1);
+    if (((arg2 - *arg0) * TRUNCF_BINANG(*arg1)) < 0) {
         *arg0 = arg2;
     }
 }
@@ -2168,7 +2168,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
             rotX = player->upperLimbRot.x;
             if ((player->transformation == PLAYER_FORM_DEKU) && (player->stateFlags3 & PLAYER_STATE3_40)) {
                 if (player->heldActor != NULL) {
-                    rotX += (s16)(((EnArrow*)(player->heldActor))->bubble.unk_144 * -470.0f);
+                    rotX += TRUNCF_BINANG(((EnArrow*)(player->heldActor))->bubble.unk_144 * -470.0f);
                 }
             }
 

@@ -355,7 +355,7 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
         case 1:
             if (curFrame >= 0.0f) {
                 this->unk_2D6 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_294);
-                Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2D6, 10, 2000, 20);
+                Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2D6, 10, 0x7D0, 0x14);
             }
 
             if ((s16)ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->unk_2D6)) < 0x100) {
@@ -503,7 +503,7 @@ void func_80C01CD0(EnBomjimb* this, PlayState* play) {
     }
 
     if (this->animIndex != ENBOMJIMB_ANIM_7) {
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_294), 1, 3000,
+        Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_294), 1, 0xBB8,
                            0);
         Math_ApproachF(&this->actor.world.pos.x, this->unk_294.x, 0.3f, 2.0f);
         Math_ApproachF(&this->actor.world.pos.z, this->unk_294.z, 0.3f, 2.0f);
@@ -605,7 +605,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
     }
 
     if (player->stateFlags3 == PLAYER_STATE3_1000000) {
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 3000, 0);
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
         func_80C01494(this);
         return;
     }
@@ -691,14 +691,14 @@ void func_80C02570(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 5000, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0x1388, 0);
 
     if (this->actor.xzDistToPlayer < 200.0f) {
         this->unk_2D6 = BINANG_ROT180(this->actor.yawTowardsPlayer);
         EnBomjimb_ChangeAnim(this, ENBOMJIMB_ANIM_19, 2.0f);
         this->actionFunc = func_80C0217C;
     } else if ((player->stateFlags3 == PLAYER_STATE3_1000000) || (this->actor.xzDistToPlayer > 410.0f)) {
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 3000, 0);
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
         func_80C01494(this);
     }
 }
@@ -845,7 +845,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
 void func_80C02BCC(EnBomjimb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 5000, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0x1388, 0);
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
@@ -918,13 +918,13 @@ void EnBomjimb_Update(Actor* thisx, PlayState* play2) {
         }
     }
 
-    Math_SmoothStepToS(&this->unk_28A, this->unk_290, 1, 5000, 0);
+    Math_SmoothStepToS(&this->unk_28A, this->unk_290, 1, 0x1388, 0);
 
     if (this->unk_2C4 == 0) {
         this->unk_2C2++;
         if (this->unk_2C2 > 2) {
             this->unk_2C2 = 0;
-            this->unk_2C4 = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->unk_2C4 = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
 

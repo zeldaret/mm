@@ -226,7 +226,7 @@ void EnZod_UpdateInstruments(EnZod* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->cymbalRots); i++) {
         this->cymbalRots[i] += this->cymbalRotVels[i];
-        this->cymbalRotVels[i] -= (s16)(this->cymbalRots[i] * 0.1f);
+        this->cymbalRotVels[i] -= TRUNCF_BINANG(this->cymbalRots[i] * 0.1f);
 
         if (ABS_ALT(this->cymbalRotVels[i]) > 100) {
             this->cymbalRotVels[i] *= 0.9f;

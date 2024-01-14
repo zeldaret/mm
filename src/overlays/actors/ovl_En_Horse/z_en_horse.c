@@ -4018,7 +4018,7 @@ void func_80886C00(EnHorse* this, PlayState* play) {
     if (((this->action == ENHORSE_ACTION_MOUNTED_WALK) || (this->action == ENHORSE_ACTION_MOUNTED_TROT) ||
          (this->action == ENHORSE_ACTION_MOUNTED_GALLOP)) &&
         (CHECK_BTN_ALL(input->press.button, BTN_A) || (AudioVoice_GetWord() == VOICE_WORD_ID_HIYA)) &&
-        (play->interfaceCtx.unk_212 == 8) && !(this->stateFlags & ENHORSE_BOOST) &&
+        (play->interfaceCtx.unk_212 == DO_ACTION_FASTER) && !(this->stateFlags & ENHORSE_BOOST) &&
         !(this->stateFlags & ENHORSE_FLAG_8) && !(this->stateFlags & ENHORSE_FLAG_9)) {
         if (this->numBoosts > 0) {
             Rumble_Request(0.0f, 180, 20, 100);
@@ -4121,7 +4121,7 @@ void EnHorse_TiltBody(EnHorse* this, PlayState* play) {
 
     speed = this->actor.speed / this->boostSpeed;
     turnVel = this->actor.shape.rot.y - this->lastYaw;
-    targetRoll = -((s16)((2730.0f * speed) * (turnVel / 960.00006f)));
+    targetRoll = -TRUNCF_BINANG((2730.0f * speed) * (turnVel / 960.00006f));
     rollDiff = targetRoll - this->actor.world.rot.z;
 
     if (fabsf(targetRoll) < 100.0f) {
@@ -4316,22 +4316,22 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
 
         if (this->type == HORSE_TYPE_2) {
             this->colliderCylinder1.dim.pos.x =
-                (s16)(Math_SinS(thisx->shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.x;
+                TRUNCF_BINANG(Math_SinS(thisx->shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.x;
             this->colliderCylinder1.dim.pos.z =
-                (s16)(Math_CosS(thisx->shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.z;
+                TRUNCF_BINANG(Math_CosS(thisx->shape.rot.y) * 11.0f) + this->colliderCylinder1.dim.pos.z;
             this->colliderCylinder2.dim.pos.x =
-                (s16)(Math_SinS(thisx->shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.x;
+                TRUNCF_BINANG(Math_SinS(thisx->shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.x;
             this->colliderCylinder2.dim.pos.z =
-                (s16)(Math_CosS(thisx->shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.z;
+                TRUNCF_BINANG(Math_CosS(thisx->shape.rot.y) * -18.0f) + this->colliderCylinder2.dim.pos.z;
         } else {
             this->colliderCylinder1.dim.pos.x =
-                (s16)(Math_SinS(thisx->shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.x;
+                TRUNCF_BINANG(Math_SinS(thisx->shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.x;
             this->colliderCylinder1.dim.pos.z =
-                (s16)(Math_CosS(thisx->shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.z;
+                TRUNCF_BINANG(Math_CosS(thisx->shape.rot.y) * 6.6000004f) + this->colliderCylinder1.dim.pos.z;
             this->colliderCylinder2.dim.pos.x =
-                (s16)(Math_SinS(thisx->shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.x;
+                TRUNCF_BINANG(Math_SinS(thisx->shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.x;
             this->colliderCylinder2.dim.pos.z =
-                (s16)(Math_CosS(thisx->shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.z;
+                TRUNCF_BINANG(Math_CosS(thisx->shape.rot.y) * -10.8f) + this->colliderCylinder2.dim.pos.z;
         }
 
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderCylinder1.base);

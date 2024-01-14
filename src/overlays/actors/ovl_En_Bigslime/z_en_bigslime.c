@@ -1325,7 +1325,7 @@ void EnBigslime_SetTargetVtxToThinCone(EnBigslime* this) {
             targetVtx = &sBigslimeTargetVtx[j];
             targetVtx->n.ob[0] = staticVtx->n.ob[0];
             targetVtx->n.ob[2] = staticVtx->n.ob[2];
-            targetVtxY = (s16)(((lowerSphereCos * 0.05f) + -1.0f) * BIGSLIME_RADIUS_F);
+            targetVtxY = TRUNCF_BINANG(((lowerSphereCos * 0.05f) + -1.0f) * BIGSLIME_RADIUS_F);
             targetVtx->n.ob[1] = targetVtxY;
         }
     }
@@ -1368,7 +1368,7 @@ void EnBigslime_SetTargetVtxToInverseCone(EnBigslime* this) {
             targetVtx = &sBigslimeTargetVtx[j];
             targetVtx->n.ob[0] = staticVtx->n.ob[0];
             targetVtx->n.ob[2] = staticVtx->n.ob[2];
-            vtxY = (s16)(((upperSphereCos * 0.1f) + 0.9f) * BIGSLIME_RADIUS_F);
+            vtxY = TRUNCF_BINANG(((upperSphereCos * 0.1f) + 0.9f) * BIGSLIME_RADIUS_F);
             targetVtx->n.ob[1] = vtxY;
         }
     }
@@ -1550,7 +1550,7 @@ void EnBigslime_CutsceneGrabPlayer(EnBigslime* this, PlayState* play) {
             for (j = 0; j < 3; j++) {
                 // Linearly interpolate dynamicVtx --> staticVtx
                 dynamicVtx->n.ob[j] +=
-                    (s16)((sBigslimeStaticVtx[i].n.ob[j] - dynamicVtx->n.ob[j]) * invgrabPlayerTimer);
+                    TRUNCF_BINANG((sBigslimeStaticVtx[i].n.ob[j] - dynamicVtx->n.ob[j]) * invgrabPlayerTimer);
             }
         }
 
@@ -1697,7 +1697,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
         player->actor.world.pos.y = this->actor.world.pos.y + (this->actor.scale.y * -500.0f);
 
         // Linearly interpolate gekkoRot.y --> this->actor.world.rot.y
-        this->gekkoRot.y += (s16)((s16)(this->actor.world.rot.y - this->gekkoRot.y) * invWindupPunchTimer);
+        this->gekkoRot.y += TRUNCF_BINANG((s16)(this->actor.world.rot.y - this->gekkoRot.y) * invWindupPunchTimer);
         this->gekkoPosOffset.x = Math_SinS(this->gekkoRot.y) * -50.0f;
         this->gekkoPosOffset.z = Math_CosS(this->gekkoRot.y) * -50.0f;
     } else {
@@ -1741,10 +1741,10 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
                 // loop over x, y, z
                 for (j = 0; j < 3; j++) {
                     // Linearly interpolate dynamicVtx --> staticVtx * (1 - scale * vtxSurfacePerturbation)
-                    dynamicVtx->n.ob[j] += (s16)(((staticVtx->n.ob[j] - (s32)(scale * staticVtx->n.ob[j] *
-                                                                              this->vtxSurfacePerturbation[i])) -
-                                                  dynamicVtx->n.ob[j]) *
-                                                 invWindupPunchTimer);
+                    dynamicVtx->n.ob[j] += TRUNCF_BINANG(
+                        ((staticVtx->n.ob[j] - (s32)(scale * staticVtx->n.ob[j] * this->vtxSurfacePerturbation[i])) -
+                         dynamicVtx->n.ob[j]) *
+                        invWindupPunchTimer);
                 }
             } else {
                 // loop over x, y, z
@@ -1759,7 +1759,8 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
                 // loop over x, y, z
                 for (j = 0; j < 3; j++) {
                     // Linearly interpolate dynamicVtx --> staticVtx
-                    dynamicVtx->n.ob[j] += (s16)((staticVtx->n.ob[j] - dynamicVtx->n.ob[j]) * invWindupPunchTimer);
+                    dynamicVtx->n.ob[j] +=
+                        TRUNCF_BINANG((staticVtx->n.ob[j] - dynamicVtx->n.ob[j]) * invWindupPunchTimer);
                 }
             }
         }
@@ -1794,7 +1795,7 @@ void EnBigslime_SetDynamicVtxThrowPlayer(EnBigslime* this, PlayState* play) {
             // loop over x, y, z
             for (j = 0; j < 3; j++) {
                 // Linearly interpolate dynamicVtx --> targetVtx
-                dynamicVtx->n.ob[j] += (s16)((targetVtx->n.ob[j] - dynamicVtx->n.ob[j]) * invThrowPlayerTimer);
+                dynamicVtx->n.ob[j] += TRUNCF_BINANG((targetVtx->n.ob[j] - dynamicVtx->n.ob[j]) * invThrowPlayerTimer);
             }
         }
 
@@ -1881,9 +1882,9 @@ void EnBigslime_Freeze(EnBigslime* this, PlayState* play) {
             dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][vtxIceSeed];
             targetVtx = &sBigslimeTargetVtx[vtxIceSeed];
             randFloat = Rand_CenteredFloat(40.0f);
-            dynamicVtx->n.ob[0] += (s16)(randFloat / this->actor.scale.x);
-            dynamicVtx->n.ob[1] += (s16)(randFloat / this->actor.scale.y);
-            dynamicVtx->n.ob[2] += (s16)(randFloat / this->actor.scale.z);
+            dynamicVtx->n.ob[0] += TRUNCF_BINANG(randFloat / this->actor.scale.x);
+            dynamicVtx->n.ob[1] += TRUNCF_BINANG(randFloat / this->actor.scale.y);
+            dynamicVtx->n.ob[2] += TRUNCF_BINANG(randFloat / this->actor.scale.z);
             if (((dynamicVtx->n.ob[1] * this->actor.scale.y) + this->actor.world.pos.y) < GBT_ROOM_5_MIN_Y) {
                 dynamicVtx->n.ob[1] = ((GBT_ROOM_5_MIN_Y - this->actor.world.pos.y) / this->actor.scale.y) - 1.0f;
             }
@@ -2843,8 +2844,8 @@ void EnBigslime_UpdateGekko(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 40.0f, 80.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
                                 UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
-    this->gekkoCollider.dim.pos.x = (s16)this->actor.world.pos.x;
-    this->gekkoCollider.dim.pos.z = (s16)this->actor.world.pos.z;
+    this->gekkoCollider.dim.pos.x = TRUNCF_BINANG(this->actor.world.pos.x);
+    this->gekkoCollider.dim.pos.z = TRUNCF_BINANG(this->actor.world.pos.z);
     if (this->gekkoCollider.base.acFlags & AC_ON) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->gekkoCollider.base);
     }
@@ -2856,7 +2857,7 @@ void EnBigslime_UpdateGekko(Actor* thisx, PlayState* play) {
     EnBigslime_UpdateEffects(this);
 
     if ((this->actionFunc != EnBigslime_StunGekko) &&
-        (this->gekkoCollider.dim.pos.y < (s16)(3.0f + GBT_ROOM_5_MIN_Y))) {
+        (this->gekkoCollider.dim.pos.y < TRUNCF_BINANG(3.0f + GBT_ROOM_5_MIN_Y))) {
         Vec3f vtxNorm;
 
         if (((play->gameplayFrames % 4) == 0) || !isGekkoOnGround) {

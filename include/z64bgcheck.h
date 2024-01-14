@@ -87,8 +87,6 @@ typedef struct {
     /* 0x4 */ Vec3s* bgCamFuncData; // s16 data grouped in threes (ex. Vec3s), is usually of type `BgCamFuncData`
 } BgCamInfo; // size = 0x8
 
-typedef BgCamInfo CamData; // TODO: ZAPD compatibility
-
 // The structure used for all instances of s16 data from `BgCamInfo`.
 typedef struct {
     /* 0x00 */ Vec3s pos;

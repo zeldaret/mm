@@ -211,7 +211,7 @@ void func_80BCB078(EnScopenuts* this, PlayState* play) {
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
-        Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 10, 300, 0);
+        Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 10, 0x12C, 0);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->unk_33E = 0x1000;
         this->unk_340 += 0x1C71;
@@ -293,7 +293,7 @@ void func_80BCB4DC(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCB52C(EnScopenuts* this, PlayState* play) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 2000, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_33C = func_80BCAF0C(this);
@@ -508,7 +508,7 @@ void func_80BCBD28(EnScopenuts* this, PlayState* play) {
         this->actor.shape.yOffset = 1500.0f;
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_372, 3, 2000, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_372, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (DECR(this->unk_34E) == 0) {
@@ -569,9 +569,9 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
         }
 
         if (this->unk_334 < 6) {
-            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 300, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 0x12C, 0);
         } else {
-            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 1500, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.y, sp38.y, 10, 0x5DC, 0);
         }
 
         this->actor.shape.rot.y = this->actor.world.rot.y;

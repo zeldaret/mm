@@ -157,7 +157,7 @@ s32 func_80A356D8(ObjBell* this) {
     scaleProjection = Math_SinS(this->unk_20C) * this->unk_21C;
     this->dyna.actor.world.rot.x = this->dyna.actor.home.rot.x;
     this->unk_220 = scaleProjection;
-    this->dyna.actor.world.rot.x += (s16)scaleProjection;
+    this->dyna.actor.world.rot.x += TRUNCF_BINANG(scaleProjection);
     Math_ApproachF(&this->unk_21C, 0.0f, 0.03f, 70.0f);
     if (this->unk_21C > 0.0f) {
         this->unk_20C -= 0x800;

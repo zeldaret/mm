@@ -168,7 +168,7 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             phi_a1 = this->actor.wallYaw;
         }
-        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 1000, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         if (EnTrt2_HasReachedPoint(this, this->path, this->unk_1E4)) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
@@ -257,9 +257,9 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
 
     if (this->path != NULL) {
         func_80AD49B8(this->path, this->unk_1E4, &this->actor.world.pos, &sp30);
-        Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 4, 1000, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y, sp30.y, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        Math_SmoothStepToS(&this->actor.shape.rot.x, sp30.x, 4, 1000, 1);
+        Math_SmoothStepToS(&this->actor.shape.rot.x, sp30.x, 4, 0x3E8, 1);
         this->actor.world.rot.x = -this->actor.shape.rot.x;
         if (EnTrt2_HasReachedPoint(this, this->path, this->unk_1E4)) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
@@ -320,8 +320,8 @@ void func_80AD3B6C(EnTrt2* this, PlayState* play) {
 void func_80AD3BE4(EnTrt2* this, PlayState* play) {
     s16 sp2E = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    Math_ScaledStepToS(&this->unk_3C0, sp2E, 400);
-    Math_SmoothStepToS(&this->unk_3C0, sp2E, 4, 10000, 0);
+    Math_ScaledStepToS(&this->unk_3C0, sp2E, 0x190);
+    Math_SmoothStepToS(&this->unk_3C0, sp2E, 4, 0x2710, 0);
     this->actor.world.rot.y += this->unk_3C0;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->actor.world.pos.y < 5.0f) {
@@ -891,8 +891,8 @@ s32 EnTrt2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
     if ((limbIndex == KOTAKE_LIMB_TORSO_LIMB) || (limbIndex == KOTAKE_LIMB_LEFT_HAND) ||
         (limbIndex == KOTAKE_LIMB_RIGHT_HAND)) {
-        rot->y += (s16)Math_SinS(this->unk_33C[limbIndex]) * 200;
-        rot->z += (s16)Math_CosS(this->unk_372[limbIndex]) * 200;
+        rot->y += TRUNCF_BINANG(Math_SinS(this->unk_33C[limbIndex])) * 200;
+        rot->z += TRUNCF_BINANG(Math_CosS(this->unk_372[limbIndex])) * 200;
     }
     return false;
 }

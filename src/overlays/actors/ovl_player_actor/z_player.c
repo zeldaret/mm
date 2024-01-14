@@ -7316,9 +7316,9 @@ void func_80838830(Player* this, s16 objectId) {
     if (objectId != OBJECT_UNSET_0) {
         this->giObjectLoading = true;
         osCreateMesgQueue(&this->giObjectLoadQueue, &this->giObjectLoadMsg, 1);
-        DmaMgr_SendRequestImpl(&this->giObjectDmaRequest, this->giObjectSegment, gObjectTable[objectId].vromStart,
-                               gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
-                               &this->giObjectLoadQueue, NULL);
+        DmaMgr_RequestAsync(&this->giObjectDmaRequest, this->giObjectSegment, gObjectTable[objectId].vromStart,
+                            gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
+                            &this->giObjectLoadQueue, NULL);
     }
 }
 
@@ -8816,7 +8816,7 @@ void func_8083C6E8(Player* this, PlayState* play) {
     }
 
     if (sPlayerFloorType == FLOOR_TYPE_11) {
-        Math_SmoothStepToS(&this->actor.focus.rot.x, -20000, 10, 4000, 800);
+        Math_SmoothStepToS(&this->actor.focus.rot.x, -0x4E20, 10, 0xFA0, 0x320);
     } else {
         s16 sp46 = 0;
         f32 yIntersect;
@@ -8826,17 +8826,17 @@ void func_8083C6E8(Player* this, PlayState* play) {
         yIntersect = func_80835D2C(play, this, &D_8085D218, &pos);
         if (yIntersect > BGCHECK_Y_MIN) {
             temp_v0 = Math_Atan2S_XY(40.0f, this->actor.world.pos.y - yIntersect);
-            sp46 = CLAMP(temp_v0, -4000, 4000);
+            sp46 = CLAMP(temp_v0, -0xFA0, 0xFA0);
         }
         this->actor.focus.rot.y = this->actor.shape.rot.y;
-        Math_SmoothStepToS(&this->actor.focus.rot.x, sp46, 14, 4000, 30);
+        Math_SmoothStepToS(&this->actor.focus.rot.x, sp46, 14, 0xFA0, 30);
     }
 
     func_80832754(this, func_800B7128(this) || func_8082EF20(this));
 }
 
 void func_8083C85C(Player* this) {
-    Math_ScaledStepToS(&this->upperLimbRot.x, D_80862B3C * -500.0f, 900);
+    Math_ScaledStepToS(&this->upperLimbRot.x, D_80862B3C * -500.0f, 0x384);
     this->headLimbRot.x = (-(f32)this->upperLimbRot.x * 0.5f);
     this->unk_AA6 |= 0x48;
 }
@@ -8851,7 +8851,7 @@ void func_8083C8E8(Player* this, PlayState* play) {
 
         temp1 = CLAMP(temp1, -0xFA0, 0xFA0);
 
-        temp1 += (s16)(s32)(D_80862B3C * -500.0f);
+        temp1 += TRUNCF_BINANG(D_80862B3C * -500.0f);
 
         temp1 = CLAMP(temp1, -0x2EE0, 0x2EE0);
 
@@ -12851,7 +12851,7 @@ void func_8084748C(Player* this, f32* speed, f32 speedTarget, s16 yawTarget) {
     }
 
     Math_AsymStepToF(speed, speedTarget * 0.8f, incrStep, (fabsf(*speed) * 0.02f) + 0.05f);
-    Math_ScaledStepToS(&this->currentYaw, yawTarget, 1600); // 1 ESS turn, also one frame of first-person rotation
+    Math_ScaledStepToS(&this->currentYaw, yawTarget, 0x640); // 1 ESS turn, also one frame of first-person rotation
 }
 
 void func_808475B4(Player* this) {
@@ -14684,7 +14684,8 @@ void Player_Action_25(Player* this, PlayState* play) {
                 this->stateFlags2 |= (PLAYER_STATE2_20 | PLAYER_STATE2_40);
 
                 this->unk_B10[0] += -800.0f;
-                this->actor.shape.rot.y += BINANG_ADD((s16)this->unk_B10[0], BINANG_SUB(this->currentYaw, prevYaw));
+                this->actor.shape.rot.y +=
+                    BINANG_ADD(TRUNCF_BINANG(this->unk_B10[0]), BINANG_SUB(this->currentYaw, prevYaw));
                 Math_StepToF(&this->unk_B10[1], 0.0f, this->unk_B10[0]);
             }
         } else {
@@ -16838,8 +16839,8 @@ void func_80852290(PlayState* play, Player* this) {
     }
 
     if (DECR(this->unk_B8A) != 0) {
-        this->unk_B86[0] += (s16)(this->upperLimbRot.x * 2.5f);
-        this->unk_B86[1] += (s16)(this->upperLimbRot.y * 3.0f);
+        this->unk_B86[0] += TRUNCF_BINANG(this->upperLimbRot.x * 2.5f);
+        this->unk_B86[1] += TRUNCF_BINANG(this->upperLimbRot.y * 3.0f);
     } else {
         this->unk_B86[0] = 0;
         this->unk_B86[1] = 0;
@@ -17915,7 +17916,8 @@ void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
     }
 
     play->envCtx.adjLightSettings.fogNear =
-        ((s16)((var_v1->fogNear - var_t0->fogNear) * arg1) + var_t0->fogNear) - play->envCtx.lightSettings.fogNear;
+        (TRUNCF_BINANG((var_v1->fogNear - var_t0->fogNear) * arg1) + var_t0->fogNear) -
+        play->envCtx.lightSettings.fogNear;
 
     func_80854CD0(arg1, play->envCtx.adjLightSettings.fogColor, var_v1->fogColor, var_t0->fogColor,
                   play->envCtx.lightSettings.fogColor, play->envCtx.adjLightSettings.ambientColor, var_v1->ambientColor,
@@ -18359,7 +18361,7 @@ void Player_Action_93(Player* this, PlayState* play) {
             this->actor.scale.y = 0.01f + temp_fv0_2;
             this->actor.scale.z = this->actor.scale.x = 0.01f - (this->unk_B48 * -0.000015f);
 
-            this->actor.shape.rot.y += (s16)(this->unk_B48 * 130.0f);
+            this->actor.shape.rot.y += TRUNCF_BINANG(this->unk_B48 * 130.0f);
             if (this->actor.floorBgId != BGCHECK_SCENE) {
                 dyna = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId);
 
@@ -18720,7 +18722,7 @@ void Player_Action_95(Player* this, PlayState* play) {
         }
 
         this->unk_B10[0] += -800.0f;
-        this->actor.shape.rot.y += BINANG_ADD((s16)this->unk_B10[0], BINANG_SUB(this->currentYaw, prevYaw));
+        this->actor.shape.rot.y += BINANG_ADD(TRUNCF_BINANG(this->unk_B10[0]), BINANG_SUB(this->currentYaw, prevYaw));
 
         if (Math_StepToF(&this->unk_B10[1], 0.0f, this->unk_B10[0])) {
             this->actor.shape.rot.y = this->currentYaw;
@@ -19055,7 +19057,7 @@ void Player_Action_96(Player* this, PlayState* play) {
                     sp80 = CLAMP_MIN(sp80, 0.0f);
 
                     Math_AsymStepToF(&this->linearVelocity, speedTarget, sp84, sp80);
-                    spC8 = (s16)(fabsf(this->actor.speed) * 20.0f) + 300;
+                    spC8 = TRUNCF_BINANG(fabsf(this->actor.speed) * 20.0f) + 300;
                     spC8 = CLAMP_MIN(spC8, 100);
 
                     sp7C = (s32)(BINANG_SUB(yawTarget, this->currentYaw) * -0.5f);

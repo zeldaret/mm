@@ -918,8 +918,8 @@ void Interface_NewDay(PlayState* play, s32 day) {
     }
 
     // Loads day number from week_static for the three-day clock
-    DmaMgr_SendRequest0((void*)(play->interfaceCtx.doActionSegment + 0x780),
-                        SEGMENT_ROM_START_OFFSET(week_static, i * 0x510), 0x510);
+    DmaMgr_RequestSync((void*)(play->interfaceCtx.doActionSegment + 0x780),
+                       SEGMENT_ROM_START_OFFSET(week_static, i * 0x510), 0x510);
 
     // i is used to store sceneId
     for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.permanentSceneFlags); i++) {
@@ -4598,7 +4598,7 @@ void Interface_DrawClock(PlayState* play) {
                 }
 
                 timeInSeconds = TIME_TO_SECONDS_F(CURRENT_TIME);
-                timeInSeconds -= ((s16)(timeInSeconds / 3600.0f)) * 3600.0f;
+                timeInSeconds -= TRUNCF_BINANG(timeInSeconds / 3600.0f) * 3600.0f;
 
                 Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
@@ -6581,8 +6581,8 @@ void Interface_LoadStory(PlayState* play, s32 osMesgFlag) {
                 break;
             }
             osCreateMesgQueue(&interfaceCtx->storyMsgQueue, &interfaceCtx->storyMsgBuf, 1);
-            DmaMgr_SendRequestImpl(&interfaceCtx->dmaRequest, interfaceCtx->storySegment, interfaceCtx->storyAddr,
-                                   interfaceCtx->storySize, 0, &interfaceCtx->storyMsgQueue, NULL);
+            DmaMgr_RequestAsync(&interfaceCtx->dmaRequest, interfaceCtx->storySegment, interfaceCtx->storyAddr,
+                                interfaceCtx->storySize, 0, &interfaceCtx->storyMsgQueue, NULL);
             interfaceCtx->storyDmaStatus = STORY_DMA_LOADING;
             // fallthrough
         case STORY_DMA_LOADING:
@@ -7116,12 +7116,11 @@ void Interface_Init(PlayState* play) {
 
     parameterStaticSize = SEGMENT_ROM_SIZE(parameter_static);
     interfaceCtx->parameterSegment = THA_AllocTailAlign16(&play->state.tha, parameterStaticSize);
-    DmaMgr_SendRequest0(interfaceCtx->parameterSegment, SEGMENT_ROM_START(parameter_static), parameterStaticSize);
+    DmaMgr_RequestSync(interfaceCtx->parameterSegment, SEGMENT_ROM_START(parameter_static), parameterStaticSize);
 
     interfaceCtx->doActionSegment = THA_AllocTailAlign16(&play->state.tha, 0xC90);
-    DmaMgr_SendRequest0(interfaceCtx->doActionSegment, SEGMENT_ROM_START(do_action_static), 0x300);
-    DmaMgr_SendRequest0(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START_OFFSET(do_action_static, 0x480),
-                        0x180);
+    DmaMgr_RequestSync(interfaceCtx->doActionSegment, SEGMENT_ROM_START(do_action_static), 0x300);
+    DmaMgr_RequestSync(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START_OFFSET(do_action_static, 0x480), 0x180);
 
     Interface_NewDay(play, CURRENT_DAY);
 
