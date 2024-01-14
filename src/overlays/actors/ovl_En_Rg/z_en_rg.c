@@ -3,7 +3,7 @@
  * Overlay: ovl_En_Rg
  * Description: Racing Goron
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_en_rg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
