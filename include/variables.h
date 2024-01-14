@@ -6,21 +6,6 @@
 #include "macros.h"
 
 // data
-// extern UNK_TYPE1 sGfxPrintFontTLUT;
-// extern UNK_TYPE1 sGfxPrintRainbowTLUT;
-// extern UNK_TYPE1 sGfxPrintRainbowData;
-// extern UNK_TYPE1 sGfxPrintFontData;
-// extern UNK_TYPE4 D_80097524;
-
-extern u8 sYaz0DataBuffer[0x400];
-extern u8* sYaz0CurDataEnd;
-extern u32 sYaz0CurRomStart;
-extern u32 sYaz0CurSize;
-extern u8* sYaz0MaxPtr;
-extern void* gYaz0DecompressDstEnd;
-
-// extern UNK_TYPE4 D_8009CD10;
-// extern UNK_TYPE4 sArenaLockMsg;
 // extern UNK_TYPE1 D_80186028;
 
 extern u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];

@@ -59,7 +59,7 @@ void EnBu_Draw(Actor* thisx, PlayState* play) {
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, this->displayListPtr);
+    gSPDisplayList(POLY_OPA_DISP++, this->dList);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
