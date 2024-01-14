@@ -21,10 +21,10 @@ typedef enum VisScissorType {
 } VisScissorType;
 
 typedef struct Vis {
-    /* 0x00 */ u32 type;
-    /* 0x04 */ u32 scissorType;
-    /* 0x08 */ Color_RGBA8_u32 primColor;
-    /* 0x0C */ Color_RGBA8_u32 envColor;
+    /* 0x0 */ u32 type;
+    /* 0x4 */ u32 scissorType;
+    /* 0x8 */ Color_RGBA8_u32 primColor;
+    /* 0xC */ Color_RGBA8_u32 envColor;
 } Vis; // size = 0x10
 
 
@@ -42,7 +42,7 @@ typedef enum VisCvgType {
 } VisCvgType;
 
 typedef struct VisCvg {
-    /* 0x00 */ Vis vis;
+    /* 0x0 */ Vis vis;
 } VisCvg; // size = 0x10
 
 void VisCvg_Init(VisCvg* this);
@@ -77,7 +77,7 @@ typedef enum VisZBufType {
 } VisZBufType;
 
 typedef struct VisZBuf {
-    /* 0x00 */ Vis vis;
+    /* 0x0 */ Vis vis;
 } VisZBuf; // size = 0x10
 
 void VisZBuf_Init(VisZBuf* this);
