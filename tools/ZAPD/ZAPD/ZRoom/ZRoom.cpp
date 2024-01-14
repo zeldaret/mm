@@ -6,7 +6,7 @@
 #include <string_view>
 
 #include "Commands/EndMarker.h"
-#include "Commands/SetActorCutsceneList.h"
+#include "Commands/SetCutsceneEntryList.h"
 #include "Commands/SetActorList.h"
 #include "Commands/SetAlternateHeaders.h"
 #include "Commands/SetAnimatedMaterialList.h"
@@ -336,7 +336,7 @@ std::string ZRoom::GetDefaultName(const std::string& prefix) const
  */
 void ZRoom::SyotesRoomFix()
 {
-	PolygonType2 poly(parent, 0, this);
+	RoomShapeCullable poly(parent, 0, this);
 
 	poly.ParseRawData();
 	poly.DeclareReferences(GetName());

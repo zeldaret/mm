@@ -809,7 +809,7 @@ void EnMa4_SetupBeginEponasSongCs(EnMa4* this) {
     this->actionFunc = EnMa4_BeginEponasSongCs;
 }
 
-// Epona's Song cutscene is an ActorCutscene
+// Epona's Song cutscene is an CutsceneEntry
 void EnMa4_BeginEponasSongCs(EnMa4* this, PlayState* play) {
     s16 csId = this->actor.csId;
 

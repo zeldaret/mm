@@ -250,19 +250,19 @@ void Skybox_Setup(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) 
             skyboxCtx->staticSegments[0] = gLoBuffer.skyboxBuffer;
             size = SEGMENT_ROM_SIZE(d2_cloud_static);
             segment = (void*)ALIGN8((uintptr_t)skyboxCtx->staticSegments[0] + size);
-            DmaMgr_SendRequest0(skyboxCtx->staticSegments[0], SEGMENT_ROM_START(d2_cloud_static), size);
+            DmaMgr_RequestSync(skyboxCtx->staticSegments[0], SEGMENT_ROM_START(d2_cloud_static), size);
 
             // Send a DMA request for the clear sky texture
             skyboxCtx->staticSegments[1] = segment;
             size = SEGMENT_ROM_SIZE(d2_fine_static);
             segment = (void*)ALIGN8((uintptr_t)segment + size);
-            DmaMgr_SendRequest0(skyboxCtx->staticSegments[1], SEGMENT_ROM_START(d2_fine_static), size);
+            DmaMgr_RequestSync(skyboxCtx->staticSegments[1], SEGMENT_ROM_START(d2_fine_static), size);
 
             // Send a DMA request for the skybox palette
             skyboxCtx->palette = segment;
             size = SEGMENT_ROM_SIZE(d2_fine_pal_static);
             segment = (void*)ALIGN8((uintptr_t)segment + size);
-            DmaMgr_SendRequest0(skyboxCtx->palette, SEGMENT_ROM_START(d2_fine_pal_static), size);
+            DmaMgr_RequestSync(skyboxCtx->palette, SEGMENT_ROM_START(d2_fine_pal_static), size);
 
             skyboxCtx->prim.r = 145;
             skyboxCtx->prim.g = 120;
@@ -297,14 +297,14 @@ void Skybox_Reload(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
                 // Send a DMA request for the clear sky texture
                 size = SEGMENT_ROM_SIZE(d2_fine_static);
 
-                DmaMgr_SendRequestImpl(&skyboxCtx->skybox1DmaRequest, skyboxCtx->staticSegments[0],
-                                       SEGMENT_ROM_START(d2_fine_static), size, 0, &skyboxCtx->loadQueue, NULL);
+                DmaMgr_RequestAsync(&skyboxCtx->skybox1DmaRequest, skyboxCtx->staticSegments[0],
+                                    SEGMENT_ROM_START(d2_fine_static), size, 0, &skyboxCtx->loadQueue, NULL);
             } else {
                 // Send a DMA request for the cloudy sky texture
                 size = SEGMENT_ROM_SIZE(d2_cloud_static);
 
-                DmaMgr_SendRequestImpl(&skyboxCtx->skybox1DmaRequest, skyboxCtx->staticSegments[0],
-                                       SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
+                DmaMgr_RequestAsync(&skyboxCtx->skybox1DmaRequest, skyboxCtx->staticSegments[0],
+                                    SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
             }
 
             osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
@@ -314,14 +314,14 @@ void Skybox_Reload(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
                 // Send a DMA request for the clear sky texture
                 size = SEGMENT_ROM_SIZE(d2_fine_static);
 
-                DmaMgr_SendRequestImpl(&skyboxCtx->skybox2DmaRequest, skyboxCtx->staticSegments[1],
-                                       SEGMENT_ROM_START(d2_fine_static), size, 0, &skyboxCtx->loadQueue, NULL);
+                DmaMgr_RequestAsync(&skyboxCtx->skybox2DmaRequest, skyboxCtx->staticSegments[1],
+                                    SEGMENT_ROM_START(d2_fine_static), size, 0, &skyboxCtx->loadQueue, NULL);
             } else {
                 // Send a DMA request for the cloudy sky texture
                 size = SEGMENT_ROM_SIZE(d2_cloud_static);
 
-                DmaMgr_SendRequestImpl(&skyboxCtx->skybox2DmaRequest, skyboxCtx->staticSegments[1],
-                                       SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
+                DmaMgr_RequestAsync(&skyboxCtx->skybox2DmaRequest, skyboxCtx->staticSegments[1],
+                                    SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
             }
 
             osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
@@ -330,8 +330,8 @@ void Skybox_Reload(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
             size = SEGMENT_ROM_SIZE(d2_fine_pal_static);
 
             // Send a DMA request for the skybox palette
-            DmaMgr_SendRequestImpl(&skyboxCtx->paletteDmaRequest, skyboxCtx->palette,
-                                   SEGMENT_ROM_START(d2_fine_pal_static), size, 0, &skyboxCtx->loadQueue, NULL);
+            DmaMgr_RequestAsync(&skyboxCtx->paletteDmaRequest, skyboxCtx->palette,
+                                SEGMENT_ROM_START(d2_fine_pal_static), size, 0, &skyboxCtx->loadQueue, NULL);
 
             osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
             break;
