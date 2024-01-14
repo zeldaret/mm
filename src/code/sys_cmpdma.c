@@ -2,6 +2,9 @@
 #include "libc64/malloc.h"
 #include "yaz0.h"
 
+#include "yaz0.h"
+#include "z64dma.h"
+
 typedef struct {
     /* 0x0 */ union {
         u32 dmaWord[2];

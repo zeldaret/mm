@@ -1,4 +1,3 @@
-#include "global.h"
 #include "fault.h"
 #include "libc64/sprintf.h"
 #include "libc64/sleep.h"

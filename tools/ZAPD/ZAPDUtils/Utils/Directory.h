@@ -21,12 +21,21 @@ class Directory
 {
 public:
 #ifdef USE_BOOST_FS
-	static std::string GetCurrentDirectory() { return fs::current_path().string(); }
+	static std::string GetCurrentDirectory()
+	{
+		return fs::current_path().string();
+	}
 #else
-	static std::string GetCurrentDirectory() { return fs::current_path().u8string(); }
+	static std::string GetCurrentDirectory()
+	{
+		return fs::current_path().u8string();
+	}
 #endif
 
-	static bool Exists(const fs::path& path) { return fs::exists(path); }
+	static bool Exists(const fs::path& path)
+	{
+		return fs::exists(path);
+	}
 
 	static void CreateDirectory(const std::string& path)
 	{

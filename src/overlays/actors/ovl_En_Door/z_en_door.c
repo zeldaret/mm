@@ -656,7 +656,7 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
     EnDoor* this = THIS;
 
     if (limbIndex == DOOR_LIMB_4) {
-        Gfx** dListSides = D_808679A4[this->knobDoor.dlIndex];
+        Gfx** sideDLists = D_808679A4[this->knobDoor.dlIndex];
 
         transitionEntry = NULL;
 
@@ -670,7 +670,7 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
                 (this->knobDoor.dyna.actor.shape.rot.y + this->knobDoor.skelAnime.jointTable[DOOR_LIMB_3].z + rot->z) -
                 Math_Vec3f_Yaw(&play->view.eye, &this->knobDoor.dyna.actor.world.pos);
 
-            *dList = (ABS_ALT(temp) < 0x4000) ? dListSides[0] : dListSides[1];
+            *dList = (ABS_ALT(temp) < 0x4000) ? sideDLists[0] : sideDLists[1];
 
         } else {
             s32 index = 0;
@@ -678,7 +678,7 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
             if (transitionEntry->sides[0].room != this->knobDoor.dyna.actor.room) {
                 index = 1;
             }
-            *dList = dListSides[index];
+            *dList = sideDLists[index];
         }
     }
     return false;

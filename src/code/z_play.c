@@ -1554,7 +1554,7 @@ void* Play_LoadFile(PlayState* this, RomFile* entry) {
     size_t size = entry->vromEnd - entry->vromStart;
     void* allocp = THA_AllocTailAlign16(&this->state.tha, size);
 
-    DmaMgr_SendRequest0(allocp, entry->vromStart, size);
+    DmaMgr_RequestSync(allocp, entry->vromStart, size);
 
     return allocp;
 }
@@ -2040,7 +2040,7 @@ s16 sPlayerCsIdToCsCamId[] = {
 /**
  * Extract the common cutscene ids used by Player from the scene and set the cutscene ids in this->playerCsIds.
  * If a playerCsId is not present in the scene, then that particular id is set to CS_ID_NONE.
- * Otherwise, if there is an ActorCutscene where csCamId matches the appropriate element of sPlayerCsIdToCsCamId,
+ * Otherwise, if there is an CutsceneEntry where csCamId matches the appropriate element of sPlayerCsIdToCsCamId,
  * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one).
  */
 void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
@@ -2050,7 +2050,7 @@ void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
     s16* csCamId = sPlayerCsIdToCsCamId;
 
     for (i = 0; i < ARRAY_COUNT(this->playerCsIds); i++, curPlayerCsId++, csCamId++) {
-        ActorCutscene* csEntry;
+        CutsceneEntry* csEntry;
         s32 curCsId;
 
         *curPlayerCsId = CS_ID_NONE;
