@@ -996,7 +996,11 @@ void BossHakugin_AddLightningSegments(BossHakugin* this, Vec3f* startPos, PlaySt
     }
 }
 
-void func_80B0696C(BossHakugin* this, Vec3f* pos) {
+/**
+ * Spawns a small rock that flies backwards from the supplied position. This is called repeatedly while Goht is running
+ * to make it look like Goht's feet are kicking up rocks.
+ */
+void BossHakugin_SpawnGravel(BossHakugin* this, Vec3f* pos) {
     s32 i;
     GohtRockEffect* rockEffect;
 
@@ -1023,6 +1027,15 @@ void func_80B0696C(BossHakugin* this, Vec3f* pos) {
     }
 }
 
+/**
+ * This function can spawn a large boulder that flies into the air behind Goht and can damage the player. The boulder
+ * can only be spawned if the player isn't too far behind Goht and if Goht's speed is 10.0f or higher. Assuming those
+ * conditions have been met, the boulder still only has a 40% chance of spawning.
+ *
+ * This function will not spawn a boulder if the `preventBoulderSpawnCount` variable on Goht's instance is non-zero.
+ * Instead, calling this function will decrement the variable; when a boulder is spawned, this variable is set to 4 to
+ * prevent Goht from spawning a lot of boulders in a short period of time.
+ */
 void BossHakugin_SpawnBoulder(BossHakugin* this, Vec3f* pos) {
     Actor* boulder;
     s32 i;
@@ -1048,6 +1061,15 @@ void BossHakugin_SpawnBoulder(BossHakugin* this, Vec3f* pos) {
     }
 }
 
+/**
+ * This function can spawn a stalactite that falls to the floor and can slow the player to a stop if they Goron Roll
+ * into it. The stalactite can only be spawned if Goht's health is below 20. Assuming Goht's health is low enough, the
+ * stalactite still only has a 35% chance of spawning.
+ *
+ * This function will not spawn a stalactite if the `preventStalactiteSpawnCount` variable on Goht's instance is
+ * non-zero. Instead, calling this function will decrement the variable; when a stalactite is spawned, this variable is
+ * set to 4 to prevent Goht from spawning a lot of stalactites in a short period of time.
+ */
 void BossHakugin_SpawnStalactite(BossHakugin* this) {
     Actor* stalactite;
     s32 i;
@@ -1071,9 +1093,18 @@ void BossHakugin_SpawnStalactite(BossHakugin* this) {
     }
 }
 
+/**
+ * This function can spawn a bomb that flies into the air behind Goht. The bomb can only be spawned if Goht's health is
+ * below 10 and if Goht's speed is 10.0f or higher. Assuming those conditions have been met, the bomb still only has a
+ * 35% chance of spawning.
+ *
+ * This function will not spawn a bomb if the `preventBombSpawnCount` variable on Goht's instance is non-zero. Instead,
+ * calling this function will decrement the variable; when a bomb is spawned, this variable is set to 4 to prevent Goht
+ * from spawning a lot of bombs in a short period of time.
+ */
 void BossHakugin_SpawnBomb(BossHakugin* this, PlayState* play) {
     EnBom* bomb;
-    s16 temp_a1;
+    s16 yawDiff;
 
     if ((this->actor.speed > 10.0f) && ((s32)this->actor.colChkInfo.health < 10) &&
         (this->preventBombSpawnCount == 0) && (Rand_ZeroOne() < 0.35f)) {
@@ -1095,10 +1126,10 @@ void BossHakugin_SpawnBomb(BossHakugin* this, PlayState* play) {
                                BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
 
     if (bomb != NULL) {
-        temp_a1 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - 0x8000;
-        if (temp_a1 > 0x2000) {
+        yawDiff = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - 0x8000;
+        if (yawDiff > 0x2000) {
             bomb->actor.world.rot.y = this->actor.shape.rot.y + 0xA000;
-        } else if (temp_a1 < -0x2000) {
+        } else if (yawDiff < -0x2000) {
             bomb->actor.world.rot.y = this->actor.shape.rot.y + 0x6000;
         } else {
             bomb->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -1129,7 +1160,7 @@ void BossHakugin_AddMalfunctionEffects(BossHakugin* this, PlayState* play) {
     }
 
     for (type = 0; type < GOHT_MALFUNCTION_NUM_TYPES; type++) {
-        if (((15 - (3 * type)) < this->actor.colChkInfo.health) ||
+        if (((GOHT_BODYPART_MAX - (3 * type)) < this->actor.colChkInfo.health) ||
             !(GOHT_LIMB_DRAW_FLAG(D_80B0EAB0[type]) & this->limbDrawFlags)) {
             break;
         }
@@ -1209,7 +1240,14 @@ s32 BossHakugin_ChargeUpAttack(BossHakugin* this) {
     return false;
 }
 
-void func_80B07450(BossHakugin* this, PlayState* play) {
+/**
+ * Handles functionality common to all of Goht's running actions, including:
+ * - Playing Goht's footstep sounds
+ * - Requesting a quake and rumble when the player is close to Goht
+ * - Spawning boulders, stalactites, and bombs under certain conditions to damage or impede the player
+ * - Spwaning dust and gravel effects at Goht's feet whenever they hit the ground
+ */
+void BossHakugin_RunUpdateCommon(BossHakugin* this, PlayState* play) {
     Vec3f velocity;
     Vec3f pos;
     f32 quakeVerticalMag;
@@ -1244,8 +1282,9 @@ void func_80B07450(BossHakugin* this, PlayState* play) {
     pos.y += 5.0f;
     pos.z += 40.0f * velocity.z;
     func_800B12F0(play, &pos, &velocity, &gZeroVec3f, Rand_S16Offset(650, 100), Rand_S16Offset(20, 10), 30);
+
     for (i = 0; i < 4; i++) {
-        func_80B0696C(this, &pos);
+        BossHakugin_SpawnGravel(this, &pos);
     }
 }
 
@@ -1628,7 +1667,7 @@ void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
     Math_ScaledStepToS(&this->frontHalfRotZ, 0x800, 0x80);
     Math_StepToF(&this->actor.speed, 25.0f, 0.5f);
     this->skelAnime.playSpeed = (this->actor.speed / 32.0f) + 0.5f;
-    func_80B07450(this, play);
+    BossHakugin_RunUpdateCommon(this, play);
     this->preventBoulderSpawnCount = 10;
     SkelAnime_Update(&this->skelAnime);
     this->timer++;
@@ -1736,7 +1775,7 @@ void BossHakugin_Run(BossHakugin* this, PlayState* play) {
 
         this->skelAnime.playSpeed = (this->actor.speed / 32.0f) + 0.5f;
         SkelAnime_Update(&this->skelAnime);
-        func_80B07450(this, play);
+        BossHakugin_RunUpdateCommon(this, play);
 
         if ((this->distToRightWall < (this->distToLeftWall * 0.5f)) || (this->distToRightWall < (89100.0f * 0.001f))) {
             this->targetRotY = (Rand_ZeroFloat(0.4f) + 0.6f) * 1536.0f;
@@ -1774,7 +1813,7 @@ void BossHakugin_Charge(BossHakugin* this, PlayState* play) {
     Math_ScaledStepToS(&this->frontHalfRotZ, 0x800, 0x100);
     Math_StepToF(&this->actor.speed, 25.0f, 2.0f);
     SkelAnime_Update(&this->skelAnime);
-    func_80B07450(this, play);
+    BossHakugin_RunUpdateCommon(this, play);
 
     if ((this->transformedPlayerPos.z < 0.0f) || (this->bodyCollider.base.atFlags & AT_HIT)) {
         BossHakugin_SetupRun(this);
@@ -2127,7 +2166,7 @@ void BossHakugin_DeathCutscenePart1(BossHakugin* this, PlayState* play) {
     this->preventBoulderSpawnCount = 10;
     this->preventStalactiteSpawnCount = 10;
     this->preventBombSpawnCount = 10;
-    func_80B07450(this, play);
+    BossHakugin_RunUpdateCommon(this, play);
     Math_SmoothStepToS(&this->actor.home.rot.y, this->baseRotY, 5, 0x800, 0x100);
     this->timer--;
     this->actor.shape.rot.y =
@@ -2195,7 +2234,7 @@ void BossHakugin_DeathCutscenePart2(BossHakugin* this, PlayState* play) {
     this->preventBoulderSpawnCount = 10;
     this->preventStalactiteSpawnCount = 10;
     this->preventBombSpawnCount = 10;
-    func_80B07450(this, play);
+    BossHakugin_RunUpdateCommon(this, play);
 
     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->targetRotY, 0x300) &&
         ((this->distToRightWall <= 189.00002f) || (this->distToLeftWall <= 189.00002f))) {
