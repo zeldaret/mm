@@ -356,7 +356,7 @@ Color_RGB16 D_801D07DC[] = {
     { 255, 130, 30 },  // MESSAGE_COLOR_ORANGE
 };
 
-Color_RGB16 sColorsNormalNES[] = {
+static Color_RGB16 sColorsNormalNES[] = {
     { 255, 60, 60 },   // MESSAGE_COLOR_RED
     { 70, 255, 80 },   // MESSAGE_COLOR_GREEN
     { 80, 90, 255 },   // MESSAGE_COLOR_BLUE
@@ -367,7 +367,7 @@ Color_RGB16 sColorsNormalNES[] = {
     { 255, 130, 30 },  // MESSAGE_COLOR_ORANGE
 };
 
-Color_RGB16 sColorsButtonsNES[] = {
+static Color_RGB16 sColorsButtonsNES[] = {
     { 255, 60, 60 },   // RED
     { 70, 255, 80 },   // GREEN
     { 80, 90, 255 },   // BLUE
@@ -389,7 +389,7 @@ Color_RGB16 D_801D086C[] = {
     { 255, 130, 30 },  // MESSAGE_COLOR_ORANGE
 };
 
-Color_RGB16 sColorsBombersNotebookNES[] = {
+static Color_RGB16 sColorsBombersNotebookNES[] = {
     { 255, 60, 60 },   // MESSAGE_COLOR_RED
     { 110, 170, 255 }, // MESSAGE_COLOR_GREEN
     { 80, 90, 255 },   // MESSAGE_COLOR_BLUE

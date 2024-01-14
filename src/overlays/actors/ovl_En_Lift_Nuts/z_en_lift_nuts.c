@@ -16,7 +16,7 @@ void EnLiftNuts_Destroy(Actor* thisx, PlayState* play);
 void EnLiftNuts_Update(Actor* thisx, PlayState* play);
 void EnLiftNuts_Draw(Actor* thisx, PlayState* play);
 
-void EnLiftNuts_HandleConversation5(EnLiftNuts* this, PlayState* play);
+void EnLiftNuts_HandleConversationEvent(EnLiftNuts* this, PlayState* play);
 
 void EnLiftNuts_SetupIdleHidden(EnLiftNuts* this);
 void EnLiftNuts_IdleHidden(EnLiftNuts* this, PlayState* play);
@@ -556,8 +556,7 @@ void EnLiftNuts_HandleConversationChoice(EnLiftNuts* this, PlayState* play) {
     }
 }
 
-// TODO: name based on TEXT_STATE_5
-void EnLiftNuts_HandleConversation5(EnLiftNuts* this, PlayState* play) {
+void EnLiftNuts_HandleConversationEvent(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Message_ShouldAdvance(play)) {
@@ -707,7 +706,7 @@ void EnLiftNuts_HandleConversation(EnLiftNuts* this, PlayState* play) {
             break;
 
         case TEXT_STATE_EVENT:
-            EnLiftNuts_HandleConversation5(this, play);
+            EnLiftNuts_HandleConversationEvent(this, play);
             break;
 
         case TEXT_STATE_DONE:

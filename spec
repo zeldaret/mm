@@ -417,7 +417,6 @@ beginseg
     name "nes_font_static"
     romalign 0x1000
     include "build/assets/interface/nes_font_static/nes_font_static.o"
-    number 10
 endseg
 
 beginseg

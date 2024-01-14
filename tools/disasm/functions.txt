@@ -12520,7 +12520,7 @@
     0x80AEA128:("EnLiftNuts_RiseUp",),
     0x80AEA1A0:("EnLiftNuts_Idle",),
     0x80AEA7A4:("EnLiftNuts_HandleConversationChoice",),
-    0x80AEA910:("EnLiftNuts_HandleConversation5",),
+    0x80AEA910:("EnLiftNuts_HandleConversationEvent",),
     0x80AEABF0:("EnLiftNuts_SetupStartConversation",),
     0x80AEAC64:("EnLiftNuts_StartConversation",),
     0x80AEACF8:("EnLiftNuts_HandleConversation",),
