@@ -8,14 +8,14 @@ void Font_LoadCharNES(PlayState* play, u8 codePointIndex, s32 offset) {
     MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font;
 
-    DmaMgr_SendRequest0(&font->charBuf[font->unk_11D88][offset],
-                        SEGMENT_ROM_START_OFFSET(nes_font_static, (codePointIndex - ' ') * FONT_CHAR_TEX_SIZE),
-                        FONT_CHAR_TEX_SIZE);
+    DmaMgr_RequestSync(&font->charBuf[font->unk_11D88][offset],
+                       SEGMENT_ROM_START_OFFSET(nes_font_static, (codePointIndex - ' ') * FONT_CHAR_TEX_SIZE),
+                       FONT_CHAR_TEX_SIZE);
 }
 
 void Font_LoadMessageBoxEndIcon(Font* font, u16 icon) {
-    DmaMgr_SendRequest0(&font->iconBuf, SEGMENT_ROM_START_OFFSET(message_static, 0x5000 + icon * FONT_CHAR_TEX_SIZE),
-                        FONT_CHAR_TEX_SIZE);
+    DmaMgr_RequestSync(&font->iconBuf, SEGMENT_ROM_START_OFFSET(message_static, 0x5000 + icon * FONT_CHAR_TEX_SIZE),
+                       FONT_CHAR_TEX_SIZE);
 }
 
 static u8 sFontOrdering[] = {
@@ -38,7 +38,7 @@ void Font_LoadOrderedFont(Font* font) {
             loadOffset = 0;
         }
 
-        DmaMgr_SendRequest0(writeLocation, SEGMENT_ROM_START(nes_font_static) + loadOffset, FONT_CHAR_TEX_SIZE);
+        DmaMgr_RequestSync(writeLocation, SEGMENT_ROM_START(nes_font_static) + loadOffset, FONT_CHAR_TEX_SIZE);
         if (sFontOrdering[codePointIndex] == 0x8C) {
             break;
         }

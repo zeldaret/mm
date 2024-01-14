@@ -16,6 +16,7 @@
 #include "slowly.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "prevent_bss_reordering.h"
 
 /**
  * Assigns the "save" values in PreRender

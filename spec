@@ -247,7 +247,7 @@ endseg
 
 beginseg
     name "dmadata"
-    include "build/asm/dmadata/dmadata.o"
+    include "build/src/dmadata/dmadata.o"
 endseg
 
 beginseg
@@ -280,6 +280,7 @@ endseg
 
 beginseg
     name "icon_item_static_syms"
+    flags SYMS
     romalign 0x1000
     include "build/assets/archives/icon_item_static/icon_item_static_yar.symbols.o"
     number 8
@@ -287,6 +288,7 @@ endseg
 
 beginseg
     name "icon_item_24_static_syms"
+    flags SYMS
     romalign 0x1000
     include "build/assets/archives/icon_item_24_static/icon_item_24_static_yar.symbols.o"
     number 9
@@ -366,6 +368,7 @@ endseg
 
 beginseg
     name "schedule_dma_static_syms"
+    flags SYMS
     include "build/assets/archives/schedule_dma_static/schedule_dma_static_yar.symbols.o"
     number 7
 endseg
