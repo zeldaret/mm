@@ -80,7 +80,7 @@ void AudioMgr_ThreadEntry(void* arg) {
     s32 exit;
 
     Audio_Init();
-    AudioLoad_SetDmaHandler(DmaMgr_DmaHandler);
+    AudioLoad_SetDmaHandler(DmaMgr_AudioDmaHandler);
     Audio_InitSound();
     osSendMesg(&audioMgr->lockQueue, NULL, OS_MESG_BLOCK);
     IrqMgr_AddClient(audioMgr->irqMgr, &irqClient, &audioMgr->interruptQueue);

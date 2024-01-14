@@ -1,7 +1,10 @@
+#include "yaz0.h"
+
 #include "global.h"
 #include "fault.h"
 #include "libc64/sprintf.h"
 #include "libc64/sleep.h"
+#include "z64dma.h"
 
 u8 sYaz0DataBuffer[0x400] ALIGNED(16);
 u8* sYaz0CurDataEnd;
@@ -10,7 +13,7 @@ u32 sYaz0CurSize;
 u8* sYaz0MaxPtr;
 void* gYaz0DecompressDstEnd;
 
-void* Yaz0_FirstDMA() {
+void* Yaz0_FirstDMA(void) {
     u32 pad0;
     u32 dmaSize;
     u32 curSize;
@@ -51,7 +54,7 @@ void* Yaz0_NextDMA(void* curSrcPos) {
         }
     } else {
         oldPri = osGetThreadPri(NULL);
-        osSetThreadPri(NULL, 0x7F);
+        osSetThreadPri(NULL, OS_PRIORITY_APPMAX);
         osSyncPrintf("圧縮展開異常\n");
         osSetThreadPri(NULL, oldPri);
     }
