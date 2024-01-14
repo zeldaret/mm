@@ -118,6 +118,7 @@ endif
 CPP        := cpp
 ELF2ROM    := tools/buildtools/elf2rom
 MKLDSCRIPT := tools/buildtools/mkldscript
+MKDMADATA  := tools/buildtools/mkdmadata
 YAZ0       := tools/buildtools/yaz0
 ZAPD       := tools/ZAPD/ZAPD.out
 FADO       := tools/fado/fado.elf
@@ -344,6 +345,13 @@ build/$(SPEC): $(SPEC)
 
 build/ldscript.txt: build/$(SPEC)
 	$(MKLDSCRIPT) $< $@
+
+build/dmadata_table_spec.h: build/$(SPEC)
+	$(MKDMADATA) $< $@
+
+# Dependencies for files that may include the dmadata header automatically generated from the spec file
+build/src/boot/z_std_dma.o: build/dmadata_table_spec.h
+build/src/dmadata/dmadata.o: build/dmadata_table_spec.h
 
 build/asm/%.o: asm/%.s
 	$(AS) $(ASFLAGS) $< -o $@
