@@ -1,6 +1,10 @@
 <Root>
     <File Name="kanji">
         <!-- The four-digit number after the prefix is the character's codepoint: the hexadecimal short it corresponds to in the text data -->
+        <!--
+            The six-digit hex number after the character's codepoint is the offset into the Kanji file.
+            TODO: remove this comment when textures are properly named without the offset
+        -->
 
         <!-- NonKanji -->
         <Texture Name="gMsgKanji8140_000000" OutName="msg_kanji_8140_000000" Format="i4" Width="16" Height="16" Offset="0x0"/>
