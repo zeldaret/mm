@@ -1,6 +1,10 @@
 #include "prevent_bss_reordering.h"
 #include "prevent_bss_reordering2.h"
-
+struct Dummy200 { int x; };
+struct Dummy201 { int x; };
+struct Dummy202 { int x; };
+struct Dummy203 { int x; };
+struct Dummy204 { int x; };
 #include "PR/ultratypes.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
