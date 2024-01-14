@@ -1046,6 +1046,9 @@ wordReplace = {
     "func_8012CA38": "Gfx_SetupDL59_Opa",
 
     "Game_SetFramerateDivisor": "GameState_SetFramerateDivisor",
+    
+    "DmaMgr_SendRequestImpl": "DmaMgr_RequestAsync",
+    "DmaMgr_SendRequest0": "DmaMgr_RequestSync",
 
     # Structs
     "ActorAnimationEntry": "AnimationInfo",

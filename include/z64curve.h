@@ -59,11 +59,4 @@ void SkelCurve_SetAnim(SkelCurve* skelCurve, CurveAnimationHeader* animation, f3
 s32 SkelCurve_Update(struct PlayState* play, SkelCurve* skelCurve);
 void SkelCurve_Draw(struct Actor* actor, struct PlayState* play, SkelCurve* skelCurve, OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, struct Actor* thisx);
 
-
-// ZAPD compatibility typedefs
-// TODO: Remove when ZAPD adds support for them
-typedef CurveInterpKnot TransformData;
-typedef CurveAnimationHeader TransformUpdateIndex;
-typedef CurveSkeletonHeader SkelCurveLimbList;
-
 #endif // Z64_CURVE_H

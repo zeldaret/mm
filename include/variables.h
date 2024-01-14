@@ -6,12 +6,6 @@
 #include "macros.h"
 
 // data
-extern size_t gDmaMgrDmaBuffSize;
-extern vs32 gIrqMgrResetStatus;
-extern volatile OSTime sIrqMgrResetTime;
-extern volatile OSTime gIrqMgrRetraceTime;
-extern s32 sIrqMgrRetraceCount;
-
 // extern UNK_TYPE1 sGfxPrintFontTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowData;
@@ -27,8 +21,6 @@ extern void* gYaz0DecompressDstEnd;
 
 // extern UNK_TYPE4 D_8009CD10;
 // extern UNK_TYPE4 sArenaLockMsg;
-
-extern DmaEntry dmadata[1568];
 // extern UNK_TYPE1 D_80186028;
 
 extern u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];

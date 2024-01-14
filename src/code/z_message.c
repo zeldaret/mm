@@ -2271,9 +2271,9 @@ void Message_Decode(PlayState* play) {
                 decodedBufPos += playerNameLen - 1;
                 spC0 += playerNameLen * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x201) {
-                DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1000, SEGMENT_ROM_START(message_texture_static), 0x900);
-                DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1900, SEGMENT_ROM_START(message_texture_static) + 0x900,
-                                    0x900);
+                DmaMgr_RequestSync(msgCtx->textboxSegment + 0x1000, SEGMENT_ROM_START(message_texture_static), 0x900);
+                DmaMgr_RequestSync(msgCtx->textboxSegment + 0x1900, SEGMENT_ROM_START(message_texture_static) + 0x900,
+                                   0x900);
                 numLines = 2;
                 spD2 = 2;
                 msgCtx->unk12012 = msgCtx->textboxY + 8;
@@ -3039,8 +3039,8 @@ void func_80150A84(PlayState* play) {
     s32 textBoxType = msgCtx->textBoxType;
 
     if (D_801CFC78[textBoxType] != 14) {
-        DmaMgr_SendRequest0(msgCtx->textboxSegment,
-                            SEGMENT_ROM_START(message_static) + D_801CFC78[textBoxType] * 0x1000, 0x1000);
+        DmaMgr_RequestSync(msgCtx->textboxSegment, SEGMENT_ROM_START(message_static) + D_801CFC78[textBoxType] * 0x1000,
+                           0x1000);
 
         if (!play->pauseCtx.bombersNotebookOpen) {
             if ((textBoxType == TEXTBOX_TYPE_0) || (textBoxType == TEXTBOX_TYPE_6) || (textBoxType == TEXTBOX_TYPE_A) ||
@@ -3167,18 +3167,18 @@ void Message_OpenText(PlayState* play, u16 textId) {
     if (msgCtx->textIsCredits) {
         Message_FindCreditsMessage(play, textId);
         msgCtx->msgLength = font->messageEnd;
-        DmaMgr_SendRequest0(&font->msgBuf, SEGMENT_ROM_START(staff_message_data_static) + font->messageStart,
-                            font->messageEnd);
+        DmaMgr_RequestSync(&font->msgBuf, SEGMENT_ROM_START(staff_message_data_static) + font->messageStart,
+                           font->messageEnd);
     } else if (gSaveContext.options.language == LANGUAGE_JPN) {
         Message_FindMessage(play, textId);
         msgCtx->msgLength = font->messageEnd;
-        DmaMgr_SendRequest0(&font->msgBuf, SEGMENT_ROM_START(message_data_static) + font->messageStart,
-                            font->messageEnd);
+        DmaMgr_RequestSync(&font->msgBuf, SEGMENT_ROM_START(message_data_static) + font->messageStart,
+                           font->messageEnd);
     } else {
         Message_FindMessageNES(play, textId);
         msgCtx->msgLength = font->messageEnd;
-        DmaMgr_SendRequest0(&font->msgBuf, SEGMENT_ROM_START(message_data_static) + font->messageStart,
-                            font->messageEnd);
+        DmaMgr_RequestSync(&font->msgBuf, SEGMENT_ROM_START(message_data_static) + font->messageStart,
+                           font->messageEnd);
     }
 
     msgCtx->choiceNum = 0;
@@ -3266,13 +3266,13 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
     if (gSaveContext.options.language == LANGUAGE_JPN) {
         Message_FindMessage(play, arg1);
         msgCtx->msgLength = font->messageEnd;
-        DmaMgr_SendRequest0(&font->msgBuf, SEGMENT_ROM_START(message_data_static) + font->messageStart,
-                            font->messageEnd);
+        DmaMgr_RequestSync(&font->msgBuf, SEGMENT_ROM_START(message_data_static) + font->messageStart,
+                           font->messageEnd);
     } else {
         Message_FindMessageNES(play, arg1);
         msgCtx->msgLength = font->messageEnd;
-        DmaMgr_SendRequest0(&font->msgBuf, SEGMENT_ROM_START(message_data_static) + font->messageStart,
-                            font->messageEnd);
+        DmaMgr_RequestSync(&font->msgBuf, SEGMENT_ROM_START(message_data_static) + font->messageStart,
+                           font->messageEnd);
     }
     msgCtx->choiceNum = 0;
     msgCtx->textUnskippable = false;
@@ -3286,7 +3286,7 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
     msgCtx->textBoxPos = arg2;
     msgCtx->unk11F0C = msgCtx->unk11F08 & 0xF;
     msgCtx->textUnskippable = true;
-    DmaMgr_SendRequest0(msgCtx->textboxSegment, SEGMENT_ROM_START(message_static) + (D_801CFC78[0] << 12), 0x1000);
+    DmaMgr_RequestSync(msgCtx->textboxSegment, SEGMENT_ROM_START(message_static) + (D_801CFC78[0] << 12), 0x1000);
     msgCtx->textboxColorRed = 0;
     msgCtx->textboxColorGreen = 0;
     msgCtx->textboxColorBlue = 0;
