@@ -4,6 +4,8 @@
 #include "global.h"
 #include "objects/object_kitan/object_kitan.h"
 
+#define ENKITAN_GET_COLLECT_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
+
 struct EnKitan;
 
 typedef void (*EnKitanActionFunc)(struct EnKitan*, PlayState*);
@@ -11,8 +13,8 @@ typedef void (*EnKitanActionFunc)(struct EnKitan*, PlayState*);
 typedef struct EnKitan {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[OBJECT_KITAN_LIMB_MAX];
-    /* 0x206 */ Vec3s morphTable[OBJECT_KITAN_LIMB_MAX];
+    /* 0x188 */ Vec3s jointTable[KEATON_LIMB_MAX];
+    /* 0x206 */ Vec3s morphTable[KEATON_LIMB_MAX];
     /* 0x284 */ ColliderCylinder collider;
     /* 0x2D0 */ s32 textBitSet;
     /* 0x2D4 */ char unk2D4[2];

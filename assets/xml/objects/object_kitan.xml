@@ -1,8 +1,8 @@
 ﻿<Root>
     <File Name="object_kitan" Segment="6">
-        <Animation Name="object_kitan_Anim_000CE8" Offset="0xCE8" /> <!-- Original name is "kt_hohoho" -->
-        <Animation Name="object_kitan_Anim_00190C" Offset="0x190C" /> <!-- Original name is "kt_laugh" -->
-        <Animation Name="object_kitan_Anim_002770" Offset="0x2770" /> <!-- Original name is "kt_wait" -->
+        <Animation Name="gKeatonChuckleAnim" Offset="0xCE8" /> <!-- Original name is "kt_hohoho" -->
+        <Animation Name="gKeatonCelebrateAnim" Offset="0x190C" /> <!-- Original name is "kt_laugh" -->
+        <Animation Name="gKeatonIdleAnim" Offset="0x2770" /> <!-- Original name is "kt_wait" -->
         <DList Name="object_kitan_DL_004C40" Offset="0x4C40" />
         <DList Name="object_kitan_DL_004DF0" Offset="0x4DF0" />
         <DList Name="object_kitan_DL_005160" Offset="0x5160" />
@@ -29,26 +29,26 @@
         <Texture Name="object_kitan_Tex_007B68" OutName="tex_007B68" Format="ci8" Width="16" Height="16" Offset="0x7B68" />
         <Texture Name="object_kitan_Tex_007C68" OutName="tex_007C68" Format="ci8" Width="16" Height="16" Offset="0x7C68" />
         <Texture Name="object_kitan_Tex_007D68" OutName="tex_007D68" Format="ci8" Width="16" Height="16" Offset="0x7D68" />
-        <Limb Name="object_kitan_Standardlimb_007E68" Type="Standard" EnumName="OBJECT_KITAN_LIMB_01" Offset="0x7E68" />
-        <Limb Name="object_kitan_Standardlimb_007E74" Type="Standard" EnumName="OBJECT_KITAN_LIMB_02" Offset="0x7E74" />
-        <Limb Name="object_kitan_Standardlimb_007E80" Type="Standard" EnumName="OBJECT_KITAN_LIMB_03" Offset="0x7E80" />
-        <Limb Name="object_kitan_Standardlimb_007E8C" Type="Standard" EnumName="OBJECT_KITAN_LIMB_04" Offset="0x7E8C" />
-        <Limb Name="object_kitan_Standardlimb_007E98" Type="Standard" EnumName="OBJECT_KITAN_LIMB_05" Offset="0x7E98" />
-        <Limb Name="object_kitan_Standardlimb_007EA4" Type="Standard" EnumName="OBJECT_KITAN_LIMB_06" Offset="0x7EA4" />
-        <Limb Name="object_kitan_Standardlimb_007EB0" Type="Standard" EnumName="OBJECT_KITAN_LIMB_07" Offset="0x7EB0" />
-        <Limb Name="object_kitan_Standardlimb_007EBC" Type="Standard" EnumName="OBJECT_KITAN_LIMB_08" Offset="0x7EBC" />
-        <Limb Name="object_kitan_Standardlimb_007EC8" Type="Standard" EnumName="OBJECT_KITAN_LIMB_09" Offset="0x7EC8" />
-        <Limb Name="object_kitan_Standardlimb_007ED4" Type="Standard" EnumName="OBJECT_KITAN_LIMB_0A" Offset="0x7ED4" />
-        <Limb Name="object_kitan_Standardlimb_007EE0" Type="Standard" EnumName="OBJECT_KITAN_LIMB_0B" Offset="0x7EE0" />
-        <Limb Name="object_kitan_Standardlimb_007EEC" Type="Standard" EnumName="OBJECT_KITAN_LIMB_0C" Offset="0x7EEC" />
-        <Limb Name="object_kitan_Standardlimb_007EF8" Type="Standard" EnumName="OBJECT_KITAN_LIMB_0D" Offset="0x7EF8" />
-        <Limb Name="object_kitan_Standardlimb_007F04" Type="Standard" EnumName="OBJECT_KITAN_LIMB_0E" Offset="0x7F04" />
-        <Limb Name="object_kitan_Standardlimb_007F10" Type="Standard" EnumName="OBJECT_KITAN_LIMB_0F" Offset="0x7F10" />
-        <Limb Name="object_kitan_Standardlimb_007F1C" Type="Standard" EnumName="OBJECT_KITAN_LIMB_10" Offset="0x7F1C" />
-        <Limb Name="object_kitan_Standardlimb_007F28" Type="Standard" EnumName="OBJECT_KITAN_LIMB_11" Offset="0x7F28" />
-        <Limb Name="object_kitan_Standardlimb_007F34" Type="Standard" EnumName="OBJECT_KITAN_LIMB_12" Offset="0x7F34" />
-        <Limb Name="object_kitan_Standardlimb_007F40" Type="Standard" EnumName="OBJECT_KITAN_LIMB_13" Offset="0x7F40" />
-        <Limb Name="object_kitan_Standardlimb_007F4C" Type="Standard" EnumName="OBJECT_KITAN_LIMB_14" Offset="0x7F4C" />
-        <Skeleton Name="object_kitan_Skel_007FA8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KITAN_LIMB_NONE" LimbMax="OBJECT_KITAN_LIMB_MAX" EnumName="ObjectKitanLimb" Offset="0x7FA8" />
+        <Limb Name="object_kitan_Standardlimb_007E68" Type="Standard" EnumName="KEATON_LIMB_LOWER_BODY" Offset="0x7E68" />
+        <Limb Name="object_kitan_Standardlimb_007E74" Type="Standard" EnumName="KEATON_LIMB_UPPER_BODY" Offset="0x7E74" />
+        <Limb Name="object_kitan_Standardlimb_007E80" Type="Standard" EnumName="KEATON_LIMB_HEAD" Offset="0x7E80" />
+        <Limb Name="object_kitan_Standardlimb_007E8C" Type="Standard" EnumName="KEATON_LIMB_LEFT_SHOULDER" Offset="0x7E8C" />
+        <Limb Name="object_kitan_Standardlimb_007E98" Type="Standard" EnumName="KEATON_LIMB_LEFT_ARM" Offset="0x7E98" />
+        <Limb Name="object_kitan_Standardlimb_007EA4" Type="Standard" EnumName="KEATON_LIMB_RIGHT_SHOULDER" Offset="0x7EA4" />
+        <Limb Name="object_kitan_Standardlimb_007EB0" Type="Standard" EnumName="KEATON_LIMB_RIGHT_ARM" Offset="0x7EB0" />
+        <Limb Name="object_kitan_Standardlimb_007EBC" Type="Standard" EnumName="KEATON_LIMB_RIGHT_LEG" Offset="0x7EBC" />
+        <Limb Name="object_kitan_Standardlimb_007EC8" Type="Standard" EnumName="KEATON_LIMB_RIGHT_FOOT" Offset="0x7EC8" />
+        <Limb Name="object_kitan_Standardlimb_007ED4" Type="Standard" EnumName="KEATON_LIMB_LEFT_LEG" Offset="0x7ED4" />
+        <Limb Name="object_kitan_Standardlimb_007EE0" Type="Standard" EnumName="KEATON_LIMB_LEFT_FOOT" Offset="0x7EE0" />
+        <Limb Name="object_kitan_Standardlimb_007EEC" Type="Standard" EnumName="KEATON_LIMB_RIGHT_TAIL_BASE" Offset="0x7EEC" />
+        <Limb Name="object_kitan_Standardlimb_007EF8" Type="Standard" EnumName="KEATON_LIMB_RIGHT_TAIL_MID" Offset="0x7EF8" />
+        <Limb Name="object_kitan_Standardlimb_007F04" Type="Standard" EnumName="KEATON_LIMB_RIGHT_TAIL_END" Offset="0x7F04" />
+        <Limb Name="object_kitan_Standardlimb_007F10" Type="Standard" EnumName="KEATON_LIMB_MIDDLE_TAIL_BASE" Offset="0x7F10" />
+        <Limb Name="object_kitan_Standardlimb_007F1C" Type="Standard" EnumName="KEATON_LIMB_MIDDLE_TAIL_MID" Offset="0x7F1C" />
+        <Limb Name="object_kitan_Standardlimb_007F28" Type="Standard" EnumName="KEATON_LIMB_MIDDLE_TAIL_END" Offset="0x7F28" />
+        <Limb Name="object_kitan_Standardlimb_007F34" Type="Standard" EnumName="KEATON_LIMB_LEFT_TAIL_BASE" Offset="0x7F34" />
+        <Limb Name="object_kitan_Standardlimb_007F40" Type="Standard" EnumName="KEATON_LIMB_LEFT_TAIL_MID" Offset="0x7F40" />
+        <Limb Name="object_kitan_Standardlimb_007F4C" Type="Standard" EnumName="KEATON_LIMB_LEFT_TAIL_END" Offset="0x7F4C" />
+        <Skeleton Name="gKeatonSkel" Type="Flex" LimbType="Standard" LimbNone="KEATON_LIMB_NONE" LimbMax="KEATON_LIMB_MAX" EnumName="ObjectKitanLimb" Offset="0x7FA8" />
     </File>
 </Root>

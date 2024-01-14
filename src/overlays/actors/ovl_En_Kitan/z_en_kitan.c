@@ -15,8 +15,8 @@ void EnKitan_Destroy(Actor* thisx, PlayState* play);
 void EnKitan_Update(Actor* thisx, PlayState* play);
 void EnKitan_Draw(Actor* thisx, PlayState* play);
 
-void func_80C09708(EnKitan*, PlayState*);
-void func_80C09B50(EnKitan*, PlayState*);
+void EnKitan_Talk(EnKitan* this, PlayState* play);
+void EnKitan_WaitToAppear(EnKitan* this, PlayState* play);
 
 ActorInit En_Kitan_InitVars = {
     /**/ ACTOR_EN_KITAN,
@@ -50,30 +50,34 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-#define ENKITAN_GET_9(thisx) (((thisx)->params & 0xFE00) >> 9)
-
 void EnKitan_Init(Actor* thisx, PlayState* play) {
     EnKitan* this = THIS;
     s32 pad;
 
     Actor_SetScale(&this->actor, 0.0f);
-    this->actionFunc = func_80C09B50;
+    this->actionFunc = EnKitan_WaitToAppear;
+
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 12.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_kitan_Skel_007FA8, &object_kitan_Anim_002770, this->jointTable,
-                       this->morphTable, OBJECT_KITAN_LIMB_MAX);
-    Animation_PlayLoop(&this->skelAnime, &object_kitan_Anim_002770);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gKeatonSkel, &gKeatonIdleAnim, this->jointTable, this->morphTable,
+                       KEATON_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &gKeatonIdleAnim);
+
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Collider_UpdateCylinder(&this->actor, &this->collider);
+
     this->actor.velocity.y = -9.0f;
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
-    if (Player_GetMask(play) != PLAYER_MASK_KEATON || Flags_GetCollectible(play, ENKITAN_GET_9(&this->actor))) {
+
+    if (Player_GetMask(play) != PLAYER_MASK_KEATON ||
+        Flags_GetCollectible(play, ENKITAN_GET_COLLECT_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
+
     this->timer = 120;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void EnKitan_Destroy(Actor* thisx, PlayState* play) {
@@ -82,7 +86,7 @@ void EnKitan_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80C0923C(EnKitan* this, PlayState* play, s32 arg2) {
+void EnKitan_SpawnEffects(EnKitan* this, PlayState* play, s32 numEffects) {
     static Color_RGBA8 sEffPrimColor = { 255, 255, 255, 255 };
     static Color_RGBA8 sEffEnvColor = { 255, 255, 200, 255 };
     s32 i;
@@ -94,10 +98,10 @@ void func_80C0923C(EnKitan* this, PlayState* play, s32 arg2) {
     pos.y = this->actor.world.pos.y;
     pos.z = this->actor.world.pos.z;
 
-    for (i = 0; i < arg2; i++) {
-        vel.x = randPlusMinusPoint5Scaled(10.0f);
+    for (i = 0; i < numEffects; i++) {
+        vel.x = Rand_CenteredFloat(10.0f);
         vel.y = Rand_ZeroFloat(6.0f);
-        vel.z = randPlusMinusPoint5Scaled(10.0f);
+        vel.z = Rand_CenteredFloat(10.0f);
         accel.x = -vel.x * 0.05f;
         accel.y = 0.1f;
         accel.z = -vel.x * 0.05f;
@@ -105,7 +109,7 @@ void func_80C0923C(EnKitan* this, PlayState* play, s32 arg2) {
     }
 }
 
-s32 func_80C09390(EnKitan* this, PlayState* play) {
+s32 EnKitan_CanTalk(EnKitan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags1 & PLAYER_STATE1_800000) {
@@ -118,15 +122,21 @@ s32 func_80C09390(EnKitan* this, PlayState* play) {
     return false;
 }
 
-u16 func_80C09418(EnKitan* this) {
+u16 EnKitan_GetQuestionMessageId(EnKitan* this) {
     s32 i = 0;
 
-    //! @bug This loop was likely meant to have a cap of 1000?
+    //! @bug This loop was likely meant to have a max iteration cap of 1000, but the condition is messed up so it will
+    //! loop forever until a question that was not yet asked is found. This is fine as the number of possible questions
+    //! is larger than the number of questions the player is required to answer, assuming the random number generator
+    //! can output the full range of values which is the case.
     while (true) {
         s32 rand = Rand_ZeroFloat(30.0f);
 
+        // Keep track of which questions have already been asked with a bitset
         if (!(this->textBitSet & (1 << rand))) {
             this->textBitSet |= (1 << rand);
+            // 0x04B6 is the start of the question + answer choice textboxes, each question textbox is followed by the
+            // choice textbox containing the answer choices
             return 0x04B6 + 2 * rand;
         }
 
@@ -137,10 +147,11 @@ u16 func_80C09418(EnKitan* this) {
     }
 }
 
-void func_80C094A8(EnKitan* this, PlayState* play) {
+void EnKitan_Leave(EnKitan* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (this->timer > 0) {
+        // Scale down
         this->timer--;
         this->actor.scale.x *= 0.7f;
         Actor_SetScale(&this->actor, this->actor.scale.x);
@@ -149,157 +160,196 @@ void func_80C094A8(EnKitan* this, PlayState* play) {
     }
 }
 
-void func_80C09518(EnKitan* this, PlayState* play) {
+void EnKitan_TalkAfterGivingPrize(EnKitan* this, PlayState* play) {
     s32 pad;
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        this->actionFunc = func_80C09708;
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        this->actionFunc = EnKitan_Talk;
         Message_ContinueTextbox(play, 0x04B5);
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        Animation_MorphToLoop(&this->skelAnime, &object_kitan_Anim_000CE8, -5.0f);
+        Animation_MorphToLoop(&this->skelAnime, &gKeatonChuckleAnim, -5.0f);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
-void func_80C095C8(EnKitan* this, PlayState* play) {
+void EnKitan_WaitForPrizeTextboxClosed(EnKitan* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
+
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        this->actionFunc = func_80C09518;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        this->actionFunc = EnKitan_TalkAfterGivingPrize;
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
-void func_80C09648(EnKitan* this, PlayState* play) {
+void EnKitan_OfferPrize(EnKitan* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        this->actionFunc = func_80C095C8;
+        this->actionFunc = EnKitan_WaitForPrizeTextboxClosed;
         gSaveContext.save.saveInfo.weekEventReg[0x4F] |= 0x80;
-    } else if (gSaveContext.save.saveInfo.weekEventReg[0x4F] & 0x80) {
+        return;
+    }
+
+    // Reward the player with a heart piece, or a red rupee if the heart piece was already obtained.
+    if (gSaveContext.save.saveInfo.weekEventReg[0x4F] & 0x80) {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 2000.0f, 1000.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
     }
 }
 
-void func_80C09708(EnKitan* this, PlayState* play) {
+void EnKitan_Talk(EnKitan* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        Animation_MorphToLoop(&this->skelAnime, &object_kitan_Anim_002770, -10.0f);
+        Animation_MorphToLoop(&this->skelAnime, &gKeatonIdleAnim, -10.0f);
         if (play->msgCtx.currentTextId != 0x04B4) {
-            Message_ContinueTextbox(play, func_80C09418(this));
+            // If the quiz is ongoing, select a question
+            Message_ContinueTextbox(play, EnKitan_GetQuestionMessageId(this));
         }
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
-            if (Message_ShouldAdvance(play)) {
-                if (play->msgCtx.choiceIndex + 1 == play->msgCtx.unk1206C) {
-                    play_sound(NA_SE_SY_QUIZ_CORRECT);
-                    this->timer++;
-                    if (this->timer < 5) {
-                        play->msgCtx.msgLength = 0;
-                    } else {
-                        this->timer = 0;
-                        this->textBitSet = 0;
-                        Message_ContinueTextbox(play, 0x04B4);
-                    }
-                    Animation_MorphToPlayOnce(&this->skelAnime, &object_kitan_Anim_00190C, -5.0f);
+        case TEXT_STATE_CHOICE:
+            if (!Message_ShouldAdvance(play)) {
+                break;
+            }
+
+            if (play->msgCtx.choiceIndex + 1 == play->msgCtx.unk1206C) {
+                // Correct answer, continue quiz or end if enough questions have been answered correctly
+                Audio_PlaySfx(NA_SE_SY_QUIZ_CORRECT);
+
+                // Here the timer is being used as a counter for number of correct answers
+                this->timer++;
+                if (this->timer < 5) {
+                    play->msgCtx.msgLength = 0;
                 } else {
-                    play_sound(NA_SE_SY_QUIZ_INCORRECT);
-                    Animation_MorphToLoop(&this->skelAnime, &object_kitan_Anim_000CE8, -5.0f);
-                    Message_ContinueTextbox(play, 0x04B3);
+                    // Enough questions have been answered, continue to prize
                     this->timer = 0;
                     this->textBitSet = 0;
+                    Message_ContinueTextbox(play, 0x04B4);
                 }
+                Animation_MorphToPlayOnce(&this->skelAnime, &gKeatonCelebrateAnim, -5.0f);
+            } else {
+                // Wrong answer, end quiz
+                Audio_PlaySfx(NA_SE_SY_QUIZ_INCORRECT);
+                Animation_MorphToLoop(&this->skelAnime, &gKeatonChuckleAnim, -5.0f);
+                Message_ContinueTextbox(play, 0x04B3);
+                this->timer = 0;
+                this->textBitSet = 0;
             }
             break;
-        case 5:
-            if (Message_ShouldAdvance(play)) {
-                switch (play->msgCtx.currentTextId) {
-                    case 0x04B0:
-                    case 0x04B1:
+
+        case TEXT_STATE_5:
+            if (!Message_ShouldAdvance(play)) {
+                break;
+            }
+
+            switch (play->msgCtx.currentTextId) {
+                case 0x04B0:
+                case 0x04B1:
+                    // Intro text
+                    Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
+                    break;
+
+                case 0x04B2:
+                    // Quiz begins
+                    Animation_MorphToLoop(&this->skelAnime, &gKeatonIdleAnim, -5.0f);
+                    Message_ContinueTextbox(play, EnKitan_GetQuestionMessageId(this));
+                    break;
+
+                case 0x04B4:
+                    // Won the quiz
+                    Message_CloseTextbox(play);
+                    this->actionFunc = EnKitan_OfferPrize;
+                    EnKitan_OfferPrize(this, play);
+                    break;
+
+                case 0x04B3:
+                    // Answered a question incorrectly, stop
+                    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 0);
+                    FALLTHROUGH;
+                case 0x04B5:
+                    // Keaton leaving
+                    Message_CloseTextbox(play);
+                    this->actionFunc = EnKitan_Leave;
+                    this->timer = 4;
+                    EnKitan_SpawnEffects(this, play, 30);
+                    SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
+                    Flags_SetCollectible(play, ENKITAN_GET_COLLECT_FLAG(&this->actor));
+                    break;
+
+                default:
+                    if (!(play->msgCtx.currentTextId & 1)) {
+                        // Even-numbered textboxes are question textboxes
+                        // The following textbox contains the associated answer choices for this question
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                        break;
-                    case 0x04B2:
-                        Animation_MorphToLoop(&this->skelAnime, &object_kitan_Anim_002770, -5.0f);
-                        Message_ContinueTextbox(play, func_80C09418(this));
-                        break;
-                    case 0x04B4:
-                        Message_CloseTextbox(play);
-                        this->actionFunc = func_80C09648;
-                        func_80C09648(this, play);
-                        break;
-                    case 0x04B3:
-                        AudioSeq_QueueSeqCmd(0x110000FF);
-                        /* fallthrough */
-                    case 0x04B5:
-                        Message_CloseTextbox(play);
-                        this->actionFunc = func_80C094A8;
-                        this->timer = 4;
-                        func_80C0923C(this, play, 30);
-                        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
-                        Flags_SetCollectible(play, ENKITAN_GET_9(&this->actor));
-                        break;
-                    default:
-                        if (!(play->msgCtx.currentTextId & 1)) {
-                            Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                        }
-                        break;
-                }
+                    }
+                    break;
             }
             break;
     }
 }
 
-void func_80C09990(EnKitan* this, PlayState* play) {
+void EnKitan_WaitForPlayer(EnKitan* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        this->actionFunc = func_80C09708;
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        // Began talking
+        this->actionFunc = EnKitan_Talk;
         Message_StartTextbox(play, 0x04B0, &this->actor);
         this->timer = 0;
-        Animation_MorphToLoop(&this->skelAnime, &object_kitan_Anim_000CE8, -5.0f);
+        Animation_MorphToLoop(&this->skelAnime, &gKeatonChuckleAnim, -5.0f);
         Audio_PlayFanfare(NA_BGM_KEATON_QUIZ);
-    } else if (this->timer <= 0 || Player_GetMask(play) != PLAYER_MASK_KEATON) {
-        this->actionFunc = func_80C094A8;
+        return;
+    }
+
+    if (this->timer <= 0 || Player_GetMask(play) != PLAYER_MASK_KEATON) {
+        // If the player does not talk quickly enough or the player isn't wearing the keaton mask, leave
+        this->actionFunc = EnKitan_Leave;
         this->timer = 4;
-        func_80C0923C(this, play, 30);
+        EnKitan_SpawnEffects(this, play, 30);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
-    } else if (func_80C09390(this, play)) {
-        func_800B8614(&this->actor, play, 130.0f);
+        return;
+    }
+
+    if (EnKitan_CanTalk(this, play)) {
+        // Broadcast talk request for the player to accept
+        Actor_OfferTalk(&this->actor, play, 130.0f);
         this->timer--;
     }
 }
 
-void func_80C09AA4(EnKitan* this, PlayState* play) {
+void EnKitan_Appear(EnKitan* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (this->timer > 0) {
+        // Scale up
         this->timer--;
         this->actor.scale.x = this->actor.scale.x * 0.3f + 0.0105f;
         Actor_SetScale(&this->actor, this->actor.scale.x);
-    } else {
-        Actor_SetScale(&this->actor, 0.015f);
-        this->actionFunc = func_80C09990;
-        this->actor.flags |= ACTOR_FLAG_1;
-        this->timer = 600;
+        return;
     }
+
+    // Done scaling, continue
+    Actor_SetScale(&this->actor, 0.015f);
+    this->actionFunc = EnKitan_WaitForPlayer;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->timer = 600;
 }
 
-void func_80C09B50(EnKitan* this, PlayState* play) {
+void EnKitan_WaitToAppear(EnKitan* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
         return;
     }
-    func_80C0923C(this, play, 30);
+    EnKitan_SpawnEffects(this, play, 30);
     Actor_PlaySfx(&this->actor, NA_SE_EN_NPC_APPEAR);
     this->actor.draw = EnKitan_Draw;
-    this->actionFunc = func_80C09AA4;
+    this->actionFunc = EnKitan_Appear;
     this->timer = 20;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -313,20 +363,23 @@ void EnKitan_Update(Actor* thisx, PlayState* play) {
     }
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 25.0f, 40.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
+
+    // Face the player
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
+
     this->actionFunc(this, play);
 }
 
 s32 EnKitan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    return 0;
+    return false;
 }
 
 void EnKitan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sFocusOffset = { 0.0f, 0.0f, 0.0f };
     EnKitan* this = THIS;
 
-    if (limbIndex == 6) {
+    if (limbIndex == KEATON_LIMB_RIGHT_SHOULDER) {
         Matrix_MultVec3f(&sFocusOffset, &this->actor.focus.pos);
     }
 }
@@ -334,7 +387,7 @@ void EnKitan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 void EnKitan_Draw(Actor* thisx, PlayState* play) {
     EnKitan* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnKitan_OverrideLimbDraw, EnKitan_PostLimbDraw, &this->actor);
 }
