@@ -1,6 +1,7 @@
 #include "fault.h"
 #include "idle.h"
 #include "libc64/sleep.h"
+#include "viconfig.h"
 #include "z64.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering

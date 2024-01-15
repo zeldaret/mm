@@ -77,9 +77,9 @@ void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 ant
     yScaleHiOddField = modeF ? (loResInterlaced ? 0x3000000 : 0x2000000) : 0;
 
     viMode->type = type;
-    viMode->comRegs.ctrl = OS_VI_UNK2000 | OS_VI_UNK1000 | OS_VI_GAMMA | OS_VI_GAMMA_DITHER |
-                           (!loResDeinterlaced ? OS_VI_UNK40 : 0) | (antialiasOn ? OS_VI_DIVOT : 0) |
-                           (fb32Bit ? OS_VI_UNK2 | OS_VI_UNK1 : OS_VI_UNK2);
+    viMode->comRegs.ctrl = VI_CTRL_PIXEL_ADV_3 | VI_CTRL_GAMMA_ON | VI_CTRL_GAMMA_DITHER_ON |
+                           (!loResDeinterlaced ? VI_CTRL_SERRATE_ON : 0) | (antialiasOn ? VI_CTRL_DIVOT_ON : 0) |
+                           (fb32Bit ? VI_CTRL_TYPE_32 : VI_CTRL_TYPE_16);
 
     if (modeLAN1) {
         // Anti-aliased, fetch extra lines as-needed
@@ -246,22 +246,22 @@ void ViMode_ConfigureFeatures(ViMode* viMode, s32 viFeatures) {
     u32 ctrl = viMode->customViMode.comRegs.ctrl;
 
     if (viFeatures & OS_VI_GAMMA_ON) {
-        ctrl |= OS_VI_GAMMA;
+        ctrl |= VI_CTRL_GAMMA_ON;
     }
     if (viFeatures & OS_VI_GAMMA_OFF) {
-        ctrl &= ~OS_VI_GAMMA;
+        ctrl &= ~VI_CTRL_GAMMA_ON;
     }
     if (viFeatures & OS_VI_GAMMA_DITHER_ON) {
-        ctrl |= OS_VI_GAMMA_DITHER;
+        ctrl |= VI_CTRL_GAMMA_DITHER_ON;
     }
     if (viFeatures & OS_VI_GAMMA_DITHER_OFF) {
-        ctrl &= ~OS_VI_GAMMA_DITHER;
+        ctrl &= ~VI_CTRL_GAMMA_DITHER_ON;
     }
     if (viFeatures & OS_VI_DIVOT_ON) {
-        ctrl |= OS_VI_DIVOT;
+        ctrl |= VI_CTRL_DIVOT_ON;
     }
     if (viFeatures & OS_VI_DIVOT_OFF) {
-        ctrl &= ~OS_VI_DIVOT;
+        ctrl &= ~VI_CTRL_DIVOT_ON;
     }
     viMode->customViMode.comRegs.ctrl = ctrl;
 }
