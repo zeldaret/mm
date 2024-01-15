@@ -1146,8 +1146,8 @@ void BossHakugin_SpawnBomb(BossHakugin* this, PlayState* play) {
 
 void BossHakugin_AddMalfunctionEffects(BossHakugin* this, PlayState* play) {
     GohtMalfunctionEffect* malfunctionEffect;
-    GohtMalfunctionEffect* malfunctionEffect2;
-    GohtMalfunctionEffect* malfunctionEffect3;
+    Vec3f* mEff2Pos;
+    Vec3f* mEff3Pos;
     Vec3f spA0;
     GohtBodyPart bodyPartIndex = this->malfunctionBodyPartIndex + 3;
     s32 var_s4;
@@ -1165,10 +1165,10 @@ void BossHakugin_AddMalfunctionEffects(BossHakugin* this, PlayState* play) {
             break;
         }
 
-        malfunctionEffect3 = &this->malfunctionEffects[type][bodyPartIndex];
-        malfunctionEffect2 = &this->malfunctionEffects[type][this->malfunctionBodyPartIndex];
+        mEff3Pos = &this->malfunctionEffects[type][bodyPartIndex].pos;
+        mEff2Pos = &this->malfunctionEffects[type][this->malfunctionBodyPartIndex].pos;
 
-        Math_Vec3f_Diff(&malfunctionEffect3->pos, &malfunctionEffect2->pos, &spA0);
+        Math_Vec3f_Diff(mEff3Pos, mEff2Pos, &spA0);
 
         spA0.y -= 3.5f;
 
@@ -1177,6 +1177,7 @@ void BossHakugin_AddMalfunctionEffects(BossHakugin* this, PlayState* play) {
             if (var_s4 > 3) {
                 var_s4 = 3;
             }
+
             Math_Vec3f_Scale(&spA0, 1.0f / var_s4);
         } else {
             var_s4 = 1;
@@ -1185,12 +1186,12 @@ void BossHakugin_AddMalfunctionEffects(BossHakugin* this, PlayState* play) {
         for (j = 0; j < var_s4; j++) {
             malfunctionEffect = &this->malfunctionEffects[type][this->malfunctionBodyPartIndex + j];
 
-            malfunctionEffect->pos.x = Rand_CenteredFloat(20.0f) + (malfunctionEffect2->pos.x + (spA0.x * j));
-            malfunctionEffect->pos.y = Rand_CenteredFloat(20.0f) + (malfunctionEffect2->pos.y + (spA0.y * j));
-            malfunctionEffect->pos.z = Rand_CenteredFloat(20.0f) + (malfunctionEffect2->pos.z + (spA0.z * j));
+            malfunctionEffect->pos.x = Rand_CenteredFloat(20.0f) + (mEff2Pos->x + (spA0.x * j));
+            malfunctionEffect->pos.y = Rand_CenteredFloat(20.0f) + (mEff2Pos->y + (spA0.y * j));
+            malfunctionEffect->pos.z = Rand_CenteredFloat(20.0f) + (mEff2Pos->z + (spA0.z * j));
             malfunctionEffect->scaleXY = 0.01f;
-            malfunctionEffect->life = 150;
-            malfunctionEffect->unk_12 = 5 - j;
+            malfunctionEffect->alpha = 150;
+            malfunctionEffect->timer = 5 - j;
         }
 
         if ((play->gameplayFrames % 2) != 0) {
@@ -1229,7 +1230,6 @@ s32 BossHakugin_ChargeUpAttack(BossHakugin* this) {
         } else {
             this->chargingLightningTranslateZ = -200.0f;
         }
-
     } else if (this->chargeUpTimer > 0) {
         this->chargeUpTimer--;
     } else if (Math_ScaledStepToS(&this->frontHalfRotZ, 0x700, 0x380)) {
@@ -2547,14 +2547,14 @@ void BossHakugin_UpdateMalfunctionEffects(BossHakugin* this) {
         for (j = 0; j < ARRAY_COUNT(this->malfunctionEffects[0]); j++) {
             GohtMalfunctionEffect* malfunctionEffect = &this->malfunctionEffects[i][j];
 
-            if (malfunctionEffect->life > 0) {
-                malfunctionEffect->unk_12--;
+            if (malfunctionEffect->alpha > 0) {
+                malfunctionEffect->timer--;
                 malfunctionEffect->pos.y += 3.5f;
                 malfunctionEffect->scaleXY += 0.003f;
-                if (malfunctionEffect->unk_12 < 0) {
-                    malfunctionEffect->life -= 15;
-                    if (malfunctionEffect->life < 0) {
-                        malfunctionEffect->life = 0;
+                if (malfunctionEffect->timer < 0) {
+                    malfunctionEffect->alpha -= 15;
+                    if (malfunctionEffect->alpha < 0) {
+                        malfunctionEffect->alpha = 0;
                     }
                 }
             }
@@ -2823,6 +2823,7 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
         if (limbIndex == GOHT_LIMB_ROOT) {
             pos->y -= this->actor.shape.yOffset;
         }
+
         if (!(this->limbDrawFlags & GOHT_LIMB_DRAW_FLAG(limbIndex))) {
             *dList = NULL;
         }
@@ -2834,6 +2835,7 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
         if (D_80B0EB68 < 0) {
             D_80B0EB68 = GOHT_MALFUNCTION_NUM_TYPES - 1;
         }
+
         D_80B0EB6C = D_80B0EAB0[D_80B0EB68];
     }
 
@@ -2869,10 +2871,12 @@ void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
                 break;
             }
         }
+
         if (i == GOHT_COLLIDER_BODYPART_MAX) {
             Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
         }
     }
+
     if (limbIndex == GOHT_LIMB_HEAD) {
         Matrix_MultVecX(3500.0f, &this->actor.focus.pos);
         this->actor.focus.rot.y = this->actor.shape.rot.y;
@@ -2940,11 +2944,11 @@ void BossHakugin_DrawMalfunctionEffects(BossHakugin* this, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->malfunctionEffects); i++) {
         for (j = 0; j < ARRAY_COUNT(this->malfunctionEffects[0]); j++) {
             malfunctionEffect = &this->malfunctionEffects[i][j];
-            if (malfunctionEffect->life > 0) {
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, malfunctionEffect->life);
+            if (malfunctionEffect->alpha > 0) {
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, malfunctionEffect->alpha);
                 gSPSegment(POLY_XLU_DISP++, 0x08,
-                           Gfx_TwoTexScroll(play->state.gfxCtx, 0, malfunctionEffect->unk_12 * 3,
-                                            malfunctionEffect->unk_12 * 15, 32, 64, 1, 0, 0, 32, 32));
+                           Gfx_TwoTexScroll(play->state.gfxCtx, 0, malfunctionEffect->timer * 3,
+                                            malfunctionEffect->timer * 15, 32, 64, 1, 0, 0, 32, 32));
                 Matrix_Translate(malfunctionEffect->pos.x, malfunctionEffect->pos.y, malfunctionEffect->pos.z,
                                  MTXMODE_NEW);
                 Matrix_RotateYS(camYaw, MTXMODE_APPLY);

@@ -43,8 +43,8 @@ typedef struct GohtLightningSegment {
 typedef struct GohtMalfunctionEffect {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ f32 scaleXY;
-    /* 0x10 */ s16 life;
-    /* 0x12 */ s16 unk_12;
+    /* 0x10 */ s16 alpha;
+    /* 0x12 */ s16 timer;
 } GohtMalfunctionEffect; // size = 0x14
 
 #define GOHT_MALFUNCTION_NUM_TYPES (FHGFLASH_SHOCK_GOHT_MAX - FHGFLASH_SHOCK_GOHT_2)
