@@ -5093,23 +5093,23 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
 }
 
 void Message_Draw(PlayState* play) {
-    Gfx* nextDisplayList;
-    Gfx* polyOpa;
+    Gfx* gfx;
+    Gfx* gfxHead;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 
-    polyOpa = POLY_OPA_DISP;
-    nextDisplayList = Graph_GfxPlusOne(polyOpa);
-    gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
+    gfxHead = POLY_OPA_DISP;
+    gfx = Graph_GfxPlusOne(gfxHead);
+    gSPDisplayList(OVERLAY_DISP++, gfx);
 
     if ((play->msgCtx.currentTextId != 0x5E6) || !Play_InCsMode(play)) {
-        Message_DrawMain(play, &nextDisplayList);
+        Message_DrawMain(play, &gfx);
     }
 
-    gSPEndDisplayList(nextDisplayList++);
-    Graph_BranchDlist(polyOpa, nextDisplayList);
-    POLY_OPA_DISP = nextDisplayList;
+    gSPEndDisplayList(gfx++);
+    Graph_BranchDlist(gfxHead, gfx);
+    POLY_OPA_DISP = gfx;
 
     CLOSE_DISPS(gfxCtx);
 }

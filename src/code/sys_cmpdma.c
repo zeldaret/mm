@@ -1,5 +1,6 @@
 #include "global.h"
 #include "libc64/malloc.h"
+#include "yaz0.h"
 
 #include "yaz0.h"
 #include "z64dma.h"

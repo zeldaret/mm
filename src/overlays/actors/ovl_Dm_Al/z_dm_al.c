@@ -153,7 +153,7 @@ void DmAl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 void DmAl_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
-static Gfx* sDlists[] = {
+static Gfx* sDLists[] = {
     gMadameAromaShawlMiddleDL,           gMadameAromaShawlUpperDL,
     gMadameAromaShawlLeftLowerMiddleDL,  gMadameAromaShawlLeftLowerDL,
     gMadameAromaShawlRightLowerMiddleDL, gMadameAromaShawlRightLowerDL,
@@ -172,7 +172,7 @@ void DmAl_Draw(Actor* thisx, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->shawlMatrices); i++) {
         Matrix_Put(&this->shawlMatrices[i]);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, sDlists[i]);
+        gSPDisplayList(POLY_OPA_DISP++, sDLists[i]);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

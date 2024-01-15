@@ -3301,24 +3301,24 @@ void Environment_Draw(PlayState* play) {
 }
 
 void Environment_DrawSkyboxStars(PlayState* play) {
-    Gfx* nextOpa;
-    Gfx* opa;
+    Gfx* gfx;
+    Gfx* gfxHead;
 
     if (sSkyboxStarsDList != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        opa = POLY_OPA_DISP;
-        nextOpa = Graph_GfxPlusOne(opa);
+        gfxHead = POLY_OPA_DISP;
+        gfx = Graph_GfxPlusOne(gfxHead);
 
-        gSPDisplayList(sSkyboxStarsDList, nextOpa);
+        gSPDisplayList(sSkyboxStarsDList, gfx);
 
-        Environment_DrawSkyboxStarsImpl(play, &nextOpa);
+        Environment_DrawSkyboxStarsImpl(play, &gfx);
 
-        gSPEndDisplayList(nextOpa++);
+        gSPEndDisplayList(gfx++);
 
-        Graph_BranchDlist(opa, nextOpa);
+        Graph_BranchDlist(gfxHead, gfx);
 
-        POLY_OPA_DISP = nextOpa;
+        POLY_OPA_DISP = gfx;
         sSkyboxStarsDList = NULL;
 
         CLOSE_DISPS(play->state.gfxCtx);

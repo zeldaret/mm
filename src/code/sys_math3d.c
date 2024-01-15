@@ -1,6 +1,4 @@
 #include "prevent_bss_reordering.h"
-//#include "prevent_bss_reordering2.h"
-
 // clang-format off
 // Partial structs taken from "prevent_bss_reordering.h"
 struct Dummy200 { int x; };
@@ -15,8 +13,7 @@ struct Dummy208 { int x; };
 struct Dummy209 { int x; };
 struct Dummy210 { int x; };
 struct Dummy211 { int x; };
-struct Dummy212 { int x; };
-struct Dummy213 { int x; };
+typedef int Dummmy212;
 // clang-format on
 
 #include "z64math.h"
