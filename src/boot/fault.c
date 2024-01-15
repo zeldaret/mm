@@ -98,7 +98,7 @@ void Fault_AddClient(FaultClient* client, FaultClientCallback callback, void* ar
     OSIntMask mask;
     u32 alreadyExists = false;
 
-    mask = osSetIntMask(1);
+    mask = osSetIntMask(OS_IM_NONE);
 
     // Ensure the client is not already registered
     {
@@ -136,7 +136,7 @@ void Fault_RemoveClient(FaultClient* client) {
     OSIntMask mask;
     u32 listIsEmpty = false;
 
-    mask = osSetIntMask(1);
+    mask = osSetIntMask(OS_IM_NONE);
 
     while (iter) {
         if (iter == client) {
@@ -147,7 +147,7 @@ void Fault_RemoveClient(FaultClient* client) {
                 if (sFaultInstance->clients) {
                     sFaultInstance->clients = client->next;
                 } else {
-                    listIsEmpty = 1;
+                    listIsEmpty = true;
                 }
             }
             break;
@@ -178,7 +178,7 @@ void Fault_AddAddrConvClient(FaultAddrConvClient* client, FaultAddrConvClientCal
     OSIntMask mask;
     s32 alreadyExists = false;
 
-    mask = osSetIntMask(1);
+    mask = osSetIntMask(OS_IM_NONE);
 
     {
         FaultAddrConvClient* iter = sFaultInstance->addrConvClients;
@@ -211,7 +211,7 @@ void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
     OSIntMask mask;
     s32 listIsEmpty = false;
 
-    mask = osSetIntMask(1);
+    mask = osSetIntMask(OS_IM_NONE);
 
     while (iter) {
         if (iter == client) {
@@ -349,9 +349,9 @@ void Fault_DrawCornerRec(u16 color) {
 
 void Fault_PrintFReg(s32 index, f32* value) {
     u32 raw = *(u32*)value;
-    s32 v0 = ((raw & 0x7F800000) >> 0x17) - 0x7F;
+    s32 exp = ((raw & 0x7F800000) >> 0x17) - 0x7F;
 
-    if ((v0 >= -0x7E && v0 < 0x80) || raw == 0) {
+    if (((exp > -0x7F) && (exp <= 0x7F)) || (raw == 0)) {
         FaultDrawer_Printf("F%02d:%14.7e ", index, *value);
     } else {
         // Print subnormal floats as their IEEE-754 hex representation
@@ -359,20 +359,20 @@ void Fault_PrintFReg(s32 index, f32* value) {
     }
 }
 
-void Fault_LogFReg(s32 idx, f32* value) {
+void Fault_LogFReg(s32 index, f32* value) {
     u32 raw = *(u32*)value;
-    s32 v0 = ((raw & 0x7F800000) >> 0x17) - 0x7F;
+    s32 exp = ((raw & 0x7F800000) >> 0x17) - 0x7F;
 
-    if ((v0 >= -0x7E && v0 < 0x80) || raw == 0) {
-        osSyncPrintf("F%02d:%14.7e ", idx, *value);
+    if (((exp > -0x7F) && (exp <= 0x7F)) || (raw == 0)) {
+        osSyncPrintf("F%02d:%14.7e ", index, *value);
     } else {
-        osSyncPrintf("F%02d:  %08x(16) ", idx, *(u32*)value);
+        osSyncPrintf("F%02d:  %08x(16) ", index, *(u32*)value);
     }
 }
 
-void Fault_PrintFPCR(u32 value) {
+void Fault_PrintFPCSR(u32 value) {
     s32 i;
-    u32 flag = 0x20000;
+    u32 flag = FPCSR_CE;
 
     FaultDrawer_Printf("FPCSR:%08xH ", value);
 
@@ -390,7 +390,7 @@ void Fault_PrintFPCR(u32 value) {
 
 void Fault_LogFPCSR(u32 value) {
     s32 i;
-    u32 flag = 0x20000;
+    u32 flag = FPCSR_CE;
 
     osSyncPrintf("FPCSR:%08xH  ", value);
     for (i = 0; i < ARRAY_COUNT(sFpuExceptions); i++) {
@@ -402,15 +402,17 @@ void Fault_LogFPCSR(u32 value) {
     }
 }
 
+#define EXC(code) (EXC_##code >> CAUSE_EXCSHIFT)
+
 void Fault_PrintThreadContext(OSThread* thread) {
     __OSThreadContext* threadCtx;
-    s16 causeStrIdx = _SHIFTR((u32)thread->context.cause, 2, 5);
+    s16 causeStrIndex = _SHIFTR((u32)thread->context.cause, 2, 5);
 
-    if (causeStrIdx == 23) { // Watchpoint
-        causeStrIdx = 16;
+    if (causeStrIndex == EXC(WATCH)) { // Watchpoint
+        causeStrIndex = 16;
     }
-    if (causeStrIdx == 31) { // Virtual coherency on data
-        causeStrIdx = 17;
+    if (causeStrIndex == EXC(VCED)) { // Virtual coherency on data
+        causeStrIndex = 17;
     }
 
     FaultDrawer_FillScreen();
@@ -418,7 +420,7 @@ void Fault_PrintThreadContext(OSThread* thread) {
     FaultDrawer_SetCursor(22, 20);
 
     threadCtx = &thread->context;
-    FaultDrawer_Printf("THREAD:%d (%d:%s)\n", thread->id, causeStrIdx, sCpuExceptions[causeStrIdx]);
+    FaultDrawer_Printf("THREAD:%d (%d:%s)\n", thread->id, causeStrIndex, sCpuExceptions[causeStrIndex]);
     FaultDrawer_SetCharPad(-1, 0);
 
     FaultDrawer_Printf("PC:%08xH SR:%08xH VA:%08xH\n", (u32)threadCtx->pc, (u32)threadCtx->sr,
@@ -434,7 +436,7 @@ void Fault_PrintThreadContext(OSThread* thread) {
     FaultDrawer_Printf("T9:%08xH GP:%08xH SP:%08xH\n", (u32)threadCtx->t9, (u32)threadCtx->gp, (u32)threadCtx->sp);
     FaultDrawer_Printf("S8:%08xH RA:%08xH LO:%08xH\n\n", (u32)threadCtx->s8, (u32)threadCtx->ra, (u32)threadCtx->lo);
 
-    Fault_PrintFPCR(threadCtx->fpcsr);
+    Fault_PrintFPCSR(threadCtx->fpcsr);
     FaultDrawer_Printf("\n");
     Fault_PrintFReg(0, &threadCtx->fp0.f.f_even);
     Fault_PrintFReg(2, &threadCtx->fp2.f.f_even);
@@ -469,18 +471,18 @@ void Fault_PrintThreadContext(OSThread* thread) {
 
 void osSyncPrintfThreadContext(OSThread* thread) {
     __OSThreadContext* threadCtx;
-    s16 causeStrIdx = _SHIFTR((u32)thread->context.cause, 2, 5);
+    s16 causeStrIndex = _SHIFTR((u32)thread->context.cause, 2, 5);
 
-    if (causeStrIdx == 23) { // Watchpoint
-        causeStrIdx = 16;
+    if (causeStrIndex == EXC(WATCH)) { // Watchpoint
+        causeStrIndex = 16;
     }
-    if (causeStrIdx == 31) { // Virtual coherency on data
-        causeStrIdx = 17;
+    if (causeStrIndex == EXC(VCED)) { // Virtual coherency on data
+        causeStrIndex = 17;
     }
 
     threadCtx = &thread->context;
     osSyncPrintf("\n");
-    osSyncPrintf("THREAD ID:%d (%d:%s)\n", thread->id, causeStrIdx, sCpuExceptions[causeStrIdx]);
+    osSyncPrintf("THREAD ID:%d (%d:%s)\n", thread->id, causeStrIndex, sCpuExceptions[causeStrIndex]);
 
     osSyncPrintf("PC:%08xH   SR:%08xH   VA:%08xH\n", (u32)threadCtx->pc, (u32)threadCtx->sr, (u32)threadCtx->badvaddr);
     osSyncPrintf("AT:%08xH   V0:%08xH   V1:%08xH\n", (u32)threadCtx->at, (u32)threadCtx->v0, (u32)threadCtx->v1);
@@ -823,7 +825,7 @@ void Fault_DrawStackTrace(OSThread* thread, u32 flags) {
     FaultDrawer_DrawText(36, 24, "SP       PC       (VPC)");
 
     for (line = 1; (line < 22) && (((ra != 0) || (sp != 0)) && (pc != (uintptr_t)__osCleanupThread)); line++) {
-        FaultDrawer_DrawText(0x24, line * 8 + 24, "%08x %08x", sp, pc);
+        FaultDrawer_DrawText(36, line * 8 + 24, "%08x %08x", sp, pc);
 
         if (flags & 1) {
             // Try to convert the relocated program counter to the corresponding unrelocated virtual address
@@ -904,13 +906,13 @@ void Fault_DisplayFrameBuffer(void) {
  */
 void Fault_ProcessClients(void) {
     FaultClient* client = sFaultInstance->clients;
-    s32 idx = 0;
+    s32 index = 0;
 
     while (client != NULL) {
         if (client->callback != NULL) {
             Fault_FillScreenBlack();
             FaultDrawer_SetCharPad(-2, 0);
-            FaultDrawer_Printf(FAULT_COLOR(DARK_GRAY) "CallBack (%d) %08x %08x %08x\n" FAULT_COLOR(WHITE), idx++,
+            FaultDrawer_Printf(FAULT_COLOR(DARK_GRAY) "CallBack (%d) %08x %08x %08x\n" FAULT_COLOR(WHITE), index++,
                                client, client->arg0, client->arg1);
             FaultDrawer_SetCharPad(0, 0);
             client->callback(client->arg0, client->arg1);
@@ -921,10 +923,10 @@ void Fault_ProcessClients(void) {
     }
 }
 
-void Fault_SetOptionsFromController3(void) {
+void Fault_SetOptions(void) {
     static u32 faultCustomOptions;
     Input* input3 = &sFaultInstance->inputs[3];
-    u32 pad;
+    s32 pad;
     uintptr_t pc;
     uintptr_t ra;
     uintptr_t sp;
@@ -948,17 +950,17 @@ void Fault_SetOptionsFromController3(void) {
             osSyncPrintf("GRAPH PC=%08x RA=%08x STACK=%08x\n", pc, ra, sp);
         }
         if (CHECK_BTN_ALL(input3->cur.button, BTN_B)) {
-            FaultDrawer_SetDrawerFrameBuffer(osViGetNextFramebuffer(), 0x140, 0xF0);
-            Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
+            FaultDrawer_SetDrawerFrameBuffer(osViGetNextFramebuffer(), SCREEN_WIDTH, SCREEN_HEIGHT);
+            Fault_DrawRec(0, 215, 320, 9, 1);
             FaultDrawer_SetCharPad(-2, 0);
-            FaultDrawer_DrawText(0x20, 0xD8, "GRAPH PC %08x RA %08x SP %08x", pc, ra, sp);
+            FaultDrawer_DrawText(32, 216, "GRAPH PC %08x RA %08x SP %08x", pc, ra, sp);
         }
     }
 }
 
 void Fault_UpdatePad(void) {
     Fault_UpdatePadImpl();
-    Fault_SetOptionsFromController3();
+    Fault_SetOptions();
 }
 
 #define FAULT_MSG_CPU_BREAK ((OSMesg)1)
@@ -967,7 +969,7 @@ void Fault_UpdatePad(void) {
 
 void Fault_ThreadEntry(void* arg) {
     OSMesg msg;
-    u32 pad;
+    s32 pad;
     OSThread* faultedThread;
 
     // Direct OS event messages to the fault event queue

@@ -1105,23 +1105,23 @@ void Play_PostWorldDraw(PlayState* this) {
 
     // Shrink the whole screen display (at the end of First and Second Day by default)
     if (gSaveContext.screenScaleFlag) {
-        Gfx* nextOpa;
-        Gfx* opa;
+        Gfx* gfx;
+        Gfx* gfxHead;
         GraphicsContext* gfxCtx = this->state.gfxCtx;
 
         sPlayVisFbufInstance->scale = gSaveContext.screenScale / 1000.0f;
 
         OPEN_DISPS(gfxCtx);
 
-        opa = POLY_OPA_DISP;
-        nextOpa = Graph_GfxPlusOne(opa);
-        gSPDisplayList(OVERLAY_DISP++, nextOpa);
+        gfxHead = POLY_OPA_DISP;
+        gfx = Graph_GfxPlusOne(gfxHead);
+        gSPDisplayList(OVERLAY_DISP++, gfx);
 
-        VisFbuf_Draw(sPlayVisFbufInstance, &nextOpa, this->unk_18E60);
+        VisFbuf_Draw(sPlayVisFbufInstance, &gfx, this->unk_18E60);
 
-        gSPEndDisplayList(nextOpa++);
-        Graph_BranchDlist(opa, nextOpa);
-        POLY_OPA_DISP = nextOpa;
+        gSPEndDisplayList(gfx++);
+        Graph_BranchDlist(gfxHead, gfx);
+        POLY_OPA_DISP = gfx;
 
         CLOSE_DISPS(gfxCtx);
     }
@@ -1140,7 +1140,7 @@ void Play_DrawMain(PlayState* this) {
     }
 
     if ((R_PAUSE_BG_PRERENDER_STATE <= PAUSE_BG_PRERENDER_SETUP) && (gTransitionTileState <= TRANS_TILE_SETUP)) {
-        if (this->skyboxCtx.skyboxShouldDraw || (this->roomCtx.curRoom.roomShape->base.type == ROOM_SHAPE_TYPE_IMAGE)) {
+        if (this->skyboxCtx.shouldDraw || (this->roomCtx.curRoom.roomShape->base.type == ROOM_SHAPE_TYPE_IMAGE)) {
             func_8012CF0C(gfxCtx, false, true, 0, 0, 0);
         } else {
             func_8012CF0C(gfxCtx, true, true, this->lightCtx.fogColor[0], this->lightCtx.fogColor[1],
@@ -1282,7 +1282,7 @@ void Play_DrawMain(PlayState* this) {
                             Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
                             Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.skyboxBlend,
                                         this->view.eye.x, this->view.eye.y, this->view.eye.z);
-                        } else if (!this->skyboxCtx.skyboxShouldDraw) {
+                        } else if (!this->skyboxCtx.shouldDraw) {
                             Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x, this->view.eye.y,
                                         this->view.eye.z);
                         }
@@ -1310,7 +1310,7 @@ void Play_DrawMain(PlayState* this) {
                     }
                 }
 
-                if (this->skyboxCtx.skyboxShouldDraw) {
+                if (this->skyboxCtx.shouldDraw) {
                     Vec3f quakeOffset;
 
                     if (1) {
