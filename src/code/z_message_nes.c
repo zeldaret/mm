@@ -1574,6 +1574,7 @@ void Message_DecodeNES(PlayState* play) {
             Message_LoadPluralRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4);
         } else if (curChar == 0xDF) {
             for (i = 0; i < 5; i++) {
+                //! @bug OoB read & write for i == 4, digits array is only 4 elements
                 digits[i] = gSaveContext.save.saveInfo.bomberCode[i];
                 Font_LoadCharNES(play, digits[i] + '0', charTexIndex);
                 charTexIndex += FONT_CHAR_TEX_SIZE;
