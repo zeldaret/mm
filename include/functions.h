@@ -3,40 +3,6 @@
 
 #include "z64.h"
 
-void bootproc(void);
-void ViConfig_UpdateVi(u32 black);
-void ViConfig_UpdateBlack(void);
-
-void osSyncPrintfUnused(const char* fmt, ...);
-
-void rmonPrintf(const char* fmt, ...);
-
-void RcpUtils_PrintRegisterStatus(void);
-void RcpUtils_Reset(void);
-
-void PadUtils_Init(Input* input);
-void func_80085150(void);
-void PadUtils_ResetPressRel(Input* input);
-u32 PadUtils_CheckCurExact(Input* input, u16 value);
-u32 PadUtils_CheckCur(Input* input, u16 key);
-u32 PadUtils_CheckPressed(Input* input, u16 key);
-u32 PadUtils_CheckReleased(Input* input, u16 key);
-u16 PadUtils_GetCurButton(Input* input);
-u16 PadUtils_GetPressButton(Input* input);
-s8 PadUtils_GetCurX(Input* input);
-s8 PadUtils_GetCurY(Input* input);
-void PadUtils_SetRelXY(Input* input, s32 x, s32 y);
-s8 PadUtils_GetRelXImpl(Input* input);
-s8 PadUtils_GetRelYImpl(Input* input);
-s8 PadUtils_GetRelX(Input* input);
-s8 PadUtils_GetRelY(Input* input);
-void PadUtils_UpdateRelXY(Input* input);
-
-void MtxConv_F2L(Mtx* mtx, MtxF* mf);
-void MtxConv_L2F(MtxF* mtx, Mtx* mf);
-
-s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
-
 // void EnItem00_SetObject(EnItem00* this, PlayState* play, f32* shadowOffset, f32* shadowScale);
 // void EnItem00_Init(Actor* thisx, PlayState* play);
 // void EnItem00_Destroy(Actor* thisx, PlayState* play);
@@ -228,8 +194,8 @@ void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overr
 void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, s32 animIndex);
 void Actor_Noop(Actor* actor, PlayState* play);
 
-void Gfx_DrawDListOpa(PlayState* play, Gfx* dlist);
-void Gfx_DrawDListXlu(PlayState* play, Gfx* dlist);
+void Gfx_DrawDListOpa(PlayState* play, Gfx* dList);
+void Gfx_DrawDListXlu(PlayState* play, Gfx* dList);
 
 Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance);
 s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5);

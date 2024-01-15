@@ -2,8 +2,11 @@
 #include "buffers.h"
 #include "irqmgr.h"
 #include "main.h"
+#include "segment_symbols.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "viconfig.h"
+#include "z64dma.h"
 #include "z64thread.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -18,8 +21,6 @@ OSMesgQueue gPiMgrCmdQueue;
 OSViMode gViConfigMode;
 u8 gViConfigModeType;
 
-#include "global.h"
-#include "buffers.h"
 #include "idle.h"
 
 u8 D_80096B20 = 1;
@@ -50,7 +51,7 @@ void Main_InitScreen(void) {
 }
 
 void Main_InitMemory(void) {
-    void* memStart = (void*)0x80000400;
+    void* memStart = (void*)BOOT_ADDRESS_ULTRA;
     void* memEnd = OS_PHYSICAL_TO_K0(osMemSize);
 
     Main_ClearMemory(memStart, SEGMENT_START(framebuffer_lo));

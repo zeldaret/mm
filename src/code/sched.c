@@ -3,6 +3,7 @@
 #include "idle.h"
 #include "libc64/sleep.h"
 #include "macros.h"
+#include "viconfig.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 FaultClient sSchedFaultClient;

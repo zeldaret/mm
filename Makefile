@@ -216,8 +216,6 @@ build/src/libultra/io/%.o: OPTFLAGS := -O2
 build/src/libultra/libc/%.o: OPTFLAGS := -O2
 build/src/libultra/gu/%.o: OPTFLAGS := -O2
 build/src/libultra/rmon/%.o: OPTFLAGS := -O2
-build/src/libultra/flash/%.o: OPTFLAGS := -g
-build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 build/src/audio/%.o: OPTFLAGS := -O2
 
@@ -232,6 +230,10 @@ build/src/code/jpegutils.o: OPTFLAGS := -O2
 build/src/code/jpegdecoder.o: OPTFLAGS := -O2
 build/src/code/jpegutils.o: CC := $(CC_OLD)
 build/src/code/jpegdecoder.o: CC := $(CC_OLD)
+
+build/src/code/osFlash.o: OPTFLAGS := -g
+build/src/code/osFlash.o: MIPS_VERSION := -mips1
+build/src/code/osFlash.o: CC := $(CC_OLD)
 
 build/src/libultra/libc/ll.o: OPTFLAGS := -O1
 build/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
