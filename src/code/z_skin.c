@@ -149,7 +149,7 @@ void Skin_DrawAnimatedLimb(GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, s
         Skin_ApplyLimbModifications(gfxCtx, skin, limbIndex, arg3);
     }
 
-    gSPDisplayList(POLY_OPA_DISP++, data->dlist);
+    gSPDisplayList(POLY_OPA_DISP++, data->dList);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -157,24 +157,24 @@ void Skin_DrawAnimatedLimb(GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, s
 /**
  * Draw a limb of type SKIN_LIMB_TYPE_NORMAL, of the skeleton `skin` at index `limbIndex`
  */
-void Skin_DrawLimb(GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, Gfx* dListOverride, s32 drawFlags) {
-    Gfx* gfx = dListOverride;
+void Skin_DrawLimb(GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, Gfx* dList, s32 drawFlags) {
+    Gfx* limbDList = dList;
     SkinLimb** skeleton;
 
     OPEN_DISPS(gfxCtx);
 
     skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
 
-    if (dListOverride == NULL) {
-        gfx = ((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->segment;
+    if (dList == NULL) {
+        limbDList = ((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->segment;
     }
 
-    if (gfx != NULL) {
+    if (limbDList != NULL) {
         Mtx* mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &gSkinLimbMatrices[limbIndex]);
 
         if (mtx != NULL) {
             gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, gfx);
+            gSPDisplayList(POLY_OPA_DISP++, limbDList);
             gSPPopMatrix(POLY_OPA_DISP++, G_MTX_MODELVIEW);
             gDPPipeSync(POLY_OPA_DISP++);
         }

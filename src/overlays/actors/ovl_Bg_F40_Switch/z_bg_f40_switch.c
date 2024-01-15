@@ -3,7 +3,7 @@
  * Overlay: ovl_Bg_F40_Switch
  * Description: Stone Tower FloorSwitch
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_bg_f40_switch.h"
 #include "z64rumble.h"
 #include "objects/object_f40_switch/object_f40_switch.h"
@@ -45,7 +45,7 @@ u32 sBgF40SwitchLastUpdateFrame;
 void BgF40Switch_CheckAll(BgF40Switch* this, PlayState* play) {
     if (play->gameplayFrames != sBgF40SwitchLastUpdateFrame) {
         u32 pressedSwitchFlags[4] = { 0 };
-        u32 pad;
+        s32 pad;
         s32 switchFlag;
         s32 isPressed;
         Actor* actor;

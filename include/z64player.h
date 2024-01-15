@@ -1419,7 +1419,7 @@ s32 func_80126440(struct PlayState* play, ColliderQuad* collider, WeaponInfo* we
 void Player_DrawGetItem(struct PlayState* play, Player* player);
 void func_80126B8C(struct PlayState* play, Player* player);
 s32 func_80127438(struct PlayState* play, Player* player, s32 currentMask);
-s32 func_80128640(struct PlayState* play, Player* player, Gfx* dlist);
+s32 func_80128640(struct PlayState* play, Player* player, Gfx* dList);
 void Player_SetFeetPos(struct PlayState* play, Player* player, s32 limbIndex);
 void Player_PostLimbDrawGameplay(struct PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
 

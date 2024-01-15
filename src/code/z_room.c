@@ -70,7 +70,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
     RoomShapeCullableEntryLinked* head = NULL;
     RoomShapeCullableEntryLinked* tail = NULL;
     RoomShapeCullableEntryLinked* iter;
-    Gfx* displayList;
+    Gfx* dList;
     RoomShapeCullableEntryLinked* insert;
     f32 entryBoundsNearZ;
     s32 i;
@@ -119,31 +119,31 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
                      (i <= R_ROOM_CULL_DEBUG_TARGET)) ||
                     ((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_ONLY_TARGET) && (i == R_ROOM_CULL_DEBUG_TARGET))) {
                     if (flags & ROOM_DRAW_OPA) {
-                        displayList = roomShapeCullableEntry->opa;
-                        if (displayList != NULL) {
-                            gSPDisplayList(POLY_OPA_DISP++, displayList);
+                        dList = roomShapeCullableEntry->opa;
+                        if (dList != NULL) {
+                            gSPDisplayList(POLY_OPA_DISP++, dList);
                         }
                     }
 
                     if (flags & ROOM_DRAW_XLU) {
-                        displayList = roomShapeCullableEntry->xlu;
-                        if (displayList != NULL) {
-                            gSPDisplayList(POLY_XLU_DISP++, displayList);
+                        dList = roomShapeCullableEntry->xlu;
+                        if (dList != NULL) {
+                            gSPDisplayList(POLY_XLU_DISP++, dList);
                         }
                     }
                 }
             } else {
                 if (flags & ROOM_DRAW_OPA) {
-                    displayList = roomShapeCullableEntry->opa;
-                    if (displayList != NULL) {
-                        gSPDisplayList(POLY_OPA_DISP++, displayList);
+                    dList = roomShapeCullableEntry->opa;
+                    if (dList != NULL) {
+                        gSPDisplayList(POLY_OPA_DISP++, dList);
                     }
                 }
 
                 if (flags & ROOM_DRAW_XLU) {
-                    displayList = roomShapeCullableEntry->xlu;
-                    if (displayList != NULL) {
-                        gSPDisplayList(POLY_XLU_DISP++, displayList);
+                    dList = roomShapeCullableEntry->xlu;
+                    if (dList != NULL) {
+                        gSPDisplayList(POLY_XLU_DISP++, dList);
                     }
                 }
             }
@@ -240,15 +240,15 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
                         ((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_ONLY_TARGET) &&
                          (i == R_ROOM_CULL_DEBUG_TARGET))) {
 
-                        displayList = roomShapeCullableEntry->opa;
-                        if (displayList != NULL) {
-                            gSPDisplayList(POLY_OPA_DISP++, displayList);
+                        dList = roomShapeCullableEntry->opa;
+                        if (dList != NULL) {
+                            gSPDisplayList(POLY_OPA_DISP++, dList);
                         }
                     }
                 } else {
-                    displayList = roomShapeCullableEntry->opa;
-                    if (displayList != NULL) {
-                        gSPDisplayList(POLY_OPA_DISP++, displayList);
+                    dList = roomShapeCullableEntry->opa;
+                    if (dList != NULL) {
+                        gSPDisplayList(POLY_OPA_DISP++, dList);
                     }
                 }
             }
@@ -260,9 +260,9 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
                 f32 temp_fv1;
 
                 roomShapeCullableEntry = tail->entry;
-                displayList = roomShapeCullableEntry->xlu;
+                dList = roomShapeCullableEntry->xlu;
 
-                if (displayList != NULL) {
+                if (dList != NULL) {
                     if (roomShapeCullableEntry->boundsSphereRadius & 1) {
 
                         temp_fv0 = tail->boundsNearZ - (f32)(iREG(93) + 0xBB8);
@@ -275,10 +275,10 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
                                 var_a1 = 255 - (s32)((temp_fv0 / temp_fv1) * 255.0f);
                             }
                             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, var_a1);
-                            gSPDisplayList(POLY_XLU_DISP++, displayList);
+                            gSPDisplayList(POLY_XLU_DISP++, dList);
                         }
                     } else {
-                        gSPDisplayList(POLY_XLU_DISP++, displayList);
+                        gSPDisplayList(POLY_XLU_DISP++, dList);
                     }
                 }
             }
@@ -560,8 +560,8 @@ s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
                                                   (size + 8) * roomCtx->activeMemPage - 7));
 
         osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, ARRAY_COUNT(roomCtx->loadMsg));
-        DmaMgr_SendRequestImpl(&roomCtx->dmaRequest, roomCtx->activeRoomVram, play->roomList[index].vromStart, size, 0,
-                               &roomCtx->loadQueue, NULL);
+        DmaMgr_RequestAsync(&roomCtx->dmaRequest, roomCtx->activeRoomVram, play->roomList[index].vromStart, size, 0,
+                            &roomCtx->loadQueue, NULL);
         roomCtx->activeMemPage ^= 1;
 
         return 1;

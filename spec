@@ -85,8 +85,8 @@ beginseg
     include "build/asm/boot/setsr.text.o"
     include "build/asm/boot/writebackdcache.text.o"
     include "build/src/libultra/os/initialize.o"
-    include "build/src/libultra/os/threadsave.o"
-    pad_text
+    include "build/src/libultra/debug/kdebugserver.o"
+    pad_text // These pads are from src/libultra/os/parameters.o
     pad_text
     pad_text
     pad_text
@@ -125,7 +125,7 @@ beginseg
     include "build/src/libultra/os/getmemsize.o"
     include "build/src/libultra/io/pfssearchfile.o"
     include "build/src/libultra/os/seteventmesg.o"
-    include "build/src/libultra/gu/sqrtf.o"
+    include "build/asm/boot/sqrtf.text.o"
     include "build/src/libultra/os/afterprenmi.o"
     include "build/src/libultra/io/contquery.o"
     include "build/src/libultra/gu/lookathil.o"
@@ -247,7 +247,7 @@ endseg
 
 beginseg
     name "dmadata"
-    include "build/asm/dmadata/dmadata.o"
+    include "build/src/dmadata/dmadata.o"
 endseg
 
 beginseg
@@ -280,6 +280,7 @@ endseg
 
 beginseg
     name "icon_item_static_syms"
+    flags SYMS
     romalign 0x1000
     include "build/assets/archives/icon_item_static/icon_item_static_yar.symbols.o"
     number 8
@@ -287,6 +288,7 @@ endseg
 
 beginseg
     name "icon_item_24_static_syms"
+    flags SYMS
     romalign 0x1000
     include "build/assets/archives/icon_item_24_static/icon_item_24_static_yar.symbols.o"
     number 9
@@ -366,6 +368,7 @@ endseg
 
 beginseg
     name "schedule_dma_static_syms"
+    flags SYMS
     include "build/assets/archives/schedule_dma_static/schedule_dma_static_yar.symbols.o"
     number 7
 endseg
@@ -578,7 +581,7 @@ beginseg
     include "build/src/code/sys_slowly.o"
     include "build/src/code/sys_flashrom.o"
     include "build/asm/code/code_80185F90.text.o" // handwritten
-    include "build/src/libultra/flash/osFlash.o"
+    include "build/src/code/osFlash.o"
     pad_text
     pad_text
     pad_text
@@ -1564,8 +1567,7 @@ beginseg
     name "ovl_Obj_Mure2"
     compress
     include "build/src/overlays/actors/ovl_Obj_Mure2/z_obj_mure2.o"
-    include "build/data/ovl_Obj_Mure2/ovl_Obj_Mure2.data.o"
-    include "build/data/ovl_Obj_Mure2/ovl_Obj_Mure2.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Mure2/ovl_Obj_Mure2_reloc.o"
 endseg
 
 beginseg
@@ -8859,21 +8861,21 @@ beginseg
     name "d2_fine_static"
     compress
     romalign 0x1000
-    include "build/baserom/d2_fine_static.o"
+    include "build/assets/misc/skyboxes/d2_fine_static.o"
 endseg
 
 beginseg
     name "d2_cloud_static"
     compress
     romalign 0x1000
-    include "build/baserom/d2_cloud_static.o"
+    include "build/assets/misc/skyboxes/d2_cloud_static.o"
 endseg
 
 beginseg
     name "d2_fine_pal_static"
     compress
     romalign 0x1000
-    include "build/baserom/d2_fine_pal_static.o"
+    include "build/assets/misc/skyboxes/d2_fine_pal_static.o"
 endseg
 
 beginseg

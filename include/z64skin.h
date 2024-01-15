@@ -45,15 +45,8 @@ typedef struct {
     /* 0x0 */ u16 totalVtxCount; // total vertex count for all modif entries
     /* 0x2 */ u16 limbModifCount; // count of limbModifCount
     /* 0x4 */ SkinLimbModif* limbModifications;
-    /* 0x8 */ Gfx* dlist;
+    /* 0x8 */ Gfx* dList;
 } SkinAnimatedLimbData; // size = 0xC
-
-// ZAPD compatibility typedefs
-// TODO: Remove when ZAPD adds support for them
-typedef SkinVertex Struct_800A57C0;
-typedef SkinTransformation Struct_800A598C_2;
-typedef SkinAnimatedLimbData Struct_800A5E28;
-typedef SkinLimbModif Struct_800A598C;
 
 #define SKIN_LIMB_TYPE_ANIMATED 4
 #define SKIN_LIMB_TYPE_NORMAL 11
@@ -89,7 +82,7 @@ typedef s32 (*SkinOverrideLimbDraw)(struct Actor* thisx, struct PlayState* play,
 void Skin_UpdateVertices(MtxF* mtx, SkinVertex* skinVertices, SkinLimbModif* modifEntry, Vtx* vtxBuf, Vec3f* pos);
 void Skin_ApplyLimbModifications(struct GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, s32 arg3);
 void Skin_DrawAnimatedLimb(struct GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, s32 arg3, s32 drawFlags);
-void Skin_DrawLimb(struct GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, Gfx* dListOverride, s32 drawFlags);
+void Skin_DrawLimb(struct GraphicsContext* gfxCtx, Skin* skin, s32 limbIndex, Gfx* dList, s32 drawFlags);
 void func_80138228(struct Actor* actor, struct PlayState* play, Skin* skin, SkinPostDraw postDraw, s32 setTranslation);
 void func_80138258(struct Actor* actor, struct PlayState* play, Skin* skin, SkinPostDraw postDraw, SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation);
 void func_8013828C(struct Actor* actor, struct PlayState* play, Skin* skin, SkinPostDraw postDraw, SkinOverrideLimbDraw overrideLimbDraw, s32 setTranslation, s32 arg6);
