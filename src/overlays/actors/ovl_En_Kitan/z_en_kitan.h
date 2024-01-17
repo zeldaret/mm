@@ -17,7 +17,7 @@ typedef struct EnKitan {
     /* 0x206 */ Vec3s morphTable[KEATON_LIMB_MAX];
     /* 0x284 */ ColliderCylinder collider;
     /* 0x2D0 */ s32 textBitSet;
-    /* 0x2D4 */ char unk2D4[2];
+    /* 0x2D4 */ UNK_TYPE1 unk2D4[2];
     /* 0x2D6 */ s16 timer;
     /* 0x2D8 */ EnKitanActionFunc actionFunc;
 } EnKitan; // size = 0x2DC

@@ -70,7 +70,7 @@ void EnKitan_Init(Actor* thisx, PlayState* play) {
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
-    if (Player_GetMask(play) != PLAYER_MASK_KEATON ||
+    if ((Player_GetMask(play) != PLAYER_MASK_KEATON) ||
         Flags_GetCollectible(play, ENKITAN_GET_COLLECT_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
@@ -91,7 +91,7 @@ void EnKitan_SpawnEffects(EnKitan* this, PlayState* play, s32 numEffects) {
     static Color_RGBA8 sEffEnvColor = { 255, 255, 200, 255 };
     s32 i;
     Vec3f accel;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f pos;
 
     pos.x = this->actor.world.pos.x;
@@ -99,13 +99,13 @@ void EnKitan_SpawnEffects(EnKitan* this, PlayState* play, s32 numEffects) {
     pos.z = this->actor.world.pos.z;
 
     for (i = 0; i < numEffects; i++) {
-        vel.x = Rand_CenteredFloat(10.0f);
-        vel.y = Rand_ZeroFloat(6.0f);
-        vel.z = Rand_CenteredFloat(10.0f);
-        accel.x = -vel.x * 0.05f;
+        velocity.x = Rand_CenteredFloat(10.0f);
+        velocity.y = Rand_ZeroFloat(6.0f);
+        velocity.z = Rand_CenteredFloat(10.0f);
+        accel.x = -velocity.x * 0.05f;
         accel.y = 0.1f;
-        accel.z = -vel.x * 0.05f;
-        func_800B0F18(play, &pos, &vel, &accel, &sEffPrimColor, &sEffEnvColor, 400, 20, 20);
+        accel.z = -velocity.x * 0.05f;
+        func_800B0F18(play, &pos, &velocity, &accel, &sEffPrimColor, &sEffEnvColor, 400, 20, 20);
     }
 }
 
@@ -116,33 +116,31 @@ s32 EnKitan_CanTalk(EnKitan* this, PlayState* play) {
         return false;
     }
     if (Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x3000) &&
-        this->actor.xzDistToPlayer < 120.0f) {
+        (this->actor.xzDistToPlayer < 120.0f)) {
         return true;
     }
     return false;
 }
 
+
 u16 EnKitan_GetQuestionMessageId(EnKitan* this) {
     s32 i = 0;
 
-    //! @bug This loop was likely meant to have a max iteration cap of 1000, but the condition is messed up so it will
-    //! loop forever until a question that was not yet asked is found. This is fine as the number of possible questions
-    //! is larger than the number of questions the player is required to answer, assuming the random number generator
-    //! can output the full range of values which is the case.
     while (true) {
         s32 rand = Rand_ZeroFloat(30.0f);
 
         // Keep track of which questions have already been asked with a bitset
         if (!(this->textBitSet & (1 << rand))) {
-            this->textBitSet |= (1 << rand);
+            this->textBitSet |= 1 << rand;
             // 0x04B6 is the start of the question + answer choice textboxes, each question textbox is followed by the
             // choice textbox containing the answer choices
-            return 0x04B6 + 2 * rand;
+            return 0x4B6 + (rand * 2);
         }
 
         i++;
         if (i > 1000) {
-            continue;
+            // There's an assert(false) here in the debug version to catch any unforeseen issues in testing. It is
+            // assumed that if this function is called there is always at least one question available to be selected.
         }
     }
 }
@@ -191,12 +189,12 @@ void EnKitan_OfferPrize(EnKitan* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = EnKitan_WaitForPrizeTextboxClosed;
-        gSaveContext.save.saveInfo.weekEventReg[0x4F] |= 0x80;
+        SET_WEEKEVENTREG(WEEKEVENTREG_79_80);
         return;
     }
 
     // Reward the player with a heart piece, or a red rupee if the heart piece was already obtained.
-    if (gSaveContext.save.saveInfo.weekEventReg[0x4F] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_80)) {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 2000.0f, 1000.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
@@ -218,7 +216,7 @@ void EnKitan_Talk(EnKitan* this, PlayState* play) {
                 break;
             }
 
-            if (play->msgCtx.choiceIndex + 1 == play->msgCtx.unk1206C) {
+            if ((play->msgCtx.choiceIndex + 1) == play->msgCtx.unk1206C) {
                 // Correct answer, continue quiz or end if enough questions have been answered correctly
                 Audio_PlaySfx(NA_SE_SY_QUIZ_CORRECT);
 
@@ -291,6 +289,9 @@ void EnKitan_Talk(EnKitan* this, PlayState* play) {
                     break;
             }
             break;
+
+        default:
+            break;
     }
 }
 
@@ -307,7 +308,7 @@ void EnKitan_WaitForPlayer(EnKitan* this, PlayState* play) {
         return;
     }
 
-    if (this->timer <= 0 || Player_GetMask(play) != PLAYER_MASK_KEATON) {
+    if ((this->timer <= 0) || (Player_GetMask(play) != PLAYER_MASK_KEATON)) {
         // If the player does not talk quickly enough or the player isn't wearing the keaton mask, leave
         this->actionFunc = EnKitan_Leave;
         this->timer = 4;
