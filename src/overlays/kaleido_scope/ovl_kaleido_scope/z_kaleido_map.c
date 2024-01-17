@@ -452,11 +452,12 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             }
 
             if (pauseCtx->cursorSpecialPos == 0) {
-                if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0) &&
+                if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON) && (msgCtx->msgLength == 0) &&
                     (pauseCtx->cursorPoint[PAUSE_MAP] == DUNGEON_STRAY_FAIRIES)) {
                     pauseCtx->itemDescriptionOn = true;
                     func_801514B0(play, 0x17AF, 1);
-                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0) &&
+                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON) &&
+                           (msgCtx->msgLength == 0) &&
                            CHECK_DUNGEON_ITEM(pauseCtx->cursorPoint[PAUSE_MAP], gSaveContext.dungeonIndex)) {
                     pauseCtx->itemDescriptionOn = true;
                     func_801514B0(play, 0x17AC + pauseCtx->cursorPoint[PAUSE_MAP], 1);

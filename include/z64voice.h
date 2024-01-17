@@ -5,6 +5,11 @@
 #include "unk.h"
 #include "PR/os_voice.h"
 
+typedef struct {
+    /* 0x000 */ u16 words[20][15]; // 20 words, each with up to 15 syllables
+    /* 0x258 */ u8 numWords;
+} OSVoiceDictionary; // size = 0x25C
+
 typedef enum OSVoiceWordId {
     /*  0 */ VOICE_WORD_ID_HOURS,
     /*  1 */ VOICE_WORD_ID_CHEESE,

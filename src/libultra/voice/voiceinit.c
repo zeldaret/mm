@@ -20,9 +20,9 @@ s32 osVoiceInit(OSMesgQueue* mq, OSVoiceHandle* hd, int channel) {
     u8 status = 0;
     u8 data[4];
 
-    hd->channel = channel;
-    hd->mq = mq;
-    hd->mode = VOICE_HANDLE_MODE_0;
+    hd->__channel = channel;
+    hd->__mq = mq;
+    hd->__mode = VOICE_HANDLE_MODE_0;
 
     errorCode = __osVoiceGetStatus(mq, channel, &status);
     if (errorCode != 0) {

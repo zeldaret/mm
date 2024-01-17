@@ -70,15 +70,15 @@ void FileSelect_SelectCopySource(GameState* thisx) {
     SramContext* sramCtx = &this->sramCtx;
     Input* input = CONTROLLER1(&this->state);
 
-    if (((this->buttonIndex == FS_BTN_COPY_QUIT) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
-        CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (((this->buttonIndex == FS_BTN_COPY_QUIT) && CHECK_BTN_ANY(input->press.button, A_BUTTON | START_BUTTON)) ||
+        CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         this->actionTimer = 4;
         this->buttonIndex = FS_BTN_MAIN_COPY;
         this->nextTitleLabel = FS_TITLE_SELECT_FILE;
         this->configMode = CM_COPY_RETURN_MAIN;
         this->warningLabel = FS_WARNING_NONE;
         Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
-    } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
+    } else if (CHECK_BTN_ANY(input->press.button, A_BUTTON | START_BUTTON)) {
         if (!gSaveContext.flashSaveAvailable) {
             if (NO_FLASH_SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
                 this->actionTimer = 4;
@@ -205,14 +205,14 @@ void FileSelect_SelectCopyDest(GameState* thisx) {
     SramContext* sramCtx = &this->sramCtx;
     Input* input = CONTROLLER1(&this->state);
 
-    if (((this->buttonIndex == FS_BTN_COPY_QUIT) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
-        CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (((this->buttonIndex == FS_BTN_COPY_QUIT) && CHECK_BTN_ANY(input->press.button, A_BUTTON | START_BUTTON)) ||
+        CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         this->buttonIndex = this->selectedFileIndex;
         this->nextTitleLabel = FS_TITLE_COPY_FROM;
         this->actionTimer = 4;
         this->configMode = CM_EXIT_TO_COPY_SOURCE_1;
         Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
-    } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
+    } else if (CHECK_BTN_ANY(input->press.button, A_BUTTON | START_BUTTON)) {
         if (!gSaveContext.flashSaveAvailable) {
             if (!NO_FLASH_SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
                 this->copyDestFileIndex = this->buttonIndex;
@@ -416,13 +416,13 @@ void FileSelect_CopyConfirm(GameState* thisx) {
     Input* input = CONTROLLER1(&this->state);
     u16 time;
 
-    if (((this->buttonIndex != FS_BTN_CONFIRM_YES) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
-        CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (((this->buttonIndex != FS_BTN_CONFIRM_YES) && CHECK_BTN_ANY(input->press.button, A_BUTTON | START_BUTTON)) ||
+        CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         this->actionTimer = 4;
         this->nextTitleLabel = FS_TITLE_COPY_TO;
         this->configMode = CM_RETURN_TO_COPY_DEST;
         Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
-    } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
+    } else if (CHECK_BTN_ANY(input->press.button, A_BUTTON | START_BUTTON)) {
         gSaveContext.save.time = time = CURRENT_TIME; // Set to itself with unused temp
         this->nameAlpha[this->copyDestFileIndex] = 0;
         this->fileInfoAlpha[this->copyDestFileIndex] = this->nameAlpha[this->copyDestFileIndex];
@@ -590,7 +590,7 @@ void FileSelect_CopyAnim3(GameState* thisx) {
     this->actionTimer--;
 
     if (this->actionTimer < 37) {
-        if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_B | BTN_START) || (this->actionTimer == 0)) {
+        if (CHECK_BTN_ANY(input->press.button, A_BUTTON | B_BUTTON | START_BUTTON) || (this->actionTimer == 0)) {
             this->actionTimer = 4;
             this->nextTitleLabel = FS_TITLE_SELECT_FILE;
             Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
@@ -786,15 +786,15 @@ void FileSelect_EraseSelect(GameState* thisx) {
     SramContext* sramCtx = &this->sramCtx;
     Input* input = CONTROLLER1(&this->state);
 
-    if (((this->buttonIndex == FS_BTN_COPY_QUIT) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
-        CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (((this->buttonIndex == FS_BTN_COPY_QUIT) && CHECK_BTN_ANY(input->press.button, A_BUTTON | START_BUTTON)) ||
+        CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         this->buttonIndex = FS_BTN_MAIN_ERASE;
         this->actionTimer = 4;
         this->nextTitleLabel = FS_TITLE_SELECT_FILE;
         this->configMode = CM_EXIT_ERASE_TO_MAIN;
         this->warningLabel = FS_WARNING_NONE;
         Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
-    } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
+    } else if (CHECK_BTN_ANY(input->press.button, A_BUTTON | START_BUTTON)) {
 
         if (!gSaveContext.flashSaveAvailable) {
             if (NO_FLASH_SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
@@ -959,14 +959,14 @@ void FileSelect_EraseConfirm(GameState* thisx) {
     SramContext* sramCtx = &this->sramCtx;
     Input* input = CONTROLLER1(&this->state);
 
-    if (((this->buttonIndex != FS_BTN_CONFIRM_YES) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
-        CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (((this->buttonIndex != FS_BTN_CONFIRM_YES) && CHECK_BTN_ANY(input->press.button, A_BUTTON | START_BUTTON)) ||
+        CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         this->buttonIndex = this->selectedFileIndex;
         this->nextTitleLabel = FS_TITLE_ERASE_FILE;
         this->configMode = CM_EXIT_TO_ERASE_SELECT_1;
         this->actionTimer = 4;
         Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
-    } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
+    } else if (CHECK_BTN_ANY(input->press.button, A_BUTTON | START_BUTTON)) {
         Sram_EraseSave(this, sramCtx, this->selectedFileIndex);
         if (!gSaveContext.flashSaveAvailable) {
             this->configMode = CM_ERASE_ANIM_1;
@@ -1135,7 +1135,7 @@ void FileSelect_EraseAnim2(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
     Input* input = CONTROLLER1(&this->state);
 
-    if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_B | BTN_START) || (--this->actionTimer == 0)) {
+    if (CHECK_BTN_ANY(input->press.button, A_BUTTON | B_BUTTON | START_BUTTON) || (--this->actionTimer == 0)) {
         this->buttonYOffsets[3] = 0;
         this->actionTimer = 4;
         this->nextTitleLabel = FS_TITLE_SELECT_FILE;

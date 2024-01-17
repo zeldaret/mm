@@ -1210,7 +1210,7 @@ void func_80963FF8(EnFu* this, PlayState* play) {
 
     if (player->stateFlags1 & PLAYER_STATE1_100000) {
         play->actorCtx.isOverrideInputOn = true;
-        play->actorCtx.overrideInput.press.button = BTN_A;
+        play->actorCtx.overrideInput.press.button = A_BUTTON;
     } else {
         play->actorCtx.isOverrideInputOn = true;
     }

@@ -4445,15 +4445,15 @@ s32 Camera_KeepOn3(Camera* camera) {
         Camera_SetUpdateRatesSlow(camera);
         camera->atLerpStepScale = 0.0f;
 
-        if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R)) {
+        if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, A_BUTTON) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, B_BUTTON) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, U_CBUTTONS) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, D_CBUTTONS) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_CBUTTONS) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_CBUTTONS) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, Z_TRIG) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_TRIG) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_TRIG)) {
             Camera_SetStateFlag(camera, CAM_STATE_2);
             Camera_UnsetStateFlag(camera, CAM_STATE_3);
         }
@@ -5489,15 +5489,15 @@ s32 Camera_Unique0(Camera* camera) {
                     rwData->unk_00 = focalActorPosRot->pos;
                 } else if (!(player->stateFlags1 & PLAYER_STATE1_20000000) &&
                            ((OLib_Vec3fDistXZ(&focalActorPosRot->pos, &rwData->unk_00) >= 10.0f) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
-                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, A_BUTTON) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, B_BUTTON) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, U_CBUTTONS) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, D_CBUTTONS) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_CBUTTONS) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_CBUTTONS) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, Z_TRIG) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_TRIG) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_TRIG) ||
                             (roData->interfaceFlags & UNIQUE0_FLAG_1))) {
                     rwData->unk_3E = 1;
                 }
@@ -5513,15 +5513,15 @@ s32 Camera_Unique0(Camera* camera) {
 
                 if (!(player->stateFlags1 & PLAYER_STATE1_20000000)) { // TODO: Merge into 1 if-statement
                     if ((rwData->unk_3A != camera->focalActor->world.rot.y) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
-                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, A_BUTTON) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, B_BUTTON) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, U_CBUTTONS) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, D_CBUTTONS) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_CBUTTONS) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_CBUTTONS) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, Z_TRIG) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_TRIG) ||
+                        CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_TRIG) ||
                         (roData->interfaceFlags & UNIQUE0_FLAG_1)) {
                         rwData->unk_3E = 1;
                     }
@@ -5999,15 +5999,15 @@ s32 Camera_Demo2(Camera* camera) {
             sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_LARGE, CAM_HUD_VISIBILITY_A, 0);
 
             if (!(((rwData->animFrame < 0) || (camera->xzSpeed > 0.001f) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
-                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R)) &&
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, A_BUTTON) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, B_BUTTON) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, U_CBUTTONS) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, D_CBUTTONS) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_CBUTTONS) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_CBUTTONS) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, Z_TRIG) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_TRIG) ||
+                   CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_TRIG)) &&
                   (camera->stateFlags & CAM_STATE_3))) {
                 goto skipeyeUpdate;
             }
@@ -6741,15 +6741,15 @@ s32 Camera_Special8(Camera* camera) {
         sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_ALL, 0);
 
         // Wait for user input to move to the next camera update function
-        if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
-            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R) ||
+        if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, A_BUTTON) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, B_BUTTON) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, U_CBUTTONS) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, D_CBUTTONS) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_CBUTTONS) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_CBUTTONS) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, Z_TRIG) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_TRIG) ||
+            CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_TRIG) ||
             (roData->interfaceFlags & SPECIAL8_FLAG_3)) {
             func_800CC938(camera);
             Camera_SetStateFlag(camera, CAM_STATE_2 | CAM_STATE_CHECK_WATER);
@@ -6905,15 +6905,16 @@ s32 Camera_Special9(Camera* camera) {
             Camera_SetStateFlag(camera, CAM_STATE_10 | CAM_STATE_4);
             sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_ALL, 0);
 
-            if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CDOWN) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CLEFT) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CRIGHT) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_Z) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_L) ||
-                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_R) ||
+            if ((camera->xzSpeed > 0.001f) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, A_BUTTON) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, B_BUTTON) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, U_CBUTTONS) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, D_CBUTTONS) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_CBUTTONS) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_CBUTTONS) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, Z_TRIG) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, L_TRIG) ||
+                CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, R_TRIG) ||
                 (roData->interfaceFlags & SPECIAL9_FLAG_3)) {
 
                 func_800CC938(camera);

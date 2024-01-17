@@ -355,7 +355,7 @@ void PadMgr_AdjustInput(Input* input) {
     s8 curX = input->cur.stick_x;
     s8 curY = input->cur.stick_y;
 
-    if (CHECK_BTN_ANY(input->press.button, BTN_RESET) || (input->press.stick_x == 0)) {
+    if (CHECK_BTN_ANY(input->press.button, RESET_BUTTON) || (input->press.stick_x == 0)) {
         input->press.stick_x = 61;
         input->press.errno = -61;
         input->press.stick_y = 63;
@@ -366,7 +366,7 @@ void PadMgr_AdjustInput(Input* input) {
     pressY = input->press.stick_y;
     pressY2 = (s8)input->rel.errno;
 
-    if (CHECK_BTN_ANY(input->cur.button, BTN_RESET)) {
+    if (CHECK_BTN_ANY(input->cur.button, RESET_BUTTON)) {
         minus = curX - 7;
         plus = curX + 7;
 
@@ -488,11 +488,11 @@ void PadMgr_UpdateInputs(void) {
         }
 
         // If opposed directions on the D-Pad are pressed at the same time, mask both out
-        if ((input->cur.button & (BTN_DDOWN | BTN_DUP)) == (BTN_DDOWN | BTN_DUP)) {
-            input->cur.button &= ~(BTN_DDOWN | BTN_DUP);
+        if ((input->cur.button & (D_JPAD | U_JPAD)) == (D_JPAD | U_JPAD)) {
+            input->cur.button &= ~(D_JPAD | U_JPAD);
         }
-        if ((input->cur.button & (BTN_DRIGHT | BTN_DLEFT)) == (BTN_DRIGHT | BTN_DLEFT)) {
-            input->cur.button &= ~(BTN_DRIGHT | BTN_DLEFT);
+        if ((input->cur.button & (R_JPAD | L_JPAD)) == (R_JPAD | L_JPAD)) {
+            input->cur.button &= ~(R_JPAD | L_JPAD);
         }
 
         // Calculate pressed and relative inputs

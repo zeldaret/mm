@@ -7,16 +7,16 @@
 #include "PR/os_voice.h"
 
 s32 __osVoiceCheckResult(OSVoiceHandle* hd, u8* status) {
-    s32 errorCode = __osVoiceGetStatus(hd->mq, hd->channel, status);
+    s32 errorCode = __osVoiceGetStatus(hd->__mq, hd->__channel, status);
     u8 data[2];
 
     if (errorCode == 0) {
         if (*status & 1) {
             errorCode = CONT_ERR_VOICE_NO_RESPONSE;
         } else {
-            errorCode = __osVoiceContRead2(hd->mq, hd->channel, 0, data);
+            errorCode = __osVoiceContRead2(hd->__mq, hd->__channel, 0, data);
             if (errorCode == 0) {
-                hd->status = data[0] & 7;
+                hd->cmd_status = data[0] & 7;
 
                 if (data[0] & 0x40) {
                     errorCode = CONT_ERR_VOICE_NO_RESPONSE;

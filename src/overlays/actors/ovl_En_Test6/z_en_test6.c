@@ -676,7 +676,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
             this->timer = 1;
         }
     } else if ((this->timer <= 60) && (this->timer > 40) &&
-               (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B))) {
+               (CHECK_BTN_ALL(input->press.button, A_BUTTON) || CHECK_BTN_ALL(input->press.button, B_BUTTON))) {
         this->screenFillAlpha = 1;
 
         if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_SLOW) {
@@ -909,7 +909,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
             this->doubleSoTEnvLerp = 0.9333333f;
         }
     } else if ((this->timer < 96) && (this->timer > 50) &&
-               (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B))) {
+               (CHECK_BTN_ALL(input->press.button, A_BUTTON) || CHECK_BTN_ALL(input->press.button, B_BUTTON))) {
         this->screenFillAlpha = 1;
         this->timer = 39;
         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_FANFARE, 20);

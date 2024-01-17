@@ -197,11 +197,11 @@ bool EnOssan_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
-        return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON);
     }
-    return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
-           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
-           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, B_BUTTON) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, U_CBUTTONS);
 }
 
 void EnOssan_CheckValidSpawn(EnOssan* this) {
@@ -324,7 +324,7 @@ void EnOssan_EndInteraction(PlayState* play, EnOssan* this) {
 }
 
 s32 EnOssan_TestEndInteraction(EnOssan* this, PlayState* play, Input* input) {
-    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         EnOssan_EndInteraction(play, this);
         return true;
     }
@@ -332,7 +332,7 @@ s32 EnOssan_TestEndInteraction(EnOssan* this, PlayState* play, Input* input) {
 }
 
 s32 EnOssan_TestCancelOption(EnOssan* this, PlayState* play, Input* input) {
-    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         this->actionFunc = this->prevActionFunc;
         Message_ContinueTextbox(play, this->items[this->cursorIndex]->actor.textId);
         return true;

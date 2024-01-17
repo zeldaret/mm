@@ -17,7 +17,7 @@ s32 osVoiceMaskDictionary(OSVoiceHandle* hd, u8* maskPattern, int size) {
     u8 status;
     u8 data[20];
 
-    errorCode = __osVoiceGetStatus(hd->mq, hd->channel, &status);
+    errorCode = __osVoiceGetStatus(hd->__mq, hd->__channel, &status);
     if (errorCode != 0) {
         return errorCode;
     }
@@ -45,7 +45,7 @@ s32 osVoiceMaskDictionary(OSVoiceHandle* hd, u8* maskPattern, int size) {
         data[ARRAY_COUNT(data) - 1] = 0;
     }
 
-    errorCode = __osVoiceContWrite20(hd->mq, hd->channel, 0, data);
+    errorCode = __osVoiceContWrite20(hd->__mq, hd->__channel, 0, data);
     if (errorCode == 0) {
         errorCode = __osVoiceCheckResult(hd, &status);
         if (errorCode & 0xFF00) {

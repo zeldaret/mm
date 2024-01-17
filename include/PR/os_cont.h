@@ -43,21 +43,21 @@ typedef struct {
 
 // TODO: use real libultra button defines instead of this
 /* Buttons */
-#define BTN_CRIGHT      0x0001
-#define BTN_CLEFT       0x0002
-#define BTN_CDOWN       0x0004
-#define BTN_CUP         0x0008
-#define BTN_R           0x0010
-#define BTN_L           0x0020
-#define BTN_RESET       0x0080
-#define BTN_DRIGHT      0x0100
-#define BTN_DLEFT       0x0200
-#define BTN_DDOWN       0x0400
-#define BTN_DUP         0x0800
-#define BTN_START       0x1000
-#define BTN_Z           0x2000
-#define BTN_B           0x4000
-#define BTN_A           0x8000
+#define R_CBUTTONS      0x0001
+#define L_CBUTTONS      0x0002
+#define D_CBUTTONS      0x0004
+#define U_CBUTTONS      0x0008
+#define R_TRIG          0x0010
+#define L_TRIG          0x0020
+#define RESET_BUTTON    0x0080 /* "neutral reset": Corresponds to holding L+R and pressing S */
+#define R_JPAD          0x0100
+#define L_JPAD          0x0200
+#define D_JPAD          0x0400
+#define U_JPAD          0x0800
+#define START_BUTTON    0x1000
+#define Z_TRIG          0x2000
+#define B_BUTTON        0x4000
+#define A_BUTTON        0x8000
 
 #define CONT_ERR_NO_CONTROLLER      PFS_ERR_NOPACK      /* 1 */
 #define CONT_ERR_CONTRFAIL          CONT_OVERRUN_ERROR  /* 4 */

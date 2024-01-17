@@ -808,7 +808,7 @@ void Interface_PostmanTimerCallback(void* arg) {
     s32 btnAPressed;
 
     PadMgr_GetInputNoLock(sPostmanTimerInput, false);
-    btnAPressed = CHECK_BTN_ALL(sPostmanTimerInput[0].cur.button, BTN_A);
+    btnAPressed = CHECK_BTN_ALL(sPostmanTimerInput[0].cur.button, A_BUTTON);
     if ((btnAPressed != sPostmanTimerInputBtnAPressed) && btnAPressed) {
         gSaveContext.postmanTimerStopOsTime = osGetTime();
         gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_STOP;
@@ -2343,12 +2343,12 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
                     restoreHudVisibility = true;
                     sPictoState = PICTO_BOX_STATE_OFF;
-                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
+                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, B_BUTTON)) {
                     play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTO_BOX_ON;
                     interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
                     restoreHudVisibility = true;
                     sPictoState = PICTO_BOX_STATE_OFF;
-                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON) ||
                            (AudioVoice_GetWord() == VOICE_WORD_ID_CHEESE)) {
                     if (!CHECK_EVENTINF(EVENTINF_41) ||
                         (CHECK_EVENTINF(EVENTINF_41) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {

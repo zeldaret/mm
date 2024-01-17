@@ -661,7 +661,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
     Input* input = CONTROLLER1(&play->state);
     s16 slot;
     s16 value;
-    s32 dBtnInput = input->cur.button & (BTN_DUP | BTN_DDOWN | BTN_DLEFT | BTN_DRIGHT);
+    s32 dBtnInput = input->cur.button & (U_JPAD | D_JPAD | L_JPAD | R_JPAD);
 
     pauseCtx->stickAdjX = input->rel.stick_x;
     pauseCtx->stickAdjY = input->rel.stick_y;
@@ -680,24 +680,24 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
         sHeldDBtnTimer = 16;
     }
 
-    if (CHECK_BTN_ANY(dBtnInput, BTN_DDOWN)) {
+    if (CHECK_BTN_ANY(dBtnInput, D_JPAD)) {
         sCurRow++;
         if (sCurRow > 17) {
             sCurRow = 0;
         }
         sCurSection = sRowFirstSections[sCurRow];
-    } else if (CHECK_BTN_ANY(dBtnInput, BTN_DUP)) {
+    } else if (CHECK_BTN_ANY(dBtnInput, U_JPAD)) {
         sCurRow--;
         if (sCurRow < 0) {
             sCurRow = 17;
         }
         sCurSection = sRowFirstSections[sCurRow];
-    } else if (CHECK_BTN_ANY(dBtnInput, BTN_DLEFT)) {
+    } else if (CHECK_BTN_ANY(dBtnInput, L_JPAD)) {
         sCurSection--;
         if (sCurSection < 0) {
             sCurSection = ARRAY_COUNT(sSectionPositions) - 1;
         }
-    } else if (CHECK_BTN_ANY(dBtnInput, BTN_DRIGHT)) {
+    } else if (CHECK_BTN_ANY(dBtnInput, R_JPAD)) {
         sCurSection++;
         if (sCurSection > (ARRAY_COUNT(sSectionPositions) - 1)) {
             sCurSection = 0;
@@ -708,22 +708,22 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
     switch (sCurSection) {
         case INV_EDITOR_SECTION_RUPEE:
             // Rupees
-            if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+            if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS)) {
                 gSaveContext.save.saveInfo.playerData.rupees -= 100;
                 if (gSaveContext.save.saveInfo.playerData.rupees < 0) {
                     gSaveContext.save.saveInfo.playerData.rupees = 0;
                 }
-            } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
+            } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS)) {
                 gSaveContext.save.saveInfo.playerData.rupees += 100;
                 if (gSaveContext.save.saveInfo.playerData.rupees >= 9999) {
                     gSaveContext.save.saveInfo.playerData.rupees = 9999;
                 }
-            } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+            } else if (CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                 gSaveContext.save.saveInfo.playerData.rupees--;
                 if (gSaveContext.save.saveInfo.playerData.rupees < 0) {
                     gSaveContext.save.saveInfo.playerData.rupees = 0;
                 }
-            } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+            } else if (CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                 gSaveContext.save.saveInfo.playerData.rupees++;
                 if (gSaveContext.save.saveInfo.playerData.rupees >= 9999) {
                     gSaveContext.save.saveInfo.playerData.rupees = 9999;
@@ -733,13 +733,13 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
 
         case INV_EDITOR_SECTION_HEALTH_CAPACITY:
             // Health Capacity
-            if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+            if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                 gSaveContext.save.saveInfo.playerData.healthCapacity -= 0x10;
                 if (gSaveContext.save.saveInfo.playerData.healthCapacity < 0x30) {
                     gSaveContext.save.saveInfo.playerData.healthCapacity = 0x30;
                 }
-            } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
-                       CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+            } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS) ||
+                       CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                 gSaveContext.save.saveInfo.playerData.healthCapacity += 0x10;
                 if (gSaveContext.save.saveInfo.playerData.healthCapacity >= 0x140) {
                     gSaveContext.save.saveInfo.playerData.healthCapacity = 0x140;
@@ -749,25 +749,25 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
 
         case INV_EDITOR_SECTION_HEALTH:
             // Health
-            if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+            if (CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                 Health_ChangeBy(play, -4);
-            } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+            } else if (CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                 Health_ChangeBy(play, 4);
-            } else if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+            } else if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS)) {
                 Health_ChangeBy(play, -0x10);
-            } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
+            } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS)) {
                 Health_ChangeBy(play, 0x10);
             }
             break;
 
         case INV_EDITOR_SECTION_HEART_PIECE_COUNT:
             // Heart Piece Count
-            if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+            if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                 if (GET_QUEST_HEART_PIECE_COUNT != 0) {
                     DECREMENT_QUEST_HEART_PIECE_COUNT;
                 }
-            } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
-                       CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+            } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS) ||
+                       CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                 if (LEQ_MAX_QUEST_HEART_PIECE_COUNT) {
                     INCREMENT_QUEST_HEART_PIECE_COUNT;
                 }
@@ -780,12 +780,12 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 slot = sCurSection - INV_EDITOR_SECTION_ITEMS;
                 if ((slot == SLOT_BOW) || ((slot >= SLOT_BOMB) && (slot <= SLOT_DEKU_NUT)) ||
                     (slot == SLOT_POWDER_KEG) || (slot == SLOT_MAGIC_BEANS)) {
-                    if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+                    if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS)) {
                         Inventory_DeleteItem(gAmmoItems[slot], SLOT(gAmmoItems[slot]));
                         AMMO(gAmmoItems[slot]) = 0;
                     }
 
-                    if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    if (CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                         if (slot != INV_CONTENT(gAmmoItems[slot])) {
                             INV_CONTENT(gAmmoItems[slot]) = gAmmoItems[slot];
                         }
@@ -793,25 +793,25 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                         if (AMMO(gAmmoItems[slot]) > 99) {
                             AMMO(gAmmoItems[slot]) = 99;
                         }
-                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    } else if (CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                         AMMO(gAmmoItems[slot])--;
                         if (AMMO(gAmmoItems[slot]) < 0) {
                             AMMO(gAmmoItems[slot]) = 0;
                         }
                     }
                 } else if ((slot == SLOT_TRADE_DEED) || (slot == SLOT_TRADE_KEY_MAMA) || (slot == SLOT_TRADE_COUPLE)) {
-                    if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+                    if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS)) {
                         value = sSlotItems[slot];
                         Inventory_DeleteItem(value, slot);
                     } else if (slot == SLOT_TRADE_DEED) {
-                        if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                        if (CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                             if (INV_CONTENT(ITEM_MOONS_TEAR) == ITEM_NONE) {
                                 gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_MOONS_TEAR;
                             } else if ((INV_CONTENT(ITEM_MOONS_TEAR) >= ITEM_MOONS_TEAR) &&
                                        (INV_CONTENT(ITEM_MOONS_TEAR) <= ITEM_DEED_MOUNTAIN)) {
                                 gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_MOONS_TEAR) + 1;
                             }
-                        } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                        } else if (CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                             if (INV_CONTENT(ITEM_MOONS_TEAR) == ITEM_NONE) {
                                 gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_DEED_OCEAN;
                             } else if ((INV_CONTENT(ITEM_MOONS_TEAR) >= ITEM_DEED_LAND) &&
@@ -820,14 +820,14 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                             }
                         }
                     } else if (slot == SLOT_TRADE_KEY_MAMA) {
-                        if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                        if (CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                             if (INV_CONTENT(ITEM_ROOM_KEY) == ITEM_NONE) {
                                 gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_ROOM_KEY;
                             } else if ((INV_CONTENT(ITEM_ROOM_KEY) >= ITEM_ROOM_KEY) &&
                                        (INV_CONTENT(ITEM_ROOM_KEY) <= ITEM_ROOM_KEY)) {
                                 gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_ROOM_KEY) + 1;
                             }
-                        } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                        } else if (CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                             if (INV_CONTENT(ITEM_ROOM_KEY) == ITEM_NONE) {
                                 gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_LETTER_MAMA;
                             } else if ((INV_CONTENT(ITEM_ROOM_KEY) >= ITEM_LETTER_MAMA) &&
@@ -835,14 +835,14 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                                 gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_ROOM_KEY) - 1;
                             }
                         }
-                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    } else if (CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                         if (INV_CONTENT(ITEM_LETTER_TO_KAFEI) == ITEM_NONE) {
                             gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_LETTER_TO_KAFEI;
                         } else if ((INV_CONTENT(ITEM_LETTER_TO_KAFEI) >= ITEM_LETTER_TO_KAFEI) &&
                                    (INV_CONTENT(ITEM_LETTER_TO_KAFEI) <= ITEM_LETTER_TO_KAFEI)) {
                             gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_LETTER_TO_KAFEI) + 1;
                         }
-                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    } else if (CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                         if (INV_CONTENT(ITEM_LETTER_TO_KAFEI) == ITEM_NONE) {
                             gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_PENDANT_OF_MEMORIES;
                         } else if ((INV_CONTENT(ITEM_LETTER_TO_KAFEI) >= ITEM_PENDANT_OF_MEMORIES) &&
@@ -851,10 +851,10 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                         }
                     }
                 } else if ((slot >= SLOT_BOTTLE_1) && (slot <= SLOT_BOTTLE_6)) {
-                    if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+                    if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS)) {
                         value = ITEM_BOTTLE + slot - SLOT_BOTTLE_1;
                         Inventory_DeleteItem(value, SLOT(ITEM_BOTTLE) + slot - SLOT_BOTTLE_1);
-                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    } else if (CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                         if (gSaveContext.save.saveInfo.inventory.items[slot] == ITEM_NONE) {
                             gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_BOTTLE;
                         } else if ((gSaveContext.save.saveInfo.inventory.items[slot] >= ITEM_BOTTLE) &&
@@ -862,7 +862,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                             gSaveContext.save.saveInfo.inventory.items[slot] =
                                 gSaveContext.save.saveInfo.inventory.items[slot] + 1;
                         }
-                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    } else if (CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                         if (gSaveContext.save.saveInfo.inventory.items[slot] == ITEM_NONE) {
                             gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_OBABA_DRINK;
                         } else if ((gSaveContext.save.saveInfo.inventory.items[slot] >= ITEM_POTION_RED) &&
@@ -872,9 +872,10 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                         }
                     }
                 } else {
-                    if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT) ||
-                        CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
-                        CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) ||
+                        CHECK_BTN_ALL(input->press.button, L_CBUTTONS) ||
+                        CHECK_BTN_ALL(input->press.button, D_CBUTTONS) ||
+                        CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                         value = sSlotItems[slot];
                         if (gSaveContext.save.saveInfo.inventory.items[slot] == ITEM_NONE) {
                             INV_CONTENT(value) = value;
@@ -887,7 +888,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
             } else if (sCurSection == INV_EDITOR_SECTION_SWORD) {
                 // Sword
                 value = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     value--;
                     if (value < EQUIP_VALUE_SWORD_NONE) {
                         value = EQUIP_VALUE_SWORD_NONE;
@@ -902,8 +903,8 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                         CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
                     }
 
-                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
-                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS) ||
+                           CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                     value++;
                     if (value > EQUIP_VALUE_SWORD_DIETY) {
                         value = EQUIP_VALUE_SWORD_DIETY;
@@ -920,7 +921,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
             } else if (sCurSection == INV_EDITOR_SECTION_SHIELD) {
                 // Shield
                 value = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     value--;
                     if (value < EQUIP_VALUE_SHIELD_NONE) {
                         value = EQUIP_VALUE_SHIELD_NONE;
@@ -928,8 +929,8 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
 
                     SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, value);
 
-                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
-                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS) ||
+                           CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                     value++;
                     if (value > EQUIP_VALUE_SHIELD_MAX) {
                         value = EQUIP_VALUE_SHIELD_MAX;
@@ -940,14 +941,14 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
             } else if (sCurSection == INV_EDITOR_SECTION_QUIVER) {
                 // Quiver
                 value = GET_CUR_UPG_VALUE(UPG_QUIVER);
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     value--;
                     if (value < 0) {
                         value = 0;
                     }
                     Inventory_ChangeUpgrade(UPG_QUIVER, value);
-                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
-                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS) ||
+                           CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                     value++;
                     if (value > 3) {
                         value = 3;
@@ -958,14 +959,14 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
             } else if (sCurSection == INV_EDITOR_SECTION_BOMB_BAG) {
                 // Bomb Bag
                 value = GET_CUR_UPG_VALUE(UPG_BOMB_BAG);
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     value--;
                     if (value < 0) {
                         value = 0;
                     }
                     Inventory_ChangeUpgrade(UPG_BOMB_BAG, value);
-                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
-                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS) ||
+                           CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                     value++;
                     if (value > 3) {
                         value = 3;
@@ -975,14 +976,14 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
 
             } else if (sCurSection == INV_EDITOR_SECTION_SWAMP_GOLD_SKULLS) {
                 // Gold Skulls (Swamp Spider House)
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     if (((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000) >> 0x10) != 0) {
                         gSaveContext.save.saveInfo.skullTokenCount =
                             ((u16)(((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000) >> 0x10) - 1) << 0x10) |
                             (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF);
                     }
-                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
-                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS) ||
+                           CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                     gSaveContext.save.saveInfo.skullTokenCount =
                         ((u16)(((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
                         (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF);
@@ -990,14 +991,14 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
 
             } else if (sCurSection == INV_EDITOR_SECTION_OCEAN_GOLD_SKULLS) {
                 // Gold Skulls (Oceans Spider House)
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     if (((u16)gSaveContext.save.saveInfo.skullTokenCount) != 0) {
                         gSaveContext.save.saveInfo.skullTokenCount =
                             (((u16)gSaveContext.save.saveInfo.skullTokenCount - 1) & 0xFFFF) |
                             (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
                     }
-                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
-                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS) ||
+                           CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                     gSaveContext.save.saveInfo.skullTokenCount =
                         (((u16)gSaveContext.save.saveInfo.skullTokenCount + 1) & 0xFFFF) |
                         (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
@@ -1005,13 +1006,13 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
 
             } else if (sCurSection == INV_EDITOR_SECTION_NOTEBOOK) {
                 // Bombers Notebook
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[QUEST_BOMBERS_NOTEBOOK];
                 }
 
             } else if (sCurSection == INV_EDITOR_SECTION_LULLABY_INTRO) {
                 // Goron Lullaby Intro
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[QUEST_SONG_LULLABY_INTRO];
                 }
 
@@ -1020,20 +1021,20 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 //! Note: quest items must align with section, and all cases below INV_EDITOR_SECTION_LULLABY_INTRO must
                 //! have also been taken
                 slot = sCurSection - INV_EDITOR_SECTION_BOSS;
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[slot];
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_DUNGEON_ITEMS) {
                 // Dungeon Small Keys
                 slot = sCurSection - INV_EDITOR_SECTION_SMALL_KEYS;
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     DUNGEON_KEY_COUNT(slot)--;
                     if (DUNGEON_KEY_COUNT(slot) < 0) {
                         DUNGEON_KEY_COUNT(slot) = -1;
                     }
-                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
-                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS) ||
+                           CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                     if (DUNGEON_KEY_COUNT(slot) < 0) {
                         DUNGEON_KEY_COUNT(slot) = 1;
                     } else {
@@ -1047,26 +1048,26 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
             } else if (sCurSection < INV_EDITOR_SECTION_STRAY_FAIRIES) {
                 // Dungeon Items
                 slot = sCurSection - INV_EDITOR_SECTION_DUNGEON_ITEMS;
-                if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= (1 << DUNGEON_MAP);
                 }
-                if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
+                if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS)) {
                     gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= (1 << DUNGEON_COMPASS);
                 }
-                if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                if (CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                     gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= (1 << DUNGEON_BOSS_KEY);
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_DOUBLE_DEFENSE) {
                 // Stray Fairies
                 slot = sCurSection - INV_EDITOR_SECTION_STRAY_FAIRIES;
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                     gSaveContext.save.saveInfo.inventory.strayFairies[slot]--;
                     if (gSaveContext.save.saveInfo.inventory.strayFairies[slot] < 0) {
                         gSaveContext.save.saveInfo.inventory.strayFairies[slot] = 0;
                     }
-                } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
-                           CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS) ||
+                           CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                     gSaveContext.save.saveInfo.inventory.strayFairies[slot]++;
                     if (gSaveContext.save.saveInfo.inventory.strayFairies[slot] >= 99) {
                         gSaveContext.save.saveInfo.inventory.strayFairies[slot] = 99;
@@ -1075,8 +1076,8 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
 
             } else {
                 // Double Defense
-                if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT) ||
-                    CHECK_BTN_ALL(input->press.button, BTN_CDOWN) || CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS) || CHECK_BTN_ALL(input->press.button, L_CBUTTONS) ||
+                    CHECK_BTN_ALL(input->press.button, D_CBUTTONS) || CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                     gSaveContext.save.saveInfo.playerData.doubleDefense ^= 1;
                     if (!gSaveContext.save.saveInfo.playerData.doubleDefense) {
                         gSaveContext.save.saveInfo.inventory.defenseHearts = 0;
@@ -1093,7 +1094,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
     // and becomes closable after a frame once `debugEditor` is set to DEBUG_EDITOR_INVENTORY
     if (pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY_INIT) {
         pauseCtx->debugEditor = DEBUG_EDITOR_INVENTORY;
-    } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY) && CHECK_BTN_ALL(input->press.button, BTN_L)) {
+    } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_INVENTORY) && CHECK_BTN_ALL(input->press.button, L_TRIG)) {
         pauseCtx->debugEditor = DEBUG_EDITOR_NONE;
     }
 }

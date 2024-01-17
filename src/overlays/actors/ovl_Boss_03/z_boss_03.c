@@ -897,7 +897,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
     // Mashing A or B reduces the time Gyorg is chewing Player
-    if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->press.button, A_BUTTON) || CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         if (this->workTimer[WORK_TIMER_CURRENT_ACTION] != 0) {
             this->workTimer[WORK_TIMER_CURRENT_ACTION]--;
         }

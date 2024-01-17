@@ -227,7 +227,7 @@ void Map_Update(PlayState* play) {
     s16 floor;
     s32 pad2;
 
-    if ((play->pauseCtx.state <= PAUSE_STATE_OPENING_2) && (CHECK_BTN_ALL(controller->press.button, BTN_L)) &&
+    if ((play->pauseCtx.state <= PAUSE_STATE_OPENING_2) && (CHECK_BTN_ALL(controller->press.button, L_TRIG)) &&
         !Play_InCsMode(play) && !func_80106530(play)) {
         if (!R_MINIMAP_DISABLED) {
             Audio_PlaySfx(NA_SE_SY_CAMERA_ZOOM_UP);

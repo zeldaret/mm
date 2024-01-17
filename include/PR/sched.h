@@ -9,8 +9,10 @@
 
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
-#define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
+#define OS_SC_RDP_DONE_MSG      3
 #define OS_SC_PRE_NMI_MSG       4
+#define OS_SC_LAST_MSG          4	/* this should have highest number */
+#define OS_SC_MAX_MESGS         8
 
 #define OS_SC_NEEDS_RDP         0x0001
 #define OS_SC_NEEDS_RSP         0x0002
@@ -21,11 +23,6 @@
 
 #define OS_SC_RCP_MASK          0x0003
 #define OS_SC_TYPE_MASK         0x0007
-
-#define OS_SC_DP                0x0001
-#define OS_SC_SP                0x0002
-#define OS_SC_YIELD             0x0010
-#define OS_SC_YIELDED           0x0020
 
 typedef struct OSScTask {
     /* 0x00 */ struct OSScTask* next;

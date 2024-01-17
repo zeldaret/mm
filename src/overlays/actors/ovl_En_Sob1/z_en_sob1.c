@@ -177,11 +177,11 @@ bool EnSob1_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
-        return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON);
     }
-    return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
-           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
-           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, B_BUTTON) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, U_CBUTTONS);
 }
 
 u16 EnSob1_GetTalkOption(EnSob1* this, PlayState* play) {
@@ -479,7 +479,7 @@ void EnSob1_EndInteraction(PlayState* play, EnSob1* this) {
 }
 
 s32 EnSob1_TestEndInteraction(EnSob1* this, PlayState* play, Input* input) {
-    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         if (this->shopType == BOMB_SHOP) {
             EnSob1_BombShopkeeper_EndInteraction(this, play);
         } else {
@@ -491,7 +491,7 @@ s32 EnSob1_TestEndInteraction(EnSob1* this, PlayState* play, Input* input) {
 }
 
 s32 EnSob1_TestCancelOption(EnSob1* this, PlayState* play, Input* input) {
-    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         this->actionFunc = this->prevActionFunc;
         Message_ContinueTextbox(play, this->items[this->cursorIndex]->actor.textId);
         return true;

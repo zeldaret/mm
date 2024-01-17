@@ -351,7 +351,7 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
         return;
     }
 
-    if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT) || CHECK_BTN_ALL(input->press.button, BTN_R)) {
+    if (CHECK_BTN_ALL(input->cur.button, R_JPAD) || CHECK_BTN_ALL(input->press.button, R_TRIG)) {
         // Switch the page to the right regardless of where the cursor is
         if (interfaceCtx->unk_212 == DO_ACTION_DECIDE) {
             func_8011552C(play, DO_ACTION_INFO);
@@ -360,7 +360,7 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
         return;
     }
 
-    if (CHECK_BTN_ALL(input->cur.button, BTN_DLEFT) || CHECK_BTN_ALL(input->press.button, BTN_Z)) {
+    if (CHECK_BTN_ALL(input->cur.button, L_JPAD) || CHECK_BTN_ALL(input->press.button, Z_TRIG)) {
         // Switch the page to the left regardless of where the cursor is
         if (interfaceCtx->unk_212 == DO_ACTION_DECIDE) {
             func_8011552C(play, DO_ACTION_INFO);
@@ -2942,8 +2942,8 @@ void KaleidoScope_Update(PlayState* play) {
         case PAUSE_STATE_MAIN:
             switch (pauseCtx->mainState) {
                 case PAUSE_MAIN_STATE_IDLE:
-                    if (!pauseCtx->itemDescriptionOn &&
-                        (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_B))) {
+                    if (!pauseCtx->itemDescriptionOn && (CHECK_BTN_ALL(input->press.button, START_BUTTON) ||
+                                                         CHECK_BTN_ALL(input->press.button, B_BUTTON))) {
                         func_8011552C(play, DO_ACTION_NONE);
                         pauseCtx->state = PAUSE_STATE_UNPAUSE_SETUP;
                         sPauseMenuVerticalOffset = -6240.0f;
@@ -2975,7 +2975,8 @@ void KaleidoScope_Update(PlayState* play) {
                 case PAUSE_MAIN_STATE_SONG_PROMPT:
                     pauseCtx->ocarinaStaff = AudioOcarina_GetPlayingStaff();
 
-                    if (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
+                    if (CHECK_BTN_ALL(input->press.button, START_BUTTON) ||
+                        CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
                         // Abort having the player play the song and close the pause menu
                         AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                         func_8011552C(play, DO_ACTION_NONE);
@@ -3012,7 +3013,8 @@ void KaleidoScope_Update(PlayState* play) {
                     break;
 
                 case PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG:
-                    if (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
+                    if (CHECK_BTN_ALL(input->press.button, START_BUTTON) ||
+                        CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
                         AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                         func_8011552C(play, DO_ACTION_NONE);
                         pauseCtx->state = PAUSE_STATE_UNPAUSE_SETUP;
@@ -3054,7 +3056,8 @@ void KaleidoScope_Update(PlayState* play) {
                     break;
 
                 case PAUSE_SAVEPROMPT_STATE_1:
-                    if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+                    if (CHECK_BTN_ALL(input->press.button, A_BUTTON) ||
+                        CHECK_BTN_ALL(input->press.button, U_CBUTTONS)) {
                         if (pauseCtx->promptChoice != PAUSE_PROMPT_YES) {
                             func_8011552C(play, DO_ACTION_NONE);
                             pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_RETURN_TO_MENU;
@@ -3073,13 +3076,13 @@ void KaleidoScope_Update(PlayState* play) {
                             }
                             sDelayTimer = 90;
                         }
-                    } else if (CHECK_BTN_ALL(input->press.button, BTN_START)) {
+                    } else if (CHECK_BTN_ALL(input->press.button, START_BUTTON)) {
                         func_8011552C(play, DO_ACTION_NONE);
                         pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_3;
                         sPauseMenuVerticalOffset = -6240.0f;
                         D_8082B90C = pauseCtx->roll;
                         Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
-                    } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+                    } else if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
                         func_8011552C(play, DO_ACTION_NONE);
                         pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_RETURN_TO_MENU;
                         D_8082B90C = pauseCtx->roll;
@@ -3093,8 +3096,8 @@ void KaleidoScope_Update(PlayState* play) {
                     break;
 
                 case PAUSE_SAVEPROMPT_STATE_5:
-                    if (CHECK_BTN_ALL(input->press.button, BTN_B) || CHECK_BTN_ALL(input->press.button, BTN_A) ||
-                        CHECK_BTN_ALL(input->press.button, BTN_START) || (--sDelayTimer == 0)) {
+                    if (CHECK_BTN_ALL(input->press.button, B_BUTTON) || CHECK_BTN_ALL(input->press.button, A_BUTTON) ||
+                        CHECK_BTN_ALL(input->press.button, START_BUTTON) || (--sDelayTimer == 0)) {
                         func_8011552C(play, DO_ACTION_NONE);
                         pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_3;
                         sPauseMenuVerticalOffset = -6240.0f;
@@ -3314,7 +3317,7 @@ void KaleidoScope_Update(PlayState* play) {
             break;
 
         case PAUSE_STATE_GAMEOVER_SAVE_PROMPT:
-            if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
+            if (CHECK_BTN_ALL(input->press.button, A_BUTTON)) {
                 if (pauseCtx->promptChoice != PAUSE_PROMPT_YES) {
                     pauseCtx->promptChoice = PAUSE_PROMPT_YES;
                     Audio_PlaySfx(NA_SE_SY_DECIDE);
@@ -3364,8 +3367,8 @@ void KaleidoScope_Update(PlayState* play) {
             if (sDelayTimer == 0) {
                 pauseCtx->state = PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT;
                 gameOverCtx->state++;
-            } else if ((sDelayTimer <= 80) &&
-                       (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_START))) {
+            } else if ((sDelayTimer <= 80) && (CHECK_BTN_ALL(input->press.button, A_BUTTON) ||
+                                               CHECK_BTN_ALL(input->press.button, START_BUTTON))) {
                 pauseCtx->state = PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT;
                 gameOverCtx->state++;
                 Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
@@ -3373,7 +3376,7 @@ void KaleidoScope_Update(PlayState* play) {
             break;
 
         case PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT:
-            if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_START)) {
+            if (CHECK_BTN_ALL(input->press.button, A_BUTTON) || CHECK_BTN_ALL(input->press.button, START_BUTTON)) {
                 if (pauseCtx->promptChoice == PAUSE_PROMPT_YES) {
                     Audio_PlaySfx(NA_SE_SY_PIECE_OF_HEART);
                     Play_SaveCycleSceneFlags(&play->state);
@@ -3483,14 +3486,14 @@ void KaleidoScope_Update(PlayState* play) {
             break;
 
         case PAUSE_STATE_OWL_WARP_SELECT:
-            if (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
+            if (CHECK_BTN_ALL(input->press.button, START_BUTTON) || CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
                 func_8011552C(play, DO_ACTION_NONE);
                 pauseCtx->state = PAUSE_STATE_OWL_WARP_6;
                 sPauseMenuVerticalOffset = -6240.0f;
                 Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
                 play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
-            } else if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
+            } else if (CHECK_BTN_ALL(input->press.button, A_BUTTON)) {
                 Audio_PlaySfx(NA_SE_SY_DECIDE);
                 Message_StartTextbox(play, 0x1B93, NULL);
                 pauseCtx->state = PAUSE_STATE_OWL_WARP_CONFIRM;
@@ -3500,7 +3503,7 @@ void KaleidoScope_Update(PlayState* play) {
             break;
 
         case PAUSE_STATE_OWL_WARP_CONFIRM:
-            if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
+            if (CHECK_BTN_ALL(input->press.button, A_BUTTON)) {
                 msgCtx->msgLength = 0;
                 msgCtx->msgMode = MSGMODE_NONE;
                 if (msgCtx->choiceIndex == 0) {
@@ -3515,12 +3518,12 @@ void KaleidoScope_Update(PlayState* play) {
                     func_8011552C(play, DO_ACTION_WARP);
                     Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
                 }
-            } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+            } else if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
                 msgCtx->msgLength = 0;
                 msgCtx->msgMode = MSGMODE_NONE;
                 pauseCtx->state = PAUSE_STATE_OWL_WARP_SELECT;
                 Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
-            } else if (CHECK_BTN_ALL(input->press.button, BTN_START)) {
+            } else if (CHECK_BTN_ALL(input->press.button, START_BUTTON)) {
                 msgCtx->msgLength = 0;
                 msgCtx->msgMode = MSGMODE_NONE;
                 func_8011552C(play, DO_ACTION_NONE);

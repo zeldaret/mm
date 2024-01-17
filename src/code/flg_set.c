@@ -145,22 +145,22 @@ void FlagSet_Update(GameState* gameState) {
 
     /* Intra-byte navigation */
 
-    if (CHECK_BTN_ALL(input->press.button, BTN_DLEFT)) {
+    if (CHECK_BTN_ALL(input->press.button, L_JPAD)) {
         sCurrentBit++;
         sTimer = 10;
     }
 
-    if (CHECK_BTN_ALL(input->press.button, BTN_DRIGHT)) {
+    if (CHECK_BTN_ALL(input->press.button, R_JPAD)) {
         sCurrentBit--;
         sTimer = 10;
     }
 
     if (sTimer == 0) {
-        if (CHECK_BTN_ALL(input->cur.button, BTN_DLEFT)) {
+        if (CHECK_BTN_ALL(input->cur.button, L_JPAD)) {
             sCurrentBit++;
             sTimer = 2;
         }
-        if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT)) {
+        if (CHECK_BTN_ALL(input->cur.button, R_JPAD)) {
             sCurrentBit--;
             sTimer = 2;
         }
@@ -172,7 +172,7 @@ void FlagSet_Update(GameState* gameState) {
     /* Navigation between bytes */
 
     // + Up/Down scroll 1 at a time
-    if (CHECK_BTN_ALL(input->press.button, BTN_DUP)) {
+    if (CHECK_BTN_ALL(input->press.button, U_JPAD)) {
         sEntryIndex--;
         if (sEntryIndex < 0) {
             sEntryIndex = 0;
@@ -180,7 +180,7 @@ void FlagSet_Update(GameState* gameState) {
         sTimer = 10;
     }
 
-    if (CHECK_BTN_ALL(input->press.button, BTN_DDOWN)) {
+    if (CHECK_BTN_ALL(input->press.button, D_JPAD)) {
         sEntryIndex++;
         if (sFlagEntries[sEntryIndex].value == NULL) { // End of array
             sEntryIndex--;
@@ -189,7 +189,7 @@ void FlagSet_Update(GameState* gameState) {
     }
 
     // C Up/Down scroll 10 at a time
-    if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+    if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS)) {
         sEntryIndex -= 10;
         if (sEntryIndex < 0) {
             sEntryIndex = 0;
@@ -197,7 +197,7 @@ void FlagSet_Update(GameState* gameState) {
         sTimer = 10;
     }
 
-    if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
+    if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS)) {
         sEntryIndex += 10;
         if (sEntryIndex > 100) {
             sEntryIndex = 100;
@@ -206,28 +206,28 @@ void FlagSet_Update(GameState* gameState) {
     }
 
     if (sTimer == 0) {
-        if (CHECK_BTN_ALL(input->cur.button, BTN_DUP)) {
+        if (CHECK_BTN_ALL(input->cur.button, U_JPAD)) {
             sEntryIndex--;
             if (sEntryIndex < 0) {
                 sEntryIndex = 0;
             }
             sTimer = 2;
 
-        } else if (CHECK_BTN_ALL(input->cur.button, BTN_DDOWN)) {
+        } else if (CHECK_BTN_ALL(input->cur.button, D_JPAD)) {
             sEntryIndex++;
             if (sFlagEntries[sEntryIndex].value == NULL) { // End of array
                 sEntryIndex--;
             }
             sTimer = 2;
 
-        } else if (CHECK_BTN_ALL(input->cur.button, BTN_CUP)) {
+        } else if (CHECK_BTN_ALL(input->cur.button, U_CBUTTONS)) {
             sEntryIndex -= 10;
             if (sEntryIndex < 0) {
                 sEntryIndex = 0;
             }
             sTimer = 2;
 
-        } else if (CHECK_BTN_ALL(input->cur.button, BTN_CDOWN)) {
+        } else if (CHECK_BTN_ALL(input->cur.button, D_CBUTTONS)) {
             sEntryIndex += 10;
             if (sEntryIndex > 100) {
                 sEntryIndex = 100;
@@ -239,7 +239,7 @@ void FlagSet_Update(GameState* gameState) {
     /* Other controls */
 
     // A toggles the selected flag
-    if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
+    if (CHECK_BTN_ALL(input->press.button, A_BUTTON)) {
         *sFlagEntries[sEntryIndex].value ^= (1 << sCurrentBit);
     }
 
@@ -248,8 +248,8 @@ void FlagSet_Update(GameState* gameState) {
     }
 
     // Hold Start and press B will reset the first two flag arrays
-    if (CHECK_BTN_ALL(input->cur.button, BTN_START)) {
-        if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->cur.button, START_BUTTON)) {
+        if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
             s16 i;
             for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.weekEventReg); i++) {
                 gSaveContext.save.saveInfo.weekEventReg[i] = 0;
@@ -260,7 +260,7 @@ void FlagSet_Update(GameState* gameState) {
         }
 
         // Pressing B will exit
-    } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    } else if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         play->pauseCtx.debugEditor = DEBUG_EDITOR_NONE;
     }
 }

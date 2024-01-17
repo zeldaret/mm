@@ -85,7 +85,7 @@ void KaleidoSetup_Update(PlayState* play) {
     Player* player = GET_PLAYER(play);
     PauseContext* pauseCtx = &play->pauseCtx;
 
-    if (CHECK_BTN_ALL(input->cur.button, BTN_R)) {
+    if (CHECK_BTN_ALL(input->cur.button, R_TRIG)) {
         if (msgCtx && msgCtx) {}
     }
 
@@ -100,7 +100,7 @@ void KaleidoSetup_Update(PlayState* play) {
                             if (!(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) &&
                                 !(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
                                 if (!play->actorCtx.isOverrideInputOn &&
-                                    CHECK_BTN_ALL(input->press.button, BTN_START)) {
+                                    CHECK_BTN_ALL(input->press.button, START_BUTTON)) {
                                     gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
                                     pauseCtx->itemDescriptionOn = false;
                                     pauseCtx->state = PAUSE_STATE_OPENING_0;

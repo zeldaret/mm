@@ -610,9 +610,9 @@ ItemId Player_GetItemOnButton(PlayState* play, Player* player, EquipSlot slot) {
 }
 
 u16 sCItemButtons[] = {
-    BTN_CLEFT,
-    BTN_CDOWN,
-    BTN_CRIGHT,
+    L_CBUTTONS,
+    D_CBUTTONS,
+    R_CBUTTONS,
 };
 
 PlayerItemAction func_80123810(PlayState* play) {
@@ -622,7 +622,7 @@ PlayerItemAction func_80123810(PlayState* play) {
     s32 i;
 
     if (gSaveContext.save.unk_06 == 0) {
-        if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_A | BTN_B)) {
+        if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, A_BUTTON | B_BUTTON)) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.hudVisibility);

@@ -280,7 +280,7 @@ s32 func_801A5808(void) {
             PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
             if (func_801A51F0(errorCode) == 0) {
-                switch (gVoiceHandle.status) {
+                switch (gVoiceHandle.cmd_status) {
                     case VOICE_STATUS_READY:
                         sVoiceContext.mode = VOICE_MODE_2;
                         break;
@@ -305,10 +305,10 @@ s32 func_801A5808(void) {
 
         case VOICE_MODE_2:
             if (((D_801FD5C8.warning & sVoiceContext.warning) == 0) &&
-                (sVoiceContext.answerNum >= D_801FD5C8.answerNum) &&
+                (sVoiceContext.answerNum >= D_801FD5C8.answer_num) &&
                 (sVoiceContext.distance >= D_801FD5C8.distance[0]) &&
-                (D_801FD5C8.voiceLevel >= sVoiceContext.voiceLevel) &&
-                (D_801FD5C8.voiceRelLevel >= sVoiceContext.voiceRelLevel)) {
+                (D_801FD5C8.voice_level >= sVoiceContext.voiceLevel) &&
+                (D_801FD5C8.voice_sn >= sVoiceContext.voiceRelLevel)) {
                 D_801FD5E8 = D_801FD5C8;
                 sVoiceContext.data = &D_801FD5E8;
             }

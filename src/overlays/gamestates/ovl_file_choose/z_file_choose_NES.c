@@ -238,7 +238,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
     SramContext* sramCtx = &this->sramCtx;
     Input* input = CONTROLLER1(&this->state);
 
-    if (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_A)) {
+    if (CHECK_BTN_ALL(input->press.button, START_BUTTON) || CHECK_BTN_ALL(input->press.button, A_BUTTON)) {
         if (this->buttonIndex <= FS_BTN_MAIN_FILE_3) {
             if (!gSaveContext.flashSaveAvailable) {
                 if (!NO_FLASH_SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
@@ -312,7 +312,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
         } else {
             Audio_PlaySfx(NA_SE_SY_FSEL_ERROR);
         }
-    } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    } else if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         gSaveContext.gameMode = GAMEMODE_TITLE_SCREEN;
         STOP_GAMESTATE(&this->state);
         SET_NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
@@ -2035,7 +2035,7 @@ void FileSelect_ConfirmFile(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
     Input* input = CONTROLLER1(&this->state);
 
-    if (CHECK_BTN_ALL(input->press.button, BTN_START) || (CHECK_BTN_ALL(input->press.button, BTN_A))) {
+    if (CHECK_BTN_ALL(input->press.button, START_BUTTON) || (CHECK_BTN_ALL(input->press.button, A_BUTTON))) {
         if (this->confirmButtonIndex == FS_BTN_CONFIRM_YES) {
             Rumble_Request(300.0f, 180, 20, 100);
             Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
@@ -2045,7 +2045,7 @@ void FileSelect_ConfirmFile(GameState* thisx) {
             Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
             this->selectMode++; // SM_FADE_OUT_FILE_INFO
         }
-    } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    } else if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
         this->selectMode++; // SM_FADE_OUT_FILE_INFO
     } else if (ABS_ALT(this->stickAdjY) >= 30) {

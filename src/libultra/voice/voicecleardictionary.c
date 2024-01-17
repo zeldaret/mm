@@ -19,7 +19,7 @@ s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 numWords) {
     u8 status;
     u8 data[4];
 
-    errorCode = __osVoiceGetStatus(hd->mq, hd->channel, &status);
+    errorCode = __osVoiceGetStatus(hd->__mq, hd->__channel, &status);
     if (errorCode != 0) {
         return errorCode;
     }
@@ -37,7 +37,7 @@ s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 numWords) {
     *(u32*)data = 0x2000000;
     data[2] = numWords;
 
-    errorCode = __osVoiceContWrite4(hd->mq, hd->channel, 0, data);
+    errorCode = __osVoiceContWrite4(hd->__mq, hd->__channel, 0, data);
     if (errorCode != 0) {
         return errorCode;
     }

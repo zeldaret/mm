@@ -9,7 +9,7 @@
  * Note: While the system is fully hooked up, there is no way to enable it in game
  * Instead one would have to add something like:
  *
- * if (CHECK_BTN_ALL(input->cur.button, BTN_R) && CHECK_BTN_ALL(input->press.button, BTN_DDOWN)) {
+ * if (CHECK_BTN_ALL(input->cur.button, R_TRIG) && CHECK_BTN_ALL(input->press.button, D_JPAD)) {
  *     frameAdvCtx->enabled = !frameAdvCtx->enabled;
  * }
  *
@@ -33,9 +33,9 @@ void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx) {
  * Returns true when frame advance is not active (game will run normally)
  */
 s32 FrameAdvance_Update(FrameAdvanceContext* frameAdvCtx, Input* input) {
-    if (!frameAdvCtx->enabled || (CHECK_BTN_ALL(input->cur.button, BTN_Z) &&
-                                  (CHECK_BTN_ALL(input->press.button, BTN_R) ||
-                                   (CHECK_BTN_ALL(input->cur.button, BTN_R) && (++frameAdvCtx->timer >= 9))))) {
+    if (!frameAdvCtx->enabled || (CHECK_BTN_ALL(input->cur.button, Z_TRIG) &&
+                                  (CHECK_BTN_ALL(input->press.button, R_TRIG) ||
+                                   (CHECK_BTN_ALL(input->cur.button, R_TRIG) && (++frameAdvCtx->timer >= 9))))) {
         frameAdvCtx->timer = 0;
         return true;
     }

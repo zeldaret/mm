@@ -13,7 +13,7 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
     u8 status;
     u8 data[4];
 
-    errorCode = __osVoiceGetStatus(hd->mq, hd->channel, &status);
+    errorCode = __osVoiceGetStatus(hd->__mq, hd->__channel, &status);
     if (errorCode != 0) {
         return errorCode;
     }
@@ -22,7 +22,7 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
         return CONT_ERR_VOICE_NO_RESPONSE;
     }
 
-    if (hd->mode != VOICE_HANDLE_MODE_0) {
+    if (hd->__mode != VOICE_HANDLE_MODE_0) {
         return CONT_ERR_INVALID;
     }
 
@@ -33,7 +33,7 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
      * data[3] = 0
      */
     *(u32*)data = 0x5000000;
-    errorCode = __osVoiceContWrite4(hd->mq, hd->channel, 0, data);
+    errorCode = __osVoiceContWrite4(hd->__mq, hd->__channel, 0, data);
 
     if (errorCode == 0) {
         errorCode = __osVoiceCheckResult(hd, &status);
@@ -41,7 +41,7 @@ s32 osVoiceStartReadData(OSVoiceHandle* hd) {
         if (errorCode & 0xFF00) {
             errorCode = CONT_ERR_INVALID;
         } else {
-            hd->mode = VOICE_HANDLE_MODE_1;
+            hd->__mode = VOICE_HANDLE_MODE_1;
         }
     }
 

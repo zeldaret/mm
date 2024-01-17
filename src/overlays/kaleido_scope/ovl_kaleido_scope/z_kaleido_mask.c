@@ -540,10 +540,10 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 // Equip item to the C buttons
                 if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && !pauseCtx->itemDescriptionOn &&
                     (pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
-                    CHECK_BTN_ANY(input->press.button, BTN_CLEFT | BTN_CDOWN | BTN_CRIGHT)) {
+                    CHECK_BTN_ANY(input->press.button, L_CBUTTONS | D_CBUTTONS | R_CBUTTONS)) {
 
                     // Ensure that a mask is not unequipped while being used
-                    if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    if (CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                         if (((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                              (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT))) ||
                             ((sMaskPlayerFormItems[GET_PLAYER_FORM] != ITEM_NONE) &&
@@ -551,7 +551,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                             Audio_PlaySfx(NA_SE_SY_ERROR);
                             return;
                         }
-                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
+                    } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS)) {
                         if (((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                              (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN))) ||
                             ((sMaskPlayerFormItems[GET_PLAYER_FORM] != ITEM_NONE) &&
@@ -559,7 +559,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                             Audio_PlaySfx(NA_SE_SY_ERROR);
                             return;
                         }
-                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    } else if (CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                         if (((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                              (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT))) ||
                             ((sMaskPlayerFormItems[GET_PLAYER_FORM] != ITEM_NONE) &&
@@ -577,11 +577,11 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                         return;
                     }
 
-                    if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+                    if (CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
                         pauseCtx->equipTargetCBtn = PAUSE_EQUIP_C_LEFT;
-                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
+                    } else if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS)) {
                         pauseCtx->equipTargetCBtn = PAUSE_EQUIP_C_DOWN;
-                    } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+                    } else if (CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
                         pauseCtx->equipTargetCBtn = PAUSE_EQUIP_C_RIGHT;
                     }
 
@@ -599,7 +599,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                     Audio_PlaySfx(NA_SE_SY_DECIDE);
                 } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
                            (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
-                           CHECK_BTN_ALL(input->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
+                           CHECK_BTN_ALL(input->press.button, A_BUTTON) && (msgCtx->msgLength == 0)) {
                     // Give description on item through a message box
                     pauseCtx->itemDescriptionOn = true;
                     if (pauseCtx->cursorYIndex[PAUSE_MASK] < 2) {

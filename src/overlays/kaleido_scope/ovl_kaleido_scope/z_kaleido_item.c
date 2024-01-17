@@ -599,22 +599,22 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                 // Equip item to the C buttons
                 if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && !pauseCtx->itemDescriptionOn &&
                     (pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
-                    CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_CLEFT | BTN_CDOWN | BTN_CRIGHT)) {
+                    CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, L_CBUTTONS | D_CBUTTONS | R_CBUTTONS)) {
 
                     // Ensure that a transformation mask can not be unequipped while being used
                     if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
                         if (1) {}
-                        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CLEFT)) {
+                        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, L_CBUTTONS)) {
                             if (sPlayerFormItems[GET_PLAYER_FORM] == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
                                 Audio_PlaySfx(NA_SE_SY_ERROR);
                                 return;
                             }
-                        } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CDOWN)) {
+                        } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, D_CBUTTONS)) {
                             if (sPlayerFormItems[GET_PLAYER_FORM] == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
                                 Audio_PlaySfx(NA_SE_SY_ERROR);
                                 return;
                             }
-                        } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CRIGHT)) {
+                        } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, R_CBUTTONS)) {
                             if (sPlayerFormItems[GET_PLAYER_FORM] == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)) {
                                 Audio_PlaySfx(NA_SE_SY_ERROR);
                                 return;
@@ -623,21 +623,21 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                     }
 
                     // Ensure that a non-transformation mask can not be unequipped while being used
-                    if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CLEFT)) {
+                    if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, L_CBUTTONS)) {
                         if ((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                             (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT))) {
                             Audio_PlaySfx(NA_SE_SY_ERROR);
                             return;
                         }
                         pauseCtx->equipTargetCBtn = PAUSE_EQUIP_C_LEFT;
-                    } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CDOWN)) {
+                    } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, D_CBUTTONS)) {
                         if ((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                             (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN))) {
                             Audio_PlaySfx(NA_SE_SY_ERROR);
                             return;
                         }
                         pauseCtx->equipTargetCBtn = PAUSE_EQUIP_C_DOWN;
-                    } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CRIGHT)) {
+                    } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, R_CBUTTONS)) {
                         if ((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                             (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT))) {
                             Audio_PlaySfx(NA_SE_SY_ERROR);
@@ -677,7 +677,8 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                     }
                 } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
                            (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
-                           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
+                           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON) &&
+                           (msgCtx->msgLength == 0)) {
                     // Give description on item through a message box
                     pauseCtx->itemDescriptionOn = true;
                     if (pauseCtx->cursorYIndex[PAUSE_ITEM] < 2) {

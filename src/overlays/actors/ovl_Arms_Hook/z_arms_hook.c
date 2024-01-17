@@ -266,7 +266,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
                 Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
             }
         } else if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
-                                 BTN_A | BTN_B | BTN_R | BTN_CUP | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN)) {
+                                 A_BUTTON | B_BUTTON | R_TRIG | U_CBUTTONS | L_CBUTTONS | R_CBUTTONS | D_CBUTTONS)) {
             s32 pad;
 
             this->timer = 1;

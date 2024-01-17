@@ -294,7 +294,7 @@ u32 Fault_WaitForInputImpl(void) {
 
         pressedBtn = input->press.button;
 
-        if (pressedBtn == BTN_L) {
+        if (pressedBtn == L_TRIG) {
             sFaultInstance->autoScroll = !sFaultInstance->autoScroll;
         }
 
@@ -303,19 +303,19 @@ u32 Fault_WaitForInputImpl(void) {
                 return false;
             }
         } else {
-            if ((pressedBtn == BTN_A) || (pressedBtn == BTN_DRIGHT)) {
+            if ((pressedBtn == A_BUTTON) || (pressedBtn == R_JPAD)) {
                 return false;
             }
 
-            if (pressedBtn == BTN_DLEFT) {
+            if (pressedBtn == L_JPAD) {
                 return true;
             }
 
-            if (pressedBtn == BTN_DUP) {
+            if (pressedBtn == U_JPAD) {
                 FaultDrawer_SetOsSyncPrintfEnabled(true);
             }
 
-            if (pressedBtn == BTN_DDOWN) {
+            if (pressedBtn == D_JPAD) {
                 FaultDrawer_SetOsSyncPrintfEnabled(false);
             }
         }
@@ -548,7 +548,7 @@ void Fault_Wait5Seconds(void) {
 
     do {
         Fault_Sleep(1000 / 60);
-    } while ((osGetTime() - start) <= OS_SEC_TO_CYCLES(5));
+    } while ((osGetTime() - start) <= OS_USEC_TO_CYCLES(5 * 1000 * 1000));
 
     sFaultInstance->autoScroll = true;
 }
@@ -568,8 +568,8 @@ void Fault_WaitForButtonCombo(void) {
         do {
             Fault_Sleep(1000 / 60);
             Fault_UpdatePadImpl();
-        } while (!CHECK_BTN_ALL(input->press.button, BTN_RESET));
-    } while (!CHECK_BTN_ALL(input->cur.button, BTN_DLEFT | BTN_L | BTN_R | BTN_CRIGHT));
+        } while (!CHECK_BTN_ALL(input->press.button, RESET_BUTTON));
+    } while (!CHECK_BTN_ALL(input->cur.button, L_JPAD | L_TRIG | R_TRIG | R_CBUTTONS));
 }
 
 void Fault_DrawMemDumpContents(const char* title, uintptr_t addr, u32 param_3) {
@@ -660,7 +660,7 @@ void Fault_DrawMemDump(uintptr_t pc, uintptr_t sp, uintptr_t cLeftJump, uintptr_
             Fault_Sleep(1000 / 60);
             Fault_UpdatePadImpl();
 
-            if (CHECK_BTN_ALL(input->press.button, BTN_L)) {
+            if (CHECK_BTN_ALL(input->press.button, L_TRIG)) {
                 sFaultInstance->autoScroll = false;
             }
         }
@@ -672,39 +672,39 @@ void Fault_DrawMemDump(uintptr_t pc, uintptr_t sp, uintptr_t cLeftJump, uintptr_
         } while (input->press.button == 0);
 
         // Move to next page
-        if (CHECK_BTN_ALL(input->press.button, BTN_START)) {
+        if (CHECK_BTN_ALL(input->press.button, START_BUTTON)) {
             return;
         }
 
         // Memory dump controls
 
         off = 0x10;
-        if (CHECK_BTN_ALL(input->cur.button, BTN_A)) {
+        if (CHECK_BTN_ALL(input->cur.button, A_BUTTON)) {
             off *= 0x10;
         }
-        if (CHECK_BTN_ALL(input->cur.button, BTN_B)) {
+        if (CHECK_BTN_ALL(input->cur.button, B_BUTTON)) {
             off *= 0x100;
         }
-        if (CHECK_BTN_ALL(input->press.button, BTN_DUP)) {
+        if (CHECK_BTN_ALL(input->press.button, U_JPAD)) {
             addr -= off;
         }
-        if (CHECK_BTN_ALL(input->press.button, BTN_DDOWN)) {
+        if (CHECK_BTN_ALL(input->press.button, D_JPAD)) {
             addr += off;
         }
-        if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+        if (CHECK_BTN_ALL(input->press.button, U_CBUTTONS)) {
             addr = pc;
         }
-        if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
+        if (CHECK_BTN_ALL(input->press.button, D_CBUTTONS)) {
             addr = sp;
         }
-        if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
+        if (CHECK_BTN_ALL(input->press.button, L_CBUTTONS)) {
             addr = cLeftJump;
         }
-        if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
+        if (CHECK_BTN_ALL(input->press.button, R_CBUTTONS)) {
             addr = cRightJump;
         }
 
-    } while (!CHECK_BTN_ALL(input->press.button, BTN_L));
+    } while (!CHECK_BTN_ALL(input->press.button, L_TRIG));
 
     // Resume auto-scroll and move to next page
     sFaultInstance->autoScroll = true;
@@ -932,8 +932,7 @@ void Fault_SetOptions(void) {
     uintptr_t ra;
     uintptr_t sp;
 
-    // BTN_RESET is the "neutral reset". Corresponds to holding L+R and pressing S
-    if (CHECK_BTN_ALL(input3->press.button, BTN_RESET)) {
+    if (CHECK_BTN_ALL(input3->press.button, RESET_BUTTON)) {
         faultCustomOptions = !faultCustomOptions;
     }
 
@@ -941,16 +940,16 @@ void Fault_SetOptions(void) {
         pc = gGraphThread.context.pc;
         ra = gGraphThread.context.ra;
         sp = gGraphThread.context.sp;
-        if (CHECK_BTN_ALL(input3->cur.button, BTN_R)) {
+        if (CHECK_BTN_ALL(input3->cur.button, R_TRIG)) {
             static u32 faultCopyToLog;
 
             faultCopyToLog = !faultCopyToLog;
             FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
         }
-        if (CHECK_BTN_ALL(input3->cur.button, BTN_A)) {
+        if (CHECK_BTN_ALL(input3->cur.button, A_BUTTON)) {
             osSyncPrintf("GRAPH PC=%08x RA=%08x STACK=%08x\n", pc, ra, sp);
         }
-        if (CHECK_BTN_ALL(input3->cur.button, BTN_B)) {
+        if (CHECK_BTN_ALL(input3->cur.button, B_BUTTON)) {
             FaultDrawer_SetDrawerFrameBuffer(osViGetNextFramebuffer(), SCREEN_WIDTH, SCREEN_HEIGHT);
             Fault_DrawRec(0, 215, 320, 9, 1);
             FaultDrawer_SetCharPad(-2, 0);

@@ -846,7 +846,8 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                         }
 
-                        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
+                        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON) &&
+                            (msgCtx->msgLength == 0)) {
                             if (pauseCtx->cursorPoint[PAUSE_QUEST] == QUEST_BOMBERS_NOTEBOOK) {
                                 play->pauseCtx.bombersNotebookOpen = true;
                                 pauseCtx->mainState = PAUSE_MAIN_STATE_BOMBERS_NOTEBOOK_OPEN;
@@ -881,7 +882,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                     AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 }
             } else if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG) &&
-                       CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) && (msgCtx->msgLength == 0) &&
+                       CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON) && (msgCtx->msgLength == 0) &&
                        (cursor >= QUEST_SONG_SONATA) && (cursor <= QUEST_SONG_SUN)) {
                 pauseCtx->mainState = PAUSE_MAIN_STATE_SONG_PLAYBACK_INIT;
                 sQuestSongPlaybackDelayTimer = 10;

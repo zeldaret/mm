@@ -170,20 +170,20 @@ retry:
 
     task->type = M_GFXTASK;
     task->flags = OS_SC_DRAM_DLIST;
-    task->ucodeBoot = SysUcode_GetUCodeBoot();
-    task->ucodeBootSize = SysUcode_GetUCodeBootSize();
+    task->ucode_boot = SysUcode_GetUCodeBoot();
+    task->ucode_boot_size = SysUcode_GetUCodeBootSize();
     task->ucode = SysUcode_GetUCode();
-    task->ucodeData = SysUcode_GetUCodeData();
-    task->ucodeSize = SP_UCODE_SIZE;
-    task->ucodeDataSize = SP_UCODE_DATA_SIZE;
-    task->dramStack = (u64*)gGfxSPTaskStack;
-    task->dramStackSize = sizeof(gGfxSPTaskStack);
-    task->outputBuff = gGfxSPTaskOutputBufferPtr;
-    task->outputBuffSize = (void*)gGfxSPTaskOutputBufferEnd;
-    task->dataPtr = (u64*)gGfxMasterDL;
-    task->dataSize = 0;
-    task->yieldDataPtr = (u64*)gGfxSPTaskYieldBuffer;
-    task->yieldDataSize = sizeof(gGfxSPTaskYieldBuffer);
+    task->ucode_data = SysUcode_GetUCodeData();
+    task->ucode_size = SP_UCODE_SIZE;
+    task->ucode_data_size = SP_UCODE_DATA_SIZE;
+    task->dram_stack = (u64*)gGfxSPTaskStack;
+    task->dram_stack_size = sizeof(gGfxSPTaskStack);
+    task->output_buff = gGfxSPTaskOutputBufferPtr;
+    task->output_buff_size = (void*)gGfxSPTaskOutputBufferEnd;
+    task->data_ptr = (u64*)gGfxMasterDL;
+    task->data_size = 0;
+    task->yield_data_ptr = (u64*)gGfxSPTaskYieldBuffer;
+    task->yield_data_size = sizeof(gGfxSPTaskYieldBuffer);
 
     scTask->next = NULL;
     scTask->flags = OS_SC_RCP_MASK | OS_SC_SWAPBUFFER | OS_SC_LAST_TASK;

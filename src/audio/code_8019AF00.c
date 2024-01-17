@@ -2519,8 +2519,8 @@ void AudioOcarina_CheckSongsWithoutMusicStaff(void) {
     u8 j;
     u8 k;
 
-    if (CHECK_BTN_ANY(sOcarinaInputButtonCur, BTN_L) &&
-        CHECK_BTN_ANY(sOcarinaInputButtonCur, BTN_A | BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP)) {
+    if (CHECK_BTN_ANY(sOcarinaInputButtonCur, L_TRIG) &&
+        CHECK_BTN_ANY(sOcarinaInputButtonCur, A_BUTTON | R_CBUTTONS | L_CBUTTONS | D_CBUTTONS | U_CBUTTONS)) {
         AudioOcarina_StartDefault(sOcarinaFlags);
         return;
     }
@@ -2591,14 +2591,14 @@ void AudioOcarina_PlayControllerInput(u8 isOcarinaSfxSuppressedWhenCancelled) {
 
     // Ensures the button pressed to start the ocarina does not also play an ocarina note
     if ((sOcarinaInputButtonStart == 0) ||
-        ((sOcarinaInputButtonStart & (BTN_A | BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP)) !=
-         (sOcarinaInputButtonCur & (BTN_A | BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP)))) {
+        ((sOcarinaInputButtonStart & (A_BUTTON | R_CBUTTONS | L_CBUTTONS | D_CBUTTONS | U_CBUTTONS)) !=
+         (sOcarinaInputButtonCur & (A_BUTTON | R_CBUTTONS | L_CBUTTONS | D_CBUTTONS | U_CBUTTONS)))) {
         sOcarinaInputButtonStart = 0;
         if (1) {}
         sCurOcarinaPitch = OCARINA_PITCH_NONE;
         sCurOcarinaButtonIndex = OCARINA_BTN_INVALID;
-        ocarinaBtnsHeld = (sOcarinaInputButtonCur & (BTN_A | BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP)) &
-                          (sOcarinaInputButtonPrev & (BTN_A | BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP));
+        ocarinaBtnsHeld = (sOcarinaInputButtonCur & (A_BUTTON | R_CBUTTONS | L_CBUTTONS | D_CBUTTONS | U_CBUTTONS)) &
+                          (sOcarinaInputButtonPrev & (A_BUTTON | R_CBUTTONS | L_CBUTTONS | D_CBUTTONS | U_CBUTTONS));
 
         if (!(sOcarinaInputButtonPress & ocarinaBtnsHeld) && (sOcarinaInputButtonCur != 0)) {
             sOcarinaInputButtonPress = sOcarinaInputButtonCur;
@@ -2607,23 +2607,23 @@ void AudioOcarina_PlayControllerInput(u8 isOcarinaSfxSuppressedWhenCancelled) {
         }
 
         // Interprets and transforms controller input into ocarina buttons and notes
-        if (CHECK_BTN_ANY(sOcarinaInputButtonPress, BTN_A)) {
+        if (CHECK_BTN_ANY(sOcarinaInputButtonPress, A_BUTTON)) {
             sCurOcarinaPitch = OCARINA_PITCH_D4;
             sCurOcarinaButtonIndex = OCARINA_BTN_A;
 
-        } else if (CHECK_BTN_ANY(sOcarinaInputButtonPress, BTN_CDOWN)) {
+        } else if (CHECK_BTN_ANY(sOcarinaInputButtonPress, D_CBUTTONS)) {
             sCurOcarinaPitch = OCARINA_PITCH_F4;
             sCurOcarinaButtonIndex = OCARINA_BTN_C_DOWN;
 
-        } else if (CHECK_BTN_ANY(sOcarinaInputButtonPress, BTN_CRIGHT)) {
+        } else if (CHECK_BTN_ANY(sOcarinaInputButtonPress, R_CBUTTONS)) {
             sCurOcarinaPitch = OCARINA_PITCH_A4;
             sCurOcarinaButtonIndex = OCARINA_BTN_C_RIGHT;
 
-        } else if (CHECK_BTN_ANY(sOcarinaInputButtonPress, BTN_CLEFT)) {
+        } else if (CHECK_BTN_ANY(sOcarinaInputButtonPress, L_CBUTTONS)) {
             sCurOcarinaPitch = OCARINA_PITCH_B4;
             sCurOcarinaButtonIndex = OCARINA_BTN_C_LEFT;
 
-        } else if (CHECK_BTN_ANY(sOcarinaInputButtonPress, BTN_CUP)) {
+        } else if (CHECK_BTN_ANY(sOcarinaInputButtonPress, U_CBUTTONS)) {
             sCurOcarinaPitch = OCARINA_PITCH_D5;
             sCurOcarinaButtonIndex = OCARINA_BTN_C_UP;
         }
@@ -2631,14 +2631,14 @@ void AudioOcarina_PlayControllerInput(u8 isOcarinaSfxSuppressedWhenCancelled) {
         if (sOcarinaInputButtonCur) {}
 
         // Pressing the R Button will raise the pitch by 1 semitone
-        if ((sCurOcarinaPitch != OCARINA_PITCH_NONE) && CHECK_BTN_ANY(sOcarinaInputButtonCur, BTN_R) &&
+        if ((sCurOcarinaPitch != OCARINA_PITCH_NONE) && CHECK_BTN_ANY(sOcarinaInputButtonCur, R_TRIG) &&
             (sRecordingState != OCARINA_RECORD_SCARECROW_SPAWN)) {
             sCurOcarinaButtonIndex += OCARINA_BUTTON_FLAG_BFLAT_RAISE; // Flag to resolve B Flat 4
             sCurOcarinaPitch++;                                        // Raise the pitch by 1 semitone
         }
 
         // Pressing the Z Button will lower the pitch by 1 semitone
-        if ((sCurOcarinaPitch != OCARINA_PITCH_NONE) && CHECK_BTN_ANY(sOcarinaInputButtonCur, BTN_Z) &&
+        if ((sCurOcarinaPitch != OCARINA_PITCH_NONE) && CHECK_BTN_ANY(sOcarinaInputButtonCur, Z_TRIG) &&
             (sRecordingState != OCARINA_RECORD_SCARECROW_SPAWN)) {
             sCurOcarinaButtonIndex += OCARINA_BUTTON_FLAG_BFLAT_LOWER; // Flag to resolve B Flat 4
             sCurOcarinaPitch--;                                        // Lower the pitch by 1 semitone

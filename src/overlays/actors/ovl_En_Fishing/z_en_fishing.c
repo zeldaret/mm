@@ -2196,7 +2196,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
             D_80917238.y += D_80917248.y;
             D_80917238.z += D_80917248.z;
 
-            if (CHECK_BTN_ALL(input->cur.button, BTN_A) || (D_8090CD0C != 0)) {
+            if (CHECK_BTN_ALL(input->cur.button, A_BUTTON) || (D_8090CD0C != 0)) {
                 D_80917238.x *= 0.9f;
                 D_80917238.z *= 0.9f;
                 if (D_8090CD0C == 0) {
@@ -2378,7 +2378,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                     if (sp70 > 1.0f) {
                         sp70 = 1.0f;
                     }
-                    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+                    if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
                         sp70 = 0.5f;
                     }
 
@@ -2415,7 +2415,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                             sReelLinePos[LINE_SEG_COUNT - 1].y += D_80917278.y;
                             sLurePos.y += D_80917278.y;
                         }
-                    } else if (CHECK_BTN_ALL(input->cur.button, BTN_A)) {
+                    } else if (CHECK_BTN_ALL(input->cur.button, A_BUTTON)) {
                         s8 requiredScopeTemp;
 
                         spDC = 0x500;
@@ -2442,7 +2442,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                     spDC = 0x500;
                     D_809101B0 = sReelLineRot[LINE_SEG_COUNT - 2].y + M_PI;
                     sLureRot.x = 0.0f;
-                    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+                    if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
                         D_809101C0 += 6.0f;
                         Audio_PlaySfx_AtPos(&D_8090D614, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_SAND);
                     }
@@ -2480,7 +2480,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
 
             D_80917254 = 0.0f;
 
-            if ((D_80917206 == 1) && CHECK_BTN_ALL(input->cur.button, BTN_A)) {
+            if ((D_80917206 == 1) && CHECK_BTN_ALL(input->cur.button, A_BUTTON)) {
                 D_80917278.y = -2.0f;
 
                 if (D_809171FE & 1) {
@@ -2527,8 +2527,8 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
 
             D_80917238.x = D_80917238.y = D_80917238.z = D_80917248.y = 0.0f;
 
-            if (CHECK_BTN_ALL(input->cur.button, BTN_A)) {
-                if (CHECK_BTN_ALL(input->cur.button, BTN_R)) {
+            if (CHECK_BTN_ALL(input->cur.button, A_BUTTON)) {
+                if (CHECK_BTN_ALL(input->cur.button, R_TRIG)) {
                     D_809101C0 += 1.5f;
                     Audio_PlaySfx(NA_SE_IT_FISHING_REEL_HIGH - SFX_FLAG);
                     Math_ApproachF(&D_809101D0, 1000.0f, 1.0f, 2.0f);
@@ -2567,7 +2567,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
             if ((sLurePos.y <= (WATER_SURFACE_Y(play) + 4.0f)) && (sLurePos.y >= (WATER_SURFACE_Y(play) - 4.0f))) {
                 s8 phi_v0 = 63;
 
-                if (CHECK_BTN_ALL(input->cur.button, BTN_A) || (D_809101B4 > 1.0f)) {
+                if (CHECK_BTN_ALL(input->cur.button, A_BUTTON) || (D_809101B4 > 1.0f)) {
                     phi_v0 = 1;
                 }
 
@@ -2585,7 +2585,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                 D_809101C0 += D_8091726C;
             }
 
-            if (CHECK_BTN_ALL(input->cur.button, BTN_A)) {
+            if (CHECK_BTN_ALL(input->cur.button, A_BUTTON)) {
                 if ((SQ(sLurePos.x) + SQ(sLurePos.z)) > SQ(920.0f)) {
                     D_809101C0 += 1.0f;
                 } else {
@@ -2727,7 +2727,7 @@ void func_809038A4(EnFishing* this, Input* input) {
                 this->unk_1A8 = 28672.0f;
                 this->unk_180 = 5.0f;
             } else {
-                if ((CHECK_BTN_ALL(input->cur.button, BTN_A) || (D_809101B4 > 1.0f)) && (sp24 < SQ(120.0f))) {
+                if ((CHECK_BTN_ALL(input->cur.button, A_BUTTON) || (D_809101B4 > 1.0f)) && (sp24 < SQ(120.0f))) {
                     this->unk_150 = 2;
                     this->unk_156 = 0;
                     this->unk_172[0] = 0;
@@ -3265,7 +3265,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             }
 
             Math_ApproachF(&this->unk_1A8, 8192.0f, 1.0f, 384.0f);
-            if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
+            if (CHECK_BTN_ALL(input->press.button, A_BUTTON)) {
                 this->unk_1A0 += 0.005f;
             }
 
@@ -3278,7 +3278,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 D_80917270 = 0;
             }
 
-            if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+            if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
                 this->unk_1A0 += 0.008f;
             }
 
@@ -3530,7 +3530,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             }
 
             if ((D_80917272 != 0) && (D_80917274 == 0)) {
-                if (((input->rel.stick_y < -50) && (D_8090CD48 > -40)) || CHECK_BTN_ALL(input->press.button, BTN_A)) {
+                if (((input->rel.stick_y < -50) && (D_8090CD48 > -40)) ||
+                    CHECK_BTN_ALL(input->press.button, A_BUTTON)) {
                     if (input->rel.stick_y < -50) {
                         temp_f0 = 40.0f - ((this->unk_1A4 - 30.0f) * 1.333333f);
                         if (temp_f0 > 0.0f) {
@@ -3664,7 +3665,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         }
                     }
                 } else {
-                    if (((this->unk_172[1] & 0xF) == 0) && CHECK_BTN_ALL(input->cur.button, BTN_A) &&
+                    if (((this->unk_172[1] & 0xF) == 0) && CHECK_BTN_ALL(input->cur.button, A_BUTTON) &&
                         (!(this->unk_1A4 >= 60.0f) || (D_809171D4 >= 2000))) {
                         this->unk_14A = Rand_ZeroFloat(30.0f) + 15.0f;
                         this->unk_14C = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
@@ -3730,7 +3731,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                                2.0f * (this->actor.speed * 1.5f));
             }
 
-            if (CHECK_BTN_ALL(input->cur.button, BTN_A) || (input->rel.stick_y < -30)) {
+            if (CHECK_BTN_ALL(input->cur.button, A_BUTTON) || (input->rel.stick_y < -30)) {
                 if (D_80917266 < 100) {
                     D_80917266++;
                 }
@@ -5246,7 +5247,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
             Math_ApproachF(&D_80911F50, 30.0f, 0.1f, 0.4f);
 
-            if (CHECK_BTN_ALL(input->press.button, BTN_Z)) {
+            if (CHECK_BTN_ALL(input->press.button, Z_TRIG)) {
                 if ((D_809171DC >= 0) && (D_80917272 == 0)) {
                     D_809171DC++;
 

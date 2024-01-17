@@ -127,11 +127,11 @@ bool EnFsn_TestItemSelected(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
-        return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON);
     }
-    return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
-           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B) ||
-           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, A_BUTTON) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, B_BUTTON) ||
+           CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, U_CBUTTONS);
 }
 
 u16 EnFsn_GetWelcome(PlayState* play) {
@@ -423,7 +423,7 @@ void EnFsn_EndInteraction(EnFsn* this, PlayState* play) {
 }
 
 s32 EnFsn_TestEndInteraction(EnFsn* this, PlayState* play, Input* input) {
-    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
         Message_StartTextbox(play, this->actor.textId, &this->actor);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CURIOSITY_SHOP_MAN);
@@ -434,7 +434,7 @@ s32 EnFsn_TestEndInteraction(EnFsn* this, PlayState* play, Input* input) {
 }
 
 s32 EnFsn_TestCancelOption(EnFsn* this, PlayState* play, Input* input) {
-    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
         this->actionFunc = this->prevActionFunc;
         Message_ContinueTextbox(play, this->items[this->cursorIndex]->actor.textId);
         return true;

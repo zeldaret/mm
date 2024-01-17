@@ -21,7 +21,7 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
         cmd = 0x98;
     }
 
-    errorCode = __osVoiceSetADConverter(hd->mq, hd->channel, cmd);
+    errorCode = __osVoiceSetADConverter(hd->__mq, hd->__channel, cmd);
     if (errorCode != 0) {
         return errorCode;
     }
@@ -32,7 +32,7 @@ s32 osVoiceControlGain(OSVoiceHandle* hd, s32 analog, s32 digital) {
         return CONT_ERR_INVALID;
     }
 
-    errorCode = __osVoiceSetADConverter(hd->mq, hd->channel, cmd);
+    errorCode = __osVoiceSetADConverter(hd->__mq, hd->__channel, cmd);
     if (errorCode != 0) {
         return errorCode;
     }

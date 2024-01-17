@@ -13,18 +13,18 @@ typedef enum OsVoiceHandleMode {
 } OsVoiceHandleMode;
 
 typedef struct {
-    /* 0x0 */ OSMesgQueue* mq;
-    /* 0x4 */ s32 channel; // Controller port
-    /* 0x8 */ OsVoiceHandleMode mode;
-    /* 0xC */ u8 status;
+    /* 0x0 */ OSMesgQueue* __mq;
+    /* 0x4 */ s32 __channel; // Controller port
+    /* 0x8 */ s32 __mode;
+    /* 0xC */ u8 cmd_status;
 } OSVoiceHandle; // size = 0x10
 
 typedef struct {
     /* 0x00 */ u16 warning;       // Warning
-    /* 0x02 */ u16 answerNum;     // Candidate number (0~5)
-    /* 0x04 */ u16 voiceLevel;    // Voice input level
-    /* 0x06 */ u16 voiceRelLevel; // Relative voice level "voice_sn"
-    /* 0x08 */ u16 voiceTime;     // Voice input time
+    /* 0x02 */ u16 answer_num;     // Candidate number (0~5)
+    /* 0x04 */ u16 voice_level;    // Voice input level
+    /* 0x06 */ u16 voice_sn; // Relative voice level
+    /* 0x08 */ u16 voice_time;     // Voice input time
     /* 0x0A */ u16 answer[5];     // Candidate word number
     /* 0x14 */ u16 distance[5];   // Distance value
 } OSVoiceData; // size = 0x20
@@ -39,11 +39,6 @@ typedef struct {
 #define VOICE_WARN_TOO_LARGE 0x800 /* Voice level is too high (Voice Level > 3500) */
 #define VOICE_WARN_NOT_FIT 0x4000 /* No words match recognition word (No. 1 Candidate Distance Value > 1600) */
 #define VOICE_WARN_TOO_NOISY 0x8000 /* Too much ambient noise (Relative Voice Level =< 400) */
-
-typedef struct {
-    /* 0x000 */ u16 words[20][15]; // 20 words, each with up to 15 syllables
-    /* 0x258 */ u8 numWords;
-} OSVoiceDictionary; // size = 0x25C
 
 s32 osVoiceInit(OSMesgQueue* mq, OSVoiceHandle* hd, int channel);
 s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word);
