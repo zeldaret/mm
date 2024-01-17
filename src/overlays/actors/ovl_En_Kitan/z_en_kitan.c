@@ -122,7 +122,6 @@ s32 EnKitan_CanTalk(EnKitan* this, PlayState* play) {
     return false;
 }
 
-
 u16 EnKitan_GetQuestionMessageId(EnKitan* this) {
     s32 i = 0;
 
