@@ -1,15 +1,14 @@
-#include "prevent_bss_reordering.h"
 #include "z64speed_meter.h"
 
+#include "libc64/malloc.h"
+
 #include "gfx.h"
+#include "main.h"
 #include "regs.h"
 #include "sys_cfb.h"
-#include "libc64/malloc.h"
 #include "z64game.h"
 #include "z64malloc.h"
 #include "z64view.h"
-
-#include "variables.h"
 
 /**
  * How much time the RSP ran audio tasks for over the course of `gGraphUpdatePeriod`.
@@ -78,15 +77,15 @@ typedef struct {
 #define gDrawRect(gfx, color, ulx, uly, lrx, lry)                      \
     do {                                                               \
         if (gSysCfbHiResEnabled == true) {                             \
-            u32 tmp = color;                                           \
+            u32 c = color;                                             \
             gDPPipeSync(gfx);                                          \
-            gDPSetFillColor(gfx, ((tmp) << 16) | (tmp));               \
+            gDPSetFillColor(gfx, ((c) << 16) | (c));                   \
             gDPFillRectangle(gfx, (ulx)*2, (uly)*2, (lrx)*2, (lry)*2); \
             if (1) {}                                                  \
         } else {                                                       \
-            u32 tmp = color;                                           \
+            u32 c = color;                                             \
             gDPPipeSync(gfx);                                          \
-            gDPSetFillColor(gfx, ((tmp) << 16) | (tmp));               \
+            gDPSetFillColor(gfx, ((c) << 16) | (c));                   \
             gDPFillRectangle(gfx, (ulx), (uly), (lrx), (lry));         \
         }                                                              \
     } while (0)
