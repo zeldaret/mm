@@ -1,11 +1,14 @@
-#include "prevent_bss_reordering.h"
-#include "global.h"
+#include "z64message.h"
+#include "message_data_static.h"
+
+#include "padmgr.h"
+#include "z64actor.h"
 #include "z64horse.h"
 #include "z64shrink_window.h"
-#include "z64view.h"
-#include "message_data_static.h"
-#include "interface/parameter_static/parameter_static.h"
+
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+
+#include "interface/parameter_static/parameter_static.h"
 
 u8 D_801C6A70 = 0;
 s16 sOcarinaButtonIndexBufPos = 0;
