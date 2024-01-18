@@ -39,19 +39,18 @@
  * DPad-Up may be pressed to enable sending fault pages over osSyncPrintf as well as displaying them on-screen.
  * DPad-Down disables sending fault pages over osSyncPrintf.
  */
-
-#include "fault_internal.h"
 #include "fault.h"
+#include "fault_internal.h"
 
-#include "libc64/sprintf.h"
 #include "libc64/sleep.h"
-#include "vt.h"
+#include "libc64/sprintf.h"
 #include "PR/osint.h"
+
+#include "macros.h"
+#include "main.h"
+#include "vt.h"
 #include "stackcheck.h"
 #include "z64thread.h"
-#include "main.h"
-#include "macros.h"
-#include "global.h"
 
 FaultMgr* sFaultInstance;
 f32 sFaultTimeTotal; // read but not set anywhere
