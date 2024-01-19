@@ -200,8 +200,8 @@ static EnInvadepohDemoFunc sDrawFuncs[EN_INVADEPOH_DEMO_TYPE_MAX] = {
     EnInvadepohDemo_CowTail_Draw, // EN_INVADEPOH_DEMO_TYPE_COW_TAIL
 };
 
-MtxF sAlienLeftEyeBeamMtxF;
-MtxF sAlienRightEyeBeamMtxF;
+MtxF sAlienDemoLeftEyeBeamMtxF;
+MtxF sAlienDemoRightEyeBeamMtxF;
 
 void EnInvadepohDemo_DoNothing(EnInvadepohDemo* this, PlayState* play) {
 }
@@ -589,14 +589,14 @@ void EnInvadepohDemo_Alien_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dL
         Matrix_RotateZS(-0x53ED, MTXMODE_APPLY);
         Matrix_RotateYS(-0x3830, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
-        Matrix_Get(&sAlienLeftEyeBeamMtxF);
+        Matrix_Get(&sAlienDemoLeftEyeBeamMtxF);
         Matrix_Pop();
     } else if (limbIndex == ALIEN_LIMB_RIGHT_EYE) {
         Matrix_Push();
         Matrix_RotateZS(-0x53ED, MTXMODE_APPLY);
         Matrix_RotateYS(-0x47D0, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
-        Matrix_Get(&sAlienRightEyeBeamMtxF);
+        Matrix_Get(&sAlienDemoRightEyeBeamMtxF);
         Matrix_Pop();
     }
 }
@@ -631,14 +631,14 @@ void EnInvadepohDemo_Alien_Draw(EnInvadepohDemo* this, PlayState* play) {
         gDPPipeSync(gfx++);
         gDPSetPrimColor(gfx++, 0, 0xFF, 240, 180, 100, 60);
         gDPSetEnvColor(gfx++, 255, 255, 255, 150);
-        Matrix_Mult(&sAlienLeftEyeBeamMtxF, MTXMODE_NEW);
+        Matrix_Mult(&sAlienDemoLeftEyeBeamMtxF, MTXMODE_NEW);
 
         mtx = Matrix_NewMtx(play->state.gfxCtx);
 
         if (mtx != NULL) {
             gSPMatrix(gfx++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(gfx++, gAlienEyeBeamDL);
-            Matrix_Mult(&sAlienRightEyeBeamMtxF, MTXMODE_NEW);
+            Matrix_Mult(&sAlienDemoRightEyeBeamMtxF, MTXMODE_NEW);
 
             mtx = Matrix_NewMtx(play->state.gfxCtx);
 

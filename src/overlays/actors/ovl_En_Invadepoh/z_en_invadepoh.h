@@ -13,25 +13,25 @@ struct EnInvadepoh;
 typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh* this, PlayState* play);
 typedef void (*EnInvadepohMainFunc)(Actor* thisx, PlayState* play); // PlayState, not GameState
 
-typedef struct {
+typedef struct EnInvadepohUnkStruct1 {
     /* 0x0 */ f32 unk0;
     /* 0x4 */ s16 unk4;
     /* 0x6 */ s16 unk6;
 } EnInvadepohUnkStruct1; // size = 0x8
 
-typedef struct {
+typedef struct EnInvadepohWarpEffect {
     /* 0x0 */ s8 type;
     /* 0x1 */ s8 timer;
     /* 0x2 */ u8 alpha;
     /* 0x4 */ Vec3f pos;
 } EnInvadepohWarpEffect; // size = 0x10
 
-typedef struct {
+typedef struct EnInvadepohFaceFrames {
     /* 0x0 */ s8* texIndex;
     /* 0x1 */ s8 count;
 } EnInvadepohFaceFrames; // size = 0x2
 
-typedef struct {
+typedef struct EnInvadepohFaceAnimNext {
     /* 0x0 */ s8 index;
     /* 0x4 */ f32 chance;
 } EnInvadepohFaceAnimNext; // size = 0x8
@@ -56,19 +56,19 @@ typedef struct {
 
 #else
 
-typedef struct {
+typedef struct EnInvadepohFaceAnimOnce {
     /* 0x0 */ s8 type;
     /* 0x4 */ EnInvadepohFaceFrames* frames;
 } EnInvadepohFaceAnimOnce; // size = 0x8
 
-typedef struct {
+typedef struct EnInvadepohFaceAnimBranched {
     /* 0x0 */ s8 type;
     /* 0x4 */ EnInvadepohFaceFrames* frames;
     /* 0x8 */ s8 nextCount;
     /* 0xC */ EnInvadepohFaceAnimNext* nextAnims;
 } EnInvadepohFaceAnimBranched; // size = 0x10
 
-typedef struct {
+typedef struct EnInvadepohFaceAnimDelayedBranched {
     /* 0x0 */ s8 type;
     /* 0x4 */ EnInvadepohFaceFrames* frames;
     /* 0x8 */ s8 nextCount;
@@ -77,7 +77,7 @@ typedef struct {
     /* 0x12 */ s16 maxDelay;
 } EnInvadepohFaceAnimDelayedBranched; // size = 0x14
 
-typedef union {
+typedef union EnInvadepohFaceAnim {
     EnInvadepohFaceAnimOnce once;
     EnInvadepohFaceAnimBranched branch;
     EnInvadepohFaceAnimDelayedBranched delay;
@@ -85,7 +85,7 @@ typedef union {
 
 #endif
 
-typedef struct {
+typedef struct EnInvadePohFaceAnimInfo {
     /* 0x0 */ EnInvadepohFaceAnim** animSet;
     /* 0x4 */ s8 curAnimType;
     /* 0x8 */ EnInvadepohFaceAnim* curAnim;
@@ -94,7 +94,7 @@ typedef struct {
     /* 0xF */ s8 curIndex;
 } EnInvadePohFaceAnimInfo; // size = 0x10
 
-typedef struct {
+typedef struct EnInvadePohInteractInfo {
     /* 0x00 */ EnInvadePohFaceAnimInfo eyeAnim;
     /* 0x10 */ EnInvadePohFaceAnimInfo mouthAnim;
     /* 0x20 */ Vec3s headRot;
@@ -164,7 +164,7 @@ typedef struct EnInvadepoh {
     /* 0x3BC */ s8 dogTargetPoint;
 } EnInvadepoh; // size = 0x3C0
 
-typedef enum {
+typedef enum EnInvadepohParamsTypes {
     /* 0x0 */ ENINVADEPOH_HANDLER,         // Invasion event handler   
     /* 0x1 */ ENINVADEPOH_ALIEN_INVADER,   // Alien invader
     /* 0x2 */ ENINVADEPOH_COW,             // Abudcted cow, spawned by unused alien abductor   
@@ -178,7 +178,7 @@ typedef enum {
     /* 0xA */ ENINVADEPOH_DOG,             // Dog during alien invasion   
     /* 0xB */ ENINVADEPOH_CREMIA_NIGHT_3,  // Cremia walking from barn to house on night 3
     /* 0xC */ ENINVADEPOH_ROMANI_NIGHT_3,  // Romnani walking from barn to house on night 3
-    /* 0xD */ ENINVADEPOH_ALIEN_ABDUCTOR,  // Alien abductor, unused, carries cow or Romani
+    /* 0xD */ ENINVADEPOH_ALIEN_ABDUCTOR   // Alien abductor, unused, carries cow or Romani
 } EnInvadepohParamsTypes;
 
 #define ENINVADEPOH_GET_INDEX(thisx) ((thisx)->params & 7)
