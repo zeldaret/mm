@@ -1,6 +1,6 @@
 #include "ultra64.h"
-#include "PR/voice_internal.h"
-#include "global.h"
+#include "PR/controller.h"
+#include "PR/voiceinternal.h"
 
 s32 __osContRamWrite(OSMesgQueue* mq, s32 channel, u16 address, u8* buffer, s32 force) {
     s32 ret = 0;

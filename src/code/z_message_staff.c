@@ -35,12 +35,9 @@ f32 sCreditsFontWidths[144] = {
     14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f,
 };
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/yc8Or
-// v0/v1 swap between `character` and `i`
 void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
     MessageContext* msgCtx = &play->msgCtx;
-    u16 lookAheadCharacter;
+    u16 pad;
     u16 j;
     u16 i;
     u16 sfxHi;
@@ -122,14 +119,13 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                      ((msgCtx->msgMode >= MSGMODE_OCARINA_STARTING) && (msgCtx->msgMode <= MSGMODE_26)))) {
                     j = i;
                     while (true) {
-                        lookAheadCharacter = msgCtx->decodedBuffer.schar[j];
-                        if (lookAheadCharacter == 6) {
+                        character = msgCtx->decodedBuffer.schar[j];
+                        if (character == 6) {
                             j += 2;
                             continue;
                         }
-                        if ((lookAheadCharacter != 9) && (lookAheadCharacter != 0xA) && (lookAheadCharacter != 0xB) &&
-                            (lookAheadCharacter != 0xC) && (lookAheadCharacter != 0xD) && (lookAheadCharacter != 4) &&
-                            (lookAheadCharacter != 2)) {
+                        if ((character != 9) && (character != 0xA) && (character != 0xB) && (character != 0xC) &&
+                            (character != 0xD) && (character != 4) && (character != 2)) {
                             j++;
                             continue;
                         }
@@ -329,9 +325,6 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
 
     *gfxP = gfx;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_staff/Message_DrawTextCredits.s")
-#endif
 
 void Message_DecodeCredits(PlayState* play) {
     u16 curChar;
@@ -601,7 +594,7 @@ void Message_DecodeCredits(PlayState* play) {
                 }
             } else if (curChar == 0x1F) {
                 digits[0] = 0;
-                timeInSeconds = TIME_TO_MINUTES_F(gSaveContext.save.time);
+                timeInSeconds = TIME_TO_MINUTES_F(CURRENT_TIME);
 
                 digits[1] = timeInSeconds / 60.0f;
                 while (digits[1] >= 10) {
@@ -634,10 +627,10 @@ void Message_DecodeCredits(PlayState* play) {
                 msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos + 1];
                 Message_LoadItemIcon(play, font->msgBuf.schar[msgCtx->msgBufPos + 1], msgCtx->textboxY + 10);
             } else if (curChar == 0x15) {
-                DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1000,
-                                    (uintptr_t)SEGMENT_ROM_START(message_texture_static) + 0x900, 0x900);
-                DmaMgr_SendRequest0(msgCtx->textboxSegment + 0x1900,
-                                    (uintptr_t)SEGMENT_ROM_START(message_texture_static) + 0x900, 0x900);
+                DmaMgr_RequestSync(msgCtx->textboxSegment + 0x1000,
+                                   (uintptr_t)SEGMENT_ROM_START(message_texture_static) + 0x900, 0x900);
+                DmaMgr_RequestSync(msgCtx->textboxSegment + 0x1900,
+                                   (uintptr_t)SEGMENT_ROM_START(message_texture_static) + 0x900, 0x900);
                 msgCtx->msgBufPos += 3;
                 msgCtx->unk12012 = msgCtx->textboxY + 8;
                 numLines = 2;

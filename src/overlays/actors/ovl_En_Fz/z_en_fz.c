@@ -50,15 +50,15 @@ void func_80934178(EnFz* this, PlayState* play);
 void func_80934464(EnFz* this, PlayState* play);
 
 ActorInit En_Fz_InitVars = {
-    ACTOR_EN_FZ,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_FZ,
-    sizeof(EnFz),
-    (ActorFunc)EnFz_Init,
-    (ActorFunc)EnFz_Destroy,
-    (ActorFunc)EnFz_Update,
-    (ActorFunc)EnFz_Draw,
+    /**/ ACTOR_EN_FZ,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_FZ,
+    /**/ sizeof(EnFz),
+    /**/ EnFz_Init,
+    /**/ EnFz_Destroy,
+    /**/ EnFz_Update,
+    /**/ EnFz_Draw,
 };
 
 static s16 D_809346F0[] = { 0, 0x2000, 0x4000, 0 };
@@ -465,7 +465,7 @@ void func_80933014(EnFz* this) {
             }
         }
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.y, temp_a1, 10, 2000, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, temp_a1, 10, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
@@ -656,7 +656,7 @@ void func_809336C0(EnFz* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_BD7 = 0;
     this->unk_BCA = 60;
-    func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xA0);
     this->actionFunc = func_80933760;
 }

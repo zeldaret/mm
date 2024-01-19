@@ -16,15 +16,15 @@ void DmNb_Update(Actor* thisx, PlayState* play);
 void DmNb_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Dm_Nb_InitVars = {
-    ACTOR_DM_NB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_NB,
-    sizeof(DmNb),
-    (ActorFunc)DmNb_Init,
-    (ActorFunc)DmNb_Destroy,
-    (ActorFunc)DmNb_Update,
-    (ActorFunc)DmNb_Draw,
+    /**/ ACTOR_DM_NB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_NB,
+    /**/ sizeof(DmNb),
+    /**/ DmNb_Init,
+    /**/ DmNb_Destroy,
+    /**/ DmNb_Update,
+    /**/ DmNb_Draw,
 };
 
 typedef enum {

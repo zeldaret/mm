@@ -29,7 +29,7 @@ typedef struct EnFsn {
     /* 0x228 */ s16 fidgetTableY[ENFSN_LIMB_MAX];
     /* 0x24E */ s16 fidgetTableZ[ENFSN_LIMB_MAX];
     /* 0x274 */ Vec3s headRot;
-    /* 0x27A */ Vec3s unk27A; // Set but never used
+    /* 0x27A */ Vec3s torsoRot; // Set but never used
     /* 0x280 */ Vec3s jointTable[ENFSN_LIMB_MAX];
     /* 0x2F2 */ Vec3s morphTable[ENFSN_LIMB_MAX];
     /* 0x364 */ s16 eyeTexIndex;

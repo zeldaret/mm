@@ -16,15 +16,15 @@ void EnGe1_Update(Actor* thisx, PlayState* play);
 void EnGe1_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Ge1_InitVars = {
-    ACTOR_EN_GE1,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GE1,
-    sizeof(EnGe1),
-    (ActorFunc)EnGe1_Init,
-    (ActorFunc)EnGe1_Destroy,
-    (ActorFunc)EnGe1_Update,
-    (ActorFunc)EnGe1_Draw,
+    /**/ ACTOR_EN_GE1,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_GE1,
+    /**/ sizeof(EnGe1),
+    /**/ EnGe1_Init,
+    /**/ EnGe1_Destroy,
+    /**/ EnGe1_Update,
+    /**/ EnGe1_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -414,8 +414,8 @@ s32 EnGe1_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         // Make small fidgeting movements if in standing animation.
         if ((limbIndex == GERUDO_WHITE_LIMB_TORSO) || (limbIndex == GERUDO_WHITE_LIMB_LEFT_FOREARM) ||
             (limbIndex == GERUDO_WHITE_LIMB_RIGHT_FOREARM)) {
-            rot->y += (s16)(Math_SinS(play->state.frames * (limbIndex * 50 + 0x814)) * 200.0f);
-            rot->z += (s16)(Math_CosS(play->state.frames * (limbIndex * 50 + 0x940)) * 200.0f);
+            rot->y += TRUNCF_BINANG(Math_SinS(play->state.frames * (limbIndex * 50 + 0x814)) * 200.0f);
+            rot->z += TRUNCF_BINANG(Math_CosS(play->state.frames * (limbIndex * 50 + 0x940)) * 200.0f);
         }
     }
     return false;

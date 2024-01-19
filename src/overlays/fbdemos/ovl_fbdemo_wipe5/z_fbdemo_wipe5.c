@@ -94,7 +94,7 @@ void TransitionWipe5_Draw(void* thisx, Gfx** gfxP) {
                         G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                             G_TD_CLAMP | G_TP_NONE | G_CYC_COPY | G_PM_NPRIMITIVE,
                         G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
-        func_8014116C(&gfx, D_0F000000, workBuffer, width, height, 1);
+        VisFbuf_SetBgSimple(&gfx, D_0F000000, workBuffer, width, height, VIS_FBUF_BG_CYC_COPY);
     } else {
         if (alpha == 255) {
             gDPSetOtherMode(gfx++,
@@ -110,7 +110,7 @@ void TransitionWipe5_Draw(void* thisx, Gfx** gfxP) {
         gDPSetEnvColor(gfx++, 255, 255, 255, alpha);
         gDPSetCombineLERP(gfx++, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, ENVIRONMENT, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0,
                           ENVIRONMENT);
-        func_8014116C(&gfx, workBuffer, D_0F000000, width, height, 0);
+        VisFbuf_SetBgSimple(&gfx, workBuffer, D_0F000000, width, height, VIS_FBUF_BG_CYC_1CYC);
     }
     gDPPipeSync(gfx++);
     gSPLoadUcode(gfx++, SysUcode_GetUCode(), SysUcode_GetUCodeData());

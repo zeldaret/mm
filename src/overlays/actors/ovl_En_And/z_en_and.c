@@ -18,15 +18,15 @@ void EnAnd_Update(Actor* thisx, PlayState* play);
 void EnAnd_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_And_InitVars = {
-    ACTOR_EN_AND,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AND,
-    sizeof(EnAnd),
-    (ActorFunc)EnAnd_Init,
-    (ActorFunc)EnAnd_Destroy,
-    (ActorFunc)EnAnd_Update,
-    (ActorFunc)EnAnd_Draw,
+    /**/ ACTOR_EN_AND,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AND,
+    /**/ sizeof(EnAnd),
+    /**/ EnAnd_Init,
+    /**/ EnAnd_Destroy,
+    /**/ EnAnd_Update,
+    /**/ EnAnd_Draw,
 };
 
 typedef enum {

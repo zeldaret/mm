@@ -67,15 +67,15 @@ typedef enum ElfgrpSpawnedFairyTypes {
 } ElfgrpSpawnedFairyTypes;
 
 ActorInit En_Elfgrp_InitVars = {
-    ACTOR_EN_ELFGRP,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnElfgrp),
-    (ActorFunc)EnElfgrp_Init,
-    (ActorFunc)EnElfgrp_Destroy,
-    (ActorFunc)EnElfgrp_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_ELFGRP,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnElfgrp),
+    /**/ EnElfgrp_Init,
+    /**/ EnElfgrp_Destroy,
+    /**/ EnElfgrp_Update,
+    /**/ NULL,
 };
 
 /**
@@ -589,7 +589,7 @@ void func_80A3A77C(EnElfgrp* this, PlayState* play) {
 void func_80A3A7FC(EnElfgrp* this, PlayState* play) {
     s32 curTotalFairies;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         gSaveContext.save.saveInfo.weekEventReg[9] |= this->talkedOnceFlag;
         this->actionFunc = func_80A3A6F4;
 
@@ -611,7 +611,7 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         gSaveContext.save.saveInfo.weekEventReg[9] |= this->talkedOnceFlag;
         this->actionFunc = func_80A3A6F4;
         return;

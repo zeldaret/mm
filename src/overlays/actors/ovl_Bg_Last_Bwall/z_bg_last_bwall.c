@@ -38,15 +38,15 @@ void func_80C188C4(BgLastBwall* this, PlayState* play);
 void BgLastBwall_DoNothing(BgLastBwall* this, PlayState* play);
 
 ActorInit Bg_Last_Bwall_InitVars = {
-    ACTOR_BG_LAST_BWALL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_LAST_OBJ,
-    sizeof(BgLastBwall),
-    (ActorFunc)BgLastBwall_Init,
-    (ActorFunc)BgLastBwall_Destroy,
-    (ActorFunc)BgLastBwall_Update,
-    (ActorFunc)BgLastBwall_Draw,
+    /**/ ACTOR_BG_LAST_BWALL,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_LAST_OBJ,
+    /**/ sizeof(BgLastBwall),
+    /**/ BgLastBwall_Init,
+    /**/ BgLastBwall_Destroy,
+    /**/ BgLastBwall_Update,
+    /**/ BgLastBwall_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[] = {

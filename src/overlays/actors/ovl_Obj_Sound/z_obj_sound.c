@@ -16,15 +16,15 @@ void ObjSound_Update(Actor* thisx, PlayState* play);
 void ObjSound_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Sound_InitVars = {
-    ACTOR_OBJ_SOUND,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjSound),
-    (ActorFunc)ObjSound_Init,
-    (ActorFunc)ObjSound_Destroy,
-    (ActorFunc)ObjSound_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_SOUND,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjSound),
+    /**/ ObjSound_Init,
+    /**/ ObjSound_Destroy,
+    /**/ ObjSound_Update,
+    /**/ NULL,
 };
 
 void ObjSound_Init(Actor* thisx, PlayState* play) {

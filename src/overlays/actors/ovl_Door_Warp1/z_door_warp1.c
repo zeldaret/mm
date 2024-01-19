@@ -51,15 +51,15 @@ s16 D_808BC000;
 f32 D_808BC004;
 
 ActorInit Door_Warp1_InitVars = {
-    ACTOR_DOOR_WARP1,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_WARP1,
-    sizeof(DoorWarp1),
-    (ActorFunc)DoorWarp1_Init,
-    (ActorFunc)DoorWarp1_Destroy,
-    (ActorFunc)DoorWarp1_Update,
-    (ActorFunc)DoorWarp1_Draw,
+    /**/ ACTOR_DOOR_WARP1,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_WARP1,
+    /**/ sizeof(DoorWarp1),
+    /**/ DoorWarp1_Init,
+    /**/ DoorWarp1_Destroy,
+    /**/ DoorWarp1_Update,
+    /**/ DoorWarp1_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -344,7 +344,7 @@ void func_808B921C(DoorWarp1* this, PlayState* play) {
     }
 
     if (func_808B866C(this, play) && !Play_InCsMode(play)) {
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
+        Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_WAIT);
         Message_StartTextbox(play, 0xF2, &this->dyna.actor);
         DoorWarp1_SetupAction(this, func_808B93A0);
     }
@@ -360,14 +360,14 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
         Message_CloseTextbox(play);
         if (play->msgCtx.choiceIndex == 0) {
             Audio_PlaySfx_MessageDecide();
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
+            Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_9);
             player->unk_3A0.x = this->dyna.actor.world.pos.x;
             player->unk_3A0.z = this->dyna.actor.world.pos.z;
             this->unk_1CA = 1;
             DoorWarp1_SetupAction(this, func_808B9524);
         } else {
             Audio_PlaySfx_MessageCancel();
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
+            Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_END);
             DoorWarp1_SetupAction(this, func_808B94A4);
         }
     }
@@ -448,7 +448,7 @@ void func_808B977C(DoorWarp1* this, PlayState* play) {
 
         AudioSfx_PlaySfx(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
+        Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
         this->unk_1CA = 1;
@@ -602,7 +602,7 @@ void func_808B9F10(DoorWarp1* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
+        Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
         this->unk_1CA = 20;
@@ -986,8 +986,9 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
     gSPSegment(POLY_XLU_DISP++, 0x0A, Matrix_NewMtx(play->state.gfxCtx));
     Matrix_Push();
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100,
-                                0x100, 1, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100, 0x100));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -(TRUNCF_BINANG(2.0f * this->unk_1AC) & 0x1FF),
+                                0x100, 0x100, 1, sp94 & 0xFF, -(TRUNCF_BINANG(2.0f * this->unk_1AC) & 0x1FF), 0x100,
+                                0x100));
 
     Matrix_Translate(0.0f, this->unk_1A4 * 230.0f, 0.0f, MTXMODE_APPLY);
     Matrix_Scale(((this->unk_1C6 * sp90) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C6 * sp90) / 100.0f) + 1.0f,
@@ -1004,8 +1005,8 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
 
         sp94 *= 2;
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100, 1,
-                                    sp94 & 0xFF, -((s16)this->unk_1AC & 0x1FF), 0x100, 0x100));
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, sp94 & 0xFF, -(TRUNCF_BINANG(this->unk_1AC) & 0x1FF), 0x100,
+                                    0x100, 1, sp94 & 0xFF, -(TRUNCF_BINANG(this->unk_1AC) & 0x1FF), 0x100, 0x100));
 
         Matrix_Translate(0.0f, this->unk_1A8 * 60.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(((this->unk_1C8 * sp8C) / 100.0f) + 1.0f, 1.0f, ((this->unk_1C8 * sp8C) / 100.0f) + 1.0f,

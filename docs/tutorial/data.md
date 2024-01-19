@@ -44,15 +44,15 @@ Once we have decompiled enough things to know what the data is, we can import it
 ```C
 #if 0
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
-    sizeof(EnRecepgirl),
-    (ActorFunc)EnRecepgirl_Init,
-    (ActorFunc)EnRecepgirl_Destroy,
-    (ActorFunc)EnRecepgirl_Update,
-    (ActorFunc)EnRecepgirl_Draw,
+    /**/ ACTOR_EN_RECEPGIRL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
+    /**/ sizeof(EnRecepgirl),
+    /**/ EnRecepgirl_Init,
+    /**/ EnRecepgirl_Destroy,
+    /**/ EnRecepgirl_Update,
+    /**/ EnRecepgirl_Draw,
 };
 
 static void* D_80C106B0[4] = { (void*)0x600F8F0, (void*)0x600FCF0, (void*)0x60100F0, (void*)0x600FCF0 };
@@ -100,15 +100,15 @@ Next remove all the externs, and uncomment their corresponding commented data:
 
 ```C
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
-    sizeof(EnRecepgirl),
-    (ActorFunc)EnRecepgirl_Init,
-    (ActorFunc)EnRecepgirl_Destroy,
-    (ActorFunc)EnRecepgirl_Update,
-    (ActorFunc)EnRecepgirl_Draw,
+    /**/ ACTOR_EN_RECEPGIRL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
+    /**/ sizeof(EnRecepgirl),
+    /**/ EnRecepgirl_Init,
+    /**/ EnRecepgirl_Destroy,
+    /**/ EnRecepgirl_Update,
+    /**/ EnRecepgirl_Draw,
 };
 
 static void* D_80C106B0[4] = { (void*)0x600F8F0, (void*)0x600FCF0, (void*)0x60100F0, (void*)0x600FCF0 };
@@ -140,10 +140,10 @@ For actors which have yet to be decompiled, this is mitigated by use of the file
 
 ```c
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
+    /**/ ACTOR_EN_RECEPGIRL,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
 };
 ```
 

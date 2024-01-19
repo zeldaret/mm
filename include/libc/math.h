@@ -1,8 +1,6 @@
 #ifndef LIBC_MATH_H
 #define LIBC_MATH_H
 
-#include "PR/ultratypes.h"
-
 #define M_PI 3.14159265358979323846f
 #define M_SQRT2 1.41421356237309504880f
 #define M_SQRT3 1.7320508075688772935274463415059f
@@ -19,5 +17,7 @@ float fabsf(float f);
 
 double sqrt(double d);
 #pragma intrinsic(sqrt)
+
+float fmodf(float dividend, float divisor);
 
 #endif

@@ -26,15 +26,15 @@ void EnBomChu_Explode(EnBomChu* this, PlayState* play);
 void EnBomChu_WaitForDeath(EnBomChu* this, PlayState* play);
 
 ActorInit En_Bom_Chu_InitVars = {
-    ACTOR_EN_BOM_CHU,
-    ACTORCAT_EXPLOSIVES,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnBomChu),
-    (ActorFunc)EnBomChu_Init,
-    (ActorFunc)EnBomChu_Destroy,
-    (ActorFunc)EnBomChu_Update,
-    (ActorFunc)EnBomChu_Draw,
+    /**/ ACTOR_EN_BOM_CHU,
+    /**/ ACTORCAT_EXPLOSIVES,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnBomChu),
+    /**/ EnBomChu_Init,
+    /**/ EnBomChu_Destroy,
+    /**/ EnBomChu_Update,
+    /**/ EnBomChu_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -63,8 +63,19 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EffectBlureInit2 sBlureInit = {
-    0, 0, 0, { 250, 0, 0, 250 }, { 200, 0, 0, 130 }, { 150, 0, 0, 100 }, { 100, 0, 0, 50 }, 16,
-    0, 0, 0, { 0, 0, 0, 0 },     { 0, 0, 0, 0 },
+    0,
+    0,
+    0,
+    { 250, 0, 0, 250 },
+    { 200, 0, 0, 130 },
+    { 150, 0, 0, 100 },
+    { 100, 0, 0, 50 },
+    16,
+    0,
+    EFF_BLURE_DRAW_MODE_SIMPLE,
+    0,
+    { 0, 0, 0, 0 },
+    { 0, 0, 0, 0 },
 };
 
 void EnBomChu_Init(Actor* thisx, PlayState* play) {
@@ -474,7 +485,7 @@ void EnBomChu_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->actionFunc != EnBomChu_WaitForDeath) &&
-        (SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
+        SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
         EnBomChu_Explode(this, play);
         return;
     }
@@ -496,7 +507,7 @@ void EnBomChu_Update(Actor* thisx, PlayState* play) {
 
     if (this->isMoving) {
         this->visualJitter =
-            (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS((((s32)(Rand_ZeroOne() * 0x200) + 0x3000) * this->timer));
+            (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS(((s32)(Rand_ZeroOne() * 0x200) + 0x3000) * this->timer);
         EnBomChu_ActorCoordsToWorld(this, &sBlureP1Offset, &blureP1);
 
         EnBomChu_ActorCoordsToWorld(this, &sBlureP2LeftOffset, &blureP2);

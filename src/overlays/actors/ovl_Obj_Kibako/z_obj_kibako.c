@@ -37,15 +37,15 @@ static s16 D_80927388 = 0;
 static s16 D_8092738C = 0;
 
 ActorInit Obj_Kibako_InitVars = {
-    ACTOR_OBJ_KIBAKO,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjKibako),
-    (ActorFunc)ObjKibako_Init,
-    (ActorFunc)ObjKibako_Destroy,
-    (ActorFunc)ObjKibako_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_KIBAKO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjKibako),
+    /**/ ObjKibako_Init,
+    /**/ ObjKibako_Destroy,
+    /**/ ObjKibako_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -214,8 +214,8 @@ void ObjKibako_WaterBreak(ObjKibako* this, PlayState* play) {
 
     pos.y = worldPos->y + this->actor.depthInWater;
     for (angle = 0, i = 0; i < 5; i++, angle += 0x3333) {
-        pos.x = (Math_SinS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f) + worldPos->x;
-        pos.z = (Math_CosS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f) + worldPos->z;
+        pos.x = worldPos->x + (Math_SinS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f);
+        pos.z = worldPos->z + (Math_CosS(((s32)(Rand_ZeroOne() * 6000.0f)) + angle) * 15.0f);
         EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 350);
     }
     pos.x = worldPos->x;

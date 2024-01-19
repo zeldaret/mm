@@ -2,7 +2,7 @@
 #include "audiomgr.h"
 #include "idle.h"
 #include "sys_cfb.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "z64debug_text.h"
 #include "z64rumble.h"
 #include "z64speed_meter.h"
@@ -182,7 +182,7 @@ void GameState_Realloc(GameState* gameState, size_t size) {
 
     THA_Destroy(&gameState->tha);
     GameAlloc_Free(alloc, heapStart);
-    SystemArena_GetSizes(&systemMaxFree, &bytesFree, &bytesAllocated);
+    GetFreeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
     size = ((systemMaxFree - sizeof(ArenaNode)) < size) ? 0 : size;
     if (size == 0) {
         size = systemMaxFree - sizeof(ArenaNode);

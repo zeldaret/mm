@@ -1,3 +1,6 @@
+#include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h"
+
 #include "PR/ultratypes.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -8,19 +11,9 @@ struct CutsceneCamera sCutsceneCameraInfo;
 u16 sCueTypeList[10];
 u8 D_801F4DDC;
 static s16 sBssPad;
-u8 gDisablePlayerCsModeStartPos;
+u8 gDisablePlayerCsActionStartPos;
 s16 gDungeonBossWarpSceneId;
 
-#include "prevent_bss_reordering.h"
-#include "prevent_bss_reordering2.h"
-// clang-format off
-// Partial structs taken from "prevent_bss_reordering.h"
-struct Dummy200 { int x; };
-struct Dummy201 { int x; };
-struct Dummy202 { int x; };
-// clang-format on
-
-#include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -54,7 +47,7 @@ void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
         sCueTypeList[i] = 0;
     }
 
-    gDisablePlayerCsModeStartPos = false;
+    gDisablePlayerCsActionStartPos = false;
 
     Audio_SetCutsceneFlag(false);
 }
@@ -183,8 +176,8 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
         case CS_MISC_CLOUDY_SKY:
             if (isFirstFrame) {
                 play->envCtx.changeSkyboxState = CHANGE_SKYBOX_REQUESTED;
-                play->envCtx.skyboxConfig = 1;
-                play->envCtx.changeSkyboxNextConfig = 0;
+                play->envCtx.skyboxConfig = SKYBOX_CONFIG_1;
+                play->envCtx.changeSkyboxNextConfig = SKYBOX_CONFIG_0;
                 play->envCtx.changeSkyboxTimer = 60;
                 play->envCtx.changeLightEnabled = true;
                 play->envCtx.lightConfig = 0;
@@ -280,9 +273,9 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_FREEZE_TIME:
             if (!gSaveContext.save.isNight) {
-                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)R_TIME_SPEED;
+                gSaveContext.save.time = CURRENT_TIME - (u16)R_TIME_SPEED;
             } else {
-                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)(2 * R_TIME_SPEED);
+                gSaveContext.save.time = CURRENT_TIME - (u16)(2 * R_TIME_SPEED);
             }
             break;
 
@@ -338,7 +331,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_MOON_CRASH_SKYBOX:
             if (isFirstFrame) {
-                play->envCtx.skyboxConfig = 0xD;
+                play->envCtx.skyboxConfig = SKYBOX_CONFIG_13;
             }
             break;
 
@@ -346,12 +339,12 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             gSaveContext.save.playerForm = sCutsceneStoredPlayerForm;
             break;
 
-        case CS_MISC_DISABLE_PLAYER_CSMODE_START_POS:
-            gDisablePlayerCsModeStartPos = true;
+        case CS_MISC_DISABLE_PLAYER_CSACTION_START_POS:
+            gDisablePlayerCsActionStartPos = true;
             break;
 
-        case CS_MISC_ENABLE_PLAYER_CSMODE_START_POS:
-            gDisablePlayerCsModeStartPos = false;
+        case CS_MISC_ENABLE_PLAYER_CSACTION_START_POS:
+            gDisablePlayerCsActionStartPos = false;
             break;
 
         case CS_MISC_SAVE_ENTER_CLOCK_TOWN:
@@ -371,9 +364,8 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
                 D_801BB15C = csCtx->curFrame;
 
                 if (R_TIME_SPEED != 0) {
-                    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
-                    gSaveContext.save.time =
-                        ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
+                    gSaveContext.save.time = CURRENT_TIME + (u16)R_TIME_SPEED;
+                    gSaveContext.save.time = CURRENT_TIME + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
                 }
             }
             break;
@@ -1134,7 +1126,7 @@ void Cutscene_SetActorCue(CutsceneContext* csCtx, u8** script, s16 cueChannel) {
     *script += sizeof(numCues);
 
     for (i = 0; i < numCues; i++) {
-        CsCmdActorCue* cue = *(CsCmdActorCue**)script;
+        CsCmdActorCue* cue = (CsCmdActorCue*)(*script);
 
         if ((csCtx->curFrame >= cue->startFrame) && (csCtx->curFrame < cue->endFrame)) {
             csCtx->actorCues[cueChannel] = cue;
@@ -1652,7 +1644,7 @@ void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 cueC
 
     VEC3F_LERPIMPDST(&actor->world.pos, &startPos, &endPos, lerp);
 
-    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 1000, 1);
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 0x3E8, 1);
     actor->shape.rot.y = actor->world.rot.y;
 }
 
@@ -1677,7 +1669,7 @@ void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 cu
     actor->world.pos.x = startPos.x + (endPos.x - startPos.x) * lerp;
     actor->world.pos.z = startPos.z + (endPos.z - startPos.z) * lerp;
 
-    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 1000, 1);
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 0x3E8, 1);
     actor->shape.rot.y = actor->world.rot.y;
 }
 

@@ -1,4 +1,5 @@
 ﻿<Root>
+    <ExternalFile XmlPath="objects/gameplay_dangeon_keep.xml" OutPath="assets/objects/gameplay_dangeon_keep/"/>
     <File Name="object_syokudai" Segment="6">
         <DList Name="gObjectSyokudaiTypeSwitchCausesFlameDL" Offset="0x3A0" />
         <DList Name="gObjectSyokudaiTypeNoSwitchDL" Offset="0x870" />

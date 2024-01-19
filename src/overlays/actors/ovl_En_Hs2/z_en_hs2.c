@@ -18,15 +18,15 @@ void EnHs2_Draw(Actor* thisx, PlayState* play);
 void EnHs2_DoNothing(EnHs2* this, PlayState* play);
 
 ActorInit En_Hs2_InitVars = {
-    ACTOR_EN_HS2,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnHs2),
-    (ActorFunc)EnHs2_Init,
-    (ActorFunc)EnHs2_Destroy,
-    (ActorFunc)EnHs2_Update,
-    (ActorFunc)EnHs2_Draw,
+    /**/ ACTOR_EN_HS2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnHs2),
+    /**/ EnHs2_Init,
+    /**/ EnHs2_Destroy,
+    /**/ EnHs2_Update,
+    /**/ EnHs2_Draw,
 };
 
 void EnHs2_Init(Actor* thisx, PlayState* play) {

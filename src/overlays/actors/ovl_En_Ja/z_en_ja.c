@@ -50,15 +50,15 @@ s32 D_80BC366C[] = {
 };
 
 ActorInit En_Ja_InitVars = {
-    ACTOR_EN_JA,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BOJ,
-    sizeof(EnJa),
-    (ActorFunc)EnJa_Init,
-    (ActorFunc)EnJa_Destroy,
-    (ActorFunc)EnJa_Update,
-    (ActorFunc)EnJa_Draw,
+    /**/ ACTOR_EN_JA,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BOJ,
+    /**/ sizeof(EnJa),
+    /**/ EnJa_Init,
+    /**/ EnJa_Destroy,
+    /**/ EnJa_Update,
+    /**/ EnJa_Draw,
 };
 
 Vec3f D_80BC36AC = { -10.0f, 56.0f, 25.0f };
@@ -129,7 +129,7 @@ void func_80BC1984(EnJa* this, PlayState* play) {
     s32 pad[2];
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    this->collider.dim.height = (s16)fabsf(this->actor.focus.pos.y - this->actor.world.pos.y) + 5;
+    this->collider.dim.height = TRUNCF_BINANG(fabsf(this->actor.focus.pos.y - this->actor.world.pos.y)) + 5;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
@@ -137,7 +137,7 @@ s32 func_80BC19FC(EnJa* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_340 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80BC22F4;
         ret = true;
@@ -155,7 +155,7 @@ void func_80BC1A68(EnJa* this) {
     }
 }
 
-s32 func_80BC1AE0(EnJa* this, PlayState* play) {
+Actor* func_80BC1AE0(EnJa* this, PlayState* play) {
     Actor* ja = SubS_FindNearestActor(&this->actor, play, ACTORCAT_NPC, ACTOR_EN_JA);
     Vec3f sp30;
     Vec3f sp24;
@@ -256,7 +256,7 @@ void func_80BC1E40(EnJa* this, PlayState* play) {
 s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
-    if (func_80BC1AE0(this, play)) {
+    if (func_80BC1AE0(this, play) != NULL) {
         SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_340 |= 0x10;
         EnJa_ChangeAnim(this, ENJA_ANIM_5);
@@ -269,7 +269,7 @@ s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80BC203C(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
-    if (func_80BC1AE0(this, play)) {
+    if (func_80BC1AE0(this, play) != NULL) {
         if (ENJA_GET_3(&this->actor) == 0) {
             EnJa_ChangeAnim(this, ENJA_ANIM_1);
         } else {

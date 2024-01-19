@@ -1,7 +1,7 @@
 ﻿<Root>
     <!-- Cucco: zelda name for chicken, "Niw" likely short for "Niwatori" -->
     <File Name="object_niw" Segment="6">
-        <Animation Name="gNiwIdleAnim" Offset="0xE8" />
+        <Animation Name="gNiwIdleAnim" Offset="0xE8" /> <!-- Original name is "nw_wait" -->
         <DList Name="gNiwNeckDL" Offset="0x9C0" />
         <DList Name="gNiwHeadDL" Offset="0xA98" />
         <DList Name="gNiwTailDL" Offset="0xDF0" />
@@ -18,7 +18,7 @@
         <Texture Name="gNiwFootTex" OutName="foot" Format="rgba16" Width="8" Height="16" Offset="0x2080" />
         <Texture Name="gNiwFeatherTex" OutName="feather" Format="rgba16" Width="16" Height="16" Offset="0x2180" />
         <DList Name="gNiwFeatherMaterialDL" Offset="0x23B0" />
-        <DList Name="gNiwFeatherDL" Offset="0x2428" />
+        <DList Name="gNiwFeatherDL" Offset="0x2428" /> <!-- Original name is "nw_hane_model" -->
 
         <Limb Name="gNiwRootLimb" LimbType="Standard" EnumName="NIW_LIMB_ROOT" Offset="0x2440"/>
         <Limb Name="gNiwLimb_244C" LimbType="Standard" EnumName="NIW_LIMB_2" Offset="0x244C"/>

@@ -19,15 +19,15 @@ void BgIkninside_Draw(Actor* thisx, PlayState* play);
 void func_80C072D0(BgIkninside* this, PlayState* play);
 
 ActorInit Bg_Ikninside_InitVars = {
-    ACTOR_BG_IKNINSIDE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_IKNINSIDE_OBJ,
-    sizeof(BgIkninside),
-    (ActorFunc)BgIkninside_Init,
-    (ActorFunc)BgIkninside_Destroy,
-    (ActorFunc)BgIkninside_Update,
-    (ActorFunc)BgIkninside_Draw,
+    /**/ ACTOR_BG_IKNINSIDE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_IKNINSIDE_OBJ,
+    /**/ sizeof(BgIkninside),
+    /**/ BgIkninside_Init,
+    /**/ BgIkninside_Destroy,
+    /**/ BgIkninside_Update,
+    /**/ BgIkninside_Draw,
 };
 
 static Gfx* D_80C076A0[] = { object_ikninside_obj_DL_00A748, object_ikninside_obj_DL_00A5A8 };

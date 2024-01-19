@@ -199,8 +199,8 @@ typedef struct {
         u16 wchar[640];   // msgBufWide
         u64 force_structure_alignment_msg;
     } msgBuf;
-    /* 0x11D80 */ u32 messageStart;
-    /* 0x11D84 */ u32 messageEnd;
+    /* 0x11D80 */ uintptr_t messageStart;
+    /* 0x11D84 */ uintptr_t messageEnd;
     /* 0x11D88 */ u8 unk_11D88; // current Char Buffer ?
 } Font; // size = 0x11D90
 
@@ -320,7 +320,7 @@ typedef struct MessageContext {
     /* 0x120DA */ UNK_TYPE1 unk_120DA[0x6];
 } MessageContext; // size = 0x120E0
 
-s32 Message_ShouldAdvance(struct PlayState* play);
+bool Message_ShouldAdvance(struct PlayState* play);
 void Message_CloseTextbox(struct PlayState* play);
 void Message_DrawTextChar(struct PlayState* play, TexturePtr texture, Gfx** gfxP);
 void Message_DrawItemIcon(struct PlayState* play, Gfx** gfxP);

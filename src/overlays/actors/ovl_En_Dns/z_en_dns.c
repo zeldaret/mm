@@ -26,15 +26,15 @@ static s32 D_8092DCB0[] = {
 };
 
 ActorInit En_Dns_InitVars = {
-    ACTOR_EN_DNS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNS,
-    sizeof(EnDns),
-    (ActorFunc)EnDns_Init,
-    (ActorFunc)EnDns_Destroy,
-    (ActorFunc)EnDns_Update,
-    (ActorFunc)EnDns_Draw,
+    /**/ ACTOR_EN_DNS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNS,
+    /**/ sizeof(EnDns),
+    /**/ EnDns_Init,
+    /**/ EnDns_Destroy,
+    /**/ EnDns_Update,
+    /**/ EnDns_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -230,7 +230,7 @@ s32 func_8092CAD0(EnDns* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_2C6 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_2C6 &= ~0x10;
         if (ENDNS_GET_4000(&this->actor)) {
@@ -308,7 +308,7 @@ s32 func_8092CCEC(EnDns* this, PlayState* play) {
 
 s32 func_8092CE38(EnDns* this) {
     static s32 D_8092DE00[] = { EN_DNS_ANIM_DANCE, EN_DNS_ANIM_DANCE, EN_DNS_ANIM_FLIP };
-    s16 rotVelocity;
+    s16 angularVelocity;
     s32 pad;
     Vec3f sp2C;
     s32 ret = false;
@@ -333,10 +333,10 @@ s32 func_8092CE38(EnDns* this) {
                 this->actor.shape.rot.y = this->actor.world.rot.y;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_JUMP);
             } else if (this->skelAnime.curFrame < 13.0f) {
-                rotVelocity = this->skelAnime.curFrame;
+                angularVelocity = this->skelAnime.curFrame;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                rotVelocity *= 0x9D8;
-                this->actor.shape.rot.y += rotVelocity;
+                angularVelocity *= 0x9D8;
+                this->actor.shape.rot.y += angularVelocity;
                 this->unk_2E4 -= -(40.0f / 13.0f);
             }
         } else {

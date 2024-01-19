@@ -36,15 +36,15 @@ typedef enum {
 } EnRatHookedState;
 
 ActorInit En_Rat_InitVars = {
-    ACTOR_EN_RAT,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_RAT,
-    sizeof(EnRat),
-    (ActorFunc)EnRat_Init,
-    (ActorFunc)EnRat_Destroy,
-    (ActorFunc)EnRat_Update,
-    (ActorFunc)EnRat_Draw,
+    /**/ ACTOR_EN_RAT,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_RAT,
+    /**/ sizeof(EnRat),
+    /**/ EnRat_Init,
+    /**/ EnRat_Destroy,
+    /**/ EnRat_Update,
+    /**/ EnRat_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -124,8 +124,19 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EffectBlureInit2 sBlureInit = {
-    0, 0, 0, { 250, 0, 0, 250 }, { 200, 0, 0, 130 }, { 150, 0, 0, 100 }, { 100, 0, 0, 50 }, 16,
-    0, 0, 0, { 0, 0, 0, 0 },     { 0, 0, 0, 0 },
+    0,
+    0,
+    0,
+    { 250, 0, 0, 250 },
+    { 200, 0, 0, 130 },
+    { 150, 0, 0, 100 },
+    { 100, 0, 0, 50 },
+    16,
+    0,
+    EFF_BLURE_DRAW_MODE_SIMPLE,
+    0,
+    { 0, 0, 0, 0 },
+    { 0, 0, 0, 0 },
 };
 
 static s32 sTexturesDesegmented = false;
@@ -324,9 +335,9 @@ void EnRat_ChooseDirection(EnRat* this) {
                 angle -= 0x8000;
             }
 
-            angle += (s16)(s32)Rand_CenteredFloat(0x800);
+            angle += TRUNCF_BINANG(Rand_CenteredFloat(0x800));
         } else {
-            angle = (Rand_ZeroOne() < 0.1f) ? (s16)(s32)Rand_CenteredFloat(0x800) : 0;
+            angle = (Rand_ZeroOne() < 0.1f) ? TRUNCF_BINANG(Rand_CenteredFloat(0x800)) : 0;
         }
     }
 

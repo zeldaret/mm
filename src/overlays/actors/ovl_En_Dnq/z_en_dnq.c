@@ -26,15 +26,15 @@ static s32 D_80A53400[] = {
 };
 
 ActorInit En_Dnq_InitVars = {
-    ACTOR_EN_DNQ,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNO,
-    sizeof(EnDnq),
-    (ActorFunc)EnDnq_Init,
-    (ActorFunc)EnDnq_Destroy,
-    (ActorFunc)EnDnq_Update,
-    (ActorFunc)EnDnq_Draw,
+    /**/ ACTOR_EN_DNQ,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNO,
+    /**/ sizeof(EnDnq),
+    /**/ EnDnq_Init,
+    /**/ EnDnq_Destroy,
+    /**/ EnDnq_Update,
+    /**/ EnDnq_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -356,7 +356,7 @@ s32 func_80A52D44(EnDnq* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_37C & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_380 = func_80A52CF8(this, play);
         this->actionFunc = func_80A52FB8;

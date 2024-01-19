@@ -19,15 +19,15 @@ void BgHakuginElvpole_Draw(Actor* thisx, PlayState* play);
 void func_80ABD92C(BgHakuginElvpole* this, PlayState* play);
 
 ActorInit Bg_Hakugin_Elvpole_InitVars = {
-    ACTOR_BG_HAKUGIN_ELVPOLE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HAKUGIN_OBJ,
-    sizeof(BgHakuginElvpole),
-    (ActorFunc)BgHakuginElvpole_Init,
-    (ActorFunc)BgHakuginElvpole_Destroy,
-    (ActorFunc)BgHakuginElvpole_Update,
-    (ActorFunc)BgHakuginElvpole_Draw,
+    /**/ ACTOR_BG_HAKUGIN_ELVPOLE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HAKUGIN_OBJ,
+    /**/ sizeof(BgHakuginElvpole),
+    /**/ BgHakuginElvpole_Init,
+    /**/ BgHakuginElvpole_Destroy,
+    /**/ BgHakuginElvpole_Update,
+    /**/ BgHakuginElvpole_Draw,
 };
 
 void BgHakuginElvpole_Init(Actor* thisx, PlayState* play) {

@@ -29,15 +29,15 @@ void func_80B13C08(Actor* thisx, PlayState* play);
 void func_80B13E40(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Dhouse_InitVars = {
-    ACTOR_OBJ_DHOUSE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_DHOUSE,
-    sizeof(ObjDhouse),
-    (ActorFunc)ObjDhouse_Init,
-    (ActorFunc)ObjDhouse_Destroy,
-    (ActorFunc)ObjDhouse_Update,
-    (ActorFunc)ObjDhouse_Draw,
+    /**/ ACTOR_OBJ_DHOUSE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_DHOUSE,
+    /**/ sizeof(ObjDhouse),
+    /**/ ObjDhouse_Init,
+    /**/ ObjDhouse_Destroy,
+    /**/ ObjDhouse_Update,
+    /**/ ObjDhouse_Draw,
 };
 
 ObjDhouseStruct3 D_80B13E90[] = {

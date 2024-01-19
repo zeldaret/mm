@@ -34,7 +34,9 @@
 #include "global.h"
 #include "PR/controller.h"
 #include "PR/os_motor.h"
+#include "libc64/sprintf.h"
 #include "fault.h"
+#include "z64voice.h"
 
 extern FaultMgr gFaultMgr;
 
@@ -527,7 +529,7 @@ void PadMgr_InitVoice(void) {
             } else {
                 sPadMgrInstance->ctrlrType[i] = PADMGR_CONT_VOICE;
                 sVoiceInitStatus = VOICE_INIT_SUCCESS;
-                func_801A4EB0();
+                AudioVoice_Noop();
             }
         }
     }

@@ -40,15 +40,15 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 ActorInit En_Tubo_Trap_InitVars = {
-    ACTOR_EN_TUBO_TRAP,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_DANGEON_KEEP,
-    sizeof(EnTuboTrap),
-    (ActorFunc)EnTuboTrap_Init,
-    (ActorFunc)EnTuboTrap_Destroy,
-    (ActorFunc)EnTuboTrap_Update,
-    (ActorFunc)EnTuboTrap_Draw,
+    /**/ ACTOR_EN_TUBO_TRAP,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_DANGEON_KEEP,
+    /**/ sizeof(EnTuboTrap),
+    /**/ EnTuboTrap_Init,
+    /**/ EnTuboTrap_Destroy,
+    /**/ EnTuboTrap_Update,
+    /**/ EnTuboTrap_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -234,7 +234,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, PlayState* play) {
     if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.world.pos.y <= player->actor.world.pos.y)) {
         startingRotation = this->actor.home.rot.z;
         if ((startingRotation == 0) || (this->actor.playerHeightRel <= (startingRotation * 10.0f))) {
-            func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
             this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10); // always update and can target
 

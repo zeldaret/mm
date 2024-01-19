@@ -1,12 +1,10 @@
-#include "global.h"
+#include "ultra64.h"
 
 s32 osRecvMesg(OSMesgQueue* mq, OSMesg* msg, s32 flags) {
-    register u32 saveMask;
+    register u32 saveMask = __osDisableInt();
 
-    saveMask = __osDisableInt();
-
-    while (mq->validCount == 0) {
-        if (flags == 0) {
+    while (MQ_IS_EMPTY(mq)) {
+        if (flags == OS_MESG_NOBLOCK) {
             __osRestoreInt(saveMask);
             return -1;
         }

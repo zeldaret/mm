@@ -23,15 +23,15 @@ void func_80BDD6BC(EnZow* this, PlayState* play);
 void func_80BDD79C(EnZow* this, PlayState* play);
 
 ActorInit En_Zow_InitVars = {
-    ACTOR_EN_ZOW,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZO,
-    sizeof(EnZow),
-    (ActorFunc)EnZow_Init,
-    (ActorFunc)EnZow_Destroy,
-    (ActorFunc)EnZow_Update,
-    (ActorFunc)EnZow_Draw,
+    /**/ ACTOR_EN_ZOW,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZO,
+    /**/ sizeof(EnZow),
+    /**/ EnZow_Init,
+    /**/ EnZow_Destroy,
+    /**/ EnZow_Update,
+    /**/ EnZow_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -498,7 +498,7 @@ void func_80BDD570(EnZow* this, PlayState* play) {
 
 void func_80BDD634(EnZow* this, PlayState* play) {
     func_80BDD490(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80BDD570;
         func_80BDD1E0(this, play);
     } else if (func_80BDD154(this, play)) {
@@ -602,14 +602,14 @@ Gfx* func_80BDDA7C(GraphicsContext* gfxCtx) {
 
 Vec3f D_80BDDD4C = { 400.0f, 0.0f, 0.0f };
 
-void func_80BDDAA0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnZow_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 15) {
         Matrix_MultVec3f(&D_80BDDD4C, &thisx->focus.pos);
     }
 }
 
-void func_80BDDAE0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    func_80BDDAA0(play, limbIndex, dList, rot, thisx);
+void EnZow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+    EnZow_PostLimbDrawOpa(play, limbIndex, dList, rot, thisx);
 }
 
 void EnZow_Draw(Actor* thisx, PlayState* play) {
@@ -639,11 +639,11 @@ void EnZow_Draw(Actor* thisx, PlayState* play) {
             gSPSegment(POLY_OPA_DISP++, 0x0C, func_80BDDA7C(play->state.gfxCtx));
 
             SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                  this->skelAnime.dListCount, NULL, func_80BDDAA0, &this->actor);
+                                  this->skelAnime.dListCount, NULL, EnZow_PostLimbDrawOpa, &this->actor);
         } else {
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sp54[this->unk_2C4]));
 
-            func_800BDAA0(play, &this->skelAnime, NULL, func_80BDDAE0, &this->actor, this->unk_2CE);
+            func_800BDAA0(play, &this->skelAnime, NULL, EnZow_PostLimbDraw, &this->actor, this->unk_2CE);
         }
 
         CLOSE_DISPS(play->state.gfxCtx);

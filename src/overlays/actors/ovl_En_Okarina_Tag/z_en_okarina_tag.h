@@ -11,6 +11,8 @@ typedef void (*EnOkarinaTagActionFunc)(struct EnOkarinaTag*, PlayState*);
 #define ENOKARINATAG_GET_780(thisx) (((thisx)->params >> 0x7) & 0xF)
 #define ENOKARINATAG_GET_F800(thisx) (((thisx)->params >> 0xB) & 0x1F)
 
+#define ENOKARINATAG_SWITCH_FLAG_NONE 0x7F
+
 typedef struct EnOkarinaTag {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnOkarinaTagActionFunc actionFunc;

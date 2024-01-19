@@ -58,15 +58,15 @@ void func_8089C164(EnDinofos* this);
 void func_8089C244(EnDinofos* this);
 
 ActorInit En_Dinofos_InitVars = {
-    ACTOR_EN_DINOFOS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DINOFOS,
-    sizeof(EnDinofos),
-    (ActorFunc)EnDinofos_Init,
-    (ActorFunc)EnDinofos_Destroy,
-    (ActorFunc)EnDinofos_Update,
-    (ActorFunc)EnDinofos_Draw,
+    /**/ ACTOR_EN_DINOFOS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DINOFOS,
+    /**/ sizeof(EnDinofos),
+    /**/ EnDinofos_Init,
+    /**/ EnDinofos_Destroy,
+    /**/ EnDinofos_Update,
+    /**/ EnDinofos_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[9] = {
@@ -259,10 +259,21 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnDinofos_Init(Actor* thisx, PlayState* play) {
-    static s32 D_8089E364 = 0;
+    static s32 sTexturesDesegmented = false;
     static EffectBlureInit2 D_8089E368 = {
-        0, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 8,
-        0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
+        0,
+        EFFECT_BLURE_ELEMENT_FLAG_8,
+        0,
+        { 255, 255, 255, 255 },
+        { 255, 255, 255, 64 },
+        { 255, 255, 255, 0 },
+        { 255, 255, 255, 0 },
+        8,
+        0,
+        EFF_BLURE_DRAW_MODE_SMOOTH,
+        0,
+        { 0, 0, 0, 0 },
+        { 0, 0, 0, 0 },
     };
     EnDinofos* this = THIS;
     s32 i;
@@ -277,11 +288,11 @@ void EnDinofos_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gDinolfosSkel, &gDinolfosIdleAnim, this->jointTable, this->morphTable,
                        DINOLFOS_LIMB_MAX);
 
-    if (D_8089E364 == 0) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
             sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
-        D_8089E364 = 1;
+        sTexturesDesegmented = true;
     }
 
     this->unk_288 = 255;
@@ -369,7 +380,7 @@ void func_8089ABF4(EnDinofos* this, PlayState* play) {
         this->subCamId = SUB_CAM_ID_DONE;
         CutsceneManager_Stop(this->actor.csId);
         if (this->actor.colChkInfo.health == 0) {
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
+            Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_END);
         }
     }
 }
@@ -450,7 +461,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         return true;
     }
 
-    if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->actionVar1 == 1) &&
+    if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->av1.actionVar1 == 1) &&
         (this->unk_28B == 0)) {
         this->unk_28B = 1;
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElement) - 3; i++) {
@@ -1143,7 +1154,7 @@ void func_8089D018(EnDinofos* this, PlayState* play) {
         s32 temp_v0 = this->unk_288 - 10;
 
         if (this->actor.category == ACTORCAT_ENEMY) {
-            func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
             func_8089ABF4(this, play);
         }
 
@@ -1209,7 +1220,7 @@ void func_8089D318(EnDinofos* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->actor.csId)) {
         if (this->actor.colChkInfo.health == 0) {
             CutsceneManager_Start(this->actor.csId, &this->actor);
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
+            Player_SetCsAction(play, &this->actor, PLAYER_CSACTION_WAIT);
         } else {
             CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         }
@@ -1407,7 +1418,8 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-s32 func_8089DC4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+s32 EnDinofos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                               Gfx** gfx) {
     EnDinofos* this = THIS;
 
     if (limbIndex == DINOLFOS_LIMB_HEAD) {
@@ -1445,7 +1457,7 @@ static s8 sLimbToBodyParts[DINOLFOS_LIMB_MAX] = {
     BODYPART_NONE,                    // DINOLFOS_LIMB_KNIFE
 };
 
-void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnDinofos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnDinofos* this = THIS;
     Vec3f sp80;
     Vec3f sp74;
@@ -1511,7 +1523,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
         Scene_SetRenderModeXlu(play, 0, 1);
         POLY_OPA_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               func_8089DC4C, func_8089DC84, &this->actor, POLY_OPA_DISP);
+                               EnDinofos_OverrideLimbDraw, EnDinofos_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         func_800B8118(&this->actor, play, 0);
@@ -1522,7 +1534,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
         Scene_SetRenderModeXlu(play, 1, 2);
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                               func_8089DC4C, func_8089DC84, &this->actor, POLY_XLU_DISP);
+                               EnDinofos_OverrideLimbDraw, EnDinofos_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
 
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, DINOFOS_BODYPART_MAX, this->drawDmgEffScale,

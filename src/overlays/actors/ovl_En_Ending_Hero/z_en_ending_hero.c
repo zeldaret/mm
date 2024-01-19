@@ -19,15 +19,15 @@ void EnEndingHero1_SetupIdle(EnEndingHero* this);
 void EnEndingHero1_Idle(EnEndingHero* this, PlayState* play);
 
 ActorInit En_Ending_Hero_InitVars = {
-    ACTOR_EN_ENDING_HERO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DT,
-    sizeof(EnEndingHero),
-    (ActorFunc)EnEndingHero_Init,
-    (ActorFunc)EnEndingHero_Destroy,
-    (ActorFunc)EnEndingHero_Update,
-    (ActorFunc)EnEndingHero_Draw,
+    /**/ ACTOR_EN_ENDING_HERO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DT,
+    /**/ sizeof(EnEndingHero),
+    /**/ EnEndingHero_Init,
+    /**/ EnEndingHero_Destroy,
+    /**/ EnEndingHero_Update,
+    /**/ EnEndingHero_Draw,
 };
 
 void EnEndingHero_Init(Actor* thisx, PlayState* play) {
@@ -62,7 +62,7 @@ void EnEndingHero_Update(Actor* thisx, PlayState* play) {
         this->unk242++;
         if (this->unk242 > 2) {
             this->unk242 = 0;
-            this->unk240 = (s16)Rand_ZeroFloat(60.0f) + 0x14;
+            this->unk240 = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 0x14;
         }
     }
     this->actionFunc(this, play);

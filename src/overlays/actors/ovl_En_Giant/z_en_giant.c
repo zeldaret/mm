@@ -51,15 +51,15 @@ typedef enum {
 } GiantCueId;
 
 ActorInit En_Giant_InitVars = {
-    ACTOR_EN_GIANT,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GIANT,
-    sizeof(EnGiant),
-    (ActorFunc)EnGiant_Init,
-    (ActorFunc)EnGiant_Destroy,
-    (ActorFunc)EnGiant_Update,
-    (ActorFunc)EnGiant_Draw,
+    /**/ ACTOR_EN_GIANT,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_GIANT,
+    /**/ sizeof(EnGiant),
+    /**/ EnGiant_Init,
+    /**/ EnGiant_Destroy,
+    /**/ EnGiant_Update,
+    /**/ EnGiant_Draw,
 };
 
 /**

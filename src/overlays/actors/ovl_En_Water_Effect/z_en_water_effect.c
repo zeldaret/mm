@@ -32,15 +32,15 @@ void func_80A5A534(Actor* thisx, PlayState* play);
 void func_80A5A6B8(Actor* thisx, PlayState* play2);
 
 ActorInit En_Water_Effect_InitVars = {
-    ACTOR_EN_WATER_EFFECT,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_WATER_EFFECT,
-    sizeof(EnWaterEffect),
-    (ActorFunc)EnWaterEffect_Init,
-    (ActorFunc)EnWaterEffect_Destroy,
-    (ActorFunc)EnWaterEffect_Update,
-    (ActorFunc)EnWaterEffect_Draw,
+    /**/ ACTOR_EN_WATER_EFFECT,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_WATER_EFFECT,
+    /**/ sizeof(EnWaterEffect),
+    /**/ EnWaterEffect_Init,
+    /**/ EnWaterEffect_Destroy,
+    /**/ EnWaterEffect_Update,
+    /**/ EnWaterEffect_Draw,
 };
 
 static Vec3f D_80A5AFB0 = { 0.0f, 0.0f, 0.0f };
@@ -438,7 +438,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
             ptr->unk_04.x += ptr->unk_10.x;
             ptr->unk_04.y += ptr->unk_10.y;
             ptr->unk_04.z += ptr->unk_10.z;
-            ptr->unk_10.y = ptr->unk_10.y + ptr->unk_1C.y;
+            ptr->unk_10.y += ptr->unk_1C.y;
 
             if (ptr->unk_00 == 4) {
                 if (ptr->unk_2A > 0) {

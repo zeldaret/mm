@@ -24,18 +24,18 @@ void func_80C05DE8(EnBombal* this, PlayState* play);
 void func_80C05B24(EnBombal* this);
 void EnBombal_InitEffects(EnBombal* this, Vec3f* pos, s16 fadeDelay);
 void EnBombal_UpdateEffects(EnBombal* this, PlayState* play);
-void EnBombal_DrawEffects(EnBombal*, PlayState*);
+void EnBombal_DrawEffects(EnBombal* this, PlayState* play);
 
 ActorInit En_Bombal_InitVars = {
-    ACTOR_EN_BOMBAL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_FUSEN,
-    sizeof(EnBombal),
-    (ActorFunc)EnBombal_Init,
-    (ActorFunc)EnBombal_Destroy,
-    (ActorFunc)EnBombal_Update,
-    (ActorFunc)EnBombal_Draw,
+    /**/ ACTOR_EN_BOMBAL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_FUSEN,
+    /**/ sizeof(EnBombal),
+    /**/ EnBombal_Init,
+    /**/ EnBombal_Destroy,
+    /**/ EnBombal_Update,
+    /**/ EnBombal_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

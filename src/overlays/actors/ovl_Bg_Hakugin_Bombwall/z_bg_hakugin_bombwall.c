@@ -27,15 +27,15 @@ void func_80ABCD98(BgHakuginBombwall* this, PlayState* play);
 void func_80ABCE60(BgHakuginBombwall* this, PlayState* play);
 
 ActorInit Bg_Hakugin_Bombwall_InitVars = {
-    ACTOR_BG_HAKUGIN_BOMBWALL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HAKUGIN_OBJ,
-    sizeof(BgHakuginBombwall),
-    (ActorFunc)BgHakuginBombwall_Init,
-    (ActorFunc)BgHakuginBombwall_Destroy,
-    (ActorFunc)BgHakuginBombwall_Update,
-    (ActorFunc)BgHakuginBombwall_Draw,
+    /**/ ACTOR_BG_HAKUGIN_BOMBWALL,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HAKUGIN_OBJ,
+    /**/ sizeof(BgHakuginBombwall),
+    /**/ BgHakuginBombwall_Init,
+    /**/ BgHakuginBombwall_Destroy,
+    /**/ BgHakuginBombwall_Update,
+    /**/ BgHakuginBombwall_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -64,15 +64,15 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit Boss_04_InitVars = {
-    ACTOR_BOSS_04,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS04,
-    sizeof(Boss04),
-    (ActorFunc)Boss04_Init,
-    (ActorFunc)Boss04_Destroy,
-    (ActorFunc)Boss04_Update,
-    (ActorFunc)Boss04_Draw,
+    /**/ ACTOR_BOSS_04,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS04,
+    /**/ sizeof(Boss04),
+    /**/ Boss04_Init,
+    /**/ Boss04_Destroy,
+    /**/ Boss04_Update,
+    /**/ Boss04_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
@@ -264,7 +264,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     this->subCamId = Play_CreateSubCamera(play);
                     Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                     Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-                    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+                    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
                     player->actor.shape.rot.y = 0x7FFF;
@@ -314,7 +314,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
             if (this->unk_704 == 45) {
                 this->unk_708 = 1;
                 this->unk_704 = 0;
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_21);
                 this->actor.gravity = 0.0f;
                 break;
             }
@@ -391,7 +391,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
                 Play_DisableMotionBlur();
                 SET_EVENTINF(EVENTINF_60);
             }
@@ -475,7 +475,7 @@ void func_809ECF58(Boss04* this, PlayState* play) {
             this->unk_2D0 = 10000.0f;
             this->unk_2C8 = 100;
         } else {
-            this->actor.world.rot.y = BINANG_ROT180((s16)Rand_ZeroFloat(8000.0f) + this->actor.world.rot.y);
+            this->actor.world.rot.y = BINANG_ROT180(TRUNCF_BINANG(Rand_ZeroFloat(8000.0f)) + this->actor.world.rot.y);
         }
 
         this->actor.speed = 0.0f;
@@ -572,7 +572,7 @@ void func_809ED45C(Boss04* this, PlayState* play) {
         this->collider1.elements[0].info.bumperFlags &= ~BUMP_HIT;
         Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DAMAGE);
         damage = this->actor.colChkInfo.damage;
-        this->actor.colChkInfo.health = this->actor.colChkInfo.health - damage;
+        this->actor.colChkInfo.health -= damage;
         if ((s8)this->actor.colChkInfo.health <= 0) {
             func_809ED224(this);
             this->unk_1FE = 100;
@@ -784,15 +784,15 @@ s32 Boss04_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
     }
 
     if ((limbIndex == WART_LIMB_TOP_EYELID_ROOT) || (limbIndex == WART_LIMB_BOTTOM_EYELID_ROOT)) {
-        rot->y = (rot->y + (s16)this->unk_2CC) - 0x500;
+        rot->y = (rot->y + TRUNCF_BINANG(this->unk_2CC)) - 0x500;
     }
 
     if (limbIndex == WART_LIMB_EYE) {
         rot->y += this->unk_2D8;
         rot->z += this->unk_2D4;
         if (this->unk_2DA != 0) {
-            rot->y = (s16)(Math_SinS(this->unk_1F4 * 0x3000) * (this->unk_2DA * 500)) + rot->y;
-            rot->z = (s16)(Math_SinS(this->unk_1F4 * 0x3500) * (this->unk_2DA * 300)) + rot->z;
+            rot->y = TRUNCF_BINANG(Math_SinS(this->unk_1F4 * 0x3000) * (this->unk_2DA * 500)) + rot->y;
+            rot->z = TRUNCF_BINANG(Math_SinS(this->unk_1F4 * 0x3500) * (this->unk_2DA * 300)) + rot->z;
         }
     }
 

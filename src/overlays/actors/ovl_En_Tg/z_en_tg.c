@@ -22,15 +22,15 @@ void EnTg_DrawHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects);
 void EnTg_SpawnHeart(EnTg* this, EnTgHeartEffect* effect, Vec3f* heartStartPos, s32 numEffects);
 
 ActorInit En_Tg_InitVars = {
-    ACTOR_EN_TG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MU,
-    sizeof(EnTg),
-    (ActorFunc)EnTg_Init,
-    (ActorFunc)EnTg_Destroy,
-    (ActorFunc)EnTg_Update,
-    (ActorFunc)EnTg_Draw,
+    /**/ ACTOR_EN_TG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MU,
+    /**/ sizeof(EnTg),
+    /**/ EnTg_Init,
+    /**/ EnTg_Destroy,
+    /**/ EnTg_Update,
+    /**/ EnTg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

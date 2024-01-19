@@ -22,9 +22,15 @@
 void ObjGrassUnit_Init(Actor* this, PlayState* play2);
 
 ActorInit Obj_Grass_Unit_InitVars = {
-    ACTOR_OBJ_GRASS_UNIT,  ACTORCAT_BG,           FLAGS,
-    GAMEPLAY_FIELD_KEEP,   sizeof(ObjGrassUnit),  (ActorFunc)ObjGrassUnit_Init,
-    (ActorFunc)Actor_Noop, (ActorFunc)Actor_Noop, (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_GRASS_UNIT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_FIELD_KEEP,
+    /**/ sizeof(ObjGrassUnit),
+    /**/ ObjGrassUnit_Init,
+    /**/ Actor_Noop,
+    /**/ Actor_Noop,
+    /**/ NULL,
 };
 
 // Neat circular pattern with a single bush in the center
@@ -142,9 +148,9 @@ void ObjGrassUnit_Init(Actor* this, PlayState* play2) {
         grassElem = &grassGroup->elements[grassGroup->count];
         grassPos = &grassPattern->positions[i];
 
-        grassElem->pos.x = (Math_CosS((this->home.rot.y + grassPos->angle)) * grassPos->distance) + this->home.pos.x;
+        grassElem->pos.x = this->home.pos.x + (Math_CosS(this->home.rot.y + grassPos->angle) * grassPos->distance);
         grassElem->pos.y = this->home.pos.y + 100.0f;
-        grassElem->pos.z = (Math_SinS((this->home.rot.y + grassPos->angle)) * grassPos->distance) + this->home.pos.z;
+        grassElem->pos.z = this->home.pos.z + (Math_SinS(this->home.rot.y + grassPos->angle) * grassPos->distance);
 
         grassElem->pos.y = BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, this, &grassElem->pos);
         tmp = grassElem->pos.y - this->home.pos.y;

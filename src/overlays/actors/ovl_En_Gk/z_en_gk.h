@@ -28,8 +28,8 @@ typedef struct EnGk {
     /* 0x144 */ ColliderCylinder collider;
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnGkActionFunc actionFunc;
-    /* 0x1D8 */ Vec3s unk_1D8;
-    /* 0x1DE */ Vec3s unk_1DE;
+    /* 0x1D8 */ Vec3s headRot;
+    /* 0x1DE */ Vec3s torsoRot;
     /* 0x1E4 */ u16 unk_1E4;
     /* 0x1E8 */ Path* path;
     /* 0x1EC */ s32 unk_1EC;

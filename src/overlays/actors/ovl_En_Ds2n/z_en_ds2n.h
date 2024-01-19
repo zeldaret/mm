@@ -16,7 +16,7 @@ typedef struct EnDs2n {
     /* 0x1D8 */ s16 fidgetTableY[DS2N_LIMB_MAX];
     /* 0x1FE */ s16 fidgetTableZ[DS2N_LIMB_MAX];
     /* 0x224 */ Vec3s headRot;
-    /* 0x22A */ Vec3s chestRot; // set by function, but not applied in limbdraw
+    /* 0x22A */ Vec3s torsoRot; // set by function, but not applied in limbdraw
     /* 0x230 */ s16 blinkState;
     /* 0x232 */ s16 blinkTimer;
 

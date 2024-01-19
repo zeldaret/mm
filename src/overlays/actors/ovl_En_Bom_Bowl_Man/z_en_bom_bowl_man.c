@@ -38,15 +38,15 @@ s32 D_809C6100 = 0;
 s32 D_809C6104 = 0;
 
 ActorInit En_Bom_Bowl_Man_InitVars = {
-    ACTOR_EN_BOM_BOWL_MAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_CS,
-    sizeof(EnBomBowlMan),
-    (ActorFunc)EnBomBowlMan_Init,
-    (ActorFunc)EnBomBowlMan_Destroy,
-    (ActorFunc)EnBomBowlMan_Update,
-    (ActorFunc)EnBomBowlMan_Draw,
+    /**/ ACTOR_EN_BOM_BOWL_MAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_CS,
+    /**/ sizeof(EnBomBowlMan),
+    /**/ EnBomBowlMan_Init,
+    /**/ EnBomBowlMan_Destroy,
+    /**/ EnBomBowlMan_Update,
+    /**/ EnBomBowlMan_Draw,
 };
 
 typedef enum {
@@ -268,7 +268,7 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
-    Math_SmoothStepToS(&this->unk_290, this->unk_2D4, 1, 5000, 0);
+    Math_SmoothStepToS(&this->unk_290, this->unk_2D4, 1, 0x1388, 0);
 
     if (this->unk_2B8 == 0) {
         Player* player = GET_PLAYER(play);
@@ -427,7 +427,7 @@ void func_809C5310(EnBomBowlMan* this, PlayState* play) {
     if (player->actor.world.pos.x < 1510.0f) {
         if (player->transformation != PLAYER_FORM_DEKU) {
             if (this->actor.xzDistToPlayer < this->unk_2C8) {
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
                 func_809C53A4(this);
             }
         } else {
@@ -485,7 +485,7 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
         } else if (this->actor.textId == 0x734) {
             this->actor.textId = 0x715;
         } else if (this->actor.textId == 0x715) {
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
             EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_17, 1.0f);
             func_809C59A4(this, play);
             return;
@@ -497,7 +497,7 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BOMBERS_NOTEBOOK);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_BOMBERS);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
             this->actionFunc = func_809C5738;
             return;
         }
@@ -537,7 +537,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_18, 1.0f);
         }
     } else {
-        Math_SmoothStepToS(&this->actor.world.rot.y, yaw, 1, 2000, 10);
+        Math_SmoothStepToS(&this->actor.world.rot.y, yaw, 1, 0x7D0, 0xA);
         Math_ApproachF(&this->actor.world.pos.x, this->unk_2A0.x, 0.5f, 6.0f);
         Math_ApproachF(&this->actor.world.pos.z, this->unk_2A0.z, 0.5f, 6.0f);
         if ((sqrtf(SQ(this->actor.world.pos.x - this->unk_2A0.x) + SQ(this->actor.world.pos.z - this->unk_2A0.z)) <
@@ -580,7 +580,7 @@ void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C5AA4(EnBomBowlMan* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->unk_2F6 == ENBOMBOWLMAN_F0_0) {
             this->actionFunc = func_809C4DA4;
         } else {

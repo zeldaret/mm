@@ -32,15 +32,15 @@ static Vec3f sZeroVec[] = { 0.0f, 0.0f, 0.0f };
 static Boss03* sGyorg = NULL;
 
 ActorInit En_Tanron3_InitVars = {
-    ACTOR_EN_TANRON3,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS03,
-    sizeof(EnTanron3),
-    (ActorFunc)EnTanron3_Init,
-    (ActorFunc)EnTanron3_Destroy,
-    (ActorFunc)EnTanron3_Update,
-    (ActorFunc)EnTanron3_Draw,
+    /**/ ACTOR_EN_TANRON3,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS03,
+    /**/ sizeof(EnTanron3),
+    /**/ EnTanron3_Init,
+    /**/ EnTanron3_Destroy,
+    /**/ EnTanron3_Update,
+    /**/ EnTanron3_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -297,17 +297,17 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                     this->actor.speed = Rand_ZeroFloat(2.0f) + 2.0f;
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.x =
-                            (s16)(s32)Rand_CenteredFloat(0x1F4) + this->targetShapeRotation.x + 0x8000;
+                            TRUNCF_BINANG(Rand_CenteredFloat(0x1F4)) + this->targetShapeRotation.x + 0x8000;
                     }
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.z =
-                            (s16)(s32)Rand_CenteredFloat(0x1F4) + this->targetShapeRotation.z + 0x8000;
+                            TRUNCF_BINANG(Rand_CenteredFloat(0x1F4)) + this->targetShapeRotation.z + 0x8000;
                     }
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->targetShapeRotation.y = (s16)Rand_ZeroFloat(0x10000);
+                        this->targetShapeRotation.y = TRUNCF_BINANG(Rand_ZeroFloat(0x10000));
                     }
                     this->actor.world.rot.y = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x) +
-                                              (s16)(s32)Rand_CenteredFloat(0xCE20);
+                                              TRUNCF_BINANG(Rand_CenteredFloat(0xCE20));
                 }
 
                 Math_ApproachS(&this->actor.shape.rot.y, this->targetShapeRotation.y, 3, 0x500);

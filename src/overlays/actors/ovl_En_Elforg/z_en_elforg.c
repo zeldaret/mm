@@ -23,15 +23,15 @@ void EnElforg_SetupTrappedByEnemy(EnElforg* this, PlayState* play);
 void EnElforg_HiddenByCollider(EnElforg* this, PlayState* play);
 
 ActorInit En_Elforg_InitVars = {
-    ACTOR_EN_ELFORG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnElforg),
-    (ActorFunc)EnElforg_Init,
-    (ActorFunc)EnElforg_Destroy,
-    (ActorFunc)EnElforg_Update,
-    (ActorFunc)EnElforg_Draw,
+    /**/ ACTOR_EN_ELFORG,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnElforg),
+    /**/ EnElforg_Init,
+    /**/ EnElforg_Destroy,
+    /**/ EnElforg_Update,
+    /**/ EnElforg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -232,7 +232,7 @@ void EnElforg_MoveToTargetFairyFountain(EnElforg* this, Vec3f* homePos) {
     }
 
     targetAngle += angleAdjustment;
-    Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 2, 4000, 1000);
+    Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 2, 0xFA0, 0x3E8);
     EnElforg_ApproachTargetSpeedXZ(this);
     Actor_MoveWithGravity(&this->actor);
 }

@@ -38,15 +38,15 @@ void func_80B1544C(Actor* thisx, PlayState* play);
 void func_80B154A0(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Hakaisi_InitVars = {
-    ACTOR_OBJ_HAKAISI,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_HAKAISI,
-    sizeof(ObjHakaisi),
-    (ActorFunc)ObjHakaisi_Init,
-    (ActorFunc)ObjHakaisi_Destroy,
-    (ActorFunc)ObjHakaisi_Update,
-    (ActorFunc)ObjHakaisi_Draw,
+    /**/ ACTOR_OBJ_HAKAISI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_HAKAISI,
+    /**/ sizeof(ObjHakaisi),
+    /**/ ObjHakaisi_Init,
+    /**/ ObjHakaisi_Destroy,
+    /**/ ObjHakaisi_Update,
+    /**/ ObjHakaisi_Draw,
 };
 
 Vec3f D_80B155B0 = { 0.0f, 25.0f, 30.0f };
@@ -115,11 +115,11 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
     this->switchFlag = OBJHAKAISI_GET_SWITCH_FLAG(thisx);
     this->csId = this->dyna.actor.csId;
 
-    if (this->switchFlag == 0xFF) {
-        this->switchFlag = -1;
+    if (this->switchFlag == OBJHAKAISI_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag != -1) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag != SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->dyna.actor);
     }
 
@@ -164,7 +164,7 @@ void func_80B1444C(ObjHakaisi* this) {
 void func_80B14460(ObjHakaisi* this, PlayState* play) {
     s16 sp26 = BINANG_SUB(this->dyna.actor.shape.rot.y, this->dyna.actor.yawTowardsPlayer);
 
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         func_80B14510(this);
     } else if (this->dyna.actor.textId != 0) {
         if (ABS_ALT(sp26) < 0x2000) {

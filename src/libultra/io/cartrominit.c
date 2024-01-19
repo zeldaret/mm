@@ -1,6 +1,8 @@
-#include "global.h"
+#include "ultra64.h"
+#include "libc/stdbool.h"
+#include "alignment.h"
 
-OSPiHandle __CartRomHandle;
+OSPiHandle __CartRomHandle ALIGNED(8);
 
 OSPiHandle* osCartRomInit(void) {
     register u32 initialConfig;
@@ -22,36 +24,36 @@ OSPiHandle* osCartRomInit(void) {
 
     sCartRomNeedsInit = false;
     __CartRomHandle.type = DEVICE_TYPE_CART;
-    __CartRomHandle.baseAddress = 0xB0000000;
-    __CartRomHandle.domain = 0;
+    __CartRomHandle.baseAddress = PHYS_TO_K1(PI_DOM1_ADDR2);
+    __CartRomHandle.domain = PI_DOMAIN1;
     __CartRomHandle.speed = 0;
     bzero(&__CartRomHandle.transferInfo, sizeof(__OSTranxInfo));
 
     /* Uses `status & PI_STATUS_ERROR` in OoT */
-    while (status = HW_REG(PI_STATUS_REG, u32), status & (PI_STATUS_DMA_BUSY | PI_STATUS_IO_BUSY)) {
+    while (status = IO_READ(PI_STATUS_REG), status & (PI_STATUS_DMA_BUSY | PI_STATUS_IO_BUSY)) {
         ;
     }
 
-    lastLatency = HW_REG(PI_BSD_DOM1_LAT_REG, u32);
-    lastPageSize = HW_REG(PI_BSD_DOM1_PGS_REG, u32);
-    lastRelDuration = HW_REG(PI_BSD_DOM1_RLS_REG, u32);
-    lastPulse = HW_REG(PI_BSD_DOM1_PWD_REG, u32);
+    lastLatency = IO_READ(PI_BSD_DOM1_LAT_REG);
+    lastPageSize = IO_READ(PI_BSD_DOM1_PGS_REG);
+    lastRelDuration = IO_READ(PI_BSD_DOM1_RLS_REG);
+    lastPulse = IO_READ(PI_BSD_DOM1_PWD_REG);
 
-    HW_REG(PI_BSD_DOM1_LAT_REG, u32) = 0xFF;
-    HW_REG(PI_BSD_DOM1_PGS_REG, u32) = 0;
-    HW_REG(PI_BSD_DOM1_RLS_REG, u32) = 3;
-    HW_REG(PI_BSD_DOM1_PWD_REG, u32) = 0xFF;
+    IO_WRITE(PI_BSD_DOM1_LAT_REG, 0xFF);
+    IO_WRITE(PI_BSD_DOM1_PGS_REG, 0);
+    IO_WRITE(PI_BSD_DOM1_RLS_REG, 3);
+    IO_WRITE(PI_BSD_DOM1_PWD_REG, 0xFF);
 
-    initialConfig = HW_REG(__CartRomHandle.baseAddress, u32);
+    initialConfig = IO_READ(__CartRomHandle.baseAddress);
     __CartRomHandle.latency = initialConfig & 0xFF;
     __CartRomHandle.pageSize = (initialConfig >> 0x10) & 0xF;
     __CartRomHandle.relDuration = (initialConfig >> 0x14) & 0xF;
     __CartRomHandle.pulse = (initialConfig >> 8) & 0xFF;
 
-    HW_REG(PI_BSD_DOM1_LAT_REG, u32) = lastLatency;
-    HW_REG(PI_BSD_DOM1_PGS_REG, u32) = lastPageSize;
-    HW_REG(PI_BSD_DOM1_RLS_REG, u32) = lastRelDuration;
-    HW_REG(PI_BSD_DOM1_PWD_REG, u32) = lastPulse;
+    IO_WRITE(PI_BSD_DOM1_LAT_REG, lastLatency);
+    IO_WRITE(PI_BSD_DOM1_PGS_REG, lastPageSize);
+    IO_WRITE(PI_BSD_DOM1_RLS_REG, lastRelDuration);
+    IO_WRITE(PI_BSD_DOM1_PWD_REG, lastPulse);
 
     prevInt = __osDisableInt();
     __CartRomHandle.next = __osPiTable;

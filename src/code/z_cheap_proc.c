@@ -3,18 +3,18 @@
 /**
  * Draws a display list to the opaque display buffer
  */
-void Gfx_DrawDListOpa(PlayState* play, Gfx* dlist) {
-    Gfx* dl;
+void Gfx_DrawDListOpa(PlayState* play, Gfx* dList) {
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    dl = POLY_OPA_DISP;
+    gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(&dl[0], gSetupDLs[SETUPDL_25]);
-    gSPMatrix(&dl[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dl[2], dlist);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
+    gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[2], dList);
 
-    POLY_OPA_DISP = &dl[3];
+    POLY_OPA_DISP = &gfx[3];
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -22,18 +22,18 @@ void Gfx_DrawDListOpa(PlayState* play, Gfx* dlist) {
 /**
  * Draws a display list to the translucent display buffer
  */
-void Gfx_DrawDListXlu(PlayState* play, Gfx* dlist) {
-    Gfx* dl;
+void Gfx_DrawDListXlu(PlayState* play, Gfx* dList) {
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    dl = POLY_XLU_DISP;
+    gfx = POLY_XLU_DISP;
 
-    gSPDisplayList(&dl[0], gSetupDLs[SETUPDL_25]);
-    gSPMatrix(&dl[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dl[2], dlist);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
+    gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[2], dList);
 
-    POLY_XLU_DISP = &dl[3];
+    POLY_XLU_DISP = &gfx[3];
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

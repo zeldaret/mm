@@ -133,7 +133,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
 }
 
 void EnHy_ChangeObjectAndAnim(EnHy* enHy, PlayState* play, s16 animIndex) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
     EnHy_ChangeAnim(&enHy->skelAnime, animIndex);
 }
 
@@ -141,7 +141,7 @@ s32 EnHy_UpdateSkelAnime(EnHy* enHy, PlayState* play) {
     s32 isUpdated = false;
 
     if (enHy->actor.draw != NULL) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->animObjectSlot].segment);
         SkelAnime_Update(&enHy->skelAnime);
         isUpdated = true;
     }
@@ -168,7 +168,7 @@ s32 EnHy_Init(EnHy* enHy, PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg
         enHy->actor.objectSlot = enHy->skelLowerObjectSlot;
         isInitialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[enHy->actor.objectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[enHy->actor.objectSlot].segment);
         SkelAnime_InitFlex(play, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
                            ENHY_LIMB_MAX);
         EnHy_ChangeObjectAndAnim(enHy, play, animIndex);
@@ -187,8 +187,8 @@ void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4
     phi_f0 = (offset.z >= 0.0f) ? 1.0f : -1.0f;
     animIndex = ((s8)phi_f0 < 0) ? 0 : 2;
     EnHy_ChangeObjectAndAnim(enHy, play, (animIndex == 0) ? arg3 : arg4);
-    enHy->skelAnime.baseTransl = *enHy->skelAnime.jointTable;
-    enHy->skelAnime.prevTransl = *enHy->skelAnime.jointTable;
+    enHy->skelAnime.baseTransl = enHy->skelAnime.jointTable[LIMB_ROOT_POS];
+    enHy->skelAnime.prevTransl = enHy->skelAnime.jointTable[LIMB_ROOT_POS];
     enHy->skelAnime.moveFlags |= (ANIM_FLAG_UPDATE_Y | ANIM_FLAG_1);
     AnimationContext_SetMoveActor(play, &enHy->actor, &enHy->skelAnime, 1.0f);
     door->knobDoor.playOpenAnim = true;

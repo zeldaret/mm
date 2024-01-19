@@ -1,6 +1,9 @@
 #include "PR/os_pfs.h"
 #include "PR/controller.h"
-#include "global.h"
+#include "PR/siint.h"
+#include "alignment.h"
+
+OSPifRam __osPfsPifRam ALIGNED(16);
 
 void __osPfsRequestData(u8 poll);
 void __osPfsGetInitData(u8* pattern, OSContStatus* contData);
@@ -50,40 +53,40 @@ s32 osPfsIsPlug(OSMesgQueue* mq, u8* pattern) {
 
 void __osPfsRequestData(u8 poll) {
     u8* bufPtr = (u8*)&__osPfsPifRam;
-    __OSContRequestHeader req;
+    __OSContRequesFormat req;
     s32 i;
 
     __osContLastPoll = poll;
 
-    __osPfsPifRam.status = 1;
+    __osPfsPifRam.status = CONT_CMD_EXE;
 
-    req.align = 0xFF;
-    req.txsize = 1;
-    req.rxsize = 3;
+    req.align = CONT_CMD_NOP;
+    req.txsize = CONT_CMD_REQUEST_STATUS_TX;
+    req.rxsize = CONT_CMD_REQUEST_STATUS_RX;
     req.poll = poll;
-    req.typeh = 0xFF;
-    req.typel = 0xFF;
-    req.status = 0xFF;
-    req.align1 = 0xFF;
+    req.typeh = CONT_CMD_NOP;
+    req.typel = CONT_CMD_NOP;
+    req.status = CONT_CMD_NOP;
+    req.align1 = CONT_CMD_NOP;
 
     for (i = 0; i < __osMaxControllers; i++) {
-        *((__OSContRequestHeader*)bufPtr) = req;
-        bufPtr += sizeof(req);
+        *(__OSContRequesFormat*)bufPtr = req;
+        bufPtr += sizeof(__OSContRequesFormat);
     }
-    *((u8*)bufPtr) = CONT_CMD_END;
+    *bufPtr = CONT_CMD_END;
 }
 
 void __osPfsGetInitData(u8* pattern, OSContStatus* contData) {
     u8* bufptr;
-    __OSContRequestHeader req;
+    __OSContRequesFormat req;
     s32 i;
     u8 bits = 0;
 
     bufptr = (u8*)&__osPfsPifRam;
 
     for (i = 0; i < __osMaxControllers; i++, bufptr += sizeof(req), contData++) {
-        req = *((__OSContRequestHeader*)bufptr);
-        contData->errno = ((req.rxsize & 0xC0) >> 4);
+        req = *(__OSContRequesFormat*)bufptr;
+        contData->errno = CHNL_ERR(req);
 
         if (contData->errno) {
             continue;

@@ -45,15 +45,15 @@ typedef enum {
 static s32 sNumPythonsDead = 0;
 
 ActorInit En_Dragon_InitVars = {
-    ACTOR_EN_DRAGON,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_UTUBO,
-    sizeof(EnDragon),
-    (ActorFunc)EnDragon_Init,
-    (ActorFunc)EnDragon_Destroy,
-    (ActorFunc)EnDragon_Update,
-    (ActorFunc)EnDragon_Draw,
+    /**/ ACTOR_EN_DRAGON,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_UTUBO,
+    /**/ sizeof(EnDragon),
+    /**/ EnDragon_Init,
+    /**/ EnDragon_Destroy,
+    /**/ EnDragon_Update,
+    /**/ EnDragon_Draw,
 };
 
 typedef enum {
@@ -542,13 +542,13 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
 
     if (this->grabTimer > sMaxGrabTimerPerPython[this->pythonIndex]) {
         if (this->state == DEEP_PYTHON_GRAB_STATE_START) {
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
             this->state = DEEP_PYTHON_GRAB_STATE_GRABBED;
         }
 
         play->unk_18770(play, player);
         player->actor.parent = &this->actor;
-        player->actionVar2 = 50;
+        player->av2.actionVar2 = 50;
         this->action = DEEP_PYTHON_ACTION_GRAB;
         Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_EAT);
         EnDragon_SetupAttack(this);
@@ -619,14 +619,14 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
     }
 
     if (((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (curFrame >= this->animEndFrame)) ||
-        (!(player->stateFlags2 & PLAYER_STATE2_80)) || ((this->collider.elements[0].info.bumperFlags & BUMP_HIT)) ||
+        !(player->stateFlags2 & PLAYER_STATE2_80) || (this->collider.elements[0].info.bumperFlags & BUMP_HIT) ||
         (this->collider.elements[1].info.bumperFlags & BUMP_HIT) ||
         (this->collider.elements[2].info.bumperFlags & BUMP_HIT)) {
         player->actor.parent = NULL;
         this->grabWaitTimer = 30;
         CutsceneManager_Stop(this->grabCsId);
         if (player->stateFlags2 & PLAYER_STATE2_80) {
-            player->actionVar2 = 100;
+            player->av2.actionVar2 = 100;
         }
 
         this->actor.flags &= ~ACTOR_FLAG_100000;
@@ -685,9 +685,9 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
     sNumPythonsDead++;
     if (sNumPythonsDead >= (BREG(39) + 8)) {
         Math_Vec3f_Copy(&seahorsePos, &this->actor.parent->world.pos);
-        seahorsePos.x += (Math_SinS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + BREG(38)));
+        seahorsePos.x += Math_SinS(this->actor.parent->world.rot.y + 0x8000) * (500.0f + BREG(38));
         seahorsePos.y += -100.0f + BREG(33);
-        seahorsePos.z += (Math_CosS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + BREG(38)));
+        seahorsePos.z += Math_CosS(this->actor.parent->world.rot.y + 0x8000) * (500.0f + BREG(38));
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y,
                                           seahorsePos.z, 0, this->actor.shape.rot.y, 0,
                                           SEAHORSE_PARAMS(SEAHORSE_TYPE_1, 0, 0), this->actor.csId,

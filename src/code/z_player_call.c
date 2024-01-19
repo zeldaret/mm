@@ -10,21 +10,16 @@ ActorFunc sPlayerCallDestroyFunc;
 ActorFunc sPlayerCallUpdateFunc;
 ActorFunc sPlayerCallDrawFunc;
 
-void PlayerCall_Init(Actor* thisx, PlayState* play);
-void PlayerCall_Destroy(Actor* thisx, PlayState* play);
-void PlayerCall_Update(Actor* thisx, PlayState* play);
-void PlayerCall_Draw(Actor* thisx, PlayState* play);
-
 ActorInit Player_InitVars = {
-    ACTOR_PLAYER,
-    ACTORCAT_PLAYER,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(Player),
-    (ActorFunc)PlayerCall_Init,
-    (ActorFunc)PlayerCall_Destroy,
-    (ActorFunc)PlayerCall_Update,
-    (ActorFunc)PlayerCall_Draw,
+    /**/ ACTOR_PLAYER,
+    /**/ ACTORCAT_PLAYER,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(Player),
+    /**/ PlayerCall_Init,
+    /**/ PlayerCall_Destroy,
+    /**/ PlayerCall_Update,
+    /**/ PlayerCall_Draw,
 };
 
 void Player_Init(Actor* thisx, PlayState* play);

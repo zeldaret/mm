@@ -1,102 +1,102 @@
 <Root>
     <File Name="map_grand_static.unarchive">
-        <Blob Name="map_grand_static_Blob_000000" Size="0x0FF0" Offset="0x0" />
-        <Blob Name="map_grand_static_Blob_000FF0" Size="0x0FF0" Offset="0xFF0" />
-        <Blob Name="map_grand_static_Blob_001FE0" Size="0x0FF0" Offset="0x1FE0" />
-        <Blob Name="map_grand_static_Blob_002FD0" Size="0x0FF0" Offset="0x2FD0" />
-        <Blob Name="map_grand_static_Blob_003FC0" Size="0x0FF0" Offset="0x3FC0" />
-        <Blob Name="map_grand_static_Blob_004FB0" Size="0x0B40" Offset="0x4FB0" />
-        <Blob Name="map_grand_static_Blob_005AF0" Size="0x0FF0" Offset="0x5AF0" />
-        <Blob Name="map_grand_static_Blob_006AE0" Size="0x0FF0" Offset="0x6AE0" />
-        <Blob Name="map_grand_static_Blob_007AD0" Size="0x0FF0" Offset="0x7AD0" />
-        <Blob Name="map_grand_static_Blob_008AC0" Size="0x0FF0" Offset="0x8AC0" />
-        <Blob Name="map_grand_static_Blob_009AB0" Size="0x0420" Offset="0x9AB0" />
-        <Blob Name="map_grand_static_Blob_009ED0" Size="0x0FF0" Offset="0x9ED0" />
-        <Blob Name="map_grand_static_Blob_00AEC0" Size="0x0450" Offset="0xAEC0" />
-        <Blob Name="map_grand_static_Blob_00B310" Size="0x07A0" Offset="0xB310" />
-        <Blob Name="map_grand_static_Blob_00BAB0" Size="0x0FF0" Offset="0xBAB0" />
-        <Blob Name="map_grand_static_Blob_00CAA0" Size="0x0FF0" Offset="0xCAA0" />
-        <Blob Name="map_grand_static_Blob_00DA90" Size="0x0FF0" Offset="0xDA90" />
-        <Blob Name="map_grand_static_Blob_00EA80" Size="0x0780" Offset="0xEA80" />
-        <Blob Name="map_grand_static_Blob_00F200" Size="0x0800" Offset="0xF200" />
-        <Blob Name="map_grand_static_Blob_00FA00" Size="0x0850" Offset="0xFA00" />
-        <Blob Name="map_grand_static_Blob_010250" Size="0x0510" Offset="0x10250" />
-        <Blob Name="map_grand_static_Blob_010760" Size="0x0710" Offset="0x10760" />
-        <Blob Name="map_grand_static_Blob_010E70" Size="0x0AE0" Offset="0x10E70" />
-        <Blob Name="map_grand_static_Blob_011950" Size="0x0660" Offset="0x11950" />
-        <Blob Name="map_grand_static_Blob_011FB0" Size="0x0C60" Offset="0x11FB0" />
-        <Blob Name="map_grand_static_Blob_012C10" Size="0x0E10" Offset="0x12C10" />
-        <Blob Name="map_grand_static_Blob_013A20" Size="0x03E0" Offset="0x13A20" />
-        <Blob Name="map_grand_static_Blob_013E00" Size="0x05A0" Offset="0x13E00" />
-        <Blob Name="map_grand_static_Blob_0143A0" Size="0x0820" Offset="0x143A0" />
-        <Blob Name="map_grand_static_Blob_014BC0" Size="0x0440" Offset="0x14BC0" />
-        <Blob Name="map_grand_static_Blob_015000" Size="0x0590" Offset="0x15000" />
-        <Blob Name="map_grand_static_Blob_015590" Size="0x05A0" Offset="0x15590" />
-        <Blob Name="map_grand_static_Blob_015B30" Size="0x07A0" Offset="0x15B30" />
-        <Blob Name="map_grand_static_Blob_0162D0" Size="0x07A0" Offset="0x162D0" />
-        <Blob Name="map_grand_static_Blob_016A70" Size="0x0DF0" Offset="0x16A70" />
-        <Blob Name="map_grand_static_Blob_017860" Size="0x0850" Offset="0x17860" />
-        <Blob Name="map_grand_static_Blob_0180B0" Size="0x09C0" Offset="0x180B0" />
-        <Blob Name="map_grand_static_Blob_018A70" Size="0x0880" Offset="0x18A70" />
-        <Blob Name="map_grand_static_Blob_0192F0" Size="0x0660" Offset="0x192F0" />
-        <Blob Name="map_grand_static_Blob_019950" Size="0x0360" Offset="0x19950" />
-        <Blob Name="map_grand_static_Blob_019CB0" Size="0x0260" Offset="0x19CB0" />
-        <Blob Name="map_grand_static_Blob_019F10" Size="0x0960" Offset="0x19F10" />
-        <Blob Name="map_grand_static_Blob_01A870" Size="0x0350" Offset="0x1A870" />
-        <Blob Name="map_grand_static_Blob_01ABC0" Size="0x09B0" Offset="0x1ABC0" />
-        <Blob Name="map_grand_static_Blob_01B570" Size="0x0980" Offset="0x1B570" />
-        <Blob Name="map_grand_static_Blob_01BEF0" Size="0x0FF0" Offset="0x1BEF0" />
-        <Blob Name="map_grand_static_Blob_01CEE0" Size="0x0B20" Offset="0x1CEE0" />
-        <Blob Name="map_grand_static_Blob_01DA00" Size="0x0DA0" Offset="0x1DA00" />
-        <Blob Name="map_grand_static_Blob_01E7A0" Size="0x0820" Offset="0x1E7A0" />
-        <Blob Name="map_grand_static_Blob_01EFC0" Size="0x03E0" Offset="0x1EFC0" />
-        <Blob Name="map_grand_static_Blob_01F3A0" Size="0x0980" Offset="0x1F3A0" />
-        <Blob Name="map_grand_static_Blob_01FD20" Size="0x0960" Offset="0x1FD20" />
-        <Blob Name="map_grand_static_Blob_020680" Size="0x0760" Offset="0x20680" />
-        <Blob Name="map_grand_static_Blob_020DE0" Size="0x0960" Offset="0x20DE0" />
-        <Blob Name="map_grand_static_Blob_021740" Size="0x01D0" Offset="0x21740" />
-        <Blob Name="map_grand_static_Blob_021910" Size="0x0630" Offset="0x21910" />
-        <Blob Name="map_grand_static_Blob_021F40" Size="0x0680" Offset="0x21F40" />
-        <Blob Name="map_grand_static_Blob_0225C0" Size="0x07D0" Offset="0x225C0" />
-        <Blob Name="map_grand_static_Blob_022D90" Size="0x0870" Offset="0x22D90" />
-        <Blob Name="map_grand_static_Blob_023600" Size="0x0E60" Offset="0x23600" />
-        <Blob Name="map_grand_static_Blob_024460" Size="0x0710" Offset="0x24460" />
-        <Blob Name="map_grand_static_Blob_024B70" Size="0x0620" Offset="0x24B70" />
-        <Blob Name="map_grand_static_Blob_025190" Size="0x0620" Offset="0x25190" />
-        <Blob Name="map_grand_static_Blob_0257B0" Size="0x0680" Offset="0x257B0" />
-        <Blob Name="map_grand_static_Blob_025E30" Size="0x0620" Offset="0x25E30" />
-        <Blob Name="map_grand_static_Blob_026450" Size="0x0210" Offset="0x26450" />
-        <Blob Name="map_grand_static_Blob_026660" Size="0x04B0" Offset="0x26660" />
-        <Blob Name="map_grand_static_Blob_026B10" Size="0x0680" Offset="0x26B10" />
-        <Blob Name="map_grand_static_Blob_027190" Size="0x0350" Offset="0x27190" />
-        <Blob Name="map_grand_static_Blob_0274E0" Size="0x0660" Offset="0x274E0" />
-        <Blob Name="map_grand_static_Blob_027B40" Size="0x0350" Offset="0x27B40" />
-        <Blob Name="map_grand_static_Blob_027E90" Size="0x0500" Offset="0x27E90" />
-        <Blob Name="map_grand_static_Blob_028390" Size="0x06A0" Offset="0x28390" />
-        <Blob Name="map_grand_static_Blob_028A30" Size="0x05E0" Offset="0x28A30" />
-        <Blob Name="map_grand_static_Blob_029010" Size="0x0680" Offset="0x29010" />
-        <Blob Name="map_grand_static_Blob_029690" Size="0x0480" Offset="0x29690" />
-        <Blob Name="map_grand_static_Blob_029B10" Size="0x0AE0" Offset="0x29B10" />
-        <Blob Name="map_grand_static_Blob_02A5F0" Size="0x02D0" Offset="0x2A5F0" />
-        <Blob Name="map_grand_static_Blob_02A8C0" Size="0x0B90" Offset="0x2A8C0" />
-        <Blob Name="map_grand_static_Blob_02B450" Size="0x0DA0" Offset="0x2B450" />
-        <Blob Name="map_grand_static_Blob_02C1F0" Size="0x08C0" Offset="0x2C1F0" />
-        <Blob Name="map_grand_static_Blob_02CAB0" Size="0x0A30" Offset="0x2CAB0" />
-        <Blob Name="map_grand_static_Blob_02D4E0" Size="0x0130" Offset="0x2D4E0" />
-        <Blob Name="map_grand_static_Blob_02D610" Size="0x0C30" Offset="0x2D610" />
-        <Blob Name="map_grand_static_Blob_02E240" Size="0x08A0" Offset="0x2E240" />
-        <Blob Name="map_grand_static_Blob_02EAE0" Size="0x0F50" Offset="0x2EAE0" />
-        <Blob Name="map_grand_static_Blob_02FA30" Size="0x09B0" Offset="0x2FA30" />
-        <Blob Name="map_grand_static_Blob_0303E0" Size="0x07B0" Offset="0x303E0" />
-        <Blob Name="map_grand_static_Blob_030B90" Size="0x0960" Offset="0x30B90" />
-        <Blob Name="map_grand_static_Blob_0314F0" Size="0x0740" Offset="0x314F0" />
-        <Blob Name="map_grand_static_Blob_031C30" Size="0x0A00" Offset="0x31C30" />
-        <Blob Name="map_grand_static_Blob_032630" Size="0x0640" Offset="0x32630" />
-        <Blob Name="map_grand_static_Blob_032C70" Size="0x0A30" Offset="0x32C70" />
-        <Blob Name="map_grand_static_Blob_0336A0" Size="0x03D0" Offset="0x336A0" />
-        <Blob Name="map_grand_static_Blob_033A70" Size="0x0D00" Offset="0x33A70" />
-        <Blob Name="map_grand_static_Blob_034770" Size="0x0440" Offset="0x34770" />
-        <Blob Name="map_grand_static_Blob_034BB0" Size="0x03A0" Offset="0x34BB0" />
-        <Blob Name="map_grand_static_Blob_034F50" Size="0x0960" Offset="0x34F50" />
+        <Texture Name="gMapGrandStatic100Tex" OutName="map_100" Format="i4" Width="96" Height="85" Offset="0x0" />
+        <Texture Name="gMapGrandStatic101Tex" OutName="map_101" Format="i4" Width="96" Height="85" Offset="0xFF0" />
+        <Texture Name="gMapGrandStatic102Tex" OutName="map_102" Format="i4" Width="96" Height="85" Offset="0x1FE0" />
+        <Texture Name="gMapGrandStatic103Tex" OutName="map_103" Format="i4" Width="96" Height="85" Offset="0x2FD0" />
+        <Texture Name="gMapGrandStatic104Tex" OutName="map_104" Format="i4" Width="96" Height="85" Offset="0x3FC0" />
+        <Texture Name="gMapGrandStatic105Tex" OutName="map_105" Format="i4" Width="80" Height="72" Offset="0x4FB0" />
+        <Texture Name="gMapGrandStatic106Tex" OutName="map_106" Format="i4" Width="96" Height="85" Offset="0x5AF0" />
+        <Texture Name="gMapGrandStatic107Tex" OutName="map_107" Format="i4" Width="96" Height="85" Offset="0x6AE0" />
+        <Texture Name="gMapGrandStatic108Tex" OutName="map_108" Format="i4" Width="96" Height="85" Offset="0x7AD0" />
+        <Texture Name="gMapGrandStatic109Tex" OutName="map_109" Format="i4" Width="96" Height="85" Offset="0x8AC0" />
+        <Texture Name="gMapGrandStatic10ATex" OutName="map_10A" Format="i4" Width="48" Height="44" Offset="0x9AB0" />
+        <Texture Name="gMapGrandStatic10BTex" OutName="map_10B" Format="i4" Width="96" Height="85" Offset="0x9ED0" />
+        <Texture Name="gMapGrandStatic10CTex" OutName="map_10C" Format="i4" Width="48" Height="46" Offset="0xAEC0" />
+        <Texture Name="gMapGrandStatic10DTex" OutName="map_10D" Format="i4" Width="64" Height="61" Offset="0xB310" />
+        <Texture Name="gMapGrandStatic10ETex" OutName="map_10E" Format="i4" Width="96" Height="85" Offset="0xBAB0" />
+        <Texture Name="gMapGrandStatic10FTex" OutName="map_10F" Format="i4" Width="96" Height="85" Offset="0xCAA0" />
+        <Texture Name="gMapGrandStatic110Tex" OutName="map_110" Format="i4" Width="96" Height="85" Offset="0xDA90" />
+        <Texture Name="gMapGrandStatic111Tex" OutName="map_111" Format="i4" Width="48" Height="80" Offset="0xEA80" />
+        <Texture Name="gMapGrandStatic112Tex" OutName="map_112" Format="i4" Width="32" Height="128" Offset="0xF200" />
+        <Texture Name="gMapGrandStatic113Tex" OutName="map_113" Format="i4" Width="80" Height="53" Offset="0xFA00" />
+        <Texture Name="gMapGrandStatic114Tex" OutName="map_114" Format="i4" Width="32" Height="81" Offset="0x10250" />
+        <Texture Name="gMapGrandStatic115Tex" OutName="map_115" Format="i4" Width="80" Height="45" Offset="0x10760" />
+        <Texture Name="gMapGrandStatic116Tex" OutName="map_116" Format="i4" Width="64" Height="87" Offset="0x10E70" />
+        <Texture Name="gMapGrandStatic117Tex" OutName="map_117" Format="i4" Width="64" Height="51" Offset="0x11950" />
+        <Texture Name="gMapGrandStatic118Tex" OutName="map_118" Format="i4" Width="80" Height="79" Offset="0x11FB0" />
+        <Texture Name="gMapGrandStatic119Tex" OutName="map_119" Format="i4" Width="96" Height="75" Offset="0x12C10" />
+        <Texture Name="gMapGrandStatic11ATex" OutName="map_11A" Format="i4" Width="48" Height="41" Offset="0x13A20" />
+        <Texture Name="gMapGrandStatic11BTex" OutName="map_11B" Format="i4" Width="64" Height="45" Offset="0x13E00" />
+        <Texture Name="gMapGrandStatic11CTex" OutName="map_11C" Format="i4" Width="80" Height="52" Offset="0x143A0" />
+        <Texture Name="gMapGrandStatic11DTex" OutName="map_11D" Format="i4" Width="48" Height="45" Offset="0x14BC0" />
+        <Texture Name="gMapGrandStatic11ETex" OutName="map_11E" Format="i4" Width="48" Height="59" Offset="0x15000" />
+        <Texture Name="gMapGrandStatic11FTex" OutName="map_11F" Format="i4" Width="48" Height="60" Offset="0x15590" />
+        <Texture Name="gMapGrandStatic120Tex" OutName="map_120" Format="i4" Width="48" Height="81" Offset="0x15B30" />
+        <Texture Name="gMapGrandStatic121Tex" OutName="map_121" Format="i4" Width="48" Height="81" Offset="0x162D0" />
+        <Texture Name="gMapGrandStatic122Tex" OutName="map_122" Format="i4" Width="80" Height="89" Offset="0x16A70" />
+        <Texture Name="gMapGrandStatic123Tex" OutName="map_123" Format="i4" Width="80" Height="53" Offset="0x17860" />
+        <Texture Name="gMapGrandStatic124Tex" OutName="map_124" Format="i4" Width="64" Height="78" Offset="0x180B0" />
+        <Texture Name="gMapGrandStatic125Tex" OutName="map_125" Format="i4" Width="64" Height="68" Offset="0x18A70" />
+        <Texture Name="gMapGrandStatic126Tex" OutName="map_126" Format="i4" Width="48" Height="68" Offset="0x192F0" />
+        <Texture Name="gMapGrandStatic127Tex" OutName="map_127" Format="i4" Width="48" Height="36" Offset="0x19950" />
+        <Texture Name="gMapGrandStatic128Tex" OutName="map_128" Format="i4" Width="48" Height="25" Offset="0x19CB0" />
+        <Texture Name="gMapGrandStatic129Tex" OutName="map_129" Format="i4" Width="64" Height="75" Offset="0x19F10" />
+        <Texture Name="gMapGrandStatic12ATex" OutName="map_12A" Format="i4" Width="32" Height="53" Offset="0x1A870" />
+        <Texture Name="gMapGrandStatic12BTex" OutName="map_12B" Format="i4" Width="80" Height="62" Offset="0x1ABC0" />
+        <Texture Name="gMapGrandStatic12CTex" OutName="map_12C" Format="i4" Width="64" Height="76" Offset="0x1B570" />
+        <Texture Name="gMapGrandStatic12DTex" OutName="map_12D" Format="i4" Width="96" Height="85" Offset="0x1BEF0" />
+        <Texture Name="gMapGrandStatic12ETex" OutName="map_12E" Format="i4" Width="80" Height="71" Offset="0x1CEE0" />
+        <Texture Name="gMapGrandStatic12FTex" OutName="map_12F" Format="i4" Width="80" Height="87" Offset="0x1DA00" />
+        <Texture Name="gMapGrandStatic130Tex" OutName="map_130" Format="i4" Width="64" Height="65" Offset="0x1E7A0" />
+        <Texture Name="gMapGrandStatic131Tex" OutName="map_131" Format="i4" Width="48" Height="41" Offset="0x1EFC0" />
+        <Texture Name="gMapGrandStatic132Tex" OutName="map_132" Format="i4" Width="64" Height="76" Offset="0x1F3A0" />
+        <Texture Name="gMapGrandStatic133Tex" OutName="map_133" Format="i4" Width="80" Height="60" Offset="0x1FD20" />
+        <Texture Name="gMapGrandStatic134Tex" OutName="map_134" Format="i4" Width="80" Height="47" Offset="0x20680" />
+        <Texture Name="gMapGrandStatic135Tex" OutName="map_135" Format="i4" Width="80" Height="60" Offset="0x20DE0" />
+        <Texture Name="gMapGrandStatic136Tex" OutName="map_136" Format="i4" Width="48" Height="19" Offset="0x21740" />
+        <Texture Name="gMapGrandStatic137Tex" OutName="map_137" Format="i4" Width="32" Height="99" Offset="0x21910" />
+        <Texture Name="gMapGrandStatic138Tex" OutName="map_138" Format="i4" Width="48" Height="69" Offset="0x21F40" />
+        <Texture Name="gMapGrandStatic139Tex" OutName="map_139" Format="i4" Width="48" Height="83" Offset="0x225C0" />
+        <Texture Name="gMapGrandStatic13ATex" OutName="map_13A" Format="i4" Width="80" Height="54" Offset="0x22D90" />
+        <Texture Name="gMapGrandStatic13BTex" OutName="map_13B" Format="i4" Width="80" Height="92" Offset="0x23600" />
+        <Texture Name="gMapGrandStatic13CTex" OutName="map_13C" Format="i4" Width="48" Height="75" Offset="0x24460" />
+        <Texture Name="gMapGrandStatic13DTex" OutName="map_13D" Format="i4" Width="64" Height="49" Offset="0x24B70" />
+        <Texture Name="gMapGrandStatic13ETex" OutName="map_13E" Format="i4" Width="64" Height="49" Offset="0x25190" />
+        <Texture Name="gMapGrandStatic13FTex" OutName="map_13F" Format="i4" Width="64" Height="52" Offset="0x257B0" />
+        <Texture Name="gMapGrandStatic140Tex" OutName="map_140" Format="i4" Width="64" Height="49" Offset="0x25E30" />
+        <Texture Name="gMapGrandStatic141Tex" OutName="map_141" Format="i4" Width="32" Height="33" Offset="0x26450" />
+        <Texture Name="gMapGrandStatic142Tex" OutName="map_142" Format="i4" Width="48" Height="50" Offset="0x26660" />
+        <Texture Name="gMapGrandStatic143Tex" OutName="map_143" Format="i4" Width="64" Height="52" Offset="0x26B10" />
+        <Texture Name="gMapGrandStatic144Tex" OutName="map_144" Format="i4" Width="48" Height="35" Offset="0x27190" />
+        <Texture Name="gMapGrandStatic145Tex" OutName="map_145" Format="i4" Width="64" Height="51" Offset="0x274E0" />
+        <Texture Name="gMapGrandStatic146Tex" OutName="map_146" Format="i4" Width="48" Height="35" Offset="0x27B40" />
+        <Texture Name="gMapGrandStatic147Tex" OutName="map_147" Format="i4" Width="48" Height="53" Offset="0x27E90" />
+        <Texture Name="gMapGrandStatic148Tex" OutName="map_148" Format="i4" Width="64" Height="53" Offset="0x28390" />
+        <Texture Name="gMapGrandStatic149Tex" OutName="map_149" Format="i4" Width="64" Height="47" Offset="0x28A30" />
+        <Texture Name="gMapGrandStatic14ATex" OutName="map_14A" Format="i4" Width="64" Height="52" Offset="0x29010" />
+        <Texture Name="gMapGrandStatic14BTex" OutName="map_14B" Format="i4" Width="48" Height="48" Offset="0x29690" />
+        <Texture Name="gMapGrandStatic14CTex" OutName="map_14C" Format="i4" Width="64" Height="87" Offset="0x29B10" />
+        <Texture Name="gMapGrandStatic14DTex" OutName="map_14D" Format="i4" Width="48" Height="30" Offset="0x2A5F0" />
+        <Texture Name="gMapGrandStatic14ETex" OutName="map_14E" Format="i4" Width="80" Height="74" Offset="0x2A8C0" />
+        <Texture Name="gMapGrandStatic14FTex" OutName="map_14F" Format="i4" Width="80" Height="87" Offset="0x2B450" />
+        <Texture Name="gMapGrandStatic150Tex" OutName="map_150" Format="i4" Width="80" Height="56" Offset="0x2C1F0" />
+        <Texture Name="gMapGrandStatic151Tex" OutName="map_151" Format="i4" Width="80" Height="65" Offset="0x2CAB0" />
+        <Texture Name="gMapGrandStatic152Tex" OutName="map_152" Format="i4" Width="16" Height="38" Offset="0x2D4E0" />
+        <Texture Name="gMapGrandStatic153Tex" OutName="map_153" Format="i4" Width="80" Height="78" Offset="0x2D610" />
+        <Texture Name="gMapGrandStatic154Tex" OutName="map_154" Format="i4" Width="80" Height="55" Offset="0x2E240" />
+        <Texture Name="gMapGrandStatic155Tex" OutName="map_155" Format="i4" Width="80" Height="98" Offset="0x2EAE0" />
+        <Texture Name="gMapGrandStatic156Tex" OutName="map_156" Format="i4" Width="80" Height="62" Offset="0x2FA30" />
+        <Texture Name="gMapGrandStatic157Tex" OutName="map_157" Format="i4" Width="32" Height="123" Offset="0x303E0" />
+        <Texture Name="gMapGrandStatic158Tex" OutName="map_158" Format="i4" Width="80" Height="60" Offset="0x30B90" />
+        <Texture Name="gMapGrandStatic159Tex" OutName="map_159" Format="i4" Width="48" Height="77" Offset="0x314F0" />
+        <Texture Name="gMapGrandStatic15ATex" OutName="map_15A" Format="i4" Width="80" Height="64" Offset="0x31C30" />
+        <Texture Name="gMapGrandStatic15BTex" OutName="map_15B" Format="i4" Width="64" Height="50" Offset="0x32630" />
+        <Texture Name="gMapGrandStatic15CTex" OutName="map_15C" Format="i4" Width="80" Height="65" Offset="0x32C70" />
+        <Texture Name="gMapGrandStatic15DTex" OutName="map_15D" Format="i4" Width="32" Height="61" Offset="0x336A0" />
+        <Texture Name="gMapGrandStatic15ETex" OutName="map_15E" Format="i4" Width="80" Height="83" Offset="0x33A70" />
+        <Texture Name="gMapGrandStatic15FTex" OutName="map_15F" Format="i4" Width="80" Height="27" Offset="0x34770" />
+        <Texture Name="gMapGrandStatic160Tex" OutName="map_160" Format="i4" Width="80" Height="23" Offset="0x34BB0" />
+        <Texture Name="gMapGrandStatic161Tex" OutName="map_161" Format="i4" Width="80" Height="60" Offset="0x34F50" />
     </File>
 </Root>

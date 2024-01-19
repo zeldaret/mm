@@ -17,15 +17,15 @@ void ObjHamishi_Update(Actor* thisx, PlayState* play);
 void ObjHamishi_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Hamishi_InitVars = {
-    ACTOR_OBJ_HAMISHI,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_FIELD_KEEP,
-    sizeof(ObjHamishi),
-    (ActorFunc)ObjHamishi_Init,
-    (ActorFunc)ObjHamishi_Destroy,
-    (ActorFunc)ObjHamishi_Update,
-    (ActorFunc)ObjHamishi_Draw,
+    /**/ ACTOR_OBJ_HAMISHI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_FIELD_KEEP,
+    /**/ sizeof(ObjHamishi),
+    /**/ ObjHamishi_Init,
+    /**/ ObjHamishi_Destroy,
+    /**/ ObjHamishi_Update,
+    /**/ ObjHamishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -148,11 +148,11 @@ void func_809A13A0(ObjHamishi* this, PlayState* play) {
 
 s32 func_809A1408(ObjHamishi* this, PlayState* play) {
     s32 pad;
-    WaterBox* sp30;
+    WaterBox* waterBox;
     f32 sp2C;
     s32 sp28;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &sp30,
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &waterBox,
                                 &sp28) &&
         (this->actor.world.pos.y < sp2C)) {
         return true;

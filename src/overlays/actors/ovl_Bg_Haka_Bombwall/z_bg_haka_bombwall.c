@@ -25,15 +25,15 @@ void BgHakaBombwall_SetupEndCutscene(BgHakaBombwall* this);
 void BgHakaBombwall_EndCutscene(BgHakaBombwall* this, PlayState* play);
 
 ActorInit Bg_Haka_Bombwall_InitVars = {
-    ACTOR_BG_HAKA_BOMBWALL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HAKA_OBJ,
-    sizeof(BgHakaBombwall),
-    (ActorFunc)BgHakaBombwall_Init,
-    (ActorFunc)BgHakaBombwall_Destroy,
-    (ActorFunc)BgHakaBombwall_Update,
-    (ActorFunc)BgHakaBombwall_Draw,
+    /**/ ACTOR_BG_HAKA_BOMBWALL,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HAKA_OBJ,
+    /**/ sizeof(BgHakaBombwall),
+    /**/ BgHakaBombwall_Init,
+    /**/ BgHakaBombwall_Destroy,
+    /**/ BgHakaBombwall_Update,
+    /**/ BgHakaBombwall_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

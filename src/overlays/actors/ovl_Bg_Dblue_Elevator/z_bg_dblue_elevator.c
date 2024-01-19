@@ -17,15 +17,15 @@ void BgDblueElevator_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit Bg_Dblue_Elevator_InitVars = {
-    ACTOR_BG_DBLUE_ELEVATOR,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_DBLUE_OBJECT,
-    sizeof(BgDblueElevator),
-    (ActorFunc)BgDblueElevator_Init,
-    (ActorFunc)BgDblueElevator_Destroy,
-    (ActorFunc)BgDblueElevator_Update,
-    (ActorFunc)BgDblueElevator_Draw,
+    /**/ ACTOR_BG_DBLUE_ELEVATOR,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_DBLUE_OBJECT,
+    /**/ sizeof(BgDblueElevator),
+    /**/ BgDblueElevator_Init,
+    /**/ BgDblueElevator_Destroy,
+    /**/ BgDblueElevator_Update,
+    /**/ BgDblueElevator_Draw,
 };
 
 // static InitChainEntry sInitChain[] = {

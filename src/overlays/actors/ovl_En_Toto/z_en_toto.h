@@ -41,7 +41,7 @@ typedef struct EnToto {
     /* 0x2B6 */ u8 unk2B6;
     /* 0x2B7 */ u8 unk2B7;
     /* 0x2B8 */ EnTotoText* text;
-    /* 0x2BC */ struct_80122744_arg1 unk_2BC;
+    /* 0x2BC */ PlayerOverrideInputEntry overrideInputEntry;
     /* 0x2C4 */ Actor* spotlights;
     /* 0x2C8 */ s32 pad2C8;
 } EnToto; // size = 0x2CC

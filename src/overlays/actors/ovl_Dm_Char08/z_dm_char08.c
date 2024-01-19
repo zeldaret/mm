@@ -37,15 +37,15 @@ typedef enum {
 } TurtleEyeMode;
 
 ActorInit Dm_Char08_InitVars = {
-    ACTOR_DM_CHAR08,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KAMEJIMA,
-    sizeof(DmChar08),
-    (ActorFunc)DmChar08_Init,
-    (ActorFunc)DmChar08_Destroy,
-    (ActorFunc)DmChar08_Update,
-    (ActorFunc)DmChar08_Draw,
+    /**/ ACTOR_DM_CHAR08,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_KAMEJIMA,
+    /**/ sizeof(DmChar08),
+    /**/ DmChar08_Init,
+    /**/ DmChar08_Destroy,
+    /**/ DmChar08_Update,
+    /**/ DmChar08_Draw,
 };
 
 #include "overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"
@@ -1024,7 +1024,7 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
     this->dyna.actor.focus.rot.y = this->dyna.actor.world.rot.y;
     this->dyna.actor.focus.rot.z = this->dyna.actor.world.rot.z;
 
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         this->unk_206 = 1;
     }
 

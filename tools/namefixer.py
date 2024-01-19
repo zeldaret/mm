@@ -6,6 +6,7 @@ import argparse
 # all occurrences of keys will be replaced by associated value
 simpleReplace = {
     "PLAYER_AP_": "PLAYER_IA_",
+    "PLAYER_CSMODE_": "PLAYER_CSACTION_",
 }
 
 # all occurrences of keys will be replaced by associated value,
@@ -17,6 +18,28 @@ simpleReplace = {
 # explanation in replace_single below)
 wordReplace = {
     # Functions
+    "SystemArena_Malloc": "malloc",
+    "SystemArena_MallocR": "malloc_r",
+    "SystemArena_Realloc": "realloc",
+    "SystemArena_Free": "free",
+    "SystemArena_Calloc": "calloc",
+    "SystemArena_GetSizes": "GetFreeArena",
+    "SystemArena_CheckArena": "CheckArena",
+    "SystemArena_Init": "MallocInit",
+    "SystemArena_Cleanup": "MallocCleanup",
+    "SystemArena_IsInitialized": "MallocIsInitialized",
+
+    "proutSprintf": "proutPrintf",
+
+    "PrintUtils_VPrintf": "vaprintf",
+    "PrintUtils_Printf": "aprintf",
+
+    "Sleep_Cycles": "csleep",
+    "Sleep_Nsec": "nsleep",
+    "Sleep_Usec": "usleep",
+    "Sleep_Msec": "msleep",
+    "Sleep_Sec": "sleep",
+
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "Math_Acot2F": "Math_Atan2F_XY",
     "atan_flip": "Math_Atan2F_XY",
@@ -113,6 +136,8 @@ wordReplace = {
     "func_8012405C": "Player_HasMirrorShieldEquipped",
     "func_80124088": "Player_IsHoldingMirrorShield",
     "func_8012697C": "Player_DrawGetItem",
+    "func_800B724C": "Player_SetCsAction",
+    "func_800B7298": "Player_SetCsActionWithHaltedActors",
     "Actor_SpawnWithParentAndCutscene": "Actor_SpawnAsChildAndCutscene",
     "Actor_SpawnWithParent": "Actor_SpawnAsChild",
     "Actor_IsLinkFacingActor": "Player_IsFacingActor",
@@ -122,7 +147,9 @@ wordReplace = {
     "Actor_IsActorFacingActor": "Actor_ActorAIsFacingActorB",
     "Actor_IsActorFacedByActor": "Actor_ActorBIsFacingActorA",
     "Actor_MarkForDeath": "Actor_Kill",
-    "func_800B84D0": "Actor_ProcessTalkRequest",
+    "func_800B84D0": "Actor_TalkOfferAccepted",
+    "Actor_ProcessTalkRequest": "Actor_TalkOfferAccepted",
+    "func_800BC154": "Actor_ChangeCategory",
     "func_8017D668": "Math3D_PointDistToLine2D",
 
     "THGA_GetSize": "THGA_GetRemaining",
@@ -959,6 +986,9 @@ wordReplace = {
     "func_8012CA38": "Gfx_SetupDL59_Opa",
 
     "Game_SetFramerateDivisor": "GameState_SetFramerateDivisor",
+    
+    "DmaMgr_SendRequestImpl": "DmaMgr_RequestAsync",
+    "DmaMgr_SendRequest0": "DmaMgr_RequestSync",
 
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
@@ -984,7 +1014,7 @@ wordReplace = {
     "skelAnime.transitionStep": "skelAnime.morphRate",
     "skelAnime.animUpdate": "skelAnime.update",
     "skelAnime.flags": "skelAnime.moveFlags",
-    "skelAnime.prevFrameRot": "skelAnime.prevRot",
+    "skelAnime.prevFrameRot": "skelAnime.prevYaw",
     "skelAnime.prevFramePos": "skelAnime.prevTransl",
     "skelAnime.unk3E": "skelAnime.baseTransl",
     "actor.unk20": "actor.halfDaysBits",
@@ -1095,7 +1125,8 @@ wordReplace = {
     "player->unk_386": "player->getItemDirection",
     "player->unk_388": "player->interactRangeActor",
     "player->unk_38C": "player->mountSide",
-    "player->unk_394": "player->csMode",
+    "player->csMode": "player->csAction",
+    "player->unk_394": "player->csAction",
     "player->swordQuads": "player->meleeWeaponQuads",
     "player->blureEffectIndex": "player->meleeWeaponEffectIndex",
     "player->unk_AD8": "player->underwaterTimer",
@@ -1109,8 +1140,10 @@ wordReplace = {
     "player->unk_AA0": "player->closestSecretDistSq",
     "player->unk_AAC": "player->headLimbRot",
     "player->unk_AB2": "player->upperLimbRot",
-    "player->unk_AE7": "player->actionVar1",
-    "player->unk_AE8": "player->actionVar2",
+    "player->unk_AE7": "player->av1.actionVar1",
+    "player->unk_AE8": "player->av2.actionVar2",
+    "player->actionVar1": "player->av1.actionVar1",
+    "player->actionVar2": "player->av2.actionVar2",
     "player->unk_B2A": "player->getItemDrawIdPlusOne",
     "player->getItemDrawId": "player->getItemDrawIdPlusOne",
     "player->unk_B68": "player->fallStartHeight",
@@ -1284,12 +1317,14 @@ wordReplace = {
     "RADF_TO_DEGF": "RAD_TO_DEG",
     "DEGF_TO_RADF": "DEG_TO_RAD",
 
+    "ACTORCTX_FLAG_1": "ACTORCTX_FLAG_TELESCOPE_ON",
     "ACTORCTX_FLAG_2": "ACTORCTX_FLAG_PICTO_BOX_ON",
 
     "ACTOR_FLAG_1": "ACTOR_FLAG_TARGETABLE",
     "ACTOR_FLAG_4": "ACTOR_FLAG_UNFRIENDLY",
     "ACTOR_FLAG_8": "ACTOR_FLAG_FRIENDLY",
-    "ACTOR_FLAG_100": "ACTOR_FLAG_TALK_REQUESTED",
+    "ACTOR_FLAG_100": "ACTOR_FLAG_TALK",
+    "ACTOR_FLAG_TALK_REQUESTED": "ACTOR_FLAG_TALK",
     "ACTOR_FLAG_8000000": "ACTOR_FLAG_CANT_LOCK_ON",
 
     "EXCH_ITEM_MINUS1": "PLAYER_IA_MINUS1",
@@ -1322,6 +1357,9 @@ wordReplace = {
     "WEEKEVENTREG_52_20": "WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE",
     "WEEKEVENTREG_55_80": "WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE",
 
+    "VIRTUAL_TO_PHYSICAL": "OS_K0_TO_PHYSICAL",
+    "SEGMENTED_TO_VIRTUAL": "SEGMENTED_TO_K0",
+
     # Enums
     "TRANS_TYPE_00": "TRANS_TYPE_WIPE",
     "TRANS_TYPE_01": "TRANS_TYPE_TRIFORCE",
@@ -1346,8 +1384,6 @@ wordReplace = {
     "TRANS_TYPE_20": "TRANS_TYPE_FADE_DYNAMIC",
     "TRANS_TYPE_21": "TRANS_TYPE_CIRCLE",
     "TRANS_TYPE_22": "TRANS_TYPE_WIPE5",
-    "PLAYER_CSMODE_6": "PLAYER_CSMODE_END",
-    "PLAYER_CSMODE_7": "PLAYER_CSMODE_WAIT",
     "SUBS_CUTSCENE_SET_UNK_LINK_FIELDS": "SUBS_CUTSCENE_WITH_PLAYER",
     "SUBS_CUTSCENE_SET_FLAG": "SUBS_CUTSCENE_WITH_PLAYER_SET_FLAG",
 

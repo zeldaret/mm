@@ -97,16 +97,17 @@ void KaleidoSetup_Update(PlayState* play) {
                     if ((play->unk_1887C < 2) && (gSaveContext.magicState != MAGIC_STATE_STEP_CAPACITY) &&
                         (gSaveContext.magicState != MAGIC_STATE_FILL)) {
                         if (!CHECK_EVENTINF(EVENTINF_17) && !(player->stateFlags1 & PLAYER_STATE1_20)) {
-                            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
+                            if (!(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) &&
                                 !(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
-                                if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
+                                if (!play->actorCtx.isOverrideInputOn &&
+                                    CHECK_BTN_ALL(input->press.button, BTN_START)) {
                                     gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
                                     pauseCtx->itemDescriptionOn = false;
                                     pauseCtx->state = PAUSE_STATE_OPENING_0;
                                     func_800F4A10(play);
                                     // Set next page mode to scroll left
                                     pauseCtx->nextPageMode = pauseCtx->pageIndex * 2 + 1;
-                                    func_801A3A7C(1);
+                                    Audio_SetPauseState(true);
                                 }
 
                                 if (pauseCtx->state == PAUSE_STATE_OPENING_0) {

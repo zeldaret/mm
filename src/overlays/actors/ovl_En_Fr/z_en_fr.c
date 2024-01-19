@@ -15,15 +15,15 @@ void EnFr_Destroy(Actor* thisx, PlayState* play);
 void EnFr_Update(Actor* thisx, PlayState* play);
 
 ActorInit En_Fr_InitVars = {
-    ACTOR_EN_FR,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnFr),
-    (ActorFunc)EnFr_Init,
-    (ActorFunc)EnFr_Destroy,
-    (ActorFunc)EnFr_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_FR,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnFr),
+    /**/ EnFr_Init,
+    /**/ EnFr_Destroy,
+    /**/ EnFr_Update,
+    /**/ NULL,
 };
 
 void EnFr_Init(Actor* thisx, PlayState* play) {

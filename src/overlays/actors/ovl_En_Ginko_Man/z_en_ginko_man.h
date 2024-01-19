@@ -14,8 +14,8 @@ typedef struct EnGinkoMan {
     /* 0x188 */ EnGinkoManActionFunc actionFunc;
     /* 0x18C */ Vec3s jointTable[OBJECT_BOJ_LIMB_MAX];
     /* 0x1EC */ Vec3s morphTable[OBJECT_BOJ_LIMB_MAX];
-    /* 0x24C */ Vec3s limb15Rot;
-    /* 0x252 */ Vec3s limb8Rot;
+    /* 0x24C */ Vec3s headRot;
+    /* 0x252 */ Vec3s torsoRot;
     /* 0x258 */ s16 curTextId;
     /* 0x25A */ s16 serviceFee;
     /* 0x25C */ s16 choiceDepositWithdrawl;

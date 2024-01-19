@@ -26,15 +26,15 @@ void func_80C0685C(ObjMoonStone* this);
 void func_80C06870(ObjMoonStone* this, PlayState* play);
 
 ActorInit Obj_Moon_Stone_InitVars = {
-    ACTOR_OBJ_MOON_STONE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GI_RESERVE00,
-    sizeof(ObjMoonStone),
-    (ActorFunc)ObjMoonStone_Init,
-    (ActorFunc)ObjMoonStone_Destroy,
-    (ActorFunc)ObjMoonStone_Update,
-    (ActorFunc)ObjMoonStone_Draw,
+    /**/ ACTOR_OBJ_MOON_STONE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_GI_RESERVE00,
+    /**/ sizeof(ObjMoonStone),
+    /**/ ObjMoonStone_Init,
+    /**/ ObjMoonStone_Destroy,
+    /**/ ObjMoonStone_Update,
+    /**/ ObjMoonStone_Draw,
 };
 
 void ObjMoonStone_Init(Actor* thisx, PlayState* play) {
@@ -73,7 +73,7 @@ void func_80C06640(ObjMoonStone* this, PlayState* play) {
     s16 sp1A = this->actor.yawTowardsPlayer - 0x8000;
 
     sp1A -= player->actor.shape.rot.y;
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.colChkInfo.health = 1;
         Message_StartTextbox(play, 0x5E3, &this->actor);
         func_80C066F8(this);
@@ -111,7 +111,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play) {
                         this->actor.world.pos.z, 0, 0, 0, -1);
         }
     }
-    if (this->actor.draw) {
+    if (this->actor.draw != NULL) {
         if (Actor_HasParent(&this->actor, play)) {
             this->actor.parent = NULL;
             this->actor.draw = NULL;

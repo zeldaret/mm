@@ -132,7 +132,7 @@ s32 AudioLoad_SyncInitSeqPlayer(s32 playerIndex, s32 seqId, s32 arg2);
 s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 playerIndex, s32 seqId, s32 skipTicks);
 void AudioLoad_ProcessLoads(s32 resetStatus);
 void AudioLoad_SetDmaHandler(DmaHandler callback);
-void AudioLoad_Init(void* heap, u32 heapSize);
+void AudioLoad_Init(void* heap, size_t heapSize);
 void AudioLoad_InitSlowLoads(void);
 s32 AudioLoad_SlowLoadSample(s32 fontId, s32 instId, s8* isDone);
 s32 AudioLoad_SlowLoadSeq(s32 seqId, u8* ramAddr, s8* isDone);

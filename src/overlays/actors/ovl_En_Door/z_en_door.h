@@ -25,10 +25,10 @@ typedef enum EnDoorType {
 
 typedef struct EnDoor {
     /* 0x000 */ KnobDoorActor knobDoor;
-    /* 0x1A4 */ u8 doorType;
+    /* 0x1A4 */ u8 doorType; // EnDoorType enum
     /* 0x1A5 */ u8 switchFlag;
     /* 0x1A6 */ u8 unk_1A6;
-    /* 0x1A7 */ s8 unk_1A7;
+    /* 0x1A7 */ s8 openTimer; // For how long the door will be open. positive/negative means the opening direction
     /* 0x1A8 */ Vec3s limbTable[DOOR_LIMB_MAX];
     /* 0x1C8 */ EnDoorActionFunc actionFunc;
 } EnDoor;

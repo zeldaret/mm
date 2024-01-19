@@ -37,15 +37,15 @@ typedef enum {
 } EnBbfallBodyPartDrawStatus;
 
 ActorInit En_Bbfall_InitVars = {
-    ACTOR_EN_BBFALL,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BB,
-    sizeof(EnBbfall),
-    (ActorFunc)EnBbfall_Init,
-    (ActorFunc)EnBbfall_Destroy,
-    (ActorFunc)EnBbfall_Update,
-    (ActorFunc)EnBbfall_Draw,
+    /**/ ACTOR_EN_BBFALL,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_BB,
+    /**/ sizeof(EnBbfall),
+    /**/ EnBbfall_Init,
+    /**/ EnBbfall_Destroy,
+    /**/ EnBbfall_Update,
+    /**/ EnBbfall_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[3] = {
@@ -325,7 +325,7 @@ void EnBbfall_Fly(EnBbfall* this, PlayState* play) {
             // Bounce upwards off the ground
             this->actor.velocity.y *= -1.2f;
             this->actor.velocity.y = CLAMP(this->actor.velocity.y, 8.0f, 12.0f);
-            this->actor.shape.rot.y += (s16)(s32)Rand_CenteredFloat(0x12000);
+            this->actor.shape.rot.y += TRUNCF_BINANG(Rand_CenteredFloat(0x12000));
         }
 
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
@@ -392,7 +392,7 @@ void EnBbfall_Down(EnBbfall* this, PlayState* play) {
         }
 
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
-        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 7.0f, 2, 2.0f, 0, 0, 0);
+        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 7.0f, 2, 2.0f, 0, 0, false);
         Math_ScaledStepToS(&this->actor.shape.rot.y, BINANG_ADD(this->actor.yawTowardsPlayer, 0x8000), 0xBB8);
     }
 

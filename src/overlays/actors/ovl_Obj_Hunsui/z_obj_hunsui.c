@@ -47,15 +47,15 @@ ObjHansuiStruct D_80B9DC70[] = {
 };
 
 ActorInit Obj_Hunsui_InitVars = {
-    ACTOR_OBJ_HUNSUI,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HUNSUI,
-    sizeof(ObjHunsui),
-    (ActorFunc)ObjHunsui_Init,
-    (ActorFunc)ObjHunsui_Destroy,
-    (ActorFunc)ObjHunsui_Update,
-    (ActorFunc)ObjHunsui_Draw,
+    /**/ ACTOR_OBJ_HUNSUI,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HUNSUI,
+    /**/ sizeof(ObjHunsui),
+    /**/ ObjHunsui_Init,
+    /**/ ObjHunsui_Destroy,
+    /**/ ObjHunsui_Update,
+    /**/ ObjHunsui_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

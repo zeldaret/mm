@@ -21,9 +21,12 @@
 #include "sfx.h"
 #include "message_data_static.h"
 
+#include "main.h"
+
 #include "gfx.h"
 #include "gfxprint.h"
 #include "padutils.h"
+#include "libc64/qrand.h"
 #include "sys_matrix.h"
 #include "tha.h"
 #include "thga.h"
@@ -46,6 +49,7 @@
 #include "z64game.h"
 #include "z64interface.h"
 #include "z64item.h"
+#include "z64lib.h"
 #include "z64light.h"
 #include "z64map.h"
 #include "z64math.h"
@@ -57,6 +61,7 @@
 #include "z64save.h"
 #include "z64scene.h"
 #include "z64schedule.h"
+#include "z64skin_matrix.h"
 #include "z64skin.h"
 #include "z64skybox.h"
 #include "z64sound_source.h"
@@ -208,7 +213,7 @@ typedef struct PlayState {
     /* 0x18770 */ void (*unk_18770)(struct PlayState* play, Player* player);
     /* 0x18774 */ s32 (*startPlayerFishing)(struct PlayState* play);
     /* 0x18778 */ s32 (*grabPlayer)(struct PlayState* play, Player* player);
-    /* 0x1877C */ s32 (*startPlayerCutscene)(struct PlayState* play, Player* player, PlayerCsMode csMode);
+    /* 0x1877C */ s32 (*tryPlayerCsAction)(struct PlayState* play, Player* player, PlayerCsAction csAction);
     /* 0x18780 */ void (*func_18780)(Player* player, struct PlayState* play);
     /* 0x18784 */ s32 (*damagePlayer)(struct PlayState* play, s32 damage);
     /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);
@@ -270,13 +275,5 @@ typedef enum {
     /* 2 */ PICTO_PHOTO_STATE_PROCESS,
     /* 3 */ PICTO_PHOTO_STATE_READY
 } PictoPhotoState;
-
-typedef struct {
-    /* 0x00 */ u8 mode;
-    /* 0x04 */ f32 scale;
-    /* 0x08 */ f32 lodProportion; // expected to be between 0.0f and 1.0f
-    /* 0x0C */ Color_RGBA8_u32 primColor;
-    /* 0x10 */ Color_RGBA8_u32 envColor;
-} Struct_80140E80; // size = 0x14
 
 #endif

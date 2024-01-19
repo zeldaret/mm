@@ -38,15 +38,15 @@ s32 func_808F99C4(EnHorseGameCheck* this, PlayState* play);
 s32 func_808F99D8(EnHorseGameCheck* this, PlayState* play);
 
 ActorInit En_Horse_Game_Check_InitVars = {
-    ACTOR_EN_HORSE_GAME_CHECK,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HORSE_GAME_CHECK,
-    sizeof(EnHorseGameCheck),
-    (ActorFunc)EnHorseGameCheck_Init,
-    (ActorFunc)EnHorseGameCheck_Destroy,
-    (ActorFunc)EnHorseGameCheck_Update,
-    (ActorFunc)EnHorseGameCheck_Draw,
+    /**/ ACTOR_EN_HORSE_GAME_CHECK,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HORSE_GAME_CHECK,
+    /**/ sizeof(EnHorseGameCheck),
+    /**/ EnHorseGameCheck_Init,
+    /**/ EnHorseGameCheck_Destroy,
+    /**/ EnHorseGameCheck_Update,
+    /**/ EnHorseGameCheck_Draw,
 };
 
 #include "overlays/ovl_En_Horse_Game_Check/ovl_En_Horse_Game_Check.c"

@@ -34,15 +34,15 @@ void func_80B04B60(ObjSnowball* this, PlayState* play);
 void func_80B04D34(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Snowball_InitVars = {
-    ACTOR_OBJ_SNOWBALL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GOROIWA,
-    sizeof(ObjSnowball),
-    (ActorFunc)ObjSnowball_Init,
-    (ActorFunc)ObjSnowball_Destroy,
-    (ActorFunc)ObjSnowball_Update,
-    (ActorFunc)ObjSnowball_Draw,
+    /**/ ACTOR_OBJ_SNOWBALL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_GOROIWA,
+    /**/ sizeof(ObjSnowball),
+    /**/ ObjSnowball_Init,
+    /**/ ObjSnowball_Destroy,
+    /**/ ObjSnowball_Update,
+    /**/ ObjSnowball_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -760,7 +760,7 @@ void ObjSnowball_Update(Actor* thisx, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_10;
                 this->unk_211 = 0;
             }
-        } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             this->actor.flags |= ACTOR_FLAG_10;
             this->unk_211 = 1;
         } else if (this->actor.isLockedOn) {

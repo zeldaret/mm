@@ -37,15 +37,15 @@ void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4);
 void func_80B382E4(PlayState* play, Vec3f arg1);
 
 ActorInit En_Maruta_InitVars = {
-    ACTOR_EN_MARUTA,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_MARUTA,
-    sizeof(EnMaruta),
-    (ActorFunc)EnMaruta_Init,
-    (ActorFunc)EnMaruta_Destroy,
-    (ActorFunc)EnMaruta_Update,
-    (ActorFunc)EnMaruta_Draw,
+    /**/ ACTOR_EN_MARUTA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_MARUTA,
+    /**/ sizeof(EnMaruta),
+    /**/ EnMaruta_Init,
+    /**/ EnMaruta_Destroy,
+    /**/ EnMaruta_Update,
+    /**/ EnMaruta_Draw,
 };
 
 Gfx* D_80B386A0[] = {

@@ -27,15 +27,15 @@ void func_808A701C(EnSt* this, PlayState* play);
 void func_808A7478(Actor* thisx, PlayState* play);
 
 ActorInit En_St_InitVars = {
-    ACTOR_EN_ST,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_ST,
-    sizeof(EnSt),
-    (ActorFunc)EnSt_Init,
-    (ActorFunc)EnSt_Destroy,
-    (ActorFunc)EnSt_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_ST,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_ST,
+    /**/ sizeof(EnSt),
+    /**/ EnSt_Init,
+    /**/ EnSt_Destroy,
+    /**/ EnSt_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {
@@ -245,7 +245,7 @@ void func_808A54B0(EnSt* this, PlayState* play) {
     if ((this->unk_18C & 1) && (this->actor.colChkInfo.health != 0)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
 
         gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[this->objectSlot].segment);
 
@@ -272,7 +272,7 @@ void func_808A54B0(EnSt* this, PlayState* play) {
 
 s32 func_808A576C(EnSt* this) {
     s32 i;
-    s16 phi_s2 = (s16)((s16)(Rand_ZeroOne() * 1000.0f) % 12) * 0x1555;
+    s16 phi_s2 = (s16)(TRUNCF_BINANG(Rand_ZeroOne() * 1000.0f) % 12) * 0x1555;
 
     for (i = 0; i < ENST_BODYPART_MAX; i++, phi_s2 += 0x1555) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {

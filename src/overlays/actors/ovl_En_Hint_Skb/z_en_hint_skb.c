@@ -5,6 +5,7 @@
  */
 
 #include "z_en_hint_skb.h"
+#include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
@@ -39,15 +40,15 @@ void func_80C21468(EnHintSkb* this, PlayState* play);
 void func_80C215E4(PlayState* play, EnHintSkb* this, Vec3f* arg2);
 
 ActorInit En_Hint_Skb_InitVars = {
-    ACTOR_EN_HINT_SKB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SKB,
-    sizeof(EnHintSkb),
-    (ActorFunc)EnHintSkb_Init,
-    (ActorFunc)EnHintSkb_Destroy,
-    (ActorFunc)EnHintSkb_Update,
-    (ActorFunc)EnHintSkb_Draw,
+    /**/ ACTOR_EN_HINT_SKB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SKB,
+    /**/ sizeof(EnHintSkb),
+    /**/ EnHintSkb_Init,
+    /**/ EnHintSkb_Destroy,
+    /**/ EnHintSkb_Update,
+    /**/ EnHintSkb_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -206,7 +207,7 @@ void func_80C1FE80(EnHintSkb* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_WALK);
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 750, 0);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0x2EE, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Actor_IsFacingPlayer(&this->actor, 0x11C7) && (this->actor.xzDistToPlayer < 60.0f)) {
         func_80C1FF30(this);
@@ -320,10 +321,10 @@ void func_80C20334(EnHintSkb* this, PlayState* play) {
         } else if (this->actor.speed != 0.0f) {
             this->actor.speed -= 0.05f;
         }
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 2500, 0);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0x9C4, 0);
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 16, 2000, 100);
+    Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 16, 0x7D0, 0x64);
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
         (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
@@ -410,7 +411,7 @@ void func_80C2075C(EnHintSkb* this) {
 }
 
 void func_80C2077C(EnHintSkb* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->unk_3E0 = 1;
         if (this->unk_3DC == 0) {
             this->unk_3DC = 1;
@@ -879,7 +880,7 @@ s32 EnHintSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         temp_f10 = fabsf(Math_SinS(play->state.frames * 6000) * 95.0f) + 160.0f;
 
         gDPPipeSync(POLY_OPA_DISP++);
-        gDPSetEnvColor(POLY_OPA_DISP++, (s16)temp_f10, (s16)temp_f10, (s16)temp_f10, 255);
+        gDPSetEnvColor(POLY_OPA_DISP++, TRUNCF_BINANG(temp_f10), TRUNCF_BINANG(temp_f10), TRUNCF_BINANG(temp_f10), 255);
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else if (limbIndex == STALCHILD_LIMB_RIBCAGE) {
@@ -903,12 +904,12 @@ void EnHintSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Collider_UpdateSpheres(limbIndex, &this->collider);
 
         if ((limbIndex == STALCHILD_LIMB_HEAD) && (this->unk_3E8 & 1) && !(this->unk_3E8 & 2)) {
-            Actor_SpawnBodyParts(&this->actor, play, 1, dList);
+            Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_1), dList);
             this->unk_3E8 |= 2;
         } else if ((this->unk_3E8 & 4) && !(this->unk_3E8 & 8) &&
                    ((limbIndex != STALCHILD_LIMB_HEAD) || !(this->unk_3E8 & 1)) &&
                    (limbIndex != STALCHILD_LIMB_LOWER_JAW)) {
-            Actor_SpawnBodyParts(&this->actor, play, 1, dList);
+            Actor_SpawnBodyParts(&this->actor, play, ENPART_PARAMS(ENPART_TYPE_1), dList);
         }
 
         if (this->drawDmgEffTimer != 0) {

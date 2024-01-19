@@ -10,6 +10,8 @@ typedef void (*ObjHakaisiActionFunc)(struct ObjHakaisi*, PlayState*);
 #define OBJHAKAISI_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define OBJHAKAISI_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0xFF00) >> 8)
 
+#define OBJHAKAISI_SWITCH_FLAG_NONE 0xFF
+
 typedef struct ObjHakaisi {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjHakaisiActionFunc actionFunc;

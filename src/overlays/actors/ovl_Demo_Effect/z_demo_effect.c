@@ -25,15 +25,15 @@ void DemoEffect_DrawTimewarp(Actor* thisx, PlayState* play);
 void DemoEffect_DrawLight(Actor* thisx, PlayState* play2);
 
 ActorInit Demo_Effect_InitVars = {
-    ACTOR_DEMO_EFFECT,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DemoEffect),
-    (ActorFunc)DemoEffect_Init,
-    (ActorFunc)DemoEffect_Destroy,
-    (ActorFunc)DemoEffect_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_DEMO_EFFECT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(DemoEffect),
+    /**/ DemoEffect_Init,
+    /**/ DemoEffect_Destroy,
+    /**/ DemoEffect_Update,
+    /**/ NULL,
 };
 
 void DemoEffect_Init(Actor* thisx, PlayState* play) {
@@ -285,7 +285,7 @@ s32 DemoEffect_OverrideLimbDrawTimewarp(PlayState* play, SkelCurve* skelCurve, s
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (limbIndex == 0) {
-        s16* transform = skelCurve->jointTable[0];
+        s16* transform = skelCurve->jointTable[LIMB_ROOT_POS];
 
         transform[2] = transform[0] = 1024;
         transform[1] = 1024;

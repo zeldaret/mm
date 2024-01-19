@@ -16,15 +16,15 @@ void EnBoj01_Update(Actor* thisx, PlayState* play);
 void EnBoj01_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Boj_01_InitVars = {
-    ACTOR_EN_BOJ_01,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnBoj01),
-    (ActorFunc)EnBoj01_Init,
-    (ActorFunc)EnBoj01_Destroy,
-    (ActorFunc)EnBoj01_Update,
-    (ActorFunc)EnBoj01_Draw,
+    /**/ ACTOR_EN_BOJ_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnBoj01),
+    /**/ EnBoj01_Init,
+    /**/ EnBoj01_Destroy,
+    /**/ EnBoj01_Update,
+    /**/ EnBoj01_Draw,
 };
 
 void EnBoj01_Init(Actor* thisx, PlayState* play) {

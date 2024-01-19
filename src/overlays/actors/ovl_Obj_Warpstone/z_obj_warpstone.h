@@ -26,7 +26,6 @@ typedef struct ObjWarpstone {
     /* 0x1AC */ ObjWarpstoneActionFunc actionFunc;
 } ObjWarpstone; // size = 0x1B0
 
-#define OBJ_WARPSTONE_GET_ID(thisx) ((u16)((thisx)->params & 0xF))
-#define OBJ_WARPSTONE_IS_ACTIVATED(owlId) (((void)0, gSaveContext.save.saveInfo.playerData.owlActivationFlags) & (u16)gBitFlags[(owlId)])
+#define OBJ_WARPSTONE_GET_OWL_WARP_ID(thisx) ((u16)((thisx)->params & 0xF))
 
 #endif // Z_OBJ_WARPSTONE_H

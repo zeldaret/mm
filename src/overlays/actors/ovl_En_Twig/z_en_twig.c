@@ -25,15 +25,15 @@ void func_80AC0CC4(EnTwig* this, PlayState* play);
 void func_80AC0D2C(EnTwig* this, PlayState* play);
 
 ActorInit En_Twig_InitVars = {
-    ACTOR_EN_TWIG,
-    ACTORCAT_MISC,
-    FLAGS,
-    OBJECT_TWIG,
-    sizeof(EnTwig),
-    (ActorFunc)EnTwig_Init,
-    (ActorFunc)EnTwig_Destroy,
-    (ActorFunc)EnTwig_Update,
-    (ActorFunc)EnTwig_Draw,
+    /**/ ACTOR_EN_TWIG,
+    /**/ ACTORCAT_MISC,
+    /**/ FLAGS,
+    /**/ OBJECT_TWIG,
+    /**/ sizeof(EnTwig),
+    /**/ EnTwig_Init,
+    /**/ EnTwig_Destroy,
+    /**/ EnTwig_Update,
+    /**/ EnTwig_Draw,
 };
 
 s32 sCurrentRing;
@@ -186,7 +186,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
                        0.01f);
     Math_SmoothStepToF(&this->dyna.actor.world.pos.z, player->bodyPartsPos[PLAYER_BODYPART_WAIST].z, 0.5f, 100.0f,
                        0.01f);
-    this->dyna.actor.shape.rot.z += (s16)this->unk_170;
+    this->dyna.actor.shape.rot.z += TRUNCF_BINANG(this->unk_170);
     this->dyna.actor.scale.x -= this->unk_174;
     if (this->dyna.actor.scale.x < 0.0f) {
         Actor_SetScale(&this->dyna.actor, 0.0f);

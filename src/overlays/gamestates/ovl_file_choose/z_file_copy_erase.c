@@ -414,7 +414,7 @@ void FileSelect_CopyConfirm(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
     SramContext* sramCtx = &this->sramCtx;
     Input* input = CONTROLLER1(&this->state);
-    u16 dayTime;
+    u16 time;
 
     if (((this->buttonIndex != FS_BTN_CONFIRM_YES) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
         CHECK_BTN_ALL(input->press.button, BTN_B)) {
@@ -423,8 +423,7 @@ void FileSelect_CopyConfirm(GameState* thisx) {
         this->configMode = CM_RETURN_TO_COPY_DEST;
         Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
     } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
-        dayTime = gSaveContext.save.time;
-        gSaveContext.save.time = dayTime;
+        gSaveContext.save.time = time = CURRENT_TIME; // Set to itself with unused temp
         this->nameAlpha[this->copyDestFileIndex] = 0;
         this->fileInfoAlpha[this->copyDestFileIndex] = this->nameAlpha[this->copyDestFileIndex];
         this->nextTitleLabel = FS_TITLE_COPY_COMPLETE;

@@ -21,15 +21,15 @@ void EnHeishi_SetupIdle(EnHeishi* this);
 void EnHeishi_Idle(EnHeishi* this, PlayState* play);
 
 ActorInit En_Heishi_InitVars = {
-    ACTOR_EN_HEISHI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SDN,
-    sizeof(EnHeishi),
-    (ActorFunc)EnHeishi_Init,
-    (ActorFunc)EnHeishi_Destroy,
-    (ActorFunc)EnHeishi_Update,
-    (ActorFunc)EnHeishi_Draw,
+    /**/ ACTOR_EN_HEISHI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnHeishi),
+    /**/ EnHeishi_Init,
+    /**/ EnHeishi_Destroy,
+    /**/ EnHeishi_Update,
+    /**/ EnHeishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -174,8 +174,8 @@ void EnHeishi_Update(Actor* thisx, PlayState* play) {
     }
 
     Actor_SetFocus(&this->actor, 60.0f);
-    Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 3000, 0);
-    Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 1000, 0);
+    Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 0x3E8, 0);
     Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
 }

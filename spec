@@ -4,20 +4,25 @@
 
 beginseg
     name "makerom"
-    address 0x8007F000
     include "build/asm/makerom/rom_header.o"
     include "build/asm/makerom/ipl3.o"
     include "build/asm/makerom/entry.o"
 endseg
 
 beginseg
+    name "framebuffer_lo"
+    address 0x80000500
+    flags NOLOAD
+    include "build/src/buffers/framebuffer_lo.o"
+endseg
+
+beginseg
     name "boot"
-    address 0x80080060
     include "build/src/boot/boot_main.o"
     include "build/data/boot/rspboot.data.o"
     include "build/src/boot/idle.o"
     include "build/src/boot/viconfig.o"
-    include "build/data/boot/viconfig.data.o"
+    include "build/src/boot/carthandle.o"
     include "build/src/boot/z_std_dma.o"
     include "build/src/boot/yaz0.o"
     include "build/src/boot/irqmgr.o"
@@ -36,27 +41,27 @@ beginseg
     include "build/src/boot/O2/debug.o"
     include "build/src/boot/O2/system_heap.o"
     include "build/src/boot/O2/padsetup.o"
-    include "build/src/boot/O2/math64.o"
-    include "build/asm/boot/fp.text.o"
+    include "build/src/boot/libc64/math64.o"
+    include "build/asm/boot/fp.text.o" // Part of libc64
     include "build/data/boot/fp.data.o"
-    include "build/src/boot/O2/system_malloc.o"
-    include "build/src/boot/O2/rand.o"
-    include "build/src/boot/O2/__osMalloc.o"
-    include "build/src/libultra/rmon/sprintf.o"
-    include "build/src/boot/O2/printutils.o"
-    include "build/src/boot/O2/sleep.o"
+    include "build/src/boot/libc64/malloc.o"
+    include "build/src/boot/libc64/qrand.o"
+    include "build/src/boot/libc64/__osMalloc.o"
+    include "build/src/boot/libc64/sprintf.o"
+    include "build/src/boot/libc64/aprintf.o"
+    include "build/src/boot/libc64/sleep.o"
     include "build/asm/boot/setcause.text.o"
     include "build/src/libultra/os/sendmesg.o"
     include "build/src/libultra/io/pfsfreeblocks.o"
-    include "build/src/libultra/os/viextend.o"
+    include "build/src/libultra/io/viextendvstart.o"
     include "build/src/libultra/os/stopthread.o"
     include "build/src/libultra/os/recvmesg.o"
     include "build/asm/boot/setintmask.text.o"
     include "build/data/boot/setintmask.rodata.o"
     include "build/asm/boot/getintmask.text.o"
     include "build/src/libultra/voice/voicesetword.o"
-    include "build/src/libultra/io/osViModeNtscHpf1.o"
-    include "build/src/libultra/io/osViModePalLan1.o"
+    include "build/src/libultra/vimodes/vimodentschpf1.o"
+    include "build/src/libultra/vimodes/vimodepallan1.o"
     include "build/asm/boot/guScale.text.o"
     include "build/src/libultra/gu/sinf.o"
     include "build/src/libultra/gu/sins.o"
@@ -80,8 +85,8 @@ beginseg
     include "build/asm/boot/setsr.text.o"
     include "build/asm/boot/writebackdcache.text.o"
     include "build/src/libultra/os/initialize.o"
-    include "build/src/libultra/os/threadsave.o"
-    pad_text
+    include "build/src/libultra/debug/kdebugserver.o"
+    pad_text // These pads are from src/libultra/os/parameters.o
     pad_text
     pad_text
     pad_text
@@ -108,11 +113,11 @@ beginseg
     include "build/src/libultra/os/stoptimer.o"
     include "build/asm/boot/probetlb.text.o"
     include "build/src/libultra/io/pimgr.o"
-    include "build/data/boot/pimgr.data.o"
     include "build/src/libultra/io/piacs.o"
     pad_text
     include "build/src/libultra/io/devmgr.o"
     include "build/src/libultra/io/pirawdma.o"
+    include "build/src/libultra/vimodes/vimodentschpn1.o"
     include "build/src/libultra/io/contpfs.o"
     include "build/asm/boot/getcount.text.o"
     pad_text
@@ -120,11 +125,11 @@ beginseg
     include "build/src/libultra/os/getmemsize.o"
     include "build/src/libultra/io/pfssearchfile.o"
     include "build/src/libultra/os/seteventmesg.o"
-    include "build/src/libultra/gu/sqrtf.o"
+    include "build/asm/boot/sqrtf.text.o"
     include "build/src/libultra/os/afterprenmi.o"
     include "build/src/libultra/io/contquery.o"
     include "build/src/libultra/gu/lookathil.o"
-    include "build/src/libultra/rmon/xprintf.o"
+    include "build/src/libultra/libc/xprintf.o"
     include "build/src/libultra/voice/voicecleardictionary.o"
     include "build/asm/boot/unmaptlball.text.o"
     include "build/src/libultra/io/epidma.o"
@@ -169,8 +174,8 @@ beginseg
     include "build/src/libultra/io/pfsdeletefile.o"
     include "build/src/libultra/gu/ortho.o"
     include "build/asm/boot/interrupt.text.o"
-    include "build/src/libultra/io/osViModeNtscLan1.o"
-    include "build/src/libultra/io/osViModeMpalLan1.o"
+    include "build/src/libultra/vimodes/vimodentsclan1.o"
+    include "build/src/libultra/vimodes/vimodempallan1.o"
     include "build/src/libultra/io/vi.o"
     include "build/src/libultra/io/viswapcontext.o"
     include "build/src/libultra/io/pigetcmdq.o"
@@ -180,12 +185,12 @@ beginseg
     include "build/src/libultra/gu/coss.o"
     include "build/src/libultra/os/settime.o"
     include "build/src/libultra/voice/voicestopread.o"
-    include "build/src/libultra/gu/visetevent.o"
+    include "build/src/libultra/io/visetevent.o"
     include "build/src/libultra/io/pfsisplug.o"
     include "build/src/libultra/voice/voicegetstatus.o"
     include "build/src/libultra/io/cartrominit.o"
-    include "build/src/libultra/gu/guS2DInitBg.o"
-    include "build/data/boot/guS2DInitBg.data.o"
+    include "build/src/libultra/gu/us2dex.o"
+    include "build/src/libultra/vimodes/vimodefpallan1.o"
     include "build/src/libultra/io/pfsselectbank.o"
     include "build/src/libultra/io/contsetch.o"
     include "build/asm/boot/setfpccsr.text.o"
@@ -203,10 +208,10 @@ beginseg
     include "build/src/libultra/io/contramwrite.o"
     include "build/src/libultra/io/epirawwrite.o"
     include "build/src/libultra/os/settimer.o"
-    include "build/data/boot/__libm_qnan_f.rodata.o"
-    include "build/src/libultra/rmon/xldtob.o"
+    include "build/data/boot/libm_vals.rodata.o"
+    include "build/src/libultra/libc/xldtob.o"
     include "build/src/libultra/libc/ldiv.o"
-    include "build/src/libultra/rmon/xlitob.o"
+    include "build/src/libultra/libc/xlitob.o"
     include "build/src/libultra/io/sirawwrite.o"
     include "build/src/libultra/io/spgetstat.o"
     include "build/src/libultra/io/spsetstat.o"
@@ -232,17 +237,17 @@ beginseg
     include "build/src/libultra/os/sethwinterrupt.o"
     include "build/asm/boot/getwatchlo.text.o"
     include "build/asm/boot/setwatchlo.text.o"
-    include "build/src/boot/O2/fmodf.o"
-    include "build/src/boot/O2/__osMemset.o"
-    include "build/src/boot/O2/__osStrcmp.o"
-    include "build/src/boot/O2/__osStrcpy.o"
-    include "build/src/boot/O2/__osMemcpy.o"
+    include "build/src/boot/libm/fmodf.o"
+    include "build/src/boot/libc/memset.o"
+    include "build/src/boot/libc/strcmp.o"
+    include "build/src/boot/libc/strcpy.o"
+    include "build/src/boot/libc/memmove.o"
     include "build/src/boot/build.o"
 endseg
 
 beginseg
     name "dmadata"
-    include "build/asm/dmadata/dmadata.o"
+    include "build/src/dmadata/dmadata.o"
 endseg
 
 beginseg
@@ -275,6 +280,7 @@ endseg
 
 beginseg
     name "icon_item_static_syms"
+    flags SYMS
     romalign 0x1000
     include "build/assets/archives/icon_item_static/icon_item_static_yar.symbols.o"
     number 8
@@ -282,6 +288,7 @@ endseg
 
 beginseg
     name "icon_item_24_static_syms"
+    flags SYMS
     romalign 0x1000
     include "build/assets/archives/icon_item_24_static/icon_item_24_static_yar.symbols.o"
     number 9
@@ -329,12 +336,12 @@ endseg
 
 beginseg
     name "map_i_static"
-    include "build/assets/archives/map_i_static/map_i_static.yar.o"
+    include "build/assets/c/archives/map_i_static/map_i_static.yar.o"
 endseg
 
 beginseg
     name "map_grand_static"
-    include "build/assets/archives/map_grand_static/map_grand_static.yar.o"
+    include "build/assets/c/archives/map_grand_static/map_grand_static.yar.o"
 endseg
 
 beginseg
@@ -361,6 +368,7 @@ endseg
 
 beginseg
     name "schedule_dma_static_syms"
+    flags SYMS
     include "build/assets/archives/schedule_dma_static/schedule_dma_static_yar.symbols.o"
     number 7
 endseg
@@ -519,7 +527,7 @@ beginseg
     include "build/src/code/z_view.o"
     include "build/src/code/z_vimode.o"
     include "build/src/code/z_viscvg.o"
-    include "build/src/code/code_80140E80.o"
+    include "build/src/code/z_visfbuf.o"
     include "build/src/code/z_vismono.o"
     include "build/src/code/z_viszbuf.o"
     include "build/src/code/z_vr_box.o"
@@ -531,7 +539,6 @@ beginseg
     include "build/src/code/z_player_call.o"
     include "build/src/code/z_shrink_window.o"
     include "build/src/code/cutscene_camera.o"
-    include "build/data/code/cutscene_camera.bss.o"
     include "build/src/code/z_kaleido_manager.o"
     include "build/src/code/z_kaleido_scope_call.o"
     include "build/src/code/z_fbdemo_dlftbls.o"
@@ -574,7 +581,7 @@ beginseg
     include "build/src/code/sys_slowly.o"
     include "build/src/code/sys_flashrom.o"
     include "build/asm/code/code_80185F90.text.o" // handwritten
-    include "build/src/libultra/flash/osFlash.o"
+    include "build/src/code/osFlash.o"
     pad_text
     pad_text
     pad_text
@@ -595,10 +602,7 @@ beginseg
     include "build/asm/code/code_8019AEC0.text.o" // handwritten
     include "build/src/audio/code_8019AF00.o"
     include "build/src/audio/voice_external.o"
-    include "build/data/code/voice_external.data.o"
     include "build/src/audio/voice_internal.o"
-    include "build/data/code/voice_internal.data.o"
-    include "build/data/code/voice_internal.bss.o"
     pad_text
     include "build/src/audio/sfx_params.o"
     include "build/src/audio/sfx.o"
@@ -616,13 +620,30 @@ beginseg
     include "build/data/code/njpgdspMain.rodata.o"
 endseg
 
+// The game expects all the segments after the `code` segment and before the first overlay to be `NOLOAD` ones
+
 beginseg
     name "buffers"
     flags NOLOAD
     include "build/src/buffers/gfxyield.o"
     include "build/src/buffers/gfxstack.o"
     include "build/src/buffers/gfxpools.o"
-    include "build/data/code/buffers.bss.o"
+    include "build/src/buffers/audio_heap.o"
+endseg
+
+beginseg
+    name "system_heap"
+    flags NOLOAD
+    // This segment is just a dummy that is used to know where the other buffers (non framebuffers) end
+    include "build/src/buffers/system_heap.o"
+endseg
+
+beginseg
+    name "framebuffer_hi"
+    flags NOLOAD
+    // This has to be fixed location in VRAM. See the FRAMEBUFFERS_START_ADDR define on `buffers.h` for a more in-depth explanation
+    address 0x80780000
+    include "build/src/buffers/framebuffer_hi.o"
 endseg
 
 beginseg
@@ -654,11 +675,7 @@ beginseg
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_copy_erase.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_nameset_NES.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_NES.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
-    #else 
-        include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
-    #endif
+    include "build/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
 endseg
 
 beginseg
@@ -1340,8 +1357,7 @@ beginseg
     name "ovl_En_Honotrap"
     compress
     include "build/src/overlays/actors/ovl_En_Honotrap/z_en_honotrap.o"
-    include "build/data/ovl_En_Honotrap/ovl_En_Honotrap.data.o"
-    include "build/data/ovl_En_Honotrap/ovl_En_Honotrap.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Honotrap/ovl_En_Honotrap_reloc.o"
 endseg
 
 beginseg
@@ -1551,8 +1567,7 @@ beginseg
     name "ovl_Obj_Mure2"
     compress
     include "build/src/overlays/actors/ovl_Obj_Mure2/z_obj_mure2.o"
-    include "build/data/ovl_Obj_Mure2/ovl_Obj_Mure2.data.o"
-    include "build/data/ovl_Obj_Mure2/ovl_Obj_Mure2.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Mure2/ovl_Obj_Mure2_reloc.o"
 endseg
 
 beginseg
@@ -2162,8 +2177,7 @@ beginseg
     name "ovl_En_Jso"
     compress
     include "build/src/overlays/actors/ovl_En_Jso/z_en_jso.o"
-    include "build/data/ovl_En_Jso/ovl_En_Jso.data.o"
-    include "build/data/ovl_En_Jso/ovl_En_Jso.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Jso/ovl_En_Jso_reloc.o"
 endseg
 
 beginseg
@@ -2298,9 +2312,7 @@ beginseg
     name "ovl_Boss_01"
     compress
     include "build/src/overlays/actors/ovl_Boss_01/z_boss_01.o"
-    include "build/data/ovl_Boss_01/ovl_Boss_01.data.o"
-    include "build/data/ovl_Boss_01/ovl_Boss_01.bss.o"
-    include "build/data/ovl_Boss_01/ovl_Boss_01.reloc.o"
+    include "build/src/overlays/actors/ovl_Boss_01/ovl_Boss_01_reloc.o"
 endseg
 
 beginseg
@@ -2328,20 +2340,14 @@ beginseg
     name "ovl_Boss_05"
     compress
     include "build/src/overlays/actors/ovl_Boss_05/z_boss_05.o"
-    include "build/data/ovl_Boss_05/ovl_Boss_05.data.o"
-    include "build/data/ovl_Boss_05/ovl_Boss_05.bss.o"
-    include "build/data/ovl_Boss_05/ovl_Boss_05.reloc.o"
+    include "build/src/overlays/actors/ovl_Boss_05/ovl_Boss_05_reloc.o"
 endseg
 
 beginseg
     name "ovl_Boss_06"
     compress
     include "build/src/overlays/actors/ovl_Boss_06/z_boss_06.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Boss_06/ovl_Boss_06_reloc.o"
-#else
-    include "build/data/ovl_Boss_06/ovl_Boss_06.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -2579,8 +2585,7 @@ beginseg
     name "ovl_Dm_Tsg"
     compress
     include "build/src/overlays/actors/ovl_Dm_Tsg/z_dm_tsg.o"
-    include "build/data/ovl_Dm_Tsg/ovl_Dm_Tsg.data.o"
-    include "build/data/ovl_Dm_Tsg/ovl_Dm_Tsg.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Tsg/ovl_Dm_Tsg_reloc.o"
 endseg
 
 beginseg
@@ -2874,8 +2879,7 @@ beginseg
     name "ovl_En_Jso2"
     compress
     include "build/src/overlays/actors/ovl_En_Jso2/z_en_jso2.o"
-    include "build/data/ovl_En_Jso2/ovl_En_Jso2.data.o"
-    include "build/data/ovl_En_Jso2/ovl_En_Jso2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Jso2/ovl_En_Jso2_reloc.o"
 endseg
 
 beginseg
@@ -3157,8 +3161,7 @@ beginseg
     name "ovl_fbdemo_wipe4"
     compress
     include "build/src/overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.o"
-    include "build/data/ovl_fbdemo_wipe4/ovl_fbdemo_wipe4.data.o"
-    include "build/data/ovl_fbdemo_wipe4/ovl_fbdemo_wipe4.reloc.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe4/ovl_fbdemo_wipe4_reloc.o"
 endseg
 
 beginseg
@@ -3291,9 +3294,7 @@ beginseg
     name "ovl_Obj_Takaraya_Wall"
     compress
     include "build/src/overlays/actors/ovl_Obj_Takaraya_Wall/z_obj_takaraya_wall.o"
-    include "build/data/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall.data.o"
-    include "build/data/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall.bss.o"
-    include "build/data/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Takaraya_Wall/ovl_Obj_Takaraya_Wall_reloc.o"
 endseg
 
 beginseg
@@ -3767,8 +3768,7 @@ beginseg
     name "ovl_En_An"
     compress
     include "build/src/overlays/actors/ovl_En_An/z_en_an.o"
-    include "build/data/ovl_En_An/ovl_En_An.data.o"
-    include "build/data/ovl_En_An/ovl_En_An.reloc.o"
+    include "build/src/overlays/actors/ovl_En_An/ovl_En_An_reloc.o"
 endseg
 
 beginseg
@@ -4245,8 +4245,7 @@ beginseg
     name "ovl_En_Po_Composer"
     compress
     include "build/src/overlays/actors/ovl_En_Po_Composer/z_en_po_composer.o"
-    include "build/data/ovl_En_Po_Composer/ovl_En_Po_Composer.data.o"
-    include "build/data/ovl_En_Po_Composer/ovl_En_Po_Composer.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Po_Composer/ovl_En_Po_Composer_reloc.o"
 endseg
 
 beginseg
@@ -6314,11 +6313,11 @@ beginseg
 endseg
 
 beginseg
-    name "object_rs"
+    name "object_rsn"
     compress
     romalign 0x1000
     number 6
-    include "build/assets/objects/object_rs/object_rs.o"
+    include "build/assets/objects/object_rsn/object_rsn.o"
 endseg
 
 beginseg
@@ -8860,21 +8859,21 @@ beginseg
     name "d2_fine_static"
     compress
     romalign 0x1000
-    include "build/baserom/d2_fine_static.o"
+    include "build/assets/misc/skyboxes/d2_fine_static.o"
 endseg
 
 beginseg
     name "d2_cloud_static"
     compress
     romalign 0x1000
-    include "build/baserom/d2_cloud_static.o"
+    include "build/assets/misc/skyboxes/d2_cloud_static.o"
 endseg
 
 beginseg
     name "d2_fine_pal_static"
     compress
     romalign 0x1000
-    include "build/baserom/d2_fine_pal_static.o"
+    include "build/assets/misc/skyboxes/d2_fine_pal_static.o"
 endseg
 
 beginseg

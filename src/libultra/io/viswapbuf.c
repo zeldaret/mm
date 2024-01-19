@@ -1,11 +1,11 @@
-#include "global.h"
+#include "ultra64.h"
 
 void osViSwapBuffer(void* frameBufPtr) {
 
     u32 saveMask = __osDisableInt();
 
     __osViNext->buffer = frameBufPtr;
-    __osViNext->state |= 0x10;
+    __osViNext->state |= VI_STATE_BUFFER_UPDATED;
 
     __osRestoreInt(saveMask);
 }

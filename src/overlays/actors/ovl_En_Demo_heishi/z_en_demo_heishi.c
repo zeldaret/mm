@@ -21,15 +21,15 @@ void EnDemoheishi_SetupTalk(EnDemoheishi* this);
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play);
 
 ActorInit En_Demo_heishi_InitVars = {
-    ACTOR_EN_DEMO_HEISHI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SDN,
-    sizeof(EnDemoheishi),
-    (ActorFunc)EnDemoheishi_Init,
-    (ActorFunc)EnDemoheishi_Destroy,
-    (ActorFunc)EnDemoheishi_Update,
-    (ActorFunc)EnDemoheishi_Draw,
+    /**/ ACTOR_EN_DEMO_HEISHI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnDemoheishi),
+    /**/ EnDemoheishi_Init,
+    /**/ EnDemoheishi_Destroy,
+    /**/ EnDemoheishi_Update,
+    /**/ EnDemoheishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -136,7 +136,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play) {
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absYawDiff = ABS_ALT(yawDiff);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnDemoheishi_SetupTalk(this);
     } else if (absYawDiff <= 0x4BB8) {
         Actor_OfferTalk(&this->actor, play, 70.0f);

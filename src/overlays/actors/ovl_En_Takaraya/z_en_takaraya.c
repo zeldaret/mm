@@ -5,6 +5,7 @@
  */
 
 #include "z_en_takaraya.h"
+#include "overlays/actors/ovl_En_Box/z_en_box.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -15,10 +16,8 @@ void EnTakaraya_Destroy(Actor* thisx, PlayState* play);
 void EnTakaraya_Update(Actor* thisx, PlayState* play);
 void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 
-void EnTakaraya_Blink(EnTakaraya* this);
 void EnTakaraya_SetupWait(EnTakaraya* this);
 void EnTakaraya_Wait(EnTakaraya* this, PlayState* play);
-void EnTakaraya_SpawnWalls(EnTakaraya* this, PlayState* play);
 void EnTakaraya_SetupTalk(EnTakaraya* this);
 void EnTakaraya_Talk(EnTakaraya* this, PlayState* play);
 void func_80ADF2D4(EnTakaraya* this);
@@ -31,19 +30,17 @@ void func_80ADF6DC(EnTakaraya* this);
 void func_80ADF730(EnTakaraya* this, PlayState* play);
 void func_80ADF7B8(EnTakaraya* this);
 void func_80ADF7CC(EnTakaraya* this, PlayState* play);
-s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void EnTakaraya_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx);
 
 ActorInit En_Takaraya_InitVars = {
-    ACTOR_EN_TAKARAYA,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
-    sizeof(EnTakaraya),
-    (ActorFunc)EnTakaraya_Init,
-    (ActorFunc)EnTakaraya_Destroy,
-    (ActorFunc)EnTakaraya_Update,
-    (ActorFunc)EnTakaraya_Draw,
+    /**/ ACTOR_EN_TAKARAYA,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BG,
+    /**/ sizeof(EnTakaraya),
+    /**/ EnTakaraya_Init,
+    /**/ EnTakaraya_Destroy,
+    /**/ EnTakaraya_Update,
+    /**/ EnTakaraya_Draw,
 };
 
 TexturePtr sEyesUpTextures[] = {
@@ -65,7 +62,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 
-u32 sTexturesDesegmented = false;
+static s32 sTexturesDesegmented = false;
 
 u16 D_80ADFB2C[PLAYER_FORM_MAX] = {
     0x76D, // PLAYER_FORM_FIERCE_DEITY
@@ -76,11 +73,11 @@ u16 D_80ADFB2C[PLAYER_FORM_MAX] = {
 };
 
 u8 D_80ADFB38[PLAYER_FORM_MAX][2] = {
-    { 5, 5 },   // PLAYER_FORM_FIERCE_DEITY
-    { 12, 5 },  // PLAYER_FORM_GORON
-    { 4, 4 },   // PLAYER_FORM_ZORA
-    { 42, 41 }, // PLAYER_FORM_DEKU
-    { 5, 5 },   // PLAYER_FORM_HUMAN
+    { GI_RUPEE_PURPLE, GI_RUPEE_PURPLE }, // PLAYER_FORM_FIERCE_DEITY
+    { GI_HEART_PIECE, GI_RUPEE_PURPLE },  // PLAYER_FORM_GORON
+    { GI_RUPEE_RED, GI_RUPEE_RED },       // PLAYER_FORM_ZORA
+    { GI_DEKU_NUTS_10, GI_DEKU_NUTS_5 },  // PLAYER_FORM_DEKU
+    { GI_RUPEE_PURPLE, GI_RUPEE_PURPLE }, // PLAYER_FORM_HUMAN
 };
 
 u16 D_80ADFB44[PLAYER_FORM_MAX] = {
@@ -109,6 +106,7 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, TREASURE_CHEST_SHOP_GAL_LIMB_MAX);
     this->switchFlag = EN_TAKARAYA_GET_SWITCH_FLAG(thisx);
     thisx->params &= 0xFF;
+
     if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sEyesDownTextures); i++) {
             sEyesUpTextures[i] = Lib_SegmentedToVirtual(sEyesUpTextures[i]);
@@ -116,6 +114,7 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
         }
         sTexturesDesegmented = true;
     }
+
     this->eyeTexIndex = 2;
     if (gSaveContext.save.entrance == ENTRANCE(TREASURE_CHEST_SHOP, 1)) {
         Audio_StopSubBgm();
@@ -174,7 +173,7 @@ void EnTakaraya_Wait(EnTakaraya* this, PlayState* play) {
             Animation_MorphToLoop(&this->skelAnime, &object_bg_Anim_009890, -4.0f);
         }
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (Text_GetFaceReaction(play, FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL) == 0) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00A280, -4.0f);
         }
@@ -190,16 +189,16 @@ void EnTakaraya_Wait(EnTakaraya* this, PlayState* play) {
 }
 
 void EnTakaraya_SpawnWalls(EnTakaraya* this, PlayState* play) {
-    u8 var_v1;
+    u8 getItemId;
 
     if (Flags_GetSwitch(play, this->formSwitchFlag)) {
-        var_v1 = D_80ADFB38[GET_PLAYER_FORM][1];
+        getItemId = D_80ADFB38[GET_PLAYER_FORM][1];
     } else {
-        var_v1 = D_80ADFB38[GET_PLAYER_FORM][0];
+        getItemId = D_80ADFB38[GET_PLAYER_FORM][0];
     }
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_OBJ_TAKARAYA_WALL, 0.0f, 0.0f, 0.0f, 0, 0, 5,
-                                  ((var_v1 << 5) + this->actor.params) + 0xB000, this->actor.csId, HALFDAYBIT_ALL,
-                                  NULL);
+                                  (ENBOX_TYPE_BIG_SWITCH_FLAG << 12) + (getItemId << 5) + this->actor.params,
+                                  this->actor.csId, HALFDAYBIT_ALL, NULL);
 }
 
 void EnTakaraya_SetupTalk(EnTakaraya* this) {
@@ -322,7 +321,7 @@ void func_80ADF520(EnTakaraya* this, PlayState* play) {
 }
 
 void func_80ADF608(EnTakaraya* this, PlayState* play) {
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
     this->unk2AD = true;
     this->actionFunc = func_80ADF654;
 }
@@ -353,7 +352,7 @@ void func_80ADF6DC(EnTakaraya* this) {
 
 void func_80ADF730(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80ADF7B8(this);
     } else {

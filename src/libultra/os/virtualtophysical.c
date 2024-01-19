@@ -1,14 +1,12 @@
-#include "PR/ultratypes.h"
-#include "PR/osint.h"
+#include "ultra64.h"
 #include "libc/stdint.h"
-#include "global.h"
 
-uintptr_t osVirtualToPhysical(void* virtualAddress) {
-    if (((uintptr_t)virtualAddress >= 0x80000000) && ((uintptr_t)virtualAddress < 0xA0000000)) {
-        return (uintptr_t)virtualAddress & 0x1FFFFFFF;
-    } else if (((uintptr_t)virtualAddress >= 0xA0000000) && ((uintptr_t)virtualAddress < 0xC0000000)) {
-        return (uintptr_t)virtualAddress & 0x1FFFFFFF;
+uintptr_t osVirtualToPhysical(void* addr) {
+    if (IS_KSEG0(addr)) {
+        return K0_TO_PHYS(addr);
+    } else if (IS_KSEG1(addr)) {
+        return K1_TO_PHYS(addr);
     } else {
-        return __osProbeTLB(virtualAddress);
+        return __osProbeTLB(addr);
     }
 }

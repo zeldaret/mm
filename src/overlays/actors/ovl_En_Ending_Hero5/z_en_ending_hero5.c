@@ -19,15 +19,15 @@ void EnEndingHero5_SetupIdle(EnEndingHero5* this);
 void EnEndingHero5_Idle(EnEndingHero5* this, PlayState* play);
 
 ActorInit En_Ending_Hero5_InitVars = {
-    ACTOR_EN_ENDING_HERO5,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DAIKU,
-    sizeof(EnEndingHero5),
-    (ActorFunc)EnEndingHero5_Init,
-    (ActorFunc)EnEndingHero5_Destroy,
-    (ActorFunc)EnEndingHero5_Update,
-    (ActorFunc)EnEndingHero5_Draw,
+    /**/ ACTOR_EN_ENDING_HERO5,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DAIKU,
+    /**/ sizeof(EnEndingHero5),
+    /**/ EnEndingHero5_Init,
+    /**/ EnEndingHero5_Destroy,
+    /**/ EnEndingHero5_Update,
+    /**/ EnEndingHero5_Draw,
 };
 
 void EnEndingHero5_Init(Actor* thisx, PlayState* play) {

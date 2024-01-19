@@ -49,15 +49,15 @@ static s32 D_80B2B2F0 = 0;
 static Actor* D_80B2B2F4 = NULL;
 
 ActorInit En_Fish2_InitVars = {
-    ACTOR_EN_FISH2,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_FB,
-    sizeof(EnFish2),
-    (ActorFunc)EnFish2_Init,
-    (ActorFunc)EnFish2_Destroy,
-    (ActorFunc)EnFish2_Update,
-    (ActorFunc)EnFish2_Draw,
+    /**/ ACTOR_EN_FISH2,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_FB,
+    /**/ sizeof(EnFish2),
+    /**/ EnFish2_Init,
+    /**/ EnFish2_Destroy,
+    /**/ EnFish2_Update,
+    /**/ EnFish2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -295,7 +295,7 @@ s32 func_80B2899C(EnFish2* this, PlayState* play) {
 }
 
 void func_80B289DC(EnFish2* this, PlayState* play) {
-    WaterBox* sp2C;
+    WaterBox* waterBox;
 
     if (this->unk_2B4 != 0) {
         this->unk_348 = 0;
@@ -314,7 +314,7 @@ void func_80B289DC(EnFish2* this, PlayState* play) {
                 this->actor.gravity = 0.0f;
             }
         } else if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                        &this->unk_334, &sp2C)) {
+                                        &this->unk_334, &waterBox)) {
             if ((this->unk_334 != BGCHECK_Y_MIN) && (this->actor.world.pos.y < (this->unk_334 - this->unk_2D8))) {
                 this->actor.velocity.y = this->actor.world.rot.x * 0.001f * -0.1f;
                 if (this->actionFunc == func_80B297FC) {
@@ -350,7 +350,7 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
     Actor* itemAction = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
     WaterBox* waterbox;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80B29128(this);
         return;
     }
@@ -922,10 +922,10 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
 
     if ((this->animIndex == FISH2_ANIM_4) &&
         (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 31.0f))) {
-        WaterBox* sp78;
+        WaterBox* waterBox;
 
         if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_334,
-                                 &sp78)) {
+                                 &waterBox)) {
             Vec3f sp6C;
             s32 i;
 
@@ -983,7 +983,7 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
         Vec3f sp5C;
 
         if (this->actor.params == 0) {
-            Math_SmoothStepToS(&this->actor.world.rot.x, this->unk_348, 1, this->unk_34C + 200, 0);
+            Math_SmoothStepToS(&this->actor.world.rot.x, this->unk_348, 1, this->unk_34C + 0xC8, 0);
             if (this->actionFunc != func_80B297FC) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_34A, 1, 0xBB8, 0);
             }
@@ -1112,15 +1112,15 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (!ptr->unk_00) {
-            TexturePtr phi_v0;
+            TexturePtr texture;
 
             if (Rand_ZeroOne() < 0.5f) {
-                phi_v0 = gEffBubble2Tex;
+                texture = gEffBubble2Tex;
             } else {
-                phi_v0 = gEffBubble1Tex;
+                texture = gEffBubble1Tex;
             }
 
-            ptr->unk_20 = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(phi_v0));
+            ptr->unk_20 = (TexturePtr)OS_K0_TO_PHYSICAL(SEGMENTED_TO_K0(texture));
             ptr->unk_00 = true;
             ptr->unk_04 = *vec;
             ptr->unk_04.x += Rand_CenteredFloat(ptr->unk_00 + (this->unk_330 * 4000.0f));
@@ -1136,7 +1136,7 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
 
 void func_80B2AF80(EnFish2* this, PlayState* play) {
     EnFish2UnkStruct* ptr = &this->unk_3F8[0];
-    WaterBox* sp90;
+    WaterBox* waterBox;
     f32 sp8C;
     s32 i;
 
@@ -1154,7 +1154,7 @@ void func_80B2AF80(EnFish2* this, PlayState* play) {
                 ptr->unk_04.y += 1.0f + ((Rand_ZeroOne() - 0.3f) * 1.2f);
                 ptr->unk_04.z += (0.3f + (Rand_ZeroOne() * 0.5f)) - 0.55f;
                 sp8C = ptr->unk_04.y;
-                if (!WaterBox_GetSurface1(play, &play->colCtx, ptr->unk_04.x, ptr->unk_04.z, &sp8C, &sp90)) {
+                if (!WaterBox_GetSurface1(play, &play->colCtx, ptr->unk_04.x, ptr->unk_04.z, &sp8C, &waterBox)) {
                     ptr->unk_00 = 0;
                 } else if (sp8C < ptr->unk_04.y) {
                     Vec3f sp7C;

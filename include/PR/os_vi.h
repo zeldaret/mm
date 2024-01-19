@@ -4,27 +4,17 @@
 #include "PR/ultratypes.h"
 #include "PR/os_message.h"
 
-/* Special Features */
-#define OS_VI_GAMMA_ON          (1 << 0)
-#define OS_VI_GAMMA_OFF         (1 << 1)
-#define OS_VI_GAMMA_DITHER_ON   (1 << 2)
-#define OS_VI_GAMMA_DITHER_OFF  (1 << 3)
-#define OS_VI_DIVOT_ON          (1 << 4)
-#define OS_VI_DIVOT_OFF         (1 << 5)
-#define OS_VI_DITHER_FILTER_ON  (1 << 6)
-#define OS_VI_DITHER_FILTER_OFF (1 << 7)
-
-#define OS_VI_GAMMA         0x08
-#define OS_VI_GAMMA_DITHER  0x04
-#define OS_VI_DIVOT         0x10
-#define OS_VI_DITHER_FILTER 0x10000
-#define OS_VI_UNK1          0x1
-#define OS_VI_UNK2          0x2
-#define OS_VI_UNK40         0x40
-#define OS_VI_UNK100        0x100
-#define OS_VI_UNK200        0x200
-#define OS_VI_UNK1000       0x1000
-#define OS_VI_UNK2000       0x2000
+/*
+ * Video Interface (VI) special features
+ */
+#define	OS_VI_GAMMA_ON			0x0001
+#define	OS_VI_GAMMA_OFF			0x0002
+#define	OS_VI_GAMMA_DITHER_ON		0x0004
+#define	OS_VI_GAMMA_DITHER_OFF		0x0008
+#define	OS_VI_DIVOT_ON			0x0010
+#define	OS_VI_DIVOT_OFF			0x0020
+#define	OS_VI_DITHER_FILTER_ON		0x0040
+#define	OS_VI_DITHER_FILTER_OFF		0x0080
 
 typedef struct {
     /* 0x00 */ u32 ctrl;
@@ -115,6 +105,12 @@ typedef struct {
 
 #define OS_VI_UNK28         28
 
+extern OSViMode osViModeNtscHpf1;
+extern OSViMode osViModePalLan1;
+extern OSViMode osViModeNtscHpn1;
+extern OSViMode osViModeNtscLan1;
+extern OSViMode osViModeMpalLan1;
+extern OSViMode osViModeFpalLan1;
 
 extern OSViMode osViModeNtscHpf1;
 extern OSViMode osViModePalLan1;
@@ -127,7 +123,7 @@ void* osViGetCurrentFramebuffer(void);
 void* osViGetNextFramebuffer(void);
 void osViSetXScale(f32 value);
 void osViSetYScale(f32 value);
-void osViExtendVStart(u32 a0);
+void osViExtendVStart(u32 value);
 void osViSetSpecialFeatures(u32 func);
 void osViSetMode(OSViMode* modep);
 void osViSetEvent(OSMesgQueue* mq, OSMesg m, u32 retraceCount);

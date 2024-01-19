@@ -25,15 +25,15 @@ void func_80B3C4E0(ObjGhaka* this, PlayState* play);
 void func_80B3C624(ObjGhaka* this, PlayState* play);
 
 ActorInit Obj_Ghaka_InitVars = {
-    ACTOR_OBJ_GHAKA,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GHAKA,
-    sizeof(ObjGhaka),
-    (ActorFunc)ObjGhaka_Init,
-    (ActorFunc)ObjGhaka_Destroy,
-    (ActorFunc)ObjGhaka_Update,
-    (ActorFunc)ObjGhaka_Draw,
+    /**/ ACTOR_OBJ_GHAKA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_GHAKA,
+    /**/ sizeof(ObjGhaka),
+    /**/ ObjGhaka_Init,
+    /**/ ObjGhaka_Destroy,
+    /**/ ObjGhaka_Update,
+    /**/ ObjGhaka_Draw,
 };
 
 static Vec3f D_80B3C960 = { 0.0f, 0.0f, 0.0f };
@@ -72,7 +72,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 yaw = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         func_80B3C29C(this);
     } else if ((this->dyna.actor.xzDistToPlayer < 100.0f) || this->dyna.actor.isLockedOn) {
         if ((yaw <= -0x5556) || (yaw >= 0x5556)) {

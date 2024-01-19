@@ -18,15 +18,15 @@ void ObjTokeiTobira_Draw(Actor* thisx, PlayState* play);
 void ObjTokeiTobira_StartCutscene(ObjTokeiTobira* this);
 
 ActorInit Obj_Tokei_Tobira_InitVars = {
-    ACTOR_OBJ_TOKEI_TOBIRA,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_TOKEI_TOBIRA,
-    sizeof(ObjTokeiTobira),
-    (ActorFunc)ObjTokeiTobira_Init,
-    (ActorFunc)ObjTokeiTobira_Destroy,
-    (ActorFunc)ObjTokeiTobira_Update,
-    (ActorFunc)ObjTokeiTobira_Draw,
+    /**/ ACTOR_OBJ_TOKEI_TOBIRA,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_TOKEI_TOBIRA,
+    /**/ sizeof(ObjTokeiTobira),
+    /**/ ObjTokeiTobira_Init,
+    /**/ ObjTokeiTobira_Destroy,
+    /**/ ObjTokeiTobira_Update,
+    /**/ ObjTokeiTobira_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

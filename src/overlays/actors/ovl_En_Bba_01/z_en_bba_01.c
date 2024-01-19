@@ -29,15 +29,15 @@ void EnBba01_FaceFoward(EnHy* this, PlayState* play);
 void EnBba01_Talk(EnHy* this, PlayState* play);
 
 ActorInit En_Bba_01_InitVars = {
-    ACTOR_EN_BBA_01,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnBba01),
-    (ActorFunc)EnBba01_Init,
-    (ActorFunc)EnBba01_Destroy,
-    (ActorFunc)EnBba01_Update,
-    (ActorFunc)EnBba01_Draw,
+    /**/ ACTOR_EN_BBA_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnBba01),
+    /**/ EnBba01_Init,
+    /**/ EnBba01_Destroy,
+    /**/ EnBba01_Update,
+    /**/ EnBba01_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -130,7 +130,7 @@ void EnBba01_UpdateModel(EnBba01* this, PlayState* play) {
 s32 EnBba01_TestIsTalking(EnBba01* this, PlayState* play) {
     s32 isTalking = false;
 
-    if (Actor_ProcessTalkRequest(&this->enHy.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->enHy.actor, &play->state)) {
         isTalking = true;
         this->enHy.textId = 0x10B9; // Invalid textId, produces empty textbox
         this->enHy.prevTrackTarget = this->enHy.trackTarget;
@@ -143,12 +143,13 @@ s32 EnBba01_TestIsTalking(EnBba01* this, PlayState* play) {
 }
 
 s32 func_809CC270(EnBba01* this, PlayState* play) {
-    s16 x;
-    s16 y;
+    s16 screenPosX;
+    s16 screenPosY;
 
-    Actor_GetScreenPos(play, &this->enHy.actor, &x, &y);
+    Actor_GetScreenPos(play, &this->enHy.actor, &screenPosX, &screenPosY);
     //! @bug: Both x and y conditionals are always true, || should be an &&
-    if (!this->enHy.waitingOnInit && ((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
+    if (!this->enHy.waitingOnInit && ((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
+        ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT))) {
         Actor_OfferTalkExchangeEquiCylinder(&this->enHy.actor, play, 30.0f, PLAYER_IA_MAGIC_BEANS);
     }
     return true;
@@ -265,8 +266,8 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.headObjectSlot].segment);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjectSlot].segment);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.headObjectSlot].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelLowerObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -288,8 +289,8 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     }
 
     if ((limbIndex == BBA_LIMB_BAG) || (limbIndex == BBA_LIMB_TORSO) || (limbIndex == BBA_LIMB_LEFT_FOREARM)) {
-        rot->y += (s16)(Math_SinS(this->enHy.fidgetTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->enHy.fidgetTableZ[limbIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->enHy.fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->enHy.fidgetTableZ[limbIndex]) * 200.0f);
     }
 
     return false;
@@ -304,7 +305,7 @@ void EnBba01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
-        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->enHy.skelUpperObjectSlot].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

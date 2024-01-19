@@ -1,25 +1,24 @@
-#include "global.h"
+#include "ultra64.h"
 
 void osStopThread(OSThread* t) {
-    register u32 saveMask;
+    register u32 saveMask = __osDisableInt();
     register u16 state;
 
-    saveMask = __osDisableInt();
-
     if (t == NULL) {
-        state = 4;
+        state = OS_STATE_RUNNING;
     } else {
         state = t->state;
     }
 
     switch (state) {
-        case 4:
-            __osRunningThread->state = 1;
+        case OS_STATE_RUNNING:
+            __osRunningThread->state = OS_STATE_STOPPED;
             __osEnqueueAndYield(NULL);
             break;
-        case 2:
-        case 8:
-            t->state = 1;
+
+        case OS_STATE_RUNNABLE:
+        case OS_STATE_WAITING:
+            t->state = OS_STATE_STOPPED;
             __osDequeueThread(t->queue, t);
             break;
     }

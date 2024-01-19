@@ -33,15 +33,15 @@ s32 D_80BA36B4;
 f32 D_80BA36B8;
 
 ActorInit Obj_Nozoki_InitVars = {
-    ACTOR_OBJ_NOZOKI,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjNozoki),
-    (ActorFunc)ObjNozoki_Init,
-    (ActorFunc)ObjNozoki_Destroy,
-    (ActorFunc)ObjNozoki_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_NOZOKI,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjNozoki),
+    /**/ ObjNozoki_Init,
+    /**/ ObjNozoki_Destroy,
+    /**/ ObjNozoki_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -350,7 +350,7 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
                     Actor_Kill(&this->dyna.actor);
                 }
 
-                this->dyna.actor.shape.rot.x = -0x1F40 - (s16)(sp38 * 400.0f);
+                this->dyna.actor.shape.rot.x = -0x1F40 - TRUNCF_BINANG(sp38 * 400.0f);
             }
         }
     }
@@ -424,7 +424,7 @@ void func_80BA3230(ObjNozoki* this, PlayState* play) {
                 }
             }
 
-            if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+            if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
                 ObjNozoki_SetupAction(this, func_80BA3344);
             } else {
                 Actor_OfferTalk(&this->dyna.actor, play, 50.0f);

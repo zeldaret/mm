@@ -1,22 +1,22 @@
-#include "global.h"
+#include "ultra64.h"
 
 s32 __osPiRawStartDma(s32 direction, uintptr_t devAddr, void* dramAddr, size_t size) {
-    register int status = HW_REG(PI_STATUS_REG, u32);
+    register int status = IO_READ(PI_STATUS_REG);
 
     while (status & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {
-        status = HW_REG(PI_STATUS_REG, u32);
+        status = IO_READ(PI_STATUS_REG);
     }
 
-    HW_REG(PI_DRAM_ADDR_REG, u32) = osVirtualToPhysical(dramAddr);
+    IO_WRITE(PI_DRAM_ADDR_REG, osVirtualToPhysical(dramAddr));
 
-    HW_REG(PI_CART_ADDR_REG, u32) = (((uintptr_t)osRomBase | devAddr) & 0x1FFFFFFF);
+    IO_WRITE(PI_CART_ADDR_REG, K1_TO_PHYS((uintptr_t)osRomBase | devAddr));
 
     switch (direction) {
         case OS_READ:
-            HW_REG(PI_WR_LEN_REG, u32) = size - 1;
+            IO_WRITE(PI_WR_LEN_REG, size - 1);
             break;
         case OS_WRITE:
-            HW_REG(PI_RD_LEN_REG, u32) = size - 1;
+            IO_WRITE(PI_RD_LEN_REG, size - 1);
             break;
         default:
             return -1;

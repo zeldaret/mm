@@ -37,15 +37,15 @@ void BgIkanaShutter_SetupDoNothing(BgIkanaShutter* this);
 void BgIkanaShutter_DoNothing(BgIkanaShutter* this, PlayState* play);
 
 ActorInit Bg_Ikana_Shutter_InitVars = {
-    ACTOR_BG_IKANA_SHUTTER,
-    ACTORCAT_SWITCH,
-    FLAGS,
-    OBJECT_IKANA_OBJ,
-    sizeof(BgIkanaShutter),
-    (ActorFunc)BgIkanaShutter_Init,
-    (ActorFunc)BgIkanaShutter_Destroy,
-    (ActorFunc)BgIkanaShutter_Update,
-    (ActorFunc)BgIkanaShutter_Draw,
+    /**/ ACTOR_BG_IKANA_SHUTTER,
+    /**/ ACTORCAT_SWITCH,
+    /**/ FLAGS,
+    /**/ OBJECT_IKANA_OBJ,
+    /**/ sizeof(BgIkanaShutter),
+    /**/ BgIkanaShutter_Init,
+    /**/ BgIkanaShutter_Destroy,
+    /**/ BgIkanaShutter_Update,
+    /**/ BgIkanaShutter_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -55,7 +55,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-s32 BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, PlayState* play) {
+bool BgIkanaShutter_AllSwitchesPressed(BgIkanaShutter* this, PlayState* play) {
     return Flags_GetSwitch(play, BGIKANASHUTTER_GET_SWITCH_FLAG(&this->dyna.actor)) &&
            Flags_GetSwitch(play, BGIKANASHUTTER_GET_SWITCH_FLAG(&this->dyna.actor) + 1) &&
            Flags_GetSwitch(play, BGIKANASHUTTER_GET_SWITCH_FLAG(&this->dyna.actor) + 2) &&

@@ -31,15 +31,15 @@ void BgNumaHana_SetupOpenedIdle(BgNumaHana* this);
 void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play);
 
 ActorInit Bg_Numa_Hana_InitVars = {
-    ACTOR_BG_NUMA_HANA,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_NUMA_OBJ,
-    sizeof(BgNumaHana),
-    (ActorFunc)BgNumaHana_Init,
-    (ActorFunc)BgNumaHana_Destroy,
-    (ActorFunc)BgNumaHana_Update,
-    (ActorFunc)BgNumaHana_Draw,
+    /**/ ACTOR_BG_NUMA_HANA,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_NUMA_OBJ,
+    /**/ sizeof(BgNumaHana),
+    /**/ BgNumaHana_Init,
+    /**/ BgNumaHana_Destroy,
+    /**/ BgNumaHana_Update,
+    /**/ BgNumaHana_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -133,7 +133,7 @@ void BgNumaHana_UpdatePetalPosRots(BgNumaHana* this) {
 void BgNumaHana_UpdateSettleRotation(s16* settleRotZ, s16* settleAngle, f32* settleScale, f32 scaleStep) {
     *settleAngle += 0x32C8;
     Math_StepToF(settleScale, 0.0f, scaleStep);
-    *settleRotZ += (s16)(Math_SinS(*settleAngle) * *settleScale);
+    *settleRotZ += TRUNCF_BINANG(Math_SinS(*settleAngle) * *settleScale);
 }
 
 void BgNumaHana_Init(Actor* thisx, PlayState* play) {
@@ -405,7 +405,7 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
     }
 
     objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_SYOKUDAI);
-    if ((objectSlot > OBJECT_SLOT_NONE) && (Object_IsLoaded(&play->objectCtx, objectSlot))) {
+    if ((objectSlot > OBJECT_SLOT_NONE) && Object_IsLoaded(&play->objectCtx, objectSlot)) {
         Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 64.5f,
                                      this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(1.5f, 1.5f, 1.5f, MTXMODE_APPLY);

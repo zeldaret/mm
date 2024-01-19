@@ -26,15 +26,15 @@ void EnSyatekiCrow_Dead(EnSyatekiCrow* this, PlayState* play);
 static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
 ActorInit En_Syateki_Crow_InitVars = {
-    ACTOR_EN_SYATEKI_CROW,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_CROW,
-    sizeof(EnSyatekiCrow),
-    (ActorFunc)EnSyatekiCrow_Init,
-    (ActorFunc)EnSyatekiCrow_Destroy,
-    (ActorFunc)EnSyatekiCrow_Update,
-    (ActorFunc)EnSyatekiCrow_Draw,
+    /**/ ACTOR_EN_SYATEKI_CROW,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_CROW,
+    /**/ sizeof(EnSyatekiCrow),
+    /**/ EnSyatekiCrow_Init,
+    /**/ EnSyatekiCrow_Destroy,
+    /**/ EnSyatekiCrow_Update,
+    /**/ EnSyatekiCrow_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -292,9 +292,9 @@ s32 EnSyatekiCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
     EnSyatekiCrow* this = THIS;
 
     if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {
-        rot->y += (s16)(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PI / 4)));
+        rot->y += TRUNCF_BINANG(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PI / 4)));
     } else if (limbIndex == OBJECT_CROW_LIMB_TAIL) {
-        rot->y += (s16)(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
+        rot->y += TRUNCF_BINANG(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
     }
 
     return false;

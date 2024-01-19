@@ -11,6 +11,7 @@ typedef void (*EnHiddenNutsActionFunc)(struct EnHiddenNuts*, PlayState*);
 #define ENHIDDENNUTS_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define ENHIDDENNUTS_GET_PATH_INDEX(thisx) (((thisx)->params >> 7) & 0x1F)
 
+#define ENHIDDENNUTS_SWITCH_FLAG_NONE 0x7F
 #define ENHIDDENNUTS_PATH_INDEX_NONE 0x1F
 #define ENHIDDENNUTS_PATH_INDEX_NONE_ALT 0x3F
 

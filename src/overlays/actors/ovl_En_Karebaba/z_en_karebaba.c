@@ -40,15 +40,15 @@ void EnKarebaba_SetupDead(EnKarebaba* this);
 void EnKarebaba_Dead(EnKarebaba* this, PlayState* play);
 
 ActorInit En_Karebaba_InitVars = {
-    ACTOR_EN_KAREBABA,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DEKUBABA,
-    sizeof(EnKarebaba),
-    (ActorFunc)EnKarebaba_Init,
-    (ActorFunc)EnKarebaba_Destroy,
-    (ActorFunc)EnKarebaba_Update,
-    (ActorFunc)EnKarebaba_Draw,
+    /**/ ACTOR_EN_KAREBABA,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DEKUBABA,
+    /**/ sizeof(EnKarebaba),
+    /**/ EnKarebaba_Init,
+    /**/ EnKarebaba_Destroy,
+    /**/ EnKarebaba_Update,
+    /**/ EnKarebaba_Draw,
 };
 
 static ColliderCylinderInit sHurtCylinderInit = {
@@ -485,7 +485,7 @@ void EnKarebaba_SetupDeadItemDrop(EnKarebaba* this, PlayState* play) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.shape.shadowScale = 3.0f;
-    func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
     this->timer = 200;
     this->actor.flags &= ~ACTOR_FLAG_20;
     this->drawDmgEffAlpha = 0.0f;
@@ -553,7 +553,7 @@ void EnKarebaba_Regrow(EnKarebaba* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
         if (this->actor.params == ENKAREBABA_1) {
-            func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
         }
         EnKarebaba_SetupIdle(this);
     }
@@ -590,11 +590,7 @@ void EnKarebaba_Update(Actor* thisx, PlayState* play2) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.375f;
-            if (this->drawDmgEffScale > 0.75f) {
-                this->drawDmgEffScale = 0.75f;
-            } else {
-                this->drawDmgEffScale = this->drawDmgEffScale;
-            }
+            this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.75f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.75f / 40)) {
             Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }

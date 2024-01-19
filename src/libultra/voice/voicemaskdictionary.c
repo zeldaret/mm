@@ -4,10 +4,10 @@
  * Mask words registered in the voice recognition system
  */
 
+#include "ultra64.h"
 #include "PR/controller_voice.h"
 #include "PR/os_voice.h"
 #include "PR/controller.h"
-#include "functions.h"
 #include "macros.h"
 
 s32 osVoiceMaskDictionary(OSVoiceHandle* hd, u8* maskPattern, int size) {

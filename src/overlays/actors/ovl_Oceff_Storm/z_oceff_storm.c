@@ -20,15 +20,15 @@ void func_80981B48(OceffStorm* this, PlayState* play);
 void OceffStorm_Draw2(Actor* thisx, PlayState* play);
 
 ActorInit Oceff_Storm_InitVars = {
-    ACTOR_OCEFF_STORM,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(OceffStorm),
-    (ActorFunc)OceffStorm_Init,
-    (ActorFunc)OceffStorm_Destroy,
-    (ActorFunc)OceffStorm_Update,
-    (ActorFunc)OceffStorm_Draw,
+    /**/ ACTOR_OCEFF_STORM,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(OceffStorm),
+    /**/ OceffStorm_Init,
+    /**/ OceffStorm_Destroy,
+    /**/ OceffStorm_Update,
+    /**/ OceffStorm_Draw,
 };
 
 void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc) {

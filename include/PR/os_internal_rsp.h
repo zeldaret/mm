@@ -5,7 +5,7 @@
 
 u32 __osSpGetStatus(void);
 void __osSpSetStatus(u32 data);
-s32 __osSpSetPc(void* pc);
-s32 __osSpRawStartDma(s32 direction, void* devAddr, void* dramAddr, size_t size);
+s32 __osSpSetPc(u32 pc);
+s32 __osSpRawStartDma(s32 direction, u32 devAddr, void* dramAddr, size_t size);
 
 #endif

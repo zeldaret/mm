@@ -1,7 +1,7 @@
 #ifndef Z64SPEED_METER_H
 #define Z64SPEED_METER_H
 
-#include "PR/ultratypes.h"
+#include "ultra64.h"
 
 struct GameState;
 struct GraphicsContext;

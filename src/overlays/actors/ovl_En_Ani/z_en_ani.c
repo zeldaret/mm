@@ -41,15 +41,15 @@ void EnAni_Talk(EnAni* this, PlayState* play);
 void EnAni_IdleStanding(EnAni* this, PlayState* play);
 
 ActorInit En_Ani_InitVars = {
-    ACTOR_EN_ANI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ANI,
-    sizeof(EnAni),
-    (ActorFunc)EnAni_Init,
-    (ActorFunc)EnAni_Destroy,
-    (ActorFunc)EnAni_Update,
-    (ActorFunc)EnAni_Draw,
+    /**/ ACTOR_EN_ANI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ANI,
+    /**/ sizeof(EnAni),
+    /**/ EnAni_Init,
+    /**/ EnAni_Destroy,
+    /**/ EnAni_Update,
+    /**/ EnAni_Draw,
 };
 
 // two different colliders, but only one init for both
@@ -182,7 +182,7 @@ void EnAni_Talk(EnAni* this, PlayState* play) {
 
 void EnAni_IdleInPain(EnAni* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnAni_Talk;
     } else {
         // telling you not to take his rupees you knocked from the tree
@@ -294,13 +294,13 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     if (this->actor.xzDistToPlayer < 100.0f && !(this->stateFlags & ANI_STATE_CLIMBING)) {
-        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->chestRot, this->actor.focus.pos);
-        this->chestRot.x = this->chestRot.y = this->chestRot.z = 0;
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
+        this->torsoRot.x = this->torsoRot.y = this->torsoRot.z = 0;
     } else {
         Math_SmoothStepToS(&this->headRot.x, 0, 0x6, 0x1838, 0x64);
         Math_SmoothStepToS(&this->headRot.y, 0, 0x6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->chestRot.x, 0, 0x6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->chestRot.y, 0, 0x6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 0x6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 0x6, 0x1838, 0x64);
     }
 
     this->blinkFunc(this);

@@ -26,15 +26,15 @@ void ObjOshihiki_SetupFall(ObjOshihiki* this, PlayState* play);
 void ObjOshihiki_Fall(ObjOshihiki* this, PlayState* play);
 
 ActorInit Obj_Oshihiki_InitVars = {
-    ACTOR_OBJ_OSHIHIKI,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_DANGEON_KEEP,
-    sizeof(ObjOshihiki),
-    (ActorFunc)ObjOshihiki_Init,
-    (ActorFunc)ObjOshihiki_Destroy,
-    (ActorFunc)ObjOshihiki_Update,
-    (ActorFunc)ObjOshihiki_Draw,
+    /**/ ACTOR_OBJ_OSHIHIKI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_DANGEON_KEEP,
+    /**/ sizeof(ObjOshihiki),
+    /**/ ObjOshihiki_Init,
+    /**/ ObjOshihiki_Destroy,
+    /**/ ObjOshihiki_Update,
+    /**/ ObjOshihiki_Draw,
 };
 
 static f32 sScales[] = { 0.1f, 0.2f, 0.4f, 0.1f, 0.2f, 0.4f };

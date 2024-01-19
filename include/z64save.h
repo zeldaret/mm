@@ -5,6 +5,7 @@
 #include "PR/os.h"
 #include "z64item.h"
 #include "z64math.h"
+#include "unk.h"
 
 struct GameState;
 struct PlayState;
@@ -33,16 +34,16 @@ typedef enum RespawnMode {
 #define SAVE_BUFFER_SIZE 0x4000
 
 typedef enum {
-    /* 0  */ MAGIC_STATE_IDLE, // Regular gameplay
-    /* 1  */ MAGIC_STATE_CONSUME_SETUP, // Sets the speed at which the magic border flashes
-    /* 2  */ MAGIC_STATE_CONSUME, // Consume magic until target is reached or no more magic is available
-    /* 3  */ MAGIC_STATE_METER_FLASH_1, // Flashes border
-    /* 4  */ MAGIC_STATE_METER_FLASH_2, // Flashes border and draws yellow magic to preview target consumption
-    /* 5  */ MAGIC_STATE_RESET, // Reset colors and return to idle
-    /* 6  */ MAGIC_STATE_METER_FLASH_3, // Flashes border with no additional behaviour
-    /* 7  */ MAGIC_STATE_CONSUME_LENS, // Magic slowly consumed by Lens of Truth
-    /* 8  */ MAGIC_STATE_STEP_CAPACITY, // Step `magicCapacity` to full capacity
-    /* 9  */ MAGIC_STATE_FILL, // Add magic until magicFillTarget is reached
+    /*  0 */ MAGIC_STATE_IDLE, // Regular gameplay
+    /*  1 */ MAGIC_STATE_CONSUME_SETUP, // Sets the speed at which the magic border flashes
+    /*  2 */ MAGIC_STATE_CONSUME, // Consume magic until target is reached or no more magic is available
+    /*  3 */ MAGIC_STATE_METER_FLASH_1, // Flashes border
+    /*  4 */ MAGIC_STATE_METER_FLASH_2, // Flashes border and draws yellow magic to preview target consumption
+    /*  5 */ MAGIC_STATE_RESET, // Reset colors and return to idle
+    /*  6 */ MAGIC_STATE_METER_FLASH_3, // Flashes border with no additional behaviour
+    /*  7 */ MAGIC_STATE_CONSUME_LENS, // Magic slowly consumed by Lens of Truth
+    /*  8 */ MAGIC_STATE_STEP_CAPACITY, // Step `magicCapacity` to full capacity
+    /*  9 */ MAGIC_STATE_FILL, // Add magic until magicFillTarget is reached
     /* 10 */ MAGIC_STATE_CONSUME_GORON_ZORA_SETUP,
     /* 11 */ MAGIC_STATE_CONSUME_GORON_ZORA, // Magic slowly consumed by Goron spiked rolling or Zora electric barrier.
     /* 12 */ MAGIC_STATE_CONSUME_GIANTS_MASK // Magic slowly consumed by Giant's Mask
@@ -239,7 +240,7 @@ typedef struct PermanentSceneFlags {
     /* 0x08 */ u32 switch1;
     /* 0x0C */ u32 clearedRoom;
     /* 0x10 */ u32 collectible;
-    /* 0x14 */ u32 unk_14; // varies based on scene. For dungeons, floors visited. 
+    /* 0x14 */ u32 unk_14; // varies based on scene. For dungeons, floors visited.
     /* 0x18 */ u32 rooms;
 } PermanentSceneFlags; // size = 0x1C
 
@@ -274,7 +275,7 @@ typedef struct SavePlayerData {
     /* 0x1D */ u8 isDoubleMagicAcquired;              // "magic_ability"
     /* 0x1E */ u8 doubleDefense;                      // "life_ability"
     /* 0x1F */ u8 unk_1F;                             // "ocarina_round"
-    /* 0x20 */ u8 unk_20;                             // "first_memory"
+    /* 0x20 */ u8 owlWarpId; // See `OwlWarpId`, "first_memory"
     /* 0x22 */ u16 owlActivationFlags;                // "memory_warp_point"
     /* 0x24 */ u8 unk_24;                             // "last_warp_pt"
     /* 0x26 */ s16 savedSceneId;                      // "scene_data_ID"
@@ -323,7 +324,7 @@ typedef struct Save {
     /* 0x07 */ u8 linkAge;                              // "link_age"
     /* 0x08 */ s32 cutsceneIndex;                       // "day_time"
     /* 0x0C */ u16 time;                                // "zelda_time"
-    /* 0x0E */ u16 owlSaveLocation;
+    /* 0x0E */ u16 owlWarpId; // See `OwlWarpId` enum
     /* 0x10 */ s32 isNight;                             // "asahiru_fg"
     /* 0x14 */ s32 timeSpeedOffset;                     // "change_zelda_time"
     /* 0x18 */ s32 day;                                 // "totalday"
@@ -450,13 +451,17 @@ typedef enum {
 #define LINK_AGE_IN_YEARS (!LINK_IS_ADULT ? YEARS_CHILD : YEARS_ADULT)
 
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
+#define CURRENT_TIME ((void)0, gSaveContext.save.time)
 
 // The day begins at CLOCK_TIME(6, 0) so it must be offset.
 #define TIME_UNTIL_MOON_CRASH \
-    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)))
-#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)))
+    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(CURRENT_TIME - CLOCK_TIME(6, 0)))
+#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(CURRENT_TIME - CLOCK_TIME(6, 0)))
 
 #define GET_PLAYER_FORM ((void)0, gSaveContext.save.playerForm)
+
+#define GET_OWL_STATUE_ACTIVATED(owlWarpId) (((void)0, gSaveContext.save.saveInfo.playerData.owlActivationFlags) & (u16)gBitFlags[(owlWarpId)])
+#define SET_OWL_STATUE_ACTIVATED(owlWarpId) (gSaveContext.save.saveInfo.playerData.owlActivationFlags = (((void)0, gSaveContext.save.saveInfo.playerData.owlActivationFlags) | (u16)gBitFlags[(owlWarpId)]))
 
 #define SLOT(item) gItemSlots[item]
 #define AMMO(item) gSaveContext.save.saveInfo.inventory.ammo[SLOT(item)]
@@ -1017,7 +1022,10 @@ typedef enum {
 #define WEEKEVENTREG_51_08 PACK_WEEKEVENTREG_FLAG(51, 0x08)
 #define WEEKEVENTREG_51_10 PACK_WEEKEVENTREG_FLAG(51, 0x10)
 #define WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT PACK_WEEKEVENTREG_FLAG(51, 0x20)
-#define WEEKEVENTREG_51_40 PACK_WEEKEVENTREG_FLAG(51, 0x40)
+
+// Set by Kafei
+#define WEEKEVENTREG_COUPLES_MASK_CUTSCENE_FINISHED PACK_WEEKEVENTREG_FLAG(51, 0x40)
+
 #define WEEKEVENTREG_51_80 PACK_WEEKEVENTREG_FLAG(51, 0x80)
 
 // Protected Cremia
@@ -1055,7 +1063,7 @@ typedef enum {
 #define WEEKEVENTREG_TALKED_PART_TIMER_AS_GORON PACK_WEEKEVENTREG_FLAG(55, 0x04)
 #define WEEKEVENTREG_TALKED_PART_TIMER_AS_ZORA PACK_WEEKEVENTREG_FLAG(55, 0x08)
 #define WEEKEVENTREG_TALKED_PART_TIMER_AS_DEKU PACK_WEEKEVENTREG_FLAG(55, 0x10)
-#define WEEKEVENTREG_55_20 PACK_WEEKEVENTREG_FLAG(55, 0x20)
+#define WEEKEVENTREG_TALKED_ANJU_IN_LAUNDRY_POOL PACK_WEEKEVENTREG_FLAG(55, 0x20)
 #define WEEKEVENTREG_55_40 PACK_WEEKEVENTREG_FLAG(55, 0x40)
 
 // Gyorg has been defeated
@@ -1353,13 +1361,18 @@ typedef enum {
 #define WEEKEVENTREG_86_01 PACK_WEEKEVENTREG_FLAG(86, 0x01)
 #define WEEKEVENTREG_86_02 PACK_WEEKEVENTREG_FLAG(86, 0x02)
 #define WEEKEVENTREG_86_04 PACK_WEEKEVENTREG_FLAG(86, 0x04)
-#define WEEKEVENTREG_86_08 PACK_WEEKEVENTREG_FLAG(86, 0x08)
+#define WEEKEVENTREG_LISTENED_ANJU_POSTMAN_CONVERSATION PACK_WEEKEVENTREG_FLAG(86, 0x08)
 #define WEEKEVENTREG_86_10 PACK_WEEKEVENTREG_FLAG(86, 0x10)
 #define WEEKEVENTREG_86_20 PACK_WEEKEVENTREG_FLAG(86, 0x20)
 #define WEEKEVENTREG_86_40 PACK_WEEKEVENTREG_FLAG(86, 0x40)
 #define WEEKEVENTREG_86_80 PACK_WEEKEVENTREG_FLAG(86, 0x80)
-#define WEEKEVENTREG_87_01 PACK_WEEKEVENTREG_FLAG(87, 0x01)
-#define WEEKEVENTREG_87_02 PACK_WEEKEVENTREG_FLAG(87, 0x02)
+
+// Currently talking to a cow using the voice recognition unit
+#define WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE PACK_WEEKEVENTREG_FLAG(87, 0x01)
+
+// Set by Anju
+#define WEEKEVENTREG_COUPLES_MASK_CUTSCENE_STARTED PACK_WEEKEVENTREG_FLAG(87, 0x02)
+
 #define WEEKEVENTREG_87_04 PACK_WEEKEVENTREG_FLAG(87, 0x04)
 #define WEEKEVENTREG_87_08 PACK_WEEKEVENTREG_FLAG(87, 0x08)
 #define WEEKEVENTREG_87_10 PACK_WEEKEVENTREG_FLAG(87, 0x10)
@@ -1572,7 +1585,7 @@ typedef enum {
 #define EVENTINF_47 0x47
 #define EVENTINF_50 0x50
 #define EVENTINF_51 0x51
-#define EVENTINF_52 0x52
+#define EVENTINF_HAS_DAYTIME_TRANSITION_CS 0x52
 #define EVENTINF_53 0x53
 #define EVENTINF_54 0x54
 #define EVENTINF_55 0x55
@@ -1597,9 +1610,8 @@ typedef enum {
 #define EVENTINF_THREEDAYRESET_LOST_STICK_AMMO 0x73
 #define EVENTINF_THREEDAYRESET_LOST_ARROW_AMMO 0x74
 
-#define EVENTINF_75 0x75
-#define EVENTINF_76 0x76
-#define EVENTINF_77 0x77
+// Checked in Kankyo as one to store the day: gSaveContext.eventInf[7] & 0xE0
+// EVENTINF_75 to EVENTINF_77
 
 #define CHECK_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] & (1 << ((flag) & 0xF)))
 #define SET_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] |= (1 << ((flag) & 0xF)))
@@ -1627,6 +1639,13 @@ typedef enum {
 #define SET_EVENTINF_DOG_RACE_RACE_STANDING(raceStanding) \
     (gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & EVENTINF_DOG_RACE_STATE_MASK) | (raceStanding << 3))
 
+#define EVENTINF_GET_7_E0 ((gSaveContext.eventInf[7] & 0xE0) >> 5)
+
+#define EVENTINF_SET_7_E0(day, temp) \
+    (temp) = gSaveContext.eventInf[7] & (u8)~0xE0; \
+    (temp) |= (u8)((day) << 5); \
+    gSaveContext.eventInf[7] = (temp)
+
 typedef enum {
     /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
     /* 1 */ DUNGEON_INDEX_SNOWHEAD_TEMPLE,
@@ -1637,7 +1656,7 @@ typedef enum {
 #define STRAY_FAIRY_TOTAL 25 // total number of stray fairies, including those already in the Great Fairy Fountain
 #define STRAY_FAIRY_SCATTERED_TOTAL 15 // original number of stray fairies in one dungeon area
 
-void Sram_ActivateOwl(u8 owlId);
+void Sram_ActivateOwl(u8 owlWarpId);
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void);
 void Sram_SaveEndOfCycle(struct PlayState* play);
 void Sram_IncrementDay(void);
@@ -1663,6 +1682,8 @@ void Sram_SetFlashPagesOwlSave(SramContext* sramCtx, s32 curPage, s32 numPages);
 void Sram_StartWriteToFlashOwlSave(SramContext* sramCtx);
 void Sram_UpdateWriteToFlashOwlSave(SramContext* sramCtx);
 
+void SaveContext_Init(void);
+
 extern u32 gSramSlotOffsets[];
 extern u8 gAmmoItems[];
 extern s32 gFlashSaveStartPages[];
@@ -1670,5 +1691,7 @@ extern s32 gFlashSaveNumPages[];
 extern s32 gFlashSpecialSaveNumPages[];
 extern s32 gFlashOwlSaveStartPages[];
 extern s32 gFlashOwlSaveNumPages[];
+
+extern SaveContext gSaveContext;
 
 #endif

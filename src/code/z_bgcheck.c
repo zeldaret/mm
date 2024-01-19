@@ -1,6 +1,6 @@
-#include "global.h"
 #include "fault.h"
-#include "fixed_point.h"
+#include "libc64/fixed_point.h"
+#include "libc64/sprintf.h"
 #include "vt.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
@@ -3570,17 +3570,17 @@ s32 BgCheck_SphVsDynaWall(CollisionContext* colCtx, u16 xpFlags, f32* outX, f32*
             continue;
         }
 
-        bgActor->boundingSphere.radius += (s16)radius;
+        bgActor->boundingSphere.radius += TRUNCF_BINANG(radius);
 
         r = bgActor->boundingSphere.radius;
         dx = bgActor->boundingSphere.center.x - resultPos.x;
         dz = bgActor->boundingSphere.center.z - resultPos.z;
         if ((SQ(r) < SQ(dx) + SQ(dz)) || (!Math3D_XYInSphere(&bgActor->boundingSphere, resultPos.x, resultPos.y) &&
                                           !Math3D_YZInSphere(&bgActor->boundingSphere, resultPos.y, resultPos.z))) {
-            bgActor->boundingSphere.radius -= (s16)radius;
+            bgActor->boundingSphere.radius -= TRUNCF_BINANG(radius);
             continue;
         }
-        bgActor->boundingSphere.radius -= (s16)radius;
+        bgActor->boundingSphere.radius -= TRUNCF_BINANG(radius);
         if (BgCheck_SphVsDynaWallInBgActor(colCtx, xpFlags, &colCtx->dyna,
                                            &(colCtx->dyna.bgActors + i)->dynaLookup.wall, outX, outZ, outPoly, outBgId,
                                            &resultPos, radius, i, actor)) {
@@ -3956,7 +3956,7 @@ s32 BgCheck_SphVsFirstDynaPoly(CollisionContext* colCtx, u16 xpFlags, CollisionP
 }
 
 /**
- * SEGMENTED_TO_VIRTUAL CollisionHeader members
+ * SEGMENTED_TO_K0 CollisionHeader members
  */
 void CollisionHeader_SegmentedToVirtual(CollisionHeader* colHeader) {
     colHeader->vtxList = Lib_SegmentedToVirtual(colHeader->vtxList);

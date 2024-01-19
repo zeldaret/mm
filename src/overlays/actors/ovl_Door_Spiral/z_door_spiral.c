@@ -32,15 +32,15 @@ void func_809A3098(DoorSpiral* this, PlayState* play);
 s32 func_809A2EA0(DoorSpiral* this, PlayState* play);
 
 ActorInit Door_Spiral_InitVars = {
-    ACTOR_DOOR_SPIRAL,
-    ACTORCAT_DOOR,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DoorSpiral),
-    (ActorFunc)DoorSpiral_Init,
-    (ActorFunc)DoorSpiral_Destroy,
-    (ActorFunc)DoorSpiral_Update,
-    (ActorFunc)DoorSpiral_Draw,
+    /**/ ACTOR_DOOR_SPIRAL,
+    /**/ ACTORCAT_DOOR,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(DoorSpiral),
+    /**/ DoorSpiral_Init,
+    /**/ DoorSpiral_Destroy,
+    /**/ DoorSpiral_Update,
+    /**/ DoorSpiral_Draw,
 };
 
 typedef struct {

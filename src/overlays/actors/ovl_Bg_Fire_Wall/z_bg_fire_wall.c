@@ -22,15 +22,15 @@ void func_809AC68C(BgFireWall* this, PlayState* play);
 void func_809AC6C0(BgFireWall* this, PlayState* play);
 
 ActorInit Bg_Fire_Wall_InitVars = {
-    ACTOR_BG_FIRE_WALL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_FWALL,
-    sizeof(BgFireWall),
-    (ActorFunc)BgFireWall_Init,
-    (ActorFunc)BgFireWall_Destroy,
-    (ActorFunc)BgFireWall_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_FIRE_WALL,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_FWALL,
+    /**/ sizeof(BgFireWall),
+    /**/ BgFireWall_Init,
+    /**/ BgFireWall_Destroy,
+    /**/ BgFireWall_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

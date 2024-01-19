@@ -102,15 +102,15 @@ static Vec3f sVelocity = { 0.0f, 20.0f, 0.0f };
 static Vec3f sAccel = { 0.0f, 0.0f, 0.0f };
 
 ActorInit En_Syateki_Wf_InitVars = {
-    ACTOR_EN_SYATEKI_WF,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_WF,
-    sizeof(EnSyatekiWf),
-    (ActorFunc)EnSyatekiWf_Init,
-    (ActorFunc)EnSyatekiWf_Destroy,
-    (ActorFunc)EnSyatekiWf_Update,
-    (ActorFunc)EnSyatekiWf_Draw,
+    /**/ ACTOR_EN_SYATEKI_WF,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_WF,
+    /**/ sizeof(EnSyatekiWf),
+    /**/ EnSyatekiWf_Init,
+    /**/ EnSyatekiWf_Destroy,
+    /**/ EnSyatekiWf_Update,
+    /**/ EnSyatekiWf_Draw,
 };
 
 typedef enum {
@@ -311,7 +311,7 @@ void EnSyatekiWf_Run(EnSyatekiWf* this, PlayState* play) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
             if (distToTarget < 50.0f) {
                 if (this->actor.speed > 3.0f) {
-                    this->actor.speed = this->actor.speed - 0.5f;
+                    this->actor.speed -= 0.5f;
                 } else {
                     this->actor.speed = this->actor.speed;
                 }
@@ -331,7 +331,7 @@ void EnSyatekiWf_Run(EnSyatekiWf* this, PlayState* play) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 10.0f, 3, 2.0f, 0, 0, 0);
+            Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 10.0f, 3, 2.0f, 0, 0, false);
         }
     }
 }

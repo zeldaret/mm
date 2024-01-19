@@ -1,17 +1,17 @@
-#include "global.h"
+#include "ultra64.h"
 
 OSYieldResult osSpTaskYielded(OSTask* task) {
-    s32 status;
+    s32 status = __osSpGetStatus();
     OSYieldResult result;
-    status = __osSpGetStatus();
-    if (status & 0x100) {
-        result = 1;
+
+    if (status & SP_STATUS_YIELDED) {
+        result = OS_TASK_YIELDED;
     } else {
         result = 0;
     }
-    if (status & 0x80) {
+    if (status & SP_STATUS_YIELD) {
         task->t.flags |= result;
-        task->t.flags &= ~(2);
+        task->t.flags &= ~OS_TASK_DP_WAIT;
     }
     return result;
 }

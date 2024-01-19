@@ -1,9 +1,9 @@
-#include "global.h"
+#include "ultra64.h"
 
 void osYieldThread(void) {
     register u32 saveMask = __osDisableInt();
 
-    __osRunningThread->state = 2;
+    __osRunningThread->state = OS_STATE_RUNNABLE;
     __osEnqueueAndYield(&__osRunQueue);
 
     __osRestoreInt(saveMask);

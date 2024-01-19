@@ -155,15 +155,15 @@ static s32 D_80951C2C[] = { 0x0E295A2D, 0x000A0C10 };
 static s32 D_80951C34[] = { 0x0E29622D, 0x000A0C10 };
 
 ActorInit En_Gm_InitVars = {
-    ACTOR_EN_GM,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_IN2,
-    sizeof(EnGm),
-    (ActorFunc)EnGm_Init,
-    (ActorFunc)EnGm_Destroy,
-    (ActorFunc)EnGm_Update,
-    (ActorFunc)EnGm_Draw,
+    /**/ ACTOR_EN_GM,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_IN2,
+    /**/ sizeof(EnGm),
+    /**/ EnGm_Init,
+    /**/ EnGm_Destroy,
+    /**/ EnGm_Update,
+    /**/ EnGm_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -757,7 +757,7 @@ s32 func_8094EE84(EnGm* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_3A4 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_3E0 = 0;
         this->unk_3E4 = NULL;
@@ -1480,9 +1480,9 @@ s32 func_80950804(EnGm* this, PlayState* play) {
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
         if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if ((this->unk_3BA / (f32)this->unk_3B8) <= 0.9f) {
-                door->unk_1A7 = this->unk_261;
+                door->openTimer = this->unk_261;
             } else {
-                door->unk_1A7 = 0;
+                door->openTimer = 0;
             }
         }
 
@@ -1782,8 +1782,8 @@ s32 EnGm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     }
 
     if ((this->unk_3A4 & 0x2000) && (fidgetIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
 
     return false;

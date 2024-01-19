@@ -16,18 +16,16 @@ void EnNimotsu_Destroy(Actor* thisx, PlayState* play);
 void EnNimotsu_Update(Actor* thisx, PlayState* play);
 void EnNimotsu_Draw(Actor* thisx, PlayState* play);
 
-void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play);
-
 ActorInit En_Nimotsu_InitVars = {
-    ACTOR_EN_NIMOTSU,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_BOJ,
-    sizeof(EnNimotsu),
-    (ActorFunc)EnNimotsu_Init,
-    (ActorFunc)EnNimotsu_Destroy,
-    (ActorFunc)EnNimotsu_Update,
-    (ActorFunc)EnNimotsu_Draw,
+    /**/ ACTOR_EN_NIMOTSU,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_BOJ,
+    /**/ sizeof(EnNimotsu),
+    /**/ EnNimotsu_Init,
+    /**/ EnNimotsu_Destroy,
+    /**/ EnNimotsu_Update,
+    /**/ EnNimotsu_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -90,7 +88,7 @@ void EnNimotsu_Update(Actor* thisx, PlayState* play) {
             dustPosition.x = this->actor.world.pos.x + Rand_CenteredFloat(15.0f);
             dustPosition.y = this->actor.world.pos.y;
             dustPosition.z = this->actor.world.pos.z + Rand_CenteredFloat(15.0f);
-            Actor_SpawnFloorDustRing(play, &this->actor, &dustPosition, 20.0f, 0, 2.0f, 0, 0, 0);
+            Actor_SpawnFloorDustRing(play, &this->actor, &dustPosition, 20.0f, 0, 2.0f, 0, 0, false);
         }
     }
 

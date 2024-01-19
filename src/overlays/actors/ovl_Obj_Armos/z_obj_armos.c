@@ -24,15 +24,15 @@ void func_809A57D8(ObjArmos* this);
 void func_809A57F4(ObjArmos* this, PlayState* play);
 
 ActorInit Obj_Armos_InitVars = {
-    ACTOR_OBJ_ARMOS,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_AM,
-    sizeof(ObjArmos),
-    (ActorFunc)ObjArmos_Init,
-    (ActorFunc)ObjArmos_Destroy,
-    (ActorFunc)ObjArmos_Update,
-    (ActorFunc)ObjArmos_Draw,
+    /**/ ACTOR_OBJ_ARMOS,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_AM,
+    /**/ sizeof(ObjArmos),
+    /**/ ObjArmos_Init,
+    /**/ ObjArmos_Destroy,
+    /**/ ObjArmos_Update,
+    /**/ ObjArmos_Draw,
 };
 
 s16 D_809A5BB0[] = { 1, -1, 0, 0 };
@@ -44,7 +44,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-s32 func_809A4E00(ObjArmos* this, PlayState* play, s16 arg2) {
+bool func_809A4E00(ObjArmos* this, PlayState* play, s16 arg2) {
     return !DynaPolyActor_ValidateMove(play, &this->dyna, 30, arg2, 1) ||
            !DynaPolyActor_ValidateMove(play, &this->dyna, 30, arg2, 28);
 }
@@ -75,7 +75,7 @@ s32 func_809A4E68(ObjArmos* this) {
     return -1;
 }
 
-s32 func_809A4F00(ObjArmos* this, s32 arg1) {
+bool func_809A4F00(ObjArmos* this, s32 arg1) {
     s32 temp_v0 = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
 
     if (temp_v0 == OBJARMOS_ROT_7_0) {
@@ -117,7 +117,7 @@ s32 func_809A4F00(ObjArmos* this, s32 arg1) {
     return false;
 }
 
-s32 func_809A500C(ObjArmos* this, s32 arg1) {
+bool func_809A500C(ObjArmos* this, s32 arg1) {
     s32 temp_v0 = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
     s32 temp_v1 = OBJARMOS_GET_ROTX_F(&this->dyna.actor);
     s32 temp;

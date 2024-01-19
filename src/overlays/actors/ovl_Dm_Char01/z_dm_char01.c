@@ -37,15 +37,15 @@ s16 D_80AAAE26;
 #include "overlays/ovl_Dm_Char01/ovl_Dm_Char01.c"
 
 ActorInit Dm_Char01_InitVars = {
-    ACTOR_DM_CHAR01,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_MTORIDE,
-    sizeof(DmChar01),
-    (ActorFunc)DmChar01_Init,
-    (ActorFunc)DmChar01_Destroy,
-    (ActorFunc)DmChar01_Update,
-    (ActorFunc)DmChar01_Draw,
+    /**/ ACTOR_DM_CHAR01,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_MTORIDE,
+    /**/ sizeof(DmChar01),
+    /**/ DmChar01_Init,
+    /**/ DmChar01_Destroy,
+    /**/ DmChar01_Update,
+    /**/ DmChar01_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -529,13 +529,13 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
                             sp44.x = (Rand_ZeroOne() - 0.5f) * (2.0f * phi_f2);
                             sp44.y = D_80AAAAB8;
                             sp44.z = (Rand_ZeroOne() * D_80AAAAC4) + phi_f2;
-                            temp = (s16)spBC + D_80AAAACC;
+                            temp = TRUNCF_BINANG(spBC) + D_80AAAACC;
                             EffectSsGSplash_Spawn(play, &sp44, NULL, NULL, 0, temp);
                         } else {
                             sp44.x = -phi_f2 - (Rand_ZeroOne() * D_80AAAAC4);
                             sp44.y = D_80AAAAB8;
                             sp44.z = (Rand_ZeroOne() - 0.5f) * (2.0f * phi_f2);
-                            temp = (s16)spBC + D_80AAAACC;
+                            temp = TRUNCF_BINANG(spBC) + D_80AAAACC;
                             EffectSsGSplash_Spawn(play, &sp44, NULL, NULL, 0, temp);
                         }
                     }

@@ -40,15 +40,15 @@ typedef enum {
 } ShootingGalleryDekuScrubHeaddressType;
 
 ActorInit En_Syateki_Dekunuts_InitVars = {
-    ACTOR_EN_SYATEKI_DEKUNUTS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DEKUNUTS,
-    sizeof(EnSyatekiDekunuts),
-    (ActorFunc)EnSyatekiDekunuts_Init,
-    (ActorFunc)EnSyatekiDekunuts_Destroy,
-    (ActorFunc)EnSyatekiDekunuts_Update,
-    (ActorFunc)EnSyatekiDekunuts_Draw,
+    /**/ ACTOR_EN_SYATEKI_DEKUNUTS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DEKUNUTS,
+    /**/ sizeof(EnSyatekiDekunuts),
+    /**/ EnSyatekiDekunuts_Init,
+    /**/ EnSyatekiDekunuts_Destroy,
+    /**/ EnSyatekiDekunuts_Update,
+    /**/ EnSyatekiDekunuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

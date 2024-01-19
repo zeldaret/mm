@@ -19,15 +19,15 @@ void EnTanron6_DoNothing(EnTanron6* this);
 void func_80BE60D0(EnTanron6* this, PlayState* play);
 
 ActorInit En_Tanron6_InitVars = {
-    ACTOR_EN_TANRON6,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_TANRON5,
-    sizeof(EnTanron6),
-    (ActorFunc)EnTanron6_Init,
-    (ActorFunc)EnTanron6_Destroy,
-    (ActorFunc)EnTanron6_Update,
-    (ActorFunc)EnTanron6_Draw,
+    /**/ ACTOR_EN_TANRON6,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_TANRON5,
+    /**/ sizeof(EnTanron6),
+    /**/ EnTanron6_Init,
+    /**/ EnTanron6_Destroy,
+    /**/ EnTanron6_Update,
+    /**/ EnTanron6_Draw,
 };
 
 static DamageTable sDamageTable = {

@@ -23,15 +23,15 @@ void func_80A4CCBC(ObjFireshield* this);
 void func_80A4CD28(ObjFireshield* this);
 
 ActorInit Obj_Fireshield_InitVars = {
-    ACTOR_OBJ_FIRESHIELD,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjFireshield),
-    (ActorFunc)ObjFireshield_Init,
-    (ActorFunc)ObjFireshield_Destroy,
-    (ActorFunc)ObjFireshield_Update,
-    (ActorFunc)ObjFireshield_Draw,
+    /**/ ACTOR_OBJ_FIRESHIELD,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjFireshield),
+    /**/ ObjFireshield_Init,
+    /**/ ObjFireshield_Destroy,
+    /**/ ObjFireshield_Update,
+    /**/ ObjFireshield_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -77,7 +77,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80A4CA90(ObjFireshield* this) {
-    if (this->actor.csId >= 0) {
+    if (this->actor.csId > CS_ID_NONE) {
         this->actionFunc = func_80A4CABC;
     } else {
         this->actionFunc = func_80A4CC54;

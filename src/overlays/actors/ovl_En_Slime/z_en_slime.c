@@ -66,16 +66,16 @@ void EnSlime_WaitForRevive(EnSlime* this, PlayState* play);
 void EnSlime_SetupRevive(EnSlime* this);
 void EnSlime_Revive(EnSlime* this, PlayState* play);
 
-const ActorInit En_Slime_InitVars = {
-    ACTOR_EN_SLIME,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_SLIME,
-    sizeof(EnSlime),
-    (ActorFunc)EnSlime_Init,
-    (ActorFunc)EnSlime_Destroy,
-    (ActorFunc)EnSlime_Update,
-    (ActorFunc)EnSlime_Draw,
+ActorInit En_Slime_InitVars = {
+    /**/ ACTOR_EN_SLIME,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_SLIME,
+    /**/ sizeof(EnSlime),
+    /**/ EnSlime_Init,
+    /**/ EnSlime_Destroy,
+    /**/ EnSlime_Update,
+    /**/ EnSlime_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -407,7 +407,7 @@ void EnSlime_MoveInDirection(EnSlime* this, PlayState* play) {
         // If actor is too far from home, start return home cycle
         EnSlime_SetupMoveToHome(this);
     } else if ((Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.xzDistToPlayer < 280.0f) &&
-               (Actor_IsFacingPlayer(&this->actor, 0x5000))) {
+               Actor_IsFacingPlayer(&this->actor, 0x5000)) {
         // If player is close enough to chuchu while not wearing the stone mask, and the chuchu is facing player,
         //  initialize attack cycle
         EnSlime_SetupTurnToPlayer(this);

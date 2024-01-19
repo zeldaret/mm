@@ -53,10 +53,10 @@ void Main(void* arg) {
     Check_RegionIsSupported();
     Check_ExpansionPak();
 
-    sysHeap = gSystemHeap;
-    fb = 0x80780000;
+    sysHeap = (intptr_t)SEGMENT_START(system_heap);
+    fb = FRAMEBUFFERS_START_ADDR;
     gSystemHeapSize = fb - sysHeap;
-    SystemHeap_Init(sysHeap, gSystemHeapSize);
+    SystemHeap_Init((void*)sysHeap, gSystemHeapSize);
 
     Regs_Init();
 

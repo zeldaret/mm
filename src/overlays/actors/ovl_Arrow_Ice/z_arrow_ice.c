@@ -24,15 +24,15 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play);
 static s32 sBssPad;
 
 ActorInit Arrow_Ice_InitVars = {
-    ACTOR_ARROW_ICE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ArrowIce),
-    (ActorFunc)ArrowIce_Init,
-    (ActorFunc)ArrowIce_Destroy,
-    (ActorFunc)ArrowIce_Update,
-    (ActorFunc)ArrowIce_Draw,
+    /**/ ACTOR_ARROW_ICE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ArrowIce),
+    /**/ ArrowIce_Init,
+    /**/ ArrowIce_Destroy,
+    /**/ ArrowIce_Update,
+    /**/ ArrowIce_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

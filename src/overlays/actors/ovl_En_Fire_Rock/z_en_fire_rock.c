@@ -16,15 +16,15 @@ void EnFireRock_Update(Actor* thisx, PlayState* play);
 void EnFireRock_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Fire_Rock_InitVars = {
-    ACTOR_EN_FIRE_ROCK,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_EFC_STAR_FIELD,
-    sizeof(EnFireRock),
-    (ActorFunc)EnFireRock_Init,
-    (ActorFunc)EnFireRock_Destroy,
-    (ActorFunc)EnFireRock_Update,
-    (ActorFunc)EnFireRock_Draw,
+    /**/ ACTOR_EN_FIRE_ROCK,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_EFC_STAR_FIELD,
+    /**/ sizeof(EnFireRock),
+    /**/ EnFireRock_Init,
+    /**/ EnFireRock_Destroy,
+    /**/ EnFireRock_Update,
+    /**/ EnFireRock_Draw,
 };
 
 void EnFireRock_Init(Actor* thisx, PlayState* play) {

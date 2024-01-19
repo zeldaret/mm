@@ -19,15 +19,15 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2);
 void ObjSyokudai_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Syokudai_InitVars = {
-    ACTOR_OBJ_SYOKUDAI,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_SYOKUDAI,
-    sizeof(ObjSyokudai),
-    (ActorFunc)ObjSyokudai_Init,
-    (ActorFunc)ObjSyokudai_Destroy,
-    (ActorFunc)ObjSyokudai_Update,
-    (ActorFunc)ObjSyokudai_Draw,
+    /**/ ACTOR_OBJ_SYOKUDAI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_SYOKUDAI,
+    /**/ sizeof(ObjSyokudai),
+    /**/ ObjSyokudai_Init,
+    /**/ ObjSyokudai_Destroy,
+    /**/ ObjSyokudai_Update,
+    /**/ ObjSyokudai_Draw,
 };
 
 static ColliderCylinderInit sStandColliderInit = {
@@ -105,8 +105,8 @@ void ObjSyokudai_Init(Actor* thisx, PlayState* play) {
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
 
     if (OBJ_SYOKUDAI_GET_START_LIT(thisx) ||
-        ((type != OBJ_SYOKUDAI_TYPE_NO_SWITCH || switchFlag != 0x7F) && Flags_GetSwitch(play, switchFlag))) {
-
+        (((type != OBJ_SYOKUDAI_TYPE_NO_SWITCH) || (switchFlag != OBJ_SYOKUDAI_SWITCH_FLAG_NONE)) &&
+         Flags_GetSwitch(play, switchFlag))) {
         s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
 
         this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
@@ -239,7 +239,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                         player->unk_B28 = 0xC8;
                     }
                     if (groupSize == 0) {
-                        if ((type == OBJ_SYOKUDAI_TYPE_NO_SWITCH) && (switchFlag == 0x7F)) {
+                        if ((type == OBJ_SYOKUDAI_TYPE_NO_SWITCH) && (switchFlag == OBJ_SYOKUDAI_SWITCH_FLAG_NONE)) {
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                         } else if (thisx->csId >= 0) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
@@ -267,9 +267,11 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->standCollider.base);
     Collider_UpdateCylinder(thisx, &this->flameCollider);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->flameCollider.base);
-    if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_OUT) && (--this->snuffTimer == OBJ_SYOKUDAI_SNUFF_OUT) &&
-        (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
-        sNumLitTorchesInGroup--;
+    if (this->snuffTimer > OBJ_SYOKUDAI_SNUFF_OUT) {
+        this->snuffTimer--;
+        if ((this->snuffTimer == OBJ_SYOKUDAI_SNUFF_OUT) && (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
+            sNumLitTorchesInGroup--;
+        }
     }
     if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
         s32 pad2;

@@ -14,15 +14,15 @@ void EnAObj_Idle(EnAObj* this, PlayState* play);
 void EnAObj_Talk(EnAObj* this, PlayState* play);
 
 ActorInit En_A_Obj_InitVars = {
-    ACTOR_EN_A_OBJ,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnAObj),
-    (ActorFunc)EnAObj_Init,
-    (ActorFunc)EnAObj_Destroy,
-    (ActorFunc)EnAObj_Update,
-    (ActorFunc)EnAObj_Draw,
+    /**/ ACTOR_EN_A_OBJ,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnAObj),
+    /**/ EnAObj_Init,
+    /**/ EnAObj_Destroy,
+    /**/ EnAObj_Update,
+    /**/ EnAObj_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -71,7 +71,7 @@ void EnAObj_Destroy(Actor* thisx, PlayState* play) {
 void EnAObj_Idle(EnAObj* this, PlayState* play) {
     s32 yawDiff;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnAObj_Talk;
     } else {
         yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y));

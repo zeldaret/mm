@@ -113,15 +113,15 @@ static DamageTable D_80C0F9E0 = {
 };
 
 ActorInit En_Bsb_InitVars = {
-    ACTOR_EN_BSB,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_BSB,
-    sizeof(EnBsb),
-    (ActorFunc)EnBsb_Init,
-    (ActorFunc)EnBsb_Destroy,
-    (ActorFunc)EnBsb_Update,
-    (ActorFunc)EnBsb_Draw,
+    /**/ ACTOR_EN_BSB,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_BSB,
+    /**/ sizeof(EnBsb),
+    /**/ EnBsb_Init,
+    /**/ EnBsb_Destroy,
+    /**/ EnBsb_Update,
+    /**/ EnBsb_Draw,
 };
 
 #endif

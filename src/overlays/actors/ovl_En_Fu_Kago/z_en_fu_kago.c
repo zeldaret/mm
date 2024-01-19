@@ -29,15 +29,15 @@ void func_80AD0274(EnFuKago* this);
 void func_80AD0288(EnFuKago* this, PlayState* play);
 
 ActorInit En_Fu_Kago_InitVars = {
-    ACTOR_EN_FU_KAGO,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_FU_MATO,
-    sizeof(EnFuKago),
-    (ActorFunc)EnFuKago_Init,
-    (ActorFunc)EnFuKago_Destroy,
-    (ActorFunc)EnFuKago_Update,
-    (ActorFunc)EnFuKago_Draw,
+    /**/ ACTOR_EN_FU_KAGO,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_FU_MATO,
+    /**/ sizeof(EnFuKago),
+    /**/ EnFuKago_Init,
+    /**/ EnFuKago_Destroy,
+    /**/ EnFuKago_Update,
+    /**/ EnFuKago_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

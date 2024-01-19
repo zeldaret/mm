@@ -23,15 +23,15 @@ static u8 sLostWoodsSparklesMutex = false; // make sure only one can exist at on
 static s16 sLostWoodsSkyFishParticleNum = 0;
 
 ActorInit Demo_Kankyo_InitVars = {
-    ACTOR_DEMO_KANKYO,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DemoKankyo),
-    (ActorFunc)DemoKankyo_Init,
-    (ActorFunc)DemoKankyo_Destroy,
-    (ActorFunc)DemoKankyo_Update,
-    (ActorFunc)DemoKankyo_Draw,
+    /**/ ACTOR_DEMO_KANKYO,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(DemoKankyo),
+    /**/ DemoKankyo_Init,
+    /**/ DemoKankyo_Destroy,
+    /**/ DemoKankyo_Update,
+    /**/ DemoKankyo_Draw,
 };
 
 static s32 sObjectBubbleId = OBJECT_BUBBLE | 0x10000;
@@ -122,11 +122,11 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, PlayState* play) {
                     // This block is also init code and only runs once
                     if (i < 32) {
                         if (Rand_ZeroOne() < 0.5f) {
-                            this->effects[i].LostWoodsSkyFishSpeedXZ = (s16)(Rand_ZeroOne() * 200.0f) + 200;
+                            this->effects[i].LostWoodsSkyFishSpeedXZ = TRUNCF_BINANG(Rand_ZeroOne() * 200.0f) + 200;
                         } else {
-                            this->effects[i].LostWoodsSkyFishSpeedXZ = -200 - (s16)(Rand_ZeroOne() * 200.0f);
+                            this->effects[i].LostWoodsSkyFishSpeedXZ = -200 - TRUNCF_BINANG(Rand_ZeroOne() * 200.0f);
                         }
-                        this->effects[i].LostWoodsSkyFishPosOffsetMax = (s16)(Rand_ZeroOne() * 50.0f) + 15;
+                        this->effects[i].LostWoodsSkyFishPosOffsetMax = TRUNCF_BINANG(Rand_ZeroOne() * 50.0f) + 15;
                         this->effects[i].LostWoodsSkyFishSpeedY = ((Rand_ZeroOne() * 10.0f) + 10.0f) * 0.01f;
 
                         // Only the 31st particle matters as sLostWoodsSkyFishParticleNum will be overwritten

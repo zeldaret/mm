@@ -21,15 +21,15 @@ void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play);
 void ItemEtcetera_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Item_Etcetera_InitVars = {
-    ACTOR_ITEM_ETCETERA,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ItemEtcetera),
-    (ActorFunc)ItemEtcetera_Init,
-    (ActorFunc)ItemEtcetera_Destroy,
-    (ActorFunc)ItemEtcetera_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_ITEM_ETCETERA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ItemEtcetera),
+    /**/ ItemEtcetera_Init,
+    /**/ ItemEtcetera_Destroy,
+    /**/ ItemEtcetera_Update,
+    /**/ NULL,
 };
 
 static s16 sObjectIds[] = {

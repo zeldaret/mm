@@ -9,7 +9,7 @@ struct EnRailSkb;
 typedef void (*EnRailSkbActionFunc)(struct EnRailSkb*, PlayState*);
 typedef void (*EnRailSkbUnkFunc)(struct EnRailSkb*);
 
-#define ENRAILSKB_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
+#define ENRAILSKB_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
 #define ENRAILSKB_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0xFF)
 
 typedef enum EnRailSkbBodyPart {
@@ -37,7 +37,7 @@ typedef struct EnRailSkb {
     /* 0x1E4 */ SkelAnime skelAnime;
     /* 0x228 */ EnRailSkbActionFunc actionFunc;
     /* 0x22C */ ObjHakaisi* unk_22C;
-    /* 0x230 */ Vec3s* unk_230;
+    /* 0x230 */ Vec3s* pathPoints;
     /* 0x234 */ Vec3f bodyPartsPos[ENRAILSKB_BODYPART_MAX];
     /* 0x2DC */ s32 bodyPartsCount;
     /* 0x2E0 */ s32 unk_2E0;

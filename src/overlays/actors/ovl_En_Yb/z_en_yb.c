@@ -33,15 +33,15 @@ void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f3
 s32 EnYb_CanTalk(EnYb* this, PlayState* play);
 
 ActorInit En_Yb_InitVars = {
-    ACTOR_EN_YB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_YB,
-    sizeof(EnYb),
-    (ActorFunc)EnYb_Init,
-    (ActorFunc)EnYb_Destroy,
-    (ActorFunc)EnYb_Update,
-    (ActorFunc)EnYb_Draw,
+    /**/ ACTOR_EN_YB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_YB,
+    /**/ sizeof(EnYb),
+    /**/ EnYb_Init,
+    /**/ EnYb_Destroy,
+    /**/ EnYb_Update,
+    /**/ EnYb_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -87,9 +87,10 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, EnYb_ActorShadowFunc, 20.0f);
 
-    // @bug this alignment is because of player animations, but should be using ALIGN16
-    SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkel, &object_yb_Anim_000200, (uintptr_t)this->jointTable & ~0xF,
-                       (uintptr_t)this->morphTable & ~0xF, YB_LIMB_MAX);
+    //! @bug this alignment is because of player animations, but should be using ALIGN16
+    SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkel, &object_yb_Anim_000200,
+                       (void*)((uintptr_t)this->jointTable & ~0xF), (void*)((uintptr_t)this->morphTable & ~0xF),
+                       YB_LIMB_MAX);
 
     Animation_PlayLoop(&this->skelAnime, &object_yb_Anim_000200);
 
@@ -115,7 +116,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     this->actor.csId = this->csIdList[0];
 
     // between midnight and morning start spawned
-    if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_TIME < CLOCK_TIME(6, 0)) {
         this->alpha = 255;
     } else { // else (night 6pm to midnight): wait to appear
         this->alpha = 0;
@@ -260,7 +261,7 @@ void EnYb_Disappear(EnYb* this, PlayState* play) {
 
 void EnYb_SetupLeaving(EnYb* this, PlayState* play) {
     EnYb_UpdateAnimation(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnYb_Talk;
         // I am counting on you
@@ -326,7 +327,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
 
 void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play) {
     EnYb_UpdateAnimation(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnYb_Talk;
         // Spread my dance across the world
         Message_StartTextbox(play, 0x147C, &this->actor);
@@ -363,7 +364,7 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
         EnYb_ChangeCutscene(this, 0);
-    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    } else if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BFA2FC(play);
         this->actionFunc = EnYb_Talk;
         if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
@@ -391,7 +392,7 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
 }
 
 void EnYb_WaitForMidnight(EnYb* this, PlayState* play) {
-    if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
+    if (CURRENT_TIME < CLOCK_TIME(6, 0)) {
         EnYb_UpdateAnimation(this, play);
         this->alpha += 5;
         if (this->alpha > 250) {

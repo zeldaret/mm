@@ -67,15 +67,15 @@ s32 D_80BE1A0C[] = {
 };
 
 ActorInit En_Tab_InitVars = {
-    ACTOR_EN_TAB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TAB,
-    sizeof(EnTab),
-    (ActorFunc)EnTab_Init,
-    (ActorFunc)EnTab_Destroy,
-    (ActorFunc)EnTab_Update,
-    (ActorFunc)EnTab_Draw,
+    /**/ ACTOR_EN_TAB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TAB,
+    /**/ sizeof(EnTab),
+    /**/ EnTab_Init,
+    /**/ EnTab_Destroy,
+    /**/ EnTab_Update,
+    /**/ EnTab_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -184,7 +184,8 @@ void func_80BE0664(EnTab* this) {
 s32 func_80BE06DC(EnTab* this, PlayState* play) {
     s32 ret = false;
 
-    if (((this->unk_2FC & 7) != SUBS_OFFER_MODE_NONE) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (((this->unk_2FC & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         ret = true;
         this->unk_320 = 0;

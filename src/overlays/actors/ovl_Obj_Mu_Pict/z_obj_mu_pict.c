@@ -26,15 +26,15 @@ void func_80C06DC8(ObjMuPict* this, PlayState* play);
 void func_80C06E88(ObjMuPict* this, PlayState* play);
 
 ActorInit Obj_Mu_Pict_InitVars = {
-    ACTOR_OBJ_MU_PICT,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjMuPict),
-    (ActorFunc)ObjMuPict_Init,
-    (ActorFunc)ObjMuPict_Destroy,
-    (ActorFunc)ObjMuPict_Update,
-    (ActorFunc)ObjMuPict_Draw,
+    /**/ ACTOR_OBJ_MU_PICT,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjMuPict),
+    /**/ ObjMuPict_Init,
+    /**/ ObjMuPict_Destroy,
+    /**/ ObjMuPict_Update,
+    /**/ ObjMuPict_Draw,
 };
 
 void ObjMuPict_Init(Actor* thisx, PlayState* play) {
@@ -63,7 +63,7 @@ void func_80C06B5C(ObjMuPict* this) {
 void func_80C06B70(ObjMuPict* this, PlayState* play) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (this->actor.csId <= CS_ID_NONE) {
             func_80C06DC8(this, play);
             func_80C06CC4(this);
@@ -113,7 +113,7 @@ void func_80C06CD8(ObjMuPict* this, PlayState* play) {
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 func_80C06B5C(this);
-                if (this->actor.csId >= 0) {
+                if (this->actor.csId > CS_ID_NONE) {
                     CutsceneManager_Stop(this->actor.csId);
                 }
             }

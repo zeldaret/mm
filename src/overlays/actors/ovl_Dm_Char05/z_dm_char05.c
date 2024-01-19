@@ -36,15 +36,15 @@ void func_80AAE030(PlayState* play, DmChar05* this);
 void func_80AAE114(PlayState* play, DmChar05* this);
 
 ActorInit Dm_Char05_InitVars = {
-    ACTOR_DM_CHAR05,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_DMASK,
-    sizeof(DmChar05),
-    (ActorFunc)DmChar05_Init,
-    (ActorFunc)DmChar05_Destroy,
-    (ActorFunc)DmChar05_Update,
-    (ActorFunc)DmChar05_Draw,
+    /**/ ACTOR_DM_CHAR05,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_DMASK,
+    /**/ sizeof(DmChar05),
+    /**/ DmChar05_Init,
+    /**/ DmChar05_Destroy,
+    /**/ DmChar05_Update,
+    /**/ DmChar05_Draw,
 };
 
 typedef enum {

@@ -29,15 +29,15 @@ void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play);
 void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this);
 
 ActorInit En_Syateki_Okuta_InitVars = {
-    ACTOR_EN_SYATEKI_OKUTA,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_OKUTA,
-    sizeof(EnSyatekiOkuta),
-    (ActorFunc)EnSyatekiOkuta_Init,
-    (ActorFunc)EnSyatekiOkuta_Destroy,
-    (ActorFunc)EnSyatekiOkuta_Update,
-    (ActorFunc)EnSyatekiOkuta_Draw,
+    /**/ ACTOR_EN_SYATEKI_OKUTA,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_OKUTA,
+    /**/ sizeof(EnSyatekiOkuta),
+    /**/ EnSyatekiOkuta_Init,
+    /**/ EnSyatekiOkuta_Destroy,
+    /**/ EnSyatekiOkuta_Update,
+    /**/ EnSyatekiOkuta_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -102,8 +102,8 @@ void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
     this->actor.floorHeight =
         BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &this->actor.world.pos);
 
-    if (!(WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
-                                 &waterbox)) ||
+    if (!WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+                                &waterbox) ||
         (ySurface <= this->actor.floorHeight)) {
         Actor_Kill(&this->actor);
     } else {
@@ -370,7 +370,7 @@ void EnSyatekiOkuta_UpdateCollision(EnSyatekiOkuta* this, PlayState* play) {
     }
 
     this->collider.dim.pos.x = this->actor.world.pos.x;
-    // jointTable->y is the y-translation of the skeleton root
+    // jointTable->y is the y-translation of the skeleton root, see `LIMB_ROOT_POS`
     this->collider.dim.pos.y = this->actor.world.pos.y + (this->skelAnime.jointTable->y * this->actor.scale.y);
     this->collider.dim.pos.z = this->actor.world.pos.z;
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

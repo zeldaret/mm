@@ -27,7 +27,8 @@ OBJDUMP_BUILD ?= 0
 ASM_PROC_FORCE ?= 0
 # Number of threads to disassmble, extract, and compress with
 N_THREADS ?= $(shell nproc)
-
+#MIPS toolchain
+MIPS_BINUTILS_PREFIX ?= mips-linux-gnu-
 #### Setup ####
 
 # Ensure the map file being created using English localization
@@ -64,11 +65,8 @@ else
 endif
 
 #### Tools ####
-
-ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
-  MIPS_BINUTILS_PREFIX := mips-linux-gnu-
-else
-  $(error Please install or build mips-linux-gnu)
+ifneq ($(shell type $(MIPS_BINUTILS_PREFIX)ld >/dev/null 2>/dev/null; echo $$?), 0)
+  $(error Unable to find $(MIPS_BINUTILS_PREFIX)ld. Please install or build MIPS binutils, commonly mips-linux-gnu. (or set MIPS_BINUTILS_PREFIX if your MIPS binutils install uses another prefix))
 endif
 
 CC       := tools/ido_recomp/$(DETECTED_OS)/7.1/cc
@@ -108,7 +106,7 @@ endif
 
 # Check code syntax with host compiler
 ifneq ($(RUN_CC_CHECK),0)
-  CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label -Wno-sign-compare -Wno-tautological-compare
+  CHECK_WARNINGS := -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-unused-but-set-variable -Wno-unused-label -Wno-sign-compare -Wno-tautological-compare
   CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
   ifneq ($(WERROR), 0)
     CC_CHECK += -Werror
@@ -120,6 +118,7 @@ endif
 CPP        := cpp
 ELF2ROM    := tools/buildtools/elf2rom
 MKLDSCRIPT := tools/buildtools/mkldscript
+MKDMADATA  := tools/buildtools/mkdmadata
 YAZ0       := tools/buildtools/yaz0
 ZAPD       := tools/ZAPD/ZAPD.out
 FADO       := tools/fado/fado.elf
@@ -173,14 +172,12 @@ SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 
 ## Assets binaries (PNGs, JPGs, etc)
-ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
+ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/c/*" -not -name "c")
 # Prevents building C files that will be #include'd
 ASSET_BIN_DIRS_C_FILES := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/code*" -not -path "assets/overlays*")
 
-ASSET_FILES_XML := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.xml))
 ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
-ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_XML:.xml=.c),$f) \
-				   $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
+ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
 
 TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
 TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
@@ -204,10 +201,14 @@ OVL_RELOC_FILES := $(shell $(CPP) $(CPPFLAGS) $(SPEC) | grep -o '[^"]*_reloc.o' 
 DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 
 # create build directories
-$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
+$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS) $(ASSET_BIN_DIRS_C_FILES),build/$(dir)))
 
 # directory flags
 build/src/boot/O2/%.o: OPTFLAGS := -O2
+
+build/src/boot/libc/%.o: OPTFLAGS := -O2
+build/src/boot/libm/%.o: OPTFLAGS := -O2
+build/src/boot/libc64/%.o: OPTFLAGS := -O2
 
 build/src/libultra/os/%.o: OPTFLAGS := -O1
 build/src/libultra/voice/%.o: OPTFLAGS := -O2
@@ -215,8 +216,6 @@ build/src/libultra/io/%.o: OPTFLAGS := -O2
 build/src/libultra/libc/%.o: OPTFLAGS := -O2
 build/src/libultra/gu/%.o: OPTFLAGS := -O2
 build/src/libultra/rmon/%.o: OPTFLAGS := -O2
-build/src/libultra/flash/%.o: OPTFLAGS := -g
-build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 build/src/audio/%.o: OPTFLAGS := -O2
 
@@ -231,6 +230,10 @@ build/src/code/jpegutils.o: OPTFLAGS := -O2
 build/src/code/jpegdecoder.o: OPTFLAGS := -O2
 build/src/code/jpegutils.o: CC := $(CC_OLD)
 build/src/code/jpegdecoder.o: CC := $(CC_OLD)
+
+build/src/code/osFlash.o: OPTFLAGS := -g
+build/src/code/osFlash.o: MIPS_VERSION := -mips1
+build/src/code/osFlash.o: CC := $(CC_OLD)
 
 build/src/libultra/libc/ll.o: OPTFLAGS := -O1
 build/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
@@ -345,6 +348,13 @@ build/$(SPEC): $(SPEC)
 build/ldscript.txt: build/$(SPEC)
 	$(MKLDSCRIPT) $< $@
 
+build/dmadata_table_spec.h: build/$(SPEC)
+	$(MKDMADATA) $< $@
+
+# Dependencies for files that may include the dmadata header automatically generated from the spec file
+build/src/boot/z_std_dma.o: build/dmadata_table_spec.h
+build/src/dmadata/dmadata.o: build/dmadata_table_spec.h
+
 build/asm/%.o: asm/%.s
 	$(AS) $(ASFLAGS) $< -o $@
 
@@ -353,7 +363,7 @@ build/assets/%.o: assets/%.c
 	$(OBJCOPY_BIN)
 	$(RM_MDEBUG)
 
-build/assets/archives/%.yar.o: build/assets/archives/%.o
+build/%.yar.o: build/%.o
 	$(MAKEYAR) $< $(@:.yar.o=.yar.bin) $(@:.yar.o=.symbols.o)
 	$(OBJCOPY) -I binary -O elf32-big $(@:.yar.o=.yar.bin) $@
 

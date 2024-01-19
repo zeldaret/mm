@@ -9,6 +9,8 @@
 
 struct GameState;
 
+#define TMEM_SIZE 0x1000
+
 typedef enum SetupDL {
     /* 0x00 */ SETUPDL_0,
     /* 0x01 */ SETUPDL_1,
@@ -237,6 +239,10 @@ void func_8012D40C(f32* param_1, f32* param_2, s16* param_3);
 extern Gfx gSetupDLs[SETUPDL_MAX][6];
 extern Gfx gEmptyDL[];
 
+
+extern GfxMasterList D_0E000000;
+
+
 #define WORK_DISP __gfxCtx->work.p
 #define POLY_OPA_DISP __gfxCtx->polyOpa.p
 #define POLY_XLU_DISP __gfxCtx->polyXlu.p
@@ -271,5 +277,31 @@ extern Gfx gEmptyDL[];
                        ((height)-1) << G_TEXTURE_IMAGE_FRAC);                                                          \
     }                                                                                                                  \
     (void)0
+
+// used only by code_80140E80
+#define gDPSetLODColor(pkt, c, m, l, d)                                           \
+    _DW({                                                                         \
+        Gfx* _g = (Gfx*)(pkt);                                                    \
+                                                                                  \
+        _g->words.w0 = (_SHIFTL(c, 24, 8) | _SHIFTL(m, 8, 8) | _SHIFTL(l, 0, 8)); \
+        _g->words.w1 = (unsigned int)(d);                                         \
+    })
+
+/**
+ * `x` vertex x
+ * `y` vertex y
+ * `z` vertex z
+ * `s` texture s coordinate
+ * `t` texture t coordinate
+ * `crnx` red component of color vertex, or x component of normal vertex
+ * `cgny` green component of color vertex, or y component of normal vertex
+ * `cbnz` blue component of color vertex, or z component of normal vertex
+ * `a` alpha
+ */
+#define VTX(x, y, z, s, t, crnx, cgny, cbnz, a) \
+    { { { x, y, z }, 0, { s, t }, { crnx, cgny, cbnz, a } }, }
+
+#define VTX_T(x, y, z, s, t, cr, cg, cb, a) \
+    { { x, y, z }, 0, { s, t }, { cr, cg, cb, a }, }
 
 #endif

@@ -33,15 +33,15 @@ void func_80B228F4(Actor* thisx, PlayState* play);
 void EnHakurock_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Hakurock_InitVars = {
-    ACTOR_EN_HAKUROCK,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_BOSS_HAKUGIN,
-    sizeof(EnHakurock),
-    (ActorFunc)EnHakurock_Init,
-    (ActorFunc)EnHakurock_Destroy,
-    (ActorFunc)EnHakurock_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_HAKUROCK,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS_HAKUGIN,
+    /**/ sizeof(EnHakurock),
+    /**/ EnHakurock_Init,
+    /**/ EnHakurock_Destroy,
+    /**/ EnHakurock_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

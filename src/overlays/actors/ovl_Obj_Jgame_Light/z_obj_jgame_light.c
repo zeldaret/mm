@@ -28,15 +28,15 @@ void ObjJgameLight_UpdateCollision(ObjJgameLight* this, PlayState* play);
 void func_80C15718(ObjJgameLight* this, PlayState* play);
 
 ActorInit Obj_Jgame_Light_InitVars = {
-    ACTOR_OBJ_JGAME_LIGHT,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_SYOKUDAI,
-    sizeof(ObjJgameLight),
-    (ActorFunc)ObjJgameLight_Init,
-    (ActorFunc)ObjJgameLight_Destroy,
-    (ActorFunc)ObjJgameLight_Update,
-    (ActorFunc)ObjJgameLight_Draw,
+    /**/ ACTOR_OBJ_JGAME_LIGHT,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_SYOKUDAI,
+    /**/ sizeof(ObjJgameLight),
+    /**/ ObjJgameLight_Init,
+    /**/ ObjJgameLight_Destroy,
+    /**/ ObjJgameLight_Update,
+    /**/ ObjJgameLight_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

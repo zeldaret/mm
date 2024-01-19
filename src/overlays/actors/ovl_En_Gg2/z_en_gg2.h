@@ -19,8 +19,8 @@ typedef struct EnGg2 {
     /* 0x1D4 */ EnGg2ActionFunc actionFunc;
     /* 0x1D8 */ Path* path;
     /* 0x1DC */ s32 unk_1DC;
-    /* 0x1E0 */ Vec3s unk_1E0;
-    /* 0x1E6 */ Vec3s unk_1E6;
+    /* 0x1E0 */ Vec3s headRot;
+    /* 0x1E6 */ Vec3s torsoRot;
     /* 0x1EC */ Vec3s jointTable[OBJECT_GG_LIMB_MAX];
     /* 0x264 */ Vec3s morphTable[OBJECT_GG_LIMB_MAX];
     /* 0x2DC */ UNK_TYPE1 unk2DC[0x8];

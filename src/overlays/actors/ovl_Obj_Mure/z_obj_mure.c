@@ -25,15 +25,15 @@ void ObjMure_KillActors(ObjMure* this, PlayState* play);
 void ObjMure_CheckChildren(ObjMure* this, PlayState* play);
 
 ActorInit Obj_Mure_InitVars = {
-    ACTOR_OBJ_MURE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjMure),
-    (ActorFunc)ObjMure_Init,
-    (ActorFunc)ObjMure_Destroy,
-    (ActorFunc)ObjMure_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_MURE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjMure),
+    /**/ ObjMure_Init,
+    /**/ ObjMure_Destroy,
+    /**/ ObjMure_Update,
+    /**/ NULL,
 };
 
 static f32 sZClip[OBJMURE_TYPE_MAX] = {
@@ -314,7 +314,7 @@ void ObjMure_SetChildToFollowPlayer(ObjMure* this, s32 idx1) {
                 i2++;
                 this->children[i]->child = this->children[i];
                 for (j = 0; j < maxChildren; j++) {
-                    if (i != j && this->children[j]->child == this->children[i]) {
+                    if ((i != j) && (this->children[j]->child == this->children[i])) {
                         this->children[j]->child = NULL;
                     }
                 }

@@ -17,15 +17,15 @@ void ObjKinoko_Update(Actor* thisx, PlayState* play);
 void ObjKinoko_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Kinoko_InitVars = {
-    ACTOR_OBJ_KINOKO,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjKinoko),
-    (ActorFunc)ObjKinoko_Init,
-    (ActorFunc)ObjKinoko_Destroy,
-    (ActorFunc)ObjKinoko_Update,
-    (ActorFunc)ObjKinoko_Draw,
+    /**/ ACTOR_OBJ_KINOKO,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjKinoko),
+    /**/ ObjKinoko_Init,
+    /**/ ObjKinoko_Destroy,
+    /**/ ObjKinoko_Update,
+    /**/ ObjKinoko_Draw,
 };
 
 void ObjKinoko_Init(Actor* thisx, PlayState* play) {

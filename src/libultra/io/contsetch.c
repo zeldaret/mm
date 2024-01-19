@@ -1,14 +1,15 @@
-#include "global.h"
+#include "ultra64.h"
+#include "PR/controller.h"
 
 s32 osContSetCh(u8 ch) {
     __osSiGetAccess();
 
-    if (4 < ch) {
-        __osMaxControllers = 4;
+    if (ch > MAXCONTROLLERS) {
+        __osMaxControllers = MAXCONTROLLERS;
     } else {
         __osMaxControllers = ch;
     }
-    __osContLastPoll = -2;
+    __osContLastPoll = CONT_CMD_END;
 
     __osSiRelAccess();
     return 0;

@@ -35,15 +35,15 @@ typedef struct {
 PowderKegFuseSegment sPowderKegFuseSegments[16];
 
 ActorInit En_Bom_InitVars = {
-    ACTOR_EN_BOM,
-    ACTORCAT_EXPLOSIVES,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnBom),
-    (ActorFunc)EnBom_Init,
-    (ActorFunc)EnBom_Destroy,
-    (ActorFunc)EnBom_Update,
-    (ActorFunc)EnBom_Draw,
+    /**/ ACTOR_EN_BOM,
+    /**/ ACTORCAT_EXPLOSIVES,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnBom),
+    /**/ EnBom_Init,
+    /**/ EnBom_Destroy,
+    /**/ EnBom_Update,
+    /**/ EnBom_Draw,
 };
 
 static f32 enBomScales[] = { 0.01f, 0.03f };
@@ -281,7 +281,7 @@ void EnBom_Move(EnBom* this, PlayState* play) {
                 temp = BINANG_ROT180(temp);
             }
             Math_ScaledStepToS(&this->actor.shape.rot.y, temp, this->actor.speed * 100.0f);
-            this->unk_1FA += (s16)(this->actor.speed * 800.0f);
+            this->unk_1FA += TRUNCF_BINANG(this->actor.speed * 800.0f);
         }
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
@@ -290,7 +290,7 @@ void EnBom_Move(EnBom* this, PlayState* play) {
                 if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                     this->actor.velocity.y = 0.0f;
                 } else {
-                    this->actor.velocity.y = this->actor.velocity.y * sp58->z;
+                    this->actor.velocity.y *= sp58->z;
                 }
                 this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
             }
@@ -320,7 +320,7 @@ void EnBom_WaitForRelease(EnBom* this, PlayState* play) {
             gSaveContext.powderKegTimer = this->timer;
         }
     }
-    Math_ScaledStepToS(&this->unk_1FA, 0, 2000);
+    Math_ScaledStepToS(&this->unk_1FA, 0, 0x7D0);
 }
 
 void EnBom_Explode(EnBom* this, PlayState* play) {

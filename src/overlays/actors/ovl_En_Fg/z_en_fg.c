@@ -33,15 +33,15 @@ typedef enum {
 } BetaFrogDamageEffect;
 
 ActorInit En_Fg_InitVars = {
-    ACTOR_EN_FG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_FR,
-    sizeof(EnFg),
-    (ActorFunc)EnFg_Init,
-    (ActorFunc)EnFg_Destroy,
-    (ActorFunc)EnFg_Update,
-    (ActorFunc)EnFg_Draw,
+    /**/ ACTOR_EN_FG,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_FR,
+    /**/ sizeof(EnFg),
+    /**/ EnFg_Init,
+    /**/ EnFg_Destroy,
+    /**/ EnFg_Update,
+    /**/ EnFg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

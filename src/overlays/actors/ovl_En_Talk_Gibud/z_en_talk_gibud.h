@@ -7,6 +7,8 @@
 #define EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx) ((thisx)->params & 0xF)
 #define EN_TALK_GIBUD_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0xFF0) >> 4)
 
+#define EN_TALK_GIBUD_SWITCH_FLAG_NONE 0xFF
+
 struct EnTalkGibud;
 
 typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, PlayState*);
@@ -45,8 +47,8 @@ typedef struct EnTalkGibud {
     /* 0x2A4 */ Vec3s jointTable[GIBDO_LIMB_MAX];
     /* 0x340 */ Vec3s morphTable[GIBDO_LIMB_MAX];
     /* 0x3DC */ s16 textId;
-    /* 0x3DE */ Vec3s headRotation;
-    /* 0x3E4 */ Vec3s upperBodyRotation;
+    /* 0x3DE */ Vec3s headRot;
+    /* 0x3E4 */ Vec3s torsoRot;
     /* 0x3EA */ union {
                     s16 playerStunWaitTimer; // Cannot stun the player if this is non-zero
                     s16 grabDamageTimer;

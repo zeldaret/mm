@@ -10,6 +10,8 @@ typedef void (*EnInvisibleRuppeActionFunc)(struct EnInvisibleRuppe*, PlayState*)
 #define INVISIBLERUPPE_GET_3(thisx) ((thisx)->params & 3)
 #define INVISIBLERUPPE_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x1FC) >> 2)
 
+#define INVISIBLERUPPE_SWITCH_FLAG_NONE 0x7F
+
 typedef struct EnInvisibleRuppe {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider;

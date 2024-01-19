@@ -20,15 +20,15 @@ void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play);
 void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play);
 
 ActorInit Shot_Sun_InitVars = {
-    ACTOR_SHOT_SUN,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ShotSun),
-    (ActorFunc)ShotSun_Init,
-    (ActorFunc)ShotSun_Destroy,
-    (ActorFunc)ShotSun_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_SHOT_SUN,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ShotSun),
+    /**/ ShotSun_Init,
+    /**/ ShotSun_Destroy,
+    /**/ ShotSun_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -178,8 +178,8 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
         return;
     }
 
-    if ((this->actor.xzDistToPlayer > 120.0f) || (gSaveContext.save.time < CLOCK_TIME(6, 30)) ||
-        (gSaveContext.save.time >= CLOCK_TIME(7, 30))) {
+    if ((this->actor.xzDistToPlayer > 120.0f) || (CURRENT_TIME < CLOCK_TIME(6, 30)) ||
+        (CURRENT_TIME >= CLOCK_TIME(7, 30))) {
         return;
     }
 

@@ -19,15 +19,15 @@ void EffChange_SetColors(EffChange* this, s32 arg1);
 void func_80A4C5CC(EffChange* this, PlayState* play);
 
 ActorInit Eff_Change_InitVars = {
-    ACTOR_EFF_CHANGE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EffChange),
-    (ActorFunc)EffChange_Init,
-    (ActorFunc)EffChange_Destroy,
-    (ActorFunc)EffChange_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EFF_CHANGE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EffChange),
+    /**/ EffChange_Init,
+    /**/ EffChange_Destroy,
+    /**/ EffChange_Update,
+    /**/ NULL,
 };
 
 static u8 D_80A4C920[] = {

@@ -22,15 +22,15 @@ void func_80A66384(EnWarpUzu* this, PlayState* play);
 void EnWarpUzu_DoNothing(EnWarpUzu* this, PlayState* play);
 
 ActorInit En_Warp_Uzu_InitVars = {
-    ACTOR_EN_WARP_UZU,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_WARP_UZU,
-    sizeof(EnWarpUzu),
-    (ActorFunc)EnWarpUzu_Init,
-    (ActorFunc)EnWarpUzu_Destroy,
-    (ActorFunc)EnWarpUzu_Update,
-    (ActorFunc)EnWarpUzu_Draw,
+    /**/ ACTOR_EN_WARP_UZU,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_WARP_UZU,
+    /**/ sizeof(EnWarpUzu),
+    /**/ EnWarpUzu_Init,
+    /**/ EnWarpUzu_Destroy,
+    /**/ EnWarpUzu_Update,
+    /**/ EnWarpUzu_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -95,7 +95,7 @@ void func_80A66278(EnWarpUzu* this, PlayState* play) {
 
     do {
         player = GET_PLAYER(play);
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
             func_80A66384(this, play);
         } else {
             phi_a0 = ABS((s16)(Actor_WorldYawTowardActor(&this->actor, &player->actor) - this->actor.shape.rot.y));

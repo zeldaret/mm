@@ -49,15 +49,15 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 ActorInit En_Col_Man_InitVars = {
-    ACTOR_EN_COL_MAN,
-    ACTORCAT_MISC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnColMan),
-    (ActorFunc)EnColMan_Init,
-    (ActorFunc)EnColMan_Destroy,
-    (ActorFunc)EnColMan_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_COL_MAN,
+    /**/ ACTORCAT_MISC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnColMan),
+    /**/ EnColMan_Init,
+    /**/ EnColMan_Destroy,
+    /**/ EnColMan_Update,
+    /**/ NULL,
 };
 
 void EnColMan_Init(Actor* thisx, PlayState* play) {

@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "z64.h"
 #include "regs.h"
 #include "functions.h"
@@ -16,7 +15,7 @@ OSTime sGraphPrevUpdateEndTime;
 #include "buffers.h"
 #include "idle.h"
 #include "sys_cfb.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "z64speed_meter.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
@@ -44,7 +43,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     GfxPool* pool = &gGfxPools[gfxCtx->gfxPoolIdx % 2];
 
     gGfxMasterDL = &pool->master;
-    gSegments[0x0E] = gGfxMasterDL;
+    gSegments[0x0E] = (uintptr_t)gGfxMasterDL;
 
     pool->headMagic = GFXPOOL_HEAD_MAGIC;
     pool->tailMagic = GFXPOOL_TAIL_MAGIC;
@@ -62,7 +61,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     gfxCtx->debugBuffer = pool->debugBuffer;
 
     gfxCtx->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx->framebufferIndex % 2);
-    gSegments[0x0F] = gfxCtx->curFrameBuffer;
+    gSegments[0x0F] = (uintptr_t)gfxCtx->curFrameBuffer;
 
     gfxCtx->zbuffer = SysCfb_GetZBuffer();
 
@@ -95,7 +94,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
 uintptr_t Graph_FaultAddrConv(uintptr_t address, void* param) {
     uintptr_t addr = address;
     GameStateOverlay* gameStateOvl = &gGameStateOverlayTable[0];
-    size_t ramConv;
+    uintptr_t ramConv;
     void* ramStart;
     size_t diff;
     s32 i;
@@ -180,7 +179,7 @@ retry:
     task->dramStack = (u64*)gGfxSPTaskStack;
     task->dramStackSize = sizeof(gGfxSPTaskStack);
     task->outputBuff = gGfxSPTaskOutputBufferPtr;
-    task->outputBuffSize = gGfxSPTaskOutputBufferEnd;
+    task->outputBuffSize = (void*)gGfxSPTaskOutputBufferEnd;
     task->dataPtr = (u64*)gGfxMasterDL;
     task->dataSize = 0;
     task->yieldDataPtr = (u64*)gGfxSPTaskYieldBuffer;
@@ -341,13 +340,12 @@ void Graph_ThreadEntry(void* arg) {
     u32 size;
     s32 pad[2];
 
-    gZBufferLoRes = SystemArena_Malloc(sizeof(*gZBufferLoRes) + sizeof(*gWorkBufferLoRes) + 64 - 1);
+    gZBufferLoRes = malloc(sizeof(*gZBufferLoRes) + sizeof(*gWorkBufferLoRes) + 64 - 1);
     gZBufferLoRes = (void*)ALIGN64((u32)gZBufferLoRes);
 
     gWorkBufferLoRes = (void*)((u8*)gZBufferLoRes + sizeof(*gZBufferLoRes));
 
-    gGfxSPTaskOutputBufferHiRes = gGfxSPTaskOutputBufferLoRes =
-        SystemArena_Malloc(sizeof(*gGfxSPTaskOutputBufferLoRes));
+    gGfxSPTaskOutputBufferHiRes = gGfxSPTaskOutputBufferLoRes = malloc(sizeof(*gGfxSPTaskOutputBufferLoRes));
 
     gGfxSPTaskOutputBufferEndLoRes = (u8*)gGfxSPTaskOutputBufferLoRes + sizeof(*gGfxSPTaskOutputBufferLoRes);
     gGfxSPTaskOutputBufferEndHiRes = (u8*)gGfxSPTaskOutputBufferHiRes + sizeof(*gGfxSPTaskOutputBufferHiRes);
@@ -365,7 +363,7 @@ void Graph_ThreadEntry(void* arg) {
 
         func_800809F4(ovl->vromStart);
 
-        gameState = SystemArena_Malloc(size);
+        gameState = malloc(size);
 
         bzero(gameState, size);
         GameState_Init(gameState, ovl->init, &gfxCtx);
@@ -379,7 +377,7 @@ void Graph_ThreadEntry(void* arg) {
         if (size) {}
 
         GameState_Destroy(gameState);
-        SystemArena_Free(gameState);
+        free(gameState);
 
         Overlay_FreeGameState(ovl);
     }

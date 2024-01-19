@@ -35,15 +35,15 @@ typedef enum {
 } SoldierAnimation;
 
 ActorInit En_Stop_heishi_InitVars = {
-    ACTOR_EN_STOP_HEISHI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SDN,
-    sizeof(EnStopheishi),
-    (ActorFunc)EnStopheishi_Init,
-    (ActorFunc)EnStopheishi_Destroy,
-    (ActorFunc)EnStopheishi_Update,
-    (ActorFunc)EnStopheishi_Draw,
+    /**/ ACTOR_EN_STOP_HEISHI,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SDN,
+    /**/ sizeof(EnStopheishi),
+    /**/ EnStopheishi_Init,
+    /**/ EnStopheishi_Destroy,
+    /**/ EnStopheishi_Update,
+    /**/ EnStopheishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -107,10 +107,10 @@ void EnStopheishi_Init(Actor* thisx, PlayState* play) {
     this->switchFlag = ENSTOPHEISHI_GET_SWITCH_FLAG(&this->actor);
     this->unk_288 = (this->actor.world.rot.z * 40.0f) + 50.0f;
     this->actor.world.rot.z = 0;
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == ENSTOPHEISHI_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -364,7 +364,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
     f32 zDiff;
 
     SkelAnime_Update(&this->skelAnime);
-    if ((this->currentAnim == SOLDIER_ANIM_5) && (((s16)this->skelAnime.curFrame % 2) != 0)) {
+    if ((this->currentAnim == SOLDIER_ANIM_5) && ((TRUNCF_BINANG(this->skelAnime.curFrame) % 2) != 0)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_SOLDIER_WALK);
     }
     if (gSaveContext.save.day != 3) {
@@ -496,7 +496,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     yawDiffAbs = ABS_ALT(yawDiff);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->skelAnime.playSpeed = 1.0f;
         func_80AE854C(this, play);
     } else if (yawDiffAbs < 0x4BB9) {

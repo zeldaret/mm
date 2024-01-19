@@ -23,15 +23,15 @@ void func_8098E098(ObjComb* this);
 void func_8098E0B8(ObjComb* this, PlayState* play);
 
 ActorInit Obj_Comb_InitVars = {
-    ACTOR_OBJ_COMB,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_COMB,
-    sizeof(ObjComb),
-    (ActorFunc)ObjComb_Init,
-    (ActorFunc)ObjComb_Destroy,
-    (ActorFunc)ObjComb_Update,
-    (ActorFunc)ObjComb_Draw,
+    /**/ ACTOR_OBJ_COMB,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_COMB,
+    /**/ sizeof(ObjComb),
+    /**/ ObjComb_Init,
+    /**/ ObjComb_Destroy,
+    /**/ ObjComb_Update,
+    /**/ ObjComb_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -68,7 +68,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-s32 func_8098CE40(ObjComb* this, PlayState* play) {
+bool func_8098CE40(ObjComb* this, PlayState* play) {
     s32 phi_a2 = -1;
     s32 temp_v0 = (OBJCOMB_GET_1F(&this->actor) << 2) | 0xFF01;
 
@@ -252,8 +252,8 @@ void func_8098D6E0(ObjComb* this, PlayState* play) {
     for (temp = 0, i = 0; i < 8; i++, temp += 0x2000) {
         temp_f0 = Rand_ZeroOne();
         temp_f20 = ((1.0f - SQ(temp_f0)) * 14.0f) + 4.0f;
-        sp70.x = (Math_SinS((s32)(Rand_ZeroOne() * 8000.0f) + temp) * temp_f20) + this->actor.world.pos.x;
-        sp70.z = (Math_CosS((s32)(Rand_ZeroOne() * 8000.0f) + temp) * temp_f20) + this->actor.world.pos.z;
+        sp70.x = this->actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * 8000.0f) + temp) * temp_f20);
+        sp70.z = this->actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * 8000.0f) + temp) * temp_f20);
         EffectSsGSplash_Spawn(play, &sp70, NULL, NULL, 0, 200);
     }
 
@@ -495,7 +495,7 @@ void func_8098E0B8(ObjComb* this, PlayState* play) {
 
     if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.csId >= 0)) {
         if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_4);
         }
     }
 }
@@ -528,8 +528,8 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
             if (this->unk_1B5 == 1) {
                 if (CutsceneManager_IsNext(this->actor.csId)) {
                     CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
-                    if (this->actor.csId >= 0) {
-                        func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
+                    if (this->actor.csId > CS_ID_NONE) {
+                        Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_1);
                     }
 
                     if (((OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor)) == 1) &&

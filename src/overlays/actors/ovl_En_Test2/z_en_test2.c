@@ -28,15 +28,15 @@ typedef struct EnTest2ModelInfo {
 } EnTest2ModelInfo; // size = 0xC
 
 ActorInit En_Test2_InitVars = {
-    ACTOR_EN_TEST2,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnTest2),
-    (ActorFunc)EnTest2_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)EnTest2_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_TEST2,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnTest2),
+    /**/ EnTest2_Init,
+    /**/ Actor_Noop,
+    /**/ EnTest2_Update,
+    /**/ NULL,
 };
 
 static EnTest2ModelInfo sModelInfo[] = {

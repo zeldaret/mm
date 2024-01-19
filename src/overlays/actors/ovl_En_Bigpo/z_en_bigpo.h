@@ -8,6 +8,10 @@ struct EnBigpo;
 
 typedef void (*EnBigPoActionFunc)(struct EnBigpo*, PlayState*);
 
+#define BIG_POE_GET_SWITCH_FLAG(thisx) (u8)((thisx)->params >> 0x8)
+
+#define BIG_POE_SWITCH_FLAG_NONE 0xFF
+
 typedef enum BigPoeBodyPart {
     /* 0 */ BIG_POE_BODYPART_0,
     /* 1 */ BIG_POE_BODYPART_1,
@@ -44,7 +48,7 @@ typedef struct EnBigpo {
     /* 0x204 */ u8 storePrevBgm;
     /* 0x206 */ s16 idleTimer; // frame counter
     /* 0x208 */ s16 unk208; // facing rotY?
-    /* 0x20A */ s16 rotVelocity;
+    /* 0x20A */ s16 angularVelocity;
     /* 0x20C */ s16 unk20C; // is this counting the number of frames the player is ztargeting them?
     /* 0x20E */ s16 subCamId;
     /* 0x210 */ s16 switchFlag;
@@ -74,7 +78,5 @@ typedef enum EnBigpoType {
   /* 4 */ BIG_POE_TYPE_REVEALED_FIRE,
   /* 5 */ BIG_POE_TYPE_UNK5
 } EnBigpoType;
-
-#define BIG_POE_GET_SWITCH_FLAG(thisx) (u8)((thisx)->params >> 0x8) 
 
 #endif // Z_EN_BIGPO_H

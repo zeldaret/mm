@@ -1,8 +1,11 @@
 #include "global.h"
 #include "PR/gs2dex.h"
 #include "sys_cfb.h"
+#include "z64malloc.h"
 #include "z64snap.h"
 #include "z64view.h"
+#include "z64voice.h"
+
 #include "archives/icon_item_static/icon_item_static_yar.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
@@ -916,8 +919,8 @@ void Interface_NewDay(PlayState* play, s32 day) {
     }
 
     // Loads day number from week_static for the three-day clock
-    DmaMgr_SendRequest0((u32)play->interfaceCtx.doActionSegment + 0x780,
-                        (u32)SEGMENT_ROM_START(week_static) + i * 0x510, 0x510);
+    DmaMgr_RequestSync((void*)(play->interfaceCtx.doActionSegment + 0x780),
+                       SEGMENT_ROM_START_OFFSET(week_static, i * 0x510), 0x510);
 
     // i is used to store sceneId
     for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.permanentSceneFlags); i++) {
@@ -2345,7 +2348,8 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
                     restoreHudVisibility = true;
                     sPictoState = PICTO_BOX_STATE_OFF;
-                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) || (func_801A5100() == 1)) {
+                } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                           (AudioVoice_GetWord() == VOICE_WORD_ID_CHEESE)) {
                     if (!CHECK_EVENTINF(EVENTINF_41) ||
                         (CHECK_EVENTINF(EVENTINF_41) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
                         Audio_PlaySfx(NA_SE_SY_CAMERA_SHUTTER);
@@ -3121,7 +3125,7 @@ void Inventory_UnequipItem(s16 item) {
 s32 Inventory_ReplaceItem(PlayState* play, u8 oldItem, u8 newItem) {
     u8 i;
 
-    for (i = 0; i < 24; i++) {
+    for (i = 0; i < ITEM_NUM_SLOTS; i++) {
         if (gSaveContext.save.saveInfo.inventory.items[i] == oldItem) {
             gSaveContext.save.saveInfo.inventory.items[i] = newItem;
 
@@ -4344,6 +4348,7 @@ void Interface_DrawClock(PlayState* play) {
         CLOCK_TIME(10, 0), CLOCK_TIME(11, 0), CLOCK_TIME(12, 0), CLOCK_TIME(13, 0), CLOCK_TIME(14, 0),
         CLOCK_TIME(15, 0), CLOCK_TIME(16, 0), CLOCK_TIME(17, 0), CLOCK_TIME(18, 0), CLOCK_TIME(19, 0),
         CLOCK_TIME(20, 0), CLOCK_TIME(21, 0), CLOCK_TIME(22, 0), CLOCK_TIME(23, 0), CLOCK_TIME(24, 0) - 1,
+        CLOCK_TIME(0, 0),
     };
     static TexturePtr sThreeDayClockHourTextures[] = {
         gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
@@ -4400,7 +4405,8 @@ void Interface_DrawClock(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if ((R_TIME_SPEED != 0) &&
-        ((msgCtx->msgMode == MSGMODE_NONE) || ((play->actorCtx.flags & ACTORCTX_FLAG_1) && !Play_InCsMode(play)) ||
+        ((msgCtx->msgMode == MSGMODE_NONE) ||
+         ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) && !Play_InCsMode(play)) ||
          (msgCtx->msgMode == MSGMODE_NONE) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
          (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) &&
         !FrameAdvance_IsEnabled(&play->state) && !Environment_IsTimeStopped() && (gSaveContext.save.day <= 3)) {
@@ -4423,7 +4429,7 @@ void Interface_DrawClock(PlayState* play) {
                     sClockAlphaTimer1 = 0;
                 }
             } else {
-                if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+                if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
                     sThreeDayClockAlpha = 255;
                 } else {
                     sThreeDayClockAlpha = interfaceCtx->bAlpha;
@@ -4432,7 +4438,7 @@ void Interface_DrawClock(PlayState* play) {
                 sClockAlphaTimer1 = 0;
             }
         } else {
-            if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+            if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
                 sThreeDayClockAlpha = 255;
             } else {
                 sThreeDayClockAlpha = interfaceCtx->bAlpha;
@@ -4471,9 +4477,8 @@ void Interface_DrawClock(PlayState* play) {
             OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gThreeDayClockBorderTex, 4, 64, 50, 96, 168, 128, 50, 1, 6,
                                              0, 1 << 10, 1 << 10);
 
-            if (((CURRENT_DAY >= 4) ||
-                 ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= (CLOCK_TIME(0, 0) + 5)) &&
-                  (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))))) {
+            if (((CURRENT_DAY >= 4) || ((CURRENT_DAY == 3) && (CURRENT_TIME >= (CLOCK_TIME(0, 0) + 5)) &&
+                                        (CURRENT_TIME < CLOCK_TIME(6, 0))))) {
                 Gfx_SetupDL42_Overlay(play->state.gfxCtx);
                 gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             } else {
@@ -4595,8 +4600,8 @@ void Interface_DrawClock(PlayState* play) {
                     D_801BF974 ^= 1;
                 }
 
-                timeInSeconds = TIME_TO_SECONDS_F(gSaveContext.save.time);
-                timeInSeconds -= ((s16)(timeInSeconds / 3600.0f)) * 3600.0f;
+                timeInSeconds = TIME_TO_SECONDS_F(CURRENT_TIME);
+                timeInSeconds -= TRUNCF_BINANG(timeInSeconds / 3600.0f) * 3600.0f;
 
                 Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
@@ -4634,7 +4639,7 @@ void Interface_DrawClock(PlayState* play) {
 
             // determines the current hour
             for (sp1C6 = 0; sp1C6 <= 24; sp1C6++) {
-                if (((void)0, gSaveContext.save.time) < sThreeDayClockHours[sp1C6 + 1]) {
+                if (CURRENT_TIME < sThreeDayClockHours[sp1C6 + 1]) {
                     break;
                 }
             }
@@ -4642,7 +4647,7 @@ void Interface_DrawClock(PlayState* play) {
             /**
              * Section: Draw Three-Day Clock's Sun (for the Day-Time Hours Tracker)
              */
-            time = gSaveContext.save.time;
+            time = CURRENT_TIME;
             sp1D8 = Math_SinS(time) * -40.0f;
             temp_f14 = Math_CosS(time) * -34.0f;
 
@@ -4685,7 +4690,7 @@ void Interface_DrawClock(PlayState* play) {
             /**
              * Section: Draws Three-Day Clock's Hour Digit Above the Sun
              */
-            sp1CC = gSaveContext.save.time * 0.000096131f; // (2.0f * 3.15f / 0x10000)
+            sp1CC = CURRENT_TIME * 0.000096131f; // (2.0f * 3.15f / 0x10000)
 
             // Rotates Three-Day Clock's Hour Digit To Above the Sun
             Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
@@ -4735,9 +4740,8 @@ void Interface_DrawClock(PlayState* play) {
 
             // Final Hours
             if ((CURRENT_DAY >= 4) ||
-                ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= (CLOCK_TIME(0, 0) + 5)) &&
-                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)))) {
-                if (((void)0, gSaveContext.save.time) >= CLOCK_TIME(5, 0)) {
+                ((CURRENT_DAY == 3) && (CURRENT_TIME >= (CLOCK_TIME(0, 0) + 5)) && (CURRENT_TIME < CLOCK_TIME(6, 0)))) {
+                if (CURRENT_TIME >= CLOCK_TIME(5, 0)) {
                     // The Final Hours clock will flash red
 
                     colorStep = ABS_ALT(sFinalHoursClockDigitsRed -
@@ -5427,7 +5431,7 @@ void Interface_DrawPerfectLetters(PlayState* play) {
 }
 
 void Interface_StartMoonCrash(PlayState* play) {
-    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
         SEQCMD_DISABLE_PLAY_SEQUENCES(false);
     }
 
@@ -5440,7 +5444,7 @@ void Interface_StartMoonCrash(PlayState* play) {
     play->transitionType = TRANS_TYPE_FADE_WHITE;
 }
 
-void Interface_GetTimerDigits(OSTime time, s16* timerArr) {
+void Interface_GetTimerDigits(OSTime time, s16 timerArr[8]) {
     OSTime t = time;
 
     // 6 minutes
@@ -6582,8 +6586,8 @@ void Interface_LoadStory(PlayState* play, s32 osMesgFlag) {
                 break;
             }
             osCreateMesgQueue(&interfaceCtx->storyMsgQueue, &interfaceCtx->storyMsgBuf, 1);
-            DmaMgr_SendRequestImpl(&interfaceCtx->dmaRequest, interfaceCtx->storySegment, interfaceCtx->storyAddr,
-                                   interfaceCtx->storySize, 0, &interfaceCtx->storyMsgQueue, NULL);
+            DmaMgr_RequestAsync(&interfaceCtx->dmaRequest, interfaceCtx->storySegment, interfaceCtx->storyAddr,
+                                interfaceCtx->storySize, 0, &interfaceCtx->storyMsgQueue, NULL);
             interfaceCtx->storyDmaStatus = STORY_DMA_LOADING;
             // fallthrough
         case STORY_DMA_LOADING:
@@ -7027,7 +7031,7 @@ void Interface_Update(PlayState* play) {
         if (play->envCtx.sceneTimeSpeed != 0) {
             if (gSaveContext.sunsSongState != SUNSSONG_SPEED_TIME) {
                 sIsSunsPlayedAtDay = false;
-                if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= CLOCK_TIME(18, 0))) {
+                if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= CLOCK_TIME(18, 0))) {
                     sIsSunsPlayedAtDay = true;
                 }
 
@@ -7036,7 +7040,7 @@ void Interface_Update(PlayState* play) {
                 R_TIME_SPEED = 400;
             } else if (!sIsSunsPlayedAtDay) {
                 // Nighttime
-                if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= CLOCK_TIME(18, 0))) {
+                if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= CLOCK_TIME(18, 0))) {
                     // Daytime has been reached. End suns song effect
                     gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
                     R_TIME_SPEED = sPrevTimeSpeed;
@@ -7044,7 +7048,7 @@ void Interface_Update(PlayState* play) {
                 }
             } else {
                 // Daytime
-                if (gSaveContext.save.time > CLOCK_TIME(18, 0)) {
+                if (CURRENT_TIME > CLOCK_TIME(18, 0)) {
                     // Nighttime has been reached. End suns song effect
                     gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
                     R_TIME_SPEED = sPrevTimeSpeed;
@@ -7117,11 +7121,11 @@ void Interface_Init(PlayState* play) {
 
     parameterStaticSize = SEGMENT_ROM_SIZE(parameter_static);
     interfaceCtx->parameterSegment = THA_AllocTailAlign16(&play->state.tha, parameterStaticSize);
-    DmaMgr_SendRequest0(interfaceCtx->parameterSegment, SEGMENT_ROM_START(parameter_static), parameterStaticSize);
+    DmaMgr_RequestSync(interfaceCtx->parameterSegment, SEGMENT_ROM_START(parameter_static), parameterStaticSize);
 
     interfaceCtx->doActionSegment = THA_AllocTailAlign16(&play->state.tha, 0xC90);
-    DmaMgr_SendRequest0(interfaceCtx->doActionSegment, SEGMENT_ROM_START(do_action_static), 0x300);
-    DmaMgr_SendRequest0(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START(do_action_static) + 0x480, 0x180);
+    DmaMgr_RequestSync(interfaceCtx->doActionSegment, SEGMENT_ROM_START(do_action_static), 0x300);
+    DmaMgr_RequestSync(interfaceCtx->doActionSegment + 0x300, SEGMENT_ROM_START_OFFSET(do_action_static, 0x480), 0x180);
 
     Interface_NewDay(play, CURRENT_DAY);
 

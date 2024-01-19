@@ -4,6 +4,7 @@
  * Description: Wart's Bubbles
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_tanron2.h"
 #include "overlays/actors/ovl_Boss_04/z_boss_04.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -31,15 +32,15 @@ f32 D_80BB8454;
 EnTanron2* D_80BB8458[82];
 
 ActorInit En_Tanron2_InitVars = {
-    ACTOR_EN_TANRON2,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS04,
-    sizeof(EnTanron2),
-    (ActorFunc)EnTanron2_Init,
-    (ActorFunc)EnTanron2_Destroy,
-    (ActorFunc)EnTanron2_Update,
-    (ActorFunc)EnTanron2_Draw,
+    /**/ ACTOR_EN_TANRON2,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS04,
+    /**/ sizeof(EnTanron2),
+    /**/ EnTanron2_Init,
+    /**/ EnTanron2_Destroy,
+    /**/ EnTanron2_Update,
+    /**/ EnTanron2_Draw,
 };
 
 static DamageTable sDamageTable = {
@@ -128,7 +129,7 @@ void EnTanron2_Init(Actor* thisx, PlayState* play) {
 
     if (this->actor.params == 100) {
         this->actor.update = func_80BB7B90;
-        func_800BC154(play, &play->actorCtx, &this->actor, 5);
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
         return;
     }
 
@@ -223,7 +224,7 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
         this->actor.world.pos.x += this->actor.velocity.x;
         this->actor.world.pos.y += this->actor.velocity.y;
         this->actor.world.pos.z += this->actor.velocity.z;
-        this->actor.velocity.y = this->actor.velocity.y - 2.0f;
+        this->actor.velocity.y -= 2.0f;
 
         if (this->actor.world.pos.y <= this->actor.floorHeight) {
             this->actor.world.pos.y = this->actor.floorHeight;
@@ -254,13 +255,15 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
                 case 2:
                     sp32 = Math_Atan2S(player->actor.world.pos.x - this->actor.world.pos.x,
                                        player->actor.world.pos.z - this->actor.world.pos.z) +
-                           (s16)Rand_ZeroFloat(20000.0f);
+                           TRUNCF_BINANG(Rand_ZeroFloat(20000.0f));
                     this->actor.speed = Rand_ZeroFloat(7.0f) + 7.0f;
                     if ((this->unk_152 == 0) && (D_80BB8450->unk_1F6 == 0)) {
                         this->unk_158 = 1;
                     }
                     break;
             }
+
+            //! @bug: sp32 may be used uninitialized
             Matrix_RotateYS(sp32, MTXMODE_NEW);
             Matrix_MultVecZ(this->actor.speed, &this->actor.velocity);
             this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 12.0f;
@@ -314,7 +317,7 @@ void func_80BB6F78(EnTanron2* this, PlayState* play) {
         case 1:
             if (this->unk_14E == 0) {
                 this->actor.world.pos.y += this->actor.velocity.y;
-                this->actor.velocity.y = this->actor.velocity.y - 2.0f;
+                this->actor.velocity.y -= 2.0f;
 
                 if (this->actor.world.pos.y <= this->actor.floorHeight) {
                     this->actor.world.pos.y = this->actor.floorHeight;

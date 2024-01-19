@@ -21,15 +21,15 @@ void EnElfbub_Pop(EnElfbub* this, PlayState* play);
 void EnElfbub_Idle(EnElfbub* this, PlayState* play);
 
 ActorInit En_Elfbub_InitVars = {
-    ACTOR_EN_ELFBUB,
-    ACTORCAT_MISC,
-    FLAGS,
-    OBJECT_BUBBLE,
-    sizeof(EnElfbub),
-    (ActorFunc)EnElfbub_Init,
-    (ActorFunc)EnElfbub_Destroy,
-    (ActorFunc)EnElfbub_Update,
-    (ActorFunc)EnElfbub_Draw,
+    /**/ ACTOR_EN_ELFBUB,
+    /**/ ACTORCAT_MISC,
+    /**/ FLAGS,
+    /**/ OBJECT_BUBBLE,
+    /**/ sizeof(EnElfbub),
+    /**/ EnElfbub_Init,
+    /**/ EnElfbub_Destroy,
+    /**/ EnElfbub_Update,
+    /**/ EnElfbub_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -62,6 +62,7 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 16.0f, ActorShadow_DrawCircle, 0.2f);
+    //! @bug: hint Id not correctly migrated from OoT `NAVI_ENEMY_SHABOM`
     this->actor.hintId = TATL_HINT_ID_IGOS_DU_IKANA;
     Actor_SetScale(&this->actor, 1.25f);
 

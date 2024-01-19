@@ -25,15 +25,15 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play);
 void func_80ACBD34(ObjAqua* this);
 
 ActorInit Obj_Aqua_InitVars = {
-    ACTOR_OBJ_AQUA,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjAqua),
-    (ActorFunc)ObjAqua_Init,
-    (ActorFunc)ObjAqua_Destroy,
-    (ActorFunc)ObjAqua_Update,
-    (ActorFunc)ObjAqua_Draw,
+    /**/ ACTOR_OBJ_AQUA,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjAqua),
+    /**/ ObjAqua_Init,
+    /**/ ObjAqua_Destroy,
+    /**/ ObjAqua_Update,
+    /**/ ObjAqua_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -93,8 +93,8 @@ void func_80ACB7F4(ObjAqua* this, PlayState* play) {
 
     effectPos.y = this->actor.floorHeight;
     for (i = 0; i < 4; i++) {
-        effectPos.x = (this->actor.world.pos.x + Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f);
-        effectPos.z = (this->actor.world.pos.z + Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f);
+        effectPos.x = this->actor.world.pos.x + Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f;
+        effectPos.z = this->actor.world.pos.z + Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f;
         EffectSsGSplash_Spawn(play, &effectPos, NULL, NULL, 0, 120);
         angleOffset += 0x4000;
     }
@@ -247,7 +247,7 @@ void ObjAqua_Update(Actor* thisx, PlayState* play) {
         this->counter--;
     }
     this->actionFunc(this, play);
-    if (this->actor.update) {
+    if (this->actor.update != NULL) {
         if (this->actionFunc == func_80ACBC8C) {
             Math_Vec3f_StepTo(&this->actor.scale, &D_80ACC308, 0.00006f);
         } else if (this->actionFunc == func_80ACBD48) {

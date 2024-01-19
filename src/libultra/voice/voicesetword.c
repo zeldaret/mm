@@ -4,10 +4,10 @@
  * Registers words to the Voice Recognition System dictionary
  */
 
+#include "ultra64.h"
 #include "PR/controller_voice.h"
 #include "PR/os_voice.h"
 #include "PR/controller.h"
-#include "functions.h"
 #include "macros.h"
 
 s32 osVoiceSetWord(OSVoiceHandle* hd, u8* word) {

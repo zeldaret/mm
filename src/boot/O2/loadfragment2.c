@@ -7,7 +7,7 @@
  *     These are for specific fragment overlays with the .ovl file extension
  */
 #include "global.h"
-#include "system_malloc.h"
+#include "libc64/malloc.h"
 #include "loadfragment.h"
 
 s32 gOverlayLogSeverity = 2;
@@ -131,20 +131,20 @@ void Overlay_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlReloc
     }
 }
 
-size_t Overlay_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart, uintptr_t vramEnd,
-                    void* allocatedRamAddr) {
-    s32 pad[2];
+size_t Overlay_Load(uintptr_t vromStart, uintptr_t vromEnd, void* ramStart, void* ramEnd, void* allocatedRamAddr) {
+    uintptr_t vramStart = (uintptr_t)ramStart;
+    uintptr_t vramEnd = (uintptr_t)ramEnd;
     s32 size = vromEnd - vromStart;
-    void* end;
+    uintptr_t end;
     OverlayRelocationSection* ovlRelocs;
 
     if (gOverlayLogSeverity >= 3) {}
     if (gOverlayLogSeverity >= 3) {}
 
     end = (uintptr_t)allocatedRamAddr + size;
-    DmaMgr_SendRequest0(allocatedRamAddr, vromStart, size);
+    DmaMgr_RequestSync(allocatedRamAddr, vromStart, size);
 
-    ovlRelocs = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
+    ovlRelocs = (OverlayRelocationSection*)(end - ((s32*)end)[-1]);
 
     if (gOverlayLogSeverity >= 3) {}
     if (gOverlayLogSeverity >= 3) {}
@@ -153,7 +153,7 @@ size_t Overlay_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart,
 
     if (ovlRelocs->bssSize != 0) {
         if (gOverlayLogSeverity >= 3) {}
-        bzero(end, ovlRelocs->bssSize);
+        bzero((void*)end, ovlRelocs->bssSize);
     }
 
     size = vramEnd - vramStart;
@@ -166,8 +166,8 @@ size_t Overlay_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart,
     return size;
 }
 
-void* Overlay_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart, uintptr_t vramEnd) {
-    void* allocatedRamAddr = SystemArena_MallocR(vramEnd - vramStart);
+void* Overlay_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, void* vramStart, void* vramEnd) {
+    void* allocatedRamAddr = malloc_r((uintptr_t)vramEnd - (uintptr_t)vramStart);
 
     if (allocatedRamAddr != NULL) {
         Overlay_Load(vromStart, vromEnd, vramStart, vramEnd, allocatedRamAddr);

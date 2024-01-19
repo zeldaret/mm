@@ -4,10 +4,10 @@
  * Initializes Voice Recognition System control structure and hardware
  */
 
+#include "ultra64.h"
 #include "PR/controller_voice.h"
 #include "PR/os_voice.h"
 #include "PR/controller.h"
-#include "functions.h"
 #include "macros.h"
 
 static u8 sCmds[] = {

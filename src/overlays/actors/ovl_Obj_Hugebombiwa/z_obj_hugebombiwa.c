@@ -29,15 +29,15 @@ void func_80A55564(ObjHugebombiwa* this, PlayState* play);
 void func_80A55B34(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Hugebombiwa_InitVars = {
-    ACTOR_OBJ_HUGEBOMBIWA,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_BOMBIWA,
-    sizeof(ObjHugebombiwa),
-    (ActorFunc)ObjHugebombiwa_Init,
-    (ActorFunc)ObjHugebombiwa_Destroy,
-    (ActorFunc)ObjHugebombiwa_Update,
-    (ActorFunc)ObjHugebombiwa_Draw,
+    /**/ ACTOR_OBJ_HUGEBOMBIWA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_BOMBIWA,
+    /**/ sizeof(ObjHugebombiwa),
+    /**/ ObjHugebombiwa_Init,
+    /**/ ObjHugebombiwa_Destroy,
+    /**/ ObjHugebombiwa_Update,
+    /**/ ObjHugebombiwa_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

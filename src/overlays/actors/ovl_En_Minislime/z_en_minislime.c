@@ -42,15 +42,15 @@ void EnMinislime_SetupGekkoThrow(EnMinislime* this);
 void EnMinislime_GekkoThrow(EnMinislime* this, PlayState* play);
 
 ActorInit En_Minislime_InitVars = {
-    ACTOR_EN_MINISLIME,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BIGSLIME,
-    sizeof(EnMinislime),
-    (ActorFunc)EnMinislime_Init,
-    (ActorFunc)EnMinislime_Destroy,
-    (ActorFunc)EnMinislime_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_MINISLIME,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BIGSLIME,
+    /**/ sizeof(EnMinislime),
+    /**/ EnMinislime_Init,
+    /**/ EnMinislime_Destroy,
+    /**/ EnMinislime_Update,
+    /**/ NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -429,12 +429,10 @@ void EnMinislime_Idle(EnMinislime* this, PlayState* play) {
     if (this->idleTimer == 0) {
         if (this->actor.xzDistToPlayer < 300.0f) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+        } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
+            this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
         } else {
-            if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
-                this->actor.world.rot.y = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
-            } else {
-                this->actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x13);
-            }
+            this->actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x13);
         }
         this->idleTimer = 20;
     }

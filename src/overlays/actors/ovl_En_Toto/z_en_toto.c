@@ -51,15 +51,15 @@ s32 func_80BA4C0C(EnToto* this, PlayState* play);
 s32 func_80BA4C44(EnToto* this, PlayState* play);
 
 ActorInit En_Toto_InitVars = {
-    ACTOR_EN_TOTO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZM,
-    sizeof(EnToto),
-    (ActorFunc)EnToto_Init,
-    (ActorFunc)EnToto_Destroy,
-    (ActorFunc)EnToto_Update,
-    (ActorFunc)EnToto_Draw,
+    /**/ ACTOR_EN_TOTO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_ZM,
+    /**/ sizeof(EnToto),
+    /**/ EnToto_Init,
+    /**/ EnToto_Destroy,
+    /**/ EnToto_Update,
+    /**/ EnToto_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -145,10 +145,10 @@ static EnTotoUnkStruct2 D_80BA50DC[] = {
     { 0x2B2C, 0x2B2D, 0x2B2E, { 0xFFF1, 0x0016, 0xFE74 } },
 };
 
-static Vec3s D_80BA510C[] = {
-    { 0xFF46, 0xFFF8, 0xFF40 },
-    { 0xFF21, 0xFFFD, 0xFF04 },
-    { 0xFF64, 0x0016, 0xFE7E },
+static Vec3s sPlayerOverrideInputPosList[] = {
+    { -186, -8, -192 },
+    { -223, -3, -252 },
+    { -156, 22, -386 },
 };
 
 static u16 sOcarinaActionWindFishPrompts[] = {
@@ -189,8 +189,8 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.save.time >= CLOCK_TIME(6, 0)) &&
-        (gSaveContext.save.time < CLOCK_TIME(21, 30))) {
+    if ((play->sceneId == SCENE_MILK_BAR) && (CURRENT_TIME >= CLOCK_TIME(6, 0)) &&
+        (CURRENT_TIME < CLOCK_TIME(21, 30))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -245,7 +245,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     func_80BA383C(this, play);
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BA36C0(this, play, 1);
         if (play->sceneId != SCENE_SONCHONOIE) {
             Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor));
@@ -257,7 +257,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
     }
 
     if (((play->sceneId == SCENE_MILK_BAR) &&
-         !((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= (CLOCK_TIME(22, 13) + 7)))) ||
+         !((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= (CLOCK_TIME(22, 13) + 7)))) ||
         ((play->sceneId != SCENE_MILK_BAR) && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
@@ -302,7 +302,7 @@ void func_80BA3BFC(EnToto* this, PlayState* play) {
 }
 
 void func_80BA3C88(EnToto* this) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 4000, 800);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 0x320);
 }
 
 void func_80BA3CC4(EnToto* this, PlayState* play) {
@@ -337,7 +337,7 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
         }
     } else {
         player = GET_PLAYER(play);
-        if ((player->stateFlags1 & PLAYER_STATE1_400) && (player->actionVar1 != 0)) {
+        if ((player->stateFlags1 & PLAYER_STATE1_400) && (player->av1.actionVar1 != 0)) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_CIRCUS_LEADERS_MASK);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN);
@@ -361,7 +361,7 @@ s32 func_80BA3ED4(EnToto* this, PlayState* play) {
 
 s32 func_80BA3EE8(EnToto* this, PlayState* play) {
     if (this->text->unk1 == 2) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
     }
     return 0;
 }
@@ -452,31 +452,32 @@ s32 func_80BA4204(EnToto* this, PlayState* play) {
 
 s32 func_80BA42BC(EnToto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u32 phi_s0 = 0;
-    Vec3s* end = &D_80BA510C[3];
+    u32 numPoints = 0;
+    Vec3s* endPosListPtr = &sPlayerOverrideInputPosList[ARRAY_COUNT(sPlayerOverrideInputPosList)];
 
     func_80BA3FB0(this, play);
-    func_800B7298(play, NULL, PLAYER_CSMODE_END);
+    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
+
     if (player->actor.world.pos.z > -310.0f) {
         if ((player->actor.world.pos.x > -150.0f) || (player->actor.world.pos.z > -172.0f)) {
-            phi_s0 = 3;
+            numPoints = ARRAY_COUNT(sPlayerOverrideInputPosList);
+        } else if (player->actor.world.pos.z > -232.0f) {
+            numPoints = ARRAY_COUNT(sPlayerOverrideInputPosList) - 1;
         } else {
-            if (player->actor.world.pos.z > -232.0f) {
-                phi_s0 = 2;
-            } else {
-                phi_s0 = 1;
-            }
+            numPoints = ARRAY_COUNT(sPlayerOverrideInputPosList) - 2;
         }
     }
-    func_80122744(play, &this->unk_2BC, phi_s0, end - phi_s0);
+
+    Player_InitOverrideInput(play, &this->overrideInputEntry, numPoints, &endPosListPtr[0 - numPoints]);
+
     this->spotlights = Actor_Spawn(&play->actorCtx, play, ACTOR_DM_CHAR07, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0xF02);
     return 0;
 }
 
 s32 func_80BA43F4(EnToto* this, PlayState* play) {
     func_80BA3C88(this);
-    if (func_80122760(play, &this->unk_2BC, 60.0f)) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_19);
+    if (Player_UpdateOverrideInput(play, &this->overrideInputEntry, 60.0f)) {
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_19);
         return func_80BA4204(this, play);
     }
     return 0;
@@ -484,7 +485,7 @@ s32 func_80BA43F4(EnToto* this, PlayState* play) {
 
 s32 func_80BA445C(EnToto* this, PlayState* play) {
     if (func_80BA4128(this, play)) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_END);
+        Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
         return 1;
     }
     return 0;
@@ -546,7 +547,7 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA46D8(EnToto* this, PlayState* play) {
-    func_800B7298(play, NULL, PLAYER_CSMODE_68);
+    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_68);
     Message_DisplayOcarinaStaff(play, sOcarinaActionWindFishPrompts[CUR_FORM]);
     return 0;
 }
@@ -603,8 +604,8 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA49A4(EnToto* this, PlayState* play) {
-    func_800B7298(play, NULL, PLAYER_CSMODE_68);
-    func_801A31EC(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4, this->unk2B3 ^ 0xF);
+    Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_68);
+    Audio_PlayFanfareWithPlayerIOCustomPort(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4, this->unk2B3 ^ 0xF);
     this->unk2B1 = 4;
     return 0;
 }
@@ -623,7 +624,7 @@ s32 func_80BA4A00(EnToto* this, PlayState* play) {
             if (this->spotlights != NULL) {
                 Actor_Kill(this->spotlights);
             }
-            func_800B7298(play, NULL, PLAYER_CSMODE_69);
+            Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_69);
             if (this->unk2B3 == 0xF) {
                 if (CURRENT_DAY == 1) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_50_01);

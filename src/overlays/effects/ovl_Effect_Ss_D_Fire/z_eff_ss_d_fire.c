@@ -73,7 +73,7 @@ void EffectSsDFire_Draw(PlayState* play, u32 index, EffectSs* this) {
 
         OPEN_DISPS(gfxCtx);
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(objectPtr);
+        gSegments[6] = OS_K0_TO_PHYSICAL(objectPtr);
         gSPSegment(POLY_XLU_DISP++, 0x06, objectPtr);
 
         scale = this->rScale / 100.0f;

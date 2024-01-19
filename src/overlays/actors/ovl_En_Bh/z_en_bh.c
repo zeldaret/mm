@@ -18,15 +18,15 @@ void EnBh_Draw(Actor* thisx, PlayState* play);
 void func_80C22DEC(EnBh* this, PlayState* play);
 
 ActorInit En_Bh_InitVars = {
-    ACTOR_EN_BH,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_BH,
-    sizeof(EnBh),
-    (ActorFunc)EnBh_Init,
-    (ActorFunc)EnBh_Destroy,
-    (ActorFunc)EnBh_Update,
-    (ActorFunc)EnBh_Draw,
+    /**/ ACTOR_EN_BH,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_BH,
+    /**/ sizeof(EnBh),
+    /**/ EnBh_Init,
+    /**/ EnBh_Destroy,
+    /**/ EnBh_Update,
+    /**/ EnBh_Draw,
 };
 
 void EnBh_Init(Actor* thisx, PlayState* play) {

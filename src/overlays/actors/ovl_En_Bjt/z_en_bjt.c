@@ -47,15 +47,15 @@ static u8 sMsgEventScript[] = {
 };
 
 ActorInit En_Bjt_InitVars = {
-    ACTOR_EN_BJT,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BJT,
-    sizeof(EnBjt),
-    (ActorFunc)EnBjt_Init,
-    (ActorFunc)EnBjt_Destroy,
-    (ActorFunc)EnBjt_Update,
-    (ActorFunc)EnBjt_Draw,
+    /**/ ACTOR_EN_BJT,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BJT,
+    /**/ sizeof(EnBjt),
+    /**/ EnBjt_Init,
+    /**/ EnBjt_Destroy,
+    /**/ EnBjt_Update,
+    /**/ EnBjt_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -321,7 +321,7 @@ s32 EnBjt_CheckTalk(EnBjt* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
-        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->stateFlags |= TOILET_HAND_STATE_TALKING;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->msgEventCallback = EnBjt_ChooseBehaviour;
@@ -365,7 +365,7 @@ void EnBjt_Talk(EnBjt* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
     if (func_8010BF58(&this->actor, play, sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
-        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+        this->actor.flags &= ~ACTOR_FLAG_TALK;
         SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->stateFlags &= ~TOILET_HAND_STATE_TALKING;
         this->msgEventArg4 = 0;

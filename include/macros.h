@@ -3,7 +3,6 @@
 
 #include "libc/stdint.h"
 #include "PR/os_convert.h"
-#include "main.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -20,11 +19,6 @@
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 
 #define ARRAY_COUNT_2D(arr) (ARRAY_COUNT(arr) * ARRAY_COUNT(arr[0]))
-
-// TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
-#define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + RDRAM_CACHED)
-#define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr) - RDRAM_CACHED)
-#define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
 #define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamId])
 
@@ -70,29 +64,15 @@
     (flag & 0x1) ? 0 : \
     0)
 
-/**
- * `x` vertex x
- * `y` vertex y
- * `z` vertex z
- * `s` texture s coordinate
- * `t` texture t coordinate
- * `crnx` red component of color vertex, or x component of normal vertex
- * `cgny` green component of color vertex, or y component of normal vertex
- * `cbnz` blue component of color vertex, or z component of normal vertex
- * `a` alpha
- */
-#define VTX(x, y, z, s, t, crnx, cgny, cbnz, a) \
-    { { { x, y, z }, 0, { s, t }, { crnx, cgny, cbnz, a } }, }
-
-#define VTX_T(x, y, z, s, t, cr, cg, cb, a) \
-    { { x, y, z }, 0, { s, t }, { cr, cg, cb, a }, }
-
 #define SQ(x) ((x) * (x))
 #define ABS(x) ((x) >= 0 ? (x) : -(x))
 #define ABS_ALT(x) ((x) < 0 ? -(x) : (x))
 #define DECR(x) ((x) == 0 ? 0 : --(x))
 
+//! checks min first
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : (x) > (max) ? (max) : (x))
+//! checks max first
+#define CLAMP_ALT(x, min, max) ((x) > (max) ? (max) : (x) < (min) ? (min) : (x))
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
 
