@@ -12910,7 +12910,7 @@
     0x80B05290:("BossHakugin_Init",),
     0x80B05690:("BossHakugin_Destroy",),
     0x80B0573C:("BossHakugin_Vec3fNormalize",),
-    0x80B057A4:("BossHakugin_StepVectorToTarget",),
+    0x80B057A4:("BossHakugin_StepVector",),
     0x80B058C0:("BossHakugin_SpawnLargeStalactiteWalls",),
     0x80B05A64:("BossHakugin_RequestQuakeAndRumble",),
     0x80B05B04:("BossHakugin_SpawnIceSparkle",),

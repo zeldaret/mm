@@ -626,7 +626,7 @@ s32 BossHakugin_Vec3fNormalize(Vec3f* vec) {
  * also possible for this function to undershoot the `targetVector` if the angle between the `vector` and the
  * `targetVector` is less than one degree; in this case, this function will return without doing any rotation.
  */
-void BossHakugin_StepVectorToTarget(Vec3f* vector, Vec3f* targetVector, f32 angleStep) {
+void BossHakugin_StepVector(Vec3f* vector, Vec3f* targetVector, f32 angleStep) {
     Vec3f crossProduct;
     Vec3f result;
     f32 dotProduct = (vector->x * targetVector->x) + (vector->y * targetVector->y) + (vector->z * targetVector->z);
@@ -1414,7 +1414,7 @@ void BossHakugin_UpdateSubCam(BossHakugin* this, PlayState* play, f32 arg2, s16 
         sp2C.x = Math_CosS(this->subCamRot.x) * Math_SinS(this->subCamRot.y);
         sp2C.y = Math_SinS(this->subCamRot.x);
         sp2C.z = Math_CosS(this->subCamRot.x) * Math_CosS(this->subCamRot.y);
-        BossHakugin_StepVectorToTarget(&sp38, &sp2C, BINANG_TO_RAD(arg3));
+        BossHakugin_StepVector(&sp38, &sp2C, BINANG_TO_RAD(arg3));
     }
 
     subCam->at.x = subCam->eye.x + (50.0f * sp38.x);
@@ -2633,7 +2633,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
         Math_Vec3f_Diff(&player->actor.world.pos, sp6C, &sp70);
 
         if (BossHakugin_Vec3fNormalize(&sp70)) {
-            BossHakugin_StepVectorToTarget(&this->electricBallRot, &sp70, sp60);
+            BossHakugin_StepVector(&this->electricBallRot, &sp70, sp60);
         }
     } else if (this->electricBallState != GOHT_ELECTRIC_BALL_STATE_FADE_OUT) {
         return;
