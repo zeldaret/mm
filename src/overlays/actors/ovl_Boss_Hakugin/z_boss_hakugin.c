@@ -614,34 +614,45 @@ s32 BossHakugin_Vec3fNormalize(Vec3f* vec) {
     return true;
 }
 
-void func_80B057A4(Vec3f* arg0, Vec3f* arg1, f32 arg2) {
-    Vec3f sp34;
-    Vec3f sp28;
-    f32 temp_fa0 = (arg0->x * arg1->x) + (arg0->y * arg1->y) + (arg0->z * arg1->z);
-    f32 var_fv1;
+/**
+ * The intention behind this function is to call it repeatedly to gradually rotate `vector` to match the `targetVector`.
+ * Specifically, this function rotates `vector` around the axis perpendicular to both `vector` and `targetVector` (in
+ * other words, it rotates around the cross product). The amount by which to rotate `vector` per call is determined by
+ * `angleStep`; if rotating `vector` by this amount would cause it to overshoot the `targetVector`, then the rotation
+ * will be clamped such that the `vector` will reach its target exactly.
+ *
+ * This function assumes that both `vector` and `targetVector` are normalized unit vectors; if non-unit vectors are
+ * supplied, then this function will do nothing at all if the dot product of the two non-unit vectors is positive. It is
+ * also possible for this function to undershoot the `targetVector` if the angle between the `vector` and the
+ * `targetVector` is less than one degree; in this case, this function will return without doing any rotation.
+ */
+void BossHakugin_StepVectorToTarget(Vec3f* vector, Vec3f* targetVector, f32 angleStep) {
+    Vec3f crossProduct;
+    Vec3f result;
+    f32 dotProduct = (vector->x * targetVector->x) + (vector->y * targetVector->y) + (vector->z * targetVector->z);
+    f32 maxAngle;
 
-    if (fabsf(temp_fa0) < 1.0f) {
-        var_fv1 = Math_FAcosF(temp_fa0);
-    } else if (temp_fa0 >= 1.0f) {
-        var_fv1 = 0.0f;
+    if (fabsf(dotProduct) < 1.0f) {
+        maxAngle = Math_FAcosF(dotProduct);
+    } else if (dotProduct >= 1.0f) {
+        // Either the dot product is exactly 1.0f, or a non-unit vector was passed into this function.
+        maxAngle = 0.0f;
     } else {
-        var_fv1 = M_PI;
+        // Either the dot product is exactly -1.0f, or a non-unit vector was passed into this function.
+        maxAngle = M_PI;
     }
 
-    if (arg2 > var_fv1) {
-        arg2 = var_fv1;
-    }
-
-    if (arg2 < (M_PI / 180.0f)) {
+    angleStep = CLAMP_MAX(angleStep, maxAngle);
+    if (angleStep < DEG_TO_RAD(1)) {
         return;
     }
 
-    Math3D_CrossProduct(arg0, arg1, &sp34);
+    Math3D_CrossProduct(vector, targetVector, &crossProduct);
 
-    if (BossHakugin_Vec3fNormalize(&sp34)) {
-        Matrix_RotateAxisF(arg2, &sp34, MTXMODE_NEW);
-        Matrix_MultVec3f(arg0, &sp28);
-        Math_Vec3f_Copy(arg0, &sp28);
+    if (BossHakugin_Vec3fNormalize(&crossProduct)) {
+        Matrix_RotateAxisF(angleStep, &crossProduct, MTXMODE_NEW);
+        Matrix_MultVec3f(vector, &result);
+        Math_Vec3f_Copy(vector, &result);
     }
 }
 
@@ -1403,7 +1414,7 @@ void BossHakugin_UpdateSubCam(BossHakugin* this, PlayState* play, f32 arg2, s16 
         sp2C.x = Math_CosS(this->subCamRot.x) * Math_SinS(this->subCamRot.y);
         sp2C.y = Math_SinS(this->subCamRot.x);
         sp2C.z = Math_CosS(this->subCamRot.x) * Math_CosS(this->subCamRot.y);
-        func_80B057A4(&sp38, &sp2C, BINANG_TO_RAD(arg3));
+        BossHakugin_StepVectorToTarget(&sp38, &sp2C, BINANG_TO_RAD(arg3));
     }
 
     subCam->at.x = subCam->eye.x + (50.0f * sp38.x);
@@ -2622,7 +2633,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
         Math_Vec3f_Diff(&player->actor.world.pos, sp6C, &sp70);
 
         if (BossHakugin_Vec3fNormalize(&sp70)) {
-            func_80B057A4(&this->electricBallRot, &sp70, sp60);
+            BossHakugin_StepVectorToTarget(&this->electricBallRot, &sp70, sp60);
         }
     } else if (this->electricBallState != GOHT_ELECTRIC_BALL_STATE_FADE_OUT) {
         return;
