@@ -1,78 +1,88 @@
 ﻿<Root>
+    <!-- Object for Kafei -->
     <File Name="object_test3" Segment="6">
-        <Texture Name="object_test3_TLUT_000000" OutName="tlut_000000" Format="rgba16" Width="16" Height="16" Offset="0x0" />
-        <Texture Name="object_test3_TLUT_000200" OutName="tlut_000200" Format="rgba16" Width="16" Height="16" Offset="0x200" />
-        <Texture Name="object_test3_Tex_000400" OutName="tex_000400" Format="rgba16" Width="16" Height="16" Offset="0x400" />
-        <Texture Name="object_test3_Tex_000600" OutName="tex_000600" Format="rgba16" Width="16" Height="16" Offset="0x600" />
-        <Texture Name="object_test3_Tex_000800" OutName="tex_000800" Format="ci8" Width="8" Height="8" Offset="0x800" />
-        <Texture Name="object_test3_Tex_000840" OutName="tex_000840" Format="ci8" Width="8" Height="16" Offset="0x840" />
-        <Texture Name="object_test3_Tex_0008C0" OutName="tex_0008C0" Format="ci8" Width="16" Height="16" Offset="0x8C0" />
-        <Texture Name="object_test3_Tex_0009C0" OutName="tex_0009C0" Format="ci8" Width="32" Height="32" Offset="0x9C0" />
-        <Texture Name="object_test3_Tex_000DC0" OutName="tex_000DC0" Format="ci8" Width="64" Height="32" Offset="0xDC0" />
-        <Texture Name="object_test3_Tex_0015C0" OutName="tex_0015C0" Format="ci8" Width="8" Height="16" Offset="0x15C0" />
-        <Texture Name="object_test3_Tex_001640" OutName="tex_001640" Format="ci8" Width="16" Height="16" Offset="0x1640" />
-        <Texture Name="object_test3_Tex_001740" OutName="tex_001740" Format="ci8" Width="32" Height="32" Offset="0x1740" />
-        <Texture Name="object_test3_Tex_001B40" OutName="tex_001B40" Format="ci8" Width="32" Height="32" Offset="0x1B40" />
-        <Texture Name="object_test3_Tex_001F40" OutName="tex_001F40" Format="ci8" Width="8" Height="8" Offset="0x1F40" />
-        <Texture Name="object_test3_Tex_001F80" OutName="tex_001F80" Format="ci8" Width="32" Height="16" Offset="0x1F80" />
-        <Texture Name="object_test3_Tex_002180" OutName="tex_002180" Format="rgba16" Width="32" Height="64" Offset="0x2180" />
-        <Texture Name="object_test3_Tex_003180" OutName="tex_003180" Format="ci8" Width="16" Height="64" Offset="0x3180" />
-        <Texture Name="object_test3_Tex_003580" OutName="tex_003580" Format="ci8" Width="16" Height="16" Offset="0x3580" />
-        <Texture Name="object_test3_Tex_003680" OutName="tex_003680" Format="ci8" Width="64" Height="32" Offset="0x3680" />
-        <Texture Name="object_test3_Tex_003E80" OutName="tex_003E80" Format="ci8" Width="64" Height="32" Offset="0x3E80" />
-        <Texture Name="object_test3_Tex_004680" OutName="tex_004680" Format="ci8" Width="64" Height="32" Offset="0x4680" />
-        <Texture Name="object_test3_Tex_004E80" OutName="tex_004E80" Format="ci8" Width="64" Height="32" Offset="0x4E80" />
-        <Texture Name="object_test3_Tex_005680" OutName="tex_005680" Format="ci8" Width="64" Height="32" Offset="0x5680" />
-        <Texture Name="object_test3_Tex_005E80" OutName="tex_005E80" Format="ci8" Width="64" Height="32" Offset="0x5E80" />
-        <Texture Name="object_test3_Tex_006680" OutName="tex_006680" Format="ci8" Width="64" Height="32" Offset="0x6680" />
-        <Texture Name="object_test3_Tex_006E80" OutName="tex_006E80" Format="ci8" Width="32" Height="32" Offset="0x6E80" />
-        <Texture Name="object_test3_Tex_007280" OutName="tex_007280" Format="ci8" Width="32" Height="32" Offset="0x7280" />
-        <Texture Name="object_test3_Tex_007680" OutName="tex_007680" Format="ci8" Width="32" Height="32" Offset="0x7680" />
-        <DList Name="object_test3_DL_00BF10" Offset="0xBF10" />
-        <DList Name="object_test3_DL_00C198" Offset="0xC198" />
-        <DList Name="object_test3_DL_00C300" Offset="0xC300" />
-        <DList Name="object_test3_DL_00C478" Offset="0xC478" />
-        <DList Name="object_test3_DL_00C708" Offset="0xC708" />
-        <DList Name="object_test3_DL_00C870" Offset="0xC870" />
-        <DList Name="object_test3_DL_00C9E8" Offset="0xC9E8" />
-        <DList Name="object_test3_DL_00CB60" Offset="0xCB60" />
-        <DList Name="object_test3_DL_00CC20" Offset="0xCC20" />
-        <DList Name="object_test3_DL_00CF70" Offset="0xCF70" />
-        <DList Name="object_test3_DL_00D670" Offset="0xD670" />
-        <DList Name="object_test3_DL_00D730" Offset="0xD730" />
-        <DList Name="object_test3_DL_00D7F0" Offset="0xD7F0" />
-        <DList Name="object_test3_DL_00D930" Offset="0xD930" />
-        <DList Name="object_test3_DL_00DA70" Offset="0xDA70" />
-        <DList Name="object_test3_DL_00DCF0" Offset="0xDCF0" />
-        <DList Name="object_test3_DL_00DE30" Offset="0xDE30" />
-        <DList Name="object_test3_DL_00DF70" Offset="0xDF70" />
-        <DList Name="object_test3_DL_00EDD0" Offset="0xEDD0" />
-        <Texture Name="object_test3_Tex_00F2C0" OutName="tex_00F2C0" Format="i4" Width="16" Height="16" Offset="0xF2C0" />
-        <Texture Name="object_test3_Tex_00F340" OutName="tex_00F340" Format="i4" Width="16" Height="16" Offset="0xF340" />
-        <Texture Name="object_test3_Tex_00F3C0" OutName="tex_00F3C0" Format="i4" Width="16" Height="16" Offset="0xF3C0" />
-        <Texture Name="object_test3_Tex_00F440" OutName="tex_00F440" Format="i4" Width="32" Height="32" Offset="0xF440" />
-        <DList Name="object_test3_DL_00F640" Offset="0xF640" />
-        <Limb Name="object_test3_Lodlimb_00F648" Type="LOD" EnumName="OBJECT_TEST3_LIMB_01" Offset="0xF648" />
-        <Limb Name="object_test3_Lodlimb_00F658" Type="LOD" EnumName="OBJECT_TEST3_LIMB_02" Offset="0xF658" />
-        <Limb Name="object_test3_Lodlimb_00F668" Type="LOD" EnumName="OBJECT_TEST3_LIMB_03" Offset="0xF668" />
-        <Limb Name="object_test3_Lodlimb_00F678" Type="LOD" EnumName="OBJECT_TEST3_LIMB_04" Offset="0xF678" />
-        <Limb Name="object_test3_Lodlimb_00F688" Type="LOD" EnumName="OBJECT_TEST3_LIMB_05" Offset="0xF688" />
-        <Limb Name="object_test3_Lodlimb_00F698" Type="LOD" EnumName="OBJECT_TEST3_LIMB_06" Offset="0xF698" />
-        <Limb Name="object_test3_Lodlimb_00F6A8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_07" Offset="0xF6A8" />
-        <Limb Name="object_test3_Lodlimb_00F6B8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_08" Offset="0xF6B8" />
-        <Limb Name="object_test3_Lodlimb_00F6C8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_09" Offset="0xF6C8" />
-        <Limb Name="object_test3_Lodlimb_00F6D8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0A" Offset="0xF6D8" />
-        <Limb Name="object_test3_Lodlimb_00F6E8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0B" Offset="0xF6E8" />
-        <Limb Name="object_test3_Lodlimb_00F6F8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0C" Offset="0xF6F8" />
-        <Limb Name="object_test3_Lodlimb_00F708" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0D" Offset="0xF708" />
-        <Limb Name="object_test3_Lodlimb_00F718" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0E" Offset="0xF718" />
-        <Limb Name="object_test3_Lodlimb_00F728" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0F" Offset="0xF728" />
-        <Limb Name="object_test3_Lodlimb_00F738" Type="LOD" EnumName="OBJECT_TEST3_LIMB_10" Offset="0xF738" />
-        <Limb Name="object_test3_Lodlimb_00F748" Type="LOD" EnumName="OBJECT_TEST3_LIMB_11" Offset="0xF748" />
-        <Limb Name="object_test3_Lodlimb_00F758" Type="LOD" EnumName="OBJECT_TEST3_LIMB_12" Offset="0xF758" />
-        <Limb Name="object_test3_Lodlimb_00F768" Type="LOD" EnumName="OBJECT_TEST3_LIMB_13" Offset="0xF768" />
-        <Limb Name="object_test3_Lodlimb_00F778" Type="LOD" EnumName="OBJECT_TEST3_LIMB_14" Offset="0xF778" />
-        <Limb Name="object_test3_Lodlimb_00F788" Type="LOD" EnumName="OBJECT_TEST3_LIMB_15" Offset="0xF788" />
-        <Skeleton Name="object_test3_Skel_00F7EC" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TEST3_LIMB_NONE" LimbMax="OBJECT_TEST3_LIMB_MAX" EnumName="ObjectTest3Limb" Offset="0xF7EC" />
+        <!-- Textures -->
+        <Texture Name="gKafeiBody1TLUT" OutName="kafei_body_1_tlut" Format="rgba16" Width="16" Height="16" Offset="0x0" />
+        <Texture Name="gKafeiBody2TLUT" OutName="kafei_body_2_tlut" Format="rgba16" Width="16" Height="16" Offset="0x200" />
+        <Texture Name="gKafeiMouthTLUT" OutName="kafei_mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0x400" />
+        <Texture Name="gKafeiEyesTLUT" OutName="kafei_eyes_tlut" Format="rgba16" Width="16" Height="16" Offset="0x600" />
+        <Texture Name="gKafeiSkinTex" OutName="kafei_skin" Format="ci8" Width="8" Height="8" Offset="0x800" />
+        <Texture Name="gKafeiHairTex" OutName="kafei_hair" Format="ci8" Width="8" Height="16" Offset="0x840" />
+        <Texture Name="gKafeiNoseTex" OutName="kafei_nose" Format="ci8" Width="16" Height="16" Offset="0x8C0" />
+        <Texture Name="gKafeiMouthClosedTex" OutName="kafei_mouth_closed" Format="ci8" Width="32" Height="32" Offset="0x9C0" />
+        <Texture Name="gKafeiEyesOpenTex" OutName="kafei_eyes_open" Format="ci8" Width="64" Height="32" Offset="0xDC0" />
+        <Texture Name="gKafeiHairPartAndUndersideTex" OutName="kafei_hair_part_and_underside" Format="ci8" Width="8" Height="16" Offset="0x15C0" />
+        <Texture Name="gKafeiFingersTex" OutName="kafei_fingers" Format="ci8" Width="16" Height="16" Offset="0x1640" />
+        <Texture Name="gKafeiBootTex" OutName="kafei_boot" Format="ci8" Width="32" Height="32" Offset="0x1740" />
+        <Texture Name="gKafeiSleevePatternTex" OutName="kafei_sleeve_pattern" Format="ci8" Width="32" Height="32" Offset="0x1B40" />
+        <Texture Name="gKafeiInnerSleeveTex" OutName="kafei_inner_sleeve" Format="ci8" Width="8" Height="8" Offset="0x1F40" />
+        <Texture Name="gKafeiClothesNeckOpeningTex" OutName="kafei_clothes_neck_opening" Format="ci8" Width="32" Height="16" Offset="0x1F80" />
+        <Texture Name="gKafeiPendantOfMemoriesTex" OutName="kafei_pendant_of_memories" Format="rgba16" Width="32" Height="64" Offset="0x2180" />
+        <Texture Name="gKafeiClothesPatternTex" OutName="kafei_clothes_pattern" Format="ci8" Width="16" Height="64" Offset="0x3180" />
+        <Texture Name="gKafeiTrouserHemTex" OutName="kafei_trouser_hem" Format="ci8" Width="16" Height="16" Offset="0x3580" />
+        <Texture Name="gKafeiEyesHalfTex" OutName="kafei_eyes_half" Format="ci8" Width="64" Height="32" Offset="0x3680" />
+        <Texture Name="gKafeiEyesClosedTex" OutName="kafei_eyes_closed" Format="ci8" Width="64" Height="32" Offset="0x3E80" />
+        <Texture Name="gKafeiEyesRollRightTex" OutName="kafei_eyes_roll_right" Format="ci8" Width="64" Height="32" Offset="0x4680" />
+        <Texture Name="gKafeiEyesRollLeftTex" OutName="kafei_eyes_roll_left" Format="ci8" Width="64" Height="32" Offset="0x4E80" />
+        <Texture Name="gKafeiEyesRollUpTex" OutName="kafei_eyes_roll_up" Format="ci8" Width="64" Height="32" Offset="0x5680" />
+        <Texture Name="gKafeiEyesRollDownTex" OutName="kafei_eyes_roll_down" Format="ci8" Width="64" Height="32" Offset="0x5E80" />
+        <Texture Name="object_test3_Tex_006680" OutName="tex_006680" Format="ci8" Width="64" Height="32" Offset="0x6680" /> <!-- TODO: name it after object_link_child_Tex_003800  -->
+        <Texture Name="gKafeiMouthTeethTex" OutName="kafei_mouth_teeth" Format="ci8" Width="32" Height="32" Offset="0x6E80" />
+        <Texture Name="gKafeiMouthAngryTex" OutName="kafei_mouth_angry" Format="ci8" Width="32" Height="32" Offset="0x7280" />
+        <Texture Name="gKafeiMouthHappyTex" OutName="kafei_mouth_happy" Format="ci8" Width="32" Height="32" Offset="0x7680" />
+
+        <!-- Kafei Dlists -->
+        <DList Name="gKafeiRightThighDL" Offset="0xBF10" />
+        <DList Name="gKafeiRightShinDL" Offset="0xC198" />
+        <DList Name="gKafeiRightFootDL" Offset="0xC300" />
+        <DList Name="gKafeiLeftThighDL" Offset="0xC478" />
+        <DList Name="gKafeiLeftShinDL" Offset="0xC708" />
+        <DList Name="gKafeiLeftFootDL" Offset="0xC870" />
+        <DList Name="gKafeiWaistDL" Offset="0xC9E8" />
+        <DList Name="gKafeiPendantOfMemoriesDL" Offset="0xCB60" />
+        <DList Name="gKafeiTorsoDL" Offset="0xCC20" />
+        <DList Name="gKafeiHeadDL" Offset="0xCF70" />
+        <DList Name="gKafeiNose1DL" Offset="0xD670" />
+        <DList Name="gKafeiNose2DL" Offset="0xD730" />
+        <DList Name="gKafeiRightShoulderDL" Offset="0xD7F0" />
+        <DList Name="gKafeiRightForearmDL" Offset="0xD930" />
+        <DList Name="gKafeiRightHandDL" Offset="0xDA70" />
+        <DList Name="gKafeiLeftShoulderDL" Offset="0xDCF0" />
+        <DList Name="gKafeiLeftForearmDL" Offset="0xDE30" />
+        <DList Name="gKafeiLeftHandDL" Offset="0xDF70" />
+
+        <!-- Sun Mask -->
+        <DList Name="gKafeiSunMaskDL" Offset="0xEDD0" />
+        <Texture Name="gKafeiSunMaskEyeTex" OutName="kafei_sun_mask_eye" Format="i4" Width="16" Height="16" Offset="0xF2C0" />
+        <Texture Name="gKafeiSunMaskPattern1Tex" OutName="kafei_sun_mask_pattern1" Format="i4" Width="16" Height="16" Offset="0xF340" />
+        <Texture Name="gKafeiSunMaskPattern2Tex" OutName="kafei_sun_mask_pattern2" Format="i4" Width="16" Height="16" Offset="0xF3C0" />
+        <Texture Name="gKafeiSunMaskPattern3Tex" OutName="kafei_sun_mask_pattern3" Format="i4" Width="32" Height="32" Offset="0xF440" />
+        <DList Name="gKafeiSunMaskEmptyDL" Offset="0xF640" />
+
+        <!-- Kafei Limbs -->
+        <Limb Name="gKafeiRootLimb" Type="LOD" EnumName="KAFEI_LIMB_ROOT" Offset="0xF648" />
+        <Limb Name="gKafeiWaistLimb" Type="LOD" EnumName="KAFEI_LIMB_WAIST" Offset="0xF658" />
+        <Limb Name="gKafeiLowerRootLimb" Type="LOD" EnumName="KAFEI_LIMB_LOWER_ROOT" Offset="0xF668" />
+        <Limb Name="gKafeiRightThighLimb" Type="LOD" EnumName="KAFEI_LIMB_RIGHT_THIGH" Offset="0xF678" />
+        <Limb Name="gKafeiRightShinLimb" Type="LOD" EnumName="KAFEI_LIMB_RIGHT_SHIN" Offset="0xF688" />
+        <Limb Name="gKafeiRightFootLimb" Type="LOD" EnumName="KAFEI_LIMB_RIGHT_FOOT" Offset="0xF698" />
+        <Limb Name="gKafeiLeftThighLimb" Type="LOD" EnumName="KAFEI_LIMB_LEFT_THIGH" Offset="0xF6A8" />
+        <Limb Name="gKafeiLeftShinLimb" Type="LOD" EnumName="KAFEI_LIMB_LEFT_SHIN" Offset="0xF6B8" />
+        <Limb Name="gKafeiLeftFootLimb" Type="LOD" EnumName="KAFEI_LIMB_LEFT_FOOT" Offset="0xF6C8" />
+        <Limb Name="gKafeiUpperRootLimb" Type="LOD" EnumName="KAFEI_LIMB_UPPER_ROOT" Offset="0xF6D8" />
+        <Limb Name="gKafeiHeadLimb" Type="LOD" EnumName="KAFEI_LIMB_HEAD" Offset="0xF6E8" />
+        <Limb Name="gKafeiHatLimb" Type="LOD" EnumName="KAFEI_LIMB_HAT" Offset="0xF6F8" />
+        <Limb Name="gKafeiCollarLimb" Type="LOD" EnumName="KAFEI_LIMB_COLLAR" Offset="0xF708" />
+        <Limb Name="gKafeiLeftShoulderLimb" Type="LOD" EnumName="KAFEI_LIMB_LEFT_SHOULDER" Offset="0xF718" />
+        <Limb Name="gKafeiLeftForearmLimb" Type="LOD" EnumName="KAFEI_LIMB_LEFT_FOREARM" Offset="0xF728" />
+        <Limb Name="gKafeiLeftHandLimb" Type="LOD" EnumName="KAFEI_LIMB_LEFT_HAND" Offset="0xF738" />
+        <Limb Name="gKafeiRightShoulderLimb" Type="LOD" EnumName="KAFEI_LIMB_RIGHT_SHOULDER" Offset="0xF748" />
+        <Limb Name="gKafeiRightForearmLimb" Type="LOD" EnumName="KAFEI_LIMB_RIGHT_FOREARM" Offset="0xF758" />
+        <Limb Name="gKafeiRightHandLimb" Type="LOD" EnumName="KAFEI_LIMB_RIGHT_HAND" Offset="0xF768" />
+        <Limb Name="gKafeiSheathLimb" Type="LOD" EnumName="KAFEI_LIMB_SHEATH" Offset="0xF778" />
+        <Limb Name="gKafeiTorsoLimb" Type="LOD" EnumName="KAFEI_LIMB_TORSO" Offset="0xF788" />
+
+        <!-- Kafei Skeleton -->
+        <Skeleton Name="gKafeiSkel" Type="Flex" LimbType="Standard" LimbNone="KAFEI_LIMB_NONE" LimbMax="KAFEI_LIMB_MAX" EnumName="KafeiLimb" Offset="0xF7EC" />
     </File>
 </Root>

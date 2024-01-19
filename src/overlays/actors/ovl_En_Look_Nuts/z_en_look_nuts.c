@@ -25,15 +25,15 @@ void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
 ActorInit En_Look_Nuts_InitVars = {
-    ACTOR_EN_LOOK_NUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNK,
-    sizeof(EnLookNuts),
-    (ActorFunc)EnLookNuts_Init,
-    (ActorFunc)EnLookNuts_Destroy,
-    (ActorFunc)EnLookNuts_Update,
-    (ActorFunc)EnLookNuts_Draw,
+    /**/ ACTOR_EN_LOOK_NUTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNK,
+    /**/ sizeof(EnLookNuts),
+    /**/ EnLookNuts_Init,
+    /**/ EnLookNuts_Destroy,
+    /**/ EnLookNuts_Update,
+    /**/ EnLookNuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -56,7 +56,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 50, 0, { 0, 0, 0 } },
 };
 
-s32 D_80A6862C = 0;
+s32 D_80A6862C = false;
 
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(1, 0xF),
@@ -109,17 +109,17 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->pathIndex = LOOKNUTS_GET_PATH_INDEX(&this->actor);
-    this->switchFlag = LOOKNUTS_GET_SCENE_FLAG(&this->actor);
+    this->switchFlag = LOOKNUTS_GET_SWITCH_FLAG(&this->actor);
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
 
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == LOOKNUTS_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
-    if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -160,7 +160,7 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
-    if (D_80A6862C != 0) {
+    if (D_80A6862C) {
         Math_ApproachZeroF(&this->actor.speed, 0.3f, 1.0f);
         return;
     }
@@ -208,7 +208,7 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     Math_ApproachZeroF(&this->actor.speed, 0.3f, 1.0f);
-    if (!Play_InCsMode(play) && (D_80A6862C == 0) && (this->eventTimer == 0)) {
+    if (!Play_InCsMode(play) && !D_80A6862C && (this->eventTimer == 0)) {
         this->eventTimer = 10;
         switch (this->waitTimer) {
             case 0:
@@ -219,39 +219,48 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
                 this->waitTimer++;
                 this->headRotTarget.y *= -1.0f;
                 break;
+
             case 5:
                 this->headRotTarget.y = 0.0f;
                 randOffset = Rand_S16Offset(1, 2);
                 this->eventTimer = 0;
                 this->waitTimer += randOffset;
                 break;
+
             case 6:
-                if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
+                if (fabsf(this->headRotTarget.y - this->headRot.y) < 10.0f) {
                     this->waitTimer = 10;
                     this->headRotTarget.x = 4000.0f;
                     this->eventTimer = 5;
                 }
                 break;
+
             case 7:
-                if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
+                if (fabsf(this->headRotTarget.y - this->headRot.y) < 10.0f) {
                     this->headRotTarget.z = 4000.0f;
                     this->waitTimer++;
                 }
                 break;
+
             case 8:
                 this->waitTimer = 10;
                 this->eventTimer = 20;
                 this->headRotTarget.z = -8000.0f;
                 break;
+
             case 10:
                 Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                 this->waitTimer = 11;
                 break;
+
             case 11:
-                if ((fabsf(this->headRotation.x) < 30.0f) && (fabsf(this->headRotation.y) < 30.0f) &&
-                    (fabsf(this->headRotation.z) < 30.0f)) {
+                if ((fabsf(this->headRot.x) < 30.0f) && (fabsf(this->headRot.y) < 30.0f) &&
+                    (fabsf(this->headRot.z) < 30.0f)) {
                     this->waitTimer = 12;
                 }
+                break;
+
+            default:
                 break;
         }
         if (this->waitTimer == 12) {
@@ -304,20 +313,15 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
     }
 }
 
-static Vec3f effectVecInitialize = { 0.0f, 0.0f, 0.0f };
-
 void EnLookNuts_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnLookNuts* this = THIS;
-    Vec3f effectVelOffset;
-    Vec3f effectPos;
-    Vec3f effectVel;
 
     if (this->blinkTimer == 0) {
         this->eyeState++;
         if (this->eyeState >= 3) {
             this->eyeState = 0;
-            this->blinkTimer = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->blinkTimer = TRUNCF_BINANG(Rand_ZeroFloat(60.0f)) + 20;
         }
     }
     this->actionFunc(this, play);
@@ -328,17 +332,20 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
         this->eventTimer--;
     }
     Actor_MoveWithGravity(&this->actor);
-    if (D_80A6862C == 0) {
+    if (!D_80A6862C) {
         if ((this->state < 2) && (this->actor.xzDistToPlayer < 320.0f) && (this->actor.playerHeightRel < 80.0f)) {
-            effectVelOffset = effectVecInitialize;
+            Vec3f effectVelocityOffset = { 0.0f, 0.0f, 0.0f };
+            Vec3f effectPos;
+            Vec3f effectVelocity;
+
             Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
-            effectPos.x += Math_SinS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
+            effectPos.x += Math_SinS(this->actor.world.rot.y + TRUNCF_BINANG(this->headRot.y)) * 10.0f;
             effectPos.y += 30.0f;
-            effectPos.z += Math_CosS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
+            effectPos.z += Math_CosS(this->actor.world.rot.y + TRUNCF_BINANG(this->headRot.y)) * 10.0f;
             Matrix_Push();
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-            effectVelOffset.z = 20.0f;
-            Matrix_MultVec3f(&effectVelOffset, &effectVel);
+            effectVelocityOffset.z = 20.0f;
+            Matrix_MultVec3f(&effectVelocityOffset, &effectVelocity);
             Matrix_Pop();
             if (!this->isPlayerDetected) {
                 s16 effectFlags = SOLDERSRCHBALL_INVISIBLE;
@@ -347,8 +354,8 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     effectFlags = 0;
                 }
                 if (Player_GetMask(play) != PLAYER_MASK_STONE) {
-                    EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->isPlayerDetected,
-                                                 effectFlags);
+                    EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVelocity, &gZeroVec3f, 50,
+                                                 &this->isPlayerDetected, effectFlags);
                 }
             }
 
@@ -358,10 +365,10 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                 if (!(player->stateFlags3 & PLAYER_STATE3_100) && !Play_InCsMode(play)) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
-                    play_sound(NA_SE_SY_FOUND);
-                    func_800B7298(play, &this->actor, PLAYER_CSMODE_26);
-                    D_80A6862C = 1;
-                    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10);
+                    Audio_PlaySfx(NA_SE_SY_FOUND);
+                    Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_26);
+                    D_80A6862C = true;
+                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;
                     EnLookNuts_DetectedPlayer(this, play);
                 } else {
@@ -369,9 +376,9 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                 }
             }
         }
-        Math_ApproachF(&this->headRotation.x, this->headRotTarget.x, 1.0f, 3000.0f);
-        Math_ApproachF(&this->headRotation.y, this->headRotTarget.y, 1.0f, 6000.0f);
-        Math_ApproachF(&this->headRotation.z, this->headRotTarget.z, 1.0f, 2000.0f);
+        Math_ApproachF(&this->headRot.x, this->headRotTarget.x, 1.0f, 3000.0f);
+        Math_ApproachF(&this->headRot.y, this->headRotTarget.y, 1.0f, 6000.0f);
+        Math_ApproachF(&this->headRot.z, this->headRotTarget.z, 1.0f, 2000.0f);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);

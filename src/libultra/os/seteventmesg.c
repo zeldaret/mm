@@ -1,25 +1,26 @@
-#include "global.h"
+#include "ultra64.h"
+#include "PR/osint.h"
+#include "libc/stdbool.h"
+#include "alignment.h"
 
-UNK_TYPE4 D_80097F10 = 0;
+u32 __osPreNMI = false;
 
-__OSEventState __osEventStateTab[16];
+__OSEventState __osEventStateTab[OS_NUM_EVENTS] ALIGNED(8);
 
 void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m) {
-    register u32 saveMask;
+    register u32 saveMask = __osDisableInt();
     __OSEventState* es;
-
-    saveMask = __osDisableInt();
 
     es = &__osEventStateTab[e];
 
     es->messageQueue = mq;
     es->message = m;
 
-    if (e == 14) {
-        if ((__osShutdown != 0) && (D_80097F10 == 0)) {
+    if (e == OS_EVENT_PRENMI) {
+        if (__osShutdown && !__osPreNMI) {
             osSendMesg(mq, m, OS_MESG_NOBLOCK);
         }
-        D_80097F10 = 1;
+        __osPreNMI = true;
     }
 
     __osRestoreInt(saveMask);

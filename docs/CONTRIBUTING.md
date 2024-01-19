@@ -4,19 +4,19 @@ Thanks for helping us reverse engineer *The Legend of Zelda: Majora's Mask* for 
 All contributions are welcome. This is a group effort, and even small contributions can make a difference. Some tasks also don't require much knowledge to get started.
 
 This document is meant to be a set of tips and guidelines for contributing to the project.
-For general information about the project, see [our readme](https://github.com/zeldaret/mm/blob/master/README.md).
+For general information about the project, see [our readme](https://github.com/zeldaret/mm/blob/main/README.md).
 
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev) where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
 
 ## Useful Links
 
-- [Installation guide](https://github.com/zeldaret/mm/blob/master/README.md#installation) - Instructions for getting this repository set up and built on your machine.
+- [Installation guide](https://github.com/zeldaret/mm/blob/main/README.md#installation) - Instructions for getting this repository set up and built on your machine.
 - [Style Guide](STYLE.md) - Description of the project style that we ask contributors to adhere to.
 - [Code Review Guidelines](REVIEWING.md) - These are the guidelines that reviewers will be using when reviewing your code. Good to be familiar with these before submitting your code.
 
 - [Zelda 64 Reverse Engineering Website](https://zelda64.dev/games/mm) - Our homepage, with FAQ and progress graph :chart_with_upwards_trend:.
 - [MM decomp tutorial](tutorial/contents.md) Detailed tutorial for learning in general how decomp works and how to decompile a small, simple file.
-- [Introduction to OOT decomp](https://github.com/zeldaret/oot/blob/master/docs/tutorial/contents.md) - The tutorial the MM one was based on. For OOT, but largely applicable to MM as well. Covers slightly different topics, including how to get your data OK with `vbindiff`.
+- [Introduction to OOT decomp](https://github.com/zeldaret/oot/blob/main/docs/tutorial/contents.md) - The tutorial the MM one was based on. For OOT, but largely applicable to MM as well. Covers slightly different topics, including how to get your data OK with `vbindiff`.
 - The `#resources` channel on the Discord contains many more links on specific details of decompiling IDO MIPS code.
 
 ## Getting Started
@@ -37,7 +37,7 @@ This project only uses *publicly available code*.
 
 ### Environment Setup
 
-Get started by following the [installation guide in the readme](https://github.com/zeldaret/mm/blob/master/README.md#installation).
+Get started by following the [installation guide in the readme](https://github.com/zeldaret/mm/blob/main/README.md#installation).
 You should be able to build a matching ROM before you start making any changes.
 
 ### First Contribution
@@ -110,7 +110,7 @@ See the [Style Guide](STYLE.md) for more details on documentation style.
 Before opening a PR, walk through the following steps to ensure that your code conforms to the style guide and conventions.
 
 - `make` successfully builds a matching ROM.
-- `./format.sh` was run to apply standard formatting.
+- `./format.py` was run to apply standard formatting.
 - No new compiler warnings were introduced during the build process.
     - Can be verified locally by running `tools/warnings_count/check_new_warnings.sh`
 - New variables & functions should follow standard naming conventions.
@@ -142,8 +142,8 @@ Project leads are responsible for ensuring that these conventions are followed.
 
 ### Some git notes
 
-- You should work on a branch on your fork separate from your copy of master: it is always useful to have a clean master branch around if you need to fix something.
-- When a PR is merged into master, it may conflict with your work. While your branch is private (in particular, not used for a PR), you can rebase, but when your branch is public/used for a PR always merge master instead of rebasing: it makes it much easier for people to understand what you changed since the last review.
+- You should work on a branch on your fork separate from your copy of main: it is always useful to have a clean main branch around if you need to fix something.
+- When a PR is merged into main, it may conflict with your work. While your branch is private (in particular, not used for a PR), you can rebase, but when your branch is public/used for a PR always merge main instead of rebasing: it makes it much easier for people to understand what you changed since the last review.
 - We squash commits when merging, so your commit history does not have to be completely spotless.
 
 Throughout the PR process, you (the author) should update the rows on the appropriate Google Sheets with the appropriate information as the decompilation process progresses.

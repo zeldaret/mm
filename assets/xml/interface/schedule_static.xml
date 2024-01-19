@@ -12,6 +12,7 @@
         <Texture Name="gBombersNotebookBackgroundTex" OutName="bombers_notebook_background" Format="i8" Width="32" Height="32" Offset="0x13D8"/>
         <Texture Name="gBombersNotebookHeaderBoxTex" OutName="bombers_notebook_header_box" Format="i8" Width="8" Height="24" Offset="0x17D8"/>
         <Texture Name="gBombersNotebookLineTex" OutName="bombers_notebook_line" Format="i8" Width="8" Height="1" Offset="0x1898"/>
+        <Texture Name="gBombersNotebookBarSmallTex" OutName="bombers_notebook_bar_small" Format="i8" Width="8" Height="2" Offset="0x18A0"/> <!-- Unused -->
         <Texture Name="gBombersNotebookBarTex" OutName="bombers_notebook_bar" Format="i8" Width="8" Height="4" Offset="0x18B0"/>
         <Texture Name="gBombersNotebookCursorTex" OutName="bombers_notebook_cursor" Format="ia4" Width="16" Height="16" Offset="0x18D0"/>
         <Texture Name="gBombersNoteoobkTimeOfDayBoxTex" OutName="bombers_notebook_time_of_day_box" Format="ia4" Width="64" Height="28" Offset="0x1950"/>
@@ -30,9 +31,29 @@
         <Texture Name="gBombersNotebookDigit8Tex" OutName="bombers_notebook_digit_8" Format="i4" Width="16" Height="17" Offset="0x24B8"/>
         <Texture Name="gBombersNotebookDigit9Tex" OutName="bombers_notebook_digit_9" Format="i4" Width="16" Height="17" Offset="0x2540"/>
         <Texture Name="gBombersNotebookColonTex" OutName="bombers_notebook_colon" Format="i4" Width="16" Height="17" Offset="0x25C8"/>
-        <Texture Name="gBombersNotebookDay1stTex" OutName="bombers_notebook_day_1st" Format="ia8" Width="48" Height="22" Offset="0x2650"/>
-        <Texture Name="gBombersNotebookDay2ndTex" OutName="bombers_notebook_day_2nd" Format="ia8" Width="48" Height="22" Offset="0x2A70"/>
-        <Texture Name="gBombersNotebookDayFinalTex" OutName="bombers_notebook_day_final" Format="ia8" Width="48" Height="22" Offset="0x2E90"/>
-        <Texture Name="gBombersNotebookTimeOfDayTex" OutName="bombers_notebook_time_of_day" Format="i4" Width="96" Height="20" Offset="0x32B0"/>
+
+        <!-- English -->
+        <Texture Name="gBombersNotebookDay1stENGTex" OutName="bombers_notebook_day_1st_eng" Format="ia8" Width="48" Height="22" Offset="0x2650"/>
+        <Texture Name="gBombersNotebookDay2ndENGTex" OutName="bombers_notebook_day_2nd_eng" Format="ia8" Width="48" Height="22" Offset="0x2A70"/>
+        <Texture Name="gBombersNotebookDayFinalENGTex" OutName="bombers_notebook_day_final_eng" Format="ia8" Width="48" Height="22" Offset="0x2E90"/>
+        <Texture Name="gBombersNotebookTimeOfDayENGTex" OutName="bombers_notebook_time_of_day_eng" Format="i4" Width="96" Height="20" Offset="0x32B0"/>
+
+        <!-- German -->
+        <Texture Name="gBombersNotebookDay1stGERTex" OutName="bombers_notebook_day_1st_ger" Format="ia8" Width="48" Height="22" Offset="0x3670"/>
+        <Texture Name="gBombersNotebookDay2ndGERTex" OutName="bombers_notebook_day_2nd_ger" Format="ia8" Width="48" Height="22" Offset="0x3A90"/>
+        <Texture Name="gBombersNotebookDayFinalGERTex" OutName="bombers_notebook_day_final_ger" Format="ia8" Width="48" Height="22" Offset="0x3EB0"/>
+        <Texture Name="gBombersNotebookTimeOfDayGERTex" OutName="bombers_notebook_time_of_day_ger" Format="i4" Width="96" Height="20" Offset="0x42D0"/>
+
+        <!-- French -->
+        <Texture Name="gBombersNotebookDay1stFRATex" OutName="bombers_notebook_day_1st_fra" Format="ia8" Width="48" Height="22" Offset="0x4690"/>
+        <Texture Name="gBombersNotebookDay2ndFRATex" OutName="bombers_notebook_day_2nd_fra" Format="ia8" Width="48" Height="22" Offset="0x4AB0"/>
+        <Texture Name="gBombersNotebookDayFinalFRATex" OutName="bombers_notebook_day_final_fra" Format="ia8" Width="48" Height="22" Offset="0x4ED0"/>
+        <Texture Name="gBombersNotebookTimeOfDayFRATex" OutName="bombers_notebook_time_of_day_fra" Format="i4" Width="96" Height="20" Offset="0x52F0"/>
+
+        <!-- Spanish -->
+        <Texture Name="gBombersNotebookDay1stSPATex" OutName="bombers_notebook_day_1st_spa" Format="ia8" Width="48" Height="22" Offset="0x56B0"/>
+        <Texture Name="gBombersNotebookDay2ndSPATex" OutName="bombers_notebook_day_2nd_spa" Format="ia8" Width="48" Height="22" Offset="0x5AD0"/>
+        <Texture Name="gBombersNotebookDayFinalSPATex" OutName="bombers_notebook_day_final_spa" Format="ia8" Width="48" Height="22" Offset="0x5EF0"/>
+        <Texture Name="gBombersNotebookTimeOfDaySPATex" OutName="bombers_notebook_time_of_day_spa" Format="i4" Width="96" Height="20" Offset="0x6310"/>
     </File>
 </Root>

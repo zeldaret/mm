@@ -1,9 +1,11 @@
-#include "global.h"
+#include "ultra64.h"
+#include "alignment.h"
+#include "macros.h"
 
 u32 __osSiAccessQueueEnabled = 0;
 
-OSMesg siAccessBuf[1];
-OSMesgQueue __osSiAccessQueue;
+OSMesg siAccessBuf[1] ALIGNED(8);
+OSMesgQueue __osSiAccessQueue ALIGNED(8);
 
 void __osSiCreateAccessQueue() {
     __osSiAccessQueueEnabled = 1;
@@ -13,6 +15,7 @@ void __osSiCreateAccessQueue() {
 
 void __osSiGetAccess(void) {
     OSMesg dummyMesg;
+
     if (!__osSiAccessQueueEnabled) {
         __osSiCreateAccessQueue();
     }

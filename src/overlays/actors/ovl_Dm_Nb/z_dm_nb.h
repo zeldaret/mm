@@ -15,9 +15,9 @@ typedef struct DmNb {
     /* 0x18C */ Vec3s jointTable[NB_LIMB_MAX];
     /* 0x1BC */ Vec3s morphTable[NB_LIMB_MAX];
     /* 0x1EC */ u8 cueId;
-    /* 0x1F0 */ s32 unk1F0;
-    /* 0x1F4 */ s32 unk1F4;
-    /* 0x1F8 */ s32 unk1F8;
+    /* 0x1F0 */ s32 animIndex;
+    /* 0x1F4 */ s32 prevAnimIndex;
+    /* 0x1F8 */ s32 isCutscenePlaying;
 } DmNb; // size = 0x1FC
 
 #endif // Z_DM_NB_H

@@ -325,6 +325,6 @@ void ObjTree_Draw(Actor* thisx, PlayState* play) {
 
 TODO: find some examples for this one.
 
-For even more examples, you can consult [the OoT tutorial](https://github.com/zeldaret/oot/blob/master/docs/tutorial/draw_functions.md)
+For even more examples, you can consult [the OoT tutorial](https://github.com/zeldaret/oot/blob/main/docs/tutorial/draw_functions.md)
 
 Next: [Data](data.md)

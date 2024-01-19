@@ -1,5 +1,5 @@
-#ifndef ULTRA64_ABI_H
-#define ULTRA64_ABI_H
+#ifndef PR_ABI_H
+#define PR_ABI_H
 
 /* Audio commands: */
 /*

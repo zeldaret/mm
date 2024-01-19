@@ -3,8 +3,8 @@
 
 #include "PR/ultratypes.h"
 #include "PR/sched.h"
-#include "ultra64/vi.h"
-#include "ultra64/sptask.h"
+#include "PR/os_vi.h"
+#include "PR/sptask.h"
 #include "irqmgr.h"
 
 #define TASK_FRAMEBUFFER(task) ((CfbInfo*)(task)->framebuffer)

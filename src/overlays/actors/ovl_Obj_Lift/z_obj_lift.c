@@ -28,15 +28,15 @@ void func_8093DB90(ObjLift* this, PlayState* play);
 void func_8093DC90(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Lift_InitVars = {
-    ACTOR_OBJ_LIFT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_D_LIFT,
-    sizeof(ObjLift),
-    (ActorFunc)ObjLift_Init,
-    (ActorFunc)ObjLift_Destroy,
-    (ActorFunc)ObjLift_Update,
-    (ActorFunc)ObjLift_Draw,
+    /**/ ACTOR_OBJ_LIFT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_D_LIFT,
+    /**/ sizeof(ObjLift),
+    /**/ ObjLift_Init,
+    /**/ ObjLift_Destroy,
+    /**/ ObjLift_Update,
+    /**/ ObjLift_Draw,
 };
 
 static s16 D_8093DD50[] = { 0, 10, 20, 30, 40, 50, 60 };
@@ -101,7 +101,7 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
     this->unk_178 = this->dyna.actor.home.rot.z;
     this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
-    if ((this->unk_178 <= 0) && (Flags_GetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor)))) {
+    if ((this->unk_178 <= 0) && Flags_GetSwitch(play, OBJLIFT_GET_SWITCH_FLAG(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -196,7 +196,7 @@ void func_8093DA48(ObjLift* this, PlayState* play) {
             func_8093DB70(this);
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
-            Flags_SetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor));
+            Flags_SetSwitch(play, OBJLIFT_GET_SWITCH_FLAG(&this->dyna.actor));
             Actor_Kill(&this->dyna.actor);
         }
     }

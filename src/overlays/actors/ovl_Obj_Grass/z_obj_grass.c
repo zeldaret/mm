@@ -1,7 +1,9 @@
 /*
  * File: z_obj_grass.c
  * Overlay: ovl_Obj_Grass
- * Description: "Master" instance of grass for unit spawned by Obj_Grass_Unit
+ * Description: Optimized manager for processing grass "spawned" by ObjGrassUnit
+ *
+ * Instances of ObjGrass must be spawned by ObjGrassUnit to function correctly.
  */
 
 #include "prevent_bss_reordering.h"
@@ -18,23 +20,23 @@ void ObjGrass_Destroy(Actor* thisx, PlayState* play);
 void ObjGrass_Update(Actor* thisx, PlayState* play);
 void ObjGrass_Draw(Actor* thisx, PlayState* play);
 
-ObjGrassStruct1* D_809AADA0[4];
-f32 D_809AADB0[4];
-ObjGrassStruct1_1* D_809AADC0[20];
-f32 D_809AAE10[20];
+ObjGrassGroup* sNearestGrassGroups[OBJ_GRASS_NEAREST_GROUP_MAX];
+f32 sNearestGrassGroupsDist[OBJ_GRASS_NEAREST_GROUP_MAX];
+ObjGrassElement* sNearestGrassElements[OBJ_GRASS_NEAREST_ELEM_MAX];
+f32 sNearestGrassElementsDistSq[OBJ_GRASS_NEAREST_ELEM_MAX];
 
 #include "overlays/ovl_Obj_Grass/ovl_Obj_Grass.c"
 
 ActorInit Obj_Grass_InitVars = {
-    ACTOR_OBJ_GRASS,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_FIELD_KEEP,
-    sizeof(ObjGrass),
-    (ActorFunc)ObjGrass_Init,
-    (ActorFunc)ObjGrass_Destroy,
-    (ActorFunc)ObjGrass_Update,
-    (ActorFunc)ObjGrass_Draw,
+    /**/ ACTOR_OBJ_GRASS,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_FIELD_KEEP,
+    /**/ sizeof(ObjGrass),
+    /**/ ObjGrass_Init,
+    /**/ ObjGrass_Destroy,
+    /**/ ObjGrass_Update,
+    /**/ ObjGrass_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -57,35 +59,35 @@ static ColliderCylinderInit sCylinderInit = {
     { 6, 44, 0, { 0, 0, 0 } },
 };
 
-Vec3f D_809AAB4C[] = {
-    { 0.0f, 0.707099974155f, 0.707099974155f },
-    { 0.707099974155f, 0.707099974155f, 0.0f },
-    { 0.0f, 0.707099974155f, -0.707099974155f },
-    { -0.707099974155f, 0.707099974155f, 0.0f },
+static Vec3f sUnitDirections[] = {
+    { 0.0f, 0.7071f, 0.7071f },
+    { 0.7071f, 0.7071f, 0.0f },
+    { 0.0f, 0.7071f, -0.7071f },
+    { -0.7071f, 0.7071f, 0.0f },
 };
 
-s16 D_809AAB7C[] = { 0x6C, 0x66, 0x60, 0x54, 0x42, 0x37, 0x2A, 0x26 };
+static s16 sFragmentScales[] = { 108, 102, 96, 84, 66, 55, 42, 38 };
 
-s32 func_809A9110(PlayState* play, Vec3f* arg1) {
-    f32 sp2C;
-    Vec3f sp20;
+s32 func_809A9110(PlayState* play, Vec3f* pos) {
+    f32 w;
+    Vec3f projectedPos;
 
-    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, arg1, &sp20, &sp2C);
+    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, pos, &projectedPos, &w);
 
-    if ((play->projectionMtxFDiagonal.z * -130.13191f) < sp20.z) {
-        if (sp2C < 1.0f) {
-            sp2C = 1.0f;
+    if ((play->projectionMtxFDiagonal.z * -130.13191f) < projectedPos.z) {
+        if (w < 1.0f) {
+            w = 1.0f;
         }
 
-        if (((fabsf(sp20.x) - (130.13191f * play->projectionMtxFDiagonal.x)) < sp2C) &&
-            ((fabsf(sp20.y) - (130.13191f * play->projectionMtxFDiagonal.y)) < sp2C)) {
+        if (((fabsf(projectedPos.x) - (130.13191f * play->projectionMtxFDiagonal.x)) < w) &&
+            ((fabsf(projectedPos.y) - (130.13191f * play->projectionMtxFDiagonal.y)) < w)) {
             return true;
         }
     }
     return false;
 }
 
-void func_809A91FC(MtxF* matrix) {
+void ObjGrass_OverrideMatrixCurrent(MtxF* matrix) {
     s32 i;
     MtxF* temp = Matrix_GetCurrent();
     f32* tmp = &temp->xx;
@@ -96,42 +98,44 @@ void func_809A91FC(MtxF* matrix) {
     }
 }
 
-void func_809A92D0(ObjGrassStruct1_1* ptr, PlayState* play) {
-    if (!(ptr->unk_0E & 0x10)) {
-        Item_DropCollectibleRandom(play, NULL, &ptr->unk_00, ptr->unk_0E * 0x10);
+void ObjGrass_DropCollectible(ObjGrassElement* grassElem, PlayState* play) {
+    if (!(grassElem->dropTable & 0x10)) {
+        Item_DropCollectibleRandom(play, NULL, &grassElem->pos, grassElem->dropTable * 0x10);
     }
 }
 
-void func_809A9314(ObjGrassStruct1_1* ptr, PlayState* play) {
-    Vec3f spBC;
-    Vec3f spB0;
+void ObjGrass_SpawnFragments(Vec3f* basePos, PlayState* play) {
+    Vec3f velocity;
+    Vec3f pos;
     s32 i;
-    Vec3f* ptr2;
+    Vec3f* dir;
 
-    for (i = 0; i < ARRAY_COUNT(D_809AAB4C); i++) {
-        ptr2 = &D_809AAB4C[i];
+    for (i = 0; i < ARRAY_COUNT(sUnitDirections); i++) {
+        dir = &sUnitDirections[i];
 
-        spB0.x = ptr->unk_00.x + (ptr2->x * 8.0f);
-        spB0.y = (ptr->unk_00.y + (ptr2->y * 8.0f)) + 10.0f;
-        spB0.z = ptr->unk_00.z + (ptr2->z * 8.0f);
+        pos.x = basePos->x + (dir->x * 8.0f);
+        pos.y = basePos->y + (dir->y * 8.0f) + 10.0f;
+        pos.z = basePos->z + (dir->z * 8.0f);
 
-        spBC.x = (Rand_ZeroOne() - 0.5f) * 8.0f;
-        spBC.y = Rand_ZeroOne() * 10.0f;
-        spBC.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
+        velocity.x = (Rand_ZeroOne() - 0.5f) * 8.0f;
+        velocity.y = Rand_ZeroOne() * 10.0f;
+        velocity.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
 
-        EffectSsKakera_Spawn(play, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gKakeraLeafMiddle);
+        EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0,
+                             sFragmentScales[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, GAMEPLAY_KEEP,
+                             gKakeraLeafMiddleDL);
 
-        spB0.x = ptr->unk_00.x + (ptr2->x * 16.0f);
-        spB0.y = (ptr->unk_00.y + (ptr2->y * 16.0f)) + 10.0f;
-        spB0.z = ptr->unk_00.z + (ptr2->z * 16.0f);
+        pos.x = basePos->x + (dir->x * 16.0f);
+        pos.y = basePos->y + (dir->y * 16.0f) + 10.0f;
+        pos.z = basePos->z + (dir->z * 16.0f);
 
-        spBC.x = (Rand_ZeroOne() - 0.5f) * 6.0f;
-        spBC.y = Rand_ZeroOne() * 10.0f;
-        spBC.z = (Rand_ZeroOne() - 0.5f) * 6.0f;
+        velocity.x = (Rand_ZeroOne() - 0.5f) * 6.0f;
+        velocity.y = Rand_ZeroOne() * 10.0f;
+        velocity.z = (Rand_ZeroOne() - 0.5f) * 6.0f;
 
-        EffectSsKakera_Spawn(play, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gKakeraLeafTip);
+        EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -100, 64, 40, 3, 0,
+                             sFragmentScales[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, GAMEPLAY_KEEP,
+                             gKakeraLeafTipDL);
     }
 }
 
@@ -141,9 +145,9 @@ void ObjGrass_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.4f);
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2948); i++) {
-        Collider_InitCylinder(play, &this->unk_2948[i].collider);
-        Collider_SetCylinder(play, &this->unk_2948[i].collider, &this->actor, &sCylinderInit);
+    for (i = 0; i < ARRAY_COUNT(this->grassElemColliders); i++) {
+        Collider_InitCylinder(play, &this->grassElemColliders[i].collider);
+        Collider_SetCylinder(play, &this->grassElemColliders[i].collider, &this->actor, &sCylinderInit);
     }
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -158,117 +162,121 @@ void ObjGrass_Destroy(Actor* thisx, PlayState* play) {
     ObjGrass* this = THIS;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2948); i++) {
-        Collider_DestroyCylinder(play, &this->unk_2948[i].collider);
+    for (i = 0; i < ARRAY_COUNT(this->grassElemColliders); i++) {
+        Collider_DestroyCylinder(play, &this->grassElemColliders[i].collider);
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_3298); i++) {
-        ObjGrassCarry** ptr = &this->unk_3298[i];
+    for (i = 0; i < ARRAY_COUNT(this->grassCarry); i++) {
+        ObjGrassCarry** grassCarry = &this->grassCarry[i];
 
-        if (*ptr != NULL) {
-            (*ptr)->unk_190 = 0;
-            *ptr = NULL;
+        if (*grassCarry != NULL) {
+            (*grassCarry)->grassManager = NULL;
+            *grassCarry = NULL;
         }
     }
 }
 
-void func_809A9790(ObjGrass* this, PlayState* play) {
+void ObjGrass_ProcessColliders(ObjGrass* this, PlayState* play) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2948); i++) {
-        ObjGrassStruct1_1* ptr = this->unk_2948[i].unk_4C;
+    for (i = 0; i < ARRAY_COUNT(this->grassElemColliders); i++) {
+        ObjGrassElement* grassElem = this->grassElemColliders[i].entity;
 
-        if ((ptr != NULL) && (this->unk_2948[i].collider.base.acFlags & AC_HIT)) {
-            func_809A9314(ptr, play);
-            func_809A92D0(ptr, play);
-            ptr->unk_0F |= 4;
-            SoundSource_PlaySfxAtFixedWorldPos(play, &ptr->unk_00, 20, NA_SE_EV_PLANT_BROKEN);
+        if ((grassElem != NULL) && (this->grassElemColliders[i].collider.base.acFlags & AC_HIT)) {
+            ObjGrass_SpawnFragments(&grassElem->pos, play);
+            ObjGrass_DropCollectible(grassElem, play);
+            grassElem->flags |= OBJ_GRASS_ELEM_REMOVED;
+            SoundSource_PlaySfxAtFixedWorldPos(play, &grassElem->pos, 20, NA_SE_EV_PLANT_BROKEN);
         }
     }
 }
 
-void func_809A983C(ObjGrass* this, PlayState* play) {
+void ObjGrass_UpdateGrass(ObjGrass* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 i;
     s32 j;
     s32 x;
     s32 y;
-    f32 temp_f0;
-    ObjGrassStruct1* ptr;
-    ObjGrassStruct1_1* ptr2;
-    ObjGrassStruct2* ptr3;
+    f32 distSq;
+    ObjGrassGroup* grassGroup;
     s16 yaw;
 
-    for (i = 0; i < ARRAY_COUNT(D_809AADC0); i++) {
-        D_809AADC0[i] = NULL;
-        D_809AAE10[i] = 422500.0f;
+    for (i = 0; i < OBJ_GRASS_NEAREST_ELEM_MAX; i++) {
+        sNearestGrassElements[i] = NULL;
+        sNearestGrassElementsDistSq[i] = SQ(650.0f);
     }
 
-    for (i = 0; i < ARRAY_COUNT(D_809AADA0); i++) {
-        D_809AADA0[i] = NULL;
-        D_809AADB0[i] = 422500.0f;
+    for (i = 0; i < OBJ_GRASS_NEAREST_GROUP_MAX; i++) {
+        sNearestGrassGroups[i] = NULL;
+        sNearestGrassGroupsDist[i] = SQ(650.0f);
     }
 
-    for (i = 0; i < this->unk_2944; i++) {
-        ptr = &this->unk_144[i];
+    for (i = 0; i < this->activeGrassGroups; i++) {
+        grassGroup = &this->grassGroups[i];
 
-        for (j = 0; j < ptr->unk_FC; j++) {
-            ptr->unk_0C[j].unk_0F &= (u16)~2;
+        for (j = 0; j < grassGroup->count; j++) {
+            grassGroup->elements[j].flags &= (u16)~OBJ_GRASS_ELEM_ANIM;
         }
     }
 
-    for (i = 0; i < this->unk_2944; i++) {
-        ptr = &this->unk_144[i];
-        temp_f0 = Math3D_Vec3fDistSq(&ptr->unk_00, &player->actor.world.pos);
+    for (i = 0; i < this->activeGrassGroups; i++) {
+        grassGroup = &this->grassGroups[i];
+        distSq = Math3D_Vec3fDistSq(&grassGroup->homePos, &player->actor.world.pos);
 
-        for (j = 0; j < ARRAY_COUNT(D_809AADB0); j++) {
-            if (temp_f0 < D_809AADB0[j]) {
+        for (j = 0; j < OBJ_GRASS_NEAREST_GROUP_MAX; j++) {
+            if (distSq < sNearestGrassGroupsDist[j]) {
                 break;
             }
         }
 
-        if (j < ARRAY_COUNT(D_809AADB0)) {
-            for (x = 2; x >= j; x--) {
-                D_809AADB0[x + 1] = D_809AADB0[x];
-                D_809AADA0[x + 1] = D_809AADA0[x];
+        if (j < OBJ_GRASS_NEAREST_GROUP_MAX) {
+            // Insert the grassGroup into the list
+
+            // Shift each element under j that remains in the list down 1
+            for (x = OBJ_GRASS_NEAREST_GROUP_MAX - 2; x >= j; x--) {
+                sNearestGrassGroupsDist[x + 1] = sNearestGrassGroupsDist[x];
+                sNearestGrassGroups[x + 1] = sNearestGrassGroups[x];
             }
 
-            D_809AADB0[j] = temp_f0;
-            D_809AADA0[j] = ptr;
+            sNearestGrassGroupsDist[j] = distSq;
+            sNearestGrassGroups[j] = grassGroup;
         }
     }
 
-    this->unk_3294 = NULL;
+    this->carryGrassElem = NULL;
 
-    for (i = 0; i < ARRAY_COUNT(D_809AADA0); i++) {
-        ptr = D_809AADA0[i];
+    for (i = 0; i < OBJ_GRASS_NEAREST_GROUP_MAX; i++) {
+        grassGroup = sNearestGrassGroups[i];
 
-        if (ptr != NULL) {
-            for (j = 0; j < ptr->unk_FC; j++) {
-                if (!(ptr->unk_0C[j].unk_0F & 4)) {
-                    temp_f0 = Math3D_Vec3fDistSq(&ptr->unk_0C[j].unk_00, &player->actor.world.pos);
+        if (grassGroup != NULL) {
+            for (j = 0; j < grassGroup->count; j++) {
+                if (!(grassGroup->elements[j].flags & OBJ_GRASS_ELEM_REMOVED)) {
+                    distSq = Math3D_Vec3fDistSq(&grassGroup->elements[j].pos, &player->actor.world.pos);
 
-                    for (x = 0; x < ARRAY_COUNT(D_809AAE10); x++) {
-                        if (temp_f0 < D_809AAE10[x]) {
+                    for (x = 0; x < OBJ_GRASS_NEAREST_ELEM_MAX; x++) {
+                        if (distSq < sNearestGrassElementsDistSq[x]) {
                             break;
                         }
                     }
 
-                    if (x < ARRAY_COUNT(D_809AAE10)) {
-                        for (y = 18; y >= x; y--) {
-                            D_809AAE10[y + 1] = D_809AAE10[y];
-                            D_809AADC0[y + 1] = D_809AADC0[y];
+                    if (x < OBJ_GRASS_NEAREST_ELEM_MAX) {
+                        // Insert the GrassElement into the list
+
+                        // Shift each element under j that remains in the list down 1
+                        for (y = OBJ_GRASS_NEAREST_ELEM_MAX - 2; y >= x; y--) {
+                            sNearestGrassElementsDistSq[y + 1] = sNearestGrassElementsDistSq[y];
+                            sNearestGrassElements[y + 1] = sNearestGrassElements[y];
                         }
 
-                        D_809AAE10[x] = temp_f0;
-                        D_809AADC0[x] = &ptr->unk_0C[j];
+                        sNearestGrassElementsDistSq[x] = distSq;
+                        sNearestGrassElements[x] = &grassGroup->elements[j];
 
-                        if (temp_f0 < 2500.0f) {
+                        if (distSq < SQ(50.0f)) {
                             yaw = player->actor.shape.rot.y -
-                                  Math_Vec3f_Yaw(&player->actor.world.pos, &ptr->unk_0C[j].unk_00);
+                                  Math_Vec3f_Yaw(&player->actor.world.pos, &grassGroup->elements[j].pos);
 
                             if (ABS_ALT(yaw) < 0x2000) {
-                                this->unk_3294 = &ptr->unk_0C[j];
+                                this->carryGrassElem = &grassGroup->elements[j];
                             }
                         }
                     }
@@ -277,28 +285,29 @@ void func_809A983C(ObjGrass* this, PlayState* play) {
         }
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2948); i++) {
-        ptr3 = &this->unk_2948[i];
+    for (i = 0; i < ARRAY_COUNT(this->grassElemColliders); i++) {
+        ObjGrassCollider* grassCol = &this->grassElemColliders[i];
+        ObjGrassElement* grassElem;
 
-        ptr3->collider.base.acFlags &= (u16)~AC_HIT;
-        ptr3->collider.base.ocFlags1 &= (u16)~OC1_HIT;
+        grassCol->collider.base.acFlags &= (u16)~AC_HIT;
+        grassCol->collider.base.ocFlags1 &= (u16)~OC1_HIT;
 
-        ptr2 = D_809AADC0[i];
-        if (ptr2 != NULL) {
-            ptr3->collider.dim.pos.x = ptr2->unk_00.x;
-            ptr3->collider.dim.pos.y = ptr2->unk_00.y;
-            ptr3->collider.dim.pos.z = ptr2->unk_00.z;
-            CollisionCheck_SetAC(play, &play->colChkCtx, &ptr3->collider.base);
-            CollisionCheck_SetOC(play, &play->colChkCtx, &ptr3->collider.base);
-            ptr2->unk_0F |= 2;
-            ptr3->unk_4C = ptr2;
+        grassElem = sNearestGrassElements[i];
+        if (grassElem != NULL) {
+            grassCol->collider.dim.pos.x = grassElem->pos.x;
+            grassCol->collider.dim.pos.y = grassElem->pos.y;
+            grassCol->collider.dim.pos.z = grassElem->pos.z;
+            CollisionCheck_SetAC(play, &play->colChkCtx, &grassCol->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &grassCol->collider.base);
+            grassElem->flags |= OBJ_GRASS_ELEM_ANIM;
+            grassCol->entity = grassElem;
         } else {
-            ptr3->unk_4C = NULL;
+            grassCol->entity = NULL;
         }
     }
 }
 
-void func_809A9DB8(ObjGrass* this) {
+void ObjGrass_CalcAnimationMatrices(ObjGrass* this) {
     s32 i;
     s32 pad;
     f32* ptr;
@@ -345,8 +354,8 @@ void func_809A9DB8(ObjGrass* this) {
     sp6C[6] = (temp_f26 - temp_f22) * temp_f22 * temp_f20 * temp_f16 * 0.0015f;
     sp6C[7] = (spA4 - temp_f20) * sp94 * sp90 * temp_f16 * 0.0015f;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_2F88); i++) {
-        ptr = &this->unk_2F88[i].mf[0][0];
+    for (i = 0; i < ARRAY_COUNT(this->distortionMtx); i++) {
+        ptr = &this->distortionMtx[i].mf[0][0];
 
         tempf1 = sp6C[(i + 0) & 7];
         tempf2 = sp6C[(i + 1) & 7];
@@ -379,64 +388,65 @@ void func_809A9DB8(ObjGrass* this) {
 void ObjGrass_Update(Actor* thisx, PlayState* play) {
     ObjGrass* this = THIS;
 
-    func_809A9790(this, play);
-    func_809A983C(this, play);
-    func_809A9DB8(this);
+    ObjGrass_ProcessColliders(this, play);
+    ObjGrass_UpdateGrass(this, play);
+    ObjGrass_CalcAnimationMatrices(this);
 }
 
-void func_809AA278(ObjGrass* this, PlayState* play) {
-    ObjGrassStruct1* ptr;
-    ObjGrassStruct1_1* ptr2;
+void ObjGrass_InitDraw(ObjGrass* this, PlayState* play) {
+    ObjGrassGroup* grassGroup;
+    ObjGrassElement* grassElem;
     s32 i;
     s32 j;
     f32 distSq;
-    f32 temp_f22;
+    f32 eyeDist;
 
-    for (i = 0; i < this->unk_2944; i++) {
-        ptr = &this->unk_144[i];
+    for (i = 0; i < this->activeGrassGroups; i++) {
+        grassGroup = &this->grassGroups[i];
 
-        temp_f22 = Math3D_Vec3fDistSq(&ptr->unk_00, &GET_ACTIVE_CAM(play)->eye);
+        eyeDist = Math3D_Vec3fDistSq(&grassGroup->homePos, &GET_ACTIVE_CAM(play)->eye);
 
-        if ((temp_f22 < SQ(1280.0f)) && func_809A9110(play, &ptr->unk_00)) {
-            ptr->unk_FE |= 1;
+        if ((eyeDist < SQ(1280.0f)) && func_809A9110(play, &grassGroup->homePos)) {
+            grassGroup->flags |= OBJ_GRASS_GROUP_DRAW;
 
-            for (j = 0; j < ptr->unk_FC; j++) {
-                ptr2 = &ptr->unk_0C[j];
+            for (j = 0; j < grassGroup->count; j++) {
+                grassElem = &grassGroup->elements[j];
 
-                if (ptr2->unk_0F & 4) {
-                    ptr2->unk_10 = 255;
-                    ptr2->unk_0F &= ~1;
+                if (grassElem->flags & OBJ_GRASS_ELEM_REMOVED) {
+                    grassElem->alpha = 255;
+                    grassElem->flags &= ~OBJ_GRASS_ELEM_DRAW;
                 } else {
-                    ptr2->unk_0F |= 1;
-                    if (temp_f22 < SQ(980.0f)) {
-                        ptr2->unk_10 = 255;
+                    grassElem->flags |= OBJ_GRASS_ELEM_DRAW;
+                    if (eyeDist < SQ(980.0f)) {
+                        grassElem->alpha = 255;
                     } else {
-                        distSq = Math3D_Vec3fDistSq(&ptr2->unk_00, &GET_ACTIVE_CAM(play)->eye);
-                        if ((distSq <= SQ(1080.0f)) || ((ptr2->unk_0F & 8) && (distSq < SQ(1180.0f)))) {
-                            ptr2->unk_10 = 255;
+                        distSq = Math3D_Vec3fDistSq(&grassElem->pos, &GET_ACTIVE_CAM(play)->eye);
+                        if ((distSq <= SQ(1080.0f)) ||
+                            ((grassElem->flags & OBJ_GRASS_ELEM_UNDERWATER) && (distSq < SQ(1180.0f)))) {
+                            grassElem->alpha = 255;
                         } else if (distSq >= SQ(1180.0f)) {
-                            ptr2->unk_10 = 0;
+                            grassElem->alpha = 0;
                         } else {
-                            ptr2->unk_10 = (1180.0f - sqrtf(distSq)) * 2.55f;
+                            grassElem->alpha = (1180.0f - sqrtf(distSq)) * 2.55f;
                         }
                     }
                 }
             }
         } else {
-            ptr->unk_FE &= ~1;
+            grassGroup->flags &= ~OBJ_GRASS_GROUP_DRAW;
         }
     }
 }
 
-void func_809AA54C(Actor* thisx, PlayState* play2) {
+void ObjGrass_DrawOpa(Actor* thisx, PlayState* play2) {
     ObjGrass* this = THIS;
     PlayState* play = play2;
-    Lights* temp_s0;
-    ObjGrassStruct1* ptr;
+    Lights* lights;
+    ObjGrassGroup* grassGroup;
     s32 i;
     s32 j;
-    Vec3s sp70 = { 0, 0, 0 };
-    ObjGrassStruct1_1* ptr2;
+    Vec3s rot = { 0, 0, 0 };
+    ObjGrassElement* grassElem;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -445,23 +455,23 @@ void func_809AA54C(Actor* thisx, PlayState* play2) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
     gSPDisplayList(POLY_OPA_DISP++, gObjGrass_D_809AA9F0);
 
-    for (i = 0; i < this->unk_2944; i++) {
-        ptr = &this->unk_144[i];
+    for (i = 0; i < this->activeGrassGroups; i++) {
+        grassGroup = &this->grassGroups[i];
 
-        if (ptr->unk_FE & 1) {
-            temp_s0 = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
-            Lights_BindAll(temp_s0, play->lightCtx.listHead, &ptr->unk_00, play);
-            Lights_Draw(temp_s0, play->state.gfxCtx);
+        if (grassGroup->flags & OBJ_GRASS_GROUP_DRAW) {
+            lights = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
+            Lights_BindAll(lights, play->lightCtx.listHead, &grassGroup->homePos, play);
+            Lights_Draw(lights, play->state.gfxCtx);
 
-            for (j = 0; j < ptr->unk_FC; j++) {
-                ptr2 = &ptr->unk_0C[j];
+            for (j = 0; j < grassGroup->count; j++) {
+                grassElem = &grassGroup->elements[j];
 
-                if ((ptr2->unk_0F & 1) && (ptr2->unk_10 == 255)) {
-                    sp70.y = ptr2->unk_0C;
-                    Matrix_SetTranslateRotateYXZ(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &sp70);
+                if ((grassElem->flags & OBJ_GRASS_ELEM_DRAW) && (grassElem->alpha == 255)) {
+                    rot.y = grassElem->rotY;
+                    Matrix_SetTranslateRotateYXZ(grassElem->pos.x, grassElem->pos.y, grassElem->pos.z, &rot);
                     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-                    if (ptr2->unk_0F & 2) {
-                        func_809A91FC(&this->unk_2F88[j]);
+                    if (grassElem->flags & OBJ_GRASS_ELEM_ANIM) {
+                        ObjGrass_OverrideMatrixCurrent(&this->distortionMtx[j]);
                     }
 
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
@@ -475,13 +485,13 @@ void func_809AA54C(Actor* thisx, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_809AA798(Actor* thisx, PlayState* play) {
+void ObjGrass_DrawXlu(Actor* thisx, PlayState* play) {
     ObjGrass* this = THIS;
-    ObjGrassStruct1* ptr;
-    ObjGrassStruct1_1* ptr2;
+    ObjGrassGroup* grassGroup;
+    ObjGrassElement* grassElem;
     s32 i;
     s32 j;
-    Vec3s sp6C = { 0, 0, 0 };
+    Vec3s rot = { 0, 0, 0 };
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -489,21 +499,21 @@ void func_809AA798(Actor* thisx, PlayState* play) {
 
     gSPDisplayList(POLY_XLU_DISP++, gObjGrass_D_809AAA68);
 
-    for (i = 0; i < this->unk_2944; i++) {
-        ptr = &this->unk_144[i];
+    for (i = 0; i < this->activeGrassGroups; i++) {
+        grassGroup = &this->grassGroups[i];
 
-        if (ptr->unk_FE & 1) {
-            for (j = 0; j < ptr->unk_FC; j++) {
-                ptr2 = &ptr->unk_0C[j];
+        if (grassGroup->flags & OBJ_GRASS_GROUP_DRAW) {
+            for (j = 0; j < grassGroup->count; j++) {
+                grassElem = &grassGroup->elements[j];
 
-                if ((ptr2->unk_0F & 1) && (ptr2->unk_10 > 0) && (ptr2->unk_10 < 255)) {
-                    sp6C.y = ptr2->unk_0C;
-                    Matrix_SetTranslateRotateYXZ(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &sp6C);
+                if ((grassElem->flags & OBJ_GRASS_ELEM_DRAW) && (grassElem->alpha > 0) && (grassElem->alpha < 255)) {
+                    rot.y = grassElem->rotY;
+                    Matrix_SetTranslateRotateYXZ(grassElem->pos.x, grassElem->pos.y, grassElem->pos.z, &rot);
                     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, ptr2->unk_10);
+                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, grassElem->alpha);
                     gSPDisplayList(POLY_XLU_DISP++, gObjGrass_D_809AAAE0);
                 }
             }
@@ -516,7 +526,7 @@ void func_809AA798(Actor* thisx, PlayState* play) {
 void ObjGrass_Draw(Actor* thisx, PlayState* play) {
     ObjGrass* this = THIS;
 
-    func_809AA278(this, play);
-    func_809AA54C(thisx, play);
-    func_809AA798(thisx, play);
+    ObjGrass_InitDraw(this, play);
+    ObjGrass_DrawOpa(thisx, play);
+    ObjGrass_DrawXlu(thisx, play);
 }

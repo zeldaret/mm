@@ -7,6 +7,7 @@
  * are DMA'd directly to fixed RAM addresses.
  */
 #include "global.h"
+#include "fault.h"
 #include "misc/locerrmsg/locerrmsg.h"
 #include "misc/memerrmsg/memerrmsg.h"
 
@@ -23,7 +24,7 @@
 
 // Address with enough room after to load either of the error message image files before the fault screen buffer at the
 // end of RDRAM
-#define CHECK_ERRMSG_STATIC_SEGMENT (u8*)(FAULT_FB_ADDRESS - MAX(SIZEOF_LOCERRMSG, SIZEOF_MEMERRMSG))
+#define CHECK_ERRMSG_STATIC_SEGMENT (u8*)((uintptr_t)FAULT_FB_ADDRESS - MAX(SIZEOF_LOCERRMSG, SIZEOF_MEMERRMSG))
 
 void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value) {
     if (value & RGBA16_PIXEL_OPAQUE) {
@@ -70,7 +71,7 @@ void Check_ClearRGBA16(u16* buffer) {
  * Draw error message textures directly to a screen buffer at the end of normal RDRAM
  */
 void Check_DrawExpansionPakErrorMessage(void) {
-    DmaMgr_SendRequest0(CHECK_ERRMSG_STATIC_SEGMENT, SEGMENT_ROM_START(memerrmsg), SEGMENT_SIZE(memerrmsg));
+    DmaMgr_RequestSync(CHECK_ERRMSG_STATIC_SEGMENT, SEGMENT_ROM_START(memerrmsg), SEGMENT_SIZE(memerrmsg));
     Check_ClearRGBA16((u16*)FAULT_FB_ADDRESS);
     Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 96, 71, MEMERRMSG_WIDTH, MEMERRMSG_HEIGHT, CHECK_ERRMSG_STATIC_SEGMENT);
     Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 96, 127, MEMERRMSG_WIDTH, MEMERRMSG_HEIGHT,
@@ -84,7 +85,7 @@ void Check_DrawExpansionPakErrorMessage(void) {
  * Draw error message texture directly to a screen buffer at the end of normal RDRAM
  */
 void Check_DrawRegionLockErrorMessage(void) {
-    DmaMgr_SendRequest0(CHECK_ERRMSG_STATIC_SEGMENT, SEGMENT_ROM_START(locerrmsg), SEGMENT_SIZE(locerrmsg));
+    DmaMgr_RequestSync(CHECK_ERRMSG_STATIC_SEGMENT, SEGMENT_ROM_START(locerrmsg), SEGMENT_SIZE(locerrmsg));
     Check_ClearRGBA16((u16*)FAULT_FB_ADDRESS);
     Check_DrawI4Texture((u16*)FAULT_FB_ADDRESS, 56, 112, LOCERRMSG_WIDTH, LOCERRMSG_HEIGHT,
                         CHECK_ERRMSG_STATIC_SEGMENT);

@@ -2,7 +2,7 @@
 #define Z64JPEG_H
 
 #include "PR/ultratypes.h"
-#include "ultra64/message.h"
+#include "PR/os_message.h"
 #include "PR/sched.h"
 
 typedef struct {

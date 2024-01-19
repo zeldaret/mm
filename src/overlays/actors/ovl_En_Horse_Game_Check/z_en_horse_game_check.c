@@ -7,6 +7,7 @@
 #include "z_en_horse_game_check.h"
 #include "z64horse.h"
 #include "objects/object_horse_game_check/object_horse_game_check.h"
+#include "debug.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -37,15 +38,15 @@ s32 func_808F99C4(EnHorseGameCheck* this, PlayState* play);
 s32 func_808F99D8(EnHorseGameCheck* this, PlayState* play);
 
 ActorInit En_Horse_Game_Check_InitVars = {
-    ACTOR_EN_HORSE_GAME_CHECK,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HORSE_GAME_CHECK,
-    sizeof(EnHorseGameCheck),
-    (ActorFunc)EnHorseGameCheck_Init,
-    (ActorFunc)EnHorseGameCheck_Destroy,
-    (ActorFunc)EnHorseGameCheck_Update,
-    (ActorFunc)EnHorseGameCheck_Draw,
+    /**/ ACTOR_EN_HORSE_GAME_CHECK,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HORSE_GAME_CHECK,
+    /**/ sizeof(EnHorseGameCheck),
+    /**/ EnHorseGameCheck_Init,
+    /**/ EnHorseGameCheck_Destroy,
+    /**/ EnHorseGameCheck_Update,
+    /**/ EnHorseGameCheck_Draw,
 };
 
 #include "overlays/ovl_En_Horse_Game_Check/ovl_En_Horse_Game_Check.c"
@@ -128,13 +129,13 @@ s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
     this->horse1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1149.0f, -106.0f, 470.0f, 0, 0x7FFF, 0,
                                          ENHORSE_PARAMS(ENHORSE_PARAM_BANDIT, ENHORSE_4));
     if (this->horse1 == NULL) {
-        __assert("../z_en_horse_game_check.c", 1517);
+        _dbg_hungup("../z_en_horse_game_check.c", 1517);
     }
 
     this->horse2 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1376.0f, -106.0f, 470.0f, 0, 0x7FFF, 0,
                                          ENHORSE_PARAMS(ENHORSE_PARAM_BANDIT, ENHORSE_5));
     if (this->horse2 == NULL) {
-        __assert("../z_en_horse_game_check.c", 1526);
+        _dbg_hungup("../z_en_horse_game_check.c", 1526);
     }
 
     this->unk_17C = -1;
@@ -250,7 +251,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
 
     if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(180)) {
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
-        play_sound(NA_SE_SY_START_SHOT);
+        Audio_PlaySfx(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x40000;
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_4);
@@ -283,7 +284,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
         (horseGameCheck->dyna.actor.id == ACTOR_EN_HORSE_GAME_CHECK) &&
         (horseGameCheck->unk_15C == ENHORSEGAMECHECK_FF_7) && !(this->unk_164 & 0x40000)) {
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
-        play_sound(NA_SE_SY_START_SHOT);
+        Audio_PlaySfx(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x40000;
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_3);
@@ -316,7 +317,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
         (horseGameCheck->dyna.actor.id == ACTOR_EN_HORSE_GAME_CHECK) &&
         (horseGameCheck->unk_15C == ENHORSEGAMECHECK_FF_7) && !(this->unk_164 & 0x02000000)) {
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
-        play_sound(NA_SE_SY_START_SHOT);
+        Audio_PlaySfx(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x02000000;
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_3);
@@ -345,7 +346,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
         (horseGameCheck->dyna.actor.id == ACTOR_EN_HORSE_GAME_CHECK) &&
         (horseGameCheck->unk_15C == ENHORSEGAMECHECK_FF_7) && !(this->unk_164 & 0x800)) {
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
-        play_sound(NA_SE_SY_START_SHOT);
+        Audio_PlaySfx(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x800;
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_2);

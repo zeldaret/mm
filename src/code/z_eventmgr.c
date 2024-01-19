@@ -3,10 +3,12 @@
  *
  * Manages all cutscenes except for manual
  */
+
 #include "global.h"
 #include "z64shrink_window.h"
+#include "libc/string.h"
 
-ActorCutscene sGlobalCutsceneList[] = {
+CutsceneEntry sGlobalCutsceneList[] = {
     // CS_ID_GLOBAL_78
     { -100, -1, CS_CAM_ID_NONE, CS_SCRIPT_ID_NONE, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
       255 },
@@ -55,6 +57,13 @@ CutsceneManager sCutsceneMgr = {
     CS_ID_NONE, 0, CS_ID_NONE, SUB_CAM_ID_DONE, NULL, CS_START_0, NULL, CAM_ID_MAIN, false,
 };
 
+CutsceneEntry* sSceneCutsceneList;
+s16 sSceneCutsceneCount;
+u8 sWaitingCutsceneList[16];
+static s32 sBssPad;
+u8 sNextCutsceneList[16];
+static s32 sBssPad2;
+
 s16 CutsceneManager_SetHudVisibility(s16 csHudVisibility) {
     u16 hudVisibility;
 
@@ -101,7 +110,7 @@ s16 CutsceneManager_SetHudVisibility(s16 csHudVisibility) {
     return hudVisibility;
 }
 
-ActorCutscene* CutsceneManager_GetCutsceneEntryImpl(s16 csId) {
+CutsceneEntry* CutsceneManager_GetCutsceneEntryImpl(s16 csId) {
     if (csId < CS_ID_GLOBAL_78) {
         return &sSceneCutsceneList[csId];
     } else {
@@ -110,7 +119,7 @@ ActorCutscene* CutsceneManager_GetCutsceneEntryImpl(s16 csId) {
     }
 }
 
-void CutsceneManager_Init(PlayState* play, ActorCutscene* cutsceneList, s16 numEntries) {
+void CutsceneManager_Init(PlayState* play, CutsceneEntry* cutsceneList, s16 numEntries) {
     s32 i;
 
     sSceneCutsceneList = cutsceneList;
@@ -195,7 +204,7 @@ s16 CutsceneManager_MarkNextCutscenes(void) {
 #define CUR_CAM sCutsceneMgr.play->cameraPtrs[sCutsceneMgr.subCamId]
 
 void CutsceneManager_End(void) {
-    ActorCutscene* csEntry;
+    CutsceneEntry* csEntry;
     s16 oldCamId;
     s16 oldStateFlags;
 
@@ -204,7 +213,7 @@ void CutsceneManager_End(void) {
             sCutsceneMgr.targetActor->flags &= ~ACTOR_FLAG_100000;
             // fallthrough
         case CS_START_1:
-            func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_END);
+            Player_SetCsActionWithHaltedActors(sCutsceneMgr.play, NULL, PLAYER_CSACTION_END);
             sCutsceneMgr.startMethod = CS_START_0;
             break;
 
@@ -216,11 +225,11 @@ void CutsceneManager_End(void) {
 
     switch (csEntry->endSfx) {
         case CS_END_SFX_TRE_BOX_APPEAR:
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             break;
 
         case CS_END_SFX_CORRECT_CHIME:
-            play_sound(NA_SE_SY_CORRECT_CHIME);
+            Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
             break;
 
         default: // CS_END_SFX_NONE
@@ -329,13 +338,13 @@ s16 CutsceneManager_IsNext(s16 csId) {
 }
 
 /**
- * Start an actor cutscene, activate Player Cutscene Mode "Wait"
+ * Start an actor cutscene, activate Player Cutscene Action "Wait"
  */
 s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
     if (startCsId >= 0) {
-        func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_WAIT);
+        Player_SetCsActionWithHaltedActors(sCutsceneMgr.play, NULL, PLAYER_CSACTION_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);
         }
@@ -345,13 +354,13 @@ s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor) {
 }
 
 /**
- * Start an actor cutscene, activate Player Cutscene Mode "Wait", turn on ACTOR_FLAG_100000
+ * Start an actor cutscene, activate Player Cutscene Action "Wait", turn on ACTOR_FLAG_100000
  */
 s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
     if (startCsId >= 0) {
-        func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_WAIT);
+        Player_SetCsActionWithHaltedActors(sCutsceneMgr.play, NULL, PLAYER_CSACTION_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);
         }
@@ -366,7 +375,7 @@ s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor) {
 }
 
 s16 CutsceneManager_Start(s16 csId, Actor* actor) {
-    ActorCutscene* csEntry;
+    CutsceneEntry* csEntry;
     Camera* subCam;
     Camera* retCam;
     s32 csType = 0;
@@ -435,7 +444,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
 }
 
 s16 CutsceneManager_Stop(s16 csId) {
-    ActorCutscene* csEntry;
+    CutsceneEntry* csEntry;
 
     if (csId <= CS_ID_NONE) {
         return csId;
@@ -463,7 +472,7 @@ s16 CutsceneManager_GetCurrentCsId(void) {
     return sCutsceneMgr.csId;
 }
 
-ActorCutscene* CutsceneManager_GetCutsceneEntry(s16 csId) {
+CutsceneEntry* CutsceneManager_GetCutsceneEntry(s16 csId) {
     return CutsceneManager_GetCutsceneEntryImpl(csId);
 }
 

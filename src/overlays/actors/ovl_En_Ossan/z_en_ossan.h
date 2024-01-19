@@ -6,7 +6,7 @@
 #include "objects/object_ani/object_ani.h"
 #include "objects/object_fsn/object_fsn.h"
 
-// Note: adding 1 to FSN_LIMB_MAX due to bug in object_fsn, see bug in object_fsn.xml
+// Note: adding 1 to FSN_LIMB_MAX due to bug in the skeleton, see bug in object_fsn.xml
 #define ENOSSAN_LIMB_MAX MAX((s32)FSN_LIMB_MAX + 1, (s32)ANI_LIMB_MAX)
 
 struct EnOssan;
@@ -21,7 +21,7 @@ typedef struct EnOssan {
     /* 0x18C */ EnOssanActionFunc prevActionFunc; // Used to restore back to correct browsing function
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ s16 delayTimer;
-    /* 0x1DE */ s8 objIndex;
+    /* 0x1DE */ s8 objectSlot;
     /* 0x1E0 */ s16 eyeTexIndex;
     /* 0x1E2 */ s16 blinkTimer;
     /* 0x1E4 */ EnOssanBlinkFunc blinkFunc;
@@ -51,9 +51,9 @@ typedef struct EnOssan {
     /* 0x2C2 */ s16 cutsceneState;
     /* 0x2C4 */ u16 textId;
     /* 0x2C6 */ Vec3s headRot;
-    /* 0x2CC */ Vec3s unk2CC; // Set but never used
-    /* 0x2D2 */ s16 limbRotTableY[19];
-    /* 0x2F8 */ s16 limbRotTableZ[19];
+    /* 0x2CC */ Vec3s torsoRot; // Set but never used
+    /* 0x2D2 */ s16 fidgetTableY[ENOSSAN_LIMB_MAX];
+    /* 0x2F8 */ s16 fidgetTableZ[ENOSSAN_LIMB_MAX];
     /* 0x31E */ Vec3s jointTable[ENOSSAN_LIMB_MAX];
     /* 0x390 */ Vec3s morphTable[ENOSSAN_LIMB_MAX];
     /* 0x402 */ s16 animIndex;

@@ -30,15 +30,15 @@ void EnEgblock_UpdateEffects(EnEgblock* this, PlayState* play);
 void EnEgblock_DrawEffects(EnEgblock* this, PlayState* play);
 
 ActorInit En_Egblock_InitVars = {
-    ACTOR_EN_EGBLOCK,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_EG,
-    sizeof(EnEgblock),
-    (ActorFunc)EnEgblock_Init,
-    (ActorFunc)EnEgblock_Destroy,
-    (ActorFunc)EnEgblock_Update,
-    (ActorFunc)EnEgblock_Draw,
+    /**/ ACTOR_EN_EGBLOCK,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_EG,
+    /**/ sizeof(EnEgblock),
+    /**/ EnEgblock_Init,
+    /**/ EnEgblock_Destroy,
+    /**/ EnEgblock_Update,
+    /**/ EnEgblock_Draw,
 };
 
 void EnEgblock_Init(Actor* thisx, PlayState* play) {

@@ -15,7 +15,7 @@ void GameOver_FadeLights(PlayState* play) {
 
     if ((gameOverCtx->state >= GAMEOVER_DEATH_WAIT_GROUND && gameOverCtx->state < GAMEOVER_REVIVE_START) ||
         (gameOverCtx->state >= GAMEOVER_REVIVE_RUMBLE && gameOverCtx->state < GAMEOVER_REVIVE_FADE_OUT)) {
-        Kankyo_FadeInGameOverLights(play);
+        Environment_FadeInGameOverLights(play);
     }
 }
 
@@ -66,7 +66,7 @@ void GameOver_Update(PlayState* play) {
             gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             gSaveContext.hudVisibilityTimer = 0;
-            Kankyo_InitGameOverLights(play);
+            Environment_InitGameOverLights(play);
             sGameOverTimer = 20;
             Rumble_Request(0.0f, 126, 124, 63);
             gameOverCtx->state = GAMEOVER_DEATH_WAIT_GROUND;
@@ -92,7 +92,7 @@ void GameOver_Update(PlayState* play) {
         case GAMEOVER_REVIVE_START:
             gameOverCtx->state++; // GAMEOVER_REVIVE_RUMBLE
             sGameOverTimer = 0;
-            Kankyo_InitGameOverLights(play);
+            Environment_InitGameOverLights(play);
             ShrinkWindow_Letterbox_SetSizeTarget(32);
             break;
 
@@ -119,7 +119,7 @@ void GameOver_Update(PlayState* play) {
             break;
 
         case GAMEOVER_REVIVE_FADE_OUT:
-            Kankyo_FadeOutGameOverLights(play);
+            Environment_FadeOutGameOverLights(play);
             sGameOverTimer--;
             if (sGameOverTimer == 0) {
                 gameOverCtx->state = GAMEOVER_INACTIVE;

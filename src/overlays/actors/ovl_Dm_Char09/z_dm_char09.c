@@ -16,37 +16,42 @@ void DmChar09_Update(Actor* thisx, PlayState* play);
 void DmChar09_Draw(Actor* thisx, PlayState* play);
 
 void DmChar09_DoNothing(DmChar09* this, PlayState* play);
-void func_80AB2268(DmChar09* this, PlayState* play);
+void DmChar09_HandleCutscene(DmChar09* this, PlayState* play);
 
 ActorInit Dm_Char09_InitVars = {
-    ACTOR_DM_CHAR09,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_BEE,
-    sizeof(DmChar09),
-    (ActorFunc)DmChar09_Init,
-    (ActorFunc)DmChar09_Destroy,
-    (ActorFunc)DmChar09_Update,
-    (ActorFunc)DmChar09_Draw,
+    /**/ ACTOR_DM_CHAR09,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_BEE,
+    /**/ sizeof(DmChar09),
+    /**/ DmChar09_Init,
+    /**/ DmChar09_Destroy,
+    /**/ DmChar09_Update,
+    /**/ DmChar09_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gBeeFlyingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum {
+    /* 0 */ DMCHAR09_ANIM_FLYING,
+    /* 1 */ DMCHAR09_ANIM_MAX
+} DmChar09Animation;
+
+static AnimationInfo sAnimationInfo[DMCHAR09_ANIM_MAX] = {
+    { &gBeeFlyingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f }, // DMCHAR09_ANIM_FLYING
 };
 
-void DmChar09_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
-    f32 frameCount;
+void DmChar09_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
+    f32 endFrame;
 
-    animationInfo += animIndex;
+    animInfo += animIndex;
 
-    if (animationInfo->frameCount < 0.0f) {
-        frameCount = Animation_GetLastFrame(animationInfo->animation);
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
     } else {
-        frameCount = animationInfo->frameCount;
+        endFrame = animInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
-                     frameCount, animationInfo->mode, animationInfo->morphFrames);
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
 void DmChar09_Init(Actor* thisx, PlayState* play) {
@@ -55,7 +60,7 @@ void DmChar09_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_Init(play, &this->skelAnime, &gBeeSkel, &gBeeFlyingAnim, this->jointTable, this->morphTable,
                    OBJECT_BEE_LIMB_MAX);
-    DmChar09_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+    DmChar09_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR09_ANIM_FLYING], 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_228 = Rand_ZeroOne() * 65535.0f;
     this->unk_22A = Rand_ZeroOne() * 65535.0f;
@@ -66,7 +71,7 @@ void DmChar09_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AB1FA0(DmChar09* this, s32 arg1) {
-    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->unk_224[arg1]);
+    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[arg1]);
 }
 
 void func_80AB1FDC(DmChar09* this, PlayState* play) {
@@ -80,7 +85,7 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
     Vec3s* temp_v1;
 
     Math_Vec3f_Copy(&sp40, &thisx->world.pos);
-    Math_Vec3s_ToVec3f(&sp58, this->unk_224 + this->unk_21C + this->unk_220);
+    Math_Vec3s_ToVec3f(&sp58, this->pathPoints + this->unk_21C + this->unk_220);
     Math_Vec3f_Diff(&sp58, &thisx->world.pos, &thisx->velocity);
     sp54 = Math3D_Vec3fMagnitude(&thisx->velocity);
     if ((sp54 < (this->speed * 8.0f)) && (this->speed > 2.0f)) {
@@ -102,14 +107,14 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
         phi_a1 = true;
         if (((this->unk_21C >= this->unk_218) && (this->unk_220 > 0)) ||
             ((this->unk_21C <= 0) && (this->unk_220 < 0))) {
-            temp_v1 = this->unk_224 + this->unk_218;
-            if (((this->unk_224->x == temp_v1->x) && (this->unk_224->y == temp_v1->y)) &&
-                (this->unk_224->z == temp_v1->z)) {
+            temp_v1 = &this->pathPoints[this->unk_218];
+            if (((this->pathPoints[0].x == temp_v1->x) && (this->pathPoints[0].y == temp_v1->y)) &&
+                (this->pathPoints[0].z == temp_v1->z)) {
                 this->unk_21C = 0;
                 this->unk_220 = 1;
             } else {
                 phi_a1 = false;
-                this->actionFunc = func_80AB2268;
+                this->actionFunc = DmChar09_HandleCutscene;
             }
         }
         if (phi_a1) {
@@ -123,7 +128,7 @@ void func_80AB1FDC(DmChar09* this, PlayState* play) {
 void DmChar09_DoNothing(DmChar09* this, PlayState* play) {
 }
 
-void func_80AB2268(DmChar09* this, PlayState* play) {
+void DmChar09_HandleCutscene(DmChar09* this, PlayState* play) {
     Path* path;
     s32 pad;
     s32 i;
@@ -148,14 +153,20 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                 case 2:
                     max = 0;
                     break;
+
                 case 3:
                     max = 1;
                     break;
+
                 case 4:
                     max = 2;
                     break;
+
                 case 5:
                     max = 3;
+                    break;
+
+                default:
                     break;
             }
 
@@ -168,7 +179,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                     path = &play->setupPathList[pathIndex];
                 }
 
-                this->unk_224 = Lib_SegmentedToVirtual(path->points);
+                this->pathPoints = Lib_SegmentedToVirtual(path->points);
                 this->unk_214 = path->count;
                 this->unk_21C = 0;
                 this->unk_218 = path->count - 1;
@@ -200,7 +211,7 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actionFunc(this, play);
-    func_80AB2268(this, play);
+    DmChar09_HandleCutscene(this, play);
     func_80AB24BC(this, play);
     if ((play->csCtx.state != CS_STATE_IDLE) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);

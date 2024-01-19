@@ -1,29 +1,25 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
-#define FLAGS                                                                                               \
-    (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_2000000 | \
-     ACTOR_FLAG_CAN_PRESS_SWITCH | ACTOR_FLAG_80000000)
+#define FLAGS                                                                                          \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | \
+     ACTOR_FLAG_2000000 | ACTOR_FLAG_CAN_PRESS_SWITCH | ACTOR_FLAG_80000000)
 
 ActorFunc sPlayerCallInitFunc;
 ActorFunc sPlayerCallDestroyFunc;
 ActorFunc sPlayerCallUpdateFunc;
 ActorFunc sPlayerCallDrawFunc;
 
-void PlayerCall_Init(Actor* thisx, PlayState* play);
-void PlayerCall_Destroy(Actor* thisx, PlayState* play);
-void PlayerCall_Update(Actor* thisx, PlayState* play);
-void PlayerCall_Draw(Actor* thisx, PlayState* play);
-
 ActorInit Player_InitVars = {
-    ACTOR_PLAYER,
-    ACTORCAT_PLAYER,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(Player),
-    (ActorFunc)PlayerCall_Init,
-    (ActorFunc)PlayerCall_Destroy,
-    (ActorFunc)PlayerCall_Update,
-    (ActorFunc)PlayerCall_Draw,
+    /**/ ACTOR_PLAYER,
+    /**/ ACTORCAT_PLAYER,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(Player),
+    /**/ PlayerCall_Init,
+    /**/ PlayerCall_Destroy,
+    /**/ PlayerCall_Update,
+    /**/ PlayerCall_Draw,
 };
 
 void Player_Init(Actor* thisx, PlayState* play);

@@ -12,7 +12,7 @@ typedef void (*BgIknvObjActionFunc)(struct BgIknvObj*, PlayState*);
 typedef struct BgIknvObj {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ColliderCylinder collider;
-    /* 0x1A8 */ Gfx* displayListPtr;
+    /* 0x1A8 */ Gfx* dList;
     /* 0x1AC */ BgIknvObjActionFunc actionFunc;
 } BgIknvObj; // size = 0x1B0
 

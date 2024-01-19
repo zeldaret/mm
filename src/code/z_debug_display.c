@@ -10,8 +10,8 @@ typedef struct {
 
 typedef void (*DebugDispObjectDrawFunc)(DebugDispObject*, void*, PlayState*);
 
-void DebugDisplay_DrawSpriteI8(DebugDispObject*, void*, PlayState*);
-void DebugDisplay_DrawPolygon(DebugDispObject*, void*, PlayState*);
+void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, PlayState* play);
+void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* dList, PlayState* play);
 Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path);
 
 DebugDispObject* DebugDisplay_Init(void) {

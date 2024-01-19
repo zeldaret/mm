@@ -1,17 +1,17 @@
 ﻿<Root>
     <File Name="object_kz" Segment="6">
-        <Animation Name="object_kz_Anim_0003CC" Offset="0x3CC" />
-        <Animation Name="object_kz_Anim_000F5C" Offset="0xF5C" />
-        <Animation Name="object_kz_Anim_001390" Offset="0x1390" />
-        <Animation Name="object_kz_Anim_001578" Offset="0x1578" />
-        <Animation Name="object_kz_Anim_001E9C" Offset="0x1E9C" />
-        <Animation Name="object_kz_Anim_002730" Offset="0x2730" />
-        <Animation Name="object_kz_Anim_002BA0" Offset="0x2BA0" />
-        <Animation Name="object_kz_Anim_003A3C" Offset="0x3A3C" />
-        <Animation Name="object_kz_Anim_0043E4" Offset="0x43E4" />
-        <Animation Name="object_kz_Anim_004860" Offset="0x4860" />
-        <Animation Name="object_kz_Anim_005644" Offset="0x5644" />
-        <Animation Name="object_kz_Anim_0058B8" Offset="0x58B8" />
+        <Animation Name="object_kz_Anim_0003CC" Offset="0x3CC" /> <!-- Original name is "kz_attackA" -->
+        <Animation Name="object_kz_Anim_000F5C" Offset="0xF5C" /> <!-- Original name is "kz_attackB" -->
+        <Animation Name="object_kz_Anim_001390" Offset="0x1390" /> <!-- Original name is "kz_back_ten" -->
+        <Animation Name="object_kz_Anim_001578" Offset="0x1578" /> <!-- Original name is "kz_defense" -->
+        <Animation Name="object_kz_Anim_001E9C" Offset="0x1E9C" /> <!-- Original name is "kz_doron" -->
+        <Animation Name="object_kz_Anim_002730" Offset="0x2730" /> <!-- Original name is "kz_down" -->
+        <Animation Name="object_kz_Anim_002BA0" Offset="0x2BA0" /> <!-- Original name is "kz_downwait" -->
+        <Animation Name="object_kz_Anim_003A3C" Offset="0x3A3C" /> <!-- Original name is "kz_downwake" -->
+        <Animation Name="object_kz_Anim_0043E4" Offset="0x43E4" /> <!-- Original name is "kz_getout" -->
+        <Animation Name="object_kz_Anim_004860" Offset="0x4860" /> <!-- Original name is "kz_hit" -->
+        <Animation Name="object_kz_Anim_005644" Offset="0x5644" /> <!-- Original name is "kz_kime" -->
+        <Animation Name="object_kz_Anim_0058B8" Offset="0x58B8" /> <!-- Original name is "kz_run" -->
 
         <Texture Name="object_kz_TLUT_0058D0" OutName="tlut_0058D0" Format="rgba16" Width="16" Height="16" Offset="0x58D0" />
         <Texture Name="object_kz_Tex_005AD0" OutName="tex_005AD0" Format="ci8" Width="8" Height="8" Offset="0x5AD0" />
@@ -82,12 +82,12 @@
         <Limb Name="object_kz_Standardlimb_00D7C0" Type="Standard" EnumName="KAIZOKU_LIMB_17" Offset="0xD7C0" />
         <Skeleton Name="gKaizokuSkel" Type="Flex" LimbType="Standard" LimbNone="KAIZOKU_LIMB_NONE" LimbMax="KAIZOKU_LIMB_MAX" EnumName="KaizokuLimb" Offset="0xD828" />
 
-        <Animation Name="object_kz_Anim_00DBE4" Offset="0xDBE4" />
-        <Animation Name="object_kz_Anim_00E1C8" Offset="0xE1C8" />
-        <Animation Name="object_kz_Anim_00E8BC" Offset="0xE8BC" />
-        <Animation Name="object_kz_Anim_00ED1C" Offset="0xED1C" />
-        <Animation Name="object_kz_Anim_00EF9C" Offset="0xEF9C" />
-        <Animation Name="object_kz_Anim_00F288" Offset="0xF288" />
-        <Animation Name="object_kz_Anim_00F8E4" Offset="0xF8E4" />
+        <Animation Name="object_kz_Anim_00DBE4" Offset="0xDBE4" /> <!-- Original name is "kz_side_walk" -->
+        <Animation Name="object_kz_Anim_00E1C8" Offset="0xE1C8" /> <!-- Original name is "kz_start" -->
+        <Animation Name="object_kz_Anim_00E8BC" Offset="0xE8BC" /> <!-- Original name is "kz_syuta" -->
+        <Animation Name="object_kz_Anim_00ED1C" Offset="0xED1C" /> <!-- Original name is "kz_syutawait" -->
+        <Animation Name="object_kz_Anim_00EF9C" Offset="0xEF9C" /> <!-- Original name is "kz_talk" -->
+        <Animation Name="object_kz_Anim_00F288" Offset="0xF288" /> <!-- Original name is "kz_togetout" -->
+        <Animation Name="object_kz_Anim_00F8E4" Offset="0xF8E4" /> <!-- Original name is "kz_wait" -->
     </File>
 </Root>

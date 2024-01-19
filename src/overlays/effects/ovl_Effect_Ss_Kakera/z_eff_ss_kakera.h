@@ -30,7 +30,7 @@ typedef struct {
     /* 0x32 */ s16 unk_32;
     /* 0x34 */ s32 life;
     /* 0x38 */ s16 colorIdx;
-    /* 0x3A */ s16 objId;
+    /* 0x3A */ s16 objectId;
     /* 0x3C */ Gfx* dList;
 } EffectSsKakeraInitParams; // size = 0x40
 

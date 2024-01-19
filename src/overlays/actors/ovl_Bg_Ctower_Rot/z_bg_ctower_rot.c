@@ -22,15 +22,15 @@ void BgCtowerRot_DoorIdle(BgCtowerRot* this, PlayState* play);
 void BgCtowerRot_SetupDoorClose(BgCtowerRot* this, PlayState* play);
 
 ActorInit Bg_Ctower_Rot_InitVars = {
-    ACTOR_BG_CTOWER_ROT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_CTOWER_ROT,
-    sizeof(BgCtowerRot),
-    (ActorFunc)BgCtowerRot_Init,
-    (ActorFunc)BgCtowerRot_Destroy,
-    (ActorFunc)BgCtowerRot_Update,
-    (ActorFunc)BgCtowerRot_Draw,
+    /**/ ACTOR_BG_CTOWER_ROT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_CTOWER_ROT,
+    /**/ sizeof(BgCtowerRot),
+    /**/ BgCtowerRot_Init,
+    /**/ BgCtowerRot_Destroy,
+    /**/ BgCtowerRot_Update,
+    /**/ BgCtowerRot_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -89,7 +89,7 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot* this, PlayState* play) {
     this->dyna.actor.shape.rot.z = rotZ * 16.384f;
 
     if (play->csCtx.curFrame == 132) {
-        play_sound(NA_SE_SY_SPIRAL_DASH);
+        Audio_PlaySfx(NA_SE_SY_SPIRAL_DASH);
     }
 }
 
@@ -104,7 +104,7 @@ void BgCtowerRot_DoorClose(BgCtowerRot* this, PlayState* play) {
         }
         this->actionFunc = BgCtowerRot_DoorDoNothing;
     } else if (this->dyna.actor.params == BGCTOWERROT_STONE_DOOR_MAIN) {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_STONE_STATUE_OPEN - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_STONE_STATUE_OPEN - SFX_FLAG);
     }
     this->dyna.actor.world.pos.x =
         this->dyna.actor.home.pos.x + (Math_SinS(this->dyna.actor.world.rot.y) * this->timer);

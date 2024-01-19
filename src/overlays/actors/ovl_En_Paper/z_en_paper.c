@@ -28,15 +28,15 @@ void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
 void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
 
 ActorInit En_Paper_InitVars = {
-    ACTOR_EN_PAPER,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_BAL,
-    sizeof(EnPaper),
-    (ActorFunc)EnPaper_Init,
-    (ActorFunc)EnPaper_Destroy,
-    (ActorFunc)EnPaper_Update,
-    (ActorFunc)EnPaper_Draw,
+    /**/ ACTOR_EN_PAPER,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_BAL,
+    /**/ sizeof(EnPaper),
+    /**/ EnPaper_Init,
+    /**/ EnPaper_Destroy,
+    /**/ EnPaper_Update,
+    /**/ EnPaper_Draw,
 };
 
 static Vec3f sUnitVecZ = { 0.0f, 0.0f, 1.0f };

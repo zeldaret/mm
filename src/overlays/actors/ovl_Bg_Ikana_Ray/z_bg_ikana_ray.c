@@ -22,15 +22,15 @@ void BgIkanaRay_SetActivated(BgIkanaRay* this);
 void BgIkanaRay_UpdateActivated(BgIkanaRay* this, PlayState* play);
 
 ActorInit Bg_Ikana_Ray_InitVars = {
-    ACTOR_BG_IKANA_RAY,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_IKANA_OBJ,
-    sizeof(BgIkanaRay),
-    (ActorFunc)BgIkanaRay_Init,
-    (ActorFunc)BgIkanaRay_Destroy,
-    (ActorFunc)BgIkanaRay_Update,
-    (ActorFunc)BgIkanaRay_Draw,
+    /**/ ACTOR_BG_IKANA_RAY,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_IKANA_OBJ,
+    /**/ sizeof(BgIkanaRay),
+    /**/ BgIkanaRay_Init,
+    /**/ BgIkanaRay_Destroy,
+    /**/ BgIkanaRay_Update,
+    /**/ BgIkanaRay_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

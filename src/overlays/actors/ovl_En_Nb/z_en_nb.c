@@ -7,7 +7,7 @@
 #include "z_en_nb.h"
 #include "objects/object_nb/object_nb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnNb*)thisx)
 
@@ -16,19 +16,9 @@ void EnNb_Destroy(Actor* thisx, PlayState* play);
 void EnNb_Update(Actor* thisx, PlayState* play);
 void EnNb_Draw(Actor* thisx, PlayState* play);
 
-void EnNb_FollowSchedule(EnNb* this, PlayState* play);
 void func_80BC0EAC(EnNb* this, PlayState* play);
 
-void func_80BC08E0(EnNb* this, PlayState* play);
-void func_80BC0978(EnNb* this, PlayState* play);
-
-s32 func_80BC00AC(Actor* thisx, PlayState* play);
-s32 func_80BC01DC(Actor* thisx, PlayState* play);
-
 #define EN_NB_FLAG_NONE (0)
-#define EN_NB_FLAG_1 (1 << 0)
-#define EN_NB_FLAG_2 (1 << 1)
-#define EN_NB_FLAG_4 (1 << 2)
 #define EN_NB_FLAG_8 (1 << 3)
 #define EN_NB_FLAG_10 (1 << 4)
 #define EN_NB_FLAG_20 (1 << 5)
@@ -111,15 +101,15 @@ u8 D_80BC15C8[] = {
 };
 
 ActorInit En_Nb_InitVars = {
-    ACTOR_EN_NB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_NB,
-    sizeof(EnNb),
-    (ActorFunc)EnNb_Init,
-    (ActorFunc)EnNb_Destroy,
-    (ActorFunc)EnNb_Update,
-    (ActorFunc)EnNb_Draw,
+    /**/ ACTOR_EN_NB,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_NB,
+    /**/ sizeof(EnNb),
+    /**/ EnNb_Init,
+    /**/ EnNb_Destroy,
+    /**/ EnNb_Update,
+    /**/ EnNb_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -143,15 +133,6 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
-
-static AnimationInfoS sAnimationInfo[] = {
-    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // EN_NB_ANIM_0
-    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_1
-    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // EN_NB_ANIM_TALK_ONCE
-    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_TALK_LOOP
-    { &gNbAngryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // EN_NB_ANIM_ANGRY
-    { &gNbRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // EN_NB_ANIM_RELIEVED
-};
 
 Actor* EnNb_FindActor(EnNb* this, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* thisx;
@@ -184,25 +165,34 @@ void EnNb_UpdateSkelAnime(EnNb* this) {
     SkelAnime_Update(&this->skelAnime);
 }
 
+static AnimationInfoS sAnimationInfo[EN_NB_ANIM_MAX] = {
+    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // EN_NB_ANIM_0
+    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_1
+    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // EN_NB_ANIM_TALK_ONCE
+    { &gNbTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // EN_NB_ANIM_TALK_LOOP
+    { &gNbAngryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // EN_NB_ANIM_ANGRY
+    { &gNbRelievedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // EN_NB_ANIM_RELIEVED
+};
+
 s32 EnNb_ChangeAnim(EnNb* this, EnNbAnimation animIndex) {
-    s32 shouldChange = false;
-    s32 didAnimationChange = false;
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
     if ((animIndex == EN_NB_ANIM_0) || (animIndex == EN_NB_ANIM_1)) {
         if ((this->animIndex != EN_NB_ANIM_0) && (this->animIndex != EN_NB_ANIM_1)) {
-            shouldChange = true;
+            changeAnim = true;
         }
     } else if (animIndex != this->animIndex) {
-        shouldChange = true;
+        changeAnim = true;
     }
 
-    if (shouldChange) {
+    if (changeAnim) {
         this->animIndex = animIndex;
-        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
-    return didAnimationChange;
+    return didAnimChange;
 }
 
 void func_80BBFF24(EnNb* this, PlayState* play) {
@@ -304,6 +294,9 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
             this->behaviour++;
             ret = true;
             break;
+
+        default:
+            break;
     }
 
     return ret;
@@ -332,18 +325,15 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
 
         case ENNB_BEHAVIOUR_2:
             // Slowly increase alpha to fill the screen with a black rectangle
-            R_PLAY_FILL_SCREEN_ALPHA = (s16)(s32)(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
+            R_PLAY_FILL_SCREEN_ALPHA = TRUNCF_BINANG(255.0f - (((f32)ABS_ALT(20 - this->storyTimer) / 20.0f) * 255.0f));
 
             if (this->storyTimer == 20) {
                 if (CHECK_EVENTINF(EVENTINF_42)) {
-                    // play->interfaceCtx.storyType = STORY_TYPE_MASK_FESTIVAL;
-                    play->interfaceCtx.storyType = 0;
+                    play->interfaceCtx.storyType = STORY_TYPE_MASK_FESTIVAL;
                 } else {
-                    // play->interfaceCtx.storyType = STORY_TYPE_GIANTS_LEAVING;
-                    play->interfaceCtx.storyType = 1;
+                    play->interfaceCtx.storyType = STORY_TYPE_GIANTS_LEAVING;
                 }
-                // play->interfaceCtx.storyState = STORY_STATE_FADE_IN;
-                play->interfaceCtx.storyState = 6;
+                play->interfaceCtx.storyState = STORY_STATE_FADE_IN;
                 R_STORY_FILL_SCREEN_ALPHA = 255;
             }
 
@@ -353,15 +343,13 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             break;
 
         case ENNB_BEHAVIOUR_3:
-            // play->interfaceCtx.storyState = STORY_STATE_SETUP_IDLE;
-            play->interfaceCtx.storyState = 4;
+            play->interfaceCtx.storyState = STORY_STATE_SETUP_IDLE;
             this->behaviour++;
             ret = true;
             break;
 
         case ENNB_BEHAVIOUR_4:
-            // play->interfaceCtx.storyState = STORY_STATE_FADE_OUT;
-            play->interfaceCtx.storyState = 5;
+            play->interfaceCtx.storyState = STORY_STATE_FADE_OUT;
             this->behaviour++;
             // fallthrough
         case ENNB_BEHAVIOUR_5:
@@ -369,7 +357,7 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
                 gSaveContext.save.time = CLOCK_TIME(8, 0);
                 Sram_IncrementDay();
             } else {
-                func_800FE658(120.0f);
+                Environment_SetTimeJump(120.0f);
             }
 
             this->behaviour++;
@@ -379,6 +367,9 @@ s32 func_80BC01DC(Actor* thisx, PlayState* play) {
             play->transitionType = TRANS_TYPE_FADE_BLACK;
             gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
             SET_EVENTINF(EVENTINF_43);
+            break;
+
+        default:
             break;
     }
 
@@ -403,18 +394,17 @@ u8* func_80BC045C(EnNb* this, PlayState* play) {
 s32 func_80BC04FC(EnNb* this, PlayState* play) {
     s32 ret = false;
 
-    if (this->stateFlags & (EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4)) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            this->stateFlags |= EN_NB_FLAG_20;
-            SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_NONE, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
-            this->behaviour = ENNB_BEHAVIOUR_0;
-            this->msgEventCallback = NULL;
-            this->actor.child = this->unk_1E8;
-            this->msgEventScript = func_80BC045C(this, play);
-            this->stateFlags |= EN_NB_FLAG_20;
-            this->actionFunc = func_80BC0EAC;
-            ret = true;
-        }
+    if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        this->stateFlags |= EN_NB_FLAG_20;
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        this->behaviour = ENNB_BEHAVIOUR_0;
+        this->msgEventCallback = NULL;
+        this->actor.child = this->unk_1E8;
+        this->msgEventScript = func_80BC045C(this, play);
+        this->stateFlags |= EN_NB_FLAG_20;
+        this->actionFunc = func_80BC0EAC;
+        ret = true;
     }
     return ret;
 }
@@ -459,7 +449,7 @@ void func_80BC06C4(EnNb* this) {
     if (this->unk_1E8->id == ACTOR_PLAYER) {
         player = (Player*)this->unk_1E8;
 
-        sp40.y = player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_1E8->focus.pos);
     }
@@ -531,8 +521,8 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
                     EnNb_ChangeAnim(this, EN_NB_ANIM_TALK_LOOP);
                     break;
 
-                case 0x2904: // "You want to hear the carnival of time story? ..."
-                case 0x290B: // "You want to hear the four giants story? ..."
+                case 0x2904:
+                case 0x290B:
                     this->unk_18C = func_80BC08E0;
                     this->unk_284 = 0;
                     break;
@@ -542,7 +532,7 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
                     this->unk_284 = 0;
                     break;
 
-                case 0x28CB: // "I told you I already ate!"
+                case 0x28CB:
                     EnNb_ChangeAnim(this, EN_NB_ANIM_ANGRY);
                     break;
 
@@ -553,6 +543,9 @@ s32 func_80BC0A18(EnNb* this, PlayState* play) {
                 case 0x290D:
                 case 0x2912:
                     EnNb_ChangeAnim(this, EN_NB_ANIM_TALK_LOOP);
+                    break;
+
+                default:
                     break;
             }
         }
@@ -576,7 +569,7 @@ s32 func_80BC0B98(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 success = false;
 
     if (EnNb_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN) != NULL) {
-        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->stateFlags |= EN_NB_FLAG_20;
         EnNb_ChangeAnim(this, EN_NB_ANIM_0);
         success = true;
@@ -587,9 +580,9 @@ s32 func_80BC0B98(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80BC0C0C(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if (!CHECK_EVENTINF(EVENTINF_43)) {
-        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else {
-        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_4, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
     }
     EnNb_ChangeAnim(this, EN_NB_ANIM_0);
 
@@ -599,16 +592,12 @@ s32 func_80BC0C0C(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 EnNb_ProcessScheduleOutput(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 success;
 
-    this->actor.flags |= ACTOR_FLAG_1;
-    this->actor.targetMode = 0;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.targetMode = TARGET_MODE_0;
     this->stateFlags = EN_NB_FLAG_NONE;
     this->unk_274 = 40.0f;
 
     switch (scheduleOutput->result) {
-        default:
-            success = false;
-            break;
-
         case EN_NB_SCH_1:
         case EN_NB_SCH_3:
         case EN_NB_SCH_4:
@@ -617,6 +606,10 @@ s32 EnNb_ProcessScheduleOutput(EnNb* this, PlayState* play, ScheduleOutput* sche
 
         case EN_NB_SCH_2:
             success = func_80BC0B98(this, play, scheduleOutput);
+            break;
+
+        default:
+            success = false;
             break;
     }
     return success;
@@ -644,16 +637,16 @@ void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
         scheduleOutput.result = EN_NB_SCH_1;
         EnNb_ProcessScheduleOutput(this, play, &scheduleOutput);
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     } else if (!Schedule_RunScript(play, sScheduleScript, &scheduleOutput) ||
                ((this->scheduleResult != scheduleOutput.result) &&
                 !EnNb_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = EN_NB_SCH_NONE;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 
     this->scheduleResult = scheduleOutput.result;
@@ -668,7 +661,7 @@ void func_80BC0EAC(EnNb* this, PlayState* play) {
             CLEAR_EVENTINF(EVENTINF_43);
         }
 
-        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_1 | EN_NB_FLAG_2, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         if (this->scheduleResult != EN_NB_SCH_2) {
             this->stateFlags &= ~EN_NB_FLAG_20;
         }
@@ -696,7 +689,7 @@ void EnNb_Init(Actor* thisx, PlayState* play) {
     this->stateFlags = EN_NB_FLAG_NONE;
 
     if (CHECK_EVENTINF(EVENTINF_43)) {
-        SubS_UpdateFlags(&this->stateFlags, EN_NB_FLAG_4, EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
     } else {
         CLEAR_EVENTINF(EVENTINF_42);
         CLEAR_EVENTINF(EVENTINF_43);
@@ -710,7 +703,7 @@ void EnNb_Destroy(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    play->interfaceCtx.storyState = 3;
+    play->interfaceCtx.storyState = STORY_STATE_DESTROY;
 }
 
 void EnNb_Update(Actor* thisx, PlayState* play) {
@@ -724,8 +717,8 @@ void EnNb_Update(Actor* thisx, PlayState* play) {
         EnNb_UpdateSkelAnime(this);
         func_80BC0800(this);
         if (Actor_IsFacingPlayer(&this->actor, 0x38E0)) {
-            func_8013C964(&this->actor, play, this->unk_274, 30.0f, ITEM_OCARINA,
-                          this->stateFlags & (EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4));
+            SubS_Offer(&this->actor, play, this->unk_274, 30.0f, PLAYER_IA_NONE,
+                       this->stateFlags & SUBS_OFFER_MODE_MASK);
         }
         func_80BBFF24(this, play);
     }

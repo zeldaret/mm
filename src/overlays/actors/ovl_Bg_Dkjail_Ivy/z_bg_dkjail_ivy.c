@@ -25,15 +25,15 @@ void BgDkjailIvy_SetupFadeOut(BgDkjailIvy* this);
 void BgDkjailIvy_FadeOut(BgDkjailIvy* this, PlayState* play);
 
 ActorInit Bg_Dkjail_Ivy_InitVars = {
-    ACTOR_BG_DKJAIL_IVY,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_DKJAIL_OBJ,
-    sizeof(BgDkjailIvy),
-    (ActorFunc)BgDkjailIvy_Init,
-    (ActorFunc)BgDkjailIvy_Destroy,
-    (ActorFunc)BgDkjailIvy_Update,
-    (ActorFunc)BgDkjailIvy_Draw,
+    /**/ ACTOR_BG_DKJAIL_IVY,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_DKJAIL_OBJ,
+    /**/ sizeof(BgDkjailIvy),
+    /**/ BgDkjailIvy_Init,
+    /**/ BgDkjailIvy_Destroy,
+    /**/ BgDkjailIvy_Update,
+    /**/ BgDkjailIvy_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -57,7 +57,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
-    static Gfx* sLeafDlists[] = { gKakeraLeafMiddle, gKakeraLeafTip };
+    static Gfx* sLeafDlists[] = { gKakeraLeafMiddleDL, gKakeraLeafTipDL };
     static s16 sLeafScales[] = { 110, 80, 60, 40 };
     f32 phi_fs0;
     s32 i;
@@ -120,15 +120,16 @@ void BgDkjailIvy_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(play, &this->collider);
 
-    if (Flags_GetSwitch(play, BG_DKJAIL_GET_SWITCH(thisx))) {
+    if (Flags_GetSwitch(play, BG_DKJAIL_GET_SWITCH_FLAG(thisx))) {
         Actor_Kill(&this->dyna.actor);
-    } else {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &object_dkjail_obj_Colheader_0011A8);
-        Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
-        Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        this->alpha = 255;
-        BgDkjailIvy_SetupWaitForCut(this);
+        return;
     }
+
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gDkjailCol);
+    Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
+    this->alpha = 255;
+    BgDkjailIvy_SetupWaitForCut(this);
 }
 
 void BgDkjailIvy_Destroy(Actor* thisx, PlayState* play) {
@@ -162,7 +163,7 @@ void BgDkjailIvy_BeginCutscene(BgDkjailIvy* this, PlayState* play) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->fadeOutTimer = 50;
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
-        Flags_SetSwitch(play, BG_DKJAIL_GET_SWITCH(&this->dyna.actor));
+        Flags_SetSwitch(play, BG_DKJAIL_GET_SWITCH_FLAG(&this->dyna.actor));
         BgDkjailIvy_IvyCutEffects(this, play);
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_GRASS_WALL_BROKEN);
         BgDkjailIvy_SetupFadeOut(this);

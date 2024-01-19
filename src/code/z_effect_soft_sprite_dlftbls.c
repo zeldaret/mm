@@ -1,4 +1,4 @@
-#include "z64effect.h"
+#include "z64effect_ss.h"
 #include "segment_symbols.h"
 
 // Init Vars and linker symbol declarations (used in the table below)
@@ -26,7 +26,7 @@
 
 #define DEFINE_EFFECT_SS_UNSET(_enumValue) { 0 },
 
-EffectSsOverlay gParticleOverlayTable[] = {
+EffectSsOverlay gParticleOverlayTable[EFFECT_SS_MAX] = {
 #include "tables/effect_ss_table.h"
 };
 

@@ -4,9 +4,9 @@
 #include "global.h"
 #include "objects/object_wf/object_wf.h"
 
-#define EN_SYATEKI_WF_GET_POINT_TO_HOWL(thisx) (((thisx)->params & 0xF0) >> 4)
-#define EN_SYATEKI_WF_GET_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
-#define EN_SYATEKI_WF_PARAMS(index, pointToHowl, unused) (((index << 8) & 0xFF00) | ((pointToHowl << 4) & 0xF0) | (unused & 0xF))
+#define SG_WOLFOS_GET_POINT_TO_HOWL(thisx) (((thisx)->params & 0xF0) >> 4)
+#define SG_WOLFOS_GET_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define SG_WOLFOS_PARAMS(index, pointToHowl, unused) (((index << 8) & 0xFF00) | ((pointToHowl << 4) & 0xF0) | (unused & 0xF))
 
 struct EnSyatekiWf;
 

@@ -31,7 +31,7 @@ typedef struct DemoKankyo {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ DemoKankyoEffect effects[DEMOKANKYO_EFFECT_COUNT];
     /* 0x1644 */ DemoKankyoActionFunc actionFunc;
-    /* 0x1648 */ s32 objectId;
+    /* 0x1648 */ s32 objectSlot;
     /* 0x164C */ u8 isSafeToDrawGiants;
 } DemoKankyo; // size = 0x1650
 

@@ -21,15 +21,15 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play);
 void DoorAna_GrabLink(DoorAna* this, PlayState* play);
 
 ActorInit Door_Ana_InitVars = {
-    ACTOR_DOOR_ANA,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_FIELD_KEEP,
-    sizeof(DoorAna),
-    (ActorFunc)DoorAna_Init,
-    (ActorFunc)DoorAna_Destroy,
-    (ActorFunc)DoorAna_Update,
-    (ActorFunc)DoorAna_Draw,
+    /**/ ACTOR_DOOR_ANA,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_FIELD_KEEP,
+    /**/ sizeof(DoorAna),
+    /**/ DoorAna_Init,
+    /**/ DoorAna_Destroy,
+    /**/ DoorAna_Update,
+    /**/ DoorAna_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -82,7 +82,7 @@ void DoorAna_Init(Actor* thisx, PlayState* play) {
         DoorAna_SetupAction(this, DoorAna_WaitOpen);
     }
 
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
 }
 
 void DoorAna_Destroy(Actor* thisx, PlayState* play) {
@@ -119,7 +119,7 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play) {
     if (grottoIsOpen) {
         DOORANA_SET_TYPE(&this->actor, DOORANA_TYPE_VISIBLE);
         DoorAna_SetupAction(this, DoorAna_WaitOpen);
-        play_sound(NA_SE_SY_CORRECT_CHIME);
+        Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
     }
 
     Actor_SetClosestSecretDistance(&this->actor, play);
@@ -130,9 +130,9 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
     s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f)) {
-        if ((this->actor.targetMode != 0) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+        if ((this->actor.targetMode != TARGET_MODE_0) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
             (play->transitionMode == TRANS_MODE_OFF) && (player->stateFlags1 & PLAYER_STATE1_80000000) &&
-            (player->unk_AE7 == 0)) {
+            (player->av1.actionVar1 == 0)) {
 
             if (grottoType == DOORANA_TYPE_VISIBLE_SCENE_EXIT) {
                 s32 exitIndex = DOORANA_GET_EXIT_INDEX(&this->actor);
@@ -162,10 +162,10 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
                    (this->actor.xzDistToPlayer <= 20.0f) && (this->actor.playerHeightRel >= -50.0f) &&
                    (this->actor.playerHeightRel <= 15.0f)) {
             player->stateFlags1 |= PLAYER_STATE1_80000000;
-            this->actor.targetMode = 1;
+            this->actor.targetMode = TARGET_MODE_1;
 
         } else {
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
         }
     }
 

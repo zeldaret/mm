@@ -24,15 +24,15 @@ void func_80B30AD4(ObjSpidertent* this);
 void func_80B30AF8(ObjSpidertent* this, PlayState* play);
 
 ActorInit Obj_Spidertent_InitVars = {
-    ACTOR_OBJ_SPIDERTENT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_SPIDERTENT,
-    sizeof(ObjSpidertent),
-    (ActorFunc)ObjSpidertent_Init,
-    (ActorFunc)ObjSpidertent_Destroy,
-    (ActorFunc)ObjSpidertent_Update,
-    (ActorFunc)ObjSpidertent_Draw,
+    /**/ ACTOR_OBJ_SPIDERTENT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_SPIDERTENT,
+    /**/ sizeof(ObjSpidertent),
+    /**/ ObjSpidertent_Init,
+    /**/ ObjSpidertent_Destroy,
+    /**/ ObjSpidertent_Update,
+    /**/ ObjSpidertent_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit1[] = {
@@ -375,7 +375,7 @@ s32 func_80B2FB94(Vec3f* arg0, f32 arg1, TriNorm* triNorm, Vec3f* arg3, f32* arg
     return false;
 }
 
-s32 func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
+bool func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
     Vec3f sp84;
     Vec3f sp78;
     Vec3f* vtx;
@@ -529,7 +529,7 @@ s32 func_80B30480(ObjSpidertent* this, PlayState* play, Vec3f* arg2) {
     Vec3f sp58;
     f32 sp54;
 
-    if (player->heldItemAction == PLAYER_IA_STICK) {
+    if (player->heldItemAction == PLAYER_IA_DEKU_STICK) {
         if (player->unk_B28 > 0) {
             for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
                 triNorm = &this->collider.elements[i].dim;
@@ -564,7 +564,7 @@ void ObjSpidertent_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitTris(play, &this->collider);
 
-    if (Flags_GetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJSPIDERTENT_GET_SWITCH_FLAG(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -679,9 +679,9 @@ void func_80B30A4C(ObjSpidertent* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         if (this->dyna.actor.csId >= 0) {
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
+            Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_1);
         }
-        Flags_SetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor));
+        Flags_SetSwitch(play, OBJSPIDERTENT_GET_SWITCH_FLAG(&this->dyna.actor));
         func_80B30AD4(this);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);

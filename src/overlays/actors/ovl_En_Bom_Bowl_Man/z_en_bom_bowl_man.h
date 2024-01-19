@@ -2,6 +2,7 @@
 #define Z_EN_BOM_BOWL_MAN_H
 
 #include "global.h"
+#include "objects/object_cs/object_cs.h"
 
 struct EnBomBowlMan;
 
@@ -19,8 +20,8 @@ typedef void (*EnBomBowlManActionFunc)(struct EnBomBowlMan*, PlayState*);
 typedef struct EnBomBowlMan {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[21];
-    /* 0x206 */ Vec3s morphTable[21];
+    /* 0x188 */ Vec3s jointTable[OBJECT_CS_LIMB_MAX];
+    /* 0x206 */ Vec3s morphTable[OBJECT_CS_LIMB_MAX];
     /* 0x284 */ EnBomBowlManActionFunc actionFunc;
     /* 0x288 */ s16 unk_288;
     /* 0x28A */ s16 unk_28A;
@@ -41,7 +42,7 @@ typedef struct EnBomBowlMan {
     /* 0x2BE */ UNK_TYPE1 unk2BE[2];
     /* 0x2C0 */ s16 unk_2C0;
     /* 0x2C2 */ s16 unk_2C2;
-    /* 0x2C4 */ f32 unk_2C4;
+    /* 0x2C4 */ f32 animEndFrame;
     /* 0x2C8 */ f32 unk_2C8;
     /* 0x2CC */ s16 csIdList[2];
     /* 0x2D0 */ s16 csId1;
@@ -54,7 +55,7 @@ typedef struct EnBomBowlMan {
     /* 0x2F2 */ s16 unk_2F2;
     /* 0x2F4 */ s16 unk_2F4;
     /* 0x2F6 */ s16 unk_2F6;
-    /* 0x2F8 */ s32 unk_2F8;
+    /* 0x2F8 */ s32 animIndex;
 } EnBomBowlMan; // size = 0x2FC
 
 #endif // Z_EN_BOM_BOWL_MAN_H

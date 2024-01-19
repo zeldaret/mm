@@ -11,6 +11,8 @@ typedef void (*EnStopheishiActionFunc)(struct EnStopheishi*, PlayState*);
 #define ENSTOPHEISHI_GET_SWITCH_FLAG(thisx) (((thisx)->params) & 0x3F)
 #define ENSTOPHEISHI_GET_F000(thisx) ((((thisx)->params) >> 0xC) & 0xF)
 
+#define ENSTOPHEISHI_SWITCH_FLAG_NONE 0x7F
+
 typedef struct EnStopheishi {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;

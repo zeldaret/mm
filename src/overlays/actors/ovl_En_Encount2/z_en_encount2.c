@@ -5,6 +5,7 @@
  */
 
 #include "z_en_encount2.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_fusen/object_fusen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -20,21 +21,21 @@ void EnEncount2_Draw(Actor* thisx, PlayState* play);
 void EnEncount2_Idle(EnEncount2* this, PlayState* play);
 void EnEncount2_Popped(EnEncount2* this, PlayState* play);
 void EnEncount2_Die(EnEncount2* this, PlayState* play);
-void EnEncount2_SetIdle(EnEncount2* this);
+void EnEncount2_SetupIdle(EnEncount2* this);
 void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
 void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play);
 void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play);
 
 ActorInit En_Encount2_InitVars = {
-    ACTOR_EN_ENCOUNT2,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_FUSEN,
-    sizeof(EnEncount2),
-    (ActorFunc)EnEncount2_Init,
-    (ActorFunc)EnEncount2_Destroy,
-    (ActorFunc)EnEncount2_Update,
-    (ActorFunc)EnEncount2_Draw,
+    /**/ ACTOR_EN_ENCOUNT2,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_FUSEN,
+    /**/ sizeof(EnEncount2),
+    /**/ EnEncount2_Init,
+    /**/ EnEncount2_Destroy,
+    /**/ EnEncount2_Update,
+    /**/ EnEncount2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -111,28 +112,28 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Collider_InitAndSetJntSph(play, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colElement);
 
-    this->dyna.actor.targetMode = 6;
+    this->dyna.actor.targetMode = TARGET_MODE_6;
     this->dyna.actor.colChkInfo.health = 1;
     this->scale = 0.1f;
     this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);
 
-    if (this->switchFlag == 0x7F) {
-        this->switchFlag = -1;
+    if (this->switchFlag == ENCOUNT2_SWITCH_FLAG_NONE) {
+        this->switchFlag = SWITCH_FLAG_NONE;
     }
 
-    if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
+    if ((this->switchFlag > SWITCH_FLAG_NONE) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
 
-    this->collider.elements->dim.modelSphere.radius = 0x39;
+    this->collider.elements->dim.modelSphere.radius = 57;
     this->collider.elements->dim.scale = 1.0f;
     this->collider.elements->dim.modelSphere.center.x = 0;
     this->collider.elements->dim.modelSphere.center.y = -4;
     this->collider.elements->dim.modelSphere.center.z = 0;
 
     this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
-    EnEncount2_SetIdle(this);
+    EnEncount2_SetupIdle(this);
 }
 
 void EnEncount2_Destroy(Actor* thisx, PlayState* play) {
@@ -142,7 +143,7 @@ void EnEncount2_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyJntSph(play, &this->collider);
 }
 
-void EnEncount2_SetIdle(EnEncount2* this) {
+void EnEncount2_SetupIdle(EnEncount2* this) {
     this->isPopped = false;
     this->actionFunc = EnEncount2_Idle;
 }
@@ -151,6 +152,7 @@ void EnEncount2_Idle(EnEncount2* this, PlayState* play) {
     this->oscillationAngle += 1500.0f;
     this->dyna.actor.velocity.y = Math_SinS(this->oscillationAngle);
     Math_ApproachF(&this->scale, 0.1f, 0.3f, 0.01f);
+
     if ((this->collider.base.acFlags & AC_HIT) && (this->dyna.actor.colChkInfo.damageEffect == 0xE)) {
         this->dyna.actor.colChkInfo.health = 0;
         this->isPopped = true;
@@ -160,15 +162,15 @@ void EnEncount2_Idle(EnEncount2* this, PlayState* play) {
 
 void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
     s32 i;
-    Vec3f curPos;
+    Vec3f effPos;
 
-    Math_Vec3f_Copy(&curPos, &this->dyna.actor.world.pos);
-    curPos.y += 60.0f;
-    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 255, 255, 200,
-                CLEAR_TAG_LARGE_EXPLOSION);
+    Math_Vec3f_Copy(&effPos, &this->dyna.actor.world.pos);
+    effPos.y += 60.0f;
+    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y, effPos.z, 255, 255, 200,
+                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_EXPLOSION));
 
     for (i = 0; i < ARRAY_COUNT(this->effects) / 2; ++i) {
-        EnEncount2_InitEffects(this, &curPos, 10);
+        EnEncount2_InitEffects(this, &effPos, 10);
     }
 
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
@@ -178,7 +180,7 @@ void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
 
 void EnEncount2_Die(EnEncount2* this, PlayState* play) {
     if (this->deathTimer == 0) {
-        if (this->switchFlag >= 0) {
+        if (this->switchFlag > SWITCH_FLAG_NONE) {
             Flags_SetSwitch(play, this->switchFlag);
         }
         Actor_Kill(&this->dyna.actor);
@@ -216,24 +218,24 @@ void EnEncount2_Draw(Actor* thisx, PlayState* play) {
 
 void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
     s16 i;
-    EnEncount2Effect* sPtr = this->effects;
+    EnEncount2Effect* effect = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
-        if (!sPtr->isEnabled) {
-            sPtr->isEnabled = true;
-            sPtr->pos = *pos;
-            sPtr->alphaFadeDelay = fadeDelay;
-            sPtr->alpha = 255;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (!effect->isEnabled) {
+            effect->isEnabled = true;
+            effect->pos = *pos;
+            effect->alphaFadeDelay = fadeDelay;
+            effect->alpha = 255;
 
-            sPtr->accel.x = (Rand_ZeroOne() - 0.5f) * 10.0f;
-            sPtr->accel.y = (Rand_ZeroOne() - 0.5f) * 10.0f;
-            sPtr->accel.z = (Rand_ZeroOne() - 0.5f) * 10.0f;
+            effect->accel.x = (Rand_ZeroOne() - 0.5f) * 10.0f;
+            effect->accel.y = (Rand_ZeroOne() - 0.5f) * 10.0f;
+            effect->accel.z = (Rand_ZeroOne() - 0.5f) * 10.0f;
 
-            sPtr->velocity.x = Rand_ZeroOne() - 0.5f;
-            sPtr->velocity.y = Rand_ZeroOne() - 0.5f;
-            sPtr->velocity.z = Rand_ZeroOne() - 0.5f;
+            effect->velocity.x = Rand_ZeroOne() - 0.5f;
+            effect->velocity.y = Rand_ZeroOne() - 0.5f;
+            effect->velocity.z = Rand_ZeroOne() - 0.5f;
 
-            sPtr->scale = (Rand_ZeroFloat(1.0f) * 0.5f) + 2.0f;
+            effect->scale = (Rand_ZeroFloat(1.0f) * 0.5f) + 2.0f;
             return;
         }
     }
@@ -241,23 +243,23 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
 
 void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play) {
     s32 i;
-    EnEncount2Effect* sPtr = this->effects;
+    EnEncount2Effect* effect = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
-        if (sPtr->isEnabled) {
-            sPtr->pos.x += sPtr->velocity.x;
-            sPtr->pos.y += sPtr->velocity.y;
-            sPtr->pos.z += sPtr->velocity.z;
-            sPtr->velocity.x += sPtr->accel.x;
-            sPtr->velocity.y += sPtr->accel.y;
-            sPtr->velocity.z += sPtr->accel.z;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isEnabled) {
+            effect->pos.x += effect->velocity.x;
+            effect->pos.y += effect->velocity.y;
+            effect->pos.z += effect->velocity.z;
+            effect->velocity.x += effect->accel.x;
+            effect->velocity.y += effect->accel.y;
+            effect->velocity.z += effect->accel.z;
 
-            if (sPtr->alphaFadeDelay != 0) {
-                sPtr->alphaFadeDelay--;
+            if (effect->alphaFadeDelay != 0) {
+                effect->alphaFadeDelay--;
             } else {
-                sPtr->alpha -= 10;
-                if (sPtr->alpha < 10) {
-                    sPtr->isEnabled = 0;
+                effect->alpha -= 10;
+                if (effect->alpha < 10) {
+                    effect->isEnabled = 0;
                 }
             }
         }
@@ -266,24 +268,24 @@ void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play) {
 
 void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play) {
     s16 i;
-    EnEncount2Effect* sPtr;
+    EnEncount2Effect* effect;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 
-    sPtr = this->effects;
+    effect = this->effects;
     Gfx_SetupDL25_Opa(gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
-        if (sPtr->isEnabled) {
-            Matrix_Translate(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
-            Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, MTXMODE_APPLY);
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isEnabled) {
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
             POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
             gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
-            gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, sPtr->alpha);
+            gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, effect->alpha);
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
             Matrix_RotateZF(DEG_TO_RAD(play->state.frames * 20.0f), MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

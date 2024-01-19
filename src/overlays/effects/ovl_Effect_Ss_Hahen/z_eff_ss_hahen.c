@@ -11,8 +11,8 @@
 #define rYaw regs[1]
 #define rFlags regs[2]
 #define rScale regs[3]
-#define rObjId regs[4]
-#define rObjBankIndex regs[5]
+#define rObjectId regs[4]
+#define rObjectSlot regs[5]
 #define rMinLife regs[6]
 
 #define PARAMS ((EffectSsHahenInitParams*)initParamsx)
@@ -27,8 +27,8 @@ EffectSsInit Effect_Ss_Hahen_InitVars = {
 };
 
 void EffectSsHahen_CheckForObject(EffectSs* this, PlayState* play) {
-    if (((this->rObjBankIndex = Object_GetIndex(&play->objectCtx, this->rObjId)) < 0) ||
-        !Object_IsLoaded(&play->objectCtx, this->rObjBankIndex)) {
+    if (((this->rObjectSlot = Object_GetSlot(&play->objectCtx, this->rObjectId)) <= OBJECT_SLOT_NONE) ||
+        !Object_IsLoaded(&play->objectCtx, this->rObjectSlot)) {
         this->life = -1;
         this->draw = NULL;
     }
@@ -44,11 +44,11 @@ u32 EffectSsHahen_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 
     if (initParams->dList != NULL) {
         this->gfx = initParams->dList;
-        this->rObjId = initParams->objId;
+        this->rObjectId = initParams->objectId;
         EffectSsHahen_CheckForObject(this, play);
     } else {
         this->gfx = gEffFragments1DL;
-        this->rObjId = HAHEN_OBJECT_DEFAULT;
+        this->rObjectId = HAHEN_OBJECT_DEFAULT;
     }
 
     this->draw = EffectSsHahen_Draw;
@@ -68,8 +68,8 @@ void EffectSsHahen_DrawOpa(PlayState* play, EffectSs* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    if (this->rObjId != HAHEN_OBJECT_DEFAULT) {
-        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->rObjBankIndex].segment);
+    if (this->rObjectId != HAHEN_OBJECT_DEFAULT) {
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[this->rObjectSlot].segment);
     }
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
@@ -84,8 +84,8 @@ void EffectSsHahen_DrawXlu(PlayState* play, EffectSs* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    if (this->rObjId != -1) {
-        gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[this->rObjBankIndex].segment);
+    if (this->rObjectId != -1) {
+        gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.slots[this->rObjectSlot].segment);
     }
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
@@ -125,7 +125,7 @@ void EffectSsHahen_Update(PlayState* play, u32 index, EffectSs* this) {
         this->life = 0;
     }
 
-    if (this->rObjId != HAHEN_OBJECT_DEFAULT) {
+    if (this->rObjectId != HAHEN_OBJECT_DEFAULT) {
         EffectSsHahen_CheckForObject(this, play);
     }
 }

@@ -20,15 +20,15 @@ void func_808D75F0(BgF40Flift* this, PlayState* play);
 void func_808D7714(BgF40Flift* this, PlayState* play);
 
 ActorInit Bg_F40_Flift_InitVars = {
-    ACTOR_BG_F40_FLIFT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_F40_OBJ,
-    sizeof(BgF40Flift),
-    (ActorFunc)BgF40Flift_Init,
-    (ActorFunc)BgF40Flift_Destroy,
-    (ActorFunc)BgF40Flift_Update,
-    (ActorFunc)BgF40Flift_Draw,
+    /**/ ACTOR_BG_F40_FLIFT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_F40_OBJ,
+    /**/ sizeof(BgF40Flift),
+    /**/ BgF40Flift_Init,
+    /**/ BgF40Flift_Destroy,
+    /**/ BgF40Flift_Update,
+    /**/ BgF40Flift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

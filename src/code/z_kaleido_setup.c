@@ -93,28 +93,29 @@ void KaleidoSetup_Update(PlayState* play) {
         (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
         if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
             if ((gSaveContext.save.cutsceneIndex < 0xFFF0) && (gSaveContext.nextCutsceneIndex < 0xFFF0)) {
-                if (!Play_InCsMode(play) || ((msgCtx->msgMode != 0) && (msgCtx->currentTextId == 0xFF))) {
+                if (!Play_InCsMode(play) || ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId == 0xFF))) {
                     if ((play->unk_1887C < 2) && (gSaveContext.magicState != MAGIC_STATE_STEP_CAPACITY) &&
                         (gSaveContext.magicState != MAGIC_STATE_FILL)) {
                         if (!CHECK_EVENTINF(EVENTINF_17) && !(player->stateFlags1 & PLAYER_STATE1_20)) {
-                            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
+                            if (!(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) &&
                                 !(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
-                                if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
+                                if (!play->actorCtx.isOverrideInputOn &&
+                                    CHECK_BTN_ALL(input->press.button, BTN_START)) {
                                     gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
                                     pauseCtx->itemDescriptionOn = false;
                                     pauseCtx->state = PAUSE_STATE_OPENING_0;
                                     func_800F4A10(play);
                                     // Set next page mode to scroll left
                                     pauseCtx->nextPageMode = pauseCtx->pageIndex * 2 + 1;
-                                    func_801A3A7C(1);
+                                    Audio_SetPauseState(true);
                                 }
 
                                 if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
-                                    Game_SetFramerateDivisor(&play->state, 2);
+                                    GameState_SetFramerateDivisor(&play->state, 2);
                                     if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
                                         ShrinkWindow_Letterbox_SetSizeTarget(0);
                                     }
-                                    func_801A3AEC(1);
+                                    Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_OPEN);
                                 }
                             }
                         }

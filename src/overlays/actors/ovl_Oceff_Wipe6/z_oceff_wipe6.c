@@ -16,15 +16,15 @@ void OceffWipe6_Update(Actor* thisx, PlayState* play);
 void OceffWipe6_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Oceff_Wipe6_InitVars = {
-    ACTOR_OCEFF_WIPE6,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(OceffWipe6),
-    (ActorFunc)OceffWipe6_Init,
-    (ActorFunc)OceffWipe6_Destroy,
-    (ActorFunc)OceffWipe6_Update,
-    (ActorFunc)OceffWipe6_Draw,
+    /**/ ACTOR_OCEFF_WIPE6,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(OceffWipe6),
+    /**/ OceffWipe6_Init,
+    /**/ OceffWipe6_Destroy,
+    /**/ OceffWipe6_Update,
+    /**/ OceffWipe6_Draw,
 };
 
 #include "overlays/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.c"
@@ -39,7 +39,7 @@ void OceffWipe6_Init(Actor* thisx, PlayState* play) {
 
 void OceffWipe6_Destroy(Actor* thisx, PlayState* play) {
     Magic_Reset(play);
-    play->msgCtx.unk120B0 = 0;
+    play->msgCtx.ocarinaSongEffectActive = false;
 }
 
 void OceffWipe6_Update(Actor* thisx, PlayState* play) {
@@ -59,13 +59,10 @@ void OceffWipe6_Draw(Actor* thisx, PlayState* play) {
     u8 alpha;
     s32 i;
     s32 counter;
-    Vec3f activeCamEye;
+    Vec3f activeCamEye = GET_ACTIVE_CAM(play)->eye;
     s32 pad;
-    Vec3f quakeOffset;
+    Vec3f quakeOffset = Camera_GetQuakeOffset(GET_ACTIVE_CAM(play));
     s32 pad2;
-
-    activeCamEye = GET_ACTIVE_CAM(play)->eye;
-    Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
 
     if (this->counter < 32) {
         counter = this->counter;

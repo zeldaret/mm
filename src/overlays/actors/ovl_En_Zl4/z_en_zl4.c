@@ -19,15 +19,15 @@ void func_809A1D0C(EnZl4* this, PlayState* play);
 
 #if 0
 ActorInit En_Zl4_InitVars = {
-    ACTOR_EN_ZL4,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_STK,
-    sizeof(EnZl4),
-    (ActorFunc)EnZl4_Init,
-    (ActorFunc)EnZl4_Destroy,
-    (ActorFunc)EnZl4_Update,
-    (ActorFunc)EnZl4_Draw,
+    /**/ ACTOR_EN_ZL4,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_STK,
+    /**/ sizeof(EnZl4),
+    /**/ EnZl4_Init,
+    /**/ EnZl4_Destroy,
+    /**/ EnZl4_Update,
+    /**/ EnZl4_Draw,
 };
 
 #endif

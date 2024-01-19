@@ -77,7 +77,7 @@ void FileSelect_SelectCopySource(GameState* thisx) {
         this->nextTitleLabel = FS_TITLE_SELECT_FILE;
         this->configMode = CM_COPY_RETURN_MAIN;
         this->warningLabel = FS_WARNING_NONE;
-        play_sound(NA_SE_SY_FSEL_CLOSE);
+        Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
     } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
         if (!gSaveContext.flashSaveAvailable) {
             if (NO_FLASH_SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
@@ -85,22 +85,22 @@ void FileSelect_SelectCopySource(GameState* thisx) {
                 this->selectedFileIndex = this->buttonIndex;
                 this->configMode = CM_SETUP_COPY_DEST_1;
                 this->nextTitleLabel = FS_TITLE_COPY_TO;
-                play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
             } else {
-                play_sound(NA_SE_SY_FSEL_ERROR);
+                Audio_PlaySfx(NA_SE_SY_FSEL_ERROR);
             }
         } else if (SLOT_OCCUPIED(this, this->buttonIndex)) {
             this->actionTimer = 4;
             this->selectedFileIndex = this->buttonIndex;
             this->configMode = CM_SETUP_COPY_DEST_1;
             this->nextTitleLabel = FS_TITLE_COPY_TO;
-            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+            Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
         } else {
-            play_sound(NA_SE_SY_FSEL_ERROR);
+            Audio_PlaySfx(NA_SE_SY_FSEL_ERROR);
         }
     } else {
         if (ABS_ALT(this->stickAdjY) >= 30) {
-            play_sound(NA_SE_SY_FSEL_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_FSEL_CURSOR);
             if (this->stickAdjY >= 30) {
                 this->buttonIndex--;
                 // Instead of removing File 3 entirely, the index is manually adjusted to skip it
@@ -211,7 +211,7 @@ void FileSelect_SelectCopyDest(GameState* thisx) {
         this->nextTitleLabel = FS_TITLE_COPY_FROM;
         this->actionTimer = 4;
         this->configMode = CM_EXIT_TO_COPY_SOURCE_1;
-        play_sound(NA_SE_SY_FSEL_CLOSE);
+        Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
     } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
         if (!gSaveContext.flashSaveAvailable) {
             if (!NO_FLASH_SLOT_OCCUPIED(sramCtx, this->buttonIndex)) {
@@ -219,22 +219,22 @@ void FileSelect_SelectCopyDest(GameState* thisx) {
                 this->nextTitleLabel = FS_TITLE_COPY_CONFIRM;
                 this->actionTimer = 4;
                 this->configMode = CM_SETUP_COPY_CONFIRM_1;
-                play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
             } else {
-                play_sound(NA_SE_SY_FSEL_ERROR);
+                Audio_PlaySfx(NA_SE_SY_FSEL_ERROR);
             }
         } else if (!SLOT_OCCUPIED(this, this->buttonIndex)) {
             this->copyDestFileIndex = this->buttonIndex;
             this->nextTitleLabel = FS_TITLE_COPY_CONFIRM;
             this->actionTimer = 4;
             this->configMode = CM_SETUP_COPY_CONFIRM_1;
-            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+            Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
         } else {
-            play_sound(NA_SE_SY_FSEL_ERROR);
+            Audio_PlaySfx(NA_SE_SY_FSEL_ERROR);
         }
     } else {
         if (ABS_ALT(this->stickAdjY) >= 30) {
-            play_sound(NA_SE_SY_FSEL_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_FSEL_CURSOR);
             if (this->stickAdjY >= 30) {
                 this->buttonIndex--;
                 // Instead of removing File 3 entirely, the index is manually adjusted to skip it
@@ -414,17 +414,16 @@ void FileSelect_CopyConfirm(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
     SramContext* sramCtx = &this->sramCtx;
     Input* input = CONTROLLER1(&this->state);
-    u16 dayTime;
+    u16 time;
 
     if (((this->buttonIndex != FS_BTN_CONFIRM_YES) && CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) ||
         CHECK_BTN_ALL(input->press.button, BTN_B)) {
         this->actionTimer = 4;
         this->nextTitleLabel = FS_TITLE_COPY_TO;
         this->configMode = CM_RETURN_TO_COPY_DEST;
-        play_sound(NA_SE_SY_FSEL_CLOSE);
+        Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
     } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
-        dayTime = gSaveContext.save.time;
-        gSaveContext.save.time = dayTime;
+        gSaveContext.save.time = time = CURRENT_TIME; // Set to itself with unused temp
         this->nameAlpha[this->copyDestFileIndex] = 0;
         this->fileInfoAlpha[this->copyDestFileIndex] = this->nameAlpha[this->copyDestFileIndex];
         this->nextTitleLabel = FS_TITLE_COPY_COMPLETE;
@@ -439,9 +438,9 @@ void FileSelect_CopyConfirm(GameState* thisx) {
             this->configMode = CM_COPY_WAIT_FOR_FLASH_SAVE;
         }
         Rumble_Request(300.0f, 180, 20, 100);
-        play_sound(NA_SE_SY_FSEL_DECIDE_L);
+        Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
     } else if (ABS_ALT(this->stickAdjY) >= 30) {
-        play_sound(NA_SE_SY_FSEL_CURSOR);
+        Audio_PlaySfx(NA_SE_SY_FSEL_CURSOR);
         this->buttonIndex ^= 1;
     }
 }
@@ -585,7 +584,7 @@ void FileSelect_CopyAnim3(GameState* thisx) {
 
     if (this->actionTimer == 38) {
         this->connectorAlpha[this->copyDestFileIndex] = 255;
-        play_sound(NA_SE_EV_DIAMOND_SWITCH);
+        Audio_PlaySfx(NA_SE_EV_DIAMOND_SWITCH);
     }
 
     this->actionTimer--;
@@ -594,7 +593,7 @@ void FileSelect_CopyAnim3(GameState* thisx) {
         if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_B | BTN_START) || (this->actionTimer == 0)) {
             this->actionTimer = 4;
             this->nextTitleLabel = FS_TITLE_SELECT_FILE;
-            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+            Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
             this->configMode = CM_COPY_ANIM_4;
         }
     }
@@ -794,7 +793,7 @@ void FileSelect_EraseSelect(GameState* thisx) {
         this->nextTitleLabel = FS_TITLE_SELECT_FILE;
         this->configMode = CM_EXIT_ERASE_TO_MAIN;
         this->warningLabel = FS_WARNING_NONE;
-        play_sound(NA_SE_SY_FSEL_CLOSE);
+        Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
     } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
 
         if (!gSaveContext.flashSaveAvailable) {
@@ -803,22 +802,22 @@ void FileSelect_EraseSelect(GameState* thisx) {
                 this->selectedFileIndex = this->buttonIndex;
                 this->configMode = CM_SETUP_ERASE_CONFIRM_1;
                 this->nextTitleLabel = FS_TITLE_ERASE_CONFIRM;
-                play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
             } else {
-                play_sound(NA_SE_SY_FSEL_ERROR);
+                Audio_PlaySfx(NA_SE_SY_FSEL_ERROR);
             }
         } else if (SLOT_OCCUPIED(this, this->buttonIndex)) {
             this->actionTimer = 4;
             this->selectedFileIndex = this->buttonIndex;
             this->configMode = CM_SETUP_ERASE_CONFIRM_1;
             this->nextTitleLabel = FS_TITLE_ERASE_CONFIRM;
-            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+            Audio_PlaySfx(NA_SE_SY_FSEL_DECIDE_L);
         } else {
-            play_sound(NA_SE_SY_FSEL_ERROR);
+            Audio_PlaySfx(NA_SE_SY_FSEL_ERROR);
         }
     } else {
         if (ABS_ALT(this->stickAdjY) >= 30) {
-            play_sound(NA_SE_SY_FSEL_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_FSEL_CURSOR);
 
             if (this->stickAdjY >= 30) {
                 this->buttonIndex--;
@@ -966,7 +965,7 @@ void FileSelect_EraseConfirm(GameState* thisx) {
         this->nextTitleLabel = FS_TITLE_ERASE_FILE;
         this->configMode = CM_EXIT_TO_ERASE_SELECT_1;
         this->actionTimer = 4;
-        play_sound(NA_SE_SY_FSEL_CLOSE);
+        Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
     } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
         Sram_EraseSave(this, sramCtx, this->selectedFileIndex);
         if (!gSaveContext.flashSaveAvailable) {
@@ -978,13 +977,13 @@ void FileSelect_EraseConfirm(GameState* thisx) {
             this->configMode = CM_ERASE_WAIT_FOR_FLASH_SAVE;
         }
         this->connectorAlpha[this->selectedFileIndex] = 0;
-        play_sound(NA_SE_EV_DIAMOND_SWITCH);
+        Audio_PlaySfx(NA_SE_EV_DIAMOND_SWITCH);
         this->actionTimer = 4;
         this->nextTitleLabel = FS_TITLE_ERASE_COMPLETE;
         Rumble_Request(200.0f, 255, 20, 150);
         sEraseDelayTimer = 15;
     } else if (ABS_ALT(this->stickAdjY) >= 30) {
-        play_sound(NA_SE_SY_FSEL_CURSOR);
+        Audio_PlaySfx(NA_SE_SY_FSEL_CURSOR);
         this->buttonIndex ^= 1;
     }
 }
@@ -1104,7 +1103,7 @@ void FileSelect_EraseAnim1(GameState* thisx) {
         sEraseDelayTimer--;
 
         if (sEraseDelayTimer == 0) {
-            play_sound(NA_SE_OC_ABYSS);
+            Audio_PlaySfx(NA_SE_OC_ABYSS);
         }
     }
 }
@@ -1141,7 +1140,7 @@ void FileSelect_EraseAnim2(GameState* thisx) {
         this->actionTimer = 4;
         this->nextTitleLabel = FS_TITLE_SELECT_FILE;
         this->configMode++; // CM_ERASE_ANIM_3
-        play_sound(NA_SE_SY_FSEL_CLOSE);
+        Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
     }
 }
 

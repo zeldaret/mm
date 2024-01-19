@@ -19,14 +19,14 @@ EffectSsInit Effect_En_Ice_Block_InitVars = {
     EffectEnIceBlock_Init,
 };
 
-#define rObjId regs[0]
+#define rObjectSlot regs[0]
 #define rScale regs[1]
 #define rRot regs[2]
 #define rRotVel regs[3]
 
 u32 EffectEnIceBlock_CheckIceBlockObject(EffectSs* this, PlayState* play) {
-    if (((this->rObjId = Object_GetIndex(&play->objectCtx, OBJECT_ICE_BLOCK)) < 0) ||
-        (!Object_IsLoaded(&play->objectCtx, this->rObjId))) {
+    if (((this->rObjectSlot = Object_GetSlot(&play->objectCtx, OBJECT_ICE_BLOCK)) <= OBJECT_SLOT_NONE) ||
+        (!Object_IsLoaded(&play->objectCtx, this->rObjectSlot))) {
         this->life = -1;
         this->draw = NULL;
         return false;
@@ -63,7 +63,7 @@ void EffectEnIceBlock_Draw(PlayState* play, u32 index, EffectSs* this) {
         OPEN_DISPS(gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x06,
-                   play->objectCtx.status[this->rObjId].segment); // object: OBJECT_ICE_BLOCK
+                   play->objectCtx.slots[this->rObjectSlot].segment); // object: OBJECT_ICE_BLOCK
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);

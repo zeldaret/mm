@@ -2,6 +2,7 @@
 #define Z_EN_ARROW_H
 
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 struct EnArrow;
 
@@ -34,7 +35,7 @@ typedef enum ArrowMagic {
 
 typedef struct {
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[5];
+    /* 0x188 */ Vec3s jointTable[ARROW_LIMB_MAX];
 } EnArrowArrow; // size = 0x1A8
 
 typedef struct {

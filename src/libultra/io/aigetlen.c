@@ -1,5 +1,5 @@
-#include "global.h"
+#include "ultra64.h"
 
 u32 osAiGetLength(void) {
-    return HW_REG(AI_LEN_REG, u32);
+    return IO_READ(AI_LEN_REG);
 }

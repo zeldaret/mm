@@ -21,15 +21,15 @@ void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play);
 void ItemEtcetera_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Item_Etcetera_InitVars = {
-    ACTOR_ITEM_ETCETERA,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ItemEtcetera),
-    (ActorFunc)ItemEtcetera_Init,
-    (ActorFunc)ItemEtcetera_Destroy,
-    (ActorFunc)ItemEtcetera_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_ITEM_ETCETERA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ItemEtcetera),
+    /**/ ItemEtcetera_Init,
+    /**/ ItemEtcetera_Destroy,
+    /**/ ItemEtcetera_Update,
+    /**/ NULL,
 };
 
 static s16 sObjectIds[] = {
@@ -55,12 +55,12 @@ void ItemEtcetera_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ItemEtcetera* this = THIS;
     s32 type = ITEMETCETERA_GET_FF(&this->actor);
-    s32 objBankIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
+    s32 objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[type]);
 
-    if (objBankIndex < 0) {
+    if (objectSlot <= OBJECT_SLOT_NONE) {
         // assert on debug
     } else {
-        this->objIndex = objBankIndex;
+        this->objectSlot = objectSlot;
     }
     this->getItemDrawId = sGetItemDrawIds[type];
     this->getItemId = sGetItemIds[type];
@@ -93,8 +93,8 @@ void ItemEtcetera_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void ItemEtcetera_WaitForObject(ItemEtcetera* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
-        this->actor.objBankIndex = this->objIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
+        this->actor.objectSlot = this->objectSlot;
         this->actor.draw = this->drawFunc;
         this->actionFunc = this->futureActionFunc;
     }

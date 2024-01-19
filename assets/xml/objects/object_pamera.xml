@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_pamera" Segment="6">
-        <Animation Name="object_pamera_Anim_0005BC" Offset="0x5BC" />
+        <Animation Name="object_pamera_Anim_0005BC" Offset="0x5BC" /> <!-- Original name is "pam_wait" -->
 
         <DList Name="gPamelaAbdomenDL" Offset="0x2E50" />
         <DList Name="gPamelaPelvisDL" Offset="0x2FB8" />
@@ -65,17 +65,17 @@
         <Limb Name="gPamelaPelvisLimb" Type="Standard" EnumName="PAMELA_LIMB_PELVIS" Offset="0x83E4" />
         <Skeleton Name="gPamelaSkel" Type="Flex" LimbType="Standard" LimbNone="PAMELA_LIMB_NONE" LimbMax="PAMELA_LIMB_MAX" EnumName="PamelaLimb" Offset="0x8448" />
         
-        <Animation Name="object_pamera_Anim_008AE0" Offset="0x8AE0" /> <!-- Pamela Walking -->
-        <Animation Name="object_pamera_Anim_008E38" Offset="0x8E38" />
-        <Animation Name="object_pamera_Anim_009870" Offset="0x9870" />
-        <Animation Name="object_pamera_Anim_009F54" Offset="0x9F54" /> <!-- HoldBack En_Hgo -->
-        <Animation Name="object_pamera_Anim_00A844" Offset="0xA844" /> <!-- Pamela Looking down the well -->
-        <Animation Name="object_pamera_Anim_00B0C4" Offset="0xB0C4" />
-        <Animation Name="object_pamera_Anim_00B5B0" Offset="0xB5B0" /> <!-- PushBack En_Hgo -->
-        <Animation Name="object_pamera_Anim_00BCC4" Offset="0xBCC4" /> <!-- Defend En_Hgo -->
-        <Animation Name="object_pamera_Anim_00C9F4" Offset="0xC9F4" />
-        <Animation Name="object_pamera_Anim_00D0F0" Offset="0xD0F0" />
-        <Animation Name="object_pamera_Anim_00D9DC" Offset="0xD9DC" />
-        <Animation Name="object_pamera_Anim_00E16C" Offset="0xE16C" /> <!-- Hugging En_Hg -->
+        <Animation Name="object_pamera_Anim_008AE0" Offset="0x8AE0" /> <!-- Pamela Walking. Original name is "pamera_aruku" -->
+        <Animation Name="object_pamera_Anim_008E38" Offset="0x8E38" /> <!-- Original name is "pamera_hasiru" -->
+        <Animation Name="object_pamera_Anim_009870" Offset="0x9870" /> <!-- Original name is "pamera_kabau" -->
+        <Animation Name="object_pamera_Anim_009F54" Offset="0x9F54" /> <!-- HoldBack En_Hgo. Original name is "pamera_kabau_loop" -->
+        <Animation Name="object_pamera_Anim_00A844" Offset="0xA844" /> <!-- Pamela Looking down the well. Original name is "pamera_nozoku" -->
+        <Animation Name="object_pamera_Anim_00B0C4" Offset="0xB0C4" /> <!-- Original name is "pamera_odoroku" -->
+        <Animation Name="object_pamera_Anim_00B5B0" Offset="0xB5B0" /> <!-- PushBack En_Hgo. Original name is "pamera_osaeru_loop" -->
+        <Animation Name="object_pamera_Anim_00BCC4" Offset="0xBCC4" /> <!-- Defend En_Hgo. Original name is "pamera_sakebu" -->
+        <Animation Name="object_pamera_Anim_00C9F4" Offset="0xC9F4" /> <!-- Original name is "pamera_siawase" -->
+        <Animation Name="object_pamera_Anim_00D0F0" Offset="0xD0F0" /> <!-- Original name is "pamera_siawase_loop" -->
+        <Animation Name="object_pamera_Anim_00D9DC" Offset="0xD9DC" /> <!-- Original name is "pamera_tobikomu" -->
+        <Animation Name="object_pamera_Anim_00E16C" Offset="0xE16C" /> <!-- Hugging En_Hg. Original name is "pamera_tobikomu_loop" -->
     </File>
 </Root>

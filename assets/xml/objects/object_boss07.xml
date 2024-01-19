@@ -10,7 +10,7 @@
         <Animation Name="gMajorasIncarnationPumpingUpAnim" Offset="0x31E4" /> <!-- Original name is "last2_hensin3" -->
         <Animation Name="gMajorasIncarnationFinalHitAnim" Offset="0x3854" /> <!-- Original name is "last2_hensin4" -->
         <Animation Name="gMajorasIncarnationSquattingDanceAnim" Offset="0x3A64" /> <!-- Original name is "last2_kd" (probably short for "kosakku (Cossack) dance") -->
-        <Animation Name="gMajorasIncarnationStationaryAnim" Offset="0x3B3C" /> <!-- Original name is "last2_kihon" ("basic"). Unused -->
+        <Animation Name="gMajorasIncarnationStationaryAnim" Offset="0x3B3C" /> <!-- Unused. Original name is "last2_kihon" ("basic") -->
 
         <!-- Majora's Incarnation Limb DisplayLists -->
         <DList Name="gMajorasIncarnationEyestalkDL" Offset="0x7930" />
@@ -68,7 +68,7 @@
 
         <!-- Majora's Mask Animations -->
         <Animation Name="gMajorasMaskJerkingAnim" Offset="0xAE40" /> <!-- Original name is "last3_dam" -->
-        <Animation Name="gMajorasMaskStationaryAnim" Offset="0xAEDC" /> <!-- Original name is "last3_kihon" ("basic"). Unused -->
+        <Animation Name="gMajorasMaskStationaryAnim" Offset="0xAEDC" /> <!-- Unused. Original name is "last3_kihon" ("basic") -->
 
         <!-- Majora's Mask Tentacle Texture and DisplayLists -->
         <Texture Name="gMajorasMaskTentacleTex" OutName="majoras_mask_tentacle" Format="rgba16" Width="8" Height="8" Offset="0xAEF0" />
@@ -150,13 +150,13 @@
         <Animation Name="gMajorasMaskFloatingAnim" Offset="0x19E48" /> <!-- Original name is "last3_stop" -->
 
         <!-- Majora's Wrath Animations. For unused animations, we don't know what the whips are supposed to do, since their physics are controlled by the Boss07 actor.  -->
-        <Animation Name="gMajorasWrathFlipLeftAndSpin" Offset="0x1AE1C" /> <!-- Original name is "last_ac01". Unused -->
-        <Animation Name="gMajorasWrathDoubleKickAndJumpBackAnim" Offset="0x1C430" /> <!-- Original name is "last_ac02". Unused -->
-        <Animation Name="gMajorasWrathBackflipUppercutAttackAnim" Offset="0x1CFF0" /> <!-- Original name is "last_ac03". Unused -->
-        <Animation Name="gMajorasWrathHighKickAnim" Offset="0x1D974" /> <!-- Original name is "last_ac04". Unused and almost identical to gMajorasWrathKickAnim -->
+        <Animation Name="gMajorasWrathFlipLeftAndSpinAnim" Offset="0x1AE1C" /> <!-- Unused. Original name is "last_ac01" -->
+        <Animation Name="gMajorasWrathDoubleKickAndJumpBackAnim" Offset="0x1C430" /> <!-- Unused. Original name is "last_ac02" -->
+        <Animation Name="gMajorasWrathBackflipUppercutAttackAnim" Offset="0x1CFF0" /> <!-- Unused. Original name is "last_ac03" -->
+        <Animation Name="gMajorasWrathHighKickAnim" Offset="0x1D974" /> <!-- Unused and almost identical to gMajorasWrathKickAnim. Original name is "last_ac04" -->
         <Animation Name="gMajorasWrathDamageAnim" Offset="0x1DEB4" /> <!-- Original name is "last_dam" -->
         <Animation Name="gMajorasWrathDeathAnim" Offset="0x22BB4" /> <!-- Original name is "last_dead" -->
-        <Animation Name="gMajorasWrathTiptoeWhipAttackAnim" Offset="0x23A44" /> <!-- Original name is "last_def". Unused -->
+        <Animation Name="gMajorasWrathTiptoeWhipAttackAnim" Offset="0x23A44" /> <!-- Unused. Original name is "last_def" -->
         <Animation Name="gMajorasWrathHeavyBreathingAnim" Offset="0x23DAC" /> <!-- Original name is "last_hen" (short for "metamorphosis/transformation") -->
         <Animation Name="gMajorasWrathIntroAnim" Offset="0x25018" /> <!-- Original name is "last_hen2" -->
         <Animation Name="gMajorasWrathBackflipAnim" Offset="0x25878" /> <!-- Original name is "last_jump" -->

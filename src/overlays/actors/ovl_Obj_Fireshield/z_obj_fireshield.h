@@ -7,10 +7,10 @@ struct ObjFireshield;
 
 typedef void (*ObjFireshieldActionFunc)(struct ObjFireshield*);
 
-#define OBJFIRESHIELD_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJFIRESHIELD_GET_FLAGS(thisx) ((thisx)->params & 0x7F)
 #define OBJFIRESHIELD_GET_1F00(thisx) (((thisx)->params >> 8) & 0x1F)
 #define OBJFIRESHIELD_GET_2000(thisx) (((thisx)->params >> 0xD) & 1)
-#define OBJFIRESHIELD_GET_3F80(thisx) (((thisx)->params >> 7) & 0x7F)
+#define OBJFIRESHIELD_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 7) & 0x7F)
 #define OBJFIRESHIELD_GET_C000(thisx) (((thisx)->params >> 0xE) & 3)
 #define OBJFIRESHIELD_GET_ROTX(thisx) ((thisx)->home.rot.x & 1)
 

@@ -29,15 +29,15 @@ void func_80B13C08(Actor* thisx, PlayState* play);
 void func_80B13E40(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Dhouse_InitVars = {
-    ACTOR_OBJ_DHOUSE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_DHOUSE,
-    sizeof(ObjDhouse),
-    (ActorFunc)ObjDhouse_Init,
-    (ActorFunc)ObjDhouse_Destroy,
-    (ActorFunc)ObjDhouse_Update,
-    (ActorFunc)ObjDhouse_Draw,
+    /**/ ACTOR_OBJ_DHOUSE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_DHOUSE,
+    /**/ sizeof(ObjDhouse),
+    /**/ ObjDhouse_Init,
+    /**/ ObjDhouse_Destroy,
+    /**/ ObjDhouse_Update,
+    /**/ ObjDhouse_Draw,
 };
 
 ObjDhouseStruct3 D_80B13E90[] = {
@@ -131,7 +131,7 @@ void ObjDhouse_Init(Actor* thisx, PlayState* play) {
 
     DynaPolyActor_Init(&this->dyna, 0);
 
-    if (Flags_GetSwitch(play, OBJDHOUSE_GET_7F(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJDHOUSE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->dyna.actor.draw = func_80B13E40;
         func_80B13908(this);
     } else {
@@ -434,7 +434,7 @@ void func_80B13940(ObjDhouse* this, PlayState* play2) {
     PlayState* play = play2;
     s32 sp20 = false;
 
-    if (Flags_GetSwitch(play, OBJDHOUSE_GET_7F(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJDHOUSE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         sp20 = true;
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_EXPLSION_LONG);
     }

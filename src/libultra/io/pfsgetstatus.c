@@ -1,5 +1,5 @@
 #include "ultra64.h"
-#include "global.h"
+#include "PR/controller.h"
 
 void __osPfsRequestOneChannel(s32 channel, u8 poll);
 void __osPfsGetOneChannelData(s32 channel, OSContStatus* contData);

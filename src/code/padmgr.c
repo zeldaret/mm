@@ -30,9 +30,15 @@
  * `osContStartReadData` to receiving the data. By running this on a separate thread to the game state, work can be
  * done while waiting for this operation to complete.
  */
+
 #include "global.h"
-#include "io/controller.h"
-#include "ultra64/motor.h"
+#include "PR/controller.h"
+#include "PR/os_motor.h"
+#include "libc64/sprintf.h"
+#include "fault.h"
+#include "z64voice.h"
+
+extern FaultMgr gFaultMgr;
 
 #define PADMGR_RETRACE_MSG (1 << 0)
 #define PADMGR_PRE_NMI_MSG (1 << 1)
@@ -523,7 +529,7 @@ void PadMgr_InitVoice(void) {
             } else {
                 sPadMgrInstance->ctrlrType[i] = PADMGR_CONT_VOICE;
                 sVoiceInitStatus = VOICE_INIT_SUCCESS;
-                func_801A4EB0();
+                AudioVoice_Noop();
             }
         }
     }
@@ -641,7 +647,7 @@ void PadMgr_HandleRetrace(void) {
     }
 
     // Rumble Pak
-    if (gFaultStruct.msgId != 0) {
+    if (gFaultMgr.msgId != 0) {
         // If fault is active, no rumble
         PadMgr_RumbleStop();
     } else if (sPadMgrInstance->rumbleOffTimer > 0) {

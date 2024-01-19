@@ -19,15 +19,15 @@ void EnStream_Draw(Actor* thisx, PlayState* play);
 void EnStream_WaitForPlayer(EnStream* this, PlayState* play);
 
 ActorInit En_Stream_InitVars = {
-    ACTOR_EN_STREAM,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_STREAM,
-    sizeof(EnStream),
-    (ActorFunc)EnStream_Init,
-    (ActorFunc)EnStream_Destroy,
-    (ActorFunc)EnStream_Update,
-    (ActorFunc)EnStream_Draw,
+    /**/ ACTOR_EN_STREAM,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_STREAM,
+    /**/ sizeof(EnStream),
+    /**/ EnStream_Init,
+    /**/ EnStream_Destroy,
+    /**/ EnStream_Update,
+    /**/ EnStream_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -127,7 +127,7 @@ void EnStream_Update(Actor* thisx, PlayState* play) {
     EnStream* this = THIS;
 
     this->actionFunc(this, play);
-    func_800B8FE8(&this->actor, NA_SE_EV_WHIRLPOOL - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_WHIRLPOOL - SFX_FLAG);
 }
 
 void EnStream_Draw(Actor* thisx, PlayState* play) {

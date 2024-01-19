@@ -27,15 +27,15 @@ void func_80ABCD98(BgHakuginBombwall* this, PlayState* play);
 void func_80ABCE60(BgHakuginBombwall* this, PlayState* play);
 
 ActorInit Bg_Hakugin_Bombwall_InitVars = {
-    ACTOR_BG_HAKUGIN_BOMBWALL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_HAKUGIN_OBJ,
-    sizeof(BgHakuginBombwall),
-    (ActorFunc)BgHakuginBombwall_Init,
-    (ActorFunc)BgHakuginBombwall_Destroy,
-    (ActorFunc)BgHakuginBombwall_Update,
-    (ActorFunc)BgHakuginBombwall_Draw,
+    /**/ ACTOR_BG_HAKUGIN_BOMBWALL,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HAKUGIN_OBJ,
+    /**/ sizeof(BgHakuginBombwall),
+    /**/ BgHakuginBombwall_Init,
+    /**/ BgHakuginBombwall_Destroy,
+    /**/ BgHakuginBombwall_Update,
+    /**/ BgHakuginBombwall_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -316,7 +316,7 @@ void BgHakuginBombwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(play, &this->collider);
 
-    if (Flags_GetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCHFLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCH_FLAG(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -343,10 +343,10 @@ void BgHakuginBombwall_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80ABCB5C(BgHakuginBombwall* this, PlayState* play) {
-    Actor* thisx = &this->dyna.actor;
-
     if (this->collider.base.acFlags & AC_HIT) {
         if (this->collider.base.ac != NULL) {
+            Actor* thisx = &this->dyna.actor;
+
             if (Math3D_Vec3fDistSq(&thisx->world.pos, &this->collider.base.ac->world.pos) <
                 D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(thisx)].unk_1C) {
                 SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 60, NA_SE_EV_WALL_BROKEN);
@@ -361,11 +361,11 @@ s32 func_80ABCC00(BgHakuginBombwall* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         if (this->collider.info.acHitInfo->toucher.dmgFlags & 8) {
             if (this->collider.base.ac != NULL) {
-                s32 requiredScopeTemp;
+                Actor* thisx = &this->dyna.actor;
 
-                if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &this->collider.base.ac->world.pos) <
-                    D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(&this->dyna.actor)].unk_1C) {
-                    SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 50, NA_SE_EV_WALL_BROKEN);
+                if (Math3D_Vec3fDistSq(&thisx->world.pos, &this->collider.base.ac->world.pos) <
+                    D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(thisx)].unk_1C) {
+                    SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 50, NA_SE_EV_WALL_BROKEN);
                     return true;
                 }
             }
@@ -400,7 +400,7 @@ void func_80ABCD98(BgHakuginBombwall* this, PlayState* play) {
         ptr->unk_24(this, play);
         this->dyna.actor.draw = NULL;
         this->unk_1AC = 20;
-        Flags_SetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCHFLAG(&this->dyna.actor));
+        Flags_SetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCH_FLAG(&this->dyna.actor));
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = func_80ABCE60;
     } else {

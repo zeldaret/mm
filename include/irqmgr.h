@@ -1,14 +1,8 @@
 #ifndef IRQMGR_H
 #define IRQMGR_H
 
-#include "PR/sched.h"
-#include "os.h"
 #include "ultra64.h"
-
-#define OS_SC_RETRACE_MSG       1
-#define OS_SC_DONE_MSG          2
-#define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
-#define OS_SC_PRE_NMI_MSG       4
+#include "PR/sched.h"
 
 typedef struct IrqMgrClient {
     /* 0x0 */ struct IrqMgrClient* next;
@@ -28,5 +22,10 @@ typedef struct {
     /* 0x258 */ OSTimer prenmiTimer;
     /* 0x278 */ OSTime lastFrameTime;
 } IrqMgr; // size = 0x280
+
+extern vs32 gIrqMgrResetStatus;
+extern volatile OSTime sIrqMgrResetTime;
+extern volatile OSTime gIrqMgrRetraceTime;
+extern s32 sIrqMgrRetraceCount;
 
 #endif

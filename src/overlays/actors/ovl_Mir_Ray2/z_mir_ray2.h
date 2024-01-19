@@ -6,7 +6,7 @@
 struct MirRay2;
 
 #define MIRRAY2_GET_F(thisx) ((thisx)->params & 0xF)
-#define MIRRAY2_GET_SWITCH_FLAGS(thisx) (((thisx)->params & 0xFE00) >> 9)
+#define MIRRAY2_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
 typedef struct MirRay2 {
     /* 0x000 */ Actor actor;

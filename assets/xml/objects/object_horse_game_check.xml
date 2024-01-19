@@ -8,9 +8,9 @@
         <Texture Name="object_horse_game_check_Tex_001D90" OutName="tex_001D90" Format="rgba16" Width="32" Height="32" Offset="0x1D90" />
         <Texture Name="object_horse_game_check_Tex_002590" OutName="tex_002590" Format="i8" Width="64" Height="32" Offset="0x2590" />
         <Collision Name="object_horse_game_check_Colheader_002FB8" Offset="0x2FB8" />
-        <DList Name="object_horse_game_check_DL_003030" Offset="0x3030" />
+        <DList Name="object_horse_game_check_DL_003030" Offset="0x3030" /> <!-- Original name is "z2_umajamp_modelT" -->
         <DList Name="object_horse_game_check_DL_0030C0" Offset="0x30C0" />
         <Texture Name="object_horse_game_check_Tex_0030C8" OutName="tex_0030C8" Format="rgba16" Width="32" Height="32" Offset="0x30C8" />
-        <Collision Name="object_horse_game_check_Colheader_003918" Offset="0x3918" />
+        <Collision Name="object_horse_game_check_Colheader_003918" Offset="0x3918" /> <!-- Original name is "z2_umajamp_bgdatainfo" -->
     </File>
 </Root>

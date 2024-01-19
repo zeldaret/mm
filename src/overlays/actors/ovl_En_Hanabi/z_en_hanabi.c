@@ -22,15 +22,15 @@ void func_80B23934(EnHanabi* this, PlayState* play);
 void EnHanabi_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Hanabi_InitVars = {
-    ACTOR_EN_HANABI,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnHanabi),
-    (ActorFunc)EnHanabi_Init,
-    (ActorFunc)EnHanabi_Destroy,
-    (ActorFunc)EnHanabi_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_HANABI,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnHanabi),
+    /**/ EnHanabi_Init,
+    /**/ EnHanabi_Destroy,
+    /**/ EnHanabi_Update,
+    /**/ NULL,
 };
 
 Vec3s D_80B23AA0[] = {
@@ -149,40 +149,41 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
     gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
 
     sp53 = 0xFF;
-    if (sp53) {}
 
     for (i = 0; i < 400; i++, arg0++) {
-        if (arg0->unk_00 == 1) {
-            Matrix_Translate(arg0->unk_08.x, arg0->unk_08.y, arg0->unk_08.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-            if (arg0->unk_01 < 40) {
-                Matrix_Scale(arg0->unk_04 * 0.025f * arg0->unk_01, arg0->unk_04 * 0.025f * arg0->unk_01, 1.0f,
-                             MTXMODE_APPLY);
-            } else {
-                Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
-            }
-            Matrix_RotateZS(play->gameplayFrames * 4864, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-            if (sp53 != arg0->unk_02) {
-                gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, D_80B23C40[arg0->unk_02], D_80B23C40[arg0->unk_02 + 1],
-                               D_80B23C40[arg0->unk_02 + 2], 255);
-
-                sp53 = arg0->unk_02;
-            }
-
-            if (arg0->unk_01 < 6) {
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80B23C2C[arg0->unk_02], D_80B23C2C[arg0->unk_02 + 1],
-                                D_80B23C2C[arg0->unk_02 + 2], arg0->unk_01 * 50);
-            } else {
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80B23C2C[arg0->unk_02], D_80B23C2C[arg0->unk_02 + 1],
-                                D_80B23C2C[arg0->unk_02 + 2], 255);
-            }
-
-            gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
+        if (arg0->unk_00 != 1) {
+            continue;
         }
+
+        Matrix_Translate(arg0->unk_08.x, arg0->unk_08.y, arg0->unk_08.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        if (arg0->unk_01 < 40) {
+            Matrix_Scale(arg0->unk_04 * 0.025f * arg0->unk_01, arg0->unk_04 * 0.025f * arg0->unk_01, 1.0f,
+                         MTXMODE_APPLY);
+        } else {
+            Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
+        }
+        Matrix_RotateZS(play->gameplayFrames * 4864, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        if (sp53 != arg0->unk_02) {
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetEnvColor(POLY_XLU_DISP++, D_80B23C40[arg0->unk_02], D_80B23C40[arg0->unk_02 + 1],
+                           D_80B23C40[arg0->unk_02 + 2], 255);
+
+            sp53 = arg0->unk_02;
+        }
+
+        if (arg0->unk_01 < 6) {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80B23C2C[arg0->unk_02], D_80B23C2C[arg0->unk_02 + 1],
+                            D_80B23C2C[arg0->unk_02 + 2], arg0->unk_01 * 50);
+        } else {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80B23C2C[arg0->unk_02], D_80B23C2C[arg0->unk_02 + 1],
+                            D_80B23C2C[arg0->unk_02 + 2], 255);
+        }
+
+        gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
     }
 
     CLOSE_DISPS(gfxCtx);
@@ -193,6 +194,7 @@ void EnHanabi_Init(Actor* thisx, PlayState* play2) {
     EnHanabi* this = THIS;
     s32 i;
 
+    //! FAKE:
     if (1) {}
 
     Actor_SetScale(thisx, 1.0f);
@@ -295,7 +297,7 @@ void func_80B236C8(EnHanabi* this, PlayState* play) {
             sp28 = func_80B22C80(&sp34, this->unk_148, 1.0f);
         }
 
-        this->actor.home.rot.y += (s16)((Rand_ZeroFloat(40.0f) + 80.0f) * 256.0f);
+        this->actor.home.rot.y += TRUNCF_BINANG((Rand_ZeroFloat(40.0f) + 80.0f) * 256.0f);
         this->unk_144 = (s32)Rand_ZeroFloat(5.0f) + 20;
         Actor_PlaySfx(&this->actor, NA_SE_OC_FIREWORKS);
         func_80B235CC(this, &sp34, sp28);
@@ -326,7 +328,7 @@ void func_80B23934(EnHanabi* this, PlayState* play) {
     if ((gSaveContext.save.entrance == ENTRANCE(TERMINA_FIELD, 1)) && (gSaveContext.sceneLayer == 7)) {
         if (play->csCtx.curFrame > 1650) {
             func_80B236C8(this, play);
-            func_800B8FE8(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
+            Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
         }
     }
 

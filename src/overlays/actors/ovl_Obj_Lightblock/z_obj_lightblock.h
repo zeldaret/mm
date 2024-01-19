@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define LIGHTBLOCK_TYPE(thisx) ((thisx)->params & 1)
-#define LIGHTBLOCK_DESTROYED(thisx) (((thisx)->params >> 8) & 0x7F)
+#define LIGHTBLOCK_GET_DESTROYED_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 
 struct ObjLightblock;
 

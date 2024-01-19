@@ -28,15 +28,15 @@ void BgKin2Fence_SetupDoNothing(BgKin2Fence* this);
 void BgKin2Fence_DoNothing(BgKin2Fence* this, PlayState* play);
 
 ActorInit Bg_Kin2_Fence_InitVars = {
-    ACTOR_BG_KIN2_FENCE,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KIN2_OBJ,
-    sizeof(BgKin2Fence),
-    (ActorFunc)BgKin2Fence_Init,
-    (ActorFunc)BgKin2Fence_Destroy,
-    (ActorFunc)BgKin2Fence_Update,
-    (ActorFunc)BgKin2Fence_Draw,
+    /**/ ACTOR_BG_KIN2_FENCE,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_KIN2_OBJ,
+    /**/ sizeof(BgKin2Fence),
+    /**/ BgKin2Fence_Init,
+    /**/ BgKin2Fence_Destroy,
+    /**/ BgKin2Fence_Update,
+    /**/ BgKin2Fence_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[4] = {
@@ -99,26 +99,6 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-static Vec3f eyeSparkleSpawnPositions[][2] = {
-    { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
-
-    { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
-
-    { { 103.0f, 139.0f, 50.0f }, { 125.0f, 139.0f, 50.0f } },
-
-    { { 193.0f, 139.0f, 50.0f }, { 215.0f, 139.0f, 50.0f } },
-};
-
-static Color_RGBA8 primColor = { 255, 255, 255, 0 };
-static Color_RGBA8 envColor = { 0, 128, 128, 0 };
-
-static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
-};
-
 s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     s32 i;
 
@@ -130,7 +110,16 @@ s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     return -1;
 }
 
+static Vec3f sEyeSparkleSpawnPositions[][2] = {
+    { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
+    { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
+    { { 103.0f, 139.0f, 50.0f }, { 125.0f, 139.0f, 50.0f } },
+    { { 193.0f, 139.0f, 50.0f }, { 215.0f, 139.0f, 50.0f } },
+};
+
 void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, PlayState* play, s32 mask) {
+    static Color_RGBA8 sPrimColor = { 255, 255, 255, 0 };
+    static Color_RGBA8 sEnvColor = { 0, 128, 128, 0 };
     s32 i;
     Vec3f sp58;
     s32 pad[2];
@@ -139,10 +128,17 @@ void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, PlayState* play, s32 mask) 
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < 2; i++) {
-        Matrix_MultVec3f(&eyeSparkleSpawnPositions[mask][i], &sp58);
-        EffectSsKirakira_SpawnDispersed(play, &sp58, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 6000, -10);
+        Matrix_MultVec3f(&sEyeSparkleSpawnPositions[mask][i], &sp58);
+        EffectSsKirakira_SpawnDispersed(play, &sp58, &gZeroVec3f, &gZeroVec3f, &sPrimColor, &sEnvColor, 6000, -10);
     }
 }
+
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 
 void BgKin2Fence_Init(Actor* thisx, PlayState* play) {
     BgKin2Fence* this = THIS;
@@ -161,7 +157,7 @@ void BgKin2Fence_Init(Actor* thisx, PlayState* play) {
         Collider_UpdateSpheres(i, &this->collider);
     }
 
-    if (Flags_GetSwitch(play, this->dyna.actor.params & 0x7F)) {
+    if (Flags_GetSwitch(play, BG_KIN2_FENCE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         BgKin2Fence_SetupDoNothing(this);
         return;
     }
@@ -189,11 +185,11 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, PlayState* play) {
         if (hitMask >= 0) {
             nextMask = (s8)gSaveContext.save.saveInfo.spiderHouseMaskOrder[this->masksHit];
             if (hitMask == nextMask) {
-                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+                Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
                 this->masksHit += 1;
                 BgKin2Fence_SpawnEyeSparkles(this, play, nextMask);
             } else {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 this->masksHit = 0;
             }
         }
@@ -219,7 +215,7 @@ void BgKin2Fence_SetupPlayOpenCutscene(BgKin2Fence* this) {
 void BgKin2Fence_PlayOpenCutscene(BgKin2Fence* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        Flags_SetSwitch(play, this->dyna.actor.params & 0x7F);
+        Flags_SetSwitch(play, BG_KIN2_FENCE_GET_SWITCH_FLAG(&this->dyna.actor));
         BgKin2Fence_SetupWaitBeforeOpen(this);
         return;
     }

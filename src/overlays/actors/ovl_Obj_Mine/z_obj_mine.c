@@ -46,15 +46,15 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play);
 void ObjMine_Water_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Mine_InitVars = {
-    ACTOR_OBJ_MINE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_NY,
-    sizeof(ObjMine),
-    (ActorFunc)ObjMine_Init,
-    (ActorFunc)ObjMine_Destroy,
-    (ActorFunc)ObjMine_Path_Update,
-    (ActorFunc)ObjMine_Path_Draw,
+    /**/ ACTOR_OBJ_MINE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_NY,
+    /**/ sizeof(ObjMine),
+    /**/ ObjMine_Init,
+    /**/ ObjMine_Destroy,
+    /**/ ObjMine_Path_Update,
+    /**/ ObjMine_Path_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -763,18 +763,17 @@ void ObjMine_Path_SetupMove(ObjMine* this) {
 }
 
 void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
-    s32 pad;
-    // Actor* thisx = &this->actor; // pos and velocity need this, though it can replace all `this->actor`s and match
+    Actor* thisx = &this->actor;
     Vec3f nextWaypoint;
     f32 distToWaypoint;
     f32 step;
     f32 target;
     s32 bgId; // not used
 
-    // this->actor.velocity is temporarily set to the vector difference to the next waypoint.
+    // thisx->velocity is temporarily set to the vector difference to the next waypoint.
     Math_Vec3s_ToVec3f(&nextWaypoint, &this->waypoints[this->waypointIndex + 1]);
-    Math_Vec3f_Diff(&nextWaypoint, &this->actor.world.pos, &this->actor.velocity);
-    distToWaypoint = Math3D_Vec3fMagnitude(&this->actor.velocity);
+    Math_Vec3f_Diff(&nextWaypoint, &thisx->world.pos, &thisx->velocity);
+    distToWaypoint = Math3D_Vec3fMagnitude(&thisx->velocity);
 
     // Mine slows to 2.0f speed when 8 frames away from the next waypoint
     if ((distToWaypoint < (this->pathSpeed * 8.0f)) && (this->pathSpeed > 2.0f)) {
@@ -784,39 +783,39 @@ void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
         target = this->pathSpeed;
         step = this->pathSpeed * 0.16f;
     }
-    Math_StepToF(&this->actor.speed, target, step);
+    Math_StepToF(&thisx->speed, target, step);
 
     // Checks if mine will reach the waypoint next frame
-    if ((this->actor.speed + 0.05f) < distToWaypoint) {
-        // Rescales this->actor.velocity to be equal in magnitude to speed
-        Math_Vec3f_Scale(&this->actor.velocity, this->actor.speed / distToWaypoint);
-        this->actor.world.pos.x += this->actor.velocity.x;
-        this->actor.world.pos.y += this->actor.velocity.y;
-        this->actor.world.pos.z += this->actor.velocity.z;
+    if ((thisx->speed + 0.05f) < distToWaypoint) {
+        // Rescales thisx->velocity to be equal in magnitude to speed
+        Math_Vec3f_Scale(&thisx->velocity, thisx->speed / distToWaypoint);
+        thisx->world.pos.x += thisx->velocity.x;
+        thisx->world.pos.y += thisx->velocity.y;
+        thisx->world.pos.z += thisx->velocity.z;
     } else {
-        this->actor.speed *= 0.4f;
+        thisx->speed *= 0.4f;
         this->waypointIndex++;
         if (this->waypointIndex >= this->waypointCount) {
             this->waypointIndex = 0;
         }
         ObjMine_Path_MoveToWaypoint(this, this->waypointIndex);
     }
-    this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &this->actor.world.pos);
-    if (this->actor.flags & ACTOR_FLAG_40) {
+    thisx->floorHeight =
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &thisx->floorPoly, &bgId, thisx, &thisx->world.pos);
+    if (thisx->flags & ACTOR_FLAG_40) {
         Vec3f rotAxis;
         Vec3f yhatCrossV;
         MtxF rotMtxF;
 
         // Makes mines appear to roll while traversing the path
-        Math3D_CrossProduct(&sStandardBasis.y, &this->actor.velocity, &yhatCrossV);
+        Math3D_CrossProduct(&sStandardBasis.y, &thisx->velocity, &yhatCrossV);
         if (ObjMine_GetUnitVec3f(&yhatCrossV, &rotAxis)) {
-            Matrix_RotateAxisF(this->actor.speed / PATH_RADIUS, &rotAxis, MTXMODE_NEW);
-            Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
-            Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
-            Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+            Matrix_RotateAxisF(thisx->speed / PATH_RADIUS, &rotAxis, MTXMODE_NEW);
+            Matrix_RotateYS(thisx->shape.rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(thisx->shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(thisx->shape.rot.z, MTXMODE_APPLY);
             Matrix_Get(&rotMtxF);
-            Matrix_MtxFToYXZRot(&rotMtxF, &this->actor.shape.rot, false);
+            Matrix_MtxFToYXZRot(&rotMtxF, &thisx->shape.rot, false);
         }
     }
 }
@@ -833,7 +832,7 @@ void ObjMine_SetupExplode(ObjMine* this) {
 
 void ObjMine_Explode(ObjMine* this, PlayState* play) {
     this->actor.scale.x *= 1.8f;
-    if (this->actor.scale.x > 0.02f * 1.5f * 5.832f) { // 5.832 = 1.8^3
+    if (this->actor.scale.x > (0.02f * 1.5f * 5.832f)) { // 5.832 = 1.8^3
         Actor_Kill(&this->actor);
         return;
     }

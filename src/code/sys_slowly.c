@@ -8,9 +8,11 @@
  *
  * @note: `argCount` must be set manually, as this file implements no way to configure it.
  */
+
 #include "slowly.h"
 #include "global.h"
 #include "stackcheck.h"
+#include "z64thread.h"
 
 void Slowly_Main(SlowlyMgr* slowly) {
     slowly->status |= SLOWLY_STATUS_STARTED;

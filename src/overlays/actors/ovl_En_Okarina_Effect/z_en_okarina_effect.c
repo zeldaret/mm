@@ -20,15 +20,15 @@ void func_8096B174(EnOkarinaEffect* this, PlayState* play);
 void func_8096B1FC(EnOkarinaEffect* this, PlayState* play);
 
 ActorInit En_Okarina_Effect_InitVars = {
-    ACTOR_EN_OKARINA_EFFECT,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnOkarinaEffect),
-    (ActorFunc)EnOkarinaEffect_Init,
-    (ActorFunc)EnOkarinaEffect_Destroy,
-    (ActorFunc)EnOkarinaEffect_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_EN_OKARINA_EFFECT,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnOkarinaEffect),
+    /**/ EnOkarinaEffect_Init,
+    /**/ EnOkarinaEffect_Destroy,
+    /**/ EnOkarinaEffect_Update,
+    /**/ NULL,
 };
 
 void EnOkarinaEffect_SetupAction(EnOkarinaEffect* this, EnOkarinaEffectActionFunc actionFunc) {
@@ -41,35 +41,36 @@ void EnOkarinaEffect_Destroy(Actor* thisx, PlayState* play) {
 void EnOkarinaEffect_Init(Actor* thisx, PlayState* play) {
     EnOkarinaEffect* this = THIS;
 
-    if (play->envCtx.unk_F2[1]) {
+    if (play->envCtx.precipitation[PRECIP_RAIN_CUR] != 0) {
         Actor_Kill(&this->actor);
     }
     EnOkarinaEffect_SetupAction(this, func_8096B104);
 }
 
 void func_8096B104(EnOkarinaEffect* this, PlayState* play) {
-    this->unk144 = 0x50;
-    play->envCtx.unk_F2[4] = 0x3C;
-    D_801F4E70 = 501.0f;
-    play->envCtx.unk_E3 = 2;
-    func_800FD78C(play);
+    this->timer = 80;
+    play->envCtx.precipitation[PRECIP_SOS_MAX] = 60;
+    gLightningStrike.delayTimer = 501.0f;
+    play->envCtx.lightningState = LIGHTNING_LAST;
+    Environment_PlayStormNatureAmbience(play);
     EnOkarinaEffect_SetupAction(this, func_8096B174);
 }
 
 void func_8096B174(EnOkarinaEffect* this, PlayState* play) {
-    DECR(this->unk144);
+    DECR(this->timer);
+
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
-        (play->msgCtx.msgLength == 0) && !FrameAdvance_IsEnabled(&play->state) && (this->unk144 == 0)) {
+        (play->msgCtx.msgLength == 0) && !FrameAdvance_IsEnabled(&play->state) && (this->timer == 0)) {
         EnOkarinaEffect_SetupAction(this, func_8096B1FC);
     }
 }
 
 void func_8096B1FC(EnOkarinaEffect* this, PlayState* play) {
-    if (play->envCtx.unk_F2[4]) {
+    if (play->envCtx.precipitation[PRECIP_SOS_MAX] != 0) {
         if ((play->state.frames & 3) == 0) {
-            play->envCtx.unk_F2[4]--;
-            if (play->envCtx.unk_F2[4] == 8) {
-                func_800FD858(play);
+            play->envCtx.precipitation[PRECIP_SOS_MAX]--;
+            if (play->envCtx.precipitation[PRECIP_SOS_MAX] == 8) {
+                Environment_StopStormNatureAmbience(play);
             }
         }
     } else {

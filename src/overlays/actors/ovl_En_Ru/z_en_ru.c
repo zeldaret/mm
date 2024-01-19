@@ -6,7 +6,7 @@
 
 #include "z_en_ru.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnRu*)thisx)
 
@@ -15,18 +15,16 @@ void EnRu_Destroy(Actor* thisx, PlayState* play);
 void EnRu_Update(Actor* thisx, PlayState* play);
 void EnRu_Draw(Actor* thisx, PlayState* play);
 
-void EnRu_DoNothing(EnRu* this, PlayState* play);
-
 ActorInit En_Ru_InitVars = {
-    ACTOR_EN_RU,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_RU2,
-    sizeof(EnRu),
-    (ActorFunc)EnRu_Init,
-    (ActorFunc)EnRu_Destroy,
-    (ActorFunc)EnRu_Update,
-    (ActorFunc)EnRu_Draw,
+    /**/ ACTOR_EN_RU,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_RU2,
+    /**/ sizeof(EnRu),
+    /**/ EnRu_Init,
+    /**/ EnRu_Destroy,
+    /**/ EnRu_Update,
+    /**/ EnRu_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -86,52 +84,110 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gAdultRutoIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gAdultRutoIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoRaisingArmsUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoCrossingArmsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoLookingDownLeftAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoIdleHandsOnHipsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoHeadTurnDownLeftAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gAdultRutoSwimmingUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+typedef enum AdultRutoAnimation {
+    /* -1 */ ADULT_RUTO_ANIM_NONE = -1,
+    /*  0 */ ADULT_RUTO_ANIM_IDLE,
+    /*  1 */ ADULT_RUTO_ANIM_IDLE_MORPH,
+    /*  2 */ ADULT_RUTO_ANIM_RAISING_ARMS_UP,
+    /*  3 */ ADULT_RUTO_ANIM_CROSSING_ARMS,
+    /*  4 */ ADULT_RUTO_ANIM_LOOKING_DOWN_LEFT,
+    /*  5 */ ADULT_RUTO_ANIM_HANDS_ON_HIPS,
+    /*  6 */ ADULT_RUTO_ANIM_TURN_DOWN_LEFT,
+    /*  7 */ ADULT_RUTO_ANIM_SWIMMING_UP,
+    /*  8 */ ADULT_RUTO_ANIM_MAX
+} AdultRutoAnimation;
+
+static AnimationInfoS sAnimationInfo[ADULT_RUTO_ANIM_MAX] = {
+    { &gAdultRutoIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },              // ADULT_RUTO_ANIM_IDLE
+    { &gAdultRutoIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },             // ADULT_RUTO_ANIM_IDLE_MORPH
+    { &gAdultRutoRaisingArmsUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // ADULT_RUTO_ANIM_RAISING_ARMS_UP
+    { &gAdultRutoCrossingArmsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },     // ADULT_RUTO_ANIM_CROSSING_ARMS
+    { &gAdultRutoLookingDownLeftAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // ADULT_RUTO_ANIM_LOOKING_DOWN_LEFT
+    { &gAdultRutoIdleHandsOnHipsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // ADULT_RUTO_ANIM_HANDS_ON_HIPS
+    { &gAdultRutoHeadTurnDownLeftAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ADULT_RUTO_ANIM_TURN_DOWN_LEFT
+    { &gAdultRutoSwimmingUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },       // ADULT_RUTO_ANIM_SWIMMING_UP
 };
 
-// in PostLimbdraw, converts limbIndex to bodyPartsPos index
-static s8 sBodyPartPosIndices[] = {
-    -1, -1, 12, 13, 14, -1, 9, 10, 11, -1, 0, 6, -1, -1, 7, 8, 2, -1, -1, 3, 4, 2, 1,
+static s8 sLimbToBodyParts[RU2_LIMB_MAX] = {
+    BODYPART_NONE,  // RU2_LIMB_NONE
+    BODYPART_NONE,  // RU2_LIMB_ROOT
+    RU_BODYPART_12, // RU2_LIMB_LEFT_THIGH
+    RU_BODYPART_13, // RU2_LIMB_LEFT_LEG
+    RU_BODYPART_14, // RU2_LIMB_LEFT_FOOT
+    BODYPART_NONE,  // RU2_LIMB_LEFT_TAIL
+    RU_BODYPART_9,  // RU2_LIMB_RIGHT_THIGH
+    RU_BODYPART_10, // RU2_LIMB_RIGHT_LEG
+    RU_BODYPART_11, // RU2_LIMB_RIGHT_FOOT
+    BODYPART_NONE,  // RU2_LIMB_RIGHT_TAIL
+    RU_BODYPART_0,  // RU2_LIMB_TORSO
+    RU_BODYPART_6,  // RU2_LIMB_LEFT_UPPER_ARM
+    BODYPART_NONE,  // RU2_LIMB_LEFT_UPPER_WING
+    BODYPART_NONE,  // RU2_LIMB_LEFT_LOWER_WING
+    RU_BODYPART_7,  // RU2_LIMB_LEFT_FOREARM
+    RU_BODYPART_8,  // RU2_LIMB_LEFT_HAND
+    RU_BODYPART_2,  // RU2_LIMB_RIGHT_UPPER_ARM
+    BODYPART_NONE,  // RU2_LIMB_RIGHT_UPPER_WING
+    BODYPART_NONE,  // RU2_LIMB_RIGHT_LOWER_WING
+    RU_BODYPART_3,  // RU2_LIMB_RIGHT_FOREARM
+    RU_BODYPART_4,  // RU2_LIMB_RIGHT_HAND
+    RU_BODYPART_2,  // RU2_LIMB_HEAD
+    RU_BODYPART_1,  // RU2_LIMB_WAIST
 };
 
-static s8 sRuBodyParts[RU_BODYPARTSPOS_COUNT] = {
-    0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13,
+static s8 sParentShadowBodyParts[RU_BODYPART_MAX] = {
+    RU_BODYPART_0,  // RU_BODYPART_0
+    RU_BODYPART_0,  // RU_BODYPART_1
+    RU_BODYPART_0,  // RU_BODYPART_2
+    RU_BODYPART_0,  // RU_BODYPART_3
+    RU_BODYPART_3,  // RU_BODYPART_4
+    RU_BODYPART_4,  // RU_BODYPART_5
+    RU_BODYPART_0,  // RU_BODYPART_6
+    RU_BODYPART_6,  // RU_BODYPART_7
+    RU_BODYPART_7,  // RU_BODYPART_8
+    RU_BODYPART_0,  // RU_BODYPART_9
+    RU_BODYPART_9,  // RU_BODYPART_10
+    RU_BODYPART_10, // RU_BODYPART_11
+    RU_BODYPART_0,  // RU_BODYPART_12
+    RU_BODYPART_12, // RU_BODYPART_13
+    RU_BODYPART_13, // RU_BODYPART_14
 };
 
-static u8 sRuShadowSizes[] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-};
-
-static TrackOptionsSet sTrackOptions = {
-    { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }, { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }
+static u8 sShadowSizes[RU_BODYPART_MAX] = {
+    0, // RU_BODYPART_0
+    0, // RU_BODYPART_1
+    0, // RU_BODYPART_2
+    0, // RU_BODYPART_3
+    0, // RU_BODYPART_4
+    0, // RU_BODYPART_5
+    0, // RU_BODYPART_6
+    0, // RU_BODYPART_7
+    0, // RU_BODYPART_8
+    0, // RU_BODYPART_9
+    0, // RU_BODYPART_10
+    0, // RU_BODYPART_11
+    0, // RU_BODYPART_12
+    0, // RU_BODYPART_13
+    0, // RU_BODYPART_14
 };
 
 s32 EnRu_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
-    s16 lastFrame;
-    s32 ret = false;
+    s16 endFrame;
+    s32 didAnimChange = false;
 
-    if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimationInfo))) {
-        lastFrame = sAnimationInfo[animIndex].frameCount;
+    if ((animIndex > ADULT_RUTO_ANIM_NONE) && (animIndex < ADULT_RUTO_ANIM_MAX)) {
+        endFrame = sAnimationInfo[animIndex].frameCount;
 
-        ret = true;
-        if (lastFrame < 0) {
-            lastFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
+        didAnimChange = true;
+        if (endFrame < 0) {
+            endFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
 
         Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
-                         sAnimationInfo[animIndex].startFrame, lastFrame, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].startFrame, endFrame, sAnimationInfo[animIndex].mode,
                          sAnimationInfo[animIndex].morphFrames);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 // En_Zo has a copy of this function
@@ -192,6 +248,10 @@ void EnRu_UpdateCollider(EnRu* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
+static TrackOptionsSet sTrackOptions = {
+    { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }, { 0xFA0, 4, 1, 3 }, { 0x1770, 4, 1, 6 }
+};
+
 void EnRu_UpdateModel(EnRu* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -202,7 +262,7 @@ void EnRu_UpdateModel(EnRu* this, PlayState* play) {
         Vec3f playerPos;
 
         playerPos.x = player->actor.world.pos.x;
-        playerPos.y = player->bodyPartsPos[7].y + 3.0f;
+        playerPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         playerPos.z = player->actor.world.pos.z;
         SubS_TrackPoint(&playerPos, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
                         &this->torsoRot, &sTrackOptions);
@@ -218,7 +278,7 @@ void EnRu_UpdateModel(EnRu* this, PlayState* play) {
 
     EnRu_UpdateEyes(this, 3);
     EnRu_PlayWalkingSound(this, play);
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, RU2_LIMB_MAX);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, RU2_LIMB_MAX);
 }
 
 void EnRu_DoNothing(EnRu* this, PlayState* play) {
@@ -230,7 +290,7 @@ void EnRu_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gAdultRutoSkel, NULL, this->jointTable, this->morphTable, RU2_LIMB_MAX);
-    EnRu_ChangeAnim(&this->skelAnime, 0);
+    EnRu_ChangeAnim(&this->skelAnime, ADULT_RUTO_ANIM_IDLE);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -251,12 +311,13 @@ void EnRu_Update(Actor* thisx, PlayState* play) {
     EnRu* this = THIS;
 
     this->actionFunc(this, play);
+
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnRu_UpdateModel(this, play);
     EnRu_UpdateCollider(this, play);
 }
 
-s32 EnRu_OverrideLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+s32 EnRu_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                           Gfx** gfx) {
     EnRu* this = THIS;
 
@@ -274,20 +335,20 @@ s32 EnRu_OverrideLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     if ((limbIndex == RU2_LIMB_TORSO) || (limbIndex == RU2_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == RU2_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)(Math_SinS(this->limbRotTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->limbRotTableZ[limbIndex]) * 200.0f);
+        rot->y += TRUNCF_BINANG(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += TRUNCF_BINANG(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
 
     return false;
 }
 
-void EnRu_PostLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnRu_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnRu* this = THIS;
     Vec3f headFocus = { 800.0f, 0, 0 };
     Vec3f bodyPartPos = { 0, 0, 0 };
 
-    if (sBodyPartPosIndices[limbIndex] >= 0) {
-        Matrix_MultVec3f(&bodyPartPos, &this->bodyPartsPos[sBodyPartPosIndices[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] > BODYPART_NONE) {
+        Matrix_MultVec3f(&bodyPartPos, &this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
     if (limbIndex == RU2_LIMB_HEAD) {
         Matrix_MultVec3f(&headFocus, &thisx->focus.pos);
@@ -335,7 +396,7 @@ void EnRu_Draw(Actor* thisx, PlayState* play) {
 
     POLY_OPA_DISP =
         SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                           EnRu_OverrideLimbdraw, EnRu_PostLimbdraw, &this->actor, POLY_OPA_DISP);
+                           EnRu_OverrideLimbDraw, EnRu_PostLimbDraw, &this->actor, POLY_OPA_DISP);
 
     Matrix_RotateXS(0, MTXMODE_NEW);
 
@@ -344,8 +405,8 @@ void EnRu_Draw(Actor* thisx, PlayState* play) {
     }
 
     for (i = 0; i < 5; i++) {
-        SubS_GenShadowTex(&this->bodyPartsPos[0], &this->actor.world.pos, shadowTex, (i / 5.0f),
-                          (ARRAY_COUNT(sRuBodyParts)), sRuShadowSizes, sRuBodyParts);
+        SubS_GenShadowTex(this->bodyPartsPos, &this->actor.world.pos, shadowTex, i / 5.0f, RU_BODYPART_MAX,
+                          sShadowSizes, sParentShadowBodyParts);
     }
 
     SubS_DrawShadowTex(&this->actor, &play->state, shadowTex);

@@ -1,3 +1,5 @@
+#include "z64eff_spark.h"
+
 #include "global.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 

@@ -18,16 +18,16 @@ void ItemBHeart_Draw(Actor* thisx, PlayState* play);
 
 void ItemBHeart_UpdateModel(ItemBHeart* this, PlayState* play);
 
-const ActorInit Item_B_Heart_InitVars = {
-    ACTOR_ITEM_B_HEART,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_GI_HEARTS,
-    sizeof(ItemBHeart),
-    (ActorFunc)ItemBHeart_Init,
-    (ActorFunc)ItemBHeart_Destroy,
-    (ActorFunc)ItemBHeart_Update,
-    (ActorFunc)ItemBHeart_Draw,
+ActorInit Item_B_Heart_InitVars = {
+    /**/ ACTOR_ITEM_B_HEART,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_GI_HEARTS,
+    /**/ sizeof(ItemBHeart),
+    /**/ ItemBHeart_Init,
+    /**/ ItemBHeart_Destroy,
+    /**/ ItemBHeart_Update,
+    /**/ ItemBHeart_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

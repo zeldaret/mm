@@ -7,7 +7,7 @@ struct BgDblueBalance;
 
 typedef void (*BgDblueBalanceActionFunc)(struct BgDblueBalance*, PlayState*);
 
-#define BGDBLUEBALANCE_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define BGDBLUEBALANCE_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define BGDBLUEBALANCE_GET_300(thisx) (((thisx)->params >> 8) & 3)
 
 typedef struct {
@@ -23,8 +23,8 @@ typedef struct BgDblueBalance {
     /* 0x160 */ struct BgDblueBalance* unk_160;
     /* 0x164 */ struct BgDblueBalance* unk_164;
     /* 0x168 */ BgDblueBalanceActionFunc actionFunc;
-    /* 0x16C */ s32 unk_16C;
-    /* 0x170 */ s32 unk_170;
+    /* 0x16C */ s32 isSwitchFlagSet2;
+    /* 0x170 */ s32 isSwitchFlagSet;
     /* 0x174 */ s16 unk_174;
     /* 0x176 */ s16 unk_176;
     /* 0x178 */ s16 unk_178;

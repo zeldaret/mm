@@ -6,6 +6,11 @@ colorama.init()
 
 EXTRACTED_ASSETS_NAMEFILE = ".extracted-assets.json"
 
+dontGenerateCFilesList = [
+    "map_grand_static",
+    "map_i_static",
+]
+
 def SignalHandler(sig, frame):
     print(f'Signal {sig} received. Aborting...')
     mainAbort.set()
@@ -16,7 +21,13 @@ def ExtractFile(xmlPath, outputPath, outputSourcePath):
         # Don't extract if another file wasn't extracted properly.
         return
 
-    execStr = f"tools/ZAPD/ZAPD.out e -eh -i {xmlPath} -b baserom/ -o {outputPath} -osf {outputSourcePath} -gsf 1 -rconf tools/ZAPDConfigs/MM/Config.xml {ZAPDArgs}"
+    generateSourceFile = "1"
+    for name in dontGenerateCFilesList:
+        if name in xmlPath:
+            generateSourceFile = "0"
+            break
+
+    execStr = f"tools/ZAPD/ZAPD.out e -eh -i {xmlPath} -b baserom/ -o {outputPath} -osf {outputSourcePath} -gsf {generateSourceFile} -rconf tools/ZAPDConfigs/MM/Config.xml {ZAPDArgs}"
 
     if globalUnaccounted:
         execStr += " -Wunaccounted"

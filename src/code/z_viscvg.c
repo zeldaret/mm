@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64viscvg.h"
 
 Gfx D_801C5DD0[] = {
     gsDPSetOtherMode(G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
@@ -39,7 +40,7 @@ Gfx D_801C5E00[] = {
     gsSPBranchList(D_0E000000.fillRect),
 };
 
-void VisCvg_Init(struct_801F8010* this) {
+void VisCvg_Init(VisCvg* this) {
     this->type = 0;
     this->setScissor = false;
     this->color.r = 255;
@@ -48,10 +49,10 @@ void VisCvg_Init(struct_801F8010* this) {
     this->color.a = 255;
 }
 
-void VisCvg_Destroy(struct_801F8010* this) {
+void VisCvg_Destroy(VisCvg* this) {
 }
 
-void VisCvg_Draw(struct_801F8010* this, Gfx** gfxp) {
+void VisCvg_Draw(VisCvg* this, Gfx** gfxp) {
     Gfx* gfx = *gfxp;
 
     gDPPipeSync(gfx++);

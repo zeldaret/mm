@@ -8,7 +8,7 @@ struct EnGs;
 typedef void (*EnGsActionFunc)(struct EnGs*, PlayState*);
 
 #define ENGS_GET_1F(thisx) ((thisx)->params & 0x1F)
-#define ENGS_GET_FE0(thisx) (((thisx)->params >> 5) & 0x7F)
+#define ENGS_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 5) & 0x7F)
 #define ENGS_GET_F000(thisx) (((thisx)->params >> 0xC) & 0xF)
 
 typedef enum {
@@ -24,7 +24,7 @@ typedef struct EnGs {
     /* 0x190 */ EnGsActionFunc actionFunc;
     /* 0x194 */ s8 unk_194;
     /* 0x195 */ u8 unk_195;
-    /* 0x196 */ u8 unk_196;
+    /* 0x196 */ u8 switchFlag;
     /* 0x197 */ s8 unk_197;
     /* 0x198 */ s16 unk_198;
     /* 0x19A */ s16 unk_19A;

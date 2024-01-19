@@ -2,10 +2,25 @@
 #define Z_EN_POH_H
 
 #include "global.h"
+#include "objects/object_po/object_po.h"
 
 struct EnPoh;
 
 typedef void (*EnPohActionFunc)(struct EnPoh*, PlayState*);
+
+typedef enum EnPohBodyPart {
+    /*  0 */ POE_BODYPART_LEFT_FOREARM,
+    /*  1 */ POE_BODYPART_LEFT_UPPER_ARM,
+    /*  2 */ POE_BODYPART_RIGHT_ARM_HAND,
+    /*  3 */ POE_BODYPART_RIGHT_FOREARM,
+    /*  4 */ POE_BODYPART_BOTTOM_CLOAK,
+    /*  5 */ POE_BODYPART_TOP_CLOAK,
+    /*  6 */ POE_BODYPART_6,
+    /*  7 */ POE_BODYPART_7,
+    /*  8 */ POE_BODYPART_8,
+    /*  9 */ POE_BODYPART_9,
+    /* 10 */ POE_BODYPART_MAX
+} EnPohBodyPart;
 
 typedef struct EnPoh {
     /* 0x000 */ Actor actor;
@@ -24,11 +39,11 @@ typedef struct EnPoh {
     /* 0x199 */ u8 unk_199;
     /* 0x19A */ u8 unk_19A;
     /* 0x19B */ u8 unk_19B;
-    /* 0x19C */ Vec3s jointTable[21];
-    /* 0x21A */ Vec3s morphTable[21];
+    /* 0x19C */ Vec3s jointTable[POE_LIMB_MAX];
+    /* 0x21A */ Vec3s morphTable[POE_LIMB_MAX];
     /* 0x298 */ f32 drawDmgEffAlpha;
     /* 0x29C */ f32 drawDmgEffScale;
-    /* 0x2A0 */ Vec3f limbPos[10];
+    /* 0x2A0 */ Vec3f bodyPartsPos[POE_BODYPART_MAX];
     /* 0x318 */ LightNode* lightNode;
     /* 0x31C */ LightInfo lightInfo;
     /* 0x32C */ ColliderCylinder colliderCylinder;

@@ -40,13 +40,13 @@
         
         <!-- DisplayLists for stolen items -->
         <DList Name="gTakkuriStolenBottleDL" Offset="0x33B0" />
-        <DList Name="gTakkuriStolenGreatFairySwordDL" Offset="0x3D58" />
+        <DList Name="gTakkuriStolenGreatFairysSwordDL" Offset="0x3D58" />
         <DList Name="gTakkuriStolenKokiriSwordDL" Offset="0x4348" />
         <DList Name="gTakkuriStolenRazorSwordDL" Offset="0x4B88" />
         <DList Name="gTakkuriStolenGildedSwordDL" Offset="0x55E0" />
 
         <!-- Textures for stolen items -->
-        <Texture Name="gTakkuriStolenGreatFairySwordCenterAndHiltTex" OutName="takkuri_stolen_great_fairy_sword_center_and_hilt" Format="rgba16" Width="32" Height="8" Offset="0x59A0" />
+        <Texture Name="gTakkuriStolenGreatFairysSwordCenterAndHiltTex" OutName="takkuri_stolen_great_fairys_sword_center_and_hilt" Format="rgba16" Width="32" Height="8" Offset="0x59A0" />
         <Texture Name="gTakkuriStolenKokiriSwordPommelTex" OutName="takkuri_stolen_kokiri_sword_pommel" Format="rgba16" Width="8" Height="8" Offset="0x5BA0" />
         <Texture Name="gTakkuriStolenKokiriAndRazorSwordScabbardTex" OutName="takkuri_stolen_kokiri_and_razor_sword_scabbard" Format="rgba16" Width="8" Height="8" Offset="0x5C20" />
         <Texture Name="gTakkuriStolenKokiriSwordGuardTex" OutName="takkuri_stolen_kokiri_sword_guard" Format="rgba16" Width="8" Height="8" Offset="0x5CA0" />
@@ -55,7 +55,7 @@
         <Texture Name="gTakkuriStolenGildedSwordScabbardTex" OutName="takkuri_stolen_gilded_sword_scabbard" Format="rgba16" Width="8" Height="16" Offset="0x5E60" />
         <Texture Name="gTakkuriStolenGildedSwordGripAndScabbardTopTex" OutName="takkuri_stolen_gilded_sword_grip_and_scabbard_top" Format="rgba16" Width="8" Height="8" Offset="0x5F60" />
         <Texture Name="gTakkuriStolenBottleAndGildedSwordGemTex" OutName="takkuri_stolen_bottle_and_gilded_sword_gem" Format="i8" Width="8" Height="8" Offset="0x5FE0" />
-        <Texture Name="gTakkuriStolenGreatFairySwordBladeGildedSwordPommelAndGuardTex" OutName="takkuri_stolen_great_fairy_sword_blade_gilded_sword_pommel_and_guard" Format="i4" Width="16" Height="16" Offset="0x6020" />
+        <Texture Name="gTakkuriStolenGreatFairysSwordBladeGildedSwordPommelGuardTex" OutName="takkuri_stolen_great_fairys_sword_blade_gilded_sword_pommel_guard" Format="i4" Width="16" Height="16" Offset="0x6020" />
 
         <!-- Takkuri Limbs -->
         <Limb Name="gTakkuriBodyLimb" Type="Standard" EnumName="TAKKURI_LIMB_BODY" Offset="0x60A0" />

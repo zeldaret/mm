@@ -5,29 +5,29 @@
         <Array Name="gTurtleWaveVtx" Count="20" Offset="0x0">
             <Vtx/>
         </Array>
-        <DList Name="gTurtleWaveDL" Offset="0x140" />
+        <DList Name="gTurtleWaveDL" Offset="0x140" /> <!-- Original name is "efc_wave_model" -->
         <Texture Name="gTurtleWaveUnusedTex" OutName="turtle_wave_unused" Format="i8" Width="32" Height="64" Offset="0x2D8" />
         <Texture Name="gTurtleWaveTex" OutName="turtle_wave" Format="i8" Width="64" Height="64" Offset="0xAD8" />
         <TextureAnimation Name="gTurtleWaveTexAnim" Offset="0x1AF0" />
 
 
         <!-- Turtle -->
-        <Collision Name="gTurtleZoraCapeAsleepCol" Offset="0x2328" />
+        <Collision Name="gTurtleZoraCapeAsleepCol" Offset="0x2328" /> <!-- Original name is "kam_all_bgdatainfo" -->
         <TextureAnimation Name="gTurtleEmptyTexAnim" Offset="0x2360"/>
-        <Collision Name="gTurtleZoraCapeAwakeCol" Offset="0x2470" />
-        <Collision Name="gTurtleUnusedCol" Offset="0x2E04" />
+        <Collision Name="gTurtleZoraCapeAwakeCol" Offset="0x2470" /> <!-- Original name is "kam_kamebgbox_bgdatainfo" -->
+        <Collision Name="gTurtleUnusedCol" Offset="0x2E04" /> <!-- Original name might be "kam_kamebg_bgdatainfo"? MM3D has this, but the collision vertices do not match at all. -->
         
-        <Animation Name="gTurtleGlitchy1Anim" Offset="0x3980" />
-        <Animation Name="gTurtleCoughAnim" Offset="0x47B8" />
-        <Animation Name="gTurtleIdleAnim" Offset="0x48B0" />
+        <Animation Name="gTurtleGlitchy1Anim" Offset="0x3980" /> <!-- Original name is "kam_laugh" -->
+        <Animation Name="gTurtleCoughAnim" Offset="0x47B8" /> <!-- Original name is "kam_laughlong" -->
+        <Animation Name="gTurtleIdleAnim" Offset="0x48B0" /> <!-- Original name is "kam_mezame" -->
 
-        <DList Name="gTurtleAsleepDL" Offset="0x4E70" /> <!-- When asleep, the turtle looks like a giant rock -->
+        <DList Name="gTurtleAsleepDL" Offset="0x4E70" /> <!-- When asleep, the turtle looks like a giant rock. Original name is "kam_sima_3_model" -->
 
         <Texture Name="gTurtleAsleepTLUT" OutName="turtle_asleep_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5248" />
         <Texture Name="gTurtleAsleepGrassTex" OutName="turtle_asleep_grass" Format="ci8" Width="32" Height="32" Offset="0x5448" />
         <Texture Name="gTurtleAsleepGrassDirtTex" OutName="turtle_asleep_grass_dirt" Format="ci8" Width="64" Height="32" Offset="0x5848" />
 
-        <Animation Name="gTurtleSwimAnim" Offset="0x6980" />
+        <Animation Name="gTurtleSwimAnim" Offset="0x6980" /> <!-- Original name is "kam_swim" -->
 
         <DList Name="gTurtleShellDL" Offset="0x8760" />
         <DList Name="gTurtleFrontLeftUpperFlipperDL" Offset="0x8E18" />
@@ -88,12 +88,12 @@
         <Limb Name="gTurtleFrontRightEndFlipperLimb" Type="Standard" EnumName="TURTLE_LIMB_FRONT_RIGHT_END_FLIPPER" Offset="0xE6E0" />
         <Skeleton Name="gTurtleSkel" Type="Flex" LimbType="Standard" LimbNone="TURTLE_LIMB_NONE" LimbMax="TURTLE_LIMB_MAX" EnumName="TurtleLimb" Offset="0xE748" />
 
-        <Animation Name="gTurtleGlitchy2Anim" Offset="0xEF98" />
-        <Animation Name="gTurtleSpeak1Anim" Offset="0x100CC" />
-        <Animation Name="gTurtleGlitchyRaiseHeadAnim" Offset="0x10918" />
-        <Animation Name="gTurtleSpeak2Anim" Offset="0x119D4" />
-        <Animation Name="gTurtleFloatAnim" Offset="0x12260" />
-        <Animation Name="gTurtleGlitchyLookAroundAnim" Offset="0x13264" />
-        <Animation Name="gTurtleYawnAnim" Offset="0x14E8C" />
+        <Animation Name="gTurtleGlitchy2Anim" Offset="0xEF98" /> <!-- Original name is "kam_talk" -->
+        <Animation Name="gTurtleSpeak1Anim" Offset="0x100CC" /> <!-- Original name is "kam_talklong" -->
+        <Animation Name="gTurtleGlitchyRaiseHeadAnim" Offset="0x10918" /> <!-- Original name is "kam_unazuku" -->
+        <Animation Name="gTurtleSpeak2Anim" Offset="0x119D4" /> <!-- Original name is "kam_unazukulong" -->
+        <Animation Name="gTurtleFloatAnim" Offset="0x12260" /> <!-- Original name is "kam_wait" -->
+        <Animation Name="gTurtleGlitchyLookAroundAnim" Offset="0x13264" /> <!-- Original name is "kam_yawn" -->
+        <Animation Name="gTurtleYawnAnim" Offset="0x14E8C" /> <!-- Original name is "kam_yawnlong" -->
     </File>
 </Root>

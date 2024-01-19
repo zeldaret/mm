@@ -10,8 +10,10 @@ struct EnEncount4;
 
 typedef void (*EnEncount4ActionFunc)(struct EnEncount4*, PlayState*);
 
-#define ENENCOUNT4_GET_FLAG(thisx) ((thisx)->params & 0x7F)
-#define ENENCOUNT4_GET_F000(thisx) (((thisx)->params >> 0xC) & 0xF)
+#define ENCOUNT4_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
+#define ENCOUNT4_GET_F000(thisx) (((thisx)->params >> 0xC) & 0xF)
+
+#define ENCOUNT4_SWITCH_FLAG_NONE 0x7F
 
 typedef struct EnEncount4 {
     /* 0x000 */ Actor actor;

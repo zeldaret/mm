@@ -3,6 +3,7 @@
  * Overlay: ovl_Dm_Char01
  * Description: Woodfall scene objects (temple, water, walls, etc)
  */
+
 #include "prevent_bss_reordering.h"
 #include "z_dm_char01.h"
 #include "objects/object_mtoride/object_mtoride.h"
@@ -36,15 +37,15 @@ s16 D_80AAAE26;
 #include "overlays/ovl_Dm_Char01/ovl_Dm_Char01.c"
 
 ActorInit Dm_Char01_InitVars = {
-    ACTOR_DM_CHAR01,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_MTORIDE,
-    sizeof(DmChar01),
-    (ActorFunc)DmChar01_Init,
-    (ActorFunc)DmChar01_Destroy,
-    (ActorFunc)DmChar01_Update,
-    (ActorFunc)DmChar01_Draw,
+    /**/ ACTOR_DM_CHAR01,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_MTORIDE,
+    /**/ sizeof(DmChar01),
+    /**/ DmChar01_Init,
+    /**/ DmChar01_Destroy,
+    /**/ DmChar01_Update,
+    /**/ DmChar01_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -168,14 +169,14 @@ void func_80AA8698(DmChar01* this, PlayState* play) {
         (player2->actor.world.pos.x < 40.0f) && (player2->actor.world.pos.z > 1000.0f) &&
         (player2->actor.world.pos.z < 1078.0f)) {
         if (!D_80AAAAB4) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             D_80AAAAB4 = true;
         }
     } else {
         D_80AAAAB4 = false;
     }
 
-    if ((player->transformation == PLAYER_FORM_DEKU) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_DEKU) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA)) {
 
         if ((player2->actor.world.pos.x > -40.0f) && (player2->actor.world.pos.x < 40.0f) &&
@@ -528,13 +529,13 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
                             sp44.x = (Rand_ZeroOne() - 0.5f) * (2.0f * phi_f2);
                             sp44.y = D_80AAAAB8;
                             sp44.z = (Rand_ZeroOne() * D_80AAAAC4) + phi_f2;
-                            temp = (s16)spBC + D_80AAAACC;
+                            temp = TRUNCF_BINANG(spBC) + D_80AAAACC;
                             EffectSsGSplash_Spawn(play, &sp44, NULL, NULL, 0, temp);
                         } else {
                             sp44.x = -phi_f2 - (Rand_ZeroOne() * D_80AAAAC4);
                             sp44.y = D_80AAAAB8;
                             sp44.z = (Rand_ZeroOne() - 0.5f) * (2.0f * phi_f2);
-                            temp = (s16)spBC + D_80AAAACC;
+                            temp = TRUNCF_BINANG(spBC) + D_80AAAACC;
                             EffectSsGSplash_Spawn(play, &sp44, NULL, NULL, 0, temp);
                         }
                     }

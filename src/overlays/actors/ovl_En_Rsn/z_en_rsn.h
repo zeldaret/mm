@@ -12,8 +12,8 @@ typedef struct EnRsn {
     /* 0x144 */ UNK_TYPE1 unk144[0x4C];
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnRsnActionFunc actionFunc;
-    /* 0x1D8 */ Vec3s unk1D8;
-    /* 0x1DE */ Vec3s unk1DE;
+    /* 0x1D8 */ Vec3s headRot;
+    /* 0x1DE */ Vec3s torsoRot;
 } EnRsn; // size = 0x1E4
 
 #endif // Z_EN_RSN_H

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_Boss_03/z_boss_03.h"
 #include "objects/object_boss03/object_boss03.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron3*)thisx)
 
@@ -32,15 +32,15 @@ static Vec3f sZeroVec[] = { 0.0f, 0.0f, 0.0f };
 static Boss03* sGyorg = NULL;
 
 ActorInit En_Tanron3_InitVars = {
-    ACTOR_EN_TANRON3,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS03,
-    sizeof(EnTanron3),
-    (ActorFunc)EnTanron3_Init,
-    (ActorFunc)EnTanron3_Destroy,
-    (ActorFunc)EnTanron3_Update,
-    (ActorFunc)EnTanron3_Draw,
+    /**/ ACTOR_EN_TANRON3,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BOSS03,
+    /**/ sizeof(EnTanron3),
+    /**/ EnTanron3_Init,
+    /**/ EnTanron3_Destroy,
+    /**/ EnTanron3_Update,
+    /**/ EnTanron3_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -117,7 +117,7 @@ void EnTanron3_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, GYORG_SMALL_FISH_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.02f);
     EnTanron3_SetupLive(this, play);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->currentRotationAngle = Rand_ZeroFloat(500000.0f);
     this->waterSurfaceYPos = 430.0f;
     sGyorg = (Boss03*)this->actor.parent;
@@ -297,17 +297,17 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                     this->actor.speed = Rand_ZeroFloat(2.0f) + 2.0f;
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.x =
-                            (s16)(s32)Rand_CenteredFloat(0x1F4) + this->targetShapeRotation.x + 0x8000;
+                            TRUNCF_BINANG(Rand_CenteredFloat(0x1F4)) + this->targetShapeRotation.x + 0x8000;
                     }
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.z =
-                            (s16)(s32)Rand_CenteredFloat(0x1F4) + this->targetShapeRotation.z + 0x8000;
+                            TRUNCF_BINANG(Rand_CenteredFloat(0x1F4)) + this->targetShapeRotation.z + 0x8000;
                     }
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->targetShapeRotation.y = (s16)Rand_ZeroFloat(0x10000);
+                        this->targetShapeRotation.y = TRUNCF_BINANG(Rand_ZeroFloat(0x10000));
                     }
                     this->actor.world.rot.y = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x) +
-                                              (s16)(s32)Rand_CenteredFloat(0xCE20);
+                                              TRUNCF_BINANG(Rand_CenteredFloat(0xCE20));
                 }
 
                 Math_ApproachS(&this->actor.shape.rot.y, this->targetShapeRotation.y, 3, 0x500);

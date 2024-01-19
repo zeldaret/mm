@@ -16,7 +16,7 @@ typedef struct EnDrs {
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ Vec3s jointTable[WEDDING_DRESS_MANNEQUIN_LIMB_MAX];
     /* 0x1F0 */ Vec3s morphTable[WEDDING_DRESS_MANNEQUIN_LIMB_MAX];
-    /* 0x208 */ s8 moonMaskObjBankIndex;
+    /* 0x208 */ s8 moonMaskObjectSlot;
 } EnDrs; // size = 0x20C */
 
 #endif // Z_EN_DRS_H

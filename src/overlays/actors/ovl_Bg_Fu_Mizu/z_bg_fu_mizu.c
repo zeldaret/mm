@@ -17,15 +17,15 @@ void BgFuMizu_Update(Actor* thisx, PlayState* play);
 void BgFuMizu_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Fu_Mizu_InitVars = {
-    ACTOR_BG_FU_MIZU,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_FU_KAITEN,
-    sizeof(BgFuMizu),
-    (ActorFunc)BgFuMizu_Init,
-    (ActorFunc)BgFuMizu_Destroy,
-    (ActorFunc)BgFuMizu_Update,
-    (ActorFunc)BgFuMizu_Draw,
+    /**/ ACTOR_BG_FU_MIZU,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_FU_KAITEN,
+    /**/ sizeof(BgFuMizu),
+    /**/ BgFuMizu_Init,
+    /**/ BgFuMizu_Destroy,
+    /**/ BgFuMizu_Update,
+    /**/ BgFuMizu_Draw,
 };
 
 void BgFuMizu_Init(Actor* thisx, PlayState* play) {
@@ -75,9 +75,9 @@ void BgFuMizu_Update(Actor* thisx, PlayState* play) {
     }
     if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, heightTarget, 0.05f, 1.0f, 0.5f) > 1.0f) {
         if (this->unk_160 == 1) {
-            func_800B9010(&this->dyna.actor, NA_SE_EV_WATER_LEVEL_DOWN_FIX - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_WATER_LEVEL_DOWN_FIX - SFX_FLAG);
         } else {
-            func_800B9010(&this->dyna.actor, NA_SE_EV_WATER_LEVEL_DOWN_FIX - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_WATER_LEVEL_DOWN_FIX - SFX_FLAG);
         }
     }
 }
