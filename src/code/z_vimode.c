@@ -279,54 +279,54 @@ void ViMode_Update(ViMode* viMode, Input* input) {
         gScreenHeight = viMode->viHeight;
 
         // Controls to reset the ViMode to defaults
-        if (CHECK_BTN_ALL(input->cur.button, START_BUTTON | U_CBUTTONS | R_CBUTTONS)) {
+        if (CHECK_BTN_ALL(input->cur.button, BTN_START | BTN_CUP | BTN_CRIGHT)) {
             ViMode_Init(viMode);
         }
 
         // Controls to adjust the screen dimensions (upper-left)
-        if (CHECK_BTN_ALL(input->cur.button, U_CBUTTONS)) {
-            if (CHECK_BTN_ALL(input->cur.button, U_JPAD)) {
+        if (CHECK_BTN_ALL(input->cur.button, BTN_CUP)) {
+            if (CHECK_BTN_ALL(input->cur.button, BTN_DUP)) {
                 viMode->upperAdjust--;
             }
-            if (CHECK_BTN_ALL(input->cur.button, D_JPAD)) {
+            if (CHECK_BTN_ALL(input->cur.button, BTN_DDOWN)) {
                 viMode->upperAdjust++;
             }
-            if (CHECK_BTN_ALL(input->cur.button, L_JPAD)) {
+            if (CHECK_BTN_ALL(input->cur.button, BTN_DLEFT)) {
                 viMode->leftAdjust--;
             }
-            if (CHECK_BTN_ALL(input->cur.button, R_JPAD)) {
+            if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT)) {
                 viMode->leftAdjust++;
             }
         }
 
         // Controls to adjust the screen dimensions (lower-right)
-        if (CHECK_BTN_ALL(input->cur.button, R_CBUTTONS)) {
-            if (CHECK_BTN_ALL(input->cur.button, U_JPAD)) {
+        if (CHECK_BTN_ALL(input->cur.button, BTN_CRIGHT)) {
+            if (CHECK_BTN_ALL(input->cur.button, BTN_DUP)) {
                 viMode->lowerAdjust--;
             }
-            if (CHECK_BTN_ALL(input->cur.button, D_JPAD)) {
+            if (CHECK_BTN_ALL(input->cur.button, BTN_DDOWN)) {
                 viMode->lowerAdjust++;
             }
-            if (CHECK_BTN_ALL(input->cur.button, L_JPAD)) {
+            if (CHECK_BTN_ALL(input->cur.button, BTN_DLEFT)) {
                 viMode->rightAdjust--;
             }
-            if (CHECK_BTN_ALL(input->cur.button, R_JPAD)) {
+            if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT)) {
                 viMode->rightAdjust++;
             }
         }
 
         // Controls to adjust key features
-        if (CHECK_BTN_ALL(input->cur.button, D_CBUTTONS)) {
-            if (CHECK_BTN_ALL(input->press.button, U_JPAD)) {
+        if (CHECK_BTN_ALL(input->cur.button, BTN_CDOWN)) {
+            if (CHECK_BTN_ALL(input->press.button, BTN_DUP)) {
                 viMode->loRes = !viMode->loRes;
             }
-            if (CHECK_BTN_ALL(input->press.button, D_JPAD)) {
+            if (CHECK_BTN_ALL(input->press.button, BTN_DDOWN)) {
                 viMode->antialiasOff = !viMode->antialiasOff;
             }
-            if (CHECK_BTN_ALL(input->press.button, L_JPAD)) {
+            if (CHECK_BTN_ALL(input->press.button, BTN_DLEFT)) {
                 viMode->modeN = !viMode->modeN;
             }
-            if (CHECK_BTN_ALL(input->press.button, R_JPAD)) {
+            if (CHECK_BTN_ALL(input->press.button, BTN_DRIGHT)) {
                 viMode->fb16Bit = !viMode->fb16Bit;
             }
         }

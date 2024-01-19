@@ -568,11 +568,11 @@ void EnTanron2_Update(Actor* thisx, PlayState* play) {
     }
 
     input = CONTROLLER3(&play->state);
-    if (CHECK_BTN_ALL(input->press.button, L_TRIG)) {
+    if (CHECK_BTN_ALL(input->press.button, BTN_L)) {
         this->unk_158 = 1;
     }
 
-    if (CHECK_BTN_ALL(input->press.button, R_TRIG)) {
+    if (CHECK_BTN_ALL(input->press.button, BTN_R)) {
         func_80BB6B80(this);
     }
 }

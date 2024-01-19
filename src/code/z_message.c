@@ -140,17 +140,17 @@ bool Message_ShouldAdvance(PlayState* play) {
     Input* controller = CONTROLLER1(&play->state);
 
     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
-        if (CHECK_BTN_ALL(controller->press.button, A_BUTTON)) {
+        if (CHECK_BTN_ALL(controller->press.button, BTN_A)) {
             Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
         }
-        return CHECK_BTN_ALL(controller->press.button, A_BUTTON);
+        return CHECK_BTN_ALL(controller->press.button, BTN_A);
     } else {
-        if (CHECK_BTN_ALL(controller->press.button, A_BUTTON) || CHECK_BTN_ALL(controller->press.button, B_BUTTON) ||
-            CHECK_BTN_ALL(controller->press.button, U_CBUTTONS)) {
+        if (CHECK_BTN_ALL(controller->press.button, BTN_A) || CHECK_BTN_ALL(controller->press.button, BTN_B) ||
+            CHECK_BTN_ALL(controller->press.button, BTN_CUP)) {
             Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
         }
-        return CHECK_BTN_ALL(controller->press.button, A_BUTTON) || CHECK_BTN_ALL(controller->press.button, B_BUTTON) ||
-               CHECK_BTN_ALL(controller->press.button, U_CBUTTONS);
+        return CHECK_BTN_ALL(controller->press.button, BTN_A) || CHECK_BTN_ALL(controller->press.button, BTN_B) ||
+               CHECK_BTN_ALL(controller->press.button, BTN_CUP);
     }
 }
 
@@ -159,10 +159,10 @@ bool Message_ShouldAdvanceSilent(PlayState* play) {
     Input* controller = CONTROLLER1(&play->state);
 
     if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
-        return CHECK_BTN_ALL(controller->press.button, A_BUTTON);
+        return CHECK_BTN_ALL(controller->press.button, BTN_A);
     } else {
-        return CHECK_BTN_ALL(controller->press.button, A_BUTTON) || CHECK_BTN_ALL(controller->press.button, B_BUTTON) ||
-               CHECK_BTN_ALL(controller->press.button, U_CBUTTONS);
+        return CHECK_BTN_ALL(controller->press.button, BTN_A) || CHECK_BTN_ALL(controller->press.button, BTN_B) ||
+               CHECK_BTN_ALL(controller->press.button, BTN_CUP);
     }
 }
 
@@ -5421,10 +5421,10 @@ void Message_Update(PlayState* play) {
 
         case MSGMODE_TEXT_DISPLAYING:
             if (msgCtx->textBoxType != TEXTBOX_TYPE_4) {
-                if (CHECK_BTN_ALL(input->press.button, B_BUTTON) && !msgCtx->textUnskippable) {
+                if (CHECK_BTN_ALL(input->press.button, BTN_B) && !msgCtx->textUnskippable) {
                     msgCtx->textboxSkipped = true;
                     msgCtx->textDrawPos = msgCtx->decodedTextLen;
-                } else if (CHECK_BTN_ALL(input->press.button, A_BUTTON) && !msgCtx->textUnskippable) {
+                } else if (CHECK_BTN_ALL(input->press.button, BTN_A) && !msgCtx->textUnskippable) {
 
                     while (true) {
                         temp_v1_2 = msgCtx->decodedBuffer.wchar[msgCtx->textDrawPos];
@@ -5436,7 +5436,7 @@ void Message_Update(PlayState* play) {
                         msgCtx->textDrawPos++;
                     }
                 }
-            } else if (CHECK_BTN_ALL(input->press.button, A_BUTTON) && (msgCtx->textUnskippable == 0)) {
+            } else if (CHECK_BTN_ALL(input->press.button, BTN_A) && (msgCtx->textUnskippable == 0)) {
                 while (true) {
                     temp_v1_2 = msgCtx->decodedBuffer.wchar[msgCtx->textDrawPos];
                     if ((temp_v1_2 == 0x10) || (temp_v1_2 == 0x12) || (temp_v1_2 == 0x1B) || (temp_v1_2 == 0x1C) ||
@@ -5635,9 +5635,8 @@ void Message_Update(PlayState* play) {
                         if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_50) {}
                     } else if (pauseCtx->itemDescriptionOn) {
                         if ((input->rel.stick_x != 0) || (input->rel.stick_y != 0) ||
-                            CHECK_BTN_ALL(input->press.button, A_BUTTON) ||
-                            CHECK_BTN_ALL(input->press.button, B_BUTTON) ||
-                            CHECK_BTN_ALL(input->press.button, START_BUTTON)) {
+                            CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B) ||
+                            CHECK_BTN_ALL(input->press.button, BTN_START)) {
                             Audio_PlaySfx(NA_SE_SY_DECIDE);
                             Message_CloseTextbox(play);
                         }
@@ -5829,7 +5828,7 @@ void Message_Update(PlayState* play) {
             break;
 
         case MSGMODE_OCARINA_PLAYING:
-            if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
+            if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
                 AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 Message_CloseTextbox(play);
@@ -5848,7 +5847,7 @@ void Message_Update(PlayState* play) {
             break;
 
         case MSGMODE_SCARECROW_SPAWN_RECORDING_ONGOING:
-            if (CHECK_BTN_ALL(input->press.button, B_BUTTON)) {
+            if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
                 AudioOcarina_SetRecordingState(OCARINA_RECORD_OFF);
                 Audio_PlaySfx(NA_SE_SY_OCARINA_ERROR);
                 Message_CloseTextbox(play);

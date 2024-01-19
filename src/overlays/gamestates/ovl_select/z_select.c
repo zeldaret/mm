@@ -508,8 +508,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
     s32 updateRate;
 
     if (this->verticalInputAccumulator == 0) {
-        if (CHECK_BTN_ALL(controller1->press.button, A_BUTTON) ||
-            CHECK_BTN_ALL(controller1->press.button, START_BUTTON)) {
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_A) || CHECK_BTN_ALL(controller1->press.button, BTN_START)) {
             for (i = 0; i < TIMER_ID_MAX; i++) {
                 gSaveContext.timerStates[i] = TIMER_STATE_OFF;
                 gSaveContext.timerCurTimes[i] = SECONDS_TO_TIMER(0);
@@ -525,7 +524,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
             }
         }
 
-        if (CHECK_BTN_ALL(controller1->press.button, B_BUTTON)) {
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_B)) {
             playerForm = GET_PLAYER_FORM - 1;
             if (playerForm < PLAYER_FORM_FIERCE_DEITY) {
                 playerForm = PLAYER_FORM_HUMAN;
@@ -533,7 +532,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
             gSaveContext.save.playerForm = playerForm;
         }
 
-        if (CHECK_BTN_ALL(controller1->press.button, Z_TRIG)) {
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_Z)) {
             if (gSaveContext.save.cutsceneIndex == 0x8000) {
                 gSaveContext.save.cutsceneIndex = 0;
             } else if (gSaveContext.save.cutsceneIndex == 0) {
@@ -563,7 +562,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
             } else if (gSaveContext.save.cutsceneIndex == 0xFFFA) {
                 gSaveContext.save.cutsceneIndex = 0x8000;
             }
-        } else if (CHECK_BTN_ALL(controller1->press.button, R_TRIG)) {
+        } else if (CHECK_BTN_ALL(controller1->press.button, BTN_R)) {
             if (gSaveContext.save.cutsceneIndex == 0x8000) {
                 gSaveContext.save.cutsceneIndex = 0xFFFA;
             } else if (gSaveContext.save.cutsceneIndex == 0) {
@@ -600,20 +599,20 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
             gSaveContext.save.isNight = true;
         }
 
-        if (CHECK_BTN_ALL(controller1->press.button, U_CBUTTONS)) {
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_CUP)) {
             this->opt--;
         }
-        if (CHECK_BTN_ALL(controller1->press.button, D_CBUTTONS)) {
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_CDOWN)) {
             this->opt++;
         }
 
-        if (CHECK_BTN_ALL(controller1->press.button, L_CBUTTONS)) {
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_CLEFT)) {
             if (gSaveContext.save.day > 1) {
                 gSaveContext.save.day--;
             }
         }
 
-        if (CHECK_BTN_ALL(controller1->press.button, R_CBUTTONS)) {
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_CRIGHT)) {
             if (gSaveContext.save.day < 4) {
                 gSaveContext.save.day++;
             }
@@ -624,7 +623,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
         if (stickY != 0) {
             this->verticalInput = (updateRate * stickY) / 7;
         } else {
-            if (CHECK_BTN_ALL(controller1->press.button, U_JPAD)) {
+            if (CHECK_BTN_ALL(controller1->press.button, BTN_DUP)) {
                 if (this->lockUp == true) {
                     this->timerUp = 0;
                 }
@@ -637,12 +636,12 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
                 }
             }
 
-            if (CHECK_BTN_ALL(controller1->cur.button, U_JPAD) && (this->timerUp == 0)) {
+            if (CHECK_BTN_ALL(controller1->cur.button, BTN_DUP) && (this->timerUp == 0)) {
                 Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = updateRate * 3;
             }
 
-            if (CHECK_BTN_ALL(controller1->press.button, D_JPAD)) {
+            if (CHECK_BTN_ALL(controller1->press.button, BTN_DDOWN)) {
                 if (this->lockDown == true) {
                     this->timerDown = 0;
                 }
@@ -653,24 +652,26 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
                     this->verticalInput = -updateRate;
                 }
             }
-            if (CHECK_BTN_ALL(controller1->cur.button, D_JPAD) && (this->timerDown == 0)) {
+            if (CHECK_BTN_ALL(controller1->cur.button, BTN_DDOWN) && (this->timerDown == 0)) {
                 Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = -updateRate * 3;
             }
 
-            if (CHECK_BTN_ALL(controller1->press.button, L_JPAD) || CHECK_BTN_ALL(controller1->cur.button, L_JPAD)) {
+            if (CHECK_BTN_ALL(controller1->press.button, BTN_DLEFT) ||
+                CHECK_BTN_ALL(controller1->cur.button, BTN_DLEFT)) {
                 Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = updateRate;
             }
 
-            if (CHECK_BTN_ALL(controller1->press.button, R_JPAD) || CHECK_BTN_ALL(controller1->cur.button, R_JPAD)) {
+            if (CHECK_BTN_ALL(controller1->press.button, BTN_DRIGHT) ||
+                CHECK_BTN_ALL(controller1->cur.button, BTN_DRIGHT)) {
                 Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = -updateRate;
             }
         }
     }
 
-    if (CHECK_BTN_ALL(controller1->press.button, L_TRIG)) {
+    if (CHECK_BTN_ALL(controller1->press.button, BTN_L)) {
         this->pageDownIndex++;
         this->pageDownIndex =
             (this->pageDownIndex + ARRAY_COUNT(this->pageDownStops)) % ARRAY_COUNT(this->pageDownStops);
