@@ -274,7 +274,8 @@ endif
 all: uncompressed compressed
 
 $(ROM): $(ELF)
-	$(ELF2ROM) -cic 6105 $< $@
+	$(OBJCOPY) --gap-fill=0x00 -O binary $< $(@:.z64=.bin)
+	python3 tools/buildtools/checksummer.py $(@:.z64=.bin) $@
 
 $(ROMC): $(ROM)
 	python3 tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
