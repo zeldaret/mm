@@ -1,6 +1,7 @@
 # Setup
-libyaz0>=0.5
 colorama>=0.4.3
+crunch64>=0.3.0,<1.0.0
+ipl3checksum>=1.2.0,<2.0.0
 
 # disasm
 rabbitizer>=1.0.0,<2.0.0
