@@ -7,6 +7,8 @@ struct ObjBigicicle;
 
 typedef void (*ObjBigicicleActionFunc)(struct ObjBigicicle*, PlayState*);
 
+#define OBJBIGICLE_GET_SWITCH_FLAG_MASK(thisx) ((thisx)->params & 0xFF)
+#define OBJBIGICLE_GET_SWITCH_FLAG(thisx) ((thisx)->params)
 #define OBJBIGICLE_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 
 typedef struct ObjBigicicle {

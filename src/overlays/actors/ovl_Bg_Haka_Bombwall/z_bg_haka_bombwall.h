@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define BGHAKABOMBWALL_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define BGHAKABOMBWALL_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 struct BgHakaBombwall;
 

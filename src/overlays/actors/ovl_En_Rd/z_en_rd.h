@@ -30,14 +30,33 @@ typedef enum {
     /*  7 */ EN_RD_TYPE_PIROUETTE
 } EnRdType;
 
+typedef enum EnRdBodyPart {
+    /*  0 */ EN_RD_BODYPART_0,
+    /*  1 */ EN_RD_BODYPART_1,
+    /*  2 */ EN_RD_BODYPART_2,
+    /*  3 */ EN_RD_BODYPART_3,
+    /*  4 */ EN_RD_BODYPART_4,
+    /*  5 */ EN_RD_BODYPART_5,
+    /*  6 */ EN_RD_BODYPART_6,
+    /*  7 */ EN_RD_BODYPART_7,
+    /*  8 */ EN_RD_BODYPART_8,
+    /*  9 */ EN_RD_BODYPART_9,
+    /* 10 */ EN_RD_BODYPART_10,
+    /* 11 */ EN_RD_BODYPART_11,
+    /* 12 */ EN_RD_BODYPART_12,
+    /* 13 */ EN_RD_BODYPART_13,
+    /* 14 */ EN_RD_BODYPART_14,
+    /* 15 */ EN_RD_BODYPART_MAX
+} EnRdBodyPart;
+
 typedef struct EnRd {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnRdActionFunc actionFunc;
     /* 0x18C */ EnRdSetupDanceFunc setupDanceFunc;
     /* 0x190 */ ColliderCylinder collider;
-    /* 0x1DC */ Vec3f limbPos[15];
-    /* 0x290 */ s32 limbIndex;
+    /* 0x1DC */ Vec3f bodyPartsPos[EN_RD_BODYPART_MAX];
+    /* 0x290 */ s32 bodyPartIndex;
     /* 0x294 */ f32 drawDmgEffAlpha;
     /* 0x298 */ f32 drawDmgEffScale;
     /* 0x29C */ Vec3s jointTable[REDEAD_LIMB_MAX];
@@ -49,15 +68,15 @@ typedef struct EnRd {
                     s16 deathTimer;
                     s16 coffinRiseForwardAccelTimer;
                 };
-    /* 0x3D8 */ s16 headYRotation;
-    /* 0x3DA */ s16 upperBodyYRotation;
+    /* 0x3D8 */ s16 headRotY;
+    /* 0x3DA */ s16 torsoRotY;
     /* 0x3DC */ s16 flags;
     /* 0x3DE */ s16 alpha;
     /* 0x3E0 */ s16 sunsSongStunTimer;
     /* 0x3E2 */ UNK_TYPE1 unk3E2[0x2];
     /* 0x3E4 */ union {
                     s16 danceEndTimer;
-                    s16 pirouetteRotationalVelocity;
+                    s16 pirouetteAngularVelocity;
                 };
     /* 0x3E6 */ s16 drawDmgEffTimer;
     /* 0x3E8 */ u8 drawDmgEffType;

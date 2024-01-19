@@ -6,7 +6,7 @@
 
 #include "z_en_pst.h"
 
-#define FLAGS (ACTOR_FLAG_1)
+#define FLAGS (ACTOR_FLAG_TARGETABLE)
 
 #define THIS ((EnPst*)thisx)
 
@@ -15,7 +15,6 @@ void EnPst_Destroy(Actor* thisx, PlayState* play);
 void EnPst_Update(Actor* thisx, PlayState* play);
 void EnPst_Draw(Actor* thisx, PlayState* play);
 
-void EnPst_FollowSchedule(EnPst* this, PlayState* play);
 void EnPst_Talk(EnPst* this, PlayState* play);
 
 typedef enum {
@@ -119,15 +118,15 @@ s32 D_80B2C488[] = { 0x2C27A40C, 0x10000000 };
 s32 D_80B2C490[] = { 0x2C27850C, 0x10000000 };
 
 ActorInit En_Pst_InitVars = {
-    ACTOR_EN_PST,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_PST,
-    sizeof(EnPst),
-    (ActorFunc)EnPst_Init,
-    (ActorFunc)EnPst_Destroy,
-    (ActorFunc)EnPst_Update,
-    (ActorFunc)EnPst_Draw,
+    /**/ ACTOR_EN_PST,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_PST,
+    /**/ sizeof(EnPst),
+    /**/ EnPst_Init,
+    /**/ EnPst_Destroy,
+    /**/ EnPst_Update,
+    /**/ EnPst_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -152,7 +151,14 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = { { &gPostboxOpenSlotAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 } };
+typedef enum PostboxAnimation {
+    /* 0 */ POSTBOX_ANIM_IDLE,
+    /* 1 */ POSTBOX_ANIM_MAX
+} PostboxAnimation;
+
+static AnimationInfoS sAnimationInfo[POSTBOX_ANIM_MAX] = {
+    { &gPostboxIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // POSTBOX_ANIM_IDLE
+};
 
 void EnPst_UpdateCollision(EnPst* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -163,14 +169,19 @@ s32 EnPst_HandleLetterDay1(EnPst* this) {
     switch (this->actor.params) {
         case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_UPPER_CLOCKTOWN);
+
         case POSTBOX_NORTH_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_NORTH_CLOCKTOWN);
+
         case POSTBOX_EAST_UPPER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_UPPER_CLOCKTOWN);
+
         case POSTBOX_EAST_LOWER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_LOWER_CLOCKTOWN);
+
         case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_LOWER_CLOCKTOWN);
+
         default:
             return false;
     }
@@ -180,14 +191,19 @@ s32 EnPst_HandleLetterDay2(EnPst* this) {
     switch (this->actor.params) {
         case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_40);
+
         case POSTBOX_NORTH_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_80);
+
         case POSTBOX_EAST_UPPER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_01);
+
         case POSTBOX_EAST_LOWER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_02);
+
         case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
             return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_04);
+
         default:
             return false;
     }
@@ -208,7 +224,7 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
                             itemAction = func_80123810(play);
                             scriptBranch = 0;
                             if ((itemAction == PLAYER_IA_LETTER_TO_KAFEI) || (itemAction == PLAYER_IA_LETTER_MAMA)) {
-                                this->exchangeItemId = itemAction;
+                                this->exchangeItemAction = itemAction;
                                 this->behaviour++;
                                 scriptBranch = 1;
                             } else if (itemAction <= PLAYER_IA_MINUS1) {
@@ -220,12 +236,19 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
                             }
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
+
         case POSTBOX_BEHAVIOUR_TAKE_ITEM:
-            if (this->exchangeItemId == PLAYER_IA_LETTER_TO_KAFEI) {
+            if (this->exchangeItemAction == PLAYER_IA_LETTER_TO_KAFEI) {
                 scriptBranch = 1;
             }
+            break;
+
+        default:
             break;
     }
     return scriptBranch;
@@ -240,39 +263,52 @@ s32* EnPst_GetMsgEventScript(EnPst* this, PlayState* play) {
         switch (this->actor.params) {
             case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
                 return D_80B2C3E8;
+
             case POSTBOX_NORTH_CLOCKTOWN:
                 return D_80B2C408;
+
             case POSTBOX_EAST_UPPER_CLOCKTOWN:
                 return D_80B2C428;
+
             case POSTBOX_EAST_LOWER_CLOCKTOWN:
                 return D_80B2C448;
+
             case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
                 return D_80B2C468;
+
             default:
                 return NULL;
         }
-    } else if (this->stateFlags & 0x20) {
-        if (this->exchangeItemId == PLAYER_IA_LETTER_MAMA) {
+    }
+
+    if (this->stateFlags & 0x20) {
+        if (this->exchangeItemAction == PLAYER_IA_LETTER_MAMA) {
             return D_80B2C488;
         } else {
             return D_80B2C490;
         }
-    } else {
-        this->msgEventCallback = EnPst_ChooseBehaviour;
-        switch (this->actor.params) {
-            case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
-                return D_80B2C23C;
-            case POSTBOX_NORTH_CLOCKTOWN:
-                return D_80B2C288;
-            case POSTBOX_EAST_UPPER_CLOCKTOWN:
-                return D_80B2C2D4;
-            case POSTBOX_EAST_LOWER_CLOCKTOWN:
-                return D_80B2C320;
-            case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
-                return D_80B2C36C;
-            default:
-                return NULL;
-        }
+    }
+
+    this->msgEventCallback = EnPst_ChooseBehaviour;
+
+    switch (this->actor.params) {
+        case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
+            return D_80B2C23C;
+
+        case POSTBOX_NORTH_CLOCKTOWN:
+            return D_80B2C288;
+
+        case POSTBOX_EAST_UPPER_CLOCKTOWN:
+            return D_80B2C2D4;
+
+        case POSTBOX_EAST_LOWER_CLOCKTOWN:
+            return D_80B2C320;
+
+        case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
+            return D_80B2C36C;
+
+        default:
+            return NULL;
     }
 }
 
@@ -280,32 +316,31 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 ret = false;
 
-    if (this->stateFlags & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            this->stateFlags &= ~0x30;
-            if (player->exchangeItemId == PLAYER_IA_LETTER_TO_KAFEI) {
-                this->stateFlags |= 0x10;
-                this->exchangeItemId = player->exchangeItemId;
-            } else if (player->exchangeItemId != PLAYER_IA_NONE) {
-                this->stateFlags |= 0x20;
-                this->exchangeItemId = player->exchangeItemId;
-            }
-            // If Letter to Kafei is deposited, value is set to 2
-            this->isLetterToKafeiDeposited = EnPst_HandleLetterDay1(this);
-            SubS_UpdateFlags(&this->stateFlags, 0, 7);
-            this->behaviour = 0;
-            this->msgEventCallback = NULL;
-            this->stateFlags |= 0x40;
-            this->msgEventScript = EnPst_GetMsgEventScript(this, play);
-            this->actionFunc = EnPst_Talk;
-            ret = true;
+    if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_TalkOfferAccepted(&this->actor, &play->state)) {
+        this->stateFlags &= ~0x30;
+        if (player->exchangeItemAction == PLAYER_IA_LETTER_TO_KAFEI) {
+            this->stateFlags |= 0x10;
+            this->exchangeItemAction = player->exchangeItemAction;
+        } else if (player->exchangeItemAction != PLAYER_IA_NONE) {
+            this->stateFlags |= 0x20;
+            this->exchangeItemAction = player->exchangeItemAction;
         }
+        // If Letter to Kafei is deposited, value is set to 2
+        this->isLetterToKafeiDeposited = EnPst_HandleLetterDay1(this);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        this->behaviour = 0;
+        this->msgEventCallback = NULL;
+        this->stateFlags |= 0x40;
+        this->msgEventScript = EnPst_GetMsgEventScript(this, play);
+        this->actionFunc = EnPst_Talk;
+        ret = true;
     }
     return ret;
 }
 
-s32 EnPst_UpdateFlagsSubs(EnPst* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    SubS_UpdateFlags(&this->stateFlags, 3, 7);
+s32 EnPst_SetOfferItemModeOnScreen(EnPst* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     return true;
 }
 
@@ -316,10 +351,14 @@ s32 EnPst_ProcessScheduleOutput(EnPst* this, PlayState* play, ScheduleOutput* sc
 
     switch (scheduleOutput->result) {
         case POSTBOX_SCH_AVAILABLE:
-            ret = EnPst_UpdateFlagsSubs(this, play, scheduleOutput);
+            ret = EnPst_SetOfferItemModeOnScreen(this, play, scheduleOutput);
             break;
+
         case POSTBOX_SCH_CHECKED_BY_POSTMAN:
             ret = true;
+            break;
+
+        default:
             break;
     }
     return ret;
@@ -342,11 +381,11 @@ void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
         ((this->scheduleResult != scheduleOutput.result) &&
          !EnPst_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = POSTBOX_SCH_NONE;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->scheduleResult = scheduleOutput.result;
     EnPst_HandleSchedule(this, play);
@@ -373,7 +412,7 @@ void EnPst_Talk(EnPst* this, PlayState* play) {
                     break;
             }
         }
-        SubS_UpdateFlags(&this->stateFlags, 3, 7);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->msgEventArg4 = 0;
         this->actionFunc = EnPst_FollowSchedule;
     }
@@ -388,9 +427,9 @@ void EnPst_Init(Actor* thisx, PlayState* play) {
                        POSTBOX_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
-    SubS_UpdateFlags(&this->stateFlags, 3, 7);
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
-    this->actor.targetMode = 0;
+    SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, POSTBOX_ANIM_IDLE);
+    this->actor.targetMode = TARGET_MODE_0;
     Actor_SetScale(&this->actor, 0.02f);
     this->actionFunc = EnPst_FollowSchedule;
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
@@ -410,7 +449,7 @@ void EnPst_Update(Actor* thisx, PlayState* play) {
     if (this->scheduleResult != POSTBOX_SCH_NONE) {
         if (Actor_IsFacingPlayer(&this->actor, 0x1FFE)) {
             this->unk214 = 0;
-            func_8013C964(&this->actor, play, 60.0f, 20.0f, 0, this->stateFlags & 7);
+            SubS_Offer(&this->actor, play, 60.0f, 20.0f, PLAYER_IA_NONE, this->stateFlags & SUBS_OFFER_MODE_MASK);
         }
         Actor_SetFocus(&this->actor, 20.0f);
         EnPst_UpdateCollision(this, play);

@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "z64snap.h"
+#include "objects/object_zov/object_zov.h"
 
 struct EnZov;
 
@@ -16,14 +17,14 @@ typedef void (*EnZovActionFunc)(struct EnZov*, PlayState*);
 
 typedef struct EnZov {
     /* 0x000 */ PictoActor picto;
-    /* 0x148 */ Vec3s jontTable[23];
-    /* 0x1D2 */ Vec3s morphTable[23];
+    /* 0x148 */ Vec3s jointTable[LULU_LIMB_MAX];
+    /* 0x1D2 */ Vec3s morphTable[LULU_LIMB_MAX];
     /* 0x25C */ SkelAnime skelAnime;
     /* 0x2A0 */ ColliderCylinder collider;
     /* 0x2EC */ s16 unk_2EC;
     /* 0x2EE */ s16 unk_2EE;
-    /* 0x2F0 */ Vec3s unk_2F0;
-    /* 0x2F6 */ Vec3s unk_2F6;
+    /* 0x2F0 */ Vec3s headRot;
+    /* 0x2F6 */ Vec3s torsoRot;
     /* 0x2FC */ Vec3f unk_2FC;
     /* 0x308 */ Vec3f unk_308;
     /* 0x314 */ Vec3f unk_314;

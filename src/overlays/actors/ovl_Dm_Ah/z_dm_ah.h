@@ -16,8 +16,8 @@ typedef struct DmAh {
     /* 0x198 */ Vec3f unk_198;
     /* 0x1A4 */ Vec3s unk_1A4;
     /* 0x1AA */ Vec3s unk_1AA;
-    /* 0x1B0 */ Vec3s morphTable[OBJECT_AH_LIMB_MAX];
-    /* 0x216 */ Vec3s jointTable[OBJECT_AH_LIMB_MAX];
+    /* 0x1B0 */ Vec3s jointTable[OBJECT_AH_LIMB_MAX];
+    /* 0x216 */ Vec3s morphTable[OBJECT_AH_LIMB_MAX];
     /* 0x27C */ u16 unk_27C;
     /* 0x27E */ u8 cueId;
     /* 0x280 */ Actor* unk_280;
@@ -28,9 +28,9 @@ typedef struct DmAh {
     /* 0x28C */ s16 unk_28C;
     /* 0x28E */ s16 unk_28E;
     /* 0x290 */ s16 unk_290;
-    /* 0x294 */ s32 animationIndex;
-    /* 0x298 */ s32 animationIndex2;
-    /* 0x29C */ s32 unk_29C;
+    /* 0x294 */ s32 animIndex;
+    /* 0x298 */ s32 prevAnimIndex;
+    /* 0x29C */ s32 isCutscenePlaying;
 } DmAh; // size = 0x2A0
 
 #endif // Z_DM_AH_H

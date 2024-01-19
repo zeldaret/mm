@@ -6,7 +6,7 @@
 
 #include "z_en_ge1.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnGe1*)thisx)
 
@@ -16,15 +16,15 @@ void EnGe1_Update(Actor* thisx, PlayState* play);
 void EnGe1_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Ge1_InitVars = {
-    ACTOR_EN_GE1,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GE1,
-    sizeof(EnGe1),
-    (ActorFunc)EnGe1_Init,
-    (ActorFunc)EnGe1_Destroy,
-    (ActorFunc)EnGe1_Update,
-    (ActorFunc)EnGe1_Draw,
+    /**/ ACTOR_EN_GE1,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_GE1,
+    /**/ sizeof(EnGe1),
+    /**/ EnGe1_Init,
+    /**/ EnGe1_Destroy,
+    /**/ EnGe1_Update,
+    /**/ EnGe1_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -69,10 +69,11 @@ typedef enum {
     /*  6 */ GERUDO_WHITE_ANIM_EXCITED_CLAPPING,
     /*  7 */ GERUDO_WHITE_ANIM_SALUTE,
     /*  8 */ GERUDO_WHITE_ANIM_LEADING_BOAT,
-    /*  9 */ GERUDO_WHITE_ANIM_BLOWN_AWAY
+    /*  9 */ GERUDO_WHITE_ANIM_BLOWN_AWAY,
+    /* 10 */ GERUDO_WHITE_ANIM_MAX
 } GerudoWhiteAnimation;
 
-void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames);
+void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 animMode, f32 morphFrames);
 void EnGe1_ShadowDraw(Actor* thisx, Lights* lights, PlayState* play);
 void EnGe1_Wait(EnGe1* this, PlayState* play);
 void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play);
@@ -86,7 +87,7 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, GERUDO_WHITE_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->picto.actor.targetMode = 6;
+    this->picto.actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->picto.actor, 0.01f);
     this->animIndex = this->cueId = -1; // GERUDO_WHITE_ANIM_NONE
     this->stateFlags = 0;
@@ -112,7 +113,7 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnGe1_PerformCutsceneActions;
             this->picto.actor.draw = NULL;
             this->picto.actor.flags |= ACTOR_FLAG_20 | ACTOR_FLAG_10;
-            this->picto.actor.flags &= ~ACTOR_FLAG_1;
+            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             break;
     }
 
@@ -127,8 +128,8 @@ void EnGe1_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames) {
-    static AnimationHeader* sAnimations[] = {
+void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 animMode, f32 morphFrames) {
+    static AnimationHeader* sAnimations[GERUDO_WHITE_ANIM_MAX] = {
         &gGerudoWhiteArmsFoldedAnim,        // GERUDO_WHITE_ANIM_ARMS_FOLDED,
         &gGerudoWhiteUnfoldingArmsAnim,     // GERUDO_WHITE_ANIM_UNFOLDING_ARMS
         &gGerudoWhiteStandingHeadBowedAnim, // GERUDO_WHITE_ANIM_STANDING_HEAD_BOWED,
@@ -154,7 +155,7 @@ void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames) {
 
         default:
             Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
-                             Animation_GetLastFrame(sAnimations[animIndex]), mode, morphFrames);
+                             Animation_GetLastFrame(sAnimations[animIndex]), animMode, morphFrames);
             break;
     }
 
@@ -413,8 +414,8 @@ s32 EnGe1_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         // Make small fidgeting movements if in standing animation.
         if ((limbIndex == GERUDO_WHITE_LIMB_TORSO) || (limbIndex == GERUDO_WHITE_LIMB_LEFT_FOREARM) ||
             (limbIndex == GERUDO_WHITE_LIMB_RIGHT_FOREARM)) {
-            rot->y += (s16)(Math_SinS(play->state.frames * (limbIndex * 50 + 0x814)) * 200.0f);
-            rot->z += (s16)(Math_CosS(play->state.frames * (limbIndex * 50 + 0x940)) * 200.0f);
+            rot->y += TRUNCF_BINANG(Math_SinS(play->state.frames * (limbIndex * 50 + 0x814)) * 200.0f);
+            rot->z += TRUNCF_BINANG(Math_CosS(play->state.frames * (limbIndex * 50 + 0x940)) * 200.0f);
         }
     }
     return false;

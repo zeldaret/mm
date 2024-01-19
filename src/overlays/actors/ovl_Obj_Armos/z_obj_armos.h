@@ -8,7 +8,7 @@ struct ObjArmos;
 
 typedef void (*ObjArmosActionFunc)(struct ObjArmos*, PlayState*);
 
-#define OBJARMOS_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJARMOS_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define OBJARMOS_GET_ROTZ_7(thisx) ((thisx)->home.rot.z & 7)
 #define OBJARMOS_GET_ROTX_F(thisx) ((thisx)->home.rot.x & 0xF)
 

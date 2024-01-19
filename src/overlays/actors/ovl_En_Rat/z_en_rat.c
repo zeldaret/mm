@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
 
 #define THIS ((EnRat*)thisx)
 
@@ -36,15 +36,15 @@ typedef enum {
 } EnRatHookedState;
 
 ActorInit En_Rat_InitVars = {
-    ACTOR_EN_RAT,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_RAT,
-    sizeof(EnRat),
-    (ActorFunc)EnRat_Init,
-    (ActorFunc)EnRat_Destroy,
-    (ActorFunc)EnRat_Update,
-    (ActorFunc)EnRat_Draw,
+    /**/ ACTOR_EN_RAT,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_RAT,
+    /**/ sizeof(EnRat),
+    /**/ EnRat_Init,
+    /**/ EnRat_Destroy,
+    /**/ EnRat_Update,
+    /**/ EnRat_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -124,8 +124,19 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EffectBlureInit2 sBlureInit = {
-    0, 0, 0, { 250, 0, 0, 250 }, { 200, 0, 0, 130 }, { 150, 0, 0, 100 }, { 100, 0, 0, 50 }, 16,
-    0, 0, 0, { 0, 0, 0, 0 },     { 0, 0, 0, 0 },
+    0,
+    0,
+    0,
+    { 250, 0, 0, 250 },
+    { 200, 0, 0, 130 },
+    { 150, 0, 0, 100 },
+    { 100, 0, 0, 50 },
+    16,
+    0,
+    EFF_BLURE_DRAW_MODE_SIMPLE,
+    0,
+    { 0, 0, 0, 0 },
+    { 0, 0, 0, 0 },
 };
 
 static s32 sTexturesDesegmented = false;
@@ -324,9 +335,9 @@ void EnRat_ChooseDirection(EnRat* this) {
                 angle -= 0x8000;
             }
 
-            angle += (s16)(s32)Rand_CenteredFloat(0x800);
+            angle += TRUNCF_BINANG(Rand_CenteredFloat(0x800));
         } else {
-            angle = (Rand_ZeroOne() < 0.1f) ? (s16)(s32)Rand_CenteredFloat(0x800) : 0;
+            angle = (Rand_ZeroOne() < 0.1f) ? TRUNCF_BINANG(Rand_CenteredFloat(0x800)) : 0;
         }
     }
 
@@ -535,7 +546,7 @@ void EnRat_SetupRevive(EnRat* this) {
     this->actor.shape.rot.z = this->actor.home.rot.z;
     EnRat_InitializeAxes(this);
     EnRat_UpdateRotation(this);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.speed = 0.0f;
     Animation_PlayLoopSetSpeed(&this->skelAnime, &gRealBombchuSpotAnim, 0.0f);
     this->revivePosY = 2666.6667f;
@@ -552,7 +563,7 @@ void EnRat_Revive(EnRat* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
         if (this->timer == 0) {
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actor.draw = EnRat_Draw;
             this->skelAnime.playSpeed = 1.0f;
         }
@@ -700,7 +711,7 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
         func_800B1210(play, &this->actor.world.pos, &sDustVelocity, &gZeroVec3f, 550, 50);
     }
 
-    if ((this->actor.floorPoly == NULL) && (Animation_OnFrame(&this->skelAnime, 0.0f))) {
+    if ((this->actor.floorPoly == NULL) && Animation_OnFrame(&this->skelAnime, 0.0f)) {
         EnRat_SpawnWaterEffects(this, play);
     }
 
@@ -709,7 +720,7 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
         this->animLoopCounter = 5;
     }
 
-    func_800B9010(&this->actor, NA_SE_EN_BOMCHU_RUN - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_BOMCHU_RUN - SFX_FLAG);
     EnRat_UpdateSparkOffsets(this);
 }
 

@@ -6,7 +6,7 @@
 #define OBJ_TARU_GET_100(thisx) ((thisx)->params & 0x100)
 #define OBJ_TARU_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define OBJ_TARU_GET_3F(thisx) ((thisx)->params & 0x3F)
-#define OBJ_TARU_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJ_TARU_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define OBJ_TARU_GET_7F00(thisx) (((thisx)->params >> 8) & 0x7F)
 #define OBJ_TARU_GET_80(thisx) ((thisx)->params & 0x80)
 #define OBJ_TARU_GET_8000(thisx) (((thisx)->params >> 0xF) & 1)

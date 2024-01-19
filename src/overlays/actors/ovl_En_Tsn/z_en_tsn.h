@@ -23,8 +23,8 @@ typedef struct EnTsn {
     /* 0x1D8 */ struct EnTsn* unk_1D8;
     /* 0x1DC */ UNK_TYPE1 unk1DC[0x44];
     /* 0x220 */ u16 unk_220;
-    /* 0x222 */ Vec3s unk_222;
-    /* 0x228 */ Vec3s unk_228;
+    /* 0x222 */ Vec3s headRot;
+    /* 0x228 */ Vec3s torsoRot;
     /* 0x22E */ s16 unk_22E;
     /* 0x230 */ s16 unk_230;
 } EnTsn; // size = 0x234

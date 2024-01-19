@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define BG_DKJAIL_GET_SWITCH(thisx) ((thisx)->params & 0x7F)
+#define BG_DKJAIL_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 struct BgDkjailIvy;
 

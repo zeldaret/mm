@@ -25,7 +25,7 @@
         <Texture Name="gKingsChamberDekuGuardEyeOpenTex" OutName="kings_chamber_deku_guard_eye_open" Format="rgba16" Width="8" Height="8" Offset="0x28E8" />" Format="rgba16" Width="8" Height="8" Offset="0x28E8" />
         <Texture Name="gKingsChamberDekuGuardEyeHalfTex" OutName="kings_chamber_deku_guard_eye_half" Format="rgba16" Width="8" Height="8" Offset="0x2968" />
         <Texture Name="gKingsChamberDekuGuardEyeClosedTex" OutName="kings_chamber_deku_guard_eye_closed" Format="rgba16" Width="8" Height="8" Offset="0x29E8" />
-        <DList Name="gKingsChamberDekuGuardDekuFlower" Offset="0x2C48" />
+        <DList Name="gKingsChamberDekuGuardDekuFlowerDL" Offset="0x2C48" />
         <Limb Name="gKingsChamberDekuGuardTorsoLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_TORSO" Offset="0x2D18" />
         <Limb Name="gKingsChamberDekuGuardHeadLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_HEAD" Offset="0x2D24" />
         <Limb Name="gKingsChamberDekuGuardStalkLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_STALK" Offset="0x2D30" />

@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define OBJMURE3_PARAM_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJMURE3_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define OBJMURE3_PARAM_RUPEEINDEX(thisx) (((thisx)->params >> 13) & 7)
 
 struct ObjMure3;

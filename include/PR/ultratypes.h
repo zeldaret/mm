@@ -1,12 +1,12 @@
-#ifndef _ULTRATYPES_H_
-#define _ULTRATYPES_H_
+#ifndef PR_ULTRATYPES_H
+#define PR_ULTRATYPES_H
 
 typedef signed char            s8;
 typedef unsigned char          u8;
 typedef signed short int       s16;
 typedef unsigned short int     u16;
-typedef signed int             s32;
-typedef unsigned int           u32;
+typedef signed long            s32;
+typedef unsigned long          u32;
 typedef signed long long int   s64;
 typedef unsigned long long int u64;
 
@@ -22,27 +22,20 @@ typedef volatile s64 vs64;
 typedef float  f32;
 typedef double f64;
 
+#if !defined(_SIZE_T)
+#define _SIZE_T
+#if defined(_MIPS_SZLONG) && (_MIPS_SZLONG == 64)
+typedef unsigned long size_t;
+#else
+typedef unsigned int  size_t;
+#endif
+#endif
+
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
+
+// TODO: move this somewhere else
 typedef void* TexturePtr;
-
-typedef long int Mtx_t[4][4];
-typedef union {
-    Mtx_t m;
-    struct {
-        u16 intPart[4][4];
-        u16 fracPart[4][4];
-    };
-    long long int forc_structure_alignment;
-} Mtx; // size = 0x40
-
-typedef float MtxF_t[4][4];
-typedef union {
-    MtxF_t mf;
-    struct {
-        float xx, yx, zx, wx,
-              xy, yy, zy, wy,
-              xz, yz, zz, wz,
-              xw, yw, zw, ww;
-    };
-} MtxF; // size = 0x40
 
 #endif

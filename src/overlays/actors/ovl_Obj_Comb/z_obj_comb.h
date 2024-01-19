@@ -19,7 +19,7 @@ typedef struct ObjComb {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ObjCombActionFunc actionFunc;
     /* 0x148 */ ColliderJntSph collider;
-    /* 0x168 */ ColliderJntSphElement colliderElement;
+    /* 0x168 */ ColliderJntSphElement colliderElements[1];
     /* 0x1A8 */ s16 unk_1A8;
     /* 0x1AA */ s16 unk_1AA;
     /* 0x1AC */ s16 unk_1AC;

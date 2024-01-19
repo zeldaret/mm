@@ -1,11 +1,11 @@
 ﻿<Root>
     <!-- Assets for Honey & Darling -->
     <File Name="object_mu" Segment="6">
-        <Animation Name="gHoneyAndDarlingCupCheeksLoopAnim" Offset="0x1F74" />
-        <Animation Name="gHoneyAndDarlingHugLoopAnim" Offset="0x2F64" />
-        <Animation Name="gHoneyAndDarlingGameDanceLoopAnim" Offset="0x4904" />
-        <Animation Name="gHoneyAndDarlingHoldHandsLoopAnim" Offset="0x5304" />
-        <Animation Name="gHoneyAndDarlingIdleAnim" Offset="0x53E0" />
+        <Animation Name="gHoneyAndDarlingCupCheeksLoopAnim" Offset="0x1F74" /> <!-- Original name is "tg_betabeta" -->
+        <Animation Name="gHoneyAndDarlingHugLoopAnim" Offset="0x2F64" /> <!-- Original name is "tg_dakisime" -->
+        <Animation Name="gHoneyAndDarlingGameDanceLoopAnim" Offset="0x4904" /> <!-- Original name is "tg_dance" -->
+        <Animation Name="gHoneyAndDarlingHoldHandsLoopAnim" Offset="0x5304" /> <!-- Original name is "tg_ityaita" -->
+        <Animation Name="gHoneyAndDarlingIdleAnim" Offset="0x53E0" /> <!-- Original name is "tg_matsu" -->
         <Texture Name="gHoneyAndDarlingTLUT" OutName="honey_and_darling_tlut" Format="rgba16" Width="16" Height="16" Offset="0x53F0" />
         <Texture Name="gHoneyAndDarlingShirtsAndShoesTex" OutName="honey_and_darling_shirts_and_shoes" Format="i8" Width="16" Height="16" Offset="0x55F0" />
         <Texture Name="gHoneyAndDarlingWomanDressTex" OutName="honey_and_darling_woman_dress" Format="ci8" Width="16" Height="16" Offset="0x56F0" />
@@ -58,6 +58,6 @@
         <Limb Name="gHoneyAndDarlingWomanRightHandLimb" Type="Standard" EnumName="HONEY_AND_DARLING_LIMB_WOMAN_RIGHT_HAND" Offset="0xB248" />
         <Limb Name="gHoneyAndDarlingWomanHeadLimb" Type="Standard" EnumName="HONEY_AND_DARLING_LIMB_WOMAN_HEAD" Offset="0xB254" />
         <Skeleton Name="gHoneyAndDarlingSkel" Type="Flex" LimbType="Standard" LimbNone="HONEY_AND_DARLING_LIMB_NONE" LimbMax="HONEY_AND_DARLING_LIMB_MAX" EnumName="HoneyAndDarlingLimb" Offset="0xB2B0" />
-        <Animation Name="gHoneyAndDarlingSurpiseAnim" Offset="0xBAC4" />
+        <Animation Name="gHoneyAndDarlingSurpiseAnim" Offset="0xBAC4" /> <!-- Original name is "tg_odoroku" -->
     </File>
 </Root>

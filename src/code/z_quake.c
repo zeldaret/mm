@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "libc/string.h"
 #include "z64quake.h"
 #include "z64view.h"
 
@@ -55,7 +56,7 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 yOffset, f32
         atEyeOffset.x = 0;
         atEyeOffset.y = 0;
         atEyeOffset.z = 0;
-        OLib_Vec3fDiffToVecGeo(&eyeToAtGeo, eye, at);
+        eyeToAtGeo = OLib_Vec3fDiffToVecGeo(eye, at);
 
         // y shake
         geo.r = req->y * yOffset;
@@ -63,7 +64,7 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 yOffset, f32
         geo.pitch = eyeToAtGeo.pitch + req->orientation.x + 0x4000;
         geo.yaw = eyeToAtGeo.yaw + req->orientation.y;
         // apply y shake
-        OLib_AddVecGeoToVec3f(&atEyeOffset, &atEyeOffset, &geo);
+        atEyeOffset = OLib_AddVecGeoToVec3f(&atEyeOffset, &geo);
 
         // x shake
         geo.r = req->x * xOffset;
@@ -71,7 +72,7 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 yOffset, f32
         geo.pitch = eyeToAtGeo.pitch + req->orientation.x;
         geo.yaw = eyeToAtGeo.yaw + req->orientation.y + 0x4000;
         // apply x shake
-        OLib_AddVecGeoToVec3f(&atEyeOffset, &atEyeOffset, &geo);
+        atEyeOffset = OLib_AddVecGeoToVec3f(&atEyeOffset, &geo);
     } else {
         atEyeOffset.x = 0;
         atEyeOffset.y = req->y * yOffset;
@@ -81,7 +82,7 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 yOffset, f32
         geo.pitch = req->orientation.x;
         geo.yaw = req->orientation.y;
 
-        OLib_AddVecGeoToVec3f(&atEyeOffset, &atEyeOffset, &geo);
+        atEyeOffset = OLib_AddVecGeoToVec3f(&atEyeOffset, &geo);
     }
 
     shake->atOffset = shake->eyeOffset = atEyeOffset;
@@ -174,7 +175,7 @@ QuakeRequest* Quake_RequestImpl(Camera* camera, u32 type) {
     s16 index = Quake_GetFreeIndex();
     QuakeRequest* req = &sQuakeRequests[index];
 
-    __osMemset(req, 0, sizeof(QuakeRequest));
+    memset(req, 0, sizeof(QuakeRequest));
 
     req->camera = camera;
     req->camId = camera->camId;
@@ -183,7 +184,7 @@ QuakeRequest* Quake_RequestImpl(Camera* camera, u32 type) {
 
     // Add a unique random identifier to the upper bits of the index
     // The `~3` assumes there are only 4 requests
-    req->index = index + ((s16)(Rand_ZeroOne() * 0x10000) & ~3);
+    req->index = index + (TRUNCF_BINANG(Rand_ZeroOne() * 0x10000) & ~3);
 
     sQuakeRequestCount++;
 
@@ -752,7 +753,7 @@ void Distortion_Update(void) {
             player = GET_PLAYER(play);
 
             if (player != NULL) {
-                Actor_GetWorldPosShapeRot(&playerPosRot, &player->actor);
+                playerPosRot = Actor_GetWorldPosShapeRot(&player->actor);
             }
 
             depthPhaseStep = 359.2f;

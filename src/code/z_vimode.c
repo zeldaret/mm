@@ -1,5 +1,7 @@
 #include "global.h"
-#include "ultra64/viint.h"
+#include "debug.h"
+#include "z64vimode.h"
+#include "PR/viint.h"
 
 typedef struct {
     /* 0x00 */ u32 burst;
@@ -75,9 +77,9 @@ void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 ant
     yScaleHiOddField = modeF ? (loResInterlaced ? 0x3000000 : 0x2000000) : 0;
 
     viMode->type = type;
-    viMode->comRegs.ctrl = OS_VI_UNK2000 | OS_VI_UNK1000 | OS_VI_GAMMA | OS_VI_GAMMA_DITHER |
-                           (!loResDeinterlaced ? OS_VI_UNK40 : 0) | (antialiasOn ? OS_VI_DIVOT : 0) |
-                           (fb32Bit ? OS_VI_UNK2 | OS_VI_UNK1 : OS_VI_UNK2);
+    viMode->comRegs.ctrl = VI_CTRL_PIXEL_ADV_3 | VI_CTRL_GAMMA_ON | VI_CTRL_GAMMA_DITHER_ON |
+                           (!loResDeinterlaced ? VI_CTRL_SERRATE_ON : 0) | (antialiasOn ? VI_CTRL_DIVOT_ON : 0) |
+                           (fb32Bit ? VI_CTRL_TYPE_32 : VI_CTRL_TYPE_16);
 
     if (modeLAN1) {
         // Anti-aliased, fetch extra lines as-needed
@@ -142,7 +144,7 @@ void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 ant
         viMode->fldRegs[0].vBurst = ptr->vBurst;
         viMode->fldRegs[1].vBurst = ptr->vBurst;
     } else {
-        __assert("../z_vimode.c", 216);
+        _dbg_hungup("../z_vimode.c", 216);
     }
 
     viMode->comRegs.hStart += (leftAdjust << 16) + (s16)rightAdjust;
@@ -153,14 +155,14 @@ void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 ant
         viMode->comRegs.vSync++;
         if (tvType == OS_TV_MPAL) {
             viMode->comRegs.hSync += HSYNC(1, 4);
-            viMode->comRegs.leap += LEAP((u16)-4, (u16)-2);
+            viMode->comRegs.leap += LEAP(-4, -2);
         }
     } else {
-        viMode->fldRegs[0].vStart += START((u16)-3, (u16)-2);
+        viMode->fldRegs[0].vStart += START(-3, -2);
         if (tvType == OS_TV_MPAL) {
-            viMode->fldRegs[0].vBurst += BURST((u8)-2, (u8)-1, 12, -1);
+            viMode->fldRegs[0].vBurst += BURST(-2, -1, 12, -1);
         } else if (tvType == OS_TV_PAL) {
-            viMode->fldRegs[1].vBurst += BURST((u8)-2, (u8)-1, 2, 0);
+            viMode->fldRegs[1].vBurst += BURST(-2, -1, 2, 0);
         }
     }
 
@@ -244,22 +246,22 @@ void ViMode_ConfigureFeatures(ViMode* viMode, s32 viFeatures) {
     u32 ctrl = viMode->customViMode.comRegs.ctrl;
 
     if (viFeatures & OS_VI_GAMMA_ON) {
-        ctrl |= OS_VI_GAMMA;
+        ctrl |= VI_CTRL_GAMMA_ON;
     }
     if (viFeatures & OS_VI_GAMMA_OFF) {
-        ctrl &= ~OS_VI_GAMMA;
+        ctrl &= ~VI_CTRL_GAMMA_ON;
     }
     if (viFeatures & OS_VI_GAMMA_DITHER_ON) {
-        ctrl |= OS_VI_GAMMA_DITHER;
+        ctrl |= VI_CTRL_GAMMA_DITHER_ON;
     }
     if (viFeatures & OS_VI_GAMMA_DITHER_OFF) {
-        ctrl &= ~OS_VI_GAMMA_DITHER;
+        ctrl &= ~VI_CTRL_GAMMA_DITHER_ON;
     }
     if (viFeatures & OS_VI_DIVOT_ON) {
-        ctrl |= OS_VI_DIVOT;
+        ctrl |= VI_CTRL_DIVOT_ON;
     }
     if (viFeatures & OS_VI_DIVOT_OFF) {
-        ctrl &= ~OS_VI_DIVOT;
+        ctrl &= ~VI_CTRL_DIVOT_ON;
     }
     viMode->customViMode.comRegs.ctrl = ctrl;
 }

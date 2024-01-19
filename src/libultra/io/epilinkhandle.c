@@ -1,4 +1,4 @@
-#include "global.h"
+#include "ultra64.h"
 
 s32 osEPiLinkHandle(OSPiHandle* handle) {
     u32 saveMask = __osDisableInt();

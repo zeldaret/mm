@@ -17,15 +17,15 @@ void ObjKinoko_Update(Actor* thisx, PlayState* play);
 void ObjKinoko_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Kinoko_InitVars = {
-    ACTOR_OBJ_KINOKO,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjKinoko),
-    (ActorFunc)ObjKinoko_Init,
-    (ActorFunc)ObjKinoko_Destroy,
-    (ActorFunc)ObjKinoko_Update,
-    (ActorFunc)ObjKinoko_Draw,
+    /**/ ACTOR_OBJ_KINOKO,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjKinoko),
+    /**/ ObjKinoko_Init,
+    /**/ ObjKinoko_Destroy,
+    /**/ ObjKinoko_Update,
+    /**/ ObjKinoko_Draw,
 };
 
 void ObjKinoko_Init(Actor* thisx, PlayState* play) {
@@ -42,11 +42,11 @@ void ObjKinoko_Update(Actor* thisx, PlayState* play) {
     if (player->currentMask != PLAYER_MASK_SCENTS) {
         thisx->draw = NULL;
         thisx->hintId = TATL_HINT_ID_NONE;
-        thisx->flags &= ~ACTOR_FLAG_1;
+        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
         thisx->draw = ObjKinoko_Draw;
         thisx->hintId = TATL_HINT_ID_MUSHROOM;
-        thisx->flags |= ACTOR_FLAG_1;
+        thisx->flags |= ACTOR_FLAG_TARGETABLE;
         if (Actor_HasParent(thisx, play)) {
             Flags_SetCollectible(play, OBJ_KINOKO_GET_FLAG(thisx));
             Actor_Kill(thisx);

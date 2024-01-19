@@ -1,81 +1,94 @@
 ﻿<Root>
+    <!-- Object file for Tingle -->
     <File Name="object_bal" Segment="6">
-        <Animation Name="object_bal_Anim_0005FC" Offset="0x5FC" /> <!-- Original name is "bal_fly" -->
-        <Animation Name="object_bal_Anim_000840" Offset="0x840" /> <!-- Original name is "bal_fly2" -->
-        <Animation Name="object_bal_Anim_000C78" Offset="0xC78" /> <!-- Original name is "bal_kaiten" ("rotation; revolution; turn; spin​") -->
-        <Animation Name="object_bal_Anim_001804" Offset="0x1804" /> <!-- Original name is "bal_kami" ("paper​") -->
-        <DList Name="object_bal_DL_004000" Offset="0x4000" />
-        <DList Name="object_bal_DL_004108" Offset="0x4108" />
-        <DList Name="object_bal_DL_0041E8" Offset="0x41E8" />
-        <DList Name="object_bal_DL_0042A8" Offset="0x42A8" />
-        <DList Name="object_bal_DL_004368" Offset="0x4368" />
-        <DList Name="object_bal_DL_004448" Offset="0x4448" />
-        <DList Name="object_bal_DL_004508" Offset="0x4508" />
-        <DList Name="object_bal_DL_0045C8" Offset="0x45C8" />
-        <DList Name="object_bal_DL_004980" Offset="0x4980" />
-        <DList Name="object_bal_DL_004BA0" Offset="0x4BA0" />
-        <DList Name="object_bal_DL_004CA0" Offset="0x4CA0" />
-        <DList Name="object_bal_DL_004D58" Offset="0x4D58" />
-        <DList Name="object_bal_DL_004E40" Offset="0x4E40" />
-        <DList Name="object_bal_DL_004F00" Offset="0x4F00" />
-        <DList Name="object_bal_DL_005000" Offset="0x5000" />
-        <DList Name="object_bal_DL_0050F8" Offset="0x50F8" />
-        <DList Name="object_bal_DL_0051E0" Offset="0x51E0" />
-        <DList Name="object_bal_DL_0052A0" Offset="0x52A0" />
-        <Texture Name="object_bal_TLUT_0053B0" OutName="tlut_0053B0" Format="rgba16" Width="4" Height="4" Offset="0x53B0" />
-        <Texture Name="object_bal_Tex_0053D0" OutName="tex_0053D0" Format="rgba16" Width="16" Height="16" Offset="0x53D0" />
-        <Texture Name="object_bal_Tex_0055D0" OutName="tex_0055D0" Format="rgba16" Width="32" Height="32" Offset="0x55D0" />
-        <Texture Name="object_bal_Tex_005DD0" OutName="tex_005DD0" Format="rgba16" Width="16" Height="16" Offset="0x5DD0" />
-        <Texture Name="object_bal_Tex_005FD0" OutName="tex_005FD0" Format="rgba16" Width="8" Height="8" Offset="0x5FD0" />
-        <Texture Name="object_bal_Tex_006050" OutName="tex_006050" Format="rgba16" Width="32" Height="64" Offset="0x6050" />
-        <Texture Name="object_bal_Tex_007050" OutName="tex_007050" Format="rgba16" Width="8" Height="8" Offset="0x7050" />
-        <Texture Name="object_bal_Tex_0070D0" OutName="tex_0070D0" Format="rgba16" Width="16" Height="16" Offset="0x70D0" />
-        <Texture Name="object_bal_Tex_0072D0" OutName="tex_0072D0" Format="rgba16" Width="64" Height="32" Offset="0x72D0" />
-        <Texture Name="object_bal_Tex_0082D0" OutName="tex_0082D0" Format="rgba16" Width="16" Height="32" Offset="0x82D0" />
-        <Texture Name="object_bal_Tex_0086D0" OutName="tex_0086D0" Format="rgba16" Width="32" Height="16" Offset="0x86D0" />
-        <Texture Name="object_bal_Tex_008AD0" OutName="tex_008AD0" Format="rgba16" Width="16" Height="16" Offset="0x8AD0" />
-        <Texture Name="object_bal_Tex_008CD0" OutName="tex_008CD0" Format="ci4" Width="64" Height="64" Offset="0x8CD0" />
-        <Texture Name="object_bal_Tex_0094D0" OutName="tex_0094D0" Format="rgba16" Width="32" Height="64" Offset="0x94D0" />
-        <Limb Name="object_bal_Standardlimb_00A4D0" Type="Standard" EnumName="OBJECT_BAL_LIMB_01" Offset="0xA4D0" />
-        <Limb Name="object_bal_Standardlimb_00A4DC" Type="Standard" EnumName="OBJECT_BAL_LIMB_02" Offset="0xA4DC" />
-        <Limb Name="object_bal_Standardlimb_00A4E8" Type="Standard" EnumName="OBJECT_BAL_LIMB_03" Offset="0xA4E8" />
-        <Limb Name="object_bal_Standardlimb_00A4F4" Type="Standard" EnumName="OBJECT_BAL_LIMB_04" Offset="0xA4F4" />
-        <Limb Name="object_bal_Standardlimb_00A500" Type="Standard" EnumName="OBJECT_BAL_LIMB_05" Offset="0xA500" />
-        <Limb Name="object_bal_Standardlimb_00A50C" Type="Standard" EnumName="OBJECT_BAL_LIMB_06" Offset="0xA50C" />
-        <Limb Name="object_bal_Standardlimb_00A518" Type="Standard" EnumName="OBJECT_BAL_LIMB_07" Offset="0xA518" />
-        <Limb Name="object_bal_Standardlimb_00A524" Type="Standard" EnumName="OBJECT_BAL_LIMB_08" Offset="0xA524" />
-        <Limb Name="object_bal_Standardlimb_00A530" Type="Standard" EnumName="OBJECT_BAL_LIMB_09" Offset="0xA530" />
-        <Limb Name="object_bal_Standardlimb_00A53C" Type="Standard" EnumName="OBJECT_BAL_LIMB_0A" Offset="0xA53C" />
-        <Limb Name="object_bal_Standardlimb_00A548" Type="Standard" EnumName="OBJECT_BAL_LIMB_0B" Offset="0xA548" />
-        <Limb Name="object_bal_Standardlimb_00A554" Type="Standard" EnumName="OBJECT_BAL_LIMB_0C" Offset="0xA554" />
-        <Limb Name="object_bal_Standardlimb_00A560" Type="Standard" EnumName="OBJECT_BAL_LIMB_0D" Offset="0xA560" />
-        <Limb Name="object_bal_Standardlimb_00A56C" Type="Standard" EnumName="OBJECT_BAL_LIMB_0E" Offset="0xA56C" />
-        <Limb Name="object_bal_Standardlimb_00A578" Type="Standard" EnumName="OBJECT_BAL_LIMB_0F" Offset="0xA578" />
-        <Limb Name="object_bal_Standardlimb_00A584" Type="Standard" EnumName="OBJECT_BAL_LIMB_10" Offset="0xA584" />
-        <Limb Name="object_bal_Standardlimb_00A590" Type="Standard" EnumName="OBJECT_BAL_LIMB_11" Offset="0xA590" />
-        <Limb Name="object_bal_Standardlimb_00A59C" Type="Standard" EnumName="OBJECT_BAL_LIMB_12" Offset="0xA59C" />
-        <Limb Name="object_bal_Standardlimb_00A5A8" Type="Standard" EnumName="OBJECT_BAL_LIMB_13" Offset="0xA5A8" />
-        <Limb Name="object_bal_Standardlimb_00A5B4" Type="Standard" EnumName="OBJECT_BAL_LIMB_14" Offset="0xA5B4" />
-        <Limb Name="object_bal_Standardlimb_00A5C0" Type="Standard" EnumName="OBJECT_BAL_LIMB_15" Offset="0xA5C0" />
-        <Limb Name="object_bal_Standardlimb_00A5CC" Type="Standard" EnumName="OBJECT_BAL_LIMB_16" Offset="0xA5CC" />
-        <Limb Name="object_bal_Standardlimb_00A5D8" Type="Standard" EnumName="OBJECT_BAL_LIMB_17" Offset="0xA5D8" />
-        <Limb Name="object_bal_Standardlimb_00A5E4" Type="Standard" EnumName="OBJECT_BAL_LIMB_18" Offset="0xA5E4" />
-        <Limb Name="object_bal_Standardlimb_00A5F0" Type="Standard" EnumName="OBJECT_BAL_LIMB_19" Offset="0xA5F0" />
-        <Limb Name="object_bal_Standardlimb_00A5FC" Type="Standard" EnumName="OBJECT_BAL_LIMB_1A" Offset="0xA5FC" />
-        <Limb Name="object_bal_Standardlimb_00A608" Type="Standard" EnumName="OBJECT_BAL_LIMB_1B" Offset="0xA608" />
-        <Limb Name="object_bal_Standardlimb_00A614" Type="Standard" EnumName="OBJECT_BAL_LIMB_1C" Offset="0xA614" />
-        <Limb Name="object_bal_Standardlimb_00A620" Type="Standard" EnumName="OBJECT_BAL_LIMB_1D" Offset="0xA620" />
-        <Limb Name="object_bal_Standardlimb_00A62C" Type="Standard" EnumName="OBJECT_BAL_LIMB_1E" Offset="0xA62C" />
-        <Limb Name="object_bal_Standardlimb_00A638" Type="Standard" EnumName="OBJECT_BAL_LIMB_1F" Offset="0xA638" />
-        <Limb Name="object_bal_Standardlimb_00A644" Type="Standard" EnumName="OBJECT_BAL_LIMB_20" Offset="0xA644" />
-        <Skeleton Name="object_bal_Skel_00A6D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BAL_LIMB_NONE" LimbMax="OBJECT_BAL_LIMB_MAX" EnumName="ObjectBalLimb" Offset="0xA6D0" />
-        <Animation Name="object_bal_Anim_00A7DC" Offset="0xA7DC" /> <!-- Original name is "bal_put" -->
-        <Animation Name="object_bal_Anim_00B1E8" Offset="0xB1E8" /> <!-- Original name is "bal_talk" -->
-        <Animation Name="object_bal_Anim_00B604" Offset="0xB604" /> <!-- Original name is "bal_talk2" -->
-        <Animation Name="object_bal_Anim_00C498" Offset="0xC498" /> <!-- Original name is "bal_talk3" -->
-        <Animation Name="object_bal_Anim_00C8D8" Offset="0xC8D8" /> <!-- Original name is "bal_talk4" -->
-        <Animation Name="object_bal_Anim_00CB78" Offset="0xCB78" /> <!-- Original name is "bal_tereru" ("to be shy; to be bashful") -->
-        <Animation Name="object_bal_Anim_00D530" Offset="0xD530" /> <!-- Original name is "bal_wait" -->
+
+        <!-- Animations 1 -->
+        <Animation Name="gTingleFloatIdleAnim" Offset="0x5FC" /> <!-- Original name is "bal_fly"-->
+        <Animation Name="gTingleFallAnim" Offset="0x840" /> <!-- Original name is "bal_fly2"-->
+        <Animation Name="gTingleSpinAnim" Offset="0xC78" /> <!-- Original name is "bal_kaiten" ("rotation; revolution; turn; spin​") -->
+        <Animation Name="gTingleFloatThrowConfettiAnim" Offset="0x1804" /> <!-- Original name is "bal_kami" ("paper​")-->
+
+        <!-- Model Pieces -->
+        <DList Name="gTinglePelvisDL" Offset="0x4000" />
+        <DList Name="gTingleLeftFootDL" Offset="0x4108" />
+        <DList Name="gTingleLeftShinDL" Offset="0x41E8" />
+        <DList Name="gTingleLeftThighDL" Offset="0x42A8" />
+        <DList Name="gTingleRightFootDL" Offset="0x4368" />
+        <DList Name="gTingleRightShinDL" Offset="0x4448" />
+        <DList Name="gTingleRightThighDL" Offset="0x4508" />
+        <DList Name="gTingleHeadDL" Offset="0x45C8" />
+        <DList Name="gTingleTorsoDL" Offset="0x4980" />
+        <DList Name="gTingleLeftHandDL" Offset="0x4BA0" />
+        <DList Name="gTingleMapDL" Offset="0x4CA0" />
+        <DList Name="gTingleLeftForearmDL" Offset="0x4D58" />
+        <DList Name="gTingleLeftUpperArmDL" Offset="0x4E40" />
+        <DList Name="gTingleRightHandDL" Offset="0x4F00" />
+        <DList Name="gTinglePenDL" Offset="0x5000" />
+        <DList Name="gTingleRightForearmDL" Offset="0x50F8" />
+        <DList Name="gTingleRightUpperArmDL" Offset="0x51E0" />
+        <DList Name="gTingleBalloonDL" Offset="0x52A0" />
+
+        <!-- Textures -->
+        <Texture Name="gTingleMapTLUT" OutName="tingle_map_tlut" Format="rgba16" Width="4" Height="4" Offset="0x53B0" />
+        <Texture Name="gTingleBriefsTex" OutName="tingle_briefs" Format="rgba16" Width="16" Height="16" Offset="0x53D0" />
+        <Texture Name="gTingleTopFrontTex" OutName="tingle_top" Format="rgba16" Width="32" Height="32" Offset="0x55D0" />
+        <Texture Name="gTingleBalloonTex" OutName="tingle_balloon" Format="rgba16" Width="16" Height="16" Offset="0x5DD0" />
+        <Texture Name="gTingleBackpackTex" OutName="tingle_backpack" Format="rgba16" Width="8" Height="8" Offset="0x5FD0" />
+        <Texture Name="gTingleEyeOpenTex" OutName="tingle_eye_open" Format="rgba16" Width="32" Height="64" Offset="0x6050" />
+        <Texture Name="gTingleBodysuitTex" OutName="tingle_bodysuit" Format="rgba16" Width="8" Height="8" Offset="0x7050" />
+        <Texture Name="gTingleNostrilTex" OutName="tingle_nostril" Format="rgba16" Width="16" Height="16" Offset="0x70D0" />
+        <Texture Name="gTingleMouthTex" OutName="tingle_mouth" Format="rgba16" Width="64" Height="32" Offset="0x72D0" />
+        <Texture Name="gTingleNoseSideTex" OutName="tingle_nose" Format="rgba16" Width="16" Height="32" Offset="0x82D0" />
+        <Texture Name="gTingleHandTex" OutName="tingle_hand" Format="rgba16" Width="32" Height="16" Offset="0x86D0" />
+        <Texture Name="gTinglePenTopTex" OutName="tingle_pen_top" Format="rgba16" Width="16" Height="16" Offset="0x8AD0" />
+        <Texture Name="gTingleMapTex" OutName="tingle_map" Format="ci4" Width="64" Height="64" Offset="0x8CD0" />
+        <Texture Name="gTingleEyeClosedTex" OutName="tingle_eye_closed" Format="rgba16" Width="32" Height="64" Offset="0x94D0" />
+
+        <!-- Skeleton -->
+        <Limb Name="gTingleRootLimb" Type="Standard" EnumName="TINGLE_LIMB_ROOT" Offset="0xA4D0" />
+        <Limb Name="gTinglePelvisLimb" Type="Standard" EnumName="TINGLE_LIMB_PELVIS" Offset="0xA4DC" />
+        <Limb Name="gTingleUpperBodyRootLimb" Type="Standard" EnumName="TINGLE_LIMB_UPPER_BODY_ROOT" Offset="0xA4E8" />
+        <Limb Name="gTingleUpperBodyWrapperLimb" Type="Standard" EnumName="TINGLE_LIMB_UPPER_BODY_WRAPPER" Offset="0xA4F4" />
+        <Limb Name="gTingleBalloonRootLimb" Type="Standard" EnumName="TINGLE_LIMB_BALLOON_ROOT" Offset="0xA500" />
+        <Limb Name="gTingleBalloonLimb" Type="Standard" EnumName="TINGLE_LIMB_BALLOON" Offset="0xA50C" />
+        <Limb Name="gTingleRightArmRootLimb" Type="Standard" EnumName="TINGLE_LIMB_RIGHT_ARM_ROOT" Offset="0xA518" />
+        <Limb Name="gTingleRightArmWrapperLimb" Type="Standard" EnumName="TINGLE_LIMB_RIGHT_ARM_WRAPPER" Offset="0xA524" />
+        <Limb Name="gTingleRightUpperArmLimb" Type="Standard" EnumName="TINGLE_LIMB_RIGHT_UPPER_ARM" Offset="0xA530" />
+        <Limb Name="gTingleRightForearmLimb" Type="Standard" EnumName="TINGLE_LIMB_RIGHT_FOREARM" Offset="0xA53C" />
+        <Limb Name="gTingleRightHandRootLimb" Type="Standard" EnumName="TINGLE_LIMB_RIGHT_HAND_ROOT" Offset="0xA548" />
+        <Limb Name="gTingleRightHandLimb" Type="Standard" EnumName="TINGLE_LIMB_RIGHT_HAND" Offset="0xA554" />
+        <Limb Name="gTingleHeldPenLimb" Type="Standard" EnumName="TINGLE_LIMB_HELD_PEN" Offset="0xA560" />
+        <Limb Name="gTingleLeftArmRootLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_ARM_ROOT" Offset="0xA56C" />
+        <Limb Name="gTingleLeftArmWrapperLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_ARM_WRAPPER" Offset="0xA578" />
+        <Limb Name="gTingleLeftUpperArmLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_UPPER_ARM" Offset="0xA584" />
+        <Limb Name="gTingleLeftForearmLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_FOREARM" Offset="0xA590" />
+        <Limb Name="gTingleLeftHandRootLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_HAND_ROOT" Offset="0xA59C" />
+        <Limb Name="gTingleLeftHandLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_HAND" Offset="0xA5A8" />
+        <Limb Name="gTingleHeldMapLimb" Type="Standard" EnumName="TINGLE_LIMB_HELD_MAP" Offset="0xA5B4" />
+        <Limb Name="gTingleTorsoLimb" Type="Standard" EnumName="TINGLE_LIMB_TORSO" Offset="0xA5C0" />
+        <Limb Name="gTingleHeadLimb" Type="Standard" EnumName="TINGLE_LIMB_HEAD" Offset="0xA5CC" />
+        <Limb Name="gTingleRightLegRootLimb" Type="Standard" EnumName="TINGLE_LIMB_RIGHT_LEG_ROOT" Offset="0xA5D8" /> 
+        <Limb Name="gTingleRightThighLimb" Type="Standard" EnumName="TINGLE_LIMB_RIGHT_THIGH" Offset="0xA5E4" />
+        <Limb Name="gTingleRightLowerLegRootLimb" Type="Standard" EnumName="TINGLE_LIMB_RIGHT_LOWER_LEG_ROOT" Offset="0xA5F0" />
+        <Limb Name="gTingleRightShinLimb" Type="Standard" EnumName="TINGLE_LIMB_RIGHT_SHIN" Offset="0xA5FC" />
+        <Limb Name="gTingleRightFootLimb" Type="Standard" EnumName="TINGLE_LIMB_RIGHT_FOOT" Offset="0xA608" />
+        <Limb Name="gTingleLeftLegRootLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_LEG_ROOT" Offset="0xA614" />
+        <Limb Name="gTingleLeftThighLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_THIGH" Offset="0xA620" />
+        <Limb Name="gTingleLeftLowerLegRootLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_LOWER_LEG_ROOT" Offset="0xA62C" />
+        <Limb Name="gTingleLeftShinLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_SHIN" Offset="0xA638" />
+        <Limb Name="gTingleLeftFootLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_FOOT" Offset="0xA644" />
+        <Skeleton Name="gTingleSkel" Type="Flex" LimbType="Standard" LimbNone="TINGLE_LIMB_NONE" LimbMax="TINGLE_LIMB_MAX" EnumName="TingleLimb" Offset="0xA6D0" />
+
+        <!-- Animations 2 -->
+        <Animation Name="gTingleLandAnim" Offset="0xA7DC" /> <!-- Original name is "bal_put"-->
+        <Animation Name="gTingleTwistAnim" Offset="0xB1E8" /> <!-- Original name is "bal_talk" -->
+        <Animation Name="gTingleTalkAnim" Offset="0xB604" /> <!-- Original name is "bal_talk2" -->
+        <Animation Name="gTingleThrowConfettiAnim" Offset="0xC498" /> <!-- Original name is "bal_talk3" -->
+        <Animation Name="gTingleHappyDanceAnim" Offset="0xC8D8" /> <!-- Original name is "bal_talk4" -->
+        <Animation Name="gTingleFloatHideFaceAnim" Offset="0xCB78" /> <!-- Original name is "bal_tereru" ("to be shy; to be bashful") -->
+        <Animation Name="gTingleIdleAnim" Offset="0xD530" /> <!-- Original name is "bal_wait" -->
+		
+        <!-- Misc. -->
         <DList Name="gTingleConfettiDL" Offset="0xD5A0" /> <!-- Original name is "bal_cube32_model" -->
     </File>
 </Root>

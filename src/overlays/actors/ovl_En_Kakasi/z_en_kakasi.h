@@ -11,7 +11,7 @@ typedef void (*EnKakasiActionFunc)(struct EnKakasi*, PlayState*);
 typedef struct EnKakasi {
     /* 0x000 */ PictoActor picto;
     /* 0x148 */ EnKakasiActionFunc actionFunc;
-    /* 0x14C */ SkelAnime skelanime;
+    /* 0x14C */ SkelAnime skelAnime;
     /* 0x190 */ s16 unk190; // camera index for song teaching angles?
     /* 0x192 */ s16 postTeachTimer;
     /* 0x194 */ s16 aboveGroundStatus; // from params, changed to 2 in init
@@ -22,7 +22,7 @@ typedef struct EnKakasi {
     /* 0x1A8 */ s32 unkState1A8;
     /* 0x1AC */ s16 talkState;
     /* 0x1AE */ s16 csIdList[3];
-    /* 0x1B4 */ f32 animeFrameCount;
+    /* 0x1B4 */ f32 animEndFrame;
     /* 0x1B8 */ f32 unkHeight;
     /* 0x1BC */ Vec3f unk1BC; // set by post limbdraw func for one limb
     /* 0x1C8 */ UNK_TYPE1 pad1C8[0x3C];

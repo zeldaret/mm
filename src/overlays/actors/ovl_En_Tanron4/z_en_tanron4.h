@@ -19,8 +19,8 @@ typedef struct EnTanron4 {
     /* 0x15C */ s16 rollTarget;
     /* 0x160 */ f32 timeInfluence;
     /* 0x164 */ SkelAnime skelAnime;
-    /* 0x1A8 */ Vec3s jointTable[OBJECT_TANRON4_LIMB_MAX];
-    /* 0x1EA */ Vec3s morphTable[OBJECT_TANRON4_LIMB_MAX];
+    /* 0x1A8 */ Vec3s jointTable[SEAGULL_LIMB_RIGHT_WING_MAX];
+    /* 0x1EA */ Vec3s morphTable[SEAGULL_LIMB_RIGHT_WING_MAX];
     /* 0x022C */ EnTanron4ActionFunc actionFunc;
 } EnTanron4; // size = 0x230
 

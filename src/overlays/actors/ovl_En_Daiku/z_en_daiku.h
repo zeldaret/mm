@@ -2,6 +2,7 @@
 #define Z_EN_DAIKU_H
 
 #include "global.h"
+#include "objects/object_daiku/object_daiku.h"
 
 struct EnDaiku;
 
@@ -22,8 +23,8 @@ typedef enum {
 typedef struct EnDaiku {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[17];
-    /* 0x1EE */ Vec3s morphTable[17];
+    /* 0x188 */ Vec3s jointTable[OBJECT_DAIKU_LIMB_MAX];
+    /* 0x1EE */ Vec3s morphTable[OBJECT_DAIKU_LIMB_MAX];
     /* 0x254 */ EnDaikuActionFunc actionFunc;
     /* 0x258 */ Path* path;
     /* 0x25C */ s16 unk_25C;
@@ -39,7 +40,7 @@ typedef struct EnDaiku {
     /* 0x27E */ s16 unk_27E;
     /* 0x280 */ s16 unk_280;
     /* 0x282 */ s16 unk_282;
-    /* 0x284 */ f32 unk_284;
+    /* 0x284 */ f32 animEndFrame;
     /* 0x288 */ s16 pathIndex;
     /* 0x28A */ s16 unk_28A;
     /* 0x28C */ s16 unk_28C;

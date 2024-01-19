@@ -8,7 +8,7 @@ struct ObjHunsui;
 
 typedef void (*ObjHunsuiActionFunc)(struct ObjHunsui*, PlayState*);
 
-#define OBJHUNSUI_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJHUNSUI_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define OBJHUNSUI_GET_F80(thisx) (((thisx)->params >> 7) & 0x1F)
 #define OBJHUNSUI_GET_F000(thisx) (((thisx)->params >> 0xC) & 0xF)
 
@@ -27,7 +27,7 @@ typedef struct ObjHunsui {
     /* 0x15C */ ObjHunsuiActionFunc actionFunc;
     /* 0x160 */ s16 unk_160;
     /* 0x164 */ s32 unk_164;
-    /* 0x168 */ s32 unk_168;
+    /* 0x168 */ s32 switchFlag;
     /* 0x16C */ s8 unk_16C;
     /* 0x16D */ s8 unk_16D;
     /* 0x16E */ s8 unk_16E;

@@ -2,6 +2,7 @@
 #define Z_EN_FG_H
 
 #include "global.h"
+#include "objects/object_fr/object_fr.h"
 
 struct EnFg;
 
@@ -9,22 +10,13 @@ typedef void (*EnFgActionFunc)(struct EnFg*, PlayState*);
 
 // Based on the envColor data. Related to params but mostly unused.
 typedef enum {
-    /* 0 */ FG_YELLOW,
-    /* 1 */ FG_CYAN,
-    /* 2 */ FG_PINK,
-    /* 3 */ FG_BLUE,
-    /* 4 */ FG_WHITE,
-    /* 5 */ FG_BLACK // All frogs are blackened when hit by an explosion
-} FrogType;
-
-typedef enum {
-    /* 0 */ FG_DMGEFFECT_NONE,
-    /* 1 */ FG_DMGEFFECT_EXPLOSION, // Bomb or bombchu, not powderkeg
-    /* 2 */ FG_DMGEFFECT_DEKUSTICK,
-    /* 3 */ FG_DMGEFFECT_HOOKSHOT,
-    /* 4 */ FG_DMGEFFECT_ARROW,
-    /* 5 */ FG_DMGEFFECT_ICEARROW
-} FrogDamageEffect;
+    /* 0 */ BETAFROG_YELLOW,
+    /* 1 */ BETAFROG_CYAN,
+    /* 2 */ BETAFROG_PINK,
+    /* 3 */ BETAFROG_BLUE,
+    /* 4 */ BETAFROG_WHITE,
+    /* 5 */ BETAFROG_BLACK // All frogs are blackened when hit by an explosion
+} BetaFrogType;
 
 typedef struct {
     /* 0x00 */ u8 type;
@@ -35,18 +27,18 @@ typedef struct {
     /* 0x20 */ Vec3f unk_20; // Likely acceleration, set to 0 but unused
     /* 0x2C */ Vec3f velocity;
     /* 0x38 */ UNK_TYPE1 unk_38[0x4];
-} EnFgEffectDust; // size = 0x3C
+} BetaFrogEffectDust; // size = 0x3C
 
 typedef struct EnFg {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnFgActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ Vec3s jointTable[24];
-    /* 0x268 */ Vec3s morphTable[24];
+    /* 0x1D8 */ Vec3s jointTable[FROG_LIMB_MAX];
+    /* 0x268 */ Vec3s morphTable[FROG_LIMB_MAX];
     /* 0x2F8 */ s16 timer;
     /* 0x2FA */ s16 bounceCounter;
-    /* 0x2FC */ EnFgEffectDust dustEffect[10];
+    /* 0x2FC */ BetaFrogEffectDust dustEffect[10];
 } EnFg; // size = 0x554
 
 #endif // Z_EN_FG_H

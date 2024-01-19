@@ -40,15 +40,15 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 ActorInit En_Tubo_Trap_InitVars = {
-    ACTOR_EN_TUBO_TRAP,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_DANGEON_KEEP,
-    sizeof(EnTuboTrap),
-    (ActorFunc)EnTuboTrap_Init,
-    (ActorFunc)EnTuboTrap_Destroy,
-    (ActorFunc)EnTuboTrap_Update,
-    (ActorFunc)EnTuboTrap_Draw,
+    /**/ ACTOR_EN_TUBO_TRAP,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_DANGEON_KEEP,
+    /**/ sizeof(EnTuboTrap),
+    /**/ EnTuboTrap_Init,
+    /**/ EnTuboTrap_Destroy,
+    /**/ EnTuboTrap_Update,
+    /**/ EnTuboTrap_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -234,9 +234,9 @@ void EnTuboTrap_Idle(EnTuboTrap* this, PlayState* play) {
     if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.world.pos.y <= player->actor.world.pos.y)) {
         startingRotation = this->actor.home.rot.z;
         if ((startingRotation == 0) || (this->actor.playerHeightRel <= (startingRotation * 10.0f))) {
-            func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
+            Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
-            this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10); // always update and can target
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10); // always update and can target
 
             transformationHeight = sTransformationHeight[player->transformation];
 
@@ -253,7 +253,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, PlayState* play) {
 }
 
 void EnTuboTrap_Levitate(EnTuboTrap* this, PlayState* play) {
-    this->actor.shape.rot.y += 5000;
+    this->actor.shape.rot.y += 0x1388;
     Math_ApproachF(&this->actor.world.pos.y, this->targetHeight, 0.8f, 3.0f);
 
     if (fabsf(this->actor.world.pos.y - this->targetHeight) < 10.0f) {
@@ -279,7 +279,7 @@ void EnTuboTrap_FlyAtPlayer(EnTuboTrap* this, PlayState* play) {
         Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
     }
 
-    this->actor.shape.rot.y += 5000;
+    this->actor.shape.rot.y += 0x1388;
     EnTuboTrap_HandleImpact(this, play);
 }
 

@@ -2,6 +2,7 @@
 #define Z_EN_SUTTARI_H
 
 #include "global.h"
+#include "objects/object_boj/object_boj.h"
 #include "overlays/actors/ovl_En_Fsn/z_en_fsn.h"
 
 struct EnSuttari;
@@ -27,14 +28,14 @@ typedef struct EnSuttari {
     /* 0x1EC */ Path* paths[2];
     /* 0x1F4 */ s32 unk1F4[2];
     /* 0x1FC */ UNK_TYPE1 unk_1FC[0x1A];
-    /* 0x216 */ Vec3s jointTable[16];
-    /* 0x276 */ Vec3s morphTable[16];
+    /* 0x216 */ Vec3s jointTable[OBJECT_BOJ_LIMB_MAX];
+    /* 0x276 */ Vec3s morphTable[OBJECT_BOJ_LIMB_MAX];
     /* 0x2D6 */ Vec3s trackTarget;
     /* 0x2DC */ Vec3s headRot;
     /* 0x2E2 */ Vec3s torsoRot;
     /* 0x2E8 */ UNK_TYPE1 unk_2E8[0x12];
-    /* 0x2FA */ s16 unk2FA[16];
-    /* 0x31A */ s16 unk31A[16];
+    /* 0x2FA */ s16 fidgetTableY[OBJECT_BOJ_LIMB_MAX];
+    /* 0x31A */ s16 fidgetTableZ[OBJECT_BOJ_LIMB_MAX];
     /* 0x33A */ UNK_TYPE1 unk_33A[0xB6];
     /* 0x3F0 */ s16 playerDetected;
     /* 0x3F2 */ s16 unk3F2;

@@ -10,8 +10,8 @@ typedef void (*BgIkanaRotaryroomUnkFunc)(Actor*, PlayState*);
 typedef void (*BgIkanaRotaryroomUnkFunc2)(struct BgIkanaRotaryroom*, PlayState*);
 
 #define BGIKANAROTARYROOM_GET_1(thisx) ((thisx)->params & 1)
-#define BGIKANAROTARYROOM_GET_FE(thisx) (((thisx)->params >> 1) & 0x7F)
-#define BGIKANAROTARYROOM_GET_7F00(thisx) (((thisx)->params >> 8) & 0x7F)
+#define BGIKANAROTARYROOM_GET_SWITCH_FLAG_1(thisx) (((thisx)->params >> 1) & 0x7F)
+#define BGIKANAROTARYROOM_GET_SWITCH_FLAG_2(thisx) (((thisx)->params >> 8) & 0x7F)
 
 typedef struct {
     /* 0x00 */ Actor* unk_00;

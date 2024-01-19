@@ -1,7 +1,7 @@
 #ifndef Z_BG_F40_SWLIFT_H
 #define Z_BG_F40_SWLIFT_H
 
-#define BG_F40_SWLIFT_GET_SWITCHFLAG(thisx) ((thisx)->params & 0xFF)
+#define BG_F40_SWLIFT_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0xFF)
 #define BG_F40_SWLIFT_GET_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
 
 #include "global.h"

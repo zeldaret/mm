@@ -25,7 +25,7 @@ typedef struct EnGuardNuts {
     /* 0x228 */ Vec3f guardPos;
     /* 0x234 */ Vec3s headRot;
     /* 0x23A */ Vec3s targetHeadPos;
-    /* 0x240 */ f32 animFrameCount;
+    /* 0x240 */ f32 animEndFrame;
     /* 0x244 */ ColliderCylinder collider;
 } EnGuardNuts; // size = 0x290
 

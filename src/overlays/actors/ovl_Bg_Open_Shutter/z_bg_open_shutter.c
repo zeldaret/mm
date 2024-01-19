@@ -28,15 +28,15 @@ typedef enum {
 } BGOpenShutterDoorState;
 
 ActorInit Bg_Open_Shutter_InitVars = {
-    ACTOR_BG_OPEN_SHUTTER,
-    ACTORCAT_DOOR,
-    FLAGS,
-    OBJECT_OPEN_OBJ,
-    sizeof(BgOpenShutter),
-    (ActorFunc)BgOpenShutter_Init,
-    (ActorFunc)BgOpenShutter_Destroy,
-    (ActorFunc)BgOpenShutter_Update,
-    (ActorFunc)BgOpenShutter_Draw,
+    /**/ ACTOR_BG_OPEN_SHUTTER,
+    /**/ ACTORCAT_DOOR,
+    /**/ FLAGS,
+    /**/ OBJECT_OPEN_OBJ,
+    /**/ sizeof(BgOpenShutter),
+    /**/ BgOpenShutter_Init,
+    /**/ BgOpenShutter_Destroy,
+    /**/ BgOpenShutter_Update,
+    /**/ BgOpenShutter_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -112,8 +112,8 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         Actor_PlaySfx(&this->slidingDoor.dyna.actor, NA_SE_EV_SLIDE_DOOR_OPEN);
-        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->slidingDoor.dyna.actor, player->doorBgCamIndex, 0.0f,
-                             12, 15, 10);
+        Camera_ChangeDoorCam(play->cameraPtrs[CAM_ID_MAIN], &this->slidingDoor.dyna.actor, player->cv.doorBgCamIndex,
+                             0.0f, 12, 15, 10);
         this->unk_164 = 0;
         this->actionFunc = func_80ACAE5C;
         this->slidingDoor.dyna.actor.velocity.y = 0.0f;

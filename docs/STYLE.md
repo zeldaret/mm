@@ -140,7 +140,7 @@ Damage flag enums are not being used at present: we want to wait until we have a
 
 Pre-C99, commas at the end of the last item in an enum will cause a compiler warning, so leave them off.
 
-All compound flag lists (e.g. `ACTOR_FLAG_4 | ACTOR_FLAG_8`) should be listed in *ascending* order
+All compound flag lists (e.g. `ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_FRIENDLY`) should be listed in *ascending* order
 
 ## Arrays
 

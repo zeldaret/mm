@@ -9,8 +9,7 @@ typedef void (*EnOkarinaEffectActionFunc)(struct EnOkarinaEffect*, PlayState*);
 
 typedef struct EnOkarinaEffect {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ u16 unk144;
-    /* 0x146 */ u16 unk146;
+    /* 0x144 */ u16 timer;
     /* 0x148 */ EnOkarinaEffectActionFunc actionFunc;
 } EnOkarinaEffect; // size = 0x14C
 

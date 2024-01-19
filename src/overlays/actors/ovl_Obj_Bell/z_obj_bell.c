@@ -20,15 +20,15 @@ s32 func_80A356D8(ObjBell* this);
 s32 func_80A357A8(ObjBell* this, PlayState* play);
 
 ActorInit Obj_Bell_InitVars = {
-    ACTOR_OBJ_BELL,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_F52_OBJ,
-    sizeof(ObjBell),
-    (ActorFunc)ObjBell_Init,
-    (ActorFunc)ObjBell_Destroy,
-    (ActorFunc)ObjBell_Update,
-    (ActorFunc)ObjBell_Draw,
+    /**/ ACTOR_OBJ_BELL,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_F52_OBJ,
+    /**/ sizeof(ObjBell),
+    /**/ ObjBell_Init,
+    /**/ ObjBell_Destroy,
+    /**/ ObjBell_Update,
+    /**/ ObjBell_Draw,
 };
 
 // Bell Post?
@@ -157,7 +157,7 @@ s32 func_80A356D8(ObjBell* this) {
     scaleProjection = Math_SinS(this->unk_20C) * this->unk_21C;
     this->dyna.actor.world.rot.x = this->dyna.actor.home.rot.x;
     this->unk_220 = scaleProjection;
-    this->dyna.actor.world.rot.x += (s16)scaleProjection;
+    this->dyna.actor.world.rot.x += TRUNCF_BINANG(scaleProjection);
     Math_ApproachF(&this->unk_21C, 0.0f, 0.03f, 70.0f);
     if (this->unk_21C > 0.0f) {
         this->unk_20C -= 0x800;

@@ -69,7 +69,7 @@
  * implementing CRC (Cyclic Redundancy Check) calculation
  * ](http://www.sunshine2k.de/articles/coding/crc/understanding_crc.html)
  */
-#include "global.h"
+#include "ultra64.h"
 
 #define ADDRESS_CRC_MESSAGE_LENGTH 10
 #define ADDRESS_CRC_LENGTH 5

@@ -8,7 +8,7 @@
 #include "z64snap.h"
 #include "objects/object_tsn/object_tsn.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnTsn*)thisx)
 
@@ -30,15 +30,15 @@ void func_80AE0D78(EnTsn* this, PlayState* play);
 void func_80AE0F84(Actor* thisx, PlayState* play);
 
 ActorInit En_Tsn_InitVars = {
-    ACTOR_EN_TSN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TSN,
-    sizeof(EnTsn),
-    (ActorFunc)EnTsn_Init,
-    (ActorFunc)EnTsn_Destroy,
-    (ActorFunc)EnTsn_Update,
-    (ActorFunc)EnTsn_Draw,
+    /**/ ACTOR_EN_TSN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_TSN,
+    /**/ sizeof(EnTsn),
+    /**/ EnTsn_Init,
+    /**/ EnTsn_Destroy,
+    /**/ EnTsn_Update,
+    /**/ EnTsn_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -83,7 +83,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
     this->actor.update = func_80AE0F84;
     this->actor.destroy = NULL;
     this->actor.draw = NULL;
-    this->actor.targetMode = 7;
+    this->actor.targetMode = TARGET_MODE_7;
 
     switch (ENTSN_GET_F(&this->actor)) {
         case ENTSN_F_0:
@@ -117,8 +117,11 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
 
     if (this->unk_1D8 == NULL) {
         Actor_Kill(&this->actor);
-    } else if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_1) {
-        func_800BC154(play, &play->actorCtx, &this->actor, 6);
+        return;
+    }
+
+    if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_1) {
+        Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     }
 }
 
@@ -160,7 +163,7 @@ void func_80ADFF84(EnTsn* this, PlayState* play) {
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
         textId = 0x107E;
-    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_80)) {
             textId = 0x1083;
         } else {
@@ -268,14 +271,14 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE0304(EnTsn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80AE0010;
         this->unk_220 |= 1;
         if (this->actor.textId == 0) {
             func_80ADFF84(this, play);
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 160.0f);
+        Actor_OfferTalk(&this->actor, play, 160.0f);
         this->unk_220 |= 1;
     } else {
         this->unk_220 &= ~1;
@@ -324,7 +327,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
             this->actionFunc = func_80AE0704;
-            if (itemAction == PLAYER_IA_PICTO_BOX) {
+            if (itemAction == PLAYER_IA_PICTOGRAPH_BOX) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
                     if (Snap_CheckFlag(PICTO_VALID_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;
@@ -420,7 +423,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
 
                     case 0x1075:
                     case 0x1078:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         break;
@@ -434,7 +437,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                             this->unk_220 &= ~2;
                             this->actor.focus.pos = this->actor.world.pos;
                             CutsceneManager_Stop(this->actor.csId);
-                            this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+                            this->actor.flags &= ~ACTOR_FLAG_TALK;
                             REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
                         } else {
                             Message_ContinueTextbox(play, 0x10A8);
@@ -448,7 +451,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                         break;
 
                     case 0x107B:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         break;
@@ -458,7 +461,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                     case 0x10A8:
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         func_80AE0698(this, play);
-                        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK;
                         this->actionFunc = func_80AE04C4;
                         break;
 
@@ -498,7 +501,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
 
                     case 0x10A9:
                         func_80AE0698(this, play);
-                        this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK;
                         this->actionFunc = func_80AE04C4;
                         break;
                 }
@@ -530,14 +533,14 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE0C88(EnTsn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80AE0704;
         if ((this->actor.textId == 0x108A) || (this->actor.textId == 0x1091)) {
             this->unk_220 |= 4;
             ENTSN_SET_Z(&this->unk_1D8->actor, true);
         }
-    } else if (this->actor.isTargeted) {
-        func_800B8614(&this->actor, play, 1000.0f);
+    } else if (this->actor.isLockedOn) {
+        Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
 
@@ -550,11 +553,11 @@ void func_80AE0D10(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE0D78(EnTsn* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80AE0D10;
         this->unk_220 |= 4;
-    } else if (this->actor.isTargeted) {
-        func_800B8614(&this->actor, play, 1000.0f);
+    } else if (this->actor.isLockedOn) {
+        Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
 
@@ -571,12 +574,12 @@ void EnTsn_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (this->unk_220 & 1) {
-        Actor_TrackPlayer(play, &this->actor, &this->unk_222, &this->unk_228, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     } else {
-        Math_SmoothStepToS(&this->unk_222.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_222.y, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_228.x, 0, 6, 0x1838, 0x64);
-        Math_SmoothStepToS(&this->unk_228.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->torsoRot.y, 0, 6, 0x1838, 0x64);
     }
 
     if (DECR(this->unk_230) == 0) {
@@ -598,15 +601,15 @@ void func_80AE0F84(Actor* thisx, PlayState* play) {
 
 s32 EnTsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTsn* this = THIS;
-    s16 shifted = this->unk_222.x >> 1;
+    s16 shifted = this->headRot.x >> 1;
 
     if (limbIndex == 15) {
-        rot->x += this->unk_222.y;
+        rot->x += this->headRot.y;
         rot->z += shifted;
     }
 
     if (limbIndex == 8) {
-        rot->x += this->unk_228.y;
+        rot->x += this->torsoRot.y;
         rot->z += shifted;
     }
     return false;

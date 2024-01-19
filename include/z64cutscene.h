@@ -430,7 +430,7 @@ typedef enum {
     /* 0x1F6 */ CS_CMD_ACTOR_CUE_502,
     /* 0x1F7 */ CS_CMD_ACTOR_CUE_503,
     /* 0x1F8 */ CS_CMD_ACTOR_CUE_504,
-    /* 0x1F9 */ CS_CMD_ACTOR_CUE_505,
+    /* 0x1F9 */ CS_CMD_ACTOR_CUE_SOTCS, // Song of Time Cutscenes (Double SoT, Three-Day Reset SoT)
     /* 0x1FA */ CS_CMD_ACTOR_CUE_506,
     /* 0x1FB */ CS_CMD_ACTOR_CUE_507,
     /* 0x1FC */ CS_CMD_ACTOR_CUE_508,
@@ -482,7 +482,7 @@ typedef enum {
     /* 0x22A */ CS_CMD_ACTOR_CUE_554,
     /* 0x22B */ CS_CMD_ACTOR_CUE_555,
     /* 0x22C */ CS_CMD_ACTOR_CUE_556,
-    /* 0x22D */ CS_CMD_ACTOR_CUE_557,
+    /* 0x22D */ CS_CMD_ACTOR_CUE_557, // Couple's Mask cs, Anju cues
     /* 0x22E */ CS_CMD_ACTOR_CUE_558,
     /* 0x22F */ CS_CMD_ACTOR_CUE_559,
     /* 0x230 */ CS_CMD_ACTOR_CUE_560,
@@ -560,8 +560,8 @@ typedef enum {
     /* 0x1B */ CS_MISC_DEST_MOON_CRASH_FIRE_WALL,
     /* 0x1C */ CS_MISC_MOON_CRASH_SKYBOX,
     /* 0x1D */ CS_MISC_PLAYER_FORM_RESTORED,
-    /* 0x1E */ CS_MISC_DISABLE_PLAYER_CSMODE_START_POS,
-    /* 0x1F */ CS_MISC_ENABLE_PLAYER_CSMODE_START_POS,
+    /* 0x1E */ CS_MISC_DISABLE_PLAYER_CSACTION_START_POS,
+    /* 0x1F */ CS_MISC_ENABLE_PLAYER_CSACTION_START_POS,
     /* 0x20 */ CS_MISC_UNIMPLEMENTED_20,
     /* 0x21 */ CS_MISC_SAVE_ENTER_CLOCK_TOWN,
     /* 0x22 */ CS_MISC_RESET_SAVE_FROM_MOON_CRASH,
@@ -579,17 +579,6 @@ typedef union CutsceneData {
     s16 s[2];
     s8  b[4];
 } CutsceneData;
-
-#define BIT_FLAG_TO_SHIFT(flag) \
-    ((flag & 0x80) ? 7 : \
-    (flag & 0x40) ? 6 : \
-    (flag & 0x20) ? 5 : \
-    (flag & 0x10) ? 4 : \
-    (flag & 0x8) ? 3 : \
-    (flag & 0x4) ? 2 : \
-    (flag & 0x2) ? 1 : \
-    (flag & 0x1) ? 0 : \
-    0)
 
 // Do not trigger the scripted cutscene upon any spawn
 #define CS_SPAWN_FLAG_NONE 0xFF
@@ -609,10 +598,6 @@ typedef struct {
     /* 0x6 */ u8 spawn;
     /* 0x7 */ u8 spawnFlags; // See `CS_SPAWN_FLAG_`
 } CutsceneScriptEntry; // size = 0x8
-
-// ZAPD compatibility typedefs
-// TODO: Remove when ZAPD adds support for them
-typedef CutsceneScriptEntry CutsceneEntry;
 
 typedef struct {
     /* 0x00 */ u8 scriptListCount;
@@ -642,13 +627,11 @@ typedef struct {
     /* 0x0C */ s16 hudVisibility; 
     /* 0x0E */ u8 endCam;
     /* 0x0F */ u8 letterboxSize;
-} ActorCutscene; // size = 0x10
-// TODO: rename `ActorCutscene` to `CutsceneEntry` once ZAPD uses `CutsceneScriptEntry`
-// typedef CutsceneEntry ActorCutscene;
+} CutsceneEntry; // size = 0x10
 
 typedef enum {
     /*   -1 */ CS_ID_NONE = -1,
-    // CsId's 0 - 119 are sceneLayer-specific and index `ActorCutscene`
+    // CsId's 0 - 119 are sceneLayer-specific and index `CutsceneEntry`
     /* 0x78 */ CS_ID_GLOBAL_78 = 120,
     /* 0x79 */ CS_ID_GLOBAL_79,
     /* 0x7A */ CS_ID_GLOBAL_7A,
@@ -748,18 +731,21 @@ typedef struct {
     /* 0xA */ s16 relativeTo; // see `CutsceneCamRelativeTo`
 } CsCmdCamPoint; // size = 0xC
 
-typedef enum {
-    /* 0 */ CS_CAM_INTERP_0,
-    /* 1 */ CS_CAM_INTERP_1,
-    /* 2 */ CS_CAM_INTERP_2,
-    /* 3 */ CS_CAM_INTERP_3,
-    /* 4 */ CS_CAM_INTERP_4,
-    /* 5 */ CS_CAM_INTERP_5,
-    /* 6 */ CS_CAM_INTERP_6,
-    /* 7 */ CS_CAM_INTERP_7
+typedef enum CutsceneCamInterpType {
+    /* 0 */ CS_CAM_INTERP_NONE, // values do not change.
+    // values 1-3 only uses a single point from the cmd
+    /* 1 */ CS_CAM_INTERP_SET, // values immediately set to cmd values.
+    /* 2 */ CS_CAM_INTERP_LINEAR, // Lerp to the target position
+    /* 3 */ CS_CAM_INTERP_SCALE, // Step to the target position in increments scaled by the remaining distance
+    // values 4-5 uses multiple points from the cmd
+    /* 4 */ CS_CAM_INTERP_MP_CUBIC, // cubic multi-point (identical to SM64/OoT)
+    /* 5 */ CS_CAM_INTERP_MP_QUAD, // quadratic multi-point
+    // value 6 only uses a single point from the cmd
+    /* 6 */ CS_CAM_INTERP_GEO, // does VecGeo calculations using fov
+    /* 7 */ CS_CAM_INTERP_OFF // interpolation is not processed.
 } CutsceneCamInterpType;
 
-typedef enum {
+typedef enum CutsceneCamRelativeTo {
     /* 0 */ CS_CAM_REL_0,
     /* 1 */ CS_CAM_REL_1,
     /* 2 */ CS_CAM_REL_2,
@@ -768,31 +754,29 @@ typedef enum {
     /* 5 */ CS_CAM_REL_5
 } CutsceneCamRelativeTo;
 
-
 // Roll and Fov Data
-typedef struct {
-    /* 0x0 */ s16 unused0; // unused
+typedef struct CsCmdCamMisc {
+    /* 0x0 */ s16 unused0; // used only in the unused interp function
     /* 0x2 */ s16 roll;
     /* 0x4 */ s16 fov;
     /* 0x6 */ s16 unused1; // unused
 } CsCmdCamMisc; // size = 0x8
 
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x2A */ f32 unk_20;
-    /* 0x24 */ s16 unk_24;
-    /* 0x26 */ s16 unk_26;
-    /* 0x28 */ s16 unk_28;
+typedef struct CutsceneCameraInterp {
+    /* 0x00 */ Vec3f curPos;
+    /* 0x0C */ Vec3f initPos;
+    /* 0x18 */ f32 initFov;
+    /* 0x1C */ f32 initRoll;
+    /* 0x2A */ f32 unk_20; // position adjustment based on fov?
+    /* 0x24 */ s16 curFrame;
+    /* 0x26 */ s16 waypoint;
+    /* 0x28 */ s16 duration;
     /* 0x2A */ s16 numEntries;
     /* 0x1E */ u8 curPoint;
-    /* 0x2D */ u8 unk_2D;
-    /* 0x2E */ UNK_TYPE1 unk_2E[2];
+    /* 0x2D */ u8 type; // See `CutsceneCamInterpType`
 } CutsceneCameraInterp; // size = 0x30
 
-typedef struct {
+typedef struct CutsceneCamera {
     /* 0x00 */ s16 splineIndex;
     /* 0x02 */ s16 cmdIndex;
     /* 0x04 */ s16 splineNeedsInit;
@@ -809,11 +793,11 @@ typedef struct {
 } CutsceneCamera; // size = 0x80
 
 typedef enum {
-    /* 0 */ CS_CAM_STATE_UPDATE_ALL, // Update spline and next spline timer
-    /* 0 */ CS_CAM_STATE_UPDATE_SPLINE, // Update spline, do not advance next spline timer
-    /* 0 */ CS_CAM_STATE_PAUSE, // No updates
-    /* 0 */ CS_CAM_STATE_DONE_SPLINE, // Finished the current spline, ready for the next one
-    /* 0 */ CS_CAM_STATE_DONE = 999 // Finished all the splines.
+    /*   0 */ CS_CAM_STATE_UPDATE_ALL, // Update spline and next spline timer
+    /*   1 */ CS_CAM_STATE_UPDATE_SPLINE, // Update spline, do not advance next spline timer
+    /*   2 */ CS_CAM_STATE_PAUSE, // No updates
+    /*   3 */ CS_CAM_STATE_DONE_SPLINE, // Finished the current spline, ready for the next one
+    /* 999 */ CS_CAM_STATE_DONE = 999 // Finished all the splines.
 } CutsceneCameraState;
 
 // OoT Remnant
@@ -836,7 +820,7 @@ s32 Cutscene_GetCueChannel(struct PlayState* play, u16 cueType);
 s32 Cutscene_IsCueInChannel(struct PlayState* play, u16 cueType);
 u8 Cutscene_IsPlaying(struct PlayState* play);
 
-void CutsceneManager_Init(struct PlayState* play, ActorCutscene* cutsceneList, s16 numEntries);
+void CutsceneManager_Init(struct PlayState* play, CutsceneEntry* cutsceneList, s16 numEntries);
 void CutsceneManager_StoreCamera(Camera* camera);
 void CutsceneManager_ClearWaiting(void);
 s16 CutsceneManager_Update(void);
@@ -847,7 +831,7 @@ s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor);
 s16 CutsceneManager_Start(s16 csId, Actor* actor);
 s16 CutsceneManager_Stop(s16 csId);
 s16 CutsceneManager_GetCurrentCsId(void);
-ActorCutscene* CutsceneManager_GetCutsceneEntry(s16 csId);
+CutsceneEntry* CutsceneManager_GetCutsceneEntry(s16 csId);
 s16 CutsceneManager_GetAdditionalCsId(s16 csId);
 s16 CutsceneManager_GetLength(s16 csId);
 s16 CutsceneManager_GetCutsceneScriptIndex(s16 csId);
@@ -866,5 +850,11 @@ void CutsceneFlags_UnsetAll(struct PlayState* play);
 void CutsceneFlags_Set(struct PlayState* play, s16 flag);
 void CutsceneFlags_Unset(struct PlayState* play, s16 flag);
 s32 CutsceneFlags_Get(struct PlayState* play, s16 flag);
+
+extern u8 gOpeningEntranceIndex;
+
+extern u8 D_801F4DDC;
+extern u8 gDisablePlayerCsActionStartPos;
+extern s16 gDungeonBossWarpSceneId;
 
 #endif

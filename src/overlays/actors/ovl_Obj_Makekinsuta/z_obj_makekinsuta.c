@@ -14,20 +14,19 @@ void ObjMakekinsuta_Init(Actor* thisx, PlayState* play);
 void ObjMakekinsuta_Destroy(Actor* thisx, PlayState* play);
 void ObjMakekinsuta_Update(Actor* thisx, PlayState* play);
 
-s32 func_8099FA40(ObjMakekinsuta* this, PlayState* play);
 void func_8099FB64(Actor* thisx, PlayState* play);
 void func_8099FD7C(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Makekinsuta_InitVars = {
-    ACTOR_OBJ_MAKEKINSUTA,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjMakekinsuta),
-    (ActorFunc)ObjMakekinsuta_Init,
-    (ActorFunc)ObjMakekinsuta_Destroy,
-    (ActorFunc)ObjMakekinsuta_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_MAKEKINSUTA,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjMakekinsuta),
+    /**/ ObjMakekinsuta_Init,
+    /**/ ObjMakekinsuta_Destroy,
+    /**/ ObjMakekinsuta_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -36,7 +35,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 1, ICHAIN_STOP),
 };
 
-s32 func_8099FA40(ObjMakekinsuta* this, PlayState* play) {
+bool func_8099FA40(ObjMakekinsuta* this, PlayState* play) {
     s32 chestFlag = -1;
     s32 skulltulaParams = (OBJMAKEKINSUTA_GET_1F(&this->actor) << 2) | 0xFF01;
 
@@ -53,7 +52,7 @@ void ObjMakekinsuta_Init(Actor* thisx, PlayState* play) {
     if (!func_8099FA40(this, play)) {
         this->unk144 = -1;
     }
-    if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAGS(thisx))) {
+    if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAG(thisx))) {
         Actor_Kill(&this->actor);
     }
 }
@@ -62,7 +61,7 @@ void ObjMakekinsuta_Destroy(Actor* thisx, PlayState* play) {
     ObjMakekinsuta* this = THIS;
 
     if (func_8099FA40(this, play)) {
-        Flags_UnsetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAGS(thisx));
+        Flags_UnsetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAG(thisx));
     }
 }
 
@@ -107,7 +106,7 @@ void func_8099FB64(Actor* thisx, PlayState* play) {
 void ObjMakekinsuta_Update(Actor* thisx, PlayState* play) {
     ObjMakekinsuta* this = THIS;
 
-    if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAGS(thisx))) {
+    if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAG(thisx))) {
         this->actor.update = func_8099FD7C;
         CutsceneManager_Queue(this->actor.csId);
     } else {
@@ -130,7 +129,7 @@ void func_8099FD7C(Actor* thisx, PlayState* play) {
     if (CutsceneManager_IsNext(thisx->csId)) {
         CutsceneManager_StartWithPlayerCs(thisx->csId, thisx);
         if (thisx->csId >= 0) {
-            func_800B7298(play, thisx, PLAYER_CSMODE_4);
+            Player_SetCsActionWithHaltedActors(play, thisx, PLAYER_CSACTION_4);
         }
         func_8099FB64(thisx, play);
         thisx->update = Actor_Noop;

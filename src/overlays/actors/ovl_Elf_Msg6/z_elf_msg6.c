@@ -24,15 +24,15 @@ void func_80BA215C(ElfMsg6* this, PlayState* play);
 void func_80BA21C4(ElfMsg6* this, PlayState* play);
 
 ActorInit Elf_Msg6_InitVars = {
-    ACTOR_ELF_MSG6,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ElfMsg6),
-    (ActorFunc)ElfMsg6_Init,
-    (ActorFunc)ElfMsg6_Destroy,
-    (ActorFunc)ElfMsg6_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_ELF_MSG6,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ElfMsg6),
+    /**/ ElfMsg6_Init,
+    /**/ ElfMsg6_Destroy,
+    /**/ ElfMsg6_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -154,8 +154,8 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
 
         case 1:
             this->actionFunc = func_80BA1F80;
-            if ((this->actor.csId == CS_ID_NONE) || ((ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) &&
-                                                     Flags_GetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor)))) {
+            if ((this->actor.csId == CS_ID_NONE) || ((ELFMSG6_SWITCH_FLAG(&this->actor) != 0x7F) &&
+                                                     Flags_GetSwitch(play, ELFMSG6_SWITCH_FLAG(&this->actor)))) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -178,12 +178,12 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 2:
-            if (INV_CONTENT(ITEM_OCARINA) == ITEM_OCARINA) {
+            if (INV_CONTENT(ITEM_OCARINA_OF_TIME) == ITEM_OCARINA_OF_TIME) {
                 Actor_Kill(&this->actor);
                 return;
             }
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED)) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_20)) {
                     Actor_Kill(&this->actor);
                     return;
@@ -200,8 +200,8 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 3:
-            if (((ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) &&
-                 Flags_GetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor))) ||
+            if (((ELFMSG6_SWITCH_FLAG(&this->actor) != 0x7F) &&
+                 Flags_GetSwitch(play, ELFMSG6_SWITCH_FLAG(&this->actor))) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_88_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_91_01) ||
                 (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA)) {
                 Actor_Kill(&this->actor);
@@ -235,7 +235,7 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
 void ElfMsg6_Destroy(Actor* thisx, PlayState* play) {
 }
 
-s32 func_80BA1C00(ElfMsg6* this) {
+bool func_80BA1C00(ElfMsg6* this) {
     return (this->actor.xzDistToPlayer < (100.0f * this->actor.scale.x)) &&
            ((this->actor.playerHeightRel >= 0.0f) && (this->actor.playerHeightRel < (100.0f * this->actor.scale.y)));
 }
@@ -262,7 +262,7 @@ void func_80BA1CF8(ElfMsg6* this, PlayState* play) {
         return;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         switch (this->actor.textId) {
             case 0x224:
                 SET_WEEKEVENTREG(WEEKEVENTREG_79_10);
@@ -276,7 +276,7 @@ void func_80BA1CF8(ElfMsg6* this, PlayState* play) {
         return;
     }
 
-    if ((this->actor.textId == 0x224) && CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
+    if ((this->actor.textId == 0x224) && CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED)) {
         this->actor.textId = 0x25B;
     } else if (func_80BA1C00(this) && (player->actor.speed > 1.0f)) {
         player->tatlTextId = -this->actor.textId;
@@ -296,7 +296,7 @@ void func_80BA1E30(ElfMsg6* this, PlayState* play) {
         return;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         switch (this->actor.textId) {
             case 0x216:
                 SET_WEEKEVENTREG(WEEKEVENTREG_31_04);
@@ -338,7 +338,7 @@ void func_80BA1F80(ElfMsg6* this, PlayState* play) {
     if (func_80BA1C00(this)) {
         if (CutsceneManager_IsNext(this->actor.csId)) {
             CutsceneManager_StartWithPlayerCs(this->actor.csId, NULL);
-            Flags_SetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor));
+            Flags_SetSwitch(play, ELFMSG6_SWITCH_FLAG(&this->actor));
             Actor_Kill(&this->actor);
             return;
         }
@@ -351,18 +351,18 @@ void func_80BA2038(ElfMsg6* this, PlayState* play) {
 }
 
 void func_80BA2048(ElfMsg6* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnElf* sp20 = (EnElf*)GET_PLAYER(play)->tatlActor;
 
         sp20->unk_264 |= 0x20;
-        if (ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) {
-            Flags_SetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor));
+        if (ELFMSG6_SWITCH_FLAG(&this->actor) != 0x7F) {
+            Flags_SetSwitch(play, ELFMSG6_SWITCH_FLAG(&this->actor));
         }
         Actor_Kill(&this->actor);
         return;
     }
 
-    if (((ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) && Flags_GetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor))) ||
+    if (((ELFMSG6_SWITCH_FLAG(&this->actor) != 0x7F) && Flags_GetSwitch(play, ELFMSG6_SWITCH_FLAG(&this->actor))) ||
         CHECK_WEEKEVENTREG(WEEKEVENTREG_88_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_91_01) ||
         (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA)) {
         Actor_Kill(&this->actor);
@@ -375,7 +375,7 @@ void func_80BA2048(ElfMsg6* this, PlayState* play) {
 }
 
 void func_80BA215C(ElfMsg6* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -386,18 +386,18 @@ void func_80BA215C(ElfMsg6* this, PlayState* play) {
 }
 
 void func_80BA21C4(ElfMsg6* this, PlayState* play) {
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnElf* sp20 = (EnElf*)GET_PLAYER(play)->tatlActor;
 
         sp20->unk_264 |= 0x20;
-        if (ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) {
-            Flags_SetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor));
+        if (ELFMSG6_SWITCH_FLAG(&this->actor) != 0x7F) {
+            Flags_SetSwitch(play, ELFMSG6_SWITCH_FLAG(&this->actor));
         }
         Actor_Kill(&this->actor);
         return;
     }
 
-    if (((ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) && Flags_GetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor))) ||
+    if (((ELFMSG6_SWITCH_FLAG(&this->actor) != 0x7F) && Flags_GetSwitch(play, ELFMSG6_SWITCH_FLAG(&this->actor))) ||
         CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
         Actor_Kill(&this->actor);
         return;

@@ -42,15 +42,15 @@ typedef struct ObjPurifyInfo {
 } ObjPurifyInfo; // size = 0x28
 
 ActorInit Obj_Purify_InitVars = {
-    ACTOR_OBJ_PURIFY,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjPurify),
-    (ActorFunc)ObjPurify_Init,
-    (ActorFunc)ObjPurify_Destroy,
-    (ActorFunc)ObjPurify_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_OBJ_PURIFY,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjPurify),
+    /**/ ObjPurify_Init,
+    /**/ ObjPurify_Destroy,
+    /**/ ObjPurify_Update,
+    /**/ NULL,
 };
 
 ObjPurifyInfo sObjPurifyInfo[] = {
@@ -130,8 +130,8 @@ void ObjPurify_Init(Actor* thisx, PlayState* play) {
     if (sp20 == 1) {
         DynaPolyActor_Init(&this->dyna, 0);
     }
-    this->objIndex = Object_GetIndex(&play->objectCtx, info->objectId);
-    if (this->objIndex < 0) {
+    this->objectSlot = Object_GetSlot(&play->objectCtx, info->objectId);
+    if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->dyna.actor);
     } else if (sp20 == 0) {
         func_80A84EAC(this);
@@ -158,10 +158,10 @@ void func_80A84EC0(ObjPurify* this, PlayState* play) {
     s32 sp28;
     s32 index;
 
-    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         sp28 = OBJPURIFY_GET_UNK_FLAG(&this->dyna.actor);
         index = OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor);
-        this->dyna.actor.objBankIndex = this->objIndex;
+        this->dyna.actor.objectSlot = this->objectSlot;
         Actor_SetObjectDependency(play, &this->dyna.actor);
         if (sp28 == 1) {
             DynaPolyActor_LoadMesh(play, &this->dyna, sObjPurifyInfo[index].colHeader);

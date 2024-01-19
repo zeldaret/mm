@@ -20,15 +20,15 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play);
 void BgCtowerGear_DrawOrgan(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Ctower_Gear_InitVars = {
-    ACTOR_BG_CTOWER_GEAR,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_CTOWER_ROT,
-    sizeof(BgCtowerGear),
-    (ActorFunc)BgCtowerGear_Init,
-    (ActorFunc)BgCtowerGear_Destroy,
-    (ActorFunc)BgCtowerGear_Update,
-    (ActorFunc)BgCtowerGear_Draw,
+    /**/ ACTOR_BG_CTOWER_GEAR,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_CTOWER_ROT,
+    /**/ sizeof(BgCtowerGear),
+    /**/ BgCtowerGear_Init,
+    /**/ BgCtowerGear_Destroy,
+    /**/ BgCtowerGear_Update,
+    /**/ BgCtowerGear_Draw,
 };
 
 static Vec3f sExitSplashOffsets[] = {
@@ -153,7 +153,7 @@ void BgCtowerGear_Update(Actor* thisx, PlayState* play) {
         this->dyna.actor.shape.rot.x -= 0x1F4;
     } else if (type == BGCTOWERGEAR_CENTER_COG) {
         this->dyna.actor.shape.rot.y += 0x1F4;
-        func_800B9010(&this->dyna.actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
     } else if (type == BGCTOWERGEAR_WATER_WHEEL) {
         this->dyna.actor.shape.rot.z -= 0x1F4;
         BgCtowerGear_Splash(this, play);

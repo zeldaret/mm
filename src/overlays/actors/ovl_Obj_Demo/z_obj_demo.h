@@ -3,11 +3,12 @@
 
 #include "global.h"
 
-#define OBJDEMO_GET_FF(thisx) ((thisx)->params & 0xFF)
-#define OBJDEMO_FF_FF 0xFF
 struct ObjDemo;
 
 typedef void (*ObjDemoActionFunc)(struct ObjDemo*, PlayState*);
+
+#define OBJDEMO_GET_SWITCH_FLAG_MASK(thisx) ((thisx)->params & 0xFF)
+#define OBJDEMO_GET_SWITCH_FLAG(thisx) ((thisx)->params)
 
 typedef struct ObjDemo {
     /* 0x000 */ Actor actor;

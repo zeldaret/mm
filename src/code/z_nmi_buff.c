@@ -3,10 +3,17 @@
 #define COLD_RESET 0
 #define NMI 1
 
+typedef struct {
+    /* 0x00 */ u32 resetting;
+    /* 0x04 */ u32 resetCount;
+    /* 0x08 */ OSTime duration;
+    /* 0x10 */ OSTime resetTime;
+} NmiBuff; // size >= 0x18
+
 NmiBuff* gNMIBuffer;
 
 void Nmi_Init(void) {
-    gNMIBuffer = (NmiBuff*)osAppNmiBuffer;
+    gNMIBuffer = (NmiBuff*)osAppNMIBuffer;
     gNMIBuffer->resetting = false;
 
     if (osResetType == COLD_RESET) {

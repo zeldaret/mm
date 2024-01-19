@@ -1,6 +1,7 @@
 ﻿<Root>
+    <!-- Assets for Pierre, the scarecrow -->
     <File Name="object_ka" Segment="6">
-        <Animation Name="object_ka_Anim_000214" Offset="0x214" />
+        <Animation Name="object_ka_Anim_000214" Offset="0x214" /> <!-- Original name is "dance" -->
         <DList Name="object_ka_DL_001550" Offset="0x1550" />
         <DList Name="object_ka_DL_001600" Offset="0x1600" />
         <DList Name="object_ka_DL_0017D8" Offset="0x17D8" />
@@ -59,11 +60,11 @@
         <Limb Name="object_ka_Standardlimb_00652C" Type="Standard" EnumName="OBJECT_KA_LIMB_1A" Offset="0x652C" />
         <Limb Name="object_ka_Standardlimb_006538" Type="Standard" EnumName="OBJECT_KA_LIMB_1B" Offset="0x6538" />
         <Skeleton Name="object_ka_Skel_0065B0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KA_LIMB_NONE" LimbMax="OBJECT_KA_LIMB_MAX" EnumName="ObjectKaLimb" Offset="0x65B0" />
-        <Animation Name="object_ka_Anim_00686C" Offset="0x686C" />
-        <Animation Name="object_ka_Anim_006A6C" Offset="0x6A6C" />
-        <Animation Name="object_ka_Anim_0071EC" Offset="0x71EC" />
-        <Animation Name="object_ka_Anim_007444" Offset="0x7444" />
-        <Animation Name="object_ka_Anim_007B90" Offset="0x7B90" />
-        <Animation Name="object_ka_Anim_0081A4" Offset="0x81A4" />
+        <Animation Name="object_ka_Anim_00686C" Offset="0x686C" /> <!-- Original name is "ka_basicdance" -->
+        <Animation Name="object_ka_Anim_006A6C" Offset="0x6A6C" /> <!-- Original name is "ka_dance" (this animation was removed in MM3D, but it's present in OoT3D) -->
+        <Animation Name="object_ka_Anim_0071EC" Offset="0x71EC" /> <!-- Original name is "ka_hello" -->
+        <Animation Name="object_ka_Anim_007444" Offset="0x7444" /> <!-- Original name is "ka_newwait" -->
+        <Animation Name="object_ka_Anim_007B90" Offset="0x7B90" /> <!-- Original name is "ka_onegai" -->
+        <Animation Name="object_ka_Anim_0081A4" Offset="0x81A4" /> <!-- Original name is "ka_turndance" -->
     </File>
 </Root>

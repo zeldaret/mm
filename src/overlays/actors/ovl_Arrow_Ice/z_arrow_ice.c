@@ -21,18 +21,18 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play);
 
 #include "overlays/ovl_Arrow_Ice/ovl_Arrow_Ice.c"
 
-s32 unused; // Needed for bss
+static s32 sBssPad;
 
 ActorInit Arrow_Ice_InitVars = {
-    ACTOR_ARROW_ICE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ArrowIce),
-    (ActorFunc)ArrowIce_Init,
-    (ActorFunc)ArrowIce_Destroy,
-    (ActorFunc)ArrowIce_Update,
-    (ActorFunc)ArrowIce_Draw,
+    /**/ ACTOR_ARROW_ICE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ArrowIce),
+    /**/ ArrowIce_Init,
+    /**/ ArrowIce_Destroy,
+    /**/ ArrowIce_Update,
+    /**/ ArrowIce_Draw,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -76,7 +76,7 @@ void ArrowIce_Charge(ArrowIce* this, PlayState* play) {
     this->actor.world.pos = arrow->actor.world.pos;
     this->actor.shape.rot = arrow->actor.shape.rot;
 
-    func_800B9010(&this->actor, NA_SE_PL_ARROW_CHARGE_ICE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_ARROW_CHARGE_ICE - SFX_FLAG);
 
     // if arrow has no parent, player has fired the arrow
     if (arrow->actor.parent == NULL) {
@@ -176,7 +176,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play) {
 void ArrowIce_Update(Actor* thisx, PlayState* play) {
     ArrowIce* this = THIS;
 
-    if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
+    if ((play->msgCtx.msgMode == MSGMODE_E) || (play->msgCtx.msgMode == MSGMODE_SONG_PLAYED)) {
         Actor_Kill(&this->actor);
         return;
     } else {

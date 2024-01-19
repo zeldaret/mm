@@ -8,7 +8,7 @@
         <Array Name="sEnMm22Vtx" Count="12" Offset="0x8E0">
             <Vtx/>
         </Array>
-        <DList Name="sEnMm2DL" Offset="0x9A8"/>
+        <DList Name="sEnMm2DL" Offset="0x9A8"/> <!-- Original name is "mm_myletter_model" -->
     </File>
 </Root>
 

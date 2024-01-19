@@ -18,6 +18,21 @@ typedef enum {
     /* 0x40 */ ENFLOORMAS_GET_7FFF_40 = 0x40
 } EnFloormasParam;
 
+typedef enum EnFloormasBodyPart {
+    /*  0 */ ENFLOORMAS_BODYPART_0,
+    /*  1 */ ENFLOORMAS_BODYPART_1,
+    /*  2 */ ENFLOORMAS_BODYPART_2,
+    /*  3 */ ENFLOORMAS_BODYPART_3,
+    /*  4 */ ENFLOORMAS_BODYPART_4,
+    /*  5 */ ENFLOORMAS_BODYPART_5,
+    /*  6 */ ENFLOORMAS_BODYPART_6,
+    /*  7 */ ENFLOORMAS_BODYPART_7,
+    /*  8 */ ENFLOORMAS_BODYPART_8,
+    /*  9 */ ENFLOORMAS_BODYPART_9,
+    /* 10 */ ENFLOORMAS_BODYPART_10,
+    /* 11 */ ENFLOORMAS_BODYPART_MAX
+} EnFloormasBodyPart;
+
 typedef struct EnFloormas {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -32,7 +47,7 @@ typedef struct EnFloormas {
     /* 0x2C4 */ f32 drawDmgEffAlpha;
     /* 0x2C8 */ f32 drawDmgEffScale;
     /* 0x2CC */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x2D0 */ Vec3f limbPos[11];
+    /* 0x2D0 */ Vec3f bodyPartsPos[ENFLOORMAS_BODYPART_MAX];
     /* 0x354 */ ColliderCylinder collider;
 } EnFloormas; // size = 0x3A0
 

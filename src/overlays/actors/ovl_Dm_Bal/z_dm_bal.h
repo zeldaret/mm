@@ -14,8 +14,8 @@ typedef struct DmBal {
     /* 0x188 */ DmBalActionFunc actionFunc;
     /* 0x18C */ Vec3f scale;
     /* 0x198 */ s32 eyeIndex;
-    /* 0x262 */ Vec3s jointTable[OBJECT_BAL_LIMB_MAX];
-    /* 0x19C */ Vec3s morphTable[OBJECT_BAL_LIMB_MAX];
+    /* 0x262 */ Vec3s jointTable[TINGLE_LIMB_MAX];
+    /* 0x19C */ Vec3s morphTable[TINGLE_LIMB_MAX];
     /* 0x328 */ UNK_TYPE1 pad_328[12];
     /* 0x334 */ s16 timer;
     /* 0x336 */ s16 keepEyesShut;

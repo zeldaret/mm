@@ -7,9 +7,9 @@
 #include "z_en_dodongo.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
-#include "objects/object_dodongo/object_dodongo.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
 #define THIS ((EnDodongo*)thisx)
 
@@ -36,15 +36,15 @@ void func_80878724(EnDodongo* this);
 void func_808787B0(EnDodongo* this, PlayState* play);
 
 ActorInit En_Dodongo_InitVars = {
-    ACTOR_EN_DODONGO,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DODONGO,
-    sizeof(EnDodongo),
-    (ActorFunc)EnDodongo_Init,
-    (ActorFunc)EnDodongo_Destroy,
-    (ActorFunc)EnDodongo_Update,
-    (ActorFunc)EnDodongo_Draw,
+    /**/ ACTOR_EN_DODONGO,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DODONGO,
+    /**/ sizeof(EnDodongo),
+    /**/ EnDodongo_Init,
+    /**/ EnDodongo_Destroy,
+    /**/ EnDodongo_Update,
+    /**/ EnDodongo_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit1[10] = {
@@ -280,8 +280,19 @@ static InitChainEntry sInitChain[] = {
 
 void EnDodongo_Init(Actor* thisx, PlayState* play) {
     static EffectBlureInit2 D_80879308 = {
-        2, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 8,
-        0, 0, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
+        2,
+        EFFECT_BLURE_ELEMENT_FLAG_8,
+        0,
+        { 255, 255, 255, 255 },
+        { 255, 255, 255, 64 },
+        { 255, 255, 255, 0 },
+        { 255, 255, 255, 0 },
+        8,
+        0,
+        EFF_BLURE_DRAW_MODE_SIMPLE,
+        0,
+        { 0, 0, 0, 0 },
+        { 0, 0, 0, 0 },
     };
     EnDodongo* this = THIS;
     s32 i;
@@ -296,7 +307,7 @@ void EnDodongo_Init(Actor* thisx, PlayState* play) {
     Math_Vec3f_Copy(&this->unk_314, &gOneVec3f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 48.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dodongo_Skel_008318, &object_dodongo_Anim_004C20, this->jointTable,
-                   this->morphTable, 31);
+                   this->morphTable, OBJECT_DODONGO_LIMB_MAX);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Collider_InitAndSetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
     Collider_InitAndSetJntSph(play, &this->collider1, &this->actor, &sJntSphInit1, this->collider1Elements);
@@ -408,7 +419,8 @@ void func_80876BD0(EnDodongo* this, PlayState* play, s32 arg2) {
         this->drawDmgEffAlpha = 4.0f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider1.elements[arg2].info.bumper.hitPos.x,
                     this->collider1.elements[arg2].info.bumper.hitPos.y,
-                    this->collider1.elements[arg2].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    this->collider1.elements[arg2].info.bumper.hitPos.z, 0, 0, 0,
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     }
 }
 
@@ -430,7 +442,8 @@ void func_80876D28(EnDodongo* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider1.base.colType = COLTYPE_HIT0;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, &this->limbPos[0], 9, 2, this->unk_334 * 0.3f, this->unk_334 * 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DODONGO_BODYPART_MAX, 2, this->unk_334 * 0.3f,
+                              this->unk_334 * 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -446,7 +459,7 @@ void func_80876DC4(EnDodongo* this, PlayState* play) {
     f32 temp_f22;
     f32 temp_f20;
 
-    Math_Vec3f_Copy(&sp68, &this->limbPos[0]);
+    Math_Vec3f_Copy(&sp68, &this->bodyPartsPos[DODONGO_BODYPART_0]);
     sp66 = ((s32)Rand_Next() >> 0x12) + this->actor.shape.rot.y;
     temp_f20 = Math_CosS(sp66);
     temp_f22 = Math_SinS(sp66);
@@ -494,10 +507,10 @@ void func_80876DC4(EnDodongo* this, PlayState* play) {
     sp74.z = (Rand_ZeroFloat(0.1f) + 0.15f) * -temp_f22 * this->unk_334;
     func_800B0EB0(play, &sp68, &sp80, &sp74, &this->unk_32C, &this->unk_330, sp64, sp62, 0x14);
 
-    sp68.x = this->limbPos[0].x + (temp_f20 * 6.0f * this->unk_334);
-    sp68.z = this->limbPos[0].z - (temp_f22 * 6.0f * this->unk_334);
+    sp68.x = this->bodyPartsPos[DODONGO_BODYPART_0].x + (temp_f20 * 6.0f * this->unk_334);
+    sp68.z = this->bodyPartsPos[DODONGO_BODYPART_0].z - (temp_f22 * 6.0f * this->unk_334);
     sp80.x *= -1.0f;
-    sp80.z = sp80.z * -1.0f;
+    sp80.z *= -1.0f;
     sp74.x = (Rand_ZeroFloat(0.1f) + 0.15f) * -temp_f20 * this->unk_334;
     sp74.z = (Rand_ZeroFloat(0.1f) + 0.15f) * temp_f22 * this->unk_334;
     func_800B0EB0(play, &sp68, &sp80, &sp74, &this->unk_32C, &this->unk_330, sp64, sp62, 0x14);
@@ -621,9 +634,9 @@ void func_808777A8(EnDodongo* this) {
     for (i = 0; i < ARRAY_COUNT(this->collider3Elements); i++) {
         sph = &this->collider3.elements[i].dim.worldSphere;
 
-        sph->center.x = this->limbPos[0].x;
-        sph->center.y = this->limbPos[0].y;
-        sph->center.z = this->limbPos[0].z;
+        sph->center.x = this->bodyPartsPos[DODONGO_BODYPART_0].x;
+        sph->center.y = this->bodyPartsPos[DODONGO_BODYPART_0].y;
+        sph->center.z = this->bodyPartsPos[DODONGO_BODYPART_0].z;
         sph->radius = 0;
     }
 
@@ -645,7 +658,7 @@ void func_8087784C(EnDodongo* this, PlayState* play) {
     }
 
     if (func_8087721C(this)) {
-        func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
         frame = this->skelAnime.curFrame - 29.0f;
         end = frame >> 1;
         if (end > 3) {
@@ -657,10 +670,12 @@ void func_8087784C(EnDodongo* this, PlayState* play) {
         temp_f12 = Math_CosS(this->actor.shape.rot.y) * this->unk_334;
 
         for (i = 0; i < end; i++, element++) {
-            element->dim.worldSphere.center.x = this->limbPos[0].x + (element->dim.modelSphere.center.z * temp_f2);
+            element->dim.worldSphere.center.x =
+                this->bodyPartsPos[DODONGO_BODYPART_0].x + (element->dim.modelSphere.center.z * temp_f2);
             element->dim.worldSphere.center.y =
-                this->limbPos[0].y + (element->dim.modelSphere.center.y * this->unk_334);
-            element->dim.worldSphere.center.z = this->limbPos[0].z + (element->dim.modelSphere.center.z * temp_f12);
+                this->bodyPartsPos[DODONGO_BODYPART_0].y + (element->dim.modelSphere.center.y * this->unk_334);
+            element->dim.worldSphere.center.z =
+                this->bodyPartsPos[DODONGO_BODYPART_0].z + (element->dim.modelSphere.center.z * temp_f12);
             element->dim.worldSphere.radius = element->dim.modelSphere.radius;
         }
 
@@ -668,10 +683,10 @@ void func_8087784C(EnDodongo* this, PlayState* play) {
         D_80879348.x = 2.5f * temp_f2;
         D_80879348.y = this->unk_334 * 1.4f;
         D_80879348.z = 2.5f * temp_f12;
-        EffectSsDFire_Spawn(play, &this->limbPos[0], &D_80879354, &D_80879348, this->unk_334 * 100.0f,
-                            this->unk_334 * 35.0f, 0xFF - (frame * 10), 5, 0, 8);
+        EffectSsDFire_Spawn(play, &this->bodyPartsPos[DODONGO_BODYPART_0], &D_80879354, &D_80879348,
+                            this->unk_334 * 100.0f, this->unk_334 * 35.0f, 0xFF - (frame * 10), 5, 0, 8);
     } else if ((this->skelAnime.curFrame >= 2.0f) && (this->skelAnime.curFrame <= 20.0f)) {
-        func_800B9010(&this->actor, NA_SE_EN_DODO_J_BREATH - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_DODO_J_BREATH - SFX_FLAG);
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -771,13 +786,13 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
         } else {
             sp5E = this->unk_334 * 50.0f;
             sp5C = this->unk_334 * 5.0f;
-            Math_Vec3f_Copy(&sp64, &this->limbPos[0]);
+            Math_Vec3f_Copy(&sp64, &this->bodyPartsPos[DODONGO_BODYPART_0]);
             func_800B0DE0(play, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
             sp64.x -= Math_CosS(this->actor.shape.rot.y) * 6.0f * this->unk_334;
             sp64.z += Math_SinS(this->actor.shape.rot.y) * 6.0f * this->unk_334;
             func_800B0DE0(play, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
-            sp64.x = (2.0f * this->limbPos[0].x) - sp64.x;
-            sp64.z = (2.0f * this->limbPos[0].z) - sp64.z;
+            sp64.x = (2.0f * this->bodyPartsPos[DODONGO_BODYPART_0].x) - sp64.x;
+            sp64.z = (2.0f * this->bodyPartsPos[DODONGO_BODYPART_0].z) - sp64.z;
             func_800B0DE0(play, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
         }
     }
@@ -798,20 +813,20 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
 
 void func_80878354(EnDodongo* this) {
     s32 pad;
-    AnimationHeader* sp18;
+    AnimationHeader* anim;
     s16 yDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     this->unk_306 = (0xFFFF - ABS_ALT(yDiff)) / 15;
 
     if (yDiff >= 0) {
-        sp18 = &object_dodongo_Anim_0042C4;
+        anim = &object_dodongo_Anim_0042C4;
         this->unk_306 = -this->unk_306;
     } else {
-        sp18 = &object_dodongo_Anim_003B14;
+        anim = &object_dodongo_Anim_003B14;
     }
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_J_TAIL);
-    Animation_PlayOnceSetSpeed(&this->skelAnime, sp18, 2.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, anim, 2.0f);
     this->timer = 0;
     this->collider1.base.atFlags |= AT_ON;
     this->unk_304 = -1;
@@ -894,7 +909,7 @@ void func_80878724(EnDodongo* this) {
     this->timer = 0;
     this->unk_304 = 0;
     Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_J_DEAD);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.speed = 0.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
     this->actionFunc = func_808787B0;
@@ -1053,7 +1068,7 @@ void EnDodongo_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.375f;
             this->drawDmgEffScale = (this->drawDmgEffScale > 0.75f) ? 0.75f : this->drawDmgEffScale;
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
@@ -1061,41 +1076,74 @@ void EnDodongo_Update(Actor* thisx, PlayState* play2) {
 s32 EnDodongo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDodongo* this = THIS;
 
-    if (limbIndex == 1) {
+    if (limbIndex == OBJECT_DODONGO_LIMB_01) {
         pos->z += 1000.0f;
-    } else if ((limbIndex == 15) || (limbIndex == 16)) {
+    } else if ((limbIndex == OBJECT_DODONGO_LIMB_0F) || (limbIndex == OBJECT_DODONGO_LIMB_10)) {
         Matrix_Scale(this->unk_314.x, this->unk_314.y, this->unk_314.z, MTXMODE_APPLY);
     }
 
     return false;
 }
 
+static Vec3f D_80879370 = { 1800.0f, 1200.0f, 0.0f };
+static Vec3f D_8087937C = { 1500.0f, 300.0f, 0.0f };
+
+static s8 sLimbToBodyParts[OBJECT_DODONGO_LIMB_MAX] = {
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_NONE
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_01
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_02
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_03
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_04
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_05
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_06
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_07
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_08
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_09
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_0A
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_0B
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_0C
+    DODONGO_BODYPART_2, // OBJECT_DODONGO_LIMB_0D
+    DODONGO_BODYPART_3, // OBJECT_DODONGO_LIMB_0E
+    DODONGO_BODYPART_4, // OBJECT_DODONGO_LIMB_0F
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_10
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_11
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_12
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_13
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_14
+    DODONGO_BODYPART_5, // OBJECT_DODONGO_LIMB_15
+    DODONGO_BODYPART_6, // OBJECT_DODONGO_LIMB_16
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_17
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_18
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_19
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_1A
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_1B
+    DODONGO_BODYPART_7, // OBJECT_DODONGO_LIMB_1C
+    DODONGO_BODYPART_8, // OBJECT_DODONGO_LIMB_1D
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_1E
+};
+
 void EnDodongo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_80879370 = { 1800.0f, 1200.0f, 0.0f };
-    static Vec3f D_8087937C = { 1500.0f, 300.0f, 0.0f };
-    static s8 D_80879388[] = {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2, 3,  4,
-        -1, -1, -1, -1, -1, 5,  6,  -1, -1, -1, -1, -1, 7,  8, -1, 0,
-    };
     EnDodongo* this = THIS;
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
     Collider_UpdateSpheres(limbIndex, &this->collider2);
-    if (D_80879388[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[D_80879388[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
-    if (limbIndex == 7) {
+    if (limbIndex == OBJECT_DODONGO_LIMB_07) {
         Matrix_MultVec3f(&D_80879370, &this->unk_308);
-        Matrix_MultVec3f(&D_8087937C, &this->limbPos[0]);
+        Matrix_MultVec3f(&D_8087937C, &this->bodyPartsPos[DODONGO_BODYPART_0]);
         Matrix_MultZero(&this->actor.focus.pos);
-        Matrix_MultVecY(-200.0f, &this->limbPos[1]);
-    } else if (limbIndex == 13) {
+        Matrix_MultVecY(-200.0f, &this->bodyPartsPos[DODONGO_BODYPART_1]);
+    } else if (limbIndex == OBJECT_DODONGO_LIMB_0D) {
         Matrix_MultVecX(1600.0f, &this->unk_320);
     }
 
-    if ((limbIndex == 30) && (this->actionFunc == func_80878424) && (this->timer != this->unk_304)) {
-        EffectBlure_AddVertex(Effect_GetByIndex(this->unk_338), &this->unk_320, &this->limbPos[4]);
+    if ((limbIndex == OBJECT_DODONGO_LIMB_1E) && (this->actionFunc == func_80878424) &&
+        (this->timer != this->unk_304)) {
+        EffectBlure_AddVertex(Effect_GetByIndex(this->unk_338), &this->unk_320,
+                              &this->bodyPartsPos[DODONGO_BODYPART_4]);
         this->unk_304 = this->timer;
     }
 }
@@ -1106,7 +1154,7 @@ void EnDodongo_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDodongo_OverrideLimbDraw,
                       EnDodongo_PostLimbDraw, &this->actor);
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, DODONGO_BODYPART_MAX,
                             this->drawDmgEffScale * this->unk_334, this->drawDmgEffFrozenSteamScale * this->unk_334,
                             this->drawDmgEffAlpha, this->drawDmgEffType);
 }

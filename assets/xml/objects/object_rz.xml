@@ -1,13 +1,13 @@
 ﻿<Root>
     <File Name="object_rz" Segment="6">
-        <Animation Name="gRosaSistersApplaudingAnim" Offset="0x59C" />
-        <Animation Name="gRosaSistersOnKneesAnim" Offset="0xDE8" />
-        <Animation Name="gRosaSistersDancingAnim" Offset="0x28D4" />
-        <Animation Name="gRosaSistersSittingAnim" Offset="0x3098" />
-        <Animation Name="gRosaSistersStandingAnim" Offset="0x3A20" />
-        <Animation Name="gRosaSistersThinkingAnim" Offset="0x457C" />
-        <Animation Name="gRosaSistersWalkingAnim" Offset="0x5390" />
-        <Animation Name="gRosaSistersWalkingWhileThinkingAnim" Offset="0x5E50" />
+        <Animation Name="gRosaSistersApplaudingAnim" Offset="0x59C" /> <!-- Original name is "rz_kakkoii_loop" -->
+        <Animation Name="gRosaSistersOnKneesAnim" Offset="0xDE8" /> <!-- Original name is "rz_onegai_loop" -->
+        <Animation Name="gRosaSistersDancingAnim" Offset="0x28D4" /> <!-- Original name is "rz_rensyu_loop" -->
+        <Animation Name="gRosaSistersSittingAnim" Offset="0x3098" /> <!-- Original name is "rz_suwaru" -->
+        <Animation Name="gRosaSistersStandingAnim" Offset="0x3A20" /> <!-- Original name is "rz_waitA" -->
+        <Animation Name="gRosaSistersThinkingAnim" Offset="0x457C" /> <!-- Original name is "rz_waitB" -->
+        <Animation Name="gRosaSistersWalkingAnim" Offset="0x5390" /> <!-- Original name is "rz_walkA" -->
+        <Animation Name="gRosaSistersWalkingWhileThinkingAnim" Offset="0x5E50" /> <!-- Original name is "rz_walkB" -->
         <DList Name="object_rz_DL_0092B0" Offset="0x92B0" />
         <DList Name="object_rz_DL_0094C8" Offset="0x94C8" />
         <DList Name="object_rz_DL_009620" Offset="0x9620" />

@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjUm*)thisx)
 
@@ -63,15 +63,15 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex);
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
 ActorInit Obj_Um_InitVars = {
-    ACTOR_OBJ_UM,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_UM,
-    sizeof(ObjUm),
-    (ActorFunc)ObjUm_Init,
-    (ActorFunc)ObjUm_Destroy,
-    (ActorFunc)ObjUm_Update,
-    (ActorFunc)ObjUm_Draw,
+    /**/ ACTOR_OBJ_UM,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_UM,
+    /**/ sizeof(ObjUm),
+    /**/ ObjUm_Init,
+    /**/ ObjUm_Destroy,
+    /**/ ObjUm_Update,
+    /**/ ObjUm_Draw,
 };
 
 static TexturePtr sEyeTextures[] = {
@@ -352,7 +352,7 @@ s32 func_80B781DC(ObjUm* this, EnHorse* bandit1, EnHorse* bandit2, PlayState* pl
 
 // ObjUm_Bandit_UpdatePosition?
 s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit) {
-    Path* sp6C = &play->setupPathList[this->pathIndex];
+    Path* path = &play->setupPathList[this->pathIndex];
     s32 sp68;
     Vec3s* sp64;
     f32 phi_f12;
@@ -365,8 +365,8 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
     f32 sp3C;
     f32 phi_f14;
 
-    sp68 = sp6C->count;
-    sp64 = Lib_SegmentedToVirtual(sp6C->points);
+    sp68 = path->count;
+    sp64 = Lib_SegmentedToVirtual(path->points);
 
     if (sp68 == 0) {
         return 0;
@@ -389,14 +389,12 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
     if (bandit->curRaceWaypoint == 0) {
         phi_f12 = sp64[1].x - sp64[0].x;
         phi_f14 = sp64[1].z - sp64[0].z;
+    } else if ((bandit->curRaceWaypoint + 1) == path->count) {
+        phi_f12 = sp64[path->count - 1].x - sp64[path->count - 2].x;
+        phi_f14 = sp64[path->count - 1].z - sp64[path->count - 2].z;
     } else {
-        if ((bandit->curRaceWaypoint + 1) == sp6C->count) {
-            phi_f12 = sp64[sp6C->count - 1].x - sp64[sp6C->count - 2].x;
-            phi_f14 = sp64[sp6C->count - 1].z - sp64[sp6C->count - 2].z;
-        } else {
-            phi_f12 = sp64[bandit->curRaceWaypoint + 1].x - sp64[bandit->curRaceWaypoint - 1].x;
-            phi_f14 = sp64[bandit->curRaceWaypoint + 1].z - sp64[bandit->curRaceWaypoint - 1].z;
-        }
+        phi_f12 = sp64[bandit->curRaceWaypoint + 1].x - sp64[bandit->curRaceWaypoint - 1].x;
+        phi_f14 = sp64[bandit->curRaceWaypoint + 1].z - sp64[bandit->curRaceWaypoint - 1].z;
     }
 
     temp_a1 = Math_Atan2S(phi_f12, phi_f14);
@@ -433,7 +431,7 @@ s32 func_80B783E0(ObjUm* this, PlayState* play, s32 banditIndex, EnHorse* bandit
         phi_v1_2 = -0x190;
     }
 
-    bandit->actor.shape.rot.y = bandit->actor.shape.rot.y + phi_v1_2;
+    bandit->actor.shape.rot.y += phi_v1_2;
     return 0;
 }
 
@@ -469,9 +467,9 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
             if (this->potsLife[potIndex] != 1) {
                 this->wasPotHit[potIndex] = true;
                 if (this->potsLife[potIndex] == 2) {
-                    Audio_PlaySfxAtPos(&this->potPos[potIndex], NA_SE_EV_MILK_POT_BROKEN);
+                    Audio_PlaySfx_AtPos(&this->potPos[potIndex], NA_SE_EV_MILK_POT_BROKEN);
                 } else {
-                    Audio_PlaySfxAtPos(&this->potPos[potIndex], NA_SE_EV_MILK_POT_DAMAGE);
+                    Audio_PlaySfx_AtPos(&this->potPos[potIndex], NA_SE_EV_MILK_POT_DAMAGE);
                 }
 
                 this->potsLife[potIndex]--;
@@ -517,7 +515,7 @@ s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse
                 Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &arg3->actor.world.pos) - this->dyna.actor.shape.rot.y;
 
             this->banditsCollisions[arg2].base.acFlags &= ~AC_HIT;
-            Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
+            Audio_PlaySfx_AtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
             arg3->unk_54C = 0xF;
 
             if (Math_SinS(sp36) > 0.0f) {
@@ -541,7 +539,7 @@ s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse
                 arg3->rider->actor.colorFilterTimer = 20;
                 Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
             }
-            Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
+            Audio_PlaySfx_AtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
         }
     }
 
@@ -701,14 +699,14 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         } else {
             // Waiting for player
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || (gSaveContext.save.time >= CLOCK_TIME(19, 0)) ||
-                (gSaveContext.save.time <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) ||
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || (CURRENT_TIME >= CLOCK_TIME(19, 0)) ||
+                (CURRENT_TIME <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
                 Actor_Kill(&this->dyna.actor);
                 return;
             }
 
-            this->dyna.actor.targetMode = 6;
+            this->dyna.actor.targetMode = TARGET_MODE_6;
             this->unk_2B4 = 0;
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
@@ -830,7 +828,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
             SET_WEEKEVENTREG(WEEKEVENTREG_31_40);
             if (play->msgCtx.choiceIndex == 0) {
                 player = GET_PLAYER(play);
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 SET_WEEKEVENTREG(WEEKEVENTREG_31_80);
                 play->nextEntrance = ENTRANCE(ROMANI_RANCH, 11);
                 if (player->stateFlags1 & PLAYER_STATE1_800000) {
@@ -842,7 +840,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
                 phi_v1 = true;
             } else {
                 Actor_ContinueText(play, &this->dyna.actor, 0x33B5);
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
                 phi_v1 = false;
             }
@@ -864,10 +862,10 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
         case 0x33BD:
             if (play->msgCtx.choiceIndex == 0) {
                 Actor_ContinueText(play, &this->dyna.actor, 0x33BE);
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
             } else {
                 Actor_ContinueText(play, &this->dyna.actor, 0x33BF);
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
             }
             phi_v1 = false;
             break;
@@ -897,7 +895,7 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play) && func_80B795A0(play, this, arg2)) {
-                msgCtx->msgMode = 0x43;
+                msgCtx->msgMode = MSGMODE_TEXT_CLOSING;
                 ret = true;
             }
             break;
@@ -911,7 +909,7 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
 u16 ObjUm_RanchGetDialogue(PlayState* play, ObjUm* this, s32 arg2) {
     u16 textId = 0;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_40)) {
             // "Want a ride?"
             textId = 0x33CF;
@@ -947,7 +945,7 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
 
-    if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
+    if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         *arg3 = 1;
         return 1;
     }
@@ -965,15 +963,15 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
 
-    if ((this->dyna.actor.xyzDistToPlayerSq > SQ(100.0f)) && !this->dyna.actor.isTargeted) {
+    if ((this->dyna.actor.xyzDistToPlayerSq > SQ(100.0f)) && !this->dyna.actor.isLockedOn) {
         return 0;
     }
 
     if (this->dyna.actor.xyzDistToPlayerSq <= SQ(50.0f)) {
-        if (func_800B8614(&this->dyna.actor, play, 50.0f)) {
+        if (Actor_OfferTalk(&this->dyna.actor, play, 50.0f)) {
             this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
         }
-    } else if (func_800B863C(&this->dyna.actor, play)) {
+    } else if (Actor_OfferTalkNearColChkInfoCylinder(&this->dyna.actor, play)) {
         this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
     }
 
@@ -995,15 +993,15 @@ s32 func_80B79A24(s32 arg0) {
 void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    this->dyna.actor.flags |= ACTOR_FLAG_1;
+    this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
     SkelAnime_Update(&this->skelAnime);
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     this->flags |= OBJ_UM_FLAG_WAITING;
-    if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= CLOCK_TIME(19, 0))) {
+    if ((CURRENT_TIME > CLOCK_TIME(18, 0)) && (CURRENT_TIME <= CLOCK_TIME(19, 0))) {
         if (!(player->stateFlags1 & PLAYER_STATE1_800000)) {
             func_80B7984C(play, this, 0, &this->unk_2B4);
         }
-    } else if (!func_80B79A24(this->unk_2B4) && (gSaveContext.save.time > CLOCK_TIME(19, 0))) {
+    } else if (!func_80B79A24(this->unk_2B4) && (CURRENT_TIME > CLOCK_TIME(19, 0))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_34_80);
         ObjUm_SetupAction(this, ObjUm_RanchWaitPathFinished);
     }
@@ -1105,17 +1103,17 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
             if (fabsf(yawDiff) < 100.0f) {
                 this->dyna.actor.shape.rot.y = this->donkey->actor.shape.rot.y;
             } else if (yawDiff > 0) {
-                this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x64;
+                this->dyna.actor.shape.rot.y += 0x64;
                 yawDiff = 0x64;
             } else if (yawDiff < 0) {
-                this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x64;
+                this->dyna.actor.shape.rot.y -= 0x64;
                 yawDiff = -0x64;
             }
         } else if (yawDiff > 0) {
-            this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x190;
+            this->dyna.actor.shape.rot.y += 0x190;
             yawDiff = 0x190;
         } else if (yawDiff < 0) {
-            this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y - 0x190;
+            this->dyna.actor.shape.rot.y -= 0x190;
             yawDiff = -0x190;
         }
 
@@ -1163,7 +1161,7 @@ void ObjUm_RanchStartCs(ObjUm* this, PlayState* play) {
 
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        this->lastTime = gSaveContext.save.time;
+        this->lastTime = CURRENT_TIME;
         ObjUm_SetupAction(this, func_80B7A0E0);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);
@@ -1189,7 +1187,7 @@ void func_80B7A070(ObjUm* this, PlayState* play) {
 
 void func_80B7A0E0(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
         ObjUm_SetupAction(this, func_80B7A070);
     }
@@ -1231,11 +1229,11 @@ void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, PlayState* play) {
 
 void func_80B7A240(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
 
-    this->lastTime = gSaveContext.save.time;
+    this->lastTime = CURRENT_TIME;
     ObjUm_PreMilkRunDialogueHandler(this, play);
 }
 
@@ -1253,11 +1251,11 @@ void func_80B7A2AC(ObjUm* this, PlayState* play) {
             break;
 
         default:
-            if (gSaveContext.save.time == this->lastTime) {
+            if (CURRENT_TIME == this->lastTime) {
                 ObjUm_SetupAction(this, func_80B7A240);
             }
 
-            this->lastTime = gSaveContext.save.time;
+            this->lastTime = CURRENT_TIME;
             Actor_MoveWithGravity(&this->dyna.actor);
             ObjUm_PreMilkRunDialogueHandler(this, play);
             break;
@@ -1267,7 +1265,7 @@ void func_80B7A2AC(ObjUm* this, PlayState* play) {
 void func_80B7A394(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0004;
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
@@ -1281,7 +1279,7 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, PlayState* play) {
     player->stateFlags1 |= PLAYER_STATE1_20;
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        this->lastTime = gSaveContext.save.time;
+        this->lastTime = CURRENT_TIME;
         ObjUm_SetupAction(this, func_80B7A394);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);
@@ -1492,11 +1490,11 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
 
 void func_80B7AB78(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
-    if (gSaveContext.save.time != this->lastTime) {
+    if (CURRENT_TIME != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7ABE4);
     }
 
-    this->lastTime = gSaveContext.save.time;
+    this->lastTime = CURRENT_TIME;
     func_80B7A860(this, play);
 }
 
@@ -1510,11 +1508,11 @@ void func_80B7ABE4(ObjUm* this, PlayState* play) {
             break;
 
         default:
-            if (gSaveContext.save.time == this->lastTime) {
+            if (CURRENT_TIME == this->lastTime) {
                 ObjUm_SetupAction(this, func_80B7AB78);
             }
 
-            this->lastTime = gSaveContext.save.time;
+            this->lastTime = CURRENT_TIME;
             Actor_MoveWithGravity(&this->dyna.actor);
             func_80B7A860(this, play);
             break;
@@ -1531,7 +1529,7 @@ void ObjUm_StartCs(ObjUm* this, PlayState* play) {
 
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        this->lastTime = gSaveContext.save.time;
+        this->lastTime = CURRENT_TIME;
         ObjUm_SetupAction(this, func_80B7ABE4);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);
@@ -1913,9 +1911,10 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         Vec3s sp80;
         s32 i;
         f32 sp70[] = { 2000.0f, 0.0f, -2000.0f };
+        s32 pad;
 
-        //! FAKE
-        if (!i) {}
+        //! FAKE:
+        if (i) {}
 
         sp80.x = 0;
         sp80.z = 0;
@@ -1950,22 +1949,22 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             }
             Matrix_Pop();
 
-            if (mtx_s3 != NULL) {
-                if (play) {}
-                gSPMatrix(POLY_OPA_DISP++, mtx_s3, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-                if (spFC[this->potsLife[i]] != NULL) {
-                    s32 pad;
-
-                    gSPDisplayList(POLY_OPA_DISP++, spFC[this->potsLife[i]]);
-
-                    if (spE4[this->potsLife[i]] != NULL) {
-                        gSPDisplayList(POLY_OPA_DISP++, spE4[this->potsLife[i]]);
-                    }
-                }
-            } else {
+            if (mtx_s3 == NULL) {
                 //! @bug skips CLOSE_DISPS
                 return;
+            }
+
+            //! FAKE:
+            if (play) {}
+
+            gSPMatrix(POLY_OPA_DISP++, mtx_s3, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            if (spFC[this->potsLife[i]] != NULL) {
+                gSPDisplayList(POLY_OPA_DISP++, spFC[this->potsLife[i]]);
+
+                if (spE4[this->potsLife[i]] != NULL) {
+                    gSPDisplayList(POLY_OPA_DISP++, spE4[this->potsLife[i]]);
+                }
             }
         }
 

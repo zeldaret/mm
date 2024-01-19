@@ -1,9 +1,15 @@
-#include "global.h"
+#include "z64light.h"
+
+#include "sys_cfb.h"
+#include "z64skin_matrix.h"
+#include "z64.h"
+#include "functions.h"
+
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 LightsBuffer sLightsBuffer;
 
-void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, s32 type) {
+void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, LightType type) {
     info->type = type;
     info->params.point.x = x;
     info->params.point.y = y;
@@ -78,7 +84,7 @@ void Lights_Draw(Lights* lights, GraphicsContext* gfxCtx) {
 }
 
 Light* Lights_FindSlot(Lights* lights) {
-    if (lights->numLights >= 7) {
+    if (lights->numLights >= ARRAY_COUNT(lights->l.l)) {
         return NULL;
     }
     return &lights->l.l[lights->numLights++];
@@ -129,7 +135,7 @@ void Lights_BindPoint(Lights* lights, LightParams* params, PlayState* play) {
     f32 radiusF = params->point.radius;
     Vec3f posF;
     Vec3f adjustedPos;
-    u32 pad;
+    s32 pad;
 
     if (radiusF > 0) {
         posF.x = params->point.x;
@@ -180,6 +186,9 @@ void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused) {
         light->l.pad1 = 0; // TODO the fact that pad1 is set here means that it now does something in MM's microcode
     }
 }
+
+typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
+typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct PlayState* play);
 
 /**
  * For every light in a provided list, try to find a free slot in the provided Lights group and bind
@@ -239,13 +248,15 @@ LightNode* Lights_FindBufSlot(void) {
 }
 
 void Lights_FreeNode(LightNode* light) {
-    if (light != NULL) {
-        sLightsBuffer.numOccupied--;
-        light->info = NULL;
-        sLightsBuffer.searchIndex =
-            (light - sLightsBuffer.lights) /
-            (s32)sizeof(LightNode); //! @bug Due to pointer arithmetic, the division is unnecessary
+    if (light == NULL) {
+        return;
     }
+
+    sLightsBuffer.numOccupied--;
+    light->info = NULL;
+
+    //! @bug Due to pointer arithmetic, the division is unnecessary
+    sLightsBuffer.searchIndex = (light - sLightsBuffer.lights) / (s32)sizeof(LightNode);
 }
 
 void LightContext_Init(PlayState* play, LightContext* lightCtx) {
@@ -256,15 +267,15 @@ void LightContext_Init(PlayState* play, LightContext* lightCtx) {
 }
 
 void LightContext_SetAmbientColor(LightContext* lightCtx, u8 r, u8 g, u8 b) {
-    lightCtx->ambient.r = r;
-    lightCtx->ambient.g = g;
-    lightCtx->ambient.b = b;
+    lightCtx->ambientColor[0] = r;
+    lightCtx->ambientColor[1] = g;
+    lightCtx->ambientColor[2] = b;
 }
 
 void LightContext_SetFog(LightContext* lightCtx, u8 r, u8 g, u8 b, s16 near, s16 far) {
-    lightCtx->fogColor.r = r;
-    lightCtx->fogColor.g = g;
-    lightCtx->fogColor.b = b;
+    lightCtx->fogColor[0] = r;
+    lightCtx->fogColor[1] = g;
+    lightCtx->fogColor[2] = b;
     lightCtx->fogNear = near;
     lightCtx->zFar = far;
 }
@@ -273,7 +284,7 @@ void LightContext_SetFog(LightContext* lightCtx, u8 r, u8 g, u8 b, s16 near, s16
  * Allocate a new Lights group and initilize the ambient color with that provided by LightContext
  */
 Lights* LightContext_NewLights(LightContext* lightCtx, GraphicsContext* gfxCtx) {
-    return Lights_New(gfxCtx, lightCtx->ambient.r, lightCtx->ambient.g, lightCtx->ambient.b);
+    return Lights_New(gfxCtx, lightCtx->ambientColor[0], lightCtx->ambientColor[1], lightCtx->ambientColor[2]);
 }
 
 void LightContext_InitList(PlayState* play, LightContext* lightCtx) {
@@ -404,21 +415,21 @@ void Lights_GlowCheck(PlayState* play) {
 }
 
 void Lights_DrawGlow(PlayState* play) {
-    Gfx* dl;
+    Gfx* gfx;
     LightPoint* params;
     LightNode* light = play->lightCtx.listHead;
 
     if (light != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        dl = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
+        gfx = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
-        gDPSetDither(dl++, G_CD_NOISE);
+        gDPSetDither(gfx++, G_CD_NOISE);
 
-        gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
+        gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
 
-        gSPDisplayList(dl++, gameplay_keep_DL_029CB0);
+        gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);
 
         do {
             if (light->info->type == LIGHT_POINT_GLOW) {
@@ -426,21 +437,21 @@ void Lights_DrawGlow(PlayState* play) {
                 if (params->drawGlow) {
                     f32 scale = SQ((f32)params->radius) * 2e-6f;
 
-                    gDPSetPrimColor(dl++, 0, 0, params->color[0], params->color[1], params->color[2], 50);
+                    gDPSetPrimColor(gfx++, 0, 0, params->color[0], params->color[1], params->color[2], 50);
 
                     Matrix_Translate(params->x, params->y, params->z, MTXMODE_NEW);
                     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-                    gSPMatrix(dl++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(dl++, gameplay_keep_DL_029CF0);
+                    gSPDisplayList(gfx++, gameplay_keep_DL_029CF0);
                 }
             }
 
             light = light->next;
         } while (light != NULL);
 
-        POLY_XLU_DISP = dl;
+        POLY_XLU_DISP = gfx;
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

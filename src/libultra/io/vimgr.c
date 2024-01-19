@@ -1,14 +1,18 @@
-#include "global.h"
+#include "ultra64.h"
+#include "PR/osint.h"
 #include "stack.h"
-#include "osint.h"
+#include "PR/osint.h"
+#include "libc/stdbool.h"
+#include "macros.h"
+#include "alignment.h"
 
 OSThread viThread;
-STACK(sViStack, 0x1000);
-OSMesgQueue viEventQueue;
-OSMesg viEventBuf[6];
-OSIoMesg viRetraceMsg;
-OSIoMesg viCounterMsg;
-OSMgrArgs __osViDevMgr = { 0 };
+STACK(sViStack, OS_VIM_STACKSIZE) ALIGNED(16);
+OSMesgQueue viEventQueue ALIGNED(8);
+OSMesg viEventBuf[6] ALIGNED(8);
+OSIoMesg viRetraceMsg ALIGNED(8);
+OSIoMesg viCounterMsg ALIGNED(8);
+OSDevMgr __osViDevMgr = { 0 };
 u32 __additional_scanline = 0;
 
 void viMgrMain(void*);
@@ -18,7 +22,7 @@ void osCreateViManager(OSPri pri) {
     OSPri newPri;
     OSPri currentPri;
 
-    if (!__osViDevMgr.initialized) {
+    if (!__osViDevMgr.active) {
         __osTimerServicesInit();
         __additional_scanline = 0;
         osCreateMesgQueue(&viEventQueue, viEventBuf, ARRAY_COUNT(viEventBuf) - 1);
@@ -38,11 +42,11 @@ void osCreateViManager(OSPri pri) {
         }
 
         prevInt = __osDisableInt();
-        __osViDevMgr.initialized = true;
-        __osViDevMgr.mgrThread = &viThread;
+        __osViDevMgr.active = true;
+        __osViDevMgr.thread = &viThread;
         __osViDevMgr.cmdQueue = &viEventQueue;
-        __osViDevMgr.eventQueue = &viEventQueue;
-        __osViDevMgr.accessQueue = NULL;
+        __osViDevMgr.evtQueue = &viEventQueue;
+        __osViDevMgr.acsQueue = NULL;
         __osViDevMgr.piDmaCallback = NULL;
         __osViDevMgr.epiDmaCallback = NULL;
 
@@ -56,8 +60,8 @@ void osCreateViManager(OSPri pri) {
     }
 }
 
-void viMgrMain(void* vargs) {
-    OSMgrArgs* args;
+void viMgrMain(void* arg) {
+    OSDevMgr* dmArgs;
     static u16 viRetrace;
     u32 addTime;
     OSIoMesg* mesg;
@@ -69,10 +73,10 @@ void viMgrMain(void* vargs) {
         viRetrace = 1;
     }
 
-    args = (OSMgrArgs*)vargs;
+    dmArgs = (OSDevMgr*)arg;
 
     while (true) {
-        osRecvMesg(args->eventQueue, (OSMesg)&mesg, OS_MESG_BLOCK);
+        osRecvMesg(dmArgs->evtQueue, (OSMesg*)&mesg, OS_MESG_BLOCK);
         switch (mesg->hdr.type) {
             case OS_MESG_TYPE_VRETRACE:
                 __osViSwapContext();

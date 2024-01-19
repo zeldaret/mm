@@ -24,15 +24,15 @@ typedef struct {
 } RuppeInfo; // size = 0x8
 
 ActorInit En_Sc_Ruppe_InitVars = {
-    ACTOR_EN_SC_RUPPE,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnScRuppe),
-    (ActorFunc)EnScRuppe_Init,
-    (ActorFunc)EnScRuppe_Destroy,
-    (ActorFunc)EnScRuppe_Update,
-    (ActorFunc)EnScRuppe_Draw,
+    /**/ ACTOR_EN_SC_RUPPE,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnScRuppe),
+    /**/ EnScRuppe_Init,
+    /**/ EnScRuppe_Destroy,
+    /**/ EnScRuppe_Update,
+    /**/ EnScRuppe_Draw,
 };
 
 RuppeInfo sRupeeInfo[] = {

@@ -8,6 +8,10 @@ struct EnToto;
 typedef void (*EnTotoActionFunc)(struct EnToto*, PlayState*);
 typedef s32 (*EnTotoUnkFunc)(struct EnToto*, PlayState*);
 
+#define ENTOTO_GET_SWITCH_FLAG_1(thisx) ((thisx)->params & 0x7F)
+#define ENTOTO_GET_SWITCH_FLAG_2(thisx) (((thisx)->params >> 7) & 0x7F)
+#define ENTOTO_GET_SWITCH_FLAG_3(thisx) ((thisx)->home.rot.x)
+
 typedef struct EnTotoText {
     /* 0x0 */ u8 unk0;
     /* 0x1 */ u8 unk1;
@@ -37,7 +41,7 @@ typedef struct EnToto {
     /* 0x2B6 */ u8 unk2B6;
     /* 0x2B7 */ u8 unk2B7;
     /* 0x2B8 */ EnTotoText* text;
-    /* 0x2BC */ struct_80122744_arg1 unk_2BC;
+    /* 0x2BC */ PlayerOverrideInputEntry overrideInputEntry;
     /* 0x2C4 */ Actor* spotlights;
     /* 0x2C8 */ s32 pad2C8;
 } EnToto; // size = 0x2CC

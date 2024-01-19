@@ -12,6 +12,7 @@
  */
 
 #include "z_bg_sinkai_kabe.h"
+#include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 #include "objects/object_sinkai_kabe/object_sinkai_kabe.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -25,15 +26,15 @@ void BgSinkaiKabe_Update(Actor* thisx, PlayState* play);
 void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, PlayState* play);
 
 ActorInit Bg_Sinkai_Kabe_InitVars = {
-    ACTOR_BG_SINKAI_KABE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_SINKAI_KABE,
-    sizeof(BgSinkaiKabe),
-    (ActorFunc)BgSinkaiKabe_Init,
-    (ActorFunc)BgSinkaiKabe_Destroy,
-    (ActorFunc)BgSinkaiKabe_Update,
-    (ActorFunc)NULL,
+    /**/ ACTOR_BG_SINKAI_KABE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_SINKAI_KABE,
+    /**/ sizeof(BgSinkaiKabe),
+    /**/ BgSinkaiKabe_Init,
+    /**/ BgSinkaiKabe_Destroy,
+    /**/ BgSinkaiKabe_Update,
+    /**/ NULL,
 };
 
 static s32 sCurrentPythonIndex = 0;
@@ -99,8 +100,8 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
         pos.z += (Math_CosS(this->dyna.actor.world.rot.y + 0x8000) * 500.0f);
         if (shouldSpawnSeahorse) {
             Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, pos.x, pos.y, pos.z, 0,
-                                          this->dyna.actor.shape.rot.y, 0, 0x4000, this->dyna.actor.csId,
-                                          this->dyna.actor.halfDaysBits, NULL);
+                                          this->dyna.actor.shape.rot.y, 0, SEAHORSE_PARAMS(SEAHORSE_TYPE_1, 0, 0),
+                                          this->dyna.actor.csId, this->dyna.actor.halfDaysBits, NULL);
         }
 
         Actor_Kill(&this->dyna.actor);

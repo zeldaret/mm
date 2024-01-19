@@ -1,3 +1,4 @@
+#include "z64eff_ss_dead.h"
 #include "global.h"
 
 void func_800AE2A0(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3) {
@@ -19,7 +20,7 @@ void func_800AE2A0(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3) {
         gDPSetFogColor(displayListHead++, color->r, color->g, color->b, color->a);
     }
 
-    gSPFogPosition(displayListHead++, 0, (s16)(absCos * 3000.0f) + 1500);
+    gSPFogPosition(displayListHead++, 0, TRUNCF_BINANG(absCos * 3000.0f) + 1500);
 
     POLY_OPA_DISP = displayListHead;
 
@@ -37,7 +38,7 @@ void func_800AE434(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3) {
 
     gDPPipeSync(displayListHead++);
     gDPSetFogColor(displayListHead++, color->r, color->g, color->b, color->a);
-    gSPFogPosition(displayListHead++, 0, (s16)(2800.0f * fabsf(cos)) + 1700);
+    gSPFogPosition(displayListHead++, 0, TRUNCF_BINANG(2800.0f * fabsf(cos)) + 1700);
 
     POLY_OPA_DISP = displayListHead;
 
@@ -74,7 +75,7 @@ void func_800AE5E4(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3) {
         gDPSetFogColor(displayListHead++, color->r, color->g, color->b, color->a);
     }
 
-    gSPFogPosition(displayListHead++, 0, (s16)(absCos * 3000.0f) + 1500);
+    gSPFogPosition(displayListHead++, 0, TRUNCF_BINANG(absCos * 3000.0f) + 1500);
 
     POLY_XLU_DISP = displayListHead;
 
@@ -92,7 +93,7 @@ void func_800AE778(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3) {
 
     gDPPipeSync(displayListHead++);
     gDPSetFogColor(displayListHead++, color->r, color->g, color->b, color->a);
-    gSPFogPosition(displayListHead++, 0, (s16)(2800.0f * fabsf(cos)) + 1700);
+    gSPFogPosition(displayListHead++, 0, TRUNCF_BINANG(2800.0f * fabsf(cos)) + 1700);
 
     POLY_XLU_DISP = displayListHead;
 

@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define BGKEIKOKUSAKU_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define BGKEIKOKUSAKU_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 struct BgKeikokuSaku;
 

@@ -11,9 +11,9 @@ typedef struct EnKnight {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s16 unk_144;
     /* 0x146 */ char unk_146[0x2];
-    /* 0x148 */ s8 unk_148;
+    /* 0x148 */ u8 unk_148;
     /* 0x149 */ char unk_149[0x8];
-    /* 0x151 */ s8 unk_151;
+    /* 0x151 */ u8 unk_151;
     /* 0x152 */ char unk_152[0x1];
     /* 0x153 */ u8 unk_153;
     /* 0x154 */ u8 unk_154;

@@ -2,12 +2,21 @@
 #define Z_EN_MUSHI2_H
 
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 struct EnMushi2;
 
 typedef void (*EnMushi2ActionFunc)(struct EnMushi2*, PlayState*);
 
 #define ENMUSHI2_GET_3(thisx) ((thisx)->params & 3)
+
+#define ENMUSHI2_PARAMS(param) ((param) & 3)
+
+typedef enum {
+    /* 0 */ ENMUSHI2_0,
+    /* 1 */ ENMUSHI2_1,
+    /* 2 */ ENMUSHI2_2
+} EnMush2Param;
 
 typedef struct {
     /* 0x0 */ s16 unk_00;
@@ -17,8 +26,8 @@ typedef struct {
 typedef struct EnMushi2 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[24];
-    /* 0x218 */ Vec3s morphTable[24];
+    /* 0x188 */ Vec3s jointTable[BUG_LIMB_MAX];
+    /* 0x218 */ Vec3s morphTable[BUG_LIMB_MAX];
     /* 0x2A8 */ ColliderJntSph collider;
     /* 0x2C8 */ ColliderJntSphElement colliderElements[1];
     /* 0x308 */ EnMushi2ActionFunc actionFunc;

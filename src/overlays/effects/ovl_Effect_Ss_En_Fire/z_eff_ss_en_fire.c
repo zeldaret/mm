@@ -43,7 +43,7 @@ u32 EffectSsEnFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
     this->update = EffectSsEnFire_Update;
     this->rUnused = -15;
 
-    if (initParams->bodyPart < 0) {
+    if (initParams->bodyPart <= BODYPART_NONE) {
         this->rYaw = Math_Vec3f_Yaw(&initParams->actor->world.pos, &initParams->pos) - initParams->actor->shape.rot.y;
         this->rPitch =
             Math_Vec3f_Pitch(&initParams->actor->world.pos, &initParams->pos) - initParams->actor->shape.rot.x;
@@ -124,7 +124,7 @@ void EffectSsEnFire_Update(PlayState* play, u32 index, EffectSs* this) {
         if (this->actor->update != NULL) {
             Math_SmoothStepToS(&this->rScale, this->rScaleMax, 1, this->rScaleMax >> 3, 0);
 
-            if (this->rBodyPart < 0) {
+            if (this->rBodyPart <= BODYPART_NONE) {
                 Matrix_Translate(this->actor->world.pos.x, this->actor->world.pos.y, this->actor->world.pos.z,
                                  MTXMODE_NEW);
                 Matrix_RotateYS(this->rYaw + this->actor->shape.rot.y, MTXMODE_APPLY);

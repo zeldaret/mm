@@ -3,8 +3,6 @@
  * Overlay: ovl_En_Twig
  * Description: Beaver Race Ring
  */
-
-#include "prevent_bss_reordering.h"
 #include "z_en_twig.h"
 #include "objects/object_twig/object_twig.h"
 
@@ -27,15 +25,15 @@ void func_80AC0CC4(EnTwig* this, PlayState* play);
 void func_80AC0D2C(EnTwig* this, PlayState* play);
 
 ActorInit En_Twig_InitVars = {
-    ACTOR_EN_TWIG,
-    ACTORCAT_MISC,
-    FLAGS,
-    OBJECT_TWIG,
-    sizeof(EnTwig),
-    (ActorFunc)EnTwig_Init,
-    (ActorFunc)EnTwig_Destroy,
-    (ActorFunc)EnTwig_Update,
-    (ActorFunc)EnTwig_Draw,
+    /**/ ACTOR_EN_TWIG,
+    /**/ ACTORCAT_MISC,
+    /**/ FLAGS,
+    /**/ OBJECT_TWIG,
+    /**/ sizeof(EnTwig),
+    /**/ EnTwig_Init,
+    /**/ EnTwig_Destroy,
+    /**/ EnTwig_Update,
+    /**/ EnTwig_Draw,
 };
 
 s32 sCurrentRing;
@@ -125,7 +123,7 @@ void func_80AC0A6C(EnTwig* this, PlayState* play) {
 void func_80AC0A7C(EnTwig* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    Math_Vec3f_Copy(&this->unk_180, &player->bodyPartsPos[0]);
+    Math_Vec3f_Copy(&this->unk_180, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
     this->unk_178 = 0;
     this->unk_17A = 0;
     this->actionFunc = func_80AC0AC8;
@@ -148,7 +146,7 @@ void func_80AC0AC8(EnTwig* this, PlayState* play) {
     SubS_ConstructPlane(&this->dyna.actor.world.pos, &D_80AC10D0, &this->dyna.actor.shape.rot, &sp4C);
     if ((sCurrentRing == RACERING_GET_PARAM_FE0(&this->dyna.actor)) &&
         Math3D_LineSegVsPlane(sp4C.normal.x, sp4C.normal.y, sp4C.normal.z, sp4C.originDist, &this->unk_180,
-                              &player->bodyPartsPos[0], &sp40, 0)) {
+                              &player->bodyPartsPos[PLAYER_BODYPART_WAIST], &sp40, 0)) {
         if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &sp40) <= SQ(this->dyna.actor.scale.x * 0.345f * 40.0f)) {
             func_80AC0CC4(this, play);
             return;
@@ -164,7 +162,7 @@ void func_80AC0AC8(EnTwig* this, PlayState* play) {
             this->dyna.actor.world.rot.y = this->dyna.actor.yawTowardsPlayer;
         }
     }
-    Math_Vec3f_Copy(&this->unk_180, &player->bodyPartsPos[0]);
+    Math_Vec3f_Copy(&this->unk_180, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
 }
 
 void func_80AC0CC4(EnTwig* this, PlayState* play) {
@@ -182,10 +180,13 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
     static Color_RGBA8 sColorYellow = { 255, 255, 0, 0 };
     Player* player = GET_PLAYER(play);
 
-    Math_SmoothStepToF(&this->dyna.actor.world.pos.x, player->bodyPartsPos[0].x, 0.5f, 100.0f, 0.01f);
-    Math_SmoothStepToF(&this->dyna.actor.world.pos.y, player->bodyPartsPos[0].y, 0.5f, 100.0f, 0.01f);
-    Math_SmoothStepToF(&this->dyna.actor.world.pos.z, player->bodyPartsPos[0].z, 0.5f, 100.0f, 0.01f);
-    this->dyna.actor.shape.rot.z += (s16)this->unk_170;
+    Math_SmoothStepToF(&this->dyna.actor.world.pos.x, player->bodyPartsPos[PLAYER_BODYPART_WAIST].x, 0.5f, 100.0f,
+                       0.01f);
+    Math_SmoothStepToF(&this->dyna.actor.world.pos.y, player->bodyPartsPos[PLAYER_BODYPART_WAIST].y, 0.5f, 100.0f,
+                       0.01f);
+    Math_SmoothStepToF(&this->dyna.actor.world.pos.z, player->bodyPartsPos[PLAYER_BODYPART_WAIST].z, 0.5f, 100.0f,
+                       0.01f);
+    this->dyna.actor.shape.rot.z += TRUNCF_BINANG(this->unk_170);
     this->dyna.actor.scale.x -= this->unk_174;
     if (this->dyna.actor.scale.x < 0.0f) {
         Actor_SetScale(&this->dyna.actor, 0.0f);
@@ -203,7 +204,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
             EffectSsKirakira_SpawnDispersed(play, &sp6C, &sKiraVel, &sKiraAccel, &sColorWhite, &sColorYellow, 1000,
                                             (s32)(Rand_ZeroOne() * 10.0f) + 20);
         }
-        play_sound(NA_SE_SY_GET_ITEM);
+        Audio_PlaySfx(NA_SE_SY_GET_ITEM);
         play->interfaceCtx.minigamePoints--;
         sRingNotCollected[RACERING_GET_PARAM_FE0(&this->dyna.actor)] = true;
         if (sCurrentRing == RACERING_GET_PARAM_FE0(&this->dyna.actor)) {
