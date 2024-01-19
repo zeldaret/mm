@@ -74,6 +74,7 @@
  *
  **************************************************************************/
 
+/* Not original to libultra: Some added task defines */
 #define M_NULTASK   0
 #define M_GFXTASK   1
 #define M_AUDTASK   2

@@ -5,6 +5,8 @@
 
 #include "ultratypes.h"
 
+/* Not original to libultra: Point Lights, DW, and Mtx intPart/FracPart union */
+
 /* To enable Fast3DEX grucode support, define F3DEX_GBI. */
 
 /* Types */

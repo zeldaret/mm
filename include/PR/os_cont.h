@@ -56,6 +56,7 @@ typedef struct {
 #define B_BUTTON        0x4000
 #define A_BUTTON        0x8000
 
+/* Not original to libultra: button macros */
 /* Buttons */
 #define BTN_CRIGHT R_CBUTTONS
 #define BTN_CLEFT  L_CBUTTONS
