@@ -123,6 +123,7 @@ YAZ0       := tools/buildtools/yaz0
 ZAPD       := tools/ZAPD/ZAPD.out
 FADO       := tools/fado/fado.elf
 MAKEYAR    := tools/buildtools/makeyar
+# MAKEYAR    := python3 tools/buildtools/makeyar.py
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
