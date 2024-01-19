@@ -30,24 +30,24 @@ typedef enum {
 } MajoraParams;
 
 typedef struct {
-    Vec3f base;
-    Vec3f pos[MAJORAS_TENT_LENGTH];
-    Vec3f rot[MAJORAS_TENT_LENGTH];
-    Vec3f vel[MAJORAS_TENT_LENGTH];
-} Boss07Tentacle; // size = 0x174 (0xC + 0x24 * length)
+    /* 0x00 */ Vec3f base;
+    /* 0x0C */ Vec3f pos[MAJORAS_TENT_LENGTH];
+    /* 0x84 */ Vec3f rot[MAJORAS_TENT_LENGTH];
+    /* 0xFC */ Vec3f vel[MAJORAS_TENT_LENGTH];
+} Boss07Tentacle; // size = 0x174
 
 typedef struct {
-    Vec3s baseRot;
-    f32 gravity;
-    f32 mobility;
-    f32 drag;
-    f32 tension;
-    Vec3f basePos;
-    Vec3f pos[MAJORAS_WHIP_MAX_LENGTH];
-    Vec3f rot[MAJORAS_WHIP_MAX_LENGTH];
-    Vec3f vel[MAJORAS_WHIP_MAX_LENGTH];
-    f32 unk_72C[MAJORAS_WHIP_MAX_LENGTH]; // unused, probably a stretch factor
-} Boss07Whip; // size = 0x7F4 (0x24 + 0x28 * max)
+    /* 0x000 */ Vec3s baseRot;
+    /* 0x008 */ f32 gravity;
+    /* 0x00C */ f32 mobility;
+    /* 0x010 */ f32 drag;
+    /* 0x014 */ f32 tension;
+    /* 0x018 */ Vec3f basePos;
+    /* 0x024 */ Vec3f pos[MAJORAS_WHIP_MAX_LENGTH];
+    /* 0x27C */ Vec3f rot[MAJORAS_WHIP_MAX_LENGTH];
+    /* 0x4D4 */ Vec3f vel[MAJORAS_WHIP_MAX_LENGTH];
+    /* 0x72C */ f32 unk_72C[MAJORAS_WHIP_MAX_LENGTH]; // unused, probably a stretch factor
+} Boss07Whip; // size = 0x7F4
 
 typedef struct Boss07 {
     /* 0x0000 */ Actor actor;

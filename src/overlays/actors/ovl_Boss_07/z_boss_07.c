@@ -12,7 +12,6 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
 
-#include "objects/object_boss07/object_boss07.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -984,11 +983,11 @@ void Boss07_Wrath_Death(Boss07* this, PlayState* play) {
     Boss07_SmoothStop(this, 1.0f);
     switch (this->csState) {
         case MAJORAS_WRATH_DEATH_STATE_0:
-            if (CutsceneManager_GetCurrentCsId() != -1) {
+            if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
             }
             Cutscene_StartManual(play, &play->csCtx);
-            Player_SetCsActionWithHaltedActors(play, &this->actor, 1);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_1);
             this->subCamIndex = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamIndex, CAM_STATUS_ACTIVE);
@@ -2504,56 +2503,23 @@ s32 Boss07_Wrath_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
 }
 
 typedef enum {
-    MAJORAS_WRATH_PART_NONE = -1,
-    MAJORAS_WRATH_PART_HEAD,
-    MAJORAS_WRATH_PART_TORSO,
-    MAJORAS_WRATH_PART_PELVIS,
-    MAJORAS_WRATH_PART_LEFT_UPPER_ARM,
-    MAJORAS_WRATH_PART_LEFT_LOWER_ARM_ROOT,
-    MAJORAS_WRATH_PART_LEFT_FOREARM,
-    MAJORAS_WRATH_PART_RIGHT_UPPER_ARM,
-    MAJORAS_WRATH_PART_RIGHT_LOWER_ARM_ROOT,
-    MAJORAS_WRATH_PART_RIGHT_FOREARM,
-    MAJORAS_WRATH_PART_RIGHT_THIGH,
-    MAJORAS_WRATH_PART_RIGHT_SHIN,
-    MAJORAS_WRATH_PART_RIGHT_FOOT,
-    MAJORAS_WRATH_PART_LEFT_THIGH,
-    MAJORAS_WRATH_PART_LEFT_SHIN,
-    MAJORAS_WRATH_PART_LEFT_FOOT,
-    MAJORAS_WRATH_PART_MAX
+    /*  0 */ MAJORAS_WRATH_BODYPART_HEAD,
+    /*  1 */ MAJORAS_WRATH_BODYPART_TORSO,
+    /*  2 */ MAJORAS_WRATH_BODYPART_PELVIS,
+    /*  3 */ MAJORAS_WRATH_BODYPART_LEFT_UPPER_ARM,
+    /*  4 */ MAJORAS_WRATH_BODYPART_LEFT_LOWER_ARM_ROOT,
+    /*  5 */ MAJORAS_WRATH_BODYPART_LEFT_FOREARM,
+    /*  6 */ MAJORAS_WRATH_BODYPART_RIGHT_UPPER_ARM,
+    /*  7 */ MAJORAS_WRATH_BODYPART_RIGHT_LOWER_ARM_ROOT,
+    /*  8 */ MAJORAS_WRATH_BODYPART_RIGHT_FOREARM,
+    /*  9 */ MAJORAS_WRATH_BODYPART_RIGHT_THIGH,
+    /* 10 */ MAJORAS_WRATH_BODYPART_RIGHT_SHIN,
+    /* 11 */ MAJORAS_WRATH_BODYPART_RIGHT_FOOT,
+    /* 12 */ MAJORAS_WRATH_BODYPART_LEFT_THIGH,
+    /* 13 */ MAJORAS_WRATH_BODYPART_LEFT_SHIN,
+    /* 14 */ MAJORAS_WRATH_BODYPART_LEFT_FOOT,
+    /* 15 */ MAJORAS_WRATH_BODYPART_MAX
 } MajorasWrathBodyPart;
-
-// typedef enum MajorasWrathLimbs {
-//     /* -1 */ MAJORAS_WRATH_LIMB_NONE,
-//     /* -1 */ MAJORAS_WRATH_LIMB_ROOT,
-//     /*  2 */ MAJORAS_WRATH_LIMB_PELVIS,
-//     /* -1 */ MAJORAS_WRATH_LIMB_LEFT_LEG_ROOT,
-//     /* 12 */ MAJORAS_WRATH_LIMB_LEFT_THIGH,
-//     /* -1 */ MAJORAS_WRATH_LIMB_LEFT_LOWER_LEG_ROOT,
-//     /* 13 */ MAJORAS_WRATH_LIMB_LEFT_SHIN,
-//     /* 14 */ MAJORAS_WRATH_LIMB_LEFT_FOOT,
-//     /* -1 */ MAJORAS_WRATH_LIMB_RIGHT_LEG_ROOT,
-//     /*  9 */ MAJORAS_WRATH_LIMB_RIGHT_THIGH,
-//     /* -1 */ MAJORAS_WRATH_LIMB_RIGHT_LOWER_LEG_ROOT,
-//     /* 10 */ MAJORAS_WRATH_LIMB_RIGHT_SHIN,
-//     /* 11 */ MAJORAS_WRATH_LIMB_RIGHT_FOOT,
-//     /* -1 */ MAJORAS_WRATH_LIMB_TORSO_ROOT,
-//     /*  1 */ MAJORAS_WRATH_LIMB_TORSO,
-//     /* -1 */ MAJORAS_WRATH_LIMB_RIGHT_ARM_ROOT,
-//     /*  6 */ MAJORAS_WRATH_LIMB_RIGHT_UPPER_ARM,
-//     /*  7 */ MAJORAS_WRATH_LIMB_RIGHT_LOWER_ARM_ROOT,
-//     /*  8 */ MAJORAS_WRATH_LIMB_RIGHT_FOREARM,
-//     /* -1 */ MAJORAS_WRATH_LIMB_RIGHT_HAND,
-//     /* -1 */ MAJORAS_WRATH_LIMB_LEFT_ARM_ROOT,
-//     /*  3 */ MAJORAS_WRATH_LIMB_LEFT_UPPER_ARM,
-//     /*  4 */ MAJORAS_WRATH_LIMB_LEFT_LOWER_ARM_ROOT,
-//     /*  5 */ MAJORAS_WRATH_LIMB_LEFT_FOREARM,
-//     /* -1 */ MAJORAS_WRATH_LIMB_LEFT_HAND,
-//     /* -1 */ MAJORAS_WRATH_LIMB_HEAD_ROOT,
-//     /*  0 */ MAJORAS_WRATH_LIMB_HEAD,
-//     /* -1 */ MAJORAS_WRATH_LIMB_THIRD_EYE,
-//     /* -1 */ MAJORAS_WRATH_LIMB_MAX
-// } MajorasWrathLimbs;
 
 void Boss07_Wrath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static s8 sLimbColliderIndex[30] = {
@@ -3406,11 +3372,11 @@ void Boss07_Incarnation_Death(Boss07* this, PlayState* play) {
     Boss07_SmoothStop(this, 3.0f);
     switch (this->csState) {
         case MAJORAS_INCARNATION_DEATH_STATE_0:
-            if (CutsceneManager_GetCurrentCsId() != -1) {
+            if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
             }
             Cutscene_StartManual(play, &play->csCtx);
-            Player_SetCsActionWithHaltedActors(play, &this->actor, 7);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
             this->subCamIndex = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamIndex, CAM_STATUS_ACTIVE);
@@ -4386,11 +4352,11 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
             this->actor.world.pos.x = 0.0f;
             this->actor.world.pos.y = 277.0f;
             this->actor.world.pos.z = -922.5f;
-            if (!((player->actor.world.pos.z < 700.0f) && (CutsceneManager_GetCurrentCsId() == -1))) {
+            if (!((player->actor.world.pos.z < 700.0f) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
                 break;
             }
             Cutscene_StartManual(play, &play->csCtx);
-            Player_SetCsActionWithHaltedActors(play, &this->actor, 7);
+            Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
             this->subCamIndex = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamIndex, CAM_STATUS_ACTIVE);
@@ -4403,7 +4369,7 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
                 Math_ApproachF(&sMajoraStatic->introOrbScale, sREG(50) + 1.0f, 0.05f, sREG(51) + 0.05f);
             }
             if (this->timer_ABC8 == 35) {
-                Player_SetCsActionWithHaltedActors(play, &this->actor, 0xF);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_15);
             }
             player->actor.world.pos.x = 0.0f;
             player->actor.world.pos.z = 700.0f;
@@ -4635,9 +4601,9 @@ void Boss07_Mask_Death(Boss07* this, PlayState* play) {
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     switch (this->csState) {
         case MAJORAS_MASK_DEATH_STATE_0:
-            if (CutsceneManager_GetCurrentCsId() == -1) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Cutscene_StartManual(play, &play->csCtx);
-                Player_SetCsActionWithHaltedActors(play, &this->actor, 1);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_1);
                 this->subCamIndex = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamIndex, CAM_STATUS_ACTIVE);
@@ -5886,9 +5852,9 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
             }
             break;
         case MAJORAS_STATIC_CS_STATE_1:
-            if (CutsceneManager_GetCurrentCsId() == -1) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Cutscene_StartManual(play, &play->csCtx);
-                Player_SetCsActionWithHaltedActors(play, &this->actor, 7);
+                Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
                 this->subCamIndex = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamIndex, CAM_STATUS_ACTIVE);
