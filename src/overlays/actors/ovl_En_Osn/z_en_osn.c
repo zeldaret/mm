@@ -884,7 +884,7 @@ void EnOsn_HandleCutscene(EnOsn* this, PlayState* play) {
 void EnOsn_Talk(EnOsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_EVENT)) && Message_ShouldAdvance(play)) {
         if (this->stateFlags & OSN_STATE_END_CONVERSATION) {
             this->stateFlags &= ~OSN_STATE_END_CONVERSATION;
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;

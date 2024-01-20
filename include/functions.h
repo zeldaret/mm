@@ -3,25 +3,6 @@
 
 #include "z64.h"
 
-void bootproc(void);
-void ViConfig_UpdateVi(u32 black);
-void ViConfig_UpdateBlack(void);
-s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size);
-s32 DmaMgr_DmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction);
-DmaEntry* DmaMgr_FindDmaEntry(uintptr_t vrom);
-u32 DmaMgr_TranslateVromToRom(uintptr_t vrom);
-s32 DmaMgr_FindDmaIndex(uintptr_t vrom);
-const char* func_800809F4(uintptr_t param_1);
-void DmaMgr_ProcessMsg(DmaRequest* req);
-void DmaMgr_ThreadEntry(void* arg);
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused, OSMesgQueue* queue, void* msg);
-s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size);
-void DmaMgr_Start(void);
-void DmaMgr_Stop(void);
-void* Yaz0_FirstDMA(void);
-void* Yaz0_NextDMA(void* curSrcPos);
-s32 Yaz0_DecompressImpl(u8* src, u8* dst);
-void Yaz0_Decompress(uintptr_t romStart, void* dst, size_t size);
 void IrqMgr_AddClient(IrqMgr* irqmgr, IrqMgrClient* client, OSMesgQueue* msgQueue);
 void IrqMgr_RemoveClient(IrqMgr* irqmgr, IrqMgrClient* remove);
 void IrqMgr_SendMesgForClient(IrqMgr* irqmgr, OSMesg msg);
@@ -35,35 +16,6 @@ void IrqMgr_HandleRetrace(IrqMgr* irqmgr);
 void IrqMgr_ThreadEntry(IrqMgr* irqmgr);
 void IrqMgr_Init(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount);
 
-void osSyncPrintfUnused(const char* fmt, ...);
-
-void rmonPrintf(const char* fmt, ...);
-
-void RcpUtils_PrintRegisterStatus(void);
-void RcpUtils_Reset(void);
-
-void PadUtils_Init(Input* input);
-void func_80085150(void);
-void PadUtils_ResetPressRel(Input* input);
-u32 PadUtils_CheckCurExact(Input* input, u16 value);
-u32 PadUtils_CheckCur(Input* input, u16 key);
-u32 PadUtils_CheckPressed(Input* input, u16 key);
-u32 PadUtils_CheckReleased(Input* input, u16 key);
-u16 PadUtils_GetCurButton(Input* input);
-u16 PadUtils_GetPressButton(Input* input);
-s8 PadUtils_GetCurX(Input* input);
-s8 PadUtils_GetCurY(Input* input);
-void PadUtils_SetRelXY(Input* input, s32 x, s32 y);
-s8 PadUtils_GetRelXImpl(Input* input);
-s8 PadUtils_GetRelYImpl(Input* input);
-s8 PadUtils_GetRelX(Input* input);
-s8 PadUtils_GetRelY(Input* input);
-void PadUtils_UpdateRelXY(Input* input);
-
-void MtxConv_F2L(Mtx* mtx, MtxF* mf);
-void MtxConv_L2F(MtxF* mtx, Mtx* mf);
-
-s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
 
 // void EnItem00_SetObject(EnItem00* this, PlayState* play, f32* shadowOffset, f32* shadowScale);
 // void EnItem00_Init(Actor* thisx, PlayState* play);
@@ -256,8 +208,8 @@ void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overr
 void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, s32 animIndex);
 void Actor_Noop(Actor* actor, PlayState* play);
 
-void Gfx_DrawDListOpa(PlayState* play, Gfx* dlist);
-void Gfx_DrawDListXlu(PlayState* play, Gfx* dlist);
+void Gfx_DrawDListOpa(PlayState* play, Gfx* dList);
+void Gfx_DrawDListXlu(PlayState* play, Gfx* dList);
 
 Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance);
 s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5);

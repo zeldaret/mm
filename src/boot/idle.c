@@ -4,6 +4,7 @@
 #include "main.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "viconfig.h"
 #include "z64thread.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -50,7 +51,7 @@ void Main_InitScreen(void) {
 }
 
 void Main_InitMemory(void) {
-    void* memStart = (void*)0x80000400;
+    void* memStart = (void*)BOOT_ADDRESS_ULTRA;
     void* memEnd = OS_PHYSICAL_TO_K0(osMemSize);
 
     Main_ClearMemory(memStart, SEGMENT_START(framebuffer_lo));
@@ -73,8 +74,8 @@ void Main_Init(void) {
     prevSize = gDmaMgrDmaBuffSize;
     gDmaMgrDmaBuffSize = 0;
 
-    DmaMgr_SendRequestImpl(&dmaReq, SEGMENT_START(code), SEGMENT_ROM_START(code), SEGMENT_ROM_SIZE_ALT(code), 0, &mq,
-                           NULL);
+    DmaMgr_RequestAsync(&dmaReq, SEGMENT_START(code), SEGMENT_ROM_START(code), SEGMENT_ROM_SIZE_ALT(code), 0, &mq,
+                        NULL);
     Main_InitScreen();
     Main_InitMemory();
     osRecvMesg(&mq, NULL, OS_MESG_BLOCK);
@@ -87,7 +88,7 @@ void Main_Init(void) {
 void Main_ThreadEntry(void* arg) {
     StackCheck_Init(&sIrqMgrStackInfo, sIrqMgrStack, STACK_TOP(sIrqMgrStack), 0, 0x100, "irqmgr");
     IrqMgr_Init(&gIrqMgr, STACK_TOP(sIrqMgrStack), Z_PRIORITY_IRQMGR, 1);
-    DmaMgr_Start();
+    DmaMgr_Init();
     Main_Init();
     Main(arg);
     DmaMgr_Stop();

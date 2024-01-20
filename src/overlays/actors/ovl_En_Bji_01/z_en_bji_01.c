@@ -264,7 +264,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 switch (play->msgCtx.currentTextId) {

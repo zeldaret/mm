@@ -1,4 +1,5 @@
 #include "global.h"
+#include "viconfig.h"
 #include "z_prenmi.h"
 
 void PreNMI_Stop(PreNMIState* this) {

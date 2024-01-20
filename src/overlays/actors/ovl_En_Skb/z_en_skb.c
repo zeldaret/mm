@@ -365,13 +365,13 @@ void func_80995068(EnSkb* this, PlayState* play) {
 void func_80995190(EnSkb* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
         case TEXT_STATE_CHOICE:
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 Message_StartTextbox(play, 0x13F7, &this->actor);
                 if (this->unk_3DE == 2) {
