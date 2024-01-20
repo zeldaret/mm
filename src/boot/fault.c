@@ -42,7 +42,6 @@
 #include "fault.h"
 #include "fault_internal.h"
 
-#include "libc64/sprintf.h"
 #include "libc64/sleep.h"
 #include "libc64/sprintf.h"
 #include "PR/osint.h"
