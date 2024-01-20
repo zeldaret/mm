@@ -45,7 +45,7 @@ u32 sBgF40SwitchLastUpdateFrame;
 void BgF40Switch_CheckAll(BgF40Switch* this, PlayState* play) {
     if (play->gameplayFrames != sBgF40SwitchLastUpdateFrame) {
         u32 pressedSwitchFlags[4] = { 0 };
-        u32 pad;
+        s32 pad;
         s32 switchFlag;
         s32 isPressed;
         Actor* actor;

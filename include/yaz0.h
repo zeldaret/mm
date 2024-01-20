@@ -5,4 +5,6 @@
 
 void Yaz0_Decompress(uintptr_t romStart, void* dst, size_t size);
 
+extern void* gYaz0DecompressDstEnd;
+
 #endif

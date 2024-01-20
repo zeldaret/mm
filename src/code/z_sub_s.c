@@ -108,7 +108,7 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
                             TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx) {
     StandardLimb* rootLimb;
     s32 pad;
-    Gfx* newDlist;
+    Gfx* newDList;
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
@@ -125,19 +125,19 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     pos.y = jointTable[LIMB_ROOT_POS].y;
     pos.z = jointTable[LIMB_ROOT_POS].z;
     rot = jointTable[LIMB_ROOT_ROT];
-    newDlist = rootLimb->dList;
+    newDList = rootLimb->dList;
     limbDList = rootLimb->dList;
 
-    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &newDlist, &pos, &rot, actor, &gfx)) {
+    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &newDList, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         Matrix_Push();
 
         transformLimbDraw(play, 1, actor, &gfx);
 
-        if (newDlist != NULL) {
+        if (newDList != NULL) {
             Matrix_ToMtx(mtx);
             gSPMatrix(gfx++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(gfx++, newDlist);
+            gSPDisplayList(gfx++, newDList);
             mtx++;
         } else if (limbDList != NULL) {
             Matrix_ToMtx(mtx);

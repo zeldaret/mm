@@ -1979,7 +1979,7 @@ void func_8012536C(void) {
 void Player_DrawZoraShield(PlayState* play, Player* player) {
     u8* phi_a0;
     Vtx* vtx;
-    Gfx* dList;
+    Gfx* gfx;
     f32 scale = player->unk_B62 * (10.0f / 51.0f);
     s32 i;
 
@@ -2000,12 +2000,12 @@ void Player_DrawZoraShield(PlayState* play, Player* player) {
         phi_a0++;
     }
 
-    dList = POLY_XLU_DISP;
+    gfx = POLY_XLU_DISP;
 
-    gSPMatrix(&dList[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dList[1], object_link_zora_DL_011760);
+    gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&gfx[1], object_link_zora_DL_011760);
 
-    POLY_XLU_DISP = &dList[2];
+    POLY_XLU_DISP = &gfx[2];
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -3263,7 +3263,7 @@ void Player_DrawGreatFairysMask(PlayState* play, Player* player) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
+s32 func_80128640(PlayState* play, Player* player, Gfx* dList) {
     s32 temp_v1 = player->skelAnime.animation == &gPlayerAnim_cl_maskoff;
     f32 temp_f0;
 
@@ -3334,7 +3334,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
         Matrix_Pop();
 
         CLOSE_DISPS(play->state.gfxCtx);
-    } else if (dlist == object_link_zora_DL_00E2A0) { // zora guitar
+    } else if (dList == object_link_zora_DL_00E2A0) { // zora guitar
         s16 sp26 = Math_SinS(player->unk_B86[0]) * (ABS_ALT(player->upperLimbRot.x) * ((f32)(IREG(52) + 20)) / 100.0f);
         s16 sp24 = Math_SinS(player->unk_B86[1]) * (ABS_ALT(player->upperLimbRot.y) * ((f32)(IREG(53) + 15)) / 100.0f);
 

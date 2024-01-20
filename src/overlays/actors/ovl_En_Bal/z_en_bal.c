@@ -592,13 +592,13 @@ void EnBal_Talk(EnBal* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
             break;
 
         case TEXT_STATE_CLOSING:
             break;
 
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             if (this->textId != 0x1D10) {
                 this->isTalking = true;
             }
@@ -608,7 +608,7 @@ void EnBal_Talk(EnBal* this, PlayState* play) {
             EnBal_TryPurchaseMap(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnBal_HandleConversation(this, play);
             break;
 
@@ -618,7 +618,7 @@ void EnBal_Talk(EnBal* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
             if (Message_ShouldAdvance(play) && (this->textId == 0x1D08)) {
                 this->forceEyesShut = false;
                 this->eyeTexIndex = TINGLE_EYETEX_OPEN;
@@ -986,7 +986,7 @@ void EnBal_SetupOfferGetItem(EnBal* this) {
 void EnBal_OfferGetItem(EnBal* this, PlayState* play) {
     GetItemId mapGetItemId;
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         sGetItemPending = true;
     }

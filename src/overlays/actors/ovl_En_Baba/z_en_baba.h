@@ -30,7 +30,7 @@ typedef struct EnBaba {
     /* 0x150 */ SkelAnime skelAnime;
     /* 0x194 */ ColliderCylinder collider;
     /* 0x1E0 */ u16 textId;
-    /* 0x1E2 */ u8 inMsgState3;
+    /* 0x1E2 */ u8 msgFading;
     /* 0x1E4 */ Path* path;
     /* 0x1E8 */ s16 waypoint;
     /* 0x1EA */ UNK_TYPE1 unk1EA[0x1C];

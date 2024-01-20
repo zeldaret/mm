@@ -968,16 +968,16 @@ void ObjSwitch_DrawFloorSwitch(ObjSwitch* this, PlayState* play) {
     s32 pad[2];
 
     if (OBJ_SWITCH_GET_SUBTYPE(&this->dyna.actor) == OBJSWITCH_SUBTYPE_ONCE) {
-        Gfx* opa;
+        Gfx* gfx;
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        opa = POLY_OPA_DISP;
-        gSPDisplayList(opa++, gSetupDLs[SETUPDL_25]);
-        gSPMatrix(opa++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(opa++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
-        gSPDisplayList(opa++, gFloorSwitch1DL);
-        POLY_OPA_DISP = opa;
+        gfx = POLY_OPA_DISP;
+        gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gDPSetPrimColor(gfx++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
+        gSPDisplayList(gfx++, gFloorSwitch1DL);
+        POLY_OPA_DISP = gfx;
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else {

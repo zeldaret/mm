@@ -822,18 +822,18 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
     s32 i;
 
     if (this->debrisTimer > 0) {
-        Gfx* dispOpa;
+        Gfx* gfx;
         EnFamosRock* rock;
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        dispOpa = POLY_OPA_DISP;
+        gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&dispOpa[0], gSetupDLs[SETUPDL_25]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
 
-        gDPSetPrimColor(&dispOpa[1], 0, 0x80, 255, 255, 255, 255);
+        gDPSetPrimColor(&gfx[1], 0, 0x80, 255, 255, 255, 255);
 
-        gDPSetEnvColor(&dispOpa[2], 255, 255, 255, 255);
+        gDPSetEnvColor(&gfx[2], 255, 255, 255, 255);
 
         rock = &this->rocks[0];
         for (i = 0; i < ARRAY_COUNT(this->rocks); i++, rock++) {
@@ -841,13 +841,12 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
             Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rot);
             Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
 
-            gSPMatrix(&dispOpa[3 + i * 2], Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(&gfx[3 + i * 2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(&dispOpa[4 + i * 2], &gameplay_keep_DL_06AB30); // greenish brown rock DL
+            gSPDisplayList(&gfx[4 + i * 2], &gameplay_keep_DL_06AB30); // greenish brown rock DL
         }
 
-        POLY_OPA_DISP = &dispOpa[3 + (ARRAY_COUNT(this->rocks) * 2)];
+        POLY_OPA_DISP = &gfx[3 + (ARRAY_COUNT(this->rocks) * 2)];
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

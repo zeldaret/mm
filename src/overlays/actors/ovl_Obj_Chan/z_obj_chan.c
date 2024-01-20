@@ -373,22 +373,22 @@ void ObjChan_Update(Actor* thisx, PlayState* play) {
 void ObjChan_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjChan* this = THIS;
-    Gfx* opa;
-    Gfx* xlu;
+    Gfx* gfxOpa;
+    Gfx* gfxXlu;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Matrix_RotateYS(this->rotation, MTXMODE_APPLY);
 
-    opa = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
-    gSPMatrix(&opa[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
-    gSPDisplayList(&opa[1], gChandelierCenterDL);
-    POLY_OPA_DISP = &opa[2];
+    gfxOpa = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
+    gSPMatrix(&gfxOpa[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+    gSPDisplayList(&gfxOpa[1], gChandelierCenterDL);
+    POLY_OPA_DISP = &gfxOpa[2];
 
-    xlu = Gfx_SetupDL71(POLY_XLU_DISP);
-    gSPMatrix(&xlu[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
-    gSPDisplayList(&xlu[1], gChandelierPotHolderDL);
-    POLY_XLU_DISP = &xlu[2];
+    gfxXlu = Gfx_SetupDL71(POLY_XLU_DISP);
+    gSPMatrix(&gfxXlu[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+    gSPDisplayList(&gfxXlu[1], gChandelierPotHolderDL);
+    POLY_XLU_DISP = &gfxXlu[2];
 
     CLOSE_DISPS(play->state.gfxCtx);
 
@@ -402,14 +402,14 @@ void ObjChan_Draw(Actor* thisx, PlayState* play) {
 void ObjChan_DrawPot(Actor* thisx, PlayState* play) {
     ObjChan* this = THIS;
     s32 pad;
-    Gfx* dl;
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    dl = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
-    gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
-    gSPDisplayList(&dl[1], gChandelierPotDL);
-    POLY_OPA_DISP = &dl[2];
+    gfx = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
+    gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+    gSPDisplayList(&gfx[1], gChandelierPotDL);
+    POLY_OPA_DISP = &gfx[2];
 
     CLOSE_DISPS(play->state.gfxCtx);
 
@@ -420,7 +420,7 @@ void ObjChan_DrawPot(Actor* thisx, PlayState* play) {
 
 void ObjChan_DrawFire(ObjChan* this, PlayState* play) {
     u32 sp4C;
-    Gfx* dl;
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -432,13 +432,13 @@ void ObjChan_DrawFire(ObjChan* this, PlayState* play) {
                  sObjChanFlameSize[OBJCHAN_SUBTYPE(&this->actor)].y * this->flameSize, 1.0f, MTXMODE_APPLY);
     Matrix_Translate(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(&this->actor)], 0.0f, MTXMODE_APPLY);
 
-    dl = Gfx_SetupDL71(POLY_XLU_DISP);
-    gSPMatrix(&dl[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
-    gSPSegment(&dl[1], 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, -sp4C * 20, 32, 128));
-    gDPSetPrimColor(&dl[2], 128, 128, 255, 255, 0, 255);
-    gDPSetEnvColor(&dl[3], 255, 0, 0, 0);
-    gSPDisplayList(&dl[4], gEffFire1DL);
-    POLY_XLU_DISP = &dl[5];
+    gfx = Gfx_SetupDL71(POLY_XLU_DISP);
+    gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+    gSPSegment(&gfx[1], 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, -sp4C * 20, 32, 128));
+    gDPSetPrimColor(&gfx[2], 128, 128, 255, 255, 0, 255);
+    gDPSetEnvColor(&gfx[3], 255, 0, 0, 0);
+    gSPDisplayList(&gfx[4], gEffFire1DL);
+    POLY_XLU_DISP = &gfx[5];
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

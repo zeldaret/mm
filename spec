@@ -85,8 +85,8 @@ beginseg
     include "build/asm/boot/setsr.text.o"
     include "build/asm/boot/writebackdcache.text.o"
     include "build/src/libultra/os/initialize.o"
-    include "build/src/libultra/os/threadsave.o"
-    pad_text
+    include "build/src/libultra/debug/kdebugserver.o"
+    pad_text // These pads are from src/libultra/os/parameters.o
     pad_text
     pad_text
     pad_text
@@ -125,7 +125,7 @@ beginseg
     include "build/src/libultra/os/getmemsize.o"
     include "build/src/libultra/io/pfssearchfile.o"
     include "build/src/libultra/os/seteventmesg.o"
-    include "build/src/libultra/gu/sqrtf.o"
+    include "build/asm/boot/sqrtf.text.o"
     include "build/src/libultra/os/afterprenmi.o"
     include "build/src/libultra/io/contquery.o"
     include "build/src/libultra/gu/lookathil.o"
@@ -405,31 +405,35 @@ endseg
 beginseg
     name "message_static"
     romalign 0x1000
-    include "build/baserom/message_static.o"
+    include "build/assets/interface/message_static/message_static.o"
+    number 7
 endseg
 
 beginseg
     name "message_texture_static"
     romalign 0x1000
-    include "build/baserom/message_texture_static.o"
+    include "build/assets/interface/message_texture_static/message_texture_static.o"
+    number 9
 endseg
 
 beginseg
     name "nes_font_static"
     romalign 0x1000
-    include "build/baserom/nes_font_static.o"
+    include "build/assets/interface/nes_font_static/nes_font_static.o"
 endseg
 
 beginseg
     name "message_data_static"
     romalign 0x1000
-    include "build/baserom/message_data_static.o"
+    include "build/assets/text/message_data_static.o"
+    number 8
 endseg
 
 beginseg
     name "staff_message_data_static"
     romalign 0x1000
-    include "build/baserom/staff_message_data_static.o"
+    include "build/assets/text/staff_message_data_static.o"
+    number 7
 endseg
 
 beginseg
@@ -581,7 +585,7 @@ beginseg
     include "build/src/code/sys_slowly.o"
     include "build/src/code/sys_flashrom.o"
     include "build/asm/code/code_80185F90.text.o" // handwritten
-    include "build/src/libultra/flash/osFlash.o"
+    include "build/src/code/osFlash.o"
     pad_text
     pad_text
     pad_text
