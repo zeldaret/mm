@@ -246,7 +246,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                     this->configMode = CM_ROTATE_TO_NAME_ENTRY;
                     this->kbdButton = FS_KBD_BTN_NONE;
                     this->charPage = FS_CHAR_PAGE_HIRA;
-                    if (gSaveContext.options.language != 0) {
+                    if (gSaveContext.options.language != LANGUAGE_JPN) {
                         this->charPage = FS_CHAR_PAGE_ENG;
                     }
                     this->kbdX = 0;
@@ -270,7 +270,7 @@ void FileSelect_UpdateMainMenu(GameState* thisx) {
                 this->configMode = CM_ROTATE_TO_NAME_ENTRY;
                 this->kbdButton = FS_KBD_BTN_NONE;
                 this->charPage = FS_CHAR_PAGE_HIRA;
-                if (gSaveContext.options.language != 0) {
+                if (gSaveContext.options.language != LANGUAGE_JPN) {
                     this->charPage = FS_CHAR_PAGE_ENG;
                 }
                 this->kbdX = 0;

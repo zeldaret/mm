@@ -1006,13 +1006,13 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
             } else if (sCurSection == INV_EDITOR_SECTION_NOTEBOOK) {
                 // Bombers Notebook
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[QUEST_BOMBERS_NOTEBOOK];
+                    TOGGLE_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK);
                 }
 
             } else if (sCurSection == INV_EDITOR_SECTION_LULLABY_INTRO) {
                 // Goron Lullaby Intro
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[QUEST_SONG_LULLABY_INTRO];
+                    TOGGLE_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO);
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_LULLABY_INTRO) {
@@ -1021,7 +1021,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 //! have also been taken
                 slot = sCurSection - INV_EDITOR_SECTION_BOSS;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    gSaveContext.save.saveInfo.inventory.questItems ^= gBitFlags[slot];
+                    TOGGLE_QUEST_ITEM(slot);
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_DUNGEON_ITEMS) {
