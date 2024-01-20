@@ -10,7 +10,7 @@
 FaultClient sActorFaultClient; // 2 funcs
 
 struct CollisionPoly* D_801ED8B0; // 1 func
-s32 D_801ED8B4;            // 2 funcs
+s32 D_801ED8B4;                   // 2 funcs
 
 struct Actor* sTargetableNearestActor;
 struct Actor* sTargetablePrioritizedActor;
