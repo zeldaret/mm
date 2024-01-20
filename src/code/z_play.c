@@ -371,7 +371,7 @@ void Play_Destroy(GameState* thisx) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     if (sBombersNotebookOpen) {
-        MsgEvent_SendNullTask();
+        Sched_FlushTaskQueue();
         SysCfb_SetLoResMode();
         gfxCtx->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx->framebufferIndex % 2);
         gfxCtx->zbuffer = SysCfb_GetZBuffer();
@@ -928,7 +928,7 @@ void Play_UpdateMain(PlayState* this) {
 
     if (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_PROCESS) {
         R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_READY;
-        MsgEvent_SendNullTask();
+        Sched_FlushTaskQueue();
         Play_TakePictoPhoto(&this->pauseBgPreRender);
         R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_OFF;
     }
@@ -1067,7 +1067,8 @@ void Play_Update(PlayState* this) {
         }
     } else if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
                CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
-               CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
+               CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) ||
+               (gIrqMgrResetStatus != IRQ_RESET_STATUS_IDLE)) {
         sBombersNotebookOpen = false;
         this->pauseCtx.bombersNotebookOpen = false;
         sBombersNotebook.loadState = BOMBERS_NOTEBOOK_LOAD_STATE_NONE;
@@ -1253,7 +1254,7 @@ void Play_DrawMain(PlayState* this) {
         PreRender_SetValues(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
 
         if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_PROCESS) {
-            MsgEvent_SendNullTask();
+            Sched_FlushTaskQueue();
             if (!gSaveContext.screenScaleFlag) {
                 PreRender_ApplyFiltersSlowlyInit(&this->pauseBgPreRender);
             }
@@ -1448,7 +1449,7 @@ void Play_Draw(PlayState* this) {
 
         if (sBombersNotebookOpen) {
             if (gSysCfbHiResEnabled != 1) {
-                MsgEvent_SendNullTask();
+                Sched_FlushTaskQueue();
                 SysCfb_SetHiResMode();
                 gfxCtx2->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
@@ -1460,7 +1461,7 @@ void Play_Draw(PlayState* this) {
             }
         } else {
             if (gSysCfbHiResEnabled != 0) {
-                MsgEvent_SendNullTask();
+                Sched_FlushTaskQueue();
                 SysCfb_SetLoResMode();
                 gfxCtx2->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
