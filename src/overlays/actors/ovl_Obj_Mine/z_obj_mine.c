@@ -800,8 +800,7 @@ void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
         }
         ObjMine_Path_MoveToWaypoint(this, this->waypointIndex);
     }
-    thisx->floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &thisx->floorPoly, &bgId, thisx, &thisx->world.pos);
+    thisx->floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &thisx->floorPoly, &bgId, thisx, &thisx->world.pos);
     if (thisx->flags & ACTOR_FLAG_40) {
         Vec3f rotAxis;
         Vec3f yhatCrossV;
