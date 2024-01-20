@@ -224,7 +224,7 @@ void func_80C038B4(EnBombers* this) {
 
 void func_80C039A8(EnBombers* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    this->unk_2A6 = TEXT_STATE_5;
+    this->unk_2A6 = TEXT_STATE_EVENT;
 
     switch (player->transformation) {
         case PLAYER_FORM_HUMAN:
@@ -351,7 +351,7 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
     if (Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS) == 0) {
         func_80C039A8(this, play);
     } else {
-        this->unk_2A6 = TEXT_STATE_5;
+        this->unk_2A6 = TEXT_STATE_EVENT;
         this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS);
     }
 
@@ -395,7 +395,7 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
     if ((this->unk_2A6 == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
         sp2A = 0;
         Message_CloseTextbox(play);
-        this->unk_2A6 = TEXT_STATE_5;
+        this->unk_2A6 = TEXT_STATE_EVENT;
 
         if ((this->actor.textId == 0x73D) || (this->actor.textId == 0x73E) || (this->actor.textId == 0x73F)) {
             this->actor.textId = 0x740;
@@ -510,7 +510,7 @@ void func_80C04354(EnBombers* this, PlayState* play) {
 
 void func_80C043C8(EnBombers* this, PlayState* play) {
     Math_SmoothStepToS(&this->unk_288, this->unk_28E, 1, 0x3E8, 0);
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         func_80C042F8(this);
     }

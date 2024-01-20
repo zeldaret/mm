@@ -601,16 +601,16 @@ void func_809628D0(EnFu* this, PlayState* play) {
 
     switch (talkState) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             break;
 
         case TEXT_STATE_CHOICE:
             func_80962588(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             func_80962660(this, play);
             break;
 
@@ -640,7 +640,7 @@ void func_809628D0(EnFu* this, PlayState* play) {
             break;
     }
 
-    if (talkState != TEXT_STATE_3) {
+    if (talkState != TEXT_STATE_FADING) {
         func_80964190(this, play);
         func_8096426C(this, play);
     }
@@ -866,7 +866,7 @@ void func_80963350(EnFu* this, PlayState* play) {
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
     if ((this->unk_54A == 0) &&
-        (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) ||
+        (((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) ||
          ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && (play->msgCtx.stateTimer == 1)))) {
         Message_CloseTextbox(play);
         this->unk_54A = 2;

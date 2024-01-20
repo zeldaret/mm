@@ -480,7 +480,7 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
             EnSyatekiMan_Swamp_HandleChoice(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnSyatekiMan_Swamp_HandleNormalMessage(this, play);
             break;
 
@@ -497,12 +497,12 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
-        case TEXT_STATE_3:
-        case TEXT_STATE_7:
+        case TEXT_STATE_NEXT:
+        case TEXT_STATE_FADING:
+        case TEXT_STATE_SONG_DEMO_DONE:
         case TEXT_STATE_8:
         case TEXT_STATE_9:
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
             break;
     }
 
@@ -856,7 +856,7 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
             EnSyatekiMan_Town_HandleChoice(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             EnSyatekiMan_Town_HandleNormalMessage(this, play);
             break;
 
@@ -871,12 +871,12 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
             break;
 
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
-        case TEXT_STATE_3:
-        case TEXT_STATE_7:
+        case TEXT_STATE_NEXT:
+        case TEXT_STATE_FADING:
+        case TEXT_STATE_SONG_DEMO_DONE:
         case TEXT_STATE_8:
         case TEXT_STATE_9:
-        case TEXT_STATE_10:
+        case TEXT_STATE_AWAITING_NEXT:
             break;
     }
 }

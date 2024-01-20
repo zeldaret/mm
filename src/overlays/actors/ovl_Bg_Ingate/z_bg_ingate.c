@@ -272,7 +272,7 @@ void func_80954340(BgIngate* this, PlayState* play) {
 void func_809543D4(BgIngate* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == TEXT_STATE_CHOICE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_CHOICE) || (talkState == TEXT_STATE_EVENT)) && Message_ShouldAdvance(play)) {
         switch (this->dyna.actor.textId) {
             case 0x9E4:
                 this->dyna.actor.textId = 0x9E5;

@@ -3,7 +3,6 @@
  * Overlay: ovl_En_Fishing
  * Description: Fishing Pond Elements (Owner, Fish, Props, Effects...)
  */
-#include "prevent_bss_reordering.h"
 #include "z_en_fishing.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -1127,7 +1126,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
                     Message_StartTextbox(play, 0x40B3, NULL);
                 }
 
-                if ((effect->unk_2C >= 100) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
+                if ((effect->unk_2C >= 100) && (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT)) {
                     if (Message_ShouldAdvance(play) || (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
                         Message_CloseTextbox(play);
                         Rupees_ChangeBy(-50);
@@ -4756,7 +4755,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 2:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 Message_ContinueTextbox(play, 0x407F);
                 this->unk_154 = 4;
@@ -4764,7 +4763,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 3:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->unk_154 = 0;
             }
@@ -4795,7 +4794,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 5:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
 
                 play->interfaceCtx.unk_27E = 1;
@@ -4909,7 +4908,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 11:
-            if (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) ||
+            if (((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) ||
                  Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) &&
                 Message_ShouldAdvance(play)) {
                 s32 getItemId;
@@ -4986,7 +4985,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             break;
 
         case 20:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 this->unk_154 = 0;
             }

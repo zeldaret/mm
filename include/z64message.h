@@ -33,30 +33,30 @@ typedef enum TextBoxType {
     /* 0x10 */ TEXTBOX_TYPE_MAX
 } TextBoxType;
 
-#define TEXTBOX_ENDTYPE_00    0x00
+#define TEXTBOX_ENDTYPE_DEFAULT    0x00
 
-#define TEXTBOX_ENDTYPE_10    0x10
-#define TEXTBOX_ENDTYPE_11    0x11
+#define TEXTBOX_ENDTYPE_TWO_CHOICE    0x10
+#define TEXTBOX_ENDTYPE_THREE_CHOICE    0x11
 #define TEXTBOX_ENDTYPE_12    0x12
 
-#define TEXTBOX_ENDTYPE_20    0x20
+#define TEXTBOX_ENDTYPE_NEXT    0x20
 
-#define TEXTBOX_ENDTYPE_30    0x30
+#define TEXTBOX_ENDTYPE_PERSISTENT    0x30
 
-#define TEXTBOX_ENDTYPE_40    0x40
-#define TEXTBOX_ENDTYPE_41    0x41
-#define TEXTBOX_ENDTYPE_42    0x42
+#define TEXTBOX_ENDTYPE_EVENT    0x40
+#define TEXTBOX_ENDTYPE_PAUSE_MENU    0x41
+#define TEXTBOX_ENDTYPE_EVENT2    0x42
 
-#define TEXTBOX_ENDTYPE_50    0x50
-#define TEXTBOX_ENDTYPE_52    0x52
-#define TEXTBOX_ENDTYPE_55    0x55
-#define TEXTBOX_ENDTYPE_56    0x56
-#define TEXTBOX_ENDTYPE_57    0x57
+#define TEXTBOX_ENDTYPE_FADE_NORMAL    0x50
+#define TEXTBOX_ENDTYPE_FADE_SKIPPABLE    0x52
+#define TEXTBOX_ENDTYPE_FADE_STAGES_1    0x55
+#define TEXTBOX_ENDTYPE_FADE_STAGES_2    0x56
+#define TEXTBOX_ENDTYPE_FADE_STAGES_3    0x57
 
-#define TEXTBOX_ENDTYPE_60    0x60
-#define TEXTBOX_ENDTYPE_61    0x61
-#define TEXTBOX_ENDTYPE_62    0x62
-#define TEXTBOX_ENDTYPE_63    0x63
+#define TEXTBOX_ENDTYPE_INPUT_BANK    0x60
+#define TEXTBOX_ENDTYPE_INPUT_DOGGY_RACETRACK_BET    0x61
+#define TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE    0x62
+#define TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE    0x63
 #define TEXTBOX_ENDTYPE_64    0x64
 
 typedef enum MessageMode {
@@ -157,23 +157,23 @@ u16 Text_GetFaceReaction(struct PlayState* play, FaceReactionSet reactionSet);
 
 typedef enum TextState {
     /*  0 */ TEXT_STATE_NONE,
-    /*  1 */ TEXT_STATE_1,
+    /*  1 */ TEXT_STATE_NEXT,
     /*  2 */ TEXT_STATE_CLOSING,
-    /*  3 */ TEXT_STATE_3,
+    /*  3 */ TEXT_STATE_FADING,
     /*  4 */ TEXT_STATE_CHOICE,
-    /*  5 */ TEXT_STATE_5,
+    /*  5 */ TEXT_STATE_EVENT,
     /*  6 */ TEXT_STATE_DONE,
-    /*  7 */ TEXT_STATE_7,
+    /*  7 */ TEXT_STATE_SONG_DEMO_DONE,
     /*  8 */ TEXT_STATE_8,
     /*  9 */ TEXT_STATE_9,
-    /* 10 */ TEXT_STATE_10,
+    /* 10 */ TEXT_STATE_AWAITING_NEXT,
     /* 11 */ TEXT_STATE_11,
     /* 12 */ TEXT_STATE_12,
     /* 13 */ TEXT_STATE_13,
-    /* 14 */ TEXT_STATE_14,
-    /* 15 */ TEXT_STATE_15,
-    /* 16 */ TEXT_STATE_16,
-    /* 17 */ TEXT_STATE_17,
+    /* 14 */ TEXT_STATE_INPUT_RUPEES,
+    /* 15 */ TEXT_STATE_INPUT_BOMBER_CODE,
+    /* 16 */ TEXT_STATE_PAUSE_MENU,
+    /* 17 */ TEXT_STATE_INPUT_LOTTERY_CODE,
     /* 18 */ TEXT_STATE_18
 } TextState;
 
@@ -285,12 +285,12 @@ typedef struct MessageContext {
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ s32 unk12070;
     /* 0x12074 */ s32 unk12074;
-    /* 0x12078 */ s32 bankRupeesSelected;
-    /* 0x1207C */ s32 bankRupees;
-    /* 0x12080 */ struct MessageTableEntry* messageEntryTable;
-    /* 0x12084 */ struct MessageTableEntry* messageEntryTableNes;
+    /* 0x12078 */ s32 rupeesSelected; // Used for bank and doggy racetrack bet
+    /* 0x1207C */ s32 rupeesTotal; // Used for bank and doggy racetrack bet
+    /* 0x12080 */ struct MessageTableEntry* messageTable;
+    /* 0x12084 */ struct MessageTableEntry* messageTableNES;
     /* 0x12088 */ UNK_TYPE1 unk12088[0x4];
-    /* 0x1208C */ struct MessageTableEntry* messageTableStaff;
+    /* 0x1208C */ struct MessageTableEntry* messageTableCredits;
     /* 0x12090 */ s16 textIsCredits;
     /* 0x12092 */ s16 messageHasSetSfx;
     /* 0x12094 */ u8 textboxSkipped;
@@ -329,7 +329,7 @@ void Message_DrawTextChar(struct PlayState* play, TexturePtr texture, Gfx** gfxP
 void Message_DrawItemIcon(struct PlayState* play, Gfx** gfxP);
 void Message_HandleOcarina(struct PlayState* play);
 void Message_LoadItemIcon(struct PlayState* play, u16 itemId, s16 arg2);
-void Message_SetupLoadItemIcon(struct PlayState* play);
+void Message_DecodeHeader(struct PlayState* play);
 void func_801514B0(struct PlayState* play, u16 arg1, u8 arg2);
 void Message_StartTextbox(struct PlayState* play, u16 textId, struct Actor* actor);
 void Message_ContinueTextbox(struct PlayState* play, u16 textId);
