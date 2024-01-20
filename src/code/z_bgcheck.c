@@ -1,6 +1,5 @@
 #include "z64bgcheck.h"
 
-#include "prevent_bss_reordering.h"
 #include "fault.h"
 #include "libc64/fixed_point.h"
 #include "libc64/sprintf.h"
