@@ -257,7 +257,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         EnMinifrog_SetJumpState(this);
 
         switch (play->msgCtx.currentTextId) {
@@ -517,7 +517,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
             }
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 EnMinifrog_SetJumpState(this);
                 switch (play->msgCtx.currentTextId) {

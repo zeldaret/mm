@@ -234,7 +234,7 @@ void EnSth_GetInitialPanicText(EnSth* this, PlayState* play) {
 void EnSth_HandlePanicConversation(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->actionFunc = EnSth_PanicIdle;
         Message_CloseTextbox(play);
     }
@@ -347,7 +347,7 @@ void EnSth_HandleOceansideSpiderHouseConversation(EnSth* this, PlayState* play) 
     SkelAnime_Update(&this->skelAnime);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1134: // (does not exist)
@@ -441,7 +441,7 @@ void EnSth_OceansideSpiderHouseIdle(EnSth* this, PlayState* play) {
 void EnSth_HandleMoonLookingConversation(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->actionFunc = EnSth_MoonLookingIdle;
         Message_CloseTextbox(play);
     }
@@ -535,7 +535,7 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x90C: // (does not exist)
                 EnSth_ChangeAnim(this, STH_ANIM_TALK);

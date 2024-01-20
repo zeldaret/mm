@@ -456,7 +456,7 @@ void func_80B29128(EnFish2* this) {
 }
 
 void func_80B2913C(EnFish2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         func_80B28B5C(this);
     }

@@ -337,11 +337,11 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
-        case TEXT_STATE_1:
+        case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
             break;
 
-        case TEXT_STATE_3:
+        case TEXT_STATE_FADING:
             this->unk_2B0 |= 2;
             break;
 
@@ -349,7 +349,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
             func_80A6F3B4(this, play);
             break;
 
-        case TEXT_STATE_5:
+        case TEXT_STATE_EVENT:
             func_80A6F5E4(this, play);
             break;
 

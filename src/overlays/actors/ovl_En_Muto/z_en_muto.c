@@ -207,7 +207,7 @@ void EnMuto_SetupDialogue(EnMuto* this, PlayState* play) {
 void EnMuto_InDialogue(EnMuto* this, PlayState* play) {
     if (!this->isInMayorsRoom) {
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
-        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
             Message_CloseTextbox(play);
 
             if (this->actor.textId == 0x62C) {
