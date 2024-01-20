@@ -276,7 +276,7 @@ void func_80B35450(EnGg* this, PlayState* play) {
 }
 
 void func_80B3556C(EnGg* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->animIndex == ENGG_ANIM_4) {
             play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;

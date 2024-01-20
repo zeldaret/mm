@@ -695,7 +695,7 @@ void func_80BFF6CC(EnBomjima* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if (curFrame >= this->animEndFrame) {
-        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
             Message_CloseTextbox(play);
             EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_1, 1.0f);
             this->actionFunc = func_80BFF754;
@@ -800,7 +800,7 @@ void func_80BFF9B0(EnBomjima* this, PlayState* play) {
 }
 
 void func_80BFFB40(EnBomjima* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_15, 1.0f);
         D_80C009F0 = 100;
@@ -991,7 +991,7 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
             break;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         this->collider.dim.radius = 10;
         this->collider.dim.height = 30;
         if ((this->action == EN_BOMJIMA_ACTION_4) || (this->unk_2CA == 1) ||

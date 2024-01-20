@@ -389,7 +389,7 @@ void func_80B76A64(EnTruMt* this, PlayState* play) {
 }
 
 void func_80B76BB8(EnTruMt* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) {
         if (Message_ShouldAdvance(play)) {
             play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
             play->transitionType = TRANS_TYPE_FADE_WHITE;

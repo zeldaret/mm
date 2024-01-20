@@ -405,31 +405,35 @@ endseg
 beginseg
     name "message_static"
     romalign 0x1000
-    include "build/baserom/message_static.o"
+    include "build/assets/interface/message_static/message_static.o"
+    number 7
 endseg
 
 beginseg
     name "message_texture_static"
     romalign 0x1000
-    include "build/baserom/message_texture_static.o"
+    include "build/assets/interface/message_texture_static/message_texture_static.o"
+    number 9
 endseg
 
 beginseg
     name "nes_font_static"
     romalign 0x1000
-    include "build/baserom/nes_font_static.o"
+    include "build/assets/interface/nes_font_static/nes_font_static.o"
 endseg
 
 beginseg
     name "message_data_static"
     romalign 0x1000
-    include "build/baserom/message_data_static.o"
+    include "build/assets/text/message_data_static.o"
+    number 8
 endseg
 
 beginseg
     name "staff_message_data_static"
     romalign 0x1000
-    include "build/baserom/staff_message_data_static.o"
+    include "build/assets/text/staff_message_data_static.o"
+    number 7
 endseg
 
 beginseg

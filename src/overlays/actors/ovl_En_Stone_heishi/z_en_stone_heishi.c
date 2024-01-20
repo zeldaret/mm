@@ -236,7 +236,7 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
 
         if (this->textIdIndex == 2) {
@@ -269,7 +269,7 @@ void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_PAUSE_MENU) {
         itemAction = func_80123810(play);
 
         if (itemAction > PLAYER_IA_NONE) {
@@ -323,7 +323,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
             break;
 
         case EN_STONE_DRINK_BOTTLE_DRINKING:
-            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
                 Player* player = GET_PLAYER(play);
 
                 play->msgCtx.msgLength = 0;
