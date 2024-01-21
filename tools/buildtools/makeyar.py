@@ -95,22 +95,21 @@ def create_archive(uncompressed_data: bytearray, symbol_list: list[Symbol]) -> b
 
     i = 0
     for sym in symbol_list:
-        real_uncompressed_size = sym.size
-        aligned_uncompressed_size = align_16(real_uncompressed_size)
+        uncompressed_size = sym.size
+        uncompressed_size_aligned = align_16(uncompressed_size)
 
-        input_buf = uncompressed_data[sym.offset:sym.offset + real_uncompressed_size]
+        input_buf = uncompressed_data[sym.offset:sym.offset + uncompressed_size]
         # Make sure to pad each entry to a 0x10 boundary
-        input_buf.extend([0x00] * (aligned_uncompressed_size - real_uncompressed_size))
-
-        Path(f"{offset:06X}_uncompressed").write_bytes(input_buf)
+        if uncompressed_size_aligned > uncompressed_size:
+            input_buf.extend([0x00] * (uncompressed_size_aligned - uncompressed_size))
 
         compressed = bytearray(crunch64.yaz0.compress(input_buf))
         compressed_size = len(compressed)
 
-        Path(f"{offset:06X}").write_bytes(compressed)
-
         # Pad to 0x10
-        compressed.extend([0xFF] * (align_16(compressed_size) - compressed_size))
+        compressed_size_aligned = align_16(compressed_size)
+        if compressed_size_aligned > compressed_size:
+            compressed.extend([0xFF] * (compressed_size_aligned - compressed_size))
 
         archive.extend(compressed)
 
@@ -122,17 +121,19 @@ def create_archive(uncompressed_data: bytearray, symbol_list: list[Symbol]) -> b
 
     write_word_as_bytes(archive, i * 4, offset - first_entry_offset)
 
-    while len(archive) % 0x10 != 0:
-        archive.extend([0])
+    archive_len = len(archive)
+    archive_len_aligned = align_16(archive_len)
+    if archive_len_aligned > archive_len:
+        archive.extend([0x00] * (archive_len_aligned - archive_len))
 
     return archive
 
 
 def main():
-    parser = argparse.ArgumentParser(description="")
-    parser.add_argument("in_file")
-    parser.add_argument("out_bin")
-    parser.add_argument("out_sym")
+    parser = argparse.ArgumentParser(description="Program to generate compressed yar (Yaz0 ARchive) files from a built C file. Said file must only contain data symbols that do not reference other symbols (i.e. textures).")
+    parser.add_argument("in_file", help="Path to built .o file")
+    parser.add_argument("out_bin", help="Output path for the generated compressed yar binary")
+    parser.add_argument("out_sym", help="Output path for the generated syms elf file")
 
     args = parser.parse_args()
 

@@ -116,13 +116,12 @@ else
 endif
 
 CPP        := cpp
-ELF2ROM    := tools/buildtools/elf2rom
 MKLDSCRIPT := tools/buildtools/mkldscript
 MKDMADATA  := tools/buildtools/mkdmadata
-YAZ0       := tools/buildtools/yaz0
 ZAPD       := tools/ZAPD/ZAPD.out
 FADO       := tools/fado/fado.elf
 MAKEYAR    := python3 tools/buildtools/makeyar.py
+CHECKSUMMER:= python3 tools/buildtools/checksummer.py
 
 OPTFLAGS := -O2 -g3
 ASFLAGS := -march=vr4300 -32 -Iinclude
@@ -275,7 +274,7 @@ all: uncompressed compressed
 
 $(ROM): $(ELF)
 	$(OBJCOPY) --gap-fill=0x00 -O binary $< $(@:.z64=.bin)
-	python3 tools/buildtools/checksummer.py $(@:.z64=.bin) $@
+	$(CHECKSUMMER) $(@:.z64=.bin) $@
 
 $(ROMC): $(ROM)
 	python3 tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
