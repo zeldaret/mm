@@ -237,16 +237,16 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
         code = gSaveContext.save.saveInfo.bomberCode[i];
         if (code == 1) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_809C61A0[i]);
-            this->unk_2D8[code] = this;
+            this->unk_2DC[code - 1] = this;
         } else {
             Math_Vec3f_Copy(&sp7C, &D_809C61A0[i]);
             bomBowlMan = (EnBomBowlMan*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_BOM_BOWL_MAN,
                                                            sp7C.x, sp7C.y, sp7C.z, 0, this->actor.world.rot.y, 0, code);
             if (bomBowlMan != NULL) {
                 if (i == 2) {
-                    this->unk_2D8[0] = bomBowlMan;
+                    this->unk_2D8 = bomBowlMan;
                 }
-                this->unk_2D8[code] = bomBowlMan;
+                this->unk_2DC[code - 1] = bomBowlMan;
             }
         }
     }
@@ -308,7 +308,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                 this->unk_2C0 = 1;
                 D_809C6104 = 1;
                 Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csId1)),
-                                      &this->unk_2D8[0]->actor);
+                                      &this->unk_2D8->actor);
                 this->unk_2D4 = 0;
                 this->unk_2BC = 10;
                 EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_17, 1.0f);
@@ -642,7 +642,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
                 Player* player = GET_PLAYER(play);
 
                 Message_CloseTextbox(play);
-                Camera_SetTargetActor(subCam, &this->unk_2D8[0]->actor);
+                Camera_SetTargetActor(subCam, &this->unk_2D8->actor);
                 EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_13, 1.0f);
                 D_809C6100 = 0;
                 if (player->transformation == PLAYER_FORM_HUMAN) {
@@ -656,8 +656,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
                 this->actionFunc = func_809C4DA4;
             } else {
                 s32 idx = D_809C6100 - 1;
-
-                Camera_SetTargetActor(subCam, &this->unk_2D8[1 + idx]->actor);
+                Camera_SetTargetActor(subCam, &this->unk_2DC[idx]->actor);
             }
         }
     }
