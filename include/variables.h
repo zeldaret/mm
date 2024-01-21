@@ -84,7 +84,7 @@ extern u8 gSampleBankTable[];
 
 // bss
 extern s32 gTransitionTileState;
-extern Color_RGBA8_u32 gVisMonoColor;
+extern Color_RGBA8_u32 gPlayVisMonoColor;
 
 extern GfxMasterList* gGfxMasterDL;
 

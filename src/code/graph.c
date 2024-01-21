@@ -154,7 +154,7 @@ retry:
         osSyncPrintf("GRAPH SP TIMEOUT\n");
         if (retryCount >= 0) {
             retryCount--;
-            Sched_SendGfxCancelMsg(&gSchedContext);
+            Sched_SendGfxCancelMsg(&gScheduler);
             goto retry;
         } else {
             // graph.c: No more! die!
@@ -202,13 +202,13 @@ retry:
     cfb = &sGraphCfbInfos[cfbIdx];
     cfbIdx = (cfbIdx + 1) % ARRAY_COUNT(sGraphCfbInfos);
 
-    cfb->fb1 = gfxCtx->curFrameBuffer;
+    cfb->framebuffer = gfxCtx->curFrameBuffer;
     cfb->swapBuffer = gfxCtx->curFrameBuffer;
 
     if (gfxCtx->updateViMode) {
         gfxCtx->updateViMode = false;
         cfb->viMode = gfxCtx->viMode;
-        cfb->features = gfxCtx->viConfigFeatures;
+        cfb->viFeatures = gfxCtx->viConfigFeatures;
         cfb->xScale = gfxCtx->xScale;
         cfb->yScale = gfxCtx->yScale;
     } else {
@@ -223,9 +223,9 @@ retry:
         osRecvMesg(&gfxCtx->queue, NULL, OS_MESG_NOBLOCK);
     }
 
-    gfxCtx->schedMsgQ = &gSchedContext.cmdQ;
-    osSendMesg(&gSchedContext.cmdQ, scTask, OS_MESG_BLOCK);
-    Sched_SendEntryMsg(&gSchedContext);
+    gfxCtx->schedMsgQ = &gScheduler.cmdQueue;
+    osSendMesg(&gScheduler.cmdQueue, (OSMesg)scTask, OS_MESG_BLOCK);
+    Sched_SendNotifyMsg(&gScheduler);
 }
 
 void Graph_UpdateGame(GameState* gameState) {
