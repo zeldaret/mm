@@ -6,8 +6,6 @@
 #include "macros.h"
 
 // data
-// extern UNK_TYPE1 D_80186028;
-
 extern u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern u8 sDropTableAmounts[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern s32 D_801AE194[32];
@@ -1432,7 +1430,7 @@ extern void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
 
 extern s32 gTransitionTileState;
-extern Color_RGBA8_u32 gVisMonoColor;
+extern Color_RGBA8_u32 gPlayVisMonoColor;
 
 extern GfxMasterList* gGfxMasterDL;
 

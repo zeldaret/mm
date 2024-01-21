@@ -3599,7 +3599,7 @@ void KaleidoScope_Update(PlayState* play) {
             Interface_UpdateButtonsPart2(play);
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
-            MsgEvent_SendNullTask();
+            Sched_FlushTaskQueue();
             Skybox_Reload(play, &play->skyboxCtx, play->skyboxId);
 
             if ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId == 0xFF)) {
