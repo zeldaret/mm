@@ -33,7 +33,7 @@ typedef struct {
     /* 0x00 */ Vec3f base;
     /* 0x0C */ Vec3f pos[MAJORAS_TENT_LENGTH];
     /* 0x84 */ Vec3f rot[MAJORAS_TENT_LENGTH];
-    /* 0xFC */ Vec3f vel[MAJORAS_TENT_LENGTH];
+    /* 0xFC */ Vec3f velocity[MAJORAS_TENT_LENGTH];
 } Boss07Tentacle; // size = 0x174
 
 typedef struct {
@@ -45,9 +45,89 @@ typedef struct {
     /* 0x018 */ Vec3f basePos;
     /* 0x024 */ Vec3f pos[MAJORAS_WHIP_MAX_LENGTH];
     /* 0x27C */ Vec3f rot[MAJORAS_WHIP_MAX_LENGTH];
-    /* 0x4D4 */ Vec3f vel[MAJORAS_WHIP_MAX_LENGTH];
+    /* 0x4D4 */ Vec3f velocity[MAJORAS_WHIP_MAX_LENGTH];
     /* 0x72C */ f32 unk_72C[MAJORAS_WHIP_MAX_LENGTH]; // unused, probably a stretch factor
 } Boss07Whip; // size = 0x7F4
+
+typedef enum MajorasWrathBodyPart {
+    /*  0 */ MAJORAS_WRATH_BODYPART_HEAD,
+    /*  1 */ MAJORAS_WRATH_BODYPART_TORSO,
+    /*  2 */ MAJORAS_WRATH_BODYPART_PELVIS,
+    /*  3 */ MAJORAS_WRATH_BODYPART_LEFT_UPPER_ARM,
+    /*  4 */ MAJORAS_WRATH_BODYPART_LEFT_LOWER_ARM_ROOT,
+    /*  5 */ MAJORAS_WRATH_BODYPART_LEFT_FOREARM,
+    /*  6 */ MAJORAS_WRATH_BODYPART_RIGHT_UPPER_ARM,
+    /*  7 */ MAJORAS_WRATH_BODYPART_RIGHT_LOWER_ARM_ROOT,
+    /*  8 */ MAJORAS_WRATH_BODYPART_RIGHT_FOREARM,
+    /*  9 */ MAJORAS_WRATH_BODYPART_RIGHT_THIGH,
+    /* 10 */ MAJORAS_WRATH_BODYPART_RIGHT_SHIN,
+    /* 11 */ MAJORAS_WRATH_BODYPART_RIGHT_FOOT,
+    /* 12 */ MAJORAS_WRATH_BODYPART_LEFT_THIGH,
+    /* 13 */ MAJORAS_WRATH_BODYPART_LEFT_SHIN,
+    /* 14 */ MAJORAS_WRATH_BODYPART_LEFT_FOOT,
+    /* 15 */ MAJORAS_WRATH_BODYPART_MAX
+} MajorasWrathBodyPart;
+
+typedef enum MajorasIncarnationBodyPart {
+    /*  0 */ MAJORAS_INCARNATION_BODYPART_0,
+    /*  1 */ MAJORAS_INCARNATION_BODYPART_1,
+    /*  2 */ MAJORAS_INCARNATION_BODYPART_2,
+    /*  3 */ MAJORAS_INCARNATION_BODYPART_3,
+    /*  4 */ MAJORAS_INCARNATION_BODYPART_4,
+    /*  5 */ MAJORAS_INCARNATION_BODYPART_5,
+    /*  6 */ MAJORAS_INCARNATION_BODYPART_6,
+    /*  7 */ MAJORAS_INCARNATION_BODYPART_7,
+    /*  8 */ MAJORAS_INCARNATION_BODYPART_8,
+    /*  9 */ MAJORAS_INCARNATION_BODYPART_9,
+    /* 10 */ MAJORAS_INCARNATION_BODYPART_10,
+    /* 11 */ MAJORAS_INCARNATION_BODYPART_11,
+    /* 12 */ MAJORAS_INCARNATION_BODYPART_12,
+    /* 13 */ MAJORAS_INCARNATION_BODYPART_13,
+    /* 14 */ MAJORAS_INCARNATION_BODYPART_14,
+    /* 15 */ MAJORAS_INCARNATION_BODYPART_MAX
+} MajorasIncarnationBodyPart;
+
+#define MAJORA_BODYPART_MAX MAX((s32)MAJORAS_WRATH_BODYPART_MAX, (s32)MAJORAS_INCARNATION_BODYPART_MAX)
+
+typedef enum MajorasWrathColliderBodyPart {
+    /*  0 */ MAJORAS_WRATH_COLLIDER_BODYPART_0,
+    /*  1 */ MAJORAS_WRATH_COLLIDER_BODYPART_1,
+    /*  2 */ MAJORAS_WRATH_COLLIDER_BODYPART_2,
+    /*  3 */ MAJORAS_WRATH_COLLIDER_BODYPART_3,
+    /*  4 */ MAJORAS_WRATH_COLLIDER_BODYPART_4,
+    /*  5 */ MAJORAS_WRATH_COLLIDER_BODYPART_5,
+    /*  6 */ MAJORAS_WRATH_COLLIDER_BODYPART_6,
+    /*  7 */ MAJORAS_WRATH_COLLIDER_BODYPART_7,
+    /*  8 */ MAJORAS_WRATH_COLLIDER_BODYPART_8,
+    /*  9 */ MAJORAS_WRATH_COLLIDER_BODYPART_9,
+    /* 10 */ MAJORAS_WRATH_COLLIDER_BODYPART_10,
+    /* 11 */ MAJORAS_WRATH_COLLIDER_BODYPART_MAX
+} MajorasWrathColliderBodyPart;
+
+typedef enum MajorasIncarnationColliderBodyPart {
+    /*  0 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_0,
+    /*  1 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_1,
+    /*  2 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_2,
+    /*  3 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_3,
+    /*  4 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_4,
+    /*  5 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_5,
+    /*  6 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_6,
+    /*  7 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_7,
+    /*  8 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_8,
+    /*  9 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_9,
+    /* 10 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_10,
+    /* 11 */ MAJORAS_INCARNATION_COLLIDER_BODYPART_MAX
+} MajorasIncarnationColliderBodyPart;
+
+#define MAJORA_COLLIDER_BODYPART_MAX MAX((s32)MAJORAS_WRATH_COLLIDER_BODYPART_MAX, (s32)MAJORAS_INCARNATION_COLLIDER_BODYPART_MAX)
+
+typedef enum MajorasIncarnationPumpBodyPart {
+    /* 0 */ MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_ARM,
+    /* 1 */ MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_ARM,
+    /* 2 */ MAJORAS_INCARNATION_PUMP_BODYPART_RIGHT_LEG,
+    /* 3 */ MAJORAS_INCARNATION_PUMP_BODYPART_LEFT_LEG,
+    /* 4 */ MAJORAS_INCARNATION_PUMP_BODYPART_MAX
+} MajorasIncarnationPumpBodyPart;
 
 typedef struct Boss07 {
     /* 0x0000 */ Actor actor;
@@ -68,7 +148,7 @@ typedef struct Boss07 {
     /* 0x0160 */ s16 motionBlurAlpha;
     /* 0x0162 */ s16 unused_162;
     /* 0x0164 */ Vec3f moveTarget;
-    /* 0x0170 */ f32 vel_170; // move speed for wrath sidestep and spin, turn rate for all others
+    /* 0x0170 */ f32 velocity_170; // move speed for wrath sidestep and spin, turn rate for all others
     /* 0x0174 */ u8 canDodge;
     /* 0x0178 */ f32 topSpinAngle; 
     /* 0x017C */ f32 topSpinRate;
@@ -83,9 +163,9 @@ typedef struct Boss07 {
     /* 0x0284 */ Vec3s morphTable[MAJORAS_LIMB_COUNT];
     /* 0x032C */ f32 unk_32C; // shock scale related
     /* 0x0330 */ f32 unk_330; // shock scale related
-    /* 0x0334 */ Vec3f bodyPartsPos[15];
+    /* 0x0334 */ Vec3f bodyPartsPos[MAJORA_BODYPART_MAX];
     /* 0x03E8 */ ColliderJntSph bodyCollider;
-    /* 0x0408 */ ColliderJntSphElement bodyElements[11];
+    /* 0x0408 */ ColliderJntSphElement bodyElements[MAJORA_COLLIDER_BODYPART_MAX];
     /* 0x06C8 */ ColliderJntSph kickCollider;
     /* 0x06E8 */ ColliderJntSphElement kickElements[1];
     /* 0x0728 */ ColliderCylinder unusedCollider;
@@ -104,8 +184,8 @@ typedef struct Boss07 {
     /* 0x1788 */ Vec3f incFeetPos[2];
     /* 0x17A0 */ Vec3f incLeftHandPos;
     /* 0x17AC */ Vec3f incRightHandPos;
-    /* 0x17B8 */ f32 unk_17B8[4]; // limb scale stuff in inc intro
-    /* 0x17C8 */ f32 unk_17C8[4]; // limb scale stuff in inc intro
+    /* 0x17B8 */ f32 unk_17B8[MAJORAS_INCARNATION_PUMP_BODYPART_MAX]; // limb scale stuff in inc intro
+    /* 0x17C8 */ f32 unk_17C8[MAJORAS_INCARNATION_PUMP_BODYPART_MAX]; // limb scale stuff in inc intro
     /* 0x17D8 */ Vec3s csHeadRot;
     /* 0x17E0 */ f32 armScale;
     /* 0x17E4 */ f32 legScale;
@@ -113,12 +193,12 @@ typedef struct Boss07 {
     /* 0x17E8 */ f32 unk_17EC; // limb pump amplitude
     /* 0x17F0 */ f32 chestScaleY;
     /* 0x17F4 */ f32 chestScaleX; 
-    /* 0x17F8 */ f32 unk_17F8; // effect scale
-    /* 0x17FC */ f32 unk_17FC; // effect steam
-    /* 0x1800 */ f32 unk_1800; // effect alpha
-    /* 0x1804 */ u8 unk_1804; // damage effect type
-    /* 0x1805 */ u8 unk_1805; // damage state
-    /* 0x1806 */ s16 unk_1806; // timer related to damage
+    /* 0x17F8 */ f32 drawDmgEffScale;
+    /* 0x17FC */ f32 drawDmgEffFrozenSteamScale;
+    /* 0x1800 */ f32 drawDmgEffAlpha;
+    /* 0x1804 */ u8 drawDmgEffType;
+    /* 0x1805 */ u8 drawDmgEffState;
+    /* 0x1806 */ s16 drawDmgEffTimer;
     /* 0x1808 */ u8 lensFlareOn;
     /* 0x180c */ f32 lensFlareScale;
     /* 0x1810 */ Vec3f lensFlarePos;
@@ -143,7 +223,7 @@ typedef struct Boss07 {
     /* 0x18C8 */ s16 remainsOrbRot;
     /* 0x18CC */ f32 xRecoil;
     /* 0x18D0 */ f32 zRecoil;
-    /* 0x18D4 */ s16 spinVel;
+    /* 0x18D4 */ s16 angularVelocity;
     /* 0x18D6 */ s16 timer_18D6;
     /* 0x18D8 */ s16 beamDmgTimer;
     /* 0x18DA */ u8 readyDeath;
@@ -163,13 +243,13 @@ typedef struct Boss07 {
     /* 0xABC8 */ u32 timer_ABC8;
     /* 0xABCC */ s32 timer_ABCC;
     /* 0xABD0 */ s16 csState;
-    /* 0xABD2 */ s16 subCamIndex;
+    /* 0xABD2 */ s16 subCamId;
     /* 0xABD4 */ Vec3f subCamEye;
     /* 0xABE0 */ Vec3f subCamAt;
     /* 0xABEC */ Vec3f subCamNextEye;
     /* 0xABF8 */ Vec3f subCamNextAt;
     /* 0xAC04 */ f32 subCamRotY;
-    /* 0xAC08 */ f32 subCamRotVel;
+    /* 0xAC08 */ f32 subCamRotVelocity;
     /* 0xAC0C */ f32 subCamSpeedMod;
     /* 0xAC10 */ UNK_TYPE1 unkAC10[4]; // probably float
     /* 0xAC14 */ f32 subCamEyeModY;
