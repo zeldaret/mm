@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# SPDX-FileCopyrightText: © 2023 ZeldaRET
+# SPDX-FileCopyrightText: © 2024 ZeldaRET
 # SPDX-License-Identifier: MIT
 
 from __future__ import annotations
@@ -10,17 +10,20 @@ import ipl3checksum
 from pathlib import Path
 import struct
 
+
 def round_up(n: int, shift: int) -> int:
     mod = 1 << shift
     return (n + mod - 1) >> shift << shift
+
 
 def pad_rom(rom_bytes: bytearray):
     rom_len = len(rom_bytes)
     fill_00 = round_up(rom_len, 12)
     fill_FF = round_up(fill_00, 17)
 
-    rom_bytes.extend([0x00]*(fill_00-rom_len))
-    rom_bytes.extend([0xFF]*(fill_FF-fill_00))
+    rom_bytes.extend([0x00] * (fill_00 - rom_len))
+    rom_bytes.extend([0xFF] * (fill_FF - fill_00))
+
 
 def update_checksum(rom_bytes: bytearray):
     # Detect CIC
@@ -35,7 +38,10 @@ def update_checksum(rom_bytes: bytearray):
     assert calculatedChecksum is not None, "Not able to calculate checksum"
 
     # Write checksum
-    struct.pack_into(f">II", rom_bytes, 0x10, calculatedChecksum[0], calculatedChecksum[1])
+    struct.pack_into(
+        f">II", rom_bytes, 0x10, calculatedChecksum[0], calculatedChecksum[1]
+    )
+
 
 def checksummer_main():
     description = "Pads a rom and updates its header checksum"
@@ -56,6 +62,7 @@ def checksummer_main():
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_bytes(rom_bytes)
+
 
 if __name__ == "__main__":
     checksummer_main()

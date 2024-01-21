@@ -43,9 +43,9 @@ import crunch64
 from elftools.elf.elffile import ELFFile
 from elftools.elf.sections import SymbolTableSection
 
+
 def write_word_as_bytes(buff: bytearray, offset: int, word: int):
     struct.pack_into(f">I", buff, offset, word)
-
 
 
 @dataclasses.dataclass
@@ -53,6 +53,7 @@ class Symbol:
     name: str
     offset: int
     size: int
+
 
 def get_data_from_elf(elf_path: Path) -> tuple[bytearray, list[Symbol], int]:
     uncompressed_data = bytearray()
@@ -74,20 +75,25 @@ def get_data_from_elf(elf_path: Path) -> tuple[bytearray, list[Symbol], int]:
                         continue
                     if sym["st_info"]["type"] != "STT_OBJECT":
                         continue
-                    symbol_list.append(Symbol(sym.name, sym["st_value"], sym["st_size"]))
+                    symbol_list.append(
+                        Symbol(sym.name, sym["st_value"], sym["st_size"])
+                    )
     return uncompressed_data, symbol_list, data_offset
 
 
 def align_16(val: int) -> int:
     return (val + 0xF) & ~0xF
 
-def create_archive(uncompressed_data: bytearray, symbol_list: list[Symbol]) -> bytearray:
+
+def create_archive(
+    uncompressed_data: bytearray, symbol_list: list[Symbol]
+) -> bytearray:
     archive = bytearray()
 
     first_entry_offset = (len(symbol_list) + 1) * 4
 
     # Fill with zeroes until the compressed data start
-    archive.extend([0]*first_entry_offset)
+    archive.extend([0] * first_entry_offset)
 
     write_word_as_bytes(archive, 0, first_entry_offset)
 
@@ -98,7 +104,7 @@ def create_archive(uncompressed_data: bytearray, symbol_list: list[Symbol]) -> b
         uncompressed_size = sym.size
         uncompressed_size_aligned = align_16(uncompressed_size)
 
-        input_buf = uncompressed_data[sym.offset:sym.offset + uncompressed_size]
+        input_buf = uncompressed_data[sym.offset : sym.offset + uncompressed_size]
         # Make sure to pad each entry to a 0x10 boundary
         if uncompressed_size_aligned > uncompressed_size:
             input_buf.extend([0x00] * (uncompressed_size_aligned - uncompressed_size))
@@ -130,9 +136,13 @@ def create_archive(uncompressed_data: bytearray, symbol_list: list[Symbol]) -> b
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Program to generate compressed yar (Yaz0 ARchive) files from a built C file. Said file must only contain data symbols that do not reference other symbols (i.e. textures).")
+    parser = argparse.ArgumentParser(
+        description="Program to generate compressed yar (Yaz0 ARchive) files from a built C file. Said file must only contain data symbols that do not reference other symbols (i.e. textures)."
+    )
     parser.add_argument("in_file", help="Path to built .o file")
-    parser.add_argument("out_bin", help="Output path for the generated compressed yar binary")
+    parser.add_argument(
+        "out_bin", help="Output path for the generated compressed yar binary"
+    )
     parser.add_argument("out_sym", help="Output path for the generated syms elf file")
 
     args = parser.parse_args()
@@ -158,7 +168,7 @@ def main():
     out_bin_path.write_bytes(archive)
 
     # Zero out data
-    for i in range(data_offset, data_offset+len(uncompressed_data)):
+    for i in range(data_offset, data_offset + len(uncompressed_data)):
         elf_bytes[i] = 0
 
     out_sym_path.write_bytes(elf_bytes)
