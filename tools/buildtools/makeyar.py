@@ -1,7 +1,36 @@
 #!/usr/bin/env python3
 
-# SPDX-FileCopyrightText: © 2023 ZeldaRET
+# SPDX-FileCopyrightText: © 2023-2024 ZeldaRET
 # SPDX-License-Identifier: MIT
+
+# Program to generate compressed yar (Yaz0 ARchive) files.
+#
+# The program expects an .o elf file and outputs a raw yar binary file and a
+# "symbols" elf.
+#
+# A yar file consists of multiple Yaz0 files compressed individually. The
+# archive begins with a header of non-fixed size, which describes the
+# location of each individual Yaz0 block within the archive itself. This
+# header is followed by each Yaz0 file.
+#
+# The first word (a 4 byte group) of the header indicates the size in bytes of
+# the header itself (also describes the offset of the first Yaz0 block). The
+# rest of the header consists of words describing the offsets of each Yaz0
+# block relative to the end of the header, because the first Yaz0
+# block is omitted from the offsets in the header.
+#
+# Each Yaz0 block is 0xFF-padded to a multiple of 0x10 in size.
+#
+# The entire archive is 0-padded to a multiple of 0x10 in size.
+#
+# The program works by compressing each .data symbol in the input elf file as
+# its own Yaz0 compressed file, appending them in order for the generated
+# archive. Other elf sections are ignored for the resulting yar file.
+#
+# The program also outputs an elf file that's identical to the elf input,
+# but with its .data section zero'ed out completely. This "symbols" elf can be
+# used for referencing each symbol as the whole file were completely
+# uncompressed.
 
 from __future__ import annotations
 
@@ -9,20 +38,13 @@ import argparse
 import dataclasses
 from pathlib import Path
 import struct
-import subprocess
 import crunch64
 
 from elftools.elf.elffile import ELFFile
 from elftools.elf.sections import SymbolTableSection
 
-def writeWordAsBytes(buff: bytearray, offset: int, word: int):
+def write_word_as_bytes(buff: bytearray, offset: int, word: int):
     struct.pack_into(f">I", buff, offset, word)
-
-
-
-def readFileAsBytearray(filepath: Path) -> bytearray:
-    with filepath.open(mode="rb") as f:
-        return bytearray(f.read())
 
 
 
@@ -32,21 +54,19 @@ class Symbol:
     offset: int
     size: int
 
-def getDataFromElf(elfPath: Path) -> tuple[bytearray, list[Symbol], int]:
-    uncompressedData = bytearray()
-    symbolList: list[Symbol] = []
-    dataOffset = -1
+def get_data_from_elf(elf_path: Path) -> tuple[bytearray, list[Symbol], int]:
+    uncompressed_data = bytearray()
+    symbol_list: list[Symbol] = []
+    data_offset = -1
 
-    with elfPath.open("rb") as elfFile:
+    with elf_path.open("rb") as elfFile:
         elf = ELFFile(elfFile)
         for section in elf.iter_sections():
             if section.name == ".data":
-                assert len(uncompressedData) == 0
-                uncompressedData.extend(section.data())
-                # print(section.header)
-                assert len(uncompressedData) == section["sh_size"]
-                dataOffset = section["sh_offset"]
-                # exit()
+                assert len(uncompressed_data) == 0
+                uncompressed_data.extend(section.data())
+                assert len(uncompressed_data) == section["sh_size"]
+                data_offset = section["sh_offset"]
             elif section.name == ".symtab":
                 assert isinstance(section, SymbolTableSection)
                 for sym in section.iter_symbols():
@@ -54,31 +74,31 @@ def getDataFromElf(elfPath: Path) -> tuple[bytearray, list[Symbol], int]:
                         continue
                     if sym["st_info"]["type"] != "STT_OBJECT":
                         continue
-                    symbolList.append(Symbol(sym.name, sym["st_value"], sym["st_size"]))
-    return uncompressedData, symbolList, dataOffset
+                    symbol_list.append(Symbol(sym.name, sym["st_value"], sym["st_size"]))
+    return uncompressed_data, symbol_list, data_offset
 
 
 def align_16(val: int) -> int:
     return (val + 0xF) & ~0xF
 
-def createArchive(uncompressedData: bytearray, symbolList: list[Symbol]) -> bytearray:
+def create_archive(uncompressed_data: bytearray, symbol_list: list[Symbol]) -> bytearray:
     archive = bytearray()
 
-    firstEntryOffset = (len(symbolList) + 1) * 4
+    first_entry_offset = (len(symbol_list) + 1) * 4
 
     # Fill with zeroes until the compressed data start
-    archive.extend([0]*firstEntryOffset)
+    archive.extend([0]*first_entry_offset)
 
-    writeWordAsBytes(archive, 0, firstEntryOffset)
+    write_word_as_bytes(archive, 0, first_entry_offset)
 
-    offset = firstEntryOffset
+    offset = first_entry_offset
 
     i = 0
-    for sym in symbolList:
+    for sym in symbol_list:
         real_uncompressed_size = sym.size
         aligned_uncompressed_size = align_16(real_uncompressed_size)
 
-        input_buf = uncompressedData[sym.offset:sym.offset + real_uncompressed_size]
+        input_buf = uncompressed_data[sym.offset:sym.offset + real_uncompressed_size]
         # Make sure to pad each entry to a 0x10 boundary
         input_buf.extend([0x00] * (aligned_uncompressed_size - real_uncompressed_size))
 
@@ -95,12 +115,12 @@ def createArchive(uncompressedData: bytearray, symbolList: list[Symbol]) -> byte
         archive.extend(compressed)
 
         if i > 0:
-            writeWordAsBytes(archive, i * 4, offset - firstEntryOffset)
+            write_word_as_bytes(archive, i * 4, offset - first_entry_offset)
 
         i += 1
         offset += len(compressed)
 
-    writeWordAsBytes(archive, i * 4, offset - firstEntryOffset)
+    write_word_as_bytes(archive, i * 4, offset - first_entry_offset)
 
     while len(archive) % 0x10 != 0:
         archive.extend([0])
@@ -116,34 +136,31 @@ def main():
 
     args = parser.parse_args()
 
-    inPath = Path(args.in_file)
-    outBinPath = Path(args.out_bin)
-    outSymPath = Path(args.out_sym)
+    in_path = Path(args.in_file)
+    out_bin_path = Path(args.out_bin)
+    out_sym_path = Path(args.out_sym)
 
     # Delete output files if they already exist
-    outBinPath.unlink(missing_ok=True)
-    outSymPath.unlink(missing_ok=True)
+    out_bin_path.unlink(missing_ok=True)
+    out_sym_path.unlink(missing_ok=True)
 
-    elfBytes = readFileAsBytearray(inPath)
+    elf_bytes = bytearray(in_path.read_bytes())
 
-    uncompressedData, symbolList, dataOffset = getDataFromElf(inPath)
-    assert len(uncompressedData) > 0
-    assert len(symbolList) > 0
-    assert dataOffset > 0
+    uncompressed_data, symbol_list, data_offset = get_data_from_elf(in_path)
+    assert len(uncompressed_data) > 0
+    assert len(symbol_list) > 0
+    assert data_offset > 0
 
-    # This should always be sorted in ascending order, but just to be sure
-    # symbolList.sort(key=lambda x: x.offset)
-
-    archive = createArchive(uncompressedData, symbolList)
+    archive = create_archive(uncompressed_data, symbol_list)
 
     # Write the compressed archive file as a raw binary
-    outBinPath.write_bytes(archive)
+    out_bin_path.write_bytes(archive)
 
-    # zero out data
-    for i in range(dataOffset, dataOffset+len(uncompressedData)):
-        elfBytes[i] = 0
+    # Zero out data
+    for i in range(data_offset, data_offset+len(uncompressed_data)):
+        elf_bytes[i] = 0
 
-    outSymPath.write_bytes(elfBytes)
+    out_sym_path.write_bytes(elf_bytes)
 
 
 if __name__ == "__main__":
