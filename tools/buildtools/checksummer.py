@@ -25,13 +25,15 @@ def pad_rom(rom_bytes: bytearray):
     rom_bytes.extend([0xFF] * (fill_FF - fill_00))
 
 
-def update_checksum(rom_bytes: bytearray):
+def update_checksum(rom_bytes: bytearray, detect: bool):
     # Detect CIC
-    # cicKind = ipl3checksum.detectCIC(rom_bytes)
-    # if cicKind is None:
-    #     eprint("Not able to detect CIC, defaulting to 6105")
-    #     cicKind = ipl3checksum.CICKind.CIC_X105
-    cicKind = ipl3checksum.CICKind.CIC_X105
+    if detect:
+        cicKind = ipl3checksum.detectCIC(rom_bytes)
+        if cicKind is None:
+            print("Not able to detect CIC, defaulting to 6105")
+            cicKind = ipl3checksum.CICKind.CIC_X105
+    else:
+        cicKind = ipl3checksum.CICKind.CIC_X105
 
     # Calculate checksum
     calculatedChecksum = cicKind.calculateChecksum(rom_bytes)
@@ -49,15 +51,22 @@ def checksummer_main():
 
     parser.add_argument("in_rom", help="input rom filename")
     parser.add_argument("out_rom", help="output rom filename")
+    parser.add_argument(
+        "-d",
+        "--detect",
+        action="store_true",
+        help="Try to detect the IPL3 binary on the ROM instead of assuming the 6105 is being used. If not able to detect the IPL3 binary then this program will default to 6105",
+    )
 
     args = parser.parse_args()
 
     in_path = Path(args.in_rom)
     out_path = Path(args.out_rom)
+    detect: bool = args.detect
 
     rom_bytes = bytearray(in_path.read_bytes())
 
-    update_checksum(rom_bytes)
+    update_checksum(rom_bytes, detect)
     pad_rom(rom_bytes)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
