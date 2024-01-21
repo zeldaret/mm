@@ -14,9 +14,9 @@
  * 4. The UFO (which appears as a spinning ball of light)
  * 5. A cow tail
  */
-
-#include "sys_cfb.h"
+#include "prevent_bss_reordering.h"
 #include "z_en_invadepoh_demo.h"
+#include "sys_cfb.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
