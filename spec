@@ -268,7 +268,7 @@ endseg
 
 beginseg
     name "kanji"
-    include "build/baserom/kanji.o"
+    include "build/assets/interface/kanji/kanji.o"
 endseg
 
 beginseg
@@ -500,7 +500,7 @@ beginseg
     include "build/src/code/z_msgevent.o"
     include "build/data/code/z_msgevent.data.o"
     include "build/src/code/z_nmi_buff.o"
-    include "build/src/code/code_8010C1B0.o"
+    include "build/src/code/z_nulltask.o"
     include "build/src/code/z_olib.o"
     pad_text
     include "build/src/code/z_parameter.o"
@@ -583,7 +583,7 @@ beginseg
     include "build/src/code/c_keyframe.o"
     include "build/src/code/sys_slowly.o"
     include "build/src/code/sys_flashrom.o"
-    include "build/asm/code/code_80185F90.text.o" // handwritten
+    include "build/asm/code/kanread.text.o" // handwritten
     include "build/src/code/osFlash.o"
     pad_text
     pad_text

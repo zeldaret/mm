@@ -1093,7 +1093,7 @@ void EnGrasshopper_Draw(Actor* thisx, PlayState* play) {
                               DRAGONFLY_SHADOW_BODYPART_MAX, sShadowSizes, sParentShadowBodyParts);
             //! FAKE: Needed to fix some regs and stack
             //! https://decomp.me/scratch/4wJBW
-            if ((shadowTex && shadowTex) && shadowTex) {}
+            if (shadowTex && shadowTex && shadowTex) {}
         }
 
         SubS_DrawShadowTex(&this->actor, &play->state, shadowTex);

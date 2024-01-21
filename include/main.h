@@ -10,7 +10,7 @@ extern s32 gScreenHeight;
 extern size_t gSystemHeapSize;
 
 extern uintptr_t gSegments[NUM_SEGMENTS];
-extern SchedContext gSchedContext;
+extern Scheduler gScheduler;
 extern OSThread gGraphThread;
 extern PadMgr gPadMgr;
 
