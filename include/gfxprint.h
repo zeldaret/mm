@@ -1,10 +1,9 @@
 #ifndef GFXPRINT_H
 #define GFXPRINT_H
 
+#include "ultra64.h"
 #include "color.h"
-#include "PR/gbi.h"
-#include "PR/ultratypes.h"
-#include "PR/xstdio.h"
+#include "libc64/aprintf.h"
 #include "unk.h"
 
 #define GFXP_UNUSED "\x8E"

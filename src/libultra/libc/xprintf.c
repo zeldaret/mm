@@ -31,7 +31,7 @@ char zeroes[] = "00000000000000000000000000000000";
 
 void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac);
 
-int _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap) {
+int _Printf(outfun pfn, void* arg, const char* fmt, va_list ap) {
     _Pft x;
     x.nchar = 0;
     while (1) {
