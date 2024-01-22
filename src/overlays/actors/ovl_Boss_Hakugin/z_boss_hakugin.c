@@ -39,7 +39,7 @@ void func_80B0DFA8(BossHakugin* this);
 void BossHakugin_EntranceCutscene(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupFrozenBeforeFight(BossHakugin* this);
 void BossHakugin_FrozenBeforeFight(BossHakugin* this, PlayState* play);
-void BossHakugin_IntroCutsceneDethaw(BossHakugin* this, PlayState* play);
+void BossHakugin_IntroCutsceneThaw(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupIntroCutsceneWakeUp(BossHakugin* this, PlayState* play);
 void BossHakugin_IntroCutsceneWakeUp(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupIntroCutsceneRun(BossHakugin* this, PlayState* play);
@@ -1375,8 +1375,12 @@ s32 func_80B0791C(BossHakugin* this, PlayState* play) {
     return false;
 }
 
-// BossHakugin_Thaw
-void func_80B07B88(BossHakugin* this, PlayState* play) {
+/**
+ * Spawns ice effects from Goht's body parts that fly off in random directions. Not to be confused with
+ * `BossHakugin_IntroCutsceneThaw`, which is exclusively used during the intro cutscene; this function is used during
+ * gameplay when Goht is hit by an Ice Arrow.
+ */
+void BossHakugin_Thaw(BossHakugin* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
@@ -1530,10 +1534,10 @@ void BossHakugin_SetupIntroCutsceneThaw(BossHakugin* this) {
     this->timer = 100;
     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
     Play_EnableMotionBlur(140);
-    this->actionFunc = BossHakugin_IntroCutsceneDethaw;
+    this->actionFunc = BossHakugin_IntroCutsceneThaw;
 }
 
-void BossHakugin_IntroCutsceneDethaw(BossHakugin* this, PlayState* play) {
+void BossHakugin_IntroCutsceneThaw(BossHakugin* this, PlayState* play) {
     Vec3f subCamEye;
     Vec3f subCamAt;
     s32 temp_v1;
@@ -2435,7 +2439,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
             return false;
         }
 
-        func_80B07B88(this, play);
+        BossHakugin_Thaw(this, play);
 
         if (this->actionFunc == BossHakugin_FallDown) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
@@ -2791,7 +2795,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 2.5f, 5.0f / 12.0f)) {
             Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         } else {
-            func_80B07B88(this, play);
+            BossHakugin_Thaw(this, play);
         }
     }
 
