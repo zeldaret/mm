@@ -139,7 +139,7 @@ typedef struct BossHakugin {
     /* 0x01E8 */ Vec3s jointTable[GOHT_LIMB_MAX];
     /* 0x02AE */ Vec3s morphTable[GOHT_LIMB_MAX];
     /* 0x0374 */ Vec3s headRot;
-    /* 0x037A */ Vec3s subCamRot; // TODO: Ask engineer about this lol
+    /* 0x037A */ Vec3s subCamRot;
     /* 0x0380 */ Vec3f chargingLightningPos; // TODO: might be used for a few other things, look into this one further
     /* 0x038C */ Vec3f subCamEye;
     /* 0x0398 */ Vec3f bodyPartsPos[GOHT_BODYPART_MAX];

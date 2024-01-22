@@ -1415,24 +1415,29 @@ void BossHakugin_UpdateDrawDmgEffect(BossHakugin* this, PlayState* play, s32 col
     }
 }
 
-void BossHakugin_UpdateSubCam(BossHakugin* this, PlayState* play, f32 arg2, s16 arg3) {
+/**
+ * The intention behind this function is to call it repeatedly to gradually move the subcam around and rotate it to its
+ * target rotation. The amount by which the position of the subcam's eye is updated per call depends on `posStep`, and
+ * the amount by which to rotate the subcam towards its target per call is determined by `angleStep`.
+ */
+void BossHakugin_UpdateSubCam(BossHakugin* this, PlayState* play, f32 posStep, s16 angleStep) {
     Camera* subCam = Play_GetCamera(play, this->subCamId);
-    Vec3f sp38;
-    Vec3f sp2C;
+    Vec3f diff;
+    Vec3f targetDiff;
 
-    Math_Vec3f_Diff(&subCam->at, &subCam->eye, &sp38);
-    Math_Vec3f_StepTo(&subCam->eye, &this->subCamEye, arg2);
+    Math_Vec3f_Diff(&subCam->at, &subCam->eye, &diff);
+    Math_Vec3f_StepTo(&subCam->eye, &this->subCamEye, posStep);
 
-    if (BossHakugin_Vec3fNormalize(&sp38)) {
-        sp2C.x = Math_CosS(this->subCamRot.x) * Math_SinS(this->subCamRot.y);
-        sp2C.y = Math_SinS(this->subCamRot.x);
-        sp2C.z = Math_CosS(this->subCamRot.x) * Math_CosS(this->subCamRot.y);
-        BossHakugin_StepVector(&sp38, &sp2C, BINANG_TO_RAD(arg3));
+    if (BossHakugin_Vec3fNormalize(&diff)) {
+        targetDiff.x = Math_CosS(this->subCamRot.x) * Math_SinS(this->subCamRot.y);
+        targetDiff.y = Math_SinS(this->subCamRot.x);
+        targetDiff.z = Math_CosS(this->subCamRot.x) * Math_CosS(this->subCamRot.y);
+        BossHakugin_StepVector(&diff, &targetDiff, BINANG_TO_RAD(angleStep));
     }
 
-    subCam->at.x = subCam->eye.x + (50.0f * sp38.x);
-    subCam->at.y = subCam->eye.y + (50.0f * sp38.y);
-    subCam->at.z = subCam->eye.z + (50.0f * sp38.z);
+    subCam->at.x = subCam->eye.x + (50.0f * diff.x);
+    subCam->at.y = subCam->eye.y + (50.0f * diff.y);
+    subCam->at.z = subCam->eye.z + (50.0f * diff.z);
     Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCam->eye);
 }
 
