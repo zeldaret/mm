@@ -1522,7 +1522,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     masterGfx = gGfxMasterDL->syncSegments;
 
-    for (i = 0; i < ARRAY_COUNT(gSegments); i++) {
+    for (i = 0; i < NUM_SEGMENTS; i++) {
         if (i == 0x0E) {
             gSPNoOp(&masterGfx[i]);
         } else {
