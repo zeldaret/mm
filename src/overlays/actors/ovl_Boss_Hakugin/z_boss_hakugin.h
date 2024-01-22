@@ -47,7 +47,8 @@ typedef struct GohtMalfunctionEffect {
     /* 0x12 */ s16 timer;
 } GohtMalfunctionEffect; // size = 0x14
 
-#define GOHT_MALFUNCTION_NUM_TYPES (FHGFLASH_SHOCK_GOHT_MAX - FHGFLASH_SHOCK_GOHT_2)
+#define GOHT_MALFUNCTION_NUM_TYPES (FHGFLASH_SHOCK_GOHT_MAX - FHGFLASH_SHOCK_GOHT_BACK_LEFT_THIGH)
+#define GOHT_MALFUNCTION_EFFECTS_PER_TYPE 15
 
 typedef enum GohtBodyPart {
     /*  0 */ GOHT_BODYPART_PELVIS,
@@ -100,7 +101,7 @@ typedef struct BossHakugin {
     /* 0x018E */ u8 preventStalactiteSpawnCount;
     /* 0x018F */ u8 preventBombSpawnCount;
     /* 0x0190 */ u8 blockMalfunctionEffects; // boolean?
-    /* 0x0191 */ u8 malfunctionBodyPartIndex; // See GohtBodyPart
+    /* 0x0191 */ u8 malfunctionEffectIndex;
     /* 0x0192 */ u8 electricBallState; // See `GohtElectricBallState`
     /* 0x0193 */ u8 iceAlpha;
     /* 0x0194 */ u8 hasAppliedGoronSpikeBoost;
@@ -154,7 +155,7 @@ typedef struct BossHakugin {
     /* 0x09D0 */ Actor* stalactites[10];
     /* 0x09F8 */ GohtRockEffect rockEffects[GOHT_ROCK_EFFECT_COUNT];
     /* 0x2618 */ GohtLightningSegment lightningSegments[GOHT_LIGHTNING_SEGMENT_COUNT]; // A chain of lightning used as an attack
-    /* 0x3158 */ GohtMalfunctionEffect malfunctionEffects[GOHT_MALFUNCTION_NUM_TYPES][GOHT_BODYPART_MAX]; // Black smoke and electric zaps on body parts as damage accumulates 
+    /* 0x3158 */ GohtMalfunctionEffect malfunctionEffects[GOHT_MALFUNCTION_NUM_TYPES][GOHT_MALFUNCTION_EFFECTS_PER_TYPE]; // Black smoke and electric zaps on body parts as damage accumulates 
     /* 0x3734 */ Vec3f electricBallPos[10];
     /* 0x37AC */ Vec3f electricBallRot;
     /* 0x37B8 */ ColliderSphere electricBallCollider;

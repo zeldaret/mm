@@ -485,12 +485,12 @@ static s8 sLimbToBodyParts[GOHT_LIMB_MAX] = {
     GOHT_BODYPART_BACK_LEFT_HOOF,        // GOHT_LIMB_BACK_LEFT_HOOF
 };
 
-s32 D_80B0EAB0[GOHT_MALFUNCTION_NUM_TYPES] = {
-    GOHT_LIMB_BACK_LEFT_THIGH,       // FHGFLASH_SHOCK_GOHT_2
-    GOHT_LIMB_BACK_RIGHT_PASTERN,    // FHGFLASH_SHOCK_GOHT_3
-    GOHT_LIMB_JAW_ROOT,              // FHGFLASH_SHOCK_GOHT_4
-    GOHT_LIMB_FRONT_LEFT_LOWER_LEG,  // FHGFLASH_SHOCK_GOHT_5
-    GOHT_LIMB_FRONT_RIGHT_UPPER_LEG, // FHGFLASH_SHOCK_GOHT_6
+s32 sMalfunctionTypeToLimbIndex[GOHT_MALFUNCTION_NUM_TYPES] = {
+    GOHT_LIMB_BACK_LEFT_THIGH,       // FHGFLASH_SHOCK_GOHT_BACK_LEFT_THIGH
+    GOHT_LIMB_BACK_RIGHT_PASTERN,    // FHGFLASH_SHOCK_GOHT_BACK_RIGHT_PASTERN
+    GOHT_LIMB_JAW_ROOT,              // FHGFLASH_SHOCK_GOHT_JAW_ROOT
+    GOHT_LIMB_FRONT_LEFT_LOWER_LEG,  // FHGFLASH_SHOCK_GOHT_FRONT_LEFT_LOWER_LEG
+    GOHT_LIMB_FRONT_RIGHT_UPPER_LEG, // FHGFLASH_SHOCK_GOHT_FRONT_RIGHT_UPPER_LEG
 };
 
 static Color_RGBA8 sSparklePrimColor = { 250, 250, 250, 255 };
@@ -1155,68 +1155,81 @@ void BossHakugin_SpawnBomb(BossHakugin* this, PlayState* play) {
     }
 }
 
+/**
+ * This function is responsible for spawning the smoke effects that billow from various body parts as Goht takes damage.
+ * It also spawns the related electrical effect from the same body parts, which is handled by `EffectSsFhgFlash`. These
+ * effects only begin to spawn when Goht has 15 or lower health (it starts with 30), and effects will appear on
+ * different body parts for every 3 health that Goht loses after that.
+ */
 void BossHakugin_AddMalfunctionEffects(BossHakugin* this, PlayState* play) {
     GohtMalfunctionEffect* malfunctionEffect;
-    Vec3f* mEff2Pos;
-    Vec3f* mEff3Pos;
-    Vec3f spA0;
-    GohtBodyPart bodyPartIndex = this->malfunctionBodyPartIndex + 3;
-    s32 var_s4;
+    Vec3f* currentPos;
+    Vec3f* prevPos;
+    Vec3f diff;
+    s32 effectIndex;
+    s32 effectCount;
     s32 type;
-    s32 j;
+    s32 i;
     s32 pad;
 
-    if (bodyPartIndex >= GOHT_BODYPART_MAX) {
-        bodyPartIndex = 0;
+    // The `effectIndex` variable is used here to represent the previous frame's effect index. The effect index is
+    // decreased by 3 every frame, so we add 3 here to counteract that.
+    effectIndex = this->malfunctionEffectIndex + 3;
+    if (effectIndex >= GOHT_MALFUNCTION_EFFECTS_PER_TYPE) {
+        effectIndex = 0;
     }
 
     for (type = 0; type < GOHT_MALFUNCTION_NUM_TYPES; type++) {
-        if (((GOHT_BODYPART_MAX - (3 * type)) < this->actor.colChkInfo.health) ||
-            !(GOHT_LIMB_DRAW_FLAG(D_80B0EAB0[type]) & this->limbDrawFlags)) {
+        if (((15 - (3 * type)) < this->actor.colChkInfo.health) ||
+            !(GOHT_LIMB_DRAW_FLAG(sMalfunctionTypeToLimbIndex[type]) & this->limbDrawFlags)) {
             break;
         }
 
-        mEff3Pos = &this->malfunctionEffects[type][bodyPartIndex].pos;
-        mEff2Pos = &this->malfunctionEffects[type][this->malfunctionBodyPartIndex].pos;
+        prevPos = &this->malfunctionEffects[type][effectIndex].pos;
+        currentPos = &this->malfunctionEffects[type][this->malfunctionEffectIndex].pos;
+        Math_Vec3f_Diff(prevPos, currentPos, &diff);
 
-        Math_Vec3f_Diff(mEff3Pos, mEff2Pos, &spA0);
+        // This is done to counteract the fact that we add 3.5f to the malfunction effect's y-coordinate in
+        // `BossHakugin_UpdateMalfunctionEffects`, which is called once before the effect is ever rendered. If we didn't
+        // do this, the effect would appear to spawn a little "too high", though it would be very hard to notice.
+        diff.y -= 3.5f;
 
-        spA0.y -= 3.5f;
-
-        var_s4 = Math3D_Vec3fMagnitude(&spA0) / 10.0f;
-        if (var_s4 > 1) {
-            if (var_s4 > 3) {
-                var_s4 = 3;
-            }
-
-            Math_Vec3f_Scale(&spA0, 1.0f / var_s4);
+        // Depending on the difference between where the effect is on this frame compared to where it was on the
+        // previous frame, we can spawn 1 to 3 effects in the loop below. This is done so that, if Goht is running
+        // around, the smoke will "trail" behind him.
+        effectCount = Math3D_Vec3fMagnitude(&diff) / 10.0f;
+        if (effectCount > 1) {
+            effectCount = CLAMP_MAX(effectCount, 3);
+            Math_Vec3f_Scale(&diff, 1.0f / effectCount);
         } else {
-            var_s4 = 1;
+            effectCount = 1;
         }
 
-        for (j = 0; j < var_s4; j++) {
-            malfunctionEffect = &this->malfunctionEffects[type][this->malfunctionBodyPartIndex + j];
-
-            malfunctionEffect->pos.x = Rand_CenteredFloat(20.0f) + (mEff2Pos->x + (spA0.x * j));
-            malfunctionEffect->pos.y = Rand_CenteredFloat(20.0f) + (mEff2Pos->y + (spA0.y * j));
-            malfunctionEffect->pos.z = Rand_CenteredFloat(20.0f) + (mEff2Pos->z + (spA0.z * j));
+        for (i = 0; i < effectCount; i++) {
+            malfunctionEffect = &this->malfunctionEffects[type][this->malfunctionEffectIndex + i];
+            malfunctionEffect->pos.x = Rand_CenteredFloat(20.0f) + (currentPos->x + (diff.x * i));
+            malfunctionEffect->pos.y = Rand_CenteredFloat(20.0f) + (currentPos->y + (diff.y * i));
+            malfunctionEffect->pos.z = Rand_CenteredFloat(20.0f) + (currentPos->z + (diff.z * i));
             malfunctionEffect->scaleXY = 0.01f;
             malfunctionEffect->alpha = 150;
-            malfunctionEffect->timer = 5 - j;
+            malfunctionEffect->timer = 5 - i;
         }
 
         if ((play->gameplayFrames % 2) != 0) {
             EffectSsFhgFlash_SpawnShock(play, &this->actor,
-                                        &this->malfunctionEffects[type][this->malfunctionBodyPartIndex].pos, 250,
-                                        FHGFLASH_SHOCK_GOHT_2 + type);
+                                        &this->malfunctionEffects[type][this->malfunctionEffectIndex].pos, 250,
+                                        FHGFLASH_SHOCK_GOHT_BACK_LEFT_THIGH + type);
         }
     }
 
-    bodyPartIndex = this->malfunctionBodyPartIndex - 3;
-    if (bodyPartIndex < 0) {
-        this->malfunctionBodyPartIndex = GOHT_BODYPART_MAX - 3;
+    // The `effectIndex` variable is used here to represent the value `malfunctionEffectIndex` should have on the next
+    // frame. Because of the loop above, up to three effects can be initialized for any given `malfunctionEffectIndex`,
+    // so we subtract 3 from the current index to make room for those three potential effects.
+    effectIndex = this->malfunctionEffectIndex - 3;
+    if (effectIndex < 0) {
+        this->malfunctionEffectIndex = GOHT_MALFUNCTION_EFFECTS_PER_TYPE - 3;
     } else {
-        this->malfunctionBodyPartIndex = bodyPartIndex;
+        this->malfunctionEffectIndex = effectIndex;
     }
 }
 
@@ -2826,8 +2839,8 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
 
 s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  Actor* thisx) {
-    static s32 D_80B0EB68 = GOHT_MALFUNCTION_NUM_TYPES - 1;
-    static s32 D_80B0EB6C = GOHT_LIMB_FRONT_RIGHT_UPPER_LEG;
+    static s32 sCurrentMalfunctionType = GOHT_MALFUNCTION_NUM_TYPES - 1;
+    static s32 sCurrentLimbIndex = GOHT_LIMB_FRONT_RIGHT_UPPER_LEG;
     BossHakugin* this = THIS;
 
     if (this->actionFunc == BossHakugin_Dead) {
@@ -2840,14 +2853,14 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
         }
     }
 
-    if (!this->blockMalfunctionEffects && (limbIndex == D_80B0EB6C)) {
-        Matrix_MultZero(&this->malfunctionEffects[D_80B0EB68][this->malfunctionBodyPartIndex].pos);
-        D_80B0EB68--;
-        if (D_80B0EB68 < 0) {
-            D_80B0EB68 = GOHT_MALFUNCTION_NUM_TYPES - 1;
+    if (!this->blockMalfunctionEffects && (limbIndex == sCurrentLimbIndex)) {
+        Matrix_MultZero(&this->malfunctionEffects[sCurrentMalfunctionType][this->malfunctionEffectIndex].pos);
+        sCurrentMalfunctionType--;
+        if (sCurrentMalfunctionType < 0) {
+            sCurrentMalfunctionType = GOHT_MALFUNCTION_NUM_TYPES - 1;
         }
 
-        D_80B0EB6C = D_80B0EAB0[D_80B0EB68];
+        sCurrentLimbIndex = sMalfunctionTypeToLimbIndex[sCurrentMalfunctionType];
     }
 
     if (limbIndex == GOHT_LIMB_HEAD) {
