@@ -1233,20 +1233,34 @@ void BossHakugin_AddMalfunctionEffects(BossHakugin* this, PlayState* play) {
     }
 }
 
-// TODO: improve this name a bit
+/**
+ * This function is responsible for multiple things which are all related to Goht charging up its electric ball or
+ * lightning attacks. Actions that want Goht to charge up an attack should call this function repeatedly on every frame.
+ * - If the charge up timer is 5, this function will make Goht slowly raise its head and increase the scale of its
+ *   charging lightning. When the head reaches its target rotation, the charge up timer will be decremented to signal
+ *   that we should move onto the next phase.
+ * - If the charge up timer is above 0 but below 5, this function will do nothing besides decrement the charge up timer.
+ *   It will also do that if the charge up timer is above 5, though this never happens in the final game.
+ * - If the charge up timer is 0, this function will make Goht lower its head quickly. Once the head reaches its target
+ *   rotation, this function will return true.
+ *
+ * The return value of this function is used to indicate whether Goht should "fire off" its attack or not. When it
+ * returns true, Goht should unleash its charged electric ball or lightning attack. When it returns false, this
+ * indicates that Goht should keep charging its attack.
+ */
 s32 BossHakugin_ChargeUpAttack(BossHakugin* this) {
     s16 rand = (Rand_Next() >> 0x12) + 0x4000;
 
     this->lightOrbRotZ += rand;
     if (this->chargeUpTimer == 5) {
-        if (Math_SmoothStepToS(&this->frontHalfRotZ, -0x900, 4, 0x200, 0x80) == 0) {
+        if (!Math_SmoothStepToS(&this->frontHalfRotZ, -0x900, 4, 0x200, 0x80)) {
             this->chargeUpTimer--;
         }
 
-        this->chargingLightOrbScale = (this->frontHalfRotZ + 0x480) * -0.026041666f; // 30 / 0x480
+        this->chargingLightOrbScale = (this->frontHalfRotZ + 0x480) * (-30.0f / 0x480);
         this->chargingLightOrbScale = CLAMP_MIN(this->chargingLightOrbScale, 0.001f);
 
-        this->chargingLightningScale = (this->frontHalfRotZ - 0x700) * -0.00021059783f; // 0.62 / 0xB80
+        this->chargingLightningScale = (this->frontHalfRotZ - 0x700) * (-0.62f / 0xB80);
         this->chargingLightningScale = CLAMP_MAX(this->chargingLightningScale, 0.62f);
 
         if (this->chargingLightningScale > 0.0f) {
