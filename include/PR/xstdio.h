@@ -23,15 +23,15 @@ typedef struct {
     /* 0x34 */ u8 qual;
 } _Pft;
 
+typedef void* (*PrintCallback)(void*, const char*, size_t);
+
 #define FLAGS_SPACE 1
 #define FLAGS_PLUS 2
 #define FLAGS_MINUS 4
 #define FLAGS_HASH 8
 #define FLAGS_ZERO 16
 
-typedef char *outfun(char*,const char*,size_t);
-
-int _Printf(outfun pfn, char* arg, const char* fmt, va_list ap);
+int _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap);
 void _Litob(_Pft* args, u8 type);
 void _Ldtob(_Pft* args, u8 type);
 

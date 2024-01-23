@@ -215,7 +215,7 @@ void FaultDrawer_FillScreen() {
     FaultDrawer_SetCursor(sFaultDrawerInstance->xStart, sFaultDrawerInstance->yStart);
 }
 
-char* FaultDrawer_FormatStringFunc(char* arg, const char* str, size_t count) {
+void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count) {
     for (; count > 0; count--, str++) {
         if (sFaultDrawerInstance->escCode) {
             sFaultDrawerInstance->escCode = false;
@@ -267,7 +267,7 @@ char* FaultDrawer_FormatStringFunc(char* arg, const char* str, size_t count) {
 const char D_80099080[] = "(null)";
 
 s32 FaultDrawer_VPrintf(const char* fmt, va_list ap) {
-    return _Printf(FaultDrawer_FormatStringFunc, (void*)sFaultDrawerInstance, fmt, ap);
+    return _Printf(FaultDrawer_FormatStringFunc, sFaultDrawerInstance, fmt, ap);
 }
 
 s32 FaultDrawer_Printf(const char* fmt, ...) {

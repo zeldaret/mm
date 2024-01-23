@@ -7,7 +7,7 @@ void* proutPrintf(void* dst, const char* fmt, size_t size) {
 }
 
 int vsprintf(char* dst, const char* fmt, va_list args) {
-    int ans = _Printf((outfun*)proutPrintf, dst, fmt, args);
+    int ans = _Printf(proutPrintf, dst, fmt, args);
 
     if (ans > -1) {
         dst[ans] = 0;
@@ -20,7 +20,7 @@ int sprintf(char* dst, const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
 
-    ans = _Printf((outfun*)proutPrintf, dst, fmt, args);
+    ans = _Printf(&proutPrintf, dst, fmt, args);
     if (ans > -1) {
         dst[ans] = 0;
     }
