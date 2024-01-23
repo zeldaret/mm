@@ -50,8 +50,8 @@ void BossHakugin_SetupCharge(BossHakugin* this);
 void BossHakugin_Charge(BossHakugin* this, PlayState* play);
 void BossHakugin_FallDown(BossHakugin* this, PlayState* play);
 void BossHakugin_Throw(BossHakugin* this, PlayState* play);
-void BossHakugin_SetupChargeLightning(BossHakugin* this, PlayState* play);
-void BossHakugin_ChargeLightning(BossHakugin* this, PlayState* play);
+void BossHakugin_SetupWait(BossHakugin* this, PlayState* play);
+void BossHakugin_Wait(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupShootLightning(BossHakugin* this);
 void BossHakugin_ShootLightning(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupCutsceneStart(BossHakugin* this);
@@ -1326,7 +1326,7 @@ void BossHakugin_RunUpdateCommon(BossHakugin* this, PlayState* play) {
     }
 }
 
-void func_80B07700(BossHakugin* this, PlayState* play, s32 arg2) {
+void BossHakugin_SpawnSteam(BossHakugin* this, PlayState* play, s32 arg2) {
     Vec3f velocity;
     Vec3f pos;
 
@@ -1347,45 +1347,54 @@ void func_80B07700(BossHakugin* this, PlayState* play, s32 arg2) {
     } else {
         pos.y = (Rand_ZeroFloat(this->iceCollider.dim.height) * 0.8f) + this->iceCollider.dim.pos.y;
     }
-    velocity.y += 0.8f;
 
+    velocity.y += 0.8f;
     EffectSsIceSmoke_Spawn(play, &pos, &velocity, &gZeroVec3f, 600);
 }
 
-s32 func_80B0791C(BossHakugin* this, PlayState* play) {
+/**
+ * Returns true if Goht should stop running and either wait for the player to get in view (to shoot lightning at them)
+ * or wait 150 frames (after which, Goht will turn around and charge them).
+ */
+s32 BossHakugin_ShouldWait(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 var_v1;
-    s32 var_v0_2;
-    f32 sp28;
-    f32 sp24;
+    s16 yawDiff;
+    s32 absYawDiff;
+    f32 posZ;
+    f32 posX;
 
     if (this->transformedPlayerPos.z > 0.0f) {
         return false;
     }
-    var_v1 = this->baseRotY - Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
-    var_v0_2 = ABS_ALT(var_v1);
 
-    if (var_v0_2 < 0x4000) {
-        if (var_v0_2 < 0x1800) {
+    yawDiff = this->baseRotY - Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
+    absYawDiff = ABS_ALT(yawDiff);
+
+    if (absYawDiff < 0x4000) {
+        if (absYawDiff < 0x1800) {
             this->lightningHitSomething = false;
         }
         return false;
     }
+
     if (this->lightningHitSomething == true) {
         return false;
     }
-    sp24 = this->actor.world.pos.x * this->direction;
-    sp28 = this->actor.world.pos.z * this->direction;
+
+    posX = this->actor.world.pos.x * this->direction;
+    posZ = this->actor.world.pos.z * this->direction;
+
     if (((player->actor.world.pos.x > 1200.0f) && (player->actor.world.pos.z < 1200.0f) &&
-         (player->actor.world.pos.z > -1200.0f) && (this->actor.world.pos.x < 0.0f) && (sp28 > 1200.0f)) ||
+         (player->actor.world.pos.z > -1200.0f) && (this->actor.world.pos.x < 0.0f) && (posZ > 1200.0f)) ||
         ((player->actor.world.pos.x < -1200.0f) && (player->actor.world.pos.z < 1200.0f) &&
-         (player->actor.world.pos.z > -1200.0f) && (this->actor.world.pos.x > 0.0f) && (sp28 < -1200.0f)) ||
+         (player->actor.world.pos.z > -1200.0f) && (this->actor.world.pos.x > 0.0f) && (posZ < -1200.0f)) ||
         ((player->actor.world.pos.z > 1200.0f) && (player->actor.world.pos.x < 1200.0f) &&
-         (player->actor.world.pos.x > -1200.0f) && (this->actor.world.pos.z < 0.0f) && (sp24 < -1200.0f)) ||
+         (player->actor.world.pos.x > -1200.0f) && (this->actor.world.pos.z < 0.0f) && (posX < -1200.0f)) ||
         ((player->actor.world.pos.z < -1200.0f) && (player->actor.world.pos.x < 1200.0f) &&
-         (player->actor.world.pos.x > -1200.0f) && (this->actor.world.pos.z > 0.0f) && (sp24 > 1200.0f))) {
+         (player->actor.world.pos.x > -1200.0f) && (this->actor.world.pos.z > 0.0f) && (posX > 1200.0f))) {
         return true;
     }
+
     return false;
 }
 
@@ -1558,9 +1567,9 @@ void BossHakugin_IntroCutsceneThaw(BossHakugin* this, PlayState* play) {
 
     this->timer--;
     if ((this->timer >= 30) && ((this->timer % 2) != 0)) {
-        func_80B07700(this, play, true);
+        BossHakugin_SpawnSteam(this, play, true);
     } else if ((this->timer % 4) == 0) {
-        func_80B07700(this, play, false);
+        BossHakugin_SpawnSteam(this, play, false);
     }
 
     if (this->timer == 99) {
@@ -1680,7 +1689,7 @@ void BossHakugin_IntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
     }
 
     if (((this->timer + 12) >= 0) && ((this->timer % 4) == 0)) {
-        func_80B07700(this, play, false);
+        BossHakugin_SpawnSteam(this, play, false);
     }
 }
 
@@ -1793,8 +1802,8 @@ void BossHakugin_Run(BossHakugin* this, PlayState* play) {
         Math_ScaledStepToS(&this->frontHalfRotZ, 0, 0x100);
     }
 
-    if (func_80B0791C(this, play)) {
-        BossHakugin_SetupChargeLightning(this, play);
+    if (BossHakugin_ShouldWait(this, play)) {
+        BossHakugin_SetupWait(this, play);
     } else {
         if (this->damagedSpeedUpCounter > 55) {
             this->damagedSpeedUpCounter = 0;
@@ -2018,7 +2027,7 @@ void BossHakugin_Throw(BossHakugin* this, PlayState* play) {
     }
 }
 
-void BossHakugin_SetupChargeLightning(BossHakugin* this, PlayState* play) {
+void BossHakugin_SetupWait(BossHakugin* this, PlayState* play) {
     f32 var_fv1;
     s16 atan;
 
@@ -2065,14 +2074,14 @@ void BossHakugin_SetupChargeLightning(BossHakugin* this, PlayState* play) {
     this->frontHalfRotZ = 0x700;
     this->timer = 150;
     this->chargingLightningTranslateZ = -100.0f;
-    this->actionFunc = BossHakugin_ChargeLightning;
+    this->actionFunc = BossHakugin_Wait;
 }
 
-void BossHakugin_ChargeLightning(BossHakugin* this, PlayState* play) {
-    f32 temp_fv1;
+void BossHakugin_Wait(BossHakugin* this, PlayState* play) {
+    f32 absTransformedPlayerPosX;
 
     SkelAnime_Update(&this->skelAnime);
-    temp_fv1 = fabsf(this->transformedPlayerPos.x);
+    absTransformedPlayerPosX = fabsf(this->transformedPlayerPos.x);
     Math_StepToF(&this->chargingLightOrbScale, 0.0f, 6.0f);
     if ((this->transformedPlayerPos.z < 0.0f) || (this->actor.xzDistToPlayer < 750.0f) ||
         (this->lightningHitSomething == true)) {
@@ -2080,13 +2089,13 @@ void BossHakugin_ChargeLightning(BossHakugin* this, PlayState* play) {
         return;
     }
 
-    if ((this->lightningSegments[0].alpha == 0) && (this->chargingLightOrbScale < 0.1f) && (temp_fv1 < 400.0f) &&
-        (this->transformedPlayerPos.z > 0.0f)) {
+    if ((this->lightningSegments[0].alpha == 0) && (this->chargingLightOrbScale < 0.1f) &&
+        (absTransformedPlayerPosX < 400.0f) && (this->transformedPlayerPos.z > 0.0f)) {
         BossHakugin_SetupShootLightning(this);
         return;
     }
 
-    if ((temp_fv1 > 400.0f) && ((play->gameplayFrames & 15) == 15)) {
+    if ((absTransformedPlayerPosX > 400.0f) && ((play->gameplayFrames & 15) == 15)) {
         BossHakugin_SpawnStalactite(this);
         return;
     }
@@ -2112,7 +2121,7 @@ void BossHakugin_ShootLightning(BossHakugin* this, PlayState* play) {
     Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_THUNDER - SFX_FLAG);
     if (BossHakugin_ChargeUpAttack(this)) {
         BossHakugin_AddLightningSegments(this, &this->chargingLightningPos, play);
-        BossHakugin_SetupChargeLightning(this, play);
+        BossHakugin_SetupWait(this, play);
     }
 }
 
@@ -2478,7 +2487,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_BLUE_LIGHT_ORB) ||
              (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_EXPLOSIVE)) &&
             ((this->actionFunc == BossHakugin_Run) || (this->actionFunc == BossHakugin_ShootLightning) ||
-             (this->actionFunc == BossHakugin_ChargeLightning) || (this->actionFunc == BossHakugin_Charge))) {
+             (this->actionFunc == BossHakugin_Wait) || (this->actionFunc == BossHakugin_Charge))) {
             Player* player = GET_PLAYER(play);
 
             if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_GORON_SPIKES) {
