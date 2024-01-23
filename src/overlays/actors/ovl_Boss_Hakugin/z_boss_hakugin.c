@@ -1326,11 +1326,16 @@ void BossHakugin_RunUpdateCommon(BossHakugin* this, PlayState* play) {
     }
 }
 
-void BossHakugin_SpawnSteam(BossHakugin* this, PlayState* play, s32 arg2) {
+/**
+ * Spawns steam effects that are used when Goht is thawed out in its intro cutscene. The steam will usually spawn in
+ * random locations around Goht's body, however if `steamFollowsMeltingIce` is true, then the steam will spawn with
+ * increasingly-lower y-coordinates as the ice block that surrounds Goht melts and shrinks downwards.
+ */
+void BossHakugin_SpawnSteam(BossHakugin* this, PlayState* play, s32 steamFollowsMeltingIce) {
     Vec3f velocity;
     Vec3f pos;
 
-    if (arg2) {
+    if (steamFollowsMeltingIce) {
         velocity.y = (this->timer - 30) * (1 / 70.0f);
     } else {
         velocity.y = 0.1f;
@@ -1342,7 +1347,7 @@ void BossHakugin_SpawnSteam(BossHakugin* this, PlayState* play, s32 arg2) {
     pos.x = ((velocity.x >= 0.0f ? 1.0f : -1.0f) * (Rand_ZeroFloat(20.0f) + 5.0f) * 4.0f) + this->iceCollider.dim.pos.x;
     pos.z = ((velocity.z >= 0.0f ? 1.0f : -1.0f) * (Rand_ZeroFloat(20.0f) + 5.0f) * 4.0f) + this->iceCollider.dim.pos.z;
 
-    if (arg2) {
+    if (steamFollowsMeltingIce) {
         pos.y = this->iceCollider.dim.pos.y + (this->iceCollider.dim.height * velocity.y);
     } else {
         pos.y = (Rand_ZeroFloat(this->iceCollider.dim.height) * 0.8f) + this->iceCollider.dim.pos.y;
@@ -1377,6 +1382,10 @@ s32 BossHakugin_ShouldWait(BossHakugin* this, PlayState* play) {
         return false;
     }
 
+    // If Goht hit the player with lightning the last time it waited, then the only way for `lightningHitSomething` to
+    // be false (in other words, the only way for us continue in this function) is because it was set to false by the
+    // code above in a previous call to this function; this only happens if the difference between Goht's base yaw and
+    // the active cam's yaw is small enough.
     if (this->lightningHitSomething == true) {
         return false;
     }
@@ -1411,6 +1420,10 @@ void BossHakugin_Thaw(BossHakugin* this, PlayState* play) {
     }
 }
 
+/**
+ * Handles various things related to damage effects, like setting the effect alpha and scale and spawning light rays at
+ * the appropriate position when Goht is hit by Light Arrows or by a sword beam.
+ */
 void BossHakugin_UpdateDrawDmgEffect(BossHakugin* this, PlayState* play, s32 colliderIndex) {
     if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
