@@ -21,19 +21,20 @@
 #define THIS ((BossHakugin*)thisx)
 
 #define GOHT_LIMB_DRAW_FLAG(limbIndex) (1 << ((limbIndex)-1))
+#define GOHT_CRUSHING_ROCK_COUNT 36
 
 void BossHakugin_Init(Actor* thisx, PlayState* play2);
 void BossHakugin_Destroy(Actor* thisx, PlayState* play);
 void BossHakugin_Update(Actor* thisx, PlayState* play);
 void BossHakugin_UpdateDead(Actor* thisx, PlayState* play2);
 void BossHakugin_Draw(Actor* thisx, PlayState* play);
-void BossHakugin_DrawDead(Actor* thisx, PlayState* play);
+void BossHakugin_DrawCrushingRocks(Actor* thisx, PlayState* play);
 
 void BossHakugin_SpawnLargeStalactiteWalls(BossHakugin* this);
 void BossHakugin_SpawnBlueWarpAndHeartContainer(BossHakugin* this, PlayState* play);
 void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
 void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
-void func_80B0D9CC(BossHakugin* this);
+void BossHakugin_SetupCrushingRocks(BossHakugin* this);
 void func_80B0DFA8(BossHakugin* this);
 
 void BossHakugin_EntranceCutscene(BossHakugin* this, PlayState* play);
@@ -1207,6 +1208,7 @@ void BossHakugin_AddMalfunctionEffects(BossHakugin* this, PlayState* play) {
 
         for (i = 0; i < effectCount; i++) {
             malfunctionEffect = &this->malfunctionEffects[type][this->malfunctionEffectIndex + i];
+
             malfunctionEffect->pos.x = Rand_CenteredFloat(20.0f) + (currentPos->x + (diff.x * i));
             malfunctionEffect->pos.y = Rand_CenteredFloat(20.0f) + (currentPos->y + (diff.y * i));
             malfunctionEffect->pos.z = Rand_CenteredFloat(20.0f) + (currentPos->z + (diff.z * i));
@@ -2429,7 +2431,7 @@ void BossHakugin_SetupDeathCutsceneCrushedByRocks(BossHakugin* this) {
     this->timer = 0;
     this->actor.speed = 0.0f;
     this->skelAnime.playSpeed = 0.5f;
-    func_80B0D9CC(this);
+    BossHakugin_SetupCrushingRocks(this);
     this->actionFunc = BossHakugin_DeathCutsceneCrushedByRocks;
 }
 
@@ -2461,19 +2463,20 @@ static BossHakuginStruct_B0A8C4 D_80B0EB38[] = {
 
 void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play) {
     EnBom* bomb;
-    Vec3s* test;
+    Vec3s* pos;
     Camera* subCam = Play_GetCamera(play, this->subCamId);
     Vec3f eyeTarget;
-    s16 temp_s0;
+    s16 eyeTargetAngle;
     s32 sp60;
     BossHakuginStruct_B0A8C4* unkStruct;
 
     SkelAnime_Update(&this->skelAnime);
     sp60 = this->timer / 6;
-    temp_s0 = this->actor.shape.rot.y + (0x6000 * this->direction);
-    eyeTarget.x = (Math_SinS(temp_s0) * 500.0f) + this->actor.world.pos.x;
+
+    eyeTargetAngle = this->actor.shape.rot.y + (0x6000 * this->direction);
+    eyeTarget.x = (Math_SinS(eyeTargetAngle) * 500.0f) + this->actor.world.pos.x;
     eyeTarget.y = this->actor.world.pos.y + 250.0f;
-    eyeTarget.z = (Math_CosS(temp_s0) * 500.0f) + this->actor.world.pos.z;
+    eyeTarget.z = (Math_CosS(eyeTargetAngle) * 500.0f) + this->actor.world.pos.z;
     Math_Vec3f_StepTo(&this->subCamEye, &eyeTarget, 25.0f);
     Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &this->subCamEye);
 
@@ -2485,12 +2488,12 @@ void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play)
         Play_SetCameraAtEye(play, this->subCamId, &mainCam->at, &mainCam->eye);
         BossHakugin_SpawnBlueWarpAndHeartContainer(this, play);
         func_80B0DFA8(this);
-        this->actor.draw = BossHakugin_DrawDead;
+        this->actor.draw = BossHakugin_DrawCrushingRocks;
         this->actor.update = BossHakugin_UpdateDead;
     } else if (((this->timer % 6) == 0) && (sp60 < 6)) {
         unkStruct = &D_80B0EB38[sp60];
-        test = &this->bodyCollider.elements[unkStruct->colliderIndex].dim.worldSphere.center;
-        bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, test->x, test->y, test->z,
+        pos = &this->bodyCollider.elements[unkStruct->colliderIndex].dim.worldSphere.center;
+        bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, pos->x, pos->y, pos->z,
                                    BOMB_EXPLOSIVE_TYPE_POWDER_KEG, 0, 0, BOMB_TYPE_BODY);
 
         if (bomb != NULL) {
@@ -2507,7 +2510,7 @@ void BossHakugin_DeathCutsceneCrushedByRocks(BossHakugin* this, PlayState* play)
         s32 i;
 
         sp60 = (this->timer + 3) / 6 - 1;
-        if (sp60 < 4) {
+        if (sp60 < ARRAY_COUNT(D_80B0EB24) - 1) {
             for (i = D_80B0EB24[sp60]; i < D_80B0EB24[sp60 + 1]; i++) {
                 this->rockEffects[i].velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
             }
@@ -2695,11 +2698,11 @@ void BossHakugin_UpdateRocks(BossHakugin* this) {
     }
 }
 
-void BossHakugin_UpdateRocksDead(BossHakugin* this) {
+void BossHakugin_UpdateCrushingRocks(BossHakugin* this) {
     GohtRockEffect* rockEffect;
     s32 i;
 
-    for (i = 0; i < 36; i++) {
+    for (i = 0; i < GOHT_CRUSHING_ROCK_COUNT; i++) {
         rockEffect = &this->rockEffects[i];
         Math_StepToF(&rockEffect->pos.y, rockEffect->velocity.x, rockEffect->velocity.y);
         if (rockEffect->velocity.y > 0.0f) {
@@ -2892,7 +2895,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.z, sp70.z, 0x100);
 
     if (this->actionFunc == BossHakugin_DeathCutsceneCrushedByRocks) {
-        BossHakugin_UpdateRocksDead(this);
+        BossHakugin_UpdateCrushingRocks(this);
     } else {
         BossHakugin_UpdateRocks(this);
     }
@@ -3318,7 +3321,7 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->actionFunc == BossHakugin_DeathCutsceneCrushedByRocks) {
-        BossHakugin_DrawDead(&this->actor, play);
+        BossHakugin_DrawCrushingRocks(&this->actor, play);
     } else {
         BossHakugin_DrawRocks(this, play);
     }
@@ -3506,63 +3509,64 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_80B0D9CC(BossHakugin* this) {
+void BossHakugin_SetupCrushingRocks(BossHakugin* this) {
     s32 i;
     Vec3f pos;
-    s32 var_s1 = 15;
+    s32 num = 15;
     GohtRockEffect* rockEffect = this->rockEffects;
-    s32 var_v1;
-    s32 temp_a0;
-    f32 spB4 = Math_SinS(this->actor.shape.rot.y) * 65.0f;
-    f32 spB0 = Math_CosS(this->actor.shape.rot.y) * 65.0f;
-    f32 spAC = Math_SinS(this->actor.shape.rot.z) * 65.0f;
-    f32 temp1;
-    f32 temp2;
-    f32 temp3;
-    f32 temp4;
-    f32 temp5;
+    s32 j;
+    s32 rockCount;
+    f32 sinY = Math_SinS(this->actor.shape.rot.y) * 65.0f;
+    f32 cosY = Math_CosS(this->actor.shape.rot.y) * 65.0f;
+    f32 sinZ = Math_SinS(this->actor.shape.rot.z) * 65.0f;
+    f32 scale;
+    f32 offsetX1;
+    f32 offsetZ1;
+    f32 offsetX2;
+    f32 offsetZ2;
     s32 pad;
 
-    for (i = 4; i > 0; i--, var_s1 -= 4) {
-        temp4 = (30.0f / 13.0f) * spB4;
-        temp5 = (30.0f / 13.0f) * spB0;
+    for (i = 4; i > 0; i--, num -= 4) {
+        offsetX2 = (30.0f / 13.0f) * sinY;
+        offsetZ2 = (30.0f / 13.0f) * cosY;
 
-        pos.x = this->actor.world.pos.x - (i * spB4) + temp4;
+        pos.x = this->actor.world.pos.x - (i * sinY) + offsetX2;
         pos.y = this->actor.world.pos.y + (85.0f * (4 - i)) + 20.0f;
-        pos.z = this->actor.world.pos.z - (i * spB0) + temp5;
+        pos.z = this->actor.world.pos.z - (i * cosY) + offsetZ2;
 
         rockEffect->scale = ((i * 4.5f) + 22.0f) * 0.001f;
         Math_Vec3f_Copy(&rockEffect->pos, &pos);
 
-        temp_a0 = var_s1 >> 1;
-        if (temp_a0 == 0) {
+        rockCount = num >> 1;
+        if (rockCount == 0) {
             break;
         }
+
         rockEffect++;
 
-        temp1 = i / (f32)temp_a0;
-        temp2 = (spB0 + spB4) * temp1;
-        temp3 = (spB0 - spB4) * temp1;
+        scale = i / (f32)rockCount;
+        offsetX1 = (cosY + sinY) * scale;
+        offsetZ1 = (cosY - sinY) * scale;
 
-        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, rockEffect++) {
-            rockEffect->pos.x = pos.x + temp2 * (temp_a0 - var_v1);
-            rockEffect->pos.y = pos.y + i * spAC;
-            rockEffect->pos.z = pos.z + temp3 * (temp_a0 - var_v1);
+        for (j = 0; j < rockCount; j++, rockEffect++) {
+            rockEffect->pos.x = pos.x + offsetX1 * (rockCount - j);
+            rockEffect->pos.y = pos.y + i * sinZ;
+            rockEffect->pos.z = pos.z + offsetZ1 * (rockCount - j);
             rockEffect->scale = ((i * 4.5f) + 22.0f) * 0.001f;
         }
 
-        temp4 = (spB4 - spB0) * temp1;
-        temp5 = (spB0 + spB4) * temp1;
+        offsetX2 = (sinY - cosY) * scale;
+        offsetZ2 = (cosY + sinY) * scale;
 
-        for (var_v1 = 0; var_v1 < temp_a0; var_v1++, rockEffect++) {
-            rockEffect->pos.x = pos.x + temp4 * (temp_a0 - var_v1);
-            rockEffect->pos.y = pos.y - i * spAC;
-            rockEffect->pos.z = pos.z + temp5 * (temp_a0 - var_v1);
+        for (j = 0; j < rockCount; j++, rockEffect++) {
+            rockEffect->pos.x = pos.x + offsetX2 * (rockCount - j);
+            rockEffect->pos.y = pos.y - i * sinZ;
+            rockEffect->pos.z = pos.z + offsetZ2 * (rockCount - j);
             rockEffect->scale = ((i * 4.5f) + 22.0f) * 0.001f;
         }
     }
 
-    for (i = 0; i < 36; i++) {
+    for (i = 0; i < GOHT_CRUSHING_ROCK_COUNT; i++) {
         rockEffect = &this->rockEffects[i];
 
         rockEffect->scale += Rand_ZeroFloat(5.0f) * 0.001f;
@@ -3580,7 +3584,7 @@ void func_80B0DFA8(BossHakugin* this) {
     GohtRockEffect* rockEffect;
     ColliderJntSphElement* element;
 
-    for (i = 0; i < 36 / 2; i++) {
+    for (i = 0; i < GOHT_CRUSHING_ROCK_COUNT / 2; i++) {
         rockEffect = &this->rockEffects[i << 1];
         element = &this->bodyCollider.elements[i];
 
@@ -3610,7 +3614,7 @@ void BossHakugin_UpdateDead(Actor* thisx, PlayState* play2) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
 }
 
-void BossHakugin_DrawDead(Actor* thisx, PlayState* play) {
+void BossHakugin_DrawCrushingRocks(Actor* thisx, PlayState* play) {
     BossHakugin* this = THIS;
     s32 i;
     GohtRockEffect* rockEffect;
@@ -3620,7 +3624,7 @@ void BossHakugin_DrawDead(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gGohtRockMaterialDL);
 
-    for (i = 0; i < 36; i++) {
+    for (i = 0; i < GOHT_CRUSHING_ROCK_COUNT; i++) {
         rockEffect = &this->rockEffects[i];
 
         Matrix_SetTranslateRotateYXZ(rockEffect->pos.x, rockEffect->pos.y, rockEffect->pos.z, &rockEffect->rot);
