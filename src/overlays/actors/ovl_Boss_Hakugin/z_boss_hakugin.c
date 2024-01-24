@@ -48,7 +48,7 @@ void BossHakugin_SetupRun(BossHakugin* this);
 void BossHakugin_Run(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupCharge(BossHakugin* this);
 void BossHakugin_Charge(BossHakugin* this, PlayState* play);
-void BossHakugin_FallDown(BossHakugin* this, PlayState* play);
+void BossHakugin_Downed(BossHakugin* this, PlayState* play);
 void BossHakugin_Throw(BossHakugin* this, PlayState* play);
 void BossHakugin_SetupWait(BossHakugin* this, PlayState* play);
 void BossHakugin_Wait(BossHakugin* this, PlayState* play);
@@ -1954,13 +1954,14 @@ void BossHakugin_Charge(BossHakugin* this, PlayState* play) {
     }
 }
 
-void BossHakugin_SetupFallDown(BossHakugin* this) {
+void BossHakugin_SetupDowned(BossHakugin* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGohtFallDownAnim, -3.0f);
     this->bodyCollider.base.atFlags &= ~AT_ON;
     this->bodyCollider.base.acFlags &= ~AC_HARD;
     this->frontHalfRotZ = 0;
     this->finishedFallingDown = false;
     this->chargingLightOrbScale = 0.0f;
+
     if (this->electricBallState == GOHT_ELECTRIC_BALL_STATE_CHARGE) {
         Math_Vec3f_Copy(&this->electricBallPos[0], &this->chargingLightningPos);
         this->electricBallSpeed = this->actor.speed + 100.0f;
@@ -1972,13 +1973,18 @@ void BossHakugin_SetupFallDown(BossHakugin* this) {
         Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_E_BALL_THR);
         this->electricBallCollider.base.atFlags |= AT_ON;
     }
+
     this->timer = 60;
     this->actor.speed = 20.0f;
-    this->actionFunc = BossHakugin_FallDown;
+    this->actionFunc = BossHakugin_Downed;
 }
 
-void BossHakugin_FallDown(BossHakugin* this, PlayState* play) {
-    CollisionPoly* spBC;
+/**
+ * This function will play Goht's falling down animation and make it skid to a complete stop. Once it stops, it will
+ * randomly shake in place for 60 frames, then it will get up and go back to running.
+ */
+void BossHakugin_Downed(BossHakugin* this, PlayState* play) {
+    CollisionPoly* floorPoly;
     Vec3f velocity;
     Vec3f pos;
     s32 i;
@@ -1992,23 +1998,27 @@ void BossHakugin_FallDown(BossHakugin* this, PlayState* play) {
             BossHakugin_RequestQuakeAndRumble(this, play, 17000, 7, 10);
         }
 
+        // This will spawn dust on Goht's sides as it skids to a stop.
         if (this->actor.speed > 5.0f) {
             for (i = -1; i < 2; i += 2) {
-                s16 temp1 = this->actor.shape.rot.y + (i * 0x7800);
-                f32 temp_fs1;
+                s16 angle = this->actor.shape.rot.y + (i * 0x7800);
+                f32 offset;
 
-                velocity.x = 2.0f * Math_SinS(temp1);
+                velocity.x = 2.0f * Math_SinS(angle);
                 velocity.y = 1.0f;
-                velocity.z = 2.0f * Math_CosS(temp1);
+                velocity.z = 2.0f * Math_CosS(angle);
 
-                temp1 = this->actor.shape.rot.y + (i * 0x4000);
-                temp_fs1 = Rand_ZeroFloat(190.0f);
-                pos.x = this->actor.world.pos.x + (80.0f * Math_SinS(temp1)) +
-                        (Math_SinS(this->actor.shape.rot.y) * temp_fs1);
-                pos.z = this->actor.world.pos.z + (80.0f * Math_CosS(temp1)) +
-                        (Math_CosS(this->actor.shape.rot.y) * temp_fs1);
+                angle = this->actor.shape.rot.y + (i * 0x4000);
+                offset = Rand_ZeroFloat(190.0f);
+
+                pos.x = this->actor.world.pos.x + (80.0f * Math_SinS(angle)) +
+                        (Math_SinS(this->actor.shape.rot.y) * offset);
+                pos.z = this->actor.world.pos.z + (80.0f * Math_CosS(angle)) +
+                        (Math_CosS(this->actor.shape.rot.y) * offset);
                 pos.y = this->actor.world.pos.y + 300.0f;
-                pos.y = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &spBC, &bgId, &this->actor, &pos) + 10.0f;
+                pos.y =
+                    BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &floorPoly, &bgId, &this->actor, &pos) + 10.0f;
+
                 func_800B12F0(play, &pos, &velocity, &gZeroVec3f, Rand_S16Offset(750, 100), 10, 30);
             }
         }
@@ -2022,6 +2032,7 @@ void BossHakugin_FallDown(BossHakugin* this, PlayState* play) {
         this->actor.world.pos.x = this->actor.home.pos.x + Rand_CenteredFloat(5.0f);
         this->actor.world.pos.y = this->actor.home.pos.y + Rand_CenteredFloat(5.0f);
         this->actor.world.pos.z = this->actor.home.pos.z + Rand_CenteredFloat(5.0f);
+
         if (this->timer == 0) {
             this->bodyCollider.base.acFlags |= AC_HARD;
             Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
@@ -2519,7 +2530,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
 
         BossHakugin_Thaw(this, play);
 
-        if (this->actionFunc == BossHakugin_FallDown) {
+        if (this->actionFunc == BossHakugin_Downed) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
             BossHakugin_UpdateDrawDmgEffect(this, play, i);
             if (Actor_ApplyDamage(&this->actor) == 0) {
@@ -2581,7 +2592,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                        BUMP_HIT) ||
                       (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_RIGHT_HORN].info.bumperFlags & BUMP_HIT) ||
                       (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_LEFT_HORN].info.bumperFlags & BUMP_HIT)))) {
-                    BossHakugin_SetupFallDown(this);
+                    BossHakugin_SetupDowned(this);
                 } else if ((this->electricBallState == GOHT_ELECTRIC_BALL_STATE_NONE) &&
                            (this->electricBallCount == 0) && (this->actionFunc == BossHakugin_Run) &&
                            (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_GORON_SPIKES)) {
